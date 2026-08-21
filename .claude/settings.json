@@ -1,0 +1,121 @@
+{
+  "$schema_note": "Ключи проверены по code.claude.com/docs/en/{settings,permissions,hooks,sandboxing} 2026-08-21 (SRC-CC-*)",
+  "permissions": {
+    "defaultMode": "default",
+    "deny": [
+      "Bash(ssh *)",
+      "Bash(scp *)",
+      "Bash(sftp *)",
+      "Bash(rsync *)",
+      "Bash(ansible *)",
+      "Bash(ansible-playbook *)",
+      "Bash(sudo *)",
+      "Bash(su *)",
+      "Bash(doas *)",
+      "Bash(rm -rf *)",
+      "Bash(rm -fr *)",
+      "Bash(mkfs*)",
+      "Bash(dd *)",
+      "Bash(shred *)",
+      "Bash(chmod 777 *)",
+      "Bash(chmod -R 777 *)",
+      "Bash(mysql *)",
+      "Bash(mysqldump *)",
+      "Bash(psql *)",
+      "Bash(iptables *)",
+      "Bash(nft *)",
+      "Bash(ufw *)",
+      "Bash(curl *)",
+      "Bash(wget *)",
+      "Bash(git push --force*)",
+      "Bash(git push -f *)",
+      "Bash(git reset --hard*)",
+      "Bash(git clean *)",
+      "Bash(git filter-branch*)",
+      "Bash(certbot *)",
+      "Bash(systemctl *)",
+      "Read(.env)",
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(secrets/**)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Read(**/id_rsa*)",
+      "Read(**/id_ed25519*)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(blueprints/dle20/dist/**)",
+      "Edit(**/.env)",
+      "Edit(secrets/**)",
+      "Edit(knowledge/KNOWLEDGE_FREEZE.yaml)"
+    ],
+    "ask": [
+      "Bash(git push *)",
+      "Bash(python3 -m factory deploy *)",
+      "Bash(python3 -m factory rollback *)",
+      "Bash(npm install *)",
+      "Bash(pip3 install *)"
+    ],
+    "allow": [
+      "Bash(python3 -m factory validate *)",
+      "Bash(python3 -m factory plan *)",
+      "Bash(python3 -m factory build *)",
+      "Bash(python3 -m factory verify *)",
+      "Bash(python3 -m factory status *)",
+      "Bash(python3 -m factory report *)",
+      "Bash(python3 -m factory seo-lint *)",
+      "Bash(python3 -m factory seo-crawl *)",
+      "Bash(python3 -m factory seo-report *)",
+      "Bash(pytest *)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(php -l *)",
+      "WebFetch(domain:code.claude.com)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PROJECT_DIR}/.claude/hooks/guard_bash.py",
+            "timeout": 20,
+            "statusMessage": "factory guard: проверка команды"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PROJECT_DIR}/.claude/hooks/guard_write.py",
+            "timeout": 20,
+            "statusMessage": "factory guard: проверка записи"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PROJECT_DIR}/.claude/hooks/secret_scan.py",
+            "timeout": 30,
+            "statusMessage": "factory guard: поиск секретов"
+          }
+        ]
+      }
+    ]
+  },
+  "disableBypassPermissionsMode": "disable",
+  "env": {
+    "FACTORY_CLOSED_WORLD": "1",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  }
+}

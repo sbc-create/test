@@ -1,0 +1,30 @@
+{
+  "$note": "Передаётся явно: claude -p --bare --settings .claude/settings.unattended.json …  Отдельный файл, потому что sandbox.failIfUnavailable=true остановит запуск на машине без bubblewrap (в текущем контейнере bwrap отсутствует — проверено). Проектный settings.json такого требования не навязывает командам разработки.",
+  "sandbox": {
+    "enabled": true,
+    "failIfUnavailable": true,
+    "allowUnsandboxedCommands": false,
+    "excludedCommands": [],
+    "filesystem": {
+      "allowWrite": ["./var", "./artifacts", "./queue"],
+      "denyRead": ["~/.ssh", "~/.aws", "~/.config/gh"]
+    },
+    "network": {
+      "allowedDomains": []
+    },
+    "credentials": {
+      "files": [
+        { "path": "~/.ssh", "mode": "deny" },
+        { "path": "~/.aws/credentials", "mode": "deny" }
+      ],
+      "env": [
+        { "name": "GITHUB_TOKEN", "mode": "deny" },
+        { "name": "GH_TOKEN", "mode": "deny" }
+      ]
+    }
+  },
+  "permissions": {
+    "defaultMode": "default"
+  },
+  "disableBypassPermissionsMode": "disable"
+}
