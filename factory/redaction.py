@@ -12,9 +12,12 @@ from typing import Any, Iterable
 PLACEHOLDER = "«REDACTED»"
 
 #: Имена полей, значение которых всегда скрывается.
+#: Границы обязательны: без них «passed» попадает под «pass» и булево значение
+#: превращается в «REDACTED», ломая схему результата задания.
 SENSITIVE_KEY_RE = re.compile(
-    r"(?i)(pass(word|wd)?|secret|token|api[_-]?key|access[_-]?key|private[_-]?key|"
-    r"client[_-]?secret|authorization|cookie|session|credential|license[_-]?key)"
+    r"(?i)(?:^|[_\-])(?:password|passwd|pass|secret|token|api[_-]?key|access[_-]?key|private[_-]?key|"
+    r"client[_-]?secret|authorization|cookie|session|credential|license[_-]?key)(?:$|[_\-])"
+    r"|^(?:password|passwd|secret|token|apikey|api_key|authorization|cookie|credential)$"
 )
 
 #: Значения, узнаваемые по форме, независимо от имени поля.

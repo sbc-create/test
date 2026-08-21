@@ -1,0 +1,408 @@
+"""CLI фабрики. Единственный интерфейс изменения окружений.
+
+Прямой ssh/scp/rsync запрещён hook'ом и permission-правилами: любые мутации идут
+через эти команды, которые проверяют manifest, allowlist, авторизацию, backup и ворота.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+from factory import audit, blueprint, build as build_mod, inventory, knowledge, pipeline, queue as queue_mod, validation
+from factory.errors import FactoryError
+from factory.paths import PATHS
+from factory.seo import crawl as crawl_mod
+from factory.seo import lint as lint_mod
+from factory.seo import matrix as matrix_mod
+from factory.seo import render_check
+from factory.seo.report import combine
+from factory.state import JobState, all_jobs
+from factory.targets import build_target
+
+EXIT_OK, EXIT_FAILED, EXIT_BLOCKED = 0, 1, 2
+
+
+def _print(data, as_json: bool) -> None:
+    if as_json:
+        print(json.dumps(data, ensure_ascii=False, indent=2))
+
+
+def _target_for(site_id: str):
+    package = validation.load_package(site_id)
+    conf = inventory.target(package["target_ref"])
+    return package, conf, build_target(conf, package)
+
+
+def _auth_for(target, environment: str) -> str:
+    if environment == "production" or not hasattr(target, "staging_credentials"):
+        return ""
+    return target.staging_credentials()
+
+
+def _latest_build(site_id: str) -> Path:
+    latest = build_mod.latest_build(site_id)
+    if not latest:
+        raise SystemExit("Сборки нет. Сначала выполни `python3 -m factory build --site <site_id>`.")
+    return latest
+
+
+# ---------------------------------------------------------------- команды
+
+def cmd_validate(args) -> int:
+    result = validation.validate(args.site)
+    _print(result.as_dict(), args.json)
+    if not args.json:
+        print(f"site: {args.site}\nstatus: {result.status}")
+        for blocker in result.blockers:
+            print(f"  [{blocker.status}] {blocker.field}: {blocker.reason}\n      нужно: {blocker.required_input}")
+        for warning in result.warnings:
+            print(f"  [warn] {warning}")
+    return EXIT_OK if result.ok else EXIT_BLOCKED
+
+
+def cmd_plan(args) -> int:
+    result = validation.validate(args.site)
+    if not result.ok:
+        _print(result.as_dict(), args.json)
+        if not args.json:
+            print(f"status: {result.status} — план не строится по невалидному пакету")
+        return EXIT_BLOCKED
+    package, conf, target = _target_for(args.site)
+    build_id = build_mod.compute_build_id(args.site, package)
+    plan = target.plan(PATHS.build_dir(args.site, build_id), build_id)
+    payload = plan.as_dict()
+    payload["mutations_applied"] = 0
+    _print(payload, args.json)
+    if not args.json:
+        print(f"site: {args.site} | build_id: {build_id} | цель: {conf.get('ref')} ({conf.get('adapter')})")
+        for step in plan.steps:
+            print(f"  {step['id']:20} mutation={str(step['mutation']):5} {step['detail']}")
+        print(f"мутаций в плане: {plan.mutations}; применено сейчас: 0")
+    return EXIT_OK
+
+
+def cmd_build(args) -> int:
+    try:
+        result = build_mod.build(args.site, environment=args.environment, force=args.force)
+    except FactoryError as exc:
+        _print({"status": exc.status, "blocker": exc.as_blocker()}, args.json)
+        if not args.json:
+            print(f"[{exc.status}] {exc.reason}\n нужно: {exc.required_input}")
+        return EXIT_BLOCKED
+    _print(result.as_dict(), args.json)
+    if not args.json:
+        print(f"build_id: {result.build_id}\nмаршрутов: {result.routes} | редиректов: {result.redirects}")
+        print(f"по типам: {result.counts}")
+        for skip in result.skipped:
+            print(f"  снято с публикации: {skip['id']} — {skip['reason']}")
+    return EXIT_OK
+
+
+def cmd_deploy(args) -> int:
+    outcome = pipeline.run_job(args.site, environment=args.environment, dry_run=args.dry_run,
+                               skip_browser=args.skip_browser, allow_production=args.allow_production)
+    _print({"status": outcome.status, "job_id": outcome.job_id, "base_url": outcome.base_url,
+            "result": str(outcome.result_path) if outcome.result_path else None,
+            "blockers": outcome.blockers, "notes": outcome.notes}, args.json)
+    if not args.json:
+        print(f"job: {outcome.job_id}\nstatus: {outcome.status}")
+        if outcome.base_url:
+            print(f"url: {outcome.base_url}")
+        for check in outcome.checks:
+            print(f"  {'PASS' if check['passed'] else 'FAIL'} {check['id']:20} exit={check['exit_code']} artifact={check['artifact']}")
+        for blocker in outcome.blockers:
+            print(f"  [{blocker['status']}] {blocker['field']}: {blocker['reason']}")
+        for note in outcome.notes:
+            print(f"  note: {note}")
+        if outcome.result_path:
+            print(f"результат задания: {outcome.result_path}")
+    return EXIT_OK if outcome.status in ("DONE", "BUILT") else EXIT_BLOCKED
+
+
+def cmd_verify(args) -> int:
+    from factory import verify as verify_mod
+    package, conf, target = _target_for(args.site)
+    build_dir = _latest_build(args.site)
+    base_url = args.base or target.base_url()
+    auth = _auth_for(target, package["environment"])
+    checks, reports = verify_mod.verify(args.site, package, build_dir, base_url, auth=auth,
+                                        environment=package["environment"], skip_browser=args.skip_browser)
+    summary = combine(args.site, reports)
+    payload = {"site_id": args.site, "base_url": base_url, "passed": all(c.passed for c in checks),
+               "checks": [c.as_dict() for c in checks], "seo": summary["totals"]}
+    _print(payload, args.json)
+    if not args.json:
+        print(f"site: {args.site} | url: {base_url}")
+        for check in checks:
+            print(f"  {'PASS' if check.passed else 'FAIL'} {check.id:20} exit={check.exit_code} artifact={check.artifact}")
+        print(f"SEO: critical={summary['totals']['critical']} major={summary['totals']['major']} minor={summary['totals']['minor']}")
+    return EXIT_OK if payload["passed"] else EXIT_FAILED
+
+
+def cmd_rollback(args) -> int:
+    package, conf, target = _target_for(args.site)
+    try:
+        result = target.rollback()
+    except FactoryError as exc:
+        _print({"status": exc.status, "blocker": exc.as_blocker()}, args.json)
+        if not args.json:
+            print(f"[{exc.status}] {exc.reason}")
+        return EXIT_BLOCKED
+    audit.record(job_id=f"rollback-{args.site}", site_id=args.site, environment=package["environment"],
+                 action="rollback", target=package["target_ref"], exit_code=0,
+                 output=f"release={result.release_id}", mutation=True)
+    _print(result.as_dict(), args.json)
+    if not args.json:
+        print(f"откат выполнен: current → {result.release_id} (был {result.previous_release_id})")
+        for step in result.steps:
+            print(f"  {step['id']:20} {step['status']} {step['detail']}")
+    return EXIT_OK
+
+
+def cmd_status(args) -> int:
+    jobs = [j for j in all_jobs() if not args.site or j.site_id == args.site]
+    payload = {"queue": queue_mod.counts(), "jobs": [j.as_dict() for j in jobs]}
+    _print(payload, args.json)
+    if not args.json:
+        print(f"очередь: {payload['queue']}")
+        for job in jobs:
+            print(f"  {job.job_id:38} {job.site_id:14} {job.environment:10} {job.status:22} checkpoint={job.checkpoint}")
+    return EXIT_OK
+
+
+def cmd_resume(args) -> int:
+    stale = queue_mod.requeue_stale(args.max_age)
+    processed = 0
+    while True:
+        item = queue_mod.claim()
+        if not item:
+            break
+        outcome = pipeline.run_job(item.site_id, environment=item.environment, job_id=item.job_id,
+                                   action=item.action, skip_browser=args.skip_browser)
+        stage = "done" if outcome.status == "DONE" else ("quarantine" if outcome.status == "QUARANTINED" else "failed")
+        queue_mod.finish(item, stage, detail=outcome.status)
+        processed += 1
+    payload = {"requeued_stale": stale, "processed": processed, "queue": queue_mod.counts()}
+    _print(payload, args.json)
+    if not args.json:
+        print(f"возвращено зависших: {len(stale)} | обработано: {processed} | очередь: {payload['queue']}")
+    return EXIT_OK
+
+
+def cmd_report(args) -> int:
+    job_dir = PATHS.artifacts / "jobs" / args.site
+    results = sorted(job_dir.glob("*.json")) if job_dir.exists() else []
+    if not results:
+        print(f"Результатов заданий для «{args.site}» нет.")
+        return EXIT_FAILED
+    latest = json.loads(results[-1].read_text(encoding="utf-8"))
+    _print(latest, args.json)
+    if not args.json:
+        print(f"job: {latest['job_id']} | статус: {latest['status']} | commit: {latest['factory_commit'][:12]}")
+        print(f"freeze: {latest.get('knowledge_freeze_version')} | build: {latest.get('build_id')} | release: {latest.get('release_id')}")
+        for check in latest["checks"]:
+            print(f"  {'PASS' if check['passed'] else 'FAIL'} {check['id']:20} exit={check['exit_code']} {check['artifact']}")
+        for blocker in latest["blockers"]:
+            print(f"  [{blocker['status']}] {blocker['field']}: {blocker['reason']}")
+    return EXIT_OK
+
+
+def cmd_queue(args) -> int:
+    if args.queue_action == "enqueue":
+        item = queue_mod.enqueue(args.site, action=args.action, environment=args.environment)
+        _print(item.as_dict(), args.json)
+        if not args.json:
+            print(f"поставлено в очередь: {item.job_id}")
+    elif args.queue_action == "list":
+        payload = queue_mod.counts()
+        _print(payload, args.json)
+        if not args.json:
+            print(payload)
+    return EXIT_OK
+
+
+def cmd_seo(args, mode: str) -> int:
+    package, conf, target = _target_for(args.site)
+    build_dir = _latest_build(args.site)
+    environment = package["environment"]
+    auth = _auth_for(target, environment)
+    reports = []
+    if mode in ("plan",):
+        payload = {"page_types": [p["id"] for p in matrix_mod.load()["page_types"]],
+                   "hard_rules": [r["id"] for r in matrix_mod.hard_rules()],
+                   "url_policy": matrix_mod.url_policy()}
+        _print(payload, args.json)
+        if not args.json:
+            print("типы страниц:", ", ".join(payload["page_types"]))
+            print("жёсткие правила:", ", ".join(payload["hard_rules"]))
+            print("политика URL:", json.dumps(payload["url_policy"], ensure_ascii=False))
+        return EXIT_OK
+    if mode == "lint":
+        reports.append(lint_mod.lint(build_dir, environment=environment))
+    elif mode == "crawl":
+        reports.append(crawl_mod.crawl(args.base or target.base_url(), build_dir, auth=auth, environment=environment))
+    elif mode == "render":
+        reports.append(render_check.run(args.base or target.base_url(), build_dir,
+                                        PATHS.artifact_dir("qa", args.site), auth=auth))
+    elif mode == "report":
+        reports.append(lint_mod.lint(build_dir, environment=environment))
+        reports.append(crawl_mod.crawl(args.base or target.base_url(), build_dir, auth=auth, environment=environment))
+    summary = combine(args.site, reports)
+    _print(summary, args.json)
+    if not args.json:
+        for report in reports:
+            print(f"{report.name}: {'PASSED' if report.passed else 'FAILED'} | {report.counts}")
+            for finding in report.findings[:30]:
+                print(f"  [{finding.severity}] {finding.check:18} {finding.url[:44]:46} {finding.message[:70]}")
+        print(f"артефакт: artifacts/seo/{args.site}/seo-report.json")
+    return EXIT_OK if summary["passed"] else EXIT_FAILED
+
+
+def cmd_knowledge(args) -> int:
+    if args.knowledge_action == "freeze":
+        data = knowledge.freeze(args.version)
+        _print(data, args.json)
+        if not args.json:
+            print(f"заморожено файлов: {data['file_count']} | версия: {data['freeze_version']} | дайджест: {data['aggregate_sha256'][:16]}")
+        return EXIT_OK
+    ok, problems = knowledge.verify()
+    _print({"ok": ok, "problems": problems, "freeze_version": knowledge.freeze_version()}, args.json)
+    if not args.json:
+        print(f"freeze: {knowledge.freeze_version()} | целостность: {'OK' if ok else 'НАРУШЕНА'}")
+        for problem in problems:
+            print(f"  - {problem}")
+    return EXIT_OK if ok else EXIT_FAILED
+
+
+def cmd_blueprint(args) -> int:
+    status = blueprint.check(args.blueprint)
+    _print(status.as_dict(), args.json)
+    if not args.json:
+        print(f"blueprint {status.blueprint}: {'готов' if status.ready else 'НЕ готов'}")
+        for problem in status.problems:
+            print(f"  - {problem}")
+    return EXIT_OK if status.ready else EXIT_BLOCKED
+
+
+def cmd_env_report(args) -> int:
+    import shutil
+    tools = {name: bool(shutil.which(name)) for name in
+             ("python3", "php", "node", "npm", "git", "ansible-playbook", "nginx", "mysql", "docker", "rsync")}
+    payload = {"tools": tools, "inventory": inventory.as_dict(),
+               "browser": dict(zip(("available", "detail"), render_check.available())),
+               "knowledge_freeze": knowledge.freeze_version()}
+    out = PATHS.artifact_dir("env") / "env-report.json"
+    out.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    _print(payload, args.json)
+    if not args.json:
+        print(json.dumps(payload["tools"], ensure_ascii=False))
+        print(f"артефакт: {out.relative_to(PATHS.root)}")
+    return EXIT_OK
+
+
+def cmd_input_request(args) -> int:
+    from factory.input_request import generate
+    md_path, json_path, items = generate()
+    _print({"items": items, "markdown": str(md_path), "json": str(json_path)}, args.json)
+    if not args.json:
+        print(f"недостающих входных данных: {len(items)}")
+        print(f"  {md_path.relative_to(PATHS.root)}\n  {json_path.relative_to(PATHS.root)}")
+    return EXIT_OK
+
+
+def cmd_selfcheck(args) -> int:
+    problems: list[str] = []
+    claude_md = PATHS.root / "CLAUDE.md"
+    lines = len(claude_md.read_text(encoding="utf-8").splitlines()) if claude_md.exists() else 0
+    if lines == 0:
+        problems.append("CLAUDE.md отсутствует")
+    elif lines > 200:
+        problems.append(f"CLAUDE.md {lines} строк — больше рекомендованных 200")
+    settings = PATHS.root / ".claude" / "settings.json"
+    try:
+        data = json.loads(settings.read_text(encoding="utf-8"))
+        if data.get("permissions", {}).get("defaultMode") == "bypassPermissions":
+            problems.append("defaultMode=bypassPermissions запрещён")
+        if not data.get("permissions", {}).get("deny"):
+            problems.append("нет deny-правил в settings.json")
+        for hook_group in data.get("hooks", {}).get("PreToolUse", []):
+            for hook in hook_group.get("hooks", []):
+                script = hook["command"].split()[-1].replace("${CLAUDE_PROJECT_DIR}", str(PATHS.root))
+                if not Path(script).exists():
+                    problems.append(f"hook-скрипт не найден: {script}")
+    except (OSError, json.JSONDecodeError) as exc:
+        problems.append(f"settings.json нечитаем: {exc}")
+    payload = {"claude_md_lines": lines, "problems": problems, "ok": not problems}
+    _print(payload, args.json)
+    if not args.json:
+        print(f"CLAUDE.md: {lines} строк | проблем: {len(problems)}")
+        for problem in problems:
+            print(f"  - {problem}")
+    return EXIT_OK if not problems else EXIT_FAILED
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(prog="factory", description="DLE Site Factory")
+    parser.add_argument("--json", action="store_true", help="машиночитаемый вывод")
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    def with_site(name, help_text):
+        p = sub.add_parser(name, help=help_text)
+        p.add_argument("--site", required=True)
+        return p
+
+    p = with_site("validate", "проверить пакет сайта"); p.set_defaults(func=cmd_validate)
+    p = with_site("plan", "показать план без мутаций"); p.set_defaults(func=cmd_plan)
+    p = with_site("build", "собрать сайт")
+    p.add_argument("--environment", choices=["staging", "production"]); p.add_argument("--force", action="store_true")
+    p.set_defaults(func=cmd_build)
+    p = with_site("deploy", "выкатить сайт через конвейер")
+    p.add_argument("--environment", choices=["staging", "production"])
+    p.add_argument("--dry-run", action="store_true"); p.add_argument("--skip-browser", action="store_true")
+    p.add_argument("--allow-production", action="store_true", help="явное подтверждение оператора для production")
+    p.set_defaults(func=cmd_deploy)
+    p = with_site("verify", "прогнать ворота качества")
+    p.add_argument("--base"); p.add_argument("--skip-browser", action="store_true"); p.set_defaults(func=cmd_verify)
+    p = with_site("rollback", "откатить на предыдущий релиз")
+    p.add_argument("--environment", choices=["staging", "production"]); p.set_defaults(func=cmd_rollback)
+    p = sub.add_parser("status", help="состояние заданий и очереди")
+    p.add_argument("--site"); p.set_defaults(func=cmd_status)
+    p = sub.add_parser("resume", help="продолжить обработку очереди")
+    p.add_argument("--max-age", type=int, default=3600); p.add_argument("--skip-browser", action="store_true")
+    p.set_defaults(func=cmd_resume)
+    p = with_site("report", "последний результат задания"); p.set_defaults(func=cmd_report)
+
+    p = sub.add_parser("queue", help="работа с очередью")
+    p.add_argument("queue_action", choices=["enqueue", "list"])
+    p.add_argument("--site"); p.add_argument("--action", default="create")
+    p.add_argument("--environment", default="staging"); p.set_defaults(func=cmd_queue)
+
+    for mode in ("plan", "lint", "crawl", "render", "report"):
+        p = sub.add_parser(f"seo-{mode}", help=f"SEO: {mode}")
+        p.add_argument("--site", required=True); p.add_argument("--base")
+        p.set_defaults(func=lambda a, m=mode: cmd_seo(a, m))
+
+    p = sub.add_parser("knowledge", help="база знаний")
+    p.add_argument("knowledge_action", choices=["freeze", "verify"])
+    p.add_argument("--version", default="unversioned"); p.set_defaults(func=cmd_knowledge)
+
+    p = sub.add_parser("blueprint", help="проверка blueprint")
+    p.add_argument("blueprint_action", choices=["check"], nargs="?", default="check")
+    p.add_argument("--blueprint", default="dle20"); p.set_defaults(func=cmd_blueprint)
+
+    p = sub.add_parser("env-report", help="read-only отчёт об окружении"); p.set_defaults(func=cmd_env_report)
+    p = sub.add_parser("input-request", help="сформировать пакет недостающих данных"); p.set_defaults(func=cmd_input_request)
+    p = sub.add_parser("selfcheck", help="самопроверка конфигурации Claude Code")
+    p.add_argument("what", nargs="?", default="claude-config"); p.set_defaults(func=cmd_selfcheck)
+
+    args = parser.parse_args(argv)
+    PATHS.ensure_runtime()
+    try:
+        return args.func(args)
+    except FactoryError as exc:
+        print(f"[{exc.status}] {exc.reason}", file=sys.stderr)
+        if exc.required_input:
+            print(f"нужно: {exc.required_input}", file=sys.stderr)
+        return EXIT_BLOCKED
