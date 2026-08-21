@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "job_id": "tmp-b4e1fa96-create-20260821T223836Z-ab347c",
+  "site_id": "tmp-b4e1fa96",
+  "environment": "staging",
+  "requested_action": "create",
+  "status": "BLOCKED_SEO",
+  "blockers": [
+    {
+      "status": "BLOCKED_SEO",
+      "field": "canonical_url",
+      "reason": "canonical_url указывает на «wrong.example.test», а политика требует «pilot.localhost.test».",
+      "required_input": "Приведи canonical_url в соответствие с domain и canonical_policy.host_form",
+      "blocks_stage": "BUILDING"
+    }
+  ],
+  "started_at": "2026-08-21T22:38:36Z",
+  "finished_at": "2026-08-21T22:38:36Z",
+  "factory_commit": "db6479dd7f1ebb536b129bb6a5616a2d5e412673",
+  "knowledge_freeze_version": "2026-08-21.1",
+  "build_id": null,
+  "release_id": null,
+  "previous_release_id": null,
+  "steps": [
+    {
+      "id": "validate",
+      "status": "blocked",
+      "started_at": "2026-08-21T22:38:36Z",
+      "finished_at": "2026-08-21T22:38:36Z",
+      "exit_code": 1,
+      "detail": "BLOCKED_SEO",
+      "mutation": false
+    }
+  ],
+  "checks": [],
+  "artifacts": [],
+  "mutations": [],
+  "backup": null,
+  "seo_summary": null,
+  "notes": []
+}

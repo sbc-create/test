@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "job_id": "tmp-e8a66ae3-create-20260821T223831Z-dce8da",
+  "site_id": "tmp-e8a66ae3",
+  "environment": "staging",
+  "requested_action": "create",
+  "status": "BUILT",
+  "blockers": [],
+  "started_at": "2026-08-21T22:38:31Z",
+  "finished_at": "2026-08-21T22:38:31Z",
+  "factory_commit": "db6479dd7f1ebb536b129bb6a5616a2d5e412673",
+  "knowledge_freeze_version": "2026-08-21.1",
+  "build_id": "8e0c0f3d7bf1440e",
+  "release_id": null,
+  "previous_release_id": null,
+  "steps": [
+    {
+      "id": "validate",
+      "status": "ok",
+      "started_at": "2026-08-21T22:38:31Z",
+      "finished_at": "2026-08-21T22:38:31Z",
+      "exit_code": 0,
+      "detail": "Пакет прошёл схему и семантику",
+      "mutation": false
+    },
+    {
+      "id": "build",
+      "status": "ok",
+      "started_at": "2026-08-21T22:38:31Z",
+      "finished_at": "2026-08-21T22:38:31Z",
+      "exit_code": 0,
+      "detail": "build_id=8e0c0f3d7bf1440e, маршрутов 48",
+      "mutation": false
+    },
+    {
+      "id": "deploy",
+      "status": "skipped",
+      "started_at": "2026-08-21T22:38:31Z",
+      "finished_at": "2026-08-21T22:38:31Z",
+      "exit_code": 0,
+      "detail": "dry-run: шагов 9, мутаций 0",
+      "mutation": false
+    }
+  ],
+  "checks": [],
+  "artifacts": [
+    "artifacts/build/tmp-e8a66ae3/8e0c0f3d7bf1440e/report.json"
+  ],
+  "mutations": [],
+  "backup": null,
+  "seo_summary": null,
+  "notes": [
+    "Лицензия DLE не подтверждена (Нет лицензии DLE, покрывающей домен второго уровня «localhost.test».). Для staging это допустимо, для production — блокер.",
+    "Материалов снято с публикации: 2 (см. build report).",
+    "Staging не является разрешением на production: нужны production_authorized, лицензия DLE и подтверждение оператора.",
+    "Выполнен dry-run: инфраструктура не менялась."
+  ]
+}

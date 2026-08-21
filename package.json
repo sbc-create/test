@@ -1,8 +1,13 @@
 {
-  "dependencies": {
-    "@playwright/test": "^1.62.1"
+  "name": "dle-site-factory-qa",
+  "private": true,
+  "description": "Браузерная приёмка фабрики сайтов на DLE: Playwright + axe-core",
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:e2e:report": "playwright test --reporter=list,json"
   },
   "devDependencies": {
-    "axe-core": "^4.13.0"
+    "@playwright/test": "1.62.1",
+    "axe-core": "4.13.0"
   }
 }

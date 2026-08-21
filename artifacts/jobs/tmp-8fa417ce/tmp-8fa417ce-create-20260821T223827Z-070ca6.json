@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "job_id": "tmp-8fa417ce-create-20260821T223827Z-070ca6",
+  "site_id": "tmp-8fa417ce",
+  "environment": "production",
+  "requested_action": "create",
+  "status": "BLOCKED_INPUT",
+  "blockers": [
+    {
+      "status": "BLOCKED_INPUT",
+      "field": "content_source/kind",
+      "reason": "'vk' was expected",
+      "required_input": "Заполни поле значением, переданным заказчиком. Значение по умолчанию не подставляется.",
+      "blocks_stage": "VALIDATING"
+    },
+    {
+      "status": "BLOCKED_INPUT",
+      "field": "dle_license_ref",
+      "reason": "None is not of type 'string'",
+      "required_input": "Заполни поле значением, переданным заказчиком. Значение по умолчанию не подставляется.",
+      "blocks_stage": "VALIDATING"
+    },
+    {
+      "status": "BLOCKED_INPUT",
+      "field": "production_authorized",
+      "reason": "True was expected",
+      "required_input": "Заполни поле значением, переданным заказчиком. Значение по умолчанию не подставляется.",
+      "blocks_stage": "VALIDATING"
+    },
+    {
+      "status": "BLOCKED_INPUT",
+      "field": "vk_video/adapter",
+      "reason": "'mock' is not one of ['official', 'disabled']",
+      "required_input": "Заполни поле значением, переданным заказчиком. Значение по умолчанию не подставляется.",
+      "blocks_stage": "VALIDATING"
+    }
+  ],
+  "started_at": "2026-08-21T22:38:27Z",
+  "finished_at": "2026-08-21T22:38:27Z",
+  "factory_commit": "db6479dd7f1ebb536b129bb6a5616a2d5e412673",
+  "knowledge_freeze_version": "2026-08-21.1",
+  "build_id": null,
+  "release_id": null,
+  "previous_release_id": null,
+  "steps": [
+    {
+      "id": "validate",
+      "status": "blocked",
+      "started_at": "2026-08-21T22:38:27Z",
+      "finished_at": "2026-08-21T22:38:27Z",
+      "exit_code": 1,
+      "detail": "BLOCKED_INPUT",
+      "mutation": false
+    }
+  ],
+  "checks": [],
+  "artifacts": [],
+  "mutations": [],
+  "backup": null,
+  "seo_summary": null,
+  "notes": []
+}

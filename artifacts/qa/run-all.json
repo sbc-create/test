@@ -1,0 +1,147 @@
+{
+  "rows": [
+    {
+      "check": "knowledge-freeze",
+      "command": "python3 -m factory knowledge verify",
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "1s"
+    },
+    {
+      "check": "claude-config",
+      "command": "python3 -m factory selfcheck",
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "0s"
+    },
+    {
+      "check": "static-python",
+      "command": "python3 -m compileall -q factory tools .claude/hooks tests > /dev/null",
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "0s"
+    },
+    {
+      "check": "static-php",
+      "command": "find automation themes -name '*.php' -print0 | xargs -0 -r -n1 php -l > /dev/null",
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "0s"
+    },
+    {
+      "check": "static-js",
+      "command": "for f in tools/*.js themes/*/assets/*.js tests/e2e/*.js playwright.config.js; do node --check \"$f\" || exit 1; done",
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "0s"
+    },
+    {
+      "check": "static-yaml",
+      "command": "python3 tests/tools/check_yaml.py",
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "0s"
+    },
+    {
+      "check": "unit-tests",
+      "command": "python3 -m pytest tests/unit tests/test_traceability.py -q -m 'not slow'",
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "3s"
+    },
+    {
+      "check": "validate-pilot",
+      "command": "python3 -m factory validate --site pilot-local > /dev/null",
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "1s"
+    },
+    {
+      "check": "plan-no-mutations",
+      "command": "python3 -m factory plan --site pilot-local > /dev/null",
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "0s"
+    },
+    {
+      "check": "build-pilot",
+      "command": "python3 -m factory build --site pilot-local --force > /dev/null",
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "0s"
+    },
+    {
+      "check": "integration-fast",
+      "command": "python3 -m pytest tests/integration -q -m 'not slow'",
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "1s"
+    },
+    {
+      "check": "integration-slow",
+      "command": "python3 -m pytest tests/integration -q -m slow",
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "7s"
+    },
+    {
+      "check": "seo-lint",
+      "command": "python3 -m factory seo-lint --site pilot-local > /dev/null",
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "1s"
+    },
+    {
+      "check": "blueprint-profile-gate",
+      "command": "python3 -m factory blueprint check",
+      "exit_code": "2",
+      "status": "PASS",
+      "note": "ожидаемый BLOCKED_INPUT"
+    },
+    {
+      "check": "seo-crawl",
+      "command": "python3 -m factory seo-crawl --site pilot-local > /dev/null",
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "0s"
+    },
+    {
+      "check": "browser-audit",
+      "command": "python3 -m factory seo-render --site pilot-local > /dev/null",
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "94s"
+    },
+    {
+      "check": "e2e-playwright",
+      "command": "npx playwright test --reporter=list",
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "17s"
+    },
+    {
+      "check": "cross-browser",
+      "command": "-",
+      "exit_code": "-",
+      "status": "SKIPPED",
+      "note": "в образе только Chromium: firefox и webkit в /opt/pw-browsers отсутствуют"
+    },
+    {
+      "check": "ansible-syntax",
+      "command": "-",
+      "exit_code": "-",
+      "status": "SKIPPED",
+      "note": "ansible-playbook не установлен на управляющем хосте"
+    },
+    {
+      "check": "nginx-config-test",
+      "command": "-",
+      "exit_code": "-",
+      "status": "SKIPPED",
+      "note": "nginx не установлен на управляющем хосте"
+    }
+  ],
+  "passed": 17,
+  "failed": 0,
+  "skipped": 3
+}
