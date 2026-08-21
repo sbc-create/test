@@ -1,0 +1,12 @@
+schema_version: 1
+# Официальные лицензионные дистрибутивы. Сам архив НИКОГДА не коммитится
+# (.gitignore: blueprints/dle20/dist/). Здесь только метаданные и контрольная сумма.
+distributions: []
+# distributions:
+#   - ref: dle-20.0-official
+#     version: "20.0"
+#     filename: DLE_20.0.zip
+#     sha256: "<64 hex>"
+#     obtained_from: "личный кабинет владельца лицензии"
+#     obtained_at: "2026-06-01"
+#     local_path: blueprints/dle20/dist/DLE_20.0.zip

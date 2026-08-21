@@ -1,0 +1,20 @@
+schema_version: 1
+targets:
+  # Единственная цель, доступная в этой сессии: одноразовое локальное окружение для пилота.
+  - ref: local-disposable
+    adapter: local_disposable
+    environments: [staging]
+    root: var/targets/local-disposable
+    bind_host: 127.0.0.1
+    port_range: [8081, 8099]
+    web_server: php_builtin
+    database: none                  # DLE не устанавливается: дистрибутив не передан
+    purpose: "пилот и автотесты SEO/QA-контура на реальном HTTP без внешней сети"
+    production_capable: false
+  # - ref: stage-1
+  #   adapter: ssh_ansible
+  #   ssh_host_ref: stage-1
+  #   environments: [staging]
+  #   web_server: nginx
+  #   database: mysql
+  #   production_capable: false

@@ -1,0 +1,449 @@
+# SEO_INDEXABILITY_MATRIX — машиночитаемая политика индексируемости
+# Потребители: factory/seo/matrix.py (рендер), factory/seo/lint.py, factory/seo/crawl.py
+schema_version: 1
+policy_version: "2026-08-21"
+verified_against_official_docs: false
+provenance: SRC-USER-MASTERPROMPT
+note: >-
+  Матрица — вход для рендера. Тип страницы, отсутствующий здесь, не рендерится:
+  factory возвращает BLOCKED_SEO. Значения per-site уточняются в site package
+  (seo.indexability_overrides), но не могут ослабить запреты раздела `hard_rules`.
+
+hard_rules:
+  - id: HR-1
+    rule: "indexable+200 обязан иметь абсолютный self-canonical"
+    blocked_status: BLOCKED_SEO
+  - id: HR-2
+    rule: "canonical не может указывать на redirect, 4xx, noindex или другой язык"
+    blocked_status: BLOCKED_SEO
+  - id: HR-3
+    rule: "в sitemap попадают только canonical + indexable + 200"
+    blocked_status: BLOCKED_SEO
+  - id: HR-4
+    rule: "пустой шаблон со статусом 200 запрещён (soft 404) — только 404 или 410"
+    blocked_status: BLOCKED_SEO
+  - id: HR-5
+    rule: "страница пагинации доступна прямым URL и связана обычными <a href>"
+    blocked_status: BLOCKED_SEO
+  - id: HR-6
+    rule: "VideoObject только там, где видео доступно и является видимой существенной частью"
+    blocked_status: BLOCKED_SEO
+  - id: HR-7
+    rule: "orphan indexable page запрещена"
+    blocked_status: BLOCKED_SEO
+  - id: HR-8
+    rule: "staging/test/demo URL не попадают в production sitemap и внутренние ссылки"
+    blocked_status: BLOCKED_SEO
+
+url_policy:
+  scheme: https
+  host_form: non_www              # site package обязан подтвердить выбор явно
+  trailing_slash: true
+  case: lower
+  word_separator: "-"
+  transliteration: passthrough_from_package   # фабрика не транслитерирует самостоятельно
+  pagination_template: "/page/{n}/"
+  page_one_url: "canonical_base"  # /page/1/ → 301 на базовый URL
+  forbidden_in_url: [session_id, utm_source, utm_medium, utm_campaign, utm_term, utm_content, gclid, yclid, fbclid]
+
+query_parameters:
+  canonical_changing: []          # заполняется site package; пусто = нет таких параметров
+  indexable_landing: []           # allowlist; пусто = индексируемых фасетов нет
+  non_indexable:
+    - sort
+    - order
+    - view
+    - per_page
+    - q
+    - utm_source
+    - utm_medium
+    - utm_campaign
+    - utm_term
+    - utm_content
+    - gclid
+    - yclid
+    - fbclid
+  normalization:
+    sort_keys: true
+    reject_repeated_keys: true
+    reject_unknown_keys: true
+
+page_types:
+  - id: home
+    purpose: "точка входа: назначение сайта, актуальные подборки, навигация по разделам"
+    url_template: "/"
+    http_status: [200]
+    index: true
+    follow: true
+    canonical_rule: self_absolute
+    in_sitemap: true
+    title_source: package.metadata.title_templates.home
+    h1_source: package.brand.name
+    description_source: package.metadata.description_templates.home
+    body_source: package.navigation + package.collections
+    structured_data: [WebSite, Organization]
+    required_internal_links: [categories, legal, collections]
+    pagination: none
+    vk_video: none
+    blocked_seo_when: [missing_title, missing_canonical, empty_body]
+
+  - id: category
+    purpose: "раздел каталога с переданной иерархией"
+    url_template: "/{category_slug}/"
+    http_status: [200, 404]
+    index: true
+    follow: true
+    canonical_rule: self_absolute
+    in_sitemap: true
+    title_source: package.metadata.title_templates.category
+    h1_source: content.category.title
+    description_source: content.category.description
+    body_source: content.category.items
+    structured_data: [BreadcrumbList]
+    required_internal_links: [home, parent_category, items, pagination_neighbours]
+    pagination: server_side
+    vk_video: none
+    empty_behaviour: not_published       # пустая категория не публикуется как indexable 200
+    blocked_seo_when: [empty_items_but_200, duplicate_title, missing_breadcrumb]
+
+  - id: collection
+    purpose: "редакционная подборка, переданная в пакете"
+    url_template: "/collections/{collection_slug}/"
+    http_status: [200, 404]
+    index: true
+    follow: true
+    canonical_rule: self_absolute
+    in_sitemap: true
+    title_source: content.collection.title
+    h1_source: content.collection.title
+    description_source: content.collection.description
+    body_source: content.collection.items
+    structured_data: [BreadcrumbList]
+    required_internal_links: [home, items]
+    pagination: server_side
+    vk_video: none
+    empty_behaviour: not_published
+    blocked_seo_when: [empty_items_but_200, missing_description_source]
+
+  - id: title
+    purpose: "карточка тайтла (фильм/сериал): описание, состав, доступные видео"
+    url_template: "/{category_slug}/{title_slug}/"
+    http_status: [200, 404, 410]
+    index: true
+    follow: true
+    canonical_rule: self_absolute
+    in_sitemap: true
+    title_source: content.title.title
+    h1_source: content.title.title
+    description_source: content.title.description
+    body_source: content.title
+    structured_data: [BreadcrumbList, Movie_or_TVSeries_when_applicable, VideoObject_when_video_available]
+    required_internal_links: [home, category, seasons_or_episodes, related_from_package]
+    pagination: none
+    vk_video: primary_when_available
+    unavailable_behaviour: render_status_block   # контролируемое состояние, подмена ролика запрещена
+    blocked_seo_when: [videoobject_without_visible_video, invented_metadata, missing_alt_on_published_image]
+
+  - id: season
+    purpose: "сезон сериала: список эпизодов из переданных отношений"
+    url_template: "/{category_slug}/{title_slug}/season-{season_number}/"
+    http_status: [200, 404]
+    index: true
+    follow: true
+    canonical_rule: self_absolute
+    in_sitemap: true
+    title_source: package.metadata.title_templates.season
+    h1_source: content.season.title
+    description_source: content.season.description
+    body_source: content.season.episodes
+    structured_data: [BreadcrumbList]
+    required_internal_links: [title, episodes]
+    pagination: server_side
+    vk_video: none
+    empty_behaviour: not_published
+    blocked_seo_when: [empty_episodes_but_200]
+
+  - id: episode
+    purpose: "эпизод с белым плеером и переданными метаданными"
+    url_template: "/{category_slug}/{title_slug}/season-{season_number}/episode-{episode_number}/"
+    http_status: [200, 404, 410]
+    index: true
+    follow: true
+    canonical_rule: self_absolute
+    in_sitemap: true
+    title_source: package.metadata.title_templates.episode
+    h1_source: content.episode.title
+    description_source: content.episode.description
+    body_source: content.episode
+    structured_data: [BreadcrumbList, TVEpisode_when_applicable, VideoObject_when_video_available]
+    required_internal_links: [season, title, prev_next_episode]
+    pagination: none
+    vk_video: primary_when_available
+    unavailable_behaviour: render_status_block
+    blocked_seo_when: [videoobject_without_visible_video, player_hidden_on_mobile]
+
+  - id: article
+    purpose: "новость или статья из переданного редакционного пакета"
+    url_template: "/news/{article_slug}/"
+    http_status: [200, 404, 410]
+    index: true
+    follow: true
+    canonical_rule: self_absolute
+    in_sitemap: true
+    title_source: content.article.title
+    h1_source: content.article.title
+    description_source: content.article.lead
+    body_source: content.article.body
+    structured_data: [BreadcrumbList, Article_or_NewsArticle]
+    required_internal_links: [home, news_index]
+    pagination: none
+    vk_video: optional_when_provided
+    blocked_seo_when: [missing_author_when_required, invented_dates]
+
+  - id: news_index
+    purpose: "лента новостей"
+    url_template: "/news/"
+    http_status: [200]
+    index: true
+    follow: true
+    canonical_rule: self_absolute
+    in_sitemap: true
+    title_source: package.metadata.title_templates.news_index
+    h1_source: package.metadata.title_templates.news_index
+    description_source: package.metadata.description_templates.news_index
+    body_source: content.articles
+    structured_data: [BreadcrumbList]
+    required_internal_links: [home, articles, pagination_neighbours]
+    pagination: server_side
+    vk_video: none
+    blocked_seo_when: [empty_items_but_200]
+
+  - id: tag
+    purpose: "тег — публикуется только при подтверждённой самостоятельной ценности"
+    url_template: "/tags/{tag_slug}/"
+    http_status: [200, 404]
+    index: conditional              # true только если tag_slug в seo.indexable_facets_allowlist
+    index_condition: "package.seo.indexable_facets_allowlist contains tag_slug"
+    index_default: false
+    follow: true
+    canonical_rule: self_absolute
+    in_sitemap: conditional_same_as_index
+    title_source: content.tag.title
+    h1_source: content.tag.title
+    description_source: content.tag.description
+    body_source: content.tag.items
+    structured_data: [BreadcrumbList]
+    required_internal_links: [home, items]
+    pagination: server_side
+    vk_video: none
+    empty_behaviour: not_published
+    blocked_seo_when: [indexable_without_allowlist_entry, empty_items_but_200]
+
+  - id: author
+    purpose: "страница автора — только при переданных данных и самостоятельной ценности"
+    url_template: "/authors/{author_slug}/"
+    http_status: [200, 404]
+    index: conditional
+    index_condition: "package.seo.indexable_facets_allowlist contains author_slug"
+    index_default: false
+    follow: true
+    canonical_rule: self_absolute
+    in_sitemap: conditional_same_as_index
+    title_source: content.author.name
+    h1_source: content.author.name
+    description_source: content.author.bio
+    body_source: content.author.items
+    structured_data: [BreadcrumbList]
+    required_internal_links: [home, items]
+    pagination: server_side
+    vk_video: none
+    empty_behaviour: not_published
+    blocked_seo_when: [invented_bio, empty_items_but_200]
+
+  - id: archive
+    purpose: "архив по датам — навигационная функция"
+    url_template: "/archive/{year}/{month}/"
+    http_status: [200, 404]
+    index: false
+    robots: "noindex,follow"
+    canonical_rule: self_absolute
+    in_sitemap: false
+    title_source: package.metadata.title_templates.archive
+    h1_source: package.metadata.title_templates.archive
+    description_source: none
+    body_source: content.archive.items
+    structured_data: []
+    required_internal_links: [home, items]
+    pagination: server_side
+    vk_video: none
+    blocked_seo_when: [present_in_sitemap]
+
+  - id: paginated_page
+    purpose: "страница 2+ любого листинга"
+    url_template: "{parent_url}page/{n}/"
+    http_status: [200, 404]
+    index: inherit_from_parent
+    follow: true
+    canonical_rule: self_absolute       # НЕ canonical на page 1
+    in_sitemap: inherit_from_parent
+    title_source: package.metadata.title_templates.pagination   # шаблон с номером страницы
+    h1_source: parent.h1                # H1 родителя, без выдуманного текста
+    description_source: package.metadata.description_templates.pagination
+    body_source: parent.items[page_slice]
+    structured_data: [BreadcrumbList]
+    required_internal_links: [prev_page, next_page, parent]
+    pagination: server_side
+    ordering: deterministic
+    ordering_tie_breaker: content_id
+    out_of_range_behaviour: http_404
+    non_numeric_behaviour: http_404
+    page_one_behaviour: redirect_301_to_parent
+    vk_video: none
+    blocked_seo_when: [canonical_points_to_page_one, js_only_pagination, duplicate_items_across_pages, missing_items_between_pages]
+
+  - id: search
+    purpose: "внутренний поиск — функция для пользователя, не landing"
+    url_template: "/search/?q={query}"
+    http_status: [200]
+    index: false
+    robots: "noindex,follow"
+    canonical_rule: none_no_index
+    in_sitemap: false
+    title_source: package.metadata.title_templates.search
+    h1_source: package.metadata.title_templates.search
+    description_source: none
+    body_source: runtime.search_results
+    structured_data: []
+    required_internal_links: [home]
+    pagination: server_side
+    vk_video: none
+    blocked_seo_when: [indexable_search_page, present_in_sitemap]
+
+  - id: filter_non_indexable
+    purpose: "фильтр/сортировка/вид отображения — по умолчанию не индексируется"
+    url_template: "{parent_url}?{non_indexable_params}"
+    http_status: [200]
+    index: false
+    robots: "noindex,follow"
+    canonical_rule: canonical_to_parent_clean_url
+    in_sitemap: false
+    title_source: parent.title
+    h1_source: parent.h1
+    description_source: parent.description
+    body_source: parent.items[filtered]
+    structured_data: []
+    required_internal_links: [parent]
+    pagination: server_side
+    vk_video: none
+    blocked_seo_when: [indexable_combination, parameter_explosion, present_in_sitemap]
+
+  - id: filter_indexable
+    purpose: "фасет из allowlist с подтверждённым назначением и переданным контентом"
+    url_template: "{allowlisted_template}"
+    http_status: [200, 404]
+    index: conditional
+    index_condition: "package.seo.indexable_facets_allowlist entry with unique content and internal links"
+    index_default: false
+    follow: true
+    canonical_rule: self_absolute
+    in_sitemap: conditional_same_as_index
+    title_source: package.seo.indexable_facets_allowlist[].title
+    h1_source: package.seo.indexable_facets_allowlist[].h1
+    description_source: package.seo.indexable_facets_allowlist[].description
+    body_source: content.filtered_items
+    structured_data: [BreadcrumbList]
+    required_internal_links: [parent, items, from_navigation]
+    pagination: server_side
+    vk_video: none
+    empty_behaviour: not_published
+    blocked_seo_when: [no_allowlist_entry, no_internal_links, empty_items_but_200, generated_from_keywords]
+
+  - id: legal
+    purpose: "юридические страницы из переданных текстов"
+    url_template: "/legal/{doc_slug}/"
+    http_status: [200]
+    index: true
+    follow: true
+    canonical_rule: self_absolute
+    in_sitemap: true
+    title_source: package.legal.documents[].title
+    h1_source: package.legal.documents[].title
+    description_source: package.legal.documents[].summary
+    body_source: package.legal.documents[].body
+    structured_data: []
+    required_internal_links: [home]
+    pagination: none
+    vk_video: none
+    blocked_seo_when: [placeholder_text, missing_owner_details]
+
+  - id: service
+    purpose: "служебные страницы (robots.txt, sitemap.xml, health) — не HTML-landing"
+    url_template: "/{service_path}"
+    http_status: [200]
+    index: false
+    robots: "noindex"
+    canonical_rule: none_no_index
+    in_sitemap: false
+    title_source: none
+    h1_source: none
+    description_source: none
+    body_source: generated
+    structured_data: []
+    required_internal_links: []
+    pagination: none
+    vk_video: none
+    blocked_seo_when: [present_in_sitemap, exposes_secret_path]
+
+  - id: not_found
+    purpose: "страница 404"
+    url_template: "*"
+    http_status: [404]
+    index: false
+    robots: "noindex,follow"
+    canonical_rule: none_no_index
+    in_sitemap: false
+    title_source: package.metadata.title_templates.not_found
+    h1_source: package.metadata.title_templates.not_found
+    description_source: none
+    body_source: navigation_help
+    structured_data: []
+    required_internal_links: [home, categories]
+    pagination: none
+    vk_video: none
+    blocked_seo_when: [status_200_returned]
+
+  - id: gone
+    purpose: "удалённый материал — 410"
+    url_template: "{removed_url}"
+    http_status: [410]
+    index: false
+    robots: "noindex,follow"
+    canonical_rule: none_no_index
+    in_sitemap: false
+    title_source: package.metadata.title_templates.gone
+    h1_source: package.metadata.title_templates.gone
+    description_source: none
+    body_source: navigation_help
+    structured_data: []
+    required_internal_links: [home, category]
+    pagination: none
+    vk_video: none
+    blocked_seo_when: [status_200_returned, still_in_sitemap]
+
+  - id: content_unavailable
+    purpose: "материал существует, но видео временно недоступно/нет прав на показ"
+    url_template: "{content_url}"
+    http_status: [200]
+    index: true
+    follow: true
+    canonical_rule: self_absolute
+    in_sitemap: true
+    title_source: content.title
+    h1_source: content.title
+    description_source: content.description
+    body_source: content.metadata + availability_status_block
+    structured_data: [BreadcrumbList]     # VideoObject запрещён: видео недоступно
+    required_internal_links: [category, related_from_package]
+    pagination: none
+    vk_video: unavailable_state
+    blocked_seo_when: [videoobject_emitted, empty_shell_around_player, substitute_video_used]

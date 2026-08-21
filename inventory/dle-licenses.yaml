@@ -1,0 +1,15 @@
+schema_version: 1
+# Реестр лицензий DLE. Одна лицензия покрывает ОДИН домен второго уровня и его поддомены.
+# Пусто → любой production job получает BLOCKED_LICENSE (проверяется тестом).
+licenses: []
+# licenses:
+#   - ref: lic-001
+#     licensee: "ООО «Пример»"
+#     covered_domain: example.tld         # домен второго уровня
+#     covers_subdomains: true
+#     product: "DataLife Engine"
+#     version: "20.0"
+#     purchased_at: "2026-06-01"
+#     expires_at: null
+#     license_key_secret_ref: env:FACTORY_DLE_LICENSE_LIC001
+#     proof_ref: "docs/legal/lic-001.pdf"  # документ хранится вне публичного git

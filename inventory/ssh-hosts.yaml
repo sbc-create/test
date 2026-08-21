@@ -1,0 +1,17 @@
+schema_version: 1
+# Пусто: SSH-хостов не передано (F1.2). Формат записи — ниже, в закомментированном примере.
+hosts: []
+# hosts:
+#   - ref: stage-1
+#     hostname: staging.example.tld       # реальный FQDN приходит от пользователя
+#     port: 22
+#     deploy_user: dle-deploy             # least-privilege, НЕ root
+#     auth: publickey_only
+#     ssh_key_secret_ref: env:FACTORY_SSH_KEY_STAGING
+#     known_hosts_entry_ref: inventory/known_hosts.d/stage-1     # host key pinning, обязателен
+#     strict_host_key_checking: yes       # отключать запрещено
+#     sudo_allowlist:                     # только точные wrapper-команды
+#       - "/usr/sbin/nginx -t"
+#       - "/bin/systemctl reload nginx"
+#       - "/bin/systemctl reload php8.3-fpm"
+#     environments: [staging]

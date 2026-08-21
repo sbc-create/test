@@ -1,0 +1,11 @@
+schema_version: 1
+zones: []
+# zones:
+#   - ref: example-tld
+#     zone: example.tld
+#     provider: <provider>
+#     api_token_secret_ref: env:FACTORY_DNS_TOKEN_EXAMPLE_TLD
+#     scope: zone_records_only            # глобальный аккаунт не выдаётся
+#     allowed_record_types: [A, AAAA, CNAME, TXT]
+#     allowed_names: ["@", "www", "staging"]
+#     cutover_requires: [origin_health_ok, tls_ready, rollback_plan]
