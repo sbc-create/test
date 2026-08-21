@@ -7,6 +7,14 @@
 set -uo pipefail
 cd "$(dirname "$0")/.."
 
+# Интеграционные тесты и пилот меняют общую одноразовую цель, поэтому полный прогон
+# сериализуется: два одновременных прогона перетирали бы артефакты друг друга.
+mkdir -p var/locks
+if [ "${FACTORY_RUN_ALL_LOCKED:-0}" != "1" ]; then
+  export FACTORY_RUN_ALL_LOCKED=1
+  exec flock -w "${FACTORY_RUN_ALL_WAIT:-1800}" var/locks/run-all.lock "$0" "$@"
+fi
+
 REPORT="artifacts/qa/run-all.json"
 mkdir -p artifacts/qa
 ROWS="$(mktemp)"

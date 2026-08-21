@@ -1,0 +1,266 @@
+{
+  "schema_version": 1,
+  "job_id": "pilot-local-create-20260821T224703Z-9554d0",
+  "site_id": "pilot-local",
+  "environment": "staging",
+  "requested_action": "create",
+  "status": "DONE",
+  "blockers": [],
+  "started_at": "2026-08-21T22:47:03Z",
+  "finished_at": "2026-08-21T22:47:03Z",
+  "factory_commit": "2a7b93fb5199fde13a0317f9024f9a6997e8eece",
+  "knowledge_freeze_version": "2026-08-21.1",
+  "build_id": "44daec829d8de4d8",
+  "release_id": "44daec829d8de4d8",
+  "previous_release_id": "44daec829d8de4d8",
+  "steps": [
+    {
+      "id": "validate",
+      "status": "ok",
+      "started_at": "2026-08-21T22:47:03Z",
+      "finished_at": "2026-08-21T22:47:03Z",
+      "exit_code": 0,
+      "detail": "Пакет прошёл схему и семантику",
+      "mutation": false
+    },
+    {
+      "id": "build",
+      "status": "ok",
+      "started_at": "2026-08-21T22:47:03Z",
+      "finished_at": "2026-08-21T22:47:03Z",
+      "exit_code": 0,
+      "detail": "build_id=44daec829d8de4d8, маршрутов 48",
+      "mutation": false
+    },
+    {
+      "id": "prepare_dirs",
+      "status": "ok",
+      "started_at": "2026-08-21T22:47:03Z",
+      "finished_at": "2026-08-21T22:47:03Z",
+      "exit_code": 0,
+      "detail": "Каталоги цели готовы: /home/user/test/var/targets/local-disposable/pilot-local",
+      "mutation": false
+    },
+    {
+      "id": "backup",
+      "status": "ok",
+      "started_at": "2026-08-21T22:47:03Z",
+      "finished_at": "2026-08-21T22:47:03Z",
+      "exit_code": 0,
+      "detail": "Бэкап изменяемых данных: var/backups/pilot-local-staging-20260821T224703Z.tar.gz",
+      "mutation": false
+    },
+    {
+      "id": "upload_release",
+      "status": "ok",
+      "started_at": "2026-08-21T22:47:03Z",
+      "finished_at": "2026-08-21T22:47:03Z",
+      "exit_code": 0,
+      "detail": "Релиз 44daec829d8de4d8 уже присутствует — повторная выгрузка не выполнялась",
+      "mutation": true
+    },
+    {
+      "id": "start_server",
+      "status": "ok",
+      "started_at": "2026-08-21T22:47:03Z",
+      "finished_at": "2026-08-21T22:47:03Z",
+      "exit_code": 0,
+      "detail": "PHP-сервер слушает 127.0.0.1:8082",
+      "mutation": true
+    },
+    {
+      "id": "health_check",
+      "status": "ok",
+      "started_at": "2026-08-21T22:47:03Z",
+      "finished_at": "2026-08-21T22:47:03Z",
+      "exit_code": 0,
+      "detail": "Проверка до переключения: HTTP 200, 2048 байт",
+      "mutation": false
+    },
+    {
+      "id": "switch_current",
+      "status": "ok",
+      "started_at": "2026-08-21T22:47:03Z",
+      "finished_at": "2026-08-21T22:47:03Z",
+      "exit_code": 0,
+      "detail": "current уже указывает на 44daec829d8de4d8",
+      "mutation": true
+    },
+    {
+      "id": "post_switch_health",
+      "status": "ok",
+      "started_at": "2026-08-21T22:47:03Z",
+      "finished_at": "2026-08-21T22:47:03Z",
+      "exit_code": 0,
+      "detail": "Проверка после переключения: HTTP 200, 2048 байт",
+      "mutation": false
+    },
+    {
+      "id": "prune_releases",
+      "status": "ok",
+      "started_at": "2026-08-21T22:47:03Z",
+      "finished_at": "2026-08-21T22:47:03Z",
+      "exit_code": 0,
+      "detail": "Удалено устаревших релизов: 0; хранится 3 плюс защищённые (текущий и предыдущий)",
+      "mutation": false
+    },
+    {
+      "id": "restore_test",
+      "status": "ok",
+      "started_at": "2026-08-21T22:47:03Z",
+      "finished_at": "2026-08-21T22:47:03Z",
+      "exit_code": 0,
+      "detail": "Восстановление бэкапа в /home/user/test/var/restore-probe/pilot-local-44daec829d8de4d8: подтверждено",
+      "mutation": false
+    }
+  ],
+  "checks": [
+    {
+      "id": "seo-lint",
+      "command": "python3 -m factory seo-lint --site pilot-local",
+      "exit_code": 0,
+      "passed": true,
+      "artifact": "artifacts/qa/pilot-local/seo-lint.json",
+      "counts": {
+        "routes": 48,
+        "indexable": 45,
+        "in_sitemap": 45,
+        "paginated": 2,
+        "redirects": 4
+      },
+      "severity": "critical"
+    },
+    {
+      "id": "seo-crawl",
+      "command": "python3 -m factory seo-crawl --site pilot-local --base http://127.0.0.1:8082",
+      "exit_code": 0,
+      "passed": true,
+      "artifact": "artifacts/qa/pilot-local/seo-crawl.json",
+      "counts": {
+        "fetched": 45,
+        "unique_urls": 45,
+        "max_depth": 4,
+        "titles": 45,
+        "internal_links": 45
+      },
+      "severity": "critical"
+    },
+    {
+      "id": "seo-render",
+      "command": "node tools/browser-audit.js --base http://127.0.0.1:8082",
+      "exit_code": 1,
+      "passed": false,
+      "artifact": "artifacts/qa/pilot-local/seo-render.json",
+      "counts": {
+        "status": "skipped"
+      },
+      "severity": "major"
+    },
+    {
+      "id": "security-smoke",
+      "command": "python3 -m factory verify --site pilot-local (security)",
+      "exit_code": 0,
+      "passed": true,
+      "artifact": "artifacts/qa/pilot-local/security-smoke.json",
+      "counts": {
+        "checked_paths": 8,
+        "root_status": 200
+      },
+      "severity": "critical"
+    },
+    {
+      "id": "acceptance-routes",
+      "command": "python3 -m factory verify --site pilot-local (acceptance)",
+      "exit_code": 0,
+      "passed": true,
+      "artifact": "artifacts/qa/pilot-local/acceptance-routes.json",
+      "counts": {
+        "routes": 11
+      },
+      "severity": "critical"
+    },
+    {
+      "id": "performance-budget",
+      "command": "python3 -m factory verify --site pilot-local (performance)",
+      "exit_code": 1,
+      "passed": false,
+      "artifact": "artifacts/qa/pilot-local/performance-budget.json",
+      "counts": {
+        "lab_lcp_ms_max": null,
+        "lab_cls_max": null,
+        "lab_transfer_bytes_max": null,
+        "budgets": {
+          "lab_lcp_ms": 2500,
+          "lab_cls": 0.1,
+          "lab_total_bytes": 800000,
+          "field_targets": {
+            "lcp_ms": 2500,
+            "inp_ms": 200,
+            "cls": 0.1
+          }
+        },
+        "field_targets_note": "Полевые LCP ≤ 2.5 s, INP ≤ 200 ms, CLS ≤ 0.1 на 75-м перцентиле измеряются только на реальном трафике."
+      },
+      "severity": "major"
+    }
+  ],
+  "artifacts": [
+    "artifacts/build/pilot-local/44daec829d8de4d8/report.json",
+    "artifacts/qa/pilot-local/seo-lint.json",
+    "artifacts/qa/pilot-local/seo-crawl.json",
+    "artifacts/qa/pilot-local/seo-render.json",
+    "artifacts/qa/pilot-local/security-smoke.json",
+    "artifacts/qa/pilot-local/acceptance-routes.json",
+    "artifacts/qa/pilot-local/performance-budget.json",
+    "artifacts/seo/pilot-local/seo-report.json"
+  ],
+  "mutations": [
+    {
+      "target": "/home/user/test/var/targets/local-disposable/pilot-local",
+      "kind": "filesystem",
+      "detail": "Релиз 44daec829d8de4d8 уже присутствует — повторная выгрузка не выполнялась",
+      "at": "2026-08-21T22:47:03Z",
+      "idempotent_noop": true
+    },
+    {
+      "target": "/home/user/test/var/targets/local-disposable/pilot-local",
+      "kind": "filesystem",
+      "detail": "PHP-сервер слушает 127.0.0.1:8082",
+      "at": "2026-08-21T22:47:03Z",
+      "idempotent_noop": false
+    },
+    {
+      "target": "/home/user/test/var/targets/local-disposable/pilot-local",
+      "kind": "filesystem",
+      "detail": "current уже указывает на 44daec829d8de4d8",
+      "at": "2026-08-21T22:47:03Z",
+      "idempotent_noop": true
+    }
+  ],
+  "backup": {
+    "taken": true,
+    "ref": "var/backups/pilot-local-staging-20260821T224703Z.tar.gz",
+    "restore_verified": true,
+    "verified_at": "2026-08-21T22:47:03Z"
+  },
+  "seo_summary": {
+    "pages_total": 48,
+    "indexable": 45,
+    "noindex": 3,
+    "in_sitemap": 45,
+    "duplicate_titles": 0,
+    "duplicate_descriptions": 0,
+    "redirect_chains": 0,
+    "orphan_pages": 0,
+    "soft_404": 0,
+    "broken_links": 0,
+    "jsonld_errors": 0
+  },
+  "notes": [
+    "Лицензия DLE не подтверждена (Нет лицензии DLE, покрывающей домен второго уровня «localhost.test».). Для staging это допустимо, для production — блокер.",
+    "Материалов снято с публикации: 2 (см. build report).",
+    "Staging не является разрешением на production: нужны production_authorized, лицензия DLE и подтверждение оператора.",
+    "Проверка seo-render не выполнялась (skipped): приёмка неполная, результат нельзя считать полной приёмкой сайта.",
+    "Проверка performance-budget не выполнялась (skipped): приёмка неполная, результат нельзя считать полной приёмкой сайта."
+  ]
+}

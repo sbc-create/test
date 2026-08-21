@@ -170,8 +170,9 @@ def verify(site_id: str, package: dict, build_dir: Path, base_url: str, *, auth:
         browser_report = render_check.run(base_url, build_dir, out_dir, auth=auth)
     (out_dir / "seo-render.json").write_text(json.dumps(browser_report.as_dict(), ensure_ascii=False, indent=2), encoding="utf-8")
     reports.append(browser_report)
+    render_passed = browser_report.passed and not skip_browser
     checks.append(Check("seo-render", f"node tools/browser-audit.js --base {base_url}",
-                        0 if browser_report.passed else 1, browser_report.passed and not skip_browser,
+                        0 if render_passed else 1, render_passed,
                         str((out_dir / "seo-render.json").relative_to(PATHS.root)), browser_report.counts,
                         severity="major" if skip_browser else "critical"))
 
@@ -189,8 +190,9 @@ def verify(site_id: str, package: dict, build_dir: Path, base_url: str, *, auth:
 
     performance = performance_budget(browser_report, package, out_dir)
     reports.append(performance)
+    performance_passed = performance.passed and not skip_browser
     checks.append(Check("performance-budget", f"python3 -m factory verify --site {site_id} (performance)",
-                        0 if performance.passed else 1, performance.passed and not skip_browser,
+                        0 if performance_passed else 1, performance_passed,
                         str((out_dir / "performance-budget.json").relative_to(PATHS.root)), performance.counts,
                         severity="major" if skip_browser else "critical"))
 
