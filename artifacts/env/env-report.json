@@ -1,0 +1,44 @@
+{
+  "tools": {
+    "python3": true,
+    "php": true,
+    "node": true,
+    "npm": true,
+    "git": true,
+    "ansible-playbook": false,
+    "nginx": false,
+    "mysql": false,
+    "docker": true,
+    "rsync": false
+  },
+  "inventory": {
+    "targets": [
+      {
+        "ref": "local-disposable",
+        "adapter": "local_disposable",
+        "environments": [
+          "staging"
+        ],
+        "root": "var/targets/local-disposable",
+        "bind_host": "127.0.0.1",
+        "port_range": [
+          8081,
+          8099
+        ],
+        "web_server": "php_builtin",
+        "database": "none",
+        "purpose": "пилот и автотесты SEO/QA-контура на реальном HTTP без внешней сети",
+        "production_capable": false
+      }
+    ],
+    "ssh_hosts": [],
+    "dns_zones": [],
+    "licenses": [],
+    "distributions": []
+  },
+  "browser": {
+    "available": true,
+    "detail": "/opt/pw-browsers/chromium-1194/chrome-linux/chrome"
+  },
+  "knowledge_freeze": "2026-08-21.1"
+}

@@ -211,6 +211,19 @@ def cmd_report(args) -> int:
 
 def cmd_queue(args) -> int:
     if args.queue_action == "enqueue":
+        if not args.site:
+            print("Для enqueue обязателен --site: очередь не принимает задание без сайта.", file=sys.stderr)
+            return EXIT_BLOCKED
+        result = validation.validate(args.site)
+        if not result.ok:
+            # Невалидный пакет не попадает в очередь: иначе worker всё равно вернёт блокер,
+            # а задание будет числиться принятым.
+            _print(result.as_dict(), args.json)
+            if not args.json:
+                print(f"status: {result.status} — задание не поставлено")
+                for blocker in result.blockers:
+                    print(f"  [{blocker.status}] {blocker.field}: {blocker.reason}")
+            return EXIT_BLOCKED
         item = queue_mod.enqueue(args.site, action=args.action, environment=args.environment)
         _print(item.as_dict(), args.json)
         if not args.json:

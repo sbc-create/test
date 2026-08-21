@@ -73,3 +73,16 @@ def test_invalid_finish_stage_rejected():
     with pytest.raises(ValueError):
         queue.finish(item, "somewhere")
     queue.finish(item, "failed")
+
+
+def test_cli_refuses_to_enqueue_without_site():
+    """Регрессия: без --site в очередь попадало задание с site_id «None»."""
+    from factory.cli import main
+    assert main(["queue", "enqueue"]) == 2
+    assert not list(queue.stage_dir("inbox").glob("None-*.json"))
+
+
+def test_cli_refuses_to_enqueue_invalid_package():
+    from factory.cli import main
+    assert main(["queue", "enqueue", "--site", "does-not-exist"]) == 2
+    assert not list(queue.stage_dir("inbox").glob("does-not-exist-*.json"))
