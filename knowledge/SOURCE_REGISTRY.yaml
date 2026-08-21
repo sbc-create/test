@@ -1,0 +1,200 @@
+# SOURCE_REGISTRY — реестр источников фабрики
+# status: approved | rejected | superseded | unavailable_blocked | not_provided
+schema_version: 1
+compiled_at: "2026-08-21T21:24:00Z"
+compiled_by: "claude-code (mode A / DISCOVERY_AND_FREEZE)"
+egress_note: >-
+  Сессия работает через policy-enforcing egress proxy. Все хосты, кроме
+  code.claude.com и package registries, отвечают 403 на CONNECT. Факт зафиксирован
+  через curl -o /dev/null -w %{http_code} и через endpoint $HTTPS_PROXY/__agentproxy/status
+  (recentRelayFailures: connect_rejected / "gateway answered 403 to CONNECT").
+  Обход политики не выполнялся и запрещён.
+
+sources:
+  # ---------- фактически прочитанные источники ----------
+  - id: SRC-CC-MEMORY
+    kind: official_documentation
+    owner: Anthropic
+    url: https://code.claude.com/docs/en/memory
+    retrieved_at: "2026-08-21T21:21:00Z"
+    version_seen: "docs snapshot 2026-08-21"
+    purpose: "CLAUDE.md, .claude/rules, path-scoped rules, лимит 200 строк, порядок загрузки"
+    status: approved
+    conclusions:
+      - "CLAUDE.md — контекст, а не enforcement; жёсткие запреты только через hooks."
+      - "Целевой размер CLAUDE.md < 200 строк."
+      - "`.claude/rules/*.md`: frontmatter `paths:` даёт scope по glob; без paths правило грузится всегда."
+      - "Правила в .claude/rules без paths имеют приоритет .claude/CLAUDE.md."
+  - id: SRC-CC-SETTINGS
+    kind: official_documentation
+    owner: Anthropic
+    url: https://code.claude.com/docs/en/settings
+    retrieved_at: "2026-08-21T21:22:00Z"
+    purpose: "точные ключи settings.json"
+    status: approved
+    conclusions:
+      - "permissions.{allow,ask,deny,defaultMode,additionalDirectories}; env; hooks; disableBypassPermissionsMode; claudeMdExcludes."
+  - id: SRC-CC-HOOKS
+    kind: official_documentation
+    owner: Anthropic
+    url: https://code.claude.com/docs/en/hooks
+    retrieved_at: "2026-08-21T21:22:00Z"
+    purpose: "формат hooks, stdin/stdout контракт, коды выхода"
+    status: approved
+    conclusions:
+      - "hooks.<Event>[].matcher + hooks[] {type: command, command, timeout}."
+      - "stdin: session_id, cwd, hook_event_name, tool_name, tool_input, tool_use_id, permission_mode."
+      - "Блокировка: exit 2 (stderr = причина) либо exit 0 + JSON hookSpecificOutput.permissionDecision=deny."
+      - "Exit 2 в PreToolUse останавливает вызов ДО оценки permission rules — сильнее allow-правил."
+  - id: SRC-CC-PERMISSIONS
+    kind: official_documentation
+    owner: Anthropic
+    url: https://code.claude.com/docs/en/permissions
+    retrieved_at: "2026-08-21T21:23:00Z"
+    purpose: "синтаксис permission rules и precedence"
+    status: approved
+    conclusions:
+      - "deny > ask > allow; deny-правило нельзя ослабить более узким allow."
+      - "Bash(prefix *) — префиксное сопоставление с word boundary; правила применяются к каждой подкоманде отдельно (&&, ||, ;, |, &)."
+      - "Read()/Edit() используют gitignore-синтаксис; //abs, ~/home, /от корня проекта."
+      - "Путевые правила для Write/Glob/NotebookEdit НЕ проверяются — использовать Edit()/Read()."
+      - "Wrapper'ы timeout/time/nice/nohup/stdbuf/command/builtin/xargs срезаются перед матчингом; devbox/npx/docker exec — нет."
+      - "WebFetch(domain:...) — контроль сетевых доменов для WebFetch."
+  - id: SRC-CC-SANDBOX
+    kind: official_documentation
+    owner: Anthropic
+    url: https://code.claude.com/docs/en/sandboxing
+    retrieved_at: "2026-08-21T21:23:00Z"
+    purpose: "sandbox для unattended-запусков"
+    status: approved
+    conclusions:
+      - "sandbox.enabled, sandbox.failIfUnavailable, sandbox.allowUnsandboxedCommands, sandbox.excludedCommands."
+      - "sandbox.filesystem.{allowWrite,denyWrite,allowRead,denyRead,disabled}; sandbox.network.allowedDomains."
+      - "sandbox.credentials.{files,env} с mode: deny|mask — для ~/.ssh и токенов."
+      - "failIfUnavailable=true предназначен именно для managed/unattended-развёртываний."
+  - id: SRC-CC-HEADLESS
+    kind: official_documentation
+    owner: Anthropic
+    url: https://code.claude.com/docs/en/headless
+    retrieved_at: "2026-08-21T21:24:00Z"
+    purpose: "non-interactive режим для автоматических job"
+    status: approved
+    conclusions:
+      - "claude -p, --output-format text|json|stream-json, --json-schema, --allowedTools, --permission-mode, --settings, --append-system-prompt, --agents."
+      - "--bare отключает автозагрузку hooks/skills/agents/MCP/CLAUDE.md — рекомендуемый режим для CI."
+      - "Без --bare `-p` выполняет hooks и .mcp.json из репозитория даже без workspace trust → произвольный site package нельзя пускать в тот же рабочий каталог."
+  - id: SRC-CC-SKILLS
+    kind: official_documentation
+    owner: Anthropic
+    url: https://code.claude.com/docs/en/skills
+    retrieved_at: "2026-08-21T21:24:00Z"
+    purpose: "формат .claude/skills/<name>/SKILL.md"
+    status: approved
+    conclusions:
+      - "Frontmatter: name, description, when_to_use, allowed-tools, disallowed-tools, disable-model-invocation, user-invocable, model, effort, context, paths, metadata."
+      - "Тело skill загружается по требованию — большая документация не стоит контекста до вызова."
+  - id: SRC-CC-SUBAGENTS
+    kind: official_documentation
+    owner: Anthropic
+    url: https://code.claude.com/docs/en/sub-agents
+    retrieved_at: "2026-08-21T21:24:00Z"
+    purpose: "формат .claude/agents/*.md"
+    status: approved
+    conclusions:
+      - "Frontmatter: name, description, tools, disallowedTools, model, permissionMode, maxTurns, skills, memory, effort."
+
+  # ---------- источники, недоступные из-за egress policy ----------
+  - id: SRC-DLE-DOCS
+    kind: official_documentation
+    owner: SoftNews Media Group (DataLife Engine)
+    url: https://dle-news.com/extras/online/
+    retrieved_at: "2026-08-21T21:20:14Z"
+    status: unavailable_blocked
+    evidence: "CONNECT dle-news.com:443 → 403 (organization egress policy)"
+    blocks: [DLE_20_COMPATIBILITY, blueprints/dle20/profiles/paths.yaml]
+    required_for: "writable paths, cron, шаблоны, plugin/VFS, требования к PHP/БД, процедура обновления"
+  - id: SRC-DLE-LICENSE
+    kind: license
+    owner: SoftNews Media Group
+    url: https://dle-news.com/licence.html
+    status: unavailable_blocked
+    evidence: "CONNECT dle-news.com:443 → 403"
+    required_for: "точный текст лицензионных ограничений; сейчас используется утверждение пользователя"
+  - id: SRC-DLE-RELEASE-20
+    kind: official_documentation
+    owner: SoftNews Media Group
+    url: https://dle-news.com/release/94-datalife-engine-v200-final-release.html
+    status: unavailable_blocked
+    evidence: "CONNECT dle-news.com:443 → 403"
+  - id: SRC-GOOGLE-SEARCH-CENTRAL
+    kind: official_documentation
+    owner: Google
+    url: https://developers.google.com/search/docs
+    status: unavailable_blocked
+    evidence: "CONNECT developers.google.com:443 → 403; WebFetch → EGRESS_BLOCKED"
+    required_for: "canonical, pagination, faceted navigation, spam policies, video structured data, sitemaps"
+  - id: SRC-YANDEX-WEBMASTER
+    kind: official_documentation
+    owner: Яндекс
+    url: https://yandex.ru/support/webmaster/
+    status: unavailable_blocked
+    evidence: "CONNECT yandex.ru:443 → 403"
+  - id: SRC-WEBDEV-CWV
+    kind: official_documentation
+    owner: Google / web.dev
+    url: https://web.dev/articles/vitals
+    status: unavailable_blocked
+    evidence: "CONNECT web.dev:443 → 403"
+  - id: SRC-PLAYWRIGHT
+    kind: official_documentation
+    owner: Microsoft
+    url: https://playwright.dev/docs/best-practices
+    status: unavailable_blocked
+    evidence: "CONNECT playwright.dev:443 → 403"
+  - id: SRC-W3C-WCAG22
+    kind: standard
+    owner: W3C
+    url: https://www.w3.org/WAI/WCAG22/quickref/
+    status: unavailable_blocked
+    evidence: "не входит в allowlist egress policy"
+
+  # ---------- переданное пользователем ----------
+  - id: SRC-USER-MASTERPROMPT
+    kind: user_specification
+    owner: "user (ITAPX@yandex.com)"
+    path: "(сообщение пользователя в сессии; производный нормативный экстракт — docs/MASTER_PROMPT_REQUIREMENTS.md)"
+    derived_extract: docs/MASTER_PROMPT_REQUIREMENTS.md
+    received_at: "2026-08-21T21:18:00Z"
+    version: "Фабрика сайтов на DLE: мастер-промпт для Claude Code v1.1"
+    status: approved
+    authority: >-
+      Единственный доступный нормативный источник по DLE-лицензии, VK-контуру и SEO-требованиям
+      в этой сессии. Требования SEO-контура реализованы дословно по этому документу и помечены
+      как подлежащие сверке с официальной документацией, когда egress-политика её откроет.
+  - id: SRC-USER-INFRA
+    kind: infrastructure_material
+    owner: user
+    status: not_provided
+    evidence: >-
+      Рабочий каталог содержал 0 файлов; ~/.ssh пуст; переменных окружения с SSH/DNS/VK/DLE
+      реквизитами нет. Проверено `git status --porcelain`, `find`, `ls -la ~/.ssh`, `env | cut -d= -f1`.
+  - id: SRC-USER-DLE-DIST
+    kind: licensed_distribution
+    owner: user
+    status: not_provided
+    required_for: "integration test чистой установки DLE, SHA-256 дистрибутива"
+  - id: SRC-USER-VK-CATALOG
+    kind: licensed_content_catalog
+    owner: user
+    status: not_provided
+    required_for: "любой реальный site package с content_source.kind=vk"
+  - id: SRC-USER-VK-ADS-CONTRACT
+    kind: integration_contract
+    owner: user
+    status: not_provided
+    required_for: "рекламный контур VK/Adman/AdTech"
+  - id: SRC-CDNVIDEOHUB
+    kind: integration_contract
+    owner: user
+    status: not_provided
+    note: "Намеренно отложен до второго change request. Создана extension point plugins/cdnvideohub/."
