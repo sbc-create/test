@@ -1,0 +1,39 @@
+# Сокращённый список публичных суффиксов, используемый для вычисления домена
+# второго уровня при проверке лицензии DLE.
+# ВАЖНО: это не полный Public Suffix List. Домен, чей суффикс не описан здесь,
+# обрабатывается консервативно: если по данным этого списка определить регистрируемый
+# домен нельзя однозначно, лицензионная проверка возвращает BLOCKED_LICENSE и требует
+# явного `covered_domain` в inventory/dle-licenses.yaml. Список расширяется вручную.
+schema_version: 1
+multi_label_suffixes:
+  - co.uk
+  - org.uk
+  - me.uk
+  - com.ua
+  - net.ua
+  - org.ua
+  - kiev.ua
+  - com.tr
+  - com.br
+  - com.au
+  - net.au
+  - org.au
+  - co.jp
+  - or.jp
+  - co.kr
+  - com.cn
+  - com.pl
+  - com.de
+  - co.il
+  - co.za
+  - com.mx
+  - com.ar
+  - co.nz
+  - com.sg
+  - com.hk
+  - spb.ru
+  - msk.ru
+  - net.ru
+  - org.ru
+  - com.ru
+  - pp.ru

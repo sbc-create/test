@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="status-page">
+  <h1>{{ page.h1 }}</h1>
+  <p>{{ page.message }}</p>
+  <nav aria-label="Куда перейти">
+    <ul class="linked-list">
+      {%- for link in page.links %}
+      <li><a href="{{ link.url }}">{{ link.label }}</a></li>
+      {%- endfor %}
+    </ul>
+  </nav>
+</div>
+{% endblock %}

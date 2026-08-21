@@ -1,0 +1,13 @@
+# Декларативный manifest cron-задач DLE. Заполняется из официальной документации.
+# Каждая задача: уникальный id, расписание, команда, lock, timeout, лог, лимит retry.
+schema_version: 1
+source_required: true
+jobs: []
+# jobs:
+#   - id: dle_cron_main
+#     schedule: "*/15 * * * *"
+#     command: "php {release}/engine/cron.php"     # точная точка входа — из документации
+#     lock: "{shared}/locks/dle_cron_main.lock"
+#     timeout_seconds: 300
+#     log: "{shared}/logs/cron/dle_cron_main.log"
+#     max_retries: 2

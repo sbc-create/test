@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<article class="text-page">
+  <h1>{{ page.h1 }}</h1>
+  {%- if page.body_html %}
+  <div class="body">{{ page.body_html }}</div>
+  {%- endif %}
+</article>
+{% endblock %}

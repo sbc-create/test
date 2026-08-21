@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<article class="detail">
+  <h1>{{ page.h1 }}</h1>
+  {%- if page.player %}
+  <div class="player-frame" style="aspect-ratio: {{ page.player.aspect_ratio }};">
+    {{ page.player.html }}
+  </div>
+  {%- elif page.availability_notice %}
+  <div class="availability" role="status">
+    <h2>{{ page.availability_notice.title }}</h2>
+    <p>{{ page.availability_notice.text }}</p>
+  </div>
+  {%- endif %}
+  {%- if page.ad_slots %}
+  {%- for slot in page.ad_slots %}
+  <div class="ad-slot" data-placement="{{ slot.placement_id }}" style="min-height: {{ slot.height }}px;">{{ slot.html }}</div>
+  {%- endfor %}
+  {%- endif %}
+  {%- if page.description %}
+  <p class="lead">{{ page.description }}</p>
+  {%- endif %}
+  {%- if page.facts %}
+  <dl class="facts">
+    {%- for fact in page.facts %}
+    <div class="fact"><dt>{{ fact.label }}</dt><dd>{{ fact.value }}</dd></div>
+    {%- endfor %}
+  </dl>
+  {%- endif %}
+  {%- if page.body_html %}
+  <div class="body">{{ page.body_html }}</div>
+  {%- endif %}
+  {%- if page.children %}
+  <section aria-labelledby="children-heading">
+    <h2 id="children-heading">{{ page.children_title }}</h2>
+    <ul class="linked-list">
+      {%- for child in page.children %}
+      <li><a href="{{ child.url }}">{{ child.title }}</a>{% if child.availability == 'unavailable' %} <span class="badge">недоступно</span>{% endif %}</li>
+      {%- endfor %}
+    </ul>
+  </section>
+  {%- endif %}
+  {%- if page.related %}
+  <section aria-labelledby="related-heading">
+    <h2 id="related-heading">Связанные материалы</h2>
+    <ul class="linked-list">
+      {%- for item in page.related %}
+      <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+      {%- endfor %}
+    </ul>
+  </section>
+  {%- endif %}
+  {%- if page.sequence %}
+  <nav class="sequence" aria-label="Навигация по эпизодам">
+    {%- if page.sequence.prev %}<a class="seq-prev" href="{{ page.sequence.prev.url }}" rel="prev">← {{ page.sequence.prev.title }}</a>{%- endif %}
+    {%- if page.sequence.next %}<a class="seq-next" href="{{ page.sequence.next.url }}" rel="next">{{ page.sequence.next.title }} →</a>{%- endif %}
+  </nav>
+  {%- endif %}
+</article>
+{% endblock %}

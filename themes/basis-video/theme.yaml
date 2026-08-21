@@ -1,0 +1,36 @@
+schema_version: 1
+name: basis-video
+version: "1.0.0"
+title: "Basis Video"
+description: >-
+  Оригинальный theme pack фабрики: каталог видеоматериалов с белым плеером,
+  серверной пагинацией, хлебными крошками и контролируемым состоянием недоступности.
+license: proprietary-internal
+origin: "Создан в этом репозитории. Чужие шаблоны, CSS и разметка не копировались."
+supported_page_types:
+  - home
+  - category
+  - collection
+  - title
+  - season
+  - episode
+  - article
+  - news_index
+  - tag
+  - author
+  - archive
+  - paginated_page
+  - search
+  - legal
+  - not_found
+  - gone
+  - content_unavailable
+breakpoints: [360, 390, 768, 1024, 1440]
+accessibility_target: "WCAG 2.2 AA"
+assets:
+  css: assets/site.css
+  js: assets/enhance.js
+extension_points:
+  video_player: "factory.vk:VideoPlayerAdapter"
+  advertising: "factory.ads:AdsAdapter"
+  cdnvideohub: "plugins/cdnvideohub (зарезервировано под второй change request, no-op)"

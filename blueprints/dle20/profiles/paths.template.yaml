@@ -1,0 +1,46 @@
+# Профиль путей и требований DataLife Engine 20.0.
+#
+# ЭТОТ ФАЙЛ НЕ ЗАПОЛНЯЕТСЯ ПО ДОГАДКЕ (§3.8). Каждое значение берётся из официальной
+# документации DLE 20.0 либо из переданного лицензионного дистрибутива.
+# Чтобы профиль заработал, скопируй его в paths.yaml и замени значения, убрав
+# source_required: true. Пока профиля нет, установка DLE даёт BLOCKED_INPUT.
+schema_version: 1
+dle_version: "20.0"
+source_required: true
+source_reference: ""        # URL раздела официальной документации + дата обращения
+
+runtime:
+  php:
+    min_version: ""         # источник: системные требования DLE 20.0
+    required_extensions: []
+    forbidden_settings: []
+  database:
+    engine: ""              # mysql | mariadb
+    min_version: ""
+    charset: ""
+    collation: ""
+
+# Полный перечень изменяемых каталогов/файлов. Пустой список = профиль не заполнен.
+writable_paths: []
+# Код релиза, который остаётся неизменяемым после развёртывания.
+immutable_paths: []
+# Данные, переживающие смену релиза (симлинки из релиза в shared).
+shared_paths: []
+# Точки входа установщика, удаляемые/блокируемые сразу после успешной установки.
+installer_entrypoints: []
+# Пути, закрываемые от публичного доступа на уровне веб-сервера.
+public_deny_paths: []
+
+template_structure:
+  root: ""                  # каталог шаблонов
+  required_files: []
+
+plugin_api:
+  mechanism: ""             # plugin system / virtual file system — точное название из документации
+  entry_points: []
+  documentation_ref: ""
+
+permissions:
+  web_process_user: ""
+  writable_mode: ""         # НЕ 777
+  immutable_mode: ""

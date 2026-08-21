@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ page.h1 }}</h1>
+{%- if page.intro %}
+<p class="intro">{{ page.intro }}</p>
+{%- endif %}
+{%- if page.items %}
+<ul class="card-grid" id="items">
+  {%- for item in page.items %}
+  <li class="card">
+    <a class="card-link" href="{{ item.url }}">
+      {%- if item.image %}
+      <img class="card-image" src="{{ item.image.src }}" alt="{{ item.image.alt }}" width="{{ item.image.width }}" height="{{ item.image.height }}"{% if not loop.first or page.page_number > 1 %} loading="lazy"{% endif %}>
+      {%- endif %}
+      <span class="card-title">{{ item.title }}</span>
+    </a>
+    {%- if item.meta %}<p class="card-meta">{{ item.meta }}</p>{%- endif %}
+    {%- if item.availability == 'unavailable' %}<p class="card-status">Видео временно недоступно</p>{%- endif %}
+  </li>
+  {%- endfor %}
+</ul>
+{%- if page.pagination and page.pagination.total_pages > 1 %}
+<nav class="pagination" aria-label="Страницы каталога" data-total-pages="{{ page.pagination.total_pages }}">
+  <ul>
+    {%- if page.pagination.prev_url %}
+    <li><a class="page-prev" href="{{ page.pagination.prev_url }}" rel="prev">Предыдущая</a></li>
+    {%- endif %}
+    {%- for p in page.pagination.pages %}
+    <li>{% if p.current %}<span aria-current="page">{{ p.number }}</span>{% else %}<a href="{{ p.url }}">Страница {{ p.number }}</a>{% endif %}</li>
+    {%- endfor %}
+    {%- if page.pagination.next_url %}
+    <li><a class="page-next" href="{{ page.pagination.next_url }}" rel="next">Следующая</a></li>
+    {%- endif %}
+  </ul>
+</nav>
+{%- endif %}
+{%- else %}
+<p class="empty">В этом разделе пока нет материалов.</p>
+{%- endif %}
+{% endblock %}

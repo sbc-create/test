@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="{{ site.language }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ page.title }}</title>
+{%- if page.description %}
+<meta name="description" content="{{ page.description }}">
+{%- endif %}
+{%- if page.robots %}
+<meta name="robots" content="{{ page.robots }}">
+{%- endif %}
+{%- if page.canonical %}
+<link rel="canonical" href="{{ page.canonical }}">
+{%- endif %}
+{%- if page.prev_url %}
+<link rel="prev" href="{{ page.prev_url }}">
+{%- endif %}
+{%- if page.next_url %}
+<link rel="next" href="{{ page.next_url }}">
+{%- endif %}
+{%- for alt in site.hreflang %}
+<link rel="alternate" hreflang="{{ alt.lang }}" href="{{ alt.url }}">
+{%- endfor %}
+{%- if site.og_enabled %}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{{ site.brand_name }}">
+<meta property="og:title" content="{{ page.title }}">
+{%- if page.description %}
+<meta property="og:description" content="{{ page.description }}">
+{%- endif %}
+{%- if page.canonical %}
+<meta property="og:url" content="{{ page.canonical }}">
+{%- endif %}
+{%- endif %}
+<link rel="icon" href="{{ site.favicon_url }}">
+<link rel="stylesheet" href="{{ site.css_url }}">
+{%- for block in page.jsonld %}
+<script type="application/ld+json">{{ block }}</script>
+{%- endfor %}
+</head>
+<body>
+<a class="skip-link" href="#main">Перейти к основному содержимому</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="/">
+      <img src="{{ site.logo_url }}" alt="{{ site.brand_name }}" width="{{ site.logo_width }}" height="{{ site.logo_height }}">
+      <span class="brand-name">{{ site.brand_name }}</span>
+    </a>
+    <nav class="primary-nav" aria-label="Основная навигация">
+      <ul>
+        {%- for item in site.navigation %}
+        <li><a href="{{ item.url }}"{% if item.current %} aria-current="page"{% endif %}>{{ item.label }}</a></li>
+        {%- endfor %}
+      </ul>
+    </nav>
+    <form class="site-search" action="/search/" method="get" role="search">
+      <label for="q">Поиск по каталогу</label>
+      <input id="q" name="q" type="search" autocomplete="off">
+      <button type="submit">Найти</button>
+    </form>
+  </div>
+</header>
+{%- if page.breadcrumbs %}
+<nav class="breadcrumbs" aria-label="Хлебные крошки">
+  <div class="wrap">
+    <ol>
+      {%- for crumb in page.breadcrumbs %}
+      <li>{% if loop.last %}<span aria-current="page">{{ crumb.label }}</span>{% else %}<a href="{{ crumb.url }}">{{ crumb.label }}</a>{% endif %}</li>
+      {%- endfor %}
+    </ol>
+  </div>
+</nav>
+{%- endif %}
+<main id="main" class="wrap">
+{% block content %}{% endblock %}
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <nav aria-label="Служебные ссылки">
+      <ul>
+        {%- for item in site.footer_navigation %}
+        <li><a href="{{ item.url }}">{{ item.label }}</a></li>
+        {%- endfor %}
+      </ul>
+    </nav>
+    <p class="owner">{{ site.legal_owner }}</p>
+    <p class="contact"><a href="mailto:{{ site.legal_email }}">{{ site.legal_email }}</a></p>
+  </div>
+</footer>
+<script src="{{ site.js_url }}" defer></script>
+</body>
+</html>

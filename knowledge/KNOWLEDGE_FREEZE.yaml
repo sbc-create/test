@@ -1,0 +1,37 @@
+# Сгенерировано `python3 -m factory knowledge freeze`. Вручную не редактируется.
+schema_version: 1
+freeze_version: 2026-08-21.1
+frozen_at: '2026-08-21T21:41:34Z'
+file_count: 10
+aggregate_sha256: cfd328a6dd2295143f9b747dc73f8ec8baf62ce6d7fcc960c9948636146f717f
+files:
+- path: knowledge/DECISIONS.md
+  sha256: dd0305ae17a14f6832a0a571d5f3f240a8acc3e9f9dffa9448b7749cdaa96a5b
+  bytes: 7798
+- path: knowledge/DLE_20_COMPATIBILITY.md
+  sha256: 3ae18bd0c3abd391d16378ec296f14c3bc2162cd6ed9d1a2c58855420f816e0f
+  bytes: 7042
+- path: knowledge/FACTS.md
+  sha256: eb8ef6b4e17a0d28785afa4473a9e2a66aff51919bc4ab12a2869fe766919e20
+  bytes: 8027
+- path: knowledge/INFRASTRUCTURE_INVENTORY.yaml
+  sha256: b572af83f7b59930d4bcfab1deaa39514f2f29af599b75e3e1c88da3b13ebf0c
+  bytes: 3114
+- path: knowledge/SEO_INDEXABILITY_MATRIX.yaml
+  sha256: d792fd514efa4a51d93bf050c57a85002e974c259eb394ed28973643b5891175
+  bytes: 18133
+- path: knowledge/SEO_KNOWLEDGE_PACK.md
+  sha256: c9483795c075751d69afa143dc55c23ed125899c02ee40658b20ac3d07d852ff
+  bytes: 13254
+- path: knowledge/SOURCE_REGISTRY.yaml
+  sha256: 077ca1da3ba2ece889238283e90c0ddfd13feec0ad967d5a5be7ee88d12a0b35
+  bytes: 11139
+- path: knowledge/THIRD_PARTY_REVIEW.md
+  sha256: c450b41ba251e3ad2fc1c4b0929302f3577f5bac7a8ae3ff64a1e2cb836cc049
+  bytes: 3089
+- path: knowledge/UNKNOWNS.md
+  sha256: ba2136515b73e500483aa482748abf852fd5022171164c88f9ed484f8405b05b
+  bytes: 4450
+- path: knowledge/VK_CONTENT_AND_ADS_CONTRACT.md
+  sha256: 36ddb0d5d4fc4f12401b5b30a201c45faca259f80101da373b77ce2c722757a4
+  bytes: 6382
