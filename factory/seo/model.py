@@ -30,13 +30,21 @@ class Report:
         return [f for f in self.findings if f.severity == "critical"]
 
     @property
+    def executed(self) -> bool:
+        """Проверка фактически выполнялась (а не пропущена и не была недоступна)."""
+        return self.counts.get("status") not in ("skipped", "unavailable", "failed")
+
+    @property
     def passed(self) -> bool:
-        return not self.critical
+        # Непроведённая проверка не может быть «пройденной» — иначе артефакт-доказательство
+        # противоречит выводу отчёта задания.
+        return self.executed and not self.critical
 
     def as_dict(self) -> dict:
         return {
             "name": self.name,
             "passed": self.passed,
+            "executed": self.executed,
             "counts": self.counts,
             "totals": {
                 "critical": len(self.critical),

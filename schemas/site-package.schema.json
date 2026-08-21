@@ -1180,6 +1180,12 @@
               }
             }
           }
+        },
+        "max_major_findings": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 25,
+          "description": "Бюджет замечаний уровня major: превышение — QA_FAILED. Без бюджета major ни на что не влияет."
         }
       }
     },
@@ -1244,14 +1250,9 @@
           "dle_license_ref",
           "dle_distribution_ref",
           "dle_distribution_sha256",
-          "ssh_host_ref",
-          "authorized_by",
-          "authorized_at"
+          "ssh_host_ref"
         ],
         "properties": {
-          "production_authorized": {
-            "const": true
-          },
           "fixture": {
             "const": false
           },
@@ -1382,6 +1383,34 @@
               "video_ids",
               "playback_mode"
             ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "production_authorized": {
+            "const": true
+          }
+        },
+        "required": [
+          "production_authorized"
+        ]
+      },
+      "then": {
+        "required": [
+          "authorized_by",
+          "authorized_at"
+        ],
+        "properties": {
+          "authorized_by": {
+            "type": "string",
+            "minLength": 1
+          },
+          "authorized_at": {
+            "type": "string",
+            "minLength": 1
           }
         }
       }

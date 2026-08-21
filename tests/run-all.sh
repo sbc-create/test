@@ -93,7 +93,12 @@ else
   run "seo-crawl"      "python3 -m factory seo-crawl --site pilot-local > /dev/null"
   run "browser-audit"  "python3 -m factory seo-render --site pilot-local > /dev/null"
   if [ -d node_modules/@playwright/test ]; then
-    run "e2e-playwright" "npx playwright test --reporter=list"
+    PW_REPORT="artifacts/qa/pilot-local/playwright-report.json"
+    rm -f "$PW_REPORT"
+    run "e2e-playwright" "npx playwright test --reporter=list,json && test -s \"$PW_REPORT\""
+    if [ ! -s "$PW_REPORT" ]; then
+      echo "   ВНИМАНИЕ: отчёт $PW_REPORT не создан — шаг не может считаться доказанным"
+    fi
   else
     skip "e2e-playwright" "@playwright/test не установлен"
   fi

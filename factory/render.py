@@ -675,9 +675,16 @@ class SiteRenderer:
         (self.public / "robots.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
     def render_sitemap(self, environment: str) -> None:
-        if environment != "production" or not (self.pkg["metadata"].get("sitemap") or {}).get("enabled", True):
-            # staging не публикует sitemap: staging-URL не должны попадать в индекс
+        """Sitemap собирается всегда, публикуется только в production.
+
+        Раньше на staging он не собирался вовсе, поэтому генерация, разбиение по типам
+        и правило «только canonical+indexable+200» не проверялись ни разу.
+        """
+        if not (self.pkg["metadata"].get("sitemap") or {}).get("enabled", True):
             return
+        # На staging файлы кладутся вне docroot: индексироваться нечему, а проверить есть что.
+        target_dir = self.public if environment == "production" else (self.out / "sitemap-preview")
+        target_dir.mkdir(parents=True, exist_ok=True)
         entries = [r for r in self.result.routes if r.in_sitemap and r.indexable and r.status == 200 and r.canonical]
         split = (self.pkg["metadata"]["sitemap"] or {}).get("split_by_type")
         limit = int((self.pkg["metadata"]["sitemap"] or {}).get("max_urls_per_file") or 50000)
@@ -697,13 +704,13 @@ class SiteRenderer:
                         body.append(f"    <lastmod>{html.escape(str(route.lastmod))}</lastmod>")
                     body.append("  </url>")
                 body.append("</urlset>")
-                (self.public / fname).write_text("\n".join(body) + "\n", encoding="utf-8")
+                (target_dir / fname).write_text("\n".join(body) + "\n", encoding="utf-8")
                 files.append(fname)
         index = ['<?xml version="1.0" encoding="UTF-8"?>', '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
         for fname in files:
             index.append(f"  <sitemap><loc>{self.abs_url('/' + fname)}</loc></sitemap>")
         index.append("</sitemapindex>")
-        (self.public / "sitemap.xml").write_text("\n".join(index) + "\n", encoding="utf-8")
+        (target_dir / "sitemap.xml").write_text("\n".join(index) + "\n", encoding="utf-8")
 
     def copy_assets(self) -> None:
         target = self.public / "assets"
@@ -748,6 +755,9 @@ class SiteRenderer:
             "url_policy": self.url_policy,
             "non_indexable_parameters": (self.pkg.get("seo") or {}).get("non_indexable_parameters") or [],
             "max_depth": int(((self.pkg.get("seo") or {}).get("internal_link_rules") or {}).get("max_depth") or 4),
+            # Поля VideoObject, разрешённые contract: всё остальное линт считает выдуманным.
+            "allowed_video_fields": sorted((self.pkg.get("content_source") or {}).get("allowed_fields") or []),
+            "canonical_changing_parameters": (self.matrix.get("query_parameters") or {}).get("canonical_changing") or [],
         }
         (self.out / "routes.json").write_text(json.dumps(routes_map, ensure_ascii=False, indent=2), encoding="utf-8")
         return self.result

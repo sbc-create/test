@@ -57,6 +57,17 @@ def temp_site(pilot_package):
     yield make
     for path in created:
         site = path.name
+        # Стенд обязан быть остановлен: иначе процессы php копятся и занимают
+        # весь разрешённый диапазон портов до конца сессии.
+        try:
+            from factory import inventory as _inventory
+            from factory.targets import build_target as _build_target
+            package = yaml.safe_load((path / "package.yaml").read_text(encoding="utf-8"))
+            target = _build_target(_inventory.target(package["target_ref"]), package)
+            if hasattr(target, "stop"):
+                target.stop()
+        except Exception:  # noqa: BLE001 — уборка не должна ронять тест
+            pass
         shutil.rmtree(path, ignore_errors=True)
         # временный сайт не оставляет за собой ни сборок, ни артефактов, ни состояния
         shutil.rmtree(PATHS.builds / site, ignore_errors=True)

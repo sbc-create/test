@@ -25,6 +25,8 @@ __pycache__/
 # Test output
 test-results/
 playwright-report/
+# сам JSON-отчёт нужен как артефакт приёмки
+!artifacts/qa/**/playwright-report.json
 # Скриншоты остаются локальными доказательствами: индекс с размерами и SHA-256
 # коммитится (artifacts/qa/pilot-local/screenshots.md), сами PNG — нет.
 artifacts/**/*.png

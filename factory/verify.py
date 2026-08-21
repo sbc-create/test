@@ -14,6 +14,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from factory.paths import PATHS
+from factory.redaction import redact_obj
 from factory.seo import crawl as crawl_mod
 from factory.seo import lint as lint_mod
 from factory.seo import render_check
@@ -24,7 +25,8 @@ from factory.seo.model import Finding, Report
 class Check:
     id: str
     command: str
-    exit_code: int
+    #: None означает «команда не запускалась»; синтетический ноль здесь запрещён.
+    exit_code: int | None
     passed: bool
     artifact: str
     counts: dict = field(default_factory=dict)
@@ -90,7 +92,7 @@ def security_smoke(base_url: str, out_dir: Path, *, auth: str = "", environment:
     if "http://" in re.sub(r'http://(127\.0\.0\.1|localhost)', "", body):
         report.add(Finding("mixed-content", "major", "/", "На странице есть ссылки по http://."))
     report.counts = {"checked_paths": len(FORBIDDEN_PUBLIC_PATHS), "root_status": status}
-    (out_dir / "security-smoke.json").write_text(json.dumps(report.as_dict(), ensure_ascii=False, indent=2), encoding="utf-8")
+    (out_dir / "security-smoke.json").write_text(json.dumps(redact_obj(report.as_dict()), ensure_ascii=False, indent=2), encoding="utf-8")
     return report
 
 
@@ -116,11 +118,14 @@ def performance_budget(browser_report: Report, package: dict, out_dir: Path) -> 
         if budgets.get("lab_total_bytes") and transfer and transfer > budgets["lab_total_bytes"]:
             report.add(Finding("performance", "major", "-", f"Передано {transfer} байт при бюджете {budgets['lab_total_bytes']}."))
     report.counts = {
+        # Статус наследуется от браузерной проверки: без него пропуск выглядел бы
+        # как «проверка нашла замечания».
+        "status": status if status in ("skipped", "unavailable", "failed") else "ok",
         "lab_lcp_ms_max": lcp, "lab_cls_max": cls, "lab_transfer_bytes_max": transfer,
         "budgets": budgets,
         "field_targets_note": "Полевые LCP ≤ 2.5 s, INP ≤ 200 ms, CLS ≤ 0.1 на 75-м перцентиле измеряются только на реальном трафике.",
     }
-    (out_dir / "performance-budget.json").write_text(json.dumps(report.as_dict(), ensure_ascii=False, indent=2), encoding="utf-8")
+    (out_dir / "performance-budget.json").write_text(json.dumps(redact_obj(report.as_dict()), ensure_ascii=False, indent=2), encoding="utf-8")
     return report
 
 
@@ -136,24 +141,27 @@ def acceptance_routes(base_url: str, package: dict, out_dir: Path, *, auth: str 
             if "noindex" not in robots:
                 report.add(Finding("acceptance", "critical", route["path"], "Маршрут должен быть неиндексируемым, но noindex отсутствует."))
     report.counts = {"routes": len((package.get("acceptance") or {}).get("routes") or [])}
-    (out_dir / "acceptance-routes.json").write_text(json.dumps(report.as_dict(), ensure_ascii=False, indent=2), encoding="utf-8")
+    (out_dir / "acceptance-routes.json").write_text(json.dumps(redact_obj(report.as_dict()), ensure_ascii=False, indent=2), encoding="utf-8")
     return report
 
 
 def verify(site_id: str, package: dict, build_dir: Path, base_url: str, *, auth: str = "",
-           environment: str = "staging", skip_browser: bool = False) -> tuple[list[Check], list[Report]]:
-    out_dir = PATHS.artifact_dir("qa", site_id)
+           environment: str = "staging", skip_browser: bool = False,
+           job_id: str | None = None) -> tuple[list[Check], list[Report]]:
+    # Артефакты каждого задания лежат отдельно: общий каталог перетирался следующим
+    # прогоном, и отчёт ссылался на чужие результаты.
+    out_dir = PATHS.artifact_dir("qa", site_id, job_id) if job_id else PATHS.artifact_dir("qa", site_id)
     checks: list[Check] = []
     reports: list[Report] = []
 
     lint_report = lint_mod.lint(build_dir, environment=environment)
-    (out_dir / "seo-lint.json").write_text(json.dumps(lint_report.as_dict(), ensure_ascii=False, indent=2), encoding="utf-8")
+    (out_dir / "seo-lint.json").write_text(json.dumps(redact_obj(lint_report.as_dict()), ensure_ascii=False, indent=2), encoding="utf-8")
     reports.append(lint_report)
     checks.append(Check("seo-lint", f"python3 -m factory seo-lint --site {site_id}", 0 if lint_report.passed else 1,
                         lint_report.passed, str((out_dir / "seo-lint.json").relative_to(PATHS.root)), lint_report.counts))
 
     crawl_report = crawl_mod.crawl(base_url, build_dir, auth=auth, environment=environment)
-    (out_dir / "seo-crawl.json").write_text(json.dumps(crawl_report.as_dict(), ensure_ascii=False, indent=2), encoding="utf-8")
+    (out_dir / "seo-crawl.json").write_text(json.dumps(redact_obj(crawl_report.as_dict()), ensure_ascii=False, indent=2), encoding="utf-8")
     reports.append(crawl_report)
     checks.append(Check("seo-crawl", f"python3 -m factory seo-crawl --site {site_id} --base {base_url}",
                         0 if crawl_report.passed else 1, crawl_report.passed,
@@ -168,11 +176,13 @@ def verify(site_id: str, package: dict, build_dir: Path, base_url: str, *, auth:
         browser_report.counts = {"status": "skipped"}
     else:
         browser_report = render_check.run(base_url, build_dir, out_dir, auth=auth)
-    (out_dir / "seo-render.json").write_text(json.dumps(browser_report.as_dict(), ensure_ascii=False, indent=2), encoding="utf-8")
+    (out_dir / "seo-render.json").write_text(json.dumps(redact_obj(browser_report.as_dict()), ensure_ascii=False, indent=2), encoding="utf-8")
     reports.append(browser_report)
     render_passed = browser_report.passed and not skip_browser
-    checks.append(Check("seo-render", f"node tools/browser-audit.js --base {base_url}",
-                        0 if render_passed else 1, render_passed,
+    render_exit = None if skip_browser else browser_report.counts.get("exit_code", 0 if render_passed else 1)
+    checks.append(Check("seo-render",
+                        "(не запускалась: --skip-browser)" if skip_browser else f"node tools/browser-audit.js --base {base_url}",
+                        render_exit, render_passed,
                         str((out_dir / "seo-render.json").relative_to(PATHS.root)), browser_report.counts,
                         severity="major" if skip_browser else "critical"))
 
@@ -188,11 +198,30 @@ def verify(site_id: str, package: dict, build_dir: Path, base_url: str, *, auth:
                         0 if acceptance.passed else 1, acceptance.passed,
                         str((out_dir / "acceptance-routes.json").relative_to(PATHS.root)), acceptance.counts))
 
+    # Бюджет major-находок: иначе замечания уровня major не влияют ни на что,
+    # и «20 major thin-content» выглядят как полностью зелёная приёмка.
+    budget = int(((package.get("acceptance") or {}).get("max_major_findings")) or 25)
+    major_total = sum(len([f for f in r.findings if f.severity == "major"]) for r in reports)
+    major_report = Report("major-findings-budget")
+    major_report.counts = {"status": "ok", "major": major_total, "budget": budget}
+    if major_total > budget:
+        major_report.add(Finding("budget", "critical", "-",
+                                 f"Замечаний уровня major {major_total} при бюджете {budget}."))
+    (out_dir / "major-findings-budget.json").write_text(
+        json.dumps(redact_obj(major_report.as_dict()), ensure_ascii=False, indent=2), encoding="utf-8")
+    reports.append(major_report)
+    checks.append(Check("major-findings-budget", f"python3 -m factory verify --site {site_id} (major budget)",
+                        0 if major_report.passed else 1, major_report.passed,
+                        str((out_dir / "major-findings-budget.json").relative_to(PATHS.root)), major_report.counts))
+
     performance = performance_budget(browser_report, package, out_dir)
     reports.append(performance)
     performance_passed = performance.passed and not skip_browser
-    checks.append(Check("performance-budget", f"python3 -m factory verify --site {site_id} (performance)",
-                        0 if performance_passed else 1, performance_passed,
+    performance_exit = None if skip_browser else (0 if performance_passed else 1)
+    checks.append(Check("performance-budget",
+                        "(не запускалась: зависит от браузерной проверки)" if skip_browser
+                        else f"python3 -m factory verify --site {site_id} (performance)",
+                        performance_exit, performance_passed,
                         str((out_dir / "performance-budget.json").relative_to(PATHS.root)), performance.counts,
                         severity="major" if skip_browser else "critical"))
 

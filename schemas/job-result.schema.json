@@ -5,56 +5,180 @@
   "description": "Машиночитаемый результат задания. Всё, что утверждается здесь, обязано иметь артефакт.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "job_id", "site_id", "environment", "status", "started_at", "finished_at", "steps", "checks", "artifacts", "mutations", "factory_commit"],
+  "required": [
+    "schema_version",
+    "job_id",
+    "site_id",
+    "environment",
+    "status",
+    "started_at",
+    "finished_at",
+    "steps",
+    "checks",
+    "artifacts",
+    "mutations",
+    "factory_commit"
+  ],
   "properties": {
-    "schema_version": { "const": 1 },
-    "job_id": { "type": "string" },
-    "site_id": { "type": "string" },
-    "environment": { "enum": ["staging", "production", "local-disposable"] },
-    "requested_action": { "type": "string" },
+    "schema_version": {
+      "const": 1
+    },
+    "job_id": {
+      "type": "string"
+    },
+    "site_id": {
+      "type": "string"
+    },
+    "environment": {
+      "enum": [
+        "staging",
+        "production",
+        "local-disposable"
+      ]
+    },
+    "requested_action": {
+      "type": "string"
+    },
     "status": {
       "enum": [
-        "RECEIVED", "VALIDATING", "READY", "BUILDING", "BUILT", "STAGING_DEPLOY", "STAGING_QA",
-        "AUTHORIZATION_CHECK", "PRODUCTION_DEPLOY", "PRODUCTION_SMOKE", "MONITORING", "DONE",
-        "BLOCKED_INPUT", "BLOCKED_LICENSE", "BLOCKED_RIGHTS", "BLOCKED_SECRET", "BLOCKED_ACCESS",
-        "BLOCKED_AUTHORIZATION", "BLOCKED_SEO", "QA_FAILED", "DEPLOY_FAILED", "ROLLED_BACK", "QUARANTINED"
+        "RECEIVED",
+        "VALIDATING",
+        "READY",
+        "BUILDING",
+        "BUILT",
+        "STAGING_DEPLOY",
+        "STAGING_QA",
+        "AUTHORIZATION_CHECK",
+        "PRODUCTION_DEPLOY",
+        "PRODUCTION_SMOKE",
+        "MONITORING",
+        "DONE",
+        "BLOCKED_INPUT",
+        "BLOCKED_LICENSE",
+        "BLOCKED_RIGHTS",
+        "BLOCKED_SECRET",
+        "BLOCKED_ACCESS",
+        "BLOCKED_AUTHORIZATION",
+        "BLOCKED_SEO",
+        "QA_FAILED",
+        "DEPLOY_FAILED",
+        "ROLLED_BACK",
+        "QUARANTINED"
       ]
     },
     "blockers": {
-      "type": "array", "default": [],
+      "type": "array",
+      "default": [],
       "items": {
-        "type": "object", "additionalProperties": false,
-        "required": ["status", "field", "reason", "required_input"],
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status",
+          "field",
+          "reason",
+          "required_input"
+        ],
         "properties": {
-          "status": { "type": "string" },
-          "field": { "type": "string" },
-          "reason": { "type": "string" },
-          "required_input": { "type": "string" },
-          "blocks_stage": { "type": "string" }
+          "status": {
+            "type": "string"
+          },
+          "field": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "required_input": {
+            "type": "string"
+          },
+          "blocks_stage": {
+            "type": "string"
+          }
         }
       }
     },
-    "started_at": { "type": "string", "format": "date-time" },
-    "finished_at": { "type": "string", "format": "date-time" },
-    "factory_commit": { "type": "string" },
-    "knowledge_freeze_version": { "type": ["string", "null"] },
-    "build_id": { "type": ["string", "null"] },
-    "release_id": { "type": ["string", "null"] },
-    "previous_release_id": { "type": ["string", "null"] },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "finished_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "factory_commit": {
+      "type": "string"
+    },
+    "knowledge_freeze_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "build_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "release_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "previous_release_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "steps": {
       "type": "array",
       "items": {
-        "type": "object", "additionalProperties": false,
-        "required": ["id", "status", "started_at", "finished_at"],
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "status",
+          "started_at",
+          "finished_at"
+        ],
         "properties": {
-          "id": { "type": "string" },
-          "status": { "enum": ["ok", "failed", "skipped", "blocked"] },
-          "started_at": { "type": "string" },
-          "finished_at": { "type": "string" },
-          "attempts": { "type": "integer", "minimum": 1, "default": 1 },
-          "exit_code": { "type": ["integer", "null"] },
-          "detail": { "type": "string" },
-          "mutation": { "type": "boolean", "default": false }
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "ok",
+              "failed",
+              "skipped",
+              "blocked"
+            ]
+          },
+          "started_at": {
+            "type": "string"
+          },
+          "finished_at": {
+            "type": "string"
+          },
+          "attempts": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 1
+          },
+          "exit_code": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "detail": {
+            "type": "string"
+          },
+          "mutation": {
+            "type": "boolean",
+            "default": false
+          }
         }
       }
     },
@@ -62,42 +186,174 @@
       "type": "array",
       "description": "Каждая проверка обязана нести фактическую команду, exit code и артефакт.",
       "items": {
-        "type": "object", "additionalProperties": false,
-        "required": ["id", "command", "exit_code", "passed", "artifact"],
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "command",
+          "exit_code",
+          "passed",
+          "artifact"
+        ],
         "properties": {
-          "id": { "type": "string" },
-          "command": { "type": "string" },
-          "exit_code": { "type": "integer" },
-          "passed": { "type": "boolean" },
-          "artifact": { "type": "string" },
-          "counts": { "type": "object" },
-          "severity": { "enum": ["critical", "major", "minor"], "default": "critical" }
+          "id": {
+            "type": "string"
+          },
+          "command": {
+            "type": "string"
+          },
+          "exit_code": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Фактический код возврата; null означает, что команда не запускалась."
+          },
+          "passed": {
+            "type": "boolean"
+          },
+          "artifact": {
+            "type": "string"
+          },
+          "counts": {
+            "type": "object"
+          },
+          "severity": {
+            "enum": [
+              "critical",
+              "major",
+              "minor"
+            ],
+            "default": "critical"
+          }
         }
       }
     },
-    "artifacts": { "type": "array", "items": { "type": "string" } },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "mutations": {
       "type": "array",
       "description": "Фактически применённые изменения. Для plan/dry-run обязан быть пустым.",
       "items": {
-        "type": "object", "additionalProperties": false,
-        "required": ["target", "kind", "detail", "at"],
-        "properties": { "target": { "type": "string" }, "kind": { "enum": ["filesystem", "database", "dns", "tls", "cron", "service", "symlink"] }, "detail": { "type": "string" }, "at": { "type": "string" }, "idempotent_noop": { "type": "boolean", "default": false } }
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "target",
+          "kind",
+          "detail",
+          "at"
+        ],
+        "properties": {
+          "target": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "filesystem",
+              "database",
+              "dns",
+              "tls",
+              "cron",
+              "service",
+              "symlink"
+            ]
+          },
+          "detail": {
+            "type": "string"
+          },
+          "at": {
+            "type": "string"
+          },
+          "idempotent_noop": {
+            "type": "boolean",
+            "default": false
+          }
+        }
       }
     },
     "backup": {
-      "type": ["object", "null"], "additionalProperties": false,
-      "properties": { "taken": { "type": "boolean" }, "ref": { "type": ["string", "null"] }, "restore_verified": { "type": "boolean" }, "verified_at": { "type": ["string", "null"] } }
-    },
-    "seo_summary": {
-      "type": ["object", "null"], "additionalProperties": false,
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
       "properties": {
-        "pages_total": { "type": "integer" }, "indexable": { "type": "integer" }, "noindex": { "type": "integer" },
-        "in_sitemap": { "type": "integer" }, "duplicate_titles": { "type": "integer" }, "duplicate_descriptions": { "type": "integer" },
-        "redirect_chains": { "type": "integer" }, "orphan_pages": { "type": "integer" }, "soft_404": { "type": "integer" },
-        "broken_links": { "type": "integer" }, "jsonld_errors": { "type": "integer" }
+        "taken": {
+          "type": "boolean"
+        },
+        "ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "restore_verified": {
+          "type": "boolean"
+        },
+        "verified_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
       }
     },
-    "notes": { "type": "array", "items": { "type": "string" }, "default": [] }
+    "seo_summary": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "pages_total": {
+          "type": "integer"
+        },
+        "indexable": {
+          "type": "integer"
+        },
+        "noindex": {
+          "type": "integer"
+        },
+        "in_sitemap": {
+          "type": "integer"
+        },
+        "duplicate_titles": {
+          "type": "integer"
+        },
+        "duplicate_descriptions": {
+          "type": "integer"
+        },
+        "redirect_chains": {
+          "type": "integer"
+        },
+        "orphan_pages": {
+          "type": "integer"
+        },
+        "soft_404": {
+          "type": "integer"
+        },
+        "broken_links": {
+          "type": "integer"
+        },
+        "jsonld_errors": {
+          "type": "integer"
+        }
+      }
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "acceptance_complete": {
+      "type": "boolean",
+      "description": "Все ли проверки приёмки фактически пройдены. DONE при false означает сокращённую приёмку."
+    }
   }
 }

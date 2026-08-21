@@ -16,7 +16,21 @@ from pathlib import Path
 import yaml
 
 from factory import validation
-from factory.errors import BlockedInput, FactoryError
+from factory.errors import (
+    BlockedAccess, BlockedAuthorization, BlockedInput, BlockedLicense, BlockedRights,
+    BlockedSecret, BlockedSeo, FactoryError,
+)
+
+#: Статус валидации → класс ошибки. Общего «failed» не существует.
+STATUS_TO_ERROR = {
+    "BLOCKED_INPUT": BlockedInput,
+    "BLOCKED_LICENSE": BlockedLicense,
+    "BLOCKED_RIGHTS": BlockedRights,
+    "BLOCKED_SECRET": BlockedSecret,
+    "BLOCKED_ACCESS": BlockedAccess,
+    "BLOCKED_AUTHORIZATION": BlockedAuthorization,
+    "BLOCKED_SEO": BlockedSeo,
+}
 from factory.paths import PATHS
 from factory.render import SiteRenderer
 
@@ -63,11 +77,13 @@ def _dir_digest(path: Path) -> str:
 
 
 def _content_digest(site_id: str, package: dict) -> str:
-    ref = (package.get("content_source") or {}).get("catalog_ref")
-    if not ref:
-        return "none"
-    path = PATHS.site_dir(site_id) / ref
-    return hashlib.sha256(path.read_bytes()).hexdigest() if path.exists() else "missing"
+    """Дайджест ВСЕХ файлов сайта, а не только каталога.
+
+    Правка юридического текста, логотипа или медиа обязана менять адрес сборки:
+    иначе сборка вернётся из кеша, деплой посчитает релиз применённым, и сайт
+    продолжит отдавать старую редакцию документа.
+    """
+    return _dir_digest(PATHS.site_dir(site_id))
 
 
 def factory_source_digest() -> str:
@@ -92,12 +108,16 @@ def factory_source_digest() -> str:
 
 def compute_build_id(site_id: str, package: dict) -> str:
     theme_dir = PATHS.themes / package["theme_ref"]
-    matrix = yaml.safe_load((PATHS.knowledge / "SEO_INDEXABILITY_MATRIX.yaml").read_text(encoding="utf-8")) or {}
+    matrix_path = PATHS.knowledge / "SEO_INDEXABILITY_MATRIX.yaml"
+    matrix = yaml.safe_load(matrix_path.read_text(encoding="utf-8")) or {}
     material = _canonical({
         "package": package,
         "content": _content_digest(site_id, package),
         "theme": _dir_digest(theme_dir),
         "matrix_policy_version": matrix.get("policy_version"),
+        # Содержимое матрицы, а не только объявленная версия: правка правил
+        # индексации без бампа policy_version меняла бы рендер незаметно.
+        "matrix_sha256": hashlib.sha256(matrix_path.read_bytes()).hexdigest(),
         "renderer": RENDERER_VERSION,
         "factory_source": factory_source_digest(),
     })
@@ -117,12 +137,14 @@ def php_lint(paths: list[Path]) -> list[dict]:
 def build(site_id: str, *, environment: str | None = None, force: bool = False) -> BuildResult:
     result = validation.validate(site_id)
     if not result.ok:
-        raise FactoryError(
-            f"Пакет не прошёл валидацию: {result.status}. Первый блокер: {result.blockers[0].reason}"
-        ) if result.status not in ("BLOCKED_INPUT",) else BlockedInput(
-            f"Пакет не прошёл валидацию. Первый блокер: {result.blockers[0].reason}",
-            field=result.blockers[0].field,
-            required_input=result.blockers[0].required_input,
+        # Точный статус, а не общий QUARANTINED: иначе отсутствие прав или лицензии
+        # становится «временной» ошибкой и ретраится.
+        blocker = result.blockers[0]
+        error_class = STATUS_TO_ERROR.get(result.status, BlockedInput)
+        raise error_class(
+            f"Пакет не прошёл валидацию ({result.status}). Первый блокер: {blocker.reason}",
+            field=blocker.field,
+            required_input=blocker.required_input,
             blocks_stage="BUILDING",
         )
     package = result.package or {}

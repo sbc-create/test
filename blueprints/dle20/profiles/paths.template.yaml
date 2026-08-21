@@ -44,3 +44,15 @@ permissions:
   web_process_user: ""
   writable_mode: ""         # НЕ 777
   immutable_mode: ""
+
+# Расположение на целевом хосте. Шаблоны подставляются deployment-слоем;
+# захардкоженных /srv, /etc/nginx и /run/php в playbook'ах быть не должно.
+layout:
+  site_root_template: ""        # напр. /srv/sites/{site_id}/{environment}
+  backup_root_template: ""      # напр. /srv/backups/{site_id}/{environment}
+  webserver_config_dir: ""      # напр. /etc/nginx/sites-available
+  fpm_socket_template: ""       # напр. /run/php/php{php_version}-fpm-{site_id}.sock
+
+webserver:
+  content_security_policy: ""   # согласованная политика с учётом плеера и рекламы
+  fastcgi_include: ""           # напр. snippets/fastcgi-php.conf (зависит от дистрибутива)

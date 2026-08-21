@@ -25,9 +25,18 @@ def test_requirements_table_is_parsed():
 
 
 @pytest.mark.parametrize("row", rows(), ids=lambda r: r["id"])
-def test_every_requirement_has_an_existing_test(row):
+def test_every_requirement_is_named_inside_its_test(row):
+    """Файл обязан не просто существовать, а называть требование, которое доказывает.
+
+    Прежняя версия проверяла только `Path.exists()`, поэтому «прослеженность»
+    держалась на имени файла, а не на его содержимом.
+    """
     target = PATHS.root / row["test"]
     assert target.exists(), f"{row['id']}: тест {row['test']} не существует"
+    if target.suffix in (".sh",):
+        return
+    text = target.read_text(encoding="utf-8")
+    assert row["id"] in text, f"{row['id']}: в {row['test']} нет ссылки на это требование"
 
 
 def test_requirement_ids_are_unique():
@@ -35,10 +44,25 @@ def test_requirement_ids_are_unique():
     assert len(ids) == len(set(ids))
 
 
-def test_key_statuses_are_covered_by_tests():
-    """Для каждого блокирующего статуса существует тест, который его вызывает."""
-    sources = "\n".join(p.read_text(encoding="utf-8") for p in (PATHS.root / "tests").rglob("*.py"))
-    for status in ("BLOCKED_INPUT", "BLOCKED_LICENSE", "BLOCKED_RIGHTS", "BLOCKED_SECRET",
-                   "BLOCKED_ACCESS", "BLOCKED_AUTHORIZATION", "BLOCKED_SEO", "QA_FAILED",
-                   "DEPLOY_FAILED", "ROLLED_BACK", "QUARANTINED"):
-        assert status in sources, f"нет теста, доказывающего статус {status}"
+STATUSES = ("BLOCKED_INPUT", "BLOCKED_LICENSE", "BLOCKED_RIGHTS", "BLOCKED_SECRET",
+            "BLOCKED_ACCESS", "BLOCKED_AUTHORIZATION", "BLOCKED_SEO", "QA_FAILED",
+            "DEPLOY_FAILED", "ROLLED_BACK", "QUARANTINED")
+
+
+@pytest.mark.parametrize("status", STATUSES)
+def test_every_blocking_status_is_asserted_somewhere(status):
+    """Статус обязан встречаться в assert-выражении вне самого traceability-теста.
+
+    Прежняя версия склеивала все тесты вместе, включая этот файл со списком
+    статусов, и потому проходила всегда — сама себя и удовлетворяла.
+    """
+    hits = []
+    for path in (PATHS.root / "tests").rglob("*.py"):
+        if path.name == "test_traceability.py":
+            continue
+        for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+            stripped = line.strip()
+            if status in stripped and (stripped.startswith("assert") or "pytest.raises" in stripped
+                                       or "== \"" + status in stripped or "status ==" in stripped):
+                hits.append(f"{path.name}:{number}")
+    assert hits, f"статус {status} не проверяется ни одним assert вне traceability-теста"

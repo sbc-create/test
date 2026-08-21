@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import re
 import time
+import urllib.parse
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -24,6 +25,10 @@ TAG_RE = {
 }
 JSONLD_RE = re.compile(r'<script type="application/ld\+json">(.*?)</script>', re.S)
 HREFLANG_RE = re.compile(r'<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"', re.I)
+OG_URL_RE = re.compile(r'<meta property="og:url" content="([^"]+)"', re.I)
+
+#: Поля VideoObject, допустимые без отдельного подтверждения contract.
+JSONLD_VIDEO_ALLOWED = {"@context", "@type", "name", "description", "url"}
 LINK_RE = re.compile(r'<a\s[^>]*href="([^"]+)"', re.I)
 STAGING_HINT_RE = re.compile(r"(localhost|127\.0\.0\.1|staging|\.test\b|demo|lorem ipsum)", re.I)
 
@@ -40,11 +45,14 @@ def lint(build_dir: Path, *, environment: str = "staging") -> Report:
         return report
     config = json.loads(routes_file.read_text(encoding="utf-8"))
     routes = config["routes"]
+    base_url = str(config.get("base_url", "")).rstrip("/")
+    site_host = urllib.parse.urlparse(base_url).netloc.lower()
     public = build_dir / "public"
     matrix_types = {p["id"]: p for p in matrix_mod.load().get("page_types", [])}
     url_policy = matrix_mod.url_policy()
     forbidden_params = set(url_policy.get("forbidden_in_url") or [])
     today = time.strftime("%Y-%m-%d", time.gmtime())
+    allowed_video_fields = set(config.get("allowed_video_fields") or [])
 
     titles: dict[str, list[str]] = defaultdict(list)
     descriptions: dict[str, list[str]] = defaultdict(list)
@@ -79,8 +87,23 @@ def lint(build_dir: Path, *, environment: str = "staging") -> Report:
                 report.add(Finding("canonical", "critical", url, "Индексируемая страница без self-canonical.", "HR-1"))
             elif not canonical.startswith("https://"):
                 report.add(Finding("canonical", "critical", url, f"Canonical не абсолютный: {canonical}", "HR-1"))
-            elif not canonical.endswith(url):
-                report.add(Finding("canonical", "critical", url, f"Canonical «{canonical}» не совпадает с собственным URL.", "HR-1"))
+            else:
+                canonical_host = urllib.parse.urlparse(canonical).netloc.lower()
+                if site_host and canonical_host != site_host:
+                    # Раньше сравнивался только хвост URL, поэтому canonical на чужой
+                    # домен проходил проверку целиком.
+                    report.add(Finding("canonical", "critical", url,
+                                       f"Canonical указывает на чужой домен «{canonical_host}» вместо «{site_host}».", "HR-2"))
+                elif not canonical.endswith(url):
+                    report.add(Finding("canonical", "critical", url, f"Canonical «{canonical}» не совпадает с собственным URL.", "HR-1"))
+            # F-4.2: отсутствие description у индексируемой страницы раньше не замечалось
+            if not description.strip():
+                report.add(Finding("description", "critical", url, "Индексируемая страница без meta description."))
+            # F-4.3: OG-URL обязан совпадать с каноническим
+            og_url_match = OG_URL_RE.search(html)
+            if og_url_match and canonical and og_url_match.group(1) != canonical:
+                report.add(Finding("og", "critical", url,
+                                   f"og:url «{og_url_match.group(1)}» расходится с canonical «{canonical}»."))
             if not title:
                 report.add(Finding("title", "critical", url, "Пустой title у индексируемой страницы."))
             titles[title].append(url)
@@ -109,8 +132,24 @@ def lint(build_dir: Path, *, environment: str = "staging") -> Report:
                 report.add(Finding("jsonld", "critical", url, f"JSON-LD не парсится: {exc}"))
                 continue
             if data.get("@type") == "VideoObject":
-                if 'class="player-frame"' not in html:
+                # Матч по префиксу: рендер добавляет к классу модификатор соотношения
+                # сторон, и точное сравнение никогда не срабатывало.
+                if 'class="player-frame' not in html:
                     report.add(Finding("jsonld", "critical", url, "VideoObject размечен на странице без видимого плеера.", "HR-6"))
+                unexpected = set(data) - JSONLD_VIDEO_ALLOWED - allowed_video_fields
+                if unexpected:
+                    report.add(Finding("jsonld", "critical", url,
+                                       f"В VideoObject поля вне разрешённых contract: {', '.join(sorted(unexpected))}.", "HR-6"))
+            # Пустой список типов в матрице означает «никакой разметки», а не «любая».
+            declared_types = set((matrix_types.get(page_type) or {}).get("structured_data") or [])
+            emitted = data.get("@type")
+            if emitted:
+                simple = {t.split("_")[0] for t in declared_types}
+                allowed_here = emitted in simple or any(emitted in t for t in declared_types)
+                if not allowed_here:
+                    report.add(Finding("jsonld", "critical", url,
+                                       f"Тип {emitted} не разрешён матрицей для «{page_type}» "
+                                       f"(разрешено: {', '.join(sorted(declared_types)) or 'ничего'}).", "HR-6"))
         # содержимое staging в production
         if environment == "production" and STAGING_HINT_RE.search(html):
             report.add(Finding("production-purity", "critical", url, "В production-сборке найден staging/demo/placeholder-маркер.", "HR-8"))
@@ -176,7 +215,36 @@ def lint(build_dir: Path, *, environment: str = "staging") -> Report:
         if redirect["source"].endswith("page/1/") and redirect["status"] != 301:
             report.add(Finding("pagination", "critical", redirect["source"], "page/1/ обязан отдавать 301 на базовый URL."))
 
+    # Содержимое собранного sitemap проверяется независимо от окружения:
+    # раньше он на staging не собирался, и правило HR-3 не проверялось ни разу.
+    sitemap_dir = next((d for d in (public, build_dir / "sitemap-preview") if (d / "sitemap.xml").exists()), None)
+    sitemap_urls: list[str] = []
+    if sitemap_dir:
+        for sitemap_file in sorted(sitemap_dir.glob("sitemap*.xml")):
+            text = sitemap_file.read_text(encoding="utf-8")
+            for loc in re.findall(r"<loc>([^<]+)</loc>", text):
+                if loc.endswith(".xml"):
+                    continue
+                sitemap_urls.append(loc)
+                path = urllib.parse.urlparse(loc).path
+                route = by_path.get(path)
+                if route is None:
+                    report.add(Finding("sitemap", "critical", loc, "URL из sitemap отсутствует среди маршрутов сборки.", "HR-3"))
+                elif not route["indexable"] or route["status"] != 200:
+                    report.add(Finding("sitemap", "critical", loc,
+                                       f"В sitemap попал URL со статусом {route['status']} / indexable={route['indexable']}.", "HR-3"))
+                elif route.get("canonical") and route["canonical"] != loc:
+                    report.add(Finding("sitemap", "critical", loc, "URL в sitemap не совпадает с каноническим.", "HR-3"))
+        expected = {r["canonical"] for r in routes if r["in_sitemap"] and r["indexable"] and r["status"] == 200 and r.get("canonical")}
+        missing = expected - set(sitemap_urls)
+        if missing:
+            report.add(Finding("sitemap", "critical", sorted(missing)[0],
+                               f"В sitemap не попали {len(missing)} индексируемых URL.", "HR-3"))
+    elif any(r["in_sitemap"] for r in routes):
+        report.add(Finding("sitemap", "critical", "sitemap.xml", "Sitemap не собран, хотя маршруты помечены для включения.", "HR-3"))
+
     report.counts = {
+        "sitemap_urls": len(sitemap_urls),
         "routes": len(routes),
         "indexable": sum(1 for r in routes if r["indexable"] and r["status"] == 200),
         "in_sitemap": sum(1 for r in routes if r["in_sitemap"]),

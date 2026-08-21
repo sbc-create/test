@@ -14,7 +14,7 @@
 
 - name: Refuse world-writable modes anywhere in the layout
   ansible.builtin.assert:
-    that: "'777' not in (writable_mode | default('0750'))"
+    that: "'777' not in writable_mode"
     fail_msg: "world-writable права запрещены в production (§3.9)"
 
 - name: Upload release artifacts
@@ -34,10 +34,18 @@
     dest: "{{ release_dir }}/{{ item }}"
     state: link
     force: true
-  loop: "{{ shared_link_paths | default(['uploads', 'logs', 'cache']) }}"
+  # Никаких догадок о структуре DLE: список приходит из профиля.
+  loop: "{{ shared_link_paths }}"
+
+- name: Fail when installer entry points are unknown
+  ansible.builtin.assert:
+    that:
+      - installer_entrypoints is defined
+      - installer_entrypoints | length > 0
+    fail_msg: "Точки входа установщика обязаны приходить из профиля: пустой список молча оставил бы установщик на месте"
 
 - name: Remove installer entry points after successful installation
   ansible.builtin.file:
     path: "{{ release_dir }}/{{ item }}"
     state: absent
-  loop: "{{ installer_entrypoints | default([]) }}"
+  loop: "{{ installer_entrypoints }}"

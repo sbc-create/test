@@ -1,13 +1,19 @@
 ---
-# Откат на предыдущий рабочий релиз. Код откатывается атомарно; миграции БД
-# восстанавливаются из бэкапа этого релиза и подтверждаются сравнением.
+# Откат КОДА на предыдущий релиз: переключение симлинка + health-проверка.
+#
+# База данных этим playbook'ом НЕ откатывается. Если релиз содержал миграцию,
+# оператор восстанавливает БД из бэкапа этого релиза (backup.ref в результате
+# задания) и подтверждает восстановление сравнением — см. docs/ROLLBACK.md.
+# Предыдущий релиз выбирается по времени изменения каталога; если нужен строго
+# «последний известно рабочий», передай его явно через переменную target_release.
 - name: Rollback DLE site to previous release
   hosts: "{{ target_host | default(omit) }}"
   gather_facts: true
   vars:
-    site_root: "/srv/sites/{{ site_id }}/{{ environment }}"
+    site_root: "{{ site_root }}"
   tasks:
     - name: Resolve previous release
+      when: target_release is not defined
       ansible.builtin.shell: |
         set -euo pipefail
         cd "{{ site_root }}/releases"
@@ -23,9 +29,16 @@
         that: previous_release.stdout | trim | length > 0
         fail_msg: "Предыдущий рабочий релиз отсутствует — откат невозможен"
 
+    - name: Warn when rolling back to a database-backed release
+      ansible.builtin.debug:
+        msg: >-
+          Релиз содержит БД ({{ database_engine }}). Откат кода не откатывает данные:
+          восстанови БД из бэкапа этого релиза и подтверди сравнением.
+      when: database_engine | default('none') != 'none'
+
     - name: Switch current to previous release
       ansible.builtin.file:
-        src: "{{ site_root }}/releases/{{ previous_release.stdout | trim }}"
+        src: "{{ site_root }}/releases/{{ target_release | default(previous_release.stdout | trim) }}"
         dest: "{{ site_root }}/current"
         state: link
         force: true

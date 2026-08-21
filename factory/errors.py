@@ -21,6 +21,11 @@ ALL_STATES = PIPELINE_STATES + FAILURE_STATES
 NON_RETRYABLE = {
     "BLOCKED_INPUT", "BLOCKED_LICENSE", "BLOCKED_RIGHTS", "BLOCKED_SECRET",
     "BLOCKED_AUTHORIZATION", "BLOCKED_SEO",
+    # Отсутствующий хост, незапиненный host key или неустановленный ansible от
+    # повтора не появятся, а каждая попытка делает новый бэкап и рестарт сервера.
+    "BLOCKED_ACCESS",
+    # Провал ворот качества — это найденный дефект, а не временная ошибка среды.
+    "QA_FAILED",
 }
 
 

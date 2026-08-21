@@ -20,8 +20,6 @@ import yaml
 from factory import inventory, licensing
 from factory.paths import PATHS
 
-_current_site_id = [""]
-
 STATUS_PRIORITY = (
     "BLOCKED_INPUT",
     "BLOCKED_AUTHORIZATION",
@@ -257,13 +255,13 @@ def _check_content_rights(pkg: dict, site_id: str, out: list[Blocker]) -> None:
         out.append(Blocker("BLOCKED_RIGHTS", "content_source.rights_manifest_ref", f"Файл rights manifest «{ref}» не найден внутри sites/{site_id}/.", "Положи rights manifest в каталог сайта", "BUILDING"))
 
 
-def _check_vk_and_ads(pkg: dict, out: list[Blocker]) -> None:
+def _check_vk_and_ads(pkg: dict, site_id: str, out: list[Blocker]) -> None:
     env = pkg.get("environment")
     vk = pkg.get("vk_video") or {}
     ads = pkg.get("advertising") or {}
     if vk.get("enabled"):
         ref = vk.get("contract_ref")
-        if ref and not _resolve_site_file(_current_site_id[0], ref):
+        if ref and not _resolve_site_file(site_id, ref):
             out.append(Blocker("BLOCKED_RIGHTS", "vk_video.contract_ref", f"Contract «{ref}» не найден в каталоге сайта.", "Положи переданный contract в sites/<site_id>/ и сошлись на него", "BUILDING"))
         if not vk.get("contract_ref"):
             out.append(Blocker("BLOCKED_RIGHTS", "vk_video.contract_ref", "VK-плеер включён без ссылки на contract.", "Официальный/внутренний contract белого плеера", "BUILDING"))
@@ -273,7 +271,7 @@ def _check_vk_and_ads(pkg: dict, out: list[Blocker]) -> None:
             out.append(Blocker("BLOCKED_RIGHTS", "vk_video.adapter", "Mock-адаптер VK технически запрещён в production.", "adapter: official с подтверждённым contract", "PRODUCTION_DEPLOY"))
     if ads.get("enabled"):
         ref = ads.get("contract_ref")
-        if ref and not _resolve_site_file(_current_site_id[0], ref):
+        if ref and not _resolve_site_file(site_id, ref):
             out.append(Blocker("BLOCKED_RIGHTS", "advertising.contract_ref", f"Рекламный contract «{ref}» не найден в каталоге сайта.", "Положи переданный contract в sites/<site_id>/", "BUILDING"))
         if not ads.get("contract_ref"):
             out.append(Blocker("BLOCKED_RIGHTS", "advertising.contract_ref", "Рекламный слой включён без contract VK/Adman/AdTech.", "Согласованный рекламный contract с placement/product IDs", "BUILDING"))
@@ -405,13 +403,12 @@ def validate(site_id: str) -> ValidationResult:
         # без валидной схемы семантические проверки дают шум, а не пользу
         return ValidationResult(site_id, pkg, blockers, warnings)
 
-    _current_site_id[0] = site_id
     _check_environment(pkg, blockers)
     _check_license(pkg, blockers, warnings)
     _check_targets(pkg, blockers)
     _check_domain_consistency(pkg, blockers)
     _check_content_rights(pkg, site_id, blockers)
-    _check_vk_and_ads(pkg, blockers)
+    _check_vk_and_ads(pkg, site_id, blockers)
     _check_secrets(pkg, blockers)
     _check_seo(pkg, blockers, warnings)
     _check_files(pkg, site_id, blockers)

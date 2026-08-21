@@ -11,7 +11,7 @@
 | REQ-MODE-B | Режим B: работа только на замороженной базе, пакете и разрешённых endpoint; пустое поле ≠ умолчание | §1 | `tests/unit/test_validation.py` |
 | REQ-DLE-VERSION | Базовая версия — DLE 20.0; автопереход запрещён | §3.1 | `tests/unit/test_schemas.py` |
 | REQ-DLE-DIST | Только официальный переданный дистрибутив; SHA-256 фиксируется; архив не в git | §3.2–3.3 | `tests/unit/test_repo_hygiene.py` |
-| REQ-DLE-LICENSE | Одна лицензия = один домен второго уровня и его поддомены; иначе `BLOCKED_LICENSE` | §3.4 | `tests/unit/test_licensing.py` |
+| REQ-DLE-LICENSE | Одна лицензия = один домен второго уровня и его поддомены; иначе `BLOCKED_LICENSE` | §3.4 | `tests/unit/test_production_gates.py` |
 | REQ-DLE-CORE | Ядро DLE не модифицируется; расширения — через plugin/VFS и шаблоны | §3.5 | `tests/unit/test_repo_hygiene.py` |
 | REQ-DLE-ISOLATION | Отдельные БД и DB user на сайт | §3.6 | `tests/unit/test_schemas.py` |
 | REQ-DLE-PATHS | Изменяемые пути берутся из официальной документации, не угадываются | §3.8 | `tests/unit/test_blueprint_profile.py` |
@@ -26,12 +26,12 @@
 | REQ-AUDIT | Журнал каждой мутации: job, site, commit, actor, target, время, exit code, redacted output | §5.6 | `tests/unit/test_audit.py` |
 | REQ-PACKAGE | Единственный вход — versioned site package со строгой схемой | §6 | `tests/unit/test_schemas.py` |
 | REQ-SECRETS | Секреты только через `secret_ref`; не в git, лог, отчёт, скриншот, fixture | §6 | `tests/unit/test_redaction.py` |
-| REQ-STATES | Точные статусы конвейера и отказов; без общего failed | §7 | `tests/unit/test_state_machine.py` |
+| REQ-STATES | Точные статусы конвейера и отказов; без общего failed | §7 | `tests/integration/test_pipeline_failure_modes.py` |
 | REQ-LOCK | Lock на site+environment исключает параллельное изменение | §7 | `tests/unit/test_locks.py` |
 | REQ-RETRY | Retry только для временных ошибок; backoff, jitter, конечный лимит; конфигурация не ретраится | §7 | `tests/unit/test_retry.py` |
 | REQ-QUEUE | Один job семантически один раз даже после restart; quarantine после исчерпания | §7 | `tests/unit/test_queue.py` |
 | REQ-DRYRUN | `plan` и `--dry-run` не меняют инфраструктуру | §7 | `tests/integration/test_dry_run.py` |
-| REQ-AUTH | `production_authorized=false` → ноль мутаций; staging не открывает production | §7 | `tests/unit/test_authorization.py` |
+| REQ-AUTH | `production_authorized=false` → ноль мутаций; staging не открывает production | §7 | `tests/unit/test_production_gates.py` |
 | REQ-SSH | Least-privilege, host key pinning, узкий sudo-allowlist, scoped DNS-токены | §8 | `tests/unit/test_inventory_security.py` |
 | REQ-ATOMIC | Атомарные релизы; переключение после health; предыдущий релиз сохраняется | §8.7 | `tests/integration/test_rollback.py` |
 | REQ-EXPOSURE | Закрыты installer, конфиги, бэкапы, `.env`, git-метаданные, debug, листинг каталогов | §8.10 | `tests/integration/test_security_smoke.py` |
@@ -46,7 +46,7 @@
 | REQ-SEO-PAGINATION | Серверная пагинация ссылками, self-canonical, page 1 один URL, out-of-range 404 | §9A | `tests/integration/test_pagination.py` |
 | REQ-SEO-FACETS | Индексируемые фасеты только из allowlist; параметры нормализуются | §9A | `tests/unit/test_validation.py` |
 | REQ-SEO-META | Уникальные title/H1/description; крошки совпадают с BreadcrumbList | §9A | `tests/unit/test_seo_lint.py` |
-| REQ-SEO-SITEMAP | Sitemap только canonical+indexable+200; staging закрыт авторизацией и noindex | §9A | `tests/integration/test_security_smoke.py` |
+| REQ-SEO-SITEMAP | Sitemap только canonical+indexable+200; staging закрыт авторизацией и noindex | §9A | `tests/unit/test_seo_lint.py` |
 | REQ-SEO-SD | JSON-LD только по фактам; VideoObject только при видимом доступном видео | §9A | `tests/unit/test_seo_lint.py` |
 | REQ-SEO-QUALITY | Нет scaled content abuse, пустых оболочек, мимикрии | §9A | `tests/unit/test_content_rules.py` |
 | REQ-SEO-LINKS | Нет orphan-страниц; ссылки crawlable; mobile = desktop по контенту | §9A | `tests/integration/test_crawl.py` |

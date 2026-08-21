@@ -29,6 +29,7 @@ def test_backup_alone_is_not_proof_of_restore(target):
 
 
 def test_restore_actually_restores_content(target, tmp_path):
+    """Восстановление возвращает именно то содержимое, что было на момент бэкапа."""
     marker = target.shared_dir / "restore-marker.txt"
     target.shared_dir.mkdir(parents=True, exist_ok=True)
     marker.write_text("значение до бэкапа", encoding="utf-8")
@@ -41,6 +42,24 @@ def test_restore_actually_restores_content(target, tmp_path):
     assert restored.exists()
     assert restored.read_text(encoding="utf-8") == "значение до бэкапа"
     marker.unlink(missing_ok=True)
+
+
+def test_restore_detects_corrupted_archive(target, tmp_path):
+    """Повреждённый архив не должен считаться восстановимым."""
+    backup = target.backup()
+    archive = PATHS.root / backup["ref"]
+    corrupted = tmp_path / "corrupted.tar.gz"
+    corrupted.write_bytes(archive.read_bytes()[: archive.stat().st_size // 3])
+    relative = str(corrupted.relative_to(PATHS.root)) if str(corrupted).startswith(str(PATHS.root)) else None
+    if relative is None:
+        import shutil as _shutil
+        target_copy = PATHS.backups / "corrupted-test.tar.gz"
+        _shutil.copyfile(corrupted, target_copy)
+        relative = str(target_copy.relative_to(PATHS.root))
+    try:
+        assert target.restore(relative, tmp_path / "out") is False
+    finally:
+        (PATHS.root / relative).unlink(missing_ok=True)
 
 
 def test_restore_of_missing_archive_fails_honestly(target, tmp_path):

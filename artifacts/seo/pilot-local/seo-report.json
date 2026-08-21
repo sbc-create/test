@@ -6,6 +6,7 @@
       "name": "seo-lint",
       "passed": true,
       "counts": {
+        "sitemap_urls": 45,
         "routes": 48,
         "indexable": 45,
         "in_sitemap": 45,

@@ -18,9 +18,22 @@ PASS = "pass"  # хук не высказывается, решают обычн
 SEPARATORS = ("&&", "||", ";", "|&", "|", "&", "\n")
 
 # Обёртки, которые исполняют свой аргумент как команду.
-WRAPPERS = {"timeout", "time", "nice", "nohup", "stdbuf", "command", "builtin", "noglob", "xargs"}
-# Обёртки, для которых срезается ещё и опция (например `timeout 30 cmd`).
-WRAPPER_TAKES_VALUE = {"timeout", "nice", "stdbuf"}
+# Список расширен после security review: env/flock/watch/setsid/ionice/chroot и
+# контейнерные раннеры точно так же запускают произвольную команду, и без них
+# `env ssh prod reboot` проходил проверку.
+WRAPPERS = {
+    "timeout", "time", "nice", "nohup", "stdbuf", "command", "builtin", "noglob", "xargs",
+    "env", "flock", "watch", "setsid", "ionice", "chrt", "taskset", "unbuffer", "script",
+    "sudo_wrapper", "runuser", "chroot", "proot", "doas_wrapper",
+}
+# Обёртки, для которых срезается ещё и значение опции (например `timeout 30 cmd`).
+WRAPPER_TAKES_VALUE = {"timeout", "nice", "stdbuf", "flock", "ionice", "chrt", "taskset", "watch"}
+
+#: Интерпретаторы: содержимое их `-c` разбирается рекурсивно.
+INTERPRETERS = {"bash", "sh", "zsh", "dash", "ksh", "csh", "tcsh", "fish",
+                "python", "python2", "python3", "perl", "ruby", "node", "nodejs", "php", "deno", "bun"}
+#: Раннеры, запускающие команду внутри контейнера/окружения.
+CONTAINER_RUNNERS = {"docker", "podman", "nerdctl", "kubectl", "devbox", "mise", "direnv", "npx", "pnpm", "yarn", "bunx"}
 
 
 @dataclass(frozen=True)
@@ -71,8 +84,12 @@ def strip_wrappers(sub: str) -> str:
             continue
         if head in WRAPPERS:
             tokens = tokens[1:]
-            # срезаем числовой/опциональный аргумент обёртки
-            while tokens and (tokens[0].startswith("-") or (head in WRAPPER_TAKES_VALUE and re.fullmatch(r"[0-9]+[smhd]?", tokens[0]))):
+            # срезаем опции и значение обёртки: `timeout 30`, `flock /tmp/l`, `nice -n 5`
+            while tokens and (
+                tokens[0].startswith("-")
+                or (head in WRAPPER_TAKES_VALUE and re.fullmatch(r"[0-9]+[smhd]?", tokens[0]))
+                or (head == "flock" and not tokens[0].startswith("-") and "/" in tokens[0])
+            ):
                 tokens = tokens[1:]
             continue
         break
@@ -132,7 +149,53 @@ def _is_localhost(host: str) -> bool:
     return host.split(":")[0] in {"127.0.0.1", "localhost", "::1", "[::1]"}
 
 
-def evaluate_subcommand(sub: str) -> Decision:
+SUBSTITUTION_RE = re.compile(r"\$\(([^()]*)\)|`([^`]*)`")
+DASH_C_RE = re.compile(r"(?:^|\s)-c\s+(?P<q>['\"])(?P<body>.*?)(?P=q)\s*$", re.S)
+DASH_C_BARE_RE = re.compile(r"(?:^|\s)-c\s+(?P<body>\S.*)$", re.S)
+FIND_EXEC_RE = re.compile(r"-(?:exec|execdir)\s+(?P<body>.+)$", re.S)
+REDIRECT_READ_RE = re.compile(r"<\s*([^\s<>|&;]+)")
+DECODE_TO_SHELL_RE = re.compile(
+    r"\b(?:base64|xxd|openssl\s+enc|uudecode|gunzip|zcat)\b[^|]*\|\s*(?:sudo\s+)?"
+    r"(?:ba|z|k|da|)sh\b|\b(?:echo|printf)\b[^|]*\|\s*(?:base64|xxd)[^|]*\|\s*(?:ba|z|k|da|)sh\b",
+    re.IGNORECASE,
+)
+
+
+def _nested_fragments(stripped: str, raw: str = "") -> list[str]:
+    """Команды, спрятанные внутри подстановок, `-c`, find -exec и раннеров."""
+    fragments: list[str] = []
+    for source in (raw or stripped, stripped):
+        for group in SUBSTITUTION_RE.findall(source):
+            fragments.extend(part for part in group if part.strip())
+    tokens = stripped.split()
+    if not tokens:
+        return fragments
+    prog = os.path.basename(tokens[0])
+    if prog in INTERPRETERS:
+        match = DASH_C_RE.search(stripped) or DASH_C_BARE_RE.search(stripped)
+        if match:
+            fragments.append(match.group("body"))
+    if prog in ("find", "fd"):
+        match = FIND_EXEC_RE.search(stripped)
+        if match:
+            # терминатор `\;` / `;` / `+` мог быть срезан разбиением на подкоманды
+            fragments.append(match.group("body").rstrip("\\;+ ").strip())
+    if prog in CONTAINER_RUNNERS and len(tokens) > 1:
+        rest = tokens[1:]
+        while rest and (rest[0].startswith("-") or rest[0] in ("exec", "run", "compose", "--")):
+            rest = rest[1:]
+        if prog in ("docker", "podman", "nerdctl", "kubectl") and rest:
+            rest = rest[1:]        # имя контейнера/пода
+        if rest:
+            fragments.append(" ".join(rest))
+    if prog == "xargs":
+        rest = [t for t in tokens[1:] if not t.startswith("-")]
+        if rest:
+            fragments.append(" ".join(rest))
+    return fragments
+
+
+def evaluate_subcommand(sub: str, depth: int = 0) -> Decision:
     stripped = strip_wrappers(sub)
     if not stripped:
         return Decision(PASS)
@@ -177,8 +240,34 @@ def evaluate_subcommand(sub: str) -> Decision:
     if prog in DB_CLIENTS:
         return Decision(DENY, f"Прямой доступ к СУБД через `{prog}` запрещён: работа с БД идёт через deployment-слой с backup и lock.", "G-DBCLI")
 
-    if prog in READERS and SECRET_PATH_RE.search(" " + stripped):
-        return Decision(DENY, "Чтение секретных файлов запрещено. Секреты доступны только через secret_ref в момент исполнения.", "G-SECRET")
+    # Секретный путь запрещён в любой команде, а не только у известных «читалок»:
+    # `python3 -c "open('.env')"` и `while read l; do :; done < .env` читают ровно то же.
+    if SECRET_PATH_RE.search(" " + stripped) or any(
+        SECRET_PATH_RE.search(" " + target) for target in REDIRECT_READ_RE.findall(stripped)
+    ):
+        return Decision(
+            DENY,
+            "Обращение к секретному файлу запрещено. Секреты доступны только через secret_ref в момент исполнения.",
+            "G-SECRET",
+        )
+
+    # Записывать в защищённые пути через shell тоже нельзя: иначе правила защиты
+    # переписываются тем же механизмом, который они охраняют.
+    for target in re.findall(r">>?\s*([^\s<>|&;]+)", stripped):
+        if evaluate_write(target).decision == DENY:
+            return Decision(DENY, f"Запись в защищённый путь «{target}» запрещена.", "G-WRITE")
+    if prog in ("tee", "cp", "mv", "install", "ln", "truncate", "sed", "dd", "rsync", "chmod", "chown"):
+        for token in stripped.split()[1:]:
+            candidate = token.strip("'\"")
+            if evaluate_write(candidate).decision == DENY:
+                return Decision(DENY, f"Изменение защищённого пути «{candidate}» запрещено.", "G-WRITE")
+
+    # Рекурсивный разбор вложенных команд: подстановки, `-c`, find -exec, раннеры.
+    if depth < 3:
+        for fragment in _nested_fragments(stripped, sub):
+            nested = evaluate_bash(fragment, depth + 1)
+            if nested.decision == DENY:
+                return Decision(nested.decision, f"Вложенная команда: {nested.reason}", nested.rule_id)
 
     if prog in NETWORK_FETCH:
         host = _host_from_fetch(stripped)
@@ -205,17 +294,21 @@ PIPE_TO_SHELL_RE = re.compile(
 )
 
 
-def evaluate_bash(command: str) -> Decision:
+def evaluate_bash(command: str, depth: int = 0) -> Decision:
     if PIPE_TO_SHELL_RE.search(command):
         return Decision(DENY, "Загрузка кода из сети напрямую в интерпретатор запрещена в любом режиме.", "G-PIPESH")
+    if DECODE_TO_SHELL_RE.search(command):
+        return Decision(DENY, "Исполнение декодированного из base64/архива кода запрещено.", "G-PIPESH")
     for sub in split_subcommands(command):
-        d = evaluate_subcommand(sub)
+        d = evaluate_subcommand(sub, depth)
         if d.decision == DENY:
             return d
     return Decision(PASS)
 
 
 PROTECTED_WRITE_PATTERNS: tuple[tuple[str, str], ...] = (
+    (r"(^|/)\.claude/", "Конфигурация правил и хуков не редактируется агентом: иначе защита снимается тем же механизмом, который она охраняет. Изменения вносит оператор вручную."),
+    (r"(^|/)inventory/(ssh-hosts|dns-zones|dle-licenses)\.yaml$", "Реестр целей, зон и лицензий меняет оператор: запись sudo_allowlist исполняется на целевом хосте с повышенными правами."),
     (r"(^|/)\.env(\.|$)", "Файлы окружения с секретами не редактируются агентом."),
     (r"(^|/)secrets/", "Каталог secrets/ недоступен для записи."),
     (r"(^|/)knowledge/KNOWLEDGE_FREEZE\.yaml$", "Freeze меняется только скриптом `python3 -m factory knowledge freeze` через skill /research-freeze."),

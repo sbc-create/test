@@ -1,7 +1,7 @@
 # SEO_INDEXABILITY_MATRIX — машиночитаемая политика индексируемости
 # Потребители: factory/seo/matrix.py (рендер), factory/seo/lint.py, factory/seo/crawl.py
 schema_version: 1
-policy_version: "2026-08-21"
+policy_version: "2026-08-21.2"
 verified_against_official_docs: false
 provenance: SRC-USER-MASTERPROMPT
 note: >-
@@ -370,7 +370,7 @@ page_types:
     h1_source: package.legal.documents[].title
     description_source: package.legal.documents[].summary
     body_source: package.legal.documents[].body
-    structured_data: []
+    structured_data: [BreadcrumbList]   # у юридических страниц есть видимые крошки
     required_internal_links: [home]
     pagination: none
     vk_video: none

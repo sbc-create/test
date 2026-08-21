@@ -37,6 +37,7 @@ module.exports = defineConfig({
   fullyParallel: false,
   forbidOnly: true,
   retries: 0,
+  // Отчёт обязателен: шаг «e2e пройден» без артефакта не считается доказанным.
   reporter: [['list'], ['json', { outputFile: 'artifacts/qa/pilot-local/playwright-report.json' }]],
   use: { baseURL: BASE_URL, trace: 'off', screenshot: 'only-on-failure' },
   projects,

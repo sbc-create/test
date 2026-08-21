@@ -1,0 +1,13 @@
+{
+  "name": "acceptance-routes",
+  "passed": true,
+  "counts": {
+    "routes": 11
+  },
+  "totals": {
+    "critical": 0,
+    "major": 0,
+    "minor": 0
+  },
+  "findings": []
+}

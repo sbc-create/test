@@ -47,6 +47,9 @@ def run(base_url: str, build_dir: Path, out_dir: Path, *, auth: str = "") -> Rep
         report.counts = {"status": "unavailable"}
         return report
     out_dir.mkdir(parents=True, exist_ok=True)
+    # Старый отчёт удаляется: иначе падение node до записи файла выдаёт прошлый
+    # прогон за свежий вместе с устаревшими метриками и скриншотами.
+    (out_dir / "browser-audit.json").unlink(missing_ok=True)
     cmd = [
         "node", str(PATHS.root / "tools" / "browser-audit.js"),
         "--base", base_url,
@@ -60,6 +63,11 @@ def run(base_url: str, build_dir: Path, out_dir: Path, *, auth: str = "") -> Rep
     audit_file = out_dir / "browser-audit.json"
     if not audit_file.exists():
         report.add(Finding("browser", "critical", base_url, f"Браузерная проверка завершилась без отчёта: {proc.stderr[:300]}"))
+        report.counts = {"status": "failed", "exit_code": proc.returncode}
+        return report
+    if proc.returncode not in (0, 1):
+        report.add(Finding("browser", "critical", base_url,
+                           f"Браузерная проверка завершилась аварийно (exit {proc.returncode}): {proc.stderr[:200]}"))
         report.counts = {"status": "failed", "exit_code": proc.returncode}
         return report
     data = json.loads(audit_file.read_text(encoding="utf-8"))

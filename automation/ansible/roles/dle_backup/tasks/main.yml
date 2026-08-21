@@ -1,7 +1,8 @@
 ---
 - name: Ensure backup directory exists
+  become: true
   ansible.builtin.file:
-    path: "/srv/backups/{{ site_id }}/{{ environment }}"
+    path: "{{ backup_root }}"
     state: directory
     mode: "0700"
 
@@ -11,7 +12,7 @@
     umask 077
     mysqldump --single-transaction --routines --events \
       --defaults-extra-file="{{ db_defaults_file }}" "{{ db_name }}" \
-      | gzip > "/srv/backups/{{ site_id }}/{{ environment }}/db-$(date -u +%Y%m%dT%H%M%SZ).sql.gz"
+      | gzip > "{{ backup_root }}/db-$(date -u +%Y%m%dT%H%M%SZ).sql.gz"
   args:
     executable: /bin/bash
   when: database_engine | default('none') != 'none'
@@ -20,15 +21,15 @@
 
 - name: Archive shared mutable data
   community.general.archive:
-    path: "/srv/sites/{{ site_id }}/{{ environment }}/shared"
-    dest: "/srv/backups/{{ site_id }}/{{ environment }}/shared-{{ ansible_date_time.iso8601_basic_short }}.tar.gz"
+    path: "{{ site_root }}/shared"
+    dest: "{{ backup_root }}/shared-{{ ansible_date_time.iso8601_basic_short }}.tar.gz"
     format: gz
     mode: "0600"
 
 - name: Verify the archive can actually be read back
   ansible.builtin.shell: |
     set -euo pipefail
-    latest=$(ls -1t /srv/backups/{{ site_id }}/{{ environment }}/shared-*.tar.gz | head -1)
+    latest=$(ls -1t {{ backup_root }}/shared-*.tar.gz | head -1)
     tar -tzf "$latest" > /dev/null
   args:
     executable: /bin/bash

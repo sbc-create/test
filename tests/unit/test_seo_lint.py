@@ -1,4 +1,4 @@
-"""REQ-SEO-META, REQ-SEO-SD, REQ-SEO-BLOCK: линтер ловит внесённые дефекты."""
+"""REQ-SEO-META, REQ-SEO-SD, REQ-SEO-BLOCK, REQ-SEO-SITEMAP: линтер ловит внесённые дефекты."""
 import json
 import re
 import shutil
@@ -94,8 +94,8 @@ def test_empty_indexable_page_is_soft_404(sandbox):
     page = sandbox / "public" / "lekcii" / "material-01" / "index.html"
     text = re.sub(r"<main[^>]*>.*?</main>", '<main id="main"><h1>.</h1></main>', page.read_text(encoding="utf-8"), flags=re.S)
     page.write_text(text, encoding="utf-8")
-    findings = criticals(sandbox)
-    assert any(f.check in ("soft404", "h1") for f in findings)
+    assert any(f.check == "soft404" for f in criticals(sandbox)), \
+        "пустая индексируемая страница обязана ловиться именно как soft 404"
 
 
 def test_pagination_without_links_is_critical(sandbox):
@@ -149,3 +149,47 @@ def test_future_lastmod_is_reported(sandbox):
     (sandbox / "routes.json").write_text(json.dumps(routes, ensure_ascii=False), encoding="utf-8")
     from factory.seo.lint import lint
     assert any(f.check == "lastmod" for f in lint(sandbox).findings)
+
+
+# --- REQ-SEO-SITEMAP: содержимое собранного sitemap проверяется, а не только его наличие ---
+
+def test_sitemap_is_built_even_for_staging(built):
+    """Раньше на staging sitemap не собирался, и правило HR-3 не проверялось ни разу."""
+    preview = built.output / "sitemap-preview" / "sitemap.xml"
+    public = built.output / "public" / "sitemap.xml"
+    assert preview.exists(), "sitemap обязан собираться всегда"
+    assert not public.exists(), "но публиковаться на staging он не должен"
+
+
+def test_sitemap_contains_only_canonical_indexable_200(built, sandbox):
+    import json as _json
+    routes = {r["path"]: r for r in _json.loads((sandbox / "routes.json").read_text(encoding="utf-8"))["routes"]}
+    import re as _re
+    import urllib.parse as _url
+    for sitemap in (sandbox / "sitemap-preview").glob("sitemap-*.xml"):
+        for loc in _re.findall(r"<loc>([^<]+)</loc>", sitemap.read_text(encoding="utf-8")):
+            route = routes[_url.urlparse(loc).path]
+            assert route["indexable"] and route["status"] == 200
+            assert route["canonical"] == loc
+
+
+def test_noindex_url_in_sitemap_is_critical(sandbox):
+    sitemap = sandbox / "sitemap-preview" / "sitemap-home.xml"
+    sitemap.write_text(sitemap.read_text(encoding="utf-8").replace(
+        "</urlset>", "  <url><loc>https://pilot.localhost.test/search/</loc></url>\n</urlset>"), encoding="utf-8")
+    assert any(f.check == "sitemap" and f.rule == "HR-3" for f in criticals(sandbox))
+
+
+def test_missing_sitemap_is_critical(sandbox):
+    import shutil as _shutil
+    _shutil.rmtree(sandbox / "sitemap-preview")
+    assert any(f.check == "sitemap" for f in criticals(sandbox))
+
+
+def test_sitemap_missing_indexable_url_is_critical(sandbox):
+    import re as _re
+    sitemap = next((sandbox / "sitemap-preview").glob("sitemap-category.xml"))
+    text = sitemap.read_text(encoding="utf-8")
+    first = _re.search(r"  <url>.*?</url>\n", text, _re.S).group(0)
+    sitemap.write_text(text.replace(first, ""), encoding="utf-8")
+    assert any(f.check == "sitemap" for f in criticals(sandbox))

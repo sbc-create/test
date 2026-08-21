@@ -1,0 +1,21 @@
+{
+  "name": "seo-render",
+  "passed": true,
+  "counts": {
+    "status": "skipped"
+  },
+  "totals": {
+    "critical": 0,
+    "major": 1,
+    "minor": 0
+  },
+  "findings": [
+    {
+      "check": "browser",
+      "severity": "major",
+      "url": "http://127.0.0.1:8082",
+      "message": "Браузерная проверка не выполнялась (--skip-browser): приёмка неполная.",
+      "rule": ""
+    }
+  ]
+}

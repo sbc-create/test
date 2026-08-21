@@ -40,6 +40,8 @@ def build_result(*, job_id: str, site_id: str, environment: str, status: str, st
         "mutations": mutations or [],
         "backup": backup,
         "seo_summary": seo_summary,
+        # Машиночитаемый признак: были ли выполнены все проверки приёмки.
+        "acceptance_complete": all(c.get("passed") for c in (checks or [])) if checks else False,
         "notes": notes or [],
     }
     return redact_obj(result)

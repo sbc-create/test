@@ -5,7 +5,8 @@
   gather_facts: true
   become: false                      # повышение прав только точечно, ниже
   vars:
-    site_root: "/srv/sites/{{ site_id }}/{{ environment }}"
+    # Путь приходит из профиля blueprint (layout.site_root_template) через extra-vars.
+    site_root: "{{ site_root }}"
     release_dir: "{{ site_root }}/releases/{{ build_id }}"
     shared_dir: "{{ site_root }}/shared"
     current_link: "{{ site_root }}/current"
@@ -69,7 +70,7 @@
       ansible.builtin.shell: |
         set -euo pipefail
         cd "{{ site_root }}/releases"
-        ls -1t | tail -n +{{ (keep_releases | int) + 1 }} | xargs -r rm -rf --
+        ls -1t | tail -n +{{ (keep_releases | default(3) | int) + 1 }} | xargs -r rm -rf --
       args:
         executable: /bin/bash
       register: prune

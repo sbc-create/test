@@ -154,6 +154,36 @@ def crawl(base_url: str, build_dir: Path, *, auth: str = "", environment: str = 
         if response.status >= 400:
             report.add(Finding("broken-link", "critical", link, f"Внутренняя ссылка отвечает {response.status}."))
 
+    # цепочки редиректов: раньше метрика redirect_chains считалась, но ничего не измеряла
+    for redirect in config.get("redirects", []):
+        hops, location, status = 0, redirect["source"], None
+        while hops < 5:
+            response = crawler.fetch(location)
+            status = response.status
+            if status not in (301, 302, 307, 308):
+                break
+            hops += 1
+            location = response.location or ""
+            if not location:
+                report.add(Finding("redirect", "critical", redirect["source"], f"Редирект {status} без заголовка Location."))
+                break
+        if hops > 1:
+            report.add(Finding("redirect", "critical", redirect["source"],
+                               f"Цепочка из {hops} редиректов до {location} — допускается ровно один переход."))
+        elif status is not None and status >= 400:
+            report.add(Finding("redirect", "critical", redirect["source"], f"Редирект ведёт на {status}."))
+
+    # out-of-range пагинация проверяется воротами, а не только роутером стенда
+    parents = {r.get("parent") for r in config["routes"] if r["page_type"] == "paginated_page" and r.get("parent")}
+    for parent in sorted(p for p in parents if p):
+        total = 1 + sum(1 for r in config["routes"] if r.get("parent") == parent)
+        for suffix, label in ((f"page/{total + 5}/", "вне диапазона"), ("page/abc/", "нечисловая"),
+                              ("page/0/", "нулевая")):
+            response = crawler.fetch(parent + suffix)
+            if response.status != 404:
+                report.add(Finding("pagination", "critical", parent + suffix,
+                                   f"{label} страница пагинации отвечает {response.status} вместо 404.", "HR-5"))
+
     # прямое открытие страницы N без прохода по ссылкам
     for route in config["routes"]:
         if route["page_type"] == "paginated_page":

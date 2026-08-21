@@ -8,10 +8,15 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import time
+import uuid
 from pathlib import Path
 
-from factory import audit, blueprint, build as build_mod, inventory, knowledge, pipeline, queue as queue_mod, validation
+from factory import (audit, blueprint, build as build_mod, inventory, knowledge, licensing,
+                     pipeline, queue as queue_mod, validation)
 from factory.errors import FactoryError
+from factory.locks import LockBusy, site_lock
+from factory.report import build_result, write_result
 from factory.paths import PATHS
 from factory.seo import crawl as crawl_mod
 from factory.seo import lint as lint_mod
@@ -118,7 +123,10 @@ def cmd_deploy(args) -> int:
             print(f"  note: {note}")
         if outcome.result_path:
             print(f"результат задания: {outcome.result_path}")
-    return EXIT_OK if outcome.status in ("DONE", "BUILT") else EXIT_BLOCKED
+    if outcome.status not in ("DONE", "BUILT"):
+        return EXIT_BLOCKED
+    # Статус DONE при непройденных проверках не должен выглядеть полным успехом.
+    return EXIT_FAILED if any(not c.get("passed") for c in outcome.checks) else EXIT_OK
 
 
 def cmd_verify(args) -> int:
@@ -128,7 +136,8 @@ def cmd_verify(args) -> int:
     base_url = args.base or target.base_url()
     auth = _auth_for(target, package["environment"])
     checks, reports = verify_mod.verify(args.site, package, build_dir, base_url, auth=auth,
-                                        environment=package["environment"], skip_browser=args.skip_browser)
+                                        environment=package["environment"], skip_browser=args.skip_browser,
+                                        job_id=args.job_id)
     summary = combine(args.site, reports)
     payload = {"site_id": args.site, "base_url": base_url, "passed": all(c.passed for c in checks),
                "checks": [c.as_dict() for c in checks], "seo": summary["totals"]}
@@ -142,22 +151,83 @@ def cmd_verify(args) -> int:
 
 
 def cmd_rollback(args) -> int:
+    """Откат — такая же мутация, как деплой: под блокировкой, с авторизацией и отчётом."""
     package, conf, target = _target_for(args.site)
+    environment = package["environment"]
+    if args.environment and args.environment != environment:
+        print(f"--environment={args.environment} противоречит пакету ({environment}).", file=sys.stderr)
+        return EXIT_BLOCKED
+    if environment == "production":
+        if not package.get("production_authorized"):
+            print("[BLOCKED_AUTHORIZATION] Откат production требует production_authorized: true.", file=sys.stderr)
+            return EXIT_BLOCKED
+        if not args.allow_production:
+            print("[BLOCKED_AUTHORIZATION] Откат production требует явного --allow-production.", file=sys.stderr)
+            return EXIT_BLOCKED
+        licensing.require_license(package["domain"], license_ref=package.get("dle_license_ref"), environment="production")
+
+    started = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    job_id = f"{args.site}-rollback-{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}-{uuid.uuid4().hex[:6]}"
     try:
-        result = target.rollback()
+        with site_lock(args.site, environment):
+            result = target.rollback()
+            ok, health_detail = target.health()
+    except LockBusy as exc:
+        print(f"[QUARANTINED] {exc}", file=sys.stderr)
+        return EXIT_BLOCKED
     except FactoryError as exc:
         _print({"status": exc.status, "blocker": exc.as_blocker()}, args.json)
         if not args.json:
-            print(f"[{exc.status}] {exc.reason}")
+            print(f"[{exc.status}] {exc.reason}", file=sys.stderr)
         return EXIT_BLOCKED
-    audit.record(job_id=f"rollback-{args.site}", site_id=args.site, environment=package["environment"],
-                 action="rollback", target=package["target_ref"], exit_code=0,
-                 output=f"release={result.release_id}", mutation=True)
-    _print(result.as_dict(), args.json)
+
+    steps = list(result.steps)
+    if not any(step["id"] == "post_rollback_health" for step in steps):
+        steps.append({"id": "post_rollback_health", "status": "ok" if ok else "failed",
+                      "started_at": started, "finished_at": started,
+                      "exit_code": 0 if ok else 1, "detail": health_detail, "mutation": False})
+    job_result = build_result(
+        job_id=job_id, site_id=args.site, environment=environment, status="ROLLED_BACK" if ok else "DEPLOY_FAILED",
+        started_at=started, requested_action="rollback", steps=steps,
+        checks=[{"id": "post-rollback-health", "command": f"python3 -m factory rollback --site {args.site}",
+                 "exit_code": 0 if ok else 1, "passed": ok, "artifact": "var/audit/audit.jsonl",
+                 "counts": {"detail": health_detail}, "severity": "critical"}],
+        artifacts=["var/audit/audit.jsonl"], mutations=result.mutations,
+        release_id=result.release_id, previous_release_id=result.previous_release_id,
+        notes=["Откат кода не откатывает БД: при миграции восстанавливай из бэкапа этого релиза."])
+    path = write_result(job_result)
+    audit.record(job_id=job_id, site_id=args.site, environment=environment, action="rollback",
+                 target=package["target_ref"], exit_code=0 if ok else 1,
+                 output=f"release={result.release_id} health={health_detail}", mutation=True)
+    _print({"status": job_result["status"], "result": str(path), **result.as_dict()}, args.json)
     if not args.json:
         print(f"откат выполнен: current → {result.release_id} (был {result.previous_release_id})")
-        for step in result.steps:
-            print(f"  {step['id']:20} {step['status']} {step['detail']}")
+        for step in steps:
+            print(f"  {step['id']:20} {step['status']} {step['detail'][:60]}")
+        print(f"результат задания: {path}")
+    return EXIT_OK if ok else EXIT_FAILED
+
+
+def cmd_decommission(args) -> int:
+    """Останавливает стенд и освобождает порт; каталог цели удаляется по флагу."""
+    package, conf, target = _target_for(args.site)
+    stopped = False
+    if hasattr(target, "stop"):
+        target.stop()
+        stopped = True
+    removed = False
+    if args.purge and hasattr(target, "root") and target.root.exists():
+        import shutil
+        shutil.rmtree(target.root, ignore_errors=True)
+        removed = True
+    audit.record(job_id=f"decommission-{args.site}", site_id=args.site,
+                 environment=package["environment"], action="decommission",
+                 target=package["target_ref"], exit_code=0,
+                 output=f"stopped={stopped} purged={removed}", mutation=True)
+    payload = {"site_id": args.site, "stopped": stopped, "purged": removed}
+    _print(payload, args.json)
+    if not args.json:
+        print(f"стенд остановлен: {stopped} | каталог цели удалён: {removed}")
     return EXIT_OK
 
 
@@ -174,39 +244,61 @@ def cmd_status(args) -> int:
 
 def cmd_resume(args) -> int:
     stale = queue_mod.requeue_stale(args.max_age)
-    processed = 0
+    processed, requeued = 0, 0
     while True:
         item = queue_mod.claim()
         if not item:
             break
         outcome = pipeline.run_job(item.site_id, environment=item.environment, job_id=item.job_id,
                                    action=item.action, skip_browser=args.skip_browser)
+        if getattr(outcome, "requeue", False) and item.attempts < queue_mod.MAX_ATTEMPTS:
+            # Гонка за блокировку — не повод выводить валидное задание из обработки.
+            queue_mod.requeue(item)
+            requeued += 1
+            break
         stage = "done" if outcome.status == "DONE" else ("quarantine" if outcome.status == "QUARANTINED" else "failed")
         queue_mod.finish(item, stage, detail=outcome.status)
         processed += 1
-    payload = {"requeued_stale": stale, "processed": processed, "queue": queue_mod.counts()}
+    payload = {"stale": stale, "processed": processed, "requeued": requeued, "queue": queue_mod.counts()}
     _print(payload, args.json)
     if not args.json:
-        print(f"возвращено зависших: {len(stale)} | обработано: {processed} | очередь: {payload['queue']}")
+        print(f"возвращено зависших: {len(stale['requeued'])} | в карантин: {len(stale['quarantined'])} "
+              f"| обработано: {processed} | возвращено в очередь: {requeued} | очередь: {payload['queue']}")
     return EXIT_OK
 
 
 def cmd_report(args) -> int:
     job_dir = PATHS.artifacts / "jobs" / args.site
-    results = sorted(job_dir.glob("*.json")) if job_dir.exists() else []
+    results = list(job_dir.glob("*.json")) if job_dir.exists() else []
     if not results:
         print(f"Результатов заданий для «{args.site}» нет.")
         return EXIT_FAILED
-    latest = json.loads(results[-1].read_text(encoding="utf-8"))
+    # Сортировка по времени завершения: имена заданий содержат случайный суффикс,
+    # и лексикографический порядок перестал совпадать с хронологическим.
+    def finished(path):
+        try:
+            return json.loads(path.read_text(encoding="utf-8")).get("finished_at", "")
+        except (OSError, json.JSONDecodeError):
+            return ""
+    latest = json.loads(sorted(results, key=finished)[-1].read_text(encoding="utf-8"))
+    incomplete = [c for c in latest["checks"] if not c["passed"]]
     _print(latest, args.json)
     if not args.json:
         print(f"job: {latest['job_id']} | статус: {latest['status']} | commit: {latest['factory_commit'][:12]}")
         print(f"freeze: {latest.get('knowledge_freeze_version')} | build: {latest.get('build_id')} | release: {latest.get('release_id')}")
         for check in latest["checks"]:
-            print(f"  {'PASS' if check['passed'] else 'FAIL'} {check['id']:20} exit={check['exit_code']} {check['artifact']}")
+            exit_code = check["exit_code"] if check["exit_code"] is not None else "не запускалась"
+            print(f"  {'PASS' if check['passed'] else 'FAIL'} {check['id']:20} exit={exit_code} {check['artifact']}")
         for blocker in latest["blockers"]:
             print(f"  [{blocker['status']}] {blocker['field']}: {blocker['reason']}")
-    return EXIT_OK
+        # Примечания объясняют, почему при статусе DONE есть непройденные проверки.
+        for note in latest.get("notes", []):
+            print(f"  note: {note}")
+        if incomplete:
+            print(f"  ВНИМАНИЕ: приёмка неполная — не пройдено проверок: {len(incomplete)}")
+    if latest["status"] not in ("DONE", "READY", "BUILT"):
+        return EXIT_BLOCKED
+    return EXIT_FAILED if incomplete else EXIT_OK
 
 
 def cmd_queue(args) -> int:
@@ -377,9 +469,16 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--allow-production", action="store_true", help="явное подтверждение оператора для production")
     p.set_defaults(func=cmd_deploy)
     p = with_site("verify", "прогнать ворота качества")
-    p.add_argument("--base"); p.add_argument("--skip-browser", action="store_true"); p.set_defaults(func=cmd_verify)
+    p.add_argument("--base"); p.add_argument("--skip-browser", action="store_true")
+    p.add_argument("--job-id", help="изолировать артефакты проверки в каталоге задания")
+    p.set_defaults(func=cmd_verify)
     p = with_site("rollback", "откатить на предыдущий релиз")
-    p.add_argument("--environment", choices=["staging", "production"]); p.set_defaults(func=cmd_rollback)
+    p.add_argument("--environment", choices=["staging", "production"])
+    p.add_argument("--allow-production", action="store_true", help="явное подтверждение оператора для production")
+    p.set_defaults(func=cmd_rollback)
+    p = with_site("decommission", "остановить стенд и освободить порт")
+    p.add_argument("--purge", action="store_true", help="удалить каталог цели вместе с релизами")
+    p.set_defaults(func=cmd_decommission)
     p = sub.add_parser("status", help="состояние заданий и очереди")
     p.add_argument("--site"); p.set_defaults(func=cmd_status)
     p = sub.add_parser("resume", help="продолжить обработку очереди")

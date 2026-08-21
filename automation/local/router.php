@@ -47,7 +47,12 @@ function require_staging_auth(string $environment): void
     }
     $expected = getenv('FACTORY_STAGING_AUTH');   // формат user:password, приходит из окружения
     if (!$expected || !str_contains($expected, ':')) {
-        return;                                    // авторизация не сконфигурирована — стенд не поднимается снаружи
+        // fail-closed: несконфигурированная авторизация не должна открывать стенд.
+        header('X-Robots-Tag: noindex, nofollow');
+        header('Retry-After: 60');
+        http_response_code(503);
+        echo "503 Staging authentication is not configured\n";
+        exit;
     }
     [$user, $password] = explode(':', $expected, 2);
     $givenUser = $_SERVER['PHP_AUTH_USER'] ?? '';
@@ -86,16 +91,15 @@ if (deny_public_path($path)) {
     return true;
 }
 
-// Статические файлы отдаёт встроенный сервер, но только после проверки доступа.
+// Авторизация staging проверяется ДО любой отдачи, включая статику: иначе
+// ассеты, robots.txt и sitemap.xml доступны анонимно, и «staging закрыт» — неправда.
+require_staging_auth($environment);
+
+// Статические файлы отдаёт встроенный сервер — уже после проверки доступа.
 $candidate = $docroot . $path;
 if ($path !== '/' && is_file($candidate)) {
-    if (str_ends_with($path, '.txt') || str_ends_with($path, '.xml')) {
-        require_staging_auth($environment);
-    }
     return false;
 }
-
-require_staging_auth($environment);
 
 // Нормализация: единый регистр и завершающий слэш.
 $lower = strtolower($path);
@@ -119,16 +123,41 @@ if (isset($redirects[$path])) {
 
 $route = $routes[$path] ?? null;
 
-// Неиндексируемые параметры: страница остаётся доступной пользователю,
-// но получает noindex и canonical на чистый URL.
+// Нормализация параметров, объявленная матрицей: порядок ключей приводится к
+// алфавитному, повторяющиеся и неизвестные ключи отвергаются. Без этого один и тот
+// же объект доступен под множеством URL — прямой путь к комбинаторному взрыву.
 $hasNonIndexableParam = false;
 if ($query !== '') {
-    parse_str($query, $params);
-    foreach (array_keys($params) as $key) {
+    $rawPairs = array_filter(explode('&', $query), static fn ($p) => $p !== '');
+    $seenKeys = [];
+    $known = array_merge($nonIndexableParams, $config['canonical_changing_parameters'] ?? []);
+    $normalized = [];
+    foreach ($rawPairs as $pair) {
+        $key = urldecode(explode('=', $pair, 2)[0]);
+        if (isset($seenKeys[$key])) {
+            http_response_code(400);
+            header('X-Robots-Tag: noindex, nofollow');
+            echo "400 Repeated query parameter: " . htmlspecialchars($key) . "\n";
+            return true;
+        }
+        $seenKeys[$key] = true;
+        if (!in_array($key, $known, true)) {
+            http_response_code(400);
+            header('X-Robots-Tag: noindex, nofollow');
+            echo "400 Unknown query parameter: " . htmlspecialchars($key) . "\n";
+            return true;
+        }
         if (in_array($key, $nonIndexableParams, true)) {
             $hasNonIndexableParam = true;
-            break;
         }
+        $normalized[] = $pair;
+    }
+    sort($normalized);
+    $canonicalQuery = implode('&', $normalized);
+    if ($canonicalQuery !== $query) {
+        http_response_code(301);
+        header('Location: ' . $path . '?' . $canonicalQuery);
+        return true;
     }
 }
 

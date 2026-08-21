@@ -1,0 +1,137 @@
+{
+  "site_id": "pilot-local",
+  "partial": false,
+  "missing_reports": [],
+  "passed": false,
+  "reports": [
+    {
+      "name": "seo-lint",
+      "passed": true,
+      "executed": true,
+      "counts": {
+        "sitemap_urls": 45,
+        "routes": 48,
+        "indexable": 45,
+        "in_sitemap": 45,
+        "paginated": 2,
+        "redirects": 4
+      },
+      "totals": {
+        "critical": 0,
+        "major": 0,
+        "minor": 0
+      },
+      "findings": []
+    },
+    {
+      "name": "seo-crawl",
+      "passed": true,
+      "executed": true,
+      "counts": {
+        "fetched": 45,
+        "unique_urls": 45,
+        "max_depth": 4,
+        "titles": 45,
+        "internal_links": 45
+      },
+      "totals": {
+        "critical": 0,
+        "major": 0,
+        "minor": 0
+      },
+      "findings": []
+    },
+    {
+      "name": "seo-render",
+      "passed": false,
+      "executed": false,
+      "counts": {
+        "status": "skipped"
+      },
+      "totals": {
+        "critical": 0,
+        "major": 1,
+        "minor": 0
+      },
+      "findings": [
+        {
+          "check": "browser",
+          "severity": "major",
+          "url": "http://127.0.0.1:8082",
+          "message": "Браузерная проверка не выполнялась (--skip-browser): приёмка неполная.",
+          "rule": ""
+        }
+      ]
+    },
+    {
+      "name": "security-smoke",
+      "passed": true,
+      "executed": true,
+      "counts": {
+        "checked_paths": 8,
+        "root_status": 200
+      },
+      "totals": {
+        "critical": 0,
+        "major": 0,
+        "minor": 0
+      },
+      "findings": []
+    },
+    {
+      "name": "acceptance-routes",
+      "passed": true,
+      "executed": true,
+      "counts": {
+        "routes": 11
+      },
+      "totals": {
+        "critical": 0,
+        "major": 0,
+        "minor": 0
+      },
+      "findings": []
+    },
+    {
+      "name": "performance-budget",
+      "passed": false,
+      "executed": false,
+      "counts": {
+        "status": "skipped",
+        "lab_lcp_ms_max": null,
+        "lab_cls_max": null,
+        "lab_transfer_bytes_max": null,
+        "budgets": {
+          "lab_lcp_ms": 2500,
+          "lab_cls": 0.1,
+          "lab_total_bytes": 800000,
+          "field_targets": {
+            "lcp_ms": 2500,
+            "inp_ms": 200,
+            "cls": 0.1
+          }
+        },
+        "field_targets_note": "Полевые LCP ≤ 2.5 s, INP ≤ 200 ms, CLS ≤ 0.1 на 75-м перцентиле измеряются только на реальном трафике."
+      },
+      "totals": {
+        "critical": 0,
+        "major": 1,
+        "minor": 0
+      },
+      "findings": [
+        {
+          "check": "performance",
+          "severity": "major",
+          "url": "-",
+          "message": "Метрики не собраны: браузерная проверка пропущена флагом.",
+          "rule": ""
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "critical": 0,
+    "major": 2,
+    "minor": 0
+  }
+}

@@ -52,9 +52,38 @@ def test_stale_processing_is_requeued():
     import os
     os.utime(item.path, (old, old))
     moved = queue.requeue_stale(max_age_seconds=3600)
-    assert "qtest-6.json" in moved
+    assert "qtest-6.json" in moved["requeued"]
     assert (queue.stage_dir("inbox") / "qtest-6.json").exists()
     again = queue.claim()
+    queue.finish(again, "done")
+
+
+def test_attempts_are_counted_and_poison_job_is_quarantined():
+    """Регрессия: «ядовитое» задание бесконечно циркулировало processing → inbox."""
+    import os
+    queue.enqueue("pilot-local", job_id="qtest-poison")
+    for expected in (1, 2, 3):
+        item = queue.claim()
+        assert item.attempts == expected
+        old = time.time() - 7200
+        os.utime(item.path, (old, old))
+        result = queue.requeue_stale(max_age_seconds=3600)
+        if expected < 3:
+            assert "qtest-poison.json" in result["requeued"]
+        else:
+            assert "qtest-poison.json" in result["quarantined"]
+    payload = json.loads((queue.stage_dir("quarantine") / "qtest-poison.json").read_text(encoding="utf-8"))
+    assert payload["attempts"] == 3
+    assert "Исчерпаны попытки" in payload["detail"]
+
+
+def test_requeue_returns_item_to_inbox():
+    queue.enqueue("pilot-local", job_id="qtest-requeue")
+    item = queue.claim()
+    queue.requeue(item)
+    assert (queue.stage_dir("inbox") / "qtest-requeue.json").exists()
+    again = queue.claim()
+    assert again.attempts == 2
     queue.finish(again, "done")
 
 

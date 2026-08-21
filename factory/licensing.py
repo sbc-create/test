@@ -55,6 +55,11 @@ def check_domain(domain: str, *, license_ref: str | None = None, today: _dt.date
         return LicenseCheck(False, "", license_ref, f"Не удалось однозначно определить домен второго уровня для «{domain}». Расширь inventory/public-suffixes.yaml или укажи covered_domain явно.")
 
     candidates = inventory.all_licenses()
+    if not license_ref:
+        # Без явной ссылки покрытие могла бы дать чужая лицензия из инвентаря,
+        # которую пакет не называл.
+        return LicenseCheck(False, rd, None,
+                            "В пакете не указан dle_license_ref: лицензия обязана быть названа явно.")
     if license_ref:
         candidates = [e for e in candidates if e.get("ref") == license_ref]
         if not candidates:

@@ -6,6 +6,7 @@
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import secrets
@@ -19,7 +20,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-from factory.errors import DeployFailed, TransientError
+from factory.errors import BlockedAccess, DeployFailed
 from factory.paths import PATHS
 from factory.targets.base import DeployPlan, DeployResult, now
 
@@ -61,7 +62,12 @@ class LocalDisposableTarget:
         for port in range(int(self.port_range[0]), int(self.port_range[1]) + 1):
             if self._port_free(port):
                 return port
-        raise TransientError("Свободный порт в разрешённом диапазоне не найден.", field="inventory/targets.yaml", required_input="Расширь port_range")
+        raise BlockedAccess(
+            f"Свободный порт в диапазоне {self.port_range} не найден: вероятно, остались "
+            "незакрытые стенды. Освободи их командой `python3 -m factory decommission --site <id>`.",
+            field="inventory/targets.yaml",
+            required_input="Расширь port_range или останови неиспользуемые стенды",
+            blocks_stage="STAGING_DEPLOY")
 
     def _port_free(self, port: int) -> bool:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
@@ -129,13 +135,47 @@ class LocalDisposableTarget:
                 tar.add(self.state_file, arcname="target-state.json")
         return {"taken": True, "ref": str(archive.relative_to(PATHS.root)), "restore_verified": False, "verified_at": None}
 
+    @staticmethod
+    def _tree_digest(root: Path) -> dict[str, str]:
+        """SHA-256 каждого файла дерева. Логи исключены: они меняются постоянно."""
+        out: dict[str, str] = {}
+        if not root.exists():
+            return out
+        for file in sorted(root.rglob("*")):
+            if file.is_file() and "logs" not in file.relative_to(root).parts:
+                out[str(file.relative_to(root))] = hashlib.sha256(file.read_bytes()).hexdigest()
+        return out
+
+    def shared_digest(self) -> dict[str, str]:
+        """Слепок текущих изменяемых данных цели — для сравнения с восстановленным."""
+        return self._tree_digest(self.shared_dir)
+
     def restore(self, archive_ref: str, destination: Path) -> bool:
+        """Разворачивает бэкап и доказывает целостность: извлечено ровно то, что в архиве.
+
+        Проверяется не факт распаковки, а совпадение состава и размеров с описью
+        архива — усечённый или повреждённый архив этим отсеивается. Совпадение с
+        живыми данными сравнивает вызывающий (см. pipeline: probe сразу после backup).
+        """
         archive = PATHS.root / archive_ref
         if not archive.exists():
             return False
+        shutil.rmtree(destination, ignore_errors=True)
         destination.mkdir(parents=True, exist_ok=True)
-        with tarfile.open(archive, "r:gz") as tar:
-            tar.extractall(destination, filter="data")
+        try:
+            with tarfile.open(archive, "r:gz") as tar:
+                members = [m for m in tar.getmembers() if m.isfile()]
+                tar.extractall(destination, filter="data")
+        except (tarfile.TarError, EOFError, OSError):
+            # Повреждённый или усечённый архив — это неподтверждённое восстановление,
+            # а не исключение, вылетающее из конвейера.
+            return False
+        # Пустой shared/ — валидное состояние нового сайта: в архиве тогда нет
+        # обычных файлов, только каталог, и это не признак повреждения.
+        for member in members:
+            extracted = destination / member.name
+            if not extracted.is_file() or extracted.stat().st_size != member.size:
+                return False
         return (destination / "shared").exists()
 
     def deploy(self, build_dir: Path, build_id: str, *, dry_run: bool = False) -> DeployResult:
@@ -167,28 +207,36 @@ class LocalDisposableTarget:
         step("backup", f"Бэкап изменяемых данных: {backup['ref']}")
 
         release_dir = self.releases_dir / build_id
-        already_present = release_dir.exists()
+        # Готовым считается только релиз с маркером: прерванный copytree оставлял
+        # полурелиз, который навсегда выглядел выгруженным.
+        already_present = release_dir.exists() and (release_dir / ".complete").exists()
         if not already_present:
-            shutil.copytree(build_dir, release_dir)
+            staging_dir = self.releases_dir / f".{build_id}.tmp"
+            shutil.rmtree(staging_dir, ignore_errors=True)
+            shutil.rmtree(release_dir, ignore_errors=True)
+            shutil.copytree(build_dir, staging_dir)
+            (staging_dir / ".complete").write_text(now(), encoding="utf-8")
+            os.replace(staging_dir, release_dir)      # атомарная публикация каталога
             content_changed = True
             step("upload_release", f"Релиз {build_id} размещён", mutation=True)
         else:
             step("upload_release", f"Релиз {build_id} уже присутствует — повторная выгрузка не выполнялась", mutation=True, noop=True)
 
-        # health до переключения: сервер обслуживает релиз-кандидат напрямую.
-        # Старый процесс останавливается ДО выбора порта, иначе занятый им порт
-        # выглядит недоступным и стенд каждый раз переезжает на новый.
-        self._stop_server()
-        port = self._pick_port()
+        # C: кандидат проверяется на отдельном порту, а рабочий сервер продолжает
+        # обслуживать текущий релиз — простоя между остановкой и стартом больше нет.
+        candidate_port = self._pick_free_port(exclude={self._state().get("port")})
+        self._save_state(pending_build_id=build_id, pending_at=now())   # intent до мутации
         auth = self.staging_credentials() if self.environment != "production" else ""
-        self._start_server(port, release_dir, auth)
-        step("start_server", f"PHP-сервер слушает {self.bind}:{port}", mutation=True)
-
-        ok, detail = self._probe(f"http://{self.bind}:{port}/", auth)
+        candidate_pid = self._spawn(candidate_port, release_dir / "public", auth)
+        try:
+            ok, detail = self._probe(f"http://{self.bind}:{candidate_port}/", auth)
+        finally:
+            self._kill(candidate_pid)
         if not ok:
-            self._stop_server()
-            raise DeployFailed(f"Health check релиза не пройден: {detail}", field="deploy.health", required_input="Работоспособная сборка", blocks_stage="STAGING_DEPLOY")
-        step("health_check", f"Проверка до переключения: {detail}")
+            # Рабочий сервер не останавливался, сайт всё это время доступен.
+            raise DeployFailed(f"Health check релиза не пройден: {detail}", field="deploy.health",
+                               required_input="Работоспособная сборка", blocks_stage="STAGING_DEPLOY")
+        step("health_check", f"Проверка кандидата на отдельном порту {candidate_port}: {detail}")
 
         if self.current_release() == build_id:
             step("switch_current", f"current уже указывает на {build_id}", mutation=True, noop=True)
@@ -201,9 +249,14 @@ class LocalDisposableTarget:
             content_changed = True
             step("switch_current", f"current → releases/{build_id}", mutation=True)
 
+        # Рабочий сервер всегда обслуживает симлинк current, поэтому переключение
+        # релиза видно ему сразу; процесс перезапускается только если он не жив.
+        port = self._ensure_server(auth)
+        step("start_server", f"PHP-сервер обслуживает current на {self.bind}:{port}", mutation=True)
         ok, detail = self._probe(f"http://{self.bind}:{port}/", auth)
         if not ok:
-            raise DeployFailed(f"Health после переключения не пройден: {detail}", field="deploy.health", required_input="Работоспособная сборка", blocks_stage="STAGING_DEPLOY")
+            raise DeployFailed(f"Health после переключения не пройден: {detail}", field="deploy.health",
+                               required_input="Работоспособная сборка", blocks_stage="STAGING_DEPLOY")
         step("post_switch_health", f"Проверка после переключения: {detail}")
 
         keep = int(self.pkg["rollback_policy"]["keep_releases"])
@@ -218,13 +271,17 @@ class LocalDisposableTarget:
         # иначе повторный деплой затирает точку отката самим собой.
         stored_previous = self._state().get("previous_release_id")
         effective_previous = previous if (previous and previous != build_id) else stored_previous
-        self._save_state(port=port, build_id=build_id, previous_release_id=effective_previous, deployed_at=now())
+        self._save_state(port=port, build_id=build_id, previous_release_id=effective_previous,
+                         deployed_at=now(), docroot="current", pending_build_id=None, pending_at=None)
         return DeployResult(self.site_id, self.environment, build_id, build_id, previous,
                             f"http://{self.bind}:{port}", steps=steps, mutations=mutations, backup=backup,
                             idempotent_noop=not content_changed)
 
     def _prune(self, keep: int, protect: set[str]) -> list[str]:
-        releases = [r for r in self.releases() if r not in protect]
+        # Сортировка по времени, а не по имени: имя — хеш, и лексикографический
+        # порядок удалял бы случайный релиз вместо самого старого.
+        candidates = [p for p in self.releases_dir.iterdir() if p.is_dir() and p.name not in protect]
+        releases = [p.name for p in sorted(candidates, key=lambda p: p.stat().st_mtime)]
         excess = releases[:-keep] if len(releases) > keep else []
         for name in excess:
             shutil.rmtree(self.releases_dir / name, ignore_errors=True)
@@ -233,6 +290,70 @@ class LocalDisposableTarget:
     # ---------------------------------------------------------------- сервер
     def _pid_file(self) -> Path:
         return self.root / "server.pid"
+
+    def _pick_free_port(self, exclude: set) -> int:
+        """Свободный порт для проверки релиза-кандидата, отличный от рабочего."""
+        blocked = {int(p) for p in exclude if p}
+        for port in range(int(self.port_range[0]), int(self.port_range[1]) + 1):
+            if port not in blocked and self._port_free(port):
+                return port
+        raise BlockedAccess("Нет свободного порта для проверки релиза-кандидата.",
+                            field="inventory/targets.yaml",
+                            required_input="Расширь port_range или останови неиспользуемые стенды",
+                            blocks_stage="STAGING_DEPLOY")
+
+    def _spawn(self, port: int, docroot: Path, auth: str) -> int:
+        """Поднимает временный процесс сервера и возвращает его pid."""
+        router = PATHS.automation / "local" / "router.php"
+        env = dict(os.environ)
+        env["FACTORY_ENVIRONMENT"] = self.environment
+        if auth:
+            env["FACTORY_STAGING_AUTH"] = auth
+        log = self.shared_dir / "logs" / "php-candidate.log"
+        log.parent.mkdir(parents=True, exist_ok=True)
+        with log.open("ab") as fh:
+            proc = subprocess.Popen(["php", "-S", f"{self.bind}:{port}", "-t", str(docroot), str(router)],
+                                    stdout=fh, stderr=fh, env=env, start_new_session=True)
+        for _ in range(50):
+            if not self._port_free(port):
+                break
+            time.sleep(0.1)
+        return proc.pid
+
+    def _kill(self, pid: int) -> None:
+        try:
+            os.killpg(os.getpgid(pid), signal.SIGTERM)
+        except (ProcessLookupError, PermissionError, OSError):
+            pass
+
+    def _server_alive(self) -> bool:
+        pid_file = self._pid_file()
+        if not pid_file.exists():
+            return False
+        try:
+            os.kill(int(pid_file.read_text(encoding="utf-8").strip()), 0)
+            return True
+        except (ValueError, ProcessLookupError, PermissionError, OSError):
+            return False
+
+    def _ensure_server(self, auth: str) -> int:
+        """Гарантирует работающий сервер поверх симлинка current.
+
+        Docroot — `current/public`, поэтому переключение релиза видно процессу
+        мгновенно, а перезапуск нужен только если процесс не жив.
+        """
+        state = self._state()
+        state_port = state.get("port")
+        # Процесс, поднятый с docroot конкретного релиза, не увидит переключения
+        # симлинка — такой сервер обязателен к перезапуску.
+        serves_current = state.get("docroot") == "current"
+        if serves_current and self._server_alive() and state_port and not self._port_free(int(state_port)):
+            return int(state_port)
+        self._stop_server()
+        port = int(state_port) if state_port and self._port_free(int(state_port)) else self._pick_port()
+        self._start_server(port, self.current, auth)
+        self._save_state(port=port, docroot="current")
+        return port
 
     def _start_server(self, port: int, release_dir: Path, auth: str) -> None:
         self._stop_server()
@@ -302,6 +423,13 @@ class LocalDisposableTarget:
                 "Предыдущий рабочий релиз отсутствует — откат невозможен.",
                 field="rollback", required_input="Как минимум два релиза в releases/", blocks_stage="ROLLED_BACK",
             )
+        if previous == current:
+            # Переключение на самого себя выглядело бы успешным откатом, которого не было.
+            raise DeployFailed(
+                f"Точка отката совпадает с текущим релизом ({current}) — откатываться некуда.",
+                field="rollback", required_input="Предыдущий отличный релиз в releases/",
+                blocks_stage="ROLLED_BACK",
+            )
         steps: list[dict] = []
         tmp = self.root / ".current.new"
         if tmp.exists() or tmp.is_symlink():
@@ -310,9 +438,9 @@ class LocalDisposableTarget:
         os.replace(tmp, self.current)
         steps.append({"id": "switch_current", "status": "ok", "started_at": now(), "finished_at": now(),
                       "exit_code": 0, "detail": f"current → releases/{previous}", "mutation": True})
-        port = state.get("port") or self._pick_port()
         auth = self.staging_credentials() if self.environment != "production" else ""
-        self._start_server(int(port), self.releases_dir / previous, auth)
+        self._stop_server()                      # docroot остаётся симлинком current
+        port = self._ensure_server(auth)
         ok, detail = self._probe(f"http://{self.bind}:{port}/", auth)
         steps.append({"id": "post_rollback_health", "status": "ok" if ok else "failed", "started_at": now(),
                       "finished_at": now(), "exit_code": 0 if ok else 1, "detail": detail, "mutation": False})
