@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import re
+import time
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -22,7 +23,8 @@ TAG_RE = {
     "h1": re.compile(r"<h1[^>]*>(.*?)</h1>", re.S | re.I),
 }
 JSONLD_RE = re.compile(r'<script type="application/ld\+json">(.*?)</script>', re.S)
-LINK_RE = re.compile(r'<a\s[^>]*href="([^"#?]+)', re.I)
+HREFLANG_RE = re.compile(r'<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"', re.I)
+LINK_RE = re.compile(r'<a\s[^>]*href="([^"]+)"', re.I)
 STAGING_HINT_RE = re.compile(r"(localhost|127\.0\.0\.1|staging|\.test\b|demo|lorem ipsum)", re.I)
 
 
@@ -40,6 +42,9 @@ def lint(build_dir: Path, *, environment: str = "staging") -> Report:
     routes = config["routes"]
     public = build_dir / "public"
     matrix_types = {p["id"]: p for p in matrix_mod.load().get("page_types", [])}
+    url_policy = matrix_mod.url_policy()
+    forbidden_params = set(url_policy.get("forbidden_in_url") or [])
+    today = time.strftime("%Y-%m-%d", time.gmtime())
 
     titles: dict[str, list[str]] = defaultdict(list)
     descriptions: dict[str, list[str]] = defaultdict(list)
@@ -109,10 +114,39 @@ def lint(build_dir: Path, *, environment: str = "staging") -> Report:
         # содержимое staging в production
         if environment == "production" and STAGING_HINT_RE.search(html):
             report.add(Finding("production-purity", "critical", url, "В production-сборке найден staging/demo/placeholder-маркер.", "HR-8"))
-        # внутренние ссылки
+        # внутренние ссылки: считаем входящие и проверяем каноничность формы
         for href in LINK_RE.findall(html):
-            if href.startswith("/"):
-                incoming[href] += 1
+            if not href.startswith("/"):
+                continue
+            # для связности считаем чистый путь, а параметры и якорь проверяем отдельно
+            incoming[href.split("#")[0].split("?")[0]] += 1
+            if href != href.lower():
+                report.add(Finding("link-canonicality", "critical", url,
+                                   f"Внутренняя ссылка не в каноничном регистре: {href}"))
+            path_only = href.split("#")[0].split("?")[0]
+            if url_policy.get("trailing_slash") and not path_only.endswith("/") and "." not in path_only.rsplit("/", 1)[-1]:
+                report.add(Finding("link-canonicality", "critical", url,
+                                   f"Внутренняя ссылка без завершающего слэша: {href} — это лишний 301"))
+            for param in forbidden_params:
+                if f"{param}=" in href:
+                    report.add(Finding("link-canonicality", "critical", url,
+                                       f"Внутренняя ссылка содержит запрещённый параметр {param}: {href}"))
+
+        # hreflang: ссылка обязана быть взаимной и включать саму себя
+        hreflangs = HREFLANG_RE.findall(html)
+        if hreflangs:
+            hrefs = {href for _, href in hreflangs}
+            if canonical and canonical not in hrefs:
+                report.add(Finding("hreflang", "critical", url,
+                                   "В наборе hreflang нет ссылки на саму страницу (self-reference)."))
+            langs = [lang for lang, _ in hreflangs]
+            if len(set(langs)) != len(langs):
+                report.add(Finding("hreflang", "critical", url, "Дублирующиеся значения hreflang."))
+
+        # lastmod: дата из будущего означает, что она проставляется деплоем, а не контентом
+        if route.get("lastmod") and str(route["lastmod"])[:10] > today:
+            report.add(Finding("lastmod", "major", url,
+                               f"lastmod в будущем ({route['lastmod']}): дата обязана отражать изменение контента"))
 
     # дубли
     for title, urls in titles.items():

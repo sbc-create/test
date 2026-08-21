@@ -116,3 +116,36 @@ def test_orphan_indexable_page_is_critical(sandbox):
 def test_staging_markers_are_critical_in_production_build(sandbox):
     findings = [f for f in lint(sandbox, environment="production").findings if f.check == "production-purity"]
     assert findings, "маркеры staging/localhost в production-сборке обязаны блокировать публикацию"
+
+
+def test_non_canonical_internal_link_is_critical(sandbox):
+    """Ссылка в другом регистре или без слэша — это лишний 301 внутри сайта."""
+    page = sandbox / "public" / "index.html"
+    page.write_text(page.read_text(encoding="utf-8").replace('href="/lekcii/"', 'href="/Lekcii"', 1), encoding="utf-8")
+    findings = criticals(sandbox)
+    assert any(f.check == "link-canonicality" for f in findings)
+
+
+def test_tracking_parameter_in_internal_link_is_critical(sandbox):
+    page = sandbox / "public" / "index.html"
+    page.write_text(page.read_text(encoding="utf-8").replace('href="/lekcii/"', 'href="/lekcii/?utm_source=nav"', 1), encoding="utf-8")
+    assert any(f.check == "link-canonicality" for f in criticals(sandbox))
+
+
+def test_hreflang_without_self_reference_is_critical(sandbox):
+    page = sandbox / "public" / "lekcii" / "material-01" / "index.html"
+    page.write_text(page.read_text(encoding="utf-8").replace(
+        "</head>", '<link rel="alternate" hreflang="en" href="https://pilot.localhost.test/en/">\n</head>'), encoding="utf-8")
+    assert any(f.check == "hreflang" for f in criticals(sandbox))
+
+
+def test_future_lastmod_is_reported(sandbox):
+    import json
+    routes = json.loads((sandbox / "routes.json").read_text(encoding="utf-8"))
+    for route in routes["routes"]:
+        if route["page_type"] == "title":
+            route["lastmod"] = "2099-01-01"
+            break
+    (sandbox / "routes.json").write_text(json.dumps(routes, ensure_ascii=False), encoding="utf-8")
+    from factory.seo.lint import lint
+    assert any(f.check == "lastmod" for f in lint(sandbox).findings)
