@@ -86,16 +86,21 @@ if [ "$FACTORY_SKIP_BROWSER" = "1" ]; then
   skip "browser-audit" "FACTORY_SKIP_BROWSER=1"
   skip "e2e-playwright" "FACTORY_SKIP_BROWSER=1"
 else
+  # Проверки по HTTP требуют поднятого стенда: прогон обязан быть самодостаточным,
+  # а не полагаться на сервер, случайно оставшийся от прошлого запуска.
+  run "deploy-pilot"     "python3 -m factory deploy --site pilot-local > /dev/null"
   FACTORY_BASE_URL="$(python3 tests/tools/base_url.py)"
   export FACTORY_BASE_URL
   FACTORY_STAGING_AUTH="$(cat var/targets/local-disposable/pilot-local/staging-auth 2>/dev/null || true)"
   export FACTORY_STAGING_AUTH
   run "seo-crawl"      "python3 -m factory seo-crawl --site pilot-local > /dev/null"
-  run "browser-audit"  "python3 -m factory seo-render --site pilot-local > /dev/null"
+  # Браузерная проверка уже выполнена внутри деплоя: здесь доказывается, что её
+  # артефакт существует и не содержит критических находок.
+  run "browser-audit"  "python3 tests/tools/check_browser_audit.py"
   if [ -d node_modules/@playwright/test ]; then
     PW_REPORT="artifacts/qa/pilot-local/playwright-report.json"
     rm -f "$PW_REPORT"
-    run "e2e-playwright" "npx playwright test --reporter=list,json && test -s \"$PW_REPORT\""
+    run "e2e-playwright" "npx playwright test && test -s \"$PW_REPORT\""
     if [ ! -s "$PW_REPORT" ]; then
       echo "   ВНИМАНИЕ: отчёт $PW_REPORT не создан — шаг не может считаться доказанным"
     fi

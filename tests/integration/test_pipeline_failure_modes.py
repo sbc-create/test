@@ -67,7 +67,7 @@ def test_failed_production_smoke_triggers_rollback(temp_site, pilot_package, mon
     from factory.targets.local_disposable import LocalDisposableTarget
     monkeypatch.setattr(inventory, "target", lambda ref: {
         "ref": "prod-test", "adapter": "local_disposable", "environments": ["production"],
-        "root": "var/targets/test-prod-smoke", "bind_host": "127.0.0.1", "port_range": [8096, 8099],
+        "root": "var/targets/test-prod-smoke", "bind_host": "127.0.0.1", "port_range": [8110, 8129],
         "production_capable": True})
     monkeypatch.setattr(inventory, "all_licenses", lambda: [
         {"ref": "lic-test", "covered_domain": "example.tld", "covers_subdomains": True, "version": "20.0"}])

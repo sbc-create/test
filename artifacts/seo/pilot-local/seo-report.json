@@ -1,17 +1,22 @@
 {
   "site_id": "pilot-local",
-  "passed": true,
+  "partial": true,
+  "missing_reports": [
+    "seo-lint",
+    "seo-render"
+  ],
+  "passed": false,
   "reports": [
     {
-      "name": "seo-lint",
+      "name": "seo-crawl",
       "passed": true,
+      "executed": true,
       "counts": {
-        "sitemap_urls": 45,
-        "routes": 48,
-        "indexable": 45,
-        "in_sitemap": 45,
-        "paginated": 2,
-        "redirects": 4
+        "fetched": 45,
+        "unique_urls": 45,
+        "max_depth": 4,
+        "titles": 45,
+        "internal_links": 45
       },
       "totals": {
         "critical": 0,

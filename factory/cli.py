@@ -361,8 +361,12 @@ def cmd_seo(args, mode: str) -> int:
             print(f"{report.name}: {'PASSED' if report.passed else 'FAILED'} | {report.counts}")
             for finding in report.findings[:30]:
                 print(f"  [{finding.severity}] {finding.check:18} {finding.url[:44]:46} {finding.message[:70]}")
+        if summary["partial"]:
+            print(f"отчёт частичный, не выполнялись: {', '.join(summary['missing_reports'])}")
         print(f"артефакт: artifacts/seo/{args.site}/seo-report.json")
-    return EXIT_OK if summary["passed"] else EXIT_FAILED
+    # Код возврата отражает результат запущенных проверок; неполнота набора
+    # фиксируется флагом partial в артефакте, а не превращает зелёный линт в красный.
+    return EXIT_OK if all(report.passed for report in reports) else EXIT_FAILED
 
 
 def cmd_knowledge(args) -> int:

@@ -5,7 +5,7 @@
       "command": "python3 -m factory knowledge verify",
       "exit_code": "0",
       "status": "PASS",
-      "note": "1s"
+      "note": "0s"
     },
     {
       "check": "claude-config",
@@ -47,14 +47,14 @@
       "command": "python3 -m pytest tests/unit tests/test_traceability.py -q -m 'not slow'",
       "exit_code": "0",
       "status": "PASS",
-      "note": "3s"
+      "note": "5s"
     },
     {
       "check": "validate-pilot",
       "command": "python3 -m factory validate --site pilot-local > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "1s"
+      "note": "0s"
     },
     {
       "check": "plan-no-mutations",
@@ -68,7 +68,7 @@
       "command": "python3 -m factory build --site pilot-local --force > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "0s"
+      "note": "1s"
     },
     {
       "check": "integration-fast",
@@ -82,7 +82,7 @@
       "command": "python3 -m pytest tests/integration -q -m slow",
       "exit_code": "0",
       "status": "PASS",
-      "note": "7s"
+      "note": "10s"
     },
     {
       "check": "seo-lint",
@@ -99,6 +99,13 @@
       "note": "ожидаемый BLOCKED_INPUT"
     },
     {
+      "check": "deploy-pilot",
+      "command": "python3 -m factory deploy --site pilot-local > /dev/null",
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "94s"
+    },
+    {
       "check": "seo-crawl",
       "command": "python3 -m factory seo-crawl --site pilot-local > /dev/null",
       "exit_code": "0",
@@ -107,17 +114,17 @@
     },
     {
       "check": "browser-audit",
-      "command": "python3 -m factory seo-render --site pilot-local > /dev/null",
+      "command": "python3 tests/tools/check_browser_audit.py",
       "exit_code": "0",
       "status": "PASS",
-      "note": "94s"
+      "note": "0s"
     },
     {
       "check": "e2e-playwright",
-      "command": "npx playwright test --reporter=list",
+      "command": "npx playwright test && test -s \"artifacts/qa/pilot-local/playwright-report.json\"",
       "exit_code": "0",
       "status": "PASS",
-      "note": "17s"
+      "note": "15s"
     },
     {
       "check": "cross-browser",
@@ -141,7 +148,7 @@
       "note": "nginx не установлен на управляющем хосте"
     }
   ],
-  "passed": 17,
+  "passed": 18,
   "failed": 0,
   "skipped": 3
 }

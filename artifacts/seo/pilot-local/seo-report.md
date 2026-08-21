@@ -1,10 +1,11 @@
 # SEO-отчёт — pilot-local
 
-Итог: PASSED
+Итог: PARTIAL
+Отчёт частичный, не выполнялись: seo-lint, seo-render
 Критических: 0, серьёзных: 0, малых: 0
 
-## seo-lint — passed
+## seo-crawl — passed
 
-Счётчики: `{"sitemap_urls": 45, "routes": 48, "indexable": 45, "in_sitemap": 45, "paginated": 2, "redirects": 4}`
+Счётчики: `{"fetched": 45, "unique_urls": 45, "max_depth": 4, "titles": 45, "internal_links": 45}`
 
 Находок нет.

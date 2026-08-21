@@ -47,7 +47,11 @@
       "Read(blueprints/dle20/dist/**)",
       "Edit(**/.env)",
       "Edit(secrets/**)",
-      "Edit(knowledge/KNOWLEDGE_FREEZE.yaml)"
+      "Edit(knowledge/KNOWLEDGE_FREEZE.yaml)",
+      "Edit(.claude/**)",
+      "Edit(inventory/ssh-hosts.yaml)",
+      "Edit(inventory/dns-zones.yaml)",
+      "Edit(inventory/dle-licenses.yaml)"
     ],
     "ask": [
       "Bash(git push *)",

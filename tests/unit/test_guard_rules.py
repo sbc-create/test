@@ -99,3 +99,58 @@ def test_secret_content_scanner():
     assert g.scan_secret_content('password: "s3cret-value-1234"')
     assert not g.scan_secret_content("password_secret_ref: env:FACTORY_DB_PASSWORD")
     assert not g.scan_secret_content("обычный текст без секретов")
+
+
+# --- REQ-GUARD, REQ-WRAPPER: обходы, найденные независимым security review ---
+
+BYPASS_ATTEMPTS = [
+    ("env ssh deploy@prod reboot", "G-REMOTE"),
+    ("env rsync -a build/ prod:/srv/", "G-REMOTE"),
+    ("bash -c 'ssh prod uptime'", "G-REMOTE"),
+    ("sh -c \"rsync -a build/ host:/var/www\"", "G-REMOTE"),
+    ("timeout 5 flock /tmp/l ssh prod reboot", "G-REMOTE"),
+    ("find . -maxdepth 0 -exec ssh prod reboot \\;", "G-REMOTE"),
+    ("X=`ssh prod whoami`", "G-REMOTE"),
+    ("echo $(ssh prod hostname)", "G-REMOTE"),
+    ("docker exec web ssh prod", "G-REMOTE"),
+    ("watch -n 5 ssh prod uptime", "G-REMOTE"),
+    ("setsid ssh prod", "G-REMOTE"),
+    ("echo aGk= | base64 -d | bash", "G-PIPESH"),
+    ("python3 -c \"print(open('.env').read())\"", "G-SECRET"),
+    ("env cat .env", "G-SECRET"),
+    ("while read l; do echo $l; done < .env", "G-SECRET"),
+    ("bash -c 'cat inventory/../.env'", "G-SECRET"),
+    ("tee .claude/settings.json", "G-WRITE"),
+    ("echo x > .claude/hooks/guard_rules.py", "G-WRITE"),
+    ("cp evil.yaml inventory/ssh-hosts.yaml", "G-WRITE"),
+    ("sed -i s/a/b/ knowledge/KNOWLEDGE_FREEZE.yaml", "G-WRITE"),
+]
+
+
+@pytest.mark.parametrize("command,rule", BYPASS_ATTEMPTS)
+def test_known_bypass_attempts_are_denied(command, rule):
+    decision = g.evaluate_bash(command)
+    assert decision.decision == g.DENY, f"обход не заблокирован: {command}"
+    assert decision.rule_id == rule, f"{command}: ожидалось правило {rule}, получено {decision.rule_id}"
+
+
+@pytest.mark.parametrize("command", [
+    "python3 -m pytest tests -q",
+    "python3 -m factory validate --site demo",
+    "node tools/browser-audit.js --base http://127.0.0.1:8082",
+    "npx playwright test",
+    "find . -name '*.py' -print",
+    "git log --oneline -5",
+    "echo $(date)",
+    "bash -c 'python3 -m factory build --site demo'",
+])
+def test_legitimate_wrapped_commands_still_pass(command):
+    assert g.evaluate_bash(command).decision != g.DENY, f"ложное срабатывание: {command}"
+
+
+def test_guard_configuration_protects_itself():
+    """Конфигурацию защиты нельзя переписать тем же механизмом, который она охраняет."""
+    for path in (".claude/settings.json", ".claude/hooks/guard_rules.py",
+                 ".claude/hooks/guard_bash.py", ".claude/rules/security.md",
+                 "inventory/ssh-hosts.yaml", "inventory/dle-licenses.yaml"):
+        assert g.evaluate_write(path).decision == g.DENY, path

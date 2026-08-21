@@ -1,0 +1,18 @@
+{
+  "name": "seo-crawl",
+  "passed": true,
+  "executed": true,
+  "counts": {
+    "fetched": 45,
+    "unique_urls": 45,
+    "max_depth": 4,
+    "titles": 45,
+    "internal_links": 45
+  },
+  "totals": {
+    "critical": 0,
+    "major": 0,
+    "minor": 0
+  },
+  "findings": []
+}

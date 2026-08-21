@@ -6,7 +6,9 @@
 from __future__ import annotations
 
 import copy
+import os
 import shutil
+import signal
 import sys
 import uuid
 from pathlib import Path
@@ -77,3 +79,24 @@ def temp_site(pilot_package):
         shutil.rmtree(PATHS.artifacts / "seo" / site, ignore_errors=True)
         for state in PATHS.state.glob(f"{site}-*.json"):
             state.unlink(missing_ok=True)
+
+
+@pytest.fixture(scope="session", autouse=True)
+def stop_all_stands():
+    """Останавливает все локальные стенды после сессии тестов.
+
+    Без этого процессы php накапливаются между прогонами и занимают весь
+    разрешённый диапазон портов — деплой начинает падать с BLOCKED_ACCESS.
+    """
+    yield
+    targets_root = PATHS.var / "targets"
+    if not targets_root.exists():
+        return
+    for pid_file in targets_root.rglob("server.pid"):
+        try:
+            pid = int(pid_file.read_text(encoding="utf-8").strip())
+            os.killpg(os.getpgid(pid), signal.SIGTERM)
+        except (ValueError, ProcessLookupError, PermissionError, OSError):
+            pass
+        finally:
+            pid_file.unlink(missing_ok=True)

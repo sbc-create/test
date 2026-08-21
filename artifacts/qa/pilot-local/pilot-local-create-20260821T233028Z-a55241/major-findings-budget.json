@@ -1,0 +1,16 @@
+{
+  "name": "major-findings-budget",
+  "passed": true,
+  "executed": true,
+  "counts": {
+    "status": "ok",
+    "major": 1,
+    "budget": 25
+  },
+  "totals": {
+    "critical": 0,
+    "major": 0,
+    "minor": 0
+  },
+  "findings": []
+}
