@@ -26,4 +26,6 @@ __pycache__/
 test-results/
 playwright-report/
 artifacts/**/*.png
+# Скриншоты пилота — доказательства приёмки синтетического стенда, секретов не содержат
+!artifacts/qa/pilot-local/*.png
 !artifacts/**/.gitkeep

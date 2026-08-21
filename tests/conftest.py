@@ -56,4 +56,13 @@ def temp_site(pilot_package):
 
     yield make
     for path in created:
+        site = path.name
         shutil.rmtree(path, ignore_errors=True)
+        # временный сайт не оставляет за собой ни сборок, ни артефактов, ни состояния
+        shutil.rmtree(PATHS.builds / site, ignore_errors=True)
+        shutil.rmtree(PATHS.artifacts / "build" / site, ignore_errors=True)
+        shutil.rmtree(PATHS.artifacts / "jobs" / site, ignore_errors=True)
+        shutil.rmtree(PATHS.artifacts / "qa" / site, ignore_errors=True)
+        shutil.rmtree(PATHS.artifacts / "seo" / site, ignore_errors=True)
+        for state in PATHS.state.glob(f"{site}-*.json"):
+            state.unlink(missing_ok=True)
