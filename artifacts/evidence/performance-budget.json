@@ -4,7 +4,7 @@
   "executed": true,
   "counts": {
     "status": "ok",
-    "lab_lcp_ms_max": 184,
+    "lab_lcp_ms_max": 176,
     "lab_cls_max": 0,
     "lab_transfer_bytes_max": 11382,
     "budgets": {
