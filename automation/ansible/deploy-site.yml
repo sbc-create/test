@@ -1,0 +1,76 @@
+---
+# Выкат релиза сайта DLE. Запускается только через `factory deploy`.
+- name: Deploy DLE site release
+  hosts: "{{ target_host | default(omit) }}"
+  gather_facts: true
+  become: false                      # повышение прав только точечно, ниже
+  vars:
+    site_root: "/srv/sites/{{ site_id }}/{{ environment }}"
+    release_dir: "{{ site_root }}/releases/{{ build_id }}"
+    shared_dir: "{{ site_root }}/shared"
+    current_link: "{{ site_root }}/current"
+
+  pre_tasks:
+    - name: Fail fast when release identity is missing
+      ansible.builtin.assert:
+        that:
+          - site_id is defined and site_id | length > 0
+          - build_id is defined and build_id | length > 0
+          - environment in ['staging', 'production']
+        fail_msg: "site_id, build_id и environment обязаны приходить из manifest"
+
+    - name: Refuse to run as root
+      ansible.builtin.assert:
+        that: ansible_user_id != 'root'
+        fail_msg: "Деплой под root запрещён: используется least-privilege deploy user"
+
+  roles:
+    - role: dle_backup
+    - role: dle_release
+    - role: dle_site
+
+  post_tasks:
+    - name: Health check before switching current
+      ansible.builtin.uri:
+        url: "http://127.0.0.1/{{ health_path | default('') }}"
+        status_code: [200]
+        headers:
+          Host: "{{ domain }}"
+      register: health_before
+      changed_when: false
+      failed_when: health_before.status != 200
+
+    - name: Switch current symlink atomically
+      ansible.builtin.file:
+        src: "{{ release_dir }}"
+        dest: "{{ current_link }}"
+        state: link
+        force: true
+
+    - name: Reload web server using the allowlisted command only
+      ansible.builtin.command: "{{ item }}"
+      loop: "{{ sudo_allowlist | default([]) }}"
+      become: true
+      become_method: ansible.builtin.sudo
+      changed_when: true
+      when: sudo_allowlist | default([]) | length > 0
+
+    - name: Health check after switching current
+      ansible.builtin.uri:
+        url: "http://127.0.0.1/{{ health_path | default('') }}"
+        status_code: [200]
+        headers:
+          Host: "{{ domain }}"
+      register: health_after
+      changed_when: false
+      failed_when: health_after.status != 200
+
+    - name: Prune old releases keeping the configured amount
+      ansible.builtin.shell: |
+        set -euo pipefail
+        cd "{{ site_root }}/releases"
+        ls -1t | tail -n +{{ (keep_releases | int) + 1 }} | xargs -r rm -rf --
+      args:
+        executable: /bin/bash
+      register: prune
+      changed_when: prune.stdout | length > 0

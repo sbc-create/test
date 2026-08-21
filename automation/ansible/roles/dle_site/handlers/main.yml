@@ -1,0 +1,11 @@
+---
+- name: validate web server config
+  ansible.builtin.command: /usr/sbin/nginx -t
+  become: true
+  changed_when: false
+  listen: validate web server config
+
+- name: reload web server
+  ansible.builtin.command: /bin/systemctl reload nginx
+  become: true
+  listen: validate web server config

@@ -1,0 +1,27 @@
+---
+- name: Render web server configuration from the blueprint profile
+  ansible.builtin.template:
+    src: "{{ webserver_template | default('nginx-site.conf.j2') }}"
+    dest: "/etc/nginx/sites-available/{{ site_id }}-{{ environment }}.conf"
+    mode: "0644"
+  become: true
+  notify: validate web server config
+
+- name: Deny public access to sensitive paths
+  ansible.builtin.assert:
+    that: public_deny_paths is defined
+    fail_msg: "Перечень закрываемых путей обязан приходить из профиля blueprint"
+
+- name: Install cron jobs declaratively
+  ansible.builtin.cron:
+    name: "{{ item.id }}"
+    job: "flock -n {{ item.lock }} timeout {{ item.timeout_seconds }} {{ item.command }} >> {{ item.log }} 2>&1"
+    minute: "{{ item.schedule.split(' ')[0] }}"
+    hour: "{{ item.schedule.split(' ')[1] }}"
+    day: "{{ item.schedule.split(' ')[2] }}"
+    month: "{{ item.schedule.split(' ')[3] }}"
+    weekday: "{{ item.schedule.split(' ')[4] }}"
+    state: present
+  loop: "{{ cron_jobs | default([]) }}"
+  loop_control:
+    label: "{{ item.id }}"

@@ -1,0 +1,36 @@
+# Конфигурация сайта {{ site_id }} ({{ environment }}).
+# Пути приходят из blueprints/dle20/profiles/paths.yaml — не из догадок.
+server {
+    listen 443 ssl http2;
+    server_name {{ domain }}{% for alias in aliases %} {{ alias }}{% endfor %};
+
+    root /srv/sites/{{ site_id }}/{{ environment }}/current/public;
+    index index.php index.html;
+
+    # Служебные пути закрыты от публичного доступа.
+{% for path in public_deny_paths %}
+    location ~* {{ path }} { deny all; return 404; }
+{% endfor %}
+    location ~ /\.(?!well-known) { deny all; return 404; }
+    location = /routes.json { deny all; return 404; }
+    location = /build-manifest.json { deny all; return 404; }
+    autoindex off;
+
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+{% if environment != 'production' %}
+    add_header X-Robots-Tag "noindex, nofollow" always;
+    auth_basic "staging";
+    auth_basic_user_file /srv/sites/{{ site_id }}/{{ environment }}/shared/htpasswd;
+{% endif %}
+
+    location / {
+        try_files $uri $uri/ /index.php?$args;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php{{ php_version }}-fpm-{{ site_id }}.sock;
+    }
+}

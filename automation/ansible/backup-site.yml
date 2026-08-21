@@ -1,0 +1,8 @@
+---
+# Резервная копия перед любой мутацией. Наличие файла доказательством не считается:
+# восстановление проверяется отдельной задачей restore-check.
+- name: Backup DLE site
+  hosts: "{{ target_host | default(omit) }}"
+  gather_facts: true
+  roles:
+    - role: dle_backup

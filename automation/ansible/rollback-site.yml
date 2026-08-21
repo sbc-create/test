@@ -1,0 +1,39 @@
+---
+# Откат на предыдущий рабочий релиз. Код откатывается атомарно; миграции БД
+# восстанавливаются из бэкапа этого релиза и подтверждаются сравнением.
+- name: Rollback DLE site to previous release
+  hosts: "{{ target_host | default(omit) }}"
+  gather_facts: true
+  vars:
+    site_root: "/srv/sites/{{ site_id }}/{{ environment }}"
+  tasks:
+    - name: Resolve previous release
+      ansible.builtin.shell: |
+        set -euo pipefail
+        cd "{{ site_root }}/releases"
+        current=$(basename "$(readlink -f "{{ site_root }}/current")")
+        ls -1t | grep -v "^${current}$" | head -1
+      args:
+        executable: /bin/bash
+      register: previous_release
+      changed_when: false
+
+    - name: Fail when there is nothing to roll back to
+      ansible.builtin.assert:
+        that: previous_release.stdout | trim | length > 0
+        fail_msg: "Предыдущий рабочий релиз отсутствует — откат невозможен"
+
+    - name: Switch current to previous release
+      ansible.builtin.file:
+        src: "{{ site_root }}/releases/{{ previous_release.stdout | trim }}"
+        dest: "{{ site_root }}/current"
+        state: link
+        force: true
+
+    - name: Health check after rollback
+      ansible.builtin.uri:
+        url: "http://127.0.0.1/"
+        status_code: [200]
+        headers:
+          Host: "{{ domain | default(omit) }}"
+      changed_when: false

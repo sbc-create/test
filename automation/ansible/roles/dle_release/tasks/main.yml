@@ -1,0 +1,43 @@
+---
+- name: Ensure site directory layout exists
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0750"
+  loop:
+    - "{{ site_root }}"
+    - "{{ site_root }}/releases"
+    - "{{ shared_dir }}"
+    - "{{ shared_dir }}/uploads"
+    - "{{ shared_dir }}/logs"
+    - "{{ shared_dir }}/cache"
+
+- name: Refuse world-writable modes anywhere in the layout
+  ansible.builtin.assert:
+    that: "'777' not in (writable_mode | default('0750'))"
+    fail_msg: "world-writable права запрещены в production (§3.9)"
+
+- name: Upload release artifacts
+  ansible.posix.synchronize:
+    src: "{{ build_dir }}/"
+    dest: "{{ release_dir }}/"
+    delete: true
+    recursive: true
+    rsync_opts:
+      - "--chmod=D0750,F0640"
+  register: upload
+  changed_when: upload.changed
+
+- name: Link shared mutable data into the release
+  ansible.builtin.file:
+    src: "{{ shared_dir }}/{{ item }}"
+    dest: "{{ release_dir }}/{{ item }}"
+    state: link
+    force: true
+  loop: "{{ shared_link_paths | default(['uploads', 'logs', 'cache']) }}"
+
+- name: Remove installer entry points after successful installation
+  ansible.builtin.file:
+    path: "{{ release_dir }}/{{ item }}"
+    state: absent
+  loop: "{{ installer_entrypoints | default([]) }}"

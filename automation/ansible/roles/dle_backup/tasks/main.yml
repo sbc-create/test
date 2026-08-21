@@ -1,0 +1,35 @@
+---
+- name: Ensure backup directory exists
+  ansible.builtin.file:
+    path: "/srv/backups/{{ site_id }}/{{ environment }}"
+    state: directory
+    mode: "0700"
+
+- name: Dump database before mutation
+  ansible.builtin.shell: |
+    set -euo pipefail
+    umask 077
+    mysqldump --single-transaction --routines --events \
+      --defaults-extra-file="{{ db_defaults_file }}" "{{ db_name }}" \
+      | gzip > "/srv/backups/{{ site_id }}/{{ environment }}/db-$(date -u +%Y%m%dT%H%M%SZ).sql.gz"
+  args:
+    executable: /bin/bash
+  when: database_engine | default('none') != 'none'
+  register: db_backup
+  changed_when: db_backup.rc == 0
+
+- name: Archive shared mutable data
+  community.general.archive:
+    path: "/srv/sites/{{ site_id }}/{{ environment }}/shared"
+    dest: "/srv/backups/{{ site_id }}/{{ environment }}/shared-{{ ansible_date_time.iso8601_basic_short }}.tar.gz"
+    format: gz
+    mode: "0600"
+
+- name: Verify the archive can actually be read back
+  ansible.builtin.shell: |
+    set -euo pipefail
+    latest=$(ls -1t /srv/backups/{{ site_id }}/{{ environment }}/shared-*.tar.gz | head -1)
+    tar -tzf "$latest" > /dev/null
+  args:
+    executable: /bin/bash
+  changed_when: false
