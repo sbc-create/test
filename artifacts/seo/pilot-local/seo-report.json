@@ -40,173 +40,19 @@
       "name": "seo-render",
       "passed": true,
       "counts": {
-        "status": "ok",
-        "exit_code": 0,
-        "viewports": [
-          "mobile-360",
-          "mobile-390",
-          "tablet-768",
-          "laptop-1024",
-          "desktop-1440"
-        ],
-        "pages": 14,
-        "screenshots": 15,
-        "lab_lcp_ms_max": 180,
-        "lab_cls_max": 0,
-        "lab_transfer_bytes_max": 11382,
-        "progressive_enhancement": {
-          "items_before": 12,
-          "items_after": 16,
-          "has_button": true,
-          "items_without_js": 4,
-          "pagination_links_without_js": 2
-        },
-        "note": "Лабораторные метрики. Полевые Core Web Vitals ими не подменяются."
+        "status": "skipped"
       },
       "totals": {
         "critical": 0,
-        "major": 20,
+        "major": 1,
         "minor": 0
       },
       "findings": [
         {
-          "check": "thin-content",
+          "check": "browser",
           "severity": "major",
-          "url": "/praktikum/serial-fikstura/season-1/",
-          "message": "[mobile-360] Мало видимого текста: 83 символов",
-          "rule": ""
-        },
-        {
-          "check": "thin-content",
-          "severity": "major",
-          "url": "/praktikum/serial-fikstura/season-1/episode-1/",
-          "message": "[mobile-360] Мало видимого текста: 171 символов",
-          "rule": ""
-        },
-        {
-          "check": "thin-content",
-          "severity": "major",
-          "url": "/news/zapis-3/",
-          "message": "[mobile-360] Мало видимого текста: 113 символов",
-          "rule": ""
-        },
-        {
-          "check": "thin-content",
-          "severity": "major",
-          "url": "/news/",
-          "message": "[mobile-360] Мало видимого текста: 96 символов",
-          "rule": ""
-        },
-        {
-          "check": "thin-content",
-          "severity": "major",
-          "url": "/praktikum/serial-fikstura/season-1/",
-          "message": "[mobile-390] Мало видимого текста: 83 символов",
-          "rule": ""
-        },
-        {
-          "check": "thin-content",
-          "severity": "major",
-          "url": "/praktikum/serial-fikstura/season-1/episode-1/",
-          "message": "[mobile-390] Мало видимого текста: 171 символов",
-          "rule": ""
-        },
-        {
-          "check": "thin-content",
-          "severity": "major",
-          "url": "/news/zapis-3/",
-          "message": "[mobile-390] Мало видимого текста: 113 символов",
-          "rule": ""
-        },
-        {
-          "check": "thin-content",
-          "severity": "major",
-          "url": "/news/",
-          "message": "[mobile-390] Мало видимого текста: 96 символов",
-          "rule": ""
-        },
-        {
-          "check": "thin-content",
-          "severity": "major",
-          "url": "/praktikum/serial-fikstura/season-1/",
-          "message": "[tablet-768] Мало видимого текста: 83 символов",
-          "rule": ""
-        },
-        {
-          "check": "thin-content",
-          "severity": "major",
-          "url": "/praktikum/serial-fikstura/season-1/episode-1/",
-          "message": "[tablet-768] Мало видимого текста: 171 символов",
-          "rule": ""
-        },
-        {
-          "check": "thin-content",
-          "severity": "major",
-          "url": "/news/zapis-3/",
-          "message": "[tablet-768] Мало видимого текста: 113 символов",
-          "rule": ""
-        },
-        {
-          "check": "thin-content",
-          "severity": "major",
-          "url": "/news/",
-          "message": "[tablet-768] Мало видимого текста: 96 символов",
-          "rule": ""
-        },
-        {
-          "check": "thin-content",
-          "severity": "major",
-          "url": "/praktikum/serial-fikstura/season-1/",
-          "message": "[laptop-1024] Мало видимого текста: 83 символов",
-          "rule": ""
-        },
-        {
-          "check": "thin-content",
-          "severity": "major",
-          "url": "/praktikum/serial-fikstura/season-1/episode-1/",
-          "message": "[laptop-1024] Мало видимого текста: 171 символов",
-          "rule": ""
-        },
-        {
-          "check": "thin-content",
-          "severity": "major",
-          "url": "/news/zapis-3/",
-          "message": "[laptop-1024] Мало видимого текста: 113 символов",
-          "rule": ""
-        },
-        {
-          "check": "thin-content",
-          "severity": "major",
-          "url": "/news/",
-          "message": "[laptop-1024] Мало видимого текста: 96 символов",
-          "rule": ""
-        },
-        {
-          "check": "thin-content",
-          "severity": "major",
-          "url": "/praktikum/serial-fikstura/season-1/",
-          "message": "[desktop-1440] Мало видимого текста: 83 символов",
-          "rule": ""
-        },
-        {
-          "check": "thin-content",
-          "severity": "major",
-          "url": "/praktikum/serial-fikstura/season-1/episode-1/",
-          "message": "[desktop-1440] Мало видимого текста: 171 символов",
-          "rule": ""
-        },
-        {
-          "check": "thin-content",
-          "severity": "major",
-          "url": "/news/zapis-3/",
-          "message": "[desktop-1440] Мало видимого текста: 113 символов",
-          "rule": ""
-        },
-        {
-          "check": "thin-content",
-          "severity": "major",
-          "url": "/news/",
-          "message": "[desktop-1440] Мало видимого текста: 96 символов",
+          "url": "http://127.0.0.1:8082",
+          "message": "Браузерная проверка не выполнялась (--skip-browser): приёмка неполная.",
           "rule": ""
         }
       ]
@@ -242,9 +88,9 @@
       "name": "performance-budget",
       "passed": true,
       "counts": {
-        "lab_lcp_ms_max": 180,
-        "lab_cls_max": 0,
-        "lab_transfer_bytes_max": 11382,
+        "lab_lcp_ms_max": null,
+        "lab_cls_max": null,
+        "lab_transfer_bytes_max": null,
         "budgets": {
           "lab_lcp_ms": 2500,
           "lab_cls": 0.1,
@@ -259,15 +105,23 @@
       },
       "totals": {
         "critical": 0,
-        "major": 0,
+        "major": 1,
         "minor": 0
       },
-      "findings": []
+      "findings": [
+        {
+          "check": "performance",
+          "severity": "major",
+          "url": "-",
+          "message": "Метрики не собраны: браузерная проверка пропущена флагом.",
+          "rule": ""
+        }
+      ]
     }
   ],
   "totals": {
     "critical": 0,
-    "major": 20,
+    "major": 2,
     "minor": 0
   }
 }

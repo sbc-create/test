@@ -1,0 +1,101 @@
+{
+  "items": [
+    {
+      "field": "dle_license",
+      "why": "Одна лицензия DLE покрывает один домен второго уровня и его поддомены; без записи production-установка невозможна.",
+      "format": "YAML-запись в inventory/dle-licenses.yaml",
+      "example_without_secret": "ref: lic-001, covered_domain: example.tld, version: '20.0', license_key_secret_ref: env:FACTORY_DLE_LICENSE_LIC001",
+      "where_to_put": "inventory/dle-licenses.yaml (сам ключ — только через secret_ref)",
+      "blocks_stage": "PRODUCTION_DEPLOY → BLOCKED_LICENSE"
+    },
+    {
+      "field": "dle_distribution",
+      "why": "Установка DLE выполняется только из официального лицензионного архива с зафиксированной контрольной суммой.",
+      "format": "файл + запись с sha256",
+      "example_without_secret": "DLE_20.0.zip, sha256: <64 hex>",
+      "where_to_put": "blueprints/dle20/dist/ (в git не попадает) + inventory/dle-distributions.yaml",
+      "blocks_stage": "BUILDING/STAGING_DEPLOY → BLOCKED_INPUT"
+    },
+    {
+      "field": "dle_paths_profile",
+      "why": "Изменяемые/неизменяемые/общие пути DLE, точки входа установщика и требования PHP/БД нельзя угадывать (§3.8).",
+      "format": "YAML по образцу blueprints/dle20/profiles/paths.template.yaml",
+      "example_without_secret": "writable_paths: [ ... ], installer_entrypoints: [ ... ], runtime.php.min_version: '8.x'",
+      "where_to_put": "blueprints/dle20/profiles/paths.yaml",
+      "blocks_stage": "STAGING_DEPLOY → BLOCKED_INPUT"
+    },
+    {
+      "field": "ssh_host",
+      "why": "Без цели по SSH фабрика не может выкатить сайт на реальный staging/production.",
+      "format": "YAML-запись",
+      "example_without_secret": "ref: stage-1, hostname: staging.example.tld, deploy_user: dle-deploy, known_hosts_entry_ref: inventory/known_hosts.d/stage-1",
+      "where_to_put": "inventory/ssh-hosts.yaml; приватный ключ — только через ssh_key_secret_ref",
+      "blocks_stage": "STAGING_DEPLOY → BLOCKED_ACCESS"
+    },
+    {
+      "field": "dns_zone",
+      "why": "DNS cutover выполняется отдельным журналируемым шагом и требует scoped-токена зоны.",
+      "format": "YAML-запись",
+      "example_without_secret": "ref: example-tld, zone: example.tld, api_token_secret_ref: env:FACTORY_DNS_TOKEN_EXAMPLE_TLD, scope: zone_records_only",
+      "where_to_put": "inventory/dns-zones.yaml",
+      "blocks_stage": "PRODUCTION_DEPLOY → BLOCKED_ACCESS"
+    },
+    {
+      "field": "vk_catalog",
+      "why": "Каждый пакет обязан ссылаться на разрешённый каталог/выгрузку VK и rights manifest: публичная доступность ролика правом не является.",
+      "format": "файл выгрузки + версия + sha256 + rights manifest",
+      "example_without_secret": "catalog_ref: content/vk-catalog-2026-08.json, catalog_sha256: <64 hex>, rights_manifest_ref: content/rights.yaml",
+      "where_to_put": "sites/<site_id>/content/",
+      "blocks_stage": "BUILDING → BLOCKED_RIGHTS"
+    },
+    {
+      "field": "vk_player_contract",
+      "why": "Схема встраивания белого плеера не выдумывается: без contract доступен только mock и только для staging.",
+      "format": "официальный/внутренний документ + ref",
+      "example_without_secret": "contract_ref: content/vk-player-contract.yaml, embed_template: <из contract>",
+      "where_to_put": "sites/<site_id>/content/",
+      "blocks_stage": "BUILDING → BLOCKED_RIGHTS"
+    },
+    {
+      "field": "vk_ads_contract",
+      "why": "Рекламный слой подключается только по согласованному contract VK/Adman/AdTech с placement/product ID и перечнем разрешённых событий.",
+      "format": "документ + placement IDs + policy refs + secret_ref",
+      "example_without_secret": "provider: vk_adman_adtech, placements: [{placement_id: ..., page_types: [...], reserved_size: {height: 250}}]",
+      "where_to_put": "sites/<site_id>/content/ + secret_ref на токен",
+      "blocks_stage": "BUILDING → BLOCKED_RIGHTS"
+    },
+    {
+      "field": "brand_and_legal",
+      "why": "Бренд, логотипы, палитра, юридическое лицо, контакты и тексты правовых документов берутся только из переданных данных.",
+      "format": "файлы + поля пакета",
+      "example_without_secret": "brand.logo_ref: brand/logo.svg, legal.owner: ООО «...», legal.contacts.email: info@example.tld",
+      "where_to_put": "sites/<site_id>/brand/, sites/<site_id>/legal/",
+      "blocks_stage": "BUILDING → BLOCKED_INPUT"
+    },
+    {
+      "field": "acceptance_baseline",
+      "why": "Визуальное сравнение требует утверждённого baseline: сохранение скриншота сравнением не является.",
+      "format": "PNG-файлы + пороги",
+      "example_without_secret": "acceptance.reference_screenshots: [qa/baseline/home-390.png]",
+      "where_to_put": "sites/<site_id>/qa/baseline/",
+      "blocks_stage": "STAGING_QA → QA_FAILED"
+    },
+    {
+      "field": "webmaster_access",
+      "why": "Подтверждение в Google Search Console и Яндекс Вебмастере нужно для наблюдения за индексацией после запуска.",
+      "format": "verification ID (уникальный на каждый сайт)",
+      "example_without_secret": "seo.webmaster_verification_refs.google_search_console: google-site-verification=...",
+      "where_to_put": "sites/<site_id>/package.yaml",
+      "blocks_stage": "MONITORING"
+    },
+    {
+      "field": "official_docs_egress",
+      "why": "Официальные источники (dle-news.com, developers.google.com, yandex.ru, web.dev, playwright.dev, w3.org) закрыты egress-политикой сессии — сверка SEO/DLE-правил с первоисточником невозможна.",
+      "format": "разрешение хостов в egress allowlist ИЛИ переданные официальные экспорты страниц",
+      "example_without_secret": "allowlist: dle-news.com, developers.google.com, yandex.ru, web.dev",
+      "where_to_put": "настройки окружения сессии или knowledge/imported/",
+      "blocks_stage": "DISCOVERY (knowledge freeze помечен unverified)"
+    }
+  ],
+  "count": 12
+}

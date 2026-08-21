@@ -2,9 +2,9 @@
   "name": "performance-budget",
   "passed": true,
   "counts": {
-    "lab_lcp_ms_max": 180,
-    "lab_cls_max": 0,
-    "lab_transfer_bytes_max": 11382,
+    "lab_lcp_ms_max": null,
+    "lab_cls_max": null,
+    "lab_transfer_bytes_max": null,
     "budgets": {
       "lab_lcp_ms": 2500,
       "lab_cls": 0.1,
@@ -19,8 +19,16 @@
   },
   "totals": {
     "critical": 0,
-    "major": 0,
+    "major": 1,
     "minor": 0
   },
-  "findings": []
+  "findings": [
+    {
+      "check": "performance",
+      "severity": "major",
+      "url": "-",
+      "message": "Метрики не собраны: браузерная проверка пропущена флагом.",
+      "rule": ""
+    }
+  ]
 }

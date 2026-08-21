@@ -5,7 +5,9 @@
 """
 from __future__ import annotations
 
+import json
 import time
+import uuid
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -60,8 +62,20 @@ def run_job(site_id: str, *, environment: str | None = None, job_id: str | None 
     validation_result = validation.validate(site_id)
     package = validation_result.package or {}
     env = environment or package.get("environment") or "staging"
-    job = JobState.load_or_create(job_id or f"{site_id}-{action}-{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}",
-                                  site_id, env, action)
+    # Идентификатор уникален: секундной метки недостаточно, два запуска в одну
+    # секунду получили бы один job_id и второй упал бы на переходе из DONE.
+    generated = f"{site_id}-{action}-{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}-{uuid.uuid4().hex[:6]}"
+    job = JobState.load_or_create(job_id or generated, site_id, env, action)
+
+    # Семантика «ровно один раз»: повторный запуск завершённого job'а возвращает
+    # сохранённый результат, а не выполняет работу заново.
+    if job.terminal:
+        stored = PATHS.artifacts / "jobs" / site_id / f"{job.job_id}.json"
+        if stored.exists():
+            data = json.loads(stored.read_text(encoding="utf-8"))
+            return RunOutcome(data["status"], job.job_id, site_id, env, stored, job.base_url,
+                              data.get("checks", []), data.get("blockers", []),
+                              data.get("notes", []) + ["Задание уже завершено: возвращён сохранённый результат."])
 
     def finish(status: str, blockers: list[dict]) -> RunOutcome:
         if job.status != status and job.can_transition(status):
@@ -131,6 +145,9 @@ def run_job(site_id: str, *, environment: str | None = None, job_id: str | None 
                 job.transition("STAGING_DEPLOY")
 
             # ---------------------------------------------------------- деплой
+            if env != "production":
+                notes.append("Staging не является разрешением на production: нужны production_authorized, лицензия DLE и подтверждение оператора.")
+
             if dry_run:
                 plan = target.plan(built.output, build_id)
                 step("deploy", "skipped", detail=f"dry-run: шагов {len(plan.steps)}, мутаций 0")
@@ -189,7 +206,11 @@ def run_job(site_id: str, *, environment: str | None = None, job_id: str | None 
                 "jsonld_errors": sum(1 for r in qa_reports for f in r.findings if f.check == "jsonld"),
             }
 
-            failed = [c for c in qa_checks if not c.passed]
+            skipped = [c for c in qa_checks if not c.passed and c.severity != "critical"]
+            for check in skipped:
+                notes.append(f"Проверка {check.id} не выполнялась ({check.counts.get('status', 'skipped')}): приёмка неполная, "
+                             f"результат нельзя считать полной приёмкой сайта.")
+            failed = [c for c in qa_checks if not c.passed and c.severity == "critical"]
             seo_failed = [c for c in failed if c.id.startswith("seo-")]
             if seo_failed:
                 if package["rollback_policy"]["auto_rollback_on_smoke_failure"] and env == "production":
@@ -221,7 +242,6 @@ def run_job(site_id: str, *, environment: str | None = None, job_id: str | None 
                 step("monitoring", detail=f"health endpoint: {package['monitoring_policy']['health_endpoint']}")
                 return finish("DONE", [])
 
-            notes.append("Staging пройден. Это не является разрешением на production: требуется production_authorized и лицензия DLE.")
             return finish("DONE", [])
 
     except LockBusy as exc:

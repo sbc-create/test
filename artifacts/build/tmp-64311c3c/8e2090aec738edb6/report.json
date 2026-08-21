@@ -1,0 +1,42 @@
+{
+  "site_id": "tmp-64311c3c",
+  "build_id": "8e2090aec738edb6",
+  "output": "/home/user/test/var/build/tmp-64311c3c/8e2090aec738edb6",
+  "routes": 48,
+  "redirects": 4,
+  "counts": {
+    "home": 1,
+    "category": 2,
+    "paginated_page": 2,
+    "collection": 1,
+    "title": 22,
+    "content_unavailable": 8,
+    "season": 1,
+    "episode": 2,
+    "article": 3,
+    "news_index": 1,
+    "legal": 2,
+    "search": 1,
+    "not_found": 1,
+    "gone": 1
+  },
+  "skipped": [
+    {
+      "id": "fx-noalt",
+      "reason": "У изображения нет alt в переданных данных — публикация материала заблокирована (§9).",
+      "required_input": "alt из переданного контентного пакета",
+      "context": "card"
+    },
+    {
+      "id": "/arhiv/",
+      "reason": "Листинг пуст: публикация как indexable 200 запрещена матрицей (soft 404).",
+      "required_input": "Материалы для раздела или удаление раздела из навигации",
+      "context": "category"
+    }
+  ],
+  "php_lint": [],
+  "renderer_version": "1.0.0",
+  "environment": "staging",
+  "built_at": "2026-08-21T22:35:13Z",
+  "package_sha256": "0f98d1577aa939db478882a47160ef15e3a1698a8e612fe5ea633cd2bf05291a"
+}

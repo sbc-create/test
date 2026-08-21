@@ -229,6 +229,23 @@ def _check_domain_consistency(pkg: dict, out: list[Blocker]) -> None:
 def _check_content_rights(pkg: dict, site_id: str, out: list[Blocker]) -> None:
     cs = pkg.get("content_source") or {}
     kind = cs.get("kind")
+
+    # Контрольная сумма и наличие каталога проверяются независимо от типа источника:
+    # подменённая выгрузка одинаково опасна и для fixture, и для лицензионного каталога.
+    catalog_ref = cs.get("catalog_ref")
+    if catalog_ref:
+        path = _resolve_site_file(site_id, catalog_ref)
+        if not path:
+            out.append(Blocker("BLOCKED_RIGHTS", "content_source.catalog_ref", f"Каталог контента «{catalog_ref}» не найден.", "Передай выгрузку каталога в каталог сайта", "BUILDING"))
+        elif cs.get("catalog_sha256") and _sha256(path) != cs["catalog_sha256"]:
+            out.append(Blocker("BLOCKED_RIGHTS", "content_source.catalog_sha256", "SHA-256 переданного каталога не совпадает с заявленным в пакете.", "Актуальная контрольная сумма переданной выгрузки", "BUILDING"))
+    if pkg.get("content_package_ref"):
+        path = _resolve_site_file(site_id, pkg["content_package_ref"])
+        if not path:
+            out.append(Blocker("BLOCKED_INPUT", "content_package_ref", f"Файл контентного пакета «{pkg['content_package_ref']}» не найден.", "Передай контентный пакет", "BUILDING"))
+        elif pkg.get("content_package_sha256") and _sha256(path) != pkg["content_package_sha256"]:
+            out.append(Blocker("BLOCKED_RIGHTS", "content_package_sha256", "SHA-256 контентного пакета не совпадает с заявленным.", "Актуальная контрольная сумма", "BUILDING"))
+
     if kind == "fixture":
         if pkg.get("environment") == "production":
             out.append(Blocker("BLOCKED_RIGHTS", "content_source.kind", "Fixture-контент запрещён в production.", "Реальный лицензионный каталог VK с rights manifest", "AUTHORIZATION_CHECK"))
@@ -238,13 +255,6 @@ def _check_content_rights(pkg: dict, site_id: str, out: list[Blocker]) -> None:
     ref = cs.get("rights_manifest_ref")
     if ref and not _resolve_site_file(site_id, ref):
         out.append(Blocker("BLOCKED_RIGHTS", "content_source.rights_manifest_ref", f"Файл rights manifest «{ref}» не найден внутри sites/{site_id}/.", "Положи rights manifest в каталог сайта", "BUILDING"))
-    catalog_ref = cs.get("catalog_ref")
-    if catalog_ref:
-        path = _resolve_site_file(site_id, catalog_ref)
-        if not path:
-            out.append(Blocker("BLOCKED_RIGHTS", "content_source.catalog_ref", f"Каталог контента «{catalog_ref}» не найден.", "Передай выгрузку каталога VK в каталог сайта", "BUILDING"))
-        elif cs.get("catalog_sha256") and _sha256(path) != cs["catalog_sha256"]:
-            out.append(Blocker("BLOCKED_RIGHTS", "content_source.catalog_sha256", "SHA-256 переданного каталога не совпадает с заявленным в пакете.", "Актуальная контрольная сумма переданной выгрузки", "BUILDING"))
 
 
 def _check_vk_and_ads(pkg: dict, out: list[Blocker]) -> None:

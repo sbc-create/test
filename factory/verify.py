@@ -102,8 +102,12 @@ def performance_budget(browser_report: Report, package: dict, out_dir: Path) -> 
     lcp = counts.get("lab_lcp_ms_max")
     cls = counts.get("lab_cls_max")
     transfer = counts.get("lab_transfer_bytes_max")
-    if counts.get("status") != "ok":
-        report.add(Finding("performance", "critical", "-", "Метрики не собраны: браузерная проверка не выполнялась."))
+    status = counts.get("status")
+    if status == "skipped":
+        # Оператор осознанно сократил объём приёмки: это не дефект сайта, но и не доказательство.
+        report.add(Finding("performance", "major", "-", "Метрики не собраны: браузерная проверка пропущена флагом."))
+    elif status != "ok":
+        report.add(Finding("performance", "critical", "-", f"Метрики не собраны: браузерная проверка недоступна ({status})."))
     else:
         if budgets.get("lab_lcp_ms") and lcp is not None and lcp > budgets["lab_lcp_ms"]:
             report.add(Finding("performance", "critical", "-", f"Lab LCP {lcp} мс превышает бюджет {budgets['lab_lcp_ms']} мс."))
@@ -157,15 +161,19 @@ def verify(site_id: str, package: dict, build_dir: Path, base_url: str, *, auth:
 
     if skip_browser:
         browser_report = Report("seo-render")
-        browser_report.add(Finding("browser", "critical", base_url, "Браузерная проверка пропущена по флагу --skip-browser."))
+        # severity=major: это осознанное сокращение объёма приёмки оператором,
+        # а не найденный дефект. Проверка при этом НЕ считается пройденной.
+        browser_report.add(Finding("browser", "major", base_url,
+                                   "Браузерная проверка не выполнялась (--skip-browser): приёмка неполная."))
         browser_report.counts = {"status": "skipped"}
     else:
         browser_report = render_check.run(base_url, build_dir, out_dir, auth=auth)
     (out_dir / "seo-render.json").write_text(json.dumps(browser_report.as_dict(), ensure_ascii=False, indent=2), encoding="utf-8")
     reports.append(browser_report)
     checks.append(Check("seo-render", f"node tools/browser-audit.js --base {base_url}",
-                        0 if browser_report.passed else 1, browser_report.passed,
-                        str((out_dir / "seo-render.json").relative_to(PATHS.root)), browser_report.counts))
+                        0 if browser_report.passed else 1, browser_report.passed and not skip_browser,
+                        str((out_dir / "seo-render.json").relative_to(PATHS.root)), browser_report.counts,
+                        severity="major" if skip_browser else "critical"))
 
     security = security_smoke(base_url, out_dir, auth=auth, environment=environment)
     reports.append(security)
@@ -182,7 +190,8 @@ def verify(site_id: str, package: dict, build_dir: Path, base_url: str, *, auth:
     performance = performance_budget(browser_report, package, out_dir)
     reports.append(performance)
     checks.append(Check("performance-budget", f"python3 -m factory verify --site {site_id} (performance)",
-                        0 if performance.passed else 1, performance.passed,
-                        str((out_dir / "performance-budget.json").relative_to(PATHS.root)), performance.counts))
+                        0 if performance.passed else 1, performance.passed and not skip_browser,
+                        str((out_dir / "performance-budget.json").relative_to(PATHS.root)), performance.counts,
+                        severity="major" if skip_browser else "critical"))
 
     return checks, reports

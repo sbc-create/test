@@ -207,11 +207,18 @@ class LocalDisposableTarget:
         step("post_switch_health", f"Проверка после переключения: {detail}")
 
         keep = int(self.pkg["rollback_policy"]["keep_releases"])
-        pruned = self._prune(keep, protect={build_id, previous or ""})
+        # Защищаем и сохранённую точку отката: иначе очистка может удалить релиз,
+        # на который ссылается состояние, и откат окажется невозможен.
+        protected = {build_id, previous or "", self._state().get("previous_release_id") or ""}
+        pruned = self._prune(keep, protect=protected)
         content_changed = content_changed or bool(pruned)
         step("prune_releases", f"Удалено устаревших релизов: {len(pruned)}; хранится {keep} плюс защищённые (текущий и предыдущий)", mutation=bool(pruned), noop=not pruned)
 
-        self._save_state(port=port, build_id=build_id, previous_release_id=previous, deployed_at=now())
+        # previous_release_id меняется только когда current действительно переключился:
+        # иначе повторный деплой затирает точку отката самим собой.
+        stored_previous = self._state().get("previous_release_id")
+        effective_previous = previous if (previous and previous != build_id) else stored_previous
+        self._save_state(port=port, build_id=build_id, previous_release_id=effective_previous, deployed_at=now())
         return DeployResult(self.site_id, self.environment, build_id, build_id, previous,
                             f"http://{self.bind}:{port}", steps=steps, mutations=mutations, backup=backup,
                             idempotent_noop=not content_changed)

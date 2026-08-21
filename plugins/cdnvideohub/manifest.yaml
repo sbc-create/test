@@ -1,0 +1,11 @@
+schema_version: 1
+name: cdnvideohub
+status: not_integrated
+integrated_at: null
+contract_ref: null
+knowledge_pack: knowledge/cdnvideohub/
+adapter: null
+note: >-
+  Заполняется во втором change request после передачи официальной документации,
+  согласованных доменов и Publisher ID. До этого момента плагин не подключается
+  ни к одному сайту.
