@@ -1,0 +1,29 @@
+# Runtime state, never committed
+var/
+!var/.gitkeep
+# Licensed DLE distributions must never be committed
+blueprints/dle20/dist/
+*.zip
+*.tar.gz
+# Secrets
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+!**/*.pub
+# Local Claude overrides
+.claude/settings.local.json
+CLAUDE.local.md
+# Node / Python
+node_modules/
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+# Test output
+test-results/
+playwright-report/
+artifacts/**/*.png
+!artifacts/**/.gitkeep
