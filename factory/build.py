@@ -70,6 +70,26 @@ def _content_digest(site_id: str, package: dict) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest() if path.exists() else "missing"
 
 
+def factory_source_digest() -> str:
+    """Дайджест кода, влияющего на результат рендера.
+
+    Без него изменившийся рендер даёт прежний build_id, деплой считает релиз уже
+    применённым и продолжает отдавать старое содержимое. Это реальная ловушка
+    контентной адресации, поэтому код входит в адрес наравне с данными.
+    """
+    h = hashlib.sha256()
+    root = Path(__file__).resolve().parent
+    for file in sorted(p for p in root.rglob("*.py") if p.is_file()):
+        h.update(str(file.relative_to(root)).encode())
+        h.update(file.read_bytes())
+    automation = PATHS.automation / "local"
+    if automation.exists():
+        for file in sorted(p for p in automation.rglob("*") if p.is_file()):
+            h.update(str(file.relative_to(automation)).encode())
+            h.update(file.read_bytes())
+    return h.hexdigest()
+
+
 def compute_build_id(site_id: str, package: dict) -> str:
     theme_dir = PATHS.themes / package["theme_ref"]
     matrix = yaml.safe_load((PATHS.knowledge / "SEO_INDEXABILITY_MATRIX.yaml").read_text(encoding="utf-8")) or {}
@@ -79,6 +99,7 @@ def compute_build_id(site_id: str, package: dict) -> str:
         "theme": _dir_digest(theme_dir),
         "matrix_policy_version": matrix.get("policy_version"),
         "renderer": RENDERER_VERSION,
+        "factory_source": factory_source_digest(),
     })
     return hashlib.sha256(material.encode()).hexdigest()[:16]
 

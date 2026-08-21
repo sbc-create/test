@@ -1,0 +1,152 @@
+"""Статический линт сборки: проверяет артефакты до подъёма сервера.
+
+Проверяет то, что можно доказать по файлам: canonical, robots, дубли title/H1/
+description, соответствие матрице, состав sitemap, разметку JSON-LD, пагинацию,
+отсутствие staging/test-URL в production-артефактах.
+"""
+from __future__ import annotations
+
+import json
+import re
+from collections import Counter, defaultdict
+from pathlib import Path
+
+from factory.seo import matrix as matrix_mod
+from factory.seo.model import Finding, Report
+
+TAG_RE = {
+    "title": re.compile(r"<title>(.*?)</title>", re.S | re.I),
+    "canonical": re.compile(r'<link rel="canonical" href="([^"]+)"', re.I),
+    "robots": re.compile(r'<meta name="robots" content="([^"]+)"', re.I),
+    "description": re.compile(r'<meta name="description" content="([^"]*)"', re.I),
+    "h1": re.compile(r"<h1[^>]*>(.*?)</h1>", re.S | re.I),
+}
+JSONLD_RE = re.compile(r'<script type="application/ld\+json">(.*?)</script>', re.S)
+LINK_RE = re.compile(r'<a\s[^>]*href="([^"#?]+)', re.I)
+STAGING_HINT_RE = re.compile(r"(localhost|127\.0\.0\.1|staging|\.test\b|demo|lorem ipsum)", re.I)
+
+
+def _text(value: str) -> str:
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", value)).strip()
+
+
+def lint(build_dir: Path, *, environment: str = "staging") -> Report:
+    report = Report("seo-lint")
+    routes_file = build_dir / "routes.json"
+    if not routes_file.exists():
+        report.add(Finding("build", "critical", "-", "routes.json отсутствует: сборка неполна."))
+        return report
+    config = json.loads(routes_file.read_text(encoding="utf-8"))
+    routes = config["routes"]
+    public = build_dir / "public"
+    matrix_types = {p["id"]: p for p in matrix_mod.load().get("page_types", [])}
+
+    titles: dict[str, list[str]] = defaultdict(list)
+    descriptions: dict[str, list[str]] = defaultdict(list)
+    by_path = {r["path"]: r for r in routes}
+    incoming: Counter[str] = Counter()
+
+    for route in routes:
+        url, page_type = route["path"], route["page_type"]
+        policy = matrix_types.get(page_type)
+        if policy is None:
+            report.add(Finding("matrix", "critical", url, f"Тип страницы «{page_type}» отсутствует в матрице.", "HR-*"))
+            continue
+        if route["status"] not in (policy.get("http_status") or [200]):
+            report.add(Finding("status", "critical", url, f"Статус {route['status']} не разрешён матрицей для типа «{page_type}» ({policy.get('http_status')}).", "HR-4"))
+        if not route.get("file"):
+            continue
+        html = (public / route["file"]).read_text(encoding="utf-8")
+
+        title = _text((TAG_RE["title"].search(html) or [None, ""])[1] if TAG_RE["title"].search(html) else "")
+        h1_matches = TAG_RE["h1"].findall(html)
+        canonical = (TAG_RE["canonical"].search(html) or [None, None])[1] if TAG_RE["canonical"].search(html) else None
+        robots = (TAG_RE["robots"].search(html) or [None, ""])[1] if TAG_RE["robots"].search(html) else ""
+        description = (TAG_RE["description"].search(html) or [None, ""])[1] if TAG_RE["description"].search(html) else ""
+
+        # H1
+        if len(h1_matches) != 1:
+            report.add(Finding("h1", "critical", url, f"Ожидается ровно один H1, найдено {len(h1_matches)}."))
+        # canonical
+        indexable = route["indexable"] and route["status"] == 200
+        if indexable:
+            if not canonical:
+                report.add(Finding("canonical", "critical", url, "Индексируемая страница без self-canonical.", "HR-1"))
+            elif not canonical.startswith("https://"):
+                report.add(Finding("canonical", "critical", url, f"Canonical не абсолютный: {canonical}", "HR-1"))
+            elif not canonical.endswith(url):
+                report.add(Finding("canonical", "critical", url, f"Canonical «{canonical}» не совпадает с собственным URL.", "HR-1"))
+            if not title:
+                report.add(Finding("title", "critical", url, "Пустой title у индексируемой страницы."))
+            titles[title].append(url)
+            if description:
+                descriptions[description].append(url)
+            if "noindex" in robots:
+                report.add(Finding("robots", "critical", url, "Страница помечена indexable, но содержит noindex."))
+        else:
+            if "noindex" not in robots and route["status"] == 200 and page_type not in ("service",):
+                report.add(Finding("robots", "critical", url, f"Неиндексируемая страница без noindex (robots=«{robots}»)."))
+            if canonical and page_type in ("search", "filter_non_indexable"):
+                report.add(Finding("canonical", "major", url, "У noindex-страницы задан self-canonical — сигналы противоречивы."))
+        # sitemap
+        if route["in_sitemap"] and not indexable:
+            report.add(Finding("sitemap", "critical", url, "URL включён в sitemap, но не является indexable 200.", "HR-3"))
+        # soft 404
+        if route["status"] == 200 and indexable:
+            body = re.search(r"<main[^>]*>(.*?)</main>", html, re.S)
+            if body and len(_text(body.group(1))) < 40:
+                report.add(Finding("soft404", "critical", url, "Индексируемая страница практически без содержимого (soft 404).", "HR-4"))
+        # JSON-LD
+        for block in JSONLD_RE.findall(html):
+            try:
+                data = json.loads(block)
+            except json.JSONDecodeError as exc:
+                report.add(Finding("jsonld", "critical", url, f"JSON-LD не парсится: {exc}"))
+                continue
+            if data.get("@type") == "VideoObject":
+                if 'class="player-frame"' not in html:
+                    report.add(Finding("jsonld", "critical", url, "VideoObject размечен на странице без видимого плеера.", "HR-6"))
+        # содержимое staging в production
+        if environment == "production" and STAGING_HINT_RE.search(html):
+            report.add(Finding("production-purity", "critical", url, "В production-сборке найден staging/demo/placeholder-маркер.", "HR-8"))
+        # внутренние ссылки
+        for href in LINK_RE.findall(html):
+            if href.startswith("/"):
+                incoming[href] += 1
+
+    # дубли
+    for title, urls in titles.items():
+        if len(urls) > 1:
+            report.add(Finding("duplicate-title", "critical", urls[0], f"Дублирующийся title на {len(urls)} страницах: {', '.join(urls[:4])}"))
+    for description, urls in descriptions.items():
+        if len(urls) > 1 and description:
+            report.add(Finding("duplicate-description", "major", urls[0], f"Дублирующаяся description на {len(urls)} страницах: {', '.join(urls[:4])}"))
+
+    # orphan pages
+    for route in routes:
+        if route["indexable"] and route["status"] == 200 and route["path"] != "/" and incoming[route["path"]] == 0:
+            report.add(Finding("orphan", "critical", route["path"], "Индексируемая страница без входящих внутренних ссылок.", "HR-7"))
+
+    # пагинация
+    paginated = [r for r in routes if r["page_type"] == "paginated_page"]
+    for route in paginated:
+        parent = route.get("parent")
+        if parent and parent not in by_path:
+            report.add(Finding("pagination", "critical", route["path"], f"Родительская страница {parent} отсутствует."))
+        html = (public / route["file"]).read_text(encoding="utf-8")
+        if 'class="pagination"' not in html:
+            report.add(Finding("pagination", "critical", route["path"], "На странице пагинации нет блока навигации по страницам.", "HR-5"))
+        if not re.search(r'<a[^>]+href="[^"]*page/\d+/"', html) and not re.search(r'<a[^>]+class="page-prev"', html):
+            report.add(Finding("pagination", "critical", route["path"], "Пагинация не связана обычными <a href> ссылками.", "HR-5"))
+    for redirect in config.get("redirects", []):
+        if redirect["source"].endswith("page/1/") and redirect["status"] != 301:
+            report.add(Finding("pagination", "critical", redirect["source"], "page/1/ обязан отдавать 301 на базовый URL."))
+
+    report.counts = {
+        "routes": len(routes),
+        "indexable": sum(1 for r in routes if r["indexable"] and r["status"] == 200),
+        "in_sitemap": sum(1 for r in routes if r["in_sitemap"]),
+        "paginated": len(paginated),
+        "redirects": len(config.get("redirects", [])),
+    }
+    return report

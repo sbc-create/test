@@ -3,7 +3,7 @@
 <article class="detail">
   <h1>{{ page.h1 }}</h1>
   {%- if page.player %}
-  <div class="player-frame" style="aspect-ratio: {{ page.player.aspect_ratio }};">
+  <div class="player-frame {{ page.player.ratio_class }}">
     {{ page.player.html | safe }}
   </div>
   {%- elif page.availability_notice %}
@@ -14,7 +14,7 @@
   {%- endif %}
   {%- if page.ad_slots %}
   {%- for slot in page.ad_slots %}
-  <div class="ad-slot" data-placement="{{ slot.placement_id }}" style="min-height: {{ slot.height }}px;">{{ slot.html | safe }}</div>
+  <div class="ad-slot {{ slot.height_class }}" data-placement="{{ slot.placement_id }}">{{ slot.html | safe }}</div>
   {%- endfor %}
   {%- endif %}
   {%- if page.description %}

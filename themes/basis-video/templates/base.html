@@ -35,6 +35,7 @@
 {%- endif %}
 <link rel="icon" href="{{ site.favicon_url }}">
 <link rel="stylesheet" href="{{ site.css_url }}">
+<link rel="stylesheet" href="{{ site.build_css_url }}">
 {%- for block in page.jsonld %}
 <script type="application/ld+json">{{ block | safe }}</script>
 {%- endfor %}

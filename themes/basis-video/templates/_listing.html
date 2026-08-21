@@ -10,7 +10,7 @@
   <li class="card">
     <a class="card-link" href="{{ item.url }}">
       {%- if item.image %}
-      <img class="card-image" src="{{ item.image.src }}" alt="{{ item.image.alt }}" width="{{ item.image.width }}" height="{{ item.image.height }}"{% if not loop.first or page.page_number > 1 %} loading="lazy"{% endif %}>
+      <img class="card-image" src="{{ item.image.src }}" alt="{{ item.image.alt }}" width="{{ item.image.width }}" height="{{ item.image.height }}"{% if not loop.first %} loading="lazy"{% endif %}>
       {%- endif %}
       <span class="card-title">{{ item.title }}</span>
     </a>

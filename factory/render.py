@@ -97,6 +97,9 @@ class SiteRenderer:
             lstrip_blocks=False,
         )
         self.base = package["canonical_url"].rstrip("/")
+        #: Классы, которые заменяют инлайновые style: CSP запрещает style-src 'unsafe-inline',
+        #: и ослаблять политику ради вёрстки нельзя.
+        self._dynamic_css: dict[str, str] = {}
         self.per_page = int((package.get("seo") or {}).get("items_per_page") or 12)
 
     # ------------------------------------------------------------------ входные данные
@@ -207,6 +210,7 @@ class SiteRenderer:
             "logo_height": 40,
             "favicon_url": "/assets/" + Path(brand["favicon_ref"]).name,
             "css_url": "/assets/site.css",
+            "build_css_url": "/assets/build.css",
             "js_url": "/assets/enhance.js",
             "navigation": nav,
             "footer_navigation": footer,
@@ -219,6 +223,22 @@ class SiteRenderer:
         return self.site_context
 
     # ------------------------------------------------------------------ JSON-LD
+    def _ratio_class(self, ratio: str) -> str:
+        name = "ratio-" + re.sub(r"[^0-9a-z]+", "-", str(ratio).lower()).strip("-")
+        self._dynamic_css[name] = f"aspect-ratio: {ratio};"
+        return name
+
+    def _height_class(self, height: int) -> str:
+        name = f"ad-h-{int(height)}"
+        self._dynamic_css[name] = f"min-height: {int(height)}px;"
+        return name
+
+    def _write_dynamic_css(self) -> None:
+        lines = ["/* Сгенерировано рендером: заменяет инлайновые style, запрещённые CSP. */"]
+        for name, body in sorted(self._dynamic_css.items()):
+            lines.append(f".{name} {{ {body} }}")
+        (self.public / "assets" / "build.css").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
     def _jsonld(self, blocks: Iterable[dict]) -> list[str]:
         allowed = set(((self.pkg.get("metadata") or {}).get("structured_data_input") or {}).get("allowed_types") or [])
         out: list[str] = []
@@ -423,7 +443,14 @@ class SiteRenderer:
             policy = self._policy(page_type)
             children = []
             for season in item.get("seasons") or []:
-                children.append({"url": f"{path}season-{season['number']}/", "title": season.get("title") or f"Сезон {season['number']}", "availability": "available"})
+                season_title = season.get("title") or f"Сезон {season['number']}"
+                children.append({"url": f"{path}season-{season['number']}/", "title": season_title, "availability": "available"})
+                for episode in season.get("episodes") or []:
+                    children.append({
+                        "url": f"{path}season-{season['number']}/episode-{episode['number']}/",
+                        "title": f"{season_title} · {episode.get('title') or 'Эпизод ' + str(episode['number'])}",
+                        "availability": episode.get("availability", "unavailable"),
+                    })
             meta = self.pkg["metadata"]
             title = meta["title_templates"]["title"].replace("{title}", item["title"]).replace("{brand}", self.pkg["brand"]["name"])
             jsonld_blocks: list[dict] = [self._breadcrumb_ld(crumbs)]
@@ -433,16 +460,16 @@ class SiteRenderer:
                 "title": title, "h1": item["title"], "description": item.get("description", ""),
                 "canonical": self.abs_url(path), "robots": self._robots_for(policy, True),
                 "breadcrumbs": crumbs, "prev_url": None, "next_url": None,
-                "player": {"html": embed, "aspect_ratio": self.player.aspect_ratio()} if (available and embed) else None,
+                "player": {"html": embed, "ratio_class": self._ratio_class(self.player.aspect_ratio())} if (available and embed) else None,
                 "availability_notice": None if (available and embed) else {
                     "title": "Видео сейчас недоступно",
                     "text": "Материал доступен в каталоге, но воспроизведение временно невозможно. "
                             "Другой ролик вместо запрошенного не подставляется.",
                 },
-                "ad_slots": [{"placement_id": s.placement_id, "height": s.height, "html": s.html} for s in self.ads.slots(page_type)],
+                "ad_slots": [{"placement_id": s.placement_id, "height_class": self._height_class(s.height), "html": s.html} for s in self.ads.slots(page_type)],
                 "facts": item.get("facts") or [],
                 "body_html": item.get("body_html", ""),
-                "children": children, "children_title": "Сезоны",
+                "children": children, "children_title": "Сезоны и эпизоды",
                 "related": self._related(item),
                 "sequence": None,
                 "jsonld": self._jsonld(jsonld_blocks),
@@ -527,12 +554,12 @@ class SiteRenderer:
             "description": episode.get("description", ""),
             "canonical": self.abs_url(epath), "robots": self._robots_for(policy, True),
             "breadcrumbs": crumbs, "prev_url": None, "next_url": None,
-            "player": {"html": embed, "aspect_ratio": self.player.aspect_ratio()} if available else None,
+            "player": {"html": embed, "ratio_class": self._ratio_class(self.player.aspect_ratio())} if available else None,
             "availability_notice": None if available else {
                 "title": "Эпизод сейчас недоступен",
                 "text": "Запись есть в каталоге, но воспроизведение временно невозможно. Замена другим роликом не выполняется.",
             },
-            "ad_slots": [{"placement_id": s.placement_id, "height": s.height, "html": s.html} for s in self.ads.slots(page_type)],
+            "ad_slots": [{"placement_id": s.placement_id, "height_class": self._height_class(s.height), "html": s.html} for s in self.ads.slots(page_type)],
             "facts": episode.get("facts") or [], "body_html": "",
             "children": [], "children_title": "", "related": [],
             "sequence": sequence if (sequence["prev"] or sequence["next"]) else None,
@@ -709,6 +736,7 @@ class SiteRenderer:
         self.render_legal()
         self.render_service_pages()
         self.copy_assets()
+        self._write_dynamic_css()
         self.render_robots(environment)
         self.render_sitemap(environment)
         routes_map = {
@@ -719,6 +747,7 @@ class SiteRenderer:
             "redirects": [r.as_dict() for r in self.result.redirects],
             "url_policy": self.url_policy,
             "non_indexable_parameters": (self.pkg.get("seo") or {}).get("non_indexable_parameters") or [],
+            "max_depth": int(((self.pkg.get("seo") or {}).get("internal_link_rules") or {}).get("max_depth") or 4),
         }
         (self.out / "routes.json").write_text(json.dumps(routes_map, ensure_ascii=False, indent=2), encoding="utf-8")
         return self.result

@@ -1,7 +1,7 @@
 {
   "site_id": "pilot-local",
-  "build_id": "f5943563b2befa0c",
-  "output": "/home/user/test/var/build/pilot-local/f5943563b2befa0c",
+  "build_id": "8f0c8dccbf9c9fb1",
+  "output": "/home/user/test/var/build/pilot-local/8f0c8dccbf9c9fb1",
   "routes": 48,
   "redirects": 4,
   "counts": {
@@ -37,6 +37,6 @@
   "php_lint": [],
   "renderer_version": "1.0.0",
   "environment": "staging",
-  "built_at": "2026-08-21T21:57:47Z",
+  "built_at": "2026-08-21T22:06:16Z",
   "package_sha256": "858fd110784542dcdcfc7414e8b9bf5364cf4a44e4306afbd6874bb218ea5d1d"
 }

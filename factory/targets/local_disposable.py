@@ -147,6 +147,9 @@ class LocalDisposableTarget:
         steps: list[dict] = []
         mutations: list[dict] = []
         previous = self.current_release()
+        #: Менялось ли фактическое содержимое релиза. Перезапуск процесса сервера
+        #: содержимым не является и на идемпотентность не влияет.
+        content_changed = False
 
         def step(step_id: str, detail: str, mutation: bool = False, noop: bool = False) -> None:
             steps.append({"id": step_id, "status": "ok", "started_at": now(), "finished_at": now(),
@@ -167,11 +170,15 @@ class LocalDisposableTarget:
         already_present = release_dir.exists()
         if not already_present:
             shutil.copytree(build_dir, release_dir)
+            content_changed = True
             step("upload_release", f"Релиз {build_id} размещён", mutation=True)
         else:
             step("upload_release", f"Релиз {build_id} уже присутствует — повторная выгрузка не выполнялась", mutation=True, noop=True)
 
-        # health до переключения: сервер обслуживает релиз-кандидат напрямую
+        # health до переключения: сервер обслуживает релиз-кандидат напрямую.
+        # Старый процесс останавливается ДО выбора порта, иначе занятый им порт
+        # выглядит недоступным и стенд каждый раз переезжает на новый.
+        self._stop_server()
         port = self._pick_port()
         auth = self.staging_credentials() if self.environment != "production" else ""
         self._start_server(port, release_dir, auth)
@@ -191,6 +198,7 @@ class LocalDisposableTarget:
                 tmp.unlink()
             tmp.symlink_to(release_dir)
             os.replace(tmp, self.current)      # атомарная замена симлинка
+            content_changed = True
             step("switch_current", f"current → releases/{build_id}", mutation=True)
 
         ok, detail = self._probe(f"http://{self.bind}:{port}/", auth)
@@ -200,12 +208,13 @@ class LocalDisposableTarget:
 
         keep = int(self.pkg["rollback_policy"]["keep_releases"])
         pruned = self._prune(keep, protect={build_id, previous or ""})
-        step("prune_releases", f"Удалено устаревших релизов: {len(pruned)} (хранится {keep})", mutation=bool(pruned), noop=not pruned)
+        content_changed = content_changed or bool(pruned)
+        step("prune_releases", f"Удалено устаревших релизов: {len(pruned)}; хранится {keep} плюс защищённые (текущий и предыдущий)", mutation=bool(pruned), noop=not pruned)
 
         self._save_state(port=port, build_id=build_id, previous_release_id=previous, deployed_at=now())
         return DeployResult(self.site_id, self.environment, build_id, build_id, previous,
                             f"http://{self.bind}:{port}", steps=steps, mutations=mutations, backup=backup,
-                            idempotent_noop=all(m.get("idempotent_noop") for m in mutations) if mutations else False)
+                            idempotent_noop=not content_changed)
 
     def _prune(self, keep: int, protect: set[str]) -> list[str]:
         releases = [r for r in self.releases() if r not in protect]
