@@ -25,6 +25,7 @@ DNS-записи или релиза. Проверяется `tests/integration/
 
 ## Cron
 
-Задачи создаются только из `blueprints/dle20/cron/jobs.yaml`: уникальный `id`,
+Задачи создаются только из `blueprints/dle20/cron/jobs.yaml` (создаётся из
+`jobs.template.yaml` по официальной документации; пока файла нет — cron не настраивается): уникальный `id`,
 `schedule`, `command`, `lock`, `timeout_seconds`, `log`, `max_retries`. Дубликат `id`
 или отсутствие lock/timeout/лога — `BLOCKED_INPUT`.
