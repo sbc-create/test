@@ -25,7 +25,7 @@ __pycache__/
 # Test output
 test-results/
 playwright-report/
+# Скриншоты остаются локальными доказательствами: индекс с размерами и SHA-256
+# коммитится (artifacts/qa/pilot-local/screenshots.md), сами PNG — нет.
 artifacts/**/*.png
-# Скриншоты пилота — доказательства приёмки синтетического стенда, секретов не содержат
-!artifacts/qa/pilot-local/*.png
 !artifacts/**/.gitkeep
