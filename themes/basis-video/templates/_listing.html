@@ -4,9 +4,9 @@
 {%- if page.intro %}
 <p class="intro">{{ page.intro }}</p>
 {%- endif %}
-{%- if page.items %}
+{%- if page['items'] %}
 <ul class="card-grid" id="items">
-  {%- for item in page.items %}
+  {%- for item in page['items'] %}
   <li class="card">
     <a class="card-link" href="{{ item.url }}">
       {%- if item.image %}

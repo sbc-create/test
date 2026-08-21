@@ -3,15 +3,16 @@
 <h1>{{ page.h1 }}</h1>
 {%- if page.intro %}<p class="intro">{{ page.intro }}</p>{%- endif %}
 {%- for section in page.sections %}
+{% set is_first_section = loop.first %}
 <section class="home-section" aria-labelledby="sec-{{ loop.index }}">
   <h2 id="sec-{{ loop.index }}"><a href="{{ section.url }}">{{ section.title }}</a></h2>
   {%- if section.description %}<p>{{ section.description }}</p>{%- endif %}
   <ul class="card-grid">
-    {%- for item in section.items %}
+    {%- for item in section['items'] %}
     <li class="card">
       <a class="card-link" href="{{ item.url }}">
         {%- if item.image %}
-        <img class="card-image" src="{{ item.image.src }}" alt="{{ item.image.alt }}" width="{{ item.image.width }}" height="{{ item.image.height }}"{% if not (loop.first and loop.parent.loop.first) %} loading="lazy"{% endif %}>
+        <img class="card-image" src="{{ item.image.src }}" alt="{{ item.image.alt }}" width="{{ item.image.width }}" height="{{ item.image.height }}"{% if not (loop.first and is_first_section) %} loading="lazy"{% endif %}>
         {%- endif %}
         <span class="card-title">{{ item.title }}</span>
       </a>

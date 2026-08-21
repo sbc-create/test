@@ -7,9 +7,9 @@
   <button type="submit">Найти</button>
 </form>
 {%- if page.query %}
-{%- if page.items %}
+{%- if page['items'] %}
 <ul class="linked-list">
-  {%- for item in page.items %}
+  {%- for item in page['items'] %}
   <li><a href="{{ item.url }}">{{ item.title }}</a></li>
   {%- endfor %}
 </ul>
