@@ -127,4 +127,7 @@ else
   skip "nginx-config-test" "nginx не установлен на управляющем хосте"
 fi
 
+# Доказательства последнего прогона фиксируются в artifacts/evidence/.
+python3 tests/tools/collect_evidence.py > /dev/null || true
+
 python3 tests/tools/summarize_run.py

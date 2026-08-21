@@ -1,0 +1,14 @@
+{
+  "stats": {
+    "startTime": "2026-08-21T23:33:28.589Z",
+    "duration": 13577.062999999998,
+    "expected": 44,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "projects": [
+    "accessibility.spec.js",
+    "user-journeys.spec.js"
+  ]
+}
