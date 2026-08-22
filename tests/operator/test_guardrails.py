@@ -171,3 +171,24 @@ class TestGitResetRules:
 
     def test_tag_allowed(self):
         assert classify(ActionContext(command="git tag v1")).decision is Decision.ALLOW
+
+
+class TestReadOnlyGitVerbs:
+    """Read-only git must not stop an unattended run to ask."""
+
+    @pytest.mark.parametrize(
+        "command",
+        [
+            "git rev-list --count HEAD",
+            "git shortlog -s",
+            "git count-objects -v",
+            "git for-each-ref refs/heads",
+            "git bundle create /tmp/x.bundle --all",
+            "git cat-file -p HEAD",
+        ],
+    )
+    def test_read_only_verbs_allowed(self, command):
+        assert classify(ActionContext(command=command)).decision is Decision.ALLOW
+
+    def test_write_verb_not_smuggled_in(self):
+        assert classify(ActionContext(command="git gc --prune=now")).decision is Decision.BLOCK

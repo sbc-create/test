@@ -45,13 +45,31 @@ Google API из этого окружения достижим — провер�
 
 ## 4. Права на запись в GitHub
 
-`git push` в `sbc-create/test` возвращает `403`. Через API:
-`403 Resource not accessible by integration`. Чтение работает.
+`git push` в `sbc-create/test` возвращает `403`. Чтение (`fetch`, `ls-remote`,
+GitHub API на чтение) работает.
 
-Не хватает разрешения GitHub App **`Contents: Read and write`**; для pull request
-дополнительно **`Pull requests: Read and write`**.
+Дословное сообщение remote:
 
-Из-за этого вся работа — включая предыдущий этап — существует только локально.
+> Claude doesn't have GitHub access to sbc-create/test for your organization.
+> An org admin can install the Claude GitHub App at
+> https://github.com/apps/claude/installations/select_target, or reconnect
+> GitHub from claude.ai settings to re-link an existing installation
+
+Через REST API запись возвращает `403 Resource not accessible by integration`.
+
+Таким образом, дело не только в объёме разрешений: **GitHub App не установлен
+или не связан с организацией**. Порядок действий:
+
+1. Администратор организации устанавливает Claude GitHub App:
+   https://github.com/apps/claude/installations/select_target
+2. Либо переподключение GitHub в claude.ai → Settings → Connectors:
+   https://claude.ai/customize/connectors?auth_start=github&auth_start_force=1
+3. После установки убедиться, что для репозитория выданы
+   **`Contents: Read and write`** и **`Pull requests: Read and write`** —
+   без второго не создастся pull request даже при работающем push.
+
+Из-за этого вся работа — и предыдущий этап, и оператор — существует только
+локально в контейнере сессии.
 
 ## 5. Права на публикацию контента
 
