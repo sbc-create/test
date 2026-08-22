@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "_comment": "Строгий профиль для планировщика / claude -p. Prompt показать некому: всё, что не разрешено заранее, отклоняется, а не подвисает. Никаких записей в ask.",
+  "permissions": {
+    "defaultMode": "default",
+    "allow": [
+      "Read(//home/user/test/**)",
+      "Glob",
+      "Grep",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git fetch:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(python3:*)",
+      "Bash(pytest:*)",
+      "Bash(seo collect:*)",
+      "Bash(seo baseline:*)",
+      "Bash(seo crawl:*)",
+      "Bash(seo opportunities:*)",
+      "Bash(seo experiment status:*)",
+      "Bash(seo experiment evaluate:*)",
+      "Bash(seo editorial discover:*)",
+      "Bash(seo editorial calendar:*)",
+      "Bash(seo daily-run:*)",
+      "Bash(seo weekly-report:*)",
+      "Bash(automation/approved-commands/cms-mutate.sh:*)",
+      "Bash(automation/approved-commands/rollback.sh:*)",
+      "Edit(//home/user/test/seo/**)",
+      "Edit(//home/user/test/src/**)",
+      "Write(//home/user/test/seo/**)",
+      "Write(//home/user/test/.seo-state/**)"
+    ],
+    "deny": [
+      "Bash(sudo:*)",
+      "Bash(rm:*)",
+      "Bash(git push:*)",
+      "Bash(git rebase:*)",
+      "Bash(git reset:*)",
+      "Bash(pip install:*)",
+      "Bash(npm install:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)",
+      "Bash(ssh:*)",
+      "Bash(printenv:*)",
+      "Bash(automation/approved-commands/deploy.sh:*)",
+      "Bash(automation/approved-commands/dns.sh:*)",
+      "Read(//**/.env*)",
+      "Read(//**/.ssh/**)",
+      "Write(//home/user/test/.claude/**)",
+      "Write(//home/user/test/automation/**)",
+      "Write(//home/user/test/inventory/authorization/**)",
+      "Write(//home/user/test/seo/PROTECTED_GUARDRAILS.yaml)"
+    ],
+    "ask": []
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/pretooluse_guard.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+version: 1
+tenant: demo
+status: FIXTURE
+# score = editorial_opportunity (editorial/discovery.py).
+# Пункт с непустыми blockers не публикуется автоматически ни при каком score.
+items:
+  - id: BL-001
+    subject: stellar-drift
+    kind: title_page
+    score: 51.975
+    expected_value: "Покрытие запросов «дата выхода» и «2 сезон» до релиза"
+    rights_ref: "rights://demo/stellar-drift"
+    source_confidence: high
+    status: ready_to_prepare
+    blockers: []
+  - id: BL-002
+    subject: iron-garden
+    kind: announcement
+    score: 51.975
+    expected_value: "Анонс с подтверждённой датой; переход в «Новинки» после выхода"
+    rights_ref: "rights://demo/iron-garden"
+    source_confidence: high
+    status: ready_to_prepare
+    blockers: []
+  - id: BL-003
+    subject: paper-moon
+    kind: watch_order_guide
+    score: 16.2
+    expected_value: "Порядок просмотра по реальным связям между произведениями"
+    rights_ref: "rights://demo/paper-moon"
+    source_confidence: high
+    status: needs_distinct_value
+    blockers: ["дублирует существующую карточку — нужен отдельный набор фактов"]

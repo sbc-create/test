@@ -1,0 +1,22 @@
+version: 1
+tenant: demo
+status: FIXTURE
+# Источник, которого здесь нет, использовать нельзя — даже если он публично доступен.
+sources:
+  - id: cdnvideohub_fixture
+    kind: catalog
+    provenance: "Синтетический каталог фикстуры"
+    confidence: high
+    refresh_cadence: daily
+    provides: [title_ids, seasons, availability, rights_ref]
+    usage_limits: "Только для demo-* сайтов. Не смешивать с рекламной конфигурацией VK/AdTech."
+    real: false
+forbidden_sources:
+  - "Любой источник, право на публикацию из которого не передано владельцем"
+  - "Пользовательские слухи и агрегаторы утечек"
+  - "Тексты конкурентов"
+field_ownership:
+  # Защита редакционных правок от перезаписи при следующем ingest.
+  ingest_owns: [external_id, seasons, media_available, availability_status]
+  editorial_owns: [intro, faq, editorial_note, collection_membership, homepage_pin]
+  conflict_policy: "ingest не перезаписывает editorial_owns без явного field ownership policy"

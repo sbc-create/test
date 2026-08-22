@@ -1,0 +1,52 @@
+version: 1
+
+preconditions:
+  before_snapshot_required: true
+  rollback_payload_required: true
+  rollback_payload_must_be_executable: true
+  rollback_dry_run_verified_before_apply: true
+
+incident_stop_conditions:
+  # На уровне сайта: заморозка экспериментов + переход в recovery.
+  - id: SC-01
+    when: organic_clicks_drop_pct_7d > 25 and not explained_by_external
+  - id: SC-02
+    when: indexed_coverage_drop_pct > 15
+  - id: SC-03
+    when: wrong_canonical_or_robots_or_noindex_detected
+  - id: SC-04
+    when: error_rate_4xx_5xx_soft404_above_budget
+  - id: SC-05
+    when: sitemap_url_count_delta_pct > 50
+  - id: SC-06
+    when: tenant_leakage_detected
+  - id: SC-07
+    when: content_rights_problem_detected
+  - id: SC-08
+    when: security_issue_or_manual_action
+  - id: SC-09
+    when: fake_or_demo_data_in_production
+  - id: SC-10
+    when: player_failure_rate_priority_pages > 0.05
+  - id: SC-11
+    when: cwv_or_cls_severe_regression
+  - id: SC-12
+    when: secret_exposure_suspected
+  - id: SC-13
+    when: unexpected_mass_cms_mutation
+
+on_incident:
+  order:
+    - freeze_experiments_for_affected_scope
+    - preserve_evidence
+    - correlate_release_cms_seo_and_external_data
+    - rollback_last_causally_plausible_reversible_batch
+    - verify_recovery
+    - open_incident_record
+  never:
+    - rollback_unrelated_sites
+    - delete_evidence
+    - resume_before_verification
+  after_review:
+    - update_failed_patterns
+    - update_playbook

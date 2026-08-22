@@ -1,0 +1,130 @@
+version: 1
+# Реестр источников. secret_ref указывает на внешний secret store — значения здесь НИКОГДА не хранятся.
+# status=unconfigured => connector возвращает BLOCKED_AUTHORIZATION, пайплайн продолжает независимые джобы.
+
+sources:
+  gsc_search_analytics:
+    kind: google_search_console
+    api: "webmasters/v3 searchanalytics.query"
+    status: unconfigured
+    secret_ref: "secret://gsc/service-account"
+    scope: read_only
+    data_lag_days: 3
+    quota: {queries_per_day: 1200, queries_per_minute: 600}
+    fields: [query, page, country, device, date, clicks, impressions, ctr, position]
+    notes: "Данные неполны за последние 3 дня. row limit 25000/запрос, использовать пагинацию."
+
+  gsc_url_inspection:
+    kind: google_search_console
+    api: "urlInspection.index.inspect"
+    status: unconfigured
+    secret_ref: "secret://gsc/service-account"
+    scope: read_only
+    quota: {inspections_per_day: 2000, per_minute: 600}
+    notes: "Дорогая квота. Только priority URLs."
+
+  gsc_sitemaps:
+    kind: google_search_console
+    api: "sitemaps.list / sitemaps.submit"
+    status: unconfigured
+    secret_ref: "secret://gsc/service-account"
+    scope: read_write_limited
+    allowed_actions: [list, get, submit]
+
+  yandex_webmaster:
+    kind: yandex_webmaster
+    api: "v4.1"
+    status: unconfigured
+    secret_ref: "secret://yandex/webmaster-oauth"
+    scope: read_plus_recrawl
+    endpoints:
+      - summary
+      - diagnostics
+      - indexing/history
+      - important-urls
+      - search-queries/history
+      - search-urls/events
+      - links/broken
+      - sitemaps
+      - recrawl/quota
+      - recrawl/queue
+    quota: {recrawl_per_day: "host-dependent, читать из recrawl/quota"}
+
+  yandex_metrika_reports:
+    kind: yandex_metrika
+    api: "stat/v1/data"
+    status: unconfigured
+    secret_ref: "secret://yandex/metrika-oauth"
+    scope: read_only
+    notes: "Агрегированные operational metrics. Текущий день неполон."
+
+  yandex_metrika_logs:
+    kind: yandex_metrika
+    api: "management/v1/counter/{id}/logrequests"
+    status: unconfigured
+    secret_ref: "secret://yandex/metrika-oauth"
+    scope: read_only
+    notes: >
+      Только по назначению, с учётом задержки. Визиты текущего дня не завершены.
+      Не запрашивать за today. Соблюдать лимит одновременных logrequests.
+
+  server_logs:
+    kind: server_access_logs
+    status: unconfigured
+    secret_ref: "secret://logs/reader"
+    scope: read_only
+    requires: bot_vs_user_separation
+
+  cms_content_api:
+    kind: cms
+    status: unconfigured
+    secret_ref: "secret://cms/seo-operator"
+    scope: read_plus_tier1_mutation
+    contract_version_field: cms_contract_version
+    requires: [snapshot_support, audit_api, rollback_api]
+
+  crawler:
+    kind: internal
+    status: available
+    scope: read_only
+    checks: [status, redirect_chain, robots, canonical, sitemap, render, meta]
+
+  cwv_rum:
+    kind: web_vitals
+    status: unconfigured
+    scope: read_only
+
+  player_telemetry:
+    kind: content_availability
+    status: unconfigured
+    scope: read_only
+
+  deployment_history:
+    kind: release_log
+    status: unconfigured
+    scope: read_only
+
+  rank_tracker:
+    kind: approved_third_party
+    status: not_provided
+    scope: read_only
+    notes: "Подключать ТОЛЬКО если владелец передал источник. Скрапинг выдачи запрещён."
+
+  user_comments:
+    kind: cms
+    status: unconfigured
+    scope: read_plus_moderation
+    notes: "Качественный сигнал. НЕ инструмент накрутки."
+
+forbidden:
+  - serp_scraping_violating_tos
+  - simulated_search_clicks
+  - purchased_engagement
+  - third_party_data_without_owner_transfer
+
+observation_metadata_required:
+  - data_freshness
+  - source_window
+  - timezone
+  - completeness
+  - collected_at

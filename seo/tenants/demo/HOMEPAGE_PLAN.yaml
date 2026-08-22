@@ -1,0 +1,42 @@
+version: 1
+tenant: demo
+status: FIXTURE
+# Любая перестановка — эксперимент со snapshot и rollback (editorial/homepage.py).
+# Пин без pin_expires считается дефектом: он замораживает главную.
+modules:
+  - id: hero
+    position: 0
+    max_items: 1
+  - id: new_releases
+    position: 1
+    freshness_window_days: 30
+    max_items: 12
+    source_status: [released]
+  - id: coming_soon
+    position: 2
+    freshness_window_days: 60
+    max_items: 8
+    source_status: [announced, undated]
+    pinned_items: [stellar-drift, iron-garden]
+    pin_expires:
+      stellar-drift: "2026-09-12"
+      iron-garden: "2026-09-04"
+  - id: ongoing
+    position: 3
+    max_items: 12
+    source_status: [released]
+  - id: popular
+    position: 4
+    max_items: 12
+  - id: editorial_picks
+    position: 5
+    freshness_window_days: 14
+    max_items: 6
+  - id: collections
+    position: 6
+    max_items: 6
+experiments: []
+rules:
+  - "Вышедший материал покидает coming_soon автоматически в тот же цикл."
+  - "Отменённый или просроченный анонс снимается с витрины немедленно."
+  - "Раскладка не должна совпадать с раскладкой другого tenant (гейт compare_layouts)."

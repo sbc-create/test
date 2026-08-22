@@ -1,0 +1,24 @@
+version: 1
+tenant: demo
+status: FIXTURE
+audience:
+  primary: "Зрители, следящие за новыми сезонами и онгоингами"
+  secondary: "Ищущие, что посмотреть по жанру"
+topics_in_scope: [new_releases, ongoing, seasons, watch_order, release_schedule]
+forbidden_topics: [piracy_instructions, unverified_leaks, personal_data_of_actors]
+tone_of_voice:
+  register: "нейтрально-информативный, без превосходных степеней"
+  person: "от редакции, не от лица зрителя"
+  forbidden: ["кликбейт-заголовки", "оценочные утверждения без источника",
+              "имитация личного опыта просмотра"]
+differentiation:
+  # Обязательное поле: чем этот сайт отличается от остальных 15-20.
+  claim: "Фокус на точных датах выхода и порядке просмотра"
+  proof: "Каждая карточка релиза несёт provenance даты и статус подтверждения"
+  must_not_duplicate: "Тексты, подборки и раскладка главной других tenant"
+priority_segments: [new_releases, ongoing]
+useful_actions:
+  - player_start
+  - episode_navigation
+  - genuine_comment
+  - genuine_rating

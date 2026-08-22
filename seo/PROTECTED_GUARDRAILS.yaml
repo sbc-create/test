@@ -1,0 +1,98 @@
+# PROTECTED KERNEL — SEO-оператор НИКОГДА не изменяет этот файл самостоятельно.
+# Любая попытка mutation из seo-контура или самосозданного модуля => BLOCKED_PROTECTED_GUARDRAIL.
+# Изменения только через development/security review в отдельном PR.
+version: 1
+last_reviewed: "2026-08-22"
+review_owners: [development, security]
+
+# Файлы под защитой. Хэши проверяются guardrails.verify_integrity().
+protected_paths:
+  - seo/PROTECTED_GUARDRAILS.yaml
+  - .claude/settings.json
+  - .claude/settings.unattended.json
+  - .claude/hooks/
+  - automation/approved-commands/
+  - inventory/authorization/
+  - src/seo_operator/guardrails.py
+  - src/seo_operator/audit.py
+
+rules:
+  content_rights:
+    id: GR-001
+    statement: >
+      Публикация контента только при подтверждённом праве (rights_ref + source_confidence>=high).
+      Отсутствие rights_ref => страница не публикуется, остаётся draft.
+    blocks: [publish, homepage_pin, sitemap_include]
+
+  no_fake_engagement:
+    id: GR-002
+    statement: >
+      Запрещено создание вымышленных пользователей, комментариев, отзывов, голосов, рейтингов
+      и любая имитация пользовательской активности. Редакционный ответ всегда с раскрытым авторством.
+    blocks: [comment_create_as_user, rating_write, vote_write, review_schema_on_non_review]
+
+  secret_handling:
+    id: GR-003
+    statement: >
+      Секреты не читаются, не печатаются, не копируются и не попадают в audit/report.
+      Оператор работает только с ссылками на secret store (secret_ref), не со значениями.
+    blocks: [secret_read, secret_print, credential_create, scope_widen]
+
+  production_authorization:
+    id: GR-004
+    statement: >
+      Production mutation только при manifest с production_authorized=true и точным совпадением
+      site/domain/host/action/branch и неистёкшим сроком. Фраза в чате не является авторизацией.
+    blocks: [production_mutation_without_manifest]
+
+  tenant_isolation:
+    id: GR-005
+    statement: >
+      Никаких cross-tenant чтений/записей, общих canonical, общих analytics counters
+      и переиспользования текста между tenant без явного решения.
+    blocks: [cross_tenant_write, cross_tenant_canonical]
+
+  rollback_required:
+    id: GR-006
+    statement: >
+      Любая mutation обязана иметь before-snapshot и исполняемый rollback payload
+      ДО применения. Нет rollback => нет mutation.
+    blocks: [mutation_without_rollback]
+
+  stop_loss_required:
+    id: GR-007
+    statement: Эксперимент без stop-loss и guardrail-метрик не стартует.
+    blocks: [experiment_start_without_stoploss]
+
+  anti_mimicry:
+    id: GR-008
+    statement: >
+      Запрещена мимикрия под чужой бренд/официальный источник, ложные заявления
+      о партнёрстве и выдача рекламы за независимый редакционный выбор.
+    blocks: [brand_claim, undisclosed_promotion]
+
+  search_spam:
+    id: GR-009
+    statement: >
+      Запрещены scaled content abuse, doorway pages, keyword stuffing, скрытый текст,
+      автосинонимизация ради уникальности, массовые near-duplicate страницы.
+    blocks: [bulk_generate_thin, keyword_stuffing, doorway_create]
+
+  audit_immutability:
+    id: GR-010
+    statement: >
+      Audit log append-only. Удаление/редактирование записей запрещено.
+      Хэш-цепочка проверяется при каждом запуске.
+    blocks: [audit_delete, audit_update]
+
+  backup_before_destructive:
+    id: GR-011
+    statement: Любая потенциально необратимая операция требует свежего проверенного backup.
+    blocks: [destructive_without_backup]
+
+  guardrail_self_modification:
+    id: GR-012
+    statement: >
+      Оператор и созданные им модули не могут менять этот файл, permission rules, hooks,
+      sandbox, tests или расширять собственные права.
+    blocks: [protected_write, permission_widen, hook_disable, test_disable]

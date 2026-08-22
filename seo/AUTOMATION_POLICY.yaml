@@ -1,0 +1,73 @@
+# Что оператор делает сам, а что требует авторизации.
+version: 1
+
+tiers:
+  0:
+    name: read_only
+    requires: []
+    actions:
+      - data_collect
+      - crawl_audit
+      - render_check
+      - status_canonical_robots_sitemap_audit
+      - query_cluster
+      - cannibalization_analyze
+      - opportunity_score
+      - technical_diagnose
+      - report_generate
+      - alert_emit
+
+  1:
+    name: low_risk_auto_apply
+    requires: [seo_autonomy_tier_ge_1, snapshot, rollback_payload, experiment_id]
+    actions:
+      - fix_broken_internal_link        # только однозначный redirect/source mapping
+      - sitemap_lastmod_update          # только при реальном content change
+      - add_internal_link               # только по утверждённым relationships
+      - title_description_update        # в пределах approved factual template
+      - intro_faq_update                # только подтверждённые факты, честное авторство
+      - cms_module_reorder
+      - alt_text_from_metadata
+      - schema_correction               # без вымышленных полей
+      - orphan_page_fix
+      - editorial_draft_create
+      - recrawl_submit                  # в пределах квоты, только priority URLs
+
+  2:
+    name: signed_policy_plus_canary
+    requires: [production_policy_signed, canary, manifest_match, health_check, backup]
+    actions:
+      - landing_page_create
+      - indexability_change
+      - canonical_change
+      - bulk_internal_linking
+      - route_template_code_change
+      - content_migration
+      - structured_data_type_change
+      - redirect_create
+      - large_cohort_rollout
+      - editorial_publish_auto
+
+  3:
+    name: explicit_owner_authorization_always
+    requires: [owner_explicit_approval_per_action]
+    actions:
+      - dns_change
+      - site_decommission
+      - robots_broad_block_or_unblock
+      - mass_url_migration
+      - rights_legal_claim
+      - brand_relationship_claim
+      - destructive_db_operation
+      - new_external_service_or_spend
+      - protected_guardrail_change
+
+# Обе проверки обязательны: tool permission (settings/hooks) И business scope (manifest).
+# Прохождение одного слоя не разрешает обойти другой.
+dual_layer_enforcement: true
+
+on_blocked:
+  status: BLOCKED_AUTHORIZATION
+  behaviour: continue_independent_jobs
+  aggregate_into: seo/reports/approval_requests.md
+  repeat_same_unchanged_blocker: false

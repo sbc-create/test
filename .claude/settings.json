@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "defaultMode": "default",
+    "allow": [
+      "Read(//home/user/test/**)",
+      "Glob",
+      "Grep",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git fetch:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git checkout -b:*)",
+      "Bash(git switch:*)",
+      "Bash(git worktree list:*)",
+      "Bash(python3:*)",
+      "Bash(pytest:*)",
+      "Bash(ruff:*)",
+      "Bash(jq:*)",
+      "Bash(yq:*)",
+      "Bash(seo:*)",
+      "Edit(//home/user/test/**)",
+      "Write(//home/user/test/**)"
+    ],
+    "deny": [
+      "Read(//home/user/test/.env)",
+      "Read(//home/user/test/**/.env*)",
+      "Read(//**/.ssh/**)",
+      "Read(//**/credentials.json)",
+      "Read(//**/service-account*.json)",
+      "Read(//**/*.pem)",
+      "Read(//**/*.key)",
+      "Write(//home/user/test/.claude/settings.json)",
+      "Write(//home/user/test/.claude/settings.unattended.json)",
+      "Write(//home/user/test/.claude/hooks/**)",
+      "Write(//home/user/test/automation/approved-commands/**)",
+      "Write(//home/user/test/inventory/authorization/**)",
+      "Write(//home/user/test/seo/PROTECTED_GUARDRAILS.yaml)",
+      "Bash(sudo:*)",
+      "Bash(rm -rf:*)",
+      "Bash(git push --force:*)",
+      "Bash(git rebase:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(curl:*|sh)",
+      "Bash(printenv:*)",
+      "Bash(ssh:*)",
+      "Bash(psql:*)",
+      "Bash(mysql:*)",
+      "Bash(kubectl:*)",
+      "Bash(terraform:*)",
+      "Bash(docker:*)"
+    ],
+    "ask": [
+      "Bash(git push:*)",
+      "Bash(npm install:*)",
+      "Bash(pip install:*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/pretooluse_guard.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,90 @@
+version: 1
+# Классификатор намерения запроса. Каждая target page имеет РОВНО ОДИН primary intent.
+# Порядок правил важен: первое совпадение выигрывает, кроме brand-детекции (ортогональна).
+
+orthogonal_flags:
+  brand:
+    description: Содержит бренд-токен сайта (из PORTFOLIO_REGISTRY.brand_tokens)
+    source: portfolio_registry
+
+classes:
+  - id: exact_title
+    priority: 10
+    signals_ru: ["<title>", "<title> смотреть", "<title> аниме", "<title> сериал"]
+    match: title_dictionary_exact
+    target_page_type: title
+
+  - id: alt_title
+    priority: 15
+    description: Транслитерация, оригинальное название, альтернативные написания
+    match: title_dictionary_alias
+    target_page_type: title
+
+  - id: season
+    priority: 20
+    signals_ru: ["сезон", "\\d+ сезон", "second season", "s\\d"]
+    target_page_type: season
+
+  - id: episode
+    priority: 25
+    signals_ru: ["серия", "эпизод", "\\d+ серия", "ep\\d+"]
+    target_page_type: episode
+
+  - id: new_or_announcement
+    priority: 30
+    signals_ru: ["новинки", "анонс", "трейлер", "тизер", "премьера", "новый сезон"]
+    target_page_type: collection_new
+
+  - id: ongoing
+    priority: 35
+    signals_ru: ["онгоинг", "онгоинги", "выходит сейчас", "продолжение"]
+    target_page_type: collection_ongoing
+
+  - id: schedule_date
+    priority: 40
+    signals_ru: ["когда выйдет", "дата выхода", "расписание", "график выхода"]
+    target_page_type: schedule
+
+  - id: watch_intent
+    priority: 45
+    signals_ru: ["смотреть онлайн", "смотреть бесплатно", "в хорошем качестве", "озвучка", "субтитры"]
+    target_page_type: title_or_episode
+
+  - id: watch_order
+    priority: 50
+    signals_ru: ["в каком порядке", "порядок просмотра", "с чего начать"]
+    target_page_type: guide
+
+  - id: genre_theme
+    priority: 55
+    signals_ru: ["жанр", "лучшие", "топ", "похожие на", "список"]
+    target_page_type: collection_genre
+
+  - id: collection_recommendation
+    priority: 60
+    signals_ru: ["подборка", "что посмотреть", "похожее"]
+    target_page_type: collection_editorial
+
+  - id: informational
+    priority: 65
+    signals_ru: ["кто такой", "что значит", "объяснение", "концовка", "сколько серий"]
+    target_page_type: article
+
+  - id: navigational
+    priority: 70
+    match: brand_plus_section
+    target_page_type: section
+
+  - id: support_error
+    priority: 75
+    signals_ru: ["не работает", "не грузит", "ошибка", "не воспроизводится"]
+    target_page_type: help
+
+  - id: unknown
+    priority: 999
+    description: Низкая уверенность. Не назначать target page автоматически.
+    target_page_type: null
+
+confidence:
+  min_to_assign_target_page: 0.7
+  below_min_action: queue_for_review

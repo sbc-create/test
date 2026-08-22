@@ -1,0 +1,79 @@
+version: 1
+# opportunity = demand × freshness × readiness × page_quality × ranking_gap
+#               × business_priority × measurement_confidence ÷ risk_and_effort
+
+factors:
+  demand_signal:
+    range: [0, 1]
+    inputs:
+      - gsc_impressions_trend_28d
+      - yandex_query_history_trend
+      - internal_site_search_volume
+      - metrika_search_phrase_volume
+    aggregation: normalized_weighted_mean
+    weights: {gsc_impressions_trend_28d: 0.35, yandex_query_history_trend: 0.35, internal_site_search_volume: 0.2, metrika_search_phrase_volume: 0.1}
+
+  release_freshness:
+    range: [0, 1]
+    curve: exponential_decay
+    half_life_days: 21
+    boost_window_days_before_release: 14
+
+  rights_and_content_readiness:
+    range: [0, 1]
+    gate: true          # 0 => opportunity = 0, публикация невозможна
+    inputs: [rights_ref_present, source_confidence, media_availability, metadata_completeness]
+
+  page_quality_readiness:
+    range: [0, 1]
+    gate_threshold: 0.6
+    inputs: [substantive_content, distinct_value, canonical_correct, internal_links_present, render_ok]
+
+  ranking_gap:
+    range: [0, 1]
+    description: Насколько далеко текущая позиция от достижимой. 0 = уже TOP-3.
+    formula: clamp((current_position - target_position) / 20, 0, 1)
+
+  business_priority:
+    range: [0.5, 1.5]
+    source: tenant EDITORIAL_STRATEGY.priority_segments
+
+  measurement_confidence:
+    range: [0, 1]
+    inputs: [data_freshness_ok, sample_size_ok, no_active_incident, no_confounding_experiment]
+
+  risk_and_effort:
+    range: [1, 10]
+    inputs: [cannibalization_risk, rights_risk, effort_hours, blast_radius]
+
+hard_gates:
+  # Все обязаны быть true до публикации новой страницы.
+  - approved_rights_source
+  - real_title_identifiers_and_metadata
+  - substantive_useful_page
+  - player_or_unavailable_state_policy_applied
+  - correct_canonical_robots_status
+  - internal_links_present
+  - sitemap_inclusion_planned
+  - no_duplicate_or_cannibalization
+  - readiness_checks_passed
+
+release_playbook:
+  - id: RP-1
+    step: pre_publish_draft_and_data_validation
+  - id: RP-2
+    step: publish_only_when_facts_and_rights_ready
+  - id: RP-3
+    step: immediate_sitemap_and_internal_link_update
+  - id: RP-4
+    step: recrawl_submit_within_quota_high_value_only
+  - id: RP-5
+    step: verify_crawl_status_canonical_render
+  - id: RP-6
+    step: monitor_first_impressions_and_queries
+  - id: RP-7
+    step: improve_factual_gaps_and_navigation      # НЕ keyword stuffing
+  - id: RP-8
+    step: evaluate_after_data_maturity
+  - id: RP-9
+    step: retain_iterate_or_rollback

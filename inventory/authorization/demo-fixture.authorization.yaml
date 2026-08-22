@@ -1,0 +1,20 @@
+site_id: demo-fixture
+domain: demo.invalid
+hosts: [local-fixture]
+environment: dev
+production_authorized: false
+seo_autonomy_tier: 1
+allowed_actions:
+  - cms_module_reorder
+  - title_description_update
+  - internal_link_add
+  - sitemap_lastmod_update
+  - editorial_draft_create
+  - rollback
+requires_backup_for:
+  - content_migration
+backup_verified: false
+authorized_build_id: null
+authorized_branch: null
+authorization_expires_at: "2027-12-31"
+notes: "Фикстура для dry-run и тестов. Production-действия недоступны по построению."

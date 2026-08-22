@@ -1,0 +1,40 @@
+version: 1
+tenant: demo
+status: FIXTURE
+generated_by: "seo editorial discover --site demo-fixture"
+# Статусы и переходы: editorial/calendar.py.
+# announced -> released | postponed | cancelled | expired
+entries:
+  - external_id: stellar-drift
+    title_ru: "Звёздный дрейф"
+    title_original: "Stellar Drift"
+    status: announced
+    release_date: "2026-09-05"
+    release_date_confirmed: true
+    source: cdnvideohub_fixture
+    source_confidence: high
+    rights_ref: "rights://demo/stellar-drift"
+    check_after: "2026-09-06"
+    owner: editorial
+  - external_id: iron-garden
+    title_ru: "Железный сад"
+    title_original: "Iron Garden"
+    status: announced
+    release_date: "2026-08-28"
+    release_date_confirmed: true
+    source: cdnvideohub_fixture
+    source_confidence: high
+    rights_ref: "rights://demo/iron-garden"
+    check_after: "2026-08-29"
+    owner: editorial
+  - external_id: quiet-harbor
+    title_ru: "Тихая гавань"
+    title_original: "Quiet Harbor"
+    status: released
+    release_date: null
+    release_date_confirmed: false
+    date_display: "дата не объявлена"
+    source: cdnvideohub_fixture
+    source_confidence: high
+    rights_ref: "rights://demo/quiet-harbor"
+    owner: editorial

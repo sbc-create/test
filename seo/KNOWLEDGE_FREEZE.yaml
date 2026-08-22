@@ -1,0 +1,109 @@
+# Замороженные официальные основания. Изменяются только при изменении самих политик,
+# с указанием даты повторной проверки.
+version: 1
+frozen_at: "2026-08-22"
+recheck_after: "2026-11-22"
+note: >
+  Ссылки зафиксированы как источники правил. На момент фиксации содержимое страниц
+  не выкачивалось (сеть в сессии не использовалась) — при первом подключении
+  выполнить сверку и проставить verified_at.
+
+rules:
+  - id: KF-001
+    statement: >
+      Scaled content abuse и массовая автоматизация ради манипуляции выдачей запрещены.
+      Следствие для оператора: запрет bulk-генерации страниц без отдельной ценности (GR-009).
+    source: https://developers.google.com/search/docs/essentials/spam-policies
+    verified_at: null
+
+  - id: KF-002
+    statement: >
+      Контент должен в первую очередь помогать пользователю (people-first).
+      Следствие: distinct_value_check перед публикацией.
+    source: https://developers.google.com/search/docs/fundamentals/creating-helpful-content
+    verified_at: null
+
+  - id: KF-003
+    statement: >
+      Вводящие в заблуждение и фиктивные отзывы/рейтинги в structured data запрещены.
+      Следствие: check_structured_data блокирует Review на не-обзоре и AggregateRating
+      не из реальных опубликованных оценок (GR-002).
+    source: https://developers.google.com/search/docs/appearance/structured-data/sd-policies
+    verified_at: null
+
+  - id: KF-004
+    statement: Требования к review snippet и подлинности отзывов.
+    source: https://developers.google.com/search/docs/appearance/structured-data/review-snippet
+    verified_at: null
+
+  - id: KF-005
+    statement: >
+      Search Console API предоставляет Search Analytics, Sitemaps, Sites и URL Inspection;
+      данные имеют задержку и квоты. Следствие: gsc_data_lag_days=3, квоты в реестре источников.
+    source: https://developers.google.com/webmaster-tools
+    verified_at: null
+
+  - id: KF-006
+    statement: Ограничения и квоты Search Console API.
+    source: https://developers.google.com/webmaster-tools/limits
+    verified_at: null
+
+  - id: KF-007
+    statement: >
+      Малополезный и автоматически сгенерированный контент без добавленной ценности —
+      нарушение. Следствие: запрет тонких страниц в индексе.
+    source: https://yandex.ru/support/webmaster/ru/threat/useless-content
+    verified_at: null
+
+  - id: KF-008
+    statement: Переоптимизированные SEO-тексты — нарушение. Следствие: контроль плотности ключей.
+    source: https://yandex.ru/support/webmaster/ru/threat/seo-text
+    verified_at: null
+
+  - id: KF-009
+    statement: >
+      Имитация действий пользователей — нарушение. Следствие: GR-002, полный запрет
+      фиктивных комментариев, оценок, голосов и симуляции поисковых переходов.
+    source: https://yandex.ru/support/webmaster/ru/threat/user-actions-imitation
+    verified_at: null
+
+  - id: KF-010
+    statement: Мимикрия под чужой бренд/официальный источник — нарушение. Следствие: GR-008.
+    source: https://yandex.ru/support/webmaster/ru/threat/mimicry
+    verified_at: null
+
+  - id: KF-011
+    statement: >
+      Вебмастер API 4.1 даёт историю запросов, индексирование, диагностику, важные URL,
+      sitemaps, перекрауз и битые ссылки. Следствие: список endpoints в реестре источников.
+    source: https://yandex.ru/dev/webmaster/doc/ru/
+    verified_at: null
+
+  - id: KF-012
+    statement: >
+      Метрика: агрегированные отчёты и Logs API по OAuth; текущий день и незавершённые
+      визиты неполны. Следствие: коннектор Logs API отказывается запрашивать today.
+    source: https://yandex.ru/dev/metrika/ru/logs/
+    verified_at: null
+
+  - id: KF-013
+    statement: >
+      Claude Code поддерживает отдельные worktree, что позволяет двум сессиям работать
+      с одним репозиторием без конфликта рабочих файлов.
+    source: https://code.claude.com/docs/en/worktrees
+    verified_at: null
+
+  - id: KF-014
+    statement: >
+      Модель разрешений, permission modes, settings, sandboxing и hooks. Следствие:
+      двухслойное enforcement — permission rules и обязательный PreToolUse hook.
+    source: https://code.claude.com/docs/en/permissions
+    verified_at: null
+    related:
+      - https://code.claude.com/docs/en/permission-modes
+      - https://code.claude.com/docs/en/settings
+      - https://code.claude.com/docs/en/sandboxing
+      - https://code.claude.com/docs/en/hooks
+      - https://code.claude.com/docs/en/hooks-guide
+      - https://code.claude.com/docs/en/headless
+      - https://code.claude.com/docs/en/security

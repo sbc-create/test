@@ -1,0 +1,64 @@
+version: 1
+# СТАТУС: NOT_POPULATED.
+# Репозиторий на момент инициализации пуст: нет site factory, CMS, доменов и подключённых
+# properties. Реальный портфель (15-20 сайтов) заполняется командой `seo portfolio discover`
+# после того, как development-контур предоставит inventory и secret store.
+# Ниже — контракт полей и один demo-tenant для прогонов dry-run/тестов.
+status: NOT_POPULATED
+discovered_at: null
+expected_site_count: [15, 20]
+
+field_contract:
+  site_id:            {type: string, required: true, unique: true}
+  tenant:             {type: string, required: true}
+  domain:             {type: string, required: true}
+  environment:        {type: enum, values: [production, staging, dev]}
+  brand_tokens:       {type: "list[string]", description: для brand/non-brand классификации}
+  audience_scope:     {type: string}
+  content_scope:      {type: string}
+  seo_profile:        {type: object}
+  cms_contract_version: {type: "semver", required: true}
+  gsc_property:       {type: string, nullable: true}
+  yandex_webmaster_host_id: {type: string, nullable: true}
+  metrika_counter_id: {type: integer, nullable: true}
+  sitemap_urls:       {type: "list[url]"}
+  analytics_timezone: {type: "iana_tz", required: true}
+  production_release: {type: string}
+  indexability_policy: {type: object}
+  priority_segments:  {type: "list[string]"}
+  rights_source_refs: {type: "list[string]", description: ссылки, не значения}
+  risk_tier:          {type: enum, values: [low, medium, high]}
+  experiment_concurrency_limit: {type: integer, default: 3}
+  seo_autonomy_tier:  {type: integer, values: [0,1,2], default: 0}
+  owner:              {type: string}
+  alert_channel:      {type: string}
+  last_successful_sync: {type: "timestamp", nullable: true}
+  incidents:          {type: "list[string]"}
+# ЗАПРЕЩЕНО: любые secret values. Только *_ref / *_id.
+
+sites:
+  - site_id: demo-fixture
+    tenant: demo
+    domain: demo.invalid
+    environment: dev
+    brand_tokens: [demo]
+    audience_scope: "Фикстура для dry-run и тестов. Не production."
+    content_scope: "Синтетический каталог, 40 тайтлов."
+    seo_profile: {market: ru, primary_engine: yandex, secondary_engine: google}
+    cms_contract_version: "0.1.0"
+    gsc_property: null
+    yandex_webmaster_host_id: null
+    metrika_counter_id: null
+    sitemap_urls: ["https://demo.invalid/sitemap.xml"]
+    analytics_timezone: "Europe/Moscow"
+    production_release: "fixture"
+    indexability_policy: {default: index, thin_pages: noindex, filters: noindex_follow}
+    priority_segments: [new_releases, ongoing]
+    rights_source_refs: []
+    risk_tier: low
+    experiment_concurrency_limit: 3
+    seo_autonomy_tier: 1
+    owner: unassigned
+    alert_channel: none
+    last_successful_sync: null
+    incidents: []

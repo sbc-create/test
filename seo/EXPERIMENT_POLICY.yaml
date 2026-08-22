@@ -1,0 +1,49 @@
+version: 1
+
+allocation:
+  default_scope: one_canary_site_or_page_cohort
+  default_cohort_share: 0.08            # 5-10% eligible pages
+  max_concurrent_per_site: 3
+  max_concurrent_per_page_type: 2
+  max_concurrent_portfolio: 12
+  holdout_required_when_possible: true
+  forbid_same_change_all_sites_simultaneously: true
+  forbid_intra_portfolio_competition_same_intent: true   # без отдельного решения
+  code_or_schema_change_path: [staging, canary, rollout]
+
+maturity:
+  # Эксперимент НЕ оценивается раньше этих порогов.
+  min_observation_days: 21
+  min_impressions: 1000
+  min_clicks: 40
+  min_comparable_weekday_pairs: 3
+  gsc_data_lag_days: 3            # не считать последние N дней полными
+  metrika_logs_lag_hours: 24
+
+evaluation:
+  windows: [7, 28, 90]
+  comparison: comparable_weekdays_rolling
+  primary_kpi_required: true
+  confounders_checked:
+    - seasonality
+    - algorithm_update
+    - outage_or_incident
+    - competitor_or_release_event
+    - portfolio_internal_change
+  decisions: [keep, rollback, inconclusive, iterate]
+  single_bad_day_triggers_rollback: false
+
+stop_loss:
+  # Немедленная остановка эксперимента (не всего сайта).
+  clicks_drop_pct: 20
+  impressions_drop_pct: 25
+  indexed_coverage_drop_pct: 10
+  conversion_drop_pct: 20
+  guardrail_violation: immediate
+  evaluation_window_days: 7
+
+rollout:
+  requires_mature_positive_result: true
+  requires_repeat_verification: true
+  step_shares: [0.08, 0.25, 0.5, 1.0]
+  min_days_between_steps: 14

@@ -1,0 +1,15 @@
+# ШАБЛОН. Скопировать в <site_id>.authorization.yaml и заполнить реальными значениями.
+# Пока файл остаётся .template, он не читается обёртками и ничего не разрешает.
+site_id: REPLACE_ME
+domain: REPLACE_ME
+hosts: [REPLACE_ME]
+environment: production
+production_authorized: false        # владелец меняет вручную
+seo_autonomy_tier: 0
+allowed_actions: []                 # начинать с пустого списка
+requires_backup_for: [content_migration, indexability_change, redirect_create, deploy]
+backup_verified: false
+authorized_build_id: null
+authorized_branch: null
+authorization_expires_at: null      # обязательно дата; без неё всё блокируется
+owner_contact: REPLACE_ME

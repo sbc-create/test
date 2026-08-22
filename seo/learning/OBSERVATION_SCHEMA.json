@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "seo/learning/OBSERVATION_SCHEMA.json",
+  "title": "Observation",
+  "description": "Неизменяемое наблюдение. Без метаданных свежести наблюдение непригодно для сравнения.",
+  "type": "object",
+  "required": ["site_id", "source", "metric", "value", "observed_date", "collected_at",
+               "timezone", "source_window", "data_freshness", "completeness"],
+  "additionalProperties": false,
+  "properties": {
+    "site_id": {"type": "string"},
+    "source": {"type": "string"},
+    "metric": {"type": "string"},
+    "dimension": {"type": ["string", "null"]},
+    "value": {"type": ["number", "null"]},
+    "observed_date": {"type": "string", "format": "date"},
+    "collected_at": {"type": "string", "format": "date-time"},
+    "timezone": {"type": "string"},
+    "source_window": {"type": "string"},
+    "data_freshness": {"type": "string"},
+    "completeness": {"type": "number", "minimum": 0, "maximum": 1,
+                     "description": "1.0 — день полный. Значения ниже 0.9 не используются в сравнении окон."},
+    "raw": {"type": ["object", "null"]}
+  }
+}

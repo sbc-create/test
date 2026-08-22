@@ -1,0 +1,21 @@
+{
+  "experiment": "EXP-20260822-demo-fixture-901",
+  "before": {
+    "title": "Звёздный дрейф",
+    "description": "Старое описание"
+  },
+  "after_apply": {
+    "title": "Звёздный дрейф — 2 сезон",
+    "description": "Дата премьеры: 2026-09-05"
+  },
+  "after_rollback": {
+    "title": "Звёздный дрейф",
+    "description": "Старое описание"
+  },
+  "restored_exactly": true,
+  "snapshot_id": 1,
+  "rollback_operations": 1,
+  "experiment_status": "rolled_back",
+  "audit_chain_ok": true,
+  "audit_records": 5
+}
