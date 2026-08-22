@@ -23,3 +23,33 @@ sources:
       page_text: false
       images: false
       identifiers: false
+  - ref: lordserials-fan
+    url: https://lordserials.fan/
+    kind: ui_reference
+    provenance: "Change Request v3.0 от 22.08.2026, раздел 1"
+    read_only: true
+    purpose: "измерение информационной архитектуры сериального каталога, плотности сетки и поведения фильтров"
+    allowed_paths:
+      - /
+    viewports: [390, 768, 1440, 1920]
+    store:
+      measurements: true
+      screenshots: true
+      page_text: false
+      images: false
+      identifiers: false
+  - ref: lord-film2026
+    url: https://lord-film2026.com/
+    kind: ui_reference
+    provenance: "Change Request v3.0 от 22.08.2026, раздел 1"
+    read_only: true
+    purpose: "измерение структуры кинокаталога, карточки произведения и навигации"
+    allowed_paths:
+      - /
+    viewports: [390, 768, 1440, 1920]
+    store:
+      measurements: true
+      screenshots: true
+      page_text: false
+      images: false
+      identifiers: false
