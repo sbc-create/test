@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { hasRole, superAdminOnly, tenantScopedAccess } from '../access/index'
+import { cascadeCommentDelete } from '../comments/cascade'
 import { submitComment } from '../comments/submit'
 
 /**
@@ -113,6 +114,7 @@ export const Comments: CollectionConfig = {
     },
   ],
   hooks: {
+    beforeDelete: [cascadeCommentDelete],
     beforeChange: [
       ({ data }) => {
         if (typeof data?.body === 'string') {

@@ -81,10 +81,17 @@ def main() -> int:
          ", ".join(f"{k}: {before.get(k)} → {after.get(k)}" for k in digests
                    if after.get(k) != before.get(k)))
 
+    # Восстановленные данные без прав на схему — это база, которая читается
+    # сегодня и падает на первой же миграции. Проверяем владение явно.
+    misowned = database.misowned_objects(SCOPE)
+    step("после восстановления схема принадлежит роли приложения", not misowned,
+         "чужое владение: " + ", ".join(misowned[:20]))
+
     ARTIFACT.parent.mkdir(parents=True, exist_ok=True)
     ARTIFACT.write_text(json.dumps({
         "backup": str(backup_path.relative_to(ROOT)),
         "before": before, "mutated": mutated, "after": after,
+        "misowned_after_restore": misowned,
         "steps": steps,
         "restore_verified": all(item["ok"] for item in steps),
     }, ensure_ascii=False, indent=2), encoding="utf-8")

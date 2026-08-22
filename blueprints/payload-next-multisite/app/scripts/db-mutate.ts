@@ -31,7 +31,9 @@ if (existing.docs.length > 0) {
   updatedPageId = existing.docs[0]!.id
   await payload.update({
     collection: 'pages', id: updatedPageId, overrideAccess: true,
-    data: { body: 'Текст, изменённый после бэкапа.' } as never,
+    // Правка должна попадать в отпечаток снимка, иначе «изменение отменено»
+    // доказывалось бы полем, которого сравнение не видит.
+    data: { name: 'Страница, изменённая после бэкапа', body: 'Текст, изменённый после бэкапа.' } as never,
   })
 }
 

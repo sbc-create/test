@@ -347,5 +347,48 @@ await check('каждая tenant-scoped коллекция действител�
   }
 })
 
+// --- 13. Удаление комментария не оставляет висящих жалоб и ответов ----------
+await check('удаление комментария уносит жалобы и ветку ответов', async () => {
+  const tenantA = data.tenants.a.id
+  const root = await payload.findByID({
+    collection: 'comments', id: data.docs.comments.a as never, overrideAccess: true,
+  })
+  const reply = await payload.create({
+    collection: 'comments', overrideAccess: true,
+    data: {
+      tenant: tenantA, targetType: root.targetType, targetId: root.targetId,
+      parent: root.id, root: root.id, depth: 1, guestName: 'Гость',
+      body: 'Ответ в ветке, который обязан исчезнуть вместе с корнем.',
+      status: 'published',
+    } as never,
+  })
+  const deepReply = await payload.create({
+    collection: 'comments', overrideAccess: true,
+    data: {
+      tenant: tenantA, targetType: root.targetType, targetId: root.targetId,
+      parent: reply.id, root: root.id, depth: 2, guestName: 'Гость',
+      body: 'Ответ на ответ: вторая ступень той же ветки.',
+      status: 'published',
+    } as never,
+  })
+  await payload.create({
+    collection: 'comment-reports', overrideAccess: true,
+    data: { tenant: tenantA, comment: reply.id, reason: 'abuse' } as never,
+  })
+
+  await payload.delete({ collection: 'comments', id: root.id, overrideAccess: true })
+
+  const left = await payload.find({
+    collection: 'comments', where: { id: { in: [root.id, reply.id, deepReply.id] } },
+    overrideAccess: true, pagination: false,
+  })
+  assertEqual(left.totalDocs, 0, 'ответы остались в базе после удаления корня ветки')
+  const reports = await payload.find({
+    collection: 'comment-reports', where: { comment: { in: [root.id, reply.id, deepReply.id] } },
+    overrideAccess: true, pagination: false,
+  })
+  assertEqual(reports.totalDocs, 0, 'жалобы пережили удаление комментариев')
+})
+
 await payload.db.destroy?.()
 process.exit(summary())

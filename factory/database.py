@@ -27,6 +27,8 @@ CLUSTER_VERSION = "16"
 CLUSTER_NAME = "main"
 CLIENT = "/usr/lib/postgresql/16/bin/psql"
 DUMP_CLIENT = "/usr/lib/postgresql/16/bin/pg_dump"
+#: Системная роль-владелец кластера; от неё выполняются привилегированные шаги.
+CLUSTER_OWNER = "postgres"
 
 
 @dataclass
@@ -200,6 +202,11 @@ def dump(scope: str, destination: Path) -> Path:
     workdir = Path(tempfile.mkdtemp(prefix="factory-dump-"))
     os.chmod(workdir, 0o711)  # postgres должен войти в каталог, но не читать соседние
     staging = workdir / "dump.sql"
+    # Каталог даёт только вход, без права создавать файлы. Поэтому цель дампа
+    # создаётся заранее и передаётся владельцу кластера: писать он может ровно
+    # в этот файл и никуда больше.
+    staging.touch(mode=0o600)
+    shutil.chown(staging, user=CLUSTER_OWNER)
     # --clean --if-exists: дамп обязан восстанавливаться в НЕПУСТУЮ базу.
     # Без этого восстановление падает на уже существующих объектах, и
     # «бэкап есть» перестаёт означать «восстановление проверено».
@@ -322,10 +329,48 @@ def repair_ownership(scope: str) -> bool:
         "FOR r IN SELECT table_name FROM information_schema.views WHERE table_schema = 'public' LOOP "
         f"EXECUTE format('ALTER VIEW public.%I OWNER TO {credentials.user}', r.table_name); "
         "END LOOP; "
+        # Типы — не декоративная мелочь: enum'ы Payload меняются при каждом
+        # расширении статуса (ALTER TYPE ... ADD VALUE), и владелец кластера,
+        # выполнявший restore, оставляет их за собой. Приложение после этого
+        # поднимается, но падает на первой же миграции схемы.
+        "FOR r IN SELECT t.typname FROM pg_type t "
+        "JOIN pg_namespace n ON n.oid = t.typnamespace "
+        "WHERE n.nspname = 'public' AND t.typtype IN ('e', 'd') LOOP "
+        f"EXECUTE format('ALTER TYPE public.%I OWNER TO {credentials.user}', r.typname); "
+        "END LOOP; "
         "END $$;"
     )
     result = _sql_as_owner(sql, database=credentials.database)
     return result.returncode == 0
+
+
+def misowned_objects(scope: str) -> list[str]:
+    """Объекты схемы public, которые принадлежат не роли приложения.
+
+    Данные могут восстановиться до последней записи и всё равно оставить базу
+    нерабочей: приложению нужно не только читать таблицы, но и менять типы при
+    миграции схемы. Поэтому владение проверяется отдельно от содержимого.
+    """
+    credentials, _ = load_credentials(scope)
+    sql = (
+        "SELECT 'table ' || tablename FROM pg_tables "
+        f"WHERE schemaname = 'public' AND tableowner <> '{credentials.user}' "
+        "UNION ALL SELECT 'sequence ' || sequencename FROM pg_sequences "
+        f"WHERE schemaname = 'public' AND sequenceowner <> '{credentials.user}' "
+        "UNION ALL SELECT 'type ' || t.typname FROM pg_type t "
+        "JOIN pg_namespace n ON n.oid = t.typnamespace "
+        "JOIN pg_roles r ON r.oid = t.typowner "
+        "WHERE n.nspname = 'public' AND t.typtype IN ('e', 'd') "
+        f"AND r.rolname <> '{credentials.user}' "
+        "UNION ALL SELECT 'schema public' FROM pg_namespace n "
+        "JOIN pg_roles r ON r.oid = n.nspowner "
+        f"WHERE n.nspname = 'public' AND r.rolname <> '{credentials.user}'"
+    )
+    result = _sql_as_owner(sql, database=credentials.database)
+    if result.returncode != 0:
+        raise BlockedAccess(f"Проверка владения не выполнена: {redact(result.stderr)[:300]}",
+                            field="database.misowned_objects", blocks_stage="STAGING_DEPLOY")
+    return [line.strip() for line in (result.stdout or "").splitlines() if line.strip()]
 
 
 def drop(scope: str) -> bool:

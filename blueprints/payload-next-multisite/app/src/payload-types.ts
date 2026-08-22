@@ -749,7 +749,7 @@ export interface ImportJob {
    * Production технически отвергает mock: проверка выполняется в адаптере, а не на словах.
    */
   mode: 'mock' | 'live';
-  status: 'running' | 'succeeded' | 'failed' | 'blocked_input' | 'blocked_content_rights';
+  status: 'running' | 'succeeded' | 'failed' | 'blocked_input' | 'blocked_content_rights' | 'blocked_access';
   /**
    * sha256 нормализованных параметров запроса. Повторный импорт с тем же отпечатком обязан быть идемпотентным: те же данные не создают дублей.
    */
@@ -799,7 +799,7 @@ export interface PlayerProfile {
   tenant?: (number | null) | Tenant;
   name: string;
   /**
-   * Например PLAYER_PUBLISHER_ID_SITE_A. Само значение в CMS, git, логи и HTML-исходники не попадает — сервер подставляет его при рендере.
+   * Например PLAYER_PUBLISHER_ID_SITE_A. В CMS и git хранится только имя переменной; значение подставляет сервер. Само значение — публичный параметр встраивания: по контракту оно обязано быть в HTML как data-publisher-id. Секретом является токен Content API, а не этот идентификатор.
    */
   publisherIdRef: string;
   /**
