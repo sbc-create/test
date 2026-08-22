@@ -6,6 +6,7 @@ import { listGenres, listTenantTitles, PAGE_SIZE } from '../../../lib/content'
 import { tenantTitleCard } from '../../../lib/present'
 import { currentSite, payloadClient } from '../../../lib/site'
 import { absoluteUrl, buildMetadata } from '../../../seo/metadata'
+import { ownsListing } from '../../../seo/profiles'
 
 export const dynamic = 'force-dynamic'
 
@@ -26,6 +27,8 @@ export const generateMetadata = async ({ searchParams }: { searchParams: Search 
       path: '/catalog/',
       heading: HEADING,
       description: `Все материалы сайта «${site.siteName}»: ${site.profile.purpose}.`,
+      // Раздел, которым сайт не владеет, остаётся навигацией и не индексируется.
+      documentRobots: ownsListing(site.profile, '/catalog/') ? 'inherit' : 'noindex',
     },
     site.siteName,
   )

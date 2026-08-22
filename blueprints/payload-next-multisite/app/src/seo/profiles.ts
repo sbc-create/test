@@ -27,6 +27,20 @@ export type SeoProfile = {
   requiresOwnText: PageTypeId[]
   /** Порядок типов в sitemap: у каждого сайта своя приоритетная поверхность. */
   sitemapTypes: PageTypeId[]
+  /**
+   * Списочные разделы, которые этот сайт считает своими. Раздел, которым сайт не
+   * владеет, остаётся навигацией и закрывается от индексации: три сайта, у
+   * которых индексируется один и тот же список одних и тех же карточек, — это
+   * три копии, что бы ни было написано в шапке.
+   */
+  ownedListings: string[]
+  /**
+   * Шаблон H1 карточки тайтла. Разные сайты показывают разный срез одного факта,
+   * и заголовок обязан это отражать, иначе H1 совпадает на трёх доменах.
+   */
+  titleHeading: (name: string) => string
+  /** Заголовок ленты материалов: у каждого сайта она про своё. */
+  newsHeading: string
   /** Подпись назначения сайта, используется в описаниях и в footer. */
   purpose: string
 }
@@ -65,6 +79,9 @@ const CATALOG_AUTHORITY: SeoProfile = {
   },
   requiresOwnText: ['collection', 'article'],
   sitemapTypes: ['home', 'category', 'title', 'season', 'episode', 'collection', 'news_index', 'article', 'legal'],
+  ownedListings: ['/catalog/', '/collections/', '/news/'],
+  titleHeading: (name) => `${name}: все сезоны и серии`,
+  newsHeading: 'Новости каталога',
 }
 
 const RELEASE_PULSE: SeoProfile = {
@@ -100,6 +117,9 @@ const RELEASE_PULSE: SeoProfile = {
   },
   requiresOwnText: ['article'],
   sitemapTypes: ['home', 'category', 'title', 'episode', 'news_index', 'article', 'legal'],
+  ownedListings: ['/schedule/', '/news/'],
+  titleHeading: (name) => `${name}: когда выходят серии`,
+  newsHeading: 'Новости выхода серий',
 }
 
 const EDITORIAL_GUIDE: SeoProfile = {
@@ -132,6 +152,9 @@ const EDITORIAL_GUIDE: SeoProfile = {
   },
   requiresOwnText: ['title', 'collection', 'article'],
   sitemapTypes: ['home', 'collection', 'news_index', 'article', 'title', 'legal'],
+  ownedListings: ['/collections/', '/news/'],
+  titleHeading: (name) => `${name}: разбор редакции`,
+  newsHeading: 'Статьи и разборы редакции',
 }
 
 export const SEO_PROFILES: Record<SeoProfileKey, SeoProfile> = {
@@ -149,6 +172,10 @@ export const profileFor = (key: string): SeoProfile => {
   }
   return profile
 }
+
+/** Раздел-список принадлежит сайту, значит может индексироваться. */
+export const ownsListing = (profile: SeoProfile, path: string): boolean =>
+  profile.ownedListings.includes(path)
 
 /** Матрица разрешает тип в принципе, профиль — на конкретном сайте. */
 export const matrixAllowsIndex = (pageType: PageTypeId): boolean =>

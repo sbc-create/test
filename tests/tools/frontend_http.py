@@ -32,13 +32,16 @@ SITES = {
     "c": {"host": "site-c.localhost", "theme": "editorial", "name": "Стенд C — редакция", "profile": "editorial_guide"},
 }
 
-# Профиль решает, какие типы страниц индексируются. Ожидания — из profiles.ts.
+# Профиль решает, какие типы страниц и какие разделы-списки индексируются.
+# Ожидания — из profiles.ts: разделом владеет ровно один сайт, остальные держат
+# его как навигацию, иначе три сайта индексируют один и тот же список.
 INDEXABLE = {
     "a": {"/": True, "/catalog/": True, "/catalog/stand-title-1/": True,
           "/catalog/stand-title-1/season-1/": True,
           "/catalog/stand-title-1/season-1/episode-1/": True,
           "/collections/stand-collection-a/": True, "/news/": True, "/legal/rights/": True},
-    "b": {"/": True, "/catalog/": True, "/catalog/stand-title-1/": True,
+    # Каталог принадлежит сайту A: у сайта расписания он остаётся навигацией.
+    "b": {"/": True, "/catalog/": False, "/catalog/stand-title-1/": True,
           "/catalog/stand-title-1/season-1/": False,
           "/catalog/stand-title-1/season-1/episode-1/": True,
           "/collections/stand-collection-b/": False, "/news/": True, "/legal/rights/": True},

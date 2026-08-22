@@ -3,6 +3,7 @@ import { currentSite, payloadClient } from '../../../lib/site'
 import { tenantFind } from '../../../lib/tenant-query'
 import { absoluteUrl } from '../../../seo/metadata'
 import { PAGE_TYPES } from '../../../seo/matrix'
+import { ownsListing } from '../../../seo/profiles'
 
 export const dynamic = 'force-dynamic'
 
@@ -40,10 +41,11 @@ export const GET = async () => {
 
   if (includes('home')) add('/')
   if (includes('category')) {
-    add('/catalog/')
-    add('/schedule/')
+    if (ownsListing(profile, '/catalog/')) add('/catalog/')
+    if (ownsListing(profile, '/schedule/')) add('/schedule/')
   }
-  if (includes('news_index')) add('/news/')
+  if (includes('collection') && ownsListing(profile, '/collections/')) add('/collections/')
+  if (includes('news_index') && ownsListing(profile, '/news/')) add('/news/')
 
   if (includes('title')) {
     const titles = await listTenantTitles(payload, site.tenant, { limit: 1000 })

@@ -77,6 +77,24 @@ await check('номера сезона и серии — целые от еди�
   }
 })
 
+await check('конфликт озвучек отклоняется (PC-1)', () => {
+  let thrown: unknown
+  try {
+    buildPlayerAttributes({ ...base, onlyVoice: 'voice-a', priorityVoice: 'voice-b' })
+  } catch (error) {
+    thrown = error
+  }
+  assert(thrown instanceof PlayerContractError, 'обе озвучки отправлены одновременно')
+
+  // Только одна из них — допустимо и не меняет остальных атрибутов.
+  const onlyVoice = buildPlayerAttributes({ ...base, onlyVoice: 'voice-a' })
+  assertEqual(onlyVoice['only-voice'], 'voice-a', 'only-voice')
+  assertEqual(onlyVoice['priority-voice'], undefined, 'priority-voice при заданном only-voice')
+
+  const priority = buildPlayerAttributes({ ...base, priorityVoice: 'voice-b' })
+  assertEqual(priority['priority-voice'], 'voice-b', 'priority-voice')
+})
+
 await check('mock-режим технически запрещён в production', () => {
   assertEqual(resolvePlayerMode('staging', 'mock'), 'mock', 'на стенде mock разрешён')
   assertEqual(resolvePlayerMode('production', undefined), 'live', 'в production по умолчанию live')

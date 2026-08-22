@@ -9,7 +9,6 @@ import { absoluteUrl, buildMetadata } from '../../../seo/metadata'
 
 export const dynamic = 'force-dynamic'
 
-const HEADING = 'Новости и статьи'
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const site = await currentSite()
@@ -18,7 +17,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
       tenant: site.tenant,
       pageType: 'news_index',
       path: '/news/',
-      heading: HEADING,
+      heading: site.profile.newsHeading,
       description: `Материалы редакции сайта «${site.siteName}».`,
     },
     site.siteName,
@@ -36,10 +35,10 @@ const NewsIndex = async () => {
         origin={absoluteUrl(site.tenant, '')}
         crumbs={[
           { title: 'Главная', href: '/' },
-          { title: HEADING, href: '/news/' },
+          { title: site.profile.newsHeading, href: '/news/' },
         ]}
       />
-      <h1>{HEADING}</h1>
+      <h1>{site.profile.newsHeading}</h1>
       <CardGrid items={result.docs.map(postCard)} empty="Материалов пока нет." />
     </>
   )

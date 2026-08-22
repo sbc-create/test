@@ -6,6 +6,7 @@ import { listCollections } from '../../../lib/content'
 import { collectionCard } from '../../../lib/present'
 import { currentSite, payloadClient } from '../../../lib/site'
 import { absoluteUrl, buildMetadata } from '../../../seo/metadata'
+import { ownsListing } from '../../../seo/profiles'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,6 +21,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
       path: '/collections/',
       heading: HEADING,
       description: `Тематические подборки сайта «${site.siteName}».`,
+      documentRobots: ownsListing(site.profile, '/collections/') ? 'inherit' : 'noindex',
     },
     site.siteName,
   )

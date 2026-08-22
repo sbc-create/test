@@ -34,7 +34,7 @@ export const generateMetadata = async ({ params }: { params: Params }): Promise<
       tenant: site.tenant,
       pageType: 'title',
       path: `/catalog/${slug}/`,
-      heading: titleNameOf(doc),
+      heading: site.profile.titleHeading(titleNameOf(doc)),
       description: describe(seo.seoDescription, record.editorialIntro, shared?.factualSynopsis),
       ownText: plainText(record.editorialIntro),
       documentRobots: (seo.robots as 'inherit' | 'index' | 'noindex' | undefined) ?? 'inherit',
@@ -68,7 +68,7 @@ const TitlePage = async ({ params }: { params: Params }) => {
           { title: name, href: `/catalog/${slug}/` },
         ]}
       />
-      <h1>{name}</h1>
+      <h1>{site.profile.titleHeading(name)}</h1>
 
       <section className="section">
         {player.attributes ? (

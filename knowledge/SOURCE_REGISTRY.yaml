@@ -196,5 +196,17 @@ sources:
   - id: SRC-CDNVIDEOHUB
     kind: integration_contract
     owner: user
-    status: not_provided
-    note: "Намеренно отложен до второго change request. Создана extension point plugins/cdnvideohub/."
+    status: partially_provided
+    received_at: "2026-08-22"
+    received_as: "раздел CDNVIDEOHUB_KNOWLEDGE_PACK_v1.0 во втором change request"
+    provided:
+      - "контракт встраивания плеера → knowledge/cdnvideohub/PLAYER_CONTRACT.yaml"
+    not_provided:
+      - "Content API: endpoint, параметры, пагинация, лимиты и поля ответа"
+    required_for: "синхронизация общего каталога из Content API"
+    verified_against_official_docs: false
+    note: >-
+      Плеерная часть контракта передана и зафиксирована. Часть Content API в pack
+      намеренно не приведена и должна быть взята из docs/CDNVIDEOHUB-METADATA-CONTRACT.md;
+      этого документа в репозитории нет, поэтому адаптер отвечает BLOCKED_INPUT.
+      Сверка с сайтом провайдера не выполнялась: egress до player.cdnvideohub.com закрыт.

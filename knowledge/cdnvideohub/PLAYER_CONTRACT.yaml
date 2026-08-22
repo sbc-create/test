@@ -1,0 +1,100 @@
+# Контракт встраивания плеера CDNVideoHub.
+#
+# Происхождение: раздел «CDNVIDEOHUB_KNOWLEDGE_PACK_v1.0» второго change request
+# (сообщение пользователя от 22.08.2026). Это ПОЛУЧЕННЫЙ ДОКУМЕНТ, а не проверка
+# по сайту провайдера: доступ к player.cdnvideohub.com в этой среде закрыт
+# политикой egress, поэтому сверка с официальной документацией не выполнялась.
+#
+# Прежний freeze не переписывается: документ добавлен рядом со статусом
+# «частично передан», как он и был передан.
+
+schema_version: 1
+contract_version: "CDNVIDEOHUB_KNOWLEDGE_PACK_v1.0"
+received_at: "2026-08-22"
+provenance: SRC-CDNVIDEOHUB
+verified_against_official_docs: false
+verification_note: >-
+  Независимая сверка с официальной документацией провайдера не проводилась:
+  сеть до player.cdnvideohub.com в среде исполнения заблокирована. До production
+  контракт обязан быть повторно сверен с переданным официальным документом.
+
+script:
+  url: https://player.cdnvideohub.com/s2/stable/video-player.umd.js
+  loading: async
+  note: "Плеер подключается прямым custom element. Оборачивать его в iframe сайта запрещено."
+
+element: video-player
+
+public_api:
+  methods:
+    - name: selectSeason
+      argument: number
+    - name: selectEpisode
+      argument: number
+  events:
+    - name: noData
+  forbidden:
+    note: >-
+      Любые другие события и методы (progress, play, pause, ended, voiceChanged)
+      не слушаются и не вызываются, пока их нет в утверждённой документации.
+      Имитировать точный прогресс просмотра запрещено.
+
+attributes:
+  - name: ident
+    meaning: "уникальный стабильный идентификатор экземпляра"
+  - name: season
+    meaning: "положительное целое в строковом HTML-атрибуте"
+  - name: episode
+    meaning: "положительное целое в строковом HTML-атрибуте"
+  - name: data-publisher-id
+    meaning: "Publisher ID владельца по contract"
+  - name: data-title-id
+    meaning: "реальный ID тайтла для выбранного агрегатора"
+  - name: data-aggregator
+    meaning: "только утверждённое значение"
+    allowed: [kp, mali, mdl]
+  - name: only-voice
+    meaning: "конкретная озвучка, если разрешена contract"
+  - name: priority-voice
+    meaning: "предпочтительная озвучка, если разрешена contract"
+  - name: is-show-voice-only
+    meaning: "строковое boolean"
+  - name: is-show-banner
+    meaning: "строковое boolean"
+  - name: disable-licensed
+    meaning: "в production всегда literal \"false\""
+    fixed_value: "false"
+
+rules:
+  - id: PC-1
+    rule: "Непустой only-voice имеет приоритет; одновременно отправлять конфликтующий priority-voice нельзя."
+    blocked_status: BLOCKED_PLAYER_CONTRACT
+  - id: PC-2
+    rule: "IMDb не используется как playback identifier."
+    blocked_status: BLOCKED_PLAYER_CONTRACT
+  - id: PC-3
+    rule: "disable-licensed в production неизменно равен \"false\" и не берётся из настроек."
+    blocked_status: BLOCKED_PLAYER_CONTRACT
+  - id: PC-4
+    rule: "Плеер не оборачивается в iframe сайта. Внутренний cross-origin frame самого web component — деталь реализации провайдера и нарушением не является."
+    blocked_status: BLOCKED_PLAYER_CONTRACT
+  - id: PC-5
+    rule: "Ошибка плеера не ломает метаданные, навигацию и комментарии страницы."
+    blocked_status: QA_FAILED
+
+secrets:
+  - name: CDNVIDEOHUB_API_TOKEN
+    kind: server_side_secret
+    usage: "Content API"
+    never_in: [NEXT_PUBLIC_*, HTML, JS bundle, screenshot, log, error response, analytics, git, artifact]
+  - name: CDNVIDEOHUB_PUBLISHER_ID
+    kind: configured_public_value
+    usage: "передаётся web component согласно контракту"
+    note: "Берётся из runtime config/secret inventory. Значения с чужих сайтов не используются."
+
+mock_policy:
+  allowed_in: [local, ci, staging]
+  forbidden_in: [production]
+  requirement: >-
+    Заглушка реализует ровно публичный контракт (элемент, два метода, событие
+    noData) и не воспроизводит внутреннюю реализацию провайдера.

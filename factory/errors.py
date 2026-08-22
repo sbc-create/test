@@ -11,7 +11,11 @@ PIPELINE_STATES = (
 
 FAILURE_STATES = (
     "BLOCKED_INPUT", "BLOCKED_LICENSE", "BLOCKED_RIGHTS", "BLOCKED_SECRET", "BLOCKED_ACCESS",
-    "BLOCKED_AUTHORIZATION", "BLOCKED_SEO", "QA_FAILED", "DEPLOY_FAILED", "ROLLED_BACK", "QUARANTINED",
+    "BLOCKED_AUTHORIZATION", "BLOCKED_SEO",
+    # Введены вторым change request: три сайта на общем каталоге создают три
+    # новых способа отказа, которые нельзя честно назвать общим BLOCKED_SEO.
+    "BLOCKED_SEO_DUPLICATE", "BLOCKED_CONTENT_RIGHTS", "BLOCKED_PLAYER_CONTRACT",
+    "QA_FAILED", "DEPLOY_FAILED", "ROLLED_BACK", "QUARANTINED",
 )
 
 ALL_STATES = PIPELINE_STATES + FAILURE_STATES
@@ -21,6 +25,9 @@ ALL_STATES = PIPELINE_STATES + FAILURE_STATES
 NON_RETRYABLE = {
     "BLOCKED_INPUT", "BLOCKED_LICENSE", "BLOCKED_RIGHTS", "BLOCKED_SECRET",
     "BLOCKED_AUTHORIZATION", "BLOCKED_SEO",
+    # Дубль между сайтами, неподтверждённые права и нарушенный контракт плеера
+    # исправляются входными данными, а не повтором задания.
+    "BLOCKED_SEO_DUPLICATE", "BLOCKED_CONTENT_RIGHTS", "BLOCKED_PLAYER_CONTRACT",
     # Отсутствующий хост, незапиненный host key или неустановленный ansible от
     # повтора не появятся, а каждая попытка делает новый бэкап и рестарт сервера.
     "BLOCKED_ACCESS",
@@ -81,6 +88,24 @@ class BlockedAuthorization(FactoryError):
 
 class BlockedSeo(FactoryError):
     status = "BLOCKED_SEO"
+
+
+class BlockedSeoDuplicate(FactoryError):
+    """Индексируемые страницы разных сайтов совпадают по смыслу или по тексту."""
+
+    status = "BLOCKED_SEO_DUPLICATE"
+
+
+class BlockedContentRights(FactoryError):
+    """Публикация материала без подтверждённых прав или происхождения."""
+
+    status = "BLOCKED_CONTENT_RIGHTS"
+
+
+class BlockedPlayerContract(FactoryError):
+    """Встраивание плеера расходится с документированным контрактом провайдера."""
+
+    status = "BLOCKED_PLAYER_CONTRACT"
 
 
 class QaFailed(FactoryError):

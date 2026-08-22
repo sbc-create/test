@@ -90,8 +90,20 @@ export const buildPlayerAttributes = (input: PlayerInput): PlayerAttributes => {
   if (input.episode !== null && input.episode !== undefined) {
     attributes.episode = positiveInteger(input.episode, 'episode')
   }
-  if (input.onlyVoice) attributes['only-voice'] = input.onlyVoice
-  if (input.priorityVoice) attributes['priority-voice'] = input.priorityVoice
+  const onlyVoice = input.onlyVoice?.trim()
+  const priorityVoice = input.priorityVoice?.trim()
+  if (onlyVoice) {
+    // PC-1: непустой only-voice имеет приоритет, конфликтующий priority-voice
+    // одновременно с ним отправлять нельзя.
+    attributes['only-voice'] = onlyVoice
+    if (priorityVoice && priorityVoice !== onlyVoice) {
+      throw new PlayerContractError(
+        `конфликт озвучек: only-voice «${onlyVoice}» и priority-voice «${priorityVoice}» одновременно`,
+      )
+    }
+  } else if (priorityVoice) {
+    attributes['priority-voice'] = priorityVoice
+  }
   if (input.showVoiceOnly) attributes['is-show-voice-only'] = 'true'
   if (input.showBanner) attributes['is-show-banner'] = 'true'
 

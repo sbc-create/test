@@ -4,6 +4,7 @@ import { Breadcrumbs } from '../../../components/Breadcrumbs'
 import { listReleaseEvents } from '../../../lib/content'
 import { currentSite, payloadClient } from '../../../lib/site'
 import { absoluteUrl, buildMetadata } from '../../../seo/metadata'
+import { ownsListing } from '../../../seo/profiles'
 
 export const dynamic = 'force-dynamic'
 
@@ -24,6 +25,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
       path: '/schedule/',
       heading: HEADING,
       description: `Даты выхода серий на ближайшие две недели — ${site.siteName}.`,
+      documentRobots: ownsListing(site.profile, '/schedule/') ? 'inherit' : 'noindex',
     },
     site.siteName,
   )

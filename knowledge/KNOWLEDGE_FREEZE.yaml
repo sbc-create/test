@@ -1,9 +1,9 @@
 # Сгенерировано `python3 -m factory knowledge freeze`. Вручную не редактируется.
 schema_version: 1
-freeze_version: 2026-08-21.3
-frozen_at: '2026-08-21T23:30:27Z'
-file_count: 10
-aggregate_sha256: 1edbbb086f5c3001daab9e272ac76076f5b49bf9e9ad78516540b7fc0c6e5acf
+freeze_version: 2026-08-22.1
+frozen_at: '2026-08-22T06:34:13Z'
+file_count: 12
+aggregate_sha256: c557169825198ea27c77ef97dcfc67622585251ece6129f725b28f2568ed5811
 files:
 - path: knowledge/DECISIONS.md
   sha256: e5604105f447eb308b748a0ab4a5ee43bbcac94ddb5c7f52a678bc0e401154a4
@@ -24,8 +24,8 @@ files:
   sha256: c9483795c075751d69afa143dc55c23ed125899c02ee40658b20ac3d07d852ff
   bytes: 13254
 - path: knowledge/SOURCE_REGISTRY.yaml
-  sha256: 077ca1da3ba2ece889238283e90c0ddfd13feec0ad967d5a5be7ee88d12a0b35
-  bytes: 11139
+  sha256: f2ec1e2f264c89e27ddff35c689d14c5875a874c147aaf760f414c0b0838ad8b
+  bytes: 12066
 - path: knowledge/THIRD_PARTY_REVIEW.md
   sha256: c450b41ba251e3ad2fc1c4b0929302f3577f5bac7a8ae3ff64a1e2cb836cc049
   bytes: 3089
@@ -35,3 +35,9 @@ files:
 - path: knowledge/VK_CONTENT_AND_ADS_CONTRACT.md
   sha256: 36ddb0d5d4fc4f12401b5b30a201c45faca259f80101da373b77ce2c722757a4
   bytes: 6382
+- path: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+  sha256: 6ed1cdf655b2f4b5a4ac0b8f85c6c7a1bc895615de5c8d092c9cdd83c06acbbf
+  bytes: 5209
+- path: knowledge/cdnvideohub/content-api.yaml
+  sha256: 6899a4ce5ddc1b753ee4c64ed153046b718d913b782f2bed3228f5578831ec9a
+  bytes: 2466

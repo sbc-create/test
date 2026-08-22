@@ -54,7 +54,7 @@ const PostPage = async ({ params }: { params: Params }) => {
         origin={absoluteUrl(site.tenant, '')}
         crumbs={[
           { title: 'Главная', href: '/' },
-          { title: 'Новости и статьи', href: '/news/' },
+          { title: site.profile.newsHeading, href: '/news/' },
           { title: String(record.headline ?? ''), href: `/news/${slug}/` },
         ]}
       />

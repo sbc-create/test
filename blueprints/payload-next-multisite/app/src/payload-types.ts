@@ -349,6 +349,10 @@ export interface Title {
    * Факты из источника. Редакционный текст сайта пишется отдельно и не выдаётся за оригинальный.
    */
   factualSynopsis?: string | null;
+  /**
+   * Исчезнувший из источника материал получает явное состояние. Подменять его другим тайтлом запрещено.
+   */
+  availability: 'available' | 'unavailable' | 'withdrawn';
   genres?: (number | Genre)[] | null;
   studios?: (number | Studio)[] | null;
   poster?: (number | null) | CatalogMedia;
@@ -1351,6 +1355,7 @@ export interface TitlesSelect<T extends boolean = true> {
   status?: T;
   year?: T;
   factualSynopsis?: T;
+  availability?: T;
   genres?: T;
   studios?: T;
   poster?: T;
