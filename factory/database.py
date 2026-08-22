@@ -12,6 +12,7 @@ import re
 import secrets
 import shutil
 import subprocess
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -44,7 +45,16 @@ class DatabaseCredentials:
                 "user": self.user, "password_ref": self.password_ref}
 
 
+SCOPE_RE = re.compile(r"^[a-z][a-z0-9_-]{1,62}$")
+
+
 def credentials_path(scope: str) -> Path:
+    if not SCOPE_RE.match(scope or ""):
+        raise BlockedInput(
+            f"Недопустимое имя набора учётных данных: {scope!r}.",
+            field="database_ref",
+            required_input="Строчные латинские буквы, цифры, дефис и подчёркивание",
+            blocks_stage="VALIDATING")
     directory = PATHS.var / "db"
     directory.mkdir(parents=True, exist_ok=True)
     return directory / f"{scope}.json"
@@ -152,7 +162,24 @@ def load_credentials(scope: str) -> tuple[DatabaseCredentials, str]:
                            required_input=f"python3 -m factory db provision --scope {scope}",
                            blocks_stage="BUILDING")
     credentials = DatabaseCredentials(**json.loads(path.read_text(encoding="utf-8")))
-    return credentials, Path(credentials.password_ref.split(":", 1)[1]).read_text(encoding="utf-8").strip()
+    # Значения из файла попадают в команду, которую исполняет владелец кластера.
+    # Проверка при создании базы этого не покрывает: файл мог быть подменён позже.
+    for field, value in (("database", credentials.database), ("user", credentials.user)):
+        if not IDENT_RE.match(value or ""):
+            raise BlockedInput(
+                f"В учётных данных «{scope}» недопустимое значение {field}: {value!r}.",
+                field=f"var/db/{scope}.json:{field}",
+                required_input="Идентификатор PostgreSQL из строчных букв, цифр и подчёркивания",
+                blocks_stage="VALIDATING")
+    reference = credentials.password_ref
+    if not reference.startswith("file:"):
+        raise BlockedInput(f"Неподдерживаемая ссылка на секрет: {reference!r}",
+                           field=f"var/db/{scope}.json:password_ref", blocks_stage="VALIDATING")
+    password_path = Path(reference.split(":", 1)[1])
+    if password_path.parent.resolve() != (PATHS.var / "db").resolve():
+        raise BlockedInput("Файл пароля обязан лежать в var/db/.",
+                           field=f"var/db/{scope}.json:password_ref", blocks_stage="VALIDATING")
+    return credentials, password_path.read_text(encoding="utf-8").strip()
 
 
 def dump(scope: str, destination: Path) -> Path:
@@ -170,7 +197,9 @@ def dump(scope: str, destination: Path) -> Path:
             blocks_stage="STAGING_DEPLOY")
 
     destination.parent.mkdir(parents=True, exist_ok=True)
-    staging = Path("/tmp") / f"factory-dump-{credentials.database}.sql"
+    workdir = Path(tempfile.mkdtemp(prefix="factory-dump-"))
+    os.chmod(workdir, 0o711)  # postgres должен войти в каталог, но не читать соседние
+    staging = workdir / "dump.sql"
     # --clean --if-exists: дамп обязан восстанавливаться в НЕПУСТУЮ базу.
     # Без этого восстановление падает на уже существующих объектах, и
     # «бэкап есть» перестаёт означать «восстановление проверено».
@@ -184,6 +213,7 @@ def dump(scope: str, destination: Path) -> Path:
         raise BlockedAccess(f"pg_dump завершился с кодом {result.returncode}: {result.stderr.strip()[:300]}",
                             field="database.dump", blocks_stage="STAGING_DEPLOY")
     shutil.move(str(staging), str(destination))
+    shutil.rmtree(workdir, ignore_errors=True)
     destination.chmod(0o600)
     audit.record(job_id=f"db-dump-{scope}", site_id=scope, environment="staging",
                  action="database.dump", target=credentials.database, exit_code=0, mutation=False,
@@ -200,18 +230,75 @@ def restore(scope: str, source: Path) -> bool:
     if not source.exists():
         raise BlockedInput(f"Дамп «{source}» не найден.", field="database.restore",
                            blocks_stage="ROLLED_BACK")
-    staging = Path("/tmp") / f"factory-restore-{credentials.database}.sql"
+    workdir = Path(tempfile.mkdtemp(prefix="factory-restore-"))
+    os.chmod(workdir, 0o711)
+    staging = workdir / "restore.sql"
     shutil.copyfile(source, staging)
     staging.chmod(0o644)
     result = _as_cluster_owner(f"{CLIENT} -v ON_ERROR_STOP=1 -d {credentials.database} -f {staging}",
                               timeout=600)
     staging.unlink(missing_ok=True)
+    shutil.rmtree(workdir, ignore_errors=True)
     if result.returncode == 0:
         repair_ownership(scope)
     audit.record(job_id=f"db-restore-{scope}", site_id=scope, environment="staging",
                  action="database.restore", target=credentials.database,
                  exit_code=result.returncode, mutation=True, extra={"file": str(source)})
     return result.returncode == 0
+
+
+def restore_probe(scope: str, archive: Path, *, probe_scope: str) -> bool:
+    """Проверка восстановимости дампа в ОТДЕЛЬНОЙ базе.
+
+    Рабочую базу трогать нельзя: проверка бэкапа не имеет права ронять
+    работающие сайты. Пробная база пересоздаётся каждый раз и удаляется после
+    проверки — она нужна только чтобы доказать, что дамп разворачивается.
+    """
+    if os.geteuid() != 0:
+        raise BlockedAccess("Проверка бэкапа требует прав администратора.",
+                            field="database.restore_probe", blocks_stage="STAGING_DEPLOY")
+    if not archive.exists():
+        raise BlockedInput(f"Дамп «{archive}» не найден.", field="database.restore_probe",
+                           blocks_stage="STAGING_DEPLOY")
+    probe = f"factory_{probe_scope}".replace("-", "_")
+    if not IDENT_RE.match(probe):
+        raise BlockedInput(f"Недопустимое имя пробной базы: {probe}",
+                           field="database.restore_probe", blocks_stage="STAGING_DEPLOY")
+
+    credentials, _ = load_credentials(scope)
+    _sql_as_owner(f"DROP DATABASE IF EXISTS {probe} WITH (FORCE)")
+    created = _sql_as_owner(f"CREATE DATABASE {probe} OWNER {credentials.user}")
+    if created.returncode != 0:
+        raise BlockedAccess(f"Пробная база не создана: {redact(created.stderr)[:300]}",
+                            field="database.restore_probe", blocks_stage="STAGING_DEPLOY")
+
+    workdir = Path(tempfile.mkdtemp(prefix="factory-probe-"))
+    os.chmod(workdir, 0o711)
+    staging = workdir / "probe.sql"
+    shutil.copyfile(archive, staging)
+    staging.chmod(0o644)
+    # ON_ERROR_STOP не ставим: дамп с --clean начинается с DROP отсутствующих
+    # объектов в пустой базе, и это не ошибка восстановления.
+    result = _as_cluster_owner(f"{CLIENT} -d {probe} -f {staging}", timeout=900)
+    staging.unlink(missing_ok=True)
+    shutil.rmtree(workdir, ignore_errors=True)
+
+    # SQL идёт через stdin: в аргументе кавычки пришлось бы экранировать дважды,
+    # и это ровно то место, где ломается тихо.
+    count_sql = ("select count(*) from information_schema.tables "
+                 "where table_schema = 'public'")
+    restored_tables = int((_sql_as_owner(count_sql, database=probe).stdout or "0").strip() or 0)
+    live_tables = int((_sql_as_owner(count_sql, database=credentials.database).stdout or "0").strip() or 0)
+
+    _sql_as_owner(f"DROP DATABASE IF EXISTS {probe} WITH (FORCE)")
+
+    ok = result.returncode == 0 and restored_tables > 0 and restored_tables == live_tables
+    audit.record(job_id=f"db-restore-probe-{scope}", site_id=scope, environment="staging",
+                 action="database.restore_probe", target=credentials.database,
+                 exit_code=0 if ok else 1, mutation=False,
+                 extra={"archive": str(archive), "restored_tables": restored_tables,
+                        "live_tables": live_tables})
+    return ok
 
 
 def repair_ownership(scope: str) -> bool:

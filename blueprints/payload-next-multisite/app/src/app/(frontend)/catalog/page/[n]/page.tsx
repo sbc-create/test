@@ -7,15 +7,21 @@ import { listGenres, listTenantTitles, PAGE_SIZE } from '../../../../../lib/cont
 import { tenantTitleCard } from '../../../../../lib/present'
 import { currentSite, payloadClient } from '../../../../../lib/site'
 import { absoluteUrl, buildMetadata } from '../../../../../seo/metadata'
+import { ownsListing } from '../../../../../seo/profiles'
 
 export const dynamic = 'force-dynamic'
 
 type Params = Promise<{ n: string }>
 
-/** Нечисловой или выходящий за диапазон номер — 404, а не пустая страница 200. */
+/**
+ * Нечисловой или выходящий за диапазон номер — 404, а не пустая страница 200.
+ * Страница 1 живёт по адресу `/catalog/`, поэтому `/catalog/page/1/` не существует.
+ * Прежняя запись `^[2-9]\d*$` отвергала ещё и страницы 10–19, 100–199 и так далее.
+ */
 const parsePage = (raw: string): number | null => {
-  if (!/^[2-9]\d*$/.test(raw)) return null
-  return Number(raw)
+  if (!/^[1-9]\d*$/.test(raw)) return null
+  const value = Number(raw)
+  return value >= 2 ? value : null
 }
 
 export const generateMetadata = async ({ params }: { params: Params }): Promise<Metadata> => {
@@ -30,6 +36,9 @@ export const generateMetadata = async ({ params }: { params: Params }): Promise<
       path: `/catalog/page/${page}/`,
       heading: 'Каталог',
       page,
+      // Пагинация наследует индексируемость родителя: раздел, которым сайт не
+      // владеет, не может индексироваться со второй страницы.
+      documentRobots: ownsListing(site.profile, '/catalog/') ? 'inherit' : 'noindex',
       description: `Каталог сайта «${site.siteName}», страница ${page}.`,
     },
     site.siteName,

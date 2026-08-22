@@ -36,7 +36,8 @@ for (const key of Object.keys(SITES)) {
       }
     });
 
-    test(`снимки экрана: [${key}] ${name}`, async ({ page }, testInfo) => {
+    // Это сбор доказательств, а не визуальная проверка: baseline нет, сравнения нет.
+    test(`сбор снимков экрана (без сравнения с эталоном): [${key}] ${name}`, async ({ page }, testInfo) => {
       if (testInfo.project.name !== 'chromium-desktop') {
         test.skip(true, 'снимки делаются один раз, в desktop-проекте');
       }

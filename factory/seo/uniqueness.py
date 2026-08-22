@@ -20,6 +20,9 @@ NEAR_DUPLICATE_THRESHOLD = 0.75
 MIN_OWN_TEXT_CHARS = 200
 #: Типы страниц, у которых собственный текст обязателен.
 TEXT_PAGE_TYPES = frozenset({"title", "article", "collection", "legal", "season", "episode"})
+#: Ниже этого объёма containment не применяется: короткая цитата целиком
+#: содержится в длинном тексте и давала бы 100% совпадения на честно разных страницах.
+MIN_SHINGLES_FOR_CONTAINMENT = 12
 #: Четыре слова — компромисс: короче даёт ложные совпадения на общих оборотах,
 #: длиннее перестаёт замечать переписанный синонимами текст.
 SHINGLE_SIZE = 4
@@ -40,6 +43,8 @@ class PageObservation:
     h1: str = ""
     own_text: str = ""
     canonical: str = ""
+    #: Имя сайта, вырезаемое из заголовков перед сравнением.
+    site_name: str = ""
 
 
 @dataclass
@@ -47,8 +52,15 @@ class UniquenessInput:
     pages: list[PageObservation] = field(default_factory=list)
 
 
-def normalize(text: str) -> str:
-    return " ".join(_WORD_RE.findall((text or "").lower()))
+def normalize(text: str, *, drop: tuple[str, ...] = ()) -> str:
+    words = _WORD_RE.findall((text or "").lower())
+    if drop:
+        # Название сайта присутствует в каждом заголовке по шаблону. Сравнивать
+        # с ним — значит никогда не найти совпадения: разные имена сайтов делают
+        # любые два заголовка различными, даже если остальное слово в слово одно.
+        excluded = {word for item in drop for word in _WORD_RE.findall(item.lower())}
+        words = [word for word in words if word not in excluded]
+    return " ".join(words)
 
 
 def shingles(text: str, size: int = SHINGLE_SIZE) -> set[str]:
@@ -107,7 +119,7 @@ def check(pages: list[PageObservation]) -> Report:
     ):
         buckets: dict[str, list[PageObservation]] = {}
         for page in indexable:
-            value = normalize(getattr(page, attribute))
+            value = normalize(getattr(page, attribute), drop=(page.site_name, page.site_id))
             if not value:
                 continue
             buckets.setdefault(value, []).append(page)
@@ -125,6 +137,10 @@ def check(pages: list[PageObservation]) -> Report:
     for i, left in enumerate(indexable):
         for right in indexable[i + 1 :]:
             if left.site_id == right.site_id:
+                continue
+            left_size = len(shingles(left.own_text))
+            right_size = len(shingles(right.own_text))
+            if min(left_size, right_size) < MIN_SHINGLES_FOR_CONTAINMENT:
                 continue
             score = similarity(left.own_text, right.own_text)
             if score >= NEAR_DUPLICATE_THRESHOLD:
@@ -152,12 +168,18 @@ def check(pages: list[PageObservation]) -> Report:
     # CSU-6: одинаковая индексируемая поверхность у всех сайтов.
     surfaces = {site: frozenset(page.path for page in indexable if page.site_id == site) for site in sites}
     non_empty = {site: surface for site, surface in surfaces.items() if surface}
-    if len(non_empty) > 1 and len(set(non_empty.values())) == 1:
-        report.add(Finding(
-            "cross-site-uniqueness", "critical", ", ".join(sorted(non_empty)),
-            "Состав индексируемых адресов полностью совпадает у всех сайтов: это зеркала, а не три сайта.",
-            "CSU-6",
-        ))
+    ordered = sorted(non_empty)
+    # Сравнение попарно: пара зеркал внутри тройки — уже дубль, а прежнее условие
+    # «совпало у всех» на трёх сайтах не срабатывало никогда.
+    for i, left in enumerate(ordered):
+        for right in ordered[i + 1:]:
+            if non_empty[left] == non_empty[right]:
+                report.add(Finding(
+                    "cross-site-uniqueness", "critical", f"{left}, {right}",
+                    f"Состав индексируемых адресов у сайтов {left} и {right} совпадает полностью: "
+                    "это зеркала, а не два самостоятельных сайта.",
+                    "CSU-6",
+                ))
 
     # CSU-7: canonical индексируемой страницы обязан вести на её собственный сайт.
     for page in indexable:

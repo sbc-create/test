@@ -116,6 +116,8 @@ const RELEASE_PULSE: SeoProfile = {
     // а факты о сезонах уже полностью раскрыты на сайте каталога.
   },
   requiresOwnText: ['article'],
+  // Сезоны в карту не идут: профиль их не индексирует, а карта обязана совпадать
+  // с индексируемой поверхностью, а не быть её надмножеством.
   sitemapTypes: ['home', 'category', 'title', 'episode', 'news_index', 'article', 'legal'],
   ownedListings: ['/schedule/', '/news/'],
   titleHeading: (name) => `${name}: когда выходят серии`,
@@ -141,6 +143,9 @@ const EDITORIAL_GUIDE: SeoProfile = {
   },
   indexable: {
     home: true,
+    // Раздел подборок — профильный листинг этого сайта, он обязан индексироваться:
+    // иначе он попадал бы в sitemap, оставаясь noindex.
+    category: true,
     collection: true,
     news_index: true,
     article: true,

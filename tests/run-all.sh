@@ -57,7 +57,7 @@ run "knowledge-freeze"   "python3 -m factory knowledge verify"
 run "claude-config"      "python3 -m factory selfcheck"
 run "static-python"      "python3 -m compileall -q factory tools .claude/hooks tests > /dev/null"
 run "static-php"         "find automation themes -name '*.php' -print0 | xargs -0 -r -n1 php -l > /dev/null"
-run "static-js"          "for f in tools/*.js themes/*/assets/*.js tests/e2e/*.js playwright.config.js; do node --check \"\$f\" || exit 1; done"
+run "static-js"          "for f in tools/*.js themes/*/assets/*.js tests/e2e/*.js tests/e2e-multisite/*.js playwright.config.js playwright.multisite.config.js; do node --check \"\$f\" || exit 1; done"
 run "static-yaml"        "python3 tests/tools/check_yaml.py"
 run "unit-tests"         "python3 -m pytest tests/unit tests/test_traceability.py -q -m 'not slow'"
 run "validate-pilot"     "python3 -m factory validate --site pilot-local > /dev/null"
@@ -163,7 +163,7 @@ else
 
   REFERENCE_STATUS=$(python3 -m factory reference-audit --ref amd-online --json 2>/dev/null | python3 -c "import json,sys; print(json.load(sys.stdin).get('status','unknown'))" 2>/dev/null || echo unknown)
   if [ "$REFERENCE_STATUS" = "measured" ]; then
-    run "reference-audit" "true"
+    run "reference-audit" "python3 -m factory reference-audit --ref amd-online > /dev/null"
   else
     skip "reference-audit" "измерение amd.online недоступно из этой среды (статус: $REFERENCE_STATUS)"
   fi
@@ -172,9 +172,7 @@ fi
 # Доказательства последнего прогона фиксируются в artifacts/evidence/.
 python3 tests/tools/collect_evidence.py > /dev/null || true
 
-# Сводка обязана выполниться: без неё прогон завершился бы нулевым кодом даже при
-# провалах — «зелёный» результат появлялся бы там, где на самом деле ничего не сведено.
-if ! python3 tests/tools/summarize_run.py; then
-  echo "ОШИБКА: сводка прогона не построена — результат нельзя считать доказанным"
-  exit 1
-fi
+# Код возврата прогона — это код сводки: она возвращает ненулевой при провалах.
+# Раньше он терялся, и прогон с десятью провалами завершался нулём.
+python3 tests/tools/summarize_run.py
+exit $?

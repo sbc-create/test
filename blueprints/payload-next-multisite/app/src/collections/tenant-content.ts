@@ -171,7 +171,11 @@ export const AuditLog: CollectionConfig = {
   slug: 'audit-log',
   labels: { singular: 'Запись журнала', plural: 'Журнал изменений' },
   admin: { useAsTitle: 'summary', group: 'Служебное', defaultColumns: ['summary', 'actor', 'createdAt'] },
-  access: { read: tenantScopedAccess(), create: () => true, update: () => false, delete: superAdminOnly },
+  // Запись в журнал — только для аутентифицированных: плагин добавляет констрейнт
+  // сайта лишь при наличии пользователя, поэтому `create: () => true` открывал
+  // анонимную запись в журнал ЛЮБОГО сайта.
+  access: { read: tenantScopedAccess(), create: hasRole('editor'), update: () => false,
+            delete: superAdminOnly },
   fields: [
     { name: 'summary', type: 'text', required: true, label: 'Что произошло' },
     { name: 'actor', type: 'relationship', relationTo: 'users', label: 'Кто' },

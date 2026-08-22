@@ -122,6 +122,8 @@ export type PlayerMode = 'live' | 'mock'
 export const MOCK_SCRIPT_URL = '/mock/video-player.umd.js'
 
 export const resolvePlayerMode = (environment: string, requested: string | undefined): PlayerMode => {
+  // Незаданное окружение трактуется как production: fail-open здесь означает,
+  // что забытая переменная тихо разрешает заглушку на боевом сайте.
   const mode: PlayerMode = requested === 'mock' ? 'mock' : 'live'
   if (mode === 'mock' && environment === 'production') {
     // Отказ именно технический: договорённость «в production мы не включаем mock»

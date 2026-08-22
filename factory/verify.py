@@ -164,6 +164,23 @@ def _get_host(base_url: str, path: str, host: str, *, follow: bool = True) -> tu
         return 0, {}, str(exc)
 
 
+def _post_host(base_url: str, path: str, host: str, payload: dict) -> tuple[int, dict, str]:
+    """Анонимный POST для проверки прав на запись."""
+    data = json.dumps(payload).encode("utf-8")
+    request = urllib.request.Request(
+        base_url.rstrip("/") + path, data=data, method="POST",
+        headers={"User-Agent": "factory-verify/1.0", "Host": host,
+                 "content-type": "application/json"})
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    try:
+        with opener.open(request, timeout=30) as response:
+            return response.status, dict(response.headers), response.read().decode("utf-8", "replace")
+    except urllib.error.HTTPError as exc:
+        return exc.code, dict(exc.headers), exc.read().decode("utf-8", "replace")
+    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        return 0, {}, str(exc)
+
+
 class _NoFollow(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: ARG002
         return None
@@ -217,14 +234,32 @@ def acceptance_routes_multisite(base_url: str, package: dict, out_dir: Path) -> 
                 report.add(Finding("acceptance-routes", "critical", route["path"],
                                    f"Индексируемый адрес отвечает {direct_status} без перехода: "
                                    "canonical указывает на редирект.", "HR-2"))
-    report.counts = {"routes": len(rows), "indexing_enabled": indexing_enabled, "status": "executed"}
+    if not indexing_enabled:
+        # Пока индексация выключена, профильная индексируемость не проверена ни разу.
+        # Вместо ослабления ожиданий проверяется то, что обязано быть верно сейчас,
+        # а сама проверка помечается частичной: полной приёмкой она не является.
+        status, _, robots_body = _get_host(base_url, "/robots.txt", host)
+        if status != 200 or "Disallow: /" not in robots_body:
+            report.add(Finding("acceptance-routes", "critical", "/robots.txt",
+                               "Индексация сайта выключена, но robots.txt не закрывает сайт целиком.",
+                               "ACC-3"))
+        status, _, _ = _get_host(base_url, "/sitemap.xml", host)
+        if status == 200:
+            report.add(Finding("acceptance-routes", "critical", "/sitemap.xml",
+                               "Индексация сайта выключена, но карта сайта отдаётся.", "ACC-4"))
+
+    report.counts = {"routes": len(rows), "indexing_enabled": indexing_enabled,
+                     "status": "executed" if indexing_enabled else "partial",
+                     "reason": None if indexing_enabled
+                     else "индексация сайта выключена: профильная индексируемость не проверялась"}
     (out_dir / "acceptance-routes.json").write_text(
-        json.dumps({"host": host, "routes": rows, **report.as_dict()},
+        json.dumps(redact_obj({"host": host, "routes": rows, **report.as_dict()}),
                    ensure_ascii=False, indent=2), encoding="utf-8")
     return report
 
 
-def security_smoke_multisite(base_url: str, package: dict, out_dir: Path) -> Report:
+def security_smoke_multisite(base_url: str, package: dict, out_dir: Path,
+                             *, environment: str = "staging") -> Report:
     """Публичная поверхность стенда: заголовки, закрытые пути, анонимный API."""
     report = Report("security-smoke")
     host = package["domain"]
@@ -238,13 +273,41 @@ def security_smoke_multisite(base_url: str, package: dict, out_dir: Path) -> Rep
             report.add(Finding("security-smoke", "critical", "/",
                                f"Отсутствует заголовок {header}.", "SEC-1"))
 
+    # Стенд с фикстурами не должен быть индексируемым: «в production попали
+    # test/demo данные» начинается именно с индексируемого staging.
+    indexing_enabled = bool((package.get("tenant") or {}).get("indexing_enabled", True))
+    if environment != "production" and indexing_enabled:
+        report.add(Finding("security-smoke", "critical", "/",
+                           "На staging включена индексация сайта.", "SEC-5"))
+
     # Анонимный доступ к данным сайтов закрыт: иначе изоляция теряет смысл на публичном API.
-    for path in ("/api/posts?limit=100", "/api/comments?limit=100", "/api/tenants?limit=100"):
+    for path in ("/api/posts?limit=100", "/api/comments?limit=100", "/api/tenants?limit=100",
+                 "/api/rights-records?limit=100", "/api/source-records?limit=100",
+                 "/api/import-jobs?limit=100", "/api/player-profiles?limit=100",
+                 "/api/audit-log?limit=100", "/api/media?limit=100"):
         status, _, body = _get_host(base_url, path, host)
         observed[path] = {"status": status}
         if status == 200 and '"docs":[]' not in body.replace(" ", ""):
             report.add(Finding("security-smoke", "critical", path,
                                f"Анонимный запрос к {path} вернул данные.", "SEC-2"))
+
+    for path in ("/api/audit-log", "/api/comments", "/api/posts"):
+        status, _, _ = _post_host(base_url, path, host, {})
+        observed[f"POST {path}"] = {"status": status}
+        # 400 означает, что доступ пройден и запрос дошёл до валидации полей.
+        if status not in (401, 403):
+            report.add(Finding("security-smoke", "critical", path,
+                               f"Анонимная запись в {path} не отклонена (получен {status}).", "SEC-6"))
+
+    # Первый пользователь Payload создаётся в обход прав доступа: пока таблица
+    # пуста, любой может зарегистрировать себе супер-администратора.
+    status, _, _ = _post_host(base_url, "/api/users/first-register", host,
+                              {"email": "probe@factory.invalid", "password": "probe-not-used"})
+    observed["POST /api/users/first-register"] = {"status": status}
+    if status not in (401, 403):
+        report.add(Finding("security-smoke", "critical", "/api/users/first-register",
+                           f"Открыта регистрация первого пользователя (получен {status}): "
+                           "стенд допускает анонимное создание супер-администратора.", "SEC-7"))
 
     for path in ("/.env", "/.git/config", "/var/db/anime.password", "/build-manifest.json"):
         status, _, _ = _get_host(base_url, path, host)
@@ -253,16 +316,20 @@ def security_smoke_multisite(base_url: str, package: dict, out_dir: Path) -> Rep
             report.add(Finding("security-smoke", "critical", path,
                                "Служебный путь доступен публично.", "SEC-3"))
 
-    # Админка не должна открываться анонимно как рабочая панель.
-    status, _, body = _get_host(base_url, "/admin", host)
+    # Строки перевода живут в бандле и находятся на любой странице админки, поэтому
+    # состояние панели определяется не текстом, а ответом API на анонимный запрос.
+    status, _, _ = _get_host(base_url, "/admin", host)
     observed["/admin"] = {"status": status}
-    if status == 200 and "Создать первого пользователя" not in body and "Вход" not in body and "Пароль" not in body:
-        report.add(Finding("security-smoke", "critical", "/admin",
-                           "Админка отвечает 200 без формы входа.", "SEC-4"))
+    me_status, _, me_body = _get_host(base_url, "/api/users/me", host)
+    observed["/api/users/me"] = {"status": me_status}
+    if me_status == 200 and '"user":null' not in me_body.replace(" ", ""):
+        report.add(Finding("security-smoke", "critical", "/api/users/me",
+                           "Анонимный запрос получает пользователя: сессия админки открыта.", "SEC-4"))
 
     report.counts = {"probes": len(observed), "status": "executed"}
     (out_dir / "security-smoke.json").write_text(
-        json.dumps({"probes": observed, **report.as_dict()}, ensure_ascii=False, indent=2), encoding="utf-8")
+        json.dumps(redact_obj({"probes": observed, **report.as_dict()}), ensure_ascii=False, indent=2),
+        encoding="utf-8")
     return report
 
 
@@ -273,13 +340,16 @@ def _surface(base_url: str, host: str) -> list[tuple[str, bool]]:
     пуст, и поверхность собирается обходом разделов: иначе ворота уникальности
     молча не выполнялись бы ровно тогда, когда они нужнее всего — до публикации.
     """
+    found: list[tuple[str, bool]] = [("/", True)]
+
+    # Карта сайта — заявление сайта о себе, а не независимый источник. Если брать
+    # только её, страница, которую профиль индексирует, но которая в карту не
+    # попала, никогда не сравнивается с другими сайтами. Поэтому карта и обход
+    # объединяются.
     status, _, sitemap = _get_host(base_url, "/sitemap.xml", host)
     if status == 200:
-        paths = [urllib.parse.urlparse(loc).path for loc in _LOC_RE.findall(sitemap)]
-        if paths:
-            return [(path, True) for path in paths]
+        found.extend((urllib.parse.urlparse(loc).path, True) for loc in _LOC_RE.findall(sitemap))
 
-    found: list[tuple[str, bool]] = [("/", True)]
     for listing in ("/catalog/", "/collections/", "/news/", "/schedule/"):
         listing_status, _, body = _get_host(base_url, listing, host)
         if listing_status != 200:
@@ -343,6 +413,7 @@ def cross_site_uniqueness(base_url: str, package: dict, out_dir: Path) -> Report
             description = _DESCRIPTION_RE.search(body)
             pages.append(uniqueness.PageObservation(
                 site_id=host, path=path, page_type=_page_type_of(path),
+                site_name=_site_name_of(body),
                 # Пока индексация сайта выключена, все страницы отдают noindex.
                 # Сравнивать при этом «нечего» неверно: вопрос дубля решается до
                 # включения переключателя, поэтому берётся намерение профиля.
@@ -357,8 +428,17 @@ def cross_site_uniqueness(base_url: str, package: dict, out_dir: Path) -> Report
 
     report = uniqueness.check(pages)
     (out_dir / "cross-site-uniqueness.json").write_text(
-        json.dumps(report.as_dict(), ensure_ascii=False, indent=2), encoding="utf-8")
+        json.dumps(redact_obj(report.as_dict()), ensure_ascii=False, indent=2), encoding="utf-8")
     return report
+
+
+_SITE_NAME_RE = re.compile(r'<a[^>]+class="site-header__brand"[^>]*>(.*?)</a>', re.S | re.I)
+
+
+def _site_name_of(body: str) -> str:
+    """Публичное имя сайта из шапки: оно вырезается из заголовков перед сравнением."""
+    match = _SITE_NAME_RE.search(body)
+    return _plain(match.group(1)) if match else ""
 
 
 def _page_type_of(path: str) -> str:
@@ -442,9 +522,16 @@ def player_contract_check(base_url: str, package: dict, out_dir: Path) -> Report
             report.add(Finding("player-contract", "critical", path,
                                "Токен Content API попал в страницу.", "PC-7"))
 
-    report.counts = {"pages": len(observed), "status": "executed"}
+    rendered = sum(1 for item in observed.values() if item.get("player_present"))
+    report.counts = {
+        "pages": len(observed),
+        "players_rendered": rendered,
+        # Ноль отрисованных плееров — это непроведённая проверка, а не «нарушений нет».
+        "status": "executed" if rendered else "skipped",
+        "reason": None if rendered else "ни на одной странице серии плеер не отрисован",
+    }
     (out_dir / "player-contract.json").write_text(
-        json.dumps({"host": host, "checked": observed, **report.as_dict()},
+        json.dumps(redact_obj({"host": host, "checked": observed, **report.as_dict()}),
                    ensure_ascii=False, indent=2), encoding="utf-8")
     return report
 
@@ -454,7 +541,8 @@ def verify_payload_multisite(site_id: str, package: dict, base_url: str, *, job_
     out_dir = PATHS.artifact_dir("verify", site_id, job_id)
     reports = [
         acceptance_routes_multisite(base_url, package, out_dir),
-        security_smoke_multisite(base_url, package, out_dir),
+        security_smoke_multisite(base_url, package, out_dir,
+                                 environment=package.get("environment", "staging")),
         cross_site_uniqueness(base_url, package, out_dir),
         player_contract_check(base_url, package, out_dir),
     ]

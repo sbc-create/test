@@ -33,14 +33,14 @@
       "command": "for f in tools/*.js themes/*/assets/*.js tests/e2e/*.js playwright.config.js; do node --check \"$f\" || exit 1; done",
       "exit_code": "0",
       "status": "PASS",
-      "note": "1s"
+      "note": "0s"
     },
     {
       "check": "static-yaml",
       "command": "python3 tests/tools/check_yaml.py",
       "exit_code": "0",
       "status": "PASS",
-      "note": "0s"
+      "note": "1s"
     },
     {
       "check": "unit-tests",
@@ -82,14 +82,14 @@
       "command": "python3 -m pytest tests/integration -q -m slow",
       "exit_code": "0",
       "status": "PASS",
-      "note": "10s"
+      "note": "11s"
     },
     {
       "check": "seo-lint",
       "command": "python3 -m factory seo-lint --site pilot-local > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "1s"
+      "note": "0s"
     },
     {
       "check": "blueprint-profile-gate",
@@ -103,14 +103,14 @@
       "command": "python3 -m factory deploy --site pilot-local > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "94s"
+      "note": "95s"
     },
     {
       "check": "seo-crawl",
       "command": "python3 -m factory seo-crawl --site pilot-local > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "0s"
+      "note": "1s"
     },
     {
       "check": "browser-audit",

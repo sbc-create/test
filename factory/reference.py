@@ -18,6 +18,7 @@ from urllib.parse import urlparse
 import yaml
 
 from factory import audit
+from factory.redaction import redact
 from factory.errors import BlockedAccess, BlockedInput
 from factory.paths import PATHS
 
@@ -95,7 +96,8 @@ def measure(ref: str) -> dict:
         "status": "measured" if measured else "unavailable_blocked",
         "viewports_measured": measured,
         "errors": measurements.get("errors", []),
-        "stderr": process.stderr.strip()[-800:],
+        # Вывод внешней команды проходит редакцию, как и любой другой.
+        "stderr": redact(process.stderr.strip()[-800:]),
         "artifact": f"artifacts/reference/{ref}-measurements.json" if measured else None,
     }
     (out_dir / f"{ref}-run.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2),

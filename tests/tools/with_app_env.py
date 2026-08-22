@@ -38,8 +38,9 @@ def payload_secret() -> str:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--scope", default="anime", help="Имя набора учётных данных в var/db")
-    parser.add_argument("--no-push", action="store_true",
-                        help="Не синхронизировать схему (для проверки поведения на неизменной базе)")
+    parser.add_argument("--push", action="store_true",
+                        help="Разрешить Payload синхронизировать схему. Только для локальных тестовых "
+                             "прогонов: выкат обязан применять миграции отдельным шагом с бэкапом.")
     parser.add_argument("--cwd", help="Рабочий каталог для команды (нужен CLI, ищущим tsconfig рядом)")
     parser.add_argument("command", nargs=argparse.REMAINDER)
     args = parser.parse_args()
@@ -52,11 +53,11 @@ def main() -> int:
     env = dict(os.environ)
     env["DATABASE_URI"] = credentials.dsn(password)
     env["PAYLOAD_SECRET"] = payload_secret()
-    # Локальный стенд синхронизирует схему сам: иначе каждый прогон после правки
-    # коллекции падал бы на отсутствующей колонке, и тест проверял бы состояние
-    # базы, а не код. Production разворачивается миграциями, а не push.
-    if not args.no_push:
-        env["PAYLOAD_DB_PUSH"] = "true"
+    # Синхронизация схемы НЕ включается по умолчанию. Иначе она срабатывала бы при
+    # каждом старте процесса — в том числе при запуске кандидата рядом с работающим
+    # релизом и при откате, где старый релиз возвращал бы старую схему и удалял
+    # колонки нового. Схему меняет отдельный шаг выката, после бэкапа.
+    env["PAYLOAD_DB_PUSH"] = "true" if args.push else "false"
     # Каталоги загрузок — состояние стенда, а не исходники: всегда под var/.
     for name, relative in (("MEDIA_DIR", "var/media"), ("CATALOG_MEDIA_DIR", "var/catalog-media")):
         directory = ROOT / relative

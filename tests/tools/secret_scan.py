@@ -48,8 +48,10 @@ def main() -> int:
             if value in content:
                 findings.append({"file": str(path.relative_to(ROOT)), "secret": label})
 
-    # Артефакты доказательств тоже уезжают наружу вместе с репозиторием.
-    for path in (ROOT / "artifacts").rglob("*"):
+    # Артефакты доказательств уезжают в отчёт целиком, включая логи серверов и
+    # скриншоты, поэтому сканируется и var/artifacts, а не только коммитируемое.
+    scan_roots = [ROOT / "artifacts", ROOT / "var" / "artifacts"]
+    for path in (item for root in scan_roots if root.exists() for item in root.rglob("*")):
         if not path.is_file():
             continue
         try:

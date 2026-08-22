@@ -71,7 +71,8 @@ export const playerConfigFor = async (
 
   const priorityVoice = asRecord(profile.priorityVoice)
   const mode = resolvePlayerMode(
-    process.env.FACTORY_ENVIRONMENT ?? 'staging',
+    // Умолчание — production: незаданная переменная не должна открывать заглушку.
+    process.env.FACTORY_ENVIRONMENT || 'production',
     process.env.PLAYER_MODE,
   )
 

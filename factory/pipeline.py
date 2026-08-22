@@ -204,7 +204,7 @@ def run_job(site_id: str, *, environment: str | None = None, job_id: str | None 
 
             if dry_run:
                 plan = target.plan(built.output, build_id)
-                step("deploy", "skipped", detail=f"dry-run: шагов {len(plan.steps)}, мутаций 0")
+                step("deploy", "skipped", detail=f"dry-run: шагов {len(plan.steps)}, мутаций в плане {plan.mutations}, применено 0")
                 notes.append("Выполнен dry-run: инфраструктура не менялась.")
                 return finish("BUILT", [])
 
@@ -228,7 +228,7 @@ def run_job(site_id: str, *, environment: str | None = None, job_id: str | None 
             # при повторном выкате того же релиза совпадает с самим релизом.
             previous_release = deploy_result.previous_release_id
             if hasattr(target, "_state"):
-                previous_release = target._state().get("previous_release_id") or previous_release
+                previous_release = target._state().get("previous_release") or previous_release
             base_url = deploy_result.base_url
             backup = deploy_result.backup
             steps.extend(deploy_result.steps)
@@ -286,6 +286,9 @@ def run_job(site_id: str, *, environment: str | None = None, job_id: str | None 
             artifacts.append(str(seo_dir.relative_to(PATHS.root) / "seo-report.json"))
             lint_counts = next((r.counts for r in qa_reports if r.name == "seo-lint"), {})
             crawl_counts = next((r.counts for r in qa_reports if r.name == "seo-crawl"), {})
+            # Нулевая сводка по невыполнявшимся проверкам — утверждение о результате
+            # измерения, которого не было. Пусто честнее нуля.
+            seo_measured = bool(lint_counts or crawl_counts)
             seo_summary = {
                 "pages_total": int(lint_counts.get("routes", 0)),
                 "indexable": int(lint_counts.get("indexable", 0)),
@@ -299,6 +302,24 @@ def run_job(site_id: str, *, environment: str | None = None, job_id: str | None 
                 "broken_links": sum(1 for r in qa_reports for f in r.findings if f.check == "broken-link"),
                 "jsonld_errors": sum(1 for r in qa_reports for f in r.findings if f.check == "jsonld"),
             }
+
+            if not seo_measured:
+                seo_summary = None
+
+            # Проверка, которая не запускалась, не может быть «пройденной». Для
+            # обязательных ворот это блокер, а не примечание: иначе первый сайт
+            # группы всегда доходил бы до DONE без проверки уникальности.
+            required_ids = {"cross-site-uniqueness", "player-contract", "acceptance-routes",
+                            "security-smoke", "seo-lint", "seo-crawl"}
+            unexecuted_required = [c for c in qa_checks
+                                   if c.id in required_ids and c.exit_code is None]
+            if unexecuted_required:
+                return finish("QA_FAILED", [{
+                    "status": "QA_FAILED", "field": c.id,
+                    "reason": f"Обязательная проверка {c.id} не выполнялась "
+                              f"({c.counts.get('reason') or c.counts.get('status')})",
+                    "required_input": "Условия для выполнения проверки (данные, второй сайт группы, доступ)",
+                    "blocks_stage": "STAGING_QA"} for c in unexecuted_required])
 
             non_critical_failures = [c for c in qa_checks if not c.passed and c.severity != "critical"]
             for check in non_critical_failures:
@@ -320,6 +341,24 @@ def run_job(site_id: str, *, environment: str | None = None, job_id: str | None 
                 release_id = rollback_result.release_id
                 previous_release = rollback_result.previous_release_id
                 notes.append(f"Выполнен откат: {reason}. На цели релиз {release_id}.")
+
+            # Дубль между сайтами — отдельный статус, а не общий QA_FAILED:
+            # он чинится содержанием страниц, а не повтором задания.
+            duplicate_failed = [c for c in failed if c.id == "cross-site-uniqueness"]
+            if duplicate_failed:
+                return finish("BLOCKED_SEO_DUPLICATE", [{
+                    "status": "BLOCKED_SEO_DUPLICATE", "field": c.id,
+                    "reason": "Индексируемые страницы сайтов группы совпадают",
+                    "required_input": "Собственное содержание страниц или сужение индексируемой поверхности",
+                    "blocks_stage": "STAGING_QA"} for c in duplicate_failed])
+
+            player_failed = [c for c in failed if c.id == "player-contract"]
+            if player_failed:
+                return finish("BLOCKED_PLAYER_CONTRACT", [{
+                    "status": "BLOCKED_PLAYER_CONTRACT", "field": c.id,
+                    "reason": "Встраивание плеера расходится с документированным контрактом",
+                    "required_input": "Приведение параметров плеера к контракту провайдера",
+                    "blocks_stage": "STAGING_QA"} for c in player_failed])
 
             if seo_failed:
                 if package["rollback_policy"]["auto_rollback_on_smoke_failure"] and env == "production":

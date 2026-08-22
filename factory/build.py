@@ -134,6 +134,9 @@ def compute_build_id(site_id: str, package: dict) -> str:
         matrix_path = PATHS.knowledge / "SEO_INDEXABILITY_MATRIX.yaml"
         material = _canonical({
             "package": package,
+            # Тексты юридических документов и прочие файлы сайта читаются сборкой,
+            # значит обязаны влиять на её адрес: иначе правка файла не доезжает.
+            "content": _content_digest(site_id, package),
             "app": _payload_app_digest(),
             "matrix_sha256": hashlib.sha256(matrix_path.read_bytes()).hexdigest(),
             "factory_source": factory_source_digest(),

@@ -47,7 +47,7 @@ export const CatalogMedia: CollectionConfig = {
       { name: 'wide', width: 1200, height: 675, position: 'centre' },
     ],
   },
-  access: { read: () => true, create: hasRole('editor'), update: hasRole('editor'), delete: superAdminOnly },
+  access: { read: () => true, create: hasRole('site_admin'), update: hasRole('site_admin'), delete: superAdminOnly },
   fields: [
     { name: 'alt', type: 'text', required: true, label: 'Альтернативный текст',
       admin: { description: 'Обязателен: без alt изображение не публикуется.' } },
@@ -62,7 +62,7 @@ export const Genres: CollectionConfig = {
   slug: 'genres',
   labels: { singular: 'Жанр', plural: 'Жанры' },
   admin: { useAsTitle: 'name', group: 'Каталог (общий)' },
-  access: { read: () => true, create: hasRole('editor'), update: hasRole('editor'), delete: superAdminOnly },
+  access: { read: () => true, create: hasRole('site_admin'), update: hasRole('site_admin'), delete: superAdminOnly },
   fields: [
     { name: 'name', type: 'text', required: true, label: 'Название' },
     { name: 'slug', type: 'text', required: true, unique: true, index: true, label: 'URL-код' },
@@ -73,7 +73,7 @@ export const Studios: CollectionConfig = {
   slug: 'studios',
   labels: { singular: 'Студия', plural: 'Студии' },
   admin: { useAsTitle: 'name', group: 'Каталог (общий)' },
-  access: { read: () => true, create: hasRole('editor'), update: hasRole('editor'), delete: superAdminOnly },
+  access: { read: () => true, create: hasRole('site_admin'), update: hasRole('site_admin'), delete: superAdminOnly },
   fields: [
     { name: 'name', type: 'text', required: true, label: 'Название' },
     { name: 'slug', type: 'text', required: true, unique: true, index: true, label: 'URL-код' },
@@ -83,6 +83,10 @@ export const Studios: CollectionConfig = {
 
 export const Titles: CollectionConfig = {
   slug: 'titles',
+  // Соответствие провайдеру обязано быть уникальным в базе, а не только в коде
+  // импорта: два параллельных прогона иначе создают два тайтла на один ID, после
+  // чего импорт блокируется навсегда как «неоднозначное соответствие».
+  indexes: [{ fields: ['playbackAggregator', 'playbackTitleId'], unique: true }],
   labels: { singular: 'Тайтл (общие факты)', plural: 'Тайтлы (общие факты)' },
   admin: {
     useAsTitle: 'primaryName',
@@ -90,7 +94,7 @@ export const Titles: CollectionConfig = {
     description: 'Проверенные факты о тайтле. Тексты и SEO конкретного сайта — в разделе «Публикации сайта».',
     defaultColumns: ['primaryName', 'kind', 'status', 'year'],
   },
-  access: { read: () => true, create: hasRole('editor'), update: hasRole('editor'), delete: superAdminOnly },
+  access: { read: () => true, create: hasRole('site_admin'), update: hasRole('site_admin'), delete: superAdminOnly },
   fields: [
     { name: 'primaryName', type: 'text', required: true, index: true, label: 'Основное название' },
     { name: 'englishName', type: 'text', label: 'Английское название' },
@@ -182,7 +186,7 @@ export const Seasons: CollectionConfig = {
   slug: 'seasons',
   labels: { singular: 'Сезон', plural: 'Сезоны' },
   admin: { useAsTitle: 'label', group: 'Каталог (общий)', defaultColumns: ['label', 'title', 'number'] },
-  access: { read: () => true, create: hasRole('editor'), update: hasRole('editor'), delete: superAdminOnly },
+  access: { read: () => true, create: hasRole('site_admin'), update: hasRole('site_admin'), delete: superAdminOnly },
   fields: [
     { name: 'title', type: 'relationship', relationTo: 'titles', required: true, index: true, label: 'Тайтл' },
     { name: 'number', type: 'number', required: true, min: 1, label: 'Номер сезона' },
@@ -195,7 +199,7 @@ export const Episodes: CollectionConfig = {
   slug: 'episodes',
   labels: { singular: 'Серия', plural: 'Серии' },
   admin: { useAsTitle: 'label', group: 'Каталог (общий)', defaultColumns: ['label', 'season', 'number', 'airedAt'] },
-  access: { read: () => true, create: hasRole('editor'), update: hasRole('editor'), delete: superAdminOnly },
+  access: { read: () => true, create: hasRole('site_admin'), update: hasRole('site_admin'), delete: superAdminOnly },
   fields: [
     { name: 'season', type: 'relationship', relationTo: 'seasons', required: true, index: true, label: 'Сезон' },
     { name: 'number', type: 'number', required: true, min: 1, label: 'Номер серии' },
@@ -216,7 +220,10 @@ export const RightsRecords: CollectionConfig = {
   slug: 'rights-records',
   labels: { singular: 'Запись о правах', plural: 'Права на контент' },
   admin: { useAsTitle: 'label', group: 'Права и источники' },
-  access: { read: () => true, create: hasRole('site_admin'), update: hasRole('site_admin'), delete: superAdminOnly },
+  // Ссылка на договор и территория — коммерческие данные, а не публичный факт.
+  // Рендер читает их на сервере через overrideAccess и от этого не страдает.
+  access: { read: hasRole('analyst'), create: hasRole('site_admin'),
+            update: hasRole('site_admin'), delete: superAdminOnly },
   fields: [
     { name: 'label', type: 'text', required: true, label: 'Обозначение' },
     { name: 'holder', type: 'text', required: true, label: 'Правообладатель' },
@@ -237,7 +244,7 @@ export const SourceRecords: CollectionConfig = {
   slug: 'source-records',
   labels: { singular: 'Запись источника', plural: 'Источники данных' },
   admin: { useAsTitle: 'label', group: 'Права и источники' },
-  access: { read: () => true, create: hasRole('editor'), update: hasRole('editor'), delete: superAdminOnly },
+  access: { read: () => true, create: hasRole('site_admin'), update: hasRole('site_admin'), delete: superAdminOnly },
   fields: [
     { name: 'label', type: 'text', required: true, label: 'Обозначение' },
     { name: 'kind', type: 'select', required: true, label: 'Вид источника',
@@ -262,7 +269,7 @@ export const Voices: CollectionConfig = {
       'Справочник озвучек. Значения используются в атрибутах плеера only-voice / priority-voice ' +
       'строго в том виде, в каком их принимает документированный контракт плеера.',
   },
-  access: { read: () => true, create: hasRole('editor'), update: hasRole('editor'), delete: superAdminOnly },
+  access: { read: () => true, create: hasRole('site_admin'), update: hasRole('site_admin'), delete: superAdminOnly },
   fields: [
     { name: 'name', type: 'text', required: true, label: 'Название' },
     { name: 'slug', type: 'text', required: true, unique: true, index: true, label: 'URL-код' },

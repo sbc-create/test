@@ -82,6 +82,9 @@ def strip_tags(html: str) -> str:
     return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", SCRIPT_RE.sub(" ", html))).strip()
 
 
+BRAND_RE = re.compile(r'<a[^>]+class="site-header__brand"[^>]*>(.*?)</a>', re.S | re.I)
+
+
 def observe(port: int, host: str, site_id: str, path: str) -> uniqueness.PageObservation | None:
     status, body = fetch(port, host, path)
     if status != 200:
@@ -99,6 +102,7 @@ def observe(port: int, host: str, site_id: str, path: str) -> uniqueness.PageObs
         h1=strip_tags(h1.group(1)) if h1 else "",
         own_text=strip_tags(main.group(1)) if main else "",
         canonical=CANONICAL_RE.search(body).group(1) if CANONICAL_RE.search(body) else "",
+        site_name=strip_tags(BRAND_RE.search(body).group(1)) if BRAND_RE.search(body) else "",
     )
 
 
@@ -114,7 +118,7 @@ def main() -> int:
     })
 
     seeding = subprocess.run(
-        [sys.executable, str(ROOT / "tests/tools/with_app_env.py"), "--scope", "anime", "--",
+        [sys.executable, str(ROOT / "tests/tools/with_app_env.py"), "--scope", "anime", "--push", "--",
          str(APP / "node_modules/.bin/tsx"), str(APP / "tests" / "stand-seed.ts")],
         cwd=ROOT, env=env, capture_output=True, text=True, timeout=900, check=False,
     )

@@ -36,10 +36,13 @@ test('методы контракта вызываются и меняют со�
   await expect(player).toHaveAttribute('season', '2');
   await expect(player).toHaveAttribute('episode', '3');
 
-  const hasMethods = await player.evaluate(
-    (node) => typeof node.selectSeason === 'function' && typeof node.selectEpisode === 'function',
-  );
-  expect(hasMethods).toBe(true);
+  // Методы появляются после того, как браузер определил custom element.
+  // Ждём апгрейда, а не угадываем момент — иначе проверка мигает.
+  await page.waitForFunction(() => {
+    const node = document.querySelector('video-player');
+    return Boolean(node) && typeof node.selectSeason === 'function'
+      && typeof node.selectEpisode === 'function';
+  });
 });
 
 test('событие noData переводит блок в честный статус вместо подмены видео', async ({ page }) => {

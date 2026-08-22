@@ -47,7 +47,7 @@ def main() -> int:
     })
 
     seeding = subprocess.run(
-        [sys.executable, str(ROOT / "tests/tools/with_app_env.py"), "--scope", "anime", "--",
+        [sys.executable, str(ROOT / "tests/tools/with_app_env.py"), "--scope", "anime", "--push", "--",
          str(APP / "node_modules/.bin/tsx"), str(APP / "tests" / "stand-seed.ts")],
         cwd=ROOT, env=env, capture_output=True, text=True, timeout=900, check=False,
     )

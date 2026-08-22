@@ -32,7 +32,7 @@ export type SyncCounters = { created: number; updated: number; skipped: number; 
 
 export type SyncResult = SyncCounters & {
   jobId: string | number
-  status: 'succeeded' | 'failed' | 'blocked_input' | 'blocked_content_rights'
+  status: 'succeeded' | 'failed' | 'blocked_input' | 'blocked_content_rights' | 'blocked_access'
   requestDigest: string
   message?: string
 }
@@ -192,6 +192,10 @@ export const syncTitles = async (options: SyncOptions): Promise<SyncResult> => {
   } catch (error) {
     if (error instanceof ContentApiBlocked) {
       status = 'blocked_input'
+    } else if (error instanceof ContentApiError && error.kind === 'auth') {
+      // Отказ авторизации не чинится повтором: по журналу это должно быть видно
+      // сразу, иначе оператор будет перезапускать импорт с тем же токеном.
+      status = 'blocked_access'
     } else {
       status = 'failed'
     }

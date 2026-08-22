@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Мутационная проверка ворот изоляции сайтов.
+"""Мутационная проверка критических ворот: изоляция сайтов и SEO.
 
 Зелёный прогон сам по себе ничего не доказывает: тест мог не проверять ничего.
 Здесь в исходники по очереди вносится ровно одна поломка защиты, и прогон обязан
@@ -15,6 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 APP = ROOT / "blueprints" / "payload-next-multisite" / "app"
 SUITE = APP / "tests" / "tenant-isolation.ts"
+SEO_SUITE = ROOT / "tests" / "tools" / "frontend_http.py"
 TSX = APP / "node_modules" / ".bin" / "tsx"
 
 
@@ -24,7 +25,33 @@ class Mutation:
     path: Path
     before: str
     after: str
+    #: Каким прогоном ловится поломка. Ворота изоляции и SEO проверяются разными.
+    suite: str = "isolation"
 
+
+SEO_MUTATIONS = [
+    Mutation(
+        "canonical перестаёт быть абсолютным",
+        APP / "src/seo/metadata.ts",
+        "    rule.canonical === 'none_no_index' || !indexable ? null : absoluteUrl(input.tenant, input.path)",
+        "    rule.canonical === 'none_no_index' || !indexable ? null : input.path",
+        suite="seo",
+    ),
+    Mutation(
+        "раздел без владельца снова индексируется",
+        APP / "src/app/(frontend)/catalog/page.tsx",
+        "      documentRobots: ownsListing(site.profile, '/catalog/') ? 'inherit' : 'noindex',",
+        "      documentRobots: 'inherit',",
+        suite="seo",
+    ),
+    Mutation(
+        "в карту сайта попадают материалы без собственного текста",
+        APP / "src/app/(frontend)/sitemap.xml/route.ts",
+        "      if (profile.requiresOwnText.includes('title') && !String(record.editorialIntro ?? '').trim()) continue",
+        "      if (false) continue",
+        suite="seo",
+    ),
+]
 
 MUTATIONS = [
     Mutation(
@@ -60,9 +87,13 @@ MUTATIONS = [
 ]
 
 
-def run_suite() -> subprocess.CompletedProcess:
+def run_suite(kind: str = "isolation") -> subprocess.CompletedProcess:
+    if kind == "seo":
+        # SEO-ворота проверяются живым HTTP: без запуска сайта они не проверяются никак.
+        return subprocess.run([sys.executable, str(SEO_SUITE)], cwd=ROOT,
+                              capture_output=True, text=True, timeout=3600, check=False)
     return subprocess.run(
-        [sys.executable, str(ROOT / "tests/tools/with_app_env.py"), "--scope", "anime", "--",
+        [sys.executable, str(ROOT / "tests/tools/with_app_env.py"), "--scope", "anime", "--push", "--",
          str(TSX), str(SUITE)],
         cwd=ROOT, capture_output=True, text=True, timeout=1800, check=False,
     )
@@ -76,8 +107,15 @@ def main() -> int:
         return 1
     print("BASELINE OK: изоляция зелёная")
 
+    seo_baseline = run_suite("seo")
+    if seo_baseline.returncode != 0:
+        print("BASELINE FAIL: SEO-прогон красный до мутаций")
+        print(seo_baseline.stdout[-3000:])
+        return 1
+    print("BASELINE OK: SEO-ворота зелёные")
+
     failures = 0
-    for mutation in MUTATIONS:
+    for mutation in [*MUTATIONS, *SEO_MUTATIONS]:
         original = mutation.path.read_text(encoding="utf-8")
         if mutation.before not in original:
             print(f"SKIP  {mutation.name}: якорь не найден в {mutation.path.relative_to(ROOT)}")
@@ -85,7 +123,7 @@ def main() -> int:
             continue
         mutation.path.write_text(original.replace(mutation.before, mutation.after, 1), encoding="utf-8")
         try:
-            result = run_suite()
+            result = run_suite(mutation.suite)
         finally:
             mutation.path.write_text(original, encoding="utf-8")
         if result.returncode == 0:
@@ -95,7 +133,7 @@ def main() -> int:
             failed_lines = [line for line in result.stdout.splitlines() if line.startswith("FAIL")]
             print(f"OK    {mutation.name}: обнаружена, упавших проверок {len(failed_lines)}")
 
-    print(f"\nмутаций: {len(MUTATIONS)}, не обнаружено: {failures}")
+    print(f"\nмутаций: {len(MUTATIONS) + len(SEO_MUTATIONS)}, не обнаружено: {failures}")
     return 0 if failures == 0 else 1
 
 

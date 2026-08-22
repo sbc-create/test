@@ -28,9 +28,26 @@ const json = (status: number, body: Record<string, unknown>): Response =>
     headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' },
   })
 
+/**
+ * Адрес отправителя.
+ *
+ * X-Forwarded-For принимается ТОЛЬКО когда явно объявлен доверенный прокси:
+ * иначе клиент подставляет новый адрес на каждый запрос, и лимит частоты вместе
+ * с ключом идемпотентности перестают работать вовсе. Без доверенного прокси
+ * берётся адрес сокета, а при его отсутствии — общий ключ, который лимитирует
+ * строже, а не слабее.
+ */
 const clientIp = (req: PayloadRequest): string => {
-  const forwarded = req.headers.get('x-forwarded-for') ?? ''
-  return (forwarded.split(',')[0] ?? '').trim() || req.headers.get('x-real-ip') || 'unknown'
+  const trustProxy = (process.env.TRUSTED_PROXY ?? '').trim() === 'true'
+  if (trustProxy) {
+    const forwarded = req.headers.get('x-forwarded-for') ?? ''
+    const first = (forwarded.split(',')[0] ?? '').trim()
+    if (first) return first
+    const real = req.headers.get('x-real-ip')
+    if (real) return real
+  }
+  const socket = (req as unknown as { socket?: { remoteAddress?: string } }).socket
+  return socket?.remoteAddress || 'shared'
 }
 
 export const issueFormToken = (
@@ -143,6 +160,8 @@ export const submitComment: PayloadHandler = async (req) => {
       and: [{ tenant: { equals: tenant.id } }, { submissionKey: { equals: idempotencyKey } }],
     },
   })
+  // Одноразовость токена обеспечивается тем же ключом: повтор с тем же токеном и
+  // тем же телом возвращает прежний результат, а с другим телом упирается в лимит.
   if (duplicate.totalDocs > 0) {
     const existing = duplicate.docs[0] as unknown as Record<string, unknown>
     return json(200, {

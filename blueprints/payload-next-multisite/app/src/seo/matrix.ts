@@ -45,14 +45,19 @@ export type PageTypeRule = {
   httpStatus: number[]
 }
 
+/**
+ * `structuredData` перечисляет типы, РАЗРЕШЁННЫЕ матрицей, а не обязательные:
+ * `*_when_applicable` и `*_when_video_available` эмитятся только при полных
+ * фактических полях. Список сверяется с замороженным YAML построчно.
+ */
 export const PAGE_TYPES: Record<PageTypeId, PageTypeRule> = {
   home: { index: 'index', follow: true, canonical: 'self_absolute', inSitemap: true, structuredData: ['WebSite', 'Organization'], httpStatus: [200] },
   category: { index: 'index', follow: true, canonical: 'self_absolute', inSitemap: true, structuredData: ['BreadcrumbList'], httpStatus: [200, 404] },
   collection: { index: 'index', follow: true, canonical: 'self_absolute', inSitemap: true, structuredData: ['BreadcrumbList'], httpStatus: [200, 404] },
-  title: { index: 'index', follow: true, canonical: 'self_absolute', inSitemap: true, structuredData: ['BreadcrumbList'], httpStatus: [200, 404, 410] },
+  title: { index: 'index', follow: true, canonical: 'self_absolute', inSitemap: true, structuredData: ['BreadcrumbList', 'Movie_or_TVSeries_when_applicable', 'VideoObject_when_video_available'], httpStatus: [200, 404, 410] },
   season: { index: 'index', follow: true, canonical: 'self_absolute', inSitemap: true, structuredData: ['BreadcrumbList'], httpStatus: [200, 404] },
-  episode: { index: 'index', follow: true, canonical: 'self_absolute', inSitemap: true, structuredData: ['BreadcrumbList'], httpStatus: [200, 404, 410] },
-  article: { index: 'index', follow: true, canonical: 'self_absolute', inSitemap: true, structuredData: ['BreadcrumbList'], httpStatus: [200, 404, 410] },
+  episode: { index: 'index', follow: true, canonical: 'self_absolute', inSitemap: true, structuredData: ['BreadcrumbList', 'TVEpisode_when_applicable', 'VideoObject_when_video_available'], httpStatus: [200, 404, 410] },
+  article: { index: 'index', follow: true, canonical: 'self_absolute', inSitemap: true, structuredData: ['BreadcrumbList', 'Article_or_NewsArticle'], httpStatus: [200, 404, 410] },
   news_index: { index: 'index', follow: true, canonical: 'self_absolute', inSitemap: true, structuredData: ['BreadcrumbList'], httpStatus: [200] },
   tag: { index: 'conditional', follow: true, canonical: 'self_absolute', inSitemap: 'conditional', structuredData: ['BreadcrumbList'], httpStatus: [200, 404] },
   archive: { index: 'noindex', follow: true, canonical: 'self_absolute', inSitemap: false, structuredData: [], httpStatus: [200, 404] },

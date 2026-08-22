@@ -151,7 +151,22 @@ def cmd_verify(args) -> int:
     return EXIT_OK if payload["passed"] else EXIT_FAILED
 
 
+def _assert_target_usable(site_id: str) -> None:
+    """Цель обязана быть объявлена пригодной для окружения пакета."""
+    package = validation.load_package(site_id)
+    target_conf = inventory.target(package.get("target_ref", ""))
+    environment = package.get("environment")
+    if environment not in (target_conf.get("environments") or []):
+        raise FactoryError(
+            f"Цель {target_conf.get('ref')} не объявлена для окружения {environment}.")
+    if environment == "production" and not target_conf.get("production_capable"):
+        raise FactoryError(f"Цель {target_conf.get('ref')} не пригодна для production.")
+
+
 def cmd_rollback(args) -> int:
+    # Пригодность цели проверяется и на откате: иначе для будущей production-цели
+    # откат оказался бы единственным путём, не спрашивающим разрешения.
+    _assert_target_usable(args.site)
     """Откат — такая же мутация, как деплой: под блокировкой, с авторизацией и отчётом."""
     package, conf, target = _target_for(args.site)
     environment = package["environment"]

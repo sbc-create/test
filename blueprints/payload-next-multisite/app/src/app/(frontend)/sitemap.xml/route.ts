@@ -1,4 +1,4 @@
-import { listCollections, listPosts, listTenantTitles } from '../../../lib/content'
+import { listCollections, listEpisodes, listPosts, listSeasons, listTenantTitles } from '../../../lib/content'
 import { currentSite, payloadClient } from '../../../lib/site'
 import { tenantFind } from '../../../lib/tenant-query'
 import { absoluteUrl } from '../../../seo/metadata'
@@ -54,6 +54,28 @@ export const GET = async () => {
       // Профиль требует собственного текста — без него страница noindex и в карту не идёт.
       if (profile.requiresOwnText.includes('title') && !String(record.editorialIntro ?? '').trim()) continue
       add(`/catalog/${String(record.slug)}/`, record.updatedAt)
+
+      // Сезоны и серии перечисляются, только если профиль их индексирует. Раньше
+      // они были объявлены в sitemapTypes, но ни одной ветки для них не было —
+      // сотни индексируемых страниц оставались вне карты сайта.
+      if (!includes('season') && !includes('episode')) continue
+      const shared = record.title as { id?: string | number } | null
+      if (!shared?.id) continue
+      const seasons = await listSeasons(payload, shared.id)
+      for (const season of seasons.docs) {
+        const seasonRecord = season as unknown as Record<string, unknown>
+        const seasonPath = `/catalog/${String(record.slug)}/season-${String(seasonRecord.number)}/`
+        const episodes = await listEpisodes(payload, seasonRecord.id as string | number)
+        // Пустой сезон отдаёт 404, поэтому в карту он не попадает.
+        if (episodes.docs.length === 0) continue
+        if (includes('season')) add(seasonPath, seasonRecord.updatedAt)
+        if (includes('episode')) {
+          for (const episode of episodes.docs) {
+            const episodeRecord = episode as unknown as Record<string, unknown>
+            add(`${seasonPath}episode-${String(episodeRecord.number)}/`, episodeRecord.updatedAt)
+          }
+        }
+      }
     }
   }
 

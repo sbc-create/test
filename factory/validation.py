@@ -242,6 +242,73 @@ def _check_domain_consistency(pkg: dict, out: list[Blocker]) -> None:
         out.append(Blocker("BLOCKED_INPUT", "aliases", "В aliases есть дубликаты.", "Уникальный список алиасов", "VALIDATING"))
 
 
+#: Владение разделами объявлено в профиле приложения. Пакет обязан ему соответствовать:
+#: иначе поле в манифесте выглядит настройкой, но ни на что не влияет.
+PROFILE_OWNED_LISTINGS = {
+    "catalog_authority": ["/catalog/", "/collections/", "/news/"],
+    "release_pulse": ["/schedule/", "/news/"],
+    "editorial_guide": ["/collections/", "/news/"],
+}
+
+
+def _check_tenant_profile(pkg: dict, out: list[Blocker]) -> None:
+    """Согласие манифеста с профилем сайта.
+
+    CLAUDE.md ставит манифест первым источником истины. Поле, которое никто не
+    читает, этот порядок нарушает: оператор правит пакет и не получает ни эффекта,
+    ни ошибки. Поэтому расхождение — блокер, а не молчание.
+    """
+    if blueprint_of(pkg) != "payload-next-multisite":
+        return
+    tenant = pkg.get("tenant") or {}
+    profile = tenant.get("seo_profile")
+    expected = PROFILE_OWNED_LISTINGS.get(profile)
+    if expected is None:
+        out.append(Blocker("BLOCKED_INPUT", "tenant.seo_profile",
+                           f"Неизвестный SEO-профиль «{profile}».",
+                           "catalog_authority | release_pulse | editorial_guide", "VALIDATING"))
+        return
+    declared = list(tenant.get("owned_listings") or [])
+    if sorted(declared) != sorted(expected):
+        out.append(Blocker(
+            "BLOCKED_INPUT", "tenant.owned_listings",
+            f"Разделы пакета {declared} не совпадают с профилем {profile}: {expected}.",
+            "Приведите owned_listings к профилю или измените профиль", "VALIDATING"))
+
+    theme = tenant.get("theme")
+    if theme != pkg.get("theme_ref"):
+        out.append(Blocker("BLOCKED_INPUT", "tenant.theme",
+                           f"tenant.theme={theme!r} расходится с theme_ref={pkg.get('theme_ref')!r}.",
+                           "Одно и то же значение темы", "VALIDATING"))
+
+    player = pkg.get("player_profile") or {}
+    if pkg.get("environment") == "production" and player.get("mode") != "live":
+        out.append(Blocker("BLOCKED_PLAYER_CONTRACT", "player_profile.mode",
+                           "Режим плеера mock недопустим в production.",
+                           "player_profile.mode: live", "PRODUCTION_DEPLOY"))
+    content_api = pkg.get("content_api") or {}
+    if pkg.get("environment") == "production" and content_api.get("mode") == "mock":
+        out.append(Blocker("BLOCKED_INPUT", "content_api.mode",
+                           "Режим фикстур Content API недопустим в production.",
+                           "content_api.mode: live | disabled", "PRODUCTION_DEPLOY"))
+
+
+def _check_publication_rights(pkg: dict, out: list[Blocker]) -> None:
+    """Публикация без подтверждённых прав блокируется отдельным статусом.
+
+    Общий BLOCKED_RIGHTS описывает происхождение исходных данных; здесь речь о
+    праве ПУБЛИКОВАТЬ материал на сайте, и оператору нужно видеть разницу.
+    """
+    source = pkg.get("content_source") or {}
+    if source.get("rights_confirmed") is True:
+        return
+    out.append(Blocker(
+        "BLOCKED_CONTENT_RIGHTS", "content_source.rights_confirmed",
+        "Права на публикацию контента не подтверждены в пакете сайта.",
+        "Подтверждённый rights manifest и content_source.rights_confirmed: true",
+        "BUILDING"))
+
+
 def _check_content_rights(pkg: dict, site_id: str, out: list[Blocker]) -> None:
     cs = pkg.get("content_source") or {}
     kind = cs.get("kind")
@@ -435,6 +502,8 @@ def validate(site_id: str) -> ValidationResult:
     _check_targets(pkg, blockers)
     _check_domain_consistency(pkg, blockers)
     _check_content_rights(pkg, site_id, blockers)
+    _check_publication_rights(pkg, blockers)
+    _check_tenant_profile(pkg, blockers)
     _check_vk_and_ads(pkg, site_id, blockers)
     _check_secrets(pkg, blockers)
     _check_seo(pkg, blockers, warnings)

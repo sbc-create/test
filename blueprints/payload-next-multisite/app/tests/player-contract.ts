@@ -12,16 +12,42 @@ import {
   resolvePlayerMode,
   scriptUrlFor,
 } from '../src/player/contract'
+import { readFileSync } from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+import { load } from 'js-yaml'
+
 import { assert, assertEqual, check, summary } from './harness'
+
+const dirname = path.dirname(fileURLToPath(import.meta.url))
+const frozen = load(
+  readFileSync(path.resolve(dirname, '../../../../knowledge/cdnvideohub/PLAYER_CONTRACT.yaml'), 'utf8'),
+) as {
+  script: { url: string }
+  element: string
+  public_api: { methods: { name: string }[]; events: { name: string }[] }
+  attributes: { name: string; allowed?: string[]; fixed_value?: string }[]
+}
 
 const base = { titleId: 'abc123', aggregator: 'kp', publisherId: 'publisher-1' }
 
-await check('константы контракта не переписаны', () => {
-  assertEqual(PLAYER_SCRIPT_URL, 'https://player.cdnvideohub.com/s2/stable/video-player.umd.js', 'адрес скрипта')
-  assertEqual(PLAYER_ELEMENT, 'video-player', 'имя элемента')
-  assertEqual(PLAYER_METHODS.join(','), 'selectSeason,selectEpisode', 'методы')
-  assertEqual(PLAYER_EVENTS.join(','), 'noData', 'события')
-  assertEqual(AGGREGATORS.join(','), 'kp,mali,mdl', 'агрегаторы')
+await check('константы контракта совпадают с замороженным документом', () => {
+  // Сравнение с литералами в самом тесте ничего не доказывает: правка кода и
+  // правка теста делаются одной рукой. Источник — knowledge/cdnvideohub/.
+  assertEqual(PLAYER_SCRIPT_URL, frozen.script.url, 'адрес скрипта')
+  assertEqual(PLAYER_ELEMENT, frozen.element, 'имя элемента')
+  assertEqual(PLAYER_METHODS.join(','), frozen.public_api.methods.map((m) => m.name).join(','), 'методы')
+  assertEqual(PLAYER_EVENTS.join(','), frozen.public_api.events.map((e) => e.name).join(','), 'события')
+
+  const aggregators = frozen.attributes.find((item) => item.name === 'data-aggregator')?.allowed ?? []
+  assertEqual(AGGREGATORS.join(','), aggregators.join(','), 'агрегаторы')
+
+  const documented = frozen.attributes.map((item) => item.name).sort().join(',')
+  assertEqual([...ALLOWED_ATTRIBUTES].sort().join(','), documented, 'набор атрибутов')
+
+  const fixed = frozen.attributes.find((item) => item.name === 'disable-licensed')?.fixed_value
+  assertEqual(fixed, 'false', 'зафиксированное значение disable-licensed в документе')
 })
 
 await check('disable-licensed всегда false и не настраивается', () => {

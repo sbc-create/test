@@ -57,8 +57,13 @@ def main() -> int:
     code, output = run_node("db-mutate.ts")
     step("данные изменены после бэкапа", code == 0, output[-400:])
     mutated = snapshot()
-    step("изменение видно в состоянии", mutated["posts"] == before["posts"] + 1,
-         f"было {before['posts']}, стало {mutated['posts']}")
+    step("изменение видно в состоянии", mutated != before,
+         f"снимок не изменился после мутации: {json.dumps(mutated, ensure_ascii=False)}")
+    step("изменены три вида данных: вставка, правка и удаление",
+         mutated.get("posts") == before.get("posts") + 1
+         and mutated.get("pages:digest") != before.get("pages:digest")
+         and mutated.get("comments") == before.get("comments") - 1,
+         f"до={json.dumps(before, ensure_ascii=False)} после={json.dumps(mutated, ensure_ascii=False)}")
 
     restored = database.restore(SCOPE, backup_path)
     step("восстановление выполнено", restored, "psql вернул ненулевой код" if not restored else "")
@@ -67,8 +72,14 @@ def main() -> int:
     same = after == before
     step("состояние после восстановления совпадает с исходным", same,
          f"до={json.dumps(before, ensure_ascii=False)} после={json.dumps(after, ensure_ascii=False)}")
-    step("внесённое изменение исчезло", after["posts"] == before["posts"],
-         f"ожидалось {before['posts']}, получено {after['posts']}")
+    step("внесённое изменение исчезло", after.get("posts") == before.get("posts"),
+         f"ожидалось {before.get('posts')}, получено {after.get('posts')}")
+    # Совпадение счётчиков без совпадения отпечатков означало бы восстановление
+    # «правильного количества испорченных записей».
+    digests = [key for key in before if key.endswith(":digest")]
+    step("отпечатки содержимого совпадают", all(after.get(k) == before.get(k) for k in digests),
+         ", ".join(f"{k}: {before.get(k)} → {after.get(k)}" for k in digests
+                   if after.get(k) != before.get(k)))
 
     ARTIFACT.parent.mkdir(parents=True, exist_ok=True)
     ARTIFACT.write_text(json.dumps({

@@ -61,8 +61,23 @@ for (const id of Object.keys(PAGE_TYPES) as PageTypeId[]) {
     assertEqual(String(rule.inSitemap), String(sitemapOf(entry)), `${id}: in_sitemap`)
     const statuses = (entry.http_status as number[]) ?? []
     assertEqual(rule.httpStatus.join(','), statuses.join(','), `${id}: http_status`)
+
+    // Структурированные данные объявлены по обе стороны и раньше не сравнивались:
+    // правка в YAML не роняла ничего, и политика расходилась молча.
+    const declared = ((entry.structured_data as string[]) ?? []).join(',')
+    assertEqual(rule.structuredData.join(','), declared, `${id}: structured_data`)
   })
 }
+
+await check('типов из матрицы, неизвестных blueprint, не остаётся без решения', () => {
+  // Тип, который матрица разрешает, а blueprint не знает, — это не ошибка сама по
+  // себе, но он обязан быть перечислен явно, иначе про него просто забудут.
+  const notImplemented = new Set(['author', 'tag', 'archive', 'filter_indexable', 'gone', 'service'])
+  const unknown = [...byId.keys()].filter(
+    (id) => !(id in PAGE_TYPES) && !notImplemented.has(id),
+  )
+  assertEqual(unknown.join(', '), '', 'типы матрицы, не учтённые blueprint')
+})
 
 await check('список неиндексируемых параметров совпадает', () => {
   assertEqual(
@@ -105,7 +120,15 @@ await check('каждый раздел-список принадлежит ро�
   assertEqual((owners.get('/catalog/') ?? []).join(','), 'catalog_authority', 'владелец каталога')
   assertEqual((owners.get('/schedule/') ?? []).join(','), 'release_pulse', 'владелец расписания')
   // Лента материалов есть у всех: у каждого сайта она про своё и с разным заголовком.
-  assertEqual((owners.get('/news/') ?? []).length, 3, 'владельцы ленты материалов')
+  // Явный ожидаемый состав владельцев: иначе смена владения проходит молча.
+  const expected: Record<string, number> = {
+    '/catalog/': 1, '/schedule/': 1, '/collections/': 2, '/news/': 3,
+  }
+  for (const [listing, count] of Object.entries(expected)) {
+    assertEqual((owners.get(listing) ?? []).length, count, `владельцев раздела ${listing}`)
+  }
+  assertEqual([...owners.keys()].sort().join(','), Object.keys(expected).sort().join(','),
+    'состав разделов-списков')
   const headings = Object.values(SEO_PROFILES).map((profile) => profile.newsHeading)
   assertEqual(new Set(headings).size, 3, 'различных заголовков ленты')
 })

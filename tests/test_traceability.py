@@ -1,4 +1,5 @@
 """REQ-*: каждое нормативное требование связано с существующим тестом."""
+from factory.errors import FAILURE_STATES
 import re
 from pathlib import Path
 
@@ -44,9 +45,7 @@ def test_requirement_ids_are_unique():
     assert len(ids) == len(set(ids))
 
 
-STATUSES = ("BLOCKED_INPUT", "BLOCKED_LICENSE", "BLOCKED_RIGHTS", "BLOCKED_SECRET",
-            "BLOCKED_ACCESS", "BLOCKED_AUTHORIZATION", "BLOCKED_SEO", "QA_FAILED",
-            "DEPLOY_FAILED", "ROLLED_BACK", "QUARANTINED")
+STATUSES = FAILURE_STATES  # список берётся из кода, а не дублируется здесь
 
 
 @pytest.mark.parametrize("status", STATUSES)

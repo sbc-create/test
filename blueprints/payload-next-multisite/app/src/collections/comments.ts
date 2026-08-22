@@ -90,6 +90,7 @@ export const Comments: CollectionConfig = {
       name: 'submissionKey',
       type: 'text',
       index: true,
+      unique: true,
       label: 'Ключ отправки',
       access: { read: ({ req }) => Boolean(req.user), create: () => false, update: () => false },
       admin: { readOnly: true, description: 'Отпечаток отправки. Защищает от дублей при повторе запроса.' },

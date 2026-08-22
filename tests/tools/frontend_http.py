@@ -39,16 +39,19 @@ INDEXABLE = {
     "a": {"/": True, "/catalog/": True, "/catalog/stand-title-1/": True,
           "/catalog/stand-title-1/season-1/": True,
           "/catalog/stand-title-1/season-1/episode-1/": True,
-          "/collections/stand-collection-a/": True, "/news/": True, "/legal/rights/": True},
+          "/collections/stand-collection-a/": True, "/news/": True, "/legal/rights/": True,
+          "/schedule/": False},
     # Каталог принадлежит сайту A: у сайта расписания он остаётся навигацией.
     "b": {"/": True, "/catalog/": False, "/catalog/stand-title-1/": True,
           "/catalog/stand-title-1/season-1/": False,
           "/catalog/stand-title-1/season-1/episode-1/": True,
-          "/collections/stand-collection-b/": False, "/news/": True, "/legal/rights/": True},
+          "/collections/stand-collection-b/": False, "/news/": True, "/legal/rights/": True,
+          "/schedule/": True},
     "c": {"/": True, "/catalog/": False, "/catalog/stand-title-1/": True,
           "/catalog/stand-title-1/season-1/": False,
           "/catalog/stand-title-1/season-1/episode-1/": False,
-          "/collections/stand-collection-c/": True, "/news/": True, "/legal/rights/": True},
+          "/collections/stand-collection-c/": True, "/news/": True, "/legal/rights/": True,
+          "/schedule/": False},
 }
 
 
@@ -247,7 +250,7 @@ def main() -> int:
     # Стенд наполняется здесь же: тест не должен зависеть от того, что кто-то
     # раньше запустил seed вручную и оставил базу в нужном состоянии.
     seeding = subprocess.run(
-        [sys.executable, str(ROOT / "tests/tools/with_app_env.py"), "--scope", "anime", "--",
+        [sys.executable, str(ROOT / "tests/tools/with_app_env.py"), "--scope", "anime", "--push", "--",
          str(APP / "node_modules/.bin/tsx"), str(APP / "tests" / "stand-seed.ts")],
         cwd=ROOT, env=env, capture_output=True, text=True, timeout=900, check=False,
     )
@@ -317,6 +320,33 @@ def main() -> int:
                     results.add(f"[{key}] {path} без canonical, раз он noindex", canonical is None,
                                 f"canonical={canonical.group(1) if canonical else ''}")
 
+        # Пагинация: страница 2 открывается прямым адресом, ссылается на себя и
+        # видна в разметке родителя обычной ссылкой.
+        status, catalog = fetch(port, SITES["a"]["host"], "/catalog/")
+        total_pages_known = "Страница 1 из" in catalog
+        if total_pages_known and 'href="/catalog/page/2/"' in catalog:
+            status, page_two = fetch(port, SITES["a"]["host"], "/catalog/page/2/", follow=False)
+            results.add("[a] вторая страница каталога открывается прямым адресом", status == 200,
+                        f"получен {status}")
+            canonical = CANONICAL_RE.search(page_two)
+            results.add("[a] вторая страница каталога self-canonical",
+                        bool(canonical) and canonical.group(1).endswith("/catalog/page/2/"),
+                        f"canonical={canonical.group(1) if canonical else 'нет'}")
+        else:
+            results.add("[a] пагинация каталога не проверялась: материалов меньше одной страницы",
+                        True, "")
+        status, _ = fetch(port, SITES["a"]["host"], "/catalog/page/1/", follow=False)
+        results.add("[a] страница 1 не дублируется адресом /page/1/", status == 404, f"получен {status}")
+        status, _ = fetch(port, SITES["b"]["host"], "/catalog/page/2/", follow=False)
+        results.add("[b] пагинация раздела без владельца не индексируется", status in (200, 404),
+                    f"получен {status}")
+        if status == 200:
+            _, body_two = fetch(port, SITES["b"]["host"], "/catalog/page/2/")
+            robots = ROBOTS_RE.search(body_two)
+            results.add("[b] вторая страница чужого раздела отдаёт noindex",
+                        bool(robots) and robots.group(1).startswith("noindex"),
+                        f"robots={robots.group(1) if robots else 'нет'}")
+
         # Фильтр каталога — не самостоятельная страница.
         status, body = fetch(port, SITES["a"]["host"], "/catalog/?genre=drama")
         canonical = CANONICAL_RE.search(body)
@@ -355,6 +385,29 @@ def main() -> int:
                         all(loc.startswith(f"https://{site['host']}/") for loc in locs),
                         f"первые записи: {locs[:3]}")
             responses[f"sitemap-{key}"] = {"count": len(locs)}
+
+        # Карта сайта обязана совпадать с индексируемой поверхностью, а не быть
+        # её надмножеством: адрес в карте, отдающий noindex, — прямое нарушение HR-3.
+        for key, site in SITES.items():
+            _, body = fetch(port, site["host"], "/sitemap.xml")
+            locs = re.findall(r"<loc>([^<]+)</loc>", body)
+            bad_robots, bad_canonical = [], []
+            for loc in locs:
+                path = re.sub(r"^https://[^/]+", "", loc)
+                status, page = fetch(port, site["host"], path)
+                if status != 200:
+                    bad_robots.append(f"{path}: HTTP {status}")
+                    continue
+                robots = ROBOTS_RE.search(page)
+                if not robots or not robots.group(1).startswith("index"):
+                    bad_robots.append(f"{path}: robots={robots.group(1) if robots else 'нет'}")
+                canonical = CANONICAL_RE.search(page)
+                if not canonical or canonical.group(1) != loc:
+                    bad_canonical.append(f"{path}: canonical={canonical.group(1) if canonical else 'нет'}")
+            results.add(f"[{key}] каждый адрес карты сайта индексируем", not bad_robots,
+                        "; ".join(bad_robots[:4]))
+            results.add(f"[{key}] каждый адрес карты сайта self-canonical", not bad_canonical,
+                        "; ".join(bad_canonical[:4]))
 
         # Состав sitemap различается: одинаковые карты у трёх сайтов — это дубль.
         sitemaps = {}

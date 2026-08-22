@@ -50,6 +50,7 @@ export const ImportJobs: CollectionConfig = {
         { label: 'Ошибка', value: 'failed' },
         { label: 'Заблокировано входными данными', value: 'blocked_input' },
         { label: 'Заблокировано правами на контент', value: 'blocked_content_rights' },
+        { label: 'Отказ доступа провайдера', value: 'blocked_access' },
       ],
     },
     {
@@ -157,8 +158,10 @@ export const PlayerProfiles: CollectionConfig = {
       label: 'Имя секрета с publisher ID',
       admin: {
         description:
-          'Например PLAYER_PUBLISHER_ID_SITE_A. Само значение в CMS, git, логи и HTML-исходники ' +
-          'не попадает — сервер подставляет его при рендере.',
+          'Например PLAYER_PUBLISHER_ID_SITE_A. В CMS и git хранится только имя переменной; ' +
+          'значение подставляет сервер. Само значение — публичный параметр встраивания: ' +
+          'по контракту оно обязано быть в HTML как data-publisher-id. Секретом является ' +
+          'токен Content API, а не этот идентификатор.',
       },
       validate: (value: unknown) =>
         typeof value === 'string' && /^[A-Z][A-Z0-9_]{2,63}$/.test(value)
