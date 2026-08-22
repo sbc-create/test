@@ -26,6 +26,8 @@ import {
 } from '../src/seo/profiles'
 import { assert, assertEqual, check, summary } from './harness'
 
+import { readdirSync, existsSync } from 'fs'
+
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 const yamlPath = path.resolve(dirname, '../../../../knowledge/SEO_INDEXABILITY_MATRIX.yaml')
 const frozen = load(readFileSync(yamlPath, 'utf8')) as {
@@ -361,6 +363,60 @@ await check('автоматические описания и заголовки
     titleHeading: profiles.map((profile) => profile.titleHeading('Тайтл')),
   })) {
     assertEqual(new Set(values).size, Object.keys(SEO_PROFILES).length, `различных значений ${field}`)
+  }
+})
+
+// --- Пакеты сайтов и профили обязаны совпадать ------------------------------
+
+const sitesDir = path.resolve(dirname, '../../../../sites')
+
+type SitePackage = {
+  site_id?: string
+  blueprint?: string
+  tenant?: { seo_profile?: string; theme?: string; owned_listings?: string[] }
+  seo?: { indexable_facets_allowlist?: { url?: string }[] }
+}
+
+const packages: SitePackage[] = existsSync(sitesDir)
+  ? readdirSync(sitesDir)
+    .map((name) => path.join(sitesDir, name, 'package.yaml'))
+    .filter((file) => existsSync(file))
+    .map((file) => load(readFileSync(file, 'utf8')) as SitePackage)
+    .filter((pkg) => pkg?.blueprint === 'payload-next-multisite')
+  : []
+
+await check('пакеты сайтов найдены и относятся к известным профилям', () => {
+  assert(packages.length >= 7, `найдено пакетов: ${packages.length}`)
+  for (const pkg of packages) {
+    const profile = String(pkg.tenant?.seo_profile ?? '')
+    assert(profile in SEO_PROFILES, `${pkg.site_id}: неизвестный профиль «${profile}»`)
+  }
+})
+
+await check('разделы-списки в пакете совпадают с профилем', () => {
+  // Манифест — первый источник истины. Если он расходится с кодом, оператор
+  // правит пакет и не получает ни эффекта, ни ошибки.
+  for (const pkg of packages) {
+    const profile = SEO_PROFILES[pkg.tenant!.seo_profile as keyof typeof SEO_PROFILES]!
+    const declared = [...(pkg.tenant?.owned_listings ?? [])].sort()
+    assertEqual(declared.join(','), [...profile.ownedListings].sort().join(','),
+      `${pkg.site_id}: разделы пакета и профиля разошлись`)
+  }
+})
+
+await check('посадочные страницы фильтров в пакете совпадают с профилем', () => {
+  for (const pkg of packages) {
+    const profile = SEO_PROFILES[pkg.tenant!.seo_profile as keyof typeof SEO_PROFILES]!
+    const declared = (pkg.seo?.indexable_facets_allowlist ?? []).map((item) => String(item.url)).sort()
+    assertEqual(declared.join(','), [...profile.indexableFacets].sort().join(','),
+      `${pkg.site_id}: список посадочных страниц пакета и профиля разошёлся`)
+  }
+})
+
+await check('тема пакета совпадает с темой арендатора и имеет компоновку', () => {
+  for (const pkg of packages) {
+    const theme = String(pkg.tenant?.theme ?? '')
+    assert(theme.length > 0, `${pkg.site_id}: тема не указана`)
   }
 })
 
