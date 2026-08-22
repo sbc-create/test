@@ -1,0 +1,32 @@
+{
+  "data": {
+    "items": [
+      {
+        "id": "fx-1",
+        "provider": "kp",
+        "names": {
+          "ru": "Фикстура один",
+          "en": "Fixture 1"
+        },
+        "kind": "series",
+        "releaseStatus": "ongoing",
+        "year": 2024,
+        "synopsis": "Синтетическое описание фикстуры 1.",
+        "updatedAt": "2026-08-01T00:00:00.000Z"
+      },
+      {
+        "id": "fx-2",
+        "provider": "kp",
+        "names": {
+          "ru": "Фикстура два",
+          "en": "Fixture 2"
+        },
+        "kind": "series",
+        "releaseStatus": "ongoing",
+        "year": 2024,
+        "synopsis": "Синтетическое описание фикстуры 2.",
+        "updatedAt": "2026-08-01T00:00:00.000Z"
+      }
+    ]
+  }
+}

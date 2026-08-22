@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///turbopack:///[project]/blueprints/payload-next-multisite/app/node_modules/@payloadcms/plugin-multi-tenant/dist/components/TenantSelector/index.scss"],"sourcesContent":[".tenant-selector {\n  width: 100%;\n  margin-bottom: 2rem;\n}\n"],"names":[],"mappings":"AAAA","ignoreList":[0]}}]
-}

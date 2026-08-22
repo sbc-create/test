@@ -1,0 +1,38 @@
+# Описание контракта Content API CDNVideoHub.
+#
+# Статус — not_provided. В переданном knowledge pack (раздел 9) сказано прямо:
+# точные endpoint, query parameters, pagination, rate limits и response fields
+# намеренно не приведены и должны быть взяты из официального документа провайдера
+# (docs/CDNVIDEOHUB-METADATA-CONTRACT.md и более свежих утверждённых материалов).
+# Этого документа в репозитории нет, поэтому поля ниже не заполняются: адаптер
+# отвечает BLOCKED_INPUT, а не подбирает адреса и имена полей самостоятельно.
+#
+# Чтобы включить синхронизацию, заполните разделы по официальному документу и
+# поставьте status: provided. Форма разделов:
+#
+#   status: provided
+#   source_document: <путь или ссылка на официальный документ>
+#   contract_version: <версия контракта>
+#   base_url: <база адресов>
+#   auth: { scheme: bearer|header, header: <имя заголовка>, tokenEnv: CDNVIDEOHUB_API_TOKEN }
+#   endpoints:
+#     titles: { path: <путь>, method: GET }
+#   pagination:
+#     style: page|cursor
+#     pageParam / sizeParam / size / cursorParam / cursorField
+#     completion: empty_page|short_page|cursor_absent    # условие завершения из документации
+#     itemsField: <путь до списка в ответе>
+#     maxPages: <предохранитель от бесконечного цикла>
+#   limits: { timeoutMs, maxRetries, backoffMs, cacheTtlMs }
+#   mapping:
+#     title: { playbackAggregator: <путь>, playbackTitleId: <путь>, primaryName: <путь>, ... }
+
+schema_version: 1
+status: not_provided
+source_document: docs/CDNVIDEOHUB-METADATA-CONTRACT.md
+provenance: SRC-CDNVIDEOHUB
+verified_against_official_docs: false
+note: >-
+  Документ провайдера не передан в репозиторий. Синхронизация каталога
+  заблокирована до его появления; плеерная часть контракта передана отдельно
+  и зафиксирована в PLAYER_CONTRACT.yaml.

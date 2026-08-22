@@ -128,6 +128,22 @@ export const Titles: CollectionConfig = {
     { name: 'year', type: 'number', label: 'Год выхода', min: 1900, max: 2100 },
     { name: 'factualSynopsis', type: 'textarea', label: 'Фактическое описание из источника',
       admin: { description: 'Факты из источника. Редакционный текст сайта пишется отдельно и не выдаётся за оригинальный.' } },
+    {
+      name: 'availability',
+      type: 'select',
+      required: true,
+      defaultValue: 'available',
+      label: 'Доступность материала',
+      options: [
+        { label: 'Доступен', value: 'available' },
+        { label: 'Временно недоступен', value: 'unavailable' },
+        { label: 'Снят с публикации', value: 'withdrawn' },
+      ],
+      admin: {
+        description:
+          'Исчезнувший из источника материал получает явное состояние. Подменять его другим тайтлом запрещено.',
+      },
+    },
     { name: 'genres', type: 'relationship', relationTo: 'genres', hasMany: true, label: 'Жанры' },
     { name: 'studios', type: 'relationship', relationTo: 'studios', hasMany: true, label: 'Студии' },
     { name: 'poster', type: 'upload', relationTo: 'catalog-media', label: 'Постер' },

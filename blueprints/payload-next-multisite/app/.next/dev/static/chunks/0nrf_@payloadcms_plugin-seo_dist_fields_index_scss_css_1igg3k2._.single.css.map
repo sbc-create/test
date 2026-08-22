@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///turbopack:///[project]/blueprints/payload-next-multisite/app/node_modules/@payloadcms/plugin-seo/dist/fields/index.scss"],"sourcesContent":["@layer payload-default {\n  .plugin-seo__field {\n    .field-label {\n      display: inline !important;\n    }\n  }\n}\n"],"names":[],"mappings":"AAAA;EAEI","ignoreList":[0]}}]
-}

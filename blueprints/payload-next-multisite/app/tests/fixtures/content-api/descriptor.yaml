@@ -1,0 +1,42 @@
+# ФИКСТУРА, а не контракт провайдера.
+#
+# Нужна, чтобы прогонять машинерию адаптера (пагинация, повторы, идемпотентность)
+# без сети и без выдуманного описания реального API. Значения здесь синтетические
+# и не должны попадать в knowledge/: официальный контракт заполняется отдельно.
+schema_version: 1
+status: provided
+source_document: tests/fixtures/content-api (стендовая фикстура)
+contract_version: fixture-1
+base_url: https://content-api.fixture.invalid/v1/
+auth:
+  scheme: bearer
+  header: Authorization
+  tokenEnv: CDNVIDEOHUB_API_TOKEN
+endpoints:
+  titles:
+    path: titles
+    method: GET
+pagination:
+  style: page
+  pageParam: page
+  sizeParam: limit
+  size: 2
+  completion: short_page
+  itemsField: data.items
+  maxPages: 10
+limits:
+  timeoutMs: 1000
+  maxRetries: 2
+  backoffMs: 1
+  cacheTtlMs: 0
+mapping:
+  title:
+    playbackAggregator: provider
+    playbackTitleId: id
+    primaryName: names.ru
+    englishName: names.en
+    kind: kind
+    status: releaseStatus
+    year: year
+    factualSynopsis: synopsis
+    sourceUpdatedAt: updatedAt

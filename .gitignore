@@ -33,3 +33,6 @@ artifacts/*
 artifacts/evidence/*.png
 tsconfig.tsbuildinfo
 **/tsconfig.tsbuildinfo
+# Сборочный кэш Next: runtime-вывод, а не исходники
+.next/
+**/.next/
