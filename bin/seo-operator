@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Operator entry point. Uses the repository virtualenv when present.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+PY="${PY:-.venv/bin/python}"
+[ -x "$PY" ] || PY="$(command -v python3)"
+exec "$PY" -m seo_operator.cli "$@"

@@ -1,0 +1,1 @@
+{"version":1,"note":"valid fixture","sites":[{"site_id":"site-a","name":"Сайт А","base_url":"https://a.example-fixture.test","risk_tier":"low","tone_of_voice":"нейтральный","rubrics":["Новинки"],"editorial_account":"Редакция сайта","moderation_enabled":true,"synthetic":true}]}

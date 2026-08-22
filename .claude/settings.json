@@ -51,7 +51,17 @@
       "Edit(.claude/**)",
       "Edit(inventory/ssh-hosts.yaml)",
       "Edit(inventory/dns-zones.yaml)",
-      "Edit(inventory/dle-licenses.yaml)"
+      "Edit(inventory/dle-licenses.yaml)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(rm -rf /:*)",
+      "Bash(dropdb:*)",
+      "Bash(terraform destroy:*)",
+      "Bash(aws s3 rb:*)",
+      "Bash(chmod 777:*)",
+      "Read(./.env)",
+      "Read(./**/*.pem)",
+      "Read(./**/credentials)"
     ],
     "ask": [
       "Bash(git push *)",
@@ -75,7 +85,39 @@
       "Bash(git diff *)",
       "Bash(git log *)",
       "Bash(php -l *)",
-      "WebFetch(domain:code.claude.com)"
+      "WebFetch(domain:code.claude.com)",
+      "Glob",
+      "Grep",
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git show:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git branch:*)",
+      "Bash(git checkout:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(git ls-files:*)",
+      "Bash(git fetch:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(wc:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(jq:*)",
+      "Bash(sort:*)",
+      "Bash(diff:*)",
+      "Bash(.venv/bin/python:*)",
+      "Bash(.venv/bin/pytest:*)",
+      "Bash(.venv/bin/ruff:*)",
+      "Bash(./scripts/verify.sh:*)",
+      "Bash(./scripts/record-evidence.sh:*)",
+      "Bash(./scripts/build-bundle.sh:*)",
+      "Bash(./bin/seo-operator:*)",
+      "Bash(mkdir:*)",
+      "Bash(touch:*)"
     ]
   },
   "hooks": {
@@ -99,6 +141,15 @@
             "command": "python3 ${CLAUDE_PROJECT_DIR}/.claude/hooks/guard_write.py",
             "timeout": 20,
             "statusMessage": "factory guard: проверка записи"
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/pretooluse-guard.sh"
           }
         ]
       }

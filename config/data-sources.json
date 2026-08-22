@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "note": "Состояние на 2026-08-22, установлено пробами из этой сессии. Здесь хранятся ТОЛЬКО имена переменных окружения, никогда значения. Поле status обновляется командой ./bin/seo-operator probe.",
+  "sources": [
+    {
+      "name": "google_search_console",
+      "kind": "search_analytics",
+      "status": "missing_credentials",
+      "required_env": ["GSC_SERVICE_ACCOUNT_JSON", "GSC_PROPERTY_MAP"],
+      "endpoint": "https://searchconsole.googleapis.com",
+      "metrics": ["impressions", "clicks", "ctr", "position"],
+      "blocker": "Не выдан сервисный аккаунт и карта property. Сеть до endpoint открыта."
+    },
+    {
+      "name": "yandex_webmaster",
+      "kind": "search_analytics",
+      "status": "network_blocked",
+      "required_env": ["YANDEX_WEBMASTER_TOKEN", "YANDEX_WEBMASTER_USER_ID"],
+      "endpoint": "https://api.webmaster.yandex.net",
+      "metrics": ["impressions", "clicks", "ctr", "position", "indexing"],
+      "blocker": "Нет токена И домен заблокирован сетевой политикой окружения (CONNECT tunnel failed, 403). Требуются оба исправления."
+    },
+    {
+      "name": "yandex_metrika",
+      "kind": "analytics",
+      "status": "network_blocked",
+      "required_env": ["YANDEX_METRIKA_TOKEN", "YANDEX_METRIKA_COUNTER_MAP"],
+      "endpoint": "https://api-metrika.yandex.net",
+      "metrics": ["sessions", "depth", "returning", "watch_starts"],
+      "blocker": "Нет токена И домен заблокирован сетевой политикой окружения."
+    },
+    {
+      "name": "cms",
+      "kind": "content",
+      "status": "missing_credentials",
+      "required_env": ["CMS_BASE_URL", "CMS_API_TOKEN"],
+      "metrics": ["entities", "editorial_fields", "publication_state"],
+      "blocker": "CMS не назван и не передан. Контракт записи в CMS неизвестен."
+    },
+    {
+      "name": "server_logs",
+      "kind": "crawl",
+      "status": "missing_credentials",
+      "required_env": ["SERVER_LOG_PATH"],
+      "metrics": ["crawl_hits", "bot_status_codes", "crawl_budget"],
+      "blocker": "Нет доступа к серверу и путям журналов."
+    },
+    {
+      "name": "monitoring",
+      "kind": "availability",
+      "status": "missing_credentials",
+      "required_env": ["MONITORING_API_URL", "MONITORING_API_TOKEN"],
+      "metrics": ["uptime", "player_availability"],
+      "blocker": "Система мониторинга не названа."
+    }
+  ]
+}

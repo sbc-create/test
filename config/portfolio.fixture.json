@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "note": "СИНТЕТИЧЕСКИЙ тенант. Существует только для dry-run, тестов и демонстрации canary/rollback. Домен example-fixture.test зарезервирован под тесты и никуда не резолвится. Каждый сайт помечен synthetic:true - конвейер обязан отказаться публиковать что-либо на synthetic-сайт в режиме production.",
+  "sites": [
+    {
+      "site_id": "fixture-anime",
+      "name": "Fixture: аниме-каталог",
+      "base_url": "https://anime.example-fixture.test",
+      "risk_tier": "low",
+      "tone_of_voice": "Сдержанный, фактологичный; без превосходных степеней и обещаний.",
+      "rubrics": ["Новинки", "Онгоинги", "Скоро", "Подборки", "Сезоны"],
+      "editorial_account": "AI-ассистент редакции",
+      "moderation_enabled": true,
+      "synthetic": true
+    },
+    {
+      "site_id": "fixture-serials",
+      "name": "Fixture: сериалы",
+      "base_url": "https://serials.example-fixture.test",
+      "risk_tier": "medium",
+      "tone_of_voice": "Разговорный, но без фамильярности; акцент на сезонах и расписании.",
+      "rubrics": ["Премьеры", "Скоро", "Популярное", "Watch order"],
+      "editorial_account": "Редакция сайта",
+      "moderation_enabled": false,
+      "synthetic": true
+    }
+  ]
+}

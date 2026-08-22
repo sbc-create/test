@@ -65,6 +65,13 @@ check_fixtures() {
   return 0
 }
 
+# 3b. Registries in config/ validate against their schemas.
+check_registries() { "$PY" scripts/validate_registries.py; }
+
+# 3c. The operator's own guardrails must hold. This stage exists separately from
+# the test suite so a guardrail regression is visible as its own failed stage.
+check_guardrails() { "$PY" -m pytest tests/operator/test_guardrails.py tests/operator/test_hookguard.py -q; }
+
 check_lint() { [ -n "$RUFF" ] && "$RUFF" check . && "$RUFF" format --check .; }
 
 check_tests() { "$PY" -m pytest tests/ -q; }
@@ -96,6 +103,8 @@ echo
 run_stage "JSON parses"            check_json_parses
 run_stage "Schemas compile"        check_schemas
 run_stage "Fixtures validate"      check_fixtures
+run_stage "Registries validate"    check_registries
+run_stage "Guardrails hold"        check_guardrails
 run_stage "Workflows parse"        check_workflows
 run_stage "Lint (ruff)"            check_lint
 run_stage "Tests (pytest)"         check_tests

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sbc-create/test/schemas/editorial-sources.schema.json",
+  "title": "Editorial Source Registry",
+  "description": "Approved sources for factual claims. A claim may only be published if its source is listed here with a publishable trust level and confirmed rights.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "sources"],
+  "properties": {
+    "version": {"type": "integer", "minimum": 1},
+    "note": {"type": "string"},
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_id", "name", "url", "trust", "rights_confirmed"],
+        "properties": {
+          "source_id": {"type": "string", "pattern": "^src-[a-z0-9-]+$"},
+          "name": {"type": "string", "minLength": 1},
+          "url": {"type": "string", "format": "uri"},
+          "trust": {
+            "type": "string",
+            "enum": ["official", "licensed_feed", "press_confirmed", "unconfirmed"]
+          },
+          "rights_confirmed": {"type": "boolean"},
+          "scope": {"type": "string"},
+          "synthetic": {"type": "boolean"}
+        }
+      }
+    }
+  }
+}

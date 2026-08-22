@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "note": "Реестр экспериментов. Ведётся оператором автоматически; завершённые эксперименты питают learning playbook. На реальных данных экспериментов не проводилось - источников нет. Ниже записан один демонстрационный прогон на синтетическом тенанте.",
+  "experiments": [
+    {
+      "experiment_id": "exp-demo-canary",
+      "synthetic": true,
+      "site_id": "fixture-anime",
+      "hypothesis": "Сокращение переполненных title до 60 символов повысит CTR карточек",
+      "primary_metric": "ctr",
+      "applicability": "Карточки произведений с title > 60 символов на одном сайте",
+      "scope_page_share": 0.02,
+      "phase": "rolled_back",
+      "observation": {
+        "days_elapsed": 15,
+        "impressions": 5200,
+        "primary_metric_delta": -0.084
+      },
+      "verdict": "rollback",
+      "verdict_reason": "ухудшение -8.4% хуже порога -3%",
+      "evidence": "docs/seo-operator/demo-canary-rollback.md"
+    }
+  ]
+}

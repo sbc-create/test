@@ -45,3 +45,6 @@ blueprints/payload-next-multisite/app/.releases/
 .ruff_cache/
 # Build output
 dist/
+
+# Operator runtime state (audit logs, checkpoints, locks, queues)
+var/
