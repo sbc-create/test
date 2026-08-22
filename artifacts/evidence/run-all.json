@@ -12,7 +12,7 @@
       "command": "python3 -m factory selfcheck",
       "exit_code": "0",
       "status": "PASS",
-      "note": "0s"
+      "note": "1s"
     },
     {
       "check": "static-python",
@@ -33,21 +33,21 @@
       "command": "for f in tools/*.js themes/*/assets/*.js tests/e2e/*.js tests/e2e-multisite/*.js playwright.config.js playwright.multisite.config.js; do node --check \"$f\" || exit 1; done",
       "exit_code": "0",
       "status": "PASS",
-      "note": "1s"
+      "note": "0s"
     },
     {
       "check": "static-yaml",
       "command": "python3 tests/tools/check_yaml.py",
       "exit_code": "0",
       "status": "PASS",
-      "note": "0s"
+      "note": "1s"
     },
     {
       "check": "unit-tests",
       "command": "python3 -m pytest tests/unit tests/test_traceability.py -q -m 'not slow'",
       "exit_code": "0",
       "status": "PASS",
-      "note": "6s"
+      "note": "5s"
     },
     {
       "check": "validate-pilot",
@@ -61,7 +61,7 @@
       "command": "python3 -m factory plan --site pilot-local > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "0s"
+      "note": "1s"
     },
     {
       "check": "build-pilot",
@@ -89,7 +89,7 @@
       "command": "python3 -m factory seo-lint --site pilot-local > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "0s"
+      "note": "1s"
     },
     {
       "check": "blueprint-profile-gate",
@@ -159,7 +159,7 @@
       "command": "(cd blueprints/payload-next-multisite/app && npx tsc --noEmit -p tsconfig.json)",
       "exit_code": "0",
       "status": "PASS",
-      "note": "1s"
+      "note": "2s"
     },
     {
       "check": "payload-seo-matrix",
@@ -173,70 +173,70 @@
       "command": "blueprints/payload-next-multisite/app/node_modules/.bin/tsx blueprints/payload-next-multisite/app/tests/player-contract.ts",
       "exit_code": "0",
       "status": "PASS",
-      "note": "1s"
+      "note": "0s"
     },
     {
       "check": "payload-comments",
       "command": "blueprints/payload-next-multisite/app/node_modules/.bin/tsx blueprints/payload-next-multisite/app/tests/comments-policy.ts",
       "exit_code": "0",
       "status": "PASS",
-      "note": "0s"
+      "note": "1s"
     },
     {
       "check": "payload-isolation",
       "command": "python3 tests/tools/with_app_env.py --scope anime --push -- blueprints/payload-next-multisite/app/node_modules/.bin/tsx blueprints/payload-next-multisite/app/tests/tenant-isolation.ts",
-      "exit_code": "1",
-      "status": "FAIL",
-      "note": "4s"
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "5s"
     },
     {
       "check": "payload-content-api",
       "command": "python3 tests/tools/with_app_env.py --scope anime --push -- blueprints/payload-next-multisite/app/node_modules/.bin/tsx blueprints/payload-next-multisite/app/tests/content-api.ts",
       "exit_code": "1",
       "status": "FAIL",
-      "note": "3s"
+      "note": "4s"
     },
     {
       "check": "payload-mutation",
       "command": "python3 tests/tools/mutation_isolation.py",
       "exit_code": "1",
       "status": "FAIL",
-      "note": "3s"
+      "note": "362s"
     },
     {
       "check": "payload-admin-smoke",
       "command": "python3 tests/tools/admin_smoke.py",
       "exit_code": "0",
       "status": "PASS",
-      "note": "8s"
+      "note": "9s"
     },
     {
       "check": "payload-frontend",
       "command": "python3 tests/tools/frontend_http.py",
-      "exit_code": "1",
-      "status": "FAIL",
-      "note": "4s"
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "79s"
     },
     {
       "check": "payload-cross-site",
       "command": "python3 tests/tools/cross_site_uniqueness.py",
       "exit_code": "1",
       "status": "FAIL",
-      "note": "3s"
+      "note": "54s"
     },
     {
       "check": "payload-restore",
       "command": "python3 tests/tools/restore_proof.py",
-      "exit_code": "1",
-      "status": "FAIL",
-      "note": "3s"
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "12s"
     },
     {
       "check": "payload-browser",
       "command": "python3 tests/tools/browser_multisite.py",
       "exit_code": "1",
       "status": "FAIL",
-      "note": "3s"
+      "note": "108s"
     },
     {
       "check": "reference-audit",
@@ -246,7 +246,7 @@
       "note": "измерение amd.online недоступно из этой среды (статус: unknown)"
     }
   ],
-  "passed": 24,
-  "failed": 7,
+  "passed": 27,
+  "failed": 4,
   "skipped": 4
 }

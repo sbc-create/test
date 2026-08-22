@@ -13,120 +13,120 @@
       "route": "home",
       "path": "/",
       "transferKb": 486,
-      "lcpMs": 936,
+      "lcpMs": 1004,
       "cls": 0,
       "domNodes": 156,
-      "domContentLoadedMs": 879
+      "domContentLoadedMs": 1033
     },
     {
       "site": "a",
       "route": "catalog",
       "path": "/catalog/",
       "transferKb": 483,
-      "lcpMs": 220,
+      "lcpMs": 200,
       "cls": 0,
       "domNodes": 120,
-      "domContentLoadedMs": 175
+      "domContentLoadedMs": 183
     },
     {
       "site": "a",
       "route": "title",
       "path": "/catalog/stand-title-1/",
-      "transferKb": 488,
-      "lcpMs": 240,
+      "transferKb": 489,
+      "lcpMs": 280,
       "cls": 0,
       "domNodes": 109,
-      "domContentLoadedMs": 193
+      "domContentLoadedMs": 255
     },
     {
       "site": "a",
       "route": "episode",
       "path": "/catalog/stand-title-1/season-1/episode-1/",
-      "transferKb": 488,
-      "lcpMs": 316,
+      "transferKb": 491,
+      "lcpMs": 312,
       "cls": 0,
       "domNodes": 105,
-      "domContentLoadedMs": 283
+      "domContentLoadedMs": 243
     },
     {
       "site": "b",
+      "route": "home",
+      "path": "/",
+      "transferKb": 489,
+      "lcpMs": 316,
+      "cls": 0,
+      "domNodes": 118,
+      "domContentLoadedMs": 220
+    },
+    {
+      "site": "b",
+      "route": "catalog",
+      "path": "/catalog/",
+      "transferKb": 483,
+      "lcpMs": 244,
+      "cls": 0,
+      "domNodes": 118,
+      "domContentLoadedMs": 273
+    },
+    {
+      "site": "b",
+      "route": "title",
+      "path": "/catalog/stand-title-1/",
+      "transferKb": 491,
+      "lcpMs": 244,
+      "cls": 0,
+      "domNodes": 109,
+      "domContentLoadedMs": 228
+    },
+    {
+      "site": "b",
+      "route": "episode",
+      "path": "/catalog/stand-title-1/season-1/episode-1/",
+      "transferKb": 488,
+      "lcpMs": 244,
+      "cls": 0,
+      "domNodes": 103,
+      "domContentLoadedMs": 195
+    },
+    {
+      "site": "c",
       "route": "home",
       "path": "/",
       "transferKb": 482,
-      "lcpMs": 256,
-      "cls": 0,
-      "domNodes": 118,
-      "domContentLoadedMs": 293
-    },
-    {
-      "site": "b",
-      "route": "catalog",
-      "path": "/catalog/",
-      "transferKb": 488,
-      "lcpMs": 228,
-      "cls": 0,
-      "domNodes": 118,
-      "domContentLoadedMs": 179
-    },
-    {
-      "site": "b",
-      "route": "title",
-      "path": "/catalog/stand-title-1/",
-      "transferKb": 488,
-      "lcpMs": 220,
-      "cls": 0,
-      "domNodes": 109,
-      "domContentLoadedMs": 172
-    },
-    {
-      "site": "b",
-      "route": "episode",
-      "path": "/catalog/stand-title-1/season-1/episode-1/",
-      "transferKb": 488,
-      "lcpMs": 272,
-      "cls": 0,
-      "domNodes": 105,
-      "domContentLoadedMs": 307
-    },
-    {
-      "site": "c",
-      "route": "home",
-      "path": "/",
-      "transferKb": 479,
-      "lcpMs": 272,
+      "lcpMs": 264,
       "cls": 0,
       "domNodes": 104,
-      "domContentLoadedMs": 180
+      "domContentLoadedMs": 280
     },
     {
       "site": "c",
       "route": "catalog",
       "path": "/catalog/",
-      "transferKb": 481,
-      "lcpMs": 232,
+      "transferKb": 482,
+      "lcpMs": 204,
       "cls": 0,
       "domNodes": 118,
-      "domContentLoadedMs": 199
+      "domContentLoadedMs": 139
     },
     {
       "site": "c",
       "route": "title",
       "path": "/catalog/stand-title-1/",
-      "transferKb": 490,
-      "lcpMs": 324,
+      "transferKb": 492,
+      "lcpMs": 260,
       "cls": 0,
-      "domNodes": 109,
-      "domContentLoadedMs": 344
+      "domNodes": 113,
+      "domContentLoadedMs": 187
     },
     {
       "site": "c",
       "route": "episode",
       "path": "/catalog/stand-title-1/season-1/episode-1/",
-      "transferKb": 489,
-      "lcpMs": 300,
+      "transferKb": 490,
+      "lcpMs": 264,
       "cls": 0,
       "domNodes": 103,
-      "domContentLoadedMs": 326
+      "domContentLoadedMs": 184
     }
   ]
 }

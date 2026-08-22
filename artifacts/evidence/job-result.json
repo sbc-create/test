@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
-  "job_id": "pilot-local-create-20260822T084826Z-65864f",
+  "job_id": "pilot-local-create-20260822T091751Z-9e5748",
   "site_id": "pilot-local",
   "environment": "staging",
   "requested_action": "create",
   "status": "DONE",
   "blockers": [],
-  "started_at": "2026-08-22T08:48:26Z",
-  "finished_at": "2026-08-22T08:50:02Z",
-  "factory_commit": "54126bdcc8f25e8b7d05cf8a449d0fbcc7bccb91",
-  "knowledge_freeze_version": "2026-08-22.3",
+  "started_at": "2026-08-22T09:17:51Z",
+  "finished_at": "2026-08-22T09:19:26Z",
+  "factory_commit": "4fba902cfa0c159a9070039ff03b9d5f4e7e7b1e",
+  "knowledge_freeze_version": "2026-08-22.4",
   "build_id": "b6739e21eb6cbd15",
   "release_id": "b6739e21eb6cbd15",
   "previous_release_id": "b6739e21eb6cbd15",
@@ -17,17 +17,17 @@
     {
       "id": "knowledge_freeze",
       "status": "ok",
-      "started_at": "2026-08-22T08:48:26Z",
-      "finished_at": "2026-08-22T08:48:26Z",
+      "started_at": "2026-08-22T09:17:51Z",
+      "finished_at": "2026-08-22T09:17:51Z",
       "exit_code": 0,
-      "detail": "freeze 2026-08-22.3 цел",
+      "detail": "freeze 2026-08-22.4 цел",
       "mutation": false
     },
     {
       "id": "validate",
       "status": "ok",
-      "started_at": "2026-08-22T08:48:26Z",
-      "finished_at": "2026-08-22T08:48:26Z",
+      "started_at": "2026-08-22T09:17:51Z",
+      "finished_at": "2026-08-22T09:17:51Z",
       "exit_code": 0,
       "detail": "Пакет прошёл схему и семантику",
       "mutation": false
@@ -35,8 +35,8 @@
     {
       "id": "build",
       "status": "ok",
-      "started_at": "2026-08-22T08:48:26Z",
-      "finished_at": "2026-08-22T08:48:26Z",
+      "started_at": "2026-08-22T09:17:51Z",
+      "finished_at": "2026-08-22T09:17:51Z",
       "exit_code": 0,
       "detail": "build_id=b6739e21eb6cbd15, маршрутов 48",
       "mutation": false
@@ -44,8 +44,8 @@
     {
       "id": "prepare_dirs",
       "status": "ok",
-      "started_at": "2026-08-22T08:48:26Z",
-      "finished_at": "2026-08-22T08:48:26Z",
+      "started_at": "2026-08-22T09:17:51Z",
+      "finished_at": "2026-08-22T09:17:51Z",
       "exit_code": 0,
       "detail": "Каталоги цели готовы: /home/user/test/var/targets/local-disposable/pilot-local",
       "mutation": false
@@ -53,17 +53,17 @@
     {
       "id": "backup",
       "status": "ok",
-      "started_at": "2026-08-22T08:48:26Z",
-      "finished_at": "2026-08-22T08:48:26Z",
+      "started_at": "2026-08-22T09:17:51Z",
+      "finished_at": "2026-08-22T09:17:51Z",
       "exit_code": 0,
-      "detail": "Бэкап изменяемых данных: var/backups/pilot-local-staging-20260822T084826Z.tar.gz",
+      "detail": "Бэкап изменяемых данных: var/backups/pilot-local-staging-20260822T091751Z.tar.gz",
       "mutation": false
     },
     {
       "id": "upload_release",
       "status": "ok",
-      "started_at": "2026-08-22T08:48:26Z",
-      "finished_at": "2026-08-22T08:48:26Z",
+      "started_at": "2026-08-22T09:17:51Z",
+      "finished_at": "2026-08-22T09:17:51Z",
       "exit_code": 0,
       "detail": "Релиз b6739e21eb6cbd15 уже присутствует — повторная выгрузка не выполнялась",
       "mutation": true
@@ -71,8 +71,8 @@
     {
       "id": "health_check",
       "status": "ok",
-      "started_at": "2026-08-22T08:48:26Z",
-      "finished_at": "2026-08-22T08:48:26Z",
+      "started_at": "2026-08-22T09:17:51Z",
+      "finished_at": "2026-08-22T09:17:51Z",
       "exit_code": 0,
       "detail": "Проверка кандидата на отдельном порту 8081: HTTP 200, 2048 байт",
       "mutation": false
@@ -80,8 +80,8 @@
     {
       "id": "switch_current",
       "status": "ok",
-      "started_at": "2026-08-22T08:48:26Z",
-      "finished_at": "2026-08-22T08:48:26Z",
+      "started_at": "2026-08-22T09:17:51Z",
+      "finished_at": "2026-08-22T09:17:51Z",
       "exit_code": 0,
       "detail": "current уже указывает на b6739e21eb6cbd15",
       "mutation": true
@@ -89,8 +89,8 @@
     {
       "id": "start_server",
       "status": "ok",
-      "started_at": "2026-08-22T08:48:27Z",
-      "finished_at": "2026-08-22T08:48:27Z",
+      "started_at": "2026-08-22T09:17:51Z",
+      "finished_at": "2026-08-22T09:17:51Z",
       "exit_code": 0,
       "detail": "PHP-сервер обслуживает current на 127.0.0.1:8082",
       "mutation": true
@@ -98,8 +98,8 @@
     {
       "id": "post_switch_health",
       "status": "ok",
-      "started_at": "2026-08-22T08:48:27Z",
-      "finished_at": "2026-08-22T08:48:27Z",
+      "started_at": "2026-08-22T09:17:51Z",
+      "finished_at": "2026-08-22T09:17:51Z",
       "exit_code": 0,
       "detail": "Проверка после переключения: HTTP 200, 2048 байт",
       "mutation": false
@@ -107,8 +107,8 @@
     {
       "id": "prune_releases",
       "status": "ok",
-      "started_at": "2026-08-22T08:48:27Z",
-      "finished_at": "2026-08-22T08:48:27Z",
+      "started_at": "2026-08-22T09:17:51Z",
+      "finished_at": "2026-08-22T09:17:51Z",
       "exit_code": 0,
       "detail": "Удалено устаревших релизов: 0; хранится 3 плюс защищённые (текущий и предыдущий)",
       "mutation": false
@@ -116,8 +116,8 @@
     {
       "id": "restore_test",
       "status": "ok",
-      "started_at": "2026-08-22T08:48:27Z",
-      "finished_at": "2026-08-22T08:48:27Z",
+      "started_at": "2026-08-22T09:17:51Z",
+      "finished_at": "2026-08-22T09:17:51Z",
       "exit_code": 0,
       "detail": "Восстановление бэкапа в /home/user/test/var/restore-probe/pilot-local-b6739e21eb6cbd15: подтверждено",
       "mutation": false
@@ -131,7 +131,7 @@
       "passed": true,
       "artifact": "var/restore-probe/pilot-local-b6739e21eb6cbd15",
       "counts": {
-        "archive": "var/backups/pilot-local-staging-20260822T084826Z.tar.gz"
+        "archive": "var/backups/pilot-local-staging-20260822T091751Z.tar.gz"
       },
       "severity": "critical"
     },
@@ -140,7 +140,7 @@
       "command": "python3 -m factory seo-lint --site pilot-local",
       "exit_code": 0,
       "passed": true,
-      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260822T084826Z-65864f/seo-lint.json",
+      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260822T091751Z-9e5748/seo-lint.json",
       "counts": {
         "sitemap_urls": 45,
         "routes": 48,
@@ -156,7 +156,7 @@
       "command": "python3 -m factory seo-crawl --site pilot-local --base http://127.0.0.1:8082",
       "exit_code": 0,
       "passed": true,
-      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260822T084826Z-65864f/seo-crawl.json",
+      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260822T091751Z-9e5748/seo-crawl.json",
       "counts": {
         "fetched": 45,
         "unique_urls": 45,
@@ -171,7 +171,7 @@
       "command": "node tools/browser-audit.js --base http://127.0.0.1:8082",
       "exit_code": 0,
       "passed": true,
-      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260822T084826Z-65864f/seo-render.json",
+      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260822T091751Z-9e5748/seo-render.json",
       "counts": {
         "status": "ok",
         "exit_code": 0,
@@ -184,7 +184,7 @@
         ],
         "pages": 14,
         "screenshots": 15,
-        "lab_lcp_ms_max": 192,
+        "lab_lcp_ms_max": 184,
         "lab_cls_max": 0,
         "lab_transfer_bytes_max": 11382,
         "progressive_enhancement": {
@@ -203,7 +203,7 @@
       "command": "python3 -m factory verify --site pilot-local (security)",
       "exit_code": 0,
       "passed": true,
-      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260822T084826Z-65864f/security-smoke.json",
+      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260822T091751Z-9e5748/security-smoke.json",
       "counts": {
         "checked_paths": 8,
         "root_status": 200
@@ -215,7 +215,7 @@
       "command": "python3 -m factory verify --site pilot-local (acceptance)",
       "exit_code": 0,
       "passed": true,
-      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260822T084826Z-65864f/acceptance-routes.json",
+      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260822T091751Z-9e5748/acceptance-routes.json",
       "counts": {
         "routes": 11
       },
@@ -226,7 +226,7 @@
       "command": "python3 -m factory verify --site pilot-local (major budget)",
       "exit_code": 0,
       "passed": true,
-      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260822T084826Z-65864f/major-findings-budget.json",
+      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260822T091751Z-9e5748/major-findings-budget.json",
       "counts": {
         "status": "ok",
         "major": 20,
@@ -239,10 +239,10 @@
       "command": "python3 -m factory verify --site pilot-local (performance)",
       "exit_code": 0,
       "passed": true,
-      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260822T084826Z-65864f/performance-budget.json",
+      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260822T091751Z-9e5748/performance-budget.json",
       "counts": {
         "status": "ok",
-        "lab_lcp_ms_max": 192,
+        "lab_lcp_ms_max": 184,
         "lab_cls_max": 0,
         "lab_transfer_bytes_max": 11382,
         "budgets": {
@@ -262,43 +262,43 @@
   ],
   "artifacts": [
     "artifacts/build/pilot-local/b6739e21eb6cbd15/report.json",
-    "artifacts/qa/pilot-local/pilot-local-create-20260822T084826Z-65864f/seo-lint.json",
-    "artifacts/qa/pilot-local/pilot-local-create-20260822T084826Z-65864f/seo-crawl.json",
-    "artifacts/qa/pilot-local/pilot-local-create-20260822T084826Z-65864f/seo-render.json",
-    "artifacts/qa/pilot-local/pilot-local-create-20260822T084826Z-65864f/security-smoke.json",
-    "artifacts/qa/pilot-local/pilot-local-create-20260822T084826Z-65864f/acceptance-routes.json",
-    "artifacts/qa/pilot-local/pilot-local-create-20260822T084826Z-65864f/major-findings-budget.json",
-    "artifacts/qa/pilot-local/pilot-local-create-20260822T084826Z-65864f/performance-budget.json",
-    "artifacts/seo/pilot-local/pilot-local-create-20260822T084826Z-65864f/seo-report.json"
+    "artifacts/qa/pilot-local/pilot-local-create-20260822T091751Z-9e5748/seo-lint.json",
+    "artifacts/qa/pilot-local/pilot-local-create-20260822T091751Z-9e5748/seo-crawl.json",
+    "artifacts/qa/pilot-local/pilot-local-create-20260822T091751Z-9e5748/seo-render.json",
+    "artifacts/qa/pilot-local/pilot-local-create-20260822T091751Z-9e5748/security-smoke.json",
+    "artifacts/qa/pilot-local/pilot-local-create-20260822T091751Z-9e5748/acceptance-routes.json",
+    "artifacts/qa/pilot-local/pilot-local-create-20260822T091751Z-9e5748/major-findings-budget.json",
+    "artifacts/qa/pilot-local/pilot-local-create-20260822T091751Z-9e5748/performance-budget.json",
+    "artifacts/seo/pilot-local/pilot-local-create-20260822T091751Z-9e5748/seo-report.json"
   ],
   "mutations": [
     {
       "target": "/home/user/test/var/targets/local-disposable/pilot-local",
       "kind": "filesystem",
       "detail": "Релиз b6739e21eb6cbd15 уже присутствует — повторная выгрузка не выполнялась",
-      "at": "2026-08-22T08:48:26Z",
+      "at": "2026-08-22T09:17:51Z",
       "idempotent_noop": true
     },
     {
       "target": "/home/user/test/var/targets/local-disposable/pilot-local",
       "kind": "filesystem",
       "detail": "current уже указывает на b6739e21eb6cbd15",
-      "at": "2026-08-22T08:48:26Z",
+      "at": "2026-08-22T09:17:51Z",
       "idempotent_noop": true
     },
     {
       "target": "/home/user/test/var/targets/local-disposable/pilot-local",
       "kind": "filesystem",
       "detail": "PHP-сервер обслуживает current на 127.0.0.1:8082",
-      "at": "2026-08-22T08:48:27Z",
+      "at": "2026-08-22T09:17:51Z",
       "idempotent_noop": false
     }
   ],
   "backup": {
     "taken": true,
-    "ref": "var/backups/pilot-local-staging-20260822T084826Z.tar.gz",
+    "ref": "var/backups/pilot-local-staging-20260822T091751Z.tar.gz",
     "restore_verified": true,
-    "verified_at": "2026-08-22T08:48:27Z"
+    "verified_at": "2026-08-22T09:17:51Z"
   },
   "seo_summary": {
     "pages_total": 48,

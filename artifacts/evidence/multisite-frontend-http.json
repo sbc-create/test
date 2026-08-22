@@ -391,19 +391,14 @@
       "detail": "утекло: []"
     },
     {
-      "name": "[b] /catalog/stand-title-1/season-1/episode-1/ индексируется",
+      "name": "[b] /catalog/stand-title-1/season-1/episode-1/ закрыт от индексации профилем",
       "ok": true,
-      "detail": "robots=index,follow"
+      "detail": "robots=noindex,follow"
     },
     {
-      "name": "[b] /catalog/stand-title-1/season-1/episode-1/ имеет абсолютный self-canonical",
+      "name": "[b] /catalog/stand-title-1/season-1/episode-1/ без canonical, раз он noindex",
       "ok": true,
-      "detail": "canonical=https://site-b.localhost/catalog/stand-title-1/season-1/episode-1/"
-    },
-    {
-      "name": "[b] /catalog/stand-title-1/season-1/episode-1/ отдаётся без редиректа",
-      "ok": true,
-      "detail": "прямой запрос вернул 200"
+      "detail": "canonical="
     },
     {
       "name": "[b] /collections/stand-collection-b/ отвечает 200",
@@ -938,7 +933,7 @@
     {
       "name": "состав sitemap у трёх сайтов различается",
       "ok": true,
-      "detail": "размеры: [56, 46, 15]"
+      "detail": "размеры: [56, 14, 15]"
     },
     {
       "name": "[c] эпизоды не попадают в sitemap редакционного сайта",
@@ -1049,117 +1044,117 @@
   "responses": {
     "a/": {
       "status": 200,
-      "length": 35948
+      "length": 35954
     },
     "a/catalog/": {
       "status": 200,
-      "length": 31061
+      "length": 31062
     },
     "a/catalog/stand-title-1/": {
       "status": 200,
-      "length": 29831
+      "length": 29846
     },
     "a/catalog/stand-title-1/season-1/": {
       "status": 200,
-      "length": 27126
+      "length": 29464
     },
     "a/catalog/stand-title-1/season-1/episode-1/": {
       "status": 200,
-      "length": 30814
+      "length": 31164
     },
     "a/collections/stand-collection-a/": {
       "status": 200,
-      "length": 30622
+      "length": 30767
     },
     "a/news/": {
       "status": 200,
-      "length": 24941
+      "length": 25406
     },
     "a/legal/rights/": {
       "status": 200,
-      "length": 26917
+      "length": 26918
     },
     "a/schedule/": {
       "status": 200,
-      "length": 26902
+      "length": 26903
     },
     "b/": {
       "status": 200,
-      "length": 29308
+      "length": 29503
     },
     "b/catalog/": {
       "status": 200,
-      "length": 30759
+      "length": 30760
     },
     "b/catalog/stand-title-1/": {
       "status": 200,
-      "length": 29461
+      "length": 29462
     },
     "b/catalog/stand-title-1/season-1/": {
       "status": 200,
-      "length": 27921
+      "length": 27926
     },
     "b/catalog/stand-title-1/season-1/episode-1/": {
       "status": 200,
-      "length": 30862
+      "length": 30590
     },
     "b/collections/stand-collection-b/": {
       "status": 200,
-      "length": 28821
+      "length": 28866
     },
     "b/news/": {
       "status": 200,
-      "length": 24935
+      "length": 25214
     },
     "b/legal/rights/": {
       "status": 200,
-      "length": 26777
+      "length": 25711
     },
     "b/schedule/": {
       "status": 200,
-      "length": 27226
+      "length": 27227
     },
     "c/": {
       "status": 200,
-      "length": 26785
+      "length": 27042
     },
     "c/catalog/": {
       "status": 200,
-      "length": 30493
+      "length": 30494
     },
     "c/catalog/stand-title-1/": {
       "status": 200,
-      "length": 29313
+      "length": 29472
     },
     "c/catalog/stand-title-1/season-1/": {
       "status": 200,
-      "length": 26522
+      "length": 26514
     },
     "c/catalog/stand-title-1/season-1/episode-1/": {
       "status": 200,
-      "length": 30156
+      "length": 30444
     },
     "c/collections/stand-collection-c/": {
       "status": 200,
-      "length": 30144
+      "length": 29148
     },
     "c/news/": {
       "status": 200,
-      "length": 24837
+      "length": 25264
     },
     "c/legal/rights/": {
       "status": 200,
-      "length": 25604
+      "length": 25605
     },
     "c/schedule/": {
       "status": 200,
-      "length": 26684
+      "length": 26685
     },
     "sitemap-a": {
       "count": 56
     },
     "sitemap-b": {
-      "count": 46
+      "count": 14
     },
     "sitemap-c": {
       "count": 15

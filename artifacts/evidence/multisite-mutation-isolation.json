@@ -1,6 +1,6 @@
 {
-  "mutations": 8,
-  "undetected": 2,
+  "mutations": 10,
+  "undetected": 0,
   "results": [
     {
       "mutation": "плагин перестаёт ограничивать выборку по сайту",
@@ -41,8 +41,8 @@
       "mutation": "canonical перестаёт быть абсолютным",
       "file": "blueprints/payload-next-multisite/app/src/seo/metadata.ts",
       "suite": "seo",
-      "detected": false,
-      "reason": "прогон остался зелёным при сломанной защите"
+      "detected": true,
+      "failed_checks": 1
     },
     {
       "mutation": "раздел без владельца снова индексируется",
@@ -53,10 +53,24 @@
     },
     {
       "mutation": "в карту сайта попадают материалы без собственного текста",
-      "file": "blueprints/payload-next-multisite/app/src/app/(frontend)/sitemap.xml/route.ts",
+      "file": "blueprints/payload-next-multisite/app/src/seo/inclusion.ts",
       "suite": "seo",
-      "detected": false,
-      "reason": "прогон остался зелёным при сломанной защите"
+      "detected": true,
+      "failed_checks": 1
+    },
+    {
+      "mutation": "страницы серий индексируются вторым сайтом",
+      "file": "blueprints/payload-next-multisite/app/src/seo/profiles.ts",
+      "suite": "seo",
+      "detected": true,
+      "failed_checks": 1
+    },
+    {
+      "mutation": "сезон без собственной заметки попадает в карту сайта",
+      "file": "blueprints/payload-next-multisite/app/src/seo/inclusion.ts",
+      "suite": "seo",
+      "detected": true,
+      "failed_checks": 1
     }
   ]
 }
