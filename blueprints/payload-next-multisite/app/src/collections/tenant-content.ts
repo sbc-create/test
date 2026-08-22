@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionBeforeValidateHook, CollectionConfig } from 'payload'
 import { hasRole, superAdminOnly, tenantScopedAccess } from '../access/index'
 
 /**
@@ -99,6 +99,29 @@ export const TenantTitles: CollectionConfig = {
   ],
 }
 
+/**
+ * У подборки ровно один источник состава: список для тематической и маршрут для
+ * порядка просмотра. Два параллельных списка молча расходятся, и на странице
+ * оказывается не то, что видел редактор.
+ */
+export const validateCollectionShape: CollectionBeforeValidateHook = ({ data }) => {
+  if (!data) return data
+  const kind = String(data.collectionKind ?? 'themed')
+  const steps = Array.isArray(data.steps) ? data.steps : []
+  const items = Array.isArray(data.items) ? data.items : []
+  if (kind === 'watch_order') {
+    if (steps.length === 0) {
+      throw new Error('BLOCKED_INPUT: порядок просмотра без шагов не публикуется.')
+    }
+    if (items.length > 0) {
+      throw new Error('BLOCKED_INPUT: у порядка просмотра состав задают шаги, а не список материалов.')
+    }
+  } else if (steps.length > 0) {
+    throw new Error('BLOCKED_INPUT: шаги допустимы только у порядка просмотра.')
+  }
+  return data
+}
+
 export const EditorialCollections: CollectionConfig = {
   slug: 'editorial-collections',
   labels: { singular: 'Подборка', plural: 'Подборки' },
@@ -110,9 +133,45 @@ export const EditorialCollections: CollectionConfig = {
     { name: 'slug', type: 'text', required: true, index: true, label: 'URL-код' },
     { name: 'intro', type: 'textarea', label: 'Вступление редакции',
       admin: { description: 'Подборка без собственного текста не индексируется.' } },
-    { name: 'items', type: 'relationship', relationTo: 'tenant-titles', hasMany: true, label: 'Материалы подборки' },
+    {
+      name: 'collectionKind',
+      type: 'select',
+      required: true,
+      defaultValue: 'themed',
+      index: true,
+      label: 'Вид подборки',
+      options: [
+        { label: 'Тематическая', value: 'themed' },
+        { label: 'По настроению', value: 'mood' },
+        { label: 'Порядок просмотра', value: 'watch_order' },
+      ],
+      admin: {
+        description:
+          'Порядок просмотра — не список, а маршрут: у каждого шага обязателен собственный '
+          + 'комментарий редакции, иначе это тот же список под другим названием.',
+      },
+    },
+    {
+      name: 'items',
+      type: 'relationship',
+      relationTo: 'tenant-titles',
+      hasMany: true,
+      label: 'Материалы подборки',
+      admin: { condition: (data) => data?.collectionKind !== 'watch_order' },
+    },
+    {
+      name: 'steps',
+      type: 'array',
+      label: 'Шаги порядка просмотра',
+      admin: { condition: (data) => data?.collectionKind === 'watch_order' },
+      fields: [
+        { name: 'title', type: 'relationship', relationTo: 'tenant-titles', required: true, label: 'Произведение' },
+        { name: 'note', type: 'textarea', required: true, label: 'Почему этот шаг здесь' },
+      ],
+    },
     ...seoFields,
   ],
+  hooks: { beforeValidate: [validateCollectionShape] },
 }
 
 export const Posts: CollectionConfig = {

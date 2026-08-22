@@ -15,6 +15,7 @@ import { Tenants } from './collections/Tenants'
 import { Users } from './collections/Users'
 import {
   CatalogMedia,
+  Countries,
   Episodes,
   Genres,
   RightsRecords,
@@ -120,6 +121,7 @@ export default buildConfig({
     Users,
     CatalogMedia,
     Genres,
+    Countries,
     Studios,
     Titles,
     Seasons,

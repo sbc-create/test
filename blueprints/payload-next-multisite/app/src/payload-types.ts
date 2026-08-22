@@ -71,6 +71,7 @@ export interface Config {
     users: User;
     'catalog-media': CatalogMedia;
     genres: Genre;
+    countries: Country;
     studios: Studio;
     titles: Title;
     seasons: Season;
@@ -105,6 +106,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     'catalog-media': CatalogMediaSelect<false> | CatalogMediaSelect<true>;
     genres: GenresSelect<false> | GenresSelect<true>;
+    countries: CountriesSelect<false> | CountriesSelect<true>;
     studios: StudiosSelect<false> | StudiosSelect<true>;
     titles: TitlesSelect<false> | TitlesSelect<true>;
     seasons: SeasonsSelect<false> | SeasonsSelect<true>;
@@ -313,6 +315,17 @@ export interface Genre {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "countries".
+ */
+export interface Country {
+  id: number;
+  name: string;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "studios".
  */
 export interface Studio {
@@ -342,7 +355,10 @@ export interface Title {
         id?: string | null;
       }[]
     | null;
-  kind: 'series' | 'movie' | 'ova';
+  /**
+   * Тип определяет, какой сайт индексирует страницу произведения: сериальные формы — сайт сериалов, полнометражные — сайт фильмов. Двух владельцев у одной страницы не бывает.
+   */
+  kind: 'series' | 'miniseries' | 'movie' | 'animated_film' | 'ova';
   status: 'ongoing' | 'completed' | 'announced';
   year?: number | null;
   /**
@@ -353,7 +369,19 @@ export interface Title {
    * Исчезнувший из источника материал получает явное состояние. Подменять его другим тайтлом запрещено.
    */
   availability: 'available' | 'unavailable' | 'withdrawn';
+  releaseState: 'announced' | 'date_unknown' | 'soon' | 'released' | 'delayed' | 'cancelled';
+  releaseDate?: string | null;
+  releaseDateConfirmed?: boolean | null;
+  /**
+   * Обязательна для любого состояния, кроме «Вышло».
+   */
+  releaseSourceRef?: string | null;
+  /**
+   * История расписания не переписывается задним числом.
+   */
+  previousReleaseDate?: string | null;
   genres?: (number | Genre)[] | null;
+  countries?: (number | Country)[] | null;
   studios?: (number | Studio)[] | null;
   poster?: (number | null) | CatalogMedia;
   playbackAggregator?: ('kp' | 'mali' | 'mdl') | null;
@@ -550,7 +578,18 @@ export interface EditorialCollection {
    * Подборка без собственного текста не индексируется.
    */
   intro?: string | null;
+  /**
+   * Порядок просмотра — не список, а маршрут: у каждого шага обязателен собственный комментарий редакции, иначе это тот же список под другим названием.
+   */
+  collectionKind: 'themed' | 'mood' | 'watch_order';
   items?: (number | TenantTitle)[] | null;
+  steps?:
+    | {
+        title: number | TenantTitle;
+        note: string;
+        id?: string | null;
+      }[]
+    | null;
   /**
    * Если пусто — собирается по шаблону сайта из фактических данных.
    */
@@ -1108,6 +1147,10 @@ export interface PayloadLockedDocument {
         value: number | Genre;
       } | null)
     | ({
+        relationTo: 'countries';
+        value: number | Country;
+      } | null)
+    | ({
         relationTo: 'studios';
         value: number | Studio;
       } | null)
@@ -1340,6 +1383,16 @@ export interface GenresSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "countries_select".
+ */
+export interface CountriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "studios_select".
  */
 export interface StudiosSelect<T extends boolean = true> {
@@ -1370,7 +1423,13 @@ export interface TitlesSelect<T extends boolean = true> {
   year?: T;
   factualSynopsis?: T;
   availability?: T;
+  releaseState?: T;
+  releaseDate?: T;
+  releaseDateConfirmed?: T;
+  releaseSourceRef?: T;
+  previousReleaseDate?: T;
   genres?: T;
+  countries?: T;
   studios?: T;
   poster?: T;
   playbackAggregator?: T;
@@ -1496,7 +1555,15 @@ export interface EditorialCollectionsSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
   intro?: T;
+  collectionKind?: T;
   items?: T;
+  steps?:
+    | T
+    | {
+        title?: T;
+        note?: T;
+        id?: T;
+      };
   seoTitle?: T;
   seoDescription?: T;
   robots?: T;

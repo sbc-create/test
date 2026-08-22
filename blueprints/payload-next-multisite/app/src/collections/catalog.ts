@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionBeforeValidateHook, CollectionConfig } from 'payload'
 import { hasRole, superAdminOnly } from '../access/index'
 
 /**
@@ -81,6 +81,49 @@ export const Studios: CollectionConfig = {
   ],
 }
 
+/** Состояния, при которых произведение ещё не вышло. */
+export const UPCOMING_RELEASE_STATES = ['announced', 'date_unknown', 'soon', 'delayed'] as const
+
+/**
+ * Анонс без источника — выдумка, а анонс с датой без подтверждения — выдумка с
+ * подробностями. Оба случая отклоняются до записи, а не помечаются в отчёте.
+ */
+export const validateReleaseState: CollectionBeforeValidateHook = ({ data }) => {
+  if (!data) return data
+  const state = String(data.releaseState ?? 'released')
+  const sourceRef = String(data.releaseSourceRef ?? '').trim()
+  const confirmed = Boolean(data.releaseDateConfirmed)
+
+  if (state !== 'released' && state !== 'cancelled' && !sourceRef) {
+    throw new Error(
+      `BLOCKED_INPUT: состояние «${state}» требует ссылки на подтверждение (releaseSourceRef).`,
+    )
+  }
+  if (state === 'soon' && !(data.releaseDate && confirmed)) {
+    throw new Error('BLOCKED_INPUT: состояние «скоро» требует подтверждённой даты выхода.')
+  }
+  if (data.releaseDate && !confirmed && state !== 'released') {
+    throw new Error(
+      'BLOCKED_INPUT: дата выхода указана, но не подтверждена источником. Уберите дату или подтвердите её.',
+    )
+  }
+  if (state === 'delayed' && !data.previousReleaseDate) {
+    throw new Error('BLOCKED_INPUT: перенос обязан сохранять прежнюю дату (previousReleaseDate).')
+  }
+  return data
+}
+
+export const Countries: CollectionConfig = {
+  slug: 'countries',
+  labels: { singular: 'Страна', plural: 'Страны' },
+  admin: { useAsTitle: 'name', group: 'Каталог (общий)' },
+  access: { read: () => true, create: hasRole('site_admin'), update: hasRole('site_admin'), delete: superAdminOnly },
+  fields: [
+    { name: 'name', type: 'text', required: true, label: 'Название' },
+    { name: 'slug', type: 'text', required: true, unique: true, index: true, label: 'URL-код' },
+  ],
+}
+
 export const Titles: CollectionConfig = {
   slug: 'titles',
   // Соответствие провайдеру обязано быть уникальным в базе, а не только в коде
@@ -113,9 +156,16 @@ export const Titles: CollectionConfig = {
       label: 'Тип',
       options: [
         { label: 'Сериал', value: 'series' },
+        { label: 'Мини-сериал', value: 'miniseries' },
         { label: 'Фильм', value: 'movie' },
+        { label: 'Полнометражная анимация', value: 'animated_film' },
         { label: 'OVA/ONA', value: 'ova' },
       ],
+      admin: {
+        description:
+          'Тип определяет, какой сайт индексирует страницу произведения: сериальные формы — '
+          + 'сайт сериалов, полнометражные — сайт фильмов. Двух владельцев у одной страницы не бывает.',
+      },
     },
     {
       name: 'status',
@@ -148,7 +198,55 @@ export const Titles: CollectionConfig = {
           'Исчезнувший из источника материал получает явное состояние. Подменять его другим тайтлом запрещено.',
       },
     },
+    {
+      type: 'collapsible',
+      label: 'Релизное состояние',
+      admin: {
+        initCollapsed: true,
+        description:
+          'Состояние выхода и дата. Дата без подтверждённого источника не сохраняется: пустое поле '
+          + 'честнее выдуманного, а страница анонса без источника не индексируется.',
+      },
+      fields: [
+        {
+          name: 'releaseState',
+          type: 'select',
+          required: true,
+          defaultValue: 'released',
+          index: true,
+          label: 'Состояние выхода',
+          options: [
+            { label: 'Анонсировано', value: 'announced' },
+            { label: 'Дата не объявлена', value: 'date_unknown' },
+            { label: 'Скоро', value: 'soon' },
+            { label: 'Вышло', value: 'released' },
+            { label: 'Перенесено', value: 'delayed' },
+            { label: 'Отменено', value: 'cancelled' },
+          ],
+        },
+        { name: 'releaseDate', type: 'date', index: true, label: 'Дата выхода' },
+        {
+          name: 'releaseDateConfirmed',
+          type: 'checkbox',
+          defaultValue: false,
+          label: 'Дата подтверждена источником',
+        },
+        {
+          name: 'releaseSourceRef',
+          type: 'text',
+          label: 'Ссылка на подтверждение',
+          admin: { description: 'Обязательна для любого состояния, кроме «Вышло».' },
+        },
+        {
+          name: 'previousReleaseDate',
+          type: 'date',
+          label: 'Прежняя дата (при переносе)',
+          admin: { description: 'История расписания не переписывается задним числом.' },
+        },
+      ],
+    },
     { name: 'genres', type: 'relationship', relationTo: 'genres', hasMany: true, label: 'Жанры' },
+    { name: 'countries', type: 'relationship', relationTo: 'countries', hasMany: true, label: 'Страны производства' },
     { name: 'studios', type: 'relationship', relationTo: 'studios', hasMany: true, label: 'Студии' },
     { name: 'poster', type: 'upload', relationTo: 'catalog-media', label: 'Постер' },
     {
@@ -180,6 +278,7 @@ export const Titles: CollectionConfig = {
     },
     ...provenanceFields,
   ],
+  hooks: { beforeValidate: [validateReleaseState] },
 }
 
 export const Seasons: CollectionConfig = {
