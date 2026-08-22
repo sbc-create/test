@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sbc-create/test/schemas/portfolio-registry.schema.json",
+  "title": "Portfolio Registry",
+  "description": "The set of sites the SEO operator manages. Adding a site is a reviewable change to this file, never a runtime decision.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "sites"],
+  "properties": {
+    "version": {"type": "integer", "minimum": 1},
+    "note": {"type": "string"},
+    "sites": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["site_id", "name", "base_url", "risk_tier"],
+        "properties": {
+          "site_id": {"type": "string", "pattern": "^[a-z0-9]{2,}(-[a-z0-9]+)*$"},
+          "name": {"type": "string", "minLength": 1},
+          "base_url": {"type": "string", "format": "uri", "pattern": "^https?://"},
+          "risk_tier": {"type": "string", "enum": ["low", "medium", "high"]},
+          "tone_of_voice": {"type": "string"},
+          "rubrics": {"type": "array", "items": {"type": "string", "minLength": 1}},
+          "editorial_account": {
+            "type": ["string", "null"],
+            "enum": ["Редакция сайта", "AI-ассистент редакции", null],
+            "description": "Only these two identities may post editorially, and only when moderation_enabled is true."
+          },
+          "moderation_enabled": {"type": "boolean"},
+          "synthetic": {
+            "type": "boolean",
+            "description": "True for fixture tenants used in dry-runs. Synthetic sites must never be treated as real inventory."
+          }
+        }
+      }
+    }
+  }
+}

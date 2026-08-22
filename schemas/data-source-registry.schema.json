@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sbc-create/test/schemas/data-source-registry.schema.json",
+  "title": "Data Source Registry",
+  "description": "Declares every data source the operator may read, the credentials it needs, and its current provisioning status. Secrets are never stored here - only the names of the environment variables that carry them.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "sources"],
+  "properties": {
+    "version": {"type": "integer", "minimum": 1},
+    "note": {"type": "string"},
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "kind", "status", "required_env"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "kind": {
+            "type": "string",
+            "enum": ["search_analytics", "analytics", "content", "crawl", "availability"]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["available", "missing_credentials", "network_blocked", "not_configured", "error"]
+          },
+          "required_env": {
+            "type": "array",
+            "items": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]*$"},
+            "description": "Names only. A value here would be a leaked secret."
+          },
+          "endpoint": {"type": "string", "format": "uri"},
+          "metrics": {"type": "array", "items": {"type": "string"}},
+          "blocker": {"type": "string", "description": "Why it is not usable today."}
+        }
+      }
+    }
+  }
+}

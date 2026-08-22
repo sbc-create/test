@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "note": "Реестр разрешённых редакционных источников. Утверждение может быть опубликовано только со ссылкой на источник из этого файла, у которого trust входит в official/licensed_feed/press_confirmed И rights_confirmed=true. Реальные источники не заведены: правообладатели и лицензии не переданы. Записи с synthetic=true используются только в демонстрациях.",
+  "sources": [
+    {
+      "source_id": "src-studio",
+      "name": "Официальный канал студии (fixture)",
+      "url": "https://studio.example-fixture.test/news",
+      "trust": "official",
+      "rights_confirmed": true,
+      "scope": "Даты выхода, переносы, отмены",
+      "synthetic": true
+    },
+    {
+      "source_id": "src-catalog",
+      "name": "Лицензированный каталог (fixture)",
+      "url": "https://catalog.example-fixture.test",
+      "trust": "licensed_feed",
+      "rights_confirmed": true,
+      "scope": "Наличие в каталоге, состав сезонов",
+      "synthetic": true
+    },
+    {
+      "source_id": "src-forum",
+      "name": "Форум пользователей (fixture, ЗАПРЕЩЁН к публикации)",
+      "url": "https://forum.example-fixture.test",
+      "trust": "unconfirmed",
+      "rights_confirmed": false,
+      "scope": "Слухи. Заведён как отрицательный пример: утверждения на его основе отклоняются.",
+      "synthetic": true
+    }
+  ]
+}

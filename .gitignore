@@ -7,3 +7,6 @@ __pycache__/
 
 # Build output
 dist/
+
+# Operator runtime state (audit logs, checkpoints, locks, queues)
+var/

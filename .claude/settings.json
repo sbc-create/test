@@ -1,4 +1,24 @@
 {
+  "permissions": {
+    "allow": [
+      "Read", "Glob", "Grep",
+      "Bash(git status:*)", "Bash(git log:*)", "Bash(git diff:*)", "Bash(git show:*)",
+      "Bash(git add:*)", "Bash(git commit:*)", "Bash(git branch:*)", "Bash(git checkout:*)",
+      "Bash(git rev-parse:*)", "Bash(git ls-files:*)", "Bash(git fetch:*)",
+      "Bash(ls:*)", "Bash(cat:*)", "Bash(head:*)", "Bash(tail:*)", "Bash(wc:*)",
+      "Bash(find:*)", "Bash(grep:*)", "Bash(jq:*)", "Bash(sort:*)", "Bash(diff:*)",
+      "Bash(.venv/bin/python:*)", "Bash(.venv/bin/pytest:*)", "Bash(.venv/bin/ruff:*)",
+      "Bash(./scripts/verify.sh:*)", "Bash(./scripts/record-evidence.sh:*)",
+      "Bash(./scripts/build-bundle.sh:*)", "Bash(./bin/seo-operator:*)",
+      "Bash(mkdir:*)", "Bash(touch:*)"
+    ],
+    "deny": [
+      "Bash(git push --force:*)", "Bash(git push -f:*)",
+      "Bash(rm -rf /:*)", "Bash(dropdb:*)", "Bash(terraform destroy:*)",
+      "Bash(aws s3 rb:*)", "Bash(chmod 777:*)",
+      "Read(./.env)", "Read(./**/*.pem)", "Read(./**/credentials)"
+    ]
+  },
   "hooks": {
     "SessionStart": [
       {
@@ -6,6 +26,17 @@
           {
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/session-start.sh"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/pretooluse-guard.sh"
           }
         ]
       }
