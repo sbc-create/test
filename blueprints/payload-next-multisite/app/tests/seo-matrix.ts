@@ -12,7 +12,18 @@ import { load } from 'js-yaml'
 import { inSitemap, seasonInSitemap, seasonNote } from '../src/seo/inclusion'
 import { MATRIX_POLICY_VERSION, NON_INDEXABLE_PARAMS, PAGE_TYPES, type PageTypeId } from '../src/seo/matrix'
 import { resolveSeo } from '../src/seo/metadata'
-import { SEO_PROFILES, matrixAllowsIndex } from '../src/seo/profiles'
+import {
+  ALL_KINDS,
+  ALL_STATES,
+  FILM_KINDS,
+  SEO_PROFILES,
+  SERIES_KINDS,
+  UPCOMING_STATES,
+  PROFILE_GROUPS,
+  matrixAllowsIndex,
+  ownsFacet,
+  ownsTitle,
+} from '../src/seo/profiles'
 import { assert, assertEqual, check, summary } from './harness'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -101,38 +112,151 @@ for (const [key, profile] of Object.entries(SEO_PROFILES)) {
   })
 }
 
-await check('три профиля различаются индексируемой поверхностью', () => {
-  const surfaces = Object.values(SEO_PROFILES).map((profile) =>
-    Object.entries(profile.indexable)
-      .filter(([, value]) => value)
-      .map(([type]) => type)
-      .sort()
-      .join(','),
-  )
-  assertEqual(new Set(surfaces).size, 3, 'различных поверхностей')
+await check('ни один профиль не повторяет другой', () => {
+  // Отпечаток профиля — что он индексирует, какими разделами владеет и какие
+  // произведения считает своими. Два одинаковых отпечатка означают два зеркала.
+  const fingerprints = Object.entries(SEO_PROFILES).map(([key, profile]) => [
+    key,
+    JSON.stringify({
+      types: Object.entries(profile.indexable).filter(([, on]) => on).map(([type]) => type).sort(),
+      listings: [...profile.ownedListings].sort(),
+      kinds: [...profile.titleOwnership.kinds].sort(),
+      states: [...profile.titleOwnership.releaseStates].sort(),
+    }),
+  ] as const)
+  const seen = new Map<string, string>()
+  for (const [key, fingerprint] of fingerprints) {
+    const twin = seen.get(fingerprint)
+    assert(!twin, `профили ${twin} и ${key} совпадают полностью`)
+    seen.set(fingerprint, key)
+  }
+  assertEqual(seen.size, Object.keys(SEO_PROFILES).length, 'различных профилей')
 })
 
-await check('каждый раздел-список принадлежит ровно одному сайту, кроме ленты материалов', () => {
+// --- Владение страницами произведений в четвёрке кинотеатров ----------------
+
+const QUARTET = ['series_hub', 'film_library', 'premiere_radar', 'curated_guide'] as const
+
+await check('в четвёрке кинотеатров одно произведение принадлежит ровно одному сайту', () => {
+  // Перебираем всё пространство: форма × состояние. Ни одна пара не должна
+  // индексироваться двумя сайтами сразу и ни одна вышедшая работа не должна
+  // остаться вовсе без владельца.
+  for (const kind of ALL_KINDS) {
+    for (const state of ALL_STATES) {
+      const owners = QUARTET.filter((key) => ownsTitle(SEO_PROFILES[key], { kind, releaseState: state }))
+      assert(owners.length <= 1, `${kind}/${state}: владельцев ${owners.length} (${owners.join(', ')})`)
+      if (state === 'released' || UPCOMING_STATES.includes(state as never)) {
+        assertEqual(owners.length, 1, `${kind}/${state}: владелец не найден`)
+      }
+    }
+  }
+})
+
+await check('вышедший сериал уходит с сайта премьер к сайту сериалов', () => {
+  const upcoming = { kind: 'series', releaseState: 'soon' }
+  const released = { kind: 'series', releaseState: 'released' }
+  assertEqual(ownsTitle(SEO_PROFILES.premiere_radar, upcoming), true, 'анонс у премьер')
+  assertEqual(ownsTitle(SEO_PROFILES.series_hub, upcoming), false, 'анонса нет у сериалов')
+  assertEqual(ownsTitle(SEO_PROFILES.premiere_radar, released), false, 'вышедшего нет у премьер')
+  assertEqual(ownsTitle(SEO_PROFILES.series_hub, released), true, 'вышедшее у сериалов')
+})
+
+await check('вышедший фильм принадлежит сайту фильмов, а не сериалов', () => {
+  for (const kind of FILM_KINDS) {
+    assertEqual(ownsTitle(SEO_PROFILES.film_library, { kind, releaseState: 'released' }), true, kind)
+    assertEqual(ownsTitle(SEO_PROFILES.series_hub, { kind, releaseState: 'released' }), false, kind)
+  }
+  for (const kind of SERIES_KINDS) {
+    assertEqual(ownsTitle(SEO_PROFILES.film_library, { kind, releaseState: 'released' }), false, kind)
+  }
+})
+
+await check('отменённое произведение не индексирует никто', () => {
+  for (const key of QUARTET) {
+    for (const kind of ALL_KINDS) {
+      assertEqual(ownsTitle(SEO_PROFILES[key], { kind, releaseState: 'cancelled' }), false, `${key}/${kind}`)
+    }
+  }
+})
+
+await check('сайт подборок не индексирует ни одной страницы произведения', () => {
+  for (const kind of ALL_KINDS) {
+    for (const state of ALL_STATES) {
+      assertEqual(ownsTitle(SEO_PROFILES.curated_guide, { kind, releaseState: state }), false, `${kind}/${state}`)
+    }
+  }
+})
+
+await check('посадочные страницы фильтров индексируются только по списку', () => {
+  const films = SEO_PROFILES.film_library
+  assert(films.indexableFacets.length > 0, 'список посадочных страниц пуст')
+  for (const path of films.indexableFacets) {
+    assertEqual(ownsFacet(films, path), true, path)
+  }
+  // Произвольная комбинация — не посадочная страница, а ловушка обхода.
+  for (const path of ['/films/genre/drama/year/2024/', '/films/genre/unknown/', '/films/year/1999/']) {
+    assertEqual(ownsFacet(films, path), false, path)
+  }
+  for (const key of ['series_hub', 'premiere_radar', 'curated_guide'] as const) {
+    assertEqual(SEO_PROFILES[key].indexableFacets.length, 0, `${key}: посадочных страниц быть не должно`)
+  }
+})
+
+await check('каждый раздел-список четвёрки принадлежит ровно одному сайту', () => {
   const owners = new Map<string, string[]>()
-  for (const [key, profile] of Object.entries(SEO_PROFILES)) {
-    for (const listing of profile.ownedListings) {
+  for (const key of QUARTET) {
+    for (const listing of SEO_PROFILES[key].ownedListings) {
       owners.set(listing, [...(owners.get(listing) ?? []), key])
     }
   }
-  assertEqual((owners.get('/catalog/') ?? []).join(','), 'catalog_authority', 'владелец каталога')
-  assertEqual((owners.get('/schedule/') ?? []).join(','), 'release_pulse', 'владелец расписания')
-  // Лента материалов есть у всех: у каждого сайта она про своё и с разным заголовком.
-  // Явный ожидаемый состав владельцев: иначе смена владения проходит молча.
-  const expected: Record<string, number> = {
-    '/catalog/': 1, '/schedule/': 1, '/collections/': 2, '/news/': 3,
+  assertEqual((owners.get('/series/') ?? []).join(','), 'series_hub', 'сериалы')
+  assertEqual((owners.get('/films/') ?? []).join(','), 'film_library', 'фильмы')
+  assertEqual((owners.get('/calendar/') ?? []).join(','), 'premiere_radar', 'календарь')
+  assertEqual((owners.get('/collections/') ?? []).join(','), 'curated_guide', 'подборки')
+  assertEqual((owners.get('/news/') ?? []).length, 4, 'лента есть у каждого')
+})
+
+await check('внутри группы сайтов раздел-список принадлежит одному сайту, кроме ленты', () => {
+  // Сравнение имеет смысл внутри группы: аниме-тройка и четвёрка кинотеатров
+  // не конкурируют между собой, а вот два сайта одной группы с общим разделом —
+  // это дубль. Ожидаемый состав владельцев задан явно, чтобы смена владения не
+  // прошла молча.
+  const expected: Record<string, Record<string, string[]>> = {
+    'anime-trio': {
+      '/catalog/': ['catalog_authority'],
+      '/schedule/': ['release_pulse'],
+      '/collections/': ['catalog_authority', 'editorial_guide'],
+      '/news/': ['catalog_authority', 'release_pulse', 'editorial_guide'],
+    },
+    'cinema-quartet': {
+      '/series/': ['series_hub'],
+      '/films/': ['film_library'],
+      '/calendar/': ['premiere_radar'],
+      '/collections/': ['curated_guide'],
+      '/news/': ['series_hub', 'film_library', 'premiere_radar', 'curated_guide'],
+    },
   }
-  for (const [listing, count] of Object.entries(expected)) {
-    assertEqual((owners.get(listing) ?? []).length, count, `владельцев раздела ${listing}`)
+
+  for (const [group, keys] of Object.entries(PROFILE_GROUPS)) {
+    const owners = new Map<string, string[]>()
+    for (const key of keys) {
+      for (const listing of SEO_PROFILES[key].ownedListings) {
+        owners.set(listing, [...(owners.get(listing) ?? []), key])
+      }
+    }
+    const actual = Object.fromEntries([...owners].map(([listing, list]) => [listing, [...list].sort()]))
+    const wanted = Object.fromEntries(
+      Object.entries(expected[group]!).map(([listing, list]) => [listing, [...list].sort()]),
+    )
+    assertEqual(JSON.stringify(actual, Object.keys(actual).sort()),
+      JSON.stringify(wanted, Object.keys(wanted).sort()),
+      `состав владельцев разделов группы ${group}`)
   }
-  assertEqual([...owners.keys()].sort().join(','), Object.keys(expected).sort().join(','),
-    'состав разделов-списков')
+})
+
+await check('заголовок ленты материалов свой у каждого сайта', () => {
   const headings = Object.values(SEO_PROFILES).map((profile) => profile.newsHeading)
-  assertEqual(new Set(headings).size, 3, 'различных заголовков ленты')
+  assertEqual(new Set(headings).size, Object.keys(SEO_PROFILES).length, 'различных заголовков ленты')
 })
 
 // --- Поведение сборки метаданных, а не только таблица ------------------------
@@ -203,20 +327,31 @@ await check('сезон попадает в карту только с заме�
   assertEqual(seasonInSitemap(SEO_PROFILES.release_pulse, withNote, 2), false, 'чужой профиль')
 })
 
-await check('страницу серии индексирует ровно один профиль', () => {
-  const owners = Object.entries(SEO_PROFILES)
-    .filter(([, profile]) => profile.indexable.episode)
-    .map(([key]) => key)
-  // Страница серии состоит из фактов провайдера: два владельца — это два
-  // дословных дубля на разных доменах, что и показали ворота уникальности.
-  assertEqual(owners.join(','), 'catalog_authority', 'владелец страниц серий')
+await check('страницу серии внутри группы индексирует ровно один сайт', () => {
+  // Страница серии состоит из фактов провайдера: два владельца в одной группе —
+  // это два дословных дубля, что и показали ворота уникальности в CR v2.0.
+  const expected: Record<string, string> = {
+    'anime-trio': 'catalog_authority',
+    'cinema-quartet': 'series_hub',
+  }
+  for (const [group, keys] of Object.entries(PROFILE_GROUPS)) {
+    const owners = keys.filter((key) => SEO_PROFILES[key].indexable.episode)
+    assertEqual(owners.join(','), expected[group]!, `владелец страниц серий группы ${group}`)
+  }
   for (const [key, profile] of Object.entries(SEO_PROFILES)) {
     if (profile.indexable.episode) continue
     assert(!profile.sitemapTypes.includes('episode'), `${key}: серии не индексируются, но объявлены в карте`)
   }
 })
 
-await check('автоматические описания и заголовки различаются у трёх профилей', () => {
+await check('каждый профиль отнесён ровно к одной группе сайтов', () => {
+  const assigned = Object.values(PROFILE_GROUPS).flat()
+  assertEqual(assigned.length, new Set(assigned).size, 'профиль не может быть в двух группах')
+  assertEqual([...assigned].sort().join(','), Object.keys(SEO_PROFILES).sort().join(','),
+    'состав профилей и состав групп разошлись')
+})
+
+await check('автоматические описания и заголовки различаются у всех профилей', () => {
   const profiles = Object.values(SEO_PROFILES)
   for (const [field, values] of Object.entries({
     newsSummary: profiles.map((profile) => profile.newsSummary),
@@ -225,7 +360,7 @@ await check('автоматические описания и заголовки
     episodeSummary: profiles.map((profile) => profile.episodeSummary('Тайтл', 1, 2)),
     titleHeading: profiles.map((profile) => profile.titleHeading('Тайтл')),
   })) {
-    assertEqual(new Set(values).size, 3, `различных значений ${field}`)
+    assertEqual(new Set(values).size, Object.keys(SEO_PROFILES).length, `различных значений ${field}`)
   }
 })
 
