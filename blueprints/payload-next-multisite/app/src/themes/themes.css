@@ -96,3 +96,142 @@
 [data-theme='editorial'] body { font-size: 17px; line-height: 1.7; }
 [data-theme='editorial'] .card { border-width: 0 0 1px 0; border-radius: 0; }
 [data-theme='pulse'] .card__poster { aspect-ratio: 16 / 9; }
+
+/* ------------------------------------------------------------------------- *
+ * Четвёрка кинотеатров. Каждая тема решает свою задачу просмотра, поэтому
+ * различаются не только цвета: другая плотность сетки, другая форма карточки,
+ * другой контейнер и другая типографическая шкала. Контраст текста к фону
+ * держится не ниже 4.5:1 во всех четырёх.
+ * ------------------------------------------------------------------------- */
+
+/* series_dark — плотная витрина сериалов: много обложек, спокойный тёмный фон,
+   мелкий шаг сетки, потому что основной сценарий здесь — просмотр списка. */
+[data-theme='series_dark'] {
+  --bg: #121722;
+  --surface: #1a2131;
+  --header-bg: #0e131c;
+  --footer-bg: #0b0f17;
+  --fg: #e8ecf4;
+  --muted: #9aa6bb;
+  --border: #2b3345;
+  --placeholder: #232b3c;
+  --link: #8fb8ff;
+  --link-hover: #b9d4ff;
+  --accent: #4c7df3;
+  --accent-fg: #0a0d14;
+  --focus: #8fb8ff;
+  --font-body: 'IBM Plex Sans', 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-display: 'IBM Plex Sans', 'Segoe UI', Roboto, Arial, sans-serif;
+  --container: 1440px;
+  --gutter: 18px;
+  --grid-gap: 12px;
+  --card-min: 152px;
+  --section-gap: 28px;
+  --header-height: 60px;
+  --radius: 4px;
+  --h1: 1.55rem;
+  --h2: 1.1rem;
+  --brand-tracking: -0.02em;
+  --brand-transform: none;
+  --card-ratio: 2 / 3;
+  --line-height: 1.5;
+}
+
+/* film_editorial — светлая бумага и крупный шрифт: кино читают, а не листают,
+   поэтому широкие кадры 16:9, три колонки и много воздуха. */
+[data-theme='film_editorial'] {
+  --bg: #faf8f5;
+  --surface: #ffffff;
+  --header-bg: #ffffff;
+  --footer-bg: #f1ede7;
+  --fg: #1d1a17;
+  --muted: #5f574e;
+  --border: #ded6cb;
+  --placeholder: #ebe5dc;
+  --link: #8a3324;
+  --link-hover: #6a2419;
+  --accent: #8a3324;
+  --accent-fg: #ffffff;
+  --focus: #8a3324;
+  --font-body: 'Source Sans 3', 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --container: 1180px;
+  --gutter: 28px;
+  --grid-gap: 28px;
+  --card-min: 320px;
+  --section-gap: 56px;
+  --header-height: 76px;
+  --radius: 2px;
+  --h1: 2.4rem;
+  --h2: 1.45rem;
+  --brand-tracking: 0.01em;
+  --brand-transform: none;
+  --card-ratio: 16 / 9;
+  --line-height: 1.7;
+}
+
+/* premiere_signal — календарь читают колонкой: узкий контейнер, строки вместо
+   сетки, один сигнальный акцент на дате и никаких скруглений. */
+[data-theme='premiere_signal'] {
+  --bg: #0a0a0b;
+  --surface: #141417;
+  --header-bg: #0a0a0b;
+  --footer-bg: #050506;
+  --fg: #f2f2f0;
+  --muted: #a0a09c;
+  --border: #2a2a2e;
+  --placeholder: #1d1d21;
+  --link: #ffc247;
+  --link-hover: #ffd782;
+  --accent: #ffc247;
+  --accent-fg: #17130a;
+  --focus: #ffc247;
+  --font-body: 'Roboto Condensed', 'Segoe UI', Arial, sans-serif;
+  --font-display: 'Roboto Mono', 'Courier New', monospace;
+  --container: 1100px;
+  --gutter: 20px;
+  --grid-gap: 8px;
+  --card-min: 100%;
+  --section-gap: 36px;
+  --header-height: 68px;
+  --radius: 0px;
+  --h1: 1.9rem;
+  --h2: 1.15rem;
+  --brand-tracking: 0.08em;
+  --brand-transform: uppercase;
+  --card-ratio: auto;
+  --line-height: 1.45;
+}
+
+/* guide_warm — тёплая рекомендательная витрина: крупные скруглённые плитки,
+   свободная сетка и спокойный ритм чтения. */
+[data-theme='guide_warm'] {
+  --bg: #fbf6ef;
+  --surface: #ffffff;
+  --header-bg: #fdf9f3;
+  --footer-bg: #f3e9dc;
+  --fg: #241c16;
+  --muted: #6b5b4c;
+  --border: #e3d5c3;
+  --placeholder: #efe4d5;
+  --link: #a2551f;
+  --link-hover: #7d3f15;
+  --accent: #c96a2a;
+  --accent-fg: #ffffff;
+  --focus: #a2551f;
+  --font-body: 'Nunito Sans', 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-display: 'Nunito Sans', 'Segoe UI', Roboto, Arial, sans-serif;
+  --container: 1240px;
+  --gutter: 24px;
+  --grid-gap: 22px;
+  --card-min: 244px;
+  --section-gap: 48px;
+  --header-height: 84px;
+  --radius: 18px;
+  --h1: 2.05rem;
+  --h2: 1.3rem;
+  --brand-tracking: 0em;
+  --brand-transform: none;
+  --card-ratio: 3 / 4;
+  --line-height: 1.65;
+}

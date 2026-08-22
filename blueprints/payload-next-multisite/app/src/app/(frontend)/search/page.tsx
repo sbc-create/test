@@ -46,11 +46,11 @@ const SearchPage = async ({ searchParams }: { searchParams: Search }) => {
         <>
           <section className="section">
             <h2>Тайтлы</h2>
-            <CardGrid items={results.titles.map(tenantTitleCard)} empty="Ничего не найдено." />
+            <CardGrid items={results.titles.map(tenantTitleCard)} empty="Ничего не найдено." shape={site.layout.card} />
           </section>
           <section className="section">
             <h2>Материалы</h2>
-            <CardGrid items={results.posts.map(postCard)} empty="Ничего не найдено." />
+            <CardGrid items={results.posts.map(postCard)} empty="Ничего не найдено." shape={site.layout.card} />
           </section>
         </>
       )}

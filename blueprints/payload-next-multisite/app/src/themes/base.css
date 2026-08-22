@@ -222,3 +222,87 @@ button.button {
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* --- Варианты компоновки шапки ------------------------------------------- */
+
+.site-header__row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+.site-header__row--brand { justify-content: space-between; }
+.site-header--stacked .site-header__inner,
+.site-header--split .site-header__inner,
+.site-header--compact .site-header__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.6rem;
+}
+.site-header--split .site-header__row--brand { justify-content: center; }
+.site-header--split .site-header__row--nav { justify-content: center; }
+.site-header--stacked .site-header__row--nav { border-top: 1px solid var(--border); padding-top: 0.5rem; }
+.site-search--below-nav,
+.site-search--drawer { margin-left: 0; width: 100%; }
+.site-search--drawer input { flex: 1; }
+
+.site-search-drawer summary {
+  cursor: pointer;
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+}
+.site-search-drawer summary::-webkit-details-marker { display: none; }
+.site-search-drawer[open] > .site-search { margin-top: 0.6rem; }
+
+.hero-search {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: calc(var(--section-gap) / 2) 0;
+}
+.hero-search__lead {
+  font-family: var(--font-display);
+  font-size: var(--h2);
+  margin: 0 0 0.8rem;
+  color: var(--fg);
+}
+.site-search--hero { margin-left: 0; width: 100%; max-width: 640px; }
+.site-search--hero input { flex: 1; font-size: 1.05rem; padding: 0.7rem 0.9rem; }
+
+/* --- Формы карточек ------------------------------------------------------ */
+
+.grid--landscape { grid-template-columns: repeat(auto-fill, minmax(var(--card-min), 1fr)); }
+.grid--tile { grid-template-columns: repeat(auto-fill, minmax(var(--card-min), 1fr)); }
+.grid--row { display: flex; flex-direction: column; gap: var(--grid-gap); }
+
+.card--landscape .card__poster { aspect-ratio: 16 / 9; }
+.card--tile .card__poster { aspect-ratio: 3 / 4; }
+.card--poster .card__poster { aspect-ratio: 2 / 3; }
+
+.card--row { border-left: 3px solid var(--accent); }
+.card--row a {
+  display: grid;
+  grid-template-columns: minmax(7rem, 9rem) 1fr;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.7rem 0.9rem;
+}
+.card--row .card__body { padding: 0; }
+.card--row .card__lead {
+  grid-row: 1;
+  font-family: var(--font-display);
+  color: var(--accent);
+  letter-spacing: 0.04em;
+}
+.card__lead { font-size: 0.85rem; color: var(--muted); }
+.card--tile .card__lead {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .card--row a { grid-template-columns: 1fr; gap: 0.2rem; }
+}

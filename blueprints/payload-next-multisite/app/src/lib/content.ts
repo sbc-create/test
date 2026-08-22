@@ -16,14 +16,38 @@ export type TitleRecord = Record<string, unknown>
 
 const publishedOnly: Where = { _status: { equals: 'published' } }
 
+export type TitleFilter = {
+  page?: number
+  genreId?: string | number
+  countryId?: string | number
+  year?: number
+  /** Формы произведения: сериальные и полнометражные разведены по сайтам. */
+  kinds?: readonly string[]
+  /** Релизные состояния: сайт премьер показывает только ещё не вышедшее. */
+  releaseStates?: readonly string[]
+  /** Статус производства: выходит, завершён, анонс. */
+  statuses?: readonly string[]
+  sort?: string
+  limit?: number
+}
+
 export const listTenantTitles = async (
   payload: Payload,
   tenant: TenantContext,
-  options: { page?: number; genreId?: string | number; sort?: string; limit?: number } = {},
+  options: TitleFilter = {},
 ) => {
-  const where: Where = options.genreId
-    ? { and: [publishedOnly, { 'title.genres': { in: [options.genreId] } }] }
-    : publishedOnly
+  // Каждый фильтр — констрейнт запроса, а не отбор после выборки: иначе
+  // счётчик и пагинация показывают одно, а список другое.
+  const constraints: Where[] = [publishedOnly]
+  if (options.genreId) constraints.push({ 'title.genres': { in: [options.genreId] } })
+  if (options.countryId) constraints.push({ 'title.countries': { in: [options.countryId] } })
+  if (typeof options.year === 'number') constraints.push({ 'title.year': { equals: options.year } })
+  if (options.kinds?.length) constraints.push({ 'title.kind': { in: [...options.kinds] } })
+  if (options.releaseStates?.length) {
+    constraints.push({ 'title.releaseState': { in: [...options.releaseStates] } })
+  }
+  if (options.statuses?.length) constraints.push({ 'title.status': { in: [...options.statuses] } })
+  const where: Where = constraints.length === 1 ? constraints[0]! : { and: constraints }
 
   return tenantFind(payload, {
     collection: 'tenant-titles',
@@ -100,6 +124,30 @@ export const getPage = async (payload: Payload, tenant: TenantContext, slug: str
 /** Общий каталог: жанры для фильтров. */
 export const listGenres = async (payload: Payload) =>
   payload.find({ collection: 'genres', limit: 100, sort: 'name', depth: 0, overrideAccess: true })
+
+export const listCountries = async (payload: Payload) =>
+  payload.find({ collection: 'countries', limit: 200, sort: 'name', depth: 0, overrideAccess: true })
+
+/**
+ * Годы, по которым в каталоге сайта действительно есть материалы.
+ *
+ * Список строится из данных, а не из диапазона «от 1990 до текущего»: год без
+ * единого произведения — это пустая страница фильтра, то есть ловушка обхода.
+ */
+export const availableYears = async (
+  payload: Payload,
+  tenant: TenantContext,
+  options: { kinds?: readonly string[]; releaseStates?: readonly string[] } = {},
+): Promise<number[]> => {
+  const result = await listTenantTitles(payload, tenant, { ...options, limit: 500 })
+  const years = new Set<number>()
+  for (const doc of result.docs) {
+    const shared = (doc as unknown as { title?: { year?: unknown } }).title
+    const year = Number(shared?.year)
+    if (Number.isInteger(year) && year > 1900) years.add(year)
+  }
+  return [...years].sort((left, right) => right - left)
+}
 
 export const listSeasons = async (payload: Payload, titleId: string | number) =>
   payload.find({

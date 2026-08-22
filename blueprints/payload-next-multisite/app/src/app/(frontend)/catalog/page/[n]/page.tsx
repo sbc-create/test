@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation'
 
 import { Breadcrumbs } from '../../../../../components/Breadcrumbs'
 import { CatalogListing } from '../../../../../components/CatalogListing'
-import { listGenres, listTenantTitles, PAGE_SIZE } from '../../../../../lib/content'
+import { availableYears, listTenantTitles, PAGE_SIZE } from '../../../../../lib/content'
+import { buildFilterGroups, parseFilters } from '../../../../../lib/filters'
 import { tenantTitleCard } from '../../../../../lib/present'
 import { currentSite, payloadClient } from '../../../../../lib/site'
 import { absoluteUrl, buildMetadata } from '../../../../../seo/metadata'
@@ -53,10 +54,15 @@ const CatalogPaged = async ({ params }: { params: Params }) => {
   // Страница 1 живёт по адресу /catalog/ — дубля с /catalog/page/1/ не существует.
   if (page === null) notFound()
 
-  const [genres, result] = await Promise.all([
-    listGenres(payload),
+  // На странице пагинации фильтры показываются, но не применяются: адрес
+  // /catalog/page/N/ обязан отдавать ту же выдачу при любом переходе, иначе
+  // страница 2 у разных посетителей содержит разное.
+  const emptyFilters = parseFilters({})
+  const [years, result] = await Promise.all([
+    availableYears(payload, site.tenant),
     listTenantTitles(payload, site.tenant, { page }),
   ])
+  const groups = await buildFilterGroups(payload, '/catalog/', emptyFilters, ['genre', 'year', 'status'], years)
   const totalPages = Math.max(1, Math.ceil(result.totalDocs / PAGE_SIZE))
   if (page > totalPages) notFound()
 
@@ -73,11 +79,13 @@ const CatalogPaged = async ({ params }: { params: Params }) => {
       <h1>Каталог</h1>
       <CatalogListing
         items={result.docs.map(tenantTitleCard)}
-        genres={genres.docs.map((genre) => ({ name: genre.name, slug: genre.slug }))}
-        activeGenre={null}
+        filters={groups}
+        basePath="/catalog/"
         page={page}
         totalPages={totalPages}
         total={result.totalDocs}
+        shape={site.layout.card}
+        empty={site.layout.tone.emptyList}
       />
     </>
   )

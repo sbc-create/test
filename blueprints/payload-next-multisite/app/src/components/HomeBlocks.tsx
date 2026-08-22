@@ -39,14 +39,14 @@ export const HomeBlocks = ({ site, blocks, data }: { site: SiteContext; blocks: 
             const items = Array.isArray(block.items) ? block.items : []
             return (
               <Section key={key} heading={block.heading as string | undefined}>
-                <CardGrid items={items.map(tenantTitleCard)} empty="Витрина пока не заполнена." />
+                <CardGrid items={items.map(tenantTitleCard)} empty="Витрина пока не заполнена." shape={site.layout.card} />
               </Section>
             )
           }
           case 'latestUpdates':
             return (
               <Section key={key} heading={block.heading as string | undefined}>
-                <CardGrid items={data.latest.map(tenantTitleCard)} empty="Обновлений пока нет." />
+                <CardGrid items={data.latest.map(tenantTitleCard)} empty="Обновлений пока нет." shape={site.layout.card} />
               </Section>
             )
           case 'releaseSchedule':
@@ -80,14 +80,14 @@ export const HomeBlocks = ({ site, blocks, data }: { site: SiteContext; blocks: 
             const items = Array.isArray(block.collections) ? block.collections : []
             return (
               <Section key={key} heading={block.heading as string | undefined}>
-                <CardGrid items={items.map(collectionCard)} empty="Подборок пока нет." />
+                <CardGrid items={items.map(collectionCard)} empty="Подборок пока нет." shape={site.layout.card} />
               </Section>
             )
           }
           case 'newsFeed':
             return (
               <Section key={key} heading={block.heading as string | undefined}>
-                <CardGrid items={data.posts.map(postCard)} empty="Материалов пока нет." />
+                <CardGrid items={data.posts.map(postCard)} empty="Материалов пока нет." shape={site.layout.card} />
               </Section>
             )
           case 'genreRails': {

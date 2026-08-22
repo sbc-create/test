@@ -39,7 +39,7 @@ const NewsIndex = async () => {
         ]}
       />
       <h1>{site.profile.newsHeading}</h1>
-      <CardGrid items={result.docs.map(postCard)} empty="Материалов пока нет." />
+      <CardGrid items={result.docs.map(postCard)} empty="Материалов пока нет." shape={site.layout.card} />
     </>
   )
 }

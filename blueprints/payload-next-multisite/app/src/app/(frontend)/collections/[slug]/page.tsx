@@ -61,7 +61,7 @@ const CollectionPage = async ({ params }: { params: Params }) => {
       />
       <h1>{String(record.name ?? '')}</h1>
       {record.intro ? <p style={{ maxWidth: '70ch' }}>{String(record.intro)}</p> : null}
-      <CardGrid items={items.map(tenantTitleCard)} empty="В подборке пока нет материалов." />
+      <CardGrid items={items.map(tenantTitleCard)} empty="В подборке пока нет материалов." shape={site.layout.card} />
     </>
   )
 }

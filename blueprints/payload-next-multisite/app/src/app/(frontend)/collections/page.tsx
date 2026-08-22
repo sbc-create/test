@@ -42,7 +42,7 @@ const CollectionsPage = async () => {
         ]}
       />
       <h1>{site.profile.collectionsHeading}</h1>
-      <CardGrid items={result.docs.map(collectionCard)} empty="Подборок пока нет." />
+      <CardGrid items={result.docs.map(collectionCard)} empty={site.layout.tone.emptyList} shape={site.layout.card} />
     </>
   )
 }

@@ -145,6 +145,7 @@ else
   run "payload-secret-scan" "python3 tests/tools/secret_scan.py"
   run "payload-typecheck"   "(cd blueprints/payload-next-multisite/app && npx tsc --noEmit -p tsconfig.json)"
   run "payload-seo-matrix"  "$TSX $APP_TESTS/seo-matrix.ts"
+  run "payload-themes"      "$TSX $APP_TESTS/themes.ts"
   run "payload-player"      "$TSX $APP_TESTS/player-contract.ts"
   run "payload-comments"    "$TSX $APP_TESTS/comments-policy.ts"
   run "payload-isolation"   "python3 tests/tools/with_app_env.py --scope anime --push -- $TSX $APP_TESTS/tenant-isolation.ts"

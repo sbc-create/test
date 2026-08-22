@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 
 import { SiteFooter } from '../../components/SiteFooter'
-import { SiteHeader } from '../../components/SiteHeader'
+import { HeroSearch, SiteHeader } from '../../components/SiteHeader'
 import { notFound } from 'next/navigation'
 
 import { currentSite } from '../../lib/site'
@@ -36,6 +36,7 @@ const FrontendLayout = async ({ children }: { children: ReactNode }) => {
           Перейти к содержимому
         </a>
         <SiteHeader site={site} />
+        <HeroSearch site={site} />
         <main id="main">
           <div className="container">{children}</div>
         </main>

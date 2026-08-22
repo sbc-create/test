@@ -4,6 +4,7 @@ import { getPayload } from 'payload'
 
 import config from '../payload.config'
 import { profileFor, type SeoProfile } from '../seo/profiles'
+import { layoutFor, type ThemeLayout } from '../themes/layouts'
 import { resolveTenantByHost, tenantGlobal, type TenantContext } from './tenant-query'
 
 /**
@@ -14,6 +15,8 @@ import { resolveTenantByHost, tenantGlobal, type TenantContext } from './tenant-
 export type SiteContext = {
   tenant: TenantContext
   profile: SeoProfile
+  /** Структурная компоновка темы: шапка, поиск, форма карточки, порядок модулей. */
+  layout: ThemeLayout
   settings: Record<string, unknown> | null
   navigation: Record<string, unknown> | null
   siteName: string
@@ -35,5 +38,12 @@ export const currentSite = cache(async (): Promise<SiteContext> => {
     throw new Error(`BLOCKED_INPUT: у сайта ${tenant.slug} не заполнено публичное название`)
   }
 
-  return { tenant, profile: profileFor(tenant.seoProfile), settings, navigation, siteName }
+  return {
+    tenant,
+    profile: profileFor(tenant.seoProfile),
+    layout: layoutFor(tenant.theme),
+    settings,
+    navigation,
+    siteName,
+  }
 })
