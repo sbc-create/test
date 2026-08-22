@@ -1,0 +1,20 @@
+/* [project]/blueprints/payload-next-multisite/app/node_modules/@payloadcms/ui/dist/elements/Gutter/index.scss.css [app-client] (css) */
+@layer payload-default {
+  .gutter--left {
+    padding-left: var(--gutter-h);
+  }
+
+  .gutter--right {
+    padding-right: var(--gutter-h);
+  }
+
+  .gutter--negative-left {
+    margin-left: calc(-1*var(--gutter-h));
+  }
+
+  .gutter--negative-right {
+    margin-right: calc(-1*var(--gutter-h));
+  }
+}
+
+/*# sourceMappingURL=0nrf_%40payloadcms_ui_dist_elements_Gutter_index_scss_css_1igg3k2._.single.css.map*/

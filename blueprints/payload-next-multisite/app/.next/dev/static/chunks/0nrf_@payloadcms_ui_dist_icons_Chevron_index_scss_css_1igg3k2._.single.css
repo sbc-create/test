@@ -1,0 +1,26 @@
+/* [project]/blueprints/payload-next-multisite/app/node_modules/@payloadcms/ui/dist/icons/Chevron/index.scss.css [app-client] (css) */
+@layer payload-default {
+  .icon--chevron {
+    height: var(--base);
+    width: var(--base);
+  }
+
+  .icon--chevron .stroke {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1px;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .icon--chevron.icon--size-large {
+    height: var(--base);
+    width: var(--base);
+  }
+
+  .icon--chevron.icon--size-small {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/*# sourceMappingURL=0nrf_%40payloadcms_ui_dist_icons_Chevron_index_scss_css_1igg3k2._.single.css.map*/

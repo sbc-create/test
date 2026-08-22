@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { hasRole, superAdminOnly, tenantScopedAccess } from '../access/index.js'
+import { hasRole, superAdminOnly, tenantScopedAccess } from '../access/index'
 
 /**
  * Tenant-scoped контент: публикации, редакционные тексты, SEO, страницы и медиа.

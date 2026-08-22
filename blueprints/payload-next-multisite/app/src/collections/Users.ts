@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { isSuperAdmin, roleFieldAccess, superAdminOnly } from '../access/index.js'
+import { isSuperAdmin, roleFieldAccess, superAdminOnly } from '../access/index'
 
 export const Users: CollectionConfig = {
   slug: 'users',

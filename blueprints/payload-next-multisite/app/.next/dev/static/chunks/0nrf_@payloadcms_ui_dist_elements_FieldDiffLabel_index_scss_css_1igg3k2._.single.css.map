@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///turbopack:///[project]/blueprints/payload-next-multisite/app/node_modules/@payloadcms/ui/dist/elements/FieldDiffLabel/index.scss"],"sourcesContent":["@layer payload-default {\n  .field-diff-label {\n    margin-bottom: calc(var(--base) * 0.35);\n    font-weight: 600;\n    display: flex;\n    flex-direction: row;\n    height: 100%;\n    align-items: center;\n    line-height: normal;\n  }\n}\n"],"names":[],"mappings":"AAAA;EACE","ignoreList":[0]}}]
+}

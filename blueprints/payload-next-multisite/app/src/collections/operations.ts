@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { hasRole, superAdminOnly, tenantScopedAccess } from '../access/index.js'
+import { hasRole, superAdminOnly, tenantScopedAccess } from '../access/index'
 
 /**
  * Операционные коллекции: импорт из Content API, расписание выходов и конфигурация

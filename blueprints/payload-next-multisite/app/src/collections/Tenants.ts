@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { superAdminOnly, tenantSelfAccess } from '../access/index.js'
+import { superAdminOnly, tenantSelfAccess } from '../access/index'
 
 /** Тенант = самостоятельный сайт: домен, бренд, SEO-профиль и состояние публикации. */
 export const Tenants: CollectionConfig = {

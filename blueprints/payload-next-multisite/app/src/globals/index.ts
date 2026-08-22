@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { hasRole, superAdminOnly, tenantScopedAccess } from '../access/index.js'
+import { hasRole, superAdminOnly, tenantScopedAccess } from '../access/index'
 
 /**
  * «Глобалы» сайта. В мультитенантной установке настоящий Payload global был бы один

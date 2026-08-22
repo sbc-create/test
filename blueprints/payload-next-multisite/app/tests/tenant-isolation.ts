@@ -6,12 +6,12 @@
  */
 import { getPayload } from 'payload'
 
-import config from '../src/payload.config.js'
-import { tenantScopedSlugs } from '../src/payload.config.js'
-import { TenantResolutionError, resolveTenantByHost, tenantCount, tenantFind } from '../src/lib/tenant-query.js'
-import { collectReferences, enforceTenantIntegrity } from '../src/hooks/tenant-integrity.js'
-import { assert, assertEqual, assertRejects, check, summary } from './harness.js'
-import { reset, seed } from './seed.js'
+import config from '../src/payload.config'
+import { tenantScopedSlugs } from '../src/payload.config'
+import { TenantResolutionError, resolveTenantByHost, tenantCount, tenantFind } from '../src/lib/tenant-query'
+import { collectReferences, enforceTenantIntegrity } from '../src/hooks/tenant-integrity'
+import { assert, assertEqual, assertRejects, check, summary } from './harness'
+import { reset, seed } from './seed'
 
 const payload = await getPayload({ config })
 

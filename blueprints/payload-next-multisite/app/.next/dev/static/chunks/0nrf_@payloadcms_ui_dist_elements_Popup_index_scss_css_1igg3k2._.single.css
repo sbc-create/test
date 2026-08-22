@@ -1,0 +1,86 @@
+/* [project]/blueprints/payload-next-multisite/app/node_modules/@payloadcms/ui/dist/elements/Popup/index.scss.css [app-client] (css) */
+@layer payload-default {
+  .popup {
+    position: relative;
+  }
+
+  .popup__trigger-wrap {
+    cursor: pointer;
+    align-items: stretch;
+    height: 100%;
+    display: flex;
+  }
+
+  .popup__on-hover-watch {
+    display: contents;
+  }
+
+  .popup__hidden-content {
+    display: none;
+  }
+
+  .popup__content {
+    --popup-caret-size: 8px;
+    --popup-button-highlight: var(--theme-elevation-150);
+    z-index: var(--z-popup);
+    background: var(--theme-input-bg);
+    color: var(--theme-text);
+    padding: calc(var(--base)*.5);
+    min-width: 150px;
+    max-width: calc(100vw - var(--base));
+    border-radius: 4px;
+    position: absolute;
+    box-shadow: 0 -2px 16px -2px #0003;
+  }
+
+  .popup__content.popup--size-xsmall {
+    min-width: 80px;
+  }
+
+  .popup__content.popup--size-small {
+    min-width: 100px;
+  }
+
+  .popup__content.popup--size-large {
+    min-width: 200px;
+  }
+
+  .popup__content.popup--size-fit-content {
+    min-width: fit-content;
+  }
+
+  .popup__scroll-container {
+    max-height: calc(var(--base)*10);
+    overflow-y: auto;
+  }
+
+  .popup__scroll-container:not(.popup__scroll-container--show-scrollbar) {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .popup__scroll-container:not(.popup__scroll-container--show-scrollbar)::-webkit-scrollbar {
+    display: none;
+  }
+
+  .popup__caret {
+    border: var(--popup-caret-size) solid #0000;
+    width: 0;
+    height: 0;
+    left: var(--caret-left, 16px);
+    position: absolute;
+    transform: translateX(-50%);
+  }
+
+  .popup--v-bottom .popup__caret {
+    top: calc(var(--popup-caret-size)*-2);
+    border-bottom-color: var(--theme-input-bg);
+  }
+
+  .popup--v-top .popup__caret {
+    bottom: calc(var(--popup-caret-size)*-2);
+    border-top-color: var(--theme-input-bg);
+  }
+}
+
+/*# sourceMappingURL=0nrf_%40payloadcms_ui_dist_elements_Popup_index_scss_css_1igg3k2._.single.css.map*/

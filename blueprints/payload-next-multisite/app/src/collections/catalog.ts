@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { hasRole, superAdminOnly } from '../access/index.js'
+import { hasRole, superAdminOnly } from '../access/index'
 
 /**
  * Общий фактический каталог. Эти данные одинаковы для всех сайтов: один и тот же

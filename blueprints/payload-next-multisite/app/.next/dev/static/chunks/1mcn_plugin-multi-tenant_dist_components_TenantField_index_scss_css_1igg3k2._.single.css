@@ -1,0 +1,48 @@
+/* [project]/blueprints/payload-next-multisite/app/node_modules/@payloadcms/plugin-multi-tenant/dist/components/TenantField/index.scss.css [app-client] (css) */
+.document-fields__main {
+  --tenant-gutter-h-right: var(--main-gutter-h-right);
+  --tenant-gutter-h-left: var(--main-gutter-h-left);
+}
+
+.document-fields__sidebar-fields {
+  --tenant-gutter-h-right: var(--sidebar-gutter-h-right);
+  --tenant-gutter-h-left: var(--sidebar-gutter-h-left);
+}
+
+.document-fields__sidebar-fields .render-fields .tenantField, .document-fields__main .render-fields .tenantField {
+  width: calc(100% + var(--tenant-gutter-h-right) + var(--tenant-gutter-h-left));
+  margin-left: calc(-1*var(--tenant-gutter-h-left));
+  border-bottom: 1px solid var(--theme-elevation-100);
+  padding-top: calc(var(--base)*1);
+  padding-bottom: calc(var(--base)*1.75);
+}
+
+.document-fields__sidebar-fields .render-fields .tenantField__wrapper, .document-fields__main .render-fields .tenantField__wrapper {
+  padding-left: var(--tenant-gutter-h-left);
+  padding-right: var(--tenant-gutter-h-right);
+}
+
+[dir="rtl"] .document-fields__sidebar-fields .render-fields .tenantField, [dir="rtl"] .document-fields__main .render-fields .tenantField {
+  margin-right: calc(-1*var(--tenant-gutter-h-right));
+  background-image: repeating-linear-gradient(-120deg, var(--theme-elevation-50) 0px, var(--theme-elevation-50) 1px, transparent 1px, transparent 5px);
+}
+
+.document-fields__sidebar-fields .render-fields .tenantField:not(:first-child), .document-fields__main .render-fields .tenantField:not(:first-child) {
+  border-top: 1px solid var(--theme-elevation-100);
+  margin-top: calc(var(--base)*1.25);
+}
+
+.document-fields__sidebar-fields .render-fields .tenantField:not(:last-child), .document-fields__main .render-fields .tenantField:not(:last-child) {
+  margin-bottom: var(--spacing-field);
+}
+
+.document-fields__sidebar-fields .render-fields .tenantField:first-child, .document-fields__main .render-fields .tenantField:first-child {
+  margin-top: calc(var(--base)*-1.5);
+  padding-top: calc(var(--base)*1.5);
+}
+
+.document-fields__sidebar-fields .render-fields .tenantField__debug-pill, .document-fields__main .render-fields .tenantField__debug-pill {
+  margin-bottom: calc(var(--base)*.5);
+}
+
+/*# sourceMappingURL=1mcn_plugin-multi-tenant_dist_components_TenantField_index_scss_css_1igg3k2._.single.css.map*/

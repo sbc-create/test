@@ -1,0 +1,14 @@
+/* [project]/blueprints/payload-next-multisite/app/node_modules/@payloadcms/ui/dist/elements/FieldDiffLabel/index.scss.css [app-client] (css) */
+@layer payload-default {
+  .field-diff-label {
+    margin-bottom: calc(var(--base)*.35);
+    flex-direction: row;
+    align-items: center;
+    height: 100%;
+    font-weight: 600;
+    line-height: normal;
+    display: flex;
+  }
+}
+
+/*# sourceMappingURL=0nrf_%40payloadcms_ui_dist_elements_FieldDiffLabel_index_scss_css_1igg3k2._.single.css.map*/

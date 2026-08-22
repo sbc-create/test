@@ -39,6 +39,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--scope", default="anime", help="Имя набора учётных данных в var/db")
     parser.add_argument("--push", action="store_true", help="Разрешить Payload синхронизировать схему (только staging)")
+    parser.add_argument("--cwd", help="Рабочий каталог для команды (нужен CLI, ищущим tsconfig рядом)")
     parser.add_argument("command", nargs=argparse.REMAINDER)
     args = parser.parse_args()
 
@@ -59,6 +60,8 @@ def main() -> int:
         env.setdefault(name, str(directory))
     env.setdefault("NODE_OPTIONS", "--no-deprecation")
 
+    if args.cwd:
+        os.chdir(args.cwd)
     os.execvpe(command[0], command, env)
 
 

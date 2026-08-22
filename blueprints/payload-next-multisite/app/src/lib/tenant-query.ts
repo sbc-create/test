@@ -1,6 +1,6 @@
 import type { Payload, Where } from 'payload'
 
-import { TENANT_SCOPED_SLUGS } from '../hooks/tenant-integrity.js'
+import { TENANT_SCOPED_SLUGS } from '../hooks/tenant-integrity'
 
 /**
  * Единственный разрешённый способ читать контент сайта при рендере.

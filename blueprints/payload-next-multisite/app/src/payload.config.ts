@@ -10,9 +10,9 @@ import { buildConfig } from 'payload'
 import type { CollectionConfig } from 'payload'
 import sharp from 'sharp'
 
-import { isSuperAdmin } from './access/index.js'
-import { Tenants } from './collections/Tenants.js'
-import { Users } from './collections/Users.js'
+import { isSuperAdmin } from './access/index'
+import { Tenants } from './collections/Tenants'
+import { Users } from './collections/Users'
 import {
   CatalogMedia,
   Episodes,
@@ -23,7 +23,7 @@ import {
   Studios,
   Titles,
   Voices,
-} from './collections/catalog.js'
+} from './collections/catalog'
 import {
   AuditLog,
   EditorialCollections,
@@ -32,11 +32,11 @@ import {
   Posts,
   Redirects,
   TenantTitles,
-} from './collections/tenant-content.js'
-import { CommentReports, Comments } from './collections/comments.js'
-import { ImportJobs, PlayerProfiles, ReleaseEvents } from './collections/operations.js'
-import { HomeLayout, Navigation, SiteSettings } from './globals/index.js'
-import { enforceTenantIntegrity } from './hooks/tenant-integrity.js'
+} from './collections/tenant-content'
+import { CommentReports, Comments } from './collections/comments'
+import { ImportJobs, PlayerProfiles, ReleaseEvents } from './collections/operations'
+import { HomeLayout, Navigation, SiteSettings } from './globals/index'
+import { enforceTenantIntegrity } from './hooks/tenant-integrity'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 

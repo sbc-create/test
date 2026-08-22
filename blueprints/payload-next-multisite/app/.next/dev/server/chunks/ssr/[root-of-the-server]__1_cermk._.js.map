@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 11, "column": 0}, "map": {"version":3,"sources":["file:///home/user/test/blueprints/payload-next-multisite/app/src/app/(payload)/admin/[[...segments]]/page.tsx"],"sourcesContent":["import type { Metadata } from 'next'\n\nimport config from '@payload-config'\nimport { importMap } from '../importMap.js'\nimport { RootPage, generatePageMetadata } from '@payloadcms/next/views'\n\ntype Args = {\n  params: Promise<{ segments: string[] }>\n  searchParams: Promise<{ [key: string]: string | string[] }>\n}\n\nexport const generateMetadata = ({ params, searchParams }: Args): Promise<Metadata> =>\n  generatePageMetadata({ config, params, searchParams })\n\nconst Page = ({ params, searchParams }: Args) =>\n  RootPage({ config, params, searchParams, importMap })\n\nexport default Page\n"],"names":["generateMetadata","params","searchParams","config","Page","importMap"],"mappings":";;;;;;AAEA;AACA;AACA;AAAA;;;;;;;;;;;AAOO,MAAMA,mBAAmB,CAAC,EAAEC,MAAM,EAAEC,YAAY,EAAQ,GAC7D,IAAA,sPAAoB,EAAC;QAAEC,QAAAA,wLAAM;QAAEF;QAAQC;IAAa;AAEtD,MAAME,OAAO,CAAC,EAAEH,MAAM,EAAEC,YAAY,EAAQ,GAC1C,IAAA,uOAAQ,EAAC;QAAEC,QAAAA,wLAAM;QAAEF;QAAQC;QAAcG,WAAAA,iNAAS;IAAC;uCAEtCD"}}]
+}

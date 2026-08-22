@@ -1,0 +1,95 @@
+/* [project]/blueprints/payload-next-multisite/app/node_modules/@payloadcms/ui/dist/elements/Tooltip/index.scss.css [app-client] (css) */
+@layer payload-default {
+  .tooltip {
+    --caret-size: 6px;
+    opacity: 0;
+    background-color: var(--theme-elevation-800);
+    z-index: 3;
+    color: var(--theme-elevation-0);
+    white-space: nowrap;
+    visibility: hidden;
+    border-radius: 2px;
+    padding: 4px 8px;
+    font-weight: normal;
+    line-height: 15px;
+    position: absolute;
+    left: 50%;
+  }
+
+  .tooltip:after {
+    content: " ";
+    border-left: var(--caret-size) solid #0000;
+    border-right: var(--caret-size) solid #0000;
+    width: 0;
+    height: 0;
+    display: block;
+    position: absolute;
+    transform: translate3d(-50%, 100%, 0);
+  }
+
+  .tooltip--show {
+    visibility: visible;
+    opacity: 1;
+    cursor: default;
+    transition: opacity .2s ease-in-out;
+  }
+
+  .tooltip--caret-center:after {
+    left: 50%;
+  }
+
+  .tooltip--caret-left:after {
+    left: calc(var(--base)*.5);
+  }
+
+  .tooltip--caret-right:after {
+    right: calc(var(--base)*.5);
+  }
+
+  .tooltip--position-top {
+    top: calc(var(--base)*-1.25);
+    transform: translate3d(-50%, calc(var(--caret-size) * -1), 0);
+  }
+
+  .tooltip--position-top:after {
+    border-top: var(--caret-size) solid var(--theme-elevation-800);
+    bottom: 1px;
+  }
+
+  .tooltip--position-bottom {
+    bottom: calc(var(--base)*-1.25);
+    transform: translate3d(-50%, var(--caret-size), 0);
+  }
+
+  .tooltip--position-bottom:after {
+    bottom: calc(100% + var(--caret-size) - 1px);
+    border-bottom: var(--caret-size) solid var(--theme-elevation-800);
+  }
+
+  .tooltip .tooltip-content {
+    text-overflow: ellipsis;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  @media (max-width: 1024px) {
+    .tooltip {
+      display: none;
+    }
+  }
+
+  html[data-theme="light"] .tooltip:not(.field-error) {
+    background-color: var(--theme-elevation-100);
+    color: var(--theme-elevation-1000);
+  }
+
+  html[data-theme="light"] .tooltip--position-top:not(.field-error):after {
+    border-top-color: var(--theme-elevation-100);
+  }
+
+  html[data-theme="light"] .tooltip--position-bottom:not(.field-error):after {
+    border-bottom-color: var(--theme-elevation-100);
+  }
+}
+
+/*# sourceMappingURL=0nrf_%40payloadcms_ui_dist_elements_Tooltip_index_scss_css_1igg3k2._.single.css.map*/

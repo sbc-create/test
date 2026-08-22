@@ -1,0 +1,68 @@
+/* [project]/blueprints/payload-next-multisite/app/node_modules/@payloadcms/ui/dist/elements/Banner/index.scss.css [app-client] (css) */
+@layer payload-default {
+  .banner {
+    vertical-align: middle;
+    background: var(--theme-elevation-100);
+    color: var(--theme-elevation-800);
+    border: 0;
+    border-radius: 4px;
+    margin-bottom: 1.53846rem;
+    padding: 10px;
+    font-size: 1rem;
+    line-height: 20px;
+  }
+
+  .banner--has-action {
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .banner--has-icon {
+    display: flex;
+  }
+
+  .banner--has-icon svg {
+    display: block;
+  }
+
+  .banner--type-default.button--has-action:hover {
+    background: var(--theme-elevation-900);
+  }
+
+  .banner--type-default.button--has-action:active {
+    background: var(--theme-elevation-950);
+  }
+
+  .banner--type-error {
+    background: var(--theme-error-100);
+    color: var(--theme-error-600);
+  }
+
+  .banner--type-error svg .stroke {
+    stroke: var(--theme-error-600);
+    fill: none;
+  }
+
+  .banner--type-error svg .fill {
+    fill: var(--theme-error-600);
+  }
+
+  .banner--type-error.button--has-action:hover {
+    background: var(--theme-error-200);
+  }
+
+  .banner--type-error.button--has-action:active {
+    background: var(--theme-error-300);
+  }
+
+  .banner--type-success {
+    background: var(--theme-success-100);
+    color: var(--theme-success-600);
+  }
+
+  .banner--type-success.button--has-action:hover, .banner--type-success.button--has-action:active {
+    background: var(--theme-success-200);
+  }
+}
+
+/*# sourceMappingURL=0nrf_%40payloadcms_ui_dist_elements_Banner_index_scss_css_1igg3k2._.single.css.map*/

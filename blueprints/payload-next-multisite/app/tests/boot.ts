@@ -1,6 +1,6 @@
 /** Проверка, что конфигурация действительно поднимается на реальном PostgreSQL. */
 import { getPayload } from 'payload'
-import config from '../src/payload.config.js'
+import config from '../src/payload.config'
 
 const payload = await getPayload({ config })
 const slugs = payload.config.collections.map((collection) => collection.slug).sort()

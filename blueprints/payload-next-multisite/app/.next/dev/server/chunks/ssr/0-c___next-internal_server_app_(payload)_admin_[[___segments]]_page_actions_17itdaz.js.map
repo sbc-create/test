@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 26, "column": 0}, "map": {"version":3,"sources":["file:///home/user/test/blueprints/payload-next-multisite/app/.next-internal/server/app/(payload)/admin/[[...segments]]/page/actions.js%20(server%20actions%20loader)"],"sourcesContent":["export {$$RSC_SERVER_ACTION_0 as '403c62f39c09ad482f0a08a5dadad9fad114a16098'} from 'ACTIONS_MODULE0'\nexport {$$RSC_SERVER_ACTION_0 as '60302f9ee3b31ae2e33227d24e2144ea3d1f943c71'} from 'ACTIONS_MODULE1'\n"],"names":[],"mappings":";AAAA;AACA"}}]
+}
