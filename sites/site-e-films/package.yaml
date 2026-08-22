@@ -1,0 +1,427 @@
+# Пакет сайта E из четвёрки кинотеатров (Change Request v3.0).
+#
+# Публичное название, домен, сервер и авторизация production НЕ переданы, поэтому
+# здесь стоят внутренний код сайта и localhost. Пустое поле — это BLOCKED_INPUT,
+# а не разрешение подставить значение по умолчанию.
+#
+# database_ref: anime — общая база стенда. Имя историческое: стенд один на все
+# семь сайтов, потому что задание требует одной multi-tenant CMS.
+schema_version: 1
+job_id: site-e-films-staging-001
+site_id: site-e-films
+requested_action: create
+blueprint: payload-next-multisite
+fixture: true
+domain: site-e.localhost
+aliases: []
+canonical_url: https://site-e.localhost/
+environment: staging
+production_authorized: false
+target_ref: payload-local
+ssh_host_ref: null
+dns_zone_ref: null
+network_allowlist:
+- 127.0.0.1
+dle_version: null
+dle_distribution_ref: null
+dle_distribution_sha256: null
+dle_license_ref: null
+brand:
+  name: site_e
+  legal_name: null
+  logo_ref: brand/placeholder.svg
+  favicon_ref: brand/placeholder.svg
+  colors:
+    primary: '#8a3324'
+    background: '#faf8f5'
+    surface: '#ffffff'
+    text: '#1d1a17'
+    muted: '#5f574e'
+  fonts:
+    body: "'Source Sans 3', 'Segoe UI', Roboto, Arial, sans-serif"
+    self_hosted: true
+theme_ref: film_editorial
+visual_reference: null
+content_package_ref: null
+content_package_sha256: null
+language: ru
+tenant:
+  slug: site_e
+  seo_profile: film_library
+  theme: film_editorial
+  indexing_enabled: false
+  allow_guest_comments: true
+  owned_listings:
+  - /films/
+  - /news/
+database_ref: anime
+player_profile:
+  contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+  publisher_id_ref: PLAYER_PUBLISHER_ID_E
+  aggregator: kp
+  mode: mock
+  show_banner: false
+  show_voice_only: false
+content_api:
+  contract_ref: knowledge/cdnvideohub/content-api.yaml
+  mode: disabled
+  token_ref: CDNVIDEOHUB_API_TOKEN
+comments:
+  enabled: true
+  premoderation: true
+  min_interval_seconds: 30
+  max_length: 4000
+cross_site_group: cinema-quartet
+metadata:
+  title_templates:
+    home: '{brand} — кино по жанрам, годам и странам'
+    category: '{category} — {brand}'
+    title: '{title} — {brand}'
+    episode: '{title}. Сезон {season}, эпизод {episode} — {brand}'
+    pagination: '{title} — страница {n}'
+    news_index: 'Кинообзоры редакции — {brand}'
+    search: 'Поиск — {brand}'
+    not_found: Страница не найдена
+    gone: Материал удалён
+  description_templates:
+    home: Полнометражное кино с навигацией по жанрам, годам и странам.
+    category: Материалы раздела {category}.
+    pagination: '{description} Страница {n}.'
+    news_index: Что посмотреть из полнометражного и почему именно это.
+  canonical_policy:
+    scheme: https
+    host_form: non_www
+    trailing_slash: true
+    case: lower
+  og:
+    enabled: true
+    site_name: site_e
+  robots:
+    staging_policy: noindex_all_plus_auth
+    production_policy: allow_indexable_only
+    extra_disallow:
+    - /search/
+  sitemap:
+    enabled: true
+    split_by_type: false
+    max_urls_per_file: 50000
+  structured_data_input:
+    organization: null
+    website: null
+    allowed_types:
+    - WebSite
+    - BreadcrumbList
+    - Movie
+seo:
+  indexability_matrix_ref: knowledge/SEO_INDEXABILITY_MATRIX.yaml
+  items_per_page: 24
+  url_templates:
+    category: /films/
+    title: /catalog/{title_slug}/
+  pagination_template: /page/{n}/
+  indexable_facets_allowlist:
+  - slug: drama
+    url: /films/genre/drama/
+    title: 'Драмы: полнометражные фильмы'
+    h1: Драмы
+    description: Полнометражные драмы с годом выхода, страной производства и составом создателей.
+    internal_links_from:
+    - /films/
+    - /news/
+  - slug: thriller
+    url: /films/genre/thriller/
+    title: 'Триллеры: полнометражные фильмы'
+    h1: Триллеры
+    description: 'Полнометражные триллеры: год выхода, страна производства и жанровые пометки.'
+    internal_links_from:
+    - /films/
+    - /news/
+  - slug: comedy
+    url: /films/genre/comedy/
+    title: 'Комедии: полнометражные фильмы'
+    h1: Комедии
+    description: Полнометражные комедии с указанием года, страны и продолжительности.
+    internal_links_from:
+    - /films/
+    - /news/
+  - slug: russia
+    url: /films/country/russia/
+    title: Российские фильмы
+    h1: Фильмы России
+    description: Полнометражные фильмы производства России с годом выхода и жанром.
+    internal_links_from:
+    - /films/
+    - /news/
+  - slug: france
+    url: /films/country/france/
+    title: Французские фильмы
+    h1: Фильмы Франции
+    description: Полнометражные фильмы производства Франции с годом выхода и жанром.
+    internal_links_from:
+    - /films/
+    - /news/
+  - slug: '2024'
+    url: /films/year/2024/
+    title: Фильмы 2024 года
+    h1: Фильмы 2024 года
+    description: Полнометражные премьеры 2024 года с жанром и страной производства.
+    internal_links_from:
+    - /films/
+    - /news/
+  non_indexable_parameters:
+  - sort
+  - order
+  - view
+  - per_page
+  - q
+  - utm_source
+  - utm_medium
+  - utm_campaign
+  - utm_term
+  - utm_content
+  - gclid
+  - yclid
+  - fbclid
+  internal_link_rules:
+    breadcrumbs: true
+    related_source: package_relations_only
+    max_depth: 4
+  hreflang: []
+  webmaster_verification_refs: {}
+navigation:
+  primary:
+  - label: Фильмы
+    url: /films/
+  - label: Кинообзоры
+    url: /news/
+  - label: Поиск
+    url: /search/
+  footer:
+  - label: Главная
+    url: /
+legal:
+  owner: null
+  contacts:
+    email: null
+    phone: null
+    address: null
+  documents:
+  - slug: rights
+    title: Права на данные каталога
+    summary: Происхождение фактических сведений каталога и порядок обращения правообладателя.
+    body_ref: legal/rights.md
+content_source:
+  kind: fixture
+  provenance: Синтетические записи стенда, созданные внутри репозитория фабрики
+  rights_manifest_ref: content/rights-manifest.yaml
+  rights_confirmed: true
+  allowed_fields:
+  - title
+  - description
+  - image
+  - facts
+vk_video:
+  enabled: false
+  adapter: disabled
+  video_ids: []
+  player_configuration: {}
+  playback_mode: disabled
+advertising:
+  enabled: false
+  provider: none
+  adapter: disabled
+  placements: []
+  policy_refs: []
+  secret_ref: null
+integrations: []
+runtime:
+  php:
+    version: null
+    fpm_pool: null
+    memory_limit: null
+    max_execution_time: null
+  database:
+    engine: postgres
+    version: '16'
+    name: factory_anime
+    user: factory_anime_app
+    password_secret_ref: file:var/db/anime.password
+  cache: {}
+  mail: {}
+  cron: []
+  limits: {}
+backup_policy:
+  before_mutation: true
+  schedule: null
+  targets:
+  - database
+  - media
+  restore_test: each_release
+monitoring_policy:
+  health_endpoint: /robots.txt
+  checks:
+  - http_status
+  - canonical_host
+  alert_ref: null
+retention_policy:
+  backups_days: 14
+  logs_days: 14
+  artifacts_days: 30
+deployment_readiness:
+  status: BLOCKED_INPUT_DOMAIN_TARGET
+  required_inputs:
+  - field: domain
+    why: Публичный домен не передан; localhost — стендовое значение, а не production.
+  - field: brand.name
+    why: Публичное название сайта не передано, внутренний код site_e не публикуется.
+  - field: target_ref
+    why: Сервер выкладки не передан; payload-local — одноразовый локальный стенд.
+  - field: ssh_host_ref
+    why: SSH-хост отсутствует в inventory, произвольный адрес не добавляется.
+  - field: dns_zone_ref
+    why: DNS-зона не передана; запись создаётся только в разрешённой зоне.
+  - field: production_authorized
+    why: Выкладка в production требует явной авторизации в манифесте.
+  - field: legal.owner
+    why: Владелец и контакты обязательны для юридической страницы.
+  dns_plan:
+    zone_ref: null
+    records:
+    - type: A
+      name: '@'
+      value_ref: TARGET_IPV4
+      ttl: 300
+    - type: CNAME
+      name: www
+      value_ref: APEX_DOMAIN
+      ttl: 300
+    - type: CAA
+      name: '@'
+      value_ref: TLS_CAA_ISSUER
+      ttl: 3600
+    cutover: >-
+      Записи создаются только после зелёного staging QA и проверки origin по IP.
+      Переключение — отдельный журналируемый шаг с планом отката на прежние значения.
+  tls_plan:
+    issuer: ACME HTTP-01 через обратный прокси цели
+    renewal: Автопродление за 30 дней до истечения, health-проверка после продления
+    hsts: true
+    redirect_http: true
+  health_checks:
+  - path: /robots.txt
+    expect_status: 200
+    expect_contains: Sitemap
+  - path: /
+    expect_status: 200
+    expect_contains: null
+  - path: /films/
+    expect_status: 200
+    expect_contains: null
+  - path: /nothing-here/
+    expect_status: 404
+    expect_contains: null
+  commands:
+    deploy: python3 -m factory deploy --site site-e-films --environment staging
+    verify: python3 -m factory verify --site site-e-films
+    rollback: python3 -m factory rollback --site site-e-films --environment staging
+    post_deploy_seo:
+    - python3 -m factory seo-crawl --site site-e-films
+    - python3 -m factory seo-render --site site-e-films
+    - python3 -m factory seo-cross-site --group cinema-quartet
+  secret_refs:
+  - name: Пароль базы сайта
+    ref: file:var/db/anime.password
+    scope: staging
+  - name: Publisher ID плеера
+    ref: PLAYER_PUBLISHER_ID_E
+    scope: staging
+  - name: Токен Content API
+    ref: CDNVIDEOHUB_API_TOKEN
+    scope: server_side_only
+acceptance:
+  routes:
+  - path: /films/
+    page_type: category
+    expected_status: 200
+    expect_indexable: true
+  - path: /
+    page_type: home
+    expected_status: 200
+    expect_indexable: true
+  - path: /news/
+    page_type: news_index
+    expected_status: 200
+    expect_indexable: true
+  - path: /series/
+    page_type: category
+    expected_status: 200
+    expect_indexable: false
+  - path: /calendar/
+    page_type: category
+    expected_status: 200
+    expect_indexable: false
+  - path: /search/
+    page_type: search
+    expected_status: 200
+    expect_indexable: false
+  - path: /nothing-here/
+    page_type: not_found
+    expected_status: 404
+    expect_indexable: false
+  - path: /films/genre/drama/
+    page_type: tag
+    expected_status: 200
+    expect_indexable: true
+  - path: /films/genre/thriller/
+    page_type: tag
+    expected_status: 200
+    expect_indexable: true
+  scenarios:
+  - id: editor-publishes-title
+    description: Редактор создаёт публикацию произведения и она появляется только на своём домене
+    steps:
+    - Войти в админку под редактором сайта
+    - Создать публикацию с собственным вступлением
+    - Опубликовать и открыть страницу на домене этого сайта
+    - Убедиться, что на других доменах публикации нет
+  - id: tenant-isolation
+    description: Пользователь одного сайта не видит и не меняет данные другого
+    steps:
+    - Открыть список материалов под администратором сайта
+    - Убедиться, что видны только материалы своего сайта
+    - Попытаться открыть документ другого сайта по прямому идентификатору
+    - Убедиться в отказе
+  - id: filter-changes-results
+    description: Фильтр меняет саму выдачу, а не только адрес страницы
+    steps:
+    - Открыть раздел без фильтров и запомнить число найденного
+    - Применить фильтр по жанру, году или стране
+    - Убедиться, что состав и число результатов изменились
+    - Убедиться, что отфильтрованная страница noindex и canonical ведёт на раздел
+  - id: single-owner-of-title
+    description: Страницу произведения индексирует ровно один сайт группы
+    steps:
+    - Открыть страницу произведения на своём сайте
+    - Проверить robots и canonical
+    - Открыть ту же страницу на соседних сайтах группы
+    - Убедиться, что там она noindex
+  - id: comment-moderation
+    description: Комментарий проходит премодерацию и только после неё виден
+    steps:
+    - Отправить комментарий с публичной страницы
+    - Убедиться, что на странице его нет
+    - Опубликовать комментарий под модератором
+    - Убедиться, что он появился только на своём сайте
+  - id: player-contract
+    description: Плеер встраивается по контракту, недоступное видео показывает статус
+    steps:
+    - Открыть страницу серии
+    - Убедиться в наличии элемента плеера с атрибутами контракта
+    - Смоделировать событие noData
+    - Убедиться, что вместо подмены показан честный статус
+rollback_policy:
+  keep_releases: 5
+  auto_rollback_on_smoke_failure: true
+requested_by: ITAPX@yandex.com
+authorized_by: null
+created_at: '2026-08-22T00:00:00Z'

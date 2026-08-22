@@ -163,7 +163,8 @@ def _check_environment(pkg: dict, out: list[Blocker]) -> None:
 
 #: Темы, объявленные blueprint payload-next-multisite. Они живут в самом
 #: приложении как наборы токенов, а не отдельными пакетами в themes/.
-PAYLOAD_THEMES = {"portal_light", "pulse", "editorial"}
+PAYLOAD_THEMES = {"portal_light", "pulse", "editorial",
+                  "series_dark", "film_editorial", "premiere_signal", "guide_warm"}
 
 
 def blueprint_of(pkg: dict) -> str:
@@ -245,9 +246,15 @@ def _check_domain_consistency(pkg: dict, out: list[Blocker]) -> None:
 #: Владение разделами объявлено в профиле приложения. Пакет обязан ему соответствовать:
 #: иначе поле в манифесте выглядит настройкой, но ни на что не влияет.
 PROFILE_OWNED_LISTINGS = {
+    # Аниме-тройка
     "catalog_authority": ["/catalog/", "/collections/", "/news/"],
     "release_pulse": ["/schedule/", "/news/"],
     "editorial_guide": ["/collections/", "/news/"],
+    # Четвёрка кинотеатров: внутри группы у каждого раздела ровно один владелец.
+    "series_hub": ["/series/", "/news/"],
+    "film_library": ["/films/", "/news/"],
+    "premiere_radar": ["/calendar/", "/news/"],
+    "curated_guide": ["/collections/", "/news/"],
 }
 
 
@@ -266,7 +273,7 @@ def _check_tenant_profile(pkg: dict, out: list[Blocker]) -> None:
     if expected is None:
         out.append(Blocker("BLOCKED_INPUT", "tenant.seo_profile",
                            f"Неизвестный SEO-профиль «{profile}».",
-                           "catalog_authority | release_pulse | editorial_guide", "VALIDATING"))
+                           " | ".join(sorted(PROFILE_OWNED_LISTINGS)), "VALIDATING"))
         return
     declared = list(tenant.get("owned_listings") or [])
     if sorted(declared) != sorted(expected):
