@@ -140,7 +140,10 @@ if [ ! -x "$TSX" ]; then
 elif ! pg_isready -q 2>/dev/null && ! python3 -c "from factory import database; raise SystemExit(0 if database.start_cluster() else 1)"; then
   skip "payload-blueprint" "кластер PostgreSQL недоступен"
 else
-  run "payload-typecheck"   "cd blueprints/payload-next-multisite/app && npx tsc --noEmit -p tsconfig.json"
+  # Подоболочка обязательна: `run` выполняет команду в текущем shell, и `cd`
+  # без скобок утащил бы за собой все последующие шаги.
+  run "payload-secret-scan" "python3 tests/tools/secret_scan.py"
+  run "payload-typecheck"   "(cd blueprints/payload-next-multisite/app && npx tsc --noEmit -p tsconfig.json)"
   run "payload-seo-matrix"  "$TSX $APP_TESTS/seo-matrix.ts"
   run "payload-player"      "$TSX $APP_TESTS/player-contract.ts"
   run "payload-comments"    "$TSX $APP_TESTS/comments-policy.ts"
@@ -169,4 +172,9 @@ fi
 # Доказательства последнего прогона фиксируются в artifacts/evidence/.
 python3 tests/tools/collect_evidence.py > /dev/null || true
 
-python3 tests/tools/summarize_run.py
+# Сводка обязана выполниться: без неё прогон завершился бы нулевым кодом даже при
+# провалах — «зелёный» результат появлялся бы там, где на самом деле ничего не сведено.
+if ! python3 tests/tools/summarize_run.py; then
+  echo "ОШИБКА: сводка прогона не построена — результат нельзя считать доказанным"
+  exit 1
+fi
