@@ -1,5 +1,5 @@
 import type { PageTypeId } from './matrix'
-import type { SeoProfile } from './profiles'
+import { ownsTitle, type SeoProfile } from './profiles'
 
 /**
  * Правила попадания документа в карту сайта — отдельно от маршрута.
@@ -53,3 +53,15 @@ export const seasonInSitemap = (profile: SeoProfile, doc: unknown, season: numbe
   profile.sitemapTypes.includes('season')
   && Boolean(profile.indexable.season)
   && seasonNote(doc, season) !== null
+
+
+/**
+ * Страница произведения попадает в карту сайта, только если этот сайт её
+ * индексирует: карта, перечисляющая noindex-страницы, вводит в заблуждение
+ * поисковую систему и прячет настоящую проблему за зелёным отчётом.
+ */
+export const titleInSitemap = (
+  profile: SeoProfile,
+  record: Record<string, unknown>,
+  shared: { kind?: unknown; releaseState?: unknown } | null | undefined,
+): boolean => inSitemap(profile, 'title', record) && ownsTitle(profile, shared)

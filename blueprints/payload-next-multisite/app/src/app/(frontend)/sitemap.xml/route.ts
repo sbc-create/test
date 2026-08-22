@@ -2,7 +2,7 @@ import { listCollections, listEpisodes, listPosts, listSeasons, listTenantTitles
 import { currentSite, payloadClient } from '../../../lib/site'
 import { tenantFind } from '../../../lib/tenant-query'
 import { absoluteUrl } from '../../../seo/metadata'
-import { inSitemap, seasonInSitemap } from '../../../seo/inclusion'
+import { inSitemap, seasonInSitemap, titleInSitemap } from '../../../seo/inclusion'
 import { PAGE_TYPES } from '../../../seo/matrix'
 import { ownsListing } from '../../../seo/profiles'
 
@@ -42,8 +42,17 @@ export const GET = async () => {
 
   if (includes('home')) add('/')
   if (includes('category')) {
-    if (ownsListing(profile, '/catalog/')) add('/catalog/')
-    if (ownsListing(profile, '/schedule/')) add('/schedule/')
+    // Перечисляем только разделы, которыми сайт владеет: чужой раздел отдаётся
+    // с noindex, и его место не в карте сайта, а в навигации.
+    for (const listing of ['/catalog/', '/schedule/', '/series/', '/films/', '/calendar/']) {
+      if (ownsListing(profile, listing)) add(listing)
+    }
+  }
+
+  // Посадочные страницы фильтров — закрытый список профиля. Произвольные
+  // комбинации фильтров в карту не попадают и не индексируются.
+  if (includes('tag')) {
+    for (const facet of profile.indexableFacets) add(facet)
   }
   if (includes('collection') && ownsListing(profile, '/collections/')) add('/collections/')
   if (includes('news_index') && ownsListing(profile, '/news/')) add('/news/')
@@ -52,8 +61,10 @@ export const GET = async () => {
     const titles = await listTenantTitles(payload, site.tenant, { limit: 1000 })
     for (const doc of titles.docs) {
       const record = doc as unknown as Record<string, unknown>
-      // Профиль требует собственного текста — без него страница noindex и в карту не идёт.
-      if (!inSitemap(profile, 'title', record)) continue
+      // Профиль требует собственного текста — без него страница noindex и в карту
+      // не идёт; страницу произведения к тому же индексирует ровно один сайт.
+      const sharedRecord = record.title as { kind?: unknown; releaseState?: unknown } | null
+      if (!titleInSitemap(profile, record, sharedRecord)) continue
       add(`/catalog/${String(record.slug)}/`, record.updatedAt)
 
       // Сезоны и серии перечисляются, только если профиль их индексирует. Раньше

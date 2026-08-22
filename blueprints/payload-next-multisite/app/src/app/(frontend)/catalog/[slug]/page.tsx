@@ -10,6 +10,7 @@ import { describe, plainText, titleNameOf } from '../../../../lib/present'
 import { currentSite, payloadClient } from '../../../../lib/site'
 import { playerConfigFor } from '../../../../player/server'
 import { absoluteUrl, buildMetadata } from '../../../../seo/metadata'
+import { ownsTitle } from '../../../../seo/profiles'
 
 export const dynamic = 'force-dynamic'
 
@@ -37,7 +38,16 @@ export const generateMetadata = async ({ params }: { params: Params }): Promise<
       heading: site.profile.titleHeading(titleNameOf(doc)),
       description: describe(seo.seoDescription, record.editorialIntro, shared?.factualSynopsis),
       ownText: plainText(record.editorialIntro),
-      documentRobots: (seo.robots as 'inherit' | 'index' | 'noindex' | undefined) ?? 'inherit',
+      // Индексирует страницу произведения ровно один сайт группы: тот, чьему
+      // владению соответствуют форма и релизное состояние. У остальных она
+      // работает и обходится, но остаётся навигацией. Явный noindex редакции
+      // сильнее: снять страницу с индексации можно всегда, добавить — нет.
+      documentRobots:
+        (seo.robots as 'inherit' | 'index' | 'noindex' | undefined) === 'noindex'
+          ? 'noindex'
+          : ownsTitle(site.profile, shared)
+            ? ((seo.robots as 'inherit' | 'index' | undefined) ?? 'inherit')
+            : 'noindex',
     },
     site.siteName,
   )

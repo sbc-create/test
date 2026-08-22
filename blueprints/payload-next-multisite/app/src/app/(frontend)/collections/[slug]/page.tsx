@@ -45,9 +45,11 @@ const CollectionPage = async ({ params }: { params: Params }) => {
   if (!doc) notFound()
 
   const record = asRecord(doc)!
+  const kind = String(record.collectionKind ?? 'themed')
+  const steps = Array.isArray(record.steps) ? record.steps : []
   const items = Array.isArray(record.items) ? record.items : []
-  // Подборка без материалов не публикуется как страница со статусом 200.
-  if (items.length === 0) notFound()
+  // Подборка без состава не публикуется как страница со статусом 200.
+  if (kind === 'watch_order' ? steps.length === 0 : items.length === 0) notFound()
 
   return (
     <>
@@ -55,13 +57,43 @@ const CollectionPage = async ({ params }: { params: Params }) => {
         origin={absoluteUrl(site.tenant, '')}
         crumbs={[
           { title: 'Главная', href: '/' },
-          { title: 'Подборки', href: '/collections/' },
+          { title: site.profile.collectionsHeading, href: '/collections/' },
           { title: String(record.name ?? ''), href: `/collections/${slug}/` },
         ]}
       />
       <h1>{String(record.name ?? '')}</h1>
       {record.intro ? <p style={{ maxWidth: '70ch' }}>{String(record.intro)}</p> : null}
-      <CardGrid items={items.map(tenantTitleCard)} empty="В подборке пока нет материалов." shape={site.layout.card} />
+      {kind === 'watch_order' ? (
+        // Порядок просмотра — нумерованный маршрут: у каждого шага собственное
+        // объяснение редакции, иначе это тот же список под другим названием.
+        <ol className="watch-order" data-testid="watch-order">
+          {steps.map((raw, index) => {
+            const step = asRecord(raw)
+            const target = asRecord(step?.title)
+            if (!target) return null
+            const card = tenantTitleCard(target)
+            return (
+              <li className="watch-order__step" key={`${card.href}-${index}`}>
+                <span className="watch-order__number" aria-hidden="true">
+                  {index + 1}
+                </span>
+                <div>
+                  <a className="watch-order__title" href={card.href}>
+                    {card.title}
+                  </a>
+                  <p className="watch-order__note">{String(step?.note ?? '')}</p>
+                </div>
+              </li>
+            )
+          })}
+        </ol>
+      ) : (
+        <CardGrid
+          items={items.map(tenantTitleCard)}
+          empty={site.layout.tone.emptyList}
+          shape={site.layout.card}
+        />
+      )}
     </>
   )
 }
