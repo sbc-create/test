@@ -31,3 +31,5 @@ playwright-report/
 artifacts/*
 !artifacts/evidence/
 artifacts/evidence/*.png
+tsconfig.tsbuildinfo
+**/tsconfig.tsbuildinfo

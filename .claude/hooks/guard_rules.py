@@ -30,6 +30,7 @@ WRAPPERS = {
 WRAPPER_TAKES_VALUE = {"timeout", "nice", "stdbuf", "flock", "ionice", "chrt", "taskset", "watch"}
 
 #: Интерпретаторы: содержимое их `-c` разбирается рекурсивно.
+SHELL_INTERPRETERS = {"bash", "sh", "zsh", "dash", "ksh", "csh", "tcsh", "fish"}
 INTERPRETERS = {"bash", "sh", "zsh", "dash", "ksh", "csh", "tcsh", "fish",
                 "python", "python2", "python3", "perl", "ruby", "node", "nodejs", "php", "deno", "bun"}
 #: Раннеры, запускающие команду внутри контейнера/окружения.
@@ -71,7 +72,9 @@ def strip_heredoc_bodies(command: str) -> tuple[str, list[str]]:
         (rest_lines if closed else body_lines).append(line)
     remainder = head + (" " + "\n".join(rest_lines) if rest_lines else "")
     first = os.path.basename((head.split() or [""])[0])
-    executed = "\n".join(body_lines) if first in INTERPRETERS else ""
+    # Оболочка исполняет тело как shell-код, скриптовый интерпретатор — как свой язык.
+    kind = "shell" if first in SHELL_INTERPRETERS else ("script" if first in INTERPRETERS else "")
+    executed = f"{kind}\n" + "\n".join(body_lines) if kind else ""
     nested_remainder, nested_bodies = (remainder, []) if not HEREDOC_RE.search(remainder) else strip_heredoc_bodies(remainder)
     bodies = ([executed] if executed else []) + nested_bodies
     return nested_remainder, bodies
@@ -364,7 +367,13 @@ def evaluate_bash(command: str, depth: int = 0) -> Decision:
     # читает интерпретатор — тогда они разбираются как вложенный код.
     command, heredoc_bodies = strip_heredoc_bodies(command)
     for body in heredoc_bodies:
-        nested = evaluate_interpreter_body(body, depth) if depth < 3 else Decision(PASS)
+        kind, _, payload = body.partition("\n")
+        if depth >= 3:
+            nested = Decision(PASS)
+        elif kind == "shell":
+            nested = evaluate_bash(payload, depth + 1)
+        else:
+            nested = evaluate_interpreter_body(payload, depth)
         if nested.decision == DENY:
             return Decision(nested.decision, f"Тело heredoc для интерпретатора: {nested.reason}", nested.rule_id)
     if PIPE_TO_SHELL_RE.search(command):
