@@ -38,3 +38,10 @@ tsconfig.tsbuildinfo
 **/.next/
 # Каталоги релизов blueprint payload-next-multisite
 blueprints/payload-next-multisite/app/.releases/
+
+# --- из SEO-оператора ---
+# Python
+*.py[cod]
+.ruff_cache/
+# Build output
+dist/

@@ -1,0 +1,6 @@
+{
+  "url": "not-a-url",
+  "title": "This title is deliberately far too long to fit inside a search engine result page without being truncated by the renderer",
+  "meta_description": "short",
+  "indexable": "yes"
+}

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sbc-create/test/schemas/keyword-plan.schema.json",
+  "title": "Keyword Plan",
+  "description": "Keyword targeting plan. Each target maps one primary keyword to one URL.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["plan_id", "targets"],
+  "properties": {
+    "plan_id": {"type": "string", "pattern": "^[a-z0-9]{4,}(-[a-z0-9]+)*$"},
+    "market": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "BCP 47 market this plan targets, e.g. en-US."
+    },
+    "targets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["keyword", "url", "intent"],
+        "properties": {
+          "keyword": {"type": "string", "minLength": 1},
+          "url": {"type": "string", "format": "uri"},
+          "intent": {
+            "type": "string",
+            "enum": ["informational", "navigational", "commercial", "transactional"]
+          },
+          "search_volume": {"type": "integer", "minimum": 0},
+          "difficulty": {"type": "number", "minimum": 0, "maximum": 100},
+          "current_position": {
+            "type": ["integer", "null"],
+            "minimum": 1,
+            "description": "Null when not currently ranking in the tracked range."
+          },
+          "secondary_keywords": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1}
+          },
+          "source": {
+            "type": "string",
+            "description": "Where volume/difficulty came from. Required for any numeric claim to be trusted."
+          }
+        }
+      }
+    }
+  }
+}
