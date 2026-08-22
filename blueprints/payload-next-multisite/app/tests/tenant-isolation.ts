@@ -46,7 +46,7 @@ for (const slug of seededSlugs) {
       depth: 0,
     })
     assertEqual(result.totalDocs, 1, `${slug}: totalDocs`)
-    assertEqual(String(result.docs[0]!.id), String(data.docs[slug]!.a), `${slug}: id документа`)
+    assertEqual(String((result.docs[0] as { id: unknown }).id), String(data.docs[slug]!.a), `${slug}: id документа`)
   })
 }
 

@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///home/user/test/blueprints/payload-next-multisite/app/src/app/(frontend)/not-found.tsx"],"sourcesContent":["import Link from 'next/link'\n\n/** 404 отдаётся именно со статусом 404: страница «ничего не найдено» со статусом 200 — soft 404. */\nconst NotFound = () => (\n  <>\n    <h1>Страница не найдена</h1>\n    <p style={{ maxWidth: '70ch' }}>\n      Такого адреса на сайте нет. Возможно, материал удалён или адрес набран с ошибкой.\n    </p>\n    <nav className=\"row\">\n      <Link className=\"button\" href=\"/\">\n        На главную\n      </Link>\n      <Link className=\"button button--ghost\" href=\"/catalog/\">\n        В каталог\n      </Link>\n    </nav>\n  </>\n)\n\nexport default NotFound\n"],"names":["NotFound","style","maxWidth","className","href"],"mappings":";;;;;AAAA;;;AAEA,kGAAkG,GAClG,MAAMA,WAAW,kBACf;;0BACE,mSAAC;0BAAG;;;;;;0BACJ,mSAAC;gBAAEC,OAAO;oBAAEC,UAAU;gBAAO;0BAAG;;;;;;0BAGhC,mSAAC;gBAAIC,WAAU;;kCACb,mSAAC,+OAAI;wBAACA,WAAU;wBAASC,MAAK;kCAAI;;;;;;kCAGlC,mSAAC,+OAAI;wBAACD,WAAU;wBAAuBC,MAAK;kCAAY;;;;;;;;;;;;;;;;;;uCAO/CJ"}}]
+}

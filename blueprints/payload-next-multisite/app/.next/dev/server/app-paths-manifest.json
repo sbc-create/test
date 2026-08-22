@@ -1,4 +1,15 @@
 {
-  "/(payload)/admin/[[...segments]]/page": "app/(payload)/admin/[[...segments]]/page.js",
-  "/(payload)/api/[...slug]/route": "app/(payload)/api/[...slug]/route.js"
+  "/(frontend)/catalog/[slug]/[season]/[episode]/page": "app/(frontend)/catalog/[slug]/[season]/[episode]/page.js",
+  "/(frontend)/catalog/[slug]/[season]/page": "app/(frontend)/catalog/[slug]/[season]/page.js",
+  "/(frontend)/catalog/[slug]/page": "app/(frontend)/catalog/[slug]/page.js",
+  "/(frontend)/catalog/page": "app/(frontend)/catalog/page.js",
+  "/(frontend)/catalog/page/[n]/page": "app/(frontend)/catalog/page/[n]/page.js",
+  "/(frontend)/collections/[slug]/page": "app/(frontend)/collections/[slug]/page.js",
+  "/(frontend)/legal/[slug]/page": "app/(frontend)/legal/[slug]/page.js",
+  "/(frontend)/news/page": "app/(frontend)/news/page.js",
+  "/(frontend)/page": "app/(frontend)/page.js",
+  "/(frontend)/robots.txt/route": "app/(frontend)/robots.txt/route.js",
+  "/(frontend)/search/page": "app/(frontend)/search/page.js",
+  "/(frontend)/sitemap.xml/route": "app/(frontend)/sitemap.xml/route.js",
+  "/_not-found/page": "app/_not-found/page.js"
 }

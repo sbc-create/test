@@ -1,5 +1,4 @@
-{"timestamp":"00:00:00.599","source":"Server","level":"LOG","message":"- Experiments (use with caution):"}
-{"timestamp":"00:00:00.599","source":"Server","level":"LOG","message":"  ? reactCompiler (invalid experimental key)"}
-{"timestamp":"00:00:00.599","source":"Server","level":"LOG","message":"  ⨯ turbopackServerFastRefresh"}
-{"timestamp":"00:00:00.599","source":"Server","level":"LOG","message":""}
-{"timestamp":"00:00:03.626","source":"Server","level":"LOG","message":"○ Compiling /admin/[[...segments]] ..."}
+{"timestamp":"00:00:00.733","source":"Server","level":"LOG","message":"- Experiments (use with caution):"}
+{"timestamp":"00:00:00.733","source":"Server","level":"LOG","message":"  ? reactCompiler (invalid experimental key)"}
+{"timestamp":"00:00:00.733","source":"Server","level":"LOG","message":"  ⨯ turbopackServerFastRefresh"}
+{"timestamp":"00:00:00.733","source":"Server","level":"LOG","message":""}

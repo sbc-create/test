@@ -1,0 +1,98 @@
+/*
+ * Токены трёх тем. Значения подобраны самостоятельно; контраст текста к фону
+ * держится не ниже 4.5:1, чтобы аудит доступности проходил на всех трёх сайтах.
+ */
+
+/* portal_light — плотный каталожный портал: много карточек, спокойный светлый фон */
+[data-theme='portal_light'] {
+  --bg: #f4f6f8;
+  --surface: #ffffff;
+  --header-bg: #ffffff;
+  --footer-bg: #eceff3;
+  --fg: #16202a;
+  --muted: #55636f;
+  --border: #d3dae1;
+  --placeholder: #dde3e9;
+  --link: #14507d;
+  --link-hover: #0d3c60;
+  --accent: #14507d;
+  --accent-fg: #ffffff;
+  --focus: #14507d;
+  --font-body: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --container: 1360px;
+  --gutter: 16px;
+  --grid-gap: 14px;
+  --card-min: 168px;
+  --section-gap: 32px;
+  --header-height: 64px;
+  --radius: 6px;
+  --h1: 1.65rem;
+  --h2: 1.2rem;
+  --brand-tracking: -0.01em;
+  --brand-transform: none;
+}
+
+/* pulse — тёмная лента релизов: крупные обложки, акцент на свежести */
+[data-theme='pulse'] {
+  --bg: #0f1216;
+  --surface: #171c22;
+  --header-bg: #10151a;
+  --footer-bg: #0c0f13;
+  --fg: #eef2f6;
+  --muted: #a3b0bd;
+  --border: #2a323b;
+  --placeholder: #222a32;
+  --link: #6fd3ff;
+  --link-hover: #a5e4ff;
+  --accent: #2b8cff;
+  --accent-fg: #05080b;
+  --focus: #6fd3ff;
+  --font-body: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-display: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
+  --container: 1240px;
+  --gutter: 20px;
+  --grid-gap: 20px;
+  --card-min: 210px;
+  --section-gap: 44px;
+  --header-height: 72px;
+  --radius: 12px;
+  --h1: 2rem;
+  --h2: 1.35rem;
+  --brand-tracking: 0.08em;
+  --brand-transform: uppercase;
+}
+
+/* editorial — журнальная тема: узкая колонка, крупный текст, мало карточек */
+[data-theme='editorial'] {
+  --bg: #fbf9f5;
+  --surface: #ffffff;
+  --header-bg: #fbf9f5;
+  --footer-bg: #f2ede4;
+  --fg: #221f1a;
+  --muted: #5d564c;
+  --border: #ddd5c8;
+  --placeholder: #e8e1d5;
+  --link: #7a3b12;
+  --link-hover: #5b2b0c;
+  --accent: #7a3b12;
+  --accent-fg: #ffffff;
+  --focus: #7a3b12;
+  --font-body: Georgia, 'Times New Roman', serif;
+  --font-display: Georgia, 'Times New Roman', serif;
+  --container: 1080px;
+  --gutter: 24px;
+  --grid-gap: 24px;
+  --card-min: 240px;
+  --section-gap: 52px;
+  --header-height: 80px;
+  --radius: 2px;
+  --h1: 2.1rem;
+  --h2: 1.4rem;
+  --brand-tracking: 0.02em;
+  --brand-transform: none;
+}
+
+[data-theme='editorial'] body { font-size: 17px; line-height: 1.7; }
+[data-theme='editorial'] .card { border-width: 0 0 1px 0; border-radius: 0; }
+[data-theme='pulse'] .card__poster { aspect-ratio: 16 / 9; }

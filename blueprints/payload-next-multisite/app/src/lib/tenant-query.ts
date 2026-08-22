@@ -41,7 +41,7 @@ export const resolveTenantByHost = async (
     depth: 0,
     overrideAccess: true,
   })
-  const doc = result.docs[0] as Record<string, unknown> | undefined
+  const doc = result.docs[0] as unknown as Record<string, unknown> | undefined
   if (!doc) {
     // Неизвестный домен не подставляется «первым попавшимся» сайтом: иначе один
     // сайт отдавался бы под чужим адресом вместе с canonical и данными.

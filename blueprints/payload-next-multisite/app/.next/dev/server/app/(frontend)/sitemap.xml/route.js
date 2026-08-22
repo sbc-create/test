@@ -1,0 +1,10 @@
+var R=require("../../../chunks/[turbopack]_runtime.js")("server/app/(frontend)/sitemap.xml/route.js")
+R.c("server/chunks/[root-of-the-server]__1u2etcl._.js")
+R.c("server/chunks/0nrf_next_1nl1cmn._.js")
+R.c("server/chunks/0nrf_@payloadcms_richtext-lexical_dist_1flqrl1._.js")
+R.c("server/chunks/0nrf_lexical_Lexical_dev_mjs_0vc4-rc._.js")
+R.c("server/chunks/0nrf_@payloadcms_plugin-multi-tenant_dist_0cfogl2._.js")
+R.c("server/chunks/[root-of-the-server]__1zbl6gn._.js")
+R.c("server/chunks/1x00_app__next-internal_server_app_(frontend)_sitemap_xml_route_actions_17ddc17.js")
+R.m("[project]/blueprints/payload-next-multisite/app/node_modules/next/dist/esm/build/templates/app-route.js { INNER_APP_ROUTE => \"[project]/blueprints/payload-next-multisite/app/src/app/(frontend)/sitemap.xml/route.ts [app-route] (ecmascript)\" } [app-route] (ecmascript)")
+module.exports=R.m("[project]/blueprints/payload-next-multisite/app/node_modules/next/dist/esm/build/templates/app-route.js { INNER_APP_ROUTE => \"[project]/blueprints/payload-next-multisite/app/src/app/(frontend)/sitemap.xml/route.ts [app-route] (ecmascript)\" } [app-route] (ecmascript)").exports

@@ -24,7 +24,7 @@ globalThis.__BUILD_MANIFEST = {
     "static/chunks/turbopack-blueprints_payload-next-multisite_app_1jxqxtw._.js"
   ],
   "rootMainFilesTree": {
-    "/(payload)/admin/[[...segments]]/page": [
+    "/(frontend)/page": [
       "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_1nu__ki._.js",
       "static/chunks/0nrf_next_dist_compiled_next-devtools_index_1zq--nm.js",
       "static/chunks/0nrf_next_dist_compiled_react-dom_1g_wmxo._.js",
@@ -35,7 +35,137 @@ globalThis.__BUILD_MANIFEST = {
       "static/chunks/0nrf_@swc_helpers_cjs_1tj7ger._.js",
       "static/chunks/blueprints_payload-next-multisite_app_1anvha4._.js",
       "static/chunks/turbopack-blueprints_payload-next-multisite_app_1jxqxtw._.js",
-      "static/chunks/blueprints_payload-next-multisite_app_15xx6ci._.js"
+      "static/chunks/blueprints_payload-next-multisite_app_10aj34o._.js"
+    ],
+    "/(frontend)/catalog/page": [
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_1nu__ki._.js",
+      "static/chunks/0nrf_next_dist_compiled_next-devtools_index_1zq--nm.js",
+      "static/chunks/0nrf_next_dist_compiled_react-dom_1g_wmxo._.js",
+      "static/chunks/0nrf_next_dist_compiled_react-server-dom-turbopack_18sdz9q._.js",
+      "static/chunks/0nrf_next_dist_compiled_1u6ro3z._.js",
+      "static/chunks/0nrf_next_dist_client_1b91lfn._.js",
+      "static/chunks/0nrf_next_dist_15j4zxc._.js",
+      "static/chunks/0nrf_@swc_helpers_cjs_1tj7ger._.js",
+      "static/chunks/blueprints_payload-next-multisite_app_1anvha4._.js",
+      "static/chunks/turbopack-blueprints_payload-next-multisite_app_1jxqxtw._.js",
+      "static/chunks/blueprints_payload-next-multisite_app_0_zzmgz._.js"
+    ],
+    "/(frontend)/catalog/[slug]/page": [
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_1nu__ki._.js",
+      "static/chunks/0nrf_next_dist_compiled_next-devtools_index_1zq--nm.js",
+      "static/chunks/0nrf_next_dist_compiled_react-dom_1g_wmxo._.js",
+      "static/chunks/0nrf_next_dist_compiled_react-server-dom-turbopack_18sdz9q._.js",
+      "static/chunks/0nrf_next_dist_compiled_1u6ro3z._.js",
+      "static/chunks/0nrf_next_dist_client_1b91lfn._.js",
+      "static/chunks/0nrf_next_dist_15j4zxc._.js",
+      "static/chunks/0nrf_@swc_helpers_cjs_1tj7ger._.js",
+      "static/chunks/blueprints_payload-next-multisite_app_1anvha4._.js",
+      "static/chunks/turbopack-blueprints_payload-next-multisite_app_1jxqxtw._.js",
+      "static/chunks/blueprints_payload-next-multisite_app_1w1skrn._.js"
+    ],
+    "/(frontend)/catalog/[slug]/[season]/page": [
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_1nu__ki._.js",
+      "static/chunks/0nrf_next_dist_compiled_next-devtools_index_1zq--nm.js",
+      "static/chunks/0nrf_next_dist_compiled_react-dom_1g_wmxo._.js",
+      "static/chunks/0nrf_next_dist_compiled_react-server-dom-turbopack_18sdz9q._.js",
+      "static/chunks/0nrf_next_dist_compiled_1u6ro3z._.js",
+      "static/chunks/0nrf_next_dist_client_1b91lfn._.js",
+      "static/chunks/0nrf_next_dist_15j4zxc._.js",
+      "static/chunks/0nrf_@swc_helpers_cjs_1tj7ger._.js",
+      "static/chunks/blueprints_payload-next-multisite_app_1anvha4._.js",
+      "static/chunks/turbopack-blueprints_payload-next-multisite_app_1jxqxtw._.js",
+      "static/chunks/blueprints_payload-next-multisite_app_0tm0jwv._.js"
+    ],
+    "/(frontend)/catalog/[slug]/[season]/[episode]/page": [
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_1nu__ki._.js",
+      "static/chunks/0nrf_next_dist_compiled_next-devtools_index_1zq--nm.js",
+      "static/chunks/0nrf_next_dist_compiled_react-dom_1g_wmxo._.js",
+      "static/chunks/0nrf_next_dist_compiled_react-server-dom-turbopack_18sdz9q._.js",
+      "static/chunks/0nrf_next_dist_compiled_1u6ro3z._.js",
+      "static/chunks/0nrf_next_dist_client_1b91lfn._.js",
+      "static/chunks/0nrf_next_dist_15j4zxc._.js",
+      "static/chunks/0nrf_@swc_helpers_cjs_1tj7ger._.js",
+      "static/chunks/blueprints_payload-next-multisite_app_1anvha4._.js",
+      "static/chunks/turbopack-blueprints_payload-next-multisite_app_1jxqxtw._.js",
+      "static/chunks/blueprints_payload-next-multisite_app_1m4rp5u._.js"
+    ],
+    "/(frontend)/collections/[slug]/page": [
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_1nu__ki._.js",
+      "static/chunks/0nrf_next_dist_compiled_next-devtools_index_1zq--nm.js",
+      "static/chunks/0nrf_next_dist_compiled_react-dom_1g_wmxo._.js",
+      "static/chunks/0nrf_next_dist_compiled_react-server-dom-turbopack_18sdz9q._.js",
+      "static/chunks/0nrf_next_dist_compiled_1u6ro3z._.js",
+      "static/chunks/0nrf_next_dist_client_1b91lfn._.js",
+      "static/chunks/0nrf_next_dist_15j4zxc._.js",
+      "static/chunks/0nrf_@swc_helpers_cjs_1tj7ger._.js",
+      "static/chunks/blueprints_payload-next-multisite_app_1anvha4._.js",
+      "static/chunks/turbopack-blueprints_payload-next-multisite_app_1jxqxtw._.js",
+      "static/chunks/blueprints_payload-next-multisite_app_1t7viaz._.js"
+    ],
+    "/(frontend)/news/page": [
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_1nu__ki._.js",
+      "static/chunks/0nrf_next_dist_compiled_next-devtools_index_1zq--nm.js",
+      "static/chunks/0nrf_next_dist_compiled_react-dom_1g_wmxo._.js",
+      "static/chunks/0nrf_next_dist_compiled_react-server-dom-turbopack_18sdz9q._.js",
+      "static/chunks/0nrf_next_dist_compiled_1u6ro3z._.js",
+      "static/chunks/0nrf_next_dist_client_1b91lfn._.js",
+      "static/chunks/0nrf_next_dist_15j4zxc._.js",
+      "static/chunks/0nrf_@swc_helpers_cjs_1tj7ger._.js",
+      "static/chunks/blueprints_payload-next-multisite_app_1anvha4._.js",
+      "static/chunks/turbopack-blueprints_payload-next-multisite_app_1jxqxtw._.js",
+      "static/chunks/blueprints_payload-next-multisite_app_00u-oho._.js"
+    ],
+    "/(frontend)/legal/[slug]/page": [
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_1nu__ki._.js",
+      "static/chunks/0nrf_next_dist_compiled_next-devtools_index_1zq--nm.js",
+      "static/chunks/0nrf_next_dist_compiled_react-dom_1g_wmxo._.js",
+      "static/chunks/0nrf_next_dist_compiled_react-server-dom-turbopack_18sdz9q._.js",
+      "static/chunks/0nrf_next_dist_compiled_1u6ro3z._.js",
+      "static/chunks/0nrf_next_dist_client_1b91lfn._.js",
+      "static/chunks/0nrf_next_dist_15j4zxc._.js",
+      "static/chunks/0nrf_@swc_helpers_cjs_1tj7ger._.js",
+      "static/chunks/blueprints_payload-next-multisite_app_1anvha4._.js",
+      "static/chunks/turbopack-blueprints_payload-next-multisite_app_1jxqxtw._.js",
+      "static/chunks/blueprints_payload-next-multisite_app_1ynn0qr._.js"
+    ],
+    "/(frontend)/search/page": [
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_1nu__ki._.js",
+      "static/chunks/0nrf_next_dist_compiled_next-devtools_index_1zq--nm.js",
+      "static/chunks/0nrf_next_dist_compiled_react-dom_1g_wmxo._.js",
+      "static/chunks/0nrf_next_dist_compiled_react-server-dom-turbopack_18sdz9q._.js",
+      "static/chunks/0nrf_next_dist_compiled_1u6ro3z._.js",
+      "static/chunks/0nrf_next_dist_client_1b91lfn._.js",
+      "static/chunks/0nrf_next_dist_15j4zxc._.js",
+      "static/chunks/0nrf_@swc_helpers_cjs_1tj7ger._.js",
+      "static/chunks/blueprints_payload-next-multisite_app_1anvha4._.js",
+      "static/chunks/turbopack-blueprints_payload-next-multisite_app_1jxqxtw._.js",
+      "static/chunks/blueprints_payload-next-multisite_app_0a-ds12._.js"
+    ],
+    "/_not-found/page": [
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_1nu__ki._.js",
+      "static/chunks/0nrf_next_dist_compiled_next-devtools_index_1zq--nm.js",
+      "static/chunks/0nrf_next_dist_compiled_react-dom_1g_wmxo._.js",
+      "static/chunks/0nrf_next_dist_compiled_react-server-dom-turbopack_18sdz9q._.js",
+      "static/chunks/0nrf_next_dist_compiled_1u6ro3z._.js",
+      "static/chunks/0nrf_next_dist_client_1b91lfn._.js",
+      "static/chunks/0nrf_next_dist_15j4zxc._.js",
+      "static/chunks/0nrf_@swc_helpers_cjs_1tj7ger._.js",
+      "static/chunks/blueprints_payload-next-multisite_app_1anvha4._.js",
+      "static/chunks/turbopack-blueprints_payload-next-multisite_app_1jxqxtw._.js",
+      "static/chunks/blueprints_payload-next-multisite_app_18x7jxu._.js"
+    ],
+    "/(frontend)/catalog/page/[n]/page": [
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_1nu__ki._.js",
+      "static/chunks/0nrf_next_dist_compiled_next-devtools_index_1zq--nm.js",
+      "static/chunks/0nrf_next_dist_compiled_react-dom_1g_wmxo._.js",
+      "static/chunks/0nrf_next_dist_compiled_react-server-dom-turbopack_18sdz9q._.js",
+      "static/chunks/0nrf_next_dist_compiled_1u6ro3z._.js",
+      "static/chunks/0nrf_next_dist_client_1b91lfn._.js",
+      "static/chunks/0nrf_next_dist_15j4zxc._.js",
+      "static/chunks/0nrf_@swc_helpers_cjs_1tj7ger._.js",
+      "static/chunks/blueprints_payload-next-multisite_app_1anvha4._.js",
+      "static/chunks/turbopack-blueprints_payload-next-multisite_app_1jxqxtw._.js",
+      "static/chunks/blueprints_payload-next-multisite_app_08bma7l._.js"
     ]
   },
   "pagesChunkGroupBootstrapParams": {},
