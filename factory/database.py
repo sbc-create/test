@@ -171,7 +171,14 @@ def dump(scope: str, destination: Path) -> Path:
 
     destination.parent.mkdir(parents=True, exist_ok=True)
     staging = Path("/tmp") / f"factory-dump-{credentials.database}.sql"
-    inner = f"{DUMP_CLIENT} --no-owner --no-privileges -d {credentials.database} -f {staging}"
+    # --clean --if-exists: дамп обязан восстанавливаться в НЕПУСТУЮ базу.
+    # Без этого восстановление падает на уже существующих объектах, и
+    # «бэкап есть» перестаёт означать «восстановление проверено».
+    # --clean --if-exists: дамп обязан восстанавливаться в НЕПУСТУЮ базу, иначе
+    # «бэкап есть» не означает «восстановление проверено».
+    # Владелец и права СОХРАНЯЮТСЯ: база принадлежит роли приложения, и дамп без
+    # владельца восстанавливается объектами postgres — приложение теряет доступ.
+    inner = f"{DUMP_CLIENT} --clean --if-exists -d {credentials.database} -f {staging}"
     result = _as_cluster_owner(inner, timeout=600)
     if result.returncode != 0:
         raise BlockedAccess(f"pg_dump завершился с кодом {result.returncode}: {result.stderr.strip()[:300]}",
@@ -199,9 +206,38 @@ def restore(scope: str, source: Path) -> bool:
     result = _as_cluster_owner(f"{CLIENT} -v ON_ERROR_STOP=1 -d {credentials.database} -f {staging}",
                               timeout=600)
     staging.unlink(missing_ok=True)
+    if result.returncode == 0:
+        repair_ownership(scope)
     audit.record(job_id=f"db-restore-{scope}", site_id=scope, environment="staging",
                  action="database.restore", target=credentials.database,
                  exit_code=result.returncode, mutation=True, extra={"file": str(source)})
+    return result.returncode == 0
+
+
+def repair_ownership(scope: str) -> bool:
+    """Возвращает владение схемой роли приложения.
+
+    После восстановления объекты могут принадлежать владельцу кластера: он и
+    выполнял restore. Приложение при этом теряет доступ, и «восстановление
+    прошло» оказывается неправдой на первом же запросе. Поэтому владение
+    восстанавливается явным шагом, а не предположением.
+    """
+    credentials, _ = load_credentials(scope)
+    sql = (
+        "DO $$ DECLARE r record; BEGIN "
+        f"EXECUTE 'ALTER SCHEMA public OWNER TO {credentials.user}'; "
+        "FOR r IN SELECT tablename FROM pg_tables WHERE schemaname = 'public' LOOP "
+        f"EXECUTE format('ALTER TABLE public.%I OWNER TO {credentials.user}', r.tablename); "
+        "END LOOP; "
+        "FOR r IN SELECT sequencename FROM pg_sequences WHERE schemaname = 'public' LOOP "
+        f"EXECUTE format('ALTER SEQUENCE public.%I OWNER TO {credentials.user}', r.sequencename); "
+        "END LOOP; "
+        "FOR r IN SELECT table_name FROM information_schema.views WHERE table_schema = 'public' LOOP "
+        f"EXECUTE format('ALTER VIEW public.%I OWNER TO {credentials.user}', r.table_name); "
+        "END LOOP; "
+        "END $$;"
+    )
+    result = _sql_as_owner(sql, database=credentials.database)
     return result.returncode == 0
 
 

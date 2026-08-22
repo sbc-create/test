@@ -74,7 +74,9 @@
     ".releases/5273e24fab1d4a34/dist/types/**/*.ts",
     ".releases/5273e24fab1d4a34/dist/dev/types/**/*.ts",
     ".releases/faf5bf721805b805/dist/types/**/*.ts",
-    ".releases/faf5bf721805b805/dist/dev/types/**/*.ts"
+    ".releases/faf5bf721805b805/dist/dev/types/**/*.ts",
+    ".next-acceptance/types/**/*.ts",
+    ".next-acceptance/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

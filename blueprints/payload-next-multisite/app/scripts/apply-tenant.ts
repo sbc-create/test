@@ -33,6 +33,38 @@ const configuration = JSON.parse(readFileSync(source, 'utf8')) as TenantConfig
 const payload = await getPayload({ config })
 
 const counters = { created: 0, updated: 0, unchanged: 0 }
+// Что именно изменилось — часть журнала выката, а не отладочный вывод.
+const changed: string[] = []
+
+/**
+ * Совпадает ли текущее состояние с желаемым.
+ *
+ * Сравнение одностороннее: пакет сайта задаёт только те поля, которыми владеет,
+ * а всё остальное (умолчания Payload, служебные `id` строк массива, поля, которые
+ * ведёт редакция) не должно считаться расхождением. Иначе «идемпотентный» шаг
+ * переписывал бы документ на каждом выкате и затирал редакционные правки.
+ */
+const matches = (current: unknown, desired: unknown): boolean => {
+  if (Array.isArray(desired)) {
+    if (!Array.isArray(current) || current.length !== desired.length) return false
+    return desired.every((item, index) => matches(current[index], item))
+  }
+  if (desired && typeof desired === 'object') {
+    if (!current || typeof current !== 'object') return false
+    const currentRecord = current as Record<string, unknown>
+    return Object.entries(desired as Record<string, unknown>).every(([key, value]) =>
+      matches(currentRecord[key], value),
+    )
+  }
+  // Связь может лежать как объект после populate и как идентификатор после записи.
+  if (current && typeof current === 'object' && 'id' in (current as Record<string, unknown>)) {
+    return String((current as { id: unknown }).id) === String(desired)
+  }
+  return JSON.stringify(current ?? null) === JSON.stringify(desired ?? null)
+}
+
+const differs = (current: Record<string, unknown>, desired: Record<string, unknown>): boolean =>
+  !matches(current, desired)
 
 const upsertGlobal = async (
   collection: 'site-settings' | 'navigation' | 'home-layout' | 'player-profiles',
@@ -52,15 +84,13 @@ const upsertGlobal = async (
     return
   }
   const current = existing.docs[0] as unknown as Record<string, unknown>
-  const changed = Object.entries(data).some(
-    ([key, value]) => JSON.stringify(current[key] ?? null) !== JSON.stringify(value ?? null),
-  )
-  if (!changed) {
+  if (!differs(current, data)) {
     counters.unchanged += 1
     return
   }
   await payload.update({ collection, id: current.id as string | number, overrideAccess: true, data: data as never })
   counters.updated += 1
+  changed.push(collection)
 }
 
 const slug = String(configuration.tenant.slug ?? '')
@@ -89,13 +119,18 @@ if (existingTenant.docs.length === 0) {
 } else {
   const current = existingTenant.docs[0]!
   tenantId = current.id
-  await payload.update({
-    collection: 'tenants',
-    id: tenantId,
-    overrideAccess: true,
-    data: configuration.tenant as never,
-  })
-  counters.updated += 1
+  if (differs(current as unknown as Record<string, unknown>, configuration.tenant)) {
+    await payload.update({
+      collection: 'tenants',
+      id: tenantId,
+      overrideAccess: true,
+      data: configuration.tenant as never,
+    })
+    counters.updated += 1
+    changed.push('tenants')
+  } else {
+    counters.unchanged += 1
+  }
 }
 
 await upsertGlobal('site-settings', tenantId, configuration.siteSettings)
@@ -132,7 +167,7 @@ for (const document of configuration.legalDocuments) {
   if (existing.docs.length === 0) {
     await payload.create({ collection: 'pages', overrideAccess: true, data: { ...data, tenant: tenantId } as never })
     counters.created += 1
-  } else {
+  } else if (differs(existing.docs[0] as unknown as Record<string, unknown>, data)) {
     await payload.update({
       collection: 'pages',
       id: existing.docs[0]!.id,
@@ -140,9 +175,12 @@ for (const document of configuration.legalDocuments) {
       data: data as never,
     })
     counters.updated += 1
+    changed.push(`pages/${document.slug}`)
+  } else {
+    counters.unchanged += 1
   }
 }
 
-console.log(JSON.stringify({ tenant: slug, tenantId, ...counters }))
+console.log(JSON.stringify({ tenant: slug, tenantId, ...counters, changed }))
 await payload.db.destroy?.()
 process.exit(0)

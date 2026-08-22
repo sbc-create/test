@@ -127,6 +127,45 @@ else
   skip "nginx-config-test" "nginx не установлен на управляющем хосте"
 fi
 
+# ---------------------------------------------------------------------------
+# Blueprint payload-next-multisite: три сайта на общей CMS.
+# Каждый шаг — фактический запуск. Недоступный компонент даёт skip с причиной,
+# а не молчаливый пропуск и не PASS.
+# ---------------------------------------------------------------------------
+TSX="blueprints/payload-next-multisite/app/node_modules/.bin/tsx"
+APP_TESTS="blueprints/payload-next-multisite/app/tests"
+
+if [ ! -x "$TSX" ]; then
+  skip "payload-blueprint" "зависимости приложения не установлены (npm ci в blueprints/payload-next-multisite/app)"
+elif ! pg_isready -q 2>/dev/null && ! python3 -c "from factory import database; raise SystemExit(0 if database.start_cluster() else 1)"; then
+  skip "payload-blueprint" "кластер PostgreSQL недоступен"
+else
+  run "payload-typecheck"   "cd blueprints/payload-next-multisite/app && npx tsc --noEmit -p tsconfig.json"
+  run "payload-seo-matrix"  "$TSX $APP_TESTS/seo-matrix.ts"
+  run "payload-player"      "$TSX $APP_TESTS/player-contract.ts"
+  run "payload-comments"    "$TSX $APP_TESTS/comments-policy.ts"
+  run "payload-isolation"   "python3 tests/tools/with_app_env.py --scope anime -- $TSX $APP_TESTS/tenant-isolation.ts"
+  run "payload-content-api" "python3 tests/tools/with_app_env.py --scope anime -- $TSX $APP_TESTS/content-api.ts"
+  run "payload-mutation"    "python3 tests/tools/mutation_isolation.py"
+  run "payload-admin-smoke" "python3 tests/tools/admin_smoke.py"
+  run "payload-frontend"    "python3 tests/tools/frontend_http.py"
+  run "payload-cross-site"  "python3 tests/tools/cross_site_uniqueness.py"
+  run "payload-restore"     "python3 tests/tools/restore_proof.py"
+
+  if [ -x /opt/pw-browsers/chromium-1194/chrome-linux/chrome ]; then
+    run "payload-browser"   "python3 tests/tools/browser_multisite.py"
+  else
+    skip "payload-browser" "Chromium не найден в /opt/pw-browsers"
+  fi
+
+  REFERENCE_STATUS=$(python3 -m factory reference-audit --ref amd-online --json 2>/dev/null | python3 -c "import json,sys; print(json.load(sys.stdin).get('status','unknown'))" 2>/dev/null || echo unknown)
+  if [ "$REFERENCE_STATUS" = "measured" ]; then
+    run "reference-audit" "true"
+  else
+    skip "reference-audit" "измерение amd.online недоступно из этой среды (статус: $REFERENCE_STATUS)"
+  fi
+fi
+
 # Доказательства последнего прогона фиксируются в artifacts/evidence/.
 python3 tests/tools/collect_evidence.py > /dev/null || true
 

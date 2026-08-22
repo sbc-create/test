@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Браузерная приёмка трёх сайтов: наполняет стенд, поднимает сервер, гоняет Playwright.
 
+Сервер поднимается из production-сборки, а не в режиме разработки. Причина не в
+скорости: dev-режим React требует eval(), запрещённый нашей CSP, и измерять на
+нём производительность бессмысленно — такой сборки в production не будет.
+
 Отчёт Playwright сохраняется в артефакт. Недоступный движок помечается пропуском
 с причиной — «прогнали в трёх браузерах» без установленных браузеров не заявляется.
 """
@@ -52,10 +56,24 @@ def main() -> int:
         print(seeding.stdout[-3000:], seeding.stderr[-3000:])
         return 1
 
+    build_env = dict(env)
+    build_env["NEXT_DIST_DIR"] = ".next-acceptance"
+    print("сборка приложения для приёмки…", flush=True)
+    built = subprocess.run(
+        [sys.executable, str(ROOT / "tests/tools/with_app_env.py"), "--scope", "anime",
+         "--cwd", str(APP), "--", str(APP / "node_modules/.bin/next"), "build"],
+        cwd=ROOT, env=build_env, capture_output=True, text=True, timeout=1800, check=False,
+    )
+    if built.returncode != 0:
+        print("FAIL: сборка приложения не удалась")
+        print((built.stdout + built.stderr)[-4000:])
+        return 1
+
     server = subprocess.Popen(
         [sys.executable, str(ROOT / "tests/tools/with_app_env.py"), "--scope", "anime",
-         "--cwd", str(APP), "--", str(APP / "node_modules/.bin/next"), "dev", "-p", str(port), "-H", "127.0.0.1"],
-        cwd=ROOT, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
+         "--cwd", str(APP), "--", str(APP / "node_modules/.bin/next"), "start",
+         "-p", str(port), "-H", "127.0.0.1"],
+        cwd=ROOT, env=build_env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
     )
     try:
         deadline = time.time() + 180
