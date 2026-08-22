@@ -329,6 +329,21 @@ def cmd_queue(args) -> int:
     return EXIT_OK
 
 
+def cmd_reference(args) -> int:
+    """Измерение референсного интерфейса по записи inventory."""
+    from factory import reference
+    summary = reference.measure(args.ref)
+    _print(summary, args.json)
+    if not args.json:
+        print(f"источник: {summary['ref']} | статус: {summary['status']}")
+        if summary.get("viewports_measured"):
+            print("измерено вьюпортов:", ", ".join(summary["viewports_measured"]))
+            print("артефакт:", summary["artifact"])
+        else:
+            print("измерение не выполнено:", summary.get("reason") or summary.get("stderr", "")[:300])
+    return EXIT_OK if summary["status"] == "measured" else EXIT_FAILED
+
+
 def cmd_seo_cross_site(args) -> int:
     """Ворота уникальности между сайтами одной группы на живом стенде."""
     package, conf, target = _target_for(args.site)
@@ -514,6 +529,9 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("queue_action", choices=["enqueue", "list"])
     p.add_argument("--site"); p.add_argument("--action", default="create")
     p.add_argument("--environment", default="staging"); p.set_defaults(func=cmd_queue)
+
+    p = sub.add_parser("reference-audit", help="read-only измерение референсного интерфейса")
+    p.add_argument("--ref", required=True); p.set_defaults(func=cmd_reference)
 
     p = sub.add_parser("seo-cross-site", help="SEO: уникальность между сайтами группы")
     p.add_argument("--site", required=True); p.add_argument("--base")
