@@ -43,6 +43,40 @@ class Decision:
     rule_id: str = ""
 
 
+HEREDOC_RE = re.compile(r"<<-?\s*(['\"]?)([A-Za-z_][A-Za-z0-9_]*)\1")
+
+
+def strip_heredoc_bodies(command: str) -> tuple[str, list[str]]:
+    """Отделяет тела heredoc от самой команды.
+
+    Тело heredoc — это данные (`cat > file <<'PY' … PY`), а не команда: разбирать
+    его как код значит блокировать запись исходников, которые лишь упоминают
+    запрещённое имя. Исключение — интерпретаторы (`bash <<'EOF'`), которые тело
+    действительно исполняют: их тела возвращаются отдельно для рекурсивного разбора.
+    """
+    match = HEREDOC_RE.search(command)
+    if not match:
+        return command, []
+    marker = match.group(2)
+    head = command[: match.start()]
+    tail = command[match.end():]
+    lines = tail.split("\n")
+    body_lines: list[str] = []
+    rest_lines: list[str] = []
+    closed = False
+    for line in lines[1:] if lines and not lines[0].strip() else lines:
+        if not closed and line.strip() == marker:
+            closed = True
+            continue
+        (rest_lines if closed else body_lines).append(line)
+    remainder = head + (" " + "\n".join(rest_lines) if rest_lines else "")
+    first = os.path.basename((head.split() or [""])[0])
+    executed = "\n".join(body_lines) if first in INTERPRETERS else ""
+    nested_remainder, nested_bodies = (remainder, []) if not HEREDOC_RE.search(remainder) else strip_heredoc_bodies(remainder)
+    bodies = ([executed] if executed else []) + nested_bodies
+    return nested_remainder, bodies
+
+
 def split_subcommands(command: str) -> list[str]:
     """Разбивает составную команду на подкоманды с учётом кавычек."""
     parts: list[str] = []
@@ -294,7 +328,45 @@ PIPE_TO_SHELL_RE = re.compile(
 )
 
 
+#: Вызовы shell из кода интерпретатора: содержимое разбирается как команда.
+SHELL_CALL_RE = re.compile(
+    r"(?:os\.system|os\.popen|subprocess\.(?:run|call|check_call|check_output|Popen)|"
+    r"commands\.getoutput|child_process\.exec(?:Sync)?|shell_exec|system)\s*\(",
+)
+QUOTED_RE = re.compile(r"""['"]([^'"\n]{2,200})['"]""")
+
+
+def evaluate_interpreter_body(body: str, depth: int = 0) -> Decision:
+    """Разбирает тело, которое исполнит интерпретатор.
+
+    Полноценный анализ произвольного кода невозможен — и это честно записано в
+    docs/SECURITY.md: hook останавливает неосторожный обход, а настоящая граница
+    задаётся permission-правилами и правами файловой системы. Здесь ловится то,
+    что ловится надёжно: обращение к секретным путям и запуск shell-команд.
+    """
+    if SECRET_PATH_RE.search(" " + body):
+        return Decision(DENY, "Код обращается к секретному пути.", "G-SECRET")
+    for match in SHELL_CALL_RE.finditer(body):
+        tail = body[match.end(): match.end() + 400]
+        quoted = QUOTED_RE.findall(tail)
+        # Список аргументов (`subprocess.run(["rm", "-rf", "/"])`) опасен именно в
+        # склеенном виде: каждый токен по отдельности безобиден.
+        candidates = quoted + ([" ".join(quoted)] if len(quoted) > 1 else [])
+        for candidate in candidates:
+            decision = evaluate_bash(candidate, depth + 1)
+            if decision.decision == DENY:
+                return decision
+    return Decision(PASS)
+
+
 def evaluate_bash(command: str, depth: int = 0) -> Decision:
+    # Тела heredoc отделяются до анализа: они данные, кроме случая, когда их
+    # читает интерпретатор — тогда они разбираются как вложенный код.
+    command, heredoc_bodies = strip_heredoc_bodies(command)
+    for body in heredoc_bodies:
+        nested = evaluate_interpreter_body(body, depth) if depth < 3 else Decision(PASS)
+        if nested.decision == DENY:
+            return Decision(nested.decision, f"Тело heredoc для интерпретатора: {nested.reason}", nested.rule_id)
     if PIPE_TO_SHELL_RE.search(command):
         return Decision(DENY, "Загрузка кода из сети напрямую в интерпретатор запрещена в любом режиме.", "G-PIPESH")
     if DECODE_TO_SHELL_RE.search(command):

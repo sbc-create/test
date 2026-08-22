@@ -154,3 +154,32 @@ def test_guard_configuration_protects_itself():
                  ".claude/hooks/guard_bash.py", ".claude/rules/security.md",
                  "inventory/ssh-hosts.yaml", "inventory/dle-licenses.yaml"):
         assert g.evaluate_write(path).decision == g.DENY, path
+
+
+# --- REQ-GUARD: heredoc-тела — данные, кроме тех, что исполняет интерпретатор ---
+
+def test_heredoc_body_written_to_file_is_data():
+    """Исходник, который лишь упоминает запрещённую команду, записывать можно."""
+    command = "cat > factory/database.py <<'PY'\nsubprocess.run(['psql', '-c', 'select 1'])\nPY"
+    assert g.evaluate_bash(command).decision != g.DENY
+
+
+def test_heredoc_body_read_by_interpreter_is_analysed():
+    for body, rule in (("os.system('ssh prod')", "G-REMOTE"),
+                       ("subprocess.run(['rm', '-rf', '/'])", "G-RM"),
+                       ("open('.env').read()", "G-SECRET")):
+        command = f"python3 - <<'PY'\n{body}\nPY"
+        decision = g.evaluate_bash(command)
+        assert decision.decision == g.DENY, body
+        assert decision.rule_id == rule
+
+
+def test_shell_heredoc_body_is_analysed():
+    assert g.evaluate_bash("bash <<'EOF'\nssh prod reboot\nEOF").decision == g.DENY
+
+
+def test_legitimate_interpreter_heredoc_passes():
+    for body in ("import pathlib; pathlib.Path('x').write_text('y')",
+                 "print('готово')",
+                 "subprocess.run(['git', 'status'])"):
+        assert g.evaluate_bash(f"python3 - <<'PY'\n{body}\nPY").decision != g.DENY, body
