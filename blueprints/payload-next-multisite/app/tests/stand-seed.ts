@@ -93,6 +93,34 @@ for (let index = 1; index <= 6; index += 1) {
   }
 }
 
+// Тайтл без подтверждённых прав: страница обязана существовать, но без плеера.
+const blockedRights = await payload.create({
+  collection: 'rights-records',
+  overrideAccess: true,
+  data: {
+    label: 'Права не подтверждены',
+    holder: 'Правообладатель не установлен',
+    contractRef: 'STAND-FIXTURE-BLOCKED',
+    allowsPublication: false,
+  } as never,
+})
+
+const blockedTitle = await payload.create({
+  collection: 'titles',
+  overrideAccess: true,
+  data: {
+    primaryName: 'Тайтл без прав на публикацию',
+    kind: 'series',
+    status: 'ongoing',
+    year: 2024,
+    factualSynopsis: 'Материал, для которого права на показ не подтверждены.',
+    rightsRecord: blockedRights.id,
+    playbackAggregator: 'kp',
+    playbackTitleId: 'stand-blocked',
+  } as never,
+})
+sharedTitles.push({ id: blockedTitle.id, slug: 'stand-title-blocked', name: 'Тайтл без прав на публикацию' })
+
 // Расписание: события в ближайшие дни, чтобы страница расписания не была пустой.
 const day = 24 * 3600 * 1000
 const now = Date.now()

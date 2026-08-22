@@ -364,6 +364,14 @@ def main() -> int:
         secret = os.environ.get("PAYLOAD_SECRET", "")
         results.add("[a] страница серии не содержит секрет приложения", not secret or secret not in body, "")
 
+        # Права не подтверждены — страница есть, плеера нет, подмены видео нет.
+        _, blocked = fetch(port, SITES["a"]["host"], "/catalog/stand-title-blocked/")
+        results.add("[a] страница без прав на публикацию отвечает 200 и объясняет причину",
+                    "права на публикацию не подтверждены" in blocked, "нет честного статуса на странице")
+        results.add("[a] на странице без прав нет параметров плеера",
+                    "data-publisher-id" not in blocked and "stand-publisher-a" not in blocked,
+                    "параметры плеера отрисованы при неподтверждённых правах")
+
         check_comments(port, results)
 
     finally:
