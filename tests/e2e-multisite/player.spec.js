@@ -1,37 +1,47 @@
 // REQ-PLAYER: прямое встраивание <video-player> по документированному контракту.
 const { test, expect } = require('@playwright/test');
-const { url } = require('./helpers');
+const { EPISODE_SITES, SITES, url } = require('./helpers');
 
-const EPISODE = '/catalog/stand-title-1/season-1/episode-1/';
+const EPISODE = SITES.a.episode;
 
-test('элемент плеера создаётся с атрибутами контракта', async ({ page }) => {
-  await page.goto(url('a', EPISODE));
-  const player = page.locator('video-player');
-  await expect(player).toHaveCount(1);
+// Контракт плеера проверяется на каждом сайте, где есть страница серии: у
+// аниме-каталога и у витрины сериалов. Один сайт доказывал бы только его.
+for (const key of EPISODE_SITES) {
+  test(`[${key}] элемент плеера создаётся с атрибутами контракта`, async ({ page }) => {
+    await page.goto(url(key, SITES[key].episode));
+    const player = page.locator('video-player');
+    await expect(player).toHaveCount(1);
 
-  const attributes = await player.evaluate((node) =>
-    Object.fromEntries([...node.attributes].map((attribute) => [attribute.name, attribute.value])),
-  );
+    const attributes = await player.evaluate((node) =>
+      Object.fromEntries([...node.attributes].map((attribute) => [attribute.name, attribute.value])),
+    );
 
-  expect(attributes['disable-licensed']).toBe('false');
-  expect(attributes['data-aggregator']).toBe('kp');
-  expect(attributes['data-title-id']).toBe('stand-1');
-  expect(attributes.ident).toBe('stand-1');
-  expect(attributes['data-publisher-id']).toBe('stand-publisher-a');
-  expect(attributes.season).toBe('1');
-  expect(attributes.episode).toBe('1');
+    expect(attributes['disable-licensed']).toBe('false');
+    expect(attributes['data-aggregator']).toBe('kp');
+    expect(attributes['data-title-id']).toBe(SITES[key].player.titleId);
+    expect(attributes.ident).toBe(SITES[key].player.titleId);
+    expect(attributes['data-publisher-id']).toBe(SITES[key].player.publisherId);
+    expect(attributes.season).toBe('1');
+    expect(attributes.episode).toBe('1');
 
-  // Ни одного атрибута сверх контракта: «на всякий случай» здесь недопустимо.
-  const allowed = new Set(['ident', 'season', 'episode', 'data-publisher-id', 'data-title-id',
-    'data-aggregator', 'only-voice', 'priority-voice', 'is-show-voice-only', 'is-show-banner',
-    'disable-licensed', 'style']);
-  for (const name of Object.keys(attributes)) {
-    expect(allowed.has(name), `неожиданный атрибут ${name}`).toBe(true);
-  }
-});
+    // Ни одного атрибута сверх контракта: «на всякий случай» здесь недопустимо.
+    const allowed = new Set(['ident', 'season', 'episode', 'data-publisher-id', 'data-title-id',
+      'data-aggregator', 'only-voice', 'priority-voice', 'is-show-voice-only', 'is-show-banner',
+      'disable-licensed', 'style']);
+    for (const name of Object.keys(attributes)) {
+      expect(allowed.has(name), `неожиданный атрибут ${name}`).toBe(true);
+    }
+  });
+
+  test(`[${key}] плеер не появляется на странице без прав или без записи`, async ({ page }) => {
+    // Сайт подборок не индексирует произведения и не показывает плеер вовсе.
+    await page.goto(url('g', '/collections/'));
+    await expect(page.locator('video-player')).toHaveCount(0);
+  });
+}
 
 test('методы контракта вызываются и меняют состояние плеера', async ({ page }) => {
-  await page.goto(url('a', '/catalog/stand-title-1/season-2/episode-3/'));
+  await page.goto(url('a', SITES.a.deeperEpisode.path));
   const player = page.locator('video-player');
   await expect(player).toHaveAttribute('season', '2');
   await expect(player).toHaveAttribute('episode', '3');

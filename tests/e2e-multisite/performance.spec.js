@@ -28,7 +28,9 @@ test.afterAll(() => {
 });
 
 for (const key of Object.keys(SITES)) {
-  for (const [name, route] of ROUTES) {
+  for (const [name, route] of ROUTES.filter(
+    ([, route]) => SITES[key].routes.includes(route),
+  )) {
     test(`лабораторный бюджет: [${key}] ${name}`, async ({ page }, testInfo) => {
       if (testInfo.project.name !== 'chromium-desktop') test.skip(true, 'бюджет измеряется в desktop-проекте');
 

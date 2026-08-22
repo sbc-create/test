@@ -39,6 +39,10 @@ def main() -> int:
         "PLAYER_PUBLISHER_ID_A": "stand-publisher-a",
         "PLAYER_PUBLISHER_ID_B": "stand-publisher-b",
         "PLAYER_PUBLISHER_ID_C": "stand-publisher-c",
+        "PLAYER_PUBLISHER_ID_D": "stand-publisher-d",
+        "PLAYER_PUBLISHER_ID_E": "stand-publisher-e",
+        "PLAYER_PUBLISHER_ID_F": "stand-publisher-f",
+        "PLAYER_PUBLISHER_ID_G": "stand-publisher-g",
         "PLAYER_MODE": "mock",
         "FACTORY_ENVIRONMENT": "staging",
         # Заведомо «секретное» значение: тест проверяет, что оно не попало в страницу.

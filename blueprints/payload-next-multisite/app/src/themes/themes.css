@@ -117,7 +117,7 @@
   --placeholder: #232b3c;
   --link: #8fb8ff;
   --link-hover: #b9d4ff;
-  --accent: #4c7df3;
+  --accent: #7aa2ff;
   --accent-fg: #0a0d14;
   --focus: #8fb8ff;
   --font-body: 'IBM Plex Sans', 'Segoe UI', Roboto, Arial, sans-serif;
@@ -216,12 +216,12 @@
   --placeholder: #efe4d5;
   --link: #a2551f;
   --link-hover: #7d3f15;
-  --accent: #c96a2a;
+  --accent: #ad541d;
   --accent-fg: #ffffff;
   --focus: #a2551f;
   --font-body: 'Nunito Sans', 'Segoe UI', Roboto, Arial, sans-serif;
   --font-display: 'Nunito Sans', 'Segoe UI', Roboto, Arial, sans-serif;
-  --container: 1240px;
+  --container: 1280px;
   --gutter: 24px;
   --grid-gap: 22px;
   --card-min: 244px;

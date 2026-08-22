@@ -24,7 +24,7 @@ test.beforeEach(async ({ context }) => {
 });
 
 for (const key of Object.keys(SITES)) {
-  for (const route of ROUTES) {
+  for (const route of SITES[key].routes) {
     test(`axe-core без критических нарушений: [${key}] ${route}`, async ({ page }) => {
       await page.goto(url(key, route));
       const result = await page.evaluate(async () => window.axe.run(document, { resultTypes: ['violations'] }));

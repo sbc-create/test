@@ -344,6 +344,21 @@ def cmd_queue(args) -> int:
     return EXIT_OK
 
 
+def cmd_editorial(args) -> int:
+    """Редакционный проход. По умолчанию ничего не меняет."""
+    from factory import editorial
+    summary = editorial.run(args.scope, apply=args.apply)
+    print(f"режим: {summary['mode']} | действий: {len(summary['actions'])} | "
+          f"заблокировано шагов: {len(summary['blocked'])} | состояние: {summary['status']}")
+    for action in summary["actions"][:10]:
+        print(f"  [{action['opportunity']:3}] {action['action']}: {action['title']} — {action['reason']}")
+    for item in summary["blocked"]:
+        print(f"  BLOCKED {item['step']}: {item['reason']}")
+    print("отчёт: artifacts/editorial/latest.md")
+    # Заблокированный внешними данными контур не выдаётся за выполненный.
+    return 0 if summary["status"] == "DRY_RUN_COMPLETE" else 3
+
+
 def cmd_reference(args) -> int:
     """Измерение референсного интерфейса по записи inventory."""
     from factory import reference
@@ -544,6 +559,12 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("queue_action", choices=["enqueue", "list"])
     p.add_argument("--site"); p.add_argument("--action", default="create")
     p.add_argument("--environment", default="staging"); p.set_defaults(func=cmd_queue)
+
+    p = sub.add_parser("editorial-pass", help="редакционный проход: смена состояний, просроченные анонсы, отчёт")
+    p.add_argument("--scope", default="anime", help="набор учётных данных базы стенда")
+    p.add_argument("--apply", action="store_true",
+                   help="применить изменения; без флага проход только показывает, что сделал бы")
+    p.set_defaults(func=cmd_editorial)
 
     p = sub.add_parser("reference-audit", help="read-only измерение референсного интерфейса")
     p.add_argument("--ref", required=True); p.set_defaults(func=cmd_reference)

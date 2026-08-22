@@ -20,7 +20,9 @@ fs.mkdirSync(OUT, { recursive: true });
 test.describe.configure({ mode: 'serial' });
 
 for (const key of Object.keys(SITES)) {
-  for (const [name, route] of ROUTES) {
+  for (const [name, route] of ROUTES.filter(
+    ([, route]) => SITES[key].routes.includes(route),
+  )) {
     test(`нет горизонтальной прокрутки: [${key}] ${name}`, async ({ page }) => {
       for (const width of WIDTHS) {
         await page.setViewportSize({ width, height: width < 500 ? 844 : 900 });
@@ -52,7 +54,7 @@ for (const key of Object.keys(SITES)) {
   }
 }
 
-test('три темы визуально различаются токенами, а не только текстом', async ({ page }) => {
+test('темы всех сайтов различаются токенами, а не только текстом', async ({ page }) => {
   const observed = {};
   for (const key of Object.keys(SITES)) {
     await page.setViewportSize({ width: 1440, height: 900 });
@@ -74,7 +76,8 @@ test('три темы визуально различаются токенами
   const themes = new Set(Object.values(observed).map((v) => v.theme));
   const containers = new Set(Object.values(observed).map((v) => v.container));
   const backgrounds = new Set(Object.values(observed).map((v) => v.background));
-  expect(themes.size, JSON.stringify(observed)).toBe(3);
-  expect(containers.size, 'ширина контейнера обязана различаться').toBe(3);
-  expect(backgrounds.size, 'фон обязан различаться').toBe(3);
+  const siteCount = Object.keys(SITES).length;
+  expect(themes.size, JSON.stringify(observed)).toBe(siteCount);
+  expect(containers.size, 'ширина контейнера обязана различаться').toBe(siteCount);
+  expect(backgrounds.size, 'фон обязан различаться').toBe(siteCount);
 });

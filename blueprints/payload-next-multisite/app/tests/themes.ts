@@ -112,4 +112,42 @@ await check('неизвестная тема не подменяется пох�
   assert(thrown, 'неизвестная тема принята без ошибки')
 })
 
+/** Относительная яркость по WCAG. */
+const luminance = (hex: string): number => {
+  const value = hex.trim().replace('#', '')
+  const channels = [0, 2, 4].map((offset) => parseInt(value.slice(offset, offset + 2), 16) / 255)
+  const linear = channels.map((channel) =>
+    channel <= 0.03928 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4,
+  )
+  return 0.2126 * linear[0]! + 0.7152 * linear[1]! + 0.0722 * linear[2]!
+}
+
+const contrast = (left: string, right: string): number => {
+  const a = luminance(left)
+  const b = luminance(right)
+  return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05)
+}
+
+await check('контраст каждой темы не ниже 4.5:1 на ключевых парах', () => {
+  // Проверяем в тестах, а не только браузерным аудитом: axe находит нарушение
+  // на конкретной странице, а тема ломает контраст сразу на всех.
+  const pairs = [
+    ['--fg', '--bg', 'основной текст на фоне'],
+    ['--muted', '--bg', 'приглушённый текст на фоне'],
+    ['--link', '--bg', 'ссылка на фоне'],
+    ['--accent-fg', '--accent', 'текст кнопки на акценте'],
+    ['--accent', '--surface', 'акцент как текст на поверхности'],
+  ] as const
+  for (const theme of ALL_THEMES) {
+    const tokens = tokensOf(theme)
+    for (const [left, right, label] of pairs) {
+      const first = tokens[left]
+      const second = tokens[right]
+      if (!first?.startsWith('#') || !second?.startsWith('#')) continue
+      const ratio = contrast(first, second)
+      assert(ratio >= 4.5, `${theme}: ${label} — ${ratio.toFixed(2)}:1 (${first} / ${second})`)
+    }
+  }
+})
+
 process.exit(summary())

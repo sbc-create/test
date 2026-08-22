@@ -43,6 +43,25 @@ run() {
   echo "   -> exit=$code (${took}s)"
 }
 
+# Шаг, у которого ожидаемый код возврата не ноль: заблокированное внешними
+# данными состояние обязано оставаться заблокированным. Ноль здесь означал бы,
+# что блокировка исчезла незаметно, и это тоже повод покраснеть.
+run_expect() {
+  local expected="$1"; shift
+  local name="$1"; shift
+  local cmd="$*"
+  echo ""
+  echo "-- $name"
+  echo "   \$ $cmd"
+  local start=$SECONDS
+  eval "$cmd"
+  local code=$?
+  local took=$((SECONDS - start))
+  local status="FAIL"; [ $code -eq "$expected" ] && status="PASS"
+  record "$name" "$cmd" "$code" "$status" "ожидался код $expected, получен $code (${took}s)"
+  echo "   -> exit=$code (ожидался $expected, ${took}s)"
+}
+
 skip() {
   echo ""
   echo "-- $1"
@@ -148,6 +167,7 @@ else
   run "payload-themes"      "$TSX $APP_TESTS/themes.ts"
   run "payload-player"      "$TSX $APP_TESTS/player-contract.ts"
   run "payload-comments"    "$TSX $APP_TESTS/comments-policy.ts"
+  run "payload-editorial"   "$TSX $APP_TESTS/editorial.ts"
   run "payload-isolation"   "python3 tests/tools/with_app_env.py --scope anime --push -- $TSX $APP_TESTS/tenant-isolation.ts"
   run "payload-content-api" "python3 tests/tools/with_app_env.py --scope anime --push -- $TSX $APP_TESTS/content-api.ts"
   run "payload-mutation"    "python3 tests/tools/mutation_isolation.py"
@@ -155,6 +175,9 @@ else
   run "payload-frontend"    "python3 tests/tools/frontend_http.py"
   run "payload-cross-site"  "python3 tests/tools/cross_site_uniqueness.py"
   run "payload-restore"     "python3 tests/tools/restore_proof.py"
+  # Контур заблокирован внешними данными (нет контракта Content API и аналитики),
+  # поэтому ожидаемый код возврата 3, а не 0. Ноль означал бы, что блокировка исчезла.
+  run_expect 3 "payload-editorial-pass" "python3 -m factory editorial-pass --scope anime"
 
   if [ -x /opt/pw-browsers/chromium-1194/chrome-linux/chrome ]; then
     run "payload-browser"   "python3 tests/tools/browser_multisite.py"

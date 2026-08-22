@@ -498,6 +498,19 @@ export const seedCinema = async (
       } as never,
     })
 
+    await payload.create({
+      collection: 'player-profiles',
+      overrideAccess: true,
+      data: {
+        tenant,
+        name: `Плеер сайта ${key.toUpperCase()}`,
+        publisherIdRef: `PLAYER_PUBLISHER_ID_${key.toUpperCase()}`,
+        aggregator: 'kp',
+        showBanner: false,
+        showVoiceOnly: false,
+      } as never,
+    })
+
     const listing = { d: '/series/', e: '/films/', f: '/calendar/', g: '/collections/' }[key]
     const listingLabel = { d: 'Сериалы', e: 'Фильмы', f: 'Календарь', g: 'Подборки' }[key]
     const newsLabel = { d: 'Что нового', e: 'Кинообзоры', f: 'Изменения дат', g: 'Материалы' }[key]

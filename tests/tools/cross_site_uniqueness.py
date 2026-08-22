@@ -26,7 +26,15 @@ from factory.seo import uniqueness  # noqa: E402
 APP = ROOT / "blueprints" / "payload-next-multisite" / "app"
 ARTIFACT = ROOT / "var" / "artifacts" / "cross-site-uniqueness.json"
 
-HOSTS = {"site-a.localhost": "a", "site-b.localhost": "b", "site-c.localhost": "c"}
+HOSTS = {
+    "site-a.localhost": "a",
+    "site-b.localhost": "b",
+    "site-c.localhost": "c",
+    "site-d.localhost": "d",
+    "site-e.localhost": "e",
+    "site-f.localhost": "f",
+    "site-g.localhost": "g",
+}
 
 TITLE_RE = re.compile(r"<title>(.*?)</title>", re.S | re.I)
 DESCRIPTION_RE = re.compile(r'<meta[^>]+name="description"[^>]+content="([^"]*)"', re.I)
@@ -113,6 +121,10 @@ def main() -> int:
         "PLAYER_PUBLISHER_ID_A": "stand-publisher-a",
         "PLAYER_PUBLISHER_ID_B": "stand-publisher-b",
         "PLAYER_PUBLISHER_ID_C": "stand-publisher-c",
+        "PLAYER_PUBLISHER_ID_D": "stand-publisher-d",
+        "PLAYER_PUBLISHER_ID_E": "stand-publisher-e",
+        "PLAYER_PUBLISHER_ID_F": "stand-publisher-f",
+        "PLAYER_PUBLISHER_ID_G": "stand-publisher-g",
         "PLAYER_MODE": "mock",
         "FACTORY_ENVIRONMENT": "staging",
     })
