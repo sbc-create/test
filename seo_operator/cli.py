@@ -20,7 +20,7 @@ from seo_operator.audit import AuditLog
 from seo_operator.datasources.live import probe_all
 from seo_operator.pipeline import Mode, Operator
 from seo_operator.registry import load_portfolio
-from seo_operator.reporting import daily_report
+from seo_operator.reporting import daily_report, weekly_report
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 FIXTURE_PORTFOLIO = REPO_ROOT / "config" / "portfolio.fixture.json"
@@ -75,6 +75,28 @@ def cmd_run(args, mode: Mode) -> int:
     return 0
 
 
+def cmd_weekly(args) -> int:
+    """Weekly report over the runs recorded this week.
+
+    With no historical runs stored yet, it summarises the current run and says
+    so, rather than implying a week of history exists.
+    """
+    op = _operator(args.fixture)
+    pages_by_site = {}
+    if args.fixture and FIXTURE_PAGES.exists():
+        pages_by_site = {"fixture-anime": _load_pages(FIXTURE_PAGES)}
+
+    results = [op.run(Mode.DRY_RUN, pages_by_site=pages_by_site, today=date.today())]
+    text = weekly_report(results, date.today())
+
+    print(text)
+    if args.out:
+        Path(args.out).parent.mkdir(parents=True, exist_ok=True)
+        Path(args.out).write_text(text, encoding="utf-8")
+        print(f"\nотчёт записан: {args.out}", file=sys.stderr)
+    return 0
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(prog="seo-operator", description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -86,6 +108,7 @@ def main(argv=None) -> int:
         ("dry-run", "рассчитать изменения без записи"),
         ("canary", "применить изменения в пределах canary"),
         ("report", "сформировать ежедневный отчёт"),
+        ("weekly", "сформировать недельный отчёт"),
     ):
         p = sub.add_parser(name, help=help_text)
         p.add_argument(
@@ -108,6 +131,8 @@ def main(argv=None) -> int:
         return cmd_run(args, Mode.CANARY)
     if args.command == "report":
         return cmd_run(args, Mode.DRY_RUN)
+    if args.command == "weekly":
+        return cmd_weekly(args)
     return 1
 
 
