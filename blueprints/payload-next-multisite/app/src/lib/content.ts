@@ -27,6 +27,12 @@ export type TitleFilter = {
   releaseStates?: readonly string[]
   /** Статус производства: выходит, завершён, анонс. */
   statuses?: readonly string[]
+  /**
+   * Заведомо пустая выдача. Нужна, когда фильтр указывает на несуществующее
+   * значение: подставлять туда фиктивный идентификатор нельзя — в Postgres это
+   * ошибка типа, то есть 500 вместо честного «ничего не найдено».
+   */
+  impossible?: boolean
   sort?: string
   limit?: number
 }
@@ -39,6 +45,9 @@ export const listTenantTitles = async (
   // Каждый фильтр — констрейнт запроса, а не отбор после выборки: иначе
   // счётчик и пагинация показывают одно, а список другое.
   const constraints: Where[] = [publishedOnly]
+  // `id: { exists: false }` не выполняется никогда: идентификатор есть у каждой
+  // записи. Это выражает «совпадений нет» средствами запроса, без гадания о типе.
+  if (options.impossible) constraints.push({ id: { exists: false } })
   if (options.genreId) constraints.push({ 'title.genres': { in: [options.genreId] } })
   if (options.countryId) constraints.push({ 'title.countries': { in: [options.countryId] } })
   if (typeof options.year === 'number') constraints.push({ 'title.year': { equals: options.year } })

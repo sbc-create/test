@@ -137,19 +137,21 @@ export const buildFilterGroups = async (
 export const filterQuery = async (
   payload: Payload,
   state: FilterState,
-): Promise<Pick<TitleFilter, 'genreId' | 'countryId' | 'year' | 'statuses'>> => {
-  const query: Pick<TitleFilter, 'genreId' | 'countryId' | 'year' | 'statuses'> = {}
+): Promise<Pick<TitleFilter, 'genreId' | 'countryId' | 'year' | 'statuses' | 'impossible'>> => {
+  const query: Pick<TitleFilter, 'genreId' | 'countryId' | 'year' | 'statuses' | 'impossible'> = {}
   if (state.genre) {
     const genres = await listGenres(payload)
     const found = genres.docs.find((genre) => String(genre.slug) === state.genre)
     // Несуществующий жанр не игнорируется: иначе фильтр «тихо не применился» и
     // страница показала бы полный список под видом отфильтрованного.
-    query.genreId = found?.id ?? '__unknown__'
+    if (found) query.genreId = found.id
+    else query.impossible = true
   }
   if (state.country) {
     const countries = await listCountries(payload)
     const found = countries.docs.find((country) => String(country.slug) === state.country)
-    query.countryId = found?.id ?? '__unknown__'
+    if (found) query.countryId = found.id
+    else query.impossible = true
   }
   if (state.year) query.year = state.year
   if (state.status) query.statuses = [state.status]

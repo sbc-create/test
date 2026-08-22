@@ -192,8 +192,15 @@ export interface Tenant {
    * Домен без схемы. По нему запрос сопоставляется с сайтом.
    */
   domain: string;
-  seoProfile: 'catalog_authority' | 'release_pulse' | 'editorial_guide';
-  theme: 'portal_light' | 'pulse' | 'editorial';
+  seoProfile:
+    | 'catalog_authority'
+    | 'release_pulse'
+    | 'editorial_guide'
+    | 'series_hub'
+    | 'film_library'
+    | 'premiere_radar'
+    | 'curated_guide';
+  theme: 'portal_light' | 'pulse' | 'editorial' | 'series_dark' | 'film_editorial' | 'premiere_signal' | 'guide_warm';
   /**
    * Пока выключено, сайт отдаёт noindex целиком. Включается только после проверки контента и SEO.
    */

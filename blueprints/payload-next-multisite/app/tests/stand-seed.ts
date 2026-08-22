@@ -9,6 +9,7 @@ import { getPayload } from 'payload'
 
 import config from '../src/payload.config'
 import { reset, seed, type Seeded } from './seed'
+import { seedCinema } from './stand-seed-cinema'
 
 const payload = await getPayload({ config })
 
@@ -465,6 +466,21 @@ for (const key of ['a', 'b', 'c'] as const) {
   })
 }
 
-console.log('стенд наполнен: 3 сайта, 6 тайтлов, расписание, подборки, новости, юридическая страница')
+// Четвёрка кинотеатров живёт в той же CMS: задание требует одной multi-tenant
+// системы, поэтому стенд один на все семь сайтов.
+const cinema = await seedCinema(payload, { rightsId: rights.id, editorId: base.users.editorA.id })
+for (const key of ['d', 'e', 'f', 'g'] as const) {
+  await payload.update({
+    collection: 'tenants',
+    id: cinema[key].id,
+    overrideAccess: true,
+    data: { indexingEnabled: true } as never,
+  })
+}
+
+console.log(
+  'стенд наполнен: 7 сайтов — 3 аниме и 4 кинотеатра; сериалы, фильмы, анонсы, '
+  + 'подборки, маршрут просмотра, новости и юридические страницы',
+)
 await payload.db.destroy?.()
 process.exit(0)

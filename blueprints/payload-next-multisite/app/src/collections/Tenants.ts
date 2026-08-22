@@ -49,6 +49,10 @@ export const Tenants: CollectionConfig = {
         { label: 'CATALOG_AUTHORITY — полнота каталога', value: 'catalog_authority' },
         { label: 'RELEASE_PULSE — новые серии и расписание', value: 'release_pulse' },
         { label: 'EDITORIAL_GUIDE — редакционные материалы', value: 'editorial_guide' },
+        { label: 'SERIES_HUB — сериалы, сезоны и серии', value: 'series_hub' },
+        { label: 'FILM_LIBRARY — полнометражное кино', value: 'film_library' },
+        { label: 'PREMIERE_RADAR — даты премьер и переносы', value: 'premiere_radar' },
+        { label: 'CURATED_GUIDE — подборки и маршруты просмотра', value: 'curated_guide' },
       ],
     },
     {
@@ -60,6 +64,10 @@ export const Tenants: CollectionConfig = {
         { label: 'Портальная светлая', value: 'portal_light' },
         { label: 'Динамичная лента', value: 'pulse' },
         { label: 'Редакционная спокойная', value: 'editorial' },
+        { label: 'Тёмная витрина сериалов', value: 'series_dark' },
+        { label: 'Светлая кинотека', value: 'film_editorial' },
+        { label: 'Календарь премьер', value: 'premiere_signal' },
+        { label: 'Тёплая витрина подборок', value: 'guide_warm' },
       ],
     },
     {

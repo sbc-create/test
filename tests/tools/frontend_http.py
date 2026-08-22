@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""HTTP-проверка трёх сайтов на одном приложении.
+"""HTTP-проверка семи сайтов на одном приложении.
 
 Проверяется то, что видит посетитель и краулер: код ответа, тема, canonical,
 robots, состав sitemap и отсутствие чужого сайта в выдаче. Ничего не считается
@@ -30,6 +30,11 @@ SITES = {
     "a": {"host": "site-a.localhost", "theme": "portal_light", "name": "Стенд A — каталог", "profile": "catalog_authority"},
     "b": {"host": "site-b.localhost", "theme": "pulse", "name": "Стенд B — расписание", "profile": "release_pulse"},
     "c": {"host": "site-c.localhost", "theme": "editorial", "name": "Стенд C — редакция", "profile": "editorial_guide"},
+    # Четвёрка кинотеатров живёт в той же CMS и на том же стенде.
+    "d": {"host": "site-d.localhost", "theme": "series_dark", "name": "Стенд D — сериалы", "profile": "series_hub"},
+    "e": {"host": "site-e.localhost", "theme": "film_editorial", "name": "Стенд E — фильмы", "profile": "film_library"},
+    "f": {"host": "site-f.localhost", "theme": "premiere_signal", "name": "Стенд F — премьеры", "profile": "premiere_radar"},
+    "g": {"host": "site-g.localhost", "theme": "guide_warm", "name": "Стенд G — подборки", "profile": "curated_guide"},
 }
 
 # Профиль решает, какие типы страниц и какие разделы-списки индексируются.
@@ -54,6 +59,28 @@ INDEXABLE = {
           "/catalog/stand-title-1/season-1/episode-1/": False,
           "/collections/stand-collection-c/": True, "/news/": True, "/legal/rights/": True,
           "/schedule/": False},
+    # Внутри четвёрки владение разведено по форме произведения и релизному
+    # состоянию: вышедший сериал у D, вышедший фильм у E, ещё не вышедшее у F,
+    # а витрина подборок не индексирует ни одной страницы произведения.
+    "d": {"/": True, "/series/": True, "/films/": False, "/calendar/": False,
+          "/collections/": False, "/news/": True, "/legal/rights/": True,
+          "/catalog/severny-marshrut/": True,
+          "/search/": False},
+    "e": {"/": True, "/films/": True, "/series/": False, "/calendar/": False,
+          "/news/": True, "/legal/rights/": True,
+          "/catalog/dolgaya-pereprava/": True,
+          "/films/genre/drama/": True,
+          "/films/genre/thriller/": True,
+          "/search/": False},
+    "f": {"/": True, "/calendar/": True, "/series/": False, "/films/": False,
+          "/news/": True, "/legal/rights/": True,
+          "/catalog/obratny-otschet/": True,
+          "/search/": False},
+    "g": {"/": True, "/collections/": True, "/collections/stand-collection-g/": True,
+          "/collections/stand-watch-order-g/": True,
+          "/series/": False, "/films/": False, "/news/": True, "/legal/rights/": True,
+          "/catalog/severny-marshrut/": False,
+          "/search/": False},
 }
 
 
@@ -411,14 +438,95 @@ def main() -> int:
             results.add(f"[{key}] каждый адрес карты сайта self-canonical", not bad_canonical,
                         "; ".join(bad_canonical[:4]))
 
+        # --- Фильтры меняют выдачу, а не только адрес ------------------------
+        # Проверка по составу результатов, а не по коду ответа: снятый или
+        # ослабленный фильтр вернул бы тот же полный список со статусом 200, и
+        # проверка «страница открылась» этого не заметила бы.
+        def listing_state(host: str, path: str) -> tuple[int, set[str]]:
+            _, body = fetch(port, host, path)
+            total = re.search(r'data-total="(\d+)"', body)
+            hrefs = set(re.findall(r'<article class="card[^"]*"><a href="([^"]+)"', body))
+            return (int(total.group(1)) if total else -1, hrefs)
+
+        films_host = SITES["e"]["host"]
+        base_total, base_items = listing_state(films_host, "/films/")
+        results.add("[e] раздел фильмов отдаёт непустую выдачу", base_total > 0, f"найдено {base_total}")
+
+        drama_total, drama_items = listing_state(films_host, "/films/?genre=drama")
+        results.add("[e] фильтр по жанру меняет число результатов",
+                    drama_total >= 0 and drama_total < base_total,
+                    f"без фильтра {base_total}, с фильтром {drama_total}")
+        results.add("[e] фильтр по жанру меняет состав результатов",
+                    drama_items != base_items and drama_items.issubset(base_items),
+                    f"состав: {sorted(drama_items)} против {sorted(base_items)}")
+
+        year_total, year_items = listing_state(films_host, "/films/?year=2024")
+        results.add("[e] фильтр по году меняет состав результатов",
+                    year_items != base_items and year_items.issubset(base_items),
+                    f"год 2024: {sorted(year_items)}")
+
+        country_total, country_items = listing_state(films_host, "/films/?country=france")
+        results.add("[e] фильтр по стране меняет состав результатов",
+                    country_items != base_items and country_items.issubset(base_items),
+                    f"Франция: {sorted(country_items)}")
+
+        combo_total, combo_items = listing_state(films_host, "/films/?genre=drama&year=2024")
+        results.add("[e] комбинация фильтров сужает выдачу сильнее одиночного",
+                    combo_items.issubset(drama_items) and combo_total <= drama_total,
+                    f"жанр {drama_total}, жанр+год {combo_total}")
+
+        unknown_total, unknown_items = listing_state(films_host, "/films/?genre=no-such-genre")
+        results.add("[e] несуществующий фильтр даёт пустую выдачу, а не полный список",
+                    unknown_total == 0 and not unknown_items,
+                    f"найдено {unknown_total}: {sorted(unknown_items)}")
+
+        _, filtered_body = fetch(port, films_host, "/films/?genre=drama")
+        robots = ROBOTS_RE.search(filtered_body)
+        canonical = CANONICAL_RE.search(filtered_body)
+        results.add("[e] отфильтрованная страница не индексируется",
+                    bool(robots) and robots.group(1).startswith("noindex"),
+                    f"robots={robots.group(1) if robots else 'нет'}")
+        results.add("[e] отфильтрованная страница canonical на чистый раздел",
+                    bool(canonical) and canonical.group(1) == f"https://{films_host}/films/",
+                    f"canonical={canonical.group(1) if canonical else 'нет'}")
+
+        series_host = SITES["d"]["host"]
+        series_base, series_items = listing_state(series_host, "/series/")
+        status_total, status_items = listing_state(series_host, "/series/?status=completed")
+        results.add("[d] фильтр по статусу меняет состав результатов",
+                    status_items != series_items and status_items.issubset(series_items),
+                    f"без фильтра {series_base}, завершённые {status_total}")
+
+        # Календарь премьер показывает только не вышедшее: вышедшая запись в нём
+        # означала бы, что смена состояния не работает.
+        calendar_total, calendar_items = listing_state(SITES["f"]["host"], "/calendar/")
+        results.add("[f] в календаре только ещё не вышедшее",
+                    calendar_total > 0 and "/catalog/dolgaya-pereprava/" not in calendar_items,
+                    f"{calendar_total}: {sorted(calendar_items)}")
+
         # Состав sitemap различается: одинаковые карты у трёх сайтов — это дубль.
         sitemaps = {}
         for key, site in SITES.items():
             _, body = fetch(port, site["host"], "/sitemap.xml")
             sitemaps[key] = {re.sub(r"^https://[^/]+", "", loc) for loc in re.findall(r"<loc>([^<]+)</loc>", body)}
-        results.add("состав sitemap у трёх сайтов различается",
-                    len({frozenset(paths) for paths in sitemaps.values()}) == 3,
-                    f"размеры: {[len(v) for v in sitemaps.values()]}")
+        duplicates = []
+        keys = sorted(sitemaps)
+        for i, left in enumerate(keys):
+            for right in keys[i + 1:]:
+                if sitemaps[left] and sitemaps[left] == sitemaps[right]:
+                    duplicates.append(f"{left}={right}")
+        results.add("состав sitemap различается у всех сайтов стенда",
+                    not duplicates,
+                    f"совпали: {', '.join(duplicates)}; размеры: "
+                    f"{ {key: len(paths) for key, paths in sitemaps.items()} }")
+        results.add("[d] страницы серий попадают в карту сайта сериалов",
+                    any("/season-" in path for path in sitemaps["d"]), "")
+        results.add("[e] посадочные страницы фильтров попадают в карту кинотеки",
+                    any(path.startswith("/films/genre/") for path in sitemaps["e"]), "")
+        results.add("[f] в карте премьер нет вышедшего",
+                    "/catalog/dolgaya-pereprava/" not in sitemaps["f"], "")
+        results.add("[g] в карте подборок нет страниц произведений",
+                    not any(path.startswith("/catalog/") for path in sitemaps["g"]), "")
         results.add("[c] эпизоды не попадают в sitemap редакционного сайта",
                     not any("/season-" in path for path in sitemaps["c"]), "")
         results.add("[a] эпизоды попадают в sitemap каталога",
