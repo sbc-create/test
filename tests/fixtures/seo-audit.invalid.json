@@ -1,0 +1,14 @@
+{
+  "audit_id": "Bad_ID",
+  "site": "example.com",
+  "generated_at": "yesterday",
+  "findings": [
+    {
+      "id": "nope",
+      "category": "vibes",
+      "severity": "catastrophic",
+      "summary": "",
+      "affected_urls": []
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "audit_id": "example-com-baseline",
+  "site": "https://example.com",
+  "generated_at": "2026-08-22T09:00:00Z",
+  "crawl": {"pages_crawled": 412, "pages_indexable": 388, "crawl_depth": 4},
+  "findings": [
+    {
+      "id": "IDX-001",
+      "category": "indexation",
+      "severity": "high",
+      "summary": "24 pages return noindex while linked from primary navigation",
+      "detail": "Pages reachable in two clicks from the homepage carry a noindex directive, so internal link equity terminates on them.",
+      "affected_urls": ["https://example.com/products/archive"],
+      "recommendation": "Remove the noindex directive or drop these URLs from primary navigation.",
+      "evidence": "Verified via crawl of 412 URLs; directive confirmed in the served HTML head."
+    },
+    {
+      "id": "ONP-002",
+      "category": "on-page",
+      "severity": "medium",
+      "summary": "Duplicate title tags across 11 category pages",
+      "affected_urls": ["https://example.com/category/a", "https://example.com/category/b"],
+      "recommendation": "Template titles to include the category name.",
+      "evidence": "Title tags extracted per URL and grouped; 11 exact-string collisions."
+    }
+  ],
+  "score": {"value": 72.5, "method": "weighted-severity-v1"}
+}

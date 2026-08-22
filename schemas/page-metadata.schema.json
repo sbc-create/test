@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sbc-create/test/schemas/page-metadata.schema.json",
+  "title": "Page Metadata",
+  "description": "On-page SEO metadata for a single URL. One record per crawled page.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["url", "title", "meta_description", "indexable"],
+  "properties": {
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://",
+      "description": "Absolute canonical-form URL of the page."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 60,
+      "description": "Title tag. Capped at 60 chars to avoid SERP truncation."
+    },
+    "meta_description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "description": "Meta description. Capped at 160 chars to avoid SERP truncation."
+    },
+    "canonical": {
+      "type": "string",
+      "format": "uri",
+      "description": "rel=canonical target. Omit when self-referencing."
+    },
+    "indexable": {
+      "type": "boolean",
+      "description": "False when blocked by robots.txt, noindex, or auth."
+    },
+    "h1": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "description": "All H1 headings found. More than one is a finding."
+    },
+    "word_count": {"type": "integer", "minimum": 0},
+    "status_code": {"type": "integer", "minimum": 100, "maximum": 599},
+    "hreflang": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["lang", "href"],
+        "properties": {
+          "lang": {"type": "string", "pattern": "^[a-z]{2}(-[A-Z]{2})?$|^x-default$"},
+          "href": {"type": "string", "format": "uri"}
+        }
+      }
+    },
+    "structured_data_types": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "schema.org @type values present in JSON-LD."
+    }
+  }
+}

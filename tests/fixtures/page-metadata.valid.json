@@ -1,0 +1,16 @@
+{
+  "url": "https://example.com/guides/technical-seo",
+  "title": "Technical SEO Guide: Crawling, Indexing, and Fixes",
+  "meta_description": "A practical walkthrough of technical SEO: how crawlers reach your pages, why they get dropped from the index, and the fixes that move the needle.",
+  "canonical": "https://example.com/guides/technical-seo",
+  "indexable": true,
+  "h1": ["Technical SEO Guide"],
+  "word_count": 2400,
+  "status_code": 200,
+  "hreflang": [
+    {"lang": "en-US", "href": "https://example.com/guides/technical-seo"},
+    {"lang": "de-DE", "href": "https://example.com/de/guides/technical-seo"},
+    {"lang": "x-default", "href": "https://example.com/guides/technical-seo"}
+  ],
+  "structured_data_types": ["Article", "BreadcrumbList"]
+}

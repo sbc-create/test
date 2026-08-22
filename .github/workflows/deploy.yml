@@ -1,0 +1,78 @@
+name: Deploy
+
+# Publishes the validated SEO knowledge pack and schemas as a versioned bundle.
+# Only runs after CI passes on main, so nothing unvalidated ships.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "schemas/**"
+      - "docs/knowledge/**"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Build the bundle but do not publish"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build bundle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m venv .venv
+          .venv/bin/pip install -r requirements.txt
+          .venv/bin/pip install pyyaml
+
+      - name: Verify before packaging
+        run: ./scripts/verify.sh
+
+      - name: Build bundle
+        run: ./scripts/build-bundle.sh
+
+      - name: Upload bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-knowledge-bundle
+          path: dist/
+          retention-days: 30
+
+  publish:
+    name: Publish bundle
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || inputs.dry_run == false
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: seo-knowledge-bundle
+          path: dist
+
+      - name: Show bundle contents
+        run: ls -la dist/
+
+      # Publishing target is intentionally not configured yet. Wire the real
+      # destination here (object storage, package registry, or Pages) once the
+      # SEO session decides where the bundle should live. Until then this job
+      # proves the bundle builds and is retrievable from the workflow run.
+      - name: Publish placeholder
+        run: |
+          echo "Bundle built and available as a workflow artifact."
+          echo "Configure a publish target in .github/workflows/deploy.yml before relying on this step."

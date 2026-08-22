@@ -1,0 +1,25 @@
+{
+  "plan_id": "example-com-q3",
+  "market": "en-US",
+  "targets": [
+    {
+      "keyword": "technical seo guide",
+      "url": "https://example.com/guides/technical-seo",
+      "intent": "informational",
+      "search_volume": 8100,
+      "difficulty": 47.5,
+      "current_position": 12,
+      "secondary_keywords": ["technical seo checklist", "technical seo audit"],
+      "source": "Search Console impressions, 90-day window"
+    },
+    {
+      "keyword": "seo audit tool",
+      "url": "https://example.com/products/audit",
+      "intent": "commercial",
+      "search_volume": 14800,
+      "difficulty": 68,
+      "current_position": null,
+      "source": "Search Console impressions, 90-day window"
+    }
+  ]
+}
