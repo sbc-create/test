@@ -1,5 +1,28 @@
 {
-  "node": {},
+  "node": {
+    "403c62f39c09ad482f0a08a5dadad9fad114a16098": {
+      "workers": {
+        "app/(payload)/admin/[[...segments]]/page": {
+          "moduleId": "[project]/blueprints/payload-next-multisite/app/.next-internal/server/app/(payload)/admin/[[...segments]]/page/actions.js { ACTIONS_MODULE0 => \"[project]/blueprints/payload-next-multisite/app/src/app/(payload)/layout.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/blueprints/payload-next-multisite/app/node_modules/@payloadcms/next/dist/layouts/Root/index.js [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "codeHash": null
+        }
+      },
+      "filename": "blueprints/payload-next-multisite/app/src/app/(payload)/layout.tsx",
+      "exportedName": "$$RSC_SERVER_ACTION_0"
+    },
+    "60302f9ee3b31ae2e33227d24e2144ea3d1f943c71": {
+      "workers": {
+        "app/(payload)/admin/[[...segments]]/page": {
+          "moduleId": "[project]/blueprints/payload-next-multisite/app/.next-internal/server/app/(payload)/admin/[[...segments]]/page/actions.js { ACTIONS_MODULE0 => \"[project]/blueprints/payload-next-multisite/app/src/app/(payload)/layout.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/blueprints/payload-next-multisite/app/node_modules/@payloadcms/next/dist/layouts/Root/index.js [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "codeHash": null
+        }
+      },
+      "filename": "blueprints/payload-next-multisite/app/node_modules/@payloadcms/next/dist/layouts/Root/index.js",
+      "exportedName": "$$RSC_SERVER_ACTION_0"
+    }
+  },
   "edge": {},
   "encryptionKey": "SBfpCVqSoirPNv6uAKX4JY5BybVHBK7/HsLoVGkJhHE="
 }

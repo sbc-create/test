@@ -12609,21 +12609,12 @@ const _removetrailingslash = __turbopack_context__.r("[project]/blueprints/paylo
 const _parsepath = __turbopack_context__.r("[project]/blueprints/payload-next-multisite/app/node_modules/next/dist/shared/lib/router/utils/parse-path.js [app-ssr] (ecmascript)");
 const normalizePathTrailingSlash = (path)=>{
     // 47 is the char code for '/'
-    if (path.charCodeAt(0) !== 47 || ("TURBOPACK compile-time value", void 0)) {
+    if (path.charCodeAt(0) !== 47 || ("TURBOPACK compile-time value", true)) {
         return path;
-    }
-    const { pathname, query, hash } = (0, _parsepath.parsePath)(path);
-    if ("TURBOPACK compile-time truthy", 1) {
-        if (/\.[^/]+\/?$/.test(pathname)) {
-            return `${(0, _removetrailingslash.removeTrailingSlash)(pathname)}${query}${hash}`;
-        } else if (pathname.endsWith('/')) {
-            return `${pathname}${query}${hash}`;
-        } else {
-            return `${pathname}/${query}${hash}`;
-        }
     }
     //TURBOPACK unreachable
     ;
+    const pathname = undefined, query = undefined, hash = undefined;
 };
 if ((typeof exports.default === 'function' || typeof exports.default === 'object' && exports.default !== null) && typeof exports.default.__esModule === 'undefined') {
     Object.defineProperty(exports.default, '__esModule', {

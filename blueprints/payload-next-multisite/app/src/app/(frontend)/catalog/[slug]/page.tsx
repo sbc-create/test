@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { Breadcrumbs } from '../../../../components/Breadcrumbs'
+import { Comments } from '../../../../components/Comments'
 import { Player } from '../../../../components/Player'
 import { getTenantTitle, listSeasons } from '../../../../lib/content'
 import { describe, plainText, titleNameOf } from '../../../../lib/present'
@@ -120,6 +121,13 @@ const TitlePage = async ({ params }: { params: Params }) => {
           </ul>
         )}
       </section>
+
+      <Comments
+        site={site}
+        targetType="title"
+        targetId={String(record.id)}
+        targetUrl={`/catalog/${slug}/`}
+      />
     </>
   )
 }

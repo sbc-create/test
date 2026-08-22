@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { Breadcrumbs } from '../../../../../../components/Breadcrumbs'
+import { Comments } from '../../../../../../components/Comments'
 import { Player } from '../../../../../../components/Player'
 import { getTenantTitle, listEpisodes, listSeasons } from '../../../../../../lib/content'
 import { titleNameOf } from '../../../../../../lib/present'
@@ -131,6 +132,13 @@ const EpisodePage = async ({ params }: { params: Params }) => {
           </Link>
         ) : null}
       </nav>
+
+      <Comments
+        site={site}
+        targetType="episode"
+        targetId={String(episodeRecord.id)}
+        targetUrl={`${base}/episode-${episodeNumber}/`}
+      />
     </>
   )
 }

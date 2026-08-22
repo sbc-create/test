@@ -1,6 +1,6 @@
 var R=require("../../../../chunks/[turbopack]_runtime.js")("server/app/(payload)/api/[...slug]/route.js")
-R.c("server/chunks/[externals]_next_dist_compiled_@vercel_og_index_node_1zmfj5o.js")
-R.c("server/chunks/[root-of-the-server]__104uvqi._.js")
+R.c("server/chunks/[externals]_next_dist_compiled_@vercel_og_index_node_06rhuyt.js")
+R.c("server/chunks/[root-of-the-server]__0p0449b._.js")
 R.c("server/chunks/0nrf_next_0mx5tf7._.js")
 R.c("server/chunks/0nrf_@payloadcms_richtext-lexical_dist_1flqrl1._.js")
 R.c("server/chunks/0nrf_lexical_Lexical_dev_mjs_0vc4-rc._.js")

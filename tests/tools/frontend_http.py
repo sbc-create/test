@@ -24,6 +24,8 @@ ROOT = Path(__file__).resolve().parents[2]
 APP = ROOT / "blueprints" / "payload-next-multisite" / "app"
 ARTIFACT = ROOT / "var" / "artifacts" / "frontend-http.json"
 
+MIN_FILL_SECONDS = 3
+
 SITES = {
     "a": {"host": "site-a.localhost", "theme": "portal_light", "name": "Стенд A — каталог", "profile": "catalog_authority"},
     "b": {"host": "site-b.localhost", "theme": "pulse", "name": "Стенд B — расписание", "profile": "release_pulse"},
@@ -91,6 +93,133 @@ def fetch(port: int, host: str, path: str, timeout: float = 180.0, follow: bool 
 CANONICAL_RE = re.compile(r'<link[^>]+rel="canonical"[^>]+href="([^"]+)"')
 ROBOTS_RE = re.compile(r'<meta[^>]+name="robots"[^>]+content="([^"]+)"')
 THEME_RE = re.compile(r'data-theme="([^"]+)"')
+
+
+TARGET_ID_RE = re.compile(r'\\?"targetId\\?":\\?"([^"\\]+)')
+FORM_TOKEN_RE = re.compile(r'\\?"formToken\\?":\\?"([^"\\]+)')
+
+
+def post_json(port: int, host: str, path: str, payload: dict, token: str | None = None) -> tuple[int, dict]:
+    data = json.dumps(payload).encode("utf-8")
+    headers = {"Host": host, "content-type": "application/json"}
+    if token:
+        headers["Authorization"] = f"JWT {token}"
+    request = urllib.request.Request(f"http://127.0.0.1:{port}{path}", data=data, headers=headers, method="POST")
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    try:
+        with opener.open(request, timeout=120) as response:
+            return response.status, json.loads(response.read().decode("utf-8", "replace") or "{}")
+    except urllib.error.HTTPError as error:
+        body = error.read().decode("utf-8", "replace")
+        try:
+            return error.code, json.loads(body or "{}")
+        except json.JSONDecodeError:
+            return error.code, {"raw": body[:400]}
+
+
+def patch_json(port: int, host: str, path: str, payload: dict, token: str) -> tuple[int, dict]:
+    data = json.dumps(payload).encode("utf-8")
+    request = urllib.request.Request(
+        f"http://127.0.0.1:{port}{path}", data=data,
+        headers={"Host": host, "content-type": "application/json", "Authorization": f"JWT {token}"},
+        method="PATCH",
+    )
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    try:
+        with opener.open(request, timeout=120) as response:
+            return response.status, json.loads(response.read().decode("utf-8", "replace") or "{}")
+    except urllib.error.HTTPError as error:
+        return error.code, {"raw": error.read().decode("utf-8", "replace")[:400]}
+
+
+def check_comments(port: int, results: "Results") -> None:
+    """Комментарии: отправка только через серверный endpoint, публикация — только после модерации."""
+    host_a = SITES["a"]["host"]
+    host_b = SITES["b"]["host"]
+    path = "/catalog/stand-title-1/"
+
+    _, body = fetch(port, host_a, path)
+    target = TARGET_ID_RE.search(body)
+    token_match = FORM_TOKEN_RE.search(body)
+    results.add("[a] форма комментария отрисована", bool(target and token_match),
+                "в разметке нет targetId/formToken")
+    if not (target and token_match):
+        return
+    target_id, form_token = target.group(1), token_match.group(1)
+
+    # Прямое создание через REST закрыто: иначе все проверки ниже обходятся одним POST.
+    status, _ = post_json(port, host_a, "/api/comments", {
+        "tenant": 1, "targetType": "title", "targetId": target_id, "body": "обход", "status": "published"})
+    results.add("[a] прямое создание комментария через REST запрещено", status in (401, 403), f"получен {status}")
+
+    # Мгновенная отправка — признак бота. Токен берём заново, чтобы измерять
+    # именно время заполнения формы, а не возраст страницы.
+    _, fresh = fetch(port, host_a, path)
+    fresh_token = FORM_TOKEN_RE.search(fresh)
+    status, payload = post_json(port, host_a, "/api/comments/submit", {
+        "targetType": "title", "targetId": target_id,
+        "formToken": fresh_token.group(1) if fresh_token else form_token,
+        "body": "слишком быстро", "guestName": "Тест"})
+    results.add("[a] мгновенная отправка отклонена", status == 400 and payload.get("code") == "TOO_FAST",
+                f"{status} {payload}")
+
+    time.sleep(MIN_FILL_SECONDS + 1)
+
+    status, payload = post_json(port, host_a, "/api/comments/submit", {
+        "targetType": "title", "targetId": target_id, "formToken": form_token,
+        "body": "Первый комментарий стенда для проверки модерации.", "guestName": "Тестировщик"})
+    results.add("[a] корректный комментарий принят", status == 201, f"{status} {payload}")
+    results.add("[a] комментарий уходит на модерацию, а не в публикацию",
+                payload.get("status") == "pending", str(payload))
+    comment_id = payload.get("id")
+
+    status, payload = post_json(port, host_a, "/api/comments/submit", {
+        "targetType": "title", "targetId": target_id, "formToken": form_token,
+        "body": "Второй комментарий подряд.", "guestName": "Тестировщик"})
+    results.add("[a] частая отправка ограничена", status == 429, f"{status} {payload}")
+
+    status, payload = post_json(port, host_a, "/api/comments/submit", {
+        "targetType": "title", "targetId": target_id, "formToken": form_token,
+        "body": "Комментарий бота.", "guestName": "Бот", "website": "http://spam"})
+    results.add("[a] заполненная ловушка отклонена", status == 400 and payload.get("code") == "HONEYPOT",
+                f"{status} {payload}")
+
+    # Токен сайта A не годится для сайта B.
+    status, payload = post_json(port, host_b, "/api/comments/submit", {
+        "targetType": "title", "targetId": target_id, "formToken": form_token,
+        "body": "Чужой токен.", "guestName": "Тестировщик"})
+    results.add("[b] токен формы другого сайта не принимается", status == 400, f"{status} {payload}")
+
+    _, body = fetch(port, host_a, path)
+    results.add("[a] комментарий на модерации не виден на сайте",
+                "Первый комментарий стенда" not in body, "непроверенный комментарий опубликован")
+
+    # Модератор публикует — только после этого текст появляется на странице.
+    status, login = post_json(port, host_a, "/api/users/login",
+                              {"email": "moderator-a@factory.test", "password": "FactoryTest!2026"})
+    results.add("[a] модератор входит в систему", status == 200 and bool(login.get("token")), f"{status}")
+    token = login.get("token")
+    if not token or not comment_id:
+        return
+
+    status, _ = patch_json(port, host_a, f"/api/comments/{comment_id}", {"status": "published"}, token)
+    results.add("[a] модератор публикует комментарий", status == 200, f"получен {status}")
+
+    _, body = fetch(port, host_a, path)
+    results.add("[a] опубликованный комментарий виден на сайте",
+                "Первый комментарий стенда" in body, "комментарий не появился")
+
+    _, body_b = fetch(port, host_b, path)
+    results.add("[b] комментарий сайта A не виден на сайте B",
+                "Первый комментарий стенда" not in body_b, "комментарий утёк между сайтами")
+
+    # Модератор чужого сайта не может трогать эту запись.
+    status, login_b = post_json(port, host_b, "/api/users/login",
+                                {"email": "admin-b@factory.test", "password": "FactoryTest!2026"})
+    if status == 200 and login_b.get("token"):
+        status, _ = patch_json(port, host_b, f"/api/comments/{comment_id}", {"status": "spam"}, login_b["token"])
+        results.add("[b] администратор другого сайта не может изменить комментарий",
+                    status in (403, 404), f"получен {status}")
 
 
 def main() -> int:
@@ -234,6 +363,8 @@ def main() -> int:
         results.add("[a] страница серии не содержит строки подключения к БД", "postgresql://" not in body, "")
         secret = os.environ.get("PAYLOAD_SECRET", "")
         results.add("[a] страница серии не содержит секрет приложения", not secret or secret not in body, "")
+
+        check_comments(port, results)
 
     finally:
         process.terminate()

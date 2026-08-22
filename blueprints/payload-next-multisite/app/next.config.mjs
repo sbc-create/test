@@ -6,6 +6,9 @@ const nextConfig = {
   // URL-политика фабрики: слэш на конце — канонический вид. Без этого Next
   // редиректит /catalog/ на /catalog, и canonical начинает указывать на редирект.
   trailingSlash: true,
+  // Автоматический редирект Next применяется и к /api/*, где он ломает POST.
+  // Канонизацию адресов страниц делает middleware, а API остаётся без слэша.
+  skipTrailingSlashRedirect: true,
   reactStrictMode: true,
   poweredByHeader: false,
   images: { remotePatterns: [] },

@@ -38,7 +38,8 @@ def payload_secret() -> str:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--scope", default="anime", help="Имя набора учётных данных в var/db")
-    parser.add_argument("--push", action="store_true", help="Разрешить Payload синхронизировать схему (только staging)")
+    parser.add_argument("--no-push", action="store_true",
+                        help="Не синхронизировать схему (для проверки поведения на неизменной базе)")
     parser.add_argument("--cwd", help="Рабочий каталог для команды (нужен CLI, ищущим tsconfig рядом)")
     parser.add_argument("command", nargs=argparse.REMAINDER)
     args = parser.parse_args()
@@ -51,7 +52,10 @@ def main() -> int:
     env = dict(os.environ)
     env["DATABASE_URI"] = credentials.dsn(password)
     env["PAYLOAD_SECRET"] = payload_secret()
-    if args.push:
+    # Локальный стенд синхронизирует схему сам: иначе каждый прогон после правки
+    # коллекции падал бы на отсутствующей колонке, и тест проверял бы состояние
+    # базы, а не код. Production разворачивается миграциями, а не push.
+    if not args.no_push:
         env["PAYLOAD_DB_PUSH"] = "true"
     # Каталоги загрузок — состояние стенда, а не исходники: всегда под var/.
     for name, relative in (("MEDIA_DIR", "var/media"), ("CATALOG_MEDIA_DIR", "var/catalog-media")):

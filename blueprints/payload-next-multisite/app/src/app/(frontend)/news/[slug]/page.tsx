@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { Breadcrumbs } from '../../../../components/Breadcrumbs'
+import { Comments } from '../../../../components/Comments'
 import { JsonLd } from '../../../../components/JsonLd'
 import { getPost } from '../../../../lib/content'
 import { describe, plainText } from '../../../../lib/present'
@@ -80,6 +81,8 @@ const PostPage = async ({ params }: { params: Params }) => {
           }}
         />
       ) : null}
+
+      <Comments site={site} targetType="post" targetId={String(record.id)} targetUrl={`/news/${slug}/`} />
     </>
   )
 }

@@ -1,5 +1,5 @@
 var R=require("../../../chunks/[turbopack]_runtime.js")("server/app/(frontend)/sitemap.xml/route.js")
-R.c("server/chunks/[root-of-the-server]__1u2etcl._.js")
+R.c("server/chunks/[root-of-the-server]__00go3te._.js")
 R.c("server/chunks/0nrf_next_1nl1cmn._.js")
 R.c("server/chunks/0nrf_@payloadcms_richtext-lexical_dist_1flqrl1._.js")
 R.c("server/chunks/0nrf_lexical_Lexical_dev_mjs_0vc4-rc._.js")

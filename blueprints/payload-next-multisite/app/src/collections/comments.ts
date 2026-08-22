@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { hasRole, superAdminOnly, tenantScopedAccess } from '../access/index'
+import { submitComment } from '../comments/submit'
 
 /**
  * Собственные комментарии, не внешний виджет.
@@ -27,9 +28,12 @@ export const Comments: CollectionConfig = {
     update: hasRole('moderator'),
     delete: hasRole('site_admin'),
   },
+  // Единственный путь создания комментария: серверный обработчик с проверками.
+  endpoints: [{ path: '/submit', method: 'post', handler: submitComment }],
   indexes: [
     { fields: ['tenant', 'targetType', 'targetId', 'status'] },
     { fields: ['tenant', 'status', 'createdAt'] },
+    { fields: ['tenant', 'authorKey', 'createdAt'] },
   ],
   fields: [
     {
@@ -81,6 +85,15 @@ export const Comments: CollectionConfig = {
     { name: 'moderatorNote', type: 'textarea', label: 'Заметка модератора',
       access: { read: ({ req }) => Boolean(req.user) } },
     { name: 'reportCount', type: 'number', defaultValue: 0, label: 'Жалоб' },
+    {
+      name: 'authorKey',
+      type: 'text',
+      index: true,
+      label: 'Ключ отправителя',
+      // Отпечаток отправителя (не IP) для лимитов частоты. Публично не отдаётся.
+      access: { read: ({ req }) => Boolean(req.user), create: () => false, update: () => false },
+      admin: { readOnly: true, description: 'Хэш отправителя для антифлуда. Исходный IP не хранится.' },
+    },
     {
       name: 'submissionMeta',
       type: 'json',

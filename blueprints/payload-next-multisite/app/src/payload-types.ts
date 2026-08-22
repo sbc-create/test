@@ -698,6 +698,10 @@ export interface Comment {
   moderatedAt?: string | null;
   moderatorNote?: string | null;
   reportCount?: number | null;
+  /**
+   * Хэш отправителя для антифлуда. Исходный IP не хранится.
+   */
+  authorKey?: string | null;
   submissionMeta?:
     | {
         [k: string]: unknown;
@@ -1620,6 +1624,7 @@ export interface CommentsSelect<T extends boolean = true> {
   moderatedAt?: T;
   moderatorNote?: T;
   reportCount?: T;
+  authorKey?: T;
   submissionMeta?: T;
   updatedAt?: T;
   createdAt?: T;
