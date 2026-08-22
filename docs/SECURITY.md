@@ -65,7 +65,17 @@ robots.txt защитой не считается. Авторизация про
 статику, `robots.txt` и `sitemap.xml`: иначе «staging закрыт» было бы неправдой.
 Если учётные данные не сконфигурированы, стенд отвечает 503, а не открывается. Проверяется `tests/integration/test_security_smoke.py`.
 
-CSP намеренно строгая (`script-src 'self'`, `style-src 'self'`). Из-за неё пришлось
+CSP пилота DLE строгая (`script-src 'self'`, `style-src 'self'`). Из-за неё пришлось
 убрать инлайновые `style` из шаблонов и внедрять axe-core init-скриптом, а не
 `addScriptTag`: ослаблять политику ради тестов нельзя — проверяется та же политика,
 что уедет в production.
+
+CSP blueprint `payload-next-multisite` слабее, и это названо прямо, а не спрятано:
+в `script-src` и `style-src` присутствует `'unsafe-inline'`. Причина — собственные
+инлайновые скрипты загрузки Next.js и инлайновые стили React; строгий вариант
+требует nonce-слоя на каждом ответе, которого в blueprint пока нет. Остальные
+директивы закрыты: `object-src 'none'`, `frame-ancestors 'none'`, `base-uri 'self'`,
+`form-action 'self'`, а внешние источники сведены к одному домену плеера
+(`https://player.cdnvideohub.com`) в `script-src`, `frame-src` и `connect-src`.
+До появления nonce-слоя защита от инъекции скрипта опирается на экранирование
+React и на серверную санитизацию комментариев (`src/comments/policy.ts`), а не на CSP.

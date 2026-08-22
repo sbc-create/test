@@ -193,7 +193,9 @@ await check('таймаут повторяется ограниченно и н�
 
 await check('отказ авторизации не повторяется с тем же токеном', async () => {
   const { result, calls } = await run([{ status: 401, body: {} }], 'fixture-auth')
-  assertEqual(result.status, 'failed', 'статус задания')
+  // Именно blocked_access, а не общий failed: по журналу должно быть видно, что
+  // повтор с тем же токеном бессмысленен и нужен новый секрет.
+  assertEqual(result.status, 'blocked_access', 'статус задания')
   assertEqual(calls().length, 1, 'число попыток')
 })
 

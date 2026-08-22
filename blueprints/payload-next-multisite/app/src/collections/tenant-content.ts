@@ -76,6 +76,20 @@ export const TenantTitles: CollectionConfig = {
       label: 'Автор редакционного текста',
     },
     {
+      name: 'seasonNotes',
+      type: 'array',
+      label: 'Заметки редакции по сезонам',
+      admin: {
+        description:
+          'Собственный текст сайта о сезоне. Без него страница сезона остаётся списком серий, '
+          + 'одинаковым на всех сайтах, и ворота уникальности закрывают её от индексации.',
+      },
+      fields: [
+        { name: 'season', type: 'number', required: true, min: 1, label: 'Номер сезона' },
+        { name: 'note', type: 'textarea', required: true, label: 'Текст редакции' },
+      ],
+    },
+    {
       name: 'highlight',
       type: 'checkbox',
       defaultValue: false,

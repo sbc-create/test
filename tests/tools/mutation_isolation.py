@@ -7,6 +7,7 @@
 """
 from __future__ import annotations
 
+import json
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -16,6 +17,7 @@ ROOT = Path(__file__).resolve().parents[2]
 APP = ROOT / "blueprints" / "payload-next-multisite" / "app"
 SUITE = APP / "tests" / "tenant-isolation.ts"
 SEO_SUITE = ROOT / "tests" / "tools" / "frontend_http.py"
+SEO_RULES = APP / "tests" / "seo-matrix.ts"
 TSX = APP / "node_modules" / ".bin" / "tsx"
 
 
@@ -46,9 +48,23 @@ SEO_MUTATIONS = [
     ),
     Mutation(
         "в карту сайта попадают материалы без собственного текста",
-        APP / "src/app/(frontend)/sitemap.xml/route.ts",
-        "      if (profile.requiresOwnText.includes('title') && !String(record.editorialIntro ?? '').trim()) continue",
-        "      if (false) continue",
+        APP / "src/seo/inclusion.ts",
+        "  if (!profile.requiresOwnText.includes(type)) return true",
+        "  return true",
+        suite="seo",
+    ),
+    Mutation(
+        "страницы серий индексируются вторым сайтом",
+        APP / "src/seo/profiles.ts",
+        "    content_unavailable: true,\n    // Сезоны, эпизоды и подборки закрыты.",
+        "    content_unavailable: true,\n    episode: true,\n    // Сезоны, эпизоды и подборки закрыты.",
+        suite="seo",
+    ),
+    Mutation(
+        "сезон без собственной заметки попадает в карту сайта",
+        APP / "src/seo/inclusion.ts",
+        "  && seasonNote(doc, season) !== null",
+        "  && true",
         suite="seo",
     ),
 ]
@@ -89,7 +105,13 @@ MUTATIONS = [
 
 def run_suite(kind: str = "isolation") -> subprocess.CompletedProcess:
     if kind == "seo":
-        # SEO-ворота проверяются живым HTTP: без запуска сайта они не проверяются никак.
+        # Сначала быстрые правила: часть поломок (canonical, состав карты сайта)
+        # видна на чистых функциях за секунду, и гонять ради них живой стенд
+        # незачем. Живой HTTP остаётся для того, что видно только на странице.
+        rules = subprocess.run([str(TSX), str(SEO_RULES)], cwd=APP,
+                               capture_output=True, text=True, timeout=600, check=False)
+        if rules.returncode != 0:
+            return rules
         return subprocess.run([sys.executable, str(SEO_SUITE)], cwd=ROOT,
                               capture_output=True, text=True, timeout=3600, check=False)
     return subprocess.run(
@@ -99,7 +121,11 @@ def run_suite(kind: str = "isolation") -> subprocess.CompletedProcess:
     )
 
 
+ARTIFACT = ROOT / "var" / "artifacts" / "mutation-isolation.json"
+
+
 def main() -> int:
+    results: list[dict] = []
     baseline = run_suite()
     if baseline.returncode != 0:
         print("BASELINE FAIL: прогон изоляции красный до мутаций, мутировать нечего")
@@ -119,6 +145,8 @@ def main() -> int:
         original = mutation.path.read_text(encoding="utf-8")
         if mutation.before not in original:
             print(f"SKIP  {mutation.name}: якорь не найден в {mutation.path.relative_to(ROOT)}")
+            results.append({"mutation": mutation.name, "file": str(mutation.path.relative_to(ROOT)),
+                            "suite": mutation.suite, "detected": False, "reason": "якорь не найден"})
             failures += 1
             continue
         mutation.path.write_text(original.replace(mutation.before, mutation.after, 1), encoding="utf-8")
@@ -126,14 +154,30 @@ def main() -> int:
             result = run_suite(mutation.suite)
         finally:
             mutation.path.write_text(original, encoding="utf-8")
+        failed_lines = [line for line in result.stdout.splitlines() if line.startswith("FAIL")]
         if result.returncode == 0:
             print(f"FAIL  {mutation.name}: поломка защиты НЕ обнаружена тестами")
             failures += 1
+            results.append({"mutation": mutation.name, "file": str(mutation.path.relative_to(ROOT)),
+                            "suite": mutation.suite, "detected": False,
+                            "reason": "прогон остался зелёным при сломанной защите"})
         else:
-            failed_lines = [line for line in result.stdout.splitlines() if line.startswith("FAIL")]
             print(f"OK    {mutation.name}: обнаружена, упавших проверок {len(failed_lines)}")
+            results.append({"mutation": mutation.name, "file": str(mutation.path.relative_to(ROOT)),
+                            "suite": mutation.suite, "detected": True,
+                            "failed_checks": len(failed_lines)})
 
-    print(f"\nмутаций: {len(MUTATIONS) + len(SEO_MUTATIONS)}, не обнаружено: {failures}")
+    # Мутационный прогон — доказательство, что ворота срабатывают, а не что
+    # тесты запускались. Результат каждой мутации фиксируется файлом.
+    ARTIFACT.parent.mkdir(parents=True, exist_ok=True)
+    ARTIFACT.write_text(json.dumps({
+        "mutations": len(MUTATIONS) + len(SEO_MUTATIONS),
+        "undetected": failures,
+        "results": results,
+    }, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    print(f"\nмутаций: {len(MUTATIONS) + len(SEO_MUTATIONS)}, не обнаружено: {failures}; "
+          f"артефакт: {ARTIFACT.relative_to(ROOT)}")
     return 0 if failures == 0 else 1
 
 

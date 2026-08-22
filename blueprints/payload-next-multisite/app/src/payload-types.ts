@@ -457,6 +457,16 @@ export interface TenantTitle {
    */
   editorialIntro?: string | null;
   editorialAuthor?: (number | null) | User;
+  /**
+   * Собственный текст сайта о сезоне. Без него страница сезона остаётся списком серий, одинаковым на всех сайтах, и ворота уникальности закрывают её от индексации.
+   */
+  seasonNotes?:
+    | {
+        season: number;
+        note: string;
+        id?: string | null;
+      }[]
+    | null;
   highlight?: boolean | null;
   /**
    * Если пусто — собирается по шаблону сайта из фактических данных.
@@ -1454,6 +1464,13 @@ export interface TenantTitlesSelect<T extends boolean = true> {
   slug?: T;
   editorialIntro?: T;
   editorialAuthor?: T;
+  seasonNotes?:
+    | T
+    | {
+        season?: T;
+        note?: T;
+        id?: T;
+      };
   highlight?: T;
   seoTitle?: T;
   seoDescription?: T;

@@ -49,6 +49,17 @@ for name in ("seo-report.json", "seo-report.md"):
     if (seo_dir / name).exists():
         shutil.copy(seo_dir / name, evidence / name)
 
+# Доказательства второго blueprint лежат в var/artifacts: собираются тем же
+# прогоном, но другими инструментами. Без них отчёт по payload-next-multisite
+# опирался бы на слова, а не на файлы.
+multisite = PATHS.var / "artifacts"
+for name in ("restore-proof.json", "cross-site-uniqueness.json", "mutation-isolation.json",
+             "secret-scan.json", "admin-smoke.json", "frontend-http.json",
+             "performance-lab.json", "playwright-multisite.json"):
+    src = multisite / name
+    if src.exists():
+        shutil.copy(src, evidence / f"multisite-{name}")
+
 playwright = PATHS.artifacts / "qa" / SITE / "playwright-report.json"
 if playwright.exists():
     data = json.loads(playwright.read_text(encoding="utf-8"))

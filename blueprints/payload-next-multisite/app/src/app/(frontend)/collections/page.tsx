@@ -10,8 +10,6 @@ import { ownsListing } from '../../../seo/profiles'
 
 export const dynamic = 'force-dynamic'
 
-const HEADING = 'Подборки'
-
 export const generateMetadata = async (): Promise<Metadata> => {
   const site = await currentSite()
   return buildMetadata(
@@ -19,8 +17,10 @@ export const generateMetadata = async (): Promise<Metadata> => {
       tenant: site.tenant,
       pageType: 'category',
       path: '/collections/',
-      heading: HEADING,
-      description: `Тематические подборки сайта «${site.siteName}».`,
+      // Заголовок и описание берутся из профиля: разделом владеют два сайта, и
+      // общий текст сделал бы их листинги дублями друг друга.
+      heading: site.profile.collectionsHeading,
+      description: site.profile.collectionsSummary,
       documentRobots: ownsListing(site.profile, '/collections/') ? 'inherit' : 'noindex',
     },
     site.siteName,
@@ -38,10 +38,10 @@ const CollectionsPage = async () => {
         origin={absoluteUrl(site.tenant, '')}
         crumbs={[
           { title: 'Главная', href: '/' },
-          { title: HEADING, href: '/collections/' },
+          { title: site.profile.collectionsHeading, href: '/collections/' },
         ]}
       />
-      <h1>{HEADING}</h1>
+      <h1>{site.profile.collectionsHeading}</h1>
       <CardGrid items={result.docs.map(collectionCard)} empty="Подборок пока нет." />
     </>
   )

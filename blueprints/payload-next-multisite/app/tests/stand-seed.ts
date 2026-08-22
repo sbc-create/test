@@ -159,6 +159,23 @@ const editorialFor = (key: 'a' | 'b' | 'c', title: SharedTitle): string => {
   )
 }
 
+/**
+ * Заметка сайта о сезоне. Пишет её только каталожный сайт: он этот раздел
+ * индексирует, а страница сезона без собственного текста — список серий,
+ * одинаковый на любом домене.
+ */
+const seasonNotesFor = (key: 'a' | 'b' | 'c', title: SharedTitle): { season: number; note: string }[] => {
+  if (key !== 'a') return []
+  return [1, 2].map((season) => ({
+    season,
+    note:
+      `Сезон ${season} «${title.name}»: порядок серий сверен с записями источника, включая случаи, ` +
+      'когда номер выпуска в источнике и порядок выхода расходятся. Рядом с каждой серией указано, ' +
+      'доступна ли она к просмотру — отсутствие видео мы показываем состоянием, а не пустой карточкой. ' +
+      'Даты приведены к одному часовому поясу, поэтому список не «прыгает» между днями.',
+  }))
+}
+
 const legalBodyFor = (key: 'a' | 'b' | 'c', siteName: string): string => {
   const common =
     `Страница относится к сайту «${siteName}». Если вы правообладатель и считаете, что материал ` +
@@ -206,6 +223,24 @@ const collectionIntroFor = (key: 'a' | 'b' | 'c'): string =>
   })[key]
 
 /** Материалы разных сайтов пишутся о разном: общая только фактура каталога. */
+const POST_HEADLINES = {
+  a: [
+    'Добавлен ещё один законченный тайтл: сезоны, порядок серий и даты',
+    'Как размечены студии и жанры и почему фильтр даёт предсказуемый результат',
+    'Путаница с нумерацией сезонов: какой вариант показываем и почему',
+  ],
+  b: [
+    'Неделя выхода: четыре продолжения и один финал',
+    'Перенос на неделю: что изменилось в расписании и когда',
+    'Что вышло за семь дней и какие серии стали доступны',
+  ],
+  c: [
+    'Почему второй сезон смотрится иначе, хотя продолжает первый',
+    'С чего начинать и что можно пропустить без потери смысла',
+    'Пересмотрели спустя год и изменили часть оценок',
+  ],
+} as const
+
 const postBodyFor = (key: 'a' | 'b' | 'c', index: number): string => {
   const variants = {
     a: [
@@ -268,6 +303,7 @@ for (const key of ['a', 'b', 'c'] as const) {
         title: title.id,
         slug: title.slug,
         editorialIntro: editorialFor(key, title),
+        seasonNotes: seasonNotesFor(key, title),
         editorialAuthor: base.users.editorA.id,
         _status: 'published',
       } as never,
@@ -280,7 +316,7 @@ for (const key of ['a', 'b', 'c'] as const) {
     overrideAccess: true,
     data: {
       tenant,
-      name: `Подборка сайта ${key.toUpperCase()}`,
+      name: { a: 'Законченные сериалы каталога', b: 'Выходят на этой неделе', c: 'С чего начать знакомство' }[key]!,
       slug: `stand-collection-${key}`,
       intro: collectionIntroFor(key),
       items: tenantTitleIds.slice(0, 4),
@@ -294,9 +330,11 @@ for (const key of ['a', 'b', 'c'] as const) {
       overrideAccess: true,
       data: {
         tenant,
-        headline: `Материал ${index} сайта ${key.toUpperCase()}`,
+        headline: POST_HEADLINES[key][(index - 1) % POST_HEADLINES[key].length]!,
         slug: `stand-post-${key}-${index}`,
-        lead: `Короткий лид материала ${index} сайта ${key.toUpperCase()}.`,
+        // Лид — первое предложение собственного текста, а не шаблон с номером:
+        // одинаковые лиды на трёх сайтах — это дубль, который ловят ворота.
+        lead: postBodyFor(key, index).split('. ')[0]! + '.',
         body: postBodyFor(key, index),
         publishedAt: new Date(now - index * day).toISOString(),
         _status: 'published',
@@ -330,7 +368,11 @@ for (const key of ['a', 'b', 'c'] as const) {
       tagline: { a: 'Каталог с полными данными о сезонах и сериях',
         b: 'Что выходит сегодня и на этой неделе',
         c: 'Разборы и подборки редакции' }[key],
-      defaultDescription: `${siteName}: стендовый экземпляр для проверки вёрстки и SEO.`,
+      defaultDescription: {
+        a: 'Каталог тайтлов с сезонами, сериями и сверенными датами выхода.',
+        b: 'Расписание выхода серий: что вышло сегодня и что ожидается на неделе.',
+        c: 'Разборы и путеводители редакции: с чего начинать и что смотреть дальше.',
+      }[key]!,
       commentsEnabled: true,
       premoderation: true,
       minIntervalSeconds: 30,

@@ -18,7 +18,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
       pageType: 'news_index',
       path: '/news/',
       heading: site.profile.newsHeading,
-      description: `Материалы редакции сайта «${site.siteName}».`,
+      description: site.profile.newsSummary,
     },
     site.siteName,
   )

@@ -1,0 +1,3295 @@
+{
+  "name": "cross-site-uniqueness",
+  "passed": false,
+  "executed": true,
+  "counts": {
+    "sites": 3,
+    "pages": 117,
+    "indexable_pages": 117,
+    "status": "executed",
+    "duplicates": 468
+  },
+  "totals": {
+    "critical": 468,
+    "major": 0,
+    "minor": 0
+  },
+  "findings": [
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/collections/, site-c.localhost/collections/",
+      "message": "Совпадает title на индексируемых страницах разных сайтов (site-a.localhost, site-c.localhost): «подборки».",
+      "rule": "CSU-1"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/news/stand-post-a-1/, site-b.localhost/news/stand-post-b-1/, site-c.localhost/news/stand-post-c-1/",
+      "message": "Совпадает title на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost, site-c.localhost): «материал 1 сайта».",
+      "rule": "CSU-1"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/news/stand-post-a-2/, site-b.localhost/news/stand-post-b-2/, site-c.localhost/news/stand-post-c-2/",
+      "message": "Совпадает title на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost, site-c.localhost): «материал 2 сайта».",
+      "rule": "CSU-1"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/news/stand-post-a-3/, site-b.localhost/news/stand-post-b-3/, site-c.localhost/news/stand-post-c-3/",
+      "message": "Совпадает title на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost, site-c.localhost): «материал 3 сайта».",
+      "rule": "CSU-1"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/, site-b.localhost/, site-c.localhost/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost, site-c.localhost): «стендовый экземпляр для проверки вёрстки и seo».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/collections/, site-c.localhost/collections/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-c.localhost): «тематические подборки сайта».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/news/, site-b.localhost/news/, site-c.localhost/news/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost, site-c.localhost): «материалы редакции сайта».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-1/, site-b.localhost/catalog/stand-title-5/season-1/episode-1/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 1 сезона 1 стендовый тайтл 5».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-2/, site-b.localhost/catalog/stand-title-5/season-1/episode-2/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 2 сезона 1 стендовый тайтл 5».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-3/, site-b.localhost/catalog/stand-title-5/season-1/episode-3/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 3 сезона 1 стендовый тайтл 5».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-4/, site-b.localhost/catalog/stand-title-5/season-1/episode-4/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 4 сезона 1 стендовый тайтл 5».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-1/, site-b.localhost/catalog/stand-title-5/season-2/episode-1/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 1 сезона 2 стендовый тайтл 5».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-2/, site-b.localhost/catalog/stand-title-5/season-2/episode-2/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 2 сезона 2 стендовый тайтл 5».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-3/, site-b.localhost/catalog/stand-title-5/season-2/episode-3/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 3 сезона 2 стендовый тайтл 5».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-4/, site-b.localhost/catalog/stand-title-5/season-2/episode-4/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 4 сезона 2 стендовый тайтл 5».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-1/, site-b.localhost/catalog/stand-title-4/season-1/episode-1/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 1 сезона 1 стендовый тайтл 4».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-2/, site-b.localhost/catalog/stand-title-4/season-1/episode-2/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 2 сезона 1 стендовый тайтл 4».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-3/, site-b.localhost/catalog/stand-title-4/season-1/episode-3/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 3 сезона 1 стендовый тайтл 4».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-4/, site-b.localhost/catalog/stand-title-4/season-1/episode-4/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 4 сезона 1 стендовый тайтл 4».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-1/, site-b.localhost/catalog/stand-title-4/season-2/episode-1/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 1 сезона 2 стендовый тайтл 4».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-2/, site-b.localhost/catalog/stand-title-4/season-2/episode-2/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 2 сезона 2 стендовый тайтл 4».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-3/, site-b.localhost/catalog/stand-title-4/season-2/episode-3/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 3 сезона 2 стендовый тайтл 4».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-4/, site-b.localhost/catalog/stand-title-4/season-2/episode-4/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 4 сезона 2 стендовый тайтл 4».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-1/, site-b.localhost/catalog/stand-title-2/season-1/episode-1/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 1 сезона 1 стендовый тайтл 2».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-2/, site-b.localhost/catalog/stand-title-2/season-1/episode-2/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 2 сезона 1 стендовый тайтл 2».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-3/, site-b.localhost/catalog/stand-title-2/season-1/episode-3/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 3 сезона 1 стендовый тайтл 2».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-4/, site-b.localhost/catalog/stand-title-2/season-1/episode-4/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 4 сезона 1 стендовый тайтл 2».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-1/, site-b.localhost/catalog/stand-title-2/season-2/episode-1/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 1 сезона 2 стендовый тайтл 2».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-2/, site-b.localhost/catalog/stand-title-2/season-2/episode-2/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 2 сезона 2 стендовый тайтл 2».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-3/, site-b.localhost/catalog/stand-title-2/season-2/episode-3/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 3 сезона 2 стендовый тайтл 2».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-4/, site-b.localhost/catalog/stand-title-2/season-2/episode-4/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 4 сезона 2 стендовый тайтл 2».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-1/, site-b.localhost/catalog/stand-title-1/season-1/episode-1/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 1 сезона 1 стендовый тайтл 1».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-2/, site-b.localhost/catalog/stand-title-1/season-1/episode-2/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 2 сезона 1 стендовый тайтл 1».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-3/, site-b.localhost/catalog/stand-title-1/season-1/episode-3/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 3 сезона 1 стендовый тайтл 1».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-4/, site-b.localhost/catalog/stand-title-1/season-1/episode-4/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 4 сезона 1 стендовый тайтл 1».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-1/, site-b.localhost/catalog/stand-title-1/season-2/episode-1/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 1 сезона 2 стендовый тайтл 1».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-2/, site-b.localhost/catalog/stand-title-1/season-2/episode-2/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 2 сезона 2 стендовый тайтл 1».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-3/, site-b.localhost/catalog/stand-title-1/season-2/episode-3/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 3 сезона 2 стендовый тайтл 1».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-4/, site-b.localhost/catalog/stand-title-1/season-2/episode-4/",
+      "message": "Совпадает description на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «серия 4 сезона 2 стендовый тайтл 1».",
+      "rule": "CSU-2"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/collections/, site-c.localhost/collections/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-c.localhost): «подборки».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-1/, site-b.localhost/catalog/stand-title-5/season-1/episode-1/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 5 сезон 1 серия 1».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-2/, site-b.localhost/catalog/stand-title-5/season-1/episode-2/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 5 сезон 1 серия 2».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-3/, site-b.localhost/catalog/stand-title-5/season-1/episode-3/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 5 сезон 1 серия 3».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-4/, site-b.localhost/catalog/stand-title-5/season-1/episode-4/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 5 сезон 1 серия 4».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-1/, site-b.localhost/catalog/stand-title-5/season-2/episode-1/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 5 сезон 2 серия 1».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-2/, site-b.localhost/catalog/stand-title-5/season-2/episode-2/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 5 сезон 2 серия 2».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-3/, site-b.localhost/catalog/stand-title-5/season-2/episode-3/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 5 сезон 2 серия 3».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-4/, site-b.localhost/catalog/stand-title-5/season-2/episode-4/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 5 сезон 2 серия 4».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-1/, site-b.localhost/catalog/stand-title-4/season-1/episode-1/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 4 сезон 1 серия 1».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-2/, site-b.localhost/catalog/stand-title-4/season-1/episode-2/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 4 сезон 1 серия 2».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-3/, site-b.localhost/catalog/stand-title-4/season-1/episode-3/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 4 сезон 1 серия 3».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-4/, site-b.localhost/catalog/stand-title-4/season-1/episode-4/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 4 сезон 1 серия 4».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-1/, site-b.localhost/catalog/stand-title-4/season-2/episode-1/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 4 сезон 2 серия 1».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-2/, site-b.localhost/catalog/stand-title-4/season-2/episode-2/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 4 сезон 2 серия 2».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-3/, site-b.localhost/catalog/stand-title-4/season-2/episode-3/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 4 сезон 2 серия 3».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-4/, site-b.localhost/catalog/stand-title-4/season-2/episode-4/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 4 сезон 2 серия 4».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-1/, site-b.localhost/catalog/stand-title-2/season-1/episode-1/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 2 сезон 1 серия 1».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-2/, site-b.localhost/catalog/stand-title-2/season-1/episode-2/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 2 сезон 1 серия 2».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-3/, site-b.localhost/catalog/stand-title-2/season-1/episode-3/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 2 сезон 1 серия 3».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-4/, site-b.localhost/catalog/stand-title-2/season-1/episode-4/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 2 сезон 1 серия 4».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-1/, site-b.localhost/catalog/stand-title-2/season-2/episode-1/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 2 сезон 2 серия 1».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-2/, site-b.localhost/catalog/stand-title-2/season-2/episode-2/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 2 сезон 2 серия 2».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-3/, site-b.localhost/catalog/stand-title-2/season-2/episode-3/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 2 сезон 2 серия 3».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-4/, site-b.localhost/catalog/stand-title-2/season-2/episode-4/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 2 сезон 2 серия 4».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-1/, site-b.localhost/catalog/stand-title-1/season-1/episode-1/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 1 сезон 1 серия 1».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-2/, site-b.localhost/catalog/stand-title-1/season-1/episode-2/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 1 сезон 1 серия 2».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-3/, site-b.localhost/catalog/stand-title-1/season-1/episode-3/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 1 сезон 1 серия 3».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-4/, site-b.localhost/catalog/stand-title-1/season-1/episode-4/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 1 сезон 1 серия 4».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-1/, site-b.localhost/catalog/stand-title-1/season-2/episode-1/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 1 сезон 2 серия 1».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-2/, site-b.localhost/catalog/stand-title-1/season-2/episode-2/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 1 сезон 2 серия 2».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-3/, site-b.localhost/catalog/stand-title-1/season-2/episode-3/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 1 сезон 2 серия 3».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-4/, site-b.localhost/catalog/stand-title-1/season-2/episode-4/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost): «стендовый тайтл 1 сезон 2 серия 4».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/collections/stand-collection-a/, site-c.localhost/collections/stand-collection-c/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-c.localhost): «подборка сайта».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/news/stand-post-a-1/, site-b.localhost/news/stand-post-b-1/, site-c.localhost/news/stand-post-c-1/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost, site-c.localhost): «материал 1 сайта».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/news/stand-post-a-2/, site-b.localhost/news/stand-post-b-2/, site-c.localhost/news/stand-post-c-2/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost, site-c.localhost): «материал 2 сайта».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/news/stand-post-a-3/, site-b.localhost/news/stand-post-b-3/, site-c.localhost/news/stand-post-c-3/",
+      "message": "Совпадает H1 на индексируемых страницах разных сайтов (site-a.localhost, site-b.localhost, site-c.localhost): «материал 3 сайта».",
+      "rule": "CSU-3"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-1/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-2/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-3/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-2/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-3/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-1/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-2/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-3/",
+      "message": "Основной текст совпадает на 84%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-4/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-1/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-3/",
+      "message": "Основной текст совпадает на 79%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-1/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-2/",
+      "message": "Основной текст совпадает на 84%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-3/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-4/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-1/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-2/",
+      "message": "Основной текст совпадает на 79%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-2/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-3/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-4/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-2/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-3/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-1/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-2/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-3/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-1/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-3/",
+      "message": "Основной текст совпадает на 79%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-1/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-2/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-3/",
+      "message": "Основной текст совпадает на 84%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-4/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-1/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-2/",
+      "message": "Основной текст совпадает на 79%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-1/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-2/",
+      "message": "Основной текст совпадает на 84%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-3/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-4/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-2/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-3/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-4/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-1/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-2/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-3/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-2/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-3/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-1/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-2/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-3/",
+      "message": "Основной текст совпадает на 84%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-4/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-1/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-3/",
+      "message": "Основной текст совпадает на 79%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-1/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-2/",
+      "message": "Основной текст совпадает на 84%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-3/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-4/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-1/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-2/",
+      "message": "Основной текст совпадает на 79%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-2/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-3/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-4/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-2/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-3/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-1/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-2/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-3/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-1/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-3/",
+      "message": "Основной текст совпадает на 79%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-1/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-2/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-3/",
+      "message": "Основной текст совпадает на 84%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-4/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-1/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-2/",
+      "message": "Основной текст совпадает на 79%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-1/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-2/",
+      "message": "Основной текст совпадает на 84%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-3/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-4/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-2/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-3/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-4/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-1/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-2/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-3/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-2/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-3/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-1/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-2/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-3/",
+      "message": "Основной текст совпадает на 84%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-4/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-1/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-3/",
+      "message": "Основной текст совпадает на 79%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-1/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-2/",
+      "message": "Основной текст совпадает на 84%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-3/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-4/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-1/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-2/",
+      "message": "Основной текст совпадает на 79%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-2/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-3/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-4/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-2/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-3/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-1/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-2/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-3/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-1/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-3/",
+      "message": "Основной текст совпадает на 79%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-1/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-2/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-3/",
+      "message": "Основной текст совпадает на 84%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-4/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-1/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-2/",
+      "message": "Основной текст совпадает на 79%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-1/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-2/",
+      "message": "Основной текст совпадает на 84%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-3/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-4/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-2/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-3/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-4/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-1/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-2/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-3/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-2/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-3/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-1/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-2/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-3/",
+      "message": "Основной текст совпадает на 84%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-4/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-1/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-3/",
+      "message": "Основной текст совпадает на 79%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-1/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-2/",
+      "message": "Основной текст совпадает на 84%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-3/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-4/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-1/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-2/",
+      "message": "Основной текст совпадает на 79%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-2/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-3/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-4/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/episode-4/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-1/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-1/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-2/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-3/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-1/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-2/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-1/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-3/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-2/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-1/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-2/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-3/",
+      "message": "Основной текст совпадает на 79%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-1/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-2/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-3/",
+      "message": "Основной текст совпадает на 84%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-2/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-4/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-3/",
+      "message": "Основной текст совпадает на 81%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-1/",
+      "message": "Основной текст совпадает на 78%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-2/",
+      "message": "Основной текст совпадает на 79%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-3/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-1/",
+      "message": "Основной текст совпадает на 83%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-2/",
+      "message": "Основной текст совпадает на 84%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-3/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-3/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-4/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-5/season-1/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-5/season-2/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-4/season-1/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-4/season-2/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-2/season-1/episode-4/",
+      "message": "Основной текст совпадает на 80%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-2/season-2/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-1/season-1/episode-4/",
+      "message": "Основной текст совпадает на 88%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-2/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-3/",
+      "message": "Основной текст совпадает на 76%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/episode-4/ ↔ site-b.localhost/catalog/stand-title-1/season-2/episode-4/",
+      "message": "Основной текст совпадает на 100%: это одна и та же страница на двух доменах.",
+      "rule": "CSU-4"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-1/",
+      "message": "Индексируемая страница несёт 143 символов собственного текста при минимуме 200.",
+      "rule": "CSU-5"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-5/season-2/",
+      "message": "Индексируемая страница несёт 143 символов собственного текста при минимуме 200.",
+      "rule": "CSU-5"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-1/",
+      "message": "Индексируемая страница несёт 143 символов собственного текста при минимуме 200.",
+      "rule": "CSU-5"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-4/season-2/",
+      "message": "Индексируемая страница несёт 143 символов собственного текста при минимуме 200.",
+      "rule": "CSU-5"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-1/",
+      "message": "Индексируемая страница несёт 143 символов собственного текста при минимуме 200.",
+      "rule": "CSU-5"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-2/season-2/",
+      "message": "Индексируемая страница несёт 143 символов собственного текста при минимуме 200.",
+      "rule": "CSU-5"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-1/",
+      "message": "Индексируемая страница несёт 143 символов собственного текста при минимуме 200.",
+      "rule": "CSU-5"
+    },
+    {
+      "check": "cross-site-uniqueness",
+      "severity": "critical",
+      "url": "site-a.localhost/catalog/stand-title-1/season-2/",
+      "message": "Индексируемая страница несёт 143 символов собственного текста при минимуме 200.",
+      "rule": "CSU-5"
+    }
+  ]
+}

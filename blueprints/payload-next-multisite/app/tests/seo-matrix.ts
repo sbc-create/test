@@ -9,7 +9,9 @@ import { fileURLToPath } from 'url'
 
 import { load } from 'js-yaml'
 
+import { inSitemap, seasonInSitemap, seasonNote } from '../src/seo/inclusion'
 import { MATRIX_POLICY_VERSION, NON_INDEXABLE_PARAMS, PAGE_TYPES, type PageTypeId } from '../src/seo/matrix'
+import { resolveSeo } from '../src/seo/metadata'
 import { SEO_PROFILES, matrixAllowsIndex } from '../src/seo/profiles'
 import { assert, assertEqual, check, summary } from './harness'
 
@@ -131,6 +133,100 @@ await check('каждый раздел-список принадлежит ро�
     'состав разделов-списков')
   const headings = Object.values(SEO_PROFILES).map((profile) => profile.newsHeading)
   assertEqual(new Set(headings).size, 3, 'различных заголовков ленты')
+})
+
+// --- Поведение сборки метаданных, а не только таблица ------------------------
+
+const TENANT = {
+  id: 1,
+  slug: 'site-a',
+  domain: 'site-a.example',
+  seoProfile: 'catalog_authority',
+  indexingEnabled: true,
+} as never
+
+await check('canonical индексируемой страницы абсолютный и на своём домене', () => {
+  const resolved = resolveSeo(
+    { tenant: TENANT, pageType: 'title', path: '/catalog/example/', heading: 'Пример' },
+    'Сайт A',
+  )
+  assert(resolved.indexable, 'страница должна быть индексируемой')
+  assert(resolved.canonical !== null, 'canonical отсутствует')
+  // Относительный canonical — это не «почти то же самое»: он не сообщает
+  // поисковой системе домен и на другом хосте укажет на другой сайт.
+  assert(
+    resolved.canonical!.startsWith('https://site-a.example/'),
+    `canonical обязан быть абсолютным и на своём домене, получено: ${resolved.canonical}`,
+  )
+  assertEqual(resolved.canonical, 'https://site-a.example/catalog/example/', 'canonical')
+})
+
+await check('страница поиска не получает canonical и не индексируется', () => {
+  const resolved = resolveSeo(
+    { tenant: TENANT, pageType: 'search', path: '/search/', heading: 'Поиск' },
+    'Сайт A',
+  )
+  assertEqual(resolved.indexable, false, 'индексируемость')
+  assertEqual(String(resolved.canonical), 'null', 'canonical')
+})
+
+// --- Состав карты сайта ------------------------------------------------------
+
+await check('материал без собственного текста в карту сайта не попадает', () => {
+  const editorial = SEO_PROFILES.editorial_guide
+  assert(editorial.requiresOwnText.includes('title'), 'профиль обязан требовать собственный текст')
+  assertEqual(inSitemap(editorial, 'title', { editorialIntro: '' }), false, 'пустой текст')
+  assertEqual(inSitemap(editorial, 'title', {}), false, 'поля нет вовсе')
+  assertEqual(inSitemap(editorial, 'title', { editorialIntro: '   ' }), false, 'только пробелы')
+  assertEqual(inSitemap(editorial, 'title', { editorialIntro: 'Разбор редакции.' }), true, 'текст есть')
+})
+
+await check('профиль, не требующий собственного текста, публикует карточку и без него', () => {
+  const catalog = SEO_PROFILES.catalog_authority
+  assert(!catalog.requiresOwnText.includes('title'), 'у каталога свой текст не обязателен')
+  assertEqual(inSitemap(catalog, 'title', {}), true, 'карточка каталога')
+})
+
+await check('тип, не объявленный в карте профиля, в неё не попадает', () => {
+  const pulse = SEO_PROFILES.release_pulse
+  assert(!pulse.sitemapTypes.includes('collection'), 'подборки не входят в карту этого сайта')
+  assertEqual(inSitemap(pulse, 'collection', { intro: 'Текст.' }), false, 'подборка')
+})
+
+await check('сезон попадает в карту только с заметкой сайта о нём', () => {
+  const catalog = SEO_PROFILES.catalog_authority
+  const withNote = { seasonNotes: [{ season: 2, note: 'Заметка о втором сезоне.' }] }
+  assertEqual(seasonNote(withNote, 2), 'Заметка о втором сезоне.', 'чтение заметки')
+  assertEqual(String(seasonNote(withNote, 1)), 'null', 'заметки о первом сезоне нет')
+  assertEqual(seasonInSitemap(catalog, withNote, 2), true, 'сезон с заметкой')
+  assertEqual(seasonInSitemap(catalog, withNote, 1), false, 'сезон без заметки')
+  assertEqual(seasonInSitemap(SEO_PROFILES.release_pulse, withNote, 2), false, 'чужой профиль')
+})
+
+await check('страницу серии индексирует ровно один профиль', () => {
+  const owners = Object.entries(SEO_PROFILES)
+    .filter(([, profile]) => profile.indexable.episode)
+    .map(([key]) => key)
+  // Страница серии состоит из фактов провайдера: два владельца — это два
+  // дословных дубля на разных доменах, что и показали ворота уникальности.
+  assertEqual(owners.join(','), 'catalog_authority', 'владелец страниц серий')
+  for (const [key, profile] of Object.entries(SEO_PROFILES)) {
+    if (profile.indexable.episode) continue
+    assert(!profile.sitemapTypes.includes('episode'), `${key}: серии не индексируются, но объявлены в карте`)
+  }
+})
+
+await check('автоматические описания и заголовки различаются у трёх профилей', () => {
+  const profiles = Object.values(SEO_PROFILES)
+  for (const [field, values] of Object.entries({
+    newsSummary: profiles.map((profile) => profile.newsSummary),
+    collectionsHeading: profiles.map((profile) => profile.collectionsHeading),
+    collectionsSummary: profiles.map((profile) => profile.collectionsSummary),
+    episodeSummary: profiles.map((profile) => profile.episodeSummary('Тайтл', 1, 2)),
+    titleHeading: profiles.map((profile) => profile.titleHeading('Тайтл')),
+  })) {
+    assertEqual(new Set(values).size, 3, `различных значений ${field}`)
+  }
 })
 
 process.exit(summary())

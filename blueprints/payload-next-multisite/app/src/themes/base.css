@@ -185,6 +185,15 @@ button.button {
   overflow: hidden;
 }
 
+.player-frame video-player {
+  /* Кастомный элемент по умолчанию inline и без собственных размеров: пока скрипт
+     провайдера не поднял его, он занимает ноль пикселей. Размер задаёт наша
+     страница, а не чужой скрипт, — иначе плеер «есть», но его не видно. */
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .player-frame--message {
   display: flex;
   flex-direction: column;

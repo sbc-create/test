@@ -2,6 +2,7 @@ import { listCollections, listEpisodes, listPosts, listSeasons, listTenantTitles
 import { currentSite, payloadClient } from '../../../lib/site'
 import { tenantFind } from '../../../lib/tenant-query'
 import { absoluteUrl } from '../../../seo/metadata'
+import { inSitemap, seasonInSitemap } from '../../../seo/inclusion'
 import { PAGE_TYPES } from '../../../seo/matrix'
 import { ownsListing } from '../../../seo/profiles'
 
@@ -52,7 +53,7 @@ export const GET = async () => {
     for (const doc of titles.docs) {
       const record = doc as unknown as Record<string, unknown>
       // Профиль требует собственного текста — без него страница noindex и в карту не идёт.
-      if (profile.requiresOwnText.includes('title') && !String(record.editorialIntro ?? '').trim()) continue
+      if (!inSitemap(profile, 'title', record)) continue
       add(`/catalog/${String(record.slug)}/`, record.updatedAt)
 
       // Сезоны и серии перечисляются, только если профиль их индексирует. Раньше
@@ -68,7 +69,8 @@ export const GET = async () => {
         const episodes = await listEpisodes(payload, seasonRecord.id as string | number)
         // Пустой сезон отдаёт 404, поэтому в карту он не попадает.
         if (episodes.docs.length === 0) continue
-        if (includes('season')) add(seasonPath, seasonRecord.updatedAt)
+        // Сезон без заметки сайта отдаётся с noindex, поэтому и в карте ему не место.
+        if (seasonInSitemap(profile, record, Number(seasonRecord.number))) add(seasonPath, seasonRecord.updatedAt)
         if (includes('episode')) {
           for (const episode of episodes.docs) {
             const episodeRecord = episode as unknown as Record<string, unknown>
@@ -85,7 +87,7 @@ export const GET = async () => {
       const record = doc as unknown as Record<string, unknown>
       const items = Array.isArray(record.items) ? record.items.length : 0
       if (items === 0) continue
-      if (profile.requiresOwnText.includes('collection') && !String(record.intro ?? '').trim()) continue
+      if (!inSitemap(profile, 'collection', record)) continue
       add(`/collections/${String(record.slug)}/`, record.updatedAt)
     }
   }
@@ -94,7 +96,7 @@ export const GET = async () => {
     const posts = await listPosts(payload, site.tenant, { limit: 1000 })
     for (const doc of posts.docs) {
       const record = doc as unknown as Record<string, unknown>
-      if (profile.requiresOwnText.includes('article') && !String(record.body ?? '').trim()) continue
+      if (!inSitemap(profile, 'article', record)) continue
       add(`/news/${String(record.slug)}/`, record.updatedAt)
     }
   }

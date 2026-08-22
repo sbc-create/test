@@ -1,0 +1,1168 @@
+{
+  "checks": [
+    {
+      "name": "[a] / отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[a] / использует тему portal_light",
+      "ok": true,
+      "detail": "в разметке portal_light"
+    },
+    {
+      "name": "[a] / не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[a] / индексируется",
+      "ok": true,
+      "detail": "robots=index,follow"
+    },
+    {
+      "name": "[a] / имеет абсолютный self-canonical",
+      "ok": true,
+      "detail": "canonical=https://site-a.localhost/"
+    },
+    {
+      "name": "[a] / отдаётся без редиректа",
+      "ok": true,
+      "detail": "прямой запрос вернул 200"
+    },
+    {
+      "name": "[a] /catalog/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[a] /catalog/ использует тему portal_light",
+      "ok": true,
+      "detail": "в разметке portal_light"
+    },
+    {
+      "name": "[a] /catalog/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[a] /catalog/ индексируется",
+      "ok": true,
+      "detail": "robots=index,follow"
+    },
+    {
+      "name": "[a] /catalog/ имеет абсолютный self-canonical",
+      "ok": true,
+      "detail": "canonical=https://site-a.localhost/catalog/"
+    },
+    {
+      "name": "[a] /catalog/ отдаётся без редиректа",
+      "ok": true,
+      "detail": "прямой запрос вернул 200"
+    },
+    {
+      "name": "[a] /catalog/stand-title-1/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[a] /catalog/stand-title-1/ использует тему portal_light",
+      "ok": true,
+      "detail": "в разметке portal_light"
+    },
+    {
+      "name": "[a] /catalog/stand-title-1/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[a] /catalog/stand-title-1/ индексируется",
+      "ok": true,
+      "detail": "robots=index,follow"
+    },
+    {
+      "name": "[a] /catalog/stand-title-1/ имеет абсолютный self-canonical",
+      "ok": true,
+      "detail": "canonical=https://site-a.localhost/catalog/stand-title-1/"
+    },
+    {
+      "name": "[a] /catalog/stand-title-1/ отдаётся без редиректа",
+      "ok": true,
+      "detail": "прямой запрос вернул 200"
+    },
+    {
+      "name": "[a] /catalog/stand-title-1/season-1/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[a] /catalog/stand-title-1/season-1/ использует тему portal_light",
+      "ok": true,
+      "detail": "в разметке portal_light"
+    },
+    {
+      "name": "[a] /catalog/stand-title-1/season-1/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[a] /catalog/stand-title-1/season-1/ индексируется",
+      "ok": true,
+      "detail": "robots=index,follow"
+    },
+    {
+      "name": "[a] /catalog/stand-title-1/season-1/ имеет абсолютный self-canonical",
+      "ok": true,
+      "detail": "canonical=https://site-a.localhost/catalog/stand-title-1/season-1/"
+    },
+    {
+      "name": "[a] /catalog/stand-title-1/season-1/ отдаётся без редиректа",
+      "ok": true,
+      "detail": "прямой запрос вернул 200"
+    },
+    {
+      "name": "[a] /catalog/stand-title-1/season-1/episode-1/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[a] /catalog/stand-title-1/season-1/episode-1/ использует тему portal_light",
+      "ok": true,
+      "detail": "в разметке portal_light"
+    },
+    {
+      "name": "[a] /catalog/stand-title-1/season-1/episode-1/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[a] /catalog/stand-title-1/season-1/episode-1/ индексируется",
+      "ok": true,
+      "detail": "robots=index,follow"
+    },
+    {
+      "name": "[a] /catalog/stand-title-1/season-1/episode-1/ имеет абсолютный self-canonical",
+      "ok": true,
+      "detail": "canonical=https://site-a.localhost/catalog/stand-title-1/season-1/episode-1/"
+    },
+    {
+      "name": "[a] /catalog/stand-title-1/season-1/episode-1/ отдаётся без редиректа",
+      "ok": true,
+      "detail": "прямой запрос вернул 200"
+    },
+    {
+      "name": "[a] /collections/stand-collection-a/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[a] /collections/stand-collection-a/ использует тему portal_light",
+      "ok": true,
+      "detail": "в разметке portal_light"
+    },
+    {
+      "name": "[a] /collections/stand-collection-a/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[a] /collections/stand-collection-a/ индексируется",
+      "ok": true,
+      "detail": "robots=index,follow"
+    },
+    {
+      "name": "[a] /collections/stand-collection-a/ имеет абсолютный self-canonical",
+      "ok": true,
+      "detail": "canonical=https://site-a.localhost/collections/stand-collection-a/"
+    },
+    {
+      "name": "[a] /collections/stand-collection-a/ отдаётся без редиректа",
+      "ok": true,
+      "detail": "прямой запрос вернул 200"
+    },
+    {
+      "name": "[a] /news/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[a] /news/ использует тему portal_light",
+      "ok": true,
+      "detail": "в разметке portal_light"
+    },
+    {
+      "name": "[a] /news/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[a] /news/ индексируется",
+      "ok": true,
+      "detail": "robots=index,follow"
+    },
+    {
+      "name": "[a] /news/ имеет абсолютный self-canonical",
+      "ok": true,
+      "detail": "canonical=https://site-a.localhost/news/"
+    },
+    {
+      "name": "[a] /news/ отдаётся без редиректа",
+      "ok": true,
+      "detail": "прямой запрос вернул 200"
+    },
+    {
+      "name": "[a] /legal/rights/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[a] /legal/rights/ использует тему portal_light",
+      "ok": true,
+      "detail": "в разметке portal_light"
+    },
+    {
+      "name": "[a] /legal/rights/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[a] /legal/rights/ индексируется",
+      "ok": true,
+      "detail": "robots=index,follow"
+    },
+    {
+      "name": "[a] /legal/rights/ имеет абсолютный self-canonical",
+      "ok": true,
+      "detail": "canonical=https://site-a.localhost/legal/rights/"
+    },
+    {
+      "name": "[a] /legal/rights/ отдаётся без редиректа",
+      "ok": true,
+      "detail": "прямой запрос вернул 200"
+    },
+    {
+      "name": "[a] /schedule/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[a] /schedule/ использует тему portal_light",
+      "ok": true,
+      "detail": "в разметке portal_light"
+    },
+    {
+      "name": "[a] /schedule/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[a] /schedule/ закрыт от индексации профилем",
+      "ok": true,
+      "detail": "robots=noindex,follow"
+    },
+    {
+      "name": "[a] /schedule/ без canonical, раз он noindex",
+      "ok": true,
+      "detail": "canonical="
+    },
+    {
+      "name": "[b] / отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[b] / использует тему pulse",
+      "ok": true,
+      "detail": "в разметке pulse"
+    },
+    {
+      "name": "[b] / не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[b] / индексируется",
+      "ok": true,
+      "detail": "robots=index,follow"
+    },
+    {
+      "name": "[b] / имеет абсолютный self-canonical",
+      "ok": true,
+      "detail": "canonical=https://site-b.localhost/"
+    },
+    {
+      "name": "[b] / отдаётся без редиректа",
+      "ok": true,
+      "detail": "прямой запрос вернул 200"
+    },
+    {
+      "name": "[b] /catalog/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[b] /catalog/ использует тему pulse",
+      "ok": true,
+      "detail": "в разметке pulse"
+    },
+    {
+      "name": "[b] /catalog/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[b] /catalog/ закрыт от индексации профилем",
+      "ok": true,
+      "detail": "robots=noindex,follow"
+    },
+    {
+      "name": "[b] /catalog/ без canonical, раз он noindex",
+      "ok": true,
+      "detail": "canonical="
+    },
+    {
+      "name": "[b] /catalog/stand-title-1/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[b] /catalog/stand-title-1/ использует тему pulse",
+      "ok": true,
+      "detail": "в разметке pulse"
+    },
+    {
+      "name": "[b] /catalog/stand-title-1/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[b] /catalog/stand-title-1/ индексируется",
+      "ok": true,
+      "detail": "robots=index,follow"
+    },
+    {
+      "name": "[b] /catalog/stand-title-1/ имеет абсолютный self-canonical",
+      "ok": true,
+      "detail": "canonical=https://site-b.localhost/catalog/stand-title-1/"
+    },
+    {
+      "name": "[b] /catalog/stand-title-1/ отдаётся без редиректа",
+      "ok": true,
+      "detail": "прямой запрос вернул 200"
+    },
+    {
+      "name": "[b] /catalog/stand-title-1/season-1/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[b] /catalog/stand-title-1/season-1/ использует тему pulse",
+      "ok": true,
+      "detail": "в разметке pulse"
+    },
+    {
+      "name": "[b] /catalog/stand-title-1/season-1/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[b] /catalog/stand-title-1/season-1/ закрыт от индексации профилем",
+      "ok": true,
+      "detail": "robots=noindex,follow"
+    },
+    {
+      "name": "[b] /catalog/stand-title-1/season-1/ без canonical, раз он noindex",
+      "ok": true,
+      "detail": "canonical="
+    },
+    {
+      "name": "[b] /catalog/stand-title-1/season-1/episode-1/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[b] /catalog/stand-title-1/season-1/episode-1/ использует тему pulse",
+      "ok": true,
+      "detail": "в разметке pulse"
+    },
+    {
+      "name": "[b] /catalog/stand-title-1/season-1/episode-1/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[b] /catalog/stand-title-1/season-1/episode-1/ индексируется",
+      "ok": true,
+      "detail": "robots=index,follow"
+    },
+    {
+      "name": "[b] /catalog/stand-title-1/season-1/episode-1/ имеет абсолютный self-canonical",
+      "ok": true,
+      "detail": "canonical=https://site-b.localhost/catalog/stand-title-1/season-1/episode-1/"
+    },
+    {
+      "name": "[b] /catalog/stand-title-1/season-1/episode-1/ отдаётся без редиректа",
+      "ok": true,
+      "detail": "прямой запрос вернул 200"
+    },
+    {
+      "name": "[b] /collections/stand-collection-b/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[b] /collections/stand-collection-b/ использует тему pulse",
+      "ok": true,
+      "detail": "в разметке pulse"
+    },
+    {
+      "name": "[b] /collections/stand-collection-b/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[b] /collections/stand-collection-b/ закрыт от индексации профилем",
+      "ok": true,
+      "detail": "robots=noindex,follow"
+    },
+    {
+      "name": "[b] /collections/stand-collection-b/ без canonical, раз он noindex",
+      "ok": true,
+      "detail": "canonical="
+    },
+    {
+      "name": "[b] /news/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[b] /news/ использует тему pulse",
+      "ok": true,
+      "detail": "в разметке pulse"
+    },
+    {
+      "name": "[b] /news/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[b] /news/ индексируется",
+      "ok": true,
+      "detail": "robots=index,follow"
+    },
+    {
+      "name": "[b] /news/ имеет абсолютный self-canonical",
+      "ok": true,
+      "detail": "canonical=https://site-b.localhost/news/"
+    },
+    {
+      "name": "[b] /news/ отдаётся без редиректа",
+      "ok": true,
+      "detail": "прямой запрос вернул 200"
+    },
+    {
+      "name": "[b] /legal/rights/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[b] /legal/rights/ использует тему pulse",
+      "ok": true,
+      "detail": "в разметке pulse"
+    },
+    {
+      "name": "[b] /legal/rights/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[b] /legal/rights/ индексируется",
+      "ok": true,
+      "detail": "robots=index,follow"
+    },
+    {
+      "name": "[b] /legal/rights/ имеет абсолютный self-canonical",
+      "ok": true,
+      "detail": "canonical=https://site-b.localhost/legal/rights/"
+    },
+    {
+      "name": "[b] /legal/rights/ отдаётся без редиректа",
+      "ok": true,
+      "detail": "прямой запрос вернул 200"
+    },
+    {
+      "name": "[b] /schedule/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[b] /schedule/ использует тему pulse",
+      "ok": true,
+      "detail": "в разметке pulse"
+    },
+    {
+      "name": "[b] /schedule/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[b] /schedule/ индексируется",
+      "ok": true,
+      "detail": "robots=index,follow"
+    },
+    {
+      "name": "[b] /schedule/ имеет абсолютный self-canonical",
+      "ok": true,
+      "detail": "canonical=https://site-b.localhost/schedule/"
+    },
+    {
+      "name": "[b] /schedule/ отдаётся без редиректа",
+      "ok": true,
+      "detail": "прямой запрос вернул 200"
+    },
+    {
+      "name": "[c] / отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[c] / использует тему editorial",
+      "ok": true,
+      "detail": "в разметке editorial"
+    },
+    {
+      "name": "[c] / не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[c] / индексируется",
+      "ok": true,
+      "detail": "robots=index,follow"
+    },
+    {
+      "name": "[c] / имеет абсолютный self-canonical",
+      "ok": true,
+      "detail": "canonical=https://site-c.localhost/"
+    },
+    {
+      "name": "[c] / отдаётся без редиректа",
+      "ok": true,
+      "detail": "прямой запрос вернул 200"
+    },
+    {
+      "name": "[c] /catalog/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[c] /catalog/ использует тему editorial",
+      "ok": true,
+      "detail": "в разметке editorial"
+    },
+    {
+      "name": "[c] /catalog/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[c] /catalog/ закрыт от индексации профилем",
+      "ok": true,
+      "detail": "robots=noindex,follow"
+    },
+    {
+      "name": "[c] /catalog/ без canonical, раз он noindex",
+      "ok": true,
+      "detail": "canonical="
+    },
+    {
+      "name": "[c] /catalog/stand-title-1/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[c] /catalog/stand-title-1/ использует тему editorial",
+      "ok": true,
+      "detail": "в разметке editorial"
+    },
+    {
+      "name": "[c] /catalog/stand-title-1/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[c] /catalog/stand-title-1/ индексируется",
+      "ok": true,
+      "detail": "robots=index,follow"
+    },
+    {
+      "name": "[c] /catalog/stand-title-1/ имеет абсолютный self-canonical",
+      "ok": true,
+      "detail": "canonical=https://site-c.localhost/catalog/stand-title-1/"
+    },
+    {
+      "name": "[c] /catalog/stand-title-1/ отдаётся без редиректа",
+      "ok": true,
+      "detail": "прямой запрос вернул 200"
+    },
+    {
+      "name": "[c] /catalog/stand-title-1/season-1/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[c] /catalog/stand-title-1/season-1/ использует тему editorial",
+      "ok": true,
+      "detail": "в разметке editorial"
+    },
+    {
+      "name": "[c] /catalog/stand-title-1/season-1/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[c] /catalog/stand-title-1/season-1/ закрыт от индексации профилем",
+      "ok": true,
+      "detail": "robots=noindex,follow"
+    },
+    {
+      "name": "[c] /catalog/stand-title-1/season-1/ без canonical, раз он noindex",
+      "ok": true,
+      "detail": "canonical="
+    },
+    {
+      "name": "[c] /catalog/stand-title-1/season-1/episode-1/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[c] /catalog/stand-title-1/season-1/episode-1/ использует тему editorial",
+      "ok": true,
+      "detail": "в разметке editorial"
+    },
+    {
+      "name": "[c] /catalog/stand-title-1/season-1/episode-1/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[c] /catalog/stand-title-1/season-1/episode-1/ закрыт от индексации профилем",
+      "ok": true,
+      "detail": "robots=noindex,follow"
+    },
+    {
+      "name": "[c] /catalog/stand-title-1/season-1/episode-1/ без canonical, раз он noindex",
+      "ok": true,
+      "detail": "canonical="
+    },
+    {
+      "name": "[c] /collections/stand-collection-c/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[c] /collections/stand-collection-c/ использует тему editorial",
+      "ok": true,
+      "detail": "в разметке editorial"
+    },
+    {
+      "name": "[c] /collections/stand-collection-c/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[c] /collections/stand-collection-c/ индексируется",
+      "ok": true,
+      "detail": "robots=index,follow"
+    },
+    {
+      "name": "[c] /collections/stand-collection-c/ имеет абсолютный self-canonical",
+      "ok": true,
+      "detail": "canonical=https://site-c.localhost/collections/stand-collection-c/"
+    },
+    {
+      "name": "[c] /collections/stand-collection-c/ отдаётся без редиректа",
+      "ok": true,
+      "detail": "прямой запрос вернул 200"
+    },
+    {
+      "name": "[c] /news/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[c] /news/ использует тему editorial",
+      "ok": true,
+      "detail": "в разметке editorial"
+    },
+    {
+      "name": "[c] /news/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[c] /news/ индексируется",
+      "ok": true,
+      "detail": "robots=index,follow"
+    },
+    {
+      "name": "[c] /news/ имеет абсолютный self-canonical",
+      "ok": true,
+      "detail": "canonical=https://site-c.localhost/news/"
+    },
+    {
+      "name": "[c] /news/ отдаётся без редиректа",
+      "ok": true,
+      "detail": "прямой запрос вернул 200"
+    },
+    {
+      "name": "[c] /legal/rights/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[c] /legal/rights/ использует тему editorial",
+      "ok": true,
+      "detail": "в разметке editorial"
+    },
+    {
+      "name": "[c] /legal/rights/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[c] /legal/rights/ индексируется",
+      "ok": true,
+      "detail": "robots=index,follow"
+    },
+    {
+      "name": "[c] /legal/rights/ имеет абсолютный self-canonical",
+      "ok": true,
+      "detail": "canonical=https://site-c.localhost/legal/rights/"
+    },
+    {
+      "name": "[c] /legal/rights/ отдаётся без редиректа",
+      "ok": true,
+      "detail": "прямой запрос вернул 200"
+    },
+    {
+      "name": "[c] /schedule/ отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[c] /schedule/ использует тему editorial",
+      "ok": true,
+      "detail": "в разметке editorial"
+    },
+    {
+      "name": "[c] /schedule/ не содержит названий других сайтов",
+      "ok": true,
+      "detail": "утекло: []"
+    },
+    {
+      "name": "[c] /schedule/ закрыт от индексации профилем",
+      "ok": true,
+      "detail": "robots=noindex,follow"
+    },
+    {
+      "name": "[c] /schedule/ без canonical, раз он noindex",
+      "ok": true,
+      "detail": "canonical="
+    },
+    {
+      "name": "[a] пагинация каталога не проверялась: материалов меньше одной страницы",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[a] страница 1 не дублируется адресом /page/1/",
+      "ok": true,
+      "detail": "получен 404"
+    },
+    {
+      "name": "[b] пагинация раздела без владельца не индексируется",
+      "ok": true,
+      "detail": "получен 404"
+    },
+    {
+      "name": "[a] фильтр по жанру не индексируется",
+      "ok": true,
+      "detail": "robots=noindex,follow"
+    },
+    {
+      "name": "[a] фильтр canonical на чистый /catalog/",
+      "ok": true,
+      "detail": "canonical=https://site-a.localhost/catalog/"
+    },
+    {
+      "name": "[a] поиск отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[a] поиск не индексируется",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[a] поиск без canonical",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[a] /nothing-here/ отвечает 404",
+      "ok": true,
+      "detail": "получен 404"
+    },
+    {
+      "name": "[a] /catalog/page/999/ отвечает 404",
+      "ok": true,
+      "detail": "получен 404"
+    },
+    {
+      "name": "[a] /catalog/stand-title-1/season-99/ отвечает 404",
+      "ok": true,
+      "detail": "получен 404"
+    },
+    {
+      "name": "[a] /catalog/stand-title-1/sezon-1/ отвечает 404",
+      "ok": true,
+      "detail": "получен 404"
+    },
+    {
+      "name": "[a] robots.txt отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[a] robots.txt указывает свой sitemap",
+      "ok": true,
+      "detail": "User-agent: *\nDisallow: /search/\nDisallow: /admin/\nDisallow: /api/\nAllow: /\n\nSitemap: https://site-a.localhost/sitemap.xml\n"
+    },
+    {
+      "name": "[a] robots.txt закрывает поиск",
+      "ok": true,
+      "detail": "User-agent: *\nDisallow: /search/\nDisallow: /admin/\nDisallow: /api/\nAllow: /\n\nSitemap: https://site-a.localhost/sitemap.xml\n"
+    },
+    {
+      "name": "[a] sitemap.xml отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[a] в sitemap только свой домен",
+      "ok": true,
+      "detail": "первые записи: ['https://site-a.localhost/', 'https://site-a.localhost/catalog/', 'https://site-a.localhost/collections/']"
+    },
+    {
+      "name": "[b] robots.txt отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[b] robots.txt указывает свой sitemap",
+      "ok": true,
+      "detail": "User-agent: *\nDisallow: /search/\nDisallow: /admin/\nDisallow: /api/\nAllow: /\n\nSitemap: https://site-b.localhost/sitemap.xml\n"
+    },
+    {
+      "name": "[b] robots.txt закрывает поиск",
+      "ok": true,
+      "detail": "User-agent: *\nDisallow: /search/\nDisallow: /admin/\nDisallow: /api/\nAllow: /\n\nSitemap: https://site-b.localhost/sitemap.xml\n"
+    },
+    {
+      "name": "[b] sitemap.xml отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[b] в sitemap только свой домен",
+      "ok": true,
+      "detail": "первые записи: ['https://site-b.localhost/', 'https://site-b.localhost/schedule/', 'https://site-b.localhost/news/']"
+    },
+    {
+      "name": "[c] robots.txt отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[c] robots.txt указывает свой sitemap",
+      "ok": true,
+      "detail": "User-agent: *\nDisallow: /search/\nDisallow: /admin/\nDisallow: /api/\nAllow: /\n\nSitemap: https://site-c.localhost/sitemap.xml\n"
+    },
+    {
+      "name": "[c] robots.txt закрывает поиск",
+      "ok": true,
+      "detail": "User-agent: *\nDisallow: /search/\nDisallow: /admin/\nDisallow: /api/\nAllow: /\n\nSitemap: https://site-c.localhost/sitemap.xml\n"
+    },
+    {
+      "name": "[c] sitemap.xml отвечает 200",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[c] в sitemap только свой домен",
+      "ok": true,
+      "detail": "первые записи: ['https://site-c.localhost/', 'https://site-c.localhost/collections/', 'https://site-c.localhost/news/']"
+    },
+    {
+      "name": "[a] каждый адрес карты сайта индексируем",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[a] каждый адрес карты сайта self-canonical",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[b] каждый адрес карты сайта индексируем",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[b] каждый адрес карты сайта self-canonical",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[c] каждый адрес карты сайта индексируем",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[c] каждый адрес карты сайта self-canonical",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "состав sitemap у трёх сайтов различается",
+      "ok": true,
+      "detail": "размеры: [56, 46, 15]"
+    },
+    {
+      "name": "[c] эпизоды не попадают в sitemap редакционного сайта",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[a] эпизоды попадают в sitemap каталога",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[a] страница серии не содержит строки подключения к БД",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[a] страница серии не содержит секрет приложения",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[a] страница без прав на публикацию отвечает 200 и объясняет причину",
+      "ok": true,
+      "detail": "нет честного статуса на странице"
+    },
+    {
+      "name": "[a] на странице без прав нет параметров плеера",
+      "ok": true,
+      "detail": "параметры плеера отрисованы при неподтверждённых правах"
+    },
+    {
+      "name": "[a] форма комментария отрисована",
+      "ok": true,
+      "detail": "в разметке нет targetId/formToken"
+    },
+    {
+      "name": "[a] прямое создание комментария через REST запрещено",
+      "ok": true,
+      "detail": "получен 403"
+    },
+    {
+      "name": "[a] мгновенная отправка отклонена",
+      "ok": true,
+      "detail": "400 {'error': 'Слишком быстро. Попробуйте отправить ещё раз через пару секунд.', 'code': 'TOO_FAST'}"
+    },
+    {
+      "name": "[a] корректный комментарий принят",
+      "ok": true,
+      "detail": "201 {'id': 4, 'status': 'pending', 'message': 'Комментарий отправлен и появится после проверки модератором.'}"
+    },
+    {
+      "name": "[a] комментарий уходит на модерацию, а не в публикацию",
+      "ok": true,
+      "detail": "{'id': 4, 'status': 'pending', 'message': 'Комментарий отправлен и появится после проверки модератором.'}"
+    },
+    {
+      "name": "[a] повтор той же отправки не создаёт дубль",
+      "ok": true,
+      "detail": "200 {'id': 4, 'status': 'pending', 'duplicate': True, 'message': 'Этот комментарий уже отправлен.'}"
+    },
+    {
+      "name": "[a] частая отправка ограничена",
+      "ok": true,
+      "detail": "429 {'error': 'Подождите 30 секунд перед следующим комментарием.', 'code': 'RATE_LIMIT'}"
+    },
+    {
+      "name": "[a] заполненная ловушка отклонена",
+      "ok": true,
+      "detail": "400 {'error': 'Не удалось отправить комментарий.', 'code': 'HONEYPOT'}"
+    },
+    {
+      "name": "[b] токен формы другого сайта не принимается",
+      "ok": true,
+      "detail": "400 {'error': 'Форма относится к другой странице.', 'code': 'BAD_TOKEN'}"
+    },
+    {
+      "name": "[a] комментарий на модерации не виден на сайте",
+      "ok": true,
+      "detail": "непроверенный комментарий опубликован"
+    },
+    {
+      "name": "[a] модератор входит в систему",
+      "ok": true,
+      "detail": "200"
+    },
+    {
+      "name": "[a] модератор публикует комментарий",
+      "ok": true,
+      "detail": "получен 200"
+    },
+    {
+      "name": "[a] опубликованный комментарий виден на сайте",
+      "ok": true,
+      "detail": "комментарий не появился"
+    },
+    {
+      "name": "[b] комментарий сайта A не виден на сайте B",
+      "ok": true,
+      "detail": "комментарий утёк между сайтами"
+    },
+    {
+      "name": "[b] администратор другого сайта не может изменить комментарий",
+      "ok": true,
+      "detail": "получен 403"
+    }
+  ],
+  "responses": {
+    "a/": {
+      "status": 200,
+      "length": 35948
+    },
+    "a/catalog/": {
+      "status": 200,
+      "length": 31061
+    },
+    "a/catalog/stand-title-1/": {
+      "status": 200,
+      "length": 29831
+    },
+    "a/catalog/stand-title-1/season-1/": {
+      "status": 200,
+      "length": 27126
+    },
+    "a/catalog/stand-title-1/season-1/episode-1/": {
+      "status": 200,
+      "length": 30814
+    },
+    "a/collections/stand-collection-a/": {
+      "status": 200,
+      "length": 30622
+    },
+    "a/news/": {
+      "status": 200,
+      "length": 24941
+    },
+    "a/legal/rights/": {
+      "status": 200,
+      "length": 26917
+    },
+    "a/schedule/": {
+      "status": 200,
+      "length": 26902
+    },
+    "b/": {
+      "status": 200,
+      "length": 29308
+    },
+    "b/catalog/": {
+      "status": 200,
+      "length": 30759
+    },
+    "b/catalog/stand-title-1/": {
+      "status": 200,
+      "length": 29461
+    },
+    "b/catalog/stand-title-1/season-1/": {
+      "status": 200,
+      "length": 27921
+    },
+    "b/catalog/stand-title-1/season-1/episode-1/": {
+      "status": 200,
+      "length": 30862
+    },
+    "b/collections/stand-collection-b/": {
+      "status": 200,
+      "length": 28821
+    },
+    "b/news/": {
+      "status": 200,
+      "length": 24935
+    },
+    "b/legal/rights/": {
+      "status": 200,
+      "length": 26777
+    },
+    "b/schedule/": {
+      "status": 200,
+      "length": 27226
+    },
+    "c/": {
+      "status": 200,
+      "length": 26785
+    },
+    "c/catalog/": {
+      "status": 200,
+      "length": 30493
+    },
+    "c/catalog/stand-title-1/": {
+      "status": 200,
+      "length": 29313
+    },
+    "c/catalog/stand-title-1/season-1/": {
+      "status": 200,
+      "length": 26522
+    },
+    "c/catalog/stand-title-1/season-1/episode-1/": {
+      "status": 200,
+      "length": 30156
+    },
+    "c/collections/stand-collection-c/": {
+      "status": 200,
+      "length": 30144
+    },
+    "c/news/": {
+      "status": 200,
+      "length": 24837
+    },
+    "c/legal/rights/": {
+      "status": 200,
+      "length": 25604
+    },
+    "c/schedule/": {
+      "status": 200,
+      "length": 26684
+    },
+    "sitemap-a": {
+      "count": 56
+    },
+    "sitemap-b": {
+      "count": 46
+    },
+    "sitemap-c": {
+      "count": 15
+    }
+  }
+}

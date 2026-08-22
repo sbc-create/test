@@ -6,6 +6,7 @@ import { Breadcrumbs } from '../../../../../components/Breadcrumbs'
 import { getTenantTitle, listEpisodes, listSeasons } from '../../../../../lib/content'
 import { titleNameOf } from '../../../../../lib/present'
 import { currentSite, payloadClient } from '../../../../../lib/site'
+import { seasonNote as seasonNoteOf } from '../../../../../seo/inclusion'
 import { absoluteUrl, buildMetadata } from '../../../../../seo/metadata'
 
 export const dynamic = 'force-dynamic'
@@ -20,6 +21,8 @@ export const seasonNumberOf = (segment: string): number | null => {
 
 const asRecord = (value: unknown): Record<string, unknown> | null =>
   value && typeof value === 'object' ? (value as Record<string, unknown>) : null
+
+
 
 export const generateMetadata = async ({ params }: { params: Params }): Promise<Metadata> => {
   const site = await currentSite()
@@ -37,7 +40,12 @@ export const generateMetadata = async ({ params }: { params: Params }): Promise<
       pageType: 'season',
       path: `/catalog/${slug}/season-${number}/`,
       heading: `${titleNameOf(doc)}, сезон ${number}`,
-      description: `Список эпизодов сезона ${number} — ${titleNameOf(doc)}.`,
+      description: seasonNoteOf(doc, number)
+        ? seasonNoteOf(doc, number)!.slice(0, 300)
+        : `Список эпизодов сезона ${number} — ${titleNameOf(doc)}.`,
+      // Сезон без собственного текста — список серий, одинаковый на всех сайтах.
+      // Такую страницу оставляем навигацией и закрываем от индексации.
+      documentRobots: seasonNoteOf(doc, number) ? 'inherit' : 'noindex',
     },
     site.siteName,
   )
@@ -78,6 +86,7 @@ const SeasonPage = async ({ params }: { params: Params }) => {
       <h1>
         {name}, сезон {number}
       </h1>
+      {seasonNoteOf(doc, number) ? <p className="lead">{seasonNoteOf(doc, number)}</p> : null}
       <ul className="list">
         {episodes.docs.map((episode) => {
           const item = asRecord(episode)!

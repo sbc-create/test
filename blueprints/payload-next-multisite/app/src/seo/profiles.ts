@@ -41,6 +41,17 @@ export type SeoProfile = {
   titleHeading: (name: string) => string
   /** Заголовок ленты материалов: у каждого сайта она про своё. */
   newsHeading: string
+  /** Описание ленты материалов. Одинаковое описание на трёх доменах — дубль. */
+  newsSummary: string
+  /** Заголовок раздела подборок: разделом владеют два сайта, и он у них разный. */
+  collectionsHeading: string
+  /** Описание раздела подборок. */
+  collectionsSummary: string
+  /**
+   * Описание страницы серии. Факт один и тот же, но сайты отвечают на разные
+   * вопросы о нём — иначе описания серий совпадают дословно на двух доменах.
+   */
+  episodeSummary: (name: string, season: number, episode: number) => string
   /** Подпись назначения сайта, используется в описаниях и в footer. */
   purpose: string
 }
@@ -82,6 +93,11 @@ const CATALOG_AUTHORITY: SeoProfile = {
   ownedListings: ['/catalog/', '/collections/', '/news/'],
   titleHeading: (name) => `${name}: все сезоны и серии`,
   newsHeading: 'Новости каталога',
+  newsSummary: 'Изменения в каталоге: что добавлено, что уточнено и как сверялись данные.',
+  collectionsHeading: 'Подборки каталога',
+  collectionsSummary: 'Наборы тайтлов, собранные по признакам каталога: студия, жанр, завершённость.',
+  episodeSummary: (name, season, episode) =>
+    `Серия ${episode} сезона ${season} «${name}»: место в порядке выхода и состояние доступа к просмотру.`,
 }
 
 const RELEASE_PULSE: SeoProfile = {
@@ -106,22 +122,27 @@ const RELEASE_PULSE: SeoProfile = {
     home: true,
     category: true,
     title: true,
-    episode: true,
     news_index: true,
     article: true,
     legal: true,
     paginated_page: true,
     content_unavailable: true,
-    // Сезоны и подборки закрыты: на этом сайте у них нет собственного содержания,
-    // а факты о сезонах уже полностью раскрыты на сайте каталога.
+    // Сезоны, эпизоды и подборки закрыты. Страница серии состоит из фактов
+    // провайдера и плеера: на сайте каталога и здесь она получалась дословно
+    // одинаковой — ворота уникальности показали это на 384 парах страниц.
+    // Серии остаются доступными и играют, но индексирует их один владелец.
   },
   requiresOwnText: ['article'],
-  // Сезоны в карту не идут: профиль их не индексирует, а карта обязана совпадать
-  // с индексируемой поверхностью, а не быть её надмножеством.
-  sitemapTypes: ['home', 'category', 'title', 'episode', 'news_index', 'article', 'legal'],
+  // Карта обязана совпадать с индексируемой поверхностью, а не быть её надмножеством.
+  sitemapTypes: ['home', 'category', 'title', 'news_index', 'article', 'legal'],
   ownedListings: ['/schedule/', '/news/'],
   titleHeading: (name) => `${name}: когда выходят серии`,
   newsHeading: 'Новости выхода серий',
+  newsSummary: 'Что вышло, что перенесено и что ожидается на ближайшей неделе.',
+  collectionsHeading: 'Подборки к расписанию',
+  collectionsSummary: 'Наборы тайтлов, сгруппированные по дням выхода серий.',
+  episodeSummary: (name, season, episode) =>
+    `Когда вышла серия ${episode} сезона ${season} «${name}» и доступна ли она сейчас.`,
 }
 
 const EDITORIAL_GUIDE: SeoProfile = {
@@ -160,6 +181,11 @@ const EDITORIAL_GUIDE: SeoProfile = {
   ownedListings: ['/collections/', '/news/'],
   titleHeading: (name) => `${name}: разбор редакции`,
   newsHeading: 'Статьи и разборы редакции',
+  newsSummary: 'Разборы, путеводители и объяснения — редакционный текст, а не пересказ аннотаций.',
+  collectionsHeading: 'Подборки редакции',
+  collectionsSummary: 'Несколько работ с объяснением, кому и с какого момента они подойдут.',
+  episodeSummary: (name, season, episode) =>
+    `Серия ${episode} сезона ${season} «${name}» в разборе редакции: о чём она и что в ней важно.`,
 }
 
 export const SEO_PROFILES: Record<SeoProfileKey, SeoProfile> = {

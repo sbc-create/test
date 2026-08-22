@@ -42,9 +42,11 @@ INDEXABLE = {
           "/collections/stand-collection-a/": True, "/news/": True, "/legal/rights/": True,
           "/schedule/": False},
     # Каталог принадлежит сайту A: у сайта расписания он остаётся навигацией.
+    # Страницу серии тоже индексирует только сайт A (D36): здесь она работает и
+    # играет, но в индекс не идёт — иначе это дословный дубль на втором домене.
     "b": {"/": True, "/catalog/": False, "/catalog/stand-title-1/": True,
           "/catalog/stand-title-1/season-1/": False,
-          "/catalog/stand-title-1/season-1/episode-1/": True,
+          "/catalog/stand-title-1/season-1/episode-1/": False,
           "/collections/stand-collection-b/": False, "/news/": True, "/legal/rights/": True,
           "/schedule/": True},
     "c": {"/": True, "/catalog/": False, "/catalog/stand-title-1/": True,

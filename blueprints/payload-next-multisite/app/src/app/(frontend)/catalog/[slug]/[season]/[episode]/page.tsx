@@ -60,7 +60,9 @@ export const generateMetadata = async ({ params }: { params: Params }): Promise<
       pageType: 'episode',
       path: `/catalog/${slug}/season-${loaded.seasonNumber}/episode-${loaded.episodeNumber}/`,
       heading: `${name}, сезон ${loaded.seasonNumber}, серия ${loaded.episodeNumber}`,
-      description: `Серия ${loaded.episodeNumber} сезона ${loaded.seasonNumber} — ${name}.`,
+      // Один факт, но разные сайты отвечают им на разные вопросы: общий шаблон
+      // давал дословно совпадающие описания серий на двух доменах.
+      description: loaded.site.profile.episodeSummary(name, loaded.seasonNumber, loaded.episodeNumber),
     },
     loaded.site.siteName,
   )
