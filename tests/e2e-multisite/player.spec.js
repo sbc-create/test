@@ -51,7 +51,49 @@ test('событие noData переводит блок в честный ста
   });
 
   await expect(page.locator('video-player')).toHaveCount(0);
-  await expect(page.getByRole('status')).toContainText('недоступна');
+  await expect(page.getByTestId('player-status')).toContainText('недоступна');
+});
+
+test('кнопка «Повторить» действительно пересоздаёт плеер, а не прячет ошибку', async ({ page }) => {
+  await page.goto(url('a', EPISODE));
+  const player = page.locator('video-player');
+  await expect(player).toHaveCount(1);
+
+  // Помечаем текущий экземпляр, чтобы отличить пересозданный элемент от прежнего.
+  await player.evaluate((node) => {
+    node.dataset.instanceMark = 'first';
+    node.dispatchEvent(new CustomEvent('noData'));
+  });
+  await expect(page.getByTestId('player-retry')).toBeVisible();
+
+  await page.getByTestId('player-retry').click();
+
+  await expect(page.locator('video-player')).toHaveCount(1);
+  const mark = await page.locator('video-player').evaluate((node) => node.dataset.instanceMark ?? null);
+  expect(mark, 'после Повторить должен быть новый экземпляр плеера').toBeNull();
+  await expect(page.getByTestId('player-status')).toHaveCount(0);
+});
+
+test('скрипт плеера подключается один раз на страницу', async ({ page }) => {
+  await page.goto(url('a', EPISODE));
+  await expect(page.locator('video-player')).toHaveCount(1);
+  await page.locator('video-player').evaluate((node) => node.dispatchEvent(new CustomEvent('noData')));
+  await page.getByTestId('player-retry').click();
+  await expect(page.locator('video-player')).toHaveCount(1);
+
+  const scripts = await page.locator('script[data-player-script]').count();
+  expect(scripts).toBe(1);
+});
+
+test('страница остаётся пригодной, когда плеер в состоянии ошибки', async ({ page }) => {
+  await page.goto(url('a', EPISODE));
+  await page.locator('video-player').evaluate((node) => node.dispatchEvent(new CustomEvent('noData')));
+  await expect(page.getByTestId('player-status')).toBeVisible();
+
+  // Метаданные, навигация и комментарии не должны зависеть от плеера.
+  await expect(page.locator('h1')).toBeVisible();
+  await expect(page.locator('#comments')).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Навигация по сериям' })).toBeVisible();
 });
 
 test('токен Content API не попадает в страницу', async ({ page }) => {

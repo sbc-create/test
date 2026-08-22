@@ -11,6 +11,17 @@ targets:
     database: none                  # DLE не устанавливается: дистрибутив не передан
     purpose: "пилот и автотесты SEO/QA-контура на реальном HTTP без внешней сети"
     production_capable: false
+  # Стенд второго blueprint: одно Next-приложение обслуживает три сайта.
+  - ref: payload-local
+    adapter: payload_multisite
+    environments: [staging]
+    root: var/targets/payload-local
+    bind_host: 127.0.0.1
+    port_range: [8110, 8129]
+    web_server: next_start
+    database: postgres
+    purpose: "стенд трёх аниме-сайтов на общей CMS: сборка, применение тенанта, откат"
+    production_capable: false
   # - ref: stage-1
   #   adapter: ssh_ansible
   #   ssh_host_ref: stage-1

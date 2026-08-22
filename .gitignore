@@ -36,3 +36,5 @@ tsconfig.tsbuildinfo
 # Сборочный кэш Next: runtime-вывод, а не исходники
 .next/
 **/.next/
+# Каталоги релизов blueprint payload-next-multisite
+blueprints/payload-next-multisite/app/.releases/

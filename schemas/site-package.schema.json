@@ -16,8 +16,6 @@
     "production_authorized",
     "target_ref",
     "network_allowlist",
-    "dle_version",
-    "dle_license_ref",
     "brand",
     "theme_ref",
     "metadata",
@@ -54,6 +52,15 @@
         "rollback",
         "decommission"
       ]
+    },
+    "blueprint": {
+      "type": "string",
+      "enum": [
+        "dle20",
+        "payload-next-multisite"
+      ],
+      "default": "dle20",
+      "description": "Какой blueprint собирает сайт. От него зависит обязательный набор полей: лицензия и дистрибутив DLE для dle20, описание тенанта и базы для payload-next-multisite."
     },
     "fixture": {
       "type": "boolean",
@@ -113,7 +120,15 @@
       "description": "Единственные endpoint, к которым разрешена сеть в этом задании."
     },
     "dle_version": {
-      "const": "20.0"
+      "oneOf": [
+        {
+          "const": "20.0"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Версия DLE. Для blueprint payload-next-multisite — null."
     },
     "dle_distribution_ref": {
       "type": [
@@ -644,7 +659,10 @@
       ],
       "properties": {
         "owner": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "minLength": 1
         },
         "contacts": {
@@ -655,8 +673,10 @@
           ],
           "properties": {
             "email": {
-              "type": "string",
-              "format": "email"
+              "type": [
+                "string",
+                "null"
+              ]
             },
             "phone": {
               "type": [
@@ -909,7 +929,10 @@
           ],
           "properties": {
             "version": {
-              "type": "string"
+              "type": [
+                "string",
+                "null"
+              ]
             },
             "fpm_pool": {
               "type": [
@@ -918,10 +941,16 @@
               ]
             },
             "memory_limit": {
-              "type": "string"
+              "type": [
+                "string",
+                "null"
+              ]
             },
             "max_execution_time": {
-              "type": "integer"
+              "type": [
+                "integer",
+                "null"
+              ]
             }
           }
         },
@@ -936,7 +965,8 @@
               "enum": [
                 "mysql",
                 "mariadb",
-                "none"
+                "none",
+                "postgres"
               ]
             },
             "version": {
@@ -1231,14 +1261,284 @@
         "string",
         "null"
       ]
+    },
+    "tenant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "slug",
+        "seo_profile",
+        "theme",
+        "indexing_enabled",
+        "allow_guest_comments"
+      ],
+      "description": "Описание тенанта в общей CMS. Публичное название берётся из brand.",
+      "properties": {
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{1,30}$"
+        },
+        "seo_profile": {
+          "enum": [
+            "catalog_authority",
+            "release_pulse",
+            "editorial_guide"
+          ]
+        },
+        "theme": {
+          "enum": [
+            "portal_light",
+            "pulse",
+            "editorial"
+          ]
+        },
+        "indexing_enabled": {
+          "type": "boolean",
+          "description": "Пока false, сайт целиком отдаёт noindex и не публикует sitemap."
+        },
+        "allow_guest_comments": {
+          "type": "boolean"
+        },
+        "owned_listings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true,
+          "description": "Разделы-списки, которыми владеет этот сайт. Раздел без владельца не индексируется."
+        }
+      }
+    },
+    "database_ref": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Ссылка на учётные данные базы в inventory. Значение секрета в пакет не попадает."
+    },
+    "player_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_ref",
+        "publisher_id_ref",
+        "aggregator"
+      ],
+      "description": "Параметры встраивания плеера. Хранятся только ссылки на секреты.",
+      "properties": {
+        "contract_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "publisher_id_ref": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]{2,63}$"
+        },
+        "aggregator": {
+          "enum": [
+            "kp",
+            "mali",
+            "mdl"
+          ]
+        },
+        "mode": {
+          "enum": [
+            "live",
+            "mock"
+          ],
+          "default": "live"
+        },
+        "show_banner": {
+          "type": "boolean",
+          "default": false
+        },
+        "show_voice_only": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "content_api": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_ref",
+        "mode"
+      ],
+      "description": "Адаптер Content API. Пока контракт не передан, режим live недопустим.",
+      "properties": {
+        "contract_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mode": {
+          "enum": [
+            "live",
+            "mock",
+            "disabled"
+          ]
+        },
+        "token_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Имя серверного секрета. Значение токена в пакете не хранится."
+        }
+      }
+    },
+    "comments": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "premoderation"
+      ],
+      "description": "Политика комментариев сайта. Модерация обязательна в первом релизе.",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "premoderation": {
+          "type": "boolean"
+        },
+        "min_interval_seconds": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 30
+        },
+        "max_length": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 4000
+        }
+      }
+    },
+    "cross_site_group": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Группа сайтов, между которыми обязательна проверка cross_site_uniqueness."
     }
   },
   "allOf": [
     {
       "if": {
         "properties": {
+          "blueprint": {
+            "not": {
+              "const": "payload-next-multisite"
+            }
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "dle_version",
+          "dle_license_ref"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "blueprint": {
+            "const": "payload-next-multisite"
+          }
+        },
+        "required": [
+          "blueprint"
+        ]
+      },
+      "then": {
+        "required": [
+          "tenant",
+          "database_ref",
+          "player_profile",
+          "content_api",
+          "comments",
+          "cross_site_group"
+        ],
+        "properties": {
+          "dle_license_ref": {
+            "type": "null"
+          },
+          "dle_distribution_ref": {
+            "type": "null"
+          },
+          "comments": {
+            "properties": {
+              "enabled": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "blueprint": {
+            "const": "payload-next-multisite"
+          },
           "environment": {
             "const": "production"
+          }
+        },
+        "required": [
+          "blueprint",
+          "environment"
+        ]
+      },
+      "then": {
+        "properties": {
+          "player_profile": {
+            "properties": {
+              "mode": {
+                "const": "live"
+              }
+            }
+          },
+          "content_api": {
+            "properties": {
+              "mode": {
+                "enum": [
+                  "live",
+                  "disabled"
+                ]
+              }
+            }
+          },
+          "comments": {
+            "properties": {
+              "premoderation": {
+                "const": true
+              }
+            }
+          },
+          "tenant": {
+            "properties": {
+              "indexing_enabled": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "required": [
+          "cross_site_group"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "environment": {
+            "const": "production"
+          },
+          "blueprint": {
+            "not": {
+              "const": "payload-next-multisite"
+            }
           }
         },
         "required": [
@@ -1411,6 +1711,77 @@
           "authorized_at": {
             "type": "string",
             "minLength": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "environment": {
+            "const": "production"
+          }
+        },
+        "required": [
+          "environment"
+        ]
+      },
+      "then": {
+        "properties": {
+          "legal": {
+            "properties": {
+              "owner": {
+                "type": "string",
+                "minLength": 1
+              },
+              "contacts": {
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "minLength": 3
+                  }
+                },
+                "required": [
+                  "email"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "blueprint": {
+            "not": {
+              "const": "payload-next-multisite"
+            }
+          },
+          "environment": {
+            "const": "production"
+          }
+        },
+        "required": [
+          "environment"
+        ]
+      },
+      "then": {
+        "properties": {
+          "dle_version": {
+            "const": "20.0"
+          },
+          "runtime": {
+            "properties": {
+              "php": {
+                "properties": {
+                  "version": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
           }
         }
       }

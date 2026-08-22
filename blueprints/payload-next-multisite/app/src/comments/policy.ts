@@ -79,6 +79,19 @@ export const verifyFormToken = (
   return { issuedAt }
 }
 
+/**
+ * Ключ идемпотентности отправки. Двойной клик, повтор запроса при обрыве связи и
+ * ретрай клиента дают один и тот же ключ — и один комментарий, а не три.
+ */
+export const submissionKey = (
+  secret: string,
+  parts: { tenant: string; target: string; author: string; body: string },
+): string =>
+  createHash('sha256')
+    .update(`${secret}:${parts.tenant}:${parts.target}:${parts.author}:${parts.body.trim()}`)
+    .digest('hex')
+    .slice(0, 40)
+
 /** IP не хранится в открытом виде: для лимитов достаточно устойчивого отпечатка. */
 export const fingerprint = (secret: string, ip: string, userAgent: string): string =>
   createHash('sha256').update(`${secret}:${ip}:${userAgent}`).digest('hex').slice(0, 32)

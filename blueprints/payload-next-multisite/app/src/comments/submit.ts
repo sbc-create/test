@@ -5,6 +5,7 @@ import {
   fingerprint,
   isRejection,
   signFormToken,
+  submissionKey,
   validateSubmission,
   verifyFormToken,
   type Limits,
@@ -126,6 +127,32 @@ export const submitComment: PayloadHandler = async (req) => {
   const userAgent = (req.headers.get('user-agent') ?? '').slice(0, 200)
   const authorKey = fingerprint(secret, clientIp(req), userAgent)
 
+  // Повтор той же отправки возвращает прежний результат, а не создаёт дубль.
+  const idempotencyKey = submissionKey(secret, {
+    tenant: String(tenant.id),
+    target: `${targetType}:${targetId}`,
+    author: req.user ? `user:${req.user.id}` : authorKey,
+    body: validation.body,
+  })
+  const duplicate = await req.payload.find({
+    collection: 'comments',
+    overrideAccess: true,
+    limit: 1,
+    depth: 0,
+    where: {
+      and: [{ tenant: { equals: tenant.id } }, { submissionKey: { equals: idempotencyKey } }],
+    },
+  })
+  if (duplicate.totalDocs > 0) {
+    const existing = duplicate.docs[0] as unknown as Record<string, unknown>
+    return json(200, {
+      id: existing.id,
+      status: existing.status,
+      duplicate: true,
+      message: 'Этот комментарий уже отправлен.',
+    })
+  }
+
   const interval = Number(settings?.minIntervalSeconds ?? 30)
   if (interval > 0) {
     const since = new Date(Date.now() - interval * 1000).toISOString()
@@ -168,6 +195,7 @@ export const submitComment: PayloadHandler = async (req) => {
       body: validation.body,
       status,
       authorKey,
+      submissionKey: idempotencyKey,
       submissionMeta: { userAgent, receivedAt: new Date().toISOString() },
     } as never,
   })

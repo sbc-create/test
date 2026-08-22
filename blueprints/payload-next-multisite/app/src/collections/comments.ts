@@ -34,6 +34,7 @@ export const Comments: CollectionConfig = {
     { fields: ['tenant', 'targetType', 'targetId', 'status'] },
     { fields: ['tenant', 'status', 'createdAt'] },
     { fields: ['tenant', 'authorKey', 'createdAt'] },
+    { fields: ['tenant', 'submissionKey'] },
   ],
   fields: [
     {
@@ -85,6 +86,14 @@ export const Comments: CollectionConfig = {
     { name: 'moderatorNote', type: 'textarea', label: 'Заметка модератора',
       access: { read: ({ req }) => Boolean(req.user) } },
     { name: 'reportCount', type: 'number', defaultValue: 0, label: 'Жалоб' },
+    {
+      name: 'submissionKey',
+      type: 'text',
+      index: true,
+      label: 'Ключ отправки',
+      access: { read: ({ req }) => Boolean(req.user), create: () => false, update: () => false },
+      admin: { readOnly: true, description: 'Отпечаток отправки. Защищает от дублей при повторе запроса.' },
+    },
     {
       name: 'authorKey',
       type: 'text',

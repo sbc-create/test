@@ -10,6 +10,7 @@ import json
 import os
 import re
 import secrets
+import shutil
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
@@ -24,6 +25,7 @@ IDENT_RE = re.compile(r"^[a-z][a-z0-9_]{2,62}$")
 CLUSTER_VERSION = "16"
 CLUSTER_NAME = "main"
 CLIENT = "/usr/lib/postgresql/16/bin/psql"
+DUMP_CLIENT = "/usr/lib/postgresql/16/bin/pg_dump"
 
 
 @dataclass
@@ -48,6 +50,16 @@ def credentials_path(scope: str) -> Path:
     return directory / f"{scope}.json"
 
 
+def _as_cluster_owner(inner: str, *, timeout: int = 120, stdin: str | None = None):
+    """Запуск фиксированной команды кластера от его владельца.
+
+    argv не собирается из пользовательского ввода: подставляется только заранее
+    известный клиент и имя базы, прошедшее проверку IDENT_RE.
+    """
+    return subprocess.run(["su", "-s", "/bin/sh", "postgres", "-c", inner],
+                          input=stdin, capture_output=True, text=True, timeout=timeout, check=False)
+
+
 def _sql_as_owner(sql: str, *, database: str = "postgres") -> subprocess.CompletedProcess:
     """Единственная привилегированная операция wrapper'а — SQL от владельца кластера.
 
@@ -62,8 +74,7 @@ def _sql_as_owner(sql: str, *, database: str = "postgres") -> subprocess.Complet
     # SQL передаётся через stdin, а не аргументом: иначе shell раскрывает `$$`
     # долларовых кавычек PL/pgSQL в PID процесса и запрос ломается.
     inner = f"{CLIENT} -v ON_ERROR_STOP=1 -d {database} -tA"
-    return subprocess.run(["su", "-s", "/bin/sh", "postgres", "-c", inner],
-                          input=sql, capture_output=True, text=True, timeout=120, check=False)
+    return _as_cluster_owner(inner, stdin=sql)
 
 
 def cluster_running() -> bool:
@@ -142,6 +153,56 @@ def load_credentials(scope: str) -> tuple[DatabaseCredentials, str]:
                            blocks_stage="BUILDING")
     credentials = DatabaseCredentials(**json.loads(path.read_text(encoding="utf-8")))
     return credentials, Path(credentials.password_ref.split(":", 1)[1]).read_text(encoding="utf-8").strip()
+
+
+def dump(scope: str, destination: Path) -> Path:
+    """Логический дамп базы сайта перед мутацией.
+
+    Дамп создаётся владельцем кластера во временном каталоге и затем переносится
+    в var/: пароль приложения при этом не участвует и в командную строку не попадает.
+    """
+    credentials, _ = load_credentials(scope)
+    if os.geteuid() != 0:
+        raise BlockedAccess(
+            "Бэкап базы требует прав администратора на управляющем хосте.",
+            field="database.dump",
+            required_input="Запуск от пользователя, которому разрешено управлять кластером PostgreSQL",
+            blocks_stage="STAGING_DEPLOY")
+
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    staging = Path("/tmp") / f"factory-dump-{credentials.database}.sql"
+    inner = f"{DUMP_CLIENT} --no-owner --no-privileges -d {credentials.database} -f {staging}"
+    result = _as_cluster_owner(inner, timeout=600)
+    if result.returncode != 0:
+        raise BlockedAccess(f"pg_dump завершился с кодом {result.returncode}: {result.stderr.strip()[:300]}",
+                            field="database.dump", blocks_stage="STAGING_DEPLOY")
+    shutil.move(str(staging), str(destination))
+    destination.chmod(0o600)
+    audit.record(job_id=f"db-dump-{scope}", site_id=scope, environment="staging",
+                 action="database.dump", target=credentials.database, exit_code=0, mutation=False,
+                 extra={"file": str(destination), "bytes": destination.stat().st_size})
+    return destination
+
+
+def restore(scope: str, source: Path) -> bool:
+    """Восстановление базы из дампа. Используется проверкой отката, а не «на всякий случай»."""
+    credentials, _ = load_credentials(scope)
+    if os.geteuid() != 0:
+        raise BlockedAccess("Восстановление базы требует прав администратора.",
+                            field="database.restore", blocks_stage="ROLLED_BACK")
+    if not source.exists():
+        raise BlockedInput(f"Дамп «{source}» не найден.", field="database.restore",
+                           blocks_stage="ROLLED_BACK")
+    staging = Path("/tmp") / f"factory-restore-{credentials.database}.sql"
+    shutil.copyfile(source, staging)
+    staging.chmod(0o644)
+    result = _as_cluster_owner(f"{CLIENT} -v ON_ERROR_STOP=1 -d {credentials.database} -f {staging}",
+                              timeout=600)
+    staging.unlink(missing_ok=True)
+    audit.record(job_id=f"db-restore-{scope}", site_id=scope, environment="staging",
+                 action="database.restore", target=credentials.database,
+                 exit_code=result.returncode, mutation=True, extra={"file": str(source)})
+    return result.returncode == 0
 
 
 def drop(scope: str) -> bool:

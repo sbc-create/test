@@ -106,7 +106,39 @@ def factory_source_digest() -> str:
     return h.hexdigest()
 
 
+#: Исходники blueprint payload-next-multisite. Их содержимое входит в build_id:
+#: правка рендера без смены build_id заставила бы деплой переиспользовать старый релиз.
+PAYLOAD_APP = PATHS.root / "blueprints" / "payload-next-multisite" / "app"
+
+
+def blueprint_of(package: dict) -> str:
+    return package.get("blueprint") or "dle20"
+
+
+def _payload_app_digest() -> str:
+    h = hashlib.sha256()
+    for sub in ("src", "public", "next.config.mjs", "package.json", "tsconfig.json"):
+        path = PAYLOAD_APP / sub
+        if path.is_file():
+            h.update(sub.encode())
+            h.update(path.read_bytes())
+        elif path.is_dir():
+            for file in sorted(p for p in path.rglob("*") if p.is_file()):
+                h.update(str(file.relative_to(PAYLOAD_APP)).encode())
+                h.update(file.read_bytes())
+    return h.hexdigest()
+
+
 def compute_build_id(site_id: str, package: dict) -> str:
+    if blueprint_of(package) == "payload-next-multisite":
+        matrix_path = PATHS.knowledge / "SEO_INDEXABILITY_MATRIX.yaml"
+        material = _canonical({
+            "package": package,
+            "app": _payload_app_digest(),
+            "matrix_sha256": hashlib.sha256(matrix_path.read_bytes()).hexdigest(),
+            "factory_source": factory_source_digest(),
+        })
+        return hashlib.sha256(material.encode()).hexdigest()[:16]
     theme_dir = PATHS.themes / package["theme_ref"]
     matrix_path = PATHS.knowledge / "SEO_INDEXABILITY_MATRIX.yaml"
     matrix = yaml.safe_load(matrix_path.read_text(encoding="utf-8")) or {}
@@ -161,6 +193,9 @@ def build(site_id: str, *, environment: str | None = None, force: bool = False) 
         shutil.rmtree(out)
     out.mkdir(parents=True, exist_ok=True)
 
+    if blueprint_of(package) == "payload-next-multisite":
+        return _build_payload(site_id, package, env, build_id, out)
+
     renderer = SiteRenderer(package, site_id, output=out)
     render_result = renderer.render(env)
     lint = php_lint([PATHS.themes / package["theme_ref"], PATHS.plugins])
@@ -188,6 +223,94 @@ def build(site_id: str, *, environment: str | None = None, force: bool = False) 
     report_dir = PATHS.artifact_dir("build", site_id, build_id)
     (report_dir / "report.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     return build_result
+
+
+def _build_payload(site_id: str, package: dict, env: str, build_id: str, out: Path) -> BuildResult:
+    """Сборка для blueprint payload-next-multisite.
+
+    Приложение одно на три сайта, поэтому «сборка сайта» — это не отдельный HTML,
+    а детерминированная конфигурация тенанта, которую деплой применяет к CMS.
+    Само приложение собирается на шаге деплоя, где существует каталог релиза.
+    """
+    tenant = package.get("tenant") or {}
+    player = package.get("player_profile") or {}
+    comments = package.get("comments") or {}
+    settings = package.get("metadata") or {}
+    navigation = package.get("navigation") or {}
+    legal = package.get("legal") or {}
+
+    config = {
+        "site_id": site_id,
+        "environment": env,
+        "domain": package["domain"],
+        "tenant": {
+            "slug": tenant.get("slug"),
+            "name": package["brand"]["name"],
+            "domain": package["domain"],
+            "seoProfile": tenant.get("seo_profile"),
+            "theme": tenant.get("theme"),
+            "indexingEnabled": bool(tenant.get("indexing_enabled")),
+            "allowGuestComments": bool(tenant.get("allow_guest_comments")),
+        },
+        "siteSettings": {
+            "siteName": package["brand"]["name"],
+            "tagline": (settings.get("description_templates") or {}).get("home"),
+            "defaultDescription": (settings.get("description_templates") or {}).get("home"),
+            "commentsEnabled": bool(comments.get("enabled", True)),
+            "premoderation": bool(comments.get("premoderation", True)),
+            "minIntervalSeconds": int(comments.get("min_interval_seconds", 30)),
+            "maxLength": int(comments.get("max_length", 4000)),
+            "rightsNotice": (legal.get("documents") or [{}])[0].get("summary"),
+        },
+        "navigation": {
+            "header": [{"title": item.get("label"), "href": item.get("url")}
+                       for item in navigation.get("primary") or []],
+            "footerGroups": [{"title": "О сайте",
+                              "links": [{"title": item.get("label"), "href": item.get("url")}
+                                        for item in navigation.get("footer") or []]}],
+        },
+        "playerProfile": {
+            "name": f"Плеер {tenant.get('slug')}",
+            "publisherIdRef": player.get("publisher_id_ref"),
+            "aggregator": player.get("aggregator"),
+            "showBanner": bool(player.get("show_banner")),
+            "showVoiceOnly": bool(player.get("show_voice_only")),
+        },
+        "legalDocuments": [
+            {
+                "slug": doc.get("slug"),
+                "name": doc.get("title"),
+                "summary": doc.get("summary"),
+                "body": (_resolve_site_text(site_id, doc.get("body_ref")) or ""),
+            }
+            for doc in legal.get("documents") or []
+        ],
+    }
+    (out / "tenant-config.json").write_text(
+        json.dumps(config, ensure_ascii=False, indent=2, sort_keys=True), encoding="utf-8")
+
+    build_result = BuildResult(site_id=site_id, build_id=build_id, output=out,
+                               counts={"tenants": 1, "legal_documents": len(config["legalDocuments"])},
+                               skipped=[], routes=0, redirects=0, php_lint=[])
+    manifest = {
+        **build_result.as_dict(),
+        "blueprint": "payload-next-multisite",
+        "environment": env,
+        "built_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "package_sha256": hashlib.sha256(_canonical(package).encode()).hexdigest(),
+        "app_digest": _payload_app_digest(),
+    }
+    (out / "build-manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    report_dir = PATHS.artifact_dir("build", site_id, build_id)
+    (report_dir / "report.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    return build_result
+
+
+def _resolve_site_text(site_id: str, ref: str | None) -> str | None:
+    if not ref:
+        return None
+    path = PATHS.sites / site_id / ref
+    return path.read_text(encoding="utf-8") if path.exists() else None
 
 
 def latest_build(site_id: str) -> Path | None:

@@ -161,7 +161,25 @@ def _check_environment(pkg: dict, out: list[Blocker]) -> None:
         out.append(Blocker("BLOCKED_INPUT", "production_authorized", "production_authorized: true при environment: staging — противоречие manifest.", "Приведи environment и production_authorized в соответствие", "VALIDATING"))
 
 
+#: Темы, объявленные blueprint payload-next-multisite. Они живут в самом
+#: приложении как наборы токенов, а не отдельными пакетами в themes/.
+PAYLOAD_THEMES = {"portal_light", "pulse", "editorial"}
+
+
+def blueprint_of(pkg: dict) -> str:
+    """Пакет без явного blueprint — исторический DLE-пакет."""
+    return pkg.get("blueprint") or "dle20"
+
+
 def _check_license(pkg: dict, out: list[Blocker], warnings: list[str]) -> None:
+    if blueprint_of(pkg) != "dle20":
+        # Лицензия DLE к другому blueprint отношения не имеет. Проверять её здесь
+        # значило бы выдавать шум вместо проверки прав на контент.
+        if pkg.get("dle_license_ref"):
+            out.append(Blocker("BLOCKED_INPUT", "dle_license_ref",
+                               "Лицензия DLE указана для blueprint, который DLE не использует.",
+                               "Убери dle_license_ref из пакета payload-next-multisite", "VALIDATING"))
+        return
     env = pkg.get("environment")
     domain = pkg.get("domain", "")
     result = licensing.check_domain(domain, license_ref=pkg.get("dle_license_ref"))
@@ -353,7 +371,16 @@ def _check_files(pkg: dict, site_id: str, out: list[Blocker]) -> None:
         if ref and not _resolve_site_file(site_id, ref):
             out.append(Blocker("BLOCKED_INPUT", f"legal/documents/{idx}/body_ref", f"Текст юридического документа «{ref}» не найден.", "Передай утверждённый текст документа", "BUILDING"))
     theme = pkg.get("theme_ref")
-    if theme and not (PATHS.themes / theme).exists():
+    if not theme:
+        return
+    if blueprint_of(pkg) == "payload-next-multisite":
+        if theme not in PAYLOAD_THEMES:
+            out.append(Blocker("BLOCKED_INPUT", "theme_ref",
+                               f"Тема «{theme}» не объявлена blueprint payload-next-multisite "
+                               f"(доступны: {', '.join(sorted(PAYLOAD_THEMES))}).",
+                               "Тема из набора blueprint", "BUILDING"))
+        return
+    if not (PATHS.themes / theme).exists():
         out.append(Blocker("BLOCKED_INPUT", "theme_ref", f"Тема «{theme}» отсутствует в themes/.", "Одобренный theme pack", "BUILDING"))
 
 

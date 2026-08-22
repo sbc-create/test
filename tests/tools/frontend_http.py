@@ -176,6 +176,14 @@ def check_comments(port: int, results: "Results") -> None:
                 payload.get("status") == "pending", str(payload))
     comment_id = payload.get("id")
 
+    # Повтор той же отправки не создаёт второй комментарий.
+    status, repeat = post_json(port, host_a, "/api/comments/submit", {
+        "targetType": "title", "targetId": target_id, "formToken": form_token,
+        "body": "Первый комментарий стенда для проверки модерации.", "guestName": "Тестировщик"})
+    results.add("[a] повтор той же отправки не создаёт дубль",
+                status == 200 and repeat.get("duplicate") is True and repeat.get("id") == comment_id,
+                f"{status} {repeat}")
+
     status, payload = post_json(port, host_a, "/api/comments/submit", {
         "targetType": "title", "targetId": target_id, "formToken": form_token,
         "body": "Второй комментарий подряд.", "guestName": "Тестировщик"})

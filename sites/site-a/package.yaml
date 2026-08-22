@@ -1,0 +1,294 @@
+schema_version: 1
+job_id: site-a-staging-001
+site_id: site-a
+requested_action: create
+blueprint: payload-next-multisite
+fixture: true
+domain: site-a.localhost
+aliases: []
+canonical_url: https://site-a.localhost/
+environment: staging
+production_authorized: false
+target_ref: payload-local
+ssh_host_ref: null
+dns_zone_ref: null
+network_allowlist:
+- 127.0.0.1
+dle_version: null
+dle_distribution_ref: null
+dle_distribution_sha256: null
+dle_license_ref: null
+brand:
+  name: site_a
+  legal_name: null
+  logo_ref: brand/placeholder.svg
+  favicon_ref: brand/placeholder.svg
+  colors:
+    primary: '#14507d'
+    background: '#f4f6f8'
+    surface: '#ffffff'
+    text: '#16202a'
+    muted: '#55636f'
+  fonts:
+    body: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif
+    self_hosted: true
+theme_ref: portal_light
+visual_reference: null
+content_package_ref: null
+content_package_sha256: null
+language: ru
+tenant:
+  slug: site_a
+  seo_profile: catalog_authority
+  theme: portal_light
+  indexing_enabled: false
+  allow_guest_comments: true
+  owned_listings:
+  - /catalog/
+  - /collections/
+  - /news/
+database_ref: anime
+player_profile:
+  contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+  publisher_id_ref: PLAYER_PUBLISHER_ID_A
+  aggregator: kp
+  mode: mock
+  show_banner: false
+  show_voice_only: false
+content_api:
+  contract_ref: knowledge/cdnvideohub/content-api.yaml
+  mode: disabled
+  token_ref: CDNVIDEOHUB_API_TOKEN
+comments:
+  enabled: true
+  premoderation: true
+  min_interval_seconds: 30
+  max_length: 4000
+cross_site_group: anime-trio
+metadata:
+  title_templates:
+    home: '{brand} — полный и точный каталог тайтлов с сезонами и эпизодами'
+    category: '{category} — {brand}'
+    title: '{title} — {brand}'
+    episode: '{title}. Сезон {season}, эпизод {episode} — {brand}'
+    pagination: '{title} — страница {n}'
+    news_index: Новости каталога — {brand}
+    search: Поиск — {brand}
+    not_found: Страница не найдена
+    gone: Материал удалён
+  description_templates:
+    home: Полный и точный каталог тайтлов с сезонами и эпизодами.
+    category: Материалы раздела {category}.
+    pagination: '{description} Страница {n}.'
+    news_index: Новости каталога.
+  canonical_policy:
+    scheme: https
+    host_form: non_www
+    trailing_slash: true
+    case: lower
+  og:
+    enabled: true
+    site_name: site_a
+  robots:
+    staging_policy: noindex_all_plus_auth
+    production_policy: allow_indexable_only
+    extra_disallow:
+    - /search/
+  sitemap:
+    enabled: true
+    split_by_type: false
+    max_urls_per_file: 50000
+  structured_data_input:
+    organization: null
+    website: null
+    allowed_types:
+    - WebSite
+    - BreadcrumbList
+    - NewsArticle
+seo:
+  indexability_matrix_ref: knowledge/SEO_INDEXABILITY_MATRIX.yaml
+  items_per_page: 24
+  url_templates:
+    category: /catalog/
+    title: /catalog/{title_slug}/
+  pagination_template: /page/{n}/
+  indexable_facets_allowlist: []
+  non_indexable_parameters:
+  - sort
+  - order
+  - view
+  - per_page
+  - q
+  - utm_source
+  - utm_medium
+  - utm_campaign
+  - utm_term
+  - utm_content
+  - gclid
+  - yclid
+  - fbclid
+  internal_link_rules:
+    breadcrumbs: true
+    related_source: package_relations_only
+    max_depth: 4
+  hreflang: []
+  webmaster_verification_refs: {}
+navigation:
+  primary:
+  - label: Каталог
+    url: /catalog/
+  - label: Расписание
+    url: /schedule/
+  - label: Подборки
+    url: /collections/
+  - label: Новости каталога
+    url: /news/
+  footer:
+  - label: Главная
+    url: /
+legal:
+  owner: null
+  contacts:
+    email: null
+    phone: null
+    address: null
+  documents:
+  - slug: rights
+    title: Права на данные каталога
+    summary: Происхождение фактических сведений каталога и порядок обращения правообладателя.
+    body_ref: legal/rights.md
+content_source:
+  kind: fixture
+  provenance: Синтетические записи стенда, созданные внутри репозитория фабрики
+  rights_manifest_ref: content/rights-manifest.yaml
+  rights_confirmed: true
+  allowed_fields:
+  - title
+  - description
+  - image
+  - facts
+vk_video:
+  enabled: false
+  adapter: disabled
+  video_ids: []
+  player_configuration: {}
+  playback_mode: disabled
+advertising:
+  enabled: false
+  provider: none
+  adapter: disabled
+  placements: []
+  policy_refs: []
+  secret_ref: null
+integrations: []
+runtime:
+  php:
+    version: null
+    fpm_pool: null
+    memory_limit: null
+    max_execution_time: null
+  database:
+    engine: postgres
+    version: '16'
+    name: factory_anime
+    user: factory_anime_app
+    password_secret_ref: file:var/db/anime.password
+  cache: {}
+  mail: {}
+  cron: []
+  limits: {}
+backup_policy:
+  before_mutation: true
+  schedule: null
+  targets:
+  - database
+  - media
+  restore_test: each_release
+monitoring_policy:
+  health_endpoint: /robots.txt
+  checks:
+  - http_status
+  - canonical_host
+  alert_ref: null
+retention_policy:
+  backups_days: 14
+  logs_days: 14
+  artifacts_days: 30
+acceptance:
+  routes:
+  - path: /
+    page_type: home
+    expected_status: 200
+    expect_indexable: true
+  - path: /catalog/
+    page_type: category
+    expected_status: 200
+    expect_indexable: true
+  - path: /collections/
+    page_type: category
+    expected_status: 200
+    expect_indexable: true
+  - path: /news/
+    page_type: news_index
+    expected_status: 200
+    expect_indexable: true
+  - path: /schedule/
+    page_type: category
+    expected_status: 200
+    expect_indexable: false
+  - path: /search/
+    page_type: search
+    expected_status: 200
+    expect_indexable: false
+  - path: /nothing-here/
+    page_type: not_found
+    expected_status: 404
+    expect_indexable: false
+  scenarios:
+  - id: editor-publishes-title
+    description: Редактор создаёт публикацию тайтла в CMS и она появляется на своём
+      домене
+    steps:
+    - Войти в админку под редактором сайта
+    - Создать публикацию тайтла с собственным вступлением
+    - Опубликовать и открыть страницу на домене этого сайта
+    - Убедиться, что на других доменах публикации нет
+  - id: tenant-isolation
+    description: Пользователь одного сайта не видит и не меняет данные другого
+    steps:
+    - Открыть список материалов под администратором сайта
+    - Убедиться, что видны только материалы своего сайта
+    - Попытаться открыть документ другого сайта по прямому идентификатору
+    - Убедиться в отказе
+  - id: comment-moderation
+    description: Комментарий проходит модерацию и только после неё появляется на сайте
+    steps:
+    - Отправить комментарий с публичной страницы
+    - Убедиться, что на странице его нет
+    - Опубликовать комментарий под модератором
+    - Убедиться, что он появился только на своём сайте
+  - id: player-contract
+    description: Плеер встраивается по контракту, недоступное видео показывает статус
+    steps:
+    - Открыть страницу серии
+    - Убедиться в наличии элемента плеера с атрибутами контракта
+    - Смоделировать событие noData
+    - Убедиться, что вместо подмены показан честный статус
+  - id: rights-gate
+    description: Материал без подтверждённых прав не получает плеер
+    steps:
+    - Открыть страницу тайтла без подтверждённых прав
+    - Убедиться, что страница отвечает 200 и объясняет причину
+    - Убедиться, что параметров плеера в разметке нет
+  - id: cross-site-uniqueness
+    description: Индексируемые страницы трёх сайтов не совпадают между собой
+    steps:
+    - Собрать индексируемые адреса из sitemap каждого сайта
+    - Сравнить заголовки, описания, H1 и основной текст
+    - Убедиться, что критических совпадений нет
+rollback_policy:
+  keep_releases: 5
+  auto_rollback_on_smoke_failure: true
+requested_by: ITAPX@yandex.com
+authorized_by: null
+created_at: '2026-08-22T00:00:00Z'

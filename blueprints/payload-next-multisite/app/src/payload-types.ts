@@ -703,6 +703,10 @@ export interface Comment {
   moderatorNote?: string | null;
   reportCount?: number | null;
   /**
+   * Отпечаток отправки. Защищает от дублей при повторе запроса.
+   */
+  submissionKey?: string | null;
+  /**
    * Хэш отправителя для антифлуда. Исходный IP не хранится.
    */
   authorKey?: string | null;
@@ -1629,6 +1633,7 @@ export interface CommentsSelect<T extends boolean = true> {
   moderatedAt?: T;
   moderatorNote?: T;
   reportCount?: T;
+  submissionKey?: T;
   authorKey?: T;
   submissionMeta?: T;
   updatedAt?: T;

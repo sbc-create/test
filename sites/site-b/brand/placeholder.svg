@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="site_b">
+  <!-- Заглушка. Логотип не передан, и придумывать его запрещено: это BLOCKED_INPUT
+       для production, а не повод нарисовать бренд за владельца. -->
+  <rect width="64" height="64" rx="8" fill="#2b8cff"/>
+  <text x="32" y="40" font-family="sans-serif" font-size="18" fill="#ffffff"
+        text-anchor="middle">B</text>
+</svg>

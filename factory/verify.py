@@ -7,8 +7,10 @@ from __future__ import annotations
 
 import base64
 import json
+import os
 import re
 import urllib.error
+import urllib.parse
 import urllib.request
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -143,6 +145,337 @@ def acceptance_routes(base_url: str, package: dict, out_dir: Path, *, auth: str 
     report.counts = {"routes": len((package.get("acceptance") or {}).get("routes") or [])}
     (out_dir / "acceptance-routes.json").write_text(json.dumps(redact_obj(report.as_dict()), ensure_ascii=False, indent=2), encoding="utf-8")
     return report
+
+
+def _get_host(base_url: str, path: str, host: str, *, follow: bool = True) -> tuple[int, dict, str]:
+    """Запрос к стенду с явным Host: три сайта живут на одном порту."""
+    request = urllib.request.Request(base_url.rstrip("/") + path,
+                                     headers={"User-Agent": "factory-verify/1.0", "Host": host})
+    handlers: list = [urllib.request.ProxyHandler({})]
+    if not follow:
+        handlers.append(_NoFollow())
+    opener = urllib.request.build_opener(*handlers)
+    try:
+        with opener.open(request, timeout=30) as response:
+            return response.status, dict(response.headers), response.read().decode("utf-8", "replace")
+    except urllib.error.HTTPError as exc:
+        return exc.code, dict(exc.headers), exc.read().decode("utf-8", "replace")
+    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        return 0, {}, str(exc)
+
+
+class _NoFollow(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: ARG002
+        return None
+
+
+_ROBOTS_RE = re.compile(r'<meta[^>]+name="robots"[^>]+content="([^"]*)"', re.I)
+_CANONICAL_RE = re.compile(r'<link[^>]+rel="canonical"[^>]+href="([^"]*)"', re.I)
+_TITLE_RE = re.compile(r"<title>(.*?)</title>", re.S | re.I)
+_DESCRIPTION_RE = re.compile(r'<meta[^>]+name="description"[^>]+content="([^"]*)"', re.I)
+_H1_RE = re.compile(r"<h1[^>]*>(.*?)</h1>", re.S | re.I)
+_MAIN_RE = re.compile(r"<main[^>]*>(.*?)</main>", re.S | re.I)
+_SCRIPT_RE = re.compile(r"<(script|style)[^>]*>.*?</\1>", re.S | re.I)
+_LOC_RE = re.compile(r"<loc>([^<]+)</loc>")
+
+
+def _plain(html: str) -> str:
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", _SCRIPT_RE.sub(" ", html))).strip()
+
+
+def acceptance_routes_multisite(base_url: str, package: dict, out_dir: Path) -> Report:
+    """Маршруты приёмки проверяются на живом стенде с Host конкретного сайта."""
+    report = Report("acceptance-routes")
+    host = package["domain"]
+    indexing_enabled = bool((package.get("tenant") or {}).get("indexing_enabled", True))
+    rows = []
+    for route in package["acceptance"]["routes"]:
+        status, _, body = _get_host(base_url, route["path"], host)
+        robots = _ROBOTS_RE.search(body)
+        indexable = bool(robots) and robots.group(1).strip().startswith("index")
+        rows.append({"path": route["path"], "status": status, "expected": route["expected_status"],
+                     "indexable": indexable, "expect_indexable": route.get("expect_indexable")})
+        if status != route["expected_status"]:
+            report.add(Finding("acceptance-routes", "critical", route["path"],
+                               f"Ожидался статус {route['expected_status']}, получен {status}.", "ACC-1"))
+        if route.get("expect_indexable") is not None and status == 200:
+            expected_indexable = bool(route["expect_indexable"]) and indexing_enabled
+            if indexable != expected_indexable:
+                report.add(Finding("acceptance-routes", "critical", route["path"],
+                                   f"Индексируемость {indexable}, ожидалась {expected_indexable} "
+                                   f"(профиль: {route['expect_indexable']}, "
+                                   f"индексация сайта включена: {indexing_enabled}).", "ACC-2"))
+        if status == 200 and indexable:
+            canonical = _CANONICAL_RE.search(body)
+            expected = f"https://{host}{route['path']}"
+            if not canonical or canonical.group(1) != expected:
+                report.add(Finding("acceptance-routes", "critical", route["path"],
+                                   f"Ожидался self-canonical {expected}, получен "
+                                   f"{canonical.group(1) if canonical else 'ничего'}.", "HR-1"))
+            direct_status, _, _ = _get_host(base_url, route["path"], host, follow=False)
+            if direct_status != 200:
+                report.add(Finding("acceptance-routes", "critical", route["path"],
+                                   f"Индексируемый адрес отвечает {direct_status} без перехода: "
+                                   "canonical указывает на редирект.", "HR-2"))
+    report.counts = {"routes": len(rows), "indexing_enabled": indexing_enabled, "status": "executed"}
+    (out_dir / "acceptance-routes.json").write_text(
+        json.dumps({"host": host, "routes": rows, **report.as_dict()},
+                   ensure_ascii=False, indent=2), encoding="utf-8")
+    return report
+
+
+def security_smoke_multisite(base_url: str, package: dict, out_dir: Path) -> Report:
+    """Публичная поверхность стенда: заголовки, закрытые пути, анонимный API."""
+    report = Report("security-smoke")
+    host = package["domain"]
+    observed = {}
+
+    status, headers, _ = _get_host(base_url, "/", host)
+    observed["/"] = {"status": status, "headers": {k: v for k, v in headers.items()
+                                                   if k.lower().startswith(("x-", "content-security", "referrer"))}}
+    for header in ("X-Content-Type-Options", "Referrer-Policy", "Content-Security-Policy"):
+        if header not in headers:
+            report.add(Finding("security-smoke", "critical", "/",
+                               f"Отсутствует заголовок {header}.", "SEC-1"))
+
+    # Анонимный доступ к данным сайтов закрыт: иначе изоляция теряет смысл на публичном API.
+    for path in ("/api/posts?limit=100", "/api/comments?limit=100", "/api/tenants?limit=100"):
+        status, _, body = _get_host(base_url, path, host)
+        observed[path] = {"status": status}
+        if status == 200 and '"docs":[]' not in body.replace(" ", ""):
+            report.add(Finding("security-smoke", "critical", path,
+                               f"Анонимный запрос к {path} вернул данные.", "SEC-2"))
+
+    for path in ("/.env", "/.git/config", "/var/db/anime.password", "/build-manifest.json"):
+        status, _, _ = _get_host(base_url, path, host)
+        observed[path] = {"status": status}
+        if status == 200:
+            report.add(Finding("security-smoke", "critical", path,
+                               "Служебный путь доступен публично.", "SEC-3"))
+
+    # Админка не должна открываться анонимно как рабочая панель.
+    status, _, body = _get_host(base_url, "/admin", host)
+    observed["/admin"] = {"status": status}
+    if status == 200 and "Создать первого пользователя" not in body and "Вход" not in body and "Пароль" not in body:
+        report.add(Finding("security-smoke", "critical", "/admin",
+                           "Админка отвечает 200 без формы входа.", "SEC-4"))
+
+    report.counts = {"probes": len(observed), "status": "executed"}
+    (out_dir / "security-smoke.json").write_text(
+        json.dumps({"probes": observed, **report.as_dict()}, ensure_ascii=False, indent=2), encoding="utf-8")
+    return report
+
+
+def _surface(base_url: str, host: str) -> list[tuple[str, bool]]:
+    """Индексируемая поверхность сайта.
+
+    Основной источник — sitemap. Если сайт ещё не разрешил индексацию, sitemap
+    пуст, и поверхность собирается обходом разделов: иначе ворота уникальности
+    молча не выполнялись бы ровно тогда, когда они нужнее всего — до публикации.
+    """
+    status, _, sitemap = _get_host(base_url, "/sitemap.xml", host)
+    if status == 200:
+        paths = [urllib.parse.urlparse(loc).path for loc in _LOC_RE.findall(sitemap)]
+        if paths:
+            return [(path, True) for path in paths]
+
+    found: list[tuple[str, bool]] = [("/", True)]
+    for listing in ("/catalog/", "/collections/", "/news/", "/schedule/"):
+        listing_status, _, body = _get_host(base_url, listing, host)
+        if listing_status != 200:
+            continue
+        robots = _ROBOTS_RE.search(body)
+        owned = bool(robots) and "noindex" not in robots.group(1)
+        found.append((listing, owned))
+        prefix = re.escape(listing)
+        for item in sorted(set(re.findall(r'href="(' + prefix + r'[^"/]+/)"', body))):
+            found.append((item, True))
+    for legal in ("/legal/rights/",):
+        legal_status, _, _ = _get_host(base_url, legal, host)
+        if legal_status == 200:
+            found.append((legal, True))
+    # Дубли путей не нужны: одна страница — одно наблюдение.
+    seen: set[str] = set()
+    unique: list[tuple[str, bool]] = []
+    for path, intent in found:
+        if path in seen:
+            continue
+        seen.add(path)
+        unique.append((path, intent))
+    return unique
+
+
+def cross_site_uniqueness(base_url: str, package: dict, out_dir: Path) -> Report:
+    """Ворота уникальности между сайтами одной группы.
+
+    Собираются только сайты, объявленные в той же `cross_site_group`. Если в группе
+    меньше двух развёрнутых сайтов, проверка помечается непроведённой: сравнивать
+    не с чем, и «уникально» здесь было бы неправдой.
+    """
+    from factory import validation
+    from factory.seo import uniqueness
+
+    group = package.get("cross_site_group")
+    hosts: list[tuple[str, str]] = []
+    if group:
+        for directory in sorted((PATHS.sites).iterdir()):
+            if not (directory / "package.yaml").exists():
+                continue
+            try:
+                other = validation.load_package(directory.name)
+            except Exception:  # noqa: BLE001 — нечитаемый чужой пакет не должен ронять проверку
+                continue
+            if other.get("cross_site_group") == group:
+                hosts.append((directory.name, other["domain"]))
+
+    pages: list = []
+    for _, host in hosts:
+        for path, intent in _surface(base_url, host):
+            page_status, _, body = _get_host(base_url, path, host)
+            if page_status != 200:
+                continue
+            robots = _ROBOTS_RE.search(body)
+            live_indexable = bool(robots) and robots.group(1).strip().startswith("index")
+            main = _MAIN_RE.search(body)
+            h1 = _H1_RE.search(body)
+            title = _TITLE_RE.search(body)
+            canonical = _CANONICAL_RE.search(body)
+            description = _DESCRIPTION_RE.search(body)
+            pages.append(uniqueness.PageObservation(
+                site_id=host, path=path, page_type=_page_type_of(path),
+                # Пока индексация сайта выключена, все страницы отдают noindex.
+                # Сравнивать при этом «нечего» неверно: вопрос дубля решается до
+                # включения переключателя, поэтому берётся намерение профиля.
+                indexable=live_indexable or intent,
+                title=_plain(title.group(1)) if title else "",
+                description=description.group(1) if description else "",
+                h1=_plain(h1.group(1)) if h1 else "",
+                own_text=_plain(main.group(1)) if main else "",
+                # Canonical у noindex-страницы отсутствует по правилам матрицы,
+                # поэтому проверка CSU-7 применима только к живым индексируемым.
+                canonical=canonical.group(1) if canonical and live_indexable else ""))
+
+    report = uniqueness.check(pages)
+    (out_dir / "cross-site-uniqueness.json").write_text(
+        json.dumps(report.as_dict(), ensure_ascii=False, indent=2), encoding="utf-8")
+    return report
+
+
+def _page_type_of(path: str) -> str:
+    if path == "/":
+        return "home"
+    if path in ("/catalog/", "/news/", "/collections/", "/schedule/"):
+        return "listing"
+    if re.fullmatch(r"/catalog/[^/]+/season-\d+/episode-\d+/", path):
+        return "episode"
+    if re.fullmatch(r"/catalog/[^/]+/season-\d+/", path):
+        return "season"
+    if re.fullmatch(r"/catalog/[^/]+/", path):
+        return "title"
+    if re.fullmatch(r"/news/[^/]+/", path):
+        return "article"
+    if re.fullmatch(r"/collections/[^/]+/", path):
+        return "collection"
+    if re.fullmatch(r"/legal/[^/]+/", path):
+        return "legal"
+    return "page"
+
+
+def player_contract_check(base_url: str, package: dict, out_dir: Path) -> Report:
+    """Плеер на живой странице: только атрибуты контракта, без утечки токена."""
+    report = Report("player-contract")
+    host = package["domain"]
+    allowed = {"ident", "season", "episode", "data-publisher-id", "data-title-id", "data-aggregator",
+               "only-voice", "priority-voice", "is-show-voice-only", "is-show-banner", "disable-licensed"}
+    observed = {}
+
+    token_env = (package.get("content_api") or {}).get("token_ref") or ""
+    token_value = os.environ.get(token_env, "") if token_env else ""
+
+    # Страницы серий ищутся обходом каталога, а не по sitemap: пока индексация
+    # сайта выключена, sitemap пуст, и проверка контракта молча не выполнялась бы.
+    episode_paths: list[str] = []
+    catalog_status, _, catalog = _get_host(base_url, "/catalog/", host)
+    if catalog_status == 200:
+        title_paths = sorted(set(re.findall(r'href="(/catalog/[^"/]+/)"', catalog)))
+        for title_path in title_paths[:5]:
+            title_status, _, title_body = _get_host(base_url, title_path, host)
+            if title_status != 200:
+                continue
+            for season_path in sorted(set(re.findall(r'href="(' + re.escape(title_path) + r'season-\d+/)"', title_body))):
+                season_status, _, season_body = _get_host(base_url, season_path, host)
+                if season_status != 200:
+                    continue
+                episode_paths.extend(sorted(set(
+                    re.findall(r'href="(' + re.escape(season_path) + r'episode-\d+/)"', season_body))))
+                if episode_paths:
+                    break
+            if episode_paths:
+                break
+    if not episode_paths:
+        report.counts = {"status": "skipped", "reason": "на сайте нет индексируемых страниц серий"}
+        (out_dir / "player-contract.json").write_text(
+            json.dumps({"host": host, "checked": []}, ensure_ascii=False, indent=2), encoding="utf-8")
+        return report
+
+    for path in episode_paths[:5]:
+        page_status, _, body = _get_host(base_url, path, host)
+        observed[path] = {"status": page_status}
+        if page_status != 200:
+            report.add(Finding("player-contract", "critical", path,
+                               f"Страница серии отвечает {page_status}.", "PC-0"))
+            continue
+
+        # На уровне HTTP проверяется то, что HTTP видит достоверно: значения
+        # атрибутов и отсутствие секрета. Полный состав атрибутов элемента
+        # проверяется в браузере, где он собран и доступен без догадок.
+        has_marker = "disable-licensed" in body
+        observed[path]["player_present"] = has_marker
+        if has_marker:
+            if not re.search(r'disable-licensed[^a-zA-Z0-9]{1,8}false', body):
+                report.add(Finding("player-contract", "critical", path,
+                                   "disable-licensed присутствует, но не равен false.", "PC-3"))
+            if "cdnvideohub.com" in body and "player.cdnvideohub.com/s2/stable/video-player.umd.js" not in body:
+                report.add(Finding("player-contract", "critical", path,
+                                   "Подключается не тот адрес скрипта плеера.", "PC-8"))
+        if token_value and token_value in body:
+            report.add(Finding("player-contract", "critical", path,
+                               "Токен Content API попал в страницу.", "PC-7"))
+
+    report.counts = {"pages": len(observed), "status": "executed"}
+    (out_dir / "player-contract.json").write_text(
+        json.dumps({"host": host, "checked": observed, **report.as_dict()},
+                   ensure_ascii=False, indent=2), encoding="utf-8")
+    return report
+
+
+def verify_payload_multisite(site_id: str, package: dict, base_url: str, *, job_id: str) -> tuple[list, list]:
+    """Ворота качества для blueprint payload-next-multisite."""
+    out_dir = PATHS.artifact_dir("verify", site_id, job_id)
+    reports = [
+        acceptance_routes_multisite(base_url, package, out_dir),
+        security_smoke_multisite(base_url, package, out_dir),
+        cross_site_uniqueness(base_url, package, out_dir),
+        player_contract_check(base_url, package, out_dir),
+    ]
+    severity = {"cross-site-uniqueness": "critical", "player-contract": "critical",
+                "acceptance-routes": "critical", "security-smoke": "critical"}
+    checks = []
+    for report in reports:
+        artifact = str((out_dir / f"{report.name}.json").relative_to(PATHS.root))
+        executed = report.counts.get("status") != "skipped"
+        checks.append(Check(
+            id=report.name,
+            command=f"factory verify --site {site_id} ({report.name})",
+            exit_code=0 if report.passed else (1 if executed else None),
+            passed=report.passed,
+            artifact=artifact,
+            counts=report.counts,
+            # Непроведённая проверка — не провал и не успех: она остаётся замечанием
+            # уровня major, из-за которого приёмка считается неполной, а production закрыт.
+            severity=severity.get(report.name, "critical") if executed else "major",
+        ))
+    return checks, reports
 
 
 def verify(site_id: str, package: dict, build_dir: Path, base_url: str, *, auth: str = "",

@@ -18,6 +18,7 @@ from factory.errors import FactoryError
 from factory.locks import LockBusy, site_lock
 from factory.report import build_result, write_result
 from factory.paths import PATHS
+from factory import verify as verify_mod
 from factory.seo import crawl as crawl_mod
 from factory.seo import lint as lint_mod
 from factory.seo import matrix as matrix_mod
@@ -328,6 +329,25 @@ def cmd_queue(args) -> int:
     return EXIT_OK
 
 
+def cmd_seo_cross_site(args) -> int:
+    """Ворота уникальности между сайтами одной группы на живом стенде."""
+    package, conf, target = _target_for(args.site)
+    base = args.base or target.base_url()
+    if not base:
+        print("сайт не развёрнут: сравнивать нечего. Сначала `factory deploy`.")
+        return EXIT_FAILED
+    out_dir = PATHS.artifact_dir("seo", args.site)
+    report = verify_mod.cross_site_uniqueness(base, package, out_dir)
+    _print(report.as_dict(), args.json)
+    if not args.json:
+        print(f"{report.name}: {'PASSED' if report.passed else 'FAILED'} | {report.counts}")
+        for finding in report.findings[:30]:
+            print(f"  [{finding.severity}] {finding.rule:8} {finding.url[:60]:62} {finding.message[:70]}")
+        print(f"артефакт: artifacts/seo/{args.site}/cross-site-uniqueness.json")
+    # Непроведённая проверка не «пройдена»: сравнивать было не с чем.
+    return EXIT_OK if report.passed else EXIT_FAILED
+
+
 def cmd_seo(args, mode: str) -> int:
     package, conf, target = _target_for(args.site)
     build_dir = _latest_build(args.site)
@@ -494,6 +514,10 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("queue_action", choices=["enqueue", "list"])
     p.add_argument("--site"); p.add_argument("--action", default="create")
     p.add_argument("--environment", default="staging"); p.set_defaults(func=cmd_queue)
+
+    p = sub.add_parser("seo-cross-site", help="SEO: уникальность между сайтами группы")
+    p.add_argument("--site", required=True); p.add_argument("--base")
+    p.set_defaults(func=cmd_seo_cross_site)
 
     for mode in ("plan", "lint", "crawl", "render", "report"):
         p = sub.add_parser(f"seo-{mode}", help=f"SEO: {mode}")

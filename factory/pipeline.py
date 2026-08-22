@@ -270,9 +270,15 @@ def run_job(site_id: str, *, environment: str | None = None, job_id: str | None 
             auth = target.staging_credentials() if hasattr(target, "staging_credentials") and env != "production" else ""
             if env != "production":
                 job.transition("STAGING_QA")
-            qa_checks, qa_reports = verify_mod.verify(site_id, package, built.output, base_url,
-                                                      auth=auth, environment=env, skip_browser=skip_browser,
-                                                      job_id=job.job_id)
+            if (package.get("blueprint") or "dle20") == "payload-next-multisite":
+                # У этого blueprint нет отрендеренных файлов: сайт динамический,
+                # поэтому ворота работают по живому HTTP с заголовком Host.
+                qa_checks, qa_reports = verify_mod.verify_payload_multisite(
+                    site_id, package, base_url, job_id=job.job_id)
+            else:
+                qa_checks, qa_reports = verify_mod.verify(site_id, package, built.output, base_url,
+                                                          auth=auth, environment=env,
+                                                          skip_browser=skip_browser, job_id=job.job_id)
             checks.extend(c.as_dict() for c in qa_checks)
             artifacts.extend(c.artifact for c in qa_checks)
             seo_dir = PATHS.artifact_dir("seo", site_id, job.job_id)
