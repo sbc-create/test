@@ -422,6 +422,24 @@ READ_ONLY = {
     "seq",
     "xxd",
     "cd",
+    # Инспекция хоста перед выкатом: только чтение, ничего не меняют.
+    "hostname",
+    "uname",
+    "arch",
+    "id",
+    "whoami",
+    "groups",
+    "getent",
+    "df",
+    "free",
+    "nproc",
+    "uptime",
+    "lscpu",
+    "lsblk",
+    "ss",
+    "netstat",
+    "ps",
+    "curl-config",
 }
 #: `sed` читает только без `-i`; запись разбирается отдельно.
 READ_ONLY_UNLESS_INPLACE = {"sed", "perl"}
@@ -526,6 +544,7 @@ GIT_READ = {
     "version",
     "notes",
     "bundle",
+    "clone",
 }
 GIT_WRITE = {
     "add",
@@ -545,13 +564,65 @@ GIT_WRITE = {
     "apply",
     "am",
 }
-#: Ветки, в которые разрешён обычный push.
-PUSH_BRANCH_RE = re.compile(r"(?:^|[\s:/])claude/[A-Za-z0-9._\-/]+")
+#: Ветки, в которые разрешён обычный push: рабочие ветки агента и ветки
+#: интеграции. `main`/`master` сюда не попадают и закрыты deny-правилами.
+PUSH_BRANCH_RE = re.compile(r"(?:^|[\s:/])(?:claude|cursor)/[A-Za-z0-9._\-/]+")
 
 DEP_SUBCOMMANDS = {"install", "ci", "sync", "add", "update", "i", "require"}
 
 #: Каталоги вне репозитория, запись в которые считается рабочей.
-SCRATCH_PREFIXES = ("/tmp/claude-", "/dev/null", "/dev/stdout", "/dev/stderr")
+#: `/srv/sites` — рабочая площадка фабрики: клоны сайтов, сборки, staging.
+#: `/srv/backups` — приёмник резервных копий. Создавать и читать можно;
+#: удаление backups остаётся под запретом в guard_rules и не смягчается здесь.
+SCRATCH_PREFIXES = (
+    "/tmp/claude-",
+    "/srv/sites",
+    "/srv/backups",
+    "/dev/null",
+    "/dev/stdout",
+    "/dev/stderr",
+)
+
+
+#: Ключевые слова оболочки, которые могут начинать сегмент.
+CONTROL_FLOW_KEYWORDS = (
+    "for",
+    "while",
+    "until",
+    "do",
+    "done",
+    "if",
+    "then",
+    "elif",
+    "else",
+    "fi",
+    "case",
+    "esac",
+    "in",
+    "select",
+    "function",
+    "{",
+    "}",
+    "!",
+)
+
+
+def strip_control_flow(text: str) -> str:
+    """Убрать ведущие ключевые слова оболочки из сегмента.
+
+    `for f in a b` вырождается в пустую строку (заголовок цикла ничего не
+    исполняет), а `do pnpm build` — в `pnpm build`, который и проверяется.
+    """
+    tokens = text.split()
+    index = 0
+    while index < len(tokens) and tokens[index] in CONTROL_FLOW_KEYWORDS:
+        if tokens[index] == "for" or tokens[index] == "select":
+            # `for NAME in WORDS` — до конца сегмента ничего не исполняется.
+            return ""
+        if tokens[index] == "case":
+            return ""
+        index += 1
+    return " ".join(tokens[index:])
 
 
 def _inside_repo(path: str, root: str) -> bool:
@@ -597,6 +668,51 @@ def _git_ok(tokens: list) -> bool:
     return False
 
 
+#: `gh`: чтение и работа с pull request — рутина цикла.
+GH_READ = {"pr", "issue", "repo", "api", "auth", "run", "release", "search", "browse", "label"}
+#: Необратимое или меняющее владение — закрыто, даже если `gh` разрешён.
+GH_BLOCKED_PAIRS = {
+    ("repo", "delete"),
+    ("repo", "archive"),
+    ("repo", "rename"),
+    ("repo", "transfer"),
+    ("pr", "merge"),
+    ("pr", "close"),
+    ("release", "delete"),
+    ("run", "cancel"),
+    ("auth", "token"),
+    ("auth", "logout"),
+    ("secret", "set"),
+    ("secret", "delete"),
+}
+#: Методы `gh api`, которые меняют состояние необратимо.
+GH_BLOCKED_API_METHODS = {"DELETE"}
+
+
+def _gh_ok(tokens: list) -> tuple[bool, str]:
+    """Разрешение для GitHub CLI.
+
+    Разрешены чтение, создание веток и pull request. Слияние и удаление
+    закрыты: PR сливает человек, а удаление необратимо. `gh auth token`
+    закрыт отдельно — он печатает секрет в лог.
+    """
+    args = [t for t in tokens[1:] if not t.startswith("-")]
+    if not args:
+        return True, "gh без подкоманды"
+    group = args[0]
+    action = args[1] if len(args) > 1 else ""
+    if (group, action) in GH_BLOCKED_PAIRS:
+        return False, f"gh {group} {action}: необратимая операция или вывод секрета"
+    if group == "api":
+        upper = [t.upper() for t in tokens[1:]]
+        for method in GH_BLOCKED_API_METHODS:
+            if method in upper:
+                return False, f"gh api -X {method}: необратимый вызов"
+    if group in GH_READ:
+        return True, f"gh {group}: работа с GitHub в рамках цикла"
+    return False, f"gh {group}: подкоманда вне профиля"
+
+
 def _dependency_install(prog: str, tokens: list) -> bool:
     args = [t for t in tokens[1:] if not t.startswith("-")]
     if prog in {"npm", "pnpm", "yarn", "composer", "poetry", "corepack"}:
@@ -612,6 +728,13 @@ def classify_segment(segment: str, root: str) -> tuple[bool, str]:
     if not text:
         return True, "пустой сегмент"
 
+    # Ключевые слова оболочки — синтаксис, а не программа. Снимаем их и
+    # судим настоящую команду: иначе `for f in *; do ls $f; done` выглядел
+    # бы как запуск неизвестной программы `for`.
+    text = strip_control_flow(text)
+    if not text:
+        return True, "синтаксис оболочки"
+
     for target in redirect_targets(segment):
         if not _inside_repo(target, root):
             return False, f"перенаправление за пределы репозитория: {target}"
@@ -623,6 +746,9 @@ def classify_segment(segment: str, root: str) -> tuple[bool, str]:
         if _git_ok(tokens):
             return True, "git в собственной ветке"
         return False, "git-операция вне профиля"
+
+    if prog == "gh":
+        return _gh_ok(tokens)
 
     if prog in READ_ONLY:
         return True, "чтение и локальный анализ"
@@ -810,6 +936,25 @@ def production_gate(command: str, root: str | None = None) -> tuple:
     return True, f"условия production выполнены для {site_id} на цели {target_ref}"
 
 
+#: Флаги, которые передают путь программе как конфигурацию, а не печатают его.
+#: `docker compose --env-file .../staging.env up` не раскрывает ни одного
+#: значения: файл читает docker, вывода нет. Запрещать здесь нечего, а под
+#: fail-closed этот запрет останавливал штатный запуск staging.
+CONFIG_FILE_FLAG_RE = re.compile(
+    r"--(?:env-file|config|compose-file|inventory|vault-password-file)(?:=|\s+)\S+"
+)
+
+
+def _without_config_file_args(text: str) -> str:
+    """Убрать аргументы-конфигурации перед поиском стоп-сигналов.
+
+    Отличие существенное: `cat .../staging.env` печатает секрет, а
+    `docker compose --env-file .../staging.env up` — нет. Первое остаётся
+    запрещённым: `cat` виден в тексте и после вырезания флага.
+    """
+    return CONFIG_FILE_FLAG_RE.sub(" ", text)
+
+
 def mandatory_confirmation(command: str, root: str | None = None) -> str:
     """Название стоп-сигнала, если команда его задевает, иначе пустая строка.
 
@@ -829,6 +974,7 @@ def mandatory_confirmation(command: str, root: str | None = None) -> str:
     searched = "\n".join(
         [text] + [b.partition("\n")[2] for b in bodies if b.partition("\n")[0] == "shell"]
     )
+    searched = _without_config_file_args(searched)
     hits = [label for pattern, label in STOP_RE if pattern.search(searched)]
     if not hits:
         return ""
