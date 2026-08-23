@@ -80,6 +80,21 @@ def strip_heredoc_bodies(command: str) -> tuple[str, list[str]]:
     return nested_remainder, bodies
 
 
+def _is_redirection(command: str, index: int, separator: str) -> bool:
+    """Является ли найденный разделитель частью перенаправления дескриптора."""
+    if separator not in ("&", "|"):
+        return False
+    if separator == "&":
+        # `>&`, `>>&`, `2>&1`: слева стоит `>` (возможно, через пробел).
+        left = command[:index].rstrip()
+        if left.endswith(">"):
+            return True
+        # `&>` и `&>>`: справа стоит `>`.
+        if command[index + 1: index + 2] == ">":
+            return True
+    return False
+
+
 def split_subcommands(command: str) -> list[str]:
     """Разбивает составную команду на подкоманды с учётом кавычек."""
     parts: list[str] = []
@@ -100,6 +115,14 @@ def split_subcommands(command: str) -> list[str]:
             i += 1
             continue
         matched = next((s for s in SEPARATORS if command.startswith(s, i)), None)
+        if matched and _is_redirection(command, i, matched):
+            # `2>&1`, `&>file`, `>&2` — это перенаправления дескрипторов, а не
+            # разделители команд. Раньше `&` в них разрывал строку, и разбор
+            # выдавал мусорные сегменты вида `cmd 2>` и `1`. На запреты это не
+            # влияло, а вот распознать безопасную команду мешало: сегмент `1`
+            # не совпадает ни с одним правилом, и вся команда уходила в запрос
+            # подтверждения.
+            matched = None
         if matched:
             parts.append("".join(buf))
             buf = []
@@ -135,6 +158,150 @@ def strip_wrappers(sub: str) -> str:
 
 # --- наборы правил -------------------------------------------------------------
 
+# --------------------------------------------------------------------------
+# Инвентарь: единственный источник истины о разрешённых целях
+# --------------------------------------------------------------------------
+
+def _repo_root() -> str:
+    """Корень репозитория относительно самого хука: .claude/hooks/ -> корень."""
+    return os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+
+#: Корень, из которого читается inventory. Пусто — корень репозитория.
+#: Переопределяется тестами через переменную окружения, а не правкой файла:
+#: доказать «хост из inventory разрешён» можно только на инвентаре, которого в
+#: боевом реестре нет, и придумывать ради этого настоящий хост запрещено.
+INVENTORY_ROOT_ENV = "FACTORY_INVENTORY_ROOT"
+
+
+def inventory_root() -> str:
+    return os.environ.get(INVENTORY_ROOT_ENV) or _repo_root()
+
+
+def _read_inventory(name: str, section: str) -> list:
+    """Читает список записей из inventory без внешних зависимостей.
+
+    YAML-парсер здесь недоступен намеренно: хук обязан работать, даже если
+    окружение сломано. Нужны только простые записи `ключ: значение`, поэтому
+    разбор построчный, а любая неожиданность трактуется как «записи нет».
+    """
+    path = os.path.join(inventory_root(), "inventory", name)
+    if not os.path.exists(path):
+        return []
+    entries: list = []
+    current = None
+    in_section = False
+    try:
+        with open(path, encoding="utf-8") as handle:
+            for raw in handle:
+                line = raw.rstrip("\n")
+                if line.strip().startswith("#") or not line.strip():
+                    continue
+                if not line.startswith(" ") and line.strip().rstrip(":") == section:
+                    in_section = "[]" not in line
+                    continue
+                if not in_section:
+                    continue
+                stripped = line.strip()
+                if stripped.startswith("- "):
+                    current = {}
+                    entries.append(current)
+                    stripped = stripped[2:].strip()
+                if current is None or ":" not in stripped:
+                    continue
+                key, _, value = stripped.partition(":")
+                current[key.strip()] = value.strip().strip('"').strip("'")
+    except OSError:
+        return []
+    return entries
+
+
+def inventory_ssh_hosts() -> set:
+    """Хосты, на которые оператор разрешил удалённый доступ."""
+    hosts = set()
+    for entry in _read_inventory("ssh-hosts.yaml", "hosts"):
+        for key in ("hostname", "host", "address", "ref"):
+            value = entry.get(key)
+            if value:
+                hosts.add(value.lower())
+    return hosts
+
+
+def inventory_dns_zones() -> set:
+    """Зоны, в которых оператор разрешил операции DNS."""
+    zones = set()
+    for entry in _read_inventory("dns-zones.yaml", "zones"):
+        value = entry.get("zone")
+        if value:
+            zones.add(value.lower())
+    return zones
+
+
+#: Флаги, значение которых — цель, а не файл: `ansible-playbook -l host`.
+TARGET_FLAGS = {"-l", "--limit"}
+#: Расширения, по которым видно, что аргумент — файл, а не хост.
+FILE_ARG_RE = re.compile(r"\.(?:ya?ml|cfg|ini|sh|tar|gz|tgz|zip|json|txt)$", re.IGNORECASE)
+
+
+def remote_targets(tokens: list) -> list:
+    """Все хосты, к которым обращается команда.
+
+    Разбор устроен по убыванию надёжности: явная цель (`-l host`), затем
+    спецификации `user@host` и `host:path`, и только потом голый аргумент.
+    Локальные пути (`build/`, `site.yml`) целью не считаются: приняв путь за
+    хост, проверка отказывала штатному `scp file user@host:/tmp/` и при этом
+    ничего не защищала.
+    """
+    args = list(tokens[1:])
+    hosts: list = []
+
+    for index, token in enumerate(args):
+        if token in TARGET_FLAGS and index + 1 < len(args):
+            hosts.append(args[index + 1])
+        elif token.startswith("--limit="):
+            hosts.append(token.split("=", 1)[1])
+    if hosts:
+        return [_host_of(h) for h in hosts if _host_of(h)]
+
+    for token in args:
+        if token.startswith("-"):
+            continue
+        # `user@host` и `host:path` — обе формы указывают удалённую цель.
+        if "@" in token or (
+            ":" in token and not token.startswith("/") and "/" not in token.split(":", 1)[0]
+        ):
+            hosts.append(token)
+    if hosts:
+        return [_host_of(h) for h in hosts if _host_of(h)]
+
+    for token in args:
+        if token.startswith("-") or "=" in token:
+            continue
+        if "/" in token or FILE_ARG_RE.search(token) or token.isdigit():
+            continue
+        host = _host_of(token)
+        if host:
+            return [host]
+    return []
+
+
+def _host_of(token: str) -> str:
+    candidate = token.strip().strip("'\"")
+    if "@" in candidate:
+        candidate = candidate.split("@", 1)[1]
+    if ":" in candidate:
+        candidate = candidate.split(":", 1)[0]
+    if not candidate or candidate.startswith("/") or candidate.startswith("."):
+        return ""
+    return candidate.lower()
+
+
+def remote_target(tokens: list) -> str:
+    """Первая цель команды. Для сообщения об отказе; проверяются все."""
+    targets = remote_targets(tokens)
+    return targets[0] if targets else ""
+
+
 REMOTE_EXEC = ("ssh", "scp", "sftp", "rsync", "ansible", "ansible-playbook", "ansible-console", "nc", "ncat", "telnet")
 PRIVILEGE = ("sudo", "su", "doas", "pkexec")
 FIREWALL_DNS = ("iptables", "ip6tables", "nft", "ufw", "firewall-cmd", "nsupdate", "resolvectl", "route", "ip")
@@ -168,10 +335,27 @@ def _host_from_fetch(sub: str) -> str | None:
     return m.group(1).lower() if m else None
 
 
+def inventory_network_hosts() -> set:
+    """Хосты интеграций, внесённые оператором в inventory."""
+    hosts = set()
+    for entry in _read_inventory("network-allowlist.yaml", "hosts"):
+        for key in ("host", "hostname", "address", "domain"):
+            value = entry.get(key)
+            if value:
+                hosts.add(value.lower())
+    return hosts
+
+
 def network_allowlist() -> set[str]:
-    """Allowlist текущего задания. Пусто = сеть в режиме B запрещена."""
+    """Allowlist текущего задания плюс реестр интеграций. Пусто = сеть закрыта.
+
+    Реестр читается наравне с переменной окружения: цель, которую оператор внёс
+    в inventory, не должна требовать ещё и переменной в каждом запуске, иначе
+    health-check утверждённого сайта останавливает работу.
+    """
     raw = os.environ.get("FACTORY_NETWORK_ALLOWLIST", "")
-    return {h.strip().lower() for h in raw.split(",") if h.strip()}
+    hosts = {h.strip().lower() for h in raw.split(",") if h.strip()}
+    return hosts | inventory_network_hosts()
 
 
 def closed_world() -> bool:
@@ -246,10 +430,38 @@ def evaluate_subcommand(sub: str, depth: int = 0) -> Decision:
         return Decision(DENY, "Неконтролируемый sudo/su запрещён. Привилегированные операции выполняет deployment-слой по sudo_allowlist из inventory.", "G-PRIV")
 
     if prog in REMOTE_EXEC:
+        # Профиль UNATTENDED_SAFE: удалённый доступ разрешён к целям, которые
+        # оператор заранее внёс в inventory, и запрещён ко всем остальным.
+        # Пустой inventory означает не поломку, а честное отсутствие переданных
+        # хостов: до их появления удалённый доступ закрыт целиком.
+        targets = remote_targets(tokens)
+        approved = inventory_ssh_hosts()
+        if targets and all(t in approved for t in targets):
+            return Decision(PASS)
+        target = next((t for t in targets if t not in approved), "")
         return Decision(
             DENY,
-            f"Прямой удалённый доступ `{prog}` запрещён. Используй `python3 -m factory deploy <site_id> --environment <env>`: wrapper проверяет manifest, allowlist целей, авторизацию, backup, lock и quality gates.",
+            f"Хост «{target or 'не определён'}» отсутствует в inventory/ssh-hosts.yaml. "
+            f"Удалённый доступ `{prog}` разрешён только к утверждённым целям; для выката "
+            "используй команду deploy фабрики — она проверяет manifest, авторизацию, "
+            "backup, lock и quality gates.",
             "G-REMOTE",
+        )
+
+    if prog == "nsupdate":
+        # DNS разрешён только для зон, внесённых оператором в inventory.
+        # Зона ищется по всей команде: nsupdate принимает её и аргументом, и в
+        # теле запроса, поэтому проверять один токен недостаточно.
+        zones = inventory_dns_zones()
+        low = stripped.lower()
+        matched_zone = next((z for z in zones if z and z in low), "")
+        if matched_zone:
+            return Decision(PASS)
+        return Decision(
+            DENY,
+            "Зона не найдена в inventory/dns-zones.yaml. Операции DNS разрешены только "
+            "для заранее внесённых зон и имён; расширять список по своей инициативе нельзя.",
+            "G-NET-CFG",
         )
 
     if prog in FIREWALL_DNS and prog != "ip" or (prog == "ip" and len(tokens) > 1 and tokens[1] in {"route", "addr", "link"} and any(t in {"add", "del", "change"} for t in tokens)):
@@ -292,7 +504,14 @@ def evaluate_subcommand(sub: str, depth: int = 0) -> Decision:
     for target in re.findall(r">>?\s*([^\s<>|&;]+)", stripped):
         if evaluate_write(target).decision == DENY:
             return Decision(DENY, f"Запись в защищённый путь «{target}» запрещена.", "G-WRITE")
-    if prog in ("tee", "cp", "mv", "install", "ln", "truncate", "sed", "dd", "rsync", "chmod", "chown"):
+    writers = ("tee", "cp", "mv", "install", "ln", "truncate", "dd", "rsync", "chmod", "chown")
+    # `sed` пишет только с `-i`: без него `sed -n '1,50p' path` — чтение, и
+    # запрещать его как запись значило запрещать чтение защищённого файла тем
+    # правилом, которое охраняет запись.
+    sed_in_place = prog == "sed" and any(
+        t == "-i" or t.startswith("-i") or t.startswith("--in-place") for t in tokens[1:]
+    )
+    if prog in writers or sed_in_place:
         for token in stripped.split()[1:]:
             candidate = token.strip("'\"")
             if evaluate_write(candidate).decision == DENY:

@@ -34,6 +34,13 @@ SSH-хостов/DNS-зон/доменов по своей инициативе.
 - Лицензионный архив DLE не коммитится. Сторонние/nulled-сборки не скачиваются.
 - `bypassPermissions` не используется.
 
+## Профиль UNATTENDED_SAFE
+
+Правка файлов репозитория, сборка, тесты, линтеры, зависимости и git в ветке `claude/*`
+идут без подтверждений: решение выдают PreToolUse-хуки поверх `seo_operator/unattended.py`.
+Профиль умеет только разрешать; запреты остаются в `guard_rules` и `guardrails`.
+Стоп-сигналы — `docs/UNATTENDED_SAFE.md`, матрица — `tests/unit/test_permission_matrix.py`.
+
 ## Команды
 
 ```bash
