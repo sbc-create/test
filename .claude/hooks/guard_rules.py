@@ -8,8 +8,8 @@ from __future__ import annotations
 
 import os
 import re
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Iterable
 
 ALLOW = "allow"
 DENY = "deny"
@@ -421,7 +421,6 @@ def evaluate_subcommand(sub: str, depth: int = 0) -> Decision:
         return Decision(PASS)
     tokens = stripped.split()
     prog = os.path.basename(tokens[0]) if tokens else ""
-    low = stripped.lower()
 
     if BYPASS_RE.search(stripped):
         return Decision(DENY, "Запрещён обход системы разрешений/песочницы.", "G-BYPASS")

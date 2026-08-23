@@ -1,6 +1,5 @@
 """REQ-SSH: least privilege, host key pinning, узкие права."""
 import pytest
-import yaml
 
 from factory import inventory
 from factory.errors import BlockedAccess

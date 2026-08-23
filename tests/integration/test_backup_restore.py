@@ -3,7 +3,7 @@ import tarfile
 
 import pytest
 
-from factory import build as build_mod, inventory
+from factory import inventory
 from factory.paths import PATHS
 from factory.targets import build_target
 
@@ -70,6 +70,7 @@ def test_restore_of_missing_archive_fails_honestly(target, tmp_path):
 def test_pipeline_verifies_restore(pilot_package):
     """Полный прогон обязан подтвердить восстановимость, а не только сделать архив."""
     import json
+
     from factory import pipeline
     outcome = pipeline.run_job("pilot-local", skip_browser=True)
     data = json.loads(outcome.result_path.read_text(encoding="utf-8"))

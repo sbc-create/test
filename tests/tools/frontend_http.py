@@ -140,7 +140,7 @@ def patch_json(port: int, host: str, path: str, payload: dict, token: str) -> tu
         return error.code, {"raw": error.read().decode("utf-8", "replace")[:400]}
 
 
-def check_comments(port: int, results: "Results") -> None:
+def check_comments(port: int, results: Results) -> None:
     """Комментарии: отправка только через серверный endpoint, публикация — только после модерации."""
     host_a = SITES["a"]["host"]
     host_b = SITES["b"]["host"]

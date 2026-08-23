@@ -4,7 +4,7 @@ import uuid
 import pytest
 
 from factory.errors import ALL_STATES, FAILURE_STATES, NON_RETRYABLE
-from factory.state import IllegalTransition, JobState, TRANSITIONS
+from factory.state import TRANSITIONS, IllegalTransition, JobState
 
 
 @pytest.fixture
@@ -67,6 +67,6 @@ def test_failure_states_are_terminal_for_the_run(job):
 
 
 def test_non_retryable_failures_are_declared():
-    assert NON_RETRYABLE <= set(FAILURE_STATES)
+    assert set(FAILURE_STATES) >= NON_RETRYABLE
     for state in ("BLOCKED_INPUT", "BLOCKED_LICENSE", "BLOCKED_RIGHTS", "BLOCKED_AUTHORIZATION", "BLOCKED_SEO"):
         assert state in NON_RETRYABLE, f"{state} нельзя ретраить: вход от этого не появится"

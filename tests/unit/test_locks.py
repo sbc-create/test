@@ -12,16 +12,14 @@ from factory.locks import LockBusy, is_locked, site_lock  # noqa: E402
 def test_lock_is_exclusive_in_process():
     with site_lock("lock-demo", "staging"):
         assert is_locked("lock-demo", "staging")
-        with pytest.raises(LockBusy):
-            with site_lock("lock-demo", "staging"):
-                pass
+        with pytest.raises(LockBusy), site_lock("lock-demo", "staging"):
+            pass
     assert not is_locked("lock-demo", "staging")
 
 
 def test_different_environments_do_not_block_each_other():
-    with site_lock("lock-demo", "staging"):
-        with site_lock("lock-demo", "production"):
-            assert True
+    with site_lock("lock-demo", "staging"), site_lock("lock-demo", "production"):
+        assert True
 
 
 def _hold(ready, release):
@@ -38,9 +36,8 @@ def test_lock_is_exclusive_across_processes():
     worker.start()
     try:
         assert ready.wait(10)
-        with pytest.raises(LockBusy):
-            with site_lock("lock-proc", "staging"):
-                pass
+        with pytest.raises(LockBusy), site_lock("lock-proc", "staging"):
+            pass
     finally:
         release.set()
         worker.join(10)

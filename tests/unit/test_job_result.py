@@ -8,8 +8,13 @@ from factory.report import build_result, validate_result, write_result
 
 
 def _minimal(**overrides):
-    payload = dict(job_id="j1", site_id="pilot-local", environment="staging", status="DONE",
-                   started_at="2026-08-21T00:00:00Z")
+    payload = {
+        "job_id": "j1",
+        "site_id": "pilot-local",
+        "environment": "staging",
+        "status": "DONE",
+        "started_at": "2026-08-21T00:00:00Z",
+    }
     payload.update(overrides)
     return build_result(**payload)
 

@@ -4,7 +4,6 @@
 а фиксированный набор файлов, по которым можно проверить заявленные результаты.
 """
 import json
-import pathlib
 import shutil
 import sys
 

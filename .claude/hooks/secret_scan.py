@@ -27,7 +27,8 @@ def main() -> int:
     try:
         if os.path.getsize(path) > MAX_BYTES:
             return 0
-        text = open(path, "r", encoding="utf-8", errors="replace").read()
+        with open(path, encoding="utf-8", errors="replace") as handle:
+            text = handle.read()
     except OSError:
         return 0
     findings = rules.scan_secret_content(text)

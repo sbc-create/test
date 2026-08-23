@@ -10,7 +10,6 @@ from __future__ import annotations
 import json
 import os
 import subprocess
-import sys
 import time
 from pathlib import Path
 from urllib.parse import urlparse
@@ -18,9 +17,9 @@ from urllib.parse import urlparse
 import yaml
 
 from factory import audit
-from factory.redaction import redact
 from factory.errors import BlockedAccess, BlockedInput
 from factory.paths import PATHS
+from factory.redaction import redact
 
 SOURCES = PATHS.root / "inventory" / "reference-sources.yaml"
 SCRIPT = PATHS.root / "tests" / "tools" / "measure_reference.js"

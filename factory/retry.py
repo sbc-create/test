@@ -7,8 +7,9 @@ from __future__ import annotations
 
 import random
 import time
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable, TypeVar
+from typing import TypeVar
 
 from factory.errors import FactoryError
 
@@ -42,7 +43,7 @@ class RetryExhausted(RuntimeError):
 def is_retryable(exc: BaseException) -> bool:
     if isinstance(exc, FactoryError):
         return exc.retryable
-    return isinstance(exc, (TimeoutError, ConnectionError, OSError))
+    return isinstance(exc, TimeoutError | ConnectionError | OSError)
 
 
 def run_with_retry(

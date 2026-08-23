@@ -72,8 +72,10 @@ def cmd_factory_portfolio(args) -> int:
             mark = "OK " if site["readiness"] == "READY" else "БЛОК"
             print(f"[{mark}] {site['site_id']:22} {site['readiness']:28} {site['base_url']}")
         counts = view["counts"]
-        print(f"\nвсего сайтов {counts['total']}, готово {counts['ready']}, "
-              f"заблокировано {counts['blocked']}")
+        print(
+            f"\nвсего сайтов {counts['total']}, готово {counts['ready']}, "
+            f"заблокировано {counts['blocked']}"
+        )
     return 0 if view["counts"]["ready"] else 3
 
 

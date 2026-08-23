@@ -1,7 +1,8 @@
 """REQ-DRYRUN: plan и dry-run не меняют инфраструктуру."""
 import json
 
-from factory import build as build_mod, inventory, pipeline, validation
+from factory import build as build_mod
+from factory import inventory, pipeline
 from factory.targets import build_target
 
 

@@ -12,19 +12,20 @@ import time
 import uuid
 from pathlib import Path
 
-from factory import (audit, blueprint, build as build_mod, inventory, knowledge, licensing,
-                     pipeline, queue as queue_mod, validation)
+from factory import audit, blueprint, inventory, knowledge, licensing, pipeline, validation
+from factory import build as build_mod
+from factory import queue as queue_mod
+from factory import verify as verify_mod
 from factory.errors import FactoryError
 from factory.locks import LockBusy, site_lock
-from factory.report import build_result, write_result
 from factory.paths import PATHS
-from factory import verify as verify_mod
+from factory.report import build_result, write_result
 from factory.seo import crawl as crawl_mod
 from factory.seo import lint as lint_mod
 from factory.seo import matrix as matrix_mod
 from factory.seo import render_check
 from factory.seo.report import combine
-from factory.state import JobState, all_jobs
+from factory.state import all_jobs
 from factory.targets import build_target
 
 EXIT_OK, EXIT_FAILED, EXIT_BLOCKED = 0, 1, 2
@@ -450,7 +451,7 @@ def cmd_env_report(args) -> int:
     tools = {name: bool(shutil.which(name)) for name in
              ("python3", "php", "node", "npm", "git", "ansible-playbook", "nginx", "mysql", "docker", "rsync")}
     payload = {"tools": tools, "inventory": inventory.as_dict(),
-               "browser": dict(zip(("available", "detail"), render_check.available())),
+               "browser": dict(zip(("available", "detail"), render_check.available(), strict=False)),
                "knowledge_freeze": knowledge.freeze_version()}
     out = PATHS.artifact_dir("env") / "env-report.json"
     out.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -512,18 +513,23 @@ def main(argv: list[str] | None = None) -> int:
         p.add_argument("--site", required=True)
         return p
 
-    p = with_site("validate", "проверить пакет сайта"); p.set_defaults(func=cmd_validate)
-    p = with_site("plan", "показать план без мутаций"); p.set_defaults(func=cmd_plan)
+    p = with_site("validate", "проверить пакет сайта")
+    p.set_defaults(func=cmd_validate)
+    p = with_site("plan", "показать план без мутаций")
+    p.set_defaults(func=cmd_plan)
     p = with_site("build", "собрать сайт")
-    p.add_argument("--environment", choices=["staging", "production"]); p.add_argument("--force", action="store_true")
+    p.add_argument("--environment", choices=["staging", "production"])
+    p.add_argument("--force", action="store_true")
     p.set_defaults(func=cmd_build)
     p = with_site("deploy", "выкатить сайт через конвейер")
     p.add_argument("--environment", choices=["staging", "production"])
-    p.add_argument("--dry-run", action="store_true"); p.add_argument("--skip-browser", action="store_true")
+    p.add_argument("--dry-run", action="store_true")
+    p.add_argument("--skip-browser", action="store_true")
     p.add_argument("--allow-production", action="store_true", help="явное подтверждение оператора для production")
     p.set_defaults(func=cmd_deploy)
     p = with_site("verify", "прогнать ворота качества")
-    p.add_argument("--base"); p.add_argument("--skip-browser", action="store_true")
+    p.add_argument("--base")
+    p.add_argument("--skip-browser", action="store_true")
     p.add_argument("--job-id", help="изолировать артефакты проверки в каталоге задания")
     p.set_defaults(func=cmd_verify)
     p = with_site("rollback", "откатить на предыдущий релиз")
@@ -534,41 +540,54 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--purge", action="store_true", help="удалить каталог цели вместе с релизами")
     p.set_defaults(func=cmd_decommission)
     p = sub.add_parser("status", help="состояние заданий и очереди")
-    p.add_argument("--site"); p.set_defaults(func=cmd_status)
+    p.add_argument("--site")
+    p.set_defaults(func=cmd_status)
     p = sub.add_parser("resume", help="продолжить обработку очереди")
-    p.add_argument("--max-age", type=int, default=3600); p.add_argument("--skip-browser", action="store_true")
+    p.add_argument("--max-age", type=int, default=3600)
+    p.add_argument("--skip-browser", action="store_true")
     p.set_defaults(func=cmd_resume)
-    p = with_site("report", "последний результат задания"); p.set_defaults(func=cmd_report)
+    p = with_site("report", "последний результат задания")
+    p.set_defaults(func=cmd_report)
 
     p = sub.add_parser("queue", help="работа с очередью")
     p.add_argument("queue_action", choices=["enqueue", "list"])
-    p.add_argument("--site"); p.add_argument("--action", default="create")
-    p.add_argument("--environment", default="staging"); p.set_defaults(func=cmd_queue)
+    p.add_argument("--site")
+    p.add_argument("--action", default="create")
+    p.add_argument("--environment", default="staging")
+    p.set_defaults(func=cmd_queue)
 
     p = sub.add_parser("reference-audit", help="read-only измерение референсного интерфейса")
-    p.add_argument("--ref", required=True); p.set_defaults(func=cmd_reference)
+    p.add_argument("--ref", required=True)
+    p.set_defaults(func=cmd_reference)
 
     p = sub.add_parser("seo-cross-site", help="SEO: уникальность между сайтами группы")
-    p.add_argument("--site", required=True); p.add_argument("--base")
+    p.add_argument("--site", required=True)
+    p.add_argument("--base")
     p.set_defaults(func=cmd_seo_cross_site)
 
     for mode in ("plan", "lint", "crawl", "render", "report"):
         p = sub.add_parser(f"seo-{mode}", help=f"SEO: {mode}")
-        p.add_argument("--site", required=True); p.add_argument("--base")
+        p.add_argument("--site", required=True)
+        p.add_argument("--base")
         p.set_defaults(func=lambda a, m=mode: cmd_seo(a, m))
 
     p = sub.add_parser("knowledge", help="база знаний")
     p.add_argument("knowledge_action", choices=["freeze", "verify"])
-    p.add_argument("--version", default="unversioned"); p.set_defaults(func=cmd_knowledge)
+    p.add_argument("--version", default="unversioned")
+    p.set_defaults(func=cmd_knowledge)
 
     p = sub.add_parser("blueprint", help="проверка blueprint")
     p.add_argument("blueprint_action", choices=["check"], nargs="?", default="check")
-    p.add_argument("--blueprint", default="dle20"); p.set_defaults(func=cmd_blueprint)
+    p.add_argument("--blueprint", default="dle20")
+    p.set_defaults(func=cmd_blueprint)
 
-    p = sub.add_parser("env-report", help="read-only отчёт об окружении"); p.set_defaults(func=cmd_env_report)
-    p = sub.add_parser("input-request", help="сформировать пакет недостающих данных"); p.set_defaults(func=cmd_input_request)
+    p = sub.add_parser("env-report", help="read-only отчёт об окружении")
+    p.set_defaults(func=cmd_env_report)
+    p = sub.add_parser("input-request", help="сформировать пакет недостающих данных")
+    p.set_defaults(func=cmd_input_request)
     p = sub.add_parser("selfcheck", help="самопроверка конфигурации Claude Code")
-    p.add_argument("what", nargs="?", default="claude-config"); p.set_defaults(func=cmd_selfcheck)
+    p.add_argument("what", nargs="?", default="claude-config")
+    p.set_defaults(func=cmd_selfcheck)
 
     args = parser.parse_args(argv)
     PATHS.ensure_runtime()

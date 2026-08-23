@@ -9,9 +9,9 @@ from __future__ import annotations
 import html
 import json
 import re
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Iterable
 
 import yaml
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
@@ -40,7 +40,7 @@ class Route:
     page_number: int = 1
 
     def as_dict(self) -> dict:
-        return {k: v for k, v in self.__dict__.items()}
+        return dict(self.__dict__)
 
 
 @dataclass
@@ -191,9 +191,9 @@ class SiteRenderer:
                 "context": context,
             })
             return False
-        if item.get("image") and not self._image(item, required_for=context):
-            return False
-        return True
+        if not item.get("image"):
+            return True
+        return bool(self._image(item, required_for=context))
 
     # ------------------------------------------------------------------ контекст сайта
     def build_site_context(self, *, environment: str) -> dict:
@@ -278,15 +278,14 @@ class SiteRenderer:
                         crumbs: list[dict], indexable: bool = True) -> None:
         policy = self._policy(page_type)
         pagination_policy = self._policy("paginated_page")
-        if not items:
-            if policy.get("empty_behaviour") == "not_published":
-                self.result.skip({
-                    "id": base_path,
-                    "reason": "Листинг пуст: публикация как indexable 200 запрещена матрицей (soft 404).",
-                    "required_input": "Материалы для раздела или удаление раздела из навигации",
-                    "context": page_type,
-                })
-                return
+        if not items and policy.get("empty_behaviour") == "not_published":
+            self.result.skip({
+                "id": base_path,
+                "reason": "Листинг пуст: публикация как indexable 200 запрещена матрицей (soft 404).",
+                "required_input": "Материалы для раздела или удаление раздела из навигации",
+                "context": page_type,
+            })
+            return
         pages = [items[i:i + self.per_page] for i in range(0, len(items), self.per_page)] or [[]]
         total = len(pages)
         for index, chunk in enumerate(pages, start=1):

@@ -1,7 +1,9 @@
 """REQ-IDEMPOTENT: повтор не создаёт дубль."""
-from factory import build as build_mod, inventory, validation
-from factory.targets import build_target
 import pytest
+
+from factory import build as build_mod
+from factory import inventory, validation
+from factory.targets import build_target
 
 
 def test_build_id_is_content_addressed():

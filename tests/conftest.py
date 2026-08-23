@@ -20,8 +20,8 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / ".claude" / "hooks"))
 
-from factory.paths import PATHS  # noqa: E402
 from factory import validation  # noqa: E402
+from factory.paths import PATHS  # noqa: E402
 
 
 @pytest.fixture(scope="session")

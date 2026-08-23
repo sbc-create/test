@@ -95,7 +95,7 @@ def test_allowlisted_host_passes(monkeypatch):
 
 
 def test_secret_content_scanner():
-    assert g.scan_secret_content("-----BEGIN PRIVATE KEY-----\nabc\n") 
+    assert g.scan_secret_content("-----BEGIN PRIVATE KEY-----\nabc\n")
     assert g.scan_secret_content('password: "s3cret-value-1234"')
     assert not g.scan_secret_content("password_secret_ref: env:FACTORY_DB_PASSWORD")
     assert not g.scan_secret_content("обычный текст без секретов")
