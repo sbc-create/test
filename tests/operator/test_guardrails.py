@@ -192,3 +192,27 @@ class TestReadOnlyGitVerbs:
 
     def test_write_verb_not_smuggled_in(self):
         assert classify(ActionContext(command="git gc --prune=now")).decision is Decision.BLOCK
+
+
+class TestRepositoryInspectionVerbs:
+    """Inspecting another branch is read-only work and must not interrupt an
+    unattended run. These verbs were falling through to default-deny."""
+
+    @pytest.mark.parametrize(
+        "command",
+        [
+            "git ls-tree --name-only origin/main",
+            "git ls-tree -r --name-only origin/main",
+            "git merge-base origin/main HEAD",
+            "git grep -l CDNVideoHub origin/main",
+            "git name-rev HEAD",
+            "git whatchanged -1",
+        ],
+    )
+    def test_inspection_verbs_allowed(self, command):
+        assert classify(ActionContext(command=command)).decision is Decision.ALLOW
+
+    def test_inspection_does_not_unlock_writes(self):
+        """Allowing `grep` must not allow every git subcommand."""
+        assert classify(ActionContext(command="git gc --prune=now")).decision is Decision.BLOCK
+        assert classify(ActionContext(command="git clean -fdx")).decision is Decision.BLOCK

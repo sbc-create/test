@@ -84,7 +84,8 @@ BLOCKED_PATTERNS: list[tuple[str, str]] = [
 ALLOWED_PATTERNS: list[tuple[str, str]] = [
     (
         r"^git\s+(status|log|diff|show|branch|rev-parse|rev-list|ls-files|ls-remote"
-        r"|fetch|blame|describe|shortlog|count-objects|cat-file|for-each-ref|bundle)\b",
+        r"|fetch|blame|describe|shortlog|count-objects|cat-file|for-each-ref|bundle"
+        r"|ls-tree|merge-base|name-rev|grep|whatchanged)\b",
         "read-only git",
     ),
     (
