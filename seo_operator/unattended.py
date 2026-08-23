@@ -40,26 +40,41 @@ class Verdict:
 # оставаться безопасным даже если его вызовут в одиночку.
 # --------------------------------------------------------------------------
 STOP_PATTERNS: tuple[tuple[str, str], ...] = (
-    (r"git\s+push\b[^\n]*(?:--force\b|--force-with-lease\b|\s-f\b|\+refs/)", "force push"),
-    (r"git\s+push\b[^\n]*\s--delete\b|git\s+push\b[^\n]*\s:\s*\S", "удаление удалённой ветки"),
-    (r"git\s+push\b[^\n]*\b(?:main|master)\b", "push напрямую в main"),
+    (
+        r"git\s+push\b[^;&|\n]*(?:--force\b|--force-with-lease\b|\s-f\b|\+refs/)",
+        "force push",
+    ),
+    (
+        r"git\s+push\b[^;&|\n]*\s--delete\b|git\s+push\b[^;&|\n]*\s:\s*\S",
+        "удаление удалённой ветки",
+    ),
+    # Ограничение одним сегментом обязательно: `git push origin claude/x &&
+    # git checkout main` — обычная последовательность, а не push в main.
+    (r"git\s+push\b[^;&|\n]*\b(?:main|master)\b", "push напрямую в main"),
     (r"git\s+(?:reset\s+--hard|filter-branch|filter-repo)\b", "переписывание истории"),
-    (r"git\s+rebase\b[^\n]*\s-i\b|git\s+rebase\b[^\n]*--interactive", "интерактивный rebase"),
+    (
+        r"git\s+rebase\b[^;&|\n]*\s-i\b|git\s+rebase\b[^;&|\n]*--interactive",
+        "интерактивный rebase",
+    ),
     (r"git\s+branch\s+-[dD]\b|git\s+update-ref\s+-d\b", "удаление ветки"),
     (r"git\s+clean\b", "удаление неотслеживаемых файлов"),
     (r"\b(?:dropdb|dropuser)\b", "удаление базы или роли"),
     (r"\bDROP\s+(?:DATABASE|SCHEMA|TABLE)\b|\bTRUNCATE\b", "разрушительный SQL"),
-    (r"\bDELETE\s+FROM\b(?![^\n]*\bWHERE\b)", "DELETE без WHERE"),
+    (r"\bDELETE\s+FROM\b(?![^;&|\n]*\bWHERE\b)", "DELETE без WHERE"),
     (r"\bterraform\s+destroy\b|\baws\s+s3\s+rb\b", "удаление инфраструктуры"),
-    (r"\b(?:backup|backups|snapshot)\b[^\n]*\b(?:rm|delete|destroy|purge)\b", "удаление бэкапа"),
-    (r"\b(?:rm|delete|destroy|purge)\b[^\n]*\b(?:backup|backups)\b", "удаление бэкапа"),
     (
-        r"\b(?:zone|domain|domains)\b[^\n]*\b(?:delete|destroy|transfer|release)\b",
+        r"\b(?:backup|backups|snapshot)\b[^;&|\n]*\b(?:rm|delete|destroy|purge)\b",
+        "удаление бэкапа",
+    ),
+    (r"\b(?:rm|delete|destroy|purge)\b[^;&|\n]*\b(?:backup|backups)\b", "удаление бэкапа"),
+    (
+        r"\b(?:zone|domain|domains)\b[^;&|\n]*\b(?:delete|destroy|transfer|release)\b",
         "удаление или перенос зоны/домена",
     ),
-    (r"\b(?:domain|domains|dns)\b[^\n]*\b(?:register|purchase|buy|renew)\b", "покупка домена"),
+    (r"\b(?:domain|domains|dns)\b[^;&|\n]*\b(?:register|purchase|buy|renew)\b", "покупка домена"),
     (
-        r"\b(?:billing|payment|invoice|subscription|checkout)\b[^\n]*\b(?:create|pay|charge|confirm)\b",
+        r"\b(?:billing|payment|invoice|subscription|checkout)\b[^;&|\n]*"
+        r"\b(?:create|pay|charge|confirm)\b",
         "оплата услуг",
     ),
     (
@@ -67,7 +82,7 @@ STOP_PATTERNS: tuple[tuple[str, str], ...] = (
         "обход разрешений",
     ),
     (r"--no-verify\b", "обход git-хуков"),
-    (r"(?:rm|mv|chmod\s+-x)\s+[^\n]*\.claude/hooks/", "отключение хуков"),
+    (r"(?:rm|mv|chmod\s+-x)\s+[^;&|\n]*\.claude/hooks/", "отключение хуков"),
     (r"\$\{?(?:[A-Z_]*(?:SECRET|TOKEN|PASSWORD|API_KEY)[A-Z_]*)\b", "подстановка значения секрета"),
     (r"(?:^|[;&|]\s*)printenv\b|(?:^|[;&|]\s*)env\s*(?:\||>|;|$)", "дамп окружения"),
     # Секретные пути закрыты и здесь: профиль обязан быть безопасным в одиночку,
@@ -81,7 +96,7 @@ STOP_PATTERNS: tuple[tuple[str, str], ...] = (
     # выполняет их сама фабрика: разрешение выдаётся на команду, а не на среду.
     (r"--environment[= ]\s*production\b|--env[= ]\s*production\b", "операция над production"),
     (
-        r"\bfactory\s+(?:deploy|rollback)\b(?![^\n]*--environment[= ]\s*staging\b)",
+        r"\bfactory\s+(?:deploy|rollback)\b(?![^;&|\n]*--environment[= ]\s*staging\b)",
         "выкат или откат вне staging",
     ),
     (
@@ -90,14 +105,16 @@ STOP_PATTERNS: tuple[tuple[str, str], ...] = (
     ),
     # Удаление истории, конфигурации защиты, знаний и самих сайтов — не рутина.
     (
-        r"\brm\b[^\n]*(?:\s|/)(?:\.git|\.claude|sites|knowledge|inventory|artifacts)(?:/|\s|$)",
+        r"(?:^|[;&|]\s*)(?:\S*/)?rm\b[^;&|\n]*(?:\s|/)"
+        r"(?:\.git|\.claude|sites|knowledge|inventory|artifacts)(?:/|\s|$)",
         "удаление истории, защиты, знаний или сайтов",
     ),
     # Отключение наблюдаемости — тот же класс, что удаление бэкапа: после него
     # уже нельзя доказать, что произошло.
     (
-        r"\b(?:rm|mv|truncate|shred)\b[^\n]*\b(?:audit|journal|var/log)\b|"
-        r"\b(?:rm|mv|truncate|shred)\b[^\n]*\.jsonl\b",
+        r"(?:^|[;&|]\s*)(?:\S*/)?(?:rm|mv|truncate|shred)\b[^;&|\n]*"
+        r"\b(?:audit|journal|var/log)\b|"
+        r"(?:^|[;&|]\s*)(?:\S*/)?(?:rm|mv|truncate|shred)\b[^;&|\n]*\.jsonl\b",
         "удаление журнала или аудита",
     ),
     (r">\s*(?:var/audit|var/log)/", "затирание журнала перенаправлением"),
@@ -106,14 +123,15 @@ STOP_PATTERNS: tuple[tuple[str, str], ...] = (
     # `test_site_packages_keep_recovery_enabled`: команда — не единственный путь,
     # и делать вид, что разбор команд закрывает оба, было бы неправдой.
     (
-        r"\b(?:sed|perl|awk)\b[^\n]*(?:before_mutation|auto_rollback_on_smoke_failure"
+        r"(?:^|[;&|]\s*)(?:\S*/)?(?:sed|perl|awk)\b[^;&|\n]*"
+        r"(?:before_mutation|auto_rollback_on_smoke_failure"
         r"|restore_test|health_endpoint|keep_releases)",
         "выключение бэкапа, отката или health-check",
     ),
     # Ослабление защиты ветки на стороне GitHub.
     (
         r"\bbranch(?:es)?/[^\s]*/protection\b|\benforce_admins\b\s*=?\s*false|"
-        r"\brequired_status_checks\b[^\n]*\bnull\b",
+        r"\brequired_status_checks\b[^;&|\n]*\bnull\b",
         "изменение branch protection",
     ),
 )
