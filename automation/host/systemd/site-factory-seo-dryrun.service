@@ -1,0 +1,27 @@
+[Unit]
+Description=site-factory: SEO operator dry-run against the synthetic tenant
+Documentation=file:///srv/site-factory/repo/docs/seo-operator/automation-policy.md
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/srv/site-factory/repo
+EnvironmentFile=/etc/site-factory/environment
+# --fixture: the synthetic tenant, so this is a self-test of the operator and
+# not a daily "no data" report. The real daily run stays unscheduled until the
+# portfolio registry and the data sources are provided — see automation-policy.md.
+ExecStart=/srv/site-factory/repo/bin/seo-operator dry-run --fixture
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=read-only
+ReadWritePaths=/var/log/site-factory /srv/site-factory/repo/var
+MemoryMax=1G
+CPUQuota=100%
+TasksMax=128
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,27 @@
+[Unit]
+Description=site-factory: health of the control host
+Documentation=file:///srv/site-factory/repo/docs/INFRASTRUCTURE.md
+After=network-online.target nginx.service docker.service
+
+[Service]
+Type=oneshot
+# Runs as root because `nginx -t` cannot open its error log and pid file
+# otherwise, and an unmeasured check is worth less than a measured one.
+User=root
+EnvironmentFile=/etc/site-factory/environment
+ExecStart=/srv/site-factory/repo/automation/host/site-factory-health.sh
+# Alerts make the unit fail on purpose: `systemctl --failed` and
+# OnFailure become the notification channel until an external one is provided.
+SuccessExitStatus=0
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=read-only
+ReadWritePaths=/var/log/site-factory /var/log/nginx /run
+MemoryMax=256M
+CPUQuota=50%
+TasksMax=64
+TimeoutStartSec=120
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,14 @@
+[Unit]
+Description=site-factory: run the queue worker regularly
+# NOT ENABLED on this host yet. The queue is empty, no target is
+# production_capable, and no site package is authorised, so enabling it would
+# schedule work that has no input. Enable it in the same change that adds the
+# first real site — see docs/INFRASTRUCTURE.md.
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=2min
+AccuracySec=30s
+
+[Install]
+WantedBy=timers.target

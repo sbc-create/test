@@ -1,0 +1,11 @@
+[Unit]
+Description=site-factory: daily verified backup of control-host state
+
+[Timer]
+OnCalendar=*-*-* 03:20:00 UTC
+RandomizedDelaySec=300
+AccuracySec=1min
+Persistent=true
+
+[Install]
+WantedBy=timers.target
