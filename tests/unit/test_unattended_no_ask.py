@@ -95,6 +95,17 @@ def test_unknown_tool_is_denied_not_asked() -> None:
     assert decide("SomeToolInventedTomorrow") == "deny"
 
 
+def test_session_bookkeeping_survives_fail_closed() -> None:
+    """Учёт работы не должен погибнуть вместе с неизвестными инструментами.
+
+    fail-closed по умолчанию закрывает всё неназванное. Список задач агента
+    не касается ни файлов, ни сети, но под этим правилом закрылся бы вместе
+    с остальным — и агент потерял бы способность вести собственный учёт.
+    """
+    for tool in ("TaskCreate", "TaskUpdate", "TaskList", "TaskGet", "Skill"):
+        assert decide(tool) == "allow", tool
+
+
 def test_unparseable_payload_fails_closed_to_deny() -> None:
     assert hookguard.decide({})["hookSpecificOutput"]["permissionDecision"] == "deny"
 

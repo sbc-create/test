@@ -17,6 +17,29 @@ READ_ONLY_TOOLS = frozenset(
     {"Read", "Glob", "Grep", "NotebookRead", "TodoWrite", "Task", "ToolSearch"}
 )
 
+# Бухгалтерия самого агента: список задач, планы, отчёты о находках. Эти
+# инструменты не касаются файлов, сети и внешних систем — они меняют только
+# состояние сессии. Под fail-closed их пришлось назвать явно: иначе
+# UNATTENDED_NO_ASK закрывает собственный учёт работы и агент теряет
+# возможность вести список задач.
+SESSION_BOOKKEEPING_TOOLS = frozenset(
+    {
+        "TaskCreate",
+        "TaskUpdate",
+        "TaskList",
+        "TaskGet",
+        "TaskOutput",
+        "TaskStop",
+        "EnterPlanMode",
+        "ExitPlanMode",
+        "ListAgents",
+        "ReportFindings",
+        "Skill",
+        "ScheduleWakeup",
+        "AskUserQuestion",
+    }
+)
+
 # Tools that write inside the working tree. Safe under UNATTENDED_SAFE because
 # the session works in its own branch and cannot push without authorization.
 BRANCH_LOCAL_WRITE_TOOLS = frozenset({"Write", "Edit", "MultiEdit", "NotebookEdit"})
@@ -72,6 +95,9 @@ def decide(payload: dict) -> dict:
 
     if tool in READ_ONLY_TOOLS:
         return _out("allow", f"{tool}: read-only инструмент")
+
+    if tool in SESSION_BOOKKEEPING_TOOLS:
+        return _out("allow", f"{tool}: учёт работы внутри сессии, без внешних эффектов")
 
     if tool in BRANCH_LOCAL_WRITE_TOOLS:
         path = str(tool_input.get("file_path", ""))
