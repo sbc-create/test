@@ -1,0 +1,11 @@
+[Unit]
+Description=site-factory: daily SEO operator dry-run self-test
+
+[Timer]
+OnCalendar=*-*-* 06:00:00 UTC
+RandomizedDelaySec=300
+AccuracySec=1min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

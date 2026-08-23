@@ -1,0 +1,31 @@
+[Unit]
+Description=site-factory: prove the stand database restores from its own dump
+Documentation=file:///srv/site-factory/repo/docs/DISASTER_RECOVERY.md
+After=network-online.target postgresql.service
+Requires=postgresql.service
+
+[Service]
+Type=oneshot
+# Root because the dump is taken by the cluster owner (`su postgres`) so the
+# application password never reaches a command line. That design is why the
+# unprivileged full run has to skip this stage — this unit is what keeps the
+# gate enforced instead of merely documented.
+User=root
+WorkingDirectory=/srv/site-factory/repo
+EnvironmentFile=/etc/site-factory/environment
+ExecStart=/srv/site-factory/repo/.venv/bin/python tests/tools/restore_proof.py
+# The proof writes into var/ as root; hand it back so the operator user keeps
+# working with its own checkout afterwards.
+ExecStartPost=/bin/chown -R claude:claude /srv/site-factory/repo/var
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=read-only
+ReadWritePaths=/srv/site-factory/repo/var /var/log/site-factory
+MemoryMax=1G
+CPUQuota=100%
+TasksMax=128
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

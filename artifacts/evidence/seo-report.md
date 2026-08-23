@@ -18,7 +18,7 @@
 
 ## seo-render — passed
 
-Счётчики: `{"status": "ok", "exit_code": 0, "viewports": ["mobile-360", "mobile-390", "tablet-768", "laptop-1024", "desktop-1440"], "pages": 14, "screenshots": 15, "lab_lcp_ms_max": 184, "lab_cls_max": 0, "lab_transfer_bytes_max": 11382, "progressive_enhancement": {"items_before": 12, "items_after": 16, "has_button": true, "items_without_js": 4, "pagination_links_without_js": 2}, "note": "Лабораторные метрики. Полевые Core Web Vitals ими не подменяются."}`
+Счётчики: `{"status": "ok", "exit_code": 0, "viewports": ["mobile-360", "mobile-390", "tablet-768", "laptop-1024", "desktop-1440"], "pages": 14, "screenshots": 15, "lab_lcp_ms_max": 260, "lab_cls_max": 0, "lab_transfer_bytes_max": 11382, "progressive_enhancement": {"items_before": 12, "items_after": 16, "has_button": true, "items_without_js": 4, "pagination_links_without_js": 2}, "note": "Лабораторные метрики. Полевые Core Web Vitals ими не подменяются."}`
 
 | severity | check | url | сообщение |
 |---|---|---|---|
@@ -63,6 +63,6 @@
 
 ## performance-budget — passed
 
-Счётчики: `{"status": "ok", "lab_lcp_ms_max": 184, "lab_cls_max": 0, "lab_transfer_bytes_max": 11382, "budgets": {"lab_lcp_ms": 2500, "lab_cls": 0.1, "lab_total_bytes": 800000, "field_targets": {"lcp_ms": 2500, "inp_ms": 200, "cls": 0.1}}, "field_targets_note": "Полевые LCP ≤ 2.5 s, INP ≤ 200 ms, CLS ≤ 0.1 на 75-м перцентиле измеряются только на реальном трафике."}`
+Счётчики: `{"status": "ok", "lab_lcp_ms_max": 260, "lab_cls_max": 0, "lab_transfer_bytes_max": 11382, "budgets": {"lab_lcp_ms": 2500, "lab_cls": 0.1, "lab_total_bytes": 800000, "field_targets": {"lcp_ms": 2500, "inp_ms": 200, "cls": 0.1}}, "field_targets_note": "Полевые LCP ≤ 2.5 s, INP ≤ 200 ms, CLS ≤ 0.1 на 75-м перцентиле измеряются только на реальном трафике."}`
 
 Находок нет.

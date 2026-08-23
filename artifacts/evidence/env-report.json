@@ -5,11 +5,11 @@
     "node": true,
     "npm": true,
     "git": true,
-    "ansible-playbook": false,
-    "nginx": false,
+    "ansible-playbook": true,
+    "nginx": true,
     "mysql": false,
     "docker": true,
-    "rsync": false
+    "rsync": true
   },
   "inventory": {
     "targets": [
@@ -29,6 +29,23 @@
         "database": "none",
         "purpose": "пилот и автотесты SEO/QA-контура на реальном HTTP без внешней сети",
         "production_capable": false
+      },
+      {
+        "ref": "payload-local",
+        "adapter": "payload_multisite",
+        "environments": [
+          "staging"
+        ],
+        "root": "var/targets/payload-local",
+        "bind_host": "127.0.0.1",
+        "port_range": [
+          8110,
+          8129
+        ],
+        "web_server": "next_start",
+        "database": "postgres",
+        "purpose": "стенд трёх аниме-сайтов на общей CMS: сборка, применение тенанта, откат",
+        "production_capable": false
       }
     ],
     "ssh_hosts": [],
@@ -38,7 +55,7 @@
   },
   "browser": {
     "available": true,
-    "detail": "/opt/pw-browsers/chromium-1194/chrome-linux/chrome"
+    "detail": "/opt/pw-browsers/chromium-1234/chrome-linux64/chrome"
   },
-  "knowledge_freeze": "2026-08-21.1"
+  "knowledge_freeze": "2026-08-23.3"
 }

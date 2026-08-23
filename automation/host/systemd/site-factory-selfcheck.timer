@@ -1,0 +1,11 @@
+[Unit]
+Description=site-factory: daily self-check of the factory checkout
+
+[Timer]
+OnCalendar=*-*-* 04:00:00 UTC
+RandomizedDelaySec=300
+AccuracySec=1min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

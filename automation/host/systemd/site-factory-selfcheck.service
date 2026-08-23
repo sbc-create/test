@@ -1,0 +1,27 @@
+[Unit]
+Description=site-factory: read-only self-check of the factory checkout
+Documentation=file:///srv/site-factory/repo/docs/INFRASTRUCTURE.md
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/srv/site-factory/repo
+EnvironmentFile=/etc/site-factory/environment
+ExecStart=/srv/site-factory/repo/automation/host/site-factory-selfcheck.sh
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=read-only
+# Read-only over the checkout: a self-check that can rewrite what it checks
+# is not a check. pytest still needs a writable cache, which PrivateTmp gives.
+ReadWritePaths=/var/log/site-factory
+Environment="PYTEST_ADDOPTS=-p no:cacheprovider"
+MemoryMax=1G
+CPUQuota=150%
+TasksMax=256
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

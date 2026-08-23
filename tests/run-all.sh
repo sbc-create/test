@@ -109,10 +109,15 @@ else
   fi
 fi
 
+PW_BROWSERS="${PLAYWRIGHT_BROWSERS_PATH:-/opt/pw-browsers}"
 if [ "${FACTORY_ALL_BROWSERS:-0}" = "1" ]; then
   run "cross-browser"  "npx playwright test --project=firefox --project=webkit --reporter=list"
+elif ls -d "$PW_BROWSERS"/firefox-* > /dev/null 2>&1 && ls -d "$PW_BROWSERS"/webkit-* > /dev/null 2>&1; then
+  # Движки на месте — причина пропуска другая, и называть надо её. Прежний текст
+  # («в образе только Chromium») на таком хосте был бы просто неправдой.
+  skip "cross-browser" "движки установлены, но прогон не запрошен: включается FACTORY_ALL_BROWSERS=1"
 else
-  skip "cross-browser" "в образе только Chromium: firefox и webkit в /opt/pw-browsers отсутствуют"
+  skip "cross-browser" "firefox и webkit не установлены в $PW_BROWSERS"
 fi
 
 if command -v ansible-playbook > /dev/null 2>&1; then
@@ -121,10 +126,26 @@ else
   skip "ansible-syntax" "ansible-playbook не установлен на управляющем хосте"
 fi
 
-if command -v nginx > /dev/null 2>&1; then
-  run "nginx-config-test" "nginx -t"
-else
+if ! command -v nginx > /dev/null 2>&1; then
   skip "nginx-config-test" "nginx не установлен на управляющем хосте"
+else
+  # Вывод берётся в переменную, а не через конвейер: при `set -o pipefail`
+  # статусом `nginx -t | grep` был бы ненулевой код самого nginx, и ветка
+  # «не хватило прав» не сработала бы никогда.
+  NGINX_TEST_OUT="$(nginx -t 2>&1)" || true
+  case "$NGINX_TEST_OUT" in
+    *"Permission denied"*)
+      # `nginx -t` открывает error_log и pid-файл, поэтому без root он не
+      # отвечает на вопрос «конфигурация верна» — он вообще не выполняется.
+      # По правилу самого прогона это SKIPPED с причиной, а не FAIL: иначе
+      # непроведённую проверку нельзя отличить от настоящей поломки конфига.
+      # Привилегированный прогон делает таймер site-factory-health от root.
+      skip "nginx-config-test" "nginx -t требует root на этом хосте; привилегированный прогон — таймер site-factory-health"
+      ;;
+    *)
+      run "nginx-config-test" "nginx -t"
+      ;;
+  esac
 fi
 
 # ---------------------------------------------------------------------------
@@ -153,12 +174,28 @@ else
   run "payload-admin-smoke" "python3 tests/tools/admin_smoke.py"
   run "payload-frontend"    "python3 tests/tools/frontend_http.py"
   run "payload-cross-site"  "python3 tests/tools/cross_site_uniqueness.py"
-  run "payload-restore"     "python3 tests/tools/restore_proof.py"
+  # Дамп снимает владелец кластера (`su postgres`), чтобы пароль приложения не
+  # попадал в командную строку, поэтому шаг требует root. Под обычным
+  # пользователем wrapper отказывает — это непроведённая проверка, а не
+  # сломанное восстановление, и записывать её как FAIL значит утверждать
+  # неправду о состоянии бэкапа. Автономно гейт держит таймер
+  # site-factory-restore-proof, который запускается от root.
+  if [ "$(id -u)" -eq 0 ]; then
+    run "payload-restore"   "python3 tests/tools/restore_proof.py"
+  else
+    skip "payload-restore" "снятие дампа требует root: sudo .venv/bin/python tests/tools/restore_proof.py (автономно — таймер site-factory-restore-proof)"
+  fi
 
-  if [ -x /opt/pw-browsers/chromium-1194/chrome-linux/chrome ]; then
+  # Путь к Chromium берётся из FACTORY_CHROMIUM — так его разрешают и
+  # tests/tools/browser_multisite.py, и factory/seo/render_check.py, и оба
+  # playwright-конфига. Жёсткий путь оставлен запасным вариантом: имя каталога
+  # содержит ревизию Playwright и меняется вместе с ней, поэтому проверка по
+  # одному только этому пути объявляла бы установленный браузер отсутствующим.
+  CHROMIUM_BIN="${FACTORY_CHROMIUM:-/opt/pw-browsers/chromium-1194/chrome-linux/chrome}"
+  if [ -x "$CHROMIUM_BIN" ]; then
     run "payload-browser"   "python3 tests/tools/browser_multisite.py"
   else
-    skip "payload-browser" "Chromium не найден в /opt/pw-browsers"
+    skip "payload-browser" "Chromium не найден: $CHROMIUM_BIN"
   fi
 
   REFERENCE_STATUS=$(python3 -m factory reference-audit --ref amd-online --json 2>/dev/null | python3 -c "import json,sys; print(json.load(sys.stdin).get('status','unknown'))" 2>/dev/null || echo unknown)
@@ -169,10 +206,29 @@ else
   fi
 fi
 
+# Отчёт об окружении — часть набора доказательств: без него `env-report.json`
+# просто исчезал из artifacts/evidence при каждой пересборке, потому что
+# пересоздать его в прогоне было нечем.
+run "env-report" "python3 -m factory env-report > /dev/null"
+
+# Манифест скриншотов: сами PNG в git не едут, а без манифеста утверждение
+# «скриншоты сняты» проверить нечем. Раньше `screenshots.md` не пересоздавался
+# ничем и просто исчезал из доказательств при каждой пересборке.
+if ls artifacts/qa/pilot-local/*/screenshot-*.png > /dev/null 2>&1; then
+  run "screenshot-manifest" "python3 tests/tools/screenshot_manifest.py"
+else
+  skip "screenshot-manifest" "снимков нет: браузерная проверка не выполнялась"
+fi
+
+# Сводка считается ПЕРЕД сбором доказательств: она пишет artifacts/qa/run-all.json,
+# который collect_evidence.py и копирует. При обратном порядке в git уезжала
+# сводка ПРЕДЫДУЩЕГО прогона — доказательства отставали ровно на один запуск.
+python3 tests/tools/summarize_run.py
+SUMMARY_CODE=$?
+
 # Доказательства последнего прогона фиксируются в artifacts/evidence/.
 python3 tests/tools/collect_evidence.py > /dev/null || true
 
 # Код возврата прогона — это код сводки: она возвращает ненулевой при провалах.
 # Раньше он терялся, и прогон с десятью провалами завершался нулём.
-python3 tests/tools/summarize_run.py
-exit $?
+exit $SUMMARY_CODE

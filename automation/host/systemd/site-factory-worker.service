@@ -1,0 +1,27 @@
+[Unit]
+Description=site-factory: process the job queue (factory resume)
+Documentation=file:///srv/site-factory/repo/docs/OPERATIONS.md
+After=network-online.target postgresql.service
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/srv/site-factory/repo
+EnvironmentFile=/etc/site-factory/environment
+# Type=oneshot, not a loop: every run is finite, idempotent, and continues from
+# the last checkpoint. Restated from docs/DISASTER_RECOVERY.md, which is where
+# this unit comes from.
+ExecStart=/srv/site-factory/repo/.venv/bin/python -m factory resume
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=read-only
+ReadWritePaths=/srv/site-factory/repo/var /srv/site-factory/repo/queue /srv/site-factory/repo/artifacts /srv/sites /var/log/site-factory
+MemoryMax=3G
+CPUQuota=200%
+TasksMax=512
+TimeoutStartSec=3600
+
+[Install]
+WantedBy=multi-user.target

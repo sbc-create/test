@@ -5,14 +5,14 @@
       "command": "python3 -m factory knowledge verify",
       "exit_code": "0",
       "status": "PASS",
-      "note": "0s"
+      "note": "1s"
     },
     {
       "check": "claude-config",
       "command": "python3 -m factory selfcheck",
       "exit_code": "0",
       "status": "PASS",
-      "note": "1s"
+      "note": "0s"
     },
     {
       "check": "static-python",
@@ -33,21 +33,21 @@
       "command": "for f in tools/*.js themes/*/assets/*.js tests/e2e/*.js tests/e2e-multisite/*.js playwright.config.js playwright.multisite.config.js; do node --check \"$f\" || exit 1; done",
       "exit_code": "0",
       "status": "PASS",
-      "note": "0s"
+      "note": "1s"
     },
     {
       "check": "static-yaml",
       "command": "python3 tests/tools/check_yaml.py",
       "exit_code": "0",
       "status": "PASS",
-      "note": "1s"
+      "note": "0s"
     },
     {
       "check": "unit-tests",
       "command": "python3 -m pytest tests/unit tests/test_traceability.py -q -m 'not slow'",
       "exit_code": "0",
       "status": "PASS",
-      "note": "5s"
+      "note": "9s"
     },
     {
       "check": "validate-pilot",
@@ -75,21 +75,21 @@
       "command": "python3 -m pytest tests/integration -q -m 'not slow'",
       "exit_code": "0",
       "status": "PASS",
-      "note": "1s"
+      "note": "2s"
     },
     {
       "check": "integration-slow",
       "command": "python3 -m pytest tests/integration -q -m slow",
       "exit_code": "0",
       "status": "PASS",
-      "note": "11s"
+      "note": "14s"
     },
     {
       "check": "seo-lint",
       "command": "python3 -m factory seo-lint --site pilot-local > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "1s"
+      "note": "0s"
     },
     {
       "check": "blueprint-profile-gate",
@@ -103,7 +103,7 @@
       "command": "python3 -m factory deploy --site pilot-local > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "96s"
+      "note": "113s"
     },
     {
       "check": "seo-crawl",
@@ -124,28 +124,28 @@
       "command": "npx playwright test && test -s \"artifacts/qa/pilot-local/playwright-report.json\"",
       "exit_code": "0",
       "status": "PASS",
-      "note": "15s"
+      "note": "24s"
     },
     {
       "check": "cross-browser",
       "command": "-",
       "exit_code": "-",
       "status": "SKIPPED",
-      "note": "в образе только Chromium: firefox и webkit в /opt/pw-browsers отсутствуют"
+      "note": "движки установлены, но прогон не запрошен: включается FACTORY_ALL_BROWSERS=1"
     },
     {
       "check": "ansible-syntax",
-      "command": "-",
-      "exit_code": "-",
-      "status": "SKIPPED",
-      "note": "ansible-playbook не установлен на управляющем хосте"
+      "command": "ansible-playbook --syntax-check automation/ansible/deploy-site.yml",
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "0s"
     },
     {
       "check": "nginx-config-test",
       "command": "-",
       "exit_code": "-",
       "status": "SKIPPED",
-      "note": "nginx не установлен на управляющем хосте"
+      "note": "nginx -t требует root на этом хосте; привилегированный прогон — таймер site-factory-health"
     },
     {
       "check": "payload-secret-scan",
@@ -159,14 +159,14 @@
       "command": "(cd blueprints/payload-next-multisite/app && npx tsc --noEmit -p tsconfig.json)",
       "exit_code": "0",
       "status": "PASS",
-      "note": "2s"
+      "note": "1s"
     },
     {
       "check": "payload-seo-matrix",
       "command": "blueprints/payload-next-multisite/app/node_modules/.bin/tsx blueprints/payload-next-multisite/app/tests/seo-matrix.ts",
       "exit_code": "0",
       "status": "PASS",
-      "note": "0s"
+      "note": "1s"
     },
     {
       "check": "payload-player",
@@ -187,56 +187,56 @@
       "command": "python3 tests/tools/with_app_env.py --scope anime --push -- blueprints/payload-next-multisite/app/node_modules/.bin/tsx blueprints/payload-next-multisite/app/tests/tenant-isolation.ts",
       "exit_code": "0",
       "status": "PASS",
-      "note": "5s"
+      "note": "12s"
     },
     {
       "check": "payload-content-api",
       "command": "python3 tests/tools/with_app_env.py --scope anime --push -- blueprints/payload-next-multisite/app/node_modules/.bin/tsx blueprints/payload-next-multisite/app/tests/content-api.ts",
-      "exit_code": "1",
-      "status": "FAIL",
-      "note": "4s"
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "9s"
     },
     {
       "check": "payload-mutation",
       "command": "python3 tests/tools/mutation_isolation.py",
-      "exit_code": "1",
-      "status": "FAIL",
-      "note": "362s"
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "297s"
     },
     {
       "check": "payload-admin-smoke",
       "command": "python3 tests/tools/admin_smoke.py",
       "exit_code": "0",
       "status": "PASS",
-      "note": "9s"
+      "note": "13s"
     },
     {
       "check": "payload-frontend",
       "command": "python3 tests/tools/frontend_http.py",
       "exit_code": "0",
       "status": "PASS",
-      "note": "79s"
+      "note": "109s"
     },
     {
       "check": "payload-cross-site",
       "command": "python3 tests/tools/cross_site_uniqueness.py",
-      "exit_code": "1",
-      "status": "FAIL",
-      "note": "54s"
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "70s"
     },
     {
       "check": "payload-restore",
-      "command": "python3 tests/tools/restore_proof.py",
-      "exit_code": "0",
-      "status": "PASS",
-      "note": "12s"
+      "command": "-",
+      "exit_code": "-",
+      "status": "SKIPPED",
+      "note": "снятие дампа требует root: sudo .venv/bin/python tests/tools/restore_proof.py (автономно — таймер site-factory-restore-proof)"
     },
     {
       "check": "payload-browser",
       "command": "python3 tests/tools/browser_multisite.py",
-      "exit_code": "1",
-      "status": "FAIL",
-      "note": "108s"
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "138s"
     },
     {
       "check": "reference-audit",
@@ -246,7 +246,7 @@
       "note": "измерение amd.online недоступно из этой среды (статус: unknown)"
     }
   ],
-  "passed": 27,
-  "failed": 4,
+  "passed": 31,
+  "failed": 0,
   "skipped": 4
 }

@@ -13,120 +13,120 @@
       "route": "home",
       "path": "/",
       "transferKb": 486,
-      "lcpMs": 1004,
+      "lcpMs": 1496,
       "cls": 0,
       "domNodes": 156,
-      "domContentLoadedMs": 1033
+      "domContentLoadedMs": 1422
     },
     {
       "site": "a",
       "route": "catalog",
       "path": "/catalog/",
       "transferKb": 483,
-      "lcpMs": 200,
+      "lcpMs": 348,
       "cls": 0,
       "domNodes": 120,
-      "domContentLoadedMs": 183
+      "domContentLoadedMs": 247
     },
     {
       "site": "a",
       "route": "title",
       "path": "/catalog/stand-title-1/",
-      "transferKb": 489,
-      "lcpMs": 280,
+      "transferKb": 488,
+      "lcpMs": 396,
       "cls": 0,
       "domNodes": 109,
-      "domContentLoadedMs": 255
+      "domContentLoadedMs": 322
     },
     {
       "site": "a",
-      "route": "episode",
-      "path": "/catalog/stand-title-1/season-1/episode-1/",
-      "transferKb": 491,
-      "lcpMs": 312,
-      "cls": 0,
-      "domNodes": 105,
-      "domContentLoadedMs": 243
-    },
-    {
-      "site": "b",
-      "route": "home",
-      "path": "/",
-      "transferKb": 489,
-      "lcpMs": 316,
-      "cls": 0,
-      "domNodes": 118,
-      "domContentLoadedMs": 220
-    },
-    {
-      "site": "b",
-      "route": "catalog",
-      "path": "/catalog/",
-      "transferKb": 483,
-      "lcpMs": 244,
-      "cls": 0,
-      "domNodes": 118,
-      "domContentLoadedMs": 273
-    },
-    {
-      "site": "b",
-      "route": "title",
-      "path": "/catalog/stand-title-1/",
-      "transferKb": 491,
-      "lcpMs": 244,
-      "cls": 0,
-      "domNodes": 109,
-      "domContentLoadedMs": 228
-    },
-    {
-      "site": "b",
       "route": "episode",
       "path": "/catalog/stand-title-1/season-1/episode-1/",
       "transferKb": 488,
-      "lcpMs": 244,
+      "lcpMs": 332,
+      "cls": 0,
+      "domNodes": 105,
+      "domContentLoadedMs": 311
+    },
+    {
+      "site": "b",
+      "route": "home",
+      "path": "/",
+      "transferKb": 483,
+      "lcpMs": 292,
+      "cls": 0,
+      "domNodes": 118,
+      "domContentLoadedMs": 287
+    },
+    {
+      "site": "b",
+      "route": "catalog",
+      "path": "/catalog/",
+      "transferKb": 482,
+      "lcpMs": 228,
+      "cls": 0,
+      "domNodes": 118,
+      "domContentLoadedMs": 154
+    },
+    {
+      "site": "b",
+      "route": "title",
+      "path": "/catalog/stand-title-1/",
+      "transferKb": 488,
+      "lcpMs": 292,
+      "cls": 0,
+      "domNodes": 109,
+      "domContentLoadedMs": 281
+    },
+    {
+      "site": "b",
+      "route": "episode",
+      "path": "/catalog/stand-title-1/season-1/episode-1/",
+      "transferKb": 489,
+      "lcpMs": 396,
       "cls": 0,
       "domNodes": 103,
-      "domContentLoadedMs": 195
+      "domContentLoadedMs": 307
     },
     {
       "site": "c",
       "route": "home",
       "path": "/",
-      "transferKb": 482,
-      "lcpMs": 264,
+      "transferKb": 480,
+      "lcpMs": 324,
       "cls": 0,
       "domNodes": 104,
-      "domContentLoadedMs": 280
+      "domContentLoadedMs": 258
     },
     {
       "site": "c",
       "route": "catalog",
       "path": "/catalog/",
       "transferKb": 482,
-      "lcpMs": 204,
+      "lcpMs": 252,
       "cls": 0,
       "domNodes": 118,
-      "domContentLoadedMs": 139
+      "domContentLoadedMs": 207
     },
     {
       "site": "c",
       "route": "title",
       "path": "/catalog/stand-title-1/",
-      "transferKb": 492,
-      "lcpMs": 260,
+      "transferKb": 488,
+      "lcpMs": 300,
       "cls": 0,
-      "domNodes": 113,
-      "domContentLoadedMs": 187
+      "domNodes": 109,
+      "domContentLoadedMs": 231
     },
     {
       "site": "c",
       "route": "episode",
       "path": "/catalog/stand-title-1/season-1/episode-1/",
-      "transferKb": 490,
-      "lcpMs": 264,
+      "transferKb": 487,
+      "lcpMs": 232,
       "cls": 0,
       "domNodes": 103,
-      "domContentLoadedMs": 184
+      "domContentLoadedMs": 215
     }
   ]
 }

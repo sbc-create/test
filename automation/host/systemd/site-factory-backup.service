@@ -1,0 +1,25 @@
+[Unit]
+Description=site-factory: back up control-host state and prove the restore
+Documentation=file:///srv/site-factory/repo/docs/DISASTER_RECOVERY.md
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+EnvironmentFile=/etc/site-factory/environment
+ExecStart=/srv/site-factory/repo/automation/host/site-factory-backup.sh
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=read-only
+ReadWritePaths=/srv/backups /var/log/site-factory
+# The archive and its restore verification both fit well inside this; a run
+# that needs more has grown something it should not have.
+MemoryMax=1G
+CPUQuota=100%
+TasksMax=128
+TimeoutStartSec=1800
+
+[Install]
+WantedBy=multi-user.target

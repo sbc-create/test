@@ -436,6 +436,26 @@ def cmd_knowledge(args) -> int:
     return EXIT_OK if ok else EXIT_FAILED
 
 
+def cmd_db(args) -> int:
+    """Провизия локальной базы стенда.
+
+    Команда существовала как обещание: `factory.database.load_credentials`
+    отправляет оператора именно сюда (`required_input`), но подкоманды не было,
+    и на чистом хосте стенд blueprint'а поднять было нечем. Сам привилегированный
+    шаг делает проверенный wrapper `factory.database.provision` — здесь только
+    разбор аргументов, без единой собственной операции над кластером.
+    """
+    from factory import database
+
+    credentials = database.provision(args.scope, environment=args.environment, rotate=args.rotate)
+    # Значение пароля не печатается никогда: наружу идёт только ссылка на файл.
+    _print(credentials.as_dict(), args.json)
+    if not args.json:
+        print(f"база: {credentials.database} | роль: {credentials.user} | "
+              f"пароль: {credentials.password_ref}")
+    return EXIT_OK
+
+
 def cmd_blueprint(args) -> int:
     status = blueprint.check(args.blueprint)
     _print(status.as_dict(), args.json)
@@ -575,6 +595,14 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("knowledge_action", choices=["freeze", "verify"])
     p.add_argument("--version", default="unversioned")
     p.set_defaults(func=cmd_knowledge)
+
+    p = sub.add_parser("db", help="провизия локальной базы стенда")
+    p.add_argument("db_action", choices=["provision"], nargs="?", default="provision")
+    p.add_argument("--scope", required=True)
+    # production сюда не попадает: wrapper сам отказывает, но и CLI не предлагает.
+    p.add_argument("--environment", default="staging", choices=["staging"])
+    p.add_argument("--rotate", action="store_true", help="сменить пароль существующей роли")
+    p.set_defaults(func=cmd_db)
 
     p = sub.add_parser("blueprint", help="проверка blueprint")
     p.add_argument("blueprint_action", choices=["check"], nargs="?", default="check")
