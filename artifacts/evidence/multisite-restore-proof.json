@@ -1,5 +1,5 @@
 {
-  "backup": "var/backups/restore-proof/anime-20260822T092454Z.sql",
+  "backup": "var/backups/restore-proof/anime-20260823T144912Z.sql",
   "before": {
     "tenants": 3,
     "tenants:digest": "d9edf33f9d571fcd",
@@ -32,7 +32,7 @@
     "episodes": 32,
     "episodes:digest": "db47de5bbceb6c68",
     "posts": 10,
-    "posts:digest": "45d2c28633c91e57",
+    "posts:digest": "ae7422d42c443bea",
     "pages": 3,
     "pages:digest": "82dba3480d41f240",
     "comments": 2,
@@ -76,22 +76,22 @@
     {
       "step": "бэкап создан",
       "ok": true,
-      "detail": "var/backups/restore-proof/anime-20260822T092454Z.sql (345712 байт)"
+      "detail": "var/backups/restore-proof/anime-20260823T144912Z.sql (345664 байт)"
     },
     {
       "step": "данные изменены после бэкапа",
       "ok": true,
-      "detail": "[09:24:56] \u001b[33mWARN\u001b[39m: \u001b[36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.\u001b[39m\n{\"createdPostId\":13,\"updatedPageId\":6,\"deletedCommentId\":3}"
+      "detail": "[14:49:25] \u001b[33mWARN\u001b[39m: \u001b[36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.\u001b[39m\n{\"createdPostId\":13,\"updatedPageId\":6,\"deletedCommentId\":3}"
     },
     {
       "step": "изменение видно в состоянии",
       "ok": true,
-      "detail": "снимок не изменился после мутации: {\"tenants\": 3, \"tenants:digest\": \"d9edf33f9d571fcd\", \"titles\": 8, \"titles:digest\": \"c3fbfc0726d3370f\", \"seasons\": 8, \"seasons:digest\": \"7b6516c68a050968\", \"episodes\": 32, \"episodes:digest\": \"db47de5bbceb6c68\", \"posts\": 10, \"posts:digest\": \"45d2c28633c91e57\", \"pages\": 3, \"pages:digest\": \"82dba3480d41f240\", \"comments\": 2, \"comments:digest\": \"0dcc3f4b2342689a\", \"tenant-titles\": 21, \"tenant-titles:digest\": \"d38fc353c18e74fd\", \"editorial-collections\": 3, \"editorial-collections:digest\": \"fce8658e8032e7a3\", \"users\": 5, \"users:digest\": \"fcfbf051427d8dc2\"}"
+      "detail": "снимок не изменился после мутации: {\"tenants\": 3, \"tenants:digest\": \"d9edf33f9d571fcd\", \"titles\": 8, \"titles:digest\": \"c3fbfc0726d3370f\", \"seasons\": 8, \"seasons:digest\": \"7b6516c68a050968\", \"episodes\": 32, \"episodes:digest\": \"db47de5bbceb6c68\", \"posts\": 10, \"posts:digest\": \"ae7422d42c443bea\", \"pages\": 3, \"pages:digest\": \"82dba3480d41f240\", \"comments\": 2, \"comments:digest\": \"0dcc3f4b2342689a\", \"tenant-titles\": 21, \"tenant-titles:digest\": \"d38fc353c18e74fd\", \"editorial-collections\": 3, \"editorial-collections:digest\": \"fce8658e8032e7a3\", \"users\": 5, \"users:digest\": \"fcfbf051427d8dc2\"}"
     },
     {
       "step": "изменены три вида данных: вставка, правка и удаление",
       "ok": true,
-      "detail": "до={\"tenants\": 3, \"tenants:digest\": \"d9edf33f9d571fcd\", \"titles\": 8, \"titles:digest\": \"c3fbfc0726d3370f\", \"seasons\": 8, \"seasons:digest\": \"7b6516c68a050968\", \"episodes\": 32, \"episodes:digest\": \"db47de5bbceb6c68\", \"posts\": 9, \"posts:digest\": \"00ea13ba4b5d3380\", \"pages\": 3, \"pages:digest\": \"7961223f43e6b4ff\", \"comments\": 3, \"comments:digest\": \"5a842bd3df5c05b6\", \"tenant-titles\": 21, \"tenant-titles:digest\": \"d38fc353c18e74fd\", \"editorial-collections\": 3, \"editorial-collections:digest\": \"fce8658e8032e7a3\", \"users\": 5, \"users:digest\": \"fcfbf051427d8dc2\"} после={\"tenants\": 3, \"tenants:digest\": \"d9edf33f9d571fcd\", \"titles\": 8, \"titles:digest\": \"c3fbfc0726d3370f\", \"seasons\": 8, \"seasons:digest\": \"7b6516c68a050968\", \"episodes\": 32, \"episodes:digest\": \"db47de5bbceb6c68\", \"posts\": 10, \"posts:digest\": \"45d2c28633c91e57\", \"pages\": 3, \"pages:digest\": \"82dba3480d41f240\", \"comments\": 2, \"comments:digest\": \"0dcc3f4b2342689a\", \"tenant-titles\": 21, \"tenant-titles:digest\": \"d38fc353c18e74fd\", \"editorial-collections\": 3, \"editorial-collections:digest\": \"fce8658e8032e7a3\", \"users\": 5, \"users:digest\": \"fcfbf051427d8dc2\"}"
+      "detail": "до={\"tenants\": 3, \"tenants:digest\": \"d9edf33f9d571fcd\", \"titles\": 8, \"titles:digest\": \"c3fbfc0726d3370f\", \"seasons\": 8, \"seasons:digest\": \"7b6516c68a050968\", \"episodes\": 32, \"episodes:digest\": \"db47de5bbceb6c68\", \"posts\": 9, \"posts:digest\": \"00ea13ba4b5d3380\", \"pages\": 3, \"pages:digest\": \"7961223f43e6b4ff\", \"comments\": 3, \"comments:digest\": \"5a842bd3df5c05b6\", \"tenant-titles\": 21, \"tenant-titles:digest\": \"d38fc353c18e74fd\", \"editorial-collections\": 3, \"editorial-collections:digest\": \"fce8658e8032e7a3\", \"users\": 5, \"users:digest\": \"fcfbf051427d8dc2\"} после={\"tenants\": 3, \"tenants:digest\": \"d9edf33f9d571fcd\", \"titles\": 8, \"titles:digest\": \"c3fbfc0726d3370f\", \"seasons\": 8, \"seasons:digest\": \"7b6516c68a050968\", \"episodes\": 32, \"episodes:digest\": \"db47de5bbceb6c68\", \"posts\": 10, \"posts:digest\": \"ae7422d42c443bea\", \"pages\": 3, \"pages:digest\": \"82dba3480d41f240\", \"comments\": 2, \"comments:digest\": \"0dcc3f4b2342689a\", \"tenant-titles\": 21, \"tenant-titles:digest\": \"d38fc353c18e74fd\", \"editorial-collections\": 3, \"editorial-collections:digest\": \"fce8658e8032e7a3\", \"users\": 5, \"users:digest\": \"fcfbf051427d8dc2\"}"
     },
     {
       "step": "восстановление выполнено",

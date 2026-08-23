@@ -206,10 +206,29 @@ else
   fi
 fi
 
+# Отчёт об окружении — часть набора доказательств: без него `env-report.json`
+# просто исчезал из artifacts/evidence при каждой пересборке, потому что
+# пересоздать его в прогоне было нечем.
+run "env-report" "python3 -m factory env-report > /dev/null"
+
+# Манифест скриншотов: сами PNG в git не едут, а без манифеста утверждение
+# «скриншоты сняты» проверить нечем. Раньше `screenshots.md` не пересоздавался
+# ничем и просто исчезал из доказательств при каждой пересборке.
+if ls artifacts/qa/pilot-local/*/screenshot-*.png > /dev/null 2>&1; then
+  run "screenshot-manifest" "python3 tests/tools/screenshot_manifest.py"
+else
+  skip "screenshot-manifest" "снимков нет: браузерная проверка не выполнялась"
+fi
+
+# Сводка считается ПЕРЕД сбором доказательств: она пишет artifacts/qa/run-all.json,
+# который collect_evidence.py и копирует. При обратном порядке в git уезжала
+# сводка ПРЕДЫДУЩЕГО прогона — доказательства отставали ровно на один запуск.
+python3 tests/tools/summarize_run.py
+SUMMARY_CODE=$?
+
 # Доказательства последнего прогона фиксируются в artifacts/evidence/.
 python3 tests/tools/collect_evidence.py > /dev/null || true
 
 # Код возврата прогона — это код сводки: она возвращает ненулевой при провалах.
 # Раньше он терялся, и прогон с десятью провалами завершался нулём.
-python3 tests/tools/summarize_run.py
-exit $?
+exit $SUMMARY_CODE

@@ -1052,7 +1052,7 @@
     },
     "a/catalog/stand-title-1/": {
       "status": 200,
-      "length": 29846
+      "length": 29990
     },
     "a/catalog/stand-title-1/season-1/": {
       "status": 200,
@@ -1088,11 +1088,11 @@
     },
     "b/catalog/stand-title-1/": {
       "status": 200,
-      "length": 29462
+      "length": 29490
     },
     "b/catalog/stand-title-1/season-1/": {
       "status": 200,
-      "length": 27926
+      "length": 26684
     },
     "b/catalog/stand-title-1/season-1/episode-1/": {
       "status": 200,
@@ -1100,7 +1100,7 @@
     },
     "b/collections/stand-collection-b/": {
       "status": 200,
-      "length": 28866
+      "length": 28894
     },
     "b/news/": {
       "status": 200,
@@ -1124,19 +1124,19 @@
     },
     "c/catalog/stand-title-1/": {
       "status": 200,
-      "length": 29472
+      "length": 29328
     },
     "c/catalog/stand-title-1/season-1/": {
       "status": 200,
-      "length": 26514
+      "length": 26528
     },
     "c/catalog/stand-title-1/season-1/episode-1/": {
       "status": 200,
-      "length": 30444
+      "length": 30598
     },
     "c/collections/stand-collection-c/": {
       "status": 200,
-      "length": 29148
+      "length": 30284
     },
     "c/news/": {
       "status": 200,

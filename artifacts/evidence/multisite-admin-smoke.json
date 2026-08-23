@@ -1,5 +1,5 @@
 {
-  "port": 51037,
+  "port": 56705,
   "checks": [
     {
       "name": "GET /admin отвечает",
