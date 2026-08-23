@@ -80,6 +80,21 @@ def strip_heredoc_bodies(command: str) -> tuple[str, list[str]]:
     return nested_remainder, bodies
 
 
+def _is_redirection(command: str, index: int, separator: str) -> bool:
+    """Является ли найденный разделитель частью перенаправления дескриптора."""
+    if separator not in ("&", "|"):
+        return False
+    if separator == "&":
+        # `>&`, `>>&`, `2>&1`: слева стоит `>` (возможно, через пробел).
+        left = command[:index].rstrip()
+        if left.endswith(">"):
+            return True
+        # `&>` и `&>>`: справа стоит `>`.
+        if command[index + 1: index + 2] == ">":
+            return True
+    return False
+
+
 def split_subcommands(command: str) -> list[str]:
     """Разбивает составную команду на подкоманды с учётом кавычек."""
     parts: list[str] = []
@@ -100,6 +115,14 @@ def split_subcommands(command: str) -> list[str]:
             i += 1
             continue
         matched = next((s for s in SEPARATORS if command.startswith(s, i)), None)
+        if matched and _is_redirection(command, i, matched):
+            # `2>&1`, `&>file`, `>&2` — это перенаправления дескрипторов, а не
+            # разделители команд. Раньше `&` в них разрывал строку, и разбор
+            # выдавал мусорные сегменты вида `cmd 2>` и `1`. На запреты это не
+            # влияло, а вот распознать безопасную команду мешало: сегмент `1`
+            # не совпадает ни с одним правилом, и вся команда уходила в запрос
+            # подтверждения.
+            matched = None
         if matched:
             parts.append("".join(buf))
             buf = []
@@ -134,6 +157,90 @@ def strip_wrappers(sub: str) -> str:
 
 
 # --- наборы правил -------------------------------------------------------------
+
+# --------------------------------------------------------------------------
+# Инвентарь: единственный источник истины о разрешённых целях
+# --------------------------------------------------------------------------
+
+def _repo_root() -> str:
+    """Корень репозитория относительно самого хука: .claude/hooks/ -> корень."""
+    return os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+
+def _read_inventory(name: str, section: str) -> list:
+    """Читает список записей из inventory без внешних зависимостей.
+
+    YAML-парсер здесь недоступен намеренно: хук обязан работать, даже если
+    окружение сломано. Нужны только простые записи `ключ: значение`, поэтому
+    разбор построчный, а любая неожиданность трактуется как «записи нет».
+    """
+    path = os.path.join(_repo_root(), "inventory", name)
+    if not os.path.exists(path):
+        return []
+    entries: list = []
+    current = None
+    in_section = False
+    try:
+        with open(path, encoding="utf-8") as handle:
+            for raw in handle:
+                line = raw.rstrip("\n")
+                if line.strip().startswith("#") or not line.strip():
+                    continue
+                if not line.startswith(" ") and line.strip().rstrip(":") == section:
+                    in_section = "[]" not in line
+                    continue
+                if not in_section:
+                    continue
+                stripped = line.strip()
+                if stripped.startswith("- "):
+                    current = {}
+                    entries.append(current)
+                    stripped = stripped[2:].strip()
+                if current is None or ":" not in stripped:
+                    continue
+                key, _, value = stripped.partition(":")
+                current[key.strip()] = value.strip().strip('"').strip("'")
+    except OSError:
+        return []
+    return entries
+
+
+def inventory_ssh_hosts() -> set:
+    """Хосты, на которые оператор разрешил удалённый доступ."""
+    hosts = set()
+    for entry in _read_inventory("ssh-hosts.yaml", "hosts"):
+        for key in ("hostname", "host", "address", "ref"):
+            value = entry.get(key)
+            if value:
+                hosts.add(value.lower())
+    return hosts
+
+
+def inventory_dns_zones() -> set:
+    """Зоны, в которых оператор разрешил операции DNS."""
+    zones = set()
+    for entry in _read_inventory("dns-zones.yaml", "zones"):
+        value = entry.get("zone")
+        if value:
+            zones.add(value.lower())
+    return zones
+
+
+def remote_target(tokens: list) -> str:
+    """Хост из аргументов ssh/scp/rsync: `user@host`, `host:path` или `host`."""
+    for token in tokens[1:]:
+        if token.startswith("-"):
+            continue
+        candidate = token
+        if "@" in candidate:
+            candidate = candidate.split("@", 1)[1]
+        if ":" in candidate:
+            candidate = candidate.split(":", 1)[0]
+        if not candidate or candidate.startswith("/") or candidate.startswith("."):
+            continue
+        return candidate.lower()
+    return ""
+
 
 REMOTE_EXEC = ("ssh", "scp", "sftp", "rsync", "ansible", "ansible-playbook", "ansible-console", "nc", "ncat", "telnet")
 PRIVILEGE = ("sudo", "su", "doas", "pkexec")
@@ -247,10 +354,35 @@ def evaluate_subcommand(sub: str, depth: int = 0) -> Decision:
         return Decision(DENY, "Неконтролируемый sudo/su запрещён. Привилегированные операции выполняет deployment-слой по sudo_allowlist из inventory.", "G-PRIV")
 
     if prog in REMOTE_EXEC:
+        # Профиль UNATTENDED_SAFE: удалённый доступ разрешён к целям, которые
+        # оператор заранее внёс в inventory, и запрещён ко всем остальным.
+        # Пустой inventory означает не поломку, а честное отсутствие переданных
+        # хостов: до их появления удалённый доступ закрыт целиком.
+        target = remote_target(tokens)
+        if target and target in inventory_ssh_hosts():
+            return Decision(PASS)
         return Decision(
             DENY,
-            f"Прямой удалённый доступ `{prog}` запрещён. Используй `python3 -m factory deploy <site_id> --environment <env>`: wrapper проверяет manifest, allowlist целей, авторизацию, backup, lock и quality gates.",
+            f"Хост «{target or 'не определён'}» отсутствует в inventory/ssh-hosts.yaml. "
+            f"Удалённый доступ `{prog}` разрешён только к утверждённым целям; для выката "
+            "используй команду deploy фабрики — она проверяет manifest, авторизацию, "
+            "backup, lock и quality gates.",
             "G-REMOTE",
+        )
+
+    if prog == "nsupdate":
+        # DNS разрешён только для зон, внесённых оператором в inventory.
+        # Зона ищется по всей команде: nsupdate принимает её и аргументом, и в
+        # теле запроса, поэтому проверять один токен недостаточно.
+        zones = inventory_dns_zones()
+        matched_zone = next((z for z in zones if z and z in low), "")
+        if matched_zone:
+            return Decision(PASS)
+        return Decision(
+            DENY,
+            "Зона не найдена в inventory/dns-zones.yaml. Операции DNS разрешены только "
+            "для заранее внесённых зон и имён; расширять список по своей инициативе нельзя.",
+            "G-NET-CFG",
         )
 
     if prog in FIREWALL_DNS and prog != "ip" or (prog == "ip" and len(tokens) > 1 and tokens[1] in {"route", "addr", "link"} and any(t in {"add", "del", "change"} for t in tokens)):
@@ -293,7 +425,14 @@ def evaluate_subcommand(sub: str, depth: int = 0) -> Decision:
     for target in re.findall(r">>?\s*([^\s<>|&;]+)", stripped):
         if evaluate_write(target).decision == DENY:
             return Decision(DENY, f"Запись в защищённый путь «{target}» запрещена.", "G-WRITE")
-    if prog in ("tee", "cp", "mv", "install", "ln", "truncate", "sed", "dd", "rsync", "chmod", "chown"):
+    writers = ("tee", "cp", "mv", "install", "ln", "truncate", "dd", "rsync", "chmod", "chown")
+    # `sed` пишет только с `-i`: без него `sed -n '1,50p' path` — чтение, и
+    # запрещать его как запись значило запрещать чтение защищённого файла тем
+    # правилом, которое охраняет запись.
+    sed_in_place = prog == "sed" and any(
+        t == "-i" or t.startswith("-i") or t.startswith("--in-place") for t in tokens[1:]
+    )
+    if prog in writers or sed_in_place:
         for token in stripped.split()[1:]:
             candidate = token.strip("'\"")
             if evaluate_write(candidate).decision == DENY:

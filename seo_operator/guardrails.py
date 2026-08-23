@@ -55,7 +55,11 @@ BLOCKED_PATTERNS: list[tuple[str, str]] = [
     (r"\bterraform\s+destroy\b", "infrastructure destruction"),
     (r"\bdocker\s+(rm|rmi)\s+-f\b", "forced container/image removal"),
     # Secret exfiltration and credential widening.
-    (r"\b(printenv|env)\b(?!.*\|\s*(cut|grep\s+-o).*\bcut\b)", "environment dump"),
+    # `env VAR=1 cmd` sets one variable for one command; it prints nothing.
+    # Blocking it blocked ordinary work (`env FACTORY_CLOSED_WORLD=0 pytest`)
+    # without closing any exfiltration path, so only the dump itself is blocked.
+    (r"(?:^|[;&|]\s*)printenv\b", "environment dump"),
+    (r"(?:^|[;&|]\s*)env\s*(?:\||>|;|$)", "environment dump"),
     (
         r"\becho\s+\$\{?(AWS_SECRET|GITHUB_TOKEN|GH_TOKEN|.*_SECRET|.*_TOKEN|.*API_KEY)",
         "secret value output",

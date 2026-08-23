@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import sys
 
+from seo_operator import unattended
 from seo_operator.guardrails import ActionContext, Decision, classify
 
 # Tools that only read. They are safe regardless of arguments.
@@ -42,7 +43,31 @@ def decide(payload: dict) -> dict:
         command = str(tool_input.get("command", ""))
         environment = payload.get("environment", "sandbox")
         verdict = classify(ActionContext(command=command, environment=environment))
-        return _out(DECISION_MAP[verdict.decision], verdict.reason)
+
+        # Стоп-сигнал профиля сильнее разрешающего правила: `python3 -m factory
+        # deploy … --environment production` подходит под «локальный python», но
+        # необратимую операцию над production человек подтверждает сам.
+        stop = unattended.mandatory_confirmation(command)
+
+        # Явный запрет и требование подтверждения окончательны: профиль
+        # UNATTENDED_SAFE не может их отменить, он работает только с командами,
+        # которые не подошли ни под одно разрешающее правило (`default-deny`).
+        # Раньше такая команда уходила на подтверждение целиком — включая
+        # `PYTHONPATH=… python`, `timeout 300 git push origin claude/…` и любой
+        # составной вызов, у которого обёртка сдвигала якорь `^`.
+        if verdict.decision is Decision.BLOCK and verdict.rule != "default-deny":
+            return _out("deny", verdict.reason)
+        if verdict.decision is Decision.REQUIRE_APPROVAL:
+            return _out("ask", verdict.reason)
+        if verdict.decision is Decision.ALLOW:
+            if stop:
+                return _out("ask", f"обязательное подтверждение: {stop}")
+            return _out("allow", verdict.reason)
+
+        profile = unattended.evaluate(command)
+        if profile.decision == unattended.ALLOW:
+            return _out("allow", f"{unattended.PROFILE}: {profile.reason}")
+        return _out("deny", f"{verdict.reason}; профиль: {profile.reason}")
 
     # Unknown tool: fail closed to a human decision.
     return _out("ask", f"неизвестный инструмент {tool!r} — решение передано человеку")
