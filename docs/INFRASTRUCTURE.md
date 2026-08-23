@@ -80,6 +80,7 @@ Python 3.11 поставлен через `uv`, а не из `jammy`: в Ubuntu 
 | `site-factory-backup` | 03:20 UTC | бэкап состояния хоста + доказанное восстановление | да |
 | `site-factory-selfcheck` | 04:00 UTC | knowledge freeze, selfcheck, схемы, реестры, guardrails, permission matrix, гигиена репозитория | да |
 | `site-factory-seo-dryrun` | 06:00 UTC | `seo-operator dry-run --fixture` — самопроверка оператора | да |
+| `site-factory-restore-proof` | вс 05:00 UTC | доказательство, что база стенда восстанавливается из своего дампа | да |
 | `site-factory-worker` | каждые 2 мин | `factory resume` — обработка очереди | **нет** |
 
 `site-factory-worker.timer` не включён намеренно: очередь пуста, ни одна цель не
@@ -90,6 +91,31 @@ Python 3.11 поставлен через `uv`, а не из `jammy`: в Ubuntu 
 с `Persistent=true` и поднимаются после перезагрузки. Журналы идут в journald,
 файловые — в `/var/log/site-factory` с ротацией 14 дней
 (`/etc/logrotate.d/site-factory`).
+
+### Почему часть проверок требует root
+
+Два шага полного прогона не могут выполниться под непривилегированным
+пользователем, и это свойство архитектуры, а не недоработка хоста:
+
+- `nginx -t` открывает `error_log` и pid-файл;
+- `tests/tools/restore_proof.py` снимает дамп базы от владельца кластера
+  (`su postgres`) — именно чтобы пароль приложения **не** попадал в командную
+  строку, где его видно через `ps`.
+
+Оба шага записываются как `SKIPPED` с причиной, а не `FAIL`: под обычным
+пользователем они не отвечают на свой вопрос, а не отвечают «плохо». Гейты при
+этом не теряются — их держат таймеры, работающие от root:
+`site-factory-health` проверяет конфигурацию nginx каждые 15 минут,
+`site-factory-restore-proof` еженедельно доказывает восстановление базы
+(10 из 10 шагов на этом хосте: снимок, бэкап, изменение, восстановление,
+совпадение отпечатков, возврат владельца схемы).
+
+Запустить их вручную:
+
+```bash
+sudo systemctl start site-factory-health.service
+sudo systemctl start site-factory-restore-proof.service
+```
 
 ### Канал оповещений
 

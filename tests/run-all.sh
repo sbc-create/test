@@ -109,10 +109,15 @@ else
   fi
 fi
 
+PW_BROWSERS="${PLAYWRIGHT_BROWSERS_PATH:-/opt/pw-browsers}"
 if [ "${FACTORY_ALL_BROWSERS:-0}" = "1" ]; then
   run "cross-browser"  "npx playwright test --project=firefox --project=webkit --reporter=list"
+elif ls -d "$PW_BROWSERS"/firefox-* > /dev/null 2>&1 && ls -d "$PW_BROWSERS"/webkit-* > /dev/null 2>&1; then
+  # Движки на месте — причина пропуска другая, и называть надо её. Прежний текст
+  # («в образе только Chromium») на таком хосте был бы просто неправдой.
+  skip "cross-browser" "движки установлены, но прогон не запрошен: включается FACTORY_ALL_BROWSERS=1"
 else
-  skip "cross-browser" "в образе только Chromium: firefox и webkit в /opt/pw-browsers отсутствуют"
+  skip "cross-browser" "firefox и webkit не установлены в $PW_BROWSERS"
 fi
 
 if command -v ansible-playbook > /dev/null 2>&1; then
@@ -169,7 +174,17 @@ else
   run "payload-admin-smoke" "python3 tests/tools/admin_smoke.py"
   run "payload-frontend"    "python3 tests/tools/frontend_http.py"
   run "payload-cross-site"  "python3 tests/tools/cross_site_uniqueness.py"
-  run "payload-restore"     "python3 tests/tools/restore_proof.py"
+  # Дамп снимает владелец кластера (`su postgres`), чтобы пароль приложения не
+  # попадал в командную строку, поэтому шаг требует root. Под обычным
+  # пользователем wrapper отказывает — это непроведённая проверка, а не
+  # сломанное восстановление, и записывать её как FAIL значит утверждать
+  # неправду о состоянии бэкапа. Автономно гейт держит таймер
+  # site-factory-restore-proof, который запускается от root.
+  if [ "$(id -u)" -eq 0 ]; then
+    run "payload-restore"   "python3 tests/tools/restore_proof.py"
+  else
+    skip "payload-restore" "снятие дампа требует root: sudo .venv/bin/python tests/tools/restore_proof.py (автономно — таймер site-factory-restore-proof)"
+  fi
 
   # Путь к Chromium берётся из FACTORY_CHROMIUM — так его разрешают и
   # tests/tools/browser_multisite.py, и factory/seo/render_check.py, и оба

@@ -16,7 +16,11 @@ bash tests/run-all.sh                              # полный прогон �
 |--------|----------|
 | Как устроена фабрика | `docs/ARCHITECTURE.md`, `adr/` |
 | Как ввести новый сайт | `docs/NEW_SITE.md` |
+| Как подключить новый домен | `docs/NEW_DOMAIN.md` |
 | Как эксплуатировать | `docs/OPERATIONS.md` |
+| Как устроен управляющий сервер | `docs/INFRASTRUCTURE.md` |
+| Сколько сайтов помещается и когда нужен второй сервер | `docs/CAPACITY.md` |
+| Что восстанавливать после сбоя | `docs/DISASTER_RECOVERY.md` |
 | Как выкатывать и откатывать | `docs/DEPLOY.md`, `docs/ROLLBACK.md` |
 | Правила безопасности | `docs/SECURITY.md` |
 | Чего не хватает для production | `docs/INPUT_REQUEST.md` |

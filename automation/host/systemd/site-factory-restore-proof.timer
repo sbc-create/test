@@ -1,0 +1,11 @@
+[Unit]
+Description=site-factory: weekly proof that the stand database restores
+
+[Timer]
+OnCalendar=Sun *-*-* 05:00:00 UTC
+RandomizedDelaySec=600
+AccuracySec=1min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

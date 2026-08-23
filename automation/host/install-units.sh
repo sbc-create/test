@@ -24,7 +24,8 @@ systemctl daemon-reload
 for timer in site-factory-health.timer \
              site-factory-backup.timer \
              site-factory-selfcheck.timer \
-             site-factory-seo-dryrun.timer; do
+             site-factory-seo-dryrun.timer \
+             site-factory-restore-proof.timer; do
   systemctl enable "$timer" >/dev/null
   systemctl start "$timer"
   echo "enabled $timer"
