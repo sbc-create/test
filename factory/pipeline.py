@@ -242,11 +242,16 @@ def run_job(site_id: str, *, environment: str | None = None, job_id: str | None 
                 probe = PATHS.var / "restore-probe" / f"{site_id}-{build_id}"
                 live_before = target.shared_digest() if hasattr(target, "shared_digest") else {}
                 restored = target.restore(backup["ref"], probe)
-                if restored and hasattr(target, "shared_digest"):
-                    # Сравнение содержимым: бэкап снят мгновение назад, поэтому
-                    # восстановленное дерево обязано совпасть с живым.
-                    restored_digest = target._tree_digest(probe / "shared") if hasattr(target, "_tree_digest") else {}
-                    restored = restored_digest == live_before
+                # Сравнение содержимым имеет смысл только для цели, которая
+                # восстанавливает дерево файлов в каталог пробы. Цель с базой
+                # данных проверяет восстановление внутри `restore()` — разворачивает
+                # дамп в отдельную базу и сверяет состав. Прежний код сравнивал её
+                # результат с пустым словарём и всегда получал «не подтверждено»:
+                # бэкап payload-цели не мог быть признан проверенным никогда.
+                if restored and hasattr(target, "_tree_digest") and hasattr(target, "shared_digest"):
+                    # Бэкап снят мгновение назад, поэтому восстановленное дерево
+                    # обязано совпасть с живым.
+                    restored = target._tree_digest(probe / "shared") == live_before
                 backup["restore_verified"] = bool(restored)
                 backup["verified_at"] = _now()
                 step("restore_test", "ok" if restored else "failed",

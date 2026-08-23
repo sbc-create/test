@@ -76,7 +76,11 @@
     ".releases/faf5bf721805b805/dist/types/**/*.ts",
     ".releases/faf5bf721805b805/dist/dev/types/**/*.ts",
     ".next-acceptance/types/**/*.ts",
-    ".next-acceptance/dev/types/**/*.ts"
+    ".next-acceptance/dev/types/**/*.ts",
+    ".releases/af9e0ede0a83e608/dist/types/**/*.ts",
+    ".releases/af9e0ede0a83e608/dist/dev/types/**/*.ts",
+    ".releases/28bfb9c3bbfa8d8a/dist/types/**/*.ts",
+    ".releases/28bfb9c3bbfa8d8a/dist/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

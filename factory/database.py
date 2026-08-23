@@ -67,7 +67,13 @@ def _as_cluster_owner(inner: str, *, timeout: int = 120, stdin: str | None = Non
 
     argv не собирается из пользовательского ввода: подставляется только заранее
     известный клиент и имя базы, прошедшее проверку IDENT_RE.
+
+    Кластер локального стенда переживает не всякий простой контейнера, поэтому
+    перед привилегированной операцией он поднимается. Это не «починка на всякий
+    случай»: остановленный кластер давал BLOCKED_ACCESS с текстом про сокет,
+    который выглядел как отказ прав, а был обычным незапущенным сервисом.
     """
+    _ensure_cluster()
     return subprocess.run(["su", "-s", "/bin/sh", "postgres", "-c", inner],
                           input=stdin, capture_output=True, text=True, timeout=timeout, check=False)
 
@@ -91,6 +97,12 @@ def _sql_as_owner(sql: str, *, database: str = "postgres") -> subprocess.Complet
 
 def cluster_running() -> bool:
     return subprocess.run(["pg_isready", "-q"], capture_output=True, check=False, timeout=30).returncode == 0
+
+
+def _ensure_cluster() -> None:
+    """Поднять кластер, если он не отвечает. Идемпотентно и без побочных эффектов."""
+    if not cluster_running():
+        start_cluster()
 
 
 def start_cluster() -> bool:
