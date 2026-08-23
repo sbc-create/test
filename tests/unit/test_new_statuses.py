@@ -6,10 +6,7 @@
 """
 from __future__ import annotations
 
-import copy
 import inspect
-
-import pytest
 
 from factory import pipeline, validation
 from factory.seo import uniqueness

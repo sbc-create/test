@@ -18,6 +18,7 @@
 """
 from __future__ import annotations
 
+import contextlib
 import json
 import os
 import shutil
@@ -278,10 +279,8 @@ class PayloadMultisiteTarget:
             if self._process_signature(pid) is None:
                 return f"процесс {pid} остановлен"
             time.sleep(0.5)
-        try:
+        with contextlib.suppress(ProcessLookupError):
             os.kill(pid, 9)
-        except ProcessLookupError:
-            pass
         return f"процесс {pid} остановлен принудительно"
 
     def _probe(self, port: int, path: str = "/robots.txt") -> tuple[bool, str]:

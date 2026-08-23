@@ -7,10 +7,8 @@ import copy
 import json
 
 import pytest
-import yaml
 
-from factory import inventory, licensing, pipeline, validation
-from factory.paths import PATHS
+from factory import inventory, pipeline, validation
 
 
 def _production_package(base: dict, **overrides) -> dict:

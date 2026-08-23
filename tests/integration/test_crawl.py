@@ -1,7 +1,8 @@
 """REQ-SEO-LINKS: живой обход доказывает связность и эквивалентность контента."""
 import pytest
 
-from factory import build as build_mod, inventory
+from factory import build as build_mod
+from factory import inventory
 from factory.seo.crawl import Crawler, crawl
 from factory.targets import build_target
 
@@ -52,7 +53,8 @@ def test_mobile_and_desktop_receive_the_same_markup(live):
     crawler = Crawler(base, auth=auth)
     desktop = crawler.fetch("/lekcii/")
     request_ua = "Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 Chrome/120 Mobile Safari/537.36"
-    import base64, urllib.request
+    import base64
+    import urllib.request
     req = urllib.request.Request(base + "/lekcii/", headers={"User-Agent": request_ua})
     req.add_header("Authorization", "Basic " + base64.b64encode(auth.encode()).decode())
     with urllib.request.urlopen(req, timeout=10) as response:
@@ -63,7 +65,8 @@ def test_mobile_and_desktop_receive_the_same_markup(live):
 @pytest.mark.slow
 def test_googlebot_receives_the_same_content(live):
     base, auth, _ = live
-    import base64, urllib.request
+    import base64
+    import urllib.request
     bodies = []
     for ua in ("factory-seo-crawler/1.0", "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"):
         req = urllib.request.Request(base + "/", headers={"User-Agent": ua})

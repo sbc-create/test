@@ -1,6 +1,5 @@
 """REQ-CONTENT, REQ-VK-UNAVAILABLE, REQ-SEO-QUALITY: контент не выдумывается."""
 import json
-import shutil
 
 import pytest
 

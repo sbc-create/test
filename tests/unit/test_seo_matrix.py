@@ -1,7 +1,5 @@
 """REQ-SEO-MATRIX: матрица покрывает все реальные типы страниц."""
-import yaml
 
-from factory.paths import PATHS
 from factory.seo import matrix as matrix_mod
 
 REQUIRED_TYPES = {

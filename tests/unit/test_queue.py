@@ -16,7 +16,7 @@ def clean_queue():
 
 
 def test_enqueue_and_claim_moves_atomically():
-    item = queue.enqueue("pilot-local", job_id="qtest-1")
+    queue.enqueue("pilot-local", job_id="qtest-1")
     assert queue.counts()["inbox"] >= 1
     claimed = queue.claim()
     assert claimed.job_id == "qtest-1"

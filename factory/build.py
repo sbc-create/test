@@ -17,11 +17,19 @@ import yaml
 
 from factory import validation
 from factory.errors import (
-    BlockedAccess, BlockedAuthorization, BlockedInput, BlockedLicense, BlockedRights,
-    BlockedSecret, BlockedSeo, FactoryError,
+    BlockedAccess,
+    BlockedAuthorization,
+    BlockedInput,
+    BlockedLicense,
+    BlockedRights,
+    BlockedSecret,
+    BlockedSeo,
 )
 
 #: Статус валидации → класс ошибки. Общего «failed» не существует.
+from factory.paths import PATHS
+from factory.render import SiteRenderer
+
 STATUS_TO_ERROR = {
     "BLOCKED_INPUT": BlockedInput,
     "BLOCKED_LICENSE": BlockedLicense,
@@ -31,8 +39,6 @@ STATUS_TO_ERROR = {
     "BLOCKED_AUTHORIZATION": BlockedAuthorization,
     "BLOCKED_SEO": BlockedSeo,
 }
-from factory.paths import PATHS
-from factory.render import SiteRenderer
 
 RENDERER_VERSION = "1.0.0"
 

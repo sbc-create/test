@@ -1,10 +1,9 @@
 """REQ-*: каждое нормативное требование связано с существующим тестом."""
-from factory.errors import FAILURE_STATES
 import re
-from pathlib import Path
 
 import pytest
 
+from factory.errors import FAILURE_STATES
 from factory.paths import PATHS
 
 DOC = PATHS.docs / "MASTER_PROMPT_REQUIREMENTS.md"

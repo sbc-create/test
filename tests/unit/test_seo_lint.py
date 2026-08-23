@@ -74,7 +74,10 @@ def test_broken_jsonld_is_critical(sandbox):
     assert any(f.check == "jsonld" for f in criticals(sandbox))
 
 
-def test_noindex_url_in_sitemap_is_critical(sandbox):
+# Два разных пути к одному нарушению HR-3: маршрут объявлен в карте сайта и
+# сама карта содержит noindex-адрес. Раньше оба теста назывались одинаково, и
+# первый молча не выполнялся — pytest оставлял только последнее определение.
+def test_noindex_route_declared_in_sitemap_is_critical(sandbox):
     routes = json.loads((sandbox / "routes.json").read_text(encoding="utf-8"))
     for route in routes["routes"]:
         if route["path"] == "/search/":

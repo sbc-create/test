@@ -3,8 +3,15 @@ import random
 
 import pytest
 
-from factory.errors import (BlockedAuthorization, BlockedInput, BlockedLicense, BlockedRights,
-                            BlockedSeo, DeployFailed, TransientError)
+from factory.errors import (
+    BlockedAuthorization,
+    BlockedInput,
+    BlockedLicense,
+    BlockedRights,
+    BlockedSeo,
+    DeployFailed,
+    TransientError,
+)
 from factory.retry import RetryPolicy, is_retryable, run_with_retry
 
 

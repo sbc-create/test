@@ -7,7 +7,8 @@ import urllib.request
 
 import pytest
 
-from factory import build as build_mod, inventory
+from factory import build as build_mod
+from factory import inventory
 from factory.targets import build_target
 
 

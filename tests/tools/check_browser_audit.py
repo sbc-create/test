@@ -4,7 +4,6 @@
 что она когда-то запускалась.
 """
 import json
-import pathlib
 import sys
 
 sys.path.insert(0, ".")

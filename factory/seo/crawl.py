@@ -192,10 +192,10 @@ def crawl(base_url: str, build_dir: Path, *, auth: str = "", environment: str = 
                 report.add(Finding("pagination", "critical", route["path"], f"Прямое открытие страницы пагинации даёт {direct.status}.", "HR-5"))
 
     # дубли по живым страницам
-    for title, paths in titles.items():
+    for _title, paths in titles.items():
         if len(paths) > 1:
             report.add(Finding("duplicate-title", "critical", paths[0], f"Одинаковый title на {len(paths)} живых страницах."))
-    for h1, paths in h1s.items():
+    for _h1, paths in h1s.items():
         if len(paths) > 2:
             report.add(Finding("duplicate-h1", "minor", paths[0], f"Одинаковый H1 на {len(paths)} страницах."))
 

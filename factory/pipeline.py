@@ -11,10 +11,13 @@ import uuid
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from factory import (audit, blueprint, build as build_mod, inventory, knowledge, licensing,
-                     validation, verify as verify_mod)
+from factory import audit, blueprint, inventory, knowledge, licensing, validation
+from factory import build as build_mod
+from factory import verify as verify_mod
 from factory.errors import (
-    BlockedAuthorization, BlockedAccess, FactoryError, QaFailed,
+    BlockedAccess,
+    BlockedAuthorization,
+    FactoryError,
 )
 from factory.locks import LockBusy, site_lock
 from factory.paths import PATHS

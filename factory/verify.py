@@ -465,8 +465,9 @@ def player_contract_check(base_url: str, package: dict, out_dir: Path) -> Report
     """Плеер на живой странице: только атрибуты контракта, без утечки токена."""
     report = Report("player-contract")
     host = package["domain"]
-    allowed = {"ident", "season", "episode", "data-publisher-id", "data-title-id", "data-aggregator",
-               "only-voice", "priority-voice", "is-show-voice-only", "is-show-banner", "disable-licensed"}
+    # Список разрешённых атрибутов живёт там, где элемент собирается, и
+    # проверяется вместе со сборкой: blueprints/payload-next-multisite/app/src/
+    # player/contract.ts. Вторая копия здесь расходилась бы с первой молча.
     observed = {}
 
     token_env = (package.get("content_api") or {}).get("token_ref") or ""

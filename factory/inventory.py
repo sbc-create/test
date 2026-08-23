@@ -6,7 +6,6 @@
 from __future__ import annotations
 
 import functools
-from pathlib import Path
 from typing import Any
 
 import yaml
@@ -29,7 +28,7 @@ def _load(name: str) -> dict:
     return data
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def _cached(name: str, mtime: float) -> dict:  # noqa: ARG001 — mtime участвует в ключе кеша
     return _load(name)
 
