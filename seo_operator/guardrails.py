@@ -54,6 +54,20 @@ BLOCKED_PATTERNS: list[tuple[str, str]] = [
     (r"aws\s+s3\s+rm\b.*--recursive", "recursive object deletion"),
     (r"\b(backup|backups|snapshot)\b.*\b(rm|delete|destroy|purge)\b", "backup deletion"),
     (r"\b(rm|delete|destroy|purge)\b.*\b(backup|backups)\b", "backup deletion"),
+    # Destructive database lifecycle. `migrate deploy` only applies pending
+    # migrations and stays allowed; everything that drops or refills data is
+    # closed, including the seed step — demo rows in a real database are a
+    # Definition-of-Done violation, not a convenience.
+    (r"\bprisma\s+migrate\s+reset\b", "destructive Prisma reset"),
+    (r"\bprisma\s+db\s+push\b[^\n]*--(force-reset|accept-data-loss)\b",
+     "destructive Prisma schema push"),
+    (r"\bdb:reset\b", "destructive database reset script"),
+    (r"\bdb:seed\b", "automatic demo seeding"),
+    (r"\bprisma\s+migrate\s+resolve\b[^\n]*--rolled-back\b",
+     "rewriting applied migration history"),
+    # Turning off the recovery and audit machinery.
+    (r"\b(disable|skip|stop|off)\b[^\n]*\b(backup|rollback|audit|guard)\b",
+     "disabling backup/rollback/audit"),
     (r"\bterraform\s+destroy\b", "infrastructure destruction"),
     (r"\bdocker\s+(rm|rmi)\s+-f\b", "forced container/image removal"),
     # Secret exfiltration and credential widening.

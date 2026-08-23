@@ -13,7 +13,9 @@ from seo_operator import unattended
 from seo_operator.guardrails import ActionContext, Decision, classify
 
 # Tools that only read. They are safe regardless of arguments.
-READ_ONLY_TOOLS = frozenset({"Read", "Glob", "Grep", "NotebookRead", "TodoWrite", "Task"})
+READ_ONLY_TOOLS = frozenset(
+    {"Read", "Glob", "Grep", "NotebookRead", "TodoWrite", "Task", "ToolSearch"}
+)
 
 # Tools that write inside the working tree. Safe under UNATTENDED_SAFE because
 # the session works in its own branch and cannot push without authorization.
@@ -57,7 +59,9 @@ GITHUB_BLOCKED_TOOLS = frozenset(
 
 DECISION_MAP = {
     Decision.ALLOW: "allow",
-    Decision.REQUIRE_APPROVAL: "ask",
+    # UNATTENDED_NO_ASK: нет человека, который ответит на вопрос. То, что
+    # раньше уходило на подтверждение, теперь закрывается и попадает в отчёт.
+    Decision.REQUIRE_APPROVAL: "deny",
     Decision.BLOCK: "deny",
 }
 
@@ -72,7 +76,11 @@ def decide(payload: dict) -> dict:
     if tool in BRANCH_LOCAL_WRITE_TOOLS:
         path = str(tool_input.get("file_path", ""))
         if "/.claude/hooks/" in path or path.endswith("settings.json"):
-            return _out("ask", "изменение самой защитной машинерии требует подтверждения")
+            return _out(
+                "deny",
+                "изменение самой защитной машинерии запрещено автоматике: "
+                "правьте .claude/settings.json и .claude/hooks/* отдельным PR с ревью человека",
+            )
         return _out("allow", f"{tool}: запись в пределах рабочей ветки")
 
     if tool in GITHUB_BLOCKED_TOOLS:
@@ -101,10 +109,10 @@ def decide(payload: dict) -> dict:
         if verdict.decision is Decision.BLOCK and verdict.rule != "default-deny":
             return _out("deny", verdict.reason)
         if verdict.decision is Decision.REQUIRE_APPROVAL:
-            return _out("ask", verdict.reason)
+            return _out("deny", verdict.reason)
         if verdict.decision is Decision.ALLOW:
             if stop:
-                return _out("ask", f"обязательное подтверждение: {stop}")
+                return _out("deny", f"остановлено профилем: {stop}")
             return _out("allow", verdict.reason)
 
         profile = unattended.evaluate(command)
@@ -112,8 +120,9 @@ def decide(payload: dict) -> dict:
             return _out("allow", f"{unattended.PROFILE}: {profile.reason}")
         return _out("deny", f"{verdict.reason}; профиль: {profile.reason}")
 
-    # Unknown tool: fail closed to a human decision.
-    return _out("ask", f"неизвестный инструмент {tool!r} — решение передано человеку")
+    # Unknown tool: fail closed. Without a human in the loop the only safe
+    # answer to "never seen this" is no.
+    return _out("deny", f"неизвестный инструмент {tool!r} — запрещён по умолчанию")
 
 
 def _out(decision: str, reason: str) -> dict:
@@ -132,7 +141,7 @@ def main() -> int:
     except (json.JSONDecodeError, ValueError):
         print(
             json.dumps(
-                _out("ask", "не удалось разобрать payload — fail closed"), ensure_ascii=False
+                _out("deny", "не удалось разобрать payload — fail closed"), ensure_ascii=False
             )
         )
         return 0

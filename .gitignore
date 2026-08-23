@@ -50,3 +50,6 @@ dist/
 var/
 # Журнал решений PreToolUse-хука SEO-оператора: runtime-состояние, а не исходник.
 .seo-state/
+
+# Session worktrees are local scratch, not repository content.
+.claude/worktrees/

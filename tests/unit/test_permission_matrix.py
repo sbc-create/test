@@ -305,14 +305,21 @@ def test_the_inventory_never_unlocks_a_forbidden_operation(command, approved_inv
 # Production: разрешён штатный выкат, но только при выполненных условиях
 # --------------------------------------------------------------------------
 class TestProductionGate:
-    def test_unready_site_asks_and_names_the_missing_condition(self):
+    def test_unready_site_is_denied_and_names_the_missing_condition(self):
+        """Невыполненное условие production закрывает выкат и называет причину.
+
+        UNATTENDED_NO_ASK: решение осталось прежним по сути — автоматика не
+        выкатывает неготовый сайт, — но теперь это запрет, а не вопрос.
+        Причина по-прежнему обязана называть недостающее условие, иначе
+        отчёт не объяснит, что чинить.
+        """
         command = "python3 -m factory deploy --site pilot-local --environment production"
-        assert final(command) == "ask"
+        assert final(command) == "deny"
         reason = unattended.mandatory_confirmation(command)
         assert "fixture" in reason, reason
 
     def test_command_without_a_site_is_never_auto_approved(self):
-        assert final("python3 -m factory deploy --environment production") == "ask"
+        assert final("python3 -m factory deploy --environment production") == "deny"
 
     def test_every_condition_is_checked(self, tmp_path):
         """Снятие любого условия возвращает выкат человеку, с названием условия."""
