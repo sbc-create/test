@@ -483,6 +483,13 @@ RUNTIMES = {
 REMOTE = {"ssh", "scp", "sftp", "rsync", "ansible", "ansible-playbook"}
 DNS_TOOLS = {"nsupdate"}
 FETCH = {"curl", "wget", "http", "httpie"}
+
+#: Чтение системного журнала. Только чтение: `journalctl` без флагов очистки не
+#: меняет ничего, а без него диагностика службы сводится к угадыванию. Флаги,
+#: которые удаляют записи (`--vacuum-*`, `--rotate`, `--flush`), в список не
+#: входят — удаление журнала закрыто и стоп-сигналом выше.
+JOURNAL = {"journalctl"}
+JOURNAL_MUTATING_FLAGS = ("--vacuum", "--rotate", "--flush", "--sync", "--relinquish-var")
 SHELLS = {"bash", "sh", "zsh"}
 
 GIT_READ = {
@@ -720,6 +727,11 @@ def classify_segment(segment: str, root: str) -> tuple[bool, str]:
         if any(zone and zone in low for zone in zones):
             return True, "зона внесена в inventory"
         return False, "зона отсутствует в inventory/dns-zones.yaml"
+
+    if prog in JOURNAL:
+        if any(flag in text for flag in JOURNAL_MUTATING_FLAGS):
+            return False, "journalctl с флагом, меняющим журнал"
+        return True, "чтение системного журнала"
 
     if prog in FETCH:
         match = re.search(r"https?://([^/\s'\"]+)", text)

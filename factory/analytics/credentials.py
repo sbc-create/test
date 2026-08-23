@@ -42,6 +42,31 @@ FORBIDDEN_VALUE_ENV = (
 )
 
 
+#: Каталог, куда systemd кладёт переданные unit'у credentials. Файл там
+#: принадлежит учётной записи сервиса, а не root, и лежит в tmpfs — это штатный
+#: способ выдать секрет непривилегированному процессу, а не ослабление правила.
+CREDENTIALS_DIR_ENV = "CREDENTIALS_DIRECTORY"
+
+
+def credentials_directory() -> Path | None:
+    raw = os.environ.get(CREDENTIALS_DIR_ENV)
+    return Path(raw) if raw else None
+
+
+def is_systemd_credential(path: Path) -> bool:
+    directory = credentials_directory()
+    if not directory:
+        return False
+    try:
+        return str(path.resolve()).startswith(str(directory.resolve()) + os.sep)
+    except OSError:
+        return False
+
+
+#: Имя, под которым секрет передаётся unit'у в `LoadCredential=`.
+CREDENTIAL_NAME = "yandex_oauth"
+
+
 class OAuthToken:
     """Носитель значения токена, который нельзя случайно напечатать.
 
@@ -145,29 +170,29 @@ class TokenFileStatus:
         }
 
 
-#: Каталог, куда systemd кладёт переданные unit'у credentials. Файл там
-#: принадлежит учётной записи сервиса, а не root, и лежит в tmpfs — это штатный
-#: способ выдать секрет непривилегированному процессу, а не ослабление правила.
-CREDENTIALS_DIR_ENV = "CREDENTIALS_DIRECTORY"
-
-
-def credentials_directory() -> Path | None:
-    raw = os.environ.get(CREDENTIALS_DIR_ENV)
-    return Path(raw) if raw else None
-
-
-def is_systemd_credential(path: Path) -> bool:
-    directory = credentials_directory()
-    if not directory:
-        return False
-    try:
-        return str(path.resolve()).startswith(str(directory.resolve()) + os.sep)
-    except OSError:
-        return False
-
-
 def token_path() -> Path:
-    return Path(os.environ.get(TOKEN_FILE_ENV) or DEFAULT_TOKEN_FILE).expanduser()
+    """Путь к файлу секрета.
+
+    Порядок: явный ``YANDEX_OAUTH_TOKEN_FILE`` → credential systemd → значение
+    по умолчанию.
+
+    Ветка с ``CREDENTIALS_DIRECTORY`` существует затем, чтобы unit не был обязан
+    вычислять путь сам. Раньше он это делал через специфер ``%d``, которого нет
+    в systemd 249 (Ubuntu 22.04: специфер появился в 250) — строка молча
+    оставалась literal-ом ``%d/yandex_oauth``, и сервис падал на «файл не
+    найден». Переменную ``CREDENTIALS_DIRECTORY`` systemd выставляет сам,
+    начиная с той же версии, что и сам ``LoadCredential``, поэтому вычислять
+    путь в коде надёжнее, чем в unit-файле.
+    """
+    configured = os.environ.get(TOKEN_FILE_ENV)
+    if configured:
+        return Path(configured).expanduser()
+    directory = credentials_directory()
+    if directory:
+        candidate = directory / CREDENTIAL_NAME
+        if candidate.exists():
+            return candidate
+    return Path(DEFAULT_TOKEN_FILE).expanduser()
 
 
 def inside_repository(path: Path, repo_root: Path | None = None) -> bool:

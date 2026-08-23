@@ -16,7 +16,14 @@ EnvironmentFile=/etc/site-factory/environment
 # доступную только этому процессу. Значение не появляется ни в окружении, ни в
 # `systemctl show`, ни в журнале.
 LoadCredential=yandex_oauth:/etc/site-factory/secrets/yandex_oauth_token
-Environment=YANDEX_OAUTH_TOKEN_FILE=%d/yandex_oauth
+# Путь к credential задаётся через %n (полное имя unit'а), а НЕ через %d.
+# Специфер %d («каталог credentials») появился в systemd 250, а Ubuntu 22.04
+# везёт 249: там строка не разворачивается и остаётся literal-ом «%d/...»,
+# после чего сервис падает на «файл секрета не найден». %n поддерживается
+# давно и на 249 разворачивается правильно.
+# Строка при этом подстраховочная: без неё фабрика возьмёт путь из
+# CREDENTIALS_DIRECTORY, который systemd выставляет сам.
+Environment=YANDEX_OAUTH_TOKEN_FILE=/run/credentials/%n/yandex_oauth
 
 # --confirm-writes включается здесь и только здесь: единственная команда
 # фабрики, которой разрешено создавать счётчики. Повторный запуск дубля не

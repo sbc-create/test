@@ -216,7 +216,12 @@ def test_units_take_the_secret_through_systemd_credentials():
                  "site-factory-analytics-collect.service"):
         text = (units / name).read_text(encoding="utf-8")
         assert "LoadCredential=yandex_oauth:" in text, name
-        assert "YANDEX_OAUTH_TOKEN_FILE=%d/yandex_oauth" in text, name
+        # Конкретная форма пути проверяется в test_systemd_unit_compatibility:
+        # она зависит от версии systemd на целевом хосте, и дублировать её
+        # здесь значило бы чинить одно и то же в двух местах.
+        assert "%d/yandex_oauth" not in text, (
+            f"{name}: специфер %d появился в systemd 250, целевой хост несёт 249"
+        )
         # Значение токена не появляется ни в Environment=, ни в EnvironmentFile.
         assert "YANDEX_OAUTH_TOKEN=" not in text, name
 
