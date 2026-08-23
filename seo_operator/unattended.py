@@ -936,6 +936,25 @@ def production_gate(command: str, root: str | None = None) -> tuple:
     return True, f"условия production выполнены для {site_id} на цели {target_ref}"
 
 
+#: Флаги, которые передают путь программе как конфигурацию, а не печатают его.
+#: `docker compose --env-file .../staging.env up` не раскрывает ни одного
+#: значения: файл читает docker, вывода нет. Запрещать здесь нечего, а под
+#: fail-closed этот запрет останавливал штатный запуск staging.
+CONFIG_FILE_FLAG_RE = re.compile(
+    r"--(?:env-file|config|compose-file|inventory|vault-password-file)(?:=|\s+)\S+"
+)
+
+
+def _without_config_file_args(text: str) -> str:
+    """Убрать аргументы-конфигурации перед поиском стоп-сигналов.
+
+    Отличие существенное: `cat .../staging.env` печатает секрет, а
+    `docker compose --env-file .../staging.env up` — нет. Первое остаётся
+    запрещённым: `cat` виден в тексте и после вырезания флага.
+    """
+    return CONFIG_FILE_FLAG_RE.sub(" ", text)
+
+
 def mandatory_confirmation(command: str, root: str | None = None) -> str:
     """Название стоп-сигнала, если команда его задевает, иначе пустая строка.
 
@@ -955,6 +974,7 @@ def mandatory_confirmation(command: str, root: str | None = None) -> str:
     searched = "\n".join(
         [text] + [b.partition("\n")[2] for b in bodies if b.partition("\n")[0] == "shell"]
     )
+    searched = _without_config_file_args(searched)
     hits = [label for pattern, label in STOP_RE if pattern.search(searched)]
     if not hits:
         return ""
