@@ -56,9 +56,7 @@ def _bash_matches(pattern: str, command: str) -> bool:
     if pattern.endswith(":*"):
         return command.startswith(pattern[:-2].strip())
     if "*" in pattern:
-        return fnmatch.fnmatchcase(command, pattern) or command.startswith(
-            pattern.split("*", 1)[0]
-        )
+        return fnmatch.fnmatchcase(command, pattern) or command.startswith(pattern.split("*", 1)[0])
     return command == pattern
 
 

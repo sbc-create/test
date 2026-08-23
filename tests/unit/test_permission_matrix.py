@@ -28,8 +28,8 @@ import guard_rules
 import pytest
 
 from factory.paths import PATHS
-from seo_operator import hookguard, permission_model as pm
-from seo_operator import unattended
+from seo_operator import hookguard, unattended
+from seo_operator import permission_model as pm
 
 HOOKS = PATHS.root / ".claude" / "hooks"
 SETTINGS = PATHS.root / ".claude" / "settings.json"

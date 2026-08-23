@@ -266,9 +266,10 @@ def remote_targets(tokens: list) -> list:
     for token in args:
         if token.startswith("-"):
             continue
-        if "@" in token:
-            hosts.append(token)
-        elif ":" in token and not token.startswith("/") and "/" not in token.split(":", 1)[0]:
+        # `user@host` и `host:path` — обе формы указывают удалённую цель.
+        if "@" in token or (
+            ":" in token and not token.startswith("/") and "/" not in token.split(":", 1)[0]
+        ):
             hosts.append(token)
     if hosts:
         return [_host_of(h) for h in hosts if _host_of(h)]
@@ -452,6 +453,7 @@ def evaluate_subcommand(sub: str, depth: int = 0) -> Decision:
         # Зона ищется по всей команде: nsupdate принимает её и аргументом, и в
         # теле запроса, поэтому проверять один токен недостаточно.
         zones = inventory_dns_zones()
+        low = stripped.lower()
         matched_zone = next((z for z in zones if z and z in low), "")
         if matched_zone:
             return Decision(PASS)

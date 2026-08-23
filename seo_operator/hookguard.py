@@ -22,30 +22,38 @@ BRANCH_LOCAL_WRITE_TOOLS = frozenset({"Write", "Edit", "MultiEdit", "NotebookEdi
 # GitHub через штатные инструменты. Чтение и работа с pull request — обычная
 # часть цикла; всё, что удаляет или переносит владение, остаётся за человеком.
 GITHUB_READ_PREFIXES = (
-    "mcp__github__get_", "mcp__github__list_", "mcp__github__search_",
-    "mcp__github__issue_read", "mcp__github__pull_request_read",
-    "mcp__github__actions_get", "mcp__github__actions_list",
+    "mcp__github__get_",
+    "mcp__github__list_",
+    "mcp__github__search_",
+    "mcp__github__issue_read",
+    "mcp__github__pull_request_read",
+    "mcp__github__actions_get",
+    "mcp__github__actions_list",
 )
-GITHUB_WRITE_TOOLS = frozenset({
-    "mcp__github__create_pull_request",
-    "mcp__github__update_pull_request",
-    "mcp__github__create_branch",
-    "mcp__github__add_comment_to_pending_review",
-    "mcp__github__pull_request_review_write",
-    "mcp__github__add_reply_to_pull_request_comment",
-    "mcp__github__resolve_review_thread",
-    "mcp__github__unresolve_review_thread",
-    "mcp__github__update_pull_request_branch",
-    "mcp__github__subscribe_pr_activity",
-    "mcp__github__unsubscribe_pr_activity",
-})
+GITHUB_WRITE_TOOLS = frozenset(
+    {
+        "mcp__github__create_pull_request",
+        "mcp__github__update_pull_request",
+        "mcp__github__create_branch",
+        "mcp__github__add_comment_to_pending_review",
+        "mcp__github__pull_request_review_write",
+        "mcp__github__add_reply_to_pull_request_comment",
+        "mcp__github__resolve_review_thread",
+        "mcp__github__unresolve_review_thread",
+        "mcp__github__update_pull_request_branch",
+        "mcp__github__subscribe_pr_activity",
+        "mcp__github__unsubscribe_pr_activity",
+    }
+)
 #: Необратимое или выходящее за репозиторий — только через человека.
-GITHUB_BLOCKED_TOOLS = frozenset({
-    "mcp__github__delete_file",
-    "mcp__github__create_repository",
-    "mcp__github__fork_repository",
-    "mcp__github__run_secret_scanning",
-})
+GITHUB_BLOCKED_TOOLS = frozenset(
+    {
+        "mcp__github__delete_file",
+        "mcp__github__create_repository",
+        "mcp__github__fork_repository",
+        "mcp__github__run_secret_scanning",
+    }
+)
 
 DECISION_MAP = {
     Decision.ALLOW: "allow",

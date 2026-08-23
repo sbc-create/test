@@ -53,33 +53,46 @@ STOP_PATTERNS: tuple[tuple[str, str], ...] = (
     (r"\bterraform\s+destroy\b|\baws\s+s3\s+rb\b", "удаление инфраструктуры"),
     (r"\b(?:backup|backups|snapshot)\b[^\n]*\b(?:rm|delete|destroy|purge)\b", "удаление бэкапа"),
     (r"\b(?:rm|delete|destroy|purge)\b[^\n]*\b(?:backup|backups)\b", "удаление бэкапа"),
-    (r"\b(?:zone|domain|domains)\b[^\n]*\b(?:delete|destroy|transfer|release)\b",
-     "удаление или перенос зоны/домена"),
-    (r"\b(?:domain|domains|dns)\b[^\n]*\b(?:register|purchase|buy|renew)\b",
-     "покупка домена"),
-    (r"\b(?:billing|payment|invoice|subscription|checkout)\b[^\n]*\b(?:create|pay|charge|confirm)\b",
-     "оплата услуг"),
-    (r"--dangerously-skip-permissions|bypassPermissions|dangerouslyDisableSandbox",
-     "обход разрешений"),
+    (
+        r"\b(?:zone|domain|domains)\b[^\n]*\b(?:delete|destroy|transfer|release)\b",
+        "удаление или перенос зоны/домена",
+    ),
+    (r"\b(?:domain|domains|dns)\b[^\n]*\b(?:register|purchase|buy|renew)\b", "покупка домена"),
+    (
+        r"\b(?:billing|payment|invoice|subscription|checkout)\b[^\n]*\b(?:create|pay|charge|confirm)\b",
+        "оплата услуг",
+    ),
+    (
+        r"--dangerously-skip-permissions|bypassPermissions|dangerouslyDisableSandbox",
+        "обход разрешений",
+    ),
     (r"--no-verify\b", "обход git-хуков"),
     (r"(?:rm|mv|chmod\s+-x)\s+[^\n]*\.claude/hooks/", "отключение хуков"),
     (r"\$\{?(?:[A-Z_]*(?:SECRET|TOKEN|PASSWORD|API_KEY)[A-Z_]*)\b", "подстановка значения секрета"),
     (r"(?:^|[;&|]\s*)printenv\b|(?:^|[;&|]\s*)env\s*(?:\||>|;|$)", "дамп окружения"),
     # Секретные пути закрыты и здесь: профиль обязан быть безопасным в одиночку,
     # а не только в паре с guard_rules.
-    (r"(?:^|[\s'\"=/])(?:\.env(?:\.[\w.-]+)?|secrets/|id_rsa|id_ed25519|id_ecdsa"
-     r"|\.pem\b|\.p12\b|\.pfx\b|authorized_keys|\.ssh/|\.aws/credentials|\.npmrc|\.pypirc)",
-     "обращение к секретному пути"),
+    (
+        r"(?:^|[\s'\"=/])(?:\.env(?:\.[\w.-]+)?|secrets/|id_rsa|id_ed25519|id_ecdsa"
+        r"|\.pem\b|\.p12\b|\.pfx\b|authorized_keys|\.ssh/|\.aws/credentials|\.npmrc|\.pypirc)",
+        "обращение к секретному пути",
+    ),
     # Необратимые операции над production подтверждает человек, даже когда
     # выполняет их сама фабрика: разрешение выдаётся на команду, а не на среду.
     (r"--environment[= ]\s*production\b|--env[= ]\s*production\b", "операция над production"),
-    (r"\bfactory\s+(?:deploy|rollback)\b(?![^\n]*--environment[= ]\s*staging\b)",
-     "выкат или откат вне staging"),
-    (r"\b(?:kubectl|helm)\s+(?:apply|delete|rollout)\b|\bterraform\s+apply\b",
-     "мутация инфраструктуры"),
+    (
+        r"\bfactory\s+(?:deploy|rollback)\b(?![^\n]*--environment[= ]\s*staging\b)",
+        "выкат или откат вне staging",
+    ),
+    (
+        r"\b(?:kubectl|helm)\s+(?:apply|delete|rollout)\b|\bterraform\s+apply\b",
+        "мутация инфраструктуры",
+    ),
     # Удаление истории, конфигурации защиты, знаний и самих сайтов — не рутина.
-    (r"\brm\b[^\n]*(?:\s|/)(?:\.git|\.claude|sites|knowledge|inventory|artifacts)(?:/|\s|$)",
-     "удаление истории, защиты, знаний или сайтов"),
+    (
+        r"\brm\b[^\n]*(?:\s|/)(?:\.git|\.claude|sites|knowledge|inventory|artifacts)(?:/|\s|$)",
+        "удаление истории, защиты, знаний или сайтов",
+    ),
 )
 
 STOP_RE = tuple((re.compile(pattern, re.IGNORECASE), label) for pattern, label in STOP_PATTERNS)
@@ -323,26 +336,107 @@ def network_hosts(root: str | None = None) -> set:
 # Наборы рутинных программ
 # --------------------------------------------------------------------------
 READ_ONLY = {
-    "ls", "cat", "head", "tail", "wc", "find", "grep", "rg", "egrep", "fgrep",
-    "awk", "sort", "uniq", "cut", "tr", "diff", "stat", "file", "tree", "jq",
-    "yq", "basename", "dirname", "realpath", "readlink", "date", "pwd", "echo",
-    "printf", "true", "false", "test", "md5sum", "sha256sum", "sha1sum",
-    "column", "nl", "tac", "comm", "du", "which", "command", "seq", "xxd", "cd",
+    "ls",
+    "cat",
+    "head",
+    "tail",
+    "wc",
+    "find",
+    "grep",
+    "rg",
+    "egrep",
+    "fgrep",
+    "awk",
+    "sort",
+    "uniq",
+    "cut",
+    "tr",
+    "diff",
+    "stat",
+    "file",
+    "tree",
+    "jq",
+    "yq",
+    "basename",
+    "dirname",
+    "realpath",
+    "readlink",
+    "date",
+    "pwd",
+    "echo",
+    "printf",
+    "true",
+    "false",
+    "test",
+    "md5sum",
+    "sha256sum",
+    "sha1sum",
+    "column",
+    "nl",
+    "tac",
+    "comm",
+    "du",
+    "which",
+    "command",
+    "seq",
+    "xxd",
+    "cd",
 }
 #: `sed` читает только без `-i`; запись разбирается отдельно.
 READ_ONLY_UNLESS_INPLACE = {"sed", "perl"}
 
 FILE_WORK = {
-    "mkdir", "touch", "cp", "mv", "ln", "rm", "rmdir", "chmod", "tee",
-    "unzip", "tar", "zip", "gzip",
+    "mkdir",
+    "touch",
+    "cp",
+    "mv",
+    "ln",
+    "rm",
+    "rmdir",
+    "chmod",
+    "tee",
+    "unzip",
+    "tar",
+    "zip",
+    "gzip",
 }
 
 RUNTIMES = {
-    "python", "python3", "pytest", "ruff", "mypy", "black", "isort", "pip", "pip3",
-    "uv", "poetry", "node", "npm", "npx", "pnpm", "yarn", "corepack", "tsc",
-    "eslint", "prettier", "playwright", "vitest", "jest", "php", "composer",
-    "docker", "docker-compose", "podman", "make", "ansible-lint", "shellcheck",
-    "hadolint", "psalm", "phpstan", "phpunit",
+    "python",
+    "python3",
+    "pytest",
+    "ruff",
+    "mypy",
+    "black",
+    "isort",
+    "pip",
+    "pip3",
+    "uv",
+    "poetry",
+    "node",
+    "npm",
+    "npx",
+    "pnpm",
+    "yarn",
+    "corepack",
+    "tsc",
+    "eslint",
+    "prettier",
+    "playwright",
+    "vitest",
+    "jest",
+    "php",
+    "composer",
+    "docker",
+    "docker-compose",
+    "podman",
+    "make",
+    "ansible-lint",
+    "shellcheck",
+    "hadolint",
+    "psalm",
+    "phpstan",
+    "phpunit",
 }
 #: Удалённые исполнители: разрешены только к целям из inventory.
 REMOTE = {"ssh", "scp", "sftp", "rsync", "ansible", "ansible-playbook"}
@@ -351,16 +445,64 @@ FETCH = {"curl", "wget", "http", "httpie"}
 SHELLS = {"bash", "sh", "zsh"}
 
 GIT_READ = {
-    "status", "diff", "log", "show", "branch", "rev-parse", "rev-list", "ls-files",
-    "ls-remote", "ls-tree", "fetch", "blame", "describe", "shortlog", "cat-file",
-    "for-each-ref", "merge-base", "name-rev", "grep", "whatchanged", "count-objects",
-    "remote", "config", "worktree", "stash", "check-ignore", "check-attr",
-    "diff-tree", "diff-index", "symbolic-ref", "show-ref", "reflog", "verify-commit",
-    "annotate", "archive", "hash-object", "help", "version", "notes", "bundle",
+    "status",
+    "diff",
+    "log",
+    "show",
+    "branch",
+    "rev-parse",
+    "rev-list",
+    "ls-files",
+    "ls-remote",
+    "ls-tree",
+    "fetch",
+    "blame",
+    "describe",
+    "shortlog",
+    "cat-file",
+    "for-each-ref",
+    "merge-base",
+    "name-rev",
+    "grep",
+    "whatchanged",
+    "count-objects",
+    "remote",
+    "config",
+    "worktree",
+    "stash",
+    "check-ignore",
+    "check-attr",
+    "diff-tree",
+    "diff-index",
+    "symbolic-ref",
+    "show-ref",
+    "reflog",
+    "verify-commit",
+    "annotate",
+    "archive",
+    "hash-object",
+    "help",
+    "version",
+    "notes",
+    "bundle",
 }
 GIT_WRITE = {
-    "add", "commit", "checkout", "switch", "restore", "merge", "rebase", "tag",
-    "cherry-pick", "revert", "reset", "mv", "pull", "init", "apply", "am",
+    "add",
+    "commit",
+    "checkout",
+    "switch",
+    "restore",
+    "merge",
+    "rebase",
+    "tag",
+    "cherry-pick",
+    "revert",
+    "reset",
+    "mv",
+    "pull",
+    "init",
+    "apply",
+    "am",
 }
 #: Ветки, в которые разрешён обычный push.
 PUSH_BRANCH_RE = re.compile(r"(?:^|[\s:/])claude/[A-Za-z0-9._\-/]+")
@@ -392,8 +534,11 @@ def _remote_hosts(tokens: list) -> list:
     rules = _guard_rules()
     if rules is not None:
         return rules.remote_targets(tokens)
-    return [t.split("@", 1)[-1].split(":", 1)[0].lower() for t in tokens[1:]
-            if not t.startswith("-") and "/" not in t]
+    return [
+        t.split("@", 1)[-1].split(":", 1)[0].lower()
+        for t in tokens[1:]
+        if not t.startswith("-") and "/" not in t
+    ]
 
 
 def _git_ok(tokens: list) -> bool:
@@ -443,8 +588,7 @@ def classify_segment(segment: str, root: str) -> tuple[bool, str]:
 
     if prog in READ_ONLY_UNLESS_INPLACE:
         inplace = any(
-            t == "-i" or t.startswith("-i") or t.startswith("--in-place")
-            for t in tokens[1:]
+            t == "-i" or t.startswith("-i") or t.startswith("--in-place") for t in tokens[1:]
         )
         if not inplace:
             return True, "чтение"
@@ -641,8 +785,9 @@ def mandatory_confirmation(command: str, root: str | None = None) -> str:
     text, bodies = strip_heredocs((command or "").strip())
     # Стоп-сигнал ищется и в теле, которое исполняет оболочка: `bash <<EOF` с
     # `git push --force` внутри — это push --force, а не текст.
-    searched = "\n".join([text] + [b.partition("\n")[2] for b in bodies
-                                   if b.partition("\n")[0] == "shell"])
+    searched = "\n".join(
+        [text] + [b.partition("\n")[2] for b in bodies if b.partition("\n")[0] == "shell"]
+    )
     hits = [label for pattern, label in STOP_RE if pattern.search(searched)]
     if not hits:
         return ""
