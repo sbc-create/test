@@ -54,6 +54,29 @@ def cmd_probe(_args) -> int:
     return 0
 
 
+def cmd_factory_portfolio(args) -> int:
+    """Портфель, каким его видит оператор поверх пакетов фабрики.
+
+    Команда только читает: реальный реестр config/portfolio.json заполняет
+    владелец. Возврат 3 означает, что ни один сайт не готов к работе с живыми
+    данными — это нормальное состояние до передачи доменов и доступов, но
+    молчаливым нулём его выдавать нельзя.
+    """
+    from seo_operator.factory_bridge import portfolio_view
+
+    view = portfolio_view(REPO_ROOT)
+    if args.json:
+        print(json.dumps(view, ensure_ascii=False, indent=2))
+    else:
+        for site in view["sites"]:
+            mark = "OK " if site["readiness"] == "READY" else "БЛОК"
+            print(f"[{mark}] {site['site_id']:22} {site['readiness']:28} {site['base_url']}")
+        counts = view["counts"]
+        print(f"\nвсего сайтов {counts['total']}, готово {counts['ready']}, "
+              f"заблокировано {counts['blocked']}")
+    return 0 if view["counts"]["ready"] else 3
+
+
 def cmd_run(args, mode: Mode) -> int:
     op = _operator(args.fixture)
     pages_by_site = {}
@@ -103,6 +126,12 @@ def main(argv=None) -> int:
 
     sub.add_parser("probe", help="проверить доступность источников")
 
+    p = sub.add_parser(
+        "factory-portfolio",
+        help="портфель по пакетам сайтов фабрики (только чтение)",
+    )
+    p.add_argument("--json", action="store_true", help="машиночитаемый вывод")
+
     for name, help_text in (
         ("inventory", "read-only инвентаризация"),
         ("dry-run", "рассчитать изменения без записи"),
@@ -123,6 +152,8 @@ def main(argv=None) -> int:
 
     if args.command == "probe":
         return cmd_probe(args)
+    if args.command == "factory-portfolio":
+        return cmd_factory_portfolio(args)
     if args.command == "inventory":
         return cmd_run(args, Mode.INVENTORY)
     if args.command == "dry-run":
