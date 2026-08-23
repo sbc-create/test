@@ -1,3 +1,14 @@
+---
+paths:
+  - "seo_operator/**"
+  - "seo/**"
+  - "config/**"
+  - "schemas/**"
+  - "scripts/**"
+  - "docs/seo-operator/**"
+  - "tests/operator/**"
+---
+
 # SEO session operating rules
 
 Binding rules for any session doing SEO work in this repository. `CLAUDE.md`

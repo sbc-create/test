@@ -48,3 +48,5 @@ dist/
 
 # Operator runtime state (audit logs, checkpoints, locks, queues)
 var/
+# Журнал решений PreToolUse-хука SEO-оператора: runtime-состояние, а не исходник.
+.seo-state/

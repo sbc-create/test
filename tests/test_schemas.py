@@ -52,10 +52,21 @@ def test_invalid_fixture_is_rejected(path, schemas):
     assert problems, f"{path.name} is meant to be invalid but the schema accepted it"
 
 
+# Схемы конвейера фабрики живут в том же каталоге, но проверяются иначе: у них
+# нет пары *.valid.json / *.invalid.json, зато каждая упражняется настоящими
+# пакетами сайтов (`python3 -m factory validate`) и тестами tests/unit. Требовать
+# от них фикстуры SEO-образца — значит требовать вторую копию тех же данных.
+FACTORY_OWNED_SCHEMAS = {"site-package", "job-result"}
+
+
 def test_every_schema_has_a_valid_fixture(schemas):
     """A schema nobody exercises drifts silently."""
     covered = {p.name.split(".")[0] for p in VALID_FIXTURES}
-    assert set(schemas) <= covered, f"schemas without a valid fixture: {set(schemas) - covered}"
+    operator_schemas = set(schemas) - FACTORY_OWNED_SCHEMAS
+    assert operator_schemas, "схемы SEO-оператора не найдены — проверка потеряла смысл"
+    assert operator_schemas <= covered, (
+        f"schemas without a valid fixture: {operator_schemas - covered}"
+    )
 
 
 @pytest.mark.parametrize(

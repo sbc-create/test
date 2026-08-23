@@ -11,4 +11,9 @@ select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-q"
+# importlib: у фабрики и SEO-оператора есть одноимённые файлы тестов в разных
+# каталогах (tests/unit/test_audit.py и tests/test_audit.py). При классическом
+# импорте pytest выводит имя модуля из базового имени файла, и второй такой файл
+# отказывается собираться. importlib различает их по полному пути, поэтому оба
+# набора живут рядом без переименований.
+addopts = "-q --import-mode=importlib"
