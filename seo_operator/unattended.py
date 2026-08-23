@@ -511,16 +511,17 @@ def strip_heredocs(command: str) -> tuple:
     тексте сообщения «команду» и снимал разрешение со всей строки — то есть
     коммит с описанием работы останавливал работу.
 
-    Возвращает `(команда без тел, есть ли тело, исполняемое интерпретатором)`.
-    Исполняемое тело профиль не разрешает: его разбирает слой запретов, а
-    ручаться за произвольный код профиль не может.
+    Возвращает `(команда без тел, тела, которые кто-то исполняет)`. Тело,
+    исполняемое оболочкой, разбирается дальше как обычная команда; тело
+    скриптового интерпретатора — как локальный код: ровно то же самое, что
+    `python3 script.py`, которое профиль и так разрешает. Запреты к телу
+    применяет слой фабрики (`evaluate_interpreter_body`) до профиля.
     """
     rules = _guard_rules()
     if rules is None:
-        return command, False
+        return command, []
     text, bodies = rules.strip_heredoc_bodies(command)
-    executable = any(body.partition("\n")[0] for body in bodies)
-    return text, executable
+    return text, [body for body in bodies if body.partition("\n")[0]]
 
 
 #: Стоп-сигналы, которые снимаются выполненными условиями production.
@@ -637,8 +638,12 @@ def mandatory_confirmation(command: str, root: str | None = None) -> str:
     # Тело heredoc отделяется и здесь: стоп-сигнал ищется в команде, а не в
     # тексте, который команда записывает. Иначе сообщение коммита, называющее
     # запрещённое действие, само становилось запрещённым действием.
-    text, _ = strip_heredocs((command or "").strip())
-    hits = [label for pattern, label in STOP_RE if pattern.search(text)]
+    text, bodies = strip_heredocs((command or "").strip())
+    # Стоп-сигнал ищется и в теле, которое исполняет оболочка: `bash <<EOF` с
+    # `git push --force` внутри — это push --force, а не текст.
+    searched = "\n".join([text] + [b.partition("\n")[2] for b in bodies
+                                   if b.partition("\n")[0] == "shell"])
+    hits = [label for pattern, label in STOP_RE if pattern.search(searched)]
     if not hits:
         return ""
     if set(hits) <= PRODUCTION_STOP_LABELS and FACTORY_MUTATION_RE.search(text):
@@ -654,20 +659,37 @@ def evaluate(command: str, root: str | None = None) -> Verdict:
     if not text:
         return Verdict(PASS, "пустая команда")
 
-    text, executable_heredoc = strip_heredocs(text)
-    if executable_heredoc:
-        return Verdict(PASS, "тело heredoc исполняется интерпретатором")
-
     stop = mandatory_confirmation(text, root)
     if stop:
         return Verdict(PASS, f"обязательное подтверждение: {stop}")
 
+    text, bodies = strip_heredocs(text)
+
+    parts = list(segments(text))
+    scripted = False
+    for body in bodies:
+        kind, _, payload = body.partition("\n")
+        if kind == "shell":
+            # Оболочка исполнит тело как команды — разбираем их наравне с прочими.
+            parts.extend(segments(payload))
+        else:
+            # Скриптовое тело эквивалентно `python3 script.py`, которое профиль
+            # и так разрешает: он не разбирает чужой язык и не притворяется, что
+            # разбирает. Границу держат запреты слоя фабрики
+            # (`evaluate_interpreter_body` уже проверил тело) и права файловой
+            # системы, а не этот разбор.
+            scripted = True
+
     reasons: list[str] = []
-    for segment in segments(text):
+    for segment in parts:
+        if not segment.strip():
+            continue
         ok, reason = classify_segment(segment, root)
         if not ok:
             return Verdict(PASS, reason)
         reasons.append(reason)
+    if scripted:
+        reasons.append("локальный код интерпретатора")
     if not reasons:
         return Verdict(PASS, "нечего разбирать")
     return Verdict(ALLOW, "; ".join(dict.fromkeys(reasons)))

@@ -130,8 +130,23 @@ class TestHeredocBodyIsData:
         command = "cat > var/note.txt <<'TXT'\nssh root@unknown.example\nTXT"
         assert unattended.evaluate(command).decision == unattended.ALLOW
 
-    def test_a_body_the_interpreter_executes_is_never_auto_approved(self):
+    def test_a_shell_body_is_judged_as_commands(self):
+        """Тело, которое исполнит оболочка, разбирается наравне с командой."""
         command = "bash <<'SH'\nssh root@unknown.example uptime\nSH"
         assert unattended.evaluate(command).decision == unattended.PASS
+        assert g.evaluate_bash(command).decision == g.DENY
+
+    def test_a_shell_body_cannot_hide_a_stop_signal(self):
+        command = "bash <<'SH'\ngit push --force origin claude/x\nSH"
+        assert unattended.evaluate(command).decision == unattended.PASS
+        assert "force push" in unattended.mandatory_confirmation(command)
+
+    def test_a_script_body_is_ordinary_local_code(self):
+        """`python - <<PY` — то же самое, что `python script.py`, и оно разрешено."""
+        command = ".venv/bin/python - <<'PY'\nprint(len(open('README.md').read()))\nPY"
+        assert unattended.evaluate(command).decision == unattended.ALLOW
+
+    def test_a_script_body_touching_a_secret_is_still_denied(self):
+        command = ".venv/bin/python - <<'PY'\nprint(open('.env').read())\nPY"
         assert g.evaluate_bash(command).decision == g.DENY
 
