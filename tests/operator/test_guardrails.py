@@ -216,3 +216,33 @@ class TestRepositoryInspectionVerbs:
         """Allowing `grep` must not allow every git subcommand."""
         assert classify(ActionContext(command="git gc --prune=now")).decision is Decision.BLOCK
         assert classify(ActionContext(command="git clean -fdx")).decision is Decision.BLOCK
+
+
+class TestCherryPickIsOrdinaryBranchWork:
+    """Перенос коммитов в собственную ветку — та же работа, что merge и rebase.
+
+    Без этого операция останавливалась на середине: сам `cherry-pick` проходил,
+    а `--continue`, `--abort` и `--quit` отклонялись, и репозиторий оставался в
+    незавершённом состоянии, из которого нечем выйти.
+    """
+
+    @pytest.mark.parametrize(
+        "command",
+        [
+            "git cherry-pick ca92f4f",
+            "git cherry-pick ca92f4f..5f35dff",
+            "git cherry-pick --continue",
+            "git cherry-pick --abort",
+            "git cherry-pick --quit",
+            "git revert --no-edit HEAD",
+        ],
+    )
+    def test_cherry_pick_allowed(self, command):
+        assert classify(ActionContext(command=command)).decision is Decision.ALLOW
+
+    def test_destructive_forms_still_blocked(self):
+        """Разрешение переноса не открывает разрушительные операции."""
+        assert classify(ActionContext(command="git push --force origin main")).decision is Decision.BLOCK
+        assert classify(ActionContext(command="git reset --hard HEAD~1")).decision is Decision.BLOCK
+        assert classify(ActionContext(command="git cherry-pick --continue --no-verify")).decision is Decision.BLOCK
+        assert classify(ActionContext(command="git clean -fdx")).decision is Decision.BLOCK

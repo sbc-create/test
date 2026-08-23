@@ -89,7 +89,15 @@ ALLOWED_PATTERNS: list[tuple[str, str]] = [
         "read-only git",
     ),
     (
-        r"^git\s+(add|commit|checkout|switch|restore|stash|merge|rebase|tag)\b",
+        # `cherry-pick` относится к тому же классу, что merge и rebase: локальный
+        # перенос коммитов в собственную ветку. Без него перенос работы между
+        # ветками останавливался на середине — сама операция проходила, а
+        # `--continue`, `--abort` и `--quit` отклонялись, и репозиторий оставался
+        # в незавершённом состоянии. Разрушительные формы (`push --force`,
+        # `reset --hard`, `--no-verify`) по-прежнему запрещены отдельными
+        # правилами выше и до этого списка не доходят.
+        r"^git\s+(add|commit|checkout|switch|restore|stash|merge|rebase|tag"
+        r"|cherry-pick|revert)\b",
         "git work in own branch",
     ),
     # Unstaging is ordinary; `reset --hard` discards uncommitted work and is not.
