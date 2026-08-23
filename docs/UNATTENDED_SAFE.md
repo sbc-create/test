@@ -124,7 +124,9 @@ canonical, pagination, schema.org и метаданных, тестирован�
 - перенос домена другому владельцу, покупка доменов и любые платные действия;
 - раскрытие, печать, коммит и передача секретов; чтение `.env`, ключей и токенов;
 - подключение к SSH-хостам и работа с зонами вне inventory;
-- отключение логирования, аудита, бэкапа и rollback;
+- удаление журнала аудита (`var/audit/`, `*.jsonl`) и затирание его перенаправлением;
+- выключение бэкапа, отката и health-check правкой пакета из команды;
+- ослабление branch protection (`branches/*/protection`, `enforce_admins=false`);
 - обход guard и permission rules: `--dangerously-skip-permissions`,
   `bypassPermissions`, `--no-verify`, снятие хуков;
 - скрытое исполнение: `curl | bash`, `base64 | bash`, произвольный `eval`;
@@ -132,6 +134,22 @@ canonical, pagination, schema.org и метаданных, тестирован�
 
 Требует подтверждения человека: production с невыполненным условием и всё,
 что профиль не опознал.
+
+## Чего разбор команд не закрывает
+
+Профиль читает команды. Поля пакета правятся ещё и редактором, а разбор команд
+там бессилен, поэтому восстановимость держится инвариантом:
+`tests/unit/test_production_gates.py::test_site_packages_keep_recovery_enabled`
+падает, если в любом пакете выключены `backup_policy.before_mutation`,
+`restore_test`, `rollback_policy.auto_rollback_on_smoke_failure`,
+`keep_releases` или `monitoring_policy.health_endpoint`/`checks`. Осознанное
+отключение остаётся возможным — оно требует изменить тест, то есть пройти через
+ревью, а не через тихую правку одной строки.
+
+Событие хука `PermissionRequest` в замороженной документации Claude Code
+(SRC-CC-HOOKS) не описано, проверить его вживую в CLOSED_WORLD нельзя, поэтому
+профиль реализован целиком на `PreToolUse` — его достаточно: решение выдаётся до
+вызова инструмента. Запись — в `knowledge/UNKNOWNS.md`.
 
 ## Как расширять
 
