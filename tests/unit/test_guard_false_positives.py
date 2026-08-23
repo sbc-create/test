@@ -8,8 +8,9 @@
 import guard_rules as g
 import pytest
 
+from seo_operator import unattended
 from seo_operator.guardrails import ActionContext, Decision, classify
-from tests.unit.test_permission_matrix import chain
+from tests.unit.test_permission_matrix import final
 
 
 class TestRedirectionIsNotASeparator:
@@ -77,7 +78,7 @@ class TestEnvAssignmentIsNotADump:
         # default-deny, который профиль UNATTENDED_SAFE поднимает до allow.
         verdict = classify(ActionContext(command=command))
         assert verdict.rule == "default-deny", verdict.reason
-        assert chain(command) == "allow"
+        assert final(command) == "allow"
 
     @pytest.mark.parametrize("command", ["env", "env | grep TOKEN", "printenv", "ls; printenv"])
     def test_dumping_the_environment_stays_blocked(self, command):
@@ -104,3 +105,33 @@ class TestRemoteAccessFollowsInventory:
         if "example.tld" not in g.inventory_dns_zones():
             assert verdict.decision == g.DENY
             assert verdict.rule_id == "G-NET-CFG"
+
+
+class TestHeredocBodyIsData:
+    """Тело heredoc — данные, а не команды.
+
+    Профиль разбирал `git commit -F - <<MSG … MSG` вместе с текстом сообщения и
+    видел в описании работы «неизвестную команду». Получалось, что коммит,
+    описывающий защиту, останавливался этой же защитой.
+    """
+
+    COMMIT = (
+        "git add -A && git commit -q -F - <<'MSG'\n"
+        "guard: описание работы\n"
+        "\n"
+        "rm -rf и git push --force упомянуты в тексте, но не выполняются.\n"
+        "MSG"
+    )
+
+    def test_commit_message_is_not_parsed_as_commands(self):
+        assert unattended.evaluate(self.COMMIT).decision == unattended.ALLOW
+
+    def test_writing_a_file_is_not_parsed_as_commands(self):
+        command = "cat > var/note.txt <<'TXT'\nssh root@unknown.example\nTXT"
+        assert unattended.evaluate(command).decision == unattended.ALLOW
+
+    def test_a_body_the_interpreter_executes_is_never_auto_approved(self):
+        command = "bash <<'SH'\nssh root@unknown.example uptime\nSH"
+        assert unattended.evaluate(command).decision == unattended.PASS
+        assert g.evaluate_bash(command).decision == g.DENY
+

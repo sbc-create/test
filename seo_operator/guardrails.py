@@ -45,6 +45,9 @@ BLOCKED_PATTERNS: list[tuple[str, str]] = [
     (r"\bALTER\s+TABLE\b.*\bDROP\s+COLUMN\b", "destructive migration"),
     (r"git\s+push\b.*(--force\b|-f\b|\+refs)", "force push"),
     (r"git\s+push\b.*:\s*refs/heads/", "remote branch deletion via refspec"),
+    (r"git\s+push\b[^\n]*\s--delete\b|git\s+push\b[^\n]*\s-d\b",
+     "remote branch deletion"),
+    (r"git\s+push\b[^\n]*\s:[A-Za-z0-9._/-]+", "remote branch deletion via refspec"),
     (r"git\s+push\b[^|;]*\b(main|master)\b", "push directly to main/master"),
     (r"\brm\s+-rf\s+/(?!tmp|home/user/test/var)", "recursive delete outside scratch"),
     (r"\b(dropdb|dropuser)\b", "database/user deletion"),
@@ -220,7 +223,10 @@ def _match(patterns: list[tuple[str, str]], text: str) -> tuple[str, str] | None
 # the strength of `git status` alone.
 SEVERITY = {Decision.ALLOW: 0, Decision.REQUIRE_APPROVAL: 1, Decision.BLOCK: 2}
 
-_OPERATORS = ("&&", "||", ";", "|")
+# `|&` — сокращение для `2>&1 |`, перевод строки разделяет команды так же,
+# как `;`. Без них хвост составной команды классифицировался вместе с
+# головой, и безопасное начало ручалось за небезопасное продолжение.
+_OPERATORS = ("&&", "||", ";", "|&", "|", "\n")
 
 
 def split_segments(command: str) -> list[str]:

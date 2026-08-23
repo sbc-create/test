@@ -19,6 +19,34 @@ READ_ONLY_TOOLS = frozenset({"Read", "Glob", "Grep", "NotebookRead", "TodoWrite"
 # the session works in its own branch and cannot push without authorization.
 BRANCH_LOCAL_WRITE_TOOLS = frozenset({"Write", "Edit", "MultiEdit", "NotebookEdit"})
 
+# GitHub через штатные инструменты. Чтение и работа с pull request — обычная
+# часть цикла; всё, что удаляет или переносит владение, остаётся за человеком.
+GITHUB_READ_PREFIXES = (
+    "mcp__github__get_", "mcp__github__list_", "mcp__github__search_",
+    "mcp__github__issue_read", "mcp__github__pull_request_read",
+    "mcp__github__actions_get", "mcp__github__actions_list",
+)
+GITHUB_WRITE_TOOLS = frozenset({
+    "mcp__github__create_pull_request",
+    "mcp__github__update_pull_request",
+    "mcp__github__create_branch",
+    "mcp__github__add_comment_to_pending_review",
+    "mcp__github__pull_request_review_write",
+    "mcp__github__add_reply_to_pull_request_comment",
+    "mcp__github__resolve_review_thread",
+    "mcp__github__unresolve_review_thread",
+    "mcp__github__update_pull_request_branch",
+    "mcp__github__subscribe_pr_activity",
+    "mcp__github__unsubscribe_pr_activity",
+})
+#: Необратимое или выходящее за репозиторий — только через человека.
+GITHUB_BLOCKED_TOOLS = frozenset({
+    "mcp__github__delete_file",
+    "mcp__github__create_repository",
+    "mcp__github__fork_repository",
+    "mcp__github__run_secret_scanning",
+})
+
 DECISION_MAP = {
     Decision.ALLOW: "allow",
     Decision.REQUIRE_APPROVAL: "ask",
@@ -38,6 +66,13 @@ def decide(payload: dict) -> dict:
         if "/.claude/hooks/" in path or path.endswith("settings.json"):
             return _out("ask", "изменение самой защитной машинерии требует подтверждения")
         return _out("allow", f"{tool}: запись в пределах рабочей ветки")
+
+    if tool in GITHUB_BLOCKED_TOOLS:
+        return _out("deny", f"{tool}: необратимая операция над репозиторием")
+    if tool.startswith(GITHUB_READ_PREFIXES):
+        return _out("allow", f"{tool}: чтение данных GitHub")
+    if tool in GITHUB_WRITE_TOOLS:
+        return _out("allow", f"{tool}: работа с pull request в собственной ветке")
 
     if tool == "Bash":
         command = str(tool_input.get("command", ""))

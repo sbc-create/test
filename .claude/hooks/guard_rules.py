@@ -167,6 +167,17 @@ def _repo_root() -> str:
     return os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
+#: Корень, из которого читается inventory. Пусто — корень репозитория.
+#: Переопределяется тестами через переменную окружения, а не правкой файла:
+#: доказать «хост из inventory разрешён» можно только на инвентаре, которого в
+#: боевом реестре нет, и придумывать ради этого настоящий хост запрещено.
+INVENTORY_ROOT_ENV = "FACTORY_INVENTORY_ROOT"
+
+
+def inventory_root() -> str:
+    return os.environ.get(INVENTORY_ROOT_ENV) or _repo_root()
+
+
 def _read_inventory(name: str, section: str) -> list:
     """Читает список записей из inventory без внешних зависимостей.
 
@@ -174,7 +185,7 @@ def _read_inventory(name: str, section: str) -> list:
     окружение сломано. Нужны только простые записи `ключ: значение`, поэтому
     разбор построчный, а любая неожиданность трактуется как «записи нет».
     """
-    path = os.path.join(_repo_root(), "inventory", name)
+    path = os.path.join(inventory_root(), "inventory", name)
     if not os.path.exists(path):
         return []
     entries: list = []
@@ -226,20 +237,68 @@ def inventory_dns_zones() -> set:
     return zones
 
 
-def remote_target(tokens: list) -> str:
-    """Хост из аргументов ssh/scp/rsync: `user@host`, `host:path` или `host`."""
-    for token in tokens[1:]:
+#: Флаги, значение которых — цель, а не файл: `ansible-playbook -l host`.
+TARGET_FLAGS = {"-l", "--limit"}
+#: Расширения, по которым видно, что аргумент — файл, а не хост.
+FILE_ARG_RE = re.compile(r"\.(?:ya?ml|cfg|ini|sh|tar|gz|tgz|zip|json|txt)$", re.IGNORECASE)
+
+
+def remote_targets(tokens: list) -> list:
+    """Все хосты, к которым обращается команда.
+
+    Разбор устроен по убыванию надёжности: явная цель (`-l host`), затем
+    спецификации `user@host` и `host:path`, и только потом голый аргумент.
+    Локальные пути (`build/`, `site.yml`) целью не считаются: приняв путь за
+    хост, проверка отказывала штатному `scp file user@host:/tmp/` и при этом
+    ничего не защищала.
+    """
+    args = list(tokens[1:])
+    hosts: list = []
+
+    for index, token in enumerate(args):
+        if token in TARGET_FLAGS and index + 1 < len(args):
+            hosts.append(args[index + 1])
+        elif token.startswith("--limit="):
+            hosts.append(token.split("=", 1)[1])
+    if hosts:
+        return [_host_of(h) for h in hosts if _host_of(h)]
+
+    for token in args:
         if token.startswith("-"):
             continue
-        candidate = token
-        if "@" in candidate:
-            candidate = candidate.split("@", 1)[1]
-        if ":" in candidate:
-            candidate = candidate.split(":", 1)[0]
-        if not candidate or candidate.startswith("/") or candidate.startswith("."):
+        if "@" in token:
+            hosts.append(token)
+        elif ":" in token and not token.startswith("/") and "/" not in token.split(":", 1)[0]:
+            hosts.append(token)
+    if hosts:
+        return [_host_of(h) for h in hosts if _host_of(h)]
+
+    for token in args:
+        if token.startswith("-") or "=" in token:
             continue
-        return candidate.lower()
-    return ""
+        if "/" in token or FILE_ARG_RE.search(token) or token.isdigit():
+            continue
+        host = _host_of(token)
+        if host:
+            return [host]
+    return []
+
+
+def _host_of(token: str) -> str:
+    candidate = token.strip().strip("'\"")
+    if "@" in candidate:
+        candidate = candidate.split("@", 1)[1]
+    if ":" in candidate:
+        candidate = candidate.split(":", 1)[0]
+    if not candidate or candidate.startswith("/") or candidate.startswith("."):
+        return ""
+    return candidate.lower()
+
+
+def remote_target(tokens: list) -> str:
+    """Первая цель команды. Для сообщения об отказе; проверяются все."""
+    targets = remote_targets(tokens)
+    return targets[0] if targets else ""
 
 
 REMOTE_EXEC = ("ssh", "scp", "sftp", "rsync", "ansible", "ansible-playbook", "ansible-console", "nc", "ncat", "telnet")
@@ -275,10 +334,27 @@ def _host_from_fetch(sub: str) -> str | None:
     return m.group(1).lower() if m else None
 
 
+def inventory_network_hosts() -> set:
+    """Хосты интеграций, внесённые оператором в inventory."""
+    hosts = set()
+    for entry in _read_inventory("network-allowlist.yaml", "hosts"):
+        for key in ("host", "hostname", "address", "domain"):
+            value = entry.get(key)
+            if value:
+                hosts.add(value.lower())
+    return hosts
+
+
 def network_allowlist() -> set[str]:
-    """Allowlist текущего задания. Пусто = сеть в режиме B запрещена."""
+    """Allowlist текущего задания плюс реестр интеграций. Пусто = сеть закрыта.
+
+    Реестр читается наравне с переменной окружения: цель, которую оператор внёс
+    в inventory, не должна требовать ещё и переменной в каждом запуске, иначе
+    health-check утверждённого сайта останавливает работу.
+    """
     raw = os.environ.get("FACTORY_NETWORK_ALLOWLIST", "")
-    return {h.strip().lower() for h in raw.split(",") if h.strip()}
+    hosts = {h.strip().lower() for h in raw.split(",") if h.strip()}
+    return hosts | inventory_network_hosts()
 
 
 def closed_world() -> bool:
@@ -358,9 +434,11 @@ def evaluate_subcommand(sub: str, depth: int = 0) -> Decision:
         # оператор заранее внёс в inventory, и запрещён ко всем остальным.
         # Пустой inventory означает не поломку, а честное отсутствие переданных
         # хостов: до их появления удалённый доступ закрыт целиком.
-        target = remote_target(tokens)
-        if target and target in inventory_ssh_hosts():
+        targets = remote_targets(tokens)
+        approved = inventory_ssh_hosts()
+        if targets and all(t in approved for t in targets):
             return Decision(PASS)
+        target = next((t for t in targets if t not in approved), "")
         return Decision(
             DENY,
             f"Хост «{target or 'не определён'}» отсутствует в inventory/ssh-hosts.yaml. "
