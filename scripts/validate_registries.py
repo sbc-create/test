@@ -23,6 +23,7 @@ MAPPING = {
     "editorial-calendar.json": "editorial-calendar.schema.json",
     "content-backlog.json": "content-backlog.schema.json",
     "experiments.json": "experiment-registry.schema.json",
+    "analytics.json": "analytics-registry.schema.json",
 }
 
 

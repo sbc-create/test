@@ -1418,6 +1418,107 @@
         "null"
       ],
       "description": "Группа сайтов, между которыми обязательна проверка cross_site_uniqueness."
+    },
+    "analytics": {
+      "type": "object",
+      "description": "Веб-аналитика сайта. Поля публичные: счётчик, список разрешённых hostname и флаг сбора. Токен провайдера сюда не попадает — только secret_ref на файл вне репозитория, и то на уровне inventory, а не пакета.",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "enabled"
+      ],
+      "properties": {
+        "provider": {
+          "enum": [
+            "none",
+            "yandex_metrika"
+          ]
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "counter_id": {
+          "description": "Публичный ID счётчика Метрики. null — счётчик ещё не создан.",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "allowed_hosts": {
+          "description": "Точные production-hostname, на которых разрешён сбор. Пустой список означает, что события не отправляются ни с одного адреса.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true,
+          "default": []
+        },
+        "webvisor": {
+          "description": "Запись сессий. Заданием требуется false.",
+          "type": "boolean",
+          "default": false
+        },
+        "goals_ref": {
+          "description": "Набор целей. Единственный поддерживаемый — канонический набор фабрики.",
+          "enum": [
+            "factory_default",
+            null
+          ]
+        }
+      }
+    },
+    "webmaster": {
+      "type": "object",
+      "description": "Регистрация и подтверждение прав в Яндекс.Вебмастере. Значения DONE здесь нет: подтверждением считается только VERIFIED, полученный от API.",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "verification_status"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "host_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "verification_status": {
+          "enum": [
+            "PLANNED",
+            "BLOCKED_DEPLOYMENT",
+            "NONE",
+            "IN_PROGRESS",
+            "VERIFIED",
+            "VERIFICATION_FAILED",
+            "INTERNAL_ERROR"
+          ]
+        },
+        "verification_type": {
+          "enum": [
+            "META_TAG",
+            "HTML_FILE",
+            "DNS",
+            null
+          ]
+        },
+        "verification_marker": {
+          "description": "Публичный код подтверждения: он печатается в HTML страницы.",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "seo_indexing_enabled": {
+      "description": "Разрешена ли поисковая индексация. Включается только отдельным решением владельца и только при выполненных production-воротах; по умолчанию false.",
+      "type": "boolean",
+      "default": false
     }
   },
   "allOf": [

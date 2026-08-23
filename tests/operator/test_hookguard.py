@@ -71,19 +71,21 @@ class TestDangerousBlocked:
     def test_protected_denied(self, command):
         assert d("Bash", command=command) == "deny"
 
-    def test_editing_the_guard_itself_requires_approval(self):
-        assert d("Write", file_path="/repo/.claude/hooks/pretooluse-guard.sh") == "ask"
-        assert d("Write", file_path="/repo/.claude/settings.json") == "ask"
+    def test_editing_the_guard_itself_is_denied(self):
+        """Профиль неинтерактивен: правку защитной машинерии он запрещает, а не спрашивает."""
+        assert d("Write", file_path="/repo/.claude/hooks/pretooluse-guard.sh") == "deny"
+        assert d("Write", file_path="/repo/.claude/settings.json") == "deny"
 
-    def test_unknown_tool_asks(self):
-        assert d("SomeNewTool", foo="bar") == "ask"
+    def test_unknown_tool_is_denied(self):
+        """«Нет правила» означает «нет разрешения», а не «спросим человека»."""
+        assert d("SomeNewTool", foo="bar") == "deny"
 
     def test_unknown_command_denied(self):
         assert d("Bash", command="mystery-binary --wipe") == "deny"
 
 
 class TestProductionGate:
-    def test_production_mutation_asks(self):
+    def test_production_mutation_is_denied(self):
         out = decide(
             {
                 "tool_name": "Bash",
@@ -91,7 +93,7 @@ class TestProductionGate:
                 "environment": "production",
             }
         )
-        assert out["hookSpecificOutput"]["permissionDecision"] == "ask"
+        assert out["hookSpecificOutput"]["permissionDecision"] == "deny"
 
     def test_push_to_main_is_denied_not_merely_asked(self):
         assert d("Bash", command=MAIN_PUSH_CMD) == "deny"
@@ -101,7 +103,7 @@ class TestProductionGate:
 
 
 class TestFailClosed:
-    def test_malformed_payload_asks(self):
+    def test_malformed_payload_is_denied(self):
         proc = subprocess.run(
             [sys.executable, "-m", "seo_operator.hookguard"],
             input="not json",
@@ -110,7 +112,9 @@ class TestFailClosed:
             check=False,
         )
         out = json.loads(proc.stdout)
-        assert out["hookSpecificOutput"]["permissionDecision"] == "ask"
+        # Fail closed без вопроса: разобрать payload не удалось, значит про
+        # действие неизвестно ничего, и разрешать его нечем.
+        assert out["hookSpecificOutput"]["permissionDecision"] == "deny"
 
     def test_empty_command_denied(self):
         assert d("Bash", command="") == "deny"

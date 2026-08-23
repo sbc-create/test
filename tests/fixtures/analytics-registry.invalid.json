@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "provider": "yandex",
+  "seo_indexing_enabled": false,
+  "properties": [
+    {
+      "domain": "yummyani.site",
+      "counter_name": "YummyAnime — yummyani.site",
+      "counter_id": 0,
+      "analytics_enabled": true,
+      "allowed_hosts": [],
+      "seo_indexing_enabled": false,
+      "oauth_token": "секрет не должен приниматься схемой",
+      "webmaster": {
+        "enabled": true,
+        "verification_status": "DONE"
+      }
+    }
+  ]
+}

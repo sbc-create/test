@@ -1,56 +1,108 @@
 {
   "version": 1,
-  "note": "Состояние на 2026-08-22, установлено пробами из этой сессии. Здесь хранятся ТОЛЬКО имена переменных окружения, никогда значения. Поле status обновляется командой ./bin/seo-operator probe.",
+  "note": "Состояние на 2026-08-23. Здесь хранятся ТОЛЬКО имена переменных окружения, никогда значения. Для Яндекса переменная содержит ПУТЬ к файлу секрета, а не сам токен. Поле status обновляется командой ./bin/seo-operator probe.",
   "sources": [
     {
       "name": "google_search_console",
       "kind": "search_analytics",
       "status": "missing_credentials",
-      "required_env": ["GSC_SERVICE_ACCOUNT_JSON", "GSC_PROPERTY_MAP"],
+      "required_env": [
+        "GSC_SERVICE_ACCOUNT_JSON",
+        "GSC_PROPERTY_MAP"
+      ],
       "endpoint": "https://searchconsole.googleapis.com",
-      "metrics": ["impressions", "clicks", "ctr", "position"],
+      "metrics": [
+        "impressions",
+        "clicks",
+        "ctr",
+        "position"
+      ],
       "blocker": "Не выдан сервисный аккаунт и карта property. Сеть до endpoint открыта."
     },
     {
       "name": "yandex_webmaster",
       "kind": "search_analytics",
-      "status": "network_blocked",
-      "required_env": ["YANDEX_WEBMASTER_TOKEN", "YANDEX_WEBMASTER_USER_ID"],
+      "status": "missing_credentials",
+      "required_env": [
+        "YANDEX_OAUTH_TOKEN_FILE"
+      ],
       "endpoint": "https://api.webmaster.yandex.net",
-      "metrics": ["impressions", "clicks", "ctr", "position", "indexing"],
-      "blocker": "Нет токена И домен заблокирован сетевой политикой окружения (CONNECT tunnel failed, 403). Требуются оба исправления."
+      "metrics": [
+        "impressions",
+        "clicks",
+        "ctr",
+        "position",
+        "indexing",
+        "pages_in_search",
+        "excluded_pages",
+        "external_links",
+        "technical_issues"
+      ],
+      "blocker": "Токен размещён владельцем в root-owned файле вне репозитория; сессии агента он недоступен по построению. Источник работает из systemd-unit с LoadCredential. Сеть до endpoint открыта (TCP 443 проверен). Данных нет и по второй причине: ни один домен ещё не развёрнут и не зарегистрирован в Вебмастере."
     },
     {
       "name": "yandex_metrika",
       "kind": "analytics",
-      "status": "network_blocked",
-      "required_env": ["YANDEX_METRIKA_TOKEN", "YANDEX_METRIKA_COUNTER_MAP"],
+      "status": "missing_credentials",
+      "required_env": [
+        "YANDEX_OAUTH_TOKEN_FILE"
+      ],
       "endpoint": "https://api-metrika.yandex.net",
-      "metrics": ["sessions", "depth", "returning", "watch_starts"],
-      "blocker": "Нет токена И домен заблокирован сетевой политикой окружения."
+      "metrics": [
+        "visitors",
+        "visits",
+        "page_depth",
+        "avg_visit_duration",
+        "bounce_rate",
+        "traffic_sources",
+        "search_engines",
+        "landing_pages",
+        "popular_pages",
+        "goal_reaches"
+      ],
+      "blocker": "Токен размещён владельцем в root-owned файле вне репозитория; сессии агента он недоступен по построению. Источник работает из systemd-unit с LoadCredential. Сеть до endpoint открыта (TCP 443 проверен). Счётчики ещё не созданы, поэтому показатели «не измерены», а не нули."
     },
     {
       "name": "cms",
       "kind": "content",
       "status": "missing_credentials",
-      "required_env": ["CMS_BASE_URL", "CMS_API_TOKEN"],
-      "metrics": ["entities", "editorial_fields", "publication_state"],
+      "required_env": [
+        "CMS_BASE_URL",
+        "CMS_API_TOKEN"
+      ],
+      "metrics": [
+        "entities",
+        "editorial_fields",
+        "publication_state"
+      ],
       "blocker": "CMS не назван и не передан. Контракт записи в CMS неизвестен."
     },
     {
       "name": "server_logs",
       "kind": "crawl",
       "status": "missing_credentials",
-      "required_env": ["SERVER_LOG_PATH"],
-      "metrics": ["crawl_hits", "bot_status_codes", "crawl_budget"],
+      "required_env": [
+        "SERVER_LOG_PATH"
+      ],
+      "metrics": [
+        "crawl_hits",
+        "bot_status_codes",
+        "crawl_budget"
+      ],
       "blocker": "Нет доступа к серверу и путям журналов."
     },
     {
       "name": "monitoring",
       "kind": "availability",
       "status": "missing_credentials",
-      "required_env": ["MONITORING_API_URL", "MONITORING_API_TOKEN"],
-      "metrics": ["uptime", "player_availability"],
+      "required_env": [
+        "MONITORING_API_URL",
+        "MONITORING_API_TOKEN"
+      ],
+      "metrics": [
+        "uptime",
+        "player_availability"
+      ],
       "blocker": "Система мониторинга не названа."
     }
   ]

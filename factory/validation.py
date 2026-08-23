@@ -18,6 +18,7 @@ import jsonschema
 import yaml
 
 from factory import inventory, licensing
+from factory.analytics.yandex import normalize_domain
 from factory.paths import PATHS
 
 STATUS_PRIORITY = (
@@ -428,6 +429,98 @@ def _check_seo(pkg: dict, out: list[Blocker], warnings: list[str]) -> None:
         warnings.append("Staging обязан быть закрыт авторизацией и noindex — один robots.txt защитой не считается.")
 
 
+def _check_analytics(pkg: dict, out: list[Blocker], warnings: list[str]) -> None:
+    """Аналитика и Вебмастер: пакет не должен утверждать больше, чем сделано.
+
+    Проверяется согласованность manifest, а не доступность API: сеть — дело
+    ворот конвейера (`factory.analytics.gate`), а здесь ловится то, что видно
+    из самого пакета. Главный класс ошибки — статус, который красивее
+    реальности: `VERIFIED` на неразвёрнутом домене, индексация без прав,
+    счётчик, привязанный к чужому hostname.
+    """
+    analytics = pkg.get("analytics") or {}
+    webmaster = pkg.get("webmaster") or {}
+    # normalize_domain, а не lstrip("www."): lstrip срезает любые из символов
+    # набора, и «web.tld» превращался в «eb.tld».
+    domain = normalize_domain(str(pkg.get("domain") or ""))
+    environment = pkg.get("environment")
+    test_domain = domain.endswith((".localhost", ".localhost.test", ".test", ".local"))
+
+    if analytics.get("enabled"):
+        if analytics.get("provider") in (None, "none"):
+            out.append(Blocker(
+                "BLOCKED_INPUT", "analytics.provider",
+                "Аналитика включена, но провайдер не назван.",
+                "analytics.provider: yandex_metrika", "VALIDATING"))
+        if analytics.get("webvisor"):
+            out.append(Blocker(
+                "BLOCKED_INPUT", "analytics.webvisor",
+                "Вебвизор включён. Заданием запись сессий должна быть выключена.",
+                "analytics.webvisor: false", "VALIDATING"))
+
+        hosts = [str(h).strip().lower() for h in (analytics.get("allowed_hosts") or [])]
+        for host in hosts:
+            if host.endswith((".localhost", ".localhost.test", ".test", ".local")):
+                out.append(Blocker(
+                    "BLOCKED_INPUT", "analytics.allowed_hosts",
+                    f"В списке разрешённых hostname тестовый адрес «{host}»: "
+                    "production-счётчик не должен получать события со стенда.",
+                    "Только боевые hostname этого сайта", "VALIDATING"))
+        if environment == "production" and hosts and domain not in hosts:
+            out.append(Blocker(
+                "BLOCKED_INPUT", "analytics.allowed_hosts",
+                f"Домен пакета «{domain}» отсутствует в analytics.allowed_hosts.",
+                f"Добавить {domain} в analytics.allowed_hosts", "PRODUCTION_DEPLOY"))
+        if analytics.get("counter_id") and test_domain:
+            out.append(Blocker(
+                "BLOCKED_INPUT", "analytics.counter_id",
+                f"Счётчик Метрики привязан к тестовому домену «{domain}».",
+                "Боевой домен или analytics.enabled: false для стенда", "VALIDATING"))
+        if environment != "production":
+            warnings.append(
+                "Аналитика включена в пакете, но окружение не production: "
+                "клиент событий тег Метрики не загрузит.")
+
+    status = webmaster.get("verification_status")
+    if webmaster.get("enabled"):
+        if status == "VERIFIED" and test_domain:
+            out.append(Blocker(
+                "BLOCKED_INPUT", "webmaster.verification_status",
+                f"Права на «{domain}» объявлены подтверждёнными, но домен тестовый: "
+                "Вебмастер такой сайт подтвердить не мог.",
+                "PLANNED или BLOCKED_DEPLOYMENT до реального развёртывания", "VALIDATING"))
+        if status == "VERIFIED" and not webmaster.get("verification_marker"):
+            out.append(Blocker(
+                "BLOCKED_INPUT", "webmaster.verification_marker",
+                "Права объявлены подтверждёнными, но маркер не сохранён — "
+                "следующий релиз потеряет подтверждение.",
+                "Маркер из ответа API в webmaster.verification_marker", "VALIDATING"))
+
+    if pkg.get("seo_indexing_enabled"):
+        # Индексация — необратимое по последствиям действие: выключить её
+        # обратно легко, а убрать сайт из выдачи — нет.
+        if environment != "production":
+            out.append(Blocker(
+                "BLOCKED_SEO", "seo_indexing_enabled",
+                f"Индексация включена в окружении {environment}.",
+                "seo_indexing_enabled: false вне production", "VALIDATING"))
+        if not pkg.get("production_authorized"):
+            out.append(Blocker(
+                "BLOCKED_SEO", "seo_indexing_enabled",
+                "Индексация включена без production_authorized: true.",
+                "Авторизация владельца в manifest", "VALIDATING"))
+        if status != "VERIFIED":
+            out.append(Blocker(
+                "BLOCKED_SEO", "seo_indexing_enabled",
+                f"Индексация включена, но права в Вебмастере не подтверждены (статус {status}).",
+                "Подтверждённые права (VERIFIED) до включения индексации", "VALIDATING"))
+        if pkg.get("fixture"):
+            out.append(Blocker(
+                "BLOCKED_SEO", "seo_indexing_enabled",
+                "Индексация включена для fixture-пакета: в выдачу попали бы тестовые данные.",
+                "fixture: false и настоящий контент", "VALIDATING"))
+
+
 def _check_files(pkg: dict, site_id: str, out: list[Blocker]) -> None:
     brand = pkg.get("brand") or {}
     for field, ref in (("brand.logo_ref", brand.get("logo_ref")), ("brand.favicon_ref", brand.get("favicon_ref"))):
@@ -508,6 +601,7 @@ def validate(site_id: str) -> ValidationResult:
     _check_secrets(pkg, blockers)
     _check_seo(pkg, blockers, warnings)
     _check_files(pkg, site_id, blockers)
+    _check_analytics(pkg, blockers, warnings)
     _check_network_allowlist(pkg, blockers, warnings)
     _check_cross_site_leakage(pkg, site_id, blockers)
     return ValidationResult(site_id, pkg, blockers, warnings)

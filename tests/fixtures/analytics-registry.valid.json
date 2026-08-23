@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "provider": "yandex",
+  "note": "Реестр аналитики. Здесь хранятся ТОЛЬКО публичные идентификаторы счётчиков и проверяемые статусы; OAuth-токен и client secret сюда не попадают ни при каких условиях. Заполняется командой `python3 -m factory analytics apply`; вручную не редактируется. Три домена YummyAnime — три независимых счётчика, зеркалами их объединять запрещено: у каждого сайта собственная аудитория и собственный отчёт.",
+  "seo_indexing_enabled": false,
+  "updated_at": null,
+  "properties": [
+    {
+      "domain": "yummyani.site",
+      "site_id": null,
+      "counter_name": "YummyAnime — yummyani.site",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": true,
+      "webvisor": false,
+      "allowed_hosts": ["yummyani.site"],
+      "goals": [],
+      "webmaster": {
+        "enabled": true,
+        "host_id": null,
+        "verification_status": "BLOCKED_DEPLOYMENT",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": null,
+      "problems": ["домен ещё не развёрнут и не отвечает по HTTPS"]
+    },
+    {
+      "domain": "yummyani.org",
+      "site_id": null,
+      "counter_name": "YummyAnime — yummyani.org",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": true,
+      "webvisor": false,
+      "allowed_hosts": ["yummyani.org"],
+      "goals": [],
+      "webmaster": {
+        "enabled": true,
+        "host_id": null,
+        "verification_status": "BLOCKED_DEPLOYMENT",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": null,
+      "problems": ["домен ещё не развёрнут и не отвечает по HTTPS"]
+    },
+    {
+      "domain": "yummyani.biz",
+      "site_id": null,
+      "counter_name": "YummyAnime — yummyani.biz",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": true,
+      "webvisor": false,
+      "allowed_hosts": ["yummyani.biz"],
+      "goals": [],
+      "webmaster": {
+        "enabled": true,
+        "host_id": null,
+        "verification_status": "BLOCKED_DEPLOYMENT",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": null,
+      "problems": ["домен ещё не развёрнут и не отвечает по HTTPS"]
+    }
+  ]
+}

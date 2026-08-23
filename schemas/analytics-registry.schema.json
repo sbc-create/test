@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://factory.local/schemas/analytics-registry.schema.json",
+  "title": "Реестр аналитики фабрики",
+  "description": "Публичное состояние Яндекс.Метрики и Яндекс.Вебмастера по каждому домену. Хранит ТОЛЬКО публичные идентификаторы и проверяемые статусы: OAuth-токен, client secret и любые персональные данные сюда попасть не могут — схема их не описывает, а additionalProperties запрещены.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "provider", "seo_indexing_enabled", "properties"],
+  "properties": {
+    "version": { "const": 1 },
+    "note": { "type": "string" },
+    "provider": {
+      "description": "Провайдер аналитики. Единственный поддерживаемый — yandex.",
+      "enum": ["yandex"]
+    },
+    "seo_indexing_enabled": {
+      "description": "Глобальный рубильник поисковой индексации. Включается только отдельным решением владельца; до этого — false.",
+      "type": "boolean"
+    },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" },
+    "properties": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/property" }
+    }
+  },
+  "$defs": {
+    "property": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domain", "counter_name", "analytics_enabled", "allowed_hosts", "webmaster", "seo_indexing_enabled"],
+      "properties": {
+        "domain": {
+          "description": "Домен без схемы и www, в той форме, в которой его хранит Метрика.",
+          "type": "string",
+          "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$"
+        },
+        "site_id": {
+          "description": "Пакет сайта в sites/, если он уже заведён. null — домен есть, пакета ещё нет.",
+          "type": ["string", "null"]
+        },
+        "counter_name": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "counter_id": {
+          "description": "Публичный идентификатор счётчика Метрики. null — счётчик ещё не создан.",
+          "type": ["integer", "null"],
+          "minimum": 1
+        },
+        "counter_state": {
+          "enum": ["planned", "created", "reused", "ambiguous", "disabled", "blocked"]
+        },
+        "analytics_enabled": { "type": "boolean" },
+        "webvisor": {
+          "description": "Запись сессий. Заданием требуется false; true означает найденное расхождение, а не разрешение.",
+          "type": "boolean"
+        },
+        "allowed_hosts": {
+          "description": "Точные production-hostname, на которых разрешён сбор. Пустой список = сбор невозможен.",
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "goals": {
+          "description": "Идентификаторы событий, для которых цель фактически существует.",
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        },
+        "webmaster": { "$ref": "#/$defs/webmaster" },
+        "seo_indexing_enabled": { "type": "boolean" },
+        "last_checked_at": { "type": ["string", "null"], "format": "date-time" },
+        "problems": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "webmaster": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "verification_status"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "host_id": { "type": ["string", "null"] },
+        "verification_status": {
+          "description": "PLANNED и BLOCKED_DEPLOYMENT — собственные состояния фабрики до развёртывания. Остальные приходят от API Вебмастера. Значения DONE здесь нет намеренно: подтверждением прав считается только VERIFIED от Яндекса.",
+          "enum": ["PLANNED", "BLOCKED_DEPLOYMENT", "NONE", "IN_PROGRESS", "VERIFIED", "VERIFICATION_FAILED", "INTERNAL_ERROR"]
+        },
+        "verification_type": {
+          "type": ["string", "null"],
+          "enum": ["META_TAG", "HTML_FILE", "DNS", null]
+        },
+        "verification_marker": {
+          "description": "Маркер подтверждения. Публичное значение: оно печатается в HTML сайта. Секретом не является.",
+          "type": ["string", "null"]
+        },
+        "sitemap_submitted": {
+          "description": "Отправлялся ли sitemap. Заданием запрещено до отдельного разрешения владельца.",
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

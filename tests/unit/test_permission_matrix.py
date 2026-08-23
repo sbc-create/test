@@ -305,14 +305,20 @@ def test_the_inventory_never_unlocks_a_forbidden_operation(command, approved_inv
 # Production: разрешён штатный выкат, но только при выполненных условиях
 # --------------------------------------------------------------------------
 class TestProductionGate:
-    def test_unready_site_asks_and_names_the_missing_condition(self):
+    def test_unready_site_is_denied_and_names_the_missing_condition(self):
+        """Профиль неинтерактивен: невыполненное условие — отказ, а не вопрос.
+
+        Раньше исходом было `ask`. На неотвечающем терминале подтверждение —
+        не защита, а зависание, поэтому исходов осталось два. Требование к
+        сообщению не смягчилось: отказ по-прежнему обязан назвать условие.
+        """
         command = "python3 -m factory deploy --site pilot-local --environment production"
-        assert final(command) == "ask"
+        assert final(command) == "deny"
         reason = unattended.mandatory_confirmation(command)
         assert "fixture" in reason, reason
 
     def test_command_without_a_site_is_never_auto_approved(self):
-        assert final("python3 -m factory deploy --environment production") == "ask"
+        assert final("python3 -m factory deploy --environment production") == "deny"
 
     def test_every_condition_is_checked(self, tmp_path):
         """Снятие любого условия возвращает выкат человеку, с названием условия."""
@@ -427,11 +433,23 @@ class TestProfileProperties:
     def test_absent_rule_means_a_question_not_a_permission(self):
         assert pm.resolve(None, "pass") == "ask"
 
-    def test_real_inventories_are_empty_until_the_owner_supplies_them(self):
-        """Пустой реестр — не поломка, а отсутствие переданных данных."""
+    def test_real_inventories_hold_only_what_the_owner_supplied(self):
+        """Реестр содержит ровно переданное владельцем — ни строкой больше.
+
+        SSH-хосты и DNS-зоны не переданы и обязаны остаться пустыми: их
+        расширение по инициативе агента прямо запрещено. Сетевой allowlist
+        не пуст, потому что владелец заданием об автоматизации аналитики
+        разрешил обращения к API и документации Яндекса. Проверяется точный
+        состав: незамеченная лишняя строка здесь — это открытый наружу канал.
+        """
         assert unattended.inventory_hosts() == set()
         assert unattended.inventory_zones() == set()
-        assert unattended.network_hosts() == set()
+        assert unattended.network_hosts() == {
+            "api-metrika.yandex.net",
+            "api.webmaster.yandex.net",
+            "yandex.ru",
+            "yandex.com",
+        }
 
 
 class TestWritePaths:

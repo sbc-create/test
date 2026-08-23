@@ -16,6 +16,7 @@ from factory import audit, blueprint, inventory, knowledge, licensing, pipeline,
 from factory import build as build_mod
 from factory import queue as queue_mod
 from factory import verify as verify_mod
+from factory.analytics import cli as analytics_cli
 from factory.errors import FactoryError
 from factory.locks import LockBusy, site_lock
 from factory.paths import PATHS
@@ -608,6 +609,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("blueprint_action", choices=["check"], nargs="?", default="check")
     p.add_argument("--blueprint", default="dle20")
     p.set_defaults(func=cmd_blueprint)
+
+    analytics_cli.register(sub)
 
     p = sub.add_parser("env-report", help="read-only отчёт об окружении")
     p.set_defaults(func=cmd_env_report)

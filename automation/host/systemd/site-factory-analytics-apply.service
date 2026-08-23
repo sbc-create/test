@@ -1,0 +1,39 @@
+[Unit]
+Description=site-factory: create or reuse the Yandex Metrika counters and their goals
+Documentation=file:///srv/site-factory/repo/docs/YANDEX_ANALYTICS.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/srv/site-factory/repo
+EnvironmentFile=/etc/site-factory/environment
+
+# Секрет выдаётся механизмом systemd, а не переменной окружения и не правом на
+# файл: unit читает root-owned файл от имени PID 1 и кладёт копию в tmpfs,
+# доступную только этому процессу. Значение не появляется ни в окружении, ни в
+# `systemctl show`, ни в журнале.
+LoadCredential=yandex_oauth:/etc/site-factory/secrets/yandex_oauth_token
+Environment=YANDEX_OAUTH_TOKEN_FILE=%d/yandex_oauth
+
+# --confirm-writes включается здесь и только здесь: единственная команда
+# фабрики, которой разрешено создавать счётчики. Повторный запуск дубля не
+# создаёт — провайдер сперва ищет счётчик по точному домену.
+ExecStart=/usr/bin/python3 -m factory analytics apply --confirm-writes --json
+
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/srv/site-factory/repo/var /srv/site-factory/repo/config /var/log/site-factory
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+MemoryMax=512M
+TasksMax=64
+TimeoutStartSec=300
+
+# Таймера у этого unit'а нет намеренно: создание счётчиков — разовое действие,
+# которое запускает человек. `install-units.sh` его не включает.
+[Install]
+WantedBy=multi-user.target

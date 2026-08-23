@@ -15,6 +15,10 @@ FAILURE_STATES = (
     # Введены вторым change request: три сайта на общем каталоге создают три
     # новых способа отказа, которые нельзя честно назвать общим BLOCKED_SEO.
     "BLOCKED_SEO_DUPLICATE", "BLOCKED_CONTENT_RIGHTS", "BLOCKED_PLAYER_CONTRACT",
+    # Введён заданием об автоматизации Яндекс.Метрики и Вебмастера: недоступный
+    # API аналитики нельзя называть ни BLOCKED_SECRET (секрет на месте), ни
+    # BLOCKED_ACCESS (доступа к серверу это не касается), ни тем более DONE.
+    "BLOCKED_ANALYTICS_ACCESS",
     "QA_FAILED", "DEPLOY_FAILED", "ROLLED_BACK", "QUARANTINED",
 )
 
@@ -33,6 +37,11 @@ NON_RETRYABLE = {
     "BLOCKED_ACCESS",
     # Провал ворот качества — это найденный дефект, а не временная ошибка среды.
     "QA_FAILED",
+    # Повторы 429 и 5xx уже сделаны внутри провайдера аналитики
+    # (`factory.analytics.transport`). Дошло сюда — значит кончился токен, права
+    # или сам сервис; конвейер этого не исправит, а каждый повтор создаёт риск
+    # дубля счётчика.
+    "BLOCKED_ANALYTICS_ACCESS",
 }
 
 
@@ -106,6 +115,16 @@ class BlockedPlayerContract(FactoryError):
     """Встраивание плеера расходится с документированным контрактом провайдера."""
 
     status = "BLOCKED_PLAYER_CONTRACT"
+
+
+class BlockedAnalyticsAccess(FactoryError):
+    """API Метрики или Вебмастера недоступен, отвечает отказом или не даёт нужных прав.
+
+    Отдельный статус существует ровно затем, чтобы конвейер не продолжал работу
+    с выдуманными идентификаторами счётчика и выдуманными показателями.
+    """
+
+    status = "BLOCKED_ANALYTICS_ACCESS"
 
 
 class QaFailed(FactoryError):

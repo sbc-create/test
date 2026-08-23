@@ -733,6 +733,42 @@ def _load_package(site_id: str, root: str):
     return data if isinstance(data, dict) else None
 
 
+ENVIRONMENT_FLAG_RE = re.compile(
+    r"--environment[= ]\s*([A-Za-z0-9_-]+)|--env[= ]\s*([A-Za-z0-9_-]+)"
+)
+
+#: Единственное окружение, выкат в которое требует выполненных условий.
+PRODUCTION = "production"
+
+
+def targets_production(command: str, root: str | None = None) -> tuple:
+    """Метит ли команда в боевое окружение. `(да, пояснение)`.
+
+    Флаг сильнее пакета: явно указанное окружение решает, чей бы пакет ни был
+    назван. Без флага решает поле `environment` самого пакета: штатный
+    `factory deploy --site X` выкатывает ровно туда, куда написано в manifest,
+    и требовать подтверждения у выката на стенд значит останавливать обычную
+    работу. Нечитаемый пакет и неназванный сайт считаются боевыми: не знать,
+    куда метит команда, — это не то же самое, что знать, что она безопасна.
+    """
+    root = os.path.realpath(root or _repo_root())
+    match = ENVIRONMENT_FLAG_RE.search(command)
+    if match:
+        value = (match.group(1) or match.group(2) or "").lower()
+        return value == PRODUCTION, f"флаг окружения: {value}"
+
+    site = SITE_ARG_RE.search(command)
+    if not site:
+        return True, "в команде не указан --site, окружение неизвестно"
+    package = _load_package(site.group(1), root)
+    if package is None:
+        return True, f"пакет sites/{site.group(1)}/package.yaml не прочитан"
+    environment = str(package.get("environment") or "").lower()
+    if not environment:
+        return True, "в пакете не указано environment"
+    return environment == PRODUCTION, f"пакет объявляет environment={environment}"
+
+
 def production_gate(command: str, root: str | None = None) -> tuple:
     """Выполнены ли условия штатного выката на production.
 
@@ -833,6 +869,12 @@ def mandatory_confirmation(command: str, root: str | None = None) -> str:
     if not hits:
         return ""
     if set(hits) <= PRODUCTION_STOP_LABELS and FACTORY_MUTATION_RE.search(text):
+        # Выкат на стенд — обычная работа, а не необратимое действие: стенд
+        # пересоздаётся, и останавливать его подтверждением значит остановить
+        # весь цикл разработки ради операции, которую и так можно повторить.
+        production, _why = targets_production(text, root)
+        if not production:
+            return ""
         ready, reason = production_gate(text, root)
         return "" if ready else f"{hits[0]} — {reason}"
     return hits[0]

@@ -66,7 +66,22 @@ BLOCKED_PATTERNS: list[tuple[str, str]] = [
         r"\becho\s+\$\{?(AWS_SECRET|GITHUB_TOKEN|GH_TOKEN|.*_SECRET|.*_TOKEN|.*API_KEY)",
         "secret value output",
     ),
-    (r"\bcat\b.*(\.env|credentials|id_rsa|\.pem|\.p12|token)", "credential file read"),
+    # Чтение файла с секретом. Правило было подстрочным: после `cat` достаточно
+    # было где угодно встретить слово `credentials` или `token`, и под запрет
+    # попадали `cat > factory/analytics/credentials.py`, `cat docs/api-token.md`
+    # и любой файл, в имени которого есть эти слова. Теперь проверяется имя
+    # самого файла, а `cat > файл` чтением не считается: это запись, и её
+    # разбирает слой записи.
+    # Каталог секретов хоста здесь намеренно не дублируется: его закрывает
+    # SECRET_PATH_RE в `.claude/hooks/guard_rules.py`, который для Bash
+    # отрабатывает раньше и вердикт которого окончателен.
+    (
+        r"\bcat\b(?!\s*>)[^|;&]*?(?<![\w.-])"
+        r"(?:\.env(?:\.[\w.-]+)?|id_rsa|id_ed25519|id_ecdsa|authorized_keys"
+        r"|[\w./~-]*\.(?:pem|p12|pfx|key)|[\w./~-]*/credentials|[\w./~-]*[/_]tokens?)"
+        r"(?=$|[\s'\"])",
+        "credential file read",
+    ),
     (r"\b(chmod|chown)\b.*\b(0?777)\b", "permission widening"),
     (r"\bgcloud\s+.*add-iam-policy-binding\b", "credential/IAM widening"),
     (r"\baws\s+iam\s+(create|attach|put)", "credential/IAM widening"),

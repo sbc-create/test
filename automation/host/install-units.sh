@@ -34,4 +34,10 @@ done
 echo
 echo "НЕ включены намеренно:"
 echo "  site-factory-worker.timer — очередь пуста, ни одна цель не production_capable"
+echo "  site-factory-analytics-collect.timer — ни один сайт не развёрнут: ежедневный"
+echo "      сбор показателей давал бы «0 визитов» вместо «не измерено»."
+echo "      Включать после появления первого работающего production-сайта:"
+echo "      systemctl enable --now site-factory-analytics-collect.timer"
+echo "  site-factory-analytics-apply.service — разовое создание счётчиков Метрики,"
+echo "      запускает человек: systemctl start site-factory-analytics-apply.service"
 systemctl list-timers 'site-factory*' --no-pager

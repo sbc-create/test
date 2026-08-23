@@ -1,9 +1,14 @@
-"""Concrete adapters for the sources named in the operating brief.
+"""Конкретные адаптеры источников, названных в задании.
 
-None of these can be exercised end-to-end in the current environment: no
-credentials are provisioned, and the Yandex endpoints are additionally blocked
-by the network policy. They are written so that supplying credentials is the
-only remaining step, and so that ``probe()`` reports the true reason today.
+Источники Яндекса — рабочие: транспорт, повторы и редакция живут в
+:mod:`factory.analytics`, а здесь остаётся контракт источника. Остальные
+адаптеры по-прежнему объявлены, но не реализованы: доступов к ним не выдано, и
+``probe()`` честно называет причину вместо того, чтобы вернуть пустой результат,
+который отчёт нарисует как «0 кликов».
+
+Отдельное правило для Яндекса: токен берётся **только** из файла, путь к
+которому задан ``YANDEX_OAUTH_TOKEN_FILE``. Значения токена в окружении быть не
+должно — источник это проверяет и отказывается работать, если оно там есть.
 """
 
 from __future__ import annotations
@@ -15,6 +20,7 @@ from seo_operator.datasources.base import (
     Availability,
     CredentialedSource,
     SourceStatus,
+    UnavailableSourceError,
 )
 
 
@@ -51,20 +57,91 @@ class GoogleSearchConsole(NetworkGatedSource):
     metrics = ("impressions", "clicks", "ctr", "position")
 
 
-class YandexWebmaster(NetworkGatedSource):
+class YandexSource(NetworkGatedSource):
+    """Общее поведение источников Яндекса: файл секрета вместо переменной.
+
+    ``required_env`` содержит имя переменной с **путём**, а не со значением:
+    сам токен в окружение не попадает никогда. Если значение всё-таки положили
+    в переменную, источник отказывается работать — молча предпочесть файл
+    значило бы оставить утечку незамеченной.
+    """
+
+    required_env = ()
+
+    def probe(self) -> Availability:
+        from factory.analytics.credentials import forbidden_env_present, inspect_token_file
+
+        leaked = forbidden_env_present()
+        if leaked:
+            return Availability(
+                SourceStatus.ERROR,
+                f"значение токена передано переменной окружения ({', '.join(leaked)}); "
+                "разрешён только путь к файлу через YANDEX_OAUTH_TOKEN_FILE",
+            )
+        status = inspect_token_file()
+        if not status.exists:
+            return Availability(
+                SourceStatus.MISSING_CREDENTIALS, f"нет файла секрета {status.path}"
+            )
+        if not status.readable:
+            return Availability(
+                SourceStatus.MISSING_CREDENTIALS,
+                f"файл секрета {status.path} недоступен этой учётной записи: "
+                "источник работает из systemd-unit с LoadCredential",
+            )
+        if status.problems:
+            return Availability(SourceStatus.ERROR, "; ".join(status.problems))
+        if self.endpoint:
+            ok, detail = _reachable(self.endpoint)
+            if not ok:
+                return Availability(SourceStatus.NETWORK_BLOCKED, detail)
+        return Availability(SourceStatus.AVAILABLE, "файл секрета на месте, endpoint отвечает")
+
+
+class YandexWebmaster(YandexSource):
     name = "yandex_webmaster"
     kind = "search_analytics"
     endpoint = "https://api.webmaster.yandex.net"
-    required_env = ("YANDEX_WEBMASTER_TOKEN", "YANDEX_WEBMASTER_USER_ID")
     metrics = ("impressions", "clicks", "ctr", "position", "indexing")
 
+    def _fetch(self, site_id: str, **kwargs):
+        """Read-only ресурс Вебмастера. Записей не делает ни при каких аргументах."""
+        from factory.analytics.yandex import YandexAnalyticsProvider
 
-class YandexMetrika(NetworkGatedSource):
+        host_id = kwargs.get("host_id")
+        resource = kwargs.get("resource", "summary")
+        if not host_id:
+            raise UnavailableSourceError(
+                f"{self.name}: host_id не передан — сайт ещё не зарегистрирован в Вебмастере"
+            )
+        provider = YandexAnalyticsProvider(dry_run=True)
+        return provider.get_webmaster_report(host_id, resource, kwargs.get("params"))
+
+
+class YandexMetrika(YandexSource):
     name = "yandex_metrika"
     kind = "analytics"
     endpoint = "https://api-metrika.yandex.net"
-    required_env = ("YANDEX_METRIKA_TOKEN", "YANDEX_METRIKA_COUNTER_MAP")
     metrics = ("sessions", "depth", "returning", "watch_starts")
+
+    def _fetch(self, site_id: str, **kwargs):
+        """Табличный отчёт Метрики. Только чтение."""
+        from factory.analytics.yandex import YandexAnalyticsProvider
+
+        counter_id = kwargs.get("counter_id")
+        if not counter_id:
+            raise UnavailableSourceError(
+                f"{self.name}: counter_id не передан — счётчик для сайта {site_id} не создан"
+            )
+        provider = YandexAnalyticsProvider(dry_run=True)
+        return provider.get_metrica_report(
+            int(counter_id),
+            date1=kwargs.get("date1", "7daysAgo"),
+            date2=kwargs.get("date2", "yesterday"),
+            metrics=kwargs.get("metrics")
+            or list(provider.contract["metrika"]["reporting"]["metrics_used"].values()),
+            dimensions=kwargs.get("dimensions"),
+        )
 
 
 class CmsSource(CredentialedSource):
