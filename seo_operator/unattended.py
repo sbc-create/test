@@ -554,8 +554,20 @@ PUSH_BRANCH_RE = re.compile(r"(?:^|[\s:/])claude/[A-Za-z0-9._\-/]+")
 #: default-deny; отдельные формы (`gh repo delete`, `gh api -X DELETE`,
 #: `branches/*/protection`) закрыты стоп-сигналами и deny-правилами выше.
 GH_READ = {
-    "pr", "issue", "repo", "run", "workflow", "release", "api", "search",
-    "status", "browse", "label", "cache", "version", "help",
+    "pr",
+    "issue",
+    "repo",
+    "run",
+    "workflow",
+    "release",
+    "api",
+    "search",
+    "status",
+    "browse",
+    "label",
+    "cache",
+    "version",
+    "help",
 }
 # `auth` в списке нет намеренно: `gh auth token` печатает токен в stdout, а
 # `gh auth status --show-token` — в stderr. Отдельно это же закрыто запретом в
