@@ -188,7 +188,7 @@ def lint(build_dir: Path, *, environment: str = "staging") -> Report:
                                f"lastmod в будущем ({route['lastmod']}): дата обязана отражать изменение контента"))
 
     # дубли
-    for title, urls in titles.items():
+    for _title, urls in titles.items():
         if len(urls) > 1:
             report.add(Finding("duplicate-title", "critical", urls[0], f"Дублирующийся title на {len(urls)} страницах: {', '.join(urls[:4])}"))
     for description, urls in descriptions.items():

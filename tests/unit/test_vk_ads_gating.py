@@ -3,7 +3,14 @@ import pytest
 
 from factory.ads import DisabledAds, MockAds, OfficialAds, build_ads
 from factory.errors import BlockedRights
-from factory.vk import AVAILABLE, DisabledPlayer, MockPlayer, OfficialPlayer, UNAVAILABLE, VideoDescriptor, build_player
+from factory.vk import (
+    AVAILABLE,
+    UNAVAILABLE,
+    DisabledPlayer,
+    MockPlayer,
+    OfficialPlayer,
+    build_player,
+)
 
 
 def _pkg(environment="staging", **vk):

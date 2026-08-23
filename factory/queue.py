@@ -127,7 +127,7 @@ def requeue_stale(max_age_seconds: int = 3600, max_attempts: int = MAX_ATTEMPTS)
     return {"requeued": moved, "quarantined": quarantined}
 
 
-def requeue(item: "QueueItem") -> Path:
+def requeue(item: QueueItem) -> Path:
     """Возвращает задание в inbox (например, при гонке за блокировку)."""
     target = stage_dir("inbox") / item.path.name
     os.rename(item.path, target)

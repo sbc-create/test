@@ -6,6 +6,7 @@
 """
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import json
 import os
@@ -321,10 +322,8 @@ class LocalDisposableTarget:
         return proc.pid
 
     def _kill(self, pid: int) -> None:
-        try:
+        with contextlib.suppress(ProcessLookupError, PermissionError, OSError):
             os.killpg(os.getpgid(pid), signal.SIGTERM)
-        except (ProcessLookupError, PermissionError, OSError):
-            pass
 
     def _server_alive(self) -> bool:
         pid_file = self._pid_file()

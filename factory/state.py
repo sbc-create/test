@@ -63,14 +63,14 @@ class JobState:
         return PATHS.state / f"{job_id}.json"
 
     @classmethod
-    def load(cls, job_id: str) -> "JobState | None":
+    def load(cls, job_id: str) -> JobState | None:
         path = cls.path_for(job_id)
         if not path.exists():
             return None
         return cls(**json.loads(path.read_text(encoding="utf-8")))
 
     @classmethod
-    def load_or_create(cls, job_id: str, site_id: str, environment: str, requested_action: str = "create") -> "JobState":
+    def load_or_create(cls, job_id: str, site_id: str, environment: str, requested_action: str = "create") -> JobState:
         existing = cls.load(job_id)
         if existing:
             return existing
@@ -91,7 +91,7 @@ class JobState:
     def can_transition(self, target: str) -> bool:
         return target in TRANSITIONS.get(self.status, set())
 
-    def transition(self, target: str, *, detail: str = "", blockers: list[dict] | None = None) -> "JobState":
+    def transition(self, target: str, *, detail: str = "", blockers: list[dict] | None = None) -> JobState:
         if target not in ALL_STATES:
             raise ValueError(f"Неизвестный статус: {target}")
         if not self.can_transition(target):

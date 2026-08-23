@@ -2,7 +2,6 @@
 import json
 
 from factory.input_request import collect, generate
-from factory.paths import PATHS
 
 
 def test_collect_returns_structured_items():

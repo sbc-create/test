@@ -25,7 +25,7 @@ def test_tampering_is_detected(tmp_path):
     target = PATHS.knowledge / "FACTS.md"
     original = target.read_bytes()
     try:
-        target.write_bytes(original + "\n<!-- изменение мимо /research-freeze -->\n".encode("utf-8"))
+        target.write_bytes(original + "\n<!-- изменение мимо /research-freeze -->\n".encode())
         ok, problems = knowledge.verify()
         assert not ok
         assert any("FACTS.md" in problem for problem in problems)

@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sbc-create/test/schemas/seo-audit.schema.json",
+  "title": "SEO Audit Report",
+  "description": "Output contract for a technical SEO audit run. Every audit an SEO session produces must validate against this.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["audit_id", "site", "generated_at", "findings"],
+  "properties": {
+    "audit_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]{4,}(-[a-z0-9]+)*$",
+      "description": "Stable slug identifying this audit run."
+    },
+    "site": {"type": "string", "format": "uri", "pattern": "^https?://"},
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC 3339 UTC timestamp of the run."
+    },
+    "crawl": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pages_crawled": {"type": "integer", "minimum": 0},
+        "pages_indexable": {"type": "integer", "minimum": 0},
+        "crawl_depth": {"type": "integer", "minimum": 0}
+      }
+    },
+    "findings": {
+      "type": "array",
+      "description": "Every issue found. An empty array means a clean audit, not a skipped one.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "category", "severity", "summary", "affected_urls"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[A-Z]{2,5}-[0-9]{3}$"},
+          "category": {
+            "type": "string",
+            "enum": ["crawlability", "indexation", "on-page", "content", "performance", "structured-data", "internationalization", "links"]
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["critical", "high", "medium", "low", "info"]
+          },
+          "summary": {"type": "string", "minLength": 1, "maxLength": 200},
+          "detail": {"type": "string"},
+          "affected_urls": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "format": "uri"}
+          },
+          "recommendation": {"type": "string"},
+          "evidence": {
+            "type": "string",
+            "description": "How this was verified: command run, tool used, or file inspected."
+          }
+        }
+      }
+    },
+    "score": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "method"],
+      "properties": {
+        "value": {"type": "number", "minimum": 0, "maximum": 100},
+        "method": {
+          "type": "string",
+          "description": "Named, reproducible scoring method. Never an unexplained number."
+        }
+      }
+    }
+  }
+}

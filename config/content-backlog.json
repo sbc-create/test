@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "note": "Content backlog по сайтам. Приоритет вычисляется моделью из docs/seo-operator/new-release-priority-model.md. Материал попадает в план только с подтверждённым источником и подтверждёнными правами.",
+  "backlogs": [
+    {
+      "site_id": "fixture-anime",
+      "synthetic": true,
+      "items": [
+        {
+          "item_id": "bkl-demo-0002",
+          "title": "Порядок просмотра: с чего начать",
+          "rubric": "Watch order",
+          "intent": "informational",
+          "state": "ready",
+          "priority": 4.5,
+          "rationale": "Связи между частями подтверждены каталогом; отвечает на discovery-запросы"
+        },
+        {
+          "item_id": "bkl-demo-0003",
+          "title": "Страница сезона для тайтла без посадочной страницы",
+          "rubric": "Сезоны",
+          "intent": "navigational",
+          "state": "idea",
+          "priority": 5.0,
+          "rationale": "Спрос на сезонный запрос есть, отвечать нечем"
+        }
+      ]
+    },
+    {
+      "site_id": "fixture-serials",
+      "synthetic": true,
+      "items": []
+    }
+  ]
+}

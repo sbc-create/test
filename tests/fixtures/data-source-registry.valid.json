@@ -1,0 +1,1 @@
+{"version":1,"sources":[{"name":"google_search_console","kind":"search_analytics","status":"missing_credentials","required_env":["GSC_SERVICE_ACCOUNT_JSON"],"endpoint":"https://searchconsole.googleapis.com","metrics":["clicks"],"blocker":"нет ключа"}]}

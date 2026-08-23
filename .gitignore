@@ -38,3 +38,15 @@ tsconfig.tsbuildinfo
 **/.next/
 # Каталоги релизов blueprint payload-next-multisite
 blueprints/payload-next-multisite/app/.releases/
+
+# --- из SEO-оператора ---
+# Python
+*.py[cod]
+.ruff_cache/
+# Build output
+dist/
+
+# Operator runtime state (audit logs, checkpoints, locks, queues)
+var/
+# Журнал решений PreToolUse-хука SEO-оператора: runtime-состояние, а не исходник.
+.seo-state/

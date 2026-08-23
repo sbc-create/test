@@ -11,10 +11,15 @@ from factory.seo import uniqueness
 
 
 def page(site, path, **kwargs):
-    defaults = dict(page_type="title", indexable=True, title=f"{site} {path}",
-                    description=f"Описание {site} {path}", h1=f"{site} {path}",
-                    own_text=f"Собственный текст сайта {site} про страницу {path}. " * 12,
-                    canonical=f"https://{site}{path}")
+    defaults = {
+        "page_type": "title",
+        "indexable": True,
+        "title": f"{site} {path}",
+        "description": f"Описание {site} {path}",
+        "h1": f"{site} {path}",
+        "own_text": f"Собственный текст сайта {site} про страницу {path}. " * 12,
+        "canonical": f"https://{site}{path}",
+    }
     defaults.update(kwargs)
     return uniqueness.PageObservation(site_id=site, path=path, **defaults)
 

@@ -10,9 +10,9 @@ import hashlib
 import json
 import os
 import re
-from dataclasses import dataclass, field as dc_field
+from dataclasses import dataclass
+from dataclasses import field as dc_field
 from pathlib import Path
-from typing import Any
 
 import jsonschema
 import yaml
@@ -199,7 +199,7 @@ def _check_targets(pkg: dict, out: list[Blocker]) -> None:
         out.append(Blocker(getattr(exc, "status", "BLOCKED_ACCESS"), "target_ref", str(exc), getattr(exc, "required_input", "запись в inventory/targets.yaml"), "STAGING_DEPLOY"))
         return
     if env not in (tgt.get("environments") or []):
-        out.append(Blocker("BLOCKED_ACCESS", "target_ref", f"Цель «{tgt.get('ref')}» не разрешена для окружения {env}.", f"Разреши окружение в inventory/targets.yaml или выбери другую цель", "STAGING_DEPLOY"))
+        out.append(Blocker("BLOCKED_ACCESS", "target_ref", f"Цель «{tgt.get('ref')}» не разрешена для окружения {env}.", "Разреши окружение в inventory/targets.yaml или выбери другую цель", "STAGING_DEPLOY"))
     if env == "production" and not tgt.get("production_capable"):
         out.append(Blocker("BLOCKED_ACCESS", "target_ref", f"Цель «{tgt.get('ref')}» помечена как не пригодная для production.", "production_capable: true у проверенной цели", "PRODUCTION_DEPLOY"))
     if tgt.get("adapter") == "ssh_ansible":

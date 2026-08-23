@@ -1,5 +1,4 @@
 """REQ-DLE-DIST, REQ-DLE-CORE, REQ-DLE-PERMS, REQ-INSTALLER, REQ-CDNVH."""
-import os
 import re
 import subprocess
 

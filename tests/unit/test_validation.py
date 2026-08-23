@@ -1,5 +1,4 @@
 """REQ-MODE-B, REQ-VK-RIGHTS, REQ-SEO-FACETS: семантические блокеры."""
-import pytest
 
 from factory import validation
 

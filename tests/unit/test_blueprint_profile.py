@@ -1,11 +1,10 @@
 """REQ-DLE-PATHS, REQ-CRON: пути и cron не угадываются."""
+import pytest
 import yaml
 
 from factory import blueprint
 from factory.errors import BlockedInput
 from factory.paths import PATHS
-
-import pytest
 
 
 def test_template_is_marked_as_requiring_official_source():

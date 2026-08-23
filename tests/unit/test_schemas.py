@@ -6,7 +6,6 @@ import jsonschema
 import pytest
 
 from factory.paths import PATHS
-from factory import validation
 
 
 @pytest.fixture(scope="module")
