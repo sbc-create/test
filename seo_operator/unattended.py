@@ -548,6 +548,40 @@ GIT_WRITE = {
 #: Ветки, в которые разрешён обычный push.
 PUSH_BRANCH_RE = re.compile(r"(?:^|[\s:/])claude/[A-Za-z0-9._\-/]+")
 
+#: Работа с GitHub через штатный CLI. Разрешаются чтение и работа с pull
+#: request и issue — это обычная часть цикла. Всё, что удаляет, переносит
+#: владение или трогает защиту ветки, в список не входит и остаётся под
+#: default-deny; отдельные формы (`gh repo delete`, `gh api -X DELETE`,
+#: `branches/*/protection`) закрыты стоп-сигналами и deny-правилами выше.
+GH_READ = {
+    "pr", "issue", "repo", "run", "workflow", "release", "api", "search",
+    "status", "browse", "label", "cache", "version", "help",
+}
+# `auth` в списке нет намеренно: `gh auth token` печатает токен в stdout, а
+# `gh auth status --show-token` — в stderr. Отдельно это же закрыто запретом в
+# `guardrails.BLOCKED_PATTERNS`, чтобы правило не держалось на одном списке.
+#: Подкоманды, которые сами по себе не считаются рутиной ни у одного объекта.
+GH_FORBIDDEN_VERBS = {"delete", "transfer", "archive", "rename", "fork", "unarchive"}
+
+
+def _gh_ok(tokens: list) -> bool:
+    args = [t for t in tokens[1:] if not t.startswith("-")]
+    if not args:
+        return True  # `gh --version`, `gh --help`
+    if args[0] not in GH_READ:
+        return False
+    # `gh repo delete`, `gh release delete`, `gh pr ... transfer` — не рутина.
+    if any(verb in GH_FORBIDDEN_VERBS for verb in args[1:3]):
+        return False
+    # `gh api` умеет менять что угодно: разрешаются только читающие методы.
+    if args[0] == "api":
+        joined = " ".join(tokens[1:])
+        method = re.search(r"(?:-X|--method)[= ]\s*([A-Za-z]+)", joined)
+        if method and method.group(1).upper() not in {"GET", "HEAD"}:
+            return False
+    return True
+
+
 DEP_SUBCOMMANDS = {"install", "ci", "sync", "add", "update", "i", "require"}
 
 #: Каталоги вне репозитория, запись в которые считается рабочей.
@@ -623,6 +657,11 @@ def classify_segment(segment: str, root: str) -> tuple[bool, str]:
         if _git_ok(tokens):
             return True, "git в собственной ветке"
         return False, "git-операция вне профиля"
+
+    if prog == "gh":
+        if _gh_ok(tokens):
+            return True, "работа с GitHub: чтение и pull request"
+        return False, "операция GitHub вне профиля"
 
     if prog in READ_ONLY:
         return True, "чтение и локальный анализ"

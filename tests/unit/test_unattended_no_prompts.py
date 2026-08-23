@@ -230,3 +230,45 @@ def test_targets_production_prefers_the_flag_over_the_package() -> None:
     production, why = unattended.targets_production(
         "python3 -m factory deploy --site pilot-local")
     assert production is False and "environment=staging" in why
+
+
+# --------------------------------------------------------------------------
+# GitHub через штатный CLI
+# --------------------------------------------------------------------------
+GH_ROUTINE = [
+    "gh pr create --base main --head claude/x --title t --body-file /tmp/claude-b.md",
+    "gh pr list",
+    "gh pr view 12 --json state",
+    "gh pr comment 12 --body-file /tmp/claude-c.md",
+    "gh pr checks 12",
+    "gh issue list",
+    "gh run list --limit 5",
+    "gh run view 42 --log",
+    "gh api repos/sbc-create/test/pulls/12",
+    "gh api -X GET repos/sbc-create/test/commits",
+    "gh repo view sbc-create/test",
+    "gh --version",
+]
+
+GH_FORBIDDEN = [
+    "gh repo delete sbc-create/test --yes",
+    "gh repo transfer sbc-create/test other",
+    "gh repo archive sbc-create/test",
+    "gh release delete v1 --yes",
+    "gh api -X DELETE repos/sbc-create/test/branches/main/protection",
+    "gh api --method PUT repos/o/r/branches/main/protection",
+    "gh secret set GH_TOKEN",
+    "gh auth token",
+]
+
+
+@pytest.mark.parametrize("command", GH_ROUTINE)
+def test_routine_github_work_is_autonomous(command: str) -> None:
+    decision, reason = _decide("Bash", command=command)
+    assert decision == "allow", f"{command} → {decision}: {reason}"
+
+
+@pytest.mark.parametrize("command", GH_FORBIDDEN)
+def test_irreversible_github_operations_are_denied(command: str) -> None:
+    decision, reason = _decide("Bash", command=command)
+    assert decision == "deny", f"{command} → {decision}: {reason}"

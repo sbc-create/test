@@ -82,6 +82,10 @@ BLOCKED_PATTERNS: list[tuple[str, str]] = [
         r"(?=$|[\s'\"])",
         "credential file read",
     ),
+    # `gh auth token` печатает токен GitHub в stdout, `--show-token` — в stderr.
+    # Это тот же класс, что `echo $GITHUB_TOKEN`, и запрещается так же.
+    (r"\bgh\s+auth\s+token\b|--show-token\b", "secret value output"),
+    (r"\bgh\s+secret\s+(set|delete)\b", "credential/IAM widening"),
     (r"\b(chmod|chown)\b.*\b(0?777)\b", "permission widening"),
     (r"\bgcloud\s+.*add-iam-policy-binding\b", "credential/IAM widening"),
     (r"\baws\s+iam\s+(create|attach|put)", "credential/IAM widening"),
