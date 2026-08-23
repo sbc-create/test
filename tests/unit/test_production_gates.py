@@ -9,6 +9,7 @@ import json
 import pytest
 
 from factory import inventory, pipeline, validation
+from factory.paths import PATHS
 
 
 def _production_package(base: dict, **overrides) -> dict:
@@ -129,3 +130,39 @@ def test_mock_adapters_are_rejected_in_production(production_site):
                                      "playback_mode": "embed_white_player"})
     result = validation.validate(site)
     assert result.status in ("BLOCKED_RIGHTS", "BLOCKED_INPUT")
+
+
+def test_site_packages_keep_recovery_enabled():
+    """REQ-UNATTENDED-SAFE: бэкап, откат и health-check нельзя выключить тихо.
+
+    Профиль запрещает выключать их командой (`sed -i` по полю пакета), но
+    команда — не единственный путь: то же поле правится редактором. Настоящая
+    защита здесь — инвариант, а не разбор команд, и делать вид, что разбор
+    закрывает оба пути, было бы неправдой.
+
+    Осознанное отключение остаётся возможным: оно требует изменить этот тест,
+    то есть пройти через ревью, а не через тихую правку одной строки.
+    """
+    import yaml
+
+    packages = sorted((PATHS.root / "sites").glob("*/package.yaml"))
+    assert packages, "пакеты сайтов не найдены — проверка потеряла смысл"
+    for path in packages:
+        package = yaml.safe_load(path.read_text(encoding="utf-8"))
+        site_id = package.get("site_id", path.parent.name)
+
+        backup = package.get("backup_policy") or {}
+        assert backup.get("before_mutation") is True, f"{site_id}: бэкап перед мутацией выключен"
+        assert backup.get("restore_test"), f"{site_id}: бэкап не проверяется восстановлением"
+
+        rollback = package.get("rollback_policy") or {}
+        assert rollback.get("auto_rollback_on_smoke_failure") is True, (
+            f"{site_id}: автоматический откат при провале smoke выключен"
+        )
+        assert int(rollback.get("keep_releases") or 0) >= 1, (
+            f"{site_id}: не хранится ни одного прошлого релиза — откатывать не на что"
+        )
+
+        monitoring = package.get("monitoring_policy") or {}
+        assert monitoring.get("health_endpoint"), f"{site_id}: health-check не задан"
+        assert monitoring.get("checks"), f"{site_id}: список проверок health-check пуст"

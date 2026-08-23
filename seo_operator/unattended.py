@@ -93,6 +93,29 @@ STOP_PATTERNS: tuple[tuple[str, str], ...] = (
         r"\brm\b[^\n]*(?:\s|/)(?:\.git|\.claude|sites|knowledge|inventory|artifacts)(?:/|\s|$)",
         "удаление истории, защиты, знаний или сайтов",
     ),
+    # Отключение наблюдаемости — тот же класс, что удаление бэкапа: после него
+    # уже нельзя доказать, что произошло.
+    (
+        r"\b(?:rm|mv|truncate|shred)\b[^\n]*\b(?:audit|journal|var/log)\b|"
+        r"\b(?:rm|mv|truncate|shred)\b[^\n]*\.jsonl\b",
+        "удаление журнала или аудита",
+    ),
+    (r">\s*(?:var/audit|var/log)/", "затирание журнала перенаправлением"),
+    # Выключение бэкапа, отката или health-check правкой пакета из команды.
+    # Та же правка через редактор ловится не здесь, а тестом
+    # `test_site_packages_keep_recovery_enabled`: команда — не единственный путь,
+    # и делать вид, что разбор команд закрывает оба, было бы неправдой.
+    (
+        r"\b(?:sed|perl|awk)\b[^\n]*(?:before_mutation|auto_rollback_on_smoke_failure"
+        r"|restore_test|health_endpoint|keep_releases)",
+        "выключение бэкапа, отката или health-check",
+    ),
+    # Ослабление защиты ветки на стороне GitHub.
+    (
+        r"\bbranch(?:es)?/[^\s]*/protection\b|\benforce_admins\b\s*=?\s*false|"
+        r"\brequired_status_checks\b[^\n]*\bnull\b",
+        "изменение branch protection",
+    ),
 )
 
 STOP_RE = tuple((re.compile(pattern, re.IGNORECASE), label) for pattern, label in STOP_PATTERNS)

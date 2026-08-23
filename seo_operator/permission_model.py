@@ -95,10 +95,35 @@ def _parse(rule: str) -> Rule:
     return Rule(tool=match.group("tool"), pattern=match.group("arg"))
 
 
+def _bash_units(command: str) -> list[str]:
+    """Единицы сопоставления для Bash: подкоманды со снятыми обёртками.
+
+    Документация Claude Code (SRC-CC-PERMISSIONS) прямо говорит: правила
+    применяются к каждой подкоманде отдельно, а обёртки `timeout`, `env`,
+    `nice`, `command`, `xargs` срезаются до сопоставления. Модель, сравнивающая
+    правило со всей строкой целиком, ошибается в опасную сторону: у
+    `git status && rm -rf /` не нашлось бы совпадения с `Bash(rm -rf *)`, и
+    запрет, который в реальности срабатывает, в проверке выглядел бы
+    отсутствующим.
+    """
+    from seo_operator import unattended
+
+    units = {command.strip()}
+    for segment in unattended.segments(command):
+        segment = segment.strip()
+        if not segment:
+            continue
+        units.add(segment)
+        units.add(unattended.normalize(segment))
+    return [unit for unit in units if unit]
+
+
 def settings_decision(groups: dict[str, list[Rule]], tool: str, argument: str) -> str | None:
+    units = _bash_units(argument) if tool == "Bash" else [argument]
     for group in (DENY, ASK, ALLOW):
-        if any(rule.matches(tool, argument) for rule in groups.get(group, [])):
-            return group
+        for rule in groups.get(group, []):
+            if any(rule.matches(tool, unit) for unit in units):
+                return group
     return None
 
 
