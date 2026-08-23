@@ -224,13 +224,22 @@ def test_three_domains_get_three_independent_counters(token):
     assert sites == sorted(DOMAINS)
 
 
-def test_counter_creation_sends_no_webvisor_and_no_gdpr_agreement(token):
-    """Вебвизор не включается, а юридическое согласие не даётся за владельца."""
+def test_counter_creation_disables_webvisor_and_omits_the_gdpr_agreement(token):
+    """Вебвизор выключается явно, а юридическое согласие не даётся за владельца.
+
+    Раньше тест требовал обратного — чтобы объекта `webvisor` в запросе не
+    было вовсе. Боевой запуск показал цену этого требования: Метрика включает
+    запись сессий по умолчанию, и все три счётчика приехали с включённым
+    Вебвизором. «Не передавать поле» и «выключено» — разные вещи.
+    """
+    from factory.analytics.yandex import WEBVISOR_OFF
+
     fake = FakeYandex()
     _provider(fake, token).ensure_metrica_counter("yummyani.site", "YummyAnime — yummyani.site")
     body = next(b for m, p, b in fake.requests if m == "POST" and p == "/management/v1/counters")
-    assert set(body["counter"]) == {"name", "site2"}
-    assert "webvisor" not in body["counter"]
+    assert set(body["counter"]) == {"name", "site2", "webvisor"}
+    assert body["counter"]["webvisor"] == WEBVISOR_OFF
+    # Согласие на обработку данных остаётся действием владельца аккаунта (D55).
     assert "gdpr_agreement_accepted" not in body["counter"]
 
 

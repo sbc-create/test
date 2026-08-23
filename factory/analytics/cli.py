@@ -125,8 +125,20 @@ def cmd_apply(args) -> int:
         domain = entry["domain"]
         try:
             state = provider.ensure_metrica_counter(domain, entry["counter_name"])
-            if state.counter_id and not state.problems:
+            # Неоднозначность (два счётчика на домен) — единственная причина
+            # остановиться: без counter_id продолжать нечем. Включённый
+            # Вебвизор останавливать не должен — его нужно как раз выключить.
+            if state.counter_id and state.status != "ambiguous":
                 state = provider.ensure_metrica_goals(state.counter_id, state)
+                webvisor = provider.ensure_webvisor_disabled(state.counter_id)
+                if not webvisor.get("webvisor"):
+                    state.webvisor = False
+                    state.problems = tuple(
+                        problem for problem in state.problems if "Вебвизор" not in problem
+                    )
+                goal_ids = provider.list_goal_ids(state.counter_id)
+            else:
+                webvisor, goal_ids = {}, {}
         except FactoryError as exc:
             results.append({"domain": domain, "status": exc.status, "reason": exc.reason})
             exit_code = EXIT_BLOCKED
@@ -142,12 +154,19 @@ def cmd_apply(args) -> int:
             ),
             "webvisor": state.webvisor,
             "goals": sorted(set(state.goals_present) | set(state.goals_created)),
+            # Числовые идентификаторы целей присваивает Метрика. Без них
+            # метрику достижения цели (`ym:s:goal<id>reaches`) не адресовать,
+            # поэтому связка «событие → goal_id» хранится рядом с целями.
+            "goal_ids": {name: goal_ids[name] for name in sorted(goal_ids)},
             "last_checked_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
             "problems": list(state.problems),
         }
         if not provider.dry_run:
             registry.upsert(update)
-        results.append(state.as_dict())
+        item = state.as_dict()
+        item["webvisor_action"] = webvisor
+        item["goal_ids"] = update["goal_ids"]
+        results.append(item)
         if state.problems:
             exit_code = EXIT_BLOCKED
 

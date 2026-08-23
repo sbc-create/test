@@ -325,3 +325,14 @@ sources:
     note: >-
       Значение токена в сессию не передавалось, не запрашивалось и не выводилось.
       Client secret для работы не нужен и не запрашивался.
+  - id: SRC-YA-METRIKA-COUNTER-EDIT
+    kind: official_documentation
+    owner: Yandex
+    url: https://yandex.com/dev/metrika/en/management/openapi/counter/editCounter
+    retrieved_at: "2026-08-23T20:55:00Z"
+    purpose: "выключение Вебвизора у уже созданного счётчика"
+    status: approved
+    conclusions:
+      - "PUT /management/v1/counter/{counterId}, тело {\"counter\": CounterEdit}."
+      - "Частичное обновление поддерживается: передаются только изменяемые поля."
+      - "WebvisorOptions: urls, arch_enabled, arch_type, load_player_type, wv_version, wv_forms."

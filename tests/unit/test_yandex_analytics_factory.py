@@ -326,7 +326,23 @@ def test_registry_never_stores_a_secret():
     Тест на подстроку запретил бы объяснить в комментарии, чего в файле не
     бывает, и при этом пропустил бы секрет, лежащий в поле с невинным именем.
     """
+    from datetime import datetime
+
     from factory.redaction import SENSITIVE_KEY_RE, _looks_like_secret
+
+    def _is_timestamp(value: str) -> bool:
+        """Метка времени ISO-8601 — не секрет.
+
+        Эвристика `_looks_like_secret` смотрит на длину и разнообразие
+        символов, и `2026-08-23T20:49:56Z` под неё подходит. В самой редакции
+        это безвредно (она применяет эвристику только к значениям переменных
+        окружения), но здесь дало бы ложную тревогу на каждом реестре.
+        """
+        try:
+            datetime.fromisoformat(value.replace("Z", "+00:00"))
+        except ValueError:
+            return False
+        return True
 
     data = json.loads((PATHS.root / registry.REGISTRY_PATH).read_text(encoding="utf-8"))
     findings: list[str] = []
@@ -341,7 +357,7 @@ def test_registry_never_stores_a_secret():
             for index, item in enumerate(node):
                 walk(item, f"{path}[{index}]")
         elif (isinstance(node, str) and path.rsplit("/", 1)[-1] != "note"
-              and _looks_like_secret(node)):
+              and not _is_timestamp(node) and _looks_like_secret(node)):
             findings.append(f"{path}: значение выглядит секретом")
 
     walk(data)

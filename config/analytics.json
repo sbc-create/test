@@ -1,20 +1,32 @@
 {
   "version": 1,
   "provider": "yandex",
-  "note": "Реестр аналитики. Здесь хранятся ТОЛЬКО публичные идентификаторы счётчиков и проверяемые статусы; OAuth-токен и client secret сюда не попадают ни при каких условиях. Заполняется командой `python3 -m factory analytics apply`; вручную не редактируется. Три домена YummyAnime — три независимых счётчика, зеркалами их объединять запрещено: у каждого сайта собственная аудитория и собственный отчёт.",
+  "note": "Реестр аналитики. Здесь хранятся ТОЛЬКО публичные идентификаторы счётчиков и проверяемые статусы; OAuth-токен и client secret сюда не попадают ни при каких условиях. Заполняется командой `python3 -m factory --json analytics apply --confirm-writes`; вручную не редактируется. Три домена YummyAnime — три независимых счётчика, зеркалами их объединять запрещено: у каждого сайта собственная аудитория и собственный отчёт.",
   "seo_indexing_enabled": false,
-  "updated_at": null,
+  "updated_at": "2026-08-23T20:49:56Z",
   "properties": [
     {
       "domain": "yummyani.site",
       "site_id": null,
       "counter_name": "YummyAnime — yummyani.site",
-      "counter_id": null,
-      "counter_state": "planned",
+      "counter_id": 111881037,
+      "counter_state": "created",
       "analytics_enabled": true,
-      "webvisor": false,
-      "allowed_hosts": ["yummyani.site"],
-      "goals": [],
+      "webvisor": true,
+      "allowed_hosts": [
+        "yummyani.site"
+      ],
+      "goals": [
+        "comment_submit",
+        "episode_select",
+        "filter_apply",
+        "player_error",
+        "player_ready",
+        "player_start",
+        "search",
+        "season_select",
+        "title_view"
+      ],
       "webmaster": {
         "enabled": true,
         "host_id": null,
@@ -24,19 +36,35 @@
         "sitemap_submitted": false
       },
       "seo_indexing_enabled": false,
-      "last_checked_at": null,
-      "problems": ["домен ещё не развёрнут и не отвечает по HTTPS"]
+      "last_checked_at": "2026-08-23T20:49:46Z",
+      "problems": [
+        "счётчик создан с включённым Вебвизором: Метрика включает его по умолчанию, а запрос на создание объект webvisor не передавал. Выключается операцией ensure_webvisor_disabled при следующем запуске apply.",
+        "домен ещё не развёрнут и не отвечает по HTTPS"
+      ],
+      "goal_ids": {}
     },
     {
       "domain": "yummyani.org",
       "site_id": null,
       "counter_name": "YummyAnime — yummyani.org",
-      "counter_id": null,
-      "counter_state": "planned",
+      "counter_id": 111881038,
+      "counter_state": "created",
       "analytics_enabled": true,
-      "webvisor": false,
-      "allowed_hosts": ["yummyani.org"],
-      "goals": [],
+      "webvisor": true,
+      "allowed_hosts": [
+        "yummyani.org"
+      ],
+      "goals": [
+        "comment_submit",
+        "episode_select",
+        "filter_apply",
+        "player_error",
+        "player_ready",
+        "player_start",
+        "search",
+        "season_select",
+        "title_view"
+      ],
       "webmaster": {
         "enabled": true,
         "host_id": null,
@@ -46,19 +74,35 @@
         "sitemap_submitted": false
       },
       "seo_indexing_enabled": false,
-      "last_checked_at": null,
-      "problems": ["домен ещё не развёрнут и не отвечает по HTTPS"]
+      "last_checked_at": "2026-08-23T20:49:51Z",
+      "problems": [
+        "счётчик создан с включённым Вебвизором: Метрика включает его по умолчанию, а запрос на создание объект webvisor не передавал. Выключается операцией ensure_webvisor_disabled при следующем запуске apply.",
+        "домен ещё не развёрнут и не отвечает по HTTPS"
+      ],
+      "goal_ids": {}
     },
     {
       "domain": "yummyani.biz",
       "site_id": null,
       "counter_name": "YummyAnime — yummyani.biz",
-      "counter_id": null,
-      "counter_state": "planned",
+      "counter_id": 111881039,
+      "counter_state": "created",
       "analytics_enabled": true,
-      "webvisor": false,
-      "allowed_hosts": ["yummyani.biz"],
-      "goals": [],
+      "webvisor": true,
+      "allowed_hosts": [
+        "yummyani.biz"
+      ],
+      "goals": [
+        "comment_submit",
+        "episode_select",
+        "filter_apply",
+        "player_error",
+        "player_ready",
+        "player_start",
+        "search",
+        "season_select",
+        "title_view"
+      ],
       "webmaster": {
         "enabled": true,
         "host_id": null,
@@ -68,8 +112,12 @@
         "sitemap_submitted": false
       },
       "seo_indexing_enabled": false,
-      "last_checked_at": null,
-      "problems": ["домен ещё не развёрнут и не отвечает по HTTPS"]
+      "last_checked_at": "2026-08-23T20:49:56Z",
+      "problems": [
+        "счётчик создан с включённым Вебвизором: Метрика включает его по умолчанию, а запрос на создание объект webvisor не передавал. Выключается операцией ensure_webvisor_disabled при следующем запуске apply.",
+        "домен ещё не развёрнут и не отвечает по HTTPS"
+      ],
+      "goal_ids": {}
     }
   ]
 }

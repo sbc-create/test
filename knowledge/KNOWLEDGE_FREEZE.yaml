@@ -1,13 +1,13 @@
 # Сгенерировано `python3 -m factory knowledge freeze`. Вручную не редактируется.
 schema_version: 1
-freeze_version: 2026-08-23.7
-frozen_at: '2026-08-23T19:49:25Z'
+freeze_version: 2026-08-23.9
+frozen_at: '2026-08-23T21:00:14Z'
 file_count: 13
-aggregate_sha256: d152ea53b400e49accbcc7ccc65d815a4c6fc44ffc522049b13a0b51fbf92c28
+aggregate_sha256: 797e940570b4a970e003745ac72ac4f50757974623349beda594ed1169c14a22
 files:
 - path: knowledge/DECISIONS.md
-  sha256: 42f7618c649bb4215344515080060c74c0650894b92ba222eaf7ece8aa911e64
-  bytes: 38808
+  sha256: 9446a72350080c1480964dafb7c0558b9315b662d3ad1be73e9344da4c18fe78
+  bytes: 42914
 - path: knowledge/DLE_20_COMPATIBILITY.md
   sha256: 3ae18bd0c3abd391d16378ec296f14c3bc2162cd6ed9d1a2c58855420f816e0f
   bytes: 7042
@@ -24,8 +24,8 @@ files:
   sha256: c9483795c075751d69afa143dc55c23ed125899c02ee40658b20ac3d07d852ff
   bytes: 13254
 - path: knowledge/SOURCE_REGISTRY.yaml
-  sha256: f00af0cc83a92643ebb92808c38d723bfc46083fb7585aab27a3f5de42cf84e8
-  bytes: 19177
+  sha256: 20266cbd98a6af7cd17433452612a23a9225cd501ae2f3424473b7d0e78604f2
+  bytes: 19858
 - path: knowledge/THIRD_PARTY_REVIEW.md
   sha256: c450b41ba251e3ad2fc1c4b0929302f3577f5bac7a8ae3ff64a1e2cb836cc049
   bytes: 3089
@@ -36,8 +36,8 @@ files:
   sha256: 36ddb0d5d4fc4f12401b5b30a201c45faca259f80101da373b77ce2c722757a4
   bytes: 6382
 - path: knowledge/YANDEX_ANALYTICS_CONTRACT.yaml
-  sha256: 8f60a7fcf4be103540092806319d445de5c1d032dc33d31f02eeb469cf84d11f
-  bytes: 11999
+  sha256: 2ddbc5e2c8ffa5025a4e6917574e57a7239e948d04ee796c6eb27eef7c74fdcb
+  bytes: 13582
 - path: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
   sha256: 6ed1cdf655b2f4b5a4ac0b8f85c6c7a1bc895615de5c8d092c9cdd83c06acbbf
   bytes: 5209

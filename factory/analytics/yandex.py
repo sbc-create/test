@@ -45,6 +45,11 @@ BLOCKED_DEPLOYMENT = "BLOCKED_DEPLOYMENT"
 
 _WWW = re.compile(r"^www\.")
 
+#: Тело, выключающее запись сессий. Только два флага включения из
+#: WebvisorOptions: выключенной записи не нужны ни urls, ни версия, ни режим
+#: плеера, а лишние поля — это выдуманная конфигурация.
+WEBVISOR_OFF = {"arch_enabled": False, "wv_forms": False}
+
 
 def load_contract() -> dict:
     """Замороженный контракт API. Без него провайдер не работает."""
@@ -393,11 +398,21 @@ class YandexAnalyticsProvider:
             state.goals_planned = events_mod.EVENT_IDS
             return state
 
-        # Тело создания — ровно то, что описано в контракте: имя и домен.
-        # Ни webvisor, ни gdpr_agreement_accepted фабрика не отправляет.
+        # Вебвизор выключается явно, а не «не передаётся». Первый боевой
+        # запуск показал, чем отличается одно от другого: объекта webvisor в
+        # запросе не было, и Метрика создала все три счётчика с включённой
+        # записью сессий — значение по умолчанию у неё «включено».
+        # gdpr_agreement_accepted по-прежнему не отправляется: это юридическое
+        # действие владельца аккаунта (D55).
         response = self.metrika.post(
             "/management/v1/counters",
-            body={"counter": {"name": name, "site2": {"site": state.domain}}},
+            body={
+                "counter": {
+                    "name": name,
+                    "site2": {"site": state.domain},
+                    "webvisor": dict(WEBVISOR_OFF),
+                }
+            },
         )
         counter = (response.payload or {}).get("counter") or {}
         if not counter.get("id"):
@@ -412,6 +427,15 @@ class YandexAnalyticsProvider:
         state.created = True
         state.status = str(counter.get("status") or "Active")
         state.webvisor = webvisor_enabled(counter)
+        if state.webvisor:
+            # Раньше эта ветка молчала, и отчёт показывал problems: [] у
+            # счётчика с включённой записью сессий. Требование задания при этом
+            # было нарушено — молчание отчёта нарушение не отменяет.
+            state.problems = (
+                f"счётчик {state.counter_id} создан с включённым Вебвизором: "
+                "Метрика включает его по умолчанию. Выключается операцией "
+                "ensure_webvisor_disabled.",
+            )
         return state
 
     @staticmethod
@@ -426,6 +450,41 @@ class YandexAnalyticsProvider:
                 if url in events_mod.BY_ID:
                     found.append(url)
         return sorted(set(found))
+
+    def ensure_webvisor_disabled(self, counter_id: int) -> dict:
+        """Выключает запись сессий, если она включена. Идемпотентна.
+
+        Сначала читает фактическое состояние и молчит, когда выключать нечего:
+        безусловный PUT на каждом запуске — лишняя мутация и лишний шанс
+        затереть настройку, которую владелец поменял осознанно.
+        """
+        response = self.metrika.get(f"/management/v1/counter/{counter_id}")
+        counter = (response.payload or {}).get("counter") or {}
+        if not webvisor_enabled(counter):
+            return {"counter_id": counter_id, "webvisor": False, "changed": False,
+                    "reason": "запись сессий уже выключена"}
+        if self.dry_run:
+            return {"counter_id": counter_id, "webvisor": True, "changed": False,
+                    "planned": True, "reason": "режим плана"}
+
+        # Частичное обновление: передаётся только объект webvisor, остальные
+        # настройки счётчика Метрика сохраняет.
+        self.metrika.request(
+            "PUT",
+            f"/management/v1/counter/{counter_id}",
+            body={"counter": {"webvisor": dict(WEBVISOR_OFF)}},
+        )
+        after = self.metrika.get(f"/management/v1/counter/{counter_id}")
+        if webvisor_enabled((after.payload or {}).get("counter") or {}):
+            raise BlockedAnalyticsAccess(
+                f"Вебвизор счётчика {counter_id} остался включённым после запроса на "
+                "выключение. Фабрика не объявляет выполненным то, что не подтвердилось.",
+                field="analytics.webvisor",
+                required_input="Выключить запись сессий в интерфейсе Метрики",
+                blocks_stage="BUILDING",
+            )
+        return {"counter_id": counter_id, "webvisor": False, "changed": True,
+                "reason": "запись сессий выключена"}
 
     def list_goal_ids(self, counter_id: int) -> dict[str, int]:
         """`{идентификатор события: числовой goal_id}` для существующих целей.

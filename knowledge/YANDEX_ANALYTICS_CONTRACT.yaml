@@ -43,6 +43,14 @@ metrika:
       method: GET
       path: "/management/v1/counter/{counterId}"
       query: [field]
+    edit_counter:
+      # Прочитано после того, как первый боевой запуск создал три счётчика с
+      # включённым по умолчанию Вебвизором: выключать его нечем, если не знать
+      # endpoint правки.
+      method: PUT
+      path: "/management/v1/counter/{counterId}"
+      body_root: counter          # {"counter": CounterEdit}
+      partial_update: true        # передаются только изменяемые поля
     add_counter:
       method: POST
       path: "/management/v1/counters"
@@ -77,12 +85,26 @@ metrika:
     webvisor: "object — читается для проверки, что запись сессий выключена"
     gdpr_agreement_accepted: "boolean"
     create_time: "datetime"
+  webvisor_options:
+    # Поля WebvisorOptions по документации editCounter. Фабрика трогает только
+    # два флага включения и не задаёт ни urls, ни версию, ни режим плеера:
+    # выключенной записи сессий эти поля не нужны.
+    urls: "список страниц для сохранения"
+    arch_enabled: "boolean — сохранение страниц"
+    arch_type: "none | load | html"
+    load_player_type: "proxy | on_your_behalf"
+    wv_version: "номер версии записи сессий"
+    wv_forms: "boolean — запись содержимого форм"
   webvisor_enable_flags:
-    # Имена флагов включения, описанные в документации Management API.
-    # Проверка сознательно шире: любой ключ вида *enabled со значением true
-    # трактуется как включённый Вебвизор.
+    # Флаги включения. Проверка на стороне фабрики сознательно шире: любой ключ
+    # вида *enabled со значением true трактуется как включённый Вебвизор.
     - arch_enabled
     - wv_forms
+  webvisor_default_on_create: true
+  # Установлено фактом, а не документацией: боевое создание трёх счётчиков
+  # 2026-08-23 вернуло webvisor включённым, хотя объект webvisor в запросе не
+  # передавался. Значение по умолчанию у Метрики — «включено», поэтому
+  # «не передавать поле» НЕ равно «Вебвизор выключен».
   goals:
     add_goal:
       method: POST
@@ -213,7 +235,6 @@ webmaster:
 not_documented_here:
   # Честный список того, чего в выжимке нет. Использовать эти возможности
   # нельзя, пока соответствующая страница документации не прочитана и не внесена.
-  - "Полная под-схема объекта webvisor (имена и значения по умолчанию всех полей)."
   - >-
     Отправка sitemap (`user-added-sitemaps`) и переобход (`recrawl/queue`):
     ресурсы существуют и перечислены в документации, но заданием запрещены до

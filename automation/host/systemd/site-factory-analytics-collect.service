@@ -23,6 +23,9 @@ Environment=YANDEX_OAUTH_TOKEN_FILE=/run/credentials/%n/yandex_oauth
 
 # Только чтение: ни --confirm-writes, ни webmaster --verify здесь нет и быть не
 # может. Отчёт складывается в artifacts/ и не меняет ни одного счётчика.
+# bin/seo-operator тоже берёт интерпретатор из .venv; FACTORY_REQUIRE_VENV=1
+# запрещает молчаливый откат на системный python.
+Environment=FACTORY_REQUIRE_VENV=1
 ExecStart=/srv/site-factory/repo/bin/seo-operator analytics-collect --json
 
 NoNewPrivileges=yes
