@@ -38,3 +38,5 @@ tsconfig.tsbuildinfo
 **/.next/
 # Каталоги релизов blueprint payload-next-multisite
 blueprints/payload-next-multisite/app/.releases/
+# Журнал решений PreToolUse-хука SEO-оператора: runtime-состояние, а не исходник.
+.seo-state/
