@@ -57,9 +57,15 @@ def run(base_url: str, build_dir: Path, out_dir: Path, *, auth: str = "") -> Rep
         "--out", str(out_dir),
         "--executable", detail,
     ]
+    # Учётные данные передаются окружением, а не argv: командная строка процесса
+    # видна через `ps` и /proc/<pid>/cmdline любому пользователю хоста.
+    child_env = dict(os.environ)
     if auth:
-        cmd += ["--auth", auth]
-    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=1800, check=False)
+        child_env["FACTORY_STAGING_AUTH"] = auth
+    else:
+        child_env.pop("FACTORY_STAGING_AUTH", None)
+    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=1800, check=False,
+                          env=child_env)
     audit_file = out_dir / "browser-audit.json"
     if not audit_file.exists():
         report.add(Finding("browser", "critical", base_url, f"Браузерная проверка завершилась без отчёта: {proc.stderr[:300]}"))

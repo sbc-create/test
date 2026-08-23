@@ -4,7 +4,9 @@
  * Запускается фабрикой (`factory seo-render` и `factory verify`). Вывод — JSON в stdout,
  * чтобы результат попадал в машиночитаемый отчёт задания без ручной интерпретации.
  *
- * Аргументы: --base <url> --routes <routes.json> --out <dir> [--auth user:pass]
+ * Аргументы: --base <url> --routes <routes.json> --out <dir>
+ * Учётные данные стенда — только через переменную FACTORY_STAGING_AUTH:
+ * аргументы командной строки видны в /proc любому пользователю хоста.
  */
 const fs = require('fs');
 const path = require('path');
@@ -18,7 +20,10 @@ function arg(name, fallback = null) {
 const BASE = arg('--base');
 const ROUTES = arg('--routes');
 const OUT = arg('--out', '.');
-const AUTH = arg('--auth', '');
+// Не аргумент: argv любого процесса читается через `ps` и /proc/<pid>/cmdline
+// любым пользователем машины, и пароль стенда утекал бы всем локальным
+// процессам на всё время прогона.
+const AUTH = process.env.FACTORY_STAGING_AUTH || '';
 const EXECUTABLE = arg('--executable', process.env.FACTORY_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome');
 const VIEWPORTS = [
   { name: 'mobile-360', width: 360, height: 780, isMobile: true },
