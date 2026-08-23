@@ -89,7 +89,14 @@ def collect() -> list[dict]:
     return items
 
 
-def generate() -> tuple[Path, Path, list[dict]]:
+def generate(docs_dir: Path | None = None) -> tuple[Path, Path, list[dict]]:
+    """Собирает пакет недостающих данных.
+
+    `docs_dir` существует ради тестов: без него проверка писала прямо в
+    `docs/INPUT_REQUEST.md` — файл под контролем версий. Прогон тестов оставлял
+    после себя изменённое рабочее дерево, а правило репозитория прямое: тесты не
+    пишут за пределы `var/` и `artifacts/`.
+    """
     items = collect()
     json_path = PATHS.artifact_dir("input-request") / "input-request.json"
     json_path.write_text(json.dumps({"items": items, "count": len(items)}, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -106,6 +113,6 @@ def generate() -> tuple[Path, Path, list[dict]]:
         lines.append("| `{field}` | {why} | {format} | `{example_without_secret}` | {where_to_put} | {blocks_stage} |".format(
             **{k: str(v).replace("|", "\\|") for k, v in item.items()}))
     lines.append("")
-    md_path = PATHS.docs / "INPUT_REQUEST.md"
+    md_path = (Path(docs_dir) if docs_dir else PATHS.docs) / "INPUT_REQUEST.md"
     md_path.write_text("\n".join(lines), encoding="utf-8")
     return md_path, json_path, items
