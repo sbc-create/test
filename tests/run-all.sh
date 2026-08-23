@@ -121,10 +121,18 @@ else
   skip "ansible-syntax" "ansible-playbook не установлен на управляющем хосте"
 fi
 
-if command -v nginx > /dev/null 2>&1; then
-  run "nginx-config-test" "nginx -t"
-else
+if ! command -v nginx > /dev/null 2>&1; then
   skip "nginx-config-test" "nginx не установлен на управляющем хосте"
+elif nginx -t 2>&1 | grep -q "Permission denied"; then
+  # `nginx -t` открывает error_log и pid-файл, поэтому без root он не отвечает
+  # на вопрос «конфигурация верна» — он вообще не выполняется. Это SKIPPED с
+  # причиной, а не FAIL: иначе непроведённая проверка выглядела бы как
+  # найденная ошибка конфигурации, а прогон нельзя было бы отличить от
+  # настоящей поломки конфига. Привилегированный прогон делает systemd-таймер
+  # site-factory-nginx-check (docs/INFRASTRUCTURE.md), от root и без агента.
+  skip "nginx-config-test" "nginx -t требует root на этом хосте; привилегированный прогон — таймер site-factory-nginx-check"
+else
+  run "nginx-config-test" "nginx -t"
 fi
 
 # ---------------------------------------------------------------------------
@@ -155,10 +163,16 @@ else
   run "payload-cross-site"  "python3 tests/tools/cross_site_uniqueness.py"
   run "payload-restore"     "python3 tests/tools/restore_proof.py"
 
-  if [ -x /opt/pw-browsers/chromium-1194/chrome-linux/chrome ]; then
+  # Путь к Chromium берётся из FACTORY_CHROMIUM — так его разрешают и
+  # tests/tools/browser_multisite.py, и factory/seo/render_check.py, и оба
+  # playwright-конфига. Жёсткий путь оставлен запасным вариантом: имя каталога
+  # содержит ревизию Playwright и меняется вместе с ней, поэтому проверка по
+  # одному только этому пути объявляла бы установленный браузер отсутствующим.
+  CHROMIUM_BIN="${FACTORY_CHROMIUM:-/opt/pw-browsers/chromium-1194/chrome-linux/chrome}"
+  if [ -x "$CHROMIUM_BIN" ]; then
     run "payload-browser"   "python3 tests/tools/browser_multisite.py"
   else
-    skip "payload-browser" "Chromium не найден в /opt/pw-browsers"
+    skip "payload-browser" "Chromium не найден: $CHROMIUM_BIN"
   fi
 
   REFERENCE_STATUS=$(python3 -m factory reference-audit --ref amd-online --json 2>/dev/null | python3 -c "import json,sys; print(json.load(sys.stdin).get('status','unknown'))" 2>/dev/null || echo unknown)
