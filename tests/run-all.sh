@@ -123,16 +123,24 @@ fi
 
 if ! command -v nginx > /dev/null 2>&1; then
   skip "nginx-config-test" "nginx не установлен на управляющем хосте"
-elif nginx -t 2>&1 | grep -q "Permission denied"; then
-  # `nginx -t` открывает error_log и pid-файл, поэтому без root он не отвечает
-  # на вопрос «конфигурация верна» — он вообще не выполняется. Это SKIPPED с
-  # причиной, а не FAIL: иначе непроведённая проверка выглядела бы как
-  # найденная ошибка конфигурации, а прогон нельзя было бы отличить от
-  # настоящей поломки конфига. Привилегированный прогон делает systemd-таймер
-  # site-factory-nginx-check (docs/INFRASTRUCTURE.md), от root и без агента.
-  skip "nginx-config-test" "nginx -t требует root на этом хосте; привилегированный прогон — таймер site-factory-nginx-check"
 else
-  run "nginx-config-test" "nginx -t"
+  # Вывод берётся в переменную, а не через конвейер: при `set -o pipefail`
+  # статусом `nginx -t | grep` был бы ненулевой код самого nginx, и ветка
+  # «не хватило прав» не сработала бы никогда.
+  NGINX_TEST_OUT="$(nginx -t 2>&1)" || true
+  case "$NGINX_TEST_OUT" in
+    *"Permission denied"*)
+      # `nginx -t` открывает error_log и pid-файл, поэтому без root он не
+      # отвечает на вопрос «конфигурация верна» — он вообще не выполняется.
+      # По правилу самого прогона это SKIPPED с причиной, а не FAIL: иначе
+      # непроведённую проверку нельзя отличить от настоящей поломки конфига.
+      # Привилегированный прогон делает таймер site-factory-health от root.
+      skip "nginx-config-test" "nginx -t требует root на этом хосте; привилегированный прогон — таймер site-factory-health"
+      ;;
+    *)
+      run "nginx-config-test" "nginx -t"
+      ;;
+  esac
 fi
 
 # ---------------------------------------------------------------------------

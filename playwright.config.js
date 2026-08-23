@@ -8,8 +8,14 @@ const CHROMIUM = process.env.FACTORY_CHROMIUM || '/opt/pw-browsers/chromium-1194
 const BASE_URL = process.env.FACTORY_BASE_URL || 'http://127.0.0.1:8082';
 const AUTH = process.env.FACTORY_STAGING_AUTH || '';
 
+// send: 'always' — иначе Playwright отдаёт учётные данные только в ответ на
+// 401-вызов. Chromium повторяет запрос сам, Firefox нет: стенд закрыт
+// Basic-авторизацией до любой отдачи, поэтому проверка «404 на несуществующей
+// странице» получала 401, а переход на главную вис на диалоге авторизации.
+// Проверку «staging закрыт» это не ослабляет — её делает test_security_smoke.py
+// отдельным запросом без учётных данных.
 const credentials = AUTH.includes(':')
-  ? { username: AUTH.split(':')[0], password: AUTH.slice(AUTH.indexOf(':') + 1) }
+  ? { username: AUTH.split(':')[0], password: AUTH.slice(AUTH.indexOf(':') + 1), send: 'always' }
   : undefined;
 
 const projects = [
