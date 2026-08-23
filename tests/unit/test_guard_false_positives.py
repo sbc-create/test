@@ -150,3 +150,51 @@ class TestHeredocBodyIsData:
         command = ".venv/bin/python - <<'PY'\nprint(open('.env').read())\nPY"
         assert g.evaluate_bash(command).decision == g.DENY
 
+
+class TestStopSignalsStayInsideOneSegment:
+    """Стоп-сигнал описывает форму одной команды, а не набор слов в строке.
+
+    Разрыв `[^\\n]*` перескакивал через `;`, `&&` и `|`, поэтому глагол из
+    одного сегмента склеивался со словом из другого. На запреты это не влияло,
+    а безопасную работу останавливало: `rm -f var/tmp.diff && git checkout
+    claude/unattended-safe-audit` читалось как удаление аудита, потому что имя
+    ветки содержит «audit».
+    """
+
+    @pytest.mark.parametrize(
+        "command",
+        [
+            # Имя ветки содержит «audit» — это не удаление журнала.
+            "rm -f var/tmp.diff && git checkout claude/unattended-safe-audit",
+            "git worktree remove var/check --force && git checkout claude/audit-branch",
+            # Переключение на main после push в собственную ветку.
+            "git push origin claude/example && git checkout main",
+            "git push -u origin claude/example; git branch --show-current",
+            # Чтение каталога бэкапов не является его удалением.
+            "ls var/backups && npm run build",
+            "find var/backups -name '*.tar.gz' | head -5",
+            # Слово production в чужом сегменте не делает команду выкатом.
+            "grep -rn production docs/ | head",
+        ],
+        ids=lambda c: c[:52],
+    )
+    def test_a_word_from_another_segment_does_not_stop_the_command(self, command):
+        assert unattended.mandatory_confirmation(command) == "", command
+
+    @pytest.mark.parametrize(
+        "command",
+        [
+            "rm -rf var/backups",
+            "rm var/audit/operator.jsonl",
+            "git status && rm var/audit/operator.jsonl",
+            "pytest -q; truncate -s 0 var/audit/operator.jsonl",
+            "git push origin main",
+            "git push --force origin claude/x",
+            "sed -i 's/before_mutation: true/before_mutation: false/' sites/site-a/package.yaml",
+            "python3 -m factory deploy --site site-a --environment production",
+        ],
+        ids=lambda c: c[:52],
+    )
+    def test_the_same_shape_inside_one_segment_still_stops(self, command):
+        assert unattended.mandatory_confirmation(command), command
+
