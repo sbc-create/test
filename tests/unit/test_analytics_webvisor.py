@@ -1,13 +1,18 @@
-"""REQ-ANALYTICS-WEBVISOR: запись сессий выключается явно, а не «по умолчанию».
+"""REQ-ANALYTICS-VISOR: записью сессий управляет code_options.visor.
 
-Дефект найден боевым запуском 2026-08-23: объект `webvisor` в запросе создания
-не передавался — и Метрика создала все три счётчика с ВКЛЮЧЁННОЙ записью
-сессий. Значение по умолчанию у неё «включено», поэтому «не передавать поле» не
-равно «выключено».
+История дефекта в двух шагах, и второй дороже первого.
 
-Вторая половина дефекта хуже первой: ветка создания не записывала это в
-`problems`, и отчёт показывал `problems: []` у счётчика, нарушающего прямое
-требование задания. Молчание отчёта нарушения не отменяет.
+Шаг первый: объект `webvisor` в запросе создания не передавался — Метрика
+включила запись сессий сама, и отчёт показал `problems: []`.
+
+Шаг второй: попытка выключить её через `webvisor.arch_enabled` получила
+HTTP 400 «Could not read JSON, error in line 1, column 43, path:
+counter.webvisor.arch_enabled». Поле устаревшее, Метрика его больше не слушает.
+Настоящий переключатель — булево `code_options.visor` (официальное описание:
+«Record and analysis of site user behavior»).
+
+Файл проверяет поведение на поддельной Метрике, которая ведёт себя как
+настоящая: отвергает устаревшее поле и хранит `code_options`.
 """
 from __future__ import annotations
 
@@ -19,14 +24,26 @@ import pytest
 from factory.analytics.credentials import OAuthToken
 from factory.analytics.transport import RateLimiter, YandexApiClient
 from factory.analytics.yandex import (
-    WEBVISOR_OFF,
+    VISOR_OPTION,
     YandexAnalyticsProvider,
+    visor_state,
     webvisor_enabled,
 )
 from factory.errors import BlockedAnalyticsAccess
 from factory.redaction import forget_secrets
 
-TOKEN_VALUE = "y0_AgAAAABwebvisorTESTtoken012345678"
+TOKEN_VALUE = "y0_AgAAAABvisorTESTtoken01234567890"
+
+#: Настройки кода счётчика, которые обязаны пережить выключение записи сессий.
+EXISTING_OPTIONS = {
+    "async": True,
+    "visor": True,
+    "track_hash": True,
+    "clickmap": True,
+    "ecommerce": False,
+    "alternative_cdn": True,
+    "informer": {"enabled": True, "type": "ext", "size": 3},
+}
 
 
 @pytest.fixture(autouse=True)
@@ -40,56 +57,72 @@ def token():
     return OAuthToken(TOKEN_VALUE, "тест")
 
 
-class MetrikaWithWebvisorOn:
-    """Метрика, которая включает Вебвизор сама, если её не попросили иначе.
+class Metrika:
+    """Поддельная Метрика с боевым поведением.
 
-    Ровно это и произошло на боевом запуске, поэтому подделка воспроизводит
-    поведение, а не удобную для теста фикцию.
+    Отвергает `webvisor.arch_enabled` ровно тем же ответом, что и настоящая:
+    иначе тест доказывал бы работоспособность схемы, которой в API нет.
     """
 
-    def __init__(self, honour_request: bool = True):
-        self.counters: list[dict] = []
-        self.requests: list[tuple[str, str, dict | None]] = []
-        self._next_id = 111881037
-        self.honour_request = honour_request
+    def __init__(self, code_options: dict | None = None, honour_put: bool = True):
+        self.counter = {
+            "id": 111881037,
+            "name": "YummyAnime — yummyani.site",
+            "status": "Active",
+            "site2": {"site": "yummyani.site"},
+            "goals": [],
+            # Объект webvisor приходит в ответе, но управляющим не является.
+            "webvisor": {"arch_enabled": True, "arch_type": "none", "wv_forms": True},
+            "code_options": dict(EXISTING_OPTIONS if code_options is None else code_options),
+        }
+        self.honour_put = honour_put
+        self.requests: list[tuple[str, str, dict | None, bytes]] = []
 
     def __call__(self, request: urllib.request.Request, timeout: float):
         method = request.get_method()
         path = request.full_url.split("?", 1)[0].split(".net", 1)[1]
-        body = json.loads(request.data.decode("utf-8")) if request.data else None
-        self.requests.append((method, path, body))
+        raw = request.data or b""
+        body = json.loads(raw.decode("utf-8")) if raw else None
+        self.requests.append((method, path, body, raw))
+
+        if body and "counter" in body and "webvisor" in body["counter"]:
+            # Дословный ответ настоящей Метрики на устаревшее поле.
+            return 400, json.dumps({
+                "errors": [{"error_type": "invalid_json",
+                            "message": "Could not read JSON, error in line 1, column 43, "
+                                       "path: counter.webvisor.arch_enabled"}],
+                "message": "Could not read JSON, error in line 1, column 43, "
+                           "path: counter.webvisor.arch_enabled",
+                "code": 400,
+            }).encode()
 
         if method == "GET" and path == "/management/v1/counters":
-            return 200, json.dumps({"rows": len(self.counters), "counters": self.counters}).encode()
-        if method == "POST" and path == "/management/v1/counters":
-            counter = dict(body["counter"])
-            counter["id"] = self._next_id
-            self._next_id += 1
-            counter.setdefault("status", "Active")
-            counter.setdefault("goals", [])
-            asked = counter.get("webvisor") or {}
-            enabled = not (self.honour_request and asked.get("arch_enabled") is False)
-            counter["webvisor"] = {"arch_enabled": enabled, "wv_forms": enabled,
-                                   "arch_type": "none", "load_player_type": "proxy"}
-            self.counters.append(counter)
-            return 200, json.dumps({"counter": counter}).encode()
+            return 200, json.dumps({"rows": 1, "counters": [self.counter]}).encode()
         if method == "GET" and path.startswith("/management/v1/counter/"):
-            cid = int(path.split("/")[4])
-            for counter in self.counters:
-                if counter["id"] == cid:
-                    return 200, json.dumps({"counter": counter}).encode()
-            return 404, b'{"message":"not found"}'
+            return 200, json.dumps({"counter": self.counter}).encode()
         if method == "PUT" and path.startswith("/management/v1/counter/"):
-            cid = int(path.split("/")[4])
-            for counter in self.counters:
-                if counter["id"] == cid:
-                    if self.honour_request:
-                        counter["webvisor"] = {**counter["webvisor"], **body["counter"]["webvisor"]}
-                    return 200, json.dumps({"counter": counter}).encode()
-            return 404, b'{"message":"not found"}'
+            if self.honour_put:
+                self.counter["code_options"] = {
+                    **self.counter["code_options"],
+                    **(body["counter"].get("code_options") or {}),
+                }
+            return 200, json.dumps({"counter": self.counter}).encode()
+        if method == "POST" and path == "/management/v1/counters":
+            created = dict(body["counter"])
+            created["id"] = 111881040
+            created.setdefault("status", "Active")
+            created.setdefault("goals", [])
+            self.counter = created
+            return 200, json.dumps({"counter": created}).encode()
         if method == "POST" and path.endswith("/goals"):
-            return 200, json.dumps({"goal": {"id": 1, **body["goal"]}}).encode()
+            goal = dict(body["goal"])
+            goal["id"] = 900 + len(self.counter["goals"])
+            self.counter.setdefault("goals", []).append(goal)
+            return 200, json.dumps({"goal": goal}).encode()
         return 404, b'{"message":"unmapped"}'
+
+    def puts(self) -> list[dict]:
+        return [b for m, _, b, _ in self.requests if m == "PUT"]
 
 
 def _provider(fake, token, *, dry_run=False) -> YandexAnalyticsProvider:
@@ -100,102 +133,208 @@ def _provider(fake, token, *, dry_run=False) -> YandexAnalyticsProvider:
     return provider
 
 
-def test_creation_asks_for_webvisor_off_explicitly(token):
-    fake = MetrikaWithWebvisorOn()
-    _provider(fake, token).ensure_metrica_counter("yummyani.site", "YummyAnime — yummyani.site")
-    body = next(b for m, p, b in fake.requests if m == "POST" and p == "/management/v1/counters")
-    assert body["counter"]["webvisor"] == WEBVISOR_OFF, (
-        "объект webvisor обязан быть в запросе: без него Метрика включает запись сессий"
-    )
+# ------------------------------------------------ устаревшее поле не уходит
+def test_arch_enabled_is_never_sent(token):
+    """Главный regression: именно это поле вернуло HTTP 400 на боевом запуске."""
+    fake = Metrika()
+    _provider(fake, token).ensure_webvisor_disabled(111881037)
+    for _method, _path, body, raw in fake.requests:
+        assert b"arch_enabled" not in raw, f"устаревшее поле ушло в запрос: {raw[:200]!r}"
+        if body and "counter" in body:
+            assert "webvisor" not in body["counter"]
 
 
-def test_counter_is_created_with_webvisor_off(token):
-    fake = MetrikaWithWebvisorOn()
-    state = _provider(fake, token).ensure_metrica_counter("yummyani.site", "n")
-    assert state.webvisor is False
-    assert state.problems == ()
+def test_creation_never_sends_the_webvisor_object(token):
+    fake = Metrika(code_options={})
+    _provider(fake, token).ensure_metrica_counter("yummyani.new", "новый")
+    post = next(b for m, p, b, _ in fake.requests
+                if m == "POST" and p == "/management/v1/counters")
+    assert "webvisor" not in post["counter"]
+    assert post["counter"]["code_options"] == {VISOR_OPTION: False}
 
 
-def test_a_server_that_ignores_the_request_is_reported_not_hidden(token):
-    """Если Метрика всё равно включит запись — это попадёт в problems, а не в тишину."""
-    fake = MetrikaWithWebvisorOn(honour_request=False)
-    state = _provider(fake, token).ensure_metrica_counter("yummyani.site", "n")
-    assert state.webvisor is True
-    assert state.problems, "problems: [] у счётчика с включённым Вебвизором — это ложный отчёт"
-    assert "Вебвизор" in state.problems[0]
+def test_the_fake_really_rejects_the_deprecated_field(token):
+    """Подделка обязана быть строгой, иначе тесты выше ничего не стерегут."""
+    fake = Metrika()
+    client = YandexApiClient(
+        "https://api-metrika.yandex.net", token, service="metrika", dry_run=False,
+        opener=fake, rate_limiter=RateLimiter(min_interval=0), sleep=lambda _s: None)
+    with pytest.raises(BlockedAnalyticsAccess, match="400"):
+        client.request("PUT", "/management/v1/counter/111881037",
+                       body={"counter": {"webvisor": {"arch_enabled": False}}})
 
 
-def test_disable_is_idempotent_and_reads_before_writing(token):
-    fake = MetrikaWithWebvisorOn(honour_request=False)
+# ------------------------------------------------------- сериализация JSON
+def test_visor_is_sent_as_a_real_json_boolean(token):
+    """`false`, а не `"false"`, не `0` и не `False`: проверяются сырые байты."""
+    fake = Metrika()
+    _provider(fake, token).ensure_webvisor_disabled(111881037)
+    raw = next(raw for m, _, _, raw in fake.requests if m == "PUT")
+    text = raw.decode("utf-8")
+
+    assert '"visor": false' in text or '"visor":false' in text, text
+    assert '"visor": "false"' not in text
+    assert '"visor": 0' not in text
+    assert "False" not in text, "в теле оказался Python-литерал вместо JSON"
+
+    body = json.loads(text)
+    value = body["counter"]["code_options"]["visor"]
+    assert value is False and isinstance(value, bool)
+
+
+def test_request_declares_json_content_type(token):
+    captured = {}
+
+    def opener(request, timeout):
+        captured["type"] = request.get_header("Content-type")
+        captured["body"] = request.data
+        return 200, json.dumps({"counter": {"id": 1, "code_options": {"visor": False}}}).encode()
+
+    client = YandexApiClient(
+        "https://api-metrika.yandex.net", token, service="metrika", dry_run=False,
+        opener=opener, rate_limiter=RateLimiter(min_interval=0), sleep=lambda _s: None)
+    client.request("PUT", "/management/v1/counter/1",
+                   body={"counter": {"code_options": {"visor": False}}})
+    assert captured["type"] == "application/json"
+    json.loads(captured["body"].decode("utf-8"))
+
+
+# --------------------------------------------- остальные настройки целы
+def test_other_code_options_survive(token):
+    fake = Metrika()
+    _provider(fake, token).ensure_webvisor_disabled(111881037)
+    sent = fake.puts()[0]["counter"]["code_options"]
+
+    assert sent[VISOR_OPTION] is False
+    for key, value in EXISTING_OPTIONS.items():
+        if key == VISOR_OPTION:
+            continue
+        assert sent[key] == value, f"настройка {key} потерялась при выключении записи сессий"
+    assert fake.counter["code_options"]["clickmap"] is True
+    assert fake.counter["code_options"]["informer"] == EXISTING_OPTIONS["informer"]
+
+
+def test_only_code_options_is_sent(token):
+    """Ни имя, ни домен, ни цели PUT не переписывает."""
+    fake = Metrika()
+    _provider(fake, token).ensure_webvisor_disabled(111881037)
+    assert set(fake.puts()[0]["counter"]) == {"code_options"}
+
+
+# ------------------------------------------------------------ подтверждение
+def test_unconfirmed_disable_raises_blocked_analytics_access(token):
+    fake = Metrika(honour_put=False)
+    with pytest.raises(BlockedAnalyticsAccess) as excinfo:
+        _provider(fake, token).ensure_webvisor_disabled(111881037)
+    assert excinfo.value.status == "BLOCKED_ANALYTICS_ACCESS"
+    assert "не подтверждена" in excinfo.value.reason
+
+
+def test_missing_code_options_is_not_treated_as_disabled(token):
+    """Непроверенное не объявляется выполненным."""
+    fake = Metrika(code_options={})
+    fake.counter.pop("code_options")
+    fake.honour_put = False
+    with pytest.raises(BlockedAnalyticsAccess):
+        _provider(fake, token).ensure_webvisor_disabled(111881037)
+
+
+def test_successful_disable_is_confirmed_by_a_second_get(token):
+    fake = Metrika()
+    result = _provider(fake, token).ensure_webvisor_disabled(111881037)
+    assert result == {"counter_id": 111881037, "visor": False, "changed": True,
+                      "reason": "запись сессий выключена"}
+    gets = [p for m, p, _, _ in fake.requests if m == "GET"]
+    assert len(gets) == 2, "результат обязан перечитываться после PUT"
+
+
+# ---------------------------------------------------------- идемпотентность
+def test_second_run_sends_no_put(token):
+    fake = Metrika()
     provider = _provider(fake, token)
-    state = provider.ensure_metrica_counter("yummyani.site", "n")
+    first = provider.ensure_webvisor_disabled(111881037)
+    assert first["changed"] is True
 
-    fake.honour_request = True
-    first = provider.ensure_webvisor_disabled(state.counter_id)
-    assert first["changed"] is True and first["webvisor"] is False
-    puts = sum(1 for m, _, _ in fake.requests if m == "PUT")
-    assert puts == 1
-
-    second = provider.ensure_webvisor_disabled(state.counter_id)
+    second = provider.ensure_webvisor_disabled(111881037)
     assert second["changed"] is False
-    assert sum(1 for m, _, _ in fake.requests if m == "PUT") == puts, (
-        "повторный вызов не должен слать PUT: выключать уже нечего"
-    )
+    assert len(fake.puts()) == 1, "выключать уже нечего — PUT слать не нужно"
 
 
-def test_disable_sends_only_the_webvisor_object(token):
-    """Частичное обновление: остальные настройки счётчика не переписываются."""
-    fake = MetrikaWithWebvisorOn(honour_request=False)
+def test_second_run_creates_neither_counter_nor_goals(token):
+    """Повторный прогон чинит настройку и не плодит объекты."""
+    from factory.analytics import events as events_mod
+
+    fake = Metrika(code_options={"visor": True})
+    fake.counter["goals"] = [
+        {"id": 900 + index, "name": event.goal_name, "type": "action",
+         "conditions": [{"type": "exact", "url": event.id}]}
+        for index, event in enumerate(events_mod.EVENTS)
+    ]
     provider = _provider(fake, token)
-    state = provider.ensure_metrica_counter("yummyani.site", "n")
-    fake.honour_request = True
+
+    state = provider.ensure_metrica_counter("yummyani.site", "YummyAnime — yummyani.site")
+    assert state.reused and state.counter_id == 111881037
+    state = provider.ensure_metrica_goals(state.counter_id, state)
     provider.ensure_webvisor_disabled(state.counter_id)
 
-    body = next(b for m, _, b in fake.requests if m == "PUT")
-    assert set(body["counter"]) == {"webvisor"}
-    assert body["counter"]["webvisor"] == WEBVISOR_OFF
+    assert state.goals_created == ()
+    assert len(state.goals_present) == 9
+    posts = [p for m, p, _, _ in fake.requests if m == "POST"]
+    assert posts == [], f"повторный прогон создал объекты: {posts}"
+    assert len(fake.counter["goals"]) == 9
 
 
-def test_disable_verifies_the_result(token):
-    """«Отправили PUT» — не то же самое, что «выключено». Проверяется факт."""
-    fake = MetrikaWithWebvisorOn(honour_request=False)
-    provider = _provider(fake, token)
-    state = provider.ensure_metrica_counter("yummyani.site", "n")
-    with pytest.raises(BlockedAnalyticsAccess, match="остался включённым"):
-        provider.ensure_webvisor_disabled(state.counter_id)
+def test_goal_ids_are_collected_for_all_nine_events(token):
+    from factory.analytics import events as events_mod
+
+    fake = Metrika()
+    fake.counter["goals"] = [
+        {"id": 900 + index, "name": event.goal_name, "type": "action",
+         "conditions": [{"type": "exact", "url": event.id}]}
+        for index, event in enumerate(events_mod.EVENTS)
+    ]
+    mapping = _provider(fake, token).list_goal_ids(111881037)
+    assert set(mapping) == set(events_mod.EVENT_IDS)
+    assert len(mapping) == 9
+    assert all(isinstance(v, int) for v in mapping.values())
 
 
-def test_dry_run_never_writes(token):
-    fake = MetrikaWithWebvisorOn(honour_request=False)
-    provider = _provider(fake, token)
-    provider.dry_run = False
-    state = provider.ensure_metrica_counter("yummyani.site", "n")
-    provider.dry_run = True
-    provider.metrika.dry_run = True
-
-    result = provider.ensure_webvisor_disabled(state.counter_id)
-    assert result["changed"] is False and result.get("planned") is True
-    assert not any(m == "PUT" for m, _, _ in fake.requests)
+# ------------------------------------------------------------- режим плана
+def test_dry_run_sends_no_put(token):
+    fake = Metrika()
+    result = _provider(fake, token, dry_run=True).ensure_webvisor_disabled(111881037)
+    assert result["changed"] is False and result["planned"] is True
+    assert fake.puts() == []
 
 
-@pytest.mark.parametrize("webvisor,expected", [
-    ({"arch_enabled": True, "wv_forms": False}, True),
-    ({"arch_enabled": False, "wv_forms": True}, True),
-    ({"arch_enabled": False, "wv_forms": False}, False),
-    ({"arch_enabled": False, "wv_forms": False, "arch_type": "none"}, False),
+# ------------------------------------------------------------- детектор
+@pytest.mark.parametrize("counter,expected", [
+    ({"code_options": {"visor": True}}, True),
+    ({"code_options": {"visor": False}}, False),
+    ({"code_options": {"visor": 1}}, True),
+    ({"code_options": {"visor": 0}}, False),
+    ({"code_options": {"async": True}}, None),
+    ({"webvisor": {"arch_enabled": True}}, None),
+    ({}, None),
 ])
-def test_either_flag_counts_as_enabled(webvisor, expected):
-    assert webvisor_enabled({"webvisor": webvisor}) is expected
+def test_visor_state_reads_only_code_options(counter, expected):
+    """Устаревший объект webvisor на решение не влияет ни в какую сторону."""
+    assert visor_state(counter) is expected
+
+
+def test_unmeasured_state_counts_as_enabled():
+    """Не измерено — значит попробуем выключить и проверим, а не «наверное, выключено»."""
+    assert webvisor_enabled({}) is True
+    assert webvisor_enabled({"code_options": {"visor": False}}) is False
 
 
 def test_registry_records_the_real_state_including_problems():
-    """Реестр в git обязан говорить правду о боевых счётчиках."""
     from factory.analytics import registry
 
     for entry in registry.properties():
         raw = entry.raw
         assert raw["counter_id"], f"{entry.domain}: боевой counter_id не записан"
         if raw["webvisor"]:
-            assert any("Вебвизор" in p for p in raw["problems"]), (
-                f"{entry.domain}: Вебвизор включён, но в problems об этом ни слова"
+            assert any("сесси" in p or "Вебвизор" in p for p in raw["problems"]), (
+                f"{entry.domain}: запись сессий включена, но в problems об этом ни слова"
             )

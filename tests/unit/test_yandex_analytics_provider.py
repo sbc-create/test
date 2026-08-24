@@ -224,45 +224,66 @@ def test_three_domains_get_three_independent_counters(token):
     assert sites == sorted(DOMAINS)
 
 
-def test_counter_creation_disables_webvisor_and_omits_the_gdpr_agreement(token):
-    """Вебвизор выключается явно, а юридическое согласие не даётся за владельца.
+def test_counter_creation_disables_the_visor_and_omits_the_gdpr_agreement(token):
+    """Запись сессий выключается через code_options.visor, а согласие не даётся.
 
-    Раньше тест требовал обратного — чтобы объекта `webvisor` в запросе не
-    было вовсе. Боевой запуск показал цену этого требования: Метрика включает
-    запись сессий по умолчанию, и все три счётчика приехали с включённым
-    Вебвизором. «Не передавать поле» и «выключено» — разные вещи.
+    Тест дважды менял требование, и оба раза за счёт боевого запуска. Сперва он
+    требовал не передавать `webvisor` вовсе — Метрика включила запись сессий
+    сама. Потом требовал передавать `webvisor.arch_enabled` — Метрика ответила
+    HTTP 400: поле устаревшее. Управляющий признак ровно один.
     """
-    from factory.analytics.yandex import WEBVISOR_OFF
+    from factory.analytics.yandex import VISOR_OPTION
 
     fake = FakeYandex()
     _provider(fake, token).ensure_metrica_counter("yummyani.site", "YummyAnime — yummyani.site")
     body = next(b for m, p, b in fake.requests if m == "POST" and p == "/management/v1/counters")
-    assert set(body["counter"]) == {"name", "site2", "webvisor"}
-    assert body["counter"]["webvisor"] == WEBVISOR_OFF
+    assert set(body["counter"]) == {"name", "site2", "code_options"}
+    assert body["counter"]["code_options"] == {VISOR_OPTION: False}
+    assert "webvisor" not in body["counter"]
     # Согласие на обработку данных остаётся действием владельца аккаунта (D55).
     assert "gdpr_agreement_accepted" not in body["counter"]
 
 
-@pytest.mark.parametrize("webvisor,expected", [
-    ({"arch_enabled": True}, True),
-    ({"arch_enabled": False}, False),
-    ({"wv_forms": True}, True),
-    ({"something_enabled": "true"}, True),
-    ({"arch_type": "none"}, False),
-    ({}, False),
+@pytest.mark.parametrize("code_options,expected", [
+    ({"visor": True}, True),
+    ({"visor": False}, False),
+    ({"visor": 1}, True),
+    ({"visor": 0}, False),
+    # Настройки есть, а переключателя в них нет — состояние не измерено, и
+    # трактуется как включённое: проверить дешевле, чем ошибиться в отчёте.
+    ({"async": True}, True),
+    ({}, True),
 ])
-def test_webvisor_detection_errs_towards_switch_it_off(webvisor, expected):
-    assert webvisor_enabled({"webvisor": webvisor}) is expected
+def test_visor_detection_errs_towards_switch_it_off(code_options, expected):
+    assert webvisor_enabled({"code_options": code_options}) is expected
 
 
-def test_enabled_webvisor_on_a_reused_counter_is_reported(token):
+def test_the_deprecated_webvisor_object_does_not_decide_anything():
+    """Метрика его больше не слушает — не должен слушать и детектор."""
+    assert webvisor_enabled({"webvisor": {"arch_enabled": False}}) is True
+    assert webvisor_enabled(
+        {"webvisor": {"arch_enabled": True}, "code_options": {"visor": False}}
+    ) is False
+
+
+def test_enabled_visor_on_a_reused_counter_is_reported(token):
     fake = FakeYandex(counters=[
         {"id": 9, "name": "x", "status": "Active", "site2": {"site": "yummyani.site"},
-         "goals": [], "webvisor": {"arch_enabled": True}},
+         "goals": [], "code_options": {"visor": True}},
     ])
     state = _provider(fake, token).ensure_metrica_counter("yummyani.site", "x")
     assert state.webvisor is True
-    assert "Вебвизор" in state.problems[0]
+    assert state.problems and "Вебвизор" in state.problems[0]
+
+
+def test_disabled_visor_on_a_reused_counter_is_not_a_problem(token):
+    fake = FakeYandex(counters=[
+        {"id": 9, "name": "x", "status": "Active", "site2": {"site": "yummyani.site"},
+         "goals": [], "code_options": {"visor": False}},
+    ])
+    state = _provider(fake, token).ensure_metrica_counter("yummyani.site", "x")
+    assert state.webvisor is False
+    assert state.problems == ()
 
 
 # --------------------------------------------------------------------- цели

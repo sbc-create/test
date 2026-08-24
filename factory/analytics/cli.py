@@ -125,20 +125,34 @@ def cmd_apply(args) -> int:
         domain = entry["domain"]
         try:
             state = provider.ensure_metrica_counter(domain, entry["counter_name"])
+            # Счётчик, уже записанный в реестр, обязан совпасть. Иначе это либо
+            # второй счётчик на тот же домен, либо чужой аккаунт — и в обоих
+            # случаях правильно остановиться, а не «принять к сведению».
+            known = entry.get("counter_id")
+            if known and state.counter_id and int(state.counter_id) != int(known):
+                raise BlockedAnalyticsAccess(
+                    f"Для {domain} в реестре записан счётчик {known}, а Метрика вернула "
+                    f"{state.counter_id}. Фабрика не подменяет счётчик молча.",
+                    field="analytics.counter_id",
+                    required_input="Сверить счётчики аккаунта и привести реестр в соответствие",
+                    blocks_stage="BUILDING",
+                )
+
             # Неоднозначность (два счётчика на домен) — единственная причина
-            # остановиться: без counter_id продолжать нечем. Включённый
-            # Вебвизор останавливать не должен — его нужно как раз выключить.
+            # остановиться: без counter_id продолжать нечем. Включённая запись
+            # сессий останавливать не должна — её нужно как раз выключить.
             if state.counter_id and state.status != "ambiguous":
                 state = provider.ensure_metrica_goals(state.counter_id, state)
-                webvisor = provider.ensure_webvisor_disabled(state.counter_id)
-                if not webvisor.get("webvisor"):
+                visor = provider.ensure_webvisor_disabled(state.counter_id)
+                if visor.get("visor") is False:
                     state.webvisor = False
                     state.problems = tuple(
-                        problem for problem in state.problems if "Вебвизор" not in problem
+                        problem for problem in state.problems
+                        if "запись сессий" not in problem and "Вебвизор" not in problem
                     )
                 goal_ids = provider.list_goal_ids(state.counter_id)
             else:
-                webvisor, goal_ids = {}, {}
+                visor, goal_ids = {}, {}
         except FactoryError as exc:
             results.append({"domain": domain, "status": exc.status, "reason": exc.reason})
             exit_code = EXIT_BLOCKED
@@ -164,7 +178,7 @@ def cmd_apply(args) -> int:
         if not provider.dry_run:
             registry.upsert(update)
         item = state.as_dict()
-        item["webvisor_action"] = webvisor
+        item["visor_action"] = visor
         item["goal_ids"] = update["goal_ids"]
         results.append(item)
         if state.problems:

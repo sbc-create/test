@@ -45,10 +45,13 @@ BLOCKED_DEPLOYMENT = "BLOCKED_DEPLOYMENT"
 
 _WWW = re.compile(r"^www\.")
 
-#: Тело, выключающее запись сессий. Только два флага включения из
-#: WebvisorOptions: выключенной записи не нужны ни urls, ни версия, ни режим
-#: плеера, а лишние поля — это выдуманная конфигурация.
-WEBVISOR_OFF = {"arch_enabled": False, "wv_forms": False}
+#: Единственное поле, которым управляется запись сессий.
+#:
+#: Через устаревший объект `webvisor` это не работает: PUT с
+#: `webvisor.arch_enabled` отвечает HTTP 400 «Could not read JSON … path:
+#: counter.webvisor.arch_enabled». Проверено боевым запросом 2026-08-23, и
+#: именно так выглядит цена догадки о недокументированной под-схеме.
+VISOR_OPTION = "visor"
 
 
 def load_contract() -> dict:
@@ -82,23 +85,31 @@ def host_url(domain: str) -> str:
     return f"https://{normalize_domain(domain)}"
 
 
-def webvisor_enabled(counter: dict) -> bool:
-    """Включена ли запись сессий.
+def visor_state(counter: dict) -> bool | None:
+    """Состояние записи сессий: ``True``, ``False`` или ``None`` — не измерено.
 
-    Проверка намеренно шире документированных флагов: под-схема объекта
-    ``webvisor`` в публичной документации раскрыта не целиком, поэтому любой
-    ключ вида ``*enabled`` со значением «истина» считается включённым Вебвизором.
-    Ошибиться в сторону «выключи» безопаснее, чем в сторону «наверное, выключен».
+    Единственный источник истины — ``code_options.visor``. Объект ``webvisor``
+    в ответе есть, но управляющим признаком не является и здесь не читается:
+    ориентироваться на устаревшее поле значило бы принимать решение по данным,
+    которых Метрика уже не слушает.
+
+    ``None`` возвращается, когда ``code_options`` в ответе нет вовсе. Это не
+    «выключено»: непроверенное не объявляется выполненным.
     """
-    webvisor = counter.get("webvisor")
-    if not isinstance(webvisor, dict):
-        return False
-    for key, value in webvisor.items():
-        name = str(key).lower()
-        looks_like_a_switch = name.endswith("enabled") or name in {"wv_forms", "arch_enabled"}
-        if looks_like_a_switch and (value is True or str(value).lower() in {"true", "1", "yes"}):
-            return True
-    return False
+    options = counter.get("code_options")
+    if not isinstance(options, dict) or VISOR_OPTION not in options:
+        return None
+    return bool(options[VISOR_OPTION])
+
+
+def webvisor_enabled(counter: dict) -> bool:
+    """Считается ли запись сессий включённой.
+
+    Неизмеренное состояние трактуется как включённое: тогда фабрика попытается
+    выключить запись и проверит результат. Ошибиться в сторону «выключи»
+    безопаснее, чем объявить выключенным то, что не проверено.
+    """
+    return visor_state(counter) is not False
 
 
 @dataclass
@@ -398,10 +409,10 @@ class YandexAnalyticsProvider:
             state.goals_planned = events_mod.EVENT_IDS
             return state
 
-        # Вебвизор выключается явно, а не «не передаётся». Первый боевой
-        # запуск показал, чем отличается одно от другого: объекта webvisor в
-        # запросе не было, и Метрика создала все три счётчика с включённой
-        # записью сессий — значение по умолчанию у неё «включено».
+        # Запись сессий выключается через code_options.visor — единственное
+        # поле, которым Метрика ею управляет. Устаревший объект webvisor не
+        # передаётся: PUT с ним отвечает HTTP 400. Передавать поле обязательно:
+        # у счётчика, созданного без code_options, запись сессий включена.
         # gdpr_agreement_accepted по-прежнему не отправляется: это юридическое
         # действие владельца аккаунта (D55).
         response = self.metrika.post(
@@ -410,7 +421,7 @@ class YandexAnalyticsProvider:
                 "counter": {
                     "name": name,
                     "site2": {"site": state.domain},
-                    "webvisor": dict(WEBVISOR_OFF),
+                    "code_options": {VISOR_OPTION: False},
                 }
             },
         )
@@ -427,14 +438,13 @@ class YandexAnalyticsProvider:
         state.created = True
         state.status = str(counter.get("status") or "Active")
         state.webvisor = webvisor_enabled(counter)
-        if state.webvisor:
+        if visor_state(counter) is True:
             # Раньше эта ветка молчала, и отчёт показывал problems: [] у
             # счётчика с включённой записью сессий. Требование задания при этом
             # было нарушено — молчание отчёта нарушение не отменяет.
             state.problems = (
-                f"счётчик {state.counter_id} создан с включённым Вебвизором: "
-                "Метрика включает его по умолчанию. Выключается операцией "
-                "ensure_webvisor_disabled.",
+                f"счётчик {state.counter_id} создан с включённой записью сессий: "
+                "выключается операцией ensure_webvisor_disabled.",
             )
         return state
 
@@ -452,38 +462,49 @@ class YandexAnalyticsProvider:
         return sorted(set(found))
 
     def ensure_webvisor_disabled(self, counter_id: int) -> dict:
-        """Выключает запись сессий, если она включена. Идемпотентна.
+        """Выключает запись сессий через ``code_options.visor``. Идемпотентна.
 
-        Сначала читает фактическое состояние и молчит, когда выключать нечего:
-        безусловный PUT на каждом запуске — лишняя мутация и лишний шанс
-        затереть настройку, которую владелец поменял осознанно.
+        Порядок именно такой, и каждый шаг обязателен:
+
+        1. GET — узнать фактическое состояние и **весь** текущий ``code_options``;
+        2. выйти молча, если выключать нечего: безусловный PUT на каждом запуске
+           затирал бы настройки, которые владелец поменял осознанно;
+        3. PUT с прежним ``code_options``, где изменён единственный ключ
+           ``visor``. Остальные настройки кода счётчика переносятся как есть;
+        4. GET ещё раз. Успех — только когда ``code_options.visor`` фактически
+           стал ``False``. «Отправили PUT» успехом не считается.
         """
         response = self.metrika.get(f"/management/v1/counter/{counter_id}")
         counter = (response.payload or {}).get("counter") or {}
-        if not webvisor_enabled(counter):
-            return {"counter_id": counter_id, "webvisor": False, "changed": False,
+        before = visor_state(counter)
+        if before is False:
+            return {"counter_id": counter_id, "visor": False, "changed": False,
                     "reason": "запись сессий уже выключена"}
         if self.dry_run:
-            return {"counter_id": counter_id, "webvisor": True, "changed": False,
+            return {"counter_id": counter_id, "visor": before, "changed": False,
                     "planned": True, "reason": "режим плана"}
 
-        # Частичное обновление: передаётся только объект webvisor, остальные
-        # настройки счётчика Метрика сохраняет.
+        # Существующие настройки сохраняются: меняется ровно один ключ.
+        options = dict(counter.get("code_options") or {})
+        options[VISOR_OPTION] = False
         self.metrika.request(
             "PUT",
             f"/management/v1/counter/{counter_id}",
-            body={"counter": {"webvisor": dict(WEBVISOR_OFF)}},
+            body={"counter": {"code_options": options}},
         )
+
         after = self.metrika.get(f"/management/v1/counter/{counter_id}")
-        if webvisor_enabled((after.payload or {}).get("counter") or {}):
+        confirmed = visor_state((after.payload or {}).get("counter") or {})
+        if confirmed is not False:
             raise BlockedAnalyticsAccess(
-                f"Вебвизор счётчика {counter_id} остался включённым после запроса на "
-                "выключение. Фабрика не объявляет выполненным то, что не подтвердилось.",
-                field="analytics.webvisor",
+                f"Запись сессий счётчика {counter_id} не подтверждена выключенной "
+                f"после PUT (code_options.visor = {confirmed!r}). Фабрика не объявляет "
+                "выполненным то, что не подтвердилось.",
+                field="analytics.code_options.visor",
                 required_input="Выключить запись сессий в интерфейсе Метрики",
                 blocks_stage="BUILDING",
             )
-        return {"counter_id": counter_id, "webvisor": False, "changed": True,
+        return {"counter_id": counter_id, "visor": False, "changed": True,
                 "reason": "запись сессий выключена"}
 
     def list_goal_ids(self, counter_id: int) -> dict[str, int]:
