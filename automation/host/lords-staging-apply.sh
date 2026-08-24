@@ -170,11 +170,15 @@ STAGING_DIR="${REPO_ROOT}/artifacts/lords/staging"
 BUNDLE_DIR="${REPO_ROOT}/artifacts/lords/bundle"
 [[ -f "${STAGING_DIR}/staging.json" ]] || die "нет ${STAGING_DIR}/staging.json"
 
+# Внутри f-string выражение не может содержать обратный слеш вплоть до
+# Python 3.11 включительно, а на хосте юниты запускает системный python3.10.
+# Поэтому поля собираются заранее и склеиваются join, без вложенных кавычек.
 mapfile -t SITES < <("${PY}" -c '
 import json, sys
 data = json.load(open(sys.argv[1]))
 for s in data["sites"]:
-    print(f"{s[\"site_id\"]}\t{s[\"apex\"]}\t{s[\"www\"]}\t{s[\"port\"]}\t{s[\"unit\"]}\t{s[\"runtime_root\"]}")
+    fields = [s["site_id"], s["apex"], s["www"], s["port"], s["unit"], s["runtime_root"]]
+    print("\t".join(str(field) for field in fields))
 ' "${STAGING_DIR}/staging.json")
 [[ ${#SITES[@]} -eq 3 ]] || die "ожидалось три сайта, получено ${#SITES[@]}"
 
@@ -604,7 +608,8 @@ log "готово"
 import json, sys
 data = json.load(open(sys.argv[1]))
 for s in data["sites"]:
-    print(f"  {s[\"url\"]:38} {s[\"site_id\"]}  {s[\"profile\"]:14} :{s[\"port\"]}")
+    print("  {:38} {}  {:14} :{}".format(
+        s["url"], s["site_id"], s["profile"], s["port"]))
 ' "${STAGING_DIR}/staging.json"
 echo
 log "commit: ${HEAD_SHA}"
