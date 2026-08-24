@@ -208,8 +208,49 @@ sources:
     note: >-
       Плеерная часть контракта передана и зафиксирована. Часть Content API в pack
       намеренно не приведена и должна быть взята из docs/CDNVIDEOHUB-METADATA-CONTRACT.md;
-      этого документа в репозитории нет, поэтому адаптер отвечает BLOCKED_INPUT.
+      этого документа в репозитории нет. Пробел закрыт источником
+      SRC-CDNVIDEOHUB-CLIENT ниже — работающим официальным клиентом, а не пересказом.
       Сверка с сайтом провайдера не выполнялась: egress до player.cdnvideohub.com закрыт.
+
+  - id: SRC-CDNVIDEOHUB-CLIENT
+    kind: working_implementation
+    owner: user
+    status: approved
+    path: /srv/sites/yummyani-staging/repo/src/modules/catalog/infrastructure/cdnvideohub/
+    retrieved_at: "2026-08-24T21:00:00Z"
+    purpose: >-
+      Фактический контракт Content API CDNVideoHub: база, endpoint, курсорная
+      пагинация, фильтры, поиск, соответствие полей, таймауты и коды ошибок.
+    required_for: "синхронизация каталога Lords из Content API"
+    verified_against_official_docs: false
+    verified_against_working_client: true
+    files:
+      - path: constants.ts
+        sha256: cd690a45aa4d35ce758bcf74360fd7f9632daf35e092ff96831899f11d730ef3
+      - path: client.ts
+        sha256: 6e98faf8aed809e0b9028ffecfd2a44c0ca27b62f18c3edf47e9a5c987ddc4a4
+      - path: mapper.ts
+        sha256: 7f4e0d25ad6523e821895691ab1010b084290227ab91fd3bb69b0e2350b2d4a6
+      - path: validator.ts
+        sha256: 1c7b0753c262339623a188b5f41c713779b473628060fea65e25bf0aa418de8c
+      - path: ../../../playback/cdn-video-hub/contract.ts
+        sha256: a9eea70e95408534990806abf76c3a5fc224ed016cdba822d20abd94ffbf8676
+    conclusions:
+      - "База метаданных: https://public-api.cdnvideohub.com/api/v1/ ; прежняя api.cdnvideohub.com объявлена устаревшей."
+      - "Авторизация: заголовок Authorization: Bearer <token>, Accept: application/json; токен серверный, браузеру не передаётся."
+      - "Пагинация курсорная: cursor + limit (max 100), ответ items / next_cursor / has_more / total."
+      - "Endpoint: titles, titles/{id}, titles/search, titles/filters, titles/{id}/seasons, .../episodes, genres, countries."
+      - "Плеер: https://player.cdnvideohub.com/s2/stable/video-player.umd.js, кастомный элемент <video-player>, без iframe."
+      - "Плеер адресуется парой data-aggregator (kp|mali|mdl) + data-title-id, publisher-id обязан быть положительным целым."
+      - "Переключение серий — методы selectSeason/selectEpisode на элементе, а не перезагрузка страницы."
+      - "Endpoint подборок в клиенте отсутствует: раздел collections не включается."
+    not_provided:
+      - "официальная спецификация провайдера (docs/doc.json) в репозиторий не передавалась"
+    note: >-
+      Источник read-only. Учётные данные YummyAnime не читались и не переносятся:
+      Lords работает на собственных api-token и publisher-id. Бренд, тексты,
+      дизайн и содержимое YummyAnime не копировались — перенесён только
+      технический контракт обращения к стороннему API.
 
   # ---------- официальная документация Яндекса (задание об автоматизации аналитики) ----------
   # Прочитана из этой сессии: egress до yandex.ru/yandex.com открыт, TCP 443 до

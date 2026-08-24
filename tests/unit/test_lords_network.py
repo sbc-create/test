@@ -426,10 +426,39 @@ class TestSeoSeparationAndIsolation:
 # Content adapter
 # --------------------------------------------------------------------------
 class TestContentAdapter:
-    def test_frozen_contract_is_not_provided_and_the_adapter_says_so(self):
+    def test_the_frozen_contract_is_provided_and_complete(self):
+        """Контракт снят с работающего клиента и заморожен (SRC-CDNVIDEOHUB-CLIENT).
+
+        Прежняя редакция теста закрепляла обратное — что контракта нет. Это было
+        верно ровно до появления источника; теперь проверяется, что переданный
+        контракт полон, а не что он отсутствует.
+        """
         contract = content_api.load_contract()
+        assert contract.provided, f"контракт не передан: {contract.status}"
+        assert contract.problems() == [], contract.problems()
+
+    def test_a_missing_contract_still_blocks(self, tmp_path):
+        """Направление, отличное от прежнего: отсутствие контракта обязано блокировать."""
+        path = tmp_path / "нет-такого.yaml"
+        contract = content_api.load_contract(path)
         state = content_api.readiness(contract, token_present=True, publisher_id_present=True)
         assert state.status == content_api.BLOCKED_CONTRACT
+
+    def test_a_half_filled_contract_blocks(self, tmp_path):
+        """Половина контракта хуже его отсутствия: недостающее пришлось бы додумывать."""
+        path = tmp_path / "content-api.yaml"
+        path.write_text(yaml.safe_dump({
+            "status": "provided", "base_url": "https://example.invalid/api/",
+        }), encoding="utf-8")
+        contract = content_api.load_contract(path)
+        state = content_api.readiness(contract, token_present=True, publisher_id_present=True)
+        assert state.status == content_api.BLOCKED_CONTRACT
+
+    def test_the_frozen_contract_without_secrets_is_blocked_on_credentials(self):
+        """Переданный контракт сам по себе ничего не открывает."""
+        contract = content_api.load_contract()
+        state = content_api.readiness(contract, token_present=False, publisher_id_present=False)
+        assert state.status == content_api.BLOCKED_CREDENTIALS
 
     def test_provided_contract_without_secrets_is_blocked_on_credentials(self, tmp_path):
         path = tmp_path / "content-api.yaml"
