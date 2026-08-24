@@ -55,7 +55,7 @@ class TestCredentials:
             live_build.Credentials.from_env({
                 "CDNVIDEOHUB_API_TOKEN": "t",
                 "CDNVIDEOHUB_PUBLISHER_ID": "1",
-                "NEXT_PUBLIC_CDNVIDEOHUB_PUBLISHER_ID": "1",
+                player.FORBIDDEN_PUBLIC_ENV: "1",
             })
 
     def test_valid_credentials_are_accepted(self):

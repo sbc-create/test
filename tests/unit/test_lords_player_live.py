@@ -136,9 +136,9 @@ class TestSecrets:
 
     def test_the_public_env_prefix_is_refused(self):
         with pytest.raises(player.PublicPublisherIdError):
-            player.assert_no_public_publisher_id(
-                {"NEXT_PUBLIC_CDNVIDEOHUB_PUBLISHER_ID": "1"}
-            )
+            # Имя берётся из рабочей константы, а не пишется буквально:
+            # репозиторный запрет на эту строку — не формальность.
+            player.assert_no_public_publisher_id({player.FORBIDDEN_PUBLIC_ENV: "1"})
 
     def test_the_stub_stays_a_stub_without_credentials(self):
         state = player.state({})

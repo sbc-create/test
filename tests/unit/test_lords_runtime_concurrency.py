@@ -33,6 +33,9 @@ from factory.lords import bundle as bundle_mod
 SITE_ID = "lords-01"
 STARTUP_TIMEOUT = 30.0
 
+#: Срок жизни соединения в рантайме. Совпадает с `timeout` в его Handler.
+Handler_TIMEOUT_S = 30.0
+
 # Страницы, статика, пробы и тайтл с блоком комментариев — то, что браузер
 # тянет одновременно при открытии одной страницы.
 PATHS = [
@@ -257,14 +260,19 @@ class TestShutdown:
         try:
             started = time.monotonic()
             process.terminate()
+            # Порог соотнесён с отказом, который проверяется: если бы молчащее
+            # соединение задерживало остановку, ждать пришлось бы таймаут
+            # соединения (30 секунд). Более узкий порог ловил бы не дефект, а
+            # загруженность машины во время полного прогона.
+            limit = Handler_TIMEOUT_S - 5
             try:
-                code = process.wait(timeout=15)
+                code = process.wait(timeout=limit)
             except subprocess.TimeoutExpired:
                 process.kill()
                 pytest.fail("молчащее соединение задержало остановку")
             elapsed = time.monotonic() - started
             assert code == 0
-            assert elapsed < 15.0, f"остановка заняла {elapsed:.1f}s"
+            assert elapsed < limit, f"остановка заняла {elapsed:.1f}s"
         finally:
             quiet.close()
 
