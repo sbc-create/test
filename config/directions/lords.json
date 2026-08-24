@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "direction": "lords",
+  "status": "dns_verified_not_launched",
+  "note": "Домены направления Lords с подтверждённой делегацией. Это НЕ реестр живых тенантов: ни один домен не обслуживается, Nginx и сертификаты для них не настраивались. Запись существует, чтобы подтверждённый факт делегации не проверялся заново и не был потерян. Перевод в portfolio.json выполняет владелец после того, как появится renderable build (PR №11).",
+  "verified_at": "2026-08-24",
+  "origin_ipv4": "45.131.182.225",
+  "secrets": {
+    "api_token": "secret://cdnvideohub/lords/api-token",
+    "publisher_id": "secret://cdnvideohub/lords/publisher-id",
+    "note": "Только ссылки. Значения не хранятся в git и не передаются в build. NEXT_PUBLIC_CDNVIDEOHUB_PUBLISHER_ID не создаётся: префикс NEXT_PUBLIC_ встраивает значение в клиентский бандл."
+  },
+  "domains": [
+    {
+      "apex": "lordserial33.biz",
+      "www": "www.lordserial33.biz",
+      "nameservers": ["april.ns.cloudflare.com", "pablo.ns.cloudflare.com"],
+      "delegation_matches_expected": true,
+      "a_apex": "45.131.182.225",
+      "a_www": "45.131.182.225",
+      "mode": "dns-only",
+      "proposed_profile": "lords-01",
+      "proposed_profile_rationale": "Числовой суффикс сериального домена и зона .biz — ближе к сериальному каталогу. Предположение, не решение.",
+      "launched": false
+    },
+    {
+      "apex": "lordfilm47.space",
+      "www": "www.lordfilm47.space",
+      "nameservers": ["april.ns.cloudflare.com", "pablo.ns.cloudflare.com"],
+      "delegation_matches_expected": true,
+      "a_apex": "45.131.182.225",
+      "a_www": "45.131.182.225",
+      "mode": "dns-only",
+      "proposed_profile": "lords-02",
+      "proposed_profile_rationale": "«film» в имени — полнометражное направление. Предположение, не решение.",
+      "launched": false
+    },
+    {
+      "apex": "1lordserials1.online",
+      "www": "www.1lordserials1.online",
+      "nameservers": ["paris.ns.cloudflare.com", "piers.ns.cloudflare.com"],
+      "delegation_matches_expected": true,
+      "a_apex": "45.131.182.225",
+      "a_www": "45.131.182.225",
+      "mode": "dns-only",
+      "proposed_profile": "lords-03",
+      "proposed_profile_rationale": "Отдельная пара NS — зона заведена независимо от двух других. Предположение, не решение.",
+      "launched": false
+    }
+  ],
+  "unassigned_profiles": ["lords-04"],
+  "mapping_status": "proposed_only",
+  "mapping_note": "Три домена и четыре профиля lords-01…lords-04: соответствие не выводится из имён доменов. Сопоставление выше — предложение для обсуждения, а не решение. Окончательное закрепление делает владелец; профиль lords-04 остаётся без домена.",
+  "blockers": [
+    "PR №11 не содержит renderable blueprint: публиковать домены нечем, а заглушка под видом готового сайта недопустима.",
+    "Nginx и сертификаты для Lords намеренно не настраивались."
+  ]
+}
