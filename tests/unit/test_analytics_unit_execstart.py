@@ -156,3 +156,54 @@ def test_wrapper_still_works_interactively(wrapper) -> None:
         capture_output=True, text=True, timeout=60, check=False,
     )
     assert result.returncode == 0, result.stderr[-300:]
+
+
+# --------------------------------------------------------------------------
+# Пути внутри unit'а обязаны указывать в одно дерево
+# --------------------------------------------------------------------------
+ROOT_RE = re.compile(r"/srv/site-factory/[A-Za-z0-9._-]+")
+
+
+@pytest.mark.parametrize("unit", UNITS, ids=lambda p: p.name)
+def test_all_paths_inside_a_unit_share_one_root(unit) -> None:
+    """WorkingDirectory, ExecStart и ReadWritePaths — одно дерево, а не разные.
+
+    Расхождение не приводит к отказу: служба запускается и молча исполняет код
+    из чужого worktree, который обычно стоит на другой ветке. Такой сбой
+    выглядит как «аналитика работает неправильно», а не как ошибка установки.
+    """
+    text = unit.read_text(encoding="utf-8")
+    roots = set()
+    for line in text.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("#") or "=" not in stripped:
+            continue
+        key = stripped.split("=", 1)[0]
+        if key not in {"WorkingDirectory", "ExecStart", "ExecStop", "ReadWritePaths"}:
+            continue
+        roots.update(ROOT_RE.findall(stripped))
+    assert len(roots) <= 1, (
+        f"{unit.name}: пути ведут в разные деревья {sorted(roots)} — служба будет "
+        "исполнять код не из того worktree, из которого её ставили"
+    )
+
+
+def test_installer_substitutes_the_actual_repository_root() -> None:
+    """Шаблоны зашивают канонический путь; установщик обязан его подменять.
+
+    Без подмены установка из review-worktree даёт unit, у которого
+    WorkingDirectory указывает в одно дерево, а ExecStart — в другое.
+    """
+    installer = (PATHS.automation / "host" / "install-units.sh").read_text(encoding="utf-8")
+    assert "REPO_ROOT=" in installer
+    assert "TEMPLATE_ROOT=" in installer
+    assert re.search(r"sed\s+\"s#\$\{TEMPLATE_ROOT\}#\$\{REPO_ROOT\}#g\"", installer), (
+        "установщик копирует unit'ы дословно — пути шаблона останутся зашитыми"
+    )
+
+
+def test_installer_refuses_without_a_virtualenv() -> None:
+    """Unit'ы требуют .venv; установщик обязан сказать об этом до установки."""
+    installer = (PATHS.automation / "host" / "install-units.sh").read_text(encoding="utf-8")
+    assert ".venv/bin/python" in installer
+    assert "exit 78" in installer
