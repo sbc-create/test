@@ -1,0 +1,44 @@
+# Blueprint `lords`: один код на все сайты направления, поведение задаётся
+# manifest'ом пакета. Второй копии кода под второй сайт не создаётся.
+schema_version: 1
+blueprint: lords
+label: Lords
+portfolio: lords
+
+# Каталог разделов. Раздел появляется на сайте, только если выполнены оба
+# условия: тип контента, от которого он зависит, находится в состоянии
+# `enabled`, и профиль сайта его либо владеет, либо держит как навигацию.
+sections:
+  movies_index:      { path: /filmy/,      page_type: category,   requires: movies }
+  series_index:      { path: /serialy/,    page_type: category,   requires: series }
+  animation_index:   { path: /multfilmy/,  page_type: category,   requires: animation }
+  anime_index:       { path: /anime/,      page_type: category,   requires: anime }
+  dorama_index:      { path: /dorama/,     page_type: category,   requires: dorama }
+  collections_index: { path: /podborki/,   page_type: collection, requires: collections }
+  new_index:         { path: /novinki/,    page_type: category,   requires: any }
+  schedule:          { path: /raspisanie/, page_type: category,   requires: series }
+  genre_facet:       { path: /zhanr/,      page_type: category,   requires: any }
+  year_facet:        { path: /god/,        page_type: category,   requires: any }
+  country_facet:     { path: /strana/,     page_type: category,   requires: any }
+
+themes:
+  - lords_dark
+  - lords_light
+
+profiles:
+  - lords-general
+  - lords-new
+  - lords-curated
+  - lords-genre
+
+# Каждым разделом владеет ровно один профиль. Не владеющий сайт держит раздел
+# как навигацию с noindex — так зритель попадает куда хотел, а в индекс уходит
+# одна страница, а не четыре её копии.
+ownership_rule: exactly_one_owner_per_section
+
+# Источник фактических данных. Пока контракт не передан, разделы не наполняются
+# и типы контента остаются в состоянии blocked_credentials.
+content_source:
+  provider: cdnvideohub
+  contract_ref: knowledge/cdnvideohub/content-api.yaml
+  secret_scope: cdnvideohub/lords

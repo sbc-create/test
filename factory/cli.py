@@ -467,6 +467,84 @@ def cmd_blueprint(args) -> int:
     return EXIT_OK if status.ready else EXIT_BLOCKED
 
 
+def cmd_lords_plan(args) -> int:
+    """Dry-run направления Lords: план сайтов, ворота дублей и план синхронизации.
+
+    Команда ничего не мутирует и ничего не запрашивает по сети. Она отвечает на
+    вопрос «что получится», а не «что развёрнуто», поэтому работает и на пакетах,
+    у которых ещё нет домена, цели выката и учётных данных.
+
+    `--assume-source fixture` моделирует переданные учётные данные и источник,
+    подтверждающий ровно те типы, что включены в manifest. Это единственный
+    способ проверить ворота дублей до появления токена, и в отчёте такой прогон
+    помечен явно: он не выдаётся за живой.
+    """
+    import json as _json
+
+    import yaml as _yaml
+
+    from factory.lords import content_api, gate
+    from factory.lords import content_types as ct
+    from factory.lords import plan as lords_plan
+
+    fixture = args.assume_source == "fixture"
+    packages = []
+    for path in sorted(PATHS.sites.glob("*/package.yaml")):
+        data = _yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        if data.get("blueprint") != "lords":
+            continue
+        if args.site and data.get("site_id") != args.site:
+            continue
+        packages.append(data)
+    if not packages:
+        print("пакеты направления lords не найдены")
+        return 3
+
+    plans, sync_reports = [], []
+    for package in packages:
+        capabilities = set(ct.configured(package)) if fixture else None
+        capabilities = {n for n, on in ct.configured(package).items() if on} if fixture else None
+        plans.append(lords_plan.build_plan(
+            package, credentials_available=fixture, api_capabilities=capabilities))
+        sync_reports.append(content_api.dry_run(
+            package, token_present=fixture, publisher_id_present=fixture))
+
+    for site_plan in plans:
+        counts = ct.counts(site_plan.type_states)
+        print(f"[{site_plan.site_id}] профиль {site_plan.profile} | "
+              f"страниц {len(site_plan.pages)} | индексируемых {len(site_plan.indexable_paths)} | "
+              f"в sitemap {len(site_plan.sitemap_paths)} | типы {counts}")
+        for absent in site_plan.absent:
+            print(f"    нет раздела {absent['path']:14} {absent['state']}: {absent['reason']}")
+
+    report = gate.check_plans(plans)
+    overlap = gate.ownership_overlap(plans)
+    print(f"\nворота уникальности: находок {len(report.critical)} | "
+          f"canonical: {report.counts.get('canonical_check')}")
+    for finding in report.critical:
+        print(f"    [{finding.rule}] {finding.url}: {finding.message}")
+    if overlap:
+        for item in overlap:
+            print(f"    раздел {item['section']} индексируют несколько сайтов: {item['sites']}")
+
+    print(f"\nисточник данных: {sync_reports[0]['readiness']} — {sync_reports[0]['reason']}")
+
+    out = PATHS.artifact_dir("lords", "plan")
+    payload = {
+        "mode": "fixture" if fixture else "real",
+        "live_request_performed": False,
+        "plans": [p.as_dict() for p in plans],
+        "uniqueness": report.as_dict(),
+        "ownership_overlap": overlap,
+        "content_sync": sync_reports,
+    }
+    artifact = out / "lords-plan.json"
+    artifact.write_text(_json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"артефакт: {artifact.relative_to(PATHS.root)}")
+
+    return 0 if not report.critical and not overlap else 1
+
+
 def cmd_env_report(args) -> int:
     import shutil
     tools = {name: bool(shutil.which(name)) for name in
@@ -611,6 +689,12 @@ def main(argv: list[str] | None = None) -> int:
     p.set_defaults(func=cmd_blueprint)
 
     analytics_cli.register(sub)
+
+    p = sub.add_parser("lords-plan", help="Lords: dry-run плана сайтов и ворот дублей")
+    p.add_argument("--site", help="только один сайт направления")
+    p.add_argument("--assume-source", choices=["none", "fixture"], default="none",
+                   help="fixture моделирует переданные учётные данные и источник")
+    p.set_defaults(func=cmd_lords_plan)
 
     p = sub.add_parser("env-report", help="read-only отчёт об окружении")
     p.set_defaults(func=cmd_env_report)

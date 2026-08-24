@@ -533,6 +533,16 @@ def _check_files(pkg: dict, site_id: str, out: list[Blocker]) -> None:
     theme = pkg.get("theme_ref")
     if not theme:
         return
+    if blueprint_of(pkg) == "lords":
+        # Темы направления объявляет сам blueprint: отдельных theme pack'ов в
+        # themes/ у него нет, и создавать пустые каталоги ради проверки незачем.
+        declared = _lords_themes()
+        if theme not in declared:
+            out.append(Blocker("BLOCKED_INPUT", "theme_ref",
+                               f"Тема «{theme}» не объявлена blueprint lords "
+                               f"(доступны: {', '.join(sorted(declared))}).",
+                               "Тема из набора blueprint", "BUILDING"))
+        return
     if blueprint_of(pkg) == "payload-next-multisite":
         if theme not in PAYLOAD_THEMES:
             out.append(Blocker("BLOCKED_INPUT", "theme_ref",
@@ -542,6 +552,48 @@ def _check_files(pkg: dict, site_id: str, out: list[Blocker]) -> None:
         return
     if not (PATHS.themes / theme).exists():
         out.append(Blocker("BLOCKED_INPUT", "theme_ref", f"Тема «{theme}» отсутствует в themes/.", "Одобренный theme pack", "BUILDING"))
+
+
+def _lords_themes() -> set:
+    """Темы, объявленные blueprint lords."""
+    import yaml
+
+    path = PATHS.root / "blueprints" / "lords" / "blueprint.yaml"
+    if not path.exists():
+        return set()
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    return set(data.get("themes") or [])
+
+
+def _check_portfolio(pkg: dict, out: list, warnings: list) -> None:
+    """Направление пакета обязано существовать в реестре.
+
+    Опечатка в имени направления иначе создала бы четвёртое направление из
+    воздуха — с пустой секретной областью и без blueprint.
+    """
+    from factory import portfolio as portfolio_registry
+
+    declared = pkg.get("portfolio")
+    if not declared:
+        return
+    try:
+        portfolios = portfolio_registry.load()
+    except (FileNotFoundError, ValueError) as exc:
+        out.append(Blocker("BLOCKED_INPUT", "portfolio",
+                           f"Реестр направлений не прочитан: {exc}.",
+                           "Исправь inventory/portfolios.yaml", "VALIDATING"))
+        return
+    if declared not in portfolios:
+        out.append(Blocker("BLOCKED_INPUT", "portfolio",
+                           f"Направление «{declared}» отсутствует в inventory/portfolios.yaml.",
+                           "Направление из реестра", "VALIDATING"))
+        return
+    label = pkg.get("portfolio_label")
+    if label and label != portfolios[declared].label:
+        out.append(Blocker("BLOCKED_INPUT", "portfolio_label",
+                           f"portfolio_label «{label}» не совпадает с реестром "
+                           f"(«{portfolios[declared].label}»).",
+                           "Совпадающее имя направления", "VALIDATING"))
 
 
 def _check_network_allowlist(pkg: dict, out: list[Blocker], warnings: list[str]) -> None:
@@ -604,4 +656,5 @@ def validate(site_id: str) -> ValidationResult:
     _check_analytics(pkg, blockers, warnings)
     _check_network_allowlist(pkg, blockers, warnings)
     _check_cross_site_leakage(pkg, site_id, blockers)
+    _check_portfolio(pkg, blockers, warnings)
     return ValidationResult(site_id, pkg, blockers, warnings)

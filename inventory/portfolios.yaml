@@ -1,0 +1,34 @@
+# Реестр направлений портфеля.
+#
+# Направление — это группа сайтов с общим замыслом, общим blueprint и общей
+# секретной областью. Реестр объявляет сами направления; принадлежность сайта
+# задаётся полем `portfolio` в его пакете. Второго списка членства здесь нет
+# намеренно: два списка разошлись бы молча.
+schema_version: 1
+portfolios:
+  - id: amedia
+    label: Amedia
+    purpose: "Направление Amedia."
+    secret_scope: cdnvideohub/amedia
+    blueprint: payload-next-multisite
+
+  - id: yami
+    label: Yami
+    purpose: "Направление Yami."
+    secret_scope: cdnvideohub/yami
+    blueprint: payload-next-multisite
+
+  - id: lords
+    label: Lords
+    purpose: "Сеть киносайтов Lords на общем blueprint с настраиваемыми типами контента."
+    secret_scope: cdnvideohub/lords
+    blueprint: lords
+
+# Принадлежность существующих сайтов
+# ----------------------------------
+# `site-a`, `site-b`, `site-c` и `pilot-local` направления не объявляют.
+# В их пакетах нет ни ссылки на референс, ни бренда, по которому можно было бы
+# определить направление: бренды — внутренние коды `site_a`, `site_b`, `site_c`.
+# Приписать их к Amedia или Yami можно только догадкой, поэтому поле `portfolio`
+# у них не заполнено и это BLOCKED_INPUT, а не упущение. Одно слово владельца
+# закрывает вопрос; до тех пор сайты работают как работали.

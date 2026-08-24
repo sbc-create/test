@@ -1,0 +1,201 @@
+schema_version: 1
+job_id: lords-02-001
+site_id: lords-02
+requested_action: create
+blueprint: lords
+portfolio: lords
+portfolio_label: Lords
+fixture: false
+domain: null
+aliases: []
+canonical_url: null
+environment: staging
+production_authorized: false
+seo_indexing_enabled: false
+target_ref: null
+ssh_host_ref: null
+dns_zone_ref: null
+network_allowlist: []
+deployment_readiness:
+  status: BLOCKED_INPUT_DOMAIN_TARGET
+  reason: не переданы домен и цель выката
+content_types:
+  movies: true
+  series: true
+  animation: true
+  anime: false
+  dorama: false
+  collections: false
+brand:
+  name: lords-02
+  legal_name: null
+  logo_ref: null
+  favicon_ref: null
+  colors:
+    primary: '#1f4fd8'
+    background: '#ffffff'
+    text: '#14181f'
+  fonts:
+    body: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif
+    self_hosted: true
+theme_ref: lords_dark
+visual_reference: null
+language: ru
+tenant:
+  slug: lords_new
+  seo_profile: lords-new
+  theme: lords_dark
+  indexing_enabled: false
+  allow_guest_comments: true
+  owned_listings:
+  - /novinki/
+  - /raspisanie/
+database_ref: lords_lords_02
+cross_site_group: lords-quartet
+player_profile:
+  contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+  publisher_id_ref: secret://cdnvideohub/lords/publisher-id
+  aggregator: kp
+  mode: mock
+  show_banner: false
+  show_voice_only: false
+content_api:
+  contract_ref: knowledge/cdnvideohub/content-api.yaml
+  mode: disabled
+  token_ref: secret://cdnvideohub/lords/api-token
+comments:
+  enabled: true
+  premoderation: true
+  min_interval_seconds: 30
+  max_length: 4000
+metadata:
+  title_templates:
+    home: '{brand}'
+    category: '{category} — {brand}'
+    title: '{title} — {brand}'
+    episode: '{title}. Сезон {season}, серия {episode} — {brand}'
+    pagination: '{title} — страница {n}'
+    not_found: Страница не найдена
+  description_templates:
+    home: Сайт направления Lords (lords-02).
+    category: 'Раздел «{category}»: список произведений с фильтрами.'
+    pagination: '{description} Страница {n}.'
+  canonical_policy:
+    scheme: https
+    host_form: non_www
+    trailing_slash: true
+    case: lower
+  robots:
+    staging_policy: noindex_all_plus_auth
+    production_policy: allow_indexable_only
+    extra_disallow: []
+  sitemap:
+    enabled: true
+    split_by_type: true
+    max_urls_per_file: 50000
+seo:
+  indexability_matrix_ref: knowledge/SEO_INDEXABILITY_MATRIX.yaml
+  items_per_page: 24
+  url_templates:
+    category: /{category_slug}/
+    title: /{category_slug}/{title_slug}/
+  pagination_template: /page/{n}/
+  indexable_facets_allowlist: []
+  non_indexable_parameters:
+  - sort
+  - order
+  - view
+  - per_page
+  - q
+  - utm_source
+  - utm_medium
+  - utm_campaign
+  - utm_term
+  - utm_content
+  - gclid
+  - yclid
+  - fbclid
+  internal_link_rules:
+    breadcrumbs: true
+    related_source: package_relations_only
+    max_depth: 4
+  hreflang: []
+  webmaster_verification_refs: {}
+navigation:
+  primary:
+  - label: Фильмы
+    url: /filmy/
+  - label: Сериалы
+    url: /serialy/
+  - label: Мультфильмы
+    url: /multfilmy/
+  footer: []
+legal:
+  owner: null
+  contacts:
+    email: null
+    phone: null
+    address: null
+  documents: []
+content_source:
+  kind: cdnvideohub
+  provenance: Публичный API CDNVideoHub по контракту knowledge/cdnvideohub/content-api.yaml
+  rights_manifest_ref: null
+  rights_confirmed: false
+  allowed_fields: []
+runtime:
+  php:
+    version: null
+  database:
+    engine: postgres
+    name: lords_lords_new
+    user: lords_lords_new
+    password_secret_ref: null
+  cache:
+    engine: redis
+    namespace: 'lords:lords-02:'
+  mail: {}
+  cron: []
+  limits: {}
+backup_policy:
+  before_mutation: true
+  schedule: null
+  targets:
+  - mutable_data
+  restore_test: each_release
+monitoring_policy:
+  health_endpoint: /health
+  checks:
+  - http_status
+  - canonical_host
+  alert_ref: null
+retention_policy:
+  backups_days: 14
+  logs_days: 14
+  artifacts_days: 30
+acceptance:
+  routes: []
+  scenarios: []
+  reference_screenshots: []
+  performance:
+    lab_lcp_ms: 2500
+    lab_cls: 0.1
+    lab_total_bytes: 800000
+  accessibility:
+    level: AA
+    viewports:
+    - 390
+    - 768
+    - 1024
+    - 1440
+  max_major_findings: 25
+rollback_policy:
+  keep_releases: 3
+  auto_rollback_on_smoke_failure: true
+  database_rollback: not_applicable
+analytics: null
+webmaster: null
+requested_by: ITAPX@yandex.com
+authorized_by: null
+created_at: '2026-08-24T06:00:00Z'
+authorized_at: null
