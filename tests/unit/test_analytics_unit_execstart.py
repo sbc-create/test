@@ -147,12 +147,36 @@ def test_wrapper_refuses_to_fall_back_when_required(wrapper) -> None:
 
 
 @pytest.mark.parametrize("wrapper", ["bin/factory", "bin/seo-operator"], ids=lambda w: w)
-def test_wrapper_still_works_interactively(wrapper) -> None:
-    """Без флага обёртка остаётся удобной: разработчику venv не обязателен."""
+def test_wrapper_falls_back_instead_of_refusing_without_the_flag(wrapper) -> None:
+    """Без флага обёртка не отказывается, а пробует системный интерпретатор.
+
+    Проверяется именно решение обёртки, а не то, что найденный интерпретатор
+    доедет до конца. Первая версия теста требовала returncode == 0 и проходила
+    локально ровно потому, что jsonschema и PyYAML стояли системно — то есть
+    закрепляла ту самую случайность, против которой написан весь этот код.
+    На CI, где зависимости живут в .venv, она сразу покраснела.
+    """
     result = subprocess.run(
         [str(PATHS.root / wrapper), "--help"],
         env={k: v for k, v in os.environ.items() if k not in {"FACTORY_REQUIRE_VENV"}}
         | {"PY": "/nonexistent/python"},
+        capture_output=True, text=True, timeout=60, check=False,
+    )
+    assert result.returncode != 78, (
+        "без FACTORY_REQUIRE_VENV обёртка не должна отказываться с EX_CONFIG"
+    )
+    assert "FACTORY_REQUIRE_VENV" not in result.stderr
+
+
+@pytest.mark.parametrize("wrapper", ["bin/factory", "bin/seo-operator"], ids=lambda w: w)
+def test_wrapper_uses_the_virtualenv_when_it_exists(wrapper) -> None:
+    """Нормальный путь: есть .venv — обёртка запускается и доходит до конца."""
+    venv_python = PATHS.root / ".venv" / "bin" / "python"
+    if not os.access(venv_python, os.X_OK):
+        pytest.skip("в этом дереве нет .venv")
+    result = subprocess.run(
+        [str(PATHS.root / wrapper), "--help"],
+        env={k: v for k, v in os.environ.items() if k not in {"FACTORY_REQUIRE_VENV", "PY"}},
         capture_output=True, text=True, timeout=60, check=False,
     )
     assert result.returncode == 0, result.stderr[-300:]
