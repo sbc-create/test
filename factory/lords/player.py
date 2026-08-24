@@ -100,6 +100,151 @@ def contract_check(player_state: PlayerState) -> dict:
     }
 
 
+#: Агрегаторы, допустимые как playback identifier. IMDb сюда не входит: PC-2
+#: запрещает его в этой роли, и молчаливое расширение списка было бы нарушением.
+ALLOWED_AGGREGATORS = ("kp", "mali", "mdl")
+
+#: PC-3: значение фиксировано контрактом и не берётся из настроек сайта.
+DISABLE_LICENSED = "false"
+
+CONTRACT_REF = "knowledge/cdnvideohub/PLAYER_CONTRACT.yaml"
+
+
+class PlayerContractError(RuntimeError):
+    """Параметры плеера расходятся с контрактом."""
+
+    status = "BLOCKED_PLAYER_CONTRACT"
+
+
+def load_player_contract(path=None) -> dict:
+    """Скрипт и элемент берутся из замороженного контракта, а не из кода."""
+    from pathlib import Path
+
+    import yaml
+
+    from factory.paths import PATHS
+    target = path or (PATHS.root / CONTRACT_REF)
+    return yaml.safe_load(Path(target).read_text(encoding="utf-8")) or {}
+
+
+def player_attributes(
+    *,
+    publisher_id: str,
+    aggregator: str,
+    title_id: str,
+    ident: str,
+    season: int,
+    episode: int,
+    only_voice: str | None = None,
+    priority_voice: str | None = None,
+    show_voice_only: bool = False,
+    show_banner: bool = True,
+) -> dict[str, str]:
+    """Атрибуты `<video-player>` по контракту.
+
+    Проверки здесь отказные, а не поправляющие: подставить «разумное» значение
+    вместо неверного значило бы выдать собственную догадку за контракт.
+    """
+    if aggregator not in ALLOWED_AGGREGATORS:
+        raise PlayerContractError(
+            f"агрегатор {aggregator!r} вне допустимых {ALLOWED_AGGREGATORS} (PC-2)"
+        )
+    if not str(title_id).strip():
+        raise PlayerContractError("пустой data-title-id")
+    if not is_valid_publisher_id(publisher_id):
+        raise PlayerContractError("publisher-id обязан быть положительным целым")
+    for label, value in (("season", season), ("episode", episode)):
+        if not isinstance(value, int) or isinstance(value, bool) or value < 1:
+            raise PlayerContractError(f"{label} обязан быть положительным целым, получено {value!r}")
+
+    attributes = {
+        "ident": ident,
+        "season": str(season),
+        "episode": str(episode),
+        "data-publisher-id": str(publisher_id).strip(),
+        "data-title-id": str(title_id).strip(),
+        "data-aggregator": aggregator,
+        "is-show-voice-only": "true" if show_voice_only else "false",
+        "is-show-banner": "true" if show_banner else "false",
+        "disable-licensed": DISABLE_LICENSED,
+    }
+
+    # PC-1: непустой only-voice имеет приоритет, конфликтующая пара запрещена.
+    only = (only_voice or "").strip()
+    priority = (priority_voice or "").strip()
+    if only and priority:
+        raise PlayerContractError("only-voice и priority-voice одновременно запрещены (PC-1)")
+    if only:
+        attributes["only-voice"] = only
+    elif priority:
+        attributes["priority-voice"] = priority
+    return attributes
+
+
+def is_valid_publisher_id(value: str | int | None) -> bool:
+    """Publisher ID — положительное целое.
+
+    Плеер вызывает Number(publisherId); нечисловое значение превращается в NaN,
+    и провайдер отвечает 400. Проверять это на сборке дешевле, чем ловить на
+    публичной странице.
+    """
+    text = str(value or "").strip()
+    if not text.isdigit() or text.startswith("0"):
+        return False
+    return int(text) >= 1
+
+
+def render_live(
+    *,
+    publisher_id: str,
+    aggregator: str,
+    title_id: str,
+    title_name: str,
+    ident: str,
+    season: int = 1,
+    episode: int = 1,
+    script_url: str | None = None,
+    only_voice: str | None = None,
+    priority_voice: str | None = None,
+) -> str:
+    """Разметка настоящего плеера: custom element, без iframe (PC-4).
+
+    Publisher ID подставляется здесь, на сервере, в момент ответа. В общий
+    JS-бандл он не попадает: отдельного скрипта с конфигурацией нет, значение
+    живёт только атрибутом этого элемента.
+    """
+    from factory.lords.render import escape
+
+    contract = load_player_contract()
+    element = str(contract.get("element") or "video-player")
+    url = script_url or str((contract.get("script") or {}).get("url", ""))
+    if not url.startswith("https://"):
+        raise PlayerContractError("в контракте нет https-адреса скрипта плеера")
+
+    attributes = player_attributes(
+        publisher_id=publisher_id, aggregator=aggregator, title_id=title_id,
+        ident=ident, season=season, episode=episode,
+        only_voice=only_voice, priority_voice=priority_voice,
+    )
+    rendered = " ".join(
+        f'{escape(name)}="{escape(value)}"' for name, value in attributes.items()
+    )
+    return (
+        '<section class="player" aria-labelledby="player-heading">'
+        '<h2 id="player-heading">Просмотр</h2>'
+        '<div class="player__frame" role="group" aria-label="Область плеера">'
+        f"<{element} {rendered}></{element}>"
+        '<noscript><p>Для просмотра нужен JavaScript: плеер подключается '
+        "скриптом провайдера.</p></noscript>"
+        '<p class="player__fallback" data-player-fallback hidden>'
+        "Источник видео сейчас недоступен. Обновите страницу позже — "
+        "каталог и описание доступны и без плеера.</p>"
+        "</div>"
+        f'<script src="{escape(url)}" async data-player-script></script>'
+        "</section>"
+    )
+
+
 def render(player_state: PlayerState, *, title_name: str) -> str:
     """Разметка области плеера.
 

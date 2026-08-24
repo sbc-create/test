@@ -310,12 +310,33 @@ server {{
 # ---------------------------------------------------------------------------
 # systemd
 # ---------------------------------------------------------------------------
-def systemd_unit(site: StagingSite) -> str:
+#: Строка LoadCredential живого режима.
+#:
+#: Publisher ID приходит именно так, а не через Environment=: значения из
+#: Environment= видны в `systemctl show` и в /proc/<pid>/environ, а каталог
+#: credentials доступен только процессу юнита и живёт в tmpfs.
+#:
+#: API-токен сюда сознательно не загружается. Этот процесс обслуживает публичный
+#: трафик, а токен нужен только сборке каталога: выдавать его публичной службе
+#: значило бы расширять поверхность утечки без единой причины.
+LIVE_CREDENTIALS = (
+    "LoadCredential=cdnvideohub-publisher-id:"
+    "/etc/site-factory/secrets/cdnvideohub/lords/publisher-id\n"
+)
+
+
+def systemd_unit(site: StagingSite, *, live: bool = False) -> str:
     """Юнит одного сайта. Слушает только петлевой интерфейс.
 
     Наружу сайт выходит исключительно через nginx: там пароль, TLS и заголовки.
     Процесс, доступный снаружи напрямую, обошёл бы всё это разом.
+
+    `live` добавляет LoadCredential. Строка появляется только вместе с живым
+    режимом намеренно: systemd не умеет необязательный LoadCredential и не
+    запускает юнит, если файла нет. Безусловная строка сломала бы работающий
+    fixture-стенд, у которого секретов нет и быть не должно.
     """
+    credentials = LIVE_CREDENTIALS if live else ""
     return f"""[Unit]
 Description=Lords staging {site.site_id} ({site.apex}, профиль {site.profile})
 Documentation=file://{site.runtime_root}/current/README.md
@@ -330,7 +351,7 @@ WorkingDirectory={site.current}
 Environment=LORDS_HOST=127.0.0.1
 Environment=LORDS_PORT={site.port}
 Environment=PYTHONDONTWRITEBYTECODE=1
-ExecStart=/usr/bin/python3 {site.current}/serve.py
+{credentials}ExecStart=/usr/bin/python3 {site.current}/serve.py
 Restart=on-failure
 RestartSec=2
 

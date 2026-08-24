@@ -523,6 +523,38 @@ def cmd_lords_preview(args) -> int:
     return 0
 
 
+def cmd_lords_live(args) -> int:  # noqa: ARG001 — команда без аргументов
+    """Собирает три сайта Lords на живом каталоге. Ничего не применяет.
+
+    Секреты читаются из окружения и в вывод не попадают: печатается только
+    факт их наличия и результат по каждому сайту.
+    """
+    from factory.lords import live_build
+
+    try:
+        credentials = live_build.Credentials.from_env()
+    except live_build.LiveBuildError as error:
+        print(f"BLOCKED_INPUT_CDNVIDEOHUB_CREDENTIALS: {error}")
+        return 2
+
+    report = live_build.build_live(credentials=credentials)
+    target = live_build.write_report(report)
+
+    for site_id, entry in sorted(report["sites"].items()):
+        print(f"  {site_id}: {entry['status']}, записей {entry['item_count']}, "
+              f"страниц {entry['pages']}, разделы {', '.join(entry['sections_enabled']) or '—'}")
+
+    problems = live_build.verify_report(report)
+    if problems:
+        print("живой каталог непригоден:")
+        for problem in problems:
+            print(f"  — {problem}")
+        return 1
+
+    print(f"отчёт: {target}")
+    return 0
+
+
 def cmd_lords_staging(args) -> int:  # noqa: ARG001 — команда без аргументов
     """Готовит конфигурацию трёх публичных стендов. Ничего не применяет."""
     from factory.lords import staging as lords_staging
@@ -802,6 +834,10 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("lords-staging",
                        help="Lords: конфигурация публичного fixture-staging трёх сайтов")
     p.set_defaults(func=cmd_lords_staging)
+
+    p = sub.add_parser("lords-live",
+                       help="Lords: собрать три сайта на живом каталоге CDNVideoHub")
+    p.set_defaults(func=cmd_lords_live)
 
     p = sub.add_parser("env-report", help="read-only отчёт об окружении")
     p.set_defaults(func=cmd_env_report)
