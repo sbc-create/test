@@ -282,3 +282,142 @@ class TestApplyScript:
         for forbidden in ("seo_indexing_enabled=true", "metrika", "webmaster",
                           "yandex", "production"):
             assert forbidden not in text.replace("не выкатывает production", ""), forbidden
+
+
+class TestApplyScriptChecksCommit:
+    """Выкатывается объявленный commit, а не то, что лежит в рабочем каталоге."""
+
+    def test_script_compares_head_against_an_expected_sha(self):
+        text = SCRIPT.read_text(encoding="utf-8")
+        assert "LORDS_EXPECT_SHA" in text
+        assert "rev-parse HEAD" in text
+        assert "ожидался commit" in text
+
+    def test_script_refuses_a_dirty_worktree(self):
+        """Грязное дерево означает, что выложится не то, что в commit."""
+        text = SCRIPT.read_text(encoding="utf-8")
+        assert "status --porcelain" in text
+        assert "рабочее дерево грязное" in text
+
+
+class TestApplyScriptBacksUpAndRollsBack:
+    """Любой отказ возвращает nginx и systemd в исходное состояние."""
+
+    def test_script_snapshots_before_the_first_mutation(self):
+        text = SCRIPT.read_text(encoding="utf-8")
+        assert "BACKUP_ROOT" in text
+        assert "etc-nginx.tar.gz" in text
+        # Снимок обязан быть готов раньше, чем скрипт начнёт что-то менять.
+        snapshot = text.index("ROLLBACK_READY=1")
+        first_install = text.index('install_phase phase1')
+        assert snapshot < first_install, "снимок делается после первой мутации"
+
+    def test_rollback_restores_config_units_and_include(self):
+        text = SCRIPT.read_text(encoding="utf-8")
+        rollback = text.split("rollback() {", 1)[1].split("\non_error()", 1)[0]
+        assert "nginx-lords" in rollback
+        assert "lords-include.conf" in rollback
+        assert "systemctl daemon-reload" in rollback
+        assert "nginx -t" in rollback, "откат перезагружает nginx без проверки"
+
+    def test_rollback_does_not_reload_nginx_on_a_broken_config(self):
+        text = SCRIPT.read_text(encoding="utf-8")
+        rollback = text.split("rollback() {", 1)[1].split("\non_error()", 1)[0]
+        assert "if nginx -t" in rollback
+        assert "Reload НЕ выполнялся" in rollback
+
+    def test_failed_acceptance_triggers_a_rollback(self):
+        """Применилось, но отвечает не тем — тоже повод откатиться."""
+        text = SCRIPT.read_text(encoding="utf-8")
+        tail = text.split("публичная приёмка не прошла", 1)[1]
+        assert "rollback" in tail
+        assert "откачен" in tail
+
+    def test_rollback_keeps_previous_releases(self):
+        """Откатываться некуда, если откат сносит прежний релиз."""
+        text = SCRIPT.read_text(encoding="utf-8")
+        rollback = text.split("rollback() {", 1)[1].split("\non_error()", 1)[0]
+        assert "RUNTIME_ROOT" not in rollback, "откат трогает каталог релизов"
+
+
+class TestApplyScriptBasicAuth:
+    """Пароль стенда — bcrypt, и слабого запасного пути нет."""
+
+    def test_script_requires_bcrypt_and_installs_the_tool(self):
+        text = SCRIPT.read_text(encoding="utf-8")
+        assert "apache2-utils" in text
+        assert "htpasswd -bcB" in text
+
+    def test_script_has_no_apr1_fallback(self):
+        """APR1-MD5 — это MD5 с 1000 итераций; запасным путём он быть не может."""
+        text = SCRIPT.read_text(encoding="utf-8")
+        assert "openssl passwd -apr1" not in text
+        assert "-apr1" not in text
+
+    def test_script_verifies_the_hash_is_actually_bcrypt(self):
+        text = SCRIPT.read_text(encoding="utf-8")
+        assert r"^lords:\$2[aby]\$" in text
+
+    def test_password_is_generated_and_never_printed(self):
+        text = SCRIPT.read_text(encoding="utf-8")
+        assert "/dev/urandom" in text
+        assert "chmod 0600 \"${CREDENTIALS}\"" in text
+
+        # log и warn всегда идут в stdout/stderr — там пароля быть не может.
+        for line in text.splitlines():
+            stripped = line.strip()
+            if stripped.startswith(("log ", "warn ")):
+                assert "${password}" not in stripped, stripped
+                assert "${AUTH_PASSWORD}" not in stripped, stripped
+
+    def test_the_password_is_written_only_into_the_credentials_file(self):
+        """Единственный printf с паролем обязан быть перенаправлен в файл.
+
+        Проверяется не отсутствие printf, а его назначение: строка с паролем
+        существует ровно одна, и она попадает в блок, вывод которого уходит в
+        ${CREDENTIALS}, а не на терминал.
+        """
+        text = SCRIPT.read_text(encoding="utf-8")
+        printing = [line.strip() for line in text.splitlines()
+                    if "${password}" in line and "printf" in line]
+        assert len(printing) == 1, printing
+
+        block = text.split("umask 077", 1)[1].split("chmod 0600", 1)[0]
+        assert "${password}" in block, "пароль пишется вне блока учётных данных"
+        assert '> "${CREDENTIALS}"' in block, "блок с паролем не перенаправлен в файл"
+
+    def test_the_acceptance_password_is_read_from_the_file_not_the_output(self):
+        text = SCRIPT.read_text(encoding="utf-8")
+        assert 'sed -n \'s/^пароль: //p\' "${CREDENTIALS}"' in text
+        # После приёмки переменная гасится, чтобы не утечь в дальнейший вывод.
+        assert 'AUTH_PASSWORD=""  # в отчёт и журнал пароль не попадает' in text
+
+    def test_credentials_file_is_not_inside_the_repository(self):
+        text = SCRIPT.read_text(encoding="utf-8")
+        assert "CREDENTIALS=/root/" in text
+
+
+class TestApplyScriptAcceptance:
+    """После запуска сценарий проверяет то, что получилось, а не заявляет это."""
+
+    def test_acceptance_checks_auth_both_ways(self):
+        text = SCRIPT.read_text(encoding="utf-8")
+        assert "401 без пароля" in text
+        assert "200 с паролем" in text
+
+    def test_acceptance_checks_indexing_is_closed_on_a_public_response(self):
+        text = SCRIPT.read_text(encoding="utf-8")
+        assert "x-robots-tag:.*noindex" in text
+        assert "Disallow: /" in text
+
+    def test_acceptance_checks_the_runtime_serves_in_parallel(self):
+        """Однопоточный рантайм обязан быть замечен на хосте, а не только в тестах."""
+        text = SCRIPT.read_text(encoding="utf-8")
+        assert "параллельных запросов" in text
+
+    def test_acceptance_verifies_the_neighbours_default_deny(self):
+        """Чужой default_server проверяется, а не предполагается."""
+        text = SCRIPT.read_text(encoding="utf-8")
+        tail = text.split("Неизвестный Host", 1)[1]
+        assert "no-such-host.invalid" in tail
+        assert "не отдаёт содержимое Lords" in tail

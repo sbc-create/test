@@ -36,10 +36,13 @@ RUNTIME = '''#!/usr/bin/env python3
 """Рантайм стенда Lords. Только стандартная библиотека — сеть при старте не нужна."""
 import json
 import os
+import signal
+import socketserver
 import sys
+import threading
 from pathlib import Path
 from urllib.parse import unquote
-from wsgiref.simple_server import make_server
+from wsgiref.simple_server import WSGIRequestHandler, WSGIServer, make_server
 
 ROOT = Path(__file__).resolve().parent
 SITE = ROOT / "site"
@@ -131,12 +134,66 @@ def app(environ, start_response):
     return [body]
 
 
+class Handler(WSGIRequestHandler):
+    """Обработчик, который не зависает на молчащем соединении.
+
+    Браузер заранее открывает несколько сокетов про запас (preconnect) и по
+    части из них не присылает ничего. Однопоточный сервер принимал такой сокет
+    и ждал строку запроса, которая не придёт, — весь сайт замирал до таймаута
+    клиента. Поэтому у соединения есть свой срок жизни.
+
+    Таймаут и разрыв — это поведение клиента, а не отказ сайта, поэтому они
+    гасятся здесь и не превращаются в traceback на каждый неиспользованный
+    сокет.
+    """
+
+    timeout = 30
+
+    def handle_one_request(self):
+        try:
+            super().handle_one_request()
+        except OSError:
+            self.close_connection = True
+
+
+class ThreadingWSGIServer(socketserver.ThreadingMixIn, WSGIServer):
+    """Сервер, обслуживающий соединения параллельно.
+
+    `wsgiref.simple_server` однопоточен: одно соединение в единицу времени на
+    сайт. Nginx это не компенсирует — он проксирует, а не мультиплексирует, и
+    очередь всё равно упирается в единственный поток рантайма.
+
+    Потоки демонические и не удерживаются при закрытии: выключение идёт через
+    shutdown() ниже, а висящее соединение не должно задерживать остановку юнита.
+    """
+
+    daemon_threads = True
+    block_on_close = False
+    request_queue_size = 128
+
+
 if __name__ == "__main__":
     host = os.environ.get("LORDS_HOST", "127.0.0.1")
     port = int(os.environ.get("LORDS_PORT", "8080"))
-    with make_server(host, port, app) as server:
-        print("стенд %s на http://%s:%d/" % (MANIFEST["site_id"], host, port), file=sys.stderr)
-        server.serve_forever()
+    server = make_server(host, port, app, server_class=ThreadingWSGIServer, handler_class=Handler)
+    stop = threading.Event()
+
+    def _stop(signum, frame):
+        # Только флаг. shutdown() ждёт выхода из цикла serve_forever, и вызов
+        # его из потока, где этот цикл крутится, — взаимоблокировка.
+        stop.set()
+
+    signal.signal(signal.SIGTERM, _stop)
+    signal.signal(signal.SIGINT, _stop)
+
+    worker = threading.Thread(target=server.serve_forever, name="serve", daemon=True)
+    worker.start()
+    print("стенд %s на http://%s:%d/" % (MANIFEST["site_id"], host, port), file=sys.stderr)
+    stop.wait()
+    print("остановка %s" % MANIFEST["site_id"], file=sys.stderr)
+    server.shutdown()
+    server.server_close()
+    worker.join(timeout=5)
 '''
 
 DOCKERFILE = """# Стенд Lords. Зависимостей нет — образ ничего не скачивает ни при сборке

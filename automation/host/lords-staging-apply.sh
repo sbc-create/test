@@ -17,12 +17,20 @@
 #
 # Переменные окружения (все необязательны):
 #   LORDS_ACME_EMAIL   адрес для уведомлений Let's Encrypt о продлении.
-#                      Не задан — регистрация без адреса, писем об истечении не будет.
+#                      По умолчанию — LORDS_ACME_EMAIL_DEFAULT ниже.
+#   LORDS_EXPECT_SHA   commit, который обязан быть выложен. Не совпал — отказ до
+#                      единой мутации. Пустая строка отключает проверку.
 #   LORDS_SKIP_CERTS=1 остановиться после фазы 1 (сертификаты не выпускать).
+#
+# Откат: всё, что сценарий меняет в nginx и systemd, сохраняется до первой
+# мутации и возвращается на место при любой ошибке — включая провал публичной
+# приёмки в конце. Каталоги релизов при этом не удаляются: прежний релиз обязан
+# пережить откат, иначе откатываться будет не на что.
 
 set -Eeuo pipefail
 
 readonly NGINX_DIR=/etc/nginx/lords
+readonly NGINX_INCLUDE=/etc/nginx/conf.d/lords.conf
 readonly RUNTIME_ROOT=/srv/lords
 readonly ACME_ROOT=/var/www/lords-acme
 readonly HTPASSWD="${NGINX_DIR}/.htpasswd"
@@ -30,12 +38,80 @@ readonly CREDENTIALS=/root/lords-staging-credentials
 readonly DEFAULT_CERT="${NGINX_DIR}/default-self-signed"
 readonly SERVICE_USER=lords
 readonly PORTS=(9101 9102 9103)
+readonly UNITS=(lords-01.service lords-02.service lords-03.service)
+readonly BACKUP_ROOT=/var/backups/lords-staging
+readonly LORDS_ACME_EMAIL_DEFAULT=sb@adcamp.ru
 
 log()  { printf '\033[1m==>\033[0m %s\n' "$*"; }
 warn() { printf '\033[33m[!]\033[0m %s\n' "$*" >&2; }
 die()  { printf '\033[31m[x]\033[0m %s\n' "$*" >&2; exit 1; }
 
-trap 'die "прервано на строке ${LINENO}; ничего не перезагружено после последней успешной проверки"' ERR
+# Пока ничего не изменено, откатывать нечего: до снимка ERR только сообщает.
+ROLLBACK_READY=0
+BACKUP_DIR=""
+
+rollback() {
+  [[ "${ROLLBACK_READY}" -eq 1 ]] || return 0
+  ROLLBACK_READY=0  # откат не откатывают повторно
+
+  warn "откат: возвращаю nginx и systemd в состояние до запуска"
+
+  for unit in "${UNITS[@]}"; do
+    systemctl stop "${unit}" >/dev/null 2>&1 || true
+    if [[ -f "${BACKUP_DIR}/systemd/${unit}" ]]; then
+      install -m 0644 "${BACKUP_DIR}/systemd/${unit}" "/etc/systemd/system/${unit}"
+    else
+      rm -f "/etc/systemd/system/${unit}"
+      systemctl disable "${unit}" >/dev/null 2>&1 || true
+    fi
+  done
+  systemctl daemon-reload >/dev/null 2>&1 || true
+
+  # Конфигурация Lords: возвращаем ровно то, что лежало до запуска.
+  # Проверка перед rm -rf намеренная: пустая переменная превратила бы уборку
+  # каталога Lords в уборку корня.
+  [[ -n "${NGINX_DIR}" && "${NGINX_DIR}" == /etc/nginx/* ]] \
+    || die "NGINX_DIR испорчен: ${NGINX_DIR}"
+  rm -rf -- "${NGINX_DIR}"
+  if [[ -d "${BACKUP_DIR}/nginx-lords" ]]; then
+    cp -a "${BACKUP_DIR}/nginx-lords" "${NGINX_DIR}"
+  fi
+  if [[ -f "${BACKUP_DIR}/lords-include.conf" ]]; then
+    install -m 0644 "${BACKUP_DIR}/lords-include.conf" "${NGINX_INCLUDE}"
+  else
+    rm -f "${NGINX_INCLUDE}"
+  fi
+
+  # Соседей не трогаем: если после отката конфигурация неверна, причина не в
+  # Lords, и молча перезагружать nginx в таком виде нельзя.
+  if nginx -t >/dev/null 2>&1; then
+    systemctl reload nginx >/dev/null 2>&1 || true
+    warn "откат выполнен, nginx перезагружен с прежней конфигурацией"
+  else
+    warn "ВНИМАНИЕ: после отката nginx -t не проходит. Reload НЕ выполнялся."
+    warn "Конфигурация Lords снята; разбирайте вручную: nginx -t"
+  fi
+
+  # Юниты, которые работали до запуска, поднимаем обратно.
+  if [[ -f "${BACKUP_DIR}/active-units" ]]; then
+    while read -r unit; do
+      [[ -n "${unit}" ]] || continue
+      systemctl start "${unit}" >/dev/null 2>&1 || \
+        warn "не удалось поднять обратно ${unit}"
+    done < "${BACKUP_DIR}/active-units"
+  fi
+
+  warn "снимок сохранён: ${BACKUP_DIR}"
+}
+
+on_error() {
+  local line="$1"
+  printf '\033[31m[x]\033[0m прервано на строке %s\n' "${line}" >&2
+  rollback
+  exit 1
+}
+
+trap 'on_error "${LINENO}"' ERR
 
 [[ ${EUID} -eq 0 ]] || die "нужен root: sudo bash $0"
 
@@ -60,6 +136,30 @@ log "интерпретатор: ${PY}"
 log "nginx: $(nginx -v 2>&1)"
 
 # --------------------------------------------------------------------------
+# 0a. Тот ли это commit
+# --------------------------------------------------------------------------
+# Выкатывать «то, что сейчас в рабочем каталоге» — значит выкатывать чужую
+# незакоммиченную правку вместе с релизом. Поэтому SHA сверяется явно, а
+# грязное дерево останавливает сценарий до первой мутации.
+HEAD_SHA="$(git -C "${REPO_ROOT}" rev-parse HEAD 2>/dev/null || true)"
+[[ -n "${HEAD_SHA}" ]] || die "не удалось прочитать commit: ${REPO_ROOT} не git-репозиторий"
+log "commit: ${HEAD_SHA}"
+
+EXPECT_SHA="${LORDS_EXPECT_SHA-unset}"
+if [[ "${EXPECT_SHA}" == "unset" ]]; then
+  warn "LORDS_EXPECT_SHA не задан: выкладывается текущий HEAD без сверки."
+elif [[ -n "${EXPECT_SHA}" ]]; then
+  if [[ "${HEAD_SHA}" != "${EXPECT_SHA}"* ]]; then
+    die "ожидался commit ${EXPECT_SHA}, в рабочем каталоге ${HEAD_SHA}; ничего не изменено"
+  fi
+  log "commit совпал с ожидаемым"
+fi
+
+if [[ -n "$(git -C "${REPO_ROOT}" status --porcelain --untracked-files=no 2>/dev/null)" ]]; then
+  die "рабочее дерево грязное: выкладывался бы не тот код, что в commit ${HEAD_SHA}"
+fi
+
+# --------------------------------------------------------------------------
 # 1. Сборка конфигурации и пакетов. Ничего ещё не применяется.
 # --------------------------------------------------------------------------
 log "собираю конфигурацию и пакеты стенда"
@@ -82,14 +182,38 @@ for s in data["sites"]:
 # 2. Чужое не трогаем: порты и сервер по умолчанию
 # --------------------------------------------------------------------------
 log "проверяю, что не мешаю соседям"
-for port in "${PORTS[@]}"; do
-  if ss -ltnp 2>/dev/null | grep -qE "127\.0\.0\.1:${port}\b"; then
-    holder="$(ss -ltnp 2>/dev/null | grep -E "127\.0\.0\.1:${port}\b" | head -1)"
-    if ! grep -qE "lords-0[123]|python3" <<<"${holder}"; then
-      die "порт ${port} занят посторонним процессом: ${holder}"
-    fi
-    log "  порт ${port} уже держит наш же рантайм — это повторный запуск"
+
+# PID главного процесса юнита; пусто, если юнит не запущен.
+unit_main_pid() {
+  local pid; pid="$(systemctl show -p MainPID --value "$1" 2>/dev/null || echo 0)"
+  [[ "${pid}" =~ ^[0-9]+$ && "${pid}" -gt 0 ]] && printf '%s' "${pid}"
+}
+
+# Порт свободен — или принадлежит именно нашему юниту. Прежняя проверка
+# пропускала любой процесс с именем python3: под это описание попадает
+# посторонний сервис, который сценарий затем молча перетёр бы своим.
+for index in "${!PORTS[@]}"; do
+  port="${PORTS[${index}]}"
+  unit="${UNITS[${index}]}"
+  holder="$(ss -ltnpH "sport = :${port}" 2>/dev/null | head -1)"
+  [[ -n "${holder}" ]] || { log "  порт ${port} свободен"; continue; }
+
+  holder_pid="$(grep -oE 'pid=[0-9]+' <<<"${holder}" | head -1 | cut -d= -f2)"
+  expected_pid="$(unit_main_pid "${unit}")"
+
+  if [[ -n "${expected_pid}" && "${holder_pid}" == "${expected_pid}" ]]; then
+    log "  порт ${port} держит ${unit} — это повторный запуск"
+    continue
   fi
+
+  # Юнит мог перезапуститься между вызовами: сверяем по cgroup, а не только PID.
+  if [[ -n "${holder_pid}" ]] \
+     && grep -qs "${unit}" "/proc/${holder_pid}/cgroup" 2>/dev/null; then
+    log "  порт ${port} держит ${unit} (по cgroup) — это повторный запуск"
+    continue
+  fi
+
+  die "порт ${port} занят посторонним процессом: ${holder}"
 done
 
 INSTALL_DEFAULT=1
@@ -101,6 +225,34 @@ if grep -rlsE '^\s*listen[^;]*default_server' /etc/nginx --include='*.conf' 2>/d
   warn "это отказ nginx -t. Ответ 421 на неизвестный Host остаётся за существующей"
   warn "конфигурацией; проверьте её отдельно."
 fi
+
+# --------------------------------------------------------------------------
+# 2a. Снимок состояния. Дальше начинаются мутации.
+# --------------------------------------------------------------------------
+# Снимок делается до первой правки и только после того, как все отказные
+# проверки выше пройдены: откатывать имеет смысл лишь то, что успели изменить.
+BACKUP_DIR="${BACKUP_ROOT}/$(date +%Y%m%d-%H%M%S)-${HEAD_SHA:0:12}"
+install -d -m 0700 "${BACKUP_ROOT}" "${BACKUP_DIR}"
+
+# Полная копия /etc/nginx — на случай, если разбирать придётся руками.
+tar -czf "${BACKUP_DIR}/etc-nginx.tar.gz" -C /etc nginx 2>/dev/null \
+  || warn "полный бэкап /etc/nginx не собрался; точечный снимок ниже всё равно сделан"
+
+# Точечный снимок того, что сценарий действительно меняет.
+[[ -d "${NGINX_DIR}" ]] && cp -a "${NGINX_DIR}" "${BACKUP_DIR}/nginx-lords"
+[[ -f "${NGINX_INCLUDE}" ]] && cp -a "${NGINX_INCLUDE}" "${BACKUP_DIR}/lords-include.conf"
+
+install -d -m 0700 "${BACKUP_DIR}/systemd"
+: > "${BACKUP_DIR}/active-units"
+for unit in "${UNITS[@]}"; do
+  [[ -f "/etc/systemd/system/${unit}" ]] \
+    && cp -a "/etc/systemd/system/${unit}" "${BACKUP_DIR}/systemd/${unit}"
+  systemctl is-active --quiet "${unit}" 2>/dev/null \
+    && printf '%s\n' "${unit}" >> "${BACKUP_DIR}/active-units"
+done
+
+ROLLBACK_READY=1
+log "снимок для отката: ${BACKUP_DIR}"
 
 # --------------------------------------------------------------------------
 # 3. Пользователь, каталоги, права
@@ -118,24 +270,56 @@ install -d -m 0755 -o "${SERVICE_USER}" -g "${SERVICE_USER}" "${RUNTIME_ROOT}"
 # --------------------------------------------------------------------------
 # 4. Basic Auth. Пароль рождается здесь и в вывод не попадает.
 # --------------------------------------------------------------------------
+# Формат хеша — bcrypt, и запасного пути в слабый формат нет. APR1-MD5, который
+# htpasswd ставит по умолчанию, — это MD5 с 1000 итераций: для пароля, лежащего
+# на публичном хосте, запас прочности неприемлемый. Поэтому при отсутствии
+# htpasswd сценарий доставляет apache2-utils, а не переходит на APR1 молча.
+if ! command -v htpasswd >/dev/null; then
+  log "htpasswd не найден — ставлю apache2-utils"
+  export DEBIAN_FRONTEND=noninteractive
+  apt-get update -qq >/dev/null 2>&1 \
+    || warn "apt-get update не прошёл; пробую установку с имеющимися списками"
+  apt-get install -y -qq apache2-utils >/dev/null 2>&1 \
+    || die "не удалось поставить apache2-utils; bcrypt недоступен, слабый формат не используется"
+fi
+command -v htpasswd >/dev/null \
+  || die "htpasswd отсутствует после установки apache2-utils"
+
 if [[ -s "${HTPASSWD}" ]]; then
-  log "файл Basic Auth уже есть — пароль не меняю"
-else
-  log "создаю пароль Basic Auth"
-  password="$(openssl rand -base64 24 | tr -d '\n/+=' | cut -c1-24)"
-  if command -v htpasswd >/dev/null; then
-    htpasswd -bcB "${HTPASSWD}" lords "${password}" >/dev/null 2>&1
+  # Повторный запуск не меняет пароль. Но если файл остался от прежней версии
+  # сценария в формате APR1, он переписывается: bcrypt-строка начинается с $2y$.
+  if grep -q '^lords:\$2[aby]\$' "${HTPASSWD}"; then
+    log "файл Basic Auth уже есть, формат bcrypt — пароль не меняю"
+    REGENERATE_AUTH=0
   else
-    printf 'lords:%s\n' "$(openssl passwd -apr1 "${password}")" > "${HTPASSWD}"
+    warn "файл Basic Auth не в формате bcrypt — перевыпускаю пароль"
+    REGENERATE_AUTH=1
   fi
+else
+  REGENERATE_AUTH=1
+fi
+
+if [[ "${REGENERATE_AUTH}" -eq 1 ]]; then
+  log "создаю пароль Basic Auth (bcrypt, cost 12)"
+  # 32 символа из ~62-символьного алфавита: около 190 бит энтропии.
+  password="$(LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 32)"
+  [[ ${#password} -eq 32 ]] || die "не удалось получить пароль нужной длины"
+
+  # Пароль передаётся htpasswd аргументом только в пределах этого процесса;
+  # -C 12 задаёт стоимость bcrypt.
+  htpasswd -bcB -C 12 "${HTPASSWD}" lords "${password}" >/dev/null 2>&1 \
+    || die "htpasswd не создал bcrypt-хеш"
+  grep -q '^lords:\$2[aby]\$' "${HTPASSWD}" \
+    || die "htpasswd записал не bcrypt; слабый формат не принимается"
+
   umask 077
   { printf 'Lords staging — Basic Auth\n'
     printf 'создано: %s\n' "$(date -Is)"
+    printf 'формат: bcrypt (htpasswd -B, cost 12)\n'
     printf 'логин: lords\n'
     printf 'пароль: %s\n' "${password}"
   } > "${CREDENTIALS}"
   chmod 0600 "${CREDENTIALS}"
-  unset password
   log "пароль записан в ${CREDENTIALS} (права 0600). В этот вывод он не попал."
 fi
 chown root:www-data "${HTPASSWD}" 2>/dev/null || chown root:root "${HTPASSWD}"
@@ -255,12 +439,14 @@ fi
 # --------------------------------------------------------------------------
 command -v certbot >/dev/null || die "certbot не установлен"
 
+ACME_EMAIL="${LORDS_ACME_EMAIL:-${LORDS_ACME_EMAIL_DEFAULT}}"
 acme_account_args=()
-if [[ -n "${LORDS_ACME_EMAIL:-}" ]]; then
-  acme_account_args=(--email "${LORDS_ACME_EMAIL}")
+if [[ -n "${ACME_EMAIL}" ]]; then
+  acme_account_args=(--email "${ACME_EMAIL}")
+  log "ACME-адрес для уведомлений о продлении: ${ACME_EMAIL}"
 else
   acme_account_args=(--register-unsafely-without-email)
-  warn "LORDS_ACME_EMAIL не задан: писем об истечении сертификата не будет."
+  warn "адрес ACME пуст: писем об истечении сертификата не будет."
 fi
 
 for row in "${SITES[@]}"; do
@@ -302,17 +488,50 @@ install_phase phase2
 # --------------------------------------------------------------------------
 # 9. Проверка того, что получилось
 # --------------------------------------------------------------------------
-log "проверяю результат"
+log "публичная приёмка"
 failures=0
+
+# Пароль читается из файла, а не из переменной: на повторном запуске пароль не
+# перевыпускался, и в памяти его нет. В вывод он не попадает ни здесь, ни ниже.
+AUTH_PASSWORD=""
+if [[ -r "${CREDENTIALS}" ]]; then
+  AUTH_PASSWORD="$(sed -n 's/^пароль: //p' "${CREDENTIALS}" | head -1)"
+fi
+
 for row in "${SITES[@]}"; do
   IFS=$'\t' read -r site_id apex www port unit runtime <<<"${row}"
 
-  code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 10 "https://${apex}/" || echo 000)"
+  code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 15 "https://${apex}/" || echo 000)"
   [[ "${code}" == "401" ]] \
     && log "  ${apex}: 401 без пароля — Basic Auth работает" \
     || { warn "  ${apex}: ожидался 401, получен ${code}"; failures=$((failures + 1)); }
 
-  redirect="$(curl -sS -o /dev/null -w '%{http_code} %{redirect_url}' --max-time 10 \
+  # С паролем сайт обязан открыться: 401 на всё подряд — это тоже отказ стенда.
+  if [[ -n "${AUTH_PASSWORD}" ]]; then
+    authed="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 15 \
+      -u "lords:${AUTH_PASSWORD}" "https://${apex}/" || echo 000)"
+    [[ "${authed}" == "200" ]] \
+      && log "  ${apex}: 200 с паролем — стенд открывается" \
+      || { warn "  ${apex}: с паролем ожидался 200, получен ${authed}"; failures=$((failures + 1)); }
+
+    # Индексация закрыта на публичном ответе, а не только в конфигурации.
+    headers="$(curl -sS -D - -o /dev/null --max-time 15 \
+      -u "lords:${AUTH_PASSWORD}" "https://${apex}/" || true)"
+    grep -qi '^x-robots-tag:.*noindex' <<<"${headers}" \
+      && log "  ${apex}: X-Robots-Tag noindex на публичном ответе" \
+      || { warn "  ${apex}: нет X-Robots-Tag noindex"; failures=$((failures + 1)); }
+
+    robots_body="$(curl -sS --max-time 15 -u "lords:${AUTH_PASSWORD}" \
+      "https://${apex}/robots.txt" || true)"
+    grep -q 'Disallow: /' <<<"${robots_body}" \
+      && log "  ${apex}: robots.txt закрывает сайт целиком" \
+      || { warn "  ${apex}: robots.txt не содержит Disallow: /"; failures=$((failures + 1)); }
+  else
+    warn "  ${apex}: пароль недоступен, проверки под аутентификацией пропущены"
+    failures=$((failures + 1))
+  fi
+
+  redirect="$(curl -sS -o /dev/null -w '%{http_code} %{redirect_url}' --max-time 15 \
     "https://${www}/" || echo '000 -')"
   grep -q '^308 ' <<<"${redirect}" \
     && log "  ${www}: ${redirect}" \
@@ -323,15 +542,61 @@ for row in "${SITES[@]}"; do
   [[ "${robots}" == "200" ]] \
     && log "  ${site_id}: robots.txt отдаётся рантаймом" \
     || { warn "  ${site_id}: robots.txt вернул ${robots}"; failures=$((failures + 1)); }
+
+  # Рантайм обязан держать параллель: однопоточный сервер здесь и вставал.
+  parallel_codes="$(for _ in 1 2 3 4 5 6 7 8; do
+      curl -sS -o /dev/null -w '%{http_code}\n' --max-time 10 \
+        "http://127.0.0.1:${port}/" &
+    done; wait)"
+  if grep -qv '^200$' <<<"${parallel_codes}"; then
+    warn "  ${site_id}: параллельные запросы вернули $(tr '\n' ' ' <<<"${parallel_codes}")"
+    failures=$((failures + 1))
+  else
+    log "  ${site_id}: восемь параллельных запросов — все 200"
+  fi
 done
 
+# Неизвестный Host. Свой сервер по умолчанию сценарий ставит, только если чужого
+# нет; если чужой есть — проверяется он, а не предположение о нём.
+unknown="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 10 \
+  -H 'Host: no-such-host.invalid' http://127.0.0.1/ || echo 000)"
 if [[ "${INSTALL_DEFAULT}" -eq 1 ]]; then
-  unknown="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 10 \
-    -H 'Host: no-such-host.invalid' http://127.0.0.1/ || echo 000)"
   [[ "${unknown}" == "421" ]] \
-    && log "  неизвестный Host: 421" \
+    && log "  неизвестный Host: 421 (сервер по умолчанию Lords)" \
     || { warn "  неизвестный Host вернул ${unknown}, ожидался 421"; failures=$((failures + 1)); }
+else
+  # Существующий default-deny соседа: он обязан отказать, но код у него свой.
+  # Требовать от чужой конфигурации ровно 421 нельзя — она написана не нами.
+  # Недопустимо одно: чтобы неизвестное имя открыло сайт Lords.
+  if [[ "${unknown}" =~ ^(421|404|403|444|000)$ ]]; then
+    log "  неизвестный Host: ${unknown} — существующий default-deny соседа отказывает"
+  else
+    warn "  неизвестный Host вернул ${unknown}: чужой default_server не отказывает"
+    failures=$((failures + 1))
+  fi
+
+  # И главное: неизвестное имя не должно отдавать контент Lords.
+  leaked="$(curl -sS --max-time 10 -H 'Host: no-such-host.invalid' \
+    http://127.0.0.1/ 2>/dev/null | head -c 2000 || true)"
+  if grep -qiE 'lords|lordfilm|lordserial' <<<"${leaked}"; then
+    warn "  неизвестный Host отдаёт содержимое Lords — сайт развешен по чужим именам"
+    failures=$((failures + 1))
+  else
+    log "  неизвестный Host не отдаёт содержимое Lords"
+  fi
 fi
+
+AUTH_PASSWORD=""  # в отчёт и журнал пароль не попадает
+
+# Приёмка — такой же повод для отката, как и падение на любом шаге выше.
+# Стенд, который применился, но отвечает не тем, оставлять работающим нельзя.
+if [[ "${failures}" -gt 0 ]]; then
+  warn "публичная приёмка не прошла: отказов ${failures}"
+  rollback
+  die "стенд откачен в состояние до запуска; ничего не опубликовано"
+fi
+
+ROLLBACK_READY=0  # дальше только вывод: откатывать успешный выкат не нужно
 
 echo
 log "готово"
@@ -342,9 +607,8 @@ for s in data["sites"]:
     print(f"  {s[\"url\"]:38} {s[\"site_id\"]}  {s[\"profile\"]:14} :{s[\"port\"]}")
 ' "${STAGING_DIR}/staging.json"
 echo
-log "учётные данные Basic Auth: ${CREDENTIALS} (значение в вывод не печатается)"
+log "commit: ${HEAD_SHA}"
+log "снимок для отката: ${BACKUP_DIR}"
+log "учётные данные Basic Auth: ${CREDENTIALS} (bcrypt, значение в вывод не печатается)"
 log "индексация выключена, X-Robots-Tag: noindex, nofollow, robots.txt: Disallow: /"
-
-if [[ "${failures}" -gt 0 ]]; then
-  die "проверок не прошло: ${failures}. Конфигурация применена, но результат не соответствует ожидаемому."
-fi
+log "Метрика не создавалась, хосты в Вебмастер не добавлялись, боевой выкат не авторизован"
