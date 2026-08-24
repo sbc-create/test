@@ -1604,7 +1604,7 @@
     },
     "deployment_readiness": {
       "type": "object",
-      "description": "Готовность к выкату. Значение проверяется тестом против вычисленного: сохранённый статус, разошедшийся с фактом, — ложь.",
+      "description": "Готовность к выкату. Значение проверяется тестом против вычисленного: сохранённый статус, разошедшийся с фактом, — ложь. Порт и каталог рантайма здесь намеренно отсутствуют: они принадлежат реестру направления, и вторая их копия в manifest разошлась бы с первой.",
       "additionalProperties": false,
       "required": [
         "status"
@@ -1614,6 +1614,7 @@
           "type": "string",
           "enum": [
             "READY",
+            "STAGING_READY",
             "BLOCKED_INPUT_DOMAIN_TARGET",
             "BLOCKED_INPUT_CDNVIDEOHUB_CREDENTIALS",
             "BLOCKED_INPUT_RIGHTS"
@@ -1624,6 +1625,14 @@
             "string",
             "null"
           ]
+        },
+        "production_blocked_by": {
+          "type": "array",
+          "description": "Что закрывает production у пакета, готового к staging. Пустой список означает «ничего не закрывает», поэтому список обязан быть непустым везде, где production не авторизован.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         }
       }
     }

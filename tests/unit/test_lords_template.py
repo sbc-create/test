@@ -27,6 +27,18 @@ from factory.paths import PATHS
 
 SITES = ("lords-01", "lords-02", "lords-03", "lords-04")
 
+#: Пакеты с утверждённым доменом: публикуются как fixture-staging.
+PUBLISHED = ("lords-01", "lords-02", "lords-03")
+#: Пакет без домена: не публикуется и остаётся закрыт воротами целиком.
+UNPUBLISHED = ("lords-04",)
+
+#: Домен каждого опубликованного пакета. Второй копии сопоставления в тестах
+#: нет: она берётся из реестра направления и сверяется с manifest.
+def registry() -> dict:
+    import json
+    data = json.loads((PATHS.root / "config/directions/lords.json").read_text(encoding="utf-8"))
+    return {d["site_id"]: d for d in data["domains"]}
+
 
 def package(site_id: str) -> dict:
     return yaml.safe_load(PATHS.site_package(site_id).read_text(encoding="utf-8"))
@@ -244,13 +256,44 @@ class TestSeoWithoutDomain:
                 continue
             assert '<meta name="robots" content="noindex, nofollow">' in page.body, path
 
-    @pytest.mark.parametrize("site_id", SITES)
-    def test_canonical_is_absent_and_says_why(self, sites, site_id):
+    @pytest.mark.parametrize("site_id", UNPUBLISHED)
+    def test_canonical_is_absent_without_a_domain_and_says_why(self, sites, site_id):
         for path, page in sites[site_id].pages.items():
             if not page.content_type.startswith("text/html"):
                 continue
             assert 'rel="canonical"' not in page.body, path
             assert render_mod.CANONICAL_ABSENT in page.body, path
+
+    @pytest.mark.parametrize("site_id", PUBLISHED)
+    def test_canonical_points_at_its_own_domain(self, sites, site_id):
+        """Canonical ведёт на свой адрес — и только на свой.
+
+        Canonical и индексация решаются порознь: адрес известен, поэтому
+        canonical осмыслен, а `noindex` рядом с ним закрывает стенд от выдачи.
+        """
+        own = registry()[site_id]["apex"]
+        foreign = {d["apex"] for d in registry().values()} - {own}
+        for path, page in sites[site_id].pages.items():
+            if not page.content_type.startswith("text/html"):
+                continue
+            found = re.findall(r'<link rel="canonical" href="([^"]+)"', page.body)
+            if path == "/search/":
+                assert not found, "выдача поиска канонического адреса не получает"
+                continue
+            assert len(found) == 1, f"{site_id}{path}: canonical не один"
+            assert found[0] == f"https://{own}{path}", f"{site_id}{path}: {found[0]}"
+            for other in foreign:
+                assert other not in page.body, f"{site_id}{path}: чужой домен {other}"
+
+    @pytest.mark.parametrize("site_id", PUBLISHED)
+    def test_canonical_matches_the_registry(self, site_id):
+        """Домен в manifest и домен в реестре направления — одно и то же."""
+        entry = registry()[site_id]
+        pkg = package(site_id)
+        assert pkg["domain"] == entry["apex"]
+        assert pkg["canonical_url"] == f"https://{entry['apex']}/"
+        assert pkg["aliases"] == [entry["www"]]
+        assert pkg["tenant"]["seo_profile"] == entry["profile"]
 
     @pytest.mark.parametrize("site_id", SITES)
     def test_robots_closes_the_whole_site(self, sites, site_id):
@@ -334,18 +377,43 @@ class TestPlayerAndSecrets:
                 assert "secret://" not in page.body, f"{site_id}{path}"
 
     def test_nothing_is_fetched_from_outside(self, sites):
-        """Ни одного внешнего адреса: ни шрифта, ни скрипта, ни изображения."""
-        allowed = ("http://www.w3.org/2000/svg", "https://schema.org",
-                   "http://www.sitemaps.org/schemas/sitemap/0.9")
+        """Ни один подресурс не грузится извне: ни шрифт, ни скрипт, ни картинка.
+
+        Проверяются именно загружаемые адреса, а не любое упоминание строки
+        `https://`. Canonical и Open Graph называют собственный домен сайта и
+        ничего не загружают; запрещать их значило бы запретить сам canonical.
+        """
+        loaders = re.compile(
+            r'<script[^>]+src="([^"]+)"'
+            r'|<img[^>]+src="([^"]+)"'
+            r'|<link[^>]+rel="stylesheet"[^>]+href="([^"]+)"'
+            r'|url\(([^)]+)\)'
+        )
         for site_id in SITES:
             for path, page in sites[site_id].pages.items():
-                body = page.body
-                for marker in allowed:
-                    body = body.replace(marker, "")
-                assert "http://" not in body and "https://" not in body, f"{site_id}{path}"
+                for match in loaders.finditer(page.body):
+                    href = next(g for g in match.groups() if g)
+                    assert not href.startswith(("http://", "https://", "//")), \
+                        f"{site_id}{path}: внешний подресурс {href}"
+
+    def test_only_the_sites_own_domain_appears_in_its_documents(self, sites):
+        """Чужого домена в разметке сайта нет — ни в canonical, ни в ссылке."""
+        by_site = registry()
+        for site_id in PUBLISHED:
+            foreign = {d["apex"] for d in by_site.values()} - {by_site[site_id]["apex"]}
+            for path, page in sites[site_id].pages.items():
+                for other in foreign:
+                    assert other not in page.body, f"{site_id}{path}: {other}"
 
     def test_no_material_from_the_reference_sites(self, sites):
-        forbidden = ("lordserials", "lordfilm", "lordfilm-hit")
+        """Материалов референсов нет.
+
+        Проверяются именно хосты референсов. Подстрока «lordfilm» для этого не
+        годится: собственные домены направления — `lordfilm47.space` и
+        `lordserial33.biz`, и запрет по подстроке запретил бы сайту называть
+        сам себя.
+        """
+        forbidden = ("lordserials.fan", "lordfilm-hit.org")
         for site_id in SITES:
             for path, page in sites[site_id].pages.items():
                 lowered = page.body.lower()
@@ -363,13 +431,13 @@ class TestProductionGates:
     выполняется через ту же функцию, что стоит на пути настоящей операции.
     """
 
-    @pytest.mark.parametrize("site_id", SITES)
+    @pytest.mark.parametrize("site_id", UNPUBLISHED)
     def test_package_without_domain_target_and_canonical_cannot_be_ready(self, site_id):
         ok, missing = gates.ready_for_deployment(package(site_id))
         assert ok is False
         assert set(missing) == {"domain", "canonical_url", "target_ref"}
 
-    @pytest.mark.parametrize("site_id", SITES)
+    @pytest.mark.parametrize("site_id", UNPUBLISHED)
     def test_indexing_cannot_be_enabled_without_a_domain(self, site_id):
         from factory.errors import BlockedSeo
         pkg = package(site_id) | {"seo_indexing_enabled": True}
@@ -379,33 +447,35 @@ class TestProductionGates:
 
     def test_indexing_cannot_be_enabled_with_a_domain_but_no_canonical(self):
         from factory.errors import BlockedSeo
-        pkg = package("lords-01") | {"seo_indexing_enabled": True, "domain": "example.test"}
+        pkg = package("lords-01") | {
+            "seo_indexing_enabled": True, "domain": "example.test", "canonical_url": None,
+        }
         with pytest.raises(BlockedSeo) as exc:
             gates.check_indexing(pkg)
         assert "canonical_url" in str(exc.value)
 
-    @pytest.mark.parametrize("site_id", SITES)
+    @pytest.mark.parametrize("site_id", UNPUBLISHED)
     def test_production_sitemap_cannot_be_built_without_a_domain(self, site_id):
         from factory.errors import BlockedInput
         pkg = package(site_id) | {"environment": "production"}
         with pytest.raises(BlockedInput):
             gates.check_production_sitemap(pkg)
 
-    @pytest.mark.parametrize("site_id", SITES)
+    @pytest.mark.parametrize("site_id", UNPUBLISHED)
     def test_production_deploy_is_impossible_without_a_target(self, site_id):
         from factory.errors import BlockedAccess
         with pytest.raises(BlockedAccess) as exc:
             gates.check_production_deploy(package(site_id))
         assert "цель выката" in str(exc.value)
 
-    @pytest.mark.parametrize("site_id", SITES)
+    @pytest.mark.parametrize("site_id", UNPUBLISHED)
     def test_tls_cannot_be_issued_without_a_domain(self, site_id):
         from factory.errors import BlockedInput
         with pytest.raises(BlockedInput) as exc:
             gates.check_tls_certificate(package(site_id))
         assert "домен" in str(exc.value)
 
-    @pytest.mark.parametrize("site_id", SITES)
+    @pytest.mark.parametrize("site_id", UNPUBLISHED)
     def test_metrica_and_webmaster_cannot_be_created_without_a_domain(self, site_id):
         from factory.errors import BlockedAnalyticsAccess
         pkg = package(site_id)
@@ -435,7 +505,7 @@ class TestProductionGates:
 
     def test_a_declared_readiness_status_does_not_open_the_gates(self):
         """Пакет не выдаёт разрешение сам себе."""
-        forged = package("lords-01") | {
+        forged = package("lords-04") | {
             "deployment_readiness": {"status": "READY", "reason": "готов"},
             "production_authorized": True,
         }
@@ -444,11 +514,60 @@ class TestProductionGates:
         with pytest.raises(BlockedAccess):
             gates.check_production_deploy(forged)
 
-    def test_validation_reports_the_indexing_gate(self):
+    @pytest.mark.parametrize("site_id", PUBLISHED)
+    def test_a_published_package_is_still_closed_for_production(self, site_id):
+        """Домен и цель открыли staging — и только staging.
+
+        Это главный риск этого этапа: получив домен, пакет выглядит «готовым», и
+        отличить готовность к стенду от готовности к production становится
+        некому. Поэтому проверяется отдельно, что production закрыт по-прежнему,
+        причём не одним условием, а тремя независимыми.
+        """
+        from factory.errors import BlockedAccess, BlockedSeo
+        pkg = package(site_id)
+        assert pkg["production_authorized"] is False
+        assert pkg["environment"] == "staging"
+        assert pkg["seo_indexing_enabled"] is False
+        # 1. Выкат в production невозможен: авторизации владельца нет.
+        with pytest.raises(BlockedAccess) as exc:
+            gates.check_production_deploy(pkg)
+        assert "production_authorized" in str(exc.value)
+        # 2. Индексацию не включить: возражают три независимых условия —
+        #    окружение, авторизация владельца и права в Вебмастере.
         from factory import validation
-        result = validation.validate("lords-01")
-        assert result.ok is False
-        assert any(b.field == "target_ref" for b in result.blockers)
+        forged = dict(pkg)
+        forged["seo_indexing_enabled"] = True
+        blockers: list = []
+        validation._check_analytics(forged, blockers, [])
+        reasons = [b.reason for b in blockers if b.field == "seo_indexing_enabled"]
+        assert len(reasons) >= 3, f"индексацию закрывает слишком мало условий: {reasons}"
+        # 3. Ворота домена при этом молчат — домен действительно есть.
+        gates.check_indexing({**pkg, "seo_indexing_enabled": False})
+        with pytest.raises(BlockedSeo):
+            gates.check_indexing({**pkg, "seo_indexing_enabled": True,
+                                  "canonical_url": None})
+
+    @pytest.mark.parametrize("site_id", PUBLISHED)
+    def test_a_published_package_is_ready_for_staging_only(self, site_id):
+        ok, missing = gates.ready_for_deployment(package(site_id))
+        assert ok is True and missing == []
+        target = package(site_id)["target_ref"]
+        from factory import inventory
+        entry = inventory.target(target)
+        assert entry["environments"] == ["staging"]
+        assert entry["production_capable"] is False
+
+    def test_validation_reports_the_gates_it_owns(self):
+        from factory import validation
+        # Пакет без домена и цели закрыт по цели выката.
+        unpublished = validation.validate("lords-04")
+        assert unpublished.ok is False
+        assert any(b.field == "target_ref" for b in unpublished.blockers)
+        # Пакет с доменом и целью закрыт правами на контент, а не отсутствием цели.
+        published = validation.validate("lords-01")
+        assert published.ok is False
+        assert not [b for b in published.blockers if b.field == "target_ref"]
+        assert any("rights" in b.field for b in published.blockers)
 
     def test_fixture_catalog_cannot_reach_production(self):
         """Стенд отказывается собираться для production по самому окружению."""

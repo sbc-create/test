@@ -19,6 +19,9 @@ def page(site, path, **kwargs):
         "h1": f"{site} {path}",
         "own_text": f"Собственный текст сайта {site} про страницу {path}. " * 12,
         "canonical": f"https://{site}{path}",
+        # В этой фикстуре идентификатор сайта служит и его хостом. CSU-7 больше
+        # не догадывается об этом сам, поэтому хост передаётся явно.
+        "site_host": site,
     }
     defaults.update(kwargs)
     return uniqueness.PageObservation(site_id=site, path=path, **defaults)
@@ -98,6 +101,29 @@ def test_identical_indexable_surface_is_blocked():
 def test_cross_domain_canonical_is_blocked():
     pages = [page("a", "/x/", canonical="https://b/x/"), page("b", "/y/")]
     assert "CSU-7" in rules(uniqueness.check(pages))
+
+
+def test_canonical_host_is_compared_not_substring_matched():
+    """Идентификатор пакета и хост сайта — разные вещи.
+
+    Прежняя проверка искала в canonical подстроку `//<site_id>`. Пока пакеты
+    назывались как хосты, это работало; с настоящим доменом правильный canonical
+    объявлялся бы чужим.
+    """
+    pages = [page("lords-01", "/x/", site_host="lordfilm47.space",
+                  canonical="https://lordfilm47.space/x/"),
+             page("lords-02", "/y/", site_host="lordserial33.biz",
+                  canonical="https://lordserial33.biz/y/")]
+    assert "CSU-7" not in rules(uniqueness.check(pages))
+
+
+def test_canonical_without_a_known_host_is_reported_not_passed():
+    """Забытый хост — невыполненная проверка, а не пройденная."""
+    pages = [page("a", "/x/", site_host=""), page("b", "/y/", site_host="")]
+    report = uniqueness.check(pages)
+    assert "CSU-7" in rules(report)
+    assert report.counts["canonical_host_unknown"] == 2
+    assert any("не передан" in f.message for f in report.critical)
 
 
 def test_noindex_pages_do_not_trigger_duplicates():

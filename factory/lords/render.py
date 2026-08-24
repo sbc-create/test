@@ -30,8 +30,10 @@ from factory.lords import plan as plan_mod
 from factory.lords import player as player_mod
 from factory.lords import theme as theme_mod
 
-#: Причина, по которой на стенде нет canonical. Записывается и в разметку, и в отчёт.
+#: Состояния canonical. Пишутся и в разметку, и в отчёт: «canonical нет» и
+#: «canonical ведёт на себя» — разные факты, и путать их нельзя.
 CANONICAL_ABSENT = "absent_no_domain"
+CANONICAL_SELF = "self"
 
 TYPE_LABELS = {
     fx.MOVIES: "Фильм",
@@ -149,6 +151,9 @@ class Meta:
     breadcrumbs: tuple = ()
     poster: str = ""
     jsonld: tuple = ()
+    #: Ставить ли canonical на себя. Выключается там, где устойчивого адреса
+    #: нет: выдача поиска зависит от запроса, и канонизировать её нечем.
+    canonical_self: bool = True
 
 
 def _nav_items(sections: list, current: str) -> str:
@@ -201,13 +206,19 @@ def _document(ctx: dict, meta: Meta, body: str) -> str:
         f"<title>{escape(full_title)}</title>",
         f'<meta name="description" content="{escape(meta.description)}">',
     ]
-    # Индексация стенда закрыта целиком: домена нет, а показывать поисковику
-    # тестовые данные нельзя ни при каких настройках профиля.
-    if meta.indexable and ctx["indexing_enabled"] and ctx["domain"]:
-        head.append(f'<link rel="canonical" href="https://{ctx["domain"]}{meta_path(ctx)}">')
-    else:
+    # Canonical и индексация — разные вопросы, и решаются они порознь.
+    # Canonical говорит, какой адрес считать основным; он осмыслен, как только
+    # известен домен, и не зависит от того, пускаем ли мы туда поисковик.
+    # Индексацию закрывает `noindex`, и на стенде он стоит всегда: каталог
+    # синтетический, а показывать поисковику тестовые записи нельзя ни при каких
+    # настройках профиля.
+    if ctx["canonical_base"] and meta.canonical_self:
+        head.append(
+            f'<link rel="canonical" href="{escape(ctx["canonical_base"] + meta_path(ctx))}">'
+        )
+    if not (meta.indexable and ctx["indexing_enabled"]):
         head.append('<meta name="robots" content="noindex, nofollow">')
-        head.append(f'<meta name="lords-canonical-state" content="{escape(ctx["canonical_state"])}">')
+    head.append(f'<meta name="lords-canonical-state" content="{escape(ctx["canonical_state"])}">')
     head += [
         f'<meta property="og:type" content="{"video.movie" if meta.page_type == "title" else "website"}">',
         f'<meta property="og:site_name" content="{escape(brand)}">',
@@ -822,6 +833,8 @@ def _search_page(ctx, catalog: fx.Catalog, kinds) -> Page:
         # Выдача поиска не индексируется никогда: содержимое зависит от запроса.
         indexable=False,
         breadcrumbs=(("Главная", "/"), ("Поиск", "")),
+        # И канонизировать её нечем: устойчивого адреса у результата нет.
+        canonical_self=False,
     )
     return _page(ctx, "/search/", meta, body)
 
@@ -1066,6 +1079,7 @@ def _schedule_page(ctx, catalog: fx.Catalog, kinds, indexable: bool) -> Page:
 def _context(package: dict, profile: dict, site_plan, player_state) -> dict:
     layout = theme_mod.layout_of(profile)
     brand = str(profile.get("label") or package.get("site_id"))
+    domain = str(package.get("domain") or "").strip()
     nav = [
         (page.section, page.path)
         for page in site_plan.pages
@@ -1077,9 +1091,10 @@ def _context(package: dict, profile: dict, site_plan, player_state) -> dict:
         "brand": brand,
         "mark": "".join(word[0] for word in brand.split()[:2]).upper() or "L",
         "language": str(package.get("language") or "ru"),
-        "domain": package.get("domain"),
+        "domain": domain,
         "indexing_enabled": bool(package.get("seo_indexing_enabled", False)),
-        "canonical_state": CANONICAL_ABSENT,
+        "canonical_base": f"https://{domain}" if domain else "",
+        "canonical_state": CANONICAL_SELF if domain else CANONICAL_ABSENT,
         "nav": [("home", "/")] + nav,
         "per_page": int(((package.get("seo") or {}).get("items_per_page")) or 24),
         "home_items": 12,
@@ -1284,6 +1299,7 @@ def render_site(
         "indexable_pages": len(indexable_paths),
         "sitemap_urls": len(indexable_paths) if (ctx["domain"] and ctx["indexing_enabled"]) else 0,
         "canonical_state": ctx["canonical_state"],
+        "canonical_base": ctx["canonical_base"],
         "robots": "Disallow: /" if not (ctx["domain"] and ctx["indexing_enabled"]) else "Allow",
         "content_types": {n: s.as_dict() for n, s in site_plan.type_states.items()},
         "active_types": kinds + (["collections"] if collections_on else []),

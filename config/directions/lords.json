@@ -1,28 +1,25 @@
 {
-  "version": 1,
+  "version": 2,
   "direction": "lords",
-  "status": "dns_verified_not_launched",
-  "note": "Домены направления Lords с подтверждённой делегацией. Это НЕ реестр живых тенантов: ни один домен не обслуживается, Nginx и сертификаты для них не настраивались. Запись существует, чтобы подтверждённый факт делегации не проверялся заново и не был потерян. Перевод в portfolio.json выполняет владелец после того, как появится renderable build (PR №11).",
+  "status": "dns_verified_staging_prepared",
+  "note": "Домены направления Lords. Сопоставление профилей закреплено владельцем (см. mapping_status). Три домена готовятся к публикации как fixture-staging: содержимое синтетическое, индексация закрыта, доступ под Basic Auth. Это не production и не реестр живых тенантов CDNVideoHub.",
   "verified_at": "2026-08-24",
   "origin_ipv4": "45.131.182.225",
+  "dns_verification": {
+    "method": "рекурсивный UDP-запрос к двум независимым публичным резолверам плюс запрос с RD=0 к NS зоны",
+    "tool": "tests/tools/dns_check.py",
+    "evidence": "var/artifacts/lords-dns.json",
+    "public_resolvers": ["1.1.1.1", "8.8.8.8"],
+    "doh_note": "DNS-over-HTTPS не использовался: агентский прокси отвечает на CONNECT к cloudflare-dns.com и dns.google кодом 403, и путь через него был бы имитацией проверки, а не проверкой.",
+    "result": "все шесть имён (три apex и три www) разрешаются в 45.131.182.225; расхождений между источниками нет"
+  },
   "secrets": {
     "api_token": "secret://cdnvideohub/lords/api-token",
     "publisher_id": "secret://cdnvideohub/lords/publisher-id",
-    "note": "Только ссылки. Значения не хранятся в git и не передаются в build. NEXT_PUBLIC_CDNVIDEOHUB_PUBLISHER_ID не создаётся: префикс NEXT_PUBLIC_ встраивает значение в клиентский бандл."
+    "basic_auth": "secret://lords/staging/basic-auth-htpasswd",
+    "note": "Только ссылки. Значения не хранятся в git и не передаются в build. Публичной переменной с Publisher ID не заводится: префикс NEXT_PUBLIC_ встраивает значение в клиентский бандл, откуда его забирает кто угодно."
   },
   "domains": [
-    {
-      "apex": "lordserial33.biz",
-      "www": "www.lordserial33.biz",
-      "nameservers": ["april.ns.cloudflare.com", "pablo.ns.cloudflare.com"],
-      "delegation_matches_expected": true,
-      "a_apex": "45.131.182.225",
-      "a_www": "45.131.182.225",
-      "mode": "dns-only",
-      "proposed_profile": "lords-01",
-      "proposed_profile_rationale": "Числовой суффикс сериального домена и зона .biz — ближе к сериальному каталогу. Предположение, не решение.",
-      "launched": false
-    },
     {
       "apex": "lordfilm47.space",
       "www": "www.lordfilm47.space",
@@ -31,8 +28,24 @@
       "a_apex": "45.131.182.225",
       "a_www": "45.131.182.225",
       "mode": "dns-only",
-      "proposed_profile": "lords-02",
-      "proposed_profile_rationale": "«film» в имени — полнометражное направление. Предположение, не решение.",
+      "site_id": "lords-01",
+      "profile": "lords-general",
+      "staging_port": 9101,
+      "runtime_root": "/srv/lords/lords-01",
+      "launched": false
+    },
+    {
+      "apex": "lordserial33.biz",
+      "www": "www.lordserial33.biz",
+      "nameservers": ["april.ns.cloudflare.com", "pablo.ns.cloudflare.com"],
+      "delegation_matches_expected": true,
+      "a_apex": "45.131.182.225",
+      "a_www": "45.131.182.225",
+      "mode": "dns-only",
+      "site_id": "lords-02",
+      "profile": "lords-new",
+      "staging_port": 9102,
+      "runtime_root": "/srv/lords/lords-02",
       "launched": false
     },
     {
@@ -43,16 +56,36 @@
       "a_apex": "45.131.182.225",
       "a_www": "45.131.182.225",
       "mode": "dns-only",
-      "proposed_profile": "lords-03",
-      "proposed_profile_rationale": "Отдельная пара NS — зона заведена независимо от двух других. Предположение, не решение.",
+      "site_id": "lords-03",
+      "profile": "lords-curated",
+      "staging_port": 9103,
+      "runtime_root": "/srv/lords/lords-03",
       "launched": false
     }
   ],
   "unassigned_profiles": ["lords-04"],
-  "mapping_status": "proposed_only",
-  "mapping_note": "Три домена и четыре профиля lords-01…lords-04: соответствие не выводится из имён доменов. Сопоставление выше — предложение для обсуждения, а не решение. Окончательное закрепление делает владелец; профиль lords-04 остаётся без домена.",
+  "unassigned_note": "lords-04 (профиль lords-genre) остаётся без домена и не публикуется. Пакет собирается и проверяется локально наравне с остальными, но ни домена, ни цели выката, ни записи в Nginx у него нет.",
+  "mapping_status": "owner_confirmed",
+  "mapping_confirmed_at": "2026-08-24",
+  "mapping_note": "Предыдущая редакция файла (PR №12) содержала предположение, выведенное из имён доменов, и было помечено proposed_only. Владелец закрепил другое соответствие: lordfilm47.space получил lords-01, а lordserial33.biz — lords-02, то есть первые два домена относительно предположения поменялись местами. Записано решение владельца, предположение отменено.",
+  "staging_policy": {
+    "content": "fixture/test",
+    "content_note": "Синтетический каталог фабрики. Не выдаётся за данные CDNVideoHub ни в разметке, ни в отчётах: каждая страница несёт meta lords-data-source=fixture/test и видимую плашку стенда.",
+    "indexing": "disabled",
+    "basic_auth": "required",
+    "x_robots_tag": "noindex, nofollow",
+    "robots_txt": "Disallow: /",
+    "sitemap": "без индексируемых loc",
+    "www_policy": "308 на соответствующий apex",
+    "unknown_host": "421",
+    "analytics": "не создаётся",
+    "webmaster": "не добавляется",
+    "player": "безопасная заглушка, статус BLOCKED_INPUT_CDNVIDEOHUB_CREDENTIALS"
+  },
   "blockers": [
-    "PR №11 не содержит renderable blueprint: публиковать домены нечем, а заглушка под видом готового сайта недопустима.",
-    "Nginx и сертификаты для Lords намеренно не настраивались."
+    "CDNVIDEOHUB_API_TOKEN и CDNVIDEOHUB_PUBLISHER_ID не переданы: живой контент и плеер закрыты.",
+    "Контракт Content API не передан: knowledge/cdnvideohub/content-api.yaml остаётся not_provided.",
+    "Rights manifest не передан: публикация настоящего контента невозможна, поэтому staging остаётся fixture.",
+    "production не авторизован ни в одном пакете: индексация, Метрика и Вебмастер закрыты воротами."
   ]
 }

@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 
 import pytest
 import yaml
@@ -19,6 +20,10 @@ from factory.lords import plan as lords_plan
 from factory.paths import PATHS
 
 LORDS_SITES = ("lords-01", "lords-02", "lords-03", "lords-04")
+#: Пакеты с утверждённым владельцем доменом. Публикуются как fixture-staging.
+PUBLISHED_SITES = ("lords-01", "lords-02", "lords-03")
+#: Пакет без домена: не публикуется.
+UNPUBLISHED_SITES = ("lords-04",)
 PROFILES = ("lords-general", "lords-new", "lords-curated", "lords-genre")
 
 
@@ -114,8 +119,9 @@ class TestFourPackages:
         assert package["portfolio_label"] == "Lords"
         assert package["blueprint"] == "lords"
 
-    @pytest.mark.parametrize("site_id", LORDS_SITES)
+    @pytest.mark.parametrize("site_id", UNPUBLISHED_SITES)
     def test_nothing_is_invented_in_place_of_missing_input(self, site_id):
+        """Непереданное остаётся пустым. Пакет без домена его не выдумывает."""
         package = _package(site_id)
         assert package["domain"] is None
         assert package["canonical_url"] is None
@@ -123,14 +129,65 @@ class TestFourPackages:
         assert package["production_authorized"] is False
         assert package["seo_indexing_enabled"] is False
 
+    @pytest.mark.parametrize("site_id", PUBLISHED_SITES)
+    def test_published_values_come_from_the_owner_not_from_a_guess(self, site_id):
+        """Домен взят из реестра направления, а не выведен из имени пакета.
+
+        Реестр хранит решение владельца (`mapping_status: owner_confirmed`).
+        Сверка идёт с ним, чтобы сопоставление нельзя было тихо поменять в
+        одном из двух мест.
+        """
+        registry = json.loads(
+            (PATHS.root / "config/directions/lords.json").read_text(encoding="utf-8"))
+        assert registry["mapping_status"] == "owner_confirmed"
+        entry = next(d for d in registry["domains"] if d["site_id"] == site_id)
+        package = _package(site_id)
+        assert package["domain"] == entry["apex"]
+        assert package["canonical_url"] == f"https://{entry['apex']}/"
+        assert package["aliases"] == [entry["www"]]
+        assert package["tenant"]["seo_profile"] == entry["profile"]
+        # Домен появился — production от этого не открылся.
+        assert package["production_authorized"] is False
+        assert package["seo_indexing_enabled"] is False
+        assert package["environment"] == "staging"
+
+    def test_the_unassigned_profile_stays_unassigned(self):
+        registry = json.loads(
+            (PATHS.root / "config/directions/lords.json").read_text(encoding="utf-8"))
+        assert registry["unassigned_profiles"] == ["lords-04"]
+        assigned = {d["site_id"] for d in registry["domains"]}
+        assert "lords-04" not in assigned
+        assert len(assigned) == 3, "доменов должно быть ровно три"
+
+    def test_every_published_site_has_its_own_domain_port_and_runtime_root(self):
+        """Три сайта не делят ни домен, ни порт, ни каталог."""
+        registry = json.loads(
+            (PATHS.root / "config/directions/lords.json").read_text(encoding="utf-8"))
+        domains = registry["domains"]
+        for field in ("apex", "www", "site_id", "profile", "staging_port", "runtime_root"):
+            values = [d[field] for d in domains]
+            assert len(set(values)) == len(values), f"поле {field} повторяется: {values}"
+
     @pytest.mark.parametrize("site_id", LORDS_SITES)
     def test_stored_readiness_matches_the_facts(self, site_id):
-        """Сохранённый статус, разошедшийся с фактом, — ложь, а не метаданные."""
+        """Сохранённый статус, разошедшийся с фактом, — ложь, а не метаданные.
+
+        `STAGING_READY` и `READY` — разные утверждения. Домен и цель открывают
+        стенд; production дополнительно требует авторизации владельца, и пока её
+        нет, писать `READY` нельзя.
+        """
         package = _package(site_id)
         stored = package["deployment_readiness"]["status"]
-        expected = ("BLOCKED_INPUT_DOMAIN_TARGET"
-                    if not package["domain"] or not package["target_ref"] else "READY")
+        if not package["domain"] or not package["target_ref"]:
+            expected = "BLOCKED_INPUT_DOMAIN_TARGET"
+        elif not package["production_authorized"]:
+            expected = "STAGING_READY"
+        else:
+            expected = "READY"
         assert stored == expected
+        if expected == "STAGING_READY":
+            blocked = package["deployment_readiness"]["production_blocked_by"]
+            assert blocked, "пустой список означал бы, что production ничем не закрыт"
 
     def test_each_site_uses_its_own_profile(self):
         profiles = [_package(s)["tenant"]["seo_profile"] for s in LORDS_SITES]
@@ -277,11 +334,40 @@ class TestSeoSeparationAndIsolation:
         report = gate.check_plans(plans)
         assert report.critical, "подложенный дубль не обнаружен"
 
-    def test_canonical_check_is_reported_as_skipped_not_passed(self):
+    def test_canonical_check_runs_once_domains_exist(self):
+        """Проверка CSU-7 выполняется, когда есть что проверять.
+
+        Раньше доменов не было ни у одного пакета, и проверка честно
+        отмечалась пропущенной. Домены переданы — и она обязана выполняться, а
+        не остаться пропущенной навсегда: пропуск, который никогда не
+        заканчивается, ничем не отличается от отсутствующей проверки.
+        """
         plans = [_fixture_plan(p) for p in _packages()]
         report = gate.check_plans(plans)
+        assert report.counts["canonical_check"] == "executed"
+        assert not report.findings, report.findings
+
+    def test_canonical_check_is_reported_as_skipped_when_there_is_no_domain(self):
+        """Без домена проверка отмечается пропущенной, а не пройденной."""
+        packages = [dict(p, domain=None, canonical_url=None) for p in _packages()]
+        report = gate.check_plans([_fixture_plan(p) for p in packages])
         assert report.counts["canonical_check"] == "skipped"
         assert "не выполнялась" in report.counts["canonical_check_reason"]
+
+    def test_canonical_pointing_at_a_neighbour_is_caught(self):
+        """Ворота обязаны падать от подложенного чужого canonical.
+
+        Проверка, которую невозможно уронить, ничего не доказывает.
+        """
+        plans = [_fixture_plan(p) for p in _packages()]
+        victim = next(plan for plan in plans if plan.site_id == "lords-01")
+        page = next(p for p in victim.pages if p.indexable and p.canonical)
+        victim.pages[victim.pages.index(page)] = replace(
+            page, canonical="https://lordserial33.biz/catalog/")
+        report = gate.check_plans(plans)
+        assert [f for f in report.findings if f.rule == "CSU-7"], (
+            "чужой canonical прошёл ворота незамеченным"
+        )
 
     def test_editorial_text_lives_in_the_profile_not_in_a_brand_template(self):
         profiles = lords_plan.load_profiles()
@@ -306,13 +392,34 @@ class TestSeoSeparationAndIsolation:
             comments = _package(site_id)["comments"]
             assert comments["enabled"] and comments["premoderation"]
 
-    def test_indexing_is_off_and_no_production_url_is_planned(self):
+    def test_indexing_is_off_and_the_sitemap_stays_empty(self):
+        """Домен появился — индексация от этого не включилась.
+
+        Это и есть главный риск шага: получив домен, пакет выглядит готовым к
+        выдаче. Sitemap обязан остаться пустым, пока индексация выключена.
+        """
         for package in _packages():
             plan = _fixture_plan(package)
             assert plan.sitemap_paths == [], "sitemap заполняется при выключенной индексации"
-            assert all(not page.canonical for page in plan.pages), (
-                "canonical построен на выдуманном домене"
-            )
+            assert package["seo_indexing_enabled"] is False
+
+    def test_canonical_never_leaves_its_own_domain(self):
+        """У каждого сайта canonical ведёт только на его собственный домен."""
+        own = {p["site_id"]: p["domain"] for p in _packages()}
+        for package in _packages():
+            plan = _fixture_plan(package)
+            domain = own[plan.site_id]
+            foreign = {d for d in own.values() if d and d != domain}
+            for page in plan.pages:
+                if not page.canonical:
+                    continue
+                assert page.canonical.startswith(f"https://{domain}/"), page.canonical
+                for other in foreign:
+                    assert other not in page.canonical, f"{plan.site_id}{page.path}: {other}"
+
+    def test_a_package_without_a_domain_plans_no_canonical(self):
+        plan = _fixture_plan(_package("lords-04"))
+        assert all(not page.canonical for page in plan.pages)
 
 
 # --------------------------------------------------------------------------

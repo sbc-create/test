@@ -6,19 +6,24 @@ blueprint: lords
 portfolio: lords
 portfolio_label: Lords
 fixture: false
-domain: null
-aliases: []
-canonical_url: null
+domain: lordfilm47.space
+aliases:
+- www.lordfilm47.space
+canonical_url: https://lordfilm47.space/
 environment: staging
 production_authorized: false
 seo_indexing_enabled: false
-target_ref: null
+target_ref: lords-staging-control-01
 ssh_host_ref: null
 dns_zone_ref: null
 network_allowlist: []
 deployment_readiness:
-  status: BLOCKED_INPUT_DOMAIN_TARGET
-  reason: не переданы домен и цель выката
+  status: STAGING_READY
+  reason: домен и цель выката переданы; публикуется как fixture-staging под Basic Auth с закрытой индексацией
+  production_blocked_by:
+  - BLOCKED_INPUT_CDNVIDEOHUB_CREDENTIALS
+  - BLOCKED_RIGHTS
+  - production_authorized не подтверждён владельцем
 content_types:
   movies: true
   series: true

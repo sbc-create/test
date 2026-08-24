@@ -48,6 +48,8 @@ class PlannedPage:
     description: str = ""
     own_text: str = ""
     canonical: str = ""
+    #: Собственный хост сайта. Без него CSU-7 не с чем сравнивать canonical.
+    site_host: str = ""
 
     def observation(self, site_name: str = "") -> PageObservation:
         return PageObservation(
@@ -61,6 +63,7 @@ class PlannedPage:
             own_text=self.own_text,
             canonical=self.canonical,
             site_name=site_name,
+            site_host=self.site_host,
         )
 
     def as_dict(self) -> dict:
@@ -248,6 +251,7 @@ def build_plan(
             description=str(text.get("description", "")) if owned else "",
             own_text=str(text.get("intro", "")) if owned else "",
             canonical=canonical if owned else "",
+            site_host=str(domain or ""),
         ))
 
     return plan

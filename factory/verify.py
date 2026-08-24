@@ -414,6 +414,9 @@ def cross_site_uniqueness(base_url: str, package: dict, out_dir: Path) -> Report
             pages.append(uniqueness.PageObservation(
                 site_id=host, path=path, page_type=_page_type_of(path),
                 site_name=_site_name_of(body),
+                # Здесь идентификатор сайта и есть его хост, но CSU-7 больше не
+                # догадывается об этом сам: хост передаётся явно.
+                site_host=host,
                 # Пока индексация сайта выключена, все страницы отдают noindex.
                 # Сравнивать при этом «нечего» неверно: вопрос дубля решается до
                 # включения переключателя, поэтому берётся намерение профиля.
