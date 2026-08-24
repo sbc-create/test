@@ -3,8 +3,14 @@
 // то же, что поедет на сервер, а не рендерер из репозитория.
 const { defineConfig, devices } = require('@playwright/test');
 
-const CHROMIUM = process.env.FACTORY_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
-const launchOptions = { executablePath: CHROMIUM };
+// Путь к браузеру не фиксируется в коде. Ревизия chromium привязана к версии
+// @playwright/test и меняется вместе с ней, а захардкоженный путь протухает
+// молча: 1.62.1 ждёт ревизию 1234 в chrome-linux64/, прежнее значение
+// указывало на 1194 в chrome-linux/ — каталога с таким именем уже нет.
+// Playwright сам находит браузер в PLAYWRIGHT_BROWSERS_PATH; FACTORY_CHROMIUM
+// остаётся ручным переопределением для нестандартных хостов.
+const CHROMIUM = process.env.FACTORY_CHROMIUM;
+const launchOptions = CHROMIUM ? { executablePath: CHROMIUM } : {};
 
 module.exports = defineConfig({
   testDir: './tests/e2e-lords-staging',

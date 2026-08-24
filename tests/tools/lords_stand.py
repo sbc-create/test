@@ -12,10 +12,11 @@
 from __future__ import annotations
 
 import json
+import socketserver
 import sys
 import threading
 from pathlib import Path
-from wsgiref.simple_server import WSGIRequestHandler, make_server
+from wsgiref.simple_server import WSGIRequestHandler, WSGIServer, make_server
 
 # Скрипт запускают по пути к файлу, поэтому корень репозитория в sys.path не
 # попадает сам: без этой строки стенд не находит собственную фабрику.
@@ -37,11 +38,29 @@ class QuietHandler(WSGIRequestHandler):
         pass
 
 
+class ThreadingWSGIServer(socketserver.ThreadingMixIn, WSGIServer):
+    """Стенд, обслуживающий запросы параллельно.
+
+    `wsgiref.simple_server` однопоточен: один запрос в единицу времени на сайт.
+    Браузер держит keep-alive соединение и параллельно тянет подресурсы, поэтому
+    занятое соединение блокировало весь сайт — приёмка падала по таймауту
+    `page.goto`, каждый раз на новом тесте. Отказ плавал по набору и выглядел
+    как дефект страницы, хотя дефект был в стенде.
+
+    Потоки демонические: стенд останавливают снаружи, дожидаться незакрытых
+    соединений на выходе не нужно.
+    """
+
+    daemon_threads = True
+
+
 def main() -> int:
     servers = []
     for site_id, port in PORTS.items():
         app = preview_mod.application(site_id)
-        server = make_server(HOST, port, app, handler_class=QuietHandler)
+        server = make_server(
+            HOST, port, app, server_class=ThreadingWSGIServer, handler_class=QuietHandler
+        )
         servers.append(server)
         threading.Thread(target=server.serve_forever, daemon=True).start()
         print(json.dumps({
