@@ -1,0 +1,248 @@
+# Контракт официальных API Яндекс.Метрики и Яндекс.Вебмастера.
+#
+# Замороженная выжимка официальной документации Яндекса. Единственный вход для
+# `factory/analytics/`: любой endpoint, поле или значение, которых здесь нет,
+# считается непереданным (BLOCKED_INPUT), а не «очевидным по аналогии».
+# Неофициальные пересказы, блог-посты и SDK третьих лиц источником не являются.
+#
+# Правки — только через `/research-freeze` с обновлением SOURCE_REGISTRY.yaml и
+# `python3 -m factory knowledge freeze`.
+schema_version: 1
+retrieved_at: "2026-08-23T18:00:00Z"
+retrieved_by: "claude-code (задание: полная автоматизация Метрики и Вебмастера)"
+
+authorization:
+  # Проверено по https://yandex.ru/dev/metrika/en/intro/authorization
+  header: "Authorization"
+  value_template: "OAuth {token}"
+  note: >-
+    Значение подставляется только в момент формирования запроса и никогда не
+    сохраняется в объект запроса, лог, аудит и артефакт. Альтернативная передача
+    токена в query-параметре в документации не описана и не используется.
+
+metrika:
+  base_url: "https://api-metrika.yandex.net"
+  management:
+    list_counters:
+      method: GET
+      path: "/management/v1/counters"
+      # Официально описанные параметры. Используются только эти.
+      query:
+        - counter_ids       # integer[] — фильтр по конкретным ID
+        - field             # csv: goals,mirrors,grants,filters,operations,counter_flags
+        - offset            # 1-индексированное смещение, по умолчанию 1
+        - per_page          # по умолчанию 1000
+        - permission        # own | view | edit
+        - search_string     # поиск по ID, имени, сайту и зеркалам
+        - status            # Active | Deleted, по умолчанию Active
+        - type              # simple | partner
+      response:
+        rows: "int — всего совпадений без учёта пагинации"
+        counters: "CounterFull[]"
+    get_counter:
+      method: GET
+      path: "/management/v1/counter/{counterId}"
+      query: [field]
+    edit_counter:
+      # Прочитано после того, как первый боевой запуск создал три счётчика с
+      # включённым по умолчанию Вебвизором: выключать его нечем, если не знать
+      # endpoint правки.
+      method: PUT
+      path: "/management/v1/counter/{counterId}"
+      body_root: counter          # {"counter": CounterEdit}
+      partial_update: true        # передаются только изменяемые поля
+    add_counter:
+      method: POST
+      path: "/management/v1/counters"
+      query: [field, ytm]
+      body_root: counter          # {"counter": CounterFull}
+      required_fields:
+        - name                    # string, ≤255 символов
+        - site2                   # {"site": "<домен>"} — основной домен
+      optional_fields_used:
+        # code_options.visor: false — единственный способ создать счётчик с
+        # выключенной записью сессий.
+        - code_options
+        # gdpr_agreement_accepted намеренно не входит в набор по умолчанию:
+        # принятие соглашения об обработке данных — юридическое действие
+        # владельца аккаунта, а не фабрики. См. knowledge/DECISIONS.md.
+      optional_fields_not_used:
+        # Устаревший объект webvisor не передаётся: PUT с ним отвечает 400.
+        - webvisor
+        - counter_flags
+        - filters
+        - operations
+      response: "{\"counter\": CounterFull} с присвоенным id"
+  counter_full:
+    # Поля, на которые опирается фабрика. Остальные читаются, но не трактуются.
+    id: "int — публичный идентификатор счётчика"
+    name: "string"
+    status: "Active | Deleted"
+    site2: "{\"site\": \"<домен>\"}"
+    mirrors2: "[{\"site\": \"<домен>\"}] — зеркала; фабрика их не создаёт"
+    goals: "Goal[] — приходит при field=goals"
+    webvisor: "object — устаревший; управлять записью сессий через него нельзя"
+    code_options: "object — здесь поле visor: переключатель записи сессий"
+    gdpr_agreement_accepted: "boolean"
+    create_time: "datetime"
+  code_options:
+    # Настройки кода счётчика. Именно здесь живёт переключатель записи сессий.
+    # Поля и типы по описанию объекта counter в Management API.
+    async: "boolean — асинхронный код счётчика"
+    informer: "InformerOptionsE — настройки информера"
+    visor: "boolean — запись и анализ поведения пользователей (Вебвизор)"
+    track_hash: "boolean — учёт хеша в адресной строке"
+    xml_site: "boolean — поддержка XML-документов"
+    clickmap: "boolean — сбор данных для карты кликов"
+    ecommerce: "boolean — сбор данных электронной коммерции"
+    alternative_cdn: "boolean — работа в регионах с ограниченным доступом"
+    ytm: "boolean — используется ли система управления тегами"
+  webvisor_switch: code_options.visor
+  # ЕДИНСТВЕННЫЙ управляющий признак Вебвизора. Значение по умолчанию у поля —
+  # «выключено», но у счётчика, созданного без явного code_options, Метрика
+  # включает запись сессий: проверено боевым созданием трёх счётчиков
+  # 2026-08-23. Поэтому «не передавать поле» НЕ равно «Вебвизор выключен».
+  webvisor_deprecated_fields:
+    # Объект webvisor существует и приходит в ответе, но управлять записью
+    # сессий через него нельзя. PUT с `webvisor.arch_enabled` отвечает
+    # HTTP 400 «Could not read JSON … path: counter.webvisor.arch_enabled»
+    # (проверено боевым запросом 2026-08-23). Поле устаревшее и игнорируется.
+    - webvisor.arch_enabled
+    - webvisor.wv_forms
+  goals:
+    add_goal:
+      method: POST
+      path: "/management/v1/counter/{counterId}/goals"
+      body_root: goal
+      required_fields: [name, type, conditions]
+    types:
+      - action            # JavaScript-событие — единственный тип, который использует фабрика
+      - chat
+      - email
+      - file
+      - messenger
+      - number
+      - payment_system
+      - phone
+      - search
+      - social
+      - step
+      - url
+      - visit_duration
+    javascript_goal:
+      type: action
+      conditions: "[{\"type\": \"exact\", \"url\": \"<идентификатор события>\"}]"
+      name_limit: 255
+    read_via: "GET /management/v1/counter/{counterId}?field=goals"
+  reporting:
+    table:
+      method: GET
+      path: "/stat/v1/data"
+      query:
+        - ids               # csv ID счётчиков (обязателен)
+        - metrics           # csv, ≤20 (обязателен)
+        - dimensions        # csv, ≤10
+        - date1             # YYYY-MM-DD, по умолчанию 6daysAgo
+        - date2             # YYYY-MM-DD, по умолчанию today
+        - filters
+        - sort
+        - limit             # ≤100000, по умолчанию 100
+        - offset            # с 1
+        - accuracy
+      response_fields: [query, data, totals, total_rows, total_rows_rounded, sampled, sample_share]
+    metrics_used:
+      visitors: "ym:s:users"
+      visits: "ym:s:visits"
+      page_depth: "ym:s:pageDepth"
+      avg_visit_duration: "ym:s:avgVisitDurationSeconds"
+      bounce_rate: "ym:s:bounceRate"
+    dimensions_used:
+      traffic_source: "ym:s:lastsignTrafficSource"
+      search_engine: "ym:s:lastsignSearchEngine"
+      landing_page: "ym:s:startURLPath"
+      page_url: "ym:pv:URLPath"
+    pageview_metrics_used:
+      pageviews: "ym:pv:pageviews"
+    goal_metrics:
+      # Шаблоны из https://yandex.com/dev/metrika/en/stat/metrics/visits/conversions
+      # <goal_id> подставляется числовым идентификатором цели, который Метрика
+      # присваивает при создании. До создания целей эти метрики не существуют —
+      # и отчёт обязан писать «не измерено», а не ноль.
+      reaches: "ym:s:goal<goal_id>reaches"
+      visits: "ym:s:goal<goal_id>visits"
+      users: "ym:s:goal<goal_id>users"
+      conversion_rate: "ym:s:goal<goal_id>conversionRate"
+    prefix_rule: >-
+      Метрики визитов используют префикс ym:s:, просмотров — ym:pv:.
+      Смешивать префиксы в одном запросе нельзя.
+
+webmaster:
+  base_url: "https://api.webmaster.yandex.net"
+  api_version: v4
+  user:
+    method: GET
+    path: "/v4/user"
+    note: "Возвращает user_id, обязательный для всех остальных ресурсов."
+  hosts:
+    list:
+      method: GET
+      path: "/v4/user/{user-id}/hosts"
+    add:
+      method: POST
+      path: "/v4/user/{user-id}/hosts"
+      body: "{\"host_url\": \"https://example.tld\"}"
+      response_201: "{\"host_id\": \"https:example.tld:443\"}"
+      errors:
+        "403": HOSTS_LIMIT_EXCEEDED
+        "409": HOST_ALREADY_ADDED
+  verification:
+    get:
+      method: GET
+      path: "/v4/user/{user-id}/hosts/{host-id}/verification"
+      response_fields:
+        verification_state: [NONE, VERIFIED, IN_PROGRESS, VERIFICATION_FAILED, INTERNAL_ERROR]
+        verification_uin: "string — код подтверждения"
+        verification_type: "применённый способ"
+        latest_verification_time: datetime
+        fail_info: "детали неуспеха"
+        applicable_verifiers: "доступные способы для этого сайта"
+    start:
+      method: POST
+      path: "/v4/user/{user-id}/hosts/{host-id}/verification"
+      query:
+        verification_type: [META_TAG, HTML_FILE, DNS]
+    markers:
+      META_TAG: '<meta name="yandex-verification" content="{uin}" />'
+      HTML_FILE:
+        filename: "yandex_{uin}.html"
+        location: "корень сайта"
+        body: "Verification: {uin}"
+  reporting:
+    # Полный перечень ресурсов v4 сверен по concepts/getting-started.
+    summary: "GET /v4/user/{user-id}/hosts/{host-id}/summary"
+    indexing_history: "GET /v4/user/{user-id}/hosts/{host-id}/indexing/history"
+    indexing_samples: "GET /v4/user/{user-id}/hosts/{host-id}/indexing/samples"
+    search_urls_in_search: "GET /v4/user/{user-id}/hosts/{host-id}/search-urls/in-search/history"
+    search_urls_in_search_samples: "GET /v4/user/{user-id}/hosts/{host-id}/search-urls/in-search/samples"
+    # События появления и исчезновения страниц из поиска. Именно здесь Яндекс
+    # называет причину, по которой страница выпала: отдельного ресурса
+    # «исключённые страницы» в API v4 нет, и выдумывать его нельзя.
+    search_urls_events: "GET /v4/user/{user-id}/hosts/{host-id}/search-urls/events/samples"
+    search_urls_events_history: "GET /v4/user/{user-id}/hosts/{host-id}/search-urls/events/history"
+    popular_queries: "GET /v4/user/{user-id}/hosts/{host-id}/search-queries/popular"
+    external_links: "GET /v4/user/{user-id}/hosts/{host-id}/links/external/samples"
+    broken_internal_links: "GET /v4/user/{user-id}/hosts/{host-id}/links/internal/broken/samples"
+    diagnostics: "GET /v4/user/{user-id}/hosts/{host-id}/diagnostics"
+    sitemaps: "GET /v4/user/{user-id}/hosts/{host-id}/sitemaps"
+    sqi_history: "GET /v4/user/{user-id}/hosts/{host-id}/sqi_history"
+
+not_documented_here:
+  # Честный список того, чего в выжимке нет. Использовать эти возможности
+  # нельзя, пока соответствующая страница документации не прочитана и не внесена.
+  - >-
+    Отправка sitemap (`user-added-sitemaps`) и переобход (`recrawl/queue`):
+    ресурсы существуют и перечислены в документации, но заданием запрещены до
+    отдельного разрешения владельца, поэтому их поля не читались и фабрика их
+    не вызывает.
+  - "Управление зеркалами (mirrors2): фабрика намеренно не объединяет домены."
+  - "Удаление счётчика и цели: фабрика их не удаляет."

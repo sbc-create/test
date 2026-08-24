@@ -210,3 +210,129 @@ sources:
       намеренно не приведена и должна быть взята из docs/CDNVIDEOHUB-METADATA-CONTRACT.md;
       этого документа в репозитории нет, поэтому адаптер отвечает BLOCKED_INPUT.
       Сверка с сайтом провайдера не выполнялась: egress до player.cdnvideohub.com закрыт.
+
+  # ---------- официальная документация Яндекса (задание об автоматизации аналитики) ----------
+  # Прочитана из этой сессии: egress до yandex.ru/yandex.com открыт, TCP 443 до
+  # api-metrika.yandex.net и api.webmaster.yandex.net проверен. Выжимка —
+  # knowledge/YANDEX_ANALYTICS_CONTRACT.yaml. Неофициальные пересказы не использовались.
+  - id: SRC-YA-METRIKA-AUTH
+    kind: official_documentation
+    owner: Yandex
+    url: https://yandex.ru/dev/metrika/en/intro/authorization
+    retrieved_at: "2026-08-23T18:00:00Z"
+    purpose: "формат заголовка авторизации Метрики"
+    status: approved
+    conclusions:
+      - "Заголовок ровно один: `Authorization: OAuth <token>`."
+      - "Передача токена query-параметром в документации не описана — не используется."
+  - id: SRC-YA-METRIKA-COUNTERS-LIST
+    kind: official_documentation
+    owner: Yandex
+    url: https://yandex.ru/dev/metrika/en/management/openapi/counter/counters
+    retrieved_at: "2026-08-23T18:00:00Z"
+    purpose: "поиск существующего счётчика по домену — основа идемпотентности"
+    status: approved
+    conclusions:
+      - "GET /management/v1/counters; параметры status, per_page, offset, field, search_string."
+      - "Ответ: {rows, counters[]}; у счётчика есть id, name, status, site2.site, mirrors2, webvisor, goals."
+      - "offset начинается с 1, per_page по умолчанию 1000 — пагинация обязательна для честного «не найдено»."
+  - id: SRC-YA-METRIKA-COUNTER-ADD
+    kind: official_documentation
+    owner: Yandex
+    url: https://yandex.ru/dev/metrika/en/management/openapi/counter/addCounter
+    retrieved_at: "2026-08-23T18:00:00Z"
+    purpose: "создание счётчика"
+    status: approved
+    conclusions:
+      - "POST /management/v1/counters, тело {\"counter\": {...}}; обязательны name и site2.site."
+      - "gdpr_agreement_accepted — необязательное поле; фабрика по умолчанию его не отправляет."
+      - "webvisor — необязательный объект; фабрика его не отправляет, Вебвизор остаётся выключенным."
+  - id: SRC-YA-METRIKA-GOAL-ADD
+    kind: official_documentation
+    owner: Yandex
+    url: https://yandex.ru/dev/metrika/en/management/openapi/goal/addGoal
+    retrieved_at: "2026-08-23T18:00:00Z"
+    purpose: "создание JavaScript-целей"
+    status: approved
+    conclusions:
+      - "POST /management/v1/counter/{counterId}/goals, тело {\"goal\": {...}}."
+      - "JavaScript-событие — type: action с conditions[{type: exact, url: <идентификатор>}]."
+      - "Всего 13 типов целей; фабрика использует только action."
+  - id: SRC-YA-METRIKA-STAT
+    kind: official_documentation
+    owner: Yandex
+    url: https://yandex.com/dev/metrika/en/stat/openapi/data
+    retrieved_at: "2026-08-23T18:00:00Z"
+    purpose: "ежедневный read-only сбор показателей"
+    status: approved
+    conclusions:
+      - "GET https://api-metrika.yandex.net/stat/v1/data; обязательны ids и metrics."
+      - "Ответ содержит data, totals, total_rows, sampled, sample_share."
+      - "Префиксы ym:s: (визиты) и ym:pv: (просмотры) нельзя смешивать в одном запросе."
+  - id: SRC-YA-WEBMASTER-HOSTS-ADD
+    kind: official_documentation
+    owner: Yandex
+    url: https://yandex.ru/dev/webmaster/doc/en/reference/hosts-add-site
+    retrieved_at: "2026-08-23T18:00:00Z"
+    purpose: "добавление сайта в Вебмастер"
+    status: approved
+    conclusions:
+      - "POST /v4/user/{user-id}/hosts с телом {\"host_url\": \"…\"}; ответ 201 {\"host_id\": …}."
+      - "409 HOST_ALREADY_ADDED — это идемпотентность, а не ошибка."
+      - "user-id берётся из GET /v4/user и обязателен для всех ресурсов."
+  - id: SRC-YA-WEBMASTER-VERIFICATION
+    kind: official_documentation
+    owner: Yandex
+    url: https://yandex.com/dev/webmaster/doc/en/reference/host-verification-get
+    retrieved_at: "2026-08-23T18:00:00Z"
+    purpose: "маркер и статус подтверждения прав"
+    status: approved
+    conclusions:
+      - "GET …/verification возвращает verification_state, verification_uin, applicable_verifiers."
+      - "verification_state: NONE | VERIFIED | IN_PROGRESS | VERIFICATION_FAILED | INTERNAL_ERROR."
+      - "Ни одно из этих значений не эквивалентно «сайт проиндексирован»."
+  - id: SRC-YA-WEBMASTER-VERIFY-EXAMPLE
+    kind: official_documentation
+    owner: Yandex
+    url: https://yandex.ru/dev/webmaster/doc/en/concepts/verification
+    retrieved_at: "2026-08-23T18:00:00Z"
+    purpose: "точный вид маркера подтверждения"
+    status: approved
+    conclusions:
+      - "META_TAG: <meta name=\"yandex-verification\" content=\"<код>\" /> в head главной страницы."
+      - "HTML_FILE: файл yandex_<код>.html в корне сайта с телом «Verification: <код>»."
+      - "Запуск проверки: POST …/verification?verification_type=META_TAG|HTML_FILE|DNS."
+  - id: SRC-YA-WEBMASTER-RESOURCES
+    kind: official_documentation
+    owner: Yandex
+    url: https://yandex.com/dev/webmaster/doc/en/concepts/getting-started
+    retrieved_at: "2026-08-23T18:00:00Z"
+    purpose: "перечень read-only ресурсов для ежедневного отчёта"
+    status: approved
+    conclusions:
+      - "summary, indexing/history, search-urls/in-search/history, search-queries/popular, links/external/samples, diagnostics, sitemaps."
+  - id: SRC-USER-YANDEX-OAUTH
+    kind: credential
+    owner: user
+    status: provided
+    received_at: "2026-08-23"
+    provided:
+      - "OAuth-токен размещён владельцем на claude-control-01 в файле root:root 0600 вне репозитория"
+      - "владелец вручную подтвердил METRIKA_API=200 и WEBMASTER_API=200"
+    not_provided:
+      - "чтение файла пользователю claude: каталог секретов закрыт (drwx------ root:root)"
+    required_for: "реальные вызовы Management API из-под сервисной учётной записи"
+    note: >-
+      Значение токена в сессию не передавалось, не запрашивалось и не выводилось.
+      Client secret для работы не нужен и не запрашивался.
+  - id: SRC-YA-METRIKA-COUNTER-EDIT
+    kind: official_documentation
+    owner: Yandex
+    url: https://yandex.com/dev/metrika/en/management/openapi/counter/editCounter
+    retrieved_at: "2026-08-23T20:55:00Z"
+    purpose: "выключение Вебвизора у уже созданного счётчика"
+    status: approved
+    conclusions:
+      - "PUT /management/v1/counter/{counterId}, тело {\"counter\": CounterEdit}."
+      - "Частичное обновление поддерживается: передаются только изменяемые поля."
+      - "WebvisorOptions: urls, arch_enabled, arch_type, load_player_type, wv_version, wv_forms."

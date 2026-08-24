@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Точка входа фабрики. Использует виртуальное окружение репозитория, когда оно есть.
+#
+# Существует по той же причине, что и bin/seo-operator, плюс одна своя: systemd
+# unit'ы обязаны запускаться подготовленным интерпретатором. Голый
+# /usr/bin/python3 работал случайно — ровно до тех пор, пока jsonschema и
+# PyYAML оказывались установлены системно. На чистом хосте служба упала бы на
+# ImportError уже после того, как объявила себя настроенной.
+#
+# FACTORY_REQUIRE_VENV=1 запрещает откат на системный python. Unit'ы выставляют
+# эту переменную: служба, которой нечем работать, должна отказаться сразу и
+# внятно, а не выяснять это на середине.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+PY="${PY:-.venv/bin/python}"
+if [ ! -x "$PY" ]; then
+  if [ "${FACTORY_REQUIRE_VENV:-0}" = "1" ]; then
+    echo "bin/factory: не найдено окружение $PWD/$PY, а FACTORY_REQUIRE_VENV=1." >&2
+    echo "Создай его: python3 -m venv .venv && .venv/bin/pip install -r requirements.txt" >&2
+    exit 78   # EX_CONFIG: ошибка конфигурации, а не логики
+  fi
+  PY="$(command -v python3)"
+fi
+
+exec "$PY" -m factory "$@"

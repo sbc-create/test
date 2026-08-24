@@ -52,6 +52,12 @@ VALUE_PATTERNS: tuple[re.Pattern[str], ...] = (
     re.compile(r"\bAKIA[0-9A-Z]{16}\b"),
     re.compile(r"\bgh[pousr]_[A-Za-z0-9]{20,}\b"),
     re.compile(r"\bvk1\.a\.[A-Za-z0-9_\-]{20,}"),
+    # Яндекс OAuth: современная форма `y0_…`/`y0__…` и историческая `AQAA…`.
+    # Форма взята из вида выданных токенов, а не из документации, поэтому это
+    # дополнительная сетка поверх register_secret, а не замена ей.
+    re.compile(r"\by0_+[A-Za-z0-9_\-]{20,}"),
+    re.compile(r"\bAQAA[A-Za-z0-9_\-]{20,}"),
+    re.compile(r"(?i)\bOAuth\s+[A-Za-z0-9_\-.]{20,}"),  # заголовок Authorization целиком
     re.compile(r"\bey[A-Za-z0-9_\-]{10,}\.[A-Za-z0-9_\-]{10,}\.[A-Za-z0-9_\-]{10,}\b"),  # JWT
     re.compile(r"://[^/\s:@]+:([^/\s@]+)@"),  # credentials в URL
 )
@@ -65,6 +71,32 @@ KEY_VALUE_RE = re.compile(
 
 #: `secret_ref` — это ссылка, а не секрет: его прятать не нужно и вредно.
 SAFE_REF_RE = re.compile(r"^(env|file|vault|secret):[A-Za-z0-9_./-]+$")
+
+
+#: Значения, которые процесс узнал во время работы: прочитанный из файла токен,
+#: ответ secret-хранилища. Переменной окружения у них нет, а в артефакт они
+#: попасть не должны. Реестр живёт только в памяти процесса и никуда не пишется.
+_REGISTERED_SECRETS: set[str] = set()
+
+
+def register_secret(value: str) -> None:
+    """Запоминает фактическое значение секрета, чтобы `redact` вырезал его буквально.
+
+    Вызывается тем, кто секрет прочитал, сразу после чтения. Короткие значения
+    игнорируются: вырезать из логов строку в пять символов опаснее, чем оставить.
+    """
+    if value and len(value) >= 8:
+        _REGISTERED_SECRETS.add(value)
+
+
+def registered_secret_count() -> int:
+    """Сколько значений под защитой. Сами значения наружу не отдаются никогда."""
+    return len(_REGISTERED_SECRETS)
+
+
+def forget_secrets() -> None:
+    """Очистка реестра. Нужна тестам и ротации, в рабочем пути не вызывается."""
+    _REGISTERED_SECRETS.clear()
 
 
 def _env_secret_values() -> list[str]:
@@ -87,7 +119,7 @@ def redact(text: str, extra_values: Iterable[str] = ()) -> str:
     if not text:
         return text
     result = text
-    for value in list(extra_values) + _env_secret_values():
+    for value in list(extra_values) + sorted(_REGISTERED_SECRETS) + _env_secret_values():
         if value and len(value) >= 8:
             result = result.replace(value, PLACEHOLDER)
     for pattern in VALUE_PATTERNS:

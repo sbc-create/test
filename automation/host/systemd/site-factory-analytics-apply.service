@@ -1,0 +1,57 @@
+[Unit]
+Description=site-factory: create or reuse the Yandex Metrika counters and their goals
+Documentation=file:///srv/site-factory/repo/docs/YANDEX_ANALYTICS.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/srv/site-factory/repo
+EnvironmentFile=/etc/site-factory/environment
+
+# Секрет выдаётся механизмом systemd, а не переменной окружения и не правом на
+# файл: unit читает root-owned файл от имени PID 1 и кладёт копию в tmpfs,
+# доступную только этому процессу. Значение не появляется ни в окружении, ни в
+# `systemctl show`, ни в журнале.
+LoadCredential=yandex_oauth:/etc/site-factory/secrets/yandex_oauth_token
+# Путь к credential задаётся через %n (полное имя unit'а), а НЕ через %d.
+# Специфер %d («каталог credentials») появился в systemd 250, а Ubuntu 22.04
+# везёт 249: там строка не разворачивается и остаётся literal-ом «%d/...»,
+# после чего сервис падает на «файл секрета не найден». %n поддерживается
+# давно и на 249 разворачивается правильно.
+# Строка при этом подстраховочная: без неё фабрика возьмёт путь из
+# CREDENTIALS_DIRECTORY, который systemd выставляет сам.
+Environment=YANDEX_OAUTH_TOKEN_FILE=/run/credentials/%n/yandex_oauth
+
+# --confirm-writes включается здесь и только здесь: единственная команда
+# фабрики, которой разрешено создавать счётчики. Повторный запуск дубля не
+# создаёт — провайдер сперва ищет счётчик по точному домену.
+#
+# Два порядка важны и оба однажды были нарушены:
+#   1. `--json` — глобальный флаг верхнего уровня, он объявлен на корневом
+#      парсере и обязан стоять ДО имени подкоманды. В форме
+#      `... analytics apply --confirm-writes --json` argparse отвечает
+#      «unrecognized arguments: --json» и выходит с кодом 2.
+#   2. Запуск идёт через bin/factory, а не через /usr/bin/python3: обёртка
+#      берёт интерпретатор из .venv репозитория, где стоят jsonschema, PyYAML и
+#      Jinja2. Голый системный python работал случайно и только там, где эти
+#      пакеты оказались установлены глобально.
+Environment=FACTORY_REQUIRE_VENV=1
+ExecStart=/srv/site-factory/repo/bin/factory --json analytics apply --confirm-writes
+
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/srv/site-factory/repo/var /srv/site-factory/repo/config /var/log/site-factory
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+MemoryMax=512M
+TasksMax=64
+TimeoutStartSec=300
+
+# Таймера у этого unit'а нет намеренно: создание счётчиков — разовое действие,
+# которое запускает человек. `install-units.sh` его не включает.
+[Install]
+WantedBy=multi-user.target

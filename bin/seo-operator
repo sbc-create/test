@@ -3,5 +3,13 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 PY="${PY:-.venv/bin/python}"
-[ -x "$PY" ] || PY="$(command -v python3)"
+if [ ! -x "$PY" ]; then
+  # FACTORY_REQUIRE_VENV=1 выставляют systemd unit'ы: служба без подготовленного
+  # окружения должна отказаться сразу, а не падать на ImportError посередине.
+  if [ "${FACTORY_REQUIRE_VENV:-0}" = "1" ]; then
+    echo "bin/seo-operator: не найдено окружение $PWD/$PY, а FACTORY_REQUIRE_VENV=1." >&2
+    exit 78
+  fi
+  PY="$(command -v python3)"
+fi
 exec "$PY" -m seo_operator.cli "$@"

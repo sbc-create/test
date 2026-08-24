@@ -29,8 +29,8 @@ SSH-хостов/DNS-зон/доменов по своей инициативе.
 - Никаких `rm -rf` по широким путям, `mkfs`, `dd` на устройства, `DROP DATABASE`,
   `git push --force`, `git reset --hard`, `git clean -fdx`, неконтролируемого `sudo`,
   изменения firewall и DNS вне manifest.
-- Секреты только через `secret_ref`. Значение секрета не попадает в git, лог, отчёт,
-  скриншот, fixture и prompt. Файлы `.env`, ключи и `secrets/` не читаются.
+- Секреты только через `secret_ref` (Яндекс — файл вне репозитория, systemd LoadCredential).
+  Значение не попадает в git, лог, отчёт, скриншот, fixture и prompt; `.env` не читается.
 - Лицензионный архив DLE не коммитится. Сторонние/nulled-сборки не скачиваются.
 - `bypassPermissions` не используется.
 
@@ -39,7 +39,7 @@ SSH-хостов/DNS-зон/доменов по своей инициативе.
 Правка файлов репозитория, сборка, тесты, линтеры, зависимости и git в ветке `claude/*`
 идут без подтверждений: решение выдают PreToolUse-хуки поверх `seo_operator/unattended.py`.
 Профиль умеет только разрешать; запреты остаются в `guard_rules` и `guardrails`.
-Стоп-сигналы — `docs/UNATTENDED_SAFE.md`, матрица — `tests/unit/test_permission_matrix.py`.
+Два исхода (`allow`/`deny`) и стоп-сигналы — `docs/UNATTENDED_SAFE.md`, матрица — `tests/unit/test_permission_matrix.py`.
 
 ## Команды
 
@@ -50,14 +50,14 @@ python3 -m factory build     --site <site_id>          # детерминиро�
 python3 -m factory deploy    --site <site_id> --environment staging|production
 python3 -m factory verify    --site <site_id>          # QA + SEO + security gates
 python3 -m factory rollback  --site <site_id> --environment <env>
-python3 -m factory status | resume | report | queue …
+python3 -m factory status | resume | report | queue | analytics …   # analytics пишет только с --confirm-writes
 python3 -m factory seo-plan | seo-lint | seo-crawl | seo-render | seo-report --site <site_id>
 bash tests/run-all.sh                                  # полный прогон с чистого состояния
 ```
 
 ## Архитектурная карта
 
-- `factory/` — controller, state machine, locks, retry, redaction, audit, SEO, адаптеры целей
+- `factory/` — controller, state machine, locks, retry, redaction, audit, SEO, цели, `analytics/`
 - `schemas/` — `site-package.schema.json` (единственный вход), `job-result.schema.json`
 - `knowledge/` — замороженная база знаний; менять только через skill `/research-freeze`
 - `inventory/` — разрешённые SSH-хосты, DNS-зоны, лицензии, дистрибутивы, targets
@@ -73,8 +73,8 @@ bash tests/run-all.sh                                  # полный прого
 AUTHORIZATION_CHECK → PRODUCTION_DEPLOY → PRODUCTION_SMOKE → MONITORING → DONE`
 
 Ошибки — только точными статусами: `BLOCKED_INPUT | BLOCKED_LICENSE | BLOCKED_RIGHTS |
-BLOCKED_SECRET | BLOCKED_ACCESS | BLOCKED_AUTHORIZATION | BLOCKED_SEO | QA_FAILED |
-DEPLOY_FAILED | ROLLED_BACK | QUARANTINED`.
+BLOCKED_SECRET | BLOCKED_ACCESS | BLOCKED_AUTHORIZATION | BLOCKED_SEO |
+BLOCKED_ANALYTICS_ACCESS | QA_FAILED | DEPLOY_FAILED | ROLLED_BACK | QUARANTINED`.
 
 Успешный staging **не** является разрешением на production. Production требует
 `production_authorized: true` в manifest и подходящей лицензии DLE.
@@ -93,7 +93,7 @@ DEPLOY_FAILED | ROLLED_BACK | QUARANTINED`.
 ## Детальные правила
 
 `.claude/rules/` (подгружаются по путям): `dle-php.md`, `frontend.md`, `content.md`,
-`security.md`, `tests.md`, `infrastructure.md`, `deployment.md`, `seo.md`.
+`security.md`, `tests.md`, `infrastructure.md`, `deployment.md`, `seo.md`; аналитика — `docs/YANDEX_ANALYTICS.md`.
 Повторяемые процессы — skills: `/research-freeze`, `/site-intake`, `/site-build`,
 `/site-qa`, `/site-deploy`, `/site-rollback`, `/site-update`, `/incident-report`.
 

@@ -18,6 +18,7 @@ from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 from factory import ads as ads_mod
 from factory import vk as vk_mod
+from factory.analytics import snippet as analytics_snippet
 from factory.errors import BlockedInput, BlockedSeo
 from factory.paths import PATHS
 
@@ -198,6 +199,7 @@ class SiteRenderer:
     # ------------------------------------------------------------------ контекст сайта
     def build_site_context(self, *, environment: str) -> dict:
         brand = self.pkg["brand"]
+        analytics = self.pkg.get("analytics") or {}
         legal = self.pkg["legal"]
         nav = [{"label": i["label"], "url": i["url"], "current": False} for i in self.pkg["navigation"]["primary"]]
         footer = [{"label": i["label"], "url": i["url"]} for i in (self.pkg["navigation"].get("footer") or [])]
@@ -219,6 +221,19 @@ class SiteRenderer:
             "og_enabled": ((self.pkg.get("metadata") or {}).get("og") or {}).get("enabled", True),
             "hreflang": (self.pkg.get("seo") or {}).get("hreflang") or [],
             "environment": environment,
+            # Аналитика встраивается только через эти два значения. Оба уже
+            # прошли проверку в snippet.py: тег пуст, если сбор невозможен.
+            "analytics_script": analytics_snippet.analytics_script_tag(
+                counter_id=analytics.get("counter_id"),
+                allowed_hosts=list(analytics.get("allowed_hosts") or []),
+                environment=environment,
+                enabled=bool(analytics.get("enabled")),
+            ),
+            # Маркер печатается при каждой сборке: Яндекс перепроверяет права, и
+            # релиз, потерявший мета-тег, теряет подтверждение вместе с ним.
+            "webmaster_verification": analytics_snippet.verification_meta(
+                (self.pkg.get("webmaster") or {}).get("verification_marker")
+            ),
         }
         return self.site_context
 

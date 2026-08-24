@@ -1,0 +1,144 @@
+{
+  "version": 1,
+  "provider": "yandex",
+  "note": "Реестр аналитики. Здесь хранятся ТОЛЬКО публичные идентификаторы счётчиков и проверяемые статусы; OAuth-токен и client secret сюда не попадают ни при каких условиях. Заполняется командой `python3 -m factory --json analytics apply --confirm-writes`; вручную не редактируется. Три домена YummyAnime — три независимых счётчика, зеркалами их объединять запрещено: у каждого сайта собственная аудитория и собственный отчёт.",
+  "seo_indexing_enabled": false,
+  "updated_at": "2026-08-24T04:44:32Z",
+  "properties": [
+    {
+      "domain": "yummyani.site",
+      "site_id": null,
+      "counter_name": "YummyAnime — yummyani.site",
+      "counter_id": 111881037,
+      "counter_state": "reused",
+      "analytics_enabled": true,
+      "webvisor": false,
+      "allowed_hosts": [
+        "yummyani.site"
+      ],
+      "goals": [
+        "comment_submit",
+        "episode_select",
+        "filter_apply",
+        "player_error",
+        "player_ready",
+        "player_start",
+        "search",
+        "season_select",
+        "title_view"
+      ],
+      "webmaster": {
+        "enabled": true,
+        "host_id": null,
+        "verification_status": "BLOCKED_DEPLOYMENT",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": "2026-08-24T04:44:30Z",
+      "problems": [],
+      "goal_ids": {
+        "comment_submit": 601108539,
+        "episode_select": 601108535,
+        "filter_apply": 601108532,
+        "player_error": 601108538,
+        "player_ready": 601108537,
+        "player_start": 601108536,
+        "search": 601108531,
+        "season_select": 601108534,
+        "title_view": 601108533
+      }
+    },
+    {
+      "domain": "yummyani.org",
+      "site_id": null,
+      "counter_name": "YummyAnime — yummyani.org",
+      "counter_id": 111881038,
+      "counter_state": "reused",
+      "analytics_enabled": true,
+      "webvisor": false,
+      "allowed_hosts": [
+        "yummyani.org"
+      ],
+      "goals": [
+        "comment_submit",
+        "episode_select",
+        "filter_apply",
+        "player_error",
+        "player_ready",
+        "player_start",
+        "search",
+        "season_select",
+        "title_view"
+      ],
+      "webmaster": {
+        "enabled": true,
+        "host_id": null,
+        "verification_status": "BLOCKED_DEPLOYMENT",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": "2026-08-24T04:44:31Z",
+      "problems": [],
+      "goal_ids": {
+        "comment_submit": 601108548,
+        "episode_select": 601108544,
+        "filter_apply": 601108541,
+        "player_error": 601108547,
+        "player_ready": 601108546,
+        "player_start": 601108545,
+        "search": 601108540,
+        "season_select": 601108543,
+        "title_view": 601108542
+      }
+    },
+    {
+      "domain": "yummyani.biz",
+      "site_id": null,
+      "counter_name": "YummyAnime — yummyani.biz",
+      "counter_id": 111881039,
+      "counter_state": "reused",
+      "analytics_enabled": true,
+      "webvisor": false,
+      "allowed_hosts": [
+        "yummyani.biz"
+      ],
+      "goals": [
+        "comment_submit",
+        "episode_select",
+        "filter_apply",
+        "player_error",
+        "player_ready",
+        "player_start",
+        "search",
+        "season_select",
+        "title_view"
+      ],
+      "webmaster": {
+        "enabled": true,
+        "host_id": null,
+        "verification_status": "BLOCKED_DEPLOYMENT",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": "2026-08-24T04:44:32Z",
+      "problems": [],
+      "goal_ids": {
+        "comment_submit": 601108557,
+        "episode_select": 601108553,
+        "filter_apply": 601108550,
+        "player_error": 601108556,
+        "player_ready": 601108555,
+        "player_start": 601108554,
+        "search": 601108549,
+        "season_select": 601108552,
+        "title_view": 601108551
+      }
+    }
+  ]
+}

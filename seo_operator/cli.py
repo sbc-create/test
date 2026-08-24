@@ -6,6 +6,7 @@ seo-operator dry-run [--fixture]   рассчитать изменения, ни
 seo-operator canary  [--fixture]   применить изменения в пределах canary
 seo-operator observe --experiment  оценить эксперимент и решить keep/rollback
 seo-operator report  [--fixture]   сформировать ежедневный отчёт
+seo-operator analytics-collect     read-only сбор показателей Метрики и Вебмастера
 """
 
 from __future__ import annotations
@@ -122,6 +123,42 @@ def cmd_weekly(args) -> int:
     return 0
 
 
+def cmd_analytics_collect(args) -> int:
+    """Ежедневный сбор. Ничего не меняет и не отправляет — только читает.
+
+    Возвращает 0 даже когда измерить не удалось ничего: отсутствие данных о
+    неразвёрнутом сайте — это правильный результат, а не сбой сбора. Ненулевой
+    код здесь означал бы, что таймер каждое утро рапортует об аварии там, где
+    аварии нет.
+    """
+    from seo_operator.analytics_collect import collect
+
+    report = collect(
+        date1=args.date1,
+        date2=args.date2,
+        artifacts_dir=REPO_ROOT / "artifacts" / "analytics",
+    )
+    if args.json:
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+    else:
+        summary = report["summary"]
+        print(f"период {report['period']['date1']} … {report['period']['date2']}")
+        for domain in report["domains"]:
+            print(
+                f"\n{domain['domain']}  "
+                f"измерено {domain['measured_count']}/{domain['total_count']}"
+            )
+            for item in domain["measurements"]:
+                value = item["value"] if item["measured"] else f"не измерено — {item['reason']}"
+                print(f"  {item['title']:34} {str(value)[:80]}")
+        print(f"\n{summary['note']}")
+    if args.out:
+        pathlib_path = Path(args.out)
+        pathlib_path.parent.mkdir(parents=True, exist_ok=True)
+        pathlib_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    return 0
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(prog="seo-operator", description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -150,8 +187,19 @@ def main(argv=None) -> int:
         p.add_argument("--json", action="store_true", help="машиночитаемый вывод")
         p.add_argument("--out", help="записать отчёт в файл")
 
+    p = sub.add_parser(
+        "analytics-collect",
+        help="read-only сбор показателей Метрики и Вебмастера",
+    )
+    p.add_argument("--date1", default="7daysAgo", help="начало периода")
+    p.add_argument("--date2", default="yesterday", help="конец периода")
+    p.add_argument("--json", action="store_true", help="машиночитаемый вывод")
+    p.add_argument("--out", help="записать отчёт в файл")
+
     args = parser.parse_args(argv)
 
+    if args.command == "analytics-collect":
+        return cmd_analytics_collect(args)
     if args.command == "probe":
         return cmd_probe(args)
     if args.command == "factory-portfolio":

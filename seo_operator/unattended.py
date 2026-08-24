@@ -483,6 +483,13 @@ RUNTIMES = {
 REMOTE = {"ssh", "scp", "sftp", "rsync", "ansible", "ansible-playbook"}
 DNS_TOOLS = {"nsupdate"}
 FETCH = {"curl", "wget", "http", "httpie"}
+
+#: Чтение системного журнала. Только чтение: `journalctl` без флагов очистки не
+#: меняет ничего, а без него диагностика службы сводится к угадыванию. Флаги,
+#: которые удаляют записи (`--vacuum-*`, `--rotate`, `--flush`), в список не
+#: входят — удаление журнала закрыто и стоп-сигналом выше.
+JOURNAL = {"journalctl"}
+JOURNAL_MUTATING_FLAGS = ("--vacuum", "--rotate", "--flush", "--sync", "--relinquish-var")
 SHELLS = {"bash", "sh", "zsh"}
 
 GIT_READ = {
@@ -547,6 +554,52 @@ GIT_WRITE = {
 }
 #: Ветки, в которые разрешён обычный push.
 PUSH_BRANCH_RE = re.compile(r"(?:^|[\s:/])claude/[A-Za-z0-9._\-/]+")
+
+#: Работа с GitHub через штатный CLI. Разрешаются чтение и работа с pull
+#: request и issue — это обычная часть цикла. Всё, что удаляет, переносит
+#: владение или трогает защиту ветки, в список не входит и остаётся под
+#: default-deny; отдельные формы (`gh repo delete`, `gh api -X DELETE`,
+#: `branches/*/protection`) закрыты стоп-сигналами и deny-правилами выше.
+GH_READ = {
+    "pr",
+    "issue",
+    "repo",
+    "run",
+    "workflow",
+    "release",
+    "api",
+    "search",
+    "status",
+    "browse",
+    "label",
+    "cache",
+    "version",
+    "help",
+}
+# `auth` в списке нет намеренно: `gh auth token` печатает токен в stdout, а
+# `gh auth status --show-token` — в stderr. Отдельно это же закрыто запретом в
+# `guardrails.BLOCKED_PATTERNS`, чтобы правило не держалось на одном списке.
+#: Подкоманды, которые сами по себе не считаются рутиной ни у одного объекта.
+GH_FORBIDDEN_VERBS = {"delete", "transfer", "archive", "rename", "fork", "unarchive"}
+
+
+def _gh_ok(tokens: list) -> bool:
+    args = [t for t in tokens[1:] if not t.startswith("-")]
+    if not args:
+        return True  # `gh --version`, `gh --help`
+    if args[0] not in GH_READ:
+        return False
+    # `gh repo delete`, `gh release delete`, `gh pr ... transfer` — не рутина.
+    if any(verb in GH_FORBIDDEN_VERBS for verb in args[1:3]):
+        return False
+    # `gh api` умеет менять что угодно: разрешаются только читающие методы.
+    if args[0] == "api":
+        joined = " ".join(tokens[1:])
+        method = re.search(r"(?:-X|--method)[= ]\s*([A-Za-z]+)", joined)
+        if method and method.group(1).upper() not in {"GET", "HEAD"}:
+            return False
+    return True
+
 
 DEP_SUBCOMMANDS = {"install", "ci", "sync", "add", "update", "i", "require"}
 
@@ -624,6 +677,11 @@ def classify_segment(segment: str, root: str) -> tuple[bool, str]:
             return True, "git в собственной ветке"
         return False, "git-операция вне профиля"
 
+    if prog == "gh":
+        if _gh_ok(tokens):
+            return True, "работа с GitHub: чтение и pull request"
+        return False, "операция GitHub вне профиля"
+
     if prog in READ_ONLY:
         return True, "чтение и локальный анализ"
 
@@ -669,6 +727,11 @@ def classify_segment(segment: str, root: str) -> tuple[bool, str]:
         if any(zone and zone in low for zone in zones):
             return True, "зона внесена в inventory"
         return False, "зона отсутствует в inventory/dns-zones.yaml"
+
+    if prog in JOURNAL:
+        if any(flag in text for flag in JOURNAL_MUTATING_FLAGS):
+            return False, "journalctl с флагом, меняющим журнал"
+        return True, "чтение системного журнала"
 
     if prog in FETCH:
         match = re.search(r"https?://([^/\s'\"]+)", text)
@@ -731,6 +794,42 @@ def _load_package(site_id: str, root: str):
     except Exception:
         return None
     return data if isinstance(data, dict) else None
+
+
+ENVIRONMENT_FLAG_RE = re.compile(
+    r"--environment[= ]\s*([A-Za-z0-9_-]+)|--env[= ]\s*([A-Za-z0-9_-]+)"
+)
+
+#: Единственное окружение, выкат в которое требует выполненных условий.
+PRODUCTION = "production"
+
+
+def targets_production(command: str, root: str | None = None) -> tuple:
+    """Метит ли команда в боевое окружение. `(да, пояснение)`.
+
+    Флаг сильнее пакета: явно указанное окружение решает, чей бы пакет ни был
+    назван. Без флага решает поле `environment` самого пакета: штатный
+    `factory deploy --site X` выкатывает ровно туда, куда написано в manifest,
+    и требовать подтверждения у выката на стенд значит останавливать обычную
+    работу. Нечитаемый пакет и неназванный сайт считаются боевыми: не знать,
+    куда метит команда, — это не то же самое, что знать, что она безопасна.
+    """
+    root = os.path.realpath(root or _repo_root())
+    match = ENVIRONMENT_FLAG_RE.search(command)
+    if match:
+        value = (match.group(1) or match.group(2) or "").lower()
+        return value == PRODUCTION, f"флаг окружения: {value}"
+
+    site = SITE_ARG_RE.search(command)
+    if not site:
+        return True, "в команде не указан --site, окружение неизвестно"
+    package = _load_package(site.group(1), root)
+    if package is None:
+        return True, f"пакет sites/{site.group(1)}/package.yaml не прочитан"
+    environment = str(package.get("environment") or "").lower()
+    if not environment:
+        return True, "в пакете не указано environment"
+    return environment == PRODUCTION, f"пакет объявляет environment={environment}"
 
 
 def production_gate(command: str, root: str | None = None) -> tuple:
@@ -833,6 +932,12 @@ def mandatory_confirmation(command: str, root: str | None = None) -> str:
     if not hits:
         return ""
     if set(hits) <= PRODUCTION_STOP_LABELS and FACTORY_MUTATION_RE.search(text):
+        # Выкат на стенд — обычная работа, а не необратимое действие: стенд
+        # пересоздаётся, и останавливать его подтверждением значит остановить
+        # весь цикл разработки ради операции, которую и так можно повторить.
+        production, _why = targets_production(text, root)
+        if not production:
+            return ""
         ready, reason = production_gate(text, root)
         return "" if ready else f"{hits[0]} — {reason}"
     return hits[0]

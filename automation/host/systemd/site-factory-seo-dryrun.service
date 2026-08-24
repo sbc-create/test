@@ -12,6 +12,9 @@ EnvironmentFile=/etc/site-factory/environment
 # --fixture: the synthetic tenant, so this is a self-test of the operator and
 # not a daily "no data" report. The real daily run stays unscheduled until the
 # portfolio registry and the data sources are provided — see automation-policy.md.
+# Обёртка берёт интерпретатор из .venv; без этого флага она молча
+# откатывается на системный python, где может не быть зависимостей.
+Environment=FACTORY_REQUIRE_VENV=1
 ExecStart=/srv/site-factory/repo/bin/seo-operator dry-run --fixture
 NoNewPrivileges=yes
 PrivateTmp=yes

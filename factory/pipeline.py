@@ -14,6 +14,7 @@ from pathlib import Path
 from factory import audit, blueprint, inventory, knowledge, licensing, validation
 from factory import build as build_mod
 from factory import verify as verify_mod
+from factory.analytics import gate as analytics_gate
 from factory.errors import (
     BlockedAccess,
     BlockedAuthorization,
@@ -26,6 +27,10 @@ from factory.retry import DEFAULT_POLICY, run_with_retry
 from factory.seo.report import combine
 from factory.state import JobState
 from factory.targets import build_target
+
+#: Статусы, которые умеют выставлять ворота аналитики. Список закрытый:
+#: недоступный API и незаполненный manifest — разные отказы с разным лечением.
+ANALYTICS_GATE_STATUSES = ("BLOCKED_ANALYTICS_ACCESS", "BLOCKED_INPUT")
 
 
 @dataclass
@@ -178,6 +183,28 @@ def run_job(site_id: str, *, environment: str | None = None, job_id: str | None 
                         f"Цель «{target_conf.get('ref')}» не пригодна для production.", field="target_ref",
                         required_input="production_capable: true у проверенной цели",
                         blocks_stage="PRODUCTION_DEPLOY").as_blocker()])
+
+            # ------------------------------------------------- ворота аналитики
+            # Проверяются до сборки: страница с аналитикой собирается один раз,
+            # и узнать о недоступном API после выката — значит узнать поздно.
+            analytics_blockers = analytics_gate.check(package, env)
+            if analytics_blockers:
+                # Статус берётся у первого блокера, но только из объявленного
+                # набора: недоступный API — это BLOCKED_ANALYTICS_ACCESS,
+                # незаполненное поле пакета — BLOCKED_INPUT, и лечатся они
+                # по-разному. Любой другой статус означал бы, что ворота вернули
+                # то, чего не умеют, — такой ответ конвейер не пропускает.
+                reported = analytics_blockers[0]["status"]
+                status = reported if reported in ANALYTICS_GATE_STATUSES else "QUARANTINED"
+                step("analytics", "blocked", detail=analytics_blockers[0]["reason"][:160], exit_code=1)
+                return finish(status, analytics_blockers)
+            analytics_conf = package.get("analytics") or {}
+            if analytics_conf.get("enabled"):
+                step("analytics", detail=f"счётчик {analytics_conf.get('counter_id')}, "
+                                         f"hosts={analytics_conf.get('allowed_hosts')}")
+                indexing_ok, indexing_reason = analytics_gate.indexing_allowed(package, env)
+                if not indexing_ok:
+                    notes.append(f"Индексация выключена: {indexing_reason}.")
 
             job.transition("READY")
 

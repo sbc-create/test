@@ -1,0 +1,12 @@
+[Unit]
+Description=site-factory: daily analytics collection (DISABLED until the first production site exists)
+Documentation=file:///srv/site-factory/repo/docs/YANDEX_ANALYTICS.md
+
+[Timer]
+OnCalendar=*-*-* 05:30:00 UTC
+RandomizedDelaySec=600
+AccuracySec=1min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

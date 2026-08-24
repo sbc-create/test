@@ -36,6 +36,9 @@
 <link rel="icon" href="{{ site.favicon_url }}">
 <link rel="stylesheet" href="{{ site.css_url }}">
 <link rel="stylesheet" href="{{ site.build_css_url }}">
+{%- if site.webmaster_verification %}
+{{ site.webmaster_verification | safe }}
+{%- endif %}
 {%- for block in page.jsonld %}
 <script type="application/ld+json">{{ block | safe }}</script>
 {%- endfor %}
@@ -90,5 +93,8 @@
   </div>
 </footer>
 <script src="{{ site.js_url }}" defer></script>
+{%- if site.analytics_script %}
+{{ site.analytics_script | safe }}
+{%- endif %}
 </body>
 </html>

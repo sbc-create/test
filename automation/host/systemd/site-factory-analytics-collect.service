@@ -1,0 +1,42 @@
+[Unit]
+Description=site-factory: daily read-only pull of Yandex Metrika and Webmaster metrics
+Documentation=file:///srv/site-factory/repo/docs/YANDEX_ANALYTICS.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/srv/site-factory/repo
+EnvironmentFile=/etc/site-factory/environment
+
+LoadCredential=yandex_oauth:/etc/site-factory/secrets/yandex_oauth_token
+# Путь к credential задаётся через %n (полное имя unit'а), а НЕ через %d.
+# Специфер %d («каталог credentials») появился в systemd 250, а Ubuntu 22.04
+# везёт 249: там строка не разворачивается и остаётся literal-ом «%d/...»,
+# после чего сервис падает на «файл секрета не найден». %n поддерживается
+# давно и на 249 разворачивается правильно.
+# Строка при этом подстраховочная: без неё фабрика возьмёт путь из
+# CREDENTIALS_DIRECTORY, который systemd выставляет сам.
+Environment=YANDEX_OAUTH_TOKEN_FILE=/run/credentials/%n/yandex_oauth
+
+# Только чтение: ни --confirm-writes, ни webmaster --verify здесь нет и быть не
+# может. Отчёт складывается в artifacts/ и не меняет ни одного счётчика.
+# bin/seo-operator тоже берёт интерпретатор из .venv; FACTORY_REQUIRE_VENV=1
+# запрещает молчаливый откат на системный python.
+Environment=FACTORY_REQUIRE_VENV=1
+ExecStart=/srv/site-factory/repo/bin/seo-operator analytics-collect --json
+
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/srv/site-factory/repo/var /srv/site-factory/repo/artifacts /var/log/site-factory
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+MemoryMax=512M
+TasksMax=64
+TimeoutStartSec=600
+
+[Install]
+WantedBy=multi-user.target
