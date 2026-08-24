@@ -523,6 +523,25 @@ def cmd_lords_preview(args) -> int:
     return 0
 
 
+def cmd_lords_staging(args) -> int:  # noqa: ARG001 — команда без аргументов
+    """Готовит конфигурацию трёх публичных стендов. Ничего не применяет."""
+    from factory.lords import staging as lords_staging
+
+    summary = lords_staging.build_staging()
+    print(f"цель: {summary['target']} ({summary['origin_ipv4']})")
+    print(f"nginx: конфигурация под {summary['nginx_target_version']}; "
+          f"{summary['offline_check']}")
+    for site in summary["sites"]:
+        print(f"  {site['url']:38} {site['site_id']}  {site['profile']:14} "
+              f":{site['port']}  {site['unit']}")
+        print(f"    релиз {site['release']}, индексация {site['indexing']}, "
+              f"Basic Auth {site['basic_auth']}")
+    print("не трогается:")
+    for item in summary["not_touched"]:
+        print(f"  — {item}")
+    return 0
+
+
 def cmd_lords_bundle(args) -> int:
     """Собирает переносимый пакет стенда: документы, рантайм, откат."""
     from factory.lords import bundle as lords_bundle
@@ -779,6 +798,10 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("lords-bundle", help="Lords: воспроизводимый пакет стенда")
     p.add_argument("--site", help="один сайт направления; без него — все")
     p.set_defaults(func=cmd_lords_bundle)
+
+    p = sub.add_parser("lords-staging",
+                       help="Lords: конфигурация публичного fixture-staging трёх сайтов")
+    p.set_defaults(func=cmd_lords_staging)
 
     p = sub.add_parser("env-report", help="read-only отчёт об окружении")
     p.set_defaults(func=cmd_env_report)
