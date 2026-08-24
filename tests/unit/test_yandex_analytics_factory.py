@@ -410,3 +410,58 @@ def test_registry_refuses_data_that_breaks_the_schema(tmp_path):
     broken["properties"][0]["webmaster"]["verification_status"] = "DONE"
     with pytest.raises(BlockedInput):
         registry.save(broken, root)
+
+
+# --------------------------------------------------------------------------
+# Зафиксированный результат боевой настройки
+# --------------------------------------------------------------------------
+#: Счётчики, фактически созданные в аккаунте владельца. Не «пример», а состояние
+#: продакшена: расхождение означает, что счётчик подменили или пересоздали, и
+#: заметить это должен тест, а не отчёт Метрики через месяц.
+LIVE_COUNTERS = {
+    "yummyani.site": 111881037,
+    "yummyani.org": 111881038,
+    "yummyani.biz": 111881039,
+}
+
+
+def test_registry_records_the_live_counters():
+    for entry in registry.properties():
+        assert entry.counter_id == LIVE_COUNTERS[entry.domain], entry.domain
+        assert entry.raw["counter_state"] == "reused", (
+            f"{entry.domain}: повторный прогон обязан переиспользовать счётчик, а не создавать"
+        )
+
+
+def test_every_counter_has_all_nine_goals_with_numeric_ids():
+    """Девять целей и девять числовых идентификаторов — иначе конверсии не измерить."""
+    from factory.analytics import events
+
+    total = 0
+    for entry in registry.properties():
+        goals = entry.raw["goals"]
+        goal_ids = entry.raw["goal_ids"]
+        assert set(goals) == set(events.EVENT_IDS), entry.domain
+        assert set(goal_ids) == set(events.EVENT_IDS), entry.domain
+        assert all(isinstance(value, int) and value > 0 for value in goal_ids.values())
+        total += len(goal_ids)
+    assert total == 27, f"ожидалось 27 идентификаторов целей на три счётчика, записано {total}"
+
+
+def test_session_recording_is_off_on_every_live_counter():
+    """Требование задания, дважды нарушенное по дороге. Теперь оно под тестом."""
+    for entry in registry.properties():
+        assert entry.raw["webvisor"] is False, entry.domain
+        assert entry.raw["problems"] == [], (
+            f"{entry.domain}: настройка завершена, а в problems что-то осталось: "
+            f"{entry.raw['problems']}"
+        )
+
+
+def test_setup_is_complete_but_indexing_and_webmaster_are_not():
+    """Готовность аналитики не означает готовности поиска — это разные ворота."""
+    assert registry.indexing_enabled() is False
+    for entry in registry.properties():
+        assert entry.indexing_enabled is False, entry.domain
+        assert entry.webmaster_status == BLOCKED_DEPLOYMENT, entry.domain
+        assert entry.raw["webmaster"]["sitemap_submitted"] is False, entry.domain
