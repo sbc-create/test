@@ -56,6 +56,35 @@ ROLLBACK_MARKER=""
 STAGE="запуск"
 stage() { STAGE="$1"; }
 
+# Покрывает ли сертификат имя.
+#
+# `openssl x509 -checkhost` возвращает 0 и при совпадении, и при несовпадении —
+# вердикт только в выводе. Поэтому читается именно вывод: строка «does match»
+# печатается лишь при совпадении, а при отказе она выглядит как «does NOT
+# match» и под шаблон ниже не подходит.
+# Вердикт берётся в переменную, а не через конвейер с grep: под `pipefail`
+# ненулевой код любого звена сделал бы совпадение неотличимым от отказа.
+cert_covers() {
+  local pem="$1" name="$2" verdict
+  [[ -s "${pem}" ]] || return 1
+  verdict="$(openssl x509 -in "${pem}" -noout -checkhost "${name}" 2>/dev/null || true)"
+  [[ "${verdict}" == *"does match certificate"* ]]
+}
+
+# Отдаёт ли локальный origin для данного SNI сертификат с этим же именем.
+# Проверяется тот самый nginx, что будет обслуживать публику, но по петле.
+# Адрес — параметр, чтобы функцию можно было проверить на отдельном стенде.
+origin_cert_covers() {
+  local sni="$1" endpoint="${2:-127.0.0.1:443}" served verdict
+  # `openssl s_client` завершается ненулевым кодом и при успешном рукопожатии —
+  # соединение закрывается по EOF на stdin. Под `pipefail` это превращало
+  # совпадение в отказ, поэтому вывод берётся отдельным шагом.
+  served="$(echo | openssl s_client -connect "${endpoint}" -servername "${sni}" 2>/dev/null || true)"
+  [[ -n "${served}" ]] || return 1
+  verdict="$(printf '%s' "${served}" | openssl x509 -noout -checkhost "${sni}" 2>/dev/null || true)"
+  [[ "${verdict}" == *"does match certificate"* ]]
+}
+
 rollback() {
   [[ "${ROLLBACK_READY}" -eq 1 ]] || return 0
 
@@ -515,9 +544,21 @@ fi
 
 for row in "${SITES[@]}"; do
   IFS=$'\t' read -r site_id apex www port unit runtime <<<"${row}"
-  if [[ -s "/etc/letsencrypt/live/${apex}/fullchain.pem" ]]; then
-    log "${apex}: сертификат уже есть"
-    continue
+  chain="/etc/letsencrypt/live/${apex}/fullchain.pem"
+  if [[ -s "${chain}" ]]; then
+    # Существование файла ничего не доказывает. Линия с нужным именем может
+    # покрывать другие домены — тогда nginx отдаст сертификат, не совпадающий
+    # с именем, и клиент получит ошибку проверки. Поэтому проверяется покрытие
+    # обоих имён, а не наличие файла.
+    if cert_covers "${chain}" "${apex}" && cert_covers "${chain}" "${www}"; then
+      log "${apex}: сертификат уже есть и покрывает apex и www — переиспользую"
+      continue
+    fi
+    die "сертификат ${chain} существует, но не покрывает ${apex} и ${www}.
+Перевыпуск здесь не делается намеренно: это расход лимита CA и потеря текущей
+линии. Разберитесь вручную:
+  certbot certificates
+  openssl x509 -in ${chain} -noout -text | grep -A1 'Subject Alternative Name'"
   fi
   log "${apex}: выпускаю сертификат на apex и www"
   certbot certonly --webroot -w "${ACME_ROOT}" \
@@ -551,6 +592,37 @@ stage "nginx фаза 2 (HTTPS)"
 install_phase phase2
 
 # --------------------------------------------------------------------------
+# 8a. Дождаться, пока новая конфигурация действительно обслуживает
+# --------------------------------------------------------------------------
+stage "ожидание TLS после перезагрузки nginx"
+# `systemctl reload nginx` возвращает управление сразу, а старые воркеры ещё
+# доживают свои соединения со СТАРОЙ конфигурацией — на фазе 1 в ней нет ни
+# одного 443-блока Lords. Запрос, попавший к такому воркеру, уходит в
+# default_server соседа, тот предъявляет свой сертификат, и проверка имени
+# падает. Раньше приёмка стартовала сразу и ловила именно это окно.
+#
+# Поэтому ждём, пока origin начнёт отдавать сертификат, совпадающий с именем,
+# для каждого из трёх доменов. Это проверка готовности, а не приёмка: она
+# ничего не утверждает о сайте.
+for row in "${SITES[@]}"; do
+  IFS=$'\t' read -r site_id apex www port unit runtime <<<"${row}"
+  ready=0
+  for attempt in $(seq 1 30); do
+    if origin_cert_covers "${apex}"; then
+      ready=1
+      log "  ${apex}: origin отдаёт свой сертификат (попытка ${attempt})"
+      break
+    fi
+    sleep 1
+  done
+  [[ "${ready}" -eq 1 ]] \
+    || die "${apex}: origin так и не начал отдавать сертификат этого имени.
+Скорее всего запрос уходит в default_server соседа. Проверьте:
+  nginx -T | grep -n 'server_name ${apex}'
+  openssl s_client -connect 127.0.0.1:443 -servername ${apex} </dev/null | openssl x509 -noout -text"
+done
+
+# --------------------------------------------------------------------------
 # 9. Проверка того, что получилось
 # --------------------------------------------------------------------------
 stage "публичная приёмка"
@@ -564,31 +636,55 @@ if [[ -r "${CREDENTIALS}" ]]; then
   AUTH_PASSWORD="$(sed -n 's/^пароль: //p' "${CREDENTIALS}" | head -1)"
 fi
 
+# Публичная проверка идёт к локальному origin, но под настоящим именем.
+#
+# `--resolve имя:443:127.0.0.1` подменяет только адрес: в SNI и в проверке
+# сертификата остаётся имя из URL. Так проверяется тот nginx, который мы
+# только что настроили, а не то, что окажется на публичном маршруте, — и при
+# этом проверка TLS остаётся включённой. `-k` не используется: он бы скрыл
+# ровно тот дефект, из-за которого приёмка и падала.
+#
+# Код возврата curl больше не склеивается с `%{http_code}`: прежняя форма
+# `... || echo 000` дописывала третий ноль к уже напечатанным «000», давая
+# бессмысленное «000000» и пряча настоящую причину.
+curl_code() {
+  local name="$1" url="$2"; shift 2
+  local out rc
+  out="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 15 \
+         --resolve "${name}:443:127.0.0.1" "$@" "${url}" 2>&1)" && rc=0 || rc=$?
+  if [[ "${rc}" -ne 0 ]]; then
+    # В сообщении curl адрес и имя есть, секретов нет: -u сюда не попадает.
+    printf 'curl-error:%s:%s' "${rc}" "${out##*curl: }"
+    return 0
+  fi
+  printf '%s' "${out}"
+}
+
 for row in "${SITES[@]}"; do
   IFS=$'\t' read -r site_id apex www port unit runtime <<<"${row}"
 
-  code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 15 "https://${apex}/" || echo 000)"
+  code="$(curl_code "${apex}" "https://${apex}/")"
   [[ "${code}" == "401" ]] \
     && log "  ${apex}: 401 без пароля — Basic Auth работает" \
-    || { warn "  ${apex}: ожидался 401, получен ${code}"; failures=$((failures + 1)); }
+    || { warn "  ${apex}: ожидался 401, получено ${code}"; failures=$((failures + 1)); }
 
   # С паролем сайт обязан открыться: 401 на всё подряд — это тоже отказ стенда.
   if [[ -n "${AUTH_PASSWORD}" ]]; then
-    authed="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 15 \
-      -u "lords:${AUTH_PASSWORD}" "https://${apex}/" || echo 000)"
+    authed="$(curl_code "${apex}" "https://${apex}/" -u "lords:${AUTH_PASSWORD}")"
     [[ "${authed}" == "200" ]] \
       && log "  ${apex}: 200 с паролем — стенд открывается" \
-      || { warn "  ${apex}: с паролем ожидался 200, получен ${authed}"; failures=$((failures + 1)); }
+      || { warn "  ${apex}: с паролем ожидался 200, получено ${authed}"; failures=$((failures + 1)); }
 
     # Индексация закрыта на публичном ответе, а не только в конфигурации.
     headers="$(curl -sS -D - -o /dev/null --max-time 15 \
-      -u "lords:${AUTH_PASSWORD}" "https://${apex}/" || true)"
+      --resolve "${apex}:443:127.0.0.1" \
+      -u "lords:${AUTH_PASSWORD}" "https://${apex}/" 2>/dev/null || true)"
     grep -qi '^x-robots-tag:.*noindex' <<<"${headers}" \
       && log "  ${apex}: X-Robots-Tag noindex на публичном ответе" \
       || { warn "  ${apex}: нет X-Robots-Tag noindex"; failures=$((failures + 1)); }
 
-    robots_body="$(curl -sS --max-time 15 -u "lords:${AUTH_PASSWORD}" \
-      "https://${apex}/robots.txt" || true)"
+    robots_body="$(curl -sS --max-time 15 --resolve "${apex}:443:127.0.0.1" \
+      -u "lords:${AUTH_PASSWORD}" "https://${apex}/robots.txt" 2>/dev/null || true)"
     grep -q 'Disallow: /' <<<"${robots_body}" \
       && log "  ${apex}: robots.txt закрывает сайт целиком" \
       || { warn "  ${apex}: robots.txt не содержит Disallow: /"; failures=$((failures + 1)); }
@@ -597,14 +693,17 @@ for row in "${SITES[@]}"; do
     failures=$((failures + 1))
   fi
 
+  # www отдельным именем: у него свой SNI и своё имя в сертификате.
   redirect="$(curl -sS -o /dev/null -w '%{http_code} %{redirect_url}' --max-time 15 \
-    "https://${www}/" || echo '000 -')"
+    --resolve "${www}:443:127.0.0.1" "https://${www}/" 2>&1 || true)"
   grep -q '^308 ' <<<"${redirect}" \
     && log "  ${www}: ${redirect}" \
     || { warn "  ${www}: ожидался 308, получено ${redirect}"; failures=$((failures + 1)); }
 
+  # Тот же приём, что и выше: код curl не склеивается со статусом ответа.
   robots="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 10 \
-    "http://127.0.0.1:${port}/robots.txt" || echo 000)"
+    "http://127.0.0.1:${port}/robots.txt" 2>/dev/null)" \
+    || robots="curl-error:$?"
   [[ "${robots}" == "200" ]] \
     && log "  ${site_id}: robots.txt отдаётся рантаймом" \
     || { warn "  ${site_id}: robots.txt вернул ${robots}"; failures=$((failures + 1)); }
@@ -625,7 +724,8 @@ done
 # Неизвестный Host. Свой сервер по умолчанию сценарий ставит, только если чужого
 # нет; если чужой есть — проверяется он, а не предположение о нём.
 unknown="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 10 \
-  -H 'Host: no-such-host.invalid' http://127.0.0.1/ || echo 000)"
+  -H 'Host: no-such-host.invalid' http://127.0.0.1/ 2>/dev/null)" \
+  || unknown="curl-error:$?"
 if [[ "${INSTALL_DEFAULT}" -eq 1 ]]; then
   [[ "${unknown}" == "421" ]] \
     && log "  неизвестный Host: 421 (сервер по умолчанию Lords)" \

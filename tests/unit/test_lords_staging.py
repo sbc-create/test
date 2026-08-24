@@ -270,7 +270,12 @@ class TestApplyScript:
         assert 'if ! id -u "${SERVICE_USER}"' in text
         assert 'if [[ -s "${HTPASSWD}" ]]' in text
         assert 'if [[ -d "${target}" ]]' in text
-        assert '-s "/etc/letsencrypt/live/${apex}/fullchain.pem"' in text
+        # Сертификат: существующая линия переиспользуется, а не выпускается
+        # заново. Проверка стала строже — мало существования файла, линия
+        # обязана покрывать оба имени, — поэтому путь лежит в переменной.
+        assert 'chain="/etc/letsencrypt/live/${apex}/fullchain.pem"' in text
+        assert 'if [[ -s "${chain}" ]]' in text
+        assert 'cert_covers "${chain}" "${apex}"' in text
 
     def test_renewal_reloads_nginx(self):
         text = SCRIPT.read_text(encoding="utf-8")
