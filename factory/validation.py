@@ -519,6 +519,29 @@ def _check_analytics(pkg: dict, out: list[Blocker], warnings: list[str]) -> None
                 "BLOCKED_SEO", "seo_indexing_enabled",
                 "Индексация включена для fixture-пакета: в выдачу попали бы тестовые данные.",
                 "fixture: false и настоящий контент", "VALIDATING"))
+        # Домен и canonical — не «ещё одна настройка SEO», а условие
+        # существования индексируемого сайта: без них поисковику нечего
+        # сообщить, кроме адреса стенда.
+        from factory.lords import gates as _gates
+        try:
+            _gates.check_indexing(pkg)
+        except Exception as exc:
+            out.append(Blocker(
+                getattr(exc, "status", "BLOCKED_SEO"), "seo_indexing_enabled", str(exc),
+                getattr(exc, "required_input", "domain и canonical_url"), "VALIDATING"))
+
+    # Счётчик и хост в Вебмастере заводятся на домен. Объявленная интеграция без
+    # домена — не «настроим позже», а невыполнимое обещание в manifest.
+    from factory.lords import gates as _gates
+    for field, check in (("analytics", _gates.check_analytics_account),
+                         ("webmaster", _gates.check_webmaster_account)):
+        if pkg.get(field):
+            try:
+                check(pkg)
+            except Exception as exc:
+                out.append(Blocker(
+                    getattr(exc, "status", "BLOCKED_ANALYTICS_ACCESS"), field, str(exc),
+                    getattr(exc, "required_input", "domain в manifest"), "VALIDATING"))
 
 
 def _check_files(pkg: dict, site_id: str, out: list[Blocker]) -> None:

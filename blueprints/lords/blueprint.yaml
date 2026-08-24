@@ -1,29 +1,36 @@
-# Blueprint `lords`: один код на все сайты направления, поведение задаётся
-# manifest'ом пакета. Второй копии кода под второй сайт не создаётся.
+# Blueprint `lords`: одно ядро на все сайты направления, поведение и вид задаёт
+# manifest пакета и профиль. Второй копии приложения под второй сайт нет.
 schema_version: 1
 blueprint: lords
 label: Lords
 portfolio: lords
+renderable: true
 
-# Каталог разделов. Раздел появляется на сайте, только если выполнены оба
-# условия: тип контента, от которого он зависит, находится в состоянии
-# `enabled`, и профиль сайта его либо владеет, либо держит как навигацию.
+# Каталог разделов. Раздел появляется на сайте, только если тип контента, от
+# которого он зависит, находится в состоянии `enabled`. Владелец раздела
+# индексирует его; остальные сайты держат раздел как навигацию с noindex.
 sections:
-  movies_index:      { path: /filmy/,      page_type: category,   requires: movies }
-  series_index:      { path: /serialy/,    page_type: category,   requires: series }
-  animation_index:   { path: /multfilmy/,  page_type: category,   requires: animation }
+  home:              { path: /,            page_type: home,       requires: any,         owner: self }
+  catalog_index:     { path: /catalog/,    page_type: category,   requires: any }
+  movies_index:      { path: /movies/,     page_type: category,   requires: movies }
+  series_index:      { path: /series/,     page_type: category,   requires: series }
+  animation_index:   { path: /animation/,  page_type: category,   requires: animation }
   anime_index:       { path: /anime/,      page_type: category,   requires: anime }
   dorama_index:      { path: /dorama/,     page_type: category,   requires: dorama }
-  collections_index: { path: /podborki/,   page_type: collection, requires: collections }
-  new_index:         { path: /novinki/,    page_type: category,   requires: any }
-  schedule:          { path: /raspisanie/, page_type: category,   requires: series }
-  genre_facet:       { path: /zhanr/,      page_type: category,   requires: any }
-  year_facet:        { path: /god/,        page_type: category,   requires: any }
-  country_facet:     { path: /strana/,     page_type: category,   requires: any }
+  collections_index: { path: /collections/, page_type: collection, requires: collections }
+  new_index:         { path: /new/,        page_type: category,   requires: any }
+  schedule:          { path: /schedule/,   page_type: category,   requires: series }
+  genres_index:      { path: /genres/,     page_type: category,   requires: any }
+  years_index:       { path: /years/,      page_type: category,   requires: any }
+  countries_index:   { path: /countries/,  page_type: category,   requires: any }
+  search:            { path: /search/,     page_type: search,     requires: any, owner: none }
 
-themes:
-  - lords_dark
-  - lords_light
+# Шаблоны адресов, порождающих по странице на значение.
+detail_routes:
+  genre:   { template: "/genres/{slug}/",    owner_section: genres_index,    page_type: category }
+  year:    { template: "/years/{year}/",     owner_section: years_index,     page_type: category }
+  country: { template: "/countries/{slug}/", owner_section: countries_index, page_type: category }
+  title:   { template: "/title/{slug}/",     owner_section: catalog_index,   page_type: title }
 
 profiles:
   - lords-general
@@ -31,14 +38,27 @@ profiles:
   - lords-curated
   - lords-genre
 
-# Каждым разделом владеет ровно один профиль. Не владеющий сайт держит раздел
-# как навигацию с noindex — так зритель попадает куда хотел, а в индекс уходит
-# одна страница, а не четыре её копии.
+themes:
+  - lords_dark
+  - lords_light
+
 ownership_rule: exactly_one_owner_per_section
 
-# Источник фактических данных. Пока контракт не передан, разделы не наполняются
-# и типы контента остаются в состоянии blocked_credentials.
 content_source:
   provider: cdnvideohub
   contract_ref: knowledge/cdnvideohub/content-api.yaml
   secret_scope: cdnvideohub/lords
+
+# Плеер. Пока Publisher ID не передан, вместо элемента плеера выводится
+# безопасная заглушка с диагностическим статусом. Точка подключения серверная:
+# после передачи секретов включается настоящий плеер без переделки интерфейса.
+player:
+  contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+  publisher_id_secret: secret://cdnvideohub/lords/publisher-id
+  placeholder_status: BLOCKED_INPUT_CDNVIDEOHUB_CREDENTIALS
+  public_env_forbidden: true
+
+preview:
+  indexing: forbidden
+  robots: "Disallow: /"
+  header: "X-Robots-Tag: noindex, nofollow"

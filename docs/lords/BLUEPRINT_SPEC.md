@@ -15,9 +15,22 @@
 | План сайта | `factory/lords/plan.py` |
 | Ворота дублей по плану | `factory/lords/gate.py` |
 | Адаптер источника | `factory/lords/content_api.py` |
+| Синтетический каталог стенда | `factory/lords/fixtures.py` |
+| Визуальная система | `factory/lords/theme.py` |
+| Рендерер HTML | `factory/lords/render.py` |
+| Рантайм (308, 404, пробы, noindex) | `factory/lords/serve.py` |
+| Точка подключения плеера | `factory/lords/player.py` |
+| Ворота невозможных операций | `factory/lords/gates.py` |
+| Стенд и переносимый пакет | `factory/lords/preview.py`, `factory/lords/bundle.py` |
 | Сборка | `factory/build.py::_build_lords` |
 | Dry-run | `python3 -m factory lords-plan [--assume-source fixture]` |
-| Тесты | `tests/unit/test_lords_network.py` |
+| Стенд | `python3 -m factory lords-preview [--serve]` |
+| Пакет стенда | `python3 -m factory lords-bundle` |
+| Тесты | `tests/unit/test_lords_network.py`, `tests/unit/test_lords_template.py` |
+| Браузерная приёмка | `playwright.lords.config.js`, `tests/e2e-lords/` |
+
+Устройство шаблона, таблица маршрутов и способ его открыть — в
+[`docs/lords/TEMPLATE.md`](TEMPLATE.md).
 
 ## Референсы
 

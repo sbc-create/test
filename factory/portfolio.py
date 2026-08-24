@@ -21,6 +21,10 @@ from factory.paths import PATHS
 REGISTRY = "inventory/portfolios.yaml"
 
 
+#: Состояние сайта, направление которого владелец ещё не называл.
+LEGACY_UNCLASSIFIED = "legacy/unclassified"
+
+
 @dataclass(frozen=True)
 class Portfolio:
     id: str
@@ -28,6 +32,9 @@ class Portfolio:
     purpose: str
     secret_scope: str
     blueprint: str
+    status: str = "registered"
+    note: str = ""
+    application_repository: str | None = None
 
     def secret_ref(self, name: str) -> str:
         """Ссылка на секрет направления. Значение секрета здесь не появляется."""
@@ -55,6 +62,9 @@ def load(root: Path | None = None) -> dict[str, Portfolio]:
             purpose=entry.get("purpose", ""),
             secret_scope=entry["secret_scope"],
             blueprint=entry["blueprint"],
+            status=entry.get("status", "registered"),
+            note=entry.get("note", ""),
+            application_repository=entry.get("application_repository"),
         )
         if portfolio.id in out:
             raise ValueError(f"направление {portfolio.id} объявлено дважды")
@@ -84,3 +94,29 @@ def members(packages: list[dict], root: Path | None = None) -> dict[str, list[st
         if pid in out:
             out[pid].append(str(package.get("site_id", "")))
     return {pid: sorted(sites) for pid, sites in out.items()}
+
+
+def legacy_unclassified(root: Path | None = None) -> dict:
+    """Сайты, направление которых владелец ещё не называл.
+
+    Отдельная запись, а не пустое поле в пакете: «не классифицирован» — это
+    состояние с причиной, а не отсутствие данных, и его видно в реестре.
+    """
+    path = registry_path(root)
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    entry = data.get("legacy_unclassified") or {}
+    return {
+        "status": entry.get("status", LEGACY_UNCLASSIFIED),
+        "sites": list(entry.get("sites") or []),
+        "reason": entry.get("reason", ""),
+        "unblocks": entry.get("unblocks", ""),
+    }
+
+
+def classification(package: dict, root: Path | None = None) -> str:
+    """Направление пакета или `legacy/unclassified`."""
+    declared = package.get("portfolio")
+    if declared:
+        return declared
+    site_id = str(package.get("site_id", ""))
+    return LEGACY_UNCLASSIFIED if site_id in legacy_unclassified(root)["sites"] else ""

@@ -8,27 +8,42 @@ schema_version: 1
 portfolios:
   - id: amedia
     label: Amedia
+    status: registered
     purpose: "Направление Amedia."
     secret_scope: cdnvideohub/amedia
     blueprint: payload-next-multisite
+    note: >-
+      Направление зарегистрировано, но ни один пакет к нему пока не подключён.
+      Существующие сайты будут привязаны позже, после подтверждения владельца.
 
   - id: yami
     label: Yami
+    status: registered
     purpose: "Направление Yami."
     secret_scope: cdnvideohub/yami
     blueprint: payload-next-multisite
+    application_repository: https://github.com/sbc-create/yummyani
+    note: >-
+      Фактическое приложение направления живёт в отдельном репозитории
+      sbc-create/yummyani и в эту фабрику не перенесено. Здесь объявлено только
+      направление и его секретная область.
 
   - id: lords
     label: Lords
+    status: implemented
     purpose: "Сеть киносайтов Lords на общем blueprint с настраиваемыми типами контента."
     secret_scope: cdnvideohub/lords
     blueprint: lords
+    note: "Новое направление, реализуемое в этой фабрике."
 
-# Принадлежность существующих сайтов
-# ----------------------------------
-# `site-a`, `site-b`, `site-c` и `pilot-local` направления не объявляют.
-# В их пакетах нет ни ссылки на референс, ни бренда, по которому можно было бы
-# определить направление: бренды — внутренние коды `site_a`, `site_b`, `site_c`.
-# Приписать их к Amedia или Yami можно только догадкой, поэтому поле `portfolio`
-# у них не заполнено и это BLOCKED_INPUT, а не упущение. Одно слово владельца
-# закрывает вопрос; до тех пор сайты работают как работали.
+# Пакеты вне направлений
+# ----------------------
+# `pilot-local`, `site-a`, `site-b` и `site-c` находятся в состоянии
+# `legacy/unclassified`. Направление им не приписано: в пакетах нет ни ссылки на
+# референс, ни бренда, по которому его можно определить — бренды это внутренние
+# коды. Классифицировать их догадкой значило бы выдумать факт.
+legacy_unclassified:
+  status: legacy/unclassified
+  sites: [pilot-local, site-a, site-b, site-c]
+  reason: "Направление не названо владельцем; определить его по содержимому пакета нельзя."
+  unblocks: "Одно слово владельца: к какому направлению относится каждый из сайтов."

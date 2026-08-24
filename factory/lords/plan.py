@@ -26,6 +26,10 @@ from factory.seo.uniqueness import PageObservation
 BLUEPRINT_DIR = "blueprints/lords"
 #: Раздел, зависящий от «любого» типа, живёт, пока активен хоть один тип.
 ANY = "any"
+#: Раздел, который каждый сайт держит и индексирует сам (главная).
+OWNER_SELF = "self"
+#: Раздел, который не индексирует никто: он служебный (поиск).
+OWNER_NONE = "none"
 
 
 @dataclass(frozen=True)
@@ -203,7 +207,13 @@ def build_plan(
 
     for section, spec in sections.items():
         requires = spec.get("requires", ANY)
-        owner = owner_of.get(section)
+        declared = spec.get("owner")
+        if declared == OWNER_SELF:
+            owner = profile_name
+        elif declared == OWNER_NONE:
+            owner = OWNER_NONE
+        else:
+            owner = owner_of.get(section)
         if owner is None:
             raise ValueError(f"раздел «{section}» не имеет владельца среди профилей")
 
@@ -218,7 +228,7 @@ def build_plan(
             })
             continue
 
-        owned = owner == profile_name
+        owned = owner == profile_name and declared != OWNER_NONE
         text = my_sections.get(section) or {}
         canonical = f"https://{domain}{spec['path']}" if domain else ""
 

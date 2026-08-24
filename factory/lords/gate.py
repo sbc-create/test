@@ -12,7 +12,7 @@ canonical индексируемой страницы с её собственн
 
 from __future__ import annotations
 
-from factory.lords.plan import SitePlan
+from factory.lords.plan import SitePlan, load_blueprint
 from factory.seo import uniqueness
 from factory.seo.model import Report
 
@@ -46,11 +46,21 @@ def ownership_overlap(plans: list[SitePlan]) -> list[dict]:
     Ворота уникальности ловят одинаковый состав адресов целиком (CSU-6), но два
     сайта могут индексировать один раздел и при этом отличаться остальными —
     такая пара пройдёт CSU-6 и всё равно останется дублем по этому разделу.
+
+    Разделы, объявленные в blueprint как `owner: self`, из проверки исключены.
+    Главная принадлежит каждому сайту по устройству: у неё разные тексты, разная
+    раскладка и разный состав блоков, и требовать, чтобы главная была ровно у
+    одного сайта из четырёх, значило бы оставить три сайта без главной. Дубли
+    среди этих страниц ловит уникальность, а не владение.
     """
+    self_owned = {
+        name for name, spec in (load_blueprint().get("sections") or {}).items()
+        if spec.get("owner") == "self"
+    }
     owners: dict[str, list[str]] = {}
     for plan in plans:
         for page in plan.pages:
-            if page.indexable:
+            if page.indexable and page.section not in self_owned:
                 owners.setdefault(page.section, []).append(plan.site_id)
     return [
         {"section": section, "sites": sorted(sites)}

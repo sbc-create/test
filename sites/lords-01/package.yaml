@@ -48,9 +48,9 @@ tenant:
   indexing_enabled: false
   allow_guest_comments: true
   owned_listings:
-  - /filmy/
-  - /serialy/
-  - /multfilmy/
+  - /movies/
+  - /series/
+  - /animation/
 database_ref: lords_lords_01
 cross_site_group: lords-quartet
 player_profile:
@@ -99,7 +99,7 @@ seo:
   items_per_page: 24
   url_templates:
     category: /{category_slug}/
-    title: /{category_slug}/{title_slug}/
+    title: /title/{title_slug}/
   pagination_template: /page/{n}/
   indexable_facets_allowlist: []
   non_indexable_parameters:
@@ -125,13 +125,13 @@ seo:
 navigation:
   primary:
   - label: Фильмы
-    url: /filmy/
+    url: /movies/
   - label: Сериалы
-    url: /serialy/
+    url: /series/
   - label: Мультфильмы
-    url: /multfilmy/
+    url: /animation/
   - label: Подборки
-    url: /podborki/
+    url: /collections/
   footer: []
 legal:
   owner: null

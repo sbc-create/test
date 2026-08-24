@@ -467,6 +467,79 @@ def cmd_blueprint(args) -> int:
     return EXIT_OK if status.ready else EXIT_BLOCKED
 
 
+def _lords_sites(args) -> list:
+    """Пакеты направления. Один сайт по `--site`, иначе все пакеты lords."""
+    import yaml
+
+    if getattr(args, "site", None):
+        return [args.site]
+    out = []
+    for path in sorted(PATHS.sites.glob("*/package.yaml")):
+        data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        if data.get("blueprint") == "lords":
+            out.append(str(data.get("site_id") or path.parent.name))
+    return out
+
+
+def cmd_lords_preview(args) -> int:
+    """Собирает стенд и, по просьбе, поднимает его локально."""
+    from factory.lords import preview as lords_preview
+
+    sites = _lords_sites(args)
+    if not sites:
+        print("пакеты направления lords не найдены")
+        return 1
+
+    results = []
+    for site_id in sites:
+        result = lords_preview.build_preview(site_id)
+        results.append(result)
+        report = result.report
+        print(f"{site_id} [{report['profile']}] документов: {report['documents']}, "
+              f"страниц: {report['pages']}, индексируемых: {report['indexable_pages']}, "
+              f"sitemap: {report['sitemap_urls']}, отпечаток: {report['digest'][:16]}")
+        print(f"  каталог: {report['directory']}")
+        print(f"  источник данных: {report['catalog']['source']}, "
+              f"записей: {report['catalog']['titles']}")
+        print(f"  плеер: {report['player']['status']} (проверка контракта: "
+              f"{'пройдена' if report['player']['passed'] else 'не запускалась'})")
+        for blocked in report["blocked_inputs"]:
+            print(f"  блокер: {blocked['code']} → {', '.join(blocked['blocks'])}")
+
+    if not args.serve:
+        return 0
+    if len(results) != 1:
+        print("для --serve укажи один сайт через --site")
+        return 2
+    server, _ = lords_preview.serve(results[0].site_id, host=args.host, port=args.port)
+    host, port = server.server_address[0], server.server_address[1]
+    print(f"стенд {results[0].site_id} доступен на http://{host}:{port}/ — Ctrl+C завершает")
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print("остановлен")
+    finally:
+        server.server_close()
+    return 0
+
+
+def cmd_lords_bundle(args) -> int:
+    """Собирает переносимый пакет стенда: документы, рантайм, откат."""
+    from factory.lords import bundle as lords_bundle
+
+    sites = _lords_sites(args)
+    if not sites:
+        print("пакеты направления lords не найдены")
+        return 1
+    for site_id in sites:
+        result = lords_bundle.build_bundle(site_id)
+        print(f"{site_id}: {result['archive']}")
+        print(f"  файлов: {result['files']}, sha256: {result['sha256'][:16]}, "
+              f"отпечаток сайта: {result['digest'][:16]}")
+        print(f"  откат: {result['rollback']}")
+    return 0
+
+
 def cmd_lords_plan(args) -> int:
     """Dry-run направления Lords: план сайтов, ворота дублей и план синхронизации.
 
@@ -695,6 +768,17 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--assume-source", choices=["none", "fixture"], default="none",
                    help="fixture моделирует переданные учётные данные и источник")
     p.set_defaults(func=cmd_lords_plan)
+
+    p = sub.add_parser("lords-preview", help="Lords: собрать стенд на синтетическом каталоге")
+    p.add_argument("--site", help="один сайт направления; без него — все")
+    p.add_argument("--serve", action="store_true", help="запустить локальный сервер стенда")
+    p.add_argument("--host", default="127.0.0.1", help="интерфейс локального сервера")
+    p.add_argument("--port", type=int, default=8080, help="порт локального сервера")
+    p.set_defaults(func=cmd_lords_preview)
+
+    p = sub.add_parser("lords-bundle", help="Lords: воспроизводимый пакет стенда")
+    p.add_argument("--site", help="один сайт направления; без него — все")
+    p.set_defaults(func=cmd_lords_bundle)
 
     p = sub.add_parser("env-report", help="read-only отчёт об окружении")
     p.set_defaults(func=cmd_env_report)

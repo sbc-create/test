@@ -150,12 +150,25 @@ class TestOneBlueprintFourConfigurations:
         assert len(set(surfaces.values())) == 4, f"конфигурации совпали: {surfaces}"
 
     def test_every_section_has_exactly_one_owner(self):
+        """У каждого раздела ровно одно разрешение владения.
+
+        Разрешений три: раздел принадлежит одному профилю; раздел принадлежит
+        каждому сайту сам по себе (`owner: self` — главная); раздел не
+        индексирует никто (`owner: none` — поиск). Раздел без разрешения и
+        профиль, объявивший чужой раздел, одинаково недопустимы: первый некому
+        индексировать, второй индексируют дважды.
+        """
         profiles = lords_plan.load_profiles()
         owners = lords_plan.owners(profiles)
         blueprint = lords_plan.load_blueprint()
-        assert set(owners) == set(blueprint["sections"]), (
-            "раздел без владельца или владелец без раздела"
-        )
+        sections = blueprint["sections"]
+        declared = {
+            name for name, spec in sections.items()
+            if spec.get("owner") in (lords_plan.OWNER_SELF, lords_plan.OWNER_NONE)
+        }
+        assert set(owners) | declared == set(sections), "раздел без владельца"
+        assert not set(owners) & declared, "раздел одновременно и свой, и профильный"
+        assert set(owners) <= set(sections), "профиль объявил несуществующий раздел"
 
     def test_no_section_is_indexed_by_two_sites(self):
         plans = [_fixture_plan(p) for p in _packages()]
