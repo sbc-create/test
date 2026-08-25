@@ -74,6 +74,22 @@ def cmd_install_panel(args) -> int:
         return 3
     print(f"  nginx: {result.get('detail')}")
 
+    # Дождаться, пока перезагруженный nginx действительно начнёт отдавать
+    # панель. `systemctl reload` возвращается сразу, а прежние рабочие
+    # процессы продолжают отвечать по старой конфигурации: на боевой установке
+    # проверка попала именно на них и получила 401 с realm основного сайта.
+    served, detail = publish.wait_until_serving(form.server_name, form.path,
+                                                panel_ui.MARKER)
+    print(f"  применение конфигурации: {detail}")
+    if not served:
+        try:
+            publish.uninstall_panel()
+        except publish.PublishError as exc:
+            print(f"  снятие панели: {exc}", file=sys.stderr)
+        print("\n[QA_FAILED] Панель не начала отвечать после перезагрузки nginx: "
+              "адрес и код не печатаются.", file=sys.stderr)
+        return 3
+
     live = publish.verify_live(form.server_name, panel_ui.MARKER, path=form.path)
     print()
     print("  ЖИВАЯ ПРОВЕРКА НА УСТАНОВЛЕННОМ NGINX")

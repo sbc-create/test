@@ -152,21 +152,33 @@ server {
 
 
 class TestLiveVerificationShape:
-    def test_all_five_required_checks_are_covered(self, monkeypatch, tmp_path):
-        """Задание перечисляет пять проверок — все обязаны быть в отчёте."""
+    def test_all_required_checks_are_covered(self, monkeypatch, tmp_path):
+        """Все заявленные проверки обязаны быть в отчёте.
+
+        Ответы различаются по адресу: единый ответ на всё сделал бы проверку
+        API бессмысленной — она затем и добавлена, что страница может прийти
+        не от панели.
+        """
         snippet = tmp_path / "enroll.conf"
         snippet.write_text(publish.PANEL_SNIPPET.format(port=1, path=PATH), encoding="utf-8")
         monkeypatch.setattr(publish, "SNIPPET", snippet)
         monkeypatch.setattr(publish, "certificate_subject", lambda *a, **k: (True, "ok"))
-        monkeypatch.setattr(publish, "_fetch",
-                            lambda url, timeout=15: (200, {}, "<!-- МЕТКА -->", ""))
+
+        def fetch(url, timeout=15):
+            if url.endswith("/app.js"):
+                return 200, {}, 'const BASE = "/x";', ""
+            if "/api/" in url:
+                return 405, {}, "", ""
+            return 200, {}, "<!-- МЕТКА -->", ""
+
+        monkeypatch.setattr(publish, "_fetch", fetch)
 
         result = publish.verify_live("example.test", "МЕТКА", path=PATH)
         names = " ".join(c.name for c in result.checks)
         for expected in ("200", "Basic Auth", "marker", "основной сайт",
-                         "сертификат", "access_log"):
+                         "сертификат", "access_log", "API панели", "дочерние пути"):
             assert expected in names, f"нет проверки: {expected}"
-        assert result.ok
+        assert result.ok, result.failures()
 
     def test_www_authenticate_fails_verification(self, monkeypatch, tmp_path):
         snippet = tmp_path / "enroll.conf"

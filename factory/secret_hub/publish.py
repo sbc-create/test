@@ -294,6 +294,48 @@ def install_panel(vhost: Path, server_name: str, port: int,
     return result
 
 
+#: Сколько ждать, пока перезагруженный nginx начнёт отдавать новую
+#: конфигурацию. `systemctl reload nginx` лишь посылает сигнал мастеру и
+#: возвращается немедленно; старые рабочие процессы продолжают отвечать по
+#: прежней конфигурации, пока не отработают текущие соединения.
+RELOAD_WAIT_SECONDS = 30
+RELOAD_POLL_SECONDS = 0.5
+
+
+def wait_until_serving(server_name: str, path: str, marker: str, *,
+                       timeout: int = RELOAD_WAIT_SECONDS) -> tuple[bool, str]:
+    """Ждёт, пока по адресу начнёт отвечать именно панель.
+
+    Существует из-за боевого отказа: проверка запускалась сразу после
+    `systemctl reload nginx` и попадала на ещё живую прежнюю конфигурацию —
+    запрос уходил в `location /` и возвращал 401 с realm основного сайта.
+    Выглядело как «location не сработал», хотя location был правильный, а
+    ошибка — во времени.
+
+    Признаком «новая конфигурация уже работает» служит метка панели в теле, а
+    не код 200: 200 умеет отдавать и посторонний обработчик.
+    """
+    import time as time_mod
+
+    deadline = time_mod.monotonic() + timeout
+    last = "ответа не было"
+    attempts = 0
+    while time_mod.monotonic() < deadline:
+        attempts += 1
+        status, headers, body, error = _fetch(f"https://{server_name}{path}")
+        if error:
+            last = error
+        elif marker in body:
+            return True, f"панель отвечает (попыток: {attempts})"
+        elif headers.get("WWW-Authenticate"):
+            last = (f"HTTP {status} с WWW-Authenticate — отвечает ещё прежняя "
+                    "конфигурация")
+        else:
+            last = f"HTTP {status} без метки панели"
+        time_mod.sleep(RELOAD_POLL_SECONDS)
+    return False, f"за {timeout} с новая конфигурация не заработала: {last}"
+
+
 def uninstall_panel() -> dict:
     """Снимает панель: адрес снова отвечает 404. Include остаётся на месте."""
     set_idle()
@@ -387,13 +429,35 @@ def verify_live(server_name: str, marker: str, *, path: str = DEFAULT_PATH,
     result.add("основной сайт продолжает отвечать", main_error == "" and main_status is not None,
                main_error or f"HTTP {main_status}")
 
-    # 4. access_log выключен именно для endpoint'а.
+    # 4. API панели отвечает. Страница может прийти из кэша или от чужого
+    #    обработчика; работающий API доказывает, что за адресом стоит именно
+    #    процесс панели. Проверяется её собственный скрипт: он отдаётся тем же
+    #    location и содержит объявление базового пути.
+    js_status, js_headers, js_body, js_error = _fetch(f"{base}{path}/app.js")
+    api_ok = (js_error == "" and js_status == 200
+              and "const BASE" in js_body
+              and not js_headers.get("WWW-Authenticate"))
+    result.add("API панели отвечает", api_ok,
+               js_error or f"HTTP {js_status}, "
+               + ("скрипт панели получен" if "const BASE" in js_body
+                  else "это не скрипт панели"))
+
+    # 5. Дочерние пути обслуживаются панелью, а не основным сайтом. Именно на
+    #    этом и споткнулась боевая установка: /__factory-secrets уходил в
+    #    `location /` и возвращал 401 с realm стенда.
+    child_status, child_headers, _, child_error = _fetch(f"{base}{path}/api/login/begin")
+    child_challenge = child_headers.get("WWW-Authenticate")
+    result.add("дочерние пути не требуют Basic Auth", not child_challenge,
+               child_error or (f"WWW-Authenticate: {child_challenge}" if child_challenge
+                               else f"HTTP {child_status} без запроса пароля"))
+
+    # 6. access_log выключен именно для endpoint'а.
     snippet_text = SNIPPET.read_text(encoding="utf-8") if SNIPPET.exists() else ""
     result.add("access_log для endpoint выключен", "access_log off;" in snippet_text,
                "директива на месте" if "access_log off;" in snippet_text
                else f"в {SNIPPET} нет access_log off")
 
-    # 5. Secret Hub не добавил Basic Auth.
+    # 7. Secret Hub не добавил Basic Auth.
     result.add("Secret Hub не ставит Basic Auth",
                "auth_basic_user_file" not in snippet_text,
                "в конфигурации формы пароля нет")
