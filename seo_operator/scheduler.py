@@ -20,6 +20,8 @@ from datetime import UTC, datetime
 from enum import Enum
 from pathlib import Path
 
+from . import quotas
+
 
 def _utcnow() -> str:
     return datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -256,13 +258,25 @@ class Worker:
                     error=job.last_error,
                 )
                 self.queue.update(job)
+                # Классификация отказа — единственная реализация живёт в quotas.py.
+                # Повторять имеет смысл не всякий отказ: истёкший токен и
+                # отсутствие прав не чинятся ожиданием, сколько ни жди.
+                kind = quotas.classify_exception(exc)
+                if kind not in quotas.RETRIABLE:
+                    job.state = JobState.FAILED
+                    job.last_error = f"{kind.value}: {job.last_error}"
+                    self.queue.update(job)
+                    self._log(job=job.job_id, event="failed_terminal", failure_kind=kind.value)
+                    return job
                 if job.attempts >= job.max_attempts:
                     job.state = JobState.FAILED
                     self.queue.update(job)
                     self._log(job=job.job_id, event="failed")
                     return job
                 if self.backoff_base:
-                    time.sleep(self.backoff_base * (2 ** (job.attempts - 1)))
+                    delay = quotas.backoff_seconds(
+                        job.attempts, kind, job.job_id, base=2.0, cap=900.0)
+                    time.sleep(self.backoff_base * (delay or 0.0))
                 continue
 
             job.state = JobState.DONE
