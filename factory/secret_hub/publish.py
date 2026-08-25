@@ -263,6 +263,12 @@ def set_active(port: int, path: str = DEFAULT_PATH) -> None:
 
 def activate(vhost: Path, server_name: str, port: int, path: str = DEFAULT_PATH) -> dict:
     """Полный путь публикации: include, активный снимок, проверка, перезагрузка."""
+    # Снимок простоя создаётся до include, а не после: nginx пустой glob
+    # переживает, но проверять конфигурацию, в которой подключать нечего, —
+    # значит проверять не то, что будет работать. Заодно первая же установка
+    # оставляет адрес в состоянии 404, а не в неопределённом.
+    if not SNIPPET.exists():
+        set_idle()
     result = ensure_include(vhost, server_name)
     previous = SNIPPET.read_text(encoding="utf-8") if SNIPPET.exists() else None
     set_active(port, path)
