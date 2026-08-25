@@ -146,12 +146,12 @@ class TestNginxConfiguration:
             assert "return 421" in configs[phase]["00-default.conf"]
             assert "default_server" in configs[phase]["00-default.conf"]
 
-    def test_basic_auth_protects_the_site_but_not_the_probes(self, sites, configs):
+    def test_no_site_is_behind_a_password(self, sites, configs):
+        """Сайты публичны: пароль снят навсегда решением владельца."""
         for site in sites:
             text = configs["phase2"][f"{site.site_id}.conf"]
-            assert f"auth_basic_user_file {staging_mod.HTPASSWD};" in text
-            probes = text.split("location = /healthz")[1]
-            assert "auth_basic" not in probes, "мониторинг не носит учётные данные"
+            assert 'auth_basic "' not in text, site.site_id
+            assert "auth_basic_user_file" not in text, site.site_id
 
     def test_noindex_header_is_always_present(self, configs):
         for phase in configs.values():
@@ -159,7 +159,7 @@ class TestNginxConfiguration:
                 assert 'add_header X-Robots-Tag "noindex, nofollow" always;' in text, name
 
     def test_every_add_header_is_marked_always(self, configs):
-        """Без `always` заголовок не попадёт на 401 — а стенд под паролем."""
+        """Без `always` заголовок не попадёт на 404 и 5xx."""
         for phase in configs.values():
             for name, text in phase.items():
                 for line in re.findall(r"^\s*add_header[^;]+;", text, re.M):
@@ -237,17 +237,17 @@ class TestApplyScript:
         assert check_at < reload_at, "reload стоит раньше проверки"
         assert "|| die" in body[check_at:reload_at], "провал nginx -t не останавливает сценарий"
 
-    def test_script_never_prints_the_password(self):
+    def test_script_never_prints_a_secret(self):
         text = SCRIPT.read_text(encoding="utf-8")
-        for line in text.split("\n"):
-            if "${password}" in line and ("log " in line or "echo " in line):
-                pytest.fail(f"пароль попадает в вывод: {line.strip()}")
-        assert "в этот вывод он не попал" in text.lower()
-
+        for line in text.splitlines():
+            stripped = line.strip()
+            if stripped.startswith(("log ", "warn ", "echo ")):
+                assert "${password}" not in stripped, stripped
+                assert "${API_TOKEN}" not in stripped, stripped
     def test_credentials_file_is_root_only(self):
+        """Файла с паролем больше не существует — создавать его нечему."""
         text = SCRIPT.read_text(encoding="utf-8")
-        assert 'chmod 0600 "${CREDENTIALS}"' in text
-
+        assert "lords-staging-credentials" not in text
     def test_script_refuses_a_port_held_by_a_stranger(self):
         text = SCRIPT.read_text(encoding="utf-8")
         assert "занят посторонним процессом" in text
@@ -268,11 +268,9 @@ class TestApplyScript:
         text = SCRIPT.read_text(encoding="utf-8")
         # Пользователь, пароль, сертификат и релиз создаются только при отсутствии.
         assert 'if ! id -u "${SERVICE_USER}"' in text
-        assert 'if [[ -s "${HTPASSWD}" ]]' in text
         assert 'if [[ -d "${target}" ]]' in text
         # Сертификат: существующая линия переиспользуется, а не выпускается
-        # заново. Проверка стала строже — мало существования файла, линия
-        # обязана покрывать оба имени, — поэтому путь лежит в переменной.
+        # заново, и обязана покрывать оба имени.
         assert 'chain="/etc/letsencrypt/live/${apex}/fullchain.pem"' in text
         assert 'if [[ -s "${chain}" ]]' in text
         assert 'cert_covers "${chain}" "${apex}"' in text
@@ -345,70 +343,55 @@ class TestApplyScriptBacksUpAndRollsBack:
         assert "RUNTIME_ROOT" not in rollback, "откат трогает каталог релизов"
 
 
-class TestApplyScriptBasicAuth:
-    """Пароль стенда — bcrypt, и слабого запасного пути нет."""
+class TestNoBasicAuthEverAgain:
+    """Пароля нет и не появляется.
 
-    def test_script_requires_bcrypt_and_installs_the_tool(self):
+    Прежний набор проверял, что сценарий создаёт bcrypt-пароль и бережно его
+    хранит. Решение владельца отменило саму задачу: пароль когда-то завёл этот
+    же сценарий, а не человек, и теперь он его не заводит. Проверяется
+    обратное — что ни одна ветка не создаёт Basic Auth заново.
+    """
+
+    def test_the_apply_script_creates_no_password(self):
         text = SCRIPT.read_text(encoding="utf-8")
-        assert "apache2-utils" in text
-        assert "htpasswd -bcB" in text
+        for forbidden in ("htpasswd -bcB", "apache2-utils", "lords-staging-credentials"):
+            assert forbidden not in text, forbidden
 
-    def test_script_has_no_apr1_fallback(self):
-        """APR1-MD5 — это MD5 с 1000 итераций; запасным путём он быть не может."""
+    def test_the_apply_script_does_not_reference_a_password_file(self):
         text = SCRIPT.read_text(encoding="utf-8")
-        assert "openssl passwd -apr1" not in text
-        assert "-apr1" not in text
+        assert "auth_basic_user_file" not in text
 
-    def test_script_verifies_the_hash_is_actually_bcrypt(self):
-        text = SCRIPT.read_text(encoding="utf-8")
-        assert r"^lords:\$2[aby]\$" in text
+    def test_the_generated_config_has_no_password(self):
+        for site in staging_mod.sites():
+            config = staging_mod.nginx_phase2(site)
+            assert 'auth_basic "' not in config, site.site_id
+            assert "auth_basic_user_file" not in config, site.site_id
 
-    def test_password_is_generated_and_never_printed(self):
-        text = SCRIPT.read_text(encoding="utf-8")
-        assert "/dev/urandom" in text
-        assert "chmod 0600 \"${CREDENTIALS}\"" in text
+    def test_phase_one_also_has_no_password(self):
+        for site in staging_mod.sites():
+            config = staging_mod.nginx_phase1(site)
+            assert 'auth_basic "' not in config, site.site_id
 
-        # log и warn всегда идут в stdout/stderr — там пароля быть не может.
-        for line in text.splitlines():
-            stripped = line.strip()
-            if stripped.startswith(("log ", "warn ")):
-                assert "${password}" not in stripped, stripped
-                assert "${AUTH_PASSWORD}" not in stripped, stripped
+    def test_indexing_stays_closed_without_the_password(self):
+        """От роботов сайт закрыт заголовком и robots.txt, а не паролем."""
+        for site in staging_mod.sites():
+            config = staging_mod.nginx_phase2(site)
+            assert "noindex, nofollow" in config, site.site_id
 
-    def test_the_password_is_written_only_into_the_credentials_file(self):
-        """Единственный printf с паролем обязан быть перенаправлен в файл.
-
-        Проверяется не отсутствие printf, а его назначение: строка с паролем
-        существует ровно одна, и она попадает в блок, вывод которого уходит в
-        ${CREDENTIALS}, а не на терминал.
-        """
-        text = SCRIPT.read_text(encoding="utf-8")
-        printing = [line.strip() for line in text.splitlines()
-                    if "${password}" in line and "printf" in line]
-        assert len(printing) == 1, printing
-
-        block = text.split("umask 077", 1)[1].split("chmod 0600", 1)[0]
-        assert "${password}" in block, "пароль пишется вне блока учётных данных"
-        assert '> "${CREDENTIALS}"' in block, "блок с паролем не перенаправлен в файл"
-
-    def test_the_acceptance_password_is_read_from_the_file_not_the_output(self):
-        text = SCRIPT.read_text(encoding="utf-8")
-        assert 'sed -n \'s/^пароль: //p\' "${CREDENTIALS}"' in text
-        # После приёмки переменная гасится, чтобы не утечь в дальнейший вывод.
-        assert 'AUTH_PASSWORD=""  # в отчёт и журнал пароль не попадает' in text
-
-    def test_credentials_file_is_not_inside_the_repository(self):
-        text = SCRIPT.read_text(encoding="utf-8")
-        assert "CREDENTIALS=/root/" in text
+    def test_no_function_can_bring_the_password_back(self):
+        """Параметра, включающего пароль, не существует намеренно."""
+        import inspect
+        signature = inspect.signature(staging_mod.nginx_phase2)
+        assert "basic_auth" not in signature.parameters
 
 
 class TestApplyScriptAcceptance:
     """После запуска сценарий проверяет то, что получилось, а не заявляет это."""
 
-    def test_acceptance_checks_auth_both_ways(self):
+    def test_acceptance_expects_a_public_site(self):
         text = SCRIPT.read_text(encoding="utf-8")
-        assert "401 без пароля" in text
-        assert "200 с паролем" in text
+        assert "сайт публичен" in text
+        assert "вернулся Basic Auth" in text, "приёмка не замечает возврата пароля"
 
     def test_acceptance_checks_indexing_is_closed_on_a_public_response(self):
         text = SCRIPT.read_text(encoding="utf-8")

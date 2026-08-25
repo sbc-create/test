@@ -33,8 +33,6 @@ readonly NGINX_DIR=/etc/nginx/lords
 readonly NGINX_INCLUDE=/etc/nginx/conf.d/lords.conf
 readonly RUNTIME_ROOT=/srv/lords
 readonly ACME_ROOT=/var/www/lords-acme
-readonly HTPASSWD="${NGINX_DIR}/.htpasswd"
-readonly CREDENTIALS=/root/lords-staging-credentials
 readonly DEFAULT_CERT="${NGINX_DIR}/default-self-signed"
 readonly SERVICE_USER=lords
 readonly PORTS=(9101 9102 9103)
@@ -164,12 +162,11 @@ on_error() {
   trap - ERR
   set +e
 
-  # BASH_COMMAND хранит текст команды до подстановок, поэтому значение пароля в
-  # него не попадает. Строку с htpasswd всё равно не печатаем целиком: там есть
-  # позиционный аргумент с паролем, и текст команды не стоит показывать даже в
-  # неразвёрнутом виде.
+  # BASH_COMMAND хранит текст команды до подстановок, поэтому значения секретов
+  # в него не попадают. Строки, где секреты всё же упоминаются по имени, не
+  # показываются целиком: сценарий работает с токеном CDNVideoHub.
   case "${command}" in
-    *htpasswd*|*password*|*CREDENTIALS*) command='<команда работы с учётными данными скрыта>' ;;
+    *token*|*TOKEN*|*password*) command='<команда работы с учётными данными скрыта>' ;;
   esac
 
   printf '\033[31m[x]\033[0m отказ на этапе: %s\n' "${STAGE:-не начат}" >&2
@@ -348,72 +345,16 @@ install -d -m 0755 "${NGINX_DIR}" "${RUNTIME_ROOT}" "${ACME_ROOT}"
 install -d -m 0755 -o "${SERVICE_USER}" -g "${SERVICE_USER}" "${RUNTIME_ROOT}"
 
 # --------------------------------------------------------------------------
-# 4. Basic Auth. Пароль рождается здесь и в вывод не попадает.
+# 4. Публичный доступ без пароля
 # --------------------------------------------------------------------------
-stage "создание Basic Auth"
-# Формат хеша — bcrypt, и запасного пути в слабый формат нет. APR1-MD5, который
-# htpasswd ставит по умолчанию, — это MD5 с 1000 итераций: для пароля, лежащего
-# на публичном хосте, запас прочности неприемлемый. Поэтому при отсутствии
-# htpasswd сценарий доставляет apache2-utils, а не переходит на APR1 молча.
-if ! command -v htpasswd >/dev/null; then
-  log "htpasswd не найден — ставлю apache2-utils"
-  export DEBIAN_FRONTEND=noninteractive
-  apt-get update -qq >/dev/null 2>&1 \
-    || warn "apt-get update не прошёл; пробую установку с имеющимися списками"
-  apt-get install -y -qq apache2-utils >/dev/null 2>&1 \
-    || die "не удалось поставить apache2-utils; bcrypt недоступен, слабый формат не используется"
-fi
-command -v htpasswd >/dev/null \
-  || die "htpasswd отсутствует после установки apache2-utils"
-
-if [[ -s "${HTPASSWD}" ]]; then
-  # Повторный запуск не меняет пароль. Но если файл остался от прежней версии
-  # сценария в формате APR1, он переписывается: bcrypt-строка начинается с $2y$.
-  if grep -q '^lords:\$2[aby]\$' "${HTPASSWD}"; then
-    log "файл Basic Auth уже есть, формат bcrypt — пароль не меняю"
-    REGENERATE_AUTH=0
-  else
-    warn "файл Basic Auth не в формате bcrypt — перевыпускаю пароль"
-    REGENERATE_AUTH=1
-  fi
-else
-  REGENERATE_AUTH=1
-fi
-
-if [[ "${REGENERATE_AUTH}" -eq 1 ]]; then
-  log "создаю пароль Basic Auth (bcrypt, cost 12)"
-
-  # 32 символа из 62-символьного алфавита — около 190 бит энтропии.
-  #
-  # Источник конечный, и обрезка делается расширением параметра, а не `head`.
-  # Прежний вариант `tr -dc ... </dev/urandom | head -c 32` выглядел безобидно,
-  # но /dev/urandom бесконечен: `head` забирал 32 байта и закрывал канал, `tr`
-  # получал SIGPIPE и завершался кодом 141, а `pipefail` объявлял весь конвейер
-  # отказом. Пароль при этом создавался верно — падала именно проверка статуса.
-  password_pool="$(openssl rand -base64 96 | LC_ALL=C tr -dc 'A-Za-z0-9')"
-  password="${password_pool:0:32}"
-  unset password_pool
-  [[ ${#password} -eq 32 ]] || die "не удалось получить пароль нужной длины"
-
-  # Пароль передаётся htpasswd аргументом только в пределах этого процесса;
-  # -C 12 задаёт стоимость bcrypt.
-  htpasswd -bcB -C 12 "${HTPASSWD}" lords "${password}" >/dev/null 2>&1 \
-    || die "htpasswd не создал bcrypt-хеш"
-  grep -q '^lords:\$2[aby]\$' "${HTPASSWD}" \
-    || die "htpasswd записал не bcrypt; слабый формат не принимается"
-
-  umask 077
-  { printf 'Lords staging — Basic Auth\n'
-    printf 'создано: %s\n' "$(date -Is)"
-    printf 'формат: bcrypt (htpasswd -B, cost 12)\n'
-    printf 'логин: lords\n'
-    printf 'пароль: %s\n' "${password}"
-  } > "${CREDENTIALS}"
-  chmod 0600 "${CREDENTIALS}"
-  log "пароль записан в ${CREDENTIALS} (права 0600). В этот вывод он не попал."
-fi
-chown root:www-data "${HTPASSWD}" 2>/dev/null || chown root:root "${HTPASSWD}"
-chmod 0640 "${HTPASSWD}"
+stage "публичный доступ"
+# Basic Auth здесь больше не создаётся. Решение владельца: сайты Lords
+# публичны уже на fixture-каталоге. Пароль когда-то завёл этот же сценарий, а
+# не человек, — и он же перестаёт его заводить.
+#
+# От индексации сайт закрыт не паролем: X-Robots-Tag, robots.txt с Disallow и
+# пустой sitemap остаются на месте и от пароля никогда не зависели.
+log "Basic Auth не создаётся: сайты публичны, индексация закрыта заголовком и robots.txt"
 
 # --------------------------------------------------------------------------
 # 5. Раскладка релизов. Переключение симлинка — атомарное.
@@ -629,13 +570,6 @@ stage "публичная приёмка"
 log "публичная приёмка"
 failures=0
 
-# Пароль читается из файла, а не из переменной: на повторном запуске пароль не
-# перевыпускался, и в памяти его нет. В вывод он не попадает ни здесь, ни ниже.
-AUTH_PASSWORD=""
-if [[ -r "${CREDENTIALS}" ]]; then
-  AUTH_PASSWORD="$(sed -n 's/^пароль: //p' "${CREDENTIALS}" | head -1)"
-fi
-
 # Публичная проверка идёт к локальному origin, но под настоящим именем.
 #
 # `--resolve имя:443:127.0.0.1` подменяет только адрес: в SNI и в проверке
@@ -664,34 +598,30 @@ for row in "${SITES[@]}"; do
   IFS=$'\t' read -r site_id apex www port unit runtime <<<"${row}"
 
   code="$(curl_code "${apex}" "https://${apex}/")"
-  [[ "${code}" == "401" ]] \
-    && log "  ${apex}: 401 без пароля — Basic Auth работает" \
-    || { warn "  ${apex}: ожидался 401, получено ${code}"; failures=$((failures + 1)); }
+  [[ "${code}" == "200" ]] \
+    && log "  ${apex}: 200 — сайт публичен" \
+    || { warn "  ${apex}: ожидался 200, получено ${code}"; failures=$((failures + 1)); }
 
-  # С паролем сайт обязан открыться: 401 на всё подряд — это тоже отказ стенда.
-  if [[ -n "${AUTH_PASSWORD}" ]]; then
-    authed="$(curl_code "${apex}" "https://${apex}/" -u "lords:${AUTH_PASSWORD}")"
-    [[ "${authed}" == "200" ]] \
-      && log "  ${apex}: 200 с паролем — стенд открывается" \
-      || { warn "  ${apex}: с паролем ожидался 200, получено ${authed}"; failures=$((failures + 1)); }
-
-    # Индексация закрыта на публичном ответе, а не только в конфигурации.
-    headers="$(curl -sS -D - -o /dev/null --max-time 15 \
-      --resolve "${apex}:443:127.0.0.1" \
-      -u "lords:${AUTH_PASSWORD}" "https://${apex}/" 2>/dev/null || true)"
-    grep -qi '^x-robots-tag:.*noindex' <<<"${headers}" \
-      && log "  ${apex}: X-Robots-Tag noindex на публичном ответе" \
-      || { warn "  ${apex}: нет X-Robots-Tag noindex"; failures=$((failures + 1)); }
-
-    robots_body="$(curl -sS --max-time 15 --resolve "${apex}:443:127.0.0.1" \
-      -u "lords:${AUTH_PASSWORD}" "https://${apex}/robots.txt" 2>/dev/null || true)"
-    grep -q 'Disallow: /' <<<"${robots_body}" \
-      && log "  ${apex}: robots.txt закрывает сайт целиком" \
-      || { warn "  ${apex}: robots.txt не содержит Disallow: /"; failures=$((failures + 1)); }
-  else
-    warn "  ${apex}: пароль недоступен, проверки под аутентификацией пропущены"
+  # Пароля быть не должно: заголовок WWW-Authenticate означает, что он вернулся.
+  headers="$(curl -sS -D - -o /dev/null --max-time 15 \
+    --resolve "${apex}:443:127.0.0.1" "https://${apex}/" 2>/dev/null || true)"
+  if grep -qi '^www-authenticate:' <<<"${headers}"; then
+    warn "  ${apex}: вернулся Basic Auth"
     failures=$((failures + 1))
+  else
+    log "  ${apex}: пароля нет"
   fi
+
+  # Индексация закрыта не паролем, а заголовком и robots.txt.
+  grep -qi '^x-robots-tag:.*noindex' <<<"${headers}" \
+    && log "  ${apex}: X-Robots-Tag noindex" \
+    || { warn "  ${apex}: нет X-Robots-Tag noindex"; failures=$((failures + 1)); }
+
+  robots_body="$(curl -sS --max-time 15 --resolve "${apex}:443:127.0.0.1" \
+    "https://${apex}/robots.txt" 2>/dev/null || true)"
+  grep -q 'Disallow: /' <<<"${robots_body}" \
+    && log "  ${apex}: robots.txt закрывает сайт целиком" \
+    || { warn "  ${apex}: robots.txt не содержит Disallow: /"; failures=$((failures + 1)); }
 
   # www отдельным именем: у него свой SNI и своё имя в сертификате.
   redirect="$(curl -sS -o /dev/null -w '%{http_code} %{redirect_url}' --max-time 15 \
@@ -752,8 +682,6 @@ else
   fi
 fi
 
-AUTH_PASSWORD=""  # в отчёт и журнал пароль не попадает
-
 # Приёмка — такой же повод для отката, как и падение на любом шаге выше.
 # Стенд, который применился, но отвечает не тем, оставлять работающим нельзя.
 if [[ "${failures}" -gt 0 ]]; then
@@ -776,6 +704,6 @@ for s in data["sites"]:
 echo
 log "commit: ${HEAD_SHA}"
 log "снимок для отката: ${BACKUP_DIR}"
-log "учётные данные Basic Auth: ${CREDENTIALS} (bcrypt, значение в вывод не печатается)"
+log "Basic Auth не используется: сайты публичны"
 log "индексация выключена, X-Robots-Tag: noindex, nofollow, robots.txt: Disallow: /"
 log "Метрика не создавалась, хосты в Вебмастер не добавлялись, боевой выкат не авторизован"

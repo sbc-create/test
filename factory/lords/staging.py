@@ -166,30 +166,27 @@ ACTIVATION_DIR = f"{NGINX_DIR}/activation"
 ACTIVATION_PATH = "/__lords-activate"
 
 
-def _proxy_block(site: StagingSite, *, basic_auth: bool = True,
+def _proxy_block(site: StagingSite, *,
                  activation_port: int | None = None,
                  activation_path: str = ACTIVATION_PATH,
                  marker: str = "") -> str:
     """Тело серверного блока сайта.
 
-    `basic_auth=False` снимает пароль со всего сайта на время приёма учётных
-    данных. Это осознанный размен: форму нельзя показать под паролем, которого
-    владелец не знает, а индексация всё равно закрыта заголовком, robots.txt и
-    пустым sitemap — они от пароля не зависят.
+    Basic Auth здесь не порождается вовсе — ни при каких аргументах. Решение
+    владельца: сайты Lords публичны уже на fixture-каталоге, пароль больше не
+    создаётся и не восстанавливается. Параметра, который вернул бы его, нет
+    намеренно: он бы рано или поздно оказался включён.
 
-    `activation_port` добавляет временный адрес формы прямо в этот блок. Раньше
-    он подключался через include отдельного каталога, и это оказалось хрупко:
-    развёрнутая конфигурация была записана до появления include, каталог никто
-    не читал, а форма молча уходила в общий `location /` под пароль. Здесь
-    подстановки нет — либо адрес в тексте конфигурации, либо его нет.
+    От индексации сайт закрыт не паролем, а заголовком `X-Robots-Tag`,
+    `robots.txt` с `Disallow: /` и пустым sitemap. Эти три барьера от пароля
+    никогда не зависели и остаются на месте.
+
+    `activation_port` добавляет временный адрес формы прямо в этот блок. Через
+    include отдельного каталога это оказалось хрупко: развёрнутая конфигурация
+    была записана до появления include, каталог никто не читал, и форма молча
+    уходила в общий `location /`. Здесь подстановки нет — либо адрес в тексте
+    конфигурации, либо его нет.
     """
-    auth = ""
-    if basic_auth:
-        auth = f'''        auth_basic "Lords staging";
-        auth_basic_user_file {HTPASSWD};
-
-'''
-
     form = ""
     if activation_port:
         form = f"""
@@ -211,7 +208,7 @@ def _proxy_block(site: StagingSite, *, basic_auth: bool = True,
 
     return f"""{form}
     location / {{
-{auth}        proxy_pass http://127.0.0.1:{site.port};
+        proxy_pass http://127.0.0.1:{site.port};
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -261,7 +258,7 @@ server {{
 """
 
 
-def nginx_phase2(site: StagingSite, *, basic_auth: bool = True,
+def nginx_phase2(site: StagingSite, *,
                  activation_port: int | None = None,
                  marker: str = "") -> str:
     """Фаза 2: HTTPS, www → apex через 308, Basic Auth, noindex."""
@@ -315,7 +312,7 @@ server {{
 
     access_log /var/log/nginx/{site.site_id}.access.log;
     error_log  /var/log/nginx/{site.site_id}.error.log;
-{_proxy_block(site, basic_auth=basic_auth, activation_port=activation_port, marker=marker)}}}
+{_proxy_block(site, activation_port=activation_port, marker=marker)}}}
 """
 
 

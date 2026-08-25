@@ -112,9 +112,9 @@ def stand(tmp_path):
     site_conf = tmp_path / "site.conf"
     marker = "lords-form-testmarker"
 
-    def render(*, basic_auth=True, activation_port=None):
+    def render(*, activation_port=None):
         block = staging_mod.nginx_phase2(
-            site, basic_auth=basic_auth, activation_port=activation_port, marker=marker
+            site, activation_port=activation_port, marker=marker
         )
         block = (
             block
@@ -195,19 +195,29 @@ def request(stand_info, path):
     return response.status, headers, body
 
 
-class TestWithoutTheSnippet:
-    """Обычное состояние: временного адреса нет."""
+class TestWithoutTheForm:
+    """Обычное состояние: сайт публичен, формы нет."""
 
-    def test_the_main_site_requires_a_password(self, stand):
+    def test_the_site_answers_without_a_password(self, stand):
         status, headers, _body = request(stand, "/")
-        assert status == 401
-        assert "www-authenticate" in headers
+        assert status == 200, f"сайт отвечает {status}"
+        assert "www-authenticate" not in headers, "вернулся Basic Auth"
 
-    def test_the_activation_path_is_also_protected_when_absent(self, stand):
-        """Пока сниппета нет, адрес обслуживает общий location — под паролем."""
-        status, headers, _body = request(stand, "/__lords-activate")
-        assert status == 401
-        assert "www-authenticate" in headers
+    def test_indexing_stays_closed(self, stand):
+        _status, headers, _body = request(stand, "/")
+        assert "noindex" in (headers.get("x-robots-tag") or "")
+
+    def test_the_activation_path_does_not_reach_the_intake(self, stand):
+        """Формы нет — адрес обслуживает рантайм сайта, а не приёмник."""
+        _status, _headers, body = request(stand, "/__lords-activate")
+        assert body.decode() != f"backend:{stand['intake_port']}"
+
+    def test_no_password_anywhere_in_the_config(self, stand):
+        from factory.lords import staging
+        site = next(s for s in staging.sites() if s.site_id == "lords-01")
+        config = staging.nginx_phase2(site)
+        assert 'auth_basic "' not in config
+        assert "auth_basic_user_file" not in config
 
 
 class TestDuringTheWindow:
@@ -219,7 +229,7 @@ class TestDuringTheWindow:
     """
 
     def open_window(self, stand):
-        stand["render"](basic_auth=False, activation_port=stand["intake_port"])
+        stand["render"](activation_port=stand["intake_port"])
         assert stand["nginx"]("-t").returncode == 0
         assert stand["nginx"]("-s", "reload").returncode == 0
         time.sleep(0.5)
@@ -257,38 +267,45 @@ class TestDuringTheWindow:
 
 
 class TestAfterTeardown:
-    """После снятия формы адрес снова закрыт, пароль сайта на месте."""
+    """После снятия формы адрес её больше не обслуживает, сайт остаётся публичным."""
 
-    def test_the_endpoint_disappears_again(self, stand):
-        stand["render"](basic_auth=False, activation_port=stand["intake_port"])
+    def test_the_form_disappears_but_the_site_stays_public(self, stand):
+        stand["render"](activation_port=stand["intake_port"])
         stand["nginx"]("-s", "reload")
         time.sleep(0.5)
         assert request(stand, "/__lords-activate")[0] == 200
 
-        stand["render"]()  # обратно: пароль на месте, формы нет
+        stand["render"](activation_port=None)
         assert stand["nginx"]("-t").returncode == 0
         assert stand["nginx"]("-s", "reload").returncode == 0
         time.sleep(0.5)
 
-        status, headers, _body = request(stand, "/__lords-activate")
-        assert status == 401, "адрес остался открытым после снятия"
-        assert "www-authenticate" in headers
+        # Сайт по-прежнему открыт.
+        status, headers, _body = request(stand, "/")
+        assert status == 200
+        assert "www-authenticate" not in headers
 
-    def test_auth_off_without_the_form_leaves_the_address_closed(self, stand):
-        """После успеха: пароль снят навсегда, но формы уже нет."""
-        stand["render"](basic_auth=False, activation_port=None)
-        assert stand["nginx"]("-t").returncode == 0
-        stand["nginx"]("-s", "reload")
-        time.sleep(0.5)
-        assert request(stand, "/")[0] == 200
-        # Формы нет — адрес обслуживает рантайм, а не приёмник.
+        # А адрес формы больше не ведёт в приёмник.
         _status, _headers, body = request(stand, "/__lords-activate")
         assert body.decode() != f"backend:{stand['intake_port']}"
 
-    def test_the_site_survives_the_empty_include(self, stand):
-        """Пустой каталог include — не ошибка конфигурации."""
-        assert stand["nginx"]("-t").returncode == 0
-        assert request(stand, "/")[0] == 401
+    def test_no_password_returns_after_teardown(self, stand):
+        stand["render"](activation_port=stand["intake_port"])
+        stand["nginx"]("-s", "reload")
+        time.sleep(0.3)
+        stand["render"](activation_port=None)
+        stand["nginx"]("-s", "reload")
+        time.sleep(0.3)
+        for path in ("/", "/catalog/", "/movies/"):
+            _status, headers, _body = request(stand, path)
+            assert "www-authenticate" not in headers, f"{path}: пароль вернулся"
+
+    def test_indexing_survives_teardown(self, stand):
+        stand["render"](activation_port=None)
+        stand["nginx"]("-s", "reload")
+        time.sleep(0.3)
+        _status, headers, _body = request(stand, "/")
+        assert "noindex" in (headers.get("x-robots-tag") or "")
 
 
 class TestConfigShape:
@@ -298,11 +315,9 @@ class TestConfigShape:
 
     def test_the_window_config_has_the_form_and_no_password(self):
         site = next(s for s in staging_mod.sites() if s.site_id == "lords-01")
-        config = staging_mod.nginx_phase2(
-            site, basic_auth=False, activation_port=1234, marker="M"
-        )
+        config = staging_mod.nginx_phase2(site, activation_port=1234, marker="M")
         assert f"location = {staging_mod.ACTIVATION_PATH} {{" in config
-        assert 'auth_basic "Lords staging";' not in config
+        assert 'auth_basic "' not in config
 
     def test_the_host_script_verifies_the_real_nginx_before_printing(self):
         from factory.paths import PATHS

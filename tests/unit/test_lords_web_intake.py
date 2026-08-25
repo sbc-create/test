@@ -442,14 +442,20 @@ class TestHostScript:
         assert "robots.txt не закрывает сайт" in text
         assert "Disallow: /" in text
 
-    def test_auth_is_restored_on_any_failure(self, text):
-        assert text.count("restore_config") >= 4
+    def test_auth_is_never_restored(self, text):
+        """Пароль снят навсегда: возвращать его не должна ни одна ветка."""
+        assert "Basic Auth восстановлен" not in text
         restore = text.split("restore_config() {", 1)[1].split("\n}", 1)[0]
-        assert "Basic Auth восстановлен" in restore
+        assert "auth_basic_user_file" in restore, "возврат не вычищает пароль из копии"
+        assert "остаются публичными" in restore
 
-    def test_auth_stays_off_after_success(self, text):
+    def test_sites_stay_public_after_success(self, text):
         assert "KEEP_AUTH_OFF=1" in text
         assert "remove_form_keep_auth_off" in text
+
+    def test_the_script_never_creates_a_password(self, text):
+        for forbidden in ("htpasswd", "auth_basic \"", "apache2-utils"):
+            assert forbidden not in text, forbidden
 
     def test_the_form_is_404_after_success(self, text):
         tail = text.split("KEEP_AUTH_OFF=1", 1)[1]
@@ -504,40 +510,36 @@ class TestActivatorNonInteractiveMode:
 
 
 class TestGeneratedConfig:
-    """Форма и снятие пароля рендерятся в конфигурацию, а не подключаются."""
+    """Конфигурация публична всегда; форма добавляется адресом, не паролем."""
 
     def _site(self):
         from factory.lords import staging
         return next(s for s in staging.sites() if s.site_id == "lords-01")
 
-    def test_the_normal_config_keeps_basic_auth_and_has_no_form(self):
+    def test_the_normal_config_is_public_and_has_no_form(self):
         from factory.lords import staging
         config = staging.nginx_phase2(self._site())
-        assert 'auth_basic "Lords staging";' in config
+        assert 'auth_basic "' not in config
+        assert "auth_basic_user_file" not in config
         assert staging.ACTIVATION_PATH not in config
 
-    def test_the_window_config_drops_auth_and_carries_the_form(self):
+    def test_the_window_config_carries_the_form_and_stays_public(self):
         from factory.lords import staging
-        config = staging.nginx_phase2(
-            self._site(), basic_auth=False, activation_port=45678, marker="MARK"
-        )
-        assert 'auth_basic "Lords staging";' not in config
+        config = staging.nginx_phase2(self._site(), activation_port=45678, marker="MARK")
+        assert 'auth_basic "' not in config
         assert f"location = {staging.ACTIVATION_PATH} {{" in config
         assert "MARK" in config
         assert "proxy_pass http://127.0.0.1:45678;" in config
 
-    def test_the_window_config_keeps_indexing_closed(self):
+    def test_indexing_stays_closed_in_both_shapes(self):
         from factory.lords import staging
-        config = staging.nginx_phase2(
-            self._site(), basic_auth=False, activation_port=45678, marker="MARK"
-        )
-        assert "noindex, nofollow" in config
+        for config in (staging.nginx_phase2(self._site()),
+                       staging.nginx_phase2(self._site(), activation_port=1, marker="M")):
+            assert "noindex, nofollow" in config
 
     def test_the_form_location_is_exact_and_unlogged(self):
         from factory.lords import staging
-        config = staging.nginx_phase2(
-            self._site(), basic_auth=False, activation_port=1, marker="M"
-        )
+        config = staging.nginx_phase2(self._site(), activation_port=1, marker="M")
         form = config.split(f"location = {staging.ACTIVATION_PATH} {{", 1)[1].split("}", 1)[0]
         assert "access_log off;" in form
         assert "client_max_body_size 8k;" in form

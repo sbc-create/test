@@ -46,14 +46,6 @@ def header() -> str:
     return text[:cut]
 
 
-def password_block() -> str:
-    """Участок генерации пароля — тот самый, что падал на строке 309."""
-    text = SCRIPT.read_text(encoding="utf-8")
-    start = text.index("password_pool=")
-    end = text.index("не удалось получить пароль нужной длины", start)
-    return text[start:text.index("\n", end) + 1]
-
-
 def run_bash(script: str, **kwargs) -> subprocess.CompletedProcess:
     return subprocess.run(
         [BASH, "-c", script], capture_output=True, text=True, timeout=120, **kwargs
@@ -63,55 +55,17 @@ def run_bash(script: str, **kwargs) -> subprocess.CompletedProcess:
 # ---------------------------------------------------------------------------
 # Причина отказа: SIGPIPE в конвейере под pipefail
 # ---------------------------------------------------------------------------
-class TestPasswordGeneration:
-    def test_the_block_runs_under_the_scripts_own_shell_options(self):
-        """Исполняется настоящий участок сценария с `set -Eeuo pipefail`."""
-        result = run_bash("set -Eeuo pipefail\n" + password_block() + '\necho "LEN=${#password}"\n')
-        assert result.returncode == 0, (
-            f"участок генерации пароля отказал: код {result.returncode}\n{result.stderr}"
-        )
-        assert "LEN=32" in result.stdout, result.stdout
+class TestNoSigpipePipelines:
+    """Наследие дефекта с генерацией пароля.
 
-    def test_the_password_is_not_printed_by_the_block(self):
-        result = run_bash("set -Eeuo pipefail\n" + password_block() + '\necho "LEN=${#password}"\n')
-        assert result.stdout.strip() == "LEN=32", "участок печатает лишнее"
+    Сам участок исчез вместе с Basic Auth — пароль больше не создаётся. Но
+    урок остаётся применимым к любой строке сценария: конвейер, где левое
+    звено читает бесконечный источник, а правое закрывает канал, под
+    `pipefail` объявляется отказом. Поэтому проверяется не участок, которого
+    нет, а отсутствие самого приёма во всём файле.
+    """
 
-    def test_repeated_runs_stay_deterministic_and_never_trip_pipefail(self):
-        """Отказ был не случайным, но проверяем повторяемость запаса ради."""
-        for attempt in range(15):
-            result = run_bash(
-                "set -Eeuo pipefail\n" + password_block() + '\necho "LEN=${#password}"\n'
-            )
-            assert result.returncode == 0, f"попытка {attempt}: код {result.returncode}"
-            assert "LEN=32" in result.stdout
-
-    def test_generated_passwords_differ(self):
-        outs = set()
-        for _ in range(3):
-            result = run_bash("set -Eeuo pipefail\n" + password_block() + '\necho "${password}"\n')
-            assert result.returncode == 0
-            outs.add(result.stdout.strip())
-        assert len(outs) == 3, "пароль повторяется между запусками"
-
-    def test_the_old_sigpipe_pattern_really_did_fail(self):
-        """Доказательство, что дело было именно в SIGPIPE, а не в чём-то ещё.
-
-        Если этот тест однажды начнёт проходить, значит поведение окружения
-        изменилось и объяснение выше пора пересматривать.
-        """
-        old = (
-            "set -Eeuo pipefail\n"
-            "password=\"$(LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 32)\"\n"
-            'echo "LEN=${#password}"\n'
-        )
-        result = run_bash(old)
-        assert result.returncode == 141, (
-            f"ожидался 141 (SIGPIPE), получен {result.returncode}"
-        )
-        assert "LEN=" not in result.stdout, "старый вариант не должен доходить до echo"
-
-    def test_the_script_no_longer_pipes_an_endless_source_into_head(self):
-        """Проверяются исполняемые строки: в комментарии старый вид описан намеренно."""
+    def test_the_script_has_no_endless_source_piped_into_head(self):
         code = [
             line for line in SCRIPT.read_text(encoding="utf-8").splitlines()
             if not line.lstrip().startswith("#")
@@ -119,6 +73,20 @@ class TestPasswordGeneration:
         for line in code:
             assert not re.search(r"</dev/urandom\s*\|\s*head", line), line
             assert not re.search(r"/dev/urandom.*\|\s*head", line), line
+
+    def test_the_old_sigpipe_pattern_really_does_fail(self):
+        """Доказательство, что запрет выше не формальность."""
+        result = run_bash(
+            "set -Eeuo pipefail\n"
+            "value=\"$(LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 32)\"\n"
+            'echo "LEN=${#value}"\n'
+        )
+        assert result.returncode == 141, f"ожидался 141 (SIGPIPE), получен {result.returncode}"
+
+    def test_the_script_creates_no_password_at_all(self):
+        text = SCRIPT.read_text(encoding="utf-8")
+        for forbidden in ("htpasswd", "apache2-utils", "lords-staging-credentials"):
+            assert forbidden not in text, forbidden
 
 
 # ---------------------------------------------------------------------------
