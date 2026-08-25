@@ -198,3 +198,28 @@ class TestStopSignalsStayInsideOneSegment:
     def test_the_same_shape_inside_one_segment_still_stops(self, command):
         assert unattended.mandatory_confirmation(command), command
 
+
+
+class TestLineContinuation:
+    """Перенос строки, экранированный обратной косой чертой, — не разделитель.
+
+    Оболочка стирает пару `\\` + перевод строки до разбора, поэтому продолжение
+    строки принадлежит той же команде. Разбор, который этого не делал, видел
+    второй «командой» её собственные аргументы (`-e s/…/`), не находил для них
+    правила и снимал разрешение с обычной правки файла.
+    """
+
+    def test_continuation_is_one_segment(self):
+        command = 'sed -i \\\n  -e "s#/old/#/new/#g" \\\n  -e "s#a#b#" sites/lords-01/package.yaml'
+        assert len(unattended.segments(command)) == 1
+        assert unattended.evaluate(command).decision == unattended.ALLOW
+
+    def test_continuation_does_not_hide_a_second_command(self):
+        """Настоящий разделитель после переноса остаётся разделителем."""
+        command = "git status --short \\\n  && rm -rf /"
+        assert len(unattended.segments(command)) == 2
+        assert unattended.evaluate(command).decision != unattended.ALLOW
+
+    def test_continuation_inside_quotes_is_left_alone(self):
+        command = "printf 'one \\\ntwo'"
+        assert "\\\n" in unattended.segments(command)[0]

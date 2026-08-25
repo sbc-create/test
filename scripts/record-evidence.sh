@@ -9,7 +9,9 @@
 # check is stable across runs while still catching a stage that changed result.
 set -uo pipefail
 
-cd "$(dirname "$0")/.."
+# Без проверки неудачный cd оставил бы скрипт работать в чужом каталоге:
+# `set -u` на это не реагирует, а `set -e` здесь намеренно не включён.
+cd "$(dirname "$0")/.." || exit 1
 
 REPORT="docs/verification/latest-run.md"
 MODE="${1:-write}"

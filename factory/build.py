@@ -175,6 +175,16 @@ def php_lint(paths: list[Path]) -> list[dict]:
     return results
 
 
+#: Этапы, наступающие после сборки. Штатная сборка останавливается на любом
+#: блокере и этот список не смотрит — он нужен стенду (`factory.lords.preview`),
+#: чтобы отличить «собрать нечем» от «выкатывать некуда». Смягчения здесь нет:
+#: блокер этапа выката по-прежнему закрывает выкат.
+POST_BUILD_STAGES = frozenset({
+    "STAGING_DEPLOY", "STAGING_QA", "AUTHORIZATION_CHECK", "PRODUCTION_DEPLOY",
+    "PRODUCTION_SMOKE", "MONITORING", "deploy",
+})
+
+
 def build(site_id: str, *, environment: str | None = None, force: bool = False) -> BuildResult:
     result = validation.validate(site_id)
     if not result.ok:
@@ -201,6 +211,9 @@ def build(site_id: str, *, environment: str | None = None, force: bool = False) 
     if out.exists():
         shutil.rmtree(out)
     out.mkdir(parents=True, exist_ok=True)
+
+    if blueprint_of(package) == "lords":
+        return _build_lords(site_id, package, env, build_id, out)
 
     if blueprint_of(package) == "payload-next-multisite":
         return _build_payload(site_id, package, env, build_id, out)
@@ -231,6 +244,86 @@ def build(site_id: str, *, environment: str | None = None, force: bool = False) 
     (out / "build-manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     report_dir = PATHS.artifact_dir("build", site_id, build_id)
     (report_dir / "report.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    return build_result
+
+
+def _build_lords(site_id: str, package: dict, env: str, build_id: str, out: Path) -> BuildResult:
+    """Сборка для blueprint lords: план сайта и сам сайт.
+
+    Собирается двумя слоями. План отвечает на вопрос «какие поверхности
+    существуют и кто их индексирует» и считается из manifest и профиля — без
+    сети и без учётных данных. Рендерер отвечает на вопрос «как они выглядят» и
+    выпускает готовые документы, которые можно открыть в браузере.
+
+    Пока источник данных не подтверждён, рендерить нечего, и сборка честно
+    выпускает только план. Стенд с синтетическим каталогом собирается отдельной
+    командой `lords-preview`: она помечает результат как fixture и в выкат не
+    попадает — иначе тестовые записи было бы невозможно отличить от настоящих.
+    """
+    from factory.lords import content_api
+    from factory.lords import plan as lords_plan
+
+    contract = content_api.load_contract()
+    readiness = content_api.readiness(contract, token_present=False, publisher_id_present=False)
+    # Учётные данные в сборку не передаются: сборка их не читает и читать не
+    # должна. Отсутствие подтверждённого источника отражается состоянием типов.
+    site_plan = lords_plan.build_plan(package, credentials_available=False, api_capabilities=None)
+
+    payload = site_plan.as_dict()
+    payload["content_source"] = {
+        "contract_ref": content_api.CONTRACT_REF,
+        "contract_status": contract.status,
+        "readiness": readiness.status,
+        "reason": readiness.reason,
+    }
+    (out / "site-plan.json").write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True), encoding="utf-8")
+
+    # Рендер сайта в штатной сборке включается вместе с подтверждённым
+    # источником данных. Пока источника нет, рендерить нечего: подставить сюда
+    # синтетический каталог значило бы выпустить тестовые записи под видом
+    # сборки сайта. Стенд собирается отдельной командой `lords-preview`,
+    # которая помечает результат как fixture и в выкат не попадает.
+    site = None
+    if readiness.status == content_api.READY:  # pragma: no cover - требует учётных данных
+        raise BlockedInput(
+            "источник данных подтверждён, но выгрузка каталога в сборку ещё не реализована",
+            field="content_source",
+            required_input="Реализованный обход каталога CDNVideoHub",
+            blocks_stage="BUILDING",
+        )
+
+    skipped = [
+        {"id": item["section"], "reason": item["reason"], "state": item["state"],
+         "required_input": "Учётные данные CDNVideoHub и подтверждение типа источником"
+                           if item["state"] == "blocked_credentials" else "Решение владельца",
+         "context": item["path"]}
+        for item in site_plan.absent
+    ]
+    build_result = BuildResult(
+        site_id=site_id, build_id=build_id, output=out,
+        counts=payload["counts"] | payload["type_state_counts"],
+        skipped=skipped, routes=len(site_plan.pages), redirects=0, php_lint=[],
+    )
+    manifest = {
+        **build_result.as_dict(),
+        "blueprint": "lords",
+        "portfolio": package.get("portfolio"),
+        "profile": site_plan.profile,
+        "environment": env,
+        "built_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "package_sha256": hashlib.sha256(_canonical(package).encode()).hexdigest(),
+        "content_source": payload["content_source"],
+        "site": {
+            "rendered": site is not None,
+            "reason": "источник данных не подтверждён; стенд собирается командой lords-preview",
+        },
+    }
+    (out / "build-manifest.json").write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    report_dir = PATHS.artifact_dir("build", site_id, build_id)
+    (report_dir / "report.json").write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     return build_result
 
 

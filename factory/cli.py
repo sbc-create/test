@@ -468,6 +468,211 @@ def cmd_blueprint(args) -> int:
     return EXIT_OK if status.ready else EXIT_BLOCKED
 
 
+def _lords_sites(args) -> list:
+    """Пакеты направления. Один сайт по `--site`, иначе все пакеты lords."""
+    import yaml
+
+    if getattr(args, "site", None):
+        return [args.site]
+    out = []
+    for path in sorted(PATHS.sites.glob("*/package.yaml")):
+        data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        if data.get("blueprint") == "lords":
+            out.append(str(data.get("site_id") or path.parent.name))
+    return out
+
+
+def cmd_lords_preview(args) -> int:
+    """Собирает стенд и, по просьбе, поднимает его локально."""
+    from factory.lords import preview as lords_preview
+
+    sites = _lords_sites(args)
+    if not sites:
+        print("пакеты направления lords не найдены")
+        return 1
+
+    results = []
+    for site_id in sites:
+        result = lords_preview.build_preview(site_id)
+        results.append(result)
+        report = result.report
+        print(f"{site_id} [{report['profile']}] документов: {report['documents']}, "
+              f"страниц: {report['pages']}, индексируемых: {report['indexable_pages']}, "
+              f"sitemap: {report['sitemap_urls']}, отпечаток: {report['digest'][:16]}")
+        print(f"  каталог: {report['directory']}")
+        print(f"  источник данных: {report['catalog']['source']}, "
+              f"записей: {report['catalog']['titles']}")
+        print(f"  плеер: {report['player']['status']} (проверка контракта: "
+              f"{'пройдена' if report['player']['passed'] else 'не запускалась'})")
+        for blocked in report["blocked_inputs"]:
+            print(f"  блокер: {blocked['code']} → {', '.join(blocked['blocks'])}")
+
+    if not args.serve:
+        return 0
+    if len(results) != 1:
+        print("для --serve укажи один сайт через --site")
+        return 2
+    server, _ = lords_preview.serve(results[0].site_id, host=args.host, port=args.port)
+    host, port = server.server_address[0], server.server_address[1]
+    print(f"стенд {results[0].site_id} доступен на http://{host}:{port}/ — Ctrl+C завершает")
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print("остановлен")
+    finally:
+        server.server_close()
+    return 0
+
+
+def cmd_lords_live(args) -> int:  # noqa: ARG001 — команда без аргументов
+    """Собирает три сайта Lords на живом каталоге. Ничего не применяет.
+
+    Значения читаются из каталога systemd credentials и в вывод не попадают:
+    печатается только факт их наличия и результат по каждому сайту.
+    """
+    # Единственный источник — $CREDENTIALS_DIRECTORY. Запасного пути через
+    # окружение нет намеренно: переменные видны в `systemctl show` и в
+    # /proc/<pid>/environ, а существующий запасной путь однажды окажется
+    # использованным в production.
+    from factory.lords import live_build
+    try:
+        credentials = live_build.Credentials.from_credentials_dir()
+    except live_build.LiveBuildError as error:
+        print(f"BLOCKED_INPUT_CDNVIDEOHUB_CREDENTIALS: {error}")
+        return 2
+
+    report = live_build.build_live(credentials=credentials)
+    target = live_build.write_report(report)
+
+    for site_id, entry in sorted(report["sites"].items()):
+        print(f"  {site_id}: {entry['status']}, записей {entry['item_count']}, "
+              f"страниц {entry['pages']}, разделы {', '.join(entry['sections_enabled']) or '—'}")
+
+    problems = live_build.verify_report(report)
+    if problems:
+        print("живой каталог непригоден:")
+        for problem in problems:
+            print(f"  — {problem}")
+        return 1
+
+    print(f"отчёт: {target}")
+    return 0
+
+
+def cmd_lords_staging(args) -> int:  # noqa: ARG001 — команда без аргументов
+    """Готовит конфигурацию трёх публичных стендов. Ничего не применяет."""
+    from factory.lords import staging as lords_staging
+
+    summary = lords_staging.build_staging()
+    print(f"цель: {summary['target']} ({summary['origin_ipv4']})")
+    print(f"nginx: конфигурация под {summary['nginx_target_version']}; "
+          f"{summary['offline_check']}")
+    for site in summary["sites"]:
+        print(f"  {site['url']:38} {site['site_id']}  {site['profile']:14} "
+              f":{site['port']}  {site['unit']}")
+        print(f"    релиз {site['release']}, индексация {site['indexing']}, "
+              f"Basic Auth {site['basic_auth']}")
+    print("не трогается:")
+    for item in summary["not_touched"]:
+        print(f"  — {item}")
+    return 0
+
+
+def cmd_lords_bundle(args) -> int:
+    """Собирает переносимый пакет стенда: документы, рантайм, откат."""
+    from factory.lords import bundle as lords_bundle
+
+    sites = _lords_sites(args)
+    if not sites:
+        print("пакеты направления lords не найдены")
+        return 1
+    for site_id in sites:
+        result = lords_bundle.build_bundle(site_id)
+        print(f"{site_id}: {result['archive']}")
+        print(f"  файлов: {result['files']}, sha256: {result['sha256'][:16]}, "
+              f"отпечаток сайта: {result['digest'][:16]}")
+        print(f"  откат: {result['rollback']}")
+    return 0
+
+
+def cmd_lords_plan(args) -> int:
+    """Dry-run направления Lords: план сайтов, ворота дублей и план синхронизации.
+
+    Команда ничего не мутирует и ничего не запрашивает по сети. Она отвечает на
+    вопрос «что получится», а не «что развёрнуто», поэтому работает и на пакетах,
+    у которых ещё нет домена, цели выката и учётных данных.
+
+    `--assume-source fixture` моделирует переданные учётные данные и источник,
+    подтверждающий ровно те типы, что включены в manifest. Это единственный
+    способ проверить ворота дублей до появления токена, и в отчёте такой прогон
+    помечен явно: он не выдаётся за живой.
+    """
+    import json as _json
+
+    import yaml as _yaml
+
+    from factory.lords import content_api, gate
+    from factory.lords import content_types as ct
+    from factory.lords import plan as lords_plan
+
+    fixture = args.assume_source == "fixture"
+    packages = []
+    for path in sorted(PATHS.sites.glob("*/package.yaml")):
+        data = _yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        if data.get("blueprint") != "lords":
+            continue
+        if args.site and data.get("site_id") != args.site:
+            continue
+        packages.append(data)
+    if not packages:
+        print("пакеты направления lords не найдены")
+        return 3
+
+    plans, sync_reports = [], []
+    for package in packages:
+        capabilities = set(ct.configured(package)) if fixture else None
+        capabilities = {n for n, on in ct.configured(package).items() if on} if fixture else None
+        plans.append(lords_plan.build_plan(
+            package, credentials_available=fixture, api_capabilities=capabilities))
+        sync_reports.append(content_api.dry_run(
+            package, token_present=fixture, publisher_id_present=fixture))
+
+    for site_plan in plans:
+        counts = ct.counts(site_plan.type_states)
+        print(f"[{site_plan.site_id}] профиль {site_plan.profile} | "
+              f"страниц {len(site_plan.pages)} | индексируемых {len(site_plan.indexable_paths)} | "
+              f"в sitemap {len(site_plan.sitemap_paths)} | типы {counts}")
+        for absent in site_plan.absent:
+            print(f"    нет раздела {absent['path']:14} {absent['state']}: {absent['reason']}")
+
+    report = gate.check_plans(plans)
+    overlap = gate.ownership_overlap(plans)
+    print(f"\nворота уникальности: находок {len(report.critical)} | "
+          f"canonical: {report.counts.get('canonical_check')}")
+    for finding in report.critical:
+        print(f"    [{finding.rule}] {finding.url}: {finding.message}")
+    if overlap:
+        for item in overlap:
+            print(f"    раздел {item['section']} индексируют несколько сайтов: {item['sites']}")
+
+    print(f"\nисточник данных: {sync_reports[0]['readiness']} — {sync_reports[0]['reason']}")
+
+    out = PATHS.artifact_dir("lords", "plan")
+    payload = {
+        "mode": "fixture" if fixture else "real",
+        "live_request_performed": False,
+        "plans": [p.as_dict() for p in plans],
+        "uniqueness": report.as_dict(),
+        "ownership_overlap": overlap,
+        "content_sync": sync_reports,
+    }
+    artifact = out / "lords-plan.json"
+    artifact.write_text(_json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"артефакт: {artifact.relative_to(PATHS.root)}")
+
+    return 0 if not report.critical and not overlap else 1
+
+
 def cmd_env_report(args) -> int:
     import shutil
     tools = {name: bool(shutil.which(name)) for name in
@@ -613,6 +818,31 @@ def main(argv: list[str] | None = None) -> int:
 
     analytics_cli.register(sub)
     secret_hub_cli.register(sub)
+
+    p = sub.add_parser("lords-plan", help="Lords: dry-run плана сайтов и ворот дублей")
+    p.add_argument("--site", help="только один сайт направления")
+    p.add_argument("--assume-source", choices=["none", "fixture"], default="none",
+                   help="fixture моделирует переданные учётные данные и источник")
+    p.set_defaults(func=cmd_lords_plan)
+
+    p = sub.add_parser("lords-preview", help="Lords: собрать стенд на синтетическом каталоге")
+    p.add_argument("--site", help="один сайт направления; без него — все")
+    p.add_argument("--serve", action="store_true", help="запустить локальный сервер стенда")
+    p.add_argument("--host", default="127.0.0.1", help="интерфейс локального сервера")
+    p.add_argument("--port", type=int, default=8080, help="порт локального сервера")
+    p.set_defaults(func=cmd_lords_preview)
+
+    p = sub.add_parser("lords-bundle", help="Lords: воспроизводимый пакет стенда")
+    p.add_argument("--site", help="один сайт направления; без него — все")
+    p.set_defaults(func=cmd_lords_bundle)
+
+    p = sub.add_parser("lords-staging",
+                       help="Lords: конфигурация публичного fixture-staging трёх сайтов")
+    p.set_defaults(func=cmd_lords_staging)
+
+    p = sub.add_parser("lords-live",
+                       help="Lords: собрать три сайта на живом каталоге CDNVideoHub")
+    p.set_defaults(func=cmd_lords_live)
 
     p = sub.add_parser("env-report", help="read-only отчёт об окружении")
     p.set_defaults(func=cmd_env_report)

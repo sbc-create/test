@@ -95,8 +95,43 @@ def _is_redirection(command: str, index: int, separator: str) -> bool:
     return False
 
 
+def join_continuations(command: str) -> str:
+    """Склеивает перенос строки, экранированный обратной косой чертой.
+
+    Оболочка стирает пару `\\` + перевод строки ещё до разбора: `sed -i \\`
+    и следующая строка — это одна команда. Разбор, который этого не делает,
+    видит вторым сегментом её продолжение (`-e s/…/`), не находит для него
+    правила и снимает разрешение с команды, которая в действительности одна.
+    Кавычки при этом не трогаются: внутри них перенос значим.
+    """
+    out: list[str] = []
+    quote: str | None = None
+    i = 0
+    while i < len(command):
+        ch = command[i]
+        if quote:
+            out.append(ch)
+            if ch == quote and (i == 0 or command[i - 1] != "\\"):
+                quote = None
+            i += 1
+            continue
+        if ch in ("'", '"'):
+            quote = ch
+            out.append(ch)
+            i += 1
+            continue
+        if ch == "\\" and command.startswith("\\\n", i):
+            out.append(" ")
+            i += 2
+            continue
+        out.append(ch)
+        i += 1
+    return "".join(out)
+
+
 def split_subcommands(command: str) -> list[str]:
     """Разбивает составную команду на подкоманды с учётом кавычек."""
+    command = join_continuations(command)
     parts: list[str] = []
     buf: list[str] = []
     quote: str | None = None

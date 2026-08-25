@@ -22,6 +22,24 @@ targets:
     database: postgres
     purpose: "стенд трёх аниме-сайтов на общей CMS: сборка, применение тенанта, откат"
     production_capable: false
+  # Публичный fixture-staging направления Lords на управляющем сервере.
+  # Адаптер не ssh_ansible: агент к серверу не подключается и подключаться не
+  # должен. Фабрика готовит пакет и идемпотентный сценарий, применяет его
+  # оператор на самом хосте. Поэтому здесь нет ssh_host_ref — выдумывать
+  # пользователя развёртывания, ключ и запись host key ради красивой записи в
+  # inventory нельзя, а без них ssh_ansible был бы неработающим обещанием.
+  - ref: lords-staging-control-01
+    adapter: operator_applied
+    environments: [staging]
+    root: /srv/lords
+    bind_host: 127.0.0.1
+    port_range: [9101, 9109]
+    web_server: nginx
+    database: none                  # каталог стенда синтетический, БД не нужна
+    origin_ipv4: 45.131.182.225
+    apply_script: automation/host/lords-staging-apply.sh
+    purpose: "три публичных fixture-staging сайта Lords под Basic Auth и noindex"
+    production_capable: false
   # - ref: stage-1
   #   adapter: ssh_ansible
   #   ssh_host_ref: stage-1

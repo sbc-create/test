@@ -1,38 +1,220 @@
-# Описание контракта Content API CDNVideoHub.
+# Контракт Content API CDNVideoHub.
 #
-# Статус — not_provided. В переданном knowledge pack (раздел 9) сказано прямо:
-# точные endpoint, query parameters, pagination, rate limits и response fields
-# намеренно не приведены и должны быть взяты из официального документа провайдера
-# (docs/CDNVIDEOHUB-METADATA-CONTRACT.md и более свежих утверждённых материалов).
-# Этого документа в репозитории нет, поэтому поля ниже не заполняются: адаптер
-# отвечает BLOCKED_INPUT, а не подбирает адреса и имена полей самостоятельно.
+# ПРОИСХОЖДЕНИЕ. Контракт снят с работающего официального клиента YummyAnime в
+# /srv/sites/yummyani-staging/repo (read-only), а не выведен из документации и
+# не угадан. Каждое поле ниже имеет ссылку на файл и строку, где оно объявлено.
+# Ничего, чего нет в том коде, здесь не появилось: недостающее остаётся
+# незаполненным, а не додуманным.
 #
-# Чтобы включить синхронизацию, заполните разделы по официальному документу и
-# поставьте status: provided. Форма разделов:
+# Что НЕ перенесено и не может быть перенесено: учётные данные YummyAnime.
+# Lords обязан работать на собственных api-token и publisher-id — они лежат в
+# отдельной области секретов и заводятся активатором.
 #
-#   status: provided
-#   source_document: <путь или ссылка на официальный документ>
-#   contract_version: <версия контракта>
-#   base_url: <база адресов>
-#   auth: { scheme: bearer|header, header: <имя заголовка>, tokenEnv: CDNVIDEOHUB_API_TOKEN }
-#   endpoints:
-#     titles: { path: <путь>, method: GET }
-#   pagination:
-#     style: page|cursor
-#     pageParam / sizeParam / size / cursorParam / cursorField
-#     completion: empty_page|short_page|cursor_absent    # условие завершения из документации
-#     itemsField: <путь до списка в ответе>
-#     maxPages: <предохранитель от бесконечного цикла>
-#   limits: { timeoutMs, maxRetries, backoffMs, cacheTtlMs }
-#   mapping:
-#     title: { playbackAggregator: <путь>, playbackTitleId: <путь>, primaryName: <путь>, ... }
+# Проверка соответствия: tests/unit/test_lords_content_api_live.py сверяет
+# запросы адаптера с этим файлом, а не с зашитыми строками.
 
-schema_version: 1
-status: not_provided
-source_document: docs/CDNVIDEOHUB-METADATA-CONTRACT.md
-provenance: SRC-CDNVIDEOHUB
+schema_version: 2
+status: provided
+contract_version: "v1"
+provenance: SRC-CDNVIDEOHUB-CLIENT
+source_document: >-
+  /srv/sites/yummyani-staging/repo/src/modules/catalog/infrastructure/cdnvideohub/
+  (constants.ts, client.ts, mapper.ts, validator.ts) — работающий официальный клиент
 verified_against_official_docs: false
+verified_against_working_client: true
+verified_at: "2026-08-24"
 note: >-
-  Документ провайдера не передан в репозиторий. Синхронизация каталога
-  заблокирована до его появления; плеерная часть контракта передана отдельно
-  и зафиксирована в PLAYER_CONTRACT.yaml.
+  Официальная спецификация провайдера доступна по адресу из docs_url и spec_url,
+  но в репозиторий не передавалась. Контракт подтверждён исполняемым клиентом,
+  который ходит в этот API в продуктиве YummyAnime. Расхождение между этим
+  файлом и ответом источника обязано останавливать синхронизацию, а не
+  подстраиваться под ответ.
+
+base_url: "https://public-api.cdnvideohub.com/api/v1/"
+docs_url: "https://public-api.cdnvideohub.com/api/v1/docs"
+spec_url: "https://public-api.cdnvideohub.com/api/v1/docs/doc.json"
+
+# Устаревшая база. Явно перечислена, чтобы её нельзя было вернуть по ошибке.
+obsolete_base_urls:
+  - "https://api.cdnvideohub.com/"
+
+auth:
+  scheme: bearer
+  header: Authorization
+  value_prefix: "Bearer "
+  accept: "application/json"
+  token_env: CDNVIDEOHUB_API_TOKEN
+  token_secret_ref: "secret://cdnvideohub/lords/api-token"
+  # Токен — серверный. Клиенту он не передаётся ни при каких условиях.
+  browser_forbidden: true
+
+endpoints:
+  titles:            { path: "titles",                                   method: GET }
+  title_detail:      { path: "titles/{id}",                              method: GET }
+  titles_search:     { path: "titles/search",                            method: GET }
+  titles_filters:    { path: "titles/filters",                           method: GET }
+  seasons:           { path: "titles/{id}/seasons",                      method: GET }
+  episodes:          { path: "titles/{id}/seasons/{season}/episodes",    method: GET }
+  genres:            { path: "genres",                                   method: GET }
+  countries:         { path: "countries",                                method: GET }
+
+pagination:
+  style: cursor
+  cursor_param: cursor
+  size_param: limit
+  default_size: 24
+  max_size: 100
+  items_field: items
+  next_cursor_field: next_cursor
+  has_more_field: has_more
+  total_field: total
+  # Условие завершения — has_more=false ЛИБО пустой next_cursor. Оба проверяются:
+  # источник, вернувший has_more=true с пустым курсором, зациклил бы обход.
+  completion: has_more_false_or_cursor_absent
+  # Предохранитель от циклической пагинации: повтор курсора и потолок страниц.
+  max_pages: 200
+  refuse_repeated_cursor: true
+
+filters:
+  # Параметры списка титулов. Источник — listQueryParams в client.ts.
+  type: type
+  id: id
+  genres: genres
+  countries: countries
+  direction: direction
+  sort: sort
+  year_from: year_from
+  year_to: year_to
+  with_count: with_count
+  updated_since: updated_since
+  rating_from: rating_from
+  rating_to: rating_to
+
+search:
+  query_param: q
+  size_param: limit
+  default_size: 20
+
+external_id_filters:
+  kp: kinopoisk_id
+  imdb: imdb_id
+  mal: mal_id
+  mdl: mdl_id
+
+limits:
+  # Значения из constants.ts.
+  timeout_ms: 30000
+  max_retry_after_ms: 5000
+  default_retry_after_ms: 1000
+  # Политика повторов задана Lords: клиент YummyAnime повторяет однократно,
+  # ночная пакетная синхронизация обходит тысячи страниц и требует выдержки.
+  max_retries: 5
+  backoff_base_ms: 1000
+  backoff_max_ms: 30000
+  retry_on_status: [429, 500, 502, 503, 504]
+  # Ограничение частоты: пауза между запросами к источнику.
+  min_interval_ms: 250
+  cache_ttl_ms: 3600000
+
+images:
+  poster_host: "poster.cdnvideohub.com"
+  # Изображения не скачиваются: в каталог попадает только адрес.
+  fetch_images: false
+
+mapping:
+  title:
+    external_id: id
+    primary_name: name
+    type: type
+    is_series: is_series
+    year: year
+    poster_url: poster_url
+    licensed: licensed
+    tags: tags
+    kinopoisk_rating: kinopoisk_rating
+    imdb_rating: imdb_rating
+    created_at: created_at
+    updated_at: updated_at
+    external_ids: external_ids
+    # Плеер адресуется агрегаторным идентификатором, а не внутренним id.
+    playback_title_id: external_ids
+    playback_aggregator_priority: [kp, mali, mdl]
+  title_detail:
+    english_name: english_name
+    original_name: original_name
+    alternative_names: alternative_names
+    description: description
+    short_description: short_description
+    backdrop_url: backdrop_url
+    genres: genres
+    genre_codes: genre_codes
+    countries: countries
+    country_codes: country_codes
+    studios: studios
+    voice_studios: voice_studios
+    duration: duration
+    premiere_date: premiere_date
+    year_end: year_end
+    seasons_count: seasons_count
+    seasons: seasons
+    available_voices: available_voices
+    crew: crew
+    source_qualities: source_qualities
+    source_types: source_types
+  season:
+    number: number
+    name: name
+    episodes_count: episodes_count
+    available_episodes_count: available_episodes_count
+    year: year
+  episode:
+    number: number
+    name: name
+    air_date: air_date
+    duration: duration
+    thumbnail_url: thumbnail_url
+    available_voices: available_voices
+    source_qualities: source_qualities
+    source_types: source_types
+  voice:
+    language: language
+    studio_code: studio_code
+    studio_name: studio_name
+    voice_type: voice_type
+    voice_type_label: voice_type_label
+  external_ids:
+    kinopoisk: [kp, kinopoisk, kinopoisk_id]
+    imdb: [imdb, imdb_id]
+    myanimelist: [mal, mali, myanimelist, mal_id]
+    mydramalist: [mdl, mydramalist, mdl_id]
+
+# Разделы сайта включаются только при подтверждённой возможности источника и
+# наличии материалов. Пустой раздел с HTTP 200 запрещён — раздел не публикуется.
+sections:
+  movies:
+    requires_filter: type
+    filter_value: movie
+    min_items: 1
+  series:
+    requires_filter: type
+    filter_value: series
+    min_items: 1
+  animation:
+    requires_filter: direction
+    filter_value: anime
+    min_items: 1
+  collections:
+    # Источник не предоставляет endpoint подборок. Раздел не включается, пока
+    # это не изменится: собирать подборки самостоятельно значило бы выдавать
+    # собственную выборку за данные источника.
+    supported: false
+    reason: "в контракте нет endpoint подборок"
+
+errors:
+  # Коды, на которые адаптер обязан реагировать по-разному.
+  not_found: 404
+  invalid_request: 400
+  unauthorized: 401
+  forbidden: 403
+  rate_limited: 429
+  retry_after_header: Retry-After

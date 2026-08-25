@@ -7,7 +7,9 @@
 # Exit code is the number of failed stages, so callers can gate on it.
 set -uo pipefail
 
-cd "$(dirname "$0")/.."
+# Без проверки неудачный cd оставил бы скрипт работать в чужом каталоге:
+# `set -u` на это не реагирует, а `set -e` здесь намеренно не включён.
+cd "$(dirname "$0")/.." || exit 1
 
 PY="${PY:-.venv/bin/python}"
 RUFF="${RUFF:-.venv/bin/ruff}"
