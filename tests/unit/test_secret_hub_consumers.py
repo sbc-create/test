@@ -130,6 +130,23 @@ class TestSystemdCredential:
         assert "LoadCredential=cdnvideohub_api_token:" in text
         assert str(consumer.path_for("api_token")) in text
 
+    def test_dropin_does_not_use_the_percent_d_specifier(self, tmp_path, fake_systemd):
+        """`%d` появился в systemd 250, а Ubuntu 22.04 везёт 249.
+
+        Там строка не разворачивается и остаётся literal-ом «%d/...», после чего
+        потребитель падает на «файл не найден» — молча, потому что для systemd
+        запись синтаксически корректна. Эти же грабли уже наступили в слое
+        аналитики; повторять их здесь незачем.
+        """
+        consumer = unit_consumer(tmp_path)
+        consumer.directory.parent.mkdir(parents=True)
+        consumers_mod.apply_consumer(consumer, values(), backup_root=tmp_path / "backups")
+        text = consumer.dropin.read_text(encoding="utf-8")
+        directives = [line for line in text.splitlines() if not line.lstrip().startswith("#")]
+        assert not any("%d" in line for line in directives), \
+            "drop-in использует %d: на systemd 249 путь не развернётся"
+        assert "CDNVIDEOHUB_API_TOKEN_CREDENTIAL=cdnvideohub_api_token" in text
+
     def test_only_own_unit_is_restarted(self, tmp_path, fake_systemd):
         consumer = unit_consumer(tmp_path, "lords-01")
         consumer.directory.parent.mkdir(parents=True)

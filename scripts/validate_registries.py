@@ -24,6 +24,10 @@ MAPPING = {
     "content-backlog.json": "content-backlog.schema.json",
     "experiments.json": "experiment-registry.schema.json",
     "analytics.json": "analytics-registry.schema.json",
+    # Реестр направлений Secret Hub. Значений секретов в нём нет и быть не
+    # может: схема запрещает их структурно (additionalProperties выключены на
+    # каждом уровне), а проверка здесь ловит попытку добавить поле в обход.
+    "secret-hub.json": "secret-hub.schema.json",
 }
 
 

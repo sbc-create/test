@@ -53,11 +53,21 @@ DROPIN_TEMPLATE = """# Сгенерировано Secret Hub. Правки бу�
 # Значения секретов здесь отсутствуют: systemd читает root-owned файлы сам и
 # кладёт копии в tmpfs процесса ($CREDENTIALS_DIRECTORY). В окружении unit'а,
 # в `systemctl show` и в журнале значений нет.
+#
+# Передаются ИМЕНА credentials, а не пути к ним. Специфер %d («каталог
+# credentials») появился в systemd 250, а Ubuntu 22.04 везёт 249: там строка
+# не разворачивается и остаётся literal-ом «%d/...», после чего потребитель
+# падает на «файл не найден». Переменную CREDENTIALS_DIRECTORY systemd
+# выставляет сам с той же версии, что и сам LoadCredential, поэтому путь
+# собирает потребитель:
+#
+#     "$CREDENTIALS_DIRECTORY/$CDNVIDEOHUB_API_TOKEN_CREDENTIAL"
+#
 [Service]
 LoadCredential={api_credential}:{api_path}
 LoadCredential={publisher_credential}:{publisher_path}
-Environment=CDNVIDEOHUB_API_TOKEN_FILE=%d/{api_credential}
-Environment=CDNVIDEOHUB_PUBLISHER_ID_FILE=%d/{publisher_credential}
+Environment=CDNVIDEOHUB_API_TOKEN_CREDENTIAL={api_credential}
+Environment=CDNVIDEOHUB_PUBLISHER_ID_CREDENTIAL={publisher_credential}
 """
 
 
