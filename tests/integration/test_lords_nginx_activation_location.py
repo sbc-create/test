@@ -93,7 +93,12 @@ def make_htpasswd(tmp: Path) -> Path:
 
 @pytest.fixture
 def stand(tmp_path):
-    """Настоящий nginx с настоящей конфигурацией сайта Lords."""
+    """Настоящий nginx с настоящей конфигурацией сайта Lords.
+
+    Серверный блок лежит отдельным файлом, который основной конфиг подключает.
+    Так `render()` может перерисовать его целиком — ровно то, что делает
+    сценарий на хосте, — и перечитать конфигурацию.
+    """
     for name in ("logs", "client_body", "proxy", "fastcgi", "uwsgi", "scgi"):
         (tmp_path / name).mkdir(parents=True, exist_ok=True)
 
@@ -102,27 +107,33 @@ def stand(tmp_path):
     intake, intake_port = start_backend()
     crt, key = make_cert(tmp_path, site.apex)
     htpasswd = make_htpasswd(tmp_path)
-    activation_dir = tmp_path / "activation"
-    activation_dir.mkdir()
     https_port = free_port()
+    http_port = free_port()
+    site_conf = tmp_path / "site.conf"
+    marker = "lords-form-testmarker"
 
-    # Берётся конфигурация, которую фабрика генерирует на самом деле. Меняются
-    # только пути и порты — то, что на тестовой машине обязано отличаться.
-    server_block = staging_mod.nginx_phase2(site)
-    server_block = (
-        server_block
-        .replace(f"/etc/letsencrypt/live/{site.apex}/fullchain.pem", str(crt))
-        .replace(f"/etc/letsencrypt/live/{site.apex}/privkey.pem", str(key))
-        .replace(f"ssl_trusted_certificate /etc/letsencrypt/live/{site.apex}/chain.pem;", "")
-        .replace(staging_mod.HTPASSWD, str(htpasswd))
-        .replace(f"{staging_mod.ACTIVATION_DIR}/*.conf", f"{activation_dir}/*.conf")
-        .replace(f"http://127.0.0.1:{site.port}", f"http://127.0.0.1:{runtime_port}")
-        .replace("listen 443 ssl http2;", f"listen 127.0.0.1:{https_port} ssl http2;")
-        .replace("listen [::]:443 ssl http2;", "")
-        .replace("listen 80;", f"listen 127.0.0.1:{free_port()};")
-        .replace("listen [::]:80;", "")
-        .replace("/var/log/nginx/", str(tmp_path / "logs") + "/")
-    )
+    def render(*, basic_auth=True, activation_port=None):
+        block = staging_mod.nginx_phase2(
+            site, basic_auth=basic_auth, activation_port=activation_port, marker=marker
+        )
+        block = (
+            block
+            .replace(f"/etc/letsencrypt/live/{site.apex}/fullchain.pem", str(crt))
+            .replace(f"/etc/letsencrypt/live/{site.apex}/privkey.pem", str(key))
+            .replace(
+                f"ssl_trusted_certificate /etc/letsencrypt/live/{site.apex}/chain.pem;", ""
+            )
+            .replace(staging_mod.HTPASSWD, str(htpasswd))
+            .replace(f"http://127.0.0.1:{site.port}", f"http://127.0.0.1:{runtime_port}")
+            .replace("listen 443 ssl http2;", f"listen 127.0.0.1:{https_port} ssl http2;")
+            .replace("listen [::]:443 ssl http2;", "")
+            .replace("listen 80;", f"listen 127.0.0.1:{http_port};")
+            .replace("listen [::]:80;", "")
+            .replace("/var/log/nginx/", str(tmp_path / "logs") + "/")
+        )
+        site_conf.write_text(block, encoding="utf-8")
+
+    render()
 
     conf = tmp_path / "nginx.conf"
     conf.write_text(textwrap.dedent(f"""
@@ -137,7 +148,7 @@ def stand(tmp_path):
           uwsgi_temp_path {tmp_path}/uwsgi;
           scgi_temp_path {tmp_path}/scgi;
           default_type text/plain;
-        {server_block}
+          include {site_conf};
         }}
     """), encoding="utf-8")
 
@@ -149,7 +160,6 @@ def stand(tmp_path):
 
     check = nginx("-t")
     assert check.returncode == 0, check.stderr
-
     started = nginx()
     assert started.returncode == 0, started.stderr
     for _ in range(40):
@@ -159,8 +169,8 @@ def stand(tmp_path):
         time.sleep(0.1)
 
     yield {
-        "port": https_port, "apex": site.apex, "activation_dir": activation_dir,
-        "intake_port": intake_port, "nginx": nginx, "tmp": tmp_path,
+        "port": https_port, "apex": site.apex, "intake_port": intake_port,
+        "nginx": nginx, "tmp": tmp_path, "render": render, "marker": marker,
     }
 
     nginx("-s", "stop")
@@ -185,22 +195,6 @@ def request(stand_info, path):
     return response.status, headers, body
 
 
-def install_snippet(stand_info) -> None:
-    """Тот же сниппет, который пишет сценарий на хосте."""
-    (stand_info["activation_dir"] / "intake.conf").write_text(
-        textwrap.dedent(f"""
-            location = /__lords-activate {{
-                auth_basic off;
-                access_log off;
-                client_max_body_size 8k;
-                client_body_buffer_size 8k;
-                proxy_pass http://127.0.0.1:{stand_info["intake_port"]};
-                proxy_http_version 1.1;
-                proxy_set_header Host $host;
-            }}
-        """), encoding="utf-8")
-
-
 class TestWithoutTheSnippet:
     """Обычное состояние: временного адреса нет."""
 
@@ -216,67 +210,62 @@ class TestWithoutTheSnippet:
         assert "www-authenticate" in headers
 
 
-class TestWithTheSnippet:
-    """Во время приёма: форма открыта, остальное закрыто."""
+class TestDuringTheWindow:
+    """Окно приёма: пароль снят со всего сайта, форма отвечает приёмником.
 
-    def test_the_form_answers_200_without_basic_auth(self, stand):
-        install_snippet(stand)
+    Снятие пароля целиком — осознанный размен, а не упущение: форму нельзя
+    показать под паролем, которого владелец не знает. Индексация при этом
+    остаётся закрытой, и проверяется это здесь же.
+    """
+
+    def open_window(self, stand):
+        stand["render"](basic_auth=False, activation_port=stand["intake_port"])
+        assert stand["nginx"]("-t").returncode == 0
         assert stand["nginx"]("-s", "reload").returncode == 0
         time.sleep(0.5)
 
+    def test_the_form_answers_200_without_basic_auth(self, stand):
+        self.open_window(stand)
         status, headers, body = request(stand, "/__lords-activate")
         assert status == 200, f"форма отвечает {status}"
-        assert "www-authenticate" not in headers, (
-            "форма всё ещё требует пароль: " + str(headers)
-        )
+        assert "www-authenticate" not in headers, str(headers)
         assert body.startswith(b"backend:"), body
 
     def test_the_form_reaches_the_intake_not_the_site_runtime(self, stand):
-        install_snippet(stand)
-        stand["nginx"]("-s", "reload")
-        time.sleep(0.5)
+        self.open_window(stand)
         _status, _headers, body = request(stand, "/__lords-activate")
-        assert body.decode() == f"backend:{stand['intake_port']}", (
-            "запрос ушёл не в приёмник"
-        )
+        assert body.decode() == f"backend:{stand['intake_port']}"
 
-    def test_the_main_page_still_requires_a_password(self, stand):
-        install_snippet(stand)
-        stand["nginx"]("-s", "reload")
-        time.sleep(0.5)
+    def test_the_form_carries_the_marker_header(self, stand):
+        """По маркеру сценарий отличает приёмник от сайта."""
+        self.open_window(stand)
+        _status, headers, _body = request(stand, "/__lords-activate")
+        assert headers.get("x-lords-form") == stand["marker"], headers
 
-        status, headers, _body = request(stand, "/")
-        assert status == 401, "Basic Auth сайта снят вместе с формой"
-        assert "www-authenticate" in headers
+    @pytest.mark.parametrize("path", ["/", "/catalog/", "/movies/", "/title/x/"])
+    def test_the_site_is_open_during_the_window(self, stand, path):
+        self.open_window(stand)
+        status, headers, _body = request(stand, path)
+        assert status == 200, f"{path} отвечает {status}"
+        assert "www-authenticate" not in headers
 
-    @pytest.mark.parametrize("path", ["/catalog/", "/movies/", "/title/x/", "/robots.txt"])
-    def test_other_paths_stay_protected(self, stand, path):
-        install_snippet(stand)
-        stand["nginx"]("-s", "reload")
-        time.sleep(0.5)
-        status, _headers, _body = request(stand, path)
-        assert status == 401, f"{path} открылся без пароля"
-
-    def test_a_near_miss_path_is_not_opened(self, stand):
-        """Точный location открывает ровно один адрес, а не префикс."""
-        install_snippet(stand)
-        stand["nginx"]("-s", "reload")
-        time.sleep(0.5)
-        for path in ("/__lords-activate/", "/__lords-activate/x", "/__lords-activateX"):
-            status, _headers, _body = request(stand, path)
-            assert status == 401, f"{path} открылся без пароля"
+    def test_indexing_stays_closed_during_the_window(self, stand):
+        """Пароль снят, но роботам сайт по-прежнему закрыт."""
+        self.open_window(stand)
+        _status, headers, _body = request(stand, "/")
+        assert "noindex" in (headers.get("x-robots-tag") or "")
 
 
 class TestAfterTeardown:
     """После снятия формы адрес снова закрыт, пароль сайта на месте."""
 
-    def test_the_endpoint_is_protected_again(self, stand):
-        install_snippet(stand)
+    def test_the_endpoint_disappears_again(self, stand):
+        stand["render"](basic_auth=False, activation_port=stand["intake_port"])
         stand["nginx"]("-s", "reload")
         time.sleep(0.5)
         assert request(stand, "/__lords-activate")[0] == 200
 
-        (stand["activation_dir"] / "intake.conf").unlink()
+        stand["render"]()  # обратно: пароль на месте, формы нет
         assert stand["nginx"]("-t").returncode == 0
         assert stand["nginx"]("-s", "reload").returncode == 0
         time.sleep(0.5)
@@ -285,6 +274,17 @@ class TestAfterTeardown:
         assert status == 401, "адрес остался открытым после снятия"
         assert "www-authenticate" in headers
 
+    def test_auth_off_without_the_form_leaves_the_address_closed(self, stand):
+        """После успеха: пароль снят навсегда, но формы уже нет."""
+        stand["render"](basic_auth=False, activation_port=None)
+        assert stand["nginx"]("-t").returncode == 0
+        stand["nginx"]("-s", "reload")
+        time.sleep(0.5)
+        assert request(stand, "/")[0] == 200
+        # Формы нет — адрес обслуживает рантайм, а не приёмник.
+        _status, _headers, body = request(stand, "/__lords-activate")
+        assert body.decode() != f"backend:{stand['intake_port']}"
+
     def test_the_site_survives_the_empty_include(self, stand):
         """Пустой каталог include — не ошибка конфигурации."""
         assert stand["nginx"]("-t").returncode == 0
@@ -292,54 +292,23 @@ class TestAfterTeardown:
 
 
 class TestConfigShape:
-    def test_the_generated_config_carries_the_include_hook(self):
+    def test_the_form_is_absent_from_the_normal_config(self):
         site = next(s for s in staging_mod.sites() if s.site_id == "lords-01")
-        assert f"include {staging_mod.ACTIVATION_DIR}/*.conf;" in staging_mod.nginx_phase2(site)
+        assert staging_mod.ACTIVATION_PATH not in staging_mod.nginx_phase2(site)
 
-    def test_the_include_sits_at_server_level_not_inside_location(self):
-        """Внутри `location` include подключал бы адрес под тот же пароль.
-
-        Проверяется глубина вложенности, а не порядок строк: в файле несколько
-        серверных блоков, и сравнение с первым попавшимся `location /` смотрело
-        бы на блок перенаправления с порта 80, а не на нужный.
-        """
+    def test_the_window_config_has_the_form_and_no_password(self):
         site = next(s for s in staging_mod.sites() if s.site_id == "lords-01")
-        config = staging_mod.nginx_phase2(site)
-
-        depth = 0
-        found = []
-        for line in config.splitlines():
-            stripped = line.strip()
-            if stripped.startswith("include ") and staging_mod.ACTIVATION_DIR in stripped:
-                found.append(depth)
-            depth += line.count("{") - line.count("}")
-
-        assert found, "в конфигурации нет include каталога временных адресов"
-        # Глубина 1 — внутри server{} и не глубже: любой location дал бы 2.
-        assert all(level == 1 for level in found), (
-            f"include не на уровне server: глубины {found}"
+        config = staging_mod.nginx_phase2(
+            site, basic_auth=False, activation_port=1234, marker="M"
         )
+        assert f"location = {staging_mod.ACTIVATION_PATH} {{" in config
+        assert 'auth_basic "Lords staging";' not in config
 
-    def test_the_host_script_sets_auth_basic_off(self):
+    def test_the_host_script_verifies_the_real_nginx_before_printing(self):
         from factory.paths import PATHS
         script = (PATHS.root / "automation/host/lords-web-activation.sh").read_text(
             encoding="utf-8"
         )
-        snippet = script.split('cat > "${SNIPPET}"', 1)[1]
-        assert "auth_basic off;" in snippet
-
-    def test_the_host_script_verifies_the_include_is_deployed(self):
-        """Развёрнутая конфигурация могла быть записана до появления include."""
-        from factory.paths import PATHS
-        script = (PATHS.root / "automation/host/lords-web-activation.sh").read_text(
-            encoding="utf-8"
-        )
-        assert "нет include" in script
-        assert "lords-staging" in script, "сценарий не переустанавливает конфигурацию"
-
-    def test_the_host_script_checks_behaviour_not_only_config(self):
-        from factory.paths import PATHS
-        script = (PATHS.root / "automation/host/lords-web-activation.sh").read_text(
-            encoding="utf-8"
-        )
-        assert "FORM_CODE" in script and "MAIN_CODE" in script
+        assert script.index("проверяю фактический nginx хоста") < script.index("URL:   %s")
+        assert "LIVE_FORM_VERIFIED=pass" in script
+        assert "LIVE_FORM_VERIFIED=fail" in script

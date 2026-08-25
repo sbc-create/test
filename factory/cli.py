@@ -555,6 +555,32 @@ def cmd_lords_live(args) -> int:  # noqa: ARG001 — команда без ар�
     return 0
 
 
+def cmd_lords_activation_config(args) -> int:
+    """Рендерит конфигурацию трёх сайтов для окна веб-активации.
+
+    Пароль снят со всех трёх, форма добавлена прямо в серверный блок первого.
+    Ничего не применяет: файлы кладутся в каталог, применяет их root-сценарий
+    после nginx -t.
+    """
+    from pathlib import Path
+
+    from factory.lords import staging as lords_staging
+
+    out = Path(args.out)
+    out.mkdir(parents=True, exist_ok=True)
+    entries = lords_staging.sites()
+    for site in entries:
+        port = args.port if site.site_id == args.form_site else None
+        text = lords_staging.nginx_phase2(
+            site, basic_auth=not args.no_basic_auth,
+            activation_port=port, marker=args.marker,
+        )
+        (out / f"{site.site_id}.conf").write_text(text, encoding="utf-8")
+        print(f"  {site.site_id}: basic_auth={'off' if args.no_basic_auth else 'on'}"
+              f"{' + форма' if port else ''}")
+    return 0
+
+
 def cmd_lords_staging(args) -> int:  # noqa: ARG001 — команда без аргументов
     """Готовит конфигурацию трёх публичных стендов. Ничего не применяет."""
     from factory.lords import staging as lords_staging
@@ -838,6 +864,15 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("lords-live",
                        help="Lords: собрать три сайта на живом каталоге CDNVideoHub")
     p.set_defaults(func=cmd_lords_live)
+
+    p = sub.add_parser("lords-activation-config",
+                       help="Lords: конфигурация сайтов на время веб-активации")
+    p.add_argument("--out", required=True)
+    p.add_argument("--port", type=int, required=True)
+    p.add_argument("--form-site", default="lords-01")
+    p.add_argument("--marker", required=True)
+    p.add_argument("--no-basic-auth", action="store_true")
+    p.set_defaults(func=cmd_lords_activation_config)
 
     p = sub.add_parser("env-report", help="read-only отчёт об окружении")
     p.set_defaults(func=cmd_env_report)

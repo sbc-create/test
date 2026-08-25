@@ -27,6 +27,8 @@ def main(argv: list[str] | None = None) -> int:
                         help="куда записать выбранный порт для nginx")
     parser.add_argument("--result-file", required=True,
                         help="куда записать итог приёма (без секретов)")
+    parser.add_argument("--marker", default="",
+                        help="уникальная метка формы: по ней сценарий убеждается,\nчто отвечает именно приёмник, а не сайт")
     args = parser.parse_args(argv)
 
     intake = web_intake.Intake(
@@ -35,6 +37,7 @@ def main(argv: list[str] | None = None) -> int:
         publisher_file=Path(args.publisher_file),
         probe_url=args.probe_url,
         ttl_seconds=args.ttl,
+        marker=args.marker,
     )
 
     accepted = {"done": False}

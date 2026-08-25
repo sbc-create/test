@@ -365,6 +365,10 @@ class TestSingleUse:
 # Сценарий на хосте
 # ---------------------------------------------------------------------------
 class TestHostScript:
+    """Сценарий на хосте. Схема сменилась: форма и снятие пароля теперь
+    рендерятся прямо в конфигурацию сайта, а не подключаются include'ом
+    отдельного каталога. Прежняя косвенность и была причиной дефекта."""
+
     @pytest.fixture(scope="class")
     def text(self):
         return SCRIPT.read_text(encoding="utf-8")
@@ -386,57 +390,82 @@ class TestHostScript:
         assert result.returncode != 0
         assert "нужен root" in result.stderr
 
-    def test_access_log_is_off_for_the_endpoint(self, text):
-        assert "access_log off;" in text
+    def test_it_renders_the_config_instead_of_including_a_snippet(self, text):
+        assert "lords-activation-config" in text
+        assert "--no-basic-auth" in text
 
-    def test_the_body_size_is_capped(self, text):
-        assert "client_max_body_size" in text
+    def test_it_backs_up_the_actual_config_before_changing_it(self, text):
+        assert "BACKUP_DIR" in text
+        assert "etc-nginx.tar.gz" in text
+        backup_at = text.index("копия конфигурации")
+        apply_at = text.index("CONFIG_APPLIED=1")
+        assert backup_at < apply_at, "копия делается после изменения"
+
+    def test_it_verifies_the_real_nginx_before_printing_anything(self, text):
+        """Адрес и код печатаются только после фактической проверки."""
+        gate = text.index("проверяю фактический nginx хоста")
+        printed = text.index("URL:   %s")
+        assert gate < printed, "адрес печатается до проверки"
+
+    def test_the_gate_checks_all_three_domains(self, text):
+        gate = text.split("проверяю фактический nginx хоста", 1)[1].split("LIVE_FORM_VERIFIED=pass", 1)[0]
+        assert 'for domain in "${DOMAINS[@]}"' in gate
+
+    def test_the_gate_checks_both_loopback_and_public(self, text):
+        gate = text.split("проверяю фактический nginx хоста", 1)[1]
+        assert "--resolve" in gate
+        assert "форма (публичный запрос)" in gate
+
+    def test_the_gate_checks_the_marker(self, text):
+        assert "FORM_MARKER" in text
+        assert "не отдаёт маркер" in text
+
+    def test_the_gate_checks_the_certificate_per_domain(self, text):
+        assert "does match certificate" in text
+
+    def test_the_gate_checks_www_authenticate_is_absent(self, text):
+        assert "has_auth_header" in text
+        assert "WWW-Authenticate" in text
+
+    def test_a_failed_gate_restores_and_prints_diagnostics(self, text):
+        block = text.split("LIVE_FORM_VERIFIED=fail", 1)[1]
+        assert "deployed SHA" in block
+        assert "nginx -T" in block
+        assert "restore_config" in block
+        assert "stop_intake" in block
+
+    def test_a_failed_gate_prints_no_url_or_code(self, text):
+        block = text.split("LIVE_FORM_VERIFIED=fail", 1)[1].split("die ", 1)[0]
+        assert "ACCESS_CODE" not in block, "код печатается при провале проверки"
+
+    def test_indexing_stays_closed_during_the_window(self, text):
+        assert "robots.txt не закрывает сайт" in text
+        assert "Disallow: /" in text
+
+    def test_auth_is_restored_on_any_failure(self, text):
+        assert text.count("restore_config") >= 4
+        restore = text.split("restore_config() {", 1)[1].split("\n}", 1)[0]
+        assert "Basic Auth восстановлен" in restore
+
+    def test_auth_stays_off_after_success(self, text):
+        assert "KEEP_AUTH_OFF=1" in text
+        assert "remove_form_keep_auth_off" in text
+
+    def test_the_form_is_404_after_success(self, text):
+        tail = text.split("KEEP_AUTH_OFF=1", 1)[1]
+        assert '"404"' in tail
 
     def test_it_uses_the_existing_certificate(self, text):
         assert "/etc/letsencrypt/live/" in text
-        assert "certbot" not in text.lower(), "сценарий выпускает сертификаты"
+        assert "certbot" not in text.lower()
 
-    def test_basic_auth_is_disabled_only_inside_the_exact_location(self, text):
-        """Пароль снимается ровно на одном адресе и нигде больше.
-
-        Прежняя редакция запрещала `auth_basic off` во всём файле. Это было
-        верно ровно до того, как выяснилось, что снимать пароль на точном
-        location всё-таки нужно: он не наследует auth_basic из `location /`,
-        но унаследовал бы его с уровня server. Поэтому проверяется место, а не
-        наличие строки.
-        """
-        snippet = text.split('cat > "${SNIPPET}"', 1)[1].split("\nCONF\n", 1)[0]
-        assert "auth_basic off;" in snippet, "на форме остался пароль сайта"
-        assert text.count("auth_basic off") == 1, "пароль снят где-то ещё"
-
-    def test_the_snippet_opens_exactly_one_address(self, text):
-        """Префиксный location открыл бы весь раздел, а не одну страницу."""
-        snippet = text.split('cat > "${SNIPPET}"', 1)[1].split("\nCONF\n", 1)[0]
-        assert "location = ${LOCATION_PATH}" in snippet, "location не точный"
-
-    def test_the_site_password_file_is_not_touched(self, text):
+    def test_it_does_not_touch_the_password_file(self, text):
         assert "htpasswd" not in text.lower()
 
-    def test_the_endpoint_is_a_location_not_a_duplicate_server(self, text):
-        """Два server{} с одним именем — молчаливый выбор первого."""
-        snippet = text.split("cat > \"${SNIPPET}\"", 1)[1].split("CONF\n", 2)[1]
-        assert "location = ${LOCATION_PATH}" in snippet
-        assert "server {" not in snippet
-
-    def test_teardown_removes_the_snippet_and_reloads(self, text):
-        teardown = text.split("teardown() {", 1)[1].split("\n}", 1)[0]
-        assert 'rm -f "${SNIPPET}"' in teardown
-        assert "nginx -t" in teardown
-        assert "systemctl reload nginx" in teardown
-
-    def test_teardown_runs_once_and_on_every_exit(self, text):
-        assert "trap 'teardown' EXIT" in text
-        teardown = text.split("teardown() {", 1)[1].split("\n}", 1)[0]
-        assert "TEARDOWN_DONE" in teardown
-
-    def test_the_activator_is_called_non_interactively(self, text):
-        assert "LORDS_NONINTERACTIVE=1" in text
-        assert "LORDS_KEEP_SECRETS_ON_ROLLBACK=1" in text
+    def test_it_does_not_touch_the_neighbour(self, text):
+        for line in text.splitlines():
+            if "install -m" in line or "rm -f" in line:
+                assert "yummy" not in line.lower(), line
 
     def test_no_secret_is_printed(self, code):
         for line in code:
@@ -452,10 +481,9 @@ class TestHostScript:
         assert "LORDS_EXPECT_SHA" in text
         assert "rev-parse HEAD" in text
 
-    def test_it_prints_only_the_four_promised_lines(self, text):
-        block = text.split("То, что видит владелец", 1)[1].split("Ожидание", 1)[0]
-        assert "URL:" in block and "Код:" in block
-        assert "Срок:" in block and "Статус:" in block
+    def test_it_cleans_up_a_previous_run(self, text):
+        assert "web_intake_main" in text
+        assert "прошлого запуска" in text
 
 
 class TestActivatorNonInteractiveMode:
@@ -475,15 +503,44 @@ class TestActivatorNonInteractiveMode:
         assert "LORDS_KEEP_SECRETS_ON_ROLLBACK" in rollback
 
 
-class TestNginxIncludeHook:
-    def test_the_site_config_includes_the_activation_directory(self):
-        from factory.lords import staging
-        site = next(s for s in staging.sites() if s.site_id == "lords-01")
-        assert f"include {staging.ACTIVATION_DIR}/*.conf;" in staging.nginx_phase2(site)
+class TestGeneratedConfig:
+    """Форма и снятие пароля рендерятся в конфигурацию, а не подключаются."""
 
-    def test_the_directory_is_inside_the_lords_tree(self):
+    def _site(self):
         from factory.lords import staging
-        assert staging.ACTIVATION_DIR.startswith("/etc/nginx/lords")
+        return next(s for s in staging.sites() if s.site_id == "lords-01")
+
+    def test_the_normal_config_keeps_basic_auth_and_has_no_form(self):
+        from factory.lords import staging
+        config = staging.nginx_phase2(self._site())
+        assert 'auth_basic "Lords staging";' in config
+        assert staging.ACTIVATION_PATH not in config
+
+    def test_the_window_config_drops_auth_and_carries_the_form(self):
+        from factory.lords import staging
+        config = staging.nginx_phase2(
+            self._site(), basic_auth=False, activation_port=45678, marker="MARK"
+        )
+        assert 'auth_basic "Lords staging";' not in config
+        assert f"location = {staging.ACTIVATION_PATH} {{" in config
+        assert "MARK" in config
+        assert "proxy_pass http://127.0.0.1:45678;" in config
+
+    def test_the_window_config_keeps_indexing_closed(self):
+        from factory.lords import staging
+        config = staging.nginx_phase2(
+            self._site(), basic_auth=False, activation_port=45678, marker="MARK"
+        )
+        assert "noindex, nofollow" in config
+
+    def test_the_form_location_is_exact_and_unlogged(self):
+        from factory.lords import staging
+        config = staging.nginx_phase2(
+            self._site(), basic_auth=False, activation_port=1, marker="M"
+        )
+        form = config.split(f"location = {staging.ACTIVATION_PATH} {{", 1)[1].split("}", 1)[0]
+        assert "access_log off;" in form
+        assert "client_max_body_size 8k;" in form
 
 
 def test_write_secret_atomic_never_leaves_a_readable_window(tmp_path):

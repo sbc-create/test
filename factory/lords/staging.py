@@ -162,17 +162,56 @@ TLS_BLOCK = """
 #: не ошибка.
 ACTIVATION_DIR = f"{NGINX_DIR}/activation"
 
+#: Адрес одноразовой формы активации.
+ACTIVATION_PATH = "/__lords-activate"
 
-def _proxy_block(site: StagingSite) -> str:
-    return f"""
-    # Временные адреса (одноразовая активация). В обычном состоянии пусто.
-    include {ACTIVATION_DIR}/*.conf;
 
-    location / {{
-        auth_basic "Lords staging";
+def _proxy_block(site: StagingSite, *, basic_auth: bool = True,
+                 activation_port: int | None = None,
+                 activation_path: str = ACTIVATION_PATH,
+                 marker: str = "") -> str:
+    """Тело серверного блока сайта.
+
+    `basic_auth=False` снимает пароль со всего сайта на время приёма учётных
+    данных. Это осознанный размен: форму нельзя показать под паролем, которого
+    владелец не знает, а индексация всё равно закрыта заголовком, robots.txt и
+    пустым sitemap — они от пароля не зависят.
+
+    `activation_port` добавляет временный адрес формы прямо в этот блок. Раньше
+    он подключался через include отдельного каталога, и это оказалось хрупко:
+    развёрнутая конфигурация была записана до появления include, каталог никто
+    не читал, а форма молча уходила в общий `location /` под пароль. Здесь
+    подстановки нет — либо адрес в тексте конфигурации, либо его нет.
+    """
+    auth = ""
+    if basic_auth:
+        auth = f'''        auth_basic "Lords staging";
         auth_basic_user_file {HTPASSWD};
 
-        proxy_pass http://127.0.0.1:{site.port};
+'''
+
+    form = ""
+    if activation_port:
+        form = f"""
+    # Временный адрес одноразовой активации. Удаляется вместе с приёмом.
+    location = {activation_path} {{
+        auth_basic off;
+        access_log off;
+        client_max_body_size 8k;
+        client_body_buffer_size 8k;
+        add_header X-Lords-Form "{marker}" always;
+
+        proxy_pass http://127.0.0.1:{activation_port};
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 60s;
+    }}
+"""
+
+    return f"""{form}
+    location / {{
+{auth}        proxy_pass http://127.0.0.1:{site.port};
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -222,7 +261,9 @@ server {{
 """
 
 
-def nginx_phase2(site: StagingSite) -> str:
+def nginx_phase2(site: StagingSite, *, basic_auth: bool = True,
+                 activation_port: int | None = None,
+                 marker: str = "") -> str:
     """Фаза 2: HTTPS, www → apex через 308, Basic Auth, noindex."""
     cert = f"/etc/letsencrypt/live/{site.apex}"
     return f"""# {site.site_id} → {site.apex} (профиль {site.profile}, порт {site.port})
@@ -274,7 +315,7 @@ server {{
 
     access_log /var/log/nginx/{site.site_id}.access.log;
     error_log  /var/log/nginx/{site.site_id}.error.log;
-{_proxy_block(site)}}}
+{_proxy_block(site, basic_auth=basic_auth, activation_port=activation_port, marker=marker)}}}
 """
 
 

@@ -130,6 +130,7 @@ class Intake:
     state: str = STATE_WAITING
     sessions: dict = field(default_factory=dict)
     probe: object = None
+    marker: str = ""
     _lock: threading.Lock = field(default_factory=threading.Lock)
 
     def expired(self, now: float | None = None) -> bool:
@@ -198,6 +199,7 @@ PAGE = """<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Активация Lords</title>
+<meta name="lords-form-marker" content="{marker}">
 <style>
  body{{font:16px/1.5 system-ui,sans-serif;max-width:34rem;margin:3rem auto;padding:0 1rem}}
  label{{display:block;margin:1rem 0 .25rem;font-weight:600}}
@@ -287,7 +289,8 @@ def make_handler(intake: Intake, on_accept):
             block = f'<p class="msg {css}">{message}</p>' if message else ""
             self._send(
                 200,
-                PAGE.format(message=block, csrf=csrf, left=intake.seconds_left()),
+                PAGE.format(message=block, csrf=csrf, left=intake.seconds_left(),
+                            marker=intake.marker),
                 session=session,
             )
 
