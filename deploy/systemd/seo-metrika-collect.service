@@ -1,0 +1,72 @@
+[Unit]
+Description=SEO operator — read-only сбор Яндекс Метрики (пилот Yami)
+Documentation=file:///srv/site-factory/repo/docs/SEO_METRIKA_COLLECT.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=seo-operator
+Group=seo-operator
+WorkingDirectory=/srv/site-factory/repo
+
+# --- Credential ---------------------------------------------------------------
+# Существующий root-owned OAuth переиспользуется, а не запрашивается заново.
+# LoadCredential копирует его в $CREDENTIALS_DIRECTORY с правами только для
+# этого юнита: значение не попадает в Environment=, argv, systemctl show,
+# docker inspect и логи. Путь-источник совпадает с тем, что использует
+# site-factory-analytics-apply.service.
+#
+# ВАЖНО: оператору выдаётся ТОТ ЖЕ credential, но процесс read-only —
+# он не вызывает ни одного write-эндпоинта Метрики.
+LoadCredential=yandex-oauth:/etc/site-factory/credentials/yandex-oauth
+
+# Secret Hub (CDNVideoHub) — ДРУГОЙ тип credential и здесь не подключается.
+# Смешивать их в одном поле запрещено: у них разные владельцы, сроки и scope.
+
+Environment=SEO_REPO_ROOT=/srv/site-factory/repo
+Environment=SEO_STATE_DIR=/var/lib/seo-operator
+Environment=PYTHONPATH=/srv/site-factory/repo/src
+Environment=PYTHONUNBUFFERED=1
+# Имя credential, а НЕ его значение. Код читает $CREDENTIALS_DIRECTORY/$SEO_METRIKA_CREDENTIAL.
+Environment=SEO_METRIKA_CREDENTIAL=yandex-oauth
+# Пилот ограничен тремя доменами Yami: у них уже есть счётчики.
+Environment=SEO_PILOT_COUNTERS=111881037,111881038,111881039
+
+ExecStartPre=/srv/site-factory/repo/.venv/bin/python -m seo_operator.cli host verify
+ExecStart=/srv/site-factory/repo/.venv/bin/python -m seo_operator.cli collect metrika \
+    --counters ${SEO_PILOT_COUNTERS} --read-only --max-days 28
+
+TimeoutStartSec=1800
+Restart=no
+
+# --- Изоляция -----------------------------------------------------------------
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectProc=invisible
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+RestrictNamespaces=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+CapabilityBoundingSet=
+# Наружу нужен только HTTPS к API Яндекса.
+IPAddressDeny=any
+IPAddressAllow=localhost
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+
+ReadWritePaths=/var/lib/seo-operator /var/log/seo-operator
+
+StandardOutput=append:/var/log/seo-operator/metrika-collect.log
+StandardError=append:/var/log/seo-operator/metrika-collect.err
+
+[Install]
+WantedBy=multi-user.target
