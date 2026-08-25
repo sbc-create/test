@@ -35,3 +35,24 @@ hosts:
     host: yandex.com
     purpose: "официальная документация API Метрики и Вебмастера (yandex.com/dev/...)"
     methods: [GET]
+
+  # --- CDNVideoHub: проверка живости credentials --------------------------
+  # Внесён заданием «центральный Secret Hub для всех направлений» (2026-08-25).
+  # Владелец прямо потребовал проверять credentials живым read-only запросом
+  # перед сохранением; без записи здесь требование неисполнимо.
+  #
+  # Запись максимально узкая: один хост, только GET. Адрес и путь взяты из уже
+  # работающего клиента на этом же хосте
+  # (/srv/sites/yummyani-staging/repo/src/modules/catalog/infrastructure/
+  #  cdnvideohub/constants.ts), а не подобраны — провенанс записан в
+  # config/secret-hub.json и в D87.
+  #
+  # Это НЕ контракт синхронизации каталога: knowledge/cdnvideohub/content-api.yaml
+  # остаётся not_provided и меняется только через skill /research-freeze по
+  # официальному документу провайдера.
+  - ref: cdnvideohub-public-api
+    host: public-api.cdnvideohub.com
+    purpose: "Secret Hub: read-only проверка выданного API Token перед сохранением"
+    methods: [GET]
+    token_secret_ref: hub:/var/lib/site-factory-secret-hub/store.sqlite3
+    contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml

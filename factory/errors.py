@@ -19,6 +19,11 @@ FAILURE_STATES = (
     # API аналитики нельзя называть ни BLOCKED_SECRET (секрет на месте), ни
     # BLOCKED_ACCESS (доступа к серверу это не касается), ни тем более DONE.
     "BLOCKED_ANALYTICS_ACCESS",
+    # Введён заданием о центральном Secret Hub: направление описано и секрет
+    # может быть настроен, но применять его некуда — инфраструктура направления
+    # не передана. Это не BLOCKED_INPUT (входные данные секрета как раз есть) и
+    # не BLOCKED_ACCESS (доступ ни к чему не терялся).
+    "BLOCKED_TARGET",
     "QA_FAILED", "DEPLOY_FAILED", "ROLLED_BACK", "QUARANTINED",
 )
 
@@ -42,6 +47,8 @@ NON_RETRYABLE = {
     # или сам сервис; конвейер этого не исправит, а каждый повтор создаёт риск
     # дубля счётчика.
     "BLOCKED_ANALYTICS_ACCESS",
+    # Цель применения не появится от повтора: её должен передать владелец.
+    "BLOCKED_TARGET",
 }
 
 
@@ -125,6 +132,17 @@ class BlockedAnalyticsAccess(FactoryError):
     """
 
     status = "BLOCKED_ANALYTICS_ACCESS"
+
+
+class BlockedTarget(FactoryError):
+    """Направление настроено, но применять credentials некуда.
+
+    Отдельный статус нужен, чтобы «секрет есть, инфраструктуры нет» не выглядело
+    ни как успех, ни как отсутствие секрета. Направление в этом состоянии не
+    получает ни одной операции записи на хост.
+    """
+
+    status = "BLOCKED_TARGET"
 
 
 class QaFailed(FactoryError):

@@ -21,6 +21,7 @@ from factory.errors import FactoryError
 from factory.locks import LockBusy, site_lock
 from factory.paths import PATHS
 from factory.report import build_result, write_result
+from factory.secret_hub import cli as secret_hub_cli
 from factory.seo import crawl as crawl_mod
 from factory.seo import lint as lint_mod
 from factory.seo import matrix as matrix_mod
@@ -611,6 +612,7 @@ def main(argv: list[str] | None = None) -> int:
     p.set_defaults(func=cmd_blueprint)
 
     analytics_cli.register(sub)
+    secret_hub_cli.register(sub)
 
     p = sub.add_parser("env-report", help="read-only отчёт об окружении")
     p.set_defaults(func=cmd_env_report)
