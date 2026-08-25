@@ -274,7 +274,7 @@ class TestUpdateActuallyTakesEffect:
     """Обновление кода без перезапуска — это обновление, которого не было."""
 
     def _launcher(self, repo_root) -> str:
-        return (repo_root / "var" / "install-secret-hub.sh").read_text(encoding="utf-8")
+        return (repo_root / "automation" / "secret-hub" / "install-secret-hub.sh").read_text(encoding="utf-8")
 
     def test_panel_is_restarted_not_just_enabled(self, repo_root):
         text = self._launcher(repo_root)

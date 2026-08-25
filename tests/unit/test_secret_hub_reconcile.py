@@ -244,14 +244,27 @@ class TestAuditChecksTheHostNotTheReport:
 
 class TestLauncherRunsReconcile:
     def test_launcher_calls_reconcile(self, repo_root):
-        text = (repo_root / "var" / "install-secret-hub.sh").read_text(encoding="utf-8")
+        text = (repo_root / "automation" / "secret-hub" / "install-secret-hub.sh").read_text(encoding="utf-8")
         assert "rootcmd reconcile" in text, \
             "владельцу остался бы отдельный клик «Применить к сайтам»"
 
     def test_reconcile_runs_after_the_panel_is_up(self, repo_root):
-        text = (repo_root / "var" / "install-secret-hub.sh").read_text(encoding="utf-8")
-        assert text.index("install-panel") < text.index("rootcmd reconcile")
+        """Сравнивается порядок ВЫЗОВОВ, а не первых упоминаний в тексте.
+
+        Предполётная проверка печатает список шагов, поэтому слово
+        «reconcile» встречается в файле раньше собственного запуска. Считаем
+        только строки, где модуль действительно запускается.
+        """
+        lines = (repo_root / "automation" / "secret-hub"
+                 / "install-secret-hub.sh").read_text(encoding="utf-8").splitlines()
+        runs = [(i, ln) for i, ln in enumerate(lines)
+                if "-m factory.secret_hub.rootcmd" in ln
+                and not ln.strip().startswith("#")]
+        panel = [i for i, ln in runs if "install-panel" in ln]
+        recon = [i for i, ln in runs if "reconcile" in ln]
+        assert panel and recon, f"вызовы не найдены: {runs}"
+        assert min(panel) < min(recon), "reconcile запускается раньше подъёма панели"
 
     def test_launcher_failure_propagates(self, repo_root):
-        text = (repo_root / "var" / "install-secret-hub.sh").read_text(encoding="utf-8")
+        text = (repo_root / "automation" / "secret-hub" / "install-secret-hub.sh").read_text(encoding="utf-8")
         assert "reconcile_code" in text, "отказ применения потерялся бы"
