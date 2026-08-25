@@ -95,6 +95,22 @@ PYTHONPATH="$REPO" SECRET_HUB_CONFIG="$REPO/config/secret-hub.json" \
 code=$?
 set -e
 
+# --- 7. применение уже сохранённых credentials ----------------------------
+# Владельцу не должно оставаться отдельного клика: то, что уже сохранено и
+# проверено, обязано доехать до потребителей само. Новых версий не создаётся,
+# повторный ввод не требуется — работа идёт с активной версией направления.
+if [ "$code" -eq 0 ]; then
+  say "применение уже сохранённых credentials"
+  set +e
+  PYTHONPATH="$REPO" SECRET_HUB_CONFIG="$REPO/config/secret-hub.json" \
+    "$PY" -m factory.secret_hub.rootcmd reconcile
+  reconcile_code=$?
+  set -e
+  if [ "$reconcile_code" -ne 0 ]; then
+    code=$reconcile_code
+  fi
+fi
+
 if [ "$code" -ne 0 ]; then
   cat >&2 <<'EOF'
 
