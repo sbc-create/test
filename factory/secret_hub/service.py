@@ -34,6 +34,7 @@ import socketserver
 import stat
 import threading
 from dataclasses import dataclass
+from dataclasses import field as dataclass_field
 from datetime import UTC
 from pathlib import Path
 
@@ -56,6 +57,13 @@ SOCKET_MODE = 0o660
 OPERATIONS = ("list", "status", "verify", "apply", "rotate", "revoke", "enroll", "import")
 
 
+#: Операции, меняющие состояние направления. Два таких вызова для одного
+#: направления обязаны идти по очереди: параллельные `apply` дерутся за одни и
+#: те же файлы, а параллельные `rotate` создают две версии, из которых
+#: применяется неизвестно какая.
+MUTATING_OPERATIONS = frozenset({"apply", "rotate", "revoke", "enroll", "import"})
+
+
 @dataclass
 class Hub:
     """Логика хаба без транспорта. Тестируется напрямую, без сокета."""
@@ -63,6 +71,15 @@ class Hub:
     config: HubConfig
     master: MasterKey
     store: Store
+    #: Замки по направлениям. Глобального замка здесь нет намеренно: `enroll`
+    #: держит форму до пятнадцати минут, и общий замок сделал бы `status`
+    #: недоступным на всё это время.
+    _locks: dict = dataclass_field(default_factory=dict)
+    _locks_guard: threading.Lock = dataclass_field(default_factory=threading.Lock)
+
+    def _portfolio_lock(self, portfolio_id: str) -> threading.RLock:
+        with self._locks_guard:
+            return self._locks.setdefault(portfolio_id, threading.RLock())
 
     # --- операции ---------------------------------------------------------
     def op_list(self, _: dict) -> dict:
@@ -261,7 +278,11 @@ class Hub:
                     "reason": f"Неизвестная операция «{op}». Доступны: {', '.join(OPERATIONS)}."}
         handler = getattr(self, f"op_{op}")
         try:
-            payload = handler(request)
+            if op in MUTATING_OPERATIONS and request.get("portfolio"):
+                with self._portfolio_lock(str(request["portfolio"])):
+                    payload = handler(request)
+            else:
+                payload = handler(request)
         except FactoryError as exc:
             return {"ok": False, "error": exc.status, **exc.as_blocker()}
         except Exception as exc:  # pragma: no cover - защитная сетка

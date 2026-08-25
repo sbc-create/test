@@ -296,6 +296,63 @@ class TestSocketTransport:
             _shutdown(hub.config.socket_path)
             thread.join(5)
 
+    def test_status_over_socket_touches_the_store(self, hub, offline_provider):
+        """Запрос, читающий хранилище, обязан работать через сокет.
+
+        Сервер обслуживает каждое соединение в отдельном потоке, а соединение
+        SQLite создаётся в главном. Без `check_same_thread=False` и замка любая
+        операция, трогающая базу, отвечала QUARANTINED — а `op: list` этого не
+        показывал, потому что до хранилища не доходит. Тест ходит именно за
+        состоянием настроенного направления.
+        """
+        _configure(hub, "yami")
+        ready = threading.Event()
+        thread = threading.Thread(
+            target=lambda: service.serve(hub.config, master=hub.master, ready=ready),
+            daemon=True)
+        thread.start()
+        assert ready.wait(10)
+        try:
+            response = service.request(hub.config.socket_path,
+                                       {"op": "status", "portfolio": "yami"})
+            assert response["ok"] is True, response
+            row = response["portfolios"][0]
+            assert row["configured"] is True
+            assert row["fingerprint"].startswith("sha256:")
+            assert TOKEN_MARKER not in json.dumps(response, ensure_ascii=False)
+        finally:
+            _shutdown(hub.config.socket_path)
+            thread.join(5)
+
+    def test_concurrent_requests_do_not_break_the_store(self, hub, offline_provider):
+        """Несколько одновременных запросов из разных потоков — штатный режим."""
+        _configure(hub, "yami")
+        _configure(hub, "lords")
+        ready = threading.Event()
+        thread = threading.Thread(
+            target=lambda: service.serve(hub.config, master=hub.master, ready=ready),
+            daemon=True)
+        thread.start()
+        assert ready.wait(10)
+        results: list[dict] = []
+        try:
+            def ask(portfolio):
+                results.append(service.request(hub.config.socket_path,
+                                               {"op": "status", "portfolio": portfolio}))
+
+            workers = [threading.Thread(target=ask, args=(p,))
+                       for p in ("yami", "lords") * 4]
+            for worker in workers:
+                worker.start()
+            for worker in workers:
+                worker.join(20)
+            assert len(results) == 8
+            assert all(r.get("ok") for r in results), \
+                [r for r in results if not r.get("ok")]
+        finally:
+            _shutdown(hub.config.socket_path)
+            thread.join(5)
+
     def test_oversized_request_is_refused(self, hub):
         ready = threading.Event()
         thread = threading.Thread(

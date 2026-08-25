@@ -22,6 +22,7 @@ from __future__ import annotations
 import os
 import sqlite3
 import stat
+import threading
 from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -182,7 +183,15 @@ class Store:
         self.master = master
         self._enforce = enforce_permissions
         self._prepare_paths()
-        self._conn = sqlite3.connect(str(db_path), isolation_level=None)
+        # `check_same_thread=False` плюс собственный замок, а не соединение на
+        # поток: сервис обслуживает запросы в отдельных потоках, и соединение,
+        # созданное в главном, иначе отвергает любой запрос, который трогает
+        # хранилище. Замок здесь не только про безопасность sqlite: две
+        # одновременные записи в одно направление всё равно должны идти по
+        # очереди, иначе версия, отпечаток и файлы у потребителей разъезжаются.
+        self._lock = threading.RLock()
+        self._conn = sqlite3.connect(str(db_path), isolation_level=None,
+                                     check_same_thread=False)
         self._conn.row_factory = sqlite3.Row
         self._conn.execute("PRAGMA foreign_keys = ON")
         self._conn.execute("PRAGMA journal_mode = WAL")
@@ -243,15 +252,18 @@ class Store:
 
     @contextmanager
     def _transaction(self):
-        self._conn.execute("BEGIN IMMEDIATE")
-        try:
-            yield
-        except BaseException:
-            self._conn.execute("ROLLBACK")
-            raise
-        else:
-            self._conn.execute("COMMIT")
-            self._enforce_file_mode()
+        # Замок держится всю транзакцию: BEGIN IMMEDIATE от другого потока на том
+        # же соединении иначе попал бы внутрь чужой транзакции.
+        with self._lock:
+            self._conn.execute("BEGIN IMMEDIATE")
+            try:
+                yield
+            except BaseException:
+                self._conn.execute("ROLLBACK")
+                raise
+            else:
+                self._conn.execute("COMMIT")
+                self._enforce_file_mode()
 
     # --- запись ----------------------------------------------------------
     def put(self, portfolio: str, values: dict[str, Secret], *, provider: str,
@@ -410,11 +422,12 @@ class Store:
 
     # --- чтение ----------------------------------------------------------
     def state(self, portfolio: str) -> PortfolioState:
-        row = self._conn.execute(
-            "SELECT * FROM portfolio WHERE portfolio = ?", (portfolio,)
-        ).fetchone()
-        versions = self._versions(portfolio)
-        deployments = self._deployments(portfolio)
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT * FROM portfolio WHERE portfolio = ?", (portfolio,)
+            ).fetchone()
+            versions = self._versions(portfolio)
+            deployments = self._deployments(portfolio)
         if row is None:
             return PortfolioState(portfolio, "", False, None, None, None, "not_configured",
                                   None, None, versions, deployments)
@@ -435,9 +448,10 @@ class Store:
         )
 
     def _versions(self, portfolio: str) -> tuple[VersionRow, ...]:
-        rows = self._conn.execute(
-            "SELECT * FROM secret_version WHERE portfolio = ? ORDER BY version", (portfolio,)
-        ).fetchall()
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT * FROM secret_version WHERE portfolio = ? ORDER BY version", (portfolio,)
+            ).fetchall()
         return tuple(
             VersionRow(portfolio, r["version"], r["created_at"], r["verified_at"], r["status"],
                        r["fingerprint"], r["key_id"])
@@ -445,9 +459,10 @@ class Store:
         )
 
     def _deployments(self, portfolio: str) -> tuple[DeploymentRow, ...]:
-        rows = self._conn.execute(
-            "SELECT * FROM deployment WHERE portfolio = ? ORDER BY consumer", (portfolio,)
-        ).fetchall()
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT * FROM deployment WHERE portfolio = ? ORDER BY consumer", (portfolio,)
+            ).fetchall()
         return tuple(
             DeploymentRow(portfolio, r["consumer"], r["version"], r["applied_at"], r["status"],
                           r["detail"])
@@ -455,9 +470,10 @@ class Store:
         )
 
     def _next_version(self, portfolio: str) -> int:
-        row = self._conn.execute(
-            "SELECT MAX(version) AS m FROM secret_version WHERE portfolio = ?", (portfolio,)
-        ).fetchone()
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT MAX(version) AS m FROM secret_version WHERE portfolio = ?", (portfolio,)
+            ).fetchone()
         return int(row["m"] or 0) + 1
 
     def reveal_for_apply(self, portfolio: str, version: int | None = None) -> dict[str, Secret]:
@@ -477,11 +493,12 @@ class Store:
                 required_input="Ввод credentials через одноразовую форму или root-импорт",
                 blocks_stage="VALIDATING",
             )
-        rows = self._conn.execute(
-            "SELECT field, salt, nonce, ciphertext FROM secret_value"
-            " WHERE portfolio = ? AND version = ?",
-            (portfolio, target),
-        ).fetchall()
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT field, salt, nonce, ciphertext FROM secret_value"
+                " WHERE portfolio = ? AND version = ?",
+                (portfolio, target),
+            ).fetchall()
         if len(rows) != len(SECRET_FIELDS):
             raise BlockedSecret(
                 f"Версия {target} направления «{portfolio}» неполна: "
@@ -490,10 +507,11 @@ class Store:
                 required_input="Целая версия секрета",
                 blocks_stage="VALIDATING",
             )
-        version_row = self._conn.execute(
-            "SELECT scheme, key_id FROM secret_version WHERE portfolio = ? AND version = ?",
-            (portfolio, target),
-        ).fetchone()
+        with self._lock:
+            version_row = self._conn.execute(
+                "SELECT scheme, key_id FROM secret_version WHERE portfolio = ? AND version = ?",
+                (portfolio, target),
+            ).fetchone()
         out: dict[str, Secret] = {}
         for row in rows:
             envelope = Envelope(version_row["scheme"], row["salt"], row["nonce"],
@@ -523,7 +541,8 @@ class Store:
         os.close(fd)
         destination = sqlite3.connect(str(tmp))
         try:
-            self._conn.backup(destination)
+            with self._lock:
+                self._conn.backup(destination)
         finally:
             destination.close()
         os.replace(tmp, target)
@@ -546,9 +565,8 @@ class Store:
             )
         source = sqlite3.connect(str(backup_path))
         try:
-            with self._transaction():
-                pass  # проверка, что база не занята другой транзакцией
-            source.backup(self._conn)
+            with self._lock:
+                source.backup(self._conn)
         finally:
             source.close()
         self._enforce_file_mode()
