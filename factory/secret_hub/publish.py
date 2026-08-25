@@ -59,34 +59,20 @@ END = "# <<< secret-hub enroll include <<<"
 
 BACKUP_DIR = Path("/var/lib/site-factory-secret-hub/nginx-backups")
 
-IDLE_SNIPPET = f"""# Состояние: форма не запущена.
-#
-# Именно 404, а не отсутствие location: без него запрос ушёл бы в `location /`,
-# где на этом стенде стоит Basic Auth, и вместо 404 браузер получил бы 401.
-location ^~ {DEFAULT_PATH} {{
-    access_log off;
-    log_not_found off;
-    auth_basic off;
-    add_header X-Robots-Tag "noindex, nofollow" always;
-    return 404;
-}}
-"""
-
-ACTIVE_SNIPPET = """# Состояние: идёт сессия ввода. Файл будет перезаписан по её завершении.
+PANEL_SNIPPET = """# Панель Secret Hub. Постоянный location, управляется установщиком.
 location ^~ {path} {{
-    # Ни строки в журнал: здесь проходит одноразовый код и тело формы.
+    # Ни строки в журнал: здесь проходят коды входа и тело формы с токеном.
     access_log off;
     log_not_found off;
 
     # Явно, а не по наследованию: на этом стенде Basic Auth включён в
-    # `location /`, и форма обязана отвечать без WWW-Authenticate.
+    # `location /`, а панель обязана отвечать без WWW-Authenticate — вход в
+    # неё идёт по passkey, и второй пароль поверх был бы и лишним, и вредным.
     auth_basic off;
 
     add_header X-Robots-Tag "noindex, nofollow" always;
-    add_header Cache-Control "no-store" always;
-    add_header Referrer-Policy "no-referrer" always;
 
-    # 8 KiB — тот же предел, что проверяет сама форма. Здесь он отсекает
+    # 8 KiB — тот же предел, что проверяет сама панель. Здесь он отсекает
     # переросшее тело до того, как оно дойдёт до процесса.
     client_max_body_size 8k;
     client_body_buffer_size 8k;
@@ -97,7 +83,20 @@ location ^~ {path} {{
     proxy_set_header X-Forwarded-Proto $scheme;
     proxy_set_header Connection "";
     proxy_connect_timeout 5s;
-    proxy_read_timeout 60s;
+    proxy_read_timeout 120s;
+}}
+"""
+
+#: Снимок на случай, когда панель не установлена. Именно 404, а не отсутствие
+#: location: без него запрос ушёл бы в `location /`, где стоит Basic Auth, и
+#: вместо 404 браузер получил бы 401.
+IDLE_SNIPPET = f"""# Панель Secret Hub не установлена.
+location ^~ {DEFAULT_PATH} {{
+    access_log off;
+    log_not_found off;
+    auth_basic off;
+    add_header X-Robots-Tag "noindex, nofollow" always;
+    return 404;
 }}
 """
 
@@ -256,13 +255,18 @@ def set_idle() -> None:
     _write(SNIPPET, IDLE_SNIPPET)
 
 
-def set_active(port: int, path: str = DEFAULT_PATH) -> None:
-    """Форма запущена: адрес проксируется на петлевой порт."""
-    _write(SNIPPET, ACTIVE_SNIPPET.format(port=int(port), path=path))
+def set_panel(port: int, path: str = DEFAULT_PATH) -> None:
+    """Панель установлена: адрес постоянно проксируется на петлевой порт."""
+    _write(SNIPPET, PANEL_SNIPPET.format(port=int(port), path=path))
 
 
-def activate(vhost: Path, server_name: str, port: int, path: str = DEFAULT_PATH) -> dict:
-    """Полный путь публикации: include, активный снимок, проверка, перезагрузка."""
+def install_panel(vhost: Path, server_name: str, port: int,
+                  path: str = DEFAULT_PATH) -> dict:
+    """Полный путь установки панели: include, снимок, проверка, перезагрузка.
+
+    Операция идемпотентна: повторный запуск установщика не создаёт второй
+    include и не меняет уже работающую конфигурацию.
+    """
     # Снимок простоя создаётся до include, а не после: nginx пустой glob
     # переживает, но проверять конфигурацию, в которой подключать нечего, —
     # значит проверять не то, что будет работать. Заодно первая же установка
@@ -271,7 +275,7 @@ def activate(vhost: Path, server_name: str, port: int, path: str = DEFAULT_PATH)
         set_idle()
     result = ensure_include(vhost, server_name)
     previous = SNIPPET.read_text(encoding="utf-8") if SNIPPET.exists() else None
-    set_active(port, path)
+    set_panel(port, path)
     ok, detail = nginx_test()
     if not ok:
         # Возврат к прежнему состоянию до перезагрузки: работающий сайт не
@@ -290,8 +294,8 @@ def activate(vhost: Path, server_name: str, port: int, path: str = DEFAULT_PATH)
     return result
 
 
-def deactivate() -> dict:
-    """Снимает форму: адрес снова отвечает 404. Include остаётся на месте."""
+def uninstall_panel() -> dict:
+    """Снимает панель: адрес снова отвечает 404. Include остаётся на месте."""
     set_idle()
     ok, detail = nginx_test()
     if not ok:

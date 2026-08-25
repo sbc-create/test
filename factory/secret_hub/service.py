@@ -19,11 +19,12 @@
 * ``apply``  — применение к инфраструктуре направления;
 * ``rotate`` — новая версия из уже введённых значений (перевыдача потребителям);
 * ``revoke`` — отзыв активной версии без её удаления;
-* ``enroll`` — запуск одноразовой формы ввода;
 * ``import`` — перенос существующих файлов credentials внутрь хранилища.
 
-``update`` как операция API отсутствует: значения приходят только через
-одноразовую форму или root-импорт, оба — внутри этого же процесса.
+Значения приходят единственным путём — операцией ``store`` от панели. У неё
+есть вход, но нет выхода: в ответе версия, отпечаток и исход проверки, а само
+значение не возвращается ни одной операцией. Право писать проверяется по uid
+пира сокета, см. :data:`PANEL_ONLY_OPERATIONS`.
 """
 from __future__ import annotations
 
@@ -32,6 +33,7 @@ import os
 import socket
 import socketserver
 import stat
+import struct
 import threading
 from dataclasses import dataclass
 from dataclasses import field as dataclass_field
@@ -54,14 +56,22 @@ MAX_REQUEST_BYTES = 64 * 1024
 #: спросить и запустить, но не право увидеть — API значений не отдаёт.
 SOCKET_MODE = 0o660
 
-OPERATIONS = ("list", "status", "verify", "apply", "rotate", "revoke", "enroll", "import")
+OPERATIONS = ("list", "status", "verify", "apply", "rotate", "revoke", "import",
+              "store")
+
+#: Операции, которые принимает только панель. Право проверяется по uid пира
+#: unix-сокета (SO_PEERCRED), а не по членству в группе: в группе управления
+#: состоит и учётная запись агента, и ей позволено спрашивать, но не писать.
+#: «Записать» — это не «прочитать», однако подменить credentials направления
+#: означало бы увести весь портфель на чужой токен.
+PANEL_ONLY_OPERATIONS = frozenset({"store"})
 
 
 #: Операции, меняющие состояние направления. Два таких вызова для одного
 #: направления обязаны идти по очереди: параллельные `apply` дерутся за одни и
 #: те же файлы, а параллельные `rotate` создают две версии, из которых
 #: применяется неизвестно какая.
-MUTATING_OPERATIONS = frozenset({"apply", "rotate", "revoke", "enroll", "import"})
+MUTATING_OPERATIONS = frozenset({"apply", "rotate", "revoke", "import", "store"})
 
 
 @dataclass
@@ -80,6 +90,19 @@ class Hub:
     def _portfolio_lock(self, portfolio_id: str) -> threading.RLock:
         with self._locks_guard:
             return self._locks.setdefault(portfolio_id, threading.RLock())
+
+    def _peer_may_write(self, peer_uid: int | None) -> bool:
+        """Может ли пир записывать credentials.
+
+        ``None`` означает вызов внутри процесса (root-команда, тесты) — там
+        проверять нечего. Из сокета uid приходит от ядра: подделать его
+        клиент не может, в отличие от любого поля в теле запроса.
+        """
+        if peer_uid is None:
+            return True
+        if peer_uid == 0:
+            return True
+        return peer_uid == _panel_uid(self.config.panel_user)
 
     # --- операции ---------------------------------------------------------
     def op_list(self, _: dict) -> dict:
@@ -231,23 +254,49 @@ class Hub:
                 "note": "Значение сохранено для отката. Файлы у потребителей не изменены: "
                         "снятие credentials с работающего сайта выполняется отдельно."}
 
-    def op_enroll(self, payload: dict) -> dict:
-        from factory.secret_hub import enroll
+    def op_store(self, payload: dict) -> dict:
+        """Принимает новые значения от панели. Наружу ничего не возвращает.
+
+        Единственная операция API, у которой значения есть во входе. В выходе
+        их нет и быть не может: ответ — версия, отпечаток и исход проверки.
+        Асимметрия намеренная: панель обязана уметь записать новый токен и
+        обязана не уметь прочитать записанный.
+        """
+        from factory.errors import BlockedInput
+        from factory.secret_hub.crypto import Secret
 
         portfolio = self.config.portfolio(_require(payload, "portfolio"))
-        if portfolio.blocked_target is not None:
-            raise BlockedTarget(
-                f"Направление «{portfolio.id}»: {portfolio.blocked_target.reason}",
-                field=portfolio.id,
-                required_input=portfolio.blocked_target.required_input,
+        api_token = str(payload.get("api_token") or "")
+        publisher_id = str(payload.get("publisher_id") or "")
+        if not api_token.strip() or not publisher_id.strip():
+            raise BlockedInput(
+                "Оба поля обязательны: пустое поле — не разрешение работать без значения.",
+                field="api_token/publisher_id",
+                required_input="Непустые API Token и Publisher ID",
                 blocks_stage="VALIDATING",
             )
-        # Одно направление в списке: операция адресная, и подсовывать оператору
-        # выбор из направлений, которых он не просил, незачем. Множественный
-        # выбор нужен только приёмочному сценарию, где заранее неизвестно,
-        # чего именно не хватит.
-        return enroll.start_session(self, (portfolio.id,),
-                                    ttl_seconds=payload.get("ttl_seconds"))
+        values = {
+            "api_token": Secret(api_token, label=f"{portfolio.id}/api_token"),
+            "publisher_id": Secret(publisher_id, label=f"{portfolio.id}/publisher_id"),
+        }
+        result = self.store_verified(portfolio.id, values)
+        # Значения не переживают обработчик: ни в локальных именах, ни в теле
+        # запроса, которое вызывающий может залогировать.
+        del values, api_token, publisher_id
+        payload.pop("api_token", None)
+        payload.pop("publisher_id", None)
+
+        response = {
+            "portfolio": portfolio.id,
+            "stored": bool(result.get("stored")),
+            "version": result.get("version"),
+            "fingerprint": result.get("fingerprint"),
+            "verify": result.get("verify"),
+        }
+        if not result.get("stored"):
+            response["ok"] = False
+            response["reason"] = result.get("reason", "провайдер не подтвердил credentials")
+        return response
 
     def op_import(self, payload: dict) -> dict:
         from factory.secret_hub import migrate
@@ -276,11 +325,17 @@ class Hub:
                 "fingerprint": self.store.state(portfolio_id).fingerprint}
 
     # --- диспетчер --------------------------------------------------------
-    def handle(self, request: dict) -> dict:
+    def handle(self, request: dict, *, peer_uid: int | None = None) -> dict:
         op = request.get("op")
         if op not in OPERATIONS:
             return {"ok": False, "error": "unknown_operation",
                     "reason": f"Неизвестная операция «{op}». Доступны: {', '.join(OPERATIONS)}."}
+        if op in PANEL_ONLY_OPERATIONS and not self._peer_may_write(peer_uid):
+            return {"ok": False, "error": "BLOCKED_AUTHORIZATION",
+                    "reason": "Запись credentials разрешена только процессу панели.",
+                    "field": "peer_uid",
+                    "required_input": "Запрос от учётной записи панели или root",
+                    "blocks_stage": "VALIDATING"}
         handler = getattr(self, f"op_{op}")
         try:
             if op in MUTATING_OPERATIONS and request.get("portfolio"):
@@ -309,6 +364,18 @@ def _require(payload: dict, name: str) -> str:
     return str(value)
 
 
+def _panel_uid(user: str | None) -> int | None:
+    """uid учётной записи панели или ``None``, если её на хосте нет."""
+    if not user:
+        return None
+    import pwd
+
+    try:
+        return pwd.getpwnam(user).pw_uid
+    except KeyError:
+        return None
+
+
 def _now() -> str:
     from datetime import datetime
 
@@ -332,7 +399,25 @@ class _Handler(socketserver.StreamRequestHandler):
         if not isinstance(request, dict):
             self._reply({"ok": False, "error": "bad_request"})
             return
-        self._reply(self.hub.handle(request))
+        self._reply(self.hub.handle(request, peer_uid=self._peer_uid()))
+
+    def _peer_uid(self) -> int | None:
+        """uid процесса на том конце сокета, по данным ядра.
+
+        ``SO_PEERCRED`` возвращает то, что ядро знает о подключившемся
+        процессе. Это единственный источник, которому здесь можно верить: любое
+        поле в теле запроса клиент пишет сам.
+        """
+        try:
+            raw = self.connection.getsockopt(socket.SOL_SOCKET, socket.SO_PEERCRED,
+                                             struct.calcsize("3i"))
+            _pid, uid, _gid = struct.unpack("3i", raw)
+            return uid
+        except (OSError, AttributeError, struct.error):
+            # Не смогли измерить — значит не подтвердили. Право записи выдаётся
+            # только по подтверждённому uid, поэтому здесь безопаснее вернуть
+            # заведомо не подходящее значение, чем None («вызов изнутри»).
+            return -1
 
     def _reply(self, payload: dict) -> None:
         # redact поверх готового ответа — последняя сетка. Значений здесь быть

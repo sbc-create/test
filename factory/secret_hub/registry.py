@@ -131,13 +131,18 @@ class VerifyContract:
 
 @dataclass(frozen=True)
 class PublicForm:
-    """Где форма показывается оператору. Домен обязан уже существовать."""
+    """Где панель показывается владельцу. Домен обязан уже существовать."""
 
     server_name: str
     vhost: Path
     path: str
     loopback_port: int
     note: str = ""
+    #: Непривилегированная учётная запись, от которой работает панель. Она же —
+    #: единственная, кому хаб разрешает записывать credentials.
+    panel_user: str = "sfpanel"
+    #: Каталог базы панели: passkey'и, хеши recovery, сессии. Секретов нет.
+    panel_state_dir: Path = Path("/var/lib/site-factory-secret-panel")
 
     @property
     def url(self) -> str:
@@ -158,6 +163,10 @@ class HubConfig:
     verify: VerifyContract
     portfolios: tuple[Portfolio, ...]
     public_form: PublicForm | None = None
+
+    @property
+    def panel_user(self) -> str | None:
+        return self.public_form.panel_user if self.public_form else None
 
     def portfolio(self, portfolio_id: str) -> Portfolio:
         for item in self.portfolios:
@@ -297,6 +306,9 @@ def load(path: Path | None = None) -> HubConfig:
         path=form_raw["path"],
         loopback_port=int(form_raw["loopback_port"]),
         note=form_raw.get("note", ""),
+        panel_user=form_raw.get("panel_user", "sfpanel"),
+        panel_state_dir=Path(form_raw.get("panel_state_dir",
+                                          "/var/lib/site-factory-secret-panel")),
     ) if form_raw else None
 
     return HubConfig(

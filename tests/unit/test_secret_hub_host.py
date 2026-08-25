@@ -19,7 +19,7 @@ import pytest
 from factory.secret_hub.registry import load as load_config
 
 HUB_UNIT = "site-factory-secret-hub.service"
-ENROLL_UNIT = "site-factory-secret-hub-enroll@.service"
+PANEL_UNIT = "site-factory-secret-panel.service"
 IMPORT_UNIT = "site-factory-secret-hub-import@.service"
 UNIT_DIR = Path("/etc/systemd/system")
 
@@ -60,7 +60,7 @@ class TestUnitFilesInRepository:
         text = (repo_root / "automation" / "secret-hub" / HUB_UNIT).read_text(encoding="utf-8")
         assert "LimitCORE=0" in text
 
-    @pytest.mark.parametrize("unit", [HUB_UNIT, ENROLL_UNIT, IMPORT_UNIT])
+    @pytest.mark.parametrize("unit", [HUB_UNIT, PANEL_UNIT, IMPORT_UNIT])
     def test_units_are_shipped(self, repo_root, unit):
         assert (repo_root / "automation" / "secret-hub" / unit).exists()
 
@@ -326,7 +326,7 @@ class TestNoSecretsInProcessSurface:
         assert present == [], f"значение секрета в окружении: {', '.join(present)}"
 
     def test_units_pass_paths_not_values(self, repo_root):
-        for name in (HUB_UNIT, ENROLL_UNIT, IMPORT_UNIT):
+        for name in (HUB_UNIT, PANEL_UNIT, IMPORT_UNIT):
             text = (repo_root / "automation" / "secret-hub" / name).read_text(encoding="utf-8")
             for line in text.splitlines():
                 if line.startswith("ExecStart="):

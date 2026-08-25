@@ -21,6 +21,10 @@ secrets/
 *.pem
 *.key
 !**/*.pub
+# Рабочие копии параллельных сессий. Каждая — отдельный git-worktree со своим
+# .git: попав в индекс, они добавляются как embedded-репозитории, которых в
+# клоне не будет. `git add -A` наступает на это молча.
+.claude/worktrees/
 # Local Claude overrides
 .claude/settings.local.json
 CLAUDE.local.md

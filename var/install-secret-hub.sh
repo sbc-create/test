@@ -1,92 +1,99 @@
 #!/usr/bin/env bash
-# Secret Hub — установка и приёмка одной командой.
+# Secret Hub — установка сервиса и постоянной веб-панели.
 #
-#     sudo bash var/install-secret-hub.sh
+#     sudo bash /srv/site-factory/repo/var/install-secret-hub.sh
 #
-# Что делает, по порядку:
-#   1. ставит Secret Hub (мастер-ключ, хранилище, группа, unit'ы) и запускает сервис;
-#   2. проверяет, что сервис жив и unix-сокет на месте и закрыт;
-#   3. пытается импортировать уже лежащие на хосте credentials Yami и Lords —
-#      внутри root-процесса, без вывода значений;
-#   4. проверяет импортированное живым read-only запросом и применяет к
-#      направлениям, у которых есть куда применять;
-#   5. если чего-то не хватило — временно открывает форму на
-#      https://<домен>/__factory-secrets, но только после того, как на
-#      настоящем nginx подтвердит: endpoint отвечает 200 без пароля, отдаёт
-#      метку этой сессии, основной сайт жив, сертификат домена на месте,
-#      access_log выключен;
-#   6. печатает адрес, одноразовый код, срок и статусы направлений;
-#   7. по завершении сессии снимает endpoint и проверяет, что он отвечает 404.
+# Root нужен ровно один раз — здесь. После этого владелец работает только через
+# браузер: открывает панель, входит по passkey, вводит и заменяет credentials,
+# применяет их к направлениям. Ни sudo, ни SSH, ни консоль больше не требуются.
 #
-# Чего не делает: не трогает DNS, индексацию, Вебмастер и базы сайтов; не
-# ставит и не восстанавливает Basic Auth; не печатает значений секретов.
+# Что делает:
+#   1. ставит Secret Hub (мастер-ключ, хранилище, группа, unit'ы) и запускает его;
+#   2. заводит непривилегированную учётную запись панели и ставит её unit;
+#   3. прописывает постоянный location панели в nginx и перезагружает его;
+#   4. проверяет на РЕАЛЬНОМ хосте, что панель отвечает 200 без пароля, отдаёт
+#      свою метку, основной сайт жив, сертификат домена валиден, журнал выключен;
+#   5. выдаёт одноразовый код первичной регистрации passkey;
+#   6. печатает адрес панели, код и срок его действия.
+#
+# Чего не делает: не спрашивает API Token в консоли, не импортирует прежние
+# credentials Yami и Lords (владелец вводит их заново и осознанно), не трогает
+# DNS, индексацию, Вебмастер и базы сайтов, не ставит и не восстанавливает
+# Basic Auth, не печатает значений секретов.
 set -euo pipefail
 
 REPO="${SECRET_HUB_REPO:-/srv/site-factory/repo}"
-UNIT=site-factory-secret-hub.service
+HUB_UNIT=site-factory-secret-hub.service
+PANEL_UNIT=site-factory-secret-panel.service
 SOCKET=/run/site-factory-secret-hub/hub.sock
 PY="$REPO/.venv/bin/python"
+PANEL_USER="${SECRET_HUB_PANEL_USER:-sfpanel}"
+ENROLL_TTL="${SECRET_HUB_ENROLL_TTL:-3600}"
 
 if [ "$(id -u)" -ne 0 ]; then
-  echo "FATAL: запускать от root — команда читает мастер-ключ и файлы секретов." >&2
+  echo "FATAL: запускать от root — команда создаёт мастер-ключ и правит nginx." >&2
   echo "нужно: sudo bash var/install-secret-hub.sh" >&2
   exit 1
 fi
-if [ ! -d "$REPO" ]; then
-  echo "FATAL: репозиторий $REPO не найден." >&2
-  exit 1
-fi
+[ -d "$REPO" ] || { echo "FATAL: репозиторий $REPO не найден." >&2; exit 1; }
 
 say() { printf '\n[secret-hub] %s\n' "$*"; }
 
-# --- 1. установка ---------------------------------------------------------
-say "установка"
+# --- 1. сервис хаба -------------------------------------------------------
+say "установка сервиса"
 bash "$REPO/automation/secret-hub/install.sh"
 
-# --- 2. сервис и сокет ----------------------------------------------------
-say "проверка сервиса и сокета"
-if ! systemctl is-active --quiet "$UNIT"; then
-  echo "FATAL: $UNIT не запущен. Журнал:" >&2
-  journalctl -u "$UNIT" --no-pager -n 30 >&2
+if ! systemctl is-active --quiet "$HUB_UNIT"; then
+  echo "FATAL: $HUB_UNIT не запущен. Журнал:" >&2
+  journalctl -u "$HUB_UNIT" --no-pager -n 30 >&2
   exit 1
 fi
-if [ ! -S "$SOCKET" ]; then
-  echo "FATAL: unix-сокет $SOCKET отсутствует — сервис не принимает команды." >&2
-  exit 1
-fi
-# Права сокета: мир не должен иметь к нему доступа даже на подключение.
-socket_mode="$(stat -c '%a' "$SOCKET")"
-case "$socket_mode" in
-  *[0-7][0-7][1-7]) echo "FATAL: сокет доступен миру (права $socket_mode)." >&2; exit 1 ;;
-esac
-echo "  $UNIT: active, сокет $SOCKET ($socket_mode)"
+[ -S "$SOCKET" ] || { echo "FATAL: сокет $SOCKET отсутствует." >&2; exit 1; }
+echo "  $HUB_UNIT: active, сокет на месте"
 
-# --- 3-6. импорт, применение, форма, живая проверка -----------------------
-say "импорт существующих credentials, применение и, если нужно, форма"
+# --- 2. учётная запись и unit панели --------------------------------------
+say "учётная запись панели"
+if ! id "$PANEL_USER" >/dev/null 2>&1; then
+  useradd --system --no-create-home --shell /usr/sbin/nologin "$PANEL_USER"
+  echo "  создан пользователь $PANEL_USER"
+fi
+usermod -aG sfhub "$PANEL_USER"
+install -d -m 0700 -o "$PANEL_USER" -g "$PANEL_USER" /var/lib/site-factory-secret-panel
+
+say "unit панели"
+install -m 0644 -o root -g root \
+  "$REPO/automation/secret-hub/$PANEL_UNIT" "/etc/systemd/system/$PANEL_UNIT"
+systemctl daemon-reload
+systemctl enable --now "$PANEL_UNIT"
+sleep 1
+if ! systemctl is-active --quiet "$PANEL_UNIT"; then
+  echo "FATAL: $PANEL_UNIT не запустился. Журнал:" >&2
+  journalctl -u "$PANEL_UNIT" --no-pager -n 30 >&2
+  exit 1
+fi
+echo "  $PANEL_UNIT: active"
+
+# --- 3-6. nginx, живая проверка, код регистрации --------------------------
+# Всё остальное делает Python: там же, где живёт разбор конфигурации nginx и
+# живые проверки, и там же, где им место — в коде, покрытом тестами.
+say "публикация панели и живая проверка на установленном nginx"
 set +e
 PYTHONPATH="$REPO" SECRET_HUB_CONFIG="$REPO/config/secret-hub.json" \
-  "$PY" -m factory.secret_hub.rootcmd bootstrap "$@"
-bootstrap_code=$?
+  "$PY" -m factory.secret_hub.rootcmd install-panel --enroll-ttl "$ENROLL_TTL" "$@"
+code=$?
 set -e
 
-# --- 7. итог --------------------------------------------------------------
-say "итоговое состояние (значения секретов не показываются)"
-PYTHONPATH="$REPO" SECRET_HUB_CONFIG="$REPO/config/secret-hub.json" \
-  "$PY" -m factory secrets status || true
-
-if [ "$bootstrap_code" -ne 0 ]; then
+if [ "$code" -ne 0 ]; then
   cat >&2 <<'EOF'
 
-Приёмка завершена не полностью. Что это может значить:
+Панель не установлена или живая проверка не пройдена.
 
-  * какое-то направление осталось ненастроенным — повторите запуск, форма
-    откроется снова;
-  * живая проверка nginx не прошла — адрес и код в этом случае намеренно НЕ
-    печатались, endpoint снят, основной сайт не тронут;
-  * направление в статусе BLOCKED_TARGET — его инфраструктура не передана,
-    и это не ошибка запуска.
+Адрес и код регистрации в этом случае намеренно НЕ печатались: отправлять
+владельца вводить credentials, не убедившись, что панель отвечает и никого не
+сломала, нельзя. Конфигурация nginx возвращена в прежнее состояние, основной
+сайт не тронут.
 
 Значения секретов не выводились ни при каком исходе.
 EOF
 fi
-exit "$bootstrap_code"
+exit "$code"
