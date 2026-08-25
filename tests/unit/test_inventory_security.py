@@ -5,6 +5,12 @@ from factory import inventory
 from factory.errors import BlockedAccess
 from factory.paths import PATHS
 
+#: Формы, в которых слово «секрет» допустимо в реестре: ссылка на секрет и имя
+#: области секретов. Обе называют, где лежит значение, но самого значения не
+#: содержат. Список именно такой, а не «файл целиком разрешён»: исключение для
+#: файла сняло бы проверку с его содержимого навсегда.
+SECRET_MENTION_FORMS = ("_secret_ref", "secret_scope", "secret://")
+
 
 def test_inventory_contains_no_secret_values():
     forbidden = ("BEGIN PRIVATE KEY", "password:", "api_token:", "secret:")
@@ -12,7 +18,11 @@ def test_inventory_contains_no_secret_values():
         text = path.read_text(encoding="utf-8")
         for marker in forbidden:
             assert marker not in text, f"{path.name}: похоже на секрет в открытом виде ({marker})"
-        assert "_secret_ref" in text or "secret" not in text.lower() or path.name in ("targets.yaml", "public-suffixes.yaml", "README.md")
+        mentions_secret = "secret" in text.lower()
+        in_allowed_form = any(form in text for form in SECRET_MENTION_FORMS)
+        assert in_allowed_form or not mentions_secret or path.name in (
+            "targets.yaml", "public-suffixes.yaml", "README.md"
+        ), f"{path.name}: слово «секрет» вне разрешённых форм {SECRET_MENTION_FORMS}"
 
 
 def test_unknown_refs_are_blocked():

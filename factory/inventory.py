@@ -40,6 +40,16 @@ def load(name: str) -> dict:
 
 
 def _find(items: list[dict], ref: str, kind: str) -> dict:
+    # Пустая ссылка и ненайденная ссылка — разные истории. «target «None»
+    # отсутствует в inventory» отправляло искать запись, которой никто и не
+    # называл: цель просто не передана.
+    if ref in (None, ""):
+        raise BlockedAccess(
+            f"{kind} не указан в пакете: значение не передано владельцем.",
+            field=f"{kind}_ref",
+            required_input=f"Передай {kind} и добавь его запись в inventory/",
+            blocks_stage="deploy",
+        )
     for item in items or []:
         if item.get("ref") == ref:
             return item

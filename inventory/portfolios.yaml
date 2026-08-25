@@ -1,0 +1,49 @@
+# Реестр направлений портфеля.
+#
+# Направление — это группа сайтов с общим замыслом, общим blueprint и общей
+# секретной областью. Реестр объявляет сами направления; принадлежность сайта
+# задаётся полем `portfolio` в его пакете. Второго списка членства здесь нет
+# намеренно: два списка разошлись бы молча.
+schema_version: 1
+portfolios:
+  - id: amedia
+    label: Amedia
+    status: registered
+    purpose: "Направление Amedia."
+    secret_scope: cdnvideohub/amedia
+    blueprint: payload-next-multisite
+    note: >-
+      Направление зарегистрировано, но ни один пакет к нему пока не подключён.
+      Существующие сайты будут привязаны позже, после подтверждения владельца.
+
+  - id: yami
+    label: Yami
+    status: registered
+    purpose: "Направление Yami."
+    secret_scope: cdnvideohub/yami
+    blueprint: payload-next-multisite
+    application_repository: https://github.com/sbc-create/yummyani
+    note: >-
+      Фактическое приложение направления живёт в отдельном репозитории
+      sbc-create/yummyani и в эту фабрику не перенесено. Здесь объявлено только
+      направление и его секретная область.
+
+  - id: lords
+    label: Lords
+    status: implemented
+    purpose: "Сеть киносайтов Lords на общем blueprint с настраиваемыми типами контента."
+    secret_scope: cdnvideohub/lords
+    blueprint: lords
+    note: "Новое направление, реализуемое в этой фабрике."
+
+# Пакеты вне направлений
+# ----------------------
+# `pilot-local`, `site-a`, `site-b` и `site-c` находятся в состоянии
+# `legacy/unclassified`. Направление им не приписано: в пакетах нет ни ссылки на
+# референс, ни бренда, по которому его можно определить — бренды это внутренние
+# коды. Классифицировать их догадкой значило бы выдумать факт.
+legacy_unclassified:
+  status: legacy/unclassified
+  sites: [pilot-local, site-a, site-b, site-c]
+  reason: "Направление не названо владельцем; определить его по содержимому пакета нельзя."
+  unblocks: "Одно слово владельца: к какому направлению относится каждый из сайтов."

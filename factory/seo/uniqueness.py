@@ -45,6 +45,20 @@ class PageObservation:
     canonical: str = ""
     #: Имя сайта, вырезаемое из заголовков перед сравнением.
     site_name: str = ""
+    #: Собственный хост сайта. Нужен CSU-7: чтобы решить, ведёт ли canonical за
+    #: пределы сайта, надо знать, где эти пределы. Пустое значение означает
+    #: «хост не передан», и проверка тогда не выполняется, а не проходит.
+    site_host: str = ""
+
+
+def _host_of(url: str) -> str:
+    """Хост из абсолютного адреса. Относительный адрес хоста не содержит."""
+    from urllib.parse import urlsplit
+
+    try:
+        return (urlsplit(url).hostname or "").lower()
+    except ValueError:
+        return ""
 
 
 @dataclass
@@ -182,13 +196,41 @@ def check(pages: list[PageObservation]) -> Report:
                 ))
 
     # CSU-7: canonical индексируемой страницы обязан вести на её собственный сайт.
+    #
+    # Сравниваются хосты, а не подстроки. Прежняя проверка искала в canonical
+    # подстроку `//<site_id>` и держалась на совпадении идентификатора пакета с
+    # именем хоста. У прежних сайтов оно совпадало (`site-a` ↔
+    # `site-a.localhost`), у настоящего домена — нет: `lords-01` не встречается
+    # в `https://lordfilm47.space/`, и правильный canonical объявлялся бы чужим.
+    # Хост, которого нет, не заменяется догадкой: проверка отмечается
+    # невыполненной для такой страницы.
+    skipped_canonical = 0
     for page in indexable:
-        if page.canonical and f"//{page.site_id}" not in page.canonical:
+        if not page.canonical:
+            continue
+        host = _host_of(page.canonical)
+        expected = (page.site_host or "").strip().lower()
+        if not expected:
+            # Хост не передан — проверить нечем. Молча пропустить нельзя: тогда
+            # достаточно забыть одно поле, чтобы ворота перестали существовать,
+            # и об этом никто не узнает. Это неисправность вызывающей стороны, и
+            # она сообщается как неисправность.
+            skipped_canonical += 1
             report.add(Finding(
                 "cross-site-uniqueness", "critical", f"{page.site_id}{page.path}",
-                f"Canonical указывает за пределы своего сайта: {page.canonical}.",
+                "Проверить canonical нечем: собственный хост сайта не передан "
+                "в наблюдение. Это не пройденная проверка, а невыполненная.",
                 "CSU-7",
             ))
+            continue
+        if host != expected:
+            report.add(Finding(
+                "cross-site-uniqueness", "critical", f"{page.site_id}{page.path}",
+                f"Canonical ведёт на «{host or page.canonical}», а сайт живёт на «{expected}».",
+                "CSU-7",
+            ))
+    if skipped_canonical:
+        report.counts["canonical_host_unknown"] = skipped_canonical
 
     report.counts["duplicates"] = len(report.critical)
     return report
