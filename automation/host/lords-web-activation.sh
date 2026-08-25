@@ -91,6 +91,30 @@ PY="${REPO}/.venv/bin/python"
 [[ -d "${NGINX_DIR}" ]] || die "нет ${NGINX_DIR}: сначала должен работать fixture-стенд"
 
 # --------------------------------------------------------------------------
+# Уборка следов прошлого запуска
+# --------------------------------------------------------------------------
+# Прошлый запуск мог оборваться и оставить сниппет с портом уже мёртвого
+# приёмника, а сам приёмник — висеть без конфигурации. Повторный запуск обязан
+# начинаться с чистого состояния, а не поверх чужого.
+if [[ -f "${SNIPPET}" ]]; then
+  warn "найден сниппет прошлого запуска — убираю"
+  rm -f "${SNIPPET}"
+  if nginx -t >/dev/null 2>&1; then
+    systemctl reload nginx >/dev/null 2>&1 || true
+  else
+    die "nginx -t не проходит после уборки прошлого сниппета; разберитесь вручную"
+  fi
+fi
+# Осиротевшие приёмники прошлых запусков. Имя модуля уникально, чужого не заденет.
+if pgrep -f "factory.lords.web_intake_main" >/dev/null 2>&1; then
+  warn "найден приёмный процесс прошлого запуска — останавливаю"
+  pkill -TERM -f "factory.lords.web_intake_main" 2>/dev/null || true
+  sleep 2
+  pkill -KILL -f "factory.lords.web_intake_main" 2>/dev/null || true
+fi
+rm -rf -- /run/lords-activation.* 2>/dev/null || true
+
+# --------------------------------------------------------------------------
 # Код доступа и рабочий каталог
 # --------------------------------------------------------------------------
 WORKDIR="$(mktemp -d /run/lords-activation.XXXXXX)"
@@ -147,12 +171,47 @@ INTAKE_PORT="$(cat "${PORT_FILE}")"
 # отвечал бы. Поэтому сайт содержит include пустого каталога, и сюда кладётся
 # один файл только на время приёма.
 install -d -m 0755 "${ACTIVATION_DIR}"
+
+# Развёрнутая конфигурация сайта могла быть записана раньше, чем в шаблон
+# добавили include. Тогда сниппет лежит в каталоге, который никто не читает,
+# и адрес формы попадает в общий `location /` — то есть под Basic Auth.
+# Именно так и вышло при первом запуске: файл был на месте, а include в
+# /etc/nginx/lords/lords-01.conf отсутствовал.
+#
+# Поэтому наличие include проверяется, и при отсутствии конфигурация сайта
+# переустанавливается из worktree — с сохранением прежней и откатом при отказе.
+SITE_CONF="${NGINX_DIR}/lords-01.conf"
+CONF_BACKUP=""
+if ! grep -q "include ${ACTIVATION_DIR}/\*.conf;" "${SITE_CONF}" 2>/dev/null; then
+  log "в развёрнутой конфигурации нет include временных адресов — обновляю её"
+  ( cd "${REPO}" && "${PY}" -m factory lords-staging >/dev/null ) \
+    || die "не удалось собрать конфигурацию сайта"
+  GENERATED="${REPO}/artifacts/lords/staging/nginx/phase2/lords-01.conf"
+  grep -q "include ${ACTIVATION_DIR}/\*.conf;" "${GENERATED}" \
+    || die "в собранной конфигурации нет include: обновите deployment worktree"
+
+  CONF_BACKUP="${WORKDIR}/lords-01.conf.before"
+  cp -a "${SITE_CONF}" "${CONF_BACKUP}"
+  install -m 0644 "${GENERATED}" "${SITE_CONF}"
+
+  if ! nginx -t >/dev/null 2>&1; then
+    install -m 0644 "${CONF_BACKUP}" "${SITE_CONF}"
+    die "nginx -t не прошёл с обновлённой конфигурацией сайта; прежняя возвращена"
+  fi
+  log "конфигурация сайта обновлена, include подключён"
+fi
+
 cat > "${SNIPPET}" <<CONF
 # Временный адрес одноразовой активации Lords. Удаляется сценарием.
 #
 # Basic Auth здесь намеренно нет: основной пароль в этот канал не передаётся.
 # Вместо него одноразовый код, который проверяет приёмный процесс.
 location = ${LOCATION_PATH} {
+    # Точный location не наследует auth_basic из location /, но пароль мог бы
+    # прийти с уровня server, если конфигурацию когда-нибудь перестроят.
+    # Снимаем его явно и только здесь: на остальных адресах он остаётся.
+    auth_basic off;
+
     access_log off;
     client_max_body_size 8k;
     client_body_buffer_size 8k;
@@ -168,9 +227,28 @@ chmod 0644 "${SNIPPET}"
 
 if ! nginx -t >/dev/null 2>&1; then
   rm -f "${SNIPPET}"
+  [[ -n "${CONF_BACKUP}" ]] && install -m 0644 "${CONF_BACKUP}" "${SITE_CONF}"
   die "nginx -t не прошёл с временным адресом; ничего не изменено"
 fi
 systemctl reload nginx
+
+# Убедиться, что форма действительно открыта без пароля, а сайт — нет.
+# Проверяется поведение, а не конфигурация: именно здесь прошлый запуск и
+# обманул сам себя, отрапортовав об установке адреса, которого не было.
+FORM_CODE="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 15 \
+  --resolve "${APEX}:443:127.0.0.1" "https://${APEX}${LOCATION_PATH}" 2>/dev/null)" \
+  || FORM_CODE="curl-error"
+MAIN_CODE="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 15 \
+  --resolve "${APEX}:443:127.0.0.1" "https://${APEX}/" 2>/dev/null)" \
+  || MAIN_CODE="curl-error"
+
+if [[ "${FORM_CODE}" != "200" ]]; then
+  die "форма отвечает ${FORM_CODE}, ожидался 200 без пароля. Временный адрес снят ловушкой."
+fi
+if [[ "${MAIN_CODE}" != "401" ]]; then
+  die "главная отвечает ${MAIN_CODE}, ожидался 401: Basic Auth сайта нарушен"
+fi
+log "форма открыта без пароля (200), остальной сайт по-прежнему под паролем (401)"
 
 # --------------------------------------------------------------------------
 # То, что видит владелец

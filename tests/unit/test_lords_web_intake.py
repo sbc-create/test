@@ -396,9 +396,26 @@ class TestHostScript:
         assert "/etc/letsencrypt/live/" in text
         assert "certbot" not in text.lower(), "сценарий выпускает сертификаты"
 
-    def test_it_does_not_disable_basic_auth_for_the_sites(self, text):
-        """Пароль снимается только с временного адреса."""
-        assert "auth_basic off" not in text
+    def test_basic_auth_is_disabled_only_inside_the_exact_location(self, text):
+        """Пароль снимается ровно на одном адресе и нигде больше.
+
+        Прежняя редакция запрещала `auth_basic off` во всём файле. Это было
+        верно ровно до того, как выяснилось, что снимать пароль на точном
+        location всё-таки нужно: он не наследует auth_basic из `location /`,
+        но унаследовал бы его с уровня server. Поэтому проверяется место, а не
+        наличие строки.
+        """
+        snippet = text.split('cat > "${SNIPPET}"', 1)[1].split("\nCONF\n", 1)[0]
+        assert "auth_basic off;" in snippet, "на форме остался пароль сайта"
+        assert text.count("auth_basic off") == 1, "пароль снят где-то ещё"
+
+    def test_the_snippet_opens_exactly_one_address(self, text):
+        """Префиксный location открыл бы весь раздел, а не одну страницу."""
+        snippet = text.split('cat > "${SNIPPET}"', 1)[1].split("\nCONF\n", 1)[0]
+        assert "location = ${LOCATION_PATH}" in snippet, "location не точный"
+
+    def test_the_site_password_file_is_not_touched(self, text):
+        assert "htpasswd" not in text.lower()
 
     def test_the_endpoint_is_a_location_not_a_duplicate_server(self, text):
         """Два server{} с одним именем — молчаливый выбор первого."""
