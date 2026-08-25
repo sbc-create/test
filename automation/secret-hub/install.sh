@@ -89,14 +89,28 @@ if [ -e /etc/systemd/system/site-factory-secret-hub-enroll@.service ]; then
 fi
 
 systemctl daemon-reload
-systemctl enable --now "$UNIT"
+systemctl enable "$UNIT"
 
-sleep 1
+# Именно restart, а не только `enable --now`. Служба, застрявшая в цикле
+# перезапуска после 203/EXEC, находится в состоянии `activating`, и `start`
+# для неё — тишина: systemd считает, что запуск уже идёт. Прежний ExecStart
+# подхватился бы только на следующем витке цикла, то есть неопределённо когда.
+# `restart` применяет перечитанный unit сразу и делает восстановление
+# предсказуемым.
+systemctl restart "$UNIT"
+
+# Ожидание с проверкой, а не фиксированная пауза: на медленном хосте секунды
+# может не хватить, и установка объявила бы отказ по своему же таймеру.
+for _ in $(seq 1 15); do
+  systemctl is-active --quiet "$UNIT" && break
+  sleep 1
+done
 if ! systemctl is-active --quiet "$UNIT"; then
-  say "СЕРВИС НЕ ЗАПУСТИЛСЯ. Журнал:"
+  say "СЕРВИС НЕ ЗАПУСТИЛСЯ ($(systemctl is-active "$UNIT" 2>&1)). Журнал:"
   journalctl -u "$UNIT" --no-pager -n 30
   exit 1
 fi
+say "сервис активен"
 
 # --- 5. состояние ---------------------------------------------------------
 say "готово. Состояние:"

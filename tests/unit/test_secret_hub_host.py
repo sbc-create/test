@@ -623,3 +623,25 @@ class TestInterpreterIsReachableByTheService:
         text = (repo_root / "pyproject.toml").read_text(encoding="utf-8")
         assert 'target-version = "py310"' in text, \
             "ruff снова начнёт переписывать код под интерпретатор, которого нет"
+
+    def test_installer_restarts_a_looping_service(self, repo_root):
+        """Служба в цикле перезапуска не подхватит новый unit от `start`.
+
+        После 203/EXEC служба находится в состоянии `activating`, и `start`
+        для неё — тишина: systemd считает, что запуск уже идёт. Прежний
+        ExecStart применялся бы только на следующем витке цикла, то есть
+        неопределённо когда.
+        """
+        text = (repo_root / "automation" / "secret-hub"
+                / "install.sh").read_text(encoding="utf-8")
+        assert 'systemctl restart "$UNIT"' in text, \
+            "восстановление из цикла перезапуска недетерминировано"
+        assert text.index("daemon-reload") < text.index('systemctl restart "$UNIT"'), \
+            "restart раньше daemon-reload применит старый unit"
+
+    def test_installer_waits_for_the_service_instead_of_guessing(self, repo_root):
+        """Фиксированная пауза объявила бы отказ по собственному таймеру."""
+        text = (repo_root / "automation" / "secret-hub"
+                / "install.sh").read_text(encoding="utf-8")
+        assert "for _ in $(seq 1 15); do" in text
+        assert "systemctl is-active --quiet" in text
