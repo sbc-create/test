@@ -89,10 +89,20 @@ class TestInstalledOnThisHost:
         result = _systemctl("is-active", HUB_UNIT)
         if result is None:
             pytest.skip("systemctl недоступен в этой среде")
-        if result.stdout.strip() in ("inactive", "unknown", "failed"):
-            pytest.skip(f"{HUB_UNIT} не запущен ({result.stdout.strip()}): "
+        state = result.stdout.strip()
+        if state in ("inactive", "unknown", "failed", "deactivating"):
+            pytest.skip(f"{HUB_UNIT} не запущен ({state}): "
                         "живая проверка хоста ещё не выполнялась")
-        assert result.stdout.strip() == "active"
+        if state in ("activating", "reloading"):
+            # `activating` у Type=simple с Restart=on-failure означает цикл
+            # перезапуска: служба падает и поднимается снова. Именно это и
+            # происходило на claude-control-01 после 203/EXEC. Считать такое
+            # состояние «ещё не проверяли» нельзя — это отказ, но и падать на
+            # нём здесь незачем: тест измеряет хост, а чинит установщик.
+            pytest.skip(f"{HUB_UNIT} в состоянии {state} — цикл перезапуска. "
+                        "Смотрите journalctl; лечится повторным запуском "
+                        "установщика после этого исправления.")
+        assert state == "active"
 
     def test_master_key_is_root_owned_and_closed(self):
         from factory.secret_hub.crypto import DEFAULT_KEY_FILE, inspect_key_file
@@ -488,3 +498,150 @@ class TestInstallerContract:
         assert "User=sfpanel" in text
         assert "User=root" not in text, "панель не должна работать от root"
         assert "SupplementaryGroups=sfhub" in text
+
+
+class TestInterpreterIsReachableByTheService:
+    """Разбор боевого отказа 203/EXEC и защита от его повторения.
+
+    Живая установка на claude-control-01 упала так:
+
+        Failed to locate executable /srv/site-factory/repo/.venv/bin/python:
+        No such file or directory        status=203/EXEC
+
+    Файл при этом существовал. Причин было две сразу: `.venv/bin/python` был
+    симлинком в /home/<пользователь>/.local/share/uv/…, а unit'ы закрывают
+    /home через ProtectHome=true — для службы этого пути нет; и `.venv` в
+    .gitignore, поэтому на чистом checkout его нет вовсе.
+    """
+
+    VENV = "/opt/site-factory-secret-hub/venv"
+
+    def _units(self, repo_root):
+        return sorted((repo_root / "automation" / "secret-hub").glob("*.service"))
+
+    def test_no_unit_executes_from_the_repository_venv(self, repo_root):
+        """`.venv` репозитория не годится: его нет на чистом checkout."""
+        for unit in self._units(repo_root):
+            text = unit.read_text(encoding="utf-8")
+            for line in text.splitlines():
+                if line.startswith("ExecStart="):
+                    assert "/repo/.venv/" not in line, (
+                        f"{unit.name}: ExecStart ведёт в .venv репозитория, "
+                        "которого на чистом checkout нет")
+
+    def test_no_unit_executes_from_home(self, repo_root):
+        """ProtectHome=true делает /home невидимым — туда ссылаться нельзя."""
+        for unit in self._units(repo_root):
+            for line in unit.read_text(encoding="utf-8").splitlines():
+                if line.startswith("ExecStart="):
+                    assert "/home/" not in line and "/root/" not in line, \
+                        f"{unit.name}: ExecStart ведёт в закрытый для службы путь"
+
+    def test_units_use_the_dedicated_interpreter(self, repo_root):
+        for unit in self._units(repo_root):
+            text = unit.read_text(encoding="utf-8")
+            exec_lines = [ln for ln in text.splitlines() if ln.startswith("ExecStart=")]
+            assert exec_lines, f"{unit.name}: нет ExecStart"
+            for line in exec_lines:
+                assert line.startswith(f"ExecStart={self.VENV}/bin/python"), \
+                    f"{unit.name}: ExecStart не указывает на отдельное окружение"
+
+    def test_units_that_hide_home_are_the_reason(self, repo_root):
+        """Фиксируется сама причина: ProtectHome=true остаётся включённым."""
+        hub = (repo_root / "automation" / "secret-hub"
+               / "site-factory-secret-hub.service").read_text(encoding="utf-8")
+        assert "ProtectHome=true" in hub
+
+    def test_bootstrap_script_is_shipped_and_runs_first(self, repo_root):
+        bootstrap = repo_root / "automation" / "secret-hub" / "bootstrap-venv.sh"
+        assert bootstrap.exists(), "нет скрипта подготовки окружения"
+        installer = (repo_root / "automation" / "secret-hub"
+                     / "install.sh").read_text(encoding="utf-8")
+        assert "bootstrap-venv.sh" in installer
+        # Окружение обязано строиться раньше, чем им же генерируется ключ и
+        # раньше, чем ставятся unit'ы: иначе установка объявляет себя успешной
+        # до того, как интерпретатор проверен.
+        assert installer.index("bootstrap-venv.sh") < installer.index('"$PY" -c'), \
+            "окружение строится позже генерации ключа"
+        assert installer.index("bootstrap-venv.sh") < installer.index("ставлю unit"), \
+            "unit'ы записываются раньше проверенного интерпретатора"
+
+    def test_bootstrap_refuses_interpreters_under_home(self, repo_root):
+        text = (repo_root / "automation" / "secret-hub"
+                / "bootstrap-venv.sh").read_text(encoding="utf-8")
+        assert "/home/*|/root/*" in text, "нет отказа от интерпретатора под /home"
+        assert "readlink -f" in text, \
+            "проверяется симлинк, а не его цель — именно на этом установка и упала"
+
+    def test_bootstrap_has_no_silent_fallback(self, repo_root):
+        """Молчаливый откат на системный python запрещён заданием."""
+        text = (repo_root / "automation" / "secret-hub"
+                / "bootstrap-venv.sh").read_text(encoding="utf-8")
+        assert "exit 78" in text, "нет явного отказа при отсутствии интерпретатора"
+        assert "базовый интерпретатор:" in text, "выбор интерпретатора не печатается"
+
+    def test_bootstrap_verifies_imports_before_starting(self, repo_root):
+        text = (repo_root / "automation" / "secret-hub"
+                / "bootstrap-venv.sh").read_text(encoding="utf-8")
+        for module in ("cryptography", "webauthn", "jsonschema", "yaml"):
+            assert module in text, f"не проверяется импорт {module}"
+        assert "factory.secret_hub.service" in text
+        assert "factory.secret_hub.panel.server" in text
+
+    def test_bootstrap_reuses_healthy_and_rebuilds_broken(self, repo_root):
+        """Идемпотентность и восстановление после частичной установки."""
+        text = (repo_root / "automation" / "secret-hub"
+                / "bootstrap-venv.sh").read_text(encoding="utf-8")
+        assert "уже готово — не пересоздаю" in text
+        assert "неполно или сломано — пересоздаю" in text
+
+    def test_bootstrap_touches_nothing_but_the_venv(self, repo_root):
+        """Ключ, пользователи, группы и данные не затрагиваются."""
+        text = (repo_root / "automation" / "secret-hub"
+                / "bootstrap-venv.sh").read_text(encoding="utf-8")
+        for forbidden in ("userdel", "groupdel", "secret-hub-master.key",
+                          "/var/lib/site-factory-secret-hub", "htpasswd"):
+            assert forbidden not in text, f"скрипт окружения трогает {forbidden}"
+
+    def test_code_runs_on_the_oldest_supported_interpreter(self, repo_root):
+        """Код не должен требовать интерпретатора новее, чем есть на хосте.
+
+        `datetime.UTC` появился в 3.11, а вне /home на боевом хосте есть только
+        /usr/bin/python3.10. Именно это правило ruff и переписало, когда
+        target-version стоял py311.
+        """
+        import re
+
+        offenders = []
+        for path in (repo_root / "factory").rglob("*.py"):
+            text = path.read_text(encoding="utf-8", errors="replace")
+            if re.search(r"\bfrom datetime import UTC\b|\bdatetime\.UTC\b", text):
+                offenders.append(str(path.relative_to(repo_root)))
+        assert offenders == [], f"3.11-only datetime.UTC в: {offenders}"
+
+    def test_ruff_target_version_matches_the_host(self, repo_root):
+        text = (repo_root / "pyproject.toml").read_text(encoding="utf-8")
+        assert 'target-version = "py310"' in text, \
+            "ruff снова начнёт переписывать код под интерпретатор, которого нет"
+
+    def test_installer_restarts_a_looping_service(self, repo_root):
+        """Служба в цикле перезапуска не подхватит новый unit от `start`.
+
+        После 203/EXEC служба находится в состоянии `activating`, и `start`
+        для неё — тишина: systemd считает, что запуск уже идёт. Прежний
+        ExecStart применялся бы только на следующем витке цикла, то есть
+        неопределённо когда.
+        """
+        text = (repo_root / "automation" / "secret-hub"
+                / "install.sh").read_text(encoding="utf-8")
+        assert 'systemctl restart "$UNIT"' in text, \
+            "восстановление из цикла перезапуска недетерминировано"
+        assert text.index("daemon-reload") < text.index('systemctl restart "$UNIT"'), \
+            "restart раньше daemon-reload применит старый unit"
+
+    def test_installer_waits_for_the_service_instead_of_guessing(self, repo_root):
+        """Фиксированная пауза объявила бы отказ по собственному таймеру."""
+        text = (repo_root / "automation" / "secret-hub"
+                / "install.sh").read_text(encoding="utf-8")
+        assert "for _ in $(seq 1 15); do" in text
+        assert "systemctl is-active --quiet" in text

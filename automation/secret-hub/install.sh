@@ -35,7 +35,14 @@ fi
 
 say() { printf '[secret-hub] %s\n' "$*"; }
 
-# --- 1. мастер-ключ -------------------------------------------------------
+# --- 1. отдельное окружение Secret Hub ------------------------------------
+# Идёт первым, а не после ключа: этим же интерпретатором генерируется
+# мастер-ключ и запускаются все unit'ы. Установка, которая пишет unit раньше,
+# чем проверен интерпретатор, объявляет себя успешной и падает с 203/EXEC.
+say "окружение Secret Hub"
+bash "$REPO/automation/secret-hub/bootstrap-venv.sh"
+
+# --- 2. мастер-ключ -------------------------------------------------------
 install -d -m 0700 -o root -g root "$SECRET_DIR"
 if [ -e "$KEY_FILE" ]; then
   say "мастер-ключ уже существует — не трогаю (перезапись = потеря всех секретов)"
@@ -43,14 +50,14 @@ else
   say "создаю мастер-ключ $KEY_FILE"
   # Ключ пишется сразу с правами 0600: umask здесь ненадёжен, а окно, в котором
   # ключ читается миром, не нужно даже на миллисекунду.
-  ( umask 077; "$REPO/.venv/bin/python" -c \
+  ( umask 077; "$PY" -c \
       'from factory.secret_hub.crypto import generate_master_key; print(generate_master_key())' \
       > "$KEY_FILE" )
   chown root:root "$KEY_FILE"
   chmod 0600 "$KEY_FILE"
 fi
 
-# --- 2. хранилище и группа управления ------------------------------------
+# --- 3. хранилище и группа управления ------------------------------------
 install -d -m 0700 -o root -g root "$STORE_DIR"
 install -d -m 0700 -o root -g root "$STORE_DIR/backups"
 install -d -m 0700 -o root -g root "$STORE_DIR/consumer-backups"
@@ -63,13 +70,6 @@ fi
 if id "$CONTROL_USER" >/dev/null 2>&1 && ! id -nG "$CONTROL_USER" | tr ' ' '\n' | grep -qx "$GROUP"; then
   say "добавляю $CONTROL_USER в $GROUP (право спросить и запустить, но не увидеть)"
   usermod -aG "$GROUP" "$CONTROL_USER"
-fi
-
-# --- 3. зависимость шифрования -------------------------------------------
-if ! "$REPO/.venv/bin/python" -c 'import cryptography' >/dev/null 2>&1; then
-  say "ставлю cryptography в $REPO/.venv"
-  "$REPO/.venv/bin/pip" install --quiet --require-virtualenv \
-    -r "$REPO/requirements.txt"
 fi
 
 # --- 4. unit'ы ------------------------------------------------------------
@@ -89,14 +89,28 @@ if [ -e /etc/systemd/system/site-factory-secret-hub-enroll@.service ]; then
 fi
 
 systemctl daemon-reload
-systemctl enable --now "$UNIT"
+systemctl enable "$UNIT"
 
-sleep 1
+# Именно restart, а не только `enable --now`. Служба, застрявшая в цикле
+# перезапуска после 203/EXEC, находится в состоянии `activating`, и `start`
+# для неё — тишина: systemd считает, что запуск уже идёт. Прежний ExecStart
+# подхватился бы только на следующем витке цикла, то есть неопределённо когда.
+# `restart` применяет перечитанный unit сразу и делает восстановление
+# предсказуемым.
+systemctl restart "$UNIT"
+
+# Ожидание с проверкой, а не фиксированная пауза: на медленном хосте секунды
+# может не хватить, и установка объявила бы отказ по своему же таймеру.
+for _ in $(seq 1 15); do
+  systemctl is-active --quiet "$UNIT" && break
+  sleep 1
+done
 if ! systemctl is-active --quiet "$UNIT"; then
-  say "СЕРВИС НЕ ЗАПУСТИЛСЯ. Журнал:"
+  say "СЕРВИС НЕ ЗАПУСТИЛСЯ ($(systemctl is-active "$UNIT" 2>&1)). Журнал:"
   journalctl -u "$UNIT" --no-pager -n 30
   exit 1
 fi
+say "сервис активен"
 
 # --- 5. состояние ---------------------------------------------------------
 say "готово. Состояние:"

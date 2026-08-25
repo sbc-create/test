@@ -42,7 +42,7 @@ import subprocess
 import urllib.error
 import urllib.request
 from dataclasses import dataclass, field
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 #: Публичный путь формы. Единственный, по которому она когда-либо доступна.
@@ -163,7 +163,7 @@ def backup_vhost(vhost: Path) -> Path:
     """Копия боевого vhost до правки. Без неё откат — это переписывание по памяти."""
     BACKUP_DIR.mkdir(parents=True, exist_ok=True)
     BACKUP_DIR.chmod(0o700)
-    stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     target = BACKUP_DIR / f"{vhost.name}.{stamp}"
     shutil.copy2(vhost, target)
     target.chmod(0o600)

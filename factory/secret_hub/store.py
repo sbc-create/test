@@ -25,7 +25,7 @@ import stat
 import threading
 from contextlib import contextmanager
 from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from factory.errors import BlockedInput, BlockedSecret
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS deployment (
 
 
 def _now() -> str:
-    return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
 @dataclass(frozen=True)

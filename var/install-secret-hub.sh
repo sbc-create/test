@@ -26,7 +26,7 @@ REPO="${SECRET_HUB_REPO:-/srv/site-factory/repo}"
 HUB_UNIT=site-factory-secret-hub.service
 PANEL_UNIT=site-factory-secret-panel.service
 SOCKET=/run/site-factory-secret-hub/hub.sock
-PY="$REPO/.venv/bin/python"
+PY="${SECRET_HUB_VENV:-/opt/site-factory-secret-hub/venv}/bin/python"
 PANEL_USER="${SECRET_HUB_PANEL_USER:-sfpanel}"
 ENROLL_TTL="${SECRET_HUB_ENROLL_TTL:-3600}"
 
@@ -36,6 +36,9 @@ if [ "$(id -u)" -ne 0 ]; then
   exit 1
 fi
 [ -d "$REPO" ] || { echo "FATAL: репозиторий $REPO не найден." >&2; exit 1; }
+
+# Интерпретатор появится на шаге установки: до него $PY ещё не существует, и
+# это нормально. Проверка стоит после, а не здесь.
 
 say() { printf '\n[secret-hub] %s\n' "$*"; }
 

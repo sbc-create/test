@@ -35,7 +35,7 @@ import shutil
 import stat
 import subprocess
 from dataclasses import dataclass, field
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from factory.errors import BlockedTarget
@@ -72,7 +72,7 @@ Environment=CDNVIDEOHUB_PUBLISHER_ID_CREDENTIAL={publisher_credential}
 
 
 def _now_tag() -> str:
-    return datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
+    return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 
 
 @dataclass
