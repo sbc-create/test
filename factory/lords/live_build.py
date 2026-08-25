@@ -21,8 +21,16 @@ from factory.lords import content_live, player
 from factory.lords import staging as staging_mod
 from factory.paths import PATHS
 
-TOKEN_ENV = "CDNVIDEOHUB_API_TOKEN"
-PUBLISHER_ENV = "CDNVIDEOHUB_PUBLISHER_ID"
+#: Имена credential'ов по умолчанию. Значения приходят файлами из
+#: $CREDENTIALS_DIRECTORY; переменных окружения с самими значениями нет.
+TOKEN_CREDENTIAL_ENV = "CDNVIDEOHUB_API_TOKEN_CREDENTIAL"
+PUBLISHER_CREDENTIAL_ENV = "CDNVIDEOHUB_PUBLISHER_ID_CREDENTIAL"
+DEFAULT_TOKEN_CREDENTIAL = "cdnvideohub_api_token"
+DEFAULT_PUBLISHER_CREDENTIAL = "cdnvideohub_publisher_id"
+
+#: Заглушка режима предпросмотра. Строка выбрана так, чтобы её нельзя было
+#: принять за настоящий токен ни в отчёте, ни в логе.
+PREVIEW_TOKEN = "PREVIEW-NOT-A-REAL-TOKEN"
 
 #: Каталог, ниже которого сайт не публикуется. Раздел, отвечающий 200 без
 #: единого материала, — обещание, которого сайт не выполняет.
@@ -51,14 +59,21 @@ class Credentials:
         show` и дамп окружения секретов не покажут.
         """
         source = os.environ if env is None else env
-        base = Path(directory or source.get("CREDENTIALS_DIRECTORY", ""))
-        if not base or not base.is_dir():
+        raw = str(directory or source.get("CREDENTIALS_DIRECTORY", "")).strip()
+        # Пустая строка превратилась бы в Path(".") — существующий каталог,
+        # который прошёл бы проверку и дал бы невнятный отказ на чтении файла.
+        if not raw:
+            raise LiveBuildError(
+                "CREDENTIALS_DIRECTORY не задан: Lords читает credentials "
+                "только через systemd LoadCredential"
+            )
+        base = Path(raw)
+        if not base.is_dir():
             raise LiveBuildError(
                 "каталог credentials недоступен: Secret Hub не применил значения"
             )
-        token_name = source.get("CDNVIDEOHUB_API_TOKEN_CREDENTIAL", "cdnvideohub_api_token")
-        publisher_name = source.get(
-            "CDNVIDEOHUB_PUBLISHER_ID_CREDENTIAL", "cdnvideohub_publisher_id")
+        token_name = source.get(TOKEN_CREDENTIAL_ENV, DEFAULT_TOKEN_CREDENTIAL)
+        publisher_name = source.get(PUBLISHER_CREDENTIAL_ENV, DEFAULT_PUBLISHER_CREDENTIAL)
         try:
             token = (base / token_name).read_text(encoding="utf-8").strip()
             publisher = (base / publisher_name).read_text(encoding="utf-8").strip()
@@ -71,20 +86,21 @@ class Credentials:
         return cls(token=token, publisher_id=publisher)
 
     @classmethod
-    def from_env(cls, env: dict | None = None) -> Credentials:
-        source = os.environ if env is None else env
-        player.assert_no_public_publisher_id(source)
-        token = (source.get(TOKEN_ENV) or "").strip()
-        publisher = (source.get(PUBLISHER_ENV) or "").strip()
-        missing = [
-            name for name, value in ((TOKEN_ENV, token), (PUBLISHER_ENV, publisher))
-            if not value
-        ]
-        if missing:
-            raise LiveBuildError("не переданы: " + ", ".join(missing))
-        if not player.is_valid_publisher_id(publisher):
+    def for_preview(cls, publisher_id: str = "1") -> Credentials:
+        """Явный режим предпросмотра: настоящих секретов нет и не будет.
+
+        Нужен фикстурам и тестам, которым нужен объект Credentials, но не
+        нужен доступ к источнику. Токен-заглушка помечена так, что перепутать
+        её с настоящим значением нельзя, а `is_preview` не даёт использовать
+        её там, где ожидается production.
+        """
+        if not player.is_valid_publisher_id(publisher_id):
             raise LiveBuildError("Publisher ID обязан быть положительным целым")
-        return cls(token=token, publisher_id=publisher)
+        return cls(token=PREVIEW_TOKEN, publisher_id=publisher_id)
+
+    @property
+    def is_preview(self) -> bool:
+        return self.token == PREVIEW_TOKEN
 
 
 def _catalog_dir() -> Path:

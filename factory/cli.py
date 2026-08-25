@@ -527,20 +527,16 @@ def cmd_lords_preview(args) -> int:
 def cmd_lords_live(args) -> int:  # noqa: ARG001 — команда без аргументов
     """Собирает три сайта Lords на живом каталоге. Ничего не применяет.
 
-    Секреты читаются из окружения и в вывод не попадают: печатается только
-    факт их наличия и результат по каждому сайту.
+    Значения читаются из каталога systemd credentials и в вывод не попадают:
+    печатается только факт их наличия и результат по каждому сайту.
     """
-    # Сначала каталог systemd credentials (Secret Hub), и только потом
-    # окружение: значения в окружении видны в `systemctl show` и в дампе
-    # процесса, поэтому это запасной путь, а не основной.
-    import os as _os
-
+    # Единственный источник — $CREDENTIALS_DIRECTORY. Запасного пути через
+    # окружение нет намеренно: переменные видны в `systemctl show` и в
+    # /proc/<pid>/environ, а существующий запасной путь однажды окажется
+    # использованным в production.
     from factory.lords import live_build
     try:
-        if _os.environ.get("CREDENTIALS_DIRECTORY"):
-            credentials = live_build.Credentials.from_credentials_dir()
-        else:
-            credentials = live_build.Credentials.from_env()
+        credentials = live_build.Credentials.from_credentials_dir()
     except live_build.LiveBuildError as error:
         print(f"BLOCKED_INPUT_CDNVIDEOHUB_CREDENTIALS: {error}")
         return 2

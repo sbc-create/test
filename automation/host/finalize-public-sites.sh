@@ -237,54 +237,189 @@ log "  три юнита активны, restart loop не обнаружен"
 # 5. Публичная приёмка шести доменов
 # --------------------------------------------------------------------------
 stage "публичная приёмка"
+# PUBLIC_SITES_VERIFIED=pass печатается только если прошло ВСЁ ниже.
 FAILURES=0
-check() {
-  local label="$1" got="$2" want="$3"
-  if [[ "${got}" == "${want}" ]]; then
-    printf '    OK   %s: %s\n' "${label}" "${got}"
-  else
-    printf '    FAIL %s: %s, ожидался %s\n' "${label}" "${got}" "${want}" >&2
-    FAILURES=$((FAILURES + 1))
-  fi
+ok()   { printf '    OK   %s\n' "$*"; }
+bad()  { printf '    FAIL %s\n' "$*" >&2; FAILURES=$((FAILURES + 1)); }
+
+# Токен читается один раз, чтобы искать его в отдаваемых файлах. В вывод он не
+# попадает: используется только как образец для grep -qF.
+TOKEN_SAMPLE=""
+[[ -r "${CREDS_DIR}/cdnvideohub-api-token" ]] \
+  && TOKEN_SAMPLE="$(cat "${CREDS_DIR}/cdnvideohub-api-token")"
+
+fetch() {  # domain path -> тело в $BODY, заголовки в $WORKDIR/h, код в $CODE
+  local domain="$1" path="$2"
+  CODE="$(curl -sS -o "${WORKDIR}/b" -D "${WORKDIR}/h" -w '%{http_code}' --max-time 25 \
+          --resolve "${domain}:443:127.0.0.1" "https://${domain}${path}" 2>/dev/null \
+          || echo curl-error)"
+  BODY="$(cat "${WORKDIR}/b" 2>/dev/null || true)"
 }
 
-probe_all() {
-  local domain="$1"
-  local pin=(--resolve "${domain}:443:127.0.0.1")
-  local code
-  code="$(curl -sS -o /dev/null -D "${WORKDIR}/h" -w '%{http_code}' --max-time 20 \
-          "${pin[@]}" "https://${domain}/" 2>/dev/null || echo curl-error)"
-  check "${domain} /" "${code}" "200"
-  if grep -qi '^www-authenticate:' "${WORKDIR}/h"; then
-    printf '    FAIL %s: остался WWW-Authenticate\n' "${domain}" >&2
-    FAILURES=$((FAILURES + 1))
-  fi
-  grep -qi '^x-robots-tag:.*noindex' "${WORKDIR}/h" \
-    || { printf '    FAIL %s: нет noindex\n' "${domain}" >&2; FAILURES=$((FAILURES + 1)); }
-  local robots
-  robots="$(curl -sS --max-time 20 "${pin[@]}" "https://${domain}/robots.txt" 2>/dev/null || true)"
-  grep -q 'Disallow: /' <<<"${robots}" \
-    || { printf '    FAIL %s: robots.txt не закрывает сайт\n' "${domain}" >&2; FAILURES=$((FAILURES + 1)); }
-}
-
+# --- 1. Шесть apex: 200, без пароля, TLS, noindex, robots -------------------
 for domain in "${YUMMY_DOMAINS[@]}" "${LORDS_DOMAINS[@]}"; do
-  probe_all "${domain}"
+  fetch "${domain}" "/"
+  [[ "${CODE}" == "200" ]] && ok "${domain} /: 200" || bad "${domain} /: ${CODE}, ожидался 200"
+  grep -qi '^www-authenticate:' "${WORKDIR}/h" && bad "${domain}: остался WWW-Authenticate"
+  grep -qi '^x-robots-tag:.*noindex' "${WORKDIR}/h" || bad "${domain}: нет noindex"
+  grep -qi '^x-robots-tag:.*nofollow' "${WORKDIR}/h" || bad "${domain}: нет nofollow"
+
+  # TLS: сертификат обязан совпадать с именем.
+  served="$(echo | openssl s_client -connect 127.0.0.1:443 -servername "${domain}" 2>/dev/null || true)"
+  verdict="$(printf '%s' "${served}" | openssl x509 -noout -checkhost "${domain}" 2>/dev/null || true)"
+  [[ "${verdict}" == *"does match certificate"* ]] \
+    && ok "${domain}: сертификат совпадает" || bad "${domain}: сертификат не совпадает"
+
+  robots="$(curl -sS --max-time 25 --resolve "${domain}:443:127.0.0.1" \
+            "https://${domain}/robots.txt" 2>/dev/null || true)"
+  grep -q 'Disallow: /' <<<"${robots}" \
+    && ok "${domain}: robots.txt закрывает сайт" || bad "${domain}: robots.txt не закрывает сайт"
+
+  # www обязан вести на свой apex.
+  redirect="$(curl -sS -o /dev/null -w '%{http_code} %{redirect_url}' --max-time 25 \
+              --resolve "www.${domain}:443:127.0.0.1" "https://www.${domain}/" 2>/dev/null \
+              || echo 'curl-error -')"
+  if grep -q "^308 https://${domain}/" <<<"${redirect}"; then
+    ok "www.${domain}: 308 на свой apex"
+  else
+    bad "www.${domain}: ${redirect}, ожидался 308 на https://${domain}/"
+  fi
+
+  # Токен не должен встречаться в отдаваемом HTML.
+  if [[ -n "${TOKEN_SAMPLE}" ]] && grep -qF "${TOKEN_SAMPLE}" <<<"${BODY}"; then
+    bad "${domain}: В HTML НАЙДЕН API-ТОКЕН"
+  fi
 done
 
-# Каталог Lords обязан быть непустым и не fixture.
+# --- 2. Каталоги обоих направлений непустые ---------------------------------
+catalog_nonempty() {  # domain marker
+  local domain="$1" marker="$2"
+  fetch "${domain}" "/"
+  grep -q "${marker}" <<<"${BODY}" \
+    && ok "${domain}: каталог непустой" || bad "${domain}: каталог пуст"
+}
+for domain in "${LORDS_DOMAINS[@]}"; do catalog_nonempty "${domain}" 'card__title'; done
+for domain in "${YUMMY_DOMAINS[@]}"; do
+  fetch "${domain}" "/"
+  grep -qiE 'href="/(title|anime|catalog)/' <<<"${BODY}" \
+    && ok "${domain}: каталог непустой" || bad "${domain}: каталог пуст"
+done
+
+# --- 3. Страница тайтла, сезоны/серии, фильм, плеер -------------------------
+# Адреса берутся из отчёта сборки и из самой страницы, а не выдумываются.
+check_direction_titles() {   # domain series_path movie_path
+  local domain="$1" series_path="$2" movie_path="$3"
+
+  if [[ -z "${series_path}" ]]; then
+    bad "${domain}: не найдена страница сериала для проверки"
+    return
+  fi
+  fetch "${domain}" "${series_path}"
+  [[ "${CODE}" == "200" ]] \
+    && ok "${domain}${series_path}: 200" || bad "${domain}${series_path}: ${CODE}"
+
+  # Сезоны и серии: на странице сериала обязаны быть оба списка.
+  grep -qiE 'season|сезон' <<<"${BODY}" \
+    && ok "${domain}: сезоны на странице" || bad "${domain}: нет сезонов"
+  grep -qiE 'episode|серия|серии' <<<"${BODY}" \
+    && ok "${domain}: серии на странице" || bad "${domain}: нет серий"
+
+  # Плеер и Publisher ID из безопасной конфигурации.
+  grep -q 'player.cdnvideohub.com' <<<"${BODY}" \
+    && ok "${domain}: скрипт плеера подключён" || bad "${domain}: нет скрипта плеера"
+  if grep -qE 'data-publisher-id="[1-9][0-9]*"' <<<"${BODY}"; then
+    ok "${domain}: Publisher ID подставлен"
+  else
+    bad "${domain}: Publisher ID не подставлен или не число"
+  fi
+  if [[ -n "${TOKEN_SAMPLE}" ]] && grep -qF "${TOKEN_SAMPLE}" <<<"${BODY}"; then
+    bad "${domain}: НА СТРАНИЦЕ ТАЙТЛА НАЙДЕН API-ТОКЕН"
+  fi
+
+  # Фильм без сезонов проверяется отдельно: у него другой путь по коду.
+  if [[ -z "${movie_path}" ]]; then
+    bad "${domain}: не найдена страница фильма без сезонов"
+    return
+  fi
+  fetch "${domain}" "${movie_path}"
+  [[ "${CODE}" == "200" ]] \
+    && ok "${domain}${movie_path}: фильм 200" || bad "${domain}${movie_path}: ${CODE}"
+  grep -q 'player.cdnvideohub.com' <<<"${BODY}" \
+    || bad "${domain}: у фильма нет плеера"
+}
+
+LORDS_REPORT="${REPO}/artifacts/lords/live/report.json"
 for index in "${!LORDS_DOMAINS[@]}"; do
   domain="${LORDS_DOMAINS[${index}]}"
-  body="$(curl -sS --max-time 20 --resolve "${domain}:443:127.0.0.1" \
-          "https://${domain}/" 2>/dev/null || true)"
-  grep -q 'card__title' <<<"${body}" \
-    || { printf '    FAIL %s: на главной нет карточек каталога\n' "${domain}" >&2
-         FAILURES=$((FAILURES + 1)); }
+  site="${LORDS_SITES[${index}]}"
+  paths="$("${PY}" - "${LORDS_REPORT}" "${site}" <<'PYEOF' 2>/dev/null || true
+import json, sys
+try:
+    site = json.load(open(sys.argv[1], encoding="utf-8"))["sites"][sys.argv[2]]
+except Exception:
+    print("	"); raise SystemExit(0)
+print(f'{site.get("sample_series_path","")}	{site.get("sample_movie_path","")}')
+PYEOF
+)"
+  series="${paths%%$'	'*}"; movie="${paths##*$'	'}"
+  # Если отчёт не назвал адреса, берём первые ссылки на тайтлы прямо со страницы.
+  if [[ -z "${series}" ]]; then
+    fetch "${domain}" "/series/"
+    series="$(grep -oE '/title/[a-z0-9-]+/' <<<"${BODY}" | head -1)"
+  fi
+  if [[ -z "${movie}" ]]; then
+    fetch "${domain}" "/movies/"
+    movie="$(grep -oE '/title/[a-z0-9-]+/' <<<"${BODY}" | head -1)"
+  fi
+  check_direction_titles "${domain}" "${series}" "${movie}"
 done
 
+for domain in "${YUMMY_DOMAINS[@]}"; do
+  fetch "${domain}" "/"
+  series="$(grep -oE '/(title|anime)/[a-z0-9-]+' <<<"${BODY}" | head -1)"
+  movie="$(grep -oE '/(title|anime)/[a-z0-9-]+' <<<"${BODY}" | tail -1)"
+  check_direction_titles "${domain}" "${series}" "${movie}"
+done
+
+# --- 4. Токен не в логах, argv и окружении ----------------------------------
+if [[ -n "${TOKEN_SAMPLE}" ]]; then
+  if grep -rqF "${TOKEN_SAMPLE}" /var/log/nginx/ 2>/dev/null; then
+    bad "API-токен найден в журналах nginx"
+  else
+    ok "токена нет в журналах nginx"
+  fi
+  if journalctl --since "-2h" --no-pager 2>/dev/null | grep -qF "${TOKEN_SAMPLE}"; then
+    bad "API-токен найден в journal"
+  else
+    ok "токена нет в journal"
+  fi
+  leaked_env=0
+  for unit in "${LORDS_UNITS[@]}"; do
+    systemctl show "${unit}" 2>/dev/null | grep -qF "${TOKEN_SAMPLE}" && leaked_env=1
+    pid="$(systemctl show -p MainPID --value "${unit}" 2>/dev/null || echo 0)"
+    if [[ "${pid}" =~ ^[0-9]+$ && "${pid}" -gt 0 && -r "/proc/${pid}/environ" ]]; then
+      tr '\0' '\n' < "/proc/${pid}/environ" | grep -qF "${TOKEN_SAMPLE}" && leaked_env=1
+    fi
+    tr '\0' ' ' < "/proc/${pid}/cmdline" 2>/dev/null | grep -qF "${TOKEN_SAMPLE}" && leaked_env=1
+  done
+  [[ "${leaked_env}" -eq 0 ]] && ok "токена нет в environment, systemctl show и argv" \
+    || bad "API-токен виден в environment/systemctl show/argv"
+fi
+TOKEN_SAMPLE=""
+
+# --- 5. Неизвестный Host не получает контент --------------------------------
+unknown="$(curl -sS --max-time 20 -H 'Host: no-such-host.invalid' \
+           http://127.0.0.1/ 2>/dev/null | head -c 3000 || true)"
+if grep -qiE 'lords|lordfilm|lordserial|yummyani|card__title' <<<"${unknown}"; then
+  bad "неизвестный Host получает контент сайтов"
+else
+  ok "неизвестный Host не получает контент"
+fi
+
 if [[ "${FAILURES}" -gt 0 ]]; then
-  warn "приёмка не прошла: отказов ${FAILURES}"
+  warn "живая приёмка не прошла: отказов ${FAILURES}"
   restore_nginx
-  die "часть проверок не прошла; конфигурация nginx возвращена"
+  die "PUBLIC_SITES_VERIFIED=fail — pass не печатается, конфигурация nginx возвращена"
 fi
 
 rm -rf -- "${WORKDIR}"
