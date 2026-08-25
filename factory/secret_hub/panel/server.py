@@ -451,6 +451,10 @@ def _human(reason: str) -> str:
 class _Server(http.server.ThreadingHTTPServer):
     daemon_threads = True
     allow_reuse_address = True
+    # См. тот же довод в factory/secret_hub/service.py: очередь по умолчанию
+    # мала, и браузер, открывающий страницу со скриптом одновременно, уже даёт
+    # два подключения.
+    request_queue_size = 64
 
 
 def build_server(config: PanelConfig, store: PanelStore) -> _Server:
