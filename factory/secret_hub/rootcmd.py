@@ -146,10 +146,17 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     if os.geteuid() != 0:
+        # Подсказка адресная: `bootstrap` запускается лончером и не имеет
+        # unit'а с шаблоном направления, а `enroll`/`import` — наоборот.
+        # Универсальная строка отправляла бы оператора запускать то, чего нет.
+        hint = {
+            "bootstrap": "sudo bash var/install-secret-hub.sh",
+            "enroll": "sudo systemctl start site-factory-secret-hub-enroll@<направление>.service",
+            "import": "sudo systemctl start site-factory-secret-hub-import@<направление>.service",
+        }[args.action]
         print("Эта команда выполняется только от root: она читает мастер-ключ и файлы "
               "секретов.", file=sys.stderr)
-        print("нужно: sudo systemctl start site-factory-secret-hub-"
-              f"{args.action}@<направление>.service", file=sys.stderr)
+        print(f"нужно: {hint}", file=sys.stderr)
         return 3
 
     try:
