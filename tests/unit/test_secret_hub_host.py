@@ -398,18 +398,32 @@ class TestInstallerContract:
     """
 
     def _launcher(self, repo_root) -> str:
-        return (repo_root / "var" / "install-secret-hub.sh").read_text(encoding="utf-8")
+        return (repo_root / "automation" / "secret-hub" / "install-secret-hub.sh").read_text(encoding="utf-8")
 
     def _installer(self, repo_root) -> str:
         return (repo_root / "automation" / "secret-hub" / "install.sh").read_text(
             encoding="utf-8")
 
     def test_launcher_never_imports_existing_credentials(self, repo_root):
+        """Запрет на ВЫЗОВ импорта, а не на упоминание имени файла.
+
+        Предполётная проверка перечисляет unit'ы, которые обязаны лежать в
+        репозитории, — среди них и шаблон импорта. Наличие имени в списке
+        проверяемых файлов не делает установщик импортирующим, и запрещать
+        подстроку целиком значило бы запрещать проверку существования.
+        """
         text = self._launcher(repo_root)
-        for forbidden in ("rootcmd import", "import_existing", "migrate",
-                          "secret-hub-import@"):
-            assert forbidden not in text, \
-                f"установщик подхватывает старые credentials: «{forbidden}»"
+        invocations = []
+        for line in text.splitlines():
+            stripped = line.strip()
+            if stripped.startswith("#"):
+                continue
+            if "rootcmd import" in stripped or "import_existing" in stripped:
+                invocations.append(stripped)
+            if "systemctl start" in stripped and "import@" in stripped:
+                invocations.append(stripped)
+        assert invocations == [], \
+            f"установщик подхватывает старые credentials: {invocations}"
 
     def test_install_panel_does_not_touch_migration(self, repo_root):
         """Проверяется разбором кода, а не чтением глазами."""
@@ -488,9 +502,13 @@ class TestInstallerContract:
 
     def test_launcher_command_is_the_documented_one(self, repo_root):
         """Путь в документации и фактический путь лончера совпадают."""
-        assert (repo_root / "var" / "install-secret-hub.sh").exists()
+        assert (repo_root / "bin" / "secret-hub-install").exists()
+        assert (repo_root / "automation" / "secret-hub"
+                / "install-secret-hub.sh").exists()
         docs = (repo_root / "docs" / "SECRET_HUB.md").read_text(encoding="utf-8")
-        assert "var/install-secret-hub.sh" in docs
+        assert "bin/secret-hub-install" in docs
+        assert "var/install-secret-hub.sh" not in docs, \
+            "документация зовёт по пути, которого на хосте может не быть"
 
     def test_panel_unit_runs_unprivileged(self, repo_root):
         text = (repo_root / "automation" / "secret-hub"

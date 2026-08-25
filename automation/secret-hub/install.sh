@@ -140,7 +140,7 @@ cat <<'EOF'
 
 Дальше — панель. Её ставит и проверяет верхний установщик:
 
-  sudo bash /srv/site-factory/repo/var/install-secret-hub.sh
+  sudo /srv/site-factory/repo/bin/secret-hub-install
 
 Он опубликует https://yummyani.site/__factory-secrets, проверит панель на
 работающем nginx и напечатает одноразовый код регистрации passkey.

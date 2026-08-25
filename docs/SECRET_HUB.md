@@ -149,7 +149,7 @@ unix-сокета (`SO_PEERCRED`), а не по членству в группе
 ## Установка — одна команда, один раз
 
 ```bash
-sudo bash /srv/site-factory/repo/var/install-secret-hub.sh
+sudo /srv/site-factory/repo/bin/secret-hub-install
 ```
 
 Ставит хаб и панель, заводит учётную запись `sfpanel`, прописывает постоянный
