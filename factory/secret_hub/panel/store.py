@@ -388,6 +388,18 @@ class PanelStore:
             return None
         return Session(row["session_id"], row["csrf"], row["expires_at"], row["label"])
 
+    def relabel_session(self, session_id: str, label: str) -> None:
+        """Меняет роль сессии, не трогая её идентификатор и CSRF-токен.
+
+        Пересоздание сессии посреди церемонии выдало бы новый CSRF-токен,
+        которого у страницы нет: следующий же запрос той же церемонии
+        отвергался бы как «форма устарела». Смена роли и смена идентификатора —
+        разные вещи, и путать их не нужно.
+        """
+        with self._lock:
+            self._conn.execute("UPDATE session SET label = ? WHERE session_id = ?",
+                               (label, session_id))
+
     def drop_session(self, session_id: str) -> None:
         with self._lock:
             self._conn.execute("DELETE FROM session WHERE session_id = ?", (session_id,))

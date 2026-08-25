@@ -19,11 +19,12 @@
 * ``apply``  — применение к инфраструктуре направления;
 * ``rotate`` — новая версия из уже введённых значений (перевыдача потребителям);
 * ``revoke`` — отзыв активной версии без её удаления;
-* ``enroll`` — запуск одноразовой формы ввода;
 * ``import`` — перенос существующих файлов credentials внутрь хранилища.
 
-``update`` как операция API отсутствует: значения приходят только через
-одноразовую форму или root-импорт, оба — внутри этого же процесса.
+Значения приходят единственным путём — операцией ``store`` от панели. У неё
+есть вход, но нет выхода: в ответе версия, отпечаток и исход проверки, а само
+значение не возвращается ни одной операцией. Право писать проверяется по uid
+пира сокета, см. :data:`PANEL_ONLY_OPERATIONS`.
 """
 from __future__ import annotations
 
@@ -55,7 +56,7 @@ MAX_REQUEST_BYTES = 64 * 1024
 #: спросить и запустить, но не право увидеть — API значений не отдаёт.
 SOCKET_MODE = 0o660
 
-OPERATIONS = ("list", "status", "verify", "apply", "rotate", "revoke", "enroll", "import",
+OPERATIONS = ("list", "status", "verify", "apply", "rotate", "revoke", "import",
               "store")
 
 #: Операции, которые принимает только панель. Право проверяется по uid пира
@@ -70,7 +71,7 @@ PANEL_ONLY_OPERATIONS = frozenset({"store"})
 #: направления обязаны идти по очереди: параллельные `apply` дерутся за одни и
 #: те же файлы, а параллельные `rotate` создают две версии, из которых
 #: применяется неизвестно какая.
-MUTATING_OPERATIONS = frozenset({"apply", "rotate", "revoke", "enroll", "import", "store"})
+MUTATING_OPERATIONS = frozenset({"apply", "rotate", "revoke", "import", "store"})
 
 
 @dataclass
@@ -253,24 +254,6 @@ class Hub:
                 "note": "Значение сохранено для отката. Файлы у потребителей не изменены: "
                         "снятие credentials с работающего сайта выполняется отдельно."}
 
-    def op_enroll(self, payload: dict) -> dict:
-        from factory.secret_hub import enroll
-
-        portfolio = self.config.portfolio(_require(payload, "portfolio"))
-        if portfolio.blocked_target is not None:
-            raise BlockedTarget(
-                f"Направление «{portfolio.id}»: {portfolio.blocked_target.reason}",
-                field=portfolio.id,
-                required_input=portfolio.blocked_target.required_input,
-                blocks_stage="VALIDATING",
-            )
-        # Одно направление в списке: операция адресная, и подсовывать оператору
-        # выбор из направлений, которых он не просил, незачем. Множественный
-        # выбор нужен только приёмочному сценарию, где заранее неизвестно,
-        # чего именно не хватит.
-        return enroll.start_session(self, (portfolio.id,),
-                                    ttl_seconds=payload.get("ttl_seconds"))
-
     def op_store(self, payload: dict) -> dict:
         """Принимает новые значения от панели. Наружу ничего не возвращает.
 
@@ -279,14 +262,13 @@ class Hub:
         Асимметрия намеренная: панель обязана уметь записать новый токен и
         обязана не уметь прочитать записанный.
         """
+        from factory.errors import BlockedInput
         from factory.secret_hub.crypto import Secret
 
         portfolio = self.config.portfolio(_require(payload, "portfolio"))
         api_token = str(payload.get("api_token") or "")
         publisher_id = str(payload.get("publisher_id") or "")
         if not api_token.strip() or not publisher_id.strip():
-            from factory.errors import BlockedInput
-
             raise BlockedInput(
                 "Оба поля обязательны: пустое поле — не разрешение работать без значения.",
                 field="api_token/publisher_id",
@@ -298,6 +280,8 @@ class Hub:
             "publisher_id": Secret(publisher_id, label=f"{portfolio.id}/publisher_id"),
         }
         result = self.store_verified(portfolio.id, values)
+        # Значения не переживают обработчик: ни в локальных именах, ни в теле
+        # запроса, которое вызывающий может залогировать.
         del values, api_token, publisher_id
         payload.pop("api_token", None)
         payload.pop("publisher_id", None)

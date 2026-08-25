@@ -1,242 +1,43 @@
-"""Публичный режим формы: путь, выбор направления, метка, отсутствие TLS внутри.
+"""nginx-слой панели: снимки конфигурации, правка боевого vhost, живая проверка.
 
-Отдельно от `test_secret_hub_enroll.py`: там проверяется поведение формы как
-таковой, здесь — то, что появилось ради публикации на работающем домене.
+Про саму форму ввода здесь больше ничего нет: одноразовая форма заменена
+постоянной панелью, и её поведение проверяется в
+``test_secret_hub_panel_server.py``. Осталось то, что от замены не зависит —
+как location попадает в конфигурацию сайта и как результат проверяется на
+настоящем nginx.
 """
 from __future__ import annotations
 
-import http.client
-import threading
-import urllib.parse
-
 import pytest
 
-from factory.secret_hub import enroll, publish
+from factory.secret_hub import publish
 
 PATH = "/__factory-secrets"
 
 
-class FakeHub:
-    def __init__(self, *, accept: bool = True) -> None:
-        self.accept = accept
-        self.calls: list[tuple[str, str, str]] = []
-
-    def store_verified(self, portfolio: str, values: dict) -> dict:
-        self.calls.append((portfolio, values["api_token"].reveal(),
-                           values["publisher_id"].reveal()))
-        if not self.accept:
-            return {"stored": False, "reason": "провайдер отверг credentials"}
-        return {"stored": True, "version": 1, "fingerprint": "sha256:тест"}
-
-
-class PublicForm:
-    """Форма в том виде, в каком её видит nginx: обычный HTTP на петле."""
-
-    def __init__(self, hub, portfolios=("yami", "lords", "amedia")) -> None:
-        self.captured: dict = {}
-        started = threading.Event()
-        self.result: dict = {}
-        self.portfolios = tuple(portfolios)
-
-        def announce(session, url, port, fingerprint, ttl):
-            self.captured = {"code": session.code, "csrf": session.csrf, "port": port,
-                             "marker": session.marker, "url": url}
-
-        def run():
-            self.result = enroll.start_session(
-                hub, self.portfolios, host="127.0.0.1", port=0, base_path=PATH,
-                tls=False, public_url="https://example.test" + PATH,
-                announce=lambda *a: (announce(*a), started.set()), serve=True)
-
-        self.thread = threading.Thread(target=run, daemon=True)
-        self.thread.start()
-        assert started.wait(10), "форма не поднялась"
-        self.port = self.captured["port"]
-
-    def get(self, path: str = PATH) -> tuple[int, str, dict]:
-        conn = http.client.HTTPConnection("127.0.0.1", self.port, timeout=10)
-        try:
-            conn.request("GET", path)
-            r = conn.getresponse()
-            return r.status, r.read().decode("utf-8", "replace"), dict(r.getheaders())
-        finally:
-            conn.close()
-
-    def post(self, fields: dict, path: str = PATH) -> tuple[int, str]:
-        body = urllib.parse.urlencode(fields).encode("utf-8")
-        conn = http.client.HTTPConnection("127.0.0.1", self.port, timeout=10)
-        try:
-            conn.request("POST", path, body,
-                         {"Content-Type": "application/x-www-form-urlencoded"})
-            r = conn.getresponse()
-            return r.status, r.read().decode("utf-8", "replace")
-        finally:
-            conn.close()
-
-    def fields(self, **over) -> dict:
-        base = {"csrf": self.captured["csrf"], "code": self.captured["code"],
-                "portfolio": self.portfolios[0],
-                "api_token": "токен", "publisher_id": "publisher-1"}
-        base.update(over)
-        return base
-
-    def finish(self) -> dict:
-        self.post(self.fields())
-        self.thread.join(10)
-        return self.result
-
-
-class TestPublicPath:
-    def test_form_is_served_on_the_public_path(self):
-        form = PublicForm(FakeHub())
-        try:
-            status, body, _ = form.get(PATH)
-            assert status == 200
-            assert f'action="{PATH}"' in body, "форма отправляется не на публичный путь"
-        finally:
-            form.finish()
-
-    def test_root_is_404_in_public_mode(self):
-        """Публичный режим отвечает только по своему пути.
-
-        Иначе форма отвечала бы и на «/», то есть на корень чужого сайта, если
-        location когда-нибудь окажется шире задуманного.
-        """
-        form = PublicForm(FakeHub())
-        try:
-            assert form.get("/")[0] == 404
-        finally:
-            form.finish()
-
-    def test_query_string_is_refused(self):
-        form = PublicForm(FakeHub())
-        try:
-            assert form.get(PATH + "?code=leak")[0] == 404
-        finally:
-            form.finish()
-
-
-class TestPortfolioChoice:
-    def test_all_three_portfolios_are_offered(self):
-        form = PublicForm(FakeHub())
-        try:
-            _, body, _ = form.get()
-            for name in ("yami", "lords", "amedia"):
-                assert f'<option value="{name}">' in body, f"нет варианта {name}"
-        finally:
-            form.finish()
-
-    def test_chosen_portfolio_is_the_one_stored(self):
-        hub = FakeHub()
-        form = PublicForm(hub)
-        status, _ = form.post(form.fields(portfolio="lords"))
-        form.thread.join(10)
-        assert status == 200
-        assert hub.calls[0][0] == "lords"
-
-    def test_portfolio_outside_the_list_is_refused(self):
-        """Подставленное в POST имя не должно записать секрет куда попало."""
-        hub = FakeHub()
-        form = PublicForm(hub, portfolios=("yami",))
-        try:
-            status, body = form.post(form.fields(portfolio="lords"))
-            assert status == 400
-            assert "не входит в список" in body
-            assert hub.calls == []
-        finally:
-            form.finish()
-
-    def test_missing_portfolio_is_refused(self):
-        hub = FakeHub()
-        form = PublicForm(hub)
-        try:
-            status, _ = form.post(form.fields(portfolio=""))
-            assert status == 400
-            assert hub.calls == []
-        finally:
-            form.finish()
-
-
-class TestMarker:
-    def test_marker_is_present_in_html(self):
-        form = PublicForm(FakeHub())
-        try:
-            _, body, _ = form.get()
-            assert form.captured["marker"] in body
-        finally:
-            form.finish()
-
-    def test_marker_is_unique_per_session(self):
-        first = PublicForm(FakeHub())
-        first_marker = first.captured["marker"]
-        first.finish()
-        second = PublicForm(FakeHub())
-        try:
-            assert second.captured["marker"] != first_marker
-        finally:
-            second.finish()
-
-    def test_marker_is_not_a_secret_but_is_not_the_code(self):
-        form = PublicForm(FakeHub())
-        try:
-            assert form.captured["code"] not in form.captured["marker"]
-            assert form.captured["csrf"] not in form.captured["marker"]
-        finally:
-            form.finish()
-
-
-class TestHeaders:
-    def test_noindex_is_sent(self):
-        form = PublicForm(FakeHub())
-        try:
-            _, body, headers = form.get()
-            assert "noindex" in headers.get("X-Robots-Tag", "")
-            assert 'content="noindex, nofollow"' in body
-        finally:
-            form.finish()
-
-    def test_no_store_and_no_referrer(self):
-        form = PublicForm(FakeHub())
-        try:
-            _, _, headers = form.get()
-            assert "no-store" in headers.get("Cache-Control", "")
-            assert headers.get("Referrer-Policy") == "no-referrer"
-        finally:
-            form.finish()
-
-    def test_form_never_sends_www_authenticate(self):
-        """Форма не использует Basic Auth — ни в каком ответе."""
-        form = PublicForm(FakeHub())
-        try:
-            for status_path in (PATH, "/", PATH + "?x=1"):
-                _, _, headers = form.get(status_path)
-                assert "WWW-Authenticate" not in headers
-        finally:
-            form.finish()
-
-
 class TestNginxSnippets:
     def test_idle_snippet_returns_404_and_disables_auth(self):
+        """Снимок «панель не установлена» отвечает 404, а не 401."""
         text = publish.IDLE_SNIPPET
         assert "return 404;" in text
         assert "auth_basic off;" in text, \
             "без явного отключения адрес отвечал бы 401 вместо 404"
         assert "access_log off;" in text
 
-    def test_active_snippet_proxies_to_loopback_only(self):
-        text = publish.ACTIVE_SNIPPET.format(port=8459, path=PATH)
+    def test_panel_snippet_proxies_to_loopback_only(self):
+        text = publish.PANEL_SNIPPET.format(port=8459, path=PATH)
         assert "proxy_pass http://127.0.0.1:8459;" in text
         assert "auth_basic off;" in text
         assert "access_log off;" in text
         assert "client_max_body_size 8k;" in text
 
     def test_snippets_never_configure_basic_auth(self):
-        for text in (publish.IDLE_SNIPPET, publish.ACTIVE_SNIPPET.format(port=1, path=PATH)):
+        for text in (publish.IDLE_SNIPPET, publish.PANEL_SNIPPET.format(port=1, path=PATH)):
             assert "auth_basic_user_file" not in text
             assert "htpasswd" not in text
 
     def test_snippets_keep_noindex(self):
-        for text in (publish.IDLE_SNIPPET, publish.ACTIVE_SNIPPET.format(port=1, path=PATH)):
+        for text in (publish.IDLE_SNIPPET, publish.PANEL_SNIPPET.format(port=1, path=PATH)):
             assert "noindex" in text
 
     def test_path_is_a_single_segment(self):
@@ -354,7 +155,7 @@ class TestLiveVerificationShape:
     def test_all_five_required_checks_are_covered(self, monkeypatch, tmp_path):
         """Задание перечисляет пять проверок — все обязаны быть в отчёте."""
         snippet = tmp_path / "enroll.conf"
-        snippet.write_text(publish.ACTIVE_SNIPPET.format(port=1, path=PATH), encoding="utf-8")
+        snippet.write_text(publish.PANEL_SNIPPET.format(port=1, path=PATH), encoding="utf-8")
         monkeypatch.setattr(publish, "SNIPPET", snippet)
         monkeypatch.setattr(publish, "certificate_subject", lambda *a, **k: (True, "ok"))
         monkeypatch.setattr(publish, "_fetch",
@@ -369,7 +170,7 @@ class TestLiveVerificationShape:
 
     def test_www_authenticate_fails_verification(self, monkeypatch, tmp_path):
         snippet = tmp_path / "enroll.conf"
-        snippet.write_text(publish.ACTIVE_SNIPPET.format(port=1, path=PATH), encoding="utf-8")
+        snippet.write_text(publish.PANEL_SNIPPET.format(port=1, path=PATH), encoding="utf-8")
         monkeypatch.setattr(publish, "SNIPPET", snippet)
         monkeypatch.setattr(publish, "certificate_subject", lambda *a, **k: (True, "ok"))
         monkeypatch.setattr(publish, "_fetch",
@@ -382,7 +183,7 @@ class TestLiveVerificationShape:
     def test_missing_marker_fails_verification(self, monkeypatch, tmp_path):
         """Страница без метки этой сессии — не наша страница."""
         snippet = tmp_path / "enroll.conf"
-        snippet.write_text(publish.ACTIVE_SNIPPET.format(port=1, path=PATH), encoding="utf-8")
+        snippet.write_text(publish.PANEL_SNIPPET.format(port=1, path=PATH), encoding="utf-8")
         monkeypatch.setattr(publish, "SNIPPET", snippet)
         monkeypatch.setattr(publish, "certificate_subject", lambda *a, **k: (True, "ok"))
         monkeypatch.setattr(publish, "_fetch",
@@ -393,7 +194,7 @@ class TestLiveVerificationShape:
 
     def test_bad_certificate_fails_verification(self, monkeypatch, tmp_path):
         snippet = tmp_path / "enroll.conf"
-        snippet.write_text(publish.ACTIVE_SNIPPET.format(port=1, path=PATH), encoding="utf-8")
+        snippet.write_text(publish.PANEL_SNIPPET.format(port=1, path=PATH), encoding="utf-8")
         monkeypatch.setattr(publish, "SNIPPET", snippet)
         monkeypatch.setattr(publish, "certificate_subject",
                             lambda *a, **k: (False, "сертификат другого домена"))

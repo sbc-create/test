@@ -1,4 +1,4 @@
-"""Root-команды: ввод через форму и импорт существующих credentials.
+"""Root-команды: установка панели и импорт существующих credentials.
 
 Обе выполняются внутри root-процесса, запущенного systemd, и обе печатают
 результат, но не значения. Отдельно от `factory secrets …` они существуют по
@@ -7,11 +7,12 @@
 
 Запуск:
 
-    sudo systemctl start site-factory-secret-hub-enroll@yami.service
-    sudo systemctl start site-factory-secret-hub-import@lords.service
+    sudo bash var/install-secret-hub.sh                              # установка панели
+    sudo systemctl start site-factory-secret-hub-import@lords.service # ручной импорт
 
-Одноразовый код формы попадает в журнал этого unit'а, то есть в root-консоль, и
-никуда больше.
+Код первичной регистрации passkey печатается в root-консоль установки и никуда
+больше. После установки root не нужен: credentials вводятся и применяются из
+панели, под входом по passkey.
 """
 from __future__ import annotations
 
@@ -19,6 +20,7 @@ import argparse
 import json
 import os
 import sys
+from pathlib import Path
 
 from factory.errors import FactoryError
 from factory.redaction import redact
@@ -35,26 +37,6 @@ def _hub():
     return Hub(config, master, Store(config.db_path, master))
 
 
-def cmd_enroll(args) -> int:
-    from factory.secret_hub import enroll
-
-    hub = _hub()
-    portfolio = hub.config.portfolio(args.portfolio)
-    if portfolio.blocked_target is not None:
-        print(f"[{portfolio.blocked_target.status}] {portfolio.blocked_target.reason}",
-              file=sys.stderr)
-        print(f"нужно: {portfolio.blocked_target.required_input}", file=sys.stderr)
-        return 3
-
-    result = enroll.start_session(hub, (portfolio.id,), ttl_seconds=args.ttl_seconds,
-                                  host=args.host, port=args.port)
-    # В выводе — исход, а не значения: ни кода доступа, ни credentials здесь нет.
-    print(redact(json.dumps(
-        {k: v for k, v in result.items() if k not in ("server", "session")},
-        ensure_ascii=False, indent=2)))
-    return 0 if result.get("outcome") == "stored" else 3
-
-
 def cmd_import(args) -> int:
     from factory.secret_hub import migrate
 
@@ -64,66 +46,87 @@ def cmd_import(args) -> int:
     return 0 if result.get("imported") else 3
 
 
-def cmd_bootstrap(args) -> int:
-    """Приёмка: импорт существующего, применение, при нехватке — форма.
+def cmd_install_panel(args) -> int:
+    """Публикует панель в nginx, проверяет вживую и выдаёт код регистрации.
 
-    Печатает только то, что разрешено показывать: статусы направлений,
-    отпечатки, адрес формы, срок и результат живой проверки. Одноразовый код
-    печатает сама форма, отдельным блоком в эту же root-консоль.
+    Порядок жёсткий: сперва конфигурация и перезагрузка nginx, затем живая
+    проверка по публичному имени, и только если она прошла — код регистрации.
+    Показать адрес и код, не убедившись, что панель отвечает и никого не
+    сломала, значит отправить владельца вводить credentials неизвестно куда.
     """
-    from factory.secret_hub import bootstrap
+    from factory.secret_hub import publish
+    from factory.secret_hub.panel import ui as panel_ui
+    from factory.secret_hub.panel.store import PanelStore
+    from factory.secret_hub.registry import load as load_config
 
-    hub = _hub()
-    report = bootstrap.run(hub, archive=args.archive, restart=not args.no_restart,
-                           open_form=not args.no_form, ttl_seconds=args.ttl_seconds)
-    summary = bootstrap.summarise(report, hub)
+    config = load_config()
+    form = config.public_form
+    if form is None:
+        print("[BLOCKED_INPUT] public_form не описан в config/secret-hub.json.",
+              file=sys.stderr)
+        return 3
 
+    try:
+        result = publish.install_panel(form.vhost, form.server_name,
+                                       form.loopback_port, form.path)
+    except publish.PublishError as exc:
+        print(f"[DEPLOY_FAILED] {exc}", file=sys.stderr)
+        return 3
+    print(f"  nginx: {result.get('detail')}")
+
+    live = publish.verify_live(form.server_name, panel_ui.MARKER, path=form.path)
+    print()
+    print("  ЖИВАЯ ПРОВЕРКА НА УСТАНОВЛЕННОМ NGINX")
+    for check in live.checks:
+        print(f"    [{'ok  ' if check.ok else 'ОТКАЗ'}] {check.name}: {check.detail}")
+    if not live.ok:
+        try:
+            publish.uninstall_panel()
+        except publish.PublishError as exc:
+            print(f"  снятие панели: {exc}", file=sys.stderr)
+        print("\n[QA_FAILED] Живая проверка не пройдена: адрес и код не печатаются.",
+              file=sys.stderr)
+        return 3
+
+    # Код регистрации выпускается только если ключей ещё нет: у владельца с
+    # рабочим passkey новый ключ добавляется из самой панели, и печатать код в
+    # консоль означало бы создать второй, никому не нужный вход.
+    store = PanelStore(Path(form.panel_state_dir) / "panel.sqlite3",
+                       enforce_permissions=False)
+    try:
+        code = None if (store.has_passkey() and not args.force_enrollment) \
+            else store.create_enrollment(ttl_seconds=args.enroll_ttl)
+    finally:
+        store.close()
+
+    minutes = max(1, args.enroll_ttl // 60)
     print()
     print("=" * 72)
-    print("  СОСТОЯНИЕ НАПРАВЛЕНИЙ")
+    print("  ПАНЕЛЬ SECRET HUB УСТАНОВЛЕНА")
     print("=" * 72)
-    header = f"  {'НАПРАВЛЕНИЕ':<10} {'CREDENTIALS':<12} {'НАСТРОЕНО':<10} {'ПРОВЕРЕНО':<10} {'ОТПЕЧАТОК':<24} СТАТУС"
-    print(header)
-    for row in summary["portfolios"]:
-        print(f"  {row['portfolio']:<10} {row['existing']:<12} "
-              f"{('да' if row['configured'] else 'нет'):<10} "
-              f"{('да' if row['verified'] else 'нет'):<10} "
-              f"{str(row['fingerprint'] or '—'):<24} {row['status']}")
-        if row["detail"]:
-            print(f"      {row['detail']}")
-
-    live = summary.get("live_verification")
-    if live:
+    print(f"  Адрес:  {form.url}")
+    if code:
+        print(f"  Код регистрации:  {code}")
+        print(f"  Срок кода:        {minutes} мин")
         print()
-        print("  ЖИВАЯ ПРОВЕРКА НА УСТАНОВЛЕННОМ NGINX")
-        for check in live["checks"]:
-            print(f"    [{'ok  ' if check['ok'] else 'ОТКАЗ'}] {check['check']}: {check['detail']}")
-
-    if summary["problems"]:
-        print()
-        print("  ТРЕБУЕТ ВНИМАНИЯ:")
-        for problem in summary["problems"]:
-            print(f"    - {problem}")
+        print("  Откройте адрес в браузере, введите код и создайте ключ")
+        print("  устройства (Touch ID / Face ID). Коды восстановления панель")
+        print("  покажет один раз — сохраните их сразу.")
+    else:
+        print("  Ключ уже зарегистрирован: код не выпускался.")
+        print("  Вход в панель — по ключу устройства.")
+    print()
+    print("  Root больше не нужен: credentials вводятся и применяются из панели.")
     print("=" * 72)
     print()
-
-    everything_configured = all(row["configured"] for row in summary["portfolios"]
-                                if row["status"] != "BLOCKED_TARGET")
-    return 0 if everything_configured and not summary["problems"] else 3
+    return 0
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="factory.secret_hub.rootcmd",
-        description="Root-команды Secret Hub: ввод через форму и импорт")
+        description="Root-команды Secret Hub: установка панели и импорт")
     sub = parser.add_subparsers(dest="action", required=True)
-
-    p = sub.add_parser("enroll", help="поднять одноразовую форму ввода")
-    p.add_argument("portfolio")
-    p.add_argument("--ttl-seconds", type=int)
-    p.add_argument("--host")
-    p.add_argument("--port", type=int)
-    p.set_defaults(func=cmd_enroll)
 
     p = sub.add_parser("import", help="импортировать существующие файлы credentials")
     p.add_argument("portfolio")
@@ -132,26 +135,22 @@ def main(argv: list[str] | None = None) -> int:
                         "Оригиналы не удаляются ни при каком флаге.")
     p.set_defaults(func=cmd_import)
 
-    p = sub.add_parser("bootstrap",
-                       help="приёмка: импорт существующего, применение, при нехватке — форма")
-    p.add_argument("--archive", action="store_true",
-                   help="архивировать прежние файлы после подтверждённого применения")
-    p.add_argument("--no-restart", action="store_true",
-                   help="записать файлы, но не перезапускать unit'ы")
-    p.add_argument("--no-form", action="store_true",
-                   help="не открывать браузерную форму, даже если чего-то не хватает")
-    p.add_argument("--ttl-seconds", type=int, help="срок жизни формы, не больше 900 с")
-    p.set_defaults(func=cmd_bootstrap)
+    p = sub.add_parser("install-panel",
+                       help="опубликовать панель в nginx, проверить вживую, выдать код")
+    p.add_argument("--enroll-ttl", type=int, default=3600,
+                   help="срок кода первичной регистрации, секунд")
+    p.add_argument("--force-enrollment", action="store_true",
+                   help="выпустить код, даже если ключ уже зарегистрирован")
+    p.set_defaults(func=cmd_install_panel)
 
     args = parser.parse_args(argv)
 
     if os.geteuid() != 0:
-        # Подсказка адресная: `bootstrap` запускается лончером и не имеет
-        # unit'а с шаблоном направления, а `enroll`/`import` — наоборот.
-        # Универсальная строка отправляла бы оператора запускать то, чего нет.
+        # Подсказка адресная: установка панели идёт лончером, импорт — своим
+        # unit'ом с именем направления. Универсальная строка отправляла бы
+        # оператора запускать то, чего нет.
         hint = {
-            "bootstrap": "sudo bash var/install-secret-hub.sh",
-            "enroll": "sudo systemctl start site-factory-secret-hub-enroll@<направление>.service",
+            "install-panel": "sudo bash var/install-secret-hub.sh",
             "import": "sudo systemctl start site-factory-secret-hub-import@<направление>.service",
         }[args.action]
         print("Эта команда выполняется только от root: она читает мастер-ключ и файлы "

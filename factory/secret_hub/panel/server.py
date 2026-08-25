@@ -284,13 +284,13 @@ class _Handler(http.server.BaseHTTPRequestHandler):
         if not allowed:
             raise auth_mod.AuthError(
                 "Чтобы добавить ключ, нужен действующий ключ или код восстановления.")
-        # Право зафиксировано в сессии: шаг finish не станет проверять код
-        # заново, а гасить его дважды нельзя — он одноразовый.
-        self.store.drop_session(session.session_id)
-        granted = self.store.create_session(label="may-register")
+        # Право фиксируется в текущей сессии, а не в новой: шаг finish не
+        # станет проверять код заново — он одноразовый и уже погашен. Менять
+        # при этом идентификатор сессии нельзя, иначе у страницы окажется
+        # устаревший CSRF-токен и собственная церемония отвергнет саму себя.
+        self.store.relabel_session(session.session_id, "may-register")
         options = auth_mod.begin_registration(self.store, self.config.rp)
-        self._json(200, options,
-                   [self._cookie(SESSION_COOKIE, granted.session_id, max_age=600)])
+        self._json(200, options)
 
     def _register_finish(self, body: dict, session) -> None:
         if session.label not in ("may-register", "owner"):

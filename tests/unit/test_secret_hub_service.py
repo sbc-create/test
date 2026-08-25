@@ -76,8 +76,9 @@ class TestNoReadEndpoint:
             assert forbidden not in service.OPERATIONS
 
     def test_update_is_not_an_api_operation(self):
-        """Значения приходят только формой или root-импортом, оба — внутри процесса."""
+        """Записать можно только `store`; «обновить и показать» не существует."""
         assert "update" not in service.OPERATIONS
+        assert {"store"} == service.PANEL_ONLY_OPERATIONS
 
     @pytest.mark.parametrize("operation", sorted(service.OPERATIONS))
     def test_no_operation_returns_a_secret_value(self, hub, offline_provider, operation,
@@ -86,13 +87,12 @@ class TestNoReadEndpoint:
         _configure(hub, "yami")
         _configure(hub, "lords")
 
-        if operation == "enroll":
-            # Форма — интерактивная операция; её ответ проверяется отдельно.
-            # Здесь достаточно, что она не отдаёт значение из хранилища.
-            from factory.secret_hub import enroll as enroll_mod
-
-            monkeypatch.setattr(enroll_mod, "start_session",
-                                lambda *a, **k: {"outcome": "expired", "url": "https://x/"})
+        if operation == "store":
+            # У `store` значения есть на входе — это единственная такая
+            # операция. Проверяется ровно то, что в ВЫХОДЕ их нет.
+            payload_extra = {"api_token": TOKEN_MARKER, "publisher_id": PUBLISHER_MARKER}
+        else:
+            payload_extra = {}
         if operation == "import":
             from factory.secret_hub import migrate as migrate_mod
 
@@ -105,7 +105,7 @@ class TestNoReadEndpoint:
                                 lambda portfolio, values, **k: consumers_mod.ApplyReport(
                                     portfolio.id, k.get("version")))
 
-        response = hub.handle({"op": operation, "portfolio": "yami"})
+        response = hub.handle({"op": operation, "portfolio": "yami", **payload_extra})
         serialized = json.dumps(response, ensure_ascii=False)
         assert TOKEN_MARKER not in serialized, f"операция «{operation}» вернула токен"
         assert PUBLISHER_MARKER not in serialized, f"операция «{operation}» вернула publisher_id"
@@ -156,10 +156,21 @@ class TestBlockedTarget:
         assert response["ok"] is False
         assert response["error"] == "BLOCKED_TARGET"
 
-    def test_enroll_for_amedia_is_refused(self, hub):
-        response = hub.handle({"op": "enroll", "portfolio": "amedia"})
-        assert response["ok"] is False
-        assert response["error"] == "BLOCKED_TARGET"
+    def test_amedia_can_be_stored_but_not_applied(self, hub, offline_provider):
+        """Amedia разрешено настроить заранее: значение сохраняется, применение — нет.
+
+        Прежде здесь проверялся отказ операции `enroll`; операции с таким
+        именем больше нет — ввод идёт через панель. Смысл проверки сместился
+        вслед за требованием владельца: «configured / not applied».
+        """
+        stored = hub.handle({"op": "store", "portfolio": "amedia",
+                             "api_token": "токен-amedia", "publisher_id": "pub-amedia"})
+        assert stored["ok"] is True
+        assert hub.store.state("amedia").configured is True
+
+        applied = hub.handle({"op": "apply", "portfolio": "amedia"})
+        assert applied["ok"] is False
+        assert applied["error"] == "BLOCKED_TARGET"
 
     def test_blocked_target_is_not_retryable(self):
         from factory.errors import NON_RETRYABLE
