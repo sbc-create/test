@@ -3,5 +3,6 @@
 from .base import Connector, ConnectorResult, NotConfigured, build, registry
 from . import search_console as _search_console   # noqa: F401  (регистрация)
 from . import yandex as _yandex                   # noqa: F401  (регистрация)
+from . import metrika as _metrika                 # noqa: F401  (регистрация)
 
 __all__ = ["Connector", "ConnectorResult", "NotConfigured", "build", "registry"]

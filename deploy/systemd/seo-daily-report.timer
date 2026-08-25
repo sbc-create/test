@@ -1,0 +1,12 @@
+[Unit]
+Description=Утренний отчёт владельцу
+
+[Timer]
+# Через час после сбора: если сбор задержался, отчёт честно покажет DATA_DELAY,
+# а не подождёт молча и не подставит вчерашние числа как сегодняшние.
+OnCalendar=*-*-* 07:30:00
+RandomizedDelaySec=300
+Persistent=true
+
+[Install]
+WantedBy=timers.target

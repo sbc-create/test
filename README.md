@@ -34,6 +34,11 @@ python3 -m pip install -e .    # или просто export PYTHONPATH=$PWD/src
 ## Команды
 
 ```bash
+seo northstar [--dedup none|estimated|exact] [--overlap 0.15]   # organic_daily_unique
+seo forecast [--capacity N]        # достаточно ли сайтов для 7 млн уников/сут
+seo access audit                   # матрица доступов, ТЗ §3.3
+seo monthly-report                 # прогноз в трёх сценариях
+seo checkpoint [--no-tests]        # финальный отчёт и критерии приёмки
 seo portfolio validate|status|report
 seo daily-run [--apply] [--site ID] [--date YYYY-MM-DD]
 seo weekly-report
@@ -55,15 +60,31 @@ seo permissions test
 python3 -m pytest tests/ -q
 ```
 
-372 теста: permission corpus (27 разрешённых + 45 запрещённых + попытки обхода),
-mutation-тесты защищённого ядра, изоляция tenant, зрелость и конфаундеры экспериментов,
-provenance, свежесть витрин, межсайтовые дубли, отказ от фиктивной активности,
+550 тестов: permission corpus (27 разрешённых + 45 запрещённых + попытки обхода),
+mutation-тесты защищённого ядра, определение `organic_daily_unique` и дедупликация
+между доменами, прогноз числа сайтов, difference-in-differences, Action Ledger,
+Secret Hub, квоты и деградация на 100+ сайтах, изоляция tenant, зрелость и конфаундеры
+экспериментов, provenance, межсайтовые дубли, отказ от фиктивной активности,
 технический SEO-аудит, сквозной прогон цикла и CLI.
+
+## Развёртывание
+
+```bash
+deploy/install.sh --repo <git-url> --commit <SHA>   # чистый хост
+deploy/restore-drill.sh --target /var/lib/seo-operator-drill
+```
+
+Расписание (`deploy/systemd/`) устанавливается, но **не включается** автоматически:
+планировщик на непроверенном хосте начнёт писать раньше, чем человек посмотрит
+на первый dry-run.
 
 ## Документация
 
 - `CLAUDE.md` — правила работы контура
+- `seo/NORTH_STAR_DEFINITION.md` — определение целевого показателя
 - `seo/UNKNOWNS.md` — что нужно от владельца, одним пакетом
 - `seo/BASELINE_REPORT.md` — почему baseline ещё не установлен
+- `seo/reports/CHECKPOINT.md` — статус по критериям приёмки ТЗ §17
 - `docs/WORKTREES.md` — запуск двух окон
 - `docs/UNATTENDED_SAFE.md` — модель разрешений
+- `docs/RESTORE.md` — восстановление на чистом хосте, RPO/RTO

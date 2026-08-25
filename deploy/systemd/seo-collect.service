@@ -1,0 +1,50 @@
+[Unit]
+Description=SEO operator — ежедневный сбор данных
+Documentation=file:///opt/seo-operator/docs/RUNBOOK.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=seo-operator
+Group=seo-operator
+WorkingDirectory=/opt/seo-operator
+
+# Секреты НЕ передаются через Environment= и НЕ видны в systemctl show:
+# процесс обращается к Secret Hub по сети/сокету и получает транспорт, а не значение.
+Environment=SEO_REPO_ROOT=/opt/seo-operator
+Environment=SEO_STATE_DIR=/var/lib/seo-operator
+Environment=PYTHONPATH=/opt/seo-operator/src
+Environment=PYTHONUNBUFFERED=1
+
+ExecStart=/opt/seo-operator/.venv/bin/python -m seo_operator.cli collect --all
+
+# Один прогон за раз: повторный запуск не создаёт дублей (ТЗ §17, п.11).
+# Блокировка также живёт в durable state, systemd здесь второй рубеж.
+RuntimeDirectory=seo-operator
+StateDirectory=seo-operator
+
+TimeoutStartSec=3600
+Restart=no
+
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallArchitectures=native
+CapabilityBoundingSet=
+ReadWritePaths=/var/lib/seo-operator /var/log/seo-operator
+
+StandardOutput=append:/var/log/seo-operator/collect.log
+StandardError=append:/var/log/seo-operator/collect.err
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,30 @@
+[Unit]
+Description=SEO operator — ежедневный отчёт владельцу
+After=seo-collect.service
+Requires=network-online.target
+
+[Service]
+Type=oneshot
+User=seo-operator
+Group=seo-operator
+WorkingDirectory=/opt/seo-operator
+
+Environment=SEO_REPO_ROOT=/opt/seo-operator
+Environment=SEO_STATE_DIR=/var/lib/seo-operator
+Environment=PYTHONPATH=/opt/seo-operator/src
+
+ExecStart=/opt/seo-operator/.venv/bin/python -m seo_operator.cli daily-run
+
+TimeoutStartSec=1800
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+CapabilityBoundingSet=
+ReadWritePaths=/var/lib/seo-operator /var/log/seo-operator
+
+StandardOutput=append:/var/log/seo-operator/daily-report.log
+StandardError=append:/var/log/seo-operator/daily-report.err
+
+[Install]
+WantedBy=multi-user.target

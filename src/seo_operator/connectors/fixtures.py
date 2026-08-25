@@ -137,6 +137,39 @@ def metrika_rows(conn: "Connector", start: date, end: date) -> ConnectorResult:
     )
 
 
+def metrika_organic_rows(conn: "Connector", start: date, end: date) -> ConnectorResult:
+    """
+    Суточные органические уники с разбивкой по поисковым системам.
+
+    Масштаб подобран так, чтобы фикстурный портфель заведомо НЕ дотягивал до
+    7 млн: иначе тесты прогноза проверяли бы случай, которого в реальности нет.
+    """
+    if not conn.site.site_id.startswith("demo-"):
+        return conn.not_configured("фикстуры доступны только для demo-* сайтов")
+
+    rows = []
+    d = start
+    while d <= end:
+        base = 1800 + 900 * _rand(f"org:{conn.site.site_id}:{d}")
+        total = base * _seasonal(d)
+        yandex_share = 0.62 + 0.08 * _rand(f"share:{conn.site.site_id}:{d}")
+        google_share = 0.28
+        other_share = max(0.0, 1.0 - yandex_share - google_share)
+        for engine, share in (("yandex", yandex_share), ("google", google_share),
+                              ("other", other_share)):
+            rows.append({"date": d.isoformat(), "engine": engine,
+                         "unique_visitors": round(total * share), "completeness": 1.0})
+        d += timedelta(days=1)
+
+    return ConnectorResult(
+        source=conn.source_id, site_id=conn.site.site_id, rows=rows,
+        source_window=f"{start}..{end}", timezone=conn.site.timezone,
+        data_freshness=f"complete_through={conn.complete_through()}",
+        completeness=conn.completeness_for(min(end, conn.complete_through())),
+        note="FIXTURE DATA — не производственные показатели.",
+    )
+
+
 def catalog_items() -> list[dict]:
     """Синтетический каталог для редакционного discovery."""
     out = []

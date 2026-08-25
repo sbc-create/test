@@ -50,6 +50,31 @@ sources:
       - recrawl/queue
     quota: {recrawl_per_day: "host-dependent, читать из recrawl/quota"}
 
+  yandex_metrika_management:
+    kind: yandex_metrika
+    api: "management/v1/counters"
+    status: unconfigured
+    secret_ref: "secret://metrika/<site_id>"
+    scope: read_only
+    notes: >
+      Состояние счётчиков, целей и факта поступления данных. Используется
+      Access Auditor: счётчик с ID, но без входящих данных — BLOCKED, а не READY.
+
+  yandex_metrika_organic:
+    kind: yandex_metrika
+    api: "stat/v1/data"
+    status: unconfigured
+    secret_ref: "secret://metrika/<site_id>"
+    scope: read_only
+    data_lag_days: 1
+    metrics: ["ym:s:users"]
+    dimensions: ["ym:s:date", "ym:s:searchEngineRoot"]
+    filters: "ym:s:lastSignTrafficSource=='organic'"
+    notes: >
+      ЕДИНСТВЕННЫЙ источник organic_daily_unique. Разбивка по поисковым системам
+      берётся из измерения запроса, а не восстанавливается постфактум.
+      Текущий день не запрашивается.
+
   yandex_metrika_reports:
     kind: yandex_metrika
     api: "stat/v1/data"

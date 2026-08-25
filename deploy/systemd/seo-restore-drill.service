@@ -1,0 +1,30 @@
+[Unit]
+Description=SEO operator — репетиция восстановления из backup
+Documentation=file:///opt/seo-operator/docs/RESTORE.md
+
+[Service]
+Type=oneshot
+User=seo-operator
+Group=seo-operator
+WorkingDirectory=/opt/seo-operator
+
+Environment=SEO_REPO_ROOT=/opt/seo-operator
+Environment=PYTHONPATH=/opt/seo-operator/src
+# Репетиция всегда идёт на ОТДЕЛЬНЫЙ target, а не поверх рабочего состояния.
+Environment=SEO_STATE_DIR=/var/lib/seo-operator-drill
+
+ExecStart=/opt/seo-operator/deploy/restore-drill.sh --target /var/lib/seo-operator-drill
+
+TimeoutStartSec=7200
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+CapabilityBoundingSet=
+ReadWritePaths=/var/lib/seo-operator-drill /var/log/seo-operator
+
+StandardOutput=append:/var/log/seo-operator/restore-drill.log
+StandardError=append:/var/log/seo-operator/restore-drill.err
+
+[Install]
+WantedBy=multi-user.target
