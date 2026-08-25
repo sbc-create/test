@@ -242,7 +242,12 @@ class Hub:
                 required_input=portfolio.blocked_target.required_input,
                 blocks_stage="VALIDATING",
             )
-        return enroll.start_session(self, portfolio.id, ttl_seconds=payload.get("ttl_seconds"))
+        # Одно направление в списке: операция адресная, и подсовывать оператору
+        # выбор из направлений, которых он не просил, незачем. Множественный
+        # выбор нужен только приёмочному сценарию, где заранее неизвестно,
+        # чего именно не хватит.
+        return enroll.start_session(self, (portfolio.id,),
+                                    ttl_seconds=payload.get("ttl_seconds"))
 
     def op_import(self, payload: dict) -> dict:
         from factory.secret_hub import migrate

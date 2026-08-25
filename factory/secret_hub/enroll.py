@@ -72,14 +72,26 @@ PORT_ENV = "SECRET_HUB_ENROLL_PORT"
 class Session:
     """Состояние одной сессии ввода. Значения здесь не задерживаются."""
 
-    portfolio: str
+    #: Направления, которые форма предлагает выбрать. Список приходит из
+    #: реестра: захардкоженного перечня направлений в форме нет, как и в
+    #: остальном пакете.
+    portfolios: tuple[str, ...]
     code: str
     csrf: str
     expires_at: float
+    #: Путь, по которому форма доступна снаружи. За nginx это
+    #: «/__factory-secrets», в петлевом режиме — «/».
+    base_path: str = "/"
+    #: Уникальная метка этой сессии в HTML. Не секрет: по ней лончер убеждается,
+    #: что страницу отдал именно этот процесс, а не кэш, заглушка соседнего
+    #: vhost или страница прошлой сессии.
+    marker: str = ""
     attempts: int = 0
     finished: bool = False
     outcome: str = "pending"
     detail: str = ""
+    #: Направление, выбранное в форме. До отправки — None.
+    portfolio: str | None = None
     stored_version: int | None = None
     fingerprint: str | None = None
     _lock: threading.Lock = field(default_factory=threading.Lock, repr=False)
@@ -98,29 +110,33 @@ class Session:
         self.detail = detail
 
     def __repr__(self) -> str:  # код доступа — тоже секрет
-        return f"<Session portfolio={self.portfolio} outcome={self.outcome}>"
+        return f"<Session portfolios={len(self.portfolios)} outcome={self.outcome}>"
 
 
 PAGE = """<!doctype html>
 <html lang="ru"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
 <title>Secret Hub — ввод credentials</title>
 <style>
  body{{font:16px/1.5 system-ui,sans-serif;max-width:34rem;margin:3rem auto;padding:0 1rem}}
  label{{display:block;margin:1rem 0 .25rem;font-weight:600}}
- input{{width:100%;padding:.5rem;font:inherit;border:1px solid #999;border-radius:4px}}
+ input,select{{width:100%;padding:.5rem;font:inherit;border:1px solid #999;border-radius:4px}}
  button{{margin-top:1.5rem;padding:.6rem 1.2rem;font:inherit}}
  .err{{color:#a00;font-weight:600}}
  .note{{color:#555;font-size:.9rem}}
 </style></head><body>
-<h1>Направление: {portfolio}</h1>
+<!-- {marker} -->
+<h1>Secret Hub</h1>
 <p class="note">Форма одноразовая. Она исчезнет после успешного ввода, по истечении
-срока или после пяти неверных кодов. Значения проверяются у провайдера до записи;
-неверные не сохраняются.</p>
+срока или после пяти неверных кодов. Значения проверяются у провайдера живым
+read-only запросом до записи; неверные не сохраняются.</p>
 {error}
-<form method="POST" action="/" autocomplete="off">
+<form method="POST" action="{action}" autocomplete="off">
  <input type="hidden" name="csrf" value="{csrf}">
+ <label for="portfolio">Направление</label>
+ <select id="portfolio" name="portfolio" required>{options}</select>
  <label for="code">Одноразовый код (из root-консоли)</label>
  <input id="code" name="code" type="password" required autocomplete="off">
  <label for="api_token">CDNVideoHub API Token</label>
@@ -132,12 +148,22 @@ PAGE = """<!doctype html>
 </body></html>"""
 
 DONE_PAGE = """<!doctype html>
-<html lang="ru"><head><meta charset="utf-8"><title>Готово</title></head><body>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow"><title>Готово</title></head><body>
+<!-- {marker} -->
 <h1>Сохранено</h1>
 <p>Направление <b>{portfolio}</b>: credentials проверены у провайдера и записаны
 (версия {version}, отпечаток {fingerprint}).</p>
 <p>Форма закрыта. Повторное обращение по этому адресу вернёт 404.</p>
 </body></html>"""
+
+
+def _options(session: Session) -> str:
+    """Список направлений для <select>. Берётся из сессии, а не из литерала."""
+    return "".join(
+        f'<option value="{html.escape(name)}">{html.escape(name)}</option>'
+        for name in session.portfolios
+    )
 
 
 class _Handler(http.server.BaseHTTPRequestHandler):
@@ -175,19 +201,25 @@ class _Handler(http.server.BaseHTTPRequestHandler):
         self._send(404, "<!doctype html><title>404</title><h1>404</h1>")
 
     # --- методы -----------------------------------------------------------
+    def _path_matches(self) -> bool:
+        """Точное совпадение с публичным путём, без query.
+
+        Query отвергается целиком: секрет в query string оседает в истории
+        браузера, в Referer и в журнале любого промежуточного узла. Форма
+        никогда не предлагает такой путь, но проверить это дешевле, чем
+        объяснять потом.
+        """
+        return self.path == self.session.base_path
+
     def do_GET(self) -> None:
-        if not self.session.alive or self.path != "/":
-            # Любой путь кроме «/» и любой GET с query — 404. Секрет в query
-            # string оседает в истории браузера и в Referer, поэтому даже
-            # намёка на такой путь здесь нет.
+        if not self.session.alive or not self._path_matches():
             self._gone()
             return
-        self._send(200, PAGE.format(portfolio=html.escape(self.session.portfolio),
-                                    csrf=html.escape(self.session.csrf), error=""))
+        self._send(200, self._render())
 
     def do_POST(self) -> None:
         session = self.session
-        if not session.alive or self.path != "/":
+        if not session.alive or not self._path_matches():
             self._gone()
             return
 
@@ -230,6 +262,16 @@ class _Handler(http.server.BaseHTTPRequestHandler):
                 self._fail(session, f"Неверный код. Попытка {session.attempts} из {MAX_ATTEMPTS}.")
                 return
 
+            # Направление берётся из формы, но принимается только из списка
+            # сессии. Иначе подставленное в POST имя записало бы секрет в
+            # направление, которого оператор не выбирал, — а список сессии
+            # собран из реестра.
+            portfolio = fields.get("portfolio", "").strip()
+            if portfolio not in session.portfolios:
+                session.attempts += 1
+                self._fail(session, "Направление не выбрано или не входит в список.")
+                return
+
             api_token = fields.get("api_token", "").strip()
             publisher_id = fields.get("publisher_id", "").strip()
             if not api_token or not publisher_id:
@@ -239,12 +281,12 @@ class _Handler(http.server.BaseHTTPRequestHandler):
                 return
 
             values = {
-                "api_token": Secret(api_token, label=f"{session.portfolio}/api_token"),
-                "publisher_id": Secret(publisher_id, label=f"{session.portfolio}/publisher_id"),
+                "api_token": Secret(api_token, label=f"{portfolio}/api_token"),
+                "publisher_id": Secret(publisher_id, label=f"{portfolio}/publisher_id"),
             }
             # Значения существуют ровно здесь и уходят в store_verified, который
             # проверяет их у провайдера и записывает только принятые.
-            result = self.hub.store_verified(session.portfolio, values)
+            result = self.hub.store_verified(portfolio, values)
             del values, api_token, publisher_id, fields
 
             if not result.get("stored"):
@@ -258,24 +300,32 @@ class _Handler(http.server.BaseHTTPRequestHandler):
                 self._fail(session, f"Не сохранено: {reason}")
                 return
 
+            session.portfolio = portfolio
             session.stored_version = result.get("version")
             session.fingerprint = result.get("fingerprint")
             session.close("stored", f"версия {session.stored_version}")
 
         self._send(200, DONE_PAGE.format(
-            portfolio=html.escape(session.portfolio),
+            marker=html.escape(session.marker),
+            portfolio=html.escape(portfolio),
             version=html.escape(str(session.stored_version)),
             fingerprint=html.escape(str(session.fingerprint)),
         ))
         _stop(self.server)
 
-    def _fail(self, session: Session, message: str) -> None:
-        self._send(400, PAGE.format(
-            portfolio=html.escape(session.portfolio),
+    def _render(self, error: str = "") -> str:
+        session = self.session
+        return PAGE.format(
+            marker=html.escape(session.marker),
+            action=html.escape(session.base_path),
+            options=_options(session),
             csrf=html.escape(session.csrf),
-            error=f'<p class="err">{html.escape(message)}</p>',
-        ))
+            error=error,
+        )
 
+    def _fail(self, session: Session, message: str) -> None:
+        self._send(400, self._render(
+            f'<p class="err">{html.escape(message)}</p>'))
 
 def _equal(supplied: str, expected: str) -> bool:
     """Постоянное по времени сравнение, переживающее не-ASCII ввод.
@@ -363,14 +413,33 @@ def _ephemeral_certificate(directory: Path) -> tuple[Path, str]:
     return pem, pretty
 
 
-def start_session(hub, portfolio: str, *, ttl_seconds: int | None = None,
+def start_session(hub, portfolios, *, ttl_seconds: int | None = None,
                   host: str | None = None, port: int | None = None,
-                  announce=None, serve: bool = True) -> dict:
+                  base_path: str = "/", tls: bool = True,
+                  announce=None, serve: bool = True, public_url: str | None = None) -> dict:
     """Поднимает форму и возвращает то, что можно показать вызывающему.
 
+    Два режима:
+
+    ``tls=True``
+        Форма сама поднимает HTTPS на эфемерном self-signed сертификате.
+        Применяется, когда до неё добираются пробросом порта.
+
+    ``tls=False``
+        Форма слушает обычный HTTP на петле, а TLS терминирует nginx настоящим
+        сертификатом домена. Именно так работает публичный режим: снаружи это
+        `https://<домен>/__factory-secrets`, а открытым текстом трафик идёт
+        только внутри машины, между nginx и этим процессом.
+
     В ответе нет ни кода доступа, ни CSRF-токена: они печатаются в root-консоли.
-    Вызывающая сторона узнаёт только адрес, срок и итог.
+    Вызывающая сторона узнаёт адрес, метку страницы, срок и итог.
     """
+    if isinstance(portfolios, str):
+        portfolios = (portfolios,)
+    portfolios = tuple(portfolios)
+    if not portfolios:
+        raise ValueError("список направлений пуст: выбирать не из чего")
+
     ttl = min(int(ttl_seconds or DEFAULT_TTL_SECONDS), MAX_TTL_SECONDS)
     if ttl <= 0:
         ttl = DEFAULT_TTL_SECONDS
@@ -384,31 +453,35 @@ def start_session(hub, portfolio: str, *, ttl_seconds: int | None = None,
     port = int(port)
 
     session = Session(
-        portfolio=portfolio,
+        portfolios=portfolios,
         code=_readable_code(),
         csrf=secrets.token_urlsafe(32),
         expires_at=time.monotonic() + ttl,
+        base_path=base_path,
+        marker=f"secret-hub-form {secrets.token_hex(16)}",
     )
 
     workdir = Path(tempfile.mkdtemp(prefix="secret-hub-enroll-"))
     os.chmod(workdir, 0o700)
+    fingerprint = "—"
     try:
-        pem, fingerprint = _ephemeral_certificate(workdir)
-        context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-        context.minimum_version = ssl.TLSVersion.TLSv1_2
-        context.load_cert_chain(pem)
-
         handler = type("_BoundEnrollHandler", (_Handler,),
                        {"session": session, "hub": hub})
         server = http.server.ThreadingHTTPServer((host, port), handler)
-        server.socket = context.wrap_socket(server.socket, server_side=True)
+        if tls:
+            pem, fingerprint = _ephemeral_certificate(workdir)
+            context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+            context.minimum_version = ssl.TLSVersion.TLSv1_2
+            context.load_cert_chain(pem)
+            server.socket = context.wrap_socket(server.socket, server_side=True)
         actual_port = server.server_address[1]
+        url = public_url or f"{'https' if tls else 'http'}://{host}:{actual_port}{base_path}"
 
-        (announce or _announce_to_root_console)(session, host, actual_port, fingerprint, ttl)
+        (announce or _announce_to_root_console)(session, url, actual_port, fingerprint, ttl)
 
         if not serve:
-            return {"portfolio": portfolio, "url": f"https://{host}:{actual_port}/",
-                    "ttl_seconds": ttl, "server": server, "session": session}
+            return {"url": url, "ttl_seconds": ttl, "marker": session.marker,
+                    "portfolios": list(portfolios), "server": server, "session": session}
 
         timer = threading.Timer(ttl, lambda: _expire(session, server))
         timer.daemon = True
@@ -429,13 +502,15 @@ def start_session(hub, portfolio: str, *, ttl_seconds: int | None = None,
     if not session.finished:
         session.close("expired", f"TTL {ttl} с истёк")
     return {
-        "portfolio": portfolio,
+        "portfolio": session.portfolio,
+        "portfolios": list(portfolios),
         "outcome": session.outcome,
         "detail": session.detail,
         "attempts": session.attempts,
         "version": session.stored_version,
         "fingerprint": session.fingerprint,
-        "url": f"https://{host}:{actual_port}/",
+        "marker": session.marker,
+        "url": url,
         "ttl_seconds": ttl,
     }
 
@@ -459,27 +534,30 @@ def _readable_code() -> str:
     return "-".join(groups)
 
 
-def _announce_to_root_console(session: Session, host: str, port: int, fingerprint: str,
+def _announce_to_root_console(session: Session, url: str, port: int, fingerprint: str,
                               ttl: int) -> None:
     """Печатает код только туда, куда смотрит root.
 
-    stderr сервиса — это журнал root-owned unit'а (``journalctl -u …``), доступный
-    только root. В ответ операции код не попадает: иначе тот, кто запустил форму,
-    смог бы ею воспользоваться, а именно этого мы и не хотим.
+    stdout/stderr этого процесса — это root-консоль (или журнал root-owned
+    unit'а, доступный только root). В ответ операции код не попадает: иначе тот,
+    кто запустил форму, смог бы ею воспользоваться, а именно этого мы и не хотим.
     """
     lines = [
         "",
         "=" * 72,
-        f"  SECRET HUB — одноразовая форма ввода, направление: {session.portfolio}",
+        "  SECRET HUB — одноразовая форма ввода",
         "=" * 72,
-        f"  Адрес:        https://{host}:{port}/",
-        f"  Проброс:      ssh -N -L {port}:127.0.0.1:{port} <этот-хост>",
+        f"  Адрес:        {url}",
+        f"  Направления:  {', '.join(session.portfolios)}",
         f"  Код доступа:  {session.code}",
-        f"  Отпечаток TLS (SHA-256): {fingerprint}",
+    ]
+    if fingerprint and fingerprint != "—":
+        lines.append(f"  Отпечаток TLS (SHA-256): {fingerprint}")
+    lines += [
         f"  Срок:         {ttl // 60} мин   Попыток: {MAX_ATTEMPTS}",
         "",
-        "  Код и отпечаток напечатаны только здесь. После успешного ввода,",
-        "  истечения срока или пяти неверных попыток адрес отвечает 404.",
+        "  Код напечатан только здесь. После успешного ввода, истечения срока",
+        "  или пяти неверных попыток адрес отвечает 404.",
         "=" * 72,
         "",
     ]

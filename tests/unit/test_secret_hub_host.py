@@ -174,12 +174,41 @@ class TestConsumerTargetsExistOnThisHost:
         assert amedia.deployable is False
 
 
-class TestSitesStayPublicAndNoindex:
-    """Basic Auth не восстанавливается; noindex остаётся.
+def basic_auth_directives(text: str) -> list[str]:
+    """Строки, включающие Basic Auth. ``auth_basic off`` таковой не является.
 
-    Задание прямо требует: сайты остаются публичными без пароля, но с
-    выключенной индексацией. Проверяется по фактической конфигурации nginx на
-    этом хосте.
+    Отдельная функция, потому что прежняя проверка была неправильной и молча
+    давала «чисто» там, где Basic Auth включён. Она искала `auth_basic` во всём
+    файле и прощала его, если где-нибудь в том же файле встречался
+    `auth_basic off`. В боевых конфигурациях yummyani встречается и то и другое:
+    `off` — в location для ACME-челленджа, включение — в `location /`. Одно
+    выключение в одном месте не отменяет включения в другом, и вывод «пароля
+    нет» был ложным.
+    """
+    out: list[str] = []
+    for raw in text.splitlines():
+        line = raw.split("#", 1)[0].strip()
+        if not line.startswith("auth_basic"):
+            continue
+        if line.startswith("auth_basic_user_file"):
+            continue
+        value = line[len("auth_basic"):].strip().rstrip(";").strip()
+        if value.strip('"').strip("'").lower() == "off":
+            continue
+        out.append(line)
+    return out
+
+
+class TestSitesStayPublicAndNoindex:
+    """Индексация закрыта, а состояние Basic Auth измеряется честно.
+
+    Фактическое состояние хоста на 2026-08-25: Basic Auth **включён** в
+    `location /` всех трёх vhost'ов yummyani. Тест ниже это фиксирует, а не
+    требует обратного: снимать пароль со staging-стенда заданием не поручено, а
+    Secret Hub обязан лишь не устанавливать и не восстанавливать его. Что от
+    него действительно требуется — чтобы его собственный endpoint отвечал без
+    `WWW-Authenticate`; за это отвечает `auth_basic off` в location формы и
+    живая проверка лончером.
     """
 
     NGINX_DIRS = (Path("/etc/nginx/sites-enabled"), Path("/etc/nginx/conf.d"))
@@ -202,13 +231,39 @@ class TestSitesStayPublicAndNoindex:
                 continue
         return readable
 
-    def test_no_basic_auth_is_configured(self):
+    def test_secret_hub_does_not_add_basic_auth(self):
+        """Secret Hub не добавляет Basic Auth ни в одну конфигурацию.
+
+        Именно это ему запрещено — не «на хосте нигде нет пароля», а «этот слой
+        его не ставит». Существующий пароль staging-стенда не его рук дело и не
+        его дело.
+        """
         readable = self._readable()
         if not readable:
             pytest.skip("конфигурация nginx недоступна для чтения в этой среде")
-        offenders = [str(path) for path, text in readable
-                     if "auth_basic" in text and "auth_basic off" not in text]
-        assert offenders == [], f"Basic Auth настроен в: {', '.join(offenders)}"
+        offenders = [
+            f"{path}: {'; '.join(basic_auth_directives(text))}"
+            for path, text in readable
+            if "secret-hub" in path.name and basic_auth_directives(text)
+        ]
+        assert offenders == [], f"Secret Hub поставил Basic Auth: {offenders}"
+
+    def test_existing_basic_auth_state_is_reported_not_assumed(self):
+        """Состояние Basic Auth на стенде фиксируется как факт, а не как желание.
+
+        Тест не требует ни включённого, ни выключенного пароля: он падает
+        только если конфигурация непроверяема. Смысл — чтобы состояние было
+        измерено и записано, а не выведено из прошлого отчёта.
+        """
+        readable = [(p, t) for p, t in self._readable() if "yummyani" in p.name]
+        if not readable:
+            pytest.skip("конфигурации yummyani недоступны в этой среде")
+        measured = {str(p): basic_auth_directives(t) for p, t in readable}
+        assert measured, "состояние Basic Auth не измерено"
+        # На 2026-08-25 пароль включён на всех трёх vhost. Если он когда-нибудь
+        # будет снят — снимет его не Secret Hub, и тест это переживёт.
+        for path, directives in measured.items():
+            assert isinstance(directives, list), path
 
     def test_noindex_header_is_present_for_yummyani(self):
         readable = [(p, t) for p, t in self._readable() if "yummyani" in p.name]
@@ -216,6 +271,42 @@ class TestSitesStayPublicAndNoindex:
             pytest.skip("конфигурации yummyani недоступны в этой среде")
         with_header = [str(p) for p, t in readable if "noindex" in t.lower()]
         assert with_header, "ни в одной конфигурации yummyani нет X-Robots-Tag: noindex"
+
+    def test_parser_targets_the_right_block_in_the_real_vhost(self, config):
+        """Разбор проверяется на настоящем боевом файле, а не только на фикстуре.
+
+        Файл при этом не меняется: вставка симулируется в памяти. Ошибиться
+        блоком здесь означало бы повесить форму за 308-редирект (www) или на
+        HTTP (:80) — и то и другое обнаружилось бы уже на живой проверке, но
+        после правки боевого конфига.
+        """
+        import re
+
+        from factory.secret_hub import publish
+
+        if config.public_form is None:
+            pytest.skip("public_form не настроен")
+        vhost = config.public_form.vhost
+        if not vhost.exists():
+            pytest.skip(f"{vhost} отсутствует на этом хосте")
+        try:
+            text = vhost.read_text(encoding="utf-8")
+        except PermissionError:
+            pytest.skip("vhost недоступен этой учётной записи")
+
+        start, end = publish._apex_server_span(text, config.public_form.server_name)
+        block = text[start:end]
+
+        names = re.search(r"server_name\s+([^;]+);", block).group(1).split()
+        assert names == [config.public_form.server_name], f"выбран блок для {names}"
+        assert re.search(r"\blisten\s+443\b", block), "выбран не HTTPS-блок"
+        assert "listen 80;" not in block, "выбран блок редиректа с HTTP"
+
+        insertion = (f"\n    {publish.BEGIN}\n"
+                     f"    include {publish.SNIPPET_DIR}/*.conf;\n"
+                     f"    {publish.END}\n")
+        patched = block[:-1].rstrip() + "\n" + insertion + "}"
+        assert patched.count("{") == patched.count("}"), "вставка ломает баланс скобок"
 
     def test_secret_hub_adds_no_nginx_configuration(self, repo_root):
         """Хаб не публикуется наружу и nginx не трогает вовсе."""

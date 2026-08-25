@@ -40,20 +40,26 @@ class FakeHub:
 class Form:
     """Запущенная форма и клиент к ней."""
 
-    def __init__(self, hub, *, ttl_seconds: int = 900) -> None:
+    def __init__(self, hub, *, ttl_seconds: int = 900, base_path: str = "/",
+                 tls: bool = True, portfolios=("yami",)) -> None:
         self.captured: dict = {}
+        self.base_path = base_path
+        self.tls = tls
+        self.portfolios = tuple(portfolios)
 
-        def announce(session, host, port, fingerprint, ttl):
+        def announce(session, url, port, fingerprint, ttl):
             # Код доступа существует только здесь: в ответе операции его нет.
             self.captured = {"code": session.code, "csrf": session.csrf,
-                             "port": port, "fingerprint": fingerprint}
+                             "port": port, "fingerprint": fingerprint,
+                             "marker": session.marker, "url": url}
 
         started = threading.Event()
         self.result: dict = {}
 
         def run():
             self.result = enroll.start_session(
-                hub, "yami", ttl_seconds=ttl_seconds, host="127.0.0.1", port=0,
+                hub, self.portfolios, ttl_seconds=ttl_seconds, host="127.0.0.1", port=0,
+                base_path=self.base_path, tls=self.tls,
                 announce=lambda *a: (announce(*a), started.set()), serve=True)
 
         self.thread = threading.Thread(target=run, daemon=True)
@@ -61,13 +67,16 @@ class Form:
         assert started.wait(10), "форма не поднялась"
         self.port = self.captured["port"]
 
-    def _connection(self) -> http.client.HTTPSConnection:
+    def _connection(self):
+        if not self.tls:
+            return http.client.HTTPConnection("127.0.0.1", self.port, timeout=10)
         context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
         context.check_hostname = False
         context.verify_mode = ssl.CERT_NONE
         return http.client.HTTPSConnection("127.0.0.1", self.port, timeout=10, context=context)
 
-    def get(self, path: str = "/") -> tuple[int, str]:
+    def get(self, path: str | None = None) -> tuple[int, str]:
+        path = self.base_path if path is None else path
         connection = self._connection()
         try:
             connection.request("GET", path)
@@ -76,8 +85,9 @@ class Form:
         finally:
             connection.close()
 
-    def post(self, fields: dict, *, path: str = "/", raw: bytes | None = None,
+    def post(self, fields: dict, *, path: str | None = None, raw: bytes | None = None,
              content_length: int | None = None) -> tuple[int, str]:
+        path = self.base_path if path is None else path
         body = raw if raw is not None else urllib.parse.urlencode(fields).encode("utf-8")
         connection = self._connection()
         try:
@@ -96,6 +106,7 @@ class Form:
         fields = {
             "csrf": self.captured["csrf"],
             "code": self.captured["code"],
+            "portfolio": self.portfolios[0],
             "api_token": "живой-токен-провайдера",
             "publisher_id": "publisher-42",
         }
@@ -121,7 +132,7 @@ class TestLimitsAreDeclaredCorrectly:
     def test_requested_ttl_cannot_exceed_the_cap(self):
         """Запрос может попросить меньше, но не больше."""
         hub = FakeHub()
-        result = enroll.start_session(hub, "yami", ttl_seconds=99999, host="127.0.0.1", port=0,
+        result = enroll.start_session(hub, ("yami",), ttl_seconds=99999, host="127.0.0.1", port=0,
                                       announce=lambda *a: None, serve=False)
         try:
             assert result["ttl_seconds"] == enroll.MAX_TTL_SECONDS
@@ -135,7 +146,7 @@ class TestLimitsAreDeclaredCorrectly:
 class TestCodeIsNotDisclosed:
     def test_response_of_start_session_has_no_code_or_csrf(self):
         hub = FakeHub()
-        result = enroll.start_session(hub, "yami", host="127.0.0.1", port=0,
+        result = enroll.start_session(hub, ("yami",), host="127.0.0.1", port=0,
                                       announce=lambda *a: None, serve=False)
         try:
             session = result.pop("session")
@@ -148,7 +159,7 @@ class TestCodeIsNotDisclosed:
 
     def test_session_repr_does_not_contain_the_code(self):
         hub = FakeHub()
-        result = enroll.start_session(hub, "yami", host="127.0.0.1", port=0,
+        result = enroll.start_session(hub, ("yami",), host="127.0.0.1", port=0,
                                       announce=lambda *a: None, serve=False)
         session = result["session"]
         try:
@@ -302,7 +313,7 @@ class TestPaths:
         hub = FakeHub()
         form = Form(hub)
         try:
-            assert form.get("/%D1%87%D1%82%D0%BE-%D1%83%D0%B3%D0%BE%D0%B4%D0%BD%D0%BE")[0] == 404
+            assert form.get("/other-path")[0] == 404
             assert form.get("/?code=leak")[0] == 404
         finally:
             form.post(form.valid_fields())

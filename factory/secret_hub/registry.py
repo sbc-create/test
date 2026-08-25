@@ -130,6 +130,25 @@ class VerifyContract:
 
 
 @dataclass(frozen=True)
+class PublicForm:
+    """Где форма показывается оператору. Домен обязан уже существовать."""
+
+    server_name: str
+    vhost: Path
+    path: str
+    loopback_port: int
+    note: str = ""
+
+    @property
+    def url(self) -> str:
+        return f"https://{self.server_name}{self.path}"
+
+    def as_dict(self) -> dict:
+        return {"server_name": self.server_name, "path": self.path, "url": self.url,
+                "vhost": str(self.vhost), "loopback_port": self.loopback_port}
+
+
+@dataclass(frozen=True)
 class HubConfig:
     source: Path
     store_dir: Path
@@ -138,6 +157,7 @@ class HubConfig:
     provider_name: str
     verify: VerifyContract
     portfolios: tuple[Portfolio, ...]
+    public_form: PublicForm | None = None
 
     def portfolio(self, portfolio_id: str) -> Portfolio:
         for item in self.portfolios:
@@ -270,6 +290,15 @@ def load(path: Path | None = None) -> HubConfig:
     portfolios = tuple(_portfolio(p) for p in document["portfolios"])
     _reject_duplicate_targets(portfolios, source)
 
+    form_raw = document.get("public_form")
+    public_form = PublicForm(
+        server_name=form_raw["server_name"],
+        vhost=Path(form_raw["vhost"]),
+        path=form_raw["path"],
+        loopback_port=int(form_raw["loopback_port"]),
+        note=form_raw.get("note", ""),
+    ) if form_raw else None
+
     return HubConfig(
         source=source,
         store_dir=store_dir,
@@ -278,6 +307,7 @@ def load(path: Path | None = None) -> HubConfig:
         provider_name=document["provider"]["name"],
         verify=verify,
         portfolios=portfolios,
+        public_form=public_form,
     )
 
 

@@ -46,7 +46,7 @@ def cmd_enroll(args) -> int:
         print(f"нужно: {portfolio.blocked_target.required_input}", file=sys.stderr)
         return 3
 
-    result = enroll.start_session(hub, portfolio.id, ttl_seconds=args.ttl_seconds,
+    result = enroll.start_session(hub, (portfolio.id,), ttl_seconds=args.ttl_seconds,
                                   host=args.host, port=args.port)
     # В выводе — исход, а не значения: ни кода доступа, ни credentials здесь нет.
     print(redact(json.dumps(
@@ -62,6 +62,54 @@ def cmd_import(args) -> int:
     result = migrate.import_existing(hub, args.portfolio, archive=args.archive)
     print(redact(json.dumps(result, ensure_ascii=False, indent=2)))
     return 0 if result.get("imported") else 3
+
+
+def cmd_bootstrap(args) -> int:
+    """Приёмка: импорт существующего, применение, при нехватке — форма.
+
+    Печатает только то, что разрешено показывать: статусы направлений,
+    отпечатки, адрес формы, срок и результат живой проверки. Одноразовый код
+    печатает сама форма, отдельным блоком в эту же root-консоль.
+    """
+    from factory.secret_hub import bootstrap
+
+    hub = _hub()
+    report = bootstrap.run(hub, archive=args.archive, restart=not args.no_restart,
+                           open_form=not args.no_form, ttl_seconds=args.ttl_seconds)
+    summary = bootstrap.summarise(report, hub)
+
+    print()
+    print("=" * 72)
+    print("  СОСТОЯНИЕ НАПРАВЛЕНИЙ")
+    print("=" * 72)
+    header = f"  {'НАПРАВЛЕНИЕ':<10} {'CREDENTIALS':<12} {'НАСТРОЕНО':<10} {'ПРОВЕРЕНО':<10} {'ОТПЕЧАТОК':<24} СТАТУС"
+    print(header)
+    for row in summary["portfolios"]:
+        print(f"  {row['portfolio']:<10} {row['existing']:<12} "
+              f"{('да' if row['configured'] else 'нет'):<10} "
+              f"{('да' if row['verified'] else 'нет'):<10} "
+              f"{str(row['fingerprint'] or '—'):<24} {row['status']}")
+        if row["detail"]:
+            print(f"      {row['detail']}")
+
+    live = summary.get("live_verification")
+    if live:
+        print()
+        print("  ЖИВАЯ ПРОВЕРКА НА УСТАНОВЛЕННОМ NGINX")
+        for check in live["checks"]:
+            print(f"    [{'ok  ' if check['ok'] else 'ОТКАЗ'}] {check['check']}: {check['detail']}")
+
+    if summary["problems"]:
+        print()
+        print("  ТРЕБУЕТ ВНИМАНИЯ:")
+        for problem in summary["problems"]:
+            print(f"    - {problem}")
+    print("=" * 72)
+    print()
+
+    everything_configured = all(row["configured"] for row in summary["portfolios"]
+                                if row["status"] != "BLOCKED_TARGET")
+    return 0 if everything_configured and not summary["problems"] else 3
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -83,6 +131,17 @@ def main(argv: list[str] | None = None) -> int:
                    help="сделать архивную копию прежних файлов (0600). "
                         "Оригиналы не удаляются ни при каком флаге.")
     p.set_defaults(func=cmd_import)
+
+    p = sub.add_parser("bootstrap",
+                       help="приёмка: импорт существующего, применение, при нехватке — форма")
+    p.add_argument("--archive", action="store_true",
+                   help="архивировать прежние файлы после подтверждённого применения")
+    p.add_argument("--no-restart", action="store_true",
+                   help="записать файлы, но не перезапускать unit'ы")
+    p.add_argument("--no-form", action="store_true",
+                   help="не открывать браузерную форму, даже если чего-то не хватает")
+    p.add_argument("--ttl-seconds", type=int, help="срок жизни формы, не больше 900 с")
+    p.set_defaults(func=cmd_bootstrap)
 
     args = parser.parse_args(argv)
 
