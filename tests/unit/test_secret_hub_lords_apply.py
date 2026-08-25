@@ -268,3 +268,27 @@ class TestInstallerCreatesTargetParents:
         text = (repo_root / "automation" / "secret-hub"
                 / "install.sh").read_text(encoding="utf-8")
         assert "secrets/lords" not in text
+
+
+class TestUpdateActuallyTakesEffect:
+    """Обновление кода без перезапуска — это обновление, которого не было."""
+
+    def _launcher(self, repo_root) -> str:
+        return (repo_root / "var" / "install-secret-hub.sh").read_text(encoding="utf-8")
+
+    def test_panel_is_restarted_not_just_enabled(self, repo_root):
+        text = self._launcher(repo_root)
+        assert 'systemctl restart "$PANEL_UNIT"' in text, \
+            "после обновления панель продолжила бы крутить прежний код"
+
+    def test_hub_is_restarted_too(self, repo_root):
+        text = (repo_root / "automation" / "secret-hub"
+                / "install.sh").read_text(encoding="utf-8")
+        assert 'systemctl restart "$UNIT"' in text
+
+    def test_both_waits_are_bounded(self, repo_root):
+        """Ожидание с проверкой, а не фиксированная пауза."""
+        for text in (self._launcher(repo_root),
+                     (repo_root / "automation" / "secret-hub"
+                      / "install.sh").read_text(encoding="utf-8")):
+            assert "for _ in $(seq 1 15); do" in text
