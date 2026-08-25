@@ -35,7 +35,14 @@ fi
 
 say() { printf '[secret-hub] %s\n' "$*"; }
 
-# --- 1. мастер-ключ -------------------------------------------------------
+# --- 1. отдельное окружение Secret Hub ------------------------------------
+# Идёт первым, а не после ключа: этим же интерпретатором генерируется
+# мастер-ключ и запускаются все unit'ы. Установка, которая пишет unit раньше,
+# чем проверен интерпретатор, объявляет себя успешной и падает с 203/EXEC.
+say "окружение Secret Hub"
+bash "$REPO/automation/secret-hub/bootstrap-venv.sh"
+
+# --- 2. мастер-ключ -------------------------------------------------------
 install -d -m 0700 -o root -g root "$SECRET_DIR"
 if [ -e "$KEY_FILE" ]; then
   say "мастер-ключ уже существует — не трогаю (перезапись = потеря всех секретов)"
@@ -43,14 +50,14 @@ else
   say "создаю мастер-ключ $KEY_FILE"
   # Ключ пишется сразу с правами 0600: umask здесь ненадёжен, а окно, в котором
   # ключ читается миром, не нужно даже на миллисекунду.
-  ( umask 077; "$REPO/.venv/bin/python" -c \
+  ( umask 077; "$PY" -c \
       'from factory.secret_hub.crypto import generate_master_key; print(generate_master_key())' \
       > "$KEY_FILE" )
   chown root:root "$KEY_FILE"
   chmod 0600 "$KEY_FILE"
 fi
 
-# --- 2. хранилище и группа управления ------------------------------------
+# --- 3. хранилище и группа управления ------------------------------------
 install -d -m 0700 -o root -g root "$STORE_DIR"
 install -d -m 0700 -o root -g root "$STORE_DIR/backups"
 install -d -m 0700 -o root -g root "$STORE_DIR/consumer-backups"
@@ -63,13 +70,6 @@ fi
 if id "$CONTROL_USER" >/dev/null 2>&1 && ! id -nG "$CONTROL_USER" | tr ' ' '\n' | grep -qx "$GROUP"; then
   say "добавляю $CONTROL_USER в $GROUP (право спросить и запустить, но не увидеть)"
   usermod -aG "$GROUP" "$CONTROL_USER"
-fi
-
-# --- 3. зависимость шифрования -------------------------------------------
-if ! "$REPO/.venv/bin/python" -c 'import cryptography' >/dev/null 2>&1; then
-  say "ставлю cryptography в $REPO/.venv"
-  "$REPO/.venv/bin/pip" install --quiet --require-virtualenv \
-    -r "$REPO/requirements.txt"
 fi
 
 # --- 4. unit'ы ------------------------------------------------------------

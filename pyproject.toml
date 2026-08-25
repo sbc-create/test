@@ -1,6 +1,11 @@
 [tool.ruff]
 line-length = 100
-target-version = "py311"
+# 3.10, а не 3.11: единственный интерпретатор вне /home на боевом хосте —
+# /usr/bin/python3.10, а unit'ы Secret Hub закрывают /home через
+# ProtectHome=true. При target-version = py311 правило UP017 переписывало
+# `timezone.utc` в `datetime.UTC`, и служба падала на ImportError уже после
+# того, как установщик объявил себя успешным.
+target-version = "py310"
 
 [tool.ruff.format]
 # Форматирование не применяется к каталогам, написанным до появления этой

@@ -37,7 +37,7 @@ import struct
 import threading
 from dataclasses import dataclass
 from dataclasses import field as dataclass_field
-from datetime import UTC
+from datetime import timezone
 from pathlib import Path
 
 from factory.errors import BlockedTarget, FactoryError
@@ -379,7 +379,7 @@ def _panel_uid(user: str | None) -> int | None:
 def _now() -> str:
     from datetime import datetime
 
-    return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
 # --- транспорт ------------------------------------------------------------

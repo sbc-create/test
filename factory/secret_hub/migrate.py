@@ -21,7 +21,7 @@ import os
 import shutil
 import stat
 from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from factory.errors import BlockedSecret
@@ -209,7 +209,7 @@ def _archive(paths: list[Path], portfolio_id: str) -> list[Path]:
     Именно копия, а не перемещение: до полной приёмки рабочие credentials должны
     оставаться там, где их сейчас читает работающий сайт.
     """
-    stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     directory = ARCHIVE_ROOT / portfolio_id / stamp
     directory.mkdir(parents=True, exist_ok=True, mode=0o700)
     os.chmod(directory, 0o700)
