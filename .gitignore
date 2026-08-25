@@ -1,6 +1,14 @@
-# Runtime state, never committed
-var/
+# Runtime state, never committed.
+#
+# Шаблон `var/*`, а не `var/`: git не позволяет вернуть файл, у которого
+# исключён родительский каталог, и с `var/` исключение ниже молча не работало
+# бы. Со звёздочкой исключается содержимое, а отдельные файлы можно вернуть.
+var/*
 !var/.gitkeep
+# Лончер Secret Hub — не runtime-состояние, а версионируемый скрипт. Владелец
+# запускает его как `bash var/install-secret-hub.sh`, поэтому путь обязан
+# существовать сразу после checkout.
+!var/install-secret-hub.sh
 # Licensed DLE distributions must never be committed
 blueprints/dle20/dist/
 *.zip
@@ -46,7 +54,9 @@ blueprints/payload-next-multisite/app/.releases/
 # Build output
 dist/
 
-# Operator runtime state (audit logs, checkpoints, locks, queues)
-var/
+# Operator runtime state (audit logs, checkpoints, locks, queues) — уже
+# исключён правилом `var/*` в начале файла вместе со своими исключениями.
+# Повторять его здесь нельзя: побеждает последнее совпавшее правило, и
+# повторный `var/*` ниже исключений отменял бы их.
 # Журнал решений PreToolUse-хука SEO-оператора: runtime-состояние, а не исходник.
 .seo-state/
