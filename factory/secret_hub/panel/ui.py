@@ -333,9 +333,13 @@ def card(row: dict, path: str) -> str:
 
     consumers = row.get("consumers") or []
     if consumers:
+        # Причина недоступности показывается прямо в списке: «цель недоступна»
+        # без объяснения — это то же «неизвестная причина», только короче.
         items = "".join(
             f"<li>{html.escape(c.get('title') or c.get('consumer', ''))}"
-            f"{' — цель недоступна' if not c.get('target_ok') else ''}</li>"
+            + ("" if c.get("target_ok")
+               else " — " + html.escape(c.get("problem") or "цель недоступна"))
+            + "</li>"
             for c in consumers
         )
         consumer_block = f'<ul class="consumers">{items}</ul>'

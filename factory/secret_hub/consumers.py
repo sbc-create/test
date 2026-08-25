@@ -106,11 +106,33 @@ class ApplyReport:
     def ok(self) -> bool:
         return bool(self.results) and all(r.status == "applied" for r in self.results)
 
+    @property
+    def reason(self) -> str:
+        """Почему направление не применилось — словами, без секретов.
+
+        Раньше причина оставалась в `consumers[].detail`, а наружу уходил
+        отчёт без единого поля `reason`. Панель показывала «неизвестная
+        причина» при том, что причина была известна и записана рядом.
+        """
+        if self.ok:
+            return ""
+        failed = [r for r in self.results if r.status != "applied"]
+        if not failed:
+            return "ни один потребитель не был обработан"
+        parts = []
+        for result in failed:
+            label = {"blocked": "цель недоступна",
+                     "failed": "запись не удалась"}.get(result.status, result.status)
+            detail = result.detail.strip()
+            parts.append(f"{result.consumer_id}: {label}" + (f" — {detail}" if detail else ""))
+        return "; ".join(parts)
+
     def as_dict(self) -> dict:
         return {
             "portfolio": self.portfolio,
             "version": self.version,
             "ok": self.ok,
+            "reason": self.reason,
             "rolled_back": self.rolled_back,
             "rollback_problems": list(self.rollback_problems),
             "consumers": [r.as_dict() for r in self.results],
@@ -217,19 +239,51 @@ def _probe(path: Path) -> tuple[str, os.stat_result | None]:
         return "present", path.stat()
     except FileNotFoundError:
         return "absent", None
+    except NotADirectoryError:
+        # На месте одного из предков лежит файл. Путь не существует и не может
+        # существовать — это «нет», а не «не измерено». Python по той же
+        # причине считает ENOTDIR и ENOENT одинаково в `Path.exists()`.
+        return "absent", None
     except PermissionError:
         return "unmeasured", None
     except OSError:
         return "unmeasured", None
 
 
+def _creatable(directory: Path) -> str | None:
+    """Можно ли создать каталог. Возвращает причину отказа или ``None``.
+
+    Проверяется не существование родителя, а возможность его создать:
+    ``_ensure_directory`` делает ``mkdir(parents=True)`` и построит всю
+    недостающую цепочку. Прежняя проверка требовала, чтобы непосредственный
+    родитель уже существовал, — она была строже действия, которое охраняла, и
+    на этом встали все три потребителя Lords. Их каталоги
+    ``/etc/site-factory/secrets/lords/lords-0N`` не создаёт никто: установщик
+    делает только ``/etc/site-factory/secrets``. Yami работал лишь потому, что
+    его родительский каталог существует по другой причине.
+
+    Настоящее препятствие — не отсутствие каталога, а файл на месте одного из
+    предков: тогда ``mkdir`` не пройдёт никогда.
+    """
+    for ancestor in [directory, *directory.parents]:
+        state, info = _probe(ancestor)
+        if state == "unmeasured":
+            # Закрытый каталог измерить нельзя; root, от которого идёт
+            # применение, измерит. Блокировать по неизмеренному нельзя.
+            return None
+        if state == "present":
+            if info is not None and not stat.S_ISDIR(info.st_mode):
+                return f"{ancestor} существует и не является каталогом"
+            return None
+    return None
+
+
 def check_target(consumer: Consumer) -> list[str]:
     """Проблемы цели до применения. Пустой список — цель пригодна."""
     problems: list[str] = []
-    parent = consumer.directory.parent
-    state, _ = _probe(parent)
-    if state == "absent":
-        problems.append(f"родительский каталог {parent} не существует")
+    blocked = _creatable(consumer.directory)
+    if blocked:
+        problems.append(blocked)
     if consumer.kind == "systemd_credential":
         if not consumer.unit:
             problems.append("не указан unit")
@@ -458,6 +512,7 @@ def describe(portfolio: Portfolio) -> list[dict]:
             "unit": consumer.unit,
             "target_ok": not problems,
             "problems": problems,
+            "problem": "; ".join(problems),
             "files": files,
         })
     return out
