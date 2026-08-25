@@ -42,9 +42,22 @@ pytestmark = pytest.mark.skipif(
 
 
 def free_port() -> int:
-    with socket.socket() as probe:
-        probe.bind(("127.0.0.1", 0))
-        return probe.getsockname()[1]
+    """Свободный порт для nginx.
+
+    Между освобождением порта здесь и bind'ом в nginx есть окно, в которое
+    порт может занять кто-то ещё — под полным прогоном это давало редкий
+    отказ старта. SO_REUSEADDR на пробнике не ставится намеренно: иначе
+    занятый порт выглядел бы свободным.
+    """
+    for _ in range(20):
+        with socket.socket() as probe:
+            probe.bind(("127.0.0.1", 0))
+            port = probe.getsockname()[1]
+        with socket.socket() as check:
+            check.settimeout(0.2)
+            if check.connect_ex(("127.0.0.1", port)) != 0:
+                return port
+    raise RuntimeError("не удалось получить свободный порт")
 
 
 class Backend(BaseHTTPRequestHandler):
@@ -160,7 +173,11 @@ def stand(tmp_path):
 
     check = nginx("-t")
     assert check.returncode == 0, check.stderr
+    # Старт с повтором: порт мог быть занят между проверкой и bind'ом.
     started = nginx()
+    if started.returncode != 0 and "Address already in use" in started.stderr:
+        time.sleep(1)
+        started = nginx()
     assert started.returncode == 0, started.stderr
     for _ in range(40):
         with socket.socket() as probe:
