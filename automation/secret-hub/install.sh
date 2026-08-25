@@ -74,12 +74,20 @@ fi
 
 # --- 4. unit'ы ------------------------------------------------------------
 say "ставлю unit'ы"
-for unit in "$UNIT" \
-            site-factory-secret-hub-enroll@.service \
-            site-factory-secret-hub-import@.service; do
-  install -m 0644 -o root -g root "$REPO/automation/secret-hub/$unit" \
-          "/etc/systemd/system/$unit"
+# Список берётся из каталога, а не переписывается руками: unit, удалённый из
+# репозитория, иначе продолжает числиться здесь, и установка падает на
+# «файл не найден» при первом же чистом запуске.
+for path in "$REPO"/automation/secret-hub/*.service; do
+  unit="$(basename "$path")"
+  install -m 0644 -o root -g root "$path" "/etc/systemd/system/$unit"
 done
+# Отзыв прежней одноразовой формы: её больше нет в репозитории, но на хосте
+# после старой установки она могла остаться.
+if [ -e /etc/systemd/system/site-factory-secret-hub-enroll@.service ]; then
+  say "снимаю устаревший unit одноразовой формы"
+  rm -f /etc/systemd/system/site-factory-secret-hub-enroll@.service
+fi
+
 systemctl daemon-reload
 systemctl enable --now "$UNIT"
 
@@ -97,20 +105,18 @@ sudo -u "$CONTROL_USER" env PYTHONPATH="$REPO" \
 
 cat <<'EOF'
 
-Дальше — ввод credentials. Для каждого направления отдельно:
+Дальше — панель. Её ставит и проверяет верхний установщик:
 
-  sudo systemctl start site-factory-secret-hub-enroll@yami.service
-  sudo journalctl -u site-factory-secret-hub-enroll@yami.service -n 20 --no-pager
+  sudo bash /srv/site-factory/repo/var/install-secret-hub.sh
 
-В журнале появится одноразовый код, адрес и отпечаток TLS. С рабочей машины:
+Он опубликует https://yummyani.site/__factory-secrets, проверит панель на
+работающем nginx и напечатает одноразовый код регистрации passkey.
 
-  ssh -N -L 8443:127.0.0.1:8443 <этот-хост>
+Прежние credentials Yami и Lords НЕ импортируются автоматически: владелец
+вводит их заново через панель. Ручной импорт, если он всё-таки понадобится, —
+отдельная осознанная команда:
 
-и открыть https://127.0.0.1:8443/ — сверив отпечаток сертификата.
-
-Если credentials уже лежат на хосте файлами, вместо формы можно импортировать:
-
-  sudo systemctl start site-factory-secret-hub-import@yami.service
+  sudo systemctl start site-factory-secret-hub-import@<направление>.service
 
 Ни одна из команд не печатает значения.
 EOF
