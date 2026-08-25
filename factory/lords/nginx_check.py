@@ -51,6 +51,9 @@ KNOWN = {
     "ssl_protocols", "ssl_ciphers", "ssl_prefer_server_ciphers",
     "ssl_session_cache", "ssl_session_timeout", "ssl_session_tickets",
     "default_type", "access_log", "error_log", "client_max_body_size",
+    # include — директива ядра, есть во всех поддерживаемых версиях. Нужна для
+    # каталога временных адресов: include по пустому шаблону ничего не делает.
+    "include", "client_body_buffer_size",
 }
 
 
