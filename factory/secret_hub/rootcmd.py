@@ -7,7 +7,7 @@
 
 Запуск:
 
-    sudo bash var/install-secret-hub.sh                              # установка панели
+    sudo /srv/site-factory/repo/bin/secret-hub-install                              # установка панели
     sudo systemctl start site-factory-secret-hub-import@lords.service # ручной импорт
 
 Код первичной регистрации passkey печатается в root-консоль установки и никуда
@@ -201,8 +201,8 @@ def main(argv: list[str] | None = None) -> int:
         # unit'ом с именем направления. Универсальная строка отправляла бы
         # оператора запускать то, чего нет.
         hint = {
-            "install-panel": "sudo bash var/install-secret-hub.sh",
-            "reconcile": "sudo bash var/install-secret-hub.sh",
+            "install-panel": "sudo /srv/site-factory/repo/bin/secret-hub-install",
+            "reconcile": "sudo /srv/site-factory/repo/bin/secret-hub-install",
             "import": "sudo systemctl start site-factory-secret-hub-import@<направление>.service",
         }[args.action]
         print("Эта команда выполняется только от root: она читает мастер-ключ и файлы "

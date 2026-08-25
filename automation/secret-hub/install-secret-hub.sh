@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Secret Hub — установка сервиса и постоянной веб-панели.
 #
-#     sudo bash /srv/site-factory/repo/var/install-secret-hub.sh
+#     sudo /srv/site-factory/repo/bin/secret-hub-install
+#     sudo /srv/site-factory/repo/bin/secret-hub-install --preflight
 #
 # Root нужен ровно один раз — здесь. После этого владелец работает только через
 # браузер: открывает панель, входит по passkey, вводит и заменяет credentials,
@@ -22,7 +23,11 @@
 # Basic Auth, не печатает значений секретов.
 set -euo pipefail
 
-REPO="${SECRET_HUB_REPO:-/srv/site-factory/repo}"
+SELF="$(readlink -f "${BASH_SOURCE[0]}")"
+# Корень репозитория — от расположения самого скрипта: он лежит в
+# automation/secret-hub/, значит на два уровня выше. Так лончер работает из
+# любого текущего каталога и не зависит от переменных окружения.
+REPO="${SECRET_HUB_REPO:-$(dirname "$(dirname "$(dirname "$SELF")")")}"
 HUB_UNIT=site-factory-secret-hub.service
 PANEL_UNIT=site-factory-secret-panel.service
 SOCKET=/run/site-factory-secret-hub/hub.sock
@@ -30,17 +35,94 @@ PY="${SECRET_HUB_VENV:-/opt/site-factory-secret-hub/venv}/bin/python"
 PANEL_USER="${SECRET_HUB_PANEL_USER:-sfpanel}"
 ENROLL_TTL="${SECRET_HUB_ENROLL_TTL:-3600}"
 
+PREFLIGHT=0
+for arg in "$@"; do
+  case "$arg" in
+    --preflight|--dry-run) PREFLIGHT=1 ;;
+  esac
+done
+
+say() { printf '\n[secret-hub] %s\n' "$*"; }
+
+# --- 0. предполётная проверка --------------------------------------------
+# Ничего не меняет и не требует root. Существует затем, чтобы «команда не
+# запустилась» можно было выяснить до того, как что-то будет тронуто: прежний
+# лончер отсутствовал на хосте, и обнаружилось это только в момент запуска.
+preflight() {
+  local bad=0
+  echo "  репозиторий:      $REPO"
+  echo "  этот скрипт:      $SELF"
+
+  local required=(
+    "automation/secret-hub/install.sh"
+    "automation/secret-hub/bootstrap-venv.sh"
+    "automation/secret-hub/site-factory-secret-hub.service"
+    "automation/secret-hub/site-factory-secret-panel.service"
+    "automation/secret-hub/site-factory-secret-hub-import@.service"
+    "config/secret-hub.json"
+    "factory/secret_hub/reconcile.py"
+    "bin/secret-hub-install"
+  )
+  local item
+  for item in "${required[@]}"; do
+    if [ -e "$REPO/$item" ]; then
+      echo "  есть:             $item"
+    else
+      echo "  ОТСУТСТВУЕТ:      $item" >&2
+      bad=1
+    fi
+  done
+
+  # Синтаксис всех shell-частей: сломанный скрипт лучше поймать здесь.
+  for item in "$REPO"/automation/secret-hub/*.sh "$REPO/bin/secret-hub-install"; do
+    if bash -n "$item" 2>/dev/null; then
+      echo "  синтаксис ok:     $(basename "$item")"
+    else
+      echo "  СИНТАКСИС СЛОМАН: $item" >&2
+      bad=1
+    fi
+  done
+
+  # Шаги, которые выполнит боевой запуск. Печатаются, чтобы было видно, что
+  # команда действительно делает всё обещанное.
+  local step
+  for step in "перезапуск хаба:site-factory-secret-hub.service" \
+              "перезапуск панели:site-factory-secret-panel.service" \
+              "применение сохранённого:rootcmd reconcile" \
+              "проверка результата:reconcile.audit"; do
+    echo "  шаг:              ${step%%:*} (${step#*:})"
+  done
+
+  if [ "$(id -u)" -ne 0 ]; then
+    echo "  запуск от:        не root — боевая установка потребует sudo"
+  else
+    echo "  запуск от:        root"
+  fi
+  return $bad
+}
+
+if [ "$PREFLIGHT" -eq 1 ]; then
+  say "предполётная проверка (ничего не меняется)"
+  if preflight; then
+    say "PREFLIGHT=pass"
+    exit 0
+  fi
+  say "PREFLIGHT=fail"
+  exit 78
+fi
+
 if [ "$(id -u)" -ne 0 ]; then
   echo "FATAL: запускать от root — команда создаёт мастер-ключ и правит nginx." >&2
-  echo "нужно: sudo bash var/install-secret-hub.sh" >&2
+  echo "нужно: sudo $REPO/bin/secret-hub-install" >&2
   exit 1
 fi
 [ -d "$REPO" ] || { echo "FATAL: репозиторий $REPO не найден." >&2; exit 1; }
 
+say "предполётная проверка"
+preflight || { echo "FATAL: предполётная проверка не пройдена." >&2; exit 78; }
+
 # Интерпретатор появится на шаге установки: до него $PY ещё не существует, и
 # это нормально. Проверка стоит после, а не здесь.
-
-say() { printf '\n[secret-hub] %s\n' "$*"; }
 
 # --- 1. сервис хаба -------------------------------------------------------
 say "установка сервиса"
