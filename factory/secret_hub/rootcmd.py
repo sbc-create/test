@@ -46,6 +46,32 @@ def cmd_import(args) -> int:
     return 0 if result.get("imported") else 3
 
 
+def cmd_reconcile(args) -> int:
+    """Применяет уже сохранённые credentials там, где они ещё не применены.
+
+    Новых версий не создаёт и повторного ввода не требует: работает с активной
+    версией направления.
+    """
+    from factory.secret_hub import reconcile
+
+    hub = _hub()
+    report = reconcile.run(hub, only=args.portfolio, restart=not args.no_restart,
+                           force=args.force)
+    print(reconcile.format_report(report))
+
+    # Отчёт говорит, что было сделано; проверка — что получилось. Смотрим на
+    # диск и на systemd, а не на собственный вывод.
+    checked = reconcile.audit(hub)
+    print(reconcile.format_audit(checked))
+
+    if not report.ok or not checked["ok"]:
+        print("Применение завершено не полностью. Значения credentials не "
+              "показывались и повторный ввод не требуется: направления хранят "
+              "уже проверенную версию.", file=sys.stderr)
+        return 3
+    return 0
+
+
 def cmd_install_panel(args) -> int:
     """Публикует панель в nginx, проверяет вживую и выдаёт код регистрации.
 
@@ -151,6 +177,15 @@ def main(argv: list[str] | None = None) -> int:
                         "Оригиналы не удаляются ни при каком флаге.")
     p.set_defaults(func=cmd_import)
 
+    p = sub.add_parser("reconcile",
+                       help="применить уже сохранённые credentials к потребителям")
+    p.add_argument("--portfolio", help="только это направление")
+    p.add_argument("--no-restart", action="store_true",
+                   help="записать файлы, но не перезапускать unit'ы")
+    p.add_argument("--force", action="store_true",
+                   help="пересмотреть и уже применённые направления")
+    p.set_defaults(func=cmd_reconcile)
+
     p = sub.add_parser("install-panel",
                        help="опубликовать панель в nginx, проверить вживую, выдать код")
     p.add_argument("--enroll-ttl", type=int, default=3600,
@@ -167,6 +202,7 @@ def main(argv: list[str] | None = None) -> int:
         # оператора запускать то, чего нет.
         hint = {
             "install-panel": "sudo bash var/install-secret-hub.sh",
+            "reconcile": "sudo bash var/install-secret-hub.sh",
             "import": "sudo systemctl start site-factory-secret-hub-import@<направление>.service",
         }[args.action]
         print("Эта команда выполняется только от root: она читает мастер-ключ и файлы "
