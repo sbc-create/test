@@ -351,18 +351,33 @@ class TestSocketTransport:
                 results.append(service.request(hub.config.socket_path,
                                                {"op": "status", "portfolio": portfolio}))
 
+            # Заведомо больше, чем очередь подключений по умолчанию (5):
+            # именно на ней тест и упал на медленном раннере CI, а клиент
+            # получал EAGAIN вместо ответа.
+            count = 16
             workers = [threading.Thread(target=ask, args=(p,))
-                       for p in ("yami", "lords") * 4]
+                       for p in ("yami", "lords") * (count // 2)]
             for worker in workers:
                 worker.start()
             for worker in workers:
-                worker.join(20)
-            assert len(results) == 8
+                worker.join(30)
+            assert len(results) == count, \
+                f"ответили {len(results)} из {count}: очередь подключений мала"
             assert all(r.get("ok") for r in results), \
                 [r for r in results if not r.get("ok")]
         finally:
             _shutdown(hub.config.socket_path)
             thread.join(5)
+
+    def test_listen_backlog_is_larger_than_the_default(self):
+        """Очередь socketserver по умолчанию — 5, и этого мало.
+
+        Значение по умолчанию отвергало восьмой одновременный запрос с EAGAIN.
+        Проверяется именно константа: воспроизвести переполнение очереди
+        стабильно на быстрой машине не выходит — оно всплыло на медленном
+        раннере CI.
+        """
+        assert service._Server.request_queue_size >= 16
 
     def test_oversized_request_is_refused(self, hub):
         ready = threading.Event()

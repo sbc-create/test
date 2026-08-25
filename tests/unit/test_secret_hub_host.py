@@ -378,3 +378,113 @@ class TestRunningServiceAnswers:
             pytest.skip(f"сокет недоступен ({exc.__class__.__name__})")
         assert response["ok"] is False
         assert response["error"] == "unknown_operation"
+
+
+class TestInstallerContract:
+    """Установщик: не импортирует старое, идемпотентен, ссылается на живые unit'ы.
+
+    Требования владельца от 25.08.2026: установка не должна подхватывать
+    прежние токены Yami и Lords, а повторный запуск не должен ничего ломать.
+    """
+
+    def _launcher(self, repo_root) -> str:
+        return (repo_root / "var" / "install-secret-hub.sh").read_text(encoding="utf-8")
+
+    def _installer(self, repo_root) -> str:
+        return (repo_root / "automation" / "secret-hub" / "install.sh").read_text(
+            encoding="utf-8")
+
+    def test_launcher_never_imports_existing_credentials(self, repo_root):
+        text = self._launcher(repo_root)
+        for forbidden in ("rootcmd import", "import_existing", "migrate",
+                          "secret-hub-import@"):
+            assert forbidden not in text, \
+                f"установщик подхватывает старые credentials: «{forbidden}»"
+
+    def test_install_panel_does_not_touch_migration(self, repo_root):
+        """Проверяется разбором кода, а не чтением глазами."""
+        import ast
+
+        source = (repo_root / "factory" / "secret_hub" / "rootcmd.py").read_text(
+            encoding="utf-8")
+        tree = ast.parse(source)
+        function = next(n for n in ast.walk(tree)
+                        if isinstance(n, ast.FunctionDef) and n.name == "cmd_install_panel")
+        names = {n.attr for n in ast.walk(function) if isinstance(n, ast.Attribute)}
+        for node in ast.walk(function):
+            if isinstance(node, ast.ImportFrom):
+                names.add(node.module or "")
+        assert not any("migrate" in n or "import_existing" in n or "discover" in n
+                       for n in names), "установка панели обращается к импорту"
+
+    def test_installer_only_starts_and_installs_shipped_units(self, repo_root):
+        """Запускать и ставить можно только то, что есть в репозитории.
+
+        Запрет именно на «ставить» и «запускать», а не на упоминание вообще:
+        удалённый unit нужно ещё и снять с хоста, где он остался от прежней
+        установки, и строка `rm -f …enroll@.service` здесь законна.
+        """
+        text = self._installer(repo_root)
+        shipped = {p.name for p in (repo_root / "automation" / "secret-hub").iterdir()
+                   if p.suffix == ".service"}
+
+        def template_of(unit: str) -> str:
+            return unit.replace("<направление>", "")
+
+        for line in text.splitlines():
+            stripped = line.strip()
+            if "systemctl start site-factory" in stripped:
+                unit = stripped.split("systemctl start ")[1].split()[0]
+                assert template_of(unit) in shipped, f"советует незнакомый unit: {unit}"
+            if stripped.startswith("install ") and ".service" in stripped:
+                assert "$path" in stripped or "$unit" in stripped, \
+                    "список unit'ов перечислен вручную и разъедется с каталогом"
+
+    def test_installer_does_not_advise_retired_flows(self, repo_root):
+        text = self._installer(repo_root)
+        assert "ssh -N -L" not in text, "установщик советует снятый способ доступа"
+        assert "systemctl start site-factory-secret-hub-enroll" not in text, \
+            "установщик зовёт запускать удалённый unit"
+
+    def test_installer_removes_the_retired_enroll_unit(self, repo_root):
+        """Удалённый из репозитория unit должен исчезать и с хоста."""
+        text = self._installer(repo_root)
+        assert "rm -f /etc/systemd/system/site-factory-secret-hub-enroll@.service" in text
+
+    def test_installer_states_no_auto_import(self, repo_root):
+        text = self._installer(repo_root)
+        assert "НЕ импортируются автоматически" in text
+
+    @pytest.mark.parametrize("guard,what", [
+        ('if [ -e "$KEY_FILE" ]', "мастер-ключ не перезаписывается"),
+        ("if ! getent group", "группа создаётся только при отсутствии"),
+    ])
+    def test_installer_is_idempotent(self, repo_root, guard, what):
+        assert guard in self._installer(repo_root), f"не идемпотентно: {what}"
+
+    def test_launcher_guards_user_creation(self, repo_root):
+        text = self._launcher(repo_root)
+        assert 'if ! id "$PANEL_USER"' in text, \
+            "повторный запуск пытался бы создать существующего пользователя"
+
+    def test_nginx_include_is_idempotent(self, repo_root):
+        """Повторная установка не добавляет второй include."""
+        from factory.secret_hub import publish
+
+        assert "if include_present(text)" in (
+            repo_root / "factory" / "secret_hub" / "publish.py"
+        ).read_text(encoding="utf-8")
+        assert publish.include_present(f"x {publish.BEGIN} y") is True
+
+    def test_launcher_command_is_the_documented_one(self, repo_root):
+        """Путь в документации и фактический путь лончера совпадают."""
+        assert (repo_root / "var" / "install-secret-hub.sh").exists()
+        docs = (repo_root / "docs" / "SECRET_HUB.md").read_text(encoding="utf-8")
+        assert "var/install-secret-hub.sh" in docs
+
+    def test_panel_unit_runs_unprivileged(self, repo_root):
+        text = (repo_root / "automation" / "secret-hub"
+                / "site-factory-secret-panel.service").read_text(encoding="utf-8")
+        assert "User=sfpanel" in text
+        assert "User=root" not in text, "панель не должна работать от root"
+        assert "SupplementaryGroups=sfhub" in text

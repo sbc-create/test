@@ -430,6 +430,13 @@ class _Handler(socketserver.StreamRequestHandler):
 class _Server(socketserver.ThreadingUnixStreamServer):
     daemon_threads = True
     allow_reuse_address = True
+    # Очередь ожидающих подключений. Значение socketserver по умолчанию — 5, и
+    # при восьми одновременных клиентах ядро отвергает лишние с EAGAIN: клиент
+    # видит «ресурс временно недоступен» вместо ответа. Панель обращается к
+    # хабу в один поток, но `factory secrets status` из нескольких сессий и
+    # параллельные проверки упираются в этот предел — а обнаружился он на
+    # медленном раннере CI, а не здесь.
+    request_queue_size = 64
 
 
 def serve(config: HubConfig | None = None, *, master: MasterKey | None = None,
