@@ -63,6 +63,25 @@ install -d -m 0700 -o root -g root "$STORE_DIR/backups"
 install -d -m 0700 -o root -g root "$STORE_DIR/consumer-backups"
 install -d -m 0700 -o root -g root "$STORE_DIR/imported"
 
+# Родительские каталоги целей направлений. Хаб создаёт недостающие сам
+# (mkdir с parents=True), но заводить их при установке дешевле: так права
+# задаются один раз и явно, а не наследуются от того, кто создал первым.
+# Список берётся из реестра — дописывать сюда руками ничего не нужно.
+"$PY" - <<'PYEOF'
+import os
+from pathlib import Path
+from factory.secret_hub.registry import load
+
+for portfolio in load().portfolios:
+    for consumer in portfolio.consumers:
+        parent = consumer.directory.parent
+        if str(parent) in ("/", "") or parent.exists():
+            continue
+        parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+        os.chmod(parent, 0o700)
+        print(f"  создан каталог цели: {parent}")
+PYEOF
+
 if ! getent group "$GROUP" >/dev/null; then
   say "создаю группу управления $GROUP"
   groupadd --system "$GROUP"

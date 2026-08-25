@@ -356,8 +356,7 @@ class _Handler(http.server.BaseHTTPRequestHandler):
                 message = ("Проверено и сохранено. Применять пока некуда: "
                            "инфраструктура направления не передана.")
             else:
-                message = "Сохранено, но применить не удалось: " + _human(
-                    applied.get("reason") or applied.get("status") or "неизвестная причина")
+                message = "Сохранено, но применить не удалось: " + _apply_reason(applied)
                 response = {"ok": False, "message": message}
                 if request_id:
                     self.store.remember_response(request_id, json.dumps(response))
@@ -382,8 +381,7 @@ class _Handler(http.server.BaseHTTPRequestHandler):
                              "message": "Применять пока некуда: инфраструктура "
                                         "направления не передана."})
             return
-        self._json(200, {"ok": False, "message": _human(
-            result.get("reason") or result.get("status") or "не применено")})
+        self._json(200, {"ok": False, "message": _apply_reason(result)})
 
     # --- разговор с хабом -------------------------------------------------
     def _hub(self, payload: dict) -> dict:
@@ -433,6 +431,43 @@ def _subtitle(row: dict) -> str:
     return f"Сайтов в направлении: {len(consumers)}. Все используют один набор credentials."
 
 
+def _apply_reason(result: dict) -> str:
+    """Причина отказа применения — конкретная и безопасная.
+
+    «Неизвестная причина» недопустима: она была не отсутствием сведений, а
+    их потерей по дороге. Причина собирается из отчёта хаба — сперва общее
+    поле, затем разбор по потребителям. Значений секретов в этих полях нет и
+    быть не может: там статусы, пути и имена unit'ов.
+    """
+    reason = (result.get("reason") or "").strip()
+    if reason:
+        return _human(reason)
+
+    failed = [c for c in result.get("consumers") or []
+              if c.get("status") != "applied"]
+    if failed:
+        parts = []
+        for consumer in failed:
+            label = {"blocked": "цель недоступна",
+                     "failed": "запись не удалась"}.get(consumer.get("status"),
+                                                        str(consumer.get("status")))
+            detail = (consumer.get("detail") or "").strip()
+            parts.append(f"{consumer.get('consumer')}: {label}"
+                         + (f" — {detail}" if detail else ""))
+        return "; ".join(parts)
+
+    status = (result.get("status") or "").strip()
+    if status:
+        return _human(status)
+    error = (result.get("error") or "").strip()
+    if error:
+        return _human(error)
+    # Досюда доходить не должно. Если дошло — это дефект отчёта хаба, и
+    # сказать об этом честнее, чем написать «неизвестная причина».
+    return ("хаб не сообщил причину отказа — это дефект отчёта, "
+            "смотрите состояние направления")
+
+
 def _human(reason: str) -> str:
     """Переводит внутренние формулировки в понятные владельцу."""
     text = str(reason)
@@ -441,6 +476,9 @@ def _human(reason: str) -> str:
         "сеть до провайдера недоступна": "Не удалось связаться с CDNVideoHub. Попробуйте позже.",
         "не соответствует форме": "Publisher ID выглядит неправильно.",
         "не запущен": "Служба Secret Hub не отвечает. Нужен запуск на сервере.",
+        "цель недоступна": "Каталог или unit направления недоступен.",
+        "не найден в systemd": "Systemd-unit сайта не установлен на сервере.",
+        "не является каталогом": "На месте каталога направления лежит файл.",
     }
     for needle, human in table.items():
         if needle in text:

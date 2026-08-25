@@ -67,8 +67,17 @@ say "unit панели"
 install -m 0644 -o root -g root \
   "$REPO/automation/secret-hub/$PANEL_UNIT" "/etc/systemd/system/$PANEL_UNIT"
 systemctl daemon-reload
-systemctl enable --now "$PANEL_UNIT"
+systemctl enable "$PANEL_UNIT"
+# Именно restart, а не `enable --now`: для уже работающей службы `--now`
+# ничего не делает, и после обновления репозитория панель продолжала бы
+# крутить прежний код. Обновление кода без перезапуска — это обновление,
+# которого не произошло.
+systemctl restart "$PANEL_UNIT"
 sleep 1
+for _ in $(seq 1 15); do
+  systemctl is-active --quiet "$PANEL_UNIT" && break
+  sleep 1
+done
 if ! systemctl is-active --quiet "$PANEL_UNIT"; then
   echo "FATAL: $PANEL_UNIT не запустился. Журнал:" >&2
   journalctl -u "$PANEL_UNIT" --no-pager -n 30 >&2
