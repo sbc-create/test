@@ -121,3 +121,69 @@ class TestRestoreKeepsItsOnlySource:
             "он перестал попадать под исключение и уедет в архив вместе с шифртекстом"
         )
         assert "--exclude='secrets/'" in SCRIPT.read_text(encoding="utf-8")
+
+
+class TestEncryptedStoreIsNeverSilentlySkipped:
+    """REQ-BACKUP-STORE-READABLE: недоступное хранилище — отказ, а не тихий пропуск.
+
+    Хранилище Secret Hub намеренно 0700 root:root. Юнит какое-то время запускался
+    как User=claude, и добавленный сбор шифрованного хранилища превращался в
+    `rsync ... Permission denied` — бэкап падал целиком, подтверждённая копия
+    старела, а health начинал падать каждые 15 минут уже не по своей вине.
+
+    Соблазнительное «исправление» — исключить каталог, чтобы run стал зелёным.
+    Оно даёт архив, из которого нельзя восстановить consumer-файлы: те исключены
+    как открытые секреты и восстанавливаются только из этого хранилища. Поэтому
+    проверяется ровно обратное: каталог не в исключениях, а недоступность —
+    явный отказ с внятным текстом.
+    """
+
+    def test_store_is_not_in_any_exclude(self):
+        for pattern in script_excludes():
+            assert "site-factory-secret-hub" not in pattern, (
+                f"шифрованное хранилище исключено из бэкапа шаблоном {pattern!r}: "
+                "восстановление consumer-файлов станет невозможным"
+            )
+
+    def test_unreadable_store_fails_the_run(self, tmp_path: Path):
+        """Поведенческая проверка: нечитаемый каталог обязан завершать скрипт."""
+        store = tmp_path / "store"
+        store.mkdir()
+        store.chmod(0o000)
+        try:
+            snippet = (
+                'HUB_STORE_DIR="$1"\n'
+                'fail() { echo "BACKUP FAILED: $*" >&2; exit 1; }\n'
+                + _precheck_block()
+                + '\necho "REACHED_COLLECT"\n'
+            )
+            proc = subprocess.run(
+                ["bash", "-c", snippet, "bash", str(store)],
+                capture_output=True,
+                text=True,
+            )
+        finally:
+            store.chmod(0o700)
+
+        assert proc.returncode == 1, "недоступное хранилище не остановило прогон"
+        assert "REACHED_COLLECT" not in proc.stdout
+        assert "Secret Hub" in proc.stderr, f"текст отказа не называет причину: {proc.stderr!r}"
+
+    def test_missing_verification_record_fails_the_run(self):
+        """Прогон без записи о проверке не имеет права считаться успешным."""
+        text = SCRIPT.read_text(encoding="utf-8")
+        assert re.search(r'if \[ ! -s "\$RECORD" \]', text), (
+            "нет проверки, что запись о проверке создана и непуста"
+        )
+
+
+def _precheck_block() -> str:
+    """Берёт сам блок предпроверки из скрипта, а не его пересказ."""
+    text = SCRIPT.read_text(encoding="utf-8")
+    match = re.search(
+        r'^if \[ -e "\$HUB_STORE_DIR" \] && \[ ! -r "\$HUB_STORE_DIR" \]; then\n.*?^fi$',
+        text,
+        re.MULTILINE | re.DOTALL,
+    )
+    assert match, "блок предпроверки хранилища не найден в скрипте"
+    return match.group(0)

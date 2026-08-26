@@ -98,6 +98,15 @@ collect /srv/sites/             "srv-sites/"
 # the consumer files excluded above, and the backup would only look complete.
 # Ciphertext is safe to archive precisely because the master key is not: it lives
 # in /etc/site-factory/secrets/, which the `secrets/` exclude keeps out of here.
+#
+# The store is 0700 root:root by design, so an unprivileged run cannot read it.
+# That must be said plainly rather than surfaced as a bare rsync EACCES: the
+# operator needs to know which privilege is missing, and skipping the directory
+# to make the run "succeed" would produce an archive that cannot restore the
+# consumers. Fail here, loudly, and leave the previous verified backup in place.
+if [ -e "$HUB_STORE_DIR" ] && [ ! -r "$HUB_STORE_DIR" ]; then
+  fail "нет доступа к $HUB_STORE_DIR (запуск от $(id -un), каталог $(stat -c '%a %U:%G' "$HUB_STORE_DIR" 2>/dev/null || echo '0700 root:root')). Шифрованное хранилище Secret Hub обязано входить в бэкап: без него восстановление consumer-файлов невозможно. Юнит должен запускаться с достаточными правами; исключать этот каталог нельзя."
+fi
 collect "$HUB_STORE_DIR/"       "secret-hub-store/"
 
 mkdir -p "$STAGE/host-facts"
@@ -174,6 +183,16 @@ json.dump({
 }, open(record, "w"), ensure_ascii=False, indent=2)
 PYEOF
 chmod 0640 "$RECORD"
+
+# A run that produced no verification record is a failed run, whatever the exit
+# status of the steps above says. `check_backups` in site-factory-health.sh dates
+# the last good backup by these files alone, so a missing or truncated record
+# silently ages the host out of its SLA while the unit reports success.
+if [ ! -s "$RECORD" ]; then
+  fail "запись о проверке $RECORD не создана или пуста — бэкап не считается подтверждённым"
+fi
+python3 -c 'import json,sys; json.load(open(sys.argv[1]))' "$RECORD" \
+  || fail "запись о проверке $RECORD не разбирается как JSON"
 
 # ---------------------------------------------------------------------------
 # 5. Retention. Prunes only fully verified triples, never below the floor.
