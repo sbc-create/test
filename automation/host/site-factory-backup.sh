@@ -15,6 +15,16 @@ REPO="${FACTORY_REPO:-/srv/site-factory/repo}"
 BACKUP_DIR="${SITE_FACTORY_BACKUP_DIR:-/srv/backups}"
 LOG_DIR="${SITE_FACTORY_LOG_DIR:-/var/log/site-factory}"
 KEEP="${SITE_FACTORY_BACKUP_KEEP:-14}"
+# Where the encrypted Secret Hub store lives. The registry is the source of truth;
+# the literal is only the fallback for a host without one.
+HUB_STORE_DIR="${SECRET_HUB_STORE_DIR:-$(
+  python3 -c 'import json,sys
+try:
+    print(json.load(open(sys.argv[1], encoding="utf-8")).get("store_dir", ""))
+except Exception:
+    pass' "$REPO/config/secret-hub.json" 2>/dev/null
+)}"
+HUB_STORE_DIR="${HUB_STORE_DIR:-/var/lib/site-factory-secret-hub}"
 # Never prune below this many verified backups, whatever the retention says.
 KEEP_FLOOR=3
 
@@ -40,6 +50,33 @@ RECORD="$BACKUP_DIR/host-$STAMP.verified.json"
 STAGE="$WORK/stage"
 mkdir -p "$STAGE"
 
+# Plaintext consumer credentials are excluded by NAME taken from the Secret Hub
+# registry, not by a pattern that happens to match today. `secrets/` covered the
+# Lords consumers only because their directory is called that; the Yami consumer
+# lives in `runtime/cdnvideohub/` and matched nothing, so rsync walked into a
+# root-only file, got EACCES, and failed the whole backup — which then aged out
+# the health check. Deriving the list from the registry keeps a new consumer from
+# reopening the same hole silently; tests/unit/test_backup_excludes_consumer_credentials.py
+# fails if any registry file name is not covered here.
+CONSUMER_EXCLUDES=()
+while IFS= read -r name; do
+  [ -n "$name" ] && CONSUMER_EXCLUDES+=( "--exclude=$name" )
+done < <(python3 - "$REPO/config/secret-hub.json" <<'PYEOF'
+import json, sys
+try:
+    cfg = json.load(open(sys.argv[1], encoding="utf-8"))
+except Exception:
+    sys.exit(0)          # no registry -> no derived excludes, static ones still apply
+names = set()
+for portfolio in cfg.get("portfolios", []):
+    for consumer in portfolio.get("consumers", []):
+        files = consumer.get("files", {})
+        names.update(files.values() if isinstance(files, dict) else files)
+for name in sorted(n for n in names if n and "/" not in n):
+    print(name)
+PYEOF
+)
+
 collect() {
   local src="$1" dest="$2"
   [ -e "$src" ] || return 0
@@ -49,6 +86,7 @@ collect() {
         --exclude='secrets/' --exclude='*staging-auth*' --exclude='node_modules/' \
         --exclude='.venv/' --exclude='__pycache__/' \
         --exclude='*.password' --exclude='db/' \
+        "${CONSUMER_EXCLUDES[@]}" \
         "$src" "$STAGE/$dest" || fail "rsync $src"
 }
 
@@ -56,6 +94,11 @@ collect "$REPO/var/"            "factory-var/"
 collect /etc/site-factory/      "etc-site-factory/"
 collect /etc/nginx/sites-available/ "etc-nginx-sites/"
 collect /srv/sites/             "srv-sites/"
+# The encrypted Secret Hub store. Without it a restore has no way to regenerate
+# the consumer files excluded above, and the backup would only look complete.
+# Ciphertext is safe to archive precisely because the master key is not: it lives
+# in /etc/site-factory/secrets/, which the `secrets/` exclude keeps out of here.
+collect "$HUB_STORE_DIR/"       "secret-hub-store/"
 
 mkdir -p "$STAGE/host-facts"
 {
