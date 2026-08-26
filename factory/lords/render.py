@@ -24,6 +24,7 @@ import math
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from factory.analytics import snippet as analytics_snippet
 from factory.lords import content_types as ct
 from factory.lords import fixtures as fx
 from factory.lords import plan as plan_mod
@@ -229,6 +230,14 @@ def _document(ctx: dict, meta: Meta, body: str) -> str:
     if meta.poster:
         head.append(f'<meta property="og:image" content="{escape(meta.poster)}">')
     head.append('<meta name="lords-data-source" content="fixture/test">')
+    # Счётчик встраивается ровно здесь и только через snippet.analytics_script_tag:
+    # тот возвращает пустую строку, если сбор невозможен (нет counter_id, аналитика
+    # выключена, окружение не production, пуст allowed_hosts). Пустая строка означает
+    # «тега нет», а не «тег есть, но молчит», поэтому отсутствие настройки не может
+    # превратиться в счётчик соседнего домена.
+    analytics_script = ctx.get("analytics_script") or ""
+    if analytics_script:
+        head.append(analytics_script)
     head.append('<link rel="stylesheet" href="/assets/site.css">')
     head.append(
         '<link rel="icon" href="data:image/svg+xml,'
@@ -1095,6 +1104,15 @@ def _context(package: dict, profile: dict, site_plan, player_state) -> dict:
         "indexing_enabled": bool(package.get("seo_indexing_enabled", False)),
         "canonical_base": f"https://{domain}" if domain else "",
         "canonical_state": CANONICAL_SELF if domain else CANONICAL_ABSENT,
+        # allowed_hosts по умолчанию — собственный домен пакета и ничей больше:
+        # три домена Lords обслуживаются одним рендерером, и общий список сразу
+        # означал бы, что счётчик одного сайта уезжает на два соседних.
+        "analytics_script": analytics_snippet.analytics_script_tag(
+            counter_id=(package.get("analytics") or {}).get("counter_id"),
+            allowed_hosts=list((package.get("analytics") or {}).get("allowed_hosts") or ([domain] if domain else [])),
+            environment=str(package.get("environment") or "staging"),
+            enabled=bool((package.get("analytics") or {}).get("enabled")),
+        ),
         "nav": [("home", "/")] + nav,
         "per_page": int(((package.get("seo") or {}).get("items_per_page")) or 24),
         "home_items": 12,
