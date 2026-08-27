@@ -118,9 +118,20 @@ mkdir -p "$STAGE/host-facts"
 } > "$STAGE/host-facts/inventory.txt" 2>/dev/null
 
 # git bundle: the repository history, recoverable without GitHub.
+#
+# `safe.directory` объявляется явно, а не наследуется из чьего-то ~/.gitconfig.
+# Юнит работает от root, а рабочее дерево принадлежит claude, и git отказывается
+# трогать чужой репозиторий: `detected dubious ownership`. Ошибка приходит уже
+# после того, как всё собрано, и выглядит как «BACKUP FAILED: git bundle» —
+# причина в ней не названа вовсе. Зависеть здесь от HOME тем более нельзя: под
+# ProtectHome и systemd-окружением он не тот, что в интерактивной сессии.
+# Доверие выдаётся ровно одному каталогу — тому, который и так читается ниже.
+GIT_SAFE=(-c "safe.directory=$REPO")
 if [ -d "$REPO/.git" ]; then
-  git -C "$REPO" bundle create "$WORK/repo.bundle" --all >/dev/null 2>&1 || fail "git bundle"
-  git -C "$REPO" bundle verify "$WORK/repo.bundle" >/dev/null 2>&1 || fail "git bundle не проходит проверку"
+  git "${GIT_SAFE[@]}" -C "$REPO" bundle create "$WORK/repo.bundle" --all >/dev/null 2>&1 \
+    || fail "git bundle: не удалось собрать историю репозитория $REPO"
+  git "${GIT_SAFE[@]}" -C "$REPO" bundle verify "$WORK/repo.bundle" >/dev/null 2>&1 \
+    || fail "git bundle не проходит проверку"
   # Replace only after the new bundle verified, and keep the previous one:
   # a failed run must never leave the host without a recoverable history.
   [ -f "$BUNDLE" ] && mv -f "$BUNDLE" "$BUNDLE_PREV"
