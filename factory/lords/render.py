@@ -916,11 +916,23 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
         else "CDNVideoHub — живой каталог"
     )
 
+    def _join(values) -> str:
+        """Список имён в строку. Длинный состав режется: страница не афиша."""
+        names = [str(v).strip() for v in (values or []) if str(v).strip()]
+        if len(names) > 8:
+            return ", ".join(names[:8]) + f" и ещё {len(names) - 8}"
+        return ", ".join(names)
+
     facts = [
         ("Оригинальное название", title.original_name),
         ("Тип", TYPE_LABELS.get(title.content_type, title.content_type)),
         ("Год", str(title.year) if title.year else ""),
+        ("Дата выхода", getattr(title, "premiere_date", "") or ""),
         ("Страна", title.country),
+        ("Режиссёр", _join(getattr(title, "directors", ()))),
+        ("В ролях", _join(getattr(title, "actors", ()))),
+        ("Озвучки", _join(getattr(title, "voices", ()))),
+        ("Сезонов", str(getattr(title, "seasons_count", 0) or "") ),
         # У фикстуры это настоящие жанры. У живого каталога — теги источника:
         # они описывают запись, но жанрами не являются, и называть их жанрами
         # значило бы написать на странице фильма «Жанры: NR».

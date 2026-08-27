@@ -21,6 +21,9 @@ PYTHON="${FACTORY_PYTHON:-${REPO}/.venv/bin/python}"
 SITES=(lords-01 lords-02 lords-03)
 STATE_DIR="${LORDS_REFRESH_STATE:-/var/lib/lords-content-refresh}"
 KEEP_RELEASES="${LORDS_KEEP_RELEASES:-4}"
+# Сколько записей дополняется из detail за прогон. Полный каталог за раз —
+# это тысячи запросов подряд; покрытие набирается прогонами и кэшируется.
+ENRICH_BUDGET="${LORDS_ENRICH_BUDGET:-300}"
 
 log()  { printf '[lords-refresh] %s\n' "$*"; }
 fail() { printf '[lords-refresh] ОТКАЗ: %s\n' "$*" >&2; exit 1; }
@@ -52,13 +55,35 @@ for site in "${SITES[@]}"; do
 
   # Сборка в сторону. Пустой каталог останавливает сборку внутри build_live_site,
   # поэтому пустая витрина сюда не доедет.
-  if ! "$PYTHON" - "$site" "$staging" <<'PYEOF'
+  if ! "$PYTHON" - "$site" "$staging" "$ENRICH_BUDGET" <<'PYEOF'
+import os
 import sys
 from pathlib import Path
+
 from factory.lords import live_site
-site_id, out = sys.argv[1], Path(sys.argv[2])
-result = live_site.build_live_site(site_id, output=out)
-print(result.report["catalog"]["titles"])
+
+site_id, out, budget = sys.argv[1], Path(sys.argv[2]), int(sys.argv[3])
+
+# Токен берётся из systemd credential — тем же путём, что и Publisher ID, и
+# наружу не печатается. Без него обогащение просто не выполняется: страницы
+# останутся беднее, но сайт соберётся и останется рабочим.
+token = None
+directory = os.environ.get("CREDENTIALS_DIRECTORY", "").strip()
+if directory:
+    name = os.environ.get("CDNVIDEOHUB_API_TOKEN_CREDENTIAL", "cdnvideohub_api_token")
+    try:
+        token = (Path(directory) / name).read_text(encoding="utf-8").strip() or None
+    except OSError:
+        token = None
+
+result = live_site.build_live_site(
+    site_id, output=out, enrich_budget=budget, credentials_token=token)
+report = result.report
+coverage = report.get("coverage") or {}
+print(report["catalog"]["titles"])
+print("описаний %s, стран %s, состава %s" % (
+    coverage.get("with_description"), coverage.get("with_country"),
+    coverage.get("with_actors")), file=sys.stderr)
 PYEOF
   then
     fail "${site}: сборка не выполнена"
