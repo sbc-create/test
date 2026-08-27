@@ -76,6 +76,24 @@ PYEOF
     continue
   fi
 
+  # --- PLAYER_FREEZE_GATE -------------------------------------------------
+  # Плеер обязан пережить обновление каталога. Однажды он его не пережил:
+  # Publisher ID перестал находиться, и КАЖДАЯ страница тайтла тихо заменила
+  # плеер нейтральной фразой. Сайт при этом отвечал двумястами, карточки были
+  # на месте, приёмка по содержимому проходила — а видео не было ни на одном
+  # из трёх доменов. Проверка по числу карточек такую регрессию не видит.
+  new_players="$(grep -rl "<video-player" "${staging}/title" 2>/dev/null | wc -l)"
+  old_players=0
+  [ -n "$current" ] && old_players="$(grep -rl "<video-player" "${current}/site/title" 2>/dev/null | wc -l)"
+  # Источник вправе убрать видео у части тайтлов, поэтому сравнение с допуском;
+  # обвал в разы или в ноль допуском не объясняется.
+  floor=$(( old_players * 90 / 100 ))
+  if [ "$old_players" -gt 0 ] && [ "$new_players" -lt "$floor" ]; then
+    rm -rf "$staging"; trap - EXIT
+    fail "${site}: плееров было ${old_players}, стало ${new_players} — обновление отклонено, витрина остаётся на прежнем релизе"
+  fi
+  log "${site}: плееров ${new_players} (было ${old_players})"
+
   if [ ! -d "$target" ]; then
     log "${site}: раскладываю релиз ${release}"
     mkdir -p "${target}"
@@ -99,6 +117,13 @@ PYEOF
     sleep 2
     body="$(curl -sS --max-time 10 "http://127.0.0.1:${port}/" 2>/dev/null || true)"
     if [ "${#body}" -gt 4000 ] && printf '%s' "$body" | grep -q 'class="card'; then
+      # Главная карточками отвечает — проверяем ещё и страницу тайтла: именно
+      # там живёт плеер, и именно его теряли прошлые обновления.
+      slug="$(printf '%s' "$body" | grep -o 'href="/title/[^"]*"' | head -1 | sed 's|href="||;s|"||')"
+      if [ -n "$slug" ] && [ "$new_players" -gt 0 ]; then
+        tp="$(curl -sS --max-time 10 "http://127.0.0.1:${port}${slug}" 2>/dev/null || true)"
+        printf '%s' "$tp" | grep -q "<video-player" || continue
+      fi
       ok=1; break
     fi
   done
