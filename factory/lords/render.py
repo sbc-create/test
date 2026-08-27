@@ -324,12 +324,24 @@ def _card(title: fx.Title) -> str:
         f'<span class="card__seasons">{title.episode_count} сер.</span>'
         if title.episodic else ""
     )
-    meta = f"{TYPE_LABELS.get(title.content_type, title.content_type)} · {title.year} · {title.country}"
+    # Источник списка не отдаёт страну, а год бывает неизвестен. Склейка через
+    # разделитель без проверки давала «Фильм · 2003 · » и «Фильм ·  · » —
+    # разделитель повисал там, где значения просто нет.
+    meta = " · ".join(
+        str(part) for part in (
+            TYPE_LABELS.get(title.content_type, title.content_type),
+            title.year or "",
+            title.country,
+        ) if part
+    )
+    # Подпись говорит, откуда карточка, а не повторяет слово «fixture» над
+    # живыми данными: на публичных доменах это была прямая неправда.
+    badge = '<span class="card__badge">каталог</span>' if title.fixture else ""
     return (
         f'<article class="card" data-slug="{escape(title.slug)}">'
         f'<a class="card__poster" href="{escape(title.path)}" tabindex="-1" aria-hidden="true">'
-        f'<img src="{escape(title.poster_path)}" alt="" loading="lazy" width="400" height="600">'
-        '<span class="card__badge">fixture</span>'
+        f'<img src="{escape(title.poster_src)}" alt="" loading="lazy" width="400" height="600">'
+        f"{badge}"
         f"{seasons}</a>"
         '<div class="card__body">'
         f'<a class="card__title" href="{escape(title.path)}">{escape(title.name)}</a>'
@@ -415,14 +427,28 @@ def _facets(catalog: fx.Catalog, kinds, *, show_type: bool, row: bool = False) -
     )
 
 
+#: Выше этого размера полный набор в разметку не встраивается.
+#: Причина в цене: на стенде в 62 тайтла набор стоил килобайты, на живом
+#: каталоге в 4800 — полтора мегабайта на КАЖДОЙ странице списка, при том что
+#: карточек на ней по-прежнему 24. Страница списка начинала весить как весь
+#: каталог, и первым это замечал посетитель с телефона.
+#: Фильтрация при этом не пропадает: фасеты жанров, годов и стран — обычные
+#: ссылки на серверные разделы, а клиентский сценарий сам отступает, когда
+#: `#listing-data` в разметке нет.
+DATASET_MAX_TITLES = 200
+
+
 def _dataset(titles) -> str:
-    """Полный набор списка для клиентской фильтрации.
+    """Набор списка для клиентской фильтрации — пока он того стоит.
 
     Пагинация на сервере отдаёт одну страницу, и фильтровать её содержимое было
     бы обманом: пользователь увидел бы «ничего не найдено» там, где запись есть
-    на третьей странице. Поэтому список фильтруется по полному набору, а
-    серверная разбивка остаётся тем, что видно без JavaScript.
+    на третьей странице. Поэтому список фильтруется по полному набору — но
+    только пока этот набор дёшево отдать целиком. Дальше фильтрация переходит
+    к серверным разделам, а не превращается в мегабайт на каждой странице.
     """
+    if len(titles) > DATASET_MAX_TITLES:
+        return ""
     payload = [
         {
             "slug": t.slug, "name": t.name, "type": t.content_type,
@@ -430,7 +456,7 @@ def _dataset(titles) -> str:
             "year": t.year, "country": t.country, "countrySlug": t.country_slug,
             "genres": list(t.genre_slugs), "genreLabels": list(t.genres),
             "runtime": t.runtime_min, "episodes": t.episode_count,
-            "path": t.path, "poster": t.poster_path,
+            "path": t.path, "poster": t.poster_src,
         }
         for t in titles
     ]
@@ -766,7 +792,7 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
 
     head = (
         f'<div class="title-head"><div class="title-head__poster">'
-        f'<img src="{escape(title.poster_path)}" alt="Заглушка постера: {escape(name)}" '
+        f'<img src="{escape(title.poster_src)}" alt="Постер: {escape(name)}" '
         'width="400" height="600"></div><div>'
         f"<h1>{escape(h1)}</h1>"
         f'<p class="lede">{escape(title.summary)}</p>'
@@ -809,7 +835,7 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
     )
     meta = Meta(
         title=page_title, description=description, h1=h1, page_type="title",
-        indexable=indexable, breadcrumbs=trail, poster=title.poster_path,
+        indexable=indexable, breadcrumbs=trail, poster=title.poster_src,
         jsonld=(entity,),
     )
     return _page(ctx, title.path, meta, body)
@@ -930,7 +956,7 @@ APP_JS = """/* Lords — поведение интерфейса. Ни одно�
     return '<article class="card" data-slug="' + item.slug + '">'
       + '<a class="card__poster" href="' + item.path + '" tabindex="-1" aria-hidden="true">'
       + '<img src="' + item.poster + '" alt="" loading="lazy" width="400" height="600">'
-      + '<span class="card__badge">fixture</span>' + seasons + "</a>"
+      + seasons + "</a>"
       + '<div class="card__body"><a class="card__title" href="' + item.path + '">'
       + item.name + "</a>"
       + '<span class="card__meta">' + item.typeLabel + " · " + item.year + " · " + item.country + "</span>"
@@ -1304,8 +1330,12 @@ def render_site(
     add(Page(path="/assets/app.js", body=APP_JS,
              content_type="text/javascript; charset=utf-8"))
     for title in pool:
-        add(Page(path=title.poster_path, body=poster_svg(title),
-                 content_type="image/svg+xml; charset=utf-8"))
+        # Заглушка нужна лишь тем, у кого нет собственного постера. Раньше
+        # страница создавалась каждому, и на живом каталоге это давало почти
+        # пять тысяч ненужных SVG рядом с настоящими картинками источника.
+        if title.poster_src == title.poster_path:
+            add(Page(path=title.poster_path, body=poster_svg(title),
+                     content_type="image/svg+xml; charset=utf-8"))
 
     site.report = {
         "site_id": ctx["site_id"],
