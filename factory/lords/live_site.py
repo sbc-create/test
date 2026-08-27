@@ -22,6 +22,7 @@ import yaml
 
 from factory.errors import BlockedInput
 from factory.lords import live_catalog
+from factory.lords import player as player_mod
 from factory.lords import render as render_mod
 from factory.lords import serve as serve_mod
 from factory.paths import PATHS
@@ -57,6 +58,40 @@ def load_live_items(site_id: str, *, root: Path | None = None) -> list[dict]:
     return list(items)
 
 
+
+def publisher_id_for(site_id: str) -> str | None:
+    """Publisher ID направления из реестра Secret Hub.
+
+    Значение публичное по назначению: плеер получает его атрибутом элемента, и
+    оно уходит в разметку в момент ответа. Секретен рядом лежащий токен — его
+    здесь не читают вовсе. Отсутствие файла не должно ронять сборку: каталог,
+    навигация и описания от плеера не зависят, а страница тайтла в этом случае
+    покажет нейтральное состояние.
+    """
+    registry = PATHS.root / "config" / "secret-hub.json"
+    try:
+        config = json.loads(registry.read_text(encoding="utf-8"))
+    except OSError:
+        return None
+    for portfolio in config.get("portfolios", []):
+        for consumer in portfolio.get("consumers", []):
+            if consumer.get("id") != site_id:
+                continue
+            files = consumer.get("files") or {}
+            name = files.get("publisher_id") if isinstance(files, dict) else None
+            directory = consumer.get("directory")
+            if not name or not directory:
+                return None
+            try:
+                value = (Path(directory) / name).read_text(encoding="utf-8").strip()
+            except OSError:
+                return None
+            # Нечисловое значение плеер превращает в NaN и молча не стартует,
+            # поэтому непригодное лучше считать отсутствующим.
+            return value if player_mod.is_valid_publisher_id(value) else None
+    return None
+
+
 @dataclass
 class LiveSiteResult:
     site_id: str
@@ -71,13 +106,16 @@ def build_live_site(
     output: Path | None = None,
     items: list[dict] | None = None,
     root: Path | None = None,
+    publisher_id: str | None = None,
 ) -> LiveSiteResult:
     """Собирает сайт одного пакета Lords из живого каталога."""
     package = yaml.safe_load(PATHS.site_package(site_id).read_text(encoding="utf-8"))
     entries = items if items is not None else load_live_items(site_id, root=root)
+    publisher = publisher_id if publisher_id is not None else publisher_id_for(site_id)
 
     catalog = live_catalog.catalog_from_live(entries)
-    site = render_mod.render_site(package, catalog=catalog, environ={})
+    site = render_mod.render_site(
+        package, catalog=catalog, environ={}, publisher_id=publisher)
 
     directory = Path(output) if output else PATHS.artifact_dir("lords", "live", site_id)
     directory.mkdir(parents=True, exist_ok=True)
@@ -104,6 +142,13 @@ def build_live_site(
         if page is not None:
             listing[path] = len(page.body)
     report["listing_bytes"] = listing
+    playable = sum(1 for t in catalog.titles if (t.playback or {}).get("title_id"))
+    report["player"] = {
+        # Значение не пишется: в отчёт идёт только факт его наличия.
+        "publisher_id_present": bool(publisher),
+        "titles_with_playback": playable,
+        "titles_total": len(catalog.titles),
+    }
     report["coverage"] = {
         "with_poster": sum(1 for t in catalog.titles if t.poster_url),
         "with_kinopoisk": sum(1 for t in catalog.titles if t.kinopoisk_rating is not None),
