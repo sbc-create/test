@@ -153,6 +153,12 @@ class LiveTitle:
     kinopoisk_rating: float | None = None
     imdb_rating: float | None = None
     licensed: bool | None = None
+    #: Пришло из detail. Списочный ответ этого не даёт.
+    directors: tuple[str, ...] = ()
+    actors: tuple[str, ...] = ()
+    premiere_date: str | None = None
+    seasons_count: int = 0
+    voices: tuple[str, ...] = ()
     created_at: str | None = None
     updated_at: str | None = None
     playback: dict | None = None
@@ -241,31 +247,57 @@ def title_from_item(entry: dict) -> LiveTitle | None:
     age_rating, format_type, tags = classify_tags(entry.get("tags"))
     year = entry.get("year")
 
+    # Ниже — поля, которых в списочном ответе нет: они появляются после
+    # обогащения из detail. Пока обогащение не дошло до записи, поля пустые, и
+    # разметка их скрывает — это честнее, чем «неизвестно» в каждой строке.
+    countries = [c for c in (entry.get("countries") or []) if isinstance(c, str) and c.strip()]
+    detail_genres = [g for g in (entry.get("genres") or []) if isinstance(g, str) and g.strip()]
+    crew = entry.get("crew") or []
+    directors = tuple(
+        str(p.get("person_name")).strip() for p in crew
+        if isinstance(p, dict) and p.get("role") == "director" and p.get("person_name")
+    )
+    actors = tuple(
+        str(p.get("person_name")).strip() for p in crew
+        if isinstance(p, dict) and p.get("role") == "actor" and p.get("person_name")
+    )
+    duration = entry.get("duration")
+    voices = tuple(
+        str(v).strip() for v in (entry.get("available_voices") or []) if str(v).strip()
+    )
+
     return LiveTitle(
         slug=slug,
         name=name,
         # Списочный ответ не содержит оригинального названия, страны, студии,
         # хронометража, возрастного ограничения и описания. Пустая строка здесь
         # — это «источник не сказал», а не «неизвестно».
-        original_name="",
+        original_name=str(entry.get("original_name") or "").strip(),
         # Пометка формы точнее поля `type`: мультфильмы и аниме приходят как
         # movie/tv и отличаются только тегом.
         content_type=format_type or _content_type(entry.get("type"), entry.get("is_series")),
         year=int(year) if isinstance(year, int) else 0,
-        country_slug="",
-        country="",
-        genre_slugs=tuple(slugify(t) or "tag" for t in tags),
-        genres=tuple(tags),
+        country_slug=slugify(countries[0]) if countries else "",
+        country=", ".join(countries),
+        # Настоящие жанры из detail вытесняют теги: теги описывают запись,
+        # но жанрами не являются — среди них лежат и возрастные отметки.
+        genre_slugs=tuple(slugify(g) or "tag" for g in (detail_genres or tags)),
+        genres=tuple(detail_genres or tags),
         studio="",
-        runtime_min=0,
+        runtime_min=int(duration) if isinstance(duration, int) and duration > 0 else 0,
         age_rating=age_rating,
-        summary="",
+        summary=str(entry.get("description") or "").strip(),
         seasons=(),
         external_id=external_id,
         poster_url=(entry.get("poster_url") or None),
         kinopoisk_rating=_rating(entry.get("kinopoisk_rating")),
         imdb_rating=_rating(entry.get("imdb_rating")),
         licensed=entry.get("licensed") if isinstance(entry.get("licensed"), bool) else None,
+        directors=directors,
+        actors=actors,
+        premiere_date=str(entry.get("premiere_date") or "").strip() or None,
+        seasons_count=int(entry.get("seasons_count") or 0),
+        voices=voices,
         created_at=entry.get("created_at"),
         updated_at=entry.get("updated_at"),
         playback=entry.get("playback"),

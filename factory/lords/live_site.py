@@ -22,7 +22,7 @@ from pathlib import Path
 import yaml
 
 from factory.errors import BlockedInput
-from factory.lords import live_catalog
+from factory.lords import content_live, detail_enrichment, live_catalog
 from factory.lords import player as player_mod
 from factory.lords import render as render_mod
 from factory.lords import serve as serve_mod
@@ -140,11 +140,31 @@ def build_live_site(
     items: list[dict] | None = None,
     root: Path | None = None,
     publisher_id: str | None = None,
+    enrich_budget: int = 0,
+    credentials_token: str | None = None,
 ) -> LiveSiteResult:
     """Собирает сайт одного пакета Lords из живого каталога."""
     package = yaml.safe_load(PATHS.site_package(site_id).read_text(encoding="utf-8"))
     entries = items if items is not None else load_live_items(site_id, root=root)
     publisher = publisher_id if publisher_id is not None else publisher_id_for(site_id)
+
+    # Обогащение до сборки: описания, страны, жанры, состав и хронометраж
+    # берутся из detail и кладутся в кэш. Бюджет ограничен — покрытие набирается
+    # прогонами, а не одним залпом в четыре тысячи запросов.
+    enrichment = None
+    if enrich_budget and credentials_token:
+        try:
+            contract = content_live.load_live_contract()
+            fetcher = content_live.Fetcher(contract=contract, token=credentials_token)
+            cache = detail_enrichment.DetailCache(
+                detail_enrichment.cache_dir(PATHS.root / "var"))
+            entries, enrichment = detail_enrichment.enrich_items(
+                entries, fetcher=fetcher, contract=contract,
+                cache=cache, budget=enrich_budget)
+        except Exception as error:  # noqa: BLE001
+            # Обогащение — улучшение, а не условие сборки: без него страницы
+            # беднее, но сайт остаётся прежним и рабочим.
+            enrichment = {"error": repr(error)[:200]}
 
     catalog = live_catalog.catalog_from_live(entries)
     site = render_mod.render_site(
@@ -182,11 +202,17 @@ def build_live_site(
         "titles_with_playback": playable,
         "titles_total": len(catalog.titles),
     }
+    report["enrichment"] = (
+        enrichment.as_dict() if hasattr(enrichment, "as_dict") else enrichment
+    )
     report["coverage"] = {
         "with_poster": sum(1 for t in catalog.titles if t.poster_url),
         "with_kinopoisk": sum(1 for t in catalog.titles if t.kinopoisk_rating is not None),
         "with_imdb": sum(1 for t in catalog.titles if t.imdb_rating is not None),
         "with_genres": sum(1 for t in catalog.titles if t.genres),
+        "with_description": sum(1 for t in catalog.titles if t.summary),
+        "with_country": sum(1 for t in catalog.titles if t.country),
+        "with_actors": sum(1 for t in catalog.titles if getattr(t, "actors", ())),
     }
 
     # Отчёт лежит РЯДОМ с каталогом документов, а не внутри него. Внутри он
