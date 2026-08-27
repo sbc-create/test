@@ -154,7 +154,7 @@ def export(site: RenderedSite, directory) -> dict:
         if path.endswith("/"):
             target = root / path.strip("/") / "index.html"
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(page.body, encoding="utf-8")
+        target.write_bytes(page.payload)
         written.append(str(target.relative_to(root)))
     if site.not_found is not None:
         (root / "404.html").write_text(site.not_found.body, encoding="utf-8")
