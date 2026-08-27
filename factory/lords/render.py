@@ -363,7 +363,7 @@ def _card(title: fx.Title) -> str:
 def _grid(titles) -> str:
     if not titles:
         return (
-            '<p class="empty">По выбранным условиям в тестовом каталоге ничего нет. '
+            '<p class="empty">По выбранным условиям в каталоге ничего нет. '
             "Стенд показывает пустой результат честно и не подставляет чужие записи.</p>"
         )
     return '<div class="grid" id="grid">' + "".join(_card(t) for t in titles) + "</div>"
@@ -644,12 +644,21 @@ def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
         elif block == "collection_cards" and ctx["show_collection_cards"]:
             parts.append(_collection_cards(ctx, catalog))
         elif block == "editor_note":
+            # Оговорка про тестовый каталог верна только для стенда. На живом
+            # каталоге она сообщала посетителю, что за записями не стоят
+            # реальные произведения, — под настоящими записями провайдера.
+            note = (
+                "Подборки на стенде собраны по формальным признакам тестового "
+                "каталога — длительности, числу сезонов, названию. Редакционного "
+                "отбора здесь нет и быть не может: за записями не стоят реальные "
+                "произведения."
+                if ctx.get("fixture_catalog") else
+                "Подборки собраны по формальным признакам каталога — году, типу, "
+                "длительности и числу сезонов. Состав обновляется вместе с каталогом."
+            )
             parts.append(
                 '<section class="section"><h2>Как собран список</h2>'
-                '<p class="lede">Подборки на стенде собраны по формальным признакам '
-                "тестового каталога — длительности, числу сезонов, названию. "
-                "Редакционного отбора здесь нет и быть не может: за записями не "
-                "стоят реальные произведения.</p></section>"
+                f'<p class="lede">{escape(note)}</p></section>'
             )
 
     jsonld = ({
@@ -946,7 +955,7 @@ def _search_page(ctx, catalog: fx.Catalog, kinds) -> Page:
         'autocomplete="off">'
         "<button type=\"submit\">Найти</button></form>"
         '<p class="count" id="search-count">Введите название: поиск идёт по '
-        f'{len(items)} записям тестового каталога.</p>'
+        f'{len(items)} записям каталога.</p>'
         '<div class="grid" id="grid"></div>'
         + _dataset(items)
     )
@@ -1082,7 +1091,7 @@ APP_JS = """/* Lords — поведение интерфейса. Ни одно�
     if (counter) {
       counter.textContent = query
         ? "Найдено записей: " + list.length + "."
-        : "Введите название: поиск идёт по " + items.length + " записям тестового каталога.";
+        : "Введите название: поиск идёт по " + items.length + " записям каталога.";
     }
     if (query === "" && counter) { grid.innerHTML = ""; return; }
 
@@ -1091,7 +1100,7 @@ APP_JS = """/* Lords — поведение интерфейса. Ни одно�
     var slice = list.slice((page - 1) * PER_PAGE, page * PER_PAGE);
     grid.innerHTML = slice.length
       ? slice.map(card).join("")
-      : '<p class="empty">По выбранным условиям в тестовом каталоге ничего нет.</p>';
+      : '<p class="empty">По выбранным условиям в каталоге ничего нет.</p>';
     grid.setAttribute("data-total", String(list.length));
     grid.setAttribute("data-page", String(page));
     renderPager(total);
@@ -1364,7 +1373,7 @@ def render_site(
             for page in _listing_pages(
                 ctx, base=f"/genres/{slug}/", titles=picks, catalog=catalog, kinds=kinds,
                 section_title=f"{label}", h1=f"Жанр: {label}",
-                description=f"Произведения жанра «{label}» в тестовом каталоге.",
+                description=f"Произведения жанра «{label}» в каталоге.",
                 intro="", indexable=entry.indexable,
                 trail=(("Главная", "/"), ("Жанры", "/genres/"), (label, "")),
             ):
@@ -1377,7 +1386,7 @@ def render_site(
             for page in _listing_pages(
                 ctx, base=f"/years/{year}/", titles=picks, catalog=catalog, kinds=kinds,
                 section_title=f"{year} год", h1=f"Год выпуска: {year}",
-                description=f"Произведения {year} года в тестовом каталоге.",
+                description=f"Произведения {year} года в каталоге.",
                 intro="", indexable=entry.indexable,
                 trail=(("Главная", "/"), ("Годы выпуска", "/years/"), (str(year), "")),
             ):
@@ -1390,7 +1399,7 @@ def render_site(
             for page in _listing_pages(
                 ctx, base=f"/countries/{slug}/", titles=picks, catalog=catalog, kinds=kinds,
                 section_title=label, h1=f"Страна производства: {label}",
-                description=f"Произведения страны «{label}» в тестовом каталоге.",
+                description=f"Произведения страны «{label}» в каталоге.",
                 intro="", indexable=entry.indexable,
                 trail=(("Главная", "/"), ("Страны", "/countries/"), (label, "")),
             ):

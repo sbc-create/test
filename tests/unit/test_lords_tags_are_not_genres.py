@@ -79,3 +79,33 @@ class TestVoteTagsAreCleanedUp:
         """Пустой список честнее, чем строка «Жанры: NR»."""
         title = live_catalog.title_from_item(item(["13+", "cartoon"]))
         assert list(title.genres) == []
+
+
+class TestNoStandWordingOnALiveCatalogue:
+    """REQ-LORDS-NO-STAND-COPY: тексты про тестовый стенд принадлежат стенду.
+
+    Витрина выглядела незаконченной не из-за вёрстки. На живом каталоге она
+    сама сообщала посетителю, что каталог синтетический, названия и постеры
+    выдуманы, а за записями не стоят реальные произведения. Проверяется весь
+    отданный сайт целиком, а не отдельная строка: такие тексты жили в баннере,
+    в подвале, в блоке комментариев и в описании подборок.
+    """
+
+    def test_no_page_tells_the_visitor_it_is_a_test_stand(self):
+        import yaml
+
+        from factory.lords import render as render_mod
+        from factory.paths import PATHS
+
+        items = [item(["Детектив"], external_id=f"id-{i}", name=f"Тайтл {i}") for i in range(20)]
+        catalog = live_catalog.catalog_from_live(items)
+        package = yaml.safe_load(PATHS.site_package("lords-03").read_text(encoding="utf-8"))
+        site = render_mod.render_site(package, catalog=catalog, environ={}, publisher_id="10238")
+        pages = site.pages if isinstance(site.pages, dict) else {p.path: p for p in site.pages}
+        for path, page in pages.items():
+            html = page.body if hasattr(page, "body") else str(page)
+            if not html.lstrip().startswith("<!doctype"):
+                continue
+            for needle in ("синтетическ", "выдуманы", "тестового каталога",
+                           "не стоят реальные произведения"):
+                assert needle not in html, f"{path}: «{needle}» под живым каталогом"
