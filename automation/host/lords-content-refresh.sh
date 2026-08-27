@@ -31,11 +31,14 @@ mkdir -p "$STATE_DIR"
 # Значения credentials читает сам factory через $CREDENTIALS_DIRECTORY и наружу
 # не отдаёт. Здесь их не видно и не должно быть видно.
 log "обновляю живой каталог"
-if ! "$PYTHON" -m factory lords-live >/dev/null 2>"${STATE_DIR}/last-fetch.err"; then
+# Диагностика factory уходит в stdout, а не в stderr: перехватываем оба потока,
+# иначе файл с причиной отказа останется пустым ровно тогда, когда он нужен.
+if ! "$PYTHON" -m factory lords-live >"${STATE_DIR}/last-fetch.log" 2>&1; then
+  tail -5 "${STATE_DIR}/last-fetch.log" >&2 || true
   # Отказ источника не повод портить витрину: прежний релиз остаётся на месте
   # и продолжает отвечать. Это и есть last-known-good.
   date -u +%Y-%m-%dT%H:%M:%SZ > "${STATE_DIR}/last_failure"
-  fail "источник не ответил; витрина оставлена на прежнем релизе (см. last-fetch.err)"
+  fail "источник не ответил; витрина оставлена на прежнем релизе (см. last-fetch.log)"
 fi
 
 CHANGED=0
