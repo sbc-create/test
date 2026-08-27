@@ -3,7 +3,7 @@
   "provider": "yandex",
   "note": "Реестр аналитики. Здесь хранятся ТОЛЬКО публичные идентификаторы счётчиков и проверяемые статусы; OAuth-токен и client secret сюда не попадают ни при каких условиях. Заполняется командой `python3 -m factory --json analytics apply --confirm-writes`; вручную не редактируется. Три домена YummyAnime — три независимых счётчика, зеркалами их объединять запрещено: у каждого сайта собственная аудитория и собственный отчёт.",
   "seo_indexing_enabled": false,
-  "updated_at": "2026-08-24T04:44:32Z",
+  "updated_at": "2026-08-27T14:09:14Z",
   "properties": [
     {
       "domain": "yummyani.site",
@@ -36,7 +36,7 @@
         "sitemap_submitted": false
       },
       "seo_indexing_enabled": false,
-      "last_checked_at": "2026-08-24T04:44:30Z",
+      "last_checked_at": "2026-08-27T14:08:59Z",
       "problems": [],
       "goal_ids": {
         "comment_submit": 601108539,
@@ -81,7 +81,7 @@
         "sitemap_submitted": false
       },
       "seo_indexing_enabled": false,
-      "last_checked_at": "2026-08-24T04:44:31Z",
+      "last_checked_at": "2026-08-27T14:09:00Z",
       "problems": [],
       "goal_ids": {
         "comment_submit": 601108548,
@@ -126,7 +126,7 @@
         "sitemap_submitted": false
       },
       "seo_indexing_enabled": false,
-      "last_checked_at": "2026-08-24T04:44:32Z",
+      "last_checked_at": "2026-08-27T14:09:01Z",
       "problems": [],
       "goal_ids": {
         "comment_submit": 601108557,
@@ -138,6 +138,141 @@
         "search": 601108549,
         "season_select": 601108552,
         "title_view": 601108551
+      }
+    },
+    {
+      "domain": "lordfilm47.space",
+      "site_id": "lords-01",
+      "counter_name": "Lords — lordfilm47.space",
+      "counter_id": 112010269,
+      "counter_state": "created",
+      "analytics_enabled": true,
+      "webvisor": false,
+      "allowed_hosts": [
+        "lordfilm47.space"
+      ],
+      "goals": [
+        "comment_submit",
+        "episode_select",
+        "filter_apply",
+        "player_error",
+        "player_ready",
+        "player_start",
+        "search",
+        "season_select",
+        "title_view"
+      ],
+      "webmaster": {
+        "enabled": true,
+        "host_id": null,
+        "verification_status": "BLOCKED_DEPLOYMENT",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": "2026-08-27T14:09:05Z",
+      "problems": [],
+      "goal_ids": {
+        "comment_submit": 602711699,
+        "episode_select": 602711695,
+        "filter_apply": 602711676,
+        "player_error": 602711698,
+        "player_ready": 602711697,
+        "player_start": 602711696,
+        "search": 602711675,
+        "season_select": 602711694,
+        "title_view": 602711693
+      }
+    },
+    {
+      "domain": "lordserial33.biz",
+      "site_id": "lords-02",
+      "counter_name": "Lords — lordserial33.biz",
+      "counter_id": 112010274,
+      "counter_state": "created",
+      "analytics_enabled": true,
+      "webvisor": false,
+      "allowed_hosts": [
+        "lordserial33.biz"
+      ],
+      "goals": [
+        "comment_submit",
+        "episode_select",
+        "filter_apply",
+        "player_error",
+        "player_ready",
+        "player_start",
+        "search",
+        "season_select",
+        "title_view"
+      ],
+      "webmaster": {
+        "enabled": true,
+        "host_id": null,
+        "verification_status": "BLOCKED_DEPLOYMENT",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": "2026-08-27T14:09:09Z",
+      "problems": [],
+      "goal_ids": {
+        "comment_submit": 602711756,
+        "episode_select": 602711752,
+        "filter_apply": 602711749,
+        "player_error": 602711755,
+        "player_ready": 602711754,
+        "player_start": 602711753,
+        "search": 602711744,
+        "season_select": 602711751,
+        "title_view": 602711750
+      }
+    },
+    {
+      "domain": "1lordserials1.online",
+      "site_id": "lords-03",
+      "counter_name": "Lords — 1lordserials1.online",
+      "counter_id": 112010277,
+      "counter_state": "created",
+      "analytics_enabled": true,
+      "webvisor": false,
+      "allowed_hosts": [
+        "1lordserials1.online"
+      ],
+      "goals": [
+        "comment_submit",
+        "episode_select",
+        "filter_apply",
+        "player_error",
+        "player_ready",
+        "player_start",
+        "search",
+        "season_select",
+        "title_view"
+      ],
+      "webmaster": {
+        "enabled": true,
+        "host_id": null,
+        "verification_status": "BLOCKED_DEPLOYMENT",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": "2026-08-27T14:09:14Z",
+      "problems": [],
+      "goal_ids": {
+        "comment_submit": 602711797,
+        "episode_select": 602711777,
+        "filter_apply": 602711758,
+        "player_error": 602711796,
+        "player_ready": 602711795,
+        "player_start": 602711786,
+        "search": 602711757,
+        "season_select": 602711760,
+        "title_view": 602711759
       }
     }
   ]

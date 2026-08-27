@@ -145,12 +145,21 @@ def test_arch_enabled_is_never_sent(token):
 
 
 def test_creation_never_sends_the_webvisor_object(token):
+    """При создании не уходит ни устаревший `webvisor`, ни `code_options`.
+
+    `code_options` перестал уходить 2026-08-27: Метрика принимает его только на
+    изменении счётчика, а на создании отвечает
+    `HTTP 400 … path: counter.code_options.visor`. Выяснилось это на трёх
+    доменах Lords — первом настоящем создании счётчика в истории проекта.
+    Выключение записи сессий никуда не делось, оно выполняется следующим
+    запросом и проверено остальными тестами этого файла.
+    """
     fake = Metrika(code_options={})
     _provider(fake, token).ensure_metrica_counter("yummyani.new", "новый")
     post = next(b for m, p, b, _ in fake.requests
                 if m == "POST" and p == "/management/v1/counters")
     assert "webvisor" not in post["counter"]
-    assert post["counter"]["code_options"] == {VISOR_OPTION: False}
+    assert "code_options" not in post["counter"]
 
 
 def test_the_fake_really_rejects_the_deprecated_field(token):
