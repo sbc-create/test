@@ -10,6 +10,10 @@ domain: 1lordserials1.online
 aliases:
 - www.1lordserials1.online
 canonical_url: https://1lordserials1.online/
+# Домены публичные, но пакет остаётся staging: объявление production требует
+# правовых сведений — правообладателя и контактного адреса, — которые задаёт
+# владелец. Подставлять их нельзя, а без них схема пакета не проходит.
+# Счётчик ниже уже создан и записан; он включится вместе с environment.
 environment: staging
 production_authorized: false
 seo_indexing_enabled: false
@@ -197,7 +201,14 @@ rollback_policy:
   keep_releases: 3
   auto_rollback_on_smoke_failure: true
   database_rollback: not_applicable
-analytics: null
+analytics:
+  provider: yandex_metrika
+  # Один домен — один счётчик: общий собирал бы визиты соседних витрин в один
+  # отчёт. allowed_hosts перечисляет только собственный домен направления.
+  enabled: true
+  counter_id: 112010277
+  allowed_hosts:
+    - 1lordserials1.online
 webmaster: null
 requested_by: ITAPX@yandex.com
 authorized_by: null
