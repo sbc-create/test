@@ -86,7 +86,10 @@ class TestPrivilegeStaysConfined:
     def test_writes_are_limited(self):
         allowed = set(" ".join(unit_value(UNIT, "ReadWritePaths")).split())
         assert allowed <= {
-            "/srv/lords", "/srv/site-factory/repo/var",
+            "/srv/lords",
+            # Кэш каталога и отчёт о выборке — два разных дерева репозитория.
+            "/srv/site-factory/repo/var",
+            "/srv/site-factory/repo/artifacts",
             "/var/lib/lords-content-refresh", "/var/log/site-factory",
         }, f"разрешена запись за пределами своих каталогов: {sorted(allowed)}"
 
@@ -184,4 +187,48 @@ class TestCredentialIdsMatchWhatTheCodeLooksFor:
         theirs = {v.partition(":")[0].strip() for v in unit_value(serving, "LoadCredential")}
         assert ours & theirs, (
             f"обновление и выдача используют разные имена credential'ов: {ours} против {theirs}"
+        )
+
+
+class TestEveryPathTheRefreshWritesToIsWritable:
+    """REQ-LORDS-REFRESH-WRITABLE: sandbox не отрезает то, что сценарий пишет.
+
+    Второй запуск отказал на `Read-only file system` при записи отчёта о
+    выборке: `ReadWritePaths` перечислял кэш, но не artifacts, а
+    `ProtectSystem=strict` делает всё остальное недоступным для записи.
+    Выборка при этом проходила целиком — наружу отказ выглядел как «источник
+    не ответил», хотя источник ответил и данные были получены.
+    """
+
+    def _writable(self) -> set[str]:
+        return set(" ".join(unit_value(UNIT, "ReadWritePaths")).split())
+
+    def test_catalogue_cache_is_writable(self):
+        """Сравнивается положение кэша внутри репозитория, а не путь чекаута.
+
+        `cache_file` считает путь от корня текущего дерева, и в рабочей копии он
+        другой. Проверять надо, что нужная ветка репозитория объявлена
+        доступной для записи, а не что совпала строка.
+        """
+        from factory.lords import live_site
+        from factory.paths import PATHS
+
+        relative = live_site.cache_file("lords-01").relative_to(PATHS.root)
+        target = Path("/srv/site-factory/repo") / relative
+        assert any(str(target).startswith(p) for p in self._writable()), (
+            f"кэш каталога {target} недоступен для записи"
+        )
+
+    def test_selection_report_directory_is_writable(self):
+        """`lords-live` пишет отчёт рядом с кэшем, но в другое дерево."""
+        writable = self._writable()
+        assert any(p.endswith("/artifacts") for p in writable), (
+            "artifacts/ не в списке записи: выборка пройдёт и упадёт на отчёте"
+        )
+
+    def test_failure_message_does_not_blame_the_source_blindly(self):
+        text = SCRIPT.read_text(encoding="utf-8")
+        assert "источник не ответил;" not in text, (
+            "сообщение об отказе обвиняет источник во всех случаях, включая "
+            "отказ записи — это уводит диагностику в сторону"
         )

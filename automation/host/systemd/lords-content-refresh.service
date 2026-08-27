@@ -28,7 +28,10 @@ NoNewPrivileges=yes
 PrivateTmp=yes
 ProtectSystem=strict
 ProtectHome=read-only
-ReadWritePaths=/srv/lords /srv/site-factory/repo/var /var/lib/lords-content-refresh /var/log/site-factory
+# `lords-live` пишет кэш каталога в var/ и отчёт о выборке в artifacts/.
+# Без второго пути выборка проходит целиком и падает на записи отчёта —
+# наружу это выглядело как «источник не ответил», хотя источник ответил.
+ReadWritePaths=/srv/lords /srv/site-factory/repo/var /srv/site-factory/repo/artifacts /var/lib/lords-content-refresh /var/log/site-factory
 ReadOnlyPaths=/srv/site-factory/repo /etc/site-factory
 InaccessiblePaths=/etc/site-factory/secrets
 StateDirectory=lords-content-refresh
