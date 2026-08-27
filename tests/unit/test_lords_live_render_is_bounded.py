@@ -17,7 +17,8 @@ from __future__ import annotations
 
 import yaml
 
-from factory.lords import live_catalog, render as render_mod
+from factory.lords import live_catalog
+from factory.lords import render as render_mod
 from factory.paths import PATHS
 
 CARD_MARK = "<article class=" + chr(34) + "card"
