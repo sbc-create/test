@@ -587,11 +587,41 @@ def _chips(pairs) -> str:
     ) + "</ul>"
 
 
+
+def _is_watchable(title) -> bool:
+    """Есть ли у записи контракт воспроизведения."""
+    return bool((getattr(title, "playback", None) or {}).get("title_id"))
+
+
+def _watchable_first(titles, limit: int) -> list:
+    """Лента поступлений, ведущая туда, где есть что смотреть.
+
+    Порядок по времени поступления сам по себе даёт плохую витрину: у только
+    что заведённых записей контракт воспроизведения чаще всего ещё не создан.
+    Из двенадцати последних поступлений его имели четыре — посетитель кликал
+    первые карточки и в двух случаях из трёх попадал на страницу без видео.
+    Покрытие каталога при этом оставалось прежним, около 86%: средняя цифра
+    скрывала то, что видел человек.
+
+    Поэтому лента показывает последние поступления среди тех, что можно
+    смотреть. Записи без видео из каталога никуда не деваются — у них есть
+    страница, описание и место в разделах; они просто не занимают собой первый
+    экран. Если смотреть нечего нигде, лента остаётся непустой: пустой блок
+    хуже блока с записями без видео.
+    """
+    ordered = _by_arrival(titles)
+    watchable = [t for t in ordered if _is_watchable(t)]
+    if len(watchable) >= limit:
+        return watchable[:limit]
+    rest = [t for t in ordered if not _is_watchable(t)]
+    return (watchable + rest)[:limit]
+
+
 def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
     text = ctx["texts"].get("home") or {}
     blocks = ctx["home_blocks"]
     pool = catalog.of_types(kinds)
-    latest = _by_arrival(pool)[:ctx["home_items"]]
+    latest = _watchable_first(pool, ctx["home_items"])
     parts = []
 
     hero_kind = ctx["hero"]
