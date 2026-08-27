@@ -773,7 +773,7 @@ def _calendar(catalog: fx.Catalog, kinds) -> str:
     if not rows:
         return ""
     return (
-        '<section class="section"><h2>Что продолжается</h2>'
+        '<section class="section"><h2>Сезоны в каталоге</h2>'
         '<p class="lede">Порядок выхода серий на стенде условный: дат премьер у '
         "синтетических записей нет и не будет выдумано.</p>"
         '<ol class="season">' + "".join(rows) + "</ol></section>"
