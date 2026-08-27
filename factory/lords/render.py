@@ -44,6 +44,19 @@ TYPE_LABELS = {
     fx.DORAMA: "Дорама",
 }
 
+#: Тип контента → заголовок раздела на главной.
+#:
+#: В карточке и в фактах тип называется в единственном числе — там он описывает
+#: одну запись. Заголовок раздела называет набор, и «Фильм» над рядом из
+#: двенадцати фильмов читается как технический ярлык, а не как название полки.
+TYPE_SECTION_LABELS = {
+    fx.MOVIES: "Фильмы",
+    fx.SERIES: "Сериалы",
+    fx.ANIMATION: "Мультфильмы",
+    fx.ANIME: "Аниме",
+    fx.DORAMA: "Дорамы",
+}
+
 #: Раздел → тип контента, который он показывает.
 SECTION_TYPE = {
     "movies_index": fx.MOVIES,
@@ -657,9 +670,11 @@ def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
                 more = f'<a class="section__more" href="{escape(href)}">Все</a>' if href else ""
                 parts.append(
                     '<section class="section"><div class="section__head">'
-                    f"<h2>{escape(TYPE_LABELS[kind])}</h2>{more}</div>"
+                    f"<h2>{escape(TYPE_SECTION_LABELS.get(kind, TYPE_LABELS[kind]))}</h2>{more}</div>"
                     + _grid(row) + "</section>"
                 )
+        elif block == "top_rated":
+            parts.append(_top_rated(ctx, pool))
         elif block == "genre_chips":
             parts.append(
                 '<section class="section"><h2>Жанры</h2>'
@@ -750,6 +765,40 @@ def _calendar(catalog: fx.Catalog, kinds) -> str:
         '<p class="lede">Порядок выхода серий на стенде условный: дат премьер у '
         "синтетических записей нет и не будет выдумано.</p>"
         '<ol class="season">' + "".join(rows) + "</ol></section>"
+    )
+
+
+
+def _best_rating(title) -> float | None:
+    """Наибольшая из подтверждённых оценок записи.
+
+    Оценки нет — возвращается None, а не ноль: запись без оценки не должна
+    занимать последнее место в рейтинге, ей там нечего делать.
+    """
+    values = [
+        v for v in (getattr(title, "kinopoisk_rating", None),
+                    getattr(title, "imdb_rating", None))
+        if isinstance(v, int | float)
+    ]
+    return max(values) if values else None
+
+
+def _top_rated(ctx, pool) -> str:
+    """Полка «высокие оценки».
+
+    Сортируется только по тому, что действительно пришло от источника. Записи
+    без оценки в полку не попадают: подставить им среднее значило бы показать
+    посетителю оценку, которой никто не ставил.
+    """
+    rated = [(t, _best_rating(t)) for t in pool]
+    rated = [(t, r) for t, r in rated if r is not None]
+    if len(rated) < 4:
+        return ""
+    rated.sort(key=lambda pair: (-pair[1], pair[0].name))
+    row = [t for t, _ in rated[:ctx["row_items"]]]
+    return (
+        '<section class="section"><div class="section__head">'
+        "<h2>Высокие оценки</h2></div>" + _grid(row) + "</section>"
     )
 
 

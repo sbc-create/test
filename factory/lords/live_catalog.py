@@ -123,6 +123,38 @@ def classify_tags(tags) -> tuple[str, str | None, tuple[str, ...]]:
     return age, format_type, tuple(rest)
 
 
+
+def seasons_from_detail(raw) -> tuple:
+    """Сезоны источника в структуре, которую понимает рендерер.
+
+    Detail отдаёт номер сезона, название и число серий — но не сами серии.
+    Поэтому эпизоды создаются как места в сетке: номер и длительность, без
+    выдуманных названий. Придумать название серии нельзя, а показать их
+    количество и дать выбор сезона — можно, и именно это ждёт посетитель.
+
+    Пока сезонов нет, `episodic` у записи ложно, и разделы «продолжающиеся
+    истории» и расписание оказываются пустыми — так главная сериального
+    домена и состояла из одной ленты.
+    """
+    seasons = []
+    for entry in raw or []:
+        if not isinstance(entry, dict):
+            continue
+        try:
+            number = int(str(entry.get("number") or "0").strip() or 0)
+        except ValueError:
+            continue
+        count = entry.get("episodes_count")
+        count = int(count) if isinstance(count, int) and count > 0 else 0
+        episodes = tuple(
+            fx.Episode(number=i, name=f"Серия {i}", runtime_min=0)
+            for i in range(1, count + 1)
+        )
+        if number and episodes:
+            seasons.append(fx.Season(number=number, episodes=episodes))
+    return tuple(sorted(seasons, key=lambda s: s.number))
+
+
 @dataclass(frozen=True)
 class LiveTitle:
     """Тайтл живого каталога.
@@ -287,7 +319,7 @@ def title_from_item(entry: dict) -> LiveTitle | None:
         runtime_min=int(duration) if isinstance(duration, int) and duration > 0 else 0,
         age_rating=age_rating,
         summary=str(entry.get("description") or "").strip(),
-        seasons=(),
+        seasons=seasons_from_detail(entry.get("seasons")),
         external_id=external_id,
         poster_url=(entry.get("poster_url") or None),
         kinopoisk_rating=_rating(entry.get("kinopoisk_rating")),

@@ -28,7 +28,7 @@ layout:
   hero: editorial
   card_ratio: "3 / 2"
   columns: { mobile: 1, tablet: 2, desktop: 3 }
-  home_blocks: [hero_editorial, collection_cards, editor_note, latest_grid]
+  home_blocks: [hero_editorial, collection_cards, latest_grid, type_rows, top_rated, genre_chips, editor_note]
   show_calendar: false
   show_collection_cards: true
   facet_position: none
