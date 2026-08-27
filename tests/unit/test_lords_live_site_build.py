@@ -70,3 +70,32 @@ class TestLiveBuildProducesTheWholeSite:
         assert coverage["with_kinopoisk"] == 20
         # IMDb источник в этой выборке не дал ни разу — и покрытие обязано это показать.
         assert coverage["with_imdb"] == 0
+
+
+class TestNothingInternalIsServed:
+    """REQ-LORDS-NO-INTERNAL-ARTEFACTS: отчёт сборки не становится страницей.
+
+    Отчёт живой сборки писался внутрь каталога документов, а тот целиком
+    становится корнем сайта. В результате `/live-report.json` отдавался
+    публично и нёс наружу причину отказа плеера, внутренние пути и состав
+    сборки — ровно то, что незадолго до этого убрали со страницы тайтла.
+    """
+
+    def test_report_is_not_inside_the_served_tree(self, tmp_path: Path):
+        result = live_site.build_live_site("lords-01", output=tmp_path, items=items(12))
+        served = {p.relative_to(tmp_path).as_posix() for p in tmp_path.rglob("*") if p.is_file()}
+        assert not any("live-report" in name for name in served), (
+            "отчёт сборки лежит внутри сайта и отдаётся как страница"
+        )
+        assert result.report["catalog"]["titles"] == 12, "отчёт при этом обязан существовать"
+
+    def test_no_served_file_carries_an_internal_code(self, tmp_path: Path):
+        live_site.build_live_site("lords-01", output=tmp_path, items=items(12))
+        for path in tmp_path.rglob("*"):
+            if not path.is_file():
+                continue
+            try:
+                text = path.read_text(encoding="utf-8")
+            except (UnicodeDecodeError, OSError):
+                continue
+            assert "BLOCKED_INPUT" not in text, f"{path.name} несёт внутренний код наружу"

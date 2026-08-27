@@ -156,7 +156,13 @@ def build_live_site(
         "with_genres": sum(1 for t in catalog.titles if t.genres),
     }
 
-    (directory / "live-report.json").write_text(
+    # Отчёт лежит РЯДОМ с каталогом документов, а не внутри него. Внутри он
+    # становится страницей сайта: `/live-report.json` отдавался публично и нёс
+    # наружу и причину отказа плеера, и внутренние пути сборки.
+    report_path = directory.parent / f"{directory.name}-live-report.json"
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(
         json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True), encoding="utf-8")
+    report["report_path"] = str(report_path)
     return LiveSiteResult(
         site_id=site_id, profile=str(site.profile), directory=directory, report=report)
