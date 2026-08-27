@@ -153,7 +153,18 @@ class Title:
 
     @property
     def poster_path(self) -> str:
+        """Локальный адрес заглушки. Он же маршрут генерируемого SVG."""
         return f"/assets/posters/{self.slug}.svg"
+
+    @property
+    def poster_src(self) -> str:
+        """Что показать в разметке. У фикстуры своего постера нет — только слот.
+
+        Разделение нужно живому каталогу: там `poster_src` указывает на картинку
+        источника, а `poster_path` остаётся локальным маршрутом. Пока это было
+        одним свойством, внешние адреса становились страницами сайта.
+        """
+        return self.poster_path
 
     def as_dict(self) -> dict:
         return {
