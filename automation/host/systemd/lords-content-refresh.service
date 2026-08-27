@@ -13,8 +13,14 @@ WorkingDirectory=/srv/site-factory/repo
 
 # Токен и Publisher ID приходят из Secret Hub через systemd, а не из окружения:
 # переменные видны в `systemctl show` и в /proc/<pid>/environ, файлы — нет.
-LoadCredential=cdnvideohub-api-token:/etc/site-factory/secrets/lords/lords-01/cdnvideohub-api-token
-LoadCredential=cdnvideohub-publisher-id:/etc/site-factory/secrets/lords/lords-01/cdnvideohub-publisher-id
+# Идентификатор credential'а — с подчёркиваниями: под этим именем его ищет
+# factory, и то же имя стоит в lords-0X.service. Имя файла-источника при этом
+# написано через дефис. Перепутать их легко, а отказ выглядит как «источник не
+# ответил», хотя источник тут ни при чём.
+LoadCredential=cdnvideohub_api_token:/etc/site-factory/secrets/lords/lords-01/cdnvideohub-api-token
+LoadCredential=cdnvideohub_publisher_id:/etc/site-factory/secrets/lords/lords-01/cdnvideohub-publisher-id
+Environment=CDNVIDEOHUB_API_TOKEN_CREDENTIAL=cdnvideohub_api_token
+Environment=CDNVIDEOHUB_PUBLISHER_ID_CREDENTIAL=cdnvideohub_publisher_id
 
 ExecStart=/srv/site-factory/repo/automation/host/lords-content-refresh.sh
 

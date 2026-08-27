@@ -62,10 +62,21 @@ class TestSecretsComeFromSystemd:
         assert any("publisher-id" in v for v in loaded)
 
     def test_no_secret_value_is_written_into_the_unit(self):
-        text = UNIT.read_text(encoding="utf-8")
-        assert "Environment=CDNVIDEOHUB_API_TOKEN" not in text, (
-            "секрет вынесен в окружение: оно видно в systemctl show и /proc"
-        )
+        """Запрещено значение, а не имя.
+
+        `CDNVIDEOHUB_API_TOKEN_CREDENTIAL` несёт имя credential'а — по нему
+        factory находит файл, и ровно так же устроены lords-0X.service. Запрет
+        обязан отличать имя от значения, иначе он запрещает штатную схему.
+        """
+        for value in unit_value(UNIT, "Environment"):
+            name, _, content = value.partition("=")
+            if name.strip() in ("CDNVIDEOHUB_API_TOKEN", "CDNVIDEOHUB_PUBLISHER_ID"):
+                raise AssertionError(
+                    f"{name} присвоено в окружении: оно видно в systemctl show и /proc"
+                )
+            if name.strip().endswith("_CREDENTIAL"):
+                # Здесь допустимо только имя credential'а, а не путь и не значение.
+                assert "/" not in content, f"{name} содержит путь, а не имя: {content}"
 
     def test_the_secrets_directory_stays_inaccessible(self):
         assert "/etc/site-factory/secrets" in " ".join(unit_value(UNIT, "InaccessiblePaths"))
@@ -123,4 +134,54 @@ class TestTheScriptRefusesToBreakTheStorefront:
         text = SCRIPT.read_text(encoding="utf-8")
         assert 'readlink -f "${runtime}/current"' in text, (
             "хранение может удалить текущий релиз — откатываться будет некуда"
+        )
+
+
+class TestCredentialIdsMatchWhatTheCodeLooksFor:
+    """REQ-LORDS-REFRESH-CREDENTIAL-ID: имя credential'а совпадает с искомым.
+
+    Первый же запуск таймера отказал с сообщением «источник не ответил», хотя
+    источник был ни при чём: в `LoadCredential` идентификатор был написан через
+    дефис, а `factory` ищет его с подчёркиваниями. Имя файла-источника при этом
+    действительно пишется через дефис — перепутать их легко, а отказ выглядит
+    как проблема сети.
+    """
+
+    def _load_credentials(self) -> dict[str, str]:
+        pairs = {}
+        for value in unit_value(UNIT, "LoadCredential"):
+            ident, _, source = value.partition(":")
+            pairs[ident.strip()] = source.strip()
+        return pairs
+
+    def test_identifiers_use_the_names_factory_expects(self):
+        from factory.lords.live_build import (
+            DEFAULT_PUBLISHER_CREDENTIAL,
+            DEFAULT_TOKEN_CREDENTIAL,
+        )
+
+        loaded = self._load_credentials()
+        for expected in (DEFAULT_TOKEN_CREDENTIAL, DEFAULT_PUBLISHER_CREDENTIAL):
+            assert expected in loaded, (
+                f"credential {expected!r} не объявлен: factory будет искать файл "
+                f"с этим именем и не найдёт его. Объявлено: {sorted(loaded)}"
+            )
+
+    def test_source_paths_point_at_files_that_exist_in_the_registry(self):
+        """Путь-источник пишется через дефис — как файлы Secret Hub."""
+        for source in self._load_credentials().values():
+            assert source.startswith("/etc/site-factory/secrets/lords/"), source
+            assert "cdnvideohub-" in source, (
+                f"путь {source} не похож на файл реестра Secret Hub"
+            )
+
+    def test_the_same_identifiers_are_used_by_the_serving_units(self):
+        """Разнобой между юнитами — это тот же отказ, только в другом месте."""
+        serving = REPO / "automation" / "host" / "systemd" / "lords-01.service"
+        if not serving.is_file():
+            return
+        ours = set(self._load_credentials())
+        theirs = {v.partition(":")[0].strip() for v in unit_value(serving, "LoadCredential")}
+        assert ours & theirs, (
+            f"обновление и выдача используют разные имена credential'ов: {ours} против {theirs}"
         )
