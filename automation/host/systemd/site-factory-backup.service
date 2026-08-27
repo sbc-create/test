@@ -5,15 +5,50 @@ After=network-online.target
 
 [Service]
 Type=oneshot
-User=claude
-Group=claude
+# Запускается привилегированно — как и site-factory-health.service — по причине
+# структурной, а не удобства. Шифрованное хранилище Secret Hub намеренно лежит
+# под 0700 root:root, а без него архив не восстановит consumer-файлы: они
+# исключены из бэкапа как открытые секреты и берутся только оттуда. Значит
+# непривилегированный запуск не может создать восстановимую копию в принципе —
+# он может только упасть. Так и было: юнит падал каждую ночь, подтверждённая
+# копия старела, и site-factory-health валился следом каждые пятнадцать минут
+# уже не по своей вине.
+#
+# Ослабить права самого хранилища было бы обменом сломанного бэкапа на более
+# слабый секрет. Поднять права юнита — честная половина сделки, и она окружена
+# ограничениями ниже: писать он может ровно в два каталога, всё остальное
+# дерево доступно только на чтение, сеть закрыта, новые привилегии запрещены.
 EnvironmentFile=/etc/site-factory/environment
 ExecStart=/srv/site-factory/repo/automation/host/site-factory-backup.sh
+
+# --- ограничения -----------------------------------------------------------
 NoNewPrivileges=yes
 PrivateTmp=yes
-ProtectSystem=full
+# strict вместо full: всё дерево только на чтение, кроме явно разрешённого.
+ProtectSystem=strict
 ProtectHome=read-only
+# Единственные два места, куда бэкапу нужно писать.
 ReadWritePaths=/srv/backups /var/log/site-factory
+# Читать нужно многое, но менять — ничего: исходное дерево фабрики, конфигурацию
+# хоста, площадки и шифрованное хранилище Secret Hub.
+ReadOnlyPaths=/srv/site-factory /etc/site-factory /srv/sites /var/lib/site-factory-secret-hub /etc/nginx
+# Мастер-ключ в архив не попадает: он лежит в /etc/site-factory/secrets/, и
+# скрипт исключает `secrets/` целиком. Здесь это подтверждается ещё раз —
+# каталог с ключом недоступен процессу вовсе.
+InaccessiblePaths=/etc/site-factory/secrets
+# Бэкап работает только с локальной файловой системой; сеть ему не нужна.
+PrivateNetwork=yes
+RestrictAddressFamilies=AF_UNIX
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+LockPersonality=yes
+SystemCallArchitectures=native
+UMask=0077
+
 # The archive and its restore verification both fit well inside this; a run
 # that needs more has grown something it should not have.
 MemoryMax=1G
