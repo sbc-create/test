@@ -614,8 +614,20 @@ def _chips(pairs) -> str:
 
 
 def _is_watchable(title) -> bool:
-    """Есть ли у записи контракт воспроизведения."""
-    return bool((getattr(title, "playback", None) or {}).get("title_id"))
+    """Можно ли на этой записи что-то посмотреть.
+
+    Прежде здесь проверялось наличие пары «агрегатор + идентификатор». Она есть
+    у всех записей каталога, включая те, для которых поток ещё не завели, — то
+    есть условие было истинным всегда, и отбор ничего не отбирал. На первый
+    экран выходили самые свежие поступления, а у них потока чаще всего нет:
+    посетитель открывал первые карточки подряд и не видел видео ни на одной.
+
+    Теперь учитывается ответ источника. Подтверждённое «пусто» исключает
+    запись с первого экрана; неизвестность — нет.
+    """
+    if not (getattr(title, "playback", None) or {}).get("title_id"):
+        return False
+    return getattr(title, "playable", None) is not False
 
 
 def _watchable_first(titles, limit: int) -> list:
@@ -910,7 +922,16 @@ def _player_block(ctx, title, name: str) -> str:
     title_id = str(playback.get("title_id") or "").strip()
     publisher_id = ctx.get("publisher_id")
 
-    if aggregator and title_id and publisher_id:
+    # Источник может подтвердить, что играть нечего: на запрос плейлиста он
+    # отвечает «пусто». Ставить в этом случае кадр плеера — значит показывать
+    # посетителю чёрный прямоугольник, который никогда не запустится.
+    #
+    # Условие намеренно проверяет именно False, а не ложность: `None` означает
+    # «не проверяли», и такая запись плеер сохраняет. Ни один тайтл, который
+    # играл, не может лишиться плеера из-за сетевой ошибки при проверке.
+    confirmed_silent = getattr(title, "playable", None) is False
+
+    if aggregator and title_id and publisher_id and not confirmed_silent:
         try:
             return player_mod.render_live(
                 publisher_id=str(publisher_id),

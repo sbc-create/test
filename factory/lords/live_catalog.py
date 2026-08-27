@@ -191,6 +191,10 @@ class LiveTitle:
     premiere_date: str | None = None
     seasons_count: int = 0
     voices: tuple[str, ...] = ()
+    #: True — источник отдал плейлист, False — ответил «пусто»,
+    #: None — не проверялось. None означает «пригодна»: неизвестность
+    #: не должна снимать плеер с записи, которая играет.
+    playable: bool | None = None
     created_at: str | None = None
     updated_at: str | None = None
     playback: dict | None = None
@@ -319,6 +323,7 @@ def title_from_item(entry: dict) -> LiveTitle | None:
         runtime_min=int(duration) if isinstance(duration, int) and duration > 0 else 0,
         age_rating=age_rating,
         summary=str(entry.get("description") or "").strip(),
+        playable=entry.get("playable"),
         seasons=seasons_from_detail(entry.get("seasons")),
         external_id=external_id,
         poster_url=(entry.get("poster_url") or None),
