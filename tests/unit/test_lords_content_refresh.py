@@ -45,8 +45,13 @@ class TestTheTimerMeetsTheStatedSlo:
         assert interval, "интервал не задан"
         match = re.match(r"^(\d+)\s*min$", interval[0])
         assert match, f"непонятный интервал {interval[0]!r}"
-        assert int(match.group(1)) <= 15, (
-            f"интервал {interval[0]} больше обещанных пятнадцати минут"
+        # Интервал обязан быть строго меньше SLO: к ожиданию цикла добавляется
+        # время пересборки. Равный интервал нарушал бы обещание ровно тогда,
+        # когда каталог меняется, — то есть в единственном интересном случае.
+        REBUILD_MINUTES = 4
+        assert int(match.group(1)) + REBUILD_MINUTES <= 15, (
+            f"интервал {interval[0]} плюс пересборка ({REBUILD_MINUTES} мин) "
+            "выходит за обещанные пятнадцать минут"
         )
 
     def test_missed_run_is_not_postponed_for_a_day(self):
