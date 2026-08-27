@@ -80,10 +80,23 @@ result = live_site.build_live_site(
     site_id, output=out, enrich_budget=budget, credentials_token=token)
 report = result.report
 coverage = report.get("coverage") or {}
+# Первая строка — число записей, её читает вызывающий сценарий.
 print(report["catalog"]["titles"])
-print("описаний %s, стран %s, состава %s" % (
+# Остальное идёт в журнал: молчаливое обогащение уже один раз выглядело как
+# работающее, хотя не выполнялось вовсе. Отчёт обязан быть виден.
+enrichment = report.get("enrichment")
+if enrichment is None:
+    print("[enrich] не выполнялось: бюджет %s, токен %s" % (
+        budget, "есть" if token else "НЕТ"), file=sys.stderr)
+elif isinstance(enrichment, dict) and enrichment.get("error"):
+    print("[enrich] ОШИБКА: %s" % enrichment["error"], file=sys.stderr)
+else:
+    print("[enrich] запрошено %s, получено %s, из кэша %s, отказов %s" % (
+        enrichment.get("requested"), enrichment.get("fetched"),
+        enrichment.get("from_cache"), enrichment.get("failed")), file=sys.stderr)
+print("[покрытие] описаний %s, стран %s, состава %s из %s" % (
     coverage.get("with_description"), coverage.get("with_country"),
-    coverage.get("with_actors")), file=sys.stderr)
+    coverage.get("with_actors"), report["catalog"]["titles"]), file=sys.stderr)
 PYEOF
   then
     fail "${site}: сборка не выполнена"
