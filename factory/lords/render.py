@@ -479,7 +479,26 @@ def _dataset(titles) -> str:
 # Страницы списков
 # ---------------------------------------------------------------------------
 def _sorted(titles) -> list:
+    """Порядок витрины: сначала свежие годы. Для каталога это верный порядок."""
     return sorted(titles, key=lambda t: (-t.year, t.name, t.slug))
+
+
+def _by_arrival(titles) -> list:
+    """Порядок ленты поступлений: сначала то, что появилось у источника позже.
+
+    Общий порядок каталога тут не подходит: он сортирует по году выпуска, и
+    фильм 2026 года, добавленный полгода назад, всегда обгонял бы вчерашнее
+    поступление 2019-го. Блок при этом называется «Последние добавления», и
+    посетитель справедливо ждёт от него другого.
+
+    Записи без отметки времени не всплывают наверх: отсутствие даты — это не
+    «только что», а «источник не сказал».
+    """
+    return sorted(
+        titles,
+        key=lambda t: (getattr(t, "created_at", "") or "", -t.year, t.name, t.slug),
+        reverse=True,
+    )
 
 
 def _listing_pages(
@@ -572,7 +591,7 @@ def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
     text = ctx["texts"].get("home") or {}
     blocks = ctx["home_blocks"]
     pool = catalog.of_types(kinds)
-    latest = _sorted(pool)[:ctx["home_items"]]
+    latest = _by_arrival(pool)[:ctx["home_items"]]
     parts = []
 
     hero_kind = ctx["hero"]
