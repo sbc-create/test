@@ -276,9 +276,14 @@ def _header(ctx: dict, meta: Meta) -> str:
     mark = escape(ctx["mark"])
     return (
         '<a class="visually-hidden" href="#content">Перейти к содержимому</a>'
-        '<div class="preview-banner"><p><strong>Тестовый стенд.</strong> '
-        "Каталог синтетический (fixture/test), названия и постеры выдуманы, "
-        "индексация закрыта.</p></div>"
+        # Полоса про тестовый стенд принадлежит стенду. На живом каталоге она
+        # сообщала посетителю, что названия и постеры выдуманы, — под настоящими
+        # записями провайдера. Витрина от этого выглядела незаконченной ровно там,
+        # где она уже была готова.
+        + ('<div class="preview-banner"><p><strong>Тестовый стенд.</strong> '
+           "Каталог синтетический (fixture/test), названия и постеры выдуманы, "
+           "индексация закрыта.</p></div>" if ctx.get("fixture_catalog") else "")
+        +
         '<header class="site-header"><div class="header-row">'
         f'<a class="brand" href="/"><span class="brand__mark">{mark}</span>'
         f'<span class="brand__name">{escape(ctx["brand"])}</span>'
@@ -737,11 +742,14 @@ def _comments_block(ctx, title: fx.Title) -> str:
     return (
         '<section class="comments" aria-labelledby="comments-heading">'
         '<h2 id="comments-heading">Комментарии</h2>'
-        '<p class="comments__note">На стенде комментарии выключены: писать не о чем — '
-        "запись синтетическая, а публиковать чужие тексты стенд не станет. "
-        "Форма показана, чтобы блок занимал своё место в раскладке.</p>"
+        + ('<p class="comments__note">На стенде комментарии выключены: писать не о чем — '
+           "запись синтетическая, а публиковать чужие тексты стенд не станет. "
+           "Форма показана, чтобы блок занимал своё место в раскладке.</p>"
+           if ctx.get("fixture_catalog") else
+           '<p class="comments__note">Комментарии скоро откроются.</p>')
+        +
         "<form><label class=\"visually-hidden\" for=\"comment\">Текст комментария</label>"
-        '<textarea id="comment" disabled placeholder="Отправка выключена на стенде">'
+        '<textarea id="comment" disabled placeholder="Комментарии пока закрыты">'
         "</textarea>"
         '<button type="button" disabled>Отправить</button></form>'
         "</section>"
@@ -801,6 +809,28 @@ def _player_block(ctx, title, name: str) -> str:
     )
 
 
+
+def _ratings_block(title) -> str:
+    """Оценки с подписью источника.
+
+    Число без подписи ничего не значит: 7.8 у Кинопоиска и 7.8 у IMDb — разные
+    утверждения разных источников. Отсутствующая оценка скрывается, а не
+    показывается нулём: ноль здесь означал бы «оценили на ноль».
+    """
+    pairs = (
+        ("КП", getattr(title, "kinopoisk_rating", None)),
+        ("IMDb", getattr(title, "imdb_rating", None)),
+    )
+    shown = [
+        f'<li class="rating"><span class="rating__source">{escape(label)}</span>'
+        f'<span class="rating__value">{escape(f"{value:.1f}")}</span></li>'
+        for label, value in pairs if isinstance(value, int | float)
+    ]
+    if not shown:
+        return ""
+    return '<ul class="ratings">' + "".join(shown) + "</ul>"
+
+
 def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: bool) -> Page:
     tpl = ctx["title_page"]
     name = title.name
@@ -808,23 +838,38 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
     description = str(tpl.get("description_template", "{name}")).format(name=name)
     h1 = str(tpl.get("h1_template", "{name}")).format(name=name)
 
+    # Длительность в ноль минут — это не длительность, а её отсутствие: списочный
+    # ответ источника хронометража не даёт вовсе.
+    duration = ""
+    if title.runtime_min:
+        duration = f"{title.runtime_min} мин"
+    if title.episodic:
+        duration = (duration + " · " if duration else "") + f"серий {title.episode_count}"
+
+    # Подпись происхождения обязана совпадать с тем, что на странице. Раньше
+    # здесь стояло «синтетическая запись стенда» — под настоящей записью
+    # провайдера это была прямая неправда на публичной странице.
+    provenance = (
+        f"{title.source} — синтетическая запись стенда" if title.fixture
+        else "CDNVideoHub — живой каталог"
+    )
+
     facts = [
         ("Оригинальное название", title.original_name),
         ("Тип", TYPE_LABELS.get(title.content_type, title.content_type)),
-        ("Год", str(title.year)),
+        ("Год", str(title.year) if title.year else ""),
         ("Страна", title.country),
         ("Жанры", ", ".join(title.genres)),
         ("Студия", title.studio),
         ("Возрастная отметка", title.age_rating),
-        (
-            "Длительность",
-            f"{title.runtime_min} мин"
-            + (f" · серий {title.episode_count}" if title.episodic else ""),
-        ),
-        ("Происхождение данных", f"{title.source} — синтетическая запись стенда"),
+        ("Длительность", duration),
+        ("Происхождение данных", provenance),
     ]
+    # Пустая строка — это «источник не сказал». Заголовок без значения выглядит
+    # как потерянные данные, поэтому такие пары не печатаются вовсе.
     facts_html = "".join(
-        f"<dt>{escape(label)}</dt><dd>{escape(value)}</dd>" for label, value in facts
+        f"<dt>{escape(label)}</dt><dd>{escape(value)}</dd>"
+        for label, value in facts if value
     )
 
     head = (
@@ -833,7 +878,8 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
         'width="400" height="600"></div><div>'
         f"<h1>{escape(h1)}</h1>"
         f'<p class="lede">{escape(title.summary)}</p>'
-        f'<dl class="facts">{facts_html}</dl></div></div>'
+        + _ratings_block(title)
+        + f'<dl class="facts">{facts_html}</dl></div></div>'
     )
 
     body = (
@@ -1149,7 +1195,7 @@ def _schedule_page(ctx, catalog: fx.Catalog, kinds, indexable: bool) -> Page:
 
 
 def _context(package: dict, profile: dict, site_plan, player_state,
-             publisher_id: str | None = None) -> dict:
+             publisher_id: str | None = None, fixture_catalog: bool = True) -> dict:
     layout = theme_mod.layout_of(profile)
     brand = str(profile.get("label") or package.get("site_id"))
     domain = str(package.get("domain") or "").strip()
@@ -1197,6 +1243,8 @@ def _context(package: dict, profile: dict, site_plan, player_state,
             fx.ANIME: "/anime/", fx.DORAMA: "/dorama/",
         },
         "player_state": player_state,
+        # Раскладка одна, а подписи разные: часть текстов честна только про стенд.
+        "fixture_catalog": fixture_catalog,
         # Публичный атрибут элемента плеера. Подставляется на сервере в момент
         # ответа и в общий JS-бандл не попадает.
         "publisher_id": publisher_id,
@@ -1229,7 +1277,10 @@ def render_site(
     )
     profile = profiles[site_plan.profile]
     player_state = player_mod.state(environ)
-    ctx = _context(package, profile, site_plan, player_state, publisher_id)
+    fixture_catalog = (
+        all(getattr(t, "fixture", True) for t in catalog.titles) if catalog.titles else True
+    )
+    ctx = _context(package, profile, site_plan, player_state, publisher_id, fixture_catalog)
 
     kinds = [k for k in ct.active_types(site_plan.type_states) if k in TYPE_LABELS]
     collections_on = site_plan.type_states["collections"].active
