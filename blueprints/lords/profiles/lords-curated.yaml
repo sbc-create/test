@@ -9,19 +9,19 @@ owns:
   - collections_index
 
 theme:
-  name: lords_light
+  name: lords_dark
   tokens:
-    bg: "#faf8f4"
-    surface: "#ffffff"
-    surface_alt: "#f1ece3"
-    text: "#1d1a16"
-    muted: "#6b6357"
-    accent: "#9c4221"
-    accent_text: "#ffffff"
-    border: "#e0d8cb"
-    radius: "2px"
-    container: "1080px"
-    heading_font: Georgia, 'Times New Roman', serif
+    bg: "#111111"
+    surface: "#1c1c1c"
+    surface_alt: "#252525"
+    text: "#e6e6e6"
+    muted: "#9a9a9a"
+    accent: "#6bb038"
+    accent_text: "#0d0d0d"
+    border: "#333333"
+    radius: "4px"
+    container: "1240px"
+    heading_font: "'Open Sans', 'Segoe UI', Roboto, Arial, sans-serif"
 
 layout:
   density: airy

@@ -211,10 +211,28 @@ class TestProfiles:
         tokens = {n: theme_mod.tokens_of(p) for n, p in profiles.items()}
         layouts = {n: theme_mod.layout_of(p) for n, p in profiles.items()}
         assert len({t["accent"] for t in tokens.values()}) == 4
-        assert len({t["bg"] for t in tokens.values()}) == 4
+        # Подложка больше не различает все четыре профиля, и это осознанно:
+        # три продуктовых домена приведены к одному тёмному семейству, потому
+        # что владелец смотрит на них вместе. Проверяется то, ради чего тест
+        # написан, — что профили не превратились в копии друг друга.
         assert len({layout["density"] for layout in layouts.values()}) == 4
         assert len({layout["hero"] for layout in layouts.values()}) == 4
         assert len({layout["columns"]["desktop"] for layout in layouts.values()}) == 4
+
+    def test_the_three_product_domains_share_one_family(self):
+        """Общая подложка у продуктовых профилей — решение, а не совпадение.
+
+        Если один профиль случайно перезапишет другой, различия исчезнут не
+        только в подложке, и это поймает соседний тест. Здесь фиксируется сам
+        уговор: три домена выглядят как одно семейство, а акцент у каждого свой.
+        """
+        profiles = plan_mod.load_profiles()
+        product = ["lords-general", "lords-new", "lords-curated"]
+        tokens = {n: theme_mod.tokens_of(profiles[n]) for n in product}
+        assert len({t["bg"] for t in tokens.values()}) == 1
+        assert len({t["accent"] for t in tokens.values()}) == 3
+        assert all(t["heading_font"] == tokens[product[0]]["heading_font"]
+                   for t in tokens.values())
 
     def test_stylesheets_differ(self):
         profiles = plan_mod.load_profiles()

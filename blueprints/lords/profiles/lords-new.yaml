@@ -12,17 +12,17 @@ owns:
 theme:
   name: lords_dark
   tokens:
-    bg: "#0d1117"
-    surface: "#161b24"
-    surface_alt: "#1d2530"
-    text: "#eef1f5"
-    muted: "#93a0b0"
-    accent: "#ff9f45"
-    accent_text: "#1a1206"
-    border: "#2c3542"
-    radius: "6px"
-    container: "1180px"
-    heading_font: "system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif"
+    bg: "#111111"
+    surface: "#1c1c1c"
+    surface_alt: "#252525"
+    text: "#e6e6e6"
+    muted: "#9a9a9a"
+    accent: "#8fce4b"
+    accent_text: "#0d0d0d"
+    border: "#333333"
+    radius: "4px"
+    container: "1240px"
+    heading_font: "'Open Sans', 'Segoe UI', Roboto, Arial, sans-serif"
 
 layout:
   density: dense
