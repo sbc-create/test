@@ -299,3 +299,31 @@ class TestPublisherIdSurvivesTheSandbox:
         assert "/etc/site-factory/secrets" in " ".join(unit_value(UNIT, "InaccessiblePaths")), (
             "каталог секретов открыли вместо того, чтобы передать значение"
         )
+
+
+class TestEnrichmentIsNotSilent:
+    """REQ-LORDS-ENRICH-VISIBLE: невыполненное обогащение обязано быть слышным.
+
+    Обогащение из detail однажды не выполнилось ни для одной записи, и заметить
+    это было нечем: сборка проходила, релиз принимался, страницы отдавались.
+    Исключение уходило в поле отчёта, а отчёт лежал во временном каталоге,
+    который удалялся вместе со сборкой. Наружу — тишина и «готово».
+
+    Молчание про невыполненную работу опаснее её невыполнения: первое скрывает
+    второе.
+    """
+
+    def test_refresh_reports_the_enrichment_outcome(self):
+        text = SCRIPT.read_text(encoding="utf-8")
+        assert "[enrich]" in text, "итог обогащения не попадает в журнал"
+        assert "не выполнялось" in text, (
+            "нет строки для случая «обогащение не запускалось»: именно он и был "
+            "неотличим от успеха"
+        )
+        assert "ОШИБКА" in text, "ошибка обогащения нигде не печатается"
+
+    def test_refresh_reports_coverage(self):
+        text = SCRIPT.read_text(encoding="utf-8")
+        assert "[покрытие]" in text, (
+            "покрытие описаниями не печатается: рост или его отсутствие не видно"
+        )
