@@ -115,3 +115,42 @@ class TestPrivilegeStaysConfined:
         assert store_dir() not in " ".join(directive("ReadWritePaths")).split(), (
             "бэкапу разрешено писать в хранилище Secret Hub; он обязан только читать"
         )
+
+
+class TestPrivilegedRunCanStillReadTheRepository:
+    """REQ-BACKUP-GIT-OWNERSHIP: смена пользователя не должна ронять git bundle.
+
+    Побочный эффект привилегированного запуска, который стоил отдельного прогона.
+    Рабочее дерево принадлежит `claude`, а юнит теперь работает от root, и git
+    отказывается трогать чужой репозиторий: `detected dubious ownership`. Отказ
+    приходит уже после того, как всё собрано, и наружу выглядит как
+    `BACKUP FAILED: git bundle` — причина в этом сообщении не названа вовсе.
+
+    Полагаться на `~/.gitconfig` того, кто запускает, здесь нельзя: под
+    ProtectHome и systemd-окружением HOME не тот, что в интерактивной сессии.
+    Поэтому доверие объявляется в самом скрипте и ровно одному каталогу.
+    """
+
+    def test_repository_is_declared_safe_for_git(self):
+        text = SCRIPT.read_text(encoding="utf-8")
+        assert 'safe.directory=$REPO' in text, (
+            "скрипт не объявляет рабочее дерево доверенным для git: при запуске "
+            "от пользователя, не владеющего репозиторием, `git bundle` откажет, "
+            "и бэкап упадёт без внятной причины"
+        )
+
+    def test_bundle_failure_says_what_failed(self):
+        """`BACKUP FAILED: git bundle` ничего не объясняет — нужен путь."""
+        text = SCRIPT.read_text(encoding="utf-8")
+        assert re.search(r'fail "git bundle: [^"]*\$REPO', text), (
+            "сообщение об отказе git bundle не называет репозиторий; именно "
+            "поэтому первый отказ был диагностирован не с первого раза"
+        )
+
+    def test_trust_is_not_granted_globally(self):
+        """Доверие выдаётся одному каталогу, а не всему, что попадётся."""
+        text = SCRIPT.read_text(encoding="utf-8")
+        assert "safe.directory=*" not in text, (
+            "скрипт доверяет любому репозиторию: это снимает защиту git там, где "
+            "достаточно было назвать один каталог"
+        )
