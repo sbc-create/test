@@ -224,21 +224,34 @@ def test_three_domains_get_three_independent_counters(token):
     assert sites == sorted(DOMAINS)
 
 
-def test_counter_creation_disables_the_visor_and_omits_the_gdpr_agreement(token):
-    """Запись сессий выключается через code_options.visor, а согласие не даётся.
+def test_counter_creation_omits_code_options_and_the_gdpr_agreement(token):
+    """Тело создания счётчика: только имя и домен.
 
-    Тест дважды менял требование, и оба раза за счёт боевого запуска. Сперва он
-    требовал не передавать `webvisor` вовсе — Метрика включила запись сессий
-    сама. Потом требовал передавать `webvisor.arch_enabled` — Метрика ответила
-    HTTP 400: поле устаревшее. Управляющий признак ровно один.
+    Требование менялось трижды, и каждый раз — из-за боевого запуска, а не из-за
+    рассуждения. Сперва тест требовал не передавать `webvisor` вовсе — Метрика
+    включила запись сессий сама. Потом требовал `webvisor.arch_enabled` —
+    Метрика ответила HTTP 400: поле устаревшее. Тогда пришли к
+    `code_options.visor`, и на изменении счётчика это работает до сих пор.
+
+    Третий раз случился 2026-08-27, когда ветка создания впервые исполнилась
+    по-настоящему — на трёх доменах Lords. Все три отказали одинаково:
+
+        HTTP 400 Could not read JSON … path: counter.code_options.visor
+
+    То есть `code_options` Метрика принимает только на изменении. На создании
+    его быть не должно. Инвариант «запись сессий выключена» держится
+    следующим шагом: `apply` сразу вызывает `ensure_webvisor_disabled`, и тот
+    ходит PUT-ом — путём, который Метрика для этого поля и предусмотрела.
+    Сам этот шаг проверен в `tests/unit/test_analytics_webvisor.py`.
     """
-    from factory.analytics.yandex import VISOR_OPTION
-
     fake = FakeYandex()
     _provider(fake, token).ensure_metrica_counter("yummyani.site", "YummyAnime — yummyani.site")
     body = next(b for m, p, b in fake.requests if m == "POST" and p == "/management/v1/counters")
-    assert set(body["counter"]) == {"name", "site2", "code_options"}
-    assert body["counter"]["code_options"] == {VISOR_OPTION: False}
+    assert set(body["counter"]) == {"name", "site2"}, (
+        "тело создания снова несёт лишние поля: Метрика отвечает на code_options "
+        "при создании HTTP 400, и счётчик не заводится вовсе"
+    )
+    assert "code_options" not in body["counter"]
     assert "webvisor" not in body["counter"]
     # Согласие на обработку данных остаётся действием владельца аккаунта (D55).
     assert "gdpr_agreement_accepted" not in body["counter"]

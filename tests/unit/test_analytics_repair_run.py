@@ -31,10 +31,17 @@ from factory.redaction import forget_secrets
 
 TOKEN_VALUE = "y0_AgAAAABrepairTESTtoken0123456789"
 
+#: Счётчики, которые уже существуют в аккаунте. Список обязан покрывать весь
+#: реестр: подделка, знающая только часть доменов, заставит повторный прогон
+#: «создавать» недостающие — и тест начнёт падать не на регрессии, а на том,
+#: что в проект добавили направление.
 LIVE = {
     "yummyani.site": 111881037,
     "yummyani.org": 111881038,
     "yummyani.biz": 111881039,
+    "lordfilm47.space": 112010269,
+    "lordserial33.biz": 112010274,
+    "1lordserials1.online": 112010277,
 }
 
 
@@ -161,7 +168,7 @@ def test_repair_run_disables_the_visor_without_creating_anything(
 
     assert exit_code == 0, "прогон обязан завершиться без блокеров"
     assert all(w.startswith("PUT ") for w in provider.writes()), provider.writes()
-    assert len(provider.writes()) == 3, "по одному PUT на счётчик — не больше"
+    assert len(provider.writes()) == len(LIVE), "по одному PUT на счётчик — не больше"
     for counter in provider.counters:
         assert counter["code_options"][VISOR_OPTION] is False
         # Остальные настройки кода счётчика не тронуты.
@@ -170,7 +177,7 @@ def test_repair_run_disables_the_visor_without_creating_anything(
         assert len(counter["goals"]) == 9
 
 
-def test_repair_run_records_counter_ids_and_twenty_seven_goal_ids(
+def test_repair_run_records_counter_ids_and_a_goal_id_for_every_event(
     provider, scoped_registry, monkeypatch, capsys
 ):
     from factory.analytics import cli as analytics_cli
@@ -188,7 +195,7 @@ def test_repair_run_records_counter_ids_and_twenty_seven_goal_ids(
         assert all(isinstance(v, int) for v in entry["goal_ids"].values())
         assert not any("сесси" in p for p in entry["problems"])
         total += len(entry["goal_ids"])
-    assert total == 27, f"ожидалось 27 идентификаторов целей, получено {total}"
+    assert total == 9 * len(LIVE), f"ожидалось 27 идентификаторов целей, получено {total}"
 
 
 def test_a_second_repair_run_writes_nothing(provider, scoped_registry, monkeypatch, capsys):

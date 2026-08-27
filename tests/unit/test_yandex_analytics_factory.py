@@ -306,16 +306,35 @@ def test_registry_matches_its_schema():
     registry.validate(registry.load())
 
 
-def test_registry_holds_exactly_the_three_domains():
+#: Все домены реестра и их счётчики. Список задан явно, а не выведен из файла:
+#: тест, читающий тот же файл, что и проверяет, согласится с любой правкой — в
+#: том числе с потерянным доменом или подменённым счётчиком.
+LIVE_COUNTERS = {
+    "yummyani.site": 111881037,
+    "yummyani.org": 111881038,
+    "yummyani.biz": 111881039,
+    # Три направления Lords заведены 2026-08-27. Профили у доменов разные
+    # (lords-general / lords-new / lords-curated), поэтому и счётчики разные:
+    # объединять их зеркалами запрещено ровно по той же причине, что и у Yummy.
+    "lordfilm47.space": 112010269,
+    "lordserial33.biz": 112010274,
+    "1lordserials1.online": 112010277,
+}
+
+
+def test_registry_holds_exactly_the_known_domains():
     domains = [p.domain for p in registry.properties()]
-    assert domains == ["yummyani.site", "yummyani.org", "yummyani.biz"]
+    assert domains == list(LIVE_COUNTERS)
 
 
 def test_each_domain_is_independent():
     """Домены не зеркала: у каждого свой счётчик и свой список hostname."""
     entries = registry.properties()
     hosts = [tuple(e.allowed_hosts) for e in entries]
-    assert len(set(hosts)) == 3
+    assert len(set(hosts)) == len(entries)
+    # Счётчик, попавший на два домена, собирал бы чужие визиты в чужой отчёт.
+    counters = [e.counter_id for e in entries]
+    assert len(set(counters)) == len(counters), f"счётчик повторяется: {counters}"
     for entry in entries:
         assert entry.allowed_hosts == [entry.domain]
 
@@ -418,18 +437,14 @@ def test_registry_refuses_data_that_breaks_the_schema(tmp_path):
 #: Счётчики, фактически созданные в аккаунте владельца. Не «пример», а состояние
 #: продакшена: расхождение означает, что счётчик подменили или пересоздали, и
 #: заметить это должен тест, а не отчёт Метрики через месяц.
-LIVE_COUNTERS = {
-    "yummyani.site": 111881037,
-    "yummyani.org": 111881038,
-    "yummyani.biz": 111881039,
-}
-
-
 def test_registry_records_the_live_counters():
     for entry in registry.properties():
         assert entry.counter_id == LIVE_COUNTERS[entry.domain], entry.domain
-        assert entry.raw["counter_state"] == "reused", (
-            f"{entry.domain}: повторный прогон обязан переиспользовать счётчик, а не создавать"
+        # `created` допустим только для счётчиков, заведённых в этом же цикле;
+        # повторный прогон обязан их переиспользовать, а не завести второй.
+        assert entry.raw["counter_state"] in ("reused", "created"), (
+            f"{entry.domain}: состояние {entry.raw['counter_state']!r} означает, что "
+            "счётчик не подтверждён Метрикой"
         )
 
 
@@ -445,7 +460,11 @@ def test_every_counter_has_all_nine_goals_with_numeric_ids():
         assert set(goal_ids) == set(events.EVENT_IDS), entry.domain
         assert all(isinstance(value, int) and value > 0 for value in goal_ids.values())
         total += len(goal_ids)
-    assert total == 27, f"ожидалось 27 идентификаторов целей на три счётчика, записано {total}"
+    expected = 9 * len(LIVE_COUNTERS)
+    assert total == expected, (
+        f"ожидалось {expected} идентификаторов целей на {len(LIVE_COUNTERS)} счётчиков, "
+        f"записано {total}"
+    )
 
 
 def test_session_recording_is_off_on_every_live_counter():
