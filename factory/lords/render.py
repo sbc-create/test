@@ -764,6 +764,43 @@ def _related(catalog: fx.Catalog, title: fx.Title, kinds, limit: int) -> str:
     )
 
 
+
+def _player_block(ctx, title, name: str) -> str:
+    """Плеер тайтла: настоящий там, где источник дал чем его адресовать.
+
+    Источник сообщает пару «агрегатор + идентификатор тайтла» только для части
+    каталога. Там, где она есть и Publisher ID известен, страница получает тот
+    же `<video-player>`, что отдавал прежний сборщик. Там, где её нет, —
+    нейтральное состояние: отсутствие видео у одного тайтла не повод объяснять
+    посетителю устройство нашей сборки.
+    """
+    playback = getattr(title, "playback", None) or {}
+    aggregator = str(playback.get("aggregator") or "").strip()
+    title_id = str(playback.get("title_id") or "").strip()
+    publisher_id = ctx.get("publisher_id")
+
+    if aggregator and title_id and publisher_id:
+        try:
+            return player_mod.render_live(
+                publisher_id=str(publisher_id),
+                aggregator=aggregator,
+                title_id=title_id,
+                title_name=name,
+                # Идентификатор элемента у каждого тайтла свой: общий склеил бы
+                # два плеера на соседних страницах в один.
+                ident=f"player-{title.slug}",
+                season=1,
+                episode=1,
+            )
+        except player_mod.PlayerContractError:
+            # Контракт нарушен — это наша проблема, а не посетителя.
+            pass
+    return player_mod.render(
+        player_mod.PlayerState(available=False, status="", message=""),
+        title_name=name,
+    )
+
+
 def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: bool) -> Page:
     tpl = ctx["title_page"]
     name = title.name
@@ -801,7 +838,7 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
 
     body = (
         head
-        + player_mod.render(ctx["player_state"], title_name=name)
+        + _player_block(ctx, title, name)
         + _seasons_block(title)
         + '<section class="section"><h2>О карточке</h2>'
         + f'<p class="lede">{escape(tpl.get("intro", ""))}</p></section>'
@@ -1111,7 +1148,8 @@ def _schedule_page(ctx, catalog: fx.Catalog, kinds, indexable: bool) -> Page:
     return _page(ctx, "/schedule/", meta, body)
 
 
-def _context(package: dict, profile: dict, site_plan, player_state) -> dict:
+def _context(package: dict, profile: dict, site_plan, player_state,
+             publisher_id: str | None = None) -> dict:
     layout = theme_mod.layout_of(profile)
     brand = str(profile.get("label") or package.get("site_id"))
     domain = str(package.get("domain") or "").strip()
@@ -1159,6 +1197,9 @@ def _context(package: dict, profile: dict, site_plan, player_state) -> dict:
             fx.ANIME: "/anime/", fx.DORAMA: "/dorama/",
         },
         "player_state": player_state,
+        # Публичный атрибут элемента плеера. Подставляется на сервере в момент
+        # ответа и в общий JS-бандл не попадает.
+        "publisher_id": publisher_id,
         "comments_enabled": bool((package.get("comments") or {}).get("enabled")),
     }
 
@@ -1169,6 +1210,7 @@ def render_site(
     catalog: fx.Catalog | None = None,
     root: Path | None = None,
     environ: dict | None = None,
+    publisher_id: str | None = None,
 ) -> RenderedSite:
     """Полный сайт одного пакета: страницы, ассеты и отчёт о сборке.
 
@@ -1187,7 +1229,7 @@ def render_site(
     )
     profile = profiles[site_plan.profile]
     player_state = player_mod.state(environ)
-    ctx = _context(package, profile, site_plan, player_state)
+    ctx = _context(package, profile, site_plan, player_state, publisher_id)
 
     kinds = [k for k in ct.active_types(site_plan.type_states) if k in TYPE_LABELS]
     collections_on = site_plan.type_states["collections"].active

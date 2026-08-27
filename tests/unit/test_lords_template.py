@@ -349,10 +349,26 @@ class TestSeoWithoutDomain:
 # Плеер и секреты
 # ---------------------------------------------------------------------------
 class TestPlayerAndSecrets:
-    def test_placeholder_is_shown_with_its_diagnostic_status(self, sites):
-        page = next(p for path, p in sites["lords-01"].pages.items() if path.startswith("/title/"))
-        assert player_mod.BLOCKED_STATUS in page.body
-        assert "player__frame" in page.body
+    def test_diagnostic_status_belongs_to_the_report_not_to_the_page(self, sites):
+        """Причину отказа читает оператор, а не посетитель.
+
+        Раньше тест требовал обратного — чтобы код `BLOCKED_INPUT_...` стоял
+        прямо в разметке страницы тайтла. Требование дожило до публичных
+        доменов: на странице фильма посетитель читал служебный текст про
+        передачу учётных данных и Publisher ID. Диагностика никуда не делась,
+        она переехала туда, где ей место, — в отчёт сборки.
+        """
+        site = sites["lords-01"]
+        page = next(p for path, p in site.pages.items() if path.startswith("/title/"))
+        assert "player__frame" in page.body, "область плеера пропала со страницы"
+        assert player_mod.BLOCKED_STATUS not in page.body, (
+            "внутренний код отказа снова попал в публичную разметку"
+        )
+        assert "учётных данных" not in page.body
+        assert "Publisher" not in page.body
+        assert site.report["player"]["status"] == player_mod.BLOCKED_STATUS, (
+            "отчёт сборки перестал называть причину — теперь её негде прочитать"
+        )
 
     def test_placeholder_is_not_a_passed_contract_check(self):
         state = player_mod.state({})
