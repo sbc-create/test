@@ -69,7 +69,10 @@ class TestNoEmptyFactRows:
         html = title_html([item()])
         assert "<dt>Тип</dt>" in html and "Фильм" in html
         assert "<dt>Год</dt>" in html and "2023" in html
-        assert "<dt>Жанры</dt>" in html and "Триллер" in html
+        # У живого каталога строка называется «Теги»: то, что источник кладёт в
+        # `tags`, жанрами не является — там же лежат возрастные отметки.
+        assert "<dt>Теги</dt>" in html and "Триллер" in html
+        assert "<dt>Жанры</dt>" not in html
 
 
 class TestProvenanceTellsTheTruth:

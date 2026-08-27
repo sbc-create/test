@@ -69,6 +69,60 @@ def slugify(value: str) -> str:
     return slug[:80]
 
 
+#: Возрастные отметки, которые источник кладёт в общий список тегов.
+#: Диапазон широкий: числовые («16», «13+»), индийские («U/A 16+», «A», «AA»),
+#: австралийские («MA 15+»), британские («12A»), американские («R», «PG-13»)
+#: и явное отсутствие оценки («NR», «Not Yet Rated»).
+_AGE_TAG = re.compile(
+    r"^(?:\d{1,2}\+?|\d{1,2}A|U/A\s*\d{1,2}\+?|MA\s*\d{1,2}\+?"
+    r"|NR|Not\s+Yet\s+Rated|R|G|PG(?:-13)?|A|AA|AL|TV-[A-Z0-9]+)$",
+    re.IGNORECASE,
+)
+
+#: Пометки формы. Источник знает о типе больше, чем говорит поле `type`:
+#: мультфильмы и аниме приходят как `movie`/`tv` и различаются только тегом.
+_FORMAT_TAGS: dict[str, str] = {
+    "cartoon": fx.ANIMATION,
+    "animation": fx.ANIMATION,
+    "anime": fx.ANIME,
+    "ona": fx.ANIME,
+    "ova": fx.ANIME,
+    "dorama": fx.DORAMA,
+}
+
+#: Суффикс пользовательских дескрипторов MyDramaList. Посетителю он не нужен.
+_VOTE_SUFFIX = re.compile(r"\s*\(Vote tags\)\s*$", re.IGNORECASE)
+
+
+def classify_tags(tags) -> tuple[str, str | None, tuple[str, ...]]:
+    """Разбирает список тегов на возраст, пометку формы и собственно теги.
+
+    Возвращает `(age_rating, format_type, tags)`. Пустая строка и `None` —
+    это «источник не сказал», а не «неизвестно»: показывать такое поле не нужно.
+    """
+    age = ""
+    format_type: str | None = None
+    rest: list[str] = []
+    for raw in tags or []:
+        tag = str(raw).strip()
+        if not tag:
+            continue
+        if not age and _AGE_TAG.match(tag):
+            age = tag
+            continue
+        if _AGE_TAG.match(tag):
+            # Вторая возрастная отметка ничего не добавляет и точно не жанр.
+            continue
+        lowered = tag.lower()
+        if lowered in _FORMAT_TAGS:
+            format_type = format_type or _FORMAT_TAGS[lowered]
+            continue
+        cleaned = _VOTE_SUFFIX.sub("", tag).strip()
+        if cleaned:
+            rest.append(cleaned)
+    return age, format_type, tuple(rest)
+
+
 @dataclass(frozen=True)
 class LiveTitle:
     """Тайтл живого каталога.
@@ -182,7 +236,9 @@ def title_from_item(entry: dict) -> LiveTitle | None:
         return None
 
     slug = slugify(name) or slugify(external_id) or external_id.lower()
-    tags = [t.strip() for t in (entry.get("tags") or []) if isinstance(t, str) and t.strip()]
+    # `tags` источника — не список жанров: там вперемешку возрастные отметки,
+    # пометки формы и пользовательские дескрипторы. Разбираем, а не показываем.
+    age_rating, format_type, tags = classify_tags(entry.get("tags"))
     year = entry.get("year")
 
     return LiveTitle(
@@ -192,15 +248,17 @@ def title_from_item(entry: dict) -> LiveTitle | None:
         # хронометража, возрастного ограничения и описания. Пустая строка здесь
         # — это «источник не сказал», а не «неизвестно».
         original_name="",
-        content_type=_content_type(entry.get("type"), entry.get("is_series")),
+        # Пометка формы точнее поля `type`: мультфильмы и аниме приходят как
+        # movie/tv и отличаются только тегом.
+        content_type=format_type or _content_type(entry.get("type"), entry.get("is_series")),
         year=int(year) if isinstance(year, int) else 0,
         country_slug="",
         country="",
-        genre_slugs=tuple(slugify(t) or "zhanr" for t in tags),
+        genre_slugs=tuple(slugify(t) or "tag" for t in tags),
         genres=tuple(tags),
         studio="",
         runtime_min=0,
-        age_rating="",
+        age_rating=age_rating,
         summary="",
         seasons=(),
         external_id=external_id,
