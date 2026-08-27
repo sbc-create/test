@@ -237,3 +237,65 @@ class TestEveryPathTheRefreshWritesToIsWritable:
             "сообщение об отказе обвиняет источник во всех случаях, включая "
             "отказ записи — это уводит диагностику в сторону"
         )
+
+
+class TestPlayerFreezeGate:
+    """REQ-LORDS-PLAYER-FREEZE: обновление каталога не имеет права снять плеер.
+
+    Регрессия, ради которой это написано, прошла все прежние проверки. Юнит
+    обновления объявлял каталог секретов недоступным — правильно объявлял, ему
+    незачем читать оттуда напрямую, — но Publisher ID искался именно там. Он
+    перестал находиться, и КАЖДАЯ страница тайтла тихо заменила плеер
+    нейтральной фразой «Видео для этого тайтла временно недоступно».
+
+    Снаружи всё выглядело исправным: HTTP 200, карточки на месте, приёмка по
+    содержимому пройдена, свежий каталог доехал. Видео при этом не было ни на
+    одном из трёх доменов, а сообщение выглядело как обычное отсутствие видео
+    у отдельного тайтла.
+    """
+
+    def test_refresh_counts_players_before_and_after(self):
+        text = SCRIPT.read_text(encoding="utf-8")
+        assert "new_players" in text and "old_players" in text, (
+            "обновление не считает плееры: потерю видео заметит только посетитель"
+        )
+
+    def test_a_collapse_in_coverage_rejects_the_release(self):
+        text = SCRIPT.read_text(encoding="utf-8")
+        assert "обновление отклонено" in text, (
+            "нет отказа при обвале покрытия плеером"
+        )
+        assert "old_players * 90 / 100" in text, (
+            "сравнение без допуска: источник вправе убрать видео у части тайтлов"
+        )
+
+    def test_acceptance_looks_at_a_title_page_not_only_the_home_page(self):
+        text = SCRIPT.read_text(encoding="utf-8")
+        assert "/title/" in text and "video-player" in text, (
+            "приёмка смотрит только на главную, а плеер живёт на странице тайтла"
+        )
+
+
+class TestPublisherIdSurvivesTheSandbox:
+    """Publisher ID приходит через systemd, а не читается из закрытого каталога."""
+
+    def test_credentials_directory_is_tried_first(self):
+        from factory.lords import live_site
+        source = __import__("inspect").getsource(live_site.publisher_id_for)
+        assert "_publisher_from_credentials" in source, (
+            "значение ищется только в реестре: в sandbox каталог секретов закрыт, "
+            "и плеер молча исчезнет со всех страниц"
+        )
+
+    def test_registry_remains_the_fallback(self):
+        from factory.lords import live_site
+        source = __import__("inspect").getsource(live_site.publisher_id_for)
+        assert "_publisher_from_registry" in source, (
+            "убран запасной путь: ручной запуск и тесты останутся без Publisher ID"
+        )
+
+    def test_the_unit_still_keeps_the_secrets_directory_closed(self):
+        """Правильное решение — передать значение, а не открыть каталог."""
+        assert "/etc/site-factory/secrets" in " ".join(unit_value(UNIT, "InaccessiblePaths")), (
+            "каталог секретов открыли вместо того, чтобы передать значение"
+        )

@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 import json
+import os
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -60,6 +61,38 @@ def load_live_items(site_id: str, *, root: Path | None = None) -> list[dict]:
 
 
 def publisher_id_for(site_id: str) -> str | None:
+    """Publisher ID направления: сначала systemd credential, затем реестр.
+
+    Порядок важен. Обновление каталога работает в sandbox, где каталог секретов
+    объявлен недоступным — и правильно объявлен: читать оттуда напрямую ему
+    незачем. Значение приходит через LoadCredential, как и токен. Когда
+    credential не передан (ручной запуск, тесты), остаётся путь через реестр.
+
+    Промах здесь не заметен на глаз: Publisher ID не находится, плеер молча
+    заменяется нейтральной фразой на КАЖДОЙ странице, а сайт продолжает
+    отвечать двумястами. Именно так однажды и пропало видео со всех трёх
+    доменов сразу.
+    """
+    from_credential = _publisher_from_credentials()
+    if from_credential:
+        return from_credential
+    return _publisher_from_registry(site_id)
+
+
+def _publisher_from_credentials() -> str | None:
+    """Значение, переданное systemd через LoadCredential."""
+    directory = os.environ.get("CREDENTIALS_DIRECTORY", "").strip()
+    if not directory:
+        return None
+    name = os.environ.get("CDNVIDEOHUB_PUBLISHER_ID_CREDENTIAL", "cdnvideohub_publisher_id")
+    try:
+        value = (Path(directory) / name).read_text(encoding="utf-8").strip()
+    except OSError:
+        return None
+    return value if player_mod.is_valid_publisher_id(value) else None
+
+
+def _publisher_from_registry(site_id: str) -> str | None:
     """Publisher ID направления из реестра Secret Hub.
 
     Значение публичное по назначению: плеер получает его атрибутом элемента, и
