@@ -630,11 +630,20 @@ class TestInterpreterIsReachableByTheService:
         """
         import re
 
+        # Правило смотрит на весь первоисточник, а не только в factory/.
+        # Пока проверялся один каталог, `datetime.UTC` спокойно жил в
+        # seo_operator/ — вне поля зрения сторожа, но на том же хосте, где
+        # доступен только python3.10.
+        packages = ("factory", "seo_operator", "automation", "scripts", "bin")
         offenders = []
-        for path in (repo_root / "factory").rglob("*.py"):
-            text = path.read_text(encoding="utf-8", errors="replace")
-            if re.search(r"\bfrom datetime import UTC\b|\bdatetime\.UTC\b", text):
-                offenders.append(str(path.relative_to(repo_root)))
+        for package in packages:
+            root = repo_root / package
+            if not root.is_dir():
+                continue
+            for path in root.rglob("*.py"):
+                text = path.read_text(encoding="utf-8", errors="replace")
+                if re.search(r"\bfrom datetime import UTC\b|\bdatetime\.UTC\b", text):
+                    offenders.append(str(path.relative_to(repo_root)))
         assert offenders == [], f"3.11-only datetime.UTC в: {offenders}"
 
     def test_ruff_target_version_matches_the_host(self, repo_root):
