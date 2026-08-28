@@ -73,9 +73,14 @@ def slugify(value: str) -> str:
 #: Диапазон широкий: числовые («16», «13+»), индийские («U/A 16+», «A», «AA»),
 #: австралийские («MA 15+»), британские («12A»), американские («R», «PG-13»)
 #: и явное отсутствие оценки («NR», «Not Yet Rated»).
+#: Коды, которые означают «отметку не присваивали», а не саму отметку.
+#: На странице они выглядели как «Возрастная отметка: NR» — сырой код вместо
+#: сведения. Посетителю это ничего не сообщает, а на 31 странице сообщало.
+_NO_AGE_RATING = {"nr", "not yet rated", "not rated", "unrated"}
+
 _AGE_TAG = re.compile(
     r"^(?:\d{1,2}\+?|\d{1,2}A|U/A\s*\d{1,2}\+?|MA\s*\d{1,2}\+?"
-    r"|NR|Not\s+Yet\s+Rated|R|G|PG(?:-13)?|A|AA|AL|TV-[A-Z0-9]+)$",
+    r"|NR|Not\s+Yet\s+Rated|Not\s+Rated|Unrated|R|G|PG(?:-13)?|A|AA|AL|TV-[A-Z0-9]+)$",
     re.IGNORECASE,
 )
 
@@ -106,6 +111,10 @@ def classify_tags(tags) -> tuple[str, str | None, tuple[str, ...]]:
     for raw in tags or []:
         tag = str(raw).strip()
         if not tag:
+            continue
+        if _AGE_TAG.match(tag) and tag.strip().lower() in _NO_AGE_RATING:
+            # «Отметки нет» — это отсутствие значения, а не значение. И жанром
+            # такой код тоже не является, поэтому в теги он не попадает.
             continue
         if not age and _AGE_TAG.match(tag):
             age = tag
