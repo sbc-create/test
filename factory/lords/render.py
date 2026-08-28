@@ -31,6 +31,7 @@ from factory.lords import fixtures as fx
 from factory.lords import icons
 from factory.lords import plan as plan_mod
 from factory.lords import player as player_mod
+from factory.lords import recommend as recommend_mod
 from factory.lords import theme as theme_mod
 
 #: Состояния canonical. Пишутся и в разметку, и в отчёт: «canonical нет» и
@@ -415,6 +416,75 @@ def _card_rating(title) -> str:
     return ""
 
 
+
+def _carousel_card(scored, position: int, shelf_id: str) -> str:
+    """Одна карточка карусели.
+
+    Показывается то, что подтверждено источником: название, год, тип, жанр и
+    оценка с подписью. Ничего из этого не додумывается — отсутствующее поле
+    просто не рисуется, а не заменяется прочерком или нулём.
+    """
+    item = scored.item
+    meta = " · ".join(str(part) for part in (
+        TYPE_LABELS.get(item.content_type, item.content_type),
+        item.release_date.year if item.release_date else "",
+        item.genres[0] if item.genres else "",
+    ) if part)
+    rating = ""
+    for label, value in (("Кинопоиск", item.kp_rating), ("IMDb", item.imdb_rating)):
+        shown = _shown_rating(value)
+        if shown is not None:
+            rating = (f'<span class="rail__rating"><span class="rail__rating-source">'
+                      f'{escape(label)}</span><span class="rail__rating-value">'
+                      f'{escape(f"{shown:.1f}")}</span></span>')
+            break
+    path = f"/title/{item.content_id}/" if not item.content_id.startswith("/") else item.content_id
+    return (
+        f'<li class="rail__item" role="listitem">'
+        f'<a class="rail__link" href="{escape(path)}"'
+        f' data-shelf="{escape(shelf_id)}" data-position="{position}"'
+        f' data-content-id="{escape(item.content_id)}">'
+        f'<span class="rail__poster">'
+        f'<img src="{escape(item.poster or "")}" alt="" loading="lazy" decoding="async"'
+        f' width="400" height="600">{rating}</span>'
+        f'<span class="rail__title">{escape(item.title)}</span>'
+        f'<span class="rail__meta">{escape(meta)}</span>'
+        "</a></li>"
+    )
+
+
+def _carousel(ctx, shelf, heading: str) -> str:
+    """Верхняя карусель.
+
+    Полка приходит от ранжировщика, а не собирается здесь руками: правила
+    допуска, разнообразия и порядка живут в одном месте и одинаковы для всех
+    доменов.
+
+    Разметка — список внутри горизонтально прокручиваемой области. Стрелки
+    добавляются только как удобство: прокрутка работает колесом, свайпом и
+    клавиатурой и без них, поэтому отключённый JavaScript ничего не ломает.
+    """
+    if shelf is None or len(shelf) < 4:
+        return ""
+    cards = "".join(_carousel_card(s, i + 1, shelf.shelf_id)
+                    for i, s in enumerate(shelf.items))
+    return (
+        '<section class="section section--rail" aria-labelledby="rail-heading"'
+        f' data-shelf="{escape(shelf.shelf_id)}"'
+        f' data-algorithm="{escape(shelf.algorithm_version)}">'
+        '<div class="section__head">'
+        f'<h2 id="rail-heading">{escape(heading)}</h2>'
+        '<div class="rail__nav">'
+        '<button class="rail__arrow" type="button" data-rail-prev'
+        ' aria-label="Предыдущие">‹</button>'
+        '<button class="rail__arrow" type="button" data-rail-next'
+        ' aria-label="Следующие">›</button>'
+        "</div></div>"
+        '<ul class="rail" role="list" tabindex="0" aria-label="Подборка">'
+        + cards + "</ul></section>"
+    )
+
+
 def _grid(titles) -> str:
     if not titles:
         return (
@@ -708,7 +778,16 @@ def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
     parts.append(f'<section class="hero hero--{escape(hero_kind)}">{hero_body}</section>')
 
     for block in blocks:
-        if block == "latest_grid":
+        if block == "top_carousel":
+            # Полка собирается ранжировщиком из записей каталога: правила
+            # допуска и разнообразия живут в одном месте и одинаковы для всех
+            # доменов. Вручную сюда ничего не подставляется.
+            parts.append(_carousel(
+                ctx,
+                recommend_mod.carousel_shelf(
+                    catalog.of_types(kinds), domain=ctx.get("domain") or None),
+                ctx.get("carousel_heading") or "Новинки"))
+        elif block == "latest_grid":
             parts.append(
                 '<section class="section"><div class="section__head">'
                 "<h2>Последние добавления</h2>"
@@ -1270,6 +1349,26 @@ def _sitemap(ctx, indexable_paths) -> Page:
 APP_JS = """/* Lords — поведение интерфейса. Ни одного внешнего запроса. */
 (function () {
   "use strict";
+
+  // Стрелки карусели. Полка прокручивается колесом, свайпом и клавиатурой и
+  // без них — это добавка для мыши, а не условие работоспособности.
+  Array.prototype.forEach.call(document.querySelectorAll(".section--rail"), function (section) {
+    var rail = section.querySelector(".rail");
+    if (!rail) { return; }
+    function step(direction) {
+      var card = rail.querySelector(".rail__item");
+      var width = card ? card.getBoundingClientRect().width + 12 : rail.clientWidth / 2;
+      rail.scrollBy({ left: direction * width * 2, behavior: "smooth" });
+    }
+    var prev = section.querySelector("[data-rail-prev]");
+    var next = section.querySelector("[data-rail-next]");
+    if (prev) { prev.addEventListener("click", function () { step(-1); }); }
+    if (next) { next.addEventListener("click", function () { step(1); }); }
+    rail.addEventListener("keydown", function (event) {
+      if (event.key === "ArrowRight") { step(1); event.preventDefault(); }
+      if (event.key === "ArrowLeft") { step(-1); event.preventDefault(); }
+    });
+  });
   var toggle = document.querySelector(".nav-toggle");
   var nav = document.getElementById("site-nav");
   if (toggle && nav) {
@@ -1489,6 +1588,7 @@ def _context(package: dict, profile: dict, site_plan, player_state,
         "profile": site_plan.profile,
         "brand": brand,
         "tokens": theme_mod.tokens_of(profile),
+        "carousel_heading": str(layout.get("carousel_heading") or "Новинки"),
         "mark": "".join(word[0] for word in brand.split()[:2]).upper() or "L",
         "language": str(package.get("language") or "ru"),
         "domain": domain,

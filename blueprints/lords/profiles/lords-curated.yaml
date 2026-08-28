@@ -28,7 +28,8 @@ layout:
   hero: editorial
   card_ratio: "2 / 3"
   columns: { mobile: 2, tablet: 4, desktop: 6 }
-  home_blocks: [hero_editorial, collection_cards, latest_grid, type_rows, top_rated, genre_chips, editor_note]
+  home_blocks: [top_carousel, hero_editorial, collection_cards, latest_grid, type_rows, top_rated, genre_chips, editor_note]
+  carousel_heading: Популярное за месяц
   show_calendar: false
   show_collection_cards: true
   facet_position: none
