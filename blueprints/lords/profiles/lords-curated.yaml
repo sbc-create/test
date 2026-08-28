@@ -27,7 +27,7 @@ layout:
   density: airy
   hero: editorial
   card_ratio: "3 / 2"
-  columns: { mobile: 1, tablet: 2, desktop: 3 }
+  columns: { mobile: 2, tablet: 4, desktop: 6 }
   home_blocks: [hero_editorial, collection_cards, latest_grid, type_rows, top_rated, genre_chips, editor_note]
   show_calendar: false
   show_collection_cards: true

@@ -122,8 +122,11 @@ a:hover, a:focus-visible {{ text-decoration: underline; }}
 h1, h2, h3 {{ line-height: 1.2; margin: 0 0 .5em; overflow-wrap: anywhere; }}
 /* H1 референса — 18px/600. Прежние 36px/700 съедали первый экран
    и делали страницу похожей на документ, а не на витрину. */
-h1 {{ font-size: clamp(1.15rem, 1.05rem + .4vw, 1.4rem); font-weight: 600; }}
-h2 {{ font-size: clamp(1.05rem, 1rem + .3vw, 1.2rem); font-weight: 600; }}
+/* Заголовки не растут вместе с окном: у референса кегль один и тот же
+   на 390 и на 1920, а наш h1 доходил до 22px и делал страницу
+   похожей на документ, а не на витрину. */
+h1 {{ font-size: 1.125rem; font-weight: 600; }}
+h2 {{ font-size: 1.05rem; font-weight: 600; }}
 p {{ margin: 0 0 1em; overflow-wrap: anywhere; }}
 .container {{ width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 16px; }}
 .visually-hidden {{

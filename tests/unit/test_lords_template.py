@@ -217,7 +217,11 @@ class TestProfiles:
         # написан, — что профили не превратились в копии друг друга.
         assert len({layout["density"] for layout in layouts.values()}) == 4
         assert len({layout["hero"] for layout in layouts.values()}) == 4
-        assert len({layout["columns"]["desktop"] for layout in layouts.values()}) == 4
+        # Плотность сетки постеров из этого перечня ушла: она перестала быть
+        # стилевой ручкой профиля. Каталог фильмов узнаётся по плотному ряду
+        # обложек, и три-четыре карточки шириной в треть экрана читались как
+        # служебный шаблон, а не как витрина. Общая плотность закреплена
+        # ниже — как уговор, а не как случайное совпадение.
 
     def test_the_three_product_domains_share_one_family(self):
         """Общая подложка у продуктовых профилей — решение, а не совпадение.
@@ -233,6 +237,25 @@ class TestProfiles:
         assert len({t["accent"] for t in tokens.values()}) == 3
         assert all(t["heading_font"] == tokens[product[0]]["heading_font"]
                    for t in tokens.values())
+
+        # Плотный ряд обложек — требование продукта, одинаковое для трёх
+        # доменов: это то, по чему каталог фильмов узнаётся с первого взгляда.
+        layouts = {n: theme_mod.layout_of(profiles[n]) for n in product}
+        assert len({tuple(sorted(lay["columns"].items())) for lay in layouts.values()}) == 1
+        assert all(lay["columns"]["desktop"] >= 6 for lay in layouts.values())
+        assert all(lay["columns"]["mobile"] >= 2 for lay in layouts.values())
+
+    def test_profiles_still_differ_where_it_matters(self):
+        """Уговор про общий вид не должен превратить профили в копии.
+
+        Состав главной, геройский блок и плотность подачи остаются своими у
+        каждого — иначе три домена стали бы одним сайтом под тремя адресами.
+        """
+        profiles = plan_mod.load_profiles()
+        layouts = {n: theme_mod.layout_of(p) for n, p in profiles.items()}
+        assert len({tuple(lay["home_blocks"]) for lay in layouts.values()}) == 4
+        assert len({lay["hero"] for lay in layouts.values()}) == 4
+        assert len({lay["density"] for lay in layouts.values()}) == 4
 
     def test_stylesheets_differ(self):
         profiles = plan_mod.load_profiles()
