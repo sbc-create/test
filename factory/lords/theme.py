@@ -222,6 +222,25 @@ main {{ padding: var(--pad) 0 40px; }}
 .card:hover {{ border-color: var(--accent); }}
 .card__poster {{ position: relative; aspect-ratio: var(--card-ratio); background: var(--surface-alt); }}
 .card__poster img {{ width: 100%; height: 100%; object-fit: cover; }}
+/* Оценки. Прежде на эти классы не было ни одного правила: разметка
+   выводилась, но подпись и число шли подряд без промежутка и терялись. */
+.ratings {{ display: flex; flex-wrap: wrap; gap: 8px; list-style: none;
+  margin: 0 0 12px; padding: 0; }}
+.rating {{ display: inline-flex; align-items: baseline; gap: 6px;
+  background: var(--surface-alt); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 4px 9px; }}
+.rating__source {{ color: var(--muted); font-size: .78rem; }}
+.rating__value {{ color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }}
+
+/* Оценка на обложке: тёмная подложка под числом, чтобы оно читалось на любом
+   кадре, а не только на тёмном. */
+.card__rating {{ position: absolute; left: 6px; bottom: 6px; display: inline-flex;
+  align-items: baseline; gap: 4px; padding: 2px 6px; border-radius: var(--radius);
+  background: rgba(0, 0, 0, .78); }}
+.card__rating-source {{ color: #cfcfcf; font-size: .66rem; }}
+.card__rating-value {{ color: #fff; font-size: .78rem; font-weight: 600;
+  font-variant-numeric: tabular-nums; }}
+
 .card__badge {{
   position: absolute; top: 6px; left: 6px;
   background: var(--bg); color: var(--muted);
