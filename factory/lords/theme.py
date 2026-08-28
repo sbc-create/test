@@ -222,6 +222,58 @@ main {{ padding: var(--pad) 0 40px; }}
 .card:hover {{ border-color: var(--accent); }}
 .card__poster {{ position: relative; aspect-ratio: var(--card-ratio); background: var(--surface-alt); }}
 .card__poster img {{ width: 100%; height: 100%; object-fit: cover; }}
+/* Верхняя карусель.
+
+   Прокручивается сама по себе — колесом, свайпом и клавиатурой, — а стрелки
+   лишь удобство. Поэтому при выключенном JavaScript полка остаётся рабочей.
+
+   Ширина карточки задана в долях видимой области, а не в пикселях: на широком
+   экране помещается шесть, на телефоне — две с половиной, и обрезанная
+   половинка подсказывает, что список продолжается. Кадр постера
+   зафиксирован через aspect-ratio, поэтому подгрузка картинки не сдвигает
+   вёрстку. */
+.section--rail {{ overflow: hidden; }}
+.rail {{
+  display: grid; grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 5 * 12px) / 6);
+  gap: 12px; margin: 0; padding: 0 0 6px; list-style: none;
+  overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory; scrollbar-width: thin;
+}}
+.rail:focus-visible {{ outline: 2px solid var(--accent); outline-offset: 3px; }}
+.rail__item {{ scroll-snap-align: start; min-width: 0; }}
+.rail__link {{ display: flex; flex-direction: column; gap: 6px;
+  color: var(--text); text-decoration: none; }}
+.rail__link:focus-visible {{ outline: 2px solid var(--accent); outline-offset: 3px; }}
+.rail__poster {{ position: relative; display: block; aspect-ratio: var(--card-ratio);
+  background: var(--surface-alt); border-radius: var(--radius); overflow: hidden; }}
+.rail__poster img {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
+.rail__title {{ font-size: .86rem; line-height: 1.3; overflow: hidden;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }}
+.rail__link:hover .rail__title {{ color: var(--accent); }}
+.rail__meta {{ color: var(--muted); font-size: .74rem; }}
+.rail__rating {{ position: absolute; left: 6px; bottom: 6px; display: inline-flex;
+  align-items: baseline; gap: 4px; padding: 2px 6px; border-radius: var(--radius);
+  background: rgba(0, 0, 0, .78); }}
+.rail__rating-source {{ color: #cfcfcf; font-size: .66rem; }}
+.rail__rating-value {{ color: #fff; font-size: .78rem; font-weight: 600;
+  font-variant-numeric: tabular-nums; }}
+.rail__nav {{ display: flex; gap: 6px; }}
+.rail__arrow {{ background: var(--surface-alt); color: var(--text);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  width: 30px; height: 28px; font-size: 1rem; line-height: 1; cursor: pointer; }}
+.rail__arrow:hover {{ border-color: var(--accent); color: var(--accent); }}
+.rail__arrow:focus-visible {{ outline: 2px solid var(--accent); outline-offset: 2px; }}
+
+@media (max-width: 1100px) {{
+  .rail {{ grid-auto-columns: calc((100% - 3 * 12px) / 4); }}
+}}
+@media (max-width: 760px) {{
+  /* Две с половиной карточки: половина показывает, что полка продолжается. */
+  .rail {{ grid-auto-columns: calc((100% - 2 * 10px) / 2.5); gap: 10px; }}
+  .rail__nav {{ display: none; }}
+}}
+
 /* Оценки. Прежде на эти классы не было ни одного правила: разметка
    выводилась, но подпись и число шли подряд без промежутка и терялись. */
 .ratings {{ display: flex; flex-wrap: wrap; gap: 8px; list-style: none;

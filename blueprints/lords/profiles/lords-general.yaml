@@ -33,7 +33,8 @@ layout:
   hero: catalog
   card_ratio: "2 / 3"
   columns: { mobile: 2, tablet: 4, desktop: 6 }
-  home_blocks: [hero_search, latest_grid, type_rows, top_rated, genre_chips, year_grid]
+  home_blocks: [top_carousel, hero_search, latest_grid, type_rows, top_rated, genre_chips, year_grid]
+  carousel_heading: Новинки каталога
   show_calendar: false
   show_collection_cards: false
   facet_position: sidebar
