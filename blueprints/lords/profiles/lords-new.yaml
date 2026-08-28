@@ -27,7 +27,7 @@ theme:
 layout:
   density: dense
   hero: timeline
-  card_ratio: "16 / 9"
+  card_ratio: "2 / 3"
   columns: { mobile: 2, tablet: 4, desktop: 6 }
   home_blocks: [hero_timeline, latest_grid, fresh_episodes, type_rows, top_rated, calendar, genre_chips]
   show_calendar: true
