@@ -126,17 +126,21 @@ def check_page(page: PageUnderTest) -> list[Finding]:
     found.append(Finding("SEO-014", not broken, f"негодные ссылки: {broken[:3]}"))
     # SEO-017 — без набивки ключами.
     #
-    # Считается только редакторский текст: заголовок, описание и H1. Первая
-    # версия считала всю страницу и объявляла набивкой список серий, где
-    # «Серия 1 … Серия 24» повторяется по устройству страницы, а не ради
-    # поисковика. Навигация — не текст, и мерить её плотность бессмысленно.
-    prose = " ".join([title, description] + [_strip(h) for h in h1s]).lower()
-    words = re.findall(r"[а-яёa-z]{4,}", prose)
-    if len(words) >= 8:
-        top = max(set(words), key=words.count)
-        share = words.count(top) / len(words)
-        found.append(Finding("SEO-017", share < 0.30,
-                             f"самое частое слово {top!r} занимает {share:.1%}"))
+    # Считается повтор ВНУТРИ описания, а не по связке «заголовок + описание +
+    # H1». Две прошлые версии ошибались по-разному: первая объявляла набивкой
+    # список серий, где «Серия 1 … Серия 24» повторяется по устройству
+    # страницы; вторая — название фильма, которое обязано стоять и в
+    # заголовке, и в описании, и в H1 по одному разу. Ни то, ни другое
+    # набивкой не является.
+    #
+    # Слишком короткий текст не оценивается вовсе: на семи словах доля любого
+    # из них скачет так, что мерить нечего.
+    prose_words = re.findall(r"[а-яёa-z]{4,}", description.lower())
+    if len(prose_words) >= 12:
+        top = max(set(prose_words), key=prose_words.count)
+        share = prose_words.count(top) / len(prose_words)
+        found.append(Finding("SEO-017", share < 0.25,
+                             f"в описании слово {top!r} занимает {share:.1%}"))
     # SEO-006 / SEO-007 — напечатанные факты совпадают с источником.
     for key in ("year", "country", "genre", "season"):
         value = page.facts.get(key)

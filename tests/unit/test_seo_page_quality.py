@@ -186,12 +186,23 @@ class TestSEO016And019MetadataSurvivesAndIsEquivalent:
 
 
 class TestSEO017NoKeywordStuffing:
-    def test_a_repeated_word_in_the_title_is_refused(self):
-        stuffed = ("<title>смотреть смотреть смотреть смотреть смотреть онлайн</title>"
+    def test_a_repeated_word_in_the_description_is_refused(self):
+        # Набивка — это повтор внутри самого текста, а не название фильма,
+        # стоящее по одному разу в заголовке, описании и H1.
+        stuffed = ("<title>Фильм смотреть онлайн</title>"
                    '<meta name="description" content="смотреть смотреть смотреть смотреть '
-                   'смотреть смотреть смотреть онлайн бесплатно тут">'
-                   "<h1>смотреть смотреть</h1>")
+                   'смотреть смотреть смотреть смотреть онлайн бесплатно хорошем качестве '
+                   'русском переводе новинка">'
+                   "<h1>Фильм</h1>")
         assert "SEO-017" in result_for(page(stuffed))
+
+    def test_a_natural_description_is_not_stuffing(self):
+        natural = ("<title>Хороший фильм (2019)</title>"
+                   '<meta name="description" content="Драма 2019 года производства Франции: '
+                   'режиссёр, состав исполнителей, продолжительность и оценки источников '
+                   'с подписями, собранные из каталога поставщика.">'
+                   "<h1>Хороший фильм</h1>")
+        assert "SEO-017" not in result_for(page(natural))
 
     def test_an_episode_list_is_not_stuffing(self):
         # «Серия 1 … Серия 24» повторяется по устройству страницы, а не ради
