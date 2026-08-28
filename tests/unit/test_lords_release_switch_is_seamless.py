@@ -23,6 +23,7 @@ import pytest
 
 from factory.lords.bundle import RUNTIME
 
+
 def free_port() -> int:
     """Свободный порт, выданный ядром.
 
