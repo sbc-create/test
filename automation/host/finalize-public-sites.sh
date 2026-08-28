@@ -189,6 +189,9 @@ if ! ( cd "${REPO}" && CREDENTIALS_DIRECTORY="${CREDS_DIR}" \
         "${PY}" -m factory lords-live ); then
   die "живой каталог не собрался — переключение не выполнено"
 fi
+python3 -m factory.lords.live_bundle --archive artifacts/lords/bundle/lords-01.tar --cache var/lords/lords/catalog-cache/lords-01.json --credentials-dir /etc/site-factory/secrets/lords/lords-01
+python3 -m factory.lords.live_bundle --archive artifacts/lords/bundle/lords-02.tar --cache var/lords/lords/catalog-cache/lords-02.json --credentials-dir /etc/site-factory/secrets/lords/lords-02
+python3 -m factory.lords.live_bundle --archive artifacts/lords/bundle/lords-03.tar --cache var/lords/lords/catalog-cache/lords-03.json --credentials-dir /etc/site-factory/secrets/lords/lords-03
 
 # Раскладка релизов и перезапуск только трёх юнитов Lords.
 BUNDLE="${REPO}/artifacts/lords/bundle"
@@ -298,7 +301,9 @@ catalog_nonempty() {  # domain marker
   grep -q "${marker}" <<<"${BODY}" \
     && ok "${domain}: каталог непустой" || bad "${domain}: каталог пуст"
 }
-for domain in "${LORDS_DOMAINS[@]}"; do catalog_nonempty "${domain}" 'card__title'; done
+# Маркер живого каталога — ссылки /title/…/, а не класс шаблона: `card__title`
+# в отрисованном каталоге не встречается, и проверка отклоняла рабочий сайт.
+for domain in "${LORDS_DOMAINS[@]}"; do catalog_nonempty "${domain}" 'href="/title/'; done
 for domain in "${YUMMY_DOMAINS[@]}"; do
   fetch "${domain}" "/"
   grep -qiE 'href="/(title|anime|catalog)/' <<<"${BODY}" \
@@ -348,36 +353,30 @@ check_direction_titles() {   # domain series_path movie_path
     || bad "${domain}: у фильма нет плеера"
 }
 
-LORDS_REPORT="${REPO}/artifacts/lords/live/report.json"
+# Примеры страниц берутся из bundle-manifest.json внутри самого пакета: это
+# тот же артефакт, что разложен в релиз, поэтому путь заведомо существует на
+# сайте. Прежде читался artifacts/lords/live/report.json, где этих полей нет.
 for index in "${!LORDS_DOMAINS[@]}"; do
   domain="${LORDS_DOMAINS[${index}]}"
   site="${LORDS_SITES[${index}]}"
-  paths="$("${PY}" - "${LORDS_REPORT}" "${site}" <<'PYEOF' 2>/dev/null || true
-import json, sys
+  paths="$("${PY}" - "${BUNDLE}/${site}.tar" <<'PYEOF' 2>/dev/null || true
+import json, sys, tarfile
 try:
-    site = json.load(open(sys.argv[1], encoding="utf-8"))["sites"][sys.argv[2]]
+    with tarfile.open(sys.argv[1]) as archive:
+        manifest = json.loads(archive.extractfile("bundle-manifest.json").read().decode("utf-8"))
 except Exception:
-    print("	"); raise SystemExit(0)
-print(f'{site.get("sample_series_path","")}	{site.get("sample_movie_path","")}')
+    print("\t"); raise SystemExit(0)
+print(f'{manifest.get("sample_series_path","")}\t{manifest.get("sample_movie_path","")}')
 PYEOF
 )"
-  series="${paths%%$'	'*}"; movie="${paths##*$'	'}"
-  # Если отчёт не назвал адреса, берём первые ссылки на тайтлы прямо со страницы.
-  if [[ -z "${series}" ]]; then
-    fetch "${domain}" "/series/"
-    series="$(grep -oE '/title/[a-z0-9-]+/' <<<"${BODY}" | head -1)"
-  fi
-  if [[ -z "${movie}" ]]; then
-    fetch "${domain}" "/movies/"
-    movie="$(grep -oE '/title/[a-z0-9-]+/' <<<"${BODY}" | head -1)"
-  fi
+  series="${paths%%$'\t'*}"; movie="${paths##*$'\t'}"
   check_direction_titles "${domain}" "${series}" "${movie}"
 done
 
 for domain in "${YUMMY_DOMAINS[@]}"; do
   fetch "${domain}" "/"
-  series="$(grep -oE '/(title|anime)/[a-z0-9-]+' <<<"${BODY}" | head -1)"
-  movie="$(grep -oE '/(title|anime)/[a-z0-9-]+' <<<"${BODY}" | tail -1)"
+  series="$(grep -m1 -oE '/(title|anime)/[a-z0-9-]+' <<<"${BODY}")"
+  movie="$(grep -m1 -oE '/(title|anime)/[a-z0-9-]+' <<<"${BODY}" | tail -1)"
   check_direction_titles "${domain}" "${series}" "${movie}"
 done
 

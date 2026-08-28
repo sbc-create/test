@@ -61,12 +61,36 @@ class TestShippedRegistry:
         assert len(lords.consumers) == 3
         assert len({c.files["api_token"] for c in lords.consumers}) == 1
 
-    def test_file_modes_are_owner_only(self, config):
+    def test_no_secret_is_readable_by_the_world(self, config):
+        """Единственное правило без исключений: мир секрет не читает.
+
+        Прежде здесь требовались строго owner-only права. Требование выглядело
+        безопасным и один раз уже стоило публичного каталога: файл лежал с
+        0400 root:root, а читать его должен был процесс контейнера, который
+        работает не от root. «Строго» и «правильно» разошлись.
+        """
         for portfolio in config.portfolios:
             for consumer in portfolio.consumers:
-                assert consumer.file_mode in (0o400, 0o600), \
+                assert not (consumer.file_mode & 0o007), \
                     f"{consumer.id}: права файла {consumer.file_mode:04o}"
-                assert not (consumer.file_mode & 0o077)
+
+    def test_modes_stay_within_the_declared_contract(self, config):
+        for portfolio in config.portfolios:
+            for consumer in portfolio.consumers:
+                assert consumer.file_mode in (0o400, 0o440, 0o600), \
+                    f"{consumer.id}: права файла {consumer.file_mode:04o}"
+
+    def test_group_access_is_only_granted_to_a_named_non_root_reader(self, config):
+        """0440 существует ради конкретного читателя, а не «на всякий случай».
+
+        Если группа осталась root, группового доступа никто не просил, и 0440
+        отличается от 0400 только видимостью послабления.
+        """
+        for portfolio in config.portfolios:
+            for consumer in portfolio.consumers:
+                if consumer.file_mode & 0o040:
+                    assert consumer.group != "root", \
+                        f"{consumer.id}: группе открыт доступ, но группа — root"
 
 
 class TestNewPortfolioNeedsNoCode:

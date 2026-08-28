@@ -334,8 +334,12 @@ def verify_written(consumer: Consumer) -> list[str]:
         mode = stat.S_IMODE(info.st_mode)
         if mode != consumer.file_mode:
             problems.append(f"{path}: права {mode:04o}, ожидается {consumer.file_mode:04o}")
-        if mode & 0o077:
-            problems.append(f"{path} доступен группе или миру")
+        # Группе файл открыт намеренно: контейнер читает секрет не от root,
+        # и группа — единственный способ дать ему доступ, не открывая файл миру.
+        # Проверяется поэтому только мир; ожидаемые права уже сверены выше
+        # точным сравнением.
+        if mode & 0o007:
+            problems.append(f"{path} доступен миру")
         if os.geteuid() == 0 and info.st_uid != 0:
             problems.append(f"{path}: владелец uid={info.st_uid}, ожидается root")
         if info.st_size == 0:
