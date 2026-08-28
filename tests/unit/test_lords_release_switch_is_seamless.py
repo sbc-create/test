@@ -126,3 +126,64 @@ class TestRuntimeReadsTheLinkNotASnapshot:
     def test_the_manifest_is_reread_rather_than_remembered(self):
         assert "def manifest():" in RUNTIME
         assert "MANIFEST[" not in RUNTIME
+
+
+class TestTheRuntimeSurvivesReleaseRetention:
+    """Хранение удаляет старые релизы. Процесс не должен зависеть от них.
+
+    Это не гипотеза: `Path(__file__).resolve()` в роли запасного пути привязал
+    рабочий процесс к каталогу релиза, который был текущим на момент старта.
+    Юнит на сервере переменную окружения ещё не получил, хранение со временем
+    удалило тот каталог — и сайт начал отдавать 404 на все адреса сразу,
+    включая главную. Перезапуска, который прежде всё чинил, больше нет.
+    """
+
+    def test_the_fallback_path_does_not_resolve_the_link_away(self):
+        assert "Path(__file__).parent" in RUNTIME
+        assert "Path(__file__).resolve().parent" not in RUNTIME
+
+    def test_serving_survives_deletion_of_the_release_it_started_on(self, tmp_path):
+        import json
+        import os
+        import shutil
+        import subprocess
+        import sys
+        import time
+        import urllib.request
+
+        port = 9296
+        for name, marker in (("r1", "ПЕРВЫЙ"), ("r2", "ВТОРОЙ")):
+            _release(tmp_path, name, marker)
+        current = tmp_path / "current"
+        current.symlink_to(tmp_path / "releases" / "r1")
+        (current / "serve.py").write_text(RUNTIME, encoding="utf-8")
+
+        # Запускается ровно так, как это делает юнит: через путь со ссылкой и
+        # БЕЗ переменной окружения — то есть по запасному пути.
+        env = {k: v for k, v in os.environ.items() if k != "LORDS_SITE_ROOT"}
+        env.update({"LORDS_HOST": "127.0.0.1", "LORDS_PORT": str(port)})
+        proc = subprocess.Popen([sys.executable, str(current / "serve.py")], env=env,
+                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        try:
+            for _ in range(60):
+                time.sleep(0.2)
+                try:
+                    urllib.request.urlopen(f"http://127.0.0.1:{port}/healthz", timeout=2).read()
+                    break
+                except OSError:
+                    continue
+            else:
+                pytest.skip("рантайм не поднялся в отведённое время")
+
+            _switch(current, tmp_path / "releases" / "r2")
+            # Хранение убирает релиз, на котором процесс стартовал.
+            shutil.rmtree(tmp_path / "releases" / "r1")
+
+            body = urllib.request.urlopen(f"http://127.0.0.1:{port}/", timeout=5).read().decode()
+            assert "ВТОРОЙ" in body
+            health = json.loads(urllib.request.urlopen(
+                f"http://127.0.0.1:{port}/healthz", timeout=5).read().decode())
+            assert health["release"] == "r2"
+        finally:
+            proc.terminate()
+            proc.wait(timeout=15)

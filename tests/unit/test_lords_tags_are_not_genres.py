@@ -34,12 +34,26 @@ def item(tags, **over) -> dict:
 
 
 class TestAgeRatingsLeaveTheTagList:
-    @pytest.mark.parametrize("tag", ["13+", "18+", "0+", "NR", "Not Yet Rated",
-                                     "U/A 16+", "MA 15+", "12A", "R", "16"])
+    @pytest.mark.parametrize("tag", ["13+", "18+", "0+", "U/A 16+", "MA 15+",
+                                     "12A", "R", "16"])
     def test_age_marks_become_the_age_field(self, tag):
         title = live_catalog.title_from_item(item([tag, "Детектив"]))
         assert title.age_rating == tag, f"{tag} не распознан как возрастная отметка"
         assert tag not in title.genres, f"{tag} остался в списке тегов"
+
+    @pytest.mark.parametrize("tag", ["NR", "Not Yet Rated", "Not Rated", "Unrated"])
+    def test_a_code_meaning_no_rating_is_not_shown_as_a_rating(self, tag):
+        """«Отметки нет» — это отсутствие значения, а не значение.
+
+        Код NR попадал в поле возрастной отметки и печатался на странице как
+        «Возрастная отметка: NR» — на 31 странице каталога. Посетителю такой
+        код ничего не сообщает; жанром он тоже не является, поэтому в теги
+        не уходит.
+        """
+        title = live_catalog.title_from_item(item([tag, "Детектив"]))
+        assert title.age_rating == ""
+        assert tag not in title.genres
+        assert list(title.genres) == ["Детектив"]
 
     def test_first_age_mark_wins_and_the_rest_do_not_pollute_tags(self):
         title = live_catalog.title_from_item(item(["13+", "16+", "Детектив"]))
