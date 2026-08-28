@@ -150,7 +150,6 @@ p {{ margin: 0 0 1em; overflow-wrap: anywhere; }}
   font-size: .85rem; letter-spacing: .02em;
 }}
 .brand__name {{ font-size: 1.05rem; }}
-.brand__kind {{ color: var(--muted); font-weight: 400; font-size: .8rem; }}
 .nav-toggle {{
   margin-left: auto; background: var(--surface-alt); color: var(--text);
   border: 1px solid var(--border); border-radius: var(--radius);
