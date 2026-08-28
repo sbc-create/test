@@ -425,6 +425,8 @@ def _carousel_card(scored, position: int, shelf_id: str) -> str:
     просто не рисуется, а не заменяется прочерком или нулём.
     """
     item = scored.item
+    if not item.path:
+        return ""
     meta = " · ".join(str(part) for part in (
         TYPE_LABELS.get(item.content_type, item.content_type),
         item.release_date.year if item.release_date else "",
@@ -438,7 +440,10 @@ def _carousel_card(scored, position: int, shelf_id: str) -> str:
                       f'{escape(label)}</span><span class="rail__rating-value">'
                       f'{escape(f"{shown:.1f}")}</span></span>')
             break
-    path = f"/title/{item.content_id}/" if not item.content_id.startswith("/") else item.content_id
+    # Адрес берётся у записи каталога. Собирать его из идентификатора нельзя:
+    # идентификатор — это UUID поставщика, страницы по такому адресу нет, и
+    # каждая карточка карусели вела в 404. Приёмка выкладки это и поймала.
+    path = item.path
     return (
         f'<li class="rail__item" role="listitem">'
         f'<a class="rail__link" href="{escape(path)}"'

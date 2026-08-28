@@ -57,6 +57,9 @@ class ItemFeatures:
 
     poster: str | None = None
     backdrop: str | None = None
+    #: Адрес страницы записи на сайте. Идентификатор для этого не годится:
+    #: он устойчив между поставщиками, но в URL не превращается.
+    path: str | None = None
 
     #: True — источник подтвердил поток, False — подтвердил, что его нет,
     #: None — не проверяли. Только False запрещает показ.
@@ -134,6 +137,7 @@ def _combine(left: ItemFeatures, right: ItemFeatures) -> ItemFeatures:
         persons=left.persons or right.persons,
         franchise_id=_prefer(left.franchise_id, right.franchise_id),
         poster=_prefer(left.poster, right.poster),
+        path=_prefer(left.path, right.path),
         backdrop=_prefer(left.backdrop, right.backdrop),
         playback_state=playback,
         has_title_page=left.has_title_page and right.has_title_page,

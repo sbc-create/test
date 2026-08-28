@@ -26,6 +26,8 @@ def feature(cid, **kw):
         "poster": f"https://poster/{cid}.webp", "playback_state": True,
         "added_at": NOW - timedelta(days=int(cid[-1]) if cid[-1].isdigit() else 1),
         "genres": ("драма",),
+        # Адрес страницы обязателен: карточке некуда вести без него.
+        "path": f"/title/{cid}/",
     }
     base.update(kw)
     return ItemFeatures(**base)
@@ -191,3 +193,37 @@ class TestAdapterKeepsTheContract:
         assert item.playback_state is True
         assert item.kp_rating == 7.0 and item.imdb_rating is None
         assert item.release_date.year == 2020
+
+
+class TestCarouselLinksGoWhereThePageIs:
+    """Ссылка карточки — адрес страницы, а не идентификатор поставщика.
+
+    Первая выкладка карусели собирала адрес из `content_id`, то есть из UUID
+    поставщика. Страницы по такому адресу нет, и каждая карточка вела в 404.
+    Поймала это приёмка выкладки: она берёт первую ссылку на тайтл с главной,
+    не находит там плеера и откатывает релиз. Сайт при этом не пострадал, но
+    карусель не появилась.
+    """
+
+    def test_the_card_uses_the_catalogue_path(self):
+        # Идентификатор уникален: совпади он с записью из набора, слияние
+        # дублей склеило бы обе и адрес взяло бы у первой.
+        item = feature("отдельная", path="/title/nastoyashchiy-slug/")
+        html = rendered(pool(12) + [item])
+        assert "/title/nastoyashchiy-slug/" in html
+
+    def test_an_identifier_never_becomes_a_url(self):
+        html = rendered([feature(f"01a0471{i}-97cc-754a-a163-7eff4fbca39{i}",
+                                path=f"/title/slug-{i}/") for i in range(12)])
+        assert "/title/01a0471" not in html
+
+    def test_a_record_without_a_path_is_not_drawn(self):
+        # Рисовать карточку, которой некуда вести, незачем.
+        assert render._carousel_card(
+            type("S", (), {"item": feature("c1", path=None)})(), 1, "shelf") == ""
+
+    def test_every_rendered_card_has_a_href(self):
+        html = rendered([feature(f"c{i}", path=f"/title/s{i}/") for i in range(14)])
+        cards = html.count("rail__item")
+        hrefs = html.count('class="rail__link" href="/title/')
+        assert cards == hrefs
