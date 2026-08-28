@@ -23,7 +23,19 @@ import pytest
 
 from factory.lords.bundle import RUNTIME
 
-PORT = 9297
+def free_port() -> int:
+    """Свободный порт, выданный ядром.
+
+    Фиксированный номер делал тесты зависимыми от того, что происходило на
+    машине минуту назад: слушающий сокет держится в TIME_WAIT, и повторный
+    прогон в том же задании мог не суметь занять тот же порт.
+    """
+    import socket
+
+    with socket.socket() as sock:
+        sock.bind(("127.0.0.1", 0))
+        return sock.getsockname()[1]
+
 
 
 def _release(root: Path, name: str, marker: str) -> Path:
@@ -43,29 +55,30 @@ def stand(tmp_path):
     current = tmp_path / "current"
     current.symlink_to(tmp_path / "releases" / "r1")
     (tmp_path / "serve.py").write_text(RUNTIME, encoding="utf-8")
+    port = free_port()
     env = {**os.environ, "LORDS_SITE_ROOT": str(current),
-           "LORDS_HOST": "127.0.0.1", "LORDS_PORT": str(PORT)}
+           "LORDS_HOST": "127.0.0.1", "LORDS_PORT": str(port)}
     proc = subprocess.Popen([sys.executable, str(tmp_path / "serve.py")], env=env,
                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     for _ in range(60):
         time.sleep(0.2)
         try:
-            urllib.request.urlopen(f"http://127.0.0.1:{PORT}/healthz", timeout=2).read()
+            urllib.request.urlopen(f"http://127.0.0.1:{port}/healthz", timeout=2).read()
             break
         except OSError:
             continue
     else:
         proc.terminate()
-        pytest.skip("рантайм не поднялся в отведённое время")
+        raise AssertionError("рантайм не поднялся в отведённое время")
     try:
-        yield tmp_path, current, proc
+        yield tmp_path, current, proc, port
     finally:
         proc.terminate()
         proc.wait(timeout=15)
 
 
-def _get(path="/"):
-    return urllib.request.urlopen(f"http://127.0.0.1:{PORT}{path}", timeout=5).read().decode()
+def _get(port, path="/"):
+    return urllib.request.urlopen(f"http://127.0.0.1:{port}{path}", timeout=5).read().decode()
 
 
 def _switch(current: Path, target: Path) -> None:
@@ -79,22 +92,22 @@ def _switch(current: Path, target: Path) -> None:
 
 class TestSwitchingReleasesNeedsNoRestart:
     def test_new_release_is_served_without_touching_the_process(self, stand):
-        root, current, proc = stand
-        assert "ПЕРВЫЙ" in _get()
+        root, current, proc, port = stand
+        assert "ПЕРВЫЙ" in _get(port)
         _switch(current, root / "releases" / "r2")
-        assert "ВТОРОЙ" in _get()
+        assert "ВТОРОЙ" in _get(port)
         # Тот же самый процесс: перезапуска не было.
         assert proc.poll() is None
 
     def test_health_reports_the_release_actually_being_served(self, stand):
-        root, current, _ = stand
-        assert json.loads(_get("/healthz"))["release"] == "r1"
+        root, current, _, port = stand
+        assert json.loads(_get(port, "/healthz"))["release"] == "r1"
         _switch(current, root / "releases" / "r2")
-        assert json.loads(_get("/healthz"))["release"] == "r2"
+        assert json.loads(_get(port, "/healthz"))["release"] == "r2"
 
     def test_the_site_answers_through_the_whole_switch(self, stand):
         """Ни один запрос не должен провалиться, пока ссылка меняется."""
-        root, current, _ = stand
+        root, current, _, port = stand
         codes = []
         for index in range(24):
             if index == 8:
@@ -102,7 +115,7 @@ class TestSwitchingReleasesNeedsNoRestart:
             if index == 16:
                 _switch(current, root / "releases" / "r1")
             try:
-                urllib.request.urlopen(f"http://127.0.0.1:{PORT}/", timeout=5).read()
+                urllib.request.urlopen(f"http://127.0.0.1:{port}/", timeout=5).read()
                 codes.append(200)
             except urllib.error.HTTPError as error:
                 codes.append(error.code)
@@ -111,8 +124,9 @@ class TestSwitchingReleasesNeedsNoRestart:
         assert all(code == 200 for code in codes), codes
 
     def test_a_missing_page_is_still_a_plain_404(self, stand):
+        _root, _current, _proc, port = stand
         with pytest.raises(urllib.error.HTTPError) as caught:
-            _get("/no-such-page/")
+            _get(port, "/no-such-page/")
         assert caught.value.code == 404
 
 
@@ -151,7 +165,7 @@ class TestTheRuntimeSurvivesReleaseRetention:
         import time
         import urllib.request
 
-        port = 9296
+        port = free_port()
         for name, marker in (("r1", "ПЕРВЫЙ"), ("r2", "ВТОРОЙ")):
             _release(tmp_path, name, marker)
         current = tmp_path / "current"
@@ -173,7 +187,7 @@ class TestTheRuntimeSurvivesReleaseRetention:
                 except OSError:
                     continue
             else:
-                pytest.skip("рантайм не поднялся в отведённое время")
+                raise AssertionError("рантайм не поднялся в отведённое время")
 
             _switch(current, tmp_path / "releases" / "r2")
             # Хранение убирает релиз, на котором процесс стартовал.
