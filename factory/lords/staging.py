@@ -362,6 +362,10 @@ Group=lords
 WorkingDirectory={site.current}
 Environment=LORDS_HOST=127.0.0.1
 Environment=LORDS_PORT={site.port}
+# Путь к ссылке `current`, а не к разрешённому каталогу релиза: рантайм
+# перечитывает её на каждом запросе, поэтому смена релиза не требует
+# перезапуска и не оставляет окна, в котором порт никто не слушает.
+Environment=LORDS_SITE_ROOT={site.current}
 Environment=PYTHONDONTWRITEBYTECODE=1
 {credentials}ExecStart=/usr/bin/python3 {site.current}/serve.py
 Restart=on-failure

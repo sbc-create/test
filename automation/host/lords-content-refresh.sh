@@ -152,16 +152,47 @@ PYEOF
     log "${site}: раскладываю релиз ${release}"
     mkdir -p "${target}"
     cp -a "${staging}" "${target}/site"
-    # Рантайм не меняется этой выкладкой: serve.py берётся у текущего релиза.
-    [ -n "$current" ] && cp -a "${current}/serve.py" "${target}/serve.py"
+    # Рантайм берётся из репозитория, а не у предыдущего релиза. Копирование
+    # у соседа означало, что исправление рантайма не доезжало до сайта
+    # никогда: каждый новый релиз наследовал serve.py от старого.
+    if ! "$PYTHON" - "${target}/serve.py" <<'RUNTIMEEOF'
+import sys
+from pathlib import Path
+
+from factory.lords.bundle import RUNTIME
+
+Path(sys.argv[1]).write_text(RUNTIME, encoding="utf-8")
+RUNTIMEEOF
+    then
+      # Без рантайма релиз бесполезен; берём прежний, чтобы не остаться ни с чем.
+      [ -n "$current" ] && cp -a "${current}/serve.py" "${target}/serve.py"
+      log "${site}: рантайм из репозитория не собрался — оставлен прежний"
+    fi
     for extra in bundle-manifest.json rollback.json README.md Dockerfile; do
       [ -f "${current}/${extra}" ] && cp -a "${current}/${extra}" "${target}/${extra}"
     done
     chown -R lords:lords "${target}"
   fi
 
+  # Переключение релиза само по себе перезапуска не требует: рантайм читает
+  # ссылку `current` на каждом запросе. Перезапуск нужен только когда меняется
+  # сам рантайм — иначе в работе остался бы прежний serve.py.
+  #
+  # Прежде здесь стоял безусловный `systemctl restart`. Он давал 243
+  # перезапуска в сутки, и в секундное окно между «остановлен» и «запущен»
+  # nginx отвечал 502 — один такой ответ достался живому посетителю.
+  need_restart=0
+  if [ -z "$current" ] || ! systemctl is-active --quiet "${site}.service"; then
+    need_restart=1
+  elif ! cmp -s "${current}/serve.py" "${target}/serve.py"; then
+    log "${site}: рантайм изменился — перезапуск нужен"
+    need_restart=1
+  fi
+
   ln -sfn "${target}" "${runtime}/current"
-  systemctl restart "${site}.service"
+  if [ "$need_restart" = "1" ]; then
+    systemctl restart "${site}.service"
+  fi
   CHANGED=1
 
   # Приёмка сразу после переключения. Плохой релиз не остаётся в работе.
@@ -184,7 +215,11 @@ PYEOF
   if [ "$ok" != "1" ]; then
     log "${site}: новый релиз не отвечает содержимым — возвращаю ${current##*/}"
     ln -sfn "${current}" "${runtime}/current"
-    systemctl restart "${site}.service"
+    # Откат тоже переключением ссылки: перезапуск здесь добавил бы к неудачному
+    # обновлению ещё и недоступность.
+    if [ "$need_restart" = "1" ]; then
+      systemctl restart "${site}.service"
+    fi
     fail "${site}: откат выполнен, витрина на прежнем релизе"
   fi
   log "${site}: релиз ${release} принят"
