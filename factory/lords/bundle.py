@@ -44,9 +44,47 @@ from pathlib import Path
 from urllib.parse import unquote
 from wsgiref.simple_server import WSGIRequestHandler, WSGIServer, make_server
 
-ROOT = Path(__file__).resolve().parent
-SITE = ROOT / "site"
-MANIFEST = json.loads((ROOT / "bundle-manifest.json").read_text(encoding="utf-8"))
+# Каталог релиза берётся из окружения и НЕ разрешается заранее.
+#
+# Раньше здесь стоял `Path(__file__).resolve()`, и процесс оказывался
+# привязан к конкретному каталогу релиза: чтобы показать новый каталог,
+# юнит приходилось перезапускать. За сутки это давало 243 перезапуска, и в
+# секундное окно между «остановлен» и «запущен» nginx отвечал 502 — один
+# такой ответ получил живой посетитель.
+#
+# Ссылка `current` разрешается операционной системой при каждом обращении к
+# файлу, поэтому переключение релиза видно немедленно и перезапуск для
+# смены содержимого больше не нужен.
+BASE = Path(os.environ.get("LORDS_SITE_ROOT") or Path(__file__).resolve().parent)
+
+
+def site_dir():
+    """Каталог страниц текущего релиза. Вычисляется на каждый запрос."""
+    return BASE / "site"
+
+
+_manifest_cache = {"stamp": None, "data": None}
+
+
+def manifest():
+    """Манифест текущего релиза, перечитываемый при смене файла.
+
+    Держать его в памяти с момента старта нельзя: после переключения релиза
+    healthz сообщал бы номер предыдущего.
+    """
+    path = BASE / "bundle-manifest.json"
+    try:
+        stat = path.stat()
+        stamp = (stat.st_mtime_ns, stat.st_ino, stat.st_size)
+    except OSError:
+        return _manifest_cache["data"] or {}
+    if _manifest_cache["stamp"] != stamp:
+        try:
+            _manifest_cache["data"] = json.loads(path.read_text(encoding="utf-8"))
+            _manifest_cache["stamp"] = stamp
+        except (OSError, ValueError):
+            return _manifest_cache["data"] or {}
+    return _manifest_cache["data"] or {}
 
 TYPES = {
     ".html": "text/html; charset=utf-8",
@@ -91,11 +129,15 @@ def resolve(path):
     clean = normalize(raw)
     if clean != raw:
         return None, clean
-    candidate = (SITE / clean.strip("/") / "index.html") if clean.endswith("/") \
-        else (SITE / clean.lstrip("/"))
+    site = site_dir()
+    candidate = (site / clean.strip("/") / "index.html") if clean.endswith("/") \
+        else (site / clean.lstrip("/"))
     try:
+        # Оба пути разрешаются от одного снимка ссылки: иначе переключение
+        # релиза посреди запроса выглядело бы как попытка выйти из каталога.
+        root = site.resolve()
         candidate = candidate.resolve()
-        candidate.relative_to(SITE.resolve())
+        candidate.relative_to(root)
     except (ValueError, OSError):
         return None, None
     return (candidate if candidate.is_file() else None), None
@@ -104,12 +146,12 @@ def resolve(path):
 def app(environ, start_response):
     path = environ.get("PATH_INFO", "/")
     if path in ("/healthz", "/readyz"):
-        ready = (SITE / "index.html").is_file()
+        ready = (site_dir() / "index.html").is_file()
         body = json.dumps({
             "status": "ok" if (path == "/healthz" or ready) else "not_ready",
-            "site_id": MANIFEST["site_id"],
-            "profile": MANIFEST["profile"],
-            "release": MANIFEST["release"],
+            "site_id": manifest().get("site_id"),
+            "profile": manifest().get("profile"),
+            "release": manifest().get("release"),
             "indexing": "disabled",
         }, ensure_ascii=False).encode("utf-8")
         status = "200 OK" if (path == "/healthz" or ready) else "503 Service Unavailable"
@@ -123,7 +165,7 @@ def app(environ, start_response):
                        [("Location", redirect), ("Content-Length", "0")] + HEADERS)
         return [b""]
     if target is None:
-        target = SITE / "404.html"
+        target = site_dir() / "404.html"
         status = "404 Not Found"
     else:
         status = "200 OK"
@@ -188,9 +230,9 @@ if __name__ == "__main__":
 
     worker = threading.Thread(target=server.serve_forever, name="serve", daemon=True)
     worker.start()
-    print("стенд %s на http://%s:%d/" % (MANIFEST["site_id"], host, port), file=sys.stderr)
+    print("стенд %s на http://%s:%d/" % (manifest().get("site_id"), host, port), file=sys.stderr)
     stop.wait()
-    print("остановка %s" % MANIFEST["site_id"], file=sys.stderr)
+    print("остановка %s" % manifest().get("site_id"), file=sys.stderr)
     server.shutdown()
     server.server_close()
     worker.join(timeout=5)
