@@ -8,7 +8,7 @@
   * поля, которых списочный ответ не даёт, всё равно печатались пустыми:
     «Страна», «Студия», «Оригинальное название» — заголовок есть, значения нет;
   * «Длительность» показывала «0 мин», хотя ноль здесь означает «не сказано»;
-  * оценки КП и IMDb источник отдаёт, но страница о них молчала.
+  * оценки Кинопоиска и IMDb источник отдаёт, но страница о них молчала.
 
 Проверяется поведение на живой записи, а не на фикстуре.
 """
@@ -85,23 +85,23 @@ class TestProvenanceTellsTheTruth:
 class TestRatingsAreLabelledAndNotMixedUp:
     def test_both_ratings_are_shown_with_their_source(self):
         html = title_html([item(kinopoisk_rating=7.8, imdb_rating=6.9)])
-        assert "КП" in html and "7.8" in html
+        assert "Кинопоиск" in html and "7.8" in html
         assert "IMDb" in html and "6.9" in html
 
     def test_ratings_are_not_swapped(self):
         html = title_html([item(kinopoisk_rating=1.1, imdb_rating=9.9)])
-        kp = html.index("КП")
+        kp = html.index("Кинопоиск")
         # Значение своего источника обязано стоять рядом со своей подписью.
-        assert "1.1" in html[kp:kp + 60], "рядом с КП стоит не его оценка"
+        assert "1.1" in html[kp:kp + 60], "рядом с Кинопоиском стоит не его оценка"
         imdb = html.index("IMDb")
         assert "9.9" in html[imdb:imdb + 60], "рядом с IMDb стоит не его оценка"
 
     def test_missing_rating_is_hidden_not_zero(self):
         html = title_html([item(kinopoisk_rating=None, imdb_rating=None)])
-        assert "КП" not in html, "подпись КП стоит без оценки"
+        assert "Кинопоиск" not in html, "подпись Кинопоиска стоит без оценки"
         assert "IMDb" not in html, "подпись IMDb стоит без оценки"
 
     def test_one_rating_present_does_not_invent_the_other(self):
         html = title_html([item(kinopoisk_rating=7.8, imdb_rating=None)])
-        assert "КП" in html
+        assert "Кинопоиск" in html
         assert "IMDb" not in html

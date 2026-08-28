@@ -379,6 +379,7 @@ def _card(title: fx.Title) -> str:
         f'<a class="card__poster" href="{escape(title.path)}" tabindex="-1" aria-hidden="true">'
         f'<img src="{escape(title.poster_src)}" alt="" loading="lazy" width="400" height="600">'
         f"{badge}"
+        f"{_card_rating(title)}"
         f"{seasons}</a>"
         '<div class="card__body">'
         f'<a class="card__title" href="{escape(title.path)}">{escape(title.name)}</a>'
@@ -386,6 +387,32 @@ def _card(title: fx.Title) -> str:
         f'<span class="card__meta">{escape(", ".join(title.genres))}</span>'
         "</div></article>"
     )
+
+
+
+def _card_rating(title) -> str:
+    """Оценка на карточке: одно число с подписью источника.
+
+    Разметка оценок на странице произведения существовала давно, но ни одного
+    правила оформления для неё не было: в таблице стилей слово «rating» не
+    встречалось ни разу. Подписи и число шли подряд без промежутка и терялись
+    среди прочего текста — владелец справедливо считал, что оценок нет.
+
+    На карточке показывается одна оценка, а не обе: две мелкие подписи под
+    обложкой спорят друг с другом. Кинопоиск идёт первым как более знакомый
+    здешнему зрителю; если его нет — IMDb.
+    """
+    for label, raw in (("Кинопоиск", getattr(title, "kinopoisk_rating", None)),
+                       ("IMDb", getattr(title, "imdb_rating", None))):
+        value = _shown_rating(raw)
+        if value is not None:
+            return (
+                f'<span class="card__rating" title="{escape(label)}">'
+                f'<span class="card__rating-source">{escape(label)}</span>'
+                f'<span class="card__rating-value">{escape(f"{value:.1f}")}</span>'
+                "</span>"
+            )
+    return ""
 
 
 def _grid(titles) -> str:
@@ -957,6 +984,21 @@ def _player_block(ctx, title, name: str) -> str:
 
 
 
+
+def _shown_rating(value) -> float | None:
+    """Оценка, которую можно показать, или ничего.
+
+    Ноль не показывается. Сейчас источник для отсутствующей оценки присылает
+    `null` — нулей в каталоге нет ни одного, — но ноль в шкале «от одного до
+    десяти» почти всегда означает «оценки нет», а не «оценили на ноль».
+    Показать 0.0 с подписью «Кинопоиск» значило бы приписать источнику
+    суждение, которого он не высказывал.
+    """
+    if isinstance(value, bool) or not isinstance(value, int | float):
+        return None
+    return float(value) if value > 0 else None
+
+
 def _ratings_block(title) -> str:
     """Оценки с подписью источника.
 
@@ -965,13 +1007,17 @@ def _ratings_block(title) -> str:
     показывается нулём: ноль здесь означал бы «оценили на ноль».
     """
     pairs = (
-        ("КП", getattr(title, "kinopoisk_rating", None)),
+        # «КП» узнают не все; на странице произведения место есть, и источник
+        # называется полностью.
+        ("Кинопоиск", getattr(title, "kinopoisk_rating", None)),
         ("IMDb", getattr(title, "imdb_rating", None)),
     )
     shown = [
         f'<li class="rating"><span class="rating__source">{escape(label)}</span>'
-        f'<span class="rating__value">{escape(f"{value:.1f}")}</span></li>'
-        for label, value in pairs if isinstance(value, int | float)
+        f'<span class="rating__value">{escape(f"{shown_value:.1f}")}</span></li>'
+        for label, shown_value in (
+            (label, _shown_rating(value)) for label, value in pairs)
+        if shown_value is not None
     ]
     if not shown:
         return ""
