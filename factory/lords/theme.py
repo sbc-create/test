@@ -12,18 +12,33 @@
 
 from __future__ import annotations
 
+#: Токены выведены из измерения референсов кинотеатров, а не подобраны на глаз.
+#: Замер вычисленных стилей lordfilm-hit.org и lordserials.fan на ширине 1440:
+#:
+#:   фон страницы      rgb(17,17,17)      — нейтральный, без синевы
+#:   поверхность       rgb(34,34,34)
+#:   акцент            rgb(121,193,66)    — зелёный, 60 вхождений на главной
+#:   гарнитура         Open Sans, 14px
+#:   H1                18px / 600
+#:
+#: Прежние значения давали синеватый фон #101319, синий акцент #6f9dff, базовый
+#: кегль 16px и H1 в 36px — вдвое крупнее референсного. Отсюда и ощущение
+#: «технической страницы»: крупные заголовки, разреженный текст и цвет ссылок
+#: по умолчанию читаются как служебная вёрстка, а не как витрина кинотеатра.
 DEFAULT_TOKENS = {
-    "bg": "#101319",
-    "surface": "#181c26",
-    "surface_alt": "#1f2531",
-    "text": "#e7eaf0",
-    "muted": "#98a2b6",
-    "accent": "#6f9dff",
-    "accent_text": "#0b0e14",
-    "border": "#2a3142",
-    "radius": "10px",
+    "bg": "#111111",
+    "surface": "#222222",
+    "surface_alt": "#2b2b2b",
+    "text": "#e6e6e6",
+    "muted": "#9a9a9a",
+    "accent": "#79c142",
+    "accent_text": "#0d0d0d",
+    "border": "#353535",
+    "radius": "6px",
     "container": "1240px",
-    "heading_font": "system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif",
+    # Open Sans — гарнитура обоих референсов. Список запасных оставлен: своего
+    # файла шрифта у сайта нет, а тянуть чужой хостинг ради начертания незачем.
+    "heading_font": "'Open Sans', 'Segoe UI', Roboto, Arial, sans-serif",
 }
 
 DEFAULT_LAYOUT = {
@@ -94,7 +109,9 @@ body {{
   background: var(--bg);
   color: var(--text);
   font-family: var(--font);
-  font-size: 16px;
+  /* Базовый кегль референсов — 14px: плотнее строка, больше контента
+     на первом экране. */
+  font-size: 14px;
   line-height: 1.55;
   overflow-x: hidden;
 }}
@@ -103,8 +120,10 @@ a {{ color: var(--accent); text-decoration: none; }}
 a:hover, a:focus-visible {{ text-decoration: underline; }}
 :focus-visible {{ outline: 2px solid var(--accent); outline-offset: 2px; }}
 h1, h2, h3 {{ line-height: 1.2; margin: 0 0 .5em; overflow-wrap: anywhere; }}
-h1 {{ font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem); }}
-h2 {{ font-size: clamp(1.2rem, 1rem + .8vw, 1.6rem); }}
+/* H1 референса — 18px/600. Прежние 36px/700 съедали первый экран
+   и делали страницу похожей на документ, а не на витрину. */
+h1 {{ font-size: clamp(1.15rem, 1.05rem + .4vw, 1.4rem); font-weight: 600; }}
+h2 {{ font-size: clamp(1.05rem, 1rem + .3vw, 1.2rem); font-weight: 600; }}
 p {{ margin: 0 0 1em; overflow-wrap: anywhere; }}
 .container {{ width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 16px; }}
 .visually-hidden {{

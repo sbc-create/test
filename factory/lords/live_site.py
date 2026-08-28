@@ -23,6 +23,7 @@ import yaml
 
 from factory.errors import BlockedInput
 from factory.lords import content_live, detail_enrichment, live_catalog
+from factory.lords import playability as playability_mod
 from factory.lords import player as player_mod
 from factory.lords import render as render_mod
 from factory.lords import serve as serve_mod
@@ -142,6 +143,7 @@ def build_live_site(
     publisher_id: str | None = None,
     enrich_budget: int = 0,
     credentials_token: str | None = None,
+    playability_budget: int = 0,
 ) -> LiveSiteResult:
     """Собирает сайт одного пакета Lords из живого каталога."""
     package = yaml.safe_load(PATHS.site_package(site_id).read_text(encoding="utf-8"))
@@ -165,6 +167,25 @@ def build_live_site(
             # Обогащение — улучшение, а не условие сборки: без него страницы
             # беднее, но сайт остаётся прежним и рабочим.
             enrichment = {"error": repr(error)[:200]}
+
+    # Проверка воспроизводимости: наличие пары «агрегатор + идентификатор»
+    # ничего не обещает — она есть у всех записей, включая те, для которых
+    # поток ещё не завели. Проверяются самые свежие поступления: именно они
+    # претендуют на первый экран и именно у них потока чаще всего нет.
+    playability = None
+    if playability_budget and publisher:
+        try:
+            cache = playability_mod.PlayabilityCache(
+                PATHS.root / "var" / "lords" / "playability.json")
+            playability = playability_mod.annotate(
+                entries, str(publisher), budget=playability_budget, cache=cache,
+                referer=f"https://{package.get('domain') or ''}/")
+            cache.save()
+        except Exception as error:  # noqa: BLE001
+            # Проверка — улучшение витрины, а не условие сборки. Если она не
+            # состоялась, все записи остаются «непроверенными», то есть
+            # пригодными, и ни один рабочий плеер не пропадает.
+            playability = {"error": repr(error)[:200]}
 
     catalog = live_catalog.catalog_from_live(entries)
     site = render_mod.render_site(
@@ -205,8 +226,15 @@ def build_live_site(
     report["enrichment"] = (
         enrichment.as_dict() if hasattr(enrichment, "as_dict") else enrichment
     )
+    report["playability"] = playability
     report["coverage"] = {
         "with_poster": sum(1 for t in catalog.titles if t.poster_url),
+        # Записи, про которые источник подтвердил, что играть нечего. Средняя
+        # цифра «у скольких есть контракт воспроизведения» их не отличала.
+        "confirmed_silent": sum(
+            1 for t in catalog.titles if getattr(t, "playable", None) is False),
+        "confirmed_playable": sum(
+            1 for t in catalog.titles if getattr(t, "playable", None) is True),
         "with_kinopoisk": sum(1 for t in catalog.titles if t.kinopoisk_rating is not None),
         "with_imdb": sum(1 for t in catalog.titles if t.imdb_rating is not None),
         "with_genres": sum(1 for t in catalog.titles if t.genres),

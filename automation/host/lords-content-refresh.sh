@@ -24,6 +24,8 @@ KEEP_RELEASES="${LORDS_KEEP_RELEASES:-4}"
 # Сколько записей дополняется из detail за прогон. Полный каталог за раз —
 # это тысячи запросов подряд; покрытие набирается прогонами и кэшируется.
 ENRICH_BUDGET="${LORDS_ENRICH_BUDGET:-300}"
+# Проверяются самые свежие поступления: там сосредоточены записи без потока.
+PLAY_BUDGET="${LORDS_PLAYABILITY_BUDGET:-400}"
 
 log()  { printf '[lords-refresh] %s\n' "$*"; }
 fail() { printf '[lords-refresh] ОТКАЗ: %s\n' "$*" >&2; exit 1; }
@@ -55,7 +57,7 @@ for site in "${SITES[@]}"; do
 
   # Сборка в сторону. Пустой каталог останавливает сборку внутри build_live_site,
   # поэтому пустая витрина сюда не доедет.
-  if ! "$PYTHON" - "$site" "$staging" "$ENRICH_BUDGET" <<'PYEOF'
+  if ! "$PYTHON" - "$site" "$staging" "$ENRICH_BUDGET" "$PLAY_BUDGET" <<'PYEOF'
 import os
 import sys
 from pathlib import Path
@@ -63,6 +65,7 @@ from pathlib import Path
 from factory.lords import live_site
 
 site_id, out, budget = sys.argv[1], Path(sys.argv[2]), int(sys.argv[3])
+play_budget = int(sys.argv[4]) if len(sys.argv) > 4 else 0
 
 # Токен берётся из systemd credential — тем же путём, что и Publisher ID, и
 # наружу не печатается. Без него обогащение просто не выполняется: страницы
@@ -77,13 +80,26 @@ if directory:
         token = None
 
 result = live_site.build_live_site(
-    site_id, output=out, enrich_budget=budget, credentials_token=token)
+    site_id, output=out, enrich_budget=budget, credentials_token=token,
+    playability_budget=play_budget)
 report = result.report
 coverage = report.get("coverage") or {}
 # Первая строка — число записей, её читает вызывающий сценарий.
 print(report["catalog"]["titles"])
 # Остальное идёт в журнал: молчаливое обогащение уже один раз выглядело как
 # работающее, хотя не выполнялось вовсе. Отчёт обязан быть виден.
+play = report.get("playability")
+if play is None:
+    print("[поток] проверка не выполнялась: бюджет %s" % play_budget, file=sys.stderr)
+elif isinstance(play, dict) and play.get("error"):
+    print("[поток] ОШИБКА: %s" % play["error"], file=sys.stderr)
+else:
+    print("[поток] проверено %s, из кэша %s, играет %s, молчит %s, неизвестно %s" % (
+        play.get("checked"), play.get("cached"), play.get("playable"),
+        play.get("silent"), play.get("unknown")), file=sys.stderr)
+    print("[витрина] подтверждённо играющих %s, молчащих %s" % (
+        coverage.get("confirmed_playable"), coverage.get("confirmed_silent")),
+        file=sys.stderr)
 enrichment = report.get("enrichment")
 if enrichment is None:
     print("[enrich] не выполнялось: бюджет %s, токен %s" % (

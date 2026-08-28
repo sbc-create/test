@@ -16,24 +16,24 @@ owns:
 theme:
   name: lords_dark
   tokens:
-    bg: "#10131a"
-    surface: "#181c26"
-    surface_alt: "#1f2531"
-    text: "#e7eaf0"
-    muted: "#98a2b6"
-    accent: "#6f9dff"
-    accent_text: "#0b0e14"
-    border: "#2a3142"
-    radius: "10px"
+    bg: "#111111"
+    surface: "#1c1c1c"
+    surface_alt: "#252525"
+    text: "#e6e6e6"
+    muted: "#9a9a9a"
+    accent: "#79c142"
+    accent_text: "#0d0d0d"
+    border: "#333333"
+    radius: "4px"
     container: "1240px"
-    heading_font: "system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif"
+    heading_font: "'Open Sans', 'Segoe UI', Roboto, Arial, sans-serif"
 
 layout:
   density: comfortable
   hero: catalog
   card_ratio: "2 / 3"
   columns: { mobile: 2, tablet: 4, desktop: 6 }
-  home_blocks: [hero_search, latest_grid, type_rows, genre_chips]
+  home_blocks: [hero_search, latest_grid, type_rows, top_rated, genre_chips, year_grid]
   show_calendar: false
   show_collection_cards: false
   facet_position: sidebar

@@ -21,12 +21,14 @@ from __future__ import annotations
 import html
 import json
 import math
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
 from factory.analytics import snippet as analytics_snippet
 from factory.lords import content_types as ct
 from factory.lords import fixtures as fx
+from factory.lords import icons
 from factory.lords import plan as plan_mod
 from factory.lords import player as player_mod
 from factory.lords import theme as theme_mod
@@ -42,6 +44,19 @@ TYPE_LABELS = {
     fx.ANIMATION: "Мультфильм",
     fx.ANIME: "Аниме",
     fx.DORAMA: "Дорама",
+}
+
+#: Тип контента → заголовок раздела на главной.
+#:
+#: В карточке и в фактах тип называется в единственном числе — там он описывает
+#: одну запись. Заголовок раздела называет набор, и «Фильм» над рядом из
+#: двенадцати фильмов читается как технический ярлык, а не как название полки.
+TYPE_SECTION_LABELS = {
+    fx.MOVIES: "Фильмы",
+    fx.SERIES: "Сериалы",
+    fx.ANIMATION: "Мультфильмы",
+    fx.ANIME: "Аниме",
+    fx.DORAMA: "Дорамы",
 }
 
 #: Раздел → тип контента, который он показывает.
@@ -91,6 +106,14 @@ class Page:
     content_type: str = "text/html; charset=utf-8"
     indexable: bool = False
     status: int = 200
+    #: Двоичное тело для документов, которые не являются текстом (иконка).
+    #: Когда оно задано, на диск и в ответ идёт именно оно, а `body` остаётся
+    #: человекочитаемым описанием — по нему видно, что за файл, в отчётах.
+    raw: bytes | None = None
+
+    @property
+    def payload(self) -> bytes:
+        return self.raw if self.raw is not None else self.body.encode("utf-8")
 
 
 @dataclass
@@ -239,11 +262,13 @@ def _document(ctx: dict, meta: Meta, body: str) -> str:
     if analytics_script:
         head.append(analytics_script)
     head.append('<link rel="stylesheet" href="/assets/site.css">')
-    head.append(
-        '<link rel="icon" href="data:image/svg+xml,'
-        "%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E"
-        "%3Crect width='16' height='16' rx='3' fill='%23888'/%3E%3C/svg%3E\">"
-    )
+    # Раньше здесь стоял серый прямоугольник в data-URI: заглушка, которая
+    # занимала место иконки и потому выглядела как решение. Настоящие файлы
+    # рисуются из токенов темы и лежат в корне сайта.
+    head.append('<link rel="icon" href="/favicon.ico" sizes="32x32">')
+    head.append('<link rel="icon" href="/favicon.svg" type="image/svg+xml">')
+    head.append('<link rel="manifest" href="/manifest.webmanifest">')
+    head.append(f'<meta name="theme-color" content="{escape(ctx["tokens"]["accent"])}">')
 
     blocks = list(meta.jsonld)
     crumbs = _breadcrumb_jsonld(meta.breadcrumbs)
@@ -589,8 +614,20 @@ def _chips(pairs) -> str:
 
 
 def _is_watchable(title) -> bool:
-    """Есть ли у записи контракт воспроизведения."""
-    return bool((getattr(title, "playback", None) or {}).get("title_id"))
+    """Можно ли на этой записи что-то посмотреть.
+
+    Прежде здесь проверялось наличие пары «агрегатор + идентификатор». Она есть
+    у всех записей каталога, включая те, для которых поток ещё не завели, — то
+    есть условие было истинным всегда, и отбор ничего не отбирал. На первый
+    экран выходили самые свежие поступления, а у них потока чаще всего нет:
+    посетитель открывал первые карточки подряд и не видел видео ни на одной.
+
+    Теперь учитывается ответ источника. Подтверждённое «пусто» исключает
+    запись с первого экрана; неизвестность — нет.
+    """
+    if not (getattr(title, "playback", None) or {}).get("title_id"):
+        return False
+    return getattr(title, "playable", None) is not False
 
 
 def _watchable_first(titles, limit: int) -> list:
@@ -657,9 +694,11 @@ def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
                 more = f'<a class="section__more" href="{escape(href)}">Все</a>' if href else ""
                 parts.append(
                     '<section class="section"><div class="section__head">'
-                    f"<h2>{escape(TYPE_LABELS[kind])}</h2>{more}</div>"
+                    f"<h2>{escape(TYPE_SECTION_LABELS.get(kind, TYPE_LABELS[kind]))}</h2>{more}</div>"
                     + _grid(row) + "</section>"
                 )
+        elif block == "top_rated":
+            parts.append(_top_rated(ctx, pool))
         elif block == "genre_chips":
             parts.append(
                 '<section class="section"><h2>Жанры</h2>'
@@ -746,10 +785,44 @@ def _calendar(catalog: fx.Catalog, kinds) -> str:
     if not rows:
         return ""
     return (
-        '<section class="section"><h2>Что продолжается</h2>'
+        '<section class="section"><h2>Сезоны в каталоге</h2>'
         '<p class="lede">Порядок выхода серий на стенде условный: дат премьер у '
         "синтетических записей нет и не будет выдумано.</p>"
         '<ol class="season">' + "".join(rows) + "</ol></section>"
+    )
+
+
+
+def _best_rating(title) -> float | None:
+    """Наибольшая из подтверждённых оценок записи.
+
+    Оценки нет — возвращается None, а не ноль: запись без оценки не должна
+    занимать последнее место в рейтинге, ей там нечего делать.
+    """
+    values = [
+        v for v in (getattr(title, "kinopoisk_rating", None),
+                    getattr(title, "imdb_rating", None))
+        if isinstance(v, int | float)
+    ]
+    return max(values) if values else None
+
+
+def _top_rated(ctx, pool) -> str:
+    """Полка «высокие оценки».
+
+    Сортируется только по тому, что действительно пришло от источника. Записи
+    без оценки в полку не попадают: подставить им среднее значило бы показать
+    посетителю оценку, которой никто не ставил.
+    """
+    rated = [(t, _best_rating(t)) for t in pool]
+    rated = [(t, r) for t, r in rated if r is not None]
+    if len(rated) < 4:
+        return ""
+    rated.sort(key=lambda pair: (-pair[1], pair[0].name))
+    row = [t for t, _ in rated[:ctx["row_items"]]]
+    return (
+        '<section class="section"><div class="section__head">'
+        "<h2>Высокие оценки</h2></div>" + _grid(row) + "</section>"
     )
 
 
@@ -849,7 +922,16 @@ def _player_block(ctx, title, name: str) -> str:
     title_id = str(playback.get("title_id") or "").strip()
     publisher_id = ctx.get("publisher_id")
 
-    if aggregator and title_id and publisher_id:
+    # Источник может подтвердить, что играть нечего: на запрос плейлиста он
+    # отвечает «пусто». Ставить в этом случае кадр плеера — значит показывать
+    # посетителю чёрный прямоугольник, который никогда не запустится.
+    #
+    # Условие намеренно проверяет именно False, а не ложность: `None` означает
+    # «не проверяли», и такая запись плеер сохраняет. Ни один тайтл, который
+    # играл, не может лишиться плеера из-за сетевой ошибки при проверке.
+    confirmed_silent = getattr(title, "playable", None) is False
+
+    if aggregator and title_id and publisher_id and not confirmed_silent:
         try:
             return player_mod.render_live(
                 publisher_id=str(publisher_id),
@@ -1064,6 +1146,44 @@ def _robots(ctx) -> Page:
                 content_type="text/plain; charset=utf-8")
 
 
+
+def _icon_pages(ctx) -> list[Page]:
+    """`/favicon.ico`, `/favicon.svg`, `/icon-32.png` и манифест.
+
+    Все три домена отдавали на эти адреса 404. Иконка рисуется из токенов темы,
+    поэтому она меняется вместе с оформлением и не может от него отстать.
+    """
+    accent = ctx["tokens"]["accent"]
+    glyph = ctx["tokens"].get("accent_text", "#0d0d0d")
+    brand = ctx["brand"]
+    manifest = json.dumps(
+        {
+            "name": brand,
+            "short_name": brand,
+            "start_url": "/",
+            "display": "standalone",
+            "background_color": ctx["tokens"]["bg"],
+            "theme_color": accent,
+            "icons": [
+                {"src": "/icon-32.png", "sizes": "32x32", "type": "image/png"},
+                {"src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml"},
+            ],
+        },
+        ensure_ascii=False,
+        indent=2,
+    )
+    return [
+        Page(path="/favicon.ico", body="[иконка сайта, ICO]",
+             content_type="image/x-icon", raw=icons.favicon_ico(accent, glyph)),
+        Page(path="/icon-32.png", body="[иконка сайта, PNG 32x32]",
+             content_type="image/png", raw=icons.favicon_png(accent, glyph)),
+        Page(path="/favicon.svg", body=icons.favicon_svg(accent, glyph),
+             content_type="image/svg+xml"),
+        Page(path="/manifest.webmanifest", body=manifest + "\n",
+             content_type="application/manifest+json; charset=utf-8"),
+    ]
+
+
 def _sitemap(ctx, indexable_paths) -> Page:
     """sitemap.xml. Без домена в нём не может быть ни одного адреса.
 
@@ -1072,13 +1192,22 @@ def _sitemap(ctx, indexable_paths) -> Page:
     синтаксически корректной, но пустой, и прямо говорит почему.
     """
     urls = []
-    if ctx["domain"] and ctx["indexing_enabled"]:  # pragma: no cover - требует домена
+    if ctx["domain"] and ctx["indexing_enabled"]:
         urls = [f"  <url><loc>https://{ctx['domain']}{path}</loc></url>" for path in indexable_paths]
         note = ""
-    else:
+    elif not ctx["domain"]:
         note = (
             "  <!-- Адресов нет: домен не передан, а абсолютный URL без домена "
             "невозможен. Карта заполнится вместе с доменом. -->\n"
+        )
+    else:
+        # Прежде здесь стояла отговорка про отсутствующий домен, хотя домен
+        # был на месте. Карта молчит по другой причине, и называть надо её:
+        # звать поисковик на страницы, которые владелец закрыл от индексации,
+        # значит спорить с его же решением.
+        note = (
+            "  <!-- Адресов нет: индексация выключена в пакете сайта. "
+            "Карта заполнится вместе с её включением. -->\n"
         )
     body = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
@@ -1271,11 +1400,36 @@ def _schedule_page(ctx, catalog: fx.Catalog, kinds, indexable: bool) -> Page:
     return _page(ctx, "/schedule/", meta, body)
 
 
+
+#: Внутренние идентификаторы стенда: `lords-01`, `lords-02`, …
+_TECHNICAL_ID = re.compile(r"^lords[-_]?\d+$", re.IGNORECASE)
+
+
+def _brand_name(package: dict, profile: dict, domain: str) -> str:
+    """Имя сайта, которое видит посетитель.
+
+    Раньше здесь стояла метка профиля — «Lords General», «Lords New»,
+    «Lords Curated». Это названия шаблонов сборки, а не сайтов: посетитель
+    читал в заголовке вкладки внутреннюю классификацию стенда.
+
+    Имя берётся из пакета, если владелец его задал. Технический идентификатор
+    именем не считается. Дальше идёт домен — он принадлежит владельцу и не
+    выдуман, а придумывать сайту название за владельца нельзя: имя бренда
+    задаёт он, и до тех пор домен честнее любой выдумки.
+    """
+    declared = str((package.get("brand") or {}).get("name") or "").strip()
+    if declared and not _TECHNICAL_ID.match(declared) and declared != package.get("site_id"):
+        return declared
+    if domain:
+        return domain
+    return str(profile.get("label") or package.get("site_id") or "")
+
+
 def _context(package: dict, profile: dict, site_plan, player_state,
              publisher_id: str | None = None, fixture_catalog: bool = True) -> dict:
     layout = theme_mod.layout_of(profile)
-    brand = str(profile.get("label") or package.get("site_id"))
     domain = str(package.get("domain") or "").strip()
+    brand = _brand_name(package, profile, domain)
     nav = [
         (page.section, page.path)
         for page in site_plan.pages
@@ -1285,6 +1439,7 @@ def _context(package: dict, profile: dict, site_plan, player_state,
         "site_id": str(package.get("site_id", "")),
         "profile": site_plan.profile,
         "brand": brand,
+        "tokens": theme_mod.tokens_of(profile),
         "mark": "".join(word[0] for word in brand.split()[:2]).upper() or "L",
         "language": str(package.get("language") or "ru"),
         "domain": domain,
@@ -1490,6 +1645,8 @@ def render_site(
     if "search" in by_section:
         add(_search_page(ctx, catalog, kinds))
     indexable_paths = sorted(p for p, page in site.pages.items() if page.indexable)
+    for icon_page in _icon_pages(ctx):
+        add(icon_page)
     add(_robots(ctx))
     add(_sitemap(ctx, indexable_paths))
     site.not_found = _not_found(ctx)
