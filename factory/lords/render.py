@@ -311,8 +311,10 @@ def _header(ctx: dict, meta: Meta) -> str:
         +
         '<header class="site-header"><div class="header-row">'
         f'<a class="brand" href="/"><span class="brand__mark">{mark}</span>'
-        f'<span class="brand__name">{escape(ctx["brand"])}</span>'
-        f'<span class="brand__kind">{escape(ctx["site_id"])}</span></a>'
+        # Рядом с именем сайта стоял его внутренний идентификатор —
+        # `lords-01`. Посетителю он ничего не сообщает, а страницу
+        # заставляет выглядеть служебной сборкой.
+        f'<span class="brand__name">{escape(ctx["brand"])}</span></a>'
         '<button class="nav-toggle" type="button" aria-expanded="false" '
         'aria-controls="site-nav">Меню</button>'
         '<nav class="site-nav" id="site-nav" aria-label="Основная навигация"><ul>'
@@ -335,8 +337,9 @@ def _footer(ctx: dict) -> str:
     return (
         '<footer class="site-footer"><div class="container">'
         f"<ul>{links}</ul>"
-        f"<p>{escape(ctx['brand'])} · {escape(ctx['site_id'])} · профиль "
-        f"{escape(ctx['profile'])}.</p>"
+        # Идентификатор сайта и имя профиля сборки — внутренняя
+        # классификация фабрики; в подвале публичного сайта им не место.
+        f"<p>{escape(ctx['brand'])}</p>"
         + ("<p>Стенд собран фабрикой из синтетических данных. Каталог не описывает "
            "существующие произведения, оценок и сведений о правообладателях не "
            "содержит и в поисковые системы не отдаётся.</p>"
