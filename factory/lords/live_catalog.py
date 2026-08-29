@@ -133,6 +133,43 @@ def classify_tags(tags) -> tuple[str, str | None, tuple[str, ...]]:
 
 
 
+
+#: Служебные украшения вокруг названий студий у источника: «@СТУДИЯ@».
+_STUDIO_DECOR = "@ \t«»\"'"
+
+
+def voice_names(raw) -> tuple[str, ...]:
+    """Человеческие названия озвучек.
+
+    Источник отдаёт список словарей: код типа озвучки, его подпись, код студии
+    и её название. Прежняя версия применяла `str()` к каждому элементу и
+    печатала на странице сам словарь — посетитель видел `voice_type`,
+    `studio_code` и прочую внутреннюю кухню вместо «Многоголосый».
+
+    Берётся название студии, если оно есть, иначе подпись типа озвучки. Голый
+    код не показывается никогда: он ничего не сообщает тому, кто пришёл
+    смотреть. Повторы схлопываются, порядок сохраняется.
+    """
+    names: list[str] = []
+    for item in raw or []:
+        if isinstance(item, dict):
+            studio = str(item.get("studio_name") or "").strip(_STUDIO_DECOR).strip()
+            label = str(item.get("voice_type_label") or "").strip()
+            value = studio or label
+        elif item is None or isinstance(item, bool | int | float):
+            # `None` в списке превращался в строку «None» и печатался как
+            # название озвучки. Пустое место честнее выдуманного слова.
+            value = ""
+        else:
+            value = str(item).strip()
+            # Строка, похожая на код, а не на название, посетителю не нужна.
+            if value and (value.islower() and ("_" in value or value.isalpha() and value.isascii())):
+                value = ""
+        if value and value not in names:
+            names.append(value)
+    return tuple(names)
+
+
 def seasons_from_detail(raw) -> tuple:
     """Сезоны источника в структуре, которую понимает рендерер.
 
@@ -307,9 +344,7 @@ def title_from_item(entry: dict) -> LiveTitle | None:
         if isinstance(p, dict) and p.get("role") == "actor" and p.get("person_name")
     )
     duration = entry.get("duration")
-    voices = tuple(
-        str(v).strip() for v in (entry.get("available_voices") or []) if str(v).strip()
-    )
+    voices = voice_names(entry.get("available_voices"))
 
     return LiveTitle(
         slug=slug,
