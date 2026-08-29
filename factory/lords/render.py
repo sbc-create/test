@@ -25,6 +25,7 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from factory.analytics import client_codegen as analytics_codegen
 from factory.analytics import snippet as analytics_snippet
 from factory.lords import content_types as ct
 from factory.lords import fixtures as fx
@@ -1423,6 +1424,10 @@ def _sitemap(ctx, indexable_paths) -> Page:
     return Page(path="/sitemap.xml", body=body, content_type="application/xml; charset=utf-8")
 
 
+#: Адрес клиента аналитики. Один на весь модуль: тег в разметке и страница
+#: ассета обязаны совпадать, а две независимые строки однажды разойдутся.
+ANALYTICS_ASSET_PATH = analytics_snippet.ANALYTICS_SCRIPT_URL
+
 APP_JS = """/* Lords — поведение интерфейса. Ни одного внешнего запроса. */
 (function () {
   "use strict";
@@ -1886,6 +1891,13 @@ def render_site(
              content_type="text/css; charset=utf-8"))
     add(Page(path="/assets/app.js", body=APP_JS,
              content_type="text/javascript; charset=utf-8"))
+    # Клиент аналитики выкладывается ровно тогда, когда на страницах есть тег,
+    # который на него ссылается. Без этого тег указывал на несуществующий файл:
+    # счётчик верный, тег единственный, разрешение выдано — и ни одного
+    # обращения к Метрике, потому что `/assets/analytics.js` отдавал 404.
+    if ctx.get("analytics_script"):
+        add(Page(path=ANALYTICS_ASSET_PATH, body=analytics_codegen.render_js(),
+                 content_type="text/javascript; charset=utf-8"))
     for title in pool:
         # Заглушка нужна лишь тем, у кого нет собственного постера. Раньше
         # страница создавалась каждому, и на живом каталоге это давало почти
