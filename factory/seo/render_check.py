@@ -14,17 +14,27 @@ from pathlib import Path
 from factory.paths import PATHS
 from factory.seo.model import Finding, Report
 
-CHROMIUM_CANDIDATES = (
-    os.environ.get("FACTORY_CHROMIUM", ""),
-    "/opt/pw-browsers/chromium-1194/chrome-linux/chrome",
-    "/opt/pw-browsers/chromium/chrome-linux/chrome",
-)
+BROWSER_ROOT = Path(os.environ.get("FACTORY_BROWSER_ROOT", "/opt/pw-browsers"))
 
 
 def chromium_path() -> str | None:
-    for candidate in CHROMIUM_CANDIDATES:
-        if candidate and Path(candidate).exists():
-            return candidate
+    """Путь к Chromium или None.
+
+    Каталог Playwright содержит номер сборки в имени и уже менял раскладку
+    (`chrome-linux` → `chrome-linux64`), поэтому фиксировать конкретный путь
+    нельзя: вшитая версия молча промахивается, проверка отрисованного DOM
+    объявляется недоступной, и целый класс SEO-проверок тихо исчезает из
+    отчёта. Ищется фактическая раскладка, а не ожидаемая.
+
+    `chromium_headless_shell-*` не подходит: его подкаталог называется
+    `chrome-headless-shell-linux64` и под маску `chrome-linux*` не попадает.
+    """
+    explicit = os.environ.get("FACTORY_CHROMIUM", "")
+    if explicit and Path(explicit).exists():
+        return explicit
+    installed = sorted(BROWSER_ROOT.glob("chromium-*/chrome-linux*/chrome"))
+    if installed:
+        return str(installed[-1])
     return shutil.which("chromium") or shutil.which("google-chrome")
 
 
