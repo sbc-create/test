@@ -18,14 +18,13 @@
 
 from __future__ import annotations
 
+import datetime as _dt
 import html
 import json
 import math
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-
-import datetime as _dt
 
 from factory.analytics import client_codegen as analytics_codegen
 from factory.analytics import snippet as analytics_snippet
