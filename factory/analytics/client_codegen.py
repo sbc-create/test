@@ -83,8 +83,8 @@ _DECIDE_BODY = """\
   if (!config) { return { active: false, reason: 'нет конфигурации' }; }
   if (config.enabled === false) { return { active: false, reason: 'ANALYTICS_ENABLED=false' }; }
   if (!config.counterId) { return { active: false, reason: 'counter ID не задан' }; }
-  if (config.environment !== 'production') {
-    return { active: false, reason: 'окружение ' + config.environment + ', не production' };
+  if (config.environment !== 'production' && !config.collectionAuthorized) {
+    return { active: false, reason: 'окружение ' + config.environment + ', сбор не разрешён' };
   }
   if (!config.allowedHosts || config.allowedHosts.length === 0) {
     return { active: false, reason: 'список разрешённых hostname пуст' };
@@ -175,6 +175,7 @@ def render_js() -> str:
       counterId: parseInt(el.getAttribute('data-counter-id') || '', 10) || 0,
       allowedHosts: hosts,
       environment: el.getAttribute('data-environment') || 'staging',
+      collectionAuthorized: el.getAttribute('data-collection-authorized') === 'true',
       enabled: el.getAttribute('data-analytics-enabled') !== 'false'
     }};
   }}
@@ -250,6 +251,7 @@ def render_ts() -> str:
     lines.append("  counterId: number;")
     lines.append("  allowedHosts: string[];")
     lines.append("  environment: string;")
+    lines.append("  collectionAuthorized?: boolean;")
     lines.append("  enabled: boolean;")
     lines.append("}")
     lines.append("")

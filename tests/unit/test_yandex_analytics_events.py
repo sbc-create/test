@@ -86,11 +86,41 @@ def test_production_with_matching_hostname_loads_the_tag():
     assert out["loaded"], "тег Метрики обязан загрузиться на боевом домене"
 
 
-def test_staging_does_not_load_the_tag_at_all():
+def test_staging_without_authorization_does_not_load_the_tag_at_all():
+    """Поведение по умолчанию: на staging тега нет.
+
+    Прежде правило звучало как «на staging — никогда». Оно связывало два разных
+    решения: разрешение собирать статистику и объявление сайта production,
+    которое требует правообладателя и документов. Из-за этой связки явно
+    разрешённый владельцем счётчик не попадал на живые публичные домены вовсе.
+    Теперь правило уже и точнее — без явного разрешения тега по-прежнему нет.
+    """
     out = _exec(_attrs(**{"data-environment": "staging"}), "yummyani.site", "")
     assert out["active"] is False
-    assert out["loaded"] == [], "на staging в странице не должно быть запроса к Метрике"
-    assert "production" in out["reason"]
+    assert out["loaded"] == [], "на staging без разрешения запроса к Метрике быть не должно"
+    assert "не разрешён" in out["reason"]
+
+
+def test_staging_with_explicit_authorization_loads_the_tag():
+    """Разрешённый счётчик на публичном домене работает и вне production."""
+    out = _exec(
+        _attrs(**{"data-environment": "staging", "data-collection-authorized": "true"}),
+        "yummyani.site",
+        "",
+    )
+    assert out["active"] is True, "явно разрешённый сбор обязан работать"
+
+
+def test_authorization_does_not_override_the_hostname_allowlist():
+    """Разрешение на сбор не разрешает собирать с чужого домена."""
+    out = _exec(
+        _attrs(**{"data-environment": "staging", "data-collection-authorized": "true"}),
+        "preview.yummyani.site",
+        "",
+    )
+    assert out["active"] is False
+    assert out["loaded"] == []
+    assert "hostname" in out["reason"]
 
 
 def test_wrong_hostname_is_blocked():

@@ -82,6 +82,7 @@ export interface AnalyticsConfig {
   counterId: number;
   allowedHosts: string[];
   environment: string;
+  collectionAuthorized?: boolean;
   enabled: boolean;
 }
 
@@ -271,8 +272,8 @@ export function decide(config: AnalyticsConfig | null, hostname: string): Analyt
   if (!config) { return { active: false, reason: 'нет конфигурации' }; }
   if (config.enabled === false) { return { active: false, reason: 'ANALYTICS_ENABLED=false' }; }
   if (!config.counterId) { return { active: false, reason: 'counter ID не задан' }; }
-  if (config.environment !== 'production') {
-    return { active: false, reason: 'окружение ' + config.environment + ', не production' };
+  if (config.environment !== 'production' && !config.collectionAuthorized) {
+    return { active: false, reason: 'окружение ' + config.environment + ', сбор не разрешён' };
   }
   if (!config.allowedHosts || config.allowedHosts.length === 0) {
     return { active: false, reason: 'список разрешённых hostname пуст' };
