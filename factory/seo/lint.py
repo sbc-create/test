@@ -94,7 +94,10 @@ def lint(build_dir: Path, *, environment: str = "staging") -> Report:
                     # домен проходил проверку целиком.
                     report.add(Finding("canonical", "critical", url,
                                        f"Canonical указывает на чужой домен «{canonical_host}» вместо «{site_host}».", "HR-2"))
-                elif not canonical.endswith(url):
+                # Сравнивается путь целиком, а не хвост: «/arhiv/lekcii/material-01/»
+                # заканчивается на «/lekcii/material-01/», и проверка по суффиксу
+                # принимала canonical на другую страницу того же сайта.
+                elif (urllib.parse.urlparse(canonical).path or "/") != url:
                     report.add(Finding("canonical", "critical", url, f"Canonical «{canonical}» не совпадает с собственным URL.", "HR-1"))
             # F-4.2: отсутствие description у индексируемой страницы раньше не замечалось
             if not description.strip():

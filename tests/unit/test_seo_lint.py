@@ -43,6 +43,26 @@ def test_canonical_pointing_elsewhere_is_critical(sandbox):
     assert any(f.check == "canonical" for f in criticals(sandbox))
 
 
+def test_canonical_with_extra_path_prefix_is_critical(sandbox):
+    """Свой домен и совпадающий хвост не делают canonical собственным.
+
+    `/arhiv/lekcii/material-01/` заканчивается на `/lekcii/material-01/`, поэтому
+    проверка по суффиксу принимала указание на совершенно другую страницу того же
+    сайта. HR-1 требует self-canonical, а не canonical с подходящим окончанием.
+    """
+    page = sandbox / "public" / "lekcii" / "material-01" / "index.html"
+    text = page.read_text(encoding="utf-8")
+    page.write_text(
+        re.sub(
+            r'(<link rel="canonical" href=")[^"]+(")',
+            r"\1https://pilot.localhost.test/arhiv/lekcii/material-01/\2",
+            text,
+        ),
+        encoding="utf-8",
+    )
+    assert any(f.check == "canonical" and f.rule == "HR-1" for f in criticals(sandbox))
+
+
 def test_duplicate_title_is_critical(sandbox):
     first = (sandbox / "public" / "lekcii" / "material-01" / "index.html").read_text(encoding="utf-8")
     title = re.search(r"<title>(.*?)</title>", first, re.S).group(1)

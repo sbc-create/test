@@ -117,8 +117,17 @@ def crawl(base_url: str, build_dir: Path, *, auth: str = "", environment: str = 
         if indexable:
             if not canonical:
                 report.add(Finding("canonical", "critical", path, "Нет self-canonical на живой indexable-странице.", "HR-1"))
-            elif not canonical.endswith(path):
-                report.add(Finding("canonical", "critical", path, f"Canonical «{canonical}» не соответствует URL.", "HR-1"))
+            else:
+                # Хост и путь сравниваются раздельно и целиком. Проверка по суффиксу
+                # пропускала и чужой домен, и другую страницу того же сайта:
+                # «/arhiv/lekcii/material-01/» заканчивается на «/lekcii/material-01/».
+                canonical_parts = urllib.parse.urlparse(canonical)
+                base_host = urllib.parse.urlparse(base_url).netloc.lower()
+                if canonical_parts.netloc.lower() != base_host:
+                    report.add(Finding("canonical", "critical", path,
+                                       f"Canonical указывает на чужой домен «{canonical_parts.netloc}» вместо «{base_host}».", "HR-2"))
+                elif (canonical_parts.path or "/") != path:
+                    report.add(Finding("canonical", "critical", path, f"Canonical «{canonical}» не соответствует URL.", "HR-1"))
             if environment == "production" and "noindex" in (header_robots + meta_robots):
                 report.add(Finding("robots", "critical", path, "Индексируемая страница отдаёт noindex."))
             title = _text((TITLE_RE.search(response.body) or [None, ""])[1] if TITLE_RE.search(response.body) else "")
