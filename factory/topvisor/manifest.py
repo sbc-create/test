@@ -12,7 +12,7 @@ Manifest декларативен: он описывает, чем сайты о
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 #: Адрес для связи, общий для всех сайтов. Владельцем подтверждён.
 CONTACT_EMAIL = "sbc.claude@yandex.ru"

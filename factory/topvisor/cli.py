@@ -12,9 +12,8 @@ import sys
 
 from factory.errors import FactoryError
 from factory.topvisor import plan as planning
-from factory.topvisor.client import ALLOWED, Cost, TopvisorClient
+from factory.topvisor.client import ALLOWED, TopvisorClient
 from factory.topvisor.credentials import load
-from factory.topvisor.manifest import MANIFEST
 
 
 def _client(apply_changes: bool) -> TopvisorClient:
@@ -47,7 +46,7 @@ def cmd_plan(args: argparse.Namespace) -> int:
     info = client.bank_info()
     balance = info.get("balance", info.get("sum"))
     current = client.projects()
-    result = planning.build(current, balance=balance if isinstance(balance, (int, float)) else None)
+    result = planning.build(current, balance=balance if isinstance(balance, int | float) else None)
     document = result.as_dict()
     if args.json:
         print(json.dumps(document, ensure_ascii=False, indent=2))

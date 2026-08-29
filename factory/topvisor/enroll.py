@@ -15,7 +15,6 @@ import grp
 import os
 import re
 import sys
-from pathlib import Path
 
 from factory.topvisor.credentials import API_KEY_FILE, USER_ID_FILE, secret_dir
 

@@ -11,9 +11,6 @@ production с указанием правообладателя — разные
 """
 from __future__ import annotations
 
-import json
-from pathlib import Path
-
 import pytest
 import yaml
 
@@ -28,12 +25,12 @@ LORDS_SITES = {
 
 
 def tag(**overrides):
-    params = dict(
-        counter_id=112010269,
-        allowed_hosts=["lordfilm47.space"],
-        environment="staging",
-        enabled=True,
-    )
+    params = {
+        "counter_id": 112010269,
+        "allowed_hosts": ["lordfilm47.space"],
+        "environment": "staging",
+        "enabled": True,
+    }
     params.update(overrides)
     return analytics_script_tag(**params)
 
