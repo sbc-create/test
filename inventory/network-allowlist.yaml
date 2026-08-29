@@ -56,3 +56,73 @@ hosts:
     methods: [GET]
     token_secret_ref: hub:/var/lib/site-factory-secret-hub/store.sqlite3
     contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+
+  # --- шесть рабочих доменов: SEO-baseline и LIVE-проверка -----------------
+  # Внесены заданием «ночной автономный SEO-цикл — шесть LIVE-сайтов»
+  # (2026-08-29). Владелец разрешил ровно HTTPS GET/HEAD: SEO-оператор читает
+  # отрисованный DOM, коды ответов, canonical, robots.txt и sitemap. Записи на
+  # эти хосты не выполняются — публикация идёт через deploy-слой, а не через
+  # прямой запрос.
+  - ref: yummy-live-site
+    host: yummyani.site
+    purpose: "SEO: read-only baseline и LIVE-проверка (коды, canonical, robots, sitemap, DOM)"
+    methods: [GET, HEAD]
+  - ref: yummy-live-org
+    host: yummyani.org
+    purpose: "SEO: read-only baseline и LIVE-проверка"
+    methods: [GET, HEAD]
+  - ref: yummy-live-biz
+    host: yummyani.biz
+    purpose: "SEO: read-only baseline и LIVE-проверка"
+    methods: [GET, HEAD]
+  - ref: lords-live-lordfilm47
+    host: lordfilm47.space
+    purpose: "SEO: read-only baseline и LIVE-проверка"
+    methods: [GET, HEAD]
+  - ref: lords-live-lordserial33
+    host: lordserial33.biz
+    purpose: "SEO: read-only baseline и LIVE-проверка"
+    methods: [GET, HEAD]
+  - ref: lords-live-1lordserials1
+    host: 1lordserials1.online
+    purpose: "SEO: read-only baseline и LIVE-проверка"
+    methods: [GET, HEAD]
+
+  # --- первоисточники SEO-правил (только чтение) ---------------------------
+  # Внесены тем же заданием. Регламент требует опираться на первичные источники
+  # и фиксировать URL и дату проверки, а не на пересказы.
+  - ref: google-search-central
+    host: developers.google.com
+    purpose: "официальная документация Google Search Central (structured data, canonical, sitemap)"
+    methods: [GET, HEAD]
+  - ref: schema-org
+    host: schema.org
+    purpose: "официальный словарь типов schema.org для JSON-LD"
+    methods: [GET, HEAD]
+
+  # --- Метрика: проверка фактической загрузки тега -------------------------
+  # Регламент прямо запрещает считать наличие тега в HTML доказательством его
+  # работы. Проверка требует увидеть реальное обращение к хосту счётчика.
+  - ref: yandex-metrika-tag
+    host: mc.yandex.ru
+    purpose: "Метрика: подтверждение фактической загрузки tag.js и отправки pageview"
+    methods: [GET, HEAD]
+
+  # --- Topvisor: только семантически read-only ------------------------------
+  # Внесён тем же заданием. API Topvisor использует POST и для чтения, поэтому
+  # метод в реестре не отражает семантику. Разрешены только читающие вызовы:
+  # список проектов, группы запросов, история уже оплаченных проверок, баланс.
+  #
+  # ЗАПРЕЩЕНО без отдельного разрешения владельца: запуск проверок позиций,
+  # добавление запросов, изменение проектов, любые списания баланса.
+  - ref: topvisor-api-readonly
+    host: api.topvisor.com
+    purpose: "Topvisor: read-only чтение проектов, запросов, истории позиций и баланса"
+    methods: [GET, POST]
+    readonly_semantics: true
+    forbidden_without_approval:
+      - "запуск проверки позиций"
+      - "добавление или изменение запросов"
+      - "изменение проектов"
+      - "любые операции, списывающие баланс"
+    token_secret_ref: file:/etc/site-factory/secrets/topvisor_api_key

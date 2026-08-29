@@ -438,20 +438,38 @@ class TestProfileProperties:
 
         SSH-хосты и DNS-зоны не переданы и обязаны остаться пустыми: их
         расширение по инициативе агента прямо запрещено. Сетевой allowlist
-        не пуст, потому что владелец разрешил обращения двумя заданиями:
-        автоматизация аналитики Яндекса (API и документация) и центральный
+        не пуст, потому что владелец разрешил обращения тремя заданиями:
+        автоматизация аналитики Яндекса (API и документация); центральный
         Secret Hub — read-only проверка выданного токена CDNVideoHub перед
-        сохранением (D88). Проверяется точный состав: незамеченная лишняя
-        строка здесь — это открытый наружу канал.
+        сохранением (D88); ночной автономный SEO-цикл по шести рабочим
+        доменам (2026-08-29) — сами домены, первоисточники SEO-правил,
+        хост счётчика Метрики и read-only чтение Topvisor. Проверяется
+        точный состав: незамеченная лишняя строка здесь — это открытый
+        наружу канал.
         """
         assert unattended.inventory_hosts() == set()
         assert unattended.inventory_zones() == set()
         assert unattended.network_hosts() == {
+            # аналитика Яндекса и её документация
             "api-metrika.yandex.net",
             "api.webmaster.yandex.net",
             "yandex.ru",
             "yandex.com",
+            # Secret Hub (D88)
             "public-api.cdnvideohub.com",
+            # SEO-цикл 2026-08-29: шесть рабочих доменов, только GET/HEAD
+            "yummyani.site",
+            "yummyani.org",
+            "yummyani.biz",
+            "lordfilm47.space",
+            "lordserial33.biz",
+            "1lordserials1.online",
+            # SEO-цикл 2026-08-29: первоисточники правил и хост счётчика
+            "developers.google.com",
+            "schema.org",
+            "mc.yandex.ru",
+            # SEO-цикл 2026-08-29: Topvisor, только читающие вызовы
+            "api.topvisor.com",
         }
 
 
