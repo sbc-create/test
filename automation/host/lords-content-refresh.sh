@@ -207,7 +207,10 @@ PYEOF
   CHANGED=1
 
   # Приёмка сразу после переключения. Плохой релиз не остаётся в работе.
-  port="$(grep -oP 'LORDS_PORT=\K[0-9]+' "/etc/systemd/system/${site}.service" | head -1)"
+  # `grep -m1` вместо `grep -o … | head -1`: при `pipefail` закрывшийся раньше
+  # времени `head` роняет grep сигналом SIGPIPE, и весь сценарий выходит с
+  # ошибкой. Здесь файл маленький, но правило одно на оба места.
+  port="$(grep -m1 -oP 'LORDS_PORT=\K[0-9]+' "/etc/systemd/system/${site}.service")"
   ok=0
   for _ in $(seq 1 10); do
     sleep 2
@@ -215,7 +218,12 @@ PYEOF
     if [ "${#body}" -gt 4000 ] && printf '%s' "$body" | grep -q 'class="card'; then
       # Главная карточками отвечает — проверяем ещё и страницу тайтла: именно
       # там живёт плеер, и именно его теряли прошлые обновления.
-      slug="$(printf '%s' "$body" | grep -o 'href="/title/[^"]*"' | head -1 | sed 's|href="||;s|"||')"
+      # Именно здесь обновление и падало. На главной появилась карусель, ссылок
+      # на произведения стало вчетверо больше, вывод grep перестал помещаться в
+      # буфер трубы — и `head -1`, закрываясь после первой строки, стал
+      # обрывать grep. При `pipefail` это выход 2 и провал всего цикла: сайты
+      # оставались живы, но обновляться переставали.
+      slug="$(printf '%s' "$body" | grep -m1 -o 'href="/title/[^"]*"' | sed 's|href="||;s|"||')"
       if [ -n "$slug" ] && [ "$new_players" -gt 0 ]; then
         tp="$(curl -sS --max-time 10 "http://127.0.0.1:${port}${slug}" 2>/dev/null || true)"
         printf '%s' "$tp" | grep -q "<video-player" || continue
