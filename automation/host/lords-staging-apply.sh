@@ -272,7 +272,9 @@ for index in "${!PORTS[@]}"; do
   holder="$(ss -ltnpH "sport = :${port}" 2>/dev/null | head -1)"
   [[ -n "${holder}" ]] || { log "  порт ${port} свободен"; continue; }
 
-  holder_pid="$(grep -oE 'pid=[0-9]+' <<<"${holder}" | head -1 | cut -d= -f2)"
+  # `grep -m1` вместо `| head -1`: при pipefail закрывшийся head обрывает grep
+  # сигналом SIGPIPE, и сценарий выходит с ошибкой на ровном месте.
+  holder_pid="$(grep -m1 -oE 'pid=[0-9]+' <<<"${holder}" | cut -d= -f2)"
   expected_pid="$(unit_main_pid "${unit}")"
 
   if [[ -n "${expected_pid}" && "${holder_pid}" == "${expected_pid}" ]]; then
