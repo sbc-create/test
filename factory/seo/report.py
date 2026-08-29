@@ -7,6 +7,9 @@ from pathlib import Path
 from factory.paths import PATHS
 from factory.seo.model import Report
 
+# Таблица в Markdown ограничена ради читаемости; данные не усекаются никогда.
+TABLE_LIMIT = 200
+
 
 def combine(site_id: str, reports: list[Report], out_dir: Path | None = None) -> dict:
     out_dir = out_dir or PATHS.artifact_dir("seo", site_id)
@@ -40,9 +43,15 @@ def combine(site_id: str, reports: list[Report], out_dir: Path | None = None) ->
         if report.findings:
             lines.append("| severity | check | url | сообщение |")
             lines.append("|---|---|---|---|")
-            for finding in report.findings[:200]:
+            for finding in report.findings[:TABLE_LIMIT]:
                 message = finding.message.replace("|", "\\|")[:200]
                 lines.append(f"| {finding.severity} | {finding.check} | `{finding.url}` | {message} |")
+            # Молчаливое усечение читается как «находок ровно столько». Остаток
+            # называется здесь же, полный список остаётся в seo-report.json.
+            hidden = len(report.findings) - TABLE_LIMIT
+            if hidden > 0:
+                lines.append("")
+                lines.append(f"Ещё {hidden} находок не показаны в таблице — полный список в `seo-report.json`.")
         else:
             lines.append("Находок нет.")
         lines.append("")
