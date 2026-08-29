@@ -963,7 +963,7 @@ def _collection_cards(ctx, catalog: fx.Catalog) -> str:
 def _seasons_block(title: fx.Title) -> str:
     if not title.episodic:
         return (
-            '<section class="seasons"><h2>Структура</h2>'
+            '<section class="seasons"><h2>О фильме</h2>'
             '<p class="lede">У полнометражной записи сезонов нет: страница ведёт '
             "к одному просмотру, а не к списку серий.</p></section>"
         )
@@ -1168,6 +1168,27 @@ def _title_description(title, template: str) -> str:
     return _trim_at_word(text, DESCRIPTION_TARGET_MAX)
 
 
+
+def _human_date(value) -> str:
+    """Дата в привычном виде: 21.11.2024.
+
+    Источник отдаёт ISO-8601, и он же попадал на страницу: «2024-11-21» читается
+    как запись из журнала, а не как дата выхода. Если известен только год, год и
+    остаётся — придумывать день и месяц нельзя.
+    """
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    head = text.split("T", 1)[0]
+    parts = head.split("-")
+    if len(parts) == 3 and all(p.isdigit() for p in parts):
+        year, month, day = parts
+        return f"{int(day):02d}.{int(month):02d}.{year}"
+    if len(parts) == 1 and parts[0].isdigit() and len(parts[0]) == 4:
+        return parts[0]
+    return text
+
+
 def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: bool) -> Page:
     tpl = ctx["title_page"]
     name = title.name
@@ -1183,14 +1204,6 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
     if title.episodic:
         duration = (duration + " · " if duration else "") + f"серий {title.episode_count}"
 
-    # Подпись происхождения обязана совпадать с тем, что на странице. Раньше
-    # здесь стояло «синтетическая запись стенда» — под настоящей записью
-    # провайдера это была прямая неправда на публичной странице.
-    provenance = (
-        f"{title.source} — синтетическая запись стенда" if title.fixture
-        else "CDNVideoHub — живой каталог"
-    )
-
     def _join(values) -> str:
         """Список имён в строку. Длинный состав режется: страница не афиша."""
         names = [str(v).strip() for v in (values or []) if str(v).strip()]
@@ -1202,7 +1215,7 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
         ("Оригинальное название", title.original_name),
         ("Тип", TYPE_LABELS.get(title.content_type, title.content_type)),
         ("Год", str(title.year) if title.year else ""),
-        ("Дата выхода", getattr(title, "premiere_date", "") or ""),
+        ("Дата выхода", _human_date(getattr(title, "premiere_date", ""))),
         ("Страна", title.country),
         ("Режиссёр", _join(getattr(title, "directors", ()))),
         ("В ролях", _join(getattr(title, "actors", ()))),
@@ -1215,7 +1228,6 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
         ("Студия", title.studio),
         ("Возрастная отметка", title.age_rating),
         ("Длительность", duration),
-        ("Происхождение данных", provenance),
     ]
     # Пустая строка — это «источник не сказал». Заголовок без значения выглядит
     # как потерянные данные, поэтому такие пары не печатаются вовсе.
