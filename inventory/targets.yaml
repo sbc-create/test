@@ -38,7 +38,11 @@ targets:
     database: none                  # каталог стенда синтетический, БД не нужна
     origin_ipv4: 45.131.182.225
     apply_script: automation/host/lords-staging-apply.sh
-    purpose: "три публичных fixture-staging сайта Lords под Basic Auth и noindex"
+    # Basic Auth снят решением владельца: automation/host/lords-staging-apply.sh
+    # его не создаёт («сайты публичны, индексация закрыта заголовком и
+    # robots.txt»), есть отдельный remove-lords-basic-auth.sh. Описание,
+    # обещающее пароль, читается как гарантия защиты, которой нет.
+    purpose: "три публичных fixture-staging сайта Lords без Basic Auth, закрытых от индексации заголовком X-Robots-Tag и robots.txt"
     production_capable: false
   # - ref: stage-1
   #   adapter: ssh_ansible
