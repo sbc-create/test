@@ -139,6 +139,27 @@ class TestSEO010And015CanonicalIsCorrect:
         p = page(GOOD_HEAD, path="/catalog/page/2/")
         assert "SEO-010" not in result_for(p)
 
+    def test_canonical_on_a_lookalike_domain_is_refused(self):
+        """Имя домена внутри строки не делает адрес своим.
+
+        «example.test» содержится в «example.test.attacker.tld», поэтому
+        проверка вхождением подстроки принимала canonical, уводящий вес на
+        чужой сайт с похожим именем.
+        """
+        p = PageUnderTest(path="/a/", domain=DOMAIN, html=(
+            f'<link rel="canonical" href="https://{DOMAIN}.attacker.tld/a/">' + GOOD_HEAD))
+        assert "SEO-010" in {f.check for f in check_page(p) if not f.ok}
+
+    def test_canonical_with_extra_path_prefix_is_refused(self):
+        """Совпадение хвоста пути не делает canonical собственным.
+
+        «/arhiv/a/» заканчивается на «/a/», поэтому проверка по суффиксу
+        принимала указание на другую страницу того же сайта.
+        """
+        p = PageUnderTest(path="/a/", domain=DOMAIN, html=(
+            f'<link rel="canonical" href="https://{DOMAIN}/arhiv/a/">' + GOOD_HEAD))
+        assert "SEO-010" in {f.check for f in check_page(p) if not f.ok}
+
 
 class TestSEO011DomainsDoNotShareOneSeoBlock:
     def test_two_domains_with_identical_home_blocks_are_refused(self):

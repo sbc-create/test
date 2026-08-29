@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import re
+import urllib.parse
 from dataclasses import dataclass, field
 
 # Разделителем бывает не только дефис: в заголовке стояло «Lords General»
@@ -112,8 +113,16 @@ def check_page(page: PageUnderTest) -> list[Finding]:
     # SEO-010 — canonical ведёт на собственный домен и на этот же адрес.
     canonical = re.search(r'<link[^>]*rel=["\']canonical["\'][^>]*href=["\'](.*?)["\']', html, re.I)
     href = canonical.group(1) if canonical else ""
-    found.append(Finding("SEO-010", bool(href) and page.domain in href and href.endswith(page.path),
-                         f"canonical={href!r}"))
+    # Хост сравнивается целиком, а не вхождением подстроки: «example.test»
+    # содержится в «example.test.attacker.tld». Путь — тоже целиком: «/arhiv/a/»
+    # заканчивается на «/a/», но это другая страница.
+    canonical_parts = urllib.parse.urlparse(href) if href else None
+    canonical_ok = bool(
+        canonical_parts
+        and canonical_parts.netloc.lower() == page.domain.lower()
+        and (canonical_parts.path or "/") == page.path
+    )
+    found.append(Finding("SEO-010", canonical_ok, f"canonical={href!r}"))
     # SEO-013 — у постера осмысленный alt.
     alts = re.findall(r'<img[^>]*alt=["\'](.*?)["\']', html, re.I)
     meaningful = [a for a in alts if a.strip()]
