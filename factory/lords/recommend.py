@@ -44,6 +44,7 @@ def features_from_title(title) -> ItemFeatures:
         countries=tuple(c for c in (getattr(title, "country", None),) if c),
         franchise_id=None,
         poster=getattr(title, "poster_url", None) or getattr(title, "poster_src", None),
+        path=getattr(title, "path", None),
         playback_state=getattr(title, "playable", None),
         has_title_page=True,
         kp_rating=getattr(title, "kinopoisk_rating", None),
