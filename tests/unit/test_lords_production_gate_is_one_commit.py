@@ -129,9 +129,42 @@ class TestFillingThemOpensTheCounter:
             assert foreign not in home, f"чужой счётчик {foreign}"
 
     @pytest.mark.parametrize("site_id", SITES)
-    def test_staging_still_emits_nothing(self, site_id):
-        site = render.render_site(package(site_id), catalog=fx.build_catalog())
+    def test_the_authorized_counter_appears_without_declaring_production(self, site_id):
+        """Разрешение на сбор и объявление production — разные решения.
+
+        Раньше счётчик включался только вместе с `environment: production`, а
+        тот требует правообладателя и юридических документов, которых фабрика
+        не знает. Из-за общей развилки явно разрешённый владельцем счётчик не
+        попадал на живые публичные домены вообще. Теперь пакеты несут
+        `collection_authorized`, и счётчик работает, оставаясь staging.
+        """
+        pkg = package(site_id)
+        assert pkg.get("environment") == "staging", "пакет намеренно остаётся staging"
+        assert (pkg.get("analytics") or {}).get("collection_authorized") is True
+        site = render.render_site(pkg, catalog=fx.build_catalog())
+        home = site.pages["/"].body
+        own = str((pkg.get("analytics") or {}).get("counter_id"))
+        assert own in home, "разрешённый счётчик обязан встроиться"
+        assert home.count('data-analytics-provider="yandex"') == 1, "тег продублирован"
+        for other in SITES:
+            if other != site_id:
+                foreign = str((package(other).get("analytics") or {}).get("counter_id"))
+                assert foreign not in home, f"чужой счётчик {foreign}"
+
+    @pytest.mark.parametrize("site_id", SITES)
+    def test_without_authorization_staging_emits_nothing(self, site_id):
+        """Поведение по умолчанию не изменилось: без разрешения тега нет."""
+        pkg = package(site_id)
+        pkg = {**pkg, "analytics": {**(pkg.get("analytics") or {}), "collection_authorized": False}}
+        site = render.render_site(pkg, catalog=fx.build_catalog())
         assert 'data-analytics-provider="yandex"' not in site.pages["/"].body
+
+    @pytest.mark.parametrize("site_id", SITES)
+    def test_authorization_does_not_widen_the_host_allowlist(self, site_id):
+        """Разрешение на сбор не разрешает собирать с чужого домена."""
+        pkg = package(site_id)
+        hosts = (pkg.get("analytics") or {}).get("allowed_hosts") or []
+        assert hosts == [pkg.get("domain")], "собственный домен и ничей больше"
 
     def test_the_visor_stays_off(self):
         tag = analytics_snippet.analytics_script_tag(

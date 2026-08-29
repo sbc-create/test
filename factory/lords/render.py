@@ -1680,6 +1680,10 @@ def _context(package: dict, profile: dict, site_plan, player_state,
             allowed_hosts=list((package.get("analytics") or {}).get("allowed_hosts") or ([domain] if domain else [])),
             environment=str(package.get("environment") or "staging"),
             enabled=bool((package.get("analytics") or {}).get("enabled")),
+            # Разрешение владельца на сбор с этого публичного домена. Отдельно
+            # от `environment`: объявление сайта production требует правовых
+            # сведений, а счётчик разрешён сам по себе.
+            collection_authorized=bool((package.get("analytics") or {}).get("collection_authorized")),
         ),
         "nav": [("home", "/")] + nav,
         "per_page": int(((package.get("seo") or {}).get("items_per_page")) or 24),
