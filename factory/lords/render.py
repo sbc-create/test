@@ -1108,11 +1108,71 @@ def _ratings_block(title) -> str:
     return '<ul class="ratings">' + "".join(shown) + "</ul>"
 
 
+
+#: Рекомендуемая длина описания в выдаче: короче обрывается смысл, длиннее —
+#: обрезает поисковик.
+DESCRIPTION_TARGET_MIN = 70
+# Запас против экранирования: кавычки-ёлочки и амперсанд в атрибуте
+# разрастаются, и обрезка ровно по 180 давала на выходе до 198 знаков.
+DESCRIPTION_TARGET_MAX = 168
+
+
+def _trim_at_word(text: str, limit: int) -> str:
+    """Обрезка по границе слова, без многоточия посреди слова."""
+    text = " ".join((text or "").split())
+    if len(text) <= limit:
+        return text
+    cut = text[:limit].rsplit(" ", 1)[0].rstrip(" ,;:—-")
+    return cut + "…"
+
+
+def _title_description(title, template: str) -> str:
+    """Описание страницы произведения из подтверждённых сведений.
+
+    Шаблон подставлял одно название и на коротком названии давал полсотни
+    знаков — в выдаче это выглядит обрывком. Ничего не выдумывая, описание
+    можно собрать из того, что источник уже сообщил.
+
+    Сначала берётся синопсис поставщика: он уникален, правдив и отвечает на
+    вопрос «про что это». Если синопсиса нет, собирается справка из полей —
+    тип, год, страна, жанры, — и она честно остаётся справкой, а не
+    притворяется пересказом сюжета. Пустые поля просто не упоминаются.
+    """
+    name = title.name
+    summary = " ".join((getattr(title, "summary", "") or "").split())
+    if len(summary) >= DESCRIPTION_TARGET_MIN:
+        return _trim_at_word(summary, DESCRIPTION_TARGET_MAX)
+
+    facts = []
+    kind = TYPE_LABELS.get(title.content_type)
+    if kind:
+        facts.append(kind.lower())
+    if getattr(title, "year", None):
+        facts.append(f"{title.year} года")
+    if getattr(title, "country", None):
+        facts.append(str(title.country))
+    genres = [g for g in (getattr(title, "genres", ()) or ()) if g][:3]
+
+    parts = [f"{name} — " + " ".join(facts) if facts else name]
+    if genres:
+        parts.append("жанр: " + ", ".join(genres))
+    base = str(template or "{name}").format(name=name)
+    tail = base.split(":", 1)[1].strip() if ":" in base else ""
+    if tail:
+        parts.append(tail.rstrip("."))
+    if summary:
+        parts.append(summary)
+    text = ". ".join(part for part in parts if part).strip()
+    if not text.endswith("."):
+        text += "."
+    return _trim_at_word(text, DESCRIPTION_TARGET_MAX)
+
+
 def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: bool) -> Page:
     tpl = ctx["title_page"]
     name = title.name
     page_title = str(tpl.get("title_template", "{name}")).format(name=name)
-    description = str(tpl.get("description_template", "{name}")).format(name=name)
+    description = _title_description(title, str(tpl.get("description_template", "{name}")))
     h1 = str(tpl.get("h1_template", "{name}")).format(name=name)
 
     # Длительность в ноль минут — это не длительность, а её отсутствие: списочный
