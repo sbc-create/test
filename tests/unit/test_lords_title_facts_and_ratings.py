@@ -85,16 +85,16 @@ class TestProvenanceTellsTheTruth:
 class TestRatingsAreLabelledAndNotMixedUp:
     def test_both_ratings_are_shown_with_their_source(self):
         html = title_html([item(kinopoisk_rating=7.8, imdb_rating=6.9)])
-        assert "Кинопоиск" in html and "7.8" in html
-        assert "IMDb" in html and "6.9" in html
+        assert "Кинопоиск" in html and "7,8" in html
+        assert "IMDb" in html and "6,9" in html
 
     def test_ratings_are_not_swapped(self):
         html = title_html([item(kinopoisk_rating=1.1, imdb_rating=9.9)])
         kp = html.index("Кинопоиск")
         # Значение своего источника обязано стоять рядом со своей подписью.
-        assert "1.1" in html[kp:kp + 60], "рядом с Кинопоиском стоит не его оценка"
+        assert "1,1" in html[kp:kp + 60], "рядом с Кинопоиском стоит не его оценка"
         imdb = html.index("IMDb")
-        assert "9.9" in html[imdb:imdb + 60], "рядом с IMDb стоит не его оценка"
+        assert "9,9" in html[imdb:imdb + 60], "рядом с IMDb стоит не его оценка"
 
     def test_missing_rating_is_hidden_not_zero(self):
         html = title_html([item(kinopoisk_rating=None, imdb_rating=None)])

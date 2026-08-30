@@ -441,12 +441,12 @@ def _card_rating(title) -> str:
     """
     for label, raw in (("Кинопоиск", getattr(title, "kinopoisk_rating", None)),
                        ("IMDb", getattr(title, "imdb_rating", None))):
-        value = _shown_rating(raw)
+        value = _format_rating(raw)
         if value is not None:
             return (
                 f'<span class="card__rating" title="{escape(label)}">'
                 f'<span class="card__rating-source">{escape(label)}</span>'
-                f'<span class="card__rating-value">{escape(f"{value:.1f}")}</span>'
+                f'<span class="card__rating-value">{escape(value)}</span>'
                 "</span>"
             )
     return ""
@@ -470,11 +470,11 @@ def _carousel_card(scored, position: int, shelf_id: str) -> str:
     ) if part)
     rating = ""
     for label, value in (("Кинопоиск", item.kp_rating), ("IMDb", item.imdb_rating)):
-        shown = _shown_rating(value)
+        shown = _format_rating(value)
         if shown is not None:
             rating = (f'<span class="rail__rating"><span class="rail__rating-source">'
                       f'{escape(label)}</span><span class="rail__rating-value">'
-                      f'{escape(f"{shown:.1f}")}</span></span>')
+                      f'{escape(shown)}</span></span>')
             break
     # Адрес берётся у записи каталога. Собирать его из идентификатора нельзя:
     # идентификатор — это UUID поставщика, страницы по такому адресу нет, и
@@ -936,8 +936,9 @@ def _calendar(catalog: fx.Catalog, kinds) -> str:
         return ""
     return (
         '<section class="section"><h2>Сезоны в каталоге</h2>'
-        '<p class="lede">Порядок выхода серий на стенде условный: дат премьер у '
-        "синтетических записей нет и не будет выдумано.</p>"
+        '<p class="lede">Здесь перечислены многосерийные записи и число серий в '
+        "последнем сезоне. Дат выхода источник не сообщает, поэтому порядок "
+        "показа не является календарём премьер.</p>"
         '<ol class="season">' + "".join(rows) + "</ol></section>"
     )
 
@@ -1105,6 +1106,26 @@ def _player_block(ctx, title, name: str) -> str:
 
 
 
+#: Разумные границы шкалы оценок. Значение вне них — не оценка: чаще всего это
+#: внешний идентификатор, случайно попавший в поле балла. Оба числа, и отличить
+#: их можно только по величине.
+RATING_MIN = 0.1
+RATING_MAX = 10.0
+
+
+def _format_rating(value) -> str | None:
+    """Оценка в виде, понятном читателю, или ничего.
+
+    По-русски дробная часть отделяется запятой. Точка здесь выглядит как
+    машинный вывод, а три знака после неё — как техническая утечка: источник
+    присылает `7.282`, читателю нужно `7,3`.
+    """
+    shown = _shown_rating(value)
+    if shown is None or not (RATING_MIN <= shown <= RATING_MAX):
+        return None
+    return f"{shown:.1f}".replace(".", ",")
+
+
 def _shown_rating(value) -> float | None:
     """Оценка, которую можно показать, или ничего.
 
@@ -1134,10 +1155,10 @@ def _ratings_block(title) -> str:
     )
     shown = [
         f'<li class="rating"><span class="rating__source">{escape(label)}</span>'
-        f'<span class="rating__value">{escape(f"{shown_value:.1f}")}</span></li>'
-        for label, shown_value in (
-            (label, _shown_rating(value)) for label, value in pairs)
-        if shown_value is not None
+        f'<span class="rating__value">{escape(text)}</span></li>'
+        for label, text in (
+            (label, _format_rating(value)) for label, value in pairs)
+        if text is not None
     ]
     if not shown:
         return ""

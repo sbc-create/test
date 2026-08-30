@@ -31,7 +31,7 @@ class TestEveryRatingCarriesItsSource:
     def test_both_ratings_are_named(self):
         html = render._ratings_block(rated(7.28, 6.1))
         assert "Кинопоиск" in html and "IMDb" in html
-        assert "7.3" in html and "6.1" in html
+        assert "7,3" in html and "6,1" in html
 
     def test_the_source_is_never_dropped(self):
         # Число без подписи ничего не утверждает: 7.8 у Кинопоиска и 7.8 у
@@ -44,7 +44,7 @@ class TestEveryRatingCarriesItsSource:
 
     def test_ratings_are_not_swapped(self):
         html = render._ratings_block(rated(9.9, 1.1))
-        assert html.index("Кинопоиск") < html.index("9.9") < html.index("IMDb")
+        assert html.index("Кинопоиск") < html.index("9,9") < html.index("IMDb")
 
     def test_one_source_present_does_not_invent_the_other(self):
         html = render._ratings_block(rated(None, 6.1))
@@ -65,7 +65,7 @@ class TestNothingIsInvented:
 
     def test_a_zero_does_not_hide_the_other_source(self):
         html = render._card_rating(rated(0.0, 8.0))
-        assert "IMDb" in html and "8.0" in html
+        assert "IMDb" in html and "8,0" in html
 
     @pytest.mark.parametrize("junk", [True, False, "7.5", None, [], {}])
     def test_non_numbers_are_refused(self, junk):
@@ -82,7 +82,7 @@ class TestTheCardShowsOneRating:
 
     def test_the_card_rating_reaches_the_grid(self):
         html = render._grid([rated(7.28, None)])
-        assert "card__rating" in html and "7.3" in html
+        assert "card__rating" in html and "7,3" in html
 
 
 class TestRatingsAreActuallyStyled:
