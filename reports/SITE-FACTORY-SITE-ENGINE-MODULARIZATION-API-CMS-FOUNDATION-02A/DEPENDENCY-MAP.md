@@ -1,6 +1,10 @@
 # Граф зависимостей и что в нём не так
 
-Построено разбором AST по `factory/`. Полный граф — `artifacts/site-engine/dependency-graph.json`.
+Построено разбором AST по `factory/`. Полный граф порождается командой
+`python3 tools/inventory.py .` и ложится в
+`artifacts/site-engine/dependency-graph.json`. В репозиторий он не
+коммитится: каталог `artifacts/` под `.gitignore`, и производный файл там
+устаревал бы молча. Воспроизводится одной командой.
 
 ## Зависимости между областями
 
