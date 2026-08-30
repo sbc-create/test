@@ -67,6 +67,18 @@ def lint(build_dir: Path, *, environment: str = "staging") -> Report:
             continue
         if route["status"] not in (policy.get("http_status") or [200]):
             report.add(Finding("status", "critical", url, f"Статус {route['status']} не разрешён матрицей для типа «{page_type}» ({policy.get('http_status')}).", "HR-4"))
+        # Формат адреса объявлен матрицей (`case`, `word_separator`) и до сих пор
+        # не проверялся ничем: сборки ему соответствовали, потому что так устроен
+        # генератор, а не потому, что кто-то следил. Заглавная буква или
+        # подчёркивание рождают вторую версию той же страницы — ровно то, от чего
+        # рядом защищают `trailing_slash` и `page_one_url`.
+        if url_policy.get("case") == "lower" and url != url.lower():
+            report.add(Finding("url-policy", "critical", url,
+                               f"Адрес содержит заглавные буквы, политика матрицы — «{url_policy['case']}»."))
+        separator = url_policy.get("word_separator")
+        if separator == "-" and "_" in url:
+            report.add(Finding("url-policy", "critical", url,
+                               "Адрес содержит «_», политика матрицы — разделитель «-»."))
         if not route.get("file"):
             continue
         html = (public / route["file"]).read_text(encoding="utf-8")
