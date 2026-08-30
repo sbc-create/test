@@ -41,7 +41,15 @@ BLOCKED_SOURCE = "BLOCKED_SOURCE"
 
 #: Обход прекращается, даже если источник продолжает обещать следующую страницу.
 #: Без этого испорченный курсор превращает синхронизацию в бесконечный цикл.
-DEFAULT_MAX_PAGES = 200
+#: Предохранитель от зациклившейся пагинации. Это наша операционная настройка,
+#: а не факт об API: провайдер число страниц не ограничивает, и в замороженном
+#: контракте ему поэтому не место.
+#:
+#: Значение берётся с запасом над измеренным каталогом. Замер 2026-08-30:
+#: источник отдаёт 53 115 записей — 532 страницы по сто. Прежние 200 страниц
+#: при размере 24 обрезали витрину ровно на 4800 записях, и обрыв ничем себя не
+#: выдавал: поле `stopped_by` заполнялось, но его никто не читал.
+DEFAULT_MAX_PAGES = 2000
 
 
 class SourceError(RuntimeError):
@@ -281,7 +289,11 @@ def walk_pages(fetcher: Fetcher, base_url: str, params: dict[str, str] | None = 
 
     while True:
         query = dict(params or {})
-        query[contract.size_param] = str(min(contract.default_size, contract.max_size))
+        # Просим столько, сколько контракт разрешает. Прежде здесь стоял
+        # `min(default_size, max_size)` — то есть двадцать четыре при
+        # разрешённой сотне: вчетверо больше запросов ради вчетверо меньших
+        # данных, и предел страниц исчерпывался вчетверо быстрее.
+        query[contract.size_param] = str(contract.max_size)
         if cursor:
             query[contract.cursor_param] = cursor
         url = f"{base_url}?{urllib.parse.urlencode(query)}"
@@ -316,8 +328,16 @@ def walk_pages(fetcher: Fetcher, base_url: str, params: dict[str, str] | None = 
             )
         seen_cursors.add(next_cursor)
         if pages >= contract.max_pages:
-            stopped_by = "max_pages"
-            break
+            # Предел страниц — защита от зациклившегося источника, а не признак
+            # конца каталога. Молчаливый обрыв однажды оставил витрину с 4800
+            # записями из 53 115, и ни один гейт об этом не сказал: поле
+            # `stopped_by` заполнялось, но никто его не читал.
+            raise SourceError(
+                f"обрыв каталога: пройден предел в {contract.max_pages} страниц, "
+                f"а источник обещает продолжение. Собрано {len(collected)} записей; "
+                "публиковать неполный каталог как полный нельзя",
+                kind="catalog_truncation",
+            )
         cursor = next_cursor
 
     return PageWalk(items=collected, pages=pages, total=total, stopped_by=stopped_by)
