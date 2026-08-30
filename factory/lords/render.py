@@ -752,6 +752,15 @@ def _lede(text: str | None) -> str:
     return f'<p class="lede">{escape(value)}</p>' if value else ""
 
 
+def _section(heading: str, inner: str) -> str:
+    """Раздел с заголовком — или ничего, если содержимого нет.
+
+    Заголовок объявляет читателю и поисковой системе, что дальше будет текст.
+    Пустая секция обещает и не даёт, поэтому исчезает целиком вместе с `<h2>`.
+    """
+    return f'<section class="section"><h2>{escape(heading)}</h2>{inner}</section>' if inner else ""
+
+
 def _page(ctx, path: str, meta: Meta, body: str) -> Page:
     local = dict(ctx)
     local["_path"] = path
@@ -1302,8 +1311,9 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
         head
         + _player_block(ctx, title, name)
         + _seasons_block(title)
-        + '<section class="section"><h2>О карточке</h2>'
-        + _lede(tpl.get("intro")) + "</section>"
+        # Секция целиком зависит от текста: заголовок «О карточке» над пустотой
+        # объявляет раздел, которого нет, и читателю, и поисковой системе.
+        + _section("О карточке", _lede(tpl.get("intro")))
         + _related(catalog, title, kinds, ctx["row_items"])
         + _comments_block(ctx, title)
     )
