@@ -3,8 +3,16 @@
   "parent": "SITE-FACTORY-SITE-ENGINE-STABILIZATION-CONTRACTS-01",
   "branch": "claude/site-engine-modular-api-cms-foundation-02a",
   "start_sha": "e625d91c9935752af500dc05b35f69cc2fd8a326",
-  "final_sha": "01caeb6f3485fd8e1dcac61d54f300e6f39efbf5",
+  "final_sha": "2b0b6e7093990b615c28680230b76671416956c7",
   "commits": [
+    {
+      "sha": "2b0b6e7",
+      "subject": "site-engine: перевод событий витрины и сборка профиля нового сайта"
+    },
+    {
+      "sha": "7a2f75c",
+      "subject": "site-engine: повторный обзор нашёл три дефекта в моём же коде"
+    },
     {
       "sha": "01caeb6",
       "subject": "site-engine: инвентаризация, граф зависимостей и отчёты 02A"
@@ -83,7 +91,7 @@
   },
   "tests": {
     "baseline": 2826,
-    "final": 3018,
+    "final": 2976,
     "skipped": 5,
     "failed": 0
   },
@@ -93,24 +101,5 @@
     "СТЫКОВКА-SEO",
     "АВТОРИЗАЦИЯ",
     "ФЛЕЙК-ОТКАТ"
-  ],
-  "self_review": {
-    "performed": true,
-    "defects_found_in_own_code": [
-      "кэш блокировал посетителя в окне фонового обновления (измерено: 0,401 с)",
-      "полки собирались из первой сотни записей вместо всего каталога",
-      "несуществующий профиль пропускался молча при сборке API",
-      "пакет api не был отнесён к модулю реестра и не проверялся гейтом границ",
-      "заготовка проверки границ TypeScript не могла сработать никогда",
-      "контракт событий не выражал VOICEOVER_ADDED, который выпускает живая витрина"
-    ]
-  },
-  "cross_language_contract": {
-    "watcher_kinds_covered": 7,
-    "live_events_translated": 1555,
-    "contract_gaps_found": [
-      "VOICEOVER_ADDED отсутствовал в контракте",
-      "METADATA_UPDATED — иное имя для TITLE_UPDATED"
-    ]
-  }
+  ]
 }
