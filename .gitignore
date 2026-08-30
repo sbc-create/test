@@ -29,7 +29,9 @@ secrets/
 .claude/settings.local.json
 CLAUDE.local.md
 # Node / Python
-node_modules/
+# Без завершающего слэша намеренно: правило «node_modules/» матчит только
+# каталог, поэтому симлинк с тем же именем попадал под отслеживание — и попал.
+node_modules
 __pycache__/
 *.pyc
 .pytest_cache/
