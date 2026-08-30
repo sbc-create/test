@@ -1,0 +1,92 @@
+{
+  "task_id": "SITE-FACTORY-SITE-ENGINE-MODULARIZATION-API-CMS-FOUNDATION-02A",
+  "parent": "SITE-FACTORY-SITE-ENGINE-STABILIZATION-CONTRACTS-01",
+  "branch": "claude/site-engine-modular-api-cms-foundation-02a",
+  "start_sha": "e625d91c9935752af500dc05b35f69cc2fd8a326",
+  "final_sha": "e8b4298e501e0992895b1526b4a48e0c5eadebed",
+  "commits": [
+    {
+      "sha": "e8b4298",
+      "subject": "site-engine: редакционный слой CMS без единого изменяющего маршрута"
+    },
+    {
+      "sha": "842dd53",
+      "subject": "site-engine: API v1 только на чтение, выключенный по умолчанию"
+    },
+    {
+      "sha": "d957585",
+      "subject": "site-engine: адаптеры Yummy и Lords, загрузчик и абстракция кэша"
+    },
+    {
+      "sha": "6fa7553",
+      "subject": "site-engine: модульные границы, контракты и гейт, который на них падает"
+    }
+  ],
+  "deploy_executed": false,
+  "production_mutation": false,
+  "modules": {
+    "total": 18,
+    "implemented": [
+      "audit",
+      "cache-invalidation",
+      "core-contracts",
+      "editorial",
+      "normalized-content",
+      "site-configuration"
+    ],
+    "adapted": [
+      "content-ingestion",
+      "provider-adapters",
+      "renderer-adapters"
+    ],
+    "contract_only": [
+      "announcements",
+      "catalog",
+      "episodes-seasons",
+      "monitoring",
+      "playback",
+      "ratings",
+      "schedule",
+      "seo-bridge",
+      "shelves"
+    ]
+  },
+  "gates": {
+    "architecture_gate": "PASS",
+    "boundary_gate": "PASS",
+    "core_neutrality": "PASS"
+  },
+  "api": {
+    "version": "v1",
+    "read_only": true,
+    "enabled_by_default": false,
+    "allowed_environments": [
+      "local",
+      "test",
+      "staging"
+    ],
+    "routes": 11,
+    "verified_profiles": [
+      "yummyani-site",
+      "lords-01",
+      "demo-books"
+    ]
+  },
+  "adapters_verified_on_live_data": {
+    "lords-live-cache": 53116,
+    "yummy-watcher-snapshot": 6774
+  },
+  "tests": {
+    "baseline": 2826,
+    "final": 2976,
+    "skipped": 5,
+    "failed": 0
+  },
+  "seo_handoff": "PENDING_OWNER_HANDOFF",
+  "blockers": [
+    "РИСК-РЕНДЕР",
+    "СТЫКОВКА-SEO",
+    "АВТОРИЗАЦИЯ",
+    "ФЛЕЙК-ОТКАТ"
+  ]
+}
