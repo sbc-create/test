@@ -78,6 +78,24 @@ def test_duplicate_project_ids_collapse_to_one(tmp_path):
     assert len(snapshot["projects"]) == 1
 
 
+def test_projects_without_an_id_do_not_collapse_into_one(tmp_path):
+    """Отсутствующий идентификатор — не признак одинаковости.
+
+    Дедупликация шла по `id`, и записи без него получали общий ключ `None`.
+    Два разных проекта схлопывались в один, а вместе со вторым исчезал его
+    домен — молча, без единой пометки. Для модуля, написанного ради того,
+    чтобы отсутствие данных нельзя было спутать с нулём, это худший вид потери.
+    """
+    client = _FakeClient([{"site": "yummyani.site"}, {"site": "yummyani.org"}])
+    source = TopvisorSource(
+        cache_path=tmp_path / "c.json",
+        credential_check=lambda: (True, "ok"),
+        client_factory=lambda: client,
+    )
+    domains = {p["domain"] for p in source.snapshot()["projects"]}
+    assert domains == {"yummyani.site", "yummyani.org"}
+
+
 def test_two_projects_on_one_domain_are_reported_not_silently_merged(tmp_path):
     client = _FakeClient(_projects((1, "yummyani.site"), (2, "yummyani.site")))
     source = TopvisorSource(

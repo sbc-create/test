@@ -161,11 +161,16 @@ class TopvisorSource(CredentialedSource):
             project_id = entry.get("id")
             domain = str(entry.get("site") or entry.get("url") or "").strip().lower()
             domain = domain.removeprefix("https://").removeprefix("http://").removeprefix("www.").rstrip("/")
-            if project_id in by_id:
+            if project_id is not None and project_id in by_id:
                 # Дубль по идентификатору — это один и тот же проект, отданный
                 # дважды. Схлопывается молча: новой информации в нём нет.
                 continue
-            by_id[project_id] = {"project_id": project_id, "domain": domain}
+            # Отсутствующий идентификатор — не признак одинаковости. Раньше все
+            # такие записи получали общий ключ `None` и схлопывались в одну,
+            # унося с собой чужие домены. Ключ подменяется на уникальный, чтобы
+            # запись дожила до healthcheck и была там видна.
+            key = project_id if project_id is not None else f"__no_id__{len(by_id)}"
+            by_id[key] = {"project_id": project_id, "domain": domain}
             seen_domains[domain] = seen_domains.get(domain, 0) + 1
 
         # Два РАЗНЫХ проекта на один домен — совсем другое дело: непонятно,
