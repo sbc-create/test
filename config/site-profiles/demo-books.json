@@ -1,0 +1,147 @@
+{
+  "schema_version": "1.0",
+  "site_id": "demo-books",
+  "site_type": "reading-catalog",
+  "domains": [
+    "demo-books.invalid"
+  ],
+  "locale": "ru-RU",
+  "timezone": "Europe/Moscow",
+  "theme": {
+    "name": "demo-quiet"
+  },
+  "content_providers": [],
+  "content_directions": [
+    "book"
+  ],
+  "enabled_modules": [
+    "content-catalog",
+    "homepage-shelves",
+    "seo",
+    "site-configuration",
+    "cache-invalidation",
+    "monitoring-audit",
+    "renderer-adapters"
+  ],
+  "normalized_content_source": {
+    "kind": "site-engine-api",
+    "ref": "site-engine/v1"
+  },
+  "render_strategy": {
+    "mode": "static",
+    "release_size_budget_mb": 50,
+    "full_render_budget_minutes": 5
+  },
+  "cache_policy": {
+    "schema_version": "1.0",
+    "layers": {
+      "homepage_shelves": {
+        "ttl_seconds": 300,
+        "stale_while_revalidate_seconds": 300,
+        "last_known_good": true,
+        "tags": [
+          "shelf"
+        ]
+      },
+      "catalog": {
+        "ttl_seconds": 900,
+        "stale_while_revalidate_seconds": 600,
+        "last_known_good": true,
+        "tags": [
+          "catalog"
+        ]
+      },
+      "title_page": {
+        "ttl_seconds": 900,
+        "stale_while_revalidate_seconds": 600,
+        "last_known_good": true,
+        "tags": [
+          "title"
+        ]
+      },
+      "seo": {
+        "ttl_seconds": 3600,
+        "stale_while_revalidate_seconds": 1800,
+        "last_known_good": true,
+        "tags": [
+          "seo"
+        ]
+      },
+      "static_assets": {
+        "ttl_seconds": 86400,
+        "last_known_good": true,
+        "tags": [
+          "static"
+        ]
+      }
+    },
+    "invalidation": {
+      "mode": "event-driven",
+      "event_map": {
+        "TITLE_CREATED": [
+          "shelf:new-titles",
+          "catalog"
+        ],
+        "TITLE_UPDATED": [
+          "title",
+          "catalog"
+        ]
+      },
+      "dry_run_supported": true
+    },
+    "keys": {
+      "site_scoped": true,
+      "stampede_protection": "coalesce"
+    },
+    "forbidden": {
+      "cache_errors": false,
+      "empty_response_as_success": false,
+      "indefinite_html_cache": false
+    },
+    "observability": {
+      "expose_hit_miss_stale": true
+    }
+  },
+  "seo_profile": {
+    "enabled": true,
+    "indexing_enabled": false,
+    "canonical_host": "demo-books.invalid",
+    "editorial_profile": "demo-books-editorial"
+  },
+  "analytics_profile": {
+    "enabled": false,
+    "provider": "none",
+    "collection_authorized": false
+  },
+  "legal_profile": {
+    "contact_email": "sbc.claude@yandex.ru",
+    "owner": null,
+    "documents": null
+  },
+  "release_policy": {
+    "keep_releases": 2,
+    "rollback_ready": true,
+    "zero_downtime_switch": true
+  },
+  "owners": {
+    "homepage-shelves": "site-factory/content",
+    "seo": "site-factory/seo",
+    "renderer-adapters": "site-factory/platform",
+    "monitoring-audit": "site-factory/platform"
+  },
+  "health_endpoint": "/healthz",
+  "coverage_endpoint": "/api/v1/coverage",
+  "feature_flags": {
+    "ad_slots_enabled": false
+  },
+  "shelf_configuration": [
+    {
+      "shelf_id": "new-titles",
+      "title": "Новые поступления",
+      "source": "query",
+      "requires_playback": false,
+      "limit": 12,
+      "position": 0
+    }
+  ]
+}

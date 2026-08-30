@@ -1,0 +1,227 @@
+{
+  "schema_version": "1.0",
+  "site_id": "lords-03",
+  "site_type": "video-showcase",
+  "domains": [
+    "1lordserials1.online"
+  ],
+  "locale": "ru-RU",
+  "timezone": "Europe/Moscow",
+  "theme": {
+    "name": "lords-showcase"
+  },
+  "content_providers": [
+    {
+      "adapter": "cdnvideohub-public-v1",
+      "role": "primary",
+      "directions": [
+        "movie",
+        "series"
+      ],
+      "credentials_ref": "cdnvideohub_api_token"
+    }
+  ],
+  "content_directions": [
+    "movie",
+    "series"
+  ],
+  "enabled_modules": [
+    "content-ingestion",
+    "content-catalog",
+    "episodes-seasons",
+    "playback-availability",
+    "homepage-shelves",
+    "ratings",
+    "seo",
+    "site-configuration",
+    "cache-invalidation",
+    "monitoring-audit",
+    "provider-adapters",
+    "renderer-adapters"
+  ],
+  "shelf_configuration": [
+    {
+      "shelf_id": "new-titles",
+      "title": "Новинки каталога",
+      "source": "query",
+      "requires_playback": true,
+      "limit": 18,
+      "position": 0
+    },
+    {
+      "shelf_id": "recently-added",
+      "title": "Последние добавления",
+      "source": "query",
+      "requires_playback": true,
+      "limit": 18,
+      "position": 1
+    },
+    {
+      "shelf_id": "top-rated",
+      "title": "Высокие оценки",
+      "source": "query",
+      "requires_playback": true,
+      "limit": 18,
+      "position": 2
+    }
+  ],
+  "render_strategy": {
+    "mode": "static",
+    "release_size_budget_mb": 1600,
+    "full_render_budget_minutes": 120
+  },
+  "cache_policy": {
+    "schema_version": "1.0",
+    "layers": {
+      "new_episodes": {
+        "ttl_seconds": 300,
+        "stale_while_revalidate_seconds": 120,
+        "last_known_good": true,
+        "tags": [
+          "shelf:new-episodes",
+          "events"
+        ]
+      },
+      "homepage_shelves": {
+        "ttl_seconds": 300,
+        "stale_while_revalidate_seconds": 300,
+        "last_known_good": true,
+        "tags": [
+          "shelf"
+        ]
+      },
+      "catalog": {
+        "ttl_seconds": 900,
+        "stale_while_revalidate_seconds": 600,
+        "last_known_good": true,
+        "tags": [
+          "catalog"
+        ]
+      },
+      "title_page": {
+        "ttl_seconds": 900,
+        "stale_while_revalidate_seconds": 600,
+        "last_known_good": true,
+        "tags": [
+          "title"
+        ]
+      },
+      "ratings": {
+        "ttl_seconds": 21600,
+        "stale_while_revalidate_seconds": 3600,
+        "last_known_good": true,
+        "tags": [
+          "ratings"
+        ]
+      },
+      "schedule": {
+        "ttl_seconds": 1800,
+        "stale_while_revalidate_seconds": 600,
+        "last_known_good": true,
+        "tags": [
+          "schedule"
+        ]
+      },
+      "announcements": {
+        "ttl_seconds": 1800,
+        "stale_while_revalidate_seconds": 600,
+        "last_known_good": true,
+        "tags": [
+          "announcements"
+        ]
+      },
+      "seo": {
+        "ttl_seconds": 3600,
+        "stale_while_revalidate_seconds": 1800,
+        "last_known_good": true,
+        "tags": [
+          "seo"
+        ]
+      },
+      "static_assets": {
+        "ttl_seconds": 86400,
+        "last_known_good": true,
+        "tags": [
+          "static"
+        ]
+      }
+    },
+    "invalidation": {
+      "mode": "event-driven",
+      "event_map": {
+        "EPISODE_ADDED": [
+          "title",
+          "shelf:new-episodes",
+          "catalog"
+        ],
+        "TITLE_CREATED": [
+          "shelf:new-titles",
+          "catalog"
+        ],
+        "PLAYBACK_AVAILABLE": [
+          "title",
+          "shelf:watchable"
+        ],
+        "RATING_UPDATED": [
+          "title",
+          "ratings"
+        ],
+        "SCHEDULE_UPDATED": [
+          "schedule"
+        ],
+        "ANNOUNCEMENT_UPDATED": [
+          "announcements"
+        ]
+      },
+      "dry_run_supported": true
+    },
+    "keys": {
+      "site_scoped": true,
+      "stampede_protection": "coalesce"
+    },
+    "forbidden": {
+      "cache_errors": false,
+      "empty_response_as_success": false,
+      "indefinite_html_cache": false
+    },
+    "observability": {
+      "expose_hit_miss_stale": true
+    }
+  },
+  "seo_profile": {
+    "enabled": true,
+    "indexing_enabled": false,
+    "canonical_host": "1lordserials1.online",
+    "editorial_profile": "lords-03-editorial"
+  },
+  "analytics_profile": {
+    "enabled": true,
+    "provider": "yandex_metrika",
+    "counter_id": 112010277,
+    "allowed_hosts": [
+      "1lordserials1.online"
+    ]
+  },
+  "legal_profile": {
+    "contact_email": "sbc.claude@yandex.ru",
+    "owner": null,
+    "documents": null
+  },
+  "release_policy": {
+    "keep_releases": 2,
+    "rollback_ready": true,
+    "zero_downtime_switch": true
+  },
+  "feature_flags": {
+    "ad_slots_enabled": false
+  },
+  "owners": {
+    "content-ingestion": "site-factory/content",
+    "homepage-shelves": "site-factory/content",
+    "seo": "site-factory/seo",
+    "renderer-adapters": "site-factory/platform",
+    "monitoring-audit": "site-factory/platform"
+  },
+  "health_endpoint": "/healthz",
+  "coverage_endpoint": "/api/v1/coverage"
+}
