@@ -59,10 +59,10 @@
 
 **Владеет данными.** профили сайтов и флаги
 
-**Публичный интерфейс.** `factory.site_engine.profiles`
+**Публичный интерфейс.** `factory.site_engine.profiles`, `factory.site_engine.scaffold`
 
 **Вход.** config/site-profiles/*.json  
-**Выход.** SiteProfile
+**Выход.** SiteProfile, новый профиль сайта
 
 **События.** не выпускает
 
@@ -83,12 +83,12 @@
 
 **Владеет данными.** сырые ответы поставщика
 
-**Публичный интерфейс.** `factory.site_engine.providers.ProviderAdapter`
+**Публичный интерфейс.** `factory.site_engine.adapters.yummy_events`, `factory.site_engine.providers.ProviderAdapter`
 
 **Вход.** внешний API  
 **Выход.** RawTitle, RawSeason
 
-**События.** не выпускает
+**События.** `перевод чужого формата в ContentEvent`
 
 **Зависит от.** `core-contracts`
 

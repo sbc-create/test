@@ -123,6 +123,7 @@ def _module_of(path: Path, root: Path) -> str:
     mapping = {
         "contracts.py": "core-contracts",
         "profiles.py": "site-configuration",
+        "scaffold.py": "site-configuration",
         "providers.py": "provider-adapters",
         "ingestion.py": "content-ingestion",
         "store.py": "normalized-content",

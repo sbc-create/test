@@ -49,6 +49,12 @@ class EventType(str, Enum):
     TITLE_UPDATED = "TITLE_UPDATED"
     EPISODE_ADDED = "EPISODE_ADDED"
     SEASON_ADDED = "SEASON_ADDED"
+    #: Появилась новая озвучка. Наблюдатель Yummy выпускает такие события
+    #: на живой витрине, а контракт их не знал: строгий переводчик ленты
+    #: упёрся в них на первой же записи. Род события, который система
+    #: производит, а контракт не выражает, — неполнота контракта, а не
+    #: лишнее событие.
+    VOICEOVER_ADDED = "VOICEOVER_ADDED"
     PLAYBACK_AVAILABLE = "PLAYBACK_AVAILABLE"
     PLAYBACK_UNAVAILABLE = "PLAYBACK_UNAVAILABLE"
     RATING_UPDATED = "RATING_UPDATED"
@@ -313,6 +319,9 @@ class ContentEvent:
 EVENT_CACHE_TAGS: dict[EventType, tuple[str, ...]] = {
     EventType.EPISODE_ADDED: ("title", "shelf:new-episodes", "catalog"),
     EventType.SEASON_ADDED: ("title", "catalog"),
+    # Новая озвучка меняет карточку тайтла, но не состав каталога и не
+    # полку новых серий: серии от неё не прибавляется.
+    EventType.VOICEOVER_ADDED: ("title",),
     EventType.TITLE_CREATED: ("shelf:new-titles", "catalog"),
     EventType.TITLE_UPDATED: ("title", "catalog"),
     EventType.PLAYBACK_AVAILABLE: ("title", "shelf:watchable"),
@@ -322,6 +331,23 @@ EVENT_CACHE_TAGS: dict[EventType, tuple[str, ...]] = {
     EventType.ANNOUNCEMENT_UPDATED: ("announcements",),
     EventType.SOURCE_ANOMALY: (),
 }
+
+
+def idempotency_key(event_type: EventType, canonical_id: str, marker: str) -> str:
+    """Один и тот же факт обязан дать один и тот же ключ.
+
+    Маркер — то, что отличает событие: номер серии, значение оценки. Времени в
+    ключе нет намеренно: иначе повторный цикл с тем же изменением положил бы его
+    в ленту второй раз.
+
+    Живёт в контрактах, а не в загрузчике, потому что ключ обязаны одинаково
+    вычислять все, кто выпускает события, — включая переводчиков чужих форматов.
+    """
+    import hashlib
+
+    return hashlib.sha256(
+        f"{event_type.value}|{canonical_id}|{marker}".encode()
+    ).hexdigest()[:32]
 
 
 @dataclass(frozen=True)

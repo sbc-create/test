@@ -21,6 +21,7 @@ from factory.site_engine.contracts import (
     EventType,
     IngestionRun,
     Title,
+    idempotency_key,
     utc_now,
 )
 from factory.site_engine.providers import ProviderAdapter, ProviderUnavailable
@@ -42,18 +43,6 @@ class IngestionLimits:
 
 def _run_id(site_id: str) -> str:
     return hashlib.sha256(f"{site_id}|{utc_now().isoformat()}".encode()).hexdigest()[:16]
-
-
-def idempotency_key(event_type: EventType, canonical_id: str, marker: str) -> str:
-    """Один и тот же факт обязан дать один и тот же ключ.
-
-    Маркер — это то, что отличает событие: номер серии, значение оценки. Время
-    в ключ не входит намеренно: иначе повторный цикл с тем же изменением
-    положил бы его в ленту второй раз.
-    """
-    return hashlib.sha256(
-        f"{event_type.value}|{canonical_id}|{marker}".encode()
-    ).hexdigest()[:32]
 
 
 def diff_titles(previous: Title | None, current: Title) -> list[ContentEvent]:
