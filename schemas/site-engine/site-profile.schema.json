@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://site-factory.local/schemas/site-engine/site-profile.schema.json",
+  "title": "SiteProfile",
+  "description": "Профиль сайта: всё, чем один сайт отличается от другого. Ядро движка о конкретных сайтах ничего не знает — оно читает профиль. Поэтому здесь нет слов anime, yummy и lords: они допустимы в значениях полей и в именах адаптеров, но не в самой схеме, иначе следующий тип сайта потребует правки ядра. Секретов здесь нет и быть не может: профиль лежит в git.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "site_id", "site_type", "domains", "locale", "timezone",
+    "theme", "content_providers", "enabled_modules", "render_strategy",
+    "cache_policy", "seo_profile", "analytics_profile", "legal_profile",
+    "release_policy", "owners"
+  ],
+  "properties": {
+    "schema_version": {
+      "description": "Версия схемы. Потребитель, встретивший незнакомую версию, обязан отказаться, а не угадывать.",
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$"
+    },
+    "site_id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,40}$" },
+    "site_type": {
+      "description": "Род сайта. Список открыт: движок обязан принимать новый тип без правки ядра.",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{1,40}$"
+    },
+    "domains": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9.-]+\\.[a-z]{2,}$" }
+    },
+    "locale": { "type": "string", "pattern": "^[a-z]{2}(-[A-Z]{2})?$" },
+    "timezone": { "type": "string", "minLength": 3 },
+    "theme": {
+      "description": "Оформление. Ядро его не интерпретирует — только передаёт рендереру.",
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "palette": { "type": "object" },
+        "typography": { "type": "object" }
+      }
+    },
+    "content_providers": {
+      "description": "Поставщики контента. Имя адаптера, а не адрес и не ключ.",
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["adapter", "role"],
+        "additionalProperties": false,
+        "properties": {
+          "adapter": { "type": "string", "minLength": 1 },
+          "role": { "enum": ["primary", "enrichment", "schedule", "ratings", "news"] },
+          "directions": { "type": "array", "items": { "type": "string" } },
+          "credentials_ref": {
+            "description": "Ссылка на секрет во внешнем хранилище. Само значение сюда не попадает никогда.",
+            "type": "string", "pattern": "^[a-z][a-z0-9_]{2,60}$"
+          }
+        }
+      }
+    },
+    "content_directions": { "type": "array", "items": { "type": "string" } },
+    "enabled_modules": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {
+        "enum": [
+          "content-ingestion", "content-catalog", "episodes-seasons",
+          "playback-availability", "homepage-shelves", "ratings",
+          "news-announcements", "seo", "site-configuration",
+          "cache-invalidation", "monitoring-audit", "provider-adapters",
+          "renderer-adapters"
+        ]
+      }
+    },
+    "shelf_configuration": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["shelf_id", "title", "source"],
+        "additionalProperties": false,
+        "properties": {
+          "shelf_id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,40}$" },
+          "title": { "type": "string", "minLength": 1 },
+          "source": {
+            "description": "Откуда берутся карточки. `events` — из ленты наблюдателя, `query` — выборкой каталога, `snapshot` — из состояния.",
+            "enum": ["events", "query", "snapshot"]
+          },
+          "event_types": { "type": "array", "items": { "type": "string" } },
+          "requires_playback": {
+            "description": "Полка обещает просмотр. Запись без подтверждённого потока в неё не попадает.",
+            "type": "boolean"
+          },
+          "limit": { "type": "integer", "minimum": 1, "maximum": 60 },
+          "position": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "render_strategy": {
+      "type": "object",
+      "required": ["mode"],
+      "additionalProperties": false,
+      "properties": {
+        "mode": { "enum": ["static", "dynamic", "hybrid"] },
+        "static_sections": { "type": "array", "items": { "type": "string" } },
+        "release_size_budget_mb": { "type": "integer", "minimum": 1 },
+        "full_render_budget_minutes": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "cache_policy": { "$ref": "cache-policy.schema.json" },
+    "seo_profile": {
+      "description": "SEO управляет метаданными, но не владеет каталогом и не ходит к поставщику.",
+      "type": "object",
+      "required": ["enabled", "indexing_enabled"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "indexing_enabled": { "type": "boolean" },
+        "canonical_host": { "type": "string" },
+        "editorial_profile": { "type": "string" }
+      }
+    },
+    "analytics_profile": {
+      "type": "object",
+      "required": ["enabled"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "provider": { "type": "string" },
+        "counter_id": { "type": ["integer", "null"] },
+        "allowed_hosts": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "legal_profile": {
+      "description": "Правовые сведения. Пустое поле честнее выдуманного: незаполненный правообладатель — это «неизвестно», а не «нет».",
+      "type": "object",
+      "properties": {
+        "contact_email": { "type": ["string", "null"] },
+        "owner": { "type": ["string", "null"] },
+        "documents": { "type": ["array", "null"], "items": { "type": "string" } }
+      }
+    },
+    "release_policy": {
+      "type": "object",
+      "required": ["keep_releases", "rollback_ready"],
+      "properties": {
+        "keep_releases": { "type": "integer", "minimum": 2 },
+        "rollback_ready": { "type": "boolean" },
+        "zero_downtime_switch": { "type": "boolean" }
+      }
+    },
+    "feature_flags": { "type": "object" },
+    "owners": {
+      "description": "Кто отвечает за каждый модуль. Модуль без владельца однажды остаётся без присмотра.",
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "type": "string", "minLength": 1 }
+    },
+    "health_endpoint": { "type": "string" },
+    "coverage_endpoint": { "type": "string" }
+  }
+}

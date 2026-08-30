@@ -1,0 +1,245 @@
+{
+  "schema_version": "1.0",
+  "site_id": "yummyani-biz",
+  "site_type": "anime-portal",
+  "domains": [
+    "yummyani.biz"
+  ],
+  "locale": "ru-RU",
+  "timezone": "Europe/Moscow",
+  "theme": {
+    "name": "yummy-portal"
+  },
+  "content_providers": [
+    {
+      "adapter": "cdnvideohub-public-v1",
+      "role": "primary",
+      "directions": [
+        "anime"
+      ],
+      "credentials_ref": "cdnvideohub_api_token"
+    }
+  ],
+  "content_directions": [
+    "anime"
+  ],
+  "enabled_modules": [
+    "content-ingestion",
+    "content-catalog",
+    "episodes-seasons",
+    "playback-availability",
+    "homepage-shelves",
+    "ratings",
+    "seo",
+    "site-configuration",
+    "cache-invalidation",
+    "monitoring-audit",
+    "provider-adapters",
+    "renderer-adapters",
+    "news-announcements"
+  ],
+  "shelf_configuration": [
+    {
+      "shelf_id": "new-episodes",
+      "title": "Новые серии",
+      "source": "events",
+      "event_types": [
+        "EPISODE_ADDED"
+      ],
+      "requires_playback": false,
+      "limit": 12,
+      "position": 0
+    },
+    {
+      "shelf_id": "featured",
+      "title": "Актуальное",
+      "source": "query",
+      "requires_playback": false,
+      "limit": 18,
+      "position": 1
+    },
+    {
+      "shelf_id": "ongoing",
+      "title": "Сейчас выходят",
+      "source": "snapshot",
+      "requires_playback": false,
+      "limit": 12,
+      "position": 2
+    },
+    {
+      "shelf_id": "recently-updated",
+      "title": "Недавно обновлённые карточки",
+      "source": "query",
+      "requires_playback": false,
+      "limit": 18,
+      "position": 3
+    },
+    {
+      "shelf_id": "new-titles",
+      "title": "Новое на сайте",
+      "source": "query",
+      "requires_playback": false,
+      "limit": 20,
+      "position": 4
+    }
+  ],
+  "render_strategy": {
+    "mode": "hybrid",
+    "release_size_budget_mb": 200,
+    "full_render_budget_minutes": 15
+  },
+  "cache_policy": {
+    "schema_version": "1.0",
+    "layers": {
+      "new_episodes": {
+        "ttl_seconds": 300,
+        "stale_while_revalidate_seconds": 120,
+        "last_known_good": true,
+        "tags": [
+          "shelf:new-episodes",
+          "events"
+        ]
+      },
+      "homepage_shelves": {
+        "ttl_seconds": 300,
+        "stale_while_revalidate_seconds": 300,
+        "last_known_good": true,
+        "tags": [
+          "shelf"
+        ]
+      },
+      "catalog": {
+        "ttl_seconds": 900,
+        "stale_while_revalidate_seconds": 600,
+        "last_known_good": true,
+        "tags": [
+          "catalog"
+        ]
+      },
+      "title_page": {
+        "ttl_seconds": 900,
+        "stale_while_revalidate_seconds": 600,
+        "last_known_good": true,
+        "tags": [
+          "title"
+        ]
+      },
+      "ratings": {
+        "ttl_seconds": 21600,
+        "stale_while_revalidate_seconds": 3600,
+        "last_known_good": true,
+        "tags": [
+          "ratings"
+        ]
+      },
+      "schedule": {
+        "ttl_seconds": 1800,
+        "stale_while_revalidate_seconds": 600,
+        "last_known_good": true,
+        "tags": [
+          "schedule"
+        ]
+      },
+      "announcements": {
+        "ttl_seconds": 1800,
+        "stale_while_revalidate_seconds": 600,
+        "last_known_good": true,
+        "tags": [
+          "announcements"
+        ]
+      },
+      "seo": {
+        "ttl_seconds": 3600,
+        "stale_while_revalidate_seconds": 1800,
+        "last_known_good": true,
+        "tags": [
+          "seo"
+        ]
+      },
+      "static_assets": {
+        "ttl_seconds": 86400,
+        "last_known_good": true,
+        "tags": [
+          "static"
+        ]
+      }
+    },
+    "invalidation": {
+      "mode": "event-driven",
+      "event_map": {
+        "EPISODE_ADDED": [
+          "title",
+          "shelf:new-episodes",
+          "catalog"
+        ],
+        "TITLE_CREATED": [
+          "shelf:new-titles",
+          "catalog"
+        ],
+        "PLAYBACK_AVAILABLE": [
+          "title",
+          "shelf:watchable"
+        ],
+        "RATING_UPDATED": [
+          "title",
+          "ratings"
+        ],
+        "SCHEDULE_UPDATED": [
+          "schedule"
+        ],
+        "ANNOUNCEMENT_UPDATED": [
+          "announcements"
+        ]
+      },
+      "dry_run_supported": true
+    },
+    "keys": {
+      "site_scoped": true,
+      "stampede_protection": "coalesce"
+    },
+    "forbidden": {
+      "cache_errors": false,
+      "empty_response_as_success": false,
+      "indefinite_html_cache": false
+    },
+    "observability": {
+      "expose_hit_miss_stale": true
+    }
+  },
+  "seo_profile": {
+    "enabled": true,
+    "indexing_enabled": false,
+    "canonical_host": "yummyani.biz",
+    "editorial_profile": "yummyani-biz-editorial"
+  },
+  "analytics_profile": {
+    "enabled": true,
+    "provider": "yandex_metrika",
+    "counter_id": 111881039,
+    "allowed_hosts": [
+      "yummyani.biz"
+    ]
+  },
+  "legal_profile": {
+    "contact_email": "sbc.claude@yandex.ru",
+    "owner": null,
+    "documents": null
+  },
+  "release_policy": {
+    "keep_releases": 2,
+    "rollback_ready": true,
+    "zero_downtime_switch": true
+  },
+  "feature_flags": {
+    "ad_slots_enabled": false
+  },
+  "owners": {
+    "content-ingestion": "site-factory/content",
+    "homepage-shelves": "site-factory/content",
+    "seo": "site-factory/seo",
+    "renderer-adapters": "site-factory/platform",
+    "monitoring-audit": "site-factory/platform"
+  },
+  "health_endpoint": "/healthz",
+  "coverage_endpoint": "/api/v1/coverage"
+}

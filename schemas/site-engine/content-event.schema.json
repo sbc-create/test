@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://site-factory.local/schemas/site-engine/content-event.schema.json",
+  "title": "ContentEvent",
+  "description": "Событие о содержимом. Отдельная схема нужна потому, что событие переживает и наблюдателя, и витрину: его читают полки, кэш, SEO и мониторинг, и каждый должен понимать его одинаково.\n\nГлавное правило встроено в типы: изменение `updated_at` само по себе не является выходом серии. Для EPISODE_ADDED обязателен рост числа доступных серий или продвижение пары сезон/серия — иначе смена технической метки выдавалась бы за новость.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "event_id", "event_type", "provider", "provider_id",
+    "canonical_title_id", "observed_at", "idempotency_key", "payload"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+$" },
+    "event_id": { "type": "string", "minLength": 8 },
+    "event_type": {
+      "enum": [
+        "TITLE_CREATED", "TITLE_UPDATED", "EPISODE_ADDED", "SEASON_ADDED",
+        "PLAYBACK_AVAILABLE", "PLAYBACK_UNAVAILABLE", "RATING_UPDATED",
+        "SCHEDULE_UPDATED", "ANNOUNCEMENT_UPDATED", "SOURCE_ANOMALY"
+      ]
+    },
+    "site_id": {
+      "description": "Область распространения. Пусто — событие относится к содержимому, а не к конкретной витрине.",
+      "type": ["string", "null"]
+    },
+    "provider": { "type": "string", "minLength": 1 },
+    "provider_id": { "type": "string", "minLength": 1 },
+    "canonical_title_id": { "type": "string", "minLength": 1 },
+    "provider_timestamp": {
+      "description": "Время по версии поставщика. Может отсутствовать: не всякий источник его сообщает, и выдавать за него момент наблюдения нельзя.",
+      "type": ["string", "null"], "format": "date-time"
+    },
+    "observed_at": {
+      "description": "Когда изменение увидели мы. Единственная метка, за которую отвечаем сами.",
+      "type": "string", "format": "date-time"
+    },
+    "idempotency_key": {
+      "description": "Повторный цикл с тем же изменением обязан дать тот же ключ — иначе одно событие попадёт в ленту дважды.",
+      "type": "string", "minLength": 8
+    },
+    "source_fingerprint": {
+      "description": "Отпечаток состояния источника. Смена алгоритма отпечатка не должна выдаваться за изменение данных, поэтому у него есть версия.",
+      "type": ["object", "null"],
+      "properties": {
+        "algorithm_version": { "type": "integer", "minimum": 1 },
+        "value": { "type": "string" }
+      }
+    },
+    "correlation_id": { "type": ["string", "null"] },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "from": {},
+        "to": {},
+        "season": { "type": ["integer", "null"] },
+        "episode": { "type": ["integer", "null"] },
+        "playable": { "type": ["boolean", "null"] },
+        "reason": { "type": ["string", "null"] }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "description": "Выход серии подтверждается числами, а не фактом обновления карточки.",
+      "if": { "properties": { "event_type": { "const": "EPISODE_ADDED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "required": ["from", "to"],
+            "properties": {
+              "from": { "type": ["integer", "null"] },
+              "to": { "type": "integer", "minimum": 1 }
+            }
+          }
+        }
+      }
+    },
+    {
+      "description": "Появление воспроизведения — переход из «нет» в «есть», а не просто наличие.",
+      "if": { "properties": { "event_type": { "const": "PLAYBACK_AVAILABLE" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "payload": { "type": "object", "required": ["to"], "properties": { "to": { "const": true } } }
+        }
+      }
+    }
+  ]
+}
