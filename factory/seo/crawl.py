@@ -142,8 +142,14 @@ def crawl(base_url: str, build_dir: Path, *, auth: str = "", environment: str = 
                 report.add(Finding("h1", "critical", path, f"H1 на странице: {len(h1_all)} (нужен ровно один)."))
             else:
                 h1s.setdefault(_text(h1_all[0]), []).append(path)
+            # Матрица объявляет `missing_breadcrumb` условием BLOCKED_SEO, а
+            # замечание степени `major` ворота не валит: провалом считается
+            # только `critical`. Страница без крошек проходила проверку вопреки
+            # правилу. Степень приведена в соответствие после замера: среди
+            # индексируемых страниц пилота и трёх витрин Lords таких нет ни
+            # одной, поэтому ужесточение никого не ломает.
             if route["page_type"] not in ("home",) and not BREADCRUMB_RE.search(response.body):
-                report.add(Finding("breadcrumbs", "major", path, "Нет видимых хлебных крошек."))
+                report.add(Finding("breadcrumbs", "critical", path, "Нет видимых хлебных крошек."))
         else:
             if response.status == 200 and "noindex" not in (header_robots + meta_robots):
                 report.add(Finding("robots", "critical", path, "Неиндексируемая страница не отдаёт noindex."))

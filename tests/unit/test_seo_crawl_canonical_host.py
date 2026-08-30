@@ -53,9 +53,9 @@ def build(tmp_path: Path) -> Path:
     return tmp_path
 
 
-def _serve(monkeypatch, body: str) -> None:
+def _serve(monkeypatch, body: str, status: int = 200) -> None:
     def fake_fetch(self, path: str):  # noqa: ANN001, ARG001
-        return crawl_mod.Response(status=200, headers={}, body=body)
+        return crawl_mod.Response(status=status, headers={}, body=body)
 
     monkeypatch.setattr(crawl_mod.Crawler, "fetch", fake_fetch)
 
@@ -73,6 +73,63 @@ def test_canonical_on_a_genuinely_foreign_domain_is_still_caught(build, monkeypa
     _serve(monkeypatch, _page("https://attacker.tld/"))
     report = crawl_mod.crawl(CRAWL_TARGET, build, environment="staging")
     assert any(f.rule == "HR-2" for f in report.findings)
+
+
+def _routes(tmp_path, path: str, page_type: str, status: int, indexable: bool) -> None:
+    routes = {
+        "base_url": PUBLIC,
+        "max_depth": 2,
+        "routes": [
+            {
+                "path": path,
+                "status": status,
+                "indexable": indexable,
+                "in_sitemap": False,
+                "canonical": f"{PUBLIC}{path}" if indexable else None,
+                "page_type": page_type,
+            }
+        ],
+        "redirects": [],
+    }
+    (tmp_path / "routes.json").write_text(json.dumps(routes), encoding="utf-8")
+
+
+def _page_without_breadcrumbs(canonical: str | None) -> str:
+    link = f'<link rel="canonical" href="{canonical}">' if canonical else ""
+    return f"<html><head>{link}<title>Заголовок</title></head><body><h1>Заголовок</h1></body></html>"
+
+
+def test_error_page_is_not_required_to_carry_breadcrumbs(tmp_path, monkeypatch):
+    """Хлебные крошки на 404 не нужны: вести по ним некуда.
+
+    Требование лежит внутри ветки `if indexable`, поэтому страницы ошибок
+    исключены их неиндексируемостью, а не перечнем типов. Тест закрепляет
+    именно это: при повышении степени до блокирующей честная страница ошибки
+    не должна ронять ворота.
+    """
+    # Обход начинается с «/», поэтому проверяемая страница обязана лежать
+    # именно там: маршрут «/404/» до проверки крошек просто не дошёл бы, и тест
+    # зеленел бы, ничего не проверив.
+    _routes(tmp_path, "/", "not_found", 404, indexable=False)
+    _serve(monkeypatch, _page_without_breadcrumbs(None), status=404)
+    report = crawl_mod.crawl(CRAWL_TARGET, tmp_path, environment="staging")
+    assert not [f for f in report.findings if f.check == "status"], "маршрут и ответ разошлись"
+    assert not [f for f in report.findings if f.check == "breadcrumbs"]
+
+
+def test_ordinary_page_without_breadcrumbs_blocks_the_gate(tmp_path, monkeypatch):
+    """Матрица объявляет `missing_breadcrumb` условием BLOCKED_SEO.
+
+    Замечание степени `major` ворота не валит: `Report.passed` считает провалом
+    только `critical`. Страница без крошек проходила проверку, хотя матрица
+    говорит обратное.
+    """
+    _routes(tmp_path, "/", "category", 200, indexable=True)
+    _serve(monkeypatch, _page_without_breadcrumbs(f"{PUBLIC}/"))
+    report = crawl_mod.crawl(CRAWL_TARGET, tmp_path, environment="staging")
+    breadcrumbs = [f for f in report.findings if f.check == "breadcrumbs"]
+    assert breadcrumbs, "страница без крошек не замечена"
+    assert breadcrumbs[0].severity == "critical", breadcrumbs[0].severity
 
 
 def test_canonical_pointing_at_another_page_of_the_same_site_is_caught(build, monkeypatch):
