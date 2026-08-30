@@ -1795,12 +1795,18 @@ def render_site(
     возникает, и рендерер честно отдаёт сайт без каталога вместо витрины с
     выдуманным содержимым.
     """
-    catalog = catalog if catalog is not None else fx.build_catalog()
+    # Отсутствие источника — это отсутствие источника, а не повод показать
+    # фикстуру. Раньше здесь стояла подстановка `fx.build_catalog()`, и
+    # `catalog=None` возвращал 90 страниц синтетических произведений — ровно
+    # ту «витрину с выдуманным содержимым», которую docstring обещает не
+    # создавать. Обещание существовало только в тексте.
+    has_source = catalog is not None
+    catalog = catalog if has_source else fx.Catalog(titles=(), collections=())
     profiles = plan_mod.load_profiles(root)
     site_plan = plan_mod.build_plan(
         package,
-        credentials_available=True,
-        api_capabilities=catalog.capabilities(),
+        credentials_available=has_source,
+        api_capabilities=catalog.capabilities() if has_source else None,
         root=root,
     )
     profile = profiles[site_plan.profile]
