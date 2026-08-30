@@ -89,6 +89,40 @@ def _find_secrets(node, path: str = "") -> list[str]:
     return found
 
 
+#: Чем может быть удовлетворено требование нормализованного контента.
+NORMALIZED_CONTENT_KINDS = ("content-ingestion", "site-engine-api", "adapter")
+
+
+def _normalized_content_problem(profile: dict, modules: set[str]) -> str | None:
+    """Есть ли у сайта источник нормализованного контента.
+
+    Три законных способа: собственный загрузчик, общий Site Engine API или
+    другой зарегистрированный адаптер. Любой из них снимает вопрос; отсутствие
+    всех трёх означает, что SEO пришлось бы добывать содержимое самому — а это
+    ровно то смешение, которого гейт и не допускает.
+    """
+    if "content-ingestion" in modules:
+        return None
+
+    source = profile.get("normalized_content_source")
+    if not isinstance(source, dict) or not source:
+        return (
+            "SEO включён, но источник нормализованного контента не объявлен: "
+            "нужен собственный content-ingestion, общий Site Engine API либо "
+            "другой зарегистрированный адаптер"
+        )
+    kind = source.get("kind")
+    if kind not in NORMALIZED_CONTENT_KINDS:
+        return (
+            f"источник нормализованного контента «{kind}» не из числа "
+            f"разрешённых: {', '.join(NORMALIZED_CONTENT_KINDS)}"
+        )
+    if not str(source.get("ref") or "").strip():
+        # Объявить источник и не назвать его — то же, что не объявить.
+        return f"источник нормализованного контента «{kind}» объявлен без ссылки"
+    return None
+
+
 def check_profile(profile: dict, root: Path) -> GateResult:
     result = GateResult(site_id=str(profile.get("site_id") or "<без site_id>"))
 
@@ -143,9 +177,17 @@ def check_profile(profile: dict, root: Path) -> GateResult:
     if not profile.get("owners"):
         result.fail("не указаны владельцы модулей")
 
-    # 7. Разделение SEO и загрузчика.
-    if "seo" in modules and "content-ingestion" not in modules:
-        result.fail("SEO включён без content-ingestion: SEO не владеет каталогом и не ходит к поставщику")
+    # 7. SEO нужен нормализованный контент — но не обязательно свой загрузчик.
+    #
+    # Прежнее правило требовало модуль `content-ingestion` и тем самым
+    # запрещало правильную схему: витрину, которая берёт готовый контент из
+    # общего Site Engine API и ничего не загружает сама. Требование — наличие
+    # источника нормализованного контента, а откуда он приходит, сайт вправе
+    # решать.
+    if "seo" in modules and (profile.get("seo_profile") or {}).get("enabled", True):
+        problem = _normalized_content_problem(profile, modules)
+        if problem:
+            result.fail(problem)
 
     # 8. Откат.
     release = profile.get("release_policy") or {}

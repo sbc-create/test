@@ -145,3 +145,78 @@ class TestSchemaVersioning:
 
     def test_core_contains_no_site_specific_words(self):
         assert gate.check_core_neutrality(ROOT, ("factory/site_engine",)) == []
+
+
+class TestNormalizedContentCapability:
+    """SEO нужен нормализованный контент, а не собственный загрузчик.
+
+    Прежнее правило требовало у сайта с SEO модуль `content-ingestion` и тем
+    самым запрещало правильную схему: витрину, которая берёт готовый
+    нормализованный контент из общего Site Engine API и ничего не загружает
+    сама. Требование — способность, а не конкретный модуль.
+    """
+
+    def test_local_ingestion_satisfies_the_requirement(self):
+        profile = valid_profile()
+        assert "content-ingestion" in profile["enabled_modules"]
+        assert gate.check_profile(profile, ROOT).passed
+
+    def test_shared_engine_api_satisfies_the_requirement(self):
+        """Сайт без собственного загрузчика, берущий контент из общего API."""
+        profile = valid_profile()
+        profile["site_id"] = "shared-consumer"
+        profile["enabled_modules"] = [
+            m for m in profile["enabled_modules"] if m != "content-ingestion"
+        ]
+        profile["normalized_content_source"] = {"kind": "site-engine-api", "ref": "site-engine/v1"}
+        result = gate.check_profile(profile, ROOT)
+        assert result.passed, result.problems
+
+    def test_registered_adapter_satisfies_the_requirement(self):
+        profile = valid_profile()
+        profile["site_id"] = "adapter-consumer"
+        profile["enabled_modules"] = [
+            m for m in profile["enabled_modules"] if m != "content-ingestion"
+        ]
+        profile["normalized_content_source"] = {"kind": "adapter", "ref": "partner-catalog-v2"}
+        result = gate.check_profile(profile, ROOT)
+        assert result.passed, result.problems
+
+    def test_seo_without_any_source_is_still_refused(self):
+        """Ни одного из трёх — SEO пришлось бы добывать содержимое самому."""
+        profile = valid_profile()
+        profile["site_id"] = "no-source"
+        profile["enabled_modules"] = [
+            m for m in profile["enabled_modules"] if m != "content-ingestion"
+        ]
+        result = gate.check_profile(profile, ROOT)
+        assert not result.passed
+        assert any("нормализованн" in p.lower() for p in result.problems)
+
+    def test_a_source_without_a_reference_is_refused(self):
+        """Объявить источник и не назвать его — то же, что не объявить."""
+        profile = valid_profile()
+        profile["enabled_modules"] = [
+            m for m in profile["enabled_modules"] if m != "content-ingestion"
+        ]
+        profile["normalized_content_source"] = {"kind": "site-engine-api"}
+        assert not gate.check_profile(profile, ROOT).passed
+
+    def test_an_unknown_kind_of_source_is_refused(self):
+        profile = valid_profile()
+        profile["enabled_modules"] = [
+            m for m in profile["enabled_modules"] if m != "content-ingestion"
+        ]
+        profile["normalized_content_source"] = {"kind": "scraping", "ref": "somewhere"}
+        assert not gate.check_profile(profile, ROOT).passed
+
+    def test_a_site_without_seo_needs_no_content_source(self):
+        """Требование идёт от SEO. Витрина без него под него не подпадает."""
+        profile = valid_profile()
+        profile["site_id"] = "no-seo"
+        profile["enabled_modules"] = [
+            m for m in profile["enabled_modules"]
+            if m not in ("seo", "content-ingestion")
+        ]
+        profile["seo_profile"]["enabled"] = False
+        assert gate.check_profile(profile, ROOT).passed
