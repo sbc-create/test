@@ -170,8 +170,19 @@ def check_profile(profile: dict, root: Path) -> GateResult:
 
     # 6. Модули и владельцы.
     modules = set(profile.get("enabled_modules") or [])
-    if "provider-adapters" not in modules:
+    # Адаптер поставщика нужен тому, кто к поставщику ходит. Сайт, берущий
+    # готовый нормализованный контент из общего API, к поставщику не ходит
+    # вовсе — требовать от него адаптер значит требовать код, которому нечего
+    # делать. Это ровно та же ошибка, что была с SEO: правило называло модуль
+    # там, где речь о способности.
+    goes_to_provider = "content-ingestion" in modules or bool(profile.get("content_providers"))
+    if goes_to_provider and "provider-adapters" not in modules:
         result.fail("нет provider-adapters: витрина обращалась бы к поставщику напрямую")
+    if not goes_to_provider and "provider-adapters" in modules:
+        result.fail(
+            "объявлен provider-adapters, но сайт не ходит к поставщику: "
+            "ни content-ingestion, ни content_providers"
+        )
     if "renderer-adapters" not in modules:
         result.fail("нет renderer-adapters")
     if not profile.get("owners"):
@@ -215,7 +226,13 @@ def check_core_neutrality(root: Path, core_paths: tuple[str, ...]) -> list[str]:
             # Сам гейт из проверки исключён: список запрещённых слов лежит
             # в нём, и он справедливо находил бы себя. Адаптеры тоже: имя
             # поставщика в адаптере — это норма, а не протечка в ядро.
-            if "__pycache__" in str(file) or "adapters" in str(file) or file.name == "gate.py":
+            if (
+                "__pycache__" in str(file)
+                or "adapters" in str(file)
+                # Оба гейта вынуждены хранить сам список запрещённых
+                # слов и потому ловили бы сами себя.
+                or file.name in ("gate.py", "boundaries.py")
+            ):
                 continue
             text = file.read_text(encoding="utf-8", errors="ignore").lower()
             # Ищем в коде, а не в комментариях: объяснить, откуда взялось
