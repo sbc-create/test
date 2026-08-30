@@ -41,6 +41,30 @@ for unit in "$SRC"/*.service "$SRC"/*.timer; do
   echo "installed $name"
 done
 
+# Drop-in'ы: настройки, которые нельзя держать в самом unit-файле, потому что он
+# общий шаблон, а значения зависят от того, что мы измерили на этом хосте.
+#
+# До сих пор они лежали только на диске и в репозитории не значились. Один такой
+# файл на диске переживал правку, о которой не знал никто: интервал таймера
+# подняли, а сам таймер запустить забыли, и автообновление каталога молча
+# перестало происходить. Теперь их источник — репозиторий, а расхождение видно
+# сравнением.
+DROPIN_SRC="$SRC/dropins"
+if [ -d "$DROPIN_SRC" ]; then
+  for dir in "$DROPIN_SRC"/*.d; do
+    [ -d "$dir" ] || continue
+    unit_dir="$(basename "$dir")"
+    install -d -m 0755 -o root -g root "$DEST/$unit_dir"
+    for conf in "$dir"/*.conf; do
+      [ -f "$conf" ] || continue
+      name="$(basename "$conf")"
+      sed "s#${TEMPLATE_ROOT}#${REPO_ROOT}#g" "$conf" > "$TMP/$name"
+      install -m 0644 -o root -g root "$TMP/$name" "$DEST/$unit_dir/$name"
+      echo "installed $unit_dir/$name"
+    done
+  done
+fi
+
 systemctl daemon-reload
 
 # Safe by default: monitoring, backup and read-only self-checks run on their own.
