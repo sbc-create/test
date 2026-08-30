@@ -51,6 +51,7 @@ def lint(build_dir: Path, *, environment: str = "staging") -> Report:
     matrix_types = {p["id"]: p for p in matrix_mod.load().get("page_types", [])}
     url_policy = matrix_mod.url_policy()
     forbidden_params = set(url_policy.get("forbidden_in_url") or [])
+    redirect_sources = {r["source"]: r.get("target", "") for r in config.get("redirects", [])}
     today = time.strftime("%Y-%m-%d", time.gmtime())
     allowed_video_fields = set(config.get("allowed_video_fields") or [])
 
@@ -178,6 +179,14 @@ def lint(build_dir: Path, *, environment: str = "staging") -> Report:
                 report.add(Finding("link-canonicality", "critical", url,
                                    f"Внутренняя ссылка не в каноничном регистре: {href}"))
             path_only = href.split("#")[0].split("?")[0]
+            # Ссылка на источник редиректа — лишний хоп на каждом клике к
+            # странице, конечный адрес которой известен заранее. Проверки формы
+            # ссылки рядом закрывают тот же класс: ссылка обязана вести туда,
+            # куда в итоге придёт запрос.
+            if path_only in redirect_sources:
+                report.add(Finding("link-canonicality", "critical", url,
+                                   f"Внутренняя ссылка ведёт на редирект: {href} → "
+                                   f"{redirect_sources[path_only]}"))
             if url_policy.get("trailing_slash") and not path_only.endswith("/") and "." not in path_only.rsplit("/", 1)[-1]:
                 report.add(Finding("link-canonicality", "critical", url,
                                    f"Внутренняя ссылка без завершающего слэша: {href} — это лишний 301"))

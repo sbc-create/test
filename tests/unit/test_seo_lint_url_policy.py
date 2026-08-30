@@ -56,6 +56,27 @@ def test_real_build_satisfies_the_url_policy(sandbox):
     assert not [f for f in criticals(sandbox) if f.check == "url-policy"]
 
 
+def test_internal_link_to_a_redirect_is_refused(sandbox):
+    """Ссылка на источник редиректа — лишний переход на каждом клике.
+
+    Сборка объявляет `/lekcii/page/1/` → `/lekcii/` со статусом 301: первая
+    страница пагинации не должна существовать отдельным адресом. Ссылаться на
+    неё изнутри сайта значит гонять и посетителя, и робота через лишний хоп к
+    странице, адрес которой известен заранее.
+
+    Проверка формы ссылки рядом уже есть — регистр, завершающий слэш,
+    запрещённые параметры. Эта закрывает тот же класс: ссылка ведёт не туда,
+    куда в итоге придёт запрос.
+    """
+    page = sandbox / "public" / "index.html"
+    html = page.read_text(encoding="utf-8")
+    page.write_text(html.replace("</body>", '<a href="/lekcii/page/1/">Лекции</a></body>'), encoding="utf-8")
+    findings = criticals(sandbox)
+    assert any(f.check == "link-canonicality" and "редирект" in f.message for f in findings), [
+        f.message for f in findings if f.check == "link-canonicality"
+    ]
+
+
 def test_uppercase_in_path_is_refused(sandbox):
     _retarget(sandbox, "/lekcii/", "/Lekcii/")
     assert any(f.check == "url-policy" for f in criticals(sandbox))
