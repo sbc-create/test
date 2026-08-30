@@ -3,8 +3,12 @@
   "parent": "SITE-FACTORY-SITE-ENGINE-STABILIZATION-CONTRACTS-01",
   "branch": "claude/site-engine-modular-api-cms-foundation-02a",
   "start_sha": "e625d91c9935752af500dc05b35f69cc2fd8a326",
-  "final_sha": "2b0b6e7093990b615c28680230b76671416956c7",
+  "final_sha": "846eb1624df893f61f1eb68a1d8a709a5a17454b",
   "commits": [
+    {
+      "sha": "846eb16",
+      "subject": "site-engine: два падения тестов объяснены до конца"
+    },
     {
       "sha": "2b0b6e7",
       "subject": "site-engine: перевод событий витрины и сборка профиля нового сайта"
