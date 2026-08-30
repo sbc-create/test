@@ -17,6 +17,22 @@ from factory.seo.model import Finding, Report
 BROWSER_ROOT = Path(os.environ.get("FACTORY_BROWSER_ROOT", "/opt/pw-browsers"))
 
 
+def _build_number(binary: Path) -> tuple[int, str]:
+    """Номер сборки Playwright из имени каталога — числом, а не строкой.
+
+    Playwright уже перешёл с трёхзначных номеров на четырёхзначные, и при
+    строковом сравнении «chromium-999» оказывается старше «chromium-1234».
+    Ошибка не проявилась бы ни падением, ни сообщением: устаревший браузер
+    существует и запускается, просто он не тот.
+
+    Имя без числа в конце отправляется в начало списка, а не роняет поиск:
+    неизвестная раскладка — повод предпочесть ей известную, но не повод
+    остаться совсем без браузера.
+    """
+    suffix = binary.parent.parent.name.rsplit("-", 1)[-1]
+    return (int(suffix), binary.parent.parent.name) if suffix.isdigit() else (-1, binary.parent.parent.name)
+
+
 def chromium_path() -> str | None:
     """Путь к Chromium или None.
 
@@ -32,7 +48,7 @@ def chromium_path() -> str | None:
     explicit = os.environ.get("FACTORY_CHROMIUM", "")
     if explicit and Path(explicit).exists():
         return explicit
-    installed = sorted(BROWSER_ROOT.glob("chromium-*/chrome-linux*/chrome"))
+    installed = sorted(BROWSER_ROOT.glob("chromium-*/chrome-linux*/chrome"), key=_build_number)
     if installed:
         return str(installed[-1])
     return shutil.which("chromium") or shutil.which("google-chrome")

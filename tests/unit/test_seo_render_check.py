@@ -39,6 +39,19 @@ def test_finds_chromium_in_the_older_layout(browser_root):
     assert render_check.chromium_path() == str(binary)
 
 
+def test_newest_build_wins_when_numbers_differ_in_length(browser_root):
+    """Номер сборки — число, а не строка.
+
+    Playwright уже перешёл с трёхзначных номеров на четырёхзначные. При
+    лексикографическом сравнении «chromium-999» оказывается старше
+    «chromium-1234», и поиск молча берёт устаревший браузер: он существует и
+    запускается, поэтому ошибка не проявится ни падением, ни сообщением.
+    """
+    _install(browser_root, "999", "chrome-linux")
+    newest = _install(browser_root, "1234", "chrome-linux64")
+    assert render_check.chromium_path() == str(newest)
+
+
 def test_explicit_env_var_wins(browser_root, tmp_path, monkeypatch):
     _install(browser_root, "1234", "chrome-linux64")
     chosen = tmp_path / "own-chrome"
