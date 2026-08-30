@@ -1433,7 +1433,7 @@ def _robots(ctx) -> Page:
             reasons.append("домен не передан")
         elif not ctx["indexing_enabled"]:
             reasons.append("индексация выключена в пакете сайта")
-        if ctx.get("fixture_catalog", True):
+        if ctx.get("fixture_catalog"):
             reasons.append("данные синтетические")
         lines = [
             "# Стенд закрыт от индексации: " + ", ".join(reasons) + ".",
