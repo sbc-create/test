@@ -1,0 +1,33 @@
+{
+  "job_id": "pilot-local-create-20260830T160739Z-79e524",
+  "job_status": "DONE",
+  "refreshed": [
+    "acceptance-routes.json",
+    "browser-audit.json",
+    "env-report.json",
+    "input-request.json",
+    "job-result.json",
+    "major-findings-budget.json",
+    "performance-budget.json",
+    "playwright-summary.json",
+    "run-all.json",
+    "screenshots.md",
+    "security-smoke.json",
+    "seo-crawl.json",
+    "seo-lint.json",
+    "seo-render.json",
+    "seo-report.json",
+    "seo-report.md"
+  ],
+  "carried_over": [
+    "multisite-admin-smoke.json",
+    "multisite-cross-site-uniqueness.json",
+    "multisite-frontend-http.json",
+    "multisite-mutation-isolation.json",
+    "multisite-performance-lab.json",
+    "multisite-playwright-multisite.json",
+    "multisite-restore-proof.json",
+    "multisite-secret-scan.json"
+  ],
+  "note": "carried_over — доказательства прошлых прогонов: их источник в этот раз не производился. Они не удаляются, но и свежими не считаются."
+}
