@@ -176,14 +176,19 @@ class TestPagination:
         with pytest.raises(content_live.SourceError, match="items"):
             content_live.walk_pages(make_fetcher(api, contract), contract.url("titles"))
 
-    def test_the_page_cap_is_honoured(self, contract, monkeypatch):
+    def test_reaching_the_page_cap_is_an_error_not_an_end(self, contract, monkeypatch):
+        """Потолок страниц — не конец каталога.
+
+        Прежде обход молча возвращал собранное, и вызывающий принимал это за
+        полный каталог. Так витрина Lords полтора месяца показывала 4800 записей
+        из 53 115: поле `stopped_by` заполнялось честно, но его никто не читал.
+        """
         looping = [page([title(f"x{n}")], cursor=f"c{n}", next_cursor=f"c{n + 1}")
                    for n in range(50)]
         api = FakeApi(looping)
         small = dataclass_replace(contract, max_pages=5)
-        walk = content_live.walk_pages(make_fetcher(api, small), small.url("titles"))
-        assert walk.pages == 5
-        assert walk.stopped_by == "max_pages"
+        with pytest.raises(content_live.SourceError, match="обрыв каталога"):
+            content_live.walk_pages(make_fetcher(api, small), small.url("titles"))
 
     def test_the_limit_never_exceeds_the_contract_maximum(self, contract):
         api = FakeApi([page([title("a")])])
