@@ -41,7 +41,7 @@ class TestНастоящийКод:
         """Гейт, ничего не открывший, тоже «проходит»."""
         result = boundaries.check(ROOT)
         assert result.checked_files >= 10
-        assert result.checked_modules == 18
+        assert result.checked_modules == 19
 
 
 class TestНамеренноСломанное:
@@ -170,3 +170,81 @@ class TestРеестр:
         )
         for module in registry["modules"]:
             assert module["status"] in ("IMPLEMENTED", "ADAPTED", "CONTRACT_ONLY")
+
+
+class TestГраницыAPI:
+    """API — тоже модуль, и его зависимости проверяются наравне с прочими.
+
+    Пока файлы пакета `api` не были отнесены ни к какому модулю реестра, правило
+    о запрещённых зависимостях к ним просто не применялось: гейт проходил, ничего
+    об этом пакете не проверив.
+    """
+
+    def test_api_не_ходит_к_поставщику(self, песочница: Path):
+        path = песочница / "factory/site_engine/api/app.py"
+        path.write_text(
+            "from factory.site_engine.providers import get\n"
+            + path.read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+        result = boundaries.check(песочница)
+        assert not result.passed
+        assert any("site-engine-api" in p and "provider-adapters" in p
+                   for p in result.problems)
+
+    def test_api_не_запускает_обход(self, песочница: Path):
+        path = песочница / "factory/site_engine/api/app.py"
+        path.write_text(
+            "from factory.site_engine.ingestion import IngestionService\n"
+            + path.read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+        result = boundaries.check(песочница)
+        assert not result.passed
+        assert any("content-ingestion" in p for p in result.problems)
+
+    def test_api_ничего_не_рендерит(self, песочница: Path):
+        path = песочница / "factory/site_engine/api/app.py"
+        path.write_text(
+            "from factory.site_engine.renderers import get\n"
+            + path.read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+        result = boundaries.check(песочница)
+        assert not result.passed
+        assert any("renderer-adapters" in p for p in result.problems)
+
+
+class TestОбратнаяСовместимость:
+    """Форма ответов — обязательство, а не подробность реализации."""
+
+    def test_версия_схемы_модели_не_менялась_молча(self):
+        from factory.site_engine.contracts import SCHEMA_VERSION
+
+        assert SCHEMA_VERSION == "1.0", (
+            "смена версии схемы — событие: потребители обязаны узнать о ней "
+            "из версии, а не из отладки"
+        )
+
+    def test_обязательные_поля_события_на_месте(self):
+        import json
+
+        схема = json.loads(
+            (ROOT / "schemas/site-engine/content-event.schema.json").read_text(encoding="utf-8")
+        )
+        assert set(схема["required"]) >= {
+            "schema_version", "event_id", "event_type", "provider", "provider_id",
+            "canonical_title_id", "observed_at", "idempotency_key", "payload",
+        }
+
+    def test_разделение_времён_сохранено(self):
+        import json
+
+        схема = json.loads(
+            (ROOT / "schemas/site-engine/content-event.schema.json").read_text(encoding="utf-8")
+        )
+        assert "provider_timestamp" in схема["properties"]
+        assert "observed_at" in схема["required"]
+        assert "provider_timestamp" not in схема["required"], (
+            "время поставщика обязательным быть не может: он сообщает его не всегда"
+        )

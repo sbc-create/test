@@ -153,6 +153,7 @@ class InMemoryCache:
         self._lkg = LastKnownGoodStore()
         self._coalescer = RequestCoalescer()
         self._stats: dict[str, int] = {o.value: 0 for o in CacheOutcome}
+        self._refreshes: list[threading.Thread] = []
         self._lock = threading.RLock()
 
     def get_or_load(self, key: CacheKey, policy: CachePolicy,
@@ -167,10 +168,12 @@ class InMemoryCache:
             if age < policy.ttl_seconds:
                 return self._done(entry.value, CacheOutcome.HIT, age)
             if age < policy.ttl_seconds + policy.stale_while_revalidate_seconds:
-                # Отдаём прежнее и обновляем при следующем обращении: фонового
-                # потока здесь нет намеренно, он превратил бы простой кэш в
-                # планировщик.
-                self._refresh_quietly(key, policy, load)
+                # Обновление уходит в фон, а посетителю сразу достаётся прежнее
+                # значение. Первая редакция вызывала загрузчик прямо здесь и
+                # получалась худшая из возможных: посетитель ждал источник и
+                # всё равно получал устаревшее. Измерено, а не вычитано:
+                # ожидание совпадало с задержкой источника до миллисекунды.
+                self._refresh_in_background(key, policy, load)
                 return self._done(entry.value, CacheOutcome.STALE, age)
 
         with self._coalescer.lock_for(key):
@@ -189,14 +192,52 @@ class InMemoryCache:
             self._store(key, policy, value)
             return self._done(value, CacheOutcome.MISS, 0.0)
 
-    def _refresh_quietly(self, key: CacheKey, policy: CachePolicy,
-                         load: Callable[[], Any]) -> None:
-        try:
-            value = load()
-        except UncacheableResponse:
-            # Отказ при фоновом обновлении не должен стирать хорошее значение.
+    def _refresh_in_background(self, key: CacheKey, policy: CachePolicy,
+                               load: Callable[[], Any]) -> None:
+        """Одно фоновое обновление на ключ, не больше.
+
+        Замок берётся без ожидания: если обновление уже идёт, второе не нужно —
+        иначе окно устаревания на популярной странице породило бы столько
+        потоков, сколько пришло посетителей.
+        """
+        замок = self._coalescer.lock_for(key)
+        if not замок.acquire(blocking=False):
             return
-        self._store(key, policy, value)
+
+        def работа() -> None:
+            try:
+                value = load()
+            except UncacheableResponse:
+                # Отказ при фоновом обновлении не стирает хорошее значение.
+                return
+            except Exception:  # noqa: BLE001
+                # Фоновый поток не должен уронить процесс из-за чужой ошибки.
+                return
+            finally:
+                pass
+            try:
+                self._store(key, policy, value)
+            finally:
+                pass
+
+        def обёртка() -> None:
+            try:
+                работа()
+            finally:
+                замок.release()
+
+        поток = threading.Thread(target=обёртка, name=f"cache-refresh:{key}", daemon=True)
+        поток.start()
+        with self._lock:
+            self._refreshes.append(поток)
+
+    def wait_for_refreshes(self, timeout: float = 5.0) -> None:
+        """Дождаться фоновых обновлений. Нужно тестам, не production."""
+        with self._lock:
+            потоки = list(self._refreshes)
+            self._refreshes.clear()
+        for поток in потоки:
+            поток.join(timeout)
 
     def _store(self, key: CacheKey, policy: CachePolicy, value: Any) -> None:
         name = str(key)

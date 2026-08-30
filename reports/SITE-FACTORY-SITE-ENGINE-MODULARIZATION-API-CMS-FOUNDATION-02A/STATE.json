@@ -3,8 +3,12 @@
   "parent": "SITE-FACTORY-SITE-ENGINE-STABILIZATION-CONTRACTS-01",
   "branch": "claude/site-engine-modular-api-cms-foundation-02a",
   "start_sha": "e625d91c9935752af500dc05b35f69cc2fd8a326",
-  "final_sha": "e8b4298e501e0992895b1526b4a48e0c5eadebed",
+  "final_sha": "01caeb6f3485fd8e1dcac61d54f300e6f39efbf5",
   "commits": [
+    {
+      "sha": "01caeb6",
+      "subject": "site-engine: инвентаризация, граф зависимостей и отчёты 02A"
+    },
     {
       "sha": "e8b4298",
       "subject": "site-engine: редакционный слой CMS без единого изменяющего маршрута"
@@ -25,14 +29,15 @@
   "deploy_executed": false,
   "production_mutation": false,
   "modules": {
-    "total": 18,
+    "total": 19,
     "implemented": [
       "audit",
       "cache-invalidation",
       "core-contracts",
       "editorial",
       "normalized-content",
-      "site-configuration"
+      "site-configuration",
+      "site-engine-api"
     ],
     "adapted": [
       "content-ingestion",
@@ -78,7 +83,7 @@
   },
   "tests": {
     "baseline": 2826,
-    "final": 2976,
+    "final": 2987,
     "skipped": 5,
     "failed": 0
   },
@@ -88,5 +93,15 @@
     "СТЫКОВКА-SEO",
     "АВТОРИЗАЦИЯ",
     "ФЛЕЙК-ОТКАТ"
-  ]
+  ],
+  "self_review": {
+    "performed": true,
+    "defects_found_in_own_code": [
+      "кэш блокировал посетителя в окне фонового обновления (измерено: 0,401 с)",
+      "полки собирались из первой сотни записей вместо всего каталога",
+      "несуществующий профиль пропускался молча при сборке API",
+      "пакет api не был отнесён к модулю реестра и не проверялся гейтом границ",
+      "заготовка проверки границ TypeScript не могла сработать никогда"
+    ]
+  }
 }

@@ -23,6 +23,7 @@
 | `audit` | реализован | AuditEvent | `factory/site_engine/audit.py` |
 | `monitoring` | описан контрактом, кода пока нет | метрики и тревоги | — |
 | `renderer-adapters` | подключён адаптером к существующей реализации | страницы | `factory/site_engine/renderers.py` |
+| `site-engine-api` | реализован | формой ответов и их совместимостью | `factory/site_engine/api/app.py` |
 
 ## Подробно
 
@@ -456,5 +457,29 @@
 **Ошибки.** `RenderFailed`
 
 **Метрики.** `pages_rendered`  
+**Теги кэша.** —
+
+### `site-engine-api`
+
+**Назначение.** Чтение нормализованного контента снаружи модульного монолита. Собственных данных не имеет и ничего не изменяет.
+
+**Статус.** реализован
+
+**Владеет данными.** формой ответов и их совместимостью
+
+**Публичный интерфейс.** `factory.site_engine.api`
+
+**Вход.** SiteProfile, NormalizedStore  
+**Выход.** ApiResponse, OpenAPI
+
+**События.** не выпускает
+
+**Зависит от.** `core-contracts`, `site-configuration`, `normalized-content`
+
+**Запрещённые зависимости.** `provider-adapters`, `content-ingestion`, `renderer-adapters`
+
+**Ошибки.** `ApiDisabled`
+
+**Метрики.** `api_requests`  
 **Теги кэша.** —
 

@@ -617,6 +617,42 @@
       ],
       "cache_tags": [],
       "implementation": "factory/site_engine/renderers.py"
+    },
+    {
+      "id": "site-engine-api",
+      "status": "IMPLEMENTED",
+      "purpose": "Чтение нормализованного контента снаружи модульного монолита. Собственных данных не имеет и ничего не изменяет.",
+      "owns": "формой ответов и их совместимостью",
+      "public_interface": [
+        "factory.site_engine.api"
+      ],
+      "inputs": [
+        "SiteProfile",
+        "NormalizedStore"
+      ],
+      "outputs": [
+        "ApiResponse",
+        "OpenAPI"
+      ],
+      "events": [],
+      "depends_on": [
+        "core-contracts",
+        "site-configuration",
+        "normalized-content"
+      ],
+      "forbidden": [
+        "provider-adapters",
+        "content-ingestion",
+        "renderer-adapters"
+      ],
+      "errors": [
+        "ApiDisabled"
+      ],
+      "metrics": [
+        "api_requests"
+      ],
+      "cache_tags": [],
+      "implementation": "factory/site_engine/api/app.py"
     }
   ]
 }

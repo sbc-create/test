@@ -177,3 +177,53 @@ class TestПолки:
         тело = api.handle("/api/v1/sites/lords-01/shelves").body
         полка = next(s for s in тело["shelves"] if s["id"] == "watchable")
         assert all(i["watchable"] for i in полка["items"])
+
+
+class TestПолкиИзВсегоКаталога:
+    """Полка, собранная из первой страницы, — неверный ответ, выглядящий верным."""
+
+    @pytest.fixture
+    def большой_каталог(self):
+        from factory.site_engine.contracts import PlaybackAvailability, Rating, Title
+        from factory.site_engine.store import WriteToken
+
+        store = InMemoryStore("lords-01")
+        token = WriteToken("r", "lords-01")
+        # Лучшая оценка намеренно лежит далеко за первой сотней.
+        store.put(
+            token,
+            [
+                Title(
+                    canonical_id=f"p:{i}",
+                    provider="p",
+                    provider_id=str(i),
+                    name=f"Т{i}",
+                    observed_at=MOMENT,
+                    ratings=(Rating("kinopoisk", 9.9 if i == 250 else 5.0,
+                                    observed_at=MOMENT),),
+                    playback=PlaybackAvailability(available=True, checked_at=MOMENT),
+                )
+                for i in range(300)
+            ],
+        )
+        return create_api(["lords-01"], root=ROOT, loader=lambda pr: (store, "тест"),
+                          env=ВКЛЮЧЁН)
+
+    def test_просмотрен_весь_каталог(self, большой_каталог):
+        тело = большой_каталог.handle("/api/v1/sites/lords-01/shelves").body
+        assert тело["considered"] == 300, "полка обязана назвать, из чего собрана"
+
+    def test_лучшее_за_пределами_первой_страницы_найдено(self, большой_каталог):
+        тело = большой_каталог.handle("/api/v1/sites/lords-01/shelves", {"limit": 1}).body
+        полка = next(s for s in тело["shelves"] if s["id"] == "top-rated")
+        assert полка["items"][0]["canonical_id"] == "p:250"
+
+
+class TestСборкаAPI:
+    def test_несуществующий_профиль_это_отказ_а_не_молчание(self):
+        """Собрать API меньшего состава и не сказать об этом — худший исход."""
+        from factory.site_engine.profiles import ProfileNotFound
+
+        with pytest.raises(ProfileNotFound):
+            create_api(["нет-такого-сайта"], root=ROOT,
+                       loader=lambda p: (InMemoryStore(p.site_id), "тест"), env=ВКЛЮЧЁН)

@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any
 
 from factory.site_engine.contracts import Title
-from factory.site_engine.profiles import ProfileNotFound, SiteProfile, load_profile
+from factory.site_engine.profiles import SiteProfile, load_profile
 from factory.site_engine.store import MAX_LIMIT, InMemoryStore
 
 API_VERSION = "v1"
@@ -297,16 +297,23 @@ class SiteEngineApi:
         )
 
     def _shelves(self, binding: SiteBinding, params: dict[str, Any]) -> ApiResponse:
-        """Полки строятся из нормализованного хранилища, а не из поставщика."""
+        """Полки строятся из нормализованного хранилища, а не из поставщика.
+
+        Просматривается весь каталог, а не первая страница. Первая редакция
+        брала `limit=MAX_LIMIT`, то есть сто записей, и «с высокой оценкой»
+        означало «лучшее из первой сотни» — при каталоге в 53 тысячи записей это
+        неверный ответ, выглядящий правдоподобно. Ровно та же ошибка, из-за
+        которой каталог однажды обрывался, отвечая при этом успехом.
+        """
         limit = min(int(params.get("limit", 12) or 12), MAX_LIMIT)
-        everything = binding.store.query(offset=0, limit=MAX_LIMIT)
-        watchable = [t for t in everything.items if t.playback and t.playback.available]
+        titles = self._all_titles(binding)
+        watchable = [t for t in titles if t.playback and t.playback.available]
         rated = sorted(
-            (t for t in everything.items if t.best_rating() is not None),
+            (t for t in titles if t.best_rating() is not None),
             key=lambda t: t.best_rating().value,
             reverse=True,
         )
-        with_episodes = [t for t in everything.items if (t.available_episodes or 0) > 0]
+        with_episodes = [t for t in titles if (t.available_episodes or 0) > 0]
         shelves = [
             {"id": "watchable", "title": "Можно смотреть",
              "items": [self._title_brief(t) for t in watchable[:limit]]},
@@ -315,8 +322,28 @@ class SiteEngineApi:
             {"id": "with-episodes", "title": "С доступными сериями",
              "items": [self._title_brief(t) for t in with_episodes[:limit]]},
         ]
-        return ApiResponse(200, {"site_id": binding.profile.site_id,
-                                 "shelves": [s for s in shelves if s["items"]]})
+        return ApiResponse(
+            200,
+            {
+                "site_id": binding.profile.site_id,
+                # Сколько записей просмотрено при сборке. Полка, собранная из
+                # части каталога, обязана называть эту часть.
+                "considered": len(titles),
+                "shelves": [s for s in shelves if s["items"]],
+            },
+        )
+
+    @staticmethod
+    def _all_titles(binding: SiteBinding) -> list[Title]:
+        """Весь каталог сайта постранично, без молчаливого усечения."""
+        собрано: list[Title] = []
+        offset = 0
+        while True:
+            page = binding.store.query(offset=offset, limit=MAX_LIMIT)
+            собрано.extend(page.items)
+            if not page.has_more or not page.items:
+                return собрано
+            offset += len(page.items)
 
     def _ingestion_status(self) -> ApiResponse:
         return ApiResponse(
@@ -384,10 +411,9 @@ def create_api(
     """
     bindings: dict[str, SiteBinding] = {}
     for site_id in site_ids:
-        try:
-            profile = load_profile(site_id, root)
-        except ProfileNotFound:
-            continue
+        # Пропустить несуществующий профиль молча значит собрать API меньшего
+        # состава, чем просили, и не сказать об этом. Отказ громче ошибки.
+        profile = load_profile(site_id, root)
         if loader is None:
             store, adapter_name = InMemoryStore(site_id), "none"
         else:

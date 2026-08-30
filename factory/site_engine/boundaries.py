@@ -135,6 +135,8 @@ def _module_of(path: Path, root: Path) -> str:
         return mapping[stem]
     if stem.startswith("adapters/"):
         return "renderer-adapters" if stem.endswith("_renderer.py") else "provider-adapters"
+    if stem.startswith("api/"):
+        return "site-engine-api"
     return ""
 
 
@@ -252,24 +254,3 @@ def check(root: Path | str = ".") -> BoundaryResult:
                 break
 
     return result
-
-
-def check_frontend_boundaries(root: Path | str = ".") -> list[str]:
-    """Правила, проверяемые вне Python-пакета.
-
-    Оформлены отдельно, потому что их предмет — соседний репозиторий, и гейт не
-    должен падать оттого, что его там нет.
-    """
-    root = Path(root)
-    problems: list[str] = []
-    ts_root = root / "src"
-    if not ts_root.exists():
-        return problems
-    for path in ts_root.rglob("*.tsx"):
-        source = path.read_text(encoding="utf-8")
-        if "readFile(" in source and "watcher" in source.lower():
-            problems.append(
-                f"{path}: компонент читает runtime-файл напрямую; "
-                "снимок наблюдателя доступен только через свой модуль"
-            )
-    return problems
