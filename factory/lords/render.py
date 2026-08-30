@@ -924,13 +924,30 @@ def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
                 f'<p class="lede">{escape(note)}</p></section>'
             )
 
-    jsonld = ({
+    # Матрица объявляет для главной `structured_data: [WebSite, Organization]`,
+    # а витрины отдавали только WebSite. Организация несёт ровно два факта,
+    # которые на странице уже есть: имя (его вычисляет `_brand_name` —
+    # объявленное имя, иначе домен, никогда технический идентификатор) и адрес
+    # сайта. Юридического имени, логотипа и контактов в пакете нет, и
+    # подставлять их сюда нельзя: пустой узел честнее выдуманного.
+    origin = ctx["canonical_base"]
+    website = {
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": ctx["brand"],
         "description": text.get("description", ""),
         "inLanguage": ctx["language"],
-    },)
+    }
+    organization = {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": ctx["brand"],
+    }
+    if origin:
+        # Без домена адрес не выдумывается — как и canonical выше по файлу.
+        website["url"] = origin + "/"
+        organization["url"] = origin + "/"
+    jsonld = (website, organization)
     meta = Meta(
         title=text.get("title") or ctx["brand"],
         description=text.get("description", ""),
