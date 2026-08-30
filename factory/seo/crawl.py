@@ -72,6 +72,12 @@ def crawl(base_url: str, build_dir: Path, *, auth: str = "", environment: str = 
     report = Report("seo-crawl")
     config = json.loads((build_dir / "routes.json").read_text(encoding="utf-8"))
     expected = {r["path"]: r for r in config["routes"]}
+    # Хост для сверки canonical берётся из сборки, а НЕ из адреса обхода.
+    # Это разные вещи: обход идёт по origin цели (на staging это
+    # `http://127.0.0.1:<порт>`), а canonical на странице — публичный домен
+    # сайта. Сравнение с адресом обхода пометило бы чужим доменом каждую
+    # индексируемую страницу.
+    site_host = urllib.parse.urlparse(str(config.get("base_url", "")).rstrip("/")).netloc.lower()
     max_depth = int(config.get("max_depth") or 4)
     redirects = {r["source"]: r for r in config.get("redirects", [])}
     crawler = Crawler(base_url, auth=auth)
@@ -122,10 +128,9 @@ def crawl(base_url: str, build_dir: Path, *, auth: str = "", environment: str = 
                 # пропускала и чужой домен, и другую страницу того же сайта:
                 # «/arhiv/lekcii/material-01/» заканчивается на «/lekcii/material-01/».
                 canonical_parts = urllib.parse.urlparse(canonical)
-                base_host = urllib.parse.urlparse(base_url).netloc.lower()
-                if canonical_parts.netloc.lower() != base_host:
+                if site_host and canonical_parts.netloc.lower() != site_host:
                     report.add(Finding("canonical", "critical", path,
-                                       f"Canonical указывает на чужой домен «{canonical_parts.netloc}» вместо «{base_host}».", "HR-2"))
+                                       f"Canonical указывает на чужой домен «{canonical_parts.netloc}» вместо «{site_host}».", "HR-2"))
                 elif (canonical_parts.path or "/") != path:
                     report.add(Finding("canonical", "critical", path, f"Canonical «{canonical}» не соответствует URL.", "HR-1"))
             if environment == "production" and "noindex" in (header_robots + meta_robots):
