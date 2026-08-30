@@ -1421,8 +1421,22 @@ def _robots(ctx) -> Page:
     if ctx["indexing_enabled"] and ctx["domain"]:  # pragma: no cover - требует домена
         lines = ["User-agent: *", "Allow: /", f"Sitemap: https://{ctx['domain']}/sitemap.xml"]
     else:
+        # Причина называется настоящая, а не одна на все случаи. Раньше здесь
+        # стоял единый текст «домен не передан, данные синтетические», и он
+        # выдавался в том числе когда домен передан: на LIVE
+        # lordfilm47.space/robots.txt утверждал отсутствие домена, а canonical
+        # на той же странице был https://lordfilm47.space/. Неверная причина
+        # отправляет искать отсутствующую настройку домена вместо флага
+        # индексации.
+        reasons = []
+        if not ctx["domain"]:
+            reasons.append("домен не передан")
+        elif not ctx["indexing_enabled"]:
+            reasons.append("индексация выключена в пакете сайта")
+        if ctx.get("fixture_catalog", True):
+            reasons.append("данные синтетические")
         lines = [
-            "# Стенд закрыт от индексации: домен не передан, данные синтетические.",
+            "# Стенд закрыт от индексации: " + ", ".join(reasons) + ".",
             "User-agent: *",
             "Disallow: /",
         ]
