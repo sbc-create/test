@@ -42,6 +42,25 @@
 `lords → paths, seo, errors`, `secret_hub → errors, paths`,
 `analytics → errors, paths`, `recs → lords`.
 
+## Неиспользуемого кода не нашлось
+
+Поиск модулей без импортов дал шесть кандидатов из 135. Проверка каждого
+показала, что **ни один не мёртв**:
+
+| Кандидат | Кто им пользуется |
+| --- | --- |
+| `factory.secret_hub.rootcmd` | два shell-сценария, systemd-юнит `site-factory-secret-hub-import@`, тест, `knowledge/DECISIONS.md` |
+| `factory.lords.live_bundle` | `automation/host/finalize-public-sites.sh` |
+| `factory.topvisor.enroll` | упоминается в сценариях |
+| `factory.__main__`, `factory.secret_hub.__main__`, `factory.secret_hub.panel.__main__` | точки входа `python -m` |
+
+Поиск по импортам не видит вызовов из shell и systemd. Удаление «неиспользуемого»
+по такому списку сломало бы установку Secret Hub и публикацию сайтов.
+
+Поэтому в этой задаче **не удалено ничего**. Уборка свелась к исправлению двух
+настоящих дефектов (слепая проверка границ, нарушение границы в CMS) и к
+подключению быстрого пути.
+
 ## Дублирование конфигурации
 
 Слои кэша задавались в двух местах — в `scaffold.DEFAULT_CACHE_LAYERS` и в
