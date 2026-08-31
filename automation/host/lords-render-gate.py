@@ -28,12 +28,15 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
+from factory.lords.detail_enrichment import DETAIL_FIELDS, cache_dir  # noqa: E402
 from factory.site_engine.fingerprint import (  # noqa: E402
     RenderInputs,
     catalog_digest,
     compare,
     digest,
+    enrichment_digest,
     load,
+    mapping_digest,
     save,
     tree_digest,
 )
@@ -66,8 +69,15 @@ def _renderer_version(repo: Path) -> str:
 def collect(repo: Path, site_id: str, cache: Path) -> RenderInputs:
     items = json.loads(cache.read_text(encoding="utf-8")).get("items") or []
     package = repo / "sites" / site_id / "package.yaml"
+    var = repo / "var"
     return RenderInputs(
         catalog=catalog_digest(items),
+        # Списочный каталог не содержит ни жанров, ни описаний, ни состава: всё
+        # это приносит обогащение и хранит отдельно. Ворота, смотревшие только
+        # на каталог, отвечали «не надо» при изменившихся страницах.
+        enrichment=enrichment_digest(cache_dir(var), DETAIL_FIELDS),
+        # Признак воспроизводимости решает, попадёт ли запись на полку.
+        playability=mapping_digest(var / "lords" / "playability.json", keep=("playable",)),
         renderer_version=_renderer_version(repo),
         template_version=tree_digest(repo / "blueprints" / "lords", ("*.html", "*.j2")),
         site_profile=digest(package.read_text(encoding="utf-8") if package.exists() else ""),

@@ -80,9 +80,51 @@ for site in "${SITES[@]}"; do
     fi
   fi
 
+  # --- БЫСТРЫЙ ПУТЬ -------------------------------------------------------
+  # Полная сборка перерисовывает 53 116 страниц произведений и занимает часы,
+  # хотя выход одной серии меняет страницу тайтла и несколько листингов.
+  #
+  # Быстрый путь строит staging как связанную копию текущего релиза и переписывает
+  # только различающиеся страницы. Измерено: изменение постера одного
+  # произведения переписало 7 страниц за 61 секунду; цикл без изменений — ноль
+  # страниц за 53 секунды.
+  #
+  # Коды тот же принцип, что у ворот: 0 — собрано, 10 — переписывать нечего,
+  # всё остальное, включая поломку самого сценария, означает полный рендер.
+  # Быстрый путь, который при своём отказе объявляет «всё в порядке», однажды
+  # заморозит витрину навсегда и незаметно.
+  fast_done=0
+  if [ "${LORDS_FAST_PATH:-1}" = "1" ] && [ -x "${REPO}/automation/host/lords-fast-render.py" ] \
+     && [ -n "$current" ] && [ -d "${current}/site" ]; then
+    fast_code=0
+    "$PYTHON" "${REPO}/automation/host/lords-fast-render.py" "$site" \
+      --repo "$REPO" --staging "$staging" --current "${current}/site" || fast_code=$?
+    case "$fast_code" in
+      0)
+        log "${site}: staging собран быстрым путём"
+        fast_done=1
+        ;;
+      10)
+        log "${site}: переписывать нечего — публикация не нужна"
+        # Отпечаток и снимок произведений принимаются: этот вход отработан.
+        if [ -x "${REPO}/automation/host/lords-render-gate.py" ]; then
+          "$PYTHON" "${REPO}/automation/host/lords-render-gate.py" "$site" --repo "$REPO" --record || true
+        fi
+        "$PYTHON" "${REPO}/automation/host/lords-fast-render.py" "$site" \
+          --repo "$REPO" --staging "$staging" --current "${current}/site" --record >/dev/null || true
+        rm -rf "$staging"; trap - EXIT
+        continue
+        ;;
+      *)
+        log "${site}: быстрый путь неприменим (код ${fast_code}) — полная сборка"
+        rm -rf "${staging:?}"/* 2>/dev/null || true
+        ;;
+    esac
+  fi
+
   # Сборка в сторону. Пустой каталог останавливает сборку внутри build_live_site,
   # поэтому пустая витрина сюда не доедет.
-  if ! "$PYTHON" - "$site" "$staging" "$ENRICH_BUDGET" "$PLAY_BUDGET" <<'PYEOF'
+  if [ "$fast_done" != "1" ] && ! "$PYTHON" - "$site" "$staging" "$ENRICH_BUDGET" "$PLAY_BUDGET" <<'PYEOF'
 import os
 import sys
 from pathlib import Path
@@ -174,6 +216,12 @@ PYEOF
     # этот вход уже отработан и повторять сборку незачем.
     if [ -x "${REPO}/automation/host/lords-render-gate.py" ]; then
       "$PYTHON" "${REPO}/automation/host/lords-render-gate.py" "$site" --repo "$REPO" --record || true
+    fi
+    # Снимок произведений — по той же причине. Без него следующий цикл счёл бы
+    # вход изменившимся и пересобрал то, что уже совпало.
+    if [ -x "${REPO}/automation/host/lords-fast-render.py" ] && [ -n "$current" ]; then
+      "$PYTHON" "${REPO}/automation/host/lords-fast-render.py" "$site" \
+        --repo "$REPO" --staging "$staging" --current "${current}/site" --record >/dev/null || true
     fi
     rm -rf "$staging"; trap - EXIT
     continue
@@ -291,6 +339,13 @@ PYEOF
   # отработанный, и следующий цикл пропустил бы сборку, не сделав её.
   if [ -x "${REPO}/automation/host/lords-render-gate.py" ]; then
     "$PYTHON" "${REPO}/automation/host/lords-render-gate.py" "$site" --repo "$REPO" --record || true
+  fi
+  # Снимок произведений принимается вместе с отпечатком и только после приёмки
+  # релиза: снимок, записанный до неё, объявил бы неопубликованное состояние
+  # отработанным.
+  if [ -x "${REPO}/automation/host/lords-fast-render.py" ] && [ -n "$current" ]; then
+    "$PYTHON" "${REPO}/automation/host/lords-fast-render.py" "$site" \
+      --repo "$REPO" --staging "$staging" --current "${current}/site" --record >/dev/null || true
   fi
 
   # Хранение: удаляются только наши же прежние релизы и никогда текущий.

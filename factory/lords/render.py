@@ -1782,6 +1782,7 @@ def render_site(
     root: Path | None = None,
     environ: dict | None = None,
     publisher_id: str | None = None,
+    only_title_slugs: frozenset[str] | None = None,
 ) -> RenderedSite:
     """Полный сайт одного пакета: страницы, ассеты и отчёт о сборке.
 
@@ -1789,6 +1790,16 @@ def render_site(
     случае все типы находятся в состоянии `blocked_credentials`, разделов не
     возникает, и рендерер честно отдаёт сайт без каталога вместо витрины с
     выдуманным содержимым.
+
+    `only_title_slugs` ограничивает отрисовку страниц произведений названными.
+    По умолчанию (`None`) поведение прежнее — отрисовываются все. Ограничение
+    нужно быстрому пути: страниц произведений 53 116, и на них уходит почти всё
+    время сборки, тогда как выход одной серии меняет одну такую страницу.
+
+    В ограниченном режиме карта сайта **не** пересобирается: она строится по
+    списку отрисованных страниц, а он в этом режиме заведомо неполон. Карта
+    остаётся прежней — что верно, пока произведения не появляются и не исчезают.
+    Появление и исчезновение произведения требует полного цикла.
     """
     catalog = catalog if catalog is not None else fx.build_catalog()
     profiles = plan_mod.load_profiles(root)
@@ -1930,6 +1941,8 @@ def render_site(
     # Страницы произведений
     owns_titles = bool(profile.get("owns_title_page"))
     for title in pool:
+        if only_title_slugs is not None and title.slug not in only_title_slugs:
+            continue
         add(_title_page(ctx, catalog, title, kinds, indexable=owns_titles))
 
     # Поиск и служебные документы
@@ -1939,7 +1952,12 @@ def render_site(
     for icon_page in _icon_pages(ctx):
         add(icon_page)
     add(_robots(ctx))
-    add(_sitemap(ctx, indexable_paths))
+    # Карта сайта строится по списку отрисованного. В ограниченном режиме этот
+    # список неполон, и пересборка выбросила бы из карты все неотрисованные
+    # страницы. Прежняя карта остаётся верной, пока состав произведений не
+    # менялся; изменение состава — повод для полного цикла, а не для быстрого.
+    if only_title_slugs is None:
+        add(_sitemap(ctx, indexable_paths))
     site.not_found = _not_found(ctx)
 
     # Ассеты
