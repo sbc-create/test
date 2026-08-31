@@ -5,7 +5,6 @@
 когда он нужен, и обнаруживается это в худший момент. Большая часть проверок
 ниже — об этом.
 """
-import os
 from pathlib import Path
 
 import pytest

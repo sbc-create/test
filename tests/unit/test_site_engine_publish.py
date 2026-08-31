@@ -126,9 +126,11 @@ class TestАтомарность:
 
         первый = релиз(tmp_path, "первый")
         current = tmp_path / "current"
-        with patch("factory.site_engine.publish._same_filesystem", return_value=False):
-            with pytest.raises(PublishError, match="разных файловых системах"):
-                switch(current, первый)
+        with (
+            patch("factory.site_engine.publish._same_filesystem", return_value=False),
+            pytest.raises(PublishError, match="разных файловых системах"),
+        ):
+            switch(current, первый)
 
 
 class TestОткат:
