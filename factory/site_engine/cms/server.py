@@ -20,8 +20,7 @@ from typing import Any
 from urllib.parse import parse_qs, urlparse
 
 from factory.site_engine.access import Principal, ROLE_PERMISSIONS
-from factory.site_engine.api.control_plane import ControlPlaneApi
-from factory.site_engine.api.openapi_v1 import spec as openapi_spec
+from factory.site_engine.api import ControlPlaneApi, control_plane_spec as openapi_spec
 
 СТИЛЬ = """
 :root{--bg:#12141a;--fg:#e6e8ee;--dim:#8b90a0;--line:#262a35;--accent:#7aa2f7;--warn:#e0af68}
