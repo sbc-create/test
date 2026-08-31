@@ -167,7 +167,15 @@ p {{ margin: 0 0 1em; overflow-wrap: anywhere; }}
 }}
 .site-nav a[aria-current="page"] {{ background: var(--accent); color: var(--accent-text); }}
 .site-nav a:hover {{ background: var(--surface-alt); text-decoration: none; }}
-.header-search {{ width: 100%; display: flex; gap: 8px; padding-bottom: 8px; }}
+/* На узких экранах строка поиска переносится целиком, а не по одному
+   элементу: обрезанное поле или уехавшая за край кнопка — худшее, что
+   может случиться с поиском на телефоне. */
+.header-search {{ width: 100%; display: flex; gap: 8px; padding-bottom: 8px;
+  flex-wrap: nowrap; align-items: stretch; }}
+@media (max-width: 400px) {{
+  .header-search button {{ padding: 9px 12px; }}
+  .header-search__filter {{ padding: 9px 10px; }}
+}}
 .header-search input {{
   flex: 1 1 auto; min-width: 0; padding: 9px 12px;
   background: var(--bg); color: var(--text);
@@ -177,6 +185,17 @@ p {{ margin: 0 0 1em; overflow-wrap: anywhere; }}
   flex: 0 0 auto; padding: 9px 16px; border: 0; border-radius: var(--radius);
   background: var(--accent); color: var(--accent-text); font: inherit; cursor: pointer;
 }}
+/* Фильтр стоит в одной строке с поиском и не переносится под него.
+   `flex: 0 0 auto` вместе с `white-space: nowrap` держат его рядом с кнопкой на
+   любой ширине, а поле поиска забирает остаток. Высота и отступы повторяют
+   кнопку, чтобы линия не выглядела сломанной. */
+.header-search__filter {{
+  flex: 0 0 auto; display: inline-flex; align-items: center; white-space: nowrap;
+  padding: 9px 14px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); color: var(--text); text-decoration: none; font: inherit;
+}}
+.header-search__filter:hover,
+.header-search__filter:focus-visible {{ border-color: var(--accent); color: var(--accent); }}
 
 /* --- уведомление стенда ------------------------------------------------- */
 .preview-banner {{
@@ -418,7 +437,7 @@ main {{ padding: var(--pad) 0 40px; }}
 /* --- планшет ------------------------------------------------------------------ */
 @media (min-width: 640px) {{
   :root {{ --cols: {cols['tablet']}; }}
-  .header-search {{ width: auto; flex: 1 1 240px; padding-bottom: 0; order: 0; }}
+  .header-search {{ width: auto; flex: 1 1 320px; padding-bottom: 0; order: 0; }}
   .nav-toggle {{ display: none; }}
   .site-nav {{ display: block; width: 100%; }}
   .title-head {{ grid-template-columns: 260px minmax(0, 1fr); }}
@@ -431,7 +450,11 @@ main {{ padding: var(--pad) 0 40px; }}
   .site-nav {{ width: auto; flex: 1 1 auto; min-width: 0; }}
   .site-nav ul {{ padding: 0; flex-wrap: nowrap; overflow-x: auto; }}
   .site-nav a {{ white-space: nowrap; }}
-  .header-search {{ flex: 0 1 300px; }}
+  /* Ширина строки поиска на широких экранах.
+     Было 300px на поле с кнопкой. С появлением кнопки фильтра поле сжалось до
+     201px — измерено в браузере, — и «поле занимает доступную ширину» перестало
+     выполняться. 420px возвращают полю около 250px при обеих кнопках рядом. */
+  .header-search {{ flex: 0 1 420px; }}
   .facets--row {{ grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }}
   /* В сайдбаре ширины на две колонки нет: поля возвращаются в столбик. */
   {'.facets:not(.facets--row) { grid-template-columns: minmax(0, 1fr); }' if sidebar else ''}

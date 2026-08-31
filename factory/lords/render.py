@@ -54,6 +54,13 @@ TYPE_LABELS = {
 #: В карточке и в фактах тип называется в единственном числе — там он описывает
 #: одну запись. Заголовок раздела называет набор, и «Фильм» над рядом из
 #: двенадцати фильмов читается как технический ярлык, а не как название полки.
+#: Сколько жанров должно быть, чтобы раздел «Жанры» имел смысл.
+#:
+#: Один-два жанра — это не рубрикатор, а видимость его. Порог отделяет
+#: «данных пока нет» от «данные есть»; когда обогащение наберёт покрытие,
+#: раздел появится сам.
+MIN_GENRE_CHIPS = 6
+
 TYPE_SECTION_LABELS = {
     fx.MOVIES: "Фильмы",
     fx.SERIES: "Сериалы",
@@ -327,7 +334,13 @@ def _header(ctx: dict, meta: Meta) -> str:
         '<label class="visually-hidden" for="q">Поиск по каталогу</label>'
         '<input id="q" name="q" type="search" placeholder="Название из каталога" '
         'autocomplete="off">'
-        "<button type=\"submit\">Найти</button></form>"
+        '<button type="submit">Найти</button>'
+        # Фильтр стоит в той же строке, что и поиск, и ведёт в каталог, где
+        # отбор по годам и типам уже существует. Отдельной страницы фильтров
+        # заводить не нужно — она бы обещала больше, чем есть.
+        '<a class="header-search__filter" href="/catalog/" '
+        'title="Каталог с отбором по годам и типам">Фильтр</a>'
+        "</form>"
         "</div></header>"
     )
 
@@ -805,13 +818,15 @@ def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
     hero_kind = ctx["hero"]
     hero_body = f'<h1>{escape(text.get("h1") or SECTION_LABELS["home"])}</h1>'
     hero_body += f'<p class="lede">{escape(text.get("intro", ""))}</p>'
-    if "hero_search" in blocks:
-        hero_body += (
-            '<form class="header-search" role="search" action="/search/" method="get">'
-            '<label class="visually-hidden" for="hero-q">Поиск по каталогу</label>'
-            '<input id="hero-q" name="q" type="search" placeholder="Название из каталога">'
-            "<button type=\"submit\">Найти</button></form>"
-        )
+    # Форма поиска в герое не рисуется. Она полностью повторяла форму в шапке —
+    # тот же action, тот же класс, то же поле, — и на витрине с включённым
+    # `hero_search` посетитель видел два одинаковых поиска подряд. Замерено на
+    # lordfilm47.space: две формы `header-search` на главной, у соседних витрин
+    # по одной.
+    #
+    # Блок `hero_search` в плане сайта оставлен: он по-прежнему означает «поиск
+    # на первом экране», и его выполняет форма шапки, которая на главной как раз
+    # и находится на первом экране. Убран дубликат, а не возможность искать.
     if "hero_facets" in blocks:
         hero_body += _chips([
             (label, f"/genres/{slug}/", count) for slug, label, count in catalog.genres(kinds)[:8]
@@ -850,12 +865,23 @@ def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
         elif block == "top_rated":
             parts.append(_top_rated(ctx, pool))
         elif block == "genre_chips":
-            parts.append(
-                '<section class="section"><h2>Жанры</h2>'
-                + _chips([(label, f"/genres/{slug}/", count)
-                          for slug, label, count in catalog.genres(kinds)])
-                + "</section>"
-            )
+            # Раздел показывается, только если жанров действительно несколько.
+            #
+            # Замерено на живом каталоге: жанры заполнены у 129 записей из
+            # 53 116 — четверть процента, — и `catalog.genres()` возвращает две
+            # позиции по одному тайтлу. Раздел с заголовком «Жанры» и одной
+            # ссылкой обещает рубрикатор, которого нет, и выглядит поломкой.
+            #
+            # Порог невелик намеренно: как только обогащение наберёт покрытие,
+            # раздел появится сам, без правки кода.
+            жанры = [(label, f"/genres/{slug}/", count)
+                     for slug, label, count in catalog.genres(kinds)]
+            if len(жанры) >= MIN_GENRE_CHIPS:
+                parts.append(
+                    '<section class="section"><h2>Жанры</h2>'
+                    + _chips(жанры)
+                    + "</section>"
+                )
         elif block == "year_grid":
             parts.append(
                 '<section class="section"><h2>Годы выпуска</h2>'
