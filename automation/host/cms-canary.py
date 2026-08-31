@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import pathlib
 import sys
 from pathlib import Path
 
@@ -95,6 +96,102 @@ def collectors(repo: Path, lords_root: Path, cache_root: Path) -> dict:
             })
         return итог
 
+    def задания() -> list[dict]:
+        """Периодические работы. Читается у systemd, а не выдумывается."""
+        import subprocess
+
+        итог: list[dict] = []
+        try:
+            вывод = subprocess.run(
+                ["systemctl", "list-timers", "--all", "--no-pager", "--no-legend"],
+                capture_output=True, text=True, timeout=20,
+            ).stdout
+        except Exception:  # noqa: BLE001
+            return итог
+        for строка in вывод.splitlines():
+            части = строка.split()
+            if len(части) < 2:
+                continue
+            юнит = next((c for c in части if c.endswith(".timer")), "")
+            служба = next((c for c in части if c.endswith(".service")), "")
+            if not юнит:
+                continue
+            итог.append({
+                "id": юнит,
+                "name": юнит,
+                "service": служба,
+                "raw": " ".join(части[:6]),
+                "site_id": "yummy" if юнит.startswith("yummy") else
+                           ("lords" if юнит.startswith("lords") else ""),
+            })
+        return итог
+
+    def события() -> list[dict]:
+        """События выхода серий. Отметка `observedAt` — когда МЫ увидели."""
+        путь = pathlib.Path("/srv/sites/yummyani-staging/runtime/episode-state/events.jsonl")
+        итог: list[dict] = []
+        try:
+            строки = путь.read_text(errors="replace").strip().split("\n")[-200:]
+        except OSError:
+            return итог
+        for строка in строки:
+            try:
+                e = json.loads(строка)
+            except ValueError:
+                continue
+            итог.append({
+                "id": f"{e.get('titleId', '')}:{e.get('observedAt', '')}",
+                "kind": e.get("kind", ""),
+                "title": e.get("name", ""),
+                "from": e.get("from"),
+                "to": e.get("to"),
+                # Время провайдера и время наблюдения хранятся раздельно:
+                # провайдер не сообщает, когда изменение произошло.
+                "observedAt": e.get("observedAt", ""),
+                "providerTimestamp": e.get("providerTimestamp", ""),
+                "site_id": "yummy",
+            })
+        return list(reversed(итог))
+
+    def медиа() -> list[dict]:
+        """Состояние кэша изображений. Размеры, а не содержимое."""
+        каталог = pathlib.Path("/var/cache/nginx/yummy-posters")
+        if not каталог.is_dir():
+            return []
+        всего = 0
+        байт = 0
+        try:
+            for файл in каталог.rglob("*"):
+                if файл.is_file():
+                    всего += 1
+                    байт += файл.stat().st_size
+        except OSError:
+            pass
+        return [{
+            "id": "yummy-posters",
+            "kind": "poster-cache",
+            "objects": всего,
+            "bytes": байт,
+            "limit_bytes": 700 * 1024 * 1024,
+            "site_id": "yummy",
+        }]
+
+    def полки() -> list[dict]:
+        """Полки берутся из профилей, а не из разметки витрины."""
+        итог = []
+        for p in profiles_mod.load_all(repo):
+            слои = ((getattr(p, "cache_policy", None) or {}) or {})
+            if hasattr(слои, "get"):
+                слои = слои.get("layers") or {}
+            for имя in sorted(слои):
+                итог.append({
+                    "id": f"{p.site_id}:{имя}",
+                    "site_id": p.site_id,
+                    "title": имя,
+                    "items": ", ".join((слои[имя] or {}).get("tags", []) or []),
+                })
+        return итог
+
     return {
         "sites": сайты,
         "site-profiles": профили,
@@ -102,15 +199,18 @@ def collectors(repo: Path, lords_root: Path, cache_root: Path) -> dict:
         "sources": источники,
         "deployments": выкладки,
         "publications": выкладки,
+        "jobs": задания,
+        "content-events": события,
+        "media": медиа,
+        "shelves": полки,
+        # Ниже — источники, которых в этом контуре нет. Отвечают 501, а не
+        # пустым списком: пустой список неотличим от «данных нет» и скрывает
+        # отсутствие источника.
         "audit-events": lambda: [],
-        "jobs": lambda: [],
-        "shelves": lambda: [],
         "schedules": lambda: [],
         "announcements": lambda: [],
         "ratings": lambda: [],
-        "media": lambda: [],
         "seo-documents": lambda: [],
-        "content-events": lambda: [],
         "commands": lambda: [],
     }
 
@@ -144,6 +244,26 @@ def main() -> int:
         collectors=collectors(Path(args.repo), Path(args.lords_root), Path(args.cache)),
         env=dict(os.environ),
     )
+    # Журналы связываются после создания API: они принадлежат ему самому, а не
+    # внешнему источнику. Пустой список вместо настоящего журнала выглядел бы
+    # как «записей нет», хотя записи есть.
+    api.collectors["audit-events"] = lambda: [
+        {
+            "id": e.event_id,
+            "actor": e.actor,
+            "action": e.action,
+            "subject": e.subject,
+            "at": e.at.isoformat(),
+            "correlation_id": e.correlation_id or "",
+            "digest": e.digest(),
+            "site_id": (e.site_ids[0] if e.site_ids else ""),
+        }
+        for e in api.audit
+    ]
+    api.collectors["commands"] = lambda: [
+        {**c, "id": c["command_id"]} for c in api.commands.as_list()
+    ]
+
     сервер, canary = serve(api, host=args.host, port=args.port)
     ключи = {имя: canary.выдать_ключ(имя) for имя in лица}
 
