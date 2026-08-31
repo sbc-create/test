@@ -47,7 +47,7 @@
     "10_уборка": "DONE",
     "11_проверки": "DONE",
     "12_документация": "DONE",
-    "13_три_timer_цикла": "BLOCKED",
+    "13_три_timer_цикла": "BLOCKED_BY_SCHEDULE",
     "14_sla_на_настоящем_событии": "PENDING_REAL_EVENT"
   },
   "blockers": [
@@ -95,5 +95,11 @@
     "cms_timers_shown": 30
   },
   "production_changed": false,
-  "owner_actions": 3
+  "owner_actions": 3,
+  "lords_schedule": {
+    "timer_period": "11h (OnUnitActiveSec)",
+    "cycle_duration_measured": "8h49m (05:55:29 → 14:44:25)",
+    "three_cycles_need": "более двух суток",
+    "conclusion": "три timer-цикла Lords за ночь недостижимы по арифметике расписания"
+  }
 }
