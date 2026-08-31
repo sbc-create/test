@@ -72,7 +72,7 @@
     "unchanged_cycle_seconds": 53,
     "one_title_change_seconds": 61,
     "gate_seconds_with_enrichment": 5,
-    "new_tests": 59,
+    "new_tests": 69,
     "existing_tests_passing": 2822,
     "boundary_problems": 0,
     "openapi_paths": 35,
@@ -80,7 +80,10 @@
     "contracts_v1": 15,
     "cms_sections": 10,
     "live_sites": "6/6",
-    "player_gate": "30/30"
+    "player_gate": "30/30",
+    "api_sources_connected": 10,
+    "api_sources_not_implemented": 4,
+    "cms_timers_shown": 30
   },
   "production_changed": false
 }
