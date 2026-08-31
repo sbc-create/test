@@ -16,43 +16,60 @@
 шесть файлов сразу, и делать половину безопасно, а половину нет — хуже, чем
 подождать.
 
+## Ветка выкладки уже готова
+
+```
+deploy/night-03-fast-path
+SHA  788c1a79d51fbfa6b2b1c9d7f6981d047e3f2763
+база deploy/02b (ad6be19)
+```
+
+Восемь файлов, 876 добавленных строк. Перенесены через Git из
+`claude/site-factory-multi-engine-api-cms-control-plane-night-03` с сохранением
+происхождения; вручную ничего не копировалось.
+
+| Файл | Что |
+| --- | --- |
+| `automation/host/lords-fast-render.py` | шаг сборки staging |
+| `automation/host/lords-content-refresh.sh` | подключение быстрого пути |
+| `automation/host/lords-render-gate.py` | ворота с обогащением |
+| `factory/lords/fast_path.py` | водитель точечной пересборки |
+| `factory/lords/render.py` | необязательное ограничение отрисовки |
+| `factory/site_engine/fingerprint.py` | два новых слагаемых отпечатка |
+| `tests/unit/test_lords_fast_path.py`, `test_fast_path_night03.py` | 20 проверок |
+
+CMS, API, контракты и права в эту ветку **не входят**: к конвейеру они отношения
+не имеют и в production не идут.
+
+Проверено на самой ветке: 50 проверок проходят, импорты разрешаются на базе
+`deploy/02b`, сценарии разбираются, конвейер синтаксически верен.
+
 ## Последовательность
 
-1. Дождаться, пока `systemctl show lords-content-refresh.service -p ActiveState
-   --value` перестанет быть `activating`/`active` **и** исчезнет процесс
-   `lords-content-refresh.sh`.
-
-   Проверять оба признака обязательно: `systemctl is-active --quiet` считает
-   `activating` неактивным, и ожидание на нём срабатывает в начале запуска.
-
-2. Создать узкую ветку выкладки от `deploy/02b` и перенести в неё **только**
-   файлы быстрого пути через Git, с сохранением происхождения:
+1. Дождаться настоящего завершения цикла — двух признаков сразу:
 
 ```
-git branch deploy/night-03-fast-path deploy/02b
-git checkout deploy/night-03-fast-path
-git checkout claude/site-factory-multi-engine-api-cms-control-plane-night-03 -- \
-    automation/host/lords-fast-render.py \
-    automation/host/lords-content-refresh.sh \
-    automation/host/lords-render-gate.py \
-    factory/lords/fast_path.py \
-    factory/lords/render.py \
-    factory/site_engine/fingerprint.py
-git commit -m "lords: быстрый путь в конвейере (из night-03)"
+systemctl show lords-content-refresh.service -p ActiveState --value   # не activating и не active
+ps -eo args | grep -c "[l]ords-content-refresh.sh"                     # 0
 ```
 
-   Ни CMS, ни API, ни контракты в production не попадают: они к конвейеру
-   отношения не имеют.
+   Проверять оба обязательно: `systemctl is-active --quiet` считает
+   `activating` неактивным, и ожидание на нём срабатывает в начале запуска, а не
+   в конце. Эта ошибка уже была допущена в этой задаче и исправлена.
 
-3. Переключить рабочий репозиторий на эту ветку.
+2. Переключить рабочий репозиторий:
 
-4. Дождаться очередного запуска таймера. Первый цикл: снимка произведений нет →
+```
+git -C /srv/site-factory/repo checkout deploy/night-03-fast-path
+```
+
+3. Дождаться очередного запуска таймера. Первый цикл: снимка произведений нет →
    полный рендер → снимок записан после приёмки.
 
-5. Второй и третий циклы: убедиться, что неизменившийся цикл даёт
+4. Второй и третий циклы: убедиться, что неизменившийся цикл даёт
    `rendered_pages=0`, релиз не создаётся, символьная ссылка не переключается.
 
-6. Зафиксировать три цикла с временами, кодами возврата и результатами.
+5. Зафиксировать три цикла с временами, кодами возврата и результатами.
 
 ## Откат
 
