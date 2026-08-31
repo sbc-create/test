@@ -20,7 +20,9 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import time
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -224,6 +226,7 @@ def apply(
     cache_root: str | Path | None = None,
     var_root: str | Path | None = None,
     only_title_slugs: frozenset[str] | None = None,
+    remove_relatives: tuple[str, ...] = (),
     write: bool = True,
 ) -> FastPathResult:
     """Быстрый путь целиком: собрать, сличить, переписать различающееся.
@@ -239,6 +242,10 @@ def apply(
 
     started = time.monotonic()
     to_write, added, removed = diff_against(site, base, partial=only_title_slugs is not None)
+    # В ограниченном режиме удалённые не вычисляются по отсутствию: их называет
+    # вызывающий, сравнив снимки произведений.
+    if only_title_slugs is not None and remove_relatives:
+        removed = list(remove_relatives)
     seconds_diff = time.monotonic() - started
 
     result = FastPathResult(
@@ -275,3 +282,87 @@ def apply(
     result.base_untouched = not violations
     result.base_violations = tuple(violations)
     return result
+
+
+#: Поля записи, влияющие на страницу произведения. Совпадает по смыслу с полями
+#: отпечатка каталога: служебные времена сюда не входят, иначе «изменилось»
+#: срабатывало бы на каждом прогоне.
+TITLE_FIELDS = (
+    "external_id", "name", "original_name", "year", "type", "is_series",
+    "genres", "countries", "tags", "poster_url", "playback", "licensed",
+    "kinopoisk_rating", "imdb_rating", "external_ids", "seasons",
+    "episodes_count", "available_episodes_count", "description",
+    "duration", "premiere_date", "voice_studios", "available_voices",
+)
+
+
+def title_digests(entries: Iterable[dict], catalog) -> dict[str, dict[str, str]]:
+    """Отпечаток каждого произведения: `external_id → {slug, digest}`.
+
+    Нужен, чтобы отвечать не на вопрос «изменился ли каталог», а на вопрос
+    «какие именно страницы придётся переписать». Первый вопрос ворота уже
+    решают; второй — то, ради чего существует быстрый путь.
+    """
+    slugs = {}
+    for title in getattr(catalog, "titles", ()):  # slug считается при сборке каталога
+        внешний = getattr(title, "external_id", None) or getattr(title, "provider_id", None)
+        if внешний:
+            slugs[str(внешний)] = title.slug
+    итог: dict[str, dict[str, str]] = {}
+    for запись in entries:
+        внешний = запись.get("external_id")
+        if not внешний:
+            continue
+        полезное = {f: запись.get(f) for f in TITLE_FIELDS if f in запись}
+        итог[str(внешний)] = {
+            "slug": slugs.get(str(внешний), ""),
+            "digest": hashlib.sha256(
+                json.dumps(полезное, sort_keys=True, ensure_ascii=False).encode("utf-8")
+            ).hexdigest()[:32],
+        }
+    return итог
+
+
+@dataclass
+class TitleChanges:
+    """Что изменилось между двумя снимками произведений."""
+
+    changed_slugs: tuple[str, ...] = ()
+    removed_slugs: tuple[str, ...] = ()
+    added: int = 0
+    modified: int = 0
+    removed: int = 0
+
+    @property
+    def any(self) -> bool:
+        return bool(self.changed_slugs or self.removed_slugs)
+
+    def as_dict(self) -> dict:
+        return {
+            "added": self.added,
+            "modified": self.modified,
+            "removed": self.removed,
+            "changed_slugs": list(self.changed_slugs[:20]),
+            "removed_slugs": list(self.removed_slugs[:20]),
+        }
+
+
+def compare_titles(previous: dict, current: dict) -> TitleChanges:
+    """Разница между снимками. Пустой прежний снимок означает «сравнивать не с чем»."""
+    добавлено = [k for k in current if k not in previous]
+    изменено = [
+        k for k in current
+        if k in previous and previous[k].get("digest") != current[k].get("digest")
+    ]
+    удалено = [k for k in previous if k not in current]
+    return TitleChanges(
+        changed_slugs=tuple(sorted(
+            {current[k]["slug"] for k in добавлено + изменено if current[k].get("slug")}
+        )),
+        removed_slugs=tuple(sorted(
+            {previous[k].get("slug", "") for k in удалено if previous[k].get("slug")}
+        )),
+        added=len(добавлено),
+        modified=len(изменено),
+        removed=len(удалено),
+    )

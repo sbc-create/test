@@ -29,6 +29,12 @@ SCHEMA_VERSION = "1.0"
 #: разом и заставляет пересобрать всё, а молча забытая — прячет изменение.
 PARTS = (
     "catalog",
+    # Обогащение и признак воспроизводимости хранятся отдельно от списочного
+    # каталога, и без них отпечаток лгал: страницы менялись, а ворота отвечали
+    # «не надо». Проверено сличением с живым релизом — расхождение было именно
+    # в жанрах и полках, которые приходят из обогащения.
+    "enrichment",
+    "playability",
     "renderer_version",
     "template_version",
     "site_profile",
@@ -73,6 +79,59 @@ def catalog_digest(entries: Iterable[dict], *, fields: tuple[str, ...] | None = 
     return h.hexdigest()
 
 
+
+def enrichment_digest(directory: Path, fields: tuple[str, ...]) -> str:
+    """Отпечаток обогащения: только поля, влияющие на HTML.
+
+    Записи кэша хранят `fetched_at` и `_fetched_at` — время выборки. Оно
+    меняется при каждом обновлении, и отпечаток по сырому содержимому менялся бы
+    каждый прогон, обесценив всю проверку. Здесь берутся ровно те поля, ради
+    которых обогащение существует.
+    """
+    directory = Path(directory)
+    if not directory.is_dir():
+        return ""
+    записи: list[str] = []
+    for путь in sorted(directory.glob("*.json")):
+        try:
+            запись = json.loads(путь.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            # Нечитаемая запись — это тоже состояние входа: молча пропустить её
+            # значит объявить вход неизменившимся при изменившемся кэше.
+            записи.append(f"{путь.name}:нечитаемо")
+            continue
+        деталь = запись.get("detail") or {}
+        полезное = {f: деталь.get(f) for f in fields if f in деталь}
+        записи.append(f"{путь.name}:{_stable(полезное)}")
+    h = hashlib.sha256()
+    for запись in записи:
+        h.update(запись.encode("utf-8"))
+        h.update(b"\n")
+    return h.hexdigest()
+
+
+def mapping_digest(path: Path, *, keep: tuple[str, ...] = ()) -> str:
+    """Отпечаток словаря на диске без служебных полей.
+
+    Для признака воспроизводимости: сам признак влияет на полки, а время
+    проверки — нет.
+    """
+    path = Path(path)
+    if not path.is_file():
+        return ""
+    try:
+        данные = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return "нечитаемо"
+    if not isinstance(данные, dict):
+        return digest(данные)
+    очищенное = {
+        ключ: ({k: v for k, v in значение.items() if not keep or k in keep}
+               if isinstance(значение, dict) else значение)
+        for ключ, значение in данные.items()
+    }
+    return digest(очищенное)
+
 def tree_digest(root: Path, patterns: tuple[str, ...] = ("*",)) -> str:
     """Отпечаток дерева файлов: имена и содержимое, без времён и прав.
 
@@ -96,11 +155,13 @@ class RenderInputs:
     """Всё, от чего зависит вывод. Ничего сверх того."""
 
     catalog: str
-    renderer_version: str
-    template_version: str
-    site_profile: str
-    shelf_configuration: str
-    route_registry: str
+    enrichment: str = ""
+    playability: str = ""
+    renderer_version: str = ""
+    template_version: str = ""
+    site_profile: str = ""
+    shelf_configuration: str = ""
+    route_registry: str = ""
     schema_version: str = SCHEMA_VERSION
     seo_contract_version: str = "1.0"
     editorial_overrides: str = ""
