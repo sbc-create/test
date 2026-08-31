@@ -1,0 +1,86 @@
+{
+  "task": "SITE-FACTORY-MULTI-ENGINE-API-CMS-CONTROL-PLANE-NIGHT-03",
+  "branch": "claude/site-factory-multi-engine-api-cms-control-plane-night-03",
+  "start_sha": "8b141883cd4dd803fcc7f881a362841b5a582d3f",
+  "repository": "/srv/site-factory/repo (worktree /home/claude/work-night03)",
+  "baseline": {
+    "yummy_revision": "93ba4d1554a620c58c76445079e75a2e35fb0a6b",
+    "yummy_digest": "sha256:e316345b7744c5eb82c41226e5881c0fb73ff725972b4e107d77729d35b836fd",
+    "lords_releases": {
+      "lords-01": "d853747e6413",
+      "lords-02": "b5ec4ad52f5f",
+      "lords-03": "d38878e79507"
+    },
+    "lords_repo": "deploy/02b ad6be19fbf42",
+    "six_sites_http": "6/6 = 200",
+    "rollback_images": [
+      "yummyani/web:rollback-6ae98f75 (67d8a92dc8d9)",
+      "yummyani/web:rollback-6fc4d3ed (da96069f923a)"
+    ],
+    "timers": [
+      "yummy-catalog-index.timer 5min",
+      "yummy-catalog-watchdog.timer 5min",
+      "yummy-episode-watcher.timer 5min",
+      "yummy-enrich.timer 10min",
+      "yummy-watchdog.timer 5min",
+      "lords-content-refresh.timer"
+    ]
+  },
+  "worktrees": {
+    "site_factory_night03": "claude/site-factory-multi-engine-api-cms-control-plane-night-03 @ 8b141883",
+    "lords_fast_path": "claude/lords-fast-path-02f @ 8b141883",
+    "site_factory_production": "deploy/02b @ ad6be19",
+    "yummy": "claude/site-engine-background-sync-image-cache-02f @ b6d6ee49",
+    "seo": "claude/seo-operator-live-11 @ 725f5a19"
+  },
+  "stages": {
+    "0_инвентаризация": "DONE",
+    "1_lords_fast_path": "DONE_IN_BRANCH_NOT_INSTALLED",
+    "2_архитектурный_аудит": "DONE",
+    "3_движки": "DONE",
+    "4_контракты": "DONE",
+    "5_api_v1": "DONE",
+    "6_командная_модель": "DONE",
+    "7_cms_canary": "DONE",
+    "8_шаблон_нового_сайта": "DONE",
+    "9_кэш": "DONE",
+    "10_уборка": "DONE",
+    "11_проверки": "DONE",
+    "12_документация": "DONE",
+    "13_три_timer_цикла": "BLOCKED",
+    "14_sla_на_настоящем_событии": "PENDING_REAL_EVENT"
+  },
+  "blockers": [
+    {
+      "stage": "1_установка_быстрого_пути / 13_три_timer_цикла",
+      "что": "цикл lords-content-refresh идёт с 16:55:29 UTC, к 20:40 — более 3 ч 43 мин",
+      "почему мешает": "подмена работающего .sh ломает цикл; публикация — гонка за символьную ссылку",
+      "доказательство": "ActiveState=activating, SubState=start, процесс PID 681263 в cgroup службы",
+      "owner_action": "не требуется — установка безопасна и не требует решения"
+    },
+    {
+      "stage": "14_sla",
+      "что": "настоящего события источника в окне не зафиксировано",
+      "статус": "PENDING_REAL_EVENT",
+      "что вместо": "обработка проверена на изолированной копии реальных данных"
+    }
+  ],
+  "measured": {
+    "unchanged_cycle_rendered_pages": 0,
+    "one_title_change_rewritten_pages": 7,
+    "pages_in_release": 61378,
+    "unchanged_cycle_seconds": 53,
+    "one_title_change_seconds": 61,
+    "gate_seconds_with_enrichment": 5,
+    "new_tests": 59,
+    "existing_tests_passing": 2822,
+    "boundary_problems": 0,
+    "openapi_paths": 35,
+    "openapi_operations": 38,
+    "contracts_v1": 15,
+    "cms_sections": 10,
+    "live_sites": "6/6",
+    "player_gate": "30/30"
+  },
+  "production_changed": false
+}
