@@ -75,9 +75,9 @@
       }
     },
     "content_providers": {
-      "description": "Поставщики контента. Имя адаптера, а не адрес и не ключ.",
+      "description": "Поставщики, к которым сайт ходит сам. Пусто — значит не ходит: контент приходит готовым через normalized_content_source. Одно из двух обязано быть заполнено, иначе показывать нечего.",
       "type": "array",
-      "minItems": 1,
+      "minItems": 0,
       "items": {
         "type": "object",
         "required": [
@@ -357,5 +357,22 @@
         }
       }
     }
-  }
+  },
+  "anyOf": [
+    {
+      "properties": {
+        "content_providers": {
+          "minItems": 1
+        }
+      },
+      "required": [
+        "content_providers"
+      ]
+    },
+    {
+      "required": [
+        "normalized_content_source"
+      ]
+    }
+  ]
 }

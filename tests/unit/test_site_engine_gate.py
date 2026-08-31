@@ -29,13 +29,41 @@ class TestSixLiveProfiles:
         assert core == []
         assert ok
 
+    #: Домены, которые действительно отвечают в интернете.
+    LIVE_DOMAINS = {
+        "yummyani.site", "yummyani.org", "yummyani.biz",
+        "lordfilm47.space", "lordserial33.biz", "1lordserials1.online",
+    }
+
     def test_all_six_sites_have_a_profile(self):
+        """Ни один действующий сайт не остался без профиля.
+
+        Прежде проверка требовала ровно шести профилей. Это оказалось не тем
+        свойством: появление профиля нового рода сайта (`demo-books`) ничего не
+        говорит о шести действующих, а проверка падала. Считается теперь
+        именно то, ради чего она писалась.
+        """
         _, results, _ = gate.run(ROOT)
-        assert len(results) == 6
-        assert {r.site_id for r in results} == {
+        assert {
             "yummyani-site", "yummyani-org", "yummyani-biz",
             "lords-01", "lords-02", "lords-03",
-        }
+        } <= {r.site_id for r in results}
+
+    def test_no_extra_profile_claims_a_live_domain(self):
+        """Зубы прежней проверки сохранены: лишний профиль не заберёт домен.
+
+        Пересечения доменов гейт запрещает и сам, но здесь проверяется другое —
+        что демонстрационный профиль не притворяется действующим сайтом.
+        """
+        живые = {"yummyani-site", "yummyani-org", "yummyani-biz",
+                 "lords-01", "lords-02", "lords-03"}
+        for path in sorted((ROOT / "config/site-profiles").glob("*.json")):
+            profile = json.loads(path.read_text(encoding="utf-8"))
+            if profile["site_id"] in живые:
+                continue
+            assert not (set(profile["domains"]) & self.LIVE_DOMAINS), (
+                f"{profile['site_id']} заявляет домен действующего сайта"
+            )
 
 
 class TestNewSiteType:

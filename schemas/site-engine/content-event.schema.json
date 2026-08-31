@@ -14,7 +14,7 @@
     "event_id": { "type": "string", "minLength": 8 },
     "event_type": {
       "enum": [
-        "TITLE_CREATED", "TITLE_UPDATED", "EPISODE_ADDED", "SEASON_ADDED",
+        "TITLE_CREATED", "TITLE_UPDATED", "EPISODE_ADDED", "SEASON_ADDED", "VOICEOVER_ADDED",
         "PLAYBACK_AVAILABLE", "PLAYBACK_UNAVAILABLE", "RATING_UPDATED",
         "SCHEDULE_UPDATED", "ANNOUNCEMENT_UPDATED", "SOURCE_ANOMALY"
       ]
