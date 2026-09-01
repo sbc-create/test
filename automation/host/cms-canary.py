@@ -74,6 +74,41 @@ def collectors(repo: Path, lords_root: Path, cache_root: Path) -> dict:
                 })
         return итог
 
+    def рейтинги() -> list[dict]:
+        """Оценки из сохранённого снимка каталога.
+
+        Источник настоящий и лежит рядом: поля ``imdb_rating`` и
+        ``kinopoisk_rating`` есть у записей каталожного кэша. Ничего не
+        вычисляется и не усредняется — показывается то, что пришло от
+        поставщика, вместе с признаком, что оценки нет.
+
+        Записи без обеих оценок пропускаются: строка «нет оценки» в списке
+        оценок не несёт сведений, а список раздувает.
+        """
+        итог: list[dict] = []
+        for файл in sorted(cache_root.glob("*.json"))[:1]:
+            try:
+                данные = json.loads(файл.read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                continue
+            for запись in (данные.get("items") or []):
+                imdb = запись.get("imdb_rating")
+                kp = запись.get("kinopoisk_rating")
+                if imdb in (None, "", 0) and kp in (None, "", 0):
+                    continue
+                итог.append({
+                    "id": запись.get("external_id", ""),
+                    "name": запись.get("name", ""),
+                    "imdb": imdb if imdb not in (None, "") else "—",
+                    "kinopoisk": kp if kp not in (None, "") else "—",
+                    "year": запись.get("year", ""),
+                    "provenance": "cdnvideohub",
+                    "site_id": файл.stem,
+                })
+                if len(итог) >= 400:
+                    break
+        return итог
+
     def источники() -> list[dict]:
         return [{"id": "cdnvideohub", "kind": "provider", "adapter": "cdnvideohub",
                  "sites": "yummy, lords", "direct_access_from_cms": "нет"}]
@@ -206,10 +241,22 @@ def collectors(repo: Path, lords_root: Path, cache_root: Path) -> dict:
         # Ниже — источники, которых в этом контуре нет. Отвечают 501, а не
         # пустым списком: пустой список неотличим от «данных нет» и скрывает
         # отсутствие источника.
+        "ratings": рейтинги,
+        # Ниже — источники, которых в этом контуре нет. Отвечают 501, а не
+        # пустым списком: пустой список неотличим от «данных нет» и скрывает
+        # отсутствие источника.
+        #
+        # `schedules` намеренно оставлен отключённым, хотя файл календаря на
+        # машине есть: в `config/editorial-calendar.json` все записи помечены
+        # `"synthetic": true`, и сам файл говорит «реальных записей нет».
+        # Подключить его значило бы вывести в CMS выдуманные даты.
+        #
+        # `seo-documents`: robots.txt и sitemap.xml отдаёт `serve.py` витрины, в
+        # каталоге релиза их нет. Читать их из CMS означало бы ходить по сети к
+        # боевым доменам на каждую отрисовку страницы — цена выше пользы.
         "audit-events": lambda: [],
         "schedules": lambda: [],
         "announcements": lambda: [],
-        "ratings": lambda: [],
         "seo-documents": lambda: [],
         "commands": lambda: [],
     }

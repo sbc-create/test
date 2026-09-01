@@ -7,6 +7,7 @@ import socket
 import threading
 import urllib.error
 import urllib.request
+from pathlib import Path
 
 import pytest
 
@@ -140,3 +141,62 @@ class TestБезопасность:
         документ = json.loads(тело)
         assert документ["openapi"].startswith("3.")
         assert "s1.example" not in тело
+
+
+class TestКоллекторРейтингов:
+    """Оценки берутся из снимка каталога, а не сочиняются.
+
+    Ресурс `ratings` до этого отвечал 501. Подключён к настоящему источнику:
+    поля `imdb_rating` и `kinopoisk_rating` каталожного кэша. Проверяется не
+    «коллектор что-то вернул», а что он не выдумывает и не прячет отсутствие
+    оценки за нулём.
+    """
+
+    @staticmethod
+    def _коллекторы(tmp_path):
+        import importlib.util
+
+        кэш = tmp_path / "cache"
+        кэш.mkdir()
+        (кэш / "lords-01.json").write_text(json.dumps({"items": [
+            {"external_id": "a", "name": "С обеими", "year": 1982,
+             "imdb_rating": 6.2, "kinopoisk_rating": 6.684},
+            {"external_id": "b", "name": "Только imdb", "year": 2026,
+             "imdb_rating": 6.3, "kinopoisk_rating": None},
+            {"external_id": "c", "name": "Без оценок", "year": 2026,
+             "imdb_rating": None, "kinopoisk_rating": None},
+            {"external_id": "d", "name": "Нули как отсутствие", "year": 2026,
+             "imdb_rating": 0, "kinopoisk_rating": 0},
+        ]}, ensure_ascii=False), encoding="utf-8")
+
+        путь = Path(__file__).resolve().parents[2] / "automation" / "host" / "cms-canary.py"
+        spec = importlib.util.spec_from_file_location("canary_под_тестом", путь)
+        модуль = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(модуль)
+        return модуль.collectors(tmp_path, tmp_path / "lords", кэш)
+
+    def test_записи_без_оценок_не_попадают_в_список(self, tmp_path):
+        строки = self._коллекторы(tmp_path)["ratings"]()
+        имена = [с["name"] for с in строки]
+        assert имена == ["С обеими", "Только imdb"], (
+            "запись без оценок и запись с нулями обязаны отсеиваться: "
+            "строка «нет оценки» в списке оценок сведений не несёт")
+
+    def test_отсутствующая_оценка_помечена_а_не_обнулена(self, tmp_path):
+        строки = self._коллекторы(tmp_path)["ratings"]()
+        только_imdb = next(с for с in строки if с["name"] == "Только imdb")
+        assert только_imdb["kinopoisk"] == "—", (
+            "нуль вместо отсутствующей оценки — выдуманное значение")
+        assert только_imdb["imdb"] == 6.3
+
+    def test_происхождение_проставлено(self, tmp_path):
+        строки = self._коллекторы(tmp_path)["ratings"]()
+        assert all(с["provenance"] == "cdnvideohub" for с in строки)
+        assert all(с["site_id"] == "lords-01" for с in строки)
+
+    def test_календарь_остаётся_отключённым(self, tmp_path):
+        """Синтетический источник не подключают: это выдуманные даты."""
+        строки = self._коллекторы(tmp_path)["schedules"]()
+        assert строки == [], (
+            "config/editorial-calendar.json помечен synthetic: подключение "
+            "вывело бы в CMS выдуманные даты")
