@@ -48,7 +48,8 @@
   "11_проверки": "DONE",
   "12_документация": "DONE",
   "13_три_timer_цикла": "BLOCKED_BY_SCHEDULE",
-  "14_sla_на_настоящем_событии": "PENDING_REAL_EVENT"
+  "14_sla_на_настоящем_событии": "PENDING_REAL_EVENT",
+  "15_yummy_авторизация": "DONE"
  },
  "blockers": [
   {
@@ -63,17 +64,6 @@
    "что": "настоящего события источника в окне не зафиксировано",
    "статус": "PENDING_REAL_EVENT",
    "что вместо": "обработка проверена на изолированной копии реальных данных"
-  },
-  {
-   "stage": "эксплуатация Yummy",
-   "что": "учётные данные CDNVideoHub для Yummy заменены 18:15:01 на недействующие (провайдер отвечает 401)",
-   "обнаружено": "сторожем: индексу 9297 с при пороге 1800 с (18:15); к 04:58 UTC 01.09 давность выросла до 38430 с — блокер усугубляется",
-   "почему витрины работают": "контейнеры стартовали в 16:36 и держат прежнее значение в памяти; сработал last-known-good",
-   "опасность": "любой перезапуск контейнера Yummy опустошит каталог",
-   "токен Lords": "отдельный файл, действует (200)",
-   "owner_action": "вернуть действующие учётные данные; до этого не перезапускать и не выкладывать Yummy",
-   "фоновая_синхронизация": "исправна: падает на 401 и не публикует пустой индекс (опубликован: false) — сработал порог MIN_SOURCE_RATIO",
-   "срок_свежести_02F": "нарушен для Yummy непрерывно, причина — учётные данные, а не код"
   }
  ],
  "measured": {
@@ -92,15 +82,19 @@
   "cms_sections": 10,
   "live_sites": "6/6",
   "player_gate": "30/30",
-  "api_sources_connected": 10,
-  "api_sources_not_implemented": 4,
+  "api_sources_connected": 11,
+  "api_sources_not_implemented": 3,
   "cms_timers_shown": 30,
   "full_suite": "3299 прошло, 3 пропущено, 0 упало (2026-09-01 05:06 UTC)",
   "cms_unauthenticated_paths_401": 5,
-  "cms_bind": "127.0.0.1:8710, снаружи соединение отвергнуто"
+  "cms_bind": "127.0.0.1:8710, снаружи соединение отвергнуто",
+  "player_freeze_gate": "30/30 (2026-09-01 05:48 UTC)",
+  "rbac_live": "403 без права, 409 на опасной команде у владельца, 202 при наличии права, 401 без ключа",
+  "yummy_freshness_after_restore": "286/267/250 с при пороге 900",
+  "orphan_processes": 0
  },
  "production_changed": false,
- "owner_actions": 3,
+ "owner_actions": 2,
  "lords_schedule": {
   "timer_period": "11h (OnUnitActiveSec, отсчёт от активации службы)",
   "cycle_duration_measured": [
@@ -117,7 +111,7 @@
   "conclusion": "три timer-цикла Lords за ночь недостижимы по арифметике расписания"
  },
  "install": {
-  "state": "запланирована на первое безопасное окно, ждёт автоматически",
+  "state": "ждёт окна; цикл идёт с 03:56:06, ожидаемое окончание 11:45–12:45 UTC",
   "script": "/home/claude/install-fast-path.sh (запущен 05:01:41 UTC)",
   "log": "/home/claude/work-night03/install-fast-path.log",
   "branch": "deploy/night-03-fast-path",
@@ -134,5 +128,20 @@
   ],
   "on_failure": "git checkout deploy/02b, запись «откат выполнен»",
   "expected_window": "около 11:45–14:56 UTC 2026-09-01"
+ },
+ "yummy_credentials": {
+  "state": "ЗАКРЫТО 2026-09-01 05:23 UTC",
+  "cause": "прогон `sudo pytest tests/unit` от root переписал боевые файлы маркерами набора тестов",
+  "evidence": [
+   "auth.log: root-сессия pytest 18:12:50 → 18:15:42, запись файлов в 18:15:01.677/.725 внутри неё",
+   "токен: 34 символа / 64 байта — ровно TOKEN_MARKER",
+   "publisher-id: 21 символ / 40 байт — ровно PUBLISHER_MARKER",
+   "Secret Hub, cron, контейнеры (rw=false) и оболочка root исключены проверкой"
+  ],
+  "restored_by": "factory secrets verify --portfolio yami (200) → factory secrets apply --portfolio yami",
+  "containers_restarted": false,
+  "proof": "контейнер синхронизации, стартовавший в 05:23:42 (до записи) — отказ; в 05:24:03 (после) — успех с первой попытки",
+  "fix": "заслон в tests/conftest.py: запись значения секрета вне временного каталога прогона отклоняется",
+  "operational_rule": "набор тестов не запускается от root"
  }
 }
