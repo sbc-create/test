@@ -25,12 +25,24 @@ total_broken=0
 total_flaky=0
 for i in 0 1 2; do
   mapfile -t slugs < <(sudo -n "$REPO/.venv/bin/python" -c "
-import json, sys
+import json, sys, yaml
 sys.path.insert(0, '$REPO')
 from factory.lords import live_catalog
+from factory.paths import PATHS
+
+# Типы берутся из пакета витрины, а не подразумеваются. Витрина Lords
+# отрисовывает movies, series, animation и collections; anime и dorama у неё
+# выключены — аниме живёт на порталах Yummy. Гейт, бравший произведения из
+# сырого кэша, набирал в выборку аниме, не находил их страниц и объявлял отказ
+# плеера там, где страницы и не должно быть. Измерено на lords-01: из 705
+# произведений без страницы 498 — аниме, остальные 207 — совпадения слагов.
+пакет = yaml.safe_load(PATHS.site_package('${sites[$i]}').read_text(encoding='utf-8'))
+разрешённые = {k for k, v in (пакет.get('content_types') or {}).items() if v}
 items = json.load(open('$CACHE/${sites[$i]}.json'))['items']
 catalog = live_catalog.catalog_from_live(items)
-print('\\n'.join(t.slug for t in catalog.titles if t.playback), end='')
+годные = [t for t in catalog.titles
+          if t.playback and getattr(t, 'content_type', None) in разрешённые]
+print('\\n'.join(t.slug for t in годные), end='')
 " 2>/dev/null | shuf -n "$PER_SITE")
 
   if [ "${#slugs[@]}" -eq 0 ]; then
