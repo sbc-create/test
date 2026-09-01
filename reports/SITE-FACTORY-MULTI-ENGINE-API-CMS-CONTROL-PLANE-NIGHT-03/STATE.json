@@ -1,105 +1,138 @@
 {
-  "task": "SITE-FACTORY-MULTI-ENGINE-API-CMS-CONTROL-PLANE-NIGHT-03",
-  "branch": "claude/site-factory-multi-engine-api-cms-control-plane-night-03",
-  "start_sha": "8b141883cd4dd803fcc7f881a362841b5a582d3f",
-  "repository": "/srv/site-factory/repo (worktree /home/claude/work-night03)",
-  "baseline": {
-    "yummy_revision": "93ba4d1554a620c58c76445079e75a2e35fb0a6b",
-    "yummy_digest": "sha256:e316345b7744c5eb82c41226e5881c0fb73ff725972b4e107d77729d35b836fd",
-    "lords_releases": {
-      "lords-01": "d853747e6413",
-      "lords-02": "b5ec4ad52f5f",
-      "lords-03": "d38878e79507"
-    },
-    "lords_repo": "deploy/02b ad6be19fbf42",
-    "six_sites_http": "6/6 = 200",
-    "rollback_images": [
-      "yummyani/web:rollback-6ae98f75 (67d8a92dc8d9)",
-      "yummyani/web:rollback-6fc4d3ed (da96069f923a)"
-    ],
-    "timers": [
-      "yummy-catalog-index.timer 5min",
-      "yummy-catalog-watchdog.timer 5min",
-      "yummy-episode-watcher.timer 5min",
-      "yummy-enrich.timer 10min",
-      "yummy-watchdog.timer 5min",
-      "lords-content-refresh.timer"
-    ]
+ "task": "SITE-FACTORY-MULTI-ENGINE-API-CMS-CONTROL-PLANE-NIGHT-03",
+ "branch": "claude/site-factory-multi-engine-api-cms-control-plane-night-03",
+ "start_sha": "8b141883cd4dd803fcc7f881a362841b5a582d3f",
+ "repository": "/srv/site-factory/repo (worktree /home/claude/work-night03)",
+ "baseline": {
+  "yummy_revision": "93ba4d1554a620c58c76445079e75a2e35fb0a6b",
+  "yummy_digest": "sha256:e316345b7744c5eb82c41226e5881c0fb73ff725972b4e107d77729d35b836fd",
+  "lords_releases": {
+   "lords-01": "d853747e6413",
+   "lords-02": "b5ec4ad52f5f",
+   "lords-03": "d38878e79507"
   },
-  "worktrees": {
-    "site_factory_night03": "claude/site-factory-multi-engine-api-cms-control-plane-night-03 @ 8b141883",
-    "lords_fast_path": "claude/lords-fast-path-02f @ 8b141883",
-    "site_factory_production": "deploy/02b @ ad6be19",
-    "yummy": "claude/site-engine-background-sync-image-cache-02f @ b6d6ee49",
-    "seo": "claude/seo-operator-live-11 @ 725f5a19"
-  },
-  "stages": {
-    "0_инвентаризация": "DONE",
-    "1_lords_fast_path": "DONE_IN_BRANCH_NOT_INSTALLED",
-    "2_архитектурный_аудит": "DONE",
-    "3_движки": "DONE",
-    "4_контракты": "DONE",
-    "5_api_v1": "DONE",
-    "6_командная_модель": "DONE",
-    "7_cms_canary": "DONE",
-    "8_шаблон_нового_сайта": "DONE",
-    "9_кэш": "DONE",
-    "10_уборка": "DONE",
-    "11_проверки": "DONE",
-    "12_документация": "DONE",
-    "13_три_timer_цикла": "BLOCKED_BY_SCHEDULE",
-    "14_sla_на_настоящем_событии": "PENDING_REAL_EVENT"
-  },
-  "blockers": [
-    {
-      "stage": "1_установка_быстрого_пути / 13_три_timer_цикла",
-      "что": "цикл lords-content-refresh идёт с 16:55:29 UTC, к 20:40 — более 3 ч 43 мин",
-      "почему мешает": "подмена работающего .sh ломает цикл; публикация — гонка за символьную ссылку",
-      "доказательство": "ActiveState=activating, SubState=start, процесс PID 681263 в cgroup службы",
-      "owner_action": "не требуется — установка безопасна и не требует решения"
-    },
-    {
-      "stage": "14_sla",
-      "что": "настоящего события источника в окне не зафиксировано",
-      "статус": "PENDING_REAL_EVENT",
-      "что вместо": "обработка проверена на изолированной копии реальных данных"
-    },
-    {
-      "stage": "эксплуатация Yummy",
-      "что": "учётные данные CDNVideoHub для Yummy заменены 18:15:01 на недействующие (провайдер отвечает 401)",
-      "обнаружено": "сторожем: индексу 9297 с при пороге 1800 с, три витрины",
-      "почему витрины работают": "контейнеры стартовали в 16:36 и держат прежнее значение в памяти; сработал last-known-good",
-      "опасность": "любой перезапуск контейнера Yummy опустошит каталог",
-      "токен Lords": "отдельный файл, действует (200)",
-      "owner_action": "вернуть действующие учётные данные; до этого не перезапускать и не выкладывать Yummy"
-    }
+  "lords_repo": "deploy/02b ad6be19fbf42",
+  "six_sites_http": "6/6 = 200",
+  "rollback_images": [
+   "yummyani/web:rollback-6ae98f75 (67d8a92dc8d9)",
+   "yummyani/web:rollback-6fc4d3ed (da96069f923a)"
   ],
-  "measured": {
-    "unchanged_cycle_rendered_pages": 0,
-    "one_title_change_rewritten_pages": 7,
-    "pages_in_release": 61378,
-    "unchanged_cycle_seconds": 53,
-    "one_title_change_seconds": 61,
-    "gate_seconds_with_enrichment": 5,
-    "new_tests": 69,
-    "existing_tests_passing": 2822,
-    "boundary_problems": 0,
-    "openapi_paths": 35,
-    "openapi_operations": 38,
-    "contracts_v1": 15,
-    "cms_sections": 10,
-    "live_sites": "6/6",
-    "player_gate": "30/30",
-    "api_sources_connected": 10,
-    "api_sources_not_implemented": 4,
-    "cms_timers_shown": 30
+  "timers": [
+   "yummy-catalog-index.timer 5min",
+   "yummy-catalog-watchdog.timer 5min",
+   "yummy-episode-watcher.timer 5min",
+   "yummy-enrich.timer 10min",
+   "yummy-watchdog.timer 5min",
+   "lords-content-refresh.timer"
+  ]
+ },
+ "worktrees": {
+  "site_factory_night03": "claude/site-factory-multi-engine-api-cms-control-plane-night-03 @ 8b141883",
+  "lords_fast_path": "claude/lords-fast-path-02f @ 8b141883",
+  "site_factory_production": "deploy/02b @ ad6be19",
+  "yummy": "claude/site-engine-background-sync-image-cache-02f @ b6d6ee49",
+  "seo": "claude/seo-operator-live-11 @ 725f5a19"
+ },
+ "stages": {
+  "0_инвентаризация": "DONE",
+  "1_lords_fast_path": "DONE_IN_BRANCH_NOT_INSTALLED",
+  "2_архитектурный_аудит": "DONE",
+  "3_движки": "DONE",
+  "4_контракты": "DONE",
+  "5_api_v1": "DONE",
+  "6_командная_модель": "DONE",
+  "7_cms_canary": "DONE",
+  "8_шаблон_нового_сайта": "DONE",
+  "9_кэш": "DONE",
+  "10_уборка": "DONE",
+  "11_проверки": "DONE",
+  "12_документация": "DONE",
+  "13_три_timer_цикла": "BLOCKED_BY_SCHEDULE",
+  "14_sla_на_настоящем_событии": "PENDING_REAL_EVENT"
+ },
+ "blockers": [
+  {
+   "stage": "1_установка_быстрого_пути / 13_три_timer_цикла",
+   "что": "цикл lords-content-refresh идёт с 16:55:29 UTC, к 20:40 — более 3 ч 43 мин",
+   "почему мешает": "подмена работающего .sh ломает цикл; публикация — гонка за символьную ссылку",
+   "доказательство": "ActiveState=activating, SubState=start, процесс PID 681263 в cgroup службы",
+   "owner_action": "не требуется — установка безопасна и не требует решения"
   },
-  "production_changed": false,
-  "owner_actions": 3,
-  "lords_schedule": {
-    "timer_period": "11h (OnUnitActiveSec)",
-    "cycle_duration_measured": "8h49m (05:55:29 → 14:44:25)",
-    "three_cycles_need": "более двух суток",
-    "conclusion": "три timer-цикла Lords за ночь недостижимы по арифметике расписания"
+  {
+   "stage": "14_sla",
+   "что": "настоящего события источника в окне не зафиксировано",
+   "статус": "PENDING_REAL_EVENT",
+   "что вместо": "обработка проверена на изолированной копии реальных данных"
+  },
+  {
+   "stage": "эксплуатация Yummy",
+   "что": "учётные данные CDNVideoHub для Yummy заменены 18:15:01 на недействующие (провайдер отвечает 401)",
+   "обнаружено": "сторожем: индексу 9297 с при пороге 1800 с (18:15); к 04:58 UTC 01.09 давность выросла до 38430 с — блокер усугубляется",
+   "почему витрины работают": "контейнеры стартовали в 16:36 и держат прежнее значение в памяти; сработал last-known-good",
+   "опасность": "любой перезапуск контейнера Yummy опустошит каталог",
+   "токен Lords": "отдельный файл, действует (200)",
+   "owner_action": "вернуть действующие учётные данные; до этого не перезапускать и не выкладывать Yummy",
+   "фоновая_синхронизация": "исправна: падает на 401 и не публикует пустой индекс (опубликован: false) — сработал порог MIN_SOURCE_RATIO",
+   "срок_свежести_02F": "нарушен для Yummy непрерывно, причина — учётные данные, а не код"
   }
+ ],
+ "measured": {
+  "unchanged_cycle_rendered_pages": 0,
+  "one_title_change_rewritten_pages": 7,
+  "pages_in_release": 61378,
+  "unchanged_cycle_seconds": 53,
+  "one_title_change_seconds": 61,
+  "gate_seconds_with_enrichment": 5,
+  "new_tests": 69,
+  "existing_tests_passing": 3299,
+  "boundary_problems": 0,
+  "openapi_paths": 35,
+  "openapi_operations": 38,
+  "contracts_v1": 15,
+  "cms_sections": 10,
+  "live_sites": "6/6",
+  "player_gate": "30/30",
+  "api_sources_connected": 10,
+  "api_sources_not_implemented": 4,
+  "cms_timers_shown": 30,
+  "full_suite": "3299 прошло, 3 пропущено, 0 упало (2026-09-01 05:06 UTC)",
+  "cms_unauthenticated_paths_401": 5,
+  "cms_bind": "127.0.0.1:8710, снаружи соединение отвергнуто"
+ },
+ "production_changed": false,
+ "owner_actions": 3,
+ "lords_schedule": {
+  "timer_period": "11h (OnUnitActiveSec, отсчёт от активации службы)",
+  "cycle_duration_measured": [
+   "8h49m (08-31 05:55:29 → 14:44:25)",
+   "7h49m (08-31 16:55:29 → 09-01 00:44)"
+  ],
+  "observed_starts": [
+   "2026-08-31 16:55:29",
+   "2026-09-01 03:56:06"
+  ],
+  "idle_window": "2–3 часа между концом цикла и следующим срабатыванием",
+  "first_window_missed": "00:44–03:56 UTC: ожидание писало в лог и ничего не предпринимало",
+  "three_cycles_need": "более полутора суток от установки",
+  "conclusion": "три timer-цикла Lords за ночь недостижимы по арифметике расписания"
+ },
+ "install": {
+  "state": "запланирована на первое безопасное окно, ждёт автоматически",
+  "script": "/home/claude/install-fast-path.sh (запущен 05:01:41 UTC)",
+  "log": "/home/claude/work-night03/install-fast-path.log",
+  "branch": "deploy/night-03-fast-path",
+  "sha": "788c1a79d51fbfa6b2b1c9d7f6981d047e3f2763",
+  "rollback_to": "deploy/02b ad6be19fbf42",
+  "checks_before_declaring_success": [
+   "SHA совпадает",
+   "bash -n конвейера",
+   "компиляция пяти модулей",
+   "импорт factory.lords.fast_path",
+   "20+12 проверок быстрого пути",
+   "три домена Lords 200",
+   "current и число релизов не изменились"
+  ],
+  "on_failure": "git checkout deploy/02b, запись «откат выполнен»",
+  "expected_window": "около 11:45–14:56 UTC 2026-09-01"
+ }
 }
