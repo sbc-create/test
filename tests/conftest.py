@@ -11,7 +11,6 @@ import os
 import shutil
 import signal
 import sys
-import tempfile
 import uuid
 from pathlib import Path
 

@@ -121,7 +121,8 @@ def collectors(repo: Path, lords_root: Path, cache_root: Path) -> dict:
                 ревизия = текущий.resolve().name
             except OSError:
                 ревизия = ""
-            релизы = sorted((каталог / "releases").glob("*")) if (каталог / "releases").is_dir() else []
+            корень_релизов = каталог / "releases"
+            релизы = sorted(корень_релизов.glob("*")) if корень_релизов.is_dir() else []
             итог.append({
                 "id": f"{каталог.name}:{ревизия}",
                 "site_id": каталог.name,
