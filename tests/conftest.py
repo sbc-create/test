@@ -5,6 +5,7 @@
 """
 from __future__ import annotations
 
+import builtins
 import copy
 import os
 import shutil
@@ -103,59 +104,69 @@ def stop_all_stands():
             pid_file.unlink(missing_ok=True)
 
 
-# --- Заслон: тесты не пишут в боевые каталоги секретов ------------------------
+# --- Аудитор: тесты не пишут в боевые каталоги ---------------------------------
 #
-# История отказа, ради которой этот заслон существует. 2026-08-31 в 18:15:01
-# прогон `sudo pytest tests/unit` от root переписал боевые файлы
-# /srv/sites/yummyani-staging/runtime/cdnvideohub/{api-token,publisher-id}
-# маркерами из набора тестов. Длины совпали до символа: в файле оказалось 34
-# символа (МАРКЕР-ТОКЕНА-НЕ-ДОЛЖЕН-ПОЯВЛЯТЬСЯ) и 21 (МАРКЕР-ПАБЛИШЕРА-ТОЖЕ).
-# Витрины продолжали работать только потому, что контейнеры держали прежнее
-# значение в памяти; фоновая синхронизация с этого момента получала от источника
-# 401, и каталог перестал обновляться на десять с половиной часов.
+# Запрет на запись значений секретов живёт в самой рабочей функции
+# (`factory/secret_hub/consumers._write_atomically`) — обойти его нельзя.
+# Здесь — более широкий вопрос: не пишет ли набор в боевые каталоги ЧЕМ-ЛИБО
+# ещё. Отказ 2026-08-31 показал, что «тест пишет в /srv» — не гипотеза.
 #
-# От не-root прогона это не защищало: каталог просто был закрыт на запись, и
-# отказ выглядел как случайность среды, а не как запрет. Заслон делает запрет
-# явным и не зависящим от того, кем запущен pytest.
-#
-# Проверяется не «настроен ли тест правильно», а физический путь, по которому
-# набор собирается писать значение секрета. Разрешён только временный каталог
-# прогона.
-@pytest.fixture(autouse=True)
-def _секреты_только_во_временный_каталог(monkeypatch, tmp_path_factory):
+# По умолчанию аудитор **отклоняет** такие записи. Переменная
+# `SECRET_WRITE_AUDIT=log` переводит его в наблюдение: попытки пишутся в файл из
+# `SECRET_WRITE_LOG` и пропускаются. Наблюдение нужно ровно один раз — чтобы
+# снять полный список нарушителей, не останавливаясь на первом.
+БОЕВЫЕ_КОРНИ = ("/srv", "/etc", "/var/lib", "/var/cache", "/run")
+
+#: Исключения — каталоги, которые боевыми не являются, хотя лежат под теми же
+#: корнями. Список намеренно короткий: каждая строка здесь ослабляет защиту.
+БОЕВЫЕ_ИСКЛЮЧЕНИЯ = ("/var/lib/pytest", "/run/user")
+
+
+def _боевой_путь(path) -> bool:
     try:
-        from factory.secret_hub import consumers as _consumers
-    except ImportError:  # набор может запускаться без этого модуля
-        yield
-        return
+        цель = os.path.realpath(str(path))
+    except (OSError, ValueError):
+        return True  # не смогли выяснить — считаем боевым
+    if any(цель == к or цель.startswith(к + os.sep) for к in БОЕВЫЕ_ИСКЛЮЧЕНИЯ):
+        return False
+    return any(цель == к or цель.startswith(к + os.sep) for к in БОЕВЫЕ_КОРНИ)
 
-    временные = tuple(
-        Path(p).resolve()
-        for p in (tempfile.gettempdir(), str(tmp_path_factory.getbasetemp()))
-    )
-    оригинал = _consumers._write_atomically
 
-    def под_временным(path: Path) -> bool:
-        return any(path == корень or корень in path.parents for корень in временные)
+@pytest.fixture(autouse=True)
+def _не_писать_в_боевые_каталоги(monkeypatch):
+    режим = os.environ.get("SECRET_WRITE_AUDIT", "block")
+    журнал = os.environ.get("SECRET_WRITE_LOG")
+    настоящий_open = builtins.open
 
-    def охрана(path, value, mode):
-        цель = Path(path).resolve()
-        if not под_временным(цель):
-            # Запись и в журнал, и в исключение. Тест, который ловит широкий
-            # Exception, проглотил бы одно исключение, и попытка осталась бы
-            # незамеченной — именно так она и осталась незамеченной в первый раз.
-            журнал = os.environ.get("SECRET_WRITE_LOG")
-            if журнал:
-                кто = os.environ.get("PYTEST_CURRENT_TEST", "?")
-                with open(журнал, "a", encoding="utf-8") as fh:
-                    fh.write(кто + "\t" + str(цель) + "\n")
+    def нарушение(путь, как):
+        кто = os.environ.get("PYTEST_CURRENT_TEST", "сбор")
+        if журнал:
+            with настоящий_open(журнал, "a", encoding="utf-8") as fh:
+                fh.write(f"{кто}\t{как}\t{путь}\n")
+        if режим != "log":
             raise AssertionError(
-                "тест попытался записать значение секрета в боевой путь "
-                f"{цель}. Разрешён только временный каталог прогона. "
-                "Подмените directory потребителя на tmp_path, как это сделано "
-                "в tests/unit/test_secret_hub_reconcile.py."
+                f"тест пытается писать в боевой путь {путь} ({как}). "
+                "Прогон не имеет права менять состояние машины: подмените путь "
+                "на tmp_path. Если запись действительно нужна для проверки "
+                "боевого состояния — она не относится к unit-набору."
             )
-        return оригинал(path, value, mode)
 
-    monkeypatch.setattr(_consumers, "_write_atomically", охрана)
+    def охрана_open(file, mode="r", *args, **kwargs):
+        if any(f in str(mode) for f in ("w", "a", "x", "+")) and _боевой_путь(file):
+            нарушение(file, f"open({mode})")
+        return настоящий_open(file, mode, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, "open", охрана_open)
+
+    for имя in ("write_text", "write_bytes"):
+        оригинал = getattr(Path, имя)
+
+        def сделать(оригинал=оригинал, имя=имя):
+            def обёртка(self, *a, **kw):
+                if _боевой_путь(self):
+                    нарушение(self, f"Path.{имя}")
+                return оригинал(self, *a, **kw)
+            return обёртка
+
+        monkeypatch.setattr(Path, имя, сделать())
     yield

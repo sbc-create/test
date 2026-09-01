@@ -35,7 +35,7 @@
  },
  "stages": {
   "0_инвентаризация": "DONE",
-  "1_lords_fast_path": "DONE_IN_BRANCH_NOT_INSTALLED",
+  "1_lords_fast_path": "УСТАНОВЛЕН В PRODUCTION 2026-09-01 13:27:53 UTC",
   "2_архитектурный_аудит": "DONE",
   "3_движки": "DONE",
   "4_контракты": "DONE",
@@ -47,7 +47,7 @@
   "10_уборка": "DONE",
   "11_проверки": "DONE",
   "12_документация": "DONE",
-  "13_три_timer_цикла": "BLOCKED_BY_SCHEDULE",
+  "13_три_timer_цикла": "PENDING: первый цикл 14:56 будет полным (снимка нет), третий — около 12:56 02.09",
   "14_sla_на_настоящем_событии": "PENDING_REAL_EVENT",
   "15_yummy_авторизация": "DONE"
  },
@@ -70,7 +70,7 @@
   "unchanged_cycle_rendered_pages": 0,
   "one_title_change_rewritten_pages": 7,
   "pages_in_release": 61378,
-  "unchanged_cycle_seconds": 53,
+  "unchanged_cycle_seconds": 47.25,
   "one_title_change_seconds": 61,
   "gate_seconds_with_enrichment": 5,
   "new_tests": 69,
@@ -88,13 +88,24 @@
   "full_suite": "3299 прошло, 3 пропущено, 0 упало (2026-09-01 05:06 UTC)",
   "cms_unauthenticated_paths_401": 5,
   "cms_bind": "127.0.0.1:8710, снаружи соединение отвергнуто",
-  "player_freeze_gate": "30/30 (2026-09-01 05:48 UTC)",
+  "player_freeze_gate": "29/30, 30/30, 28/30 — все промахи 404, страницы нет в релизе",
   "rbac_live": "403 без права, 409 на опасной команде у владельца, 202 при наличии права, 401 без ключа",
   "yummy_freshness_after_restore": "286/267/250 с при пороге 900",
-  "orphan_processes": 0
+  "orphan_processes": 0,
+  "unchanged_cycle_exit_code": 10,
+  "one_change_rewritten_pages": "6 из 9260",
+  "one_change_seconds": 64.3,
+  "release_lag_titles": {
+   "lords-01": 705,
+   "lords-02": 705,
+   "lords-03": 804
+  },
+  "layout_class_divergences": 0,
+  "disk_free_after_cleanup": "4.4 ГБ (94%)",
+  "timer": "active, enabled, следующее срабатывание 2026-09-01T14:56:06Z"
  },
  "production_changed": false,
- "owner_actions": 2,
+ "owner_actions": 3,
  "lords_schedule": {
   "timer_period": "11h (OnUnitActiveSec, отсчёт от активации службы)",
   "cycle_duration_measured": [
@@ -111,23 +122,15 @@
   "conclusion": "три timer-цикла Lords за ночь недостижимы по арифметике расписания"
  },
  "install": {
-  "state": "ждёт окна; цикл идёт с 03:56:06, ожидаемое окончание 11:45–12:45 UTC",
-  "script": "/home/claude/install-fast-path.sh (запущен 05:01:41 UTC)",
-  "log": "/home/claude/work-night03/install-fast-path.log",
+  "state": "ВЫПОЛНЕНА",
+  "installed_at": "2026-09-01T13:27:53Z",
   "branch": "deploy/night-03-fast-path",
-  "sha": "788c1a79d51fbfa6b2b1c9d7f6981d047e3f2763",
-  "rollback_to": "deploy/02b ad6be19fbf42",
-  "checks_before_declaring_success": [
-   "SHA совпадает",
-   "bash -n конвейера",
-   "компиляция пяти модулей",
-   "импорт factory.lords.fast_path",
-   "20+12 проверок быстрого пути",
-   "три домена Lords 200",
-   "current и число релизов не изменились"
-  ],
-  "on_failure": "git checkout deploy/02b, запись «откат выполнен»",
-  "expected_window": "около 11:45–14:56 UTC 2026-09-01"
+  "installed_sha": "788c1a79d51fbfa6b2b1c9d7f6981d047e3f2763",
+  "worktree_divergences": 0,
+  "first_attempt": "11:59:27 — отказ: ветка занята worktree /home/claude/work-deploy-fp; установщик ничего не изменил и вышел",
+  "partial_checkout": "fingerprint.py принадлежит root, каталог root:root 755 — файл восстановлен из HEAD, расхождений 0",
+  "tests_on_installed_code": "32 пройдено",
+  "rollback_rehearsed": "в обе стороны: deploy/02b ad6be19fbf42 ↔ 788c1a79, оба раза 0 расхождений, домены 200"
  },
  "yummy_credentials": {
   "state": "ЗАКРЫТО 2026-09-01 05:23 UTC",
