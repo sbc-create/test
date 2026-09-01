@@ -20,6 +20,9 @@ sites=(lords-01 lords-02 lords-03)
 
 total_ok=0
 total_bad=0
+total_absent=0
+total_broken=0
+total_flaky=0
 for i in 0 1 2; do
   mapfile -t slugs < <(sudo -n "$REPO/.venv/bin/python" -c "
 import json, sys
@@ -37,18 +40,73 @@ print('\\n'.join(t.slug for t in catalog.titles if t.playback), end='')
 
   hit=0
   miss=0
+  absent=0
+  broken=0
+  flaky=0
   for s in "${slugs[@]}"; do
-    if curl -sS --max-time 25 "https://${hosts[$i]}/title/$s/" | grep -q "<video-player"; then
+    # Ответ и тело берутся одним запросом: два запроса подряд к одному адресу
+    # могут застать разные релизы, и тогда код относится к одной странице, а
+    # разметка — к другой.
+    body=$(curl -sS --max-time 25 -w '\n%{http_code}' "https://${hosts[$i]}/title/$s/" 2>/dev/null)
+    curl_rc=$?
+    code=${body##*$'\n'}
+    if [ "$curl_rc" -ne 0 ]; then
+      # Обрыв на середине тела даёт код 200 при усечённом HTML: заголовки уже
+      # пришли, а разметка — нет, и страница выглядит как «без плеера».
+      # Проверено: страница, однажды объявленная отказом, отдала плеер 12 раз из
+      # 12 при повторе. Отказ связи — это невыполненная проверка, а не отказ
+      # витрины, и складывать их в один счётчик нельзя.
+      broken=$((broken + 1))
+      echo "      ПРОВЕРКА НЕ ВЫПОЛНЕНА (curl код $curl_rc): ${hosts[$i]}/title/$s/"
+    elif [ "$code" != "200" ]; then
+      # Страницы нет в опубликованном релизе. Это отставание релиза от каталога,
+      # а не отказ плеера, и смешивать их нельзя: гейт берёт произведения из
+      # НЫНЕШНЕГО каталога и ищет их в УЖЕ опубликованном релизе, который всегда
+      # старше. Раньше такой случай печатался как «БЕЗ ПЛЕЕРА при наличии
+      # потока» и выглядел поломкой витрины.
+      absent=$((absent + 1))
+      echo "      НЕТ СТРАНИЦЫ (HTTP $code, релиз старше каталога): ${hosts[$i]}/title/$s/"
+    elif printf '%s' "$body" | grep -q "<video-player"; then
       hit=$((hit + 1))
     else
-      miss=$((miss + 1))
-      echo "      БЕЗ ПЛЕЕРА при наличии потока: ${hosts[$i]}/title/$s/"
+      # Перепроверка перед объявлением отказа. Две страницы, объявленные
+      # отказом одиночным запросом, отдали плеер 12 раз из 12 при повторе —
+      # то есть одиночный запрос по живой витрине даёт ложные срабатывания.
+      # Гейт, который так делает, обесценивает себя: на исправной витрине он
+      # показывает 28-29 из 30, и на настоящую поломку никто не посмотрит.
+      sleep 2
+      retry=$(curl -sS --max-time 25 -w '\n%{http_code}' "https://${hosts[$i]}/title/$s/" 2>/dev/null)
+      retry_rc=$?
+      retry_code=${retry##*$'\n'}
+      if [ "$retry_rc" -eq 0 ] && [ "$retry_code" = "200" ] \
+         && printf '%s' "$retry" | grep -q "<video-player"; then
+        hit=$((hit + 1))
+        flaky=$((flaky + 1))
+      else
+        miss=$((miss + 1))
+        echo "      БЕЗ ПЛЕЕРА при наличии потока (подтверждено повтором): ${hosts[$i]}/title/$s/"
+      fi
     fi
   done
   total_ok=$((total_ok + hit))
   total_bad=$((total_bad + miss))
-  printf '  %-9s плеер найден %s из %s\n' "${sites[$i]}" "$hit" "${#slugs[@]}"
+  total_absent=$((total_absent + absent))
+  total_broken=$((total_broken + broken))
+  total_flaky=$((total_flaky + flaky))
+  printf '  %-9s плеер найден %s из %s (страниц нет: %s)\n' \
+    "${sites[$i]}" "$hit" "$((hit + miss))" "$absent"
 done
 
-echo "  ИТОГО: ${total_ok}/$((total_ok + total_bad))"
+echo "  ИТОГО: ${total_ok}/$((total_ok + total_bad)) страниц с потоком"
+if [ "$total_flaky" -gt 0 ]; then
+  echo "  ПОДТВЕРЖДЕНО ПОВТОРОМ: ${total_flaky} страниц отдали плеер со второго запроса"
+fi
+if [ "$total_broken" -gt 0 ]; then
+  echo "  НЕ ВЫПОЛНЕНО ПРОВЕРОК: ${total_broken} — связь оборвалась, витрина ни при чём"
+fi
+if [ "$total_absent" -gt 0 ]; then
+  echo "  ОТСТАВАНИЕ РЕЛИЗА: ${total_absent} произведений из выборки ещё не отрисованы"
+  echo "  Это не отказ плеера. Отдельный счётчик заведён потому, что раньше такие"
+  echo "  случаи попадали в отказы и давали 28-29 из 30 на исправной витрине."
+fi
 [ "$total_bad" -eq 0 ]
