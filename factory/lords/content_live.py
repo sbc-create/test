@@ -101,6 +101,20 @@ class LiveContract:
     title_mapping: dict[str, Any]
     aggregator_priority: tuple[str, ...]
     external_id_aliases: dict[str, list[str]]
+    #: Раздел `filters` контракта. До 2026-09-02 он не читался вовсе, и
+    #: объявленный там `updated_since` пролежал неиспользованным: каждый цикл
+    #: забирал все 53 180 записей за 10 мин 42 с ради полусотни изменившихся.
+    filters: dict[str, str] = field(default_factory=dict)
+
+    @property
+    def updated_since_param(self) -> str | None:
+        """Имя параметра «изменения с отметки времени», если контракт его знает.
+
+        Имя берётся только из контракта. Догадка здесь опаснее отсутствия:
+        неизвестный параметр источник молча игнорирует и отдаёт полный каталог,
+        то есть ошибка в имени выглядит как исправная работа.
+        """
+        return self.filters.get("updated_since") or None
 
     @classmethod
     def from_contract(cls, contract: Contract) -> LiveContract:
@@ -150,6 +164,11 @@ class LiveContract:
             external_id_aliases={
                 key: list(value)
                 for key, value in (mapping.get("external_ids") or {}).items()
+            },
+            filters={
+                str(key): str(value)
+                for key, value in (raw.get("filters") or {}).items()
+                if value
             },
         )
 
@@ -441,6 +460,14 @@ class CacheEntry:
     fetched_at_ms: int
     items: list[dict]
     source: str
+    #: Отметка для следующего инкрементального запроса. None у кэшей, записанных
+    #: до появления инкрементального режима, — такой кэш обновляется полностью
+    #: один раз и после этого отметку получает.
+    mark: str | None = None
+    #: Когда каталог в последний раз собирался полным обходом. Инкрементальный
+    #: ответ не сообщает об удалённых записях, поэтому полный обход обязан
+    #: повторяться, а не заменяться приращениями навсегда.
+    base_full_at_ms: int = 0
 
     def age_ms(self, now_ms: int) -> int:
         return max(0, now_ms - self.fetched_at_ms)
@@ -463,10 +490,13 @@ def read_cache(path: Path) -> CacheEntry | None:
     items = payload.get("items")
     if not isinstance(items, list):
         return None
+    mark = payload.get("mark")
     return CacheEntry(
         fetched_at_ms=int(payload.get("fetched_at_ms", 0)),
         items=[i for i in items if isinstance(i, dict)],
         source=str(payload.get("source", "unknown")),
+        mark=str(mark) if isinstance(mark, str) and mark.strip() else None,
+        base_full_at_ms=int(payload.get("base_full_at_ms", 0) or 0),
     )
 
 
@@ -487,8 +517,76 @@ def write_atomic(path: Path, payload: dict) -> None:
     os.replace(tmp, path)
 
 
-def write_cache(path: Path, items: list[dict], *, now_ms: int, source: str) -> None:
-    write_atomic(path, {"fetched_at_ms": now_ms, "source": source, "items": items})
+def write_cache(
+    path: Path,
+    items: list[dict],
+    *,
+    now_ms: int,
+    source: str,
+    mark: str | None = None,
+    base_full_at_ms: int | None = None,
+) -> None:
+    payload: dict = {"fetched_at_ms": now_ms, "source": source, "items": items}
+    if mark:
+        payload["mark"] = mark
+    payload["base_full_at_ms"] = int(base_full_at_ms if base_full_at_ms is not None else now_ms)
+    write_atomic(path, payload)
+
+
+# ---------------------------------------------------------------------------
+# Инкрементальное обновление
+# ---------------------------------------------------------------------------
+#: Насколько отметка сдвигается в прошлое относительно начала удачного обхода.
+#: Обход длится минуты, часы источника и наши могут расходиться, а запись,
+#: изменённая ровно во время обхода, обязана попасть в следующий ответ.
+#: Перекрытие даёт повторы, а повтор при слиянии по идентификатору безвреден;
+#: пропуск — нет.
+DEFAULT_MARK_OVERLAP_MS = 15 * 60 * 1000
+
+#: Как часто каталог обязан пересобираться полным обходом. Инкрементальный ответ
+#: сообщает только об изменившихся записях и ничего — об исчезнувших, поэтому
+#: без полного обхода удалённое осталось бы на витрине навсегда.
+DEFAULT_FULL_REFRESH_AFTER_MS = 6 * 60 * 60 * 1000
+
+
+def format_mark(now_ms: int, *, overlap_ms: int = DEFAULT_MARK_OVERLAP_MS) -> str:
+    """Отметка времени для `updated_since` в формате, который принял источник."""
+    seconds = max(0, (now_ms - max(0, overlap_ms))) // 1000
+    return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(seconds))
+
+
+def merge_items(base: list[dict], fresh: list[dict]) -> tuple[list[dict], int, int]:
+    """Слияние приращения с каталогом по `external_id`.
+
+    Возвращает каталог, число заменённых и число добавленных записей. Порядок
+    прежних записей сохраняется, новые дописываются в конец: перестановка
+    каталога сдвинула бы разбиение на страницы, а с ним и адреса.
+
+    Слияние, а не замена, — здесь главное. Инкрементальный ответ содержит
+    полсотни записей из пятидесяти трёх тысяч; замена оставила бы от каталога
+    полсотни.
+    """
+    index = {}
+    merged = list(base)
+    for position, item in enumerate(merged):
+        key = item.get("external_id")
+        if key:
+            index[key] = position
+    replaced = 0
+    added = 0
+    for item in fresh:
+        key = item.get("external_id")
+        if not key:
+            continue
+        position = index.get(key)
+        if position is None:
+            index[key] = len(merged)
+            merged.append(item)
+            added += 1
+        else:
+            merged[position] = item
+            replaced += 1
+    return merged, replaced, added
 
 
 # ---------------------------------------------------------------------------
@@ -505,6 +603,15 @@ class SyncOutcome:
     cache_age_ms: int | None = None
     requests_made: int = 0
     retries_made: int = 0
+    #: "full" или "incremental" — каким обходом получен этот каталог.
+    mode: str = "full"
+    #: Сколько записей приращение заменило и сколько добавило. Для полного
+    #: обхода не заполняется: там изменилось всё или ничего.
+    replaced: int = 0
+    added: int = 0
+    #: Почему выбран полный обход вместо инкрементального. Пусто, если выбора
+    #: не было или он не менялся.
+    mode_reason: str = ""
 
     def as_dict(self) -> dict:
         return {
@@ -518,7 +625,48 @@ class SyncOutcome:
             "cache_age_ms": self.cache_age_ms,
             "requests_made": self.requests_made,
             "retries_made": self.retries_made,
+            "mode": self.mode,
+            "replaced": self.replaced,
+            "added": self.added,
+            "mode_reason": self.mode_reason,
         }
+
+
+def _decide_mode(
+    *,
+    contract: LiveContract,
+    cached: CacheEntry | None,
+    incremental: bool,
+    now_ms: int,
+    full_refresh_after_ms: int,
+) -> tuple[str, str]:
+    """Полный обход или приращение. При любом сомнении — полный.
+
+    Полный обход дороже, но никогда не бывает неправ. Приращение допускается
+    только когда все условия выполнены разом, и каждый отказ называется вслух:
+    молчаливый откат к полному обходу выглядел бы как исправная работа.
+    """
+    if not incremental:
+        return "full", "инкрементальный режим не запрошен"
+    if not contract.updated_since_param:
+        return "full", "контракт не объявляет параметр updated_since"
+    if cached is None:
+        return "full", "кэша нет — приращение не к чему прибавлять"
+    if not cached.items:
+        return "full", "кэш пуст — приращение не к чему прибавлять"
+    if not cached.mark:
+        return "full", "в кэше нет отметки времени прошлой загрузки"
+    if cached.base_full_at_ms <= 0:
+        return "full", "неизвестно, когда каталог собирался полностью"
+    age = now_ms - cached.base_full_at_ms
+    if age >= full_refresh_after_ms:
+        return "full", (
+            f"с последнего полного обхода прошло {age // 60000} мин — "
+            "пора сверить исчезнувшие записи"
+        )
+    if age < 0:
+        return "full", "отметка полного обхода из будущего — доверять ей нельзя"
+    return "incremental", ""
 
 
 def fetch_catalog(
@@ -529,62 +677,125 @@ def fetch_catalog(
     now_ms: int,
     params: dict[str, str] | None = None,
     allow_stale: bool = True,
+    incremental: bool = False,
+    full_refresh_after_ms: int = DEFAULT_FULL_REFRESH_AFTER_MS,
+    mark_overlap_ms: int = DEFAULT_MARK_OVERLAP_MS,
 ) -> SyncOutcome:
     """Живой каталог: сеть, при отказе — последний удачный ответ.
 
     Отказ источника никогда не превращается в пустой каталог. Если сети нет, а
     кэш есть — отдаётся кэш со статусом STALE, и вызывающий обязан этот статус
     учесть. Если нет ни того, ни другого — BLOCKED_SOURCE и ноль изменений.
+
+    При `incremental=True` и выполненных условиях (см. `_decide_mode`) у
+    источника запрашиваются только записи, изменившиеся с отметки прошлой
+    удачной загрузки, и ответ **сливается** с кэшем. Разница в цене измерена
+    2026-09-02: полный обход — 53 180 записей за 10 мин 42 с, приращение за
+    сутки — 51 запись за 0,4 с.
+
+    Пустой ответ в двух режимах означает противоположное. В полном обходе пустой
+    каталог — отказ источника: каталог из пятидесяти тысяч записей не пустеет.
+    В приращении пустой ответ — самый обычный случай: с прошлого раза ничего не
+    менялось. Различать их обязательно, иначе тихий час источника либо сотрёт
+    витрину, либо навсегда останется «отказом».
     """
     cached = read_cache(cache_file)
-    try:
-        walk = walk_pages(fetcher, contract.url("titles"), params)
-    except SourceError as error:
+    mode, mode_reason = _decide_mode(
+        contract=contract,
+        cached=cached,
+        incremental=incremental,
+        now_ms=now_ms,
+        full_refresh_after_ms=full_refresh_after_ms,
+    )
+
+    # Отметка берётся до запроса: всё, что изменится во время обхода, обязано
+    # попасть в следующий ответ, а не потеряться между двумя загрузками.
+    next_mark = format_mark(now_ms, overlap_ms=mark_overlap_ms)
+
+    query = dict(params or {})
+    if mode == "incremental":
+        query[contract.updated_since_param] = cached.mark
+
+    def _fallback(reason: str, pages: int = 0, rejected: list[dict] | None = None,
+                  stopped_by: str = "") -> SyncOutcome:
         if cached and allow_stale:
             return SyncOutcome(
                 status=STALE,
-                reason=f"источник недоступен ({error}); отдан последний удачный ответ",
+                reason=f"{reason}; отдан последний удачный ответ",
                 items=cached.items,
+                pages=pages,
+                rejected=rejected or [],
+                stopped_by=stopped_by,
                 cache_age_ms=cached.age_ms(now_ms),
                 requests_made=fetcher.requests_made,
                 retries_made=fetcher.retries_made,
+                mode=mode,
+                mode_reason=mode_reason,
             )
         return SyncOutcome(
             status=BLOCKED_SOURCE,
-            reason=f"источник недоступен ({error}), кэша нет — каталог не трогаем",
+            reason=f"{reason}, кэша нет — каталог не трогаем",
             items=[],
+            pages=pages,
+            rejected=rejected or [],
+            stopped_by=stopped_by,
             requests_made=fetcher.requests_made,
             retries_made=fetcher.retries_made,
+            mode=mode,
+            mode_reason=mode_reason,
         )
+
+    try:
+        walk = walk_pages(fetcher, contract.url("titles"), query)
+    except SourceError as error:
+        return _fallback(f"источник недоступен ({error})")
 
     items, rejected = normalize_all(walk.items, contract)
 
-    if not items:
-        # Пустой ответ — это отказ источника, а не «каталог опустел».
-        if cached and allow_stale:
-            return SyncOutcome(
-                status=STALE,
-                reason="источник вернул пустой каталог; сохранён последний удачный ответ",
-                items=cached.items,
-                pages=walk.pages,
-                rejected=rejected,
-                stopped_by=walk.stopped_by,
-                cache_age_ms=cached.age_ms(now_ms),
-                requests_made=fetcher.requests_made,
-                retries_made=fetcher.retries_made,
+    if mode == "incremental":
+        # Здесь пустой ответ законен и означает «ничего не изменилось».
+        merged, replaced, added = merge_items(cached.items, items)
+        if len(merged) < len(cached.items):
+            # Недостижимо при слиянии по построению. Проверка стоит здесь
+            # потому, что цена ошибки — стёртый каталог, а не лишняя строка.
+            return _fallback(
+                "слияние уменьшило каталог — приращение отвергнуто",
+                pages=walk.pages, rejected=rejected, stopped_by=walk.stopped_by,
             )
+        write_cache(
+            cache_file, merged,
+            now_ms=now_ms, source="live-incremental",
+            mark=next_mark, base_full_at_ms=cached.base_full_at_ms,
+        )
         return SyncOutcome(
-            status=BLOCKED_SOURCE,
-            reason="источник вернул пустой каталог, кэша нет — публиковать нечего",
-            items=[],
+            status=FRESH,
+            reason=(
+                f"приращение с {cached.mark}: изменено {replaced}, добавлено {added}, "
+                f"каталог {len(merged)} записей за {walk.pages} страниц"
+            ),
+            items=merged,
             pages=walk.pages,
             rejected=rejected,
             stopped_by=walk.stopped_by,
+            cache_age_ms=0,
             requests_made=fetcher.requests_made,
             retries_made=fetcher.retries_made,
+            mode="incremental",
+            replaced=replaced,
+            added=added,
         )
 
-    write_cache(cache_file, items, now_ms=now_ms, source="live")
+    if not items:
+        # Пустой ответ — это отказ источника, а не «каталог опустел».
+        return _fallback(
+            "источник вернул пустой каталог",
+            pages=walk.pages, rejected=rejected, stopped_by=walk.stopped_by,
+        )
+
+    write_cache(
+        cache_file, items,
+        now_ms=now_ms, source="live", mark=next_mark, base_full_at_ms=now_ms,
+    )
     return SyncOutcome(
         status=FRESH,
         reason=f"получено {len(items)} записей за {walk.pages} страниц",
@@ -595,6 +806,8 @@ def fetch_catalog(
         cache_age_ms=0,
         requests_made=fetcher.requests_made,
         retries_made=fetcher.retries_made,
+        mode="full",
+        mode_reason=mode_reason,
     )
 
 

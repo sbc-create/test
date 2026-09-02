@@ -13,6 +13,7 @@
 
 from __future__ import annotations
 
+import time
 import json
 import urllib.request
 
@@ -469,3 +470,226 @@ class TestSecrets:
     def test_the_contract_forbids_the_token_in_the_browser(self):
         raw = content_api.load_contract().raw
         assert raw["auth"]["browser_forbidden"] is True
+
+
+# ---------------------------------------------------------------------------
+# Инкрементальное обновление каталога
+# ---------------------------------------------------------------------------
+class TestIncrementalRefresh:
+    """REQ-LORDS-LIVE-INC: приращение вместо полного обхода.
+
+    Полный обход стоит 53 180 записей и 10 мин 42 с (замер 2026-09-02) — из-за
+    него первая витрина Lords выходила за пятнадцатиминутный срок. Источник
+    умеет отдавать изменения с отметки времени, и контракт это объявляет.
+
+    Опасность здесь одна и она велика: приращение содержит полсотни записей.
+    Если его записать вместо каталога, а не слить с ним, от каталога останется
+    полсотни. Поэтому проверяется прежде всего слияние и отказ от приращения при
+    любом сомнении.
+    """
+
+    @staticmethod
+    def _seed(cache, contract, ids, *, now_ms, mark, base_full_at_ms=None):
+        content_live.write_cache(
+            cache,
+            [content_live.normalize_title(title(i), contract) for i in ids],
+            now_ms=now_ms,
+            source="live",
+            mark=mark,
+            base_full_at_ms=now_ms if base_full_at_ms is None else base_full_at_ms,
+        )
+
+    def test_the_contract_supplies_the_parameter_name(self, contract):
+        # Имя не угадывается: неизвестный параметр источник молча игнорирует и
+        # отдаёт полный каталог, то есть опечатка выглядит как исправная работа.
+        assert contract.updated_since_param == "updated_since"
+
+    def test_an_incremental_run_asks_only_for_changes_since_the_mark(self, contract, tmp_path):
+        cache = tmp_path / "c.json"
+        self._seed(cache, contract, ["a", "b"], now_ms=1_000_000, mark="2026-09-01T00:00:00Z")
+
+        api = FakeApi([page([title("c")])])
+        outcome = content_live.fetch_catalog(
+            contract=contract, fetcher=make_fetcher(api, contract),
+            cache_file=cache, now_ms=1_100_000, incremental=True,
+        )
+        assert outcome.mode == "incremental", outcome.mode_reason
+        assert "updated_since=2026-09-01T00%3A00%3A00Z" in api.calls[0], api.calls[0]
+
+    def test_the_increment_is_merged_into_the_catalogue_not_written_over_it(
+        self, contract, tmp_path
+    ):
+        # Главная проверка набора. Замена вместо слияния оставила бы одну запись
+        # вместо трёх — ровно то, чем инкрементальное обновление опасно.
+        cache = tmp_path / "c.json"
+        self._seed(cache, contract, ["a", "b"], now_ms=1_000_000, mark="2026-09-01T00:00:00Z")
+
+        api = FakeApi([page([title("c")])])
+        outcome = content_live.fetch_catalog(
+            contract=contract, fetcher=make_fetcher(api, contract),
+            cache_file=cache, now_ms=1_100_000, incremental=True,
+        )
+        assert outcome.status == content_live.FRESH
+        assert [i["external_id"] for i in outcome.items] == ["a", "b", "c"]
+        assert (outcome.replaced, outcome.added) == (0, 1)
+        assert [i["external_id"] for i in content_live.read_cache(cache).items] == ["a", "b", "c"]
+
+    def test_a_changed_record_replaces_its_previous_version_in_place(self, contract, tmp_path):
+        # Порядок обязан сохраниться: перестановка каталога сдвинула бы разбиение
+        # на страницы, а с ним и адреса — то есть SEO.
+        cache = tmp_path / "c.json"
+        self._seed(cache, contract, ["a", "b", "c"], now_ms=1_000_000, mark="2026-09-01T00:00:00Z")
+
+        api = FakeApi([page([title("b", name="Новое имя")])])
+        outcome = content_live.fetch_catalog(
+            contract=contract, fetcher=make_fetcher(api, contract),
+            cache_file=cache, now_ms=1_100_000, incremental=True,
+        )
+        assert [i["external_id"] for i in outcome.items] == ["a", "b", "c"]
+        assert outcome.items[1]["name"] == "Новое имя"
+        assert (outcome.replaced, outcome.added) == (1, 0)
+
+    def test_an_empty_increment_means_nothing_changed_and_keeps_the_catalogue(
+        self, contract, tmp_path
+    ):
+        # В полном обходе пустой ответ — отказ источника. В приращении это самый
+        # обычный случай, и путать их нельзя ни в ту, ни в другую сторону.
+        cache = tmp_path / "c.json"
+        self._seed(cache, contract, ["a", "b"], now_ms=1_000_000, mark="2026-09-01T00:00:00Z")
+
+        api = FakeApi([page([])])
+        outcome = content_live.fetch_catalog(
+            contract=contract, fetcher=make_fetcher(api, contract),
+            cache_file=cache, now_ms=1_100_000, incremental=True,
+        )
+        assert outcome.status == content_live.FRESH
+        assert [i["external_id"] for i in outcome.items] == ["a", "b"]
+        assert (outcome.replaced, outcome.added) == (0, 0)
+
+    def test_a_failing_source_during_an_increment_still_yields_last_known_good(
+        self, contract, tmp_path
+    ):
+        cache = tmp_path / "c.json"
+        self._seed(cache, contract, ["a", "b"], now_ms=1_000_000, mark="2026-09-01T00:00:00Z")
+
+        api = FakeApi([page([])], failures=[(-1, {})] * 20)
+        outcome = content_live.fetch_catalog(
+            contract=contract, fetcher=make_fetcher(api, contract),
+            cache_file=cache, now_ms=1_100_000, incremental=True,
+        )
+        assert outcome.status == content_live.STALE
+        assert [i["external_id"] for i in outcome.items] == ["a", "b"]
+
+    def test_the_next_mark_is_shifted_back_to_cover_the_walk(self, contract, tmp_path):
+        # Обход длится минуты, часы источника и наши расходятся. Запись,
+        # изменённая во время обхода, обязана попасть в следующий ответ:
+        # повтор при слиянии безвреден, пропуск — нет.
+        cache = tmp_path / "c.json"
+        self._seed(cache, contract, ["a"], now_ms=1_000_000, mark="2026-09-01T00:00:00Z")
+
+        api = FakeApi([page([title("b")])])
+        now = 1_800_000_000_000
+        content_live.fetch_catalog(
+            contract=contract, fetcher=make_fetcher(api, contract),
+            cache_file=cache, now_ms=now, incremental=True,
+        )
+        expected = content_live.format_mark(now)
+        assert content_live.read_cache(cache).mark == expected
+        assert expected < time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(now // 1000))
+
+    def test_a_full_run_records_the_mark_so_the_next_one_can_be_incremental(
+        self, contract, tmp_path
+    ):
+        cache = tmp_path / "c.json"
+        api = FakeApi([page([title("a")])])
+        content_live.fetch_catalog(
+            contract=contract, fetcher=make_fetcher(api, contract),
+            cache_file=cache, now_ms=1_800_000_000_000,
+        )
+        entry = content_live.read_cache(cache)
+        assert entry.mark == content_live.format_mark(1_800_000_000_000)
+        assert entry.base_full_at_ms == 1_800_000_000_000
+
+    @pytest.mark.parametrize(
+        "seed, reason_fragment",
+        [
+            (dict(ids=[], mark="2026-09-01T00:00:00Z"), "кэш пуст"),
+            (dict(ids=["a"], mark=None), "нет отметки"),
+        ],
+    )
+    def test_any_doubt_falls_back_to_a_full_walk(self, contract, tmp_path, seed, reason_fragment):
+        cache = tmp_path / "c.json"
+        self._seed(cache, contract, seed["ids"], now_ms=1_000_000, mark=seed["mark"])
+
+        api = FakeApi([page([title("z")])])
+        outcome = content_live.fetch_catalog(
+            contract=contract, fetcher=make_fetcher(api, contract),
+            cache_file=cache, now_ms=1_100_000, incremental=True,
+        )
+        assert outcome.mode == "full"
+        assert reason_fragment in outcome.mode_reason
+        assert "updated_since" not in api.calls[0]
+
+    def test_a_missing_cache_falls_back_to_a_full_walk(self, contract, tmp_path):
+        api = FakeApi([page([title("z")])])
+        outcome = content_live.fetch_catalog(
+            contract=contract, fetcher=make_fetcher(api, contract),
+            cache_file=tmp_path / "нет.json", now_ms=1_100_000, incremental=True,
+        )
+        assert outcome.mode == "full"
+        assert "кэша нет" in outcome.mode_reason
+
+    def test_the_catalogue_is_walked_in_full_again_after_the_reconcile_interval(
+        self, contract, tmp_path
+    ):
+        # Приращение ничего не сообщает об исчезнувших записях. Без повторного
+        # полного обхода удалённое осталось бы на витрине навсегда.
+        cache = tmp_path / "c.json"
+        self._seed(
+            cache, contract, ["a", "b"], now_ms=1_000_000, mark="2026-09-01T00:00:00Z",
+            base_full_at_ms=1_000_000,
+        )
+        api = FakeApi([page([title("z")])])
+        outcome = content_live.fetch_catalog(
+            contract=contract, fetcher=make_fetcher(api, contract),
+            cache_file=cache, now_ms=1_000_000 + content_live.DEFAULT_FULL_REFRESH_AFTER_MS,
+            incremental=True,
+        )
+        assert outcome.mode == "full"
+        assert "полного обхода" in outcome.mode_reason
+        # Исчезнувшие записи ушли — именно ради этого обход и повторяется.
+        assert [i["external_id"] for i in outcome.items] == ["z"]
+
+    def test_without_the_flag_nothing_changes(self, contract, tmp_path):
+        # Инкрементальный режим включается явно. Прежнее поведение — полный
+        # обход — остаётся тем, что происходит по умолчанию.
+        cache = tmp_path / "c.json"
+        self._seed(cache, contract, ["a", "b"], now_ms=1_000_000, mark="2026-09-01T00:00:00Z")
+
+        api = FakeApi([page([title("z")])])
+        outcome = content_live.fetch_catalog(
+            contract=contract, fetcher=make_fetcher(api, contract),
+            cache_file=cache, now_ms=1_100_000,
+        )
+        assert outcome.mode == "full"
+        assert [i["external_id"] for i in outcome.items] == ["z"]
+
+    def test_a_cache_written_before_this_change_is_read_without_a_mark(self, contract, tmp_path):
+        # Кэши, записанные прежним кодом, обязаны читаться: иначе первое же
+        # обновление после выкладки увидело бы «кэша нет» и потеряло каталог.
+        cache = tmp_path / "c.json"
+        cache.parent.mkdir(parents=True, exist_ok=True)
+        cache.write_text(json.dumps({
+            "fetched_at_ms": 1_000_000,
+            "source": "live",
+            "items": [content_live.normalize_title(title("a"), contract)],
+        }, ensure_ascii=False), encoding="utf-8")
+        entry = content_live.read_cache(cache)
+        assert entry is not None and entry.mark is None and entry.base_full_at_ms == 0
+
+    def test_merge_never_shrinks_the_catalogue(self, contract):
+        base = [content_live.normalize_title(title(i), contract) for i in ("a", "b", "c")]
+        merged, replaced, added = content_live.merge_items(base, [])
+        assert len(merged) == 3 and (replaced, added) == (0, 0)
+        merged, _, _ = content_live.merge_items(base, base[:1])
+        assert len(merged) == 3

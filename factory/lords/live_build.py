@@ -113,6 +113,7 @@ def build_live(
     contract: content_live.LiveContract | None = None,
     fetcher_factory=None,
     now_ms: int | None = None,
+    incremental: bool = False,
 ) -> dict:
     """Живой каталог для трёх сайтов и отчёт о нём.
 
@@ -126,6 +127,7 @@ def build_live(
 
     report: dict = {
         "generated_at_ms": stamp,
+        "incremental_requested": bool(incremental),
         "contract_ref": "knowledge/cdnvideohub/content-api.yaml",
         "publisher_id_present": True,
         "api_token_present": True,
@@ -144,6 +146,7 @@ def build_live(
             fetcher=fetcher,
             cache_file=cache_file,
             now_ms=stamp,
+            incremental=incremental,
         )
         sections = content_live.enabled_sections(outcome.items, live_contract)
         enabled = sorted(name for name, spec in sections.items() if spec.get("enabled"))

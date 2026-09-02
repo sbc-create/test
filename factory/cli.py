@@ -524,7 +524,7 @@ def cmd_lords_preview(args) -> int:
     return 0
 
 
-def cmd_lords_live(args) -> int:  # noqa: ARG001 — команда без аргументов
+def cmd_lords_live(args) -> int:
     """Собирает три сайта Lords на живом каталоге. Ничего не применяет.
 
     Значения читаются из каталога systemd credentials и в вывод не попадают:
@@ -541,12 +541,21 @@ def cmd_lords_live(args) -> int:  # noqa: ARG001 — команда без ар�
         print(f"BLOCKED_INPUT_CDNVIDEOHUB_CREDENTIALS: {error}")
         return 2
 
-    report = live_build.build_live(credentials=credentials)
+    report = live_build.build_live(
+        credentials=credentials, incremental=bool(getattr(args, "incremental", False)))
     target = live_build.write_report(report)
 
     for site_id, entry in sorted(report["sites"].items()):
         print(f"  {site_id}: {entry['status']}, записей {entry['item_count']}, "
               f"страниц {entry['pages']}, разделы {', '.join(entry['sections_enabled']) or '—'}")
+        # Режим виден всегда: молчаливый откат к полному обходу выглядел бы как
+        # исправная работа инкрементального, и разницу в десять минут никто бы
+        # не связал с причиной.
+        if entry.get("mode") == "incremental":
+            print(f"    приращение: изменено {entry.get('replaced', 0)}, "
+                  f"добавлено {entry.get('added', 0)}")
+        elif entry.get("mode_reason"):
+            print(f"    полный обход: {entry['mode_reason']}")
 
     problems = live_build.verify_report(report)
     if problems:
@@ -842,6 +851,12 @@ def main(argv: list[str] | None = None) -> int:
 
     p = sub.add_parser("lords-live",
                        help="Lords: собрать три сайта на живом каталоге CDNVideoHub")
+    p.add_argument(
+        "--incremental", action="store_true",
+        help=("запрашивать у источника только изменения с отметки прошлой удачной "
+              "загрузки и сливать их с каталогом. При любом сомнении — отметки нет, "
+              "кэш пуст, пора сверять исчезнувшие — выполняется полный обход"),
+    )
     p.set_defaults(func=cmd_lords_live)
 
     p = sub.add_parser("env-report", help="read-only отчёт об окружении")
