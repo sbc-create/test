@@ -51,7 +51,24 @@ CHANGED=0
 for site in "${SITES[@]}"; do
   runtime="/srv/lords/${site}"
   current="$(readlink -f "${runtime}/current" 2>/dev/null || true)"
-  staging="$(mktemp -d)"
+  # Каталог сборки обязан лежать на ТОМ ЖЕ монтировании, что и релизы.
+  #
+  # Быстрый путь связывает базовый релиз жёсткими ссылками, а ядро отказывает в
+  # ссылке между разными точками монтирования — даже когда файловая система под
+  # ними одна. У службы включены PrivateTmp и ProtectSystem=strict, поэтому
+  # внутри её пространства /tmp и /srv/lords — два разных монтирования одного
+  # устройства 252:1:
+  #
+  #   id=2288 dev=252:1 точка=/srv/lords
+  #   id=2291 dev=252:1 точка=/tmp      (источник: systemd-private-.../tmp)
+  #
+  # `mktemp -d` в /tmp давал `cp: cannot create hard link ...: Invalid
+  # cross-device link`, быстрый путь падал, и цикл каждый раз уходил в полную
+  # пересборку 53 151 страницы. Снаружи пространства службы этого не видно:
+  # на хосте ни /tmp, ни /srv/lords отдельными монтированиями не являются, и
+  # проверка, запущенная вручную, проходила успешно.
+  mkdir -p "${runtime}/.staging"
+  staging="$(mktemp -d -p "${runtime}/.staging")"
   # shellcheck disable=SC2064
   trap "rm -rf '${staging}'" EXIT
 
