@@ -51,7 +51,26 @@ CHANGED=0
 for site in "${SITES[@]}"; do
   runtime="/srv/lords/${site}"
   current="$(readlink -f "${runtime}/current" 2>/dev/null || true)"
-  staging="$(mktemp -d)"
+
+  # Каталог сборки создаётся РЯДОМ С РЕЛИЗАМИ, а не в /tmp.
+  #
+  # Причина — жёсткие ссылки. Быстрый путь строит staging связанной копией
+  # текущего релиза (`cp -al`), а ядро запрещает жёсткую ссылку через границу
+  # монтирования — даже когда по обе стороны одна и та же файловая система.
+  # У этой службы `PrivateTmp=yes`, поэтому её `/tmp` — отдельная точка
+  # монтирования того же `/dev/vda1`, что и `/srv/lords`:
+  #
+  #   2288 ... /srv/lords /srv/lords ... ext4 /dev/vda1
+  #   2291 ... /tmp/systemd-private-…/tmp /tmp ... ext4 /dev/vda1
+  #
+  # и `cp -al` отвечал «Invalid cross-device link» на каждом файле. Снаружи
+  # службы это не воспроизводится: там `/tmp` и `/srv` — одно монтирование,
+  # и все канареечные прогоны проходили.
+  #
+  # Побочная польза: публикация релиза становится переименованием внутри одного
+  # монтирования вместо копирования между ними.
+  rm -rf "${runtime}"/.staging.* 2>/dev/null || true
+  staging="$(mktemp -d "${runtime}/.staging.XXXXXX")"
   # shellcheck disable=SC2064
   trap "rm -rf '${staging}'" EXIT
 
