@@ -1,0 +1,42 @@
+{
+  "schema_version": "1",
+  "generated_from": "config/site-profiles/*.json",
+  "note": "Образец для тестов. Настоящая матрица порождается из профилей сайтов.",
+  "sites": [
+    {
+      "site_id": "example-site",
+      "site_type": "anime",
+      "domains": [
+        "example.test"
+      ],
+      "locale": "ru-RU",
+      "timezone": "Europe/Moscow",
+      "theme": {
+        "name": "example"
+      },
+      "directions": [
+        "anime"
+      ],
+      "providers": [
+        "cdnvideohub"
+      ],
+      "render_mode": "dynamic",
+      "modules": [
+        "catalog",
+        "player"
+      ],
+      "seo": {
+        "enabled": true,
+        "indexing_enabled": false,
+        "canonical_host": "example.test"
+      },
+      "normalized_content_source": {
+        "kind": "provider",
+        "ref": "cdnvideohub"
+      },
+      "keep_releases": 5,
+      "health_endpoint": "/api/health",
+      "coverage_endpoint": "/api/coverage"
+    }
+  ]
+}
