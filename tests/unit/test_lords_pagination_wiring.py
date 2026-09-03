@@ -21,9 +21,8 @@ SITE = "lords-01"
 
 
 def пакет(*, по_годам: bool | None = None) -> dict:
-    p = yaml.safe_load(PATHS.site_package(SITE).read_text(encoding="utf-8"))
+    p = copy.deepcopy(yaml.safe_load(PATHS.site_package(SITE).read_text(encoding="utf-8")))
     if по_годам is not None:
-        p = copy.deepcopy(p)
         p.setdefault("seo", {})["pagination_by_year"] = по_годам
     return p
 
@@ -39,8 +38,16 @@ def первая_страница_списка(site) -> str | None:
     return None
 
 
-def test_по_умолчанию_разбиение_прежнее():
-    обычный = render.render_site(пакет(), catalog=fx.build_catalog())
+def test_отсутствие_поля_означает_прежнее_разбиение():
+    """Пакет без поля обязан рендериться ровно как с явным `false`.
+
+    Проверка написана на пакете, где поля нет вовсе: после включения флага в
+    боевых пакетах сравнение «пакет как есть» против «явно выключено» стало
+    бы сравнением включённого с выключенным и перестало бы проверять умолчание.
+    """
+    без_поля = пакет()
+    без_поля.get("seo", {}).pop("pagination_by_year", None)
+    обычный = render.render_site(без_поля, catalog=fx.build_catalog())
     выключенный = render.render_site(пакет(по_годам=False), catalog=fx.build_catalog())
     assert sorted(обычный.pages) == sorted(выключенный.pages)
     for path in обычный.pages:
