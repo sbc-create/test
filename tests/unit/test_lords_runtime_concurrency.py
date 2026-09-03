@@ -204,6 +204,13 @@ class TestShutdown:
         )
         deadline = time.monotonic() + STARTUP_TIMEOUT
         while time.monotonic() < deadline:
+            # Мёртвый процесс нельзя ждать тридцать секунд: цикл получал бы
+            # «соединение отклонено» до самого срока и падал с «не поднялся»,
+            # ни словом не назвав причину. Фикстура `runtime` выше проверяет
+            # это с самого начала — здесь проверка отсутствовала, и полный
+            # прогон изредка падал сообщением, по которому нечего чинить.
+            if process.poll() is not None:
+                pytest.fail(f"рантайм умер на старте: {process.stderr.read().decode()}")
             try:
                 if _get(port, "/healthz", timeout=1.0)[0] == 200:
                     break
@@ -211,7 +218,7 @@ class TestShutdown:
                 time.sleep(0.1)
         else:
             process.kill()
-            pytest.fail("рантайм не поднялся")
+            pytest.fail("рантайм не ответил на /healthz за отведённое время")
 
         process.terminate()  # SIGTERM
         try:
