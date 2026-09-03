@@ -30,6 +30,11 @@ secrets/
 CLAUDE.local.md
 # Node / Python
 node_modules/
+# Без косой черты — иначе правило не покрывает символическую ссылку с тем же
+# именем. Такая ссылка однажды попала под наблюдение git и указывала на саму
+# себя: любой запуск npx в репозитории падал с «Too many levels of symbolic
+# links».
+node_modules
 __pycache__/
 *.pyc
 .pytest_cache/
