@@ -206,18 +206,18 @@ python3 -c 'import json,sys; json.load(open(sys.argv[1]))' "$RECORD" \
   || fail "запись о проверке $RECORD не разбирается как JSON"
 
 # ---------------------------------------------------------------------------
-# 5. Retention. Prunes only fully verified triples, never below the floor.
+# 5. Retention. Вынесено в `backup-retention.sh` целиком.
+#
+# Правило удержания должно быть проверяемо на подставном каталоге: внутри этого
+# скрипта до него полторы минуты rsync по живому хосту, и до 2026-09-03 его не
+# проверял никто. Дефект, который там жил, стоил суток без подтверждённого
+# бэкапа: удалялись только полные тройки, а архив упавшего прогона не имел
+# записи о проверке и не попадал в список удаления никогда.
+# См. tests/unit/test_backup_retention_prunes_orphan_archives.py.
 # ---------------------------------------------------------------------------
-mapfile -t VERIFIED < <(find "$BACKUP_DIR" -maxdepth 1 -name 'host-*.verified.json' | sort)
-TOTAL=${#VERIFIED[@]}
-if [ "$TOTAL" -gt "$KEEP" ] && [ "$TOTAL" -gt "$KEEP_FLOOR" ]; then
-  DROP=$(( TOTAL - KEEP ))
-  [ $(( TOTAL - DROP )) -lt $KEEP_FLOOR ] && DROP=$(( TOTAL - KEEP_FLOOR ))
-  for (( i = 0; i < DROP; i++ )); do
-    base="$(basename "${VERIFIED[$i]}" .verified.json)"
-    rm -f "$BACKUP_DIR/$base.tar.gz" "${VERIFIED[$i]}"
-    echo "retention: удалён $base"
-  done
-fi
+SITE_FACTORY_BACKUP_KEEP="$KEEP" \
+SITE_FACTORY_BACKUP_KEEP_FLOOR="$KEEP_FLOOR" \
+  bash "$(dirname "$0")/backup-retention.sh" "$BACKUP_DIR" \
+  || echo "retention: удержание отработало с ошибкой, архивы оставлены как есть" >&2
 
 echo "OK: $ARCHIVE ($FILE_COUNT файлов) — восстановление подтверждено, запись $RECORD"
