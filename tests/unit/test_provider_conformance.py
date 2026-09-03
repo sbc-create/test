@@ -34,11 +34,11 @@ def kinds(findings) -> set[str]:
     return {f.kind for f in findings}
 
 
-def test_declared_endpoint_returning_404_is_reported() -> None:
+def test_declared_endpoint_returning_404_is_reported_as_mismatch() -> None:
     """Реальный случай: /api/v1/ingestion/status объявлен и отвечает 404."""
     doc = schema(["/api/v1/health", "/api/v1/ingestion/status"], security=True)
     found = check_provider(doc, responder({"/api/v1/health": 200, "/api/v1/ingestion/status": 404}))
-    assert "MISSING" in kinds(found)
+    assert "MISMATCH" in kinds(found)
     assert any("ingestion" in f.path for f in found)
 
 
@@ -95,4 +95,4 @@ def test_access_denied_still_means_the_route_exists() -> None:
     """403 — это «нельзя», а не «нет»: маршрут объявлен не зря."""
     doc = schema(["/api/v1/sites"], security=True)
     found = check_provider(doc, responder({"/api/v1/sites": 403}))
-    assert "MISSING" not in kinds(found)
+    assert "MISMATCH" not in kinds(found)
