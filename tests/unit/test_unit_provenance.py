@@ -18,6 +18,7 @@ unit'ов предупреждает об этом словами — «служ
 
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -99,7 +100,65 @@ def test_missing_path_is_named_not_silently_ignored(tmp_path: Path) -> None:
 
 
 def test_arguments_without_any_path_do_not_claim_safety(tmp_path: Path) -> None:
-    """Пустая проверка не должна выглядеть как пройденная проверка."""
+    """Пустая проверка не должна выглядеть как пройденная проверка.
+
+    Прежде тест утверждал ровно обратное тому, что обещает его имя: код 0 —
+    это и есть код пройденной проверки. Имя заявляло свойство, а проверка
+    закрепляла его нарушение, и дефект дожил до вызова на настоящем юните.
+    """
     result = run("--only", "flags")
-    assert result.returncode == 0
-    assert "проверять нечего" in result.stderr
+    assert result.returncode == 64
+    assert "проверка не выполнена" in result.stderr
+
+
+def run_with_path(extra_bin: Path, *args: str) -> subprocess.CompletedProcess[str]:
+    env = dict(os.environ)
+    env["PATH"] = f"{extra_bin}:{env['PATH']}"
+    return subprocess.run(
+        ["bash", str(SCRIPT), *args],
+        capture_output=True,
+        text=True,
+        timeout=60,
+        env=env,
+    )
+
+
+def fake_systemctl(tmp_path: Path, unit: str, exec_start: str) -> Path:
+    """systemctl, отдающий заданный ExecStart на `systemctl cat <unit>`."""
+    binn = tmp_path / "bin"
+    binn.mkdir(exist_ok=True)
+    sc = binn / "systemctl"
+    sc.write_text(
+        "#!/usr/bin/env bash\n"
+        'if [ "$1" = "cat" ] && [ "$2" = "%s" ]; then\n'
+        '  echo "[Service]"\n'
+        '  echo "ExecStart=%s"\n'
+        "  exit 0\n"
+        "fi\n"
+        "exit 1\n" % (unit, exec_start),
+        encoding="utf-8",
+    )
+    sc.chmod(0o755)
+    return binn
+
+
+def test_unit_name_is_resolved_not_treated_as_a_non_path(tmp_path: Path) -> None:
+    """Вызов с именем юнита — самый естественный, и он обязан работать.
+
+    Пока принималась только строка ExecStart, такой вызов не падал, а отвечал
+    «проверять нечего» с кодом 0. Поймано 2026-09-04 на
+    site-factory-backup.service, который исполняется из /srv/site-factory/repo.
+    """
+    script = make_worktree(tmp_path, "repo", branch="deploy/day05")
+    binn = fake_systemctl(tmp_path, "demo.service", str(script))
+    result = run_with_path(binn, "demo.service")
+    assert result.returncode == 1
+    assert "ИЗ ДЕРЕВА" in result.stdout
+    assert "deploy/day05" in result.stdout
+
+
+def test_unknown_unit_is_an_error_not_a_clean_result(tmp_path: Path) -> None:
+    binn = fake_systemctl(tmp_path, "demo.service", "/bin/true")
+    result = run_with_path(binn, "нет-такого.service")
+    assert result.returncode == 65
+    assert "НЕТ ЮНИТА" in result.stderr
