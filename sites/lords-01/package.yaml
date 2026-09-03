@@ -106,6 +106,10 @@ metadata:
 seo:
   indexability_matrix_ref: knowledge/SEO_INDEXABILITY_MATRIX.yaml
   items_per_page: 24
+  # Состав страницы определяется блоком года, а не сплошным срезом:
+  # одна добавленная запись перестаёт переписывать 87 % сайта.
+  # Договор и цена перехода — adr/0007-pagination-by-year-blocks.md.
+  pagination_by_year: true
   url_templates:
     category: /{category_slug}/
     title: /title/{title_slug}/
