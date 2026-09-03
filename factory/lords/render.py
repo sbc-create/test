@@ -23,7 +23,8 @@ import html
 import json
 import math
 import re
-from dataclasses import dataclass, field
+from collections.abc import Callable
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 
 from factory.analytics import client_codegen as analytics_codegen
@@ -1856,6 +1857,7 @@ def render_site(
     environ: dict | None = None,
     publisher_id: str | None = None,
     only_title_slugs: frozenset[str] | None = None,
+    sink: Callable[[Page], None] | None = None,
 ) -> RenderedSite:
     """Полный сайт одного пакета: страницы, ассеты и отчёт о сборке.
 
@@ -1898,6 +1900,23 @@ def render_site(
                         brand=ctx["brand"], plan=site_plan)
 
     def add(page: Page) -> None:
+        # Потоковая отдача вместо накопления.
+        #
+        # `RenderedSite.pages` хранит тело каждой страницы, а их 9721 на
+        # витрину: замер 3 сентября — 1791 МБ на один рендер при 3671 МБ
+        # доступных на хосте, из которых почти три гигабайта уже в swap.
+        # Поэтому три витрины нельзя собирать одновременно, и третья выходила
+        # за пятнадцатиминутный срок.
+        #
+        # Когда вызывающий передал `sink`, страница уходит ему сразу, а в
+        # словаре остаётся запись без тела: пути, признак индексируемости, тип
+        # и статус по-прежнему видны всем, кому нужен состав сайта.
+        #
+        # Без `sink` поведение прежнее — тела остаются на месте, и ни сервер
+        # разработки, ни отпечаток предпросмотра, ни отчёты ничего не теряют.
+        if sink is not None:
+            sink(page)
+            page = replace(page, body="", raw=None)
         site.pages[page.path] = page
 
     def texts_of(section: str) -> dict:

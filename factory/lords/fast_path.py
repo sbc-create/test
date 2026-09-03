@@ -153,6 +153,7 @@ def render_from_cache(
     cache_root: str | Path | None = None,
     var_root: str | Path | None = None,
     only_title_slugs: frozenset[str] | None = None,
+    sink=None,
 ):
     """Собирает сайт в памяти из сохранённого каталога. К провайдеру не ходит.
 
@@ -175,6 +176,7 @@ def render_from_cache(
         environ={},
         publisher_id=live_site.publisher_id_for(site_id),
         only_title_slugs=only_title_slugs,
+        sink=sink,
     )
     return site, seconds_catalog, time.monotonic() - started
 
@@ -218,6 +220,17 @@ def diff_against(site, base: Path, *, partial: bool = False) -> tuple[dict[str, 
     return to_write, added, removed
 
 
+def _removed_relatives(base: Path, present: set[str]) -> list[str]:
+    """Страницы, которые есть в релизе и не появились в новой сборке."""
+    if not base.exists():
+        return []
+    return [
+        str(existing.relative_to(base))
+        for existing in base.rglob("*.html")
+        if str(existing.relative_to(base)) not in present and str(existing.relative_to(base)) != "404.html"
+    ]
+
+
 def apply(
     site_id: str,
     *,
@@ -228,6 +241,7 @@ def apply(
     only_title_slugs: frozenset[str] | None = None,
     remove_relatives: tuple[str, ...] = (),
     write: bool = True,
+    stream: bool = False,
 ) -> FastPathResult:
     """Быстрый путь целиком: собрать, сличить, переписать различающееся.
 
@@ -236,6 +250,48 @@ def apply(
     вызов равносилен сухому прогону.
     """
     base = Path(base)
+    partial = only_title_slugs is not None
+
+    if stream:
+        # Сличение по ходу сборки, а не после неё.
+        #
+        # Прежде рендер складывал тела всех 9721 страницы в словарь, и только
+        # потом они сличались с релизом: 1791 МБ на витрину при 3671 МБ
+        # доступных. Здесь страница сравнивается сразу и тут же забывается;
+        # в памяти остаются только различающиеся — их 811 из 9721 на обычном
+        # обновлении.
+        to_write: dict[str, str] = {}
+        added: list[str] = []
+        present: set[str] = set()
+
+        def сличить(page) -> None:
+            relative = _relative_for(page.path)
+            present.add(relative)
+            payload = page.payload
+            existing = base / relative
+            if not existing.exists():
+                added.append(relative)
+                to_write[relative] = payload.decode("utf-8", errors="replace")
+                return
+            if _digest(existing.read_bytes()) != _digest(payload):
+                to_write[relative] = payload.decode("utf-8", errors="replace")
+
+        started = time.monotonic()
+        site, seconds_catalog, seconds_render = render_from_cache(
+            site_id, cache_root=cache_root, var_root=var_root,
+            only_title_slugs=only_title_slugs, sink=сличить,
+        )
+        removed = [] if partial else _removed_relatives(base, present)
+        seconds_diff = time.monotonic() - started - seconds_catalog - seconds_render
+        if partial and remove_relatives:
+            removed = list(remove_relatives)
+        return _finish(
+            site_id=site_id, site=site, base=base, target=target,
+            to_write=to_write, added=added, removed=removed,
+            seconds_catalog=seconds_catalog, seconds_render=seconds_render,
+            seconds_diff=max(0.0, seconds_diff), write=write,
+        )
+
     site, seconds_catalog, seconds_render = render_from_cache(
         site_id, cache_root=cache_root, var_root=var_root, only_title_slugs=only_title_slugs
     )
@@ -248,6 +304,24 @@ def apply(
         removed = list(remove_relatives)
     seconds_diff = time.monotonic() - started
 
+    return _finish(
+        site_id=site_id, site=site, base=base, target=target,
+        to_write=to_write, added=added, removed=removed,
+        seconds_catalog=seconds_catalog, seconds_render=seconds_render,
+        seconds_diff=seconds_diff, write=write,
+    )
+
+
+def _finish(
+    *, site_id, site, base, target, to_write, added, removed,
+    seconds_catalog, seconds_render, seconds_diff, write,
+) -> FastPathResult:
+    """Общий хвост обоих путей: отчёт, а при изменениях — запись релиза.
+
+    Вынесен, чтобы потоковое и обычное сличение расходились только в том, где
+    считается разница, и совпадали во всём остальном. Разошедшиеся хвосты — это
+    два места, где надо чинить одну ошибку.
+    """
     result = FastPathResult(
         site_id=site_id,
         pages_total=len(site.pages),
