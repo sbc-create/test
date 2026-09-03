@@ -1,0 +1,12 @@
+[Unit]
+Description=YummyAnime: ежедневная резервная копия баз витрин
+
+[Timer]
+# Ночью и не в ноль минут: в ноль стартует слишком многое сразу, а копия
+# конкурирует за диск с host-бэкапом, который идёт в 03:20.
+OnCalendar=*-*-* 02:37:00
+Persistent=true
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target
