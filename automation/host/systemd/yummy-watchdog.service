@@ -1,0 +1,12 @@
+[Unit]
+Description=YummyAnime: сторож загрузчика — свежесть, замки, отставание обхода
+Documentation=file:///srv/site-factory/repo/automation/host/yummy-content-run.sh
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/yummy-content-run.sh scripts/watchdog-run.mjs
+User=root
+Nice=10
+TimeoutStartSec=300
