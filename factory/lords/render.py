@@ -582,17 +582,28 @@ def _options(pairs, name: str) -> str:
     return f'<option value="">{escape(name)}</option>{body}'
 
 
-def _facets(catalog: fx.Catalog, kinds, *, show_type: bool, row: bool = False) -> str:
+def _facets(catalog: fx.Catalog, kinds, *, show_type: bool, row: bool = False,
+            with_counts: bool = True) -> str:
     """Панель фильтров и сортировки. Работает поверх встроенного набора данных.
 
     `row` включает раскладку в строку — она нужна там, где фасеты стоят над
     списком: пять полей в колонку отодвигают первую карточку за сгиб, и раздел
     выглядит пустым, хотя в нём полсотни записей.
+
+    `with_counts=False` убирает числа из подписей фильтров. Числа считаются по
+    всему разделу, поэтому одна добавленная запись меняла подпись `2026 (1842)`
+    на `2026 (1843)` — и меняла её на **каждой** странице раздела. Измерено
+    2026-09-03: после перехода на разбиение по годам одна запись всё равно
+    перерисовывала 9266 страниц из 9717, и дифф показал, что расходятся ровно
+    эти счётчики. Числа остаются там, где они полезны и где страница и так
+    меняется от любой правки, — на первой странице раздела.
     """
     types = [(k, TYPE_LABELS[k]) for k in kinds if catalog.of_type(k)]
-    genres = [(slug, f"{label} ({count})") for slug, label, count in catalog.genres(kinds)]
-    years = [(str(y), f"{y} ({c})") for y, c in catalog.years(kinds)]
-    countries = [(slug, f"{label} ({count})") for slug, label, count in catalog.countries(kinds)]
+    подпись = (lambda label, count: f"{label} ({count})") if with_counts else (
+        lambda label, count: str(label))
+    genres = [(slug, подпись(label, count)) for slug, label, count in catalog.genres(kinds)]
+    years = [(str(y), подпись(y, c)) for y, c in catalog.years(kinds)]
+    countries = [(slug, подпись(label, count)) for slug, label, count in catalog.countries(kinds)]
 
     type_block = ""
     if show_type and len(types) > 1:
@@ -718,8 +729,16 @@ def _listing_pages(
     pages_count = len(страницы)
     out = []
     position = ctx["facet_position"]
+    # Два варианта панели: с числами для первой страницы раздела и без чисел
+    # для остальных. Числа считаются по всему разделу и потому связывают все
+    # страницы между собой — с ними инкрементальная публикация невозможна.
     facets = (
         _facets(catalog, kinds, show_type=show_type, row=position != "sidebar")
+        if (show_facets and items) else ""
+    )
+    facets_deep = (
+        _facets(catalog, kinds, show_type=show_type, row=position != "sidebar",
+                with_counts=False)
         if (show_facets and items) else ""
     )
 
@@ -731,16 +750,19 @@ def _listing_pages(
         desc = description if number == 1 else f"{description} Страница {number}."
         lede = f'<p class="lede">{escape(intro)}</p>' if intro and number == 1 else ""
         grid = _grid(chunk) + _pagination(base, number, pages_count)
-        body_top = (
-            f'<h1>{escape(heading)}</h1>{lede}'
-            f'<p class="count">Записей в разделе: {len(items)}.</p>{extra_top}'
-        )
-        if not facets:
+        # Общее число записей — та же связность: оно меняется от любой правки
+        # каталога и стоит на каждой странице. Остаётся на первой, где читатель
+        # его и ищет.
+        счётчик = (f'<p class="count">Записей в разделе: {len(items)}.</p>'
+                   if number == 1 else "")
+        body_top = f'<h1>{escape(heading)}</h1>{lede}{счётчик}{extra_top}'
+        панель = facets if number == 1 else facets_deep
+        if not панель:
             inner = body_top + grid
         elif position == "sidebar":
-            inner = body_top + f'<div class="listing">{facets}<div>{grid}</div></div>'
+            inner = body_top + f'<div class="listing">{панель}<div>{grid}</div></div>'
         else:  # top / hero / none — фасеты стоят над списком
-            inner = body_top + facets + grid
+            inner = body_top + панель + grid
         inner += _dataset(items)
 
         page_trail = trail if number == 1 else trail + ((f"Страница {number}", ""),)
