@@ -18,32 +18,51 @@
 #   $1 — размер собранного staging
 #   $2 — свободно на файловой системе, где лежит рабочий каталог (архив + распаковка)
 #   $3 — свободно на файловой системе каталога бэкапов
+#   $4 — 1, если оба каталога на ОДНОЙ файловой системе (иначе 0)
 #
-# Требуется на рабочей ФС: архив (сверху ограничен размером staging, сжатие
-# не может его увеличить) плюс распакованная копия (равна staging) плюс запас.
-# Требуется на ФС бэкапов: итоговый архив плюс запас.
+# Про четвёртый аргумент. Первая версия проверки сравнивала два требования с
+# двумя запасами независимо — и на этом хосте была бы бесполезна ровно там, где
+# нужна: `/tmp` и `/srv/backups` лежат на одном `/`, свободное место у них общее.
+# Две проверки по 7.2 GB и 3.6 GB порознь проходят при 8.1 GB свободного, а
+# вместе требуют 10.8 GB, которых нет. Когда файловая система одна, требования
+# складываются и сравниваются с одним и тем же свободным местом.
 set -uo pipefail
 
 STAGE_KB="${1:?нужен размер staging в КБ}"
 WORK_AVAIL_KB="${2:?нужно свободное место рабочей ФС в КБ}"
 BACKUP_AVAIL_KB="${3:?нужно свободное место ФС бэкапов в КБ}"
+SAME_FS="${4:-0}"
 MARGIN_PCT="${SITE_FACTORY_BACKUP_SPACE_MARGIN_PCT:-20}"
 
-margin() { echo $(( $1 * MARGIN_PCT / 100 )); }
+with_margin() { echo $(( $1 + $1 * MARGIN_PCT / 100 )); }
 
-WORK_NEED_KB=$(( STAGE_KB * 2 + $(margin $(( STAGE_KB * 2 ))) ))
-BACKUP_NEED_KB=$(( STAGE_KB + $(margin "$STAGE_KB") ))
+# Архив сверху ограничен размером staging: сжатие не может его увеличить.
+WORK_NEED_KB="$(with_margin $(( STAGE_KB * 2 )))"   # архив + распакованная копия
+BACKUP_NEED_KB="$(with_margin "$STAGE_KB")"          # итоговый архив
 
 human() { awk -v kb="$1" 'BEGIN{printf "%.1f GB", kb/1048576}'; }
 
 FAIL=0
-if [ "$WORK_AVAIL_KB" -lt "$WORK_NEED_KB" ]; then
-  echo "недостаточно места для доказательства восстановления: рабочей ФС нужно $(human "$WORK_NEED_KB") (архив + распакованная копия + запас ${MARGIN_PCT}%), свободно $(human "$WORK_AVAIL_KB"); staging $(human "$STAGE_KB")" >&2
-  FAIL=1
-fi
-if [ "$BACKUP_AVAIL_KB" -lt "$BACKUP_NEED_KB" ]; then
-  echo "недостаточно места под архив: каталогу бэкапов нужно $(human "$BACKUP_NEED_KB") (архив + запас ${MARGIN_PCT}%), свободно $(human "$BACKUP_AVAIL_KB")" >&2
-  FAIL=1
+if [ "$SAME_FS" = "1" ]; then
+  TOTAL_NEED_KB=$(( WORK_NEED_KB + BACKUP_NEED_KB ))
+  if [ "$WORK_AVAIL_KB" -lt "$TOTAL_NEED_KB" ]; then
+    echo "недостаточно места: рабочий каталог и каталог бэкапов на одной файловой системе, им вместе нужно $(human "$TOTAL_NEED_KB") (архив + распакованная копия для доказательства восстановления + итоговый архив + запас ${MARGIN_PCT}%), свободно $(human "$WORK_AVAIL_KB"); staging $(human "$STAGE_KB")" >&2
+    FAIL=1
+  fi
+else
+  if [ "$WORK_AVAIL_KB" -lt "$WORK_NEED_KB" ]; then
+    echo "недостаточно места для доказательства восстановления: рабочей ФС нужно $(human "$WORK_NEED_KB") (архив + распакованная копия + запас ${MARGIN_PCT}%), свободно $(human "$WORK_AVAIL_KB"); staging $(human "$STAGE_KB")" >&2
+    FAIL=1
+  fi
+  if [ "$BACKUP_AVAIL_KB" -lt "$BACKUP_NEED_KB" ]; then
+    echo "недостаточно места под архив: каталогу бэкапов нужно $(human "$BACKUP_NEED_KB") (архив + запас ${MARGIN_PCT}%), свободно $(human "$BACKUP_AVAIL_KB")" >&2
+    FAIL=1
+  fi
 fi
 [ "$FAIL" -eq 0 ] || exit 1
-echo "место проверено: рабочей ФС нужно $(human "$WORK_NEED_KB") при $(human "$WORK_AVAIL_KB"), каталогу бэкапов $(human "$BACKUP_NEED_KB") при $(human "$BACKUP_AVAIL_KB")"
+
+if [ "$SAME_FS" = "1" ]; then
+  echo "место проверено: одна ФС, нужно $(human $(( WORK_NEED_KB + BACKUP_NEED_KB ))) при $(human "$WORK_AVAIL_KB") свободных"
+else
+  echo "место проверено: рабочей ФС нужно $(human "$WORK_NEED_KB") при $(human "$WORK_AVAIL_KB"), каталогу бэкапов $(human "$BACKUP_NEED_KB") при $(human "$BACKUP_AVAIL_KB")"
+fi

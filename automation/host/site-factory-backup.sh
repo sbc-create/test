@@ -154,8 +154,15 @@ fi
 STAGE_KB="$(du -sk "$STAGE" | awk '{print $1}')"
 WORK_AVAIL_KB="$(df -Pk "$WORK" | awk 'NR==2{print $4}')"
 BACKUP_AVAIL_KB="$(df -Pk "$BACKUP_DIR" | awk 'NR==2{print $4}')"
+# Одна ли под ними файловая система. На этом хосте — да: `/tmp` и `/srv/backups`
+# лежат на одном `/`, и свободное место у них общее. Проверять два требования
+# порознь означало бы разрешить раскладку, которой на самом деле не хватает.
+SAME_FS=0
+if [ "$(stat -c %d "$WORK" 2>/dev/null)" = "$(stat -c %d "$BACKUP_DIR" 2>/dev/null)" ]; then
+  SAME_FS=1
+fi
 bash "$(dirname "$0")/backup-space-precheck.sh" \
-     "$STAGE_KB" "$WORK_AVAIL_KB" "$BACKUP_AVAIL_KB" \
+     "$STAGE_KB" "$WORK_AVAIL_KB" "$BACKUP_AVAIL_KB" "$SAME_FS" \
   || fail "упаковка не начиналась: места не хватает уже сейчас, предыдущий подтверждённый бэкап цел"
 
 # ---------------------------------------------------------------------------

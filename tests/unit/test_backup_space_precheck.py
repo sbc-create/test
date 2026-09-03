@@ -29,12 +29,12 @@ SCRIPT = REPO / "automation" / "host" / "backup-space-precheck.sh"
 GB = 1024 * 1024  # килобайт в гигабайте
 
 
-def check(stage_kb: int, work_avail_kb: int, backup_avail_kb: int, **env: str):
+def check(stage_kb: int, work_avail_kb: int, backup_avail_kb: int, same_fs: int = 0, **env: str):
     assert SCRIPT.exists(), f"нет скрипта проверки места: {SCRIPT}"
     import os
 
     return subprocess.run(
-        ["bash", str(SCRIPT), str(stage_kb), str(work_avail_kb), str(backup_avail_kb)],
+        ["bash", str(SCRIPT), str(stage_kb), str(work_avail_kb), str(backup_avail_kb), str(same_fs)],
         capture_output=True,
         text=True,
         env={**os.environ, **env},
@@ -89,3 +89,28 @@ def test_failure_message_names_what_is_missing_and_how_much() -> None:
     assert result.returncode == 1
     for expected in ("GB", "staging", "свободно"):
         assert expected in result.stderr, f"в сообщении нет {expected}: {result.stderr}"
+
+
+def test_one_filesystem_sums_both_requirements() -> None:
+    """Общая ФС: требования складываются, а не проверяются порознь.
+
+    Первая версия этой проверки сравнивала два требования с двумя запасами
+    независимо и на этом хосте была бы бесполезна ровно там, где нужна:
+    `/tmp` и `/srv/backups` лежат на одном `/`, свободное место у них общее.
+    Порознь 7.2 GB и 3.6 GB проходят при 8.1 GB свободного — а вместе требуют
+    10.8 GB, которых нет. Тест закрепляет именно это различие.
+    """
+    stage, avail = 3 * GB, int(8.1 * GB)
+
+    apart = check(stage, avail, avail, same_fs=0)
+    assert apart.returncode == 0, "порознь эта раскладка обязана проходить — иначе тест ничего не различает"
+
+    together = check(stage, avail, avail, same_fs=1)
+    assert together.returncode == 1, "на одной ФС та же раскладка обязана быть отклонена"
+    assert "одной файловой системе" in together.stderr
+
+
+def test_one_filesystem_passes_when_there_is_genuinely_room() -> None:
+    """Складывание требований не должно запрещать заведомо достаточный диск."""
+    result = check(1 * GB, 20 * GB, 20 * GB, same_fs=1)
+    assert result.returncode == 0, result.stderr
