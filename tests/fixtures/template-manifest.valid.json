@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "family": "lords",
+  "profile": "lords-shelf",
+  "label": "Lords Shelf",
+  "purpose": "Проверочный шаблон: полка ранжировщика, сетка последних добавлений и плашки жанров.",
+  "owns_title_page": false,
+  "owns": [],
+  "theme": {
+    "name": "lords_dark",
+    "tokens": {
+      "bg": "#111111",
+      "surface": "#1c1c1c",
+      "surface_alt": "#252525",
+      "text": "#e6e6e6",
+      "muted": "#9a9a9a",
+      "accent": "#79c142",
+      "accent_text": "#0d0d0d",
+      "border": "#333333",
+      "radius": "4px",
+      "container": "1240px",
+      "heading_font": "'Open Sans', 'Segoe UI', Roboto, Arial, sans-serif"
+    }
+  },
+  "layout": {
+    "density": "comfortable",
+    "hero": "catalog",
+    "card_ratio": "2 / 3",
+    "columns": { "mobile": 2, "tablet": 4, "desktop": 6 },
+    "facet_position": "sidebar",
+    "home_blocks": ["hero_search", "top_carousel", "latest_grid", "genre_chips"],
+    "carousel_heading": "Свежее",
+    "show_calendar": false,
+    "show_collection_cards": false
+  },
+  "sections": {
+    "home": {
+      "title": "Каталог фильмов и сериалов",
+      "h1": "Смотреть фильмы и сериалы",
+      "description": "Главная страница каталога: свежие поступления и переход к фильтрам.",
+      "intro": ""
+    },
+    "search": {
+      "title": "Поиск по каталогу",
+      "h1": "Поиск",
+      "description": "Поиск по названиям каталога. Страница закрыта от индексации.",
+      "intro": ""
+    }
+  }
+}

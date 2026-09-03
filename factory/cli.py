@@ -458,6 +458,53 @@ def cmd_db(args) -> int:
     return EXIT_OK
 
 
+def cmd_template_check(args) -> int:
+    """Проверка шаблонов направления по контракту.
+
+    Без `--manifest` проверяются все шаблоны в blueprints/lords/profiles/ и
+    правила между ними: один владелец на раздел, один владелец страниц
+    произведений, совпадение реестра блоков с рендерером.
+    """
+    from factory.templates import contract
+
+    if getattr(args, "manifest", None):
+        manifest = contract.load_manifest(Path(args.manifest))
+        problems = contract.validate_manifest(manifest, where=str(args.manifest))
+    else:
+        problems = contract.validate_repository()
+    _print({"problems": [str(p) for p in problems]}, args.json)
+    if not args.json:
+        for problem in problems:
+            print(f"  - {problem}")
+        print("шаблоны приняты" if not problems else f"претензий: {len(problems)}")
+    return EXIT_OK if not problems else EXIT_FAILED
+
+
+def cmd_template_new(args) -> int:
+    """Новый шаблон из манифеста. Ingestion, API и служебная логика не копируются."""
+    import yaml
+
+    from factory.templates import contract
+    from factory.templates import scaffold as scaffold_mod
+
+    if getattr(args, "example", False):
+        print(yaml.safe_dump(scaffold_mod.example_manifest(args.example),
+                             allow_unicode=True, sort_keys=False))
+        return EXIT_OK
+    if not getattr(args, "manifest", None):
+        print("нужен --manifest или --example <имя>", file=sys.stderr)
+        return EXIT_FAILED
+    manifest = contract.load_manifest(Path(args.manifest))
+    result = scaffold_mod.scaffold(manifest, force=args.force, dry_run=args.dry_run)
+    _print(result.as_dict(), args.json)
+    if not args.json:
+        for problem in result.problems:
+            print(f"  - {problem}")
+        for changed, action in result.changes:
+            print(f"  {'будет изменён' if args.dry_run else 'изменён'} {changed}: {action}")
+    return EXIT_OK if result.ok else EXIT_FAILED
+
+
 def cmd_blueprint(args) -> int:
     status = blueprint.check(args.blueprint)
     _print(status.as_dict(), args.json)
@@ -846,6 +893,19 @@ def main(argv: list[str] | None = None) -> int:
 
     analytics_cli.register(sub)
     secret_hub_cli.register(sub)
+
+    p = sub.add_parser("template-check",
+                       help="Lords: проверка шаблонов по контракту (schemas/template-manifest.schema.json)")
+    p.add_argument("--manifest", help="один манифест; без него — все шаблоны направления")
+    p.set_defaults(func=cmd_template_check)
+
+    p = sub.add_parser("template-new", help="Lords: новый шаблон из манифеста")
+    p.add_argument("--manifest", help="путь к манифесту (YAML или JSON)")
+    p.add_argument("--example", nargs="?", const="lords-example",
+                   help="напечатать заготовку манифеста и выйти")
+    p.add_argument("--force", action="store_true", help="перезаписать существующий шаблон")
+    p.add_argument("--dry-run", action="store_true", help="показать правки, ничего не записывая")
+    p.set_defaults(func=cmd_template_new)
 
     p = sub.add_parser("lords-plan", help="Lords: dry-run плана сайтов и ворот дублей")
     p.add_argument("--site", help="только один сайт направления")

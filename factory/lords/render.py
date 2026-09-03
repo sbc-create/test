@@ -844,6 +844,22 @@ def _watchable_first(titles, limit: int) -> list:
     return (watchable + rest)[:limit]
 
 
+def _mark(block: str, html: str) -> str:
+    """Помечает фрагмент главной именем блока из манифеста шаблона.
+
+    До этой метки состав главной нельзя было проверить снаружи: контракт
+    называет блоки именами, а в разметке они различались только заголовком —
+    «Жанры», «Годы выпуска», «Страны» — и два блока с одинаковым заголовком
+    было не отличить друг от друга вовсе. Атрибут добавляется в первый тег
+    фрагмента, ничего в нём не меняя и ни на что не влияя, кроме проверок.
+    """
+    if not html:
+        return html
+    positions = [pos for pos in (html.find(" "), html.find(">")) if pos > 0]
+    at = min(positions)
+    return f'{html[:at]} data-block="{escape(block)}"{html[at:]}'
+
+
 def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
     text = ctx["texts"].get("home") or {}
     blocks = ctx["home_blocks"]
@@ -856,29 +872,34 @@ def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
     hero_body += f'<p class="lede">{escape(text.get("intro", ""))}</p>'
     if "hero_search" in blocks:
         hero_body += (
-            '<form class="header-search" role="search" action="/search/" method="get">'
+            '<form class="header-search" data-block="hero_search" role="search"'
+            ' action="/search/" method="get">'
             '<label class="visually-hidden" for="hero-q">Поиск по каталогу</label>'
             '<input id="hero-q" name="q" type="search" placeholder="Название из каталога">'
             "<button type=\"submit\">Найти</button></form>"
         )
     if "hero_facets" in blocks:
-        hero_body += _chips([
+        hero_body += _mark("hero_facets", _chips([
             (label, f"/genres/{slug}/", count) for slug, label, count in catalog.genres(kinds)[:8]
-        ])
-    parts.append(f'<section class="hero hero--{escape(hero_kind)}">{hero_body}</section>')
+        ]))
+    parts.append(_mark(
+        "hero", f'<section class="hero hero--{escape(hero_kind)}">{hero_body}</section>'))
+
+    def add(block: str, html: str) -> None:
+        parts.append(_mark(block, html))
 
     for block in blocks:
         if block == "top_carousel":
             # Полка собирается ранжировщиком из записей каталога: правила
             # допуска и разнообразия живут в одном месте и одинаковы для всех
             # доменов. Вручную сюда ничего не подставляется.
-            parts.append(_carousel(
+            add(block, _carousel(
                 ctx,
                 recommend_mod.carousel_shelf(
                     catalog.of_types(kinds), domain=ctx.get("domain") or None),
                 ctx.get("carousel_heading") or "Новинки"))
         elif block == "latest_grid":
-            parts.append(
+            add(block,
                 '<section class="section"><div class="section__head">'
                 "<h2>Последние добавления</h2>"
                 f'<a class="section__more" href="{escape(ctx["catalog_path"])}">Весь каталог</a>'
@@ -891,45 +912,45 @@ def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
                     continue
                 href = ctx["type_paths"].get(kind)
                 more = f'<a class="section__more" href="{escape(href)}">Все</a>' if href else ""
-                parts.append(
+                add(block,
                     '<section class="section"><div class="section__head">'
                     f"<h2>{escape(TYPE_SECTION_LABELS.get(kind, TYPE_LABELS[kind]))}</h2>{more}</div>"
                     + _grid(row) + "</section>"
                 )
         elif block == "top_rated":
-            parts.append(_top_rated(ctx, pool))
+            add(block, _top_rated(ctx, pool))
         elif block == "genre_chips":
-            parts.append(
+            add(block,
                 '<section class="section"><h2>Жанры</h2>'
                 + _chips([(label, f"/genres/{slug}/", count)
                           for slug, label, count in catalog.genres(kinds)])
                 + "</section>"
             )
         elif block == "year_grid":
-            parts.append(
+            add(block,
                 '<section class="section"><h2>Годы выпуска</h2>'
                 + _chips([(str(year), f"/years/{year}/", count)
                           for year, count in catalog.years(kinds)])
                 + "</section>"
             )
         elif block == "country_grid":
-            parts.append(
+            add(block,
                 '<section class="section"><h2>Страны</h2>'
                 + _chips([(label, f"/countries/{slug}/", count)
                           for slug, label, count in catalog.countries(kinds)])
                 + "</section>"
             )
         elif block == "calendar" and ctx["show_calendar"]:
-            parts.append(_calendar(catalog, kinds))
+            add(block, _calendar(catalog, kinds))
         elif block == "fresh_episodes":
             episodic = [t for t in _sorted(pool) if t.episodic][:ctx["row_items"]]
             if episodic:
-                parts.append(
+                add(block,
                     '<section class="section"><div class="section__head">'
                     "<h2>Продолжающиеся истории</h2></div>" + _grid(episodic) + "</section>"
                 )
         elif block == "collection_cards" and ctx["show_collection_cards"]:
-            parts.append(_collection_cards(ctx, catalog))
+            add(block, _collection_cards(ctx, catalog))
         elif block == "editor_note":
             # Оговорка про тестовый каталог верна только для стенда. На живом
             # каталоге она сообщала посетителю, что за записями не стоят
@@ -943,7 +964,7 @@ def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
                 "Подборки собраны по формальным признакам каталога — году, типу, "
                 "длительности и числу сезонов. Состав обновляется вместе с каталогом."
             )
-            parts.append(
+            add(block,
                 '<section class="section"><h2>Как собран список</h2>'
                 f'<p class="lede">{escape(note)}</p></section>'
             )

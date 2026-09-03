@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "profile": "lords-broken",
+  "label": "Lords Broken",
+  "purpose": "Шаблон, объявляющий блок, которого рендерер не рисует, и токен, который CSS не читает.",
+  "owns_title_page": false,
+  "owns": [],
+  "theme": {
+    "name": "lords_dark",
+    "tokens": {
+      "bg": "#111111",
+      "shadow": "rgba(0, 0, 0, .4)"
+    }
+  },
+  "layout": {
+    "density": "cozy",
+    "hero": "catalog",
+    "card_ratio": "2 / 3",
+    "columns": { "mobile": 2, "tablet": 4, "desktop": 6 },
+    "facet_position": "sidebar",
+    "home_blocks": ["hero_timeline", "latest_grid"]
+  },
+  "sections": {
+    "home": {
+      "title": "Главная",
+      "h1": "Главная",
+      "description": "Описание главной страницы витрины."
+    }
+  }
+}
