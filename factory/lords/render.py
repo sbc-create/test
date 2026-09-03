@@ -323,12 +323,32 @@ def _header(ctx: dict, meta: Meta) -> str:
         '<nav class="site-nav" id="site-nav" aria-label="Основная навигация"><ul>'
         + _nav_items(ctx["nav"], ctx.get("_path", ""))
         + "</ul></nav>"
+        + _header_search(ctx)
+        + "</div></header>"
+    )
+
+
+def _header_search(ctx: dict) -> str:
+    """Форма поиска в шапке — кроме главной, где она уже стоит в первом экране.
+
+    Измерено 2026-09-02 на живом lordfilm47.space: две видимые формы поиска на
+    всех трёх ширинах, обе с action=/search/ и классом header-search. Соседние
+    витрины того же семейства показывали одну — расхождение шло от профиля:
+    `lords-general` держит `hero_search` в `home_blocks`, а форма в шапке
+    рисовалась безусловно.
+
+    Убирается именно вторая по счёту, а не первая попавшаяся: форма в первом
+    экране заметнее и стоит там намеренно, форма в шапке есть на всех
+    остальных страницах и никуда не девается.
+    """
+    if "hero_search" in (ctx.get("home_blocks") or ()) and ctx.get("_path", "/") == "/":
+        return ""
+    return (
         '<form class="header-search" role="search" action="/search/" method="get">'
         '<label class="visually-hidden" for="q">Поиск по каталогу</label>'
         '<input id="q" name="q" type="search" placeholder="Название из каталога" '
         'autocomplete="off">'
         "<button type=\"submit\">Найти</button></form>"
-        "</div></header>"
     )
 
 
