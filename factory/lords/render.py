@@ -31,6 +31,7 @@ from factory.analytics import snippet as analytics_snippet
 from factory.lords import content_types as ct
 from factory.lords import fixtures as fx
 from factory.lords import icons
+from factory.lords import pagination as pagination_mod
 from factory.lords import plan as plan_mod
 from factory.lords import player as player_mod
 from factory.lords import recommend as recommend_mod
@@ -708,7 +709,13 @@ def _listing_pages(
     """Список с фасетами, сортировкой и пагинацией. Одна функция на все разделы."""
     items = _sorted(titles)
     per_page = ctx["per_page"]
-    pages_count = max(1, math.ceil(len(items) / per_page)) if items else 1
+    # Разбиение по блокам годов ограничивает правку одним годом: добавленная
+    # запись 2026-го трогает 82 страницы вместо 2216. Договор и цена перехода —
+    # adr/0007-pagination-by-year-blocks.md. Пока владелец не согласился на
+    # однократную смену состава страниц, поведение прежнее.
+    страницы = pagination_mod.разбить(
+        items, per_page, по_годам=bool(ctx.get("pagination_by_year")))
+    pages_count = len(страницы)
     out = []
     position = ctx["facet_position"]
     facets = (
@@ -717,7 +724,7 @@ def _listing_pages(
     )
 
     for number in range(1, pages_count + 1):
-        chunk = items[(number - 1) * per_page: number * per_page]
+        chunk = страницы[number - 1]
         path = base if number == 1 else f"{base}page/{number}/"
         heading = h1 if number == 1 else f"{h1} — страница {number}"
         title = section_title if number == 1 else f"{section_title} — страница {number}"
@@ -1768,6 +1775,9 @@ def _context(package: dict, profile: dict, site_plan, player_state,
         ),
         "nav": [("home", "/")] + nav,
         "per_page": int(((package.get("seo") or {}).get("items_per_page")) or 24),
+        # Выключено по умолчанию: включение меняет состав страниц один раз и
+        # требует согласия владельца (adr/0007).
+        "pagination_by_year": bool(((package.get("seo") or {}).get("pagination_by_year"))),
         "home_items": 12,
         "row_items": 6,
         "facet_position": str(layout.get("facet_position")),
