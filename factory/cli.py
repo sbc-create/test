@@ -534,7 +534,7 @@ def cmd_lords_live(args) -> int:
     # окружение нет намеренно: переменные видны в `systemctl show` и в
     # /proc/<pid>/environ, а существующий запасной путь однажды окажется
     # использованным в production.
-    from factory.lords import live_build
+    from factory.lords import content_live, live_build
     try:
         credentials = live_build.Credentials.from_credentials_dir()
     except live_build.LiveBuildError as error:
@@ -551,13 +551,32 @@ def cmd_lords_live(args) -> int:
         # Режим виден всегда: молчаливый откат к полному обходу выглядел бы как
         # исправная работа инкрементального, и разницу в десять минут никто бы
         # не связал с причиной.
-        if entry.get("mode") == "incremental":
+        # Про приращение сообщается только когда оно состоялось. Прежде строка
+        # печаталась и при отказе источника — «приращение: изменено 0,
+        # добавлено 0» рядом со статусом STALE читалось как «ничего не
+        # изменилось», хотя означало «обхода не было вовсе».
+        if entry.get("status") == content_live.FRESH and entry.get("mode") == "incremental":
             print(f"    приращение: изменено {entry.get('replaced', 0)}, "
                   f"добавлено {entry.get('added', 0)}")
+        elif entry.get("status") != content_live.FRESH:
+            print(f"    {entry.get('reason', 'причина не указана')}")
         elif entry.get("mode_reason"):
             print(f"    полный обход: {entry['mode_reason']}")
 
     problems = live_build.verify_report(report)
+    if problems and live_build.source_unavailable_but_fresh_enough(report):
+        # Источник недоступен, но последний удачный ответ ещё свеж. Это не
+        # поломка фабрики, и объявлять её сломанной нельзя: иначе внешний 502
+        # неотличим от собственного отказа, и настоящая поломка теряется среди
+        # чужих. Витрина остаётся на прежнем релизе — как и должна.
+        возраст = max(
+            (e.get("cache_age_ms") or 0) for e in (report.get("sites") or {}).values()
+        )
+        print("источник недоступен; витрина оставлена на последнем удачном ответе "
+              f"({возраст // 60000} мин назад)")
+        for problem in problems:
+            print(f"  — {problem}")
+        return 0
     if problems:
         print("живой каталог непригоден:")
         for problem in problems:
