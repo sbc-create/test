@@ -29,8 +29,6 @@ from factory.templates import digest as digest_mod  # noqa: E402
 
 EVIDENCE = ROOT / "artifacts" / "evidence" / "templates"
 A11Y = EVIDENCE / "a11y"
-#: Отчёты аудита пересобираются командой и в отслеживаемый набор не входят.
-TEMPLATES = ROOT / "artifacts" / "templates"
 
 NOT_RUN = "not_run"
 
@@ -152,7 +150,7 @@ def _performance_gate() -> dict:
 
 
 def _audit_gate() -> dict:
-    f = TEMPLATES / "audit.lords.json"
+    f = EVIDENCE / "audit.lords.json"
     if not f.exists():
         return {"status": NOT_RUN, "reason": "отчёта аудита нет"}
     d = json.loads(f.read_text(encoding="utf-8"))
@@ -160,7 +158,7 @@ def _audit_gate() -> dict:
         "status": "pass" if d["meets_threshold"] else "fail",
         "threshold": d["threshold"],
         "minimum_by_site": {s["site"]: s["minimum"] for s in d["sites"]},
-        "evidence": "artifacts/templates/audit.lords.json",
+        "evidence": "artifacts/evidence/templates/audit.lords.json",
     }
 
 

@@ -1,7 +1,7 @@
 {
   "lane": "TEMPLATES",
   "branch": "claude/templates-lords-yummy-refpacks-01",
-  "head": "de585a1d3e92bcb094374bcb73a1459578866714",
+  "head": "2d9ba39f709b9d3c04bcae47c9744c5269cfb14d",
   "base_sha": "76552b9a7372c5ad15cfc7d8b1052a10024722a3",
   "template_digest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
   "template_digest_files": 19,
@@ -80,7 +80,7 @@
         "lords-03": 10.0,
         "lords-04": 10.0
       },
-      "evidence": "artifacts/templates/audit.lords.json"
+      "evidence": "artifacts/evidence/templates/audit.lords.json"
     }
   },
   "blockers": [

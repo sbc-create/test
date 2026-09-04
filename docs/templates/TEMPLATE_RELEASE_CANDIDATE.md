@@ -183,6 +183,7 @@ Yummy и референсы — см. `docs/templates/BLOCKERS.md`: два бл�
 | Сборка стенда | `python3 -m factory lords-preview` | exit 0, четыре пакета |
 | Целостность знаний | `python3 -m factory knowledge verify` | `целостность: OK` |
 | Статус полосы | `python3 scripts/templates_status.py` | пять ворот `pass`, exit 0 |
+| Прогон в чистом дереве | worktree из `2d9ba39` | **196 passed**, отпечаток совпал |
 
 196 браузерных проверок складываются так: 72 — прежняя приёмка стенда, 72 — axe,
 24 — визуальный эталон, 16 — замер скорости, 12 — клавиатура и цели.
