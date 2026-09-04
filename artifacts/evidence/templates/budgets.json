@@ -1,5 +1,5 @@
 {
-  "captured_at_utc": "2026-09-04T15:09:41.759Z",
+  "captured_at_utc": "2026-09-04T16:25:58.590Z",
   "budget": {
     "documentKb": 120,
     "scriptKb": 60,
@@ -103,11 +103,11 @@
     {
       "site": "lords-01",
       "route": "/catalog/",
-      "interactions": 0,
-      "worstMs": 0,
+      "interactions": 3,
+      "worstMs": 16,
       "reporting_threshold_ms": 16,
-      "note": "ни одно взаимодействие не достигло порога 16 мс — INP ниже него",
-      "observer_selfcheck_ms": 192
+      "note": "зафиксированы взаимодействия выше порога отчётности",
+      "observer_selfcheck_ms": 128
     }
   ],
   "player": [
