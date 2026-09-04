@@ -6,6 +6,13 @@ Documentation=file:///srv/site-factory/repo/docs/runbooks/control-api.md
 After=network-online.target
 Wants=network-online.target
 
+# Перезапуск не чаще пяти раз за пять минут: служба, падающая на старте, иначе
+# крутится в цикле и заполняет журнал вместо того, чтобы остановиться и быть
+# замеченной. Ключи принадлежат [Unit]: в [Service] systemd их игнорирует, и
+# защита выглядит настроенной, не будучи ею.
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
 [Service]
 # Type=notify, а не simple: между «процесс запустился» и «служба готова»
 # находится протокол запуска. При simple systemd считал бы службу готовой
@@ -43,11 +50,6 @@ WatchdogSec=60
 
 Restart=on-failure
 RestartSec=5
-# Перезапуск не чаще пяти раз за пять минут: иначе служба, падающая на старте,
-# крутится в цикле и заполняет журнал вместо того, чтобы остановиться и быть
-# замеченной.
-StartLimitIntervalSec=300
-StartLimitBurst=5
 
 # Завершение: SIGTERM, слив начатых запросов, затем выход. 40 секунд больше,
 # чем drain по умолчанию (25 c), чтобы слив успевал завершиться сам.

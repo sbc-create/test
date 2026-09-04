@@ -109,6 +109,11 @@ cmd_deploy() {
     # без незафиксированных правок и мусора рабочего дерева.
     git -C "$source_repo" archive "$full" | tar -x -C "$staging" \
       || { rm -rf "$staging"; die "архив коммита не распакован"; }
+    # В репозитории .venv отслеживается как символическая ссылка на окружение
+    # разработчика. После распаковки путь занят этой ссылкой, и venv в него не
+    # создаётся: "Unable to create directory". Релиз обязан иметь собственное
+    # окружение, не зависящее от чужого домашнего каталога.
+    rm -rf "$staging/.venv"
     say "создание окружения"
     python3 -m venv "$staging/.venv" >/dev/null 2>&1 || { rm -rf "$staging"; die "venv не создан"; }
     "$staging/.venv/bin/pip" install -q --upgrade pip >/dev/null 2>&1
