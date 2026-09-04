@@ -2858,3 +2858,51 @@ ExecStart=/srv/site-factory/repo/automation/host/site-factory-backup.sh
 Что из прошлой записи остаётся верным без изменений: служба исполняется из
 git-дерева `/srv/site-factory/repo` на ветке `deploy/day05-lords`, и `git
 checkout` там меняет поведение боевого бэкапа без выкатки и без отката.
+
+### Шесть упавших юнитов, наконец раскрытые
+
+Число «упавших: 6» я печатал каждый тик и ни разу не раскрывал. Раскрыл.
+
+```
+detail-diff-3332398.service      переходный юнит от /tmp/detail_diff.py
+pbprobe-3333048.service          переходный юнит от /tmp/playback_probe.py
+logrotate.service                упал сегодня в 00:00:04
+site-factory-backup.service      известный ENOSPC от 03:24
+site-factory-health.service      известный
+site-factory-selfcheck.service   провалов 1 — разобран ниже
+```
+
+**Самопроверка падает ежедневно, и падает ровно на том, что чинит эта ветка.**
+
+```
+Sep 02 04:02:37  FAIL: SITE-MATRIX.json: реестр не сопоставлен ни одной схеме
+Sep 03 04:04:18  FAIL: SITE-MATRIX.json: реестр не сопоставлен ни одной схеме
+```
+
+Это в точности дефект, ради которого добавлены `DERIVED` в
+`validate_registries.py` и `schemas/site-matrix.schema.json`. То есть правка не
+умозрительная: на развёрнутом дереве боевой юнит проваливается каждые сутки.
+
+Первая моя попытка это доказать доказательством не была. Прогон на своей ветке
+дал `SKIP: производный артефакт отсутствует в этой ветке` и код 0 — ноль
+получался оттого, что файла в дереве нет, а не оттого, что он проходит проверку.
+Проверил как надо, против настоящего развёрнутого файла:
+
+```
+OK: config/SITE-MATRIX.json -> site-matrix.schema.json     код 0
+```
+
+**logrotate — не моя вина, и не стоит её себе приписывать.** Ошибки про
+`error switching euid from 1001 to 0` и недоступный файл состояния я получил
+оттого, что запускал logrotate от `claude`, а не от root; о настоящем отказе они
+не говорят ничего. Сам конфиг site-factory вхолостую отрабатывает верно, и его
+журнал сегодня повёрнут успешно:
+
+```
+rotating pattern: /var/log/site-factory/*.log after 1 days (14 rotations)
+Last rotated at 2026-09-04 00:00
+log does not need rotating (log has already been rotated)
+```
+
+Значит отказ `logrotate.service` в 00:00:04 пришёл от другого конфига в
+`/etc/logrotate.d`, и разобрать его без root нечем. Занесено владельцу.
