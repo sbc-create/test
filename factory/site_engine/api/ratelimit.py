@@ -108,12 +108,22 @@ class SharedRateLimiter:
     # ---- состояние ------------------------------------------------------
 
     def _open_locked(self):
-        self._path.parent.mkdir(parents=True, exist_ok=True)
+        # Создание каталога и открытие файла — тоже часть доступа к хранилищу.
+        # Без этого перехвата отказ по правам вылетал исключением мимо запасного
+        # режима, и недоступное хранилище счётчика превращалось в общий отказ
+        # обслуживания — ровно то, чего запасной режим должен не допускать.
+        try:
+            self._path.parent.mkdir(parents=True, exist_ok=True)
+        except OSError as exc:
+            raise StoreUnavailable(f"каталог состояния недоступен: {exc}") from exc
         deadline = self._now() + LOCK_TIMEOUT_SECONDS
         # Дескриптор возвращается наружу удерживающим блокировку, поэтому
         # менеджер контекста здесь неприменим: закрыть его обязан вызывающий,
         # после записи состояния.
-        handle = open(self._path, "a+", encoding="utf-8")  # noqa: SIM115
+        try:
+            handle = open(self._path, "a+", encoding="utf-8")  # noqa: SIM115
+        except OSError as exc:
+            raise StoreUnavailable(f"файл состояния недоступен: {exc}") from exc
         while True:
             try:
                 fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)

@@ -440,3 +440,46 @@ def test_обычные_ключи_кэша_проходят(sandbox):
                             body={"scope": "title", "keys": ["title-42", "anime:1001"]},
                             headers=AUTH)
     assert r.status == 202
+
+
+# ---- недоступное хранилище счётчика -----------------------------------------
+
+def test_недоступный_файл_счётчика_не_роняет_обслуживание(sandbox):
+    """Найдено проверкой сценария: отказ по правам вылетал исключением.
+
+    Недоступное хранилище счётчика не должно превращаться в общий отказ
+    обслуживания: работать надо, но строже, и факт обязан быть виден.
+    """
+    import stat as _stat
+
+    a = api(sandbox)
+    a.handle("GET", "/api/v1/metrics", headers=AUTH)
+    файл = sandbox / "var" / "state" / "control-ratelimit.json"
+    прежние = файл.stat().st_mode
+    файл.chmod(_stat.S_IRUSR)
+    try:
+        r = a.handle("GET", "/api/v1/metrics", headers=AUTH)
+    finally:
+        файл.chmod(прежние)
+    assert r.status == 200, "недоступный счётчик уронил обслуживание"
+
+
+def test_запасной_режим_строже_обычного(sandbox):
+    """Раздавать полный предел, не видя общего состояния, нельзя."""
+    import stat as _stat
+
+    from factory.site_engine.api import ratelimit
+
+    каталог = sandbox / "var" / "state"
+    предел = ratelimit.SharedRateLimiter(каталог, degraded_capacity=3)
+    файл = каталог / "control-ratelimit.json"
+    файл.write_text("{}", encoding="utf-8")
+    прежние = файл.stat().st_mode
+    файл.chmod(_stat.S_IRUSR)
+    try:
+        решения = [предел.check({"actor": "x"}) for _ in range(6)]
+    finally:
+        файл.chmod(прежние)
+    assert all(d.degraded for d in решения), "переход в запасной режим не отмечен"
+    assert sum(1 for d in решения if d.allowed) == 3, "запасной предел не соблюдён"
+    assert предел.last_error, "причина деградации не сохранена"
