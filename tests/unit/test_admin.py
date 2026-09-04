@@ -317,10 +317,30 @@ def test_неизвестная_страница_админки_даёт_404(app
 
 # ---- контракт CMS -----------------------------------------------------------
 
-def test_панель_показывает_состояние_контракта(app):
+def test_панель_показывает_согласованный_контракт(app, sandbox):
+    """Состояние берётся из профиля, а не из умолчания фикстуры.
+
+    Ранняя редакция теста опиралась на то, что образцовый профиль контракта не
+    объявляет. Как только профили массива его объявили, тест стал проверять
+    отсутствующее свойство — поэтому оба состояния задаются здесь явно.
+    """
+    путь = sandbox / "config" / "site-profiles" / f"{SITE}.json"
+    данные = json.loads(путь.read_text(encoding="utf-8"))
+    данные["cms_contract"] = "1.2.0"
+    путь.write_text(json.dumps(данные, ensure_ascii=False), encoding="utf-8")
     cookies, _ = войти(app)
     r = app.handle("GET", f"/admin/sites/{SITE}", cookies=cookies)
     assert "Контракт CMS" in r.html
+    assert "контракт согласован" in r.html
+
+
+def test_панель_показывает_необъявленный_контракт(app, sandbox):
+    путь = sandbox / "config" / "site-profiles" / f"{SITE}.json"
+    данные = json.loads(путь.read_text(encoding="utf-8"))
+    данные.pop("cms_contract", None)
+    путь.write_text(json.dumps(данные, ensure_ascii=False), encoding="utf-8")
+    cookies, _ = войти(app)
+    r = app.handle("GET", f"/admin/sites/{SITE}", cookies=cookies)
     assert "контракт не объявлен" in r.html
 
 
