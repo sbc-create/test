@@ -398,3 +398,17 @@ def test_audit_trail_is_readable_and_filterable(sandbox):
     r = a.handle("GET", "/api/v1/audit", body={"limit": 10, "siteId": SITE}, headers=AUTH)
     assert r.status == 200
     assert all(e["site_id"] == SITE for e in r.body["entries"])
+
+
+def test_закрытые_на_запись_профили_дают_понятный_отказ(sandbox):
+    """500 выглядел бы поломкой службы; на деле это граница её прав."""
+    каталог = sandbox / "config" / "site-profiles"
+    прежние = каталог.stat().st_mode
+    каталог.chmod(0o555)
+    try:
+        r = api(sandbox).handle("PATCH", f"/api/v1/sites/{SITE}/settings",
+                                body={"changes": {"keep_releases": 9}}, headers=AUTH)
+    finally:
+        каталог.chmod(прежние)
+    assert r.status == 503
+    assert r.body["error"]["code"] == "config_read_only"

@@ -597,10 +597,20 @@ class ControlApi:
                     raise ControlDenied(409, "version_conflict",
                                         "конфигурация изменилась во время применения")
                 tmp = target.with_suffix(".json.tmp")
-                tmp.write_text(json.dumps(after, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+                tmp.write_text(json.dumps(after, ensure_ascii=False, indent=2) + "\n",
+                               encoding="utf-8")
                 tmp.replace(target)
         except locks.LockBusy as exc:
             raise ControlDenied(409, "site_busy", "по сайту уже идёт операция") from exc
+        except OSError as exc:
+            # Каталог профилей может быть намеренно закрыт на запись. Падение с
+            # 500 выглядело бы как поломка службы; на деле это её граница прав,
+            # и оператору полезнее увидеть причину, чем внутреннюю ошибку.
+            raise ControlDenied(
+                503, "config_read_only",
+                "настройки витрин недоступны для записи этой службе",
+                reason=exc.strerror or "",
+            ) from exc
 
         new_version = config_version(target)
         audit.record(

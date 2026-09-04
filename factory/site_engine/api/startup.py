@@ -124,6 +124,31 @@ def check_profiles(root: Path) -> list[Check]:
     return проверки
 
 
+def check_config_writable(root: Path) -> list[Check]:
+    """Можно ли менять настройки витрин.
+
+    Каталог профилей бывает намеренно закрыт на запись: настройки витрин —
+    чувствительная конфигурация, и на боевом хосте ею владеет не та учётная
+    запись, под которой работает служба. Это не повод не подниматься: чтение,
+    задания и инвалидация кэша не требуют записи. Но знать об этом надо
+    заранее, а не в момент, когда оператор нажал «Применить».
+    """
+    directory = _profiles_dir(root)
+    if not directory.is_dir():
+        return []
+    проба = directory / ".startup-write-probe"
+    try:
+        проба.write_text("", encoding="utf-8")
+        проба.unlink()
+    except OSError as exc:
+        return [Check("config.writable", DEGRADED,
+                      f"профили доступны только для чтения ({exc.strerror}); "
+                      "изменение настроек через API будет отклоняться",
+                      {"writable": False, "path": str(directory)})]
+    return [Check("config.writable", OK, "профили доступны на запись",
+                  {"writable": True})]
+
+
 def check_contract_compatibility(root: Path) -> list[Check]:
     """Совместимость контракта CMS по каждой витрине."""
     directory = _profiles_dir(root)
@@ -246,6 +271,7 @@ def run(root: Path | str = ".", env: dict[str, str] | None = None) -> StartupRep
     отчёт.checks.extend(check_state_dirs(root))
     отчёт.checks.extend(check_profiles(root))
     отчёт.checks.extend(check_site_isolation(root))
+    отчёт.checks.extend(check_config_writable(root))
     отчёт.checks.extend(check_contract_compatibility(root))
     отчёт.checks.extend(check_secrets(env))
     return отчёт
