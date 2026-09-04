@@ -15,7 +15,6 @@ from pathlib import Path
 
 import pytest
 
-from factory import queue as queue_mod
 from factory.paths import PATHS
 from factory.site_engine.api import ratelimit
 

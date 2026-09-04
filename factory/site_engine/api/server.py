@@ -29,8 +29,8 @@ from urllib.parse import parse_qs, unquote, urlparse
 from factory.site_engine.api import create_api
 from factory.site_engine.api import startup as startup_protocol
 from factory.site_engine.api.app import SiteEngineApi
-from factory.site_engine.api.lifecycle import Lifecycle, Notifier, watchdog_interval
 from factory.site_engine.api.control import ControlApi
+from factory.site_engine.api.lifecycle import Lifecycle, Notifier, watchdog_interval
 from factory.site_engine.api.openapi import ЗАПИСЬ
 
 MAX_BODY_BYTES = 256 * 1024

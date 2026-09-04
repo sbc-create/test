@@ -11,7 +11,7 @@ from pathlib import Path
 
 import pytest
 
-from factory.site_engine.api import compat, startup
+from factory.site_engine.api import startup
 from factory.site_engine.api.lifecycle import Lifecycle, Notifier, watchdog_interval
 
 REPO = Path(__file__).resolve().parents[2]
