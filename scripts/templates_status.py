@@ -245,7 +245,7 @@ def _crossbrowser_gate() -> dict:
         unexpected = report.get("stats", {}).get("unexpected", 0)
         return (expected, unexpected)
 
-    lords = read(ROOT / "var" / "artifacts" / "playwright-lords-cross.json")
+    lords = read(EVIDENCE / "playwright-lords-cross.json")
     lords_ok, lords_bad = count(lords)
     if not lords:
         return {"status": NOT_RUN, "reason": "отчёта кросс-браузерного прогона нет"}
@@ -259,7 +259,7 @@ def _crossbrowser_gate() -> dict:
             "head": "43a9cbce51673f8a0ae7f4772594f96c1411b55b",
         },
         "scope": "только критический путь: широкий набор в трёх движках даёт шум",
-        "evidence": "var/artifacts/playwright-lords-cross.json",
+        "evidence": "artifacts/evidence/templates/playwright-lords-cross.json",
     }
 
 

@@ -1,7 +1,7 @@
 {
   "lane": "TEMPLATES",
   "branch": "claude/templates-lords-yummy-refpacks-01",
-  "head": "0cd3309b31ff59d1282c5f76a029503ec90633de",
+  "head": "085698653ac50cb7dc7ce84f5cd243102d5f4c1c",
   "base_sha": "76552b9a7372c5ad15cfc7d8b1052a10024722a3",
   "template_digest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
   "template_digest_files": 19,
@@ -149,7 +149,7 @@
         "head": "43a9cbce51673f8a0ae7f4772594f96c1411b55b"
       },
       "scope": "только критический путь: широкий набор в трёх движках даёт шум",
-      "evidence": "var/artifacts/playwright-lords-cross.json"
+      "evidence": "artifacts/evidence/templates/playwright-lords-cross.json"
     }
   },
   "blockers": [

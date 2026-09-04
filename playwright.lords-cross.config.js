@@ -25,7 +25,12 @@ module.exports = defineConfig({
   fullyParallel: false,
   forbidOnly: true,
   retries: 0,
-  reporter: [['list'], ['json', { outputFile: 'var/artifacts/playwright-lords-cross.json' }]],
+  // Отчёт кладётся в отслеживаемый набор свидетельств, а не в var/: тот
+  // каталог целиком в .gitignore, и ворота кросс-браузерной проверки в
+  // свежем клоне честно гасли в not_run — свидетельства там просто нет.
+  reporter: [['list'], ['json', {
+    outputFile: 'artifacts/evidence/templates/playwright-lords-cross.json',
+  }]],
   use: { launchOptions },
   projects: [
     { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
