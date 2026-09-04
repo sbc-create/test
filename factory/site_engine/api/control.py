@@ -94,6 +94,11 @@ REFUSED_SETTINGS: dict[str, str] = {
 }
 
 SITE_ID_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
+# Ключ кэша — идентификатор, а не адрес. Управляющий слой сам ключи не
+# запрашивает, но кладёт их в очередь исполнителю, и тот может обойтись с
+# похожим на URL значением как с адресом. Проще не пропускать такое сюда,
+# чем полагаться на осторожность каждого будущего исполнителя.
+CACHE_KEY_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$")
 MAX_BODY_KEYS = 32
 
 
@@ -712,6 +717,13 @@ class ControlApi:
         keys = body.get("keys") or []
         if not isinstance(keys, list) or any(not isinstance(k, str) or not k for k in keys):
             raise ControlDenied(400, "invalid_keys", "keys должен быть списком непустых строк")
+        негодные = [k for k in keys if not CACHE_KEY_RE.match(k)]
+        if негодные:
+            raise ControlDenied(
+                400, "invalid_keys",
+                "ключ кэша должен быть идентификатором, а не адресом",
+                rejected=негодные[:5],
+            )
         if len(keys) > 100:
             raise ControlDenied(400, "too_many_keys", "не более 100 ключей за запрос")
         if scope == "title" and not keys:

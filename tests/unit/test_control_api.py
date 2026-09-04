@@ -412,3 +412,31 @@ def test_закрытые_на_запись_профили_дают_понятн
         каталог.chmod(прежние)
     assert r.status == 503
     assert r.body["error"]["code"] == "config_read_only"
+
+
+@pytest.mark.parametrize("ключ", [
+    "http://169.254.169.254/latest/meta-data/",
+    "file:///etc/passwd",
+    "ключ с пробелом",
+    "../../etc/passwd",
+    "key\nInjected: header",
+    "x" * 200,
+])
+def test_ключ_кэша_не_может_быть_адресом(sandbox, ключ):
+    """Найдено отрицательной проверкой: принимался адрес метаданных облака.
+
+    Управляющий слой ключи не запрашивает, но передаёт исполнителю, и тот может
+    обойтись с похожим на URL значением как с адресом.
+    """
+    r = api(sandbox).handle("POST", f"/api/v1/sites/{SITE}/cache/invalidate",
+                            body={"scope": "title", "keys": [ключ]}, headers=AUTH)
+    assert r.status == 400
+    assert r.body["error"]["code"] == "invalid_keys"
+    assert queue.counts()["inbox"] == 0
+
+
+def test_обычные_ключи_кэша_проходят(sandbox):
+    r = api(sandbox).handle("POST", f"/api/v1/sites/{SITE}/cache/invalidate",
+                            body={"scope": "title", "keys": ["title-42", "anime:1001"]},
+                            headers=AUTH)
+    assert r.status == 202
