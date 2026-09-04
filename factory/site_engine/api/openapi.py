@@ -149,6 +149,15 @@ from factory.site_engine.api.control import (
         "success": ("202", "инвалидация поставлена в очередь"),
         "errors": {"400": "негодная область или пустой keys при scope=title"},
     },
+    "/api/v1/metrics": {
+        "method": "get",
+        "summary": "Метрики процесса в текстовом формате Prometheus",
+        "scope": "read",
+        "idempotent": False,
+        "body": None,
+        "success": ("200", "текстовый формат Prometheus; счётчики обнуляются при перезапуске"),
+        "errors": {"404": "маршрут выключен"},
+    },
     "/api/v1/audit": {
         "method": "get",
         "summary": "Журнал операций, включая отказы",

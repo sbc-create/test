@@ -36,6 +36,7 @@ from typing import Any
 from factory import audit, locks, queue
 from factory.paths import PATHS
 from factory.site_engine.api.app import ApiResponse, error
+from factory.site_engine.api.metrics import Metrics, status_class
 
 API_VERSION = "v1"
 
@@ -240,12 +241,25 @@ class ControlApi:
         root: Path | str = ".",
         env: dict[str, str] | None = None,
         now: Any = time.time,
+        metrics: Metrics | None = None,
     ) -> None:
         self._root = Path(root).resolve()
         self._env = env if env is not None else {}
         self._now = now
         self._principals = principals_from_env(self._env)
         self._buckets: dict[str, _Bucket] = {}
+        self._metrics = metrics if metrics is not None else Metrics()
+        # Показатели, которые считает не этот модуль: их поставщик регистрирует
+        # себя сам. Иначе управляющий слой начал бы знать про админку.
+        self._gauges: dict[str, Any] = {}
+
+    @property
+    def metrics(self) -> Metrics:
+        return self._metrics
+
+    def register_gauge(self, name: str, source: Any) -> None:
+        """Источник показателя, вычисляемый в момент опроса."""
+        self._gauges[name] = source
 
     def principal_for(self, token: str) -> Principal | None:
         """Права токена — для вызывающих внутри процесса.
@@ -272,6 +286,9 @@ class ControlApi:
         except ControlDenied as denied:
             self._audit_refusal(denied, method, path, headers, correlation_id)
             response = error(denied.status, denied.code, denied.message, **denied.extra)
+            self._metrics.inc("site_engine_control_refusals_total", code=denied.code)
+        self._metrics.inc("site_engine_control_requests_total",
+                          method=method.upper(), status=status_class(response.status))
         # Идентификатор запроса возвращается всегда, включая отказы: без него
         # вызывающий не может найти свой запрос в журнале и приносит скриншот.
         payload = response.body if isinstance(response.body, dict) else {"result": response.body}
@@ -304,6 +321,9 @@ class ControlApi:
         principal = self._authenticate(headers)
         self._rate_limit(principal)
 
+        if method == "GET" and rest == ["metrics"]:
+            principal.require(SCOPE_READ)
+            return self._metrics_response()
         if method == "GET" and rest[:1] == ["audit"]:
             principal.require(SCOPE_AUDIT)
             return self._audit_trail(body, headers)
@@ -618,6 +638,34 @@ class ControlApi:
         response = ApiResponse(status=202, body={"job": item.as_dict(), "invalidate": plan})
         self._remember(key, "POST", path, body, response)
         return response
+
+    def _metrics_response(self) -> ApiResponse:
+        """Показатели собираются в момент опроса, а не накапливаются.
+
+        Очередь и состав витрин — состояние на диске: держать их копию в памяти
+        значит однажды отдать устаревшую.
+        """
+        gauges: dict[str, list[tuple[dict[str, str], Any]]] = {}
+        try:
+            counts = queue.counts()
+            gauges["site_engine_queue_items"] = [
+                ({"stage": stage}, counts.get(stage, 0)) for stage in queue.STAGES
+            ]
+        except OSError:
+            # Недоступная очередь не должна ронять опрос метрик: система сбора
+            # получит остальные показатели и заметит пропажу этого.
+            pass
+        profiles = self._root / "config" / "site-profiles"
+        if profiles.is_dir():
+            gauges["site_engine_sites"] = [({}, len(list(profiles.glob("*.json"))))]
+        for name, source in self._gauges.items():
+            try:
+                gauges[name] = source()
+            except Exception:  # noqa: BLE001
+                continue
+        text = self._metrics.render(gauges)
+        return ApiResponse(status=200, body={"prometheus": text,
+                                             "counters": self._metrics.snapshot()})
 
     def _audit_trail(self, body: dict[str, Any], headers: dict[str, str]) -> ApiResponse:
         limit = body.get("limit", 50)

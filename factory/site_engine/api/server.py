@@ -33,9 +33,23 @@ from factory.site_engine.api.openapi import ЗАПИСЬ
 MAX_BODY_BYTES = 256 * 1024
 ADMIN_MAX_BODY_BYTES = 64 * 1024
 
-# Маршруты управляющего слоя, отвечающие на GET. Разделять по методу
-# недостаточно: часть управляющих маршрутов читающая.
-_CONTROL_GET_PREFIXES = ("/api/v1/audit", "/api/v1/jobs/")
+def _control_get_prefixes() -> tuple[str, ...]:
+    """Читающие маршруты управляющего слоя — из таблицы описания, не из списка.
+
+    Список, который ведут вручную, отстаёт при добавлении маршрута, и отстаёт
+    молча: маршрут уходит в читающий слой и отвечает 404, хотя реализован.
+    Именно так и случилось с /api/v1/metrics.
+    """
+    prefixes = []
+    for path, node in ЗАПИСЬ.items():
+        if node.get("method") != "get":
+            continue
+        head, sep, _ = path.partition("{")
+        prefixes.append(head if sep else path)
+    return tuple(sorted(prefixes))
+
+
+_CONTROL_GET_PREFIXES = _control_get_prefixes()
 
 
 @dataclass
@@ -139,6 +153,15 @@ class _Handler(http.server.BaseHTTPRequestHandler):
         raw = self.rfile.read(length).decode("utf-8", errors="replace")
         return {k: v[-1] for k, v in parse_qs(raw, keep_blank_values=True).items()}
 
+    def _text(self, status: int, body: str, content_type: str) -> None:
+        payload = body.encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Length", str(len(payload)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(payload)
+
     def _html(self, status: int, body: str, extra: dict[str, str] | None = None) -> None:
         payload = body.encode("utf-8")
         self.send_response(status)
@@ -205,6 +228,13 @@ class _Handler(http.server.BaseHTTPRequestHandler):
                 response = self.server.control_api.handle(
                     method, path, body=merged, headers=self._headers_dict()
                 )
+                # Единственный маршрут с не-JSON представлением: сборщику нужен
+                # текстовый формат. Разбирать JSON он не умеет, а заводить ради
+                # этого второй адрес значит заводить и вторую проверку прав.
+                if path == "/api/v1/metrics" and response.status == 200:
+                    self._text(200, response.body.get("prometheus", ""),
+                               "text/plain; version=0.0.4; charset=utf-8")
+                    return
             else:
                 if method != "GET":
                     self._error(405, "method_not_allowed", "маршрут только для чтения")
@@ -321,6 +351,10 @@ def main(argv: list[str] | None = None) -> int:
 
         admin_app = AdminApp(read_api, control_api,
                              secure_cookie=args.host not in {"127.0.0.1", "::1", "localhost"})
+        control_api.register_gauge(
+            "site_engine_admin_sessions",
+            lambda: [({}, admin_app.sessions.count())],
+        )
     config = ServerConfig(host=args.host, port=args.port,
                           allow_public_bind=args.allow_public_bind)
     server = build_server(config, read_api, control_api, admin_app)

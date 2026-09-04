@@ -57,7 +57,12 @@ def запрос(база, путь, *, метод="GET", тело=None, заг�
                                  headers=заголовки or {})
     try:
         with urllib.request.urlopen(req, timeout=10) as ответ:
-            return ответ.status, json.loads(ответ.read().decode("utf-8")), dict(ответ.headers)
+            сырой = ответ.read().decode("utf-8")
+            try:
+                разобрано = json.loads(сырой)
+            except json.JSONDecodeError:
+                разобрано = {"raw": сырой}
+            return ответ.status, разобрано, dict(ответ.headers)
     except urllib.error.HTTPError as e:
         сырой = e.read().decode("utf-8")
         try:
@@ -183,3 +188,17 @@ def test_выключенная_запись_невидима_и_по_http():
         srv.shutdown()
         поток.join(timeout=5)
         srv.server_close()
+
+
+def test_метрики_отдаются_текстом_для_сборщика(сервер):
+    """Сборщик не разбирает JSON; текстовый формат — не украшение."""
+    код, _, заголовки = запрос(сервер, "/api/v1/metrics", заголовки=ЗАГОЛОВКИ)
+    assert код == 200
+    assert заголовки.get("Content-Type", "").startswith("text/plain")
+    assert "version=0.0.4" in заголовки.get("Content-Type", "")
+
+
+def test_метрики_без_токена_не_отдаются(сервер):
+    """Состав очереди и число витрин — сведения о работе, а не о погоде."""
+    код, _, _ = запрос(сервер, "/api/v1/metrics")
+    assert код == 401

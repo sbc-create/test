@@ -31,6 +31,7 @@ ROOT = Path(__file__).resolve().parents[2]
     "/api/v1/sites/{siteId}/cache/invalidate": {"scope": "catalog", "dryRun": True},
     "/api/v1/jobs/{jobId}": {},
     "/api/v1/audit": {"limit": 1},
+    "/api/v1/metrics": {},
 }
 
 
