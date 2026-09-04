@@ -19,7 +19,10 @@ const fs = require('fs');
 const path = require('path');
 const { SITES, url, VIEWPORTS } = require('./helpers');
 
-const BASELINE = path.join(__dirname, '..', '..', 'artifacts', 'templates', 'visual-baseline.json');
+// Эталон лежит рядом со своим потребителем и отслеживается git'ом. В
+// artifacts/ ему не место: этот каталог целиком в .gitignore, и эталон,
+// не доехавший до свежего клона, превращает проверку в ошибку чтения файла.
+const BASELINE = path.join(__dirname, 'visual-baseline.json');
 const UPDATE = process.env.LORDS_UPDATE_BASELINE === '1';
 
 // Допуск в один пиксель — только для длин: округление ширины контейнера пляшет
