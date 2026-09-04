@@ -33,6 +33,7 @@ ROOT = Path(__file__).resolve().parents[2]
     "/api/v1/audit": {"limit": 1},
     "/api/v1/metrics": {},
     "/api/v1/compatibility": {},
+    "/api/v1/traces/{traceId}": {},
 }
 
 
@@ -75,7 +76,9 @@ class TestОписание:
                 continue
             метод = ЗАПИСЬ[путь]["method"].upper()
             assert метод.lower() in узел, f"{путь}: описан не тот метод"
-            конкретный = путь.replace("{siteId}", "lords-01").replace("{jobId}", "нет-такого")
+            конкретный = (путь.replace("{siteId}", "lords-01")
+                          .replace("{jobId}", "нет-такого")
+                          .replace("{traceId}", "0" * 32))
             ответ = control.handle(метод, конкретный,
                                    body=dict(ПРОБНЫЕ_ТЕЛА[путь]), headers=ЗАГОЛОВКИ)
             код = ответ.body.get("error", {}).get("code")

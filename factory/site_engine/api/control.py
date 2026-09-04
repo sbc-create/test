@@ -45,6 +45,13 @@ from factory.site_engine.api.idempotency import (
 )
 from factory.site_engine.api.metrics import Metrics, status_class
 from factory.site_engine.api.ratelimit import SharedRateLimiter
+from factory.site_engine.api.tracing import (
+    TRACEPARENT,
+    Tracer,
+    new_context,
+    parse_traceparent,
+    path_template,
+)
 
 API_VERSION = "v1"
 
@@ -233,6 +240,23 @@ def _diff(before: dict[str, Any], changes: dict[str, Any]) -> dict[str, Any]:
     return out
 
 
+def _завершённый_отрезок(контекст, родитель, имя, атрибуты, начало, конец):
+    """Готовый отрезок для записи после ответа."""
+    from factory.site_engine.api.tracing import Span, sanitize_attrs
+
+    отрезок = Span(
+        trace_id=контекст.trace_id,
+        span_id=контекст.span_id,
+        parent_id=родитель.span_id if родитель is not None else None,
+        name=имя,
+        service="control-api",
+        started=начало,
+        attrs=sanitize_attrs(атрибуты),
+    )
+    отрезок.ended = конец
+    return отрезок
+
+
 class ControlApi:
     """Записывающая часть Control API v1."""
 
@@ -245,6 +269,7 @@ class ControlApi:
         metrics: Metrics | None = None,
         limiter: SharedRateLimiter | None = None,
         idempotency: IdempotencyStore | None = None,
+        tracer: Tracer | None = None,
     ) -> None:
         self._root = Path(root).resolve()
         self._env = env if env is not None else {}
@@ -259,9 +284,14 @@ class ControlApi:
         self._limiter = limiter if limiter is not None else SharedRateLimiter(состояние, now=now)
         self._idempotency = idempotency if idempotency is not None else IdempotencyStore(
             состояние, now=now)
+        self._tracer = tracer if tracer is not None else Tracer(состояние, now=now)
         # Показатели, которые считает не этот модуль: их поставщик регистрирует
         # себя сам. Иначе управляющий слой начал бы знать про админку.
         self._gauges: dict[str, Any] = {}
+
+    @property
+    def tracer(self) -> Tracer:
+        return self._tracer
 
     @property
     def metrics(self) -> Metrics:
@@ -291,6 +321,16 @@ class ControlApi:
     ) -> ApiResponse:
         headers = {str(k).lower(): v for k, v in (headers or {}).items()}
         correlation_id = str(headers.get("x-correlation-id") or "").strip() or self._new_correlation_id()
+        # Контекст следа продолжается, если пришёл, и начинается, если нет.
+        родитель = parse_traceparent(headers.get(TRACEPARENT))
+        изменяющий = method.upper() in {"POST", "PATCH", "PUT", "DELETE"}
+        if родитель is not None:
+            контекст = родитель.child()
+        else:
+            контекст = new_context(
+                sampled=self._tracer.should_sample(mutating=изменяющий, failed=False))
+        self._trace_context = контекст
+        self._request_started = float(self._now())
         try:
             ключ, отпечаток = self._idempotency_key(method, path, body or {}, headers)
         except ControlDenied as denied:
@@ -340,7 +380,19 @@ class ControlApi:
         # Идентификатор запроса возвращается всегда, включая отказы: без него
         # вызывающий не может найти свой запрос в журнале и приносит скриншот.
         payload = response.body if isinstance(response.body, dict) else {"result": response.body}
-        payload = {**payload, "correlationId": correlation_id}
+        payload = {**payload, "correlationId": correlation_id,
+                   "traceparent": контекст.header()}
+        # Отрезок записывается после ответа: до него неизвестны ни код, ни
+        # причина отказа, а след без них отвечает «что-то произошло».
+        ошибка = (payload.get("error") or {}).get("code", "") if isinstance(payload, dict) else ""
+        if контекст.sampled or response.status >= 400:
+            отрезок = _завершённый_отрезок(
+                контекст, родитель, "control.request",
+                {"method": method.upper(), "path_template": path_template(path),
+                 "status": response.status, "error_code": ошибка,
+                 "outcome": "ok" if response.status < 400 else "error"},
+                self._request_started, float(self._now()))
+            self._tracer.record(отрезок)
         return ApiResponse(status=response.status, body=payload)
 
     def _idempotency_key(self, method: str, path: str, body: dict[str, Any],
@@ -369,8 +421,21 @@ class ControlApi:
         self._metrics.inc("site_engine_control_requests_total",
                           method=method.upper(), status=status_class(denied.status))
         ответ = error(denied.status, denied.code, denied.message, **denied.extra)
-        return ApiResponse(status=ответ.status,
-                           body={**ответ.body, "correlationId": correlation_id})
+        # Ранние отказы возвращаются мимо общего хвоста handle(), поэтому след
+        # пишется здесь. Без этого конфликт ключа и запрос в работе — то есть
+        # ровно те случаи, ради которых трассировку заводят, — следа не имели.
+        контекст = getattr(self, "_trace_context", None)
+        if контекст is not None:
+            отрезок = _завершённый_отрезок(
+                контекст, None, "control.request",
+                {"method": method.upper(), "path_template": path_template(path),
+                 "status": denied.status, "error_code": denied.code, "outcome": "error"},
+                getattr(self, "_request_started", float(self._now())), float(self._now()))
+            self._tracer.record(отрезок)
+        тело = {**ответ.body, "correlationId": correlation_id}
+        if контекст is not None:
+            тело["traceparent"] = контекст.header()
+        return ApiResponse(status=ответ.status, body=тело)
 
     def _new_correlation_id(self) -> str:
         seed = f"{self._now()}:{id(self)}"
@@ -403,6 +468,9 @@ class ControlApi:
         operation = "/".join(rest[2:]) if len(rest) > 2 else (rest[0] if rest else "")
         self._rate_limit(principal, site_for_limit, f"{method}:{operation}")
 
+        if method == "GET" and len(rest) == 2 and rest[0] == "traces":
+            principal.require(SCOPE_AUDIT)
+            return self._trace(rest[1])
         if method == "GET" and rest[:1] == ["compatibility"]:
             principal.require(SCOPE_READ)
             return self._compatibility(rest[1] if len(rest) > 1 else None)
@@ -506,7 +574,8 @@ class ControlApi:
 
         try:
             with locks.site_lock(site_id, environment, timeout=2.0):
-                item = queue.enqueue(site_id, action=action, environment=environment)
+                item = queue.enqueue(site_id, action=action, environment=environment,
+                                     traceparent=self._trace_context.header())
         except locks.LockBusy as exc:
             raise ControlDenied(409, "site_busy", "по сайту уже идёт операция") from exc
         except FileExistsError as exc:
@@ -515,7 +584,8 @@ class ControlApi:
         audit.record(
             job_id=item.job_id, site_id=site_id, environment=environment,
             action=f"control.job.{action}", target="queue", mutation=True, exit_code=0,
-            extra={"correlation_id": correlation_id, "actor_token": principal.token_id},
+            extra={"correlation_id": correlation_id, "actor_token": principal.token_id,
+                   "trace_id": self._trace_context.trace_id},
         )
         return ApiResponse(status=202, body={"job": item.as_dict(), "status": "queued"})
 
@@ -618,6 +688,7 @@ class ControlApi:
             action="control.settings.patch", target=str(target.relative_to(self._root)),
             mutation=True, exit_code=0,
             extra={"correlation_id": correlation_id, "actor_token": principal.token_id,
+                   "trace_id": self._trace_context.trace_id,
                    "diff": diff, "version_before": current_version, "version_after": new_version},
         )
         return ApiResponse(status=200, body={"applied": True, "diff": diff,
@@ -654,14 +725,16 @@ class ControlApi:
 
         job_id = f"{site_id}-cache-{scope}-{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}"
         try:
-            item = queue.enqueue(site_id, action="invalidate", environment="staging", job_id=job_id)
+            item = queue.enqueue(site_id, action="invalidate", environment="staging",
+                                 job_id=job_id, traceparent=self._trace_context.header())
         except FileExistsError as exc:
             raise ControlDenied(409, "job_exists",
                                 "такая инвалидация уже запланирована") from exc
         audit.record(
             job_id=item.job_id, site_id=site_id, environment="staging",
             action="control.cache.invalidate", target=scope, mutation=True, exit_code=0,
-            extra={"correlation_id": correlation_id, "actor_token": principal.token_id, "keys": keys},
+            extra={"correlation_id": correlation_id, "actor_token": principal.token_id,
+                   "trace_id": self._trace_context.trace_id, "keys": keys},
         )
         return ApiResponse(status=202, body={"job": item.as_dict(), "invalidate": plan})
 
@@ -703,6 +776,23 @@ class ControlApi:
                 "витрина несовместима с версией движка",
                 **state.as_dict(),
             )
+
+    def _trace(self, trace_id: str) -> ApiResponse:
+        """Путь запроса по его идентификатору.
+
+        Отрезки без способа их собрать — это данные, которых никто не читает.
+        Здесь они собираются в цепочку с длительностями по звеньям.
+        """
+        отрезки = self._tracer.read_trace(trace_id)
+        if not отрезки:
+            raise ControlDenied(404, "trace_not_found",
+                                "след не найден: возможно, запрос не попал в выборку")
+        return ApiResponse(status=200, body={
+            "traceId": trace_id,
+            "spans": отрезки,
+            "total": len(отрезки),
+            "durationMs": round(sum(s.get("duration_ms", 0) for s in отрезки), 2),
+        })
 
     def _compatibility(self, site_id: str | None) -> ApiResponse:
         if site_id is not None:

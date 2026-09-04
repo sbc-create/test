@@ -149,6 +149,15 @@ from factory.site_engine.api.ratelimit import DEFAULT_LIMITS
         "success": ("202", "инвалидация поставлена в очередь"),
         "errors": {"400": "негодная область или пустой keys при scope=title"},
     },
+    "/api/v1/traces/{traceId}": {
+        "method": "get",
+        "summary": "Путь запроса по идентификатору следа",
+        "scope": "audit:read",
+        "idempotent": False,
+        "body": None,
+        "success": ("200", "отрезки следа по звеньям с длительностями"),
+        "errors": {"404": "след не найден: запрос мог не попасть в выборку"},
+    },
     "/api/v1/compatibility": {
         "method": "get",
         "summary": "Матрица совместимости витрин с версией движка",

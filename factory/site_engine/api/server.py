@@ -97,6 +97,10 @@ class _Handler(http.server.BaseHTTPRequestHandler):
         body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
+        # Контекст следа возвращается заголовком: вызывающему нужен способ
+        # связать свой запрос с записанным путём, не разбирая тело ответа.
+        if isinstance(payload, dict) and payload.get("traceparent"):
+            self.send_header("traceparent", str(payload["traceparent"]))
         self.send_header("Content-Length", str(len(body)))
         # Ответы управляющего API не кэшируются нигде: устаревшее состояние
         # задания хуже, чем отсутствие ответа.
