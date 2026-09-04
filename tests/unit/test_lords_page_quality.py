@@ -274,3 +274,31 @@ class TestPlayerPlaceholderStaysPolite:
             for path, html in _by_path(sites[site_id]).items():
                 assert "player__status" not in html, (
                     f"{site_id} {path}: вернулся элемент утечки")
+
+
+# ---------------------------------------------------------------------------
+# 6. Оценка не появляется без источника
+# ---------------------------------------------------------------------------
+class TestRatingsAlwaysCarryTheirSource:
+    """Оценка без подписи источника — это выдуманное число.
+
+    Механика оценок в рендерере есть (`_card_rating`: Кинопоиск, затем IMDb), а
+    в синтетическом каталоге оценок нет как полей. Оба факта верны
+    одновременно, и тест закрепляет связь между ними: пока источник молчит,
+    разметки оценки не возникает, а как только она возникнет — рядом обязана
+    стоять подпись источника.
+    """
+
+    @pytest.mark.parametrize("site_id", SITES)
+    def test_no_rating_value_stands_without_a_source(self, sites, site_id):
+        for path, html in _by_path(sites[site_id]).items():
+            values = html.count('class="card__rating-value"')
+            sources = html.count('class="card__rating-source"')
+            assert values == sources, (
+                f"{site_id} {path}: оценок {values}, подписей источника {sources}")
+
+    def test_fixture_catalog_declares_no_ratings_at_all(self, catalog):
+        """У синтетических записей оценок нет как полей, а не как пустых значений."""
+        for title in catalog.titles:
+            assert getattr(title, "kinopoisk_rating", None) is None
+            assert getattr(title, "imdb_rating", None) is None

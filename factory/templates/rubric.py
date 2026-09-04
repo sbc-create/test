@@ -420,17 +420,21 @@ def _player_shell(doc: _Document, exp: Expectation, html: str) -> Check:
 
 def _ratings(doc: _Document, exp: Expectation, html: str) -> Check:
     """Оценка показывается только с источником и никогда не выдумывается."""
-    shown = re.findall(r'data-rating="([^"]*)"', html)
-    if not shown:
+    # Разметка берётся настоящая. Первая версия критерия искала `data-rating`,
+    # которого рендерер не выдаёт вовсе: оценка выводится классами
+    # `card__rating-value` и `card__rating-source`. Такой критерий не отличил бы
+    # оценку без источника от её отсутствия и ставил бы PASS в обоих случаях.
+    values = re.findall(r'class="[a-z_]*rating-value"', html)
+    sources = re.findall(r'class="[a-z_]*rating-source"', html)
+    if not values:
         return Check(
             "ratings", PASS,
             "оценок нет ни как поля, ни как разметки — выдумывать нечего")
-    sourced = re.findall(r'data-rating-source="([^"]+)"', html)
-    if len(sourced) < len(shown):
+    if len(sources) < len(values):
         return Check(
             "ratings", FAIL,
-            f"оценок {len(shown)}, из них с источником {len(sourced)}")
-    return Check("ratings", PASS, f"оценок {len(shown)}, у каждой указан источник")
+            f"оценок {len(values)}, из них с указанным источником {len(sources)}")
+    return Check("ratings", PASS, f"оценок {len(values)}, у каждой указан источник")
 
 
 def _speed(doc: _Document, exp: Expectation, html: str) -> Check:
