@@ -11,6 +11,9 @@ from pathlib import Path
     ("test_compat.py", "Контракт CMS"),
     ("test_blast_radius.py", "Изоляция и радиус поражения"),
     ("test_site_engine_openapi.py", "Сверка описания с поведением"),
+    ("test_multiprocess_control.py", "Распределённые пределы и идемпотентность"),
+    ("test_startup_lifecycle.py", "Протокол запуска и жизненный цикл"),
+    ("test_tracing.py", "Сквозная трассировка"),
 ]
 
 строки = [
