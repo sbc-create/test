@@ -33,9 +33,10 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Callable, Iterable
+from typing import Any
 
 # Коды, означающие «эндпоинт существует»: доступ может быть закрыт, но маршрут
 # объявлен не зря. 404 и 501 означают обратное.

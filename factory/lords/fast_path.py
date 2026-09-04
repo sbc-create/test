@@ -31,7 +31,6 @@ import yaml
 from factory.lords import detail_enrichment, live_catalog, live_site
 from factory.lords import playability as playability_mod
 from factory.lords import render as render_mod
-from factory.lords import serve as serve_mod
 from factory.paths import PATHS
 from factory.site_engine import incremental
 

@@ -21,7 +21,6 @@ from __future__ import annotations
 import datetime as _dt
 import html
 import json
-import math
 import re
 from collections.abc import Callable
 from dataclasses import dataclass, field, replace
@@ -1821,7 +1820,7 @@ def _context(package: dict, profile: dict, site_plan, player_state,
         "per_page": int(((package.get("seo") or {}).get("items_per_page")) or 24),
         # Выключено по умолчанию: включение меняет состав страниц один раз и
         # требует согласия владельца (adr/0007).
-        "pagination_by_year": bool(((package.get("seo") or {}).get("pagination_by_year"))),
+        "pagination_by_year": bool((package.get("seo") or {}).get("pagination_by_year")),
         "home_items": 12,
         "row_items": 6,
         "facet_position": str(layout.get("facet_position")),

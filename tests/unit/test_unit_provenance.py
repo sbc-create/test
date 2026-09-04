@@ -20,10 +20,7 @@ from __future__ import annotations
 
 import os
 import subprocess
-import sys
 from pathlib import Path
-
-import pytest
 
 REPO = Path(__file__).resolve().parents[2]
 SCRIPT = REPO / "automation" / "host" / "check-unit-provenance.sh"
@@ -130,12 +127,12 @@ def fake_systemctl(tmp_path: Path, unit: str, exec_start: str) -> Path:
     sc = binn / "systemctl"
     sc.write_text(
         "#!/usr/bin/env bash\n"
-        'if [ "$1" = "cat" ] && [ "$2" = "%s" ]; then\n'
+        f'if [ "$1" = "cat" ] && [ "$2" = "{unit}" ]; then\n'
         '  echo "[Service]"\n'
-        '  echo "ExecStart=%s"\n'
+        f'  echo "ExecStart={exec_start}"\n'
         "  exit 0\n"
         "fi\n"
-        "exit 1\n" % (unit, exec_start),
+        "exit 1\n",
         encoding="utf-8",
     )
     sc.chmod(0o755)

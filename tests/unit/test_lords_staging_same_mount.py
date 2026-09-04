@@ -23,8 +23,8 @@ def _text() -> str:
 
 
 def test_staging_создаётся_рядом_с_релизами():
-    строки = [l.strip() for l in _text().splitlines()
-              if re.match(r'^\s*staging="\$\(mktemp', l)]
+    строки = [ln.strip() for ln in _text().splitlines()
+              if re.match(r'^\s*staging="\$\(mktemp', ln)]
     assert строки, "не найдено создание каталога сборки"
     for строка in строки:
         assert "-p" in строка and "runtime" in строка, (

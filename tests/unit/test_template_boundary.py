@@ -8,8 +8,6 @@
 
 from __future__ import annotations
 
-import pytest
-
 from factory.contracts.template_boundary import check_source, check_tree, main
 
 

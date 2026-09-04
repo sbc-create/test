@@ -9,8 +9,6 @@
 
 from __future__ import annotations
 
-import pytest
-
 from factory.contracts.provider_conformance import (
     blocking,
     check_provider,

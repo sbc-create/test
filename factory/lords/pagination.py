@@ -80,7 +80,7 @@ def затронутые_страницы(было: Iterable[list], стало: 
     было_list = [list(p) for p in было]
     стало_list = [list(p) for p in стало]
     сколько = abs(len(было_list) - len(стало_list))
-    for старая, новая in zip(было_list, стало_list):
+    for старая, новая in zip(было_list, стало_list, strict=False):
         if старая != новая:
             сколько += 1
     return сколько

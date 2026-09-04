@@ -13,8 +13,8 @@
 
 from __future__ import annotations
 
-import time
 import json
+import time
 import urllib.request
 
 import pytest
@@ -613,8 +613,8 @@ class TestIncrementalRefresh:
     @pytest.mark.parametrize(
         "seed, reason_fragment",
         [
-            (dict(ids=[], mark="2026-09-01T00:00:00Z"), "кэш пуст"),
-            (dict(ids=["a"], mark=None), "нет отметки"),
+            ({"ids": [], "mark": "2026-09-01T00:00:00Z"}, "кэш пуст"),
+            ({"ids": ["a"], "mark": None}, "нет отметки"),
         ],
     )
     def test_any_doubt_falls_back_to_a_full_walk(self, contract, tmp_path, seed, reason_fragment):
