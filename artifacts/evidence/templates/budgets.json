@@ -1,5 +1,5 @@
 {
-  "captured_at_utc": "2026-09-04T14:15:47.167Z",
+  "captured_at_utc": "2026-09-04T15:09:41.759Z",
   "budget": {
     "documentKb": 120,
     "scriptKb": 60,
@@ -107,7 +107,7 @@
       "worstMs": 0,
       "reporting_threshold_ms": 16,
       "note": "ни одно взаимодействие не достигло порога 16 мс — INP ниже него",
-      "observer_selfcheck_ms": 128
+      "observer_selfcheck_ms": 192
     }
   ],
   "player": [

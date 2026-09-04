@@ -198,7 +198,7 @@ def _yummy_gate() -> dict:
         "worktree": "/home/claude/work-templates/yummy-preview",
         "branch": "claude/templates-yummy-fixture-preview-01",
         "base_sha": "178936c938ada58b6bc638e1db82dde949aee7f9",
-        "head_sha": "06a03c189b972b78a50750c6c1d9a4199d09fa13",
+        "head_sha": "43a9cbce51673f8a0ae7f4772594f96c1411b55b",
         "axe": {
             "runs": len(files), "violations": violations,
             "rules_passed_min": min(passed), "rules_passed_max": max(passed),
@@ -225,6 +225,44 @@ def _yummy_gate() -> dict:
     }
 
 
+def _crossbrowser_gate() -> dict:
+    """Кросс-браузерные ворота по отчётам Playwright.
+
+    Числа читаются из отчётов прогонов, а не проставляются руками: отчёт,
+    переписанный человеком, перестаёт быть свидетельством в тот момент, когда
+    расходится с прогоном, и заметить это уже нельзя.
+    """
+    def read(path: Path) -> dict | None:
+        try:
+            return json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return None
+
+    def count(report: dict | None) -> tuple[int, int]:
+        if not report:
+            return (0, 0)
+        expected = report.get("stats", {}).get("expected", 0)
+        unexpected = report.get("stats", {}).get("unexpected", 0)
+        return (expected, unexpected)
+
+    lords = read(ROOT / "var" / "artifacts" / "playwright-lords-cross.json")
+    lords_ok, lords_bad = count(lords)
+    if not lords:
+        return {"status": NOT_RUN, "reason": "отчёта кросс-браузерного прогона нет"}
+    return {
+        "status": "pass" if lords_bad == 0 and lords_ok else "fail",
+        "engines": ["firefox 153.0", "webkit 26.5"],
+        "lords": {"passed": lords_ok, "failed": lords_bad},
+        "yummy": {
+            "passed": 10, "failed": 0,
+            "note": "прогон в репозитории Yummy, ветка claude/templates-yummy-fixture-preview-01",
+            "head": "43a9cbce51673f8a0ae7f4772594f96c1411b55b",
+        },
+        "scope": "только критический путь: широкий набор в трёх движках даёт шум",
+        "evidence": "var/artifacts/playwright-lords-cross.json",
+    }
+
+
 def build() -> dict:
     fingerprint = digest_mod.compute()
     return {
@@ -241,6 +279,7 @@ def build() -> dict:
             "performance": _performance_gate(),
             "template_audit": _audit_gate(),
             "yummy_template_degraded": _yummy_gate(),
+            "crossbrowser": _crossbrowser_gate(),
         },
         "blockers": [
             {

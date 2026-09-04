@@ -1,7 +1,7 @@
 {
   "lane": "TEMPLATES",
   "branch": "claude/templates-lords-yummy-refpacks-01",
-  "head": "8947065ca8aae000999bc8f9ce38cbcdea6e1f6c",
+  "head": "0cd3309b31ff59d1282c5f76a029503ec90633de",
   "base_sha": "76552b9a7372c5ad15cfc7d8b1052a10024722a3",
   "template_digest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
   "template_digest_files": 19,
@@ -29,7 +29,7 @@
       "rules_passed_min": 25,
       "rules_passed_max": 29,
       "evidence": "artifacts/evidence/templates/a11y/axe-*.json",
-      "last_capture_utc": "2026-09-04T13:42:48.341Z"
+      "last_capture_utc": "2026-09-04T15:10:41.951Z"
     },
     "a11y_manual": {
       "status": "pass",
@@ -66,7 +66,7 @@
       "runs": 16,
       "worst_cls": 0,
       "cls_budget": 0.1,
-      "worst_lcp_ms": 520,
+      "worst_lcp_ms": 472,
       "lcp_budget_ms": 1000,
       "limitation": "стенд локальный: LCP — нижняя граница, а не боевое значение",
       "evidence": "artifacts/evidence/templates/performance.json"
@@ -91,7 +91,7 @@
       "worktree": "/home/claude/work-templates/yummy-preview",
       "branch": "claude/templates-yummy-fixture-preview-01",
       "base_sha": "178936c938ada58b6bc638e1db82dde949aee7f9",
-      "head_sha": "06a03c189b972b78a50750c6c1d9a4199d09fa13",
+      "head_sha": "43a9cbce51673f8a0ae7f4772594f96c1411b55b",
       "axe": {
         "runs": 24,
         "violations": 0,
@@ -131,6 +131,25 @@
         "производительность на production build"
       ],
       "evidence": "artifacts/evidence/templates/yummy/*.json"
+    },
+    "crossbrowser": {
+      "status": "pass",
+      "engines": [
+        "firefox 153.0",
+        "webkit 26.5"
+      ],
+      "lords": {
+        "passed": 16,
+        "failed": 0
+      },
+      "yummy": {
+        "passed": 10,
+        "failed": 0,
+        "note": "прогон в репозитории Yummy, ветка claude/templates-yummy-fixture-preview-01",
+        "head": "43a9cbce51673f8a0ae7f4772594f96c1411b55b"
+      },
+      "scope": "только критический путь: широкий набор в трёх движках даёт шум",
+      "evidence": "var/artifacts/playwright-lords-cross.json"
     }
   },
   "blockers": [
