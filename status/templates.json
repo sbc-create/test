@@ -1,0 +1,104 @@
+{
+  "lane": "TEMPLATES",
+  "branch": "claude/templates-lords-yummy-refpacks-01",
+  "head": "f2fc6ea45a991efb1aae2781ff9c9888a4f3401b",
+  "base_sha": "76552b9a7372c5ad15cfc7d8b1052a10024722a3",
+  "template_digest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
+  "template_digest_files": 19,
+  "gates": {
+    "axe_wcag22aa": {
+      "status": "pass",
+      "tool": "axe-core 4.13.0",
+      "standard": "WCAG 2.0/2.1/2.2 A + AA",
+      "runs": 72,
+      "pages": [
+        "catalog",
+        "home",
+        "not-found",
+        "search",
+        "search-empty",
+        "title"
+      ],
+      "viewports": [
+        390,
+        768,
+        1440
+      ],
+      "violations": 0,
+      "incomplete": 0,
+      "rules_passed_min": 25,
+      "rules_passed_max": 29,
+      "evidence": "artifacts/evidence/templates/a11y/axe-*.json",
+      "last_capture_utc": "2026-09-04T13:42:48.341Z"
+    },
+    "a11y_manual": {
+      "status": "pass",
+      "target_size_aa_24px": {
+        "criterion": "WCAG 2.2 SC 2.5.8 (AA)",
+        "note": "учтены исключения по интервалу и по строчной цели",
+        "failing": 0
+      },
+      "target_size_aaa_44px": {
+        "criterion": "WCAG 2.2 SC 2.5.5 (AAA) — требование владельца",
+        "note": "учтено исключение по эквивалентной цели того же адреса",
+        "failing": 0
+      },
+      "mobile_input_font_16px": {
+        "note": "не критерий WCAG: защита от зума iOS Safari при фокусе",
+        "fields_checked": 9,
+        "failing": 0
+      },
+      "keyboard": {
+        "stops_traversed": 40,
+        "focus_invisible": 0
+      },
+      "evidence": "artifacts/evidence/templates/a11y/manual-*.json"
+    },
+    "visual_baseline": {
+      "status": "pass",
+      "rows": 24,
+      "tolerance_px": 1,
+      "note": "эталон отслеживается git и сравнивается при каждом прогоне",
+      "evidence": "tests/e2e-lords/visual-baseline.json"
+    },
+    "performance": {
+      "status": "pass",
+      "runs": 16,
+      "worst_cls": 0,
+      "cls_budget": 0.1,
+      "worst_lcp_ms": 520,
+      "lcp_budget_ms": 1000,
+      "limitation": "стенд локальный: LCP — нижняя граница, а не боевое значение",
+      "evidence": "artifacts/evidence/templates/performance.json"
+    },
+    "template_audit": {
+      "status": "pass",
+      "threshold": 8.0,
+      "minimum_by_site": {
+        "lords-01": 10.0,
+        "lords-02": 10.0,
+        "lords-03": 10.0,
+        "lords-04": 10.0
+      },
+      "evidence": "artifacts/templates/audit.lords.json"
+    }
+  },
+  "blockers": [
+    {
+      "id": "REF-EGRESS-01",
+      "state": "open",
+      "what": "хосты amd.online и w140.zona.plus отклоняются профилем разрешений",
+      "effect": "снимки и измерения референсов недоступны",
+      "recorded_in": "docs/templates/BLOCKERS.md"
+    },
+    {
+      "id": "YUMMY-RENDER-01",
+      "state": "open",
+      "what": "ключевые страницы Yummy нечем отрисовать: нужна база и учётные данные",
+      "effect": "оценка Yummy по рубрике не проводилась и не заявляется",
+      "recorded_in": "docs/templates/BLOCKERS.md"
+    }
+  ],
+  "verdict": "CONDITIONAL_BLOCKED_ON_YUMMY",
+  "verdict_reason": "Ворота Lords пройдены полностью. Yummy не проверен: блокер YUMMY-RENDER-01. TEMPLATE_RELEASE_CANDIDATE=PASS не заявляется."
+}

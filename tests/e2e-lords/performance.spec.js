@@ -11,14 +11,16 @@
 // именно её. Поэтому бюджет CLS строгий, а бюджет LCP — заведомо щедрый и
 // работает как сторож против обвала, а не как замер производительности.
 //
-// Измерения сохраняются в artifacts/templates/performance.json как
+// Измерения сохраняются в artifacts/evidence/templates/performance.json как
 // свидетельство прогона: отчёт обязан ссылаться на числа, а не на впечатление.
+// Каталог выбран не произвольно — `artifacts/*` закрыт .gitignore целиком, и
+// только `artifacts/evidence/` отслеживается git'ом.
 const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
 const { SITES, url, VIEWPORTS } = require('./helpers');
 
-const OUT = path.join(__dirname, '..', '..', 'artifacts', 'templates');
+const OUT = path.join(__dirname, '..', '..', 'artifacts', 'evidence', 'templates');
 
 // Бюджет смещения — тот же, что у Core Web Vitals: 0.1. Он не выдуман под
 // текущий результат, иначе сторож охранял бы то, что уже есть.

@@ -1,0 +1,71 @@
+{
+  "note": "Замер на локальном стенде. LCP — нижняя граница, сети нет. CLS отражает вёрстку.",
+  "cls_budget": 0.1,
+  "lcp_budget_ms": 1000,
+  "measurements": {
+    "lords-01/catalog/1440": {
+      "lcp": 156,
+      "cls": 0
+    },
+    "lords-01/catalog/390": {
+      "lcp": 108,
+      "cls": 0
+    },
+    "lords-01/home/1440": {
+      "lcp": 408,
+      "cls": 0
+    },
+    "lords-01/home/390": {
+      "lcp": 176,
+      "cls": 0
+    },
+    "lords-02/catalog/1440": {
+      "lcp": 180,
+      "cls": 0
+    },
+    "lords-02/catalog/390": {
+      "lcp": 176,
+      "cls": 0
+    },
+    "lords-02/home/1440": {
+      "lcp": 500,
+      "cls": 0
+    },
+    "lords-02/home/390": {
+      "lcp": 172,
+      "cls": 0
+    },
+    "lords-03/catalog/1440": {
+      "lcp": 256,
+      "cls": 0
+    },
+    "lords-03/catalog/390": {
+      "lcp": 268,
+      "cls": 0
+    },
+    "lords-03/home/1440": {
+      "lcp": 188,
+      "cls": 0
+    },
+    "lords-03/home/390": {
+      "lcp": 220,
+      "cls": 0
+    },
+    "lords-04/catalog/1440": {
+      "lcp": 336,
+      "cls": 0
+    },
+    "lords-04/catalog/390": {
+      "lcp": 220,
+      "cls": 0
+    },
+    "lords-04/home/1440": {
+      "lcp": 520,
+      "cls": 0
+    },
+    "lords-04/home/390": {
+      "lcp": 188,
+      "cls": 0
+    }
+  }
+}

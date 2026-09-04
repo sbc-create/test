@@ -1,0 +1,369 @@
+{
+  "captured_at_utc": "2026-09-04T13:41:31.381Z",
+  "site": "lords-01",
+  "route": "/catalog/",
+  "viewport": 1440,
+  "order": [
+    {
+      "tag": "a",
+      "cls": "visually-hidden",
+      "id": "",
+      "text": "Перейти к содержимому",
+      "top": -1,
+      "left": -1,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "brand",
+      "id": "",
+      "text": "Llordfilm47.space",
+      "top": 43,
+      "left": 116,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Главная",
+      "top": 85,
+      "left": 116,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Каталог",
+      "top": 85,
+      "left": 202,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Фильмы",
+      "top": 85,
+      "left": 285,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Сериалы",
+      "top": 85,
+      "left": 371,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Мультфильмы",
+      "top": 85,
+      "left": 464,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Подборки",
+      "top": 85,
+      "left": 594,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Новое",
+      "top": 85,
+      "left": 690,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Расписание",
+      "top": 85,
+      "left": 762,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Жанры",
+      "top": 85,
+      "left": 874,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Годы",
+      "top": 85,
+      "left": 953,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Страны",
+      "top": 85,
+      "left": 1016,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Поиск",
+      "top": 85,
+      "left": 1098,
+      "focusVisible": true
+    },
+    {
+      "tag": "input",
+      "cls": "",
+      "id": "q",
+      "text": "",
+      "top": 137,
+      "left": 116,
+      "focusVisible": true
+    },
+    {
+      "tag": "button",
+      "cls": "",
+      "id": "",
+      "text": "Найти",
+      "top": 137,
+      "left": 344,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Главная",
+      "top": 212,
+      "left": 116,
+      "focusVisible": true
+    },
+    {
+      "tag": "select",
+      "cls": "",
+      "id": "f-type",
+      "text": "Любой типФильмСериалМультфильм",
+      "top": 473,
+      "left": 129,
+      "focusVisible": true
+    },
+    {
+      "tag": "select",
+      "cls": "",
+      "id": "f-genre",
+      "text": "Любой жанрДрама (11)Детектив (",
+      "top": 538,
+      "left": 129,
+      "focusVisible": true
+    },
+    {
+      "tag": "select",
+      "cls": "",
+      "id": "f-year",
+      "text": "Любой год2025 (3)2024 (3)2023 ",
+      "top": 603,
+      "left": 129,
+      "focusVisible": true
+    },
+    {
+      "tag": "select",
+      "cls": "",
+      "id": "f-country",
+      "text": "Любая странаРоссия (13)Франция",
+      "top": 669,
+      "left": 129,
+      "focusVisible": true
+    },
+    {
+      "tag": "select",
+      "cls": "",
+      "id": "f-sort",
+      "text": "Сначала новыеСначала старыеПо ",
+      "top": 734,
+      "left": 129,
+      "focusVisible": true
+    },
+    {
+      "tag": "button",
+      "cls": "facets__reset",
+      "id": "",
+      "text": "Сбросить",
+      "top": 776,
+      "left": 129,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "card__title",
+      "id": "",
+      "text": "Пепельный невод",
+      "top": 632,
+      "left": 397,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "card__title",
+      "id": "",
+      "text": "Пепельный обжиг",
+      "top": 632,
+      "left": 557,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "card__title",
+      "id": "",
+      "text": "Тёплый разъезд",
+      "top": 632,
+      "left": 716,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "2",
+      "top": 778,
+      "left": 428,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "3",
+      "top": 778,
+      "left": 472,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "4",
+      "top": 778,
+      "left": 516,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "5",
+      "top": 778,
+      "left": 560,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "6",
+      "top": 778,
+      "left": 604,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "7",
+      "top": 778,
+      "left": 648,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "8",
+      "top": 778,
+      "left": 692,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "9",
+      "top": 778,
+      "left": 736,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "10",
+      "top": 778,
+      "left": 780,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Вперёд",
+      "top": 778,
+      "left": 824,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Главная",
+      "top": 915,
+      "left": 116,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Каталог",
+      "top": 915,
+      "left": 182,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Фильмы",
+      "top": 915,
+      "left": 245,
+      "focusVisible": true
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "id": "",
+      "text": "Сериалы",
+      "top": 915,
+      "left": 311,
+      "focusVisible": true
+    }
+  ],
+  "trapped": false
+}

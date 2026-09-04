@@ -1,0 +1,24 @@
+{
+  "site": "lords-03",
+  "page": "title",
+  "route": "/title/pepelnyy-obzhig-2025/",
+  "url": "http://127.0.0.1:8803/title/pepelnyy-obzhig-2025/",
+  "viewport": {
+    "name": "desktop",
+    "width": 1440,
+    "height": 900
+  },
+  "captured_at_utc": "2026-09-04T13:42:29.302Z",
+  "axe_version": "4.13.0",
+  "tags": [
+    "wcag2a",
+    "wcag2aa",
+    "wcag21a",
+    "wcag21aa",
+    "wcag22aa"
+  ],
+  "rules_passed": 29,
+  "rules_inapplicable": 34,
+  "violations": [],
+  "incomplete": []
+}
