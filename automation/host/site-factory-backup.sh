@@ -140,6 +140,32 @@ if [ -d "$REPO/.git" ]; then
 fi
 
 # ---------------------------------------------------------------------------
+# 1b. Хватит ли места — решается здесь, до упаковки.
+#
+# Дальше на диске одновременно живут три вещи: staging, архив и распакованная
+# копия для доказательства восстановления. 2026-09-03 прогон это выяснил на
+# последнем шаге: `tar: No space left on device` после трёх с половиной минут
+# работы и уже записанного архива на 1.13 GB, который затем остался сиротой.
+# Отказ был предсказуем ещё до `tar`, и отказать заранее дешевле — предыдущий
+# подтверждённый бэкап при этом остаётся нетронутым.
+# Политика вынесена в backup-space-precheck.sh и проверяется на числах:
+# tests/unit/test_backup_space_precheck.py.
+# ---------------------------------------------------------------------------
+STAGE_KB="$(du -sk "$STAGE" | awk '{print $1}')"
+WORK_AVAIL_KB="$(df -Pk "$WORK" | awk 'NR==2{print $4}')"
+BACKUP_AVAIL_KB="$(df -Pk "$BACKUP_DIR" | awk 'NR==2{print $4}')"
+# Одна ли под ними файловая система. На этом хосте — да: `/tmp` и `/srv/backups`
+# лежат на одном `/`, и свободное место у них общее. Проверять два требования
+# порознь означало бы разрешить раскладку, которой на самом деле не хватает.
+SAME_FS=0
+if [ "$(stat -c %d "$WORK" 2>/dev/null)" = "$(stat -c %d "$BACKUP_DIR" 2>/dev/null)" ]; then
+  SAME_FS=1
+fi
+bash "$(dirname "$0")/backup-space-precheck.sh" \
+     "$STAGE_KB" "$WORK_AVAIL_KB" "$BACKUP_AVAIL_KB" "$SAME_FS" \
+  || fail "упаковка не начиналась: места не хватает уже сейчас, предыдущий подтверждённый бэкап цел"
+
+# ---------------------------------------------------------------------------
 # 2. Archive with a manifest of checksums taken from the source, before packing.
 # ---------------------------------------------------------------------------
 ( cd "$STAGE" && find . -type f -print0 | sort -z | xargs -0 -r sha256sum ) > "$WORK/manifest.sha256" \
@@ -206,18 +232,18 @@ python3 -c 'import json,sys; json.load(open(sys.argv[1]))' "$RECORD" \
   || fail "запись о проверке $RECORD не разбирается как JSON"
 
 # ---------------------------------------------------------------------------
-# 5. Retention. Prunes only fully verified triples, never below the floor.
+# 5. Retention. Вынесено в `backup-retention.sh` целиком.
+#
+# Правило удержания должно быть проверяемо на подставном каталоге: внутри этого
+# скрипта до него полторы минуты rsync по живому хосту, и до 2026-09-03 его не
+# проверял никто. Дефект, который там жил, стоил суток без подтверждённого
+# бэкапа: удалялись только полные тройки, а архив упавшего прогона не имел
+# записи о проверке и не попадал в список удаления никогда.
+# См. tests/unit/test_backup_retention_prunes_orphan_archives.py.
 # ---------------------------------------------------------------------------
-mapfile -t VERIFIED < <(find "$BACKUP_DIR" -maxdepth 1 -name 'host-*.verified.json' | sort)
-TOTAL=${#VERIFIED[@]}
-if [ "$TOTAL" -gt "$KEEP" ] && [ "$TOTAL" -gt "$KEEP_FLOOR" ]; then
-  DROP=$(( TOTAL - KEEP ))
-  [ $(( TOTAL - DROP )) -lt $KEEP_FLOOR ] && DROP=$(( TOTAL - KEEP_FLOOR ))
-  for (( i = 0; i < DROP; i++ )); do
-    base="$(basename "${VERIFIED[$i]}" .verified.json)"
-    rm -f "$BACKUP_DIR/$base.tar.gz" "${VERIFIED[$i]}"
-    echo "retention: удалён $base"
-  done
-fi
+SITE_FACTORY_BACKUP_KEEP="$KEEP" \
+SITE_FACTORY_BACKUP_KEEP_FLOOR="$KEEP_FLOOR" \
+  bash "$(dirname "$0")/backup-retention.sh" "$BACKUP_DIR" \
+  || echo "retention: удержание отработало с ошибкой, архивы оставлены как есть" >&2
 
 echo "OK: $ARCHIVE ($FILE_COUNT файлов) — восстановление подтверждено, запись $RECORD"

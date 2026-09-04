@@ -1,0 +1,30 @@
+[Unit]
+Description=YummyAnime: резервная копия трёх баз витрин с репетицией восстановления
+Documentation=file:///srv/sites/yummyani-staging/repo/deploy/staging/backup.sh
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# Скрипт самодостаточен: дампит три базы, считает контрольные суммы и
+# проверяет, что дамп загружается в отдельную базу. Аргументов не требует.
+#
+# Зачем этот юнит. До сих пор копия баз снималась ТОЛЬКО при выкатке —
+# deploy.sh вызывает этот же скрипт перед заменой образа. Расписания не было
+# ни у кого, и на 2026-09-03 последняя копия оказалась от 31 августа: RPO
+# составил трое суток и продолжал расти. Базы витрин лежат в томах docker,
+# то есть вне /srv/sites, который собирает host-бэкап, — другого механизма,
+# который бы их сохранял, в парке нет.
+#
+# Рост ограничен: вторым ExecStart идёт удержание. Без него ежедневный таймер
+# заполнял бы диск, а этот диск уже ломался ровно на неограниченном росте
+# бэкапов — 2026-09-03 host-бэкап упал с No space left on device.
+ExecStart=/usr/bin/bash /srv/sites/yummyani-staging/repo/deploy/staging/backup.sh
+# Удержание сразу после копирования: скрипт сайта его не имеет, а дописывать
+# удаление файлов в чужой репозиторий мимоходом нельзя. Набор, на который
+# указывает latest, удержание не трогает — его берёт откат.
+ExecStart=/usr/bin/bash /srv/site-factory/repo/automation/host/site-backup-retention.sh
+User=root
+Nice=10
+IOSchedulingClass=idle
+TimeoutStartSec=1800

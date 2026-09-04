@@ -1,0 +1,13 @@
+[Unit]
+Description=YummyAnime: фоновое обогащение снимка эпизодов данными detail
+Documentation=file:///srv/site-factory/repo/automation/host/yummy-content-run.sh
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/yummy-content-run.sh scripts/enrich-episode-details.mjs
+User=root
+Nice=10
+IOSchedulingClass=idle
+TimeoutStartSec=900

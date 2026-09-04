@@ -27,6 +27,22 @@ BACKUP_MAX_AGE_HOURS="${BACKUP_MAX_AGE_HOURS:-30}"
 ALERTS=()
 CHECKS=()
 
+# Привести владельца файла к владельцу каталога, в котором он лежит.
+#
+# Вынесено функцией, потому что правило неочевидно: «кто пишет — тот и
+# выравнивает». Возвращает 0, даже когда выровнять не удалось: отказ здесь не
+# повод завалить проверку здоровья хоста.
+align_log_owner() {
+  local dir="$1" file="$2"
+  [ -e "$dir" ] && [ -e "$file" ] || return 0
+  local dir_owner file_owner
+  dir_owner="$(stat -c '%U:%G' "$dir" 2>/dev/null)" || return 0
+  file_owner="$(stat -c '%U:%G' "$file" 2>/dev/null)" || return 0
+  [ "$dir_owner" = "$file_owner" ] && return 0
+  chown "$dir_owner" "$file" 2>/dev/null || true
+  return 0
+}
+
 add_check() { CHECKS+=("$1"); }
 add_alert() { ALERTS+=("$1"); }
 
@@ -235,6 +251,21 @@ mkdir -p "$STATE_DIR" 2>/dev/null || true
   done
   printf ']}\n'
 } | tee -a "$STATE_DIR/health.log" 2>/dev/null || true
+
+# Владелец лога приводится к владельцу каталога.
+#
+# Юнит работает от root, поэтому tee создаёт файл root:root. Каталог же
+# принадлежит claude, и logrotate для него настроен с `su claude claude` —
+# понижает права, а затем не может открыть root-овский файл. Итог: с 2026-09-02
+# `logrotate.service` падал ежедневно с `Permission denied`, лог не вращался
+# вовсе и рос без предела, а сам отказ выглядел как поломка ротации вообще, хотя
+# спотыкалась она об один файл.
+#
+# Выравнивание делает не logrotate, а тот, кто пишет: он один знает, что создал
+# файл, и он один здесь имеет права. Ошибка chown не важна — если прав нет,
+# значит юнит запущен не от root, и тогда файл и так создан подходящим
+# пользователем.
+align_log_owner "$STATE_DIR" "$STATE_DIR/health.log"
 
 for a in ${ALERTS+"${ALERTS[@]}"}; do
   echo "ALERT: $a" >&2

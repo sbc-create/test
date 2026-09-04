@@ -1,0 +1,19 @@
+[Unit]
+Description=YummyAnime: наблюдатель за выходом серий
+Documentation=file:///srv/site-factory/repo/automation/host/yummy-content-run.sh
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# Код берётся из боевого образа, а не из рабочего дерева git: см. обоснование
+# в yummy-content-run.sh. Пути к скрипту относительные — абсолютный отвергается.
+Environment=WATCHER_ACTIVE_BUDGET=400
+Environment=WATCHER_SWEEP_BUDGET=2500
+Environment=WATCHER_CONCURRENCY=6
+Environment=WATCHER_PACE_MS=90
+ExecStart=/usr/local/bin/yummy-content-run.sh scripts/episode-watcher.mjs
+User=root
+Nice=10
+IOSchedulingClass=idle
+TimeoutStartSec=900

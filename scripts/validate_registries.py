@@ -30,11 +30,27 @@ MAPPING = {
     "secret-hub.json": "secret-hub.schema.json",
 }
 
+# Производные артефакты: файл порождается из другого источника и в некоторых
+# ветках отсутствует вовсе.
+#
+# Почему не в MAPPING. Там отсутствие файла — провал, и это правильно для
+# реестра, который обязан быть. SITE-MATRIX.json порождается из
+# config/site-profiles/*.json, живёт не во всех ветках, и требовать его
+# повсеместно значит ломать проверку там, где генератор ещё не подключён.
+#
+# Почему не в списке исключений. Молчаливый пропуск вернул бы ровно ту дыру,
+# ради закрытия которой сопоставление сделано явным: файл, не сопоставленный
+# ни одной схеме, не проверяется никем. Здесь отсутствие разрешено, а
+# присутствие обязано пройти схему.
+DERIVED = {
+    "SITE-MATRIX.json": "site-matrix.schema.json",
+}
+
 
 def main() -> int:
     config_dir = REPO / "config"
     present = {p.name for p in config_dir.glob("*.json")}
-    unmapped = present - set(MAPPING)
+    unmapped = present - set(MAPPING) - set(DERIVED)
     failures: list[str] = []
 
     for name in sorted(unmapped):
@@ -44,6 +60,22 @@ def main() -> int:
         path = config_dir / name
         if not path.exists():
             failures.append(f"{name}: файл отсутствует")
+            continue
+        schema = json.loads((REPO / "schemas" / schema_name).read_text(encoding="utf-8"))
+        data = json.loads(path.read_text(encoding="utf-8"))
+        validator = Draft202012Validator(schema, format_checker=FormatChecker())
+        errors = sorted(validator.iter_errors(data), key=lambda e: list(e.path))
+        if errors:
+            for err in errors[:5]:
+                loc = "/".join(str(p) for p in err.path) or "(root)"
+                failures.append(f"{name} at {loc}: {err.message}")
+        else:
+            print(f"OK: config/{name} -> {schema_name}")
+
+    for name, schema_name in sorted(DERIVED.items()):
+        path = config_dir / name
+        if not path.exists():
+            print(f"SKIP: config/{name} -> производный артефакт отсутствует в этой ветке")
             continue
         schema = json.loads((REPO / "schemas" / schema_name).read_text(encoding="utf-8"))
         data = json.loads(path.read_text(encoding="utf-8"))

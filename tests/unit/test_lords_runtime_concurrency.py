@@ -204,6 +204,13 @@ class TestShutdown:
         )
         deadline = time.monotonic() + STARTUP_TIMEOUT
         while time.monotonic() < deadline:
+            # Мёртвый процесс нельзя ждать тридцать секунд: цикл получал бы
+            # «соединение отклонено» до самого срока и падал с «не поднялся»,
+            # ни словом не назвав причину. Фикстура `runtime` выше проверяет
+            # это с самого начала — здесь проверка отсутствовала, и полный
+            # прогон изредка падал сообщением, по которому нечего чинить.
+            if process.poll() is not None:
+                pytest.fail(f"рантайм умер на старте: {process.stderr.read().decode()}")
             try:
                 if _get(port, "/healthz", timeout=1.0)[0] == 200:
                     break
@@ -211,7 +218,7 @@ class TestShutdown:
                 time.sleep(0.1)
         else:
             process.kill()
-            pytest.fail("рантайм не поднялся")
+            pytest.fail("рантайм не ответил на /healthz за отведённое время")
 
         process.terminate()  # SIGTERM
         try:
@@ -290,6 +297,32 @@ class TestRuntimeSource:
         assert "signal.SIGTERM" in runtime
         assert "server.shutdown()" in runtime
         assert "server.server_close()" in runtime
+
+
+    def test_the_shipped_runtime_waits_with_a_timeout(self):
+        """Бесконечное ожидание события съедает сигнал остановки.
+
+        Обработчик сигнала на уровне Python выполняется только когда главный
+        поток возвращается в цикл интерпретатора. Бесконечный `stop.wait()`
+        стоит в futex, а обработчики ставятся с SA_RESTART, поэтому ядро
+        перезапускает ожидание и ход обработчику не достаётся.
+
+        Измерено 2026-09-04 под нагрузкой, примерно один запуск из семи:
+        SIGTERM доставлен и снят (SigPnd пуст, SigCgt содержит 0x4000), главный
+        поток в futex_wait_queue_me, «остановка» не напечатана, юнит доживал до
+        таймаута соединения в 30 секунд. Поведение проверяется соседним тестом;
+        здесь закреплён сам приём, потому что обратная правка выглядит невинно.
+        """
+        # Только код: пояснение к самой правке цитирует бесконечный вызов, и
+        # проверка по всему тексту ловила бы собственный комментарий.
+        code = "\n".join(
+            line for line in bundle_mod.RUNTIME.splitlines()
+            if not line.lstrip().startswith("#")
+        )
+        assert "stop.wait(" in code
+        assert "stop.wait()" not in code, (
+            "бесконечное ожидание вернулось: SIGTERM снова может быть съеден"
+        )
 
     def test_the_shipped_runtime_bounds_a_connection(self):
         """Без таймаута молчащее соединение держало бы поток вечно."""
