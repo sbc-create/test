@@ -1,0 +1,86 @@
+[Unit]
+Description=site-factory: Control API, админка и управляющий слой CMS
+Documentation=file:///srv/site-factory/repo/docs/runbooks/control-api.md
+# Сеть должна быть поднята: служба слушает сокет и при старте проверяет
+# доступность зависимостей.
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+# Type=notify, а не simple: между «процесс запустился» и «служба готова»
+# находится протокол запуска. При simple systemd считал бы службу готовой
+# сразу, и зависимые проверки шли бы к ней раньше времени.
+Type=notify
+NotifyAccess=main
+
+User=claude
+Group=claude
+
+# Код берётся из неизменяемого релиза по ссылке current, а состояние — из
+# общего каталога через FACTORY_ROOT. Иначе у каждого релиза оказались бы своя
+# очередь и свой журнал, и откат терял бы задания вместе с версией.
+WorkingDirectory=/srv/site-factory/control-api/current
+Environment=FACTORY_ROOT=/srv/site-factory/repo
+Environment=PYTHONPATH=/srv/site-factory/control-api/current
+Environment=PYTHONDONTWRITEBYTECODE=1
+EnvironmentFile=/etc/site-factory/environment
+# Настройки службы: токены и выключатели. Знак «-» — файла может не быть на
+# хосте, где служба ещё не настроена, и это не повод падать при загрузке юнита.
+EnvironmentFile=-/etc/site-factory/control-api.env
+
+ExecStart=/srv/site-factory/control-api/current/.venv/bin/python -m factory.site_engine.api.server \
+    --root /srv/site-factory/repo --host 127.0.0.1 --port 8790
+
+# Протокол запуска идёт до готовности; 90 секунд с запасом на проверку всех
+# профилей. Не бесконечность: зависший старт обязан стать отказом, а не
+# бесконечным «активируется».
+TimeoutStartSec=90
+
+# Сторожевой таймер: зависший цикл обслуживания перестаёт слать отметку, и
+# служба перезапускается. Без него зависание выглядит как работа — процесс жив,
+# порт слушает, ответов нет.
+WatchdogSec=60
+
+Restart=on-failure
+RestartSec=5
+# Перезапуск не чаще пяти раз за пять минут: иначе служба, падающая на старте,
+# крутится в цикле и заполняет журнал вместо того, чтобы остановиться и быть
+# замеченной.
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+# Завершение: SIGTERM, слив начатых запросов, затем выход. 40 секунд больше,
+# чем drain по умолчанию (25 c), чтобы слив успевал завершиться сам.
+KillSignal=SIGTERM
+KillMode=mixed
+TimeoutStopSec=40
+
+# Ограничения ресурсов: служба не должна вытеснить с хоста витрины.
+MemoryMax=1G
+CPUQuota=100%
+TasksMax=256
+
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=full
+# read-only, а не true: интерпретатор релиза может ссылаться в /home, и при
+# ProtectHome=true запуск падал бы с 203/EXEC при существующем на вид файле.
+# Так уже было с панелью Secret Hub.
+ProtectHome=read-only
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=yes
+RestrictRealtime=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+# Служба пишет только в состояние фабрики; код релиза остаётся неизменяемым.
+ReadWritePaths=/srv/site-factory/repo/var /srv/site-factory/repo/queue /srv/site-factory/repo/artifacts /srv/site-factory/repo/config
+
+# Дамп памяти управляющей службы содержал бы токены операторов.
+LimitCORE=0
+
+[Install]
+WantedBy=multi-user.target

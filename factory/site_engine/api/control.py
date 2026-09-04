@@ -291,7 +291,13 @@ class ControlApi:
     ) -> ApiResponse:
         headers = {str(k).lower(): v for k, v in (headers or {}).items()}
         correlation_id = str(headers.get("x-correlation-id") or "").strip() or self._new_correlation_id()
-        ключ, отпечаток = self._idempotency_key(method, path, body or {}, headers)
+        try:
+            ключ, отпечаток = self._idempotency_key(method, path, body or {}, headers)
+        except ControlDenied as denied:
+            # Разбор ключа стоит до конвейера, поэтому его отказ надо перехватить
+            # здесь: иначе недопустимый ключ вылетает исключением наружу вместо
+            # ответа 400. Найдено проверкой несколькими процессами.
+            return self._deny(denied, method, path, headers, correlation_id)
         if ключ:
             заявка = self._idempotency.reserve(ключ, отпечаток)
             if заявка.state == REPLAY:
