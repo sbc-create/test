@@ -195,3 +195,43 @@ def test_один_движок_обслуживает_разные_типы_ви
     # что контракт введён сегодня.
     assert r.body["manageable"] == взято, r.body["byState"]
     assert {row["siteType"] for row in r.body["sites"]} == типы
+
+
+# ---- объявление в схеме профиля ---------------------------------------------
+
+def test_схема_знает_о_поле_контракта():
+    """Схема запрещает лишние свойства: необъявленное поле ломает ворота качества."""
+    import json as _json
+    схема = _json.loads(
+        (REPO / "schemas" / "site-engine" / "site-profile.schema.json").read_text(encoding="utf-8"))
+    assert схема.get("additionalProperties") is False
+    поле = схема["properties"].get("cms_contract")
+    assert поле is not None, "поле не объявлено — профили с ним не пройдут схему"
+    assert поле["type"] == "string"
+    assert "cms_contract" not in схема.get("required", []), (
+        "обязательность разом остановила бы витрины без объявления")
+
+
+@pytest.mark.parametrize("значение,годно", [
+    ("1.2.0", True), ("1.2", True), ("10.0.3", True),
+    ("v1.2", False), ("последняя", False), ("1", False), ("1.2.3.4", False),
+])
+def test_схема_проверяет_формат_версии(значение, годно):
+    import json as _json
+
+    import jsonschema
+    схема = _json.loads(
+        (REPO / "schemas" / "site-engine" / "site-profile.schema.json").read_text(encoding="utf-8"))
+    проверяющий = jsonschema.Draft202012Validator(схема["properties"]["cms_contract"])
+    ошибки = list(проверяющий.iter_errors(значение))
+    assert (not ошибки) is годно, f"{значение}: {[e.message for e in ошибки]}"
+
+
+def test_все_профили_массива_объявляют_контракт():
+    """Механика без объявлений не работает ни разу."""
+    import json as _json
+    профили = sorted((REPO / "config" / "site-profiles").glob("*.json"))
+    assert профили, "профилей не найдено"
+    без = [p.stem for p in профили
+           if "cms_contract" not in _json.loads(p.read_text(encoding="utf-8"))]
+    assert not без, f"без объявления контракта: {без}"
