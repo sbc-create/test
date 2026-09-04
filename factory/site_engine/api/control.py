@@ -646,15 +646,29 @@ class ControlApi:
         self._remember(key, "POST", path, body, response)
         return response
 
-    def _load_profile_raw(self, site_id: str) -> dict[str, Any]:
+    def _load_profile_raw(self, site_id: str) -> dict[str, Any] | None:
+        """Содержимое профиля или None, если прочитать не удалось.
+
+        Отличать «не прочитан» от «пустой» обязательно: пустой словарь означает
+        «контракт не объявлен», то есть управляемо по обратной совместимости.
+        Нечитаемый профиль означает «состояние неизвестно» — управлять витриной
+        в этом случае значит менять то, чего не видишь.
+        """
         path = profile_path(site_id, self._root)
         try:
-            return json.loads(path.read_text(encoding="utf-8"))
+            data = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
-            return {}
+            return None
+        return data if isinstance(data, dict) else None
 
     def _compatibility_of(self, site_id: str) -> compat.Compatibility:
-        return compat.evaluate(self._load_profile_raw(site_id))
+        raw = self._load_profile_raw(site_id)
+        if raw is None:
+            return compat.Compatibility(
+                compat.STATE_INCOMPATIBLE, compat.ENGINE_CONTRACT, None,
+                "профиль витрины не прочитан или не является объектом JSON",
+            )
+        return compat.evaluate(raw)
 
     def _require_manageable(self, site_id: str) -> None:
         """Витрину под чужим старшим контрактом менять нельзя.
@@ -681,9 +695,9 @@ class ControlApi:
         rows = []
         for path in sorted(directory.glob("*.json")) if directory.is_dir() else []:
             raw = self._load_profile_raw(path.stem)
-            state = compat.evaluate(raw)
+            state = self._compatibility_of(path.stem)
             rows.append({"siteId": path.stem,
-                         "siteType": raw.get("site_type"),
+                         "siteType": (raw or {}).get("site_type"),
                          **state.as_dict()})
         by_state: dict[str, int] = {}
         for row in rows:
