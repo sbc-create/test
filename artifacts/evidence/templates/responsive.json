@@ -1,0 +1,2143 @@
+{
+  "captured_at_utc": "2026-09-04T14:10:20.680Z",
+  "sweep": [
+    {
+      "site": "lords-01",
+      "route": "home",
+      "width": 320,
+      "overflows": false,
+      "scrollWidth": 320,
+      "limit": 320
+    },
+    {
+      "site": "lords-01",
+      "route": "catalog",
+      "width": 320,
+      "overflows": false,
+      "scrollWidth": 320,
+      "limit": 320
+    },
+    {
+      "site": "lords-01",
+      "route": "search",
+      "width": 320,
+      "overflows": false,
+      "scrollWidth": 320,
+      "limit": 320
+    },
+    {
+      "site": "lords-01",
+      "route": "not-found",
+      "width": 320,
+      "overflows": false,
+      "scrollWidth": 320,
+      "limit": 320
+    },
+    {
+      "site": "lords-01",
+      "route": "home",
+      "width": 360,
+      "overflows": false,
+      "scrollWidth": 360,
+      "limit": 360
+    },
+    {
+      "site": "lords-01",
+      "route": "catalog",
+      "width": 360,
+      "overflows": false,
+      "scrollWidth": 360,
+      "limit": 360
+    },
+    {
+      "site": "lords-01",
+      "route": "search",
+      "width": 360,
+      "overflows": false,
+      "scrollWidth": 360,
+      "limit": 360
+    },
+    {
+      "site": "lords-01",
+      "route": "not-found",
+      "width": 360,
+      "overflows": false,
+      "scrollWidth": 360,
+      "limit": 360
+    },
+    {
+      "site": "lords-01",
+      "route": "home",
+      "width": 390,
+      "overflows": false,
+      "scrollWidth": 390,
+      "limit": 390
+    },
+    {
+      "site": "lords-01",
+      "route": "catalog",
+      "width": 390,
+      "overflows": false,
+      "scrollWidth": 390,
+      "limit": 390
+    },
+    {
+      "site": "lords-01",
+      "route": "search",
+      "width": 390,
+      "overflows": false,
+      "scrollWidth": 390,
+      "limit": 390
+    },
+    {
+      "site": "lords-01",
+      "route": "not-found",
+      "width": 390,
+      "overflows": false,
+      "scrollWidth": 390,
+      "limit": 390
+    },
+    {
+      "site": "lords-01",
+      "route": "home",
+      "width": 414,
+      "overflows": false,
+      "scrollWidth": 414,
+      "limit": 414
+    },
+    {
+      "site": "lords-01",
+      "route": "catalog",
+      "width": 414,
+      "overflows": false,
+      "scrollWidth": 414,
+      "limit": 414
+    },
+    {
+      "site": "lords-01",
+      "route": "search",
+      "width": 414,
+      "overflows": false,
+      "scrollWidth": 414,
+      "limit": 414
+    },
+    {
+      "site": "lords-01",
+      "route": "not-found",
+      "width": 414,
+      "overflows": false,
+      "scrollWidth": 414,
+      "limit": 414
+    },
+    {
+      "site": "lords-01",
+      "route": "home",
+      "width": 480,
+      "overflows": false,
+      "scrollWidth": 480,
+      "limit": 480
+    },
+    {
+      "site": "lords-01",
+      "route": "catalog",
+      "width": 480,
+      "overflows": false,
+      "scrollWidth": 480,
+      "limit": 480
+    },
+    {
+      "site": "lords-01",
+      "route": "search",
+      "width": 480,
+      "overflows": false,
+      "scrollWidth": 480,
+      "limit": 480
+    },
+    {
+      "site": "lords-01",
+      "route": "not-found",
+      "width": 480,
+      "overflows": false,
+      "scrollWidth": 480,
+      "limit": 480
+    },
+    {
+      "site": "lords-01",
+      "route": "home",
+      "width": 560,
+      "overflows": false,
+      "scrollWidth": 560,
+      "limit": 560
+    },
+    {
+      "site": "lords-01",
+      "route": "catalog",
+      "width": 560,
+      "overflows": false,
+      "scrollWidth": 560,
+      "limit": 560
+    },
+    {
+      "site": "lords-01",
+      "route": "search",
+      "width": 560,
+      "overflows": false,
+      "scrollWidth": 560,
+      "limit": 560
+    },
+    {
+      "site": "lords-01",
+      "route": "not-found",
+      "width": 560,
+      "overflows": false,
+      "scrollWidth": 560,
+      "limit": 560
+    },
+    {
+      "site": "lords-01",
+      "route": "home",
+      "width": 640,
+      "overflows": false,
+      "scrollWidth": 640,
+      "limit": 640
+    },
+    {
+      "site": "lords-01",
+      "route": "catalog",
+      "width": 640,
+      "overflows": false,
+      "scrollWidth": 640,
+      "limit": 640
+    },
+    {
+      "site": "lords-01",
+      "route": "search",
+      "width": 640,
+      "overflows": false,
+      "scrollWidth": 640,
+      "limit": 640
+    },
+    {
+      "site": "lords-01",
+      "route": "not-found",
+      "width": 640,
+      "overflows": false,
+      "scrollWidth": 640,
+      "limit": 640
+    },
+    {
+      "site": "lords-01",
+      "route": "home",
+      "width": 720,
+      "overflows": false,
+      "scrollWidth": 720,
+      "limit": 720
+    },
+    {
+      "site": "lords-01",
+      "route": "catalog",
+      "width": 720,
+      "overflows": false,
+      "scrollWidth": 720,
+      "limit": 720
+    },
+    {
+      "site": "lords-01",
+      "route": "search",
+      "width": 720,
+      "overflows": false,
+      "scrollWidth": 720,
+      "limit": 720
+    },
+    {
+      "site": "lords-01",
+      "route": "not-found",
+      "width": 720,
+      "overflows": false,
+      "scrollWidth": 720,
+      "limit": 720
+    },
+    {
+      "site": "lords-01",
+      "route": "home",
+      "width": 768,
+      "overflows": false,
+      "scrollWidth": 768,
+      "limit": 768
+    },
+    {
+      "site": "lords-01",
+      "route": "catalog",
+      "width": 768,
+      "overflows": false,
+      "scrollWidth": 768,
+      "limit": 768
+    },
+    {
+      "site": "lords-01",
+      "route": "search",
+      "width": 768,
+      "overflows": false,
+      "scrollWidth": 768,
+      "limit": 768
+    },
+    {
+      "site": "lords-01",
+      "route": "not-found",
+      "width": 768,
+      "overflows": false,
+      "scrollWidth": 768,
+      "limit": 768
+    },
+    {
+      "site": "lords-01",
+      "route": "home",
+      "width": 900,
+      "overflows": false,
+      "scrollWidth": 900,
+      "limit": 900
+    },
+    {
+      "site": "lords-01",
+      "route": "catalog",
+      "width": 900,
+      "overflows": false,
+      "scrollWidth": 900,
+      "limit": 900
+    },
+    {
+      "site": "lords-01",
+      "route": "search",
+      "width": 900,
+      "overflows": false,
+      "scrollWidth": 900,
+      "limit": 900
+    },
+    {
+      "site": "lords-01",
+      "route": "not-found",
+      "width": 900,
+      "overflows": false,
+      "scrollWidth": 900,
+      "limit": 900
+    },
+    {
+      "site": "lords-01",
+      "route": "home",
+      "width": 1024,
+      "overflows": false,
+      "scrollWidth": 1024,
+      "limit": 1024
+    },
+    {
+      "site": "lords-01",
+      "route": "catalog",
+      "width": 1024,
+      "overflows": false,
+      "scrollWidth": 1024,
+      "limit": 1024
+    },
+    {
+      "site": "lords-01",
+      "route": "search",
+      "width": 1024,
+      "overflows": false,
+      "scrollWidth": 1024,
+      "limit": 1024
+    },
+    {
+      "site": "lords-01",
+      "route": "not-found",
+      "width": 1024,
+      "overflows": false,
+      "scrollWidth": 1024,
+      "limit": 1024
+    },
+    {
+      "site": "lords-01",
+      "route": "home",
+      "width": 1180,
+      "overflows": false,
+      "scrollWidth": 1180,
+      "limit": 1180
+    },
+    {
+      "site": "lords-01",
+      "route": "catalog",
+      "width": 1180,
+      "overflows": false,
+      "scrollWidth": 1180,
+      "limit": 1180
+    },
+    {
+      "site": "lords-01",
+      "route": "search",
+      "width": 1180,
+      "overflows": false,
+      "scrollWidth": 1180,
+      "limit": 1180
+    },
+    {
+      "site": "lords-01",
+      "route": "not-found",
+      "width": 1180,
+      "overflows": false,
+      "scrollWidth": 1180,
+      "limit": 1180
+    },
+    {
+      "site": "lords-01",
+      "route": "home",
+      "width": 1280,
+      "overflows": false,
+      "scrollWidth": 1280,
+      "limit": 1280
+    },
+    {
+      "site": "lords-01",
+      "route": "catalog",
+      "width": 1280,
+      "overflows": false,
+      "scrollWidth": 1280,
+      "limit": 1280
+    },
+    {
+      "site": "lords-01",
+      "route": "search",
+      "width": 1280,
+      "overflows": false,
+      "scrollWidth": 1280,
+      "limit": 1280
+    },
+    {
+      "site": "lords-01",
+      "route": "not-found",
+      "width": 1280,
+      "overflows": false,
+      "scrollWidth": 1280,
+      "limit": 1280
+    },
+    {
+      "site": "lords-01",
+      "route": "home",
+      "width": 1440,
+      "overflows": false,
+      "scrollWidth": 1440,
+      "limit": 1440
+    },
+    {
+      "site": "lords-01",
+      "route": "catalog",
+      "width": 1440,
+      "overflows": false,
+      "scrollWidth": 1440,
+      "limit": 1440
+    },
+    {
+      "site": "lords-01",
+      "route": "search",
+      "width": 1440,
+      "overflows": false,
+      "scrollWidth": 1440,
+      "limit": 1440
+    },
+    {
+      "site": "lords-01",
+      "route": "not-found",
+      "width": 1440,
+      "overflows": false,
+      "scrollWidth": 1440,
+      "limit": 1440
+    },
+    {
+      "site": "lords-01",
+      "route": "home",
+      "width": 1600,
+      "overflows": false,
+      "scrollWidth": 1600,
+      "limit": 1600
+    },
+    {
+      "site": "lords-01",
+      "route": "catalog",
+      "width": 1600,
+      "overflows": false,
+      "scrollWidth": 1600,
+      "limit": 1600
+    },
+    {
+      "site": "lords-01",
+      "route": "search",
+      "width": 1600,
+      "overflows": false,
+      "scrollWidth": 1600,
+      "limit": 1600
+    },
+    {
+      "site": "lords-01",
+      "route": "not-found",
+      "width": 1600,
+      "overflows": false,
+      "scrollWidth": 1600,
+      "limit": 1600
+    },
+    {
+      "site": "lords-01",
+      "route": "home",
+      "width": 1920,
+      "overflows": false,
+      "scrollWidth": 1920,
+      "limit": 1920
+    },
+    {
+      "site": "lords-01",
+      "route": "catalog",
+      "width": 1920,
+      "overflows": false,
+      "scrollWidth": 1920,
+      "limit": 1920
+    },
+    {
+      "site": "lords-01",
+      "route": "search",
+      "width": 1920,
+      "overflows": false,
+      "scrollWidth": 1920,
+      "limit": 1920
+    },
+    {
+      "site": "lords-01",
+      "route": "not-found",
+      "width": 1920,
+      "overflows": false,
+      "scrollWidth": 1920,
+      "limit": 1920
+    },
+    {
+      "site": "lords-02",
+      "route": "home",
+      "width": 320,
+      "overflows": false,
+      "scrollWidth": 320,
+      "limit": 320
+    },
+    {
+      "site": "lords-02",
+      "route": "catalog",
+      "width": 320,
+      "overflows": false,
+      "scrollWidth": 320,
+      "limit": 320
+    },
+    {
+      "site": "lords-02",
+      "route": "search",
+      "width": 320,
+      "overflows": false,
+      "scrollWidth": 320,
+      "limit": 320
+    },
+    {
+      "site": "lords-02",
+      "route": "not-found",
+      "width": 320,
+      "overflows": false,
+      "scrollWidth": 320,
+      "limit": 320
+    },
+    {
+      "site": "lords-02",
+      "route": "home",
+      "width": 360,
+      "overflows": false,
+      "scrollWidth": 360,
+      "limit": 360
+    },
+    {
+      "site": "lords-02",
+      "route": "catalog",
+      "width": 360,
+      "overflows": false,
+      "scrollWidth": 360,
+      "limit": 360
+    },
+    {
+      "site": "lords-02",
+      "route": "search",
+      "width": 360,
+      "overflows": false,
+      "scrollWidth": 360,
+      "limit": 360
+    },
+    {
+      "site": "lords-02",
+      "route": "not-found",
+      "width": 360,
+      "overflows": false,
+      "scrollWidth": 360,
+      "limit": 360
+    },
+    {
+      "site": "lords-02",
+      "route": "home",
+      "width": 390,
+      "overflows": false,
+      "scrollWidth": 390,
+      "limit": 390
+    },
+    {
+      "site": "lords-02",
+      "route": "catalog",
+      "width": 390,
+      "overflows": false,
+      "scrollWidth": 390,
+      "limit": 390
+    },
+    {
+      "site": "lords-02",
+      "route": "search",
+      "width": 390,
+      "overflows": false,
+      "scrollWidth": 390,
+      "limit": 390
+    },
+    {
+      "site": "lords-02",
+      "route": "not-found",
+      "width": 390,
+      "overflows": false,
+      "scrollWidth": 390,
+      "limit": 390
+    },
+    {
+      "site": "lords-02",
+      "route": "home",
+      "width": 414,
+      "overflows": false,
+      "scrollWidth": 414,
+      "limit": 414
+    },
+    {
+      "site": "lords-02",
+      "route": "catalog",
+      "width": 414,
+      "overflows": false,
+      "scrollWidth": 414,
+      "limit": 414
+    },
+    {
+      "site": "lords-02",
+      "route": "search",
+      "width": 414,
+      "overflows": false,
+      "scrollWidth": 414,
+      "limit": 414
+    },
+    {
+      "site": "lords-02",
+      "route": "not-found",
+      "width": 414,
+      "overflows": false,
+      "scrollWidth": 414,
+      "limit": 414
+    },
+    {
+      "site": "lords-02",
+      "route": "home",
+      "width": 480,
+      "overflows": false,
+      "scrollWidth": 480,
+      "limit": 480
+    },
+    {
+      "site": "lords-02",
+      "route": "catalog",
+      "width": 480,
+      "overflows": false,
+      "scrollWidth": 480,
+      "limit": 480
+    },
+    {
+      "site": "lords-02",
+      "route": "search",
+      "width": 480,
+      "overflows": false,
+      "scrollWidth": 480,
+      "limit": 480
+    },
+    {
+      "site": "lords-02",
+      "route": "not-found",
+      "width": 480,
+      "overflows": false,
+      "scrollWidth": 480,
+      "limit": 480
+    },
+    {
+      "site": "lords-02",
+      "route": "home",
+      "width": 560,
+      "overflows": false,
+      "scrollWidth": 560,
+      "limit": 560
+    },
+    {
+      "site": "lords-02",
+      "route": "catalog",
+      "width": 560,
+      "overflows": false,
+      "scrollWidth": 560,
+      "limit": 560
+    },
+    {
+      "site": "lords-02",
+      "route": "search",
+      "width": 560,
+      "overflows": false,
+      "scrollWidth": 560,
+      "limit": 560
+    },
+    {
+      "site": "lords-02",
+      "route": "not-found",
+      "width": 560,
+      "overflows": false,
+      "scrollWidth": 560,
+      "limit": 560
+    },
+    {
+      "site": "lords-02",
+      "route": "home",
+      "width": 640,
+      "overflows": false,
+      "scrollWidth": 640,
+      "limit": 640
+    },
+    {
+      "site": "lords-02",
+      "route": "catalog",
+      "width": 640,
+      "overflows": false,
+      "scrollWidth": 640,
+      "limit": 640
+    },
+    {
+      "site": "lords-02",
+      "route": "search",
+      "width": 640,
+      "overflows": false,
+      "scrollWidth": 640,
+      "limit": 640
+    },
+    {
+      "site": "lords-02",
+      "route": "not-found",
+      "width": 640,
+      "overflows": false,
+      "scrollWidth": 640,
+      "limit": 640
+    },
+    {
+      "site": "lords-02",
+      "route": "home",
+      "width": 720,
+      "overflows": false,
+      "scrollWidth": 720,
+      "limit": 720
+    },
+    {
+      "site": "lords-02",
+      "route": "catalog",
+      "width": 720,
+      "overflows": false,
+      "scrollWidth": 720,
+      "limit": 720
+    },
+    {
+      "site": "lords-02",
+      "route": "search",
+      "width": 720,
+      "overflows": false,
+      "scrollWidth": 720,
+      "limit": 720
+    },
+    {
+      "site": "lords-02",
+      "route": "not-found",
+      "width": 720,
+      "overflows": false,
+      "scrollWidth": 720,
+      "limit": 720
+    },
+    {
+      "site": "lords-02",
+      "route": "home",
+      "width": 768,
+      "overflows": false,
+      "scrollWidth": 768,
+      "limit": 768
+    },
+    {
+      "site": "lords-02",
+      "route": "catalog",
+      "width": 768,
+      "overflows": false,
+      "scrollWidth": 768,
+      "limit": 768
+    },
+    {
+      "site": "lords-02",
+      "route": "search",
+      "width": 768,
+      "overflows": false,
+      "scrollWidth": 768,
+      "limit": 768
+    },
+    {
+      "site": "lords-02",
+      "route": "not-found",
+      "width": 768,
+      "overflows": false,
+      "scrollWidth": 768,
+      "limit": 768
+    },
+    {
+      "site": "lords-02",
+      "route": "home",
+      "width": 900,
+      "overflows": false,
+      "scrollWidth": 900,
+      "limit": 900
+    },
+    {
+      "site": "lords-02",
+      "route": "catalog",
+      "width": 900,
+      "overflows": false,
+      "scrollWidth": 900,
+      "limit": 900
+    },
+    {
+      "site": "lords-02",
+      "route": "search",
+      "width": 900,
+      "overflows": false,
+      "scrollWidth": 900,
+      "limit": 900
+    },
+    {
+      "site": "lords-02",
+      "route": "not-found",
+      "width": 900,
+      "overflows": false,
+      "scrollWidth": 900,
+      "limit": 900
+    },
+    {
+      "site": "lords-02",
+      "route": "home",
+      "width": 1024,
+      "overflows": false,
+      "scrollWidth": 1024,
+      "limit": 1024
+    },
+    {
+      "site": "lords-02",
+      "route": "catalog",
+      "width": 1024,
+      "overflows": false,
+      "scrollWidth": 1024,
+      "limit": 1024
+    },
+    {
+      "site": "lords-02",
+      "route": "search",
+      "width": 1024,
+      "overflows": false,
+      "scrollWidth": 1024,
+      "limit": 1024
+    },
+    {
+      "site": "lords-02",
+      "route": "not-found",
+      "width": 1024,
+      "overflows": false,
+      "scrollWidth": 1024,
+      "limit": 1024
+    },
+    {
+      "site": "lords-02",
+      "route": "home",
+      "width": 1180,
+      "overflows": false,
+      "scrollWidth": 1180,
+      "limit": 1180
+    },
+    {
+      "site": "lords-02",
+      "route": "catalog",
+      "width": 1180,
+      "overflows": false,
+      "scrollWidth": 1180,
+      "limit": 1180
+    },
+    {
+      "site": "lords-02",
+      "route": "search",
+      "width": 1180,
+      "overflows": false,
+      "scrollWidth": 1180,
+      "limit": 1180
+    },
+    {
+      "site": "lords-02",
+      "route": "not-found",
+      "width": 1180,
+      "overflows": false,
+      "scrollWidth": 1180,
+      "limit": 1180
+    },
+    {
+      "site": "lords-02",
+      "route": "home",
+      "width": 1280,
+      "overflows": false,
+      "scrollWidth": 1280,
+      "limit": 1280
+    },
+    {
+      "site": "lords-02",
+      "route": "catalog",
+      "width": 1280,
+      "overflows": false,
+      "scrollWidth": 1280,
+      "limit": 1280
+    },
+    {
+      "site": "lords-02",
+      "route": "search",
+      "width": 1280,
+      "overflows": false,
+      "scrollWidth": 1280,
+      "limit": 1280
+    },
+    {
+      "site": "lords-02",
+      "route": "not-found",
+      "width": 1280,
+      "overflows": false,
+      "scrollWidth": 1280,
+      "limit": 1280
+    },
+    {
+      "site": "lords-02",
+      "route": "home",
+      "width": 1440,
+      "overflows": false,
+      "scrollWidth": 1440,
+      "limit": 1440
+    },
+    {
+      "site": "lords-02",
+      "route": "catalog",
+      "width": 1440,
+      "overflows": false,
+      "scrollWidth": 1440,
+      "limit": 1440
+    },
+    {
+      "site": "lords-02",
+      "route": "search",
+      "width": 1440,
+      "overflows": false,
+      "scrollWidth": 1440,
+      "limit": 1440
+    },
+    {
+      "site": "lords-02",
+      "route": "not-found",
+      "width": 1440,
+      "overflows": false,
+      "scrollWidth": 1440,
+      "limit": 1440
+    },
+    {
+      "site": "lords-02",
+      "route": "home",
+      "width": 1600,
+      "overflows": false,
+      "scrollWidth": 1600,
+      "limit": 1600
+    },
+    {
+      "site": "lords-02",
+      "route": "catalog",
+      "width": 1600,
+      "overflows": false,
+      "scrollWidth": 1600,
+      "limit": 1600
+    },
+    {
+      "site": "lords-02",
+      "route": "search",
+      "width": 1600,
+      "overflows": false,
+      "scrollWidth": 1600,
+      "limit": 1600
+    },
+    {
+      "site": "lords-02",
+      "route": "not-found",
+      "width": 1600,
+      "overflows": false,
+      "scrollWidth": 1600,
+      "limit": 1600
+    },
+    {
+      "site": "lords-02",
+      "route": "home",
+      "width": 1920,
+      "overflows": false,
+      "scrollWidth": 1920,
+      "limit": 1920
+    },
+    {
+      "site": "lords-02",
+      "route": "catalog",
+      "width": 1920,
+      "overflows": false,
+      "scrollWidth": 1920,
+      "limit": 1920
+    },
+    {
+      "site": "lords-02",
+      "route": "search",
+      "width": 1920,
+      "overflows": false,
+      "scrollWidth": 1920,
+      "limit": 1920
+    },
+    {
+      "site": "lords-02",
+      "route": "not-found",
+      "width": 1920,
+      "overflows": false,
+      "scrollWidth": 1920,
+      "limit": 1920
+    },
+    {
+      "site": "lords-03",
+      "route": "home",
+      "width": 320,
+      "overflows": false,
+      "scrollWidth": 320,
+      "limit": 320
+    },
+    {
+      "site": "lords-03",
+      "route": "catalog",
+      "width": 320,
+      "overflows": false,
+      "scrollWidth": 320,
+      "limit": 320
+    },
+    {
+      "site": "lords-03",
+      "route": "search",
+      "width": 320,
+      "overflows": false,
+      "scrollWidth": 320,
+      "limit": 320
+    },
+    {
+      "site": "lords-03",
+      "route": "not-found",
+      "width": 320,
+      "overflows": false,
+      "scrollWidth": 320,
+      "limit": 320
+    },
+    {
+      "site": "lords-03",
+      "route": "home",
+      "width": 360,
+      "overflows": false,
+      "scrollWidth": 360,
+      "limit": 360
+    },
+    {
+      "site": "lords-03",
+      "route": "catalog",
+      "width": 360,
+      "overflows": false,
+      "scrollWidth": 360,
+      "limit": 360
+    },
+    {
+      "site": "lords-03",
+      "route": "search",
+      "width": 360,
+      "overflows": false,
+      "scrollWidth": 360,
+      "limit": 360
+    },
+    {
+      "site": "lords-03",
+      "route": "not-found",
+      "width": 360,
+      "overflows": false,
+      "scrollWidth": 360,
+      "limit": 360
+    },
+    {
+      "site": "lords-03",
+      "route": "home",
+      "width": 390,
+      "overflows": false,
+      "scrollWidth": 390,
+      "limit": 390
+    },
+    {
+      "site": "lords-03",
+      "route": "catalog",
+      "width": 390,
+      "overflows": false,
+      "scrollWidth": 390,
+      "limit": 390
+    },
+    {
+      "site": "lords-03",
+      "route": "search",
+      "width": 390,
+      "overflows": false,
+      "scrollWidth": 390,
+      "limit": 390
+    },
+    {
+      "site": "lords-03",
+      "route": "not-found",
+      "width": 390,
+      "overflows": false,
+      "scrollWidth": 390,
+      "limit": 390
+    },
+    {
+      "site": "lords-03",
+      "route": "home",
+      "width": 414,
+      "overflows": false,
+      "scrollWidth": 414,
+      "limit": 414
+    },
+    {
+      "site": "lords-03",
+      "route": "catalog",
+      "width": 414,
+      "overflows": false,
+      "scrollWidth": 414,
+      "limit": 414
+    },
+    {
+      "site": "lords-03",
+      "route": "search",
+      "width": 414,
+      "overflows": false,
+      "scrollWidth": 414,
+      "limit": 414
+    },
+    {
+      "site": "lords-03",
+      "route": "not-found",
+      "width": 414,
+      "overflows": false,
+      "scrollWidth": 414,
+      "limit": 414
+    },
+    {
+      "site": "lords-03",
+      "route": "home",
+      "width": 480,
+      "overflows": false,
+      "scrollWidth": 480,
+      "limit": 480
+    },
+    {
+      "site": "lords-03",
+      "route": "catalog",
+      "width": 480,
+      "overflows": false,
+      "scrollWidth": 480,
+      "limit": 480
+    },
+    {
+      "site": "lords-03",
+      "route": "search",
+      "width": 480,
+      "overflows": false,
+      "scrollWidth": 480,
+      "limit": 480
+    },
+    {
+      "site": "lords-03",
+      "route": "not-found",
+      "width": 480,
+      "overflows": false,
+      "scrollWidth": 480,
+      "limit": 480
+    },
+    {
+      "site": "lords-03",
+      "route": "home",
+      "width": 560,
+      "overflows": false,
+      "scrollWidth": 560,
+      "limit": 560
+    },
+    {
+      "site": "lords-03",
+      "route": "catalog",
+      "width": 560,
+      "overflows": false,
+      "scrollWidth": 560,
+      "limit": 560
+    },
+    {
+      "site": "lords-03",
+      "route": "search",
+      "width": 560,
+      "overflows": false,
+      "scrollWidth": 560,
+      "limit": 560
+    },
+    {
+      "site": "lords-03",
+      "route": "not-found",
+      "width": 560,
+      "overflows": false,
+      "scrollWidth": 560,
+      "limit": 560
+    },
+    {
+      "site": "lords-03",
+      "route": "home",
+      "width": 640,
+      "overflows": false,
+      "scrollWidth": 640,
+      "limit": 640
+    },
+    {
+      "site": "lords-03",
+      "route": "catalog",
+      "width": 640,
+      "overflows": false,
+      "scrollWidth": 640,
+      "limit": 640
+    },
+    {
+      "site": "lords-03",
+      "route": "search",
+      "width": 640,
+      "overflows": false,
+      "scrollWidth": 640,
+      "limit": 640
+    },
+    {
+      "site": "lords-03",
+      "route": "not-found",
+      "width": 640,
+      "overflows": false,
+      "scrollWidth": 640,
+      "limit": 640
+    },
+    {
+      "site": "lords-03",
+      "route": "home",
+      "width": 720,
+      "overflows": false,
+      "scrollWidth": 720,
+      "limit": 720
+    },
+    {
+      "site": "lords-03",
+      "route": "catalog",
+      "width": 720,
+      "overflows": false,
+      "scrollWidth": 720,
+      "limit": 720
+    },
+    {
+      "site": "lords-03",
+      "route": "search",
+      "width": 720,
+      "overflows": false,
+      "scrollWidth": 720,
+      "limit": 720
+    },
+    {
+      "site": "lords-03",
+      "route": "not-found",
+      "width": 720,
+      "overflows": false,
+      "scrollWidth": 720,
+      "limit": 720
+    },
+    {
+      "site": "lords-03",
+      "route": "home",
+      "width": 768,
+      "overflows": false,
+      "scrollWidth": 768,
+      "limit": 768
+    },
+    {
+      "site": "lords-03",
+      "route": "catalog",
+      "width": 768,
+      "overflows": false,
+      "scrollWidth": 768,
+      "limit": 768
+    },
+    {
+      "site": "lords-03",
+      "route": "search",
+      "width": 768,
+      "overflows": false,
+      "scrollWidth": 768,
+      "limit": 768
+    },
+    {
+      "site": "lords-03",
+      "route": "not-found",
+      "width": 768,
+      "overflows": false,
+      "scrollWidth": 768,
+      "limit": 768
+    },
+    {
+      "site": "lords-03",
+      "route": "home",
+      "width": 900,
+      "overflows": false,
+      "scrollWidth": 900,
+      "limit": 900
+    },
+    {
+      "site": "lords-03",
+      "route": "catalog",
+      "width": 900,
+      "overflows": false,
+      "scrollWidth": 900,
+      "limit": 900
+    },
+    {
+      "site": "lords-03",
+      "route": "search",
+      "width": 900,
+      "overflows": false,
+      "scrollWidth": 900,
+      "limit": 900
+    },
+    {
+      "site": "lords-03",
+      "route": "not-found",
+      "width": 900,
+      "overflows": false,
+      "scrollWidth": 900,
+      "limit": 900
+    },
+    {
+      "site": "lords-03",
+      "route": "home",
+      "width": 1024,
+      "overflows": false,
+      "scrollWidth": 1024,
+      "limit": 1024
+    },
+    {
+      "site": "lords-03",
+      "route": "catalog",
+      "width": 1024,
+      "overflows": false,
+      "scrollWidth": 1024,
+      "limit": 1024
+    },
+    {
+      "site": "lords-03",
+      "route": "search",
+      "width": 1024,
+      "overflows": false,
+      "scrollWidth": 1024,
+      "limit": 1024
+    },
+    {
+      "site": "lords-03",
+      "route": "not-found",
+      "width": 1024,
+      "overflows": false,
+      "scrollWidth": 1024,
+      "limit": 1024
+    },
+    {
+      "site": "lords-03",
+      "route": "home",
+      "width": 1180,
+      "overflows": false,
+      "scrollWidth": 1180,
+      "limit": 1180
+    },
+    {
+      "site": "lords-03",
+      "route": "catalog",
+      "width": 1180,
+      "overflows": false,
+      "scrollWidth": 1180,
+      "limit": 1180
+    },
+    {
+      "site": "lords-03",
+      "route": "search",
+      "width": 1180,
+      "overflows": false,
+      "scrollWidth": 1180,
+      "limit": 1180
+    },
+    {
+      "site": "lords-03",
+      "route": "not-found",
+      "width": 1180,
+      "overflows": false,
+      "scrollWidth": 1180,
+      "limit": 1180
+    },
+    {
+      "site": "lords-03",
+      "route": "home",
+      "width": 1280,
+      "overflows": false,
+      "scrollWidth": 1280,
+      "limit": 1280
+    },
+    {
+      "site": "lords-03",
+      "route": "catalog",
+      "width": 1280,
+      "overflows": false,
+      "scrollWidth": 1280,
+      "limit": 1280
+    },
+    {
+      "site": "lords-03",
+      "route": "search",
+      "width": 1280,
+      "overflows": false,
+      "scrollWidth": 1280,
+      "limit": 1280
+    },
+    {
+      "site": "lords-03",
+      "route": "not-found",
+      "width": 1280,
+      "overflows": false,
+      "scrollWidth": 1280,
+      "limit": 1280
+    },
+    {
+      "site": "lords-03",
+      "route": "home",
+      "width": 1440,
+      "overflows": false,
+      "scrollWidth": 1440,
+      "limit": 1440
+    },
+    {
+      "site": "lords-03",
+      "route": "catalog",
+      "width": 1440,
+      "overflows": false,
+      "scrollWidth": 1440,
+      "limit": 1440
+    },
+    {
+      "site": "lords-03",
+      "route": "search",
+      "width": 1440,
+      "overflows": false,
+      "scrollWidth": 1440,
+      "limit": 1440
+    },
+    {
+      "site": "lords-03",
+      "route": "not-found",
+      "width": 1440,
+      "overflows": false,
+      "scrollWidth": 1440,
+      "limit": 1440
+    },
+    {
+      "site": "lords-03",
+      "route": "home",
+      "width": 1600,
+      "overflows": false,
+      "scrollWidth": 1600,
+      "limit": 1600
+    },
+    {
+      "site": "lords-03",
+      "route": "catalog",
+      "width": 1600,
+      "overflows": false,
+      "scrollWidth": 1600,
+      "limit": 1600
+    },
+    {
+      "site": "lords-03",
+      "route": "search",
+      "width": 1600,
+      "overflows": false,
+      "scrollWidth": 1600,
+      "limit": 1600
+    },
+    {
+      "site": "lords-03",
+      "route": "not-found",
+      "width": 1600,
+      "overflows": false,
+      "scrollWidth": 1600,
+      "limit": 1600
+    },
+    {
+      "site": "lords-03",
+      "route": "home",
+      "width": 1920,
+      "overflows": false,
+      "scrollWidth": 1920,
+      "limit": 1920
+    },
+    {
+      "site": "lords-03",
+      "route": "catalog",
+      "width": 1920,
+      "overflows": false,
+      "scrollWidth": 1920,
+      "limit": 1920
+    },
+    {
+      "site": "lords-03",
+      "route": "search",
+      "width": 1920,
+      "overflows": false,
+      "scrollWidth": 1920,
+      "limit": 1920
+    },
+    {
+      "site": "lords-03",
+      "route": "not-found",
+      "width": 1920,
+      "overflows": false,
+      "scrollWidth": 1920,
+      "limit": 1920
+    },
+    {
+      "site": "lords-04",
+      "route": "home",
+      "width": 320,
+      "overflows": false,
+      "scrollWidth": 320,
+      "limit": 320
+    },
+    {
+      "site": "lords-04",
+      "route": "catalog",
+      "width": 320,
+      "overflows": false,
+      "scrollWidth": 320,
+      "limit": 320
+    },
+    {
+      "site": "lords-04",
+      "route": "search",
+      "width": 320,
+      "overflows": false,
+      "scrollWidth": 320,
+      "limit": 320
+    },
+    {
+      "site": "lords-04",
+      "route": "not-found",
+      "width": 320,
+      "overflows": false,
+      "scrollWidth": 320,
+      "limit": 320
+    },
+    {
+      "site": "lords-04",
+      "route": "home",
+      "width": 360,
+      "overflows": false,
+      "scrollWidth": 360,
+      "limit": 360
+    },
+    {
+      "site": "lords-04",
+      "route": "catalog",
+      "width": 360,
+      "overflows": false,
+      "scrollWidth": 360,
+      "limit": 360
+    },
+    {
+      "site": "lords-04",
+      "route": "search",
+      "width": 360,
+      "overflows": false,
+      "scrollWidth": 360,
+      "limit": 360
+    },
+    {
+      "site": "lords-04",
+      "route": "not-found",
+      "width": 360,
+      "overflows": false,
+      "scrollWidth": 360,
+      "limit": 360
+    },
+    {
+      "site": "lords-04",
+      "route": "home",
+      "width": 390,
+      "overflows": false,
+      "scrollWidth": 390,
+      "limit": 390
+    },
+    {
+      "site": "lords-04",
+      "route": "catalog",
+      "width": 390,
+      "overflows": false,
+      "scrollWidth": 390,
+      "limit": 390
+    },
+    {
+      "site": "lords-04",
+      "route": "search",
+      "width": 390,
+      "overflows": false,
+      "scrollWidth": 390,
+      "limit": 390
+    },
+    {
+      "site": "lords-04",
+      "route": "not-found",
+      "width": 390,
+      "overflows": false,
+      "scrollWidth": 390,
+      "limit": 390
+    },
+    {
+      "site": "lords-04",
+      "route": "home",
+      "width": 414,
+      "overflows": false,
+      "scrollWidth": 414,
+      "limit": 414
+    },
+    {
+      "site": "lords-04",
+      "route": "catalog",
+      "width": 414,
+      "overflows": false,
+      "scrollWidth": 414,
+      "limit": 414
+    },
+    {
+      "site": "lords-04",
+      "route": "search",
+      "width": 414,
+      "overflows": false,
+      "scrollWidth": 414,
+      "limit": 414
+    },
+    {
+      "site": "lords-04",
+      "route": "not-found",
+      "width": 414,
+      "overflows": false,
+      "scrollWidth": 414,
+      "limit": 414
+    },
+    {
+      "site": "lords-04",
+      "route": "home",
+      "width": 480,
+      "overflows": false,
+      "scrollWidth": 480,
+      "limit": 480
+    },
+    {
+      "site": "lords-04",
+      "route": "catalog",
+      "width": 480,
+      "overflows": false,
+      "scrollWidth": 480,
+      "limit": 480
+    },
+    {
+      "site": "lords-04",
+      "route": "search",
+      "width": 480,
+      "overflows": false,
+      "scrollWidth": 480,
+      "limit": 480
+    },
+    {
+      "site": "lords-04",
+      "route": "not-found",
+      "width": 480,
+      "overflows": false,
+      "scrollWidth": 480,
+      "limit": 480
+    },
+    {
+      "site": "lords-04",
+      "route": "home",
+      "width": 560,
+      "overflows": false,
+      "scrollWidth": 560,
+      "limit": 560
+    },
+    {
+      "site": "lords-04",
+      "route": "catalog",
+      "width": 560,
+      "overflows": false,
+      "scrollWidth": 560,
+      "limit": 560
+    },
+    {
+      "site": "lords-04",
+      "route": "search",
+      "width": 560,
+      "overflows": false,
+      "scrollWidth": 560,
+      "limit": 560
+    },
+    {
+      "site": "lords-04",
+      "route": "not-found",
+      "width": 560,
+      "overflows": false,
+      "scrollWidth": 560,
+      "limit": 560
+    },
+    {
+      "site": "lords-04",
+      "route": "home",
+      "width": 640,
+      "overflows": false,
+      "scrollWidth": 640,
+      "limit": 640
+    },
+    {
+      "site": "lords-04",
+      "route": "catalog",
+      "width": 640,
+      "overflows": false,
+      "scrollWidth": 640,
+      "limit": 640
+    },
+    {
+      "site": "lords-04",
+      "route": "search",
+      "width": 640,
+      "overflows": false,
+      "scrollWidth": 640,
+      "limit": 640
+    },
+    {
+      "site": "lords-04",
+      "route": "not-found",
+      "width": 640,
+      "overflows": false,
+      "scrollWidth": 640,
+      "limit": 640
+    },
+    {
+      "site": "lords-04",
+      "route": "home",
+      "width": 720,
+      "overflows": false,
+      "scrollWidth": 720,
+      "limit": 720
+    },
+    {
+      "site": "lords-04",
+      "route": "catalog",
+      "width": 720,
+      "overflows": false,
+      "scrollWidth": 720,
+      "limit": 720
+    },
+    {
+      "site": "lords-04",
+      "route": "search",
+      "width": 720,
+      "overflows": false,
+      "scrollWidth": 720,
+      "limit": 720
+    },
+    {
+      "site": "lords-04",
+      "route": "not-found",
+      "width": 720,
+      "overflows": false,
+      "scrollWidth": 720,
+      "limit": 720
+    },
+    {
+      "site": "lords-04",
+      "route": "home",
+      "width": 768,
+      "overflows": false,
+      "scrollWidth": 768,
+      "limit": 768
+    },
+    {
+      "site": "lords-04",
+      "route": "catalog",
+      "width": 768,
+      "overflows": false,
+      "scrollWidth": 768,
+      "limit": 768
+    },
+    {
+      "site": "lords-04",
+      "route": "search",
+      "width": 768,
+      "overflows": false,
+      "scrollWidth": 768,
+      "limit": 768
+    },
+    {
+      "site": "lords-04",
+      "route": "not-found",
+      "width": 768,
+      "overflows": false,
+      "scrollWidth": 768,
+      "limit": 768
+    },
+    {
+      "site": "lords-04",
+      "route": "home",
+      "width": 900,
+      "overflows": false,
+      "scrollWidth": 900,
+      "limit": 900
+    },
+    {
+      "site": "lords-04",
+      "route": "catalog",
+      "width": 900,
+      "overflows": false,
+      "scrollWidth": 900,
+      "limit": 900
+    },
+    {
+      "site": "lords-04",
+      "route": "search",
+      "width": 900,
+      "overflows": false,
+      "scrollWidth": 900,
+      "limit": 900
+    },
+    {
+      "site": "lords-04",
+      "route": "not-found",
+      "width": 900,
+      "overflows": false,
+      "scrollWidth": 900,
+      "limit": 900
+    },
+    {
+      "site": "lords-04",
+      "route": "home",
+      "width": 1024,
+      "overflows": false,
+      "scrollWidth": 1024,
+      "limit": 1024
+    },
+    {
+      "site": "lords-04",
+      "route": "catalog",
+      "width": 1024,
+      "overflows": false,
+      "scrollWidth": 1024,
+      "limit": 1024
+    },
+    {
+      "site": "lords-04",
+      "route": "search",
+      "width": 1024,
+      "overflows": false,
+      "scrollWidth": 1024,
+      "limit": 1024
+    },
+    {
+      "site": "lords-04",
+      "route": "not-found",
+      "width": 1024,
+      "overflows": false,
+      "scrollWidth": 1024,
+      "limit": 1024
+    },
+    {
+      "site": "lords-04",
+      "route": "home",
+      "width": 1180,
+      "overflows": false,
+      "scrollWidth": 1180,
+      "limit": 1180
+    },
+    {
+      "site": "lords-04",
+      "route": "catalog",
+      "width": 1180,
+      "overflows": false,
+      "scrollWidth": 1180,
+      "limit": 1180
+    },
+    {
+      "site": "lords-04",
+      "route": "search",
+      "width": 1180,
+      "overflows": false,
+      "scrollWidth": 1180,
+      "limit": 1180
+    },
+    {
+      "site": "lords-04",
+      "route": "not-found",
+      "width": 1180,
+      "overflows": false,
+      "scrollWidth": 1180,
+      "limit": 1180
+    },
+    {
+      "site": "lords-04",
+      "route": "home",
+      "width": 1280,
+      "overflows": false,
+      "scrollWidth": 1280,
+      "limit": 1280
+    },
+    {
+      "site": "lords-04",
+      "route": "catalog",
+      "width": 1280,
+      "overflows": false,
+      "scrollWidth": 1280,
+      "limit": 1280
+    },
+    {
+      "site": "lords-04",
+      "route": "search",
+      "width": 1280,
+      "overflows": false,
+      "scrollWidth": 1280,
+      "limit": 1280
+    },
+    {
+      "site": "lords-04",
+      "route": "not-found",
+      "width": 1280,
+      "overflows": false,
+      "scrollWidth": 1280,
+      "limit": 1280
+    },
+    {
+      "site": "lords-04",
+      "route": "home",
+      "width": 1440,
+      "overflows": false,
+      "scrollWidth": 1440,
+      "limit": 1440
+    },
+    {
+      "site": "lords-04",
+      "route": "catalog",
+      "width": 1440,
+      "overflows": false,
+      "scrollWidth": 1440,
+      "limit": 1440
+    },
+    {
+      "site": "lords-04",
+      "route": "search",
+      "width": 1440,
+      "overflows": false,
+      "scrollWidth": 1440,
+      "limit": 1440
+    },
+    {
+      "site": "lords-04",
+      "route": "not-found",
+      "width": 1440,
+      "overflows": false,
+      "scrollWidth": 1440,
+      "limit": 1440
+    },
+    {
+      "site": "lords-04",
+      "route": "home",
+      "width": 1600,
+      "overflows": false,
+      "scrollWidth": 1600,
+      "limit": 1600
+    },
+    {
+      "site": "lords-04",
+      "route": "catalog",
+      "width": 1600,
+      "overflows": false,
+      "scrollWidth": 1600,
+      "limit": 1600
+    },
+    {
+      "site": "lords-04",
+      "route": "search",
+      "width": 1600,
+      "overflows": false,
+      "scrollWidth": 1600,
+      "limit": 1600
+    },
+    {
+      "site": "lords-04",
+      "route": "not-found",
+      "width": 1600,
+      "overflows": false,
+      "scrollWidth": 1600,
+      "limit": 1600
+    },
+    {
+      "site": "lords-04",
+      "route": "home",
+      "width": 1920,
+      "overflows": false,
+      "scrollWidth": 1920,
+      "limit": 1920
+    },
+    {
+      "site": "lords-04",
+      "route": "catalog",
+      "width": 1920,
+      "overflows": false,
+      "scrollWidth": 1920,
+      "limit": 1920
+    },
+    {
+      "site": "lords-04",
+      "route": "search",
+      "width": 1920,
+      "overflows": false,
+      "scrollWidth": 1920,
+      "limit": 1920
+    },
+    {
+      "site": "lords-04",
+      "route": "not-found",
+      "width": 1920,
+      "overflows": false,
+      "scrollWidth": 1920,
+      "limit": 1920
+    }
+  ],
+  "reflow": [
+    {
+      "site": "lords-01",
+      "route": "home",
+      "zoom": "400% (эквивалент 320 CSS-px)",
+      "overflows": false,
+      "scrollWidth": 320,
+      "limit": 320,
+      "clientWidth": 320,
+      "mobileMediaQuery": true
+    },
+    {
+      "site": "lords-01",
+      "route": "catalog",
+      "zoom": "400% (эквивалент 320 CSS-px)",
+      "overflows": false,
+      "scrollWidth": 320,
+      "limit": 320,
+      "clientWidth": 320,
+      "mobileMediaQuery": true
+    },
+    {
+      "site": "lords-01",
+      "route": "search",
+      "zoom": "400% (эквивалент 320 CSS-px)",
+      "overflows": false,
+      "scrollWidth": 320,
+      "limit": 320,
+      "clientWidth": 320,
+      "mobileMediaQuery": true
+    },
+    {
+      "site": "lords-01",
+      "route": "not-found",
+      "zoom": "400% (эквивалент 320 CSS-px)",
+      "overflows": false,
+      "scrollWidth": 320,
+      "limit": 320,
+      "clientWidth": 320,
+      "mobileMediaQuery": true
+    }
+  ],
+  "textSpacing": [
+    {
+      "route": "home",
+      "heightBefore": 7382,
+      "height": 8120,
+      "horizontal": false,
+      "clipped": []
+    },
+    {
+      "route": "catalog",
+      "heightBefore": 2125,
+      "height": 2436,
+      "horizontal": false,
+      "clipped": []
+    },
+    {
+      "route": "search",
+      "heightBefore": 1025,
+      "height": 1293,
+      "horizontal": false,
+      "clipped": []
+    },
+    {
+      "route": "not-found",
+      "heightBefore": 874,
+      "height": 1125,
+      "horizontal": false,
+      "clipped": []
+    }
+  ],
+  "console": [
+    {
+      "site": "lords-01",
+      "problems": []
+    },
+    {
+      "site": "lords-02",
+      "problems": []
+    },
+    {
+      "site": "lords-03",
+      "problems": []
+    },
+    {
+      "site": "lords-04",
+      "problems": []
+    }
+  ]
+}

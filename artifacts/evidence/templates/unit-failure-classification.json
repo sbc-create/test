@@ -30,5 +30,16 @@
     }
   ],
   "action_taken": "Результаты пилота скопированы в artifacts/ рабочего дерева потока. Каталог закрыт .gitignore, в коммит ничего не попадает. Пилот этим потоком не запускался: он относится к конвейеру фабрики, а не к шаблонам, и запускать его ради зелёного счётчика значило бы выйти за границы полосы.",
-  "known_since": "Провал зафиксирован до этого потока: status.json потока SITE-FACTORY-HARDENING-AND-PARALLEL-TEMPLATES-01 от 03.09.2026 называет его известным и объясняет той же причиной."
+  "known_since": "Провал зафиксирован до этого потока: status.json потока SITE-FACTORY-HARDENING-AND-PARALLEL-TEMPLATES-01 от 03.09.2026 называет его известным и объясняет той же причиной.",
+  "required_artifact": {
+    "path": "artifacts/jobs/pilot-local/",
+    "files": 261,
+    "sha256_of_set": "bf9cd466ff5f06c48bfbd69cfba2af40772efc3df8920057345e4bade59c6f7a",
+    "algorithm": "sha256 по отсортированным именам и содержимому",
+    "source": "/srv/site-factory/repo/artifacts/jobs/pilot-local (основное дерево)",
+    "tracked_by_git": false,
+    "why_untracked": "artifacts/* закрыт .gitignore; в набор свидетельств не входит"
+  },
+  "suite_claim_rule": "Полный набор называется зелёным только с этим artefact. Без него набор даёт один провал, и это состояние окружения, а не кода. Оба утверждения приводятся вместе; подменять второе первым запрещено.",
+  "reverified_at_utc": "2026-09-04T14:05:18Z"
 }

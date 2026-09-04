@@ -111,6 +111,48 @@ function describeViolations(record) {
     .join('\n  ');
 }
 
+// Самопроверка инструмента. Ноль нарушений — утверждение о странице только
+// тогда, когда доказано, что инструмент вообще способен вернуть нарушение.
+// Одинаково выглядит и чистая страница, и axe, который молча не выполнился.
+//
+// Проверка временно подсаживает два заведомых дефекта, убеждается, что axe их
+// назвал, и снимает их обратно. Она живёт в наборе постоянно, а не разово в
+// чужом черновике: инструмент ломается тихо и именно тогда, когда его давно
+// никто не оспаривал.
+test('axe способен вернуть нарушение — самопроверка инструмента', async ({ page }) => {
+  await page.goto(url('lords-01', '/'));
+  await page.addScriptTag({ path: AXE });
+
+  const clean = await page.evaluate(async (tags) => axe.run(document, {
+    runOnly: { type: 'tag', values: tags } }), TAGS);
+  expect(clean.violations, 'страница-основание должна быть чистой').toEqual([]);
+  expect(clean.passes.length, 'axe не выполнил ни одного правила').toBeGreaterThan(10);
+
+  await page.evaluate(() => {
+    const img = document.createElement('img');
+    img.id = 'axe-selfcheck-img';
+    img.src = '/assets/posters/selfcheck.svg';
+    const button = document.createElement('button');
+    button.id = 'axe-selfcheck-button';
+    document.querySelector('main').append(img, button);
+  });
+
+  const dirty = await page.evaluate(async (tags) => axe.run(document, {
+    runOnly: { type: 'tag', values: tags } }), TAGS);
+  const found = dirty.violations.map((v) => v.id);
+  expect(found, 'axe не заметил картинку без alt').toContain('image-alt');
+  expect(found, 'axe не заметил кнопку без имени').toContain('button-name');
+
+  // Подсадка снимается: следующий тест обязан видеть страницу, а не следы этого.
+  await page.evaluate(() => {
+    document.getElementById('axe-selfcheck-img')?.remove();
+    document.getElementById('axe-selfcheck-button')?.remove();
+  });
+  const restored = await page.evaluate(async (tags) => axe.run(document, {
+    runOnly: { type: 'tag', values: tags } }), TAGS);
+  expect(restored.violations, 'подсадка не снята').toEqual([]);
+});
+
 test.describe('axe WCAG 2.2 AA', () => {
   for (const site of Object.keys(SITES)) {
     for (const viewport of VIEWPORTS) {
