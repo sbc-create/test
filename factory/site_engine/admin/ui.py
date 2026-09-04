@@ -194,7 +194,7 @@ def site_detail(site_id: str, *, info: dict, config: dict, coverage: dict,
 
     cov = (
         '<div class="card"><h2>Полнота каталога</h2>'
-        + _dl([(k, v) for k, v in list(coverage.items())[:8]])
+        + _dl(list(coverage.items())[:8])
         + "</div>"
     ) if coverage else ""
 

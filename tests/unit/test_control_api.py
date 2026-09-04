@@ -11,7 +11,7 @@ import pytest
 
 from factory import audit, queue
 from factory.paths import PATHS
-from factory.site_engine.api import control
+from factory.site_engine.api import ratelimit
 from factory.site_engine.api.control import ControlApi
 
 ADMIN = "admin-token"
@@ -116,7 +116,7 @@ def test_scope_is_enforced_per_operation(sandbox):
 
 def test_job_scope_does_not_grant_config_scope(sandbox):
     """Отдельные области должны быть действительно отдельными."""
-    env = dict(ENV, SITE_ENGINE_CONTROL_TOKENS=f"partial=read,jobs:write")
+    env = dict(ENV, SITE_ENGINE_CONTROL_TOKENS="partial=read,jobs:write")
     r = api(sandbox, env=env).handle("PATCH", f"/api/v1/sites/{SITE}/settings",
                                      body={"changes": {"keep_releases": 4}},
                                      headers={"Authorization": "Bearer partial"})
@@ -127,10 +127,47 @@ def test_job_scope_does_not_grant_config_scope(sandbox):
 # ---- ступень 4: лимит частоты -----------------------------------------------
 
 def test_rate_limit_stops_runaway_automation(sandbox):
+    """Предел общий для процессов и иерархический: срабатывает самый узкий."""
     a = api(sandbox)
-    statuses = [a.handle("GET", "/api/v1/jobs/x", headers=AUTH).status for _ in range(40)]
+    statuses = [a.handle("GET", "/api/v1/jobs/x", headers=AUTH).status for _ in range(80)]
     assert 429 in statuses, "сорвавшийся цикл должен упереться в предел"
-    assert statuses.index(429) >= control.RATE_LIMIT_PER_MINUTE - 1
+    первый = statuses.index(429)
+    самый_узкий = min(п.capacity for п in ratelimit.DEFAULT_LIMITS.values())
+    assert первый >= самый_узкий - 1, f"предел сработал слишком рано: на {первый}"
+
+
+def test_rate_limit_names_which_limit_was_hit(sandbox):
+    """Без имени ключа оператор не поймёт, что именно упёрлось."""
+    a = api(sandbox)
+    ответ = None
+    for _ in range(80):
+        r = a.handle("GET", "/api/v1/jobs/x", headers=AUTH)
+        if r.status == 429:
+            ответ = r
+            break
+    assert ответ is not None
+    assert ответ.body["error"]["limit_key"]
+    assert ответ.body["error"]["retry_after_seconds"] >= 1
+
+
+def test_noisy_site_does_not_block_its_neighbour(sandbox):
+    """Ключи раздельные по витрине: иначе один сайт упирает в предел все."""
+    другой = sandbox / "config" / "site-profiles" / "quiet-site.json"
+    другой.write_text((sandbox / "config" / "site-profiles" / f"{SITE}.json").read_text(
+        encoding="utf-8").replace(SITE, "quiet-site"), encoding="utf-8")
+    a = api(sandbox)
+    # Столько, чтобы исчерпать ведро витрины и операции, но не ведро
+    # действующего лица: иначе проверялось бы не разделение по витринам.
+    шумных = ratelimit.DEFAULT_LIMITS["site"].capacity + 2
+    assert шумных < ratelimit.DEFAULT_LIMITS["actor"].capacity
+    последний = None
+    for _ in range(шумных):
+        последний = a.handle("POST", f"/api/v1/sites/{SITE}/jobs",
+                             body={"action": "reindex", "dryRun": True}, headers=AUTH)
+    assert последний.status == 429, "шумная витрина должна была упереться сама"
+    сосед = a.handle("POST", "/api/v1/sites/quiet-site/jobs",
+                     body={"action": "reindex", "dryRun": True}, headers=AUTH)
+    assert сосед.status != 429, "шумная витрина упёрла в предел соседнюю"
 
 
 # ---- ступень 5: валидация ---------------------------------------------------

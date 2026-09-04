@@ -136,7 +136,7 @@ def test_трижды_неудавшееся_уходит_в_карантин(ap
 def test_недоступный_журнал_не_превращает_отказ_в_сбой(api, sandbox):
     """Невозможность записать отказ не должна менять код ответа."""
     каталог = sandbox / "var" / "audit"
-    прежние = стат = каталог.stat().st_mode
+    прежние = каталог.stat().st_mode
     каталог.chmod(stat.S_IRUSR | stat.S_IXUSR)
     try:
         r = api.handle("POST", f"/api/v1/sites/{БОЛЬНАЯ}/jobs",

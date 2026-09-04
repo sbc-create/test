@@ -53,7 +53,9 @@ def панель():
     try:
         yield база
     finally:
-        srv.shutdown(); поток.join(timeout=5); srv.server_close()
+        srv.shutdown()
+        поток.join(timeout=5)
+        srv.server_close()
 
 
 def запрос(url, *, метод="GET", форма=None, заголовки=None):
@@ -74,7 +76,9 @@ def test_без_включённой_админки_маршрута_нет():
         assert код == 404
         assert json.loads(тело)["error"]["code"] == "not_found"
     finally:
-        srv.shutdown(); поток.join(timeout=5); srv.server_close()
+        srv.shutdown()
+        поток.join(timeout=5)
+        srv.server_close()
 
 
 def test_страница_входа_отдаётся(панель):

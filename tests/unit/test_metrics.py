@@ -8,7 +8,6 @@ import json
 
 import pytest
 
-from factory import queue
 from factory.paths import PATHS
 from factory.site_engine.api.control import ControlApi
 from factory.site_engine.api.metrics import Metrics, status_class

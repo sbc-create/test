@@ -13,7 +13,7 @@ from __future__ import annotations
 import hmac
 import secrets
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from hashlib import sha256
 
 from factory.site_engine.admin import SESSION_IDLE_SECONDS, SESSION_TTL_SECONDS

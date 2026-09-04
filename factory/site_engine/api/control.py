@@ -29,15 +29,22 @@ import hashlib
 import json
 import re
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 from factory import audit, locks, queue
-from factory.paths import PATHS
-from factory.site_engine.api.app import ApiResponse, error
 from factory.site_engine.api import compat
+from factory.site_engine.api.app import ApiResponse, error
+from factory.site_engine.api.idempotency import (
+    CONFLICT,
+    IN_PROGRESS,
+    REPLAY,
+    IdempotencyStore,
+    fingerprint,
+)
 from factory.site_engine.api.metrics import Metrics, status_class
+from factory.site_engine.api.ratelimit import SharedRateLimiter
 
 API_VERSION = "v1"
 
@@ -81,7 +88,6 @@ REFUSED_SETTINGS: dict[str, str] = {
 
 SITE_ID_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
 MAX_BODY_KEYS = 32
-RATE_LIMIT_PER_MINUTE = 30
 
 
 class ControlDenied(Exception):
@@ -227,12 +233,6 @@ def _diff(before: dict[str, Any], changes: dict[str, Any]) -> dict[str, Any]:
     return out
 
 
-@dataclass
-class _Bucket:
-    tokens: float
-    updated: float
-
-
 class ControlApi:
     """Записывающая часть Control API v1."""
 
@@ -243,13 +243,22 @@ class ControlApi:
         env: dict[str, str] | None = None,
         now: Any = time.time,
         metrics: Metrics | None = None,
+        limiter: SharedRateLimiter | None = None,
+        idempotency: IdempotencyStore | None = None,
     ) -> None:
         self._root = Path(root).resolve()
         self._env = env if env is not None else {}
         self._now = now
         self._principals = principals_from_env(self._env)
-        self._buckets: dict[str, _Bucket] = {}
         self._metrics = metrics if metrics is not None else Metrics()
+        состояние = self._root / "var" / "state"
+        # Ограничение и идемпотентность живут в общем каталоге состояния, а не
+        # в памяти: при двух экземплярах Control API предел в памяти оказался бы
+        # вдвое выше объявленного, а повтор после таймаута создал бы второе
+        # задание.
+        self._limiter = limiter if limiter is not None else SharedRateLimiter(состояние, now=now)
+        self._idempotency = idempotency if idempotency is not None else IdempotencyStore(
+            состояние, now=now)
         # Показатели, которые считает не этот модуль: их поставщик регистрирует
         # себя сам. Иначе управляющий слой начал бы знать про админку.
         self._gauges: dict[str, Any] = {}
@@ -282,9 +291,41 @@ class ControlApi:
     ) -> ApiResponse:
         headers = {str(k).lower(): v for k, v in (headers or {}).items()}
         correlation_id = str(headers.get("x-correlation-id") or "").strip() or self._new_correlation_id()
+        ключ, отпечаток = self._idempotency_key(method, path, body or {}, headers)
+        if ключ:
+            заявка = self._idempotency.reserve(ключ, отпечаток)
+            if заявка.state == REPLAY:
+                тело = dict(заявка.stored.get("body") or {})
+                тело["idempotentReplay"] = True
+                тело["correlationId"] = correlation_id
+                return ApiResponse(status=int(заявка.stored.get("status", 200)), body=тело)
+            if заявка.state == CONFLICT:
+                return self._deny(
+                    ControlDenied(409, "idempotency_key_reused",
+                                  "ключ идемпотентности уже использован для другого запроса"),
+                    method, path, headers, correlation_id)
+            if заявка.state == IN_PROGRESS:
+                # Первый запрос ещё выполняется. Ждать значит удваивать таймаут
+                # вместо ответа; выполнить второй раз — нарушить идемпотентность.
+                return self._deny(
+                    ControlDenied(409, "request_in_flight",
+                                  "запрос с этим ключом уже выполняется",
+                                  holder=заявка.holder,
+                                  age_seconds=round(заявка.age_seconds, 1)),
+                    method, path, headers, correlation_id)
+
         try:
             response = self._route(method.upper(), path, body or {}, headers, correlation_id)
+            if ключ:
+                if 200 <= response.status < 300:
+                    self._idempotency.commit(ключ, отпечаток, response.status, response.body)
+                else:
+                    # Отказ не запоминается: исправленный повтор с тем же ключом
+                    # должен получить возможность выполниться.
+                    self._idempotency.release(ключ)
         except ControlDenied as denied:
+            if ключ:
+                self._idempotency.release(ключ)
             self._audit_refusal(denied, method, path, headers, correlation_id)
             response = error(denied.status, denied.code, denied.message, **denied.extra)
             self._metrics.inc("site_engine_control_refusals_total", code=denied.code)
@@ -295,6 +336,35 @@ class ControlApi:
         payload = response.body if isinstance(response.body, dict) else {"result": response.body}
         payload = {**payload, "correlationId": correlation_id}
         return ApiResponse(status=response.status, body=payload)
+
+    def _idempotency_key(self, method: str, path: str, body: dict[str, Any],
+                         headers: dict[str, str]) -> tuple[str | None, str]:
+        """Ключ применим только к изменяющим запросам без dryRun.
+
+        Пробный запуск ничего не меняет, поэтому занимать под него ключ значит
+        запретить последующее боевое применение с тем же ключом.
+        """
+        if method.upper() not in {"POST", "PATCH", "PUT", "DELETE"}:
+            return None, ""
+        if body.get("dryRun"):
+            return None, ""
+        ключ = str(headers.get("idempotency-key") or "").strip()
+        if not ключ:
+            return None, ""
+        if len(ключ) > 128 or not re.match(r"^[A-Za-z0-9_.:-]+$", ключ):
+            raise ControlDenied(400, "invalid_idempotency_key",
+                                "ключ идемпотентности недопустим")
+        return ключ, fingerprint(method.upper(), path, body)
+
+    def _deny(self, denied: ControlDenied, method: str, path: str,
+              headers: dict[str, str], correlation_id: str) -> ApiResponse:
+        self._audit_refusal(denied, method, path, headers, correlation_id)
+        self._metrics.inc("site_engine_control_refusals_total", code=denied.code)
+        self._metrics.inc("site_engine_control_requests_total",
+                          method=method.upper(), status=status_class(denied.status))
+        ответ = error(denied.status, denied.code, denied.message, **denied.extra)
+        return ApiResponse(status=ответ.status,
+                           body={**ответ.body, "correlationId": correlation_id})
 
     def _new_correlation_id(self) -> str:
         seed = f"{self._now()}:{id(self)}"
@@ -320,7 +390,12 @@ class ControlApi:
             raise ControlDenied(404, "not_found", "маршрут не найден")
 
         principal = self._authenticate(headers)
-        self._rate_limit(principal)
+        # Витрина и операция извлекаются до списания разрешения: без них
+        # предел был бы общим на действующее лицо, и одна витрина упирала бы
+        # в него остальные.
+        site_for_limit = rest[1] if rest[:1] == ["sites"] and len(rest) >= 2 else ""
+        operation = "/".join(rest[2:]) if len(rest) > 2 else (rest[0] if rest else "")
+        self._rate_limit(principal, site_for_limit, f"{method}:{operation}")
 
         if method == "GET" and rest[:1] == ["compatibility"]:
             principal.require(SCOPE_READ)
@@ -359,88 +434,36 @@ class ControlApi:
             raise ControlDenied(401, "unauthorized", "токен не распознан")
         return principal
 
-    def _rate_limit(self, principal: Principal) -> None:
-        """Ограничение частоты на принципала.
+    def _rate_limit(self, principal: Principal, site_id: str, operation: str) -> None:
+        """Списать разрешение по иерархии ключей.
 
-        Счётчик живёт в процессе: при нескольких экземплярах предел кратен их
-        числу. Это записано честно, потому что ограничение задумано против
-        сорвавшегося цикла автоматизации, а не против злоумышленника.
+        Ключи раздельные: среда, витрина, действующее лицо, операция. Общего
+        счётчика на весь массив здесь нет намеренно — один шумный сайт не
+        должен упирать в предел остальные.
         """
-        now = float(self._now())
-        bucket = self._buckets.get(principal.token_id)
-        if bucket is None:
-            self._buckets[principal.token_id] = _Bucket(tokens=RATE_LIMIT_PER_MINUTE - 1, updated=now)
-            return
-        refill = (now - bucket.updated) * (RATE_LIMIT_PER_MINUTE / 60.0)
-        bucket.tokens = min(float(RATE_LIMIT_PER_MINUTE), bucket.tokens + refill)
-        bucket.updated = now
-        if bucket.tokens < 1.0:
-            raise ControlDenied(
-                429, "rate_limited", f"не более {RATE_LIMIT_PER_MINUTE} запросов в минуту",
-                retry_after_seconds=max(1, int(60.0 / RATE_LIMIT_PER_MINUTE)),
-            )
-        bucket.tokens -= 1.0
+        решение = self._limiter.check({
+            "environment": self._env.get("SITE_ENGINE_ENVIRONMENT", "local"),
+            "site": site_id,
+            "actor": principal.token_id,
+            # Витрина входит в ключ операции: без неё шум по одной витрине
+            # выбирал бы операционное ведро сразу для всех остальных.
+            "operation": f"{principal.token_id}:{site_id or '-'}:{operation}" if operation else "",
+        })
+        if решение.degraded:
+            # Тихий переход в запасной режим не должен остаться незамеченным:
+            # предел в нём строже, и вызывающий обязан узнать причину отказов.
+            self._metrics.inc("site_engine_ratelimit_degraded_total")
+        if not решение.allowed:
+            self._metrics.inc("site_engine_control_refusals_total", code="rate_limited")
+            raise ControlDenied(429, "rate_limited",
+                                "превышен предел частоты",
+                                **решение.as_error_extra())
 
     def _check_site_id(self, site_id: str) -> None:
         if not SITE_ID_RE.match(site_id):
             raise ControlDenied(400, "invalid_site_id", "недопустимый идентификатор сайта")
         if not profile_path(site_id, self._root).exists():
             raise ControlDenied(404, "site_not_found", f"сайта {site_id} нет")
-
-    # ---- идемпотентность ------------------------------------------------
-
-    def _idempotency_dir(self) -> Path:
-        path = self._root / "var" / "state" / "control-idempotency"
-        path.mkdir(parents=True, exist_ok=True)
-        return path
-
-    def _request_fingerprint(self, method: str, path: str, body: dict[str, Any]) -> str:
-        blob = json.dumps({"m": method, "p": path, "b": body}, sort_keys=True, ensure_ascii=False)
-        return hashlib.sha256(blob.encode("utf-8")).hexdigest()
-
-    def _idempotent(
-        self,
-        headers: dict[str, str],
-        method: str,
-        path: str,
-        body: dict[str, Any],
-    ) -> tuple[str | None, dict | None]:
-        """Повтор того же запроса возвращает прежний ответ; тот же ключ с другим
-        телом — конфликт. Второе важнее первого: молча выполнить другой запрос
-        под уже использованным ключом значит выполнить его дважды по-разному."""
-        key = str(headers.get("idempotency-key") or "").strip()
-        if not key:
-            return None, None
-        if len(key) > 128 or not re.match(r"^[A-Za-z0-9_.:-]+$", key):
-            raise ControlDenied(400, "invalid_idempotency_key", "ключ идемпотентности недопустим")
-        fingerprint = self._request_fingerprint(method, path, body)
-        store = self._idempotency_dir() / f"{hashlib.sha256(key.encode()).hexdigest()[:32]}.json"
-        if store.exists():
-            saved = json.loads(store.read_text(encoding="utf-8"))
-            if saved.get("fingerprint") != fingerprint:
-                raise ControlDenied(
-                    409, "idempotency_key_reused",
-                    "ключ идемпотентности уже использован для другого запроса",
-                )
-            return key, saved
-        return key, None
-
-    def _remember(self, key: str | None, method: str, path: str, body: dict[str, Any], response: ApiResponse) -> None:
-        if not key or response.status >= 400:
-            return
-        store = self._idempotency_dir() / f"{hashlib.sha256(key.encode()).hexdigest()[:32]}.json"
-        store.write_text(
-            json.dumps(
-                {
-                    "fingerprint": self._request_fingerprint(method, path, body),
-                    "status": response.status,
-                    "body": response.body,
-                    "stored_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                },
-                ensure_ascii=False,
-            ),
-            encoding="utf-8",
-        )
 
     # ---- операции -------------------------------------------------------
 
@@ -465,11 +488,6 @@ class ControlApi:
             raise ControlDenied(400, "invalid_environment", "недопустимая среда",
                                 allowed=sorted(ALLOWED_ENVIRONMENTS))
 
-        path = f"/api/{API_VERSION}/sites/{site_id}/jobs"
-        key, saved = self._idempotent(headers, "POST", path, body)
-        if saved:
-            return ApiResponse(status=saved["status"], body={**saved["body"], "idempotentReplay": True})
-
         if dry_run:
             return ApiResponse(
                 status=200,
@@ -483,19 +501,17 @@ class ControlApi:
         try:
             with locks.site_lock(site_id, environment, timeout=2.0):
                 item = queue.enqueue(site_id, action=action, environment=environment)
-        except locks.LockBusy:
-            raise ControlDenied(409, "site_busy", "по сайту уже идёт операция")
-        except FileExistsError:
-            raise ControlDenied(409, "job_exists", "такое задание уже в очереди")
+        except locks.LockBusy as exc:
+            raise ControlDenied(409, "site_busy", "по сайту уже идёт операция") from exc
+        except FileExistsError as exc:
+            raise ControlDenied(409, "job_exists", "такое задание уже в очереди") from exc
 
         audit.record(
             job_id=item.job_id, site_id=site_id, environment=environment,
             action=f"control.job.{action}", target="queue", mutation=True, exit_code=0,
             extra={"correlation_id": correlation_id, "actor_token": principal.token_id},
         )
-        response = ApiResponse(status=202, body={"job": item.as_dict(), "status": "queued"})
-        self._remember(key, "POST", path, body, response)
-        return response
+        return ApiResponse(status=202, body={"job": item.as_dict(), "status": "queued"})
 
     def _job_status(self, job_id: str) -> ApiResponse:
         if not re.match(r"^[A-Za-z0-9_.:-]{1,128}$", job_id):
@@ -548,7 +564,6 @@ class ControlApi:
         before = json.loads(target.read_text(encoding="utf-8"))
         diff = _diff(before, changes)
         dry_run = bool(body.get("dryRun"))
-        path = f"/api/{API_VERSION}/sites/{site_id}/settings"
 
         if dry_run:
             return ApiResponse(
@@ -556,10 +571,6 @@ class ControlApi:
                 body={"dryRun": True, "currentVersion": current_version, "diff": diff,
                       "noop": not diff},
             )
-
-        key, saved = self._idempotent(headers, "PATCH", path, body)
-        if saved:
-            return ApiResponse(status=saved["status"], body={**saved["body"], "idempotentReplay": True})
 
         if not diff:
             return ApiResponse(status=200, body={"applied": False, "noop": True,
@@ -582,8 +593,8 @@ class ControlApi:
                 tmp = target.with_suffix(".json.tmp")
                 tmp.write_text(json.dumps(after, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
                 tmp.replace(target)
-        except locks.LockBusy:
-            raise ControlDenied(409, "site_busy", "по сайту уже идёт операция")
+        except locks.LockBusy as exc:
+            raise ControlDenied(409, "site_busy", "по сайту уже идёт операция") from exc
 
         new_version = config_version(target)
         audit.record(
@@ -593,11 +604,9 @@ class ControlApi:
             extra={"correlation_id": correlation_id, "actor_token": principal.token_id,
                    "diff": diff, "version_before": current_version, "version_after": new_version},
         )
-        response = ApiResponse(status=200, body={"applied": True, "diff": diff,
-                                                 "previousVersion": current_version,
-                                                 "version": new_version})
-        self._remember(key, "PATCH", path, body, response)
-        return response
+        return ApiResponse(status=200, body={"applied": True, "diff": diff,
+                                                   "previousVersion": current_version,
+                                                   "version": new_version})
 
     def _invalidate_cache(
         self,
@@ -623,28 +632,22 @@ class ControlApi:
             # точечной операции. Такой запрос почти всегда ошибка вызывающего.
             raise ControlDenied(400, "keys_required", "для области title нужен непустой keys")
 
-        path = f"/api/{API_VERSION}/sites/{site_id}/cache/invalidate"
         plan = {"siteId": site_id, "scope": scope, "keys": keys}
         if bool(body.get("dryRun")):
             return ApiResponse(status=200, body={"dryRun": True, "wouldInvalidate": plan})
 
-        key, saved = self._idempotent(headers, "POST", path, body)
-        if saved:
-            return ApiResponse(status=saved["status"], body={**saved["body"], "idempotentReplay": True})
-
         job_id = f"{site_id}-cache-{scope}-{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}"
         try:
             item = queue.enqueue(site_id, action="invalidate", environment="staging", job_id=job_id)
-        except FileExistsError:
-            raise ControlDenied(409, "job_exists", "такая инвалидация уже запланирована")
+        except FileExistsError as exc:
+            raise ControlDenied(409, "job_exists",
+                                "такая инвалидация уже запланирована") from exc
         audit.record(
             job_id=item.job_id, site_id=site_id, environment="staging",
             action="control.cache.invalidate", target=scope, mutation=True, exit_code=0,
             extra={"correlation_id": correlation_id, "actor_token": principal.token_id, "keys": keys},
         )
-        response = ApiResponse(status=202, body={"job": item.as_dict(), "invalidate": plan})
-        self._remember(key, "POST", path, body, response)
-        return response
+        return ApiResponse(status=202, body={"job": item.as_dict(), "invalidate": plan})
 
     def _load_profile_raw(self, site_id: str) -> dict[str, Any] | None:
         """Содержимое профиля или None, если прочитать не удалось.

@@ -16,10 +16,8 @@ from __future__ import annotations
 import json
 import time
 from dataclasses import dataclass, field
-from typing import Any
 
-from factory.site_engine.admin import ADMIN_COOKIE, CSRF_FIELD
-from factory.site_engine.admin import ui
+from factory.site_engine.admin import ADMIN_COOKIE, CSRF_FIELD, ui
 from factory.site_engine.admin.session import SessionStore
 
 
@@ -112,13 +110,13 @@ class AdminApp:
             status = 200 if method == "GET" else 403
             return AdminResponse(status=status, html=ui.login())
 
-        if method == "POST":
-            if not self._sessions.csrf_valid(session.sid, form.get(CSRF_FIELD)):
-                return AdminResponse(
-                    status=403,
-                    html=ui.page("Отказ", '<div class="flash bad">Форма устарела или '
-                                          "подделана. Обновите страницу и повторите.</div>"),
-                )
+        if method == "POST" and not self._sessions.csrf_valid(
+                session.sid, form.get(CSRF_FIELD)):
+            return AdminResponse(
+                status=403,
+                html=ui.page("Отказ", '<div class="flash bad">Форма устарела или '
+                                      "подделана. Обновите страницу и повторите.</div>"),
+            )
 
         if method == "POST" and rest == ["logout"]:
             self._sessions.destroy(session.sid)

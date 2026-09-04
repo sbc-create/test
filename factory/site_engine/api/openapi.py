@@ -15,10 +15,10 @@ from factory.site_engine.api.control import (
     ALLOWED_ENVIRONMENTS,
     ALLOWED_JOB_ACTIONS,
     KNOWN_SCOPES,
-    RATE_LIMIT_PER_MINUTE,
     REFUSED_SETTINGS,
     SAFE_SETTINGS,
 )
+from factory.site_engine.api.ratelimit import DEFAULT_LIMITS
 
 ОШИБКА = {
     "type": "object",
@@ -234,7 +234,11 @@ def spec() -> dict[str, Any]:
                          "content": {"application/json": {"schema": ОШИБКА}}}
         ответы["403"] = {"description": f"у токена нет области {описание['scope']}",
                          "content": {"application/json": {"schema": ОШИБКА}}}
-        ответы["429"] = {"description": f"не более {RATE_LIMIT_PER_MINUTE} запросов в минуту",
+        пределы = ", ".join(
+            f"{вид} {п.capacity}/{int(п.per_seconds)}с" for вид, п in sorted(DEFAULT_LIMITS.items()))
+        ответы["429"] = {"description": f"превышен предел частоты ({пределы}); "
+                                        "пределы раздельные по среде, витрине, "
+                                        "действующему лицу и операции",
                          "content": {"application/json": {"schema": ОШИБКА}}}
         операция: dict[str, Any] = {
             "summary": описание["summary"],

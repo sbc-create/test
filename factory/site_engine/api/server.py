@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import http.server
 import json
+import signal
 import threading
 from dataclasses import dataclass
 from pathlib import Path
@@ -26,7 +27,9 @@ from typing import Any
 from urllib.parse import parse_qs, unquote, urlparse
 
 from factory.site_engine.api import create_api
+from factory.site_engine.api import startup as startup_protocol
 from factory.site_engine.api.app import SiteEngineApi
+from factory.site_engine.api.lifecycle import Lifecycle, Notifier, watchdog_interval
 from factory.site_engine.api.control import ControlApi
 from factory.site_engine.api.openapi import ЗАПИСЬ
 
@@ -205,6 +208,53 @@ class _Handler(http.server.BaseHTTPRequestHandler):
         path = unquote(parsed.path)
         query = {k: v[-1] for k, v in parse_qs(parsed.query).items()}
 
+        # Готовность отвечает без токена и без подробностей: её опрашивает
+        # supervisor и балансировщик, а не человек. Подробности состояния
+        # доступны по /api/v1/metrics, где нужен токен.
+        if path == "/api/v1/ready":
+            self._readiness()
+            return
+
+        жизнь = getattr(self.server, "lifecycle", None)
+        if жизнь is not None and not жизнь.enter():
+            # Служба сливается: новый запрос принимать нельзя, но и молчать
+            # нельзя — балансировщик должен увидеть отказ, а не таймаут.
+            self.send_response(503)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Connection", "close")
+            self.send_header("Retry-After", "5")
+            тело = b'{"error": {"code": "draining", "message": "\xd1\x81\xd0\xbb\xd1\x83\xd0\xb6\xd0\xb1\xd0\xb0 \xd0\xb7\xd0\xb0\xd0\xb2\xd0\xb5\xd1\x80\xd1\x88\xd0\xb0\xd0\xb5\xd1\x82\xd1\x81\xd1\x8f"}}'
+            self.send_header("Content-Length", str(len(тело)))
+            self.end_headers()
+            self.wfile.write(тело)
+            return
+        try:
+            self._serve(method, path, query)
+        finally:
+            if жизнь is not None:
+                жизнь.leave()
+
+    def _readiness(self) -> None:
+        жизнь = getattr(self.server, "lifecycle", None)
+        if жизнь is not None and not жизнь.accepting:
+            self._json(503, {"ready": False, "reason": "draining"})
+            return
+        корень = getattr(self.server, "service_root", None)
+        if корень is not None:
+            плохие = [c for c in startup_protocol.check_state_dirs(корень)
+                      if c.status == startup_protocol.FATAL]
+            if плохие:
+                # Каталог состояния мог стать недоступен уже после запуска.
+                # Служба, отвечающая «готова» без доступа к очереди, обманывает
+                # балансировщик.
+                self._json(503, {"ready": False, "reason": "state_unavailable"})
+                return
+        self._json(200, {"ready": True})
+
+    def _json(self, status: int, payload: dict) -> None:
+        self._send(status, payload)
+
+    def _serve(self, method: str, path: str, query: dict) -> None:
         if path == "/admin" or path.startswith("/admin/"):
             self._handle_admin(method, path)
             return
@@ -266,11 +316,14 @@ class _Server(http.server.ThreadingHTTPServer):
     daemon_threads = True
     allow_reuse_address = True
 
-    def __init__(self, address, handler, read_api, control_api, admin_app=None):
+    def __init__(self, address, handler, read_api, control_api, admin_app=None,
+                 lifecycle=None, service_root=None):
         super().__init__(address, handler)
         self.read_api = read_api
         self.control_api = control_api
         self.admin_app = admin_app
+        self.lifecycle = lifecycle if lifecycle is not None else Lifecycle()
+        self.service_root = service_root
 
 
 def build_server(
@@ -278,6 +331,8 @@ def build_server(
     read_api: SiteEngineApi,
     control_api: ControlApi,
     admin_app: Any = None,
+    lifecycle: Any = None,
+    service_root: Any = None,
 ) -> _Server:
     """Сборка сервера.
 
@@ -290,7 +345,8 @@ def build_server(
             f"привязка к {config.host} требует allow_public_bind=True: "
             "управляющий API не выставляется наружу по умолчанию"
         )
-    return _Server((config.host, config.port), _Handler, read_api, control_api, admin_app)
+    return _Server((config.host, config.port), _Handler, read_api, control_api,
+                   admin_app, lifecycle, service_root)
 
 
 def serve(
@@ -338,6 +394,17 @@ def main(argv: list[str] | None = None) -> int:
         return 64
 
     root = Path(args.root).resolve()
+
+    # Протокол запуска — тот же, что выполняет выкладка и откат. Отдельного
+    # облегчённого пути здесь нет: иначе откат поднимался бы не так, как потом
+    # работает рабочая версия.
+    отчёт = startup_protocol.run(root, env)
+    print(отчёт.as_text(), flush=True)
+    if not отчёт.ok:
+        # Не подняться честнее, чем подняться и отвечать ошибкой на каждый
+        # запрос: во втором случае supervisor считает службу исправной.
+        return 70
+
     ids = _site_ids(root)
     if not ids:
         print(f"в {root}/config/site-profiles нет профилей", flush=True)
@@ -357,15 +424,49 @@ def main(argv: list[str] | None = None) -> int:
         )
     config = ServerConfig(host=args.host, port=args.port,
                           allow_public_bind=args.allow_public_bind)
-    server = build_server(config, read_api, control_api, admin_app)
+    жизнь = Lifecycle(drain_timeout=float(env.get("SITE_ENGINE_DRAIN_SECONDS", "25")))
+    server = build_server(config, read_api, control_api, admin_app,
+                          lifecycle=жизнь, service_root=root)
     адрес = server.server_address
     состояние = "с админкой" if admin_app else "без админки"
     print(f"слушаю {адрес[0]}:{адрес[1]}, сайтов: {len(ids)}, {состояние}", flush=True)
+
+    уведомитель = Notifier()
+    поток = threading.Thread(target=server.serve_forever, kwargs={"poll_interval": 0.2},
+                             daemon=True)
+    поток.start()
+    # READY после того, как сокет действительно принимает: сообщить о
+    # готовности раньше значит пустить к себе трафик до готовности.
+    уведомитель.ready(f"сайтов {len(ids)}, ограничений {len(отчёт.degraded)}")
+
+    останов = threading.Event()
+
+    def по_сигналу(signum, _frame):
+        # Обработчик обязан быть коротким: разбор слива идёт в основном потоке.
+        останов.set()
+
+    signal.signal(signal.SIGTERM, по_сигналу)
+    signal.signal(signal.SIGINT, по_сигналу)
+
+    период = watchdog_interval()
     try:
-        server.serve_forever(poll_interval=0.2)
-    except KeyboardInterrupt:
-        pass
+        while not останов.is_set():
+            # Ожидание с таймаутом, а не sleep: сигнал должен прерывать сразу.
+            останов.wait(timeout=период if период > 0 else 1.0)
+            if период > 0 and not останов.is_set():
+                уведомитель.watchdog()
     finally:
+        уведомитель.stopping("слив начатых запросов")
+        print("получен сигнал остановки: перестаю принимать запросы", flush=True)
+        жизнь.begin_drain()
+        слито = жизнь.wait_drained()
+        if not слито:
+            print(f"слив не завершён за отведённое время, "
+                  f"в работе осталось {жизнь.inflight}", flush=True)
+        else:
+            print("начатые запросы завершены", flush=True)
+        server.shutdown()
+        поток.join(timeout=10)
         server.server_close()
     return 0
 
