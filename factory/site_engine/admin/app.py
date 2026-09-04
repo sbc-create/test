@@ -1,0 +1,252 @@
+"""Маршрутизация админки.
+
+Правило, которому подчинён весь модуль: панель не выполняет действий сама.
+Она разбирает форму, вызывает Control API тем же путём, каким его вызвала бы
+внешняя автоматика, и показывает ответ. Ни очередь, ни блокировки, ни профили
+отсюда не видны — если бы были видны, у панели появился бы второй, расходящийся
+путь исполнения.
+
+Отсюда же следует поведение при отказах: панель ничего не «сглаживает». Отказ по
+праву, конфликт версии и отклонённая настройка показываются оператору так, как
+их вернул API, включая идентификатор связи, — иначе оператор не сможет найти
+свой запрос в журнале.
+"""
+from __future__ import annotations
+
+import json
+import time
+from dataclasses import dataclass, field
+from typing import Any
+
+from factory.site_engine.admin import ADMIN_COOKIE, CSRF_FIELD
+from factory.site_engine.admin import ui
+from factory.site_engine.admin.session import SessionStore
+
+
+@dataclass
+class AdminResponse:
+    status: int
+    html: str = ""
+    headers: dict[str, str] = field(default_factory=dict)
+
+
+def _redirect(location: str, *, extra: dict[str, str] | None = None) -> AdminResponse:
+    """Перенаправление после записи.
+
+    Без него обновление страницы повторяет действие, а оператор об этом не
+    предупреждён. Ключ идемпотентности защищает от повтора на уровне API, но
+    полагаться только на него значит требовать его от каждой формы.
+    """
+    headers = {"Location": location}
+    if extra:
+        headers.update(extra)
+    return AdminResponse(status=303, headers=headers)
+
+
+class AdminApp:
+    def __init__(self, read_api, control_api, *, sessions: SessionStore | None = None,
+                 now=time.time, secure_cookie: bool = False) -> None:
+        self._read = read_api
+        self._control = control_api
+        self._sessions = sessions if sessions is not None else SessionStore(now=now)
+        self._secure = secure_cookie
+
+    @property
+    def sessions(self) -> SessionStore:
+        return self._sessions
+
+    # ---- вспомогательное -------------------------------------------------
+
+    def _cookie_header(self, sid: str, *, drop: bool = False) -> str:
+        parts = [
+            f"{ADMIN_COOKIE}={'' if drop else sid}",
+            "Path=/admin",
+            "HttpOnly",
+            # Strict, а не Lax: у панели нет сценария перехода со стороннего
+            # сайта, а Lax пропускает межсайтовые GET-переходы.
+            "SameSite=Strict",
+        ]
+        if self._secure:
+            parts.append("Secure")
+        parts.append("Max-Age=0" if drop else "Max-Age=28800")
+        return "; ".join(parts)
+
+    def _call(self, method: str, path: str, session, body: dict | None = None):
+        """Единственная дверь к Control API."""
+        return self._control.handle(
+            method, path, body=body or {},
+            headers={"Authorization": f"Bearer {session.token}"},
+        )
+
+    def _scopes(self, session) -> list[str]:
+        principal = self._control.principal_for(session.token)
+        return sorted(principal.scopes) if principal else []
+
+    def _flash_from(self, response, *, success: str) -> dict:
+        body = response.body if isinstance(response.body, dict) else {}
+        if 200 <= response.status < 300:
+            return {"ok": True, "message": success, "detail": body}
+        error = body.get("error", {})
+        message = f"{response.status} {error.get('code', 'error')}: {error.get('message', '')}"
+        return {"ok": False, "message": message, "detail": body}
+
+    # ---- маршруты --------------------------------------------------------
+
+    def handle(self, method: str, path: str, *, form: dict[str, str] | None = None,
+               cookies: dict[str, str] | None = None) -> AdminResponse:
+        form = form or {}
+        cookies = cookies or {}
+        session = self._sessions.get(cookies.get(ADMIN_COOKIE))
+        parts = [p for p in path.strip("/").split("/") if p]
+
+        if parts[:1] != ["admin"]:
+            return AdminResponse(status=404, html=ui.page("Не найдено", "<p>Нет такой страницы.</p>"))
+        rest = parts[1:]
+
+        if method == "POST" and rest == ["login"]:
+            return self._login(form)
+
+        if session is None:
+            # Неавторизованная запись не должна отвечать формой входа с кодом
+            # 200: автоматика примет это за успех.
+            status = 200 if method == "GET" else 403
+            return AdminResponse(status=status, html=ui.login())
+
+        if method == "POST":
+            if not self._sessions.csrf_valid(session.sid, form.get(CSRF_FIELD)):
+                return AdminResponse(
+                    status=403,
+                    html=ui.page("Отказ", '<div class="flash bad">Форма устарела или '
+                                          "подделана. Обновите страницу и повторите.</div>"),
+                )
+
+        if method == "POST" and rest == ["logout"]:
+            self._sessions.destroy(session.sid)
+            return _redirect("/admin", extra={"Set-Cookie": self._cookie_header("", drop=True)})
+
+        csrf = self._sessions.csrf_token(session.sid)
+        label = f"токен {session.token_fingerprint()}"
+        flash = getattr(session, "flash", None)
+        if flash is not None:
+            session.flash = None
+
+        if method == "GET" and rest == []:
+            return self._dashboard(session, flash, label, csrf)
+        if method == "GET" and rest == ["audit"]:
+            return self._audit(session, flash, label, csrf)
+        if rest[:1] == ["sites"] and len(rest) >= 2:
+            site_id = rest[1]
+            tail = rest[2:]
+            if method == "GET" and not tail:
+                return self._site(session, site_id, flash, label, csrf)
+            if method == "POST" and tail == ["jobs"]:
+                return self._job(session, site_id, form)
+            if method == "POST" and tail == ["cache"]:
+                return self._cache(session, site_id, form)
+            if method == "POST" and tail == ["settings"]:
+                return self._settings(session, site_id, form)
+        return AdminResponse(status=404, html=ui.page("Не найдено", "<p>Нет такой страницы.</p>"))
+
+    def _login(self, form: dict[str, str]) -> AdminResponse:
+        token = (form.get("token") or "").strip()
+        principal = self._control.principal_for(token) if token else None
+        if principal is None:
+            # Один и тот же текст на пустой и на неверный токен: разные тексты
+            # сообщают, существует ли токен.
+            return AdminResponse(status=401, html=ui.login(error="Токен не распознан."))
+        session = self._sessions.create(token)
+        return _redirect("/admin", extra={"Set-Cookie": self._cookie_header(session.sid)})
+
+    def _dashboard(self, session, flash, label, csrf) -> AdminResponse:
+        response = self._read.handle("/api/v1/sites")
+        if response.status != 200:
+            problem = ("Читающий слой недоступен: проверьте SITE_ENGINE_API_ENABLED и "
+                       "SITE_ENGINE_ENVIRONMENT (допустимо local, test, staging).")
+            return AdminResponse(status=200, html=ui.dashboard(
+                [], flash=flash, session_label=label, csrf=csrf, read_problem=problem))
+        sites = response.body.get("items", [])
+        return AdminResponse(status=200, html=ui.dashboard(
+            sites, flash=flash, session_label=label, csrf=csrf))
+
+    def _site(self, session, site_id, flash, label, csrf) -> AdminResponse:
+        info = self._read.handle(f"/api/v1/sites/{site_id}")
+        if info.status != 200:
+            return AdminResponse(status=info.status, html=ui.page(
+                "Витрина", f'<div class="flash bad">Витрина {site_id} недоступна '
+                           f"({info.status}).</div>", session_label=label, csrf=csrf))
+        config = self._read.handle(f"/api/v1/sites/{site_id}/config")
+        coverage = self._read.handle(f"/api/v1/sites/{site_id}/coverage")
+        return AdminResponse(status=200, html=ui.site_detail(
+            site_id,
+            info=info.body,
+            config=config.body if config.status == 200 else {},
+            coverage=coverage.body if coverage.status == 200 else {},
+            scopes=self._scopes(session),
+            flash=flash, session_label=label, csrf=csrf,
+        ))
+
+    def _job(self, session, site_id, form) -> AdminResponse:
+        dry = bool(form.get("dryRun"))
+        body = {
+            "action": (form.get("action") or "").strip(),
+            "environment": (form.get("environment") or "staging").strip(),
+            "dryRun": dry,
+        }
+        response = self._call("POST", f"/api/v1/sites/{site_id}/jobs", session, body)
+        session.flash = self._flash_from(
+            response, success="Проверка выполнена, ничего не изменено." if dry
+            else "Задание поставлено в очередь.")
+        return _redirect(f"/admin/sites/{site_id}")
+
+    def _cache(self, session, site_id, form) -> AdminResponse:
+        dry = bool(form.get("dryRun"))
+        raw_keys = (form.get("keys") or "").strip()
+        keys = [k.strip() for k in raw_keys.split(",") if k.strip()] if raw_keys else []
+        body = {"scope": (form.get("scope") or "").strip(), "keys": keys, "dryRun": dry}
+        response = self._call("POST", f"/api/v1/sites/{site_id}/cache/invalidate", session, body)
+        session.flash = self._flash_from(
+            response, success="Проверка выполнена." if dry else "Инвалидация запланирована.")
+        return _redirect(f"/admin/sites/{site_id}")
+
+    def _settings(self, session, site_id, form) -> AdminResponse:
+        key = (form.get("key") or "").strip()
+        raw = (form.get("value") or "").strip()
+        dry = bool(form.get("dryRun"))
+        try:
+            value = json.loads(raw)
+        except json.JSONDecodeError:
+            session.flash = {"ok": False,
+                             "message": "Значение не разобрано как JSON.",
+                             "detail": {"value": raw}}
+            return _redirect(f"/admin/sites/{site_id}")
+
+        path = f"/api/v1/sites/{site_id}/settings"
+        if dry:
+            response = self._call("PATCH", path, session,
+                                  {"changes": {key: value}, "dryRun": True})
+            session.flash = self._flash_from(response, success="Проверка выполнена, ничего не изменено.")
+            return _redirect(f"/admin/sites/{site_id}")
+
+        # Сначала пробный вызов — за версией, затем боевой со сверкой. Панель
+        # следует тому же порядку, который предписывает операторам инструкция:
+        # если между двумя вызовами вмешается кто-то ещё, будет отказ, а не
+        # тихая перезапись чужой правки.
+        peek = self._call("PATCH", path, session, {"changes": {key: value}, "dryRun": True})
+        if peek.status != 200:
+            session.flash = self._flash_from(peek, success="")
+            return _redirect(f"/admin/sites/{site_id}")
+        version = peek.body.get("currentVersion", "")
+        response = self._call("PATCH", path, session,
+                              {"changes": {key: value}, "expectedVersion": version})
+        session.flash = self._flash_from(response, success="Настройка применена.")
+        return _redirect(f"/admin/sites/{site_id}")
+
+    def _audit(self, session, flash, label, csrf) -> AdminResponse:
+        response = self._call("GET", "/api/v1/audit", session, {"limit": 50})
+        if response.status != 200:
+            return AdminResponse(status=response.status, html=ui.page(
+                "Журнал", f'<div class="flash bad">Журнал недоступен: '
+                          f"{response.status}.</div>", session_label=label, csrf=csrf))
+        return AdminResponse(status=200, html=ui.audit(
+            response.body.get("entries", []), total=response.body.get("total", 0),
+            session_label=label, csrf=csrf, flash=flash))

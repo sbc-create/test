@@ -31,6 +31,7 @@ from factory.site_engine.api.control import ControlApi
 from factory.site_engine.api.openapi import ЗАПИСЬ
 
 MAX_BODY_BYTES = 256 * 1024
+ADMIN_MAX_BODY_BYTES = 64 * 1024
 
 # Маршруты управляющего слоя, отвечающие на GET. Разделять по методу
 # недостаточно: часть управляющих маршрутов читающая.
@@ -42,6 +43,17 @@ class ServerConfig:
     host: str = "127.0.0.1"
     port: int = 8787
     allow_public_bind: bool = False
+
+
+def admin_enabled(env: dict[str, str] | None = None) -> bool:
+    """Админка включается своим выключателем.
+
+    Четвёртый независимый флаг, а не следствие остальных: интерфейс с формами
+    и сессиями — отдельная поверхность нападения, и включать её вместе с
+    машинным API значит включать её незаметно.
+    """
+    env = env if env is not None else {}
+    return str(env.get("SITE_ENGINE_ADMIN", "")).strip().lower() in {"1", "true", "yes", "on"}
 
 
 def http_enabled(env: dict[str, str] | None = None) -> bool:
@@ -103,6 +115,65 @@ class _Handler(http.server.BaseHTTPRequestHandler):
             return None
         return parsed
 
+    def _cookies(self) -> dict[str, str]:
+        raw = self.headers.get("Cookie") or ""
+        jar: dict[str, str] = {}
+        for chunk in raw.split(";"):
+            name, sep, value = chunk.strip().partition("=")
+            if sep and name:
+                jar[name] = value
+        return jar
+
+    def _read_form(self) -> dict[str, str] | None:
+        raw_length = self.headers.get("Content-Length")
+        if raw_length is None:
+            return {}
+        try:
+            length = int(raw_length)
+        except ValueError:
+            self._error(400, "invalid_length", "негодный Content-Length")
+            return None
+        if length < 0 or length > ADMIN_MAX_BODY_BYTES:
+            self._html(413, "<p>Слишком большая форма.</p>")
+            return None
+        raw = self.rfile.read(length).decode("utf-8", errors="replace")
+        return {k: v[-1] for k, v in parse_qs(raw, keep_blank_values=True).items()}
+
+    def _html(self, status: int, body: str, extra: dict[str, str] | None = None) -> None:
+        payload = body.encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(payload)))
+        self.send_header("Cache-Control", "no-store")
+        # Панель не встраивается никуда и не загружает ничего постороннего.
+        self.send_header("X-Frame-Options", "DENY")
+        self.send_header("Referrer-Policy", "no-referrer")
+        self.send_header("Content-Security-Policy",
+                         "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'")
+        for key, value in (extra or {}).items():
+            self.send_header(key, value)
+        self.end_headers()
+        if self.command != "HEAD":
+            self.wfile.write(payload)
+
+    def _handle_admin(self, method: str, path: str) -> None:
+        app = getattr(self.server, "admin_app", None)
+        if app is None:
+            self._error(404, "not_found", "маршрут не найден")
+            return
+        form: dict[str, str] = {}
+        if method == "POST":
+            parsed = self._read_form()
+            if parsed is None:
+                return
+            form = parsed
+        try:
+            response = app.handle(method, path, form=form, cookies=self._cookies())
+        except Exception:  # noqa: BLE001
+            self._html(500, "<p>Внутренняя ошибка.</p>")
+            return
+        self._html(response.status, response.html, response.headers)
+
     def _headers_dict(self) -> dict[str, str]:
         return {k.lower(): v for k, v in self.headers.items()}
 
@@ -110,6 +181,10 @@ class _Handler(http.server.BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = unquote(parsed.path)
         query = {k: v[-1] for k, v in parse_qs(parsed.query).items()}
+
+        if path == "/admin" or path.startswith("/admin/"):
+            self._handle_admin(method, path)
+            return
 
         body = self._read_body()
         if body is None:
@@ -161,16 +236,18 @@ class _Server(http.server.ThreadingHTTPServer):
     daemon_threads = True
     allow_reuse_address = True
 
-    def __init__(self, address, handler, read_api, control_api):
+    def __init__(self, address, handler, read_api, control_api, admin_app=None):
         super().__init__(address, handler)
         self.read_api = read_api
         self.control_api = control_api
+        self.admin_app = admin_app
 
 
 def build_server(
     config: ServerConfig,
     read_api: SiteEngineApi,
     control_api: ControlApi,
+    admin_app: Any = None,
 ) -> _Server:
     """Сборка сервера.
 
@@ -183,7 +260,7 @@ def build_server(
             f"привязка к {config.host} требует allow_public_bind=True: "
             "управляющий API не выставляется наружу по умолчанию"
         )
-    return _Server((config.host, config.port), _Handler, read_api, control_api)
+    return _Server((config.host, config.port), _Handler, read_api, control_api, admin_app)
 
 
 def serve(
@@ -191,9 +268,10 @@ def serve(
     read_api: SiteEngineApi,
     control_api: ControlApi,
     *,
+    admin_app: Any = None,
     ready: threading.Event | None = None,
 ) -> None:
-    server = build_server(config, read_api, control_api)
+    server = build_server(config, read_api, control_api, admin_app)
     try:
         if ready is not None:
             ready.set()
@@ -237,11 +315,18 @@ def main(argv: list[str] | None = None) -> int:
 
     read_api = create_api(ids, root=root, env=env)
     control_api = ControlApi(root=root, env=env)
+    admin_app = None
+    if admin_enabled(env):
+        from factory.site_engine.admin.app import AdminApp
+
+        admin_app = AdminApp(read_api, control_api,
+                             secure_cookie=args.host not in {"127.0.0.1", "::1", "localhost"})
     config = ServerConfig(host=args.host, port=args.port,
                           allow_public_bind=args.allow_public_bind)
-    server = build_server(config, read_api, control_api)
+    server = build_server(config, read_api, control_api, admin_app)
     адрес = server.server_address
-    print(f"слушаю {адрес[0]}:{адрес[1]}, сайтов: {len(ids)}", flush=True)
+    состояние = "с админкой" if admin_app else "без админки"
+    print(f"слушаю {адрес[0]}:{адрес[1]}, сайтов: {len(ids)}, {состояние}", flush=True)
     try:
         server.serve_forever(poll_interval=0.2)
     except KeyboardInterrupt:

@@ -247,6 +247,14 @@ class ControlApi:
         self._principals = principals_from_env(self._env)
         self._buckets: dict[str, _Bucket] = {}
 
+    def principal_for(self, token: str) -> Principal | None:
+        """Права токена — для вызывающих внутри процесса.
+
+        Нужен админке, чтобы не показывать кнопки, которых всё равно не
+        позволит конвейер. Показ и запрет — разные вещи: запрет остаётся здесь.
+        """
+        return self._principals.get(token)
+
     # ---- конвейер -------------------------------------------------------
 
     def handle(
