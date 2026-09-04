@@ -313,3 +313,36 @@ def test_журнал_показывает_и_отказы(app):
 def test_неизвестная_страница_админки_даёт_404(app):
     cookies, _ = войти(app)
     assert app.handle("GET", "/admin/нет-такой", cookies=cookies).status == 404
+
+
+# ---- контракт CMS -----------------------------------------------------------
+
+def test_панель_показывает_состояние_контракта(app):
+    cookies, _ = войти(app)
+    r = app.handle("GET", f"/admin/sites/{SITE}", cookies=cookies)
+    assert "Контракт CMS" in r.html
+    assert "контракт не объявлен" in r.html
+
+
+def test_несовместимая_витрина_видна_в_списке(app, sandbox):
+    путь = sandbox / "config" / "site-profiles" / f"{SITE}.json"
+    данные = json.loads(путь.read_text(encoding="utf-8"))
+    данные["cms_contract"] = "99.0.0"
+    путь.write_text(json.dumps(данные, ensure_ascii=False), encoding="utf-8")
+    cookies, _ = войти(app)
+    r = app.handle("GET", "/admin", cookies=cookies)
+    assert "управление запрещено" in r.html
+
+
+def test_действие_над_несовместимой_витриной_отклоняется(app, sandbox):
+    """Панель показывает кнопки, но ворота стоят в API."""
+    путь = sandbox / "config" / "site-profiles" / f"{SITE}.json"
+    данные = json.loads(путь.read_text(encoding="utf-8"))
+    данные["cms_contract"] = "99.0.0"
+    путь.write_text(json.dumps(данные, ensure_ascii=False), encoding="utf-8")
+    cookies, csrf = войти(app)
+    app.handle("POST", f"/admin/sites/{SITE}/jobs",
+               form={"action": "reindex", "dryRun": "", CSRF_FIELD: csrf}, cookies=cookies)
+    assert queue.counts()["inbox"] == 0
+    r = app.handle("GET", f"/admin/sites/{SITE}", cookies=cookies)
+    assert "incompatible_contract" in r.html

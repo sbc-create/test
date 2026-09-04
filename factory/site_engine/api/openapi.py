@@ -149,6 +149,15 @@ from factory.site_engine.api.control import (
         "success": ("202", "инвалидация поставлена в очередь"),
         "errors": {"400": "негодная область или пустой keys при scope=title"},
     },
+    "/api/v1/compatibility": {
+        "method": "get",
+        "summary": "Матрица совместимости витрин с версией движка",
+        "scope": "read",
+        "idempotent": False,
+        "body": None,
+        "success": ("200", "состояние по каждой витрине: ok, unversioned, degraded, incompatible"),
+        "errors": {"404": "маршрут выключен"},
+    },
     "/api/v1/metrics": {
         "method": "get",
         "summary": "Метрики процесса в текстовом формате Prometheus",

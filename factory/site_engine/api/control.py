@@ -36,6 +36,7 @@ from typing import Any
 from factory import audit, locks, queue
 from factory.paths import PATHS
 from factory.site_engine.api.app import ApiResponse, error
+from factory.site_engine.api import compat
 from factory.site_engine.api.metrics import Metrics, status_class
 
 API_VERSION = "v1"
@@ -321,6 +322,9 @@ class ControlApi:
         principal = self._authenticate(headers)
         self._rate_limit(principal)
 
+        if method == "GET" and rest[:1] == ["compatibility"]:
+            principal.require(SCOPE_READ)
+            return self._compatibility(rest[1] if len(rest) > 1 else None)
         if method == "GET" and rest == ["metrics"]:
             principal.require(SCOPE_READ)
             return self._metrics_response()
@@ -448,6 +452,7 @@ class ControlApi:
         headers: dict[str, str],
         correlation_id: str,
     ) -> ApiResponse:
+        self._require_manageable(site_id)
         action = str(body.get("action") or "").strip()
         environment = str(body.get("environment") or "staging").strip()
         dry_run = bool(body.get("dryRun"))
@@ -519,6 +524,7 @@ class ControlApi:
         headers: dict[str, str],
         correlation_id: str,
     ) -> ApiResponse:
+        self._require_manageable(site_id)
         changes = body.get("changes")
         if not isinstance(changes, dict) or not changes:
             raise ControlDenied(400, "invalid_body", "нужен непустой объект changes")
@@ -601,6 +607,7 @@ class ControlApi:
         headers: dict[str, str],
         correlation_id: str,
     ) -> ApiResponse:
+        self._require_manageable(site_id)
         scope = str(body.get("scope") or "").strip()
         allowed_scopes = {"homepage", "title", "shelves", "catalog"}
         if scope not in allowed_scopes:
@@ -638,6 +645,56 @@ class ControlApi:
         response = ApiResponse(status=202, body={"job": item.as_dict(), "invalidate": plan})
         self._remember(key, "POST", path, body, response)
         return response
+
+    def _load_profile_raw(self, site_id: str) -> dict[str, Any]:
+        path = profile_path(site_id, self._root)
+        try:
+            return json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return {}
+
+    def _compatibility_of(self, site_id: str) -> compat.Compatibility:
+        return compat.evaluate(self._load_profile_raw(site_id))
+
+    def _require_manageable(self, site_id: str) -> None:
+        """Витрину под чужим старшим контрактом менять нельзя.
+
+        Правка конфигурации под контракт, которого движок не реализует, делает
+        витрину хуже, а не лучше: настройка применится, а поведение окажется
+        не тем, которого ждал автор профиля.
+        """
+        state = self._compatibility_of(site_id)
+        if not state.manageable:
+            raise ControlDenied(
+                409, "incompatible_contract",
+                "витрина несовместима с версией движка",
+                **state.as_dict(),
+            )
+
+    def _compatibility(self, site_id: str | None) -> ApiResponse:
+        if site_id is not None:
+            self._check_site_id(site_id)
+            return ApiResponse(status=200,
+                               body={"siteId": site_id,
+                                     **self._compatibility_of(site_id).as_dict()})
+        directory = self._root / "config" / "site-profiles"
+        rows = []
+        for path in sorted(directory.glob("*.json")) if directory.is_dir() else []:
+            raw = self._load_profile_raw(path.stem)
+            state = compat.evaluate(raw)
+            rows.append({"siteId": path.stem,
+                         "siteType": raw.get("site_type"),
+                         **state.as_dict()})
+        by_state: dict[str, int] = {}
+        for row in rows:
+            by_state[row["state"]] = by_state.get(row["state"], 0) + 1
+        return ApiResponse(status=200, body={
+            "engine": compat.ENGINE_CONTRACT,
+            "sites": rows,
+            "total": len(rows),
+            "byState": by_state,
+            "manageable": sum(1 for r in rows if r["manageable"]),
+        })
 
     def _metrics_response(self) -> ApiResponse:
         """Показатели собираются в момент опроса, а не накапливаются.

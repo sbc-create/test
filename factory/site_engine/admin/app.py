@@ -165,8 +165,14 @@ class AdminApp:
             return AdminResponse(status=200, html=ui.dashboard(
                 [], flash=flash, session_label=label, csrf=csrf, read_problem=problem))
         sites = response.body.get("items", [])
+        # Состояние контрактов берётся у Control API, а не вычисляется здесь:
+        # иначе панель начала бы отвечать на вопрос, на который уже отвечает API.
+        matrix = self._call("GET", "/api/v1/compatibility", session)
+        by_site = {}
+        if matrix.status == 200:
+            by_site = {row["siteId"]: row for row in matrix.body.get("sites", [])}
         return AdminResponse(status=200, html=ui.dashboard(
-            sites, flash=flash, session_label=label, csrf=csrf))
+            sites, flash=flash, session_label=label, csrf=csrf, compat_by_site=by_site))
 
     def _site(self, session, site_id, flash, label, csrf) -> AdminResponse:
         info = self._read.handle(f"/api/v1/sites/{site_id}")
@@ -176,12 +182,14 @@ class AdminApp:
                            f"({info.status}).</div>", session_label=label, csrf=csrf))
         config = self._read.handle(f"/api/v1/sites/{site_id}/config")
         coverage = self._read.handle(f"/api/v1/sites/{site_id}/coverage")
+        совместимость = self._call("GET", f"/api/v1/compatibility/{site_id}", session)
         return AdminResponse(status=200, html=ui.site_detail(
             site_id,
             info=info.body,
             config=config.body if config.status == 200 else {},
             coverage=coverage.body if coverage.status == 200 else {},
             scopes=self._scopes(session),
+            compatibility=совместимость.body if совместимость.status == 200 else None,
             flash=flash, session_label=label, csrf=csrf,
         ))
 

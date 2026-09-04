@@ -63,6 +63,17 @@ padding:1px 9px;font-size:12px;color:var(--mut);margin:0 4px 4px 0}
 """
 
 
+# Состояние совместимости → класс подсветки. Неуправляемая витрина обязана
+# отличаться от исправной с одного взгляда, а не при чтении текста.
+_STATE_KIND = {"ok": "ok", "unversioned": "warn", "degraded": "warn", "incompatible": "bad"}
+_STATE_WORDS = {
+    "ok": "контракт согласован",
+    "unversioned": "контракт не объявлен",
+    "degraded": "работает ограниченно",
+    "incompatible": "управление запрещено",
+}
+
+
 def _e(value: Any) -> str:
     return html.escape("" if value is None else str(value), quote=True)
 
@@ -115,7 +126,8 @@ def _flash(flash: dict | None) -> str:
 
 
 def dashboard(sites: list[dict], *, flash: dict | None, session_label: str,
-              csrf: str, read_problem: str = "") -> str:
+              csrf: str, read_problem: str = "",
+              compat_by_site: dict[str, dict] | None = None) -> str:
     if read_problem:
         body = _flash(flash) + f'<div class="flash bad">{_e(read_problem)}</div>'
         return page("Витрины", body, session_label=session_label, csrf=csrf)
@@ -123,12 +135,16 @@ def dashboard(sites: list[dict], *, flash: dict | None, session_label: str,
     for site in sites:
         sid = site.get("site_id", "")
         domains = ", ".join(site.get("domains") or [])
+        state = (compat_by_site or {}).get(sid, {})
+        kind = _STATE_KIND.get(state.get("state", ""), "")
+        words = _STATE_WORDS.get(state.get("state", ""), "состояние неизвестно")
         cards.append(
-            f'<div class="card ok"><h2><span class="dot"></span>'
+            f'<div class="card {kind or "ok"}"><h2><span class="dot"></span>'
             f'<a href="/admin/sites/{_e(sid)}">{_e(sid)}</a></h2>'
             f'<dl><dt>Тип</dt><dd>{_e(site.get("site_type"))}</dd>'
             f'<dt>Домены</dt><dd>{_e(domains)}</dd>'
-            f'<dt>Рендеринг</dt><dd>{_e(site.get("render_mode"))}</dd></dl></div>'
+            f'<dt>Рендеринг</dt><dd>{_e(site.get("render_mode"))}</dd>'
+            f'<dt>Контракт</dt><dd>{_e(words)}</dd></dl></div>'
         )
     listing = "".join(cards) or '<div class="card"><p class="hint">Витрин нет.</p></div>'
     return page(
@@ -146,7 +162,7 @@ def _dl(pairs: list[tuple[str, Any]]) -> str:
 
 def site_detail(site_id: str, *, info: dict, config: dict, coverage: dict,
                 scopes: list[str], flash: dict | None, session_label: str,
-                csrf: str) -> str:
+                csrf: str, compatibility: dict | None = None) -> str:
     hidden = f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
     tags = "".join(f'<span class="tag">{_e(s)}</span>' for s in scopes)
 
@@ -161,6 +177,20 @@ def site_detail(site_id: str, *, info: dict, config: dict, coverage: dict,
         ])
         + f'<p class="hint">Права токена: {tags or "нет"}</p></div>'
     )
+
+    состояние = ""
+    if compatibility:
+        kind = _STATE_KIND.get(compatibility.get("state", ""), "warn")
+        состояние = (
+            f'<div class="card {kind}"><h2><span class="dot"></span>Контракт CMS</h2>'
+            + _dl([
+                ("Состояние", _STATE_WORDS.get(compatibility.get("state", ""), "неизвестно")),
+                ("Объявлено витриной", compatibility.get("declared") or "не объявлено"),
+                ("Реализует движок", compatibility.get("engine")),
+                ("Управление", "разрешено" if compatibility.get("manageable") else "запрещено"),
+            ])
+            + f'<p class="hint">{_e(compatibility.get("reason", ""))}</p></div>'
+        )
 
     cov = (
         '<div class="card"><h2>Полнота каталога</h2>'
@@ -237,7 +267,7 @@ def site_detail(site_id: str, *, info: dict, config: dict, coverage: dict,
     return page(
         site_id,
         _flash(flash) + '<p><a href="/admin">← ко всем витринам</a></p>'
-        + overview + cov + "".join(actions),
+        + overview + состояние + cov + "".join(actions),
         session_label=session_label,
         csrf=csrf,
     )
