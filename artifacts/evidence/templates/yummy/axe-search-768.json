@@ -1,15 +1,15 @@
 {
-  "captured_at_utc": "2026-09-04T14:52:46.315Z",
-  "base": "http://127.0.0.1:3111",
+  "captured_at_utc": "2026-09-04T16:23:26.228Z",
+  "base": "http://127.0.0.1:3210",
   "page": "search",
   "route": "/search?q=a",
-  "url": "http://127.0.0.1:3111/search?q=a",
+  "url": "http://127.0.0.1:3210/search?q=a",
   "viewport": {
     "name": "tablet",
     "width": 768,
     "height": 1024
   },
-  "state": "degraded (база недоступна)",
+  "state": "normal (fixture)",
   "axe_version": "4.13.0",
   "rules_passed": 27,
   "rules_inapplicable": 36,
@@ -18,6 +18,10 @@
     {
       "id": "aria-valid-attr-value",
       "nodes": 2
+    },
+    {
+      "id": "color-contrast",
+      "nodes": 19
     }
   ]
 }

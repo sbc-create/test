@@ -1,7 +1,7 @@
 {
   "lane": "TEMPLATES",
   "branch": "claude/templates-lords-yummy-refpacks-01",
-  "head": "085698653ac50cb7dc7ce84f5cd243102d5f4c1c",
+  "head": "d1b448841df357fb8c45d0833a75a3aa036ab80a",
   "base_sha": "76552b9a7372c5ad15cfc7d8b1052a10024722a3",
   "template_digest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
   "template_digest_files": 19,
@@ -82,16 +82,19 @@
       },
       "evidence": "artifacts/evidence/templates/audit.lords.json"
     },
-    "yummy_template_degraded": {
+    "yummy_template_fixture": {
       "status": "pass",
-      "scope": "template-only, degraded state",
-      "state_measured": "degraded — база недоступна",
-      "preview": "локальный next dev с подставным окружением; секреты не читались",
+      "scope": "template-only, fixture normal state",
+      "state_measured": [
+        "degraded (данных нет)",
+        "normal (fixture)"
+      ],
+      "preview": "локальный next dev с подставным окружением и флагом CATALOG_VISUAL_FIXTURE=1; секреты не читались, база не доступна",
       "repo": "/srv/sites/yummyani-staging/repo (канонический)",
       "worktree": "/home/claude/work-templates/yummy-preview",
       "branch": "claude/templates-yummy-fixture-preview-01",
       "base_sha": "178936c938ada58b6bc638e1db82dde949aee7f9",
-      "head_sha": "43a9cbce51673f8a0ae7f4772594f96c1411b55b",
+      "head_sha": "1fd59f90c4a0866c567a8204301bed0ec015106d",
       "axe": {
         "runs": 24,
         "violations": 0,
@@ -120,15 +123,38 @@
       "degraded_honesty": {
         "pages": 6,
         "stuck_in_loading": [],
-        "all_explain": true
+        "all_explain": null
+      },
+      "parity": {
+        "checks": 5,
+        "source": "тот же модуль фикстур, из которого берёт данные приложение",
+        "covered": [
+          "количество и порядок каталога",
+          "отсутствие визуальных дыр у пустых полок",
+          "устойчивость порядка после гидратации",
+          "связь произведения с сезонами и сериями",
+          "отсутствие клиентского N+1"
+        ]
+      },
+      "visual": {
+        "baseline_rows": 30,
+        "page_scores": 10,
+        "min_score": 8,
+        "note": "девять страниц 10/10, страница 404 — 8/10 (намеренно минимальна)"
+      },
+      "crossbrowser": {
+        "engines": [
+          "firefox 153.0",
+          "webkit 26.5"
+        ],
+        "checks": 10
       },
       "not_covered": [
-        "нормальное состояние с данными",
-        "соответствие API → SSR → DOM",
-        "CTA и маршруты событий",
-        "страница произведения, сезоны, серии, плеер",
-        "визуальный эталон и кросс-браузерная проверка",
-        "производительность на production build"
+        "живые данные вместо фикстуры",
+        "четыре событийных пути: полки событий пусты по устройству фикстуры, наполнить их значило бы показать несуществующий факт",
+        "состояния плеера loading/slow/timeout/error/retry — нужен поставщик",
+        "производительность на production build — сборка падает на предсуществующих ошибках типов, TEMPLATE_TO_CORE-006",
+        "живой аудит трёх боевых доменов"
       ],
       "evidence": "artifacts/evidence/templates/yummy/*.json"
     },
@@ -150,6 +176,24 @@
       },
       "scope": "только критический путь: широкий набор в трёх движках даёт шум",
       "evidence": "artifacts/evidence/templates/playwright-lords-cross.json"
+    },
+    "reference_packs": {
+      "status": "pass",
+      "packs": [
+        "amd-online",
+        "zona-w140"
+      ],
+      "files_per_pack": {
+        "amd-online": 21,
+        "zona-w140": 21
+      },
+      "state": "architecture_draft",
+      "production_enabled": false,
+      "indexing_enabled": false,
+      "visual_parity_claimed": false,
+      "screenshots": "BLOCKED — REF-EGRESS-01",
+      "visual_tokens": "пусты намеренно: измерять не на чем",
+      "verified_by": "tests/unit/test_reference_packs.py (25 проверок)"
     }
   },
   "blockers": [
@@ -176,6 +220,6 @@
       "recorded_in": "docs/templates/BLOCKERS.md"
     }
   ],
-  "verdict": "CONDITIONAL_BLOCKED_ON_YUMMY_NORMAL_STATE_DATA",
-  "verdict_reason": "Ворота Lords пройдены полностью. У Yummy пройдены ворота шаблона в деградированном состоянии, но нормальное состояние, соответствие API → SSR → DOM и маршруты событий остаются непроверенными: нужны данные, а они не принадлежат полосе шаблона. TEMPLATE_RELEASE_CANDIDATE=PASS не заявляется."
+  "verdict": "CONDITIONAL_BLOCKED_ON_YUMMY_LIVE_DATA",
+  "verdict_reason": "Ворота Lords пройдены полностью. У Yummy закрыт фикстурный контур: нормальное состояние, соответствие фикстура → ViewModel → SSR → DOM, визуальный эталон, axe, кросс-браузер. Остаётся живой контур — данные, четыре событийных пути, состояния плеера и производительность на production-сборке. Данные полосе шаблона не принадлежат. TEMPLATE_RELEASE_CANDIDATE=PASS не заявляется."
 }

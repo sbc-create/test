@@ -1,15 +1,15 @@
 {
-  "captured_at_utc": "2026-09-04T14:53:25.856Z",
-  "base": "http://127.0.0.1:3111",
+  "captured_at_utc": "2026-09-04T16:24:08.331Z",
+  "base": "http://127.0.0.1:3210",
   "page": "schedule",
   "route": "/catalog/schedule",
-  "url": "http://127.0.0.1:3111/catalog/schedule",
+  "url": "http://127.0.0.1:3210/catalog/schedule",
   "viewport": {
     "name": "desktop",
     "width": 1440,
     "height": 900
   },
-  "state": "degraded (база недоступна)",
+  "state": "degraded (данных нет)",
   "axe_version": "4.13.0",
   "rules_passed": 28,
   "rules_inapplicable": 35,

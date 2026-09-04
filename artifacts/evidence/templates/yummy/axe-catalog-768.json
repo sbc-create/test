@@ -1,23 +1,27 @@
 {
-  "captured_at_utc": "2026-09-04T14:52:40.693Z",
-  "base": "http://127.0.0.1:3111",
+  "captured_at_utc": "2026-09-04T16:23:19.400Z",
+  "base": "http://127.0.0.1:3210",
   "page": "catalog",
   "route": "/catalog",
-  "url": "http://127.0.0.1:3111/catalog",
+  "url": "http://127.0.0.1:3210/catalog",
   "viewport": {
     "name": "tablet",
     "width": 768,
     "height": 1024
   },
-  "state": "degraded (база недоступна)",
+  "state": "normal (fixture)",
   "axe_version": "4.13.0",
-  "rules_passed": 27,
-  "rules_inapplicable": 36,
+  "rules_passed": 28,
+  "rules_inapplicable": 35,
   "violations": [],
   "incomplete": [
     {
       "id": "aria-valid-attr-value",
       "nodes": 2
+    },
+    {
+      "id": "color-contrast",
+      "nodes": 21
     }
   ]
 }

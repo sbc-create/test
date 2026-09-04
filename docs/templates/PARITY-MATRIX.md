@@ -17,7 +17,7 @@
 | Семейство | Прогонов | Нарушений | Правил пройдено | Состояние | Итог |
 |---|---|---|---|---|---|
 | Lords | 72 | 0 | 25–29 | normal (fixture) | PASS |
-| Yummy | 24 | 0 | 9–32 | degraded (база недоступна) | PASS |
+| Yummy | 24 | 0 | 9–32 | normal (fixture) | PASS |
 
 Страницы Lords: catalog, home, not-found, search, search-empty, title.
 Страницы Yummy: catalog, dev-ui, home, not-found, ongoing, schedule, search, updates.
@@ -60,7 +60,7 @@
 | Кадр 16:9 зарезервирован и кликабелен | Lords | PASS | 8 сочетаний витрины и ширины |
 | Состояния плеера: loading/slow/timeout/error/retry | Lords | BLOCKED | поставщик не подключён (`BLOCKED_INPUT_CDNVIDEOHUB_CREDENTIALS`), состояний не существует |
 | Кадр и состояния плеера | Yummy | BLOCKED | страница произведения требует данных |
-| Деградация объясняет себя, содержимое не выдумывается | Yummy | PASS | 6 страниц, застрявших в загрузке: 0 |
+| Деградация объясняет себя, содержимое не выдумывается | Yummy | NOT_RUN | 6 страниц, застрявших в загрузке: 0 |
 | Оценка выводится только с источником | Lords | PASS | `test_lords_page_quality.py::TestRatingsAlwaysCarryTheirSource` |
 | Набор источников оценки `ratingSources[]` | Yummy | BLOCKED | ViewModel отдаёт скаляр — `TEMPLATE_TO_CORE-002` |
 

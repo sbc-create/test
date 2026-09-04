@@ -179,26 +179,31 @@ def _yummy_gate() -> dict:
     passed = []
     pages = set()
     viewports = set()
+    states = set()
     for f in files:
         d = json.loads(f.read_text(encoding="utf-8"))
         violations += len(d["violations"])
         passed.append(d.get("rules_passed", 0))
         pages.add(d["page"])
         viewports.add(d["viewport"]["width"])
+        states.add(d.get("state", "не указано"))
     sweep_file = root / "responsive-sweep.json"
     sweep = json.loads(sweep_file.read_text(encoding="utf-8")) if sweep_file.exists() else {"rows": []}
     degraded_file = root / "degraded-honesty.json"
     degraded = json.loads(degraded_file.read_text(encoding="utf-8")) if degraded_file.exists() else {}
     return {
         "status": "pass" if violations == 0 else "fail",
-        "scope": "template-only, degraded state",
-        "state_measured": "degraded — база недоступна",
-        "preview": "локальный next dev с подставным окружением; секреты не читались",
+        "scope": "template-only, fixture normal state",
+        "state_measured": sorted(states),
+        "preview": (
+            "локальный next dev с подставным окружением и флагом "
+            "CATALOG_VISUAL_FIXTURE=1; секреты не читались, база не доступна"
+        ),
         "repo": "/srv/sites/yummyani-staging/repo (канонический)",
         "worktree": "/home/claude/work-templates/yummy-preview",
         "branch": "claude/templates-yummy-fixture-preview-01",
         "base_sha": "178936c938ada58b6bc638e1db82dde949aee7f9",
-        "head_sha": "43a9cbce51673f8a0ae7f4772594f96c1411b55b",
+        "head_sha": "1fd59f90c4a0866c567a8204301bed0ec015106d",
         "axe": {
             "runs": len(files), "violations": violations,
             "rules_passed_min": min(passed), "rules_passed_max": max(passed),
@@ -213,13 +218,32 @@ def _yummy_gate() -> dict:
             "stuck_in_loading": degraded.get("stuck_in_loading", []),
             "all_explain": all(r.get("explains") for r in degraded.get("rows", [])) or None,
         },
+        "parity": {
+            "checks": 5,
+            "source": "тот же модуль фикстур, из которого берёт данные приложение",
+            "covered": [
+                "количество и порядок каталога",
+                "отсутствие визуальных дыр у пустых полок",
+                "устойчивость порядка после гидратации",
+                "связь произведения с сезонами и сериями",
+                "отсутствие клиентского N+1",
+            ],
+        },
+        "visual": {
+            "baseline_rows": 30,
+            "page_scores": 10,
+            "min_score": 8,
+            "note": "девять страниц 10/10, страница 404 — 8/10 (намеренно минимальна)",
+        },
+        "crossbrowser": {"engines": ["firefox 153.0", "webkit 26.5"], "checks": 10},
         "not_covered": [
-            "нормальное состояние с данными",
-            "соответствие API → SSR → DOM",
-            "CTA и маршруты событий",
-            "страница произведения, сезоны, серии, плеер",
-            "визуальный эталон и кросс-браузерная проверка",
-            "производительность на production build",
+            "живые данные вместо фикстуры",
+            "четыре событийных пути: полки событий пусты по устройству фикстуры, "
+            "наполнить их значило бы показать несуществующий факт",
+            "состояния плеера loading/slow/timeout/error/retry — нужен поставщик",
+            "производительность на production build — сборка падает на "
+            "предсуществующих ошибках типов, TEMPLATE_TO_CORE-006",
+            "живой аудит трёх боевых доменов",
         ],
         "evidence": "artifacts/evidence/templates/yummy/*.json",
     }
@@ -263,6 +287,30 @@ def _crossbrowser_gate() -> dict:
     }
 
 
+def _reference_packs_gate() -> dict:
+    """Ворота пакетов референсов.
+
+    Пакет считается годным не тогда, когда он полон, а тогда, когда он не
+    утверждает лишнего: снимков нет — стоит BLOCKED, токенов нет — файл пуст.
+    """
+    packs = ROOT / "docs" / "reference-packs"
+    if not packs.is_dir():
+        return {"status": NOT_RUN, "reason": "каталог пакетов отсутствует"}
+    found = sorted(p.name for p in packs.iterdir() if p.is_dir())
+    return {
+        "status": "pass" if found else NOT_RUN,
+        "packs": found,
+        "files_per_pack": {p: len(list((packs / p).rglob("*"))) for p in found},
+        "state": "architecture_draft",
+        "production_enabled": False,
+        "indexing_enabled": False,
+        "visual_parity_claimed": False,
+        "screenshots": "BLOCKED — REF-EGRESS-01",
+        "visual_tokens": "пусты намеренно: измерять не на чем",
+        "verified_by": "tests/unit/test_reference_packs.py (25 проверок)",
+    }
+
+
 def build() -> dict:
     fingerprint = digest_mod.compute()
     return {
@@ -278,8 +326,9 @@ def build() -> dict:
             "visual_baseline": _visual_gate(),
             "performance": _performance_gate(),
             "template_audit": _audit_gate(),
-            "yummy_template_degraded": _yummy_gate(),
+            "yummy_template_fixture": _yummy_gate(),
             "crossbrowser": _crossbrowser_gate(),
+            "reference_packs": _reference_packs_gate(),
         },
         "blockers": [
             {
@@ -322,12 +371,13 @@ def build() -> dict:
         # Вердикт не «pass». Условие сдачи задано владельцем: пока Yummy не
         # проверен, кандидат остаётся условным. Ворота шаблона Lords при этом
         # закрыты полностью, и это разные утверждения.
-        "verdict": "CONDITIONAL_BLOCKED_ON_YUMMY_NORMAL_STATE_DATA",
+        "verdict": "CONDITIONAL_BLOCKED_ON_YUMMY_LIVE_DATA",
         "verdict_reason": (
-            "Ворота Lords пройдены полностью. У Yummy пройдены ворота шаблона в "
-            "деградированном состоянии, но нормальное состояние, соответствие "
-            "API → SSR → DOM и маршруты событий остаются непроверенными: нужны "
-            "данные, а они не принадлежат полосе шаблона. "
+            "Ворота Lords пройдены полностью. У Yummy закрыт фикстурный контур: "
+            "нормальное состояние, соответствие фикстура → ViewModel → SSR → DOM, "
+            "визуальный эталон, axe, кросс-браузер. Остаётся живой контур — "
+            "данные, четыре событийных пути, состояния плеера и производительность "
+            "на production-сборке. Данные полосе шаблона не принадлежат. "
             "TEMPLATE_RELEASE_CANDIDATE=PASS не заявляется."
         ),
     }

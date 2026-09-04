@@ -1,46 +1,46 @@
 {
-  "captured_at_utc": "2026-09-04T14:54:04.829Z",
-  "base": "http://127.0.0.1:3111",
+  "captured_at_utc": "2026-09-04T15:52:30.056Z",
+  "base": "http://127.0.0.1:3210",
   "rows": [
     {
       "page": "home",
       "route": "/",
-      "cards": 0,
-      "titleLinks": 0,
+      "cards": 18,
+      "titleLinks": 42,
       "h1": "Аниме онлайн: каталог и просмотр",
       "explains": true,
       "stuckLoading": false,
-      "textLength": 1312
+      "textLength": 3467
     },
     {
       "page": "catalog",
       "route": "/catalog",
-      "cards": 0,
-      "titleLinks": 0,
+      "cards": 24,
+      "titleLinks": 48,
       "h1": "Каталог аниме — YummyAnime",
-      "explains": true,
+      "explains": false,
       "stuckLoading": false,
-      "textLength": 712
+      "textLength": 2405
     },
     {
       "page": "updates",
       "route": "/catalog/anime-updates",
       "cards": 0,
-      "titleLinks": 0,
+      "titleLinks": 24,
       "h1": "Обновления",
-      "explains": true,
+      "explains": false,
       "stuckLoading": false,
-      "textLength": 423
+      "textLength": 1382
     },
     {
       "page": "ongoing",
       "route": "/catalog/ongoing",
       "cards": 0,
-      "titleLinks": 0,
+      "titleLinks": 1,
       "h1": "Онгоинги аниме",
-      "explains": true,
+      "explains": false,
       "stuckLoading": false,
-      "textLength": 493
+      "textLength": 504
     },
     {
       "page": "schedule",
@@ -56,11 +56,11 @@
       "page": "search",
       "route": "/search?q=a",
       "cards": 0,
-      "titleLinks": 0,
+      "titleLinks": 24,
       "h1": "Поиск: a",
-      "explains": true,
+      "explains": false,
       "stuckLoading": false,
-      "textLength": 432
+      "textLength": 21
     }
   ],
   "stuck_in_loading": [],

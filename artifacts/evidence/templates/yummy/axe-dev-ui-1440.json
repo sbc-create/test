@@ -1,15 +1,15 @@
 {
-  "captured_at_utc": "2026-09-04T14:53:59.698Z",
-  "base": "http://127.0.0.1:3111",
+  "captured_at_utc": "2026-09-04T16:24:42.615Z",
+  "base": "http://127.0.0.1:3210",
   "page": "dev-ui",
   "route": "/dev/ui",
-  "url": "http://127.0.0.1:3111/dev/ui",
+  "url": "http://127.0.0.1:3210/dev/ui",
   "viewport": {
     "name": "desktop",
     "width": 1440,
     "height": 900
   },
-  "state": "degraded (база недоступна)",
+  "state": "normal (fixture)",
   "axe_version": "4.13.0",
   "rules_passed": 32,
   "rules_inapplicable": 31,
