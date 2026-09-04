@@ -1,0 +1,89 @@
+# Блоки черновика amd-online.
+#
+# У каждого блока названы `mustNot` и `protectedBy`: блок без проверки — это
+# намерение, а не поведение.
+
+schemaVersion: 1
+templateId: animedia-anime-portal
+
+blocks:
+  - blockId: header
+    responsibility: "Шапка и основная навигация"
+    data: описывается при подключении контракта
+    states: [normal, sticky]
+    mustNot:
+      - Показывать данные, которых нет в источнике.
+      - Оставлять заголовок над пустотой.
+      - Содержать ассеты или тексты референса.
+    protectedBy:
+      - tests/unit/test_reference_packs.py
+  - blockId: search
+    responsibility: "Поиск по каталогу"
+    data: описывается при подключении контракта
+    states: [idle, suggesting, empty]
+    mustNot:
+      - Показывать данные, которых нет в источнике.
+      - Оставлять заголовок над пустотой.
+      - Содержать ассеты или тексты референса.
+    protectedBy:
+      - tests/unit/test_reference_packs.py
+  - blockId: shelves
+    responsibility: "Полки главной"
+    data: описывается при подключении контракта
+    states: [normal, empty]
+    mustNot:
+      - Показывать данные, которых нет в источнике.
+      - Оставлять заголовок над пустотой.
+      - Содержать ассеты или тексты референса.
+    protectedBy:
+      - tests/unit/test_reference_packs.py
+  - blockId: catalog-grid
+    responsibility: "Сетка каталога"
+    data: описывается при подключении контракта
+    states: [normal, empty, degraded]
+    mustNot:
+      - Показывать данные, которых нет в источнике.
+      - Оставлять заголовок над пустотой.
+      - Содержать ассеты или тексты референса.
+    protectedBy:
+      - tests/unit/test_reference_packs.py
+  - blockId: pager
+    responsibility: "Пагинация"
+    data: описывается при подключении контракта
+    states: [normal, first, last]
+    mustNot:
+      - Показывать данные, которых нет в источнике.
+      - Оставлять заголовок над пустотой.
+      - Содержать ассеты или тексты референса.
+    protectedBy:
+      - tests/unit/test_reference_packs.py
+  - blockId: title-hero
+    responsibility: "Заголовок и факты произведения"
+    data: описывается при подключении контракта
+    states: [normal, no_poster, no_rating]
+    mustNot:
+      - Показывать данные, которых нет в источнике.
+      - Оставлять заголовок над пустотой.
+      - Содержать ассеты или тексты референса.
+    protectedBy:
+      - tests/unit/test_reference_packs.py
+  - blockId: player-shell
+    responsibility: "Посадочное место плеера"
+    data: описывается при подключении контракта
+    states: [idle, unavailable]
+    mustNot:
+      - Показывать данные, которых нет в источнике.
+      - Оставлять заголовок над пустотой.
+      - Содержать ассеты или тексты референса.
+    protectedBy:
+      - tests/unit/test_reference_packs.py
+  - blockId: footer
+    responsibility: "Подвал"
+    data: описывается при подключении контракта
+    states: [normal]
+    mustNot:
+      - Показывать данные, которых нет в источнике.
+      - Оставлять заголовок над пустотой.
+      - Содержать ассеты или тексты референса.
+    protectedBy:
+      - tests/unit/test_reference_packs.py
