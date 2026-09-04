@@ -241,7 +241,19 @@ if __name__ == "__main__":
     worker = threading.Thread(target=server.serve_forever, name="serve", daemon=True)
     worker.start()
     print("стенд %s на http://%s:%d/" % (manifest().get("site_id"), host, port), file=sys.stderr)
-    stop.wait()
+    # Ждём с таймаутом, а не бесконечно. Обработчик сигнала на уровне Python
+    # выполняется только когда главный поток возвращается в цикл интерпретатора.
+    # Бесконечный stop.wait() стоит в futex, а обработчики ставятся с SA_RESTART,
+    # поэтому ядро перезапускает ожидание и ход обработчику не достаётся: SIGTERM
+    # доставлен и снят, а _stop не выполнялся.
+    #
+    # Измерено 2026-09-04 под нагрузкой, примерно один запуск из семи: SigCgt
+    # содержит 0x4000, SigPnd и ShdPnd пусты, SigBlk пуст, главный поток в
+    # futex_wait_queue_me, строка «остановка» не напечатана. Юнит доживал до
+    # таймаута соединения в 30 секунд, то есть systemd добивал бы его по
+    # TimeoutStopSec вместо чистой остановки.
+    while not stop.wait(0.5):
+        pass
     print("остановка %s" % manifest().get("site_id"), file=sys.stderr)
     server.shutdown()
     server.server_close()
