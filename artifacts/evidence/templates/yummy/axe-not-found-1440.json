@@ -1,0 +1,18 @@
+{
+  "captured_at_utc": "2026-09-04T14:53:57.870Z",
+  "base": "http://127.0.0.1:3111",
+  "page": "not-found",
+  "route": "/nonexistent-address-xyz",
+  "url": "http://127.0.0.1:3111/nonexistent-address-xyz",
+  "viewport": {
+    "name": "desktop",
+    "width": 1440,
+    "height": 900
+  },
+  "state": "degraded (база недоступна)",
+  "axe_version": "4.13.0",
+  "rules_passed": 9,
+  "rules_inapplicable": 54,
+  "violations": [],
+  "incomplete": []
+}

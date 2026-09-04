@@ -1,0 +1,23 @@
+{
+  "captured_at_utc": "2026-09-04T14:52:02.589Z",
+  "base": "http://127.0.0.1:3111",
+  "page": "ongoing",
+  "route": "/catalog/ongoing",
+  "url": "http://127.0.0.1:3111/catalog/ongoing",
+  "viewport": {
+    "name": "mobile",
+    "width": 390,
+    "height": 844
+  },
+  "state": "degraded (база недоступна)",
+  "axe_version": "4.13.0",
+  "rules_passed": 27,
+  "rules_inapplicable": 36,
+  "violations": [],
+  "incomplete": [
+    {
+      "id": "aria-valid-attr-value",
+      "nodes": 2
+    }
+  ]
+}

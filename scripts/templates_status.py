@@ -162,6 +162,69 @@ def _audit_gate() -> dict:
     }
 
 
+def _yummy_gate() -> dict:
+    """Ворота шаблона Yummy по свидетельствам локальной preview.
+
+    Состояние названо прямо: замеры сняты при недоступной базе, то есть в
+    деградированном состоянии. Это полноценная проверка вёрстки и доступности и
+    **не** проверка нормального состояния. Ворота, которым нужны данные,
+    остаются `blocked`, а не `pass`: подменять одно другим — то же самое, что
+    выдавать непроведённую проверку за пройденную.
+    """
+    root = EVIDENCE / "yummy"
+    files = sorted(root.glob("axe-*.json"))
+    if not files:
+        return {"status": NOT_RUN, "reason": "свидетельств Yummy нет"}
+    violations = 0
+    passed = []
+    pages = set()
+    viewports = set()
+    for f in files:
+        d = json.loads(f.read_text(encoding="utf-8"))
+        violations += len(d["violations"])
+        passed.append(d.get("rules_passed", 0))
+        pages.add(d["page"])
+        viewports.add(d["viewport"]["width"])
+    sweep_file = root / "responsive-sweep.json"
+    sweep = json.loads(sweep_file.read_text(encoding="utf-8")) if sweep_file.exists() else {"rows": []}
+    degraded_file = root / "degraded-honesty.json"
+    degraded = json.loads(degraded_file.read_text(encoding="utf-8")) if degraded_file.exists() else {}
+    return {
+        "status": "pass" if violations == 0 else "fail",
+        "scope": "template-only, degraded state",
+        "state_measured": "degraded — база недоступна",
+        "preview": "локальный next dev с подставным окружением; секреты не читались",
+        "repo": "/srv/sites/yummyani-staging/repo (канонический)",
+        "worktree": "/home/claude/work-templates/yummy-preview",
+        "branch": "claude/templates-yummy-fixture-preview-01",
+        "base_sha": "178936c938ada58b6bc638e1db82dde949aee7f9",
+        "head_sha": "06a03c189b972b78a50750c6c1d9a4199d09fa13",
+        "axe": {
+            "runs": len(files), "violations": violations,
+            "rules_passed_min": min(passed), "rules_passed_max": max(passed),
+            "pages": sorted(pages), "viewports": sorted(viewports),
+        },
+        "responsive_sweep": {
+            "measurements": len(sweep.get("rows", [])),
+            "overflows": sum(1 for r in sweep.get("rows", []) if r.get("overflows")),
+        },
+        "degraded_honesty": {
+            "pages": len(degraded.get("rows", [])),
+            "stuck_in_loading": degraded.get("stuck_in_loading", []),
+            "all_explain": all(r.get("explains") for r in degraded.get("rows", [])) or None,
+        },
+        "not_covered": [
+            "нормальное состояние с данными",
+            "соответствие API → SSR → DOM",
+            "CTA и маршруты событий",
+            "страница произведения, сезоны, серии, плеер",
+            "визуальный эталон и кросс-браузерная проверка",
+            "производительность на production build",
+        ],
+        "evidence": "artifacts/evidence/templates/yummy/*.json",
+    }
+
+
 def build() -> dict:
     fingerprint = digest_mod.compute()
     return {
@@ -177,6 +240,7 @@ def build() -> dict:
             "visual_baseline": _visual_gate(),
             "performance": _performance_gate(),
             "template_audit": _audit_gate(),
+            "yummy_template_degraded": _yummy_gate(),
         },
         "blockers": [
             {
@@ -188,19 +252,44 @@ def build() -> dict:
             },
             {
                 "id": "YUMMY-RENDER-01",
+                "state": "partially_lifted",
+                "what": (
+                    "Ключевые страницы Yummy теперь отрисовываются локально без базы и "
+                    "секретов: поднят next dev с подставным окружением, все восемь "
+                    "маршрутов отдают 200. Снято ограничение на браузерную проверку "
+                    "шаблона."
+                ),
+                "remains": (
+                    "Содержимое приходит из базы, поэтому доступно только "
+                    "деградированное состояние. Нормальное состояние, соответствие "
+                    "API → SSR → DOM, маршруты событий, страница произведения, сезоны, "
+                    "серии и плеер остаются непроверенными."
+                ),
+                "effect": "ворота, которым нужны данные, помечены blocked, а не pass",
+                "recorded_in": "docs/templates/BLOCKERS.md",
+            },
+            {
+                "id": "YUMMY-LIVE-EGRESS-01",
                 "state": "open",
-                "what": "ключевые страницы Yummy нечем отрисовать: нужна база и учётные данные",
-                "effect": "оценка Yummy по рубрике не проводилась и не заявляется",
+                "what": (
+                    "Боевые домены yummyani.site/.org/.biz отклоняются профилем "
+                    "разрешений так же, как референсы: «хост не входит в переданные "
+                    "контракты»."
+                ),
+                "effect": "живой read-only аудит трёх доменов не проводился",
                 "recorded_in": "docs/templates/BLOCKERS.md",
             },
         ],
         # Вердикт не «pass». Условие сдачи задано владельцем: пока Yummy не
         # проверен, кандидат остаётся условным. Ворота шаблона Lords при этом
         # закрыты полностью, и это разные утверждения.
-        "verdict": "CONDITIONAL_BLOCKED_ON_YUMMY",
+        "verdict": "CONDITIONAL_BLOCKED_ON_YUMMY_NORMAL_STATE_DATA",
         "verdict_reason": (
-            "Ворота Lords пройдены полностью. Yummy не проверен: блокер "
-            "YUMMY-RENDER-01. TEMPLATE_RELEASE_CANDIDATE=PASS не заявляется."
+            "Ворота Lords пройдены полностью. У Yummy пройдены ворота шаблона в "
+            "деградированном состоянии, но нормальное состояние, соответствие "
+            "API → SSR → DOM и маршруты событий остаются непроверенными: нужны "
+            "данные, а они не принадлежат полосе шаблона. "
+            "TEMPLATE_RELEASE_CANDIDATE=PASS не заявляется."
         ),
     }
 

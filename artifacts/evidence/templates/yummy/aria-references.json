@@ -1,0 +1,18 @@
+{
+  "captured_at_utc": "2026-09-04T14:59:39.685Z",
+  "base": "http://127.0.0.1:3111",
+  "rows": [
+    {
+      "route": "/",
+      "dangling": []
+    },
+    {
+      "route": "/catalog",
+      "dangling": []
+    },
+    {
+      "route": "/search?q=a",
+      "dangling": []
+    }
+  ]
+}

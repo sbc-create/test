@@ -1,7 +1,7 @@
 {
   "lane": "TEMPLATES",
   "branch": "claude/templates-lords-yummy-refpacks-01",
-  "head": "2d9ba39f709b9d3c04bcae47c9744c5269cfb14d",
+  "head": "8947065ca8aae000999bc8f9ce38cbcdea6e1f6c",
   "base_sha": "76552b9a7372c5ad15cfc7d8b1052a10024722a3",
   "template_digest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
   "template_digest_files": 19,
@@ -81,6 +81,56 @@
         "lords-04": 10.0
       },
       "evidence": "artifacts/evidence/templates/audit.lords.json"
+    },
+    "yummy_template_degraded": {
+      "status": "pass",
+      "scope": "template-only, degraded state",
+      "state_measured": "degraded — база недоступна",
+      "preview": "локальный next dev с подставным окружением; секреты не читались",
+      "repo": "/srv/sites/yummyani-staging/repo (канонический)",
+      "worktree": "/home/claude/work-templates/yummy-preview",
+      "branch": "claude/templates-yummy-fixture-preview-01",
+      "base_sha": "178936c938ada58b6bc638e1db82dde949aee7f9",
+      "head_sha": "06a03c189b972b78a50750c6c1d9a4199d09fa13",
+      "axe": {
+        "runs": 24,
+        "violations": 0,
+        "rules_passed_min": 9,
+        "rules_passed_max": 32,
+        "pages": [
+          "catalog",
+          "dev-ui",
+          "home",
+          "not-found",
+          "ongoing",
+          "schedule",
+          "search",
+          "updates"
+        ],
+        "viewports": [
+          390,
+          768,
+          1440
+        ]
+      },
+      "responsive_sweep": {
+        "measurements": 64,
+        "overflows": 0
+      },
+      "degraded_honesty": {
+        "pages": 6,
+        "stuck_in_loading": [],
+        "all_explain": true
+      },
+      "not_covered": [
+        "нормальное состояние с данными",
+        "соответствие API → SSR → DOM",
+        "CTA и маршруты событий",
+        "страница произведения, сезоны, серии, плеер",
+        "визуальный эталон и кросс-браузерная проверка",
+        "производительность на production build"
+      ],
+      "evidence": "artifacts/evidence/templates/yummy/*.json"
     }
   },
   "blockers": [
@@ -93,12 +143,20 @@
     },
     {
       "id": "YUMMY-RENDER-01",
+      "state": "partially_lifted",
+      "what": "Ключевые страницы Yummy теперь отрисовываются локально без базы и секретов: поднят next dev с подставным окружением, все восемь маршрутов отдают 200. Снято ограничение на браузерную проверку шаблона.",
+      "remains": "Содержимое приходит из базы, поэтому доступно только деградированное состояние. Нормальное состояние, соответствие API → SSR → DOM, маршруты событий, страница произведения, сезоны, серии и плеер остаются непроверенными.",
+      "effect": "ворота, которым нужны данные, помечены blocked, а не pass",
+      "recorded_in": "docs/templates/BLOCKERS.md"
+    },
+    {
+      "id": "YUMMY-LIVE-EGRESS-01",
       "state": "open",
-      "what": "ключевые страницы Yummy нечем отрисовать: нужна база и учётные данные",
-      "effect": "оценка Yummy по рубрике не проводилась и не заявляется",
+      "what": "Боевые домены yummyani.site/.org/.biz отклоняются профилем разрешений так же, как референсы: «хост не входит в переданные контракты».",
+      "effect": "живой read-only аудит трёх доменов не проводился",
       "recorded_in": "docs/templates/BLOCKERS.md"
     }
   ],
-  "verdict": "CONDITIONAL_BLOCKED_ON_YUMMY",
-  "verdict_reason": "Ворота Lords пройдены полностью. Yummy не проверен: блокер YUMMY-RENDER-01. TEMPLATE_RELEASE_CANDIDATE=PASS не заявляется."
+  "verdict": "CONDITIONAL_BLOCKED_ON_YUMMY_NORMAL_STATE_DATA",
+  "verdict_reason": "Ворота Lords пройдены полностью. У Yummy пройдены ворота шаблона в деградированном состоянии, но нормальное состояние, соответствие API → SSR → DOM и маршруты событий остаются непроверенными: нужны данные, а они не принадлежат полосе шаблона. TEMPLATE_RELEASE_CANDIDATE=PASS не заявляется."
 }
