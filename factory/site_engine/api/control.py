@@ -245,7 +245,44 @@ def _diff(before: dict[str, Any], changes: dict[str, Any]) -> dict[str, Any]:
     return out
 
 
-def _завершённый_отрезок(контекст, родитель, имя, атрибуты, начало, конец):
+class ClientOperation:
+    """Операция, начатая внешним слоем поверх Control API.
+
+    Существует, чтобы панель не импортировала внутренности пакета `api`.
+    Панель получает управляющий объект внедрением и работает только через его
+    открытую поверхность: иначе граница между слоями держится на договорённости,
+    а не на устройстве кода, и первый же прямой импорт её отменяет.
+    """
+
+    def __init__(self, tracer, context, *, name: str, service: str,
+                 method: str, path: str, started: float, now) -> None:
+        self._tracer = tracer
+        self._context = context
+        self._name = name
+        self._service = service
+        self._method = method.upper()
+        self._path = path
+        self._started = started
+        self._now = now
+
+    @property
+    def headers(self) -> dict[str, str]:
+        """Заголовки для передачи в Control API. Продолжают тот же след."""
+        return {TRACEPARENT: self._context.header()}
+
+    def finish(self, status: int) -> None:
+        if not self._context.sampled:
+            return
+        отрезок = _завершённый_отрезок(
+            self._context, None, self._name,
+            {"method": self._method, "path_template": path_template(self._path),
+             "status": status, "outcome": "ok" if status < 400 else "error"},
+            self._started, float(self._now()), service=self._service)
+        self._tracer.record(отрезок)
+
+
+def _завершённый_отрезок(контекст, родитель, имя, атрибуты, начало, конец,
+                         service: str = "control-api"):
     """Готовый отрезок для записи после ответа."""
     from factory.site_engine.api.tracing import Span, sanitize_attrs
 
@@ -254,7 +291,7 @@ def _завершённый_отрезок(контекст, родитель, �
         span_id=контекст.span_id,
         parent_id=родитель.span_id if родитель is not None else None,
         name=имя,
-        service="control-api",
+        service=service,
         started=начало,
         attrs=sanitize_attrs(атрибуты),
     )
@@ -305,6 +342,20 @@ class ControlApi:
     def register_gauge(self, name: str, source: Any) -> None:
         """Источник показателя, вычисляемый в момент опроса."""
         self._gauges[name] = source
+
+    def begin_client_operation(self, method: str, path: str, *, service: str,
+                               mutating: bool) -> ClientOperation:
+        """Начать операцию внешнего слоя.
+
+        Возвращается объект с заголовками для последующих вызовов и способом
+        закрыть отрезок. Внешнему слою не нужно знать ни формата контекста, ни
+        устройства трассировщика.
+        """
+        контекст = new_context(
+            sampled=self._tracer.should_sample(mutating=mutating, failed=False))
+        return ClientOperation(self._tracer, контекст, name=f"{service}.request",
+                               service=service, method=method, path=path,
+                               started=float(self._now()), now=self._now)
 
     def principal_for(self, token: str) -> Principal | None:
         """Права токена — для вызывающих внутри процесса.

@@ -14,6 +14,10 @@ StartLimitIntervalSec=300
 StartLimitBurst=5
 
 [Service]
+# X-Split-Roots: код берётся из неизменяемого релиза (control-api/current), а
+# состояние фабрики — из общего репозитория (repo). Это суть релизной модели:
+# при едином корне откат уносил бы вместе с кодом задания, поставленные новой
+# версией. Разделение намеренное и проверяется deploy-control-api.sh.
 # Type=notify, а не simple: между «процесс запустился» и «служба готова»
 # находится протокол запуска. При simple systemd считал бы службу готовой
 # сразу, и зависимые проверки шли бы к ней раньше времени.
@@ -35,8 +39,7 @@ EnvironmentFile=/etc/site-factory/environment
 # хосте, где служба ещё не настроена, и это не повод падать при загрузке юнита.
 EnvironmentFile=-/etc/site-factory/control-api.env
 
-ExecStart=/srv/site-factory/control-api/current/.venv/bin/python -m factory.site_engine.api.server \
-    --root /srv/site-factory/repo --host 127.0.0.1 --port 8790
+ExecStart=/srv/site-factory/control-api/current/.venv/bin/python -m factory.site_engine.api.server --root /srv/site-factory/repo --host 127.0.0.1 --port 8790
 
 # Протокол запуска идёт до готовности; 90 секунд с запасом на проверку всех
 # профилей. Не бесконечность: зависший старт обязан стать отказом, а не

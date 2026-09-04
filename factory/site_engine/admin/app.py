@@ -19,7 +19,6 @@ from dataclasses import dataclass, field
 
 from factory.site_engine.admin import ADMIN_COOKIE, CSRF_FIELD, ui
 from factory.site_engine.admin.session import SessionStore
-from factory.site_engine.api.tracing import TRACEPARENT, new_context, path_template
 
 
 @dataclass
@@ -78,9 +77,9 @@ class AdminApp:
         что-то нажал, но не видно, чем это кончилось внутри.
         """
         заголовки = {"Authorization": f"Bearer {session.token}"}
-        контекст = getattr(self, "_trace", None)
-        if контекст is not None:
-            заголовки[TRACEPARENT] = контекст.header()
+        операция = getattr(self, "_operation", None)
+        if операция is not None:
+            заголовки.update(операция.headers)
         return self._control.handle(method, path, body=body or {}, headers=заголовки)
 
     def _scopes(self, session) -> list[str]:
@@ -103,12 +102,9 @@ class AdminApp:
         cookies = cookies or {}
         # Отрезок панели — корень следа операторского действия.
         изменяющий = method.upper() == "POST"
-        трассировщик = getattr(self._control, "tracer", None)
-        выбран = True
-        if трассировщик is not None:
-            выбран = трассировщик.should_sample(mutating=изменяющий, failed=False)
-        self._trace = new_context(sampled=выбран)
-        начало = time.time()
+        начать = getattr(self._control, "begin_client_operation", None)
+        self._operation = (начать(method, path, service="admin", mutating=изменяющий)
+                           if начать is not None else None)
         session = self._sessions.get(cookies.get(ADMIN_COOKIE))
         parts = [p for p in path.strip("/").split("/") if p]
 
@@ -144,47 +140,31 @@ class AdminApp:
             session.flash = None
 
         if method == "GET" and rest == []:
-            return self._record(трассировщик, начало, method, path,
-                                self._dashboard(session, flash, label, csrf))
+            return self._record(self._dashboard(session, flash, label, csrf))
         if method == "GET" and rest == ["audit"]:
-            return self._record(трассировщик, начало, method, path,
-                                self._audit(session, flash, label, csrf))
+            return self._record(self._audit(session, flash, label, csrf))
         if rest[:1] == ["sites"] and len(rest) >= 2:
             site_id = rest[1]
             tail = rest[2:]
             if method == "GET" and not tail:
                 return self._site(session, site_id, flash, label, csrf)
             if method == "POST" and tail == ["jobs"]:
-                return self._record(трассировщик, начало, method, path,
-                                    self._job(session, site_id, form))
+                return self._record(self._job(session, site_id, form))
             if method == "POST" and tail == ["cache"]:
                 return self._cache(session, site_id, form)
             if method == "POST" and tail == ["settings"]:
                 return self._settings(session, site_id, form)
         return AdminResponse(status=404, html=ui.page("Не найдено", "<p>Нет такой страницы.</p>"))
 
-    def _record(self, трассировщик, начало: float, method: str, path: str,
-                ответ: AdminResponse) -> AdminResponse:
-        """Записать отрезок панели.
+    def _record(self, ответ: AdminResponse) -> AdminResponse:
+        """Закрыть отрезок панели.
 
         Возвращается тот же ответ: запись следа не должна менять поведение,
         иначе диагностика начинает влиять на диагностируемое.
         """
-        контекст = getattr(self, "_trace", None)
-        if трассировщик is None or контекст is None or not контекст.sampled:
-            return ответ
-        from factory.site_engine.api.tracing import Span, sanitize_attrs
-
-        отрезок = Span(
-            trace_id=контекст.trace_id, span_id=контекст.span_id, parent_id=None,
-            name="admin.request", service="admin", started=начало,
-            attrs=sanitize_attrs({"method": method.upper(),
-                                  "path_template": path_template(path),
-                                  "status": ответ.status,
-                                  "outcome": "ok" if ответ.status < 400 else "error"}),
-        )
-        отрезок.ended = time.time()
-        трассировщик.record(отрезок)
+        операция = getattr(self, "_operation", None)
+        if операция is not None:
+            операция.finish(ответ.status)
         return ответ
 
     def _login(self, form: dict[str, str]) -> AdminResponse:
