@@ -1,7 +1,7 @@
 {
   "lane": "TEMPLATES",
   "branch": "claude/templates-lords-yummy-refpacks-01",
-  "head": "f2fc6ea45a991efb1aae2781ff9c9888a4f3401b",
+  "head": "de585a1d3e92bcb094374bcb73a1459578866714",
   "base_sha": "76552b9a7372c5ad15cfc7d8b1052a10024722a3",
   "template_digest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
   "template_digest_files": 19,
