@@ -229,12 +229,18 @@ def _document(ctx: dict, meta: Meta, body: str) -> str:
     lang = ctx["language"]
     full_title = meta.title if meta.title.endswith(brand) else f"{meta.title} — {brand}"
 
+    # Пустое описание не объявляется. Отсутствие описания и описание, равное
+    # пустой строке, — разные утверждения: второе сообщает, что описание есть и
+    # оно пусто. Раздел без редакционного текста честнее промолчать, чем
+    # подставить сгенерированную фразу, выдающую себя за редакционную.
+    описание = meta.description.strip()
     head = [
         '<meta charset="utf-8">',
         '<meta name="viewport" content="width=device-width, initial-scale=1">',
         f"<title>{escape(full_title)}</title>",
-        f'<meta name="description" content="{escape(meta.description)}">',
     ]
+    if описание:
+        head.append(f'<meta name="description" content="{escape(описание)}">')
     # Canonical и индексация — разные вопросы, и решаются они порознь.
     # Canonical говорит, какой адрес считать основным; он осмыслен, как только
     # известен домен, и не зависит от того, пускаем ли мы туда поисковик.
@@ -252,9 +258,10 @@ def _document(ctx: dict, meta: Meta, body: str) -> str:
         f'<meta property="og:type" content="{"video.movie" if meta.page_type == "title" else "website"}">',
         f'<meta property="og:site_name" content="{escape(brand)}">',
         f'<meta property="og:title" content="{escape(full_title)}">',
-        f'<meta property="og:description" content="{escape(meta.description)}">',
         f'<meta property="og:locale" content="{escape("ru_RU" if lang == "ru" else lang)}">',
     ]
+    if описание:
+        head.append(f'<meta property="og:description" content="{escape(описание)}">')
     if meta.poster:
         head.append(f'<meta property="og:image" content="{escape(meta.poster)}">')
     head.append('<meta name="lords-data-source" content="fixture/test">')
@@ -548,13 +555,22 @@ def _carousel(ctx, shelf, heading: str) -> str:
     )
 
 
-def _grid(titles) -> str:
+def _grid(titles, *, anchor: bool = False) -> str:
+    """Сетка карточек. `anchor` выдаёт `id="grid"` — якорь скрипта списка.
+
+    Якорь по умолчанию выключен, потому что главная зовёт `_grid()` по разу на
+    каждую полку: безусловный идентификатор давал от трёх до пяти одинаковых
+    `id` в одном документе. Скрипту он там и не нужен — тот ищет `listing-data`
+    и `grid` вместе, а набора данных на главной нет, и скрипт выходит сразу.
+    Якорь включают ровно там, где список живой: каталог и поиск.
+    """
     if not titles:
         return (
             '<p class="empty">По выбранным условиям в каталоге ничего нет. '
             "Стенд показывает пустой результат честно и не подставляет чужие записи.</p>"
         )
-    return '<div class="grid" id="grid">' + "".join(_card(t) for t in titles) + "</div>"
+    attrs = ' id="grid"' if anchor else ""
+    return f'<div class="grid"{attrs}>' + "".join(_card(t) for t in titles) + "</div>"
 
 
 def _pagination(base: str, page: int, pages: int) -> str:
@@ -610,7 +626,7 @@ def _facets(catalog: fx.Catalog, kinds, *, show_type: bool, row: bool = False,
     if show_type and len(types) > 1:
         type_block = (
             '<fieldset><legend>Тип</legend>'
-            f'<select id="f-type" data-facet="type">{_options(types, "Любой тип")}</select>'
+            f'<select id="f-type" data-facet="type" aria-label="Тип">{_options(types, "Любой тип")}</select>'
             "</fieldset>"
         )
     css = "facets facets--row" if row else "facets"
@@ -619,16 +635,16 @@ def _facets(catalog: fx.Catalog, kinds, *, show_type: bool, row: bool = False,
         "<h2>Фильтры</h2>"
         + type_block
         + '<fieldset><legend>Жанр</legend>'
-        f'<select id="f-genre" data-facet="genre">{_options(genres, "Любой жанр")}</select>'
+        f'<select id="f-genre" data-facet="genre" aria-label="Жанр">{_options(genres, "Любой жанр")}</select>'
         "</fieldset>"
         '<fieldset><legend>Год</legend>'
-        f'<select id="f-year" data-facet="year">{_options(years, "Любой год")}</select>'
+        f'<select id="f-year" data-facet="year" aria-label="Год">{_options(years, "Любой год")}</select>'
         "</fieldset>"
         '<fieldset><legend>Страна</legend>'
-        f'<select id="f-country" data-facet="country">{_options(countries, "Любая страна")}</select>'
+        f'<select id="f-country" data-facet="country" aria-label="Страна">{_options(countries, "Любая страна")}</select>'
         "</fieldset>"
         '<fieldset><legend>Сортировка</legend>'
-        f'<select id="f-sort" data-facet="sort">{_options(SORTS[1:], SORTS[0][1])}</select>'
+        f'<select id="f-sort" data-facet="sort" aria-label="Сортировка">{_options(SORTS[1:], SORTS[0][1])}</select>'
         "</fieldset>"
         '<button class="facets__reset" type="reset">Сбросить</button>'
         "</form>"
@@ -646,7 +662,7 @@ def _facets(catalog: fx.Catalog, kinds, *, show_type: bool, row: bool = False,
 DATASET_MAX_TITLES = 200
 
 
-def _dataset(titles) -> str:
+def _dataset(titles, *, per_page: int = 24, by_year: bool = False) -> str:
     """Набор списка для клиентской фильтрации — пока он того стоит.
 
     Пагинация на сервере отдаёт одну страницу, и фильтровать её содержимое было
@@ -671,7 +687,15 @@ def _dataset(titles) -> str:
     body = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
     # `</script>` внутри данных закрыл бы тег раньше времени.
     body = body.replace("<", "\\u003c")
-    return f'<script type="application/json" id="listing-data">{body}</script>'
+    # Модель разбиения объявляется в разметке, а не угадывается скриптом.
+    # Сервер режет каталог блоками годов (ADR-0007), и скрипт списка обязан
+    # повторить ровно это: иначе фильтр молча меняет и размер страницы, и
+    # смысл слова «страница», а вернуться на исходную нечем.
+    модель = "year" if by_year else "flat"
+    return (
+        f'<script type="application/json" id="listing-data" '
+        f'data-per-page="{per_page}" data-pagination="{модель}">{body}</script>'
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -750,7 +774,7 @@ def _listing_pages(
         title = section_title if number == 1 else f"{section_title} — страница {number}"
         desc = description if number == 1 else f"{description} Страница {number}."
         lede = f'<p class="lede">{escape(intro)}</p>' if intro and number == 1 else ""
-        grid = _grid(chunk) + _pagination(base, number, pages_count)
+        grid = _grid(chunk, anchor=True) + _pagination(base, number, pages_count)
         # Общее число записей — та же связность: оно меняется от любой правки
         # каталога и стоит на каждой странице. Остаётся на первой, где читатель
         # его и ищет.
@@ -764,7 +788,8 @@ def _listing_pages(
             inner = body_top + f'<div class="listing">{панель}<div>{grid}</div></div>'
         else:  # top / hero / none — фасеты стоят над списком
             inner = body_top + панель + grid
-        inner += _dataset(items)
+        inner += _dataset(
+            items, per_page=per_page, by_year=bool(ctx.get("pagination_by_year")))
 
         page_trail = trail if number == 1 else trail + ((f"Страница {number}", ""),)
         jsonld = ({
@@ -1594,8 +1619,39 @@ APP_JS = """/* Lords — поведение интерфейса. Ни одно�
   var items = [];
   try { items = JSON.parse(node.textContent); } catch (e) { return; }
 
-  var PER_PAGE = 24;
+  // Размер страницы и модель разбиения приходят из разметки: их выбирает
+  // сервер, и расходиться с ним скрипту нельзя. Значения по умолчанию
+  // повторяют прежнее поведение для набора без объявленной модели.
+  var PER_PAGE = parseInt(node.getAttribute("data-per-page"), 10) || 24;
+  var BY_YEAR = node.getAttribute("data-pagination") === "year";
   var page = 1;
+
+  // Повторяет factory/lords/pagination.py: каждый год начинается с новой
+  // страницы, длинный год добирается страницами по PER_PAGE, записи без года
+  // идут последним блоком. Группируются подряд идущие годы — ровно как groupby
+  // на сервере, который тоже полагается на порядок витрины, а не сортирует.
+  function paginate(list) {
+    var pages = [];
+    function flush(block) {
+      for (var i = 0; i < block.length; i += PER_PAGE) {
+        pages.push(block.slice(i, i + PER_PAGE));
+      }
+    }
+    if (!BY_YEAR) {
+      flush(list);
+      return pages.length ? pages : [[]];
+    }
+    var block = [];
+    var current;
+    for (var j = 0; j < list.length; j += 1) {
+      var year = typeof list[j].year === "number" ? list[j].year : null;
+      if (block.length && year !== current) { flush(block); block = []; }
+      current = year;
+      block.push(list[j]);
+    }
+    if (block.length) { flush(block); }
+    return pages.length ? pages : [[]];
+  }
 
   function card(item) {
     var seasons = item.episodes ? '<span class="card__seasons">' + item.episodes + ' сер.</span>' : "";
@@ -1642,9 +1698,10 @@ APP_JS = """/* Lords — поведение интерфейса. Ни одно�
     }
     if (query === "" && counter) { grid.innerHTML = ""; return; }
 
-    var total = Math.max(1, Math.ceil(list.length / PER_PAGE));
+    var pages = paginate(list);
+    var total = pages.length;
     if (page > total) { page = total; }
-    var slice = list.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+    var slice = pages[page - 1] || [];
     grid.innerHTML = slice.length
       ? slice.map(card).join("")
       : '<p class="empty">По выбранным условиям в каталоге ничего нет.</p>';

@@ -458,6 +458,40 @@ def cmd_db(args) -> int:
     return EXIT_OK
 
 
+def cmd_template_audit(args) -> int:
+    """Оценка ключевых страниц собранного стенда по рубрике шаблона.
+
+    Порог берётся по худшей странице, а не по средней: среднее скрывает провал,
+    а владелец открывает не среднее. Разделы, выключенные профилем, в оценку не
+    входят — их отсутствие исполняет решение владельца, а не проваливает его.
+    """
+    import json as _json
+
+    from factory.templates.audit import audit_site, render_table, report
+
+    root = PATHS.root / "artifacts" / "lords" / "preview"
+    sites = [args.site] if getattr(args, "site", None) else sorted(
+        d.name for d in root.iterdir() if d.is_dir()) if root.is_dir() else []
+    if not sites:
+        print("стенд не собран: сначала python3 -m factory lords-preview")
+        return EXIT_FAILED
+    scores = [audit_site(root / site, site) for site in sites]
+    summary = report(scores, threshold=args.threshold)
+    if args.output:
+        Path(args.output).write_text(
+            _json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    _print(summary, args.json)
+    if not args.json:
+        print(render_table(scores, threshold=args.threshold))
+        for site in scores:
+            for page in site.pages:
+                if page.applies and page.score < args.threshold:
+                    print(f"\n{site.site} {page.page} = {page.score}")
+                    for check in page.failures:
+                        print(f"    [{check.status}] {check.criterion}: {check.detail}")
+    return EXIT_OK if summary["meets_threshold"] else EXIT_FAILED
+
+
 def cmd_template_check(args) -> int:
     """Проверка шаблонов направления по контракту.
 
@@ -898,6 +932,14 @@ def main(argv: list[str] | None = None) -> int:
                        help="Lords: проверка шаблонов по контракту (schemas/template-manifest.schema.json)")
     p.add_argument("--manifest", help="один манифест; без него — все шаблоны направления")
     p.set_defaults(func=cmd_template_check)
+
+    p = sub.add_parser("template-audit",
+                       help="Lords: оценка ключевых страниц стенда по рубрике шаблона")
+    p.add_argument("--site", help="один пакет направления; без него — все собранные")
+    p.add_argument("--threshold", type=float, default=8.0,
+                   help="порог по худшей странице (по умолчанию 8.0)")
+    p.add_argument("--output", help="куда записать машиночитаемый отчёт")
+    p.set_defaults(func=cmd_template_audit)
 
     p = sub.add_parser("template-new", help="Lords: новый шаблон из манифеста")
     p.add_argument("--manifest", help="путь к манифесту (YAML или JSON)")

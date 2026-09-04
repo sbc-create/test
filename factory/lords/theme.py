@@ -366,12 +366,6 @@ main {{ padding: var(--pad) 0 40px; }}
   background: var(--surface-alt); border: 1px dashed var(--border);
   border-radius: var(--radius); padding: 16px; color: var(--muted);
 }}
-.player__status {{
-  display: inline-block; margin-top: 8px; padding: 4px 9px;
-  background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .74rem;
-  color: var(--text); overflow-wrap: anywhere;
-}}
 .seasons {{ margin-bottom: 26px; }}
 .season {{
   background: var(--surface); border: 1px solid var(--border);

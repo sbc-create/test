@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "ref": "amd-online",
+  "url": "https://amd.online/",
+  "provenance": "Change Request v2.0 от 22.08.2026, раздел 3; запись inventory/reference-sources.yaml",
+  "access": {
+    "status": "blocked_policy",
+    "checked_at": "2026-09-04T00:00:00Z",
+    "detail": "Отказ наступает до сети: guard профиля UNATTENDED_SAFE отвечает «хост не входит в переданные контракты» на попытку обращения. Ранее (D35, 22.08.2026) тот же референс отклонялся прокси средой с net::ERR_TUNNEL_CONNECTION_FAILED. Инструмент измерения готов и запускается без правки кода, как только доступ откроют."
+  },
+  "measurement_plan": {
+    "tool": "node tests/tools/measure_reference.js <url> artifacts/reference/<ref> 390,768,1024,1440,1920",
+    "viewports": [
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ],
+    "metrics": [
+      {
+        "id": "content_width",
+        "what": "ширина контентного контейнера и боковых полей",
+        "why": "плотность портала задаётся шириной колонки, а не размером карточки"
+      },
+      {
+        "id": "typography_scale",
+        "what": "кегль и межстрочный интервал body, h1, h2, a, p, button",
+        "why": "плотная типографика — главный признак портального интерфейса"
+      },
+      {
+        "id": "card_ratio",
+        "what": "пропорции постеров карточек в списке",
+        "why": "пропорция карточки определяет, сколько их влезает в экран"
+      },
+      {
+        "id": "grid_columns",
+        "what": "число колонок сетки на каждой ширине",
+        "why": "поведение сетки на изломах — то, что копируется чаще всего и хуже всего"
+      },
+      {
+        "id": "section_order",
+        "what": "порядок секций главной сверху вниз",
+        "why": "информационная архитектура переносима, в отличие от содержимого"
+      },
+      {
+        "id": "header_behaviour",
+        "what": "высота шапки и её поведение при прокрутке",
+        "why": "липкая шапка меняет доступную высоту первого экрана"
+      },
+      {
+        "id": "player_ratio",
+        "what": "пропорция кадра плеера",
+        "why": "кадр резервируется заранее, иначе включение плеера сдвигает раскладку"
+      },
+      {
+        "id": "horizontal_scroll",
+        "what": "наличие горизонтальной прокрутки на каждой ширине",
+        "why": "её появление — отказ адаптивности, видимый без спора о вкусе"
+      },
+      {
+        "id": "pagination_links",
+        "what": "число ссылок пагинации в каталоге",
+        "why": "глубина обхода списка влияет и на зрителя, и на индексацию"
+      }
+    ]
+  },
+  "observations": [
+    {
+      "parameter": "ширина вьюпорта desktop",
+      "value": "~1363 px",
+      "source": "CR v2.0 §3",
+      "verified": "unverified"
+    },
+    {
+      "parameter": "ширина контента",
+      "value": "~1272 px",
+      "source": "CR v2.0 §3",
+      "verified": "unverified"
+    },
+    {
+      "parameter": "боковые поля",
+      "value": "~40 px",
+      "source": "CR v2.0 §3",
+      "verified": "unverified"
+    },
+    {
+      "parameter": "базовый кегль",
+      "value": "14 px, плотная типографика",
+      "source": "CR v2.0 §3",
+      "verified": "unverified"
+    },
+    {
+      "parameter": "основа",
+      "value": "светлая белая",
+      "source": "CR v2.0 §3",
+      "verified": "unverified"
+    },
+    {
+      "parameter": "шапка",
+      "value": "горизонтальная",
+      "source": "CR v2.0 §3",
+      "verified": "unverified"
+    },
+    {
+      "parameter": "секции главной",
+      "value": "каталог-карусель, Telegram CTA, новые серии 2D/3D, расписание, подборки, рецензии, каталог с пагинацией, рейтинги, комментарии",
+      "source": "CR v2.0 §3",
+      "verified": "unverified"
+    },
+    {
+      "parameter": "анти-паттерн",
+      "value": "пустые рекламные промежутки при выключенной рекламе",
+      "source": "CR v2.0 §3",
+      "verified": "unverified"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "AMD-01",
+      "pattern": "плотная портальная сетка карточек",
+      "benefit": "за один экран видно объём каталога",
+      "our_implementation": "сетка auto-fill minmax(--card-min); плотность задаёт токен темы профиля, а не общий CSS",
+      "verified_by": "tests/e2e-lords/lords.spec.js — сетка меняет число колонок вместе с шириной",
+      "status": "implemented"
+    },
+    {
+      "id": "AMD-02",
+      "pattern": "карусель отобранного на главной",
+      "benefit": "витрина показывает отбор, а не только последние добавления",
+      "our_implementation": "блок top_carousel; состав собирает factory/lords/recommend.py",
+      "verified_by": "tests/unit/test_lords_carousel.py",
+      "status": "implemented"
+    },
+    {
+      "id": "AMD-03",
+      "pattern": "большой каталог с пагинацией",
+      "benefit": "глубокий обзор без бесконечной ленты",
+      "our_implementation": "/catalog/ и /catalog/page/N/ обычными <a href>, первая страница без суффикса",
+      "verified_by": "tests/e2e-lords/lords.spec.js — фильтры, сортировка, пагинация",
+      "status": "implemented"
+    },
+    {
+      "id": "AMD-04",
+      "pattern": "карточка тайтла как центр сущности",
+      "benefit": "всё о произведении в одном месте",
+      "our_implementation": "/title/{slug}/ с зарезервированным кадром плеера, фактами и сезонами",
+      "verified_by": "tests/unit/test_lords_page_quality.py — player_shell рубрики",
+      "status": "implemented"
+    },
+    {
+      "id": "AMD-05",
+      "pattern": "расписание выхода серий",
+      "benefit": "понять, что продолжает выходить",
+      "our_implementation": "маршрут /schedule/; даты, которых нет в источнике, не выдумываются",
+      "verified_by": "tests/unit/test_lords_template.py — маршруты",
+      "status": "implemented"
+    },
+    {
+      "id": "AMD-06",
+      "pattern": "состояние «видео недоступно»",
+      "benefit": "честность вместо пустого кадра",
+      "our_implementation": "статус-блок с кодом BLOCKED_INPUT_CDNVIDEOHUB_CREDENTIALS вместо молчания",
+      "verified_by": "factory/lords/player.py — contract_check() возвращает passed: false",
+      "status": "implemented"
+    },
+    {
+      "id": "AMD-07",
+      "pattern": "рейтинги и пользовательские списки",
+      "benefit": "вовлечение зрителя",
+      "our_implementation": "не реализовано: нет ни источника оценок, ни аутентификации",
+      "verified_by": "tests/unit/test_lords_page_quality.py — критерий ratings не находит разметки оценок",
+      "status": "declined",
+      "declined_because": "мёртвый пункт интерфейса хуже его отсутствия: показать оценку без источника значило бы её выдумать"
+    },
+    {
+      "id": "AMD-08",
+      "pattern": "рекламные слоты",
+      "benefit": "монетизация",
+      "our_implementation": "место резервируется только при включённой рекламе; пустых промежутков нет",
+      "verified_by": "визуальные снимки стенда",
+      "status": "implemented"
+    },
+    {
+      "id": "AMD-09",
+      "pattern": "Telegram CTA",
+      "benefit": "канал коммуникации",
+      "our_implementation": "блок настраивается редакцией; по умолчанию выключен",
+      "verified_by": "не подтверждается: блок выключен по умолчанию, ссылка владельцем не передана — подтверждать нечего",
+      "status": "blocked"
+    }
+  ]
+}
