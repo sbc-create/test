@@ -24,16 +24,19 @@ STYLE = """
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);
 font:15px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-header{border-bottom:1px solid var(--line);padding:14px 20px;display:flex;
+header{border-bottom:1px solid var(--line);padding:14px clamp(10px,4vw,20px);display:flex;
 align-items:center;gap:16px;flex-wrap:wrap}
 header h1{font-size:16px;margin:0;font-weight:650}
 header .sp{flex:1}
-main{max-width:1000px;margin:0 auto;padding:22px 20px 60px}
+main{max-width:1000px;margin:0 auto;padding:22px clamp(10px,4vw,20px) 60px}
 a{color:var(--acc)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:10px;
-padding:16px 18px;margin:0 0 14px}
+padding:16px clamp(10px,3vw,18px);margin:0 0 14px}
 .card h2{margin:0 0 10px;font-size:15px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+/* min(260px,100%) вместо 260px: при двукратном увеличении на узком экране
+   жёсткий минимум делает содержимое шире окна и появляется горизонтальная
+   прокрутка — читать панель приходится в два движения. */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:12px}
 dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:8px 0 0;font-size:14px}
 dt{color:var(--mut)}
 dd{margin:0;overflow-wrap:anywhere}
