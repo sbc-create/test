@@ -1,6 +1,7 @@
 {
   "schema_version": "1.0",
   "site_id": "lords-03",
+  "cms_contract": "1.2.0",
   "site_type": "video-showcase",
   "domains": [
     "1lordserials1.online"

@@ -1,6 +1,7 @@
 {
   "schema_version": "1.0",
   "site_id": "yummyani-org",
+  "cms_contract": "1.2.0",
   "site_type": "anime-portal",
   "domains": [
     "yummyani.org"
