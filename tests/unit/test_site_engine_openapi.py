@@ -11,11 +11,27 @@ import jsonschema
 import pytest
 
 from factory.site_engine.api import create_api
-from factory.site_engine.api.openapi import spec
+from factory.site_engine.api.control import ControlApi
+from factory.site_engine.api.openapi import ЗАПИСЬ, spec
 from factory.site_engine.store import InMemoryStore
 
 ROOT = Path(__file__).resolve().parents[2]
 ВКЛЮЧЁН = {"SITE_ENGINE_API_ENABLED": "1", "SITE_ENGINE_ENVIRONMENT": "test"}
+УПРАВЛЕНИЕ = {
+    "SITE_ENGINE_CONTROL_WRITES": "1",
+    "SITE_ENGINE_CONTROL_TOKENS": "t=read,jobs:write,config:write,cache:write,audit:read",
+}
+ЗАГОЛОВКИ = {"Authorization": "Bearer t"}
+
+# Тела для опроса записывающих маршрутов. Всюду dryRun: проверка описания
+# не должна ничего выполнять — иначе тест сам станет источником изменений.
+ПРОБНЫЕ_ТЕЛА = {
+    "/api/v1/sites/{siteId}/jobs": {"action": "reindex", "dryRun": True},
+    "/api/v1/sites/{siteId}/settings": {"changes": {"keep_releases": 5}, "dryRun": True},
+    "/api/v1/sites/{siteId}/cache/invalidate": {"scope": "catalog", "dryRun": True},
+    "/api/v1/jobs/{jobId}": {},
+    "/api/v1/audit": {"limit": 1},
+}
 
 
 @pytest.fixture
@@ -33,19 +49,47 @@ class TestОписание:
     def test_версия_openapi(self, описание):
         assert описание["openapi"].startswith("3.")
 
-    def test_все_описанные_маршруты_отвечают(self, описание, api):
+    def test_каждый_описанный_маршрут_принадлежит_слою(self, описание):
+        """Маршрут, не обслуживаемый ни одним слоем, — обещание без исполнителя."""
+        from factory.site_engine.api.openapi import ПУТИ
+        assert set(описание["paths"]) == set(ПУТИ) | set(ЗАПИСЬ)
+
+    def test_все_описанные_читающие_маршруты_отвечают(self, описание, api):
         """Описание, обещающее несуществующий маршрут, хуже отсутствия описания."""
         for путь in описание["paths"]:
+            if путь in ЗАПИСЬ:
+                continue
             конкретный = путь.replace("{siteId}", "lords-01").replace("{titleId}", "нет")
             ответ = api.handle(конкретный)
             assert ответ.status in (200, 404), f"{путь} ответил {ответ.status}"
             if "{titleId}" not in путь:
                 assert ответ.status == 200, f"{путь} должен отвечать успехом"
 
+    def test_все_описанные_управляющие_маршруты_отвечают(self, описание):
+        """То же требование к записывающему слою, но без побочных действий."""
+        control = ControlApi(root=ROOT, env=УПРАВЛЕНИЕ)
+        for путь, узел in описание["paths"].items():
+            if путь not in ЗАПИСЬ:
+                continue
+            метод = ЗАПИСЬ[путь]["method"].upper()
+            assert метод.lower() in узел, f"{путь}: описан не тот метод"
+            конкретный = путь.replace("{siteId}", "lords-01").replace("{jobId}", "нет-такого")
+            ответ = control.handle(метод, конкретный,
+                                   body=dict(ПРОБНЫЕ_ТЕЛА[путь]), headers=ЗАГОЛОВКИ)
+            код = ответ.body.get("error", {}).get("code")
+            assert код != "not_found", f"{путь}: описан, но не обслуживается"
+            assert ответ.status != 401, f"{путь}: токен со всеми правами получил отказ"
+
     def test_каждый_маршрут_описывает_ошибку(self, описание):
         for путь, узел in описание["paths"].items():
-            ответы = узел["get"]["responses"]
-            assert "404" in ответы, f"{путь}: не описано, что бывает при отсутствии"
+            for метод, операция in узел.items():
+                ответы = операция["responses"]
+                if путь in ЗАПИСЬ:
+                    # У записи «не туда» менее вероятно, чем «нельзя»: проверяем,
+                    # что описан отказ по праву, а не только отсутствие объекта.
+                    assert "403" in ответы, f"{путь}.{метод}: не описан отказ по праву"
+                    continue
+                assert "404" in ответы, f"{путь}: не описано, что бывает при отсутствии"
 
     def test_страничные_маршруты_описывают_пределы(self, описание):
         узел = описание["paths"]["/api/v1/sites/{siteId}/titles"]["get"]

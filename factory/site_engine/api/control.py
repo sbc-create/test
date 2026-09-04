@@ -1,0 +1,652 @@
+"""Control API v1 — безопасные операции записи над массивом сайтов.
+
+Читающая часть (app.py) отвечает на вопрос «что сейчас». Этот модуль отвечает на
+вопрос «измени вот это» — и потому устроен строже. Каждая запись проходит один и
+тот же конвейер: включённость → аутентификация → право → лимит частоты →
+валидация → идемпотентность → блокировка сайта → сверка версии → применение →
+аудит. Пропустить ступень нельзя: конвейер один на все маршруты.
+
+Три решения, которые стоит объяснить, потому что они ограничивают возможности:
+
+1. Запись включается отдельным флагом, а не вместе с чтением. Открытое чтение —
+   это утечка; открытая запись — это чужой контроль над витриной. Разные риски
+   заслуживают разных выключателей, иначе включивший чтение однажды обнаружит,
+   что включил и запись.
+
+2. Меняются только обратимые настройки, принадлежащие ядру. Домены, канонический
+   хост, тип сайта и флаги индексации отклоняются намеренно: их правка через
+   вызов API — не управление, а авария с большим радиусом, которую замечают
+   через недели по падению трафика. Такие изменения проходят через ревью и
+   выкладку, где у них есть автор и откат.
+
+3. Инвалидация кэша ставится заданием в очередь, а не ходит в Redis напрямую.
+   Управляющий слой не должен иметь доступа к данным витрин: тогда его ошибка
+   останется ошибкой планирования, а не порчей чужого состояния.
+"""
+from __future__ import annotations
+
+import hashlib
+import json
+import re
+import time
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any
+
+from factory import audit, locks, queue
+from factory.paths import PATHS
+from factory.site_engine.api.app import ApiResponse, error
+
+API_VERSION = "v1"
+
+# Право на чтение отделено от права на запись, а запись — по областям. Один
+# токен для всего означает, что задача «дай Qwen перезапускать индексацию»
+# незаметно выдаёт и право переписать конфигурацию.
+SCOPE_READ = "read"
+SCOPE_JOBS = "jobs:write"
+SCOPE_CONFIG = "config:write"
+SCOPE_CACHE = "cache:write"
+SCOPE_AUDIT = "audit:read"
+KNOWN_SCOPES = frozenset({SCOPE_READ, SCOPE_JOBS, SCOPE_CONFIG, SCOPE_CACHE, SCOPE_AUDIT})
+
+# Действия, которые разрешено ставить в очередь. Список закрытый: очередь
+# исполняет то, что в ней лежит, поэтому свободное поле action означало бы
+# выполнение произвольного действия по HTTP.
+ALLOWED_JOB_ACTIONS = frozenset({"reindex", "refresh", "enrich", "verify"})
+ALLOWED_ENVIRONMENTS = frozenset({"staging", "production"})
+
+# Обратимые настройки ядра: у каждой — проверка диапазона, а не только типа.
+# Проверка типа пропускает keep_releases=0, после которого откатываться некуда.
+SAFE_SETTINGS: dict[str, dict[str, Any]] = {
+    "keep_releases": {"type": int, "min": 2, "max": 20},
+    "cache_policy": {"type": dict, "value_type": int, "min": 0, "max": 86_400},
+    "feature_flags": {"type": dict, "value_type": bool},
+}
+
+# Отклоняются намеренно — с указанием причины в ответе, чтобы вызывающий понял,
+# что это правило, а не пробел в реализации.
+REFUSED_SETTINGS: dict[str, str] = {
+    "domains": "смена доменов требует выкладки и проверки сертификатов",
+    "canonical_host": "смена канонического хоста меняет индексацию всего сайта",
+    "site_type": "тип сайта определяет адаптеры и хранилище",
+    "indexing_enabled": "отключение индексации замечают через недели по падению трафика",
+    "seo_enabled": "SEO-слой принадлежит другому потоку и меняется через него",
+    "locale": "локаль меняет весь отрендеренный контент",
+    "timezone": "часовой пояс меняет расписания и отметки времени",
+    "theme": "оформление принадлежит потоку шаблонов",
+    "render_mode": "режим рендеринга меняется вместе с выкладкой",
+}
+
+SITE_ID_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
+MAX_BODY_KEYS = 32
+RATE_LIMIT_PER_MINUTE = 30
+
+
+class ControlDenied(Exception):
+    """Отказ на ступени конвейера. Несёт код и статус, чтобы ответ был точным."""
+
+    def __init__(self, status: int, code: str, message: str, **extra: Any) -> None:
+        super().__init__(message)
+        self.status = status
+        self.code = code
+        self.message = message
+        self.extra = extra
+
+
+@dataclass(frozen=True)
+class Principal:
+    """Кто обращается. Токен наружу не отдаётся — только его идентификатор."""
+
+    token_id: str
+    scopes: frozenset[str]
+    label: str = ""
+
+    def require(self, scope: str) -> None:
+        if scope not in self.scopes:
+            raise ControlDenied(
+                403,
+                "forbidden",
+                f"нет права {scope}",
+                required_scope=scope,
+                granted_scopes=sorted(self.scopes),
+            )
+
+
+def writes_enabled(env: dict[str, str] | None = None) -> bool:
+    """Запись выключена по умолчанию и включается отдельно от чтения."""
+    env = env if env is not None else {}
+    return str(env.get("SITE_ENGINE_CONTROL_WRITES", "")).strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _token_id(token: str) -> str:
+    """Устойчивый идентификатор токена для журналов. Сам токен не хранится."""
+    return hashlib.sha256(token.encode("utf-8")).hexdigest()[:12]
+
+
+def principals_from_env(env: dict[str, str] | None = None) -> dict[str, Principal]:
+    """Разбор SITE_ENGINE_CONTROL_TOKENS вида `токен=области|токен=области`.
+
+    Разделитель — «=», а не «:»: имена областей сами содержат двоеточие
+    (jobs:write), и разбор по первому двоеточию разорвал бы их пополам.
+
+    Пустая переменная означает «никому ничего»: отсутствие настройки не должно
+    молча превращаться в открытый доступ.
+    """
+    env = env if env is not None else {}
+    raw = str(env.get("SITE_ENGINE_CONTROL_TOKENS", "")).strip()
+    principals: dict[str, Principal] = {}
+    if not raw:
+        return principals
+    for chunk in raw.split("|"):
+        chunk = chunk.strip()
+        if not chunk or "=" not in chunk:
+            continue
+        token, _, scope_part = chunk.partition("=")
+        token = token.strip()
+        if not token:
+            continue
+        scopes = {s.strip() for s in scope_part.split(",") if s.strip()}
+        unknown = scopes - KNOWN_SCOPES
+        if unknown:
+            # Опечатка в области права — это тихо выданное не то право.
+            raise ValueError(f"неизвестные области: {sorted(unknown)}")
+        principals[token] = Principal(token_id=_token_id(token), scopes=frozenset(scopes))
+    return principals
+
+
+def profile_path(site_id: str, root: Path) -> Path:
+    return root / "config" / "site-profiles" / f"{site_id}.json"
+
+
+def config_version(path: Path) -> str:
+    """Версия конфигурации — хэш её содержимого.
+
+    Хэш, а не отметка времени: время меняется при копировании файла, содержимое —
+    только при правке. Сверка по времени пропустила бы конкурентную запись.
+    """
+    if not path.exists():
+        return "absent"
+    return "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()[:32]
+
+
+def _validate_settings(changes: dict[str, Any]) -> list[str]:
+    """Все нарушения сразу, а не первое. Отказ по одному полю за запрос
+    превращает исправление конфигурации в переписку из пяти раундов."""
+    problems: list[str] = []
+    for key, value in changes.items():
+        if key in REFUSED_SETTINGS:
+            problems.append(f"{key}: отклонено намеренно — {REFUSED_SETTINGS[key]}")
+            continue
+        rule = SAFE_SETTINGS.get(key)
+        if rule is None:
+            problems.append(f"{key}: не входит в список изменяемых настроек")
+            continue
+        expected = rule["type"]
+        if expected is int and isinstance(value, bool):
+            problems.append(f"{key}: ожидалось число, получено логическое значение")
+            continue
+        if not isinstance(value, expected):
+            problems.append(f"{key}: ожидался тип {expected.__name__}")
+            continue
+        if expected is int:
+            if not (rule["min"] <= value <= rule["max"]):
+                problems.append(f"{key}: допустимо от {rule['min']} до {rule['max']}, получено {value}")
+        elif expected is dict:
+            vtype = rule["value_type"]
+            for sub_key, sub_value in value.items():
+                if not isinstance(sub_key, str) or not sub_key:
+                    problems.append(f"{key}: имя вложенного ключа должно быть непустой строкой")
+                    continue
+                if vtype is int and isinstance(sub_value, bool):
+                    problems.append(f"{key}.{sub_key}: ожидалось число")
+                    continue
+                if not isinstance(sub_value, vtype):
+                    problems.append(f"{key}.{sub_key}: ожидался тип {vtype.__name__}")
+                    continue
+                if vtype is int and not (rule["min"] <= sub_value <= rule["max"]):
+                    problems.append(
+                        f"{key}.{sub_key}: допустимо от {rule['min']} до {rule['max']}, получено {sub_value}"
+                    )
+    return problems
+
+
+def _diff(before: dict[str, Any], changes: dict[str, Any]) -> dict[str, Any]:
+    """Что именно изменится. Возвращается и в dry-run, и в аудит, чтобы запись в
+    журнале отвечала на вопрос «что стало другим», а не только «кто-то менял»."""
+    out: dict[str, Any] = {}
+    for key, value in changes.items():
+        old = before.get(key)
+        if isinstance(value, dict) and isinstance(old, dict):
+            merged = {**old, **value}
+            if merged != old:
+                out[key] = {"before": old, "after": merged}
+        elif old != value:
+            out[key] = {"before": old, "after": value}
+    return out
+
+
+@dataclass
+class _Bucket:
+    tokens: float
+    updated: float
+
+
+class ControlApi:
+    """Записывающая часть Control API v1."""
+
+    def __init__(
+        self,
+        *,
+        root: Path | str = ".",
+        env: dict[str, str] | None = None,
+        now: Any = time.time,
+    ) -> None:
+        self._root = Path(root).resolve()
+        self._env = env if env is not None else {}
+        self._now = now
+        self._principals = principals_from_env(self._env)
+        self._buckets: dict[str, _Bucket] = {}
+
+    # ---- конвейер -------------------------------------------------------
+
+    def handle(
+        self,
+        method: str,
+        path: str,
+        *,
+        body: dict[str, Any] | None = None,
+        headers: dict[str, str] | None = None,
+    ) -> ApiResponse:
+        headers = {str(k).lower(): v for k, v in (headers or {}).items()}
+        correlation_id = str(headers.get("x-correlation-id") or "").strip() or self._new_correlation_id()
+        try:
+            response = self._route(method.upper(), path, body or {}, headers, correlation_id)
+        except ControlDenied as denied:
+            self._audit_refusal(denied, method, path, headers, correlation_id)
+            response = error(denied.status, denied.code, denied.message, **denied.extra)
+        # Идентификатор запроса возвращается всегда, включая отказы: без него
+        # вызывающий не может найти свой запрос в журнале и приносит скриншот.
+        payload = response.body if isinstance(response.body, dict) else {"result": response.body}
+        payload = {**payload, "correlationId": correlation_id}
+        return ApiResponse(status=response.status, body=payload)
+
+    def _new_correlation_id(self) -> str:
+        seed = f"{self._now()}:{id(self)}"
+        return "cid-" + hashlib.sha256(seed.encode("utf-8")).hexdigest()[:16]
+
+    def _route(
+        self,
+        method: str,
+        path: str,
+        body: dict[str, Any],
+        headers: dict[str, str],
+        correlation_id: str,
+    ) -> ApiResponse:
+        parts = [p for p in path.strip("/").split("/") if p]
+        if parts[:2] != ["api", API_VERSION]:
+            raise ControlDenied(404, "not_found", "маршрут не найден")
+        rest = parts[2:]
+
+        # Запись выключена — маршрут не существует. Отвечать 403 значит
+        # подтверждать, что здесь есть что включать.
+        mutating = method in {"POST", "PATCH", "PUT", "DELETE"}
+        if mutating and not writes_enabled(self._env):
+            raise ControlDenied(404, "not_found", "маршрут не найден")
+
+        principal = self._authenticate(headers)
+        self._rate_limit(principal)
+
+        if method == "GET" and rest[:1] == ["audit"]:
+            principal.require(SCOPE_AUDIT)
+            return self._audit_trail(body, headers)
+        if method == "GET" and len(rest) == 2 and rest[0] == "jobs":
+            principal.require(SCOPE_READ)
+            return self._job_status(rest[1])
+        if rest[:1] == ["sites"] and len(rest) >= 3:
+            site_id = rest[1]
+            self._check_site_id(site_id)
+            tail = rest[2:]
+            if method == "POST" and tail == ["jobs"]:
+                principal.require(SCOPE_JOBS)
+                return self._start_job(principal, site_id, body, headers, correlation_id)
+            if method == "PATCH" and tail == ["settings"]:
+                principal.require(SCOPE_CONFIG)
+                return self._patch_settings(principal, site_id, body, headers, correlation_id)
+            if method == "POST" and tail == ["cache", "invalidate"]:
+                principal.require(SCOPE_CACHE)
+                return self._invalidate_cache(principal, site_id, body, headers, correlation_id)
+        raise ControlDenied(404, "not_found", "маршрут не найден")
+
+    def _authenticate(self, headers: dict[str, str]) -> Principal:
+        raw = str(headers.get("authorization") or "").strip()
+        if not raw.lower().startswith("bearer "):
+            raise ControlDenied(401, "unauthorized", "нужен заголовок Authorization: Bearer")
+        token = raw[7:].strip()
+        principal = self._principals.get(token)
+        if principal is None:
+            raise ControlDenied(401, "unauthorized", "токен не распознан")
+        return principal
+
+    def _rate_limit(self, principal: Principal) -> None:
+        """Ограничение частоты на принципала.
+
+        Счётчик живёт в процессе: при нескольких экземплярах предел кратен их
+        числу. Это записано честно, потому что ограничение задумано против
+        сорвавшегося цикла автоматизации, а не против злоумышленника.
+        """
+        now = float(self._now())
+        bucket = self._buckets.get(principal.token_id)
+        if bucket is None:
+            self._buckets[principal.token_id] = _Bucket(tokens=RATE_LIMIT_PER_MINUTE - 1, updated=now)
+            return
+        refill = (now - bucket.updated) * (RATE_LIMIT_PER_MINUTE / 60.0)
+        bucket.tokens = min(float(RATE_LIMIT_PER_MINUTE), bucket.tokens + refill)
+        bucket.updated = now
+        if bucket.tokens < 1.0:
+            raise ControlDenied(
+                429, "rate_limited", f"не более {RATE_LIMIT_PER_MINUTE} запросов в минуту",
+                retry_after_seconds=max(1, int(60.0 / RATE_LIMIT_PER_MINUTE)),
+            )
+        bucket.tokens -= 1.0
+
+    def _check_site_id(self, site_id: str) -> None:
+        if not SITE_ID_RE.match(site_id):
+            raise ControlDenied(400, "invalid_site_id", "недопустимый идентификатор сайта")
+        if not profile_path(site_id, self._root).exists():
+            raise ControlDenied(404, "site_not_found", f"сайта {site_id} нет")
+
+    # ---- идемпотентность ------------------------------------------------
+
+    def _idempotency_dir(self) -> Path:
+        path = self._root / "var" / "state" / "control-idempotency"
+        path.mkdir(parents=True, exist_ok=True)
+        return path
+
+    def _request_fingerprint(self, method: str, path: str, body: dict[str, Any]) -> str:
+        blob = json.dumps({"m": method, "p": path, "b": body}, sort_keys=True, ensure_ascii=False)
+        return hashlib.sha256(blob.encode("utf-8")).hexdigest()
+
+    def _idempotent(
+        self,
+        headers: dict[str, str],
+        method: str,
+        path: str,
+        body: dict[str, Any],
+    ) -> tuple[str | None, dict | None]:
+        """Повтор того же запроса возвращает прежний ответ; тот же ключ с другим
+        телом — конфликт. Второе важнее первого: молча выполнить другой запрос
+        под уже использованным ключом значит выполнить его дважды по-разному."""
+        key = str(headers.get("idempotency-key") or "").strip()
+        if not key:
+            return None, None
+        if len(key) > 128 or not re.match(r"^[A-Za-z0-9_.:-]+$", key):
+            raise ControlDenied(400, "invalid_idempotency_key", "ключ идемпотентности недопустим")
+        fingerprint = self._request_fingerprint(method, path, body)
+        store = self._idempotency_dir() / f"{hashlib.sha256(key.encode()).hexdigest()[:32]}.json"
+        if store.exists():
+            saved = json.loads(store.read_text(encoding="utf-8"))
+            if saved.get("fingerprint") != fingerprint:
+                raise ControlDenied(
+                    409, "idempotency_key_reused",
+                    "ключ идемпотентности уже использован для другого запроса",
+                )
+            return key, saved
+        return key, None
+
+    def _remember(self, key: str | None, method: str, path: str, body: dict[str, Any], response: ApiResponse) -> None:
+        if not key or response.status >= 400:
+            return
+        store = self._idempotency_dir() / f"{hashlib.sha256(key.encode()).hexdigest()[:32]}.json"
+        store.write_text(
+            json.dumps(
+                {
+                    "fingerprint": self._request_fingerprint(method, path, body),
+                    "status": response.status,
+                    "body": response.body,
+                    "stored_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                },
+                ensure_ascii=False,
+            ),
+            encoding="utf-8",
+        )
+
+    # ---- операции -------------------------------------------------------
+
+    def _start_job(
+        self,
+        principal: Principal,
+        site_id: str,
+        body: dict[str, Any],
+        headers: dict[str, str],
+        correlation_id: str,
+    ) -> ApiResponse:
+        action = str(body.get("action") or "").strip()
+        environment = str(body.get("environment") or "staging").strip()
+        dry_run = bool(body.get("dryRun"))
+        if action not in ALLOWED_JOB_ACTIONS:
+            raise ControlDenied(
+                400, "invalid_action", "недопустимое действие",
+                allowed=sorted(ALLOWED_JOB_ACTIONS),
+            )
+        if environment not in ALLOWED_ENVIRONMENTS:
+            raise ControlDenied(400, "invalid_environment", "недопустимая среда",
+                                allowed=sorted(ALLOWED_ENVIRONMENTS))
+
+        path = f"/api/{API_VERSION}/sites/{site_id}/jobs"
+        key, saved = self._idempotent(headers, "POST", path, body)
+        if saved:
+            return ApiResponse(status=saved["status"], body={**saved["body"], "idempotentReplay": True})
+
+        if dry_run:
+            return ApiResponse(
+                status=200,
+                body={
+                    "dryRun": True,
+                    "wouldEnqueue": {"siteId": site_id, "action": action, "environment": environment},
+                    "siteLocked": locks.is_locked(site_id, environment),
+                },
+            )
+
+        try:
+            with locks.site_lock(site_id, environment, timeout=2.0):
+                item = queue.enqueue(site_id, action=action, environment=environment)
+        except locks.LockBusy:
+            raise ControlDenied(409, "site_busy", "по сайту уже идёт операция")
+        except FileExistsError:
+            raise ControlDenied(409, "job_exists", "такое задание уже в очереди")
+
+        audit.record(
+            job_id=item.job_id, site_id=site_id, environment=environment,
+            action=f"control.job.{action}", target="queue", mutation=True, exit_code=0,
+            extra={"correlation_id": correlation_id, "actor_token": principal.token_id},
+        )
+        response = ApiResponse(status=202, body={"job": item.as_dict(), "status": "queued"})
+        self._remember(key, "POST", path, body, response)
+        return response
+
+    def _job_status(self, job_id: str) -> ApiResponse:
+        if not re.match(r"^[A-Za-z0-9_.:-]{1,128}$", job_id):
+            raise ControlDenied(400, "invalid_job_id", "недопустимый идентификатор задания")
+        for stage in queue.STAGES:
+            candidate = queue.stage_dir(stage) / f"{job_id}.json"
+            if candidate.exists():
+                data = json.loads(candidate.read_text(encoding="utf-8"))
+                return ApiResponse(
+                    status=200,
+                    body={
+                        "jobId": job_id,
+                        "stage": stage,
+                        "terminal": stage in {"done", "failed", "quarantine"},
+                        "attempts": queue.attempts_of(candidate),
+                        "job": data,
+                    },
+                )
+        raise ControlDenied(404, "job_not_found", f"задания {job_id} нет")
+
+    def _patch_settings(
+        self,
+        principal: Principal,
+        site_id: str,
+        body: dict[str, Any],
+        headers: dict[str, str],
+        correlation_id: str,
+    ) -> ApiResponse:
+        changes = body.get("changes")
+        if not isinstance(changes, dict) or not changes:
+            raise ControlDenied(400, "invalid_body", "нужен непустой объект changes")
+        if len(changes) > MAX_BODY_KEYS:
+            raise ControlDenied(400, "too_many_changes", f"не более {MAX_BODY_KEYS} настроек за запрос")
+        problems = _validate_settings(changes)
+        if problems:
+            raise ControlDenied(422, "invalid_settings", "настройки не приняты", problems=problems)
+
+        target = profile_path(site_id, self._root)
+        current_version = config_version(target)
+        expected = str(body.get("expectedVersion") or "").strip()
+        if expected and expected != current_version:
+            # Конкурентная правка. Применить поверх значило бы потерять чужое
+            # изменение и не сообщить об этом ни одной из сторон.
+            raise ControlDenied(
+                409, "version_conflict", "конфигурация изменилась с момента чтения",
+                expected_version=expected, current_version=current_version,
+            )
+
+        before = json.loads(target.read_text(encoding="utf-8"))
+        diff = _diff(before, changes)
+        dry_run = bool(body.get("dryRun"))
+        path = f"/api/{API_VERSION}/sites/{site_id}/settings"
+
+        if dry_run:
+            return ApiResponse(
+                status=200,
+                body={"dryRun": True, "currentVersion": current_version, "diff": diff,
+                      "noop": not diff},
+            )
+
+        key, saved = self._idempotent(headers, "PATCH", path, body)
+        if saved:
+            return ApiResponse(status=saved["status"], body={**saved["body"], "idempotentReplay": True})
+
+        if not diff:
+            return ApiResponse(status=200, body={"applied": False, "noop": True,
+                                                 "version": current_version, "diff": {}})
+
+        after = dict(before)
+        for field_name, value in changes.items():
+            if isinstance(value, dict) and isinstance(before.get(field_name), dict):
+                after[field_name] = {**before[field_name], **value}
+            else:
+                after[field_name] = value
+
+        try:
+            with locks.site_lock(site_id, "staging", timeout=2.0):
+                # Повторная сверка под блокировкой: между чтением версии и
+                # захватом замка файл мог измениться.
+                if config_version(target) != current_version:
+                    raise ControlDenied(409, "version_conflict",
+                                        "конфигурация изменилась во время применения")
+                tmp = target.with_suffix(".json.tmp")
+                tmp.write_text(json.dumps(after, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+                tmp.replace(target)
+        except locks.LockBusy:
+            raise ControlDenied(409, "site_busy", "по сайту уже идёт операция")
+
+        new_version = config_version(target)
+        audit.record(
+            job_id=correlation_id, site_id=site_id, environment="staging",
+            action="control.settings.patch", target=str(target.relative_to(self._root)),
+            mutation=True, exit_code=0,
+            extra={"correlation_id": correlation_id, "actor_token": principal.token_id,
+                   "diff": diff, "version_before": current_version, "version_after": new_version},
+        )
+        response = ApiResponse(status=200, body={"applied": True, "diff": diff,
+                                                 "previousVersion": current_version,
+                                                 "version": new_version})
+        self._remember(key, "PATCH", path, body, response)
+        return response
+
+    def _invalidate_cache(
+        self,
+        principal: Principal,
+        site_id: str,
+        body: dict[str, Any],
+        headers: dict[str, str],
+        correlation_id: str,
+    ) -> ApiResponse:
+        scope = str(body.get("scope") or "").strip()
+        allowed_scopes = {"homepage", "title", "shelves", "catalog"}
+        if scope not in allowed_scopes:
+            raise ControlDenied(400, "invalid_scope", "недопустимая область инвалидации",
+                                allowed=sorted(allowed_scopes))
+        keys = body.get("keys") or []
+        if not isinstance(keys, list) or any(not isinstance(k, str) or not k for k in keys):
+            raise ControlDenied(400, "invalid_keys", "keys должен быть списком непустых строк")
+        if len(keys) > 100:
+            raise ControlDenied(400, "too_many_keys", "не более 100 ключей за запрос")
+        if scope == "title" and not keys:
+            # Пустой список при точечной области — это «сбрось всё» под видом
+            # точечной операции. Такой запрос почти всегда ошибка вызывающего.
+            raise ControlDenied(400, "keys_required", "для области title нужен непустой keys")
+
+        path = f"/api/{API_VERSION}/sites/{site_id}/cache/invalidate"
+        plan = {"siteId": site_id, "scope": scope, "keys": keys}
+        if bool(body.get("dryRun")):
+            return ApiResponse(status=200, body={"dryRun": True, "wouldInvalidate": plan})
+
+        key, saved = self._idempotent(headers, "POST", path, body)
+        if saved:
+            return ApiResponse(status=saved["status"], body={**saved["body"], "idempotentReplay": True})
+
+        job_id = f"{site_id}-cache-{scope}-{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}"
+        try:
+            item = queue.enqueue(site_id, action="invalidate", environment="staging", job_id=job_id)
+        except FileExistsError:
+            raise ControlDenied(409, "job_exists", "такая инвалидация уже запланирована")
+        audit.record(
+            job_id=item.job_id, site_id=site_id, environment="staging",
+            action="control.cache.invalidate", target=scope, mutation=True, exit_code=0,
+            extra={"correlation_id": correlation_id, "actor_token": principal.token_id, "keys": keys},
+        )
+        response = ApiResponse(status=202, body={"job": item.as_dict(), "invalidate": plan})
+        self._remember(key, "POST", path, body, response)
+        return response
+
+    def _audit_trail(self, body: dict[str, Any], headers: dict[str, str]) -> ApiResponse:
+        limit = body.get("limit", 50)
+        if not isinstance(limit, int) or isinstance(limit, bool) or not (1 <= limit <= 500):
+            raise ControlDenied(400, "invalid_limit", "limit — целое от 1 до 500")
+        site_id = body.get("siteId")
+        entries = audit.read_all()
+        if site_id:
+            entries = [e for e in entries if e.get("site_id") == site_id]
+        return ApiResponse(status=200, body={"entries": entries[-limit:], "total": len(entries)})
+
+    def _audit_refusal(
+        self,
+        denied: ControlDenied,
+        method: str,
+        path: str,
+        headers: dict[str, str],
+        correlation_id: str,
+    ) -> None:
+        """Отказы тоже попадают в журнал.
+
+        Журнал, где видны только удачные операции, отвечает на вопрос «что
+        изменилось», но не на вопрос «кто пытался». Второй вопрос задают ровно
+        тогда, когда он уже важен.
+        """
+        if denied.status in {404} and denied.code == "not_found":
+            return
+        try:
+            raw = str(headers.get("authorization") or "")
+            token = raw[7:].strip() if raw.lower().startswith("bearer ") else ""
+            audit.record(
+                job_id=correlation_id, site_id="-", environment="-",
+                action=f"control.denied.{denied.code}", target=f"{method} {path}",
+                mutation=False, exit_code=denied.status,
+                extra={"correlation_id": correlation_id,
+                       "actor_token": _token_id(token) if token else "anonymous"},
+            )
+        except Exception:
+            # Невозможность записать отказ не должна превращать отказ в сбой.
+            pass
