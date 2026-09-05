@@ -1,7 +1,7 @@
 {
   "lane": "TEMPLATES",
   "branch": "claude/templates-lords-yummy-refpacks-01",
-  "head": "d1b448841df357fb8c45d0833a75a3aa036ab80a",
+  "head": "2f87236a6e27b68fd1deed523390e5e3cc559d99",
   "base_sha": "76552b9a7372c5ad15cfc7d8b1052a10024722a3",
   "template_digest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
   "template_digest_files": 19,
@@ -29,7 +29,7 @@
       "rules_passed_min": 25,
       "rules_passed_max": 29,
       "evidence": "artifacts/evidence/templates/a11y/axe-*.json",
-      "last_capture_utc": "2026-09-04T15:10:41.951Z"
+      "last_capture_utc": "2026-09-05T06:20:34.238Z"
     },
     "a11y_manual": {
       "status": "pass",
@@ -66,8 +66,8 @@
       "runs": 16,
       "worst_cls": 0,
       "cls_budget": 0.1,
-      "worst_lcp_ms": 472,
-      "lcp_budget_ms": 1000,
+      "worst_lcp_ms": 196,
+      "lcp_budget_ms": 2500,
       "limitation": "стенд локальный: LCP — нижняя граница, а не боевое значение",
       "evidence": "artifacts/evidence/templates/performance.json"
     },

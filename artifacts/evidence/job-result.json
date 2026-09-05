@@ -1,33 +1,33 @@
 {
   "schema_version": 1,
-  "job_id": "pilot-local-create-20260823T145830Z-6604b6",
+  "job_id": "pilot-local-create-20260905T061702Z-a0e15b",
   "site_id": "pilot-local",
   "environment": "staging",
   "requested_action": "create",
   "status": "DONE",
   "blockers": [],
-  "started_at": "2026-08-23T14:58:29Z",
-  "finished_at": "2026-08-23T15:00:21Z",
-  "factory_commit": "d841597cd87f7ec4b04bf7244eb5607ac64f7269",
-  "knowledge_freeze_version": "2026-08-23.3",
-  "build_id": "5527b1c9c811408d",
-  "release_id": "5527b1c9c811408d",
-  "previous_release_id": "5527b1c9c811408d",
+  "started_at": "2026-09-05T06:17:02Z",
+  "finished_at": "2026-09-05T06:18:56Z",
+  "factory_commit": "2f87236a6e27b68fd1deed523390e5e3cc559d99",
+  "knowledge_freeze_version": "2026-09-04-templates-d128",
+  "build_id": "44aea3ec42dd2219",
+  "release_id": "44aea3ec42dd2219",
+  "previous_release_id": "44aea3ec42dd2219",
   "steps": [
     {
       "id": "knowledge_freeze",
       "status": "ok",
-      "started_at": "2026-08-23T14:58:30Z",
-      "finished_at": "2026-08-23T14:58:30Z",
+      "started_at": "2026-09-05T06:17:02Z",
+      "finished_at": "2026-09-05T06:17:02Z",
       "exit_code": 0,
-      "detail": "freeze 2026-08-23.3 цел",
+      "detail": "freeze 2026-09-04-templates-d128 цел",
       "mutation": false
     },
     {
       "id": "validate",
       "status": "ok",
-      "started_at": "2026-08-23T14:58:30Z",
-      "finished_at": "2026-08-23T14:58:30Z",
+      "started_at": "2026-09-05T06:17:02Z",
+      "finished_at": "2026-09-05T06:17:02Z",
       "exit_code": 0,
       "detail": "Пакет прошёл схему и семантику",
       "mutation": false
@@ -35,44 +35,44 @@
     {
       "id": "build",
       "status": "ok",
-      "started_at": "2026-08-23T14:58:30Z",
-      "finished_at": "2026-08-23T14:58:30Z",
+      "started_at": "2026-09-05T06:17:03Z",
+      "finished_at": "2026-09-05T06:17:03Z",
       "exit_code": 0,
-      "detail": "build_id=5527b1c9c811408d, маршрутов 48",
+      "detail": "build_id=44aea3ec42dd2219, маршрутов 48",
       "mutation": false
     },
     {
       "id": "prepare_dirs",
       "status": "ok",
-      "started_at": "2026-08-23T14:58:30Z",
-      "finished_at": "2026-08-23T14:58:30Z",
+      "started_at": "2026-09-05T06:17:03Z",
+      "finished_at": "2026-09-05T06:17:03Z",
       "exit_code": 0,
-      "detail": "Каталоги цели готовы: /srv/site-factory/repo/var/targets/local-disposable/pilot-local",
+      "detail": "Каталоги цели готовы: /home/claude/work-templates/site-factory/var/targets/local-disposable/pilot-local",
       "mutation": false
     },
     {
       "id": "backup",
       "status": "ok",
-      "started_at": "2026-08-23T14:58:30Z",
-      "finished_at": "2026-08-23T14:58:30Z",
+      "started_at": "2026-09-05T06:17:03Z",
+      "finished_at": "2026-09-05T06:17:03Z",
       "exit_code": 0,
-      "detail": "Бэкап изменяемых данных: var/backups/pilot-local-staging-20260823T145830Z.tar.gz",
+      "detail": "Бэкап изменяемых данных: var/backups/pilot-local-staging-20260905T061703Z.tar.gz",
       "mutation": false
     },
     {
       "id": "upload_release",
       "status": "ok",
-      "started_at": "2026-08-23T14:58:30Z",
-      "finished_at": "2026-08-23T14:58:30Z",
+      "started_at": "2026-09-05T06:17:03Z",
+      "finished_at": "2026-09-05T06:17:03Z",
       "exit_code": 0,
-      "detail": "Релиз 5527b1c9c811408d уже присутствует — повторная выгрузка не выполнялась",
+      "detail": "Релиз 44aea3ec42dd2219 уже присутствует — повторная выгрузка не выполнялась",
       "mutation": true
     },
     {
       "id": "health_check",
       "status": "ok",
-      "started_at": "2026-08-23T14:58:30Z",
-      "finished_at": "2026-08-23T14:58:30Z",
+      "started_at": "2026-09-05T06:17:03Z",
+      "finished_at": "2026-09-05T06:17:03Z",
       "exit_code": 0,
       "detail": "Проверка кандидата на отдельном порту 8081: HTTP 200, 2048 байт",
       "mutation": false
@@ -80,17 +80,17 @@
     {
       "id": "switch_current",
       "status": "ok",
-      "started_at": "2026-08-23T14:58:30Z",
-      "finished_at": "2026-08-23T14:58:30Z",
+      "started_at": "2026-09-05T06:17:03Z",
+      "finished_at": "2026-09-05T06:17:03Z",
       "exit_code": 0,
-      "detail": "current уже указывает на 5527b1c9c811408d",
+      "detail": "current уже указывает на 44aea3ec42dd2219",
       "mutation": true
     },
     {
       "id": "start_server",
       "status": "ok",
-      "started_at": "2026-08-23T14:58:30Z",
-      "finished_at": "2026-08-23T14:58:30Z",
+      "started_at": "2026-09-05T06:17:03Z",
+      "finished_at": "2026-09-05T06:17:03Z",
       "exit_code": 0,
       "detail": "PHP-сервер обслуживает current на 127.0.0.1:8082",
       "mutation": true
@@ -98,8 +98,8 @@
     {
       "id": "post_switch_health",
       "status": "ok",
-      "started_at": "2026-08-23T14:58:30Z",
-      "finished_at": "2026-08-23T14:58:30Z",
+      "started_at": "2026-09-05T06:17:03Z",
+      "finished_at": "2026-09-05T06:17:03Z",
       "exit_code": 0,
       "detail": "Проверка после переключения: HTTP 200, 2048 байт",
       "mutation": false
@@ -107,8 +107,8 @@
     {
       "id": "prune_releases",
       "status": "ok",
-      "started_at": "2026-08-23T14:58:30Z",
-      "finished_at": "2026-08-23T14:58:30Z",
+      "started_at": "2026-09-05T06:17:03Z",
+      "finished_at": "2026-09-05T06:17:03Z",
       "exit_code": 0,
       "detail": "Удалено устаревших релизов: 0; хранится 3 плюс защищённые (текущий и предыдущий)",
       "mutation": false
@@ -116,10 +116,10 @@
     {
       "id": "restore_test",
       "status": "ok",
-      "started_at": "2026-08-23T14:58:30Z",
-      "finished_at": "2026-08-23T14:58:30Z",
+      "started_at": "2026-09-05T06:17:03Z",
+      "finished_at": "2026-09-05T06:17:03Z",
       "exit_code": 0,
-      "detail": "Восстановление бэкапа в /srv/site-factory/repo/var/restore-probe/pilot-local-5527b1c9c811408d: подтверждено",
+      "detail": "Восстановление бэкапа в /home/claude/work-templates/site-factory/var/restore-probe/pilot-local-44aea3ec42dd2219: подтверждено",
       "mutation": false
     }
   ],
@@ -129,9 +129,9 @@
       "command": "python3 -m factory deploy --site pilot-local (restore probe)",
       "exit_code": 0,
       "passed": true,
-      "artifact": "var/restore-probe/pilot-local-5527b1c9c811408d",
+      "artifact": "var/restore-probe/pilot-local-44aea3ec42dd2219",
       "counts": {
-        "archive": "var/backups/pilot-local-staging-20260823T145830Z.tar.gz"
+        "archive": "var/backups/pilot-local-staging-20260905T061703Z.tar.gz"
       },
       "severity": "critical"
     },
@@ -140,7 +140,7 @@
       "command": "python3 -m factory seo-lint --site pilot-local",
       "exit_code": 0,
       "passed": true,
-      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260823T145830Z-6604b6/seo-lint.json",
+      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260905T061702Z-a0e15b/seo-lint.json",
       "counts": {
         "sitemap_urls": 45,
         "routes": 48,
@@ -156,7 +156,7 @@
       "command": "python3 -m factory seo-crawl --site pilot-local --base http://127.0.0.1:8082",
       "exit_code": 0,
       "passed": true,
-      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260823T145830Z-6604b6/seo-crawl.json",
+      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260905T061702Z-a0e15b/seo-crawl.json",
       "counts": {
         "fetched": 45,
         "unique_urls": 45,
@@ -171,7 +171,7 @@
       "command": "node tools/browser-audit.js --base http://127.0.0.1:8082",
       "exit_code": 0,
       "passed": true,
-      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260823T145830Z-6604b6/seo-render.json",
+      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260905T061702Z-a0e15b/seo-render.json",
       "counts": {
         "status": "ok",
         "exit_code": 0,
@@ -184,7 +184,7 @@
         ],
         "pages": 14,
         "screenshots": 15,
-        "lab_lcp_ms_max": 260,
+        "lab_lcp_ms_max": 364,
         "lab_cls_max": 0,
         "lab_transfer_bytes_max": 11382,
         "progressive_enhancement": {
@@ -203,7 +203,7 @@
       "command": "python3 -m factory verify --site pilot-local (security)",
       "exit_code": 0,
       "passed": true,
-      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260823T145830Z-6604b6/security-smoke.json",
+      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260905T061702Z-a0e15b/security-smoke.json",
       "counts": {
         "checked_paths": 8,
         "root_status": 200
@@ -215,7 +215,7 @@
       "command": "python3 -m factory verify --site pilot-local (acceptance)",
       "exit_code": 0,
       "passed": true,
-      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260823T145830Z-6604b6/acceptance-routes.json",
+      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260905T061702Z-a0e15b/acceptance-routes.json",
       "counts": {
         "routes": 11
       },
@@ -226,7 +226,7 @@
       "command": "python3 -m factory verify --site pilot-local (major budget)",
       "exit_code": 0,
       "passed": true,
-      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260823T145830Z-6604b6/major-findings-budget.json",
+      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260905T061702Z-a0e15b/major-findings-budget.json",
       "counts": {
         "status": "ok",
         "major": 20,
@@ -239,10 +239,10 @@
       "command": "python3 -m factory verify --site pilot-local (performance)",
       "exit_code": 0,
       "passed": true,
-      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260823T145830Z-6604b6/performance-budget.json",
+      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20260905T061702Z-a0e15b/performance-budget.json",
       "counts": {
         "status": "ok",
-        "lab_lcp_ms_max": 260,
+        "lab_lcp_ms_max": 364,
         "lab_cls_max": 0,
         "lab_transfer_bytes_max": 11382,
         "budgets": {
@@ -261,44 +261,44 @@
     }
   ],
   "artifacts": [
-    "artifacts/build/pilot-local/5527b1c9c811408d/report.json",
-    "artifacts/qa/pilot-local/pilot-local-create-20260823T145830Z-6604b6/seo-lint.json",
-    "artifacts/qa/pilot-local/pilot-local-create-20260823T145830Z-6604b6/seo-crawl.json",
-    "artifacts/qa/pilot-local/pilot-local-create-20260823T145830Z-6604b6/seo-render.json",
-    "artifacts/qa/pilot-local/pilot-local-create-20260823T145830Z-6604b6/security-smoke.json",
-    "artifacts/qa/pilot-local/pilot-local-create-20260823T145830Z-6604b6/acceptance-routes.json",
-    "artifacts/qa/pilot-local/pilot-local-create-20260823T145830Z-6604b6/major-findings-budget.json",
-    "artifacts/qa/pilot-local/pilot-local-create-20260823T145830Z-6604b6/performance-budget.json",
-    "artifacts/seo/pilot-local/pilot-local-create-20260823T145830Z-6604b6/seo-report.json"
+    "artifacts/build/pilot-local/44aea3ec42dd2219/report.json",
+    "artifacts/qa/pilot-local/pilot-local-create-20260905T061702Z-a0e15b/seo-lint.json",
+    "artifacts/qa/pilot-local/pilot-local-create-20260905T061702Z-a0e15b/seo-crawl.json",
+    "artifacts/qa/pilot-local/pilot-local-create-20260905T061702Z-a0e15b/seo-render.json",
+    "artifacts/qa/pilot-local/pilot-local-create-20260905T061702Z-a0e15b/security-smoke.json",
+    "artifacts/qa/pilot-local/pilot-local-create-20260905T061702Z-a0e15b/acceptance-routes.json",
+    "artifacts/qa/pilot-local/pilot-local-create-20260905T061702Z-a0e15b/major-findings-budget.json",
+    "artifacts/qa/pilot-local/pilot-local-create-20260905T061702Z-a0e15b/performance-budget.json",
+    "artifacts/seo/pilot-local/pilot-local-create-20260905T061702Z-a0e15b/seo-report.json"
   ],
   "mutations": [
     {
-      "target": "/srv/site-factory/repo/var/targets/local-disposable/pilot-local",
+      "target": "/home/claude/work-templates/site-factory/var/targets/local-disposable/pilot-local",
       "kind": "filesystem",
-      "detail": "Релиз 5527b1c9c811408d уже присутствует — повторная выгрузка не выполнялась",
-      "at": "2026-08-23T14:58:30Z",
+      "detail": "Релиз 44aea3ec42dd2219 уже присутствует — повторная выгрузка не выполнялась",
+      "at": "2026-09-05T06:17:03Z",
       "idempotent_noop": true
     },
     {
-      "target": "/srv/site-factory/repo/var/targets/local-disposable/pilot-local",
+      "target": "/home/claude/work-templates/site-factory/var/targets/local-disposable/pilot-local",
       "kind": "filesystem",
-      "detail": "current уже указывает на 5527b1c9c811408d",
-      "at": "2026-08-23T14:58:30Z",
+      "detail": "current уже указывает на 44aea3ec42dd2219",
+      "at": "2026-09-05T06:17:03Z",
       "idempotent_noop": true
     },
     {
-      "target": "/srv/site-factory/repo/var/targets/local-disposable/pilot-local",
+      "target": "/home/claude/work-templates/site-factory/var/targets/local-disposable/pilot-local",
       "kind": "filesystem",
       "detail": "PHP-сервер обслуживает current на 127.0.0.1:8082",
-      "at": "2026-08-23T14:58:30Z",
+      "at": "2026-09-05T06:17:03Z",
       "idempotent_noop": false
     }
   ],
   "backup": {
     "taken": true,
-    "ref": "var/backups/pilot-local-staging-20260823T145830Z.tar.gz",
+    "ref": "var/backups/pilot-local-staging-20260905T061703Z.tar.gz",
     "restore_verified": true,
-    "verified_at": "2026-08-23T14:58:30Z"
+    "verified_at": "2026-09-05T06:17:03Z"
   },
   "seo_summary": {
     "pages_total": 48,
