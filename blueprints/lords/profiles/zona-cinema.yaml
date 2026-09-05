@@ -1,0 +1,56 @@
+# Шаблон направления Lords. Файл создан `python3 -m factory template-new`
+# из манифеста и проверяется `python3 -m factory template-check`.
+# Форма — schemas/template-manifest.schema.json, смысловые правила —
+# factory/templates/contract.py.
+schema_version: 1
+profile: zona-cinema
+label: Zona Cinema
+purpose: 'Кинопортал: полнометражный фильм на первом месте, подборки вместо расписания. Отличается
+  от соседних витрин тем, что не показывает календарь выхода серий — у кино его нет, — и делает ставку
+  на крупную афишу и редакционный отбор.'
+owns_title_page: false
+owns: []
+theme:
+  name: zona_light
+  tokens:
+    bg: '#f4f4f5'
+    surface: '#ffffff'
+    surface_alt: '#ececed'
+    text: '#1b1b1f'
+    muted: '#5f6067'
+    accent: '#c8102e'
+    accent_text: '#ffffff'
+    border: '#d6d6da'
+    radius: 8px
+    container: 1280px
+    heading_font: '''Open Sans'', ''Segoe UI'', Roboto, Arial, sans-serif'
+layout:
+  density: airy
+  hero: catalog
+  card_ratio: 2 / 3
+  columns:
+    mobile: 2
+    tablet: 3
+    desktop: 5
+  home_blocks:
+  - top_carousel
+  - latest_grid
+  - collection_cards
+  - type_rows
+  - genre_chips
+  carousel_heading: Сейчас смотрят
+  show_calendar: false
+  show_collection_cards: true
+  facet_position: sidebar
+sections:
+  home:
+    title: Кино онлайн — большой каталог фильмов
+    h1: Фильмы онлайн
+    description: Каталог полнометражного кино с фильтрами по жанру, году и стране.
+    intro: 'Каталог собран вокруг полнометражного кино: фильтры отбирают по жанру, году выпуска и
+      стране производства, а подборки объясняют, почему фильмы оказались рядом.'
+  search:
+    title: Поиск по каталогу фильмов
+    h1: Поиск
+    description: Поиск по названиям каталога. Страница закрыта от индексации.
+    intro: ''

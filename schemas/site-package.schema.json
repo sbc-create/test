@@ -1320,8 +1320,10 @@
             "lords-general",
             "lords-new",
             "lords-curated",
-            "lords-genre"
-          ]
+            "lords-genre",
+          "zona-cinema",
+          "animedia-portal"
+]
         },
         "theme": {
           "enum": [
@@ -1329,8 +1331,10 @@
             "pulse",
             "editorial",
             "lords_dark",
-            "lords_light"
-          ]
+            "lords_light",
+          "zona_light",
+          "animedia_night"
+]
         },
         "indexing_enabled": {
           "type": "boolean",
