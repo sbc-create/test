@@ -24,8 +24,9 @@ const { SITES, url } = require('./helpers');
 const OUT = path.join(__dirname, '..', '..', 'artifacts', 'evidence', 'templates', 'a11y');
 fs.mkdirSync(OUT, { recursive: true });
 
-const AA_MIN = 24;   // WCAG 2.2 SC 2.5.8, уровень AA
-const AAA_MIN = 44;  // WCAG 2.2 SC 2.5.5, уровень AAA — требование задания
+// Критерий и его исключения живут в общем модуле: их же применяет проверка
+// шаблонов направлений, и две копии разошлись бы молча.
+const { AA_MIN, AAA_MIN, measureTargets, failingAA, failingAAA } = require('../lib/target-size');
 const INPUT_MIN_FONT = 16;
 
 const evidence = {};
@@ -37,77 +38,6 @@ function save(name, payload) {
     `${JSON.stringify({ captured_at_utc: new Date().toISOString(), ...payload }, null, 2)}\n`,
   );
 }
-
-/** Размеры интерактивных целей с учётом исключений SC 2.5.8.
- *
- * Критерий не требует, чтобы каждая цель была 24×24. Он даёт четыре
- * исключения, и два из них здесь существенны:
- *
- *   * **интервал** — маленькая цель проходит, если вокруг неё есть место:
- *     окружность диаметром 24 px с центром в цели не пересекает такую же
- *     окружность соседней цели;
- *   * **строчная** — цель внутри предложения размер держать не обязана,
- *     иначе ссылка в абзаце разрывала бы строку.
- *
- * Считать по одному размеру, игнорируя интервал, значит объявлять нарушением
- * то, что критерию удовлетворяет, и чинить работающую вёрстку.
- */
-const measureTargets = () => {
-  const MIN = 24;
-  const selector = 'a[href], button, input:not([type="hidden"]), select, textarea, [tabindex]:not([tabindex="-1"])';
-  const visible = [...document.querySelectorAll(selector)].filter((el) => {
-    const style = getComputedStyle(el);
-    if (style.display === 'none' || style.visibility === 'hidden') { return false; }
-    const rect = el.getBoundingClientRect();
-    // Ссылка перехода к содержимому спрятана до фокуса и целью указателя не
-    // является: измерять её как цель — измерять то, чего пальцем не касаются.
-    if (rect.width <= 1 || rect.height <= 1) { return false; }
-    return true;
-  });
-
-  const boxes = visible.map((el) => {
-    const r = el.getBoundingClientRect();
-    return { cx: r.left + r.width / 2, cy: r.top + r.height / 2, w: r.width, h: r.height };
-  });
-
-  return visible.map((el, index) => {
-    const rect = el.getBoundingClientRect();
-    const me = boxes[index];
-    // Интервал: расстояние до ближайшего центра другой цели. Если оно не
-    // меньше 24 px, окружности не пересекаются и исключение применимо.
-    let nearest = Infinity;
-    boxes.forEach((other, j) => {
-      if (j === index) { return; }
-      const distance = Math.hypot(me.cx - other.cx, me.cy - other.cy);
-      if (distance < nearest) { nearest = distance; }
-    });
-    // Исключение «эквивалент»: если то же действие доступно другой целью
-    // достаточного размера, маленькая цель критерию не противоречит. На
-    // карточке это буквальный случай — постер и заголовок ведут по одному
-    // адресу, и постер крупный. Требовать 44 px от подписи под постером
-    // значило бы растить карточку ради цели, дубль которой уже большой.
-    const href = el.getAttribute('href');
-    let equivalent = null;
-    if (href) {
-      visible.forEach((other, j) => {
-        if (j === index || other.getAttribute('href') !== href) { return; }
-        const r = boxes[j];
-        if (r.w >= 44 && r.h >= 44) { equivalent = Math.round(Math.min(r.w, r.h)); }
-      });
-    }
-    return {
-      tag: el.tagName.toLowerCase(),
-      cls: el.getAttribute('class') || '',
-      text: (el.textContent || '').trim().slice(0, 40),
-      width: Math.round(rect.width * 100) / 100,
-      height: Math.round(rect.height * 100) / 100,
-      nearestTargetPx: Number.isFinite(nearest) ? Math.round(nearest * 100) / 100 : null,
-      spacingExempt: Number.isFinite(nearest) ? nearest >= MIN : true,
-      equivalentTargetPx: equivalent,
-      inline: !!el.closest('p, li.inline, .lede, footer p'),
-    };
-  });
-};
 
 test.describe('клавиатура, фокус и размеры целей', () => {
   test('обход с клавиатуры доходит до содержимого и не проваливается в ловушку', async ({ page }) => {
@@ -185,9 +115,7 @@ test.describe('клавиатура, фокус и размеры целей', (
       await page.setViewportSize({ width: 390, height: 844 });
       await page.goto(url(site, '/catalog/'));
       const targets = await page.evaluate(measureTargets);
-      const small = targets.filter(
-        (t) => !t.inline && !t.spacingExempt
-          && (t.width < AA_MIN || t.height < AA_MIN));
+      const small = failingAA(targets);
       save(`targets-aa-${site}`, {
         site, route: '/catalog/', viewport: 390, threshold: AA_MIN,
         total: targets.length, failing: small,
@@ -225,9 +153,7 @@ test.describe('цели по усиленному порогу 44 px (WCAG AAA, 
       await page.setViewportSize({ width: 390, height: 844 });
       await page.goto(url(site, '/catalog/'));
       const targets = await page.evaluate(measureTargets);
-      const small = targets.filter(
-        (t) => !t.inline && !t.equivalentTargetPx
-          && (t.width < AAA_MIN || t.height < AAA_MIN));
+      const small = failingAAA(targets);
       save(`targets-aaa-${site}`, {
         site, route: '/catalog/', viewport: 390, threshold: AAA_MIN,
         total: targets.length, failing: small,

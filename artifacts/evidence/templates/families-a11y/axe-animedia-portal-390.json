@@ -1,0 +1,150 @@
+{
+  "captured_at_utc": "2026-09-05T16:51:22.364Z",
+  "profile": "animedia-portal",
+  "viewport": 390,
+  "url": "http://127.0.0.1:8811/",
+  "rules_passed": 25,
+  "violations": [],
+  "targets_total": 72,
+  "thresholds": {
+    "aa": 24,
+    "aaa": 44,
+    "input_font": 16
+  },
+  "failing_aa": [],
+  "failing_aaa": [
+    {
+      "tag": "a",
+      "cls": "",
+      "text": "Медный чертёж",
+      "width": 105.98,
+      "height": 16,
+      "nearestTargetPx": 37.43,
+      "spacingExempt": true,
+      "equivalentTargetPx": null,
+      "inline": false
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "text": "Поздний невод",
+      "width": 100.41,
+      "height": 16,
+      "nearestTargetPx": 37.43,
+      "spacingExempt": true,
+      "equivalentTargetPx": null,
+      "inline": false
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "text": "Драма11",
+      "width": 80.58,
+      "height": 32.34,
+      "nearestTargetPx": 38.5,
+      "spacingExempt": true,
+      "equivalentTargetPx": null,
+      "inline": false
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "text": "Детектив9",
+      "width": 89.47,
+      "height": 32.34,
+      "nearestTargetPx": 39.25,
+      "spacingExempt": true,
+      "equivalentTargetPx": null,
+      "inline": false
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "text": "Приключения7",
+      "width": 117.31,
+      "height": 32.34,
+      "nearestTargetPx": 38.88,
+      "spacingExempt": true,
+      "equivalentTargetPx": null,
+      "inline": false
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "text": "Комедия9",
+      "width": 87.42,
+      "height": 32.34,
+      "nearestTargetPx": 38.5,
+      "spacingExempt": true,
+      "equivalentTargetPx": null,
+      "inline": false
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "text": "Триллер11",
+      "width": 92.58,
+      "height": 32.34,
+      "nearestTargetPx": 39.25,
+      "spacingExempt": true,
+      "equivalentTargetPx": null,
+      "inline": false
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "text": "Фэнтези9",
+      "width": 84.5,
+      "height": 32.34,
+      "nearestTargetPx": 38.88,
+      "spacingExempt": true,
+      "equivalentTargetPx": null,
+      "inline": false
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "text": "Фантастика11",
+      "width": 111.66,
+      "height": 32.34,
+      "nearestTargetPx": 39.55,
+      "spacingExempt": true,
+      "equivalentTargetPx": null,
+      "inline": false
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "text": "Семейное8",
+      "width": 96.63,
+      "height": 32.34,
+      "nearestTargetPx": 46.47,
+      "spacingExempt": true,
+      "equivalentTargetPx": null,
+      "inline": false
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "text": "Историческое8",
+      "width": 119.3,
+      "height": 32.34,
+      "nearestTargetPx": 59.64,
+      "spacingExempt": true,
+      "equivalentTargetPx": null,
+      "inline": false
+    },
+    {
+      "tag": "a",
+      "cls": "",
+      "text": "Мистика11",
+      "width": 92.27,
+      "height": 32.34,
+      "nearestTargetPx": 39.55,
+      "spacingExempt": true,
+      "equivalentTargetPx": null,
+      "inline": false
+    }
+  ],
+  "small_inputs": []
+}
