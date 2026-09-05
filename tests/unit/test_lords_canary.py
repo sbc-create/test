@@ -473,18 +473,26 @@ class TestDubiousOwnershipReproduced:
         assert result.returncode == 0, f"сверка упала при чужом владельце: {result.stderr}"
         assert result.stdout.strip(), "commit не напечатан"
 
-    def test_сценарий_проходит_предполётные_проверки_при_чужом_владельце(self):
-        # Дальше сценарий упирается в права на рантайм, и это ожидаемо: здесь
-        # проверяется только то, что владелец каталога его больше не роняет.
+    def test_сценарий_проходит_предполётные_проверки_при_чужом_владельце(self, tmp_path):
+        # Снимок подставляется заведомо маленький: сценарий обязан дойти до
+        # проверки его размера и остановиться там. Настоящий снимок запустил бы
+        # полный рендер пятидесяти трёх тысяч страниц — тест, идущий часами,
+        # никто не станет запускать, и он перестанет что-либо охранять.
+        import json
         import subprocess
+        cache = tmp_path / "catalog-cache"
+        cache.mkdir()
+        (cache / "lords-02.json").write_text(json.dumps({"items": [{"external_id": "x"}]}),
+                                             encoding="utf-8")
         result = subprocess.run(
             ["bash", str(self.ROOT / "automation/host/lords-canary-apply.sh"), "render", "lords-02"],
-            capture_output=True, text=True, cwd=self.ROOT,
-            env={**self.env(),
-                 "LORDS_SNAPSHOT_DIR": "/srv/site-factory/repo/var/lords/lords/catalog-cache"})
+            capture_output=True, text=True, cwd=self.ROOT, timeout=120,
+            env={**self.env(), "LORDS_SNAPSHOT_DIR": str(cache),
+                 "LORDS_CANARY_STAGING": str(tmp_path / "staging")})
         out = result.stdout + result.stderr
         assert "dubious ownership" not in out, "git вернулся в путь запуска"
         assert "происхождение подтверждено" in out, f"предполётные проверки не пройдены:\n{out[-600:]}"
+        assert "не живой каталог" in out, f"проверка размера снимка не сработала:\n{out[-400:]}"
 
 
 class TestNoBlanketGitTrust:
