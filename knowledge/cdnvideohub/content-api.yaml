@@ -142,7 +142,9 @@ mapping:
     external_ids: external_ids
     # Плеер адресуется агрегаторным идентификатором, а не внутренним id.
     playback_title_id: external_ids
-    playback_aggregator_priority: [kp, mali, mdl]
+    # imdb последним: перечень определяет порядок, и записи с kp
+    # обязаны сохранить прежнее поведение.
+    playback_aggregator_priority: [kp, mali, mdl, imdb]
   title_detail:
     english_name: english_name
     original_name: original_name
