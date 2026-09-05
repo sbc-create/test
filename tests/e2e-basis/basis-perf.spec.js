@@ -54,7 +54,12 @@ test('замер сдвига умеет видеть сдвиг', async ({ page
     block.style.background = '#333';
     document.body.prepend(block);
   });
-  await page.waitForTimeout(800);
+  // Ждём само событие, а не фиксированный срок. Обратный вызов наблюдателя
+  // приходит асинхронно, и в загруженном прогоне 800 мс не хватало: проверка
+  // падала на исправной оснастке. Ожидание по условию снимает эту зависимость
+  // от загруженности машины и при этом не прощает неработающий наблюдатель —
+  // тогда оно истекает по таймауту и проверка падает.
+  await page.waitForFunction(() => window.__cls > 0, null, { timeout: 10_000 });
   const after = await page.evaluate(() => window.__cls);
   expect(after, 'наблюдатель сдвига не сработал').toBeGreaterThan(before + CLS_BUDGET);
 });
@@ -66,6 +71,10 @@ for (const entry of PLAN.pages) {
     const response = await page.goto(entry.url, { waitUntil: 'load' });
     const body = await response.body();
     await page.evaluate(() => document.fonts.ready).catch(() => {});
+    await page.waitForLoadState('networkidle').catch(() => {});
+    // Сдвиг случается после первого кадра: изображение без размеров и шрифт
+    // без резерва двигают раскладку тогда, когда загрузка уже считается
+    // завершённой. Замер сразу после load показал бы ноль на любой странице.
     await page.waitForTimeout(1200);
     const vitals = await page.evaluate(() => ({ cls: window.__cls, lcp: window.__lcp }));
     const kb = Math.round(body.length / 1024);

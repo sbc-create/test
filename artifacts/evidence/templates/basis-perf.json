@@ -1,5 +1,5 @@
 {
-  "captured_at_utc": "2026-09-05T17:26:43.875Z",
+  "captured_at_utc": "2026-09-05T17:33:22.414Z",
   "site": "pilot-local",
   "build": "dbefbb0eed312308",
   "limitation": "локальный стенд без сети: LCP — нижняя граница, не замер продукта",
@@ -8,67 +8,67 @@
   "measurements": {
     "article": {
       "cls": 0,
-      "lcp": 72,
+      "lcp": 60,
       "document_kb": 4,
       "url": "http://127.0.0.1:8821/news/zapis-3/"
     },
     "category": {
       "cls": 0,
-      "lcp": 80,
+      "lcp": 132,
       "document_kb": 8,
       "url": "http://127.0.0.1:8821/lekcii/"
     },
     "collection": {
       "cls": 0,
-      "lcp": 64,
+      "lcp": 112,
       "document_kb": 6,
       "url": "http://127.0.0.1:8821/collections/izbrannoe/"
     },
     "content_unavailable": {
       "cls": 0,
-      "lcp": 76,
+      "lcp": 60,
       "document_kb": 5,
       "url": "http://127.0.0.1:8821/lekcii/material-04/"
     },
     "episode": {
       "cls": 0,
-      "lcp": 56,
+      "lcp": 104,
       "document_kb": 5,
       "url": "http://127.0.0.1:8821/praktikum/serial-fikstura/season-1/episode-1/"
     },
     "gone": {
       "cls": 0,
-      "lcp": 40,
+      "lcp": 56,
       "document_kb": 3,
       "url": "http://127.0.0.1:8821/410/"
     },
     "home": {
       "cls": 0,
-      "lcp": 76,
+      "lcp": 56,
       "document_kb": 10,
       "url": "http://127.0.0.1:8821/"
     },
     "legal": {
       "cls": 0,
-      "lcp": 52,
+      "lcp": 72,
       "document_kb": 4,
       "url": "http://127.0.0.1:8821/legal/terms/"
     },
     "news_index": {
       "cls": 0,
-      "lcp": 72,
+      "lcp": 84,
       "document_kb": 4,
       "url": "http://127.0.0.1:8821/news/"
     },
     "not_found": {
       "cls": 0,
-      "lcp": 52,
+      "lcp": 76,
       "document_kb": 3,
       "url": "http://127.0.0.1:8821/404/"
     },
     "paginated_page": {
       "cls": 0,
-      "lcp": 52,
+      "lcp": 72,
       "document_kb": 5,
       "url": "http://127.0.0.1:8821/lekcii/page/2/"
     },
@@ -80,13 +80,13 @@
     },
     "season": {
       "cls": 0,
-      "lcp": 76,
+      "lcp": 72,
       "document_kb": 4,
       "url": "http://127.0.0.1:8821/praktikum/serial-fikstura/season-1/"
     },
     "title": {
       "cls": 0,
-      "lcp": 88,
+      "lcp": 76,
       "document_kb": 5,
       "url": "http://127.0.0.1:8821/lekcii/material-01/"
     }
