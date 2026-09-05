@@ -7,13 +7,12 @@
 Измерено на боевом каталоге: 637 карточек из 53 203 попадали в этот класс.
 Два названных владельцем адреса — из их числа.
 """
-import json
 from pathlib import Path
 
 import pytest
 import yaml
 
-from factory.lords.content_live import LiveContract, normalize_title
+from factory.lords.content_live import normalize_title
 
 REPO = Path(__file__).resolve().parents[2]
 CONTRACT = REPO / "knowledge" / "cdnvideohub" / "content-api.yaml"
