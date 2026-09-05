@@ -254,6 +254,26 @@ def _data_source_label(ctx: dict) -> str:
     return FIXTURE_DATA_SOURCE if ctx["fixture_catalog"] else LIVE_DATA_SOURCE
 
 
+def _episode_items(season) -> str:
+    """Строки списка серий. Неизвестная длительность не печатается.
+
+    Прежде разметка подставляла значение безусловно, и отсутствие хронометража
+    выходило строкой «0 мин» у каждой серии: провайдер поэпизодной длительности
+    не отдаёт вовсе. Зритель читал это как «серия пустая».
+
+    Решение не новое: страница тайтла ниже уже скрывает нулевую длительность и
+    объясняет почему. Здесь оно применено к списку серий — там, где его не
+    хватало.
+    """
+    items = []
+    for episode in season.episodes:
+        duration = (f"<span>{episode.runtime_min} мин</span>"
+                    if episode.runtime_min else "")
+        items.append(f'<li class="episode"><span>{escape(episode.name)}</span>'
+                     f"{duration}</li>")
+    return "".join(items)
+
+
 def _document(ctx: dict, meta: Meta, body: str) -> str:
     """Полный HTML-документ. Всё встроено, ничего не подгружается извне."""
     brand = ctx["brand"]
@@ -1134,11 +1154,7 @@ def _seasons_block(title: fx.Title) -> str:
         )
     blocks = []
     for season in title.seasons:
-        episodes = "".join(
-            f'<li class="episode"><span>{escape(episode.name)}</span>'
-            f"<span>{episode.runtime_min} мин</span></li>"
-            for episode in season.episodes
-        )
+        episodes = _episode_items(season)
         opened = " open" if season.number == 1 else ""
         blocks.append(
             f'<details class="season"{opened}><summary>Сезон {season.number} · '

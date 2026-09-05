@@ -103,7 +103,10 @@ AGE_RATINGS = ("6+", "12+", "16+", "18+")
 class Episode:
     number: int
     name: str
-    runtime_min: int
+    #: Длительность в минутах или None, если источник её не передал. Ноль
+    #: здесь не «пусто», а утверждение «серия идёт ноль минут» — утверждение
+    #: ложное, и печаталось оно на боевых витринах у каждой серии.
+    runtime_min: int | None = None
 
 
 @dataclass(frozen=True)
@@ -112,8 +115,14 @@ class Season:
     episodes: tuple[Episode, ...]
 
     @property
-    def runtime_min(self) -> int:
-        return sum(e.runtime_min for e in self.episodes)
+    def runtime_min(self) -> int | None:
+        """Суммарная длительность сезона или None, если ничего не известно.
+
+        Сумма неизвестных величин — не ноль. Складывается только известное;
+        если известного нет вовсе, сезон честно не имеет длительности.
+        """
+        known = [e.runtime_min for e in self.episodes if e.runtime_min]
+        return sum(known) if known else None
 
 
 @dataclass(frozen=True)

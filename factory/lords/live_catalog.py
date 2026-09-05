@@ -193,7 +193,10 @@ def seasons_from_detail(raw) -> tuple:
         count = entry.get("episodes_count")
         count = int(count) if isinstance(count, int) and count > 0 else 0
         episodes = tuple(
-            fx.Episode(number=i, name=f"Серия {i}", runtime_min=0)
+            # Длительность не передаётся: списочный ответ источника её не
+            # содержит, а поэпизодного запроса в контракте нет. Оставляем
+            # неизвестной, а не подставляем ноль.
+            fx.Episode(number=i, name=f"Серия {i}")
             for i in range(1, count + 1)
         )
         if number and episodes:
@@ -364,7 +367,7 @@ def title_from_item(entry: dict) -> LiveTitle | None:
         genre_slugs=tuple(slugify(g) or "tag" for g in (detail_genres or tags)),
         genres=tuple(detail_genres or tags),
         studio="",
-        runtime_min=int(duration) if isinstance(duration, int) and duration > 0 else 0,
+        runtime_min=int(duration) if isinstance(duration, int) and duration > 0 else None,
         age_rating=age_rating,
         summary=str(entry.get("description") or "").strip(),
         playable=entry.get("playable"),
