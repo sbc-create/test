@@ -162,6 +162,30 @@ GATES="$(cat "${GATES_FILE}")"
 rm -f "${GATES_FILE}"
 
 TIMER_WAS_ACTIVE=0
+
+# Возврат таймера ставится обработчиком выхода ДО остановки, а не после
+# успешного завершения. Путей выхода больше двух: кроме удачи и явного отказа
+# есть `set -e` на любой команде между остановкой и концом, прерывание
+# сигналом и падение systemctl. Прежняя редакция возвращала таймер только на
+# пути отказа, а на удачном пути печатала совет «вернуть обновление вручную» —
+# и удачный canary одного домена оставлял обновление каталога остановленным у
+# ВСЕХ ТРЁХ витрин. Заметить это можно было только по отсутствию новых
+# релизов, то есть через часы.
+restore_refresh_timer() {
+  local code=$?
+  if [ "${TIMER_WAS_ACTIVE}" = "1" ]; then
+    if systemctl is-active --quiet "${REFRESH_TIMER}"; then
+      log "таймер обновления уже работает"
+    else
+      log "возвращаю ${REFRESH_TIMER}"
+      systemctl start "${REFRESH_TIMER}" \
+        || log "ВНИМАНИЕ: таймер обновления не запустился — верните вручную"
+    fi
+  fi
+  return "${code}"
+}
+trap restore_refresh_timer EXIT
+
 if systemctl is-active --quiet "${REFRESH_TIMER}"; then
   TIMER_WAS_ACTIVE=1
   log "останавливаю ${REFRESH_TIMER} на время наблюдения"
@@ -201,7 +225,8 @@ if [ "${ok}" != "1" ]; then
   log "приёмка не пройдена — откатываю"
   ln -sfn "${CURRENT}" "${RUNTIME}/current"
   [ "${NEED_RESTART}" = "1" ] && systemctl restart "${SITE}.service"
-  [ "${TIMER_WAS_ACTIVE}" = "1" ] && systemctl start "${REFRESH_TIMER}"
+  # Таймер вернёт обработчик выхода: он срабатывает и здесь, и на любом другом
+  # пути, включая падение по set -e между остановкой и этой строкой.
   die "витрина не ответила после подмены; возвращена на $(basename "${CURRENT}")"
 fi
 
