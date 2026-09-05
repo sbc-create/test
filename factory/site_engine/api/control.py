@@ -698,6 +698,24 @@ class ControlApi:
             return self._metrics_response()
         if rest[:1] == ["site-requests"]:
             return self._site_requests(method, rest[1:], body, principal, correlation_id)
+        if method == "GET" and len(rest) == 2 and rest[0] == "join-keys":
+            principal.require(SCOPE_READ)
+            from factory.site_engine.api import join_keys as _ключи
+
+            self._check_site_id(rest[1])
+            try:
+                return ApiResponse(
+                    status=200,
+                    body=_ключи.join_keys(
+                        self._root,
+                        rest[1],
+                        env=self._env,
+                        offset=self._целое(body, "offset", 0, 0, 10**6),
+                        limit=self._целое(body, "limit", 500, 1, 5000),
+                    ),
+                )
+            except _ключи.JoinKeyError as ошибка:
+                raise ControlDenied(404, "site_not_found", str(ошибка)) from ошибка
         if method == "GET" and rest == ["scorecard"]:
             principal.require(SCOPE_READ)
             from factory.site_engine.api import readiness

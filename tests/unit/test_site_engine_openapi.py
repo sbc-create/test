@@ -38,6 +38,7 @@ ROOT = Path(__file__).resolve().parents[2]
     "/api/v1/site-requests/{requestId}/verification": {},
     "/api/v1/site-requests/{requestId}/publish": {},
     "/api/v1/site-requests/{requestId}/rollback": {},
+    "/api/v1/join-keys/{siteId}": {},
     "/api/v1/scorecard": {},
     "/api/v1/alerts": {},
     "/api/v1/state-inventory": {},

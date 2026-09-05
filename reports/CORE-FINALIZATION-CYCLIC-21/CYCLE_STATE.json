@@ -8,9 +8,9 @@
   "productionCheckout": "568863d350c320e4101ac17417c846ca4b7265c0",
   "deployedControlApi": "52fd06659a7ff73fd37b5bed2f20eb46a90d7a1e",
   "locks": "нет",
-  "nextStep": "падающий тест на conformance входящих handoff и на четыре таймера цикла SEO: ежедневный снимок 03:10, ежедневный content-audit 03:30, недельная сводка понедельник 04:00, месячная 1-го 04:30; одна попытка повтора через 15 минут, ключи идемпотентности по периоду отчёта",
+  "nextStep": "независимые работы исчерпаны: ratingsProvenance требует разрешённого источника рейтингов, Yummyanime — доступа только на чтение, установка таймеров SEO и переменной SITE_ENGINE_RENDER_STATE_DIR — прав на боевой машине",
   "testPortPolicy": "свободный порт из диапазона 18800-18899, владелец проверяется до запуска, cleanup только по сохранённому PID",
-  "status": "IN_PROGRESS",
+  "status": "OWNER_ACTION_REQUIRED",
   "lastCommit": "118ebf1664320b7adaa17b5cd74c5b0530e285f5",
   "cycle1": "closed: Overview и Content, браузер ×2 движка, провалов 0",
   "cycle2": "closed: рабочий поток до витрины, регресс 3672 passed",
@@ -19,5 +19,6 @@
   "cycle5": "closed: Выпуски, Происшествия, отбор в журнале; editorialAdmin 7 → 8",
   "cycle6": "closed: мастер и сухой прогон; selfServiceSite 3 → 6",
   "cycle7": "closed: подтверждение, канарейка, откат; selfServiceSite 6 → 8",
-  "cycle8": "closed: наблюдаемость и безопасность; observability 7→8, securityRollback 7→8"
+  "cycle8": "closed: наблюдаемость и безопасность; observability 7→8, securityRollback 7→8",
+  "cycle9": "closed: ключ связи и расписание SEO; coreTemplatesSeo 7 → 8"
 }
