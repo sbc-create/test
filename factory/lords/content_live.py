@@ -162,13 +162,10 @@ class LiveContract:
             title_mapping=title,
             aggregator_priority=tuple(title.get("playback_aggregator_priority", ("kp",))),
             external_id_aliases={
-                key: list(value)
-                for key, value in (mapping.get("external_ids") or {}).items()
+                key: list(value) for key, value in (mapping.get("external_ids") or {}).items()
             },
             filters={
-                str(key): str(value)
-                for key, value in (raw.get("filters") or {}).items()
-                if value
+                str(key): str(value) for key, value in (raw.get("filters") or {}).items() if value
             },
         )
 
@@ -263,13 +260,14 @@ class Fetcher:
                     raise failure
                 raise SourceError(
                     f"источник отвечает {status} после {attempt} повторов",
-                    status=status, kind="http",
+                    status=status,
+                    kind="http",
                 )
 
             delay_ms = self._retry_after_ms(headers) if status == 429 else None
             if delay_ms is None:
                 delay_ms = min(
-                    self.contract.backoff_base_ms * (2 ** attempt),
+                    self.contract.backoff_base_ms * (2**attempt),
                     self.contract.backoff_max_ms,
                 )
             attempt += 1
@@ -422,7 +420,10 @@ def normalize_title(raw: dict, contract: LiveContract) -> dict | None:
         content_type=("series" if is_series else "movie") if is_series is not None else None
     )
     aggregator_by_key = {
-        "kinopoisk": "kp", "myanimelist": "mali", "mydramalist": "mdl", "imdb": "imdb",
+        "kinopoisk": "kp",
+        "myanimelist": "mali",
+        "mydramalist": "mdl",
+        "imdb": "imdb",
     }
     for key, code in aggregator_by_key.items():
         if not политика.permits(code):
@@ -451,7 +452,8 @@ def normalize_title(raw: dict, contract: LiveContract) -> dict | None:
         "external_ids": resolved,
         "playback": (
             {"aggregator": aggregator, "title_id": playback_id}
-            if aggregator and playback_id else None
+            if aggregator and playback_id
+            else None
         ),
         "created_at": _text(raw.get("created_at")),
         "updated_at": _text(raw.get("updated_at")),
@@ -587,6 +589,34 @@ def сверить_с_политикой(items: list[dict]) -> tuple[list[dict],
     return итог, снято
 
 
+def _записать_в_аудит(path: Path, снято: dict[str, int]) -> None:
+    """Снятие дескрипторов попадает в журнал аудита.
+
+    Это изменение того, что каталог обещает зрителю, и оно обязано быть видно
+    там же, где остальные изменения состояния, — а не только в выводе задания,
+    который переживает один прогон.
+
+    Отказ журнала не отменяет запись каталога: витрина важнее записи о ней,
+    а пропажа записи видна по расхождению с полем playback_policy_stripped.
+    """
+    try:
+        from factory import audit
+
+        audit.record(
+            job_id=f"playback-policy-{path.stem}",
+            site_id=path.stem,
+            environment="production",
+            action="playback_policy_reconcile",
+            target=str(path),
+            exit_code=0,
+            output=f"снято дескрипторов: {снято}",
+            mutation=True,
+            extra={"stripped": снято},
+        )
+    except Exception:  # noqa: BLE001
+        pass
+
+
 def write_cache(
     path: Path,
     items: list[dict],
@@ -601,6 +631,7 @@ def write_cache(
         # Печатается намеренно: беззвучное изменение состава каталога — ровно то,
         # что делает разбор «почему пропало видео» долгим.
         print(f"[playback-policy] снято дескрипторов: {снято}", flush=True)
+        _записать_в_аудит(path, снято)
     payload: dict = {"fetched_at_ms": now_ms, "source": source, "items": items}
     if снято:
         payload["playback_policy_stripped"] = снято
@@ -793,8 +824,9 @@ def fetch_catalog(
     if mode == "incremental":
         query[contract.updated_since_param] = cached.mark
 
-    def _fallback(reason: str, pages: int = 0, rejected: list[dict] | None = None,
-                  stopped_by: str = "") -> SyncOutcome:
+    def _fallback(
+        reason: str, pages: int = 0, rejected: list[dict] | None = None, stopped_by: str = ""
+    ) -> SyncOutcome:
         if cached and allow_stale:
             return SyncOutcome(
                 status=STALE,
@@ -837,12 +869,17 @@ def fetch_catalog(
             # потому, что цена ошибки — стёртый каталог, а не лишняя строка.
             return _fallback(
                 "слияние уменьшило каталог — приращение отвергнуто",
-                pages=walk.pages, rejected=rejected, stopped_by=walk.stopped_by,
+                pages=walk.pages,
+                rejected=rejected,
+                stopped_by=walk.stopped_by,
             )
         write_cache(
-            cache_file, merged,
-            now_ms=now_ms, source="live-incremental",
-            mark=next_mark, base_full_at_ms=cached.base_full_at_ms,
+            cache_file,
+            merged,
+            now_ms=now_ms,
+            source="live-incremental",
+            mark=next_mark,
+            base_full_at_ms=cached.base_full_at_ms,
         )
         return SyncOutcome(
             status=FRESH,
@@ -866,12 +903,18 @@ def fetch_catalog(
         # Пустой ответ — это отказ источника, а не «каталог опустел».
         return _fallback(
             "источник вернул пустой каталог",
-            pages=walk.pages, rejected=rejected, stopped_by=walk.stopped_by,
+            pages=walk.pages,
+            rejected=rejected,
+            stopped_by=walk.stopped_by,
         )
 
     write_cache(
-        cache_file, items,
-        now_ms=now_ms, source="live", mark=next_mark, base_full_at_ms=now_ms,
+        cache_file,
+        items,
+        now_ms=now_ms,
+        source="live",
+        mark=next_mark,
+        base_full_at_ms=now_ms,
     )
     return SyncOutcome(
         status=FRESH,
@@ -898,7 +941,10 @@ def enabled_sections(items: list[dict], contract: LiveContract) -> dict[str, dic
     result: dict[str, dict] = {}
     for name, spec in contract.sections.items():
         if spec.get("supported") is False:
-            result[name] = {"enabled": False, "reason": spec.get("reason", "не поддержан источником")}
+            result[name] = {
+                "enabled": False,
+                "reason": spec.get("reason", "не поддержан источником"),
+            }
             continue
         minimum = int(spec.get("min_items", 1))
         value = spec.get("filter_value")
@@ -906,8 +952,9 @@ def enabled_sections(items: list[dict], contract: LiveContract) -> dict[str, dic
         if field_name == "type":
             matched = [i for i in items if (i.get("type") or "").lower() == str(value).lower()]
         elif field_name == "direction":
-            matched = [i for i in items if str(value).lower() in
-                       [t.lower() for t in (i.get("tags") or [])]]
+            matched = [
+                i for i in items if str(value).lower() in [t.lower() for t in (i.get("tags") or [])]
+            ]
         else:
             matched = list(items)
         if len(matched) >= minimum:

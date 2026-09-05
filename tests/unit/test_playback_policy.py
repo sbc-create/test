@@ -296,3 +296,27 @@ class TestСверкаНаЗаписи:
         данные = json.loads(путь.read_text(encoding="utf-8"))
         assert len(данные["items"]) == 1
         assert данные["items"][0]["name"] == "запрещённый"
+
+
+def test_снятие_дескрипторов_попадает_в_журнал_аудита(tmp_path):
+    """Изменение того, что каталог обещает зрителю, обязано быть видно.
+
+    Вывод задания переживает один прогон; журнал аудита отвечает на вопрос
+    «когда и почему каталог перестал предлагать видео» и через неделю.
+    """
+    from factory import audit
+    from factory.lords import content_live
+
+    до = len(audit.read_all())
+    content_live.write_cache(
+        tmp_path / "lords-01.json",
+        [{"external_id": "b", "playback": {"aggregator": "imdb", "title_id": "2"}}],
+        now_ms=0,
+        source="тест",
+    )
+    после = audit.read_all()
+    assert len(после) == до + 1
+    запись = после[-1]
+    assert запись["action"] == "playback_policy_reconcile"
+    assert запись["mutation"] is True
+    assert "imdb" in запись["output"]
