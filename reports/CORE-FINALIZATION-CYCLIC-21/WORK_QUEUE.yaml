@@ -40,8 +40,7 @@ gates:
     state: in_progress
     priority: 1
     gaps:
-      - "Overview отсутствует"
-      - "Content отсутствует"
+      # закрыто циклом 1, commit c366a81
       - "Workflow: draft → preview/diff → approve → publish → rollback"
       - "Jobs отсутствует"
       - "Sites отсутствует"

@@ -1,14 +1,16 @@
 {
   "task": "CORE-FINALIZATION-CYCLIC-21",
-  "cycle": 1,
-  "slice": "Admin Overview и Content",
+  "cycle": 2,
+  "slice": "Review Queue и Workflow",
   "branch": "claude/core-product-8plus-20",
   "headAtStart": "b3bd6ede308dee2ec527d3e461acfae4857df21f",
   "upstream": "origin/claude/core-product-8plus-20",
   "productionCheckout": "568863d350c320e4101ac17417c846ca4b7265c0",
   "deployedControlApi": "52fd06659a7ff73fd37b5bed2f20eb46a90d7a1e",
   "locks": "нет",
-  "nextStep": "воспроизвести отсутствие разделов Overview и Content, написать падающий тест, реализовать",
+  "nextStep": "воспроизвести отсутствие draft/preview/approve/publish/rollback в очереди разбора",
   "testPortPolicy": "свободный порт из диапазона 18800-18899, владелец проверяется до запуска, cleanup только по сохранённому PID",
-  "status": "IN_PROGRESS"
+  "status": "IN_PROGRESS",
+  "lastCommit": "c366a81f90a74e0c7a3b4b4e119b49587db0f9f0",
+  "cycle1": "closed: Overview и Content, браузер ×2 движка, провалов 0"
 }
