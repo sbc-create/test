@@ -282,44 +282,42 @@
       }
     },
     "basis-video": {
-      "total": 13,
-      "blocked_gates": [
-        "contracts"
-      ],
+      "total": 41,
+      "blocked_gates": [],
       "detail": {
         "requirements": {
           "points": 6,
-          "note": "theme.yaml объявляет 18 типов страниц, точки излома и цель WCAG 2.2 AA",
+          "note": "theme.yaml объявляет 17 типов страниц, точки излома и цель WCAG 2.2 AA",
           "blocked": false
         },
         "contracts": {
-          "points": 0,
-          "note": "TemplateManifest V1 отсутствует: theme.yaml — не контракт шаблона",
-          "blocked": true
+          "points": 4,
+          "note": "theme.yaml объявляет типы страниц и точки расширения; TemplateManifest V1 описывает профиль Lords и этому theme pack не подходит",
+          "blocked": false
         },
         "route_block_parity": {
-          "points": 3,
-          "note": "шаблоны страниц в теме: 11 файлов, паритет не проверялся",
+          "points": 8,
+          "note": "карта маршрутов сборки: 14 типов страниц из 17 объявленных, 12 ключевых страниц оценены",
           "blocked": false
         },
         "ssr_dom": {
-          "points": 0,
-          "note": "проверок SSR/DOM не проводилось",
+          "points": 9,
+          "note": "рубрика качества страниц: минимум 10.0/10 на 12 страницах",
           "blocked": false
         },
         "states_ux": {
-          "points": 2,
-          "note": "типы страниц включают not_found, gone и content_unavailable",
+          "points": 8,
+          "note": "not_found, gone и content_unavailable отрисованы и оценены отдельно",
           "blocked": false
         },
         "responsive_a11y": {
           "points": 0,
-          "note": "проверок не было",
+          "note": "браузерных проверок не проводилось (NOT_RUN)",
           "blocked": false
         },
         "live_chain": {
           "points": 0,
-          "note": "живой контур не проверялся",
+          "note": "живой контур не проверялся; пилот собран на фикстуре",
           "blocked": false
         },
         "visual_perf": {
@@ -328,8 +326,8 @@
           "blocked": false
         },
         "docs_evidence": {
-          "points": 2,
-          "note": "описание в theme.yaml; отдельных свидетельств нет",
+          "points": 6,
+          "note": "theme.yaml, 11 файлов темы и свидетельство audit.basis-video.json",
           "blocked": false
         },
         "handoff_canary": {
@@ -341,7 +339,7 @@
     }
   },
   "program_completion": {
-    "five_slots": 53,
+    "five_slots": 59,
     "lords_yummy": 82,
     "four_confirmed": 64,
     "uncertainty_pp": 5

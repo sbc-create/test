@@ -173,3 +173,141 @@ class TestScoreArithmetic:
         page = score_page(document(), PLAIN)
         page.checks = [rubric.Check(c.criterion, NOT_APPLICABLE, "нет") for c in page.checks]
         assert not page.applies
+
+
+# --------------------------------------------------------------------------
+# Обобщение критериев с рендерера Lords на любой theme pack
+#
+# Четыре критерия проверяли не свойство документа, а служебные метки и точные
+# слова рендерера Lords: `lords-canonical-state`, `lords-data-source`, класс
+# `nav-toggle` и подстроки «недоступ»/«не подключ». На втором theme pack они
+# объявляли отказом работающую витрину.
+#
+# Послабление опасно ровно тем, что критерий может перестать ловить настоящий
+# дефект. Поэтому каждая пара ниже проверяет обе стороны: обобщённую форму
+# критерий обязан принять, а испорченный документ — по-прежнему отвергнуть.
+class TestКритерииПроверяютСвойствоАНеМеткуРендерера:
+    def _проверка(self, html, expectation, имя, css=""):
+        from factory.templates.rubric import score_page
+        page = score_page(html, expectation, css=css)
+        return next(c for c in page.checks if c.criterion == имя)
+
+    def test_canonical_принимается_вместо_метки_lords(self):
+        from factory.templates.rubric import Expectation, PASS
+        html = ('<html lang="ru"><head><meta name="robots" content="index,follow">'
+                '<link rel="canonical" href="https://example.test/"></head>'
+                '<body><h1>Х</h1></body></html>')
+        check = self._проверка(html, Expectation("home", "index.html"), "routes")
+        assert check.status == PASS, check.detail
+
+    def test_страница_без_объявления_места_по_прежнему_отвергается(self):
+        from factory.templates.rubric import Expectation, FAIL
+        html = ('<html lang="ru"><head><meta name="robots" content="index,follow">'
+                '</head><body><h1>Х</h1></body></html>')
+        check = self._проверка(html, Expectation("home", "index.html"), "routes")
+        assert check.status == FAIL, "индексируемая страница без canonical обязана падать"
+
+    def test_noindex_считается_объявлением_места(self):
+        from factory.templates.rubric import Expectation, PASS
+        html = ('<html lang="ru"><head><meta name="robots" content="noindex,follow">'
+                '</head><body><h1>Х</h1></body></html>')
+        check = self._проверка(html, Expectation("search", "search/index.html"), "routes")
+        assert check.status == PASS, check.detail
+
+    def test_общая_метка_источника_принимается(self):
+        from factory.templates.rubric import Expectation, PASS
+        html = ('<html lang="ru"><head><meta name="data-source" content="package:a@b">'
+                '</head><body><h1>Х</h1></body></html>')
+        check = self._проверка(html, Expectation("home", "index.html", cards=False),
+                               "content_honesty")
+        assert check.status == PASS, check.detail
+
+    def test_документ_без_источника_по_прежнему_отвергается(self):
+        from factory.templates.rubric import Expectation, FAIL
+        html = '<html lang="ru"><head></head><body><h1>Х</h1></body></html>'
+        check = self._проверка(html, Expectation("home", "index.html", cards=False),
+                               "content_honesty")
+        assert check.status == FAIL
+
+    def test_меню_без_переключателя_не_считается_дефектом(self):
+        from factory.templates.rubric import Expectation, PASS
+        html = ('<html lang="ru"><head><meta name="viewport" content="width=device-width">'
+                '</head><body><nav><a href="/">Главная</a></nav></body></html>')
+        check = self._проверка(html, Expectation("home", "index.html"), "adaptivity")
+        assert check.status == PASS, check.detail
+
+    def test_переключатель_без_aria_expanded_по_прежнему_отвергается(self):
+        from factory.templates.rubric import Expectation, FAIL
+        html = ('<html lang="ru"><head><meta name="viewport" content="width=device-width">'
+                '</head><body><button class="nav-toggle">Меню</button></body></html>')
+        check = self._проверка(html, Expectation("home", "index.html"), "adaptivity")
+        assert check.status == FAIL
+
+    def test_фиксированная_ширина_по_прежнему_отвергается(self):
+        from factory.templates.rubric import Expectation, FAIL
+        html = ('<html lang="ru"><head><meta name="viewport" content="width=device-width">'
+                '</head><body><div style="width: 1200px">Х</div></body></html>')
+        check = self._проверка(html, Expectation("home", "index.html"), "adaptivity")
+        assert check.status == FAIL
+
+    def test_заглушка_плеера_объяснённая_своими_словами_принимается(self):
+        from factory.templates.rubric import Expectation, PASS
+        html = ('<html lang="ru"><head></head><body>'
+                '<div class="player-frame ratio-16-9">'
+                '<div class="player-mock" role="region" aria-label="Видеоплеер (заглушка)">'
+                '<p>Плеер подключается после передачи контракта поставщика; '
+                'контейнер держит размеры, чтобы раскладка не сдвинулась.</p>'
+                '</div></div></body></html>')
+        css = ".ratio-16-9 { aspect-ratio: 16 / 9; }"
+        check = self._проверка(html, Expectation("title", "t/index.html", player=True,
+                                                 cards=False), "player_shell", css=css)
+        assert check.status == PASS, check.detail
+
+    def test_молчащий_кадр_плеера_по_прежнему_отвергается(self):
+        from factory.templates.rubric import Expectation, FAIL
+        html = ('<html lang="ru"><head></head><body>'
+                '<div class="player-frame ratio-16-9"></div></body></html>')
+        css = ".ratio-16-9 { aspect-ratio: 16 / 9; }"
+        check = self._проверка(html, Expectation("title", "t/index.html", player=True,
+                                                 cards=False), "player_shell", css=css)
+        assert check.status == FAIL, "кадр без подписи и объяснения обязан падать"
+
+    def test_утечка_служебного_кода_в_разметку_по_прежнему_отвергается(self):
+        from factory.templates.rubric import Expectation, FAIL
+        html = ('<html lang="ru"><head></head><body>'
+                '<div class="player-frame ratio-16-9" role="region" aria-label="Плеер">'
+                '<p>Плеер недоступен: BLOCKED_INPUT по контракту поставщика видео, '
+                'и это состояние объяснено читателю подробно.</p></div></body></html>')
+        css = ".ratio-16-9 { aspect-ratio: 16 / 9; }"
+        check = self._проверка(html, Expectation("title", "t/index.html", player=True,
+                                                 cards=False), "player_shell", css=css)
+        assert check.status == FAIL
+
+    def test_резерв_кадра_во_внешних_стилях_виден_критерию(self):
+        """Резерв кадра живёт в правиле класса, а не в разметке.
+
+        Без чтения подключённых таблиц стилей критерий объявлял отсутствующим
+        то, что есть, — и требовал бы вписать `style="aspect-ratio"` в разметку
+        ради проверки, а не ради читателя.
+        """
+        from factory.templates.rubric import Expectation, PASS, FAIL
+        html = ('<html lang="ru"><head><link rel="stylesheet" href="/assets/build.css">'
+                '</head><body><div class="player-frame ratio-16-9" role="region" '
+                'aria-label="Плеер"><p>Плеер подключается после передачи контракта '
+                'поставщика, контейнер держит размеры кадра.</p></div></body></html>')
+        exp = Expectation("title", "t/index.html", player=True, cards=False)
+        без_стилей = self._проверка(html, exp, "player_shell")
+        со_стилями = self._проверка(html, exp, "player_shell",
+                                    css=".ratio-16-9 { aspect-ratio: 16 / 9; }")
+        assert без_стилей.status == FAIL, "без стилей резерв подтвердить нечем"
+        assert со_стилями.status == PASS, со_стилями.detail
+
+    def test_служебная_страница_не_обязана_описывать_себя_машинам(self):
+        from factory.templates.rubric import Expectation, NOT_APPLICABLE, FAIL
+        html = '<html lang="ru"><head></head><body><h1>Не найдено</h1></body></html>'
+        служебная = self._проверка(
+            html, Expectation("not_found", "404/index.html", cards=False,
+                              structured_data=False), "structured_data")
+        обычная = self._проверка(html, Expectation("home", "index.html"), "structured_data")
+        assert служебная.status == NOT_APPLICABLE
+        assert обычная.status == FAIL, "обычная страница обязана нести JSON-LD"

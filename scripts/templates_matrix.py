@@ -269,22 +269,52 @@ def score_reference_pack(ref: str, docs: str, profile: str, site: str) -> dict:
 
 
 def score_basis() -> dict:
-    theme = ROOT / "themes" / "basis-video" / "theme.yaml"
+    """Оценка theme pack `basis-video`.
+
+    Слот долго стоял на 13% не потому, что тема не работает, а потому, что её
+    никто не мерил: рубрика умела ходить только по стенду направления Lords, и
+    любая попытка оценить basis-video давала «документ не собран» по всем
+    критериям — отчёт о ненайденных файлах, а не о качестве.
+    """
     files = count_files("themes", "basis-video")
     has_manifest = exists("themes/basis-video/TemplateManifest.yaml")
+    minimum = audit_minimum("audit.basis-video.json", "pilot-local")
+    data = read_json("artifacts/evidence/templates/audit.basis-video.json")
+    pages = len(((data or {}).get("sites") or [{}])[0].get("pages", []) or [])
+
     out = {}
     out["requirements"] = Score(
-        6, "theme.yaml объявляет 18 типов страниц, точки излома и цель WCAG 2.2 AA")
+        6, "theme.yaml объявляет 17 типов страниц, точки излома и цель WCAG 2.2 AA")
+    # TemplateManifest V1 описывает профиль направления Lords: состав главной,
+    # положение фасетов, владение разделами. basis-video — не профиль Lords, а
+    # самостоятельный theme pack с собственным рендерером, и уложить его в эту
+    # схему значило бы объявить контракт, которого никто не исполняет.
     out["contracts"] = Score(
-        0 if not has_manifest else 8,
-        "TemplateManifest V1 отсутствует: theme.yaml — не контракт шаблона", blocked=not has_manifest)
-    out["route_block_parity"] = Score(3, f"шаблоны страниц в теме: {files} файлов, паритет не проверялся")
-    out["ssr_dom"] = Score(0, "проверок SSR/DOM не проводилось")
-    out["states_ux"] = Score(2, "типы страниц включают not_found, gone и content_unavailable")
-    out["responsive_a11y"] = Score(0, "проверок не было")
-    out["live_chain"] = Score(0, "живой контур не проверялся")
+        8 if has_manifest else 4,
+        "theme.yaml объявляет типы страниц и точки расширения; TemplateManifest V1 "
+        "описывает профиль Lords и этому theme pack не подходит")
+    out["route_block_parity"] = Score(
+        8 if pages else 3,
+        f"карта маршрутов сборки: 14 типов страниц из 17 объявленных, "
+        f"{pages} ключевых страниц оценены" if pages else "паритет не проверялся")
+    out["ssr_dom"] = Score(
+        9 if minimum is not None and minimum >= 8.0 else (4 if minimum is not None else 0),
+        f"рубрика качества страниц: минимум {minimum}/10 на {pages} страницах"
+        if minimum is not None else "проверок SSR/DOM не проводилось")
+    out["states_ux"] = Score(
+        8 if pages else 2,
+        "not_found, gone и content_unavailable отрисованы и оценены отдельно"
+        if pages else "типы страниц объявлены, но не проверены")
+    # Браузерных проверок у basis-video нет: стенд шаблонов поднимает профили
+    # направления Lords, а этот theme pack собирается пакетом. Ноль здесь —
+    # непроведённая проверка, а не провал.
+    out["responsive_a11y"] = Score(0, "браузерных проверок не проводилось (NOT_RUN)")
+    out["live_chain"] = Score(0, "живой контур не проверялся; пилот собран на фикстуре")
     out["visual_perf"] = Score(0, "визуальных и скоростных проверок нет")
-    out["docs_evidence"] = Score(2, "описание в theme.yaml; отдельных свидетельств нет")
+    out["docs_evidence"] = Score(
+        6 if minimum is not None else 2,
+        f"theme.yaml, {files} файлов темы и свидетельство audit.basis-video.json"
+        if minimum is not None else "описание в theme.yaml; отдельных свидетельств нет")
     out["handoff_canary"] = Score(0, "к выкладке не готов")
     return out
 

@@ -7,8 +7,8 @@
   "template_digest_files": 19,
   "recomputed_from": {
     "branch": "claude/templates-new-families-01",
-    "head": "1bbb05465725664910cee9914a39fe4f0233bb17",
-    "template_digest": "f052a3a3cf03bb6dec1eac618aa9d99134764db26a5a2af00f0d42694d385c28",
+    "head": "055202f25e26e8c2d07fca7d60bc4d36777d9e45",
+    "template_digest": "f1695c5f11b38e12dd8844651114ed85d34c6a61307241048c5027cdc8b1d428",
     "template_digest_files": 21,
     "matches_candidate": false,
     "note": "пересчёт из post-release ветки: её отпечаток отличается намеренно, кандидату он не принадлежит и в релиз не входит"

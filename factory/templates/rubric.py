@@ -130,6 +130,11 @@ class _Document(HTMLParser):
         self.inline_styles: list[str] = []
         self.scripts: int = 0
         self.stylesheets: int = 0
+        #: Адреса подключённых таблиц стилей. Нужны затем, что часть свойств
+        #: документа задана не в разметке: резерв кадра под плеер живёт в
+        #: правиле класса, и критерий, читающий только HTML, объявляет его
+        #: отсутствующим там, где он есть.
+        self.stylesheet_hrefs: list[str] = []
         self._heading: str | None = None
         self._text: list[str] = []
 
@@ -169,6 +174,8 @@ class _Document(HTMLParser):
             self.scripts += 1
         if tag == "link" and attr.get("rel") == "stylesheet":
             self.stylesheets += 1
+            if attr.get("href"):
+                self.stylesheet_hrefs.append(attr["href"])
 
     def handle_endtag(self, tag: str) -> None:
         if self._heading and tag == self._heading:
@@ -221,6 +228,10 @@ class Expectation:
     search_form: bool = False
     #: Бюджет веса документа в килобайтах.
     weight_budget_kb: int = 120
+    #: Ожидается ли разметка для машин. Служебные страницы — поиск, 404 и 410 —
+    #: описывать себя машинам не обязаны: их не индексируют, и JSON-LD на них
+    #: описывал бы документ, которого не должно быть в выдаче.
+    structured_data: bool = True
 
 
 #: Ключевые страницы направления Lords. Список закрыт намеренно: «ключевая»
@@ -235,7 +246,48 @@ LORDS_KEY_PAGES: tuple[Expectation, ...] = (
     Expectation("genre_landing", "genres/{slug}/index.html"),
     Expectation("collections", "collections/index.html", cards=False,
                 requires_type="collections"),
-    Expectation("search", "search/index.html", cards=False, search_form=True),
+    Expectation("search", "search/index.html", cards=False, search_form=True,
+                structured_data=False),
+)
+
+
+#: Ключевые страницы theme pack `basis-video`. Список снят с карты маршрутов
+#: собранного пакета (`var/build/pilot-local/<id>/routes.json`), а не составлен
+#: по образцу Lords: у basis-video своя карта — разделы названы по-русски, а
+#: типов страниц он отдаёт четырнадцать из семнадцати объявленных.
+#:
+#: Отдельно об ожиданиях, которые здесь намеренно сняты:
+#:
+#:   * `updates=False` у главной. Полки обновлений у неё нет, и это устройство
+#:     витрины, а не пробел: basis-video — каталог видеоматериалов, а не портал
+#:     отслеживания выхода серий. Требовать полку значило бы штрафовать витрину
+#:     за отсутствие раздела, которого она не обещает.
+#:   * `cards=False` у страницы сезона. Сезон отдаёт список эпизодов строками,
+#:     а не карточками каталога.
+#:
+#: Три объявленных типа — `tag`, `author`, `archive` — в список не входят:
+#: фикстура пилота их не создаёт, и оценивать несуществующие документы значило
+#: бы записывать «не измерено» в ворота, которые нечем закрыть.
+BASIS_KEY_PAGES: tuple[Expectation, ...] = (
+    Expectation("home", "index.html", search_form=True),
+    Expectation("category", "lekcii/index.html", search_form=True),
+    Expectation("title", "lekcii/material-01/index.html", player=True, cards=False,
+                search_form=True),
+    Expectation("season", "praktikum/serial-fikstura/season-1/index.html",
+                cards=False, search_form=True),
+    Expectation("episode", "praktikum/serial-fikstura/season-1/episode-1/index.html",
+                player=True, cards=False, search_form=True),
+    Expectation("collection", "collections/izbrannoe/index.html", search_form=True),
+    Expectation("news_index", "news/index.html", search_form=True),
+    Expectation("article", "news/zapis-3/index.html", cards=False, search_form=True),
+    Expectation("search", "search/index.html", cards=False, search_form=True,
+                structured_data=False),
+    Expectation("content_unavailable", "lekcii/material-04/index.html",
+                cards=False, search_form=True),
+    Expectation("not_found", "404/index.html", cards=False, search_form=True,
+                structured_data=False),
+    Expectation("gone", "410/index.html", cards=False, search_form=True,
+                structured_data=False),
 )
 
 
@@ -261,6 +313,15 @@ YUMMY_KEY_PAGES: tuple[Expectation, ...] = (
     Expectation("announcements", "catalog/announcement/index.html"),
 )
 
+#: Наборы ключевых страниц по слотам. Реестр нужен затем, чтобы выбор набора
+#: был именем в команде, а не правкой кода: рубрика одна, карты страниц разные.
+KEY_PAGE_SETS: dict[str, tuple[Expectation, ...]] = {
+    "lords": LORDS_KEY_PAGES,
+    "yummy": YUMMY_KEY_PAGES,
+    "basis-video": BASIS_KEY_PAGES,
+}
+
+
 # --------------------------------------------------------------------------
 # Критерии
 # --------------------------------------------------------------------------
@@ -268,13 +329,25 @@ YUMMY_KEY_PAGES: tuple[Expectation, ...] = (
 
 def _routes(doc: _Document, exp: Expectation, html: str) -> Check:
     """Страница объявляет своё место и свою индексируемость явно."""
+    # Проверяется свойство, а не метка конкретного рендерера. Прежде критерий
+    # требовал `lords-canonical-state` — служебную метку рендерера Lords — и
+    # потому объявлял отказом любой второй theme pack, даже когда тот честно
+    # отдаёт `<link rel="canonical">` и `meta robots`. Метка Lords осталась
+    # принимаемой формой, но перестала быть единственной.
     canonical_state = doc.metas.get("lords-canonical-state")
+    canonical_link = 'rel="canonical"' in html
     robots = doc.metas.get("robots")
-    if not canonical_state:
-        return Check("routes", FAIL, "нет метки lords-canonical-state")
     if not robots:
         return Check("routes", FAIL, "нет meta robots")
-    return Check("routes", PASS, f"canonical-state={canonical_state}, robots={robots}")
+    # Страница, закрытая от индексации, своё место в выдаче уже объявила —
+    # тем, что её там не будет. Canonical на ней не нужен и вреден: он указал
+    # бы на адрес, который сам себя из индекса исключает.
+    excluded = "noindex" in robots.lower()
+    if not canonical_state and not canonical_link and not excluded:
+        return Check("routes", FAIL, "место страницы не объявлено: "
+                                     "нет ни canonical, ни метки canonical-state")
+    place = canonical_state or ("canonical-link" if canonical_link else "noindex")
+    return Check("routes", PASS, f"canonical-state={place}, robots={robots}")
 
 
 def _document(doc: _Document, exp: Expectation, html: str) -> Check:
@@ -353,8 +426,14 @@ def _adaptivity(doc: _Document, exp: Expectation, html: str) -> Check:
     fixed = [s for s in doc.inline_styles if re.search(r"width:\s*\d{3,}px", s)]
     if fixed:
         problems.append(f"фиксированная ширина в inline-стиле: {len(fixed)}")
-    if "nav-toggle" not in doc.classes:
-        problems.append("нет переключателя меню для узкого экрана")
+    # Сворачиваемое меню — решение вёрстки, а не требование к узкому экрану:
+    # навигация, переносящаяся по строкам, прокрутку не создаёт и переключателя
+    # не требует. Прежде критерий требовал класс `nav-toggle` и потому
+    # штрафовал любую тему, кроме Lords, за отсутствие чужого решения.
+    # Проверяется теперь связность: если переключатель есть, он обязан быть
+    # объявлен для вспомогательных технологий.
+    if "nav-toggle" in doc.classes and "aria-expanded" not in html:
+        problems.append("переключатель меню не объявляет aria-expanded")
     if problems:
         return Check("adaptivity", FAIL, "; ".join(problems))
     return Check("adaptivity", PASS, f"viewport={viewport!r}, меню сворачивается")
@@ -402,7 +481,19 @@ def _player_shell(doc: _Document, exp: Expectation, html: str) -> Check:
     # отказа: код отказа принадлежит отчёту сборки, а не публичной странице
     # (REQ-LORDS-PLAYER-LIVE, D128). Утечка служебного кода — не признак
     # диагностируемости, а отдельный дефект, и он тоже проверяется здесь.
-    explained = "недоступ" in html or "не подключ" in html
+    # Объяснение проверяется как свойство, а не как формулировка. Прежде здесь
+    # искались подстроки «недоступ» и «не подключ» — точные слова рендерера
+    # Lords, — и заглушка, объяснённая другими словами («подключается после
+    # передачи contract»), считалась необъяснённой. Критерий обязан отличать
+    # молчащий чёрный прямоугольник от подписанного места, а не сверять
+    # словарь одного шаблона.
+    frame = re.search(r'class="[^"]*player[^"]*".*?</div>', html, re.S)
+    frame_html = frame.group(0) if frame else ""
+    labelled = bool(re.search(r'aria-label(?:ledby)?="[^"]{3,}"', frame_html))
+    prose = [t for t in re.findall(r"<p[^>]*>(.*?)</p>", frame_html, re.S)
+             if len(re.sub(r"<[^>]+>", "", t).strip()) >= 40]
+    explained = ("недоступ" in html or "не подключ" in html
+                 or (labelled and prose))
     leaked = [c for c in ("BLOCKED_INPUT", "CDNVIDEOHUB_CREDENTIALS") if c in html]
     problems = []
     if not reserved:
@@ -457,6 +548,9 @@ def _speed(doc: _Document, exp: Expectation, html: str) -> Check:
 
 def _structured_data(doc: _Document, exp: Expectation, html: str) -> Check:
     """Страница описывает себя машинам: хлебные крошки или тип документа."""
+    if not exp.structured_data:
+        return Check("structured_data", NOT_APPLICABLE,
+                     "служебная страница: разметка для машин не обещана")
     if "application/ld+json" not in html:
         return Check("structured_data", FAIL, "нет ни одного блока JSON-LD")
     return Check("structured_data", PASS, "JSON-LD присутствует")
@@ -464,7 +558,10 @@ def _structured_data(doc: _Document, exp: Expectation, html: str) -> Check:
 
 def _content_honesty(doc: _Document, exp: Expectation, html: str) -> Check:
     """Происхождение данных объявлено, карточки есть там, где обещаны."""
-    source = doc.metas.get("lords-data-source")
+    # Имя метки не фиксировано одним рендерером: `lords-data-source` — форма
+    # Lords, `data-source` — общая. Проверяется объявленность происхождения, а
+    # не то, каким из двух способов оно объявлено.
+    source = doc.metas.get("lords-data-source") or doc.metas.get("data-source")
     if not source:
         return Check("content_honesty", FAIL, "не объявлено происхождение данных")
     if exp.cards and doc.classes.get("card", 0) == 0:
@@ -488,8 +585,18 @@ CRITERIA = (
 )
 
 
-def score_page(html: str, expectation: Expectation) -> PageScore:
-    """Оценить один готовый документ по всем применимым критериям."""
+def score_page(html: str, expectation: Expectation, css: str = "") -> PageScore:
+    """Оценить один готовый документ по всем применимым критериям.
+
+    ``css`` — содержимое подключённых таблиц стилей, если их удалось прочитать.
+    Пустая строка означает «стили не читались», и критерии, которым они нужны,
+    обязаны различать это состояние с «правила нет»: первое — предел измерения,
+    второе — дефект.
+    """
     doc = parse(html)
-    checks = [criterion(doc, expectation, html) for criterion in CRITERIA]
+    # Критерии читают стили через тот же аргумент, что и разметку: отдельного
+    # канала нет намеренно, иначе часть критериев видела бы документ полнее
+    # других и отчёт стал бы несравнимым между страницами.
+    checks = [criterion(doc, expectation, html + ("\n/*css*/\n" + css if css else ""))
+              for criterion in CRITERIA]
     return PageScore(expectation.page, expectation.path, checks)
