@@ -440,7 +440,11 @@ class ControlApi:
                    "traceparent": контекст.header()}
         # Отрезок записывается после ответа: до него неизвестны ни код, ни
         # причина отказа, а след без них отвечает «что-то произошло».
-        ошибка = (payload.get("error") or {}).get("code", "") if isinstance(payload, dict) else ""
+        # Поле error принадлежит оболочке ошибок и обязано быть объектом.
+        # Но тело может прийти от любого обработчика, и чужая форма не
+        # должна ронять запись следа — диагностика не вправе ломать работу.
+        сырое = payload.get("error") if isinstance(payload, dict) else None
+        ошибка = сырое.get("code", "") if isinstance(сырое, dict) else ""
         if контекст.sampled or response.status >= 400:
             отрезок = _завершённый_отрезок(
                 контекст, родитель, "control.request",
@@ -854,14 +858,14 @@ class ControlApi:
         пострадавших не даёт оператору куда смотреть.
         """
         if site_id is None:
-            return ApiResponse(status=200, body=content_health.сводка(self._root))
+            return ApiResponse(status=200, body=content_health.сводка(self._root, env=self._env))
         self._check_site_id_soft(site_id)
-        свод = content_health.сводка(self._root, site=site_id)
+        свод = content_health.сводка(self._root, site=site_id, env=self._env)
         код = body.get("reason")
         предел = body.get("limit", 50)
         if not isinstance(предел, int) or isinstance(предел, bool) or not (1 <= предел <= 500):
             raise ControlDenied(400, "invalid_limit", "limit — целое от 1 до 500")
-        детали = content_health.проблемные(self._root, site_id, code=код, limit=предел)
+        детали = content_health.проблемные(self._root, site_id, code=код, limit=предел, env=self._env)
         return ApiResponse(status=200, body={**свод, "problems": детали})
 
     def _check_site_id_soft(self, site_id: str) -> None:

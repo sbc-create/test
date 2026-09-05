@@ -11,6 +11,7 @@
 from __future__ import annotations
 
 import json
+import os
 import time
 from collections import Counter, defaultdict
 from dataclasses import dataclass
@@ -28,16 +29,45 @@ DEFAULT_SUPPORTED = ("kp", "mali", "mdl", "imdb")
 FRESHNESS_SLO_SECONDS = 15 * 60
 
 
+# Расположение кэша каталога и файла проб — настройка развёртывания, а не
+# знание ядра. Ядро обслуживает разные семейства витрин, и зашитый в него путь
+# одного семейства делал бы его неуниверсальным: различия сайтов живут в
+# профилях и адаптерах.
+ENV_CATALOG_DIR = "SITE_ENGINE_CATALOG_DIR"
+ENV_PROBE_FILE = "SITE_ENGINE_PLAYABILITY_FILE"
+
+
 @dataclass
 class Источники:
-    catalog_dir: Path
+    catalog_dir: Path | None
     probe_file: Path | None = None
 
+    @property
+    def configured(self) -> bool:
+        return self.catalog_dir is not None
+
     @classmethod
-    def default(cls, root: Path | str) -> Источники:
-        base = Path(root) / "var" / "lords"
-        return cls(catalog_dir=base / "lords" / "catalog-cache",
-                   probe_file=base / "playability.json")
+    def from_env(cls, root: Path | str, env: dict[str, str] | None = None) -> Источники:
+        """Источники из настроек. Без настройки — честное «не задано».
+
+        Догадка о пути хуже отказа: она даёт правдоподобную пустую сводку,
+        которую примут за отсутствие проблем.
+        """
+        env = env if env is not None else dict(os.environ)
+        каталог = str(env.get(ENV_CATALOG_DIR, "")).strip()
+        пробы = str(env.get(ENV_PROBE_FILE, "")).strip()
+        if not каталог:
+            return cls(catalog_dir=None, probe_file=None)
+        основа = Path(root)
+        путь = Path(каталог)
+        if not путь.is_absolute():
+            путь = основа / путь
+        файл = None
+        if пробы:
+            файл = Path(пробы)
+            if not файл.is_absolute():
+                файл = основа / файл
+        return cls(catalog_dir=путь, probe_file=файл)
 
 
 def _загрузить_пробы(path: Path | None) -> dict[str, Any]:
@@ -73,18 +103,23 @@ def оценить(item: dict, пробы: dict, *, supported=DEFAULT_SUPPORTED)
 
 
 def сводка(root: Path | str, *, site: str | None = None,
-           supported=DEFAULT_SUPPORTED, now: float | None = None) -> dict[str, Any]:
+           supported=DEFAULT_SUPPORTED, now: float | None = None,
+           env: dict[str, str] | None = None,
+           sources: Источники | None = None) -> dict[str, Any]:
     """Покрытие и разбивка по причинам для одной витрины или всех."""
     сейчас = now if now is not None else time.time()
-    ист = Источники.default(root)
+    ист = sources if sources is not None else Источники.from_env(root, env)
     пробы = _загрузить_пробы(ист.probe_file)
     результат: dict[str, Any] = {"generatedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ",
                                                               time.gmtime(сейчас)),
                                  "reasonVersion": reasons.VERSION,
                                  "freshnessSloSeconds": FRESHNESS_SLO_SECONDS,
                                  "sites": {}}
+    if not ист.configured:
+        результат["problem"] = f"источник каталога не задан: укажите {ENV_CATALOG_DIR}"
+        return результат
     if not ист.catalog_dir.is_dir():
-        результат["error"] = "каталог не найден"
+        результат["problem"] = "каталог не найден по заданному пути"
         return результат
 
     файлы = sorted(ист.catalog_dir.glob("*.json"))
@@ -94,7 +129,7 @@ def сводка(root: Path | str, *, site: str | None = None,
         try:
             data = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
-            результат["sites"][path.stem] = {"error": "кэш каталога не прочитан"}
+            результат["sites"][path.stem] = {"problem": "кэш каталога не прочитан"}
             continue
         items = data.get("items") or []
         всего = len(items)
@@ -144,7 +179,7 @@ def сводка(root: Path | str, *, site: str | None = None,
     итог = Counter()
     всего_всех = играбельных_всех = 0
     for s in результат["sites"].values():
-        if "error" in s:
+        if "problem" in s:
             continue
         итог.update(s["reasons"])
         всего_всех += s["total"]
@@ -159,13 +194,18 @@ def сводка(root: Path | str, *, site: str | None = None,
 
 
 def проблемные(root: Path | str, site: str, *, code: str | None = None,
-               limit: int = 50, supported=DEFAULT_SUPPORTED) -> dict[str, Any]:
+               limit: int = 50, supported=DEFAULT_SUPPORTED,
+               env: dict[str, str] | None = None,
+               sources: Источники | None = None) -> dict[str, Any]:
     """Карточки без воспроизведения с указанием звена и способа устранения."""
-    ист = Источники.default(root)
+    ист = sources if sources is not None else Источники.from_env(root, env)
     пробы = _загрузить_пробы(ист.probe_file)
+    if not ист.configured:
+        return {"problem": f"источник каталога не задан: укажите {ENV_CATALOG_DIR}",
+                "site": site}
     path = ист.catalog_dir / f"{site}.json"
     if not path.is_file():
-        return {"error": "витрина не найдена", "site": site}
+        return {"problem": "витрина не найдена", "site": site}
     data = json.loads(path.read_text(encoding="utf-8"))
     строки = []
     for t in data.get("items") or []:

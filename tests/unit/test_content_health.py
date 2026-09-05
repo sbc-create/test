@@ -34,18 +34,21 @@ def корень(tmp_path):
                                      encoding="utf-8")
     (tmp_path / "var" / "lords" / "playability.json").write_text(
         json.dumps({"kp:9": {"playable": False, "checked_at": 1}}), encoding="utf-8")
-    return tmp_path
+    return tmp_path, {
+        ch.ENV_CATALOG_DIR: str(d),
+        ch.ENV_PROBE_FILE: str(tmp_path / "var" / "lords" / "playability.json"),
+    }
 
 
 def test_знаменатель_честный(корень):
-    d = ch.сводка(корень)
+    d = ch.сводка(корень[0], env=корень[1])
     assert d["fleet"]["total"] == 4
     assert d["fleet"]["playable"] == 1
     assert d["fleet"]["coverage"] == pytest.approx(0.25)
 
 
 def test_причины_разложены_по_кодам(корень):
-    r = ch.сводка(корень)["fleet"]["reasons"]
+    r = ch.сводка(корень[0], env=корень[1])["fleet"]["reasons"]
     assert r["OK"] == 1
     assert r["UNSUPPORTED_AGGREGATOR"] == 1, "запись только с IMDb при узком списке"
     assert r["MISSING_PROVIDER_ID"] == 1
@@ -53,8 +56,8 @@ def test_причины_разложены_по_кодам(корень):
 
 
 def test_расширение_списка_агрегаторов_видно_в_покрытии(корень):
-    узкий = ch.сводка(корень, supported=("kp",))
-    широкий = ch.сводка(корень, supported=("kp", "imdb"))
+    узкий = ch.сводка(корень[0], env=корень[1], supported=("kp",))
+    широкий = ch.сводка(корень[0], env=корень[1], supported=("kp", "imdb"))
     assert узкий["fleet"]["reasons"].get("UNSUPPORTED_AGGREGATOR") == 1
     # При широком списке запись всё равно без дескриптора в кэше: покрытие
     # меняется только после переработки проекции, и это должно быть видно.
@@ -63,27 +66,27 @@ def test_расширение_списка_агрегаторов_видно_в_
 
 def test_устаревшая_проекция_заметна(корень):
     import os
-    файл = корень / "var" / "lords" / "lords" / "catalog-cache" / "lords-01.json"
+    файл = корень[0] / "var" / "lords" / "lords" / "catalog-cache" / "lords-01.json"
     старое = time.time() - ch.FRESHNESS_SLO_SECONDS - 60
     os.utime(файл, (старое, старое))
-    s = ch.сводка(корень)["sites"]["lords-01"]
+    s = ch.сводка(корень[0], env=корень[1])["sites"]["lords-01"]
     assert s["projectionStale"] is True
     assert s["projectionAgeSeconds"] > ch.FRESHNESS_SLO_SECONDS
 
 
 def test_свежая_проекция_не_помечается(корень):
-    s = ch.сводка(корень)["sites"]["lords-01"]
+    s = ch.сводка(корень[0], env=корень[1])["sites"]["lords-01"]
     assert s["projectionStale"] is False
 
 
 def test_разбивка_по_типу_и_месяцу(корень):
-    s = ch.сводка(корень)["sites"]["lords-01"]
+    s = ch.сводка(корень[0], env=корень[1])["sites"]["lords-01"]
     assert "movie" in s["byType"] and "series" in s["byType"]
     assert any(m.startswith("2026-") for m in s["recentMonths"])
 
 
 def test_проблемные_называют_звено_и_устранение(корень):
-    d = ch.проблемные(корень, "lords-01")
+    d = ch.проблемные(корень[0], env=корень[1], site="lords-01")
     assert d["total"] == 3, "три карточки без воспроизведения"
     for row in d["items"]:
         assert row["reason"] != "OK"
@@ -94,34 +97,34 @@ def test_проблемные_называют_звено_и_устранени�
 
 
 def test_фильтр_по_коду(корень):
-    d = ch.проблемные(корень, "lords-01", code="MISSING_PROVIDER_ID")
+    d = ch.проблемные(корень[0], env=корень[1], site="lords-01", code="MISSING_PROVIDER_ID")
     assert d["total"] == 1
     assert d["items"][0]["name"] == "Без идентификаторов"
 
 
 def test_предел_соблюдается(корень):
-    d = ch.проблемные(корень, "lords-01", limit=1)
+    d = ch.проблемные(корень[0], env=корень[1], site="lords-01", limit=1)
     assert len(d["items"]) == 1
 
 
 def test_неизвестная_витрина_не_роняет(корень):
-    d = ch.проблемные(корень, "нет-такой")
-    assert "error" in d
+    d = ch.проблемные(корень[0], env=корень[1], site="нет-такой")
+    assert "problem" in d
 
 
 def test_повреждённый_кэш_не_роняет_сводку(корень):
-    файл = корень / "var" / "lords" / "lords" / "catalog-cache" / "lords-01.json"
+    файл = корень[0] / "var" / "lords" / "lords" / "catalog-cache" / "lords-01.json"
     файл.write_text("{битый", encoding="utf-8")
-    d = ch.сводка(корень)
-    assert "error" in d["sites"]["lords-01"], "повреждение обязано быть названо"
+    d = ch.сводка(корень[0], env=корень[1])
+    assert "problem" in d["sites"]["lords-01"], "повреждение обязано быть названо"
     assert d["fleet"]["total"] == 0
 
 
 def test_отсутствие_каталога_не_роняет(tmp_path):
-    d = ch.сводка(tmp_path)
-    assert "error" in d
+    d = ch.сводка(tmp_path, env={})
+    assert "problem" in d
 
 
 def test_версия_классификации_указана(корень):
-    assert ch.сводка(корень)["reasonVersion"]
-    assert ch.проблемные(корень, "lords-01")["reasonVersion"]
+    assert ch.сводка(корень[0], env=корень[1])["reasonVersion"]
+    assert ch.проблемные(корень[0], env=корень[1], site="lords-01")["reasonVersion"]

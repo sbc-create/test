@@ -34,6 +34,11 @@ WorkingDirectory=/srv/site-factory/control-api/current
 Environment=FACTORY_ROOT=/srv/site-factory/repo
 Environment=PYTHONPATH=/srv/site-factory/control-api/current
 Environment=PYTHONDONTWRITEBYTECODE=1
+# Где лежит кэш каталога и результаты проб воспроизводимости. Ядро этого не
+# знает намеренно: оно обслуживает разные семейства витрин, и различия сайтов
+# живут в настройке, а не в коде. Пути относительные — от FACTORY_ROOT.
+Environment=SITE_ENGINE_CATALOG_DIR=var/lords/lords/catalog-cache
+Environment=SITE_ENGINE_PLAYABILITY_FILE=var/lords/playability.json
 EnvironmentFile=/etc/site-factory/environment
 # Настройки службы: токены и выключатели. Знак «-» — файла может не быть на
 # хосте, где служба ещё не настроена, и это не повод падать при загрузке юнита.
