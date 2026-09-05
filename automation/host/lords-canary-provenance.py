@@ -70,8 +70,17 @@ def collect() -> dict:
     fingerprint = digest_mod.compute()
     head = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "HEAD"],
                           capture_output=True, text=True).stdout.strip()
-    dirty = subprocess.run(["git", "-C", str(ROOT), "status", "--porcelain",
-                            "--untracked-files=no"], capture_output=True, text=True).stdout.strip()
+    # Собственный файл из проверки исключается: манифест пишется до своего же
+    # коммита и потому всегда выглядел бы грязью. Прежде это давало
+    # `tree_clean_at_write: false` и отказ сверки на ровном месте — манифест
+    # обвинял в недостоверности сам факт своей записи.
+    changed = subprocess.run(["git", "-C", str(ROOT), "status", "--porcelain",
+                              "--untracked-files=no"], capture_output=True, text=True).stdout
+    own = MANIFEST.relative_to(ROOT).as_posix()
+    dirty = "\n".join(
+        line for line in changed.splitlines()
+        if line.strip() and not line.split(maxsplit=1)[-1].strip() == own
+    ).strip()
     return {
         "head_sha": head or None,
         "tree_clean_at_write": dirty == "",
