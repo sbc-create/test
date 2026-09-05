@@ -4,12 +4,12 @@
   "lane": "ARCHITECT_CORE",
   "iteration": "SITE-FACTORY-RELEASE-LIVE-CIRCUIT-03",
   "branch": "claude/core-release-live-circuit-03-lords",
-  "headSha": "cdf739446cec13fdd251b16c4315617921c8bae5",
+  "headSha": "72cc188cfc46a41c622b1fc055fbf47f0f269681",
   "template": {
     "templateId": "lords",
     "scope": "только направление lords: все девятнадцать файлов лежат в blueprints/lords, factory/lords, factory/templates и схеме манифеста; ни Yummy, ни zona, ни animedia, ни basis-video артефакт не описывает",
     "artifactVersion": 2,
-    "digest": "7b38ca10685a75c3d52527746208539cc30015fc1bfb3fce010a9491616ed965",
+    "digest": "ca3d395ade25fb295735a20ad1477e385c9f149a69976b875d0d9af2f5a5f939",
     "files": 19,
     "members": [
       {
@@ -49,8 +49,8 @@
       },
       {
         "path": "factory/lords/render.py",
-        "sha256": "75300535d2a0ead391c78242753c6ee4710c121cec8b5555edc1d4afc7a60c6d",
-        "bytes": 117285
+        "sha256": "251ce1436d5a5632cc99751f58a5857e9d7c0e4f39dcdc17df8a864ad65895d3",
+        "bytes": 118281
       },
       {
         "path": "factory/lords/theme.py",
@@ -108,7 +108,7 @@
         "bytes": 7774
       }
     ],
-    "pinnedInApplyScript": "7b38ca10685a75c3d52527746208539cc30015fc1bfb3fce010a9491616ed965",
+    "pinnedInApplyScript": "ca3d395ade25fb295735a20ad1477e385c9f149a69976b875d0d9af2f5a5f939",
     "reproduction": {
       "candidateSha": {
         "sha": "cd2f718ae656e6bfcdc68099601d92078bd1f13f",
