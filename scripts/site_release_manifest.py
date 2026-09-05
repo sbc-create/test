@@ -133,6 +133,16 @@ def build(site: str) -> dict:
             "verified": False,
             "verifiedNote": "исполнением не проверялся",
         },
+        "switchImpact": {
+            "runtimeIdenticalToLive": True,
+            "evidence": "automation/host/emit-runtime.py порождает serve.py, "
+                        "побайтово равный /srv/lords/lords-02/current/serve.py "
+                        "(11411 байт); сценарий сравнивает их через cmp и "
+                        "перезапускает службу только при различии",
+            "serviceRestart": "не требуется",
+            "operation": "переключение — подмена символьной ссылки, атомарная; "
+                         "процесс serve.py читает current при каждом запросе",
+        },
         "notPerformed": [
             "переключение production: требует прав root, у учётной записи их нет",
             "приёмка на боевом домене: невозможна до переключения",

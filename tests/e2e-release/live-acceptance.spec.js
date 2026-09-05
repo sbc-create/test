@@ -144,11 +144,38 @@ test.describe('скорость', () => {
     await clean.waitForLoadState('networkidle').catch(() => {});
     await clean.waitForTimeout(1500);
     const vitals = await clean.evaluate(() => ({ cls: window.__cls, lcp: window.__lcp }));
+    // Отзывчивость на действие. INP по-настоящему считается по полю, а на
+    // одном прогоне его нет; здесь берётся ближайшее измеримое — задержка
+    // обработки настоящего нажатия на настоящую ссылку. Величина названа
+    // своим именем и не выдаётся за полевой INP.
+    const interaction = await clean.evaluate(async () => {
+      const target = document.querySelector('a[href], button');
+      if (!target) return null;
+      return await new Promise((resolve) => {
+        let started = 0;
+        const onDown = () => { started = performance.now(); };
+        target.addEventListener('pointerdown', onDown, { once: true });
+        requestAnimationFrame(() => {
+          const ev = new PointerEvent('pointerdown', { bubbles: true, cancelable: true });
+          target.dispatchEvent(ev);
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            resolve(started ? performance.now() - started : null);
+          }));
+        });
+      });
+    });
+
     collected.vitals = {
       ...vitals,
-      limitation: 'петлевой контур без сети: LCP — нижняя граница, не замер продукта',
+      interaction_ms: interaction === null ? null : Math.round(interaction * 100) / 100,
+      limitation: 'петлевой контур без сети: LCP — нижняя граница, не замер продукта; '
+        + 'interaction_ms — задержка обработки нажатия на одном прогоне, а не полевой INP',
     };
     expect(vitals.cls, `сдвиг раскладки ${vitals.cls.toFixed(3)}`).toBeLessThanOrEqual(0.1);
+    if (interaction !== null) {
+      expect(interaction, `задержка обработки нажатия ${interaction.toFixed(1)} мс`)
+        .toBeLessThanOrEqual(200);
+    }
     await clean.close();
   });
 });

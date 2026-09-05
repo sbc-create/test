@@ -1,7 +1,7 @@
 {
   "artifact": "SiteReleaseManifest",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-05T18:32:19Z",
+  "generatedAt": "2026-09-05T18:44:46Z",
   "lane": "ARCHITECT_CORE",
   "siteId": "lords-02",
   "domain": "lordserial33.biz",
@@ -12,7 +12,7 @@
     "artifactVersion": 2,
     "digest": "7b38ca10685a75c3d52527746208539cc30015fc1bfb3fce010a9491616ed965",
     "files": 19,
-    "sha": "f80e5e2b8cbbb650691dfe7220a3e37d7a8e4dd0",
+    "sha": "b6cf2ce60d6ed07860e3685bf26d7d7d37c79705",
     "branch": "claude/core-release-live-circuit-03-lords",
     "pinnedInApplyScript": "7b38ca10685a75c3d52527746208539cc30015fc1bfb3fce010a9491616ed965",
     "scope": "только направление lords"
@@ -67,6 +67,12 @@
     "note": "откат — возврат символьной ссылки на предыдущий выложенный релиз; каталог предыдущего релиза не удаляется",
     "verified": false,
     "verifiedNote": "исполнением не проверялся"
+  },
+  "switchImpact": {
+    "runtimeIdenticalToLive": true,
+    "evidence": "automation/host/emit-runtime.py порождает serve.py, побайтово равный /srv/lords/lords-02/current/serve.py (11411 байт); сценарий сравнивает их через cmp и перезапускает службу только при различии",
+    "serviceRestart": "не требуется",
+    "operation": "переключение — подмена символьной ссылки, атомарная; процесс serve.py читает current при каждом запросе"
   },
   "notPerformed": [
     "переключение production: требует прав root, у учётной записи их нет",
