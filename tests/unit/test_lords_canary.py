@@ -516,3 +516,57 @@ class TestNoBlanketGitTrust:
                                 env={**os.environ, "GIT_TEST_ASSUME_DIFFERENT_OWNER": "1"})
         assert result.returncode != 0 or "dubious" in result.stderr, (
             "посторонний каталог оказался доверенным")
+
+
+class TestUnitNamespace:
+    """Юнит обязан строить пространство имён, а не падать на нём.
+
+    Первый боевой запуск завершился ничем: ни релиза, ни журнала, ни файлов от
+    root. Причина — `ProtectHome=read-only` вместе с путями под `/home` в
+    `ReadWritePaths`: первое перемонтирует `/home` только для чтения, второе
+    требует запись под ним, и служба завершается до `ExecStart`.
+
+    Отказ такого рода не оставляет следов на диске и виден только в системном
+    журнале, доступном не всякой учётной записи. Поэтому он проверяется здесь.
+    """
+
+    UNIT = Path(__file__).resolve().parents[2] / "automation" / "host" / "systemd" / "lords-canary@.service"
+
+    def directives(self) -> dict:
+        out: dict = {}
+        for line in self.UNIT.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, _, value = line.partition("=")
+            out.setdefault(key, []).append(value)
+        return out
+
+    def test_нет_путей_под_home_при_включённом_protecthome(self):
+        d = self.directives()
+        rw = " ".join(d.get("ReadWritePaths", [])).split()
+        home = [p for p in rw if p.startswith("/home")]
+        if d.get("ProtectHome"):
+            assert home == [], (
+                "ProtectHome вместе с путями под /home в ReadWritePaths — служба не построит "
+                f"пространство имён: {home}")
+
+    def test_иерархия_всё_равно_только_для_чтения(self):
+        # Убрав ProtectHome, нельзя потерять защиту: её обязан давать
+        # ProtectSystem=strict, иначе снятие директивы было бы послаблением.
+        d = self.directives()
+        assert d.get("ProtectSystem") == ["strict"], (
+            "без ProtectHome защита держится только на ProtectSystem=strict")
+
+    def test_запись_разрешена_только_туда_куда_нужно(self):
+        d = self.directives()
+        rw = " ".join(d.get("ReadWritePaths", [])).split()
+        assert "/srv/lords" in rw, "рантайм витрин недоступен на запись — выкладка невозможна"
+        for path in rw:
+            assert path.startswith(("/srv/lords", "/home/claude/wt-canary", "/var/log", "/var/lib")), (
+                f"запись разрешена в неожиданный путь: {path}")
+
+    def test_операция_одноразовая(self):
+        d = self.directives()
+        assert d.get("Type") == ["oneshot"], "разрешение обязано истекать вместе с операцией"
+        assert d.get("RemainAfterExit") == ["no"], "служба не должна оставаться активной"
