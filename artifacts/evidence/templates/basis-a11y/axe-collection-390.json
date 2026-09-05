@@ -1,0 +1,17 @@
+{
+  "captured_at_utc": "2026-09-05T17:21:06.887Z",
+  "site": "pilot-local",
+  "build": "dbefbb0eed312308",
+  "page_type": "collection",
+  "viewport": 390,
+  "url": "http://127.0.0.1:8821/collections/izbrannoe/",
+  "rules_passed": 26,
+  "violations": [],
+  "targets_total": 18,
+  "failing_aa": [],
+  "small_inputs": [],
+  "overflow": {
+    "scrollWidth": 390,
+    "clientWidth": 390
+  }
+}

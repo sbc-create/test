@@ -282,7 +282,7 @@
       }
     },
     "basis-video": {
-      "total": 41,
+      "total": 49,
       "blocked_gates": [],
       "detail": {
         "requirements": {
@@ -311,8 +311,8 @@
           "blocked": false
         },
         "responsive_a11y": {
-          "points": 0,
-          "note": "браузерных проверок не проводилось (NOT_RUN)",
+          "points": 8,
+          "note": "axe 42 прогонов на трёх ширинах: нарушений 0, целей ниже AA 0, страниц с горизонтальной прокруткой 0",
           "blocked": false
         },
         "live_chain": {
@@ -339,7 +339,7 @@
     }
   },
   "program_completion": {
-    "five_slots": 59,
+    "five_slots": 61,
     "lords_yummy": 82,
     "four_confirmed": 64,
     "uncertainty_pp": 5

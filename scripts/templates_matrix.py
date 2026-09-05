@@ -305,10 +305,22 @@ def score_basis() -> dict:
         8 if pages else 2,
         "not_found, gone и content_unavailable отрисованы и оценены отдельно"
         if pages else "типы страниц объявлены, но не проверены")
-    # Браузерных проверок у basis-video нет: стенд шаблонов поднимает профили
-    # направления Lords, а этот theme pack собирается пакетом. Ноль здесь —
-    # непроведённая проверка, а не провал.
-    out["responsive_a11y"] = Score(0, "браузерных проверок не проводилось (NOT_RUN)")
+    directory = EV / "basis-a11y"
+    runs = len(sorted(directory.glob("axe-*.json"))) if directory.is_dir() else 0
+    axe_violations = aa = overflow = 0
+    for path in (sorted(directory.glob("axe-*.json")) if runs else []):
+        row = read_json(str(path.relative_to(ROOT))) or {}
+        axe_violations += len(row.get("violations", []) or [])
+        aa += len(row.get("failing_aa", []) or [])
+        box = row.get("overflow") or {}
+        if box.get("scrollWidth", 0) > box.get("clientWidth", 0) + 1:
+            overflow += 1
+    clean = runs and not axe_violations and not aa and not overflow
+    out["responsive_a11y"] = Score(
+        8 if clean else (3 if runs else 0),
+        f"axe {runs} прогонов на трёх ширинах: нарушений {axe_violations}, "
+        f"целей ниже AA {aa}, страниц с горизонтальной прокруткой {overflow}"
+        if runs else "браузерных проверок не проводилось (NOT_RUN)")
     out["live_chain"] = Score(0, "живой контур не проверялся; пилот собран на фикстуре")
     out["visual_perf"] = Score(0, "визуальных и скоростных проверок нет")
     out["docs_evidence"] = Score(

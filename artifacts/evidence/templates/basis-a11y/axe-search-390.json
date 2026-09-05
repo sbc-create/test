@@ -1,0 +1,17 @@
+{
+  "captured_at_utc": "2026-09-05T17:21:28.050Z",
+  "site": "pilot-local",
+  "build": "dbefbb0eed312308",
+  "page_type": "search",
+  "viewport": 390,
+  "url": "http://127.0.0.1:8821/search/",
+  "rules_passed": 26,
+  "violations": [],
+  "targets_total": 14,
+  "failing_aa": [],
+  "small_inputs": [],
+  "overflow": {
+    "scrollWidth": 390,
+    "clientWidth": 390
+  }
+}
