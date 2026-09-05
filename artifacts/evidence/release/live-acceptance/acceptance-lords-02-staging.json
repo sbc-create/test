@@ -1,0 +1,58 @@
+{
+  "captured_at_utc": "2026-09-05T20:46:31.623Z",
+  "base": "http://127.0.0.1:8932",
+  "site": "lords-02-staging",
+  "routes": {
+    "home": {
+      "status": 200,
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "catalog": {
+      "status": 200,
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "catalog-page-2": {
+      "status": 200,
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "genres": {
+      "status": 200,
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "years": {
+      "status": 200,
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "countries": {
+      "status": 200,
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "search": {
+      "status": 200,
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "search-empty": {
+      "status": 200,
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "not-found": {
+      "status": 404,
+      "consoleErrors": [],
+      "networkErrors": []
+    }
+  },
+  "vitals": {
+    "cls": 0,
+    "lcp": 84,
+    "interaction_ms": 30.3,
+    "limitation": "петлевой контур без сети: LCP — нижняя граница, не замер продукта; interaction_ms — задержка обработки нажатия на одном прогоне, а не полевой INP"
+  }
+}

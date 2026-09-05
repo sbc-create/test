@@ -4,11 +4,11 @@
   "lane": "ARCHITECT_CORE",
   "iteration": "SITE-FACTORY-RELEASE-LIVE-CIRCUIT-03",
   "branch": "claude/core-release-live-circuit-03-lords",
-  "headSha": "72cc188cfc46a41c622b1fc055fbf47f0f269681",
+  "headSha": "210d060129e996e13d31047a6cfd82ac90911d0d",
   "template": {
     "templateId": "lords",
     "scope": "только направление lords: все девятнадцать файлов лежат в blueprints/lords, factory/lords, factory/templates и схеме манифеста; ни Yummy, ни zona, ни animedia, ни basis-video артефакт не описывает",
-    "artifactVersion": 2,
+    "artifactVersion": 3,
     "digest": "ca3d395ade25fb295735a20ad1477e385c9f149a69976b875d0d9af2f5a5f939",
     "files": 19,
     "members": [
@@ -123,12 +123,26 @@
         "files": 19
       }
     },
-    "supersedes": {
-      "artifactVersion": 1,
-      "digest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
-      "acceptedBy": "TEMPLATE_TO_CORE-008 / CORE_TO_OWNER-011",
-      "difference": "метка происхождения данных перестала быть зашитой строкой fixture/test"
-    }
+    "history": [
+      {
+        "version": 1,
+        "digest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
+        "acceptedBy": "TEMPLATE_TO_CORE-008 / CORE_TO_OWNER-011",
+        "state": "заменён"
+      },
+      {
+        "version": 2,
+        "digest": "7b38ca10685a75c3d52527746208539cc30015fc1bfb3fce010a9491616ed965",
+        "difference": "метка происхождения данных перестала быть зашитой строкой fixture/test",
+        "state": "заменён, в production не выкладывался"
+      },
+      {
+        "version": 3,
+        "digest": "ca3d395ade25fb295735a20ad1477e385c9f149a69976b875d0d9af2f5a5f939",
+        "difference": "длительность серии стала неизвестной, а не нулевой",
+        "state": "собран для canary"
+      }
+    ]
   },
   "deployedCheckout": {
     "path": "/srv/site-factory/repo",
@@ -183,16 +197,16 @@
   "runtime": {
     "lords-01": {
       "site_id": "lords-01",
-      "current_release": "cfbaacbce795",
-      "switched_at_utc": "2026-09-05T14:06:28.350752Z",
+      "current_release": "3ddba1290c6e",
+      "switched_at_utc": "2026-09-05T19:12:43.214084Z",
       "switched_by_uid": 0,
       "releases": [
-        "6ee11ea03f63",
-        "cfbaacbce795"
+        "95d8f17054e5",
+        "3ddba1290c6e"
       ],
-      "rollback_release": "6ee11ea03f63",
+      "rollback_release": "95d8f17054e5",
       "fingerprint": {
-        "catalog": "151f0d5cdd9d06545e69426b1a61bce7bb9094b2efd35c25d51293165035fb1b",
+        "catalog": "eaacf89aefe9919ebb1ce28c5334958af6f907f708c2d071996e61fe221d2d50",
         "enrichment": "97f72ad11acfc35804293b603a3d1fea4409923f52aea1c08dc481d6ede1a665",
         "playability": "64e81fff34e8b43132fcee55221e7188412d1c89cbfc81ad9548e78b6e78ea61",
         "renderer_version": "1d53c49349999bbb9fce668823cd385d983882b71809c56048336b3163dcc3f6",
@@ -204,21 +218,21 @@
         "seo_contract_version": "1.0",
         "editorial_overrides": "",
         "assets": "",
-        "fingerprint": "9a8377c86ec9e6b232b72ab26ca66ecdb2cbf5649cbc4693e0cb9b525adf63ff"
+        "fingerprint": "44afb47b933467b071eee852aeff1591f984de5d98444fe2f9aed0ec3b956894"
       }
     },
     "lords-02": {
       "site_id": "lords-02",
-      "current_release": "93251ba3b7e6",
-      "switched_at_utc": "2026-09-05T14:11:30.037810Z",
+      "current_release": "2baf922e8864",
+      "switched_at_utc": "2026-09-05T19:17:48.333164Z",
       "switched_by_uid": 0,
       "releases": [
-        "584f481e74a0",
-        "93251ba3b7e6"
+        "1335d087089b",
+        "2baf922e8864"
       ],
-      "rollback_release": "584f481e74a0",
+      "rollback_release": "1335d087089b",
       "fingerprint": {
-        "catalog": "151f0d5cdd9d06545e69426b1a61bce7bb9094b2efd35c25d51293165035fb1b",
+        "catalog": "eaacf89aefe9919ebb1ce28c5334958af6f907f708c2d071996e61fe221d2d50",
         "enrichment": "97f72ad11acfc35804293b603a3d1fea4409923f52aea1c08dc481d6ede1a665",
         "playability": "64e81fff34e8b43132fcee55221e7188412d1c89cbfc81ad9548e78b6e78ea61",
         "renderer_version": "1d53c49349999bbb9fce668823cd385d983882b71809c56048336b3163dcc3f6",
@@ -230,21 +244,21 @@
         "seo_contract_version": "1.0",
         "editorial_overrides": "",
         "assets": "",
-        "fingerprint": "b44cbcefe04736b36b0c9d580aaeb22cd2187abf1ec018efcf270eacbca60ae9"
+        "fingerprint": "187f5ac45243c8edaca73190d128ac2d4c9ccc59ee0e9f2d2df5432a9f45c90b"
       }
     },
     "lords-03": {
       "site_id": "lords-03",
-      "current_release": "44a8251abf45",
-      "switched_at_utc": "2026-09-05T14:14:42.784883Z",
+      "current_release": "3d8a64f020e2",
+      "switched_at_utc": "2026-09-05T19:20:33.971193Z",
       "switched_by_uid": 0,
       "releases": [
-        "e8f6d26039e0",
-        "44a8251abf45"
+        "4711b52bfa21",
+        "3d8a64f020e2"
       ],
-      "rollback_release": "e8f6d26039e0",
+      "rollback_release": "4711b52bfa21",
       "fingerprint": {
-        "catalog": "151f0d5cdd9d06545e69426b1a61bce7bb9094b2efd35c25d51293165035fb1b",
+        "catalog": "eaacf89aefe9919ebb1ce28c5334958af6f907f708c2d071996e61fe221d2d50",
         "enrichment": "97f72ad11acfc35804293b603a3d1fea4409923f52aea1c08dc481d6ede1a665",
         "playability": "64e81fff34e8b43132fcee55221e7188412d1c89cbfc81ad9548e78b6e78ea61",
         "renderer_version": "1d53c49349999bbb9fce668823cd385d983882b71809c56048336b3163dcc3f6",
@@ -256,7 +270,7 @@
         "seo_contract_version": "1.0",
         "editorial_overrides": "",
         "assets": "",
-        "fingerprint": "b9a236f0b4ab3df36c16e5f09a040cf9ffc958fc8d8ed4de8a7eae4777e2d33a"
+        "fingerprint": "6f40c892792c7ec75f27443265eca51afc74a47a3b597b49fbf46a19435749ad"
       }
     }
   },
@@ -264,7 +278,7 @@
     "lords-01": {
       "home": {
         "status": 200,
-        "bytes": 32759
+        "bytes": 32753
       },
       "data_source_label": "fixture/test",
       "catalog": {
@@ -275,7 +289,7 @@
     "lords-02": {
       "home": {
         "status": 200,
-        "bytes": 30304
+        "bytes": 30298
       },
       "data_source_label": "fixture/test",
       "catalog": {
@@ -286,7 +300,7 @@
     "lords-03": {
       "home": {
         "status": 200,
-        "bytes": 21915
+        "bytes": 21909
       },
       "data_source_label": "fixture/test",
       "catalog": {
