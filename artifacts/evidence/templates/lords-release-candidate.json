@@ -5,7 +5,7 @@
   "repo": "sbc-create/test.git (site-factory)",
   "branch": "claude/templates-lords-yummy-refpacks-01",
   "baseSha": "76552b9a7372c5ad15cfc7d8b1052a10024722a3",
-  "headSha": "2f87236a6e27b68fd1deed523390e5e3cc559d99",
+  "headSha": "9894114fe6aae1300097f79e30db9ef292b57e05",
   "templateDigest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
   "templateDigestFiles": 19,
   "digestCommand": "python3 -c \"from factory.templates import digest; print(digest.compute()['template_digest'])\"",
