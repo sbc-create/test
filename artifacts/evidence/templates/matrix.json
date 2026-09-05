@@ -164,7 +164,7 @@
       }
     },
     "zona-cinema": {
-      "total": 43,
+      "total": 48,
       "blocked_gates": [
         "requirements",
         "visual_perf"
@@ -206,8 +206,8 @@
           "blocked": false
         },
         "visual_perf": {
-          "points": 0,
-          "note": "наблюдений за референсом 0; снимки заблокированы (REF-EGRESS-01)",
+          "points": 5,
+          "note": "Firefox и WebKit: 36 пройдено, 0 провалено; CLS в бюджете на 6 шаблонах; сравнение с референсом заблокировано (REF-EGRESS-01), наблюдений 0",
           "blocked": true
         },
         "docs_evidence": {
@@ -223,7 +223,7 @@
       }
     },
     "animedia-portal": {
-      "total": 47,
+      "total": 52,
       "blocked_gates": [
         "requirements",
         "visual_perf"
@@ -265,8 +265,8 @@
           "blocked": false
         },
         "visual_perf": {
-          "points": 0,
-          "note": "наблюдений за референсом 8; снимки заблокированы (REF-EGRESS-01)",
+          "points": 5,
+          "note": "Firefox и WebKit: 36 пройдено, 0 провалено; CLS в бюджете на 6 шаблонах; сравнение с референсом заблокировано (REF-EGRESS-01), наблюдений 8",
           "blocked": true
         },
         "docs_evidence": {
@@ -282,7 +282,7 @@
       }
     },
     "basis-video": {
-      "total": 49,
+      "total": 55,
       "blocked_gates": [],
       "detail": {
         "requirements": {
@@ -321,8 +321,8 @@
           "blocked": false
         },
         "visual_perf": {
-          "points": 0,
-          "note": "визуальных и скоростных проверок нет",
+          "points": 6,
+          "note": "Firefox и WebKit: 8 пройдено, 0 провалено; CLS в бюджете на 14 типах страниц; визуального эталона нет",
           "blocked": false
         },
         "docs_evidence": {
@@ -339,9 +339,9 @@
     }
   },
   "program_completion": {
-    "five_slots": 61,
+    "five_slots": 64,
     "lords_yummy": 82,
-    "four_confirmed": 64,
+    "four_confirmed": 66,
     "uncertainty_pp": 5
   }
 }

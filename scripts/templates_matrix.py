@@ -209,6 +209,23 @@ def a11y_counts(profile: str) -> tuple[int, int, int]:
     return len(files), axe, aa
 
 
+def cross_browser(report: str) -> tuple[int, int]:
+    """Пройдено и провалено в кросс-браузерном отчёте Playwright."""
+    data = read_json(f"artifacts/evidence/templates/{report}")
+    stats = (data or {}).get("stats") or {}
+    return int(stats.get("expected", 0)), int(stats.get("unexpected", 0))
+
+
+def perf_clean(report: str, budget_key: str = "cls_budget") -> tuple[int, bool]:
+    """Сколько страниц измерено и уложились ли все в бюджет сдвига."""
+    data = read_json(f"artifacts/evidence/templates/{report}")
+    rows = (data or {}).get("measurements") or {}
+    if not rows:
+        return 0, False
+    budget = float((data or {}).get(budget_key, 0.1))
+    return len(rows), all(float(v.get("cls", 1)) <= budget for v in rows.values())
+
+
 def score_reference_pack(ref: str, docs: str, profile: str, site: str) -> dict:
     """Оценка семейства, выросшего из референсного пакета.
 
@@ -259,8 +276,16 @@ def score_reference_pack(ref: str, docs: str, profile: str, site: str) -> dict:
     # вместо живых данных даёт ноль по правилу счёта. Домена у пакета нет вовсе.
     out["live_chain"] = Score(
         0, "срез собран на фикстуре; домен не задан (BLOCKED_INPUT_DOMAIN_TARGET)")
+    passed, failed = cross_browser("playwright-templates-cross.json")
+    perf_pages, perf_ok = perf_clean("templates-perf.json")
+    # Сравнение с референсом остаётся заблокированным (REF-EGRESS-01): снимков
+    # источника нет и быть не может. Но кросс-браузер и сдвиг раскладки — это
+    # собственные замеры, они проведены, и доказанная часть сохраняется.
     out["visual_perf"] = Score(
-        0, f"наблюдений за референсом {observations}; снимки заблокированы (REF-EGRESS-01)",
+        5 if passed and not failed and perf_ok else (2 if passed else 0),
+        f"Firefox и WebKit: {passed} пройдено, {failed} провалено; "
+        f"CLS в бюджете на {perf_pages} шаблонах; "
+        f"сравнение с референсом заблокировано (REF-EGRESS-01), наблюдений {observations}",
         blocked=blocked)
     out["docs_evidence"] = Score(
         6 if files >= 15 else 0, "README_AI, VISUAL_DECISIONS, CHANGELOG и прочее на месте")
@@ -322,7 +347,15 @@ def score_basis() -> dict:
         f"целей ниже AA {aa}, страниц с горизонтальной прокруткой {overflow}"
         if runs else "браузерных проверок не проводилось (NOT_RUN)")
     out["live_chain"] = Score(0, "живой контур не проверялся; пилот собран на фикстуре")
-    out["visual_perf"] = Score(0, "визуальных и скоростных проверок нет")
+    passed, failed = cross_browser("playwright-basis-cross.json")
+    perf_pages, perf_ok = perf_clean("basis-perf.json")
+    # Визуального эталона у theme pack нет: снимков, с которыми сравнивать, не
+    # существует, и заводить их сейчас значило бы закрепить как эталон то, что
+    # никто не утверждал. Кросс-браузер и скорость измерены.
+    out["visual_perf"] = Score(
+        6 if passed and not failed and perf_ok else (2 if passed else 0),
+        f"Firefox и WebKit: {passed} пройдено, {failed} провалено; "
+        f"CLS в бюджете на {perf_pages} типах страниц; визуального эталона нет")
     out["docs_evidence"] = Score(
         6 if minimum is not None else 2,
         f"theme.yaml, {files} файлов темы и свидетельство audit.basis-video.json"
