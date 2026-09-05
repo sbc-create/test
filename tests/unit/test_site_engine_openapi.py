@@ -34,6 +34,9 @@ ROOT = Path(__file__).resolve().parents[2]
     "/api/v1/metrics": {},
     "/api/v1/compatibility": {},
     "/api/v1/traces/{traceId}": {},
+    "/api/v1/content-health": {},
+    "/api/v1/content-health/{siteId}": {},
+    "/api/v1/reasons": {},
 }
 
 
@@ -78,7 +81,8 @@ class TestОписание:
             assert метод.lower() in узел, f"{путь}: описан не тот метод"
             конкретный = (путь.replace("{siteId}", "lords-01")
                           .replace("{jobId}", "нет-такого")
-                          .replace("{traceId}", "0" * 32))
+                          .replace("{traceId}", "0" * 32)
+                          .replace("{siteId}", "lords-01"))
             ответ = control.handle(метод, конкретный,
                                    body=dict(ПРОБНЫЕ_ТЕЛА[путь]), headers=ЗАГОЛОВКИ)
             код = ответ.body.get("error", {}).get("code")

@@ -34,7 +34,7 @@ from pathlib import Path
 from typing import Any
 
 from factory import audit, locks, queue
-from factory.site_engine.api import compat
+from factory.site_engine.api import compat, content_health, reasons
 from factory.site_engine.api.app import ApiResponse, error
 from factory.site_engine.api.idempotency import (
     CONFLICT,
@@ -524,6 +524,12 @@ class ControlApi:
         operation = "/".join(rest[2:]) if len(rest) > 2 else (rest[0] if rest else "")
         self._rate_limit(principal, site_for_limit, f"{method}:{operation}")
 
+        if method == "GET" and rest[:1] == ["content-health"]:
+            principal.require(SCOPE_READ)
+            return self._content_health(rest[1] if len(rest) > 1 else None, body)
+        if method == "GET" and rest == ["reasons"]:
+            principal.require(SCOPE_READ)
+            return ApiResponse(status=200, body=reasons.catalogue())
         if method == "GET" and len(rest) == 2 and rest[0] == "traces":
             principal.require(SCOPE_AUDIT)
             return self._trace(rest[1])
@@ -839,6 +845,34 @@ class ControlApi:
                 "витрина несовместима с версией движка",
                 **state.as_dict(),
             )
+
+    def _content_health(self, site_id: str | None, body: dict[str, Any]) -> ApiResponse:
+        """Покрытие воспроизведения и причины его отсутствия.
+
+        Без витрины — сводка по массиву. С витриной — она же плюс проблемные
+        карточки с указанием звена и способа устранения: диагноз без списка
+        пострадавших не даёт оператору куда смотреть.
+        """
+        if site_id is None:
+            return ApiResponse(status=200, body=content_health.сводка(self._root))
+        self._check_site_id_soft(site_id)
+        свод = content_health.сводка(self._root, site=site_id)
+        код = body.get("reason")
+        предел = body.get("limit", 50)
+        if not isinstance(предел, int) or isinstance(предел, bool) or not (1 <= предел <= 500):
+            raise ControlDenied(400, "invalid_limit", "limit — целое от 1 до 500")
+        детали = content_health.проблемные(self._root, site_id, code=код, limit=предел)
+        return ApiResponse(status=200, body={**свод, "problems": детали})
+
+    def _check_site_id_soft(self, site_id: str) -> None:
+        """Проверка идентификатора без требования профиля.
+
+        Витрины Lords живут в кэше каталога, а не в config/site-profiles, и
+        требовать профиль здесь значило бы закрыть диагностику именно там, где
+        она нужнее всего.
+        """
+        if not SITE_ID_RE.match(site_id):
+            raise ControlDenied(400, "invalid_site_id", "недопустимый идентификатор витрины")
 
     def _trace(self, trace_id: str) -> ApiResponse:
         """Путь запроса по его идентификатору.

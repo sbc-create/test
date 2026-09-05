@@ -1,7 +1,7 @@
 # Сгенерировано `python3 -m factory knowledge freeze`. Вручную не редактируется.
 schema_version: 1
 freeze_version: unversioned
-frozen_at: '2026-09-05T08:03:45Z'
+frozen_at: '2026-09-05T08:07:12Z'
 file_count: 13
 aggregate_sha256: 338cb8f228eb8a0f21d626fe157c0e37f8d11be777d3944077f3c47ec0626a81
 files:
