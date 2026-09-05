@@ -1,0 +1,18 @@
+{
+  "captured_at_utc": "2026-09-05T06:59:32.666Z",
+  "base": "http://127.0.0.1:3310",
+  "results": {
+    "390": {
+      "scrollWidth": 390,
+      "clientWidth": 390
+    },
+    "768": {
+      "scrollWidth": 768,
+      "clientWidth": 768
+    },
+    "1440": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440
+    }
+  }
+}
