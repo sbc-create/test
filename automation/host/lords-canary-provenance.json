@@ -1,5 +1,5 @@
 {
-  "head_sha": "7e54ba5e61ac54e84f6fd103bf2cbab3d9a1cec3",
+  "head_sha": "6b0f1e8b61da5e931e95237c28372c6af181d41f",
   "note": "манифест собран под учётной записью разработчика; привилегированная операция сверяет его без git",
   "template_digest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
   "template_digest_files": 19,
@@ -12,5 +12,5 @@
     "factory/lords/canary.py": "446dd579bfc7fcf9f977bd8f6647205fa50b1c62c7247c173b6afab7bc630f02",
     "factory/lords/live_site.py": "89d90923c25b32425066364186cc7759fc4657b9cee54148701ea984b827bdfd"
   },
-  "tree_clean_at_write": true
+  "tree_clean_at_write": false
 }

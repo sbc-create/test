@@ -434,3 +434,85 @@ class TestProvenanceVerify:
         finally:
             target.write_bytes(original)
         assert self.run().returncode == 0, "восстановление не вернуло сверку в норму"
+
+
+class TestDubiousOwnershipReproduced:
+    """Отказ systemd-запуска воспроизводится детерминированно.
+
+    Служба идёт от root, рабочее дерево принадлежит другой учётной записи, и git
+    отвечает `fatal: detected dubious ownership`. Под своей учётной записью это
+    не воспроизводится — владелец совпадает, и любой прогон проходит, создавая
+    ложную уверенность. Ровно так дефект и дожил до боевого запуска.
+
+    `GIT_TEST_ASSUME_DIFFERENT_OWNER=1` — штатный переключатель самого git: он
+    заставляет проверку владельца считать каталог чужим. Это и есть точная
+    имитация условий службы, а не приблизительная.
+    """
+
+    ROOT = Path(__file__).resolve().parents[2]
+    FOREIGN = {"GIT_TEST_ASSUME_DIFFERENT_OWNER": "1"}
+
+    def env(self) -> dict:
+        import os
+        return {**os.environ, **self.FOREIGN}
+
+    def test_контроль_условие_действительно_воспроизводится(self):
+        # Без этой проверки все остальные ничего не стоят: они могли бы
+        # проходить просто потому, что условие не наступило.
+        import subprocess
+        result = subprocess.run(["git", "rev-parse", "HEAD"], cwd=self.ROOT,
+                                capture_output=True, text=True, env=self.env())
+        assert "dubious ownership" in result.stderr, (
+            "имитация чужого владельца не сработала — остальные проверки бессмысленны")
+
+    def test_сверка_происхождения_переживает_чужого_владельца(self):
+        import subprocess, sys
+        result = subprocess.run(
+            [sys.executable, str(self.ROOT / "automation/host/lords-canary-provenance.py"),
+             "--verify"], capture_output=True, text=True, env=self.env())
+        assert result.returncode == 0, f"сверка упала при чужом владельце: {result.stderr}"
+        assert result.stdout.strip(), "commit не напечатан"
+
+    def test_сценарий_проходит_предполётные_проверки_при_чужом_владельце(self):
+        # Дальше сценарий упирается в права на рантайм, и это ожидаемо: здесь
+        # проверяется только то, что владелец каталога его больше не роняет.
+        import subprocess
+        result = subprocess.run(
+            ["bash", str(self.ROOT / "automation/host/lords-canary-apply.sh"), "lords-02"],
+            capture_output=True, text=True, cwd=self.ROOT,
+            env={**self.env(),
+                 "LORDS_SNAPSHOT_DIR": "/srv/site-factory/repo/var/lords/lords/catalog-cache"})
+        out = result.stdout + result.stderr
+        assert "dubious ownership" not in out, "git вернулся в путь запуска"
+        assert "происхождение подтверждено" in out, f"предполётные проверки не пройдены:\n{out[-600:]}"
+        assert "отпечаток шаблона совпал" in out, f"отпечаток не сверен:\n{out[-600:]}"
+
+
+class TestNoBlanketGitTrust:
+    """Доверие не раздаётся ни каталогам вообще, ни через общий конфиг."""
+
+    ROOT = Path(__file__).resolve().parents[2]
+
+    def test_нигде_нет_safe_directory(self):
+        import subprocess
+        bad = []
+        for name in ("automation/host/lords-canary-apply.sh",
+                     "automation/host/lords-canary-install-and-run.sh",
+                     "automation/host/systemd/lords-canary@.service",
+                     "automation/host/lords-canary-provenance.py"):
+            text = (self.ROOT / name).read_text(encoding="utf-8")
+            for n, line in enumerate(text.splitlines(), 1):
+                if "safe.directory" in line and not line.lstrip().startswith(("#", "*")):
+                    bad.append(f"{name}:{n}")
+        assert bad == [], "safe.directory просочился в оснастку: " + ", ".join(bad)
+
+    def test_произвольный_каталог_не_становится_доверенным(self, tmp_path):
+        # Отдельный репозиторий рядом обязан остаться недоверенным: сверка
+        # происхождения не должна ничего разрешать за пределами своего дерева.
+        import subprocess
+        subprocess.run(["git", "init", "-q", str(tmp_path)], check=True, capture_output=True)
+        result = subprocess.run(["git", "rev-parse", "--show-toplevel"], cwd=tmp_path,
+                                capture_output=True, text=True,
+                                env={**os.environ, "GIT_TEST_ASSUME_DIFFERENT_OWNER": "1"})
+        assert result.returncode != 0 or "dubious" in result.stderr, (
+            "посторонний каталог оказался доверенным")
