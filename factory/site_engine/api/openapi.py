@@ -4,6 +4,7 @@
 отдельно от маршрутов, расходится с ними за одну итерацию. Тест сверяет,
 что описанные маршруты и есть отвечающие.
 """
+
 from __future__ import annotations
 
 import json
@@ -58,8 +59,10 @@ from factory.site_engine.api.ratelimit import DEFAULT_LIMITS
     "/api/v1/sites/{siteId}/shelves": {"summary": "Полки", "returns": "object"},
     "/api/v1/sites/{siteId}/titles": {"summary": "Каталог со страницами", "returns": "page"},
     "/api/v1/sites/{siteId}/titles/{titleId}": {"summary": "Тайтл", "returns": "object"},
-    "/api/v1/sites/{siteId}/titles/{titleId}/episodes": {"summary": "Сезоны и счётчики",
-                                                          "returns": "object"},
+    "/api/v1/sites/{siteId}/titles/{titleId}/episodes": {
+        "summary": "Сезоны и счётчики",
+        "returns": "object",
+    },
     "/api/v1/sites/{siteId}/titles/{titleId}/ratings": {"summary": "Оценки", "returns": "object"},
     "/api/v1/sites/{siteId}/coverage": {"summary": "Полнота каталога", "returns": "object"},
     "/api/v1/ingestion/status": {"summary": "Состояние обхода", "returns": "object"},
@@ -80,8 +83,11 @@ from factory.site_engine.api.ratelimit import DEFAULT_LIMITS
             "required": ["action"],
             "properties": {
                 "action": {"type": "string", "enum": sorted(ALLOWED_JOB_ACTIONS)},
-                "environment": {"type": "string", "enum": sorted(ALLOWED_ENVIRONMENTS),
-                                "default": "staging"},
+                "environment": {
+                    "type": "string",
+                    "enum": sorted(ALLOWED_ENVIRONMENTS),
+                    "default": "staging",
+                },
                 "dryRun": {"type": "boolean", "default": False},
             },
         },
@@ -109,15 +115,25 @@ from factory.site_engine.api.ratelimit import DEFAULT_LIMITS
                 "changes": {
                     "type": "object",
                     "description": (
-                        "Изменяемые настройки: " + ", ".join(sorted(SAFE_SETTINGS))
+                        "Изменяемые настройки: "
+                        + ", ".join(sorted(SAFE_SETTINGS))
                         + ". Отклоняются намеренно: "
                         + "; ".join(f"{k} — {v}" for k, v in sorted(REFUSED_SETTINGS.items()))
                     ),
                     "properties": {
-                        "keep_releases": {"type": "integer", "minimum": SAFE_SETTINGS["keep_releases"]["min"],
-                                          "maximum": SAFE_SETTINGS["keep_releases"]["max"]},
-                        "cache_policy": {"type": "object", "additionalProperties": {"type": "integer"}},
-                        "feature_flags": {"type": "object", "additionalProperties": {"type": "boolean"}},
+                        "keep_releases": {
+                            "type": "integer",
+                            "minimum": SAFE_SETTINGS["keep_releases"]["min"],
+                            "maximum": SAFE_SETTINGS["keep_releases"]["max"],
+                        },
+                        "cache_policy": {
+                            "type": "object",
+                            "additionalProperties": {"type": "integer"},
+                        },
+                        "feature_flags": {
+                            "type": "object",
+                            "additionalProperties": {"type": "boolean"},
+                        },
                     },
                 },
                 "expectedVersion": {
@@ -128,8 +144,10 @@ from factory.site_engine.api.ratelimit import DEFAULT_LIMITS
             },
         },
         "success": ("200", "применено, либо diff при dryRun"),
-        "errors": {"409": "конфигурация изменилась с момента чтения",
-                   "422": "настройка вне списка, вне диапазона или отклонена намеренно"},
+        "errors": {
+            "409": "конфигурация изменилась с момента чтения",
+            "422": "настройка вне списка, вне диапазона или отклонена намеренно",
+        },
     },
     "/api/v1/sites/{siteId}/cache/invalidate": {
         "method": "post",
@@ -141,8 +159,12 @@ from factory.site_engine.api.ratelimit import DEFAULT_LIMITS
             "required": ["scope"],
             "properties": {
                 "scope": {"type": "string", "enum": ["catalog", "homepage", "shelves", "title"]},
-                "keys": {"type": "array", "items": {"type": "string"}, "maxItems": 100,
-                         "description": "Для scope=title обязателен непустой список."},
+                "keys": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "maxItems": 100,
+                    "description": "Для scope=title обязателен непустой список.",
+                },
                 "dryRun": {"type": "boolean", "default": False},
             },
         },
@@ -184,6 +206,182 @@ from factory.site_engine.api.ratelimit import DEFAULT_LIMITS
         "body": None,
         "success": ("200", "перечень, основа, версия политики и состояние флагов"),
         "errors": {"409": "настройка противоречит контракту поставщика"},
+    },
+    "/api/v1/review-queue": {
+        "method": "get",
+        "summary": "Очередь разбора спорных записей: оба утверждения и доказательства",
+        "scope": "read",
+        "idempotent": False,
+        "body": None,
+        "success": ("200", "страница очереди со счётчиками по состояниям"),
+        "errors": {"400": "негодный limit или offset"},
+    },
+    "/api/v1/review-queue/{itemId}": {
+        "method": "get",
+        "summary": "Одна спорная запись целиком: утверждения, источники, история",
+        "scope": "read",
+        "idempotent": False,
+        "body": None,
+        "success": ("200", "запись очереди"),
+        "errors": {"400": "негодный идентификатор", "404": "записи нет"},
+    },
+    "/api/v1/review-queue/{itemId}/decide": {
+        "method": "post",
+        "summary": "Решение редактора по спорной записи",
+        "scope": "review:write",
+        "idempotent": True,
+        "body": {
+            "type": "object",
+            "properties": {
+                "value": {
+                    "type": "string",
+                    "description": "одно из утверждений записи; третье значение запрещено",
+                },
+                "expectedVersion": {"type": "integer"},
+                "note": {"type": "string"},
+                "dismiss": {"type": "boolean"},
+            },
+        },
+        "success": ("200", "запись с записанным решением"),
+        "errors": {
+            "400": "значение вне утверждений записи",
+            "409": "запись изменилась: конфликт версии",
+        },
+    },
+    "/api/v1/review-queue/{itemId}/claim": {
+        "method": "post",
+        "summary": "Взять спорную запись в работу",
+        "scope": "review:write",
+        "idempotent": False,
+        "body": None,
+        "success": ("200", "запись в состоянии IN_REVIEW"),
+        "errors": {"409": "запись уже в работе или решена"},
+    },
+    "/api/v1/review-queue/{itemId}/revert": {
+        "method": "post",
+        "summary": "Отмена решения: запись возвращается в OPEN",
+        "scope": "review:write",
+        "idempotent": False,
+        "body": {"type": "object", "properties": {"note": {"type": "string"}}},
+        "success": ("200", "запись в состоянии OPEN"),
+        "errors": {"409": "отменять нечего"},
+    },
+    "/api/v1/review-queue/batch": {
+        "method": "post",
+        "summary": "Групповое решение: сухой прогон, применение по отпечатку, откат партии",
+        "scope": "review:write",
+        "idempotent": False,
+        "body": {
+            "type": "object",
+            "required": ["mode"],
+            "properties": {
+                "mode": {"type": "string", "enum": ["dryRun", "apply", "revert"]},
+                "conflictCode": {"type": "string"},
+                "fromValue": {"type": "string"},
+                "toValue": {"type": "string"},
+                "expectedFingerprint": {
+                    "type": "string",
+                    "description": "отпечаток состава и версий из сухого прогона",
+                },
+                "batchId": {"type": "string"},
+            },
+        },
+        "success": ("200", "итог сухого прогона, применения или отката"),
+        "errors": {"400": "негодный mode", "409": "набор изменился между прогоном и применением"},
+    },
+    "/api/v1/operators": {
+        "method": "get",
+        "summary": "Операторы: роли, состояние, второй фактор",
+        "scope": "read",
+        "idempotent": False,
+        "body": None,
+        "success": ("200", "страница каталога операторов"),
+        "errors": {"400": "негодный limit"},
+    },
+    "/api/v1/operators/invites": {
+        "method": "post",
+        "summary": "Приглашение оператора; одноразовый секрет возвращается один раз",
+        "scope": "operators:write",
+        "idempotent": False,
+        "body": {
+            "type": "object",
+            "required": ["email", "roles"],
+            "properties": {
+                "email": {"type": "string"},
+                "roles": {"type": "array", "items": {"type": "string"}},
+            },
+        },
+        "success": ("201", "приглашение и одноразовый секрет"),
+        "errors": {"400": "негодный адрес или роль", "409": "адрес уже активен"},
+    },
+    "/api/v1/operators/sessions": {
+        "method": "get",
+        "summary": "Активные сессии операторов",
+        "scope": "operators:write",
+        "idempotent": False,
+        "body": None,
+        "success": ("200", "список сессий без идентификаторов cookie"),
+        "errors": {},
+    },
+    "/api/v1/operators/sessions/revoke": {
+        "method": "post",
+        "summary": "Отзыв одной сессии; действует немедленно",
+        "scope": "operators:write",
+        "idempotent": True,
+        "body": {
+            "type": "object",
+            "required": ["sessionId"],
+            "properties": {"sessionId": {"type": "string"}},
+        },
+        "success": ("200", "сессия отозвана"),
+        "errors": {"404": "сессии нет или она уже отозвана"},
+    },
+    "/api/v1/operators/{operatorId}/roles": {
+        "method": "post",
+        "summary": "Смена ролей; отзывает выданные сессии оператора",
+        "scope": "operators:write",
+        "idempotent": True,
+        "body": {
+            "type": "object",
+            "required": ["roles"],
+            "properties": {
+                "roles": {"type": "array", "items": {"type": "string"}},
+                "actorOperatorId": {"type": "string"},
+            },
+        },
+        "success": ("200", "оператор с новыми ролями"),
+        "errors": {"409": "последний администратор или повышение собственных полномочий"},
+    },
+    "/api/v1/operators/{operatorId}/block": {
+        "method": "post",
+        "summary": "Блокировка оператора; сессии гаснут немедленно",
+        "scope": "operators:write",
+        "idempotent": True,
+        "body": {
+            "type": "object",
+            "required": ["reason"],
+            "properties": {"reason": {"type": "string"}, "actorOperatorId": {"type": "string"}},
+        },
+        "success": ("200", "заблокированный оператор"),
+        "errors": {"409": "последний администратор или блокировка самого себя"},
+    },
+    "/api/v1/operators/{operatorId}/unblock": {
+        "method": "post",
+        "summary": "Разблокировка оператора",
+        "scope": "operators:write",
+        "idempotent": True,
+        "body": None,
+        "success": ("200", "оператор вернулся в строй"),
+        "errors": {"409": "оператор не заблокирован"},
+    },
+    "/api/v1/operators/{operatorId}/revoke-sessions": {
+        "method": "post",
+        "summary": "Отзыв всех сессий оператора",
+        "scope": "operators:write",
+        "idempotent": True,
+        "body": None,
+        "success": ("200", "число отозванных сессий"),
+        "errors": {},
     },
     "/api/v1/traces/{traceId}": {
         "method": "get",
@@ -229,62 +427,96 @@ def spec() -> dict[str, Any]:
     for путь, описание in ПУТИ.items():
         параметры = []
         if "{siteId}" in путь:
-            параметры.append({"name": "siteId", "in": "path", "required": True,
-                              "schema": {"type": "string"}})
+            параметры.append(
+                {"name": "siteId", "in": "path", "required": True, "schema": {"type": "string"}}
+            )
         if "{titleId}" in путь:
-            параметры.append({"name": "titleId", "in": "path", "required": True,
-                              "schema": {"type": "string"}})
+            параметры.append(
+                {"name": "titleId", "in": "path", "required": True, "schema": {"type": "string"}}
+            )
         if описание["returns"] == "page":
             параметры += [
-                {"name": "offset", "in": "query", "required": False,
-                 "schema": {"type": "integer", "minimum": 0}},
-                {"name": "limit", "in": "query", "required": False,
-                 "schema": {"type": "integer", "minimum": 1, "maximum": MAX_LIMIT}},
+                {
+                    "name": "offset",
+                    "in": "query",
+                    "required": False,
+                    "schema": {"type": "integer", "minimum": 0},
+                },
+                {
+                    "name": "limit",
+                    "in": "query",
+                    "required": False,
+                    "schema": {"type": "integer", "minimum": 1, "maximum": MAX_LIMIT},
+                },
             ]
         ответы = {
             "200": {"description": "успех"},
-            "404": {"description": "нет такого маршрута, сайта или тайтла",
-                    "content": {"application/json": {"schema": ОШИБКА}}},
+            "404": {
+                "description": "нет такого маршрута, сайта или тайтла",
+                "content": {"application/json": {"schema": ОШИБКА}},
+            },
         }
         if описание["returns"] == "page":
-            ответы["400"] = {"description": "негодные параметры страницы",
-                             "content": {"application/json": {"schema": ОШИБКА}}}
-        paths[путь] = {"get": {"summary": описание["summary"], "parameters": параметры,
-                               "responses": ответы}}
+            ответы["400"] = {
+                "description": "негодные параметры страницы",
+                "content": {"application/json": {"schema": ОШИБКА}},
+            }
+        paths[путь] = {
+            "get": {"summary": описание["summary"], "parameters": параметры, "responses": ответы}
+        }
     for путь, описание in ЗАПИСЬ.items():
         параметры = []
         if "{siteId}" in путь:
-            параметры.append({"name": "siteId", "in": "path", "required": True,
-                              "schema": {"type": "string"}})
+            параметры.append(
+                {"name": "siteId", "in": "path", "required": True, "schema": {"type": "string"}}
+            )
         if "{jobId}" in путь:
-            параметры.append({"name": "jobId", "in": "path", "required": True,
-                              "schema": {"type": "string"}})
-        параметры.append({
-            "name": "X-Correlation-Id", "in": "header", "required": False,
-            "schema": {"type": "string"},
-            "description": "Возвращается во всех ответах, включая отказы.",
-        })
+            параметры.append(
+                {"name": "jobId", "in": "path", "required": True, "schema": {"type": "string"}}
+            )
+        параметры.append(
+            {
+                "name": "X-Correlation-Id",
+                "in": "header",
+                "required": False,
+                "schema": {"type": "string"},
+                "description": "Возвращается во всех ответах, включая отказы.",
+            }
+        )
         if описание["idempotent"]:
-            параметры.append({
-                "name": "Idempotency-Key", "in": "header", "required": False,
-                "schema": {"type": "string", "maxLength": 128},
-                "description": "Повтор возвращает прежний ответ; тот же ключ с другим телом — 409.",
-            })
+            параметры.append(
+                {
+                    "name": "Idempotency-Key",
+                    "in": "header",
+                    "required": False,
+                    "schema": {"type": "string", "maxLength": 128},
+                    "description": "Повтор возвращает прежний ответ; тот же ключ с другим телом — 409.",
+                }
+            )
         код, текст = описание["success"]
         ответы = {код: {"description": текст}}
         for код_ошибки, текст_ошибки in описание["errors"].items():
-            ответы[код_ошибки] = {"description": текст_ошибки,
-                                  "content": {"application/json": {"schema": ОШИБКА}}}
-        ответы["401"] = {"description": "нет или не распознан токен",
-                         "content": {"application/json": {"schema": ОШИБКА}}}
-        ответы["403"] = {"description": f"у токена нет области {описание['scope']}",
-                         "content": {"application/json": {"schema": ОШИБКА}}}
+            ответы[код_ошибки] = {
+                "description": текст_ошибки,
+                "content": {"application/json": {"schema": ОШИБКА}},
+            }
+        ответы["401"] = {
+            "description": "нет или не распознан токен",
+            "content": {"application/json": {"schema": ОШИБКА}},
+        }
+        ответы["403"] = {
+            "description": f"у токена нет области {описание['scope']}",
+            "content": {"application/json": {"schema": ОШИБКА}},
+        }
         пределы = ", ".join(
-            f"{вид} {п.capacity}/{int(п.per_seconds)}с" for вид, п in sorted(DEFAULT_LIMITS.items()))
-        ответы["429"] = {"description": f"превышен предел частоты ({пределы}); "
-                                        "пределы раздельные по среде, витрине, "
-                                        "действующему лицу и операции",
-                         "content": {"application/json": {"schema": ОШИБКА}}}
+            f"{вид} {п.capacity}/{int(п.per_seconds)}с" for вид, п in sorted(DEFAULT_LIMITS.items())
+        )
+        ответы["429"] = {
+            "description": f"превышен предел частоты ({пределы}); "
+            "пределы раздельные по среде, витрине, "
+            "действующему лицу и операции",
+            "content": {"application/json": {"schema": ОШИБКА}},
+        }
         операция: dict[str, Any] = {
             "summary": описание["summary"],
             "parameters": параметры,
@@ -308,7 +540,8 @@ def spec() -> dict[str, Any]:
                 "SITE_ENGINE_API_ENABLED для чтения, SITE_ENGINE_CONTROL_WRITES "
                 "для записи. Открытое чтение — это утечка, открытая запись — это "
                 "чужой контроль над витриной; разные риски заслуживают разных "
-                "выключателей. Права выдаются по областям (" + ", ".join(sorted(KNOWN_SCOPES))
+                "выключателей. Права выдаются по областям ("
+                + ", ".join(sorted(KNOWN_SCOPES))
                 + "); токен без нужной области получает 403, а не тихий отказ."
             ),
         },
@@ -316,8 +549,11 @@ def spec() -> dict[str, Any]:
         "components": {
             "schemas": {"Error": ОШИБКА, "TitleBrief": КРАТКО},
             "securitySchemes": {
-                "bearerAuth": {"type": "http", "scheme": "bearer",
-                               "description": "Токен из SITE_ENGINE_CONTROL_TOKENS."}
+                "bearerAuth": {
+                    "type": "http",
+                    "scheme": "bearer",
+                    "description": "Токен из SITE_ENGINE_CONTROL_TOKENS.",
+                }
             },
         },
     }

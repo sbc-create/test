@@ -74,7 +74,10 @@ def войти(app, token=FULL):
 
 def test_без_сессии_страница_показывает_форму_входа(app):
     r = app.handle("GET", "/admin")
-    assert r.status == 200 and "Вход по токену" in r.html
+    # Заголовок формы сменился: вход теперь по учётной записи, а поле токена
+    # появляется только пока каталог операторов пуст. Проверяется форма, а не
+    # её название.
+    assert r.status == 200 and 'name="password"' in r.html
 
 
 def test_без_сессии_запись_отвечает_отказом_а_не_формой(app):
@@ -85,14 +88,17 @@ def test_без_сессии_запись_отвечает_отказом_а_н�
 
 def test_неверный_токен_отклонён(app):
     r = app.handle("POST", "/admin/login", form={"token": "нет-такого"})
-    assert r.status == 401 and "не распознан" in r.html
+    # Любой неудачный вход отвечает одинаково: 403 и один и тот же текст.
+    # Прежде отказ по токену отличался от отказа по паролю кодом ответа, и
+    # этого достаточно, чтобы отличить существующую запись от несуществующей.
+    assert r.status == 403 and "Неверный адрес или пароль" in r.html
 
 
 def test_пустой_и_неверный_токен_неотличимы(app):
     """Разные тексты сообщали бы, существует ли токен."""
     a = app.handle("POST", "/admin/login", form={"token": ""})
     b = app.handle("POST", "/admin/login", form={"token": "чужой"})
-    assert a.status == b.status == 401 and a.html == b.html
+    assert a.status == b.status == 403 and a.html == b.html
 
 
 def test_cookie_защищена(app):
@@ -107,7 +113,8 @@ def test_выход_разрушает_сессию(app):
     r = app.handle("POST", "/admin/logout", form={CSRF_FIELD: csrf}, cookies=cookies)
     assert r.status == 303 and app.sessions.count() == 0
     assert "Max-Age=0" in r.headers["Set-Cookie"]
-    assert app.handle("GET", "/admin", cookies=cookies).html.count("Вход по токену") == 1
+    assert app.handle("GET", "/admin", cookies=cookies).html.count(
+        'name="password"') == 1
 
 
 def test_сессия_истекает_по_бездействию(sandbox, monkeypatch):

@@ -138,23 +138,174 @@ def page(title: str, body: str, *, session_label: str = "", csrf: str = "") -> s
         '<header><h1><a href="/admin" style="color:inherit;text-decoration:none">'
         "Админка фабрики</a></h1>"
         '<a href="/admin/review">Разбор</a>'
+        '<a href="/admin/users">Люди</a>'
         '<a href="/admin/audit">Журнал</a><span class="sp"></span>'
         f"{nav}</header><main>{body}</main></body></html>"
     )
 
 
-def login(*, error: str = "") -> str:
+def login(*, error: str = "", bootstrap: bool = False) -> str:
+    """Вход по учётной записи.
+
+    Поле токена показывается только пока каталог операторов пуст: это окно
+    начальной настройки, и оно закрывается само, как только появился первый
+    активный оператор. Постоянный вход в обход каталога обесценил бы и
+    блокировку, и отзыв сессий, и журнал — в нём был бы виден токен, а не
+    человек.
+    """
     warn = f'<div class="flash bad">{_e(error)}</div>' if error else ""
-    return page(
-        "Вход",
-        warn + '<div class="card"><h2>Вход по токену Control API</h2>'
-        '<p class="hint">Панель не заводит собственных учётных записей. '
-        "Права оператора — это области выданного токена.</p>"
+    начальная = (
+        '<div class="card"><h2>Начальная настройка</h2>'
+        '<p class="hint">Учётных записей ещё нет. Пока их нет, можно войти '
+        "токеном Control API и завести первого администратора. После этого "
+        "вход по токену закроется сам.</p>"
         '<form method="post" action="/admin/login">'
         '<label for="tok">Токен</label>'
         '<input id="tok" name="token" type="password" autocomplete="off" required>'
-        '<div class="row"><button type="submit">Войти</button></div></form></div>',
+        '<div class="row"><button type="submit">Войти токеном</button></div>'
+        "</form></div>") if bootstrap else ""
+    return page(
+        "Вход",
+        warn + '<div class="card"><h2>Вход</h2>'
+        '<form method="post" action="/admin/login">'
+        '<label for="em">Адрес</label>'
+        '<input id="em" name="email" type="email" autocomplete="username" required>'
+        '<label for="pw">Пароль</label>'
+        '<input id="pw" name="password" type="password" '
+        'autocomplete="current-password" required>'
+        '<div class="row"><button type="submit">Войти</button></div></form></div>'
+        + начальная,
     )
+
+
+def accept_invite(*, error: str = "", secret: str = "") -> str:
+    """Принятие приглашения: пароль задаёт приглашённый, а не приглашающий."""
+    warn = f'<div class="flash bad">{_e(error)}</div>' if error else ""
+    return page(
+        "Приглашение",
+        warn + '<div class="card"><h2>Принять приглашение</h2>'
+        '<p class="hint">Пароль задаёте вы. Он не известен тому, кто вас '
+        "пригласил, и нигде не хранится в открытом виде.</p>"
+        '<form method="post" action="/admin/invite/accept">'
+        f'<input type="hidden" name="secret" value="{_e(secret)}">'
+        '<label for="pw">Новый пароль (не короче 12 символов)</label>'
+        '<input id="pw" name="password" type="password" minlength="12" '
+        'autocomplete="new-password" required>'
+        '<div class="row"><button type="submit">Принять</button></div>'
+        "</form></div>",
+    )
+
+
+def invite_created(приглашение: dict, секрет: str, *, session_label: str,
+                   csrf: str) -> str:
+    """Секрет приглашения показывается прямо в ответе, а не через перенаправление.
+
+    Причина не в удобстве: значение, пронесённое через перенаправление, живёт
+    в сессии до следующего запроса. Одноразовый секрет не должен нигде
+    задерживаться — ни на диске, ни в памяти между запросами.
+    """
+    return page(
+        "Приглашение создано",
+        '<div class="card ok"><h2>Приглашение создано</h2>'
+        f'<p>Адрес: <b>{_e(приглашение.get("email", ""))}</b>, роли: '
+        f'{_e(", ".join(приглашение.get("roles") or []))}.</p>'
+        '<p class="hint">Ссылка показывается один раз. Она нигде не хранится '
+        "в открытом виде: на диске лежит только её отпечаток.</p>"
+        f'<p><code id="invite-link">/admin/invite?secret={_e(секрет)}</code></p>'
+        f'<p class="mut">Действует до {_e(приглашение.get("expiresAt", ""))}.</p>'
+        '<p><a href="/admin/users">← К списку людей</a></p></div>',
+        session_label=session_label, csrf=csrf)
+
+
+def users(данные: dict, приглашения: list, сессии: list, *, flash: dict | None,
+          session_label: str, csrf: str, может: bool, свой_id: str) -> str:
+    """Люди, их роли, приглашения и активные сессии на одном экране."""
+    строки = []
+    for o in данные.get("items") or []:
+        свой = o["operatorId"] == свой_id
+        действия = ""
+        if может and not свой:
+            выбор = "".join(
+                f'<option value="{_e(r)}"{" selected" if r in o["roles"] else ""}>'
+                f"{_e(r)}</option>" for r in ("viewer", "reviewer", "editor",
+                                              "operator", "admin"))
+            действия = (
+                f'<form method="post" action="/admin/users/{_e(o["operatorId"])}/roles">'
+                f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+                f'<select name="role" aria-label="Роль">{выбор}</select>'
+                '<button type="submit">Роль</button></form>'
+                + (f'<form method="post" action="/admin/users/{_e(o["operatorId"])}/unblock">'
+                   f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+                   '<button class="ghost" type="submit">Разблокировать</button></form>'
+                   if o["state"] == "BLOCKED" else
+                   f'<form method="post" action="/admin/users/{_e(o["operatorId"])}/block">'
+                   f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+                   '<input name="reason" placeholder="причина" required>'
+                   '<button class="ghost" type="submit">Заблокировать</button></form>')
+                + f'<form method="post" action="/admin/users/{_e(o["operatorId"])}/revoke-sessions">'
+                f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+                '<button class="ghost" type="submit">Отозвать сессии</button></form>')
+        elif свой:
+            действия = '<span class="mut">это вы</span>'
+        строки.append(
+            f'<tr><td>{_e(o["email"])}</td>'
+            f'<td>{" ".join(f"<code>{_e(r)}</code>" for r in o["roles"]) or "—"}</td>'
+            f'<td><span class="pill {"ok" if o["state"] == "ACTIVE" else "warn"}">'
+            f'{_e(o["state"])}</span></td>'
+            f'<td class="mut">{_e(o["mfaState"])}</td>'
+            f"<td>{действия}</td></tr>")
+
+    приглашения_html = "".join(
+        f'<tr><td>{_e(i["email"])}</td><td>{" ".join(_e(r) for r in i["roles"])}</td>'
+        f'<td><span class="pill">{_e(i["state"])}</span></td>'
+        f'<td class="mut">{_e(i["expiresAt"])}</td>'
+        + (f'<td><form method="post" action="/admin/users/invites/{_e(i["inviteId"])}/revoke">'
+           f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+           '<button class="ghost" type="submit">Отозвать</button></form></td>'
+           if может and i["state"] == "PENDING" else "<td></td>")
+        + "</tr>" for i in приглашения)
+
+    сессии_html = "".join(
+        f'<tr><td>{_e(s["operatorId"][:12])}</td><td class="mut">{_e(s["createdAt"])}</td>'
+        f'<td class="mut">{_e(s["lastSeen"])}</td><td class="mut">{_e(s["userAgent"])}</td>'
+        + (f'<td><form method="post" action="/admin/users/sessions/revoke">'
+           f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+           f'<input type="hidden" name="sessionId" value="{_e(s["sessionId"])}">'
+           '<button class="ghost" type="submit">Отозвать</button></form></td>'
+           if может else "<td></td>") + "</tr>" for s in сессии)
+
+    форма = ("" if not может else
+             '<div class="card"><h2>Пригласить</h2>'
+             '<p class="hint">Секрет приглашения показывается один раз и '
+             "нигде не хранится в открытом виде.</p>"
+             '<form method="post" action="/admin/users/invites">'
+             f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+             '<label>Адрес<input name="email" type="email" required></label>'
+             '<label>Роль<select name="role">'
+             + "".join(f'<option value="{r}">{r}</option>' for r in
+                       ("viewer", "reviewer", "editor", "operator", "admin"))
+             + "</select></label>"
+             '<button type="submit">Создать приглашение</button></form></div>')
+
+    return page(
+        "Люди",
+        _flash(flash)
+        + '<div class="card"><h2>Операторы</h2><div class="scroll-x"><table>'
+        "<thead><tr><th>Адрес</th><th>Роли</th><th>Состояние</th>"
+        "<th>Второй фактор</th><th>Действия</th></tr></thead><tbody>"
+        + ("".join(строки) or '<tr><td colspan="5" class="mut">Пусто.</td></tr>')
+        + "</tbody></table></div></div>" + форма
+        + '<div class="card"><h2>Приглашения</h2><div class="scroll-x"><table>'
+        "<thead><tr><th>Адрес</th><th>Роли</th><th>Состояние</th><th>До</th>"
+        "<th></th></tr></thead><tbody>"
+        + (приглашения_html or '<tr><td colspan="5" class="mut">Нет.</td></tr>')
+        + "</tbody></table></div></div>"
+        + '<div class="card"><h2>Активные сессии</h2><div class="scroll-x"><table>'
+        "<thead><tr><th>Оператор</th><th>Начата</th><th>Последний запрос</th>"
+        "<th>Клиент</th><th></th></tr></thead><tbody>"
+        + (сессии_html or '<tr><td colspan="5" class="mut">Нет.</td></tr>')
+        + "</tbody></table></div></div>",
+        session_label=session_label, csrf=csrf)
 
 
 def _flash(flash: dict | None) -> str:

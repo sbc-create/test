@@ -68,8 +68,20 @@ SCOPE_AUDIT = "audit:read"
 #: решающий вопрос о виде произведения, не должен получать право менять
 #: настройки витрины — это разные роли и разный радиус ошибки.
 SCOPE_REVIEW = "review:write"
+#: Управление людьми. Самое опасное право в системе: оно позволяет выдать
+#: любое другое. Поэтому оно есть только у роли admin и никогда не входит в
+#: набор по умолчанию.
+SCOPE_OPERATORS = "operators:write"
 KNOWN_SCOPES = frozenset(
-    {SCOPE_READ, SCOPE_JOBS, SCOPE_CONFIG, SCOPE_CACHE, SCOPE_AUDIT, SCOPE_REVIEW}
+    {
+        SCOPE_READ,
+        SCOPE_JOBS,
+        SCOPE_CONFIG,
+        SCOPE_CACHE,
+        SCOPE_AUDIT,
+        SCOPE_REVIEW,
+        SCOPE_OPERATORS,
+    }
 )
 
 # Действия, которые разрешено ставить в очередь. Список закрытый: очередь
@@ -407,6 +419,40 @@ class ControlApi:
         """
         return self._principals.get(token)
 
+    def mint_session_principal(self, *, label: str, scopes) -> str:
+        """Временный принципал для сессии оператора.
+
+        Права оператора задаются его ролями, а не выданным заранее токеном. Но
+        второй путь аутентификации заводить нельзя: он неизбежно разойдётся с
+        первым. Поэтому здесь рождается обычный принципал — просто с временем
+        жизни сессии и без записи в настройках.
+
+        Значение живёт только в памяти процесса, наружу не отдаётся и
+        уничтожается вместе с сессией.
+        """
+        import secrets as _secrets
+
+        токен = _secrets.token_urlsafe(32)
+        self._principals[токен] = Principal(
+            token_id=hashlib.sha256(токен.encode("utf-8")).hexdigest()[:12],
+            scopes=frozenset(scopes),
+            label=label,
+        )
+        return токен
+
+    def update_session_principal(self, token: str, *, scopes) -> None:
+        """Права сессии обязаны следовать за ролями, а не за моментом входа."""
+        прежний = self._principals.get(token)
+        if прежний is None:
+            return
+        self._principals[token] = Principal(
+            token_id=прежний.token_id, scopes=frozenset(scopes), label=прежний.label
+        )
+
+    def drop_session_principal(self, token: str) -> None:
+        if token:
+            self._principals.pop(token, None)
+
     # ---- конвейер -------------------------------------------------------
 
     def handle(
@@ -626,6 +672,8 @@ class ControlApi:
             return self._playback_policy()
         if rest[:1] == ["review-queue"]:
             return self._review_route(method, rest[1:], body, principal, headers, correlation_id)
+        if rest[:1] == ["operators"]:
+            return self._operators_route(method, rest[1:], body, principal, headers, correlation_id)
         if method == "GET" and len(rest) == 2 and rest[0] == "traces":
             principal.require(SCOPE_AUDIT)
             return self._trace(rest[1])
@@ -1095,6 +1143,140 @@ class ControlApi:
                 "byState": by_state,
                 "manageable": sum(1 for r in rows if r["manageable"]),
             },
+        )
+
+    # ------------------------------------------------------------------
+    # Операторы
+    # ------------------------------------------------------------------
+    def _directory(self):
+        from factory.site_engine.operators import OperatorDirectory
+
+        return OperatorDirectory(self._root)
+
+    def _operators_route(
+        self,
+        method: str,
+        tail: list[str],
+        body: dict[str, Any],
+        principal,
+        headers: dict[str, str],
+        correlation_id: str,
+    ) -> ApiResponse:
+        """Каталог операторов.
+
+        Чтение списка требует read: знать, кто имеет доступ, полезно всем, кто
+        и так внутри. Любое изменение требует operators:write — права, которое
+        позволяет выдать любое другое право, и потому есть только у admin.
+        """
+        from factory.site_engine.operators import OperatorError
+
+        каталог = self._directory()
+        актор = getattr(principal, "name", "operator")
+        актор_id = str(body.get("actorOperatorId") or "")
+        try:
+            if method == "GET" and not tail:
+                principal.require(SCOPE_READ)
+                return ApiResponse(
+                    status=200,
+                    body=каталог.list(
+                        state=self._опция(body, "state"),
+                        role=self._опция(body, "role"),
+                        offset=self._целое(body, "offset", 0, 0, 100000),
+                        limit=self._целое(body, "limit", 50, 1, 200),
+                    ),
+                )
+            if method == "GET" and tail == ["invites"]:
+                principal.require(SCOPE_OPERATORS)
+                return ApiResponse(status=200, body={"items": каталог.list_invites()})
+            if method == "GET" and tail == ["sessions"]:
+                principal.require(SCOPE_OPERATORS)
+                return ApiResponse(
+                    status=200,
+                    body={
+                        "items": каталог.list_sessions(
+                            operator_id=self._опция(body, "operatorId"),
+                            active_only=body.get("activeOnly", True) is not False,
+                        )
+                    },
+                )
+            if method == "POST" and tail == ["invites"]:
+                principal.require(SCOPE_OPERATORS)
+                приглашение, секрет = каталог.invite(
+                    email=str(body.get("email") or ""),
+                    roles=body.get("roles") or [],
+                    created_by=актор,
+                )
+                self._audit_operators("invite", приглашение.email, актор, correlation_id)
+                # Секрет возвращается ровно один раз и в журнал не попадает.
+                return ApiResponse(status=201, body={**приглашение.as_dict(), "secret": секрет})
+            if method == "POST" and len(tail) == 2 and tail[0] == "invites":
+                principal.require(SCOPE_OPERATORS)
+                if tail[1] == "accept":
+                    оператор = каталог.accept_invite(
+                        secret=str(body.get("secret") or ""),
+                        password=str(body.get("password") or ""),
+                    )
+                    self._audit_operators("accept", оператор.email, оператор.email, correlation_id)
+                    return ApiResponse(status=200, body=оператор.as_dict())
+                итог = каталог.revoke_invite(tail[1], actor=актор)
+                self._audit_operators("revoke_invite", итог.get("email", ""), актор, correlation_id)
+                return ApiResponse(status=200, body=итог)
+            # Проверяется РАНЬШЕ общей ветки из двух частей: иначе "sessions"
+            # разбирается как идентификатор оператора, "revoke" — как неизвестное
+            # действие, и маршрут отвечает «не найдено». Поймано проверкой
+            # соответствия описания и обслуживаемых маршрутов.
+            if method == "POST" and tail == ["sessions", "revoke"]:
+                principal.require(SCOPE_OPERATORS)
+                ок = каталог.revoke_session(str(body.get("sessionId") or ""), actor=актор)
+                self._audit_operators(
+                    "revoke_session", str(body.get("sessionId") or ""), актор, correlation_id
+                )
+                return ApiResponse(status=200 if ок else 404, body={"revoked": ок})
+            if method == "POST" and len(tail) == 2:
+                principal.require(SCOPE_OPERATORS)
+                оператор_id, действие = tail
+                if действие == "roles":
+                    итог = каталог.set_roles(
+                        оператор_id,
+                        body.get("roles") or [],
+                        actor_id=актор_id,
+                        actor_roles=body.get("actorRoles") or [],
+                    )
+                elif действие == "block":
+                    итог = каталог.block(
+                        оператор_id, reason=str(body.get("reason") or ""), actor_id=актор_id
+                    )
+                elif действие == "unblock":
+                    итог = каталог.unblock(оператор_id)
+                elif действие == "delete":
+                    итог = каталог.delete(оператор_id, actor_id=актор_id)
+                elif действие == "revoke-sessions":
+                    сколько = каталог.revoke_all_sessions(оператор_id, actor=актор)
+                    self._audit_operators("revoke_sessions", оператор_id, актор, correlation_id)
+                    return ApiResponse(status=200, body={"revoked": сколько})
+                elif действие == "mfa-enroll":
+                    return ApiResponse(status=200, body=каталог.start_mfa_enrollment(оператор_id))
+                else:
+                    raise ControlDenied(404, "not_found", "маршрут не найден")
+                self._audit_operators(действие, итог.email, актор, correlation_id)
+                return ApiResponse(status=200, body=итог.as_dict())
+        except OperatorError as ошибка:
+            текст = str(ошибка)
+            код = 409 if ("последний" in текст or "уже" in текст or "нельзя" in текст) else 400
+            raise ControlDenied(код, "operator_conflict", текст) from ошибка
+        raise ControlDenied(404, "not_found", "маршрут не найден")
+
+    def _audit_operators(self, действие: str, цель: str, актор: str, correlation_id: str) -> None:
+        audit.record(
+            job_id=f"operators-{действие}",
+            site_id="",
+            environment="control",
+            action=f"operators_{действие}",
+            target=цель,
+            exit_code=0,
+            output="",
+            mutation=True,
+            extra={"correlationId": correlation_id, "actor": актор},
         )
 
     # ------------------------------------------------------------------

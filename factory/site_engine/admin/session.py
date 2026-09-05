@@ -26,6 +26,11 @@ class Session:
     created_at: float
     last_seen: float
     label: str = ""
+    #: Оператор, которому выдана сессия. Пусто у сессий времени начальной
+    #: настройки, когда каталог операторов ещё пуст.
+    operator_id: str = ""
+    email: str = ""
+    roles: tuple = ()
     # Сообщение о результате последнего действия: панель перенаправляет
     # после записи, поэтому результат нужно пронести через перенаправление.
     flash: dict | None = None
@@ -50,12 +55,30 @@ class SessionStore:
         # перезапуск, иначе старые формы остаются действительными.
         self._csrf_secret = secrets.token_bytes(32)
 
-    def create(self, token: str, *, label: str = "") -> Session:
+    def create(self, token: str, *, label: str = "", operator_id: str = "",
+               email: str = "", roles=()) -> Session:
+        """Новый идентификатор на каждый вход.
+
+        Идентификатор не переиспользуется никогда: сессия, начатая до входа и
+        сохранённая после него, — это фиксация сессии, и чужая ссылка с таким
+        идентификатором даёт чужие права.
+        """
         now = float(self._now())
         sid = secrets.token_urlsafe(32)
-        session = Session(sid=sid, token=token, created_at=now, last_seen=now, label=label)
+        session = Session(sid=sid, token=token, created_at=now, last_seen=now,
+                          label=label, operator_id=operator_id, email=email,
+                          roles=tuple(roles))
         self._sessions[sid] = session
         return session
+
+    def attach_directory(self, directory) -> None:
+        """Каталог операторов, по которому сессия проверяется на КАЖДОМ запросе.
+
+        Проверка только при входе оставила бы отозванную сессию живой до
+        истечения срока, а это и есть та дыра, ради закрытия которой отзыв
+        существует.
+        """
+        self._directory = directory
 
     def get(self, sid: str | None) -> Session | None:
         if not sid:
@@ -72,6 +95,16 @@ class SessionStore:
         if now - session.last_seen > SESSION_IDLE_SECONDS:
             self._sessions.pop(sid, None)
             return None
+        каталог = getattr(self, "_directory", None)
+        if каталог is not None and session.operator_id:
+            оператор = каталог.session_valid(sid)
+            if оператор is None:
+                # Отозвана, заблокирована, разжалована или устарела по политике.
+                self._sessions.pop(sid, None)
+                return None
+            # Роли могли измениться: сессия обязана нести текущие, а не те,
+            # что были при входе.
+            session.roles = tuple(оператор.roles)
         session.last_seen = now
         return session
 

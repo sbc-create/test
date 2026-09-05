@@ -15,6 +15,7 @@
   внутреннего устройства, выданная тому, кто не смог сформировать корректный
   запрос.
 """
+
 from __future__ import annotations
 
 import http.server
@@ -35,6 +36,7 @@ from factory.site_engine.api.openapi import ЗАПИСЬ
 
 MAX_BODY_BYTES = 256 * 1024
 ADMIN_MAX_BODY_BYTES = 64 * 1024
+
 
 def _control_get_prefixes() -> tuple[str, ...]:
     """Читающие маршруты управляющего слоя — из таблицы описания, не из списка.
@@ -178,20 +180,25 @@ class _Handler(http.server.BaseHTTPRequestHandler):
         # Панель не встраивается никуда и не загружает ничего постороннего.
         self.send_header("X-Frame-Options", "DENY")
         self.send_header("Referrer-Policy", "no-referrer")
-        self.send_header("Content-Security-Policy",
-                         "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'")
+        self.send_header(
+            "Content-Security-Policy",
+            "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'",
+        )
         for key, value in (extra or {}).items():
             self.send_header(key, value)
         self.end_headers()
         if self.command != "HEAD":
             self.wfile.write(payload)
 
-    def _handle_admin(self, method: str, path: str) -> None:
+    def _handle_admin(self, method: str, path: str, *, query: dict[str, str] | None = None) -> None:
         app = getattr(self.server, "admin_app", None)
         if app is None:
             self._error(404, "not_found", "маршрут не найден")
             return
-        form: dict[str, str] = {}
+        # Параметры строки запроса — часть формы для GET. Без них не работают
+        # ни фильтры списков, ни ссылка приглашения: панель получала пустой
+        # словарь и вела себя так, будто оператор ничего не выбрал.
+        form: dict[str, str] = dict(query or {})
         if method == "POST":
             parsed = self._read_form()
             if parsed is None:
@@ -245,8 +252,11 @@ class _Handler(http.server.BaseHTTPRequestHandler):
             return
         корень = getattr(self.server, "service_root", None)
         if корень is not None:
-            плохие = [c for c in startup_protocol.check_state_dirs(корень)
-                      if c.status == startup_protocol.FATAL]
+            плохие = [
+                c
+                for c in startup_protocol.check_state_dirs(корень)
+                if c.status == startup_protocol.FATAL
+            ]
             if плохие:
                 # Каталог состояния мог стать недоступен уже после запуска.
                 # Служба, отвечающая «готова» без доступа к очереди, обманывает
@@ -260,7 +270,7 @@ class _Handler(http.server.BaseHTTPRequestHandler):
 
     def _serve(self, method: str, path: str, query: dict) -> None:
         if path == "/admin" or path.startswith("/admin/"):
-            self._handle_admin(method, path)
+            self._handle_admin(method, path, query=query)
             return
 
         body = self._read_body()
@@ -286,8 +296,11 @@ class _Handler(http.server.BaseHTTPRequestHandler):
                 # текстовый формат. Разбирать JSON он не умеет, а заводить ради
                 # этого второй адрес значит заводить и вторую проверку прав.
                 if path == "/api/v1/metrics" and response.status == 200:
-                    self._text(200, response.body.get("prometheus", ""),
-                               "text/plain; version=0.0.4; charset=utf-8")
+                    self._text(
+                        200,
+                        response.body.get("prometheus", ""),
+                        "text/plain; version=0.0.4; charset=utf-8",
+                    )
                     return
             else:
                 if method != "GET":
@@ -320,8 +333,16 @@ class _Server(http.server.ThreadingHTTPServer):
     daemon_threads = True
     allow_reuse_address = True
 
-    def __init__(self, address, handler, read_api, control_api, admin_app=None,
-                 lifecycle=None, service_root=None):
+    def __init__(
+        self,
+        address,
+        handler,
+        read_api,
+        control_api,
+        admin_app=None,
+        lifecycle=None,
+        service_root=None,
+    ):
         super().__init__(address, handler)
         self.read_api = read_api
         self.control_api = control_api
@@ -349,8 +370,15 @@ def build_server(
             f"привязка к {config.host} требует allow_public_bind=True: "
             "управляющий API не выставляется наружу по умолчанию"
         )
-    return _Server((config.host, config.port), _Handler, read_api, control_api,
-                   admin_app, lifecycle, service_root)
+    return _Server(
+        (config.host, config.port),
+        _Handler,
+        read_api,
+        control_api,
+        admin_app,
+        lifecycle,
+        service_root,
+    )
 
 
 def serve(
@@ -388,8 +416,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8787)
     parser.add_argument("--root", default=".")
-    parser.add_argument("--allow-public-bind", action="store_true",
-                        help="выставить наружу; по умолчанию только 127.0.0.1")
+    parser.add_argument(
+        "--allow-public-bind",
+        action="store_true",
+        help="выставить наружу; по умолчанию только 127.0.0.1",
+    )
     args = parser.parse_args(argv)
 
     env = dict(os.environ)
@@ -420,24 +451,26 @@ def main(argv: list[str] | None = None) -> int:
     if admin_enabled(env):
         from factory.site_engine.admin.app import AdminApp
 
-        admin_app = AdminApp(read_api, control_api,
-                             secure_cookie=args.host not in {"127.0.0.1", "::1", "localhost"})
+        admin_app = AdminApp(
+            read_api, control_api, secure_cookie=args.host not in {"127.0.0.1", "::1", "localhost"}
+        )
         control_api.register_gauge(
             "site_engine_admin_sessions",
             lambda: [({}, admin_app.sessions.count())],
         )
-    config = ServerConfig(host=args.host, port=args.port,
-                          allow_public_bind=args.allow_public_bind)
+    config = ServerConfig(host=args.host, port=args.port, allow_public_bind=args.allow_public_bind)
     жизнь = Lifecycle(drain_timeout=float(env.get("SITE_ENGINE_DRAIN_SECONDS", "25")))
-    server = build_server(config, read_api, control_api, admin_app,
-                          lifecycle=жизнь, service_root=root)
+    server = build_server(
+        config, read_api, control_api, admin_app, lifecycle=жизнь, service_root=root
+    )
     адрес = server.server_address
     состояние = "с админкой" if admin_app else "без админки"
     print(f"слушаю {адрес[0]}:{адрес[1]}, сайтов: {len(ids)}, {состояние}", flush=True)
 
     уведомитель = Notifier()
-    поток = threading.Thread(target=server.serve_forever, kwargs={"poll_interval": 0.2},
-                             daemon=True)
+    поток = threading.Thread(
+        target=server.serve_forever, kwargs={"poll_interval": 0.2}, daemon=True
+    )
     поток.start()
     # READY после того, как сокет действительно принимает: сообщить о
     # готовности раньше значит пустить к себе трафик до готовности.
@@ -465,8 +498,10 @@ def main(argv: list[str] | None = None) -> int:
         жизнь.begin_drain()
         слито = жизнь.wait_drained()
         if not слито:
-            print(f"слив не завершён за отведённое время, "
-                  f"в работе осталось {жизнь.inflight}", flush=True)
+            print(
+                f"слив не завершён за отведённое время, " f"в работе осталось {жизнь.inflight}",
+                flush=True,
+            )
         else:
             print("начатые запросы завершены", flush=True)
         server.shutdown()

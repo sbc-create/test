@@ -3,7 +3,10 @@
 Заголовки проверяются здесь, а не в модуле приложения: их ставит транспорт, и
 проверка на уровне AdminApp подтвердила бы то, чего пользователь не получает.
 """
+
 import json
+import shutil
+import tempfile
 import threading
 import urllib.error
 import urllib.parse
@@ -22,8 +25,10 @@ from factory.site_engine.store import InMemoryStore
 ROOT = Path(__file__).resolve().parents[2]
 ТОКЕН = "adm"
 ЧТЕНИЕ = {"SITE_ENGINE_API_ENABLED": "1", "SITE_ENGINE_ENVIRONMENT": "test"}
-УПРАВЛЕНИЕ = {"SITE_ENGINE_CONTROL_WRITES": "1",
-              "SITE_ENGINE_CONTROL_TOKENS": f"{ТОКЕН}=read,jobs:write,audit:read"}
+УПРАВЛЕНИЕ = {
+    "SITE_ENGINE_CONTROL_WRITES": "1",
+    "SITE_ENGINE_CONTROL_TOKENS": f"{ТОКЕН}=read,jobs:write,audit:read",
+}
 
 
 class _НеСледоватьЗаПеренаправлением(urllib.request.HTTPRedirectHandler):
@@ -31,18 +36,47 @@ class _НеСледоватьЗаПеренаправлением(urllib.request
         return None
 
 
-def _apis():
-    read = create_api(["lords-01"], root=ROOT,
-                      loader=lambda p: (InMemoryStore(p.site_id), "т"), env=ЧТЕНИЕ)
-    return read, ControlApi(root=ROOT, env=УПРАВЛЕНИЕ)
+def _песочница() -> Path:
+    """Отдельный корень на каждый подъём службы.
+
+    Прежде здесь стоял настоящий корень репозитория, и исход теста зависел от
+    того, что осталось на диске от других прогонов: каталог операторов живёт в
+    var/state, и заведённая где-то учётная запись закрывала вход по токену.
+    Тест, который так себя ведёт, ничего не гарантирует.
+    """
+    корень = Path(tempfile.mkdtemp(prefix="admin-http-"))
+    (корень / "config" / "site-profiles").mkdir(parents=True)
+    shutil.copy(
+        ROOT / "config" / "site-profiles" / "lords-01.json",
+        корень / "config" / "site-profiles" / "lords-01.json",
+    )
+    for под in (
+        "queue/inbox",
+        "queue/processing",
+        "queue/done",
+        "queue/failed",
+        "queue/quarantine",
+        "var/locks",
+        "var/audit",
+        "var/state",
+    ):
+        (корень / под).mkdir(parents=True, exist_ok=True)
+    return корень
+
+
+def _apis(корень: Path):
+    read = create_api(
+        ["lords-01"], root=корень, loader=lambda p: (InMemoryStore(p.site_id), "т"), env=ЧТЕНИЕ
+    )
+    return read, ControlApi(root=корень, env=УПРАВЛЕНИЕ)
 
 
 def _поднять(admin: bool):
-    read, control = _apis()
+    корень = _песочница()
+    read, control = _apis(корень)
     app = AdminApp(read, control) if admin else None
     srv = build_server(ServerConfig(host="127.0.0.1", port=0), read, control, app)
-    поток = threading.Thread(target=srv.serve_forever, kwargs={"poll_interval": 0.05},
-                             daemon=True)
+    поток = threading.Thread(target=srv.serve_forever, kwargs={"poll_interval": 0.05}, daemon=True)
     поток.start()
     return srv, поток, f"http://127.0.0.1:{srv.server_address[1]}"
 
@@ -83,7 +117,7 @@ def test_без_включённой_админки_маршрута_нет():
 
 def test_страница_входа_отдаётся(панель):
     код, тело, _ = запрос(панель + "/admin")
-    assert код == 200 and "Вход по токену" in тело
+    assert код == 200 and 'name="password"' in тело
 
 
 def test_защитные_заголовки_на_месте(панель):
@@ -108,7 +142,9 @@ def test_вход_по_http_выдаёт_cookie_и_перенаправляет(
 
 def test_неверный_токен_по_http(панель):
     код, тело, з = запрос(панель + "/admin/login", метод="POST", форма={"token": "нет"})
-    assert код == 401 and ADMIN_COOKIE not in з.get("Set-Cookie", "")
+    # Единый отказ на любой неудачный вход: 403. Разные коды на разные
+    # причины отличали бы существующую учётную запись от несуществующей.
+    assert код == 403 and ADMIN_COOKIE not in з.get("Set-Cookie", "")
 
 
 def test_список_витрин_после_входа(панель):
@@ -119,6 +155,5 @@ def test_список_витрин_после_входа(панель):
 
 
 def test_слишком_большая_форма_отклонена(панель):
-    код, _, _ = запрос(панель + "/admin/login", метод="POST",
-                       форма={"token": "x" * 70000})
+    код, _, _ = запрос(панель + "/admin/login", метод="POST", форма={"token": "x" * 70000})
     assert код == 413
