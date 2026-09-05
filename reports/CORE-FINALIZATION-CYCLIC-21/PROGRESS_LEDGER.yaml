@@ -137,7 +137,7 @@ entries:
     cycle: 6
     note: "мастер заведения витрины и детерминированный сухой прогон"
     branch: claude/core-product-8plus-20
-    full_head_sha: ЗАПОЛНЯЕТСЯ_ПОСЛЕ_КОММИТА
+    full_head_sha: 575267e9959ab3025818e8404cdcdfae8dd1e02f
     deployed_sha: 52fd06659a7ff73fd37b5bed2f20eb46a90d7a1e
     cycles_completed: 6
     cycles_planned_minimum: 8
@@ -172,4 +172,44 @@ entries:
       selfServiceSite 3 → 6: путь заявки и сухой прогон работают и проверены в
       двух движках. Не 8: выкладки, канарейки и отката ещё нет, а восьмёрка за
       план без исполнения — это оценка за схему.
+
+  - timestamp: "2026-09-05T19:30:00Z"
+    cycle: 7
+    note: "подтверждение, выкладка канарейки, проверки и полный откат"
+    branch: claude/core-product-8plus-20
+    full_head_sha: ЗАПОЛНЯЕТСЯ_ПОСЛЕ_КОММИТА
+    deployed_sha: 52fd06659a7ff73fd37b5bed2f20eb46a90d7a1e
+    cycles_completed: 7
+    cycles_planned_minimum: 8
+    gates_closed: 8
+    gates_total: 12
+    scores_by_gate:
+      releaseBaseline: 8
+      contentIdentityReview: 8
+      playbackCatalog: 8
+      workerAutonomy: 9
+      operatorIdentity: 8
+      publicRegistration: 8
+      editorialAdmin: 8
+      ratingsProvenance: 6
+      selfServiceSite: 8
+      observability: 7
+      securityRollback: 7
+      coreTemplatesSeo: 7
+    maturity_percent: 94.8
+    closure_percent: 66.7
+    progress_index: 80.7
+    progress_delta_since_previous: 5.2
+    defects_closed_this_cycle: 6
+    regressions_opened: 0
+    critical_steps_remaining: 5
+    external_blockers:
+      - "Yummyanime: read-only доступа нет"
+      - "Рейтинги: ни одного разрешённого источника не зарегистрировано"
+    next_cycle: 8
+    production_status: "не изменялась; mutations 0"
+    comment: >-
+      selfServiceSite 6 → 8: полный путь от заявки до канарейки и обратно
+      пройден в двух движках, с негативными сценариями, изоляцией и откатом.
+      Публикация в боевой контур честно отказывает: это решение владельца.
 

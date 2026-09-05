@@ -50,13 +50,13 @@ gates:
       - "цикл 4: Люди и доступ, Настройки"
       - "цикл 5: Выпуски, Происшествия, отбор в журнале"
   - id: selfServiceSite
-    score: 6
-    state: in_progress
-    priority: 1
-    evidence: reports/CORE-FINALIZATION-CYCLIC-21/cycles/CYCLE-06.md
-    gaps: ["выкладка, канарейка и откат не реализованы: план их описывает, исполнения нет"]
+    score: 8
+    state: closed
+    evidence: reports/CORE-FINALIZATION-CYCLIC-21/cycles/CYCLE-07.md
+    gaps: ["публикация в боевой контур требует решения владельца и мастером не выдаётся"]
     history:
       - "цикл 6: мастер из восьми шагов и детерминированный сухой прогон"
+      - "цикл 7: подтверждение, канарейка под NOINDEX, проверки и полный откат"
   - id: observability
     score: 7
     state: pending

@@ -98,6 +98,7 @@ async function прогон(движок, имя) {
   // текущего документа, если переход ещё не начался, и дальше читается страница
   // без заявки: мастер выглядит пустым, хотя заявка создана.
   await p.waitForURL(/request=/, { timeout: 15000 });
+  const адресЗаявки = p.url();
   await p.waitForFunction(
     () => document.readyState === 'complete' && !!document.querySelector('header h1'),
     null,
@@ -113,8 +114,8 @@ async function прогон(движок, имя) {
   await шаг(p, 'domain', { domain: `${витрина}.test`, aliases: '' });
   await шаг(p, 'profile', { environment: 'staging', targetRef: 'local-disposable',
                             seoProfile: 'catalog_authority' });
-  await шаг(p, 'content', { contentSource: 'provider-feed', contentTypes: 'movie,series' });
-  await шаг(p, 'template', { themeRef: 'basis-video' });
+  await шаг(p, 'content', { contentSource: 'fixture', contentTypes: 'movies,series' });
+  await шаг(p, 'template', { themeRef: 'portal_light' });
   await шаг(p, 'branding', { brandName: 'Новая', legalName: 'ООО Новая', primaryColor: '#1f4fd8' });
   await шаг(p, 'seo', { canonicalHostForm: 'non_www', trailingSlash: true });
   await шаг(p, 'analytics', { analyticsRef: 'secret://analytics/nova', adsRef: '' });
@@ -142,6 +143,61 @@ async function прогон(движок, имя) {
   const api = await ctx.request.get(`${БАЗА}/admin/new-site`);
   проверить(api.ok(), 'страница доступна');
   проверить(!итог.includes('production_authorized'), 'разрешение не предлагается формой');
+
+  // --- исполнение: подтверждение, канарейка, откат ---
+  const кнопка = (действие) =>
+    p.locator(`form[action$="/${действие}"] button[type="submit"]`).first();
+  const нажать = async (действие, ждать) => {
+    await кнопка(действие).click();
+    try {
+      await p.waitForFunction(
+        (что) => document.readyState === 'complete'
+          && !!document.querySelector('header h1')
+          && document.body.innerText.includes(что),
+        ждать,
+        { timeout: 20000 }
+      );
+      return true;
+    } catch (e) {
+      // Отказ должен называть себя, а не падать таймаутом: без текста сообщения
+      // «страница не дождалась» неотличимо от «действие отклонено».
+      провалов++;
+      const текст = await p.content();
+      const беда = текст.includes('flash bad')
+        ? текст.split('flash bad">')[1].split('<')[0] : 'сообщения нет';
+      console.log(`  FAIL действие «${действие}» не привело к «${ждать}»: ${беда}`);
+      return false;
+    }
+  };
+
+  проверить(await кнопка('approve').count() > 0, 'подтверждение предложено на готовом плане');
+  await нажать('approve', 'APPROVED');
+  проверить((await p.content()).includes('APPROVED'), 'план подтверждён');
+
+  await нажать('provision', 'PROVISIONED');
+  const после = await p.content();
+  проверить(после.includes('PROVISIONED'), 'канарейка выложена');
+  проверить(после.includes('Откатить'), 'откат предложен после выкладки');
+
+  // Публикация обязана отказать: разрешение владельца мастером не выдаётся.
+  await кнопка('publish').click();
+  await p.waitForLoadState('domcontentloaded');
+  const отказ = await p.content();
+  проверить(отказ.includes('OWNER_AUTHORIZATION_REQUIRED') || отказ.toLowerCase().includes('владельц'),
+            'публикация отказана с названной причиной');
+
+  // Канарейка видна в списке витрин и помечена как канарейка.
+  await p.goto(`${БАЗА}/admin/sites`, { waitUntil: 'domcontentloaded' });
+  проверить((await p.content()).includes(витрина), 'канарейка видна в списке витрин');
+
+  await p.goto(`${БАЗА}/admin/new-site?request=${p.url().includes('request=') ? '' : ''}`,
+               { waitUntil: 'domcontentloaded' });
+  await p.goto(адресЗаявки, { waitUntil: 'domcontentloaded' });
+  await нажать('rollback', 'ROLLED_BACK');
+  проверить((await p.content()).includes('ROLLED_BACK'), 'откат выполнен');
+
+  await p.goto(`${БАЗА}/admin/sites`, { waitUntil: 'domcontentloaded' });
+  проверить(!(await p.content()).includes(витрина), 'после отката канарейки в списке нет');
 
   // --- узкий экран ---
   const узкий = await b.newContext({ viewport: { width: 390, height: 780 } });

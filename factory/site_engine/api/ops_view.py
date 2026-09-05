@@ -200,8 +200,49 @@ def site_status(root: Path, site_id: str, *, env=None) -> dict[str, Any]:
     }
 
 
+#: Наложение канареек. Отдельный каталог, а не общий: витрина, попавшая в
+#: каталог профилей, участвует в обходах, полках и выкладке раньше, чем её
+#: проверили.
+CANARY_DIR = "var/state/canary-profiles"
+
+
+def _канарейки(root: Path) -> list[dict[str, Any]]:
+    """Канареечные витрины отдельным списком и с отметкой.
+
+    Прятать их от оператора нельзя: витрина, которой нет в списке, не будет
+    ни проверена, ни откачена — про неё просто забудут.
+    """
+    каталог = Path(root) / CANARY_DIR
+    строки: list[dict[str, Any]] = []
+    for файл in sorted(каталог.glob("*.json")) if каталог.is_dir() else []:
+        try:
+            профиль = json.loads(файл.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            строки.append(
+                {
+                    "siteId": файл.stem,
+                    "canary": True,
+                    "health": {"state": "UNKNOWN", "problems": ["PROFILE_UNREADABLE"]},
+                }
+            )
+            continue
+        строки.append(
+            {
+                "siteId": профиль.get("site_id", файл.stem),
+                "canary": True,
+                "indexingEnabled": bool(профиль.get("indexing_enabled")),
+                "domains": list(профиль.get("domains") or []),
+                "health": {
+                    "state": "CANARY",
+                    "problems": [] if профиль.get("noindex") else ["CANARY_INDEXABLE"],
+                },
+            }
+        )
+    return строки
+
+
 def sites(root: Path, *, env=None) -> dict[str, Any]:
-    """Все витрины разом, для списка."""
+    """Все витрины разом, для списка. Канарейки — с отметкой, а не вперемешку."""
     каталог = Path(root) / "config" / "site-profiles"
     имена = sorted(п.stem for п in каталог.glob("*.json")) if каталог.is_dir() else []
     строки = []
@@ -212,4 +253,10 @@ def sites(root: Path, *, env=None) -> dict[str, Any]:
             строки.append(
                 {"siteId": имя, "health": {"state": "UNKNOWN", "problems": ["PROFILE_UNREADABLE"]}}
             )
-    return {"total": len(строки), "items": строки, "contractVersion": CONTRACT_VERSION}
+    канареечные = _канарейки(Path(root))
+    return {
+        "total": len(строки) + len(канареечные),
+        "items": строки + канареечные,
+        "canaryCount": len(канареечные),
+        "contractVersion": CONTRACT_VERSION,
+    }

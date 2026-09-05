@@ -644,7 +644,9 @@ class ControlApi:
         # в него остальные.
         site_for_limit = rest[1] if rest[:1] == ["sites"] and len(rest) >= 2 else ""
         operation = "/".join(rest[2:]) if len(rest) > 2 else (rest[0] if rest else "")
-        self._rate_limit(principal, site_for_limit, f"{method}:{operation}")
+        self._rate_limit(
+            principal, site_for_limit, f"{method}:{operation}", mutating=mutating
+        )
 
         if method == "GET" and rest[:1] == ["content-health"]:
             principal.require(SCOPE_READ)
@@ -767,7 +769,9 @@ class ControlApi:
             raise ControlDenied(401, "unauthorized", "токен не распознан")
         return principal
 
-    def _rate_limit(self, principal: Principal, site_id: str, operation: str) -> None:
+    def _rate_limit(
+        self, principal: Principal, site_id: str, operation: str, *, mutating: bool = True
+    ) -> None:
         """Списать разрешение по иерархии ключей.
 
         Ключи раздельные: среда, витрина, действующее лицо, операция. Общего
@@ -778,12 +782,14 @@ class ControlApi:
             {
                 "environment": self._env.get("SITE_ENGINE_ENVIRONMENT", "local"),
                 "site": site_id,
-                "actor": principal.token_id,
+                # Чтение и запись считаются в разные вёдра: ограничивать надо
+                # то, что меняет состояние.
+                ("actor" if mutating else "actor_read"): principal.token_id,
                 # Витрина входит в ключ операции: без неё шум по одной витрине
                 # выбирал бы операционное ведро сразу для всех остальных.
-                "operation": f"{principal.token_id}:{site_id or '-'}:{operation}"
-                if operation
-                else "",
+                ("operation" if mutating else "operation_read"): (
+                    f"{principal.token_id}:{site_id or '-'}:{operation}" if operation else ""
+                ),
             }
         )
         if решение.degraded:
@@ -911,7 +917,7 @@ class ControlApi:
         correlation_id: str,
     ) -> ApiResponse:
         """Заявки на новую витрину. Мастер, сухой прогон — и ни одной мутации."""
-        from factory.site_engine import site_plan, site_request
+        from factory.site_engine import site_plan, site_provision, site_request
 
         склад = site_request.SiteRequestStore(self._root)
         try:
@@ -946,6 +952,48 @@ class ControlApi:
                 return ApiResponse(
                     status=200, body=site_plan.план(заявка, self._root, self._env)
                 )
+            if method == "POST" and tail[1:] == ["approve"]:
+                principal.require(SCOPE_SITES)
+                заявка = site_provision.approve(
+                    склад,
+                    tail[0],
+                    str(body.get("planHash") or ""),
+                    self._root,
+                    actor=_актор(principal),
+                )
+                self._audit_site_request("approve", заявка, _актор(principal), correlation_id)
+                return ApiResponse(status=200, body=заявка.as_dict())
+            if method == "POST" and tail[1:] == ["provision"]:
+                principal.require(SCOPE_SITES)
+                итог = site_provision.provision(
+                    склад,
+                    tail[0],
+                    self._root,
+                    actor=_актор(principal),
+                    correlation_id=correlation_id,
+                    now=self._время(),
+                )
+                return ApiResponse(status=200, body=итог)
+            if method == "GET" and tail[1:] == ["verification"]:
+                principal.require(SCOPE_READ)
+                return ApiResponse(
+                    status=200, body=site_provision.verification(склад, tail[0], self._root)
+                )
+            if method == "POST" and tail[1:] == ["publish"]:
+                principal.require(SCOPE_SITES)
+                return ApiResponse(
+                    status=200, body=site_provision.publish(склад, tail[0], self._root)
+                )
+            if method == "POST" and tail[1:] == ["rollback"]:
+                principal.require(SCOPE_SITES)
+                итог = site_provision.rollback(
+                    склад,
+                    tail[0],
+                    self._root,
+                    actor=_актор(principal),
+                    correlation_id=correlation_id,
+                )
+                return ApiResponse(status=200, body=итог)
             if method == "PATCH" and len(tail) == 1:
                 principal.require(SCOPE_SITES)
                 заявка = склад.answer(
@@ -958,6 +1006,10 @@ class ControlApi:
         except site_request.SiteRequestError as ошибка:
             raise ControlDenied(
                 ошибка.status, ошибка.code, ошибка.message, field=ошибка.field
+            ) from ошибка
+        except site_provision.ProvisionError as ошибка:
+            raise ControlDenied(
+                ошибка.status, ошибка.code, ошибка.message, **ошибка.extra
             ) from ошибка
         raise ControlDenied(404, "not_found", "маршрут не найден")
 

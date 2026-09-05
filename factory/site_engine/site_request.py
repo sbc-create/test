@@ -41,23 +41,34 @@ from typing import Any
 ПРОФИЛИ_SEO = ("catalog_authority", "release_pulse", "editorial_guide")
 
 
-def _типы_содержимого() -> tuple[str, ...]:
-    """Виды содержимого берутся из договора о видах, а не перечисляются заново.
-
-    Собственный список здесь означал бы третий перечень видов рядом с
-    `ContentKind` и словарём распознавания — и первое же добавление вида
-    разошлось бы с мастером. Заодно снимается вопрос об именах доменов в ядре:
-    договор о видах их не содержит по построению.
-    """
-    from factory.site_engine.content_kind import ContentKind
-
-    неприменимы = {"UNKNOWN", "SEASON", "EPISODE"}
-    return tuple(
-        sorted(k.value.lower() for k in ContentKind if k.value not in неприменимы)
-    )
+#: Допустимые значения читаются из схемы пакета — той же, по которой пакет
+#: потом проверяется. Свой список в коде мастера означал бы, что оператор
+#: вводит значение, которое мастер принял, а проверка отвергла: ровно это и
+#: происходило с темой оформления, источником и типами содержимого.
+СХЕМА_ПАКЕТА = "schemas/site-package.schema.json"
 
 
-ТИПЫ_СОДЕРЖИМОГО = _типы_содержимого()
+def _схема(root: Path) -> dict[str, Any]:
+    try:
+        return json.loads((Path(root) / СХЕМА_ПАКЕТА).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+
+
+def значения(root: Path, *путь: str) -> tuple[str, ...]:
+    """Перечисление или набор ключей по пути в схеме. Пусто — значит не знаем."""
+    узел: Any = _схема(root).get("properties") or {}
+    for шаг in путь:
+        if not isinstance(узел, dict):
+            return ()
+        узел = узел.get(шаг) if шаг in узел else (узел.get("properties") or {}).get(шаг)
+        if узел is None:
+            return ()
+    if isinstance(узел, dict) and "enum" in узел:
+        return tuple(str(v) for v in узел["enum"])
+    if isinstance(узел, dict) and "properties" in узел:
+        return tuple(sorted(узел["properties"]))
+    return ()
 
 
 class SiteRequestError(Exception):
@@ -106,6 +117,12 @@ class Заявка:
     created_by: str = ""
     answers: dict[str, dict[str, Any]] = field(default_factory=dict)
     state: str = "DRAFT"
+    #: Отпечаток плана, который подтвердили. Хранится, чтобы выкладка шла по
+    #: тому плану, который видел человек: изменились ответы — подтверждение
+    #: недействительно, и это видно, а не подразумевается.
+    approved_plan_hash: str = ""
+    approved_by: str = ""
+    job_id: str = ""
 
     @property
     def next_step(self) -> str | None:
@@ -125,6 +142,9 @@ class Заявка:
             "createdAt": self.created_at,
             "createdBy": self.created_by,
             "state": self.state,
+            "approvedPlanHash": self.approved_plan_hash,
+            "approvedBy": self.approved_by,
+            "jobId": self.job_id,
             "answers": self.answers,
             "nextStep": self.next_step,
             "complete": self.complete,
@@ -141,7 +161,9 @@ class Заявка:
         }
 
 
-def _проверить_шаг(шаг: Шаг, ответы: dict[str, Any], *, занятые: set[str]) -> dict[str, Any]:
+def _проверить_шаг(
+    шаг: Шаг, ответы: dict[str, Any], *, занятые: set[str], root: Path
+) -> dict[str, Any]:
     """Разбор ответов одного шага. Все нарушения не копятся: шаг небольшой, и
     первый точный отказ понятнее списка из одного пункта."""
     чистые: dict[str, Any] = {}
@@ -200,26 +222,34 @@ def _проверить_шаг(шаг: Шаг, ответы: dict[str, Any], *, 
         чистые = {"environment": среда, "seoProfile": профиль, "targetRef": площадка}
 
     elif шаг.id == "content":
+        допустимые_источники = значения(root, "content_source", "kind")
         источник = str(ответы.get("contentSource")).strip()
-        if not ИДЕНТИФИКАТОР.match(источник):
+        if допустимые_источники and источник not in допустимые_источники:
             raise SiteRequestError(
-                "invalid_content_source", "contentSource — идентификатор источника",
+                "invalid_content_source",
+                f"contentSource — одно из {', '.join(допустимые_источники)}",
                 field="contentSource",
             )
+        допустимые_типы = значения(root, "content_types")
         типы = [t.strip() for t in str(ответы.get("contentTypes") or "").split(",") if t.strip()]
-        чужие = [t for t in типы if t not in ТИПЫ_СОДЕРЖИМОГО]
+        чужие = [t for t in типы if допустимые_типы and t not in допустимые_типы]
         if not типы or чужие:
             raise SiteRequestError(
                 "invalid_content_types",
-                f"contentTypes — из набора {', '.join(ТИПЫ_СОДЕРЖИМОГО)}",
+                f"contentTypes — из набора {', '.join(допустимые_типы)}",
                 field="contentTypes",
             )
         чистые = {"contentSource": источник, "contentTypes": типы}
 
     elif шаг.id == "template":
+        допустимые_темы = значения(root, "tenant", "theme")
         тема = str(ответы.get("themeRef")).strip()
-        if not ИДЕНТИФИКАТОР.match(тема):
-            raise SiteRequestError("invalid_theme", "themeRef — идентификатор темы", field="themeRef")
+        if допустимые_темы and тема not in допустимые_темы:
+            raise SiteRequestError(
+                "invalid_theme",
+                f"themeRef — одно из {', '.join(допустимые_темы)}",
+                field="themeRef",
+            )
         чистые = {"themeRef": тема}
 
     elif шаг.id == "branding":
@@ -308,6 +338,11 @@ class SiteRequestStore:
             if канон:
                 занятые.add(канон)
         for заявка in self.list():
+            # Откачённая заявка домен не держит. Иначе отменённая попытка
+            # занимала бы имя навсегда, и повторить её было бы нельзя —
+            # включая повтор после исправления ошибки в той же заявке.
+            if заявка.state == "ROLLED_BACK":
+                continue
             домен = (заявка.answers.get("domain") or {}).get("domain")
             if домен:
                 занятые.add(str(домен).lower())
@@ -340,6 +375,9 @@ class SiteRequestStore:
             created_by=данные.get("createdBy", ""),
             answers=данные.get("answers") or {},
             state=данные.get("state", "DRAFT"),
+            approved_plan_hash=данные.get("approvedPlanHash", ""),
+            approved_by=данные.get("approvedBy", ""),
+            job_id=данные.get("jobId", ""),
         )
 
     def list(self) -> list[Заявка]:
@@ -359,6 +397,9 @@ class SiteRequestStore:
                     created_by=данные.get("createdBy", ""),
                     answers=данные.get("answers") or {},
                     state=данные.get("state", "DRAFT"),
+                    approved_plan_hash=данные.get("approvedPlanHash", ""),
+                    approved_by=данные.get("approvedBy", ""),
+                    job_id=данные.get("jobId", ""),
                 )
             )
         return итог
@@ -385,7 +426,19 @@ class SiteRequestStore:
         свой = (заявка.answers.get("domain") or {}).get("domain")
         if свой:
             занятые.discard(str(свой).lower())
-        заявка.answers[step] = _проверить_шаг(шаг, ответы, занятые=занятые)
+        заявка.answers[step] = _проверить_шаг(шаг, ответы, занятые=занятые, root=self._root)
+        # Ответ изменился — подтверждение прошлого плана к новому не относится.
+        # Перенести его значило бы выложить не то, что подтверждали.
+        if заявка.state == "APPROVED":
+            заявка.state = "DRAFT"
+            заявка.approved_plan_hash = ""
+            заявка.approved_by = ""
+        self._записать(заявка)
+        return заявка
+
+    def save(self, заявка: Заявка) -> Заявка:
+        """Сохранить заявку целиком. Нужна исполнению: состояние заявки меняется
+        не только ответами, но и подтверждением, выкладкой и откатом."""
         self._записать(заявка)
         return заявка
 

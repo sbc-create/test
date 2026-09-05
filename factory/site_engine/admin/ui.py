@@ -1657,6 +1657,14 @@ def _план(план: dict) -> str:
     """План показывается целиком: шаги, ресурсы, замки, контракты и откат."""
     if not план:
         return ""
+    недостаёт = план.get("missingAssets") or []
+    файлы = (
+        ""
+        if not недостаёт
+        else '<div class="flash warn">Для публикации не хватает файлов витрины: '
+        + _e(", ".join(sorted(б.get("field", "") for б in недостаёт)))
+        + ". Канарейке они не мешают: она не индексируется и никому не показана.</div>"
+    )
     шаги = "".join(
         f'<tr><td><code>{_e(ш["id"])}</code></td><td>{_e(ш["detail"])}</td>'
         f'<td class="mut">{"изменение" if ш.get("mutation") else "проверка"}</td></tr>'
@@ -1676,11 +1684,16 @@ def _план(план: dict) -> str:
         + ", ".join(f"<code>{_e(str(з))}</code>" for з in значения or [])
         + "</p>"
     )
-    готов = план.get("ready")
+    готов = план.get("canaryReady")
     return (
-        f'<div class="card"><h2>Сухой прогон</h2>'
+        файлы
+        + f'<div class="card"><h2>Сухой прогон</h2>'
         f'<div class="flash {"ok" if готов else "warn"}">'
-        + ("Заявка готова к исполнению." if готов else "Заявка ещё не готова: см. требования.")
+        + (
+            "Заявка готова к канарейке."
+            if готов
+            else "Заявка ещё не готова: см. требования."
+        )
         + f' Изменений выполнено: {план.get("mutations", 0)}.</div>'
         f'<p class="hint">Отпечаток плана <code>{_e(план.get("planHash", ""))}</code>. '
         "Один и тот же ввод даёт один и тот же отпечаток: подтверждают именно то, "
@@ -1761,6 +1774,52 @@ def new_site(
     )
 
     подробно = ""
+    исполнение = ""
+    if заявка and может:
+        состояние = заявка.get("state", "DRAFT")
+        rid = _e(заявка["requestId"])
+        отпечаток = _e((план or {}).get("planHash", ""))
+        # Канарейку можно завести без логотипа и юридических текстов, а
+        # опубликовать — нет. Это два разных ответа, и кнопка опирается на тот,
+        # который относится к следующему шагу.
+        готов = bool((план or {}).get("canaryReady"))
+        кнопки = []
+        if состояние == "DRAFT" and готов:
+            кнопки.append(
+                f'<form method="post" action="/admin/new-site/{rid}/approve">{hidden}'
+                f'<input type="hidden" name="planHash" value="{отпечаток}">'
+                "<button type=\"submit\">Подтвердить план</button></form>"
+            )
+        if состояние == "APPROVED":
+            кнопки.append(
+                f'<form method="post" action="/admin/new-site/{rid}/provision">{hidden}'
+                "<button type=\"submit\">Выложить канарейку</button></form>"
+            )
+        if состояние == "PROVISIONED":
+            кнопки.append(
+                f'<form method="post" action="/admin/new-site/{rid}/publish">{hidden}'
+                '<button class="ghost" type="submit">Опубликовать</button></form>'
+                f'<form method="post" action="/admin/new-site/{rid}/rollback">{hidden}'
+                "<button type=\"submit\">Откатить</button></form>"
+            )
+        пояснение = {
+            "DRAFT": "План подтверждают до выкладки: подтверждение привязано к отпечатку, "
+            "и после изменения ответов его придётся дать заново.",
+            "APPROVED": "Выкладка создаёт канарейку под NOINDEX в отдельном наложении. "
+            "В общий каталог витрин она не попадает.",
+            "PROVISIONED": "Публикация в боевой контур требует разрешения владельца и "
+            "мастером не выдаётся. Откат снимает всё созданное и освобождает домен.",
+            "ROLLED_BACK": "Откат выполнен: наложение, состояние канарейки и бронь домена сняты.",
+        }.get(состояние, "")
+        исполнение = (
+            f'<div class="card"><h2>Исполнение</h2>'
+            f'<p>Состояние заявки: <span class="pill '
+            f'{"ok" if состояние in ("APPROVED", "PROVISIONED") else "warn"}">'
+            f'{_e(состояние)}</span></p>'
+            f'<p class="hint">{_e(пояснение)}</p>'
+            f'<div class="row">{"".join(кнопки) or "<span class=&quot;mut&quot;>Действий нет.</span>"}'
+            "</div></div>"
+        )
     if заявка:
         шаги = "".join(
             f'<tr><td><code>{_e(ш["id"])}</code></td><td>{_e(ш["title"])}</td>'
@@ -1789,6 +1848,7 @@ def new_site(
             + шаги
             + "</tbody></table></div></div>"
             + форма
+            + исполнение
             + _план(план or {})
         )
 

@@ -54,8 +54,8 @@ REPO = Path(__file__).resolve().parents[2]
     "domain": {"domain": "novaya.test", "aliases": ""},
     "profile": {"environment": "staging", "targetRef": "local-disposable",
                 "seoProfile": "catalog_authority"},
-    "content": {"contentSource": "provider-feed", "contentTypes": "movie,series"},
-    "template": {"themeRef": "basis-video"},
+    "content": {"contentSource": "fixture", "contentTypes": "movies,series"},
+    "template": {"themeRef": "portal_light"},
     "branding": {"brandName": "Новая", "legalName": "ООО Новая",
                  "primaryColor": "#1f4fd8"},
     "seo": {"canonicalHostForm": "non_www", "trailingSlash": "1"},
@@ -81,6 +81,15 @@ def sandbox(tmp_path, monkeypatch):
     # схема проверяла бы не то, что проверит конвейер.
     (tmp_path / "schemas").symlink_to(REPO / "schemas")
     (tmp_path / "knowledge").symlink_to(REPO / "knowledge")
+    # Проверка пакета читает реестры: список публичных суффиксов нужен, чтобы
+    # отличить домен второго уровня от третьего. Без них проверка падает
+    # исключением, а не блокером, и заявка выглядит сломанной.
+    (tmp_path / "inventory").symlink_to(REPO / "inventory")
+    # Пресет пакета — часть поставки, а не деталь теста: без него мастер
+    # собирает пакет из пустоты, и проверка ругается на всё сразу.
+    (tmp_path / "config" / "site-request-presets").symlink_to(
+        REPO / "config" / "site-request-presets"
+    )
     return tmp_path
 
 

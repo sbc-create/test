@@ -1,14 +1,14 @@
 {
   "task": "CORE-FINALIZATION-CYCLIC-21",
-  "cycle": 7,
-  "slice": "Self-service: подтверждение, выкладка, канарейка и откат",
+  "cycle": 8,
+  "slice": "Observability, security, contracts и release candidate",
   "branch": "claude/core-product-8plus-20",
   "headAtStart": "b3bd6ede308dee2ec527d3e461acfae4857df21f",
   "upstream": "origin/claude/core-product-8plus-20",
   "productionCheckout": "568863d350c320e4101ac17417c846ca4b7265c0",
   "deployedControlApi": "52fd06659a7ff73fd37b5bed2f20eb46a90d7a1e",
   "locks": "нет",
-  "nextStep": "падающий тест на исполнение заявки: подтверждение по отпечатку плана, идемпотентная выкладка, атомарная бронь домена, канарейка под NOINDEX в наложении, проверки поимённо, полный откат",
+  "nextStep": "падающий тест на сквозной correlation ID от панели до задания, scorecard по фактическим данным, алерты с runbook, негативная матрица безопасности, backup/restore нового состояния, conformance CORE-TEMPLATES-SEO",
   "testPortPolicy": "свободный порт из диапазона 18800-18899, владелец проверяется до запуска, cleanup только по сохранённому PID",
   "status": "IN_PROGRESS",
   "lastCommit": "118ebf1664320b7adaa17b5cd74c5b0530e285f5",
@@ -17,5 +17,6 @@
   "cycle3": "closed: Jobs и Sites, живой стенд, 210 targeted passed",
   "cycle4": "closed: Люди и доступ, Настройки; сторож безопасности процессов",
   "cycle5": "closed: Выпуски, Происшествия, отбор в журнале; editorialAdmin 7 → 8",
-  "cycle6": "closed: мастер и сухой прогон; selfServiceSite 3 → 6"
+  "cycle6": "closed: мастер и сухой прогон; selfServiceSite 3 → 6",
+  "cycle7": "closed: подтверждение, канарейка, откат; selfServiceSite 6 → 8"
 }

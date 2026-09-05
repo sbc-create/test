@@ -881,6 +881,28 @@ class AdminApp:
             )
             return _redirect(куда)
 
+        if method == "POST" and len(tail) == 2 and tail[1] in {
+            "approve",
+            "provision",
+            "publish",
+            "rollback",
+        }:
+            rid, действие = tail
+            тело = {"planHash": form.get("planHash") or ""} if действие == "approve" else {}
+            ответ = self._call(
+                "POST", f"/api/v1/site-requests/{rid}/{действие}", session, тело
+            )
+            session.flash = self._flash_from(
+                ответ,
+                success={
+                    "approve": "План подтверждён.",
+                    "provision": "Канарейка выложена.",
+                    "publish": "",
+                    "rollback": "Откат выполнен.",
+                }.get(действие, "Готово"),
+            )
+            return _redirect(f"/admin/new-site?request={rid}")
+
         if method == "POST" and len(tail) == 1:
             шаг = (form.get("step") or "").strip()
             ответы = {
