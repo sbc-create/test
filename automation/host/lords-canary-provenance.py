@@ -44,6 +44,9 @@ MANIFEST = ROOT / "automation" / "host" / "lords-canary-provenance.json"
 #: меняет то, что делает root, и потому обязано ломать сверку.
 TOOLING = (
     "automation/host/lords-canary-apply.sh",
+    "automation/host/lords-canary-install-and-run.sh",
+    "automation/host/systemd/lords-canary-render@.service",
+    "automation/host/systemd/lords-canary-switch@.service",
     "automation/host/lords-canary-build.py",
     "automation/host/lords-canary-gates.py",
     "automation/host/lords-canary-snapshot.py",

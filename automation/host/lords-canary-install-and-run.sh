@@ -1,55 +1,64 @@
 #!/usr/bin/env bash
 # Единственное привилегированное действие для canary одной витрины Lords.
 #
-# Ставит oneshot-юнит с той же привязкой учётных данных, что у штатного
-# обновления содержимого, и запускает его один раз для названной витрины.
-# Постоянной службы с правами на выкладку после этого не остаётся: юнит
-# oneshot, RemainAfterExit=no.
+# Ставит два oneshot-юнита и запускает первый. Постоянной службы с правами на
+# выкладку не остаётся: оба oneshot, RemainAfterExit=no.
+#
+#   render — ограниченная учётная запись, учётные данные, часы работы,
+#            никакого доступа на запись в /srv/lords;
+#   switch — root, БЕЗ учётных данных, минуты работы.
+#
+# Секрет и полные права никогда не встречаются в одном процессе.
 #
 # Запуск:
 #   sudo bash automation/host/lords-canary-install-and-run.sh lords-02
 #
-# Что изменится:
-#   * появится /etc/systemd/system/lords-canary@.service;
-#   * витрина lords-02 получит релиз, собранный на живом каталоге и
-#     закреплённом артефакте TEMPLATE_TO_CORE-008;
-#   * таймер lords-content-refresh.timer будет остановлен на время наблюдения.
+# Что изменится: появятся два юнита; витрина lords-02 получит релиз, собранный
+# на живом каталоге и закреплённом артефакте; на время переключения и
+# наблюдения будет остановлен lords-content-refresh.timer.
 #
 # Что НЕ изменится: nginx, TLS, соседние витрины, Yummy, провайдер плеера,
 # robots и индексируемость, наблюдатель.
-#
-# Откат печатается сценарием и записывается в журнал операции.
 set -Eeuo pipefail
 
 SITE="${1:-lords-02}"
 SRC="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-UNIT="lords-canary@.service"
+STEPS="/var/log/site-factory/lords-canary-${SITE}.steps.log"
 
 [ "$(id -u)" = "0" ] || { echo "нужны права root: запустите через sudo" >&2; exit 2; }
 
-echo "==> ставлю ${UNIT}"
-install -m 0644 "${SRC}/systemd/${UNIT}" "/etc/systemd/system/${UNIT}"
+echo "==> ставлю юниты"
+for unit in lords-canary-render@.service lords-canary-switch@.service; do
+  install -m 0644 "${SRC}/systemd/${unit}" "/etc/systemd/system/${unit}"
+  echo "    ${unit}"
+done
+# Прежний одноблочный юнит больше не используется: он делал всё от root.
+rm -f /etc/systemd/system/lords-canary@.service
 systemctl daemon-reload
 
-STEPS="/var/log/site-factory/lords-canary-${SITE}.steps.log"
+echo "==> запускаю сборку lords-canary-render@${SITE}.service"
+# Без --wait намеренно: полный рендер идёт часами, а обрыв сессии убил бы
+# операцию. Переключение запускается отдельно, после проверки результата.
+systemctl start --no-block "lords-canary-render@${SITE}.service"
 
-echo "==> запускаю lords-canary@${SITE}.service"
-# Без --wait намеренно. Полная пересборка витрины — это рендер пятидесяти трёх
-# тысяч страниц; держать сессию всё это время незачем, а оборванная сессия
-# убила бы операцию. Ход виден в пошаговом журнале, итог — в журнале операции.
-systemctl start --no-block "lords-canary@${SITE}.service"
+cat <<TXT
 
-echo
-echo "Операция запущена в фоне. Следить за ходом:"
-echo "    tail -f ${STEPS}"
-echo
-echo "Итог появится здесь (журнал операции с отпечатками и командой отката):"
-echo "    /var/log/site-factory/lords-canary-${SITE}-<release>.json"
-echo
-echo "Остановить и вернуть всё как было:"
-echo "    systemctl stop lords-canary@${SITE}.service"
-echo "    systemctl start lords-content-refresh.timer"
-echo
+Сборка запущена в фоне и идёт от ограниченной учётной записи.
+
+Следить за ходом:
+    tail -f ${STEPS}
+
+Когда в журнале появится «готово к переключению», выполнить переключение:
+    sudo systemctl start --wait lords-canary-switch@${SITE}.service
+
+Итог с отпечатками и командой отката появится здесь:
+    /var/log/site-factory/lords-canary-${SITE}-<release>.json
+
+Остановить и вернуть всё как было:
+    systemctl stop lords-canary-render@${SITE}.service
+    systemctl start lords-content-refresh.timer
+
+TXT
 sleep 5
 echo "==> первые шаги"
 tail -n 12 "${STEPS}" 2>/dev/null || echo "(журнал ещё не создан)"

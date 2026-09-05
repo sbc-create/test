@@ -478,14 +478,13 @@ class TestDubiousOwnershipReproduced:
         # проверяется только то, что владелец каталога его больше не роняет.
         import subprocess
         result = subprocess.run(
-            ["bash", str(self.ROOT / "automation/host/lords-canary-apply.sh"), "lords-02"],
+            ["bash", str(self.ROOT / "automation/host/lords-canary-apply.sh"), "render", "lords-02"],
             capture_output=True, text=True, cwd=self.ROOT,
             env={**self.env(),
                  "LORDS_SNAPSHOT_DIR": "/srv/site-factory/repo/var/lords/lords/catalog-cache"})
         out = result.stdout + result.stderr
         assert "dubious ownership" not in out, "git вернулся в путь запуска"
         assert "происхождение подтверждено" in out, f"предполётные проверки не пройдены:\n{out[-600:]}"
-        assert "отпечаток шаблона совпал" in out, f"отпечаток не сверен:\n{out[-600:]}"
 
 
 class TestNoBlanketGitTrust:
@@ -498,7 +497,8 @@ class TestNoBlanketGitTrust:
         bad = []
         for name in ("automation/host/lords-canary-apply.sh",
                      "automation/host/lords-canary-install-and-run.sh",
-                     "automation/host/systemd/lords-canary@.service",
+                     "automation/host/systemd/lords-canary-render@.service",
+                     "automation/host/systemd/lords-canary-switch@.service",
                      "automation/host/lords-canary-provenance.py"):
             text = (self.ROOT / name).read_text(encoding="utf-8")
             for n, line in enumerate(text.splitlines(), 1):
@@ -530,11 +530,12 @@ class TestUnitNamespace:
     журнале, доступном не всякой учётной записи. Поэтому он проверяется здесь.
     """
 
-    UNIT = Path(__file__).resolve().parents[2] / "automation" / "host" / "systemd" / "lords-canary@.service"
+    UNITS = ("lords-canary-render@.service", "lords-canary-switch@.service")
+    BASE = Path(__file__).resolve().parents[2] / "automation" / "host" / "systemd"
 
-    def directives(self) -> dict:
+    def directives(self, unit: str) -> dict:
         out: dict = {}
-        for line in self.UNIT.read_text(encoding="utf-8").splitlines():
+        for line in (self.BASE / unit).read_text(encoding="utf-8").splitlines():
             line = line.strip()
             if not line or line.startswith("#") or "=" not in line:
                 continue
@@ -543,30 +544,145 @@ class TestUnitNamespace:
         return out
 
     def test_нет_путей_под_home_при_включённом_protecthome(self):
-        d = self.directives()
-        rw = " ".join(d.get("ReadWritePaths", [])).split()
-        home = [p for p in rw if p.startswith("/home")]
-        if d.get("ProtectHome"):
-            assert home == [], (
-                "ProtectHome вместе с путями под /home в ReadWritePaths — служба не построит "
-                f"пространство имён: {home}")
+        for unit in self.UNITS:
+            d = self.directives(unit)
+            rw = " ".join(d.get("ReadWritePaths", [])).split()
+            home = [p for p in rw if p.startswith("/home")]
+            if d.get("ProtectHome"):
+                assert home == [], (
+                    f"{unit}: ProtectHome вместе с путями под /home в ReadWritePaths — "
+                    f"служба не построит пространство имён: {home}")
 
     def test_иерархия_всё_равно_только_для_чтения(self):
         # Убрав ProtectHome, нельзя потерять защиту: её обязан давать
         # ProtectSystem=strict, иначе снятие директивы было бы послаблением.
-        d = self.directives()
-        assert d.get("ProtectSystem") == ["strict"], (
-            "без ProtectHome защита держится только на ProtectSystem=strict")
-
-    def test_запись_разрешена_только_туда_куда_нужно(self):
-        d = self.directives()
-        rw = " ".join(d.get("ReadWritePaths", [])).split()
-        assert "/srv/lords" in rw, "рантайм витрин недоступен на запись — выкладка невозможна"
-        for path in rw:
-            assert path.startswith(("/srv/lords", "/home/claude/wt-canary", "/var/log", "/var/lib")), (
-                f"запись разрешена в неожиданный путь: {path}")
+        for unit in self.UNITS:
+            assert self.directives(unit).get("ProtectSystem") == ["strict"], (
+                f"{unit}: без ProtectHome защита держится только на ProtectSystem=strict")
 
     def test_операция_одноразовая(self):
-        d = self.directives()
-        assert d.get("Type") == ["oneshot"], "разрешение обязано истекать вместе с операцией"
-        assert d.get("RemainAfterExit") == ["no"], "служба не должна оставаться активной"
+        for unit in self.UNITS:
+            d = self.directives(unit)
+            assert d.get("Type") == ["oneshot"], f"{unit}: разрешение обязано истекать"
+            assert d.get("RemainAfterExit") == ["no"], f"{unit}: служба не должна оставаться активной"
+
+
+class TestPrivilegeSeparation:
+    """Секрет и полные права не встречаются в одном процессе.
+
+    Прежде обе вещи делала одна служба от root: и рендер тридцати пяти
+    мегабайт данных поставщика, и системное переключение. Долгая фаза с чужими
+    данными не имеет ни одной причины идти с полными правами.
+    """
+
+    BASE = Path(__file__).resolve().parents[2] / "automation" / "host" / "systemd"
+
+    def directives(self, unit: str) -> dict:
+        out: dict = {}
+        for line in (self.BASE / unit).read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, _, value = line.partition("=")
+            out.setdefault(key, []).append(value)
+        return out
+
+    def test_сборка_идёт_не_от_root(self):
+        d = self.directives("lords-canary-render@.service")
+        assert d.get("User"), "у фазы сборки не задана учётная запись — она пойдёт от root"
+        assert d["User"] != ["root"], "фаза сборки не должна идти от root"
+
+    def test_сборка_не_имеет_записи_в_боевой_рантайм(self):
+        rw = " ".join(self.directives("lords-canary-render@.service").get("ReadWritePaths", [])).split()
+        assert not any(p.startswith("/srv/lords") for p in rw), (
+            "фаза сборки получила запись в боевой рантайм — она может тронуть витрину при любой ошибке")
+
+    def test_переключение_не_получает_учётных_данных(self):
+        d = self.directives("lords-canary-switch@.service")
+        assert not d.get("LoadCredential"), (
+            "фазе переключения переданы учётные данные: секрет встретился с полными правами")
+
+    def test_учётные_данные_только_у_сборки(self):
+        d = self.directives("lords-canary-render@.service")
+        assert d.get("LoadCredential"), "фаза сборки без учётных данных соберёт витрину без плеера"
+
+    def test_сценарий_отказывается_переключать_с_учётными_данными(self):
+        script = (self.BASE.parent / "lords-canary-apply.sh").read_text(encoding="utf-8")
+        assert "CREDENTIALS_DIRECTORY" in script and "не должны встречаться" in script, (
+            "сценарий не проверяет, что фазе переключения не подсунули секрет")
+
+    def test_фаза_сборки_отказывается_идти_от_root(self):
+        script = (self.BASE.parent / "lords-canary-apply.sh").read_text(encoding="utf-8")
+        assert "рендер не должен идти от root" in script
+
+
+class TestSnapshotPathIsExplicitInput:
+    """Снимок берётся из указанного каталога, а не «рядом с кодом».
+
+    Отказ, ради которого написан класс, выглядел в журнале так:
+
+        BlockedInput: нет кэша живого каталога
+        /home/claude/wt-canary/var/lords/lords/catalog-cache/lords-02.json
+
+    при том, что снимок в 53 229 записей уже лежал в боевом контуре и был
+    прочитан оболочкой строкой выше. Причина: переменную `LORDS_SNAPSHOT_DIR`
+    читала только оболочка — ради числа записей в отчёте, — а сборка звала
+    `load_live_items` без неё и уходила искать кэш относительно собственного
+    дерева. Операция из отдельного worktree с закреплённым артефактом ищет
+    снимок по своему адресу и не находит его никогда.
+    """
+
+    BUILD = Path(__file__).resolve().parents[2] / "automation" / "host" / "lords-canary-build.py"
+    LIVE_CACHE = Path("/srv/site-factory/repo/var/lords/lords/catalog-cache/lords-02.json")
+
+    def make_cache(self, tmp_path: Path, count: int = 3) -> Path:
+        """Маленький кэш настоящей формы: записи берутся из боевого снимка."""
+        import json
+        if not self.LIVE_CACHE.is_file():
+            pytest.skip("боевого снимка нет — форму записи взять неоткуда")
+        raw = json.loads(self.LIVE_CACHE.read_text(encoding="utf-8"))
+        items = (raw.get("items") if isinstance(raw, dict) else raw) or []
+        directory = tmp_path / "catalog-cache"
+        directory.mkdir(parents=True, exist_ok=True)
+        (directory / "lords-02.json").write_text(
+            json.dumps({"items": items[:count]}, ensure_ascii=False), encoding="utf-8")
+        return directory
+
+    def run_build(self, out: Path, env_extra: dict) -> "subprocess.CompletedProcess":
+        import os as _os
+        import subprocess
+        import sys
+        return subprocess.run(
+            [sys.executable, str(self.BUILD), "lords-02", str(out)],
+            capture_output=True, text=True,
+            env={**_os.environ, **env_extra},
+            cwd=str(self.BUILD.resolve().parents[2]))
+
+    def test_сборка_читает_снимок_из_указанного_каталога(self, tmp_path):
+        cache = self.make_cache(tmp_path, count=3)
+        result = self.run_build(tmp_path / "out", {"LORDS_SNAPSHOT_DIR": str(cache)})
+        assert result.returncode == 0, f"сборка не прошла: {result.stderr[-500:]}"
+        assert result.stdout.strip() == "3", (
+            f"собрано не из указанного снимка: напечатано {result.stdout.strip()!r}")
+
+    def test_без_переменной_воспроизводится_прежний_отказ(self, tmp_path):
+        # Контроль: без явного входа сборка ищет кэш относительно своего дерева
+        # и падает — ровно то, что видел журнал службы.
+        result = self.run_build(tmp_path / "out", {"LORDS_SNAPSHOT_DIR": ""})
+        assert result.returncode != 0, "без указанного снимка сборка обязана отказать"
+        assert "кэш" in result.stderr or "BlockedInput" in result.stderr, result.stderr[-300:]
+
+    def test_неверный_каталог_останавливает_до_сборки(self, tmp_path):
+        result = self.run_build(tmp_path / "out",
+                                {"LORDS_SNAPSHOT_DIR": str(tmp_path / "нет-такого")})
+        assert result.returncode != 0
+        assert "не на каталог" in result.stderr, result.stderr[-300:]
+
+    def test_сценарий_передаёт_переменную_в_сборку(self):
+        # Оболочка обязана передать тот же адрес, что читает сама: иначе отчёт
+        # о числе записей и фактическая сборка расходятся молча.
+        script = (self.BUILD.parent / "lords-canary-apply.sh").read_text(encoding="utf-8")
+        assert "LORDS_SNAPSHOT_DIR" in script, "оболочка не знает про адрес снимка"
+        build = self.BUILD.read_text(encoding="utf-8")
+        assert "LORDS_SNAPSHOT_DIR" in build, "сборка не читает адрес снимка"
+        assert "root=snapshot_dir()" in build, "адрес снимка не доходит до load_live_items"

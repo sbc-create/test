@@ -1,0 +1,42 @@
+[Unit]
+Description=lords canary: переключение витрины %i на собранный релиз (без учётных данных)
+Documentation=file:///srv/site-factory/coordination/v1/handoffs/013-core-to-owner-one-privileged-action.md
+Requires=lords-canary-render@%i.service
+After=lords-canary-render@%i.service
+# Одновременная работа с обновлением содержимого означала бы двух писателей в
+# один каталог релизов.
+Conflicts=lords-content-refresh.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=no
+
+# Здесь root, и это осознанно: смена владельца каталога релиза, подмена ссылки
+# и остановка таймера системных прав требуют. Фаза короткая.
+#
+# Учётных данных у неё НЕТ — ни одной директивы LoadCredential. Сценарий
+# отказывается работать, если переменная окружения с каталогом учётных данных
+# всё же оказалась выставлена: секрет и полные права не встречаются.
+WorkingDirectory=/home/claude/wt-canary
+Environment=LORDS_SNAPSHOT_DIR=/srv/site-factory/repo/var/lords/lords/catalog-cache
+Environment=LORDS_CANARY_STAGING=/home/claude/wt-canary/var/canary-staging
+Environment=FACTORY_PYTHON=/home/claude/work-templates/site-factory/.venv/bin/python3
+
+ExecStart=/home/claude/wt-canary/automation/host/lords-canary-apply.sh switch %i
+
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+InaccessiblePaths=/etc/site-factory/secrets
+ReadWritePaths=/srv/lords /home/claude/wt-canary/var /var/log/site-factory
+ReadOnlyPaths=/srv/site-factory/repo /etc/site-factory
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+UMask=0022
+
+TimeoutStartSec=1800
+MemoryMax=2G
+TasksMax=256

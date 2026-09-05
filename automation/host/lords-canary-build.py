@@ -25,10 +25,31 @@ def token_from_credentials() -> str | None:
         return None
 
 
+#: Каталог снимка живого каталога — явный вход, а не догадка.
+#:
+#: `load_live_items` по умолчанию ищет кэш относительно корня репозитория, из
+#: которого запущен код. Для операции, идущей из отдельного дерева с
+#: закреплённым артефактом, это неверный адрес: снимок наполняет служба
+#: обновления и лежит он в боевом репозитории. Прежде переменную читала только
+#: оболочка — для отчёта о числе записей, — а сборка уходила искать кэш рядом с
+#: собой и падала BlockedInput при уже найденном снимке в 53 229 записей.
+SNAPSHOT_DIR_ENV = "LORDS_SNAPSHOT_DIR"
+
+
+def snapshot_dir() -> Path | None:
+    value = os.environ.get(SNAPSHOT_DIR_ENV, "").strip()
+    if not value:
+        return None
+    path = Path(value)
+    if not path.is_dir():
+        raise SystemExit(f"{SNAPSHOT_DIR_ENV} указывает не на каталог: {path}")
+    return path
+
+
 def main() -> int:
     site_id, out = sys.argv[1], Path(sys.argv[2])
     result = live_site.build_live_site(
-        site_id, output=out, enrich_budget=0,
+        site_id, output=out, root=snapshot_dir(), enrich_budget=0,
         credentials_token=token_from_credentials(), playability_budget=0)
     print(result.report["catalog"]["titles"])
     return 0
