@@ -31,13 +31,25 @@ echo "==> ставлю ${UNIT}"
 install -m 0644 "${SRC}/systemd/${UNIT}" "/etc/systemd/system/${UNIT}"
 systemctl daemon-reload
 
-echo "==> запускаю lords-canary@${SITE}.service"
-# Без --wait команда вернулась бы сразу, и отказ ворот выглядел бы как успех.
-systemctl start --wait "lords-canary@${SITE}.service" || {
-  echo "операция завершилась с ошибкой; журнал:" >&2
-  journalctl -u "lords-canary@${SITE}.service" -n 40 --no-pager >&2 || true
-  exit 1
-}
+STEPS="/var/log/site-factory/lords-canary-${SITE}.steps.log"
 
-echo "==> журнал операции"
-journalctl -u "lords-canary@${SITE}.service" -n 40 --no-pager || true
+echo "==> запускаю lords-canary@${SITE}.service"
+# Без --wait намеренно. Полная пересборка витрины — это рендер пятидесяти трёх
+# тысяч страниц; держать сессию всё это время незачем, а оборванная сессия
+# убила бы операцию. Ход виден в пошаговом журнале, итог — в журнале операции.
+systemctl start --no-block "lords-canary@${SITE}.service"
+
+echo
+echo "Операция запущена в фоне. Следить за ходом:"
+echo "    tail -f ${STEPS}"
+echo
+echo "Итог появится здесь (журнал операции с отпечатками и командой отката):"
+echo "    /var/log/site-factory/lords-canary-${SITE}-<release>.json"
+echo
+echo "Остановить и вернуть всё как было:"
+echo "    systemctl stop lords-canary@${SITE}.service"
+echo "    systemctl start lords-content-refresh.timer"
+echo
+sleep 5
+echo "==> первые шаги"
+tail -n 12 "${STEPS}" 2>/dev/null || echo "(журнал ещё не создан)"
