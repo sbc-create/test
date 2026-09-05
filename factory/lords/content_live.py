@@ -403,14 +403,12 @@ def normalize_title(raw: dict, contract: LiveContract) -> dict | None:
     # Плеер адресуется агрегатором, а не внутренним id источника.
     aggregator = None
     playback_id = None
-    # imdb добавлен последним намеренно: у записей, где есть kp, поведение не
-    # меняется. Источник отдаёт imdb для части каталога, а поставщик принимает
-    # его как агрегатор — проверено прямым запросом плейлиста. Без этой строки
-    # 637 карточек из 53 203 показывали «видео временно недоступно», хотя видео
-    # существует и адресуется тем идентификатором, который у нас уже был.
-    aggregator_by_key = {"kinopoisk": "kp", "myanimelist": "mali",
-                         "mydramalist": "mdl", "imdb": "imdb"}
-    for key in ("kinopoisk", "myanimelist", "mydramalist", "imdb"):
+    # imdb в этом отображении отсутствует намеренно: правило PC-2 контракта
+    # плеера запрещает IMDb в роли playback identifier. Поставщик по нему поток
+    # отдаёт, и 645 карточек из-за этого остаются без видео — но снимать запрет
+    # вправе только владелец контракта.
+    aggregator_by_key = {"kinopoisk": "kp", "myanimelist": "mali", "mydramalist": "mdl"}
+    for key in ("kinopoisk", "myanimelist", "mydramalist"):
         code = aggregator_by_key[key]
         if code in contract.aggregator_priority and resolved.get(key):
             aggregator, playback_id = code, resolved[key]

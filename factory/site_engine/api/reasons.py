@@ -78,10 +78,12 @@ REASONS: dict[str, Reason] = {r.code: r for r in (
         code="UNSUPPORTED_AGGREGATOR", stage="identity", terminal=False,
         public=_ОБЩЕЕ,
         operator="Идентификаторы есть, но ни один не объявлен в playback_aggregator_priority. "
-                 "Так были потеряны 637 карточек с одним лишь IMDb, пока imdb не добавили в контракт.",
+                 "Прежде чем расширять перечень, сверьтесь с контрактом плеера: он может "
+                 "запрещать этот идентификатор в роли playback identifier.",
         metric="playback_reason_total{code=UNSUPPORTED_AGGREGATOR}",
-        remediation="Проверить у поставщика, принимает ли он этот агрегатор; при да — добавить "
-                    "в контракт последним и переработать проекцию.",
+        remediation="Проверить и у поставщика, и в контракте плеера. Согласие поставщика "
+                    "недостаточно: перечни обязаны совпадать, иначе дескриптор создастся "
+                    "и будет отвергнут при сборке элемента плеера.",
         automatic="targeted-reprojection", cooldown_seconds=3600, escalate_after=100,
         tags=("наш-дефект", "массовое"),
     ),
@@ -211,6 +213,20 @@ REASONS: dict[str, Reason] = {r.code: r for r in (
         tags=("клиент", "временное"),
     ),
     Reason(
+        code="IDENTIFIER_FORBIDDEN_BY_CONTRACT", stage="policy", terminal=True,
+        public=_ОБЩЕЕ,
+        operator="У записи есть идентификатор, и поставщик по нему отдаёт поток, но контракт "
+                 "плеера запрещает этот тип идентификатора в роли playback identifier. "
+                 "Измерено 2026-09-05: 645 карточек с одним лишь IMDb при правиле PC-2 "
+                 "«IMDb не используется как playback identifier». Потери сосредоточены в "
+                 "свежих поступлениях: среди записей с августа 2026 таких 40 процентов.",
+        metric="playback_reason_total{code=IDENTIFIER_FORBIDDEN_BY_CONTRACT}",
+        remediation="Решение владельца контракта. Технически видео доступно; снятие запрета "
+                    "меняет правило PC-2 и требует ревью, а не правки перечня в коде.",
+        automatic=None, cooldown_seconds=86400, escalate_after=1,
+        tags=("политика", "массовое", "требует-решения-владельца"),
+    ),
+    Reason(
         code="UNKNOWN", stage="descriptor", terminal=False,
         public=_ОБЩЕЕ,
         operator="Причина не классифицирована. Допустима только как временная заглушка: "
@@ -241,8 +257,9 @@ def catalogue() -> dict[str, Any]:
 
 
 def classify_descriptor(external_ids: dict | None, playback: dict | None,
-                        *, supported: tuple[str, ...] = ("kp", "mali", "mdl", "imdb"),
-                        probe: str | None = None) -> str:
+                        *, supported: tuple[str, ...] = ("kp", "mali", "mdl"),
+                        probe: str | None = None,
+                        forbidden: tuple[str, ...] = ("imdb",)) -> str:
     """Код причины по состоянию записи каталога.
 
     Порядок проверок повторяет порядок цепочки: сначала источник, потом
@@ -254,6 +271,11 @@ def classify_descriptor(external_ids: dict | None, playback: dict | None,
     if not pb:
         if not ext:
             return "MISSING_PROVIDER_ID"
+        # Идентификатор, запрещённый контрактом плеера, — не пробел в
+        # сопоставлении, а решение политики. Смешивать их нельзя: первое чинится
+        # кодом, второе только владельцем контракта.
+        if forbidden and all(k in forbidden for k in ext):
+            return "IDENTIFIER_FORBIDDEN_BY_CONTRACT"
         return "UNSUPPORTED_AGGREGATOR"
     aggr, tid = pb.get("aggregator"), pb.get("title_id")
     if not aggr or not tid:

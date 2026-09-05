@@ -1,9 +1,9 @@
 # Сгенерировано `python3 -m factory knowledge freeze`. Вручную не редактируется.
 schema_version: 1
 freeze_version: unversioned
-frozen_at: '2026-09-05T08:17:38Z'
+frozen_at: '2026-09-05T08:50:50Z'
 file_count: 13
-aggregate_sha256: 338cb8f228eb8a0f21d626fe157c0e37f8d11be777d3944077f3c47ec0626a81
+aggregate_sha256: 6ff7b5fb567a206568e1262b3bba84744a719f3747833f3164a0fe0efcaf080a
 files:
 - path: knowledge/DECISIONS.md
   sha256: 9b6d5de51c20ba049e17eeccf02c866939bf56761e5e9c40467533f0a02390df
@@ -42,5 +42,5 @@ files:
   sha256: 6ed1cdf655b2f4b5a4ac0b8f85c6c7a1bc895615de5c8d092c9cdd83c06acbbf
   bytes: 5209
 - path: knowledge/cdnvideohub/content-api.yaml
-  sha256: 911abaf286817db258d1608f125819a2ba9afd37bb0040aa8facd72467b1623a
-  bytes: 9479
+  sha256: cb8899502b8ca8c6db5d62c28426d8646939f8d42dcb03d0d92a3cd7cccee0ef
+  bytes: 9744

@@ -50,18 +50,16 @@ def test_знаменатель_честный(корень):
 def test_причины_разложены_по_кодам(корень):
     r = ch.сводка(корень[0], env=корень[1])["fleet"]["reasons"]
     assert r["OK"] == 1
-    assert r["UNSUPPORTED_AGGREGATOR"] == 1, "запись только с IMDb при узком списке"
+    assert r["IDENTIFIER_FORBIDDEN_BY_CONTRACT"] == 1, "запись только с IMDb — запрет PC-2"
     assert r["MISSING_PROVIDER_ID"] == 1
     assert r["PROVIDER_NOT_PLAYABLE"] == 1
 
 
-def test_расширение_списка_агрегаторов_видно_в_покрытии(корень):
-    узкий = ch.сводка(корень[0], env=корень[1], supported=("kp",))
-    широкий = ch.сводка(корень[0], env=корень[1], supported=("kp", "imdb"))
-    assert узкий["fleet"]["reasons"].get("UNSUPPORTED_AGGREGATOR") == 1
-    # При широком списке запись всё равно без дескриптора в кэше: покрытие
-    # меняется только после переработки проекции, и это должно быть видно.
-    assert широкий["fleet"]["total"] == узкий["fleet"]["total"]
+def test_запрет_контракта_виден_отдельным_классом(корень):
+    """Карточка с одним лишь IMDb не смешивается с неизвестным агрегатором."""
+    d = ch.сводка(корень[0], env=корень[1])
+    assert d["fleet"]["reasons"].get("IDENTIFIER_FORBIDDEN_BY_CONTRACT") == 1
+    assert "UNSUPPORTED_AGGREGATOR" not in d["fleet"]["reasons"]
 
 
 def test_устаревшая_проекция_заметна(корень):

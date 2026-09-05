@@ -13,7 +13,8 @@ from factory.site_engine.api import reasons
     "IDENTITY_AMBIGUOUS", "PROVIDER_NOT_PLAYABLE", "RESOLVER_TIMEOUT",
     "RESOLVER_ERROR", "DOMAIN_NOT_ELIGIBLE", "CONTENT_NOT_PLAYABLE_BY_POLICY",
     "PROJECTION_STALE", "DESCRIPTOR_INVALID", "CLIENT_COMPONENT_FAILED",
-    "IFRAME_FAILED", "MEDIA_REQUEST_FAILED", "FIRST_FRAME_TIMEOUT", "UNKNOWN",
+    "IFRAME_FAILED", "MEDIA_REQUEST_FAILED", "FIRST_FRAME_TIMEOUT",
+    "IDENTIFIER_FORBIDDEN_BY_CONTRACT", "UNKNOWN",
 ]
 
 
@@ -93,15 +94,23 @@ def test_нет_идентификаторов():
     assert reasons.classify_descriptor({}, None) == "MISSING_PROVIDER_ID"
 
 
-def test_идентификатор_есть_но_агрегатор_не_объявлен():
-    """Ровно класс двух названных владельцем адресов до исправления."""
-    assert reasons.classify_descriptor({"imdb": "43670638"}, None,
-                                       supported=("kp",)) == "UNSUPPORTED_AGGREGATOR"
+def test_запрещённый_контрактом_идентификатор_отличается_от_неизвестного():
+    """Ровно класс двух названных владельцем адресов.
+
+    IMDb запрещён правилом PC-2, а не отсутствует в перечне. Смешивать нельзя:
+    первое чинится решением владельца, второе — кодом.
+    """
+    assert reasons.classify_descriptor({"imdb": "43670638"}, None) == \
+        "IDENTIFIER_FORBIDDEN_BY_CONTRACT"
+    assert reasons.classify_descriptor({"tvdb": "1"}, None) == "UNSUPPORTED_AGGREGATOR"
 
 
-def test_после_добавления_imdb_класс_исчезает():
-    assert reasons.classify_descriptor(
-        {"imdb": "43670638"}, {"aggregator": "imdb", "title_id": "43670638"}) == "OK"
+def test_запрет_контракта_окончателен_и_без_автодействия():
+    """Снятие запрета — решение владельца контракта, не системы."""
+    r = reasons.REASONS["IDENTIFIER_FORBIDDEN_BY_CONTRACT"]
+    assert r.terminal is True
+    assert r.automatic is None
+    assert "требует-решения-владельца" in r.tags
 
 
 def test_неполный_дескриптор():
