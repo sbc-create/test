@@ -1,0 +1,57 @@
+{
+  "captured_at_utc": "2026-09-05T18:35:47.345Z",
+  "base": "http://127.0.0.1:9102",
+  "site": "lords-02-before",
+  "routes": {
+    "home": {
+      "status": 200,
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "catalog": {
+      "status": 200,
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "catalog-page-2": {
+      "status": 200,
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "genres": {
+      "status": 200,
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "years": {
+      "status": 200,
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "countries": {
+      "status": 200,
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "search": {
+      "status": 200,
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "search-empty": {
+      "status": 200,
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "not-found": {
+      "status": 404,
+      "consoleErrors": [],
+      "networkErrors": []
+    }
+  },
+  "vitals": {
+    "cls": 0,
+    "lcp": 144,
+    "limitation": "петлевой контур без сети: LCP — нижняя граница, не замер продукта"
+  }
+}
