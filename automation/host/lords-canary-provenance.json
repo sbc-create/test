@@ -1,5 +1,5 @@
 {
-  "head_sha": "10d1d6d62a56196f93f0ffc7311f75895363680e",
+  "head_sha": "ffff6a72d999fe5f41fa5bee0acefd0cb644c65f",
   "note": "манифест собран под учётной записью разработчика; привилегированная операция сверяет его без git",
   "template_digest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
   "template_digest_files": 19,
