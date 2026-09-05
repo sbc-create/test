@@ -318,41 +318,55 @@ class TestPreSwitchGates:
         slugs = [f"t{i:04d}" for i in range(1000)]
         site = self.build_site(tmp_path, slugs)
         report = canary.pre_switch_gates(site, expected_titles=1000,
-                                         sample_slugs=slugs[:5], previous_site=None)
+                                         previous_site=None)
         assert report.passed, report.failures
         assert report.catalog_titles == 1000
 
     def test_обвал_каталога_останавливает(self, tmp_path):
         site = self.build_site(tmp_path, [f"t{i:03d}" for i in range(30)])
         report = canary.pre_switch_gates(site, expected_titles=53216,
-                                         sample_slugs=[], previous_site=None)
-        assert not report.passed
-        assert any("потеря каталога" in f for f in report.failures), report.failures
-
-    def test_допуск_переживает_отклонённые_источником_записи(self, tmp_path):
-        # Источник отдал 1000, рендер принял 997: три записи отклонены. Это не
-        # потеря каталога, и ворота обязаны это различать.
-        slugs = [f"t{i:04d}" for i in range(997)]
-        site = self.build_site(tmp_path, slugs)
-        report = canary.pre_switch_gates(site, expected_titles=1000,
-                                         sample_slugs=slugs[:3], previous_site=None)
-        assert report.passed, report.failures
-
-    def test_пропавший_выборочный_адрес_останавливает(self, tmp_path):
-        slugs = [f"t{i:04d}" for i in range(1000)]
-        site = self.build_site(tmp_path, slugs)
-        report = canary.pre_switch_gates(site, expected_titles=1000,
-                                         sample_slugs=["t0001", "нет-такого"],
                                          previous_site=None)
         assert not report.passed
-        assert any("выборочных адресов" in f for f in report.failures), report.failures
+        assert any("обвал каталога" in f for f in report.failures), report.failures
+
+    def test_свод_одинаковых_адресов_не_считается_потерей(self, tmp_path):
+        # Настоящий случай, из-за которого ворота пришлось перекалибровать:
+        # 52 521 страница при 53 229 записях — недобор 1.33%. Причина не в
+        # потере, а в том, что рендерер сводит записи с одинаковым адресом в
+        # одну страницу. Прежний порог в 1% от записей отклонил бы исправную
+        # сборку; проверено, что те же адреса отсутствуют и на боевом релизе.
+        slugs = [f"t{i:05d}" for i in range(5252)]
+        site = self.build_site(tmp_path, slugs, players=False)
+        report = canary.pre_switch_gates(site, expected_titles=5323, previous_site=None)
+        assert report.passed, report.failures
+
+    def test_расхождение_с_прежним_релизом_останавливает(self, tmp_path):
+        prev = self.build_site(tmp_path / "prev", [f"t{i:04d}" for i in range(1000)])
+        new = self.build_site(tmp_path / "new", [f"t{i:04d}" for i in range(950)])
+        report = canary.pre_switch_gates(new, expected_titles=1000, previous_site=prev)
+        assert not report.passed
+        assert any("прежнего релиза" in f or "у прежнего релиза" in f for f in report.failures), \
+            report.failures
+
+    def test_исчезнувшая_работающая_страница_останавливает(self, tmp_path):
+        # Число страниц совпало, но состав другой: одна работающая страница
+        # исчезла, вместо неё появилась новая. Счётчик такого не видит.
+        prev = self.build_site(tmp_path / "prev", [f"t{i:04d}" for i in range(1000)])
+        # Пропадает ровно одна страница из тысячи — 0.1%, ниже допуска на
+        # убыль. Проверяется, что ворота считают исчезновение долей, а не
+        # ловят его случайно: убираем сразу двадцать, это 2%.
+        new_slugs = [f"t{i:04d}" for i in range(980)] + [f"новая-{i}" for i in range(20)]
+        new = self.build_site(tmp_path / "new", new_slugs)
+        report = canary.pre_switch_gates(new, expected_titles=1000, previous_site=prev)
+        assert not report.passed
+        assert any("исчезло то, что работает" in f for f in report.failures), report.failures
 
     def test_исчезнувший_плеер_останавливает(self, tmp_path):
         slugs = [f"t{i:04d}" for i in range(100)]
         prev = self.build_site(tmp_path / "prev", slugs, players=True)
         new = self.build_site(tmp_path / "new", slugs, players=False)
         report = canary.pre_switch_gates(new, expected_titles=100,
-                                         sample_slugs=slugs[:3], previous_site=prev)
+                                         previous_site=prev)
         assert not report.passed
         assert any("плеер исчез" in f for f in report.failures), report.failures
         assert report.players_previous == 100 and report.players_new == 0
@@ -367,7 +381,7 @@ class TestPreSwitchGates:
             page.parent.mkdir(parents=True, exist_ok=True)
             page.write_text("<html><body>без плеера</body></html>", encoding="utf-8")
         report = canary.pre_switch_gates(new, expected_titles=100,
-                                         sample_slugs=slugs[:3], previous_site=prev)
+                                         previous_site=prev)
         assert report.passed, report.failures
         assert report.players_new == 95
 

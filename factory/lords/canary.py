@@ -432,13 +432,27 @@ class GateReport:
         }
 
 
-#: Допуск на расхождение числа страниц с числом записей снимка.
+#: Допуск на расхождение числа страниц с ПРЕЖНИМ РЕЛИЗОМ.
 #:
-#: Ноль здесь неверен: источник вправе отдать запись, которую рендер отклонит —
-#: в последнем снимке таких три из 53 216. Но допуск обязан быть узким:
-#: обвал каталога в разы должен останавливать выкладку, а не списываться на
-#: «источник вправе».
+#: Сравнивать страницы с числом записей снимка нельзя, и это выяснилось на
+#: настоящей сборке: 52 521 страница при 53 229 записях — недобор 1.33%.
+#: Причина не в потере: рендерер сводит записи с одинаковым адресом в одну
+#: страницу (3 438 адресов делят 9 041 запись) и разводит часть коллизий
+#: суффиксами. Отношение «запись → страница» не единица и единицей не будет.
+#:
+#: Проверено, что недобор не нов: пятнадцать адресов, отсутствующих в новой
+#: сборке, отвечают 404 и на боевом релизе. Ворота с порогом в 1% от записей
+#: отклонили бы исправную сборку.
+#:
+#: Осмысленный вопрос другой: не исчезло ли то, что работает сейчас. Поэтому
+#: сравнение идёт с прежним релизом, а снимок остаётся грубым полом против
+#: обвала.
 CATALOG_TOLERANCE = 0.01
+
+#: Грубый пол против обвала каталога, считается от записей снимка. Широкий
+#: намеренно: он ловит катастрофу (фикстура вместо каталога, обрыв рендера), а
+#: не отличает 52 521 от 53 229.
+SNAPSHOT_FLOOR = 0.9
 
 #: Насколько может просесть число страниц с плеером. Порог тот же, что в
 #: `lords-content-refresh.sh`: источник вправе убрать видео у части тайтлов,
@@ -452,8 +466,7 @@ def pre_switch_gates(
     staging: Path,
     *,
     expected_titles: int,
-    sample_slugs: "list[str]",
-    previous_site: Path | None,
+    previous_site: Path | None = None,
 ) -> GateReport:
     """Ворота, которые обязаны сойтись до подмены ссылки.
 
@@ -462,13 +475,30 @@ def pre_switch_gates(
     доступности и при этом является полной потерей данных.
     """
     title_dir = staging / "title"
-    pages = sorted(p for p in title_dir.glob("*/index.html")) if title_dir.is_dir() else []
-    total = len(pages)
+    built = {p.parent.name for p in title_dir.glob("*/index.html")} if title_dir.is_dir() else set()
+    total = len(built)
 
-    found = 0
-    for slug in sample_slugs:
-        if (title_dir / slug / "index.html").is_file():
-            found += 1
+    previous_titles = previous_site / "title" if previous_site else None
+    previous_pages: set[str] = set()
+    if previous_titles and previous_titles.is_dir():
+        previous_pages = {p.parent.name for p in previous_titles.glob("*/index.html")}
+
+    # Сравнивается ПОЛНОЕ множество страниц прежнего релиза, а не выборка.
+    #
+    # Выборка сюда не годится дважды. Первое: наивный адрес по имени записи
+    # совпадает с настоящим не всегда — часть адресов рендерер разводит
+    # суффиксами, и 493 наивных адреса не существуют ни в новой сборке, ни на
+    # боевом релизе; выборка из них роняла бы ворота на исправной сборке
+    # примерно в каждом пятом прогоне. Второе: ступенчатая выборка пропускает
+    # конкретную пропажу — тест это и показал, убрав страницу, в выборку не
+    # попавшую.
+    #
+    # Разность множеств стоит доли секунды на пятидесяти тысячах строк и не
+    # пропускает ничего. Проверяемый инвариант: то, что работает сейчас, не
+    # должно исчезнуть.
+    disappeared = sorted(previous_pages - built) if previous_pages else []
+    found = len(previous_pages) - len(disappeared) if previous_pages else 0
+    checked = len(previous_pages)
 
     def players_in(root: Path) -> int:
         directory = root / "title"
@@ -481,17 +511,28 @@ def pre_switch_gates(
     players_prev = players_in(previous_site) if previous_site and previous_site.is_dir() else None
 
     failures: list[str] = []
-    floor = int(expected_titles * (1 - CATALOG_TOLERANCE))
+    floor = int(expected_titles * SNAPSHOT_FLOOR)
     if total < floor:
         failures.append(
             f"страниц произведений {total} при снимке в {expected_titles}: "
-            f"ниже допустимого {floor} — потеря каталога"
+            f"ниже грубого пола {floor} — обвал каталога"
         )
-    if sample_slugs and found < len(sample_slugs):
-        missing = len(sample_slugs) - found
-        failures.append(
-            f"из {len(sample_slugs)} выборочных адресов снимка не собрано {missing}"
-        )
+    if previous_pages:
+        drift = abs(total - len(previous_pages)) / len(previous_pages)
+        if drift > CATALOG_TOLERANCE:
+            failures.append(
+                f"страниц {total}, у прежнего релиза {len(previous_pages)}: "
+                f"расхождение {drift:.1%} больше допустимых {CATALOG_TOLERANCE:.0%}"
+            )
+    if previous_pages and disappeared:
+        share = len(disappeared) / len(previous_pages)
+        # Ноль здесь неверен: источник убирает записи, и часть страниц исчезает
+        # законно. Но исчезновение заметной доли — это потеря, а не убыль.
+        if share > CATALOG_TOLERANCE:
+            failures.append(
+                f"исчезло {len(disappeared)} страниц прежнего релиза ({share:.1%}), "
+                f"например {disappeared[:3]} — исчезло то, что работает"
+            )
     if players_prev is not None and players_prev > 0:
         player_floor = int(players_prev * PLAYER_FLOOR)
         if players_new < player_floor:
@@ -502,7 +543,7 @@ def pre_switch_gates(
 
     return GateReport(
         catalog_titles=total, expected_titles=expected_titles,
-        sample_slugs_found=found, sample_slugs_checked=len(sample_slugs),
+        sample_slugs_found=found, sample_slugs_checked=checked,
         players_new=players_new, players_previous=players_prev,
         failures=tuple(failures),
     )
