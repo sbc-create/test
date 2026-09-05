@@ -31,6 +31,10 @@ ROOT = Path(__file__).resolve().parents[2]
 ПРОБНЫЕ_ТЕЛА = {
     "/api/v1/sites/{siteId}/jobs": {"action": "reindex", "dryRun": True},
     "/api/v1/sites/{siteId}/settings": {"changes": {"keep_releases": 5}, "dryRun": True},
+    "/api/v1/releases": {},
+    "/api/v1/incidents": {},
+    "/api/v1/settings/{siteId}": {},
+    "/api/v1/settings/{siteId}/rollback": {"dryRun": True},
     "/api/v1/sites/{siteId}/cache/invalidate": {"scope": "catalog", "dryRun": True},
     "/api/v1/jobs/{jobId}": {},
     "/api/v1/audit": {"limit": 1},

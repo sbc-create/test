@@ -1,18 +1,20 @@
 {
   "task": "CORE-FINALIZATION-CYCLIC-21",
-  "cycle": 4,
-  "slice": "Users, Settings и Access",
+  "cycle": 6,
+  "slice": "Self-service: мастер и детерминированный сухой прогон",
   "branch": "claude/core-product-8plus-20",
   "headAtStart": "b3bd6ede308dee2ec527d3e461acfae4857df21f",
   "upstream": "origin/claude/core-product-8plus-20",
   "productionCheckout": "568863d350c320e4101ac17417c846ca4b7265c0",
   "deployedControlApi": "52fd06659a7ff73fd37b5bed2f20eb46a90d7a1e",
   "locks": "нет",
-  "nextStep": "падающий тест на Settings: схема, сухой прогон, сверка до/после, запрет изменений для читателя",
+  "nextStep": "падающий тест на мастер создания витрины: домен → профиль → источник и тип содержимого → шаблон → оформление → SEO → аналитика → правовые требования → проверка DNS/TLS → сухой прогон без мутаций",
   "testPortPolicy": "свободный порт из диапазона 18800-18899, владелец проверяется до запуска, cleanup только по сохранённому PID",
   "status": "IN_PROGRESS",
   "lastCommit": "118ebf1664320b7adaa17b5cd74c5b0530e285f5",
   "cycle1": "closed: Overview и Content, браузер ×2 движка, провалов 0",
   "cycle2": "closed: рабочий поток до витрины, регресс 3672 passed",
-  "cycle3": "closed: Jobs и Sites, живой стенд, 210 targeted passed"
+  "cycle3": "closed: Jobs и Sites, живой стенд, 210 targeted passed",
+  "cycle4": "closed: Люди и доступ, Настройки; сторож безопасности процессов",
+  "cycle5": "closed: Выпуски, Происшествия, отбор в журнале; editorialAdmin 7 → 8"
 }

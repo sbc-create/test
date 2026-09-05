@@ -1,0 +1,135 @@
+# Книга прогресса CORE-FINALIZATION-CYCLIC-21.
+#
+# Рабочий артефакт отчёта. Каноническое состояние программы остаётся в
+# /srv/site-factory/coordination/v1/.
+#
+# Правило заполнения, без которого книга становится украшением: процент растёт
+# ТОЛЬКО вслед за доказанной оценкой ворот. Цикл, сделавший полезную работу, но
+# не поднявший ни одних ворот, записывается с delta 0.0 — и это не повод
+# подправить число.
+#
+# maturity_percent = sum(min(оценка, 8)) / 96 * 100
+# closure_percent  = доля ворот с оценкой >= 8
+# progress_index   = (maturity_percent + closure_percent) / 2
+
+version: 1
+task: CORE-FINALIZATION-CYCLIC-21
+
+entries:
+  - timestamp: "2026-09-05T16:20:00Z"
+    cycle: 3
+    note: "контрольная точка при возобновлении"
+    branch: claude/core-product-8plus-20
+    full_head_sha: c7bb946a1c8ed76d99c1e494156c788d056944ba
+    deployed_sha: 52fd06659a7ff73fd37b5bed2f20eb46a90d7a1e
+    cycles_completed: 3
+    cycles_planned_minimum: 8
+    gates_closed: 6
+    gates_total: 12
+    scores_by_gate:
+      releaseBaseline: 8
+      contentIdentityReview: 8
+      playbackCatalog: 8
+      workerAutonomy: 9
+      operatorIdentity: 8
+      publicRegistration: 8
+      editorialAdmin: 7
+      ratingsProvenance: 6
+      selfServiceSite: 3
+      observability: 7
+      securityRollback: 7
+      coreTemplatesSeo: 7
+    maturity_percent: 88.5
+    closure_percent: 50.0
+    progress_index: 69.3
+    progress_delta_since_previous: null
+    defects_closed_this_cycle: null
+    regressions_opened: 0
+    critical_steps_remaining: 9
+    external_blockers:
+      - "Yummyanime: read-only доступа нет, 9 572 записи NOT_AUDITED_ACCESS_BLOCKED"
+      - "Рейтинги: ни одного разрешённого источника не зарегистрировано"
+    next_cycle: 4
+    production_status: "не изменялась; mutations 0"
+
+  - timestamp: "2026-09-05T17:40:00Z"
+    cycle: 4
+    note: "Users, Settings и Access; ни одни ворота не поднялись — так и записано"
+    branch: claude/core-product-8plus-20
+    full_head_sha: c7bb946a1c8ed76d99c1e494156c788d056944ba
+    deployed_sha: 52fd06659a7ff73fd37b5bed2f20eb46a90d7a1e
+    cycles_completed: 4
+    cycles_planned_minimum: 8
+    gates_closed: 6
+    gates_total: 12
+    scores_by_gate:
+      releaseBaseline: 8
+      contentIdentityReview: 8
+      playbackCatalog: 8
+      workerAutonomy: 9
+      operatorIdentity: 8
+      publicRegistration: 8
+      editorialAdmin: 7
+      ratingsProvenance: 6
+      selfServiceSite: 3
+      observability: 7
+      securityRollback: 7
+      coreTemplatesSeo: 7
+    maturity_percent: 88.5
+    closure_percent: 50.0
+    progress_index: 69.3
+    progress_delta_since_previous: 0.0
+    defects_closed_this_cycle: 7
+    regressions_opened: 0
+    critical_steps_remaining: 9
+    external_blockers:
+      - "Yummyanime: read-only доступа нет"
+      - "Рейтинги: ни одного разрешённого источника не зарегистрировано"
+    next_cycle: 5
+    production_status: "не изменялась; mutations 0"
+    comment: >-
+      Восьми разделов из одиннадцати мало для восьмёрки Editorial Admin.
+      Ставить её здесь значило бы усреднить. Цикл закрыл два раздела из трёх
+      оставшихся и восстановил сторожа безопасности процессов, которого не
+      существовало вопреки предписанию после инцидента 004.
+
+  - timestamp: "2026-09-05T18:30:00Z"
+    cycle: 5
+    note: "Выпуски, Происшествия, отбор в журнале; одиннадцать разделов из одиннадцати"
+    branch: claude/core-product-8plus-20
+    full_head_sha: ЗАПОЛНЯЕТСЯ_ПОСЛЕ_КОММИТА
+    deployed_sha: 52fd06659a7ff73fd37b5bed2f20eb46a90d7a1e
+    cycles_completed: 5
+    cycles_planned_minimum: 8
+    gates_closed: 7
+    gates_total: 12
+    scores_by_gate:
+      releaseBaseline: 8
+      contentIdentityReview: 8
+      playbackCatalog: 8
+      workerAutonomy: 9
+      operatorIdentity: 8
+      publicRegistration: 8
+      editorialAdmin: 8
+      ratingsProvenance: 6
+      selfServiceSite: 3
+      observability: 7
+      securityRollback: 7
+      coreTemplatesSeo: 7
+    maturity_percent: 89.6
+    closure_percent: 58.3
+    progress_index: 74.0
+    progress_delta_since_previous: 4.7
+    defects_closed_this_cycle: 3
+    regressions_opened: 0
+    critical_steps_remaining: 8
+    external_blockers:
+      - "Yummyanime: read-only доступа нет"
+      - "Рейтинги: ни одного разрешённого источника не зарегистрировано"
+    next_cycle: 6
+    production_status: "не изменялась; mutations 0"
+    comment: >-
+      Editorial Admin 7 → 8: полный редакционный путь на настоящих данных,
+      два движка, 42 проверки на движок, роли, отбор на стороне сервера,
+      390/768/1440 и двукратное увеличение.
+

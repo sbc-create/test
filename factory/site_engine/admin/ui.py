@@ -143,6 +143,9 @@ def page(title: str, body: str, *, session_label: str = "", csrf: str = "") -> s
         '<a href="/admin/jobs">Задания</a>'
         '<a href="/admin/sites">Витрины</a>'
         '<a href="/admin/users">Люди</a>'
+        '<a href="/admin/settings">Настройки</a>'
+        '<a href="/admin/releases">Выпуски</a>'
+        '<a href="/admin/incidents">Происшествия</a>'
         '<a href="/admin/audit">Журнал</a><span class="sp"></span>'
         f"{nav}</header><main>{body}</main></body></html>"
     )
@@ -294,7 +297,13 @@ def users(
     )
 
     сессии_html = "".join(
-        f'<tr><td>{_e(s["operatorId"][:12])}</td><td class="mut">{_e(s["createdAt"])}</td>'
+        f'<tr><td>{_e(s.get("email") or s["operatorId"][:12])}'
+        + (
+            f'<br><span class="mut">{_e(" ".join(s.get("roles") or []))}</span>'
+            if s.get("roles")
+            else ""
+        )
+        + f'</td><td class="mut">{_e(s["createdAt"])}</td>'
         f'<td class="mut">{_e(s["lastSeen"])}</td><td class="mut">{_e(s["userAgent"])}</td>'
         + (
             f'<td><form method="post" action="/admin/users/sessions/revoke">'
@@ -340,7 +349,7 @@ def users(
         + (приглашения_html or '<tr><td colspan="5" class="mut">Нет.</td></tr>')
         + "</tbody></table></div></div>"
         + '<div class="card"><h2>Активные сессии</h2><div class="scroll-x"><table>'
-        "<thead><tr><th>Оператор</th><th>Начата</th><th>Последний запрос</th>"
+        "<thead><tr><th>Чья сессия</th><th>Начата</th><th>Последний запрос</th>"
         "<th>Клиент</th><th></th></tr></thead><tbody>"
         + (сессии_html or '<tr><td colspan="5" class="mut">Нет.</td></tr>')
         + "</tbody></table></div></div>",
@@ -539,35 +548,91 @@ def site_detail(
     )
 
 
+def _отбор_журнала(отбор: dict) -> str:
+    """Форма отбора. Значения возвращаются в поля: иначе после отбора не видно,
+    что именно отобрано, и следующий запрос делают вслепую."""
+    поле = lambda имя, подпись, ширина="": (  # noqa: E731
+        f'<div><label for="ф-{имя}">{_e(подпись)}</label>'
+        f'<input id="ф-{имя}" name="{имя}" value="{_e(отбор.get(имя, ""))}"{ширина}></div>'
+    )
+    исход = отбор.get("result", "")
+    выбор = "".join(
+        f'<option value="{v}"{" selected" if исход == v else ""}>{_e(п)}</option>'
+        for v, п in (("", "любой"), ("ok", "удача"), ("error", "отказ"))
+    )
+    return (
+        '<div class="card"><h2>Отбор</h2>'
+        '<form method="get" action="/admin/audit"><div class="row">'
+        + поле("actor", "Кто")
+        + поле("siteId", "Витрина")
+        + поле("action", "Действие (начало имени)")
+        + поле("correlationId", "Идентификатор связи")
+        + '<div><label for="ф-result">Исход</label>'
+        f'<select id="ф-result" name="result">{выбор}</select></div>'
+        + поле("since", "С (ISO)")
+        + поле("until", "По (ISO)")
+        + '<button type="submit">Отобрать</button>'
+        '<a class="ghost" href="/admin/audit">Сбросить</a>'
+        "</div></form></div>"
+    )
+
+
 def audit(
-    entries: list[dict], *, total: int, session_label: str, csrf: str, flash: dict | None = None
+    entries: list[dict],
+    *,
+    total: int,
+    session_label: str,
+    csrf: str,
+    flash: dict | None = None,
+    matched: int | None = None,
+    отбор: dict | None = None,
 ) -> str:
     rows = []
     for e in reversed(entries):
         mark = "мутация" if e.get("mutation") else "чтение/отказ"
+        # Действующее лицо и исход показываются прямо в строке: без них отбор по
+        # ним нечем проверить глазами, а именно эти два поля спрашивают первыми.
+        актор = (e.get("extra") or {}).get("actor") or e.get("actor") or ""
+        код = e.get("exit_code")
+        исход = "удача" if код == 0 or код is None else "отказ"
         rows.append(
             f"<tr><td><code>{_e(e.get('ts'))}</code></td>"
+            f"<td>{_e(актор)}</td>"
             f"<td>{_e(e.get('site_id'))}</td>"
             f"<td><code>{_e(e.get('action'))}</code></td>"
             f"<td>{_e(e.get('target'))}</td>"
+            f'<td><span class="pill {"ok" if исход == "удача" else "warn"}">{_e(исход)}</span></td>'
             f"<td>{_e(mark)}</td>"
             f"<td><code>{_e((e.get('extra') or {}).get('correlation_id', ''))}</code></td></tr>"
         )
     table = (
         (
-            '<div class="scroll-x"><table><thead><tr><th>Время</th>'
+            '<div class="scroll-x"><table><thead><tr><th>Время</th><th>Кто</th>'
             "<th>Витрина</th><th>Действие</th>"
-            "<th>Цель</th><th>Род</th><th>Идентификатор связи</th></tr></thead>"
+            "<th>Цель</th><th>Исход</th><th>Род</th>"
+            "<th>Идентификатор связи</th></tr></thead>"
             f"<tbody>{''.join(rows)}</tbody></table></div>"
         )
         if rows
         else '<p class="hint">Записей нет.</p>'
     )
+    подошло = total if matched is None else matched
+    пояснение = (
+        f"Показаны последние {len(entries)} из {подошло} подошедших; всего записей {total}. "
+        "Отказы записываются наравне с удачными операциями."
+    )
+    пусто = (
+        ""
+        if entries or подошло
+        else '<p class="hint">Под отбор не подошла ни одна запись. Это ноль совпадений, '
+        "а не пустой журнал.</p>"
+    )
     return page(
         "Журнал",
-        _flash(flash) + f'<div class="card"><h2>Журнал операций</h2>'
-        f'<p class="hint">Показаны последние {len(entries)} из {total}. '
-        "Отказы записываются наравне с удачными операциями.</p>"
+        _flash(flash)
+        + _отбор_журнала(отбор or {})
+        + '<div class="card"><h2>Журнал операций</h2>'
+        f'<p class="hint">{пояснение}</p>{пусто}'
         f"{table}</div>",
         session_label=session_label,
         csrf=csrf,
@@ -1266,3 +1331,276 @@ def sites_list(данные: dict, *, flash: dict | None, session_label: str, cs
         session_label=session_label,
         csrf=csrf,
     )
+
+
+def _значение(значение) -> str:
+    """Текущее значение настройки в том виде, в каком его можно ввести обратно."""
+    if значение is None:
+        return "—"
+    if isinstance(значение, dict | list):
+        return json.dumps(значение, ensure_ascii=False)
+    if isinstance(значение, bool):
+        return "true" if значение else "false"
+    return str(значение)
+
+
+def _разница(diff: dict) -> str:
+    """Сравнение «было/станет» таблицей, а не текстом ответа.
+
+    Разница возвращалась и раньше, но приходила оператору строкой в сообщении.
+    Прочитать в ней, что именно поменяется, можно было только зная формат.
+    """
+    if not diff:
+        return (
+            '<div class="card"><h2>Проверка</h2>'
+            '<p class="mut">Ничего не изменится: значение уже такое.</p></div>'
+        )
+    строки = "".join(
+        f"<tr><td><code>{_e(ключ)}</code></td>"
+        f"<td>было <code>{_e(_значение(пара.get('before')))}</code></td>"
+        f"<td>станет <code>{_e(_значение(пара.get('after')))}</code></td></tr>"
+        for ключ, пара in sorted(diff.items())
+    )
+    return (
+        '<div class="card"><h2>Проверка</h2>'
+        '<p class="hint">Ничего не записано. Это только сравнение.</p>'
+        f'<div class="scroll-x"><table><tbody>{строки}</tbody></table></div></div>'
+    )
+
+
+def settings(
+    данные: dict,
+    витрины: list,
+    *,
+    предпросмотр: dict | None,
+    flash: dict | None,
+    session_label: str,
+    csrf: str,
+) -> str:
+    """Настройки витрины: схема, значения, отклонённое, секреты, откат."""
+    site_id = данные.get("siteId", "")
+    может = bool(данные.get("canWrite"))
+    hidden = f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+    версия = данные.get("version", "")
+
+    выбор = "".join(
+        f'<option value="{_e(s)}"{" selected" if s == site_id else ""}>{_e(s)}</option>'
+        for s in витрины
+    )
+    переключатель = (
+        '<div class="card"><form method="get" action="/admin/settings">'
+        '<div class="row"><div><label for="site">Витрина</label>'
+        f'<select id="site" name="site">{выбор}</select></div>'
+        '<button type="submit">Открыть</button></div></form>'
+        f'<p class="mut">Версия конфигурации: <code>{_e(версия)}</code></p></div>'
+    )
+
+    строки = []
+    for поле in данные.get("fields") or []:
+        форма = ""
+        if может:
+            форма = (
+                f'<form method="post" action="/admin/settings">{hidden}'
+                f'<input type="hidden" name="site" value="{_e(site_id)}">'
+                f'<input type="hidden" name="key" value="{_e(поле["key"])}">'
+                f'<input type="hidden" name="expectedVersion" value="{_e(версия)}">'
+                f'<input name="value" aria-label="Новое значение {_e(поле["key"])}" '
+                f'value="{_e(_значение(поле.get("value")))}">'
+                '<button name="dryRun" value="1" type="submit">Проверить</button>'
+                '<button name="dryRun" value="" type="submit">Применить</button>'
+                "</form>"
+            )
+        выкат = (
+            "сначала на канарейке"
+            if поле.get("rollout") == "canary"
+            else "действует сразу целиком"
+        )
+        строки.append(
+            f'<tr><td><code>{_e(поле["key"])}</code><br>'
+            f'<span class="mut">{_e(поле.get("description", ""))}</span></td>'
+            f'<td class="mut">{_e(поле.get("type", ""))}'
+            + (f'<br>{_e(поле["limits"])}' if поле.get("limits") else "")
+            + "</td>"
+            f'<td><code>{_e(_значение(поле.get("value")))}</code></td>'
+            f'<td class="mut">{_e(выкат)}</td>'
+            f"<td>{форма}</td></tr>"
+        )
+
+    отказы = "".join(
+        f'<tr><td><code>{_e(r["key"])}</code></td><td class="mut">{_e(r["reason"])}</td></tr>'
+        for r in данные.get("refused") or []
+    )
+
+    секреты = "".join(
+        f'<tr><td><code>{_e(s["key"])}</code></td><td class="mut">{_e(s.get("store", ""))}</td>'
+        f'<td><code>{_e(s.get("ref", ""))}</code></td>'
+        f'<td class="mut">{_e(s.get("value", ""))}</td></tr>'
+        for s in данные.get("secretRefs") or []
+    )
+
+    откат = данные.get("rollback") or {}
+    if откат.get("available") and может:
+        назад = ", ".join(
+            f"{_e(k)} → {_e(_значение(v))}" for k, v in sorted((откат.get("changes") or {}).items())
+        )
+        блок_отката = (
+            '<div class="card"><h2>Откат</h2>'
+            f'<p>Последнее изменение записано {_e(откат.get("recordedAt", ""))}. '
+            f"Вернуть: {назад}.</p>"
+            f'<form method="post" action="/admin/settings/rollback">{hidden}'
+            f'<input type="hidden" name="site" value="{_e(site_id)}">'
+            '<button name="dryRun" value="1" type="submit">Проверить откат</button>'
+            '<button type="submit">Откатить</button></form></div>'
+        )
+    else:
+        причина = откат.get("reason") or "откатывать нечего"
+        блок_отката = (
+            f'<div class="card"><h2>Откат</h2><p class="mut">{_e(причина)}.</p></div>'
+        )
+
+    предупреждение = (
+        ""
+        if может
+        else '<div class="flash warn">У вас нет права config:write: '
+        "раздел открыт только для чтения.</div>"
+    )
+
+    return page(
+        "Настройки",
+        _flash(flash)
+        + предупреждение
+        + переключатель
+        + (_разница(предпросмотр or {}) if предпросмотр is not None else "")
+        + '<div class="card"><h2>Изменяемые настройки</h2>'
+        '<p class="hint">Границы показаны до ввода. Значение вне границ '
+        "отклоняется целиком, а не обрезается.</p>"
+        '<div class="scroll-x"><table>'
+        "<thead><tr><th>Настройка</th><th>Тип и границы</th><th>Сейчас</th>"
+        "<th>Как действует</th><th></th></tr></thead><tbody>"
+        + ("".join(строки) or чтопусто(5))
+        + "</tbody></table></div></div>"
+        + блок_отката
+        + '<div class="card"><h2>Секреты</h2>'
+        '<p class="hint">Панель показывает ссылку на хранилище. Значение '
+        "секрета не читается и не отображается никогда.</p>"
+        '<div class="scroll-x"><table>'
+        "<thead><tr><th>Имя</th><th>Хранилище</th><th>Ссылка</th><th>Значение</th>"
+        "</tr></thead><tbody>"
+        + (секреты or чтопусто(4, "Секретов не подключено."))
+        + "</tbody></table></div></div>"
+        + '<div class="card"><h2>Отклоняется намеренно</h2>'
+        '<p class="hint">Это правило, а не пробел в реализации: каждое из этих '
+        "полей меняется выкладкой, а не панелью.</p>"
+        '<div class="scroll-x"><table>'
+        "<thead><tr><th>Поле</th><th>Почему</th></tr></thead><tbody>"
+        + (отказы or чтопусто(2))
+        + "</tbody></table></div></div>",
+        session_label=session_label,
+        csrf=csrf,
+    )
+
+
+def _источник_недоступен(данные: dict, что: str) -> str:
+    """Недоступный источник называется словами и причиной.
+
+    Пустая таблица на его месте читается как «ничего не было» — ровно та ложь,
+    из-за которой каталог тридцатипятичасовой давности месяцами считался
+    работающим.
+    """
+    return (
+        f'<div class="card"><h2>{_e(что)}</h2>'
+        '<div class="flash bad">Источник недоступен, поэтому список не показан. '
+        f'Причина: {_e(данные.get("reason", "не указана"))}.</div>'
+        '<p class="hint">Это не то же самое, что «записей нет».</p></div>'
+    )
+
+
+def releases(данные: dict, *, flash: dict | None, session_label: str, csrf: str) -> str:
+    """Выпуски: что выложено, когда и куда откатываться."""
+    if not данные.get("available"):
+        return page(
+            "Выпуски",
+            _flash(flash) + _источник_недоступен(данные, "Выпуски"),
+            session_label=session_label,
+            csrf=csrf,
+        )
+    строки = "".join(
+        f'<tr><td><code>{_e(з["releaseId"])}</code><br>'
+        f'<span class="mut">{_e(з.get("iteration", ""))}</span></td>'
+        f'<td class="mut">{_e(з.get("branch", ""))}</td>'
+        f'<td><code>{_e((з.get("headSha") or "")[:12])}</code></td>'
+        f'<td><code>{_e((з.get("deployedSha") or "")[:12])}</code><br>'
+        f'<span class="mut">{_e(з.get("deployedAt", ""))}</span></td>'
+        f'<td class="mut">{_e(з.get("component", ""))}</td>'
+        + (
+            f'<td><code>{_e((з.get("rollbackTo") or "")[:12])}</code></td>'
+            if з.get("rollbackAvailable")
+            else '<td class="mut">откат не записан</td>'
+        )
+        + "</tr>"
+        for з in данные.get("items") or []
+    )
+    битые = данные.get("unreadable") or []
+    предупреждение = (
+        ""
+        if not битые
+        else '<div class="flash warn">Не прочитаны записи: '
+        + _e(", ".join(битые))
+        + ". Они не показаны и не учтены.</div>"
+    )
+    return page(
+        "Выпуски",
+        _flash(flash)
+        + предупреждение
+        + '<div class="card"><h2>Выпуски</h2>'
+        f'<p class="hint">Источник: <code>{_e(данные.get("source", ""))}</code>. '
+        "Панель только читает: записи ведёт координация программы.</p>"
+        '<div class="scroll-x"><table><thead><tr><th>Выпуск</th><th>Ветка</th>'
+        "<th>Голова</th><th>Выложено</th><th>Компонент</th><th>Откат к</th>"
+        "</tr></thead><tbody>"
+        + (строки or чтопусто(6, "Выпусков не записано."))
+        + "</tbody></table></div></div>",
+        session_label=session_label,
+        csrf=csrf,
+    )
+
+
+def incidents(данные: dict, *, flash: dict | None, session_label: str, csrf: str) -> str:
+    """Происшествия: открытые отделены от закрытых."""
+    if not данные.get("available"):
+        return page(
+            "Происшествия",
+            _flash(flash) + _источник_недоступен(данные, "Происшествия"),
+            session_label=session_label,
+            csrf=csrf,
+        )
+    строки = "".join(
+        f'<tr><td><code>{_e(з["incidentId"])}</code></td>'
+        f'<td>{_e(з.get("title", ""))}</td>'
+        f'<td><span class="pill {"warn" if з.get("open") else "ok"}">'
+        f'{_e(з.get("state", ""))}</span></td>'
+        f'<td class="mut">{_e(з.get("impact", ""))}</td>'
+        f'<td class="mut">{_e(з.get("detectedAt", ""))}</td></tr>'
+        for з in данные.get("items") or []
+    )
+    открытых = данные.get("open", 0)
+    сводка = (
+        f'<div class="flash {"warn" if открытых else "ok"}">Открытых происшествий: '
+        f"{открытых} из {данные.get('total', 0)}.</div>"
+    )
+    return page(
+        "Происшествия",
+        _flash(flash)
+        + сводка
+        + '<div class="card"><h2>Происшествия</h2>'
+        f'<p class="hint">Источник: <code>{_e(данные.get("source", ""))}</code>. '
+        "Происшествие без строки состояния считается открытым: молчаливое "
+        "закрытие хуже честно неизвестного состояния.</p>"
+        '<div class="scroll-x"><table><thead><tr><th>Номер</th><th>Что случилось</th>'
+        "<th>Состояние</th><th>Влияние</th><th>Обнаружено</th></tr></thead><tbody>"
+        + (строки or чтопусто(5, "Происшествий не записано."))
+        + "</tbody></table></div></div>",
+        session_label=session_label,
+        csrf=csrf,
+    )
+

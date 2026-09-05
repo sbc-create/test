@@ -189,7 +189,11 @@ class AdminApp:
         if method == "GET" and rest == []:
             return self._record(self._dashboard(session, flash, label, csrf))
         if method == "GET" and rest == ["audit"]:
-            return self._record(self._audit(session, flash, label, csrf))
+            return self._record(self._audit(session, flash, label, csrf, form))
+        if method == "GET" and rest == ["releases"]:
+            return self._record(self._программа(session, "releases", flash, label, csrf))
+        if method == "GET" and rest == ["incidents"]:
+            return self._record(self._программа(session, "incidents", flash, label, csrf))
         if method == "GET" and rest == ["overview"]:
             ответ = self._call("GET", "/api/v1/overview", session, {})
             if ответ.status != 200:
@@ -234,6 +238,10 @@ class AdminApp:
                     status=200,
                     html=ui.sites_list(ответ.body, flash=flash, session_label=label, csrf=csrf),
                 )
+            )
+        if rest[:1] == ["settings"]:
+            return self._record(
+                self._settings_route(session, method, rest[1:], form, flash, label, csrf)
             )
         if rest[:1] == ["content"]:
             return self._record(
@@ -848,14 +856,156 @@ class AdminApp:
         session.flash = self._flash_from(response, success="Настройка применена.")
         return _redirect(f"/admin/sites/{site_id}")
 
-    def _audit(self, session, flash, label, csrf) -> AdminResponse:
-        response = self._call("GET", "/api/v1/audit", session, {"limit": 50})
+    # ------------------------------------------------------------------
+    # Настройки
+    # ------------------------------------------------------------------
+    def _settings_route(
+        self, session, method: str, tail: list[str], form: dict, flash, label: str, csrf: str
+    ) -> AdminResponse:
+        """Отдельный раздел настроек: схема, сравнение, применение, откат."""
+        витрины = [s for s in self._витрины(session) if s]
+        site = (form.get("site") or "").strip() or (витрины[0] if витрины else "")
+        if not site:
+            return AdminResponse(
+                status=200,
+                html=ui.page(
+                    "Настройки",
+                    '<div class="flash warn">Ни одной витрины не видно.</div>',
+                    session_label=label,
+                    csrf=csrf,
+                ),
+            )
+
+        if method == "GET" and not tail:
+            return self._settings_page(session, site, flash, label, csrf)
+        if method == "POST" and not tail:
+            return self._settings_apply(session, site, form, flash, label, csrf)
+        if method == "POST" and tail == ["rollback"]:
+            ответ = self._call(
+                "POST",
+                f"/api/v1/settings/{site}/rollback",
+                session,
+                {"dryRun": bool(form.get("dryRun"))},
+            )
+            session.flash = self._flash_from(ответ, success="Прежние значения возвращены.")
+            return _redirect(f"/admin/settings?site={site}")
+        return AdminResponse(status=404, html=ui.page("Не найдено", "<p>Нет такой страницы.</p>"))
+
+    def _settings_state(self, session, site: str):
+        return self._call("GET", f"/api/v1/settings/{site}", session, {})
+
+    def _settings_page(
+        self, session, site: str, flash, label: str, csrf: str, предпросмотр=None
+    ) -> AdminResponse:
+        ответ = self._settings_state(session, site)
+        if ответ.status != 200:
+            return AdminResponse(
+                status=ответ.status,
+                html=ui.page(
+                    "Настройки",
+                    f'<div class="flash bad">Настройки недоступны: {ответ.status}.</div>',
+                    session_label=label,
+                    csrf=csrf,
+                ),
+            )
+        return AdminResponse(
+            status=200,
+            html=ui.settings(
+                ответ.body,
+                [s for s in self._витрины(session) if s],
+                предпросмотр=предпросмотр,
+                flash=flash,
+                session_label=label,
+                csrf=csrf,
+            ),
+        )
+
+    def _settings_apply(
+        self, session, site: str, form: dict, flash, label: str, csrf: str
+    ) -> AdminResponse:
+        ключ = (form.get("key") or "").strip()
+        сырое = (form.get("value") or "").strip()
+        сухой = bool(form.get("dryRun"))
+        значение = self._как_значение(сырое)
+        путь = f"/api/v1/sites/{site}/settings"
+
+        if сухой:
+            ответ = self._call(
+                "PATCH", путь, session, {"changes": {ключ: значение}, "dryRun": True}
+            )
+            if ответ.status != 200:
+                session.flash = self._flash_from(ответ, success="")
+                return _redirect(f"/admin/settings?site={site}")
+            # Сравнение показывается на самой странице, а не строкой сообщения:
+            # ответ «что станет другим» нужен рядом с текущими значениями.
+            return self._settings_page(
+                session, site, None, label, csrf, предпросмотр=ответ.body.get("diff") or {}
+            )
+
+        # Версия берётся из формы, а не из свежего чтения. Свежее чтение перед
+        # записью сделало бы сверку версий бессмысленной: она бы всегда
+        # совпадала, и чужая правка между показом страницы и отправкой формы
+        # была бы затёрта молча.
+        версия = (form.get("expectedVersion") or "").strip()
+        тело = {"changes": {ключ: значение}}
+        if версия:
+            тело["expectedVersion"] = версия
+        ответ = self._call("PATCH", путь, session, тело)
+        session.flash = self._flash_from(ответ, success="Настройка применена.")
+        return _redirect(f"/admin/settings?site={site}")
+
+    @staticmethod
+    def _как_значение(сырое: str):
+        """Число, логическое значение или JSON — но не молчаливая строка.
+
+        Поле ввода одно на все настройки: и на число, и на словарь. Разобрать
+        как JSON и при неудаче оставить строкой правильнее, чем требовать от
+        оператора кавычек вокруг восьмёрки.
+        """
+        try:
+            return json.loads(сырое)
+        except json.JSONDecodeError:
+            return сырое
+
+    #: Поля отбора журнала. Замкнутый список: произвольные параметры из строки
+    #: запроса уходили бы в API как есть и однажды стали бы чужим фильтром.
+    ОТБОР_ЖУРНАЛА = ("actor", "siteId", "action", "correlationId", "result", "since", "until")
+
+    def _программа(self, session, раздел: str, flash, label: str, csrf: str) -> AdminResponse:
+        """Выпуски и происшествия. Панель только читает координацию программы."""
+        заголовок = {"releases": "Выпуски", "incidents": "Происшествия"}[раздел]
+        ответ = self._call("GET", f"/api/v1/{раздел}", session, {})
+        if ответ.status != 200:
+            return AdminResponse(
+                status=ответ.status,
+                html=ui.page(
+                    заголовок,
+                    f'<div class="flash bad">Раздел недоступен: {ответ.status}.</div>',
+                    session_label=label,
+                    csrf=csrf,
+                ),
+            )
+        рисовать = ui.releases if раздел == "releases" else ui.incidents
+        return AdminResponse(
+            status=200,
+            html=рисовать(ответ.body, flash=flash, session_label=label, csrf=csrf),
+        )
+
+    def _audit(self, session, flash, label, csrf, form: dict | None = None) -> AdminResponse:
+        отбор = {
+            имя: значение.strip()
+            for имя in self.ОТБОР_ЖУРНАЛА
+            if (значение := (form or {}).get(имя, "").strip())
+        }
+        response = self._call("GET", "/api/v1/audit", session, {"limit": 50, **отбор})
         if response.status != 200:
+            причина = (response.body.get("error") or {}).get("message", "")
             return AdminResponse(
                 status=response.status,
                 html=ui.page(
                     "Журнал",
-                    f'<div class="flash bad">Журнал недоступен: ' f"{response.status}.</div>",
+                    f'<div class="flash bad">Журнал недоступен: {response.status}. '
+                    f"{ui._e(причина)}</div>",
                     session_label=label,
                     csrf=csrf,
                 ),
@@ -865,6 +1015,8 @@ class AdminApp:
             html=ui.audit(
                 response.body.get("entries", []),
                 total=response.body.get("total", 0),
+                matched=response.body.get("matched"),
+                отбор=отбор,
                 session_label=label,
                 csrf=csrf,
                 flash=flash,

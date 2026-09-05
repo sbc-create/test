@@ -53,6 +53,12 @@ from factory.site_engine.api.tracing import (
     parse_traceparent,
     path_template,
 )
+from factory.site_engine.settings_contract import (
+    REFUSED_SETTINGS,
+    SAFE_SETTINGS,
+    config_version,
+    profile_path,
+)
 
 API_VERSION = "v1"
 
@@ -89,28 +95,6 @@ KNOWN_SCOPES = frozenset(
 # выполнение произвольного действия по HTTP.
 ALLOWED_JOB_ACTIONS = frozenset({"reindex", "refresh", "enrich", "verify"})
 ALLOWED_ENVIRONMENTS = frozenset({"staging", "production"})
-
-# Обратимые настройки ядра: у каждой — проверка диапазона, а не только типа.
-# Проверка типа пропускает keep_releases=0, после которого откатываться некуда.
-SAFE_SETTINGS: dict[str, dict[str, Any]] = {
-    "keep_releases": {"type": int, "min": 2, "max": 20},
-    "cache_policy": {"type": dict, "value_type": int, "min": 0, "max": 86_400},
-    "feature_flags": {"type": dict, "value_type": bool},
-}
-
-# Отклоняются намеренно — с указанием причины в ответе, чтобы вызывающий понял,
-# что это правило, а не пробел в реализации.
-REFUSED_SETTINGS: dict[str, str] = {
-    "domains": "смена доменов требует выкладки и проверки сертификатов",
-    "canonical_host": "смена канонического хоста меняет индексацию всего сайта",
-    "site_type": "тип сайта определяет адаптеры и хранилище",
-    "indexing_enabled": "отключение индексации замечают через недели по падению трафика",
-    "seo_enabled": "SEO-слой принадлежит другому потоку и меняется через него",
-    "locale": "локаль меняет весь отрендеренный контент",
-    "timezone": "часовой пояс меняет расписания и отметки времени",
-    "theme": "оформление принадлежит потоку шаблонов",
-    "render_mode": "режим рендеринга меняется вместе с выкладкой",
-}
 
 SITE_ID_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
 # Ключ кэша — идентификатор, а не адрес. Управляющий слой сам ключи не
@@ -207,21 +191,6 @@ def principals_from_env(env: dict[str, str] | None = None) -> dict[str, Principa
             raise ValueError(f"неизвестные области: {sorted(unknown)}")
         principals[token] = Principal(token_id=_token_id(token), scopes=frozenset(scopes))
     return principals
-
-
-def profile_path(site_id: str, root: Path) -> Path:
-    return root / "config" / "site-profiles" / f"{site_id}.json"
-
-
-def config_version(path: Path) -> str:
-    """Версия конфигурации — хэш её содержимого.
-
-    Хэш, а не отметка времени: время меняется при копировании файла, содержимое —
-    только при правке. Сверка по времени пропустила бы конкурентную запись.
-    """
-    if not path.exists():
-        return "absent"
-    return "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()[:32]
 
 
 def _validate_settings(changes: dict[str, Any]) -> list[str]:
@@ -720,6 +689,16 @@ class ControlApi:
         if method == "GET" and rest == ["metrics"]:
             principal.require(SCOPE_READ)
             return self._metrics_response()
+        if method == "GET" and rest == ["releases"]:
+            principal.require(SCOPE_READ)
+            from factory.site_engine.api import program_view
+
+            return ApiResponse(status=200, body=program_view.releases(self._root, self._env))
+        if method == "GET" and rest == ["incidents"]:
+            principal.require(SCOPE_READ)
+            from factory.site_engine.api import program_view
+
+            return ApiResponse(status=200, body=program_view.incidents(self._root, self._env))
         if method == "GET" and rest[:1] == ["audit"]:
             principal.require(SCOPE_AUDIT)
             return self._audit_trail(body, headers)
@@ -747,6 +726,15 @@ class ControlApi:
                 )
             except ops_view.OpsError as ошибка:
                 raise ControlDenied(404, "site_not_found", str(ошибка)) from ошибка
+        # Чтение настроек — отдельный префикс, не GET на пути записи:
+        # управляющие маршруты транспорт различает по префиксу из описания, и
+        # второй метод на том же пути в описании не помещается.
+        if method == "GET" and len(rest) == 2 and rest[0] == "settings":
+            principal.require(SCOPE_READ)
+            return self._settings_view(rest[1], principal)
+        if method == "POST" and len(rest) == 3 and rest[0] == "settings" and rest[2] == "rollback":
+            principal.require(SCOPE_CONFIG)
+            return self._settings_rollback(principal, rest[1], body, headers, correlation_id)
         if rest[:1] == ["sites"] and len(rest) >= 3:
             site_id = rest[1]
             self._check_site_id(site_id)
@@ -907,6 +895,59 @@ class ControlApi:
                 )
         raise ControlDenied(404, "job_not_found", f"задания {job_id} нет")
 
+    def _settings_view(self, site_id: str, principal: Principal) -> ApiResponse:
+        """Схема, значения, версия, ссылки на секреты и готовый откат."""
+        from factory.site_engine import settings_view
+
+        self._check_site_id(site_id)
+        try:
+            тело = settings_view.представление(
+                site_id, self._root, can_write=SCOPE_CONFIG in principal.scopes
+            )
+        except settings_view.SettingsViewError as ошибка:
+            raise ControlDenied(404, "site_not_found", str(ошибка)) from ошибка
+        return ApiResponse(status=200, body=тело)
+
+    def _settings_rollback(
+        self,
+        principal: Principal,
+        site_id: str,
+        body: dict[str, Any],
+        headers: dict[str, str],
+        correlation_id: str,
+    ) -> ApiResponse:
+        """Вернуть прежние значения последнего изменения настроек.
+
+        Откат идёт тем же путём, что и обычное изменение: те же проверки, та же
+        сверка версии, та же запись в журнал. Отдельный путь записи «только для
+        отката» обошёл бы проверки ровно там, где ошибиться дороже всего.
+        """
+        from factory.site_engine import settings_view
+
+        self._check_site_id(site_id)
+        путь = profile_path(site_id, self._root)
+        версия = config_version(путь)
+        план = settings_view.откат(site_id, self._root, версия=версия)
+        if not план.get("available"):
+            raise ControlDenied(
+                409,
+                "rollback_unavailable",
+                str(план.get("reason") or "откатывать нечего"),
+            )
+        return self._patch_settings(
+            principal,
+            site_id,
+            {
+                "changes": план["changes"],
+                "remove": план.get("remove") or [],
+                "expectedVersion": версия,
+                "dryRun": bool(body.get("dryRun")),
+                "rollback": True,
+            },
+            headers,
+            correlation_id,
+        )
+
     def _patch_settings(
         self,
         principal: Principal,
@@ -917,8 +958,24 @@ class ControlApi:
     ) -> ApiResponse:
         self._require_manageable(site_id)
         changes = body.get("changes")
-        if not isinstance(changes, dict) or not changes:
+        # Удаление настройки — отдельное поле, а не changes[key] = null. Null в
+        # словаре изменений неотличим от «поставить пустое значение», и разница
+        # между «убрать поле» и «записать null» стоила бы одного молчаливого
+        # расхождения профиля со схемой.
+        убрать = body.get("remove") or []
+        if not isinstance(убрать, list) or not all(isinstance(к, str) for к in убрать):
+            raise ControlDenied(400, "invalid_body", "remove — список имён настроек")
+        чужие = [к for к in убрать if к not in SAFE_SETTINGS]
+        if чужие:
+            raise ControlDenied(
+                422,
+                "invalid_settings",
+                "настройки не приняты",
+                problems=[f"{к}: не входит в список изменяемых настроек" for к in чужие],
+            )
+        if not isinstance(changes, dict) or (not changes and not убрать):
             raise ControlDenied(400, "invalid_body", "нужен непустой объект changes")
+        changes = changes if isinstance(changes, dict) else {}
         if len(changes) > MAX_BODY_KEYS:
             raise ControlDenied(
                 400, "too_many_changes", f"не более {MAX_BODY_KEYS} настроек за запрос"
@@ -943,6 +1000,9 @@ class ControlApi:
 
         before = json.loads(target.read_text(encoding="utf-8"))
         diff = _diff(before, changes)
+        for ключ in убрать:
+            if ключ in before:
+                diff[ключ] = {"before": before[ключ], "after": None, "removed": True}
         dry_run = bool(body.get("dryRun"))
 
         if dry_run:
@@ -963,6 +1023,8 @@ class ControlApi:
             )
 
         after = dict(before)
+        for ключ in убрать:
+            after.pop(ключ, None)
         for field_name, value in changes.items():
             if isinstance(value, dict) and isinstance(before.get(field_name), dict):
                 after[field_name] = {**before[field_name], **value}
@@ -1298,15 +1360,26 @@ class ControlApi:
                 return ApiResponse(status=200, body={"items": каталог.list_invites()})
             if method == "GET" and tail == ["sessions"]:
                 principal.require(SCOPE_OPERATORS)
-                return ApiResponse(
-                    status=200,
-                    body={
-                        "items": каталог.list_sessions(
-                            operator_id=self._опция(body, "operatorId"),
-                            active_only=body.get("activeOnly", True) is not False,
-                        )
-                    },
+                # Сессия отдаётся с адресом и ролями владельца. Один только
+                # идентификатор оператора делает отзыв неосмысленным: решение
+                # «отозвать эту сессию» принимают, зная чью, а сверять хэши
+                # глазами по второму списку никто не станет.
+                строки = каталог.list_sessions(
+                    operator_id=self._опция(body, "operatorId"),
+                    active_only=body.get("activeOnly", True) is not False,
                 )
+                for строка in строки:
+                    try:
+                        владелец = каталог.get(строка.get("operatorId", ""))
+                    except OperatorError:
+                        строка["email"] = ""
+                        строка["roles"] = []
+                        строка["ownerState"] = "UNKNOWN"
+                        continue
+                    строка["email"] = владелец.email
+                    строка["roles"] = list(владелец.roles)
+                    строка["ownerState"] = владелец.state
+                return ApiResponse(status=200, body={"items": строки})
             if method == "POST" and tail == ["invites"]:
                 principal.require(SCOPE_OPERATORS)
                 приглашение, секрет = каталог.invite(
@@ -1687,15 +1760,99 @@ class ControlApi:
             status=200, body={"prometheus": text, "counters": self._metrics.snapshot()}
         )
 
+    #: Исходы, по которым можно отбирать. Замкнутый набор: «error» и «ошибка»
+    #: как разные значения одного отбора однажды дадут два разных ответа на
+    #: один вопрос.
+    ИСХОДЫ = ("ok", "error")
+
+    @staticmethod
+    def _актор_записи(запись: dict[str, Any]) -> str:
+        """Кто действовал. Панель кладёт имя в extra, ядро — в поле actor."""
+        дополнительно = запись.get("extra") or {}
+        return str(дополнительно.get("actor") or запись.get("actor") or "")
+
     def _audit_trail(self, body: dict[str, Any], headers: dict[str, str]) -> ApiResponse:
+        """Журнал с отбором. Общее число не зависит от отбора — это разные числа.
+
+        `total` отвечает «сколько записей есть», `matched` — «сколько подошло».
+        Одно число на оба вопроса превращает пустой отбор в «записей нет».
+        """
         limit = body.get("limit", 50)
         if not isinstance(limit, int) or isinstance(limit, bool) or not (1 <= limit <= 500):
             raise ControlDenied(400, "invalid_limit", "limit — целое от 1 до 500")
-        site_id = body.get("siteId")
-        entries = audit.read_all()
-        if site_id:
-            entries = [e for e in entries if e.get("site_id") == site_id]
-        return ApiResponse(status=200, body={"entries": entries[-limit:], "total": len(entries)})
+        offset = body.get("offset", 0)
+        if not isinstance(offset, int) or isinstance(offset, bool) or offset < 0:
+            raise ControlDenied(400, "invalid_offset", "offset — целое от 0")
+        исход = str(body.get("result") or "").strip()
+        if исход and исход not in self.ИСХОДЫ:
+            raise ControlDenied(
+                400,
+                "invalid_result",
+                f"result — одно из {', '.join(self.ИСХОДЫ)}",
+                field="result",
+            )
+
+        site_id = self._опция(body, "siteId")
+        актор = self._опция(body, "actor")
+        действие = self._опция(body, "action")
+        связь = self._опция(body, "correlationId")
+        цель = self._опция(body, "target")
+        с = self._опция(body, "since")
+        по = self._опция(body, "until")
+
+        все = audit.read_all()
+        подошли = []
+        for запись in все:
+            if site_id and запись.get("site_id") != site_id:
+                continue
+            if актор and self._актор_записи(запись) != актор:
+                continue
+            # Действие отбирается по началу имени: «control.settings» обязано
+            # находить и patch, и будущие control.settings.*. Точное совпадение
+            # заставляло бы помнить полный список действий наизусть.
+            if действие and not str(запись.get("action") or "").startswith(действие):
+                continue
+            if цель and цель not in str(запись.get("target") or ""):
+                continue
+            if связь and (запись.get("extra") or {}).get("correlation_id") != связь:
+                continue
+            код = запись.get("exit_code")
+            if исход == "ok" and not (код == 0 or код is None):
+                continue
+            if исход == "error" and (код == 0 or код is None):
+                continue
+            отметка = str(запись.get("ts") or "")
+            if с and отметка < с:
+                continue
+            if по and отметка > по:
+                continue
+            подошли.append(запись)
+
+        окно = подошли[::-1][offset : offset + limit]
+        return ApiResponse(
+            status=200,
+            body={
+                "entries": окно,
+                "matched": len(подошли),
+                "total": len(все),
+                "offset": offset,
+                "limit": limit,
+                "filters": {
+                    k: v
+                    for k, v in (
+                        ("siteId", site_id),
+                        ("actor", актор),
+                        ("action", действие),
+                        ("target", цель),
+                        ("correlationId", связь),
+                        ("result", исход),
+                        ("since", с),
+                        ("until", по),
+                    )
+                    if v
+                },
+            },
+        )
 
     def _audit_refusal(
         self,

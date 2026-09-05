@@ -36,18 +36,19 @@ gates:
     state: closed
     gaps: ["почтовых реквизитов нет: production-контур выключен"]
   - id: editorialAdmin
-    score: 6
-    state: in_progress
-    priority: 1
-    gaps:
-      # закрыто циклом 1, commit c366a81
-      # Workflow закрыт циклом 2, commit 7e3886c
-      # Jobs и Sites закрыты циклом 3, commit 118ebf1
-      - "Users & Access: экран есть, нужен полный"
-      - "Settings отсутствует"
-      - "Releases отсутствует"
-      - "Incidents отсутствует"
-      - "Audit: есть журнал, нужны фильтры по actor/site/entity/action/result"
+    score: 8
+    state: closed
+    evidence: reports/CORE-FINALIZATION-CYCLIC-21/cycles/CYCLE-05.md
+    note: >-
+      Одиннадцать разделов из одиннадцати. Полный путь пройден в двух движках
+      на настоящих данных: 42 проверки на движок, роли, отбор на стороне
+      сервера, 390/768/1440 и двукратное увеличение.
+    history:
+      - "цикл 1: Сводка и Каталог, commit c366a81"
+      - "цикл 2: Разбор и рабочий поток, commit 7e3886c"
+      - "цикл 3: Задания и Витрины, commit 118ebf1"
+      - "цикл 4: Люди и доступ, Настройки"
+      - "цикл 5: Выпуски, Происшествия, отбор в журнале"
   - id: selfServiceSite
     score: 3
     state: pending
