@@ -146,6 +146,7 @@ def page(title: str, body: str, *, session_label: str = "", csrf: str = "") -> s
         '<a href="/admin/settings">Настройки</a>'
         '<a href="/admin/releases">Выпуски</a>'
         '<a href="/admin/incidents">Происшествия</a>'
+        '<a href="/admin/new-site">Новая витрина</a>'
         '<a href="/admin/audit">Журнал</a><span class="sp"></span>'
         f"{nav}</header><main>{body}</main></body></html>"
     )
@@ -1600,6 +1601,207 @@ def incidents(данные: dict, *, flash: dict | None, session_label: str, csr
         "<th>Состояние</th><th>Влияние</th><th>Обнаружено</th></tr></thead><tbody>"
         + (строки or чтопусто(5, "Происшествий не записано."))
         + "</tbody></table></div></div>",
+        session_label=session_label,
+        csrf=csrf,
+    )
+
+
+#: Подписи и вид поля для каждого шага мастера. Список полей живёт рядом с
+#: формой, а правила проверки — в ядре: разметка не должна решать, что годится.
+ПОЛЯ_ШАГА: dict[str, list[tuple[str, str, str]]] = {
+    "domain": [("domain", "Домен", "text"), ("aliases", "Псевдонимы через запятую", "text")],
+    "profile": [
+        ("environment", "Среда", "select:staging,production"),
+        ("targetRef", "Площадка", "text"),
+        ("seoProfile", "Профиль разделов", "select:catalog_authority,release_pulse,editorial_guide"),
+    ],
+    "content": [
+        ("contentSource", "Источник", "text"),
+        ("contentTypes", "Типы через запятую", "text"),
+    ],
+    "template": [("themeRef", "Шаблон", "text")],
+    "branding": [
+        ("brandName", "Название", "text"),
+        ("legalName", "Юридическое лицо", "text"),
+        ("primaryColor", "Основной цвет", "text"),
+    ],
+    "seo": [
+        ("canonicalHostForm", "Канонический хост", "select:non_www,www"),
+        ("trailingSlash", "Слэш на конце", "checkbox"),
+    ],
+    "analytics": [
+        ("analyticsRef", "Ссылка на ключ аналитики", "text"),
+        ("adsRef", "Ссылка на рекламный аккаунт", "text"),
+    ],
+    "legal": [
+        ("legalEntity", "Правообладатель", "text"),
+        ("contactEmail", "Контактная почта", "text"),
+        ("rightsConfirmed", "Права на содержимое подтверждены", "checkbox"),
+    ],
+}
+
+
+def _поле_шага(имя: str, подпись: str, вид: str) -> str:
+    if вид.startswith("select:"):
+        значения = вид.split(":", 1)[1].split(",")
+        выбор = "".join(f'<option value="{_e(v)}">{_e(v)}</option>' for v in значения)
+        поле = f'<select id="п-{_e(имя)}" name="{_e(имя)}">{выбор}</select>'
+    elif вид == "checkbox":
+        поле = f'<input id="п-{_e(имя)}" name="{_e(имя)}" type="checkbox" value="1">'
+    else:
+        поле = f'<input id="п-{_e(имя)}" name="{_e(имя)}">'
+    return f'<div><label for="п-{_e(имя)}">{_e(подпись)}</label>{поле}</div>'
+
+
+def _план(план: dict) -> str:
+    """План показывается целиком: шаги, ресурсы, замки, контракты и откат."""
+    if not план:
+        return ""
+    шаги = "".join(
+        f'<tr><td><code>{_e(ш["id"])}</code></td><td>{_e(ш["detail"])}</td>'
+        f'<td class="mut">{"изменение" if ш.get("mutation") else "проверка"}</td></tr>'
+        for ш in план.get("steps") or []
+    )
+    требования = "".join(
+        f'<tr><td><code>{_e(т.get("step", ""))}</code></td><td>{_e(т.get("title", ""))}</td>'
+        f'<td class="mut">{_e(т.get("required_input", ""))}</td></tr>'
+        for т in план.get("requirements") or []
+    )
+    откат = "".join(
+        f'<li><code>{_e(ш["id"])}</code> — {_e(ш["detail"])}</li>'
+        for ш in (план.get("rollback") or {}).get("steps") or []
+    )
+    список = lambda имя, значения: (  # noqa: E731
+        f'<p><b>{_e(имя)}:</b> '
+        + ", ".join(f"<code>{_e(str(з))}</code>" for з in значения or [])
+        + "</p>"
+    )
+    готов = план.get("ready")
+    return (
+        f'<div class="card"><h2>Сухой прогон</h2>'
+        f'<div class="flash {"ok" if готов else "warn"}">'
+        + ("Заявка готова к исполнению." if готов else "Заявка ещё не готова: см. требования.")
+        + f' Изменений выполнено: {план.get("mutations", 0)}.</div>'
+        f'<p class="hint">Отпечаток плана <code>{_e(план.get("planHash", ""))}</code>. '
+        "Один и тот же ввод даёт один и тот же отпечаток: подтверждают именно то, "
+        "что выполнится.</p>"
+        '<div class="scroll-x"><table><thead><tr><th>Шаг</th><th>Что будет сделано</th>'
+        "<th>Род</th></tr></thead><tbody>"
+        + (шаги or чтопусто(3))
+        + "</tbody></table></div>"
+        + список("Затрагиваемые ресурсы", план.get("resources"))
+        + список("Замки", план.get("locks"))
+        + список("Контракты", план.get("contracts"))
+        + "</div>"
+        + '<div class="card"><h2>Чего не хватает</h2>'
+        '<div class="scroll-x"><table><thead><tr><th>Где</th><th>Что не так</th>'
+        "<th>Что нужно</th></tr></thead><tbody>"
+        + (требования or чтопусто(3, "Всё заполнено."))
+        + "</tbody></table></div></div>"
+        + f'<div class="card"><h2>Откат</h2><ul>{откат}</ul>'
+        f'<p class="hint">{_e((план.get("rollback") or {}).get("note", ""))}</p></div>'
+    )
+
+
+#: Порядок шагов для показа «что спросят». Берётся из ядра, а не переписан
+#: здесь: два списка шагов разошлись бы на первом же изменении мастера.
+def _порядок_шагов() -> list[tuple[str, str, str]]:
+    from factory.site_engine.site_request import ШАГИ
+
+    return [(ш.id, ш.title, ш.подсказка) for ш in ШАГИ]
+
+
+ПОРЯДОК_ШАГОВ = _порядок_шагов()
+
+
+def new_site(
+    заявки: list,
+    заявка: dict | None,
+    план: dict | None,
+    *,
+    может: bool,
+    flash: dict | None,
+    session_label: str,
+    csrf: str,
+) -> str:
+    """Мастер заведения витрины: шаги, состояние и сухой прогон."""
+    hidden = f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+    список = "".join(
+        f'<tr><td><a href="/admin/new-site?request={_e(з["requestId"])}">'
+        f'{_e(з["siteId"])}</a></td>'
+        f'<td class="mut">{_e(з.get("createdAt", ""))}</td>'
+        f'<td><span class="pill {"ok" if з.get("complete") else "warn"}">'
+        f'{"заполнена" if з.get("complete") else _e(з.get("nextStep") or "")}</span></td></tr>'
+        for з in заявки
+    )
+    # Что спросят — видно до начала. Мастер, показывающий шаг только после
+    # предыдущего, заставляет узнавать требования по одному: половина заявок
+    # так и застревает на шаге, к которому нечего было приготовить.
+    порядок = "".join(
+        f'<tr><td>{n_}</td><td><code>{_e(и)}</code></td><td>{_e(п)}</td>'
+        f'<td class="mut">{_e(х)}</td></tr>'
+        for n_, (и, п, х) in enumerate(ПОРЯДОК_ШАГОВ, 1)
+    )
+    что_спросят = (
+        '<div class="card"><h2>Что спросят</h2>'
+        '<div class="scroll-x"><table><thead><tr><th>№</th><th>Шаг</th>'
+        "<th>Название</th><th>Пояснение</th></tr></thead><tbody>"
+        + порядок
+        + "</tbody></table></div></div>"
+    )
+    создание = (
+        ""
+        if not может
+        else '<div class="card"><h2>Новая заявка</h2>'
+        '<p class="hint">Ни SSH, ни правка файлов не нужны: весь путь проходится здесь.</p>'
+        f'<form method="post" action="/admin/new-site">{hidden}'
+        '<label for="siteId">Идентификатор витрины</label>'
+        '<input id="siteId" name="siteId" placeholder="строчные буквы, цифры и дефис">'
+        '<button type="submit">Завести заявку</button></form></div>'
+    )
+
+    подробно = ""
+    if заявка:
+        шаги = "".join(
+            f'<tr><td><code>{_e(ш["id"])}</code></td><td>{_e(ш["title"])}</td>'
+            f'<td><span class="pill {"ok" if ш["done"] else "warn"}">'
+            f'{"готово" if ш["done"] else "ждёт"}</span></td>'
+            f'<td class="mut">{_e(ш["hint"])}</td></tr>'
+            for ш in заявка.get("steps") or []
+        )
+        следующий = заявка.get("nextStep")
+        форма = ""
+        if может and следующий:
+            поля = "".join(
+                _поле_шага(*описание) for описание in ПОЛЯ_ШАГА.get(следующий, [])
+            )
+            форма = (
+                f'<div class="card"><h2>Шаг: {_e(следующий)}</h2>'
+                f'<form method="post" action="/admin/new-site/{_e(заявка["requestId"])}">'
+                f'{hidden}<input type="hidden" name="step" value="{_e(следующий)}">'
+                f'<div class="row">{поля}<button type="submit">Дальше</button></div>'
+                "</form></div>"
+            )
+        подробно = (
+            f'<div class="card"><h2>Заявка на {_e(заявка["siteId"])}</h2>'
+            '<div class="scroll-x"><table><thead><tr><th>Шаг</th><th>Что спрашивают</th>'
+            "<th>Состояние</th><th>Пояснение</th></tr></thead><tbody>"
+            + шаги
+            + "</tbody></table></div></div>"
+            + форма
+            + _план(план or {})
+        )
+
+    return page(
+        "Новая витрина",
+        _flash(flash)
+        + создание
+        + что_спросят
+        + '<div class="card"><h2>Заявки</h2><div class="scroll-x"><table>'
+        "<thead><tr><th>Витрина</th><th>Заведена</th><th>Состояние</th></tr></thead><tbody>"
+        + (список or чтопусто(3, "Заявок нет."))
+        + "</tbody></table></div></div>"
+        + подробно,
         session_label=session_label,
         csrf=csrf,
     )

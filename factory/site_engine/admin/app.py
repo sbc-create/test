@@ -239,6 +239,10 @@ class AdminApp:
                     html=ui.sites_list(ответ.body, flash=flash, session_label=label, csrf=csrf),
                 )
             )
+        if rest[:1] == ["new-site"]:
+            return self._record(
+                self._new_site_route(session, method, rest[1:], form, flash, label, csrf)
+            )
         if rest[:1] == ["settings"]:
             return self._record(
                 self._settings_route(session, method, rest[1:], form, flash, label, csrf)
@@ -855,6 +859,76 @@ class AdminApp:
         )
         session.flash = self._flash_from(response, success="Настройка применена.")
         return _redirect(f"/admin/sites/{site_id}")
+
+    # ------------------------------------------------------------------
+    # Новая витрина
+    # ------------------------------------------------------------------
+    def _new_site_route(
+        self, session, method: str, tail: list[str], form: dict, flash, label: str, csrf: str
+    ) -> AdminResponse:
+        """Мастер заведения витрины. Панель ничего не решает: всё через API."""
+        может = self._есть_права(session, "sites:create")
+
+        if method == "POST" and not tail:
+            ответ = self._call(
+                "POST", "/api/v1/site-requests", session, {"siteId": form.get("siteId") or ""}
+            )
+            session.flash = self._flash_from(ответ, success="Заявка заведена.")
+            куда = (
+                f"/admin/new-site?request={ответ.body['requestId']}"
+                if ответ.status == 201
+                else "/admin/new-site"
+            )
+            return _redirect(куда)
+
+        if method == "POST" and len(tail) == 1:
+            шаг = (form.get("step") or "").strip()
+            ответы = {
+                к: v for к, v in form.items() if к not in {CSRF_FIELD, "step"}
+            }
+            ответ = self._call(
+                "PATCH", f"/api/v1/site-requests/{tail[0]}", session, {"step": шаг, "answers": ответы}
+            )
+            session.flash = self._flash_from(ответ, success=f"Шаг «{шаг}» принят.")
+            return _redirect(f"/admin/new-site?request={tail[0]}")
+
+        if method != "GET":
+            return AdminResponse(status=404, html=ui.page("Не найдено", "<p>Нет такой страницы.</p>"))
+
+        список = self._call("GET", "/api/v1/site-requests", session, {})
+        заявки = (список.body.get("items") or []) if список.status == 200 else []
+        rid = (form.get("request") or "").strip() or (tail[0] if tail else "")
+        заявка = план = None
+        беда = ""
+        if rid:
+            подробно = self._call(
+                "GET", f"/api/v1/site-requests/{rid}", session, {"withPlan": True}
+            )
+            if подробно.status == 200:
+                заявка = подробно.body
+                план = заявка.get("plan")
+            else:
+                # Молчаливая пустая страница на месте неудавшегося чтения — это
+                # та же ложь, что пустой список вместо недоступного источника:
+                # заявка выглядит несуществующей, хотя её просто не прочитали.
+                беда = f"заявка не прочитана: {подробно.status} " + str(
+                    (подробно.body.get("error") or {}).get("code", "")
+                )
+        return AdminResponse(
+            status=200,
+            html=ui.new_site(
+                заявки,
+                заявка,
+                план,
+                может=может,
+                # Отказ чтения важнее успеха предыдущего шага: сообщение
+                # «шаг принят» поверх неудавшегося чтения — ровно та подмена,
+                # из-за которой пустая страница выглядела нормальной.
+                flash=({"ok": False, "message": беда} if беда else flash),
+                session_label=label,
+                csrf=csrf,
+            ),
+        )
 
     # ------------------------------------------------------------------
     # Настройки

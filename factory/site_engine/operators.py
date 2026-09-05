@@ -59,6 +59,7 @@ ROLES: dict[str, tuple[str, ...]] = {
         "audit:read",
         "config:write",
         "operators:write",
+        "sites:create",
     ),
 }
 

@@ -50,10 +50,13 @@ gates:
       - "цикл 4: Люди и доступ, Настройки"
       - "цикл 5: Выпуски, Происшествия, отбор в журнале"
   - id: selfServiceSite
-    score: 3
-    state: pending
-    priority: 2
-    gaps: ["мастера, dry-run, provision, canary, rollback нет"]
+    score: 6
+    state: in_progress
+    priority: 1
+    evidence: reports/CORE-FINALIZATION-CYCLIC-21/cycles/CYCLE-06.md
+    gaps: ["выкладка, канарейка и откат не реализованы: план их описывает, исполнения нет"]
+    history:
+      - "цикл 6: мастер из восьми шагов и детерминированный сухой прогон"
   - id: observability
     score: 7
     state: pending

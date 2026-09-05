@@ -652,8 +652,6 @@ def _check_cross_site_leakage(pkg: dict, site_id: str, out: list[Blocker]) -> No
 
 
 def validate(site_id: str) -> ValidationResult:
-    blockers: list[Blocker] = []
-    warnings: list[str] = []
     try:
         pkg = load_package(site_id)
     except FileNotFoundError:
@@ -661,6 +659,21 @@ def validate(site_id: str) -> ValidationResult:
     except (ValueError, yaml.YAMLError) as exc:
         return ValidationResult(site_id, None, [Blocker("BLOCKED_INPUT", "package.yaml", f"Пакет нечитаем: {exc}", "Корректный YAML по schemas/site-package.schema.json", "RECEIVED")])
 
+    return validate_package(pkg, site_id)
+
+
+def validate_package(pkg: dict, site_id: str) -> ValidationResult:
+    """Те же проверки для пакета, уже загруженного в память.
+
+    Мастер заведения витрины собирает пакет из ответов и обязан показать
+    требования ДО того, как что-либо записано на диск. Читать пакет из
+    `sites/<id>/package.yaml` для этого нельзя: черновик, положенный туда,
+    неотличим от настоящего, и конвейер увидел бы недозаполненную заявку как
+    готовую витрину. Второй набор проверок, написанный для мастера, разошёлся
+    бы с этим на первом же изменении правил.
+    """
+    blockers: list[Blocker] = []
+    warnings: list[str] = []
     if not _check_schema(pkg, blockers):
         # без валидной схемы семантические проверки дают шум, а не пользу
         return ValidationResult(site_id, pkg, blockers, warnings)

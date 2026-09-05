@@ -78,6 +78,10 @@ SCOPE_REVIEW = "review:write"
 #: любое другое. Поэтому оно есть только у роли admin и никогда не входит в
 #: набор по умолчанию.
 SCOPE_OPERATORS = "operators:write"
+#: Заведение новых витрин. Отдельно от config:write: право менять настройки
+#: существующей витрины и право создать новую — разные по последствиям. Первое
+#: обратимо откатом, второе занимает домен и место на площадке.
+SCOPE_SITES = "sites:create"
 KNOWN_SCOPES = frozenset(
     {
         SCOPE_READ,
@@ -87,6 +91,7 @@ KNOWN_SCOPES = frozenset(
         SCOPE_AUDIT,
         SCOPE_REVIEW,
         SCOPE_OPERATORS,
+        SCOPE_SITES,
     }
 )
 
@@ -689,6 +694,8 @@ class ControlApi:
         if method == "GET" and rest == ["metrics"]:
             principal.require(SCOPE_READ)
             return self._metrics_response()
+        if rest[:1] == ["site-requests"]:
+            return self._site_requests(method, rest[1:], body, principal, correlation_id)
         if method == "GET" and rest == ["releases"]:
             principal.require(SCOPE_READ)
             from factory.site_engine.api import program_view
@@ -894,6 +901,89 @@ class ControlApi:
                     },
                 )
         raise ControlDenied(404, "job_not_found", f"задания {job_id} нет")
+
+    def _site_requests(
+        self,
+        method: str,
+        tail: list[str],
+        body: dict[str, Any],
+        principal: Principal,
+        correlation_id: str,
+    ) -> ApiResponse:
+        """Заявки на новую витрину. Мастер, сухой прогон — и ни одной мутации."""
+        from factory.site_engine import site_plan, site_request
+
+        склад = site_request.SiteRequestStore(self._root)
+        try:
+            if method == "POST" and not tail:
+                principal.require(SCOPE_SITES)
+                заявка = склад.create(
+                    str(body.get("siteId") or ""),
+                    actor=_актор(principal),
+                    now=self._время(),
+                )
+                self._audit_site_request("create", заявка, _актор(principal), correlation_id)
+                return ApiResponse(status=201, body=заявка.as_dict())
+            if method == "GET" and not tail:
+                principal.require(SCOPE_READ)
+                return ApiResponse(
+                    status=200, body={"items": [з.as_dict() for з in склад.list()]}
+                )
+            if method == "GET" and len(tail) == 1:
+                principal.require(SCOPE_READ)
+                заявка = склад.get(tail[0])
+                тело = заявка.as_dict()
+                # План по требованию в том же ответе. Экран мастера показывает
+                # заявку и план вместе; двумя запросами он тратил вдвое больше
+                # разрешений частоты и на восьмом шаге упирался в предел —
+                # страница при этом молча оказывалась пустой.
+                if body.get("withPlan"):
+                    тело["plan"] = site_plan.план(заявка, self._root, self._env)
+                return ApiResponse(status=200, body=тело)
+            if method == "GET" and tail[1:] == ["plan"]:
+                principal.require(SCOPE_READ)
+                заявка = склад.get(tail[0])
+                return ApiResponse(
+                    status=200, body=site_plan.план(заявка, self._root, self._env)
+                )
+            if method == "PATCH" and len(tail) == 1:
+                principal.require(SCOPE_SITES)
+                заявка = склад.answer(
+                    tail[0], str(body.get("step") or ""), body.get("answers") or {}
+                )
+                self._audit_site_request(
+                    f"answer.{body.get('step')}", заявка, _актор(principal), correlation_id
+                )
+                return ApiResponse(status=200, body=заявка.as_dict())
+        except site_request.SiteRequestError as ошибка:
+            raise ControlDenied(
+                ошибка.status, ошибка.code, ошибка.message, field=ошибка.field
+            ) from ошибка
+        raise ControlDenied(404, "not_found", "маршрут не найден")
+
+    def _время(self) -> str:
+        """Отметка времени создания заявки. Фиксируется один раз: план обязан
+        быть детерминированным, а часы в момент показа плана меняются."""
+        import time
+
+        return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+
+    def _audit_site_request(self, действие: str, заявка, актор: str, correlation_id: str) -> None:
+        audit.record(
+            job_id=correlation_id,
+            site_id=заявка.site_id,
+            environment="staging",
+            action=f"control.site_request.{действие}",
+            target=f"var/state/site-requests/{заявка.request_id}",
+            mutation=True,
+            exit_code=0,
+            extra={
+                "correlation_id": correlation_id,
+                "actor": актор,
+                "request_id": заявка.request_id,
+                "next_step": заявка.next_step,
+            },
+        )
 
     def _settings_view(self, site_id: str, principal: Principal) -> ApiResponse:
         """Схема, значения, версия, ссылки на секреты и готовый откат."""
