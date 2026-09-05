@@ -183,7 +183,39 @@ def score_yummy() -> dict:
     return out
 
 
-def score_reference_pack(ref: str, docs: str) -> dict:
+def audit_minimum(evidence: str, site: str) -> float | None:
+    """Минимальный балл рубрики по сайту. Нет свидетельства — None, не ноль:
+    отсутствие прогона и провал прогона различаются."""
+    data = read_json(f"artifacts/evidence/templates/{evidence}")
+    if not data:
+        return None
+    for row in data.get("sites", []) or []:
+        if row.get("site") == site:
+            return float(row.get("minimum", 0))
+    return None
+
+
+def a11y_counts(profile: str) -> tuple[int, int, int]:
+    """Прогоны axe по профилю, нарушения axe, нарушения уровня AA."""
+    directory = EV / "families-a11y"
+    files = sorted(directory.glob(f"axe-{profile}-*.json")) if directory.is_dir() else []
+    axe = aa = 0
+    for path in files:
+        data = read_json(str(path.relative_to(ROOT)))
+        if not data:
+            continue
+        axe += len(data.get("violations", []) or [])
+        aa += len(data.get("failing_aa", []) or [])
+    return len(files), axe, aa
+
+
+def score_reference_pack(ref: str, docs: str, profile: str, site: str) -> dict:
+    """Оценка семейства, выросшего из референсного пакета.
+
+    Пакет документов и вертикальный срез считаются раздельно. Документ описывает
+    намерение, срез — то, что шаблон действительно отдаёт; смешивать их значит
+    выдавать описанное за реализованное.
+    """
     pack = read_json(f"config/reference-packs/reference-pack.{ref}.json")
     files = count_files("docs", "reference-packs", docs)
     observations = len((pack or {}).get("observations", []) or [])
@@ -191,23 +223,48 @@ def score_reference_pack(ref: str, docs: str) -> dict:
     access = ((pack or {}).get("access") or {}).get("status", "unknown")
     blocked = access != "ok"
 
+    has_manifest = exists(f"var/manifests/{profile}.yaml")
+    has_profile = exists(f"blueprints/lords/profiles/{profile}.yaml")
+    has_package = exists(f"sites/{site}/package.yaml")
+    minimum = audit_minimum("audit.families.json", site)
+    runs, axe_violations, aa_violations = a11y_counts(profile)
+
     out = {}
     out["requirements"] = Score(
         4 if requirements == 0 else 8,
         f"требования из референса: {requirements}; доступ к источнику: {access}", blocked=blocked)
     out["contracts"] = Score(
-        6 if files >= 15 else 0, f"пакет документов: {files} файлов, манифест и ROUTES объявлены")
-    out["route_block_parity"] = Score(2, "маршруты и блоки описаны, но не реализованы")
-    out["ssr_dom"] = Score(0, "вертикального среза нет: рендера не существует")
-    out["states_ux"] = Score(2, "состояния описаны в STATES.md, не реализованы")
-    out["responsive_a11y"] = Score(0, "проверок не было: проверять нечего")
-    out["live_chain"] = Score(0, "живых данных нет и быть не может без реализации")
+        6 + (2 if has_manifest and has_profile else 0) if files >= 15 else 0,
+        f"пакет документов: {files} файлов; TemplateManifest: "
+        f"{'объявлен и проходит контракт' if has_manifest else 'нет'}")
+    # Паритет маршрутов и блоков проверяется браузером против манифеста, а не
+    # глазами: спецификация читает состав из var/artifacts/template-stand.json.
+    out["route_block_parity"] = Score(
+        7 if has_manifest and has_profile else 2,
+        "состав и порядок блоков сверены с манифестом на 390/768/1440"
+        if has_manifest else "маршруты и блоки описаны, но не реализованы")
+    out["ssr_dom"] = Score(
+        6 if minimum is not None else 0,
+        f"рубрика качества страниц: минимум {minimum}/10 на восьми страницах"
+        if minimum is not None else "вертикального среза нет: рендера не существует")
+    out["states_ux"] = Score(
+        5 if has_package else 2,
+        "пустой поиск, отсутствующая страница и недоступный плеер отрисованы"
+        if has_package else "состояния описаны в STATES.md, не реализованы")
+    out["responsive_a11y"] = Score(
+        7 if runs and axe_violations == 0 and aa_violations == 0 else (3 if runs else 0),
+        f"axe {runs} прогонов на трёх ширинах, нарушений {axe_violations}, "
+        f"уровень AA: {aa_violations}" if runs else "проверок не было: проверять нечего")
+    # Живой контур остаётся нулём осознанно: срез собран на фикстуре, а фикстура
+    # вместо живых данных даёт ноль по правилу счёта. Домена у пакета нет вовсе.
+    out["live_chain"] = Score(
+        0, "срез собран на фикстуре; домен не задан (BLOCKED_INPUT_DOMAIN_TARGET)")
     out["visual_perf"] = Score(
         0, f"наблюдений за референсом {observations}; снимки заблокированы (REF-EGRESS-01)",
         blocked=blocked)
     out["docs_evidence"] = Score(
         6 if files >= 15 else 0, "README_AI, VISUAL_DECISIONS, CHANGELOG и прочее на месте")
-    out["handoff_canary"] = Score(0, "к выкладке не готов: реализации нет")
+    out["handoff_canary"] = Score(0, "к выкладке не готов: живого контура и домена нет")
     return out
 
 
@@ -236,8 +293,10 @@ def build() -> list:
     return [
         Row("lords", score_lords()),
         Row("yummy", score_yummy()),
-        Row("zona-cinema", score_reference_pack("zona-w140", "zona-w140")),
-        Row("animedia-portal", score_reference_pack("amd-online", "amd-online")),
+        Row("zona-cinema", score_reference_pack("zona-w140", "zona-w140",
+                                              "zona-cinema", "zona-cinema-preview")),
+        Row("animedia-portal", score_reference_pack("amd-online", "amd-online",
+                                                  "animedia-portal", "animedia-preview")),
         Row("basis-video", score_basis()),
     ]
 

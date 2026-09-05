@@ -431,15 +431,47 @@ def _release_candidate_gate() -> dict:
     }
 
 
+#: Отпечаток замороженного кандидата и ветка, в которой он заморожен. Значения
+#: не вычисляются из текущего рабочего дерева намеренно: статус обязан называть
+#: то, что предлагается к релизу, а post-release ветка трогает
+#: `factory/templates/` и потому даёт другой отпечаток. Один раз статус уже
+#: подменил кандидата веткой доработок — читатель увидел бы «21 файл» там, где
+#: Архитектору передавались 19.
+FROZEN_CANDIDATE = {
+    "branch": "claude/templates-lords-yummy-refpacks-01",
+    "head": "cd2f718ae656e6bfcdc68099601d92078bd1f13f",
+    "template_digest":
+        "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
+    "template_digest_files": 19,
+}
+
+
 def build() -> dict:
     fingerprint = digest_mod.compute()
+    branch = _git("rev-parse", "--abbrev-ref", "HEAD")
+    candidate_branch = branch == FROZEN_CANDIDATE["branch"]
     return {
         "lane": "TEMPLATES",
-        "branch": _git("rev-parse", "--abbrev-ref", "HEAD"),
-        "head": _git("rev-parse", "HEAD"),
+        "branch": FROZEN_CANDIDATE["branch"],
+        "head": FROZEN_CANDIDATE["head"],
         "base_sha": "76552b9a7372c5ad15cfc7d8b1052a10024722a3",
-        "template_digest": fingerprint["template_digest"],
-        "template_digest_files": fingerprint["files"],
+        "template_digest": FROZEN_CANDIDATE["template_digest"],
+        "template_digest_files": FROZEN_CANDIDATE["template_digest_files"],
+        # Ветка, из которой запущен пересчёт. Совпадает с кандидатом — отпечаток
+        # проверяется на месте; не совпадает — называется отдельно и с причиной.
+        "recomputed_from": {
+            "branch": branch,
+            "head": _git("rev-parse", "HEAD"),
+            "template_digest": fingerprint["template_digest"],
+            "template_digest_files": fingerprint["files"],
+            "matches_candidate":
+                fingerprint["template_digest"] == FROZEN_CANDIDATE["template_digest"],
+            "note": (
+                "пересчёт из ветки кандидата: отпечаток проверен на месте"
+                if candidate_branch else
+                "пересчёт из post-release ветки: её отпечаток отличается намеренно, "
+                "кандидату он не принадлежит и в релиз не входит"),
+        },
         "gates": {
             "axe_wcag22aa": _axe_gate(),
             "a11y_manual": _manual_gate(),

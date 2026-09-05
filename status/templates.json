@@ -1,10 +1,18 @@
 {
   "lane": "TEMPLATES",
   "branch": "claude/templates-lords-yummy-refpacks-01",
-  "head": "c862bb7eca5575ca79e0ae002dbe83cbba515d38",
+  "head": "cd2f718ae656e6bfcdc68099601d92078bd1f13f",
   "base_sha": "76552b9a7372c5ad15cfc7d8b1052a10024722a3",
   "template_digest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
   "template_digest_files": 19,
+  "recomputed_from": {
+    "branch": "claude/templates-new-families-01",
+    "head": "1bbb05465725664910cee9914a39fe4f0233bb17",
+    "template_digest": "f052a3a3cf03bb6dec1eac618aa9d99134764db26a5a2af00f0d42694d385c28",
+    "template_digest_files": 21,
+    "matches_candidate": false,
+    "note": "пересчёт из post-release ветки: её отпечаток отличается намеренно, кандидату он не принадлежит и в релиз не входит"
+  },
   "gates": {
     "axe_wcag22aa": {
       "status": "pass",

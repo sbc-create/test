@@ -164,7 +164,7 @@
       }
     },
     "zona-cinema": {
-      "total": 20,
+      "total": 43,
       "blocked_gates": [
         "requirements",
         "visual_perf"
@@ -176,33 +176,33 @@
           "blocked": true
         },
         "contracts": {
-          "points": 6,
-          "note": "пакет документов: 20 файлов, манифест и ROUTES объявлены",
+          "points": 8,
+          "note": "пакет документов: 20 файлов; TemplateManifest: объявлен и проходит контракт",
           "blocked": false
         },
         "route_block_parity": {
-          "points": 2,
-          "note": "маршруты и блоки описаны, но не реализованы",
+          "points": 7,
+          "note": "состав и порядок блоков сверены с манифестом на 390/768/1440",
           "blocked": false
         },
         "ssr_dom": {
-          "points": 0,
-          "note": "вертикального среза нет: рендера не существует",
+          "points": 6,
+          "note": "рубрика качества страниц: минимум 10.0/10 на восьми страницах",
           "blocked": false
         },
         "states_ux": {
-          "points": 2,
-          "note": "состояния описаны в STATES.md, не реализованы",
+          "points": 5,
+          "note": "пустой поиск, отсутствующая страница и недоступный плеер отрисованы",
           "blocked": false
         },
         "responsive_a11y": {
-          "points": 0,
-          "note": "проверок не было: проверять нечего",
+          "points": 7,
+          "note": "axe 3 прогонов на трёх ширинах, нарушений 0, уровень AA: 0",
           "blocked": false
         },
         "live_chain": {
           "points": 0,
-          "note": "живых данных нет и быть не может без реализации",
+          "note": "срез собран на фикстуре; домен не задан (BLOCKED_INPUT_DOMAIN_TARGET)",
           "blocked": false
         },
         "visual_perf": {
@@ -217,13 +217,13 @@
         },
         "handoff_canary": {
           "points": 0,
-          "note": "к выкладке не готов: реализации нет",
+          "note": "к выкладке не готов: живого контура и домена нет",
           "blocked": false
         }
       }
     },
     "animedia-portal": {
-      "total": 24,
+      "total": 47,
       "blocked_gates": [
         "requirements",
         "visual_perf"
@@ -235,33 +235,33 @@
           "blocked": true
         },
         "contracts": {
-          "points": 6,
-          "note": "пакет документов: 20 файлов, манифест и ROUTES объявлены",
+          "points": 8,
+          "note": "пакет документов: 20 файлов; TemplateManifest: объявлен и проходит контракт",
           "blocked": false
         },
         "route_block_parity": {
-          "points": 2,
-          "note": "маршруты и блоки описаны, но не реализованы",
+          "points": 7,
+          "note": "состав и порядок блоков сверены с манифестом на 390/768/1440",
           "blocked": false
         },
         "ssr_dom": {
-          "points": 0,
-          "note": "вертикального среза нет: рендера не существует",
+          "points": 6,
+          "note": "рубрика качества страниц: минимум 10.0/10 на восьми страницах",
           "blocked": false
         },
         "states_ux": {
-          "points": 2,
-          "note": "состояния описаны в STATES.md, не реализованы",
+          "points": 5,
+          "note": "пустой поиск, отсутствующая страница и недоступный плеер отрисованы",
           "blocked": false
         },
         "responsive_a11y": {
-          "points": 0,
-          "note": "проверок не было: проверять нечего",
+          "points": 7,
+          "note": "axe 3 прогонов на трёх ширинах, нарушений 0, уровень AA: 0",
           "blocked": false
         },
         "live_chain": {
           "points": 0,
-          "note": "живых данных нет и быть не может без реализации",
+          "note": "срез собран на фикстуре; домен не задан (BLOCKED_INPUT_DOMAIN_TARGET)",
           "blocked": false
         },
         "visual_perf": {
@@ -276,7 +276,7 @@
         },
         "handoff_canary": {
           "points": 0,
-          "note": "к выкладке не готов: реализации нет",
+          "note": "к выкладке не готов: живого контура и домена нет",
           "blocked": false
         }
       }
@@ -341,9 +341,9 @@
     }
   },
   "program_completion": {
-    "five_slots": 44,
+    "five_slots": 53,
     "lords_yummy": 82,
-    "four_confirmed": 52,
+    "four_confirmed": 64,
     "uncertainty_pp": 5
   }
 }
