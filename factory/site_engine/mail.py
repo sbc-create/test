@@ -187,5 +187,12 @@ def mailer_from_env(
     Подмена молчаливой быть не может: у складывающего `production_ready`
     равен False, и включение публичной регистрации это проверяет.
     """
+    env = env if env is not None else os.environ
     smtp = SmtpMailer.from_env(env)
-    return smtp if smtp.configured else CaptureMailer(capture_sink)
+    if smtp.configured:
+        return smtp
+    # Каталог для складывания задаётся отдельно и только ради проверок:
+    # письма на диске — это ссылки подтверждения на диске, и в production
+    # такого каталога быть не должно.
+    сток = capture_sink or env.get("SITE_ENGINE_MAIL_CAPTURE_DIR") or None
+    return CaptureMailer(сток)

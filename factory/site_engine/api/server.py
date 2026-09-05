@@ -211,6 +211,32 @@ class _Handler(http.server.BaseHTTPRequestHandler):
             return
         self._html(response.status, response.html, response.headers)
 
+    def _handle_account(self, method: str, path: str, *,
+                        query: dict[str, str] | None = None) -> None:
+        """Публичные страницы учётной записи.
+
+        Отдельный обработчик, а не ветка внутри админского: разметка панели не
+        должна попадать на публичную страницу даже случайно, и права у них
+        разные по определению.
+        """
+        app = getattr(self.server, "account_app", None)
+        if app is None:
+            self._error(404, "not_found", "маршрут не найден")
+            return
+        form: dict[str, str] = dict(query or {})
+        if method == "POST":
+            parsed = self._read_form()
+            if parsed is None:
+                return
+            form = parsed
+        try:
+            ответ = app.handle(method, path, form=form, cookies=self._cookies(),
+                               user_agent=self.headers.get("User-Agent", ""))
+        except Exception:  # noqa: BLE001
+            self._html(500, "<p>Внутренняя ошибка.</p>")
+            return
+        self._html(ответ.status, ответ.html, ответ.headers)
+
     def _headers_dict(self) -> dict[str, str]:
         return {k.lower(): v for k, v in self.headers.items()}
 
@@ -271,6 +297,9 @@ class _Handler(http.server.BaseHTTPRequestHandler):
     def _serve(self, method: str, path: str, query: dict) -> None:
         if path == "/admin" or path.startswith("/admin/"):
             self._handle_admin(method, path, query=query)
+            return
+        if path == "/account" or path.startswith("/account/"):
+            self._handle_account(method, path, query=query)
             return
 
         body = self._read_body()
@@ -342,11 +371,13 @@ class _Server(http.server.ThreadingHTTPServer):
         admin_app=None,
         lifecycle=None,
         service_root=None,
+        account_app=None,
     ):
         super().__init__(address, handler)
         self.read_api = read_api
         self.control_api = control_api
         self.admin_app = admin_app
+        self.account_app = account_app
         self.lifecycle = lifecycle if lifecycle is not None else Lifecycle()
         self.service_root = service_root
 
@@ -358,6 +389,7 @@ def build_server(
     admin_app: Any = None,
     lifecycle: Any = None,
     service_root: Any = None,
+    account_app: Any = None,
 ) -> _Server:
     """Сборка сервера.
 
@@ -378,6 +410,7 @@ def build_server(
         admin_app,
         lifecycle,
         service_root,
+        account_app,
     )
 
 
@@ -458,10 +491,30 @@ def main(argv: list[str] | None = None) -> int:
             "site_engine_admin_sessions",
             lambda: [({}, admin_app.sessions.count())],
         )
+    # Публичный контур учётных записей включается отдельно от админки и
+    # только для названной витрины. Складывающий адаптер почты разрешается
+    # явной переменной — путь, которым регистрация работает без настоящей
+    # доставки, обязан быть виден, а не выводиться из умолчаний.
+    account_app = None
+    site_for_accounts = str(env.get("SITE_ENGINE_ACCOUNTS_SITE", "")).strip()
+    if site_for_accounts:
+        from factory.site_engine.account_app import AccountApp
+        from factory.site_engine.accounts import AccountDirectory
+        from factory.site_engine.mail import mailer_from_env
+
+        каталог = AccountDirectory(root, mailer=mailer_from_env(env))
+        account_app = AccountApp(
+            каталог, site_id=site_for_accounts, enabled=True,
+            secure_cookie=args.host not in {"127.0.0.1", "::1", "localhost"},
+            allow_capture_mailer=str(
+                env.get("SITE_ENGINE_ACCOUNTS_ALLOW_CAPTURE_MAILER", "")
+            ).strip().lower() in {"1", "true", "yes", "on"})
+
     config = ServerConfig(host=args.host, port=args.port, allow_public_bind=args.allow_public_bind)
     жизнь = Lifecycle(drain_timeout=float(env.get("SITE_ENGINE_DRAIN_SECONDS", "25")))
     server = build_server(
-        config, read_api, control_api, admin_app, lifecycle=жизнь, service_root=root
+        config, read_api, control_api, admin_app, lifecycle=жизнь,
+        service_root=root, account_app=account_app
     )
     адрес = server.server_address
     состояние = "с админкой" if admin_app else "без админки"
