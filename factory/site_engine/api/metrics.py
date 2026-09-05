@@ -29,6 +29,10 @@ _HELP = {
         "gauge", "Витрин под управлением"),
     "site_engine_admin_sessions": (
         "gauge", "Открытых сессий админки"),
+    "site_engine_playback_identifiers_allowed": (
+        "gauge", "Идентификаторы, которыми разрешено адресовать плеер (1 — разрешён)"),
+    "site_engine_playback_identifier_flags": (
+        "gauge", "Состояние флагов идентификаторов вне основы контракта"),
 }
 
 

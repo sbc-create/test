@@ -227,6 +227,30 @@ REASONS: dict[str, Reason] = {r.code: r for r in (
         tags=("политика", "массовое", "требует-решения-владельца"),
     ),
     Reason(
+        code="IDENTIFIER_DISABLED_BY_POLICY", stage="policy", terminal=True,
+        public=_ОБЩЕЕ,
+        operator="Идентификатор допускается контрактом поставщика, но выключен настройкой "
+                 "эксплуатации в config/playback-identifiers.yaml. Это наше собственное "
+                 "решение, а не отказ поставщика: отличать их обязательно, иначе оператор "
+                 "будет писать поставщику про запрет, который ввели мы сами.",
+        metric="playback_reason_total{code=IDENTIFIER_DISABLED_BY_POLICY}",
+        remediation="Включить идентификатор в перечне эксплуатации, если это и было намерением.",
+        automatic=None, cooldown_seconds=3600, escalate_after=5,
+        tags=("политика", "обратимое"),
+    ),
+    Reason(
+        code="IDENTIFIER_OUT_OF_SCOPE", stage="policy", terminal=True,
+        public=_ОБЩЕЕ,
+        operator="Идентификатор разрешён, но не для этого профиля сайта или типа содержимого. "
+                 "Так выключен cvh для сериалов: поставщик возвращает по нему франшизу "
+                 "целиком, и привязка показала бы зрителю не тот сезон.",
+        metric="playback_reason_total{code=IDENTIFIER_OUT_OF_SCOPE}",
+        remediation="Расширять область применения только с доказательством, что смешения "
+                    "содержимого не происходит.",
+        automatic=None, cooldown_seconds=86400, escalate_after=1,
+        tags=("политика", "требует-доказательства"),
+    ),
+    Reason(
         code="UNKNOWN", stage="descriptor", terminal=False,
         public=_ОБЩЕЕ,
         operator="Причина не классифицирована. Допустима только как временная заглушка: "
@@ -256,16 +280,42 @@ def catalogue() -> dict[str, Any]:
     }
 
 
+def действующий_перечень() -> tuple[tuple[str, ...], tuple[str, ...]]:
+    """Разрешённые и запрещённые идентификаторы по действующей политике.
+
+    Читается из factory/lords/playback_policy, а не задаётся здесь константой:
+    два перечня в двух модулях уже расходились, и каталог строил дескрипторы,
+    которые плеер затем отвергал. При недоступной политике классификатор
+    возвращает основу контракта, а не пустоту: пустой перечень превратил бы
+    каждую карточку в UNSUPPORTED_AGGREGATOR.
+    """
+    try:
+        from factory.site_engine import playback_policy
+
+        решение = playback_policy.resolve_cached()
+        запрещены = tuple(
+            имя for имя in ("imdb", "cvh", "tmdb", "shiki")
+            if имя not in решение.allowed
+        )
+        return решение.allowed, запрещены
+    except Exception:
+        return ("kp", "mali", "mdl"), ("imdb",)
+
+
 def classify_descriptor(external_ids: dict | None, playback: dict | None,
-                        *, supported: tuple[str, ...] = ("kp", "mali", "mdl"),
+                        *, supported: tuple[str, ...] | None = None,
                         probe: str | None = None,
-                        forbidden: tuple[str, ...] = ("imdb",)) -> str:
+                        forbidden: tuple[str, ...] | None = None) -> str:
     """Код причины по состоянию записи каталога.
 
     Порядок проверок повторяет порядок цепочки: сначала источник, потом
     сопоставление, потом резолвер. Иначе отсутствие идентификатора выглядело бы
     как отказ поставщика.
     """
+    if supported is None or forbidden is None:
+        разрешены, запрещены = действующий_перечень()
+        supported = разрешены if supported is None else supported
+        forbidden = запрещены if forbidden is None else forbidden
     ext = external_ids or {}
     pb = playback if isinstance(playback, dict) else None
     if not pb:
@@ -281,6 +331,12 @@ def classify_descriptor(external_ids: dict | None, playback: dict | None,
     if not aggr or not tid:
         return "DESCRIPTOR_INVALID"
     if aggr not in supported:
+        # Запрещённый и неподдерживаемый — разные вещи, и путать их дорого:
+        # первое чинится решением владельца контракта, второе — работой над
+        # сопоставлением. Измерено 2026-09-05: 645 карточек с дескриптором
+        # aggr=imdb попадали в «неподдерживаемый» и выглядели как наш пробел.
+        if aggr in (forbidden or ()):
+            return "IDENTIFIER_FORBIDDEN_BY_CONTRACT"
         return "UNSUPPORTED_AGGREGATOR"
     if probe == "EMPTY":
         return "PROVIDER_NOT_PLAYABLE"

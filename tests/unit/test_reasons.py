@@ -14,7 +14,8 @@ from factory.site_engine.api import reasons
     "RESOLVER_ERROR", "DOMAIN_NOT_ELIGIBLE", "CONTENT_NOT_PLAYABLE_BY_POLICY",
     "PROJECTION_STALE", "DESCRIPTOR_INVALID", "CLIENT_COMPONENT_FAILED",
     "IFRAME_FAILED", "MEDIA_REQUEST_FAILED", "FIRST_FRAME_TIMEOUT",
-    "IDENTIFIER_FORBIDDEN_BY_CONTRACT", "UNKNOWN",
+    "IDENTIFIER_FORBIDDEN_BY_CONTRACT",
+    "IDENTIFIER_DISABLED_BY_POLICY", "IDENTIFIER_OUT_OF_SCOPE", "UNKNOWN",
 ]
 
 
@@ -83,7 +84,7 @@ def test_справочник_машиночитаем():
     c = reasons.catalogue()
     assert c["version"] == reasons.VERSION
     assert len(c["codes"]) == len(ОБЯЗАТЕЛЬНЫЕ)
-    for code, d in c["codes"].items():
+    for _code, d in c["codes"].items():
         assert d["retryable"] == (not d["terminal"])
         assert d["stage"] in c["stages"]
 

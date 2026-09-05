@@ -534,6 +534,9 @@ class ControlApi:
         if method == "GET" and rest == ["reasons"]:
             principal.require(SCOPE_READ)
             return ApiResponse(status=200, body=reasons.catalogue())
+        if method == "GET" and rest == ["playback-policy"]:
+            principal.require(SCOPE_READ)
+            return self._playback_policy()
         if method == "GET" and len(rest) == 2 and rest[0] == "traces":
             principal.require(SCOPE_AUDIT)
             return self._trace(rest[1])
@@ -920,6 +923,65 @@ class ControlApi:
             "manageable": sum(1 for r in rows if r["manageable"]),
         })
 
+    def _playback_policy(self) -> ApiResponse:
+        """Действующий перечень идентификаторов и состояние флагов.
+
+        Отдаётся отдельным маршрутом, потому что вопрос «почему у этой карточки
+        нет видео» на массиве в пятьдесят тысяч записей чаще всего оказывается
+        вопросом «что сейчас разрешено», и выяснять это чтением файлов на
+        рабочем узле — самый долгий способ.
+        """
+        from factory.site_engine import playback_policy
+
+        try:
+            решение = playback_policy.resolve_cached(root=self._root)
+        except playback_policy.PlaybackPolicyError as ошибка:
+            # Противоречивая настройка — это состояние, о котором обязан узнать
+            # оператор, а не отсутствующий маршрут.
+            return ApiResponse(status=409, body={
+                "error": {"code": "playback_policy_conflict", "message": str(ошибка)}})
+        тело = решение.as_dict()
+        тело["flags"] = self._playback_flags()
+        return ApiResponse(status=200, body=тело)
+
+    def _playback_flags(self) -> list[dict[str, Any]]:
+        """Флаги отдаются без содержимого записей авторизации.
+
+        Наружу уходит только факт наличия разрешения и его статус: сами
+        доказательства могут содержать переписку и реквизиты договора.
+        """
+        import yaml
+
+        путь = self._root / "config" / "playback-identifiers.yaml"
+        if not путь.exists():
+            return []
+        try:
+            данные = yaml.safe_load(путь.read_text(encoding="utf-8")) or {}
+        except Exception:  # noqa: BLE001
+            return []
+        поставщики = данные.get("providers")
+        if not isinstance(поставщики, dict):
+            return []
+        строки: list[dict[str, Any]] = []
+        for поставщик, описание in поставщики.items():
+            записи = (описание or {}).get("identifiers")
+            if not isinstance(записи, dict):
+                continue
+            for имя, запись in записи.items():
+                if not isinstance(запись, dict):
+                    continue
+                авторизация = запись.get("authorization")
+                строки.append({
+                    "provider": поставщик,
+                    "identifier": имя,
+                    "enabled": bool(запись.get("enabled")),
+                    "flag": запись.get("flag"),
+                    "authorization": (
+                        авторизация.get("status") if isinstance(авторизация, dict) else "baseline"
+                    ),
+                })
+        return строки
+
     def _metrics_response(self) -> ApiResponse:
         """Показатели собираются в момент опроса, а не накапливаются.
 
@@ -939,6 +1001,25 @@ class ControlApi:
         profiles = self._root / "config" / "site-profiles"
         if profiles.is_dir():
             gauges["site_engine_sites"] = [({}, len(list(profiles.glob("*.json"))))]
+        try:
+            from factory.site_engine import playback_policy
+
+            решение = playback_policy.resolve_cached(root=self._root)
+            gauges["site_engine_playback_identifiers_allowed"] = [
+                ({"identifier": имя}, 1 if имя in решение.allowed else 0)
+                for имя in sorted(set(решение.baseline) | set(решение.allowed))
+            ]
+            gauges["site_engine_playback_identifier_flags"] = [
+                ({"identifier": строка["identifier"],
+                  "authorization": str(строка["authorization"])},
+                 1 if строка["enabled"] else 0)
+                for строка in self._playback_flags()
+                if строка["flag"]
+            ]
+        except Exception:  # noqa: BLE001
+            # Противоречивая настройка видна на своём маршруте; ронять опрос
+            # метрик из-за неё значит потерять и все остальные показатели.
+            pass
         for name, source in self._gauges.items():
             try:
                 gauges[name] = source()

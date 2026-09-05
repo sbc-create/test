@@ -382,6 +382,9 @@ def _pick_external(ids: dict | None, aliases: list[str]) -> str | None:
     return None
 
 
+from factory.site_engine import playback_policy  # noqa: E402
+
+
 def normalize_title(raw: dict, contract: LiveContract) -> dict | None:
     """Запись каталога из ответа источника. Ничего не додумывает.
 
@@ -400,24 +403,36 @@ def normalize_title(raw: dict, contract: LiveContract) -> dict | None:
         if found:
             resolved[key] = found
 
-    # Плеер адресуется агрегатором, а не внутренним id источника.
-    aggregator = None
-    playback_id = None
-    # imdb в этом отображении отсутствует намеренно: правило PC-2 контракта
-    # плеера запрещает IMDb в роли playback identifier. Поставщик по нему поток
-    # отдаёт, и 645 карточек из-за этого остаются без видео — но снимать запрет
-    # вправе только владелец контракта.
-    aggregator_by_key = {"kinopoisk": "kp", "myanimelist": "mali", "mydramalist": "mdl"}
-    for key in ("kinopoisk", "myanimelist", "mydramalist"):
-        code = aggregator_by_key[key]
-        if code in contract.aggregator_priority and resolved.get(key):
-            aggregator, playback_id = code, resolved[key]
-            break
-
     is_series = raw.get("is_series")
     raw_type = _text(raw.get("type"))
     if is_series is None and raw_type:
         is_series = raw_type.lower() in {"series", "tv", "show"}
+
+    # Плеер адресуется агрегатором, а не внутренним id источника.
+    #
+    # Перечень допустимых идентификаторов разрешается один раз, в
+    # factory/lords/playback_policy.py. Раньше он был константой и здесь, и в
+    # сборщике разметки: каталог построил 645 дескрипторов, плеер их отверг, и
+    # дефект выглядел как исправление. Пересечение с приоритетом источника
+    # оставлено намеренно — расширить перечень описание источника не может,
+    # только выразить предпочтение внутри уже разрешённого.
+    aggregator = None
+    playback_id = None
+    политика = playback_policy.resolve_cached(
+        content_type=("series" if is_series else "movie") if is_series is not None else None
+    )
+    aggregator_by_key = {
+        "kinopoisk": "kp", "myanimelist": "mali", "mydramalist": "mdl", "imdb": "imdb",
+    }
+    for key, code in aggregator_by_key.items():
+        if not политика.permits(code):
+            continue
+        if code in contract.aggregator_priority and resolved.get(key):
+            aggregator, playback_id = code, resolved[key]
+            break
+    # cvh адресуется собственным идентификатором источника, а не внешним.
+    if aggregator is None and политика.permits("cvh") and "cvh" in contract.aggregator_priority:
+        aggregator, playback_id = "cvh", external_id
 
     year = raw.get("year")
     year = int(year) if isinstance(year, int) else None
@@ -521,6 +536,57 @@ def write_atomic(path: Path, payload: dict) -> None:
     os.replace(tmp, path)
 
 
+def сверить_с_политикой(items: list[dict]) -> tuple[list[dict], dict[str, int]]:
+    """Убирает дескрипторы, которые действующая политика больше не разрешает.
+
+    Зачем это здесь, а не только в normalize_title. Каталог обновляется
+    приращением: запись, не изменившаяся у поставщика, переносится из прежнего
+    кэша как есть. Поэтому запрет, введённый или возвращённый сегодня, дошёл бы
+    до витрины только со следующим полным обходом — а он раз в шесть часов.
+    Измерено 2026-09-05: после отката IMDb в каталоге оставалось 645 записей с
+    запрещённым дескриптором, и покрытие воспроизведения показывало их
+    исправными.
+
+    Отсюда и свойство отката: правка перечня действует со следующей записи
+    каталога, без полного обхода и без перезапуска службы.
+
+    Дескриптор снимается, но запись остаётся: карточка обязана существовать с
+    честной заглушкой, а не исчезать с витрины.
+    """
+    try:
+        from factory.site_engine import playback_policy
+    except Exception:  # noqa: BLE001
+        return items, {}
+
+    итог: list[dict] = []
+    снято: dict[str, int] = {}
+    for запись in items:
+        pb = запись.get("playback") if isinstance(запись, dict) else None
+        if not isinstance(pb, dict):
+            итог.append(запись)
+            continue
+        агрегатор = str(pb.get("aggregator") or "")
+        тип = запись.get("is_series")
+        try:
+            решение = playback_policy.resolve_cached(
+                content_type=("series" if тип else "movie") if тип is not None else None
+            )
+        except playback_policy.PlaybackPolicyError:
+            # Противоречивая настройка не повод молча вычистить каталог:
+            # это состояние разбирает оператор, а витрина живёт на прежнем.
+            return items, {"policy_conflict": 1}
+        if решение.permits(агрегатор):
+            итог.append(запись)
+            continue
+        копия = dict(запись)
+        копия["playback"] = None
+        копия["playback_blocked_reason"] = решение.reason_for(агрегатор)
+        копия["playback_blocked_aggregator"] = агрегатор
+        итог.append(копия)
+        снято[агрегатор] = снято.get(агрегатор, 0) + 1
+    return итог, снято
+
+
 def write_cache(
     path: Path,
     items: list[dict],
@@ -530,7 +596,14 @@ def write_cache(
     mark: str | None = None,
     base_full_at_ms: int | None = None,
 ) -> None:
+    items, снято = сверить_с_политикой(items)
+    if снято:
+        # Печатается намеренно: беззвучное изменение состава каталога — ровно то,
+        # что делает разбор «почему пропало видео» долгим.
+        print(f"[playback-policy] снято дескрипторов: {снято}", flush=True)
     payload: dict = {"fetched_at_ms": now_ms, "source": source, "items": items}
+    if снято:
+        payload["playback_policy_stripped"] = снято
     if mark:
         payload["mark"] = mark
     payload["base_full_at_ms"] = int(base_full_at_ms if base_full_at_ms is not None else now_ms)

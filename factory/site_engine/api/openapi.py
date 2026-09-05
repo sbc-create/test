@@ -176,6 +176,15 @@ from factory.site_engine.api.ratelimit import DEFAULT_LIMITS
         "success": ("200", "версионированный справочник"),
         "errors": {"404": "маршрут выключен"},
     },
+    "/api/v1/playback-policy": {
+        "method": "get",
+        "summary": "Действующий перечень playback identifier, основа контракта и флаги",
+        "scope": "read",
+        "idempotent": False,
+        "body": None,
+        "success": ("200", "перечень, основа, версия политики и состояние флагов"),
+        "errors": {"409": "настройка противоречит контракту поставщика"},
+    },
     "/api/v1/traces/{traceId}": {
         "method": "get",
         "summary": "Путь запроса по идентификатору следа",

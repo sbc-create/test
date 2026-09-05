@@ -100,14 +100,19 @@ def contract_check(player_state: PlayerState) -> dict:
     }
 
 
-#: Агрегаторы, допустимые как playback identifier. IMDb сюда не входит: PC-2
-#: запрещает его в этой роли, и молчаливое расширение списка было бы нарушением.
+#: Основа перечня, зафиксированная контрактом поставщика. Оставлена именем для
+#: совместимости и как последний рубеж: действующий перечень разрешает
+#: factory/lords/playback_policy.py, и он вправе только сузить эту основу либо
+#: расширить её идентификатором с записью авторизации.
 ALLOWED_AGGREGATORS = ("kp", "mali", "mdl")
 
 #: PC-3: значение фиксировано контрактом и не берётся из настроек сайта.
 DISABLE_LICENSED = "false"
 
 CONTRACT_REF = "knowledge/cdnvideohub/PLAYER_CONTRACT.yaml"
+
+
+from factory.site_engine import playback_policy  # noqa: E402  (после констант модуля)
 
 
 class PlayerContractError(RuntimeError):
@@ -139,15 +144,22 @@ def player_attributes(
     priority_voice: str | None = None,
     show_voice_only: bool = False,
     show_banner: bool = True,
+    site_profile: str | None = None,
+    content_type: str | None = None,
 ) -> dict[str, str]:
     """Атрибуты `<video-player>` по контракту.
 
     Проверки здесь отказные, а не поправляющие: подставить «разумное» значение
     вместо неверного значило бы выдать собственную догадку за контракт.
     """
-    if aggregator not in ALLOWED_AGGREGATORS:
+    решение = playback_policy.resolve_cached(
+        site_profile=site_profile, content_type=content_type
+    )
+    if not решение.permits(aggregator):
         raise PlayerContractError(
-            f"агрегатор {aggregator!r} вне допустимых {ALLOWED_AGGREGATORS} (PC-2)"
+            f"агрегатор {aggregator!r} вне допустимых {решение.allowed} "
+            f"(причина {решение.reason_for(aggregator)}, "
+            f"перечень {решение.policy_version} по контракту {решение.contract_version})"
         )
     if not str(title_id).strip():
         raise PlayerContractError("пустой data-title-id")

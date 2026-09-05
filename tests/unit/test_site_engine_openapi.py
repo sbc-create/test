@@ -37,6 +37,7 @@ ROOT = Path(__file__).resolve().parents[2]
     "/api/v1/content-health": {},
     "/api/v1/content-health/{siteId}": {},
     "/api/v1/reasons": {},
+    "/api/v1/playback-policy": {},
 }
 
 

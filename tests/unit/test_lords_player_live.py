@@ -47,8 +47,15 @@ class TestPublisherId:
 
 class TestContractRules:
     def test_imdb_is_refused_as_a_playback_identifier(self):
-        """PC-2: IMDb не используется как playback identifier."""
-        with pytest.raises(player.PlayerContractError, match="PC-2"):
+        """PC-2: IMDb не используется как playback identifier.
+
+        Проверяется код причины, а не текст правила. Перечень допустимых
+        идентификаторов теперь разрешается из контракта и настройки, поэтому
+        отказ обязан называть машинный код, по которому его можно посчитать и
+        показать оператору, — а не строку, совпавшую по случайности.
+        """
+        with pytest.raises(player.PlayerContractError,
+                           match="IDENTIFIER_FORBIDDEN_BY_CONTRACT"):
             render(aggregator="imdb")
 
     @pytest.mark.parametrize("aggregator", ["kp", "mali", "mdl"])
