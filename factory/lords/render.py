@@ -223,6 +223,37 @@ def _breadcrumb_jsonld(trail: tuple) -> dict | None:
     }
 
 
+#: Имя живого источника. Значение не выдумано здесь: ровно этим словом
+#: подписывает выкладку конвейер обновления (`bundle-manifest.json`,
+#: поле `data_source`), и второй редакции словаря быть не должно.
+LIVE_DATA_SOURCE = "cdnvideohub-live"
+FIXTURE_DATA_SOURCE = "fixture/test"
+UNKNOWN_DATA_SOURCE = "unknown/unverified"
+
+
+def _data_source_label(ctx: dict) -> str:
+    """Чем подписать происхождение данных страницы.
+
+    Раньше значение было зашито строкой `fixture/test` и печаталось всегда —
+    в том числе на трёх боевых витринах, отдававших живой каталог CDNVideoHub
+    из 53 230 записей. Рендерер знал правду: `ctx["fixture_catalog"]` управляет
+    баннером «Каталог синтетический» и значками карточек, и на живых витринах
+    ни баннера, ни значков не было. Метка спорила с собственной страницей.
+
+    Цена была не косметической. По этой метке делались выводы: handoff
+    `CORE_TO_OWNER-011` заключил «витрины отдают синтетический каталог» и
+    назвал это условием, которое не снимается подписью владельца. Вывод
+    оказался неверным, а сделан он был добросовестно — по метке.
+
+    Неизвестное происхождение называется неизвестным. Отсутствие признака —
+    не разрешение объявить данные живыми: ошибка в эту сторону прячет
+    синтетику в production, а именно её запрещает Definition of Done.
+    """
+    if "fixture_catalog" not in ctx:
+        return UNKNOWN_DATA_SOURCE
+    return FIXTURE_DATA_SOURCE if ctx["fixture_catalog"] else LIVE_DATA_SOURCE
+
+
 def _document(ctx: dict, meta: Meta, body: str) -> str:
     """Полный HTML-документ. Всё встроено, ничего не подгружается извне."""
     brand = ctx["brand"]
@@ -264,7 +295,8 @@ def _document(ctx: dict, meta: Meta, body: str) -> str:
         head.append(f'<meta property="og:description" content="{escape(описание)}">')
     if meta.poster:
         head.append(f'<meta property="og:image" content="{escape(meta.poster)}">')
-    head.append('<meta name="lords-data-source" content="fixture/test">')
+    head.append(
+        f'<meta name="lords-data-source" content="{escape(_data_source_label(ctx))}">')
     # Счётчик встраивается ровно здесь и только через snippet.analytics_script_tag:
     # тот возвращает пустую строку, если сбор невозможен (нет counter_id, аналитика
     # выключена, окружение не production, пуст allowed_hosts). Пустая строка означает
