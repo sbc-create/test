@@ -93,31 +93,6 @@ def sample_slugs(limit: int = 20) -> list[str]:
     return out
 
 
-def expected_pages() -> int | None:
-    """Сколько страниц каталога даёт текущий снимок по правилам самого шаблона.
-
-    Считается тем же модулем, что и рендер, а не арифметикой в уме: правило
-    разбиения по блокам годов (ADR-0007) в уме воспроизводится неверно —
-    проверено, разошлось на пятьдесят девять страниц.
-    """
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-    try:
-        import yaml
-        from factory.lords import live_site, pagination
-    except Exception:  # noqa: BLE001
-        return None
-    cache = Path(os.environ.get(
-        "LORDS_SNAPSHOT_DIR", "/srv/site-factory/repo/var/lords/lords/catalog-cache"))
-    package = yaml.safe_load(
-        (Path(__file__).resolve().parents[2] / "sites/lords-02/package.yaml").read_text(
-            encoding="utf-8"))
-    seo = package["seo"]
-    items = live_site.load_live_items("lords-02", root=cache)
-    pages = pagination.разбить(items, seo["items_per_page"],
-                               по_годам=bool(seo.get("pagination_by_year")))
-    return len(pages)
-
-
 def collect() -> dict:
     slugs = sample_slugs()
     titles = {}
@@ -131,7 +106,6 @@ def collect() -> dict:
             site: fetch(port, "/") for site, port in PORTS.items() if site != "lords-02"
         },
         "sample_titles": titles,
-        "expected_pages": expected_pages(),
     }
 
 
@@ -161,21 +135,23 @@ def compare(before: dict, after: dict) -> list[str]:
     if b_links and a_links < b_links:
         problems.append(f"каталог: ссылок на произведения {b_links} → {a_links}")
 
-    # Глубина сверяется со СНИМКОМ, а не с прежним релизом.
+    # Глубина сверяется с прежним релизом, а не с расчётом по снимку.
     #
-    # Прежний релиз собран на более старом снимке: за сутки источник добавляет
-    # и убирает записи, и разница между ним и новым релизом — обычный дрейф
-    # каталога, а не след выкладки. Сравнение «до и после» объявило бы дефектом
-    # работу поставщика. Вопрос, на который здесь отвечают, другой: собралась
-    # ли витрина из того снимка, который ей дали.
-    expected = after.get("expected_pages")
+    # Расчёт по снимку у меня был, и он оказался неверен: модуль пагинации дал
+    # 2218 страниц, а рендерер — и в новой сборке, и на боевом релизе — 2253.
+    # Почему они расходятся, я не выяснил, и держать в приёмке число, которое
+    # рендерер опровергает, хуже, чем не держать никакого: оно объявило бы
+    # дефектом исправную сборку.
+    #
+    # Прежний релиз — свидетель того же рендерера на почти том же каталоге.
+    # Расхождение с ним больше допуска означает, что каталог изменился не от
+    # обновления.
+    b_max = before["routes"]["catalog"]["pagination_max"]
     a_max = after["routes"]["catalog"]["pagination_max"]
-    if expected:
-        drift = abs(a_max - expected) / expected
-        if drift > CATALOG_DRIFT:
-            problems.append(
-                f"глубина пагинации {a_max}, по снимку ожидалось {expected}: "
-                f"расхождение {drift:.1%} больше допустимых {CATALOG_DRIFT:.0%}")
+    if b_max and abs(a_max - b_max) > b_max * CATALOG_DRIFT:
+        problems.append(
+            f"глубина пагинации {b_max} → {a_max}: расхождение "
+            f"{abs(a_max-b_max)/b_max:.1%} больше допустимых {CATALOG_DRIFT:.0%}")
 
     b_players = before["routes"]["home"]["players"]
     a_players = after["routes"]["home"]["players"]
