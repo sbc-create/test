@@ -1,0 +1,13 @@
+{
+  "probedAt": "2026-09-05T07:58:36Z",
+  "total": 53137,
+  "seconds": 603.5,
+  "counts": {
+    "PLAYABLE": 53035,
+    "EMPTY": 80,
+    "ERROR_TimeoutError": 3,
+    "HTTP_502": 5,
+    "ERROR_URLError": 8,
+    "ERROR_RemoteDisconnected": 6
+  }
+}
