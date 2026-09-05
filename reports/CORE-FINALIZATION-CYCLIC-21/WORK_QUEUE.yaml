@@ -1,0 +1,108 @@
+# Очередь работ CORE-FINALIZATION-CYCLIC-21.
+#
+# Рабочий артефакт отчёта, а не источник истины. Каноническое состояние
+# программы — /srv/site-factory/coordination/v1/.
+#
+# Оценка ставится по факту закрытого пользовательского пути с доказательствами,
+# а не по наличию кода.
+
+version: 1
+task: CORE-FINALIZATION-CYCLIC-21
+branch: claude/core-product-8plus-20
+base_head: b3bd6ede308dee2ec527d3e461acfae4857df21f
+
+gates:
+  - id: releaseBaseline
+    score: 8
+    state: closed
+    evidence: coordination/v1/evidence/013-core-review-queue-and-baseline.md
+  - id: contentIdentityReview
+    score: 8
+    state: closed_for_available_catalog
+    gaps: ["Yummyanime без доступа: 9 572 записи NOT_AUDITED_ACCESS_BLOCKED"]
+  - id: playbackCatalog
+    score: 8
+    state: closed
+    gaps: ["полки рекомендаций на витринах не отрисовываются"]
+  - id: workerAutonomy
+    score: 9
+    state: closed
+  - id: operatorIdentity
+    score: 8
+    state: closed
+    note: "не переписывать; использовать как основу экранов Users & Access"
+  - id: publicRegistration
+    score: 8
+    state: closed
+    gaps: ["почтовых реквизитов нет: production-контур выключен"]
+  - id: editorialAdmin
+    score: 6
+    state: in_progress
+    priority: 1
+    gaps:
+      - "Overview отсутствует"
+      - "Content отсутствует"
+      - "Workflow: draft → preview/diff → approve → publish → rollback"
+      - "Jobs отсутствует"
+      - "Sites отсутствует"
+      - "Users & Access: экран есть, нужен полный"
+      - "Settings отсутствует"
+      - "Releases отсутствует"
+      - "Incidents отсутствует"
+      - "Audit: есть журнал, нужны фильтры по actor/site/entity/action/result"
+  - id: selfServiceSite
+    score: 3
+    state: pending
+    priority: 2
+    gaps: ["мастера, dry-run, provision, canary, rollback нет"]
+  - id: observability
+    score: 7
+    state: pending
+    priority: 3
+    gaps: ["scorecard по gates", "correlation ID сквозной", "алерты с runbook"]
+  - id: securityRollback
+    score: 7
+    state: pending
+    priority: 3
+    gaps: ["negative matrix", "backup/restore новых identity-состояний"]
+  - id: coreTemplatesSeo
+    score: 7
+    state: pending
+    priority: 3
+    gaps: ["conformance tests входящих handoff"]
+  - id: ratingsProvenance
+    score: 6
+    state: blocked_external
+    gaps: ["ни одного разрешённого источника рейтингов не зарегистрировано"]
+    note: "технический слой можно довести до 8; функциональный — нет"
+
+incoming_handoffs:
+  - id: HANDOFF-2026-09-05-019-SEO-TO-CORE
+    type: scheduling_request
+    state: accepted_for_work
+    what: "четыре таймера systemd для цикла SEO"
+    note: "systemd принадлежит CORE; работа исполнима, запланирована отдельным циклом"
+  - id: HANDOFF-2026-09-05-011-SEO-TO-CORE
+    state: partially_addressed
+    note: "два дефекта из четырёх закрыты; synopsis и VideoObject остаются"
+
+external_blockers:
+  - id: YUMMYANI-CATALOG-READ
+    severity: P1
+    owner_action: "доступ на чтение к копии каталога"
+  - id: NO-RATING-SOURCE
+    severity: P1
+    owner_action: "регистрация хотя бы одного разрешённого источника рейтингов"
+  - id: DEPLOY-CLASSIFIER
+    severity: P1
+    note: "команда выкладки отклоняется классификатором среды агента"
+
+cycle_order:
+  1: "Admin Overview и Content"
+  2: "Review Queue и Workflow"
+  3: "Jobs и Sites"
+  4: "Users, Settings и Access"
+  5: "Releases, Incidents и Audit"
+  6: "Self-service: план и сухой прогон"
+  7: "Self-service: provision, canary и откат"
+  8: "Observability, security, contracts и release candidate"

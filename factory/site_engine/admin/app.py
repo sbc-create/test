@@ -158,8 +158,7 @@ class AdminApp:
             # 200: автоматика примет это за успех.
             status = 200 if method == "GET" else 403
             начальная = not self._есть_активные_операторы(self._directory())
-            return AdminResponse(status=status,
-                                 html=ui.login(bootstrap=начальная))
+            return AdminResponse(status=status, html=ui.login(bootstrap=начальная))
 
         if method == "POST" and not self._sessions.csrf_valid(session.sid, form.get(CSRF_FIELD)):
             return AdminResponse(
@@ -179,8 +178,7 @@ class AdminApp:
         if getattr(session, "operator_id", "") and session.token:
             from factory.site_engine.operators import scopes_for
 
-            self._control.update_session_principal(
-                session.token, scopes=scopes_for(session.roles))
+            self._control.update_session_principal(session.token, scopes=scopes_for(session.roles))
 
         csrf = self._sessions.csrf_token(session.sid)
         label = f"токен {session.token_fingerprint()}"
@@ -192,9 +190,29 @@ class AdminApp:
             return self._record(self._dashboard(session, flash, label, csrf))
         if method == "GET" and rest == ["audit"]:
             return self._record(self._audit(session, flash, label, csrf))
+        if method == "GET" and rest == ["overview"]:
+            ответ = self._call("GET", "/api/v1/overview", session, {})
+            if ответ.status != 200:
+                return self._record(
+                    AdminResponse(
+                        status=ответ.status,
+                        html=ui.page("Сводка", '<div class="flash bad">Сводка недоступна.</div>'),
+                    )
+                )
+            return self._record(
+                AdminResponse(
+                    status=200,
+                    html=ui.overview(ответ.body, flash=flash, session_label=label, csrf=csrf),
+                )
+            )
+        if rest[:1] == ["content"]:
+            return self._record(
+                self._content_route(session, method, rest[1:], form, flash, label, csrf)
+            )
         if rest[:1] == ["users"]:
-            return self._record(self._users_route(session, method, rest[1:],
-                                                  form, flash, label, csrf))
+            return self._record(
+                self._users_route(session, method, rest[1:], form, flash, label, csrf)
+            )
         if rest[:1] == ["review"]:
             return self._record(
                 self._review_route(session, method, rest[1:], form, flash, label, csrf)
@@ -213,11 +231,118 @@ class AdminApp:
         return AdminResponse(status=404, html=ui.page("Не найдено", "<p>Нет такой страницы.</p>"))
 
     # ------------------------------------------------------------------
+    # Каталог
+    # ------------------------------------------------------------------
+    def _витрины(self, session) -> list[str]:
+        ответ = self._read.handle("/api/v1/sites")
+        if ответ.status != 200:
+            return []
+        строки = ответ.body.get("sites") or ответ.body.get("items") or []
+        return [
+            s.get("siteId") or s.get("site_id") or s.get("id")
+            for s in строки
+            if isinstance(s, dict)
+        ]
+
+    def _первая_с_каталогом(self, session, витрины: list[str]) -> str:
+        """Первая витрина, у которой каталог действительно читается."""
+        for site in витрины:
+            ответ = self._call("GET", "/api/v1/content", session, {"siteId": site, "limit": 1})
+            if ответ.status == 200:
+                return site
+        return ""
+
+    def _content_route(
+        self,
+        session,
+        method: str,
+        tail: list[str],
+        form: dict[str, str],
+        flash,
+        label: str,
+        csrf: str,
+    ) -> AdminResponse:
+        """Каталог и карточка. Отбор уходит в API, а не выполняется здесь."""
+        витрины = [s for s in self._витрины(session) if s]
+
+        if method == "GET" and not tail:
+            site = (form.get("siteId") or "").strip()
+            if not site:
+                # По умолчанию берётся первая витрина С ДОСТУПНЫМ каталогом, а
+                # не первая по алфавиту: у части профилей каталога нет вовсе, и
+                # раздел открывался ошибкой вместо содержимого.
+                site = self._первая_с_каталогом(session, витрины)
+            if not site:
+                return AdminResponse(
+                    status=200,
+                    html=ui.page(
+                        "Каталог",
+                        '<div class="flash warn">Ни у одной витрины нет доступного '
+                        "каталога. Проверьте SITE_ENGINE_CATALOG_DIR и то, что "
+                        "обновление содержимого отработало.</div>",
+                        session_label=label,
+                        csrf=csrf,
+                    ),
+                )
+            тело = {
+                "siteId": site,
+                "q": form.get("q") or "",
+                "kind": form.get("kind") or "",
+                "reason": form.get("reason") or "",
+                "sort": form.get("sort") or "externalId",
+                "offset": _целое(form.get("offset"), 0),
+                "limit": ui.REVIEW_PAGE,
+            }
+            ответ = self._call("GET", "/api/v1/content", session, тело)
+            if ответ.status != 200:
+                return AdminResponse(
+                    status=ответ.status,
+                    html=ui.page(
+                        "Каталог",
+                        f'<div class="flash bad">{ui._e(str(ответ.body))}</div>',
+                        session_label=label,
+                        csrf=csrf,
+                    ),
+                )
+            return AdminResponse(
+                status=200,
+                html=ui.content_list(
+                    ответ.body, витрины=витрины, flash=flash, session_label=label, csrf=csrf
+                ),
+            )
+
+        if method == "GET" and len(tail) == 2:
+            ответ = self._call("GET", f"/api/v1/content/{tail[0]}/{tail[1]}", session, {})
+            if ответ.status != 200:
+                return AdminResponse(
+                    status=ответ.status,
+                    html=ui.page(
+                        "Запись",
+                        '<div class="flash bad">Записи нет.</div>',
+                        session_label=label,
+                        csrf=csrf,
+                    ),
+                )
+            return AdminResponse(
+                status=200,
+                html=ui.content_item(ответ.body, flash=flash, session_label=label, csrf=csrf),
+            )
+
+        return AdminResponse(status=404, html=ui.page("Не найдено", "<p>Нет такой страницы.</p>"))
+
+    # ------------------------------------------------------------------
     # Люди
     # ------------------------------------------------------------------
-    def _users_route(self, session, method: str, tail: list[str],
-                     form: dict[str, str], flash, label: str,
-                     csrf: str) -> AdminResponse:
+    def _users_route(
+        self,
+        session,
+        method: str,
+        tail: list[str],
+        form: dict[str, str],
+        flash,
+        label: str,
+        csrf: str,
+    ) -> AdminResponse:
         """Экран людей. Панель ничего не решает: всё через Control API."""
         может = self._есть_права(session, "operators:write")
         свой = getattr(session, "operator_id", "")
@@ -225,59 +350,97 @@ class AdminApp:
         if method == "GET" and not tail:
             люди = self._call("GET", "/api/v1/operators", session, {"limit": 100})
             if люди.status != 200:
-                return AdminResponse(status=люди.status, html=ui.page(
-                    "Люди", '<div class="flash bad">Список недоступен.</div>'))
-            приглашения = (self._call("GET", "/api/v1/operators/invites",
-                                      session, {}).body.get("items") or []) if может else []
-            сессии = (self._call("GET", "/api/v1/operators/sessions",
-                                 session, {}).body.get("items") or []) if может else []
-            return AdminResponse(status=200, html=ui.users(
-                люди.body, приглашения, сессии, flash=flash, session_label=label,
-                csrf=csrf, может=может, свой_id=свой))
+                return AdminResponse(
+                    status=люди.status,
+                    html=ui.page("Люди", '<div class="flash bad">Список недоступен.</div>'),
+                )
+            приглашения = (
+                (
+                    self._call("GET", "/api/v1/operators/invites", session, {}).body.get("items")
+                    or []
+                )
+                if может
+                else []
+            )
+            сессии = (
+                (
+                    self._call("GET", "/api/v1/operators/sessions", session, {}).body.get("items")
+                    or []
+                )
+                if может
+                else []
+            )
+            return AdminResponse(
+                status=200,
+                html=ui.users(
+                    люди.body,
+                    приглашения,
+                    сессии,
+                    flash=flash,
+                    session_label=label,
+                    csrf=csrf,
+                    может=может,
+                    свой_id=свой,
+                ),
+            )
 
         if method == "POST" and tail == ["invites"]:
-            ответ = self._call("POST", "/api/v1/operators/invites", session,
-                               {"email": form.get("email") or "",
-                                "roles": [form.get("role") or "viewer"]})
+            ответ = self._call(
+                "POST",
+                "/api/v1/operators/invites",
+                session,
+                {"email": form.get("email") or "", "roles": [form.get("role") or "viewer"]},
+            )
             if ответ.status == 201:
                 # Ответ отдаётся сразу, без перенаправления: секрет не должен
                 # задерживаться в сессии между запросами.
-                return AdminResponse(status=200, html=ui.invite_created(
-                    ответ.body, ответ.body.get("secret", ""),
-                    session_label=label, csrf=csrf))
+                return AdminResponse(
+                    status=200,
+                    html=ui.invite_created(
+                        ответ.body, ответ.body.get("secret", ""), session_label=label, csrf=csrf
+                    ),
+                )
             session.flash = self._flash_from(ответ, success="")
             return _redirect("/admin/users")
 
         if method == "POST" and len(tail) == 3 and tail[0] == "invites":
-            ответ = self._call("POST", f"/api/v1/operators/invites/{tail[1]}",
-                               session, {})
+            ответ = self._call("POST", f"/api/v1/operators/invites/{tail[1]}", session, {})
             session.flash = self._flash_from(ответ, success="Приглашение отозвано")
             return _redirect("/admin/users")
 
         if method == "POST" and tail == ["sessions", "revoke"]:
-            ответ = self._call("POST", "/api/v1/operators/sessions/revoke",
-                               session, {"sessionId": form.get("sessionId") or ""})
+            ответ = self._call(
+                "POST",
+                "/api/v1/operators/sessions/revoke",
+                session,
+                {"sessionId": form.get("sessionId") or ""},
+            )
             session.flash = self._flash_from(ответ, success="Сессия отозвана")
             return _redirect("/admin/users")
 
         if method == "POST" and len(tail) == 2:
             operator_id, действие = tail
-            тело: dict = {"actorOperatorId": свой,
-                          "actorRoles": list(getattr(session, "roles", ()))}
+            тело: dict = {
+                "actorOperatorId": свой,
+                "actorRoles": list(getattr(session, "roles", ())),
+            }
             if действие == "roles":
                 тело["roles"] = [form.get("role") or "viewer"]
             if действие == "block":
                 тело["reason"] = form.get("reason") or ""
-            ответ = self._call("POST", f"/api/v1/operators/{operator_id}/{действие}",
-                               session, тело)
-            session.flash = self._flash_from(ответ, success={
-                "roles": "Роль изменена", "block": "Оператор заблокирован",
-                "unblock": "Оператор разблокирован",
-                "revoke-sessions": "Сессии отозваны"}.get(действие, "Готово"))
+            ответ = self._call("POST", f"/api/v1/operators/{operator_id}/{действие}", session, тело)
+            session.flash = self._flash_from(
+                ответ,
+                success={
+                    "roles": "Роль изменена",
+                    "block": "Оператор заблокирован",
+                    "unblock": "Оператор разблокирован",
+                    "revoke-sessions": "Сессии отозваны",
+                }.get(действие, "Готово"),
+            )
             return _redirect("/admin/users")
 
-        return AdminResponse(status=404, html=ui.page(
-            "Не найдено", "<p>Нет такой страницы.</p>"))
+        return AdminResponse(status=404, html=ui.page("Не найдено", "<p>Нет такой страницы.</p>"))
 
     # ------------------------------------------------------------------
     # Очередь разбора
@@ -448,15 +611,17 @@ class AdminApp:
             from factory.site_engine.operators import scopes_for
 
             токен_сессии = self._control.mint_session_principal(
-                label=оператор.email, scopes=scopes_for(оператор.roles))
+                label=оператор.email, scopes=scopes_for(оператор.roles)
+            )
             session = self._sessions.create(
-                токен_сессии, label=оператор.email,
-                operator_id=оператор.operator_id, email=оператор.email,
-                roles=оператор.roles)
-            каталог.register_session(sid=session.sid,
-                                     operator_id=оператор.operator_id)
-            return _redirect("/admin",
-                             extra={"Set-Cookie": self._cookie_header(session.sid)})
+                токен_сессии,
+                label=оператор.email,
+                operator_id=оператор.operator_id,
+                email=оператор.email,
+                roles=оператор.roles,
+            )
+            каталог.register_session(sid=session.sid, operator_id=оператор.operator_id)
+            return _redirect("/admin", extra={"Set-Cookie": self._cookie_header(session.sid)})
 
         токен = (form.get("token") or "").strip()
         if not токен or self._есть_активные_операторы(каталог):
@@ -474,30 +639,33 @@ class AdminApp:
         паролем — иначе. Этого достаточно, чтобы отличить существующую учётную
         запись от несуществующей по коду ответа.
         """
-        return AdminResponse(status=403,
-                             html=ui.login(error="Неверный адрес или пароль."))
+        return AdminResponse(status=403, html=ui.login(error="Неверный адрес или пароль."))
 
-    def _invite_route(self, method: str, tail: list[str],
-                      form: dict[str, str]) -> AdminResponse:
+    def _invite_route(self, method: str, tail: list[str], form: dict[str, str]) -> AdminResponse:
         from factory.site_engine.operators import OperatorError
 
         каталог = self._directory()
         if method == "GET" and not tail:
-            return AdminResponse(status=200, html=ui.accept_invite(
-                secret=(form.get("secret") or "").strip()))
+            return AdminResponse(
+                status=200, html=ui.accept_invite(secret=(form.get("secret") or "").strip())
+            )
         if method == "POST" and tail == ["accept"]:
             try:
-                каталог.accept_invite(secret=(form.get("secret") or "").strip(),
-                                      password=form.get("password") or "")
+                каталог.accept_invite(
+                    secret=(form.get("secret") or "").strip(), password=form.get("password") or ""
+                )
             except OperatorError as ошибка:
                 # Текст ошибки здесь конкретен намеренно: секрет уже
                 # предъявлен, перебирать нечего, а приглашённому нужно понять,
                 # истёк ли срок или он уже воспользовался ссылкой.
-                return AdminResponse(status=400, html=ui.accept_invite(
-                    error=str(ошибка), secret=(form.get("secret") or "").strip()))
+                return AdminResponse(
+                    status=400,
+                    html=ui.accept_invite(
+                        error=str(ошибка), secret=(form.get("secret") or "").strip()
+                    ),
+                )
             return _redirect("/admin")
-        return AdminResponse(status=404, html=ui.page(
-            "Не найдено", "<p>Нет такой страницы.</p>"))
+        return AdminResponse(status=404, html=ui.page("Не найдено", "<p>Нет такой страницы.</p>"))
 
     def _есть_права(self, session, право: str) -> bool:
         return право in self._scopes(session)

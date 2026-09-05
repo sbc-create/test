@@ -243,8 +243,41 @@ VOCABULARY_REF = "config/content-kind-vocabulary.yaml"
 #: Запасной словарь на случай отсутствующего файла. Содержит только написания,
 #: совпадающие с именами самих видов: расширять перечень отсутствие настройки
 #: не вправе, а обнулять его — тем более.
-_ЗАПАСНОЙ = {
-    вид.value: [вид.value.lower()] for вид in ContentKind if вид is not ContentKind.UNKNOWN
+#: Встроенный словарь написаний. Файл настройки его ДОПОЛНЯЕТ, а не заменяет.
+#:
+#: Прежде встроенным был перечень из одних имён самих видов, и при отсутствии
+#: файла «movie» и «tv» переставали распознаваться: весь каталог молча
+#: становился UNKNOWN. Молчаливое обнуление хуже отказа — оно выглядит как
+#: «поставщик не назвал тип», хотя тип назван.
+#:
+#: Способов исполнения здесь нет: универсальному слою запрещено называть
+#: предметную область, и эти написания живут только в файле настройки. При его
+#: отсутствии признак остаётся None — «не измерено», а не «нет».
+_ВСТРОЕННЫЙ = {
+    "MOVIE": ["movie", "film", "feature", "фильм"],
+    "SERIES": ["series", "tvseries", "tv", "tvshow", "show", "сериал", "tv_series"],
+    "MINISERIES": ["miniseries", "минисериал"],
+    "SEASON": ["season", "сезон"],
+    "EPISODE": ["episode", "серия", "эпизод"],
+    "OVA": ["ova"],
+    "OAD": ["oad"],
+    "ONA": ["ona"],
+    "SPECIAL": ["special", "specials", "tvspecial", "спецвыпуск"],
+    "SHORT": ["short", "shortfilm", "короткометражка"],
+    "MUSIC": ["music", "musicvideo", "pv", "клип"],
+    "DOCUMENTARY": ["documentary", "документальный"],
+}
+
+#: Теги, несущие вид. Тоже встроены: без них запись с уточняющим тегом теряла
+#: бы его при отсутствии файла.
+_ВСТРОЕННЫЕ_ТЕГИ = {
+    "OVA": ["ova"],
+    "OAD": ["oad"],
+    "ONA": ["ona"],
+    "SPECIAL": ["special", "specials"],
+    "SHORT": ["short"],
+    "MUSIC": ["music", "pv"],
+    "DOCUMENTARY": ["documentary"],
 }
 
 
@@ -253,21 +286,34 @@ def _загрузить_словарь(root=None) -> dict:
 
     import yaml
 
+    основа = {
+        "aliases": {k: list(v) for k, v in _ВСТРОЕННЫЙ.items()},
+        "animation_markers": [],
+        "kind_tags": {k: list(v) for k, v in _ВСТРОЕННЫЕ_ТЕГИ.items()},
+        "vocabulary_version": "builtin",
+    }
     if root is None:
         try:
             from factory.paths import PATHS
 
             root = PATHS.root
         except Exception:  # noqa: BLE001
-            return {"aliases": _ЗАПАСНОЙ, "animation_markers": [], "kind_tags": {}}
+            return основа
     путь = Path(root) / VOCABULARY_REF
     if not путь.exists():
-        return {"aliases": _ЗАПАСНОЙ, "animation_markers": [], "kind_tags": {}}
+        return основа
     данные = yaml.safe_load(путь.read_text(encoding="utf-8")) or {}
-    данные.setdefault("aliases", _ЗАПАСНОЙ)
-    данные.setdefault("animation_markers", [])
-    данные.setdefault("kind_tags", {})
-    return данные
+    # Файл дополняет встроенное, а не заменяет: неполный файл иначе молча
+    # выключал бы распознавание типов, которые в нём просто не перечислили.
+    итог = dict(основа)
+    for ключ in ("aliases", "kind_tags"):
+        слитое = {k: list(v) for k, v in основа[ключ].items()}
+        for вид, написания in (данные.get(ключ) or {}).items():
+            слитое[вид] = sorted(set(слитое.get(вид, [])) | set(написания or []))
+        итог[ключ] = слитое
+    итог["animation_markers"] = list(данные.get("animation_markers") or [])
+    итог["vocabulary_version"] = str(данные.get("vocabulary_version", "builtin"))
+    return итог
 
 
 _СЛОВАРЬ = _загрузить_словарь()

@@ -137,6 +137,8 @@ def page(title: str, body: str, *, session_label: str = "", csrf: str = "") -> s
         f"<title>{_e(title)} — админка фабрики</title><style>{STYLE}</style></head><body>"
         '<header><h1><a href="/admin" style="color:inherit;text-decoration:none">'
         "Админка фабрики</a></h1>"
+        '<a href="/admin/overview">Сводка</a>'
+        '<a href="/admin/content">Каталог</a>'
         '<a href="/admin/review">Разбор</a>'
         '<a href="/admin/users">Люди</a>'
         '<a href="/admin/audit">Журнал</a><span class="sp"></span>'
@@ -155,15 +157,20 @@ def login(*, error: str = "", bootstrap: bool = False) -> str:
     """
     warn = f'<div class="flash bad">{_e(error)}</div>' if error else ""
     начальная = (
-        '<div class="card"><h2>Начальная настройка</h2>'
-        '<p class="hint">Учётных записей ещё нет. Пока их нет, можно войти '
-        "токеном Control API и завести первого администратора. После этого "
-        "вход по токену закроется сам.</p>"
-        '<form method="post" action="/admin/login">'
-        '<label for="tok">Токен</label>'
-        '<input id="tok" name="token" type="password" autocomplete="off" required>'
-        '<div class="row"><button type="submit">Войти токеном</button></div>'
-        "</form></div>") if bootstrap else ""
+        (
+            '<div class="card"><h2>Начальная настройка</h2>'
+            '<p class="hint">Учётных записей ещё нет. Пока их нет, можно войти '
+            "токеном Control API и завести первого администратора. После этого "
+            "вход по токену закроется сам.</p>"
+            '<form method="post" action="/admin/login">'
+            '<label for="tok">Токен</label>'
+            '<input id="tok" name="token" type="password" autocomplete="off" required>'
+            '<div class="row"><button type="submit">Войти токеном</button></div>'
+            "</form></div>"
+        )
+        if bootstrap
+        else ""
+    )
     return page(
         "Вход",
         warn + '<div class="card"><h2>Вход</h2>'
@@ -173,8 +180,7 @@ def login(*, error: str = "", bootstrap: bool = False) -> str:
         '<label for="pw">Пароль</label>'
         '<input id="pw" name="password" type="password" '
         'autocomplete="current-password" required>'
-        '<div class="row"><button type="submit">Войти</button></div></form></div>'
-        + начальная,
+        '<div class="row"><button type="submit">Войти</button></div></form></div>' + начальная,
     )
 
 
@@ -196,8 +202,7 @@ def accept_invite(*, error: str = "", secret: str = "") -> str:
     )
 
 
-def invite_created(приглашение: dict, секрет: str, *, session_label: str,
-                   csrf: str) -> str:
+def invite_created(приглашение: dict, секрет: str, *, session_label: str, csrf: str) -> str:
     """Секрет приглашения показывается прямо в ответе, а не через перенаправление.
 
     Причина не в удобстве: значение, пронесённое через перенаправление, живёт
@@ -214,11 +219,22 @@ def invite_created(приглашение: dict, секрет: str, *, session_l
         f'<p><code id="invite-link">/admin/invite?secret={_e(секрет)}</code></p>'
         f'<p class="mut">Действует до {_e(приглашение.get("expiresAt", ""))}.</p>'
         '<p><a href="/admin/users">← К списку людей</a></p></div>',
-        session_label=session_label, csrf=csrf)
+        session_label=session_label,
+        csrf=csrf,
+    )
 
 
-def users(данные: dict, приглашения: list, сессии: list, *, flash: dict | None,
-          session_label: str, csrf: str, может: bool, свой_id: str) -> str:
+def users(
+    данные: dict,
+    приглашения: list,
+    сессии: list,
+    *,
+    flash: dict | None,
+    session_label: str,
+    csrf: str,
+    может: bool,
+    свой_id: str,
+) -> str:
     """Люди, их роли, приглашения и активные сессии на одном экране."""
     строки = []
     for o in данные.get("items") or []:
@@ -227,24 +243,28 @@ def users(данные: dict, приглашения: list, сессии: list, 
         if может and not свой:
             выбор = "".join(
                 f'<option value="{_e(r)}"{" selected" if r in o["roles"] else ""}>'
-                f"{_e(r)}</option>" for r in ("viewer", "reviewer", "editor",
-                                              "operator", "admin"))
+                f"{_e(r)}</option>"
+                for r in ("viewer", "reviewer", "editor", "operator", "admin")
+            )
             действия = (
                 f'<form method="post" action="/admin/users/{_e(o["operatorId"])}/roles">'
                 f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
                 f'<select name="role" aria-label="Роль">{выбор}</select>'
                 '<button type="submit">Роль</button></form>'
-                + (f'<form method="post" action="/admin/users/{_e(o["operatorId"])}/unblock">'
-                   f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
-                   '<button class="ghost" type="submit">Разблокировать</button></form>'
-                   if o["state"] == "BLOCKED" else
-                   f'<form method="post" action="/admin/users/{_e(o["operatorId"])}/block">'
-                   f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
-                   '<input name="reason" placeholder="причина" required>'
-                   '<button class="ghost" type="submit">Заблокировать</button></form>')
+                + (
+                    f'<form method="post" action="/admin/users/{_e(o["operatorId"])}/unblock">'
+                    f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+                    '<button class="ghost" type="submit">Разблокировать</button></form>'
+                    if o["state"] == "BLOCKED"
+                    else f'<form method="post" action="/admin/users/{_e(o["operatorId"])}/block">'
+                    f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+                    '<input name="reason" placeholder="причина" required>'
+                    '<button class="ghost" type="submit">Заблокировать</button></form>'
+                )
                 + f'<form method="post" action="/admin/users/{_e(o["operatorId"])}/revoke-sessions">'
                 f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
-                '<button class="ghost" type="submit">Отозвать сессии</button></form>')
+                '<button class="ghost" type="submit">Отозвать сессии</button></form>'
+            )
         elif свой:
             действия = '<span class="mut">это вы</span>'
         строки.append(
@@ -253,48 +273,65 @@ def users(данные: dict, приглашения: list, сессии: list, 
             f'<td><span class="pill {"ok" if o["state"] == "ACTIVE" else "warn"}">'
             f'{_e(o["state"])}</span></td>'
             f'<td class="mut">{_e(o["mfaState"])}</td>'
-            f"<td>{действия}</td></tr>")
+            f"<td>{действия}</td></tr>"
+        )
 
     приглашения_html = "".join(
         f'<tr><td>{_e(i["email"])}</td><td>{" ".join(_e(r) for r in i["roles"])}</td>'
         f'<td><span class="pill">{_e(i["state"])}</span></td>'
         f'<td class="mut">{_e(i["expiresAt"])}</td>'
-        + (f'<td><form method="post" action="/admin/users/invites/{_e(i["inviteId"])}/revoke">'
-           f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
-           '<button class="ghost" type="submit">Отозвать</button></form></td>'
-           if может and i["state"] == "PENDING" else "<td></td>")
-        + "</tr>" for i in приглашения)
+        + (
+            f'<td><form method="post" action="/admin/users/invites/{_e(i["inviteId"])}/revoke">'
+            f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+            '<button class="ghost" type="submit">Отозвать</button></form></td>'
+            if может and i["state"] == "PENDING"
+            else "<td></td>"
+        )
+        + "</tr>"
+        for i in приглашения
+    )
 
     сессии_html = "".join(
         f'<tr><td>{_e(s["operatorId"][:12])}</td><td class="mut">{_e(s["createdAt"])}</td>'
         f'<td class="mut">{_e(s["lastSeen"])}</td><td class="mut">{_e(s["userAgent"])}</td>'
-        + (f'<td><form method="post" action="/admin/users/sessions/revoke">'
-           f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
-           f'<input type="hidden" name="sessionId" value="{_e(s["sessionId"])}">'
-           '<button class="ghost" type="submit">Отозвать</button></form></td>'
-           if может else "<td></td>") + "</tr>" for s in сессии)
+        + (
+            f'<td><form method="post" action="/admin/users/sessions/revoke">'
+            f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+            f'<input type="hidden" name="sessionId" value="{_e(s["sessionId"])}">'
+            '<button class="ghost" type="submit">Отозвать</button></form></td>'
+            if может
+            else "<td></td>"
+        )
+        + "</tr>"
+        for s in сессии
+    )
 
-    форма = ("" if not может else
-             '<div class="card"><h2>Пригласить</h2>'
-             '<p class="hint">Секрет приглашения показывается один раз и '
-             "нигде не хранится в открытом виде.</p>"
-             '<form method="post" action="/admin/users/invites">'
-             f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
-             '<label>Адрес<input name="email" type="email" required></label>'
-             '<label>Роль<select name="role">'
-             + "".join(f'<option value="{r}">{r}</option>' for r in
-                       ("viewer", "reviewer", "editor", "operator", "admin"))
-             + "</select></label>"
-             '<button type="submit">Создать приглашение</button></form></div>')
+    форма = (
+        ""
+        if not может
+        else '<div class="card"><h2>Пригласить</h2>'
+        '<p class="hint">Секрет приглашения показывается один раз и '
+        "нигде не хранится в открытом виде.</p>"
+        '<form method="post" action="/admin/users/invites">'
+        f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+        '<label>Адрес<input name="email" type="email" required></label>'
+        '<label>Роль<select name="role">'
+        + "".join(
+            f'<option value="{r}">{r}</option>'
+            for r in ("viewer", "reviewer", "editor", "operator", "admin")
+        )
+        + "</select></label>"
+        '<button type="submit">Создать приглашение</button></form></div>'
+    )
 
     return page(
         "Люди",
-        _flash(flash)
-        + '<div class="card"><h2>Операторы</h2><div class="scroll-x"><table>'
+        _flash(flash) + '<div class="card"><h2>Операторы</h2><div class="scroll-x"><table>'
         "<thead><tr><th>Адрес</th><th>Роли</th><th>Состояние</th>"
         "<th>Второй фактор</th><th>Действия</th></tr></thead><tbody>"
         + ("".join(строки) or '<tr><td colspan="5" class="mut">Пусто.</td></tr>')
-        + "</tbody></table></div></div>" + форма
+        + "</tbody></table></div></div>"
+        + форма
         + '<div class="card"><h2>Приглашения</h2><div class="scroll-x"><table>'
         "<thead><tr><th>Адрес</th><th>Роли</th><th>Состояние</th><th>До</th>"
         "<th></th></tr></thead><tbody>"
@@ -305,7 +342,9 @@ def users(данные: dict, приглашения: list, сессии: list, 
         "<th>Клиент</th><th></th></tr></thead><tbody>"
         + (сессии_html or '<tr><td colspan="5" class="mut">Нет.</td></tr>')
         + "</tbody></table></div></div>",
-        session_label=session_label, csrf=csrf)
+        session_label=session_label,
+        csrf=csrf,
+    )
 
 
 def _flash(flash: dict | None) -> str:
@@ -805,6 +844,295 @@ def review_batch(предпросмотр: dict, *, session_label: str, csrf: st
             if можно
             else ""
         ),
+        session_label=session_label,
+        csrf=csrf,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Сводка
+# ---------------------------------------------------------------------------
+def _доля(значение) -> str:
+    """Доля или честный прочерк. Ноль вместо неизмеренного — это ложь."""
+    return "—" if значение is None else f"{значение:.1%}"
+
+
+def _число(значение) -> str:
+    return "—" if значение is None else f"{значение}"
+
+
+def _возраст(секунды) -> str:
+    if секунды is None:
+        return "неизвестно"
+    if секунды < 90:
+        return f"{секунды} с"
+    if секунды < 5400:
+        return f"{секунды // 60} мин"
+    return f"{секунды // 3600} ч {(секунды % 3600) // 60} мин"
+
+
+ВАЖНОСТЬ = {"critical": "bad", "high": "bad", "medium": "warn", "low": ""}
+
+
+def overview(данные: dict, *, flash: dict | None, session_label: str, csrf: str) -> str:
+    """Сводка по массиву. Каждое число посчитано или отсутствует."""
+    тревоги = данные.get("alerts") or []
+    блок_тревог = (
+        '<div class="card"><h2>Тревоги</h2>'
+        + (
+            "".join(
+                f'<div class="flash {ВАЖНОСТЬ.get(t.get("severity"), "")}">'
+                f'<b>{_e(t.get("code", ""))}</b> · {_e(t.get("subject", ""))}<br>'
+                f'<span class="mut">{_e(t.get("detail", ""))}</span></div>'
+                for t in тревоги
+            )
+            or '<p class="mut">Тревог нет. Пороги: свежесть '
+            f'{данные.get("thresholds", {}).get("freshnessSeconds")} с, '
+            f'воспроизведение '
+            f'{_доля(данные.get("thresholds", {}).get("playbackCoverage"))}.</p>'
+        )
+        + "</div>"
+    )
+
+    строки = "".join(
+        f'<tr><td><a href="/admin/content?siteId={_e(в["siteId"])}">{_e(в["siteId"])}</a></td>'
+        f'<td>{_число(в["titles"])}</td>'
+        f'<td>{_доля(в["playbackCoverage"])}</td>'
+        f'<td>{_число(в["blockedByContract"])}</td>'
+        f'<td>{_число(в["ratingNumeric"])}</td>'
+        f'<td><span class="pill {"ok" if в["freshnessState"] == "FRESH" else "warn"}">'
+        f'{_e(в["freshnessState"])}</span> <span class="mut">'
+        f'{_e(_возраст(в["freshnessSeconds"]))}</span></td></tr>'
+        for в in данные.get("sites") or []
+    )
+
+    итоги = данные.get("totals") or {}
+    очередь = данные.get("queue")
+    очередь_html = (
+        '<p class="mut">Очередь недоступна.</p>'
+        if очередь is None
+        else _dl(sorted(очередь.items()))
+    )
+
+    return page(
+        "Сводка",
+        _flash(flash)
+        + блок_тревог
+        + '<div class="card"><h2>Всего по массиву</h2>'
+        + _dl(
+            [
+                ("Витрин измерено", f'{итоги.get("sitesMeasured")} из {итоги.get("sitesTotal")}'),
+                ("Карточек", _число(итоги.get("titles"))),
+                ("С воспроизведением", _число(итоги.get("playable"))),
+                ("Покрытие", _доля(итоги.get("playbackCoverage"))),
+                ("Ждут разбора", _число(данные.get("identityConflicts"))),
+                ("Снято", данные.get("generatedAt", "")),
+            ]
+        )
+        + "</div>"
+        + '<div class="card"><h2>Витрины</h2><div class="scroll-x"><table>'
+        "<thead><tr><th>Витрина</th><th>Карточек</th><th>Воспроизведение</th>"
+        "<th>Запрещено</th><th>С оценкой</th><th>Свежесть</th></tr></thead>"
+        f"<tbody>{строки or чтопусто(6)}</tbody></table></div></div>"
+        + f'<div class="card"><h2>Очередь заданий</h2>{очередь_html}</div>',
+        session_label=session_label,
+        csrf=csrf,
+    )
+
+
+def чтопусто(колонок: int, текст: str = "Ничего не найдено.") -> str:
+    return f'<tr><td colspan="{колонок}" class="mut">{_e(текст)}</td></tr>'
+
+
+# ---------------------------------------------------------------------------
+# Каталог
+# ---------------------------------------------------------------------------
+def content_list(
+    данные: dict, *, витрины: list, flash: dict | None, session_label: str, csrf: str
+) -> str:
+    """Каталог витрины. Отбор выполнен на сервере, состояние живёт в ссылке."""
+    site = данные.get("siteId", "")
+    q = данные.get("query", "") or ""
+    вид = данные.get("kind", "") or ""
+    причина = данные.get("reason", "") or ""
+
+    def ссылка(**замены) -> str:
+        параметры = {
+            "siteId": site,
+            "q": q,
+            "kind": вид,
+            "reason": причина,
+            "sort": данные.get("sort", "externalId"),
+            "offset": данные.get("offset", 0),
+        }
+        параметры.update(замены)
+        return "/admin/content?" + "&".join(
+            f"{k}={_e(str(v))}" for k, v in параметры.items() if v not in ("", None)
+        )
+
+    выбор_витрин = "".join(
+        f'<option value="{_e(s)}"{" selected" if s == site else ""}>{_e(s)}</option>'
+        for s in витрины
+    )
+    выбор_видов = '<option value="">любой</option>' + "".join(
+        f'<option value="{_e(k)}"{" selected" if k == вид else ""}>{_e(k)} ' f"({n})</option>"
+        for k, n in sorted((данные.get("byKind") or {}).items())
+    )
+    выбор_причин = '<option value="">любая</option>' + "".join(
+        f'<option value="{_e(k)}"{" selected" if k == причина else ""}>{_e(k)} ' f"({n})</option>"
+        for k, n in sorted((данные.get("byReason") or {}).items())
+    )
+
+    строки = "".join(
+        f'<tr><td><a href="/admin/content/{_e(site)}/{_e(str(i["externalId"]))}">'
+        f'{_e(str(i["title"] or "(без названия)"))}</a>'
+        f'<div class="mut">{_e(str(i["externalId"]))}</div></td>'
+        f'<td class="mut">{_e(str(i.get("year") or "—"))}</td>'
+        f'<td><code>{_e(str(i["contentKind"]))}</code></td>'
+        f'<td class="mut">{_e(str(i.get("playbackAggregator") or "—"))}</td>'
+        f'<td><span class="pill {"ok" if i["playbackReason"] == "OK" else "warn"}">'
+        f'{_e(str(i["playbackReason"]))}</span></td>'
+        f'<td class="mut">{_e(str(i["ratingState"]))}</td></tr>'
+        for i in данные.get("items") or []
+    )
+
+    смещение = int(данные.get("offset", 0))
+    предел = int(данные.get("limit", 25))
+    всего = int(данные.get("total", 0))
+    навигация = (
+        '<div class="pager">'
+        + (
+            f'<a href="{ссылка(offset=max(0, смещение - предел))}">← Назад</a>'
+            if смещение > 0
+            else '<span class="mut">← Назад</span>'
+        )
+        + f'<span class="mut">{(смещение + 1) if всего else 0}–'
+        f'{min(всего, смещение + предел)} из {всего} '
+        f'(в каталоге {данные.get("totalAll", 0)})</span>'
+        + (
+            f'<a href="{ссылка(offset=смещение + предел)}">Вперёд →</a>'
+            if смещение + предел < всего
+            else '<span class="mut">Вперёд →</span>'
+        )
+        + "</div>"
+    )
+
+    return page(
+        "Каталог",
+        _flash(flash) + '<div class="card"><h2>Отбор</h2>'
+        '<form method="get" action="/admin/content">'
+        f'<label>Витрина<select name="siteId">{выбор_витрин}</select></label>'
+        f'<label>Поиск<input name="q" value="{_e(q)}" '
+        'placeholder="название или идентификатор"></label>'
+        f'<label>Вид<select name="kind">{выбор_видов}</select></label>'
+        f'<label>Причина<select name="reason">{выбор_причин}</select></label>'
+        '<button type="submit">Показать</button></form>'
+        '<p class="mut">Отбор выполняется на сервере по всему каталогу, а не '
+        "поверх текущей страницы.</p>"
+        # Постоянная ссылка на текущий вид. Без неё состояние отбора живёт
+        # только в кнопках постраничной навигации, а те исчезают, когда
+        # результат помещается на одну страницу: оператор обновляет вкладку и
+        # теряет свой отбор.
+        f'<p class="mut">Ссылка на этот вид: <code>{_e(ссылка())}</code></p>'
+        "</div>" + '<div class="card"><h2>Записи</h2><div class="scroll-x"><table>'
+        "<thead><tr><th>Тайтл</th><th>Год</th><th>Вид</th><th>Агрегатор</th>"
+        "<th>Причина</th><th>Оценка</th></tr></thead>"
+        f'<tbody>{строки or чтопусто(6, "Ничего не найдено по этому отбору.")}'
+        "</tbody></table></div>" + навигация + "</div>",
+        session_label=session_label,
+        csrf=csrf,
+    )
+
+
+def content_item(данные: dict, *, flash: dict | None, session_label: str, csrf: str) -> str:
+    """Карточка записи: идентификаторы, происхождение, состояния, история."""
+    идентификаторы = (
+        ", ".join(
+            f"{_e(k)}:{_e(str(v))}" for k, v in sorted((данные.get("externalIds") or {}).items())
+        )
+        or "нет"
+    )
+    источники = "".join(
+        f'<li>{_e(s.get("source", ""))} · <code>{_e(str(s.get("sourceEntityId", "")))}'
+        f'</code> · {_e(str(s.get("updatedAt") or ""))}</li>'
+        for s in данные.get("sourceRefs") or []
+    )
+    история = "".join(
+        f'<tr><td class="mut">{_e(str(с.get("at", "")))}</td>'
+        f'<td>{_e(str(с.get("event", "")))}</td>'
+        f'<td class="mut">{_e(str(с.get("actor", "")))}</td></tr>'
+        for с in данные.get("timeline") or []
+    )
+    разбор = данные.get("review")
+    разбор_html = (
+        ""
+        if not разбор
+        else '<div class="card"><h2>Разбор</h2>'
+        + _dl(
+            [
+                ("Состояние", разбор.get("state")),
+                ("Решение", разбор.get("decidedValue") or "—"),
+                ("Кто", разбор.get("decidedBy") or "—"),
+            ]
+        )
+        + f'<p><a href="/admin/review/{_e(str(разбор.get("itemId", "")))}">'
+        "Открыть в очереди разбора →</a></p></div>"
+    )
+    оценки = данные.get("ratings") or {}
+
+    return page(
+        str(данные.get("title") or "Запись"),
+        _flash(flash) + f'<p><a href="/admin/content?siteId={_e(str(данные.get("siteId", "")))}">'
+        "← К каталогу</a></p>"
+        + f'<div class="card"><h2>{_e(str(данные.get("title") or "(без названия)"))}</h2>'
+        + _dl(
+            [
+                ("Витрина", данные.get("siteId")),
+                ("Идентификатор", данные.get("externalId")),
+                ("Год", данные.get("year") if данные.get("year") is not None else "—"),
+                ("Вид", данные.get("contentKind")),
+                ("Тип поставщика", данные.get("providerType")),
+                ("Анимация", "да" if данные.get("isAnimation") else "не отмечено"),
+                ("Теги", ", ".join(str(t) for t in данные.get("tags") or []) or "нет"),
+                ("Идентификаторы", идентификаторы),
+                (
+                    "Сезонов",
+                    данные.get("seasons") if данные.get("seasons") is not None else "неизвестно",
+                ),
+                (
+                    "Серий",
+                    данные.get("episodes") if данные.get("episodes") is not None else "неизвестно",
+                ),
+                (
+                    "Длительность",
+                    данные.get("duration") if данные.get("duration") is not None else "не измерена",
+                ),
+            ]
+        )
+        + "</div>"
+        + '<div class="card"><h2>Состояния</h2>'
+        + _dl(
+            [
+                ("Воспроизведение", данные.get("playbackReason")),
+                ("Агрегатор", данные.get("playbackAggregator") or "—"),
+                ("Оценка", данные.get("ratingState")),
+                (
+                    "Кинопоиск",
+                    оценки.get("kinopoisk")
+                    if оценки.get("kinopoisk") is not None
+                    else "нет данных",
+                ),
+                ("IMDb", оценки.get("imdb") if оценки.get("imdb") is not None else "нет данных"),
+                ("SEO", данные.get("seoState")),
+                ("Конфликты вида", ", ".join(данные.get("kindConflicts") or []) or "нет"),
+            ]
+        )
+        + f'<p class="mut">{_e(str(данные.get("kindReason", "")))}</p></div>'
+        + разбор_html
+        + f'<div class="card"><h2>Происхождение</h2><ul>{источники}</ul></div>'
+        + '<div class="card"><h2>История</h2><div class="scroll-x"><table>'
+        "<thead><tr><th>Когда</th><th>Событие</th><th>Кто</th></tr></thead>"
+        f"<tbody>{история or чтопусто(3, 'Событий нет.')}</tbody></table></div></div>",
         session_label=session_label,
         csrf=csrf,
     )

@@ -1,0 +1,14 @@
+{
+  "task": "CORE-FINALIZATION-CYCLIC-21",
+  "cycle": 1,
+  "slice": "Admin Overview и Content",
+  "branch": "claude/core-product-8plus-20",
+  "headAtStart": "b3bd6ede308dee2ec527d3e461acfae4857df21f",
+  "upstream": "origin/claude/core-product-8plus-20",
+  "productionCheckout": "568863d350c320e4101ac17417c846ca4b7265c0",
+  "deployedControlApi": "52fd06659a7ff73fd37b5bed2f20eb46a90d7a1e",
+  "locks": "нет",
+  "nextStep": "воспроизвести отсутствие разделов Overview и Content, написать падающий тест, реализовать",
+  "testPortPolicy": "свободный порт из диапазона 18800-18899, владелец проверяется до запуска, cleanup только по сохранённому PID",
+  "status": "IN_PROGRESS"
+}

@@ -672,6 +672,13 @@ class ControlApi:
             return self._playback_policy()
         if rest[:1] == ["review-queue"]:
             return self._review_route(method, rest[1:], body, principal, headers, correlation_id)
+        if method == "GET" and rest == ["overview"]:
+            principal.require(SCOPE_READ)
+            from factory.site_engine.api import overview as overview_mod
+
+            return ApiResponse(status=200, body=overview_mod.сводка(self._root, env=self._env))
+        if rest[:1] == ["content"]:
+            return self._content_route(method, rest[1:], body, principal)
         if rest[:1] == ["operators"]:
             return self._operators_route(method, rest[1:], body, principal, headers, correlation_id)
         if method == "GET" and len(rest) == 2 and rest[0] == "traces":
@@ -1144,6 +1151,47 @@ class ControlApi:
                 "manageable": sum(1 for r in rows if r["manageable"]),
             },
         )
+
+    # ------------------------------------------------------------------
+    # Каталог
+    # ------------------------------------------------------------------
+    def _content_route(
+        self, method: str, tail: list[str], body: dict[str, Any], principal
+    ) -> ApiResponse:
+        """Просмотр каталога. Отбор выполняется здесь, а не в браузере."""
+        from factory.site_engine.api import content_browse
+
+        principal.require(SCOPE_READ)
+        try:
+            if method == "GET" and not tail:
+                return ApiResponse(
+                    status=200,
+                    body=content_browse.список(
+                        self._root,
+                        site_id=self._опция(body, "siteId"),
+                        env=self._env,
+                        q=self._опция(body, "q"),
+                        kind=self._опция(body, "kind"),
+                        reason=self._опция(body, "reason"),
+                        sort=self._опция(body, "sort") or "externalId",
+                        desc=bool(body.get("desc")),
+                        offset=self._целое(body, "offset", 0, 0, 10**6),
+                        limit=self._целое(
+                            body, "limit", content_browse.DEFAULT_LIMIT, 1, content_browse.MAX_LIMIT
+                        ),
+                    ),
+                )
+            if method == "GET" and len(tail) == 2:
+                return ApiResponse(
+                    status=200,
+                    body=content_browse.карточка(
+                        self._root, site_id=tail[0], external_id=tail[1], env=self._env
+                    ),
+                )
+        except content_browse.ContentError as ошибка:
+            код = 404 if "нет" in str(ошибка) else 400
+            raise ControlDenied(код, "content_error", str(ошибка)) from ошибка
+        raise ControlDenied(404, "not_found", "маршрут не найден")
 
     # ------------------------------------------------------------------
     # Операторы
