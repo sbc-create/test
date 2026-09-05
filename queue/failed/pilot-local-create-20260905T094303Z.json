@@ -1,0 +1,12 @@
+{
+  "job_id": "pilot-local-create-20260905T094303Z",
+  "site_id": "pilot-local",
+  "action": "create",
+  "environment": "staging",
+  "enqueued_at": "2026-09-05T09:43:03Z",
+  "attempts": 1,
+  "last_claimed_at": "2026-09-05T09:44:33Z",
+  "finished_at": "2026-09-05T09:44:35Z",
+  "result_stage": "failed",
+  "detail": "BLOCKED_SEO"
+}
