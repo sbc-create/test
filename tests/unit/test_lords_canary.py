@@ -468,7 +468,17 @@ class TestDubiousOwnershipReproduced:
 
     def env(self) -> dict:
         import os
-        return {**os.environ, **self.FOREIGN}
+        import tempfile
+        # Журнал операции уводится в отдельный каталог. Прогон тестов писал в
+        # боевой /var/log/site-factory, и записи вида «ОТКАЗ: в снимке 1
+        # записей» — намеренно крошечный снимок теста — оседали там вперемешку
+        # с записями настоящих выкладок. Журнал операции служит релизным
+        # свидетельством, и шум теста в нём делает свидетельство хуже.
+        audit = getattr(self, "_audit_dir", None)
+        if audit is None:
+            audit = tempfile.mkdtemp(prefix="canary-audit-")
+            self._audit_dir = audit
+        return {**os.environ, **self.FOREIGN, "LORDS_CANARY_AUDIT": audit}
 
     def test_контроль_условие_действительно_воспроизводится(self):
         # Без этой проверки все остальные ничего не стоят: они могли бы
