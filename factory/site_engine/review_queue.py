@@ -47,6 +47,10 @@ class ReviewState(str, enum.Enum):
     OPEN = "OPEN"
     IN_REVIEW = "IN_REVIEW"
     RESOLVED = "RESOLVED"
+    #: Решение утверждено вторым человеком, но ещё не действует на витрине.
+    APPROVED = "APPROVED"
+    #: Решение применено: наложение записано, вид на витрине изменился.
+    PUBLISHED = "PUBLISHED"
     #: Конфликт признан незначащим: запись остаётся как есть, но больше не
     #: показывается как требующая внимания. Отличается от RESOLVED тем, что
     #: значение не менялось.
@@ -349,8 +353,17 @@ class ReviewQueue:
     def revert(self, item_id: str, *, actor: str, note: str = "") -> ReviewItem:
         """Отмена решения. Возвращает запись ровно туда, где она была."""
         запись = self.get(item_id)
-        if запись.state not in (ReviewState.RESOLVED, ReviewState.DISMISSED):
+        if запись.state not in (
+            ReviewState.RESOLVED,
+            ReviewState.DISMISSED,
+            ReviewState.APPROVED,
+            ReviewState.PUBLISHED,
+        ):
             raise ReviewError(f"отменять нечего: запись в состоянии {запись.state.value}")
+        if запись.state is ReviewState.PUBLISHED:
+            # Иначе отменённое решение продолжает действовать на витрине:
+            # в очереди оно снято, а зритель видит его до сих пор.
+            self._наложение().unset(запись.internal_entity_id, actor=actor)
         запись.history.append(
             {
                 "at": self._сейчас(),
@@ -371,6 +384,172 @@ class ReviewQueue:
         запись.updated_at = self._сейчас()
         self._записать(запись)
         return запись
+
+    # ------------------------------------------------------------------
+    # Рабочий поток: сверка, утверждение, публикация, точечный откат
+    # ------------------------------------------------------------------
+    def _наложение(self):
+        from factory.site_engine.kind_overlay import KindOverlay
+
+        return KindOverlay(self.dir.parent.parent.parent)
+
+    def preview(self, item_id: str) -> dict[str, Any]:
+        """Что изменится на витрине. Сверка «было/стало» перед публикацией.
+
+        Без неё утверждение — это доверие к строке в списке. Публикация без
+        предъявленной разницы однажды применит не то, что имелось в виду.
+        """
+        запись = self.get(item_id)
+        наложение = self._наложение().get(запись.internal_entity_id)
+        было = наложение.kind if наложение else "UNKNOWN"
+        return {
+            "itemId": запись.item_id,
+            "internalEntityId": запись.internal_entity_id,
+            "title": запись.title,
+            "field": запись.field,
+            "before": было,
+            "after": запись.decided_value or "—",
+            "published": наложение is not None and наложение.kind == запись.decided_value,
+            "state": запись.state.value,
+            "version": запись.version,
+            "claims": [c.as_dict() for c in запись.claims],
+            "contractVersion": CONTRACT_VERSION,
+        }
+
+    def approve(
+        self, item_id: str, *, actor: str, expected_version: int | None = None, note: str = ""
+    ) -> ReviewItem:
+        """Утверждение решения. Утверждает НЕ тот, кто решил.
+
+        Иначе утверждение — это второе нажатие того же человека, и весь смысл
+        второго шага исчезает.
+        """
+        запись = self.get(item_id)
+        if expected_version is not None and expected_version != запись.version:
+            raise ReviewError(
+                f"запись изменилась: ожидалась версия {expected_version}, "
+                f"фактическая {запись.version}"
+            )
+        if запись.state is not ReviewState.RESOLVED:
+            raise ReviewError(
+                f"утверждать можно только решённое; запись в состоянии " f"{запись.state.value}"
+            )
+        if actor and actor == запись.decided_by:
+            raise ReviewError(
+                "нельзя утвердить собственное решение сам: второй шаг нужен "
+                "ради второй пары глаз, а не ради второго нажатия"
+            )
+        запись.history.append(
+            {
+                "at": self._сейчас(),
+                "actor": actor,
+                "action": "approve",
+                "value": запись.decided_value,
+                "note": note,
+                "fromState": запись.state.value,
+            }
+        )
+        запись.state = ReviewState.APPROVED
+        запись.version += 1
+        запись.updated_at = self._сейчас()
+        self._записать(запись)
+        return запись
+
+    def publish(
+        self, item_id: str, *, actor: str, expected_version: int | None = None, batch: str = ""
+    ) -> ReviewItem:
+        """Применение решения к витрине через наложение."""
+        запись = self.get(item_id)
+        if expected_version is not None and expected_version != запись.version:
+            raise ReviewError(
+                f"запись изменилась: ожидалась версия {expected_version}, "
+                f"фактическая {запись.version}"
+            )
+        if запись.state is not ReviewState.APPROVED:
+            raise ReviewError(
+                f"публиковать можно только утверждённое; запись в состоянии "
+                f"{запись.state.value}"
+            )
+        if not запись.decided_value:
+            raise ReviewError("публиковать нечего: решение пустое")
+        self._наложение().set(
+            запись.internal_entity_id,
+            kind=запись.decided_value,
+            actor=actor,
+            note=запись.decision_note,
+            batch=batch,
+        )
+        запись.history.append(
+            {
+                "at": self._сейчас(),
+                "actor": actor,
+                "action": "publish",
+                "value": запись.decided_value,
+                "fromState": запись.state.value,
+                **({"batch": batch} if batch else {}),
+            }
+        )
+        запись.state = ReviewState.PUBLISHED
+        запись.version += 1
+        запись.updated_at = self._сейчас()
+        self._записать(запись)
+        return запись
+
+    def unpublish(self, item_id: str, *, actor: str, note: str = "") -> ReviewItem:
+        """Точечный откат: наложение снимается, решение сохраняется."""
+        запись = self.get(item_id)
+        if запись.state is not ReviewState.PUBLISHED:
+            raise ReviewError(f"откатывать нечего: запись в состоянии {запись.state.value}")
+        self._наложение().unset(запись.internal_entity_id, actor=actor)
+        запись.history.append(
+            {
+                "at": self._сейчас(),
+                "actor": actor,
+                "action": "unpublish",
+                "value": запись.decided_value,
+                "note": note,
+                "fromState": запись.state.value,
+            }
+        )
+        запись.state = ReviewState.APPROVED
+        запись.version += 1
+        запись.updated_at = self._сейчас()
+        self._записать(запись)
+        return запись
+
+    def batch_publish(self, *, batch_id: str, actor: str) -> dict[str, Any]:
+        """Публикация партии. Утверждённые записи применяются разом."""
+        опубликовано: list[str] = []
+        пропущено: list[str] = []
+        for файл in sorted(self.dir.glob("*.json")):
+            try:
+                запись = ReviewItem.from_dict(json.loads(файл.read_text(encoding="utf-8")))
+            except (OSError, json.JSONDecodeError, KeyError, ValueError):
+                continue
+            if not any(h.get("batch") == batch_id for h in запись.history):
+                continue
+            if запись.state is ReviewState.RESOLVED:
+                # Утверждение партии выполняет тот, кто её публикует: решение
+                # приняла автоматика группового действия, а не человек.
+                запись = self.approve(
+                    запись.item_id,
+                    actor=actor,
+                    expected_version=запись.version,
+                    note=f"утверждение партии {batch_id}",
+                )
+            if запись.state is not ReviewState.APPROVED:
+                пропущено.append(запись.item_id)
+                continue
+            self.publish(
+                запись.item_id, actor=actor, expected_version=запись.version, batch=batch_id
+            )
+            опубликовано.append(запись.item_id)
+        return {
+            "batchId": batch_id,
+            "published": len(опубликовано),
+            "skipped": len(пропущено),
+            "itemIds": опубликовано,
+        }
 
     def claim(self, item_id: str, *, actor: str) -> ReviewItem:
         """Взять запись в работу. Нужно, чтобы двое не разбирали одно и то же."""
@@ -550,7 +729,11 @@ class ReviewQueue:
             except (OSError, json.JSONDecodeError, KeyError, ValueError):
                 continue
             свои = [h for h in запись.history if h.get("batch") == batch_id]
-            if not свои or запись.state is not ReviewState.RESOLVED:
+            if not свои or запись.state not in (
+                ReviewState.RESOLVED,
+                ReviewState.APPROVED,
+                ReviewState.PUBLISHED,
+            ):
                 continue
             self.revert(запись.item_id, actor=actor, note=f"откат партии {batch_id}")
             отменены.append(запись.item_id)

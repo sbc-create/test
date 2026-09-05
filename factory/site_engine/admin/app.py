@@ -448,6 +448,11 @@ class AdminApp:
     def _может_решать(self, session) -> bool:
         return "review:write" in self._scopes(session)
 
+    def _сверка(self, session, item_id: str):
+        """Сверка «было/стало». Недоступна — карточка всё равно открывается."""
+        ответ = self._call("GET", f"/api/v1/review-queue/{item_id}/preview", session, {})
+        return ответ.body if ответ.status == 200 else None
+
     def _review_route(
         self,
         session,
@@ -542,13 +547,22 @@ class AdminApp:
             return AdminResponse(
                 status=200,
                 html=ui.review_item(
-                    ответ.body, flash=flash, session_label=label, csrf=csrf, может_решать=может
+                    ответ.body,
+                    flash=flash,
+                    session_label=label,
+                    csrf=csrf,
+                    может_решать=может,
+                    сверка=self._сверка(session, tail[0]),
                 ),
             )
 
         if method == "POST" and len(tail) == 2:
             item_id, действие = tail
             тело: dict = {"note": form.get("note") or ""}
+            if действие in ("approve", "publish"):
+                версия = _целое(form.get("expectedVersion"), None)
+                if версия is not None:
+                    тело["expectedVersion"] = версия
             if действие == "decide":
                 тело["value"] = form.get("value") or ""
                 тело["dismiss"] = bool(form.get("dismiss"))
@@ -561,6 +575,9 @@ class AdminApp:
                 success={
                     "claim": "Запись взята в работу",
                     "decide": "Решение записано",
+                    "approve": "Решение утверждено",
+                    "publish": "Опубликовано на витрину",
+                    "unpublish": "Снято с витрины",
                     "revert": "Решение отменено",
                 }.get(действие, "Готово"),
             )

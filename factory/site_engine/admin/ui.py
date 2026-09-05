@@ -695,8 +695,63 @@ def review_list(
     )
 
 
+def _поток(i: dict, сверка: dict | None, csrf: str, может: bool) -> str:
+    """Путь решения до витрины: сверка, утверждение, публикация, откат.
+
+    Утверждение и публикация разведены намеренно. Записанное решение — ещё не
+    изменение витрины, и человек, нажимающий «опубликовать», обязан видеть
+    сверку «было/стало», а не доверять строке в списке.
+    """
+    if not сверка:
+        return ""
+    состояние = i.get("state", "")
+    разница = (
+        '<div class="card"><h2>Что изменится на витрине</h2>'
+        + _dl(
+            [
+                ("Было", сверка.get("before")),
+                ("Станет", сверка.get("after")),
+                ("Опубликовано", "да" if сверка.get("published") else "нет"),
+            ]
+        )
+        + "</div>"
+    )
+    действия = ""
+    if может and состояние == "RESOLVED":
+        действия += (
+            f'<form method="post" action="/admin/review/{_e(i["itemId"])}/approve">'
+            f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+            f'<input type="hidden" name="expectedVersion" value="{i["version"]}">'
+            '<label>Чем подтверждено решение<input name="note" required></label>'
+            "<button type=\"submit\">Утвердить</button></form>"
+            '<p class="mut">Утверждает не тот, кто решил: второй шаг нужен ради '
+            "второй пары глаз, а не ради второго нажатия.</p>"
+        )
+    if может and состояние == "APPROVED":
+        действия += (
+            f'<form method="post" action="/admin/review/{_e(i["itemId"])}/publish">'
+            f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+            f'<input type="hidden" name="expectedVersion" value="{i["version"]}">'
+            "<button type=\"submit\">Опубликовать на витрину</button></form>"
+        )
+    if может and состояние == "PUBLISHED":
+        действия += (
+            f'<form method="post" action="/admin/review/{_e(i["itemId"])}/unpublish">'
+            f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+            '<label>Причина отката<input name="note" required></label>'
+            '<button class="ghost" type="submit">Снять с витрины</button></form>'
+        )
+    return разница + (f'<div class="card"><h2>Публикация</h2>{действия}</div>' if действия else "")
+
+
 def review_item(
-    i: dict, *, flash: dict | None, session_label: str, csrf: str, может_решать: bool
+    i: dict,
+    *,
+    flash: dict | None,
+    session_label: str,
+    csrf: str,
+    может_решать: bool,
+    сверка: dict | None = None,
 ) -> str:
     """Карточка спорной записи: оба утверждения, доказательства, история."""
     утверждения = "".join(
@@ -776,6 +831,7 @@ def review_item(
         + f'<div class="card"><h2>Утверждения</h2><div class="claims">{утверждения}</div>'
         + '<p class="mut">Третье значение ввести нельзя: очередь разрешает '
         "выбрать между утверждениями источников, а не придумать своё.</p></div>"
+        + _поток(i, сверка, csrf, может_решать)
         + (f'<div class="card"><h2>Действия</h2>{действия}</div>' if действия else "")
         + '<div class="card"><h2>История</h2><div class="scroll-x"><table>'
         "<thead><tr><th>Когда</th><th>Действие</th><th>Значение</th><th>Кто</th>"

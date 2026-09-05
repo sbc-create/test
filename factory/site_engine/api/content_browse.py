@@ -55,12 +55,20 @@ def _каталог(root: Path, env, site_id: str) -> list[dict]:
     return [i for i in (данные.get("items") or []) if isinstance(i, dict)]
 
 
-def _вид(запись: dict) -> str:
+def _вид(запись: dict, site_id: str = "", root=None) -> str:
+    """Вид записи с учётом решения редактора.
+
+    Наложение обязано спрашиваться здесь. Без этого опубликованное решение
+    остаётся строкой в очереди: редактор разобрал конфликт, а выдача его не
+    заметила — и это ровно тот разрыв, ради закрытия которого рабочий поток
+    и существует.
+    """
     from factory.site_engine import catalog_identity
 
+    eid = f"{site_id}:{запись.get('external_id')}" if site_id else ""
     решение = catalog_identity.decide(
-        provider_type=запись.get("type"), tags=запись.get("tags") or ()
-    )
+        provider_type=запись.get("type"), tags=запись.get("tags") or (),
+        entity_id=eid, root=root)
     return решение.kind.value
 
 
@@ -80,14 +88,14 @@ def _состояние_рейтинга(запись: dict) -> str:
     return "SOURCE_UNAVAILABLE"
 
 
-def строка(запись: dict, site_id: str) -> dict[str, Any]:
+def строка(запись: dict, site_id: str, root=None) -> dict[str, Any]:
     pb = запись.get("playback") if isinstance(запись.get("playback"), dict) else None
     return {
         "siteId": site_id,
         "externalId": запись.get("external_id"),
         "title": запись.get("name"),
         "year": запись.get("year"),
-        "contentKind": _вид(запись),
+        "contentKind": _вид(запись, site_id, root),
         "playbackAggregator": (pb or {}).get("aggregator"),
         "playbackReason": _причина(запись),
         "ratingState": _состояние_рейтинга(запись),
@@ -117,7 +125,7 @@ def список(
         raise ContentError(f"сортировка {sort!r} не разрешена; " f"допустимы {sorted(SORTABLE)}")
 
     записи = _каталог(Path(root), env, site_id)
-    строки = [строка(з, site_id) for з in записи]
+    строки = [строка(з, site_id, root) for з in записи]
 
     искомое = (q or "").strip().lower()
     отобрано = [
@@ -176,9 +184,9 @@ def карточка(root: Path, *, site_id: str, external_id: str, env=None) ->
     from factory.site_engine import catalog_identity
 
     решение = catalog_identity.decide(
-        provider_type=запись.get("type"), tags=запись.get("tags") or ()
-    )
-    основа = строка(запись, site_id)
+        provider_type=запись.get("type"), tags=запись.get("tags") or (),
+        entity_id=f"{site_id}:{external_id}", root=root)
+    основа = строка(запись, site_id, root)
 
     # История берётся из того, что источник действительно сообщает. Выдумывать
     # события нельзя: витрина не хранит журнала изменений записи.

@@ -151,6 +151,17 @@ class Principal:
             )
 
 
+def _актор(principal) -> str:
+    """Кто действует. У Principal нет поля name — было бы всегда «operator».
+
+    Различие существенное: запрет утверждать собственное решение и запись в
+    журнал опираются на действующее лицо. Одно имя на всех превращает и то и
+    другое в формальность.
+    """
+    метка = getattr(principal, "label", "") or ""
+    return метка or f"token:{getattr(principal, 'token_id', 'unknown')}"
+
+
 def writes_enabled(env: dict[str, str] | None = None) -> bool:
     """Запись выключена по умолчанию и включается отдельно от чтения."""
     env = env if env is not None else {}
@@ -1219,7 +1230,7 @@ class ControlApi:
         from factory.site_engine.operators import OperatorError
 
         каталог = self._directory()
-        актор = getattr(principal, "name", "operator")
+        актор = _актор(principal)
         актор_id = str(body.get("actorOperatorId") or "")
         try:
             if method == "GET" and not tail:
@@ -1370,13 +1381,35 @@ class ControlApi:
             if method == "GET" and len(tail) == 1:
                 principal.require(SCOPE_READ)
                 return ApiResponse(status=200, body=очередь.get(tail[0]).as_dict())
+            if method == "GET" and len(tail) == 2 and tail[1] == "preview":
+                principal.require(SCOPE_READ)
+                return ApiResponse(status=200, body=очередь.preview(tail[0]))
             if method == "POST" and tail == ["batch"]:
                 return self._review_batch(body, principal, headers, correlation_id)
             if method == "POST" and len(tail) == 2:
                 principal.require(SCOPE_REVIEW)
                 действие = tail[1]
-                актор = principal.name if hasattr(principal, "name") else "operator"
-                if действие == "claim":
+                актор = _актор(principal)
+                if действие in ("approve", "publish", "unpublish"):
+                    вызов = {
+                        "approve": очередь.approve,
+                        "publish": очередь.publish,
+                        "unpublish": очередь.unpublish,
+                    }[действие]
+                    если_версия = self._целое(body, "expectedVersion", None, 1, 10**9)
+                    итог = (
+                        вызов(
+                            tail[0],
+                            actor=актор,
+                            expected_version=если_версия,
+                            note=str(body.get("note") or ""),
+                        )
+                        if действие == "approve"
+                        else вызов(tail[0], actor=актор, expected_version=если_версия)
+                        if действие == "publish"
+                        else вызов(tail[0], actor=актор, note=str(body.get("note") or ""))
+                    )
+                elif действие == "claim":
                     итог = очередь.claim(tail[0], actor=актор)
                 elif действие == "decide":
                     итог = очередь.decide(
@@ -1396,7 +1429,16 @@ class ControlApi:
         except ReviewError as ошибка:
             # Конфликт версии и негодное значение — это 409 и 400, а не 500:
             # оператор обязан увидеть, что именно не так, а не «ошибку сервера».
-            код = 409 if "версия" in str(ошибка) or "изменил" in str(ошибка) else 400
+            текст = str(ошибка)
+            # Конфликт СОСТОЯНИЯ — это 409: запрос корректен, но запись сейчас
+            # в другом состоянии. 400 сказал бы «вы прислали ерунду», и
+            # оператор искал бы ошибку в своей форме.
+            конфликт = any(
+                слово in текст
+                for слово in ("версия", "изменил", "нельзя", "только", "нечего",
+                              "уже")
+            )
+            код = 409 if конфликт else 400
             raise ControlDenied(код, "review_conflict", str(ошибка)) from ошибка
         raise ControlDenied(404, "not_found", "маршрут не найден")
 
@@ -1406,7 +1448,7 @@ class ControlApi:
         """Групповое действие. Сухой прогон доступен по чтению, изменение — нет."""
         режим = str(body.get("mode") or "dryRun")
         очередь = self._review()
-        актор = principal.name if hasattr(principal, "name") else "operator"
+        актор = _актор(principal)
         if режим == "dryRun":
             principal.require(SCOPE_READ)
             return ApiResponse(
@@ -1430,6 +1472,8 @@ class ControlApi:
                 site_id=self._опция(body, "siteId"),
                 note=str(body.get("note") or ""),
             )
+        elif режим == "publish":
+            итог = очередь.batch_publish(batch_id=str(body.get("batchId") or ""), actor=актор)
         elif режим == "revert":
             итог = очередь.batch_revert(batch_id=str(body.get("batchId") or ""), actor=актор)
         else:

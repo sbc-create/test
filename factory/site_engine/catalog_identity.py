@@ -69,10 +69,33 @@ class KindDecision:
     conflicts: tuple[str, ...] = ()
     confidence: float = 0.0
     reason: str = ""
+    #: Вид установлен решением редактора, а не данными источника. Признак
+    #: обязателен: «система разобралась» и «человек решил» — разные основания,
+    #: и в отчёте о покрытии их смешивать нельзя.
+    decided_by_editor: bool = False
+    decided_by: str = ""
 
     @property
     def conflicted(self) -> bool:
         return bool(self.conflicts)
+
+
+def _решение_редактора(entity_id: str, root):
+    """Решение из наложения. Отсутствие наложения — не ошибка."""
+    if not entity_id:
+        return None
+    try:
+        from factory.site_engine.kind_overlay import KindOverlay
+
+        if root is None:
+            from factory.paths import PATHS
+
+            root = PATHS.root
+        return KindOverlay(root).get(entity_id)
+    except Exception:  # noqa: BLE001
+        # Недоступное наложение не должно ронять построение каталога: запись
+        # останется конфликтной, и это видно в отчёте.
+        return None
 
 
 def _группа(kind: ContentKind):
@@ -83,8 +106,21 @@ def _группа(kind: ContentKind):
     return None
 
 
-def decide(*, provider_type: str | None, tags=(), episode_count: int | None = None) -> KindDecision:
-    """Вид произведения по записи каталога. Ничего не додумывает."""
+def decide(
+    *,
+    provider_type: str | None,
+    tags=(),
+    episode_count: int | None = None,
+    entity_id: str = "",
+    root=None,
+) -> KindDecision:
+    """Вид произведения по записи каталога. Ничего не додумывает.
+
+    Решение редактора учитывается ТОЛЬКО там, где данные источника
+    противоречивы. Там, где поставщик сам себе не противоречит, редактору
+    нечего решать, и наложение поверх непротиворечивых данных означало бы
+    подмену источника, а не разбор конфликта.
+    """
     поставщик = ALIASES.get(normalise_alias(str(provider_type or "")), ContentKind.UNKNOWN)
     метки = [str(t) for t in (tags or ())]
     анимация = any(is_animation_marker(t) for t in метки) or None
@@ -143,6 +179,22 @@ def decide(*, provider_type: str | None, tags=(), episode_count: int | None = No
             confidence=1.0,
             reason=f"тег {тег.value} уточняет тип поставщика "
             f"{поставщик.value} внутри одной группы",
+        )
+
+    решение = _решение_редактора(entity_id, root)
+    if решение is not None and решение.kind in {k.value for k in виды} | {поставщик.value}:
+        # Редактор выбрал между утверждениями источника — именно то, для чего
+        # очередь и существует. Конфликт снят, но видно, кем.
+        return KindDecision(
+            ContentKind(решение.kind),
+            анимация,
+            поставщик,
+            виды,
+            conflicts=(),
+            confidence=1.0,
+            decided_by_editor=True,
+            decided_by=решение.actor,
+            reason=f"выбор редактора {решение.actor}: {решение.note}".strip(": "),
         )
 
     return KindDecision(
