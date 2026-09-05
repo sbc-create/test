@@ -59,15 +59,22 @@ for candidate in "${ALLOWED_SITES[@]}"; do
 done
 [ "${allowed}" = "1" ] || die "витрина «${SITE:-не указана}» не в списке разрешённых: ${ALLOWED_SITES[*]}"
 
-[ -d "${REPO}/.git" ] || [ -f "${REPO}/.git" ] || die "не репозиторий: ${REPO}"
-HEAD_SHA="$(git -C "${REPO}" rev-parse HEAD)"
-[ -z "$(git -C "${REPO}" status --porcelain --untracked-files=no)" ] \
-  || die "рабочее дерево грязное: выкатывался бы не тот код, что в ${HEAD_SHA}"
+# Происхождение и целостность — без git.
+#
+# Операция идёт от root, а дерево принадлежит другой учётной записи. Git на это
+# отвечает `detected dubious ownership` и отказывается работать: первый же
+# запуск падал здесь, до единой проверки. Объявить каталог доверенным можно, но
+# это лечило бы симптом — git давал только идентификатор коммита и признак
+# «дерево не правили». Оба получаются из манифеста происхождения, который
+# сверяется по содержимому файлов и в git не нуждается.
+HEAD_SHA="$("${PYTHON}" "${SCRIPT_DIR}/lords-canary-provenance.py" --verify)" \
+  || die "манифест происхождения не сошёлся: исполняемая оснастка не та, что проверялась"
+log "происхождение подтверждено: commit ${HEAD_SHA:0:12}"
 
 DIGEST="$("${PYTHON}" -c 'from factory.templates import digest; print(digest.compute()["template_digest"])')"
 [ "${DIGEST}" = "${EXPECT_DIGEST}" ] \
   || die "отпечаток шаблона ${DIGEST:0:16} не совпал с закреплённым ${EXPECT_DIGEST:0:16}"
-log "отпечаток шаблона совпал: ${DIGEST:0:16} (commit ${HEAD_SHA:0:12})"
+log "отпечаток шаблона совпал: ${DIGEST:0:16}"
 
 RUNTIME="/srv/lords/${SITE}"
 [ -d "${RUNTIME}/releases" ] || die "нет рантайма ${RUNTIME}"

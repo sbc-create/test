@@ -370,3 +370,67 @@ class TestPreSwitchGates:
                                          sample_slugs=slugs[:3], previous_site=prev)
         assert report.passed, report.failures
         assert report.players_new == 95
+
+
+class TestPrivilegedPathHasNoGit:
+    """Привилегированный сценарий не имеет права звать git.
+
+    Первый настоящий запуск упал здесь: операция идёт от root, дерево
+    принадлежит другой учётной записи, и git отвечает `detected dubious
+    ownership`. Отказ наступал до единой проверки, то есть сценарий не делал
+    ничего из того, ради чего написан.
+
+    Объявить каталог доверенным было бы лечением симптома: git давал только
+    идентификатор коммита и признак «дерево не правили», а оба получаются из
+    манифеста происхождения по содержимому файлов.
+    """
+
+    SCRIPT = Path(__file__).resolve().parents[2] / "automation" / "host" / "lords-canary-apply.sh"
+
+    def test_сценарий_не_вызывает_git(self):
+        import re
+        lines = self.SCRIPT.read_text(encoding="utf-8").splitlines()
+        calls = [
+            f"{n}: {line.strip()}"
+            for n, line in enumerate(lines, 1)
+            if not line.lstrip().startswith("#") and re.search(r"(^|[|;&(\s])git\s", line)
+        ]
+        assert calls == [], "git вернулся в привилегированный путь:\n" + "\n".join(calls)
+
+    def test_манифест_происхождения_существует_и_полон(self):
+        import json
+        manifest = self.SCRIPT.parent / "lords-canary-provenance.json"
+        assert manifest.is_file(), "манифест происхождения не собран"
+        data = json.loads(manifest.read_text(encoding="utf-8"))
+        for key in ("head_sha", "template_digest", "tooling", "tree_clean_at_write"):
+            assert key in data, f"в манифесте нет поля {key}"
+        assert self.SCRIPT.name in " ".join(data["tooling"]), (
+            "сам привилегированный сценарий не входит в манифест — его подмену не заметят")
+
+
+class TestProvenanceVerify:
+    """Сверка манифеста ловит подмену того, что исполняет root."""
+
+    TOOL = Path(__file__).resolve().parents[2] / "automation" / "host" / "lords-canary-provenance.py"
+
+    def run(self):
+        import subprocess, sys
+        return subprocess.run([sys.executable, str(self.TOOL), "--verify"],
+                              capture_output=True, text=True)
+
+    def test_нетронутая_оснастка_проходит(self):
+        result = self.run()
+        assert result.returncode == 0, result.stderr
+        assert result.stdout.strip(), "commit не напечатан"
+
+    def test_изменённый_файл_оснастки_ломает_сверку(self, tmp_path):
+        target = self.TOOL.parent / "lords-canary-build.py"
+        original = target.read_bytes()
+        try:
+            target.write_bytes(original + "\n# подмена\n".encode("utf-8"))
+            result = self.run()
+            assert result.returncode != 0
+            assert "изменён файл оснастки" in result.stderr
+        finally:
+            target.write_bytes(original)
+        assert self.run().returncode == 0, "восстановление не вернуло сверку в норму"
