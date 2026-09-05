@@ -140,6 +140,8 @@ def page(title: str, body: str, *, session_label: str = "", csrf: str = "") -> s
         '<a href="/admin/overview">Сводка</a>'
         '<a href="/admin/content">Каталог</a>'
         '<a href="/admin/review">Разбор</a>'
+        '<a href="/admin/jobs">Задания</a>'
+        '<a href="/admin/sites">Витрины</a>'
         '<a href="/admin/users">Люди</a>'
         '<a href="/admin/audit">Журнал</a><span class="sp"></span>'
         f"{nav}</header><main>{body}</main></body></html>"
@@ -1189,6 +1191,78 @@ def content_item(данные: dict, *, flash: dict | None, session_label: str, 
         + '<div class="card"><h2>История</h2><div class="scroll-x"><table>'
         "<thead><tr><th>Когда</th><th>Событие</th><th>Кто</th></tr></thead>"
         f"<tbody>{история or чтопусто(3, 'Событий нет.')}</tbody></table></div></div>",
+        session_label=session_label,
+        csrf=csrf,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Задания и витрины
+# ---------------------------------------------------------------------------
+СОСТОЯНИЕ_ЗАДАНИЯ = {"SUCCEEDED": "ok", "FAILED": "bad", "BLOCKED": "warn", "UNKNOWN": ""}
+
+
+def jobs(данные: dict, *, flash: dict | None, session_label: str, csrf: str) -> str:
+    """Задания. Принятое в очередь не называется выполненным."""
+    очередь = данные.get("queue")
+    очередь_html = (
+        '<p class="mut">Очередь недоступна.</p>'
+        if очередь is None
+        else _dl(sorted(очередь.items()))
+    )
+    строки = "".join(
+        f'<tr><td><code>{_e(str(i.get("jobId")))}</code>'
+        f'<div class="mut">{_e(str(i.get("siteId") or ""))}</div></td>'
+        f'<td><span class="pill {СОСТОЯНИЕ_ЗАДАНИЯ.get(i.get("state"), "")}">'
+        f'{_e(str(i.get("state")))}</span>'
+        f'<div class="mut">{_e(str(i.get("status") or ""))}</div></td>'
+        f'<td>{"да" if i.get("succeeded") else "нет"}</td>'
+        f'<td class="mut">{_e(", ".join(i.get("failedChecks") or []) or "—")}</td>'
+        f'<td class="mut">{_e(str(i.get("finishedAt") or "—"))}</td></tr>'
+        for i in данные.get("items") or []
+    )
+    return page(
+        "Задания",
+        _flash(flash) + f'<div class="card"><h2>Очередь</h2>{очередь_html}'
+        '<p class="mut">Принятое в очередь задание ещё не выполнено: работа '
+        "начинается, когда исполнитель его заберёт.</p></div>"
+        + '<div class="card"><h2>Задания</h2><div class="scroll-x"><table>'
+        "<thead><tr><th>Задание</th><th>Состояние</th><th>Успех</th>"
+        "<th>Не прошли</th><th>Завершено</th></tr></thead>"
+        f"<tbody>{строки or чтопусто(5, 'Заданий нет.')}</tbody></table></div>"
+        f'<p class="mut">Всего: {данные.get("total", 0)}. По состояниям: '
+        f'{_e(str(данные.get("byState") or {}))}</p></div>',
+        session_label=session_label,
+        csrf=csrf,
+    )
+
+
+ЗДОРОВЬЕ = {"HEALTHY": "ok", "DEGRADED": "warn", "UNHEALTHY": "bad", "UNKNOWN": ""}
+
+
+def sites_list(данные: dict, *, flash: dict | None, session_label: str, csrf: str) -> str:
+    строки = "".join(
+        f'<tr><td><a href="/admin/sites/{_e(str(i.get("siteId")))}">'
+        f'{_e(str(i.get("siteId")))}</a>'
+        f'<div class="mut">{_e(", ".join(i.get("domains") or []))}</div></td>'
+        f'<td><span class="pill {ЗДОРОВЬЕ.get((i.get("health") or {}).get("state"), "")}">'
+        f'{_e(str((i.get("health") or {}).get("state")))}</span>'
+        f'<div class="mut">{_e(", ".join((i.get("health") or {}).get("problems") or []))}'
+        "</div></td>"
+        f'<td>{_число((i.get("catalog") or {}).get("titles"))}</td>'
+        f'<td>{_доля((i.get("catalog") or {}).get("playbackCoverage"))}</td>'
+        f'<td class="mut">{_e(str((i.get("freshness") or {}).get("state") or ""))}</td>'
+        "</tr>"
+        for i in данные.get("items") or []
+    )
+    return page(
+        "Витрины",
+        _flash(flash) + '<div class="card"><h2>Витрины</h2><div class="scroll-x"><table>'
+        "<thead><tr><th>Витрина</th><th>Здоровье</th><th>Карточек</th>"
+        "<th>Воспроизведение</th><th>Свежесть</th></tr></thead>"
+        f"<tbody>{строки or чтопусто(5, 'Витрин нет.')}</tbody></table></div>"
+        '<p class="mut">Здоровье считается по содержимому каталога, а не по '
+        "коду ответа: витрина с пустым каталогом отвечает 200.</p></div>",
         session_label=session_label,
         csrf=csrf,
     )

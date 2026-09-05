@@ -205,6 +205,36 @@ class AdminApp:
                     html=ui.overview(ответ.body, flash=flash, session_label=label, csrf=csrf),
                 )
             )
+        if method == "GET" and rest == ["jobs"]:
+            ответ = self._call("GET", "/api/v1/jobs", session, {"limit": 50})
+            if ответ.status != 200:
+                return self._record(
+                    AdminResponse(
+                        status=ответ.status,
+                        html=ui.page("Задания", '<div class="flash bad">Задания недоступны.</div>'),
+                    )
+                )
+            return self._record(
+                AdminResponse(
+                    status=200,
+                    html=ui.jobs(ответ.body, flash=flash, session_label=label, csrf=csrf),
+                )
+            )
+        if method == "GET" and rest == ["sites"]:
+            ответ = self._call("GET", "/api/v1/sites-status", session, {})
+            if ответ.status != 200:
+                return self._record(
+                    AdminResponse(
+                        status=ответ.status,
+                        html=ui.page("Витрины", '<div class="flash bad">Витрины недоступны.</div>'),
+                    )
+                )
+            return self._record(
+                AdminResponse(
+                    status=200,
+                    html=ui.sites_list(ответ.body, flash=flash, session_label=label, csrf=csrf),
+                )
+            )
         if rest[:1] == ["content"]:
             return self._record(
                 self._content_route(session, method, rest[1:], form, flash, label, csrf)

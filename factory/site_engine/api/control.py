@@ -688,6 +688,25 @@ class ControlApi:
             from factory.site_engine.api import overview as overview_mod
 
             return ApiResponse(status=200, body=overview_mod.сводка(self._root, env=self._env))
+        if method == "GET" and rest == ["jobs"]:
+            principal.require(SCOPE_READ)
+            from factory.site_engine.api import ops_view
+
+            return ApiResponse(
+                status=200,
+                body=ops_view.jobs(
+                    self._root,
+                    site_id=self._опция(body, "siteId"),
+                    state=self._опция(body, "state"),
+                    offset=self._целое(body, "offset", 0, 0, 10**6),
+                    limit=self._целое(body, "limit", 50, 1, 200),
+                ),
+            )
+        if method == "GET" and rest == ["sites-status"]:
+            principal.require(SCOPE_READ)
+            from factory.site_engine.api import ops_view
+
+            return ApiResponse(status=200, body=ops_view.sites(self._root, env=self._env))
         if rest[:1] == ["content"]:
             return self._content_route(method, rest[1:], body, principal)
         if rest[:1] == ["operators"]:
@@ -706,7 +725,28 @@ class ControlApi:
             return self._audit_trail(body, headers)
         if method == "GET" and len(rest) == 2 and rest[0] == "jobs":
             principal.require(SCOPE_READ)
+            # Сначала результат: очередь знает только «где лежит файл», а
+            # оператору нужно, чем задание кончилось и какие проверки не
+            # прошли. Пока задание в очереди, результата ещё нет — тогда
+            # отвечает очередь.
+            результат = self._job_result(rest[1])
+            if результат is not None:
+                return результат
             return self._job_status(rest[1])
+        # Отдельный префикс, а не /api/v1/sites/{id}/status: транспорт
+        # определяет управляющие маршруты по префиксу из описания, и запись
+        # под sites/ перехватывала читающий /api/v1/sites/{id}. Поймано
+        # проверкой границ маршрутизации.
+        if method == "GET" and len(rest) == 2 and rest[0] == "site-status":
+            principal.require(SCOPE_READ)
+            from factory.site_engine.api import ops_view
+
+            try:
+                return ApiResponse(
+                    status=200, body=ops_view.site_status(self._root, rest[1], env=self._env)
+                )
+            except ops_view.OpsError as ошибка:
+                raise ControlDenied(404, "site_not_found", str(ошибка)) from ошибка
         if rest[:1] == ["sites"] and len(rest) >= 3:
             site_id = rest[1]
             self._check_site_id(site_id)
@@ -838,6 +878,15 @@ class ControlApi:
             },
         )
         return ApiResponse(status=202, body={"job": item.as_dict(), "status": "queued"})
+
+    def _job_result(self, job_id: str) -> ApiResponse | None:
+        """Результат задания, если он записан. Очередь его не содержит."""
+        from factory.site_engine.api import ops_view
+
+        try:
+            return ApiResponse(status=200, body=ops_view.job(self._root, job_id))
+        except ops_view.OpsError:
+            return None
 
     def _job_status(self, job_id: str) -> ApiResponse:
         if not re.match(r"^[A-Za-z0-9_.:-]{1,128}$", job_id):
@@ -1435,8 +1484,7 @@ class ControlApi:
             # оператор искал бы ошибку в своей форме.
             конфликт = any(
                 слово in текст
-                for слово in ("версия", "изменил", "нельзя", "только", "нечего",
-                              "уже")
+                for слово in ("версия", "изменил", "нельзя", "только", "нечего", "уже")
             )
             код = 409 if конфликт else 400
             raise ControlDenied(код, "review_conflict", str(ошибка)) from ошибка
