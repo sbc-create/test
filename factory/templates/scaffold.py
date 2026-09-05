@@ -134,7 +134,11 @@ def scaffold(manifest: dict, *, root: Path | None = None, force: bool = False,
     name = str(manifest.get("profile") or "")
     result = ScaffoldResult(profile=name)
 
-    result.problems = contract.validate_manifest(manifest, root=base, where="манифест")
+    # Тема объявляется этой же операцией — третья запись из описания выше.
+    # Без флага валидатор отверг бы ровно тот случай, ради которого scaffold
+    # и написан.
+    result.problems = contract.validate_manifest(
+        manifest, root=base, where="манифест", declaring_theme=True)
     if result.problems:
         return result
 

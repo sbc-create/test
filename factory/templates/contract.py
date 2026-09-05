@@ -188,7 +188,8 @@ def _blueprint(root: Path | None = None) -> dict:
 
 
 def validate_manifest(manifest: dict, *, root: Path | None = None,
-                      where: str = "manifest") -> list[Problem]:
+                      where: str = "manifest",
+                      declaring_theme: bool = False) -> list[Problem]:
     """Все претензии к одному манифесту. Пустой список — манифест принят."""
     problems: list[Problem] = []
     validator = Draft202012Validator(schema(root))
@@ -304,7 +305,16 @@ def validate_manifest(manifest: dict, *, root: Path | None = None,
 
     theme = manifest.get("theme") or {}
     declared_themes = list(blueprint.get("themes") or [])
-    if theme.get("name") and theme["name"] not in declared_themes:
+    # `declaring_theme` — про операцию, которая объявит тему сама.
+    #
+    # Проверка ниже верна для существующего шаблона: тема, которой никто не
+    # объявил, ломает валидацию пакета сайта. Но при СОЗДАНИИ шаблона она
+    # запирала замкнутую пару — тему нельзя объявить, не создав шаблон, и
+    # нельзя создать шаблон, не объявив тему. Scaffold объявляет её третьей
+    # записью, это записано в его собственном описании, но до записи не
+    # доходил: валидатор возвращал отказ раньше. Снаружи это выглядело как
+    # отказ без единой правки.
+    if theme.get("name") and theme["name"] not in declared_themes and not declaring_theme:
         problems.append(Problem(
             where,
             f"тема «{theme['name']}» не объявлена в {BLUEPRINT_FILE.as_posix()} themes — "
