@@ -8,6 +8,7 @@
 ошибок API, записи журнала, — проходит через html.escape. Значения приходят из
 профилей и ответов API, то есть из мест, куда пишет не только эта панель.
 """
+
 from __future__ import annotations
 
 import html
@@ -65,6 +66,36 @@ code{font:12.5px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace}
 padding:1px 9px;font-size:12px;color:var(--mut);margin:0 4px 4px 0}
 """
 
+#: Стили разделов очереди. Держатся отдельной строкой, чтобы правка очереди не
+#: трогала общий вид панели.
+STYLE += """
+.tabs{display:flex;flex-wrap:wrap;gap:.5rem;margin:.75rem 0}
+.tab{padding:.35rem .7rem;border:1px solid #d0d7de;border-radius:999px;
+  text-decoration:none;color:inherit;font-size:.9rem}
+.tab.on{background:#0969da;color:#fff;border-color:#0969da}
+.tab b{font-weight:600}
+.claim{display:inline-block;margin-right:.75rem;white-space:nowrap}
+.claims{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));
+  gap:1rem}
+.claim-box{border:1px solid #d0d7de;border-radius:8px;padding:.9rem}
+.claim-box h3{margin:.1rem 0 .6rem;font-size:1.1rem}
+.pager{display:flex;gap:1rem;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;margin-top:.75rem}
+.pill{display:inline-block;padding:.15rem .55rem;border-radius:999px;
+  font-size:.8rem;border:1px solid #d0d7de}
+.pill.ok{background:#dafbe1;border-color:#4ac26b}
+.pill.warn{background:#fff8c5;border-color:#d4a72c}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:.45rem .5rem;border-bottom:1px solid #eaeef2;
+  vertical-align:top}
+@media (prefers-color-scheme:dark){
+  .claim-box,.tab,.pill{border-color:#30363d}
+  .pill.ok{background:#12261e;border-color:#2ea043}
+  .pill.warn{background:#272115;border-color:#9e6a03}
+  th,td{border-bottom-color:#21262d}
+}
+"""
+
 
 # Состояние совместимости → класс подсветки. Неуправляемая витрина обязана
 # отличаться от исправной с одного взгляда, а не при чтении текста.
@@ -91,12 +122,13 @@ def page(title: str, body: str, *, session_label: str = "", csrf: str = "") -> s
             f'<button class="ghost" type="submit">Выйти</button></form>'
         )
     return (
-        "<!doctype html><html lang=\"ru\"><head><meta charset=\"utf-8\">"
-        "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
-        "<meta name=\"robots\" content=\"noindex,nofollow\">"
+        '<!doctype html><html lang="ru"><head><meta charset="utf-8">'
+        '<meta name="viewport" content="width=device-width,initial-scale=1">'
+        '<meta name="robots" content="noindex,nofollow">'
         f"<title>{_e(title)} — админка фабрики</title><style>{STYLE}</style></head><body>"
         '<header><h1><a href="/admin" style="color:inherit;text-decoration:none">'
         "Админка фабрики</a></h1>"
+        '<a href="/admin/review">Разбор</a>'
         '<a href="/admin/audit">Журнал</a><span class="sp"></span>'
         f"{nav}</header><main>{body}</main></body></html>"
     )
@@ -106,8 +138,7 @@ def login(*, error: str = "") -> str:
     warn = f'<div class="flash bad">{_e(error)}</div>' if error else ""
     return page(
         "Вход",
-        warn
-        + '<div class="card"><h2>Вход по токену Control API</h2>'
+        warn + '<div class="card"><h2>Вход по токену Control API</h2>'
         '<p class="hint">Панель не заводит собственных учётных записей. '
         "Права оператора — это области выданного токена.</p>"
         '<form method="post" action="/admin/login">'
@@ -128,9 +159,15 @@ def _flash(flash: dict | None) -> str:
     return f'<div class="flash {kind}">{_e(flash.get("message", ""))}{block}</div>'
 
 
-def dashboard(sites: list[dict], *, flash: dict | None, session_label: str,
-              csrf: str, read_problem: str = "",
-              compat_by_site: dict[str, dict] | None = None) -> str:
+def dashboard(
+    sites: list[dict],
+    *,
+    flash: dict | None,
+    session_label: str,
+    csrf: str,
+    read_problem: str = "",
+    compat_by_site: dict[str, dict] | None = None,
+) -> str:
     if read_problem:
         body = _flash(flash) + f'<div class="flash bad">{_e(read_problem)}</div>'
         return page("Витрины", body, session_label=session_label, csrf=csrf)
@@ -163,21 +200,32 @@ def _dl(pairs: list[tuple[str, Any]]) -> str:
     return "<dl>" + "".join(f"<dt>{_e(k)}</dt><dd>{_e(v)}</dd>" for k, v in pairs) + "</dl>"
 
 
-def site_detail(site_id: str, *, info: dict, config: dict, coverage: dict,
-                scopes: list[str], flash: dict | None, session_label: str,
-                csrf: str, compatibility: dict | None = None) -> str:
+def site_detail(
+    site_id: str,
+    *,
+    info: dict,
+    config: dict,
+    coverage: dict,
+    scopes: list[str],
+    flash: dict | None,
+    session_label: str,
+    csrf: str,
+    compatibility: dict | None = None,
+) -> str:
     hidden = f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
     tags = "".join(f'<span class="tag">{_e(s)}</span>' for s in scopes)
 
     overview = (
         f'<div class="card"><h2>{_e(site_id)}</h2>'
-        + _dl([
-            ("Тип", info.get("site_type")),
-            ("Домены", ", ".join(info.get("domains") or [])),
-            ("Локаль", info.get("locale")),
-            ("Рендеринг", info.get("render_mode")),
-            ("Модулей", len(info.get("modules") or [])),
-        ])
+        + _dl(
+            [
+                ("Тип", info.get("site_type")),
+                ("Домены", ", ".join(info.get("domains") or [])),
+                ("Локаль", info.get("locale")),
+                ("Рендеринг", info.get("render_mode")),
+                ("Модулей", len(info.get("modules") or [])),
+            ]
+        )
         + f'<p class="hint">Права токена: {tags or "нет"}</p></div>'
     )
 
@@ -186,20 +234,22 @@ def site_detail(site_id: str, *, info: dict, config: dict, coverage: dict,
         kind = _STATE_KIND.get(compatibility.get("state", ""), "warn")
         состояние = (
             f'<div class="card {kind}"><h2><span class="dot"></span>Контракт CMS</h2>'
-            + _dl([
-                ("Состояние", _STATE_WORDS.get(compatibility.get("state", ""), "неизвестно")),
-                ("Объявлено витриной", compatibility.get("declared") or "не объявлено"),
-                ("Реализует движок", compatibility.get("engine")),
-                ("Управление", "разрешено" if compatibility.get("manageable") else "запрещено"),
-            ])
+            + _dl(
+                [
+                    ("Состояние", _STATE_WORDS.get(compatibility.get("state", ""), "неизвестно")),
+                    ("Объявлено витриной", compatibility.get("declared") or "не объявлено"),
+                    ("Реализует движок", compatibility.get("engine")),
+                    ("Управление", "разрешено" if compatibility.get("manageable") else "запрещено"),
+                ]
+            )
             + f'<p class="hint">{_e(compatibility.get("reason", ""))}</p></div>'
         )
 
     cov = (
-        '<div class="card"><h2>Полнота каталога</h2>'
-        + _dl(list(coverage.items())[:8])
-        + "</div>"
-    ) if coverage else ""
+        ('<div class="card"><h2>Полнота каталога</h2>' + _dl(list(coverage.items())[:8]) + "</div>")
+        if coverage
+        else ""
+    )
 
     # Действия показываются по правам токена. Сокрытие — удобство: запрет
     # всё равно применяется на уровне API, а не здесь.
@@ -243,13 +293,21 @@ def site_detail(site_id: str, *, info: dict, config: dict, coverage: dict,
             "</div></form></div>"
         )
     if "config:write" in scopes:
-        current = _e(json.dumps(
-            {k: config.get(k) for k in ("keep_releases", "cache_policy", "feature_flags")
-             if k in config}, ensure_ascii=False, indent=2))
+        current = _e(
+            json.dumps(
+                {
+                    k: config.get(k)
+                    for k in ("keep_releases", "cache_policy", "feature_flags")
+                    if k in config
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
         actions.append(
             f'<div class="card"><h2>Настройки</h2>'
             f'<p class="hint">Изменяются только обратимые настройки ядра. Домены, '
-            f'канонический хост и флаги индексации отклоняются намеренно.</p>'
+            f"канонический хост и флаги индексации отклоняются намеренно.</p>"
             f"<pre><code>{current}</code></pre>"
             f'<form method="post" action="/admin/sites/{_e(site_id)}/settings">{hidden}'
             '<div class="row">'
@@ -269,15 +327,20 @@ def site_detail(site_id: str, *, info: dict, config: dict, coverage: dict,
 
     return page(
         site_id,
-        _flash(flash) + '<p><a href="/admin">← ко всем витринам</a></p>'
-        + overview + состояние + cov + "".join(actions),
+        _flash(flash)
+        + '<p><a href="/admin">← ко всем витринам</a></p>'
+        + overview
+        + состояние
+        + cov
+        + "".join(actions),
         session_label=session_label,
         csrf=csrf,
     )
 
 
-def audit(entries: list[dict], *, total: int, session_label: str, csrf: str,
-          flash: dict | None = None) -> str:
+def audit(
+    entries: list[dict], *, total: int, session_label: str, csrf: str, flash: dict | None = None
+) -> str:
     rows = []
     for e in reversed(entries):
         mark = "мутация" if e.get("mutation") else "чтение/отказ"
@@ -290,17 +353,297 @@ def audit(entries: list[dict], *, total: int, session_label: str, csrf: str,
             f"<td><code>{_e((e.get('extra') or {}).get('correlation_id', ''))}</code></td></tr>"
         )
     table = (
-        "<table><thead><tr><th>Время</th><th>Витрина</th><th>Действие</th>"
-        "<th>Цель</th><th>Род</th><th>Идентификатор связи</th></tr></thead>"
-        f"<tbody>{''.join(rows)}</tbody></table>"
-    ) if rows else '<p class="hint">Записей нет.</p>'
+        (
+            "<table><thead><tr><th>Время</th><th>Витрина</th><th>Действие</th>"
+            "<th>Цель</th><th>Род</th><th>Идентификатор связи</th></tr></thead>"
+            f"<tbody>{''.join(rows)}</tbody></table>"
+        )
+        if rows
+        else '<p class="hint">Записей нет.</p>'
+    )
     return page(
         "Журнал",
-        _flash(flash)
-        + f'<div class="card"><h2>Журнал операций</h2>'
+        _flash(flash) + f'<div class="card"><h2>Журнал операций</h2>'
         f'<p class="hint">Показаны последние {len(entries)} из {total}. '
         "Отказы записываются наравне с удачными операциями.</p>"
         f"{table}</div>",
+        session_label=session_label,
+        csrf=csrf,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Очередь разбора
+# ---------------------------------------------------------------------------
+#: Сколько записей на странице. Не «все»: очередь на двести тридцать записей
+#: не читается человеком целиком, а запрос за ней успевает подвесить страницу.
+REVIEW_PAGE = 25
+
+
+def _состояние_класс(состояние: str) -> str:
+    return {
+        "OPEN": "warn",
+        "IN_REVIEW": "warn",
+        "RESOLVED": "ok",
+        "DISMISSED": "ok",
+        "REVERTED": "warn",
+    }.get(состояние, "")
+
+
+def review_list(
+    данные: dict,
+    *,
+    фильтры: dict,
+    flash: dict | None,
+    session_label: str,
+    csrf: str,
+    может_решать: bool,
+) -> str:
+    """Список спорных записей.
+
+    Показывает оба утверждения прямо в строке. Без этого редактор вынужден
+    открывать каждую карточку, чтобы понять, о чём вообще спор, — а спор у
+    всех 231 записи один и тот же по форме и разный по существу.
+    """
+    состояния = данные.get("byState") or {}
+    вкладки = "".join(
+        f'<a class="tab{" on" if фильтры.get("state") == с else ""}" '
+        f'href="/admin/review?state={_e(с)}">{_e(с)} <b>{состояния.get(с, 0)}</b></a>'
+        for с in ("OPEN", "IN_REVIEW", "RESOLVED", "DISMISSED")
+    )
+    вкладки = (
+        f'<a class="tab{" on" if not фильтры.get("state") else ""}" '
+        f'href="/admin/review">Все <b>{данные.get("totalAll", 0)}</b></a>' + вкладки
+    )
+
+    строки = []
+    for i in данные.get("items") or []:
+        утв = " ".join(
+            f'<span class="claim"><b>{_e(c["value"])}</b> '
+            f'<span class="mut">{_e(c["source"])}</span></span>'
+            for c in i.get("claims") or []
+        )
+        строки.append(
+            f'<tr><td><a href="/admin/review/{_e(i["itemId"])}">{_e(i["title"] or "(без названия)")}</a>'
+            f'<div class="mut">{_e(i["siteId"])} · {i.get("year") or "год неизвестен"}</div></td>'
+            f"<td>{утв}</td>"
+            f'<td><span class="pill {_состояние_класс(i["state"])}">{_e(i["state"])}</span>'
+            + (
+                f'<div class="mut">{_e(i["decidedValue"])} · {_e(i["decidedBy"])}</div>'
+                if i.get("decidedValue")
+                else ""
+            )
+            + f'</td><td class="mut">{_e(i["conflictCode"])}</td></tr>'
+        )
+
+    если_пусто = (
+        '<tr><td colspan="4" class="mut">Записей нет. Это не ошибка: '
+        "очередь пуста, когда спорных записей не осталось.</td></tr>"
+    )
+    смещение = int(данные.get("offset", 0))
+    предел = int(данные.get("limit", REVIEW_PAGE))
+    всего = int(данные.get("total", 0))
+    состояние_параметр = f'&state={_e(фильтры["state"])}' if фильтры.get("state") else ""
+    навигация = (
+        '<div class="pager">'
+        + (
+            f'<a href="/admin/review?offset={max(0, смещение - предел)}{состояние_параметр}">← Назад</a>'
+            if смещение > 0
+            else '<span class="mut">← Назад</span>'
+        )
+        + f'<span class="mut">{смещение + 1}–{min(всего, смещение + предел)} из {всего}</span>'
+        + (
+            f'<a href="/admin/review?offset={смещение + предел}{состояние_параметр}">Вперёд →</a>'
+            if смещение + предел < всего
+            else '<span class="mut">Вперёд →</span>'
+        )
+        + "</div>"
+    )
+
+    групповое = ""
+    if может_решать:
+        групповое = (
+            '<div class="card"><h2>Групповое решение</h2>'
+            '<p class="mut">Сначала сухой прогон: он покажет число, разницу и '
+            "поимённую выборку. Применить можно только тот набор, который был "
+            "показан.</p>"
+            '<form method="get" action="/admin/review/batch">'
+            '<label>Код конфликта<input name="conflictCode" '
+            'value="PROVIDER_TYPE_VS_KIND_TAG"></label>'
+            '<label>Из значения<input name="fromValue" placeholder="MOVIE"></label>'
+            '<label>В значение<input name="toValue" placeholder="OVA"></label>'
+            '<button type="submit">Сухой прогон</button></form></div>'
+        )
+
+    return page(
+        "Очередь разбора",
+        _flash(flash)
+        + '<div class="card"><h2>Спорные записи</h2>'
+        + '<p class="mut">Оба утверждения принадлежат одному источнику и '
+        "противоречат друг другу. Система не выбирает за редактора: "
+        "рекомендации здесь нет, потому что оснований для неё нет.</p>"
+        + f'<div class="tabs">{вкладки}</div>'
+        + "<table><thead><tr><th>Тайтл</th><th>Утверждения</th>"
+        "<th>Состояние</th><th>Конфликт</th></tr></thead><tbody>"
+        + ("".join(строки) or если_пусто)
+        + "</tbody></table>"
+        + навигация
+        + "</div>"
+        + групповое,
+        session_label=session_label,
+        csrf=csrf,
+    )
+
+
+def review_item(
+    i: dict, *, flash: dict | None, session_label: str, csrf: str, может_решать: bool
+) -> str:
+    """Карточка спорной записи: оба утверждения, доказательства, история."""
+    утверждения = "".join(
+        f'<div class="claim-box"><h3>{_e(c["value"])}</h3>'
+        f'<dl><dt>Источник</dt><dd>{_e(c["source"])}</dd>'
+        f'<dt>Доказательство</dt><dd><code>{_e(c["evidence"])}</code></dd>'
+        f'<dt>Уверенность</dt><dd>{c.get("confidence", 0)}</dd></dl>'
+        + (
+            f'<form method="post" action="/admin/review/{_e(i["itemId"])}/decide">'
+            f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+            f'<input type="hidden" name="value" value="{_e(c["value"])}">'
+            f'<input type="hidden" name="expectedVersion" value="{i["version"]}">'
+            f'<label>Обоснование<input name="note" required '
+            f'placeholder="почему выбрано это значение"></label>'
+            f'<button type="submit">Выбрать {_e(c["value"])}</button></form>'
+            if может_решать and i["state"] in ("OPEN", "IN_REVIEW")
+            else ""
+        )
+        + "</div>"
+        for c in i.get("claims") or []
+    )
+
+    история = "".join(
+        f'<tr><td class="mut">{_e(h.get("at", ""))}</td><td>{_e(h.get("action", ""))}</td>'
+        f'<td>{_e(h.get("value", ""))}</td><td>{_e(h.get("actor", ""))}</td>'
+        f'<td class="mut">{_e(h.get("note", ""))}</td></tr>'
+        for h in i.get("history") or []
+    )
+
+    идентификаторы = ", ".join(
+        f"{_e(k)}:{_e(v)}" for k, v in sorted((i.get("externalIds") or {}).items())
+    )
+    действия = ""
+    if может_решать and i["state"] == "OPEN":
+        действия += (
+            f'<form method="post" action="/admin/review/{_e(i["itemId"])}/claim">'
+            f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+            "<button class=\"ghost\" type=\"submit\">Взять в работу</button></form>"
+        )
+    if может_решать and i["state"] in ("RESOLVED", "DISMISSED"):
+        действия += (
+            f'<form method="post" action="/admin/review/{_e(i["itemId"])}/revert">'
+            f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+            '<label>Причина отмены<input name="note" required></label>'
+            '<button class="ghost" type="submit">Отменить решение</button></form>'
+        )
+    if может_решать and i["state"] in ("OPEN", "IN_REVIEW"):
+        действия += (
+            f'<form method="post" action="/admin/review/{_e(i["itemId"])}/decide">'
+            f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+            f'<input type="hidden" name="dismiss" value="1">'
+            f'<input type="hidden" name="expectedVersion" value="{i["version"]}">'
+            '<label>Почему конфликт незначащий<input name="note" required></label>'
+            '<button class="ghost" type="submit">Признать незначащим</button></form>'
+        )
+
+    return page(
+        i.get("title") or "Запись",
+        _flash(flash)
+        + '<p><a href="/admin/review">← К очереди</a></p>'
+        + f'<div class="card"><h2>{_e(i.get("title") or "(без названия)")}</h2>'
+        + _dl(
+            [
+                ("Витрина", i.get("siteId")),
+                ("Год", i.get("year") or "неизвестен"),
+                ("Сезон", i.get("seasonNumber") if i.get("seasonNumber") is not None else "—"),
+                ("Поле", i.get("field")),
+                ("Конфликт", i.get("conflictCode")),
+                ("Состояние", i.get("state")),
+                ("Версия", i.get("version")),
+                ("Идентификаторы", идентификаторы or "нет"),
+                ("Сущность", i.get("internalEntityId")),
+            ]
+        )
+        + (f'<p class="mut">{_e(i.get("recommendationReason", ""))}</p>')
+        + "</div>"
+        + f'<div class="card"><h2>Утверждения</h2><div class="claims">{утверждения}</div>'
+        + '<p class="mut">Третье значение ввести нельзя: очередь разрешает '
+        "выбрать между утверждениями источников, а не придумать своё.</p></div>"
+        + (f'<div class="card"><h2>Действия</h2>{действия}</div>' if действия else "")
+        + '<div class="card"><h2>История</h2><table><thead><tr><th>Когда</th>'
+        "<th>Действие</th><th>Значение</th><th>Кто</th><th>Примечание</th>"
+        "</tr></thead><tbody>"
+        + (история or '<tr><td colspan="5" class="mut">Действий ещё не было.</td></tr>')
+        + "</tbody></table></div>",
+        session_label=session_label,
+        csrf=csrf,
+    )
+
+
+def review_batch(предпросмотр: dict, *, session_label: str, csrf: str) -> str:
+    """Сухой прогон группового решения. Применение — отдельным нажатием."""
+    выборка = "".join(
+        f'<tr><td>{_e(s["title"])}</td><td class="mut">{s.get("year") or ""}</td>'
+        f'<td class="mut">{_e(s["siteId"])}</td></tr>'
+        for s in предпросмотр.get("sample") or []
+    )
+    причины = "".join(
+        f"<li>{_e(k)}: {v}</li>" for k, v in (предпросмотр.get("skippedReasons") or {}).items()
+    )
+    однороден = предпросмотр.get("homogeneous")
+    предупреждение = (
+        ""
+        if однороден
+        else (
+            '<div class="flash bad">Набор неоднороден: групповое действие '
+            "допустимо только для одного доказанного класса конфликта.</div>"
+        )
+    )
+    можно = однороден and предпросмотр.get("affected", 0) > 0
+    return page(
+        "Сухой прогон",
+        '<p><a href="/admin/review">← К очереди</a></p>'
+        + предупреждение
+        + '<div class="card"><h2>Что будет сделано</h2>'
+        + _dl(
+            [
+                ("Код конфликта", предпросмотр.get("conflictCode")),
+                ("Из значения", предпросмотр.get("fromValue") or "(любое)"),
+                ("В значение", предпросмотр.get("toValue")),
+                ("Затронуто записей", предпросмотр.get("affected")),
+                ("Пропущено", предпросмотр.get("skipped")),
+                ("Отпечаток набора", предпросмотр.get("versionFingerprint")),
+            ]
+        )
+        + (f'<ul class="mut">{причины}</ul>' if причины else "")
+        + "</div>"
+        + '<div class="card"><h2>Выборка</h2><table><thead><tr><th>Тайтл</th>'
+        "<th>Год</th><th>Витрина</th></tr></thead><tbody>"
+        + (выборка or '<tr><td colspan="3" class="mut">Пусто.</td></tr>')
+        + "</tbody></table></div>"
+        + (
+            (
+                '<div class="card"><h2>Применить</h2>'
+                '<form method="post" action="/admin/review/batch">'
+                f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+                f'<input type="hidden" name="conflictCode" value="{_e(предпросмотр.get("conflictCode", ""))}">'
+                f'<input type="hidden" name="fromValue" value="{_e(предпросмотр.get("fromValue", ""))}">'
+                f'<input type="hidden" name="toValue" value="{_e(предпросмотр.get("toValue", ""))}">'
+                f'<input type="hidden" name="expectedFingerprint" value="{_e(предпросмотр.get("versionFingerprint", ""))}">'
+                '<label>Чем доказан однородный класс<input name="note" required></label>'
+                f'<button type="submit">Применить к {предпросмотр.get("affected")} записям</button>'
+                "</form></div>"
+            )
+            if можно
+            else ""
+        ),
         session_label=session_label,
         csrf=csrf,
     )

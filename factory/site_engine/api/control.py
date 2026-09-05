@@ -23,6 +23,7 @@
    Управляющий слой не должен иметь доступа к данным витрин: тогда его ошибка
    останется ошибкой планирования, а не порчей чужого состояния.
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -63,7 +64,13 @@ SCOPE_JOBS = "jobs:write"
 SCOPE_CONFIG = "config:write"
 SCOPE_CACHE = "cache:write"
 SCOPE_AUDIT = "audit:read"
-KNOWN_SCOPES = frozenset({SCOPE_READ, SCOPE_JOBS, SCOPE_CONFIG, SCOPE_CACHE, SCOPE_AUDIT})
+#: Разбор спорных записей. Отдельно от config:write намеренно: редактор,
+#: решающий вопрос о виде произведения, не должен получать право менять
+#: настройки витрины — это разные роли и разный радиус ошибки.
+SCOPE_REVIEW = "review:write"
+KNOWN_SCOPES = frozenset(
+    {SCOPE_READ, SCOPE_JOBS, SCOPE_CONFIG, SCOPE_CACHE, SCOPE_AUDIT, SCOPE_REVIEW}
+)
 
 # Действия, которые разрешено ставить в очередь. Список закрытый: очередь
 # исполняет то, что в ней лежит, поэтому свободное поле action означало бы
@@ -135,7 +142,12 @@ class Principal:
 def writes_enabled(env: dict[str, str] | None = None) -> bool:
     """Запись выключена по умолчанию и включается отдельно от чтения."""
     env = env if env is not None else {}
-    return str(env.get("SITE_ENGINE_CONTROL_WRITES", "")).strip().lower() in {"1", "true", "yes", "on"}
+    return str(env.get("SITE_ENGINE_CONTROL_WRITES", "")).strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
 
 
 def _token_id(token: str) -> str:
@@ -210,7 +222,9 @@ def _validate_settings(changes: dict[str, Any]) -> list[str]:
             continue
         if expected is int:
             if not (rule["min"] <= value <= rule["max"]):
-                problems.append(f"{key}: допустимо от {rule['min']} до {rule['max']}, получено {value}")
+                problems.append(
+                    f"{key}: допустимо от {rule['min']} до {rule['max']}, получено {value}"
+                )
         elif expected is dict:
             vtype = rule["value_type"]
             for sub_key, sub_value in value.items():
@@ -254,8 +268,18 @@ class ClientOperation:
     а не на устройстве кода, и первый же прямой импорт её отменяет.
     """
 
-    def __init__(self, tracer, context, *, name: str, service: str,
-                 method: str, path: str, started: float, now) -> None:
+    def __init__(
+        self,
+        tracer,
+        context,
+        *,
+        name: str,
+        service: str,
+        method: str,
+        path: str,
+        started: float,
+        now,
+    ) -> None:
         self._tracer = tracer
         self._context = context
         self._name = name
@@ -274,15 +298,25 @@ class ClientOperation:
         if not self._context.sampled:
             return
         отрезок = _завершённый_отрезок(
-            self._context, None, self._name,
-            {"method": self._method, "path_template": path_template(self._path),
-             "status": status, "outcome": "ok" if status < 400 else "error"},
-            self._started, float(self._now()), service=self._service)
+            self._context,
+            None,
+            self._name,
+            {
+                "method": self._method,
+                "path_template": path_template(self._path),
+                "status": status,
+                "outcome": "ok" if status < 400 else "error",
+            },
+            self._started,
+            float(self._now()),
+            service=self._service,
+        )
         self._tracer.record(отрезок)
 
 
-def _завершённый_отрезок(контекст, родитель, имя, атрибуты, начало, конец,
-                         service: str = "control-api"):
+def _завершённый_отрезок(
+    контекст, родитель, имя, атрибуты, начало, конец, service: str = "control-api"
+):
     """Готовый отрезок для записи после ответа."""
     from factory.site_engine.api.tracing import Span, sanitize_attrs
 
@@ -324,8 +358,9 @@ class ControlApi:
         # вдвое выше объявленного, а повтор после таймаута создал бы второе
         # задание.
         self._limiter = limiter if limiter is not None else SharedRateLimiter(состояние, now=now)
-        self._idempotency = idempotency if idempotency is not None else IdempotencyStore(
-            состояние, now=now)
+        self._idempotency = (
+            idempotency if idempotency is not None else IdempotencyStore(состояние, now=now)
+        )
         self._tracer = tracer if tracer is not None else Tracer(состояние, now=now)
         # Показатели, которые считает не этот модуль: их поставщик регистрирует
         # себя сам. Иначе управляющий слой начал бы знать про админку.
@@ -343,19 +378,26 @@ class ControlApi:
         """Источник показателя, вычисляемый в момент опроса."""
         self._gauges[name] = source
 
-    def begin_client_operation(self, method: str, path: str, *, service: str,
-                               mutating: bool) -> ClientOperation:
+    def begin_client_operation(
+        self, method: str, path: str, *, service: str, mutating: bool
+    ) -> ClientOperation:
         """Начать операцию внешнего слоя.
 
         Возвращается объект с заголовками для последующих вызовов и способом
         закрыть отрезок. Внешнему слою не нужно знать ни формата контекста, ни
         устройства трассировщика.
         """
-        контекст = new_context(
-            sampled=self._tracer.should_sample(mutating=mutating, failed=False))
-        return ClientOperation(self._tracer, контекст, name=f"{service}.request",
-                               service=service, method=method, path=path,
-                               started=float(self._now()), now=self._now)
+        контекст = new_context(sampled=self._tracer.should_sample(mutating=mutating, failed=False))
+        return ClientOperation(
+            self._tracer,
+            контекст,
+            name=f"{service}.request",
+            service=service,
+            method=method,
+            path=path,
+            started=float(self._now()),
+            now=self._now,
+        )
 
     def principal_for(self, token: str) -> Principal | None:
         """Права токена — для вызывающих внутри процесса.
@@ -376,7 +418,9 @@ class ControlApi:
         headers: dict[str, str] | None = None,
     ) -> ApiResponse:
         headers = {str(k).lower(): v for k, v in (headers or {}).items()}
-        correlation_id = str(headers.get("x-correlation-id") or "").strip() or self._new_correlation_id()
+        correlation_id = (
+            str(headers.get("x-correlation-id") or "").strip() or self._new_correlation_id()
+        )
         # Контекст следа продолжается, если пришёл, и начинается, если нет.
         родитель = parse_traceparent(headers.get(TRACEPARENT))
         изменяющий = method.upper() in {"POST", "PATCH", "PUT", "DELETE"}
@@ -384,7 +428,8 @@ class ControlApi:
             контекст = родитель.child()
         else:
             контекст = new_context(
-                sampled=self._tracer.should_sample(mutating=изменяющий, failed=False))
+                sampled=self._tracer.should_sample(mutating=изменяющий, failed=False)
+            )
         self._trace_context = контекст
         self._request_started = float(self._now())
         try:
@@ -403,18 +448,32 @@ class ControlApi:
                 return ApiResponse(status=int(заявка.stored.get("status", 200)), body=тело)
             if заявка.state == CONFLICT:
                 return self._deny(
-                    ControlDenied(409, "idempotency_key_reused",
-                                  "ключ идемпотентности уже использован для другого запроса"),
-                    method, path, headers, correlation_id)
+                    ControlDenied(
+                        409,
+                        "idempotency_key_reused",
+                        "ключ идемпотентности уже использован для другого запроса",
+                    ),
+                    method,
+                    path,
+                    headers,
+                    correlation_id,
+                )
             if заявка.state == IN_PROGRESS:
                 # Первый запрос ещё выполняется. Ждать значит удваивать таймаут
                 # вместо ответа; выполнить второй раз — нарушить идемпотентность.
                 return self._deny(
-                    ControlDenied(409, "request_in_flight",
-                                  "запрос с этим ключом уже выполняется",
-                                  holder=заявка.holder,
-                                  age_seconds=round(заявка.age_seconds, 1)),
-                    method, path, headers, correlation_id)
+                    ControlDenied(
+                        409,
+                        "request_in_flight",
+                        "запрос с этим ключом уже выполняется",
+                        holder=заявка.holder,
+                        age_seconds=round(заявка.age_seconds, 1),
+                    ),
+                    method,
+                    path,
+                    headers,
+                    correlation_id,
+                )
 
         try:
             response = self._route(method.upper(), path, body or {}, headers, correlation_id)
@@ -431,13 +490,15 @@ class ControlApi:
             self._audit_refusal(denied, method, path, headers, correlation_id)
             response = error(denied.status, denied.code, denied.message, **denied.extra)
             self._metrics.inc("site_engine_control_refusals_total", code=denied.code)
-        self._metrics.inc("site_engine_control_requests_total",
-                          method=method.upper(), status=status_class(response.status))
+        self._metrics.inc(
+            "site_engine_control_requests_total",
+            method=method.upper(),
+            status=status_class(response.status),
+        )
         # Идентификатор запроса возвращается всегда, включая отказы: без него
         # вызывающий не может найти свой запрос в журнале и приносит скриншот.
         payload = response.body if isinstance(response.body, dict) else {"result": response.body}
-        payload = {**payload, "correlationId": correlation_id,
-                   "traceparent": контекст.header()}
+        payload = {**payload, "correlationId": correlation_id, "traceparent": контекст.header()}
         # Отрезок записывается после ответа: до него неизвестны ни код, ни
         # причина отказа, а след без них отвечает «что-то произошло».
         # Поле error принадлежит оболочке ошибок и обязано быть объектом.
@@ -447,16 +508,25 @@ class ControlApi:
         ошибка = сырое.get("code", "") if isinstance(сырое, dict) else ""
         if контекст.sampled or response.status >= 400:
             отрезок = _завершённый_отрезок(
-                контекст, родитель, "control.request",
-                {"method": method.upper(), "path_template": path_template(path),
-                 "status": response.status, "error_code": ошибка,
-                 "outcome": "ok" if response.status < 400 else "error"},
-                self._request_started, float(self._now()))
+                контекст,
+                родитель,
+                "control.request",
+                {
+                    "method": method.upper(),
+                    "path_template": path_template(path),
+                    "status": response.status,
+                    "error_code": ошибка,
+                    "outcome": "ok" if response.status < 400 else "error",
+                },
+                self._request_started,
+                float(self._now()),
+            )
             self._tracer.record(отрезок)
         return ApiResponse(status=response.status, body=payload)
 
-    def _idempotency_key(self, method: str, path: str, body: dict[str, Any],
-                         headers: dict[str, str]) -> tuple[str | None, str]:
+    def _idempotency_key(
+        self, method: str, path: str, body: dict[str, Any], headers: dict[str, str]
+    ) -> tuple[str | None, str]:
         """Ключ применим только к изменяющим запросам без dryRun.
 
         Пробный запуск ничего не меняет, поэтому занимать под него ключ значит
@@ -470,16 +540,24 @@ class ControlApi:
         if not ключ:
             return None, ""
         if len(ключ) > 128 or not re.match(r"^[A-Za-z0-9_.:-]+$", ключ):
-            raise ControlDenied(400, "invalid_idempotency_key",
-                                "ключ идемпотентности недопустим")
+            raise ControlDenied(400, "invalid_idempotency_key", "ключ идемпотентности недопустим")
         return ключ, fingerprint(method.upper(), path, body)
 
-    def _deny(self, denied: ControlDenied, method: str, path: str,
-              headers: dict[str, str], correlation_id: str) -> ApiResponse:
+    def _deny(
+        self,
+        denied: ControlDenied,
+        method: str,
+        path: str,
+        headers: dict[str, str],
+        correlation_id: str,
+    ) -> ApiResponse:
         self._audit_refusal(denied, method, path, headers, correlation_id)
         self._metrics.inc("site_engine_control_refusals_total", code=denied.code)
-        self._metrics.inc("site_engine_control_requests_total",
-                          method=method.upper(), status=status_class(denied.status))
+        self._metrics.inc(
+            "site_engine_control_requests_total",
+            method=method.upper(),
+            status=status_class(denied.status),
+        )
         ответ = error(denied.status, denied.code, denied.message, **denied.extra)
         # Ранние отказы возвращаются мимо общего хвоста handle(), поэтому след
         # пишется здесь. Без этого конфликт ключа и запрос в работе — то есть
@@ -487,10 +565,19 @@ class ControlApi:
         контекст = getattr(self, "_trace_context", None)
         if контекст is not None:
             отрезок = _завершённый_отрезок(
-                контекст, None, "control.request",
-                {"method": method.upper(), "path_template": path_template(path),
-                 "status": denied.status, "error_code": denied.code, "outcome": "error"},
-                getattr(self, "_request_started", float(self._now())), float(self._now()))
+                контекст,
+                None,
+                "control.request",
+                {
+                    "method": method.upper(),
+                    "path_template": path_template(path),
+                    "status": denied.status,
+                    "error_code": denied.code,
+                    "outcome": "error",
+                },
+                getattr(self, "_request_started", float(self._now())),
+                float(self._now()),
+            )
             self._tracer.record(отрезок)
         тело = {**ответ.body, "correlationId": correlation_id}
         if контекст is not None:
@@ -537,6 +624,8 @@ class ControlApi:
         if method == "GET" and rest == ["playback-policy"]:
             principal.require(SCOPE_READ)
             return self._playback_policy()
+        if rest[:1] == ["review-queue"]:
+            return self._review_route(method, rest[1:], body, principal, headers, correlation_id)
         if method == "GET" and len(rest) == 2 and rest[0] == "traces":
             principal.require(SCOPE_AUDIT)
             return self._trace(rest[1])
@@ -584,23 +673,27 @@ class ControlApi:
         счётчика на весь массив здесь нет намеренно — один шумный сайт не
         должен упирать в предел остальные.
         """
-        решение = self._limiter.check({
-            "environment": self._env.get("SITE_ENGINE_ENVIRONMENT", "local"),
-            "site": site_id,
-            "actor": principal.token_id,
-            # Витрина входит в ключ операции: без неё шум по одной витрине
-            # выбирал бы операционное ведро сразу для всех остальных.
-            "operation": f"{principal.token_id}:{site_id or '-'}:{operation}" if operation else "",
-        })
+        решение = self._limiter.check(
+            {
+                "environment": self._env.get("SITE_ENGINE_ENVIRONMENT", "local"),
+                "site": site_id,
+                "actor": principal.token_id,
+                # Витрина входит в ключ операции: без неё шум по одной витрине
+                # выбирал бы операционное ведро сразу для всех остальных.
+                "operation": f"{principal.token_id}:{site_id or '-'}:{operation}"
+                if operation
+                else "",
+            }
+        )
         if решение.degraded:
             # Тихий переход в запасной режим не должен остаться незамеченным:
             # предел в нём строже, и вызывающий обязан узнать причину отказов.
             self._metrics.inc("site_engine_ratelimit_degraded_total")
         if not решение.allowed:
             self._metrics.inc("site_engine_control_refusals_total", code="rate_limited")
-            raise ControlDenied(429, "rate_limited",
-                                "превышен предел частоты",
-                                **решение.as_error_extra())
+            raise ControlDenied(
+                429, "rate_limited", "превышен предел частоты", **решение.as_error_extra()
+            )
 
     def _check_site_id(self, site_id: str) -> None:
         if not SITE_ID_RE.match(site_id):
@@ -624,37 +717,59 @@ class ControlApi:
         dry_run = bool(body.get("dryRun"))
         if action not in ALLOWED_JOB_ACTIONS:
             raise ControlDenied(
-                400, "invalid_action", "недопустимое действие",
+                400,
+                "invalid_action",
+                "недопустимое действие",
                 allowed=sorted(ALLOWED_JOB_ACTIONS),
             )
         if environment not in ALLOWED_ENVIRONMENTS:
-            raise ControlDenied(400, "invalid_environment", "недопустимая среда",
-                                allowed=sorted(ALLOWED_ENVIRONMENTS))
+            raise ControlDenied(
+                400,
+                "invalid_environment",
+                "недопустимая среда",
+                allowed=sorted(ALLOWED_ENVIRONMENTS),
+            )
 
         if dry_run:
             return ApiResponse(
                 status=200,
                 body={
                     "dryRun": True,
-                    "wouldEnqueue": {"siteId": site_id, "action": action, "environment": environment},
+                    "wouldEnqueue": {
+                        "siteId": site_id,
+                        "action": action,
+                        "environment": environment,
+                    },
                     "siteLocked": locks.is_locked(site_id, environment),
                 },
             )
 
         try:
             with locks.site_lock(site_id, environment, timeout=2.0):
-                item = queue.enqueue(site_id, action=action, environment=environment,
-                                     traceparent=self._trace_context.header())
+                item = queue.enqueue(
+                    site_id,
+                    action=action,
+                    environment=environment,
+                    traceparent=self._trace_context.header(),
+                )
         except locks.LockBusy as exc:
             raise ControlDenied(409, "site_busy", "по сайту уже идёт операция") from exc
         except FileExistsError as exc:
             raise ControlDenied(409, "job_exists", "такое задание уже в очереди") from exc
 
         audit.record(
-            job_id=item.job_id, site_id=site_id, environment=environment,
-            action=f"control.job.{action}", target="queue", mutation=True, exit_code=0,
-            extra={"correlation_id": correlation_id, "actor_token": principal.token_id,
-                   "trace_id": self._trace_context.trace_id},
+            job_id=item.job_id,
+            site_id=site_id,
+            environment=environment,
+            action=f"control.job.{action}",
+            target="queue",
+            mutation=True,
+            exit_code=0,
+            extra={
+                "correlation_id": correlation_id,
+                "actor_token": principal.token_id,
+                "trace_id": self._trace_context.trace_id,
+            },
         )
         return ApiResponse(status=202, body={"job": item.as_dict(), "status": "queued"})
 
@@ -690,7 +805,9 @@ class ControlApi:
         if not isinstance(changes, dict) or not changes:
             raise ControlDenied(400, "invalid_body", "нужен непустой объект changes")
         if len(changes) > MAX_BODY_KEYS:
-            raise ControlDenied(400, "too_many_changes", f"не более {MAX_BODY_KEYS} настроек за запрос")
+            raise ControlDenied(
+                400, "too_many_changes", f"не более {MAX_BODY_KEYS} настроек за запрос"
+            )
         problems = _validate_settings(changes)
         if problems:
             raise ControlDenied(422, "invalid_settings", "настройки не приняты", problems=problems)
@@ -702,8 +819,11 @@ class ControlApi:
             # Конкурентная правка. Применить поверх значило бы потерять чужое
             # изменение и не сообщить об этом ни одной из сторон.
             raise ControlDenied(
-                409, "version_conflict", "конфигурация изменилась с момента чтения",
-                expected_version=expected, current_version=current_version,
+                409,
+                "version_conflict",
+                "конфигурация изменилась с момента чтения",
+                expected_version=expected,
+                current_version=current_version,
             )
 
         before = json.loads(target.read_text(encoding="utf-8"))
@@ -713,13 +833,19 @@ class ControlApi:
         if dry_run:
             return ApiResponse(
                 status=200,
-                body={"dryRun": True, "currentVersion": current_version, "diff": diff,
-                      "noop": not diff},
+                body={
+                    "dryRun": True,
+                    "currentVersion": current_version,
+                    "diff": diff,
+                    "noop": not diff,
+                },
             )
 
         if not diff:
-            return ApiResponse(status=200, body={"applied": False, "noop": True,
-                                                 "version": current_version, "diff": {}})
+            return ApiResponse(
+                status=200,
+                body={"applied": False, "noop": True, "version": current_version, "diff": {}},
+            )
 
         after = dict(before)
         for field_name, value in changes.items():
@@ -733,11 +859,13 @@ class ControlApi:
                 # Повторная сверка под блокировкой: между чтением версии и
                 # захватом замка файл мог измениться.
                 if config_version(target) != current_version:
-                    raise ControlDenied(409, "version_conflict",
-                                        "конфигурация изменилась во время применения")
+                    raise ControlDenied(
+                        409, "version_conflict", "конфигурация изменилась во время применения"
+                    )
                 tmp = target.with_suffix(".json.tmp")
-                tmp.write_text(json.dumps(after, ensure_ascii=False, indent=2) + "\n",
-                               encoding="utf-8")
+                tmp.write_text(
+                    json.dumps(after, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+                )
                 tmp.replace(target)
         except locks.LockBusy as exc:
             raise ControlDenied(409, "site_busy", "по сайту уже идёт операция") from exc
@@ -746,23 +874,39 @@ class ControlApi:
             # 500 выглядело бы как поломка службы; на деле это её граница прав,
             # и оператору полезнее увидеть причину, чем внутреннюю ошибку.
             raise ControlDenied(
-                503, "config_read_only",
+                503,
+                "config_read_only",
                 "настройки витрин недоступны для записи этой службе",
                 reason=exc.strerror or "",
             ) from exc
 
         new_version = config_version(target)
         audit.record(
-            job_id=correlation_id, site_id=site_id, environment="staging",
-            action="control.settings.patch", target=str(target.relative_to(self._root)),
-            mutation=True, exit_code=0,
-            extra={"correlation_id": correlation_id, "actor_token": principal.token_id,
-                   "trace_id": self._trace_context.trace_id,
-                   "diff": diff, "version_before": current_version, "version_after": new_version},
+            job_id=correlation_id,
+            site_id=site_id,
+            environment="staging",
+            action="control.settings.patch",
+            target=str(target.relative_to(self._root)),
+            mutation=True,
+            exit_code=0,
+            extra={
+                "correlation_id": correlation_id,
+                "actor_token": principal.token_id,
+                "trace_id": self._trace_context.trace_id,
+                "diff": diff,
+                "version_before": current_version,
+                "version_after": new_version,
+            },
         )
-        return ApiResponse(status=200, body={"applied": True, "diff": diff,
-                                                   "previousVersion": current_version,
-                                                   "version": new_version})
+        return ApiResponse(
+            status=200,
+            body={
+                "applied": True,
+                "diff": diff,
+                "previousVersion": current_version,
+                "version": new_version,
+            },
+        )
 
     def _invalidate_cache(
         self,
@@ -776,15 +920,20 @@ class ControlApi:
         scope = str(body.get("scope") or "").strip()
         allowed_scopes = {"homepage", "title", "shelves", "catalog"}
         if scope not in allowed_scopes:
-            raise ControlDenied(400, "invalid_scope", "недопустимая область инвалидации",
-                                allowed=sorted(allowed_scopes))
+            raise ControlDenied(
+                400,
+                "invalid_scope",
+                "недопустимая область инвалидации",
+                allowed=sorted(allowed_scopes),
+            )
         keys = body.get("keys") or []
         if not isinstance(keys, list) or any(not isinstance(k, str) or not k for k in keys):
             raise ControlDenied(400, "invalid_keys", "keys должен быть списком непустых строк")
         негодные = [k for k in keys if not CACHE_KEY_RE.match(k)]
         if негодные:
             raise ControlDenied(
-                400, "invalid_keys",
+                400,
+                "invalid_keys",
                 "ключ кэша должен быть идентификатором, а не адресом",
                 rejected=негодные[:5],
             )
@@ -801,16 +950,29 @@ class ControlApi:
 
         job_id = f"{site_id}-cache-{scope}-{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}"
         try:
-            item = queue.enqueue(site_id, action="invalidate", environment="staging",
-                                 job_id=job_id, traceparent=self._trace_context.header())
+            item = queue.enqueue(
+                site_id,
+                action="invalidate",
+                environment="staging",
+                job_id=job_id,
+                traceparent=self._trace_context.header(),
+            )
         except FileExistsError as exc:
-            raise ControlDenied(409, "job_exists",
-                                "такая инвалидация уже запланирована") from exc
+            raise ControlDenied(409, "job_exists", "такая инвалидация уже запланирована") from exc
         audit.record(
-            job_id=item.job_id, site_id=site_id, environment="staging",
-            action="control.cache.invalidate", target=scope, mutation=True, exit_code=0,
-            extra={"correlation_id": correlation_id, "actor_token": principal.token_id,
-                   "trace_id": self._trace_context.trace_id, "keys": keys},
+            job_id=item.job_id,
+            site_id=site_id,
+            environment="staging",
+            action="control.cache.invalidate",
+            target=scope,
+            mutation=True,
+            exit_code=0,
+            extra={
+                "correlation_id": correlation_id,
+                "actor_token": principal.token_id,
+                "trace_id": self._trace_context.trace_id,
+                "keys": keys,
+            },
         )
         return ApiResponse(status=202, body={"job": item.as_dict(), "invalidate": plan})
 
@@ -833,7 +995,9 @@ class ControlApi:
         raw = self._load_profile_raw(site_id)
         if raw is None:
             return compat.Compatibility(
-                compat.STATE_INCOMPATIBLE, compat.ENGINE_CONTRACT, None,
+                compat.STATE_INCOMPATIBLE,
+                compat.ENGINE_CONTRACT,
+                None,
                 "профиль витрины не прочитан или не является объектом JSON",
             )
         return compat.evaluate(raw)
@@ -848,7 +1012,8 @@ class ControlApi:
         state = self._compatibility_of(site_id)
         if not state.manageable:
             raise ControlDenied(
-                409, "incompatible_contract",
+                409,
+                "incompatible_contract",
                 "витрина несовместима с версией движка",
                 **state.as_dict(),
             )
@@ -868,7 +1033,9 @@ class ControlApi:
         предел = body.get("limit", 50)
         if not isinstance(предел, int) or isinstance(предел, bool) or not (1 <= предел <= 500):
             raise ControlDenied(400, "invalid_limit", "limit — целое от 1 до 500")
-        детали = content_health.проблемные(self._root, site_id, code=код, limit=предел, env=self._env)
+        детали = content_health.проблемные(
+            self._root, site_id, code=код, limit=предел, env=self._env
+        )
         return ApiResponse(status=200, body={**свод, "problems": детали})
 
     def _check_site_id_soft(self, site_id: str) -> None:
@@ -889,39 +1056,197 @@ class ControlApi:
         """
         отрезки = self._tracer.read_trace(trace_id)
         if not отрезки:
-            raise ControlDenied(404, "trace_not_found",
-                                "след не найден: возможно, запрос не попал в выборку")
-        return ApiResponse(status=200, body={
-            "traceId": trace_id,
-            "spans": отрезки,
-            "total": len(отрезки),
-            "durationMs": round(sum(s.get("duration_ms", 0) for s in отрезки), 2),
-        })
+            raise ControlDenied(
+                404, "trace_not_found", "след не найден: возможно, запрос не попал в выборку"
+            )
+        return ApiResponse(
+            status=200,
+            body={
+                "traceId": trace_id,
+                "spans": отрезки,
+                "total": len(отрезки),
+                "durationMs": round(sum(s.get("duration_ms", 0) for s in отрезки), 2),
+            },
+        )
 
     def _compatibility(self, site_id: str | None) -> ApiResponse:
         if site_id is not None:
             self._check_site_id(site_id)
-            return ApiResponse(status=200,
-                               body={"siteId": site_id,
-                                     **self._compatibility_of(site_id).as_dict()})
+            return ApiResponse(
+                status=200, body={"siteId": site_id, **self._compatibility_of(site_id).as_dict()}
+            )
         directory = self._root / "config" / "site-profiles"
         rows = []
         for path in sorted(directory.glob("*.json")) if directory.is_dir() else []:
             raw = self._load_profile_raw(path.stem)
             state = self._compatibility_of(path.stem)
-            rows.append({"siteId": path.stem,
-                         "siteType": (raw or {}).get("site_type"),
-                         **state.as_dict()})
+            rows.append(
+                {"siteId": path.stem, "siteType": (raw or {}).get("site_type"), **state.as_dict()}
+            )
         by_state: dict[str, int] = {}
         for row in rows:
             by_state[row["state"]] = by_state.get(row["state"], 0) + 1
-        return ApiResponse(status=200, body={
-            "engine": compat.ENGINE_CONTRACT,
-            "sites": rows,
-            "total": len(rows),
-            "byState": by_state,
-            "manageable": sum(1 for r in rows if r["manageable"]),
-        })
+        return ApiResponse(
+            status=200,
+            body={
+                "engine": compat.ENGINE_CONTRACT,
+                "sites": rows,
+                "total": len(rows),
+                "byState": by_state,
+                "manageable": sum(1 for r in rows if r["manageable"]),
+            },
+        )
+
+    # ------------------------------------------------------------------
+    # Очередь разбора
+    # ------------------------------------------------------------------
+    def _review(self):
+        from factory.site_engine.review_queue import ReviewQueue
+
+        return ReviewQueue(self._root)
+
+    def _review_route(
+        self,
+        method: str,
+        tail: list[str],
+        body: dict[str, Any],
+        principal,
+        headers: dict[str, str],
+        correlation_id: str,
+    ) -> ApiResponse:
+        """Маршруты очереди. Чтение и решение разведены по правам.
+
+        Решение — изменяющая операция, и она обязана нести версию записи:
+        без неё два редактора перезапишут решение друг друга, и второй даже
+        не узнает, что было первое.
+        """
+        from factory.site_engine.review_queue import ReviewError
+
+        очередь = self._review()
+        try:
+            if method == "GET" and not tail:
+                principal.require(SCOPE_READ)
+                return ApiResponse(
+                    status=200,
+                    body=очередь.list(
+                        state=self._опция(body, "state"),
+                        site_id=self._опция(body, "siteId"),
+                        conflict_code=self._опция(body, "conflictCode"),
+                        query=self._опция(body, "q"),
+                        offset=self._целое(body, "offset", 0, 0, 100000),
+                        limit=self._целое(body, "limit", 50, 1, 200),
+                    ),
+                )
+            if method == "GET" and len(tail) == 1:
+                principal.require(SCOPE_READ)
+                return ApiResponse(status=200, body=очередь.get(tail[0]).as_dict())
+            if method == "POST" and tail == ["batch"]:
+                return self._review_batch(body, principal, headers, correlation_id)
+            if method == "POST" and len(tail) == 2:
+                principal.require(SCOPE_REVIEW)
+                действие = tail[1]
+                актор = principal.name if hasattr(principal, "name") else "operator"
+                if действие == "claim":
+                    итог = очередь.claim(tail[0], actor=актор)
+                elif действие == "decide":
+                    итог = очередь.decide(
+                        tail[0],
+                        value=str(body.get("value") or ""),
+                        actor=актор,
+                        note=str(body.get("note") or ""),
+                        expected_version=self._целое(body, "expectedVersion", None, 1, 10**9),
+                        dismiss=bool(body.get("dismiss")),
+                    )
+                elif действие == "revert":
+                    итог = очередь.revert(tail[0], actor=актор, note=str(body.get("note") or ""))
+                else:
+                    raise ControlDenied(404, "not_found", "маршрут не найден")
+                self._audit_review(действие, итог, актор, correlation_id)
+                return ApiResponse(status=200, body=итог.as_dict())
+        except ReviewError as ошибка:
+            # Конфликт версии и негодное значение — это 409 и 400, а не 500:
+            # оператор обязан увидеть, что именно не так, а не «ошибку сервера».
+            код = 409 if "версия" in str(ошибка) or "изменил" in str(ошибка) else 400
+            raise ControlDenied(код, "review_conflict", str(ошибка)) from ошибка
+        raise ControlDenied(404, "not_found", "маршрут не найден")
+
+    def _review_batch(
+        self, body: dict[str, Any], principal, headers: dict[str, str], correlation_id: str
+    ) -> ApiResponse:
+        """Групповое действие. Сухой прогон доступен по чтению, изменение — нет."""
+        режим = str(body.get("mode") or "dryRun")
+        очередь = self._review()
+        актор = principal.name if hasattr(principal, "name") else "operator"
+        if режим == "dryRun":
+            principal.require(SCOPE_READ)
+            return ApiResponse(
+                status=200,
+                body=очередь.batch_preview(
+                    conflict_code=str(body.get("conflictCode") or ""),
+                    from_value=str(body.get("fromValue") or ""),
+                    to_value=str(body.get("toValue") or ""),
+                    site_id=self._опция(body, "siteId"),
+                    sample=self._целое(body, "sample", 5, 0, 50),
+                ),
+            )
+        principal.require(SCOPE_REVIEW)
+        if режим == "apply":
+            итог = очередь.batch_apply(
+                conflict_code=str(body.get("conflictCode") or ""),
+                from_value=str(body.get("fromValue") or ""),
+                to_value=str(body.get("toValue") or ""),
+                actor=актор,
+                expected_fingerprint=str(body.get("expectedFingerprint") or ""),
+                site_id=self._опция(body, "siteId"),
+                note=str(body.get("note") or ""),
+            )
+        elif режим == "revert":
+            итог = очередь.batch_revert(batch_id=str(body.get("batchId") or ""), actor=актор)
+        else:
+            raise ControlDenied(400, "invalid_mode", "mode — dryRun, apply или revert")
+        audit.record(
+            job_id=f"review-batch-{итог.get('batchId', '')}",
+            site_id=self._опция(body, "siteId"),
+            environment="control",
+            action=f"review_batch_{режим}",
+            target="review-queue",
+            exit_code=0,
+            output=json.dumps(
+                {k: v for k, v in итог.items() if k != "itemIds"}, ensure_ascii=False
+            ),
+            mutation=True,
+            extra={"correlationId": correlation_id, "actor": актор},
+        )
+        return ApiResponse(status=200, body=итог)
+
+    def _audit_review(self, действие: str, итог, актор: str, correlation_id: str) -> None:
+        audit.record(
+            job_id=f"review-{итог.item_id}",
+            site_id=итог.site_id,
+            environment="control",
+            action=f"review_{действие}",
+            target=итог.internal_entity_id,
+            exit_code=0,
+            output=f"{итог.state.value} {итог.decided_value}".strip(),
+            mutation=True,
+            extra={"correlationId": correlation_id, "actor": актор, "version": итог.version},
+        )
+
+    @staticmethod
+    def _опция(body: dict[str, Any], имя: str) -> str:
+        значение = body.get(имя)
+        return str(значение).strip() if значение is not None else ""
+
+    @staticmethod
+    def _целое(body: dict[str, Any], имя: str, по_умолчанию, низ: int, верх: int):
+        значение = body.get(имя, по_умолчанию)
+        if значение is None:
+            return по_умолчанию
+        if not isinstance(значение, int) or isinstance(значение, bool):
+            raise ControlDenied(400, "invalid_value", f"{имя} — целое число")
+        if not (низ <= значение <= верх):
+            raise ControlDenied(400, "invalid_value", f"{имя} — целое от {низ} до {верх}")
+        return значение
 
     def _playback_policy(self) -> ApiResponse:
         """Действующий перечень идентификаторов и состояние флагов.
@@ -938,8 +1263,10 @@ class ControlApi:
         except playback_policy.PlaybackPolicyError as ошибка:
             # Противоречивая настройка — это состояние, о котором обязан узнать
             # оператор, а не отсутствующий маршрут.
-            return ApiResponse(status=409, body={
-                "error": {"code": "playback_policy_conflict", "message": str(ошибка)}})
+            return ApiResponse(
+                status=409,
+                body={"error": {"code": "playback_policy_conflict", "message": str(ошибка)}},
+            )
         тело = решение.as_dict()
         тело["flags"] = self._playback_flags()
         return ApiResponse(status=200, body=тело)
@@ -971,15 +1298,19 @@ class ControlApi:
                 if not isinstance(запись, dict):
                     continue
                 авторизация = запись.get("authorization")
-                строки.append({
-                    "provider": поставщик,
-                    "identifier": имя,
-                    "enabled": bool(запись.get("enabled")),
-                    "flag": запись.get("flag"),
-                    "authorization": (
-                        авторизация.get("status") if isinstance(авторизация, dict) else "baseline"
-                    ),
-                })
+                строки.append(
+                    {
+                        "provider": поставщик,
+                        "identifier": имя,
+                        "enabled": bool(запись.get("enabled")),
+                        "flag": запись.get("flag"),
+                        "authorization": (
+                            авторизация.get("status")
+                            if isinstance(авторизация, dict)
+                            else "baseline"
+                        ),
+                    }
+                )
         return строки
 
     def _metrics_response(self) -> ApiResponse:
@@ -1010,9 +1341,13 @@ class ControlApi:
                 for имя in sorted(set(решение.baseline) | set(решение.allowed))
             ]
             gauges["site_engine_playback_identifier_flags"] = [
-                ({"identifier": строка["identifier"],
-                  "authorization": str(строка["authorization"])},
-                 1 if строка["enabled"] else 0)
+                (
+                    {
+                        "identifier": строка["identifier"],
+                        "authorization": str(строка["authorization"]),
+                    },
+                    1 if строка["enabled"] else 0,
+                )
                 for строка in self._playback_flags()
                 if строка["flag"]
             ]
@@ -1026,8 +1361,9 @@ class ControlApi:
             except Exception:  # noqa: BLE001
                 continue
         text = self._metrics.render(gauges)
-        return ApiResponse(status=200, body={"prometheus": text,
-                                             "counters": self._metrics.snapshot()})
+        return ApiResponse(
+            status=200, body={"prometheus": text, "counters": self._metrics.snapshot()}
+        )
 
     def _audit_trail(self, body: dict[str, Any], headers: dict[str, str]) -> ApiResponse:
         limit = body.get("limit", 50)
@@ -1059,11 +1395,17 @@ class ControlApi:
             raw = str(headers.get("authorization") or "")
             token = raw[7:].strip() if raw.lower().startswith("bearer ") else ""
             audit.record(
-                job_id=correlation_id, site_id="-", environment="-",
-                action=f"control.denied.{denied.code}", target=f"{method} {path}",
-                mutation=False, exit_code=denied.status,
-                extra={"correlation_id": correlation_id,
-                       "actor_token": _token_id(token) if token else "anonymous"},
+                job_id=correlation_id,
+                site_id="-",
+                environment="-",
+                action=f"control.denied.{denied.code}",
+                target=f"{method} {path}",
+                mutation=False,
+                exit_code=denied.status,
+                extra={
+                    "correlation_id": correlation_id,
+                    "actor_token": _token_id(token) if token else "anonymous",
+                },
             )
         except Exception:
             # Невозможность записать отказ не должна превращать отказ в сбой.

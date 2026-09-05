@@ -11,6 +11,7 @@
 их вернул API, включая идентификатор связи, — иначе оператор не сможет найти
 свой запрос в журнале.
 """
+
 from __future__ import annotations
 
 import json
@@ -28,6 +29,18 @@ class AdminResponse:
     headers: dict[str, str] = field(default_factory=dict)
 
 
+def _целое(сырое, по_умолчанию):
+    """Число из формы. Мусор — это значение по умолчанию, а не отказ.
+
+    Смещение страницы приходит из адресной строки, и падать на «?offset=абв»
+    значит отдавать 500 за чужую опечатку.
+    """
+    try:
+        return int(str(сырое))
+    except (TypeError, ValueError):
+        return по_умолчанию
+
+
 def _redirect(location: str, *, extra: dict[str, str] | None = None) -> AdminResponse:
     """Перенаправление после записи.
 
@@ -42,8 +55,15 @@ def _redirect(location: str, *, extra: dict[str, str] | None = None) -> AdminRes
 
 
 class AdminApp:
-    def __init__(self, read_api, control_api, *, sessions: SessionStore | None = None,
-                 now=time.time, secure_cookie: bool = False) -> None:
+    def __init__(
+        self,
+        read_api,
+        control_api,
+        *,
+        sessions: SessionStore | None = None,
+        now=time.time,
+        secure_cookie: bool = False,
+    ) -> None:
         self._read = read_api
         self._control = control_api
         self._sessions = sessions if sessions is not None else SessionStore(now=now)
@@ -96,20 +116,31 @@ class AdminApp:
 
     # ---- маршруты --------------------------------------------------------
 
-    def handle(self, method: str, path: str, *, form: dict[str, str] | None = None,
-               cookies: dict[str, str] | None = None) -> AdminResponse:
+    def handle(
+        self,
+        method: str,
+        path: str,
+        *,
+        form: dict[str, str] | None = None,
+        cookies: dict[str, str] | None = None,
+    ) -> AdminResponse:
         form = form or {}
         cookies = cookies or {}
         # Отрезок панели — корень следа операторского действия.
         изменяющий = method.upper() == "POST"
         начать = getattr(self._control, "begin_client_operation", None)
-        self._operation = (начать(method, path, service="admin", mutating=изменяющий)
-                           if начать is not None else None)
+        self._operation = (
+            начать(method, path, service="admin", mutating=изменяющий)
+            if начать is not None
+            else None
+        )
         session = self._sessions.get(cookies.get(ADMIN_COOKIE))
         parts = [p for p in path.strip("/").split("/") if p]
 
         if parts[:1] != ["admin"]:
-            return AdminResponse(status=404, html=ui.page("Не найдено", "<p>Нет такой страницы.</p>"))
+            return AdminResponse(
+                status=404, html=ui.page("Не найдено", "<p>Нет такой страницы.</p>")
+            )
         rest = parts[1:]
 
         if method == "POST" and rest == ["login"]:
@@ -121,12 +152,14 @@ class AdminApp:
             status = 200 if method == "GET" else 403
             return AdminResponse(status=status, html=ui.login())
 
-        if method == "POST" and not self._sessions.csrf_valid(
-                session.sid, form.get(CSRF_FIELD)):
+        if method == "POST" and not self._sessions.csrf_valid(session.sid, form.get(CSRF_FIELD)):
             return AdminResponse(
                 status=403,
-                html=ui.page("Отказ", '<div class="flash bad">Форма устарела или '
-                                      "подделана. Обновите страницу и повторите.</div>"),
+                html=ui.page(
+                    "Отказ",
+                    '<div class="flash bad">Форма устарела или '
+                    "подделана. Обновите страницу и повторите.</div>",
+                ),
             )
 
         if method == "POST" and rest == ["logout"]:
@@ -143,6 +176,10 @@ class AdminApp:
             return self._record(self._dashboard(session, flash, label, csrf))
         if method == "GET" and rest == ["audit"]:
             return self._record(self._audit(session, flash, label, csrf))
+        if rest[:1] == ["review"]:
+            return self._record(
+                self._review_route(session, method, rest[1:], form, flash, label, csrf)
+            )
         if rest[:1] == ["sites"] and len(rest) >= 2:
             site_id = rest[1]
             tail = rest[2:]
@@ -154,6 +191,132 @@ class AdminApp:
                 return self._cache(session, site_id, form)
             if method == "POST" and tail == ["settings"]:
                 return self._settings(session, site_id, form)
+        return AdminResponse(status=404, html=ui.page("Не найдено", "<p>Нет такой страницы.</p>"))
+
+    # ------------------------------------------------------------------
+    # Очередь разбора
+    # ------------------------------------------------------------------
+    def _может_решать(self, session) -> bool:
+        return "review:write" in self._scopes(session)
+
+    def _review_route(
+        self,
+        session,
+        method: str,
+        tail: list[str],
+        form: dict[str, str],
+        flash,
+        label: str,
+        csrf: str,
+    ) -> AdminResponse:
+        """Разделы очереди. Панель ничего не решает сама — только вызывает API.
+
+        Право проверяется и здесь, и в API. Проверка в панели не защита, а
+        удобство: она прячет кнопку, которой пользователь всё равно не смог бы
+        воспользоваться. Защита — в API, и она остаётся, даже если панель
+        обойти.
+        """
+        может = self._может_решать(session)
+
+        if method == "GET" and not tail:
+            тело = {
+                "limit": ui.REVIEW_PAGE,
+                "offset": _целое(form.get("offset"), 0),
+                "state": form.get("state") or "",
+            }
+            ответ = self._call("GET", "/api/v1/review-queue", session, тело)
+            if ответ.status != 200:
+                return AdminResponse(
+                    status=ответ.status,
+                    html=ui.page(
+                        "Очередь", f'<div class="flash bad">{ui._e(str(ответ.body))}</div>'
+                    ),
+                )
+            return AdminResponse(
+                status=200,
+                html=ui.review_list(
+                    ответ.body,
+                    фильтры={"state": form.get("state") or ""},
+                    flash=flash,
+                    session_label=label,
+                    csrf=csrf,
+                    может_решать=может,
+                ),
+            )
+
+        if method == "GET" and tail == ["batch"]:
+            тело = {
+                "mode": "dryRun",
+                "conflictCode": form.get("conflictCode") or "",
+                "fromValue": form.get("fromValue") or "",
+                "toValue": form.get("toValue") or "",
+                "sample": 10,
+            }
+            ответ = self._call("POST", "/api/v1/review-queue/batch", session, тело)
+            if ответ.status != 200:
+                return AdminResponse(
+                    status=ответ.status,
+                    html=ui.page(
+                        "Сухой прогон", f'<div class="flash bad">{ui._e(str(ответ.body))}</div>'
+                    ),
+                )
+            return AdminResponse(
+                status=200, html=ui.review_batch(ответ.body, session_label=label, csrf=csrf)
+            )
+
+        if method == "POST" and tail == ["batch"]:
+            тело = {
+                "mode": "apply",
+                "conflictCode": form.get("conflictCode") or "",
+                "fromValue": form.get("fromValue") or "",
+                "toValue": form.get("toValue") or "",
+                "expectedFingerprint": form.get("expectedFingerprint") or "",
+                "note": form.get("note") or "",
+            }
+            ответ = self._call("POST", "/api/v1/review-queue/batch", session, тело)
+            session.flash = self._flash_from(
+                ответ,
+                success=f"Применено к {ответ.body.get('changed', 0)} записям, "
+                f"партия {ответ.body.get('batchId', '')}",
+            )
+            return _redirect("/admin/review")
+
+        if method == "GET" and len(tail) == 1:
+            ответ = self._call("GET", f"/api/v1/review-queue/{tail[0]}", session, {})
+            if ответ.status != 200:
+                return AdminResponse(
+                    status=ответ.status,
+                    html=ui.page(
+                        "Запись", '<div class="flash bad">Записи нет или доступ закрыт.</div>'
+                    ),
+                )
+            return AdminResponse(
+                status=200,
+                html=ui.review_item(
+                    ответ.body, flash=flash, session_label=label, csrf=csrf, может_решать=может
+                ),
+            )
+
+        if method == "POST" and len(tail) == 2:
+            item_id, действие = tail
+            тело: dict = {"note": form.get("note") or ""}
+            if действие == "decide":
+                тело["value"] = form.get("value") or ""
+                тело["dismiss"] = bool(form.get("dismiss"))
+                версия = _целое(form.get("expectedVersion"), None)
+                if версия is not None:
+                    тело["expectedVersion"] = версия
+            ответ = self._call("POST", f"/api/v1/review-queue/{item_id}/{действие}", session, тело)
+            session.flash = self._flash_from(
+                ответ,
+                success={
+                    "claim": "Запись взята в работу",
+                    "decide": "Решение записано",
+                    "revert": "Решение отменено",
+                }.get(действие, "Готово"),
+            )
+            return _redirect(f"/admin/review/{item_id}")
+
         return AdminResponse(status=404, html=ui.page("Не найдено", "<p>Нет такой страницы.</p>"))
 
     def _record(self, ответ: AdminResponse) -> AdminResponse:
@@ -180,10 +343,16 @@ class AdminApp:
     def _dashboard(self, session, flash, label, csrf) -> AdminResponse:
         response = self._read.handle("/api/v1/sites")
         if response.status != 200:
-            problem = ("Читающий слой недоступен: проверьте SITE_ENGINE_API_ENABLED и "
-                       "SITE_ENGINE_ENVIRONMENT (допустимо local, test, staging).")
-            return AdminResponse(status=200, html=ui.dashboard(
-                [], flash=flash, session_label=label, csrf=csrf, read_problem=problem))
+            problem = (
+                "Читающий слой недоступен: проверьте SITE_ENGINE_API_ENABLED и "
+                "SITE_ENGINE_ENVIRONMENT (допустимо local, test, staging)."
+            )
+            return AdminResponse(
+                status=200,
+                html=ui.dashboard(
+                    [], flash=flash, session_label=label, csrf=csrf, read_problem=problem
+                ),
+            )
         sites = response.body.get("items", [])
         # Состояние контрактов берётся у Control API, а не вычисляется здесь:
         # иначе панель начала бы отвечать на вопрос, на который уже отвечает API.
@@ -191,27 +360,43 @@ class AdminApp:
         by_site = {}
         if matrix.status == 200:
             by_site = {row["siteId"]: row for row in matrix.body.get("sites", [])}
-        return AdminResponse(status=200, html=ui.dashboard(
-            sites, flash=flash, session_label=label, csrf=csrf, compat_by_site=by_site))
+        return AdminResponse(
+            status=200,
+            html=ui.dashboard(
+                sites, flash=flash, session_label=label, csrf=csrf, compat_by_site=by_site
+            ),
+        )
 
     def _site(self, session, site_id, flash, label, csrf) -> AdminResponse:
         info = self._read.handle(f"/api/v1/sites/{site_id}")
         if info.status != 200:
-            return AdminResponse(status=info.status, html=ui.page(
-                "Витрина", f'<div class="flash bad">Витрина {site_id} недоступна '
-                           f"({info.status}).</div>", session_label=label, csrf=csrf))
+            return AdminResponse(
+                status=info.status,
+                html=ui.page(
+                    "Витрина",
+                    f'<div class="flash bad">Витрина {site_id} недоступна '
+                    f"({info.status}).</div>",
+                    session_label=label,
+                    csrf=csrf,
+                ),
+            )
         config = self._read.handle(f"/api/v1/sites/{site_id}/config")
         coverage = self._read.handle(f"/api/v1/sites/{site_id}/coverage")
         совместимость = self._call("GET", f"/api/v1/compatibility/{site_id}", session)
-        return AdminResponse(status=200, html=ui.site_detail(
-            site_id,
-            info=info.body,
-            config=config.body if config.status == 200 else {},
-            coverage=coverage.body if coverage.status == 200 else {},
-            scopes=self._scopes(session),
-            compatibility=совместимость.body if совместимость.status == 200 else None,
-            flash=flash, session_label=label, csrf=csrf,
-        ))
+        return AdminResponse(
+            status=200,
+            html=ui.site_detail(
+                site_id,
+                info=info.body,
+                config=config.body if config.status == 200 else {},
+                coverage=coverage.body if coverage.status == 200 else {},
+                scopes=self._scopes(session),
+                compatibility=совместимость.body if совместимость.status == 200 else None,
+                flash=flash,
+                session_label=label,
+                csrf=csrf,
+            ),
+        )
 
     def _job(self, session, site_id, form) -> AdminResponse:
         dry = bool(form.get("dryRun"))
@@ -222,8 +407,11 @@ class AdminApp:
         }
         response = self._call("POST", f"/api/v1/sites/{site_id}/jobs", session, body)
         session.flash = self._flash_from(
-            response, success="Проверка выполнена, ничего не изменено." if dry
-            else "Задание поставлено в очередь.")
+            response,
+            success="Проверка выполнена, ничего не изменено."
+            if dry
+            else "Задание поставлено в очередь.",
+        )
         return _redirect(f"/admin/sites/{site_id}")
 
     def _cache(self, session, site_id, form) -> AdminResponse:
@@ -233,7 +421,8 @@ class AdminApp:
         body = {"scope": (form.get("scope") or "").strip(), "keys": keys, "dryRun": dry}
         response = self._call("POST", f"/api/v1/sites/{site_id}/cache/invalidate", session, body)
         session.flash = self._flash_from(
-            response, success="Проверка выполнена." if dry else "Инвалидация запланирована.")
+            response, success="Проверка выполнена." if dry else "Инвалидация запланирована."
+        )
         return _redirect(f"/admin/sites/{site_id}")
 
     def _settings(self, session, site_id, form) -> AdminResponse:
@@ -243,16 +432,19 @@ class AdminApp:
         try:
             value = json.loads(raw)
         except json.JSONDecodeError:
-            session.flash = {"ok": False,
-                             "message": "Значение не разобрано как JSON.",
-                             "detail": {"value": raw}}
+            session.flash = {
+                "ok": False,
+                "message": "Значение не разобрано как JSON.",
+                "detail": {"value": raw},
+            }
             return _redirect(f"/admin/sites/{site_id}")
 
         path = f"/api/v1/sites/{site_id}/settings"
         if dry:
-            response = self._call("PATCH", path, session,
-                                  {"changes": {key: value}, "dryRun": True})
-            session.flash = self._flash_from(response, success="Проверка выполнена, ничего не изменено.")
+            response = self._call("PATCH", path, session, {"changes": {key: value}, "dryRun": True})
+            session.flash = self._flash_from(
+                response, success="Проверка выполнена, ничего не изменено."
+            )
             return _redirect(f"/admin/sites/{site_id}")
 
         # Сначала пробный вызов — за версией, затем боевой со сверкой. Панель
@@ -264,17 +456,31 @@ class AdminApp:
             session.flash = self._flash_from(peek, success="")
             return _redirect(f"/admin/sites/{site_id}")
         version = peek.body.get("currentVersion", "")
-        response = self._call("PATCH", path, session,
-                              {"changes": {key: value}, "expectedVersion": version})
+        response = self._call(
+            "PATCH", path, session, {"changes": {key: value}, "expectedVersion": version}
+        )
         session.flash = self._flash_from(response, success="Настройка применена.")
         return _redirect(f"/admin/sites/{site_id}")
 
     def _audit(self, session, flash, label, csrf) -> AdminResponse:
         response = self._call("GET", "/api/v1/audit", session, {"limit": 50})
         if response.status != 200:
-            return AdminResponse(status=response.status, html=ui.page(
-                "Журнал", f'<div class="flash bad">Журнал недоступен: '
-                          f"{response.status}.</div>", session_label=label, csrf=csrf))
-        return AdminResponse(status=200, html=ui.audit(
-            response.body.get("entries", []), total=response.body.get("total", 0),
-            session_label=label, csrf=csrf, flash=flash))
+            return AdminResponse(
+                status=response.status,
+                html=ui.page(
+                    "Журнал",
+                    f'<div class="flash bad">Журнал недоступен: ' f"{response.status}.</div>",
+                    session_label=label,
+                    csrf=csrf,
+                ),
+            )
+        return AdminResponse(
+            status=200,
+            html=ui.audit(
+                response.body.get("entries", []),
+                total=response.body.get("total", 0),
+                session_label=label,
+                csrf=csrf,
+                flash=flash,
+            ),
+        )
