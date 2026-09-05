@@ -1,0 +1,349 @@
+{
+  "gates": [
+    {
+      "key": "requirements",
+      "label": "требования и объём"
+    },
+    {
+      "key": "contracts",
+      "label": "TemplateManifest и контракты"
+    },
+    {
+      "key": "route_block_parity",
+      "label": "маршруты и блоки"
+    },
+    {
+      "key": "ssr_dom",
+      "label": "SSR и DOM"
+    },
+    {
+      "key": "states_ux",
+      "label": "состояния и UX"
+    },
+    {
+      "key": "responsive_a11y",
+      "label": "адаптивность и доступность"
+    },
+    {
+      "key": "live_chain",
+      "label": "API → SDK → SSR → DOM на живых данных"
+    },
+    {
+      "key": "visual_perf",
+      "label": "визуал, кросс-браузер, скорость"
+    },
+    {
+      "key": "docs_evidence",
+      "label": "документы, свидетельства, отпечаток, откат"
+    },
+    {
+      "key": "handoff_canary",
+      "label": "handoff и готовность к canary"
+    }
+  ],
+  "slots": {
+    "lords": {
+      "total": 93,
+      "blocked_gates": [
+        "live_chain",
+        "handoff_canary"
+      ],
+      "detail": {
+        "requirements": {
+          "points": 10,
+          "note": "профили, страницы и рубрика качества объявлены и покрыты тестами",
+          "blocked": false
+        },
+        "contracts": {
+          "points": 10,
+          "note": "схема манифеста и blueprint направления",
+          "blocked": false
+        },
+        "route_block_parity": {
+          "points": 10,
+          "note": "рубрика: минимум 10.0 из 10 по всем витринам",
+          "blocked": false
+        },
+        "ssr_dom": {
+          "points": 10,
+          "note": "статический рендер: SSR и DOM совпадают по построению",
+          "blocked": false
+        },
+        "states_ux": {
+          "points": 10,
+          "note": "пустой поиск, 404, деградация и место плеера покрыты e2e",
+          "blocked": false
+        },
+        "responsive_a11y": {
+          "points": 10,
+          "note": "axe 72 прогонов, нарушений 0; свипы 320–1920 и ручная доступность",
+          "blocked": false
+        },
+        "live_chain": {
+          "points": 5,
+          "note": "сборка на живом каталоге доказана (53 229 записей, 0 потерянных адресов); переключение витрины не выполнено",
+          "blocked": true
+        },
+        "visual_perf": {
+          "points": 10,
+          "note": "эталон 24 строк, замеров скорости 16, кросс-браузер 16",
+          "blocked": false
+        },
+        "docs_evidence": {
+          "points": 10,
+          "note": "кандидат: 7 ворот из 7, отпечаток воспроизводим",
+          "blocked": false
+        },
+        "handoff_canary": {
+          "points": 8,
+          "note": "TEMPLATE_TO_CORE-008 передан; canary подготовлен, переключение за владельцем",
+          "blocked": true
+        }
+      }
+    },
+    "yummy": {
+      "total": 71,
+      "blocked_gates": [
+        "contracts",
+        "states_ux",
+        "live_chain",
+        "visual_perf",
+        "handoff_canary"
+      ],
+      "detail": {
+        "requirements": {
+          "points": 10,
+          "note": "маршруты, блоки и состояния объявлены в TemplateManifest",
+          "blocked": false
+        },
+        "contracts": {
+          "points": 6,
+          "note": "манифест есть; apiVersionRange, sdkVersionRange и seoContractVersionRange — pending",
+          "blocked": true
+        },
+        "route_block_parity": {
+          "points": 10,
+          "note": "обход маршрутов и блоков покрыт браузерным набором",
+          "blocked": false
+        },
+        "ssr_dom": {
+          "points": 7,
+          "note": "паритет фикстура → ViewModel → SSR → DOM доказан; живой не проверялся",
+          "blocked": false
+        },
+        "states_ux": {
+          "points": 8,
+          "note": "нормальное, деградированное, пустое и 404 закрыты; событийные полки недоступны",
+          "blocked": true
+        },
+        "responsive_a11y": {
+          "points": 10,
+          "note": "axe 60 прогонов, нарушений 0; свип 64 замеров",
+          "blocked": false
+        },
+        "live_chain": {
+          "points": 0,
+          "note": "живой контур не проверялся: домены отклоняются профилем, событийные пути обходят производителя (TEMPLATE_TO_CORE-011)",
+          "blocked": true
+        },
+        "visual_perf": {
+          "points": 7,
+          "note": "эталон 30 строк и кросс-браузер на фикстуре; скорость на production-сборке не мерена (TEMPLATE_TO_CORE-007)",
+          "blocked": true
+        },
+        "docs_evidence": {
+          "points": 9,
+          "note": "манифест, blocks, RATINGS, PLAYER_SHELL, STATES, THEME, COLLECTIONS",
+          "blocked": false
+        },
+        "handoff_canary": {
+          "points": 4,
+          "note": "передано пять handoff; кандидат не собирается — сборка падает на чужой декларации",
+          "blocked": true
+        }
+      }
+    },
+    "zona-cinema": {
+      "total": 20,
+      "blocked_gates": [
+        "requirements",
+        "visual_perf"
+      ],
+      "detail": {
+        "requirements": {
+          "points": 4,
+          "note": "требования из референса: 0; доступ к источнику: blocked_policy",
+          "blocked": true
+        },
+        "contracts": {
+          "points": 6,
+          "note": "пакет документов: 20 файлов, манифест и ROUTES объявлены",
+          "blocked": false
+        },
+        "route_block_parity": {
+          "points": 2,
+          "note": "маршруты и блоки описаны, но не реализованы",
+          "blocked": false
+        },
+        "ssr_dom": {
+          "points": 0,
+          "note": "вертикального среза нет: рендера не существует",
+          "blocked": false
+        },
+        "states_ux": {
+          "points": 2,
+          "note": "состояния описаны в STATES.md, не реализованы",
+          "blocked": false
+        },
+        "responsive_a11y": {
+          "points": 0,
+          "note": "проверок не было: проверять нечего",
+          "blocked": false
+        },
+        "live_chain": {
+          "points": 0,
+          "note": "живых данных нет и быть не может без реализации",
+          "blocked": false
+        },
+        "visual_perf": {
+          "points": 0,
+          "note": "наблюдений за референсом 0; снимки заблокированы (REF-EGRESS-01)",
+          "blocked": true
+        },
+        "docs_evidence": {
+          "points": 6,
+          "note": "README_AI, VISUAL_DECISIONS, CHANGELOG и прочее на месте",
+          "blocked": false
+        },
+        "handoff_canary": {
+          "points": 0,
+          "note": "к выкладке не готов: реализации нет",
+          "blocked": false
+        }
+      }
+    },
+    "animedia-portal": {
+      "total": 24,
+      "blocked_gates": [
+        "requirements",
+        "visual_perf"
+      ],
+      "detail": {
+        "requirements": {
+          "points": 8,
+          "note": "требования из референса: 9; доступ к источнику: blocked_policy",
+          "blocked": true
+        },
+        "contracts": {
+          "points": 6,
+          "note": "пакет документов: 20 файлов, манифест и ROUTES объявлены",
+          "blocked": false
+        },
+        "route_block_parity": {
+          "points": 2,
+          "note": "маршруты и блоки описаны, но не реализованы",
+          "blocked": false
+        },
+        "ssr_dom": {
+          "points": 0,
+          "note": "вертикального среза нет: рендера не существует",
+          "blocked": false
+        },
+        "states_ux": {
+          "points": 2,
+          "note": "состояния описаны в STATES.md, не реализованы",
+          "blocked": false
+        },
+        "responsive_a11y": {
+          "points": 0,
+          "note": "проверок не было: проверять нечего",
+          "blocked": false
+        },
+        "live_chain": {
+          "points": 0,
+          "note": "живых данных нет и быть не может без реализации",
+          "blocked": false
+        },
+        "visual_perf": {
+          "points": 0,
+          "note": "наблюдений за референсом 8; снимки заблокированы (REF-EGRESS-01)",
+          "blocked": true
+        },
+        "docs_evidence": {
+          "points": 6,
+          "note": "README_AI, VISUAL_DECISIONS, CHANGELOG и прочее на месте",
+          "blocked": false
+        },
+        "handoff_canary": {
+          "points": 0,
+          "note": "к выкладке не готов: реализации нет",
+          "blocked": false
+        }
+      }
+    },
+    "basis-video": {
+      "total": 13,
+      "blocked_gates": [
+        "contracts"
+      ],
+      "detail": {
+        "requirements": {
+          "points": 6,
+          "note": "theme.yaml объявляет 18 типов страниц, точки излома и цель WCAG 2.2 AA",
+          "blocked": false
+        },
+        "contracts": {
+          "points": 0,
+          "note": "TemplateManifest V1 отсутствует: theme.yaml — не контракт шаблона",
+          "blocked": true
+        },
+        "route_block_parity": {
+          "points": 3,
+          "note": "шаблоны страниц в теме: 11 файлов, паритет не проверялся",
+          "blocked": false
+        },
+        "ssr_dom": {
+          "points": 0,
+          "note": "проверок SSR/DOM не проводилось",
+          "blocked": false
+        },
+        "states_ux": {
+          "points": 2,
+          "note": "типы страниц включают not_found, gone и content_unavailable",
+          "blocked": false
+        },
+        "responsive_a11y": {
+          "points": 0,
+          "note": "проверок не было",
+          "blocked": false
+        },
+        "live_chain": {
+          "points": 0,
+          "note": "живой контур не проверялся",
+          "blocked": false
+        },
+        "visual_perf": {
+          "points": 0,
+          "note": "визуальных и скоростных проверок нет",
+          "blocked": false
+        },
+        "docs_evidence": {
+          "points": 2,
+          "note": "описание в theme.yaml; отдельных свидетельств нет",
+          "blocked": false
+        },
+        "handoff_canary": {
+          "points": 0,
+          "note": "к выкладке не готов",
+          "blocked": false
+        }
+      }
+    }
+  },
+  "program_completion": {
+    "five_slots": 44,
+    "lords_yummy": 82,
+    "four_confirmed": 52,
+    "uncertainty_pp": 5
+  }
+}
