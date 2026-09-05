@@ -192,6 +192,15 @@ from factory.site_engine.api.ratelimit import DEFAULT_LIMITS
         "success": ("200", "оценки с основанием; неизмеренное без числа"),
         "errors": {"400": "негодные параметры"},
     },
+    "/api/v1/rating-sources": {
+        "method": "get",
+        "summary": "Реестр источников оценок и состояние разрешений",
+        "scope": "read",
+        "idempotent": True,
+        "body": None,
+        "success": ("200", "разрешённые источники, известные источники и причина отсутствия"),
+        "errors": {"500": "реестр противоречив: включено то, что не разрешено"},
+    },
     "/api/v1/alerts": {
         "method": "get",
         "summary": "Коды тревог и инструкции к ним",

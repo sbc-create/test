@@ -897,6 +897,7 @@ class AdminApp:
             ("табель", "/api/v1/scorecard"),
             ("тревоги", "/api/v1/alerts"),
             ("опись", "/api/v1/state-inventory"),
+            ("оценки", "/api/v1/rating-sources"),
         ):
             ответ = self._call("GET", путь, session, {})
             if ответ.status == 200:
@@ -912,6 +913,7 @@ class AdminApp:
                 части["табель"],
                 части["тревоги"],
                 части["опись"],
+                части["оценки"],
                 flash=({"ok": False, "message": "; ".join(беды)} if беды else flash),
                 session_label=label,
                 csrf=csrf,

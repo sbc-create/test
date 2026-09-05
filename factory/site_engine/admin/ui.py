@@ -1868,8 +1868,44 @@ def new_site(
     )
 
 
+def _источники_оценок(данные: dict) -> str:
+    """Почему оценок нет. Причина называется, а не подразумевается.
+
+    Пустой раздел на этом месте читался бы как «оценки просто не сделали».
+    Оценок нет потому, что ни один источник не разрешён, — и это решение
+    владельца, которое видно здесь целиком, вместе с объяснением по каждому
+    источнику.
+    """
+    if not данные:
+        return ""
+    строки = "".join(
+        f'<tr><td><code>{_e(и["id"])}</code></td>'
+        f'<td><span class="pill {"ok" if и["authorization"]["status"] == "granted" else "warn"}">'
+        f'{_e(и["authorization"]["status"])}</span></td>'
+        f'<td class="mut">{_e(и["authorization"].get("reason", ""))}</td>'
+        f'<td class="mut">{_e(и["authorization"].get("document", "") or "—")}</td></tr>'
+        for и in данные.get("known") or []
+    )
+    блокер = данные.get("blocker") or ""
+    return (
+        '<div class="card"><h2>Источники оценок</h2>'
+        + (f'<div class="flash warn">{_e(блокер)}</div>' if блокер else "")
+        + '<div class="scroll-x"><table><thead><tr><th>Источник</th><th>Разрешение</th>'
+        "<th>Почему</th><th>Документ</th></tr></thead><tbody>"
+        + (строки or чтопусто(4))
+        + "</tbody></table></div></div>"
+    )
+
+
 def readiness(
-    табель: dict, тревоги: dict, опись: dict, *, flash: dict | None, session_label: str, csrf: str
+    табель: dict,
+    тревоги: dict,
+    опись: dict,
+    оценки: dict | None = None,
+    *,
+    flash: dict | None,
+    session_label: str,
+    csrf: str,
 ) -> str:
     """Готовность: оценки с основанием, тревоги с инструкцией, опись состояния."""
     строки = "".join(
@@ -1920,6 +1956,7 @@ def readiness(
         "<th>Что означает</th><th>Инструкция</th></tr></thead><tbody>"
         + (тревоги_html or чтопусто(4))
         + "</tbody></table></div></div>"
+        + _источники_оценок(оценки or {})
         + '<div class="card"><h2>Состояние службы</h2>'
         '<p class="hint">Хранилище, не попавшее в опись, не попадёт и в копию — '
         "и обнаружится это при восстановлении.</p>"

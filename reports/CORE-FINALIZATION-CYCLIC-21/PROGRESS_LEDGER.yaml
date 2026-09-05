@@ -257,7 +257,7 @@ entries:
     cycle: 9
     note: "ключ связи со смежным потоком и расписание SEO"
     branch: claude/core-product-8plus-20
-    full_head_sha: ЗАПОЛНЯЕТСЯ_ПОСЛЕ_КОММИТА
+    full_head_sha: e10f2651210b9dacba80fc32493853587a84dc8b
     deployed_sha: 52fd06659a7ff73fd37b5bed2f20eb46a90d7a1e
     cycles_completed: 9
     cycles_planned_minimum: 8
@@ -294,4 +294,47 @@ entries:
       таблицей запроса тестом. Остался один незакрытый gate —
       ratingsProvenance, и он упирается в отсутствие разрешённого источника:
       это решение владельца, а не работа.
+
+  - timestamp: "2026-09-05T22:10:00Z"
+    cycle: 10
+    note: "реестр источников оценок и договор с ними"
+    branch: claude/core-product-8plus-20
+    full_head_sha: ЗАПОЛНЯЕТСЯ_ПОСЛЕ_КОММИТА
+    deployed_sha: 52fd06659a7ff73fd37b5bed2f20eb46a90d7a1e
+    cycles_completed: 10
+    cycles_planned_minimum: 8
+    gates_closed: 11
+    gates_total: 12
+    scores_by_gate:
+      releaseBaseline: 8
+      contentIdentityReview: 8
+      playbackCatalog: 8
+      workerAutonomy: 9
+      operatorIdentity: 8
+      publicRegistration: 8
+      editorialAdmin: 8
+      ratingsProvenance: 7
+      selfServiceSite: 8
+      observability: 8
+      securityRollback: 8
+      coreTemplatesSeo: 8
+    maturity_percent: 99.0
+    closure_percent: 91.7
+    progress_index: 95.4
+    progress_delta_since_previous: 0.6
+    defects_closed_this_cycle: 0
+    regressions_opened: 0
+    critical_steps_remaining: 0
+    external_blockers:
+      - "Рейтинги: ни один источник не разрешён — решение владельца"
+      - "Yummyanime: read-only доступа нет, 9 572 записи NOT_AUDITED_ACCESS_BLOCKED"
+      - "Установка таймеров SEO и SITE_ENGINE_RENDER_STATE_DIR: права на боевой машине"
+    next_cycle: null
+    production_status: "не изменялась; mutations 0"
+    comment: >-
+      ratingsProvenance 6 → 7 и остаётся открытым. Семь, а не восемь:
+      технический слой готов целиком, но пользовательского пути нет и быть не
+      может, пока ни один источник не разрешён. Восьмёрка за слой без
+      работающего источника была бы оценкой за схему.
+      Независимые работы исчерпаны: всё оставшееся требует действий владельца.
 

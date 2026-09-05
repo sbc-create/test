@@ -721,6 +721,16 @@ class ControlApi:
             from factory.site_engine.api import readiness
 
             return ApiResponse(status=200, body=readiness.scorecard(self._root, self._env))
+        if method == "GET" and rest == ["rating-sources"]:
+            principal.require(SCOPE_READ)
+            from factory.site_engine import rating_sources
+
+            try:
+                return ApiResponse(status=200, body=rating_sources.resolve(self._root).as_dict())
+            except rating_sources.RatingSourceError as ошибка:
+                # Противоречивый реестр — не «почти работает»: он молча
+                # открывает то, что закрыто решением владельца.
+                raise ControlDenied(500, "rating_registry_invalid", str(ошибка)) from ошибка
         if method == "GET" and rest == ["alerts"]:
             principal.require(SCOPE_READ)
             from factory.site_engine.api import readiness

@@ -1,14 +1,14 @@
 {
   "task": "CORE-FINALIZATION-CYCLIC-21",
-  "cycle": 9,
-  "slice": "Conformance CORE–TEMPLATES–SEO и входящий handoff 019",
+  "cycle": 10,
+  "slice": "Реестр источников оценок",
   "branch": "claude/core-product-8plus-20",
   "headAtStart": "b3bd6ede308dee2ec527d3e461acfae4857df21f",
   "upstream": "origin/claude/core-product-8plus-20",
   "productionCheckout": "568863d350c320e4101ac17417c846ca4b7265c0",
   "deployedControlApi": "52fd06659a7ff73fd37b5bed2f20eb46a90d7a1e",
   "locks": "нет",
-  "nextStep": "независимые работы исчерпаны: ratingsProvenance требует разрешённого источника рейтингов, Yummyanime — доступа только на чтение, установка таймеров SEO и переменной SITE_ENGINE_RENDER_STATE_DIR — прав на боевой машине",
+  "nextStep": "независимые работы исчерпаны; см. owner_actions в WORK_QUEUE.yaml",
   "testPortPolicy": "свободный порт из диапазона 18800-18899, владелец проверяется до запуска, cleanup только по сохранённому PID",
   "status": "OWNER_ACTION_REQUIRED",
   "lastCommit": "118ebf1664320b7adaa17b5cd74c5b0530e285f5",
@@ -20,5 +20,6 @@
   "cycle6": "closed: мастер и сухой прогон; selfServiceSite 3 → 6",
   "cycle7": "closed: подтверждение, канарейка, откат; selfServiceSite 6 → 8",
   "cycle8": "closed: наблюдаемость и безопасность; observability 7→8, securityRollback 7→8",
-  "cycle9": "closed: ключ связи и расписание SEO; coreTemplatesSeo 7 → 8"
+  "cycle9": "closed: ключ связи и расписание SEO; coreTemplatesSeo 7 → 8",
+  "cycle10": "closed: реестр источников оценок; ratingsProvenance 6 → 7"
 }

@@ -77,6 +77,11 @@ def sandbox(tmp_path, monkeypatch):
     (tmp_path / "config" / "site-request-presets").symlink_to(
         REPO / "config" / "site-request-presets"
     )
+    # Реестр источников оценок — часть поставки: без него экран готовности не
+    # сможет назвать причину, по которой оценок нет.
+    (tmp_path / "config" / "rating-sources.yaml").symlink_to(
+        REPO / "config" / "rating-sources.yaml"
+    )
     кэш = tmp_path / "var" / "lords" / "lords" / "catalog-cache"
     кэш.mkdir(parents=True)
     (кэш / f"{SITE}.json").write_text(
@@ -319,4 +324,11 @@ class TestЭкранГотовности:
         html = app.handle("GET", "/admin/readiness", cookies=войти(app)).html
         for хранилище in ("operators", "accounts", "site-requests"):
             assert хранилище in html
+
+    def test_причина_отсутствия_оценок_названа(self, app):
+        """Пустой раздел читался бы как «оценки просто не сделали»."""
+        html = app.handle("GET", "/admin/readiness", cookies=войти(app)).html
+        assert "Источники оценок" in html
+        assert "ни один источник оценок не разрешён" in html
+        assert "kinopoisk" in html and "imdb" in html
 
