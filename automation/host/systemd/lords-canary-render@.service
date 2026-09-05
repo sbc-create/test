@@ -22,10 +22,10 @@ RemainAfterExit=no
 User=claude
 Group=claude
 
-WorkingDirectory=/home/claude/wt-canary
+WorkingDirectory=/home/claude/wt-release-03
 Environment=LORDS_SNAPSHOT_DIR=/srv/site-factory/repo/var/lords/lords/catalog-cache
-Environment=LORDS_CANARY_STAGING=/home/claude/wt-canary/var/canary-staging
-Environment=FACTORY_PYTHON=/home/claude/work-templates/site-factory/.venv/bin/python3
+Environment=LORDS_CANARY_STAGING=/home/claude/wt-release-03/var/canary-staging
+Environment=FACTORY_PYTHON=/home/claude/wt-release-03/.venv/bin/python
 
 # Учётные данные приходят только сюда. Фаза переключения их не получает вовсе:
 # секрет и полные права не должны встречаться в одном процессе.
@@ -34,7 +34,7 @@ LoadCredential=cdnvideohub_publisher_id:/etc/site-factory/secrets/lords/lords-01
 Environment=CDNVIDEOHUB_API_TOKEN_CREDENTIAL=cdnvideohub_api_token
 Environment=CDNVIDEOHUB_PUBLISHER_ID_CREDENTIAL=cdnvideohub_publisher_id
 
-ExecStart=/home/claude/wt-canary/automation/host/lords-canary-apply.sh render %i
+ExecStart=/home/claude/wt-release-03/automation/host/lords-canary-apply.sh render %i
 
 NoNewPrivileges=yes
 PrivateTmp=yes
@@ -42,7 +42,7 @@ ProtectSystem=strict
 InaccessiblePaths=/etc/site-factory/secrets
 # /srv/lords здесь НЕ объявлен: фаза сборки не имеет доступа на запись в боевой
 # рантайм ни при какой ошибке в коде.
-ReadWritePaths=/home/claude/wt-canary/var /home/claude/wt-canary/artifacts /var/log/site-factory
+ReadWritePaths=/home/claude/wt-release-03/var /home/claude/wt-release-03/artifacts /var/log/site-factory
 ReadOnlyPaths=/srv/site-factory/repo /etc/site-factory
 ProtectKernelTunables=yes
 ProtectKernelModules=yes

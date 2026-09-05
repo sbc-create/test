@@ -17,18 +17,18 @@ RemainAfterExit=no
 # Учётных данных у неё НЕТ — ни одной директивы LoadCredential. Сценарий
 # отказывается работать, если переменная окружения с каталогом учётных данных
 # всё же оказалась выставлена: секрет и полные права не встречаются.
-WorkingDirectory=/home/claude/wt-canary
+WorkingDirectory=/home/claude/wt-release-03
 Environment=LORDS_SNAPSHOT_DIR=/srv/site-factory/repo/var/lords/lords/catalog-cache
-Environment=LORDS_CANARY_STAGING=/home/claude/wt-canary/var/canary-staging
-Environment=FACTORY_PYTHON=/home/claude/work-templates/site-factory/.venv/bin/python3
+Environment=LORDS_CANARY_STAGING=/home/claude/wt-release-03/var/canary-staging
+Environment=FACTORY_PYTHON=/home/claude/wt-release-03/.venv/bin/python
 
-ExecStart=/home/claude/wt-canary/automation/host/lords-canary-apply.sh switch %i
+ExecStart=/home/claude/wt-release-03/automation/host/lords-canary-apply.sh switch %i
 
 NoNewPrivileges=yes
 PrivateTmp=yes
 ProtectSystem=strict
 InaccessiblePaths=/etc/site-factory/secrets
-ReadWritePaths=/srv/lords /home/claude/wt-canary/var /var/log/site-factory
+ReadWritePaths=/srv/lords /home/claude/wt-release-03/var /var/log/site-factory
 ReadOnlyPaths=/srv/site-factory/repo /etc/site-factory
 ProtectKernelTunables=yes
 ProtectKernelModules=yes
