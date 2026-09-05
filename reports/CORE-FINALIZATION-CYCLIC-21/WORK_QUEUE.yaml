@@ -42,8 +42,7 @@ gates:
     gaps:
       # закрыто циклом 1, commit c366a81
       # Workflow закрыт циклом 2, commit 7e3886c
-      - "Jobs отсутствует"
-      - "Sites отсутствует"
+      # Jobs и Sites закрыты циклом 3, commit 118ebf1
       - "Users & Access: экран есть, нужен полный"
       - "Settings отсутствует"
       - "Releases отсутствует"
