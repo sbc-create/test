@@ -58,12 +58,55 @@ def _renderer_version(repo: Path) -> str:
         repo / "factory" / "lords" / "live_site.py",
         repo / "factory" / "lords" / "theme.py",
         repo / "factory" / "lords" / "player.py",
+        # Разбиение каталога на страницы входит в замороженный артефакт
+        # шаблона и меняет каждую страницу листинга. В отпечатке его не было:
+        # правка пагинации не вызывала пересборку.
+        repo / "factory" / "lords" / "pagination.py",
     ]
     h = hashlib.sha256()
     for путь in файлы:
         h.update(путь.name.encode("utf-8"))
         h.update(hashlib.sha256(путь.read_bytes()).digest() if путь.exists() else b"-")
     return h.hexdigest()
+
+
+def _template_version(repo: Path) -> str:
+    """Отпечаток шаблона направления: blueprint и профили витрин.
+
+    Раньше здесь стояло ``tree_digest(blueprints/lords, ("*.html", "*.j2"))``.
+    Маска не совпадала ни с одним файлом: рендерер Lords написан на Python, а
+    профили — YAML, и `.html`/`.j2` в каталоге нет вовсе. Отпечаток выходил
+    равным ``sha256("[]")`` — хешу пустого списка — на всех витринах и во всех
+    прогонах. Поле выглядело как отпечаток и не несло ни одного бита о шаблоне,
+    поэтому смена профиля не вызывала пересборку: ворота отвечали «вход не
+    изменился», и выложенный шаблон не доезжал до страниц.
+    """
+    blueprint = repo / "blueprints" / "lords"
+    файлы: list[tuple[str, str]] = []
+    for путь in sorted(blueprint.rglob("*.yaml")) + sorted(blueprint.rglob("*.yml")):
+        if путь.is_file():
+            файлы.append((путь.relative_to(blueprint).as_posix(),
+                          hashlib.sha256(путь.read_bytes()).hexdigest()))
+    if not файлы:
+        # Пустой шаблон — не «пусто», а «нечем считать». Значение отличается от
+        # хеша пустого списка нарочно: молчаливое равенство пустот и было тем,
+        # что скрывало поломку.
+        return "absent:no-template-sources"
+    return digest(sorted(set(файлы)))
+
+
+def _route_registry(repo: Path, site_id: str) -> str:
+    """Отпечаток реестра маршрутов витрины.
+
+    Каталога ``var/lords/routes`` на машине нет, и ``tree_digest`` возвращал для
+    него ``digest(None)`` — правдоподобный отпечаток отсутствующего входа.
+    Отсутствие называется прямо: так его видно в отчёте, а не принимают за
+    посчитанное значение.
+    """
+    путь = repo / "var" / "lords" / "routes" / f"{site_id}.json"
+    if not путь.is_file():
+        return "absent:no-route-registry"
+    return digest(hashlib.sha256(путь.read_bytes()).hexdigest())
 
 
 def collect(repo: Path, site_id: str, cache: Path) -> RenderInputs:
@@ -79,10 +122,10 @@ def collect(repo: Path, site_id: str, cache: Path) -> RenderInputs:
         # Признак воспроизводимости решает, попадёт ли запись на полку.
         playability=mapping_digest(var / "lords" / "playability.json", keep=("playable",)),
         renderer_version=_renderer_version(repo),
-        template_version=tree_digest(repo / "blueprints" / "lords", ("*.html", "*.j2")),
+        template_version=_template_version(repo),
         site_profile=digest(package.read_text(encoding="utf-8") if package.exists() else ""),
         shelf_configuration=tree_digest(repo / "factory" / "lords", ("plan.py",)),
-        route_registry=tree_digest(repo / "var" / "lords" / "routes", (f"{site_id}.json",)),
+        route_registry=_route_registry(repo, site_id),
     )
 
 
