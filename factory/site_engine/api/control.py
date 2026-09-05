@@ -698,6 +698,43 @@ class ControlApi:
             return self._metrics_response()
         if rest[:1] == ["site-requests"]:
             return self._site_requests(method, rest[1:], body, principal, correlation_id)
+        if method == "GET" and rest == ["scorecard"]:
+            principal.require(SCOPE_READ)
+            from factory.site_engine.api import readiness
+
+            return ApiResponse(status=200, body=readiness.scorecard(self._root, self._env))
+        if method == "GET" and rest == ["alerts"]:
+            principal.require(SCOPE_READ)
+            from factory.site_engine.api import readiness
+
+            return ApiResponse(status=200, body=readiness.alerts())
+        if method == "GET" and rest == ["state-inventory"]:
+            principal.require(SCOPE_AUDIT)
+            from factory.site_engine.api import readiness
+
+            return ApiResponse(status=200, body=readiness.state_inventory(self._root))
+        if method == "POST" and rest == ["state-backup"]:
+            principal.require(SCOPE_AUDIT)
+            from factory.site_engine.api import readiness
+
+            итог = readiness.state_backup(
+                self._root, verify=body.get("verify", True) is not False
+            )
+            audit.record(
+                job_id=correlation_id,
+                site_id="",
+                environment="staging",
+                action="control.state.backup",
+                target=str(итог["backup"]),
+                mutation=True,
+                exit_code=0 if итог["verified"] else 1,
+                extra={
+                    "correlation_id": correlation_id,
+                    "actor": _актор(principal),
+                    "verified": итог["verified"],
+                },
+            )
+            return ApiResponse(status=200, body=итог)
         if method == "GET" and rest == ["releases"]:
             principal.require(SCOPE_READ)
             from factory.site_engine.api import program_view

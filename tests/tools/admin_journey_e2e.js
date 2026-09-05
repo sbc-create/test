@@ -35,6 +35,8 @@ const РАЗДЕЛЫ = [
   ['/admin/releases', 'Выпуски', 'Выпуски'],
   ['/admin/incidents', 'Происшествия', 'Происшествия'],
   ['/admin/audit', 'Журнал', 'Журнал операций'],
+  ['/admin/new-site', 'Новая витрина', 'Что спросят'],
+  ['/admin/readiness', 'Готовность', 'Табель'],
 ];
 
 async function войти(ctx, токен) {
@@ -112,7 +114,8 @@ async function прогон(движок, имя) {
                                  [1440, 900, '1440px'], [720, 450, '200 %']]) {
     const c = await b.newContext({ viewport: { width: ш, height: в } });
     const s = await войти(c, ТОКЕН);
-    for (const путь of ['/admin/settings', '/admin/audit', '/admin/releases', '/admin/users']) {
+    for (const путь of ['/admin/settings', '/admin/audit', '/admin/releases',
+                        '/admin/users', '/admin/readiness']) {
       await s.goto(`${БАЗА}${путь}`, { waitUntil: 'domcontentloaded' });
       const беда = await перелив(s);
       проверить(беда === '', `${подпись} ${путь}${беда ? ': ' + беда : ''}`);
@@ -131,6 +134,7 @@ async function прогон(движок, имя) {
   const ctxRO = await b.newContext({ viewport: { width: 1440, height: 900 } });
   const r = await войти(ctxRO, ТОКЕН_ЧТЕНИЯ);
   for (const [путь, подпись] of [['/admin/settings', 'Настройки'], ['/admin/users', 'Люди'],
+                                 ['/admin/readiness', 'Готовность'],
                                  ['/admin/releases', 'Выпуски'], ['/admin/incidents', 'Происшествия'],
                                  ['/admin/audit', 'Журнал']]) {
     await r.goto(`${БАЗА}${путь}`, { waitUntil: 'domcontentloaded' });

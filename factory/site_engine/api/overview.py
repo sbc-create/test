@@ -36,6 +36,19 @@ PLAYBACK_COVERAGE_FLOOR = 0.90
 #: Столько заданий в очереди означает, что исполнитель не справляется.
 QUEUE_BACKLOG_ALERT = 25
 
+#: Коды тревог, которые умеет выдавать сводка. Перечень существует, чтобы
+#: проверка могла сверить его с таблицей инструкций: код, придуманный здесь и
+#: не попавший в таблицу, дежурный увидит без объяснения.
+КОДЫ_ТРЕВОГ = (
+    "CATALOG_UNREADABLE",
+    "EMPTY_CATALOG",
+    "STALE_CATALOG",
+    "LOW_PLAYBACK_COVERAGE",
+    "QUEUE_UNREADABLE",
+    "QUEUE_BACKLOG",
+    "IDENTITY_CONFLICTS",
+)
+
 
 def _now() -> dt.datetime:
     return dt.datetime.now(dt.timezone.utc)

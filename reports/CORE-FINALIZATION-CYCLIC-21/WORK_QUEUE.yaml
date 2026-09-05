@@ -58,20 +58,22 @@ gates:
       - "цикл 6: мастер из восьми шагов и детерминированный сухой прогон"
       - "цикл 7: подтверждение, канарейка под NOINDEX, проверки и полный откат"
   - id: observability
-    score: 7
-    state: pending
-    priority: 3
-    gaps: ["scorecard по gates", "correlation ID сквозной", "алерты с runbook"]
+    score: 8
+    state: closed
+    evidence: reports/CORE-FINALIZATION-CYCLIC-21/cycles/CYCLE-08.md
+    note: "сквозной идентификатор, табель по измерению, тревоги с проверенными инструкциями"
   - id: securityRollback
-    score: 7
-    state: pending
-    priority: 3
-    gaps: ["negative matrix", "backup/restore новых identity-состояний"]
+    score: 8
+    state: closed
+    evidence: reports/CORE-FINALIZATION-CYCLIC-21/cycles/CYCLE-08.md
+    note: "матрица отказов, опись состояния, копия проверяется разворачиванием"
   - id: coreTemplatesSeo
     score: 7
-    state: pending
-    priority: 3
-    gaps: ["conformance tests входящих handoff"]
+    state: in_progress
+    priority: 1
+    gaps:
+      - "conformance tests входящих handoff"
+      - "handoff 019: четыре таймера цикла SEO не заведены"
   - id: ratingsProvenance
     score: 6
     state: blocked_external

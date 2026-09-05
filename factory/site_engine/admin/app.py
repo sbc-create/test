@@ -100,7 +100,13 @@ class AdminApp:
         операция = getattr(self, "_operation", None)
         if операция is not None:
             заголовки.update(операция.headers)
-        return self._control.handle(method, path, body=body or {}, headers=заголовки)
+        ответ = self._control.handle(method, path, body=body or {}, headers=заголовки)
+        # Идентификатор связи берётся из ответа управляющего слоя: он же попал
+        # в журнал, и по нему действие находится целиком.
+        связь = (ответ.body or {}).get("correlationId") if isinstance(ответ.body, dict) else ""
+        if связь:
+            self._last_correlation = str(связь)
+        return ответ
 
     def _scopes(self, session) -> list[str]:
         principal = self._control.principal_for(session.token)
@@ -117,6 +123,27 @@ class AdminApp:
     # ---- маршруты --------------------------------------------------------
 
     def handle(
+        self,
+        method: str,
+        path: str,
+        *,
+        form: dict[str, str] | None = None,
+        cookies: dict[str, str] | None = None,
+    ) -> AdminResponse:
+        """Обёртка вокруг разбора: ответ уносит идентификатор связи.
+
+        Без него оператор, нажавший кнопку, не может ничего найти — даже когда
+        всё записано. Идентификатор ставится один раз здесь, а не в каждой из
+        двух десятков точек возврата: пропущенная точка означала бы действие,
+        которое не найти, и заметить это можно было бы только случайно.
+        """
+        self._last_correlation = ""
+        ответ = self._handle(method, path, form=form, cookies=cookies)
+        if self._last_correlation and "X-Correlation-Id" not in ответ.headers:
+            ответ.headers["X-Correlation-Id"] = self._last_correlation
+        return ответ
+
+    def _handle(
         self,
         method: str,
         path: str,
@@ -239,6 +266,8 @@ class AdminApp:
                     html=ui.sites_list(ответ.body, flash=flash, session_label=label, csrf=csrf),
                 )
             )
+        if method == "GET" and rest == ["readiness"]:
+            return self._record(self._readiness(session, flash, label, csrf))
         if rest[:1] == ["new-site"]:
             return self._record(
                 self._new_site_route(session, method, rest[1:], form, flash, label, csrf)
@@ -859,6 +888,35 @@ class AdminApp:
         )
         session.flash = self._flash_from(response, success="Настройка применена.")
         return _redirect(f"/admin/sites/{site_id}")
+
+    def _readiness(self, session, flash, label: str, csrf: str) -> AdminResponse:
+        """Готовность к выпуску одним экраном: табель, тревоги, опись состояния."""
+        части = {}
+        беды = []
+        for имя, путь in (
+            ("табель", "/api/v1/scorecard"),
+            ("тревоги", "/api/v1/alerts"),
+            ("опись", "/api/v1/state-inventory"),
+        ):
+            ответ = self._call("GET", путь, session, {})
+            if ответ.status == 200:
+                части[имя] = ответ.body
+            else:
+                # Недоступная часть называет себя. Пустая таблица на её месте
+                # читается как «нечего показывать».
+                части[имя] = {}
+                беды.append(f"{путь}: {ответ.status}")
+        return AdminResponse(
+            status=200,
+            html=ui.readiness(
+                части["табель"],
+                части["тревоги"],
+                части["опись"],
+                flash=({"ok": False, "message": "; ".join(беды)} if беды else flash),
+                session_label=label,
+                csrf=csrf,
+            ),
+        )
 
     # ------------------------------------------------------------------
     # Новая витрина

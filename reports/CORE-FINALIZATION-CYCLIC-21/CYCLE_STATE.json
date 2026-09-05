@@ -1,14 +1,14 @@
 {
   "task": "CORE-FINALIZATION-CYCLIC-21",
-  "cycle": 8,
-  "slice": "Observability, security, contracts и release candidate",
+  "cycle": 9,
+  "slice": "Conformance CORE–TEMPLATES–SEO и входящий handoff 019",
   "branch": "claude/core-product-8plus-20",
   "headAtStart": "b3bd6ede308dee2ec527d3e461acfae4857df21f",
   "upstream": "origin/claude/core-product-8plus-20",
   "productionCheckout": "568863d350c320e4101ac17417c846ca4b7265c0",
   "deployedControlApi": "52fd06659a7ff73fd37b5bed2f20eb46a90d7a1e",
   "locks": "нет",
-  "nextStep": "падающий тест на сквозной correlation ID от панели до задания, scorecard по фактическим данным, алерты с runbook, негативная матрица безопасности, backup/restore нового состояния, conformance CORE-TEMPLATES-SEO",
+  "nextStep": "падающий тест на conformance входящих handoff и на четыре таймера цикла SEO: ежедневный снимок 03:10, ежедневный content-audit 03:30, недельная сводка понедельник 04:00, месячная 1-го 04:30; одна попытка повтора через 15 минут, ключи идемпотентности по периоду отчёта",
   "testPortPolicy": "свободный порт из диапазона 18800-18899, владелец проверяется до запуска, cleanup только по сохранённому PID",
   "status": "IN_PROGRESS",
   "lastCommit": "118ebf1664320b7adaa17b5cd74c5b0530e285f5",
@@ -18,5 +18,6 @@
   "cycle4": "closed: Люди и доступ, Настройки; сторож безопасности процессов",
   "cycle5": "closed: Выпуски, Происшествия, отбор в журнале; editorialAdmin 7 → 8",
   "cycle6": "closed: мастер и сухой прогон; selfServiceSite 3 → 6",
-  "cycle7": "closed: подтверждение, канарейка, откат; selfServiceSite 6 → 8"
+  "cycle7": "closed: подтверждение, канарейка, откат; selfServiceSite 6 → 8",
+  "cycle8": "closed: наблюдаемость и безопасность; observability 7→8, securityRollback 7→8"
 }

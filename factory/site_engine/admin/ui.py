@@ -147,6 +147,7 @@ def page(title: str, body: str, *, session_label: str = "", csrf: str = "") -> s
         '<a href="/admin/releases">Выпуски</a>'
         '<a href="/admin/incidents">Происшествия</a>'
         '<a href="/admin/new-site">Новая витрина</a>'
+        '<a href="/admin/readiness">Готовность</a>'
         '<a href="/admin/audit">Журнал</a><span class="sp"></span>'
         f"{nav}</header><main>{body}</main></body></html>"
     )
@@ -1862,6 +1863,70 @@ def new_site(
         + (список or чтопусто(3, "Заявок нет."))
         + "</tbody></table></div></div>"
         + подробно,
+        session_label=session_label,
+        csrf=csrf,
+    )
+
+
+def readiness(
+    табель: dict, тревоги: dict, опись: dict, *, flash: dict | None, session_label: str, csrf: str
+) -> str:
+    """Готовность: оценки с основанием, тревоги с инструкцией, опись состояния."""
+    строки = "".join(
+        f'<tr><td><code>{_e(в["id"])}</code></td>'
+        + (
+            f'<td><span class="pill {"ok" if (в.get("score") or 0) >= 8 else "warn"}">'
+            f'{_e(str(в["score"]))}</span></td>'
+            if в.get("measured")
+            else '<td><span class="pill warn">не измерено</span></td>'
+        )
+        + f'<td class="mut">{_e(в.get("basis", ""))}</td></tr>'
+        for в in табель.get("gates") or []
+    )
+    тревоги_html = "".join(
+        f'<tr><td><code>{_e(т["code"])}</code></td>'
+        f'<td><span class="pill {"warn" if т.get("severity") != "info" else ""}">'
+        f'{_e(т.get("severity", ""))}</span></td>'
+        f'<td>{_e(т.get("meaning", ""))}</td>'
+        f'<td><code>{_e(т.get("runbook", ""))}</code></td></tr>'
+        for т in тревоги.get("items") or []
+    )
+    опись_html = "".join(
+        f'<tr><td><code>{_e(х["id"])}</code></td>'
+        f'<td class="mut">{_e(х.get("path", ""))}</td>'
+        f'<td>{_e(х.get("meaning", ""))}</td>'
+        f'<td><span class="pill {"ok" if х.get("present") else "warn"}">'
+        f'{"есть" if х.get("present") else "пусто"}</span></td>'
+        f'<td class="mut">{_число(х.get("files"))}</td></tr>'
+        for х in опись.get("items") or []
+    )
+    измерено = табель.get("measuredCount", 0)
+    всего = табель.get("total", 0)
+    return page(
+        "Готовность",
+        _flash(flash)
+        + f'<div class="card"><h2>Табель</h2>'
+        f'<p class="hint">Измерено {измерено} из {всего}. Неизмеренное показано '
+        "как «не измерено» и не имеет числа: оценка «примерно» — то же усреднение, "
+        "которым закрывают ворота без доказательств.</p>"
+        '<div class="scroll-x"><table><thead><tr><th>Ворота</th><th>Оценка</th>'
+        "<th>На чём основана</th></tr></thead><tbody>"
+        + (строки or чтопусто(3))
+        + "</tbody></table></div></div>"
+        + '<div class="card"><h2>Тревоги и инструкции</h2>'
+        '<p class="hint">Код без инструкции сообщает дежурному, что что-то не так, '
+        "и ничего не говорит о том, что делать.</p>"
+        '<div class="scroll-x"><table><thead><tr><th>Код</th><th>Значимость</th>'
+        "<th>Что означает</th><th>Инструкция</th></tr></thead><tbody>"
+        + (тревоги_html or чтопусто(4))
+        + "</tbody></table></div></div>"
+        + '<div class="card"><h2>Состояние службы</h2>'
+        '<p class="hint">Хранилище, не попавшее в опись, не попадёт и в копию — '
+        "и обнаружится это при восстановлении.</p>"
+        '<div class="scroll-x"><table><thead><tr><th>Хранилище</th><th>Путь</th>'
+        "<th>Что там</th><th>Наличие</th><th>Файлов</th></tr></thead><tbody>"
+        + (опись_html or чтопусто(5))
+        + "</tbody></table></div></div>",
         session_label=session_label,
         csrf=csrf,
     )
