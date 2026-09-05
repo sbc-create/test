@@ -74,7 +74,16 @@ STYLE += """
   text-decoration:none;color:inherit;font-size:.9rem}
 .tab.on{background:#0969da;color:#fff;border-color:#0969da}
 .tab b{font-weight:600}
-.claim{display:inline-block;margin-right:.75rem;white-space:nowrap}
+/* Утверждения обязаны переноситься. nowrap держал строку шире экрана, и на
+   390px и при 200% увеличении появлялась горизонтальная прокрутка — поймано
+   браузерной проверкой в обоих движках. */
+.claim{display:inline-block;margin-right:.75rem}
+/* Широкую таблицу прокручивает её собственная обёртка, а не страница:
+   горизонтальная прокрутка body уводит из зоны видимости всю разметку. */
+.scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.scroll-x table{min-width:32rem}
+/* Длинный идентификатор и адрес не должны растягивать страницу. */
+code,dd{overflow-wrap:anywhere}
 .claims{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));
   gap:1rem}
 .claim-box{border:1px solid #d0d7de;border-radius:8px;padding:.9rem}
@@ -354,9 +363,10 @@ def audit(
         )
     table = (
         (
-            "<table><thead><tr><th>Время</th><th>Витрина</th><th>Действие</th>"
+            '<div class="scroll-x"><table><thead><tr><th>Время</th>'
+            "<th>Витрина</th><th>Действие</th>"
             "<th>Цель</th><th>Род</th><th>Идентификатор связи</th></tr></thead>"
-            f"<tbody>{''.join(rows)}</tbody></table>"
+            f"<tbody>{''.join(rows)}</tbody></table></div>"
         )
         if rows
         else '<p class="hint">Записей нет.</p>'
@@ -483,10 +493,10 @@ def review_list(
         "противоречат друг другу. Система не выбирает за редактора: "
         "рекомендации здесь нет, потому что оснований для неё нет.</p>"
         + f'<div class="tabs">{вкладки}</div>'
-        + "<table><thead><tr><th>Тайтл</th><th>Утверждения</th>"
-        "<th>Состояние</th><th>Конфликт</th></tr></thead><tbody>"
+        + '<div class="scroll-x"><table><thead><tr><th>Тайтл</th>'
+        "<th>Утверждения</th><th>Состояние</th><th>Конфликт</th></tr></thead><tbody>"
         + ("".join(строки) or если_пусто)
-        + "</tbody></table>"
+        + "</tbody></table></div>"
         + навигация
         + "</div>"
         + групповое,
@@ -577,11 +587,11 @@ def review_item(
         + '<p class="mut">Третье значение ввести нельзя: очередь разрешает '
         "выбрать между утверждениями источников, а не придумать своё.</p></div>"
         + (f'<div class="card"><h2>Действия</h2>{действия}</div>' if действия else "")
-        + '<div class="card"><h2>История</h2><table><thead><tr><th>Когда</th>'
-        "<th>Действие</th><th>Значение</th><th>Кто</th><th>Примечание</th>"
-        "</tr></thead><tbody>"
+        + '<div class="card"><h2>История</h2><div class="scroll-x"><table>'
+        "<thead><tr><th>Когда</th><th>Действие</th><th>Значение</th><th>Кто</th>"
+        "<th>Примечание</th></tr></thead><tbody>"
         + (история or '<tr><td colspan="5" class="mut">Действий ещё не было.</td></tr>')
-        + "</tbody></table></div>",
+        + "</tbody></table></div></div>",
         session_label=session_label,
         csrf=csrf,
     )
@@ -624,10 +634,10 @@ def review_batch(предпросмотр: dict, *, session_label: str, csrf: st
         )
         + (f'<ul class="mut">{причины}</ul>' if причины else "")
         + "</div>"
-        + '<div class="card"><h2>Выборка</h2><table><thead><tr><th>Тайтл</th>'
-        "<th>Год</th><th>Витрина</th></tr></thead><tbody>"
+        + '<div class="card"><h2>Выборка</h2><div class="scroll-x"><table>'
+        "<thead><tr><th>Тайтл</th><th>Год</th><th>Витрина</th></tr></thead><tbody>"
         + (выборка or '<tr><td colspan="3" class="mut">Пусто.</td></tr>')
-        + "</tbody></table></div>"
+        + "</tbody></table></div></div>"
         + (
             (
                 '<div class="card"><h2>Применить</h2>'
