@@ -294,3 +294,79 @@ class TestRelativeRoot:
         link = relative / "lords-01" / "current"
         assert link.is_dir()
         assert (link / "site" / "index.html").read_text(encoding="utf-8") == "<html>lords-01 old</html>"
+
+
+class TestPreSwitchGates:
+    """Ворота, отличающие «сайт отвечает» от «сайт тот же».
+
+    Витрина с пустым каталогом отвечает двумястами на каждой странице и
+    проходит любую проверку доступности. Именно так выглядела бы подмена
+    живого каталога фикстурой: маршруты верные, ошибок нет, записей на три
+    порядка меньше.
+    """
+
+    def build_site(self, tmp_path: Path, slugs, *, players=True) -> Path:
+        root = tmp_path / "staging"
+        for slug in slugs:
+            page = root / "title" / slug / "index.html"
+            page.parent.mkdir(parents=True, exist_ok=True)
+            body = "<html><body>" + ("<video-player id='p'></video-player>" if players else "") + "</body></html>"
+            page.write_text(body, encoding="utf-8")
+        return root
+
+    def test_полный_каталог_проходит(self, tmp_path):
+        slugs = [f"t{i:04d}" for i in range(1000)]
+        site = self.build_site(tmp_path, slugs)
+        report = canary.pre_switch_gates(site, expected_titles=1000,
+                                         sample_slugs=slugs[:5], previous_site=None)
+        assert report.passed, report.failures
+        assert report.catalog_titles == 1000
+
+    def test_обвал_каталога_останавливает(self, tmp_path):
+        site = self.build_site(tmp_path, [f"t{i:03d}" for i in range(30)])
+        report = canary.pre_switch_gates(site, expected_titles=53216,
+                                         sample_slugs=[], previous_site=None)
+        assert not report.passed
+        assert any("потеря каталога" in f for f in report.failures), report.failures
+
+    def test_допуск_переживает_отклонённые_источником_записи(self, tmp_path):
+        # Источник отдал 1000, рендер принял 997: три записи отклонены. Это не
+        # потеря каталога, и ворота обязаны это различать.
+        slugs = [f"t{i:04d}" for i in range(997)]
+        site = self.build_site(tmp_path, slugs)
+        report = canary.pre_switch_gates(site, expected_titles=1000,
+                                         sample_slugs=slugs[:3], previous_site=None)
+        assert report.passed, report.failures
+
+    def test_пропавший_выборочный_адрес_останавливает(self, tmp_path):
+        slugs = [f"t{i:04d}" for i in range(1000)]
+        site = self.build_site(tmp_path, slugs)
+        report = canary.pre_switch_gates(site, expected_titles=1000,
+                                         sample_slugs=["t0001", "нет-такого"],
+                                         previous_site=None)
+        assert not report.passed
+        assert any("выборочных адресов" in f for f in report.failures), report.failures
+
+    def test_исчезнувший_плеер_останавливает(self, tmp_path):
+        slugs = [f"t{i:04d}" for i in range(100)]
+        prev = self.build_site(tmp_path / "prev", slugs, players=True)
+        new = self.build_site(tmp_path / "new", slugs, players=False)
+        report = canary.pre_switch_gates(new, expected_titles=100,
+                                         sample_slugs=slugs[:3], previous_site=prev)
+        assert not report.passed
+        assert any("плеер исчез" in f for f in report.failures), report.failures
+        assert report.players_previous == 100 and report.players_new == 0
+
+    def test_частичная_убыль_плееров_в_пределах_допуска_проходит(self, tmp_path):
+        # Источник вправе убрать видео у части тайтлов; обвал в разы — нет.
+        slugs = [f"t{i:04d}" for i in range(100)]
+        prev = self.build_site(tmp_path / "prev", slugs, players=True)
+        new = self.build_site(tmp_path / "new", slugs[:95], players=True)
+        for slug in slugs[95:]:
+            page = new / "title" / slug / "index.html"
+            page.parent.mkdir(parents=True, exist_ok=True)
+            page.write_text("<html><body>без плеера</body></html>", encoding="utf-8")
+        report = canary.pre_switch_gates(new, expected_titles=100,
+                                         sample_slugs=slugs[:3], previous_site=prev)
+        assert report.passed, report.failures
+        assert report.players_new == 95

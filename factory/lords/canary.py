@@ -401,3 +401,108 @@ def serve_health(directory: Path, *, timeout: float = 25.0) -> tuple[bool, str]:
             process.wait(timeout=5)
         except subprocess.TimeoutExpired:
             process.kill()
+
+
+@dataclass
+class GateReport:
+    """Итог предпереключательных ворот. Пустой `failures` — единственный пропуск."""
+
+    catalog_titles: int
+    expected_titles: int
+    sample_slugs_found: int
+    sample_slugs_checked: int
+    players_new: int
+    players_previous: int | None
+    failures: tuple[str, ...] = ()
+
+    @property
+    def passed(self) -> bool:
+        return not self.failures
+
+    def describe(self) -> dict:
+        return {
+            "catalog_titles": self.catalog_titles,
+            "expected_titles": self.expected_titles,
+            "sample_slugs_found": self.sample_slugs_found,
+            "sample_slugs_checked": self.sample_slugs_checked,
+            "players_new": self.players_new,
+            "players_previous": self.players_previous,
+            "passed": self.passed,
+            "failures": list(self.failures),
+        }
+
+
+#: Допуск на расхождение числа страниц с числом записей снимка.
+#:
+#: Ноль здесь неверен: источник вправе отдать запись, которую рендер отклонит —
+#: в последнем снимке таких три из 53 216. Но допуск обязан быть узким:
+#: обвал каталога в разы должен останавливать выкладку, а не списываться на
+#: «источник вправе».
+CATALOG_TOLERANCE = 0.01
+
+#: Насколько может просесть число страниц с плеером. Порог тот же, что в
+#: `lords-content-refresh.sh`: источник вправе убрать видео у части тайтлов,
+#: обвал в разы допуском не объясняется. Однажды Publisher ID перестал
+#: находиться, и плеер тихо исчез со всех страниц всех трёх доменов сразу —
+#: сайт при этом отвечал двумястами.
+PLAYER_FLOOR = 0.9
+
+
+def pre_switch_gates(
+    staging: Path,
+    *,
+    expected_titles: int,
+    sample_slugs: "list[str]",
+    previous_site: Path | None,
+) -> GateReport:
+    """Ворота, которые обязаны сойтись до подмены ссылки.
+
+    Проверяется не «отвечает ли сайт», а «тот ли это каталог». Витрина,
+    отвечающая двумястами на пустом каталоге, проходит любую проверку
+    доступности и при этом является полной потерей данных.
+    """
+    title_dir = staging / "title"
+    pages = sorted(p for p in title_dir.glob("*/index.html")) if title_dir.is_dir() else []
+    total = len(pages)
+
+    found = 0
+    for slug in sample_slugs:
+        if (title_dir / slug / "index.html").is_file():
+            found += 1
+
+    def players_in(root: Path) -> int:
+        directory = root / "title"
+        if not directory.is_dir():
+            return 0
+        return sum(1 for page in directory.glob("*/index.html")
+                   if b"<video-player" in page.read_bytes())
+
+    players_new = players_in(staging)
+    players_prev = players_in(previous_site) if previous_site and previous_site.is_dir() else None
+
+    failures: list[str] = []
+    floor = int(expected_titles * (1 - CATALOG_TOLERANCE))
+    if total < floor:
+        failures.append(
+            f"страниц произведений {total} при снимке в {expected_titles}: "
+            f"ниже допустимого {floor} — потеря каталога"
+        )
+    if sample_slugs and found < len(sample_slugs):
+        missing = len(sample_slugs) - found
+        failures.append(
+            f"из {len(sample_slugs)} выборочных адресов снимка не собрано {missing}"
+        )
+    if players_prev is not None and players_prev > 0:
+        player_floor = int(players_prev * PLAYER_FLOOR)
+        if players_new < player_floor:
+            failures.append(
+                f"страниц с плеером {players_new}, было {players_prev}: "
+                f"ниже допустимого {player_floor} — плеер исчез"
+            )
+
+    return GateReport(
+        catalog_titles=total, expected_titles=expected_titles,
+        sample_slugs_found=found, sample_slugs_checked=len(sample_slugs),
+        players_new=players_new, players_previous=players_prev,
+        failures=tuple(failures),
+    )
