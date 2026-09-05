@@ -32,7 +32,17 @@ set -Eeuo pipefail
 PHASE="${1:-}"
 SITE="${2:-}"
 readonly ALLOWED_SITES=(lords-02)
-readonly EXPECT_DIGEST="52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc"
+# Отпечаток артефакта закреплён константой намеренно: он не следует за кодом
+# автоматически, иначе сценарий выкатывал бы всё, что оказалось в дереве, и
+# перестал бы быть воротами. Смена значения — решение, а не правка.
+#
+# Версия 2. Отличие от версии 1 (52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc,
+# принята по TEMPLATE_TO_CORE-008) — одна: метка происхождения данных в
+# factory/lords/render.py перестала быть зашитой строкой `fixture/test`.
+# Версия 1 объявляла живой каталог CDNVideoHub синтетическим на всех трёх
+# боевых витринах, и по этой метке CORE_TO_OWNER-011 вывел несуществующий
+# блокер выкладки.
+readonly EXPECT_DIGEST="7b38ca10685a75c3d52527746208539cc30015fc1bfb3fce010a9491616ed965"
 readonly REFRESH_TIMER="lords-content-refresh.timer"
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
