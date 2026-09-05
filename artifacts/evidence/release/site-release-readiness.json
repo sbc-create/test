@@ -1,0 +1,323 @@
+{
+  "artifact": "SITE_RELEASE_READINESS",
+  "gates": [
+    {
+      "key": "artifact_identity",
+      "label": "полный SHA, отпечаток, воспроизведение"
+    },
+    {
+      "key": "registration",
+      "label": "siteId и домен в реестре"
+    },
+    {
+      "key": "content_live",
+      "label": "живой источник и снимок каталога"
+    },
+    {
+      "key": "render_live",
+      "label": "сборка витрины на живом каталоге"
+    },
+    {
+      "key": "preswitch_gates",
+      "label": "предпусковые ворота"
+    },
+    {
+      "key": "switch",
+      "label": "переключение выполнено"
+    },
+    {
+      "key": "live_acceptance",
+      "label": "приёмка на живом домене"
+    },
+    {
+      "key": "browser_quality",
+      "label": "браузер: доступность, скорость, кросс-браузер"
+    },
+    {
+      "key": "rollback_proven",
+      "label": "откат доказан"
+    },
+    {
+      "key": "owner_gate",
+      "label": "визуальная проверка владельцем"
+    }
+  ],
+  "slots": {
+    "lords": {
+      "total": 41,
+      "gates": {
+        "artifact_identity": {
+          "points": 10,
+          "note": "артефакт v2 7b38ca10685a75c3…, 19 файлов; воспроизведение из двух точных ревизий: совпало",
+          "blocked": false
+        },
+        "registration": {
+          "points": 10,
+          "note": "siteId lords-02 в реестре Control API, домен lordserial33.biz",
+          "blocked": false
+        },
+        "content_live": {
+          "points": 10,
+          "note": "снимок каталога 151f0d5cdd9d0654…, живой источник, 53 230 записей",
+          "blocked": false
+        },
+        "render_live": {
+          "points": 0,
+          "note": "сборка на живом каталоге идёт или не запускалась (расписки нет)",
+          "blocked": false
+        },
+        "preswitch_gates": {
+          "points": 0,
+          "note": "предпусковые ворота не запускались: они идут после сборки",
+          "blocked": false
+        },
+        "switch": {
+          "points": 0,
+          "note": "переключение не выполнялось: в журнале операции нет ни одной записи о смене current; смена ссылок 14:06–14:14 — работа таймера обновления",
+          "blocked": true
+        },
+        "live_acceptance": {
+          "points": 0,
+          "note": "приёмка на живом домене невозможна до переключения",
+          "blocked": true
+        },
+        "browser_quality": {
+          "points": 5,
+          "note": "axe, размеры целей, кросс-браузер и CLS закрыты на стенде шаблонов; на боевом домене не проводились",
+          "blocked": false
+        },
+        "rollback_proven": {
+          "points": 6,
+          "note": "предыдущий релиз существует: 584f481e74a0; откат исполнением не проверялся",
+          "blocked": false
+        },
+        "owner_gate": {
+          "points": 0,
+          "note": "владельцу нечего смотреть до переключения",
+          "blocked": false
+        }
+      }
+    },
+    "yummy": {
+      "total": 31,
+      "gates": {
+        "artifact_identity": {
+          "points": 3,
+          "note": "отпечатка артефакта у Yummy нет: артефакт шаблона определён только для направления lords",
+          "blocked": true
+        },
+        "registration": {
+          "points": 10,
+          "note": "yummyani-site, -org, -biz в реестре Control API",
+          "blocked": false
+        },
+        "content_live": {
+          "points": 8,
+          "note": "боевая ревизия 4460031491403b759c910e5875fe20688dc67053, health healthy по PROGRAM_STATE",
+          "blocked": false
+        },
+        "render_live": {
+          "points": 0,
+          "note": "production build не запускался: шёл рендер Lords, а общий lock запрещает параллельные тяжёлые сборки",
+          "blocked": true
+        },
+        "preswitch_gates": {
+          "points": 0,
+          "note": "не запускались",
+          "blocked": false
+        },
+        "switch": {
+          "points": 0,
+          "note": "выкладка не выполнялась",
+          "blocked": false
+        },
+        "live_acceptance": {
+          "points": 0,
+          "note": "не проводилась",
+          "blocked": false
+        },
+        "browser_quality": {
+          "points": 6,
+          "note": "фикстурные браузерные ворота закрыты; на боевом домене не проводились",
+          "blocked": false
+        },
+        "rollback_proven": {
+          "points": 4,
+          "note": "боевая ревизия известна; откат исполнением не проверялся",
+          "blocked": false
+        },
+        "owner_gate": {
+          "points": 0,
+          "note": "нечего показывать",
+          "blocked": false
+        }
+      }
+    },
+    "zona-cinema": {
+      "total": 25,
+      "gates": {
+        "artifact_identity": {
+          "points": 0,
+          "note": "отпечатка артефакта нет: артефакт определён только для lords",
+          "blocked": true
+        },
+        "registration": {
+          "points": 0,
+          "note": "ни siteId, ни домена в реестре Control API нет",
+          "blocked": true
+        },
+        "content_live": {
+          "points": 0,
+          "note": "живого источника нет: витрина собрана на фикстуре",
+          "blocked": true
+        },
+        "render_live": {
+          "points": 4,
+          "note": "витрина собрана и отдаётся стендом предпросмотра",
+          "blocked": false
+        },
+        "preswitch_gates": {
+          "points": 0,
+          "note": "неприменимо без домена",
+          "blocked": false
+        },
+        "switch": {
+          "points": 0,
+          "note": "в production не выкладывается и выложена быть не может",
+          "blocked": false
+        },
+        "live_acceptance": {
+          "points": 0,
+          "note": "живого домена нет",
+          "blocked": false
+        },
+        "browser_quality": {
+          "points": 6,
+          "note": "снимков 390/768/1440: 9; axe и кросс-браузер закрыты на стенде шаблонов",
+          "blocked": false
+        },
+        "rollback_proven": {
+          "points": 8,
+          "note": "откат предпросмотра — остановка стенда; боевого состояния не затрагивает",
+          "blocked": false
+        },
+        "owner_gate": {
+          "points": 7,
+          "note": "предпросмотр доступен владельцу по туннелю, индексация закрыта заголовком",
+          "blocked": false
+        }
+      }
+    },
+    "animedia-portal": {
+      "total": 25,
+      "gates": {
+        "artifact_identity": {
+          "points": 0,
+          "note": "отпечатка артефакта нет: артефакт определён только для lords",
+          "blocked": true
+        },
+        "registration": {
+          "points": 0,
+          "note": "ни siteId, ни домена в реестре Control API нет",
+          "blocked": true
+        },
+        "content_live": {
+          "points": 0,
+          "note": "живого источника нет: витрина собрана на фикстуре",
+          "blocked": true
+        },
+        "render_live": {
+          "points": 4,
+          "note": "витрина собрана и отдаётся стендом предпросмотра",
+          "blocked": false
+        },
+        "preswitch_gates": {
+          "points": 0,
+          "note": "неприменимо без домена",
+          "blocked": false
+        },
+        "switch": {
+          "points": 0,
+          "note": "в production не выкладывается и выложена быть не может",
+          "blocked": false
+        },
+        "live_acceptance": {
+          "points": 0,
+          "note": "живого домена нет",
+          "blocked": false
+        },
+        "browser_quality": {
+          "points": 6,
+          "note": "снимков 390/768/1440: 9; axe и кросс-браузер закрыты на стенде шаблонов",
+          "blocked": false
+        },
+        "rollback_proven": {
+          "points": 8,
+          "note": "откат предпросмотра — остановка стенда; боевого состояния не затрагивает",
+          "blocked": false
+        },
+        "owner_gate": {
+          "points": 7,
+          "note": "предпросмотр доступен владельцу по туннелю, индексация закрыта заголовком",
+          "blocked": false
+        }
+      }
+    },
+    "basis-video": {
+      "total": 25,
+      "gates": {
+        "artifact_identity": {
+          "points": 0,
+          "note": "отпечатка артефакта нет: артефакт определён только для lords",
+          "blocked": true
+        },
+        "registration": {
+          "points": 0,
+          "note": "ни siteId, ни домена в реестре Control API нет",
+          "blocked": true
+        },
+        "content_live": {
+          "points": 0,
+          "note": "живого источника нет: витрина собрана на фикстуре",
+          "blocked": true
+        },
+        "render_live": {
+          "points": 4,
+          "note": "витрина собрана и отдаётся стендом предпросмотра",
+          "blocked": false
+        },
+        "preswitch_gates": {
+          "points": 0,
+          "note": "неприменимо без домена",
+          "blocked": false
+        },
+        "switch": {
+          "points": 0,
+          "note": "в production не выкладывается и выложена быть не может",
+          "blocked": false
+        },
+        "live_acceptance": {
+          "points": 0,
+          "note": "живого домена нет",
+          "blocked": false
+        },
+        "browser_quality": {
+          "points": 6,
+          "note": "снимков 390/768/1440: 9; axe и кросс-браузер закрыты на стенде шаблонов",
+          "blocked": false
+        },
+        "rollback_proven": {
+          "points": 8,
+          "note": "откат предпросмотра — остановка стенда; боевого состояния не затрагивает",
+          "blocked": false
+        },
+        "owner_gate": {
+          "points": 7,
+          "note": "предпросмотр доступен владельцу по туннелю, индексация закрыта заголовком",
+          "blocked": false
+        }
+      }
+    }
+  },
+  "average": 29
+}
