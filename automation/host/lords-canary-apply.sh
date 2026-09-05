@@ -44,13 +44,25 @@ AUDIT_DIR="${LORDS_CANARY_AUDIT:-/var/log/site-factory}"
 STAGING=""
 TIMER_WAS_ACTIVE=0
 
-log()  { printf '[canary] %s\n' "$*"; }
-die()  { printf '[canary] ОТКАЗ: %s\n' "$*" >&2; exit 1; }
+# Пошаговый журнал в файл, а не только в поток службы.
+#
+# Первый боевой запуск завершился ничем: ни релиза, ни журнала операции, ни
+# следов на диске, — а системный журнал доступен не всякой учётной записи.
+# Разбирать отказ было нечем. Теперь каждый шаг пишется в файл в каталоге,
+# который и так объявлен на запись, и любой отказ читается без journalctl.
+STEP_LOG="${LORDS_CANARY_AUDIT:-/var/log/site-factory}/lords-canary-${SITE:-unknown}.steps.log"
+mkdir -p "$(dirname "${STEP_LOG}")" 2>/dev/null || true
+step() {
+  printf '%s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$*" >> "${STEP_LOG}" 2>/dev/null || true
+}
+log()  { step "$*"; printf '[canary] %s\n' "$*"; }
+die()  { step "ОТКАЗ: $*"; printf '[canary] ОТКАЗ: %s\n' "$*" >&2; exit 1; }
 
 cleanup() {
   [ -n "${STAGING}" ] && [ -d "${STAGING}" ] && rm -rf "${STAGING}"
 }
 trap cleanup EXIT
+step "=== запуск операции для «${SITE:-не указана}», uid $(id -u) ==="
 
 # ------------------------------------------------------------------ 0. ворота
 allowed=0

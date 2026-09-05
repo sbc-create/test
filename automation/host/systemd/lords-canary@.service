@@ -33,7 +33,17 @@ ExecStart=/home/claude/wt-canary/automation/host/lords-canary-apply.sh %i
 NoNewPrivileges=yes
 PrivateTmp=yes
 ProtectSystem=strict
-ProtectHome=read-only
+# ProtectHome здесь НЕТ намеренно, и это не послабление.
+#
+# `ProtectSystem=strict` уже монтирует всю иерархию только для чтения, включая
+# /home; писать можно ровно в ReadWritePaths и никуда больше. А `ProtectHome`
+# перемонтирует /home отдельно, и заявленные ниже пути под ним оказываются в
+# конфликте: служба падает на построении пространства имён — до ExecStart, без
+# единой строки в собственном журнале и без следов на диске.
+#
+# Именно так первый запуск и завершился «ничем»: ни релиза, ни журнала
+# операции, ни файлов от root. У работающей рядом службы обновления содержимого
+# путей под /home в ReadWritePaths нет вовсе, поэтому её ProtectHome не мешает.
 InaccessiblePaths=/etc/site-factory/secrets
 # Писать можно ровно туда, куда нужно операции: рантайм витрин, кэш и отчёты
 # репозитория с артефактом, журнал. Ни nginx, ни /etc, ни соседние службы.
