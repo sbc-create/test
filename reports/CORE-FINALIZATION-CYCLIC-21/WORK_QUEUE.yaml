@@ -41,7 +41,7 @@ gates:
     priority: 1
     gaps:
       # закрыто циклом 1, commit c366a81
-      - "Workflow: draft → preview/diff → approve → publish → rollback"
+      # Workflow закрыт циклом 2, commit 7e3886c
       - "Jobs отсутствует"
       - "Sites отсутствует"
       - "Users & Access: экран есть, нужен полный"
