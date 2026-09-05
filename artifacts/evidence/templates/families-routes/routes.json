@@ -1,0 +1,91 @@
+{
+  "captured_at_utc": "2026-09-05T17:29:52.335Z",
+  "routes": {
+    "animedia-portal/catalog/": {
+      "status": 200,
+      "h1": "Каталог",
+      "title": "Каталог — animedia-portal"
+    },
+    "animedia-portal/genres/": {
+      "status": 200,
+      "h1": "Жанры",
+      "title": "Жанры — animedia-portal"
+    },
+    "animedia-portal/years/": {
+      "status": 200,
+      "h1": "Годы",
+      "title": "Годы — animedia-portal"
+    },
+    "animedia-portal/countries/": {
+      "status": 200,
+      "h1": "Страны",
+      "title": "Страны — animedia-portal"
+    },
+    "animedia-portal/new/": {
+      "status": 200,
+      "h1": "Новое",
+      "title": "Новое — animedia-portal"
+    },
+    "animedia-portal/movies/": {
+      "status": 200,
+      "h1": "Фильмы",
+      "title": "Фильмы — animedia-portal"
+    },
+    "animedia-portal/series/": {
+      "status": 200,
+      "h1": "Сериалы",
+      "title": "Сериалы — animedia-portal"
+    },
+    "animedia-portal/search/": {
+      "status": 200,
+      "h1": "Поиск",
+      "title": "Поиск по каталогу аниме — animedia-portal"
+    },
+    "animedia-portal/404": {
+      "status": 404
+    },
+    "zona-cinema/catalog/": {
+      "status": 200,
+      "h1": "Каталог",
+      "title": "Каталог — zona-cinema"
+    },
+    "zona-cinema/genres/": {
+      "status": 200,
+      "h1": "Жанры",
+      "title": "Жанры — zona-cinema"
+    },
+    "zona-cinema/years/": {
+      "status": 200,
+      "h1": "Годы",
+      "title": "Годы — zona-cinema"
+    },
+    "zona-cinema/countries/": {
+      "status": 200,
+      "h1": "Страны",
+      "title": "Страны — zona-cinema"
+    },
+    "zona-cinema/new/": {
+      "status": 200,
+      "h1": "Новое",
+      "title": "Новое — zona-cinema"
+    },
+    "zona-cinema/movies/": {
+      "status": 200,
+      "h1": "Фильмы",
+      "title": "Фильмы — zona-cinema"
+    },
+    "zona-cinema/series/": {
+      "status": 200,
+      "h1": "Сериалы",
+      "title": "Сериалы — zona-cinema"
+    },
+    "zona-cinema/search/": {
+      "status": 200,
+      "h1": "Поиск",
+      "title": "Поиск по каталогу фильмов — zona-cinema"
+    },
+    "zona-cinema/404": {
+      "status": 404
+    }
+  }
+}

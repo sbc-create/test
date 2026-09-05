@@ -264,10 +264,17 @@ def score_reference_pack(ref: str, docs: str, profile: str, site: str) -> dict:
         6 if minimum is not None else 0,
         f"рубрика качества страниц: минимум {minimum}/10 на восьми страницах"
         if minimum is not None else "вертикального среза нет: рендера не существует")
+    # Признаком раньше было «пакет существует» при формулировке «состояния
+    # отрисованы» — сильное утверждение на пустом основании. Теперь считается
+    # число маршрутов и состояний, проверенных браузером.
+    routes = read_json("artifacts/evidence/templates/families-routes/routes.json") or {}
+    checked = [k for k in (routes.get("routes") or {}) if k.startswith(profile)]
     out["states_ux"] = Score(
-        5 if has_package else 2,
-        "пустой поиск, отсутствующая страница и недоступный плеер отрисованы"
-        if has_package else "состояния описаны в STATES.md, не реализованы")
+        8 if len(checked) >= 9 else (5 if has_package else 2),
+        f"браузером проверено маршрутов и состояний: {len(checked)} "
+        f"(разделы, пустой поиск, отсутствующая страница)" if checked else
+        ("пакет собран, состояния браузером не проверялись" if has_package
+         else "состояния описаны в STATES.md, не реализованы"))
     out["responsive_a11y"] = Score(
         7 if runs and axe_violations == 0 and aa_violations == 0 else (3 if runs else 0),
         f"axe {runs} прогонов на трёх ширинах, нарушений {axe_violations}, "

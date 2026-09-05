@@ -164,7 +164,7 @@
       }
     },
     "zona-cinema": {
-      "total": 48,
+      "total": 51,
       "blocked_gates": [
         "requirements",
         "visual_perf"
@@ -191,8 +191,8 @@
           "blocked": false
         },
         "states_ux": {
-          "points": 5,
-          "note": "пустой поиск, отсутствующая страница и недоступный плеер отрисованы",
+          "points": 8,
+          "note": "браузером проверено маршрутов и состояний: 9 (разделы, пустой поиск, отсутствующая страница)",
           "blocked": false
         },
         "responsive_a11y": {
@@ -223,7 +223,7 @@
       }
     },
     "animedia-portal": {
-      "total": 52,
+      "total": 55,
       "blocked_gates": [
         "requirements",
         "visual_perf"
@@ -250,8 +250,8 @@
           "blocked": false
         },
         "states_ux": {
-          "points": 5,
-          "note": "пустой поиск, отсутствующая страница и недоступный плеер отрисованы",
+          "points": 8,
+          "note": "браузером проверено маршрутов и состояний: 9 (разделы, пустой поиск, отсутствующая страница)",
           "blocked": false
         },
         "responsive_a11y": {
@@ -339,9 +339,9 @@
     }
   },
   "program_completion": {
-    "five_slots": 64,
+    "five_slots": 65,
     "lords_yummy": 82,
-    "four_confirmed": 66,
+    "four_confirmed": 68,
     "uncertainty_pp": 5
   }
 }

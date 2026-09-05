@@ -7,7 +7,7 @@
   "template_digest_files": 19,
   "recomputed_from": {
     "branch": "claude/templates-new-families-01",
-    "head": "74384a5bbbd02f8983101bd55a0ea62c4b134218",
+    "head": "41d9a709861944cfd9849650474bf5e850c0035d",
     "template_digest": "f1695c5f11b38e12dd8844651114ed85d34c6a61307241048c5027cdc8b1d428",
     "template_digest_files": 21,
     "matches_candidate": false,
