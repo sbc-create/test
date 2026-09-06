@@ -657,6 +657,9 @@ class ControlApi:
         if method == "GET" and rest == ["playback-policy"]:
             principal.require(SCOPE_READ)
             return self._playback_policy()
+        if method == "GET" and rest[:1] == ["seo-bindings"]:
+            principal.require(SCOPE_READ)
+            return self._seo_bindings(rest[1] if len(rest) > 1 else None, body)
         if rest[:1] == ["review-queue"]:
             return self._review_route(method, rest[1:], body, principal, headers, correlation_id)
         if method == "GET" and rest == ["overview"]:
@@ -1422,6 +1425,35 @@ class ControlApi:
         )
         return ApiResponse(status=200, body={**свод, "problems": детали})
 
+    def _seo_bindings(self, site_id: str | None,
+                      body: dict[str, Any]) -> ApiResponse:
+        """Связи записей каталога с публичными страницами витрины.
+
+        Без витрины — перечень витрин, умеющих отдавать связи. С витриной —
+        страница выгрузки: каталог велик, и ответ целиком означал бы, что
+        потребитель либо держит его в памяти, либо не получает вовсе.
+        """
+        from factory.site_engine.api import seo_bindings
+
+        if site_id is None:
+            return ApiResponse(status=200,
+                               body=seo_bindings.каталог_витрин(self._root))
+        self._check_site_id_soft(site_id)
+        предел = body.get("limit", seo_bindings.DEFAULT_LIMIT)
+        смещение = body.get("offset", 0)
+        состояние = body.get("bindingState")
+        if состояние is not None and not isinstance(состояние, str):
+            raise ControlDenied(400, "invalid_binding_state",
+                                "bindingState — строка")
+        try:
+            return ApiResponse(status=200, body=seo_bindings.страница(
+                self._root, site_id, offset=смещение, limit=предел,
+                binding_state=состояние))
+        except seo_bindings.BindingSourceUnknown as error:
+            raise ControlDenied(404, "binding_source_unknown", str(error)) from error
+        except ValueError as error:
+            raise ControlDenied(400, "invalid_paging", str(error)) from error
+
     def _check_site_id_soft(self, site_id: str) -> None:
         """Проверка идентификатора без требования профиля.
 
@@ -1474,6 +1506,13 @@ class ControlApi:
             status=200,
             body={
                 "engine": compat.ENGINE_CONTRACT,
+                # Контракты, которые движок отдаёт помимо основного. Список
+                # здесь, а не в снимке матрицы: матрица — снимок, а движок
+                # обязан сам отвечать, что он умеет.
+                "contracts": [
+                    {"name": "seo-route-binding", "version": "1.0.0",
+                     "endpoint": "/api/v1/seo-bindings/{siteId}"},
+                ],
                 "sites": rows,
                 "total": len(rows),
                 "byState": by_state,
