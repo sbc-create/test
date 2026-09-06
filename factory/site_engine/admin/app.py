@@ -75,10 +75,10 @@ class AdminApp:
 
     # ---- вспомогательное -------------------------------------------------
 
-    def _cookie_header(self, sid: str, *, drop: bool = False) -> str:
+    def _cookie_header(self, sid: str, *, drop: bool = False, site_id: str = "") -> str:
         parts = [
-            f"{ADMIN_COOKIE}={'' if drop else sid}",
-            "Path=/admin",
+            f"{self._имя_печенья(site_id)}={'' if drop else sid}",
+            f"Path={ui._путь()}",
             "HttpOnly",
             # Strict, а не Lax: у панели нет сценария перехода со стороннего
             # сайта, а Lax пропускает межсайтовые GET-переходы.
@@ -161,17 +161,85 @@ class AdminApp:
             if начать is not None
             else None
         )
-        session = self._sessions.get(cookies.get(ADMIN_COOKIE))
         parts = [p for p in path.strip("/").split("/") if p]
 
-        if parts[:1] != ["admin"]:
+        # Контур сайта: /s/<siteId>/admin/... У сайта свой адрес входа, своё
+        # оформление и своя печенья. Общий вход с выбором витрины оставлял бы
+        # тенанта в руках у того, кто правит строку запроса.
+        сайт = ""
+        if parts[:1] == ["s"] and len(parts) >= 3 and parts[2] == "admin":
+            сайт = parts[1]
+            if not self._витрина_существует(сайт):
+                return AdminResponse(
+                    status=404, html=ui.page("Не найдено", "<p>Нет такой витрины.</p>")
+                )
+            rest = parts[3:]
+        elif parts[:1] == ["admin"]:
+            rest = parts[1:]
+        else:
             return AdminResponse(
                 status=404, html=ui.page("Не найдено", "<p>Нет такой страницы.</p>")
             )
-        rest = parts[1:]
+
+        self._сайт = сайт
+        основа = f"/s/{сайт}/admin" if сайт else "/admin"
+        отметка = ui.БАЗА.set(основа)
+        отметка_бренда = ui.БРЕНД.set(self._название_витрины(сайт) if сайт else "")
+        try:
+            return self._маршрут(method, rest, form, cookies, сайт)
+        finally:
+            ui.БАЗА.reset(отметка)
+            ui.БРЕНД.reset(отметка_бренда)
+
+    def _витрина_существует(self, site_id: str) -> bool:
+        if not site_id or "/" in site_id or ".." in site_id:
+            return False
+        корень = getattr(self._control, "_root", None)
+        if корень is None:
+            return False
+        return (корень / "config" / "site-profiles" / f"{site_id}.json").is_file()
+
+    def _название_витрины(self, site_id: str) -> str:
+        """Имя витрины из её профиля. Идентификатор — запасной вариант: он
+        всегда есть, а название может быть не заполнено."""
+        корень = getattr(self._control, "_root", None)
+        if корень is None:
+            return site_id
+        путь = корень / "config" / "site-profiles" / f"{site_id}.json"
+        try:
+            профиль = json.loads(путь.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return site_id
+        имя = (профиль.get("brand") or {}).get("name") or ""
+        return str(имя or site_id)
+
+    @staticmethod
+    def _имя_печенья(site_id: str) -> str:
+        """Своя печенья на сайт.
+
+        Одно имя на все сайты означало бы, что вход на второй выбрасывает с
+        первого, а сессия, полученная где угодно, действует везде.
+        """
+        return f"{ADMIN_COOKIE}_{site_id}" if site_id else ADMIN_COOKIE
+
+    def _маршрут(
+        self,
+        method: str,
+        rest: list[str],
+        form: dict[str, str],
+        cookies: dict[str, str],
+        сайт: str,
+    ) -> AdminResponse:
+        session = self._sessions.get(cookies.get(self._имя_печенья(сайт)))
+        # Сессия чужого сайта на этом сайте не значит ничего: иначе изоляция
+        # держится на том, что никто не подставил чужой адрес к своей печенье.
+        if session is not None and сайт and getattr(session, "site_id", "") not in (сайт, ""):
+            session = None
+        if session is not None and сайт and getattr(session, "is_super_admin", False):
+            session.viewing_site_id = сайт
 
         if method == "POST" and rest == ["login"]:
-            return self._login(form)
+            return self._login(form, сайт)
 
         # Принятие приглашения идёт БЕЗ сессии: приглашённый ещё не может войти.
         # Единственное, что его пускает, — одноразовый секрет из приглашения.
@@ -200,7 +268,12 @@ class AdminApp:
         if method == "POST" and rest == ["logout"]:
             self._control.drop_session_principal(session.token)
             self._sessions.destroy(session.sid)
-            return _redirect("/admin", extra={"Set-Cookie": self._cookie_header("", drop=True)})
+            return _redirect(
+                f"{ui._путь()}",
+                extra={
+                    "Set-Cookie": self._cookie_header("", drop=True, site_id=self._сайт)
+                },
+            )
 
         if getattr(session, "operator_id", "") and session.token:
             from factory.site_engine.operators import scopes_for
@@ -305,6 +378,12 @@ class AdminApp:
     # Каталог
     # ------------------------------------------------------------------
     def _витрины(self, session) -> list[str]:
+        # В контуре сайта перечень состоит из одной витрины. Иначе на странице
+        # сайта виден соседний, и «изоляция» держится на том, что его не
+        # выбрали в списке.
+        свой = getattr(self, "_сайт", "") or (getattr(session, "site_id", "") or "")
+        if свой:
+            return [свой]
         ответ = self._read.handle("/api/v1/sites")
         if ответ.status != 200:
             return []
@@ -492,12 +571,12 @@ class AdminApp:
                     ),
                 )
             session.flash = self._flash_from(ответ, success="")
-            return _redirect("/admin/users")
+            return _redirect(f"{ui._путь()}/users")
 
         if method == "POST" and len(tail) == 3 and tail[0] == "invites":
             ответ = self._call("POST", f"/api/v1/operators/invites/{tail[1]}", session, {})
             session.flash = self._flash_from(ответ, success="Приглашение отозвано")
-            return _redirect("/admin/users")
+            return _redirect(f"{ui._путь()}/users")
 
         if method == "POST" and tail == ["sessions", "revoke"]:
             ответ = self._call(
@@ -507,7 +586,7 @@ class AdminApp:
                 {"sessionId": form.get("sessionId") or ""},
             )
             session.flash = self._flash_from(ответ, success="Сессия отозвана")
-            return _redirect("/admin/users")
+            return _redirect(f"{ui._путь()}/users")
 
         if method == "POST" and len(tail) == 2:
             operator_id, действие = tail
@@ -529,7 +608,7 @@ class AdminApp:
                     "revoke-sessions": "Сессии отозваны",
                 }.get(действие, "Готово"),
             )
-            return _redirect("/admin/users")
+            return _redirect(f"{ui._путь()}/users")
 
         return AdminResponse(status=404, html=ui.page("Не найдено", "<p>Нет такой страницы.</p>"))
 
@@ -624,7 +703,7 @@ class AdminApp:
                 success=f"Применено к {ответ.body.get('changed', 0)} записям, "
                 f"партия {ответ.body.get('batchId', '')}",
             )
-            return _redirect("/admin/review")
+            return _redirect(f"{ui._путь()}/review")
 
         if method == "GET" and len(tail) == 1:
             ответ = self._call("GET", f"/api/v1/review-queue/{tail[0]}", session, {})
@@ -672,7 +751,7 @@ class AdminApp:
                     "revert": "Решение отменено",
                 }.get(действие, "Готово"),
             )
-            return _redirect(f"/admin/review/{item_id}")
+            return _redirect(f"{ui._путь()}/review/{item_id}")
 
         return AdminResponse(status=404, html=ui.page("Не найдено", "<p>Нет такой страницы.</p>"))
 
@@ -697,7 +776,7 @@ class AdminApp:
     def _есть_активные_операторы(self, каталог) -> bool:
         return каталог.list()["byState"].get("ACTIVE", 0) > 0
 
-    def _login(self, form: dict[str, str]) -> AdminResponse:
+    def _login(self, form: dict[str, str], сайт: str = "") -> AdminResponse:
         """Вход по учётной записи. Токен — только пока каталог пуст.
 
         Окно начальной настройки закрывается само: как только появился хотя бы
@@ -715,6 +794,11 @@ class AdminApp:
             try:
                 оператор = каталог.authenticate(email=email, password=пароль)
             except OperatorError:
+                return self._отказ_входа()
+            # Оператор чужой витрины получает тот же отказ, что и человек с
+            # неверным паролем: различие сообщало бы, что учётная запись есть
+            # у соседа.
+            if сайт and not оператор.is_super_admin and оператор.site_id != сайт:
                 return self._отказ_входа()
             from factory.site_engine.operators import scopes_for
 
@@ -734,7 +818,10 @@ class AdminApp:
                 is_super_admin=оператор.is_super_admin,
             )
             каталог.register_session(sid=session.sid, operator_id=оператор.operator_id)
-            return _redirect("/admin", extra={"Set-Cookie": self._cookie_header(session.sid)})
+            return _redirect(
+                f"{ui._путь()}",
+                extra={"Set-Cookie": self._cookie_header(session.sid, site_id=сайт)},
+            )
 
         токен = (form.get("token") or "").strip()
         if not токен or self._есть_активные_операторы(каталог):
@@ -777,7 +864,7 @@ class AdminApp:
                         error=str(ошибка), secret=(form.get("secret") or "").strip()
                     ),
                 )
-            return _redirect("/admin")
+            return _redirect(f"{ui._путь()}")
         return AdminResponse(status=404, html=ui.page("Не найдено", "<p>Нет такой страницы.</p>"))
 
     def _есть_права(self, session, право: str) -> bool:
@@ -790,7 +877,7 @@ class AdminApp:
         if principal is None:
             return self._отказ_входа()
         session = self._sessions.create(token)
-        return _redirect("/admin", extra={"Set-Cookie": self._cookie_header(session.sid)})
+        return _redirect(f"{ui._путь()}", extra={"Set-Cookie": self._cookie_header(session.sid)})
 
     def _dashboard(self, session, flash, label, csrf) -> AdminResponse:
         response = self._read.handle("/api/v1/sites")
@@ -864,7 +951,7 @@ class AdminApp:
             if dry
             else "Задание поставлено в очередь.",
         )
-        return _redirect(f"/admin/sites/{site_id}")
+        return _redirect(f"{ui._путь()}/sites/{site_id}")
 
     def _cache(self, session, site_id, form) -> AdminResponse:
         dry = bool(form.get("dryRun"))
@@ -875,7 +962,7 @@ class AdminApp:
         session.flash = self._flash_from(
             response, success="Проверка выполнена." if dry else "Инвалидация запланирована."
         )
-        return _redirect(f"/admin/sites/{site_id}")
+        return _redirect(f"{ui._путь()}/sites/{site_id}")
 
     def _settings(self, session, site_id, form) -> AdminResponse:
         key = (form.get("key") or "").strip()
@@ -889,7 +976,7 @@ class AdminApp:
                 "message": "Значение не разобрано как JSON.",
                 "detail": {"value": raw},
             }
-            return _redirect(f"/admin/sites/{site_id}")
+            return _redirect(f"{ui._путь()}/sites/{site_id}")
 
         path = f"/api/v1/sites/{site_id}/settings"
         if dry:
@@ -897,7 +984,7 @@ class AdminApp:
             session.flash = self._flash_from(
                 response, success="Проверка выполнена, ничего не изменено."
             )
-            return _redirect(f"/admin/sites/{site_id}")
+            return _redirect(f"{ui._путь()}/sites/{site_id}")
 
         # Сначала пробный вызов — за версией, затем боевой со сверкой. Панель
         # следует тому же порядку, который предписывает операторам инструкция:
@@ -906,13 +993,13 @@ class AdminApp:
         peek = self._call("PATCH", path, session, {"changes": {key: value}, "dryRun": True})
         if peek.status != 200:
             session.flash = self._flash_from(peek, success="")
-            return _redirect(f"/admin/sites/{site_id}")
+            return _redirect(f"{ui._путь()}/sites/{site_id}")
         version = peek.body.get("currentVersion", "")
         response = self._call(
             "PATCH", path, session, {"changes": {key: value}, "expectedVersion": version}
         )
         session.flash = self._flash_from(response, success="Настройка применена.")
-        return _redirect(f"/admin/sites/{site_id}")
+        return _redirect(f"{ui._путь()}/sites/{site_id}")
 
     def _readiness(self, session, flash, label: str, csrf: str) -> AdminResponse:
         """Готовность к выпуску одним экраном: табель, тревоги, опись состояния."""
@@ -960,9 +1047,9 @@ class AdminApp:
             )
             session.flash = self._flash_from(ответ, success="Заявка заведена.")
             куда = (
-                f"/admin/new-site?request={ответ.body['requestId']}"
+                f"{ui._путь()}/new-site?request={ответ.body['requestId']}"
                 if ответ.status == 201
-                else "/admin/new-site"
+                else f"{ui._путь()}/new-site"
             )
             return _redirect(куда)
 
@@ -986,7 +1073,7 @@ class AdminApp:
                     "rollback": "Откат выполнен.",
                 }.get(действие, "Готово"),
             )
-            return _redirect(f"/admin/new-site?request={rid}")
+            return _redirect(f"{ui._путь()}/new-site?request={rid}")
 
         if method == "POST" and len(tail) == 1:
             шаг = (form.get("step") or "").strip()
@@ -997,7 +1084,7 @@ class AdminApp:
                 "PATCH", f"/api/v1/site-requests/{tail[0]}", session, {"step": шаг, "answers": ответы}
             )
             session.flash = self._flash_from(ответ, success=f"Шаг «{шаг}» принят.")
-            return _redirect(f"/admin/new-site?request={tail[0]}")
+            return _redirect(f"{ui._путь()}/new-site?request={tail[0]}")
 
         if method != "GET":
             return AdminResponse(status=404, html=ui.page("Не найдено", "<p>Нет такой страницы.</p>"))
@@ -1069,7 +1156,7 @@ class AdminApp:
                 {"dryRun": bool(form.get("dryRun"))},
             )
             session.flash = self._flash_from(ответ, success="Прежние значения возвращены.")
-            return _redirect(f"/admin/settings?site={site}")
+            return _redirect(f"{ui._путь()}/settings?site={site}")
         return AdminResponse(status=404, html=ui.page("Не найдено", "<p>Нет такой страницы.</p>"))
 
     def _settings_state(self, session, site: str):
@@ -1116,7 +1203,7 @@ class AdminApp:
             )
             if ответ.status != 200:
                 session.flash = self._flash_from(ответ, success="")
-                return _redirect(f"/admin/settings?site={site}")
+                return _redirect(f"{ui._путь()}/settings?site={site}")
             # Сравнение показывается на самой странице, а не строкой сообщения:
             # ответ «что станет другим» нужен рядом с текущими значениями.
             return self._settings_page(
@@ -1133,7 +1220,7 @@ class AdminApp:
             тело["expectedVersion"] = версия
         ответ = self._call("PATCH", путь, session, тело)
         session.flash = self._flash_from(ответ, success="Настройка применена.")
-        return _redirect(f"/admin/settings?site={site}")
+        return _redirect(f"{ui._путь()}/settings?site={site}")
 
     @staticmethod
     def _как_значение(сырое: str):

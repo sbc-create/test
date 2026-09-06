@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import html
 import json
+from contextvars import ContextVar
 from typing import Any
 
 from factory.site_engine.admin import CSRF_FIELD
@@ -117,6 +118,28 @@ _STATE_WORDS = {
 }
 
 
+#: Базовый путь контура админки. У общего контура это «/admin», у контура
+#: сайта — «/s/<siteId>/admin». Значение живёт в контекстной переменной, а не в
+#: глобальной: сервер обслуживает запросы в нескольких потоках, и глобальная
+#: переменная перепутала бы контуры соседних запросов.
+БАЗА: ContextVar[str] = ContextVar("admin_base", default="/admin")
+
+#: Название витрины в контуре сайта. Пусто — общий контур. Показывается в
+#: заголовке и на странице входа: вход без имени сайта — это общий вход, а не
+#: вход этого сайта, и человек не может убедиться, что пришёл куда хотел.
+БРЕНД: ContextVar[str] = ContextVar("admin_brand", default="")
+
+
+def _путь() -> str:
+    """Начало всех адресов панели. Пропущенный вызов виден проверкой разметки."""
+    return БАЗА.get()
+
+
+def _бренд() -> str:
+    """Название контура для заголовка. Пусто у общего контура."""
+    return БРЕНД.get()
+
+
 def _e(value: Any) -> str:
     return html.escape("" if value is None else str(value), quote=True)
 
@@ -126,7 +149,7 @@ def page(title: str, body: str, *, session_label: str = "", csrf: str = "") -> s
     if session_label:
         nav = (
             f'<span class="mut">{_e(session_label)}</span>'
-            f'<form method="post" action="/admin/logout" style="margin:0">'
+            f'<form method="post" action="{_путь()}/logout" style="margin:0">'
             f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
             f'<button class="ghost" type="submit">Выйти</button></form>'
         )
@@ -134,21 +157,21 @@ def page(title: str, body: str, *, session_label: str = "", csrf: str = "") -> s
         '<!doctype html><html lang="ru"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
         '<meta name="robots" content="noindex,nofollow">'
-        f"<title>{_e(title)} — админка фабрики</title><style>{STYLE}</style></head><body>"
-        '<header><h1><a href="/admin" style="color:inherit;text-decoration:none">'
-        "Админка фабрики</a></h1>"
-        '<a href="/admin/overview">Сводка</a>'
-        '<a href="/admin/content">Каталог</a>'
-        '<a href="/admin/review">Разбор</a>'
-        '<a href="/admin/jobs">Задания</a>'
-        '<a href="/admin/sites">Витрины</a>'
-        '<a href="/admin/users">Люди</a>'
-        '<a href="/admin/settings">Настройки</a>'
-        '<a href="/admin/releases">Выпуски</a>'
-        '<a href="/admin/incidents">Происшествия</a>'
-        '<a href="/admin/new-site">Новая витрина</a>'
-        '<a href="/admin/readiness">Готовность</a>'
-        '<a href="/admin/audit">Журнал</a><span class="sp"></span>'
+        f"<title>{_e(title)} — {_e(_бренд() or 'админка фабрики')}</title><style>{STYLE}</style></head><body>"
+        f'<header><h1><a href="{_путь()}" style="color:inherit;text-decoration:none">'
+        f"{_e(_бренд() or 'Админка фабрики')}</a></h1>"
+        f'<a href="{_путь()}/overview">Сводка</a>'
+        f'<a href="{_путь()}/content">Каталог</a>'
+        f'<a href="{_путь()}/review">Разбор</a>'
+        f'<a href="{_путь()}/jobs">Задания</a>'
+        f'<a href="{_путь()}/sites">Витрины</a>'
+        f'<a href="{_путь()}/users">Люди</a>'
+        f'<a href="{_путь()}/settings">Настройки</a>'
+        f'<a href="{_путь()}/releases">Выпуски</a>'
+        f'<a href="{_путь()}/incidents">Происшествия</a>'
+        f'<a href="{_путь()}/new-site">Новая витрина</a>'
+        f'<a href="{_путь()}/readiness">Готовность</a>'
+        f'<a href="{_путь()}/audit">Журнал</a><span class="sp"></span>'
         f"{nav}</header><main>{body}</main></body></html>"
     )
 
@@ -169,7 +192,7 @@ def login(*, error: str = "", bootstrap: bool = False) -> str:
             '<p class="hint">Учётных записей ещё нет. Пока их нет, можно войти '
             "токеном Control API и завести первого администратора. После этого "
             "вход по токену закроется сам.</p>"
-            '<form method="post" action="/admin/login">'
+            f'<form method="post" action="{_путь()}/login">'
             '<label for="tok">Токен</label>'
             '<input id="tok" name="token" type="password" autocomplete="off" required>'
             '<div class="row"><button type="submit">Войти токеном</button></div>'
@@ -181,7 +204,7 @@ def login(*, error: str = "", bootstrap: bool = False) -> str:
     return page(
         "Вход",
         warn + '<div class="card"><h2>Вход</h2>'
-        '<form method="post" action="/admin/login">'
+        f'<form method="post" action="{_путь()}/login">'
         '<label for="em">Адрес</label>'
         '<input id="em" name="email" type="email" autocomplete="username" required>'
         '<label for="pw">Пароль</label>'
@@ -199,7 +222,7 @@ def accept_invite(*, error: str = "", secret: str = "") -> str:
         warn + '<div class="card"><h2>Принять приглашение</h2>'
         '<p class="hint">Пароль задаёте вы. Он не известен тому, кто вас '
         "пригласил, и нигде не хранится в открытом виде.</p>"
-        '<form method="post" action="/admin/invite/accept">'
+        f'<form method="post" action="{_путь()}/invite/accept">'
         f'<input type="hidden" name="secret" value="{_e(secret)}">'
         '<label for="pw">Новый пароль (не короче 12 символов)</label>'
         '<input id="pw" name="password" type="password" minlength="12" '
@@ -223,9 +246,9 @@ def invite_created(приглашение: dict, секрет: str, *, session_l
         f'{_e(", ".join(приглашение.get("roles") or []))}.</p>'
         '<p class="hint">Ссылка показывается один раз. Она нигде не хранится '
         "в открытом виде: на диске лежит только её отпечаток.</p>"
-        f'<p><code id="invite-link">/admin/invite?secret={_e(секрет)}</code></p>'
+        f'<p><code id="invite-link">{_путь()}/invite?secret={_e(секрет)}</code></p>'
         f'<p class="mut">Действует до {_e(приглашение.get("expiresAt", ""))}.</p>'
-        '<p><a href="/admin/users">← К списку людей</a></p></div>',
+        f'<p><a href="{_путь()}/users">← К списку людей</a></p></div>',
         session_label=session_label,
         csrf=csrf,
     )
@@ -257,21 +280,21 @@ def users(
                 for r in ("viewer", "reviewer", "editor", "operator", "admin")
             )
             действия = (
-                f'<form method="post" action="/admin/users/{_e(o["operatorId"])}/roles">'
+                f'<form method="post" action="{_путь()}/users/{_e(o["operatorId"])}/roles">'
                 f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
                 f'<select name="role" aria-label="Роль">{выбор}</select>'
                 '<button type="submit">Роль</button></form>'
                 + (
-                    f'<form method="post" action="/admin/users/{_e(o["operatorId"])}/unblock">'
+                    f'<form method="post" action="{_путь()}/users/{_e(o["operatorId"])}/unblock">'
                     f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
                     '<button class="ghost" type="submit">Разблокировать</button></form>'
                     if o["state"] == "BLOCKED"
-                    else f'<form method="post" action="/admin/users/{_e(o["operatorId"])}/block">'
+                    else f'<form method="post" action="{_путь()}/users/{_e(o["operatorId"])}/block">'
                     f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
                     '<input name="reason" placeholder="причина" required>'
                     '<button class="ghost" type="submit">Заблокировать</button></form>'
                 )
-                + f'<form method="post" action="/admin/users/{_e(o["operatorId"])}/revoke-sessions">'
+                + f'<form method="post" action="{_путь()}/users/{_e(o["operatorId"])}/revoke-sessions">'
                 f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
                 '<button class="ghost" type="submit">Отозвать сессии</button></form>'
             )
@@ -291,7 +314,7 @@ def users(
         f'<td><span class="pill">{_e(i["state"])}</span></td>'
         f'<td class="mut">{_e(i["expiresAt"])}</td>'
         + (
-            f'<td><form method="post" action="/admin/users/invites/{_e(i["inviteId"])}/revoke">'
+            f'<td><form method="post" action="{_путь()}/users/invites/{_e(i["inviteId"])}/revoke">'
             f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
             '<button class="ghost" type="submit">Отозвать</button></form></td>'
             if может and i["state"] == "PENDING"
@@ -311,7 +334,7 @@ def users(
         + f'</td><td class="mut">{_e(s["createdAt"])}</td>'
         f'<td class="mut">{_e(s["lastSeen"])}</td><td class="mut">{_e(s["userAgent"])}</td>'
         + (
-            f'<td><form method="post" action="/admin/users/sessions/revoke">'
+            f'<td><form method="post" action="{_путь()}/users/sessions/revoke">'
             f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
             f'<input type="hidden" name="sessionId" value="{_e(s["sessionId"])}">'
             '<button class="ghost" type="submit">Отозвать</button></form></td>'
@@ -328,7 +351,7 @@ def users(
         else '<div class="card"><h2>Пригласить</h2>'
         '<p class="hint">Секрет приглашения показывается один раз и '
         "нигде не хранится в открытом виде.</p>"
-        '<form method="post" action="/admin/users/invites">'
+        f'<form method="post" action="{_путь()}/users/invites">'
         f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
         '<label>Адрес<input name="email" type="email" required></label>'
         + (
@@ -411,7 +434,7 @@ def dashboard(
         words = _STATE_WORDS.get(state.get("state", ""), "состояние неизвестно")
         cards.append(
             f'<div class="card {kind or "ok"}"><h2><span class="dot"></span>'
-            f'<a href="/admin/sites/{_e(sid)}">{_e(sid)}</a></h2>'
+            f'<a href="{_путь()}/sites/{_e(sid)}">{_e(sid)}</a></h2>'
             f'<dl><dt>Тип</dt><dd>{_e(site.get("site_type"))}</dd>'
             f'<dt>Домены</dt><dd>{_e(domains)}</dd>'
             f'<dt>Рендеринг</dt><dd>{_e(site.get("render_mode"))}</dd>'
@@ -488,7 +511,7 @@ def site_detail(
     if "jobs:write" in scopes:
         actions.append(
             f'<div class="card"><h2>Задание</h2>'
-            f'<form method="post" action="/admin/sites/{_e(site_id)}/jobs">{hidden}'
+            f'<form method="post" action="{_путь()}/sites/{_e(site_id)}/jobs">{hidden}'
             '<div class="row">'
             '<div><label for="act">Действие</label>'
             '<select id="act" name="action">'
@@ -509,7 +532,7 @@ def site_detail(
     if "cache:write" in scopes:
         actions.append(
             f'<div class="card"><h2>Кэш</h2>'
-            f'<form method="post" action="/admin/sites/{_e(site_id)}/cache">{hidden}'
+            f'<form method="post" action="{_путь()}/sites/{_e(site_id)}/cache">{hidden}'
             '<div class="row">'
             '<div><label for="scope">Область</label>'
             '<select id="scope" name="scope">'
@@ -540,7 +563,7 @@ def site_detail(
             f'<p class="hint">Изменяются только обратимые настройки ядра. Домены, '
             f"канонический хост и флаги индексации отклоняются намеренно.</p>"
             f"<pre><code>{current}</code></pre>"
-            f'<form method="post" action="/admin/sites/{_e(site_id)}/settings">{hidden}'
+            f'<form method="post" action="{_путь()}/sites/{_e(site_id)}/settings">{hidden}'
             '<div class="row">'
             '<div><label for="key">Настройка</label>'
             '<select id="key" name="key">'
@@ -559,7 +582,7 @@ def site_detail(
     return page(
         site_id,
         _flash(flash)
-        + '<p><a href="/admin">← ко всем витринам</a></p>'
+        + f'<p><a href="{_путь()}">← ко всем витринам</a></p>'
         + overview
         + состояние
         + cov
@@ -583,7 +606,7 @@ def _отбор_журнала(отбор: dict) -> str:
     )
     return (
         '<div class="card"><h2>Отбор</h2>'
-        '<form method="get" action="/admin/audit"><div class="row">'
+        f'<form method="get" action="{_путь()}/audit"><div class="row">'
         + поле("actor", "Кто")
         + поле("siteId", "Витрина")
         + поле("action", "Действие (начало имени)")
@@ -593,7 +616,7 @@ def _отбор_журнала(отбор: dict) -> str:
         + поле("since", "С (ISO)")
         + поле("until", "По (ISO)")
         + '<button type="submit">Отобрать</button>'
-        '<a class="ghost" href="/admin/audit">Сбросить</a>'
+        f'<a class="ghost" href="{_путь()}/audit">Сбросить</a>'
         "</div></form></div>"
     )
 
@@ -696,12 +719,12 @@ def review_list(
     состояния = данные.get("byState") or {}
     вкладки = "".join(
         f'<a class="tab{" on" if фильтры.get("state") == с else ""}" '
-        f'href="/admin/review?state={_e(с)}">{_e(с)} <b>{состояния.get(с, 0)}</b></a>'
+        f'href="{_путь()}/review?state={_e(с)}">{_e(с)} <b>{состояния.get(с, 0)}</b></a>'
         for с in ("OPEN", "IN_REVIEW", "RESOLVED", "DISMISSED")
     )
     вкладки = (
         f'<a class="tab{" on" if not фильтры.get("state") else ""}" '
-        f'href="/admin/review">Все <b>{данные.get("totalAll", 0)}</b></a>' + вкладки
+        f'href="{_путь()}/review">Все <b>{данные.get("totalAll", 0)}</b></a>' + вкладки
     )
 
     строки = []
@@ -712,7 +735,7 @@ def review_list(
             for c in i.get("claims") or []
         )
         строки.append(
-            f'<tr><td><a href="/admin/review/{_e(i["itemId"])}">{_e(i["title"] or "(без названия)")}</a>'
+            f'<tr><td><a href="{_путь()}/review/{_e(i["itemId"])}">{_e(i["title"] or "(без названия)")}</a>'
             f'<div class="mut">{_e(i["siteId"])} · {i.get("year") or "год неизвестен"}</div></td>'
             f"<td>{утв}</td>"
             f'<td><span class="pill {_состояние_класс(i["state"])}">{_e(i["state"])}</span>'
@@ -735,13 +758,13 @@ def review_list(
     навигация = (
         '<div class="pager">'
         + (
-            f'<a href="/admin/review?offset={max(0, смещение - предел)}{состояние_параметр}">← Назад</a>'
+            f'<a href="{_путь()}/review?offset={max(0, смещение - предел)}{состояние_параметр}">← Назад</a>'
             if смещение > 0
             else '<span class="mut">← Назад</span>'
         )
         + f'<span class="mut">{смещение + 1}–{min(всего, смещение + предел)} из {всего}</span>'
         + (
-            f'<a href="/admin/review?offset={смещение + предел}{состояние_параметр}">Вперёд →</a>'
+            f'<a href="{_путь()}/review?offset={смещение + предел}{состояние_параметр}">Вперёд →</a>'
             if смещение + предел < всего
             else '<span class="mut">Вперёд →</span>'
         )
@@ -755,7 +778,7 @@ def review_list(
             '<p class="mut">Сначала сухой прогон: он покажет число, разницу и '
             "поимённую выборку. Применить можно только тот набор, который был "
             "показан.</p>"
-            '<form method="get" action="/admin/review/batch">'
+            f'<form method="get" action="{_путь()}/review/batch">'
             '<label>Код конфликта<input name="conflictCode" '
             'value="PROVIDER_TYPE_VS_KIND_TAG"></label>'
             '<label>Из значения<input name="fromValue" placeholder="MOVIE"></label>'
@@ -807,7 +830,7 @@ def _поток(i: dict, сверка: dict | None, csrf: str, может: bool)
     действия = ""
     if может and состояние == "RESOLVED":
         действия += (
-            f'<form method="post" action="/admin/review/{_e(i["itemId"])}/approve">'
+            f'<form method="post" action="{_путь()}/review/{_e(i["itemId"])}/approve">'
             f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
             f'<input type="hidden" name="expectedVersion" value="{i["version"]}">'
             '<label>Чем подтверждено решение<input name="note" required></label>'
@@ -817,14 +840,14 @@ def _поток(i: dict, сверка: dict | None, csrf: str, может: bool)
         )
     if может and состояние == "APPROVED":
         действия += (
-            f'<form method="post" action="/admin/review/{_e(i["itemId"])}/publish">'
+            f'<form method="post" action="{_путь()}/review/{_e(i["itemId"])}/publish">'
             f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
             f'<input type="hidden" name="expectedVersion" value="{i["version"]}">'
             "<button type=\"submit\">Опубликовать на витрину</button></form>"
         )
     if может and состояние == "PUBLISHED":
         действия += (
-            f'<form method="post" action="/admin/review/{_e(i["itemId"])}/unpublish">'
+            f'<form method="post" action="{_путь()}/review/{_e(i["itemId"])}/unpublish">'
             f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
             '<label>Причина отката<input name="note" required></label>'
             '<button class="ghost" type="submit">Снять с витрины</button></form>'
@@ -848,7 +871,7 @@ def review_item(
         f'<dt>Доказательство</dt><dd><code>{_e(c["evidence"])}</code></dd>'
         f'<dt>Уверенность</dt><dd>{c.get("confidence", 0)}</dd></dl>'
         + (
-            f'<form method="post" action="/admin/review/{_e(i["itemId"])}/decide">'
+            f'<form method="post" action="{_путь()}/review/{_e(i["itemId"])}/decide">'
             f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
             f'<input type="hidden" name="value" value="{_e(c["value"])}">'
             f'<input type="hidden" name="expectedVersion" value="{i["version"]}">'
@@ -875,20 +898,20 @@ def review_item(
     действия = ""
     if может_решать and i["state"] == "OPEN":
         действия += (
-            f'<form method="post" action="/admin/review/{_e(i["itemId"])}/claim">'
+            f'<form method="post" action="{_путь()}/review/{_e(i["itemId"])}/claim">'
             f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
             "<button class=\"ghost\" type=\"submit\">Взять в работу</button></form>"
         )
     if может_решать and i["state"] in ("RESOLVED", "DISMISSED"):
         действия += (
-            f'<form method="post" action="/admin/review/{_e(i["itemId"])}/revert">'
+            f'<form method="post" action="{_путь()}/review/{_e(i["itemId"])}/revert">'
             f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
             '<label>Причина отмены<input name="note" required></label>'
             '<button class="ghost" type="submit">Отменить решение</button></form>'
         )
     if может_решать and i["state"] in ("OPEN", "IN_REVIEW"):
         действия += (
-            f'<form method="post" action="/admin/review/{_e(i["itemId"])}/decide">'
+            f'<form method="post" action="{_путь()}/review/{_e(i["itemId"])}/decide">'
             f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
             f'<input type="hidden" name="dismiss" value="1">'
             f'<input type="hidden" name="expectedVersion" value="{i["version"]}">'
@@ -899,7 +922,7 @@ def review_item(
     return page(
         i.get("title") or "Запись",
         _flash(flash)
-        + '<p><a href="/admin/review">← К очереди</a></p>'
+        + f'<p><a href="{_путь()}/review">← К очереди</a></p>'
         + f'<div class="card"><h2>{_e(i.get("title") or "(без названия)")}</h2>'
         + _dl(
             [
@@ -953,7 +976,7 @@ def review_batch(предпросмотр: dict, *, session_label: str, csrf: st
     можно = однороден and предпросмотр.get("affected", 0) > 0
     return page(
         "Сухой прогон",
-        '<p><a href="/admin/review">← К очереди</a></p>'
+        f'<p><a href="{_путь()}/review">← К очереди</a></p>'
         + предупреждение
         + '<div class="card"><h2>Что будет сделано</h2>'
         + _dl(
@@ -975,7 +998,7 @@ def review_batch(предпросмотр: dict, *, session_label: str, csrf: st
         + (
             (
                 '<div class="card"><h2>Применить</h2>'
-                '<form method="post" action="/admin/review/batch">'
+                f'<form method="post" action="{_путь()}/review/batch">'
                 f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
                 f'<input type="hidden" name="conflictCode" value="{_e(предпросмотр.get("conflictCode", ""))}">'
                 f'<input type="hidden" name="fromValue" value="{_e(предпросмотр.get("fromValue", ""))}">'
@@ -1039,7 +1062,7 @@ def overview(данные: dict, *, flash: dict | None, session_label: str, csrf
     )
 
     строки = "".join(
-        f'<tr><td><a href="/admin/content?siteId={_e(в["siteId"])}">{_e(в["siteId"])}</a></td>'
+        f'<tr><td><a href="{_путь()}/content?siteId={_e(в["siteId"])}">{_e(в["siteId"])}</a></td>'
         f'<td>{_число(в["titles"])}</td>'
         f'<td>{_доля(в["playbackCoverage"])}</td>'
         f'<td>{_число(в["blockedByContract"])}</td>'
@@ -1110,7 +1133,7 @@ def content_list(
             "offset": данные.get("offset", 0),
         }
         параметры.update(замены)
-        return "/admin/content?" + "&".join(
+        return f"{_путь()}/content?" + "&".join(
             f"{k}={_e(str(v))}" for k, v in параметры.items() if v not in ("", None)
         )
 
@@ -1128,7 +1151,7 @@ def content_list(
     )
 
     строки = "".join(
-        f'<tr><td><a href="/admin/content/{_e(site)}/{_e(str(i["externalId"]))}">'
+        f'<tr><td><a href="{_путь()}/content/{_e(site)}/{_e(str(i["externalId"]))}">'
         f'{_e(str(i["title"] or "(без названия)"))}</a>'
         f'<div class="mut">{_e(str(i["externalId"]))}</div></td>'
         f'<td class="mut">{_e(str(i.get("year") or "—"))}</td>'
@@ -1164,7 +1187,7 @@ def content_list(
     return page(
         "Каталог",
         _flash(flash) + '<div class="card"><h2>Отбор</h2>'
-        '<form method="get" action="/admin/content">'
+        f'<form method="get" action="{_путь()}/content">'
         f'<label>Витрина<select name="siteId">{выбор_витрин}</select></label>'
         f'<label>Поиск<input name="q" value="{_e(q)}" '
         'placeholder="название или идентификатор"></label>'
@@ -1257,7 +1280,7 @@ def content_item(данные: dict, *, flash: dict | None, session_label: str, 
                 ("Кто", разбор.get("decidedBy") or "—"),
             ]
         )
-        + f'<p><a href="/admin/review/{_e(str(разбор.get("itemId", "")))}">'
+        + f'<p><a href="{_путь()}/review/{_e(str(разбор.get("itemId", "")))}">'
         "Открыть в очереди разбора →</a></p></div>"
     )
     оценки = данные.get("ratings") or {}
@@ -1265,7 +1288,7 @@ def content_item(данные: dict, *, flash: dict | None, session_label: str, 
 
     return page(
         str(данные.get("title") or "Запись"),
-        _flash(flash) + f'<p><a href="/admin/content?siteId={_e(str(данные.get("siteId", "")))}">'
+        _flash(flash) + f'<p><a href="{_путь()}/content?siteId={_e(str(данные.get("siteId", "")))}">'
         "← К каталогу</a></p>"
         + f'<div class="card"><h2>{_e(str(данные.get("title") or "(без названия)"))}</h2>'
         + _dl(
@@ -1361,7 +1384,7 @@ def jobs(данные: dict, *, flash: dict | None, session_label: str, csrf: st
 
 def sites_list(данные: dict, *, flash: dict | None, session_label: str, csrf: str) -> str:
     строки = "".join(
-        f'<tr><td><a href="/admin/sites/{_e(str(i.get("siteId")))}">'
+        f'<tr><td><a href="{_путь()}/sites/{_e(str(i.get("siteId")))}">'
         f'{_e(str(i.get("siteId")))}</a>'
         f'<div class="mut">{_e(", ".join(i.get("domains") or []))}</div></td>'
         f'<td><span class="pill {ЗДОРОВЬЕ.get((i.get("health") or {}).get("state"), "")}">'
@@ -1442,7 +1465,7 @@ def settings(
         for s in витрины
     )
     переключатель = (
-        '<div class="card"><form method="get" action="/admin/settings">'
+        f'<div class="card"><form method="get" action="{_путь()}/settings">'
         '<div class="row"><div><label for="site">Витрина</label>'
         f'<select id="site" name="site">{выбор}</select></div>'
         '<button type="submit">Открыть</button></div></form>'
@@ -1454,7 +1477,7 @@ def settings(
         форма = ""
         if может:
             форма = (
-                f'<form method="post" action="/admin/settings">{hidden}'
+                f'<form method="post" action="{_путь()}/settings">{hidden}'
                 f'<input type="hidden" name="site" value="{_e(site_id)}">'
                 f'<input type="hidden" name="key" value="{_e(поле["key"])}">'
                 f'<input type="hidden" name="expectedVersion" value="{_e(версия)}">'
@@ -1501,7 +1524,7 @@ def settings(
             '<div class="card"><h2>Откат</h2>'
             f'<p>Последнее изменение записано {_e(откат.get("recordedAt", ""))}. '
             f"Вернуть: {назад}.</p>"
-            f'<form method="post" action="/admin/settings/rollback">{hidden}'
+            f'<form method="post" action="{_путь()}/settings/rollback">{hidden}'
             f'<input type="hidden" name="site" value="{_e(site_id)}">'
             '<button name="dryRun" value="1" type="submit">Проверить откат</button>'
             '<button type="submit">Откатить</button></form></div>'
@@ -1793,7 +1816,7 @@ def new_site(
     """Мастер заведения витрины: шаги, состояние и сухой прогон."""
     hidden = f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
     список = "".join(
-        f'<tr><td><a href="/admin/new-site?request={_e(з["requestId"])}">'
+        f'<tr><td><a href="{_путь()}/new-site?request={_e(з["requestId"])}">'
         f'{_e(з["siteId"])}</a></td>'
         f'<td class="mut">{_e(з.get("createdAt", ""))}</td>'
         f'<td><span class="pill {"ok" if з.get("complete") else "warn"}">'
@@ -1820,7 +1843,7 @@ def new_site(
         if not может
         else '<div class="card"><h2>Новая заявка</h2>'
         '<p class="hint">Ни SSH, ни правка файлов не нужны: весь путь проходится здесь.</p>'
-        f'<form method="post" action="/admin/new-site">{hidden}'
+        f'<form method="post" action="{_путь()}/new-site">{hidden}'
         '<label for="siteId">Идентификатор витрины</label>'
         '<input id="siteId" name="siteId" placeholder="строчные буквы, цифры и дефис">'
         '<button type="submit">Завести заявку</button></form></div>'
@@ -1839,20 +1862,20 @@ def new_site(
         кнопки = []
         if состояние == "DRAFT" and готов:
             кнопки.append(
-                f'<form method="post" action="/admin/new-site/{rid}/approve">{hidden}'
+                f'<form method="post" action="{_путь()}/new-site/{rid}/approve">{hidden}'
                 f'<input type="hidden" name="planHash" value="{отпечаток}">'
                 "<button type=\"submit\">Подтвердить план</button></form>"
             )
         if состояние == "APPROVED":
             кнопки.append(
-                f'<form method="post" action="/admin/new-site/{rid}/provision">{hidden}'
+                f'<form method="post" action="{_путь()}/new-site/{rid}/provision">{hidden}'
                 "<button type=\"submit\">Выложить канарейку</button></form>"
             )
         if состояние == "PROVISIONED":
             кнопки.append(
-                f'<form method="post" action="/admin/new-site/{rid}/publish">{hidden}'
+                f'<form method="post" action="{_путь()}/new-site/{rid}/publish">{hidden}'
                 '<button class="ghost" type="submit">Опубликовать</button></form>'
-                f'<form method="post" action="/admin/new-site/{rid}/rollback">{hidden}'
+                f'<form method="post" action="{_путь()}/new-site/{rid}/rollback">{hidden}'
                 "<button type=\"submit\">Откатить</button></form>"
             )
         пояснение = {
@@ -1889,7 +1912,7 @@ def new_site(
             )
             форма = (
                 f'<div class="card"><h2>Шаг: {_e(следующий)}</h2>'
-                f'<form method="post" action="/admin/new-site/{_e(заявка["requestId"])}">'
+                f'<form method="post" action="{_путь()}/new-site/{_e(заявка["requestId"])}">'
                 f'{hidden}<input type="hidden" name="step" value="{_e(следующий)}">'
                 f'<div class="row">{поля}<button type="submit">Дальше</button></div>'
                 "</form></div>"

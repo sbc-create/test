@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import http.server
 import json
+import re
 import signal
 import threading
 from dataclasses import dataclass
@@ -295,7 +296,10 @@ class _Handler(http.server.BaseHTTPRequestHandler):
         self._send(status, payload)
 
     def _serve(self, method: str, path: str, query: dict) -> None:
-        if path == "/admin" or path.startswith("/admin/"):
+        # Контур сайта: /s/<siteId>/admin[/...]. Разбор принадлежности делает
+        # сама панель — транспорт лишь отдаёт ей путь целиком.
+        сайтовый = re.match(r"^/s/[^/]+/admin(/|$)", path) is not None
+        if path == "/admin" or path.startswith("/admin/") or сайтовый:
             self._handle_admin(method, path, query=query)
             return
         if path == "/account" or path.startswith("/account/"):

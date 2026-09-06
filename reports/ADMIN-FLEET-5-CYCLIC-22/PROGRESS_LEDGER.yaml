@@ -60,7 +60,7 @@ entries:
     cycle: 2
     note: "изоляция тенанта в управляющем слое"
     branch: claude/core-product-8plus-20
-    full_head_sha: ЗАПОЛНЯЕТСЯ_ПОСЛЕ_КОММИТА
+    full_head_sha: e808b3262d42dffdfd5591d3892a68dee39ba506
     core_percent: 100.0
     central_admin: 8
     fleet_gates_closed: 0
@@ -86,4 +86,36 @@ entries:
       fleetTenancy 7: проверка стоит в одном месте и покрывает шесть маршрутов,
       списки и журнал. Не 8: своего входа у сайта ещё нет, и проверить путь
       целиком нечем.
+
+  - timestamp: "2026-09-06T08:10:00Z"
+    cycle: 3
+    note: "своя точка входа, печенья и оформление у каждого сайта"
+    branch: claude/core-product-8plus-20
+    full_head_sha: ЗАПОЛНЯЕТСЯ_ПОСЛЕ_КОММИТА
+    core_percent: 100.0
+    central_admin: 8
+    fleet_gates_closed: 0
+    fleet_gates_total: 9
+    fleet_scores:
+      fleetContract: 8
+      fleetTenancy: 8
+      fleetRbac: 6
+      fleetPortalLight: 0
+      fleetPulse: 0
+      fleetEditorial: 0
+      fleetLordsDark: 0
+      fleetLordsLight: 0
+      fleetPilotRollout: 0
+    fleet_percent: 30.6
+    progress_delta_since_previous: 4.2
+    tests: "4375 passed, 3 skipped, 0 failed"
+    defects_found: 1
+    regressions_opened: 0
+    production_status: "не изменялась; mutations 0"
+    next_cycle: 4
+    comment: >-
+      fleetContract и fleetTenancy закрыты на 8: договор проверяется схемой,
+      изоляция — одной точкой проверки и двенадцатью браузерно-независимыми
+      сценариями. Ворота семейств по-прежнему 0: без полного E2E ставить
+      оценку семейству нельзя.
 
