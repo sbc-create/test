@@ -1,0 +1,40 @@
+{
+ "gate": "1. Воспроизведение блокера",
+ "catalogSnapshotAt": "2026-09-06T04:45:32.935000+00:00",
+ "seoSnapshotAt": "2026-09-05 (экспорт очереди SEO-21)",
+ "seoConsumerReference": "99e12ba7588693b17229046bd6a747675be7bbc9",
+ "queueTotal": 268,
+ "queueBreakdown": {
+  "LordsURL": 155,
+  "LordsНеАдрес": 12,
+  "yummyaniURL": 71,
+  "yummyaniНеАдрес": 30
+ },
+ "catalogRecords": 53232,
+ "routes": 53025,
+ "routeCollisionsResidual": 207,
+ "routesDisambiguatedByNumber": 5603,
+ "playbackCounts": {
+  "PLAYABLE": 52512,
+  "BLOCKED_BY_CONTRACT": 654,
+  "NO_IDENTIFIER": 66
+ },
+ "matched": 155,
+ "unmatched": 0,
+ "collisions": 0,
+ "expected159": {
+  "held": 159,
+  "resolved": 109,
+  "remaining": 50,
+  "remainingCause": "каталог yummyani недоступен ядру"
+ },
+ "bindingDigest": "fde15758a281004171d0754ca0a7c16276c1b9fdef7af31bd06c0696ea4f1232",
+ "method": "маршрут вычисляется функцией самой витрины (factory.lords.live_catalog.slugify) с воспроизведением её же правила разведения одинаковых адресов номером",
+ "notUsed": [
+  "сопоставление по названию",
+  "транслитерация помимо движка",
+  "DOM",
+  "похожесть слагов",
+  "нечёткий поиск"
+ ]
+}
