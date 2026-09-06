@@ -961,16 +961,29 @@ def _listing_pages(
     show_type: bool = True,
     show_facets: bool = True,
     extra_top: str = "",
+    order: str = "catalog",
 ) -> list:
-    """Список с фасетами, сортировкой и пагинацией. Одна функция на все разделы."""
-    items = _sorted(titles)
+    """Список с фасетами, сортировкой и пагинацией. Одна функция на все разделы.
+
+    `order` выбирает порядок раздела. `catalog` — общий порядок витрины: год
+    выпуска, затем название. `arrival` — лента поступлений: сначала то, что
+    появилось у источника позже.
+
+    Порядок — не оформление. Раздел новинок обещает зрителю ленту поступлений,
+    и пока он получал общий порядок каталога, обещание не выполнялось: раздел
+    повторял каталог запись в запись.
+    """
+    items = _by_arrival(titles) if order == "arrival" else _sorted(titles)
     per_page = ctx["per_page"]
     # Разбиение по блокам годов ограничивает правку одним годом: добавленная
     # запись 2026-го трогает 82 страницы вместо 2216. Договор и цена перехода —
     # adr/0007-pagination-by-year-blocks.md. Пока владелец не согласился на
     # однократную смену состава страниц, поведение прежнее.
-    страницы = pagination_mod.разбить(
-        items, per_page, по_годам=bool(ctx.get("pagination_by_year")))
+    # Блоки годов группируют страницы по году выпуска. Для ленты поступлений это
+    # бессмысленно: она упорядочена по другой величине, и блоки пересобрали бы
+    # её обратно в каталог — то самое, чего раздел обещает не делать.
+    по_годам = bool(ctx.get("pagination_by_year")) and order != "arrival"
+    страницы = pagination_mod.разбить(items, per_page, по_годам=по_годам)
     pages_count = len(страницы)
     out = []
     position = ctx["facet_position"]
@@ -2359,7 +2372,8 @@ def render_site(
     def texts_of(section: str) -> dict:
         return ctx["texts"].get(section) or {}
 
-    def listing(section, *, base, titles, subset, trail_label, show_type=True):
+    def listing(section, *, base, titles, subset, trail_label, show_type=True,
+                order="catalog"):
         entry = by_section.get(section)
         if entry is None:
             return
@@ -2371,6 +2385,7 @@ def render_site(
             description=text.get("description", f"{title} каталога."),
             intro=text.get("intro", ""), indexable=entry.indexable,
             trail=(("Главная", "/"), (trail_label, "")), show_type=show_type,
+            order=order,
         ):
             add(page)
 
@@ -2389,7 +2404,8 @@ def render_site(
 
     # Новое
     listing("new_index", base="/new/", titles=pool, subset=kinds,
-            trail_label=texts_of("new_index").get("title") or "Новое")
+            trail_label=texts_of("new_index").get("title") or "Новое",
+            order="arrival")
 
     # Расписание
     if "schedule" in by_section:
