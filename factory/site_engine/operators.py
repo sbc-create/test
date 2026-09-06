@@ -545,7 +545,7 @@ class OperatorDirectory:
             )
         return запись, секрет
 
-    def list_invites(self) -> list[dict[str, Any]]:
+    def list_invites(self, *, scope_site_id: str = "") -> list[dict[str, Any]]:
         итог = []
         for файл in sorted(self.invites_dir.glob("*.json")):
             try:
@@ -556,6 +556,9 @@ class OperatorDirectory:
             строка = приглашение.as_dict()
             if приглашение.state == "PENDING" and приглашение.expires_at < float(self._now()):
                 строка["state"] = "EXPIRED"
+            if scope_site_id and str(данные.get("siteId") or "") != scope_site_id:
+                # Приглашение соседа — это его адрес почты и его роль.
+                continue
             итог.append(строка)
         return итог
 
@@ -785,7 +788,7 @@ class OperatorDirectory:
         return оператор
 
     def list_sessions(
-        self, *, operator_id: str = "", active_only: bool = True
+        self, *, operator_id: str = "", active_only: bool = True, scope_site_id: str = ""
     ) -> list[dict[str, Any]]:
         итог = []
         for файл in sorted(self.sessions_dir.glob("*.json")):
@@ -795,6 +798,16 @@ class OperatorDirectory:
                 continue
             if operator_id and данные.get("operatorId") != operator_id:
                 continue
+            if scope_site_id:
+                # Сессия соседа не должна быть видна: в списке стоит адрес
+                # владельца, и перечень сессий — это перечень людей соседнего
+                # сайта, только другой дорогой.
+                try:
+                    владелец = self.get(данные.get("operatorId", ""))
+                except OperatorError:
+                    continue
+                if владелец.site_id != scope_site_id:
+                    continue
             отозвана = bool(данные.get("revokedAtRaw"))
             if active_only and отозвана:
                 continue

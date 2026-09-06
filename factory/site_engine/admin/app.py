@@ -803,7 +803,11 @@ class AdminApp:
             from factory.site_engine.operators import scopes_for
 
             токен_сессии = self._control.mint_session_principal(
-                label=оператор.email, scopes=scopes_for(оператор.roles)
+                label=оператор.email,
+                scopes=scopes_for(оператор.roles),
+                # Принадлежность едет вместе с правами: управляющий слой обязан
+                # знать тенанта, иначе список людей приходит со всего массива.
+                site_id=оператор.site_id,
             )
             session = self._sessions.create(
                 токен_сессии,

@@ -417,7 +417,7 @@ class ControlApi:
         """
         return self._principals.get(token)
 
-    def mint_session_principal(self, *, label: str, scopes) -> str:
+    def mint_session_principal(self, *, label: str, scopes, site_id: str = "") -> str:
         """Временный принципал для сессии оператора.
 
         Права оператора задаются его ролями, а не выданным заранее токеном. Но
@@ -435,6 +435,7 @@ class ControlApi:
             token_id=hashlib.sha256(токен.encode("utf-8")).hexdigest()[:12],
             scopes=frozenset(scopes),
             label=label,
+            site_id=site_id,
         )
         return токен
 
@@ -444,7 +445,14 @@ class ControlApi:
         if прежний is None:
             return
         self._principals[token] = Principal(
-            token_id=прежний.token_id, scopes=frozenset(scopes), label=прежний.label
+            token_id=прежний.token_id,
+            scopes=frozenset(scopes),
+            label=прежний.label,
+            # Принадлежность переживает обновление прав. Пересборка принципала
+            # без неё молча превращала местного администратора в видящего весь
+            # массив — и именно так это и происходило: права обновлялись на
+            # каждом запросе панели.
+            site_id=прежний.site_id,
         )
 
     def drop_session_principal(self, token: str) -> None:
@@ -1676,11 +1684,18 @@ class ControlApi:
                         role=self._опция(body, "role"),
                         offset=self._целое(body, "offset", 0, 0, 100000),
                         limit=self._целое(body, "limit", 50, 1, 200),
+                        # Привязанный видит только своих. Иначе список людей —
+                        # это перечень всех, кто есть у соседей, включая их
+                        # адреса и роли.
+                        scope_site_id=principal.site_id,
                     ),
                 )
             if method == "GET" and tail == ["invites"]:
                 principal.require(SCOPE_OPERATORS)
-                return ApiResponse(status=200, body={"items": каталог.list_invites()})
+                return ApiResponse(
+                    status=200,
+                    body={"items": каталог.list_invites(scope_site_id=principal.site_id)},
+                )
             if method == "GET" and tail == ["sessions"]:
                 principal.require(SCOPE_OPERATORS)
                 # Сессия отдаётся с адресом и ролями владельца. Один только
@@ -1690,6 +1705,7 @@ class ControlApi:
                 строки = каталог.list_sessions(
                     operator_id=self._опция(body, "operatorId"),
                     active_only=body.get("activeOnly", True) is not False,
+                    scope_site_id=principal.site_id,
                 )
                 for строка in строки:
                     try:
@@ -1769,6 +1785,7 @@ class ControlApi:
                         body.get("roles") or [],
                         actor_id=актор_id,
                         actor_roles=body.get("actorRoles") or [],
+                        scope_site_id=principal.site_id,
                     )
                 elif действие == "block":
                     итог = каталог.block(
