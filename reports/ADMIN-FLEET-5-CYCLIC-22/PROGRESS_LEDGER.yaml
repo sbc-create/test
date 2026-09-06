@@ -123,7 +123,7 @@ entries:
     cycle: 4
     note: "браузерная приёмка контура сайта; две утечки соседа"
     branch: claude/core-product-8plus-20
-    full_head_sha: ЗАПОЛНЯЕТСЯ_ПОСЛЕ_КОММИТА
+    full_head_sha: f807f53eefd9127db9e73757b79edb5e6b1a5293
     core_percent: 100.0
     central_admin: 8
     fleet_gates_closed: 0
