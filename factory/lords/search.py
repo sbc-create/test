@@ -192,7 +192,7 @@ def did_you_mean(catalog, query: str) -> str | None:
                     # честно — «матр» против «мат», — и не требует ни рейтинга,
                     # ни частотности, которых у нас нет.
                     common = 0
-                    for a, b in zip(word, variant):
+                    for a, b in zip(word, variant, strict=False):
                         if a != b:
                             break
                         common += 1

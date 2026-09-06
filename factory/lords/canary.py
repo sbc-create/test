@@ -43,10 +43,10 @@ import hashlib
 import json
 import os
 import shutil
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Callable
 
 #: Каталог рантайма витрин по умолчанию. Совпадает с `runtime_root` в
 #: `config/directions/lords.json`; в тестах подменяется аргументом, а не

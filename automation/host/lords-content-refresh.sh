@@ -20,6 +20,11 @@ REPO="${FACTORY_REPO:-/srv/site-factory/repo}"
 PYTHON="${FACTORY_PYTHON:-${REPO}/.venv/bin/python}"
 SITES=(lords-01 lords-02 lords-03)
 STATE_DIR="${LORDS_REFRESH_STATE:-/var/lib/lords-content-refresh}"
+RUNTIME_ROOT="${LORDS_RUNTIME_ROOT:-/srv/lords}"
+# Хранилище закреплённых артефактов шаблона. Внутри рантайма, а не в репозитории:
+# релиз обязан оставаться восстановимым и после того, как рабочее дерево уедет.
+ARTIFACT_ROOT="${LORDS_ARTIFACT_ROOT:-/srv/lords/.artifacts}"
+GUARD="${REPO}/automation/host/lords-refresh-guard.py"
 KEEP_RELEASES="${LORDS_KEEP_RELEASES:-4}"
 # Сколько записей дополняется из detail за прогон. Полный каталог за раз —
 # это тысячи запросов подряд; покрытие набирается прогонами и кэшируется.
@@ -60,8 +65,32 @@ fi
 CHANGED=0
 
 for site in "${SITES[@]}"; do
-  runtime="/srv/lords/${site}"
+  runtime="${RUNTIME_ROOT}/${site}"
   current="$(readlink -f "${runtime}/current" 2>/dev/null || true)"
+
+  # --- ЗАКРЕПЛЁННЫЙ ШАБЛОН ------------------------------------------------
+  # Отрисовка идёт артефактом, который назвал манифест ДЕЙСТВУЮЩЕГО релиза,
+  # а не рабочим деревом. Прежде было наоборот, и цена этого известна: на
+  # lords-02 канареечный релиз прожил сорок восемь минут — до первого
+  # обновления каталога, которое пересобрало витрину из развёрнутого
+  # checkout и вернуло прежний шаблон. Переключение при этом считалось
+  # успешным, и публичная приёмка была невозможна.
+  #
+  # Отказ ворот означает «эту витрину не трогаем», а не «останавливаем всё»:
+  # остановка обновления трёх витрин ради одной уже была и стоила свежести
+  # каталога на всех.
+  TEMPLATE_ROOT="$REPO"
+  if [ "${LORDS_PINNED_TEMPLATE:-1}" = "1" ] && [ -x "$GUARD" ]; then
+    if pinned="$("$PYTHON" "$GUARD" --runtime-root "$RUNTIME_ROOT" \
+                 --artifact-root "$ARTIFACT_ROOT" plan "$site" 2>&1)"; then
+      TEMPLATE_ROOT="$pinned"
+      log "${site}: шаблон закреплён релизом ${current##*/}"
+    else
+      log "${site}: ворота шаблона отказали — ${pinned}"
+      log "${site}: витрина остаётся на прежнем релизе, обновление пропущено"
+      continue
+    fi
+  fi
   # Каталог сборки обязан лежать на ТОМ ЖЕ монтировании, что и релизы.
   #
   # Быстрый путь связывает базовый релиз жёсткими ссылками, а ядро отказывает в
@@ -100,7 +129,7 @@ for site in "${SITES[@]}"; do
   # «не надо», останавливают обновление каталога навсегда и незаметно.
   if [ "${LORDS_RENDER_GATE:-1}" = "1" ] && [ -x "${REPO}/automation/host/lords-render-gate.py" ]; then
     gate_code=0
-    "$PYTHON" "${REPO}/automation/host/lords-render-gate.py" "$site" --repo "$REPO" || gate_code=$?
+    "$PYTHON" "${REPO}/automation/host/lords-render-gate.py" "$site" --repo "$TEMPLATE_ROOT" || gate_code=$?
     if [ "$gate_code" -eq 10 ]; then
       log "${site}: вход не изменился — сборка пропущена"
       rm -rf "$staging"; trap - EXIT
@@ -126,7 +155,7 @@ for site in "${SITES[@]}"; do
      && [ -n "$current" ] && [ -d "${current}/site" ]; then
     fast_code=0
     "$PYTHON" "${REPO}/automation/host/lords-fast-render.py" "$site" \
-      --repo "$REPO" --staging "$staging" --current "${current}/site" || fast_code=$?
+      --repo "$TEMPLATE_ROOT" --staging "$staging" --current "${current}/site" || fast_code=$?
     case "$fast_code" in
       0)
         log "${site}: staging собран быстрым путём"
@@ -136,10 +165,10 @@ for site in "${SITES[@]}"; do
         log "${site}: переписывать нечего — публикация не нужна"
         # Отпечаток и снимок произведений принимаются: этот вход отработан.
         if [ -x "${REPO}/automation/host/lords-render-gate.py" ]; then
-          "$PYTHON" "${REPO}/automation/host/lords-render-gate.py" "$site" --repo "$REPO" --record || true
+          "$PYTHON" "${REPO}/automation/host/lords-render-gate.py" "$site" --repo "$TEMPLATE_ROOT" --record || true
         fi
         "$PYTHON" "${REPO}/automation/host/lords-fast-render.py" "$site" \
-          --repo "$REPO" --staging "$staging" --current "${current}/site" --record >/dev/null || true
+          --repo "$TEMPLATE_ROOT" --staging "$staging" --current "${current}/site" --record >/dev/null || true
         rm -rf "$staging"; trap - EXIT
         continue
         ;;
@@ -152,7 +181,11 @@ for site in "${SITES[@]}"; do
 
   # Сборка в сторону. Пустой каталог останавливает сборку внутри build_live_site,
   # поэтому пустая витрина сюда не доедет.
-  if [ "$fast_done" != "1" ] && ! "$PYTHON" - "$site" "$staging" "$ENRICH_BUDGET" "$PLAY_BUDGET" <<'PYEOF'
+  # Полная сборка выполняется В КОРНЕ ЗАКРЕПЛЁННОГО ШАБЛОНА: `factory`
+  # разрешается от текущего каталога, и запуск из репозитория означал бы
+  # отрисовку рабочим деревом при закреплённом артефакте — то есть ровно то,
+  # что чинится.
+  if [ "$fast_done" != "1" ] && ! ( cd "$TEMPLATE_ROOT" && "$PYTHON" - "$site" "$staging" "$ENRICH_BUDGET" "$PLAY_BUDGET" ) <<'PYEOF'
 import os
 import sys
 from pathlib import Path
@@ -243,13 +276,13 @@ PYEOF
     # Отпечаток принимается и здесь: собранное совпало с текущим релизом, значит
     # этот вход уже отработан и повторять сборку незачем.
     if [ -x "${REPO}/automation/host/lords-render-gate.py" ]; then
-      "$PYTHON" "${REPO}/automation/host/lords-render-gate.py" "$site" --repo "$REPO" --record || true
+      "$PYTHON" "${REPO}/automation/host/lords-render-gate.py" "$site" --repo "$TEMPLATE_ROOT" --record || true
     fi
     # Снимок произведений — по той же причине. Без него следующий цикл счёл бы
     # вход изменившимся и пересобрал то, что уже совпало.
     if [ -x "${REPO}/automation/host/lords-fast-render.py" ] && [ -n "$current" ]; then
       "$PYTHON" "${REPO}/automation/host/lords-fast-render.py" "$site" \
-        --repo "$REPO" --staging "$staging" --current "${current}/site" --record >/dev/null || true
+        --repo "$TEMPLATE_ROOT" --staging "$staging" --current "${current}/site" --record >/dev/null || true
     fi
     rm -rf "$staging"; trap - EXIT
     continue
@@ -298,7 +331,11 @@ PYEOF
       [ -n "$current" ] && cp -a "${current}/serve.py" "${target}/serve.py"
       log "${site}: рантайм из репозитория не собрался — оставлен прежний"
     fi
-    for extra in bundle-manifest.json rollback.json README.md Dockerfile; do
+    # bundle-manifest.json больше не переносится копией. Именно перенос и
+    # делал манифест враньём: он утверждал происхождение и версию шаблона
+    # прежнего релиза, тогда как содержимое было пересобрано заново.
+    # Манифест нового релиза пишется воротами ниже, из манифеста текущего.
+    for extra in rollback.json README.md Dockerfile; do
       [ -f "${current}/${extra}" ] && cp -a "${current}/${extra}" "${target}/${extra}"
     done
     chown -R lords:lords "${target}"
@@ -319,7 +356,24 @@ PYEOF
     need_restart=1
   fi
 
-  ln -sfn "${target}" "${runtime}/current"
+  # Переключение — через ворота: манифест нового релиза пишется из манифеста
+  # текущего (шаблонная часть переносится, содержательная обновляется),
+  # инварианты проверяются ДО смены ссылки, замок берётся на витрину, а
+  # ожидаемый предыдущий релиз сверяется — иначе переключение затёрло бы
+  # канареечную выкладку или ручную публикацию, случившуюся во время сборки.
+  if [ "${LORDS_PINNED_TEMPLATE:-1}" = "1" ] && [ -x "$GUARD" ]; then
+    content_count="$(find "${target}/site/title" -mindepth 1 -maxdepth 1 2>/dev/null | wc -l)"
+    if ! "$PYTHON" "$GUARD" --runtime-root "$RUNTIME_ROOT" \
+         --artifact-root "$ARTIFACT_ROOT" finalize "$site" \
+         --target "$target" --snapshot "$release" \
+         --content-count "$content_count" --reason content-refresh; then
+      log "${site}: ворота переключения отказали — витрина остаётся на ${current##*/}"
+      rm -rf "$staging"; trap - EXIT
+      continue
+    fi
+  else
+    ln -sfn "${target}" "${runtime}/current"
+  fi
   if [ "$need_restart" = "1" ]; then
     systemctl restart "${site}.service"
   fi
@@ -379,14 +433,14 @@ PYEOF
   # Запись раньше означала бы, что оборвавшийся прогон пометил вход как
   # отработанный, и следующий цикл пропустил бы сборку, не сделав её.
   if [ -x "${REPO}/automation/host/lords-render-gate.py" ]; then
-    "$PYTHON" "${REPO}/automation/host/lords-render-gate.py" "$site" --repo "$REPO" --record || true
+    "$PYTHON" "${REPO}/automation/host/lords-render-gate.py" "$site" --repo "$TEMPLATE_ROOT" --record || true
   fi
   # Снимок произведений принимается вместе с отпечатком и только после приёмки
   # релиза: снимок, записанный до неё, объявил бы неопубликованное состояние
   # отработанным.
   if [ -x "${REPO}/automation/host/lords-fast-render.py" ] && [ -n "$current" ]; then
     "$PYTHON" "${REPO}/automation/host/lords-fast-render.py" "$site" \
-      --repo "$REPO" --staging "$staging" --current "${current}/site" --record >/dev/null || true
+      --repo "$TEMPLATE_ROOT" --staging "$staging" --current "${current}/site" --record >/dev/null || true
   fi
 
   # Хранение: удаляются только наши же прежние релизы и никогда текущий.
