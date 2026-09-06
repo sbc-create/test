@@ -149,6 +149,43 @@ def команда_pin(args) -> int:
     return 0
 
 
+def команда_rollback(args) -> int:
+    """Вернуть витрину на цель отката, названную её же манифестом.
+
+    Цель не передаётся аргументом. Аргумент означал бы, что откатиться можно
+    куда угодно, включая релиз другой витрины или тот, которого нет; манифест
+    же называет ровно тот релиз, поверх которого текущий был выложен.
+
+    Откат идёт через тот же замок и ту же проверку ожидаемого состояния, что и
+    выкладка: откат, затирающий чужую операцию, — это вторая авария поверх
+    первой.
+    """
+    рантайм = _рантайм(args.runtime_root, args.site)
+    try:
+        with рр.замок(рантайм, timeout=args.lock_timeout):
+            текущий = рр.текущий_релиз(рантайм)
+            if текущий is None:
+                raise рр.RefreshRefused("у витрины нет действующего релиза")
+            манифест = рм.прочитать(текущий / рр.МАНИФЕСТ)
+            цель_имя = str(манифест.get("rollback_target") or "")
+            if not цель_имя:
+                raise рр.RefreshRefused(
+                    "манифест не называет цель отката: это первый релиз витрины "
+                    "или манифест неполон — возвращаться некуда")
+            цель = рантайм / "releases" / цель_имя
+            if not (цель / рр.МАНИФЕСТ).is_file():
+                raise рр.RefreshRefused(
+                    f"цель отката {цель_имя} недоступна: каталог удалён хранением "
+                    "или манифеста в нём нет")
+            итог = рр.переключить(рантайм, цель, expected_current=текущий.name,
+                                  reason=args.reason, actor=args.actor)
+    except (рр.RefreshRefused, рм.ManifestError) as отказ:
+        print(f"ОТКАЗ {args.site}: {отказ}", file=sys.stderr)
+        return 3
+    print(json.dumps(итог, ensure_ascii=False))
+    return 0
+
+
 def команда_finalize(args) -> int:
     рантайм = _рантайм(args.runtime_root, args.site)
     try:
@@ -223,6 +260,13 @@ def main(argv: list[str] | None = None) -> int:
     pn.add_argument("--repo", default="/home/claude/wt-prod-25")
     pn.add_argument("--json", action="store_true")
     pn.set_defaults(func=команда_pin)
+
+    rb = под.add_parser("rollback")
+    rb.add_argument("site")
+    rb.add_argument("--reason", default="rollback")
+    rb.add_argument("--actor", default="operator")
+    rb.add_argument("--lock-timeout", type=float, default=300.0)
+    rb.set_defaults(func=команда_rollback)
 
     f = под.add_parser("finalize")
     f.add_argument("site")

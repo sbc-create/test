@@ -206,3 +206,64 @@ def test_канареечная_выкладка_не_отменяется_во�
     assert 'gate_allowed="${LORDS_RENDER_GATE:-1}"' in текст, (
         "обычное обновление обязано сохранить ворота: без них каждый цикл "
         "платит полную цену рендера")
+
+
+# --- откат ------------------------------------------------------------------
+
+def test_откат_возвращает_на_цель_из_манифеста(витрина):
+    _adopt(витрина, _ревизия())
+    новый = витрина["runtime"] / "releases" / "bbbb0002"
+    (новый / "site" / "title").mkdir(parents=True)
+    (новый / "site" / "title" / "t0").mkdir()
+    _запуск("--runtime-root", str(витрина["root"]),
+            "--artifact-root", str(витрина["artifacts"]), "finalize", "lords-02",
+            "--target", str(новый), "--snapshot", "s2", "--content-count", "1")
+    assert (витрина["runtime"] / "current").resolve().name == "bbbb0002"
+
+    итог = _запуск("--runtime-root", str(витрина["root"]),
+                   "--artifact-root", str(витрина["artifacts"]), "rollback", "lords-02")
+    assert итог.returncode == 0, итог.stderr
+    assert (витрина["runtime"] / "current").resolve().name == "aaaa0001"
+
+
+def test_откат_без_цели_отказан(витрина):
+    """У первого релиза витрины цели отката нет, и выдумывать её нельзя."""
+    _adopt(витрина, _ревизия())
+    итог = _запуск("--runtime-root", str(витрина["root"]),
+                   "--artifact-root", str(витрина["artifacts"]), "rollback", "lords-02")
+    assert итог.returncode == 3
+    assert "возвращаться некуда" in итог.stderr
+
+
+def test_откат_на_удалённый_хранением_релиз_отказан(витрина):
+    _adopt(витрина, _ревизия())
+    новый = витрина["runtime"] / "releases" / "cccc0003"
+    (новый / "site" / "title" / "t0").mkdir(parents=True)
+    _запуск("--runtime-root", str(витрина["root"]),
+            "--artifact-root", str(витрина["artifacts"]), "finalize", "lords-02",
+            "--target", str(новый), "--snapshot", "s3", "--content-count", "1")
+    import shutil
+    shutil.rmtree(витрина["release"])
+
+    итог = _запуск("--runtime-root", str(витрина["root"]),
+                   "--artifact-root", str(витрина["artifacts"]), "rollback", "lords-02")
+    assert итог.returncode == 3
+    assert "недоступна" in итог.stderr
+    # Витрина при этом осталась работать на текущем релизе, а не ни на чём.
+    assert (витрина["runtime"] / "current").resolve().name == "cccc0003"
+
+
+def test_откат_записывается_в_журнал(витрина):
+    _adopt(витрина, _ревизия())
+    новый = витрина["runtime"] / "releases" / "dddd0004"
+    (новый / "site" / "title" / "t0").mkdir(parents=True)
+    _запуск("--runtime-root", str(витрина["root"]),
+            "--artifact-root", str(витрина["artifacts"]), "finalize", "lords-02",
+            "--target", str(новый), "--snapshot", "s4", "--content-count", "1")
+    _запуск("--runtime-root", str(витрина["root"]),
+            "--artifact-root", str(витрина["artifacts"]), "rollback", "lords-02",
+            "--reason", "проверка отката", "--actor", "тест")
+    строки = (витрина["runtime"] / "release-log.jsonl").read_text(encoding="utf-8").splitlines()
+    последняя = json.loads(строки[-1])
+    assert последняя["from"] == "dddd0004" and последняя["to"] == "aaaa0001"
+    assert последняя["reason"] == "проверка отката"
