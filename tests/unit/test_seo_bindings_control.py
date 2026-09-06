@@ -241,3 +241,40 @@ def test_отсутствие_связей_не_мешает_службе_под
 
     for c in startup.check_seo_binding_sources(tmp_path):
         assert c.status != startup.FATAL
+
+
+def test_протокол_запуска_называет_пустые_перечни(песочница, monkeypatch):
+    """Оба перечня fail-closed: без настройки пусты, и это верно. Но пустой
+    перечень тих — связи собираются, записи отдаются, и каждая приходит без
+    идентификаторов и без права обещать просмотр. Отказ, о котором никто не
+    сказал, выглядит работой."""
+    from factory.site_engine import seo_binding
+    from factory.site_engine.api import startup
+
+    monkeypatch.setattr(seo_binding, "ID_NAMESPACES", ())
+    monkeypatch.setattr(seo_binding, "PLAYBACK_AUTHORISED", frozenset())
+    имена = {c.name: c for c in startup.check_seo_binding_sources(песочница)}
+    assert имена["seo-bindings.namespaces"].status == startup.DEGRADED
+    assert имена["seo-bindings.playback"].status == startup.DEGRADED
+
+
+def test_заполненные_перечни_ограничением_не_объявляются(песочница):
+    from factory.site_engine.api import startup
+
+    имена = {c.name for c in startup.check_seo_binding_sources(песочница)}
+    assert "seo-bindings.namespaces" not in имена
+    assert "seo-bindings.playback" not in имена
+
+
+def test_ворота_сообщают_обо_всех_пробелах_сразу(tmp_path, monkeypatch):
+    """Ворота, останавливающиеся на первом ограничении, заставляют чинить по
+    одному и выкатывать трижды — каждый раз узнавая о следующем уже после
+    выкладки."""
+    from factory.site_engine import seo_binding
+    from factory.site_engine.api import startup
+
+    monkeypatch.setattr(seo_binding, "ID_NAMESPACES", ())
+    monkeypatch.setattr(seo_binding, "PLAYBACK_AUTHORISED", frozenset())
+    имена = {c.name for c in startup.check_seo_binding_sources(tmp_path)}
+    assert имена == {"seo-bindings.sources", "seo-bindings.namespaces",
+                     "seo-bindings.playback"}

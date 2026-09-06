@@ -200,11 +200,15 @@ def check_seo_binding_sources(root: Path) -> list[Check]:
     from factory.site_engine.api import seo_bindings
 
     if not seo_bindings.настройка_есть(root):
+        # Перечни идентификаторов проверяются и здесь: они от настройки
+        # источников не зависят. Ворота, останавливающиеся на первом
+        # ограничении, заставляют чинить по одному и выкатывать трижды —
+        # каждый раз узнавая о следующем уже после выкладки.
         return [Check("seo-bindings.sources", DEGRADED,
                       f"{seo_bindings.SOURCES_REF} нет: маршруты контракта "
                       f"{seo_binding.SCHEMA_VERSION} ответят пустым перечнем",
                       {"contract": seo_binding.SCHEMA_VERSION,
-                       "configured": False})]
+                       "configured": False})] + _перечни_идентификаторов()
 
     каталог = seo_bindings.каталог_витрин(root)
     витрины = каталог["sites"]
@@ -227,6 +231,32 @@ def check_seo_binding_sources(root: Path) -> list[Check]:
     if отсутствуют:
         проверки.append(Check("seo-bindings.inputs", DEGRADED,
                               f"нет входных файлов: {', '.join(отсутствуют)}"))
+
+    return проверки + _перечни_идентификаторов()
+
+
+def _перечни_идентификаторов() -> list[Check]:
+    """Перечни, без которых связи собираются, но ничего не значат.
+
+    Оба устроены fail-closed: без настройки они пусты, и это верно —
+    подставлять встроенный список значило бы молча раздать права, о которых
+    эксплуатация не знает. Но пустой перечень тих: связи собираются, записи
+    отдаются, и каждая приходит без внешних идентификаторов и без права
+    обещать просмотр. Отказ, о котором никто не сказал, выглядит работой.
+    """
+    from factory.site_engine import seo_binding
+
+    проверки: list[Check] = []
+    if not seo_binding.ID_NAMESPACES:
+        проверки.append(Check(
+            "seo-bindings.namespaces", DEGRADED,
+            f"{seo_binding.ID_NAMESPACES_REF} не прочитан: связи будут "
+            "отдаваться без внешних идентификаторов"))
+    if not seo_binding.PLAYBACK_AUTHORISED:
+        проверки.append(Check(
+            "seo-bindings.playback", DEGRADED,
+            f"{seo_binding.PLAYBACK_POLICY_REF} не прочитан: ни одна запись "
+            "не получит права обещать просмотр"))
     return проверки
 
 
