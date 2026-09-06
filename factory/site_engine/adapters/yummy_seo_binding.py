@@ -93,9 +93,25 @@ def _rating_of(entry: dict) -> tuple[RatingState, float | None]:
 
 def _external_ids(entry: dict) -> dict[str, str]:
     ids = entry.get("external_ids")
-    if not isinstance(ids, dict):
-        return {}
-    return {str(k): str(v) for k, v in ids.items() if str(k) in ID_NAMESPACES}
+    out = {str(k): str(v) for k, v in ids.items()
+           if str(k) in ID_NAMESPACES} if isinstance(ids, dict) else {}
+
+    # Идентификатор, которым адресуется поток, — тоже внешний идентификатор, и
+    # без него состояние `PLAYABLE` нечем подтвердить. Сквозная проверка это и
+    # показала: потребитель получал состояние «поток есть», не находил в
+    # перечне ни одного разрешённого идентификатора и честно понижал страницу
+    # до метаданных. Состояние, которое нельзя проверить, — не состояние.
+    #
+    # Имя агрегатора секретом не является: оно отвечает на вопрос «чем
+    # адресуется», а не «где лежит файл». Приватных адресов потока здесь
+    # по-прежнему нет.
+    playback = entry.get("playback")
+    if isinstance(playback, dict):
+        агрегатор = str(playback.get("aggregator") or "")
+        значение = str(playback.get("title_id") or "")
+        if агрегатор in ID_NAMESPACES and значение:
+            out.setdefault(агрегатор, значение)
+    return out
 
 
 def bind_route(route: dict, entry: dict | None, *, site_id: str,

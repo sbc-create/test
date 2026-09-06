@@ -468,3 +468,36 @@ def test_неоднозначный_адрес_обещать_просмотр_�
                 if b.binding_state is sb.BindingState.ROUTE_COLLISION]
     assert коллизии
     assert all(b.may_promise_playback is False for b in коллизии)
+
+
+def test_идентификатор_потока_попадает_в_контракт():
+    """Состояние, которое нельзя проверить, — не состояние.
+
+    Сквозная проверка через HTTP показала: контракт объявлял `PLAYABLE`, а
+    потребитель не находил в перечне идентификаторов ни одного разрешённого и
+    честно понижал страницу до метаданных. Так все 199 связанных записей
+    выборки теряли право обещать просмотр. С идентификатором потока в
+    контракте их стало 198 с просмотром и одна без — то есть столько, сколько
+    и есть на самом деле.
+    """
+    b = одна(playback={"aggregator": "kp", "title_id": "4756012"},
+             external_ids={"myanimelist": "1583"})
+    assert b.playback_state is sb.PlaybackState.PLAYABLE
+    assert b.external_ids.get("kp") == "4756012", (
+        "идентификатор, которым адресуется поток, обязан быть в контракте: "
+        "иначе потребитель не может подтвердить объявленное состояние")
+    assert b.external_ids.get("myanimelist") == "1583", "прочие не потеряны"
+
+
+def test_идентификатор_потока_не_вытесняет_одноимённый():
+    """Если такой идентификатор уже пришёл каталогом, он остаётся."""
+    b = одна(playback={"aggregator": "kp", "title_id": "999"},
+             external_ids={"kp": "111"})
+    assert b.external_ids["kp"] == "111"
+
+
+def test_приватных_адресов_потока_в_контракте_по_прежнему_нет():
+    b = одна(playback={"aggregator": "kp", "title_id": "4756012"})
+    payload = json.dumps(b.as_dict(), ensure_ascii=False).lower()
+    for запрещённое in ("aggregator", "title_id", "m3u8", "http://", "token"):
+        assert запрещённое not in payload, запрещённое
