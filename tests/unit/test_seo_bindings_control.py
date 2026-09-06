@@ -12,6 +12,7 @@ from pathlib import Path
 
 import pytest
 
+from factory.site_engine.api import seo_bindings as api
 from factory.site_engine.api.control import ControlApi
 
 ЧИТАТЕЛЬ = "reader-token"
@@ -181,3 +182,62 @@ def test_объявленные_производители_совпадают_с
     объявлен = next(c for c in r.body["contracts"]
                     if c["name"] == "seo-route-binding")
     assert tuple(объявлен["producers"]) == adapters.PRODUCERS
+
+
+# --- незавершённая установка не выглядит измеренным нулём --------------------
+#
+# Код берётся из каталога релиза, а настройка и данные — из корня состояния,
+# и это разные места. Релиз с маршрутами контракта, выложенный в корень без
+# config/seo-binding-sources.yaml, поднимается полностью исправным и отдаёт
+# пустой перечень. Выкладка, выглядящая успешной при неработающей
+# возможности, — худший вид отказа: о нём узнают от потребителя и позже.
+
+def test_отсутствие_настройки_отличимо_от_нуля_витрин(tmp_path):
+    """«Настройки нет» и «настройка описывает ноль витрин» выглядят одинаково —
+    пустым перечнем. Схлопывать первое во второе значит выдавать незнание за
+    измеренный ноль."""
+    (tmp_path / "config").mkdir()
+    без = api.каталог_витрин(tmp_path)
+    assert без["sites"] == []
+    assert без["sourcesConfigured"] is False
+    assert без["reason"]
+
+    (tmp_path / "config" / "seo-binding-sources.yaml").write_text(
+        'version: "1.0.0"\nsites: {}\n', encoding="utf-8")
+    пусто = api.каталог_витрин(tmp_path)
+    assert пусто["sites"] == []
+    assert пусто["sourcesConfigured"] is True
+    assert "reason" not in пусто, "осознанный ноль причины не требует"
+
+
+def test_перечень_витрин_объявляет_настроенность_и_при_наличии(песочница):
+    assert api.каталог_витрин(песочница)["sourcesConfigured"] is True
+
+
+def test_протокол_запуска_называет_отсутствие_настройки(tmp_path):
+    """Иначе выкладка выглядит исправной, а контракт молчит."""
+    from factory.site_engine.api import startup
+
+    проверки = startup.check_seo_binding_sources(tmp_path)
+    имена = {c.name: c for c in проверки}
+    assert имена["seo-bindings.sources"].status == startup.DEGRADED
+    assert "пустым перечнем" in имена["seo-bindings.sources"].detail
+
+
+def test_протокол_запуска_называет_недостающие_входы(песочница):
+    """Настройка на месте, а файла каталога нет — тоже молчаливая пустота."""
+    from factory.site_engine.api import startup
+
+    (песочница / "var" / "catalog.json").unlink()
+    имена = {c.name: c for c in startup.check_seo_binding_sources(песочница)}
+    assert имена["seo-bindings.inputs"].status == startup.DEGRADED
+    assert "demo-declared:catalog" in имена["seo-bindings.inputs"].detail
+
+
+def test_отсутствие_связей_не_мешает_службе_подняться(tmp_path):
+    """Корень без витрин со связями — законное состояние: ограничение, а не
+    фатальная ошибка. Ворота, роняющие запуск, заменяют один отказ другим."""
+    from factory.site_engine.api import startup
+
+    for c in startup.check_seo_binding_sources(tmp_path):
+        assert c.status != startup.FATAL

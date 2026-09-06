@@ -181,6 +181,55 @@ def check_contract_compatibility(root: Path) -> list[Check]:
     return проверки
 
 
+def check_seo_binding_sources(root: Path) -> list[Check]:
+    """Есть ли чем отдавать связи из этого корня состояния.
+
+    Проверка существует из-за конкретного случая, а не из осторожности. Код
+    берётся из каталога релиза, а настройка и данные — из корня состояния, и
+    это разные места. Релиз с маршрутами контракта, выложенный в корень без
+    `config/seo-binding-sources.yaml`, поднимается полностью исправным:
+    протокол запуска проходит, `/api/v1/ready` отвечает 200, маршрут связей
+    отвечает 200 — и отдаёт пустой перечень по всем витринам.
+
+    Выкладка, выглядящая успешной при неработающей возможности, — худший вид
+    отказа: о нём узнают не в момент выкладки, а от потребителя и позже.
+    Ограничение, а не фатальная ошибка: корень без витрин со связями — законное
+    состояние, служба обязана в нём подниматься.
+    """
+    from factory.site_engine import seo_binding
+    from factory.site_engine.api import seo_bindings
+
+    if not seo_bindings.настройка_есть(root):
+        return [Check("seo-bindings.sources", DEGRADED,
+                      f"{seo_bindings.SOURCES_REF} нет: маршруты контракта "
+                      f"{seo_binding.SCHEMA_VERSION} ответят пустым перечнем",
+                      {"contract": seo_binding.SCHEMA_VERSION,
+                       "configured": False})]
+
+    каталог = seo_bindings.каталог_витрин(root)
+    витрины = каталог["sites"]
+    отсутствуют: list[str] = []
+    for витрина in витрины:
+        try:
+            описано = seo_bindings.описание(root, витрина["siteId"])
+        except seo_bindings.BindingSourceUnknown:
+            continue
+        for поле in ("catalog", "routes"):
+            значение = описано.get(поле)
+            if значение and not (root / str(значение)).exists():
+                отсутствуют.append(f"{витрина['siteId']}:{поле}")
+
+    проверки = [Check("seo-bindings.sources", OK,
+                      f"контракт {seo_binding.SCHEMA_VERSION}, витрин "
+                      f"{len(витрины)}, недостающих входов {len(отсутствуют)}",
+                      {"contract": seo_binding.SCHEMA_VERSION,
+                       "sites": len(витрины), "missing": отсутствуют})]
+    if отсутствуют:
+        проверки.append(Check("seo-bindings.inputs", DEGRADED,
+                              f"нет входных файлов: {', '.join(отсутствуют)}"))
+    return проверки
+
+
 def check_site_isolation(root: Path) -> list[Check]:
     """Витрины не делят между собой домены и базы данных.
 
@@ -273,5 +322,6 @@ def run(root: Path | str = ".", env: dict[str, str] | None = None) -> StartupRep
     отчёт.checks.extend(check_site_isolation(root))
     отчёт.checks.extend(check_config_writable(root))
     отчёт.checks.extend(check_contract_compatibility(root))
+    отчёт.checks.extend(check_seo_binding_sources(root))
     отчёт.checks.extend(check_secrets(env))
     return отчёт
