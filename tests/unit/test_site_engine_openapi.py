@@ -36,6 +36,7 @@ ROOT = Path(__file__).resolve().parents[2]
     "/api/v1/seo-bindings": {},
     # Флот читается без тела: проверка убеждается, что маршрут обслуживается,
     # а не то, сколько в нём витрин.
+    "/api/v1/templates": {},
     "/api/v1/fleet": {},
     "/api/v1/fleet/{siteId}": {},
     "/api/v1/seo-bindings/{siteId}": {"limit": 1},

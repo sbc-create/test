@@ -760,6 +760,12 @@ class ControlApi:
                 and len(rest) == 3 and rest[2] == "resolve":
             principal.require(SCOPE_READ)
             return self._seo_resolve(rest[1], body)
+        if method == "GET" and rest == ["templates"]:
+            principal.require(SCOPE_READ)
+            from factory.site_engine import template_registry
+
+            return ApiResponse(status=200, body=template_registry.прочитать(self._root))
+
         if method == "GET" and rest[:1] == ["fleet"]:
             principal.require(SCOPE_READ)
             from factory.site_engine import fleet_registry as реестр

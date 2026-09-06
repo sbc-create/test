@@ -117,7 +117,7 @@ def test_способность_проверяется_по_версии(tmp_pat
 def test_отсутствующий_реестр_называет_причину(tmp_path):
     из = реестр.прочитать(tmp_path)
     assert из["templates"] == []
-    assert "реестра нет" in из["error"]
+    assert "реестра нет" in из["registryError"]
 
 
 def test_отвергнутые_видны_а_не_выброшены(tmp_path):
@@ -134,6 +134,6 @@ def test_настоящий_реестр_репозитория_годен():
 
     корень = Path(__file__).resolve().parents[2]
     из = реестр.прочитать(корень)
-    assert из["error"] == ""
+    assert из["registryError"] == ""
     assert из["rejected"] == [], f"в реестре есть отвергнутые записи: {из['rejected']}"
     assert из["templates"], "реестр пуст"

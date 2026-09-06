@@ -155,10 +155,10 @@ def прочитать(root: Path | str) -> dict[str, Any]:
         сырое = yaml.safe_load(путь.read_text(encoding="utf-8")) or {}
     except FileNotFoundError:
         return {"registryVersion": ВЕРСИЯ, "templates": [], "rejected": [],
-                "error": f"реестра нет: {РЕЕСТР}"}
+                "registryError": f"реестра нет: {РЕЕСТР}"}
     except (OSError, yaml.YAMLError) as ошибка:
         return {"registryVersion": ВЕРСИЯ, "templates": [], "rejected": [],
-                "error": f"реестр не читается: {ошибка}"}
+                "registryError": f"реестр не читается: {ошибка}"}
 
     годные, отвергнутые = [], []
     for элемент in сырое.get("templates") or []:
@@ -174,7 +174,7 @@ def прочитать(root: Path | str) -> dict[str, Any]:
         "registryVersion": ВЕРСИЯ,
         "templates": годные,
         "rejected": отвергнутые,
-        "error": "",
+        "registryError": "",
     }
 
 
