@@ -5,12 +5,20 @@
 человека каждый раз заново.
 """
 import json
+import os
 import pathlib
 import shutil
 import sys
 
 КОРЕНЬ = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else "/tmp/stand-fleet")
-РЕПО = pathlib.Path("/home/claude/wt-p8-20")
+# Корень берётся от расположения самого сценария, а не пишется путём.
+#
+# Жёсткий путь означал, что стенд, собранный из одного рабочего дерева,
+# проверяет другое: приёмка проходит или падает не из-за того кода, который
+# правили. Переменная оставлена для случая, когда стенд нужен от чужого дерева
+# намеренно.
+РЕПО = pathlib.Path(os.environ.get("FACTORY_REPO") or
+                    pathlib.Path(__file__).resolve().parents[2])
 САЙТЫ = sys.argv[2].split(",") if len(sys.argv) > 2 else ["lords-01", "lords-02"]
 ПАРОЛЬ = "длинный-пароль-для-проверки-1"
 

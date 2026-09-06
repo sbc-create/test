@@ -25,11 +25,20 @@ const ТОКЕН = process.argv[3] || 'boot';
 const ТОКЕН_ЧТЕНИЯ = process.argv[4] || 'ro';
 const ДВИЖОК = process.argv[5] || 'both';
 
-async function войти(ctx, токен) {
+const ПАРОЛЬ = process.env.STAND_PASSWORD || 'длинный-пароль-для-проверки-1';
+
+// Вход по учётной записи оператора, а не по токену.
+//
+// Прежняя редакция вводила токен в поле `token` — форма, которой в админке
+// больше нет: вход перешёл на сессии операторов. Проверка ждала поля тридцать
+// секунд и падала по таймауту, то есть сообщала о таймауте вместо того, чтобы
+// сообщить о своей устарелости. Мастер при этом работал.
+async function войти(ctx, email) {
   const p = await ctx.newPage();
   await p.goto(`${БАЗА}/admin`, { waitUntil: 'domcontentloaded' });
-  await p.fill('input[name="token"]', токен);
-  await p.locator('input[name="token"]').press('Enter');
+  await p.fill('input[name="email"]', email);
+  await p.fill('input[name="password"]', ПАРОЛЬ);
+  await p.locator('input[name="password"]').press('Enter');
   await p.waitForLoadState('domcontentloaded');
   return p;
 }
@@ -86,7 +95,7 @@ async function прогон(движок, имя) {
   const b = await движок.launch({ args: ['--no-sandbox'] });
   console.log(`\n=== ${имя} ===`);
   const ctx = await b.newContext({ viewport: { width: 1440, height: 900 } });
-  const p = await войти(ctx, ТОКЕН);
+  const p = await войти(ctx, 'super@test');
   const витрина = `nova-${имя}-${Date.now().toString(36).slice(-6)}`;
 
   await p.goto(`${БАЗА}/admin/new-site`, { waitUntil: 'domcontentloaded' });
@@ -201,7 +210,7 @@ async function прогон(движок, имя) {
 
   // --- узкий экран ---
   const узкий = await b.newContext({ viewport: { width: 390, height: 780 } });
-  const у = await войти(узкий, ТОКЕН);
+  const у = await войти(узкий, 'super@test');
   await у.goto(`${БАЗА}/admin/new-site`, { waitUntil: 'domcontentloaded' });
   const беда = await у.evaluate(() => {
     const ш = document.documentElement.clientWidth;
@@ -215,7 +224,7 @@ async function прогон(движок, имя) {
 
   // --- читатель ---
   const ctxRO = await b.newContext({ viewport: { width: 1440, height: 900 } });
-  const r = await войти(ctxRO, ТОКЕН_ЧТЕНИЯ);
+  const r = await войти(ctxRO, 'viewer-lords-01@test');
   await r.goto(`${БАЗА}/admin/new-site`, { waitUntil: 'domcontentloaded' });
   проверить(await r.locator('form[method="post"][action="/admin/new-site"]').count() === 0,
             'читатель не заводит заявку');

@@ -17,6 +17,7 @@
 """
 import hashlib
 import json
+import os
 import pathlib
 import sys
 
@@ -77,6 +78,7 @@ def записать(root: pathlib.Path, repo: pathlib.Path, site_id: str, count
 
 if __name__ == "__main__":
     корень = pathlib.Path(sys.argv[1])
-    репо = pathlib.Path("/home/claude/wt-p8-20")
+    репо = pathlib.Path(os.environ.get("FACTORY_REPO") or
+                        pathlib.Path(__file__).resolve().parents[2])
     for сайт in sys.argv[2].split(","):
         print("набор", записать(корень, репо, сайт, int(sys.argv[3] if len(sys.argv) > 3 else 60)))
