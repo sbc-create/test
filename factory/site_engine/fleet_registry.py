@@ -309,6 +309,10 @@ def site_record(root: Path | str, site_id: str, *, настройки: dict | No
         пакет.get("content_package_ref"), источник_пакета)
     запись.fields["seoIndexingEnabled"] = известно(
         пакет.get("seo_indexing_enabled"), источник_пакета)
+    from factory.site_engine.fleet_accounts import ПРИЗНАК as ПРИЗНАК_РЕГИСТРАЦИИ
+
+    запись.fields["publicRegistration"] = известно(
+        bool(профиль.get(ПРИЗНАК_РЕГИСТРАЦИИ)), источник_профиля)
     запись.fields["adminAdapter"] = известно(
         пакет.get("cms_contract") or профиль.get("cms_contract"), источник_пакета)
 

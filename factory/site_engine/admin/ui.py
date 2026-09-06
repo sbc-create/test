@@ -2051,6 +2051,115 @@ def readiness(
     )
 
 
+
+#: Как показывать состояние показателя. Цвет и подпись — не украшение: экран
+#: обязан отличать «ноль» от «не спрашивали» с одного взгляда, иначе первый же
+#: отчёт по нему будет неверным.
+СОСТОЯНИЯ = {
+    "CONNECTED": ("ok", "есть"),
+    "NOT_CONNECTED": ("mut", "не подключено"),
+    "NO_DATA": ("mut", "нет данных"),
+    "STALE": ("warn", "устарело"),
+    "ACCESS_BLOCKED": ("warn", "доступ закрыт"),
+    "ERROR": ("bad", "отказ"),
+}
+
+
+def _показатель(поле: dict | None) -> str:
+    """Значение вместе с его состоянием, источником и временем.
+
+    Пустое место здесь недопустимо: пустая ячейка читается как ноль, а ноль —
+    как измеренное значение. Поэтому неизвестное подписывается словами.
+    """
+    if not поле:
+        return '<span class="mut">не спрашивали</span>'
+    состояние = str(поле.get("state") or "")
+    класс, подпись = СОСТОЯНИЯ.get(состояние, ("mut", состояние or "неизвестно"))
+    значение = поле.get("value")
+    if значение is None or значение == "":
+        показ = f'<span class="{класс}">{_e(подпись)}</span>'
+    else:
+        плоское = (", ".join(str(з) for з in значение)
+                   if isinstance(значение, list) else значение)
+        показ = _e(str(плоское))
+        if состояние != "CONNECTED":
+            показ += f' <span class="{класс}">({_e(подпись)})</span>'
+    подсказка = поле.get("source") or ""
+    когда = поле.get("observedAt") or ""
+    причина = поле.get("reason") or ""
+    хвост = " · ".join(x for x in (подсказка, когда, причина) if x)
+    return показ + (f'<br><span class="mut small">{_e(хвост)}</span>' if хвост else "")
+
+
+def control_center(записи: list, сводка: dict, *, flash: dict | None,
+                   session_label: str, csrf: str, запрос: str = "") -> str:
+    """Единое окно флота: строка на витрину, всё остальное — подробностями.
+
+    Экран собран вокруг того, что нужно решить с одного взгляда: где витрина,
+    чем собрана, свежо ли содержимое и не молчит ли источник. Разворачивать
+    подробности можно тут же, не уходя со страницы: список, который надо
+    собирать переходами по сайтам, на практике не собирают.
+    """
+    hidden = f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+    строки = []
+    for з in записи:
+        поля = з.get("fields") or {}
+        сайт = з.get("siteId") or ""
+        имя = (поля.get("name") or {}).get("value") or сайт
+        строки.append(
+            f'<tr><td><a href="/s/{_e(сайт)}/admin"><strong>{_e(str(имя))}</strong></a>'
+            f'<br><span class="mut">{_e(сайт)}</span></td>'
+            f'<td>{_показатель(поля.get("domains"))}</td>'
+            f'<td>{_показатель(поля.get("templateFamily"))}</td>'
+            f'<td>{_показатель(поля.get("currentRelease"))}</td>'
+            f'<td>{_показатель(поля.get("health"))}</td>'
+            f'<td>{_показатель(поля.get("freshnessSeconds"))}</td>'
+            f'<td>{_показатель(поля.get("visitors"))}</td>'
+            f'<td>{_показатель(поля.get("seoIndexingEnabled"))}</td>'
+            f'<td><details><summary>Подробно</summary><dl class="kv">'
+            + "".join(
+                f"<dt>{_e(и)}</dt><dd>{_показатель(поля.get(и))}</dd>"
+                for и in ("environment", "productionAuthorized", "templateDigest",
+                          "rendererRevision", "toolingRevision", "contentSource",
+                          "contentSnapshotId", "contentCount", "rollbackTarget",
+                          "deployment", "adminAdapter", "secretRefs",
+                          "analyticsConnector", "indexedPages", "sitemapState",
+                          "lastSyncAt")
+            )
+            + "</dl>"
+            f'<form method="post" action="{_путь()}/fleet/switch">{hidden}'
+            f'<input type="hidden" name="siteId" value="{_e(сайт)}">'
+            "<button type=\"submit\">Открыть контур витрины</button></form>"
+            "</details></td></tr>"
+        )
+    плитки = "".join(
+        f'<div class="tile"><span class="tile__n">{_e(str(число))}</span>'
+        f'<span class="tile__l">{_e(СОСТОЯНИЯ.get(имя, ("mut", имя))[1])}</span></div>'
+        for имя, число in sorted(сводка.items())
+    )
+    return page(
+        "Центр управления",
+        _flash(flash)
+        + '<div class="card"><h2>Флот</h2>'
+        '<p class="hint">У каждого показателя показан источник и время. Пустых '
+        "ячеек здесь нет: неизвестное подписано словами, потому что пустая "
+        "ячейка читается как ноль, а ноль — как измеренное значение.</p>"
+        f'<div class="tiles">{плитки}</div>'
+        f'<form method="get" action="{_путь()}/fleet" class="filter">'
+        f'<input type="search" name="q" value="{_e(запрос)}" '
+        'placeholder="витрина, домен или семейство" aria-label="Поиск по флоту">'
+        '<button type="submit">Найти</button></form>'
+        '<div class="scroll-x"><table><thead><tr>'
+        "<th>Витрина</th><th>Домены</th><th>Семейство</th><th>Релиз</th>"
+        "<th>Здоровье</th><th>Свежесть</th><th>Посетители</th><th>Индексация</th>"
+        "<th>Регистрация</th><th>Подробности</th></tr></thead><tbody>"
+        + ("".join(строки) or чтопусто(10, "Витрин нет."))
+        + "</tbody></table></div></div>",
+        session_label=session_label,
+        csrf=csrf,
+    )
+
+
 def fleet(витрины: list, *, flash: dict | None, session_label: str, csrf: str) -> str:
     """Массив витрин: состояние, признаки и переход в контур каждой.
 

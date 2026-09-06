@@ -1038,10 +1038,40 @@ class AdminApp:
                 status=404, html=ui.page("Не найдено", "<p>Нет такой страницы.</p>")
             )
 
+        корень = getattr(self._control, "_root", None)
+
+        # Единое окно собирается из той же записи, что отдаёт Control API.
+        # Второй способ собрать те же данные означал бы, что интерфейс и машина
+        # однажды покажут разное про одну витрину.
+        if корень is not None:
+            from factory.site_engine import fleet_registry as реестр
+
+            собранное = реестр.fleet(корень)
+            записи = собранное["sites"]
+            запрос = str((form or {}).get("q") or "").strip().lower()
+            if запрос:
+                # Отбор идёт по тому, что видно в строке: имени, домену,
+                # семейству. Скрытый отбор по невидимому полю сбивает: строка
+                # пропала, а почему — непонятно.
+                отобрано = []
+                for з in записи:
+                    поля = з.get("fields") or {}
+                    видимое = " ".join(
+                        str((поля.get(и) or {}).get("value") or "")
+                        for и in ("name", "domains", "templateFamily")
+                    ).lower()
+                    if запрос in (з.get("siteId", "") + " " + видимое).lower():
+                        отобрано.append(з)
+                записи = отобрано
+            return AdminResponse(
+                status=200,
+                html=ui.control_center(записи, собранное["stateCounts"], flash=flash,
+                                       session_label=label, csrf=csrf, запрос=запрос),
+            )
+
         from factory.site_engine.fleet_accounts import FleetAccounts
         from factory.site_engine.site_admin_contract import TEMPLATE_FAMILIES
 
-        корень = getattr(self._control, "_root", None)
         флот = FleetAccounts(корень) if корень is not None else None
         строки = []
         for сайт in sorted(self._все_витрины()):
