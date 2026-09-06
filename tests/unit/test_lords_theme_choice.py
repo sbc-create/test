@@ -167,11 +167,24 @@ class TestВыборНеМигаетИСохраняется:
         assert "documentElement" in script
         assert "setAttribute" in script or "dataset" in script
 
-    def test_предпочтение_именовано_по_витрине(self):
-        """Соседние витрины не делят выбор: у каждой свой ключ."""
-        assert "lords-01" in self._script("lords-01")
-        assert "lords-03" in self._script("lords-03")
+    def test_предпочтение_различается_по_витринам(self):
+        """Соседние витрины не делят выбор: у каждой свой ключ.
+
+        Проверяется различие, а не наличие имени витрины в разметке. Имя туда
+        попадать не должно: `lords-01` — внутренняя классификация фабрики, и
+        в публичном подвале ей не место.
+        """
         assert self._script("lords-01") != self._script("lords-03")
+
+    def test_идентификатор_витрины_не_попадает_в_разметку(self):
+        from factory.lords import render as render_mod
+
+        assert "lords-01" not in self._script("lords-01")
+        assert "lords-01" not in render_mod._theme_switch("lords-01")
+
+    def test_ключ_устойчив_между_сборками(self):
+        """Меняющийся ключ терял бы выбор зрителя при каждой выкладке."""
+        assert self._script("lords-01") == self._script("lords-01")
 
     def test_скрипт_переживает_запрет_хранилища(self):
         """В приватном режиме обращение к хранилищу бросает исключение.
