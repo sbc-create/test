@@ -93,7 +93,8 @@ def манифест_текущего(runtime: Path | str) -> dict[str, Any]:
     return рм.прочитать(релиз / МАНИФЕСТ)
 
 
-def план(runtime: Path | str, *, artifact_root: Path | str) -> dict[str, Any]:
+def план(runtime: Path | str, *, artifact_root: Path | str,
+         state_root: Path | str | None = None) -> dict[str, Any]:
     """Из чего собирать следующий релиз. Ничего не меняет.
 
     Отдельный шаг именно потому, что решение принимается до действия: план
@@ -109,7 +110,8 @@ def план(runtime: Path | str, *, artifact_root: Path | str) -> dict[str, Any
             f"действующий релиз {релиз.name} не удовлетворяет инвариантам: "
             + "; ".join(беды)
         )
-    корень = та.корень_шаблона(манифест, runtime=runtime, artifact_root=artifact_root)
+    корень = та.корень_шаблона(манифест, runtime=runtime, artifact_root=artifact_root,
+                               state_root=state_root)
     return {
         "runtime": str(runtime),
         "currentRelease": релиз.name,

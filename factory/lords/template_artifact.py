@@ -59,7 +59,33 @@ def собрать(repo: Path | str, revision: str, out: Path | str) -> dict[str
     return {"path": str(цель), "digest": отпечаток_файла(цель), "revision": revision}
 
 
-def распаковать(archive: Path | str, digest: str, into: Path | str) -> Path:
+#: Изменяемое состояние, которое обязано остаться общим для всех релизов.
+#:
+#: Артефакт неизменяем — в нём нет и не должно быть кэша каталога, очередей и
+#: снимков. Но отрисовщик ищет их относительно собственного дерева, и без этой
+#: связи закреплённая сборка искала бы живой каталог внутри архива и не находила
+#: его: измерено — `BlockedInput: нет кэша живого каталога …/.templates/…/var/…`.
+ОБЩЕЕ_СОСТОЯНИЕ = ("var",)
+
+
+def _связать_состояние(корень: Path, state_root: Path | None) -> None:
+    """Общее изменяемое состояние подставляется ссылкой, а не копией.
+
+    Копия означала бы, что каждая витрина работает со своим снимком очередей и
+    кэша, и расхождение обнаружилось бы по разному содержимому страниц, а не по
+    отказу.
+    """
+    if state_root is None:
+        return
+    for имя in ОБЩЕЕ_СОСТОЯНИЕ:
+        цель = корень / имя
+        if цель.exists() or цель.is_symlink():
+            continue
+        цель.symlink_to(Path(state_root) / имя)
+
+
+def распаковать(archive: Path | str, digest: str, into: Path | str,
+                *, state_root: Path | str | None = None) -> Path:
     """Распаковать артефакт с проверкой отпечатка. Возвращает корень шаблона.
 
     Уже распакованный артефакт не распаковывается заново: каталог назван его
@@ -77,6 +103,7 @@ def распаковать(archive: Path | str, digest: str, into: Path | str) -
     корень = Path(into) / digest
     готово = корень / ".unpacked"
     if готово.is_file():
+        _связать_состояние(корень, Path(state_root) if state_root else None)
         return корень
     корень.parent.mkdir(parents=True, exist_ok=True)
     временный = Path(tempfile.mkdtemp(prefix=f"{digest[:12]}.", dir=str(корень.parent)))
@@ -92,11 +119,13 @@ def распаковать(archive: Path | str, digest: str, into: Path | str) -
         subprocess.run(["rm", "-rf", str(временный)], check=False)
         if not готово.is_file():
             raise ArtifactError(f"артефакт не распакован: {ошибка}") from ошибка
+    _связать_состояние(корень, Path(state_root) if state_root else None)
     return корень
 
 
 def корень_шаблона(манифест: dict, *, runtime: Path | str,
-                   artifact_root: Path | str) -> Path:
+                   artifact_root: Path | str,
+                   state_root: Path | str | None = None) -> Path:
     """Каталог, из которого обязана идти отрисовка этого релиза."""
     ссылка = str(манифест.get("template_artifact_ref") or "")
     отпечаток = str(манифест.get("template_digest") or "")
@@ -107,7 +136,8 @@ def корень_шаблона(манифест: dict, *, runtime: Path | str,
     архив = Path(ссылка)
     if not архив.is_absolute():
         архив = Path(artifact_root) / ссылка
-    return распаковать(архив, отпечаток, Path(runtime) / ПОДКАТАЛОГ)
+    return распаковать(архив, отпечаток, Path(runtime) / ПОДКАТАЛОГ,
+                      state_root=state_root)
 
 
 def отпечаток_дерева(корень: Path | str, *, подкаталоги: tuple[str, ...]) -> str:

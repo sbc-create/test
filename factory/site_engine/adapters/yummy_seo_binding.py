@@ -30,6 +30,8 @@ from pathlib import Path
 from typing import Any
 
 from factory.site_engine.catalog_identity import decide
+from factory.site_engine.rating_feed import ПОЛЯ as ПОЛЯ_ОЦЕНОК
+from factory.site_engine.rating_feed import ШКАЛА_ВЕРХ
 from factory.site_engine.seo_binding import (
     ID_NAMESPACES,
     BindingState,
@@ -78,17 +80,18 @@ def page_type_of(path: str) -> tuple[str, str]:
     return "", слаг
 
 
-def _rating_of(entry: dict) -> tuple[RatingState, float | None]:
+def _rating_of(entry: dict) -> tuple[RatingState, float | None, str, float | None]:
     """Оценка. Отсутствие числа не превращается в ноль ни на каком шаге."""
     for поле in ("kinopoisk_rating", "imdb_rating"):
         сырое = entry.get(поле)
         if сырое is None:
             continue
         try:
-            return RatingState.RATED, float(str(сырое).replace(",", "."))
+            return (RatingState.RATED, float(str(сырое).replace(",", ".")),
+                    ПОЛЯ_ОЦЕНОК[поле], ШКАЛА_ВЕРХ)
         except (TypeError, ValueError):
-            return RatingState.UNKNOWN, None
-    return RatingState.UNRATED, None
+            return RatingState.UNKNOWN, None, "", None
+    return RatingState.UNRATED, None, "", None
 
 
 def _external_ids(entry: dict) -> dict[str, str]:
@@ -145,7 +148,7 @@ def bind_route(route: dict, entry: dict | None, *, site_id: str,
                      tags=entry.get("tags") or (), entity_id=content_id)
     состояние_вида, вид, происхождение = kind_state_of(решение)
     состояние_видео, код_видео = playback_of(entry)
-    оценка, число = _rating_of(entry)
+    оценка, число, источник_оценки, шкала_оценки = _rating_of(entry)
 
     if not route.get("canonical", True):
         # Неканонический маршрут остаётся маршрутом, но своей страницей не
@@ -180,6 +183,7 @@ def bind_route(route: dict, entry: dict | None, *, site_id: str,
                               if состояние_видео is PlaybackState.PLAYABLE
                               else ""),
         rating_state=оценка, rating_value=число,
+        rating_source=источник_оценки, rating_scale=шкала_оценки,
         content_revision=revision_of(entry), binding_state=связь,
         reason_codes=tuple(dict.fromkeys(причины)), provenance=provenance,
         snapshot_at=snapshot_at)

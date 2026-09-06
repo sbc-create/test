@@ -38,7 +38,8 @@ def _рантайм(корень: str, сайт: str) -> Path:
 def команда_plan(args) -> int:
     рантайм = _рантайм(args.runtime_root, args.site)
     try:
-        план = рр.план(рантайм, artifact_root=args.artifact_root)
+        план = рр.план(рантайм, artifact_root=args.artifact_root,
+                       state_root=args.state_root)
     except (рр.RefreshRefused, рм.ManifestError, та.ArtifactError) as отказ:
         print(f"ОТКАЗ {args.site}: {отказ}", file=sys.stderr)
         return 3
@@ -121,7 +122,8 @@ def команда_finalize(args) -> int:
     рантайм = _рантайм(args.runtime_root, args.site)
     try:
         with рр.замок(рантайм, timeout=args.lock_timeout):
-            план = рр.план(рантайм, artifact_root=args.artifact_root)
+            план = рр.план(рантайм, artifact_root=args.artifact_root,
+                       state_root=args.state_root)
             цель = Path(args.target)
             рр.записать_манифест(
                 цель, план,
@@ -146,6 +148,8 @@ def main(argv: list[str] | None = None) -> int:
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     р.add_argument("--runtime-root", default="/srv/lords")
     р.add_argument("--artifact-root", default="/srv/lords/.artifacts")
+    р.add_argument("--state-root", default="/srv/site-factory/repo",
+                   help="корень общего изменяемого состояния (var/)")
     под = р.add_subparsers(dest="команда", required=True)
 
     p = под.add_parser("plan")

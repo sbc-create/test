@@ -323,8 +323,8 @@ def test_среди_принятых_записей_коллизий_нет():
 
 def test_версия_объявлена_и_не_является_словом_latest():
     b = одна()
-    assert b.schema_version == "seo-route-binding/1.0.0"
-    assert b.contract_version == "1.0.0"
+    assert b.schema_version == "seo-route-binding/1.1.0"
+    assert b.contract_version == "1.1.0"
     assert "latest" not in json.dumps(b.as_dict())
 
 
@@ -501,3 +501,61 @@ def test_приватных_адресов_потока_в_контракте_п
     payload = json.dumps(b.as_dict(), ensure_ascii=False).lower()
     for запрещённое in ("aggregator", "title_id", "m3u8", "http://", "token"):
         assert запрещённое not in payload, запрещённое
+
+
+# --- происхождение оценки (HANDOFF-041 от SEO) -------------------------------
+#
+# Потребитель отказался выпускать `aggregateRating` без источника, шкалы и
+# счёта голосов, и отказ верен: число, поставленное неизвестно кем, нельзя ни
+# проверить, ни объяснить. Контракт нёс `ratingState` и `ratingValue` и
+# молчал о том, кто поставил оценку и по какой шкале.
+
+
+def test_оценка_несёт_источник_и_шкалу():
+    b = одна(kinopoisk_rating="6,7")
+    assert b.rating_state is sb.RatingState.RATED
+    assert b.rating_source == "kinopoisk"
+    assert b.rating_scale == 10.0
+    выдача = b.as_dict()
+    assert выдача["ratingSource"] == "kinopoisk"
+    assert выдача["ratingScale"] == 10.0
+
+
+def test_счёт_голосов_отсутствует_а_не_выдумывается():
+    # Фид поставщика счёт голосов не передаёт. Пустое поле честнее числа,
+    # похожего на правду: средняя из трёх голосов и средняя из трёх тысяч
+    # различаются только этим полем.
+    b = одна(kinopoisk_rating="6,7")
+    assert b.rating_count is None
+    assert b.as_dict()["ratingCount"] is None
+
+
+def test_rated_без_источника_отвергается():
+    with pytest.raises(sb.ContractViolation, match="без источника"):
+        одна(kinopoisk_rating="6,7").__class__(
+            **{**одна(kinopoisk_rating="6,7").__dict__, "rating_source": ""})
+
+
+def test_rated_без_шкалы_отвергается():
+    основа = одна(kinopoisk_rating="6,7").__dict__
+    with pytest.raises(sb.ContractViolation, match="без шкалы"):
+        sb.RouteBinding(**{**основа, "rating_scale": None})
+
+
+def test_оценка_больше_своей_шкалы_отвергается():
+    основа = одна(kinopoisk_rating="6,7").__dict__
+    with pytest.raises(sb.ContractViolation, match="больше своей шкалы"):
+        sb.RouteBinding(**{**основа, "rating_value": 88.0})
+
+
+def test_происхождение_без_оценки_отвергается():
+    основа = одна().__dict__
+    assert основа["rating_state"] is not sb.RatingState.RATED
+    with pytest.raises(sb.ContractViolation, match="описывает несуществующее число"):
+        sb.RouteBinding(**{**основа, "rating_source": "kinopoisk"})
+
+
+def test_отрицательный_счёт_голосов_отвергается():
+    основа = одна(kinopoisk_rating="6,7").__dict__
+    with pytest.raises(sb.ContractViolation, match="отрицателен"):
+        sb.RouteBinding(**{**основа, "rating_count": -1})

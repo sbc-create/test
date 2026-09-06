@@ -225,7 +225,7 @@ def каталог_витрин(root: Path) -> dict[str, Any]:
     есть = настройка_есть(root)
     источники = (_sources(root).get("sites") or {})
     итог: dict[str, Any] = {
-        "contract": "seo-route-binding/1.0.0",
+        "contract": "seo-route-binding/1.1.0",
         # Пустой перечень — это утверждение «витрин со связями нет». Делать
         # его можно, только когда настройка так и говорит.
         "sourcesConfigured": есть,

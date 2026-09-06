@@ -369,7 +369,7 @@ from factory.site_engine.api.ratelimit import DEFAULT_LIMITS
         "scope": "read",
         "idempotent": False,
         "body": None,
-        "success": ("200", "страница выгрузки контракта seo-route-binding/1.0.0 "
+        "success": ("200", "страница выгрузки контракта seo-route-binding/1.1.0 "
                            "с отпечатком всего набора и сводкой по состояниям связи"),
         "errors": {"400": "недопустимые limit, offset или bindingState",
                    "404": "витрина не описана в источниках связей"},

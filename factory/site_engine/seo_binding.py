@@ -45,11 +45,11 @@ from factory.site_engine.content_kind import ContentKind, emits_schema, schema_t
 
 #: Версия схемы. SemVer; `latest` запрещён и здесь, и у потребителя: контракт,
 #: на который ссылаются словом «последний», нельзя ни закрепить, ни откатить.
-SCHEMA_VERSION = "seo-route-binding/1.0.0"
+SCHEMA_VERSION = "seo-route-binding/1.1.0"
 
 #: Версия самого контракта, отдельно от версии схемы. Схема описывает форму,
 #: контракт — обещания о содержимом; они меняются по разным поводам.
-CONTRACT_VERSION = "1.0.0"
+CONTRACT_VERSION = "1.1.0"
 
 #: Файл с перечнем пространств имён внешних идентификаторов.
 #:
@@ -221,6 +221,18 @@ class RouteBinding:
     kind_candidates: tuple[ContentKind, ...] = ()
     rating_state: RatingState = RatingState.UNKNOWN
     rating_value: float | None = None
+    #: Откуда оценка, по какой шкале и на скольких голосах.
+    #:
+    #: Потребитель отказался выпускать `aggregateRating` без этих трёх полей, и
+    #: отказ верен: число, поставленное неизвестно кем, нельзя ни проверить, ни
+    #: объяснить. 7,8 из десяти и 7,8 из ста неразличимы без шкалы, а средняя
+    #: из трёх голосов выглядит как средняя из трёх тысяч без счёта голосов.
+    #:
+    #: Умолчаний здесь нет намеренно: шкала «наверное, десять» — та же догадка,
+    #: что и само число без источника.
+    rating_source: str = ""
+    rating_scale: float | None = None
+    rating_count: int | None = None
     is_animation: bool | None = None
     display_title: str = ""
     schema_version: str = SCHEMA_VERSION
@@ -252,6 +264,32 @@ class RouteBinding:
                 f"{self.rating_value}: ноль здесь означал бы оценку «ноль»")
         if self.rating_state is RatingState.RATED and self.rating_value is None:
             raise ContractViolation("RATED без числа: оценка есть или её нет")
+        if self.rating_state is RatingState.RATED:
+            if not self.rating_source:
+                raise ContractViolation(
+                    "оценка без источника: число, поставленное неизвестно кем, "
+                    "нельзя ни проверить, ни объяснить")
+            if self.rating_scale is None or self.rating_scale <= 0:
+                raise ContractViolation(
+                    f"оценка {self.rating_value} без шкалы: 7,8 из десяти и "
+                    "7,8 из ста неразличимы")
+            if self.rating_value > self.rating_scale:
+                raise ContractViolation(
+                    f"оценка {self.rating_value} больше своей шкалы "
+                    f"{self.rating_scale}: сходятся не те числа")
+        else:
+            лишнее = [и for и, з in (("rating_source", self.rating_source),
+                                     ("rating_scale", self.rating_scale),
+                                     ("rating_count", self.rating_count))
+                      if з not in (None, "")]
+            if лишнее:
+                raise ContractViolation(
+                    f"оценки нет, а {', '.join(лишнее)} заполнены: происхождение "
+                    "несуществующего числа описывает несуществующее число")
+        if self.rating_count is not None and (
+                isinstance(self.rating_count, bool) or self.rating_count < 0):
+            raise ContractViolation(
+                f"счёт голосов {self.rating_count!r} отрицателен или не число")
 
         # Отсутствие воспроизведения не превращается в обещание просмотра.
         if self.playback_state is PlaybackState.PLAYABLE:
@@ -363,6 +401,9 @@ class RouteBinding:
             "playbackObservedAt": self.playback_observed_at,
             "ratingState": self.rating_state.value,
             "ratingValue": self.rating_value,
+            "ratingSource": self.rating_source or None,
+            "ratingScale": self.rating_scale,
+            "ratingCount": self.rating_count,
             "contentRevision": self.content_revision,
             "bindingState": self.binding_state.value,
             "reasonCodes": [c.value for c in self.reason_codes],

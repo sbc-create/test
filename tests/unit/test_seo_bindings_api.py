@@ -70,7 +70,7 @@ def корень(tmp_path: Path) -> Path:
 
 def test_перечень_витрин_называет_производителя(корень):
     каталог = api.каталог_витрин(корень)
-    assert каталог["contract"] == "seo-route-binding/1.0.0"
+    assert каталог["contract"] == "seo-route-binding/1.1.0"
     имена = {s["siteId"]: s["producer"] for s in каталог["sites"]}
     assert имена["demo-lords"] == "computed-routes"
     assert имена["demo-declared"] == "declared-routes"
@@ -155,8 +155,8 @@ def test_отбор_не_меняет_отпечаток_и_счёт_набор�
 
 def test_страница_несёт_версию_контракта_и_происхождение(корень):
     итог = api.страница(корень, "demo-declared", limit=1)
-    assert итог["schemaVersion"] == "seo-route-binding/1.0.0"
-    assert итог["contractVersion"] == "1.0.0"
+    assert итог["schemaVersion"] == "seo-route-binding/1.1.0"
+    assert итог["contractVersion"] == "1.1.0"
     assert итог["provenance"]
     assert итог["snapshotAt"]
 
@@ -198,7 +198,7 @@ def test_адрес_произведения_разрешается_в_связ�
     assert итог["pageType"] == "title"
     assert итог["inheritsFrom"] == ""
     assert итог["binding"]["contentId"] == "p-003"
-    assert итог["schemaVersion"] == "seo-route-binding/1.0.0"
+    assert итог["schemaVersion"] == "seo-route-binding/1.1.0"
 
 
 @pytest.mark.parametrize("путь, тип", [

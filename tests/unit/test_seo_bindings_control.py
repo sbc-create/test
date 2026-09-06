@@ -73,7 +73,7 @@ def test_чтения_достаточно_права_на_чтение(песо
     r = клиент(песочница).handle("GET", f"/api/v1/seo-bindings/{ВИТРИНА}",
                                  body={"limit": 1}, headers=ДОСТУП)
     assert r.status == 200
-    assert r.body["schemaVersion"] == "seo-route-binding/1.0.0"
+    assert r.body["schemaVersion"] == "seo-route-binding/1.1.0"
 
 
 # --- разрешение адреса -------------------------------------------------------
