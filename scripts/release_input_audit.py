@@ -61,7 +61,8 @@ DEPLOYED_CHECKOUT = Path("/srv/site-factory/repo")
 
 COORD = Path("/srv/site-factory/coordination/v1")
 LORDS_ROOT = Path("/srv/lords")
-PORTS = {"lords-01": 9101, "lords-02": 9102, "lords-03": 9103}
+PORTS = {"lords-01": 9101, "lords-02": 9102,
+    "eeb442aef29011757526e65711e5e30e6dee8b9c73b0fe14b8e1d62d402a1a0a": 9103, "lords-03": 9103}
 
 
 def _git(*args: str, cwd: Path = ROOT) -> str:
