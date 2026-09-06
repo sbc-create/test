@@ -1,0 +1,48 @@
+{
+ "gate": "Сквозная проверка: HTTP → контракт → решение SEO",
+ "server": "локальный экземпляр 127.0.0.1:8792, боевой runtime не затронут",
+ "consumerSha": "99e12ba7588693b17229046bd6a747675be7bbc9",
+ "endpoints": [
+  "/api/v1/seo-bindings",
+  "/api/v1/seo-bindings/{siteId}",
+  "/api/v1/compatibility"
+ ],
+ "storefronts": {
+  "lords-01": 53232,
+  "yummyani-site": 7303,
+  "yummyani-org": 7291,
+  "yummyani-biz": 7291
+ },
+ "digestStableAcrossRequests": true,
+ "defectsFound": [
+  {
+   "what": "контракт объявлял PLAYABLE без идентификатора потока",
+   "impact": "199 из 199 связанных записей понижались до метаданных",
+   "fixed": true,
+   "after": "198 с просмотром, 1 без"
+  },
+  {
+   "what": "не было описано отображение bindingState на входы политики",
+   "impact": "57 из 60 записей с неоднозначным маршрутом получали индекс и обещание просмотра",
+   "fixed": "описано в HANDOFF-2026-09-06-031",
+   "after": "60 из 60 NOINDEX_DUPLICATE"
+  }
+ ],
+ "afterFix": {
+  "collisions": {
+   "records": 60,
+   "NOINDEX_DUPLICATE": 60
+  },
+  "kindUnresolved": {
+   "records": 60,
+   "HOLD_FOR_KIND_REVIEW": 60
+  },
+  "yummyaniPage": {
+   "records": 500,
+   "INDEXABLE_WITH_PLAYBACK": 492,
+   "HOLD_FOR_KIND_REVIEW": 6,
+   "INDEXABLE_METADATA_ONLY": 2
+  }
+ },
+ "refusals": 0
+}
