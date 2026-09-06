@@ -1498,8 +1498,7 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
     if title.episodic:
         entity["numberOfSeasons"] = len(title.seasons)
         entity["numberOfEpisodes"] = title.episode_count
-    else:
-        entity["duration"] = f"PT{title.runtime_min}M"
+    entity.update(_schema_duration(title))
 
     trail = (
         ("Главная", "/"),
@@ -2026,6 +2025,31 @@ _HEADING_BY_KIND: dict[str, str] = {
     "OAD": "Об OAD", "ONA": "Об ONA", "SPECIAL": "О спецвыпуске",
     "DOCUMENTARY": "О фильме", "ANIMATION": "О фильме",
 }
+
+
+def _schema_duration(title) -> dict[str, str]:
+    """Длительность для разметки — или пустой словарь.
+
+    Прежняя формула подставляла значение прямо в шаблон ISO-длительности, и у
+    произведения без длительности на страницу уходило `"duration": "PTNoneM"`.
+    Измерено на боевой витрине lordserial33.biz.
+
+    `PTNoneM` — не длительность и не её отсутствие: поисковая система разберёт
+    её как ошибку разметки, а человек прочитает как сбой. Ноль подошёл бы ещё
+    меньше — он означал бы произведение нулевой длины.
+
+    У сериала поля нет вовсе: `duration` описывал бы одну серию, а стоял бы у
+    сериала целиком.
+    """
+    if getattr(title, "episodic", False):
+        return {}
+    значение = getattr(title, "runtime_min", None)
+    if isinstance(значение, bool) or not isinstance(значение, int | float):
+        return {}
+    # NaN не сравнивается ни с чем, поэтому проверка идёт через сам объект.
+    if значение != значение or значение <= 0:
+        return {}
+    return {"duration": f"PT{int(значение)}M"}
 
 
 def _schema_type_of(title) -> str:
