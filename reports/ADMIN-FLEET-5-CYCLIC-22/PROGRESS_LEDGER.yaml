@@ -91,7 +91,7 @@ entries:
     cycle: 3
     note: "своя точка входа, печенья и оформление у каждого сайта"
     branch: claude/core-product-8plus-20
-    full_head_sha: ЗАПОЛНЯЕТСЯ_ПОСЛЕ_КОММИТА
+    full_head_sha: 1f7ab4cc461c8975ff3e4ca6d5f32565ae26ccc7
     core_percent: 100.0
     central_admin: 8
     fleet_gates_closed: 0
