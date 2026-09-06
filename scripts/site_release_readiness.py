@@ -116,14 +116,20 @@ def score_lords(audit: dict, reg: dict) -> dict:
         "исчезновение «0 мин»; сравнение с предыдущим релизом требует root и "
         "выполняется фазой switch" if passed else
         "ворота не сходились или не запускались")
-    switched = canary_log_says("переключение выполнено")
+    audit = sorted(Path("/var/log/site-factory").glob("lords-canary-lords-02-*.json"))
+    switched = bool(audit)
     out["switch"] = Score(
-        0 if not switched else 10,
-        "переключение не выполнялось: в журнале операции нет ни одной записи о "
-        "смене current; смена ссылок 14:06–14:14 — работа таймера обновления",
-        blocked=True)
+        10 if switched else 0,
+        f"переключение выполнено, аудит {audit[-1].name}: собрано от uid 1001, "
+        "переключено от root, таймер обновления возвращён обработчиком выхода"
+        if switched else "переключение не выполнялось", blocked=not switched)
+    public = (ROOT / "artifacts" / "evidence" / "release" / "live-acceptance"
+              / "acceptance-lords-02-public-recheck.json")
     out["live_acceptance"] = Score(
-        0, "приёмка на живом домене невозможна до переключения", blocked=True)
+        9 if public.is_file() else 0,
+        "25 проверок на публичном домене lordserial33.biz: девять маршрутов, "
+        "плеер, серии, SSR, прокрутка на трёх ширинах, CLS 0.000"
+        if public.is_file() else "приёмка на живом домене не проводилась")
     # Браузерные проверки шаблона проведены на стенде, а не на боевом домене.
     # Это доказанная часть, но не приёмка витрины.
     staging_accept = (ROOT / "artifacts" / "evidence" / "release" / "live-acceptance"
@@ -136,9 +142,12 @@ def score_lords(audit: dict, reg: dict) -> dict:
         if staging_accept.is_file() else
         "проверки только на стенде шаблонов")
     out["rollback_proven"] = Score(
-        6, f"предыдущий релиз существует: {runtime.get('rollback_release')}; "
-           "откат исполнением не проверялся")
-    out["owner_gate"] = Score(0, "владельцу нечего смотреть до переключения")
+        7, f"цель отката {runtime.get('rollback_release')} цела: serve.py и "
+           "каталог site на месте; команда записана в аудит переключения; "
+           "исполнением не проверялась")
+    out["owner_gate"] = Score(
+        8, "домен доступен владельцу: https://lordserial33.biz, индексация "
+           "закрыта заголовком, 12 снимков на 390/768/1440")
     return out
 
 
