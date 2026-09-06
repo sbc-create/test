@@ -798,3 +798,71 @@ class TestRefreshTimerIsAlwaysRestored:
         hint_at = hint.start()
         assert any(i < hint_at for i in self._команды_запуска(script)), (
             "до подсказки нет ни одного фактического запуска таймера")
+
+
+class TestSwitchUnitDoesNotPullRender:
+    """Фаза переключения не должна тянуть за собой фазу сборки.
+
+    Отказ, ради которого написан класс, стоил ста четырнадцати минут работы и
+    выглядел как успешно выполненная команда.
+
+    Юнит переключения объявлял:
+
+        Requires=lords-canary-render@%i.service
+        After=lords-canary-render@%i.service
+
+    systemd заводит обе задачи в одну транзакцию, поэтому запуск переключения
+    сначала поднимал сборку. А сборка первым делом делает `rm -rf` каталога
+    staging — то есть уничтожала готовую витрину, ради переключения которой её
+    и запускали, и начинала собирать заново.
+
+    Владелец, выполнивший ровно одну подготовленную команду, получил вместо
+    минутного переключения повторный двухчасовой рендер.
+
+    Настоящее предусловие переключения — не служба, а расписка о сборке, и
+    сценарий её уже проверяет. Зависимость от службы лишняя и вредная.
+    """
+
+    UNIT = (Path(__file__).resolve().parents[2] / "automation" / "host" / "systemd"
+            / "lords-canary-switch@.service")
+
+    def директивы(self) -> dict[str, list[str]]:
+        out: dict[str, list[str]] = {}
+        for line in self.UNIT.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            out.setdefault(key.strip(), []).append(value.strip())
+        return out
+
+    def test_переключение_не_требует_службы_сборки(self):
+        d = self.директивы()
+        pulled = [v for key in ("Requires", "Wants", "BindsTo", "Requisite")
+                  for v in d.get(key, []) if "render" in v]
+        assert not pulled, (
+            f"юнит переключения тянет за собой сборку: {pulled}. Запуск "
+            "переключения запустит рендер, а тот сотрёт готовую витрину")
+
+    def test_порядок_после_сборки_допустим(self):
+        """`After=` без `Requires=` безвреден и полезен.
+
+        Он лишь упорядочивает, если обе задачи оказались в одной транзакции, но
+        сам сборку не запускает. Запрещать его незачем — запрещается именно
+        зависимость.
+        """
+        d = self.директивы()
+        after_render = [v for v in d.get("After", []) if "render" in v]
+        requires_render = [v for v in d.get("Requires", []) if "render" in v]
+        assert not requires_render, "упорядочение подменено зависимостью"
+        # Само по себе наличие After на сборку — не дефект, а полезная
+        # предосторожность. Проверяется лишь, что оно не сопровождается
+        # зависимостью, которая сборку запускает.
+        assert after_render or True
+
+    def test_конфликт_с_обновлением_содержимого_сохранён(self):
+        # Одновременная работа с обновлением означала бы двух писателей в один
+        # каталог релизов. Эта защита обязана остаться.
+        d = self.директивы()
+        assert any("lords-content-refresh" in v for v in d.get("Conflicts", [])), (
+            "снят конфликт с обновлением содержимого")

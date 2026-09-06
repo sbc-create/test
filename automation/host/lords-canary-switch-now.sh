@@ -57,7 +57,27 @@ print(json.load(open(sys.argv[1], encoding="utf-8"))["template_digest"])' "${REC
   echo "       а сценарий закрепляет ${EXPECT_DIGEST:0:16}" >&2
   exit 4
 }
-echo "==> расписка о сборке принята: отпечаток ${RECEIPT_DIGEST:0:16}"
+# Расписка обещает страницы — проверяем, что они есть. Эта проверка написана
+# после случая, когда запуск переключения через зависимость юнита поднял фазу
+# сборки, та сделала `rm -rf` каталога staging, и расписка осталась описывать
+# витрину из 61 609 страниц, которых на диске было ноль.
+RECEIPT_PAGES="$(python3 -c '
+import json, sys
+print(json.load(open(sys.argv[1], encoding="utf-8"))["pages"])' "${RECEIPT}")"
+ACTUAL_PAGES="$(find "${REPO}/var/canary-staging/${SITE}" -name index.html 2>/dev/null | wc -l)"
+[ "${ACTUAL_PAGES}" -gt 0 ] || {
+  echo "ОТКАЗ: расписка обещает ${RECEIPT_PAGES} страниц, на диске ноль." >&2
+  echo "       Каталог сборки пуст — вероятно, идёт или прошла новая фаза render," >&2
+  echo "       которая стирает staging перед началом. Дождитесь её завершения." >&2
+  exit 6
+}
+# Допуск на расхождение не нужен: сборка либо та самая, либо другая.
+if [ "${ACTUAL_PAGES}" != "${RECEIPT_PAGES}" ]; then
+  echo "ОТКАЗ: расписка обещает ${RECEIPT_PAGES} страниц, на диске ${ACTUAL_PAGES}." >&2
+  echo "       Каталог сборки не соответствует расписке." >&2
+  exit 7
+fi
+echo "==> расписка о сборке принята: отпечаток ${RECEIPT_DIGEST:0:16}, страниц ${ACTUAL_PAGES}"
 
 [ "$(id -u)" = "0" ] || {
   echo
