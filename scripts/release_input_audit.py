@@ -31,6 +31,15 @@ sys.path.insert(0, str(ROOT))
 
 OUT = ROOT / "artifacts" / "evidence" / "release" / "release-input-audit.json"
 
+#: Известные версии артефакта. Номер выводится из отпечатка, а не пишется
+#: числом рядом: зашитый номер расходится с содержимым при первой же правке —
+#: именно так в отчёте однажды оказался «артефакт v2» с отпечатком версии 3.
+ARTIFACT_VERSIONS = {
+    "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc": 1,
+    "7b38ca10685a75c3d52527746208539cc30015fc1bfb3fce010a9491616ed965": 2,
+    "ca3d395ade25fb295735a20ad1477e385c9f149a69976b875d0d9af2f5a5f939": 3,
+}
+
 #: Ревизии, участвующие в релизе. Полные, а не сокращённые.
 CANDIDATE_SHA = "cd2f718ae656e6bfcdc68099601d92078bd1f13f"
 CANARY_BASE_SHA = "21d2c21dfc50c01b2fdd5a13821a29f3cbce1626"
@@ -185,8 +194,8 @@ def build() -> dict:
                      "blueprints/lords, factory/lords, factory/templates и схеме "
                      "манифеста; ни Yummy, ни zona, ни animedia, ни basis-video "
                      "артефакт не описывает",
-            "artifactVersion": 2,
-            "digest": None,  # заполняется ниже
+            "artifactVersion": None,  # выводится из отпечатка ниже
+            "digest": None,
             "files": None,
             "members": artifact_members(),
             "pinnedInApplyScript": pinned_digest(),
@@ -194,13 +203,21 @@ def build() -> dict:
                 "candidateSha": {"sha": CANDIDATE_SHA, **digest_at(CANDIDATE_SHA)},
                 "canaryBaseSha": {"sha": CANARY_BASE_SHA, **digest_at(CANARY_BASE_SHA)},
             },
-            "supersedes": {
-                "artifactVersion": 1,
-                "digest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
-                "acceptedBy": "TEMPLATE_TO_CORE-008 / CORE_TO_OWNER-011",
-                "difference": "метка происхождения данных перестала быть зашитой "
-                              "строкой fixture/test",
-            },
+            "history": [
+                {"version": 1,
+                 "digest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
+                 "acceptedBy": "TEMPLATE_TO_CORE-008 / CORE_TO_OWNER-011",
+                 "state": "заменён"},
+                {"version": 2,
+                 "digest": "7b38ca10685a75c3d52527746208539cc30015fc1bfb3fce010a9491616ed965",
+                 "difference": "метка происхождения данных перестала быть зашитой "
+                               "строкой fixture/test",
+                 "state": "заменён, в production не выкладывался"},
+                {"version": 3,
+                 "digest": "ca3d395ade25fb295735a20ad1477e385c9f149a69976b875d0d9af2f5a5f939",
+                 "difference": "длительность серии стала неизвестной, а не нулевой",
+                 "state": "собран для canary"},
+            ],
         },
         "deployedCheckout": {
             "path": str(DEPLOYED_CHECKOUT),
@@ -235,6 +252,12 @@ def main() -> int:
     computed = digest_mod.compute(ROOT)
     payload["template"]["digest"] = computed["template_digest"]
     payload["template"]["files"] = computed["files"]
+    payload["template"]["artifactVersion"] = ARTIFACT_VERSIONS.get(
+        computed["template_digest"])
+    if payload["template"]["artifactVersion"] is None:
+        payload["template"]["artifactVersionNote"] = (
+            "отпечаток не значится ни в одной известной версии: артефакт изменён "
+            "без записи в ARTIFACT_VERSIONS")
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 

@@ -1,10 +1,10 @@
 {
-  "captured_at_utc": "2026-09-05T18:32:59Z",
+  "captured_at_utc": "2026-09-05T20:47:10Z",
   "site_id": "lords-02",
   "base": "http://127.0.0.1:9102",
   "home": {
     "status": 200,
-    "bytes": 30304,
+    "bytes": 30298,
     "titles": 92,
     "title_paths": [
       "/title/100-dney-do-proschaniya-dorogoy/",
@@ -75,14 +75,14 @@
       "/title/korotkoe-leto/",
       "/title/lyuboy-cenoy/",
       "/title/lyuboy-cenoy/",
-      "/title/meydey/",
-      "/title/meydey/",
+      "/title/natisk/",
+      "/title/natisk/",
       "/title/neprimetnyy/",
       "/title/neprimetnyy/",
       "/title/parasomniya/",
       "/title/parasomniya/",
-      "/title/poydem-so-mnoy-2/",
-      "/title/poydem-so-mnoy-2/",
+      "/title/poydem-so-mnoy/",
+      "/title/poydem-so-mnoy/",
       "/title/prekrasnyy-shum/",
       "/title/prekrasnyy-shum/",
       "/title/proshlaya-zhizn-beloy-zmei/",
@@ -163,7 +163,7 @@
     "ratio": 1.0
   },
   "content_snapshot": {
-    "catalog": "151f0d5cdd9d06545e69426b1a61bce7bb9094b2efd35c25d51293165035fb1b",
+    "catalog": "eaacf89aefe9919ebb1ce28c5334958af6f907f708c2d071996e61fe221d2d50",
     "enrichment": "97f72ad11acfc35804293b603a3d1fea4409923f52aea1c08dc481d6ede1a665",
     "playability": "64e81fff34e8b43132fcee55221e7188412d1c89cbfc81ad9548e78b6e78ea61",
     "template_version": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"

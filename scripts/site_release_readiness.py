@@ -105,8 +105,16 @@ def score_lords(audit: dict, reg: dict) -> dict:
         9 if receipt.is_file() else 0,
         f"расписка о сборке: {receipt.name}" if receipt.is_file()
         else "сборка на живом каталоге идёт или не запускалась (расписки нет)")
+    # Ворота разделены надвое честно: часть выполнима без прав, часть — нет.
+    verification = ROOT / "artifacts" / "evidence" / "release" / "staging-verification.lords-02.json"
+    v = json.loads(verification.read_text(encoding="utf-8")) if verification.is_file() else {}
+    passed = v.get("verdict") == "PASS"
     out["preswitch_gates"] = Score(
-        0, "предпусковые ворота не запускались: они идут после сборки")
+        7 if passed else 0,
+        "доступная без прав часть сошлась: обвал каталога, восемь маршрутов, "
+        "исчезновение «0 мин»; сравнение с предыдущим релизом требует root и "
+        "выполняется фазой switch" if passed else
+        "ворота не сходились или не запускались")
     switched = canary_log_says("переключение выполнено")
     out["switch"] = Score(
         0 if not switched else 10,
@@ -117,9 +125,15 @@ def score_lords(audit: dict, reg: dict) -> dict:
         0, "приёмка на живом домене невозможна до переключения", blocked=True)
     # Браузерные проверки шаблона проведены на стенде, а не на боевом домене.
     # Это доказанная часть, но не приёмка витрины.
+    staging_accept = (ROOT / "artifacts" / "evidence" / "release" / "live-acceptance"
+                      / "acceptance-lords-02-staging.json")
     out["browser_quality"] = Score(
-        5, "axe, размеры целей, кросс-браузер и CLS закрыты на стенде шаблонов; "
-           "на боевом домене не проводились")
+        8 if staging_accept.is_file() else 5,
+        "22 приёмочные проверки против собранной витрины: маршруты, консоль, "
+        "сеть, прокрутка на 390/768/1440, CLS 0.000; на боевом домене не "
+        "проводились — до переключения его нечем проверять"
+        if staging_accept.is_file() else
+        "проверки только на стенде шаблонов")
     out["rollback_proven"] = Score(
         6, f"предыдущий релиз существует: {runtime.get('rollback_release')}; "
            "откат исполнением не проверялся")
