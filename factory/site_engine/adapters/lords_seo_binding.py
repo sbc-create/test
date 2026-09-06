@@ -144,6 +144,9 @@ def bind_entry(entry: dict, *, site_id: str, route: str,
         content_kind=вид, content_kind_state=состояние_вида,
         content_kind_provenance=происхождение,
         is_animation=решение.is_animation,
+        kind_candidates=tuple(dict.fromkeys(
+            (решение.provider_kind, *решение.tag_kinds)))
+        if состояние_вида is KindState.CONFLICTED else (),
         display_title=name,
         playback_state=состояние_видео, playback_reason_code=код_видео,
         playback_observed_at=snapshot_at if состояние_видео is PlaybackState.PLAYABLE else "",

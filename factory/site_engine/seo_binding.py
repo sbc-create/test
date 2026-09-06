@@ -154,6 +154,9 @@ class RouteBinding:
     reason_codes: tuple[ReasonCode, ...]
     provenance: str
     snapshot_at: str
+    #: Кандидаты вида при конфликте. Меньше двух — не конфликт, а отсутствие:
+    #: редактору нечего разбирать, если выбор не из чего делать.
+    kind_candidates: tuple[ContentKind, ...] = ()
     rating_state: RatingState = RatingState.UNKNOWN
     rating_value: float | None = None
     is_animation: bool | None = None
@@ -208,6 +211,12 @@ class RouteBinding:
             if ReasonCode.ROUTE_AMBIGUOUS in self.reason_codes:
                 raise ContractViolation(
                     "BOUND с признаком неоднозначного маршрута")
+
+        if self.content_kind_state is KindState.CONFLICTED \
+                and len(self.kind_candidates) < 2:
+            raise ContractViolation(
+                "конфликт вида без двух кандидатов не является конфликтом: "
+                "разбирать нечего")
 
         неизвестные = set(self.external_ids) - set(ID_NAMESPACES)
         if неизвестные:
@@ -283,8 +292,39 @@ class RouteBinding:
             "reasonCodes": [c.value for c in self.reason_codes],
             "schemaType": self.schema_type,
             "mayPromisePlayback": self.may_promise_playback,
+            "kindCandidates": [k.value for k in self.kind_candidates],
             "provenance": self.provenance,
             "snapshotAt": self.snapshot_at,
+            "contentIdentity": self.as_identity_payload(),
+        }
+
+    def as_identity_payload(self) -> dict[str, Any]:
+        """Тот же вид произведения в форме `content-identity/1.0.0`.
+
+        Нужен, чтобы потребитель, написанный до этого контракта, продолжал
+        работать без единой правки. Новые поля он просто не прочитает, а вид,
+        состояние и основания конфликта получит там же, где получал раньше.
+        Совместимость, проверяемая только словами, кончается на первой правке
+        любой из сторон.
+        """
+        статус = {KindState.RESOLVED: "RESOLVED",
+                  KindState.CONFLICTED: "CONFLICTED",
+                  KindState.MISSING: "MISSING"}[self.content_kind_state]
+        return {
+            "schemaVersion": "content-identity/1.0.0",
+            "identityStatus": статус,
+            "contentKind": self.content_kind.value,
+            "candidateKinds": [k.value for k in self.kind_candidates],
+            "conflictState": [c.value for c in self.reason_codes
+                              if c is not ReasonCode.OK],
+            "isAnimation": self.is_animation,
+            "displayedTitle": self.display_title,
+            "internalEntityId": f"{self.site_id}:{self.content_id}",
+            "providerAssetId": self.content_id,
+            "mappingMethod": self.content_kind_provenance,
+            "mappingConfidence": 1.0 if self.content_kind_state is KindState.RESOLVED else 0.0,
+            "payloadHash": self.content_revision,
+            "resolverVersion": f"seo-route-binding/{self.contract_version}",
         }
 
 
