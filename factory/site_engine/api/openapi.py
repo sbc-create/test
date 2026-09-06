@@ -332,6 +332,26 @@ from factory.site_engine.api.ratelimit import DEFAULT_LIMITS
         "success": ("202", "инвалидация поставлена в очередь"),
         "errors": {"400": "негодная область или пустой keys при scope=title"},
     },
+    "/api/v1/seo-bindings": {
+        "method": "get",
+        "summary": "Витрины, умеющие отдавать связи записей каталога с публичными страницами",
+        "scope": "read",
+        "idempotent": False,
+        "body": None,
+        "success": ("200", "перечень витрин и способ адресации каждой"),
+        "errors": {"404": "маршрут выключен"},
+    },
+    "/api/v1/seo-bindings/{siteId}": {
+        "method": "get",
+        "summary": "Связи записей каталога с публичными страницами витрины, страницами",
+        "scope": "read",
+        "idempotent": False,
+        "body": None,
+        "success": ("200", "страница выгрузки контракта seo-route-binding/1.0.0 "
+                           "с отпечатком всего набора и сводкой по состояниям связи"),
+        "errors": {"400": "недопустимые limit, offset или bindingState",
+                   "404": "витрина не описана в источниках связей"},
+    },
     "/api/v1/content-health": {
         "method": "get",
         "summary": "Покрытие воспроизведения по массиву и причины его отсутствия",
