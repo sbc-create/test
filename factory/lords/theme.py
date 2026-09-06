@@ -357,8 +357,17 @@ main {{ padding: var(--pad) 0 40px; }}
 .rail__poster {{ position: relative; display: block; aspect-ratio: var(--card-ratio);
   background: var(--surface-alt); border-radius: var(--radius); overflow: hidden; }}
 .rail__poster img {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
-.rail__title {{ font-size: .86rem; line-height: 1.3; overflow: hidden;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }}
+/* Названию позволено занять столько строк, сколько ему нужно.
+   Прежде здесь стоял зажим в две строки. При обычном размере шрифта он ничего
+   не резал, и потому выглядел безобидно, но зажим считает строки, а не текст:
+   при увеличении шрифта до 200 % в те же две строки помещается вдвое меньше
+   знаков, и часть названия, которую зритель только что видел, исчезает. Это
+   потеря содержимого от изменения размера текста — то самое, что запрещает
+   критерий 1.4.4.
+   Ряд от этого не разъезжается: постеры выровнены сверху, растёт только высота
+   строки заголовков, и то лишь когда шрифт увеличен. В сетке каталога
+   названия и так растут свободно — теперь ряды ведут себя так же. */
+.rail__title {{ font-size: .86rem; line-height: 1.3; overflow-wrap: anywhere; }}
 .rail__link:hover .rail__title {{ color: var(--accent); }}
 .rail__meta {{ color: var(--muted); font-size: .74rem; }}
 .rail__rating {{ position: absolute; left: 6px; bottom: 6px; display: inline-flex;

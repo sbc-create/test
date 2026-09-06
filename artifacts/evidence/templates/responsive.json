@@ -1,5 +1,5 @@
 {
-  "captured_at_utc": "2026-09-06T14:06:30.565Z",
+  "captured_at_utc": "2026-09-06T14:23:47.963Z",
   "sweep": [
     {
       "site": "lords-01",
@@ -2095,8 +2095,8 @@
   "textSpacing": [
     {
       "route": "home",
-      "heightBefore": 7432,
-      "height": 8170,
+      "heightBefore": 8216,
+      "height": 8985,
       "horizontal": false,
       "clipped": []
     },
@@ -2138,6 +2138,120 @@
     {
       "site": "lords-04",
       "problems": []
+    }
+  ],
+  "zoom200": [
+    {
+      "site": "lords-01",
+      "route": "home",
+      "clipped": 0,
+      "overflowX": false,
+      "examples": []
+    },
+    {
+      "site": "lords-01",
+      "route": "catalog",
+      "clipped": 0,
+      "overflowX": false,
+      "examples": []
+    },
+    {
+      "site": "lords-01",
+      "route": "search",
+      "clipped": 0,
+      "overflowX": false,
+      "examples": []
+    },
+    {
+      "site": "lords-01",
+      "route": "not-found",
+      "clipped": 0,
+      "overflowX": false,
+      "examples": []
+    },
+    {
+      "site": "lords-02",
+      "route": "home",
+      "clipped": 0,
+      "overflowX": false,
+      "examples": []
+    },
+    {
+      "site": "lords-02",
+      "route": "catalog",
+      "clipped": 0,
+      "overflowX": false,
+      "examples": []
+    },
+    {
+      "site": "lords-02",
+      "route": "search",
+      "clipped": 0,
+      "overflowX": false,
+      "examples": []
+    },
+    {
+      "site": "lords-02",
+      "route": "not-found",
+      "clipped": 0,
+      "overflowX": false,
+      "examples": []
+    },
+    {
+      "site": "lords-03",
+      "route": "home",
+      "clipped": 0,
+      "overflowX": false,
+      "examples": []
+    },
+    {
+      "site": "lords-03",
+      "route": "catalog",
+      "clipped": 0,
+      "overflowX": false,
+      "examples": []
+    },
+    {
+      "site": "lords-03",
+      "route": "search",
+      "clipped": 0,
+      "overflowX": false,
+      "examples": []
+    },
+    {
+      "site": "lords-03",
+      "route": "not-found",
+      "clipped": 0,
+      "overflowX": false,
+      "examples": []
+    },
+    {
+      "site": "lords-04",
+      "route": "home",
+      "clipped": 0,
+      "overflowX": false,
+      "examples": []
+    },
+    {
+      "site": "lords-04",
+      "route": "catalog",
+      "clipped": 0,
+      "overflowX": false,
+      "examples": []
+    },
+    {
+      "site": "lords-04",
+      "route": "search",
+      "clipped": 0,
+      "overflowX": false,
+      "examples": []
+    },
+    {
+      "site": "lords-04",
+      "route": "not-found",
+      "clipped": 0,
+      "overflowX": false,
+      "examples": []
     }
   ]
 }
