@@ -1,5 +1,5 @@
 {
-  "captured_at_utc": "2026-09-06T16:17:20.677Z",
+  "captured_at_utc": "2026-09-06T22:06:16.919Z",
   "budget": {
     "documentKb": 120,
     "scriptKb": 60,
@@ -36,11 +36,11 @@
       "site": "lords-02",
       "page": "home",
       "url": "http://127.0.0.1:8802/",
-      "requests": 4,
+      "requests": 37,
       "documentKb": 53,
       "scriptKb": 19,
       "styleKb": 26,
-      "imageKb": 0,
+      "imageKb": 26,
       "domNodes": 870
     },
     {
@@ -103,11 +103,11 @@
     {
       "site": "lords-01",
       "route": "/catalog/",
-      "interactions": 0,
-      "worstMs": 0,
+      "interactions": 3,
+      "worstMs": 32,
       "reporting_threshold_ms": 16,
-      "note": "ни одно взаимодействие не достигло порога 16 мс — INP ниже него",
-      "observer_selfcheck_ms": 536
+      "note": "зафиксированы взаимодействия выше порога отчётности",
+      "observer_selfcheck_ms": 136
     }
   ],
   "player": [

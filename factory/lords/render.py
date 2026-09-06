@@ -1509,6 +1509,27 @@ def _shown_rating(value) -> float | None:
     return float(value) if value > 0 else None
 
 
+def _external_id_attrs(title) -> str:
+    """Идентификаторы записи у внешних источников — машиночитаемо.
+
+    Не украшение и не разметка для поисковика: это происхождение. Оценку,
+    показанную на странице, без идентификатора нельзя ни проверить, ни
+    обновить, ни сопоставить с той же записью у другого поставщика. Полоса SEO
+    отдельным решением отказалась выпускать оценку без происхождения, и
+    идентификатор — его половина.
+
+    Ссылок здесь нет намеренно: адреса чужих карточек в замороженной базе не
+    объявлены, а придумывать их шаблону запрещено. Значение выдаётся как есть.
+    """
+    parts = []
+    for attr, name in (("kinopoisk_id", "data-kinopoisk-id"),
+                       ("imdb_id", "data-imdb-id")):
+        value = getattr(title, attr, None)
+        if value:
+            parts.append(f' {name}="{escape(str(value))}"')
+    return "".join(parts)
+
+
 def _ratings_block(title) -> str:
     """Оценки с подписью источника.
 
@@ -1624,11 +1645,15 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
 
     # Длительность в ноль минут — это не длительность, а её отсутствие: списочный
     # ответ источника хронометража не даёт вовсе.
-    duration = ""
-    if title.runtime_min:
-        duration = f"{title.runtime_min} мин"
-    if title.episodic:
-        duration = (duration + " · " if duration else "") + f"серий {title.episode_count}"
+    # Длительность — только хронометраж. Число серий раньше печаталось в этой
+    # же строке, и получалось «Длительность: серий 12»: подпись говорила об
+    # одном, значение о другом. У числа серий теперь своя строка рядом с
+    # числом сезонов, где ему и место.
+    #
+    # Длительность в ноль минут — не длительность, а её отсутствие: списочный
+    # ответ источника хронометража не даёт вовсе.
+    duration = f"{title.runtime_min} мин" if title.runtime_min else ""
+    episodes_fact = str(title.episode_count) if title.episodic and title.episode_count else ""
 
     def _join(values) -> str:
         """Список имён в строку. Длинный состав режется: страница не афиша."""
@@ -1647,6 +1672,7 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
         ("В ролях", _join(getattr(title, "actors", ()))),
         ("Озвучки", _join(getattr(title, "voices", ()))),
         ("Сезонов", str(getattr(title, "seasons_count", 0) or "") ),
+        ("Серий", episodes_fact),
         # У фикстуры это настоящие жанры. У живого каталога — теги источника:
         # они описывают запись, но жанрами не являются, и называть их жанрами
         # значило бы написать на странице фильма «Жанры: NR».
@@ -1663,7 +1689,8 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
     )
 
     head = (
-        f'<div class="title-head"><div class="title-head__poster">'
+        f'<div class="title-head"{_external_id_attrs(title)}>'
+        f'<div class="title-head__poster">'
         f'<img src="{escape(title.poster_src)}" alt="Постер: {escape(name)}" '
         'width="400" height="600"></div><div>'
         f"<h1>{escape(h1)}</h1>"
