@@ -1,5 +1,5 @@
 {
-  "captured_at_utc": "2026-09-06T23:18:05.614Z",
+  "captured_at_utc": "2026-09-06T23:37:30.697Z",
   "budget": {
     "documentKb": 120,
     "scriptKb": 60,
@@ -104,7 +104,7 @@
       "site": "lords-01",
       "route": "/catalog/",
       "interactions": 3,
-      "worstMs": 32,
+      "worstMs": 24,
       "reporting_threshold_ms": 16,
       "note": "зафиксированы взаимодействия выше порога отчётности",
       "observer_selfcheck_ms": 128

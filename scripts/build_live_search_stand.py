@@ -28,12 +28,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from factory.lords import detail_enrichment as enrich_mod  # noqa: E402
 from factory.lords import live_catalog as live_mod  # noqa: E402
 from factory.lords import preview as preview_mod  # noqa: E402
 from factory.lords import render as render_mod  # noqa: E402
 from factory.lords import serve as serve_mod  # noqa: E402
 
 CATALOG_CACHE = Path("/srv/site-factory/repo/var/lords/lords/catalog-cache")
+DETAIL_CACHE = Path("/srv/site-factory/repo/var/lords/detail-cache")
 OUT = ROOT / "var" / "live-search-stand"
 
 
@@ -53,7 +55,27 @@ def main() -> int:
     started = time.perf_counter()
     raw = json.loads(source.read_text(encoding="utf-8"))
     items = raw["items"] if isinstance(raw, dict) else raw
-    catalog = live_mod.catalog_from_live(items)
+
+    # Обогащение обязательно, а не по желанию. Списочный ответ не несёт ни
+    # описаний, ни жанров, ни стран, ни длительности — они приходят только из
+    # detail. Стенд без обогащения показывает витрину, которой не существует:
+    # указатель стран на нём пуст, хотя у 8 348 записей страна есть.
+    details: dict[str, dict] = {}
+    if DETAIL_CACHE.is_dir():
+        for path in DETAIL_CACHE.glob("*.json"):
+            try:
+                entry = json.loads(path.read_text(encoding="utf-8"))
+            except Exception:  # noqa: BLE001 — битый файл кэша не поле
+                continue
+            detail = entry.get("detail")
+            if detail:
+                details[detail.get("id") or path.stem] = detail
+    merged = [
+        enrich_mod.merge_detail(item, details[item["external_id"]])
+        if item.get("external_id") in details else item
+        for item in items
+    ]
+    catalog = live_mod.catalog_from_live(merged)
     package, _ = preview_mod._package(args.site)
     # Страницы произведений отрисовываются выборочно: их пятьдесят три тысячи,
     # и полная отрисовка занимает часы. Выборка идёт равным шагом по каталогу,
@@ -71,7 +93,8 @@ def main() -> int:
     result = serve_mod.export(site, directory)
 
     index = site.pages.get(render_mod.SEARCH_INDEX_PATH)
-    print(f"{args.site}: записей {len(items)}, страниц произведений {len(slugs)}, "
+    print(f"{args.site}: записей {len(items)}, обогащено {len(details)}, "
+          f"страниц произведений {len(slugs)}, "
           f"документов {len(site.pages)}, "
           f"собрано за {time.perf_counter() - started:.0f} с")
     if index is None:

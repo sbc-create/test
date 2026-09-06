@@ -2374,12 +2374,29 @@ def _index_page(ctx, *, path, section, pairs, trail_label, indexable) -> Page:
     text = ctx["texts"].get(section) or {}
     title = text.get("title") or SECTION_LABELS.get(section, section)
     h1 = text.get("h1") or title
-    lede = f'<p class="lede">{escape(text.get("intro", ""))}</p>' if text.get("intro") else ""
-    body = (
-        f"<h1>{escape(h1)}</h1>{lede}"
-        f'<p class="count">Значений с непустым списком: {len(pairs)}.</p>'
-        + _chips(pairs)
-    )
+    lede = _lede(text.get("intro", ""))
+    if pairs:
+        body = (
+            f"<h1>{escape(h1)}</h1>{lede}"
+            f'<p class="count">Значений с непустым списком: {len(pairs)}.</p>'
+            + _chips(pairs)
+        )
+    else:
+        # Пустой указатель — тупик, а не страница. Прежде здесь оставались
+        # «Значений с непустым списком: 0» и пустой список: раздел объявлен в
+        # навигации на каждой странице витрины, зритель приходит и упирается в
+        # ноль без объяснения и без выхода.
+        #
+        # Причина у пустоты всегда одна и та же — источник не дал этих
+        # сведений, — и назвать её честнее, чем показать ноль. Ссылки ведут
+        # туда, где выбор работает: раздел без значений не должен уводить
+        # зрителя с витрины.
+        body = (
+            f"<h1>{escape(h1)}</h1>{lede}"
+            '<p class="empty">Источник не сообщил этих сведений ни по одной '
+            'записи каталога, поэтому выбирать здесь пока не из чего. '
+            'Работают <a href="/catalog/">каталог</a> и поиск по названию.</p>'
+        )
     meta = Meta(
         title=title,
         description=text.get("description", f"{title} каталога."),
