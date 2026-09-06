@@ -52,3 +52,37 @@ blocked_external:
     note: lordfilm1.online не разрешается; lorserial66.lol и newlordfilm.lol
       разрешаются на 172.86.76.55 и 172.86.76.69 — это не наш хост, владение не
       подтверждено, использовать нельзя
+
+# --- UNIFIED-SITE-CONTROL-CENTER-26 -----------------------------------------
+unified_control_center:
+  done:
+    - id: UCC-1
+      what: единая запись сайта с источником, временем и состоянием у каждого показателя
+      evidence: factory/site_engine/fleet_registry.py; 10 проверок
+    - id: UCC-2
+      what: маршруты GET /api/v1/fleet и /fleet/{siteId} с сужением по тенанту
+      evidence: tests/unit/test_fleet_api.py; 7 проверок
+    - id: UCC-3
+      what: единое окно флота с шестью состояниями и подробностями на месте
+      evidence: factory/site_engine/admin/ui.py::control_center
+    - id: UCC-4
+      what: сборщик наблюдений; измерено на трёх боевых витринах
+      evidence: automation/host/fleet-observe.py; 8 проверок
+    - id: UCC-5
+      what: идентификаторы витрины управляются через API с границами и журналом
+      evidence: tests/unit/test_site_identifiers.py; 14 проверок
+    - id: UCC-6
+      what: право чтения проверено на каждом изменяющем маршруте договора
+      evidence: tests/unit/test_service_identity_readonly.py; 31 проверка
+  next:
+    - id: UCC-7
+      what: карточка сайта как drawer с управлением настройками на месте
+    - id: UCC-8
+      what: реестр шаблонов с версией, отпечатком, совместимостью и результатом контрактных тестов
+    - id: UCC-9
+      what: устойчивость — перезапуск службы, конкурентные операции, битый пакет
+  blocked_external:
+    - id: UCC-ANALYTICS
+      what: учётные данные внешнего счётчика и поисковой консоли
+      who: владелец
+      note: контракт и состояние NOT_CONNECTED уже реализованы; цифры не выдумываются
