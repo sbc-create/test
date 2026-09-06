@@ -227,6 +227,17 @@ body {{
 img, svg {{ max-width: 100%; height: auto; display: block; }}
 a {{ color: var(--link, var(--accent)); text-decoration: none; }}
 a:hover, a:focus-visible {{ text-decoration: underline; }}
+/* Ссылка внутри текста подчёркивается всегда, а не только под указателем.
+   Без подчёркивания она отличается от окружающего текста одним лишь цветом, а
+   это прямо запрещено критерием 1.4.1: зритель, не различающий цвета, ссылки
+   не видит вовсе. Поймано на боевых данных — на фикстуре таких абзацев не
+   было, и проверка молчала.
+   Навигация, фасеты и карточки под правило не подпадают намеренно: они
+   различимы положением и формой, а не цветом, и подчёркивание там только
+   зашумило бы список. */
+p a, dd a, .lede a, li > a:not([class]) {{ text-decoration: underline;
+  text-underline-offset: 0.2em; }}
+.site-nav a, .site-footer ul a, footer ul a {{ text-decoration: none; }}
 :focus-visible {{ outline: 2px solid var(--accent); outline-offset: 2px; }}
 h1, h2, h3 {{ line-height: 1.2; margin: 0 0 .5em; overflow-wrap: anywhere; }}
 /* H1 референса — 18px/600. Прежние 36px/700 съедали первый экран

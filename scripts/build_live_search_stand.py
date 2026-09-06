@@ -41,6 +41,8 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--site", default="lords-02")
     parser.add_argument("--output", default=str(OUT))
+    parser.add_argument("--titles", type=int, default=0,
+                        help="сколько страниц произведений отрисовать (0 — ни одной)")
     args = parser.parse_args()
 
     source = CATALOG_CACHE / f"{args.site}.json"
@@ -53,14 +55,24 @@ def main() -> int:
     items = raw["items"] if isinstance(raw, dict) else raw
     catalog = live_mod.catalog_from_live(items)
     package, _ = preview_mod._package(args.site)
+    # Страницы произведений отрисовываются выборочно: их пятьдесят три тысячи,
+    # и полная отрисовка занимает часы. Выборка идёт равным шагом по каталогу,
+    # а не с начала: начало — самые свежие записи, они заполнены лучше хвоста,
+    # и первые N завысили бы любую проверку полноты.
+    slugs: frozenset[str] = frozenset()
+    if args.titles > 0:
+        ordered = sorted(t.slug for t in catalog.titles)
+        step = max(1, len(ordered) // args.titles)
+        slugs = frozenset(ordered[::step][:args.titles])
     site = render_mod.render_site(package, catalog=catalog, environ={},
-                                  only_title_slugs=frozenset())
+                                  only_title_slugs=slugs)
     directory = Path(args.output)
     directory.mkdir(parents=True, exist_ok=True)
     result = serve_mod.export(site, directory)
 
     index = site.pages.get(render_mod.SEARCH_INDEX_PATH)
-    print(f"{args.site}: записей {len(items)}, документов {len(site.pages)}, "
+    print(f"{args.site}: записей {len(items)}, страниц произведений {len(slugs)}, "
+          f"документов {len(site.pages)}, "
           f"собрано за {time.perf_counter() - started:.0f} с")
     if index is None:
         print("указатель поиска не отдан: проверьте seo.search_index в пакете")
