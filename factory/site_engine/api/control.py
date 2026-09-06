@@ -1403,6 +1403,7 @@ class ControlApi:
         if problems:
             raise ControlDenied(422, "invalid_settings", "настройки не приняты", problems=problems)
 
+
         target = profile_path(site_id, self._root)
         current_version = config_version(target)
         expected = str(body.get("expectedVersion") or "").strip()
