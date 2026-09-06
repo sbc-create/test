@@ -40,8 +40,9 @@ import signal
 import socketserver
 import sys
 import threading
+from html import escape
 from pathlib import Path
-from urllib.parse import unquote
+from urllib.parse import parse_qs, unquote
 from wsgiref.simple_server import WSGIRequestHandler, WSGIServer, make_server
 
 # Каталог релиза берётся из окружения и НЕ разрешается заранее.
@@ -67,10 +68,117 @@ from wsgiref.simple_server import WSGIRequestHandler, WSGIServer, make_server
 # каждом обращении, и процесс остаётся привязан к ссылке, а не к её цели.
 BASE = Path(os.environ.get("LORDS_SITE_ROOT") or Path(__file__).parent)
 
+sys.path.insert(0, str(BASE / "lib"))
+
 
 def site_dir():
     """Каталог страниц текущего релиза. Вычисляется на каждый запрос."""
     return BASE / "site"
+
+
+SEARCH_LIMIT = 20
+SEARCH_MAX_LIMIT = 50
+_search_cache = {"stamp": None, "index": None}
+
+
+def search_index():
+    """Указатель поиска текущего релиза или None.
+
+    None означает «источник недоступен», и это не то же самое, что пустая
+    выдача: пустая выдача утверждает, что ничего не найдено, а здесь неизвестно,
+    искали ли вообще. Витрина, отвечающая «ничего не найдено» из-за
+    отсутствующего файла, выглядит исправной и не находит ничего никогда.
+    """
+    path = BASE / "search-index.json"
+    try:
+        stat = path.stat()
+    except OSError:
+        _search_cache["stamp"] = None
+        _search_cache["index"] = None
+        return None
+    stamp = (stat.st_mtime_ns, stat.st_ino, stat.st_size)
+    if _search_cache["stamp"] != stamp:
+        lib = str(BASE / "lib")
+        if lib not in sys.path:
+            sys.path.insert(0, lib)
+        try:
+            _search_cache["index"] = json.loads(path.read_text(encoding="utf-8"))
+            _search_cache["stamp"] = stamp
+        except (OSError, ValueError):
+            _search_cache["stamp"] = None
+            _search_cache["index"] = None
+            return None
+    return _search_cache["index"]
+
+
+def search(query, limit=SEARCH_LIMIT):
+    """Результаты поиска или None, если указателя нет."""
+    index = search_index()
+    if index is None:
+        return None
+    try:
+        from factory.lords import search_index as si
+    except ImportError:
+        return None
+    try:
+        return si.search(index, index.get("items") or [], query, limit=limit)
+    except ValueError:
+        # Указатель собран на другом наборе страниц: выдача была бы о других
+        # записях. Отказ честнее.
+        return None
+
+
+def _query_of(environ):
+    raw = environ.get("QUERY_STRING", "")
+    values = parse_qs(raw, keep_blank_values=True).get("q", [])
+    return (values[0] if values else "").strip()
+
+
+def _limit_of(environ):
+    raw = parse_qs(environ.get("QUERY_STRING", "")).get("limit", [])
+    try:
+        value = int(raw[0]) if raw else SEARCH_LIMIT
+    except (TypeError, ValueError):
+        return SEARCH_LIMIT
+    return max(1, min(value, SEARCH_MAX_LIMIT))
+
+
+def _card(item):
+    name = escape(str(item.get("name") or ""))
+    url = escape(str(item.get("url") or "/"))
+    year = item.get("year")
+    подпись = f" <span class='year'>{escape(str(year))}</span>" if year else ""
+    return f'<li><a href="{url}">{name}</a>{подпись}</li>'
+
+
+def search_page(body, query, results):
+    """Готовая страница поиска с результатами, вставленными на сервере.
+
+    Вставка идёт по единственному якорю — строке счётчика. Если якоря нет,
+    страница отдаётся как есть: сломанная вставка хуже отсутствующей, а
+    страница обязана открыться в любом случае.
+    """
+    anchor_start = body.find('<p class="count" id="search-count">')
+    if anchor_start < 0:
+        return body
+    anchor_end = body.find("</p>", anchor_start)
+    if anchor_end < 0:
+        return body
+    if results is None:
+        замена = ('<p class="count" id="search-count">Поиск временно недоступен: '
+                  'указатель этого выпуска не собран.</p>')
+        return body[:anchor_start] + замена + body[anchor_end + 4:]
+    if not query:
+        return body
+    if results:
+        строки = "".join(_card(i) for i in results)
+        замена = (f'<p class="count" id="search-count">Найдено: {len(results)} '
+                  f'по запросу «{escape(query)}».</p>'
+                  f'<ul class="cards search-results">{строки}</ul>')
+    else:
+        замена = (f'<p class="count" id="search-count">По запросу «{escape(query)}» '
+                  f'ничего не найдено.</p>')
+    return body[:anchor_start] + замена + body[anchor_end + 4:]
 
 
 _manifest_cache = {"stamp": None, "data": None}
@@ -209,6 +317,33 @@ def app(environ, start_response):
         start_response(status, [("Content-Type", "application/json; charset=utf-8"),
                                 ("Content-Length", str(len(body)))] + HEADERS)
         return [body]
+
+    if path == "/api/search":
+        query = _query_of(environ)
+        results = search(query, _limit_of(environ)) if query else []
+        if results is None:
+            body = json.dumps({"error": "search_index_unavailable",
+                               "message": "указатель поиска этого выпуска не собран"},
+                              ensure_ascii=False).encode("utf-8")
+            status = "503 Service Unavailable"
+        else:
+            body = json.dumps({"query": query, "count": len(results),
+                               "results": results}, ensure_ascii=False).encode("utf-8")
+            status = "200 OK"
+        start_response(status, [("Content-Type", "application/json; charset=utf-8"),
+                                ("Content-Length", str(len(body)))] + HEADERS)
+        return [body]
+
+    if path in ("/search/", "/search"):
+        query = _query_of(environ)
+        page = site_dir() / "search" / "index.html"
+        if page.is_file():
+            текст = page.read_text(encoding="utf-8", errors="replace")
+            результаты = search(query, SEARCH_LIMIT) if query else []
+            body = search_page(текст, query, результаты).encode("utf-8")
+            start_response("200 OK", [("Content-Type", "text/html; charset=utf-8"),
+                                      ("Content-Length", str(len(body)))] + HEADERS)
+            return [body]
 
     target, redirect = resolve(path)
     if redirect:
