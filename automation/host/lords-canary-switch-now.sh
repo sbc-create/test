@@ -27,6 +27,17 @@
 set -Eeuo pipefail
 
 SITE="lords-02"
+# Ход операции пишется в файл, а не только на экран.
+#
+# Причина: 2026-09-06 команда была выполнена и не оставила следа — ни записи в
+# журнале операции, ни переустановленных юнитов. Установить, на каком шаге она
+# завершилась, оказалось нечем: весь вывод ушёл в терминал владельца и пропал
+# вместе с сеансом. Операция, о которой нельзя узнать постфактум, что она
+# делала, не диагностируется.
+WRAPPER_LOG="/var/log/site-factory/lords-canary-switch-now.log"
+mkdir -p "$(dirname "${WRAPPER_LOG}")" 2>/dev/null || true
+exec > >(tee -a "${WRAPPER_LOG}") 2>&1
+echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) запуск lords-canary-switch-now.sh, uid $(id -u) ==="
 SRC="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 REPO="$(cd -- "${SRC}/../.." && pwd)"
 RECEIPT="${REPO}/var/canary-staging/${SITE}.render.json"
