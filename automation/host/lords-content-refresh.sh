@@ -25,6 +25,12 @@ RUNTIME_ROOT="${LORDS_RUNTIME_ROOT:-/srv/lords}"
 # релиз обязан оставаться восстановимым и после того, как рабочее дерево уедет.
 ARTIFACT_ROOT="${LORDS_ARTIFACT_ROOT:-/srv/lords/.artifacts}"
 GUARD="${REPO}/automation/host/lords-refresh-guard.py"
+# Канареечная выкладка: одна витрина отрисовывается ДРУГИМ шаблоном, чем
+# записан в её действующем манифесте. Это единственный законный случай
+# расхождения, и он назван переменными, а не угадан по содержимому.
+CANARY_SITE="${LORDS_CANARY_SITE:-}"
+CANARY_REV="${LORDS_CANARY_REVISION:-}"
+CANARY_REPO="${LORDS_CANARY_REPO:-/home/claude/wt-prod-25}"
 KEEP_RELEASES="${LORDS_KEEP_RELEASES:-4}"
 # Сколько записей дополняется из detail за прогон. Полный каталог за раз —
 # это тысячи запросов подряд; покрытие набирается прогонами и кэшируется.
@@ -80,7 +86,19 @@ for site in "${SITES[@]}"; do
   # остановка обновления трёх витрин ради одной уже была и стоила свежести
   # каталога на всех.
   TEMPLATE_ROOT="$REPO"
-  if [ "${LORDS_PINNED_TEMPLATE:-1}" = "1" ] && [ -x "$GUARD" ]; then
+  site_canary=0
+  if [ -n "$CANARY_SITE" ] && [ "$CANARY_SITE" = "$site" ] && [ -n "$CANARY_REV" ]; then
+    if pinned="$("$PYTHON" "$GUARD" --runtime-root "$RUNTIME_ROOT" \
+                 --artifact-root "$ARTIFACT_ROOT" pin "$site" \
+                 --revision "$CANARY_REV" --repo "$CANARY_REPO" 2>&1)"; then
+      TEMPLATE_ROOT="$pinned"
+      site_canary=1
+      log "${site}: КАНАРЕЙКА — шаблон ревизии ${CANARY_REV:0:12}"
+    else
+      log "${site}: канареечный артефакт не закреплён — ${pinned}"
+      continue
+    fi
+  elif [ "${LORDS_PINNED_TEMPLATE:-1}" = "1" ] && [ -x "$GUARD" ]; then
     if pinned="$("$PYTHON" "$GUARD" --runtime-root "$RUNTIME_ROOT" \
                  --artifact-root "$ARTIFACT_ROOT" plan "$site" 2>&1)"; then
       TEMPLATE_ROOT="$pinned"
@@ -363,10 +381,17 @@ PYEOF
   # канареечную выкладку или ручную публикацию, случившуюся во время сборки.
   if [ "${LORDS_PINNED_TEMPLATE:-1}" = "1" ] && [ -x "$GUARD" ]; then
     content_count="$(find "${target}/site/title" -mindepth 1 -maxdepth 1 2>/dev/null | wc -l)"
+    finalize_args=(--target "$target" --snapshot "$release"
+                   --content-count "$content_count")
+    if [ "$site_canary" = "1" ]; then
+      # Причина у выкладки шаблона своя: под причиной content-refresh смена
+      # шаблона неотличима в журнале от обновления данных.
+      finalize_args+=(--reason canary --template-revision "$CANARY_REV")
+    else
+      finalize_args+=(--reason content-refresh)
+    fi
     if ! "$PYTHON" "$GUARD" --runtime-root "$RUNTIME_ROOT" \
-         --artifact-root "$ARTIFACT_ROOT" finalize "$site" \
-         --target "$target" --snapshot "$release" \
-         --content-count "$content_count" --reason content-refresh; then
+         --artifact-root "$ARTIFACT_ROOT" finalize "$site" "${finalize_args[@]}"; then
       log "${site}: ворота переключения отказали — витрина остаётся на ${current##*/}"
       rm -rf "$staging"; trap - EXIT
       continue

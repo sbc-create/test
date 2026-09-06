@@ -278,3 +278,63 @@ def test_отпечаток_дерева_замечает_правку(стен�
         "ШАБЛОН = 'подменён'\n", encoding="utf-8")
     стало = та.отпечаток_дерева(план["templateRoot"], подкаталоги=("factory",))
     assert было != стало
+
+
+# --- канареечная выкладка: смена шаблона возможна только именем -------------
+#
+# Обновление каталога шаблон не меняет — это доказано выше. Но выложить новый
+# шаблон когда-то нужно, и путь для этого должен быть ровно один: названный,
+# под своей причиной и с записью прежних значений. Иначе «канарейка» и «подмена
+# шаблона обновлением данных» снова станут неразличимы.
+
+
+def test_канарейка_меняет_шаблон_и_записывает_прежний(стенд):
+    архив_b, отпечаток_b = _архив(стенд["tmp"], "canary", {
+        "factory/lords/renderer.py": "ШАБЛОН = 'canary'\n"})
+    архив_b.replace(стенд["artifacts"] / "templates" / "canary.tar.gz")
+    план = рр.план(стенд["runtime"], artifact_root=стенд["artifacts"])
+    цель = стенд["runtime"] / "releases" / "can00001"
+    (цель / "site").mkdir(parents=True)
+
+    новый = рр.записать_манифест(
+        цель, план, content_snapshot_id="snap-canary", content_count=100,
+        created_by="тест", artifact_root=стенд["artifacts"], release_reason="canary",
+        template={"template_artifact_ref": "templates/canary.tar.gz",
+                  "template_digest": отпечаток_b,
+                  "renderer_revision": "c" * 40,
+                  "template_package_ref": "lords-tooling/canary"},
+    )
+    assert новый["template_digest"] == отпечаток_b
+    assert новый["renderer_revision"] == "c" * 40
+    # Прежний шаблон записан в самом манифесте: без этого «откатиться к тому,
+    # что было» означало бы искать по журналам.
+    assert новый["superseded_template"]["template_digest"] == стенд["digestA"]
+    # Витрина, тема и происхождение содержимого не менялись.
+    assert новый["tenant_id"] == план["manifest"]["tenant_id"]
+    assert новый["theme"] == план["manifest"]["theme"]
+    assert новый["content_source"] == план["manifest"]["content_source"]
+    assert новый["rollback_target"] == "aaaa1111"
+
+
+def test_смена_шаблона_под_видом_обновления_каталога_отказана(стенд):
+    план = рр.план(стенд["runtime"], artifact_root=стенд["artifacts"])
+    цель = стенд["runtime"] / "releases" / "can00002"
+    (цель / "site").mkdir(parents=True)
+    with pytest.raises(рр.RefreshRefused, match="своя причина|content-refresh"):
+        рр.записать_манифест(
+            цель, план, content_snapshot_id="s", content_count=1, created_by="тест",
+            artifact_root=стенд["artifacts"], release_reason="content-refresh",
+            template={"template_digest": "d" * 64},
+        )
+
+
+def test_смена_шаблона_не_протаскивает_посторонние_поля(стенд):
+    план = рр.план(стенд["runtime"], artifact_root=стенд["artifacts"])
+    цель = стенд["runtime"] / "releases" / "can00003"
+    (цель / "site").mkdir(parents=True)
+    with pytest.raises((рр.RefreshRefused, рм.ManifestError), match="к шаблону не относящиеся"):
+        рр.записать_манифест(
+            цель, план, content_snapshot_id="s", content_count=1, created_by="тест",
+            artifact_root=стенд["artifacts"], release_reason="canary",
+            template={"tenant_id": "чужая-витрина", "template_digest": "d" * 64},
+        )

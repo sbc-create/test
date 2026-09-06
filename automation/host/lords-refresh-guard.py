@@ -118,6 +118,37 @@ def команда_adopt(args) -> int:
     return 0
 
 
+def команда_pin(args) -> int:
+    """Закрепить артефакт ревизии и распаковать его. Печатает корень шаблона.
+
+    Отдельная подкоманда, потому что канареечная выкладка отрисовывает витрину
+    НЕ тем шаблоном, что записан в её действующем манифесте. Это единственный
+    законный случай расхождения, и он назван явно: молчаливая подмена корня
+    отрисовки и есть исходный дефект.
+    """
+    рантайм = _рантайм(args.runtime_root, args.site)
+    хранилище = Path(args.artifact_root) / "templates"
+    хранилище.mkdir(parents=True, exist_ok=True)
+    архив = хранилище / f"{args.revision[:12]}.tar.gz"
+    try:
+        if not архив.is_file():
+            та.собрать(args.repo, args.revision, архив)
+        отпечаток = рм.отпечаток_файла(архив)
+        корень = та.распаковать(архив, отпечаток, рантайм / та.ПОДКАТАЛОГ,
+                                state_root=args.state_root)
+    except (та.ArtifactError, рм.ManifestError) as отказ:
+        print(f"ОТКАЗ {args.site}: {отказ}", file=sys.stderr)
+        return 3
+    if args.json:
+        print(json.dumps({"templateRoot": str(корень), "templateDigest": отпечаток,
+                          "rendererRevision": args.revision,
+                          "templateArtifactRef": f"templates/{архив.name}"},
+                         ensure_ascii=False))
+    else:
+        print(корень)
+    return 0
+
+
 def команда_finalize(args) -> int:
     рантайм = _рантайм(args.runtime_root, args.site)
     try:
@@ -125,6 +156,20 @@ def команда_finalize(args) -> int:
             план = рр.план(рантайм, artifact_root=args.artifact_root,
                        state_root=args.state_root)
             цель = Path(args.target)
+            шаблон = None
+            if args.template_revision:
+                архив = (Path(args.artifact_root) / "templates"
+                         / f"{args.template_revision[:12]}.tar.gz")
+                if not архив.is_file():
+                    raise рр.RefreshRefused(
+                        f"артефакт ревизии {args.template_revision[:12]} не закреплён: "
+                        "сначала pin, иначе манифест сошлётся на то, чего нет")
+                шаблон = {
+                    "template_artifact_ref": f"templates/{архив.name}",
+                    "template_digest": рм.отпечаток_файла(архив),
+                    "renderer_revision": args.template_revision,
+                    "template_package_ref": f"lords-tooling/{args.template_revision[:12]}",
+                }
             рр.записать_манифест(
                 цель, план,
                 content_snapshot_id=args.snapshot,
@@ -132,6 +177,7 @@ def команда_finalize(args) -> int:
                 created_by=args.actor,
                 artifact_root=args.artifact_root,
                 release_reason=args.reason,
+                template=шаблон,
             )
             итог = рр.переключить(рантайм, цель,
                                   expected_current=план["currentRelease"],
@@ -170,6 +216,13 @@ def main(argv: list[str] | None = None) -> int:
     a.add_argument("--force", action="store_true")
     a.set_defaults(func=команда_adopt)
 
+    pn = под.add_parser("pin")
+    pn.add_argument("site")
+    pn.add_argument("--revision", required=True)
+    pn.add_argument("--repo", default="/home/claude/wt-prod-25")
+    pn.add_argument("--json", action="store_true")
+    pn.set_defaults(func=команда_pin)
+
     f = под.add_parser("finalize")
     f.add_argument("site")
     f.add_argument("--target", required=True)
@@ -178,6 +231,9 @@ def main(argv: list[str] | None = None) -> int:
     f.add_argument("--actor", default="lords-content-refresh")
     f.add_argument("--reason", default="content-refresh")
     f.add_argument("--lock-timeout", type=float, default=300.0)
+    f.add_argument("--template-revision", default="",
+                   help="выложить другой шаблон: только вместе с причиной, "
+                        "отличной от content-refresh")
     f.set_defaults(func=команда_finalize)
 
     args = р.parse_args(argv)

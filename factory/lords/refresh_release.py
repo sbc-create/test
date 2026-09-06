@@ -133,8 +133,18 @@ def записать_манифест(
     created_by: str,
     artifact_root: Path | str,
     release_reason: str = "content-refresh",
+    template: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Манифест нового релиза. Шаблонная часть переносится, а не пересчитывается."""
+    """Манифест нового релиза. Шаблонная часть переносится, а не пересчитывается.
+
+    `template` передаётся только канареечной выкладкой и только вместе с
+    причиной, отличной от обновления каталога: смена шаблона под видом
+    обновления данных — это ровно тот случай, ради которого написан весь модуль.
+    """
+    if template and release_reason == "content-refresh":
+        raise RefreshRefused(
+            "смена шаблона с причиной content-refresh: у выкладки шаблона своя "
+            "причина, иначе она неотличима от обновления данных в журнале")
     новый = рм.следующий(
         план_["manifest"],
         content_snapshot_id=content_snapshot_id,
@@ -143,12 +153,13 @@ def записать_манифест(
         created_by=created_by,
         previous_release=план_["currentRelease"],
         release_reason=release_reason,
+        template=template,
     )
     беды = рм.нарушения(новый, artifact_root=artifact_root)
     if беды:
         raise RefreshRefused("новый релиз не удовлетворяет инвариантам: " + "; ".join(беды))
     разошлось = рм.шаблон_сохранён(план_["manifest"], новый)
-    if разошлось:
+    if разошлось and not template:
         raise RefreshRefused("обновление каталога изменило шаблон: " + "; ".join(разошлось))
     путь = Path(target) / МАНИФЕСТ
     путь.parent.mkdir(parents=True, exist_ok=True)
