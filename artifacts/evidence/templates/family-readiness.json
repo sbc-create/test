@@ -1,0 +1,528 @@
+{
+  "artifact": "TEMPLATE_FAMILY_READINESS",
+  "generated_at_utc": "2026-09-06T22:22:16.369408+00:00",
+  "rubric": {
+    "package": "готовность пакета",
+    "adapter": "адаптер админки",
+    "content": "содержимое и данные",
+    "ssr": "отрисовка без JavaScript",
+    "browser": "браузерные проверки",
+    "a11y": "доступность",
+    "visual": "визуальный эталон",
+    "admin_preview": "предпросмотр и сборка",
+    "live": "приёмка боевой витрины"
+  },
+  "max_per_dimension": 10,
+  "families": {
+    "lords_dark": {
+      "sites": [
+        "lords-01",
+        "lords-02"
+      ],
+      "dimensions": {
+        "package": {
+          "points": 4,
+          "note": "validate exit 2:   [warn] network_allowlist пуст: сеть в режиме CLOSED_WORLD будет полностью запр"
+        },
+        "adapter": {
+          "points": 0,
+          "note": "адаптер site-admin в пакете не объявлен"
+        },
+        "content": {
+          "points": 10,
+          "note": "живой источник, снимок 53251 записей"
+        },
+        "ssr": {
+          "points": 10,
+          "note": "171 страниц, из них 112 документов"
+        },
+        "browser": {
+          "points": 10,
+          "note": "Chromium 222, Firefox+WebKit 16"
+        },
+        "a11y": {
+          "points": 10,
+          "note": "72 прогонов WCAG 2.2 AA, нарушений нет"
+        },
+        "visual": {
+          "points": 10,
+          "note": "24 измерений, допуск 1 px"
+        },
+        "admin_preview": {
+          "points": 10,
+          "note": "предпросмотр собран"
+        },
+        "live": {
+          "points": 0,
+          "note": "BLOCKED: production не авторизован в пакете (lordfilm47.space)"
+        }
+      },
+      "per_site": {
+        "lords-01": {
+          "package": {
+            "points": 4,
+            "note": "validate exit 2:   [warn] network_allowlist пуст: сеть в режиме CLOSED_WORLD будет полностью запр"
+          },
+          "adapter": {
+            "points": 0,
+            "note": "адаптер site-admin в пакете не объявлен"
+          },
+          "content": {
+            "points": 10,
+            "note": "живой источник, снимок 53251 записей"
+          },
+          "ssr": {
+            "points": 10,
+            "note": "171 страниц, из них 112 документов"
+          },
+          "browser": {
+            "points": 10,
+            "note": "Chromium 222, Firefox+WebKit 16"
+          },
+          "a11y": {
+            "points": 10,
+            "note": "72 прогонов WCAG 2.2 AA, нарушений нет"
+          },
+          "visual": {
+            "points": 10,
+            "note": "24 измерений, допуск 1 px"
+          },
+          "admin_preview": {
+            "points": 10,
+            "note": "предпросмотр собран"
+          },
+          "live": {
+            "points": 0,
+            "note": "BLOCKED: production не авторизован в пакете (lordfilm47.space)"
+          }
+        },
+        "lords-02": {
+          "package": {
+            "points": 4,
+            "note": "validate exit 2:   [warn] network_allowlist пуст: сеть в режиме CLOSED_WORLD будет полностью запр"
+          },
+          "adapter": {
+            "points": 0,
+            "note": "адаптер site-admin в пакете не объявлен"
+          },
+          "content": {
+            "points": 10,
+            "note": "живой источник, снимок 53251 записей"
+          },
+          "ssr": {
+            "points": 10,
+            "note": "166 страниц, из них 107 документов"
+          },
+          "browser": {
+            "points": 10,
+            "note": "Chromium 222, Firefox+WebKit 16"
+          },
+          "a11y": {
+            "points": 10,
+            "note": "72 прогонов WCAG 2.2 AA, нарушений нет"
+          },
+          "visual": {
+            "points": 10,
+            "note": "24 измерений, допуск 1 px"
+          },
+          "admin_preview": {
+            "points": 10,
+            "note": "предпросмотр собран"
+          },
+          "live": {
+            "points": 0,
+            "note": "BLOCKED: production не авторизован в пакете (lordserial33.biz)"
+          }
+        }
+      },
+      "package_readiness": 80,
+      "live_acceptance": 0,
+      "total": 71
+    },
+    "lords_light": {
+      "sites": [
+        "lords-03",
+        "lords-04"
+      ],
+      "dimensions": {
+        "package": {
+          "points": 4,
+          "note": "validate exit 2:   [warn] network_allowlist пуст: сеть в режиме CLOSED_WORLD будет полностью запр"
+        },
+        "adapter": {
+          "points": 0,
+          "note": "адаптер site-admin в пакете не объявлен"
+        },
+        "content": {
+          "points": 4,
+          "note": "живой источник объявлен, снимка нет"
+        },
+        "ssr": {
+          "points": 10,
+          "note": "151 страниц, из них 100 документов"
+        },
+        "browser": {
+          "points": 10,
+          "note": "Chromium 222, Firefox+WebKit 16"
+        },
+        "a11y": {
+          "points": 10,
+          "note": "72 прогонов WCAG 2.2 AA, нарушений нет"
+        },
+        "visual": {
+          "points": 10,
+          "note": "24 измерений, допуск 1 px"
+        },
+        "admin_preview": {
+          "points": 10,
+          "note": "предпросмотр собран"
+        },
+        "live": {
+          "points": 0,
+          "note": "BLOCKED: production не авторизован в пакете (1lordserials1.online)"
+        }
+      },
+      "per_site": {
+        "lords-03": {
+          "package": {
+            "points": 4,
+            "note": "validate exit 2:   [warn] network_allowlist пуст: сеть в режиме CLOSED_WORLD будет полностью запр"
+          },
+          "adapter": {
+            "points": 0,
+            "note": "адаптер site-admin в пакете не объявлен"
+          },
+          "content": {
+            "points": 10,
+            "note": "живой источник, снимок 53251 записей"
+          },
+          "ssr": {
+            "points": 10,
+            "note": "151 страниц, из них 100 документов"
+          },
+          "browser": {
+            "points": 10,
+            "note": "Chromium 222, Firefox+WebKit 16"
+          },
+          "a11y": {
+            "points": 10,
+            "note": "72 прогонов WCAG 2.2 AA, нарушений нет"
+          },
+          "visual": {
+            "points": 10,
+            "note": "24 измерений, допуск 1 px"
+          },
+          "admin_preview": {
+            "points": 10,
+            "note": "предпросмотр собран"
+          },
+          "live": {
+            "points": 0,
+            "note": "BLOCKED: production не авторизован в пакете (1lordserials1.online)"
+          }
+        },
+        "lords-04": {
+          "package": {
+            "points": 4,
+            "note": "validate exit 2:   [warn] network_allowlist пуст: сеть в режиме CLOSED_WORLD будет полностью запр"
+          },
+          "adapter": {
+            "points": 0,
+            "note": "адаптер site-admin в пакете не объявлен"
+          },
+          "content": {
+            "points": 4,
+            "note": "живой источник объявлен, снимка нет"
+          },
+          "ssr": {
+            "points": 10,
+            "note": "150 страниц, из них 92 документов"
+          },
+          "browser": {
+            "points": 10,
+            "note": "Chromium 222, Firefox+WebKit 16"
+          },
+          "a11y": {
+            "points": 10,
+            "note": "72 прогонов WCAG 2.2 AA, нарушений нет"
+          },
+          "visual": {
+            "points": 10,
+            "note": "24 измерений, допуск 1 px"
+          },
+          "admin_preview": {
+            "points": 10,
+            "note": "предпросмотр собран"
+          },
+          "live": {
+            "points": 0,
+            "note": "BLOCKED: домен не задан владельцем"
+          }
+        }
+      },
+      "package_readiness": 72,
+      "live_acceptance": 0,
+      "total": 64
+    },
+    "portal_light": {
+      "sites": [
+        "site-a"
+      ],
+      "dimensions": {
+        "package": {
+          "points": 4,
+          "note": "validate exit 2:       нужно: Значение секрета в согласованном хранилище/переменной окружения (в "
+        },
+        "adapter": {
+          "points": 0,
+          "note": "адаптер site-admin в пакете не объявлен"
+        },
+        "content": {
+          "points": 6,
+          "note": "набор на месте, 24 записей, отпечаток сошёлся"
+        },
+        "ssr": {
+          "points": 10,
+          "note": "страница собрана на сервере: 12 карточек, скриптов нет"
+        },
+        "browser": {
+          "points": 8,
+          "note": "Chromium и Firefox, 54 проверок без отказов (стенд семейств)"
+        },
+        "a11y": {
+          "points": 10,
+          "note": "3 прогонов WCAG 2.2 AA, нарушений нет"
+        },
+        "visual": {
+          "points": 8,
+          "note": "3 измерений на трёх ширинах; расхождение с соседями не менее 6 признаков из девяти"
+        },
+        "admin_preview": {
+          "points": 3,
+          "note": "собранного предпросмотра нет"
+        },
+        "live": {
+          "points": 0,
+          "note": "BLOCKED: site-a.localhost — не боевой домен"
+        }
+      },
+      "per_site": {
+        "site-a": {
+          "package": {
+            "points": 4,
+            "note": "validate exit 2:       нужно: Значение секрета в согласованном хранилище/переменной окружения (в "
+          },
+          "adapter": {
+            "points": 0,
+            "note": "адаптер site-admin в пакете не объявлен"
+          },
+          "content": {
+            "points": 6,
+            "note": "набор на месте, 24 записей, отпечаток сошёлся"
+          },
+          "ssr": {
+            "points": 10,
+            "note": "страница собрана на сервере: 12 карточек, скриптов нет"
+          },
+          "browser": {
+            "points": 8,
+            "note": "Chromium и Firefox, 54 проверок без отказов (стенд семейств)"
+          },
+          "a11y": {
+            "points": 10,
+            "note": "3 прогонов WCAG 2.2 AA, нарушений нет"
+          },
+          "visual": {
+            "points": 8,
+            "note": "3 измерений на трёх ширинах; расхождение с соседями не менее 6 признаков из девяти"
+          },
+          "admin_preview": {
+            "points": 3,
+            "note": "собранного предпросмотра нет"
+          },
+          "live": {
+            "points": 0,
+            "note": "BLOCKED: site-a.localhost — не боевой домен"
+          }
+        }
+      },
+      "package_readiness": 61,
+      "live_acceptance": 0,
+      "total": 54
+    },
+    "pulse": {
+      "sites": [
+        "site-b"
+      ],
+      "dimensions": {
+        "package": {
+          "points": 4,
+          "note": "validate exit 2:       нужно: Значение секрета в согласованном хранилище/переменной окружения (в "
+        },
+        "adapter": {
+          "points": 0,
+          "note": "адаптер site-admin в пакете не объявлен"
+        },
+        "content": {
+          "points": 6,
+          "note": "набор на месте, 24 записей, отпечаток сошёлся"
+        },
+        "ssr": {
+          "points": 10,
+          "note": "страница собрана на сервере: 12 карточек, скриптов нет"
+        },
+        "browser": {
+          "points": 8,
+          "note": "Chromium и Firefox, 54 проверок без отказов (стенд семейств)"
+        },
+        "a11y": {
+          "points": 10,
+          "note": "3 прогонов WCAG 2.2 AA, нарушений нет"
+        },
+        "visual": {
+          "points": 8,
+          "note": "3 измерений на трёх ширинах; расхождение с соседями не менее 6 признаков из девяти"
+        },
+        "admin_preview": {
+          "points": 3,
+          "note": "собранного предпросмотра нет"
+        },
+        "live": {
+          "points": 0,
+          "note": "BLOCKED: site-b.localhost — не боевой домен"
+        }
+      },
+      "per_site": {
+        "site-b": {
+          "package": {
+            "points": 4,
+            "note": "validate exit 2:       нужно: Значение секрета в согласованном хранилище/переменной окружения (в "
+          },
+          "adapter": {
+            "points": 0,
+            "note": "адаптер site-admin в пакете не объявлен"
+          },
+          "content": {
+            "points": 6,
+            "note": "набор на месте, 24 записей, отпечаток сошёлся"
+          },
+          "ssr": {
+            "points": 10,
+            "note": "страница собрана на сервере: 12 карточек, скриптов нет"
+          },
+          "browser": {
+            "points": 8,
+            "note": "Chromium и Firefox, 54 проверок без отказов (стенд семейств)"
+          },
+          "a11y": {
+            "points": 10,
+            "note": "3 прогонов WCAG 2.2 AA, нарушений нет"
+          },
+          "visual": {
+            "points": 8,
+            "note": "3 измерений на трёх ширинах; расхождение с соседями не менее 6 признаков из девяти"
+          },
+          "admin_preview": {
+            "points": 3,
+            "note": "собранного предпросмотра нет"
+          },
+          "live": {
+            "points": 0,
+            "note": "BLOCKED: site-b.localhost — не боевой домен"
+          }
+        }
+      },
+      "package_readiness": 61,
+      "live_acceptance": 0,
+      "total": 54
+    },
+    "editorial": {
+      "sites": [
+        "site-c"
+      ],
+      "dimensions": {
+        "package": {
+          "points": 4,
+          "note": "validate exit 2:       нужно: Значение секрета в согласованном хранилище/переменной окружения (в "
+        },
+        "adapter": {
+          "points": 0,
+          "note": "адаптер site-admin в пакете не объявлен"
+        },
+        "content": {
+          "points": 6,
+          "note": "набор на месте, 24 записей, отпечаток сошёлся"
+        },
+        "ssr": {
+          "points": 10,
+          "note": "страница собрана на сервере: 12 карточек, скриптов нет"
+        },
+        "browser": {
+          "points": 8,
+          "note": "Chromium и Firefox, 54 проверок без отказов (стенд семейств)"
+        },
+        "a11y": {
+          "points": 10,
+          "note": "3 прогонов WCAG 2.2 AA, нарушений нет"
+        },
+        "visual": {
+          "points": 8,
+          "note": "3 измерений на трёх ширинах; расхождение с соседями не менее 7 признаков из девяти"
+        },
+        "admin_preview": {
+          "points": 3,
+          "note": "собранного предпросмотра нет"
+        },
+        "live": {
+          "points": 0,
+          "note": "BLOCKED: site-c.localhost — не боевой домен"
+        }
+      },
+      "per_site": {
+        "site-c": {
+          "package": {
+            "points": 4,
+            "note": "validate exit 2:       нужно: Значение секрета в согласованном хранилище/переменной окружения (в "
+          },
+          "adapter": {
+            "points": 0,
+            "note": "адаптер site-admin в пакете не объявлен"
+          },
+          "content": {
+            "points": 6,
+            "note": "набор на месте, 24 записей, отпечаток сошёлся"
+          },
+          "ssr": {
+            "points": 10,
+            "note": "страница собрана на сервере: 12 карточек, скриптов нет"
+          },
+          "browser": {
+            "points": 8,
+            "note": "Chromium и Firefox, 54 проверок без отказов (стенд семейств)"
+          },
+          "a11y": {
+            "points": 10,
+            "note": "3 прогонов WCAG 2.2 AA, нарушений нет"
+          },
+          "visual": {
+            "points": 8,
+            "note": "3 измерений на трёх ширинах; расхождение с соседями не менее 7 признаков из девяти"
+          },
+          "admin_preview": {
+            "points": 3,
+            "note": "собранного предпросмотра нет"
+          },
+          "live": {
+            "points": 0,
+            "note": "BLOCKED: site-c.localhost — не боевой домен"
+          }
+        }
+      },
+      "package_readiness": 61,
+      "live_acceptance": 0,
+      "total": 54
+    }
+  },
+  "average": 59,
+  "note": "Готовность пакета и приёмка боевой витрины считаются отдельно. Фикстурные проверки в приёмку не входят."
+}
