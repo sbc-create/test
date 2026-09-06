@@ -286,9 +286,15 @@ main {{ padding: var(--pad) 0 40px; }}
 
 /* Оценка на обложке: тёмная подложка под числом, чтобы оно читалось на любом
    кадре, а не только на тёмном. */
+/* Две оценки ведут себя как одна группа: позиционируется она, а не каждая
+   оценка по отдельности. Иначе абсолютно спозиционированные подписи легли бы
+   одна на другую в том же углу обложки. */
+.card__ratings {{ position: absolute; left: 6px; bottom: 6px; display: flex;
+  flex-wrap: wrap; gap: 4px; max-width: calc(100% - 12px); }}
 .card__rating {{ position: absolute; left: 6px; bottom: 6px; display: inline-flex;
   align-items: baseline; gap: 4px; padding: 2px 6px; border-radius: var(--radius);
   background: rgba(0, 0, 0, .78); }}
+.card__ratings .card__rating {{ position: static; left: auto; bottom: auto; }}
 .card__rating-source {{ color: #cfcfcf; font-size: .66rem; }}
 .card__rating-value {{ color: #fff; font-size: .78rem; font-weight: 600;
   font-variant-numeric: tabular-nums; }}
