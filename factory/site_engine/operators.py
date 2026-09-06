@@ -179,6 +179,12 @@ class Operator:
     #: Все сессии, выданные после этой отметки, действительны; выданные раньше —
     #: нет. Одно число отзывает все сессии сразу, не перебирая их.
     sessions_valid_after: float = 0.0
+    #: Витрина, которой принадлежит оператор. Пустая строка означает не «все
+    #: витрины», а «супер-администратор» — и это объявляется отдельным полем.
+    #: Пустая принадлежность со смыслом «видит всё» превращала бы забытое поле
+    #: в раздачу прав на весь массив.
+    site_id: str = ""
+    is_super_admin: bool = False
     version: int = 1
 
     def as_dict(self, *, safe: bool = True) -> dict[str, Any]:
@@ -194,6 +200,8 @@ class Operator:
             "blockedReason": self.blocked_reason,
             "failedLogins": self.failed_logins,
             "lockedUntil": _метка(self.locked_until) if self.locked_until else "",
+            "siteId": self.site_id,
+            "isSuperAdmin": self.is_super_admin,
             "version": self.version,
             "contractVersion": CONTRACT_VERSION,
         }
@@ -211,6 +219,8 @@ class Operator:
             email=d["email"],
             roles=tuple(d.get("roles") or ()),
             state=OperatorState(d.get("state", "INVITED")),
+            site_id=str(d.get("siteId") or ""),
+            is_super_admin=bool(d.get("isSuperAdmin")),
             password=d.get("password"),
             mfa_state=MfaState(d.get("mfaState", "NOT_ENROLLED")),
             mfa_recovery_hash=d.get("mfaRecoveryHash", ""),
@@ -308,6 +318,9 @@ class OperatorDirectory:
         import time
 
         self._now = now or time.time
+        # Корень нужен не только для каталога операторов: принадлежность
+        # проверяется по профилям витрин, лежащим рядом.
+        self._root = Path(root)
         base = Path(root) / "var" / "state" / "operators"
         self.dir = base
         self.invites_dir = base / "invites"
@@ -345,11 +358,34 @@ class OperatorDirectory:
         return hashlib.sha256(email.encode("utf-8")).hexdigest()[:24]
 
     # ---- операторы ------------------------------------------------------
-    def get(self, operator_id: str) -> Operator:
+    def _сайт_существует(self, site_id: str) -> bool:
+        """Есть ли такая витрина. Проверяется по профилям — тому же источнику,
+        который читает весь движок. Принадлежность несуществующему сайту не
+        ошибка написания, а оператор, которого никто никогда не увидит."""
+        профиль = self._root / "config" / "site-profiles" / f"{site_id}.json"
+        return профиль.is_file()
+
+    def _в_области(self, оператор: Operator, scope_site_id: str) -> bool:
+        """Виден ли оператор в этой области видимости.
+
+        Пустая область — это супер-администратор, и он видит всех. Область,
+        равная сайту, показывает только своих: соседний оператор не должен быть
+        ни виден, ни изменяем.
+        """
+        if not scope_site_id:
+            return True
+        return оператор.site_id == scope_site_id
+
+    def get(self, operator_id: str, *, scope_site_id: str = "") -> Operator:
         путь = self.dir / f"{self._безопасный(operator_id)}.json"
         if not путь.exists():
             raise OperatorError(f"оператора {operator_id} нет")
-        return Operator.from_dict(json.loads(путь.read_text(encoding="utf-8")))
+        оператор = Operator.from_dict(json.loads(путь.read_text(encoding="utf-8")))
+        if not self._в_области(оператор, scope_site_id):
+            # Ответ тот же, что и для несуществующего: различие сообщало бы, что
+            # оператор с таким идентификатором есть на соседнем сайте.
+            raise OperatorError(f"оператора {operator_id} нет")
+        return оператор
 
     def by_email(self, email: str) -> Operator | None:
         try:
@@ -363,7 +399,13 @@ class OperatorDirectory:
         return оператор
 
     def list(
-        self, *, state: str = "", role: str = "", offset: int = 0, limit: int = 50
+        self,
+        *,
+        state: str = "",
+        role: str = "",
+        offset: int = 0,
+        limit: int = 50,
+        scope_site_id: str = "",
     ) -> dict[str, Any]:
         все: list[Operator] = []
         for файл in sorted(self.dir.glob("*.json")):
@@ -371,11 +413,13 @@ class OperatorDirectory:
                 все.append(Operator.from_dict(json.loads(файл.read_text(encoding="utf-8"))))
             except (OSError, json.JSONDecodeError, KeyError, ValueError):
                 continue
+        если_видно = [o for o in все if self._в_области(o, scope_site_id)]
         отобрано = [
             o
-            for o in все
+            for o in если_видно
             if (not state or o.state.value == state) and (not role or role in o.roles)
         ]
+        все = если_видно
         отобрано.sort(key=lambda o: o.email)
         по_состояниям: dict[str, int] = {}
         for o in все:
@@ -390,7 +434,13 @@ class OperatorDirectory:
             "contractVersion": CONTRACT_VERSION,
         }
 
-    def _активных_админов(self, *, кроме: str = "") -> int:
+    def _активных_админов(self, *, кроме: str = "", site_id: str | None = None) -> int:
+        """Сколько активных администраторов осталось.
+
+        Считается по витрине, а не по всему массиву. Пока считалось по массиву,
+        единственного администратора сайта можно было разжаловать: в массиве
+        оставались другие, проверка не возражала, а сайт оставался без хозяина.
+        """
         сколько = 0
         for файл in self.dir.glob("*.json"):
             try:
@@ -398,6 +448,8 @@ class OperatorDirectory:
             except (OSError, json.JSONDecodeError, KeyError, ValueError):
                 continue
             if o.operator_id == кроме:
+                continue
+            if site_id is not None and o.site_id != site_id:
                 continue
             if o.state is OperatorState.ACTIVE and "admin" in o.roles:
                 сколько += 1
@@ -407,7 +459,10 @@ class OperatorDirectory:
         """Система без администратора не чинится изнутри."""
         if "admin" not in оператор.roles or оператор.state is not OperatorState.ACTIVE:
             return
-        if self._активных_админов(кроме=оператор.operator_id) == 0:
+        # Супер-администратор считается по всему массиву, местный — по своей
+        # витрине: у них разные области ответственности и разные «последние».
+        область = None if оператор.is_super_admin else оператор.site_id
+        if self._активных_админов(кроме=оператор.operator_id, site_id=область) == 0:
             raise OperatorError(
                 f"нельзя {действие}: это последний активный администратор. "
                 f"Сначала назначьте другого — иначе управление каталогом "
@@ -417,7 +472,14 @@ class OperatorDirectory:
 
     # ---- приглашения ----------------------------------------------------
     def invite(
-        self, *, email: str, roles, created_by: str, ttl_seconds: int = INVITE_TTL_SECONDS
+        self,
+        *,
+        email: str,
+        roles,
+        created_by: str,
+        ttl_seconds: int = INVITE_TTL_SECONDS,
+        site_id: str = "",
+        super_admin: bool = False,
     ) -> tuple[Invite, str]:
         """Создаёт приглашение. Возвращает запись и одноразовый секрет.
 
@@ -429,6 +491,20 @@ class OperatorDirectory:
         scopes_for(роли)  # проверка ролей до записи
         if not роли:
             raise OperatorError("приглашение без ролей бессмысленно")
+        # Принадлежность обязательна. Оператор без витрины и без флага
+        # супер-администратора невидим нигде или виден везде — в зависимости от
+        # того, как это истолкует следующий читатель кода.
+        if super_admin and site_id:
+            raise OperatorError(
+                "супер-администратор не принадлежит витрине: выберите одно"
+            )
+        if not super_admin and not site_id:
+            raise OperatorError(
+                "приглашение без витрины: укажите site_id или объявите "
+                "super_admin явно"
+            )
+        if site_id and not self._сайт_существует(site_id):
+            raise OperatorError(f"витрины {site_id!r} нет среди профилей")
         существующий = self.by_email(адрес)
         if существующий and существующий.state is OperatorState.ACTIVE:
             raise OperatorError(f"{адрес} уже активен")
@@ -446,6 +522,10 @@ class OperatorDirectory:
         данные = запись.as_dict()
         данные["tokenHash"] = запись.token_hash
         данные["expiresAtRaw"] = запись.expires_at
+        # Принадлежность хранится в приглашении: между созданием и принятием
+        # проходит время, и восстанавливать её по адресу почты было бы догадкой.
+        данные["siteId"] = site_id
+        данные["isSuperAdmin"] = super_admin
         self._записать(self.invites_dir / f"{запись.invite_id}.json", данные)
 
         # Заводим запись оператора в состоянии INVITED, чтобы он был виден в
@@ -459,6 +539,8 @@ class OperatorDirectory:
                     state=OperatorState.INVITED,
                     mfa_state=MfaState.PROVIDER_NOT_CONFIGURED,
                     created_at=_сейчас(),
+                    site_id=site_id,
+                    is_super_admin=super_admin,
                 )
             )
         return запись, секрет
@@ -517,6 +599,10 @@ class OperatorDirectory:
                 created_at=_сейчас(),
             )
             оператор.roles = приглашение.roles
+            # Принадлежность берётся из приглашения, а не из существующей
+            # записи: приглашение — то место, где её выдал администратор.
+            оператор.site_id = str(данные.get("siteId") or "")
+            оператор.is_super_admin = bool(данные.get("isSuperAdmin"))
             оператор.password = hash_password(password)
             оператор.state = OperatorState.ACTIVE
             оператор.mfa_state = MfaState.PROVIDER_NOT_CONFIGURED
@@ -531,11 +617,19 @@ class OperatorDirectory:
         raise OperatorError("приглашение не найдено")
 
     # ---- роли, блокировка ----------------------------------------------
-    def set_roles(self, operator_id: str, roles, *, actor_id: str, actor_roles) -> Operator:
-        """Смена ролей. Себе полномочия не повышают."""
+    def set_roles(
+        self,
+        operator_id: str,
+        roles,
+        *,
+        actor_id: str,
+        actor_roles,
+        scope_site_id: str = "",
+    ) -> Operator:
+        """Смена ролей. Себе полномочия не повышают, чужой витрине — не меняют."""
         роли = tuple(roles or ())
         scopes_for(роли)
-        оператор = self.get(operator_id)
+        оператор = self.get(operator_id, scope_site_id=scope_site_id)
         if operator_id == actor_id:
             своё = max((RANK[r] for r in оператор.roles), default=-1)
             новое = max((RANK[r] for r in роли), default=-1)
@@ -553,8 +647,10 @@ class OperatorDirectory:
         оператор.sessions_valid_after = float(self._now())
         return self.save(оператор)
 
-    def block(self, operator_id: str, *, reason: str, actor_id: str) -> Operator:
-        оператор = self.get(operator_id)
+    def block(
+        self, operator_id: str, *, reason: str, actor_id: str, scope_site_id: str = ""
+    ) -> Operator:
+        оператор = self.get(operator_id, scope_site_id=scope_site_id)
         if operator_id == actor_id:
             raise OperatorError("нельзя заблокировать самого себя")
         self._не_последний_админ(оператор, "заблокировать")
@@ -564,8 +660,8 @@ class OperatorDirectory:
         оператор.sessions_valid_after = float(self._now())
         return self.save(оператор)
 
-    def unblock(self, operator_id: str) -> Operator:
-        оператор = self.get(operator_id)
+    def unblock(self, operator_id: str, *, scope_site_id: str = "") -> Operator:
+        оператор = self.get(operator_id, scope_site_id=scope_site_id)
         if оператор.state is not OperatorState.BLOCKED:
             raise OperatorError("оператор не заблокирован")
         оператор.state = OperatorState.ACTIVE if оператор.password else OperatorState.INVITED
@@ -733,13 +829,15 @@ class OperatorDirectory:
             return True
         return False
 
-    def revoke_all_sessions(self, operator_id: str, *, actor: str) -> int:
+    def revoke_all_sessions(
+        self, operator_id: str, *, actor: str, scope_site_id: str = ""
+    ) -> int:
         """Отзыв всех сессий одним числом, а не перебором файлов.
 
         Перебор пропустил бы сессию, созданную в тот же миг другим процессом;
         отметка времени — нет.
         """
-        оператор = self.get(operator_id)
+        оператор = self.get(operator_id, scope_site_id=scope_site_id)
         оператор.sessions_valid_after = float(self._now())
         оператор.version += 1
         self.save(оператор)

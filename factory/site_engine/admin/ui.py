@@ -241,6 +241,9 @@ def users(
     csrf: str,
     может: bool,
     свой_id: str,
+    витрины: list | None = None,
+    своя_витрина: str = "",
+    супер: bool = False,
 ) -> str:
     """Люди, их роли, приглашения и активные сессии на одном экране."""
     строки = []
@@ -328,7 +331,23 @@ def users(
         '<form method="post" action="/admin/users/invites">'
         f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
         '<label>Адрес<input name="email" type="email" required></label>'
-        '<label>Роль<select name="role">'
+        + (
+            # Витрину выбирает только тот, кто вправе приглашать не к себе.
+            # Местному администратору поле не показывается вовсе: значение
+            # берётся из его сессии, а поле формы, задающее тенанта, — это и
+            # есть смена тенанта снаружи.
+            '<label>Витрина<select name="siteId">'
+            + "".join(
+                f'<option value="{_e(с)}">{_e(с)}</option>' for с in (витрины or [])
+            )
+            + '</select></label>'
+            '<label><input type="checkbox" name="superAdmin" value="1"> '
+            "супер-администратор (без витрины)</label>"
+            if супер
+            else f'<p class="hint">Приглашение выдаётся на витрину '
+            f"<code>{_e(своя_витрина)}</code>: приглашать на чужую нельзя.</p>"
+        )
+        + '<label>Роль<select name="role">'
         + "".join(
             f'<option value="{r}">{r}</option>'
             for r in ("viewer", "reviewer", "editor", "operator", "admin")

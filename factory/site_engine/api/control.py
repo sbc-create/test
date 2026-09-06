@@ -1604,10 +1604,34 @@ class ControlApi:
                 return ApiResponse(status=200, body={"items": строки})
             if method == "POST" and tail == ["invites"]:
                 principal.require(SCOPE_OPERATORS)
+                # Принадлежность приглашаемого. Местный администратор может
+                # приглашать только к себе: разрешить ему назвать чужую витрину
+                # значило бы дать право заводить людей у соседа.
+                своя = str(body.get("actorSiteId") or "")
+                просят = str(body.get("siteId") or "")
+                супер = bool(body.get("superAdmin"))
+                if своя:
+                    if просят and просят != своя:
+                        raise ControlDenied(
+                            403,
+                            "cross_tenant_invite",
+                            "нельзя приглашать на чужую витрину",
+                            requested=просят,
+                            allowed=своя,
+                        )
+                    if супер:
+                        raise ControlDenied(
+                            403,
+                            "cross_tenant_invite",
+                            "супер-администратора назначает только супер-администратор",
+                        )
+                    просят, супер = своя, False
                 приглашение, секрет = каталог.invite(
                     email=str(body.get("email") or ""),
                     roles=body.get("roles") or [],
                     created_by=актор,
+                    site_id=просят,
+                    super_admin=супер,
                 )
                 self._audit_operators("invite", приглашение.email, актор, correlation_id)
                 # Секрет возвращается ровно один раз и в журнал не попадает.

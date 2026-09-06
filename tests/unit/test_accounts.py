@@ -341,7 +341,9 @@ class TestКонтурыНеСмешаны:
         from factory.site_engine.operators import OperatorDirectory
 
         операторы = OperatorDirectory(tmp_path)
-        _, секрет = операторы.invite(email="op@x.com", roles=["admin"], created_by="boot")
+        _, секрет = операторы.invite(
+            email="op@x.com", roles=["admin"], created_by="boot", super_admin=True
+        )
         операторы.accept_invite(secret=секрет, password="пароль-оператора-1")
         зрители = AccountDirectory(tmp_path, mailer=почта)
         assert зрители.by_email("s1", "op@x.com") is None
@@ -375,7 +377,9 @@ class TestКонтурыНеСмешаны:
         from factory.site_engine.operators import OperatorDirectory
 
         операторы = OperatorDirectory(tmp_path)
-        _, секрет = операторы.invite(email="op@x.com", roles=["admin"], created_by="boot")
+        _, секрет = операторы.invite(
+            email="op@x.com", roles=["admin"], created_by="boot", super_admin=True
+        )
         оператор = операторы.accept_invite(secret=секрет, password="пароль-оператора-1")
         операторы.register_session(sid="общий", operator_id=оператор.operator_id)
 

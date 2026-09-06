@@ -31,6 +31,15 @@ class Session:
     operator_id: str = ""
     email: str = ""
     roles: tuple = ()
+    #: Витрина, к которой привязан вошедший. Пустая строка — супер-администратор
+    #: или сессия времени начальной настройки. Значение берётся из каталога при
+    #: входе и не меняется ничем, что приходит снаружи: поле формы или параметр
+    #: адреса, задающий тенанта, — это и есть смена тенанта снаружи.
+    site_id: str = ""
+    is_super_admin: bool = False
+    #: На какую витрину смотрит супер-администратор сейчас. Переключение —
+    #: отдельное действие под запись, а не побочный эффект открытия страницы.
+    viewing_site_id: str = ""
     # Сообщение о результате последнего действия: панель перенаправляет
     # после записи, поэтому результат нужно пронести через перенаправление.
     flash: dict | None = None
@@ -56,7 +65,8 @@ class SessionStore:
         self._csrf_secret = secrets.token_bytes(32)
 
     def create(self, token: str, *, label: str = "", operator_id: str = "",
-               email: str = "", roles=()) -> Session:
+               email: str = "", roles=(), site_id: str = "",
+               is_super_admin: bool = False) -> Session:
         """Новый идентификатор на каждый вход.
 
         Идентификатор не переиспользуется никогда: сессия, начатая до входа и
@@ -67,7 +77,9 @@ class SessionStore:
         sid = secrets.token_urlsafe(32)
         session = Session(sid=sid, token=token, created_at=now, last_seen=now,
                           label=label, operator_id=operator_id, email=email,
-                          roles=tuple(roles))
+                          roles=tuple(roles), site_id=site_id,
+                          is_super_admin=is_super_admin,
+                          viewing_site_id=site_id)
         self._sessions[sid] = session
         return session
 

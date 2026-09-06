@@ -1,0 +1,140 @@
+{
+  "stage": "ADMIN-FLEET-5-CYCLIC-22",
+  "generatedFrom": [
+    "schemas/site-package.schema.json (tenant.theme enum)",
+    "sites/*/package.yaml",
+    "config/site-profiles/*.json"
+  ],
+  "templateFamilies": [
+    "portal_light",
+    "pulse",
+    "editorial",
+    "lords_dark",
+    "lords_light"
+  ],
+  "seoProfiles": [
+    "catalog_authority",
+    "release_pulse",
+    "editorial_guide",
+    "lords-general",
+    "lords-new",
+    "lords-curated",
+    "lords-genre"
+  ],
+  "matrix": {
+    "portal_light": [
+      {
+        "siteId": "site-a",
+        "domain": "site-a.localhost",
+        "environment": "staging",
+        "blueprint": "payload-next-multisite",
+        "productionAuthorized": false,
+        "seoProfile": "catalog_authority",
+        "engineProfile": false,
+        "engineTheme": null,
+        "renderMode": null,
+        "live": false
+      }
+    ],
+    "pulse": [
+      {
+        "siteId": "site-b",
+        "domain": "site-b.localhost",
+        "environment": "staging",
+        "blueprint": "payload-next-multisite",
+        "productionAuthorized": false,
+        "seoProfile": "release_pulse",
+        "engineProfile": false,
+        "engineTheme": null,
+        "renderMode": null,
+        "live": false
+      }
+    ],
+    "editorial": [
+      {
+        "siteId": "site-c",
+        "domain": "site-c.localhost",
+        "environment": "staging",
+        "blueprint": "payload-next-multisite",
+        "productionAuthorized": false,
+        "seoProfile": "editorial_guide",
+        "engineProfile": false,
+        "engineTheme": null,
+        "renderMode": null,
+        "live": false
+      }
+    ],
+    "lords_dark": [
+      {
+        "siteId": "lords-01",
+        "domain": "lordfilm47.space",
+        "environment": "staging",
+        "blueprint": "lords",
+        "productionAuthorized": false,
+        "seoProfile": "lords-general",
+        "engineProfile": true,
+        "engineTheme": "lords-showcase",
+        "renderMode": "static",
+        "live": true
+      },
+      {
+        "siteId": "lords-02",
+        "domain": "lordserial33.biz",
+        "environment": "staging",
+        "blueprint": "lords",
+        "productionAuthorized": false,
+        "seoProfile": "lords-new",
+        "engineProfile": true,
+        "engineTheme": "lords-showcase",
+        "renderMode": "static",
+        "live": true
+      }
+    ],
+    "lords_light": [
+      {
+        "siteId": "lords-03",
+        "domain": "1lordserials1.online",
+        "environment": "staging",
+        "blueprint": "lords",
+        "productionAuthorized": false,
+        "seoProfile": "lords-curated",
+        "engineProfile": true,
+        "engineTheme": "lords-showcase",
+        "renderMode": "static",
+        "live": true
+      },
+      {
+        "siteId": "lords-04",
+        "domain": null,
+        "environment": "staging",
+        "blueprint": "lords",
+        "productionAuthorized": false,
+        "seoProfile": "lords-genre",
+        "engineProfile": false,
+        "engineTheme": null,
+        "renderMode": null,
+        "live": false
+      }
+    ]
+  },
+  "engineSitesWithoutPackage": [
+    "demo-books",
+    "yummyani-biz",
+    "yummyani-org",
+    "yummyani-site"
+  ],
+  "counts": {
+    "families": 5,
+    "packages": 8,
+    "engineProfiles": 7,
+    "liveDomains": [
+      "1lordserials1.online",
+      "demo-books.invalid",
+      "lordfilm47.space",
+      "lordserial33.biz",
+      "yummyani.biz",
+      "yummyani.org",
+      "yummyani.site"
+    ]
+  }
+}

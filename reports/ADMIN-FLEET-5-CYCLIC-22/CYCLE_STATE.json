@@ -1,0 +1,12 @@
+{
+  "stage": "ADMIN-FLEET-5-CYCLIC-22",
+  "cycle": 2,
+  "slice": "Изоляция тенанта в Control API и панели",
+  "branch": "claude/core-product-8plus-20",
+  "headAtStart": "463fe108c7fb5d2afb98db32c42744d47e1b2eab",
+  "status": "IN_PROGRESS",
+  "cycle0": "closed: инвентаризация, матрица пяти семейств, три дефекта",
+  "nextStep": "падающий тест: запрос с чужим siteId в теле, адресе и форме обязан получать отказ, а не данные соседа",
+  "minimumCycles": 10,
+  "cycle1": "closed: SiteAdminContract v1 и принадлежность оператора"
+}

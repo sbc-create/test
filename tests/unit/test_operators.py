@@ -40,7 +40,9 @@ def каталог(tmp_path):
 
 
 def завести(каталог, email, роли, *, кем="bootstrap"):
-    _, секрет = каталог.invite(email=email, roles=роли, created_by=кем)
+    _, секрет = каталог.invite(
+        email=email, roles=роли, created_by=кем, super_admin=True
+    )
     return каталог.accept_invite(secret=секрет, password=ПАРОЛЬ)
 
 
@@ -89,7 +91,9 @@ class TestОсновы:
 
     def test_негодный_адрес_отклонён(self, каталог):
         with pytest.raises(OperatorError, match="негодный адрес"):
-            каталог.invite(email="без-собаки", roles=["viewer"], created_by="b")
+            каталог.invite(
+                email="без-собаки", roles=["viewer"], created_by="b", super_admin=True
+            )
 
 
 # --------------------------------------------------------------------------
@@ -97,7 +101,9 @@ class TestОсновы:
 # --------------------------------------------------------------------------
 class TestПриглашения:
     def test_секрет_не_попадает_на_диск(self, каталог, tmp_path):
-        _, секрет = каталог.invite(email="a@x.com", roles=["viewer"], created_by="b")
+        _, секрет = каталог.invite(
+            email="a@x.com", roles=["viewer"], created_by="b", super_admin=True
+        )
         весь = "".join(
             ф.read_text(encoding="utf-8")
             for ф in (tmp_path / "var/state/operators").rglob("*.json")
@@ -105,7 +111,9 @@ class TestПриглашения:
         assert секрет not in весь, "одноразовый секрет обязан храниться только хэшем"
 
     def test_приглашённый_виден_в_списке_сразу(self, каталог):
-        каталог.invite(email="a@x.com", roles=["viewer"], created_by="b")
+        каталог.invite(
+            email="a@x.com", roles=["viewer"], created_by="b", super_admin=True
+        )
         assert каталог.list()["byState"].get("INVITED") == 1
 
     def test_принятие_задаёт_пароль_приглашённым(self, каталог):
@@ -114,13 +122,17 @@ class TestПриглашения:
         assert каталог.authenticate(email="a@x.com", password=ПАРОЛЬ)
 
     def test_повторное_использование_отклонено(self, каталог):
-        _, секрет = каталог.invite(email="a@x.com", roles=["viewer"], created_by="b")
+        _, секрет = каталог.invite(
+            email="a@x.com", roles=["viewer"], created_by="b", super_admin=True
+        )
         каталог.accept_invite(secret=секрет, password=ПАРОЛЬ)
         with pytest.raises(OperatorError, match="уже использовано"):
             каталог.accept_invite(secret=секрет, password="другой-пароль-11")
 
     def test_отозванное_приглашение_не_принимается(self, каталог):
-        приглашение, секрет = каталог.invite(email="a@x.com", roles=["viewer"], created_by="b")
+        приглашение, секрет = каталог.invite(
+            email="a@x.com", roles=["viewer"], created_by="b", super_admin=True
+        )
         каталог.revoke_invite(приглашение.invite_id, actor="b")
         with pytest.raises(OperatorError, match="отозвано"):
             каталог.accept_invite(secret=секрет, password=ПАРОЛЬ)
@@ -128,25 +140,34 @@ class TestПриглашения:
     def test_истёкшее_приглашение_не_принимается(self, tmp_path):
         часы = [1000.0]
         к = OperatorDirectory(tmp_path, now=lambda: часы[0])
-        _, секрет = к.invite(email="a@x.com", roles=["viewer"], created_by="b", ttl_seconds=60)
+        _, секрет = к.invite(
+            email="a@x.com", roles=["viewer"], created_by="b",
+            ttl_seconds=60, super_admin=True,
+        )
         часы[0] += 61
         with pytest.raises(OperatorError, match="истёк"):
             к.accept_invite(secret=секрет, password=ПАРОЛЬ)
         assert [i["state"] for i in к.list_invites()] == ["EXPIRED"]
 
     def test_чужой_секрет_не_подходит(self, каталог):
-        каталог.invite(email="a@x.com", roles=["viewer"], created_by="b")
+        каталог.invite(
+            email="a@x.com", roles=["viewer"], created_by="b", super_admin=True
+        )
         with pytest.raises(OperatorError, match="не найдено"):
             каталог.accept_invite(secret="подобранный", password=ПАРОЛЬ)
 
     def test_приглашение_без_ролей_бессмысленно(self, каталог):
         with pytest.raises(OperatorError, match="без ролей"):
-            каталог.invite(email="a@x.com", roles=[], created_by="b")
+            каталог.invite(
+                email="a@x.com", roles=[], created_by="b", super_admin=True
+            )
 
     def test_приглашение_активного_отклонено(self, каталог):
         завести(каталог, "a@x.com", ["viewer"])
         with pytest.raises(OperatorError, match="уже активен"):
-            каталог.invite(email="a@x.com", roles=["admin"], created_by="b")
+            каталог.invite(
+                email="a@x.com", roles=["admin"], created_by="b", super_admin=True
+            )
 
 
 # --------------------------------------------------------------------------
@@ -378,7 +399,10 @@ class TestApi:
     @pytest.mark.parametrize(
         "маршрут,тело",
         [
-            ("/api/v1/operators/invites", {"email": "n@x.com", "roles": ["viewer"]}),
+            (
+                "/api/v1/operators/invites",
+                {"email": "n@x.com", "roles": ["viewer"], "superAdmin": True},
+            ),
             ("/api/v1/operators/sessions/revoke", {"sessionId": "нет"}),
         ],
     )
@@ -393,7 +417,7 @@ class TestApi:
         r = api.handle(
             "POST",
             "/api/v1/operators/invites",
-            body={"email": "n@x.com", "roles": ["reviewer"]},
+            body={"email": "n@x.com", "roles": ["reviewer"], "superAdmin": True},
             headers=h,
         )
         assert r.status == 201 and r.body["secret"]
@@ -436,9 +460,10 @@ class TestApi:
         r = api.handle(
             "POST",
             "/api/v1/operators/invites",
-            body={"email": "n@x.com", "roles": ["viewer"]},
+            body={"email": "n@x.com", "roles": ["viewer"], "superAdmin": True},
             headers=h,
         )
+        assert r.status == 201, r.body
         import json as _json
 
         from factory import audit

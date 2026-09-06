@@ -417,6 +417,10 @@ class AdminApp:
         """Экран людей. Панель ничего не решает: всё через Control API."""
         может = self._есть_права(session, "operators:write")
         свой = getattr(session, "operator_id", "")
+        # Сессия без витрины — это супер-администратор или начальная настройка,
+        # когда каталог ещё пуст. И в том и в другом случае приглашать можно
+        # куда угодно; привязанный администратор — только к себе.
+        не_привязан = not (getattr(session, "site_id", "") or "")
 
         if method == "GET" and not tail:
             люди = self._call("GET", "/api/v1/operators", session, {"limit": 100})
@@ -452,6 +456,9 @@ class AdminApp:
                     csrf=csrf,
                     может=может,
                     свой_id=свой,
+                    витрины=[s for s in self._витрины(session) if s],
+                    своя_витрина=getattr(session, "site_id", "") or "",
+                    супер=не_привязан,
                 ),
             )
 
@@ -460,7 +467,20 @@ class AdminApp:
                 "POST",
                 "/api/v1/operators/invites",
                 session,
-                {"email": form.get("email") or "", "roles": [form.get("role") or "viewer"]},
+                {
+                    "email": form.get("email") or "",
+                    "roles": [form.get("role") or "viewer"],
+                    # Своя витрина передаётся из сессии, а не из формы: поле
+                    # формы, задающее тенанта, — это и есть смена тенанта
+                    # снаружи.
+                    "actorSiteId": getattr(session, "site_id", "") or "",
+                    "siteId": form.get("siteId") or "",
+                    # Начальная настройка заводит супер-администратора: витрин
+                    # с администраторами ещё нет, и кто-то должен управлять
+                    # массивом. Позже супер-администратор выбирает явно.
+                    "superAdmin": bool(form.get("superAdmin"))
+                    or (не_привязан and not (form.get("siteId") or "")),
+                },
             )
             if ответ.status == 201:
                 # Ответ отдаётся сразу, без перенаправления: секрет не должен
@@ -707,6 +727,11 @@ class AdminApp:
                 operator_id=оператор.operator_id,
                 email=оператор.email,
                 roles=оператор.roles,
+                # Принадлежность берётся из каталога при входе. Ни адрес, ни
+                # форма её задать не могут: иначе смена тенанта — это правка
+                # строки запроса.
+                site_id=оператор.site_id,
+                is_super_admin=оператор.is_super_admin,
             )
             каталог.register_session(sid=session.sid, operator_id=оператор.operator_id)
             return _redirect("/admin", extra={"Set-Cookie": self._cookie_header(session.sid)})
