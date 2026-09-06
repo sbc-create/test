@@ -153,7 +153,7 @@ entries:
     cycle: 5
     note: "наполнение очереди разбора; полный путь на двух семействах"
     branch: claude/core-product-8plus-20
-    full_head_sha: ЗАПОЛНЯЕТСЯ_ПОСЛЕ_КОММИТА
+    full_head_sha: 36aa6ca3276e68528fb0960664346925c65e52a2
     core_percent: 100.0
     central_admin: 8
     fleet_gates_closed: 5
