@@ -1844,6 +1844,60 @@ ANALYTICS_ASSET_PATH = analytics_snippet.ANALYTICS_SCRIPT_URL
 
 APP_JS = """/* Lords — поведение интерфейса. Ни одного внешнего запроса. */
 
+/* Состояния плеера.
+ *
+ * Пустая область — не состояние. На боевой витрине <video-player> имел размер
+ * 0×0, скрипт поставщика был подключён, а запасной текст «Источник видео
+ * сейчас недоступен» оставался hidden: показать его было НЕКОМУ — строка
+ * data-player-fallback не упоминалась больше нигде. Зритель видел большой
+ * пустой прямоугольник без единого слова о том, что произошло.
+ *
+ * Состояния объявляются на обёртке атрибутом data-player-state, чтобы их
+ * можно было увидеть в разметке, а не угадывать по виду: loading → ready,
+ * unavailable или error.
+ *
+ * Повторов нет намеренно: недоступный источник от повторных попыток не
+ * становится доступным, а батарею они жгут.
+ */
+(function () {
+  var frame = document.querySelector(".player__frame");
+  if (!frame) { return; }
+  var fallback = frame.querySelector("[data-player-fallback]");
+  var element = frame.querySelector("video-player");
+  var script = document.querySelector("[data-player-script]");
+  var READY_TIMEOUT_MS = 8000;
+  var settled = false;
+
+  function set(state) {
+    if (settled) { return; }
+    settled = state !== "loading";
+    frame.setAttribute("data-player-state", state);
+    if (fallback) {
+      if (state === "unavailable" || state === "error") {
+        fallback.removeAttribute("hidden");
+      } else {
+        fallback.setAttribute("hidden", "");
+      }
+    }
+  }
+
+  set("loading");
+
+  if (script) {
+    script.addEventListener("error", function () { set("error"); });
+  }
+  if (!element) { set("unavailable"); return; }
+
+  /* Готовность определяется по факту: элемент занял место. Ждать сигнала
+   * поставщика нельзя — контракт его не обещает, и страница осталась бы в
+   * загрузке навсегда. */
+  window.setTimeout(function () {
+    var box = element.getBoundingClientRect();
+    if (box.width > 1 && box.height > 1) { set("ready"); } else { set("unavailable"); }
+  }, READY_TIMEOUT_MS);
+})();
+
+
 /* Выбор темы.
  *
  * Тема ставится встроенным скриптом в head до первого кадра; здесь только

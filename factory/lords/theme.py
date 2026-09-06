@@ -397,6 +397,18 @@ main {{ padding: var(--pad) 0 40px; }}
 .theme-switch button[aria-pressed="true"] {{ background: var(--accent);
   color: var(--accent-text); font-weight: 700; }}
 .theme-switch button:hover {{ color: var(--text); }}
+/* Кадр плеера резервирует место до подключения: иначе включение сдвинет всю
+   раскладку. Размер задан пропорцией, а не высотой в пикселях. */
+.player__frame {{ position: relative; aspect-ratio: 16 / 9; width: 100%;
+  background: var(--surface-alt); border-radius: var(--radius);
+  display: flex; align-items: center; justify-content: center; }}
+.player__frame video-player {{ display: block; width: 100%; height: 100%; }}
+/* Запасной текст читается тогда, когда его показали. Прежде он был скрыт
+   всегда, и на его месте зритель видел пустой прямоугольник. */
+.player__fallback {{ margin: 0; padding: 16px 20px; max-width: 46ch;
+  text-align: center; color: var(--text); font-size: .95rem; line-height: 1.5; }}
+.player__frame[data-player-state="unavailable"],
+.player__frame[data-player-state="error"] {{ background: var(--surface); }}
 .facets legend {{ font-size: .78rem; color: var(--muted); padding: 0 0 4px; }}
 .facets select, .facets input {{
   width: 100%; padding: 7px 10px; font: inherit;
