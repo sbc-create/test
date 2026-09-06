@@ -27,6 +27,7 @@ import { CardGrid, type CardItem } from '../src/components/TitleCard'
 import { Pagination } from '../src/components/Pagination'
 import { Breadcrumbs } from '../src/components/Breadcrumbs'
 import type { SiteContext } from '../src/lib/site'
+import { CONSUMED_SETTINGS } from '../src/lib/admin-contract'
 
 const HERE = path.dirname(fileURLToPath(import.meta.url))
 const APP = path.resolve(HERE, '..')
@@ -62,28 +63,69 @@ const cards: CardItem[] = TITLES.map((title, index) => ({
   image: null,
 }))
 
-const context = (family: (typeof FAMILIES)[number]): SiteContext =>
-  ({
+/**
+ * Две витрины на семейство с заведомо разными настройками.
+ *
+ * Нужны затем, что изоляцию нельзя проверить на одной витрине: утечка видна
+ * только тогда, когда есть у кого утечь. Значения различаются в каждом поле
+ * контракта — совпадающее значение не отличило бы «взяли своё» от «взяли
+ * чужое и случайно совпало».
+ */
+const TENANTS = {
+  a: {
+    suffix: 'tenant-a',
+    siteName: 'Первая витрина',
+    rightsNotice: 'Права первой витрины',
+    tagline: 'Подпись первой витрины',
+    nav: ['Каталог', 'Подборки', 'Новости'],
+  },
+  b: {
+    suffix: 'tenant-b',
+    siteName: 'Вторая витрина',
+    rightsNotice: 'Права второй витрины',
+    tagline: 'Подпись второй витрины',
+    nav: ['Расписание', 'Обзоры'],
+  },
+} as const
+
+type TenantKey = keyof typeof TENANTS
+
+const context = (
+  family: (typeof FAMILIES)[number],
+  tenant: TenantKey | null = null,
+): SiteContext => {
+  const t = tenant ? TENANTS[tenant] : null
+  const navTitles = t ? t.nav : ['Каталог', 'Подборки', 'Новости', 'Поиск']
+  return {
     tenant: { id: family.site, slug: family.site } as never,
     profile: family.profile as never,
-    settings: null,
+    settings: t
+      ? {
+          // Заполняются все поля контракта: пропущенное поле проверило бы
+          // поведение при пустоте, а не потребление, и это другой предмет.
+          commentsEnabled: true,
+          defaultDescription: `Описание витрины ${t.siteName}`,
+          maxLength: 4000,
+          rightsNotice: t.rightsNotice,
+          rulesText: `Правила витрины ${t.siteName}`,
+          tagline: t.tagline,
+        }
+      : null,
     navigation: {
-      header: [
-        { title: 'Каталог', href: '/catalog' },
-        { title: 'Подборки', href: '/collections' },
-        { title: 'Новости', href: '/news' },
-        { title: 'Поиск', href: '/search' },
-      ],
-      footer: [
-        { title: 'О проекте', href: '/about' },
-        { title: 'Правообладателям', href: '/rights' },
+      header: navTitles.map((title) => ({ title, href: `/${title.toLowerCase()}` })),
+      footerGroups: [
+        {
+          title: 'О сайте',
+          items: [{ title: 'О проекте', href: '/about' }],
+        },
       ],
     },
-    siteName: family.siteName,
-  }) as SiteContext
+    siteName: t ? t.siteName : family.siteName,
+  } as SiteContext
+}
 
-const page = (family: (typeof FAMILIES)[number]): string => {
-  const site = context(family)
+const page = (family: (typeof FAMILIES)[number], tenant: TenantKey | null = null): string => {
+  const site = context(family, tenant)
   const body = renderToStaticMarkup(
     <>
       <SiteHeader site={site} />
@@ -125,11 +167,28 @@ const page = (family: (typeof FAMILIES)[number]): string => {
 }
 
 fs.mkdirSync(OUT, { recursive: true })
+let pages = 0
 for (const family of FAMILIES) {
   fs.writeFileSync(path.join(OUT, `${family.theme}.html`), page(family))
+  pages += 1
+  for (const key of Object.keys(TENANTS) as TenantKey[]) {
+    fs.writeFileSync(
+      path.join(OUT, `${family.theme}-${TENANTS[key].suffix}.html`), page(family, key))
+    pages += 1
+  }
 }
 fs.writeFileSync(
   path.join(OUT, 'index.json'),
-  `${JSON.stringify({ families: FAMILIES.map((f) => f.theme), cards: cards.length }, null, 2)}\n`,
+  `${JSON.stringify(
+    {
+      families: FAMILIES.map((f) => f.theme),
+      tenants: Object.fromEntries(
+        (Object.keys(TENANTS) as TenantKey[]).map((k) => [k, TENANTS[k]])),
+      consumedSettings: CONSUMED_SETTINGS,
+      cards: cards.length,
+    },
+    null,
+    2,
+  )}\n`,
 )
-console.log(`стенд семейств собран: ${FAMILIES.length} страниц в ${OUT}`)
+console.log(`стенд семейств собран: ${pages} страниц в ${OUT}`)

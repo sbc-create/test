@@ -95,13 +95,31 @@ def score_package(site: str, pkg: dict) -> tuple[int, str]:
 
 
 def score_adapter(site: str, pkg: dict) -> tuple[int, str]:
+    """Адаптер админки: объявлен в манифесте и доказан потреблением.
+
+    Одного объявления мало. Версия в пакете — это обещание; доказательством
+    служит прогон, показавший, что отданное админкой доходит до страницы, что
+    витрины не видят настроек друг друга и что пустая настройка не подменяется
+    выдуманным текстом. Без прогона объявление остаётся бумагой.
+    """
     admin = (pkg.get("admin") or {}) if isinstance(pkg.get("admin"), dict) else {}
     contract = admin.get("contract") or admin.get("adapter")
     if not contract:
-        return 0, "адаптер site-admin в пакете не объявлен"
-    if str(contract).startswith("site-admin/"):
-        return MAX, f"адаптер объявлен: {contract}"
-    return 5, f"адаптер объявлен нестандартно: {contract}"
+        return 0, "контракт site-admin в пакете не объявлен"
+    if not str(contract).startswith("site-admin/"):
+        return 3, f"контракт объявлен нестандартно: {contract}"
+    evidence = _load("admin-contract.json")
+    if not evidence:
+        return 5, f"контракт объявлен ({contract}), потребление не проверено"
+    isolation = evidence.get("isolation") or []
+    leaks = [x for entry in isolation for x in (entry.get("leaks") or [])]
+    consumption = evidence.get("consumption") or []
+    if leaks:
+        return 4, f"утечки между витринами: {len(leaks)}"
+    if not consumption:
+        return 5, f"контракт объявлен ({contract}), потребление не измерено"
+    return MAX, (f"{contract}: потребление проверено на {len(consumption)} витринах, "
+                 f"утечек нет")
 
 
 def score_content(site: str, pkg: dict) -> tuple[int, str]:
