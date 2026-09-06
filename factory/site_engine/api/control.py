@@ -721,6 +721,21 @@ class ControlApi:
             from factory.site_engine.api import readiness
 
             return ApiResponse(status=200, body=readiness.scorecard(self._root, self._env))
+        if method == "GET" and len(rest) == 2 and rest[0] == "ratings":
+            principal.require(SCOPE_READ)
+            from factory.site_engine import rating_feed
+
+            self._check_site_id(rest[1])
+            return ApiResponse(
+                status=200,
+                body=rating_feed.ratings(
+                    self._root,
+                    rest[1],
+                    env=self._env,
+                    offset=self._целое(body, "offset", 0, 0, 10**6),
+                    limit=self._целое(body, "limit", 500, 1, 5000),
+                ),
+            )
         if method == "GET" and rest == ["rating-sources"]:
             principal.require(SCOPE_READ)
             from factory.site_engine import rating_sources

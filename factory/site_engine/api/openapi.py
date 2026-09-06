@@ -192,6 +192,18 @@ from factory.site_engine.api.ratelimit import DEFAULT_LIMITS
         "success": ("200", "оценки с основанием; неизмеренное без числа"),
         "errors": {"400": "негодные параметры"},
     },
+    "/api/v1/ratings/{siteId}": {
+        "method": "get",
+        "summary": "Оценки записей витрины из договорного фида поставщика",
+        "scope": "read",
+        "idempotent": True,
+        "body": None,
+        "success": (
+            "200",
+            "значения с происхождением и правовым основанием; две метрики не сводятся в одну",
+        ),
+        "errors": {"400": "негодный идентификатор витрины"},
+    },
     "/api/v1/rating-sources": {
         "method": "get",
         "summary": "Реестр источников оценок и состояние разрешений",

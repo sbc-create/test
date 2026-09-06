@@ -1169,6 +1169,44 @@ def content_list(
     )
 
 
+def _оценки(оценки: dict) -> str:
+    """Оценки с происхождением. Число без происхождения через месяц
+    неотличимо от скачанного со стороны, поэтому источник, основание и время
+    забора фида стоят рядом со значением, а не в описании раздела."""
+    if not оценки:
+        return ""
+    состояние = str(оценки.get("state") or "")
+    значения = оценки.get("values") or []
+    строки = "".join(
+        f'<tr><td><code>{_e(str(з.get("metric", "")))}</code></td>'
+        f'<td><b>{_e(str(з.get("value", "")))}</b> '
+        f'<span class="mut">из {_e(str(з.get("scale", "")))}</span></td>'
+        f'<td class="mut">{_e(str(з.get("source", "")))}</td>'
+        f'<td class="mut">{_e(str(з.get("legalBasis", "")))}</td>'
+        f'<td class="mut">{_e(str(з.get("feedFetchedAt", "")))}</td></tr>'
+        for з in значения
+    )
+    пояснение = ""
+    if оценки.get("primaryReason") == "MULTIPLE_METRICS_NOT_RECONCILED":
+        пояснение = (
+            '<p class="hint">Главного значения нет намеренно: две метрики меряют '
+            "разные совокупности зрителей, и выбор между ними — решение о "
+            "представлении, которого владелец не принимал. Среднее не считается: "
+            "это третье число, которого не сообщал никто.</p>"
+        )
+    elif оценки.get("reason"):
+        пояснение = f'<p class="hint">{_e(str(оценки["reason"]))}</p>'
+    return (
+        '<div class="card"><h2>Оценки</h2>'
+        f'<p><span class="pill {"ok" if состояние == "AVAILABLE" else "warn"}">'
+        f"{_e(состояние)}</span></p>" + пояснение + '<div class="scroll-x"><table>'
+        "<thead><tr><th>Метрика</th><th>Значение</th><th>Источник</th>"
+        "<th>Основание</th><th>Фид забран</th></tr></thead><tbody>"
+        + (строки or чтопусто(5, "Оценок в фиде нет."))
+        + "</tbody></table></div></div>"
+    )
+
+
 def content_item(данные: dict, *, flash: dict | None, session_label: str, csrf: str) -> str:
     """Карточка записи: идентификаторы, происхождение, состояния, история."""
     идентификаторы = (
@@ -1204,6 +1242,7 @@ def content_item(данные: dict, *, flash: dict | None, session_label: str, 
         "Открыть в очереди разбора →</a></p></div>"
     )
     оценки = данные.get("ratings") or {}
+    оценки_html = _оценки(оценки)
 
     return page(
         str(данные.get("title") or "Запись"),
@@ -1241,18 +1280,12 @@ def content_item(данные: dict, *, flash: dict | None, session_label: str, 
                 ("Воспроизведение", данные.get("playbackReason")),
                 ("Агрегатор", данные.get("playbackAggregator") or "—"),
                 ("Оценка", данные.get("ratingState")),
-                (
-                    "Кинопоиск",
-                    оценки.get("kinopoisk")
-                    if оценки.get("kinopoisk") is not None
-                    else "нет данных",
-                ),
-                ("IMDb", оценки.get("imdb") if оценки.get("imdb") is not None else "нет данных"),
                 ("SEO", данные.get("seoState")),
                 ("Конфликты вида", ", ".join(данные.get("kindConflicts") or []) or "нет"),
             ]
         )
         + f'<p class="mut">{_e(str(данные.get("kindReason", "")))}</p></div>'
+        + оценки_html
         + разбор_html
         + f'<div class="card"><h2>Происхождение</h2><ul>{источники}</ul></div>'
         + '<div class="card"><h2>История</h2><div class="scroll-x"><table>'

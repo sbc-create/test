@@ -172,6 +172,59 @@ def список(
     }
 
 
+def _когда_забран_фид(root: Path, env, site_id: str) -> str:
+    """Отметка времени фида, из которого взяты значения.
+
+    Без неё происхождение неполно: «7.6 из фида поставщика» через месяц не
+    отвечает на вопрос, какого числа этот фид забирали.
+    """
+    from factory.site_engine.api import overview as _overview
+
+    данные, _ = _overview._каталог_витрины(Path(root), env, site_id)
+    отметка = (данные or {}).get("fetched_at_ms")
+    if not isinstance(отметка, int | float) or отметка <= 0:
+        return ""
+    import time
+
+    return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(float(отметка) / 1000.0))
+
+
+def _оценки_записи(запись: dict[str, Any], root: Path, забран: str = "") -> dict[str, Any]:
+    """Оценки одной записи с происхождением и проверкой разрешения."""
+    from factory.site_engine import rating_feed, rating_sources
+
+    решение = rating_sources.resolve(root)
+    описание = next((и for и in решение.known if и["id"] == rating_feed.ИСТОЧНИК), None)
+    состояние = (описание or {}).get("authorization", {}).get("status", "absent")
+    if состояние != "granted":
+        return {
+            "state": "SOURCE_NOT_AUTHORIZED",
+            "values": [],
+            "primary": None,
+            "primaryReason": "",
+            "reason": (описание or {}).get("authorization", {}).get(
+                "reason", "источник оценок не разрешён"
+            ),
+        }
+    if rating_feed.ИСТОЧНИК not in решение.authorized:
+        return {
+            "state": "SOURCE_DISABLED",
+            "values": [],
+            "primary": None,
+            "primaryReason": "",
+            "reason": "источник разрешён, но выключен в реестре",
+        }
+    значения = rating_feed.значения_записи(запись, забран=забран)
+    главное = значения[0] if len(значения) == 1 else None
+    return {
+        "state": "AVAILABLE" if значения else "NO_RATING_IN_FEED",
+        "values": значения,
+        "primary": главное,
+        "primaryReason": "MULTIPLE_METRICS_NOT_RECONCILED" if len(значения) > 1 else "",
+        "reason": "",
+    }
+
+
 def карточка(root: Path, *, site_id: str, external_id: str, env=None) -> dict[str, Any]:
     """Полная карточка: идентификаторы, происхождение, состояния, история."""
     if not external_id or "/" in external_id or ".." in external_id:
@@ -232,7 +285,11 @@ def карточка(root: Path, *, site_id: str, external_id: str, env=None) ->
                 "updatedAt": запись.get("updated_at"),
             }
         ],
-        "ratings": {"kinopoisk": запись.get("kinopoisk_rating"), "imdb": запись.get("imdb_rating")},
+        # Оценки проходят через реестр источников, а не берутся из записи
+        # напрямую. Раньше числа отдавались всегда: если бы владелец ответил
+        # «нет», карточка продолжала бы их показывать, потому что показ не
+        # зависел ни от какого разрешения.
+        "ratings": _оценки_записи(запись, root, _когда_забран_фид(root, env, site_id)),
         "seasons": запись.get("seasons_count"),
         "episodes": запись.get("episodes_count"),
         # Длительность источник не отдаёт. None, а не ноль: ноль ушёл бы в

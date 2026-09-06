@@ -78,17 +78,20 @@ gates:
       - "установить юниты deploy/systemd/seo-* (нужны права на боевой машине)"
       - "задать SITE_ENGINE_RENDER_STATE_DIR в юните управляющей службы"
   - id: ratingsProvenance
-    score: 7
-    state: blocked_external
-    evidence: reports/CORE-FINALIZATION-CYCLIC-21/cycles/CYCLE-10.md
-    gaps: ["ни один источник не разрешён: пользовательского пути нет"]
+    score: 8
+    state: closed
+    evidence: reports/CORE-FINALIZATION-CYCLIC-21/cycles/CYCLE-11.md
     note: >-
-      Технический слой закрыт: versioned реестр, договор, происхождение,
-      предохранитель, срок годности последнего значения, политика расхождений,
-      экран состояния. Семь, а не восемь: слой без единого работающего
-      источника — это схема, а не путь.
-    owner_actions:
-      - "зарегистрировать источник оценок и его правовое основание в config/rating-sources.yaml"
+      Разрешение владельца от 2026-09-06: только оценки из действующего
+      договорного фида поставщика. Скрапинг сторонних сайтов запрещён и
+      проверяется тестом по исходному коду соединителя. Охват 51,0 % — свойство
+      фида, а не пробел реализации.
+    measured:
+      sites: 3
+      records: 53232
+      withRating: 27156
+      coverage: 0.510
+      bothMetrics: 19413
 
 incoming_handoffs:
   - id: HANDOFF-2026-09-05-019-SEO-TO-CORE
@@ -105,8 +108,11 @@ external_blockers:
     severity: P1
     owner_action: "доступ на чтение к копии каталога"
   - id: NO-RATING-SOURCE
-    severity: P1
-    owner_action: "регистрация хотя бы одного разрешённого источника рейтингов"
+    severity: resolved
+    resolved_at: "2026-09-06"
+    note: >-
+      Снят решением владельца: разрешён действующий договорный фид поставщика.
+      Скрапинг сторонних сайтов остаётся запрещённым.
   - id: DEPLOY-CLASSIFIER
     severity: P1
     note: "команда выкладки отклоняется классификатором среды агента"
