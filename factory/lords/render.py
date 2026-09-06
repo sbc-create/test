@@ -274,6 +274,58 @@ def _episode_items(season) -> str:
     return "".join(items)
 
 
+#: Подписи выбора темы. «Как в системе» стоит первым: это состояние по
+#: умолчанию, и начинать перечень с него честнее, чем со «светлой».
+THEME_CHOICES = (
+    ("system", "Как в системе", "Авто"),
+    ("light", "Светлая", "Светл"),
+    ("dark", "Тёмная", "Тёмн"),
+)
+
+
+def _theme_key(site_id: str) -> str:
+    """Ключ хранения выбора. Именован по витрине намеренно.
+
+    Общий ключ означал бы, что выбор на одной витрине меняет соседнюю: они
+    живут на разных доменах, но в одном браузере, и зритель не ожидает, что
+    настройка перетечёт.
+    """
+    return f"lords-theme:{site_id}"
+
+
+def _theme_boot(site_id: str) -> str:
+    """Скрипт, ставящий тему ДО первого кадра.
+
+    Тема, выставленная после разбора разметки, даёт вспышку: страница приходит
+    одной и перекрашивается на глазах. На тёмной теме это удар белым в темноте —
+    ровно то, ради чего тему и выбирали. Поэтому скрипт встроенный и стоит в
+    head, до таблицы стилей.
+
+    Обращение к хранилищу обёрнуто: в приватном режиме оно бросает исключение,
+    и непойманное оставило бы страницу без темы, уронив остальной сценарий.
+    """
+    key = _theme_key(site_id)
+    return (
+        "<script>(function(){try{var v=localStorage.getItem('" + key + "');"
+        "if(v==='light'||v==='dark'){document.documentElement.setAttribute('data-theme',v);}"
+        "}catch(e){}})();</script>"
+    )
+
+
+def _theme_switch(site_id: str) -> str:
+    """Видимый выбор темы: три состояния, доступные с клавиатуры."""
+    key = _theme_key(site_id)
+    buttons = "".join(
+        f'<button type="button" data-theme-set="{value}" aria-pressed="false" '
+        f'aria-label="{escape(full)}" title="{escape(full)}">{escape(short)}</button>'
+        for value, full, short in THEME_CHOICES
+    )
+    return (
+        f'<div class="theme-switch" role="group" aria-label="Тема оформления" '
+        f'data-theme-key="{escape(key)}">{buttons}</div>'
+    )
+
+
 def _document(ctx: dict, meta: Meta, body: str) -> str:
     """Полный HTML-документ. Всё встроено, ничего не подгружается извне."""
     brand = ctx["brand"]
@@ -289,6 +341,9 @@ def _document(ctx: dict, meta: Meta, body: str) -> str:
         '<meta charset="utf-8">',
         '<meta name="viewport" content="width=device-width, initial-scale=1">',
         f"<title>{escape(full_title)}</title>",
+        # Тема ставится ДО таблицы стилей и до первого кадра: иначе страница
+        # приходит одной и перекрашивается на глазах.
+        _theme_boot(str(ctx.get("site_id") or "lords")),
     ]
     if описание:
         head.append(f'<meta name="description" content="{escape(описание)}">')
@@ -385,6 +440,7 @@ def _header(ctx: dict, meta: Meta) -> str:
         + _nav_items(ctx["nav"], ctx.get("_path", ""))
         + "</ul></nav>"
         + _header_search(ctx)
+        + _theme_switch(str(ctx.get("site_id") or "lords"))
         + "</div></header>"
     )
 
@@ -1787,6 +1843,56 @@ def _sitemap(ctx, indexable_paths) -> Page:
 ANALYTICS_ASSET_PATH = analytics_snippet.ANALYTICS_SCRIPT_URL
 
 APP_JS = """/* Lords — поведение интерфейса. Ни одного внешнего запроса. */
+
+/* Выбор темы.
+ *
+ * Тема ставится встроенным скриптом в head до первого кадра; здесь только
+ * реакция на нажатие и сохранение. Разделение намеренно: обработчик приходит
+ * с отложенным файлом, и если бы тему ставил он, страница успевала бы
+ * мигнуть чужой палитрой.
+ *
+ * Состояние «как в системе» снимает атрибут, а не ставит третье значение:
+ * тогда решает медиазапрос prefers-color-scheme, и выбор зрителя не спорит с
+ * системой, а уступает ей.
+ */
+(function () {
+  var group = document.querySelector(".theme-switch");
+  if (!group) { return; }
+  var key = group.getAttribute("data-theme-key") || "lords-theme";
+  var root = document.documentElement;
+
+  function current() {
+    try { return localStorage.getItem(key) || "system"; } catch (e) { return "system"; }
+  }
+
+  function paint() {
+    var value = current();
+    var buttons = group.querySelectorAll("button[data-theme-set]");
+    for (var i = 0; i < buttons.length; i += 1) {
+      var pressed = buttons[i].getAttribute("data-theme-set") === value;
+      buttons[i].setAttribute("aria-pressed", pressed ? "true" : "false");
+    }
+  }
+
+  function apply(value) {
+    if (value === "light" || value === "dark") {
+      root.setAttribute("data-theme", value);
+    } else {
+      root.removeAttribute("data-theme");
+    }
+    try { localStorage.setItem(key, value); } catch (e) { /* приватный режим */ }
+    paint();
+  }
+
+  group.addEventListener("click", function (event) {
+    var button = event.target.closest("button[data-theme-set]");
+    if (!button) { return; }
+    apply(button.getAttribute("data-theme-set"));
+  });
+
+  paint();
+})();
+
 (function () {
   "use strict";
 

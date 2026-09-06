@@ -58,6 +58,35 @@ DENSITY = {
 }
 
 
+
+#: Нейтральные палитры под выбор зрителя.
+#:
+#: Профиль задаёт ЛИЦО витрины — свой фон и свой акцент. Выбор темы — другое:
+#: это предпочтение зрителя поверх лица. Поэтому здесь только поверхности и
+#: текст; акцент профиля не трогается, иначе витрины перестали бы различаться.
+#:
+#: Значения подобраны так, чтобы обычный и приглушённый текст проходили
+#: WCAG AA на своём фоне; это проверяется тестом, а не глазом.
+SURFACE_PALETTES = {
+    "dark": {
+        "bg": "#111111", "surface": "#181818", "surface_alt": "#1f1f1f",
+        "text": "#e6e6e6", "muted": "#a8a8a8", "border": "#2c2c2c",
+    },
+    "light": {
+        "bg": "#f4f6f8", "surface": "#ffffff", "surface_alt": "#e9edf1",
+        "text": "#151a21", "muted": "#4d5560", "border": "#d3d9df",
+    },
+}
+
+
+def _palette_block(selector: str, mode: str, *, indent: str = "") -> str:
+    """Переопределение поверхностей для одной палитры."""
+    tokens = SURFACE_PALETTES[mode]
+    lines = "".join(
+        f"\n{indent}  --{name.replace('_', '-')}: {value};" for name, value in tokens.items())
+    return f"{indent}{selector} {{{lines}\n{indent}}}"
+
+
 def tokens_of(profile: dict) -> dict:
     merged = dict(DEFAULT_TOKENS)
     merged.update((profile.get("theme") or {}).get("tokens") or {})
@@ -100,6 +129,23 @@ def stylesheet(profile: dict) -> str:
   --card-ratio: {lay['card_ratio']};
   --cols: {cols['mobile']};
   --font: {t['heading_font']};
+  /* Без color-scheme браузер рисует свои полосы прокрутки и элементы
+     управления в чужой теме — страница выходит двухцветной. */
+  color-scheme: light dark;
+}}
+
+/* Явный выбор зрителя. Он идёт первым и побеждает системную настройку. */
+{_palette_block(':root[data-theme="dark"]', 'dark')}
+{_palette_block(':root[data-theme="light"]', 'light')}
+
+/* Системная настройка — только когда зритель не выбрал сам. Условие
+   :not([data-theme=...]) существует ровно затем, чтобы системная тема не
+   перебивала явный выбор. */
+@media (prefers-color-scheme: dark) {{
+{_palette_block(':root:not([data-theme="light"])', 'dark', indent='  ')}
+}}
+@media (prefers-color-scheme: light) {{
+{_palette_block(':root:not([data-theme="dark"])', 'light', indent='  ')}
 }}
 
 *, *::before, *::after {{ box-sizing: border-box; }}
@@ -340,6 +386,17 @@ main {{ padding: var(--pad) 0 40px; }}
 .facet__more {{ font-weight: 600; }}
 /* Разрыв в пагинации — не ссылка: он не должен выглядеть нажимаемым. */
 .pagination__gap {{ padding: 3px 6px; color: var(--muted); user-select: none; }}
+/* Выбор темы. Цели не меньше 44 px по высоте: критерий 2.5.5 и требование
+   задания. Нажатое состояние показано не только цветом — цвет один не
+   различает состояние для тех, кто его не видит. */
+.theme-switch {{ display: inline-flex; gap: 2px; margin-left: 8px;
+  border: 1px solid var(--border); border-radius: var(--radius); padding: 2px; }}
+.theme-switch button {{ min-height: 44px; min-width: 44px; padding: 4px 10px;
+  border: 0; border-radius: calc(var(--radius) - 2px); background: transparent;
+  color: var(--muted); font: inherit; font-size: .78rem; cursor: pointer; }}
+.theme-switch button[aria-pressed="true"] {{ background: var(--accent);
+  color: var(--accent-text); font-weight: 700; }}
+.theme-switch button:hover {{ color: var(--text); }}
 .facets legend {{ font-size: .78rem; color: var(--muted); padding: 0 0 4px; }}
 .facets select, .facets input {{
   width: 100%; padding: 7px 10px; font: inherit;
