@@ -1,0 +1,25 @@
+{
+ "gate": "4. Потребительская проверка",
+ "consumerSha": "99e12ba7588693b17229046bd6a747675be7bbc9",
+ "consumerTree": "/home/claude/wt-seo-quality-21",
+ "producerPython": "3.10.12",
+ "consumerPython": "3.11.16",
+ "boundary": "процесс: контракт передан JSON, как в работе",
+ "cases": 10,
+ "checks": 50,
+ "passed": true,
+ "failures": [],
+ "consumerCompatibility": "PROVISIONAL",
+ "caseNames": [
+  "играющий сериал",
+  "играющий фильм",
+  "ONA",
+  "OVA",
+  "спецвыпуск",
+  "анимационный сериал",
+  "вид не установлен",
+  "конфликт вида",
+  "только imdb",
+  "идентификаторов нет"
+ ]
+}

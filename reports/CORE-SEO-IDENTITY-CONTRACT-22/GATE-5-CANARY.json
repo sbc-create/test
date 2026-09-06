@@ -1,0 +1,15 @@
+{
+ "страниц": 133,
+ "связано": 133,
+ "canonical совпал": 133,
+ "тип разметки совпал": 132,
+ "с видео": 129,
+ "страниц с noindex": 133,
+ "без видео": 4,
+ "разметки нет, как и ждали": 1,
+ "digestFirst": "0b83dd55a23bae1c0ddb9cb8fb24562442f25b0d879c34a2bdf07273dc3280ec",
+ "digestRepeat": "0b83dd55a23bae1c0ddb9cb8fb24562442f25b0d879c34a2bdf07273dc3280ec",
+ "digestStable": true,
+ "mismatches": [],
+ "mismatchCount": 0
+}

@@ -21,6 +21,7 @@ import unicodedata
 from dataclasses import dataclass
 
 from factory.lords import fixtures as fx
+from factory.site_engine.catalog_identity import decide as kind_decide
 
 #: Происхождение записей этого каталога. Отличается от `fx.SOURCE` намеренно:
 #: по нему видно, что каталог живой, а не синтетический.
@@ -231,6 +232,14 @@ class LiveTitle:
     kinopoisk_rating: float | None = None
     imdb_rating: float | None = None
     licensed: bool | None = None
+    #: Вид произведения по контракту `content-kind`, установленный ядром.
+    #: Отдельно от `content_type`: тот смешивает вид со способом исполнения —
+    #: тег `ona` вытесняет тип поставщика, и сериал становится «аниме».
+    #: Пустая строка означает, что вид не установлен, и разметку выпускать
+    #: нельзя. `None` не используется: поле обязано быть у каждой записи.
+    content_kind: str = ""
+    #: Состояние вида: RESOLVED, CONFLICTED или MISSING.
+    content_kind_state: str = "MISSING"
     #: Пришло из detail. Списочный ответ этого не даёт.
     directors: tuple[str, ...] = ()
     actors: tuple[str, ...] = ()
@@ -324,6 +333,12 @@ def title_from_item(entry: dict) -> LiveTitle | None:
         return None
 
     slug = slugify(name) or slugify(external_id) or external_id.lower()
+    # Вид произведения устанавливает ядро по типу поставщика и тегам вида, а
+    # не витрина по наличию сезонов. Сезоны приходят обогащением и часто
+    # отсутствуют; «нет сезонов» никогда не означало «фильм».
+    решение_о_виде = kind_decide(provider_type=entry.get("type"),
+                                 tags=entry.get("tags") or (),
+                                 entity_id=external_id)
     # `tags` источника — не список жанров: там вперемешку возрастные отметки,
     # пометки формы и пользовательские дескрипторы. Разбираем, а не показываем.
     age_rating, format_type, tags = classify_tags(entry.get("tags"))
@@ -356,6 +371,12 @@ def title_from_item(entry: dict) -> LiveTitle | None:
         # Пометка формы точнее поля `type`: мультфильмы и аниме приходят как
         # movie/tv и отличаются только тегом.
         content_type=format_type or _content_type(entry.get("type"), entry.get("is_series")),
+        content_kind=("" if решение_о_виде.conflicted
+                      or решение_о_виде.kind.value == "UNKNOWN"
+                      else решение_о_виде.kind.value),
+        content_kind_state=("CONFLICTED" if решение_о_виде.conflicted
+                            else "MISSING" if решение_о_виде.kind.value == "UNKNOWN"
+                            else "RESOLVED"),
         year=int(year) if isinstance(year, int) else 0,
         country_slug=slugify(countries[0]) if countries else "",
         country=", ".join(countries),

@@ -734,6 +734,13 @@ class ControlApi:
                 },
             )
             return ApiResponse(status=200, body=итог)
+        if method == "GET" and rest[:2] == ["seo-bindings"] + rest[1:2] \
+                and len(rest) == 3 and rest[2] == "resolve":
+            principal.require(SCOPE_READ)
+            return self._seo_resolve(rest[1], body)
+        if method == "GET" and rest[:1] == ["seo-bindings"]:
+            principal.require(SCOPE_READ)
+            return self._seo_bindings(rest[1] if len(rest) > 1 else None, body)
         if rest[:1] == ["review-queue"]:
             return self._review_route(method, rest[1:], body, principal, headers, correlation_id)
         if method == "GET" and rest == ["overview"]:
@@ -1598,6 +1605,50 @@ class ControlApi:
         )
         return ApiResponse(status=200, body={**свод, "problems": детали})
 
+    def _seo_bindings(self, site_id: str | None,
+                      body: dict[str, Any]) -> ApiResponse:
+        """Связи записей каталога с публичными страницами витрины.
+
+        Без витрины — перечень витрин, умеющих отдавать связи. С витриной —
+        страница выгрузки: каталог велик, и ответ целиком означал бы, что
+        потребитель либо держит его в памяти, либо не получает вовсе.
+        """
+        from factory.site_engine.api import seo_bindings
+
+        if site_id is None:
+            return ApiResponse(status=200,
+                               body=seo_bindings.каталог_витрин(self._root))
+        self._check_site_id_soft(site_id)
+        предел = body.get("limit", seo_bindings.DEFAULT_LIMIT)
+        смещение = body.get("offset", 0)
+        состояние = body.get("bindingState")
+        if состояние is not None and not isinstance(состояние, str):
+            raise ControlDenied(400, "invalid_binding_state",
+                                "bindingState — строка")
+        try:
+            return ApiResponse(status=200, body=seo_bindings.страница(
+                self._root, site_id, offset=смещение, limit=предел,
+                binding_state=состояние))
+        except seo_bindings.BindingSourceUnknown as error:
+            raise ControlDenied(404, "binding_source_unknown", str(error)) from error
+        except ValueError as error:
+            raise ControlDenied(400, "invalid_paging", str(error)) from error
+
+    def _seo_resolve(self, site_id: str, body: dict[str, Any]) -> ApiResponse:
+        """Связь по адресу страницы, включая вложенные адреса."""
+        from factory.site_engine.api import seo_bindings
+
+        self._check_site_id_soft(site_id)
+        путь = body.get("path")
+        if not isinstance(путь, str) or not путь.startswith("/"):
+            raise ControlDenied(400, "invalid_path",
+                                "path — адрес страницы, начинается с косой черты")
+        try:
+            return ApiResponse(status=200,
+                               body=seo_bindings.разрешить(self._root, site_id, путь))
+        except seo_bindings.BindingSourceUnknown as error:
+            raise ControlDenied(404, "binding_source_unknown", str(error)) from error
+
     def _check_site_id_soft(self, site_id: str) -> None:
         """Проверка идентификатора без требования профиля.
 
@@ -1646,10 +1697,29 @@ class ControlApi:
         by_state: dict[str, int] = {}
         for row in rows:
             by_state[row["state"]] = by_state.get(row["state"], 0) + 1
+        from factory.site_engine import adapters
+
         return ApiResponse(
             status=200,
             body={
                 "engine": compat.ENGINE_CONTRACT,
+                # Контракты, которые движок отдаёт помимо основного. Список
+                # здесь, а не в снимке матрицы: матрица — снимок, а движок
+                # обязан сам отвечать, что он умеет.
+                # Маршруты перечислены все, а не один: потребитель обязан
+                # узнать возможность у движка, а не вывести её из номера
+                # версии. Вывод из версии — это догадка, ради запрета которой
+                # контракт и написан.
+                "contracts": [
+                    {"name": "seo-route-binding", "version": "1.0.0",
+                     "endpoint": "/api/v1/seo-bindings/{siteId}",
+                     "endpoints": [
+                         "/api/v1/seo-bindings",
+                         "/api/v1/seo-bindings/{siteId}",
+                         "/api/v1/seo-bindings/{siteId}/resolve",
+                     ],
+                     "producers": list(adapters.PRODUCERS)},
+                ],
                 "sites": rows,
                 "total": len(rows),
                 "byState": by_state,

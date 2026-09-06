@@ -1316,10 +1316,31 @@ def _human_date(value) -> str:
     return text
 
 
+#: Обещания просмотра в шаблоне заголовка. Убираются, когда потока нет.
+_PLAYBACK_PROMISE_PARTS = ("— смотреть онлайн", "- смотреть онлайн",
+                           "смотреть онлайн", "смотреть бесплатно")
+
+
+def _without_playback_promise(page_title: str, name: str) -> str:
+    """Заголовок без обещания просмотра. Название остаётся, обещание уходит."""
+    итог = page_title
+    for часть in _PLAYBACK_PROMISE_PARTS:
+        итог = итог.replace(часть, "")
+    итог = " ".join(итог.split()).strip(" —-–|·")
+    return итог or name
+
+
 def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: bool) -> Page:
     tpl = ctx["title_page"]
     name = title.name
+    # Заголовок выдачи не обещает просмотра там, где просмотра нет. Шаблон
+    # витрины оканчивается словами «— смотреть онлайн», и для карточки без
+    # подтверждённого потока это обещание, которое посетитель проверяет
+    # немедленно и лично: нажимает и видит, что видео нет. На выборке стенда
+    # из 133 страниц так обещали пять — все без разрешённого идентификатора.
     page_title = str(tpl.get("title_template", "{name}")).format(name=name)
+    if not _is_watchable(title):
+        page_title = _without_playback_promise(page_title, name)
     description = _title_description(title, str(tpl.get("description_template", "{name}")))
     h1 = str(tpl.get("h1_template", "{name}")).format(name=name)
 
@@ -1377,13 +1398,18 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
         head
         + _player_block(ctx, title, name)
         + _seasons_block(title)
-        + '<section class="section"><h2>О карточке</h2>'
+        + f'<section class="section"><h2>{escape(_about_heading(title))}</h2>'
         + f'<p class="lede">{escape(tpl.get("intro", ""))}</p></section>'
         + _related(catalog, title, kinds, ctx["row_items"])
         + _comments_block(ctx, title)
     )
 
-    schema_type = "Movie" if not title.episodic else "TVSeries"
+    # Тип разметки берётся из установленного вида, а не из наличия сезонов.
+    # Прежнее правило — `Movie`, если сезоны не загружены — объявляло фильмом
+    # каждый сериал, чьё обогащение не дошло: на выборке из 133 страниц стенда
+    # так ошибались 58, то есть 43 %. Сезоны приходят обогащением; «сезонов
+    # нет» никогда не означало «это фильм».
+    schema_type = _schema_type_of(title)
     entity = {
         "@context": "https://schema.org",
         "@type": schema_type,
@@ -1846,6 +1872,54 @@ def _context(package: dict, profile: dict, site_plan, player_state,
         "publisher_id": publisher_id,
         "comments_enabled": bool((package.get("comments") or {}).get("enabled")),
     }
+
+
+#: Вид произведения → тип Schema.org. Таблица, а не условие: вид, которого
+#: здесь нет, разметки не получает, и это видно правкой, а не молчанием.
+_SCHEMA_BY_KIND: dict[str, str] = {
+    "MOVIE": "Movie", "SERIES": "TVSeries", "MINISERIES": "TVSeries",
+    "SEASON": "TVSeason", "EPISODE": "TVEpisode", "OVA": "TVSeries",
+    "OAD": "TVSeries", "ONA": "TVSeries", "SPECIAL": "TVSpecial",
+    "DOCUMENTARY": "Movie", "ANIMATION": "Movie",
+}
+
+#: Заголовок содержательного блока по виду. «О карточке» здесь нет и быть не
+#: может: карточка — наша структура данных, а читатель пришёл за произведением.
+_HEADING_BY_KIND: dict[str, str] = {
+    "MOVIE": "О фильме", "SERIES": "О сериале", "MINISERIES": "О сериале",
+    "SEASON": "О сезоне", "EPISODE": "О серии", "OVA": "Об OVA",
+    "OAD": "Об OAD", "ONA": "Об ONA", "SPECIAL": "О спецвыпуске",
+    "DOCUMENTARY": "О фильме", "ANIMATION": "О фильме",
+}
+
+
+def _schema_type_of(title) -> str:
+    """Тип разметки по установленному виду. Пусто — разметку не выпускать.
+
+    Запись без установленного вида разметки не получает вовсе: неизвестный
+    вид, объявленный фильмом, — это утверждение о произведении, которого
+    никто не проверял.
+    """
+    вид = str(getattr(title, "content_kind", "") or "")
+    состояние = str(getattr(title, "content_kind_state", "") or "")
+    if вид and состояние == "RESOLVED":
+        return _SCHEMA_BY_KIND.get(вид, "")
+    if not состояние:
+        # Запись из набора, не знающего о виде: прежнее поведение сохраняется,
+        # иначе проверки на фикстурах теряют смысл вместе с разметкой.
+        return "TVSeries" if getattr(title, "episodic", False) else "Movie"
+    return ""
+
+
+def _about_heading(title) -> str:
+    """Заголовок содержательного блока. Без вида — нейтральный."""
+    вид = str(getattr(title, "content_kind", "") or "")
+    состояние = str(getattr(title, "content_kind_state", "") or "")
+    if вид and состояние == "RESOLVED":
+        return _HEADING_BY_KIND.get(вид, "Об этой странице")
+    if not состояние:
+        return "О сериале" if getattr(title, "episodic", False) else "О фильме"
+    return "Об этой странице"
 
 
 def render_site(
