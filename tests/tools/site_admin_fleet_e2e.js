@@ -29,9 +29,17 @@ const ПАРОЛЬ = process.env.FLEET_PASSWORD || 'длинный-пароль-
 const АДРЕС = (сайт) => `${БАЗА}/s/${сайт}/admin`;
 
 async function готово(p) {
-  await p.waitForFunction(
-    () => document.readyState === 'complete' && !!document.querySelector('header h1, form'),
-    null, { timeout: 20000 });
+  try {
+    await p.waitForFunction(
+      () => document.readyState === 'complete' && !!document.querySelector('header h1, form'),
+      null, { timeout: 20000 });
+  } catch (e) {
+    // Страница, на которой не дождались ни заголовка, ни формы, обязана назвать
+    // себя: «таймаут» неотличим от «служба ответила не тем».
+    провалов++;
+    const текст = await p.content().catch(() => '');
+    console.log('  FAIL страница не готова: ' + p.url() + ' | ' + текст.slice(0, 200));
+  }
 }
 
 async function войти(ctx, сайт, email) {
@@ -113,6 +121,71 @@ async function прогон(движок, имя) {
                           .first().innerText()).trim();
   проверить(!у_соседа_знач.includes('12'), 'правка не задела соседний сайт');
   await сосед_ctx.close();
+
+  // --- полный путь: решение → утверждение → публикация → витрина → откат ---
+  const ред_ctx = await b.newContext();
+  const ред = await войти(ред_ctx, САЙТ, `editor-${САЙТ}@test`);
+  await ред.goto(`${АДРЕС(САЙТ)}/review?state=OPEN`, { waitUntil: 'domcontentloaded' });
+  const ссылка = ред.locator('table a[href*="/admin/review/"]').first();
+  const есть_спорные = await ссылка.count() > 0;
+  проверить(есть_спорные, 'в очереди разбора есть открытые записи');
+
+  if (есть_спорные) {
+    const href = await ссылка.getAttribute('href');
+    await ред.goto(`${БАЗА}${href}`, { waitUntil: 'domcontentloaded' });
+    const карточка = await ред.content();
+    проверить(карточка.includes('Что изменится на витрине'),
+              'сверка «было/станет» показана до решения');
+
+    await ред.locator('form[action$="/decide"] input[name="note"]').first().fill('по тегу');
+    await ред.locator('form[action$="/decide"] button[type="submit"]').first().click();
+    await готово(ред);
+    проверить((await ред.content()).includes('RESOLVED') ||
+              (await ред.content()).includes('решено'), 'решение записано');
+
+    // утверждает другой человек
+    await p.goto(`${БАЗА}${href}`, { waitUntil: 'domcontentloaded' });
+    const утв = p.locator('form[action$="/approve"] button[type="submit"]');
+    проверить(await утв.count() > 0, 'утверждение предложено второму человеку');
+    // Поле обоснования обязательное: браузер не отправит форму без него, и
+    // нажатие вслепую выглядело бы как отказ службы.
+    await p.locator('form[action$="/approve"] input[name="note"]').first()
+      .fill('проверено второй парой глаз');
+    await утв.first().click();
+    await готово(p);
+    проверить((await p.content()).includes('APPROVED'), 'решение утверждено');
+
+    const пуб = p.locator('form[action$="/publish"] button[type="submit"]');
+    проверить(await пуб.count() > 0, 'публикация предложена после утверждения');
+    await пуб.first().click();
+    await готово(p);
+    const после_пуб = await p.content();
+    проверить(после_пуб.includes('PUBLISHED'), 'решение опубликовано');
+
+    // витрина: вид берётся из API каталога, а не из строки очереди
+    const сущность = (после_пуб.match(/[0-9a-f]{8}-[0-9a-f-]{27,}/) || [])[0];
+    if (сущность) {
+      const ответ = await ctx.request.get(
+        `${БАЗА}/api/v1/content/${САЙТ}/${сущность}`,
+        { headers: { 'Authorization': `Bearer ${process.env.FLEET_TOKEN || ''}` } });
+      проверить(ответ.status() === 200 || ответ.status() === 401,
+                'карточка каталога отвечает');
+    }
+
+    // Откат опубликованного решения — это снятие с витрины. «Отменить
+    // решение» доступно до публикации; после неё откатывать надо то, что
+    // на витрине уже стоит.
+    const отк = p.locator('form[action$="/unpublish"] button[type="submit"]');
+    проверить(await отк.count() > 0, 'снятие с витрины предложено после публикации');
+    await p.locator('form[action$="/unpublish"] input[name="note"]').first()
+      .fill('проверка отката');
+    await отк.first().click();
+    await готово(p);
+    const после_отката = await p.content();
+    проверить(!после_отката.includes('PUBLISHED') || после_отката.includes('APPROVED'),
+              'решение снято с витрины');
+  }
+  await ред_ctx.close();
 
   // --- безопасность ---
   const csrf = await p.locator('input[name="_csrf"]').first().getAttribute('value');

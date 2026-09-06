@@ -682,6 +682,31 @@ class ControlApi:
         if method == "GET" and rest == ["playback-policy"]:
             principal.require(SCOPE_READ)
             return self._playback_policy()
+        if method == "POST" and rest == ["review-queue", "rebuild"]:
+            principal.require(SCOPE_REVIEW)
+            from factory.site_engine import review_build
+
+            сайт = str(body.get("siteId") or "")
+            self._check_site_id(сайт)
+            try:
+                итог = review_build.rebuild(self._root, сайт, env=self._env)
+            except review_build.ReviewBuildError as ошибка:
+                raise ControlDenied(404, "site_not_found", str(ошибка)) from ошибка
+            audit.record(
+                job_id=correlation_id,
+                site_id=сайт,
+                environment="staging",
+                action="control.review.rebuild",
+                target=f"var/state/review-queue/{сайт}",
+                mutation=True,
+                exit_code=0,
+                extra={
+                    "correlation_id": correlation_id,
+                    "actor": _актор(principal),
+                    **итог,
+                },
+            )
+            return ApiResponse(status=200, body=итог)
         if rest[:1] == ["review-queue"]:
             return self._review_route(method, rest[1:], body, principal, headers, correlation_id)
         if method == "GET" and rest == ["overview"]:

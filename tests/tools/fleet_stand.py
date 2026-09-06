@@ -4,7 +4,10 @@
 администратора, и проверять надо путь после входа, а не заведение первого
 человека каждый раз заново.
 """
-import json, pathlib, shutil, sys
+import json
+import pathlib
+import shutil
+import sys
 
 КОРЕНЬ = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else "/tmp/stand-fleet")
 РЕПО = pathlib.Path("/home/claude/wt-p8-20")
@@ -47,7 +50,10 @@ from factory.site_engine.operators import OperatorDirectory  # noqa: E402
 
 каталог = OperatorDirectory(КОРЕНЬ)
 for сайт in САЙТЫ:
-    for роль, префикс in (("admin", "admin"), ("viewer", "viewer")):
+    # Редактор нужен отдельно от администратора: утверждает решение второй
+    # человек, и самоутверждение запрещено. Один оператор на сайт сделал бы
+    # проверку утверждения невозможной.
+    for роль, префикс in (("admin", "admin"), ("viewer", "viewer"), ("editor", "editor")):
         _, секрет = каталог.invite(
             email=f"{префикс}-{сайт}@test", roles=[роль],
             created_by="стенд", site_id=сайт,
@@ -56,6 +62,24 @@ for сайт in САЙТЫ:
 _, секрет = каталог.invite(
     email="super@test", roles=["admin"], created_by="стенд", super_admin=True)
 каталог.accept_invite(secret=секрет, password=ПАРОЛЬ)
+
+# Очередь разбора наполняется из каталога: пустая очередь сделала бы проверку
+# пути публикации невозможной, а заводить записи руками — то же, что не иметь
+# очереди.
+from factory.site_engine import review_build  # noqa: E402
+
+for сайт in САЙТЫ:
+    try:
+        итог = review_build.rebuild(
+            КОРЕНЬ, сайт, env={"SITE_ENGINE_CATALOG_DIR": "var/lords/lords/catalog-cache"},
+            limit=3000,
+        )
+        print("очередь", сайт, "->", итог["created"], "из", итог["scanned"])
+    except review_build.ReviewBuildError as ошибка:
+        # У витрины другого семейства каталога в этом кэше нет. Подсовывать ей
+        # чужой каталог нельзя: зелёный прогон на выдуманных данных доказывает
+        # только то, что данные выдуманы.
+        print("очередь", сайт, "-> НЕТ КАТАЛОГА:", ошибка)
 
 print("стенд:", КОРЕНЬ)
 print("витрины:", САЙТЫ)

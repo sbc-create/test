@@ -149,3 +149,35 @@ entries:
       fleetLordsDark 6: контур админки пройден в двух движках, но публикации и
       проверки витрины в сценарии ещё нет. Восьмёрка требует полного пути.
 
+  - timestamp: "2026-09-06T10:30:00Z"
+    cycle: 5
+    note: "наполнение очереди разбора; полный путь на двух семействах"
+    branch: claude/core-product-8plus-20
+    full_head_sha: ЗАПОЛНЯЕТСЯ_ПОСЛЕ_КОММИТА
+    core_percent: 100.0
+    central_admin: 8
+    fleet_gates_closed: 5
+    fleet_gates_total: 9
+    fleet_scores:
+      fleetContract: 8
+      fleetTenancy: 8
+      fleetRbac: 8
+      fleetPortalLight: 6
+      fleetPulse: 6
+      fleetEditorial: 6
+      fleetLordsDark: 8
+      fleetLordsLight: 8
+      fleetPilotRollout: 0
+    fleet_percent: 80.6
+    progress_delta_since_previous: 38.9
+    tests: "4383 passed, 3 skipped, 0 failed"
+    defects_found: 4
+    regressions_opened: 0
+    production_status: "не изменялась; mutations 0"
+    next_cycle: 6
+    comment: >-
+      Два семейства прошли полный путь и закрыты на 8. Три семейства payload
+      получили 6: контур админки работает целиком, но каталога в движке у них
+      нет, и путь публикации проверить нечем. Выдуманные данные вместо каталога
+      доказали бы только собственную выдуманность.
+
