@@ -75,26 +75,69 @@ def site_dir():
 
 _manifest_cache = {"stamp": None, "data": None}
 
+#: Манифесты релиза по убыванию доверия. `release-manifest.json` описывает
+#: релиз целиком — витрину, тему, отпечаток шаблона, ревизию отрисовщика и
+#: снимок каталога. `bundle-manifest.json` — прежняя форма, оставленная для
+#: релизов, выложенных до неё.
+MANIFEST_NAMES = ("release-manifest.json", "bundle-manifest.json")
+
 
 def manifest():
     """Манифест текущего релиза, перечитываемый при смене файла.
 
     Держать его в памяти с момента старта нельзя: после переключения релиза
     healthz сообщал бы номер предыдущего.
+
+    Отсутствие файла — это отсутствие манифеста, а не повод отдать прежний.
+    Прежняя редакция при пропаже файла возвращала последнее прочитанное, и
+    после смены имени манифеста healthz полтора часа сообщал номер релиза,
+    которого уже не было в работе. Проверка по такому ответу подтверждает не
+    то, что выложено, а то, что когда-то читалось.
     """
-    path = BASE / "bundle-manifest.json"
-    try:
-        stat = path.stat()
-        stamp = (stat.st_mtime_ns, stat.st_ino, stat.st_size)
-    except OSError:
-        return _manifest_cache["data"] or {}
-    if _manifest_cache["stamp"] != stamp:
+    for name in MANIFEST_NAMES:
+        path = BASE / name
         try:
-            _manifest_cache["data"] = json.loads(path.read_text(encoding="utf-8"))
-            _manifest_cache["stamp"] = stamp
-        except (OSError, ValueError):
-            return _manifest_cache["data"] or {}
-    return _manifest_cache["data"] or {}
+            stat = path.stat()
+        except OSError:
+            continue
+        stamp = (name, stat.st_mtime_ns, stat.st_ino, stat.st_size)
+        if _manifest_cache["stamp"] != stamp:
+            try:
+                _manifest_cache["data"] = json.loads(path.read_text(encoding="utf-8"))
+                _manifest_cache["stamp"] = stamp
+            except (OSError, ValueError):
+                continue
+        return _manifest_cache["data"] or {}
+    _manifest_cache["stamp"] = None
+    _manifest_cache["data"] = None
+    return {}
+
+
+def release_identity():
+    """Чем витрина отвечает на вопрос «что именно сейчас выложено».
+
+    Отдаётся то, по чему выкладку можно сверить: витрина, тема, отпечаток
+    шаблона, ревизия отрисовщика, снимок каталога и цель отката. Пустые
+    значения не подставляются: незаполненное поле честнее правдоподобного.
+    """
+    m = manifest()
+    release = m.get("release")
+    if not release:
+        try:
+            release = Path(os.path.realpath(str(BASE))).name
+        except OSError:
+            release = None
+    return {
+        "site_id": m.get("tenant_id") or m.get("site_id"),
+        "theme": m.get("theme"),
+        "profile": m.get("profile"),
+        "release": release,
+        "template_digest": m.get("template_digest"),
+        "renderer_revision": m.get("renderer_revision"),
+        "content_snapshot_id": m.get("content_snapshot_id"),
+        "content_count": m.get("content_count"),
+        "rollback_target": m.get("rollback_target"),
+    }
 
 TYPES = {
     ".html": "text/html; charset=utf-8",
@@ -159,9 +202,7 @@ def app(environ, start_response):
         ready = (site_dir() / "index.html").is_file()
         body = json.dumps({
             "status": "ok" if (path == "/healthz" or ready) else "not_ready",
-            "site_id": manifest().get("site_id"),
-            "profile": manifest().get("profile"),
-            "release": manifest().get("release"),
+            **release_identity(),
             "indexing": "disabled",
         }, ensure_ascii=False).encode("utf-8")
         status = "200 OK" if (path == "/healthz" or ready) else "503 Service Unavailable"
