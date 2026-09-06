@@ -1,0 +1,98 @@
+{
+  "rehearsal": "активация на изолированной копии; production не затронут",
+  "coreSha": "e7d4fe313e1e99c841cc173b98e6b24aa61382a3",
+  "consumerSha": "99e12ba7588693b17229046bd6a747675be7bbc9",
+  "model": {
+    "code": "git archive коммита → каталог релиза, 474 модуля",
+    "state": "копия боевого корня состояния; каталоги и маршруты по ссылке",
+    "split": "ровно как в юните: код из релиза, --root и FACTORY_ROOT — корень состояния"
+  },
+  "beforeStep1": {
+    "gate": [
+      "seo-bindings.sources degraded",
+      "seo-bindings.namespaces degraded"
+    ],
+    "sameAsProduction": true
+  },
+  "afterStep1": {
+    "gate": [
+      "seo-bindings.sources ok: витрин 6, недостающих входов 0"
+    ],
+    "degradedTotal": 0
+  },
+  "service": {
+    "health": 200,
+    "ready": 200,
+    "withoutToken": 401,
+    "withReadToken": 200
+  },
+  "sites": {
+    "lords-01": {
+      "records": 53237,
+      "BOUND": 52746,
+      "KIND_UNRESOLVED": 77,
+      "ROUTE_COLLISION": 414
+    },
+    "lords-02": {
+      "records": 53237,
+      "BOUND": 52746,
+      "KIND_UNRESOLVED": 77,
+      "ROUTE_COLLISION": 414
+    },
+    "lords-03": {
+      "records": 53237,
+      "BOUND": 52746,
+      "KIND_UNRESOLVED": 77,
+      "ROUTE_COLLISION": 414
+    },
+    "yummyani-site": {
+      "records": 7303,
+      "BOUND": 7225,
+      "KIND_UNRESOLVED": 77,
+      "ROUTE_COLLISION": 1
+    },
+    "yummyani-org": {
+      "records": 7291,
+      "BOUND": 7213,
+      "KIND_UNRESOLVED": 77,
+      "ROUTE_COLLISION": 1
+    },
+    "yummyani-biz": {
+      "records": 7291,
+      "BOUND": 7213,
+      "KIND_UNRESOLVED": 77,
+      "ROUTE_COLLISION": 1
+    }
+  },
+  "nestedAddress": {
+    "path": "/anime/009-1/season/1/episode/7",
+    "pageType": "episode",
+    "resolved": true,
+    "inheritsFrom": "/anime/009-1/",
+    "mayPromisePlayback": true,
+    "externalIds": [
+      "imdb",
+      "myanimelist",
+      "kp"
+    ]
+  },
+  "consumerDecisions": {
+    "yummyani-site": {
+      "records": 500,
+      "INDEXABLE_WITH_PLAYBACK": 492,
+      "HOLD_FOR_KIND_REVIEW": 6,
+      "INDEXABLE_METADATA_ONLY": 2,
+      "refusals": 0
+    },
+    "lords-01": {
+      "records": 500,
+      "INDEXABLE_WITH_PLAYBACK": 281,
+      "INDEXABLE_METADATA_ONLY": 215,
+      "HOLD_FOR_KIND_REVIEW": 2,
+      "NOINDEX_DUPLICATE": 2,
+      "refusals": 0
+    }
+  },
+  "conclusion": "список активации из handoff 036 воспроизведён целиком и работает; шаг 1 обязателен — без него ворота показывают ровно то, что показывают на боевом корне сейчас",
+  "productionTouched": false
+}
