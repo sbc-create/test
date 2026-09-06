@@ -1,5 +1,5 @@
 {
-  "captured_at_utc": "2026-09-06T15:35:58.332Z",
+  "captured_at_utc": "2026-09-06T15:55:45.197Z",
   "budget": {
     "documentKb": 120,
     "scriptKb": 60,
@@ -107,7 +107,7 @@
       "worstMs": 16,
       "reporting_threshold_ms": 16,
       "note": "зафиксированы взаимодействия выше порога отчётности",
-      "observer_selfcheck_ms": 128
+      "observer_selfcheck_ms": 136
     }
   ],
   "player": [

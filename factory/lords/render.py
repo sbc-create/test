@@ -944,6 +944,20 @@ def _by_arrival(titles) -> list:
     )
 
 
+def _lede(text: str) -> str:
+    """Абзац подзаголовка — или ничего, если текста нет.
+
+    Пустой `<p class="lede"></p>` невидим, но не бесплатен: высота у него
+    нулевая, а нижний отступ — четырнадцать пикселей, и они складываются в
+    мёртвое место между заголовком и содержимым. На четырёх витринах таких
+    абзацев набиралось сто сорок шесть.
+
+    Пустое поле — не повод выводить пустой элемент.
+    """
+    text = (text or "").strip()
+    return f'<p class="lede">{escape(text)}</p>' if text else ""
+
+
 def _listing_pages(
     ctx,
     *,
@@ -1128,7 +1142,7 @@ def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
 
     hero_kind = ctx["hero"]
     hero_body = f'<h1>{escape(text.get("h1") or SECTION_LABELS["home"])}</h1>'
-    hero_body += f'<p class="lede">{escape(text.get("intro", ""))}</p>'
+    hero_body += _lede(text.get("intro", ""))
     if "hero_search" in blocks:
         hero_body += (
             '<form class="header-search" data-block="hero_search" role="search"'
@@ -1653,7 +1667,7 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
         f'<img src="{escape(title.poster_src)}" alt="Постер: {escape(name)}" '
         'width="400" height="600"></div><div>'
         f"<h1>{escape(h1)}</h1>"
-        f'<p class="lede">{escape(title.summary)}</p>'
+        + _lede(title.summary)
         + _ratings_block(title)
         + f'<dl class="facts">{facts_html}</dl></div></div>'
     )
@@ -1663,7 +1677,7 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
         + _player_block(ctx, title, name)
         + _seasons_block(title)
         + '<section class="section"><h2>О карточке</h2>'
-        + f'<p class="lede">{escape(tpl.get("intro", ""))}</p></section>'
+        + _lede(tpl.get("intro", "")) + "</section>"
         + _related(catalog, title, kinds, ctx["row_items"])
         + _comments_block(ctx, title)
     )
@@ -1733,8 +1747,8 @@ def _search_body(text: dict, items) -> str:
                 '<a href="/years/">годами</a> и <a href="/countries/">странами</a>.</p>')
     return (
         f'<h1>{escape(text.get("h1", "Поиск"))}</h1>'
-        f'<p class="lede">{escape(text.get("intro", ""))}</p>'
-        '<form class="header-search" role="search" action="/search/" method="get">'
+        + _lede(text.get("intro", ""))
+        + '<form class="header-search" role="search" action="/search/" method="get">'
         '<label class="visually-hidden" for="search-q">Строка поиска</label>'
         '<input id="search-q" name="q" type="search" placeholder="Название из каталога" '
         'autocomplete="off">'
@@ -2179,8 +2193,8 @@ def _collections_index(ctx, catalog: fx.Catalog, indexable: bool) -> Page:
     )
     body = (
         f'<h1>{escape(text.get("h1") or title)}</h1>'
-        f'<p class="lede">{escape(text.get("intro", ""))}</p>'
-        f'<p class="count">Подборок: {len(catalog.collections)}.</p>'
+        + _lede(text.get("intro", ""))
+        + f'<p class="count">Подборок: {len(catalog.collections)}.</p>'
         f'<div class="grid">{cards}</div>'
     )
     meta = Meta(
@@ -2196,7 +2210,7 @@ def _schedule_page(ctx, catalog: fx.Catalog, kinds, indexable: bool) -> Page:
     title = text.get("title") or SECTION_LABELS["schedule"]
     body = (
         f'<h1>{escape(text.get("h1") or title)}</h1>'
-        f'<p class="lede">{escape(text.get("intro", ""))}</p>'
+        + _lede(text.get("intro", ""))
         + (_calendar(catalog, kinds) or '<p class="empty">Многосерийных записей нет.</p>')
     )
     meta = Meta(
