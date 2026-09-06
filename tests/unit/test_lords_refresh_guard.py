@@ -267,3 +267,37 @@ def test_откат_записывается_в_журнал(витрина):
     последняя = json.loads(строки[-1])
     assert последняя["from"] == "dddd0004" and последняя["to"] == "aaaa0001"
     assert последняя["reason"] == "проверка отката"
+
+
+def test_возврат_снятого_релиза(витрина):
+    _adopt(витрина, _ревизия())
+    новый = витрина["runtime"] / "releases" / "eeee0005"
+    (новый / "site" / "title" / "t0").mkdir(parents=True)
+    _запуск("--runtime-root", str(витрина["root"]),
+            "--artifact-root", str(витрина["artifacts"]), "finalize", "lords-02",
+            "--target", str(новый), "--snapshot", "s5", "--content-count", "1")
+    _запуск("--runtime-root", str(витрина["root"]),
+            "--artifact-root", str(витрина["artifacts"]), "rollback", "lords-02")
+    assert (витрина["runtime"] / "current").resolve().name == "aaaa0001"
+
+    итог = _запуск("--runtime-root", str(витрина["root"]),
+                   "--artifact-root", str(витрина["artifacts"]), "promote", "lords-02",
+                   "--release", "eeee0005")
+    assert итог.returncode == 0, итог.stderr
+    assert (витрина["runtime"] / "current").resolve().name == "eeee0005"
+
+
+def test_возврат_на_посторонний_релиз_отказан(витрина):
+    _adopt(витрина, _ревизия())
+    чужой = витрина["runtime"] / "releases" / "ffff0006"
+    (чужой / "site").mkdir(parents=True)
+    манифест = json.loads((витрина["release"] / "release-manifest.json").read_text("utf-8"))
+    манифест["previous_release"] = "неизвестный"
+    (чужой / "release-manifest.json").write_text(json.dumps(манифест), encoding="utf-8")
+
+    итог = _запуск("--runtime-root", str(витрина["root"]),
+                   "--artifact-root", str(витрина["artifacts"]), "promote", "lords-02",
+                   "--release", "ffff0006")
+    assert итог.returncode == 3
+    assert "посторонний" in итог.stderr
+    assert (витрина["runtime"] / "current").resolve().name == "aaaa0001"

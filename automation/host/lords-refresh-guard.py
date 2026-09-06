@@ -186,6 +186,40 @@ def команда_rollback(args) -> int:
     return 0
 
 
+def команда_promote(args) -> int:
+    """Вернуть витрину на релиз, который был снят откатом.
+
+    Ограничение то же по строгости, что и у отката, только зеркальное: целевой
+    релиз обязан называть текущий своим предыдущим. Это ровно тот релиз, что
+    стоял до отката, и никакой другой — «переключить куда угодно» здесь нет.
+    """
+    рантайм = _рантайм(args.runtime_root, args.site)
+    try:
+        with рр.замок(рантайм, timeout=args.lock_timeout):
+            текущий = рр.текущий_релиз(рантайм)
+            if текущий is None:
+                raise рр.RefreshRefused("у витрины нет действующего релиза")
+            цель = рантайм / "releases" / args.release
+            манифест = рм.прочитать(цель / рр.МАНИФЕСТ)
+            если_предыдущий = str(манифест.get("previous_release") or "")
+            if если_предыдущий != текущий.name:
+                raise рр.RefreshRefused(
+                    f"релиз {args.release} называет предыдущим {если_предыдущий!r}, "
+                    f"а витрина сейчас на {текущий.name!r}: это не возврат снятого "
+                    "релиза, а переключение на посторонний")
+            беды = рм.нарушения(манифест, artifact_root=args.artifact_root)
+            if беды:
+                raise рр.RefreshRefused("целевой релиз не удовлетворяет инвариантам: "
+                                        + "; ".join(беды))
+            итог = рр.переключить(рантайм, цель, expected_current=текущий.name,
+                                  reason=args.reason, actor=args.actor)
+    except (рр.RefreshRefused, рм.ManifestError) as отказ:
+        print(f"ОТКАЗ {args.site}: {отказ}", file=sys.stderr)
+        return 3
+    print(json.dumps(итог, ensure_ascii=False))
+    return 0
+
+
 def команда_finalize(args) -> int:
     рантайм = _рантайм(args.runtime_root, args.site)
     try:
@@ -267,6 +301,14 @@ def main(argv: list[str] | None = None) -> int:
     rb.add_argument("--actor", default="operator")
     rb.add_argument("--lock-timeout", type=float, default=300.0)
     rb.set_defaults(func=команда_rollback)
+
+    pr = под.add_parser("promote")
+    pr.add_argument("site")
+    pr.add_argument("--release", required=True)
+    pr.add_argument("--reason", default="restore-after-rollback")
+    pr.add_argument("--actor", default="operator")
+    pr.add_argument("--lock-timeout", type=float, default=300.0)
+    pr.set_defaults(func=команда_promote)
 
     f = под.add_parser("finalize")
     f.add_argument("site")
