@@ -1,0 +1,12 @@
+{
+ "gate": "Откат",
+ "method": "git revert --no-commit 90ef4b8^..HEAD во временном дереве",
+ "filesRemoved": [
+  "factory/site_engine/adapters/yummy_seo_binding.py",
+  "automation/host/yummy-route-export.py",
+  "tests/unit/test_yummy_seo_binding.py"
+ ],
+ "testsAfterRollback": "73 passed",
+ "migrations": "нет",
+ "productionUnchanged": true
+}
