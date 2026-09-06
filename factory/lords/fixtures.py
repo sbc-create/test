@@ -310,6 +310,39 @@ _COLLECTION_SPECS: tuple[tuple[str, str, str], ...] = (
 )
 
 
+def _facet(counts: dict[str, int], labels: dict[str, str],
+           vocabulary: tuple[tuple[str, str], ...]) -> tuple[tuple[str, str, int], ...]:
+    """Фасет по данным, а не по словарю.
+
+    Прежде значения пересекались с зашитым перечнем `GENRES`/`COUNTRIES`, и
+    всё, чего в нём нет, исчезало молча: ни ошибки, ни записи в журнале.
+    Перечень фикстурный и на английских слагах — `canada`, `france`, — а живой
+    источник отдаёт русские названия, из которых `slugify` делает
+    транслитерацию: `kanada`, `franciya`. Совпасть они не могут никогда, и на
+    боевой витрине страница «Страны» была пуста при шестидесяти шести странах
+    в данных.
+
+    Теперь перечень задаёт только ПОРЯДОК известных значений и их подписи;
+    состав задают данные. Подпись неизвестного значения берётся из самих
+    данных — она там и есть, в исходном виде.
+    """
+    # Курируемый перечень ведёт намеренно, даже если частота у него ниже.
+    # Источник отдаёт вперемешку жанры и пометки: на живом каталоге «западный
+    # контент» встречается 964 раза, а «драма» — 505, и ставить первым
+    # «западный контент» значило бы возглавить список жанров тем, что жанром
+    # не является. Отбор в перечне уже сделан человеком; данные добавляют
+    # хвост, а не переписывают начало.
+    known = [(slug, label) for slug, label in vocabulary if counts.get(slug)]
+    seen = {slug for slug, _ in known}
+    # Остальное — по убыванию частоты: у длинного перечня порядок обязан быть
+    # осмысленным, а алфавит транслитерации осмысленным не является.
+    rest = sorted(
+        ((slug, labels.get(slug) or slug) for slug in counts if slug and slug not in seen),
+        key=lambda pair: (-counts[pair[0]], pair[1]),
+    )
+    return tuple((slug, label, counts[slug]) for slug, label in known + rest if slug)
+
+
 @dataclass(frozen=True)
 class Catalog:
     titles: tuple[Title, ...]
@@ -336,12 +369,16 @@ class Catalog:
         """Жанры, за которыми стоит хотя бы одно произведение доступных типов."""
         pool = self.of_types(kinds) if kinds is not None else self.titles
         counts: dict[str, int] = {}
+        labels: dict[str, str] = {}
         for title in pool:
-            for slug in title.genre_slugs:
+            names = tuple(title.genres or ())
+            for index, slug in enumerate(title.genre_slugs):
+                if not slug:
+                    continue
                 counts[slug] = counts.get(slug, 0) + 1
-        return tuple(
-            (slug, label, counts[slug]) for slug, label in GENRES if counts.get(slug)
-        )
+                if slug not in labels and index < len(names) and names[index]:
+                    labels[slug] = names[index]
+        return _facet(counts, labels, GENRES)
 
     def years(self, kinds=None) -> tuple[tuple[int, int], ...]:
         pool = self.of_types(kinds) if kinds is not None else self.titles
@@ -353,11 +390,19 @@ class Catalog:
     def countries(self, kinds=None) -> tuple[tuple[str, str, int], ...]:
         pool = self.of_types(kinds) if kinds is not None else self.titles
         counts: dict[str, int] = {}
+        labels: dict[str, str] = {}
         for title in pool:
-            counts[title.country_slug] = counts.get(title.country_slug, 0) + 1
-        return tuple(
-            (slug, label, counts[slug]) for slug, label in COUNTRIES if counts.get(slug)
-        )
+            slug = title.country_slug
+            if not slug:
+                # Пустое значение — отсутствие данных, а не категория:
+                # посадочная страница под него вела бы в никуда.
+                continue
+            counts[slug] = counts.get(slug, 0) + 1
+            if slug not in labels:
+                # У записи может быть несколько стран через запятую; подписью
+                # служит первая — та же, из которой получен слаг.
+                labels[slug] = (title.country or "").split(",")[0].strip() or slug
+        return _facet(counts, labels, COUNTRIES)
 
     def capabilities(self) -> set[str]:
         """Типы, которые стенд действительно может показать.
