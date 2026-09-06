@@ -34,6 +34,10 @@ ROOT = Path(__file__).resolve().parents[2]
     # собирала весь каталог: она проверяет, что маршрут обслуживается, а не
     # то, сколько в нём записей.
     "/api/v1/seo-bindings": {},
+    # Флот читается без тела: проверка убеждается, что маршрут обслуживается,
+    # а не то, сколько в нём витрин.
+    "/api/v1/fleet": {},
+    "/api/v1/fleet/{siteId}": {},
     "/api/v1/seo-bindings/{siteId}": {"limit": 1},
     "/api/v1/seo-bindings/{siteId}/resolve": {"path": "/anime/x/"},
     "/api/v1/sites/{siteId}/jobs": {"action": "reindex", "dryRun": True},

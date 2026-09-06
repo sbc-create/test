@@ -738,6 +738,29 @@ class ControlApi:
                 and len(rest) == 3 and rest[2] == "resolve":
             principal.require(SCOPE_READ)
             return self._seo_resolve(rest[1], body)
+        if method == "GET" and rest[:1] == ["fleet"]:
+            principal.require(SCOPE_READ)
+            from factory.site_engine import fleet_registry as реестр
+
+            if len(rest) == 1:
+                итог = реестр.fleet(self._root)
+                # Привязанный к витрине видит во флоте только свою строку.
+                # Список без сужения был бы утечкой: по нему видно домены,
+                # релизы и состояние соседей.
+                свой = getattr(principal, "site_id", "")
+                if свой:
+                    итог = dict(итог)
+                    итог["sites"] = [з for з in итог["sites"] if з["siteId"] == свой]
+                    итог["total"] = len(итог["sites"])
+                    итог["scopedTo"] = свой
+                return ApiResponse(status=200, body=итог)
+            if len(rest) == 2:
+                сайт = rest[1]
+                self._check_site_id(сайт)
+                запись = реестр.site_record(self._root, сайт)
+                return ApiResponse(status=200, body=запись.as_dict())
+            raise ControlDenied(404, "not_found", "нет такого маршрута")
+
         if method == "GET" and rest[:1] == ["seo-bindings"]:
             principal.require(SCOPE_READ)
             return self._seo_bindings(rest[1] if len(rest) > 1 else None, body)
@@ -990,6 +1013,9 @@ class ControlApi:
         # Связи SEO пришли слиянием ветки маршрутов и принесли витрину в адресе.
         # Таблица о них не знала, и привязанный обращающийся читал соседа.
         "seo-bindings": 1,
+        # Единая запись витрины несёт её домены, релизы и состояние — читать
+        # чужую нельзя ровно по той же причине, что и настройки.
+        "fleet": 1,
     }
 
     def _названная_витрина(self, rest: list[str], body: dict[str, Any]) -> str:
