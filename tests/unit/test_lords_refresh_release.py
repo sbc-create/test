@@ -338,3 +338,31 @@ def test_смена_шаблона_не_протаскивает_посторо�
             artifact_root=стенд["artifacts"], release_reason="canary",
             template={"tenant_id": "чужая-витрина", "template_digest": "d" * 64},
         )
+
+
+def test_ревизия_оснастки_записывается_и_переносится(стенд):
+    """Закреплений два, и видно должно быть оба.
+
+    Шаблон закреплён манифестом релиза. Рантайм и сами сценарии приходят из
+    закреплённого релиза оснастки — и правка рантайма доезжает до витрины
+    обычным обновлением каталога. Без записи это остаётся незаметным: по
+    манифесту видно, чем отрисовано, и не видно, чем собрано.
+    """
+    план = рр.план(стенд["runtime"], artifact_root=стенд["artifacts"])
+    цель = стенд["runtime"] / "releases" / "tool0001"
+    (цель / "site").mkdir(parents=True)
+    новый = рр.записать_манифест(
+        цель, план, content_snapshot_id="s1", content_count=10, created_by="тест",
+        artifact_root=стенд["artifacts"], tooling_revision="f" * 40)
+    assert новый[рм.ОСНАСТКА] == "f" * 40
+
+    # Следующий релиз без явной ревизии наследует прежнюю, а не теряет её.
+    (стенд["runtime"] / "current").unlink()
+    (стенд["runtime"] / "current").symlink_to(цель)
+    план2 = рр.план(стенд["runtime"], artifact_root=стенд["artifacts"])
+    цель2 = стенд["runtime"] / "releases" / "tool0002"
+    (цель2 / "site").mkdir(parents=True)
+    второй = рр.записать_манифест(
+        цель2, план2, content_snapshot_id="s2", content_count=11, created_by="тест",
+        artifact_root=стенд["artifacts"])
+    assert второй[рм.ОСНАСТКА] == "f" * 40

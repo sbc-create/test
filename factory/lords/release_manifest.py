@@ -63,6 +63,13 @@ from typing import Any
     "production_authorized",
 )
 
+#: Ревизия оснастки, которой собран релиз. Отличается от `renderer_revision`:
+#: шаблон закреплён манифестом релиза, а рантайм (`serve.py`) и сами сценарии
+#: приходят из закреплённого релиза оснастки. Поле записывается, чтобы по
+#: манифесту было видно оба закрепления, а не одно: правка рантайма доезжает до
+#: витрины обновлением каталога, и без записи это остаётся незаметным.
+ОСНАСТКА = "tooling_revision"
+
 #: Поля, которые описывают именно шаблон. Сменить их вправе только
 #: канареечная выкладка, и только назвав их явно.
 ШАБЛОННЫЕ: tuple[str, ...] = (
@@ -199,6 +206,7 @@ def следующий(
     previous_release: str,
     release_reason: str = "content-refresh",
     template: dict[str, Any] | None = None,
+    tooling_revision: str = "",
 ) -> dict[str, Any]:
     """Манифест следующего релиза.
 
@@ -223,6 +231,7 @@ def следующий(
         новый.update(template)
     новый.update(
         {
+            ОСНАСТКА: tooling_revision or текущий.get(ОСНАСТКА),
             "content_snapshot_id": content_snapshot_id,
             "content_count": int(content_count),
             "created_at": created_at,

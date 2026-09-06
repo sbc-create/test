@@ -134,6 +134,7 @@ def записать_манифест(
     artifact_root: Path | str,
     release_reason: str = "content-refresh",
     template: dict[str, Any] | None = None,
+    tooling_revision: str = "",
 ) -> dict[str, Any]:
     """Манифест нового релиза. Шаблонная часть переносится, а не пересчитывается.
 
@@ -154,6 +155,7 @@ def записать_манифест(
         previous_release=план_["currentRelease"],
         release_reason=release_reason,
         template=template,
+        tooling_revision=tooling_revision,
     )
     беды = рм.нарушения(новый, artifact_root=artifact_root)
     if беды:

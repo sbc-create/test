@@ -412,8 +412,17 @@ PYEOF
   # канареечную выкладку или ручную публикацию, случившуюся во время сборки.
   if [ "${LORDS_PINNED_TEMPLATE:-1}" = "1" ] && [ -x "$GUARD" ]; then
     content_count="$(find "${target}/site/title" -mindepth 1 -maxdepth 1 2>/dev/null | wc -l)"
+    # Ревизия оснастки — имя каталога закреплённого релиза. Не git: в
+    # привилегированном пути он недоступен по чужому владельцу каталога, и
+    # запрашивать его там значило бы возвращать уже закрытую ошибку.
+    tooling_rev="$(basename "$REPO")"
+    case "$tooling_rev" in
+      ????????????????????????????????????????) ;;
+      *) tooling_rev="" ;;
+    esac
     finalize_args=(--target "$target" --snapshot "$release"
                    --content-count "$content_count")
+    [ -n "$tooling_rev" ] && finalize_args+=(--tooling-revision "$tooling_rev")
     if [ "$site_canary" = "1" ]; then
       # Причина у выкладки шаблона своя: под причиной content-refresh смена
       # шаблона неотличима в журнале от обновления данных.

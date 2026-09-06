@@ -178,6 +178,7 @@ def команда_finalize(args) -> int:
                 artifact_root=args.artifact_root,
                 release_reason=args.reason,
                 template=шаблон,
+                tooling_revision=args.tooling_revision,
             )
             итог = рр.переключить(рантайм, цель,
                                   expected_current=план["currentRelease"],
@@ -231,6 +232,8 @@ def main(argv: list[str] | None = None) -> int:
     f.add_argument("--actor", default="lords-content-refresh")
     f.add_argument("--reason", default="content-refresh")
     f.add_argument("--lock-timeout", type=float, default=300.0)
+    f.add_argument("--tooling-revision", default="",
+                   help="ревизия оснастки, которой собран релиз")
     f.add_argument("--template-revision", default="",
                    help="выложить другой шаблон: только вместе с причиной, "
                         "отличной от content-refresh")
