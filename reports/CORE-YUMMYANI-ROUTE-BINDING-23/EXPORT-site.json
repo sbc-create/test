@@ -1,0 +1,14 @@
+{
+ "schemaVersion": "seo-route-binding/1.0.0",
+ "contractVersion": "1.0.0",
+ "siteId": "yummyani-site",
+ "snapshotAt": "2026-09-06T05:51:46.369666+00:00",
+ "provenance": "container:yummyani-staging-pg-site-1:PublicTitleRoute+lords-01.json",
+ "records": 7303,
+ "byBindingState": {
+  "BOUND": 7225,
+  "KIND_UNRESOLVED": 77,
+  "ROUTE_COLLISION": 1
+ },
+ "digest": "11c51c18e73730ff7e56fca78eacc4debf6ea5e558911f3f7b8dabca377f4d33"
+}

@@ -1,0 +1,36 @@
+{
+ "gate": "3. Сверка контракта с живыми страницами",
+ "method": "чтение по петле 127.0.0.1:3101 с заголовком Host, только GET",
+ "pagesRead": 20,
+ "canonicalMatched": 20,
+ "schemaMatched": 19,
+ "schemaMismatched": 1,
+ "mismatch": {
+  "path": "/anime/chasha-snega",
+  "contentId": "01a03ceb-8309-7452-a66b-bde66e5c6c1f",
+  "displayTitle": "Чаша снега",
+  "catalog": {
+   "type": "movie",
+   "tags": [
+    "ona",
+    "13+"
+   ],
+   "is_series": false
+  },
+  "contractKindState": "CONFLICTED",
+  "contractCandidates": [
+   "MOVIE",
+   "ONA"
+  ],
+  "contractSchemaType": "",
+  "pageSchemaType": "Movie",
+  "verdict": "витрина превращает неразрешённый вид в фильм"
+ },
+ "classSize": {
+  "perStorefront": 77,
+  "storefronts": 3,
+  "total": 231,
+  "matchesCoreMeasurement": true
+ },
+ "owner": "TEMPLATES / рендерер yummyani (Next.js)"
+}
