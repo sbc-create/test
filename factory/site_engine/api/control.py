@@ -657,6 +657,10 @@ class ControlApi:
         if method == "GET" and rest == ["playback-policy"]:
             principal.require(SCOPE_READ)
             return self._playback_policy()
+        if method == "GET" and rest[:2] == ["seo-bindings"] + rest[1:2] \
+                and len(rest) == 3 and rest[2] == "resolve":
+            principal.require(SCOPE_READ)
+            return self._seo_resolve(rest[1], body)
         if method == "GET" and rest[:1] == ["seo-bindings"]:
             principal.require(SCOPE_READ)
             return self._seo_bindings(rest[1] if len(rest) > 1 else None, body)
@@ -1453,6 +1457,21 @@ class ControlApi:
             raise ControlDenied(404, "binding_source_unknown", str(error)) from error
         except ValueError as error:
             raise ControlDenied(400, "invalid_paging", str(error)) from error
+
+    def _seo_resolve(self, site_id: str, body: dict[str, Any]) -> ApiResponse:
+        """Связь по адресу страницы, включая вложенные адреса."""
+        from factory.site_engine.api import seo_bindings
+
+        self._check_site_id_soft(site_id)
+        путь = body.get("path")
+        if not isinstance(путь, str) or not путь.startswith("/"):
+            raise ControlDenied(400, "invalid_path",
+                                "path — адрес страницы, начинается с косой черты")
+        try:
+            return ApiResponse(status=200,
+                               body=seo_bindings.разрешить(self._root, site_id, путь))
+        except seo_bindings.BindingSourceUnknown as error:
+            raise ControlDenied(404, "binding_source_unknown", str(error)) from error
 
     def _check_site_id_soft(self, site_id: str) -> None:
         """Проверка идентификатора без требования профиля.

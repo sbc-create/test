@@ -183,3 +183,111 @@ def test_секретов_в_выдаче_нет(корень):
     for запрещённое in ("token", "secret", "password", "m3u8", "aggregator",
                         "title_id", "postgres"):
         assert запрещённое not in сырьё, запрещённое
+
+
+# --- адрес страницы ----------------------------------------------------------
+#
+# У потребителя на входе адреса, а контракт отдаёт связи по маршрутам страниц
+# произведений. Разбирать вложенный адрес на своей стороне значит зашивать
+# форму адресов витрины в потребителя — ровно та догадка, ради запрета которой
+# контракт и написан.
+
+def test_адрес_произведения_разрешается_в_связь(корень):
+    итог = api.разрешить(корень, "demo-declared", "/anime/rabota-003/")
+    assert итог["resolved"] is True
+    assert итог["pageType"] == "title"
+    assert итог["inheritsFrom"] == ""
+    assert итог["binding"]["contentId"] == "p-003"
+    assert итог["schemaVersion"] == "seo-route-binding/1.0.0"
+
+
+@pytest.mark.parametrize("путь, тип", [
+    ("/anime/rabota-003/season/1", "season"),
+    ("/anime/rabota-003/season/2/episode/7", "episode"),
+])
+def test_вложенный_адрес_наследует_связь_произведения(корень, путь, тип):
+    итог = api.разрешить(корень, "demo-declared", путь)
+    assert итог["resolved"] is True
+    assert итог["pageType"] == тип
+    assert итог["inheritsFrom"] == "/anime/rabota-003/"
+    assert итог["binding"]["contentId"] == "p-003"
+
+
+def test_право_обещать_просмотр_наследуется_вместе_со_связью(корень):
+    """Поток принадлежит произведению, а не отдельной странице сезона."""
+    страница = api.разрешить(корень, "demo-declared", "/anime/rabota-003/")
+    серия = api.разрешить(корень, "demo-declared",
+                          "/anime/rabota-003/season/1/episode/4")
+    assert серия["binding"]["mayPromisePlayback"] \
+        == страница["binding"]["mayPromisePlayback"]
+
+
+def test_вложенный_адрес_конфликтного_вида_права_не_получает(корень):
+    """Наследуется связь целиком, включая запрет — а не одно лишь разрешение."""
+    итог = api.разрешить(корень, "demo-declared", "/anime/konflikt/season/1")
+    assert итог["binding"]["bindingState"] == "KIND_UNRESOLVED"
+    assert итог["binding"]["schemaType"] == ""
+
+
+@pytest.mark.parametrize("путь", [
+    "/catalog", "/", "/anime/", "/anime/rabota-003/season",
+    "/anime/rabota-003/season/1/episode", "/anime/rabota-003/kadry",
+])
+def test_чужой_адрес_отказывается_явно_а_не_угадывается(корень, путь):
+    итог = api.разрешить(корень, "demo-declared", путь)
+    assert итог["resolved"] is False
+    assert итог["pageType"] == ""
+    assert итог["reason"]
+    assert "binding" not in итог
+
+
+def test_адрес_без_маршрута_не_выдумывает_связь(корень):
+    итог = api.разрешить(корень, "demo-declared", "/anime/net-takogo/")
+    assert итог["resolved"] is False
+    assert итог["pageType"] == "title"
+    assert "маршрута нет" in итог["reason"]
+
+
+def test_у_вычисляемых_адресов_вложенных_страниц_нет(корень):
+    """Витрины Lords адресуют сезон и серию иначе; догадка здесь запрещена."""
+    assert api.разрешить(корень, "demo-lords",
+                         "/title/rabota-003/season/1")["resolved"] is False
+
+
+def test_разрешение_у_неизвестного_производителя_отказывает(корень):
+    """Отказ тот же, что и у выдачи: иначе один и тот же изъян настройки даёт
+    потребителю 404 в одном месте и поломку сервера в другом."""
+    with pytest.raises(api.BindingSourceUnknown, match="неизвестен"):
+        api.разрешить(корень, "demo-broken", "/title/x/")
+
+
+# --- кэш выгрузки ------------------------------------------------------------
+
+def test_повторная_выгрузка_берётся_из_кэша(корень):
+    первая = api.выгрузка(корень, "demo-declared")
+    assert api.выгрузка(корень, "demo-declared") is первая
+
+
+def test_правка_источника_кэш_обесценивает(корень):
+    """Ключом было время правки, и проверка поймала это редким падением: две
+    правки внутри одного тика дают одну отметку, и кэш отдаёт вчерашнее."""
+    до = api.выгрузка(корень, "demo-declared")["records"]
+    снимок = json.loads((корень / "var" / "routes.json").read_text("utf-8"))
+    снимок["items"].append({"slug": "novyj", "providerTitleId": "p-001",
+                            "canonical": True})
+    (корень / "var" / "routes.json").write_text(json.dumps(снимок),
+                                                encoding="utf-8")
+    assert api.выгрузка(корень, "demo-declared")["records"] == до + 1
+
+
+def test_правка_того_же_объёма_кэш_тоже_обесценивает(корень):
+    """Отпечаток по содержимому, а не по размеру и времени: подмена слага на
+    равный по длине не меняет ни того, ни другого."""
+    было = api.выгрузка(корень, "demo-declared")
+    снимок = json.loads((корень / "var" / "routes.json").read_text("utf-8"))
+    снимок["items"][0]["slug"] = "rabota-XXX"
+    (корень / "var" / "routes.json").write_text(json.dumps(снимок),
+                                                encoding="utf-8")
+    стало = api.выгрузка(корень, "demo-declared")
+    assert стало["records"] == было["records"]
+    assert стало["digest"] != было["digest"]

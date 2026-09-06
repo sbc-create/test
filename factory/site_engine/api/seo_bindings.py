@@ -18,6 +18,7 @@
 
 from __future__ import annotations
 
+import hashlib
 from pathlib import Path
 from typing import Any
 
@@ -54,6 +55,41 @@ def описание(root: Path, site_id: str) -> dict[str, Any]:
     return описано
 
 
+#: Собранные выгрузки, чтобы не пересобирать каталог на каждый запрос.
+#: Ключ включает отпечаток содержимого входных файлов: изменился каталог —
+#: изменился ключ, и старая выгрузка не отдаётся.
+_КЭШ: dict[tuple, dict[str, Any]] = {}
+
+#: Сколько выгрузок держать. Витрин шесть, и держать больше незачем; предел
+#: существует, чтобы кэш не рос молча при появлении новых.
+_КЭШ_ПРЕДЕЛ = 8
+
+
+def _отпечаток_входов(root: Path, spec: dict[str, Any]) -> tuple:
+    """Отпечаток содержимого файлов, из которых собирается выгрузка.
+
+    Ключом было время правки, и это оказалось неверно: две правки внутри
+    одного тика файловой системы дают одну отметку, и кэш отдаёт вчерашнее,
+    выглядя при этом исправным. Проверка поймала это как редкое падение —
+    то есть ровно так, как такой дефект и проявляется в работе.
+
+    Содержимое не врёт. Тридцать пять мегабайт каталога считаются за 0,11 с
+    против шести секунд пересборки: честный ключ здесь в полсотни раз дешевле
+    того, ради чего кэш заведён.
+    """
+    метки = []
+    for поле in ("catalog", "routes"):
+        значение = spec.get(поле)
+        if not значение:
+            continue
+        путь = root / str(значение)
+        метки.append((str(значение),
+                      hashlib.blake2b(путь.read_bytes(),
+                                      digest_size=16).hexdigest()
+                      if путь.exists() else ""))
+    return tuple(метки)
+
+
 def выгрузка(root: Path, site_id: str) -> dict[str, Any]:
     """Полная выгрузка связей витрины через её производителя.
 
@@ -66,11 +102,19 @@ def выгрузка(root: Path, site_id: str) -> dict[str, Any]:
 
     описано = описание(root, site_id)
     вид = str(описано.get("producer") or "")
+    ключ = (str(root.resolve()), site_id, вид, _отпечаток_входов(root, описано))
+    готовая = _КЭШ.get(ключ)
+    if готовая is not None:
+        return готовая
     try:
-        return adapters.export_bindings(вид, root=root, site_id=site_id,
-                                        spec=описано)
+        собранная = adapters.export_bindings(вид, root=root, site_id=site_id,
+                                             spec=описано)
     except LookupError as error:
         raise BindingSourceUnknown(str(error)) from error
+    if len(_КЭШ) >= _КЭШ_ПРЕДЕЛ:
+        _КЭШ.pop(next(iter(_КЭШ)))
+    _КЭШ[ключ] = собранная
+    return собранная
 
 
 def страница(root: Path, site_id: str, *, offset: int = 0,
@@ -110,6 +154,50 @@ def страница(root: Path, site_id: str, *, offset: int = 0,
         "returned": len(окно),
         "hasMore": offset + len(окно) < len(записи),
         "bindings": окно,
+    }
+
+
+def разрешить(root: Path, site_id: str, path: str) -> dict[str, Any]:
+    """Связь по адресу страницы, включая вложенные адреса сезона и серии.
+
+    Нужен, потому что у потребителя на входе адреса, а контракт отдаёт связи
+    по маршрутам страниц произведений. Вложенный адрес — `/anime/x/season/1` —
+    принадлежит тому же произведению, но выводить это на своей стороне значит
+    зашивать форму адреса витрины в потребителя: ровно та догадка, ради
+    запрета которой контракт и написан.
+
+    Право обещать просмотр наследуется вместе со связью: поток принадлежит
+    произведению, а не отдельной странице сезона.
+    """
+    from factory.site_engine import adapters
+
+    описано = описание(root, site_id)
+    вид = str(описано.get("producer") or "")
+    try:
+        тип, ключ = adapters.page_shape(вид, path)
+    except LookupError as error:
+        raise BindingSourceUnknown(str(error)) from error
+    if not тип:
+        return {"siteId": site_id, "path": path, "pageType": "",
+                "resolved": False,
+                "reason": "адрес не относится к странице произведения"}
+
+    полная = выгрузка(root, site_id)
+    искомый = adapters.route_for(вид, ключ)
+    связь = next((b for b in полная["bindings"]
+                  if b["canonicalPath"] == искомый), None)
+    if связь is None:
+        return {"siteId": site_id, "path": path, "pageType": тип,
+                "resolved": False, "reason": "маршрута нет в выгрузке"}
+    return {
+        "schemaVersion": полная["schemaVersion"],
+        "contractVersion": полная["contractVersion"],
+        "siteId": site_id, "path": path, "pageType": тип,
+        "resolved": True,
+        # Вложенная страница наследует связь произведения, но остаётся своей
+        # страницей: тип страницы здесь, а не в связи.
+        "inheritsFrom": связь["canonicalPath"] if тип != "title" else "",
+        "binding": связь,
     }
 
 

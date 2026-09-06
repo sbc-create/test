@@ -35,6 +35,7 @@ ROOT = Path(__file__).resolve().parents[2]
     # то, сколько в нём записей.
     "/api/v1/seo-bindings": {},
     "/api/v1/seo-bindings/{siteId}": {"limit": 1},
+    "/api/v1/seo-bindings/{siteId}/resolve": {"path": "/anime/x/"},
     "/api/v1/sites/{siteId}/jobs": {"action": "reindex", "dryRun": True},
     "/api/v1/sites/{siteId}/settings": {"changes": {"keep_releases": 5}, "dryRun": True},
     "/api/v1/site-requests": {},

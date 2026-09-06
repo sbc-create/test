@@ -352,6 +352,17 @@ from factory.site_engine.api.ratelimit import DEFAULT_LIMITS
         "errors": {"400": "недопустимые limit, offset или bindingState",
                    "404": "витрина не описана в источниках связей"},
     },
+    "/api/v1/seo-bindings/{siteId}/resolve": {
+        "method": "get",
+        "summary": "Связь по адресу страницы, включая вложенные адреса сезона и серии",
+        "scope": "read",
+        "idempotent": False,
+        "body": None,
+        "success": ("200", "тип страницы, связь произведения и адрес, у которого "
+                           "она унаследована; либо явный отказ с причиной"),
+        "errors": {"400": "path отсутствует или не начинается с косой черты",
+                   "404": "витрина не описана в источниках связей"},
+    },
     "/api/v1/content-health": {
         "method": "get",
         "summary": "Покрытие воспроизведения по массиву и причины его отсутствия",

@@ -32,6 +32,14 @@ __all__ = ["lords", "lords_renderer", "yummy", "yummy_renderer"]
 PRODUCERS: tuple[str, ...] = ("computed-routes", "declared-routes")
 
 
+def _неизвестен(kind: str) -> LookupError:
+    """Один отказ на все входы: иначе один изъян настройки даёт потребителю
+    вежливое «нет такого» в одном месте и поломку сервера в другом."""
+    return LookupError(
+        f"производитель {kind!r} неизвестен: разрешены {', '.join(PRODUCERS)}. "
+        "Новый способ адресации — это новый адаптер, а не строка в настройке")
+
+
 def export_bindings(kind: str, *, root, site_id: str, spec: dict):
     """Выгрузка связей витрины производителем названного вида."""
     if kind == "computed-routes":
@@ -45,6 +53,31 @@ def export_bindings(kind: str, *, root, site_id: str, spec: dict):
         return producer.export(root / str(spec.get("routes") or ""),
                                root / str(spec.get("catalog") or ""),
                                site_id=site_id)
-    raise LookupError(
-        f"производитель {kind!r} неизвестен: разрешены {', '.join(PRODUCERS)}. "
-        "Новый способ адресации — это новый адаптер, а не строка в настройке")
+    raise _неизвестен(kind)
+
+
+def page_shape(kind: str, path: str):
+    """Тип страницы и ключ произведения по адресу — правилами адресации витрины."""
+    if kind == "declared-routes":
+        from factory.site_engine.adapters import yummy_seo_binding as producer
+
+        return producer.page_type_of(path)
+    if kind == "computed-routes":
+        # У витрин с вычисляемым адресом вложенных страниц произведения нет:
+        # сезон и серия там адресуются иначе и отдельным типом страницы.
+        части = [c for c in (path or "").split("/") if c]
+        if len(части) == 2 and части[0] == "title":
+            return "title", части[1]
+        return "", ""
+    raise _неизвестен(kind)
+
+
+def route_for(kind: str, key: str) -> str:
+    """Маршрут страницы произведения по ключу."""
+    if kind == "declared-routes":
+        from factory.site_engine.adapters import yummy_seo_binding as producer
+
+        return producer.route_of(key)
+    if kind == "computed-routes":
+        return f"/title/{key}/"
+    raise _неизвестен(kind)
