@@ -1,0 +1,323 @@
+{
+  "artifact": "SITE_RELEASE_READINESS",
+  "gates": [
+    {
+      "key": "artifact_identity",
+      "label": "полный SHA, отпечаток, воспроизведение"
+    },
+    {
+      "key": "registration",
+      "label": "siteId и домен в реестре"
+    },
+    {
+      "key": "content_live",
+      "label": "живой источник и снимок каталога"
+    },
+    {
+      "key": "render_live",
+      "label": "сборка витрины на живом каталоге"
+    },
+    {
+      "key": "preswitch_gates",
+      "label": "предпусковые ворота"
+    },
+    {
+      "key": "switch",
+      "label": "переключение выполнено"
+    },
+    {
+      "key": "live_acceptance",
+      "label": "приёмка на живом домене"
+    },
+    {
+      "key": "browser_quality",
+      "label": "браузер: доступность, скорость, кросс-браузер"
+    },
+    {
+      "key": "rollback_proven",
+      "label": "откат доказан"
+    },
+    {
+      "key": "owner_gate",
+      "label": "визуальная проверка владельцем"
+    }
+  ],
+  "slots": {
+    "lords": {
+      "total": 88,
+      "gates": {
+        "artifact_identity": {
+          "points": 10,
+          "note": "артефакт v3 ca3d395ade25fb29…, 19 файлов; воспроизведение из двух точных ревизий: совпало",
+          "blocked": false
+        },
+        "registration": {
+          "points": 10,
+          "note": "siteId lords-02 в реестре Control API, домен lordserial33.biz",
+          "blocked": false
+        },
+        "content_live": {
+          "points": 10,
+          "note": "снимок каталога eaacf89aefe9919e…, живой источник, 53 230 записей",
+          "blocked": false
+        },
+        "render_live": {
+          "points": 9,
+          "note": "расписка о сборке: lords-02.render.json",
+          "blocked": false
+        },
+        "preswitch_gates": {
+          "points": 7,
+          "note": "доступная без прав часть сошлась: обвал каталога, восемь маршрутов, исчезновение «0 мин»; сравнение с предыдущим релизом требует root и выполняется фазой switch",
+          "blocked": false
+        },
+        "switch": {
+          "points": 10,
+          "note": "переключение выполнено, аудит lords-canary-lords-02-c573222dcd23.json: собрано от uid 1001, переключено от root, таймер обновления возвращён обработчиком выхода",
+          "blocked": false
+        },
+        "live_acceptance": {
+          "points": 9,
+          "note": "25 проверок на публичном домене lordserial33.biz: девять маршрутов, плеер, серии, SSR, прокрутка на трёх ширинах, CLS 0.000",
+          "blocked": false
+        },
+        "browser_quality": {
+          "points": 8,
+          "note": "22 приёмочные проверки против собранной витрины: маршруты, консоль, сеть, прокрутка на 390/768/1440, CLS 0.000; на боевом домене не проводились — до переключения его нечем проверять",
+          "blocked": false
+        },
+        "rollback_proven": {
+          "points": 7,
+          "note": "цель отката 1335d087089b цела: serve.py и каталог site на месте; команда записана в аудит переключения; исполнением не проверялась",
+          "blocked": false
+        },
+        "owner_gate": {
+          "points": 8,
+          "note": "домен доступен владельцу: https://lordserial33.biz, индексация закрыта заголовком, 12 снимков на 390/768/1440",
+          "blocked": false
+        }
+      }
+    },
+    "yummy": {
+      "total": 39,
+      "gates": {
+        "artifact_identity": {
+          "points": 3,
+          "note": "отпечатка артефакта у Yummy нет: артефакт шаблона определён только для направления lords",
+          "blocked": true
+        },
+        "registration": {
+          "points": 10,
+          "note": "yummyani-site, -org, -biz в реестре Control API",
+          "blocked": false
+        },
+        "content_live": {
+          "points": 8,
+          "note": "боевая ревизия 4460031491403b759c910e5875fe20688dc67053, health healthy по PROGRAM_STATE",
+          "blocked": false
+        },
+        "render_live": {
+          "points": 8,
+          "note": "production build выполнен: next typegen exit 0, tsc 0 ошибок, next build exit 0; фикстурный ответ 200 сборку не заменял",
+          "blocked": false
+        },
+        "preswitch_gates": {
+          "points": 0,
+          "note": "не запускались",
+          "blocked": false
+        },
+        "switch": {
+          "points": 0,
+          "note": "выкладка не выполнялась",
+          "blocked": false
+        },
+        "live_acceptance": {
+          "points": 0,
+          "note": "не проводилась",
+          "blocked": false
+        },
+        "browser_quality": {
+          "points": 6,
+          "note": "фикстурные браузерные ворота закрыты; на боевом домене не проводились",
+          "blocked": false
+        },
+        "rollback_proven": {
+          "points": 4,
+          "note": "боевая ревизия известна; откат исполнением не проверялся",
+          "blocked": false
+        },
+        "owner_gate": {
+          "points": 0,
+          "note": "нечего показывать",
+          "blocked": false
+        }
+      }
+    },
+    "zona-cinema": {
+      "total": 25,
+      "gates": {
+        "artifact_identity": {
+          "points": 0,
+          "note": "отпечатка артефакта нет: артефакт определён только для lords",
+          "blocked": true
+        },
+        "registration": {
+          "points": 0,
+          "note": "ни siteId, ни домена в реестре Control API нет",
+          "blocked": true
+        },
+        "content_live": {
+          "points": 0,
+          "note": "живого источника нет: витрина собрана на фикстуре",
+          "blocked": true
+        },
+        "render_live": {
+          "points": 4,
+          "note": "витрина собрана и отдаётся стендом предпросмотра",
+          "blocked": false
+        },
+        "preswitch_gates": {
+          "points": 0,
+          "note": "неприменимо без домена",
+          "blocked": false
+        },
+        "switch": {
+          "points": 0,
+          "note": "в production не выкладывается и выложена быть не может",
+          "blocked": false
+        },
+        "live_acceptance": {
+          "points": 0,
+          "note": "живого домена нет",
+          "blocked": false
+        },
+        "browser_quality": {
+          "points": 6,
+          "note": "снимков 390/768/1440: 9; axe и кросс-браузер закрыты на стенде шаблонов",
+          "blocked": false
+        },
+        "rollback_proven": {
+          "points": 8,
+          "note": "откат предпросмотра — остановка стенда; боевого состояния не затрагивает",
+          "blocked": false
+        },
+        "owner_gate": {
+          "points": 7,
+          "note": "предпросмотр доступен владельцу по туннелю, индексация закрыта заголовком",
+          "blocked": false
+        }
+      }
+    },
+    "animedia-portal": {
+      "total": 25,
+      "gates": {
+        "artifact_identity": {
+          "points": 0,
+          "note": "отпечатка артефакта нет: артефакт определён только для lords",
+          "blocked": true
+        },
+        "registration": {
+          "points": 0,
+          "note": "ни siteId, ни домена в реестре Control API нет",
+          "blocked": true
+        },
+        "content_live": {
+          "points": 0,
+          "note": "живого источника нет: витрина собрана на фикстуре",
+          "blocked": true
+        },
+        "render_live": {
+          "points": 4,
+          "note": "витрина собрана и отдаётся стендом предпросмотра",
+          "blocked": false
+        },
+        "preswitch_gates": {
+          "points": 0,
+          "note": "неприменимо без домена",
+          "blocked": false
+        },
+        "switch": {
+          "points": 0,
+          "note": "в production не выкладывается и выложена быть не может",
+          "blocked": false
+        },
+        "live_acceptance": {
+          "points": 0,
+          "note": "живого домена нет",
+          "blocked": false
+        },
+        "browser_quality": {
+          "points": 6,
+          "note": "снимков 390/768/1440: 9; axe и кросс-браузер закрыты на стенде шаблонов",
+          "blocked": false
+        },
+        "rollback_proven": {
+          "points": 8,
+          "note": "откат предпросмотра — остановка стенда; боевого состояния не затрагивает",
+          "blocked": false
+        },
+        "owner_gate": {
+          "points": 7,
+          "note": "предпросмотр доступен владельцу по туннелю, индексация закрыта заголовком",
+          "blocked": false
+        }
+      }
+    },
+    "basis-video": {
+      "total": 25,
+      "gates": {
+        "artifact_identity": {
+          "points": 0,
+          "note": "отпечатка артефакта нет: артефакт определён только для lords",
+          "blocked": true
+        },
+        "registration": {
+          "points": 0,
+          "note": "ни siteId, ни домена в реестре Control API нет",
+          "blocked": true
+        },
+        "content_live": {
+          "points": 0,
+          "note": "живого источника нет: витрина собрана на фикстуре",
+          "blocked": true
+        },
+        "render_live": {
+          "points": 4,
+          "note": "витрина собрана и отдаётся стендом предпросмотра",
+          "blocked": false
+        },
+        "preswitch_gates": {
+          "points": 0,
+          "note": "неприменимо без домена",
+          "blocked": false
+        },
+        "switch": {
+          "points": 0,
+          "note": "в production не выкладывается и выложена быть не может",
+          "blocked": false
+        },
+        "live_acceptance": {
+          "points": 0,
+          "note": "живого домена нет",
+          "blocked": false
+        },
+        "browser_quality": {
+          "points": 6,
+          "note": "снимков 390/768/1440: 9; axe и кросс-браузер закрыты на стенде шаблонов",
+          "blocked": false
+        },
+        "rollback_proven": {
+          "points": 8,
+          "note": "откат предпросмотра — остановка стенда; боевого состояния не затрагивает",
+          "blocked": false
+        },
+        "owner_gate": {
+          "points": 7,
+          "note": "предпросмотр доступен владельцу по туннелю, индексация закрыта заголовком",
+          "blocked": false
+        }
+      }
+    }
+  },
+  "average": 40
+}

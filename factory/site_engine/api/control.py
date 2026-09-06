@@ -987,6 +987,9 @@ class ControlApi:
         "ratings": 1,
         "content": 1,
         "content-health": 1,
+        # Связи SEO пришли слиянием ветки маршрутов и принесли витрину в адресе.
+        # Таблица о них не знала, и привязанный обращающийся читал соседа.
+        "seo-bindings": 1,
     }
 
     def _названная_витрина(self, rest: list[str], body: dict[str, Any]) -> str:

@@ -289,7 +289,6 @@ def test_ворота_сообщают_обо_всех_пробелах_сраз
 # виде отдал владельцу. С эксплуатацией вышло бы то же, только дороже.
 
 def test_отсутствие_файла_и_сломанный_файл_различимы(tmp_path, monkeypatch):
-    from pathlib import Path
 
     from factory.paths import PATHS
     from factory.site_engine import seo_binding

@@ -22,7 +22,8 @@ import sys
 
 def main() -> int:
     путь = sys.argv[1]
-    записи = json.loads(open(путь, encoding="utf-8").read())
+    with open(путь, encoding="utf-8") as ф:
+        записи = json.loads(ф.read())
 
     from seo_engine.content import authoritative_kind as ak
     from seo_engine.policy import eligibility as el

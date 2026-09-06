@@ -1,0 +1,25 @@
+# Маршруты черновика zona-w140.
+schemaVersion: 1
+templateId: zona-video-portal
+
+routes:
+  - routeId: home
+    pageType: homepage
+    path: /
+    blockOrder: [header, search, shelves, footer]
+  - routeId: catalog
+    pageType: catalog
+    path: /catalog
+    blockOrder: [header, search, shelves, footer]
+  - routeId: title
+    pageType: title
+    path: /title/{slug}
+    blockOrder: [header, search, shelves, footer]
+  - routeId: search
+    pageType: search
+    path: /search
+    blockOrder: [header, search, shelves, footer]
+  - routeId: not-found
+    pageType: error
+    path: '*'
+    blockOrder: [header, search, shelves, footer]

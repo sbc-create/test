@@ -1,0 +1,225 @@
+{
+  "lane": "TEMPLATES",
+  "branch": "claude/templates-lords-yummy-refpacks-01",
+  "head": "d1b448841df357fb8c45d0833a75a3aa036ab80a",
+  "base_sha": "76552b9a7372c5ad15cfc7d8b1052a10024722a3",
+  "template_digest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
+  "template_digest_files": 19,
+  "gates": {
+    "axe_wcag22aa": {
+      "status": "pass",
+      "tool": "axe-core 4.13.0",
+      "standard": "WCAG 2.0/2.1/2.2 A + AA",
+      "runs": 72,
+      "pages": [
+        "catalog",
+        "home",
+        "not-found",
+        "search",
+        "search-empty",
+        "title"
+      ],
+      "viewports": [
+        390,
+        768,
+        1440
+      ],
+      "violations": 0,
+      "incomplete": 0,
+      "rules_passed_min": 25,
+      "rules_passed_max": 29,
+      "evidence": "artifacts/evidence/templates/a11y/axe-*.json",
+      "last_capture_utc": "2026-09-04T15:10:41.951Z"
+    },
+    "a11y_manual": {
+      "status": "pass",
+      "target_size_aa_24px": {
+        "criterion": "WCAG 2.2 SC 2.5.8 (AA)",
+        "note": "учтены исключения по интервалу и по строчной цели",
+        "failing": 0
+      },
+      "target_size_aaa_44px": {
+        "criterion": "WCAG 2.2 SC 2.5.5 (AAA) — требование владельца",
+        "note": "учтено исключение по эквивалентной цели того же адреса",
+        "failing": 0
+      },
+      "mobile_input_font_16px": {
+        "note": "не критерий WCAG: защита от зума iOS Safari при фокусе",
+        "fields_checked": 9,
+        "failing": 0
+      },
+      "keyboard": {
+        "stops_traversed": 40,
+        "focus_invisible": 0
+      },
+      "evidence": "artifacts/evidence/templates/a11y/manual-*.json"
+    },
+    "visual_baseline": {
+      "status": "pass",
+      "rows": 24,
+      "tolerance_px": 1,
+      "note": "эталон отслеживается git и сравнивается при каждом прогоне",
+      "evidence": "tests/e2e-lords/visual-baseline.json"
+    },
+    "performance": {
+      "status": "pass",
+      "runs": 16,
+      "worst_cls": 0,
+      "cls_budget": 0.1,
+      "worst_lcp_ms": 472,
+      "lcp_budget_ms": 1000,
+      "limitation": "стенд локальный: LCP — нижняя граница, а не боевое значение",
+      "evidence": "artifacts/evidence/templates/performance.json"
+    },
+    "template_audit": {
+      "status": "pass",
+      "threshold": 8.0,
+      "minimum_by_site": {
+        "lords-01": 10.0,
+        "lords-02": 10.0,
+        "lords-03": 10.0,
+        "lords-04": 10.0
+      },
+      "evidence": "artifacts/evidence/templates/audit.lords.json"
+    },
+    "yummy_template_fixture": {
+      "status": "pass",
+      "scope": "template-only, fixture normal state",
+      "state_measured": [
+        "degraded (данных нет)",
+        "normal (fixture)"
+      ],
+      "preview": "локальный next dev с подставным окружением и флагом CATALOG_VISUAL_FIXTURE=1; секреты не читались, база не доступна",
+      "repo": "/srv/sites/yummyani-staging/repo (канонический)",
+      "worktree": "/home/claude/work-templates/yummy-preview",
+      "branch": "claude/templates-yummy-fixture-preview-01",
+      "base_sha": "178936c938ada58b6bc638e1db82dde949aee7f9",
+      "head_sha": "1fd59f90c4a0866c567a8204301bed0ec015106d",
+      "axe": {
+        "runs": 24,
+        "violations": 0,
+        "rules_passed_min": 9,
+        "rules_passed_max": 32,
+        "pages": [
+          "catalog",
+          "dev-ui",
+          "home",
+          "not-found",
+          "ongoing",
+          "schedule",
+          "search",
+          "updates"
+        ],
+        "viewports": [
+          390,
+          768,
+          1440
+        ]
+      },
+      "responsive_sweep": {
+        "measurements": 64,
+        "overflows": 0
+      },
+      "degraded_honesty": {
+        "pages": 6,
+        "stuck_in_loading": [],
+        "all_explain": null
+      },
+      "parity": {
+        "checks": 5,
+        "source": "тот же модуль фикстур, из которого берёт данные приложение",
+        "covered": [
+          "количество и порядок каталога",
+          "отсутствие визуальных дыр у пустых полок",
+          "устойчивость порядка после гидратации",
+          "связь произведения с сезонами и сериями",
+          "отсутствие клиентского N+1"
+        ]
+      },
+      "visual": {
+        "baseline_rows": 30,
+        "page_scores": 10,
+        "min_score": 8,
+        "note": "девять страниц 10/10, страница 404 — 8/10 (намеренно минимальна)"
+      },
+      "crossbrowser": {
+        "engines": [
+          "firefox 153.0",
+          "webkit 26.5"
+        ],
+        "checks": 10
+      },
+      "not_covered": [
+        "живые данные вместо фикстуры",
+        "четыре событийных пути: полки событий пусты по устройству фикстуры, наполнить их значило бы показать несуществующий факт",
+        "состояния плеера loading/slow/timeout/error/retry — нужен поставщик",
+        "производительность на production build — сборка падает на предсуществующих ошибках типов, TEMPLATE_TO_CORE-006",
+        "живой аудит трёх боевых доменов"
+      ],
+      "evidence": "artifacts/evidence/templates/yummy/*.json"
+    },
+    "crossbrowser": {
+      "status": "pass",
+      "engines": [
+        "firefox 153.0",
+        "webkit 26.5"
+      ],
+      "lords": {
+        "passed": 16,
+        "failed": 0
+      },
+      "yummy": {
+        "passed": 10,
+        "failed": 0,
+        "note": "прогон в репозитории Yummy, ветка claude/templates-yummy-fixture-preview-01",
+        "head": "43a9cbce51673f8a0ae7f4772594f96c1411b55b"
+      },
+      "scope": "только критический путь: широкий набор в трёх движках даёт шум",
+      "evidence": "artifacts/evidence/templates/playwright-lords-cross.json"
+    },
+    "reference_packs": {
+      "status": "pass",
+      "packs": [
+        "amd-online",
+        "zona-w140"
+      ],
+      "files_per_pack": {
+        "amd-online": 21,
+        "zona-w140": 21
+      },
+      "state": "architecture_draft",
+      "production_enabled": false,
+      "indexing_enabled": false,
+      "visual_parity_claimed": false,
+      "screenshots": "BLOCKED — REF-EGRESS-01",
+      "visual_tokens": "пусты намеренно: измерять не на чем",
+      "verified_by": "tests/unit/test_reference_packs.py (25 проверок)"
+    }
+  },
+  "blockers": [
+    {
+      "id": "REF-EGRESS-01",
+      "state": "open",
+      "what": "хосты amd.online и w140.zona.plus отклоняются профилем разрешений",
+      "effect": "снимки и измерения референсов недоступны",
+      "recorded_in": "docs/templates/BLOCKERS.md"
+    },
+    {
+      "id": "YUMMY-RENDER-01",
+      "state": "partially_lifted",
+      "what": "Ключевые страницы Yummy теперь отрисовываются локально без базы и секретов: поднят next dev с подставным окружением, все восемь маршрутов отдают 200. Снято ограничение на браузерную проверку шаблона.",
+      "remains": "Содержимое приходит из базы, поэтому доступно только деградированное состояние. Нормальное состояние, соответствие API → SSR → DOM, маршруты событий, страница произведения, сезоны, серии и плеер остаются непроверенными.",
+      "effect": "ворота, которым нужны данные, помечены blocked, а не pass",
+      "recorded_in": "docs/templates/BLOCKERS.md"
+    },
+    {
+      "id": "YUMMY-LIVE-EGRESS-01",
+      "state": "open",
+      "what": "Боевые домены yummyani.site/.org/.biz отклоняются профилем разрешений так же, как референсы: «хост не входит в переданные контракты».",
+      "effect": "живой read-only аудит трёх доменов не проводился",
+      "recorded_in": "docs/templates/BLOCKERS.md"
+    }
+  ],
+  "verdict": "CONDITIONAL_BLOCKED_ON_YUMMY_LIVE_DATA",
+  "verdict_reason": "Ворота Lords пройдены полностью. У Yummy закрыт фикстурный контур: нормальное состояние, соответствие фикстура → ViewModel → SSR → DOM, визуальный эталон, axe, кросс-браузер. Остаётся живой контур — данные, четыре событийных пути, состояния плеера и производительность на production-сборке. Данные полосе шаблона не принадлежат. TEMPLATE_RELEASE_CANDIDATE=PASS не заявляется."
+}

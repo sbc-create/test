@@ -1,0 +1,24 @@
+{
+  "site": "lords-03",
+  "page": "search-empty",
+  "route": "/search/?q=zzzzzzzzzz",
+  "url": "http://127.0.0.1:8803/search/?q=zzzzzzzzzz",
+  "viewport": {
+    "name": "tablet",
+    "width": 768,
+    "height": 1024
+  },
+  "captured_at_utc": "2026-09-04T16:26:38.096Z",
+  "axe_version": "4.13.0",
+  "tags": [
+    "wcag2a",
+    "wcag2aa",
+    "wcag21a",
+    "wcag21aa",
+    "wcag22aa"
+  ],
+  "rules_passed": 25,
+  "rules_inapplicable": 38,
+  "violations": [],
+  "incomplete": []
+}

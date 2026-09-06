@@ -1,0 +1,69 @@
+{
+  "captured_at_utc": "2026-09-04T15:52:30.056Z",
+  "base": "http://127.0.0.1:3210",
+  "rows": [
+    {
+      "page": "home",
+      "route": "/",
+      "cards": 18,
+      "titleLinks": 42,
+      "h1": "Аниме онлайн: каталог и просмотр",
+      "explains": true,
+      "stuckLoading": false,
+      "textLength": 3467
+    },
+    {
+      "page": "catalog",
+      "route": "/catalog",
+      "cards": 24,
+      "titleLinks": 48,
+      "h1": "Каталог аниме — YummyAnime",
+      "explains": false,
+      "stuckLoading": false,
+      "textLength": 2405
+    },
+    {
+      "page": "updates",
+      "route": "/catalog/anime-updates",
+      "cards": 0,
+      "titleLinks": 24,
+      "h1": "Обновления",
+      "explains": false,
+      "stuckLoading": false,
+      "textLength": 1382
+    },
+    {
+      "page": "ongoing",
+      "route": "/catalog/ongoing",
+      "cards": 0,
+      "titleLinks": 1,
+      "h1": "Онгоинги аниме",
+      "explains": false,
+      "stuckLoading": false,
+      "textLength": 504
+    },
+    {
+      "page": "schedule",
+      "route": "/catalog/schedule",
+      "cards": 0,
+      "titleLinks": 0,
+      "h1": "Расписание выхода серий",
+      "explains": true,
+      "stuckLoading": false,
+      "textLength": 455
+    },
+    {
+      "page": "search",
+      "route": "/search?q=a",
+      "cards": 0,
+      "titleLinks": 24,
+      "h1": "Поиск: a",
+      "explains": false,
+      "stuckLoading": false,
+      "textLength": 21
+    }
+  ],
+  "stuck_in_loading": [],
+  "handoff": null,
+  "note": null
+}

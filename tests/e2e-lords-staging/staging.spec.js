@@ -141,9 +141,12 @@ test.describe('поведение каталога', () => {
       await page.locator('.card__title').first().click();
       await expect(page.locator('details.season')).toHaveCount(0);
 
-      // Плеер — заглушка, а не настоящий плеер
-      await expect(page.locator('.player__status'))
-        .toHaveText('BLOCKED_INPUT_CDNVIDEOHUB_CREDENTIALS');
+      // Плеер — заглушка, а не настоящий плеер. Служебного кода на публичной
+      // странице нет ни текстом, ни атрибутом (REQ-LORDS-PLAYER-LIVE, D128).
+      await expect(page.locator('.player__frame')).toContainText('временно недоступно');
+      const html = await page.content();
+      expect(html).not.toContain('BLOCKED_INPUT');
+      expect(html).not.toContain('CDNVIDEOHUB_CREDENTIALS');
       expect(await page.locator('iframe').count()).toBe(0);
       await expect(page.locator('.comments button')).toBeDisabled();
     });

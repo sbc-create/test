@@ -1,0 +1,62 @@
+{
+  "captured_at_utc": "2026-09-04T16:25:41.436Z",
+  "site": "lords-01",
+  "viewport": 390,
+  "threshold": 16,
+  "fields": [
+    {
+      "route": "/catalog/",
+      "id": "q",
+      "tag": "input",
+      "fontSize": 16
+    },
+    {
+      "route": "/catalog/",
+      "id": "f-type",
+      "tag": "select",
+      "fontSize": 16
+    },
+    {
+      "route": "/catalog/",
+      "id": "f-genre",
+      "tag": "select",
+      "fontSize": 16
+    },
+    {
+      "route": "/catalog/",
+      "id": "f-year",
+      "tag": "select",
+      "fontSize": 16
+    },
+    {
+      "route": "/catalog/",
+      "id": "f-country",
+      "tag": "select",
+      "fontSize": 16
+    },
+    {
+      "route": "/catalog/",
+      "id": "f-sort",
+      "tag": "select",
+      "fontSize": 16
+    },
+    {
+      "route": "/search/",
+      "id": "q",
+      "tag": "input",
+      "fontSize": 16
+    },
+    {
+      "route": "/search/",
+      "id": "search-q",
+      "tag": "input",
+      "fontSize": 16
+    },
+    {
+      "route": "/",
+      "id": "hero-q",
+      "tag": "input",
+      "fontSize": 16
+    }
+  ]
+}

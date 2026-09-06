@@ -188,12 +188,19 @@ test.describe('страница произведения', () => {
     await expect(page.locator('.seasons')).toContainText('сезонов нет');
   });
 
-  test('вместо плеера стоит заглушка с диагностическим статусом', async ({ page }) => {
+  test('вместо плеера стоит вежливая заглушка без служебного кода', async ({ page }) => {
     await page.goto(url('lords-01', '/movies/'));
     await page.locator('.card__title').first().click();
-    await expect(page.locator('.player__frame')).toBeVisible();
-    await expect(page.locator('.player__status'))
-      .toHaveText('BLOCKED_INPUT_CDNVIDEOHUB_CREDENTIALS');
+    const frame = page.locator('.player__frame');
+    await expect(frame).toBeVisible();
+    // Заглушка узнаётся по своим признакам: кадр зарезервирован, состояние
+    // объяснено обычной фразой. Служебного кода на публичной странице нет ни
+    // текстом, ни атрибутом — REQ-LORDS-PLAYER-LIVE и решение D128.
+    await expect(frame).toContainText('временно недоступно');
+    const html = await page.content();
+    expect(html).not.toContain('BLOCKED_INPUT');
+    expect(html).not.toContain('CDNVIDEOHUB_CREDENTIALS');
+    expect(await page.locator('.player__status').count()).toBe(0);
     expect(await page.locator('iframe').count()).toBe(0);
   });
 

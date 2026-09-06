@@ -1,0 +1,23 @@
+{
+  "captured_at_utc": "2026-09-04T16:23:24.225Z",
+  "base": "http://127.0.0.1:3210",
+  "page": "schedule",
+  "route": "/catalog/schedule",
+  "url": "http://127.0.0.1:3210/catalog/schedule",
+  "viewport": {
+    "name": "tablet",
+    "width": 768,
+    "height": 1024
+  },
+  "state": "degraded (данных нет)",
+  "axe_version": "4.13.0",
+  "rules_passed": 27,
+  "rules_inapplicable": 36,
+  "violations": [],
+  "incomplete": [
+    {
+      "id": "aria-valid-attr-value",
+      "nodes": 2
+    }
+  ]
+}

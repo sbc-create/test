@@ -122,6 +122,14 @@ def выгрузка(root: Path, site_id: str) -> dict[str, Any]:
                                              spec=описано)
     except LookupError as error:
         raise BindingSourceUnknown(str(error)) from error
+    except (OSError, ValueError) as error:
+        # Источник описан, но недоступен: кэш каталога ещё не собран, перенесён
+        # или испорчен. Наружу это уходило пятисоткой без причины, а пустая
+        # выгрузка была бы хуже отказа — она утверждает, что связей нет, тогда
+        # как неизвестно, есть ли они.
+        raise BindingSourceUnknown(
+            f"источник связей витрины {site_id!r} (producer {вид!r}) недоступен: {error}"
+        ) from error
     if len(_КЭШ) >= _КЭШ_ПРЕДЕЛ:
         _КЭШ.pop(next(iter(_КЭШ)))
     _КЭШ[ключ] = собранная

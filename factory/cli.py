@@ -458,6 +458,40 @@ def cmd_db(args) -> int:
     return EXIT_OK
 
 
+def cmd_template_audit(args) -> int:
+    """Оценка ключевых страниц собранного стенда по рубрике шаблона.
+
+    Порог берётся по худшей странице, а не по средней: среднее скрывает провал,
+    а владелец открывает не среднее. Разделы, выключенные профилем, в оценку не
+    входят — их отсутствие исполняет решение владельца, а не проваливает его.
+    """
+    import json as _json
+
+    from factory.templates.audit import audit_site, render_table, report
+
+    root = PATHS.root / "artifacts" / "lords" / "preview"
+    sites = [args.site] if getattr(args, "site", None) else sorted(
+        d.name for d in root.iterdir() if d.is_dir()) if root.is_dir() else []
+    if not sites:
+        print("стенд не собран: сначала python3 -m factory lords-preview")
+        return EXIT_FAILED
+    scores = [audit_site(root / site, site) for site in sites]
+    summary = report(scores, threshold=args.threshold)
+    if args.output:
+        Path(args.output).write_text(
+            _json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    _print(summary, args.json)
+    if not args.json:
+        print(render_table(scores, threshold=args.threshold))
+        for site in scores:
+            for page in site.pages:
+                if page.applies and page.score < args.threshold:
+                    print(f"\n{site.site} {page.page} = {page.score}")
+                    for check in page.failures:
+                        print(f"    [{check.status}] {check.criterion}: {check.detail}")
+    return EXIT_OK if summary["meets_threshold"] else EXIT_FAILED
+
+
 def cmd_template_check(args) -> int:
     """Проверка шаблонов направления по контракту.
 
@@ -651,6 +685,76 @@ def cmd_lords_staging(args) -> int:  # noqa: ARG001 — команда без а
     for item in summary["not_touched"]:
         print(f"  — {item}")
     return 0
+
+
+def cmd_lords_canary(args) -> int:
+    """Выкладка одной витрины Lords и откат её же.
+
+    Команда делает ровно одно: раскладывает релиз в
+    `<runtime>/<site>/releases/<отпечаток>` и переключает ссылку `current`.
+    Ни nginx, ни сертификатов, ни systemd, ни соседних витрин — в отличие от
+    `automation/host/lords-staging-apply.sh`, который применяет конфигурацию
+    всем трём разом и потому поэтапную выкладку выразить не может.
+
+    Отпечаток шаблона сверяется до первой записи: без сверки выкатилось бы
+    то, что оказалось в дереве, а не названный артефакт.
+    """
+    from factory.lords import canary as canary_mod
+    from factory.lords import preview as preview_mod
+    from factory.templates import digest as digest_mod
+
+    root = Path(args.runtime_root) if args.runtime_root else canary_mod.DEFAULT_ROOT
+
+    if args.rollback:
+        try:
+            result = canary_mod.rollback(args.site, root=root, health=canary_mod.serve_health)
+        except canary_mod.CanaryRefused as exc:
+            print(f"откат отклонён: {exc}")
+            return 2
+        print(f"{args.site}: {result.detail}")
+        return 0 if result.switched else 1
+
+    fingerprint = digest_mod.compute()
+    print(f"отпечаток шаблона в дереве: {fingerprint['template_digest'][:16]} "
+          f"({fingerprint['files']} файлов)")
+
+    built = preview_mod.build_preview(args.site)
+    payload = Path(built.report["directory"]).parent / f"{args.site}-canary"
+    # Рантайм и страницы кладутся рядом ровно так, как их ожидает витрина:
+    # serve.py в корне релиза, документы в site/.
+    import shutil
+    if payload.exists():
+        shutil.rmtree(payload)
+    (payload / "site").mkdir(parents=True)
+    for item in Path(built.report["directory"]).rglob("*"):
+        if item.is_file():
+            target = payload / "site" / item.relative_to(built.report["directory"])
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(item, target)
+    from factory.lords.bundle import RUNTIME
+    (payload / "serve.py").write_text(RUNTIME, encoding="utf-8")
+
+    plan = canary_mod.plan(
+        args.site, payload=payload,
+        template_digest=fingerprint["template_digest"],
+        expect_template_digest=args.expect_digest,
+        root=root,
+    )
+    print(f"витрина: {plan.site_id} ({plan.site_dir})")
+    print(f"текущий релиз: {plan.current_release}  →  новый: {plan.new_release}")
+    if not plan.allowed:
+        print("выкладка отклонена до единой записи:")
+        for refusal in plan.refusals:
+            print(f"  — {refusal}")
+        return 2
+
+    result = canary_mod.apply(plan, health=canary_mod.serve_health, dry_run=args.dry_run)
+    if result.dry_run:
+        print("сухой прогон: ни одной записи не сделано")
+        print(f"  переключил бы {result.would['switch_from']} → {result.would['switch_to']}")
+        return 0
+    print(result.detail)
+    return 0 if result.switched else 1
 
 
 def cmd_lords_bundle(args) -> int:
@@ -899,6 +1003,14 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--manifest", help="один манифест; без него — все шаблоны направления")
     p.set_defaults(func=cmd_template_check)
 
+    p = sub.add_parser("template-audit",
+                       help="Lords: оценка ключевых страниц стенда по рубрике шаблона")
+    p.add_argument("--site", help="один пакет направления; без него — все собранные")
+    p.add_argument("--threshold", type=float, default=8.0,
+                   help="порог по худшей странице (по умолчанию 8.0)")
+    p.add_argument("--output", help="куда записать машиночитаемый отчёт")
+    p.set_defaults(func=cmd_template_audit)
+
     p = sub.add_parser("template-new", help="Lords: новый шаблон из манифеста")
     p.add_argument("--manifest", help="путь к манифесту (YAML или JSON)")
     p.add_argument("--example", nargs="?", const="lords-example",
@@ -923,6 +1035,15 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("lords-bundle", help="Lords: воспроизводимый пакет стенда")
     p.add_argument("--site", help="один сайт направления; без него — все")
     p.set_defaults(func=cmd_lords_bundle)
+
+    p = sub.add_parser("lords-canary",
+                       help="Lords: выкладка ОДНОЙ витрины и откат её же")
+    p.add_argument("--site", required=True, help="единственная витрина, которую трогаем")
+    p.add_argument("--expect-digest", help="отпечаток шаблона, который обязан быть выложен")
+    p.add_argument("--dry-run", action="store_true", help="показать план, ничего не менять")
+    p.add_argument("--rollback", action="store_true", help="вернуть витрину на прежний релиз")
+    p.add_argument("--runtime-root", help="корень рантайма витрин (по умолчанию /srv/lords)")
+    p.set_defaults(func=cmd_lords_canary)
 
     p = sub.add_parser("lords-staging",
                        help="Lords: конфигурация публичного fixture-staging трёх сайтов")

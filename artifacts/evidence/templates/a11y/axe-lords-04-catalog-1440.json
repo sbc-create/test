@@ -1,0 +1,24 @@
+{
+  "site": "lords-04",
+  "page": "catalog",
+  "route": "/catalog/",
+  "url": "http://127.0.0.1:8804/catalog/",
+  "viewport": {
+    "name": "desktop",
+    "width": 1440,
+    "height": 900
+  },
+  "captured_at_utc": "2026-09-04T16:26:58.904Z",
+  "axe_version": "4.13.0",
+  "tags": [
+    "wcag2a",
+    "wcag2aa",
+    "wcag21a",
+    "wcag21aa",
+    "wcag22aa"
+  ],
+  "rules_passed": 27,
+  "rules_inapplicable": 36,
+  "violations": [],
+  "incomplete": []
+}

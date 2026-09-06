@@ -1,0 +1,56 @@
+[Unit]
+Description=lords canary: сборка витрины %i на живом каталоге (без прав на боевой рантайм)
+Documentation=file:///srv/site-factory/coordination/v1/handoffs/013-core-to-owner-one-privileged-action.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=no
+
+# Ограниченная учётная запись, а не root.
+#
+# Рендер разбирает тридцать пять мегабайт данных поставщика и отрисовывает
+# пятьдесят три тысячи страниц. Делать это с полными правами незачем: у фазы
+# нет ни одной причины писать за пределы своего каталога сборки.
+#
+# Почему claude, а не lords: `lords` не может войти в /home/claude — каталог
+# `drwxr-x---`, и код операции ему недоступен. Расширять права на домашний
+# каталог ради этого нельзя, это открыло бы куда больше нужного. `claude` при
+# этом не root и не имеет записи в /srv/lords: рендер физически не может
+# тронуть боевой рантайм.
+User=claude
+Group=claude
+
+WorkingDirectory=/home/claude/wt-release-03
+Environment=LORDS_SNAPSHOT_DIR=/srv/site-factory/repo/var/lords/lords/catalog-cache
+Environment=LORDS_CANARY_STAGING=/home/claude/wt-release-03/var/canary-staging
+Environment=FACTORY_PYTHON=/home/claude/wt-release-03/.venv/bin/python
+
+# Учётные данные приходят только сюда. Фаза переключения их не получает вовсе:
+# секрет и полные права не должны встречаться в одном процессе.
+LoadCredential=cdnvideohub_api_token:/etc/site-factory/secrets/lords/lords-01/cdnvideohub-api-token
+LoadCredential=cdnvideohub_publisher_id:/etc/site-factory/secrets/lords/lords-01/cdnvideohub-publisher-id
+Environment=CDNVIDEOHUB_API_TOKEN_CREDENTIAL=cdnvideohub_api_token
+Environment=CDNVIDEOHUB_PUBLISHER_ID_CREDENTIAL=cdnvideohub_publisher_id
+
+ExecStart=/home/claude/wt-release-03/automation/host/lords-canary-apply.sh render %i
+
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+InaccessiblePaths=/etc/site-factory/secrets
+# /srv/lords здесь НЕ объявлен: фаза сборки не имеет доступа на запись в боевой
+# рантайм ни при какой ошибке в коде.
+ReadWritePaths=/home/claude/wt-release-03/var /home/claude/wt-release-03/artifacts /var/log/site-factory
+ReadOnlyPaths=/srv/site-factory/repo /etc/site-factory
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+UMask=0022
+
+TimeoutStartSec=18000
+MemoryMax=5G
+TasksMax=256

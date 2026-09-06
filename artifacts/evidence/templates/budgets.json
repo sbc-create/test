@@ -1,0 +1,243 @@
+{
+  "captured_at_utc": "2026-09-04T16:25:58.590Z",
+  "budget": {
+    "documentKb": 120,
+    "scriptKb": 60,
+    "styleKb": 60,
+    "imageKb": 400,
+    "requests": 60,
+    "domNodes": 3000,
+    "inpMs": 200
+  },
+  "pages": [
+    {
+      "site": "lords-01",
+      "page": "home",
+      "url": "http://127.0.0.1:8801/",
+      "requests": 34,
+      "documentKb": 26,
+      "scriptKb": 15,
+      "styleKb": 20,
+      "imageKb": 23,
+      "domNodes": 442
+    },
+    {
+      "site": "lords-01",
+      "page": "catalog",
+      "url": "http://127.0.0.1:8801/catalog/",
+      "requests": 7,
+      "documentKb": 29,
+      "scriptKb": 15,
+      "styleKb": 20,
+      "imageKb": 2,
+      "domNodes": 216
+    },
+    {
+      "site": "lords-02",
+      "page": "home",
+      "url": "http://127.0.0.1:8802/",
+      "requests": 34,
+      "documentKb": 30,
+      "scriptKb": 15,
+      "styleKb": 19,
+      "imageKb": 23,
+      "domNodes": 499
+    },
+    {
+      "site": "lords-02",
+      "page": "catalog",
+      "url": "http://127.0.0.1:8802/catalog/",
+      "requests": 7,
+      "documentKb": 28,
+      "scriptKb": 15,
+      "styleKb": 19,
+      "imageKb": 2,
+      "domNodes": 209
+    },
+    {
+      "site": "lords-03",
+      "page": "home",
+      "url": "http://127.0.0.1:8803/",
+      "requests": 28,
+      "documentKb": 23,
+      "scriptKb": 15,
+      "styleKb": 19,
+      "imageKb": 19,
+      "domNodes": 377
+    },
+    {
+      "site": "lords-03",
+      "page": "catalog",
+      "url": "http://127.0.0.1:8803/catalog/",
+      "requests": 7,
+      "documentKb": 25,
+      "scriptKb": 15,
+      "styleKb": 19,
+      "imageKb": 2,
+      "domNodes": 206
+    },
+    {
+      "site": "lords-04",
+      "page": "home",
+      "url": "http://127.0.0.1:8804/",
+      "requests": 15,
+      "documentKb": 15,
+      "scriptKb": 8,
+      "styleKb": 19,
+      "imageKb": 9,
+      "domNodes": 314
+    },
+    {
+      "site": "lords-04",
+      "page": "catalog",
+      "url": "http://127.0.0.1:8804/catalog/",
+      "requests": 27,
+      "documentKb": 39,
+      "scriptKb": 8,
+      "styleKb": 19,
+      "imageKb": 19,
+      "domNodes": 369
+    }
+  ],
+  "inp": [
+    {
+      "site": "lords-01",
+      "route": "/catalog/",
+      "interactions": 3,
+      "worstMs": 16,
+      "reporting_threshold_ms": 16,
+      "note": "зафиксированы взаимодействия выше порога отчётности",
+      "observer_selfcheck_ms": 128
+    }
+  ],
+  "player": [
+    {
+      "site": "lords-01",
+      "viewport": 390,
+      "url": "http://127.0.0.1:8801/title/pepelnyy-obzhig-2025/",
+      "width": 312,
+      "height": 176,
+      "ratio": 1.778,
+      "probePoint": {
+        "x": 195,
+        "y": 450
+      },
+      "insideFrame": true,
+      "topTag": "p",
+      "topClass": "",
+      "zIndex": "auto"
+    },
+    {
+      "site": "lords-01",
+      "viewport": 1440,
+      "url": "http://127.0.0.1:8801/title/pepelnyy-obzhig-2025/",
+      "width": 1162,
+      "height": 654,
+      "ratio": 1.778,
+      "probePoint": {
+        "x": 720,
+        "y": 573
+      },
+      "insideFrame": true,
+      "topTag": "p",
+      "topClass": "",
+      "zIndex": "auto"
+    },
+    {
+      "site": "lords-02",
+      "viewport": 390,
+      "url": "http://127.0.0.1:8802/title/pepelnyy-obzhig-2025/",
+      "width": 320,
+      "height": 180,
+      "ratio": 1.778,
+      "probePoint": {
+        "x": 195,
+        "y": 450
+      },
+      "insideFrame": true,
+      "topTag": "p",
+      "topClass": "",
+      "zIndex": "auto"
+    },
+    {
+      "site": "lords-02",
+      "viewport": 1440,
+      "url": "http://127.0.0.1:8802/title/pepelnyy-obzhig-2025/",
+      "width": 1170,
+      "height": 658,
+      "ratio": 1.778,
+      "probePoint": {
+        "x": 720,
+        "y": 571
+      },
+      "insideFrame": true,
+      "topTag": "p",
+      "topClass": "",
+      "zIndex": "auto"
+    },
+    {
+      "site": "lords-03",
+      "viewport": 390,
+      "url": "http://127.0.0.1:8803/title/pepelnyy-obzhig-2025/",
+      "width": 288,
+      "height": 162,
+      "ratio": 1.778,
+      "probePoint": {
+        "x": 195,
+        "y": 450
+      },
+      "insideFrame": true,
+      "topTag": "p",
+      "topClass": "",
+      "zIndex": "auto"
+    },
+    {
+      "site": "lords-03",
+      "viewport": 1440,
+      "url": "http://127.0.0.1:8803/title/pepelnyy-obzhig-2025/",
+      "width": 1138,
+      "height": 640,
+      "ratio": 1.778,
+      "probePoint": {
+        "x": 720,
+        "y": 580
+      },
+      "insideFrame": true,
+      "topTag": "p",
+      "topClass": "",
+      "zIndex": "auto"
+    },
+    {
+      "site": "lords-04",
+      "viewport": 390,
+      "url": "http://127.0.0.1:8804/title/pepelnyy-obzhig-2025/",
+      "width": 330,
+      "height": 186,
+      "ratio": 1.778,
+      "probePoint": {
+        "x": 195,
+        "y": 450
+      },
+      "insideFrame": true,
+      "topTag": "p",
+      "topClass": "",
+      "zIndex": "auto"
+    },
+    {
+      "site": "lords-04",
+      "viewport": 1440,
+      "url": "http://127.0.0.1:8804/title/pepelnyy-obzhig-2025/",
+      "width": 1260,
+      "height": 709,
+      "ratio": 1.778,
+      "probePoint": {
+        "x": 720,
+        "y": 546
+      },
+      "insideFrame": true,
+      "topTag": "p",
+      "topClass": "",
+      "zIndex": "auto"
+    }
+  ]
+}

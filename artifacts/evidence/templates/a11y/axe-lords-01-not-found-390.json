@@ -1,0 +1,24 @@
+{
+  "site": "lords-01",
+  "page": "not-found",
+  "route": "/nonexistent-address/",
+  "url": "http://127.0.0.1:8801/nonexistent-address/",
+  "viewport": {
+    "name": "mobile",
+    "width": 390,
+    "height": 844
+  },
+  "captured_at_utc": "2026-09-04T16:25:51.450Z",
+  "axe_version": "4.13.0",
+  "tags": [
+    "wcag2a",
+    "wcag2aa",
+    "wcag21a",
+    "wcag21aa",
+    "wcag22aa"
+  ],
+  "rules_passed": 25,
+  "rules_inapplicable": 38,
+  "violations": [],
+  "incomplete": []
+}

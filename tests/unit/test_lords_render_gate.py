@@ -129,3 +129,93 @@ class TestПодключениеКСценарию:
     def test_ворота_отключаются_переменной(self):
         """Аварийный выключатель нужен: гейт не должен быть незаменимым."""
         assert "LORDS_RENDER_GATE" in SCRIPT.read_text(encoding="utf-8")
+
+
+# ---------------------------------------------------------------------------
+# Слепые зоны отпечатка
+#
+# Ворота отвечают «не надо», сравнивая отпечаток входов. Вход, который в
+# отпечаток не попал, для ворот не существует: его изменение не вызывает
+# пересборку, и новый шаблон молча не доезжает до страниц.
+#
+# На боевых витринах это состояние наблюдалось прямо: в
+# var/lords/fingerprints/lords-0*.json поле `template_version` равнялось
+# sha256("[]") — хешу пустого списка, — потому что считалось маской
+# ("*.html", "*.j2") по каталогу blueprints/lords, где нет ни одного такого
+# файла: рендерер Lords написан на Python, а профили — YAML. Поле выглядело
+# как отпечаток и не несло ни одного бита о шаблоне.
+# ---------------------------------------------------------------------------
+class TestОтпечатокВидитВходыШаблона:
+    @staticmethod
+    def _отпечаток(repo: Path, state: Path) -> dict:
+        запустить("lords-01", "--record", repo=repo, state=state)
+        return json.loads(state.read_text(encoding="utf-8"))
+
+    @pytest.fixture
+    def репозиторий_с_шаблоном(self, репозиторий: Path) -> Path:
+        профили = репозиторий / "blueprints" / "lords" / "profiles"
+        профили.mkdir(parents=True)
+        (репозиторий / "blueprints" / "lords" / "blueprint.yaml").write_text(
+            "direction: lords\n", encoding="utf-8")
+        (профили / "lords-general.yaml").write_text(
+            "profile: lords-general\nlayout:\n  density: dense\n", encoding="utf-8")
+        (репозиторий / "factory" / "lords" / "pagination.py").write_text(
+            "# pagination\n", encoding="utf-8")
+        return репозиторий
+
+    def test_версия_шаблона_не_является_хешем_пустого_значения(
+            self, репозиторий_с_шаблоном, tmp_path):
+        import hashlib
+        пустые = {
+            hashlib.sha256(b"[]").hexdigest(),
+            hashlib.sha256(b"null").hexdigest(),
+            hashlib.sha256(b"{}").hexdigest(),
+            hashlib.sha256(b"").hexdigest(),
+        }
+        отпечаток = self._отпечаток(репозиторий_с_шаблоном, tmp_path / "fp.json")
+        assert отпечаток["template_version"] not in пустые, (
+            "версия шаблона — хеш пустого значения: поле выглядит как отпечаток "
+            "и не несёт ни одного бита о шаблоне")
+
+    def test_изменение_профиля_меняет_отпечаток(self, репозиторий_с_шаблоном, tmp_path):
+        state = tmp_path / "fp.json"
+        было = self._отпечаток(репозиторий_с_шаблоном, state)
+        (репозиторий_с_шаблоном / "blueprints" / "lords" / "profiles"
+         / "lords-general.yaml").write_text(
+            "profile: lords-general\nlayout:\n  density: airy\n", encoding="utf-8")
+        стало = self._отпечаток(репозиторий_с_шаблоном, state)
+        assert было["template_version"] != стало["template_version"], (
+            "профиль изменился, а отпечаток нет: выкладка шаблона не вызовет пересборку")
+
+    def test_изменение_blueprint_меняет_отпечаток(self, репозиторий_с_шаблоном, tmp_path):
+        state = tmp_path / "fp.json"
+        было = self._отпечаток(репозиторий_с_шаблоном, state)
+        (репозиторий_с_шаблоном / "blueprints" / "lords" / "blueprint.yaml").write_text(
+            "direction: lords\nversion: 2\n", encoding="utf-8")
+        стало = self._отпечаток(репозиторий_с_шаблоном, state)
+        assert было["template_version"] != стало["template_version"]
+
+    def test_изменение_пагинации_меняет_отпечаток(self, репозиторий_с_шаблоном, tmp_path):
+        # pagination.py разбивает каталог на страницы и входит в замороженный
+        # артефакт шаблона. В отпечатке рендерера его не было.
+        state = tmp_path / "fp.json"
+        было = self._отпечаток(репозиторий_с_шаблоном, state)
+        (репозиторий_с_шаблоном / "factory" / "lords" / "pagination.py").write_text(
+            "# pagination v2\n", encoding="utf-8")
+        стало = self._отпечаток(репозиторий_с_шаблоном, state)
+        assert было["renderer_version"] != стало["renderer_version"], (
+            "pagination.py изменился, а отпечаток рендерера нет")
+
+    def test_ворота_требуют_сборки_после_смены_шаблона(
+            self, репозиторий_с_шаблоном, tmp_path):
+        # Главное следствие: ворота обязаны ответить «нужен», а не «не нужен».
+        state = tmp_path / "fp.json"
+        запустить("lords-01", "--record", repo=репозиторий_с_шаблоном, state=state)
+        повтор = запустить("lords-01", repo=репозиторий_с_шаблоном, state=state)
+        assert повтор.returncode == НЕ_НУЖЕН, "без изменений сборка не нужна"
+        (репозиторий_с_шаблоном / "blueprints" / "lords" / "profiles"
+         / "lords-general.yaml").write_text(
+            "profile: lords-general\nlayout:\n  density: airy\n", encoding="utf-8")
+        после = запустить("lords-01", repo=репозиторий_с_шаблоном, state=state)
+        assert после.returncode == НУЖЕН, (
+            "шаблон сменился, а ворота ответили «не надо» — релиз не доедет до страниц")

@@ -366,12 +366,6 @@ main {{ padding: var(--pad) 0 40px; }}
   background: var(--surface-alt); border: 1px dashed var(--border);
   border-radius: var(--radius); padding: 16px; color: var(--muted);
 }}
-.player__status {{
-  display: inline-block; margin-top: 8px; padding: 4px 9px;
-  background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .74rem;
-  color: var(--text); overflow-wrap: anywhere;
-}}
 .seasons {{ margin-bottom: 26px; }}
 .season {{
   background: var(--surface); border: 1px solid var(--border);
@@ -437,6 +431,39 @@ main {{ padding: var(--pad) 0 40px; }}
   {'.facets:not(.facets--row) { grid-template-columns: minmax(0, 1fr); }' if sidebar else ''}
   {'.listing { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: var(--gap); align-items: start; }' if sidebar else ''}
   {'.facets { position: sticky; top: 78px; }' if sidebar else ''}
+}}
+
+/* Пальцевые цели на телефоне.
+   Замер на 390 px показал 33 цели ниже 44 px: пункты меню и подвала высотой
+   15 px, страницы пагинации 38 px, фасетные списки 34 px. По WCAG 2.2 AA
+   (SC 2.5.8, порог 24 px) вёрстка проходила за счёт исключения по интервалу —
+   и это проверено отдельно, — но пальцем в ссылку высотой пятнадцать пикселей
+   попадают мимо независимо от того, что засчитывает критерий.
+
+   Правило ограничено телефоном намеренно: на десктопе указатель точный, и
+   строки меню высотой в палец там выглядели бы разреженной таблицей. Поэтому
+   раскладка широких экранов этим блоком не затрагивается вовсе. */
+@media (max-width: 767px) {{
+  .site-nav a, .site-footer ul a, .pagination a, .pagination span,
+  .brand, .nav-toggle, .facets__reset, .header-search button {{
+    min-height: 44px; display: flex; align-items: center; justify-content: center;
+  }}
+  .facets select, .header-search input {{ min-height: 44px; }}
+  /* Ширина не меньше высоты: подпись «Годы» укладывалась в 31 px, и цель
+     оставалась узкой полосой при достаточной высоте. */
+  .pagination a, .pagination span, .site-nav a, .site-footer ul a {{ min-width: 44px; }}
+
+  /* Кегль поля не ниже 16 px. Это не критерий WCAG, а защита от поведения
+     iOS Safari: при фокусе в поле с меньшим кеглем он зумит страницу и
+     оставляет зрителя в увеличенной раскладке без очевидного пути назад.
+     Замер показал 14 px во всех девяти полях телефона.
+
+     Селекторы повторяют классы исходных правил не для красоты: `font: inherit`
+     у `.header-search input` — правило с классом, и объявление на голом
+     `input` ему проигрывает по специфичности, сколько его ни пиши. */
+  .header-search input, .header-search button,
+  .facets select, .facets input,
+  input, select, textarea {{ font-size: 16px; }}
 }}
 
 @media (prefers-reduced-motion: reduce) {{

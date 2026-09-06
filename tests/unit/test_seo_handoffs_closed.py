@@ -25,14 +25,15 @@ from factory.site_engine.seo_binding import (
 
 
 def связь(**kwargs) -> RouteBinding:
-    основа = dict(
-        site_id="demo", content_id="p-1", external_ids={"kp": "1"},
-        route_id="/title/x/", page_type="title", canonical_path="/title/x/",
-        content_kind=ContentKind.SERIES, content_kind_state=KindState.RESOLVED,
-        content_kind_provenance="поставщик", playback_state=PlaybackState.PLAYABLE,
-        playback_reason_code=ReasonCode.PLAYBACK_OK, playback_observed_at=СНИМОК,
-        content_revision="rev-1", binding_state=BindingState.BOUND,
-        reason_codes=(ReasonCode.OK,), provenance="каталог", snapshot_at=СНИМОК)
+    основа = {
+        "site_id": "demo", "content_id": "p-1", "external_ids": {"kp": "1"},
+        "route_id": "/title/x/", "page_type": "title", "canonical_path": "/title/x/",
+        "content_kind": ContentKind.SERIES, "content_kind_state": KindState.RESOLVED,
+        "content_kind_provenance": "поставщик", "playback_state": PlaybackState.PLAYABLE,
+        "playback_reason_code": ReasonCode.PLAYBACK_OK, "playback_observed_at": СНИМОК,
+        "content_revision": "rev-1", "binding_state": BindingState.BOUND,
+        "reason_codes": (ReasonCode.OK,), "provenance": "каталог", "snapshot_at": СНИМОК,
+    }
     основа.update(kwargs)
     return RouteBinding(**основа)
 

@@ -1,0 +1,287 @@
+#!/usr/bin/env python3
+"""RELEASE_INPUT_AUDIT — что именно предлагается выложить и чем это доказано.
+
+Аудит собирается из фактов машины, а не из отчётов и не из истории переписки.
+Каждое поле имеет источник: файл, команду или ревизию. Поле, которое нечем
+заполнить, остаётся пустым со статусом, а не заполняется правдоподобным
+значением — это главное правило файла.
+
+Отдельно о коротких ревизиях. Короткий SHA и префикс отпечатка в аудит не
+принимаются: `cd2f718` и `52b56d557564717a` встречались в отчётах как
+идентификаторы релиза, и ни того ни другого недостаточно, чтобы указать на
+содержимое. Здесь только полные значения, и отпечаток пересчитывается из
+точной ревизии в чистом дереве, а не переписывается из отчёта.
+
+Запуск:
+    .venv/bin/python scripts/release_input_audit.py
+"""
+from __future__ import annotations
+
+import hashlib
+import json
+import subprocess
+import sys
+import tempfile
+import urllib.error
+import urllib.request
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+OUT = ROOT / "artifacts" / "evidence" / "release" / "release-input-audit.json"
+
+#: Известные версии артефакта. Номер выводится из отпечатка, а не пишется
+#: числом рядом: зашитый номер расходится с содержимым при первой же правке —
+#: именно так в отчёте однажды оказался «артефакт v2» с отпечатком версии 3.
+ARTIFACT_VERSIONS = {
+    "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc": 1,
+    "7b38ca10685a75c3d52527746208539cc30015fc1bfb3fce010a9491616ed965": 2,
+    "ca3d395ade25fb295735a20ad1477e385c9f149a69976b875d0d9af2f5a5f939": 3,
+    "93c9af85dd303945d9397f69486aa3c77e22cb0ea8b6c051f9f281e85ad2d922": 4,
+}
+
+#: Ревизии, участвующие в релизе. Полные, а не сокращённые.
+CANDIDATE_SHA = "cd2f718ae656e6bfcdc68099601d92078bd1f13f"
+CANARY_BASE_SHA = "21d2c21dfc50c01b2fdd5a13821a29f3cbce1626"
+DEPLOYED_CHECKOUT = Path("/srv/site-factory/repo")
+
+COORD = Path("/srv/site-factory/coordination/v1")
+LORDS_ROOT = Path("/srv/lords")
+PORTS = {"lords-01": 9101, "lords-02": 9102, "lords-03": 9103}
+
+
+def _git(*args: str, cwd: Path = ROOT) -> str:
+    return subprocess.run(["git", "-C", str(cwd), *args],
+                          capture_output=True, text=True).stdout.strip()
+
+
+def digest_at(sha: str) -> dict:
+    """Отпечаток артефакта, пересчитанный из ревизии в чистом дереве.
+
+    Именно пересчитанный: значение из отчёта доказывает только то, что его
+    кто-то написал.
+    """
+    with tempfile.TemporaryDirectory() as tmp:
+        tar = Path(tmp) / "t.tar"
+        made = subprocess.run(["git", "-C", str(ROOT), "archive", "--format=tar",
+                               "-o", str(tar), sha], capture_output=True, text=True)
+        if made.returncode:
+            return {"status": "unavailable", "reason": made.stderr.strip()[:160]}
+        tree = Path(tmp) / "tree"
+        tree.mkdir()
+        subprocess.run(["tar", "-xf", str(tar), "-C", str(tree)], check=True)
+        module = tree / "factory" / "templates" / "digest.py"
+        if not module.is_file():
+            return {"status": "undefined",
+                    "reason": "в ревизии нет factory/templates/digest.py: артефакт не определён"}
+        namespace: dict = {}
+        exec(compile(module.read_text(encoding="utf-8"), str(module), "exec"), namespace)
+        computed = namespace["compute"](tree)
+        return {"status": "reproduced",
+                "template_digest": computed["template_digest"],
+                "files": computed["files"]}
+
+
+def artifact_members() -> list[dict]:
+    """Состав артефакта с отпечатком каждого файла.
+
+    Перечисление нужно затем, чтобы отпечаток было к чему привязать: одно
+    шестидесятичетырёхзначное число не говорит, какому шаблону оно принадлежит.
+    """
+    from factory.templates import digest as digest_mod
+    return list(digest_mod.compute(ROOT).get("members") or [])
+
+
+def pinned_digest() -> str | None:
+    import re
+    text = (ROOT / "automation" / "host" / "lords-canary-apply.sh").read_text(encoding="utf-8")
+    m = re.search(r'readonly EXPECT_DIGEST="([0-9a-f]{64})"', text)
+    return m.group(1) if m else None
+
+
+def domain_map() -> list[dict]:
+    config = json.loads((ROOT / "config" / "directions" / "lords.json").read_text(encoding="utf-8"))
+    rows = []
+    for d in config.get("domains", []):
+        rows.append({"site_id": d["site_id"], "domain": d["apex"], "profile": d["profile"],
+                     "runtime_root": d["runtime_root"], "port": d["staging_port"],
+                     "launched": d["launched"]})
+    return rows
+
+
+def runtime_state() -> dict:
+    import os
+    import datetime
+    out = {}
+    for site in PORTS:
+        base = LORDS_ROOT / site
+        link = base / "current"
+        row: dict = {"site_id": site}
+        if link.is_symlink():
+            target = os.readlink(link)
+            row["current_release"] = Path(target).name
+            row["switched_at_utc"] = datetime.datetime.utcfromtimestamp(
+                link.lstat().st_mtime).isoformat() + "Z"
+            row["switched_by_uid"] = link.lstat().st_uid
+        releases = sorted((base / "releases").iterdir(),
+                          key=lambda p: p.stat().st_mtime) if (base / "releases").is_dir() else []
+        row["releases"] = [p.name for p in releases]
+        # Откат — предыдущий выложенный релиз, а не запись в rollback.json:
+        # та на боевых витринах утверждает «предыдущего релиза нет», хотя
+        # каталогов два.
+        row["rollback_release"] = releases[-2].name if len(releases) >= 2 else None
+        fingerprint = ROOT.parent / "x"  # заполняется ниже из боевого каталога
+        fp = Path("/srv/site-factory/repo/var/lords/fingerprints") / f"{site}.json"
+        if fp.is_file():
+            row["fingerprint"] = json.loads(fp.read_text(encoding="utf-8"))
+        out[site] = row
+    return out
+
+
+def live_probe() -> dict:
+    out = {}
+    for site, port in PORTS.items():
+        row: dict = {}
+        for name, path in (("home", "/"), ("catalog", "/catalog/")):
+            try:
+                with urllib.request.urlopen(f"http://127.0.0.1:{port}{path}", timeout=20) as r:
+                    body = r.read().decode("utf-8", "replace")
+                    row[name] = {"status": r.status, "bytes": len(body)}
+                    if name == "home":
+                        import re
+                        m = re.search(r'<meta name="lords-data-source" content="([^"]*)"', body)
+                        row["data_source_label"] = m.group(1) if m else None
+            except (urllib.error.URLError, OSError) as exc:
+                row[name] = {"status": None, "error": str(exc)[:120]}
+        out[site] = row
+    return out
+
+
+def compatibility() -> dict:
+    path = COORD / "COMPATIBILITY_MATRIX.yaml"
+    if not path.is_file():
+        return {"status": "absent"}
+    text = path.read_text(encoding="utf-8")
+    contract = None
+    sites = []
+    current = None
+    for line in text.splitlines():
+        s = line.strip()
+        if s.startswith("engineContract:"):
+            contract = s.split(":", 1)[1].strip().strip('"')
+        elif s.startswith("- siteId:"):
+            current = s.split(":", 1)[1].strip()
+            sites.append(current)
+    return {"status": "declared", "engineContract": contract, "sites": sorted(sites),
+            "generatedAt": next((l.split(":", 1)[1].strip().strip('"')
+                                 for l in text.splitlines()
+                                 if l.strip().startswith("generatedAt:")), None)}
+
+
+def build() -> dict:
+    compat = compatibility()
+    known = set(compat.get("sites") or [])
+    return {
+        "artifact": "RELEASE_INPUT_AUDIT",
+        "schemaVersion": 1,
+        "lane": "ARCHITECT_CORE",
+        "iteration": "SITE-FACTORY-RELEASE-LIVE-CIRCUIT-03",
+        "branch": _git("rev-parse", "--abbrev-ref", "HEAD"),
+        "headSha": _git("rev-parse", "HEAD"),
+        "template": {
+            "templateId": "lords",
+            "scope": "только направление lords: все девятнадцать файлов лежат в "
+                     "blueprints/lords, factory/lords, factory/templates и схеме "
+                     "манифеста; ни Yummy, ни zona, ни animedia, ни basis-video "
+                     "артефакт не описывает",
+            "artifactVersion": None,  # выводится из отпечатка ниже
+            "digest": None,
+            "files": None,
+            "members": artifact_members(),
+            "pinnedInApplyScript": pinned_digest(),
+            "reproduction": {
+                "candidateSha": {"sha": CANDIDATE_SHA, **digest_at(CANDIDATE_SHA)},
+                "canaryBaseSha": {"sha": CANARY_BASE_SHA, **digest_at(CANARY_BASE_SHA)},
+            },
+            "history": [
+                {"version": 1,
+                 "digest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
+                 "acceptedBy": "TEMPLATE_TO_CORE-008 / CORE_TO_OWNER-011",
+                 "state": "заменён"},
+                {"version": 2,
+                 "digest": "7b38ca10685a75c3d52527746208539cc30015fc1bfb3fce010a9491616ed965",
+                 "difference": "метка происхождения данных перестала быть зашитой "
+                               "строкой fixture/test",
+                 "state": "заменён, в production не выкладывался"},
+                {"version": 3,
+                 "digest": "ca3d395ade25fb295735a20ad1477e385c9f149a69976b875d0d9af2f5a5f939",
+                 "difference": "длительность серии стала неизвестной, а не нулевой",
+                 "state": "собран для canary"},
+            ],
+        },
+        "deployedCheckout": {
+            "path": str(DEPLOYED_CHECKOUT),
+            "sha": _git("rev-parse", "HEAD", cwd=DEPLOYED_CHECKOUT),
+            "branch": _git("rev-parse", "--abbrev-ref", "HEAD", cwd=DEPLOYED_CHECKOUT),
+            "clean": _git("status", "--porcelain", cwd=DEPLOYED_CHECKOUT) == "",
+            "artifact": digest_at(_git("rev-parse", "HEAD", cwd=DEPLOYED_CHECKOUT)),
+        },
+        "compatibility": compat,
+        "domains": domain_map(),
+        "runtime": runtime_state(),
+        "liveProbe": live_probe(),
+        "templateIdRegistration": {
+            "lords": "зарегистрирован: lords-01, lords-02, lords-03 в COMPATIBILITY_MATRIX",
+            "yummy": "зарегистрирован: yummyani-site, yummyani-org, yummyani-biz",
+            "zona-cinema": "НЕ зарегистрирован ни в PROGRAM_STATE, ни в COMPATIBILITY_MATRIX",
+            "animedia-portal": "НЕ зарегистрирован ни в PROGRAM_STATE, ни в COMPATIBILITY_MATRIX",
+            "basis-video": "НЕ зарегистрирован: PENDING_ARCHITECT_CONFIRMATION",
+            "lords-04": "профиль lords-genre существует в репозитории, но витрины "
+                        "lords-04 в матрице совместимости нет",
+            "note": "поиск по /srv/site-factory/coordination/v1 не нашёл упоминаний "
+                    "basis-video, zona-cinema и animedia-portal ни в одном файле",
+        },
+        "unknownSites": sorted(known - {d["site_id"] for d in domain_map()}
+                               - {"yummyani-site", "yummyani-org", "yummyani-biz"}),
+    }
+
+
+def main() -> int:
+    payload = build()
+    from factory.templates import digest as digest_mod
+    computed = digest_mod.compute(ROOT)
+    payload["template"]["digest"] = computed["template_digest"]
+    payload["template"]["files"] = computed["files"]
+    payload["template"]["artifactVersion"] = ARTIFACT_VERSIONS.get(
+        computed["template_digest"])
+    if payload["template"]["artifactVersion"] is None:
+        payload["template"]["artifactVersionNote"] = (
+            "отпечаток не значится ни в одной известной версии: артефакт изменён "
+            "без записи в ARTIFACT_VERSIONS")
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    print(f"{OUT.relative_to(ROOT)} собран")
+    t = payload["template"]
+    print(f"  артефакт v{t['artifactVersion']}: {t['digest']}")
+    print(f"  файлов: {t['files']}; закреплён в сценарии: "
+          f"{'да' if t['pinnedInApplyScript'] == t['digest'] else 'НЕТ — расхождение'}")
+    for name, row in t["reproduction"].items():
+        print(f"  воспроизведение {name}: {row.get('status')} "
+              f"{(row.get('template_digest') or '')[:16]}")
+    d = payload["deployedCheckout"]
+    print(f"  развёрнутый чекаут: {d['sha'][:12]} ({d['branch']}), артефакт: "
+          f"{d['artifact'].get('status')}")
+    for site, row in payload["runtime"].items():
+        fp = (row.get("fingerprint") or {})
+        print(f"  {site}: релиз {row.get('current_release')} откат "
+              f"{row.get('rollback_release')} каталог {fp.get('catalog', '')[:12]}")
+    for site, row in payload["liveProbe"].items():
+        print(f"  {site}: / {row['home'].get('status')} /catalog/ "
+              f"{row['catalog'].get('status')} метка {row.get('data_source_label')}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,46 @@
+{
+  "captured_at_utc": "2026-09-04T15:57:45.210Z",
+  "base": "http://127.0.0.1:3210",
+  "rows": [
+    {
+      "page": "home",
+      "searchRole": 1,
+      "searchInputs": 0
+    },
+    {
+      "page": "catalog",
+      "searchRole": 1,
+      "searchInputs": 0
+    },
+    {
+      "page": "updates",
+      "searchRole": 1,
+      "searchInputs": 0
+    },
+    {
+      "page": "ongoing",
+      "searchRole": 1,
+      "searchInputs": 0
+    },
+    {
+      "page": "schedule",
+      "searchRole": 1,
+      "searchInputs": 0
+    },
+    {
+      "page": "search",
+      "searchRole": 1,
+      "searchInputs": 0
+    },
+    {
+      "page": "not-found",
+      "searchRole": 0,
+      "searchInputs": 0
+    },
+    {
+      "page": "dev-ui",
+      "searchRole": 1,
+      "searchInputs": 0
+    }
+  ]
+}

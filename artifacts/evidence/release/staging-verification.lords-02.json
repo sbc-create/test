@@ -1,0 +1,77 @@
+{
+  "artifact": "STAGING_BUILD_VERIFICATION",
+  "captured_at_utc": "2026-09-06T07:19:41Z",
+  "site_id": "lords-02",
+  "receipt": {
+    "site_id": "lords-02",
+    "rendered_at_utc": "2026-09-06T07:18:54Z",
+    "rendered_by_uid": 1001,
+    "template_sha": "12ad506a0c35aa1e029ed82fe7a3041cb1f8c044",
+    "template_digest": "ca3d395ade25fb295735a20ad1477e385c9f149a69976b875d0d9af2f5a5f939",
+    "content_snapshot_digest": "547d379fae4acbd4",
+    "content_snapshot_items": 53232,
+    "pages": 61609,
+    "staging": "/home/claude/wt-release-03/var/canary-staging/lords-02"
+  },
+  "snapshot_items_now": 53232,
+  "gates_without_previous_release": {
+    "catalog_titles": 52523,
+    "expected_titles": 53232,
+    "sample_slugs_found": 0,
+    "sample_slugs_checked": 0,
+    "players_new": 51806,
+    "players_previous": null,
+    "passed": true,
+    "failures": []
+  },
+  "gates_limitation": "сравнение с предыдущим релизом невозможно без прав root: каталог /srv/lords/<site>/current/site принадлежит lords с правами drwx------. Эту часть выполняет фаза switch",
+  "routes": {
+    "/": {
+      "status": 200,
+      "bytes": 25279,
+      "cards": 267
+    },
+    "/catalog/": {
+      "status": 200,
+      "bytes": 125370,
+      "cards": 159
+    },
+    "/catalog/page/2/": {
+      "status": 200,
+      "bytes": 125375,
+      "cards": 159
+    },
+    "/genres/": {
+      "status": 200,
+      "bytes": 4016,
+      "cards": 0
+    },
+    "/years/": {
+      "status": 200,
+      "bytes": 11009,
+      "cards": 0
+    },
+    "/countries/": {
+      "status": 200,
+      "bytes": 3848,
+      "cards": 0
+    },
+    "/new/": {
+      "status": 200,
+      "bytes": 116991,
+      "cards": 159
+    },
+    "/search/": {
+      "status": 200,
+      "bytes": 4412,
+      "cards": 0
+    }
+  },
+  "episode_duration": {
+    "pages_checked": 20,
+    "pages_with_zero": 0,
+    "distinct_values": []
+  },
+  "findings": [],
+  "verdict": "PASS"
+}

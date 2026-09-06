@@ -34,8 +34,8 @@ brand:
     self_hosted: true
 theme_ref: portal_light
 visual_reference: null
-content_package_ref: null
-content_package_sha256: null
+content_package_ref: content/catalog.json
+content_package_sha256: e564d57593edfc29b9b26f793e981f975392323b69b661ecf8cc0480e9ff8fec
 language: ru
 tenant:
   slug: site_a
