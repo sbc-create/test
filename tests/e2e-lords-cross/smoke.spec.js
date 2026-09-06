@@ -81,14 +81,24 @@ test.describe('критический путь', () => {
     await expect(page.locator('.card').first()).toBeVisible();
   });
 
-  test('фильтр каталога работает и сбрасывается', async ({ page }) => {
+  test('фильтр каталога сужает выдачу и возвращается назад', async ({ page }) => {
+    // Фасеты стали ссылками на разделы, а не полями выбора: прежнее поле не
+    // имело ни `name`, ни `method` и на боевом каталоге не меняло ничего.
+    // Проверка переписана под работающее поведение, а не удалена — именно её
+    // предметом остаётся то, что важно в каждом движке: выбор сужает список,
+    // адрес его запоминает, возврат восстанавливает прежнюю выдачу.
     await page.goto(url(SITE, '/catalog/'));
     const before = await page.locator('.card').count();
-    const value = await page.locator('#f-genre option').nth(1).getAttribute('value');
-    await page.selectOption('#f-genre', value);
-    await page.waitForFunction((n) => document.querySelectorAll('.card').length !== n, before);
-    await page.locator('.facets__reset').click();
-    await page.waitForFunction((n) => document.querySelectorAll('.card').length === n, before);
+    const chip = page.locator('#facets a[href^="/genres/"]').first();
+    const href = await chip.getAttribute('href');
+    expect(href, 'фасет жанра не является ссылкой').toBeTruthy();
+    await chip.click();
+    await expect(page).toHaveURL(new RegExp(href.replace(/[/]/g, '\\/') + '$'));
+    const after = await page.locator('.card').count();
+    expect(after).toBeGreaterThan(0);
+    expect(after).not.toBe(before);
+    await page.goBack();
+    await expect(page).toHaveURL(/\/catalog\/$/);
     expect(await page.locator('.card').count()).toBe(before);
   });
 
