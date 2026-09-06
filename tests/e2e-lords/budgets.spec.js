@@ -100,6 +100,23 @@ test.describe('бюджеты веса и запросов', () => {
   }
 });
 
+// Записи Event Timing доходят до наблюдателя после вывода кадра, а не в момент
+// нажатия. Фиксированная пауза здесь была настоящей ошибкой измерения, и
+// опасной стороной наружу: преждевременное чтение занижает худшее
+// взаимодействие, и бюджет проходит потому, что медленная запись ещё не
+// пришла. Ждём не время, а тишину — два одинаковых замера подряд означают,
+// что поток записей иссяк.
+async function settle(page, { quietMs = 150, capMs = 3000 } = {}) {
+  const started = Date.now();
+  let previous = -1;
+  while (Date.now() - started < capMs) {
+    const count = await page.evaluate(() => window.__interactions.length);
+    if (count === previous) return;
+    previous = count;
+    await page.waitForTimeout(quietMs);
+  }
+}
+
 test.describe('INP: страница слушается после появления', () => {
   test('отклик на действия зрителя укладывается в 200 мс', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
@@ -128,7 +145,7 @@ test.describe('INP: страница слушается после появле�
     if (await themeButton.count()) { await themeButton.click(); }
     const toggle = page.locator('.nav-toggle');
     if (await toggle.isVisible()) { await toggle.click(); }
-    await page.waitForTimeout(300);
+    await settle(page);
 
     const interactions = await page.evaluate(() => window.__interactions.slice());
 
@@ -155,7 +172,14 @@ test.describe('INP: страница слушается после появле�
       document.body.append(button);
     });
     await page.locator('#inp-selfcheck').click();
-    await page.waitForTimeout(300);
+    // Ожидание записи, а не времени. Заведомо медленное взаимодействие обязано
+    // появиться у наблюдателя — если оно не появилось за отведённый срок, это
+    // настоящий отказ наблюдателя, а не недождавшаяся проверка.
+    await page.waitForFunction(
+      () => window.__interactions.some((i) => i.duration >= 100),
+      null,
+      { timeout: 5000 },
+    ).catch(() => {});
     const selfCheck = await page.evaluate(() => {
       const slow = window.__interactions.filter((i) => i.duration >= 100);
       document.getElementById('inp-selfcheck')?.remove();
