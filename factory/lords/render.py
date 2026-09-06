@@ -1744,7 +1744,49 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
 # ---------------------------------------------------------------------------
 # Поиск, служебные документы и 404
 # ---------------------------------------------------------------------------
-def _search_body(text: dict, items) -> str:
+#: Адрес указателя поиска. Отдельный документ, а не встроенный в страницу
+#: набор: встраивать полный каталог в каждую страницу нельзя, а в одну
+#: страницу поиска — можно и нужно.
+SEARCH_INDEX_PATH = "/search-index.json"
+
+
+def _search_index_page(items) -> Page:
+    """Указатель поиска: то и только то, что нужно поиску по названию.
+
+    Почему отдельным документом. Клиентский набор списка встраивается в
+    страницу и потому ограничен: на боевом каталоге он не отдаётся вовсе, и
+    поиск не находил ничего — ни по адресу, ни при вводе. Ограничение было
+    верным, а следствие — нет: страница честно сообщала, что поиска нет, но
+    поиска от этого не появлялось.
+
+    Указатель решает обе задачи сразу. Он не утяжеляет ни одну страницу, кроме
+    страницы поиска, и забирается один раз по требованию. В нём нет ничего,
+    кроме адреса, названия, оригинального названия, года и типа: постеры,
+    описания, жанры и оценки поиску по названию не нужны, а весят больше всего
+    остального вместе взятого.
+
+    Поля названы одной буквой намеренно. При пятидесяти тысячах записей
+    человекочитаемые ключи — это лишний мегабайт, который платит зритель.
+    """
+    payload = [
+        {
+            "s": t.slug,
+            "n": t.name,
+            **({"o": t.original_name} if getattr(t, "original_name", "") else {}),
+            **({"y": t.year} if t.year else {}),
+            "t": TYPE_LABELS.get(t.content_type, t.content_type),
+        }
+        for t in items
+    ]
+    return Page(
+        path=SEARCH_INDEX_PATH,
+        body=json.dumps(payload, ensure_ascii=False, separators=(",", ":")),
+        content_type="application/json; charset=utf-8",
+        indexable=False,
+    )
+
+
+def _search_body(text: dict, items, *, index_enabled: bool = True) -> str:
     """Тело страницы поиска. Обещание соответствует возможности.
 
     Прежде страница всегда сообщала «поиск идёт по N записям каталога», где N —
@@ -1763,15 +1805,38 @@ def _search_body(text: dict, items) -> str:
     нет» отправляет туда, где выбор работает, — в разделы каталога.
     """
     dataset = _dataset(items)
+    if not dataset and not index_enabled:
+        # Владелец витрины отказался от указателя. Страница возвращается к
+        # прежнему состоянию: сообщает правду и отправляет туда, где выбор
+        # работает без него.
+        note = ('<p class="count" id="search-count">Поиск по названию на этой '
+                'витрине отключён. Воспользуйтесь разделами — '
+                '<a href="/catalog/">каталогом</a>, <a href="/genres/">жанрами</a>, '
+                '<a href="/years/">годами</a> и <a href="/countries/">странами</a>.</p>')
+        return (
+            f'<h1>{escape(text.get("h1", "Поиск"))}</h1>'
+            + _lede(text.get("intro", ""))
+            + note
+        )
     if dataset:
         note = (f'<p class="count" id="search-count">Введите название: поиск идёт по '
                 f'{len(items)} записям каталога.</p>')
     else:
-        note = ('<p class="count" id="search-count">Поиск по названию сейчас '
-                'недоступен: каталог слишком велик, чтобы отдать его страницей '
-                'целиком. Воспользуйтесь разделами — '
-                '<a href="/catalog/">каталогом</a>, <a href="/genres/">жанрами</a>, '
-                '<a href="/years/">годами</a> и <a href="/countries/">странами</a>.</p>')
+        # Прежде здесь стояло сообщение, что поиска нет: набор для клиентского
+        # поиска встраивается в страницу, а на боевом каталоге он не
+        # отдавался. Сообщение было честным, но поиска не заменяло.
+        #
+        # Теперь страница знает, где взять указатель, и забирает его по
+        # требованию — один документ, только на этой странице, только при
+        # первом запросе. Разделы каталога остаются в подсказке: пока
+        # указатель не загрузился, они и есть работающий путь.
+        note = (f'<p class="count" id="search-count" data-search-index="{SEARCH_INDEX_PATH}"'
+                f' data-search-total="{len(items)}">Введите название: поиск идёт по '
+                f'{len(items)} записям каталога. Указатель загружается при первом '
+                'запросе — это несколько секунд на медленной связи. Разделы '
+                '<a href="/catalog/">каталога</a>, <a href="/genres/">жанров</a>, '
+                '<a href="/years/">годов</a> и <a href="/countries/">стран</a> '
+                'работают без него.</p>')
     return (
         f'<h1>{escape(text.get("h1", "Поиск"))}</h1>'
         + _lede(text.get("intro", ""))
@@ -1789,7 +1854,7 @@ def _search_body(text: dict, items) -> str:
 def _search_page(ctx, catalog: fx.Catalog, kinds) -> Page:
     text = ctx["texts"].get("search") or {}
     items = _sorted(catalog.of_types(kinds))
-    body = _search_body(text, items)
+    body = _search_body(text, items, index_enabled=bool(ctx.get("search_index_enabled")))
     meta = Meta(
         title=text.get("title", "Поиск"),
         description=text.get("description", "Поиск по каталогу."),
@@ -1910,7 +1975,7 @@ def _sitemap(ctx, indexable_paths) -> Page:
 #: ассета обязаны совпадать, а две независимые строки однажды разойдутся.
 ANALYTICS_ASSET_PATH = analytics_snippet.ANALYTICS_SCRIPT_URL
 
-APP_JS = """/* Lords — поведение интерфейса. Ни одного внешнего запроса. */
+APP_JS = r"""/* Lords — поведение интерфейса. Ни одного внешнего запроса. */
 
 /* Состояния плеера.
  *
@@ -2182,6 +2247,122 @@ APP_JS = """/* Lords — поведение интерфейса. Ни одно�
     apply(true);
   }
 })();
+
+/* Поиск по указателю.
+ *
+ * Работает только там, где встроенного набора нет, — на большом каталоге.
+ * Указатель забирается один раз и только по запросу зрителя: тянуть мегабайт
+ * при открытии страницы значило бы платить за поиск, которого не просили.
+ *
+ * Порядок совпадений тот же, что и у серверного сопоставления: точное
+ * совпадение, начало, вхождение. Нестрогого сравнения здесь нет намеренно —
+ * оно стоит дорого в браузере, а строгие совпадения покрывают почти всё; при
+ * пустой выдаче страница говорит об этом прямо, а не молчит.
+ */
+(function () {
+  var note = document.getElementById("search-count");
+  var grid = document.getElementById("grid");
+  var field = document.getElementById("search-q");
+  if (!note || !grid || !field) { return; }
+  var source = note.getAttribute("data-search-index");
+  if (!source) { return; }
+
+  var index = null;
+  var loading = false;
+  var message = note.innerHTML;
+
+  function say(text) { note.textContent = text; }
+
+  function normalize(value) {
+    return (value || "").toLowerCase().replace(/ё/g, "е").replace(/\s+/g, " ").trim();
+  }
+
+  function score(form, query) {
+    if (!form || !query) { return 0; }
+    if (form === query) { return 100; }
+    if (form.indexOf(query) === 0) { return 80; }
+    if (form.indexOf(query) >= 0) { return 60; }
+    return 0;
+  }
+
+  function render(query) {
+    var q = normalize(query);
+    if (q.length < 2) { grid.innerHTML = ""; note.innerHTML = message; return; }
+    var found = [];
+    for (var i = 0; i < index.length; i += 1) {
+      var item = index[i];
+      var best = Math.max(score(normalize(item.n), q), score(normalize(item.o || ""), q));
+      if (best) { found.push([best, normalize(item.n), i, item]); }
+    }
+    found.sort(function (a, b) {
+      if (a[0] !== b[0]) { return b[0] - a[0]; }
+      if (a[1] !== b[1]) { return a[1] < b[1] ? -1 : 1; }
+      return a[2] - b[2];
+    });
+    var shown = found.slice(0, 24);
+    if (!shown.length) {
+      grid.innerHTML = "";
+      say("По запросу «" + query + "» ничего не нашлось.");
+      return;
+    }
+    say("Найдено: " + found.length + (found.length > shown.length
+      ? ". Показаны первые " + shown.length + "." : "."));
+    var html = "";
+    for (var j = 0; j < shown.length; j += 1) {
+      var found_item = shown[j][3];
+      var meta = [found_item.y || "", found_item.t || ""].filter(Boolean).join(" · ");
+      html += '<article class="card"><div class="card__body">'
+        + '<a class="card__title" href="/title/' + encodeURIComponent(found_item.s) + '/">'
+        + found_item.n.replace(/[<>&]/g, "") + "</a>"
+        + (meta ? '<span class="card__meta">' + meta + "</span>" : "")
+        + "</div></article>";
+    }
+    grid.innerHTML = html;
+  }
+
+  function ensure(query) {
+    if (index) { render(query); return; }
+    if (loading) { return; }
+    loading = true;
+    say("Загружается указатель поиска…");
+    var request = new XMLHttpRequest();
+    request.open("GET", source, true);
+    request.onreadystatechange = function () {
+      if (request.readyState !== 4) { return; }
+      loading = false;
+      if (request.status !== 200) {
+        /* Отказ называется отказом. Молчание здесь неотличимо от «ничего не
+           найдено», а это разные вещи с разными действиями зрителя. */
+        say("Указатель поиска не загрузился. Воспользуйтесь разделами каталога.");
+        return;
+      }
+      try { index = JSON.parse(request.responseText); } catch (e) { index = null; }
+      if (!index) {
+        say("Указатель поиска повреждён. Воспользуйтесь разделами каталога.");
+        return;
+      }
+      render(query);
+    };
+    request.send();
+  }
+
+  var timer = null;
+  function schedule() {
+    if (timer) { window.clearTimeout(timer); }
+    timer = window.setTimeout(function () { ensure(field.value); }, 200);
+  }
+
+  field.addEventListener("input", schedule);
+  var form = field.closest("form");
+  if (form) {
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      ensure(field.value);
+    });
+  }
+  var initial = new URLSearchParams(window.location.search).get("q");
+  if (initial) { field.value = initial; ensure(initial); }
+})();
 """
 
 
@@ -2313,6 +2494,12 @@ def _context(package: dict, profile: dict, site_plan, player_state,
         # Выключено по умолчанию: включение меняет состав страниц один раз и
         # требует согласия владельца (adr/0007).
         "pagination_by_year": bool(((package.get("seo") or {}).get("pagination_by_year"))),
+        # Указатель поиска на большом каталоге весит около мегабайта в сжатом
+        # виде и забирается один раз на странице поиска. Цена заметная, и
+        # решение о ней принадлежит владельцу витрины, а не рендереру: флаг
+        # опускается одной строкой в пакете и возвращает прежнее поведение —
+        # честное сообщение о недоступности поиска и разделы каталога.
+        "search_index_enabled": (package.get("seo") or {}).get("search_index", True) is not False,
         "home_items": 12,
         "row_items": 6,
         "facet_position": str(layout.get("facet_position")),
@@ -2534,6 +2721,11 @@ def render_site(
     # Поиск и служебные документы
     if "search" in by_section:
         add(_search_page(ctx, catalog, kinds))
+        # Указатель отдаётся только тогда, когда встроенного набора нет: при
+        # малом каталоге он дублировал бы уже встроенные данные.
+        search_items = _sorted(catalog.of_types(kinds))
+        if ctx.get("search_index_enabled") and len(search_items) > DATASET_MAX_TITLES:
+            add(_search_index_page(search_items))
     indexable_paths = sorted(p for p, page in site.pages.items() if page.indexable)
     for icon_page in _icon_pages(ctx):
         add(icon_page)

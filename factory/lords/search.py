@@ -8,10 +8,32 @@
 
 ## Чего здесь нет
 
-Индекса, хранилища и обращения к сети. Это чистое сопоставление: на вход
-список записей и строка, на выход — упорядоченная выборка. Где искать и как
-доставлять набор — решает вызывающий; смешивать это с правилом сопоставления
-значило бы привязать правило к одному способу доставки.
+Хранилища и обращения к сети. На вход — список записей или построенный по нему
+указатель, на выход — упорядоченная выборка. Где брать набор и как его
+доставлять, решает вызывающий.
+
+## Об указателе
+
+Указатель появился по измерению, а не из общих соображений. На боевом каталоге
+в 53 251 запись сплошной перебор занимал 3,5 секунды в медиане и 6,4 в худшем
+случае — поиска в таком виде для зрителя не существует.
+
+Время уходило в два места. Первое: формы записей пересобирались на каждый
+запрос — 434 мс, целиком напрасно, потому что каталог между запросами не
+меняется. Второе: нестрогое сравнение шло по 291 226 словам всех записей,
+тогда как различных слов всего 63 671 — одно и то же слово сравнивалось с
+запросом десятки раз.
+
+Третье наблюдение оказалось важнее обоих. Оценки строгих совпадений — точное
+100, начало 80, вхождение 60 — всегда выше нестрогого, у которого потолок 39.
+Значит, когда строгие совпадения уже набрали полную выдачу, нестрогий проход
+не может изменить результат **вообще никак**, и его можно не делать. Это не
+приближение и не эвристика: порядок сортировки доказывает, что выдача
+совпадёт с точностью до записи.
+
+Совместимость сохранена: `search` принимает и список записей, и указатель. Со
+списком он строит указатель на месте — медленно, но верно, и старые вызовы
+продолжают работать.
 
 ## Главное ограничение
 
@@ -104,6 +126,19 @@ def _forms(item: dict) -> tuple[str, ...]:
     return tuple(f for f in forms if f)
 
 
+def _too_short(query: str) -> bool:
+    """Запрос короче двух символов не обрабатывается.
+
+    Считается длина того, что набрал зритель, а не длина самого длинного
+    прочтения. Прежде проверялись прочтения, и однобуквенный запрос проходил
+    охрану через транслитерацию: «я» превращалось в «ya», два символа, и поиск
+    выдавал всё, где встречается это сочетание, — «маяк», «Майами», «Кая».
+    Правило модуля сказано прямо: один символ совпадает почти с чем угодно, и
+    обходить собственное правило через побочный эффект преобразования нельзя.
+    """
+    return len(normalize(query)) < MIN_QUERY
+
+
 def _variants(query: str) -> tuple[str, ...]:
     """Все прочтения запроса: как набрано, из чужой раскладки, латиницей."""
     base = normalize(query)
@@ -135,23 +170,180 @@ def _score(form: str, query: str) -> int:
     return 0
 
 
+#: Потолок оценки нестрогого совпадения и пол оценки строгого. Между ними нет
+#: и не должно быть пересечения: на этом основан пропуск нестрогого прохода.
+FUZZY_CEILING = 39
+STRICT_FLOOR = 60
+
+
+def _strict_score(form: str, query: str) -> int:
+    """Строгая часть оценки: точное совпадение, начало, вхождение.
+
+    Вынесена отдельно потому, что стоит почти ничего — сравнение и поиск
+    подстроки выполняет сам интерпретатор, — тогда как нестрогая часть считает
+    расстояние редактирования и стоит на три порядка дороже.
+    """
+    if not form or not query:
+        return 0
+    if form == query:
+        return 100
+    if form.startswith(query):
+        return 80
+    if query in form:
+        return 60
+    return 0
+
+
+def _bigrams(word: str) -> set[str]:
+    return {word[i:i + 2] for i in range(len(word) - 1)}
+
+
+class Index:
+    """Указатель по каталогу: формы записей и словарь слов.
+
+    Строится один раз на каталог. Хранит ровно то, что нужно сопоставлению, и
+    ничего сверх: формы записей, словарь различных слов и указатель от слова к
+    записям. Никаких оценок и никакого порядка — они зависят от запроса.
+    """
+
+    __slots__ = ("items", "forms", "names", "vocabulary", "word_items", "bigram_words")
+
+    def __init__(self, catalog):
+        self.items: list[dict] = list(catalog)
+        self.forms: list[tuple[str, ...]] = [_forms(item) for item in self.items]
+        self.names: list[str] = [normalize(item.get("name") or "") for item in self.items]
+        self.word_items: dict[str, set[int]] = {}
+        self.bigram_words: dict[str, set[str]] = {}
+        for position, forms in enumerate(self.forms):
+            for form in forms:
+                for word in form.split():
+                    self.word_items.setdefault(word, set()).add(position)
+        self.vocabulary: tuple[str, ...] = tuple(self.word_items)
+        for word in self.vocabulary:
+            for bigram in _bigrams(word):
+                self.bigram_words.setdefault(bigram, set()).add(word)
+
+    def __len__(self) -> int:
+        return len(self.items)
+
+    def stats(self) -> dict:
+        """Размер указателя. Нужен отчёту, а не работе."""
+        return {
+            "items": len(self.items),
+            "forms": sum(len(f) for f in self.forms),
+            "vocabulary": len(self.vocabulary),
+            "bigrams": len(self.bigram_words),
+        }
+
+
+def build_index(catalog) -> Index:
+    return Index(catalog)
+
+
+def _as_index(catalog) -> Index:
+    return catalog if isinstance(catalog, Index) else Index(catalog)
+
+
+def _fuzzy_candidates(index: Index, variant: str) -> set[int]:
+    """Записи, до которых нестрогое сравнение вообще может дотянуться.
+
+    Отбор идёт по словарю, а не по записям: одно и то же слово встречается в
+    каталоге десятки раз, и сравнивать его с запросом каждый раз заново незачем.
+
+    Двухбуквенный отбор применяется только там, где он доказуемо ничего не
+    теряет. Слово на расстоянии не больше L от запроса длины N делит с ним не
+    меньше (N−1)−2L двубуквий; при L = N // 4 это число положительно начиная с
+    N = 4. Для запросов короче четырёх букв отбор по двубуквиям неверен, и там
+    словарь просматривается целиком с отсечением по длине — коротких слов мало,
+    и это дёшево.
+    """
+    tolerance = max(1, len(variant) // 4)
+    if len(variant) >= 4:
+        query_bigrams = _bigrams(variant)
+        # Порог общих двубуквий, а не «хотя бы одно». Правка разрушает не более
+        # трёх двубуквий, поэтому слово на расстоянии не больше L обязано
+        # делить с запросом не меньше (число двубуквий запроса − 3L).
+        #
+        # Именно трёх, а не двух. Замена, вставка и удаление портят два
+        # двубуквия, но расстояние здесь Дамерау — Левенштейна, и перестановка
+        # соседних букв тоже стоит одной правки, а портит три: «абвг» → «авбг»
+        # теряет «бв», «аб» и «вг». Граница в два двубуквия прошла все замеры
+        # скорости и провалила проверку на перестановку — самую частую опечатку
+        # из всех.
+        # Порог считается от различных двубуквий запроса, а не от его длины:
+        # у запроса с повторами их меньше, и порог от длины отбросил бы верные
+        # слова. Отбор «хотя бы одно общее» пропускал почти весь словарь, и
+        # многословный запрос без совпадений стоил восьмисот миллисекунд.
+        needed = max(1, len(query_bigrams) - 3 * tolerance)
+        shared: dict[str, int] = {}
+        for bigram in query_bigrams:
+            for word in index.bigram_words.get(bigram, ()):  # noqa: PERF401
+                shared[word] = shared.get(word, 0) + 1
+        words = [word for word, count in shared.items() if count >= needed]
+    else:
+        words = list(index.vocabulary)
+    candidates: set[int] = set()
+    for word in words:
+        if abs(len(word) - len(variant)) > tolerance:
+            continue
+        if distance(word, variant, limit=tolerance) <= tolerance:
+            candidates |= index.word_items.get(word, set())
+    return candidates
+
+
 def search(catalog, query: str, *, limit: int = 20) -> list[dict]:
-    """Записи, отвечающие запросу, в устойчивом порядке."""
-    variants = _variants(query)
-    if not variants or max(len(v) for v in variants) < MIN_QUERY:
+    """Записи, отвечающие запросу, в устойчивом порядке.
+
+    Принимает список записей или готовый указатель. Результат один и тот же:
+    указатель ускоряет, но ничего не решает.
+    """
+    if _too_short(query):
         return []
-    scored: list[tuple[int, str, dict]] = []
-    for item in catalog:
+    variants = _variants(query)
+    if not variants:
+        return []
+    index = _as_index(catalog)
+
+    # Строгий проход по всем формам. Стоит почти ничего и обычно набирает
+    # полную выдачу.
+    scored: dict[int, int] = {}
+    for position, forms in enumerate(index.forms):
         best = 0
-        for form in _forms(item):
+        for form in forms:
             for variant in variants:
-                best = max(best, _score(form, variant))
-        if best > 0:
-            scored.append((best, normalize(item.get("name") or ""), item))
-    # Порядок устойчив: сначала оценка, затем название. Без второго ключа
-    # одинаково оценённые записи меняли бы места между прогонами.
-    scored.sort(key=lambda row: (-row[0], row[1]))
-    return [item for _, _, item in scored[:limit]]
+                value = _strict_score(form, variant)
+                if value > best:
+                    best = value
+        if best:
+            scored[position] = best
+
+    # Нестрогий проход — только если строгих совпадений не хватило на выдачу.
+    # Когда их хватило, нестрогое совпадение (не выше 39) не может обойти
+    # строгое (не ниже 60) ни при каком порядке, и проход изменил бы лишь
+    # время ответа.
+    strong = sum(1 for value in scored.values() if value >= STRICT_FLOOR)
+    if strong < limit:
+        for variant in variants:
+            for position in _fuzzy_candidates(index, variant):
+                if scored.get(position, 0) >= STRICT_FLOOR:
+                    continue
+                best = scored.get(position, 0)
+                for form in index.forms[position]:
+                    value = _score(form, variant)
+                    if value > best:
+                        best = value
+                if best:
+                    scored[position] = best
+
+    # Порядок устойчив: оценка, название, положение в каталоге. Третий ключ
+    # добавлен не для красоты: при равных оценке и названии прежний сплошной
+    # перебор оставлял записи в порядке каталога, а указатель добирает часть
+    # записей нестрогим проходом позже строгого — и две одноимённые записи
+    # менялись местами. Сверка с эталоном это и показала: множество то же,
+    # порядок другой.
+    order = sorted(scored.items(),
+                   key=lambda row: (-row[1], index.names[row[0]], row[0]))
+    return [index.items[position] for position, _ in order[:limit]]
 
 
 def did_you_mean(catalog, query: str) -> str | None:
@@ -166,14 +358,17 @@ def did_you_mean(catalog, query: str) -> str | None:
     Подсказка уместна ровно в одном случае — выдача пуста, а близкое написание
     существует. При бессмысленном запросе её нет: выдумывать нечего.
     """
-    if search(catalog, query, limit=1):
+    index = _as_index(catalog)
+    if search(index, query, limit=1):
+        return None
+    if _too_short(query):
         return None
     variants = _variants(query)
-    if not variants or max(len(v) for v in variants) < MIN_QUERY:
+    if not variants:
         return None
     best_name, best_key = None, None
-    for item in catalog:
-        for form in _forms(item):
+    for position, item in enumerate(index.items):
+        for form in index.forms[position]:
             for variant in variants:
                 # Порог мягче, чем у выдачи: подсказка вправе дотянуться туда,
                 # куда выдача не дотянулась, — иначе она никогда не появится.
