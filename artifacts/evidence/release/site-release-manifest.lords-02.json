@@ -1,7 +1,7 @@
 {
   "artifact": "SiteReleaseManifest",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-05T20:47:10Z",
+  "generatedAt": "2026-09-06T07:23:43Z",
   "lane": "ARCHITECT_CORE",
   "siteId": "lords-02",
   "domain": "lordserial33.biz",
@@ -12,7 +12,7 @@
     "artifactVersion": 3,
     "digest": "ca3d395ade25fb295735a20ad1477e385c9f149a69976b875d0d9af2f5a5f939",
     "files": 19,
-    "sha": "210d060129e996e13d31047a6cfd82ac90911d0d",
+    "sha": "5b85d9849be2575cda44acf36b3e3d0a18992c77",
     "branch": "claude/core-release-live-circuit-03-lords",
     "pinnedInApplyScript": "ca3d395ade25fb295735a20ad1477e385c9f149a69976b875d0d9af2f5a5f939",
     "scope": "только направление lords"
@@ -34,7 +34,7 @@
   },
   "content": {
     "status": "present",
-    "catalog": "eaacf89aefe9919ebb1ce28c5334958af6f907f708c2d071996e61fe221d2d50",
+    "catalog": "bd4aefb99d726c9ac7b98af9e9b59fd27a9bc8b8db29f4535c6609ce59534de5",
     "enrichment": "97f72ad11acfc35804293b603a3d1fea4409923f52aea1c08dc481d6ede1a665",
     "playability": "64e81fff34e8b43132fcee55221e7188412d1c89cbfc81ad9548e78b6e78ea61",
     "renderer_version": "1d53c49349999bbb9fce668823cd385d983882b71809c56048336b3163dcc3f6",
@@ -46,32 +46,32 @@
     "seo_contract_version": "1.0",
     "editorial_overrides": "",
     "assets": "",
-    "fingerprint": "187f5ac45243c8edaca73190d128ac2d4c9ccc59ee0e9f2d2df5432a9f45c90b"
+    "fingerprint": "895ee8b3720b41794061a62bed2e52dbbe3f17534b1a6cd777501bddeda6314f"
   },
   "render": {
     "status": "present",
     "site_id": "lords-02",
-    "rendered_at_utc": "2026-09-05T20:45:23Z",
+    "rendered_at_utc": "2026-09-06T07:18:54Z",
     "rendered_by_uid": 1001,
     "template_sha": "12ad506a0c35aa1e029ed82fe7a3041cb1f8c044",
     "template_digest": "ca3d395ade25fb295735a20ad1477e385c9f149a69976b875d0d9af2f5a5f939",
-    "content_snapshot_digest": "533563edc52ac551",
+    "content_snapshot_digest": "547d379fae4acbd4",
     "content_snapshot_items": 53232,
     "pages": 61609,
     "staging": "/home/claude/wt-release-03/var/canary-staging/lords-02"
   },
   "runtime": {
-    "current_release": "2baf922e8864",
+    "current_release": "9b48993181bf",
     "releases": [
-      "1335d087089b",
-      "2baf922e8864"
+      "2baf922e8864",
+      "9b48993181bf"
     ],
-    "rollback_release": "1335d087089b",
+    "rollback_release": "2baf922e8864",
     "rollback_note": "rollback.json внутри релиза описывает другую сборку (lords-02-e4f8919e53ef, 4316 синтетических записей) и источником отката не является"
   },
   "rollback": {
-    "release": "1335d087089b",
-    "command": "sudo ln -sfn /srv/lords/lords-02/releases/1335d087089b /srv/lords/lords-02/current",
+    "release": "2baf922e8864",
+    "command": "sudo ln -sfn /srv/lords/lords-02/releases/2baf922e8864 /srv/lords/lords-02/current",
     "note": "откат — возврат символьной ссылки на предыдущий выложенный релиз; каталог предыдущего релиза не удаляется",
     "verified": false,
     "verifiedNote": "исполнением не проверялся"
