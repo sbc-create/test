@@ -19,8 +19,8 @@ from pathlib import Path
 
 from factory.templates.rubric import (
     CRITERIA,
-    NOT_APPLICABLE,
     LORDS_KEY_PAGES,
+    NOT_APPLICABLE,
     UNMEASURED,
     Check,
     Expectation,

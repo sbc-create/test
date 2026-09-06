@@ -17,8 +17,6 @@
 
 from __future__ import annotations
 
-import pytest
-
 from factory.templates import rubric
 from factory.templates.rubric import (
     FAIL,

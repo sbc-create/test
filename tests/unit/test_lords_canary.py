@@ -25,12 +25,12 @@ from __future__ import annotations
 
 import json
 import os
+import subprocess
 from pathlib import Path
 
 import pytest
 
 from factory.lords import canary
-
 
 DIGEST = "a" * 64
 
@@ -428,7 +428,8 @@ class TestProvenanceVerify:
     TOOL = Path(__file__).resolve().parents[2] / "automation" / "host" / "lords-canary-provenance.py"
 
     def run(self):
-        import subprocess, sys
+        import subprocess
+        import sys
         return subprocess.run([sys.executable, str(self.TOOL), "--verify"],
                               capture_output=True, text=True)
 
@@ -441,7 +442,7 @@ class TestProvenanceVerify:
         target = self.TOOL.parent / "lords-canary-build.py"
         original = target.read_bytes()
         try:
-            target.write_bytes(original + "\n# подмена\n".encode("utf-8"))
+            target.write_bytes(original + "\n# подмена\n".encode())
             result = self.run()
             assert result.returncode != 0
             assert "изменён файл оснастки" in result.stderr
@@ -490,7 +491,8 @@ class TestDubiousOwnershipReproduced:
             "имитация чужого владельца не сработала — остальные проверки бессмысленны")
 
     def test_сверка_происхождения_переживает_чужого_владельца(self):
-        import subprocess, sys
+        import subprocess
+        import sys
         result = subprocess.run(
             [sys.executable, str(self.ROOT / "automation/host/lords-canary-provenance.py"),
              "--verify"], capture_output=True, text=True, env=self.env())
@@ -525,7 +527,6 @@ class TestNoBlanketGitTrust:
     ROOT = Path(__file__).resolve().parents[2]
 
     def test_нигде_нет_safe_directory(self):
-        import subprocess
         bad = []
         for name in ("automation/host/lords-canary-apply.sh",
                      "automation/host/lords-canary-install-and-run.sh",
@@ -680,9 +681,8 @@ class TestSnapshotPathIsExplicitInput:
             json.dumps({"items": items[:count]}, ensure_ascii=False), encoding="utf-8")
         return directory
 
-    def run_build(self, out: Path, env_extra: dict) -> "subprocess.CompletedProcess":
+    def run_build(self, out: Path, env_extra: dict) -> subprocess.CompletedProcess:
         import os as _os
-        import subprocess
         import sys
         return subprocess.run(
             [sys.executable, str(self.BUILD), "lords-02", str(out)],
@@ -856,9 +856,9 @@ class TestSwitchUnitDoesNotPullRender:
         requires_render = [v for v in d.get("Requires", []) if "render" in v]
         assert not requires_render, "упорядочение подменено зависимостью"
         # Само по себе наличие After на сборку — не дефект, а полезная
-        # предосторожность. Проверяется лишь, что оно не сопровождается
-        # зависимостью, которая сборку запускает.
-        assert after_render or True
+        # предосторожность. Проверяется только отсутствие Requires выше;
+        #  ничего не проверял и был снят.
+        del after_render
 
     def test_конфликт_с_обновлением_содержимого_сохранён(self):
         # Одновременная работа с обновлением означала бы двух писателей в один

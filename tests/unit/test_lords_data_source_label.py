@@ -21,8 +21,6 @@ Definition of Done запрещает `DONE` при test/demo данных в pr
 """
 from __future__ import annotations
 
-import pytest
-
 from factory.lords import render as render_mod
 
 
@@ -82,7 +80,6 @@ class TestЗакреплённыйОтпечатокСовпадаетСДере
 
     def test_константа_сценария_равна_посчитанному_отпечатку(self):
         import re
-        from pathlib import Path
 
         from factory.paths import PATHS
         from factory.templates import digest as digest_mod

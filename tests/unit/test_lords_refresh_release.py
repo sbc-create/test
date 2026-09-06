@@ -220,10 +220,13 @@ def test_повтор_той_же_операции_ничего_не_делае�
 
 
 def test_замок_держится_одним_владельцем(стенд):
-    with рр.замок(стенд["runtime"]):
-        with pytest.raises(рр.RefreshRefused) as отказ:
-            with рр.замок(стенд["runtime"], timeout=0.5):
-                pass
+    держим = рр.замок(стенд["runtime"])
+    держим.__enter__()
+    try:
+        with pytest.raises(рр.RefreshRefused) as отказ, рр.замок(стенд["runtime"], timeout=0.5):
+            pass
+    finally:
+        держим.__exit__(None, None, None)
     assert "занята" in str(отказ.value)
 
 

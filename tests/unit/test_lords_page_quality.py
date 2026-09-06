@@ -35,8 +35,8 @@ import yaml
 
 from factory.lords import fixtures as fx
 from factory.lords import render as render_mod
-from factory.seo import validate as seo_validate
 from factory.paths import PATHS
+from factory.seo import validate as seo_validate
 
 SITES = ("lords-01", "lords-02", "lords-03", "lords-04")
 

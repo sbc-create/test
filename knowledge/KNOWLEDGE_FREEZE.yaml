@@ -1,16 +1,9 @@
 # Сгенерировано `python3 -m factory knowledge freeze`. Вручную не редактируется.
 schema_version: 1
-<<<<<<< HEAD
 freeze_version: unversioned
 frozen_at: '2026-09-05T08:50:50Z'
 file_count: 13
 aggregate_sha256: 6ff7b5fb567a206568e1262b3bba84744a719f3747833f3164a0fe0efcaf080a
-=======
-freeze_version: 2026-09-04-templates-d128
-frozen_at: '2026-09-04T12:51:50Z'
-file_count: 13
-aggregate_sha256: 6dd0886088294bbb529cd265942ec4e4222278ce43a2f75f9e2165b8a1a75ea7
->>>>>>> claude/templates-real-admin-fleet-23
 files:
 - path: knowledge/DECISIONS.md
   sha256: 5b908af939431e579c5836cdfd5f11ff6fe310548d1d3c490fc4ca02ab376a41

@@ -52,14 +52,14 @@ class TestФасетыОтражаютДанные:
         ), collections=())
 
     def test_страны_из_данных_попадают_в_фасет(self):
-        countries = dict((slug, label) for slug, label, _ in self._каталог().countries())
+        countries = {slug: label for slug, label, _ in self._каталог().countries()}
         assert "ssha" in countries, (
             "страна, отсутствующая в зашитом словаре, исчезла из фасета — "
             "именно так /countries/ и оказалась пустой на боевой витрине")
         assert "kanada" in countries
 
     def test_подпись_страны_берётся_из_данных(self):
-        countries = dict((slug, label) for slug, label, _ in self._каталог().countries())
+        countries = {slug: label for slug, label, _ in self._каталог().countries()}
         assert countries.get("ssha") == "США", (
             f"подпись не из данных: {countries.get('ssha')!r}")
 
@@ -69,7 +69,7 @@ class TestФасетыОтражаютДанные:
         assert counts.get("kanada") == 1
 
     def test_жанры_из_данных_попадают_в_фасет(self):
-        genres = dict((slug, label) for slug, label, _ in self._каталог().genres())
+        genres = {slug: label for slug, label, _ in self._каталог().genres()}
         assert "komediya" in genres and "triller" in genres, (
             "жанр вне зашитого словаря исчез из фасета")
         assert genres.get("komediya") == "комедия"

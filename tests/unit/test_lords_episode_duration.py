@@ -19,8 +19,6 @@
 """
 from __future__ import annotations
 
-import pytest
-
 from factory.lords import fixtures as fx
 from factory.lords import render as render_mod
 

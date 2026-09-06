@@ -53,7 +53,7 @@ def замок(runtime: Path | str, *, timeout: float = 300.0):
     """Замок на витрину. Ожидание конечно: вечное ожидание — это остановка."""
     путь = Path(runtime) / ".refresh.lock"
     путь.parent.mkdir(parents=True, exist_ok=True)
-    ф = open(путь, "a+")
+    ф = open(путь, "a+")  # noqa: SIM115 — закрывается в finally ниже
     край = time.monotonic() + timeout
     try:
         while True:
