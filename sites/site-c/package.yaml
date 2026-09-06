@@ -34,8 +34,8 @@ brand:
     self_hosted: true
 theme_ref: editorial
 visual_reference: null
-content_package_ref: null
-content_package_sha256: null
+content_package_ref: content/catalog.json
+content_package_sha256: 83dd8d6c6a3d9f1d583ed4dc504aa577d3acebe65ce5e13da1bbdff6f3dc1c92
 language: ru
 tenant:
   slug: site_c

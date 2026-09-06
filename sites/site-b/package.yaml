@@ -34,8 +34,8 @@ brand:
     self_hosted: true
 theme_ref: pulse
 visual_reference: null
-content_package_ref: null
-content_package_sha256: null
+content_package_ref: content/catalog.json
+content_package_sha256: 9b88f3827070259cad4c4f39fbb4951e734d04edc5b579ba2f45e23f51b0b8be
 language: ru
 tenant:
   slug: site_b
