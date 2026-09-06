@@ -1,14 +1,14 @@
 {
   "artifact": "STAGING_BUILD_VERIFICATION",
-  "captured_at_utc": "2026-09-05T20:45:58Z",
+  "captured_at_utc": "2026-09-06T07:19:41Z",
   "site_id": "lords-02",
   "receipt": {
     "site_id": "lords-02",
-    "rendered_at_utc": "2026-09-05T20:45:23Z",
+    "rendered_at_utc": "2026-09-06T07:18:54Z",
     "rendered_by_uid": 1001,
     "template_sha": "12ad506a0c35aa1e029ed82fe7a3041cb1f8c044",
     "template_digest": "ca3d395ade25fb295735a20ad1477e385c9f149a69976b875d0d9af2f5a5f939",
-    "content_snapshot_digest": "533563edc52ac551",
+    "content_snapshot_digest": "547d379fae4acbd4",
     "content_snapshot_items": 53232,
     "pages": 61609,
     "staging": "/home/claude/wt-release-03/var/canary-staging/lords-02"
@@ -19,7 +19,7 @@
     "expected_titles": 53232,
     "sample_slugs_found": 0,
     "sample_slugs_checked": 0,
-    "players_new": 0,
+    "players_new": 51806,
     "players_previous": null,
     "passed": true,
     "failures": []
