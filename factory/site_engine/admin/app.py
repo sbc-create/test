@@ -341,6 +341,17 @@ class AdminApp:
             )
         if rest[:1] == ["fleet"]:
             return self._record(self._fleet_route(session, method, rest[1:], form, flash, label, csrf))
+        if method == "GET" and rest == ["templates"]:
+            корень = getattr(self._control, "_root", None)
+            if корень is None:
+                return AdminResponse(status=404, html=ui.page("Не найдено", "<p>Нет.</p>"))
+            from factory.site_engine import template_registry
+
+            return self._record(AdminResponse(
+                status=200,
+                html=ui.templates(template_registry.прочитать(корень), flash=flash,
+                                  session_label=label, csrf=csrf),
+            ))
         if method == "GET" and rest == ["readiness"]:
             return self._record(self._readiness(session, flash, label, csrf))
         if rest[:1] == ["new-site"]:

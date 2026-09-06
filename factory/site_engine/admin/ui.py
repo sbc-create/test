@@ -2160,6 +2160,68 @@ def control_center(записи: list, сводка: dict, *, flash: dict | None
     )
 
 
+
+def templates(реестр: dict, *, flash: dict | None, session_label: str, csrf: str) -> str:
+    """Реестр шаблонов: что зарегистрировано и что отвергнуто — с причиной.
+
+    Отвергнутые показаны рядом с годными намеренно. Список только годных
+    выглядит как полный, и тот, кто добавлял пакет, не узнает, почему его нет:
+    он решит, что не сохранилось.
+    """
+    строки = "".join(
+        f'<tr><td><strong>{_e(з["family"])}</strong><br>'
+        f'<span class="mut">{_e(з["version"])}</span></td>'
+        f'<td class="mut small">{_e(з["digest"][:16])}…<br>{_e(з["rendererRevision"][:12])}</td>'
+        f'<td class="mut">{_e(з["contract"])}</td>'
+        f'<td>{_e(", ".join(з["capabilities"]) or "—")}</td>'
+        f'<td>{_проверки(з.get("contractTests") or {})}</td>'
+        f'<td class="mut">{_e(", ".join(з["rollbackCompatibleWith"]) or "некуда")}</td>'
+        f'<td>{_ссылка(з.get("preview"))}</td></tr>'
+        for з in реестр.get("templates") or []
+    )
+    отвергнутые = "".join(
+        f'<tr><td>{_e(str(з.get("family")))} {_e(str(з.get("version")))}</td>'
+        f'<td colspan="6" class="bad">{_e(str(з.get("reason")))}</td></tr>'
+        for з in реестр.get("rejected") or []
+    )
+    беда = реестр.get("registryError") or ""
+    return page(
+        "Шаблоны",
+        _flash(flash)
+        + (f'<div class="flash bad">{_e(беда)}</div>' if беда else "")
+        + '<div class="card"><h2>Реестр шаблонов</h2>'
+        '<p class="hint">Запись здесь — регистрация проверенного пакета, а не '
+        "загрузка кода. Пакет без результата контрактных проверок не "
+        "регистрируется: не потому, что он плох, а потому что неизвестно.</p>"
+        '<div class="scroll-x"><table><thead><tr>'
+        "<th>Семейство и версия</th><th>Отпечаток и ревизия</th><th>Договор</th>"
+        "<th>Умеет</th><th>Проверки</th><th>Откат на</th><th>Посмотреть</th>"
+        "</tr></thead><tbody>"
+        + (строки or чтопусто(7, "Зарегистрированных пакетов нет."))
+        + (('<tr><th colspan="7">Отвергнуты при чтении</th></tr>' + отвергнутые)
+           if отвергнутые else "")
+        + "</tbody></table></div></div>",
+        session_label=session_label,
+        csrf=csrf,
+    )
+
+
+def _проверки(о: dict) -> str:
+    if not о:
+        return '<span class="mut">не проверялся</span>'
+    когда = str(о.get("at") or "")
+    чем = str(о.get("suite") or "")
+    итог = "ok" if о.get("passed") else "bad"
+    подпись = "пройдены" if о.get("passed") else "не пройдены"
+    return (f'<span class="{итог}">{подпись}</span>'
+            f'<br><span class="mut small">{_e(когда)} · {_e(чем[:60])}</span>')
+
+
+def _ссылка(адрес: str | None) -> str:
+    if not адрес:
+        return '<span class="mut">нет</span>'
+    return f'<a href="{_e(адрес)}" rel="noopener">открыть</a>'
+
 def fleet(витрины: list, *, flash: dict | None, session_label: str, csrf: str) -> str:
     """Массив витрин: состояние, признаки и переход в контур каждой.
 
