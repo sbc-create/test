@@ -63,7 +63,8 @@ COORD = Path("/srv/site-factory/coordination/v1")
 LORDS_ROOT = Path("/srv/lords")
 PORTS = {"lords-01": 9101, "lords-02": 9102,
     "eeb442aef29011757526e65711e5e30e6dee8b9c73b0fe14b8e1d62d402a1a0a": 9103,
-    "afb23829d14b8f27201b23075dd5e750800251c676057a3d595bc82a30a024d2": 9104, "lords-03": 9103}
+    "afb23829d14b8f27201b23075dd5e750800251c676057a3d595bc82a30a024d2": 9104,
+    "32272d5e2fbb93000274c33bc9630582856f63b61dda2b4db6dd64f785400179": 9105, "lords-03": 9103}
 
 
 def _git(*args: str, cwd: Path = ROOT) -> str:
