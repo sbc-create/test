@@ -1,0 +1,37 @@
+# Прогресс этапа PROGRAM-PRODUCTION-FINISH-25
+#
+# Ограничения оценки заданы постановкой и соблюдаются буквально:
+# fixture-only <= 40 %, нет реального publish/rollback <= 70 %,
+# нет публичной браузерной проверки <= 80 %, критический дефект <= 85 %.
+
+version: 1
+checkpoints:
+  - timestamp: "2026-09-06T11:30:00Z"
+    cycle: 6
+    branch: claude/program-production-finish-25
+    head_sha: 8eface4c3290a6711c961234a03495bc6e39d506
+    core: 100
+    central_admin: 80
+    admin_fleet: PARTIAL
+    families:
+      lords_dark: 70
+      lords_light: 70
+      portal_light: 40
+      pulse: 40
+      editorial: 40
+    seo: 60
+    production: 55
+    global_progress: 58
+    reasoning: >-
+      Lords ограничены 70 %: реальный publish через ворота ещё не выполнен на
+      боевой витрине, канарейка не выложена. Три семейства payload ограничены
+      40 %: подтверждены только fixtures. SEO 60 %: контракт закрыт, разметка
+      на боевых витринах не проверена. Production 55 %: механизм исправлен и
+      внедрён, но публичного результата пользователь пока не видит.
+    tests: "4438 passed, 3 skipped, 0 failed (до правок цикла 5-6)"
+    defects_fixed: 4
+    production_changes:
+      - "манифесты релизов заведены трём витринам Lords"
+      - "оснастка обновления вынесена в неизменяемый релиз /srv/site-factory/lords-tooling"
+      - "drop-in systemd: FACTORY_REPO, ExecStart и корень артефактов закреплены"
+    sites_unchanged: [yummyani.site, yummyani.org, yummyani.biz]
