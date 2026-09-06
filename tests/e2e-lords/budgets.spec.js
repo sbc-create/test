@@ -118,10 +118,14 @@ test.describe('INP: страница слушается после появле�
       }).observe({ type: 'event', buffered: true, durationThreshold: 0 });
     });
 
-    const value = await page.locator('#f-genre option').nth(1).getAttribute('value');
-    await page.selectOption('#f-genre', value);
-    await page.locator('.facets__reset').click();
-    await page.locator('#f-sort').selectOption({ index: 1 });
+    // Действия зрителя, которые действительно есть на странице. Прежде здесь
+    // выбирались значения в `#f-genre` и `#f-sort` и нажималась кнопка
+    // сброса; фасеты стали ссылками, и этих полей больше нет. Измерять отклик
+    // несуществующего управления значило бы измерять оснастку.
+    const chip = page.locator('#facets a[href^="/genres/"]').first();
+    if (await chip.count()) { await chip.hover(); }
+    const themeButton = page.locator('.theme-switch button').first();
+    if (await themeButton.count()) { await themeButton.click(); }
     const toggle = page.locator('.nav-toggle');
     if (await toggle.isVisible()) { await toggle.click(); }
     await page.waitForTimeout(300);

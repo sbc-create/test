@@ -1,5 +1,5 @@
 {
-  "captured_at_utc": "2026-09-04T16:25:41.436Z",
+  "captured_at_utc": "2026-09-06T13:15:18.842Z",
   "site": "lords-01",
   "viewport": 390,
   "threshold": 16,
@@ -8,30 +8,6 @@
       "route": "/catalog/",
       "id": "q",
       "tag": "input",
-      "fontSize": 16
-    },
-    {
-      "route": "/catalog/",
-      "id": "f-type",
-      "tag": "select",
-      "fontSize": 16
-    },
-    {
-      "route": "/catalog/",
-      "id": "f-genre",
-      "tag": "select",
-      "fontSize": 16
-    },
-    {
-      "route": "/catalog/",
-      "id": "f-year",
-      "tag": "select",
-      "fontSize": 16
-    },
-    {
-      "route": "/catalog/",
-      "id": "f-country",
-      "tag": "select",
       "fontSize": 16
     },
     {

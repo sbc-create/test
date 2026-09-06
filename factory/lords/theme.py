@@ -79,11 +79,73 @@ SURFACE_PALETTES = {
 }
 
 
-def _palette_block(selector: str, mode: str, *, indent: str = "") -> str:
-    """Переопределение поверхностей для одной палитры."""
-    tokens = SURFACE_PALETTES[mode]
+def _relative_luminance(color: str) -> float:
+    value = color.strip().lstrip("#")
+    if len(value) == 3:
+        value = "".join(ch * 2 for ch in value)
+    channels = []
+    for i in (0, 2, 4):
+        c = int(value[i:i + 2], 16) / 255
+        channels.append(c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4)
+    r, g, b = channels
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+
+def _contrast(foreground: str, background: str) -> float:
+    a, b = _relative_luminance(foreground), _relative_luminance(background)
+    high, low = max(a, b), min(a, b)
+    return (high + 0.05) / (low + 0.05)
+
+
+def readable_on(color: str, background: str, *, target: float = 4.5) -> str:
+    """Тот же цвет, доведённый до порога контраста на данном фоне.
+
+    Нужен для ссылок. Ссылка красится акцентом профиля — это лицо витрины, — но
+    акцент подобран под родную палитру. На светлой палитре зелёный `#79c142`
+    даёт контраст около двух: axe справедливо считает это нарушением, и
+    прочитать такую ссылку тяжело.
+
+    Менять акцент нельзя: витрины перестали бы различаться. Поэтому цвет
+    ССЫЛКИ вычисляется из акцента — затемняется или осветляется шагами, пока
+    не достигнет порога. Вычисляется, а не подбирается на глаз: подбор не
+    воспроизводится и разъезжается при первой смене палитры.
+    """
+    value = color.strip().lstrip("#")
+    if len(value) == 3:
+        value = "".join(ch * 2 for ch in value)
+    try:
+        r, g, b = (int(value[i:i + 2], 16) for i in (0, 2, 4))
+    except ValueError:
+        return color
+    # Направление выбирается по фону: на светлом темнеем, на тёмном светлеем.
+    darken = _relative_luminance(background) > 0.5
+    for _ in range(64):
+        current = f"#{r:02x}{g:02x}{b:02x}"
+        if _contrast(current, background) >= target:
+            return current
+        if darken:
+            r, g, b = (max(0, int(c * 0.94)) for c in (r, g, b))
+            if r == g == b == 0:
+                return "#000000"
+        else:
+            r, g, b = (min(255, int(c * 1.06) + 2) for c in (r, g, b))
+            if r == g == b == 255:
+                return "#ffffff"
+    return f"#{r:02x}{g:02x}{b:02x}"
+
+
+def _palette_block(selector: str, mode: str, *, accent: str = "", indent: str = "") -> str:
+    """Переопределение поверхностей для одной палитры.
+
+    Вместе с поверхностями переопределяется цвет ссылки: акцент профиля
+    подобран под родную палитру и на чужой может не пройти контраст.
+    """
+    tokens = dict(SURFACE_PALETTES[mode])
     lines = "".join(
         f"\n{indent}  --{name.replace('_', '-')}: {value};" for name, value in tokens.items())
+    if accent:
+        link = readable_on(accent, tokens["bg"])
+        lines += f"\n{indent}  --link: {link};"
     return f"{indent}{selector} {{{lines}\n{indent}}}"
 
 
@@ -128,6 +190,7 @@ def stylesheet(profile: dict) -> str:
   --card-pad: {d['card_pad']};
   --card-ratio: {lay['card_ratio']};
   --cols: {cols['mobile']};
+  --link: {readable_on(t['accent'], t['bg'])};
   --font: {t['heading_font']};
   /* Без color-scheme браузер рисует свои полосы прокрутки и элементы
      управления в чужой теме — страница выходит двухцветной. */
@@ -135,17 +198,17 @@ def stylesheet(profile: dict) -> str:
 }}
 
 /* Явный выбор зрителя. Он идёт первым и побеждает системную настройку. */
-{_palette_block(':root[data-theme="dark"]', 'dark')}
-{_palette_block(':root[data-theme="light"]', 'light')}
+{_palette_block(':root[data-theme="dark"]', 'dark', accent=t['accent'])}
+{_palette_block(':root[data-theme="light"]', 'light', accent=t['accent'])}
 
 /* Системная настройка — только когда зритель не выбрал сам. Условие
    :not([data-theme=...]) существует ровно затем, чтобы системная тема не
    перебивала явный выбор. */
 @media (prefers-color-scheme: dark) {{
-{_palette_block(':root:not([data-theme="light"])', 'dark', indent='  ')}
+{_palette_block(':root:not([data-theme="light"])', 'dark', accent=t['accent'], indent='  ')}
 }}
 @media (prefers-color-scheme: light) {{
-{_palette_block(':root:not([data-theme="dark"])', 'light', indent='  ')}
+{_palette_block(':root:not([data-theme="dark"])', 'light', accent=t['accent'], indent='  ')}
 }}
 
 *, *::before, *::after {{ box-sizing: border-box; }}
@@ -162,7 +225,7 @@ body {{
   overflow-x: hidden;
 }}
 img, svg {{ max-width: 100%; height: auto; display: block; }}
-a {{ color: var(--accent); text-decoration: none; }}
+a {{ color: var(--link, var(--accent)); text-decoration: none; }}
 a:hover, a:focus-visible {{ text-decoration: underline; }}
 :focus-visible {{ outline: 2px solid var(--accent); outline-offset: 2px; }}
 h1, h2, h3 {{ line-height: 1.2; margin: 0 0 .5em; overflow-wrap: anywhere; }}
@@ -378,7 +441,7 @@ main {{ padding: var(--pad) 0 40px; }}
 .facet__list {{ list-style: none; margin: 6px 0 0; padding: 0; display: flex;
   flex-wrap: wrap; gap: 6px; }}
 .facet__chip, .facet__more {{ display: inline-flex; align-items: center;
-  min-height: 28px; padding: 3px 10px; border-radius: var(--radius);
+  min-height: 44px; padding: 8px 12px; border-radius: var(--radius);
   background: var(--surface-alt); color: var(--text); text-decoration: none;
   font-size: .82rem; line-height: 1.2; }}
 .facet__chip:hover, .facet__more:hover {{ background: var(--accent);

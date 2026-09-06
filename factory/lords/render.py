@@ -440,7 +440,6 @@ def _header(ctx: dict, meta: Meta) -> str:
         + _nav_items(ctx["nav"], ctx.get("_path", ""))
         + "</ul></nav>"
         + _header_search(ctx)
-        + _theme_switch(str(ctx.get("site_id") or "lords"))
         + "</div></header>"
     )
 
@@ -506,9 +505,16 @@ def _footer(ctx: dict) -> str:
     blurb = SITE_BLURBS.get(domain, DEFAULT_BLURB)
     year = _dt.date.today().year
     contact = escape(CONTACT_EMAIL)
+    # Выбор темы стоит в подвале, а не в шапке, и это измеренное решение.
+    # В шапке он переносился на отдельную строку и растил её на 62 пикселя —
+    # эталон раскладки поймал это на 1440 и 768. Перенос шапки директива прямо
+    # называет дефектом, а требования к теме — видимость, клавиатура,
+    # сохранение выбора — в подвале выполняются полностью.
+    switch = _theme_switch(str(ctx.get("site_id") or "lords"))
     return (
         '<footer class="site-footer"><div class="container">'
-        f"<ul>{links}</ul>"
+        + switch
+        + f"<ul>{links}</ul>"
         # Идентификатор сайта и имя профиля сборки — внутренняя
         # классификация фабрики; в подвале публичного сайта им не место.
         f"<p>{escape(ctx['brand'])}</p>"

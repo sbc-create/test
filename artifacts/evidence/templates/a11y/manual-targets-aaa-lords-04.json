@@ -1,9 +1,9 @@
 {
-  "captured_at_utc": "2026-09-04T16:25:45.655Z",
+  "captured_at_utc": "2026-09-06T13:15:21.346Z",
   "site": "lords-04",
   "route": "/catalog/",
   "viewport": 390,
   "threshold": 44,
-  "total": 74,
+  "total": 101,
   "failing": []
 }
