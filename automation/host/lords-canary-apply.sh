@@ -157,16 +157,6 @@ CURRENT="$(readlink -f "${RUNTIME}/current" 2>/dev/null || true)"
 [ -n "${CURRENT}" ] || die "у витрины нет текущего релиза: откатываться будет некуда"
 log "текущий релиз: $(basename "${CURRENT}")"
 
-log "ворота содержимого до подмены ссылки"
-GATES_FILE="$(mktemp)"
-if ! "${PYTHON}" "${SCRIPT_DIR}/lords-canary-gates.py" \
-     "${STAGING}" "${SNAPSHOT}" "${CURRENT}/site" > "${GATES_FILE}"; then
-  rm -f "${GATES_FILE}"
-  die "предпереключательные ворота содержимого; ссылка не трогалась"
-fi
-GATES="$(cat "${GATES_FILE}")"
-rm -f "${GATES_FILE}"
-
 TIMER_WAS_ACTIVE=0
 
 # Возврат таймера ставится обработчиком выхода ДО остановки, а не после
@@ -198,6 +188,33 @@ if systemctl is-active --quiet "${REFRESH_TIMER}"; then
   log "  цена: обновление содержимого приостановлено у ВСЕХ ТРЁХ витрин"
   systemctl stop "${REFRESH_TIMER}"
 fi
+
+
+# Остановки таймера мало: служба обновления могла уже работать. `Conflicts`
+# действует и на запущенную — она остановит переключение так же надёжно, как
+# только что запущенная. Именно так операция и погибла 2026-09-06: фаза switch
+# ушла в ворота, через двадцать три секунды сработал таймер обновления, и
+# systemd прекратил переключение без единой строки отказа в журнале.
+if systemctl is-active --quiet lords-content-refresh.service; then
+  log "обновление содержимого идёт — жду завершения, иначе конфликт юнитов прекратит переключение"
+  waited=0
+  while systemctl is-active --quiet lords-content-refresh.service; do
+    sleep 10
+    waited=$(( waited + 10 ))
+    [ "${waited}" -lt 1800 ] || die "обновление содержимого не завершилось за 30 минут; ссылка не трогалась"
+  done
+  log "обновление завершилось за ${waited} с, продолжаю"
+fi
+
+log "ворота содержимого до подмены ссылки"
+GATES_FILE="$(mktemp)"
+if ! "${PYTHON}" "${SCRIPT_DIR}/lords-canary-gates.py" \
+     "${STAGING}" "${SNAPSHOT}" "${CURRENT}/site" > "${GATES_FILE}"; then
+  rm -f "${GATES_FILE}"
+  die "предпереключательные ворота содержимого; ссылка не трогалась"
+fi
+GATES="$(cat "${GATES_FILE}")"
+rm -f "${GATES_FILE}"
 
 RELEASE="$(find "${STAGING}" -type f -print0 | sort -z | xargs -0 sha256sum | sha256sum | cut -c1-12)"
 TARGET="${RUNTIME}/releases/${RELEASE}"
