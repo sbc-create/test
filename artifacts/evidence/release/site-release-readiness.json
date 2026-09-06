@@ -99,7 +99,7 @@
       }
     },
     "yummy": {
-      "total": 31,
+      "total": 39,
       "gates": {
         "artifact_identity": {
           "points": 3,
@@ -117,9 +117,9 @@
           "blocked": false
         },
         "render_live": {
-          "points": 0,
-          "note": "production build не запускался: шёл рендер Lords, а общий lock запрещает параллельные тяжёлые сборки",
-          "blocked": true
+          "points": 8,
+          "note": "production build выполнен: next typegen exit 0, tsc 0 ошибок, next build exit 0; фикстурный ответ 200 сборку не заменял",
+          "blocked": false
         },
         "preswitch_gates": {
           "points": 0,
@@ -319,5 +319,5 @@
       }
     }
   },
-  "average": 33
+  "average": 35
 }

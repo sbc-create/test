@@ -24,6 +24,7 @@ import subprocess
 import sys
 import urllib.error
 import urllib.request
+import pathlib
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -149,9 +150,23 @@ def score_yummy() -> dict:
     out["registration"] = Score(10, "yummyani-site, -org, -biz в реестре Control API")
     out["content_live"] = Score(8, "боевая ревизия 4460031491403b759c910e5875fe20688dc67053, "
                                    "health healthy по PROGRAM_STATE")
-    out["render_live"] = Score(0, "production build не запускался: шёл рендер Lords, "
-                                  "а общий lock запрещает параллельные тяжёлые сборки",
-                               blocked=True)
+    # Свидетельство лежит в рабочем дереве Yummy: этот показатель считается в
+    # дереве Core, и держать копию отчёта здесь значило бы завести второй
+    # источник правды о чужом прогоне.
+    build_evidence = pathlib.Path(
+        "/home/claude/wt-yummy-core-03/docs/evidence/production-build-2026-09-06.md")
+    # Признак ищется по строке целиком, а не по точной подстроке с
+    # форматированием: prettier в pre-commit выровнял таблицу пробелами, и
+    # точное совпадение перестало срабатывать на верном свидетельстве.
+    build_passed = build_evidence.is_file() and any(
+        "next build" in line and "exit 0" in line
+        for line in build_evidence.read_text(encoding="utf-8").splitlines())
+    out["render_live"] = Score(
+        8 if build_passed else 0,
+        "production build выполнен: next typegen exit 0, tsc 0 ошибок, "
+        "next build exit 0; фикстурный ответ 200 сборку не заменял"
+        if build_passed else
+        "production build не запускался")
     out["preswitch_gates"] = Score(0, "не запускались")
     out["switch"] = Score(0, "выкладка не выполнялась")
     out["live_acceptance"] = Score(0, "не проводилась")
