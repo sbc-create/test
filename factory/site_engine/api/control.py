@@ -128,6 +128,11 @@ class Principal:
     token_id: str
     scopes: frozenset[str]
     label: str = ""
+    #: Витрина, которой принадлежит обращающийся. Пусто — доступ ко всему
+    #: массиву (супер-администратор или служебная автоматика). Принадлежность
+    #: приходит из объявления токена или из сессии, но никогда из запроса:
+    #: заголовок, задающий тенанта, — это и есть смена тенанта снаружи.
+    site_id: str = ""
 
     def require(self, scope: str) -> None:
         if scope not in self.scopes:
@@ -189,12 +194,20 @@ def principals_from_env(env: dict[str, str] | None = None) -> dict[str, Principa
         token = token.strip()
         if not token:
             continue
+        # Принадлежность объявляется суффиксом «@витрина». Отдельная переменная
+        # среды на каждую витрину разошлась бы со списком токенов при первом же
+        # добавлении, а токен без объявленной витрины остаётся общим намеренно.
+        scope_part, _, site_part = scope_part.partition("@")
         scopes = {s.strip() for s in scope_part.split(",") if s.strip()}
         unknown = scopes - KNOWN_SCOPES
         if unknown:
             # Опечатка в области права — это тихо выданное не то право.
             raise ValueError(f"неизвестные области: {sorted(unknown)}")
-        principals[token] = Principal(token_id=_token_id(token), scopes=frozenset(scopes))
+        principals[token] = Principal(
+            token_id=_token_id(token),
+            scopes=frozenset(scopes),
+            site_id=site_part.strip(),
+        )
     return principals
 
 
@@ -647,6 +660,10 @@ class ControlApi:
         self._rate_limit(
             principal, site_for_limit, f"{method}:{operation}", mutating=mutating
         )
+        # Проверка тенанта стоит в одном месте, до разбора маршрутов. Проверка
+        # в каждом обработчике означала бы, что пропущенный обработчик — это
+        # дыра ровно там, где её не искали.
+        self._проверить_тенанта(principal, rest, body)
 
         if method == "GET" and rest[:1] == ["content-health"]:
             principal.require(SCOPE_READ)
@@ -682,7 +699,16 @@ class ControlApi:
             principal.require(SCOPE_READ)
             from factory.site_engine.api import ops_view
 
-            return ApiResponse(status=200, body=ops_view.sites(self._root, env=self._env))
+            тело = ops_view.sites(self._root, env=self._env)
+            if principal.site_id:
+                # Список — тот же доступ, что и карточка. Отфильтровать надо
+                # здесь, иначе сосед виден в перечне, а «закрыт» только по
+                # прямой ссылке.
+                строки = [
+                    с for с in тело.get("items") or [] if с.get("siteId") == principal.site_id
+                ]
+                тело = {**тело, "items": строки, "total": len(строки)}
+            return ApiResponse(status=200, body=тело)
         if rest[:1] == ["content"]:
             return self._content_route(method, rest[1:], body, principal)
         if rest[:1] == ["operators"]:
@@ -716,6 +742,39 @@ class ControlApi:
                 )
             except _ключи.JoinKeyError as ошибка:
                 raise ControlDenied(404, "site_not_found", str(ошибка)) from ошибка
+        if method == "POST" and rest == ["tenant-switch"]:
+            principal.require(SCOPE_READ)
+            if principal.site_id:
+                raise ControlDenied(
+                    403,
+                    "cross_tenant",
+                    "переключение витрины доступно только не привязанному к витрине",
+                    allowed=principal.site_id,
+                )
+            куда = str(body.get("siteId") or "")
+            self._check_site_id(куда)
+            if not (self._root / "config" / "site-profiles" / f"{куда}.json").is_file():
+                raise ControlDenied(404, "site_not_found", f"витрины {куда} нет")
+            # Переключение — действие под запись. Переключение, происходящее
+            # само, неотличимо от его отсутствия: по журналу не понять, кто и
+            # что смотрел.
+            audit.record(
+                job_id=correlation_id,
+                site_id=куда,
+                environment="staging",
+                action="control.tenant.switch",
+                target=f"config/site-profiles/{куда}.json",
+                mutation=False,
+                exit_code=0,
+                extra={
+                    "correlation_id": correlation_id,
+                    "actor": _актор(principal),
+                    "site_id": куда,
+                },
+            )
+            return ApiResponse(
+                status=200, body={"siteId": куда, "switchedBy": _актор(principal)}
+            )
         if method == "GET" and rest == ["scorecard"]:
             principal.require(SCOPE_READ)
             from factory.site_engine.api import readiness
@@ -790,6 +849,7 @@ class ControlApi:
             return ApiResponse(status=200, body=program_view.incidents(self._root, self._env))
         if method == "GET" and rest[:1] == ["audit"]:
             principal.require(SCOPE_AUDIT)
+            self._принципал_сайт = principal.site_id
             return self._audit_trail(body, headers)
         if method == "GET" and len(rest) == 2 and rest[0] == "jobs":
             principal.require(SCOPE_READ)
@@ -848,6 +908,47 @@ class ControlApi:
         if principal is None:
             raise ControlDenied(401, "unauthorized", "токен не распознан")
         return principal
+
+    #: Где в адресе стоит имя витрины. Таблица, а не догадка по позиции:
+    #: маршрут, добавленный мимо неё, не получит проверки молча — он получит
+    #: её отсутствие, и это видно в самой таблице.
+    ВИТРИНА_В_АДРЕСЕ: dict[str, int] = {
+        "sites": 1,
+        "site-status": 1,
+        "settings": 1,
+        "join-keys": 1,
+        "ratings": 1,
+        "content": 1,
+        "content-health": 1,
+    }
+
+    def _названная_витрина(self, rest: list[str], body: dict[str, Any]) -> str:
+        """Какую витрину назвал запрос — адресом или телом."""
+        позиция = self.ВИТРИНА_В_АДРЕСЕ.get(rest[0] if rest else "")
+        if позиция is not None and len(rest) > позиция:
+            return rest[позиция]
+        из_тела = body.get("siteId") if isinstance(body, dict) else None
+        return str(из_тела or "")
+
+    def _проверить_тенанта(
+        self, principal: Principal, rest: list[str], body: dict[str, Any]
+    ) -> None:
+        """Привязанный обращающийся не выходит за свою витрину.
+
+        Отказ 403 с отдельным кодом, а не 404: 404 сообщал бы, что витрины нет,
+        и оператор соседнего сайта решил бы, что она удалена.
+        """
+        if not principal.site_id:
+            return
+        названа = self._названная_витрина(rest, body)
+        if названа and названа != principal.site_id:
+            raise ControlDenied(
+                403,
+                "cross_tenant",
+                "запрос называет чужую витрину",
+                requested=названа,
+                allowed=principal.site_id,
+            )
 
     def _rate_limit(
         self, principal: Principal, site_id: str, operation: str, *, mutating: bool = True
@@ -2039,6 +2140,7 @@ class ControlApi:
             )
 
         site_id = self._опция(body, "siteId")
+        принадлежность = getattr(self, "_принципал_сайт", "")
         актор = self._опция(body, "actor")
         действие = self._опция(body, "action")
         связь = self._опция(body, "correlationId")
@@ -2049,6 +2151,11 @@ class ControlApi:
         все = audit.read_all()
         подошли = []
         for запись in все:
+            # Привязанный видит только свою витрину, что бы он ни просил.
+            # Записи без витрины (общие для службы) остаются видны: они ничего
+            # не сообщают о соседях.
+            if принадлежность and запись.get("site_id") not in ("", None, принадлежность):
+                continue
             if site_id and запись.get("site_id") != site_id:
                 continue
             if актор and self._актор_записи(запись) != актор:

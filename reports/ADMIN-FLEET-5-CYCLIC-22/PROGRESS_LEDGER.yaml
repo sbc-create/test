@@ -29,7 +29,7 @@ entries:
     cycle: 1
     note: "SiteAdminContract v1 и принадлежность оператора"
     branch: claude/core-product-8plus-20
-    full_head_sha: ЗАПОЛНЯЕТСЯ_ПОСЛЕ_КОММИТА
+    full_head_sha: 27867757657bd24edcbc1a39e07d33273fb00dc2
     core_percent: 100.0
     central_admin: 8
     fleet_gates_closed: 0
@@ -55,4 +55,35 @@ entries:
       Договор и принадлежность есть; изоляции в API и панели ещё нет — поэтому
       fleetTenancy 3, а не выше. Ни одни ворота семейства не открыты: без
       полного E2E ставить оценку семейству нельзя.
+
+  - timestamp: "2026-09-06T07:20:00Z"
+    cycle: 2
+    note: "изоляция тенанта в управляющем слое"
+    branch: claude/core-product-8plus-20
+    full_head_sha: ЗАПОЛНЯЕТСЯ_ПОСЛЕ_КОММИТА
+    core_percent: 100.0
+    central_admin: 8
+    fleet_gates_closed: 0
+    fleet_gates_total: 9
+    fleet_scores:
+      fleetContract: 7
+      fleetTenancy: 7
+      fleetRbac: 5
+      fleetPortalLight: 0
+      fleetPulse: 0
+      fleetEditorial: 0
+      fleetLordsDark: 0
+      fleetLordsLight: 0
+      fleetPilotRollout: 0
+    fleet_percent: 26.4
+    progress_delta_since_previous: 9.7
+    tests: "4363 passed, 3 skipped, 0 failed"
+    defects_found: 0
+    regressions_opened: 0
+    production_status: "не изменялась; mutations 0"
+    next_cycle: 3
+    comment: >-
+      fleetTenancy 7: проверка стоит в одном месте и покрывает шесть маршрутов,
+      списки и журнал. Не 8: своего входа у сайта ещё нет, и проверить путь
+      целиком нечем.
 

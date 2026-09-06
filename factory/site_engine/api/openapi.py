@@ -183,6 +183,16 @@ from factory.site_engine.api.ratelimit import DEFAULT_LIMITS
         ),
         "errors": {"400": "негодный идентификатор витрины", "404": "каталог не читается"},
     },
+    "/api/v1/tenant-switch": {
+        "method": "post",
+        "summary": "Явно переключить витрину супер-администратора",
+        "scope": "read",
+        "idempotent": True,
+        "body": {"type": "object", "required": ["siteId"],
+                 "properties": {"siteId": {"type": "string"}}},
+        "success": ("200", "витрина переключена; действие записано в журнал"),
+        "errors": {"403": "привязанный к витрине не переключается", "404": "витрины нет"},
+    },
     "/api/v1/scorecard": {
         "method": "get",
         "summary": "Табель ворот по измеренному состоянию",
