@@ -339,6 +339,8 @@ class AdminApp:
                     html=ui.sites_list(ответ.body, flash=flash, session_label=label, csrf=csrf),
                 )
             )
+        if rest[:1] == ["fleet"]:
+            return self._record(self._fleet_route(session, method, rest[1:], form, flash, label, csrf))
         if method == "GET" and rest == ["readiness"]:
             return self._record(self._readiness(session, flash, label, csrf))
         if rest[:1] == ["new-site"]:
@@ -1004,6 +1006,93 @@ class AdminApp:
         )
         session.flash = self._flash_from(response, success="Настройка применена.")
         return _redirect(f"{ui._путь()}/sites/{site_id}")
+
+    def _fleet_route(
+        self, session, method: str, tail: list[str], form: dict, flash, label: str, csrf: str
+    ) -> AdminResponse:
+        """Массив витрин. Виден только тому, кто за массив отвечает."""
+        # Привязанный к витрине массива не видит: ни экрана, ни ссылки. Иначе
+        # изоляция держится на том, что он не ввёл адрес руками.
+        if getattr(session, "site_id", "") or getattr(self, "_сайт", ""):
+            return AdminResponse(
+                status=403,
+                html=ui.page(
+                    "Массив",
+                    '<div class="flash bad">Массив витрин доступен только '
+                    "супер-администратору.</div>",
+                    session_label=label,
+                    csrf=csrf,
+                ),
+            )
+
+        if method == "POST" and tail == ["switch"]:
+            куда = (form.get("siteId") or "").strip()
+            ответ = self._call("POST", "/api/v1/tenant-switch", session, {"siteId": куда})
+            if ответ.status != 200:
+                session.flash = self._flash_from(ответ, success="")
+                return _redirect(f"{ui._путь()}/fleet")
+            return _redirect(f"/s/{куда}/admin")
+
+        if method != "GET" or tail:
+            return AdminResponse(
+                status=404, html=ui.page("Не найдено", "<p>Нет такой страницы.</p>")
+            )
+
+        from factory.site_engine.fleet_accounts import FleetAccounts
+        from factory.site_engine.site_admin_contract import TEMPLATE_FAMILIES
+
+        корень = getattr(self._control, "_root", None)
+        флот = FleetAccounts(корень) if корень is not None else None
+        строки = []
+        for сайт in sorted(self._все_витрины()):
+            профиль = self._профиль_витрины(сайт)
+            строки.append(
+                {
+                    "siteId": сайт,
+                    "brand": (профиль.get("brand") or {}).get("name") or "",
+                    "domains": профиль.get("domains") or [],
+                    "family": self._семейство(сайт, TEMPLATE_FAMILIES),
+                    "registration": bool(флот and флот.enabled(сайт)),
+                }
+            )
+        return AdminResponse(
+            status=200,
+            html=ui.fleet(строки, flash=flash, session_label=label, csrf=csrf),
+        )
+
+    def _все_витрины(self) -> list[str]:
+        корень = getattr(self._control, "_root", None)
+        каталог = (корень / "config" / "site-profiles") if корень else None
+        if каталог is None or not каталог.is_dir():
+            return []
+        return [п.stem for п in каталог.glob("*.json")]
+
+    def _профиль_витрины(self, site_id: str) -> dict:
+        корень = getattr(self._control, "_root", None)
+        if корень is None:
+            return {}
+        путь = корень / "config" / "site-profiles" / f"{site_id}.json"
+        try:
+            return json.loads(путь.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return {}
+
+    def _семейство(self, site_id: str, семейства) -> str:
+        """Семейство шаблона витрины — из её пакета, а не из догадки по имени."""
+        корень = getattr(self._control, "_root", None)
+        if корень is None:
+            return ""
+        путь = корень / "sites" / site_id / "package.yaml"
+        if not путь.is_file():
+            return ""
+        try:
+            import yaml
+
+            пакет = yaml.safe_load(путь.read_text(encoding="utf-8")) or {}
+        except Exception:  # noqa: BLE001
+            return ""
+        семья = str(пакет.get("theme_ref") or "")
+        return семья if семья in семейства else семья or ""
 
     def _readiness(self, session, flash, label: str, csrf: str) -> AdminResponse:
         """Готовность к выпуску одним экраном: табель, тревоги, опись состояния."""

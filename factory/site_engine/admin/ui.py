@@ -145,6 +145,9 @@ def _e(value: Any) -> str:
 
 
 def page(title: str, body: str, *, session_label: str = "", csrf: str = "") -> str:
+    массив = (
+        f'<a href="{_путь()}/fleet">Массив</a>' if _путь() == "/admin" else ""
+    )
     nav = ""
     if session_label:
         nav = (
@@ -171,6 +174,10 @@ def page(title: str, body: str, *, session_label: str = "", csrf: str = "") -> s
         f'<a href="{_путь()}/incidents">Происшествия</a>'
         f'<a href="{_путь()}/new-site">Новая витрина</a>'
         f'<a href="{_путь()}/readiness">Готовность</a>'
+        # Ссылка на массив показывается только вне контура витрины: в контуре её
+        # видеть некому, а видимая ссылка у местного администратора —
+        # приглашение проверить, что будет.
+        f'{массив}'
         f'<a href="{_путь()}/audit">Журнал</a><span class="sp"></span>'
         f"{nav}</header><main>{body}</main></body></html>"
     )
@@ -2038,6 +2045,42 @@ def readiness(
         '<div class="scroll-x"><table><thead><tr><th>Хранилище</th><th>Путь</th>'
         "<th>Что там</th><th>Наличие</th><th>Файлов</th></tr></thead><tbody>"
         + (опись_html or чтопусто(5))
+        + "</tbody></table></div></div>",
+        session_label=session_label,
+        csrf=csrf,
+    )
+
+
+def fleet(витрины: list, *, flash: dict | None, session_label: str, csrf: str) -> str:
+    """Массив витрин: состояние, признаки и переход в контур каждой.
+
+    Список, который надо собирать переходами по сайтам, на практике не
+    собирают. Поэтому массив виден одним экраном, и с него же происходит
+    переключение — явное, а не как побочный эффект открытия чужой страницы.
+    """
+    hidden = f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
+    строки = "".join(
+        f'<tr><td><a href="/s/{_e(в["siteId"])}/admin">{_e(в.get("brand") or в["siteId"])}</a>'
+        f'<br><span class="mut">{_e(в["siteId"])}</span></td>'
+        f'<td class="mut">{_e(", ".join(в.get("domains") or []) or "—")}</td>'
+        f'<td class="mut">{_e(в.get("family") or "—")}</td>'
+        f'<td><span class="pill {"ok" if в.get("registration") else "warn"}">'
+        f'{"регистрация включена" if в.get("registration") else "регистрация выключена"}'
+        "</span></td>"
+        f'<td><form method="post" action="{_путь()}/fleet/switch">{hidden}'
+        f'<input type="hidden" name="siteId" value="{_e(в["siteId"])}">'
+        '<button type="submit">Открыть</button></form></td></tr>'
+        for в in витрины
+    )
+    return page(
+        "Массив витрин",
+        _flash(flash)
+        + '<div class="card"><h2>Витрины массива</h2>'
+        '<p class="hint">Переход в контур витрины записывается в журнал: по нему '
+        "должно быть видно, кто и куда смотрел.</p>"
+        '<div class="scroll-x"><table><thead><tr><th>Витрина</th><th>Домены</th>'
+        "<th>Семейство</th><th>Регистрация</th><th></th></tr></thead><tbody>"
+        + (строки or чтопусто(5, "Витрин нет."))
         + "</tbody></table></div></div>",
         session_label=session_label,
         csrf=csrf,
