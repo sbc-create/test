@@ -1,0 +1,1763 @@
+{
+ "counts": {
+  "не страница произведения": 42,
+  "связано": 226,
+  "  тип:episode": 18,
+  "  состояние:BOUND": 224,
+  "  тип:title": 208,
+  "  состояние:KIND_UNRESOLVED": 2
+ },
+ "heldResolved": 159,
+ "rows": [
+  {
+   "url": "about-catalog",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-aoasi-promo-rolik-vtorogo-sezona",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-aoasi-vtoroy-sezon-startuet-4-oktyabrya",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-nippon-sangoku-poluchit-prodolzhenie",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-premera-dragon-ball-super-beerus-11-oktyabrya",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-dve-kartochki-avgusta-v-kataloge",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-uzniki-repeticiya-proschaniya-v-lente-novinok",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-novye-kartochki-v-podborkah",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "https://yummyani.org/anime/velikiy-pravitel/season/1/episode/8",
+   "reason": "OK",
+   "pageType": "episode",
+   "bindingState": "BOUND",
+   "before": "NEEDS_KIND"
+  },
+  {
+   "url": "news-announcement-re-zero-vyshla-pyatnadcataya-seriya-chetvertogo-",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-van-pis-vyshla-seriya-1176",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-igra-lzhecov-vyshla-seriya-22",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-chernaya-koshka-i-klass-vedm-seriya-21",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-cugai-zagrobnogo-mira-seriya-21-vyshla",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-cugai-zagrobnogo-mira-seriya-22-5-sentyabrya-202",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-van-pis-seriya-1177-6-sentyabrya-2026-goda",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-chernaya-koshka-i-klass-vedm-seriya-22-6-sentyab",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-igra-lzhecov-seriya-23-7-sentyabrya-2026-goda",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-re-zero-zhizn-s-nulya-v-alternativnom-mire-4-ser",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-cugai-zagrobnogo-mira-seriya-23-12-sentyabrya-20",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-van-pis-seriya-1178-13-sentyabrya-2026-goda",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-chernaya-koshka-i-klass-vedm-seriya-23-13-sentya",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-igra-lzhecov-seriya-24-14-sentyabrya-2026-goda",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-serialy-spisok-iz-neskolkih-urovney",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "https://yummyani.org/anime/voiny-chernogo-i-belogo-2/season/2/episode/9",
+   "reason": "OK",
+   "pageType": "episode",
+   "bindingState": "BOUND",
+   "before": "NEEDS_KIND"
+  },
+  {
+   "url": "news-announcement-re-zero-zhizn-s-nulya-v-alternativnom-mire-4-ser",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-cugai-zagrobnogo-mira-seriya-24-19-sentyabrya-20",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-van-pis-seriya-1179-20-sentyabrya-2026-goda",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-chernaya-koshka-i-klass-vedm-seriya-24-20-sentya",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-igra-lzhecov-seriya-25-21-sentyabrya-2026-goda",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-dve-daty-kotorye-nelzya-putat",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-zachem-spisok-filmov-ryadom-s-podborkami",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-dragon-ball-super-beerus-treyler-i-data-premery",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-re-zero-zhizn-s-nulya-v-alternativnom-mire-4-ser",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-novinki-kataloga-konca-avgusta",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-kak-ustroen-razdel-filmov",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-chto-poyavilos-v-lente-novinok",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-taynaya-strast-pasi-n-de-gavilanes-chto-izvestno",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-kak-ustroeny-podborki",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-zastav-menya-polyubit-mujer-de-nadie",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-chto-vyshlo-za-nedelyu",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-chto-vyhodit-na-nedele",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-prognoz-final-sezona-igry-lzhecov",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "news-announcement-prognoz-ritm-vyhoda-re-zero",
+   "reason": "NOT_A_TITLE_PAGE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/byvshiy-moy-vrag/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/100-dney-do-proschaniya-dorogoy/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/50-minut-s-vozlyublennym/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/gaskins-ubiyca-avtostopschikov/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/prekrasnyy-shum/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/28-let-spustya-chast-ii-hram-kostey/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/meydey/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/ya-znayu-kto-ty/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/53-voskresenya/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/adepta-sororitas-pokayanie/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/exo-bezumnoe-puteshestvie-po-chedzhu/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/s4-neveroyatnaya-pravdivaya-istoriya-boba-lazara/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/agata-kristian-igra-v-ubiystvo/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/alius-rassledovanie-konkretnogo-incidenta/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/drakoniy-strayker/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/obrechennye/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "REJECTED"
+  },
+  {
+   "url": "https://lordfilm47.space/title/bez-truda-ne-vytaschish-rybku-iz-pruda/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/105-minut/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/12-rozhdestvenskih-svidaniy/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/1992/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/gallyucinacii-voyny/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/karatel-poslednee-ubiystvo/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/eto-peredacha-o-sadovodstve/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/dinozavry/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/liga-spravedlivosti-tron-atlantidy/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/magicheskaya-bitva-pagubnyy-talant-talanty-umirayut-molodymi/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "REJECTED"
+  },
+  {
+   "url": "https://lordfilm47.space/title/a-ty-ne-izmenilsya/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/22-dorozhki/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/priklyucheniya-molodogo-voltera/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/13-dney-do-kanikul/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/v-interesah-adama/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/dom-sevidzh/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/100-tigr/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/kak-ten/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/parshivaya-ovca-2/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/ne-vezuchie-sestry/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/404-begi-begi/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/pochti-legendy/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/101-sposob-zhenitsya/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/18-let-ya-stala-zhenoy-i-zavela-roman/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/ne-idealnye-prestupniki/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/1899/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/10-shagov-k-lyubvi/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://yummyani.org/anime/zvezdnyy-domen-sorokovoe-tysyacheletie/season/1/episode/9",
+   "reason": "OK",
+   "pageType": "episode",
+   "bindingState": "BOUND",
+   "before": "NEEDS_KIND"
+  },
+  {
+   "url": "https://lordfilm47.space/title/1-11/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/27-chasovoy-den/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/ne-udachnyy-vybor/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/2020-tebe-konec/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/68-viski/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://yummyani.org/anime/duh-sveta/season/1/episode/6",
+   "reason": "OK",
+   "pageType": "episode",
+   "bindingState": "BOUND",
+   "before": "NEEDS_KIND"
+  },
+  {
+   "url": "https://lordfilm47.space/title/1-noch-i-2-dnya-sezon-4/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/20-let-s-dzheymi-oliverom/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/45-oborotov/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/ne-idealnaya-zhenschina/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/2036-proishozhdenie-neizvestno/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordfilm47.space/title/7-oskolkov-vo-vremeni/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/1-1-gollivudskaya-istoriya/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordfilm47.space/title/200-gradusov-po-farengeytu/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordserial33.biz/title/gaskins-ubiyca-avtostopschikov/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordserial33.biz/title/dobro-pozhalovat-v-dzhungli/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordserial33.biz/title/velvet-novaya-imperiya/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordserial33.biz/title/ad-dlya-odinochek-5/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/13-dush/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/53-voskresenya/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/0-1-mira/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordserial33.biz/title/102-predlozhenie-ruki-i-serdca/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/vo-vse-tyazhkie-medvedi/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/neprimetnyy/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/dzhudzhi/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "REJECTED"
+  },
+  {
+   "url": "https://lordserial33.biz/title/bts-vozvraschenie/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/lol-2-0-luchshee-vremya-anny/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/re-zero-pereryv-s-nulya-4/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "KIND_UNRESOLVED",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/vhs-letniy-lager/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/burya/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/agnes-protiv-mira/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/txt-kurs-molodogo-otca/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/agent-svyshe/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/drakoniy-strayker/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.org/anime/molodoy-hvastlivyy-kochevnik/season/1/episode/5",
+   "reason": "OK",
+   "pageType": "episode",
+   "bindingState": "BOUND",
+   "before": "NEEDS_KIND"
+  },
+  {
+   "url": "https://lordserial33.biz/title/maugli-i-akira-novye-priklyucheniya/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/superpes-i-hvostataya-komanda/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/cirk-gomesa/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/105-minut/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordserial33.biz/title/1993/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://yummyani.org/anime/mech-rassveta/season/1/episode/2",
+   "reason": "OK",
+   "pageType": "episode",
+   "bindingState": "BOUND",
+   "before": "NEEDS_KIND"
+  },
+  {
+   "url": "https://lordserial33.biz/title/18-letnyaya-prababushka-navodit-poryadok-v-seme/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/60-minut-do-lyubvi/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/6-sekundnaya-traektoriya-melanholiya-pirotehnika-motidzuki-seytaro/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/chernilnyy-sad/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.org/anime/mech-rassveta/season/1/episode/14",
+   "reason": "OK",
+   "pageType": "episode",
+   "bindingState": "BOUND",
+   "before": "NEEDS_KIND"
+  },
+  {
+   "url": "https://lordserial33.biz/title/esh-molis-hudey/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/amerikanskiy-koyot/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/karatel-poslednee-ubiystvo/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/angely-pri-smerti/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.biz/anime/tabakoshka/season/1/episode/9",
+   "reason": "OK",
+   "pageType": "episode",
+   "bindingState": "BOUND",
+   "before": "NEEDS_KIND"
+  },
+  {
+   "url": "https://lordserial33.biz/title/golye-i-napugannye-globalnoe-protivostoyanie/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/bozhi-monstry/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/osvezhayuschee-leto/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/rukovodstvo-falshivoy-svetskoy-lvicy/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.biz/anime/mificheskie-zveri-6/season/6/episode/6",
+   "reason": "OK",
+   "pageType": "episode",
+   "bindingState": "BOUND",
+   "before": "NEEDS_KIND"
+  },
+  {
+   "url": "https://lordserial33.biz/title/liga-spravedlivosti/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/magicheskaya-bitva-pagubnyy-talant-talanty-umirayut-molodymi/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "REJECTED"
+  },
+  {
+   "url": "https://lordserial33.biz/title/dzherri-uest-logotip/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/ahmed-i-ahmed/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/40-dney/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/120-hrabrecov/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/1-800-hot-nayt/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordserial33.biz/title/13-chelovek-v-lovushke-kak-my-vyzhili-v-tayskoy-peschere/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://lordserial33.biz/title/zhanna-d-ark/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/avantyura/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/v-interesah-adama/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/voyna-shery/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/dom-sevidzh/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/iz-pepla-yama/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://lordserial33.biz/title/kanikuly-v-seredine-zimy/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/meydey/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://1lordserials1.online/title/dobro-pozhalovat-v-dzhungli/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://1lordserials1.online/title/ya-znayu-kto-ty/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://1lordserials1.online/title/kurer/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/100-povarov/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/35-eto-slishkom-pozdno-dlya-lyubvi/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/svyatoy-paisiy-iz-farasy-na-nebesa/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/800-metrov/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/goat-mechtay-po-krupnomu/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/ng-morskie-odissei-otkryvaya-tihiy-okean/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/s4-neveroyatnaya-pravdivaya-istoriya-boba-lazara/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/vhs-letniy-lager/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/agata-kristian-igra-v-ubiystvo/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/s-i-x/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/alius-rassledovanie-konkretnogo-incidenta/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/agenty-chetyreh-sezonov-vesenniy-tanec/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/adskiy-universitet/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/beremennost-ne-skryt-kak-ya-stala-lyubimicey-holodnogo-princa/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.biz/anime/velikiy-pravitel/season/1/episode/8",
+   "reason": "OK",
+   "pageType": "episode",
+   "bindingState": "BOUND",
+   "before": "NEEDS_KIND"
+  },
+  {
+   "url": "https://1lordserials1.online/title/13-dney-vdali-ot-solnca/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://1lordserials1.online/title/29gram/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://1lordserials1.online/title/18-letnyaya-prababushka-navodit-poryadok-v-seme-3/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/100-atletov-2/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/6-sekundnaya-traektoriya-melanholiya-pirotehnika-motidzuki-seytaro/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/atlas-king/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/ditya-nochi/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/logovo/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/anakonda-kolco-smerti/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.biz/anime/voiny-chernogo-i-belogo-2/season/2/episode/9",
+   "reason": "OK",
+   "pageType": "episode",
+   "bindingState": "BOUND",
+   "before": "NEEDS_KIND"
+  },
+  {
+   "url": "https://1lordserials1.online/title/odna-milya-glava-pervaya/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/angely-pri-smerti/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/eto-peredacha-o-sadovodstve/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/amerikanskiy-eksperiment/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/120-hrabrecov/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/dinozavry/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/prednachertannaya-vstrecha/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/30-nochey-s-byvshim/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/ahmed-i-ahmed/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.biz/anime/zvezdnyy-domen-sorokovoe-tysyacheletie/season/1/episode/9",
+   "reason": "OK",
+   "pageType": "episode",
+   "bindingState": "BOUND",
+   "before": "NEEDS_KIND"
+  },
+  {
+   "url": "https://1lordserials1.online/title/12-istoriy-glena-anggara/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "NEEDS_SOURCE"
+  },
+  {
+   "url": "https://1lordserials1.online/title/sdelano-v-indii-istoriya-titan/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/nastoyaschaya-zhenschina/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/avariynyy-vyhod/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.biz/anime/duh-sveta/season/1/episode/6",
+   "reason": "OK",
+   "pageType": "episode",
+   "bindingState": "BOUND",
+   "before": "NEEDS_KIND"
+  },
+  {
+   "url": "https://1lordserials1.online/title/burya/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/bud-schastlivoy/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/venchanie/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/grozovoy-pereval/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/zolotoe-bozhestvo",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/zagadochnaya-zhenschina/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/iskusstvo-lzhi/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://1lordserials1.online/title/klika/",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/chasha-snega",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "KIND_UNRESOLVED",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/istoriya-efendi",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/boevoy-master",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/istoriya-iz-epohi-seva",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/otvazhnoe-priklyuchenie",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/kotikame",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/pervyy-bessmertnyy-na-puti-mecha",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/volshebnaya-legenda-put-k-bessmertiyu-2",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/povsednevnaya-zhizn-bessmertnogo-korolya-5",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/lazurnyy-put-malyy-vpered",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.org/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah/season/1/episode/10",
+   "reason": "OK",
+   "pageType": "episode",
+   "bindingState": "BOUND",
+   "before": "NEEDS_KIND"
+  },
+  {
+   "url": "https://yummyani.site/anime/pesnya-rayantsuri",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/konfetnyy-karies",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/vpered-ko-vselennoy",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/kafe-iz-drugogo-mira-2",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/postapokalipticheskoe-puteshestvie",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/tokiyskie-mstiteli-rozhdestvenskaya-bitva",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/rasskazy-kuklovoda-sakona",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/yatterman-nochi",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/vpered-vpered-atom",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/kaprizy-apelsinovoy-ulitsy-ya-hochu-vernutsya-v-tot-den",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "REJECTED"
+  },
+  {
+   "url": "https://yummyani.site/anime/poveliteli-izmereniy",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/matsu-yamma-i-moburi-morskie-sokrovischa-i-ostrov-zagadka",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/priklyucheniya-vo-vremeni-24",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.site/anime/bobobo-bo-bo-bobo",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.org/anime/chuvstvennye-slova/season/1/episode/44",
+   "reason": "OK",
+   "pageType": "episode",
+   "bindingState": "BOUND",
+   "before": "NEEDS_KIND"
+  },
+  {
+   "url": "https://yummyani.org/anime/velikiy-pravitel",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.org/anime/tayna-imperatora-devyati-nebes",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.org/anime/yunyy-lord-master-pobega-2",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.org/anime/nevesta-demona",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.org/anime/s-mesta-na-mesto-epizod-13",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "REJECTED"
+  },
+  {
+   "url": "https://yummyani.org/anime/bashnya-mechty-zagadka-snezhnogo-goroda",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.org/anime/geroy-merzavets",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.org/anime/pohititeli-pod-prikrytiem",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.org/anime/velikiy-iz-brodyachih-psov-5",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.org/anime/s-mesta-na-mesto",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.org/anime/malenkiy-gorod-enotov-vnutri-mobilnogo-telefona",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.org/anime/devushki-i-tanki-final",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.org/anime/pinok-v-serdtse",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.org/anime/yuvenilnyy-belyy-kon-opyanennyy-vesennim-vetrom",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.biz/anime/velikiy-pravitel",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.biz/anime/tayna-imperatora-devyati-nebes",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.biz/anime/yunyy-lord-master-pobega-2",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.biz/anime/nevesta-demona",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.biz/anime/s-mesta-na-mesto-epizod-13",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "REJECTED"
+  },
+  {
+   "url": "https://yummyani.biz/anime/bashnya-mechty-zagadka-snezhnogo-goroda",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.biz/anime/geroy-merzavets",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.biz/anime/pohititeli-pod-prikrytiem",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.biz/anime/velikiy-iz-brodyachih-psov-5",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.biz/anime/s-mesta-na-mesto",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.biz/anime/malenkiy-gorod-enotov-vnutri-mobilnogo-telefona",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.biz/anime/devushki-i-tanki-final",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.biz/anime/pinok-v-serdtse",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.biz/anime/yuvenilnyy-belyy-kon-opyanennyy-vesennim-vetrom",
+   "reason": "OK",
+   "pageType": "title",
+   "bindingState": "BOUND",
+   "before": "HELD_INSUFFICIENT_DATA"
+  },
+  {
+   "url": "https://yummyani.biz/anime/molodoy-hvastlivyy-kochevnik/season/1/episode/5",
+   "reason": "OK",
+   "pageType": "episode",
+   "bindingState": "BOUND",
+   "before": "NEEDS_KIND"
+  },
+  {
+   "url": "https://yummyani.biz/anime/mech-rassveta/season/1/episode/2",
+   "reason": "OK",
+   "pageType": "episode",
+   "bindingState": "BOUND",
+   "before": "NEEDS_KIND"
+  },
+  {
+   "url": "https://yummyani.biz/anime/mech-rassveta/season/1/episode/14",
+   "reason": "OK",
+   "pageType": "episode",
+   "bindingState": "BOUND",
+   "before": "NEEDS_KIND"
+  }
+ ]
+}
