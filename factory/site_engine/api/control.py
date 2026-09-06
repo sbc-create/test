@@ -1521,6 +1521,8 @@ class ControlApi:
         by_state: dict[str, int] = {}
         for row in rows:
             by_state[row["state"]] = by_state.get(row["state"], 0) + 1
+        from factory.site_engine import adapters
+
         return ApiResponse(
             status=200,
             body={
@@ -1528,9 +1530,19 @@ class ControlApi:
                 # Контракты, которые движок отдаёт помимо основного. Список
                 # здесь, а не в снимке матрицы: матрица — снимок, а движок
                 # обязан сам отвечать, что он умеет.
+                # Маршруты перечислены все, а не один: потребитель обязан
+                # узнать возможность у движка, а не вывести её из номера
+                # версии. Вывод из версии — это догадка, ради запрета которой
+                # контракт и написан.
                 "contracts": [
                     {"name": "seo-route-binding", "version": "1.0.0",
-                     "endpoint": "/api/v1/seo-bindings/{siteId}"},
+                     "endpoint": "/api/v1/seo-bindings/{siteId}",
+                     "endpoints": [
+                         "/api/v1/seo-bindings",
+                         "/api/v1/seo-bindings/{siteId}",
+                         "/api/v1/seo-bindings/{siteId}/resolve",
+                     ],
+                     "producers": list(adapters.PRODUCERS)},
                 ],
                 "sites": rows,
                 "total": len(rows),

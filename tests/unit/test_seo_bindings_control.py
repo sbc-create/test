@@ -155,3 +155,29 @@ def test_перечень_называет_витрины_и_способ_адр
     assert r.status == 200
     имена = {s["siteId"]: s["producer"] for s in r.body["sites"]}
     assert имена[ВИТРИНА] == "declared-routes"
+
+
+# --- объявление возможностей -------------------------------------------------
+
+def test_движок_объявляет_все_маршруты_контракта(песочница):
+    """Потребитель обязан узнать возможность у движка, а не вывести её из
+    номера версии: вывод из версии — догадка, ради запрета которой контракт и
+    написан. Объявлялся один маршрут из трёх."""
+    from factory.site_engine.api import openapi
+
+    r = клиент(песочница).handle("GET", "/api/v1/compatibility", headers=ДОСТУП)
+    объявлен = next(c for c in r.body["contracts"]
+                    if c["name"] == "seo-route-binding")
+    описаны = {п for п in openapi.spec()["paths"]
+               if п.startswith("/api/v1/seo-bindings")}
+    assert set(объявлен["endpoints"]) == описаны, \
+        "объявление движка разошлось с описанием API"
+
+
+def test_объявленные_производители_совпадают_с_существующими(песочница):
+    from factory.site_engine import adapters
+
+    r = клиент(песочница).handle("GET", "/api/v1/compatibility", headers=ДОСТУП)
+    объявлен = next(c for c in r.body["contracts"]
+                    if c["name"] == "seo-route-binding")
+    assert tuple(объявлен["producers"]) == adapters.PRODUCERS
