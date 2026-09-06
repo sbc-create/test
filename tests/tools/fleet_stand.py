@@ -22,6 +22,9 @@ for имя in ("factory", "tests", "schemas", "knowledge", "inventory", "docs", 
     if источник.exists():
         (КОРЕНЬ / имя).symlink_to(источник)
 shutil.copytree(РЕПО / "config", КОРЕНЬ / "config")
+# Пакеты витрин копируются, а не связываются ссылкой: стенд дописывает в них
+# ссылку на свой набор записей, и правка не должна доставать до репозитория.
+shutil.copytree(РЕПО / "sites", КОРЕНЬ / "sites")
 for под in ("var/state", "var/audit", "var/locks", "queue/inbox", "queue/done", "artifacts/jobs"):
     (КОРЕНЬ / под).mkdir(parents=True, exist_ok=True)
 (КОРЕНЬ / "var" / "lords").symlink_to(pathlib.Path("/srv/site-factory/repo/var/lords"))
@@ -43,6 +46,7 @@ for сайт in САЙТЫ:
         json.dumps(d, ensure_ascii=False, indent=2), encoding="utf-8")
 
 sys.path.insert(0, str(РЕПО))
+sys.path.insert(0, str(pathlib.Path(__file__).parent))
 from factory.paths import PATHS  # noqa: E402
 
 PATHS.root = КОРЕНЬ
@@ -66,19 +70,42 @@ _, секрет = каталог.invite(
 # Очередь разбора наполняется из каталога: пустая очередь сделала бы проверку
 # пути публикации невозможной, а заводить записи руками — то же, что не иметь
 # очереди.
-from factory.site_engine import review_build  # noqa: E402
+import fixture_catalog  # noqa: E402
+
+from factory.site_engine import (
+    content_fixture,  # noqa: E402
+    review_build,  # noqa: E402
+)
+
+
+def _источник_пакета(сайт: str) -> str:
+    import yaml
+
+    путь = РЕПО / "sites" / сайт / "package.yaml"
+    if not путь.is_file():
+        return ""
+    пакет = yaml.safe_load(путь.read_text(encoding="utf-8")) or {}
+    return str((пакет.get("content_source") or {}).get("kind") or "")
+
 
 for сайт in САЙТЫ:
-    try:
-        итог = review_build.rebuild(
-            КОРЕНЬ, сайт, env={"SITE_ENGINE_CATALOG_DIR": "var/lords/lords/catalog-cache"},
-            limit=3000,
+    # Каталог берётся тем способом, который объявил пакет самой витрины.
+    # Витрине поставщика набор стенда не подкладывается, и наоборот: зелёный
+    # прогон на чужих данных доказывает только то, что данные чужие.
+    if _источник_пакета(сайт) == "fixture":
+        fixture_catalog.записать(КОРЕНЬ, РЕПО, сайт, 60)
+        перенос = content_fixture.ingest(
+            КОРЕНЬ, сайт, env={"SITE_ENGINE_CATALOG_DIR": "var/state/catalog-cache"}
         )
+        print("набор", сайт, "->", перенос["records"], "записей,",
+              "отпечаток сверен" if перенос["digestVerified"] else "БЕЗ СВЕРКИ")
+        каталог_env = {"SITE_ENGINE_CATALOG_DIR": "var/state/catalog-cache"}
+    else:
+        каталог_env = {"SITE_ENGINE_CATALOG_DIR": "var/lords/lords/catalog-cache"}
+    try:
+        итог = review_build.rebuild(КОРЕНЬ, сайт, env=каталог_env, limit=3000)
         print("очередь", сайт, "->", итог["created"], "из", итог["scanned"])
     except review_build.ReviewBuildError as ошибка:
-        # У витрины другого семейства каталога в этом кэше нет. Подсовывать ей
-        # чужой каталог нельзя: зелёный прогон на выдуманных данных доказывает
-        # только то, что данные выдуманы.
         print("очередь", сайт, "-> НЕТ КАТАЛОГА:", ошибка)
 
 print("стенд:", КОРЕНЬ)

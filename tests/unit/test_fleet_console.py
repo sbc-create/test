@@ -26,7 +26,6 @@ from pathlib import Path
 import pytest
 
 from factory.paths import PATHS
-from factory.site_engine.admin import ADMIN_COOKIE
 from factory.site_engine.admin.app import AdminApp
 from factory.site_engine.api import create_api
 from factory.site_engine.api.control import ControlApi

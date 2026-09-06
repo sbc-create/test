@@ -317,3 +317,44 @@ entries:
       пилот выдержал полчаса наблюдения и полную приёмку. Выкладка — одно
       действие владельца: перезапуск службы требует прав root.
 
+  - timestamp: "2026-09-06T09:15:00Z"
+    cycle: 10
+    note: "пятое семейство и полная приёмка 5/5"
+    branch: claude/core-product-8plus-20
+    candidate_sha: c8796b8faf818d7a7619a66b72a69ae497d65c6b
+    core_percent: 100.0
+    central_admin: 8
+    fleet_gates_closed: 9
+    fleet_gates_total: 9
+    fleet_scores:
+      fleetContract: 8
+      fleetTenancy: 8
+      fleetRbac: 8
+      fleetPortalLight: 8
+      fleetPulse: 8
+      fleetEditorial: 8
+      fleetLordsDark: 8
+      fleetLordsLight: 8
+      fleetPilotRollout: 8
+    fleet_percent: 100.0
+    progress_delta_since_previous: 4.2
+    tests: "4418 passed, 3 skipped, 0 failed"
+    acceptance:
+      portal_light: "site-a: chromium 0, firefox 0"
+      pulse: "site-b: chromium 0, firefox 0"
+      editorial: "site-c: chromium 0, firefox 0"
+      lords_dark: "lords-01: chromium 0, firefox 0"
+      lords_light: "lords-03: chromium 0, firefox 0"
+    defects_found: 0
+    regressions_opened: 0
+    production_status: "не изменялась; mutations 0; current 52fd0665; готовность да"
+    next_cycle: null
+    owner_actions:
+      - "sudo bash automation/host/deploy-control-api.sh deploy c8796b8f…"
+    comment: >-
+      Три семейства payload поднялись с 7 до 8: их пакет сам объявляет источник
+      fixture, не хватало только файла набора. Набор создаётся в корне стенда,
+      пакет витрины в репозитории не тронут — handoff 032 остаётся открытым.
+      Приёмка пройдена на стенде; витрины site-a/b/c остаются staging и в бой
+      не выведены.
+

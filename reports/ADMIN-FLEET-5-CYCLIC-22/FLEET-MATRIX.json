@@ -136,5 +136,32 @@
       "yummyani.org",
       "yummyani.site"
     ]
+  },
+  "acceptance": {
+    "date": "2026-09-06",
+    "engines": [
+      "chromium",
+      "firefox"
+    ],
+    "viewports": [
+      390,
+      768,
+      1440,
+      "200%"
+    ],
+    "result": {
+      "portal_light": "0 провалов",
+      "pulse": "0 провалов",
+      "editorial": "0 провалов",
+      "lords_dark": "0 провалов",
+      "lords_light": "0 провалов"
+    },
+    "catalogSource": {
+      "portal_light": "fixture стенда (пакет витрины объявляет kind: fixture)",
+      "pulse": "fixture стенда (пакет витрины объявляет kind: fixture)",
+      "editorial": "fixture стенда (пакет витрины объявляет kind: fixture)",
+      "lords_dark": "каталог поставщика cdnvideohub",
+      "lords_light": "каталог поставщика cdnvideohub"
+    }
   }
 }
