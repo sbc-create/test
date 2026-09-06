@@ -349,13 +349,18 @@ def test_профиль_без_канонического_хоста_адрес_
 
 
 def test_потребителю_не_из_чего_угадать_вид():
-    """У неустановленного вида нет ни типа разметки, ни разрешения на текст."""
+    """У неустановленного вида нет ни типа разметки, ни имени вида.
+
+    Право обещать просмотр сюда не входит намеренно: оно зависит от потока, а
+    не от вида. Первая редакция проверки требовала и его — и вместе с
+    несуществующим видом отнимала существующее видео.
+    """
     b = одна(type="", tags=[])
     payload = b.as_dict()
     assert payload["contentKind"] == "UNKNOWN"
     assert payload["schemaType"] == ""
     assert payload["contentKindState"] == "MISSING"
-    assert payload["mayPromisePlayback"] is False
+    assert payload["bindingState"] == "KIND_UNRESOLVED"
 
 
 def test_метаданные_без_видео_не_обещают_просмотра():
@@ -438,3 +443,28 @@ def test_конфликт_типа_и_тега_не_разрешается_мо�
     assert b.content_kind_state is sb.KindState.CONFLICTED
     assert b.content_kind is ContentKind.UNKNOWN
     assert sb.ReasonCode.KIND_CONFLICTED in b.reason_codes
+
+
+def test_неизвестный_вид_не_отменяет_существующего_видео():
+    """Стенд поймал: поток подтверждён, вид не разрешён — обещать можно.
+
+    Неизвестный вид отменяет разметку и типоспецифичный текст. Видео он не
+    отменяет: это разные запреты, и смешивать их значит либо лишать страницу
+    правды, либо давать ей лишнее.
+    """
+    b = одна(type="", tags=[])
+    assert b.binding_state is sb.BindingState.KIND_UNRESOLVED
+    assert b.playback_state is sb.PlaybackState.PLAYABLE
+    assert b.may_promise_playback is True
+    assert b.schema_type == "", "разметка при неизвестном виде запрещена"
+
+
+def test_неоднозначный_адрес_обещать_просмотр_не_даёт():
+    """При коллизии неизвестно, чьё это видео."""
+    связи = связать([запись(external_id="g-1", name="Одно"),
+                     запись(external_id="g-2", name="Одно"),
+                     запись(external_id="g-3", name="Одно 2")])
+    коллизии = [b for b in связи
+                if b.binding_state is sb.BindingState.ROUTE_COLLISION]
+    assert коллизии
+    assert all(b.may_promise_playback is False for b in коллизии)
