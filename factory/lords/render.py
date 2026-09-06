@@ -1492,10 +1492,35 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
 # ---------------------------------------------------------------------------
 # Поиск, служебные документы и 404
 # ---------------------------------------------------------------------------
-def _search_page(ctx, catalog: fx.Catalog, kinds) -> Page:
-    text = ctx["texts"].get("search") or {}
-    items = _sorted(catalog.of_types(kinds))
-    body = (
+def _search_body(text: dict, items) -> str:
+    """Тело страницы поиска. Обещание соответствует возможности.
+
+    Прежде страница всегда сообщала «поиск идёт по N записям каталога», где N —
+    полный размер каталога. Но набор для клиентского поиска отдаётся только
+    пока записей не больше `DATASET_MAX_TITLES`; на боевом каталоге из 52 725
+    записей его нет вовсе, и поиск не находил ничего — ни по адресу
+    `/search/?q=…`, ни при вводе в поле. Проверено браузером: блоков данных на
+    странице ноль.
+
+    Ограничение разумно: иначе каждая страница несла бы мегабайты. Неверным
+    было не оно, а сообщение — оно называло число, до которого страница не
+    дотягивается. Ложное обещание хуже отсутствия возможности: зритель вводит
+    запрос, ничего не получает и заключает, что каталог пуст.
+
+    Теперь страница говорит правду в обоих состояниях и в состоянии «поиска
+    нет» отправляет туда, где выбор работает, — в разделы каталога.
+    """
+    dataset = _dataset(items)
+    if dataset:
+        note = (f'<p class="count" id="search-count">Введите название: поиск идёт по '
+                f'{len(items)} записям каталога.</p>')
+    else:
+        note = ('<p class="count" id="search-count">Поиск по названию сейчас '
+                'недоступен: каталог слишком велик, чтобы отдать его страницей '
+                'целиком. Воспользуйтесь разделами — '
+                '<a href="/catalog/">каталогом</a>, <a href="/genres/">жанрами</a>, '
+                '<a href="/years/">годами</a> и <a href="/countries/">странами</a>.</p>')
+    return (
         f'<h1>{escape(text.get("h1", "Поиск"))}</h1>'
         f'<p class="lede">{escape(text.get("intro", ""))}</p>'
         '<form class="header-search" role="search" action="/search/" method="get">'
@@ -1503,11 +1528,16 @@ def _search_page(ctx, catalog: fx.Catalog, kinds) -> Page:
         '<input id="search-q" name="q" type="search" placeholder="Название из каталога" '
         'autocomplete="off">'
         "<button type=\"submit\">Найти</button></form>"
-        '<p class="count" id="search-count">Введите название: поиск идёт по '
-        f'{len(items)} записям каталога.</p>'
-        '<div class="grid" id="grid"></div>'
-        + _dataset(items)
+        + note
+        + '<div class="grid" id="grid"></div>'
+        + dataset
     )
+
+
+def _search_page(ctx, catalog: fx.Catalog, kinds) -> Page:
+    text = ctx["texts"].get("search") or {}
+    items = _sorted(catalog.of_types(kinds))
+    body = _search_body(text, items)
     meta = Meta(
         title=text.get("title", "Поиск"),
         description=text.get("description", "Поиск по каталогу."),
