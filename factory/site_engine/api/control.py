@@ -251,6 +251,28 @@ def _validate_settings(changes: dict[str, Any]) -> list[str]:
                     problems.append(
                         f"{key}.{sub_key}: допустимо от {rule['min']} до {rule['max']}, получено {sub_value}"
                     )
+        elif expected is str:
+            предел = int(rule.get("max_len") or 0)
+            if предел and len(value) > предел:
+                problems.append(f"{key}: не длиннее {предел} символов, получено {len(value)}")
+            образец = rule.get("pattern")
+            if образец and not re.match(образец, value):
+                # Идентификатор с посторонними символами — это не идентификатор,
+                # а попытка вписать в профиль что-то другое: он попадёт в
+                # разметку страницы как есть.
+                problems.append(f"{key}: допустимы только буквы, цифры и знаки _.:-")
+        elif expected is list:
+            предел = int(rule.get("max_items") or 0)
+            if предел and len(value) > предел:
+                problems.append(f"{key}: не более {предел} значений, получено {len(value)}")
+            vtype = rule.get("value_type", str)
+            образец = rule.get("pattern")
+            for н, элемент in enumerate(value):
+                if not isinstance(элемент, vtype):
+                    problems.append(f"{key}[{н}]: ожидался тип {vtype.__name__}")
+                    continue
+                if образец and not re.match(образец, элемент):
+                    problems.append(f"{key}[{н}]: значение {элемент!r} не из допустимых")
     return problems
 
 
