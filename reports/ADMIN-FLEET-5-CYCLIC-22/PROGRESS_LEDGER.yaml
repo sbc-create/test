@@ -181,3 +181,36 @@ entries:
       нет, и путь публикации проверить нечем. Выдуманные данные вместо каталога
       доказали бы только собственную выдуманность.
 
+  - timestamp: "2026-09-06T11:20:00Z"
+    cycle: 6
+    note: "перенос содержимого из пакета витрины; блокер трёх семейств назван"
+    branch: claude/core-product-8plus-20
+    full_head_sha: ЗАПОЛНЯЕТСЯ_ПОСЛЕ_КОММИТА
+    core_percent: 100.0
+    central_admin: 8
+    fleet_gates_closed: 5
+    fleet_gates_total: 9
+    fleet_scores:
+      fleetContract: 8
+      fleetTenancy: 8
+      fleetRbac: 8
+      fleetPortalLight: 6
+      fleetPulse: 6
+      fleetEditorial: 6
+      fleetLordsDark: 8
+      fleetLordsLight: 8
+      fleetPilotRollout: 0
+    fleet_percent: 80.6
+    progress_delta_since_previous: 0.0
+    tests: "4392 passed, 3 skipped, 0 failed"
+    defects_found: 1
+    regressions_opened: 0
+    production_status: "не изменялась; mutations 0"
+    next_cycle: 7
+    external_blockers:
+      - "site-a/b/c: наборов content/catalog.json нет; запрошены у TEMPLATES (handoff 032)"
+    comment: >-
+      Процент не вырос, и это честно: адаптер написан и доказан на pilot-local,
+      но три семейства не сдвинулись — у них нет содержимого, и придумывать его
+      нельзя. Блокер назван поимённо и передан владельцу контура.
+

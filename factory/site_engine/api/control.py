@@ -682,6 +682,33 @@ class ControlApi:
         if method == "GET" and rest == ["playback-policy"]:
             principal.require(SCOPE_READ)
             return self._playback_policy()
+        if method == "POST" and rest == ["content-ingest"]:
+            principal.require(SCOPE_JOBS)
+            from factory.site_engine import content_fixture
+
+            сайт = str(body.get("siteId") or "")
+            self._check_site_id(сайт)
+            try:
+                итог = content_fixture.ingest(self._root, сайт, env=self._env)
+            except content_fixture.FixtureError as ошибка:
+                # Отказ называет причину: пустой каталог на месте отсутствующего
+                # набора выглядит исправной витриной без материалов.
+                raise ControlDenied(409, "fixture_unavailable", str(ошибка)) from ошибка
+            audit.record(
+                job_id=correlation_id,
+                site_id=сайт,
+                environment="staging",
+                action="control.content.ingest",
+                target=итог["source"],
+                mutation=True,
+                exit_code=0,
+                extra={
+                    "correlation_id": correlation_id,
+                    "actor": _актор(principal),
+                    **итог,
+                },
+            )
+            return ApiResponse(status=200, body=итог)
         if method == "POST" and rest == ["review-queue", "rebuild"]:
             principal.require(SCOPE_REVIEW)
             from factory.site_engine import review_build
