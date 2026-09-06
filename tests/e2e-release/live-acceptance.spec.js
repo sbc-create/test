@@ -35,10 +35,42 @@ const VIEWPORTS = [390, 768, 1440];
 
 const collected = { base: BASE, site: SITE, routes: {}, vitals: {} };
 
-test.afterAll(() => {
-  fs.writeFileSync(path.join(OUT, `acceptance-${SITE}.json`),
-    `${JSON.stringify({ captured_at_utc: new Date().toISOString(), ...collected }, null, 2)}\n`);
-});
+// Свидетельство пишется ПОСЛЕ КАЖДОЙ проверки, а не один раз в конце.
+//
+// Первая редакция копила всё в памяти и записывала в afterAll. При падении
+// теста Playwright перезапускает рабочий процесс, накопленное теряется, и в
+// свидетельстве не оказалось ни страницы произведения, ни списка серий —
+// именно тех разделов, ради которых прогон и запускался. Отчёт о релизе,
+// теряющий данные при первом же отказе, бесполезен ровно тогда, когда нужен.
+function record() {
+  // Запись идёт СЛИЯНИЕМ с уже накопленным на диске, а не перезаписью.
+  //
+  // Причина установлена опытом, а не догадкой: после падения проверки
+  // Playwright поднимает новый рабочий процесс, модуль загружается заново, и
+  // `collected` в нём пуст. Прежняя редакция перезаписывала файл этим пустым
+  // накопителем, и из свидетельства исчезали именно те разделы, что были сняты
+  // до отказа, — страница произведения и список серий. Отчёт о релизе,
+  // теряющий данные при первом же отказе, бесполезен ровно тогда, когда нужен.
+  //
+  // Файл удаляется перед прогоном снаружи, поэтому слияние не тащит данные
+  // прошлых запусков.
+  const file = path.join(OUT, `acceptance-${SITE}.json`);
+  let previous = {};
+  try {
+    previous = JSON.parse(fs.readFileSync(file, 'utf8'));
+    delete previous.captured_at_utc;
+  } catch {
+    previous = {};
+  }
+  const merged = { ...previous, ...collected };
+  // Маршруты накапливаются по одному и тоже обязаны сливаться, а не заменяться.
+  merged.routes = { ...(previous.routes || {}), ...(collected.routes || {}) };
+  fs.writeFileSync(file,
+    `${JSON.stringify({ captured_at_utc: new Date().toISOString(), ...merged }, null, 2)}\n`);
+}
+
+test.afterEach(() => record());
+test.afterAll(() => record());
 
 test.describe('маршруты отвечают и не ломают консоль', () => {
   for (const route of ROUTES) {
@@ -68,6 +100,7 @@ test.describe('маршруты отвечают и не ломают консо
       const status = response ? response.status() : null;
       const allowed = route.expect || [200];
       collected.routes[route.name] = { status, consoleErrors, networkErrors };
+      record();
       expect(allowed, `${route.path} ответил ${status}`).toContain(status);
       // Заголовок обязателен: страница без h1 неотличима от заглушки.
       await expect(page.locator('h1').first()).toBeVisible();
@@ -75,6 +108,79 @@ test.describe('маршруты отвечают и не ломают консо
       expect(networkErrors, `отказы запросов к витрине на ${route.path}`).toEqual([]);
     });
   }
+});
+
+test.describe('страница произведения', () => {
+  // Адрес тайтла не зашит: он берётся из каталога той же витрины. Зашитый
+  // адрес живёт ровно до следующего обновления каталога.
+  const firstTitle = async (page) => {
+    await page.goto(`${BASE}/catalog/`, { waitUntil: 'load' });
+    const href = await page.locator('a[href^="/title/"]').first().getAttribute('href');
+    expect(href, 'в каталоге нет ни одной ссылки на произведение').toBeTruthy();
+    return href;
+  };
+
+  test('открывается, подписана и несёт место плеера', async ({ page }) => {
+    const href = await firstTitle(page);
+    const response = await page.goto(BASE + href, { waitUntil: 'load' });
+    expect(response.status(), href).toBe(200);
+    await expect(page.locator('h1')).toBeVisible();
+
+    const shell = await page.evaluate(() => {
+      const frame = document.querySelector('[class*="player"]');
+      if (!frame) return null;
+      const rect = frame.getBoundingClientRect();
+      const style = getComputedStyle(frame);
+      return { height: Math.round(rect.height), width: Math.round(rect.width),
+               ratio: style.aspectRatio, text: (frame.textContent || '').trim().slice(0, 120) };
+    });
+    collected.title = { href, player: shell };
+    record();
+    expect(shell, 'посадочного места плеера на странице нет').not.toBeNull();
+    // Кадр обязан занимать место до подключения поставщика: иначе включение
+    // плеера сдвинет всю раскладку.
+    expect(shell.height, `кадр плеера схлопнут: ${shell.height}px`).toBeGreaterThan(50);
+  });
+
+  test('серии сгруппированы и не показывают ложную длительность', async ({ page }) => {
+    const href = await firstTitle(page);
+    await page.goto(BASE + href, { waitUntil: 'load' });
+    const episodes = await page.evaluate(() => {
+      const items = [...document.querySelectorAll('li.episode')];
+      const spans = items.flatMap((li) => [...li.querySelectorAll('span')]
+        .map((s) => (s.textContent || '').trim()));
+      return {
+        count: items.length,
+        seasons: document.querySelectorAll('details.season').length,
+        durations: spans.filter((t) => /\d+\s*мин/.test(t)),
+        zero: spans.filter((t) => /^0\s*мин$/.test(t)).length,
+      };
+    });
+    collected.episodes = episodes;
+    record();
+    // Ноль минут — не длительность, а её отсутствие. Ради этого собиралась
+    // версия 3 артефакта.
+    expect(episodes.zero, `«0 мин» на странице: ${episodes.zero}`).toBe(0);
+    if (episodes.count > 0) {
+      expect(episodes.seasons, 'серии есть, а группировки по сезонам нет')
+        .toBeGreaterThan(0);
+    }
+  });
+
+  test('содержимое приходит с сервера, а не дорисовывается скриптом', async ({ browser }) => {
+    // SSR проверяется отключением JavaScript: если каталог виден и без него,
+    // страницу отдал сервер.
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+    await page.goto(`${BASE}/catalog/`, { waitUntil: 'load' });
+    const cards = await page.locator('a[href^="/title/"]').count();
+    const h1 = await page.locator('h1').first().textContent();
+    collected.ssr = { cards_without_js: cards, h1: (h1 || '').trim().slice(0, 60) };
+    record();
+    expect(cards, 'без JavaScript каталог пуст — содержимое дорисовывается скриптом')
+      .toBeGreaterThan(0);
+    await context.close();
+  });
 });
 
 test.describe('раскладка не уезжает вбок', () => {
