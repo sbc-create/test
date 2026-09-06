@@ -325,6 +325,15 @@ def _document(ctx: dict, meta: Meta, body: str) -> str:
     if analytics_script:
         head.append(analytics_script)
     head.append('<link rel="stylesheet" href="/assets/site.css">')
+    # Выбор темы применяется ДО отрисовки, иначе страница успевает мигнуть
+    # чужой темой. Сценарий крошечный и встроенный по той же причине: внешний
+    # файл грузится после разбора и мигание не убирает.
+    if ctx.get("theme_switch"):
+        head.append(
+            "<script>(function(){try{var v=localStorage.getItem('lords-theme');"
+            "if(v==='light'||v==='dark'){document.documentElement.dataset.theme=v;}}"
+            "catch(e){}})();</script>"
+        )
     # Раньше здесь стоял серый прямоугольник в data-URI: заглушка, которая
     # занимала место иконки и потому выглядела как решение. Настоящие файлы
     # рисуются из токенов темы и лежат в корне сайта.
@@ -384,7 +393,43 @@ def _header(ctx: dict, meta: Meta) -> str:
         + _nav_items(ctx["nav"], ctx.get("_path", ""))
         + "</ul></nav>"
         + _header_search(ctx)
+        + _theme_switch(ctx)
         + "</div></header>"
+    )
+
+
+def _theme_switch(ctx: dict) -> str:
+    """Переключатель темы: система, светлая, тёмная.
+
+    Рисуется только тогда, когда витрина объявила вторую палитру. Кнопка,
+    которая ничего не меняет, хуже её отсутствия: посетитель считает её
+    сломанной, а не отсутствующей.
+
+    Без JavaScript переключателя нет, и это честно: выбор нужно где-то хранить.
+    Системная тема при этом работает — её даёт медиазапрос, а не сценарий.
+    """
+    if not ctx.get("theme_switch"):
+        return ""
+    кнопки = "".join(
+        f'<button type="button" data-theme-set="{значение}" aria-pressed="false">'
+        f"{подпись}</button>"
+        for значение, подпись in (("system", "Система"), ("light", "Светлая"),
+                                  ("dark", "Тёмная"))
+    )
+    return (
+        '<div class="theme-switch" role="group" aria-label="Тема оформления" hidden>'
+        + кнопки
+        + "</div>"
+        + "<script>(function(){var g=document.querySelector('.theme-switch');"
+        "if(!g)return;g.hidden=false;var r=document.documentElement;"
+        "function cur(){return r.dataset.theme||'system';}"
+        "function mark(){var c=cur();g.querySelectorAll('button').forEach(function(b){"
+        "b.setAttribute('aria-pressed',String(b.dataset.themeSet===c));});}"
+        "g.addEventListener('click',function(e){var b=e.target.closest('button');"
+        "if(!b)return;var v=b.dataset.themeSet;"
+        "try{if(v==='system'){localStorage.removeItem('lords-theme');delete r.dataset.theme;}"
+        "else{localStorage.setItem('lords-theme',v);r.dataset.theme=v;}}catch(err){}"
+        "mark();});mark();})();</script>"
     )
 
 
@@ -1956,6 +2001,10 @@ def _context(package: dict, profile: dict, site_plan, player_state,
         "profile": site_plan.profile,
         "brand": brand,
         "tokens": theme_mod.tokens_of(profile),
+        # Переключатель темы включается наличием второй палитры у витрины,
+        # а не отдельным флагом: флаг и палитра однажды разойдутся, и
+        # кнопка останется на витрине, где переключать нечего.
+        "theme_switch": theme_mod.theme_switch_available(profile),
         "carousel_heading": str(layout.get("carousel_heading") or "Новинки"),
         "mark": "".join(word[0] for word in brand.split()[:2]).upper() or "L",
         "language": str(package.get("language") or "ru"),

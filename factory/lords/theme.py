@@ -64,6 +64,88 @@ def tokens_of(profile: dict) -> dict:
     return merged
 
 
+#: Схема второй палитры: какой она приходится основной. Значение проверяется,
+#: а не угадывается по яркости цветов — «светлая» палитра с тёмным фоном
+#: сломала бы и `prefers-color-scheme`, и переключатель.
+СХЕМЫ = ("light", "dark")
+
+
+def alt_tokens_of(profile: dict) -> tuple[str, dict] | None:
+    """Вторая палитра витрины и то, какой схеме она соответствует.
+
+    None означает, что витрина объявила одну палитру. Переключатель тем в этом
+    случае не рисуется вовсе: кнопка, которая ничего не меняет, хуже её
+    отсутствия — посетитель считает её сломанной, а не отсутствующей.
+
+    Палитра не выводится из основной. Осветлить тёмные токены арифметикой можно,
+    но получится не «светлая тема», а тёмная с испорченным контрастом; выбор
+    цветов — решение оформления, а не вычисление.
+    """
+    тема = profile.get("theme") or {}
+    палитра = тема.get("tokens_alt") or {}
+    схема = str(тема.get("alt_scheme") or "").strip().lower()
+    if not палитра:
+        return None
+    if схема not in СХЕМЫ:
+        # Палитра есть, а чему она соответствует — не сказано. Догадка здесь
+        # означала бы, что светлая тема включается по системной тёмной.
+        return None
+    слитая = dict(DEFAULT_TOKENS)
+    слитая.update(тема.get("tokens") or {})
+    слитая.update(палитра)
+    return схема, слитая
+
+
+def theme_switch_available(profile: dict) -> bool:
+    return alt_tokens_of(profile) is not None
+
+
+def _переменные(t: dict) -> str:
+    поля = ("bg", "surface", "surface_alt", "text", "muted", "accent",
+            "accent_text", "border")
+    return "\n".join(f"  --{имя.replace('_', '-')}: {t[имя]};" for имя in поля if имя in t)
+
+
+def alt_blocks(profile: dict) -> str:
+    """Правила второй палитры: системная схема и явный выбор посетителя.
+
+    Три блока, и каждый нужен. Медиазапрос даёт системную тему тем, кто ничего
+    не выбирал; `:root:not([data-theme])` в нём — чтобы явный выбор не
+    отменялся системной настройкой. Два блока по `data-theme` дают сам выбор в
+    обе стороны.
+    """
+    пара = alt_tokens_of(profile)
+    if пара is None:
+        return ""
+    схема, alt = пара
+    основная = "dark" if схема == "light" else "light"
+    свои = _переменные(alt)
+    родные = _переменные(tokens_of(profile))
+    return f"""
+
+/* Вторая палитра витрины: {схема}. */
+@media (prefers-color-scheme: {схема}) {{
+  :root:not([data-theme="{основная}"]) {{
+{свои}
+  }}
+}}
+:root[data-theme="{схема}"] {{
+{свои}
+}}
+:root[data-theme="{основная}"] {{
+{родные}
+}}
+.theme-switch {{ display: inline-flex; gap: 2px; margin-left: auto; }}
+.theme-switch button {{
+  background: var(--surface-alt); color: var(--text); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 4px 8px; font: inherit; cursor: pointer;
+}}
+.theme-switch button[aria-pressed="true"] {{
+  background: var(--accent); color: var(--accent-text);
+}}
+"""
+
+
 def layout_of(profile: dict) -> dict:
     merged = dict(DEFAULT_LAYOUT)
     merged.update(profile.get("layout") or {})
@@ -73,7 +155,7 @@ def layout_of(profile: dict) -> dict:
     return merged
 
 
-def stylesheet(profile: dict) -> str:
+def _stylesheet_base(profile: dict) -> str:
     """Полная таблица стилей сайта. Один файл, без импортов и без внешних ссылок."""
     t = tokens_of(profile)
     lay = layout_of(profile)
@@ -472,3 +554,12 @@ main {{ padding: var(--pad) 0 40px; }}
 
 /* профиль: hero={hero}, фасеты={'сбоку' if sidebar else 'в шапке раздела'} */
 """
+
+
+def stylesheet(profile: dict) -> str:
+    """Таблица стилей витрины вместе с правилами второй палитры.
+
+    Вторая палитра приклеивается в конец, а не подмешивается в `:root`: правила
+    ниже по файлу перекрывают верхние, и порядок здесь — часть смысла.
+    """
+    return _stylesheet_base(profile) + alt_blocks(profile)
