@@ -218,7 +218,7 @@ entries:
     cycle: 7
     note: "публичная регистрация посайтово и её признак витрины"
     branch: claude/core-product-8plus-20
-    full_head_sha: ЗАПОЛНЯЕТСЯ_ПОСЛЕ_КОММИТА
+    full_head_sha: b95dc9ea769aa49ce6c6cc257dd79e52fd8e5ae5
     core_percent: 100.0
     central_admin: 8
     fleet_gates_closed: 5
