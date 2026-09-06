@@ -4,11 +4,13 @@
   "generatedAt": "2026-09-06T08:00:00Z",
   "branch": "claude/core-product-8plus-20",
   "baseSha": "463fe108c7fb5d2afb98db32c42744d47e1b2eab",
-  "headSha": "c8796b8faf818d7a7619a66b72a69ae497d65c6b",
-  "candidateSha": "c8796b8faf818d7a7619a66b72a69ae497d65c6b",
-  "candidateDigest": "1bc18bc82469bd79",
-  "commitCount": 14,
+  "headSha": "7fdf9d9b6f575e22e274dcd022d8221347cc9514",
+  "candidateSha": "7fdf9d9b6f575e22e274dcd022d8221347cc9514",
+  "candidateDigest": "030fb8629ea61fb4",
+  "commitCount": 16,
   "commits": [
+    "7fdf9d9 fleet: пятое семейство и приёмка всех пяти",
+    "09fa551 fleet: кандидат выпуска, пилот под наблюдением и манифест отката",
     "c8796b8 reports: отпечаток коммита цикла 8",
     "6f89679 fleet: массив витрин у супер-администратора",
     "4e30e61 reports: отпечаток коммита цикла 7",
@@ -26,22 +28,7 @@
   ],
   "candidate": true,
   "deployed": null,
-  "dryRun": {
-    "command": "bash automation/host/deploy-control-api.sh deploy c8796b8faf818d7a7619a66b72a69ae497d65c6b --dry-run",
-    "result": "готов, фатальных 0, ограничений 0",
-    "gates": [
-      "state.queue",
-      "state.state",
-      "state.audit",
-      "state.locks",
-      "profiles: 7",
-      "isolation.domains: пересечений нет",
-      "config.writable",
-      "contract: движок 1.2.0, несовместимых 0",
-      "secrets.tokens"
-    ],
-    "currentUntouched": true
-  },
+  "dryRun": "готов, фатальных 0, ограничений 0; current не переключался",
   "artifactCheck": {
     "servedFrom": "/srv/site-factory/control-api/releases/c8796b8faf818d7a7619a66b72a69ae497d65c6b",
     "results": {
@@ -59,14 +46,21 @@
     "protocol": "откат проходит тот же протокол запуска: версия, не прошедшая проверку, не станет рабочей только оттого, что она старая",
     "stateUntouched": "код неизменяем, состояние общее: откат не уносит задания, поставленные новой версией"
   },
-  "ownerAction": {
-    "why": "переключение current требует перезапуска службы, а он — прав root",
-    "command": "sudo bash /srv/site-factory/repo/automation/host/deploy-control-api.sh deploy c8796b8faf818d7a7619a66b72a69ae497d65c6b",
-    "verify": "curl -s http://127.0.0.1:8790/api/v1/ready && bash automation/host/deploy-control-api.sh status"
-  },
+  "ownerAction": "sudo bash /srv/site-factory/repo/automation/host/deploy-control-api.sh deploy 7fdf9d9b6f575e22e274dcd022d8221347cc9514",
   "productionStatus": {
     "mutations": 0,
     "currentSha": "52fd06659a7ff73fd37b5bed2f20eb46a90d7a1e"
   },
-  "evidence": "reports/ADMIN-FLEET-5-CYCLIC-22/"
+  "evidence": "reports/ADMIN-FLEET-5-CYCLIC-22/",
+  "supersededCandidateSha": "c8796b8faf818d7a7619a66b72a69ae497d65c6b",
+  "supersededCandidateDigest": "1bc18bc82469bd79",
+  "reissueReason": "цикл 10 добавил только оснастку стенда и тесты; служебный код тот же",
+  "acceptance": {
+    "families": 5,
+    "engines": [
+      "chromium",
+      "firefox"
+    ],
+    "failures": 0
+  }
 }
