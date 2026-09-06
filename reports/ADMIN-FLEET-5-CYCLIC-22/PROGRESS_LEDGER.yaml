@@ -185,7 +185,7 @@ entries:
     cycle: 6
     note: "перенос содержимого из пакета витрины; блокер трёх семейств назван"
     branch: claude/core-product-8plus-20
-    full_head_sha: ЗАПОЛНЯЕТСЯ_ПОСЛЕ_КОММИТА
+    full_head_sha: faad953ac335f31c2f1fdd079813314873bfcb61
     core_percent: 100.0
     central_admin: 8
     fleet_gates_closed: 5
