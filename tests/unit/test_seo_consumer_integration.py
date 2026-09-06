@@ -27,6 +27,7 @@ from pathlib import Path
 import pytest
 
 from factory.site_engine.adapters import lords_seo_binding as ad
+from factory.site_engine.adapters import yummy_seo_binding as ay
 from factory.site_engine.seo_binding import BindingState
 
 #: Коммит потребителя, против которого доказывается совместимость. Не
@@ -73,6 +74,14 @@ def запись(**kwargs):
 def связь(**kwargs):
     return ad.build([запись(**kwargs)], site_id="site-01", snapshot_at=СНИМОК,
                     provenance="catalog-cache:test")[0]
+
+
+def _yummy(**kwargs):
+    """Связь витрины, объявляющей маршруты таблицей."""
+    маршрут = {"slug": "obyavlennyy", "providerTitleId": запись()["external_id"],
+               "canonical": True, "updatedAt": СНИМОК}
+    return ay.build([маршрут], [запись(**kwargs)], site_id="site-01",
+                    snapshot_at=СНИМОК, provenance="routes:test")[0]
 
 
 def случай(имя: str, b, *, ожидание: dict) -> dict:
@@ -138,6 +147,23 @@ def _случаи() -> list[dict]:
                    "contentKind": "SERIES", "identityStatus": "RESOLVED",
                    "schemaType": "TVSeries", "mayPromisePlayback": False,
                    "eligibility": "INDEXABLE_METADATA_ONLY"}),
+        # Витрина, объявляющая маршруты сама. Проверяется отдельно, потому что
+        # у неё другой производитель связи: адрес читается из таблицы, а не
+        # вычисляется, и потребитель обязан принять и такой.
+        случай("объявленный маршрут", _yummy(), ожидание={
+            "contentKind": "SERIES", "identityStatus": "RESOLVED",
+            "schemaType": "TVSeries", "mayPromisePlayback": True,
+            "eligibility": "INDEXABLE_WITH_PLAYBACK"}),
+        случай("объявленный маршрут без видео",
+               _yummy(playback=None, external_ids={"imdb": "tt1"}), ожидание={
+                   "contentKind": "SERIES", "identityStatus": "RESOLVED",
+                   "schemaType": "TVSeries", "mayPromisePlayback": False,
+                   "eligibility": "INDEXABLE_METADATA_ONLY"}),
+        случай("объявленный маршрут, вид конфликтен",
+               _yummy(type="movie", tags=["ona"]), ожидание={
+                   "contentKind": "UNKNOWN", "identityStatus": "CONFLICTED",
+                   "schemaType": "", "mayPromisePlayback": True,
+                   "eligibility": "HOLD_FOR_KIND_REVIEW"}),
     ]
 
 
