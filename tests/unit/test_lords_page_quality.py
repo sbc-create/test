@@ -134,11 +134,44 @@ class TestFormControlsAreNamed:
                 assert found and found.group(1) in labelled, (
                     f"{site_id} {path}: поле без доступного имени: {control}")
 
-    def test_facet_selects_keep_their_visible_legend(self, sites):
-        """Имя добавляется, видимая подпись остаётся на месте."""
+    def test_facet_groups_keep_their_visible_legend(self, sites):
+        """Видимая подпись остаётся на месте у каждой группы фасетов.
+
+        Сортировки в перечне больше нет намеренно. Она действует поверх
+        встроенного набора данных, а тот встраивается лишь при каталоге не
+        больше `DATASET_MAX_TITLES`; на большом каталоге поле сортировки не
+        отправляло никуда и меняло только собственное значение — ровно то, за
+        что убраны поля фасетов. Там, где набор есть, поле остаётся, и это
+        проверяет соседний случай.
+        """
         html = _by_path(sites["lords-01"])["/catalog/"]
-        for legend in ("Жанр", "Год", "Страна", "Сортировка"):
+        for legend in ("Жанр", "Год", "Страна"):
             assert f"<legend>{legend}</legend>" in html, f"пропала легенда {legend}"
+
+    def test_sort_control_exists_only_where_it_works(self, sites):
+        import sys
+        from pathlib import Path as _P
+        sys.path.insert(0, str(_P(__file__).resolve().parents[2]))
+        from factory.lords import fixtures as fx
+        from factory.lords import render as render_mod
+
+        def catalog(n):
+            titles = tuple(
+                fx.Title(slug=f"t{i}", name=f"Запись {i}", original_name="",
+                         content_type="movies", year=2024, country_slug="ssha",
+                         country="США", genre_slugs=("drama",), genres=("Драма",),
+                         studio="", runtime_min=None, age_rating="", summary="",
+                         seasons=())
+                for i in range(n))
+            return fx.Catalog(titles=titles, collections=())
+
+        small = render_mod._facets(catalog(10), ("movies",), show_type=False)
+        big = render_mod._facets(catalog(render_mod.DATASET_MAX_TITLES + 1),
+                                 ("movies",), show_type=False)
+        assert "Сортировка" in small, "на малом каталоге сортировка работает и обязана быть"
+        assert "Сортировка" not in big, (
+            "на большом каталоге сортировка не действует: поле меняло бы только "
+            "собственное значение")
 
 
 # ---------------------------------------------------------------------------

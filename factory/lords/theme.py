@@ -326,6 +326,18 @@ main {{ padding: var(--pad) 0 40px; }}
 }}
 .facets h2 {{ font-size: .95rem; margin: 0; grid-column: 1 / -1; }}
 .facets fieldset {{ border: 0; margin: 0; padding: 0; min-width: 0; }}
+/* Значения фасета — ссылки на разделы, а не пункты списка. Оформление
+   отличает их от текста: без него перечень читается как подпись, и по нему
+   никто не нажимает. Цель не меньше 24 px по высоте — критерий 2.5.8. */
+.facet__list {{ list-style: none; margin: 6px 0 0; padding: 0; display: flex;
+  flex-wrap: wrap; gap: 6px; }}
+.facet__chip, .facet__more {{ display: inline-flex; align-items: center;
+  min-height: 28px; padding: 3px 10px; border-radius: var(--radius);
+  background: var(--surface-alt); color: var(--text); text-decoration: none;
+  font-size: .82rem; line-height: 1.2; }}
+.facet__chip:hover, .facet__more:hover {{ background: var(--accent);
+  color: var(--accent-text); }}
+.facet__more {{ font-weight: 600; }}
 .facets legend {{ font-size: .78rem; color: var(--muted); padding: 0 0 4px; }}
 .facets select, .facets input {{
   width: 100%; padding: 7px 10px; font: inherit;

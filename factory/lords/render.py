@@ -665,23 +665,57 @@ def _options(pairs, name: str) -> str:
     return f'<option value="">{escape(name)}</option>{body}'
 
 
+#: Сколько значений фасета показывать рядом со списком. Полный перечень живёт
+#: на своей странице: 94 года, 64 жанра и 50 стран в панели превращают её в
+#: простыню и отодвигают первую карточку за сгиб.
+FACET_CHIPS = 12
+
+
+def _facet_links(base: str, values, *, title: str, index_url: str) -> str:
+    """Один фасет ссылками на существующие разделы.
+
+    Прежде здесь стоял `<select data-facet=…>` без `name`, без `method` и без
+    `action`. Такое поле не отправляет ничего: оно зацепка для скрипта. Скрипт
+    же работал «поверх встроенного набора данных», а тот при каталоге больше
+    `DATASET_MAX_TITLES` не встраивается вовсе — и выбор года на боевой витрине
+    менял только `select.value`, оставляя адрес и выдачу прежними.
+
+    Поле, которое выглядит рабочим и не работает, — худший вид неисправности:
+    зритель винит каталог, а не управление.
+
+    Ссылки работают без скрипта, воспроизводятся по адресу, переживают
+    перезагрузку и кнопку «назад». Комбинации при этом остаются недоступны:
+    страницы «жанр И год» на статической витрине не существует. Это названо
+    прямо, а не спрятано за молчащим полем.
+    """
+    if not values:
+        return ""
+    shown = values[:FACET_CHIPS]
+    chips = "".join(
+        f'<li><a class="facet__chip" href="{base}{escape(str(slug))}/">{escape(str(label))}</a></li>'
+        for slug, label in shown
+    )
+    more = ""
+    if len(values) > len(shown):
+        more = (f'<li><a class="facet__more" href="{index_url}">'
+                f"Все ({len(values)})</a></li>")
+    return (f'<fieldset><legend>{escape(title)}</legend>'
+            f'<ul class="facet__list">{chips}{more}</ul></fieldset>')
+
+
 def _facets(catalog: fx.Catalog, kinds, *, show_type: bool, row: bool = False,
             with_counts: bool = True) -> str:
-    """Панель фильтров и сортировки. Работает поверх встроенного набора данных.
+    """Панель фильтров: ссылки на разделы, а не поля без имени.
 
     `row` включает раскладку в строку — она нужна там, где фасеты стоят над
     списком: пять полей в колонку отодвигают первую карточку за сгиб, и раздел
     выглядит пустым, хотя в нём полсотни записей.
 
-    `with_counts=False` убирает числа из подписей фильтров. Числа считаются по
-    всему разделу, поэтому одна добавленная запись меняла подпись `2026 (1842)`
-    на `2026 (1843)` — и меняла её на **каждой** странице раздела. Измерено
-    2026-09-03: после перехода на разбиение по годам одна запись всё равно
-    перерисовывала 9266 страниц из 9717, и дифф показал, что расходятся ровно
-    эти счётчики. Числа остаются там, где они полезны и где страница и так
-    меняется от любой правки, — на первой странице раздела.
+    `with_counts=False` убирает числа из подписей. Числа считаются по всему
+    разделу, поэтому одна добавленная запись меняла подпись `2026 (1842)` на
+    `2026 (1843)` — и меняла её на КАЖДОЙ странице раздела. Измерено
+    2026-09-03: одна запись перерисовывала 9266 страниц из 9717.
     """
-    types = [(k, TYPE_LABELS[k]) for k in kinds if catalog.of_type(k)]
     подпись = (lambda label, count: f"{label} ({count})") if with_counts else (
         lambda label, count: str(label))
     genres = [(slug, подпись(label, count)) for slug, label, count in catalog.genres(kinds)]
@@ -689,32 +723,45 @@ def _facets(catalog: fx.Catalog, kinds, *, show_type: bool, row: bool = False,
     countries = [(slug, подпись(label, count)) for slug, label, count in catalog.countries(kinds)]
 
     type_block = ""
-    if show_type and len(types) > 1:
-        type_block = (
-            '<fieldset><legend>Тип</legend>'
-            f'<select id="f-type" data-facet="type" aria-label="Тип">{_options(types, "Любой тип")}</select>'
+    if show_type:
+        types = [(k, TYPE_LABELS[k]) for k in kinds if catalog.of_type(k)]
+        if len(types) > 1:
+            chips = "".join(
+                f'<li><a class="facet__chip" href="/{escape(slug)}/">{escape(label)}</a></li>'
+                for slug, label in types)
+            type_block = ('<fieldset><legend>Тип</legend>'
+                          f'<ul class="facet__list">{chips}</ul></fieldset>')
+
+    # Сортировка остаётся только там, где она действительно работает: она
+    # действует поверх встроенного набора данных, а тот встраивается лишь при
+    # каталоге не больше DATASET_MAX_TITLES. На большом каталоге поле
+    # сортировки не отправляло никуда и меняло только собственное значение —
+    # ровно то, за что убраны поля фасетов. Убрать его совсем значило бы
+    # отнять работающую возможность у малых витрин.
+    sortable = len(catalog.of_types(kinds)) <= DATASET_MAX_TITLES
+    sort_block = ""
+    if sortable:
+        sort_block = (
+            '<fieldset><legend>Сортировка</legend>'
+            f'<select id="f-sort" name="sort" data-facet="sort" aria-label="Сортировка">'
+            f'{_options(SORTS[1:], SORTS[0][1])}</select>'
             "</fieldset>"
         )
+
     css = "facets facets--row" if row else "facets"
-    return (
-        f'<form class="{css}" id="facets" aria-label="Фильтры и сортировка">'
+    body = (
         "<h2>Фильтры</h2>"
         + type_block
-        + '<fieldset><legend>Жанр</legend>'
-        f'<select id="f-genre" data-facet="genre" aria-label="Жанр">{_options(genres, "Любой жанр")}</select>'
-        "</fieldset>"
-        '<fieldset><legend>Год</legend>'
-        f'<select id="f-year" data-facet="year" aria-label="Год">{_options(years, "Любой год")}</select>'
-        "</fieldset>"
-        '<fieldset><legend>Страна</legend>'
-        f'<select id="f-country" data-facet="country" aria-label="Страна">{_options(countries, "Любая страна")}</select>'
-        "</fieldset>"
-        '<fieldset><legend>Сортировка</legend>'
-        f'<select id="f-sort" data-facet="sort" aria-label="Сортировка">{_options(SORTS[1:], SORTS[0][1])}</select>'
-        "</fieldset>"
-        '<button class="facets__reset" type="reset">Сбросить</button>'
-        "</form>"
+        + _facet_links("/genres/", genres, title="Жанр", index_url="/genres/")
+        + _facet_links("/years/", years, title="Год", index_url="/years/")
+        + _facet_links("/countries/", countries, title="Страна", index_url="/countries/")
+        + sort_block
     )
+    # Форма нужна только ради поля сортировки; без него это перечень ссылок, и
+    # оборачивать его в форму значило бы обещать отправку, которой нет.
+    if sortable:
+        return f'<form class="{css}" id="facets" aria-label="Фильтры и сортировка">{body}</form>'
+    return f'<nav class="{css}" id="facets" aria-label="Фильтры">{body}</nav>' 
 
 
 #: Выше этого размера полный набор в разметку не встраивается.
