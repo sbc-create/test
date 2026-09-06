@@ -278,3 +278,69 @@ def test_ворота_сообщают_обо_всех_пробелах_сраз
     имена = {c.name for c in startup.check_seo_binding_sources(tmp_path)}
     assert имена == {"seo-bindings.sources", "seo-bindings.namespaces",
                      "seo-bindings.playback"}
+
+
+# --- пустой перечень обязан объяснять себя ----------------------------------
+#
+# Широкий except превращал любую беду в пустой перечень: отсутствие файла,
+# сломанный YAML и ошибка вызывающего выглядели одинаково. Так меня обманула
+# собственная проверка — я передал корень строкой, ошибка ушла в except и
+# вернулась пустотой, которую я прочитал как незавершённую установку и в таком
+# виде отдал владельцу. С эксплуатацией вышло бы то же, только дороже.
+
+def test_отсутствие_файла_и_сломанный_файл_различимы(tmp_path, monkeypatch):
+    from pathlib import Path
+
+    from factory.paths import PATHS
+    from factory.site_engine import seo_binding
+
+    monkeypatch.setattr(PATHS, "root", tmp_path)
+    (tmp_path / "config").mkdir()
+
+    _, нет_файла = seo_binding._загрузить_пространства()
+    assert "нет в корне состояния" in нет_файла
+
+    (tmp_path / "config" / "external-id-namespaces.yaml").write_text(
+        "namespaces: [: не yaml\n", encoding="utf-8")
+    _, сломан = seo_binding._загрузить_пространства()
+    assert "не разобран" in сломан
+    assert нет_файла != сломан, "разные беды не должны выглядеть одинаково"
+
+
+def test_пустой_перечень_в_исправном_файле_тоже_назван(tmp_path, monkeypatch):
+    """Файл на месте и разбирается, а пространств не называет — третья беда,
+    и она не то же самое, что первые две."""
+    from factory.paths import PATHS
+    from factory.site_engine import seo_binding
+
+    monkeypatch.setattr(PATHS, "root", tmp_path)
+    (tmp_path / "config").mkdir()
+    (tmp_path / "config" / "external-id-namespaces.yaml").write_text(
+        "namespaces: []\n", encoding="utf-8")
+    перечень, причина = seo_binding._загрузить_пространства()
+    assert перечень == ()
+    assert "ни одного пространства" in причина
+
+
+def test_исправная_настройка_причины_не_несёт(tmp_path, monkeypatch):
+    from factory.paths import PATHS
+    from factory.site_engine import seo_binding
+
+    monkeypatch.setattr(PATHS, "root", tmp_path)
+    (tmp_path / "config").mkdir()
+    (tmp_path / "config" / "external-id-namespaces.yaml").write_text(
+        "namespaces: [kp, mali]\n", encoding="utf-8")
+    перечень, причина = seo_binding._загрузить_пространства()
+    assert перечень == ("kp", "mali")
+    assert причина == ""
+
+
+def test_ворота_передают_причину_а_не_общие_слова(песочница, monkeypatch):
+    from factory.site_engine import seo_binding
+    from factory.site_engine.api import startup
+
+    monkeypatch.setattr(seo_binding, "ID_NAMESPACES", ())
+    monkeypatch.setattr(seo_binding, "ID_NAMESPACES_REASON",
+                        "config/external-id-namespaces.yaml не разобран: тест")
+    имена = {c.name: c for c in startup.check_seo_binding_sources(песочница)}
+    assert "не разобран: тест" in имена["seo-bindings.namespaces"].detail

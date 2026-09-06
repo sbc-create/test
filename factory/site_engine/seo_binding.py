@@ -60,38 +60,49 @@ CONTRACT_VERSION = "1.0.0"
 ID_NAMESPACES_REF = "config/external-id-namespaces.yaml"
 
 
-def _загрузить_пространства() -> tuple[str, ...]:
-    """Пространства имён из настройки. Без настройки — пустой перечень.
+def _загрузить_пространства() -> tuple[tuple[str, ...], str]:
+    """Пространства имён из настройки. Без настройки — пустой перечень и причина.
 
     Пустой, а не «какой-нибудь встроенный»: подставить свой список значило бы
-    молча дать права пространствам, о которых эксплуатация не знает. Пустой
-    перечень заметен сразу — ни один идентификатор не переносится.
-    """
-    try:
-        from pathlib import Path
+    молча дать права пространствам, о которых эксплуатация не знает.
 
+    Причина возвращается вместе с перечнем, потому что пустой перечень сам по
+    себе не отвечает на вопрос «почему». Отсутствие файла и сломанный файл
+    выглядели одинаково, и это не догадка: так меня обманула собственная
+    проверка — ошибка в ней ушла в широкий `except` и вернулась пустотой,
+    которую я прочитал как незавершённую установку. То же самое случилось бы с
+    эксплуатацией, только дороже.
+    """
+    from pathlib import Path
+
+    from factory.paths import PATHS
+
+    путь = Path(PATHS.root, ID_NAMESPACES_REF)
+    if not путь.exists():
+        return (), f"{ID_NAMESPACES_REF} нет в корне состояния"
+    try:
         import yaml
 
-        from factory.paths import PATHS
-
-        сырьё = yaml.safe_load(
-            Path(PATHS.root, ID_NAMESPACES_REF).read_text(encoding="utf-8"))
+        сырьё = yaml.safe_load(путь.read_text(encoding="utf-8"))
         значения = (сырьё or {}).get("namespaces") or []
-        return tuple(str(v).strip() for v in значения if str(v).strip())
-    except Exception:  # noqa: BLE001 — отсутствие настройки не роняет разбор
-        return ()
+        перечень = tuple(str(v).strip() for v in значения if str(v).strip())
+    except Exception as ошибка:  # noqa: BLE001 — сломанная настройка не роняет разбор
+        return (), f"{ID_NAMESPACES_REF} не разобран: {ошибка}"
+    if not перечень:
+        return (), f"{ID_NAMESPACES_REF} не называет ни одного пространства"
+    return перечень, ""
 
 
 #: Пространства имён внешних идентификаторов. Идентификатор из неизвестного
 #: пространства не отбрасывается тихо, но и разрешением на воспроизведение не
 #: становится: право обещать просмотр даёт отдельный перечень.
-ID_NAMESPACES: tuple[str, ...] = _загрузить_пространства()
+ID_NAMESPACES, ID_NAMESPACES_REASON = _загрузить_пространства()
 
 #: Файл с перечнем идентификаторов, которыми разрешено адресовать плеер.
 PLAYBACK_POLICY_REF = "config/playback-identifiers.yaml"
 
 
-def _загрузить_разрешённые() -> frozenset[str]:
+def _загрузить_разрешённые() -> tuple[frozenset[str], str]:
     """Идентификаторы, дающие право обещать просмотр.
 
     Берутся из политики воспроизведения, а не перечисляются здесь: включение
@@ -102,13 +113,16 @@ def _загрузить_разрешённые() -> frozenset[str]:
     try:
         from factory.site_engine.playback_policy import resolve
 
-        return frozenset(resolve().allowed)
-    except Exception:  # noqa: BLE001
-        return frozenset()
+        разрешённые = frozenset(resolve().allowed)
+    except Exception as ошибка:  # noqa: BLE001 — сломанная политика не роняет разбор
+        return frozenset(), f"политика воспроизведения не прочитана: {ошибка}"
+    if not разрешённые:
+        return frozenset(), "политика не разрешает ни одного идентификатора"
+    return разрешённые, ""
 
 
 #: Идентификаторы, разрешённые как основание воспроизведения.
-PLAYBACK_AUTHORISED: frozenset[str] = _загрузить_разрешённые()
+PLAYBACK_AUTHORISED, PLAYBACK_AUTHORISED_REASON = _загрузить_разрешённые()
 
 
 class BindingState(str, enum.Enum):

@@ -250,13 +250,13 @@ def _перечни_идентификаторов() -> list[Check]:
     if not seo_binding.ID_NAMESPACES:
         проверки.append(Check(
             "seo-bindings.namespaces", DEGRADED,
-            f"{seo_binding.ID_NAMESPACES_REF} не прочитан: связи будут "
-            "отдаваться без внешних идентификаторов"))
+            f"{seo_binding.ID_NAMESPACES_REASON}: связи будут отдаваться без "
+            "внешних идентификаторов"))
     if not seo_binding.PLAYBACK_AUTHORISED:
         проверки.append(Check(
             "seo-bindings.playback", DEGRADED,
-            f"{seo_binding.PLAYBACK_POLICY_REF} не прочитан: ни одна запись "
-            "не получит права обещать просмотр"))
+            f"{seo_binding.PLAYBACK_AUTHORISED_REASON}: ни одна запись не "
+            "получит права обещать просмотр"))
     return проверки
 
 
