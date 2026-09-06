@@ -5,8 +5,8 @@
   "branch": "claude/core-product-8plus-20",
   "baseSha": "463fe108c7fb5d2afb98db32c42744d47e1b2eab",
   "headSha": "7fdf9d9b6f575e22e274dcd022d8221347cc9514",
-  "candidateSha": "7fdf9d9b6f575e22e274dcd022d8221347cc9514",
-  "candidateDigest": "030fb8629ea61fb4",
+  "candidateSha": "b0d0362cfacab4274745de8fa4485fb2f8cf64b3",
+  "candidateDigest": "205851468ce63232",
   "commitCount": 16,
   "commits": [
     "7fdf9d9 fleet: пятое семейство и приёмка всех пяти",
@@ -46,7 +46,7 @@
     "protocol": "откат проходит тот же протокол запуска: версия, не прошедшая проверку, не станет рабочей только оттого, что она старая",
     "stateUntouched": "код неизменяем, состояние общее: откат не уносит задания, поставленные новой версией"
   },
-  "ownerAction": "sudo bash /srv/site-factory/repo/automation/host/deploy-control-api.sh deploy 7fdf9d9b6f575e22e274dcd022d8221347cc9514",
+  "ownerAction": "не выкладывать",
   "productionStatus": {
     "mutations": 0,
     "currentSha": "52fd06659a7ff73fd37b5bed2f20eb46a90d7a1e"
@@ -56,11 +56,17 @@
   "supersededCandidateDigest": "1bc18bc82469bd79",
   "reissueReason": "цикл 10 добавил только оснастку стенда и тесты; служебный код тот же",
   "acceptance": {
-    "families": 5,
+    "realSite": 2,
+    "fixture": 3,
+    "total": 5,
     "engines": [
       "chromium",
       "firefox"
     ],
     "failures": 0
-  }
+  },
+  "state": "BLOCKED_UNTIL_REAL_SITE_ACCEPTANCE",
+  "productionBlocked": true,
+  "blockReason": "приёмка на реальных сайтах 2 из 5; три семейства приняты на наборе стенда",
+  "lock": "coordination/v1/locks/RELEASE-BLOCK-b0d0362.json"
 }

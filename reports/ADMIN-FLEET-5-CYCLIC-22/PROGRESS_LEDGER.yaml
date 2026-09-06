@@ -358,3 +358,51 @@ entries:
       Приёмка пройдена на стенде; витрины site-a/b/c остаются staging и в бой
       не выведены.
 
+  - timestamp: "2026-09-06T09:40:00Z"
+    cycle: 10
+    entry_kind: correction
+    note: "поправка владельца: ADMIN_FLEET = PARTIAL"
+    corrects: "запись цикла 10 от 09:15 — три семейства payload были оценены в 8"
+    branch: claude/core-product-8plus-20
+    candidate_sha: b0d0362cfacab4274745de8fa4485fb2f8cf64b3
+    candidate_state: BLOCKED_UNTIL_REAL_SITE_ACCEPTANCE
+    core_percent: 100.0
+    framework_status: "закрыт: контракт, изоляция тенанта и роли — 8"
+    fleet_status: PARTIAL
+    fleet_scores:
+      fleetContract: 8
+      fleetTenancy: 8
+      fleetRbac: 8
+      fleetPortalLight: 7
+      fleetPulse: 7
+      fleetEditorial: 7
+      fleetLordsDark: 8
+      fleetLordsLight: 8
+      fleetPilotRollout: 8
+    fleet_percent:
+      maturity: 95.8
+      closure: 66.7
+      real_site_acceptance: 40.0
+      reading_warning: >-
+        maturity 95,8 % — сумма частичных оценок, а не готовность. Флот готов
+        настолько, насколько принят на реальных сайтах: 2 из 5.
+    acceptance:
+      real_site: "2 из 5: lords_dark (lords-01), lords_light (lords-03)"
+      fixture: "3 из 5: portal_light (site-a), pulse (site-b), editorial (site-c)"
+      fixture_meaning: >-
+        путь администратора доказан целиком, работа на настоящем содержимом
+        витрины — нет
+    tests: "4418 passed, 3 skipped, 0 failed"
+    production_status: "не изменялась; mutations 0; current 52fd0665; выкладка заблокирована"
+    blocked_by:
+      - "handoff 032 к TEMPLATES: наборы содержимого для site-a/b/c"
+      - "CORE-YUMMYANI-ROUTE-BINDING-23: ветки расходятся там, где живёт проверка тенанта"
+    owner_actions:
+      - "ничего не выкладывать до интеграционной приёмки пяти реальных сайтов"
+    comment: >-
+      Оценка 8 за три семейства payload была выставлена по зелёной приёмке на
+      наборе стенда. Владелец поправил: стендовый набор доказывает путь
+      администратора, но не работу витрины на настоящем содержимом, и переносить
+      закрытость каркаса на семейства нельзя. Оценки возвращены к 7, статус
+      флота — PARTIAL, кандидат заблокирован от production.
+

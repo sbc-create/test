@@ -1,12 +1,12 @@
 {
   "stage": "ADMIN-FLEET-5-CYCLIC-22",
   "cycle": 10,
-  "slice": "закрыт: приёмка 5/5",
+  "slice": "PARTIAL: каркас закрыт, приёмка на реальных сайтах 2 из 5",
   "branch": "claude/core-product-8plus-20",
   "headAtStart": "463fe108c7fb5d2afb98db32c42744d47e1b2eab",
-  "status": "OWNER_ACTION_REQUIRED",
+  "status": "BLOCKED_PENDING_REAL_SITE_ACCEPTANCE",
   "cycle0": "closed: инвентаризация, матрица пяти семейств, три дефекта",
-  "nextStep": "выкладка кандидата владельцем одной командой",
+  "nextStep": "дождаться наборов содержимого (handoff 032) и завершения CORE-YUMMYANI-ROUTE-BINDING-23; выкладка заблокирована",
   "minimumCycles": 10,
   "cycle1": "closed: SiteAdminContract v1 и принадлежность оператора",
   "cycle2": "closed: изоляция тенанта в управляющем слое",
@@ -17,5 +17,6 @@
   "cycle7": "closed: публичная регистрация посайтово и её признак витрины",
   "cycle8": "closed: массив витрин и явное переключение",
   "cycle9": "closed: кандидат, пилот 32 снимка, манифест отката",
-  "cycle10": "closed: пять семейств приняты, оба движка, 0 провалов"
+  "cycle10": "closed: пять семейств приняты, оба движка, 0 провалов",
+  "candidate": "b0d0362 — BLOCKED_UNTIL_REAL_SITE_ACCEPTANCE"
 }

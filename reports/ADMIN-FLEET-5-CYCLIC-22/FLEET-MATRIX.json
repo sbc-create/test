@@ -162,6 +162,14 @@
       "editorial": "fixture стенда (пакет витрины объявляет kind: fixture)",
       "lords_dark": "каталог поставщика cdnvideohub",
       "lords_light": "каталог поставщика cdnvideohub"
-    }
+    },
+    "kind": {
+      "portal_light": "fixture",
+      "pulse": "fixture",
+      "editorial": "fixture",
+      "lords_dark": "real-site",
+      "lords_light": "real-site"
+    },
+    "summary": "real-site 2 из 5, fixture 3 из 5"
   }
 }
