@@ -1,5 +1,5 @@
 {
-  "captured_at_utc": "2026-09-06T14:23:22.130Z",
+  "captured_at_utc": "2026-09-06T14:41:37.701Z",
   "budget": {
     "documentKb": 120,
     "scriptKb": 60,
@@ -14,34 +14,34 @@
       "site": "lords-01",
       "page": "home",
       "url": "http://127.0.0.1:8801/",
-      "requests": 35,
-      "documentKb": 36,
+      "requests": 37,
+      "documentKb": 48,
       "scriptKb": 19,
       "styleKb": 26,
-      "imageKb": 24,
-      "domNodes": 557
+      "imageKb": 26,
+      "domNodes": 790
     },
     {
       "site": "lords-01",
       "page": "catalog",
       "url": "http://127.0.0.1:8801/catalog/",
       "requests": 7,
-      "documentKb": 31,
+      "documentKb": 32,
       "scriptKb": 19,
       "styleKb": 26,
       "imageKb": 2,
-      "domNodes": 234
+      "domNodes": 247
     },
     {
       "site": "lords-02",
       "page": "home",
       "url": "http://127.0.0.1:8802/",
-      "requests": 35,
-      "documentKb": 40,
+      "requests": 37,
+      "documentKb": 53,
       "scriptKb": 19,
       "styleKb": 26,
-      "imageKb": 24,
-      "domNodes": 614
+      "imageKb": 26,
+      "domNodes": 870
     },
     {
       "site": "lords-02",
@@ -52,51 +52,51 @@
       "scriptKb": 19,
       "styleKb": 26,
       "imageKb": 2,
-      "domNodes": 227
+      "domNodes": 240
     },
     {
       "site": "lords-03",
       "page": "home",
       "url": "http://127.0.0.1:8803/",
-      "requests": 29,
-      "documentKb": 33,
+      "requests": 31,
+      "documentKb": 44,
       "scriptKb": 19,
       "styleKb": 26,
-      "imageKb": 20,
-      "domNodes": 492
+      "imageKb": 21,
+      "domNodes": 702
     },
     {
       "site": "lords-03",
       "page": "catalog",
       "url": "http://127.0.0.1:8803/catalog/",
       "requests": 7,
-      "documentKb": 26,
+      "documentKb": 27,
       "scriptKb": 19,
       "styleKb": 26,
       "imageKb": 2,
-      "domNodes": 221
+      "domNodes": 234
     },
     {
       "site": "lords-04",
       "page": "home",
       "url": "http://127.0.0.1:8804/",
       "requests": 15,
-      "documentKb": 16,
+      "documentKb": 18,
       "scriptKb": 12,
       "styleKb": 26,
       "imageKb": 9,
-      "domNodes": 314
+      "domNodes": 360
     },
     {
       "site": "lords-04",
       "page": "catalog",
       "url": "http://127.0.0.1:8804/catalog/",
       "requests": 27,
-      "documentKb": 41,
+      "documentKb": 46,
       "scriptKb": 12,
       "styleKb": 26,
       "imageKb": 19,
-      "domNodes": 398
+      "domNodes": 500
     }
   ],
   "inp": [
@@ -107,7 +107,7 @@
       "worstMs": 24,
       "reporting_threshold_ms": 16,
       "note": "зафиксированы взаимодействия выше порога отчётности",
-      "observer_selfcheck_ms": 128
+      "observer_selfcheck_ms": 136
     }
   ],
   "player": [

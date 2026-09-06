@@ -96,6 +96,8 @@ def contract_catalog() -> fx.Catalog:
         base_fields = dict(vars(title))
         base_fields.pop("playable", None)
         base_fields.pop("created_at", None)
+        base_fields.pop("kinopoisk_rating", None)
+        base_fields.pop("imdb_rating", None)
         titles.append(ContractTitle(
             **base_fields,
             external_id=title.slug,

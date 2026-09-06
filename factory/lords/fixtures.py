@@ -157,6 +157,10 @@ class Title:
     #: было, ни одна фикстурная запись не проходила допуск, и полка выходила
     #: пустой при любом наборе данных.
     playable: bool | None = None
+    #: Оценки источников. `None` означает «источник оценки не давал» — не ноль
+    #: и не среднее: подставленное число выглядело бы как чужая оценка.
+    kinopoisk_rating: float | None = None
+    imdb_rating: float | None = None
     #: Происхождение. Единственное допустимое значение в этом модуле.
     source: str = SOURCE
 
@@ -471,6 +475,24 @@ CATALOG_EPOCH = datetime(2026, 1, 1, tzinfo=timezone.utc)
 #: на стенд и под ворота.
 PLAYBACK_MIX = (True, True, True, True, False, True, True, True, None, True, True)
 
+#: Раскладка оценок по кругу. Семь позиций покрывают все четыре случая, которые
+#: рендерер обязан различать: обе оценки, только Кинопоиск, только IMDb, ни
+#: одной. Без них полка «высокие оценки» не набиралась вовсе, а показ двух
+#: оценок на карточке — работа отдельного цикла — на стенде не появлялся ни
+#: разу, и ворота о нём молчали.
+#:
+#: Числа синтетические и намеренно разные у двух источников: равные значения
+#: скрыли бы путаницу шкал, а 7,4 у одного не равно 7,4 у другого.
+RATING_MIX = (
+    (8.1, 7.4),
+    (7.6, None),
+    (None, 8.3),
+    (None, None),
+    (6.9, 7.8),
+    (8.7, None),
+    (None, 6.4),
+)
+
 
 def build_catalog() -> Catalog:
     """Детерминированный каталог стенда. Ни сети, ни случайности, ни времени."""
@@ -502,6 +524,8 @@ def build_catalog() -> Catalog:
             title,
             created_at=(CATALOG_EPOCH - timedelta(days=position)).isoformat(),
             playable=PLAYBACK_MIX[position % len(PLAYBACK_MIX)],
+            kinopoisk_rating=RATING_MIX[position % len(RATING_MIX)][0],
+            imdb_rating=RATING_MIX[position % len(RATING_MIX)][1],
         )
         for position, title in enumerate(unique)
     ]

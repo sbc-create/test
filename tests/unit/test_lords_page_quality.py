@@ -315,11 +315,23 @@ class TestPlayerPlaceholderStaysPolite:
 class TestRatingsAlwaysCarryTheirSource:
     """Оценка без подписи источника — это выдуманное число.
 
-    Механика оценок в рендерере есть (`_card_rating`: Кинопоиск, затем IMDb), а
-    в синтетическом каталоге оценок нет как полей. Оба факта верны
-    одновременно, и тест закрепляет связь между ними: пока источник молчит,
-    разметки оценки не возникает, а как только она возникнет — рядом обязана
-    стоять подпись источника.
+    Раньше здесь закреплялось и второе: что в синтетическом каталоге оценок нет
+    как полей. Это допущение пересмотрено, и вот почему.
+
+    Замысел был верным — не показывать зрителю число, которого никто не ставил.
+    Но правило это относится к настоящим каталогам, а не к стенду: на стенде
+    синтетично всё — названия, жанры, страны, длительности. Оценки оказались
+    единственным полем, оставленным пустым, и цена вышла несоразмерной. Полка
+    «высокие оценки» не набиралась и не рендерилась ни разу; показ обеих оценок
+    на карточке — работа отдельного цикла — на стенде не появлялся вовсе. Ворота
+    молчали об обоих и оставались зелёными.
+
+    Настоящая защита от выдуманного числа — не пустое поле фикстуры, а то, что
+    фикстура себя объявляет: `source`, признак `fixture` и метка источника
+    данных на витрине. Она и проверяется отдельно.
+
+    Здесь остаётся содержательное: число никогда не стоит без подписи
+    источника, и синтетические оценки не выдают себя за настоящие.
     """
 
     @pytest.mark.parametrize("site_id", SITES)
@@ -330,8 +342,18 @@ class TestRatingsAlwaysCarryTheirSource:
             assert values == sources, (
                 f"{site_id} {path}: оценок {values}, подписей источника {sources}")
 
-    def test_fixture_catalog_declares_no_ratings_at_all(self, catalog):
-        """У синтетических записей оценок нет как полей, а не как пустых значений."""
+    def test_fixture_ratings_declare_themselves_synthetic(self, catalog):
+        """Оценки на стенде есть, и каждая принадлежит записи, объявленной синтетической."""
+        rated = [t for t in catalog.titles
+                 if t.kinopoisk_rating is not None or t.imdb_rating is not None]
+        assert rated, "без оценок полка «высокие оценки» не проверяется ничем"
+        for title in rated:
+            assert title.source == fx.SOURCE
+            assert title.fixture is True
+
+    def test_fixture_ratings_stay_within_a_plausible_scale(self, catalog):
+        """Число вне шкалы выдало бы себя на витрине, а не в тесте."""
         for title in catalog.titles:
-            assert getattr(title, "kinopoisk_rating", None) is None
-            assert getattr(title, "imdb_rating", None) is None
+            for value in (title.kinopoisk_rating, title.imdb_rating):
+                if value is not None:
+                    assert 0 < value <= 10, f"{title.slug}: оценка {value} вне шкалы"
