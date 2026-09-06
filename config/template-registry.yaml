@@ -1,0 +1,61 @@
+# Реестр шаблонов: что можно выложить и чем это доказано.
+#
+# Запись здесь — это регистрация проверенного пакета, а не загрузка кода в
+# production. Пакет без результата контрактных проверок не регистрируется: не
+# потому, что он плох, а потому что неизвестно.
+#
+# Отпечаток считается по девятнадцати файлам отрисовки; ревизия — полный SHA
+# коммита, которым пакет собран. Короткая ссылка через день означает другое
+# содержимое.
+
+version: 1
+
+templates:
+  - family: lords_dark
+    version: "5.0.0"
+    digest: 88abcbadc4b93da94099f79da0a07779f17367240303e87e304453ffe82cdeaf
+    renderer_revision: 3bc7f0db3c60a2c1a0225d6d80f2247fe8a46c07
+    contract: site-template/1.0.0
+    capabilities: [pagination, facets, player, collections, episode-pages, schema-org]
+    contract_tests:
+      passed: true
+      at: "2026-09-06T12:24:00Z"
+      suite: tests/unit/test_lords_canary.py + публичная приёмка lordserial33.biz
+      evidence: жанров 258, стран 74, PTNoneM 0, разделы 200
+    rollback_compatible_with: ["4.0.0"]
+    preview: https://lordserial33.biz/
+    notes: >-
+      Выложена канарейкой на lords-02, пережила принудительное обновление и
+      штатный таймер; откат и возврат проверены на боевой витрине.
+
+  - family: lords_dark
+    version: "4.0.0"
+    digest: 0c905f9fe50a746bf5facabbb24453475826cbf3ca02baab716313c5860fe316
+    renderer_revision: 568863d350c320e4101ac17417c846ca4b7265c0
+    contract: site-template/1.0.0
+    capabilities: [pagination, player, collections, episode-pages, schema-org]
+    contract_tests:
+      passed: true
+      at: "2026-09-06T11:37:00Z"
+      suite: полный набор фабрики на ревизии 568863d
+      evidence: работает на lords-01 и lords-03
+    rollback_compatible_with: []
+    preview: https://lordfilm47.space/
+    notes: >-
+      Версия без фасетов из данных и без серверного поиска: /genres/ отдавала
+      три ссылки вместо шестидесяти четырёх, /countries/ — ни одной.
+
+  - family: lords_light
+    version: "4.0.0"
+    digest: 0c905f9fe50a746bf5facabbb24453475826cbf3ca02baab716313c5860fe316
+    renderer_revision: 568863d350c320e4101ac17417c846ca4b7265c0
+    contract: site-template/1.0.0
+    capabilities: [pagination, player, collections, episode-pages, schema-org]
+    contract_tests:
+      passed: true
+      at: "2026-09-06T11:49:00Z"
+      suite: полный набор фабрики на ревизии 568863d
+      evidence: работает на lords-03
+    rollback_compatible_with: []
+    preview: https://1lordserials1.online/
+    notes: Светлая палитра того же пакета отрисовки.
