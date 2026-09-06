@@ -118,7 +118,10 @@ class TestЧтениеНастроек:
     def test_схема_разрешённых_полей_приходит_до_ввода(self, api):
         тело = api.handle("GET", f"/api/v1/settings/{SITE}", headers=H_W).body
         поля = {f["key"]: f for f in тело["fields"]}
-        assert set(поля) == {"keep_releases", "cache_policy", "feature_flags"}
+        # Перечень растёт вместе с продуктом: признак публичной регистрации —
+        # такая же настройка витрины, как остальные.
+        assert {"keep_releases", "cache_policy", "feature_flags"} <= set(поля)
+        assert "public_registration_enabled" in поля
         assert поля["keep_releases"]["min"] == 2 and поля["keep_releases"]["max"] == 20
         assert поля["keep_releases"]["value"] == 8
 

@@ -212,6 +212,34 @@ class _Handler(http.server.BaseHTTPRequestHandler):
             return
         self._html(response.status, response.html, response.headers)
 
+    def _handle_fleet_account(self, method: str, path: str, *,
+                              query: dict[str, str] | None = None) -> None:
+        """Регистрация витрины по её собственному адресу.
+
+        Отдельный обработчик, а не ветка внутри общего: у контура витрины свой
+        признак включения и своя причина отказа, и смешивать их с общим
+        контуром значит однажды показать посетителю чужую.
+        """
+        флот = getattr(self.server, "fleet_accounts", None)
+        if флот is None:
+            self._error(404, "not_found", "маршрут не найден")
+            return
+        form: dict[str, str] = dict(query or {})
+        if method == "POST":
+            разобранная = self._read_form()
+            if разобранная is None:
+                return
+            form = разобранная
+        try:
+            ответ = флот.handle(
+                method, path, form=form, cookies=self._cookies(),
+                user_agent=self.headers.get("User-Agent", ""),
+            )
+        except Exception:  # noqa: BLE001
+            self._html(500, "<p>Внутренняя ошибка.</p>")
+            return
+        self._html(ответ.status, ответ.html, getattr(ответ, "headers", None))
+
     def _handle_account(self, method: str, path: str, *,
                         query: dict[str, str] | None = None) -> None:
         """Публичные страницы учётной записи.
@@ -302,6 +330,11 @@ class _Handler(http.server.BaseHTTPRequestHandler):
         if path == "/admin" or path.startswith("/admin/") or сайтовый:
             self._handle_admin(method, path, query=query)
             return
+        # Публичный контур витрины: /s/<siteId>/account/...
+        аккаунт_витрины = re.match(r"^/s/[^/]+/account(/|$)", path) is not None
+        if аккаунт_витрины:
+            self._handle_fleet_account(method, path, query=query)
+            return
         if path == "/account" or path.startswith("/account/"):
             self._handle_account(method, path, query=query)
             return
@@ -376,12 +409,14 @@ class _Server(http.server.ThreadingHTTPServer):
         lifecycle=None,
         service_root=None,
         account_app=None,
+        fleet_accounts=None,
     ):
         super().__init__(address, handler)
         self.read_api = read_api
         self.control_api = control_api
         self.admin_app = admin_app
         self.account_app = account_app
+        self.fleet_accounts = fleet_accounts
         self.lifecycle = lifecycle if lifecycle is not None else Lifecycle()
         self.service_root = service_root
 
@@ -394,6 +429,7 @@ def build_server(
     lifecycle: Any = None,
     service_root: Any = None,
     account_app: Any = None,
+    fleet_accounts: Any = None,
 ) -> _Server:
     """Сборка сервера.
 
@@ -415,6 +451,7 @@ def build_server(
         lifecycle,
         service_root,
         account_app,
+        fleet_accounts,
     )
 
 
@@ -514,11 +551,30 @@ def main(argv: list[str] | None = None) -> int:
                 env.get("SITE_ENGINE_ACCOUNTS_ALLOW_CAPTURE_MAILER", "")
             ).strip().lower() in {"1", "true", "yes", "on"})
 
+    # Публичный контур флота: регистрация каждой витрины по её адресу и по её
+    # настройке. Включается одной переменной на весь массив, а не по витрине:
+    # какие витрины открыты, решает их собственный признак, и переменная здесь
+    # означает лишь «контур флота смонтирован».
+    fleet_accounts = None
+    if str(env.get("SITE_ENGINE_FLEET_ACCOUNTS", "")).strip().lower() in {
+        "1", "true", "yes", "on",
+    }:
+        from factory.site_engine.fleet_accounts import FleetAccounts
+
+        fleet_accounts = FleetAccounts(
+            root,
+            mail_dir=env.get("SITE_ENGINE_MAIL_CAPTURE_DIR") or None,
+            allow_capture_mailer=str(
+                env.get("SITE_ENGINE_ACCOUNTS_ALLOW_CAPTURE_MAILER", "")
+            ).strip().lower() in {"1", "true", "yes", "on"},
+            secure_cookie=args.host not in {"127.0.0.1", "::1", "localhost"},
+        )
+
     config = ServerConfig(host=args.host, port=args.port, allow_public_bind=args.allow_public_bind)
     жизнь = Lifecycle(drain_timeout=float(env.get("SITE_ENGINE_DRAIN_SECONDS", "25")))
     server = build_server(
         config, read_api, control_api, admin_app, lifecycle=жизнь,
-        service_root=root, account_app=account_app
+        service_root=root, account_app=account_app, fleet_accounts=fleet_accounts
     )
     адрес = server.server_address
     состояние = "с админкой" if admin_app else "без админки"

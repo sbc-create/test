@@ -18,6 +18,10 @@ SAFE_SETTINGS: dict[str, dict[str, Any]] = {
     "keep_releases": {"type": int, "min": 2, "max": 20},
     "cache_policy": {"type": dict, "value_type": int, "min": 0, "max": 86_400},
     "feature_flags": {"type": dict, "value_type": bool},
+    # Признак публичной регистрации — настройка витрины, а не переменная среды.
+    # Переменной он включается сразу везде и выключается перезапуском, то есть
+    # на практике не выключается вовсе.
+    "public_registration_enabled": {"type": bool},
 }
 
 # Отклоняются намеренно — с указанием причины в ответе, чтобы вызывающий понял,
