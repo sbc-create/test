@@ -338,6 +338,8 @@ main {{ padding: var(--pad) 0 40px; }}
 .facet__chip:hover, .facet__more:hover {{ background: var(--accent);
   color: var(--accent-text); }}
 .facet__more {{ font-weight: 600; }}
+/* Разрыв в пагинации — не ссылка: он не должен выглядеть нажимаемым. */
+.pagination__gap {{ padding: 3px 6px; color: var(--muted); user-select: none; }}
 .facets legend {{ font-size: .78rem; color: var(--muted); padding: 0 0 4px; }}
 .facets select, .facets input {{
   width: 100%; padding: 7px 10px; font: inherit;

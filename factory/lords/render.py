@@ -639,19 +639,56 @@ def _grid(titles, *, anchor: bool = False) -> str:
     return f'<div class="grid"{attrs}>' + "".join(_card(t) for t in titles) + "</div>"
 
 
+#: Сколько соседних страниц показывать по каждую сторону от текущей.
+PAGINATION_RADIUS = 2
+
+
 def _pagination(base: str, page: int, pages: int) -> str:
+    """Окно страниц, а не весь каталог ссылками.
+
+    Прежде перечислялись ВСЕ страницы: `range(1, pages + 1)`. На боевом
+    каталоге это 2 253 ссылки при 24 карточках — блок пагинации в сотню раз
+    объёмнее содержимого, основная часть из ~132 тысяч знаков разметки и
+    несколько тысяч пикселей высоты.
+
+    Скрыть лишнее стилями было бы хуже, чем оставить: узлы всё равно приходят
+    по сети, разбираются браузером и читаются экранным диктором. Их не должно
+    быть в разметке.
+
+    Показываются: первая страница, окно вокруг текущей, последняя и переходы
+    «назад»/«вперёд». Разрывы обозначены — без них соседство `1` и `100`
+    читается как ошибка вёрстки.
+    """
     if pages <= 1:
         return ""
+
     def href(n: int) -> str:
         return base if n == 1 else f"{base}page/{n}/"
+
+    window = {1, pages}
+    window.update(range(max(1, page - PAGINATION_RADIUS),
+                        min(pages, page + PAGINATION_RADIUS) + 1))
+    # Разрыв в одну страницу бессмыслен: многоточие занимает столько же места,
+    # сколько сама страница, и прячет достижимый переход.
+    for n in list(window):
+        if n + 2 in window:
+            window.add(n + 1)
+    numbers = sorted(window)
+
     items = []
     if page > 1:
         items.append(f'<li><a rel="prev" href="{escape(href(page - 1))}">Назад</a></li>')
-    for n in range(1, pages + 1):
+    previous = 0
+    for n in numbers:
+        if previous and n > previous + 1:
+            # Разрыв — не ссылка: щёлкать по нему некуда, и объявлять его
+            # экранному диктору как элемент списка незачем.
+            items.append('<li aria-hidden="true" class="pagination__gap">…</li>')
         if n == page:
             items.append(f'<li><span aria-current="page">{n}</span></li>')
         else:
             items.append(f'<li><a href="{escape(href(n))}">{n}</a></li>')
+        previous = n
     if page < pages:
         items.append(f'<li><a rel="next" href="{escape(href(page + 1))}">Вперёд</a></li>')
     return (
