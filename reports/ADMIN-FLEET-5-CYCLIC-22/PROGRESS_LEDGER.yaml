@@ -249,7 +249,7 @@ entries:
     cycle: 8
     note: "массив витрин и явное переключение"
     branch: claude/core-product-8plus-20
-    full_head_sha: ЗАПОЛНЯЕТСЯ_ПОСЛЕ_КОММИТА
+    full_head_sha: 6f8967922f224a12e7782c171b5db5d19e84ced3
     core_percent: 100.0
     central_admin: 8
     fleet_gates_closed: 5
