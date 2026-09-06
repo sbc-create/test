@@ -272,3 +272,48 @@ entries:
     production_status: "не изменялась; mutations 0"
     next_cycle: 9
 
+  - timestamp: "2026-09-06T08:30:00Z"
+    cycle: 9
+    note: "кандидат выпуска, пилот под наблюдением, манифест отката"
+    branch: claude/core-product-8plus-20
+    full_head_sha: c8796b8faf818d7a7619a66b72a69ae497d65c6b
+    candidate_sha: c8796b8faf818d7a7619a66b72a69ae497d65c6b
+    candidate_digest: 1bc18bc82469bd79
+    core_percent: 100.0
+    central_admin: 8
+    fleet_gates_closed: 6
+    fleet_gates_total: 9
+    fleet_scores:
+      fleetContract: 8
+      fleetTenancy: 8
+      fleetRbac: 8
+      fleetPortalLight: 7
+      fleetPulse: 7
+      fleetEditorial: 7
+      fleetLordsDark: 8
+      fleetLordsLight: 8
+      fleetPilotRollout: 8
+    fleet_percent: 95.8
+    progress_delta_since_previous: 8.3
+    tests: "4411 passed, 3 skipped, 0 failed"
+    pilot:
+      snapshots: 32
+      ready_200: 32
+      admin_200: 32
+      production_active: 32
+      production_restarts: 0
+      rss_kb_min: 23480
+      rss_kb_max: 110068
+      acceptance_against_pilot: "0 провалов"
+    defects_found: 0
+    regressions_opened: 0
+    production_status: "не изменялась; mutations 0; current 52fd0665"
+    next_cycle: 10
+    owner_actions:
+      - "sudo bash automation/host/deploy-control-api.sh deploy c8796b8f…"
+    comment: >-
+      fleetPilotRollout 8: кандидат собран из коммита, отпечаток сверен, сухой
+      прогон пройден как ворота, артефакт проверен отдельно от исходников,
+      пилот выдержал полчаса наблюдения и полную приёмку. Выкладка — одно
+      действие владельца: перезапуск службы требует прав root.
+

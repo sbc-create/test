@@ -1,0 +1,72 @@
+{
+  "iteration": "ADMIN-FLEET-5-CYCLIC-22",
+  "role": "ARCHITECT_CORE",
+  "generatedAt": "2026-09-06T08:00:00Z",
+  "branch": "claude/core-product-8plus-20",
+  "baseSha": "463fe108c7fb5d2afb98db32c42744d47e1b2eab",
+  "headSha": "c8796b8faf818d7a7619a66b72a69ae497d65c6b",
+  "candidateSha": "c8796b8faf818d7a7619a66b72a69ae497d65c6b",
+  "candidateDigest": "1bc18bc82469bd79",
+  "commitCount": 14,
+  "commits": [
+    "c8796b8 reports: отпечаток коммита цикла 8",
+    "6f89679 fleet: массив витрин у супер-администратора",
+    "4e30e61 reports: отпечаток коммита цикла 7",
+    "b95dc9e fleet: публичная регистрация посайтово и её признак витрины",
+    "e7502e3 reports: отпечаток коммита цикла 6",
+    "faad953 fleet: содержимое витрины из её собственного пакета",
+    "3a62753 reports: отпечаток коммита цикла 5",
+    "36aa6ca fleet: очередь разбора наполняется из каталога, полный путь пройден в браузере",
+    "91a7aad reports: отпечаток коммита цикла 4",
+    "f807f53 fleet: приёмка контура сайта в браузере и две настоящие утечки соседа",
+    "5b6512a reports: отпечаток коммита цикла 3",
+    "1f7ab4c fleet: своя точка входа, печенья и оформление у каждого сайта",
+    "e808b32 fleet: тенант проверяется в одном месте, а не в каждом обработчике",
+    "2786775 fleet: договор админки сайта и принадлежность оператора витрине"
+  ],
+  "candidate": true,
+  "deployed": null,
+  "dryRun": {
+    "command": "bash automation/host/deploy-control-api.sh deploy c8796b8faf818d7a7619a66b72a69ae497d65c6b --dry-run",
+    "result": "готов, фатальных 0, ограничений 0",
+    "gates": [
+      "state.queue",
+      "state.state",
+      "state.audit",
+      "state.locks",
+      "profiles: 7",
+      "isolation.domains: пересечений нет",
+      "config.writable",
+      "contract: движок 1.2.0, несовместимых 0",
+      "secrets.tokens"
+    ],
+    "currentUntouched": true
+  },
+  "artifactCheck": {
+    "servedFrom": "/srv/site-factory/control-api/releases/c8796b8faf818d7a7619a66b72a69ae497d65c6b",
+    "results": {
+      "/api/v1/ready": 200,
+      "/s/lords-01/admin": 200,
+      "/s/lords-02/admin": 200,
+      "/s/нет/admin": 404,
+      "brandRendered": "Первая витрина"
+    },
+    "note": "проверен собранный артефакт, а не рабочее дерево"
+  },
+  "rollback": {
+    "command": "bash automation/host/deploy-control-api.sh rollback",
+    "target": "52fd06659a7ff73fd37b5bed2f20eb46a90d7a1e",
+    "protocol": "откат проходит тот же протокол запуска: версия, не прошедшая проверку, не станет рабочей только оттого, что она старая",
+    "stateUntouched": "код неизменяем, состояние общее: откат не уносит задания, поставленные новой версией"
+  },
+  "ownerAction": {
+    "why": "переключение current требует перезапуска службы, а он — прав root",
+    "command": "sudo bash /srv/site-factory/repo/automation/host/deploy-control-api.sh deploy c8796b8faf818d7a7619a66b72a69ae497d65c6b",
+    "verify": "curl -s http://127.0.0.1:8790/api/v1/ready && bash automation/host/deploy-control-api.sh status"
+  },
+  "productionStatus": {
+    "mutations": 0,
+    "currentSha": "52fd06659a7ff73fd37b5bed2f20eb46a90d7a1e"
+  },
+  "evidence": "reports/ADMIN-FLEET-5-CYCLIC-22/"
+}
