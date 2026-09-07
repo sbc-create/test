@@ -374,7 +374,18 @@ main {{ padding: var(--pad) 0 40px; }}
   display: flex; flex-direction: column;
 }}
 .card:hover {{ border-color: var(--accent); }}
-.card__poster {{ position: relative; aspect-ratio: var(--card-ratio); background: var(--surface-alt); }}
+.card__poster {{ position: relative; aspect-ratio: var(--card-ratio); background: var(--surface-alt);
+  display: block; overflow: hidden; }}
+/* Заглушка постера. Лежит под изображением и видна только тогда, когда
+   изображения нет: постеры отдаёт внешний хост поставщика, и часть их не
+   приходит. Пустой серый прямоугольник читается как поломка, буква — как
+   намеренно занятое место. */
+.card__poster-empty {{ position: absolute; inset: 0; display: flex;
+  align-items: center; justify-content: center;
+  font-size: 2.2rem; font-weight: 700; color: var(--muted);
+  background: var(--surface-alt); }}
+.card__poster img {{ position: relative; width: 100%; height: 100%;
+  object-fit: cover; display: block; }}
 .card__poster img {{ width: 100%; height: 100%; object-fit: cover; }}
 /* Верхняя карусель.
 

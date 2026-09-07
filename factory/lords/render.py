@@ -569,7 +569,7 @@ def _card(title: fx.Title) -> str:
     return (
         f'<article class="card" data-slug="{escape(title.slug)}">'
         f'<a class="card__poster" href="{escape(title.path)}" tabindex="-1" aria-hidden="true">'
-        f'<img src="{escape(title.poster_src)}" alt="" loading="lazy" width="400" height="600">'
+        f'{_poster(title)}'
         f"{badge}"
         f"{_card_rating(title)}"
         f"{seasons}</a>"
@@ -580,6 +580,33 @@ def _card(title: fx.Title) -> str:
         "</div></article>"
     )
 
+
+
+def _poster(title) -> str:
+    """Постер записи или заглушка вместо него.
+
+    Постеры отдаёт внешний хост поставщика, и часть их не приходит: запись без
+    постера у источника, снятая картинка, закрытая сеть. Пустой элемент
+    изображения оставляет в карточке серый прямоугольник, и страница выглядит
+    сломанной, а не неполной — разница для зрителя большая.
+
+    Заглушка несёт первую букву названия. Это не украшение: она отличает
+    карточки друг от друга взглядом, пока названия ещё не прочитаны, и
+    показывает, что место занято намеренно. Буква скрыта от экранного диктора —
+    он читает название рядом, и повторять его инициалом незачем.
+
+    `onerror` снимает изображение, не сумевшее загрузиться, и оставляет
+    заглушку под ним: без этого браузер рисует значок битой картинки.
+    """
+    letter = escape((title.name or "?").strip()[:1].upper())
+    placeholder = f'<span class="card__poster-empty" aria-hidden="true">{letter}</span>'
+    source = getattr(title, "poster_url", None) or ""
+    if not source:
+        return placeholder
+    return (
+        f'{placeholder}<img src="{escape(title.poster_src)}" alt="" loading="lazy"'
+        ' width="400" height="600" onerror="this.remove()">'
+    )
 
 
 def _card_rating(title) -> str:
@@ -1227,7 +1254,13 @@ def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
                     "<h2>Продолжающиеся истории</h2></div>" + _grid(episodic) + "</section>"
                 )
         elif block == "collection_cards" and ctx["show_collection_cards"]:
-            add(block, _collection_cards(ctx, catalog))
+            # Блок рисуется только если подборки есть. Прежде он выводился
+            # безусловно, и на живом каталоге, где подборок нет, страница
+            # получала заголовок «Подборки», ссылку «Все подборки» и пустую
+            # сетку под ними. Пустая секция ради структуры хуже отсутствия
+            # секции: зритель видит обещание и ничего за ним.
+            if catalog.collections:
+                add(block, _collection_cards(ctx, catalog))
         elif block == "editor_note":
             # Оговорка про тестовый каталог верна только для стенда. На живом
             # каталоге она сообщала посетителю, что за записями не стоят
@@ -2556,8 +2589,17 @@ def _context(package: dict, profile: dict, site_plan, player_state,
         # опускается одной строкой в пакете и возвращает прежнее поведение —
         # честное сообщение о недоступности поиска и разделы каталога.
         "search_index_enabled": (package.get("seo") or {}).get("search_index", True) is not False,
-        "home_items": 12,
-        "row_items": 6,
+        # Числа карточек в ряду и на главной выводятся из сетки профиля, а не
+        # задаются здесь. Прежде стояли 12 и 6 — они подобраны под шесть
+        # колонок и на них ложатся ровно. Профиль zona-cinema объявляет пять,
+        # и те же 6 давали ряд из пяти карточек плюс одна одинокая под ним, а
+        # 12 — пять, пять и две. Ряд, оборванный на одной карточке, выглядит
+        # незаконченной вёрсткой, а не решением.
+        #
+        # Ряд равен числу колонок, главная — двум рядам. При шести колонках
+        # получаются прежние 6 и 12, то есть у витрин Lords не меняется ничего.
+        "home_items": 2 * int((layout.get("columns") or {}).get("desktop") or 6),
+        "row_items": int((layout.get("columns") or {}).get("desktop") or 6),
         "facet_position": str(layout.get("facet_position")),
         "hero": str(layout.get("hero")),
         "home_blocks": list(layout.get("home_blocks") or []),
