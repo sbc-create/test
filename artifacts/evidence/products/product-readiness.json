@@ -6,8 +6,8 @@
     "basis-video",
     "zona-cinema"
   ],
-  "average_integration": 42,
-  "generated_at_utc": "2026-09-07T12:10:59.350644+00:00",
+  "average_integration": 64,
+  "generated_at_utc": "2026-09-07T13:16:59.056184+00:00",
   "rubric": {
     "package": "готовность пакета",
     "data": "данные",
@@ -18,6 +18,18 @@
     "adapter": "адаптер админки",
     "live": "приёмка боевой витрины"
   },
+  "product_dimensions": [
+    "package",
+    "data",
+    "functional",
+    "visual",
+    "responsive"
+  ],
+  "integration_dimensions": [
+    "preview",
+    "adapter"
+  ],
+  "measured_products": 3,
   "max_per_dimension": 10,
   "products": {
     "zona-cinema": {
@@ -45,7 +57,7 @@
         },
         "preview": {
           "points": 9,
-          "note": "1355 страниц собрано и готово к выкладке; локальная витрина в приёмку не входит"
+          "note": "1338 страниц собрано и готово к выкладке; локальная витрина в приёмку не входит"
         },
         "adapter": {
           "points": 7,
@@ -58,10 +70,11 @@
       },
       "package_readiness": 86,
       "preview_acceptance": 90,
-      "live_acceptance": 0,
+      "live_acceptance": null,
+      "live_state": "BLOCKED_OWNER_URLS",
       "total": 75,
       "product_readiness": 88,
-      "integration_readiness": 53
+      "integration_readiness": 80
     },
     "animedia-portal": {
       "package": "animedia-preview",
@@ -88,7 +101,7 @@
         },
         "preview": {
           "points": 9,
-          "note": "1415 страниц собрано и готово к выкладке; локальная витрина в приёмку не входит"
+          "note": "1398 страниц собрано и готово к выкладке; локальная витрина в приёмку не входит"
         },
         "adapter": {
           "points": 7,
@@ -101,10 +114,11 @@
       },
       "package_readiness": 86,
       "preview_acceptance": 90,
-      "live_acceptance": 0,
+      "live_acceptance": null,
+      "live_state": "BLOCKED_OWNER_URLS",
       "total": 75,
       "product_readiness": 88,
-      "integration_readiness": 53
+      "integration_readiness": 80
     },
     "basis-video": {
       "package": "pilot-local",
@@ -144,10 +158,11 @@
       },
       "package_readiness": 84,
       "preview_acceptance": 90,
-      "live_acceptance": 0,
+      "live_acceptance": null,
+      "live_state": "BLOCKED_OWNER_URLS",
       "total": 74,
       "product_readiness": 86,
-      "integration_readiness": 53
+      "integration_readiness": 80
     },
     "yummy": {
       "package": "—",
@@ -187,11 +202,12 @@
       },
       "package_readiness": 4,
       "preview_acceptance": 0,
-      "live_acceptance": 0,
+      "live_acceptance": null,
+      "live_state": "BLOCKED_OWNER_URLS",
       "total": 4,
       "product_readiness": null,
       "product_note": "не измерено этой полосой: приложение вне фабрики, боевые адреса закрыты профилем разрешений, чужая активная ветка не запускается. Известно от ARCHITECT_CORE: ревизия 4460031, три витрины, health healthy на 2026-09-04. Прочитано: 41 маршрут, 66 модульных тестов, 13 браузерных спеков",
-      "integration_readiness": 10
+      "integration_readiness": 15
     }
   },
   "average": 57,

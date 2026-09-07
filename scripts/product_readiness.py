@@ -273,7 +273,15 @@ def evaluate() -> dict:
                 100 * sum(dims[k]["points"] for k, _ in DIMENSIONS if k != "live")
                 / (MAX * (len(DIMENSIONS) - 1))),
             "preview_acceptance": round(100 * dims["preview"]["points"] / MAX),
-            "live_acceptance": round(100 * dims["live"]["points"] / MAX),
+            # Ноль и ожидание читаются одинаково, а означают противоположное:
+            # первое — что проверяли и не прошло, второе — что не проверяли и
+            # не на чем. Пока адреса нет, числа нет тоже.
+            "live_acceptance": (round(100 * dims["live"]["points"] / MAX)
+                                if not dims["live"]["note"].startswith("BLOCKED_OWNER_URLS")
+                                else None),
+            "live_state": ("BLOCKED_OWNER_URLS"
+                           if dims["live"]["note"].startswith("BLOCKED_OWNER_URLS")
+                           else "MEASURED"),
             "total": round(100 * total / (MAX * len(DIMENSIONS))),
         }
     # Две средние, а не одна. Смешивать готовность работающего сайта с
@@ -286,7 +294,12 @@ def evaluate() -> dict:
     # доступность. `integration` — то, что видит фабрика: адаптер, предпросмотр
     # в общем стенде, приёмка боевой витрины её средствами.
     PRODUCT_DIMS = ("package", "data", "functional", "visual", "responsive")
-    INTEGRATION_DIMS = ("preview", "adapter", "live")
+    # Приёмки боевой витрины здесь нет намеренно. Она была слагаемым, и
+    # слагаемое это равнялось нулю — не потому что витрина не прошла приёмку, а
+    # потому что адреса для неё не передали. Ожидание входа занижало число,
+    # которое к нему не относится. Владелец потребовал трёх раздельных величин,
+    # и приёмка витрины — третья из них, а не часть второй.
+    INTEGRATION_DIMS = ("preview", "adapter")
     for name, info in products.items():
         dims = info["dimensions"]
         if name == "yummy":
@@ -336,6 +349,10 @@ def evaluate() -> dict:
             sum(p["integration_readiness"] for p in products.values()) / len(products)),
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "rubric": dict(DIMENSIONS),
+        "product_dimensions": list(PRODUCT_DIMS),
+        "integration_dimensions": list(INTEGRATION_DIMS),
+        "measured_products": sum(
+            1 for p in products.values() if p["product_readiness"] is not None),
         "max_per_dimension": MAX,
         "products": products,
         "average": round(sum(p["total"] for p in products.values()) / len(products)),
@@ -361,17 +378,30 @@ def main() -> int:
     print(f"{'измерение':30}" + "".join(f"{n:>17}" for n in names))
     print("-" * (30 + 17 * len(names)))
     for key, label in DIMENSIONS:
-        row = "".join(f"{report['products'][n]['dimensions'][key]['points']:>17}" for n in names)
-        print(f"{label:30}{row}")
+        cells = []
+        for n in names:
+            info = report["products"][n]
+            if key == "live" and info["live_state"] == "BLOCKED_OWNER_URLS":
+                cells.append(f"{'ждёт адреса':>17}")
+            else:
+                cells.append(f"{info['dimensions'][key]['points']:>17}")
+        print(f"{label:30}" + "".join(cells))
     print("-" * (30 + 17 * len(names)))
     for label, field in (("ГОТОВНОСТЬ ПРОДУКТА, %", "product_readiness"),
                          ("ГОТОВНОСТЬ ИНТЕГРАЦИИ, %", "integration_readiness"),
                          ("  готовность пакета, %", "package_readiness"),
                          ("  предпросмотр, %", "preview_acceptance"),
                          ("  приёмка витрины, %", "live_acceptance")):
-        print(f"{label:30}" + "".join(
-            f"{report['products'][n][field] if report['products'][n][field] is not None else 'не измерено':>17}"
-            for n in names))
+        cells = []
+        for n in names:
+            value = report["products"][n][field]
+            if value is not None:
+                cells.append(f"{value:>17}")
+            elif field == "live_acceptance":
+                cells.append(f"{'ждёт адреса':>17}")
+            else:
+                cells.append(f"{'не измерено':>17}")
+        print(f"{label:30}" + "".join(cells))
     print(f"\nсредняя готовность продуктов:   {report['average_product']}%")
     print(f"средняя готовность интеграции: {report['average_integration']}%")
     print(f"{OUT.relative_to(ROOT)}")
