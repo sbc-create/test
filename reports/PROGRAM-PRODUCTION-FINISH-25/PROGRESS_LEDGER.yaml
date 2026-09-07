@@ -37,3 +37,37 @@ checkpoints:
       lords-03: 0c905f9fe50a746b
     defects_fixed: 9
     sites_unchanged: [yummyani.site, yummyani.org, yummyani.biz]
+
+  - timestamp: "2026-09-07T00:05:00Z"
+    cycle: 26
+    branch: claude/program-production-finish-25
+    head_sha: e39c6b6ee3651d8d77098a385fee4d51e5eb44cb
+    core: 100
+    central_admin: 90
+    admin_fleet: PARTIAL
+    unified_control_center: 70
+    families:
+      lords_dark: 85
+      lords_light: 75
+      portal_light: 40
+      pulse: 40
+      editorial: 40
+    seo: 65
+    production: 75
+    global_progress: 79
+    was: 74
+    delta: 5
+    tests: "5101 passed, 3 skipped, 0 failed"
+    reasoning: >-
+      Центр управления поднят до 70 %: единая запись, машинный интерфейс, окно
+      флота, реестр шаблонов, аналитика с честными состояниями и сборщик
+      измерений работают и проверены. До большего не хватает браузерной приёмки
+      ролей на самом экране и подключения внешних источников — последнее
+      требует учётных данных владельца. Центральная админка 90 %: пять зон
+      собраны, роли проверены серверными отказами.
+    defects_fixed_this_cycle:
+      - "поле error в успешном ответе ломало разбор у потребителя"
+      - "стенд приёмки проверял другое рабочее дерево"
+      - "сквозная проверка мастера отстала от входа по учётным записям"
+    production_unchanged: [lordfilm47.space, 1lordserials1.online, yummyani.site]
+
