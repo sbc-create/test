@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://site-factory.local/schemas/live-acceptance.schema.json",
+  "title": "Адреса действующих витрин для приёмки",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "products"],
+  "properties": {
+    "$comment": { "type": "string" },
+    "schema_version": { "const": 1 },
+    "products": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["base_url", "routes"],
+        "properties": {
+          "base_url": {
+            "description": "Адрес действующей витрины. null означает, что владелец его ещё не передал; выдуманное значение здесь недопустимо.",
+            "type": ["string", "null"],
+            "pattern": "^https://[^/]+/?$"
+          },
+          "routes": {
+            "type": "array",
+            "items": { "type": "string", "pattern": "^/" }
+          },
+          "note": { "type": "string" }
+        }
+      }
+    }
+  }
+}
