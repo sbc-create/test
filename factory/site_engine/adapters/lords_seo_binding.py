@@ -28,7 +28,6 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
-from factory.lords.live_catalog import slugify
 from factory.site_engine.catalog_identity import decide
 from factory.site_engine.rating_feed import ПОЛЯ as ПОЛЯ_ОЦЕНОК
 from factory.site_engine.rating_feed import ШКАЛА_ВЕРХ
@@ -47,6 +46,7 @@ from factory.site_engine.seo_binding import (
     playback_of,
     revision_of,
 )
+from factory.slug import slugify
 
 #: Тип страницы, который производит этот адаптер. Список закрыт: раздел и
 #: карточка эпизода адресуются иначе, и их выпуск — отдельная правка.

@@ -24,8 +24,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from factory import validation
-from factory.build import POST_BUILD_STAGES
 from factory.errors import BlockedInput
+from factory.lifecycle_stages import POST_BUILD_STAGES
 from factory.lords import fixtures as fx
 from factory.lords import render as render_mod
 from factory.lords import serve as serve_mod

@@ -32,6 +32,8 @@ shared:
     - factory/reference.py
     - factory/site_engine/contracts.py
     - factory/retry.py
+    - factory/slug.py
+    - factory/lifecycle_stages.py
     - factory/site_engine/dependencies.py
     - factory/site_engine/boundaries.py
   forbidden:
@@ -277,6 +279,7 @@ control_plane:
     - factory/site_engine/mail.py
     - factory/validation.py
     - factory/cli.py
+    - factory/entrypoints/
   allowed:
     - Все домены через их публичные интерфейсы.
   forbidden:

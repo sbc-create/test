@@ -175,14 +175,10 @@ def php_lint(paths: list[Path]) -> list[dict]:
     return results
 
 
-#: Этапы, наступающие после сборки. Штатная сборка останавливается на любом
-#: блокере и этот список не смотрит — он нужен стенду (`factory.lords.preview`),
-#: чтобы отличить «собрать нечем» от «выкатывать некуда». Смягчения здесь нет:
-#: блокер этапа выката по-прежнему закрывает выкат.
-POST_BUILD_STAGES = frozenset({
-    "STAGING_DEPLOY", "STAGING_QA", "AUTHORIZATION_CHECK", "PRODUCTION_DEPLOY",
-    "PRODUCTION_SMOKE", "MONITORING", "deploy",
-})
+#: Перечень переехал в общую опору: им пользуется и стенд витрины, а держать
+#: его здесь значило держать цикл между подсистемами. Имя оставлено для
+#: существующих потребителей.
+from factory.lifecycle_stages import POST_BUILD_STAGES  # noqa: E402,F401
 
 
 def build(site_id: str, *, environment: str | None = None, force: bool = False) -> BuildResult:

@@ -12,7 +12,7 @@ from datetime import datetime, timedelta, timezone
 import pytest
 import yaml
 
-from factory.recs import cli
+from factory.entrypoints import recs_editorial as cli
 from factory.recs.editorial import Editorial
 from factory.recs.model import ItemFeatures
 from factory.recs.ranker import rank

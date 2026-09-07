@@ -17,12 +17,16 @@
 from __future__ import annotations
 
 import re
-import unicodedata
 from dataclasses import dataclass
 
 from factory.lords import content_types as ct
 from factory.lords import fixtures as fx
 from factory.site_engine.catalog_identity import decide as kind_decide
+
+# Адрес из названия живёт в общей опоре: он нужен и управляющему контуру,
+# а держать его в семействе витрин значило держать цикл между подсистемами.
+# Имя оставлено здесь же для существующих потребителей.
+from factory.slug import slugify  # noqa: F401
 
 #: Происхождение записей этого каталога. Отличается от `fx.SOURCE` намеренно:
 #: по нему видно, что каталог живой, а не синтетический.
@@ -44,31 +48,8 @@ TYPE_MAP: dict[str, str] = {
     "drama": fx.DORAMA,
 }
 
-_TRANSLIT = {
-    "а": "a", "б": "b", "в": "v", "г": "g", "д": "d", "е": "e", "ё": "e", "ж": "zh",
-    "з": "z", "и": "i", "й": "y", "к": "k", "л": "l", "м": "m", "н": "n", "о": "o",
-    "п": "p", "р": "r", "с": "s", "т": "t", "у": "u", "ф": "f", "х": "h", "ц": "c",
-    "ч": "ch", "ш": "sh", "щ": "sch", "ъ": "", "ы": "y", "ь": "", "э": "e",
-    "ю": "yu", "я": "ya",
-}
 
 
-def slugify(value: str) -> str:
-    """Адрес из названия. Пусто на входе — пусто на выходе, без выдумки."""
-    lowered = (value or "").strip().lower()
-    out: list[str] = []
-    for char in lowered:
-        if char in _TRANSLIT:
-            out.append(_TRANSLIT[char])
-        elif char.isalnum() and char.isascii():
-            out.append(char)
-        elif unicodedata.category(char).startswith("L") or unicodedata.category(char) == "Nd":
-            # Незнакомая письменность: пропускаем символ, а не весь тайтл.
-            continue
-        else:
-            out.append("-")
-    slug = re.sub(r"-{2,}", "-", "".join(out)).strip("-")
-    return slug[:80]
 
 
 #: Возрастные отметки, которые источник кладёт в общий список тегов.
