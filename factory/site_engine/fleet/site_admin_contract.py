@@ -18,7 +18,6 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
 from typing import Any
 
 VERSION = "site-admin/1.0.0"
@@ -27,7 +26,14 @@ VERSION = "site-admin/1.0.0"
 
 #: Корень репозитория относительно этого файла. Перечень семейств читается из
 #: схемы, а схема лежит в поставке рядом с кодом.
-_КОРЕНЬ = Path(__file__).resolve().parents[2]
+# Корень берётся у центрального модуля путей, а не отсчётом родителей от
+# файла. Отсчёт ломается при переносе модуля глубже: он и сломался, когда этот
+# файл переехал в пакет домена — путь стал указывать на factory/schemas вместо
+# schemas, и договор перестал читаться. Число уровней — это знание о месте
+# файла, которого у файла быть не должно.
+from factory.paths import PATHS  # noqa: E402
+
+_КОРЕНЬ = PATHS.root
 
 
 class ContractError(Exception):
