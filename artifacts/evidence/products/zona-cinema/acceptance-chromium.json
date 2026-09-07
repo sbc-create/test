@@ -1,23 +1,12 @@
 {
   "product": "zona-cinema",
   "engine": "chromium",
-  "captured_at_utc": "2026-09-07T10:02:15.532Z",
+  "captured_at_utc": "2026-09-07T10:31:36.526Z",
   "surfaces": {
-    "countries@1440": {
+    "years@390": {
       "overflowX": false,
-      "scrollWidth": 1440,
-      "clientWidth": 1440,
-      "cards": 0,
-      "h1": "Страны",
-      "emptyElements": [],
-      "foreignIds": [],
-      "consoleErrors": [],
-      "networkErrors": []
-    },
-    "years@1440": {
-      "overflowX": false,
-      "scrollWidth": 1440,
-      "clientWidth": 1440,
+      "scrollWidth": 390,
+      "clientWidth": 390,
       "cards": 0,
       "h1": "Годы",
       "emptyElements": [],
@@ -36,10 +25,21 @@
       "consoleErrors": [],
       "networkErrors": []
     },
-    "years@390": {
+    "search@390": {
       "overflowX": false,
       "scrollWidth": 390,
       "clientWidth": 390,
+      "cards": 0,
+      "h1": "Поиск",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "years@1440": {
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
       "cards": 0,
       "h1": "Годы",
       "emptyElements": [],
@@ -47,10 +47,21 @@
       "consoleErrors": [],
       "networkErrors": []
     },
-    "search@390": {
+    "not-found@390": {
       "overflowX": false,
       "scrollWidth": 390,
       "clientWidth": 390,
+      "cards": 0,
+      "h1": "Страница не найдена",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "search@1440": {
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
       "cards": 0,
       "h1": "Поиск",
       "emptyElements": [],
@@ -69,21 +80,10 @@
       "consoleErrors": [],
       "networkErrors": []
     },
-    "search@1440": {
+    "not-found@768": {
       "overflowX": false,
-      "scrollWidth": 1440,
-      "clientWidth": 1440,
-      "cards": 0,
-      "h1": "Поиск",
-      "emptyElements": [],
-      "foreignIds": [],
-      "consoleErrors": [],
-      "networkErrors": []
-    },
-    "not-found@390": {
-      "overflowX": false,
-      "scrollWidth": 390,
-      "clientWidth": 390,
+      "scrollWidth": 768,
+      "clientWidth": 768,
       "cards": 0,
       "h1": "Страница не найдена",
       "emptyElements": [],
@@ -95,17 +95,6 @@
       "overflowX": false,
       "scrollWidth": 1440,
       "clientWidth": 1440,
-      "cards": 0,
-      "h1": "Страница не найдена",
-      "emptyElements": [],
-      "foreignIds": [],
-      "consoleErrors": [],
-      "networkErrors": []
-    },
-    "not-found@768": {
-      "overflowX": false,
-      "scrollWidth": 768,
-      "clientWidth": 768,
       "cards": 0,
       "h1": "Страница не найдена",
       "emptyElements": [],

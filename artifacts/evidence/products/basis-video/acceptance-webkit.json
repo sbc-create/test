@@ -13,6 +13,193 @@
       "foreignIds": [],
       "consoleErrors": [],
       "networkErrors": []
+    },
+    "home@390": {
+      "overflowX": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "cards": 18,
+      "h1": "Basis Pilot",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "home@768": {
+      "overflowX": false,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "cards": 18,
+      "h1": "Basis Pilot",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "home@1440": {
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "cards": 18,
+      "h1": "Basis Pilot",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "lekcii@390": {
+      "overflowX": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "cards": 12,
+      "h1": "Лекции",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "lekcii@768": {
+      "overflowX": false,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "cards": 12,
+      "h1": "Лекции",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "lekcii@1440": {
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "cards": 12,
+      "h1": "Лекции",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "collection@390": {
+      "overflowX": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "cards": 6,
+      "h1": "Избранное",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "collection@768": {
+      "overflowX": false,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "cards": 6,
+      "h1": "Избранное",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "collection@1440": {
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "cards": 6,
+      "h1": "Избранное",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "news@390": {
+      "overflowX": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "cards": 3,
+      "h1": "Новости",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "news@768": {
+      "overflowX": false,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "cards": 3,
+      "h1": "Новости",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "news@1440": {
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "cards": 3,
+      "h1": "Новости",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "search@390": {
+      "overflowX": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "cards": 0,
+      "h1": "Поиск по каталогу",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "search@768": {
+      "overflowX": false,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "cards": 0,
+      "h1": "Поиск по каталогу",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "search@1440": {
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "cards": 0,
+      "h1": "Поиск по каталогу",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "not-found@390": {
+      "overflowX": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "cards": 0,
+      "h1": "Страница не найдена",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "not-found@768": {
+      "overflowX": false,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "cards": 0,
+      "h1": "Страница не найдена",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
     }
   },
   "keyboard": [
