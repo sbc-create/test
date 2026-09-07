@@ -100,6 +100,34 @@ SORTS = (
 )
 
 
+def _json_ld_script(block: dict) -> str:
+    """Разметка Schema.org одним блоком, из которого нельзя вырваться.
+
+    `json.dumps` экранирует то, что мешает JSON: кавычки, обратную косую,
+    перевод строки. Символы `<` и `>` ему не мешают, и он их не трогает —
+    верно для JSON и опасно внутри HTML.
+
+    Блок `<script type="application/ld+json">` заканчивается первой же
+    последовательностью `</script>` в содержимом. Название произведения,
+    пришедшее от поставщика и содержащее `</script><img src=x onerror=…>`,
+    закрывало блок и продолжалось как разметка страницы: сохранённый XSS на
+    каждой витрине, вносимый данными, а не кодом.
+
+    Обычный `escape()` здесь не годится и не годился: внутри блока нужен
+    валидный JSON, а `&quot;` его ломает. Годятся юникодные экранирования —
+    JSON остаётся тем же и разбирается как прежде, а опасных
+    последовательностей в тексте не возникает.
+
+    `&` экранируется тоже: сам по себе он в JSON безобиден, но в HTML начинает
+    мнемонику, и оставлять разбор на усмотрение браузера незачем.
+    """
+    payload = json.dumps(block, ensure_ascii=False, separators=(",", ":"))
+    payload = (payload.replace("<", "\\u003c")
+                      .replace(">", "\\u003e")
+                      .replace("&", "\\u0026"))
+    return f'<script type="application/ld+json">{payload}</script>'
+
+
 def escape(value) -> str:
     return html.escape(str(value), quote=True)
 
@@ -420,8 +448,7 @@ def _document(ctx: dict, meta: Meta, body: str) -> str:
     if crumbs:
         blocks.append(crumbs)
     for block in blocks:
-        payload = json.dumps(block, ensure_ascii=False, separators=(",", ":"))
-        head.append(f'<script type="application/ld+json">{payload}</script>')
+        head.append(_json_ld_script(block))
 
     return (
         f'<!doctype html><html lang="{escape(lang)}"><head>'
