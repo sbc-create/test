@@ -210,6 +210,34 @@ class TestВыгрузкаСливаетDetail:
         assert связь["descriptiveFacts"]["year"] == 2024, "пустое поле detail затёрло год"
         assert связь["playbackReasonCode"] != "подмена"
 
+    def test_detail_не_меняет_адрес_и_вид_произведения(self, tmp_path):
+        """Ответ detail несёт `name`, `type`, `tags`, `is_series`.
+
+        Это ровно то, из чего считаются адрес страницы и вид произведения.
+        Слить их «как есть» значит поменять маршруты двенадцати тысячам
+        записей и развести коллизии адресов из-за того, что второй ответ
+        источника назвал фильм чуть иначе. Проверяется, что не меняет.
+        """
+        каталог, детали = self._кэш(tmp_path, [запись()])
+        (детали / "e-1.json").write_text(json.dumps({
+            "detail": {
+                "_fetched_at": 1.0,
+                "name": "Совсем другое название",
+                "type": "series",
+                "is_series": True,
+                "tags": ["anime"],
+                "genres": ["драма"],
+            },
+        }, ensure_ascii=False), encoding="utf-8")
+
+        без = ad.export(каталог, site_id="lords-01")["bindings"][0]
+        со = ad.export(каталог, site_id="lords-01", detail_cache=детали)["bindings"][0]
+
+        assert со["routeId"] == без["routeId"], "detail переписал адрес страницы"
+        assert со["displayTitle"] == без["displayTitle"], "detail переписал название"
+        assert со["contentKind"] == без["contentKind"], "detail переписал вид произведения"
+        assert со["descriptiveFacts"]["genres"] == ["драма"], "жанры при этом потеряны"
+
     def test_битый_файл_не_ломает_выгрузку_и_не_врёт_про_источник(self, tmp_path):
         каталог, детали = self._кэш(tmp_path, [запись()])
         (детали / "e-1.json").write_text("{не json", encoding="utf-8")
