@@ -33,14 +33,19 @@ deployment_readiness:
   - цель выката не передана
   - production_authorized не подтверждён владельцем
 content_types:
+  # Портал аниме обязан включать аниме. Флаг стоял в false при профиле, чья
+  # первая строка — «Портал аниме»: витрина называлась одним, а показывала
+  # другое, и раздела аниме в меню не было вовсе.
   movies: true
   series: true
   animation: true
-  anime: false
+  anime: true
   dorama: false
   collections: false
 brand:
-  name: lords-04
+  # Имя витрины, а не технический идентификатор соседней. `lords-04` попал
+  # сюда при создании пакета из образца и остался.
+  name: Animedia Portal
   legal_name: null
   logo_ref: null
   favicon_ref: null
@@ -134,10 +139,14 @@ seo:
   webmaster_verification_refs: {}
 navigation:
   primary:
-  - label: Фильмы
-    url: /movies/
+  # Аниме первым: витрина заведена ради него, и прятать его за фильмами
+  # значит спорить с собственным назначением.
+  - label: Аниме
+    url: /anime/
   - label: Сериалы
     url: /series/
+  - label: Фильмы
+    url: /movies/
   - label: Мультфильмы
     url: /animation/
   footer: []

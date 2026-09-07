@@ -40,7 +40,9 @@ content_types:
   dorama: false
   collections: false
 brand:
-  name: lords-04
+  # Имя витрины, а не технический идентификатор соседней. `lords-04` попал
+  # сюда при создании пакета из образца и остался.
+  name: Zona Cinema
   legal_name: null
   logo_ref: null
   favicon_ref: null
