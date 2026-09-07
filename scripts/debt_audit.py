@@ -161,8 +161,32 @@ def check_markers() -> list[Finding]:
     return out
 
 
+def _referenced_by_name() -> str:
+    """Всё, где модуль может быть назван по имени файла, а не импортирован.
+
+    Оболочечные сценарии, CI и документация запускают `python tests/tools/x.py`
+    — импорта при этом нет. Первая редакция проверки объявила мёртвыми
+    девятнадцать таких инструментов; все девятнадцать оказались рабочими и
+    упоминались в `tests/run-all.sh`, рабочих процессах CI и документации.
+
+    Удалять по такому «доказательству» значило бы выломать рабочий прогон,
+    и правило этапа прямое: сначала доказать неиспользование программно.
+    """
+    chunks = []
+    for pattern in ("*.sh", "*.yml", "*.yaml", "*.md", "*.json", "*.toml", "*.cfg"):
+        for path in ROOT.rglob(pattern):
+            text = path.as_posix()
+            if "node_modules" in text or "/var/" in text or "/.git/" in text:
+                continue
+            try:
+                chunks.append(path.read_text(encoding="utf-8", errors="ignore"))
+            except OSError:
+                continue
+    return "\n".join(chunks)
+
+
 def check_dead_modules() -> list[Finding]:
-    """Модули, которые никто не импортирует и которые не являются точками входа."""
+    """Модули, которые никто не импортирует и никто не называет по имени."""
     files = python_files()
     imported: set[str] = set()
     for path in files:
@@ -179,6 +203,7 @@ def check_dead_modules() -> list[Finding]:
                     imported.add(node.module.split(".")[-1])
                 for alias in node.names:
                     imported.add(alias.name)
+    by_name = _referenced_by_name()
     out = []
     for path in files:
         name = path.stem
@@ -192,6 +217,9 @@ def check_dead_modules() -> list[Finding]:
             if "__main__" in body:
                 continue
         if name in imported:
+            continue
+        if path.name in by_name:
+            # Запускается по имени файла из оболочки, CI или документации.
             continue
         out.append(Finding(
             "модуль никем не импортируется", "средний", rel(path), 1,

@@ -1,0 +1,967 @@
+[
+  {
+    "site": "lords-01",
+    "profile": "lords-general",
+    "surfaces_total": 23,
+    "surfaces_indexable": 6,
+    "surfaces": [
+      {
+        "path": "/",
+        "indexable": true,
+        "title": "Каталог фильмов и сериалов онлайн — lordfilm47.space",
+        "h1": "Смотреть фильмы и сериалы",
+        "blocks": [
+          "hero",
+          "hero_search",
+          "top_carousel",
+          "latest_grid",
+          "type_rows",
+          "top_rated",
+          "genre_chips",
+          "year_grid"
+        ],
+        "cards": 36,
+        "has_player": false,
+        "weight_kb": 55.3
+      },
+      {
+        "path": "/animation/",
+        "indexable": true,
+        "title": "Мультфильмы — lordfilm47.space",
+        "h1": "Мультфильмы",
+        "blocks": [],
+        "cards": 21,
+        "has_player": false,
+        "weight_kb": 67.7
+      },
+      {
+        "path": "/animation/page/{n}/",
+        "indexable": false,
+        "title": "Мультфильмы — страница 10 — lordfilm47.space",
+        "h1": "Мультфильмы — страница 10",
+        "blocks": [],
+        "cards": 4,
+        "has_player": false,
+        "weight_kb": 55.6
+      },
+      {
+        "path": "/catalog/",
+        "indexable": true,
+        "title": "Каталог — lordfilm47.space",
+        "h1": "Каталог",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 26.6
+      },
+      {
+        "path": "/catalog/page/{n}/",
+        "indexable": false,
+        "title": "Каталог — страница 10 — lordfilm47.space",
+        "h1": "Каталог — страница 10",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 27.8
+      },
+      {
+        "path": "/countries/",
+        "indexable": false,
+        "title": "Страны — lordfilm47.space",
+        "h1": "Страны",
+        "blocks": [],
+        "cards": 0,
+        "has_player": false,
+        "weight_kb": 12.7
+      },
+      {
+        "path": "/countries/{slug}/",
+        "indexable": false,
+        "title": "Афганистан — lordfilm47.space",
+        "h1": "Страна производства: Афганистан",
+        "blocks": [],
+        "cards": 1,
+        "has_player": false,
+        "weight_kb": 10.7
+      },
+      {
+        "path": "/countries/{slug}/page/{n}/",
+        "indexable": false,
+        "title": "Аргентина — страница 2 — lordfilm47.space",
+        "h1": "Страна производства: Аргентина — страница 2",
+        "blocks": [],
+        "cards": 11,
+        "has_player": false,
+        "weight_kb": 32.3
+      },
+      {
+        "path": "/genres/",
+        "indexable": false,
+        "title": "Жанры — lordfilm47.space",
+        "h1": "Жанры",
+        "blocks": [],
+        "cards": 0,
+        "has_player": false,
+        "weight_kb": 12.8
+      },
+      {
+        "path": "/genres/{slug}/",
+        "indexable": false,
+        "title": "Ai — lordfilm47.space",
+        "h1": "Жанр: Ai",
+        "blocks": [],
+        "cards": 9,
+        "has_player": false,
+        "weight_kb": 20.2
+      },
+      {
+        "path": "/genres/{slug}/page/{n}/",
+        "indexable": false,
+        "title": "аниме — страница 10 — lordfilm47.space",
+        "h1": "Жанр: аниме — страница 10",
+        "blocks": [],
+        "cards": 2,
+        "has_player": false,
+        "weight_kb": 75.5
+      },
+      {
+        "path": "/movies/",
+        "indexable": true,
+        "title": "Фильмы — lordfilm47.space",
+        "h1": "Фильмы",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 26.1
+      },
+      {
+        "path": "/movies/page/{n}/",
+        "indexable": false,
+        "title": "Фильмы — страница 10 — lordfilm47.space",
+        "h1": "Фильмы — страница 10",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 25.5
+      },
+      {
+        "path": "/new/",
+        "indexable": false,
+        "title": "Новое — lordfilm47.space",
+        "h1": "Новое",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 23.8
+      },
+      {
+        "path": "/new/page/{n}/",
+        "indexable": false,
+        "title": "Новое — страница 10 — lordfilm47.space",
+        "h1": "Новое — страница 10",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 25.2
+      },
+      {
+        "path": "/schedule/",
+        "indexable": false,
+        "title": "Расписание — lordfilm47.space",
+        "h1": "Расписание",
+        "blocks": [],
+        "cards": 0,
+        "has_player": false,
+        "weight_kb": 6.6
+      },
+      {
+        "path": "/search/",
+        "indexable": false,
+        "title": "Поиск по каталогу — lordfilm47.space",
+        "h1": "Поиск",
+        "blocks": [],
+        "cards": 0,
+        "has_player": false,
+        "weight_kb": 6.3
+      },
+      {
+        "path": "/series/",
+        "indexable": true,
+        "title": "Сериалы — lordfilm47.space",
+        "h1": "Сериалы",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 27.4
+      },
+      {
+        "path": "/series/page/{n}/",
+        "indexable": false,
+        "title": "Сериалы — страница 10 — lordfilm47.space",
+        "h1": "Сериалы — страница 10",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 26.6
+      },
+      {
+        "path": "/title/{slug}/",
+        "indexable": true,
+        "title": "1:11: Время для встречи с тобой — смотреть онлайн — lordfilm47.space",
+        "h1": "1:11: Время для встречи с тобой",
+        "blocks": [],
+        "cards": 6,
+        "has_player": true,
+        "weight_kb": 13.1
+      },
+      {
+        "path": "/years/",
+        "indexable": false,
+        "title": "Годы — lordfilm47.space",
+        "h1": "Годы",
+        "blocks": [],
+        "cards": 0,
+        "has_player": false,
+        "weight_kb": 8.6
+      },
+      {
+        "path": "/years/{slug}/",
+        "indexable": false,
+        "title": "1964 год — lordfilm47.space",
+        "h1": "Год выпуска: 1964",
+        "blocks": [],
+        "cards": 1,
+        "has_player": false,
+        "weight_kb": 10.7
+      },
+      {
+        "path": "/years/{slug}/page/{n}/",
+        "indexable": false,
+        "title": "2020 год — страница 2 — lordfilm47.space",
+        "h1": "Год выпуска: 2020 — страница 2",
+        "blocks": [],
+        "cards": 13,
+        "has_player": false,
+        "weight_kb": 33.5
+      }
+    ]
+  },
+  {
+    "site": "lords-02",
+    "profile": "lords-new",
+    "surfaces_total": 23,
+    "surfaces_indexable": 3,
+    "surfaces": [
+      {
+        "path": "/",
+        "indexable": true,
+        "title": "Новинки каталога — что вышло и что добавлено — lordserial33.biz",
+        "h1": "Новое в каталоге",
+        "blocks": [
+          "hero",
+          "top_carousel",
+          "latest_grid",
+          "fresh_episodes",
+          "type_rows",
+          "top_rated",
+          "calendar",
+          "genre_chips"
+        ],
+        "cards": 42,
+        "has_player": false,
+        "weight_kb": 58.0
+      },
+      {
+        "path": "/animation/",
+        "indexable": false,
+        "title": "Мультфильмы — lordserial33.biz",
+        "h1": "Мультфильмы",
+        "blocks": [],
+        "cards": 21,
+        "has_player": false,
+        "weight_kb": 66.7
+      },
+      {
+        "path": "/animation/page/{n}/",
+        "indexable": false,
+        "title": "Мультфильмы — страница 10 — lordserial33.biz",
+        "h1": "Мультфильмы — страница 10",
+        "blocks": [],
+        "cards": 4,
+        "has_player": false,
+        "weight_kb": 55.0
+      },
+      {
+        "path": "/catalog/",
+        "indexable": false,
+        "title": "Каталог — lordserial33.biz",
+        "h1": "Каталог",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 25.5
+      },
+      {
+        "path": "/catalog/page/{n}/",
+        "indexable": false,
+        "title": "Каталог — страница 10 — lordserial33.biz",
+        "h1": "Каталог — страница 10",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 27.2
+      },
+      {
+        "path": "/countries/",
+        "indexable": false,
+        "title": "Страны — lordserial33.biz",
+        "h1": "Страны",
+        "blocks": [],
+        "cards": 0,
+        "has_player": false,
+        "weight_kb": 12.7
+      },
+      {
+        "path": "/countries/{slug}/",
+        "indexable": false,
+        "title": "Афганистан — lordserial33.biz",
+        "h1": "Страна производства: Афганистан",
+        "blocks": [],
+        "cards": 1,
+        "has_player": false,
+        "weight_kb": 10.7
+      },
+      {
+        "path": "/countries/{slug}/page/{n}/",
+        "indexable": false,
+        "title": "Аргентина — страница 2 — lordserial33.biz",
+        "h1": "Страна производства: Аргентина — страница 2",
+        "blocks": [],
+        "cards": 11,
+        "has_player": false,
+        "weight_kb": 32.3
+      },
+      {
+        "path": "/genres/",
+        "indexable": false,
+        "title": "Жанры — lordserial33.biz",
+        "h1": "Жанры",
+        "blocks": [],
+        "cards": 0,
+        "has_player": false,
+        "weight_kb": 12.8
+      },
+      {
+        "path": "/genres/{slug}/",
+        "indexable": false,
+        "title": "Ai — lordserial33.biz",
+        "h1": "Жанр: Ai",
+        "blocks": [],
+        "cards": 9,
+        "has_player": false,
+        "weight_kb": 20.1
+      },
+      {
+        "path": "/genres/{slug}/page/{n}/",
+        "indexable": false,
+        "title": "аниме — страница 10 — lordserial33.biz",
+        "h1": "Жанр: аниме — страница 10",
+        "blocks": [],
+        "cards": 2,
+        "has_player": false,
+        "weight_kb": 75.5
+      },
+      {
+        "path": "/movies/",
+        "indexable": false,
+        "title": "Фильмы — lordserial33.biz",
+        "h1": "Фильмы",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 25.2
+      },
+      {
+        "path": "/movies/page/{n}/",
+        "indexable": false,
+        "title": "Фильмы — страница 10 — lordserial33.biz",
+        "h1": "Фильмы — страница 10",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 24.9
+      },
+      {
+        "path": "/new/",
+        "indexable": true,
+        "title": "Новинки — lordserial33.biz",
+        "h1": "Что появилось недавно",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 24.9
+      },
+      {
+        "path": "/new/page/{n}/",
+        "indexable": false,
+        "title": "Новинки — страница 10 — lordserial33.biz",
+        "h1": "Что появилось недавно — страница 10",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 25.7
+      },
+      {
+        "path": "/schedule/",
+        "indexable": true,
+        "title": "Расписание выхода серий — lordserial33.biz",
+        "h1": "Расписание выхода серий",
+        "blocks": [],
+        "cards": 0,
+        "has_player": false,
+        "weight_kb": 7.7
+      },
+      {
+        "path": "/search/",
+        "indexable": false,
+        "title": "Поиск по новинкам — lordserial33.biz",
+        "h1": "Поиск",
+        "blocks": [],
+        "cards": 0,
+        "has_player": false,
+        "weight_kb": 6.3
+      },
+      {
+        "path": "/series/",
+        "indexable": false,
+        "title": "Сериалы — lordserial33.biz",
+        "h1": "Сериалы",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 26.4
+      },
+      {
+        "path": "/series/page/{n}/",
+        "indexable": false,
+        "title": "Сериалы — страница 10 — lordserial33.biz",
+        "h1": "Сериалы — страница 10",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 26.1
+      },
+      {
+        "path": "/title/{slug}/",
+        "indexable": false,
+        "title": "1:11: Время для встречи с тобой — lordserial33.biz",
+        "h1": "1:11: Время для встречи с тобой",
+        "blocks": [],
+        "cards": 6,
+        "has_player": true,
+        "weight_kb": 12.4
+      },
+      {
+        "path": "/years/",
+        "indexable": false,
+        "title": "Годы — lordserial33.biz",
+        "h1": "Годы",
+        "blocks": [],
+        "cards": 0,
+        "has_player": false,
+        "weight_kb": 8.6
+      },
+      {
+        "path": "/years/{slug}/",
+        "indexable": false,
+        "title": "1964 год — lordserial33.biz",
+        "h1": "Год выпуска: 1964",
+        "blocks": [],
+        "cards": 1,
+        "has_player": false,
+        "weight_kb": 10.7
+      },
+      {
+        "path": "/years/{slug}/page/{n}/",
+        "indexable": false,
+        "title": "2020 год — страница 2 — lordserial33.biz",
+        "h1": "Год выпуска: 2020 — страница 2",
+        "blocks": [],
+        "cards": 13,
+        "has_player": false,
+        "weight_kb": 33.5
+      }
+    ]
+  },
+  {
+    "site": "lords-03",
+    "profile": "lords-curated",
+    "surfaces_total": 21,
+    "surfaces_indexable": 1,
+    "surfaces": [
+      {
+        "path": "/",
+        "indexable": true,
+        "title": "Подборки — тематические списки каталога — 1lordserials1.online",
+        "h1": "Подборки",
+        "blocks": [
+          "hero",
+          "top_carousel",
+          "latest_grid",
+          "type_rows",
+          "top_rated",
+          "genre_chips",
+          "editor_note"
+        ],
+        "cards": 30,
+        "has_player": false,
+        "weight_kb": 46.7
+      },
+      {
+        "path": "/catalog/",
+        "indexable": false,
+        "title": "Каталог — 1lordserials1.online",
+        "h1": "Каталог",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 25.3
+      },
+      {
+        "path": "/catalog/page/{n}/",
+        "indexable": false,
+        "title": "Каталог — страница 10 — 1lordserials1.online",
+        "h1": "Каталог — страница 10",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 26.7
+      },
+      {
+        "path": "/countries/",
+        "indexable": false,
+        "title": "Страны — 1lordserials1.online",
+        "h1": "Страны",
+        "blocks": [],
+        "cards": 0,
+        "has_player": false,
+        "weight_kb": 12.4
+      },
+      {
+        "path": "/countries/{slug}/",
+        "indexable": false,
+        "title": "Афганистан — 1lordserials1.online",
+        "h1": "Страна производства: Афганистан",
+        "blocks": [],
+        "cards": 1,
+        "has_player": false,
+        "weight_kb": 10.4
+      },
+      {
+        "path": "/countries/{slug}/page/{n}/",
+        "indexable": false,
+        "title": "Аргентина — страница 2 — 1lordserials1.online",
+        "h1": "Страна производства: Аргентина — страница 2",
+        "blocks": [],
+        "cards": 11,
+        "has_player": false,
+        "weight_kb": 31.4
+      },
+      {
+        "path": "/genres/",
+        "indexable": false,
+        "title": "Жанры — 1lordserials1.online",
+        "h1": "Жанры",
+        "blocks": [],
+        "cards": 0,
+        "has_player": false,
+        "weight_kb": 12.7
+      },
+      {
+        "path": "/genres/{slug}/",
+        "indexable": false,
+        "title": "Ai — 1lordserials1.online",
+        "h1": "Жанр: Ai",
+        "blocks": [],
+        "cards": 9,
+        "has_player": false,
+        "weight_kb": 19.9
+      },
+      {
+        "path": "/genres/{slug}/page/{n}/",
+        "indexable": false,
+        "title": "аниме — страница 10 — 1lordserials1.online",
+        "h1": "Жанр: аниме — страница 10",
+        "blocks": [],
+        "cards": 2,
+        "has_player": false,
+        "weight_kb": 71.8
+      },
+      {
+        "path": "/movies/",
+        "indexable": false,
+        "title": "Фильмы — 1lordserials1.online",
+        "h1": "Фильмы",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 25.0
+      },
+      {
+        "path": "/movies/page/{n}/",
+        "indexable": false,
+        "title": "Фильмы — страница 10 — 1lordserials1.online",
+        "h1": "Фильмы — страница 10",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 24.8
+      },
+      {
+        "path": "/new/",
+        "indexable": false,
+        "title": "Новое — 1lordserials1.online",
+        "h1": "Новое",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 23.6
+      },
+      {
+        "path": "/new/page/{n}/",
+        "indexable": false,
+        "title": "Новое — страница 10 — 1lordserials1.online",
+        "h1": "Новое — страница 10",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 24.5
+      },
+      {
+        "path": "/schedule/",
+        "indexable": false,
+        "title": "Расписание — 1lordserials1.online",
+        "h1": "Расписание",
+        "blocks": [],
+        "cards": 0,
+        "has_player": false,
+        "weight_kb": 6.5
+      },
+      {
+        "path": "/search/",
+        "indexable": false,
+        "title": "Поиск по подборкам и каталогу — 1lordserials1.online",
+        "h1": "Поиск",
+        "blocks": [],
+        "cards": 0,
+        "has_player": false,
+        "weight_kb": 6.1
+      },
+      {
+        "path": "/series/",
+        "indexable": false,
+        "title": "Сериалы — 1lordserials1.online",
+        "h1": "Сериалы",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 26.2
+      },
+      {
+        "path": "/series/page/{n}/",
+        "indexable": false,
+        "title": "Сериалы — страница 10 — 1lordserials1.online",
+        "h1": "Сериалы — страница 10",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 25.9
+      },
+      {
+        "path": "/title/{slug}/",
+        "indexable": false,
+        "title": "1:11: Время для встречи с тобой — 1lordserials1.online",
+        "h1": "1:11: Время для встречи с тобой",
+        "blocks": [],
+        "cards": 6,
+        "has_player": true,
+        "weight_kb": 12.2
+      },
+      {
+        "path": "/years/",
+        "indexable": false,
+        "title": "Годы — 1lordserials1.online",
+        "h1": "Годы",
+        "blocks": [],
+        "cards": 0,
+        "has_player": false,
+        "weight_kb": 8.4
+      },
+      {
+        "path": "/years/{slug}/",
+        "indexable": false,
+        "title": "1964 год — 1lordserials1.online",
+        "h1": "Год выпуска: 1964",
+        "blocks": [],
+        "cards": 1,
+        "has_player": false,
+        "weight_kb": 10.5
+      },
+      {
+        "path": "/years/{slug}/page/{n}/",
+        "indexable": false,
+        "title": "2020 год — страница 2 — 1lordserials1.online",
+        "h1": "Год выпуска: 2020 — страница 2",
+        "blocks": [],
+        "cards": 12,
+        "has_player": false,
+        "weight_kb": 32.2
+      }
+    ]
+  },
+  {
+    "site": "lords-04",
+    "profile": "lords-genre",
+    "surfaces_total": 23,
+    "surfaces_indexable": 7,
+    "surfaces": [
+      {
+        "path": "/",
+        "indexable": true,
+        "title": "Жанры, годы и страны — навигация по каталогу — Lords Genre",
+        "h1": "Навигация по каталогу",
+        "blocks": [
+          "hero",
+          "hero_facets",
+          "genre_chips",
+          "year_grid",
+          "country_grid",
+          "latest_grid"
+        ],
+        "cards": 16,
+        "has_player": false,
+        "weight_kb": 36.2
+      },
+      {
+        "path": "/animation/",
+        "indexable": false,
+        "title": "Мультфильмы — Lords Genre",
+        "h1": "Мультфильмы",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 68.9
+      },
+      {
+        "path": "/animation/page/{n}/",
+        "indexable": false,
+        "title": "Мультфильмы — страница 2 — Lords Genre",
+        "h1": "Мультфильмы — страница 2",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 69.5
+      },
+      {
+        "path": "/catalog/",
+        "indexable": false,
+        "title": "Каталог — Lords Genre",
+        "h1": "Каталог",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 25.0
+      },
+      {
+        "path": "/catalog/page/{n}/",
+        "indexable": false,
+        "title": "Каталог — страница 10 — Lords Genre",
+        "h1": "Каталог — страница 10",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 26.7
+      },
+      {
+        "path": "/countries/",
+        "indexable": true,
+        "title": "Страны — Lords Genre",
+        "h1": "Страны производства",
+        "blocks": [],
+        "cards": 0,
+        "has_player": false,
+        "weight_kb": 13.0
+      },
+      {
+        "path": "/countries/{slug}/",
+        "indexable": true,
+        "title": "Афганистан — Lords Genre",
+        "h1": "Страна производства: Афганистан",
+        "blocks": [],
+        "cards": 1,
+        "has_player": false,
+        "weight_kb": 10.1
+      },
+      {
+        "path": "/countries/{slug}/page/{n}/",
+        "indexable": false,
+        "title": "Аргентина — страница 2 — Lords Genre",
+        "h1": "Страна производства: Аргентина — страница 2",
+        "blocks": [],
+        "cards": 9,
+        "has_player": false,
+        "weight_kb": 31.3
+      },
+      {
+        "path": "/genres/",
+        "indexable": true,
+        "title": "Жанры — Lords Genre",
+        "h1": "Жанры",
+        "blocks": [],
+        "cards": 0,
+        "has_player": false,
+        "weight_kb": 13.2
+      },
+      {
+        "path": "/genres/{slug}/",
+        "indexable": true,
+        "title": "Ai — Lords Genre",
+        "h1": "Жанр: Ai",
+        "blocks": [],
+        "cards": 9,
+        "has_player": false,
+        "weight_kb": 19.6
+      },
+      {
+        "path": "/genres/{slug}/page/{n}/",
+        "indexable": false,
+        "title": "аниме — страница 2 — Lords Genre",
+        "h1": "Жанр: аниме — страница 2",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 91.9
+      },
+      {
+        "path": "/movies/",
+        "indexable": false,
+        "title": "Фильмы — Lords Genre",
+        "h1": "Фильмы",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 24.6
+      },
+      {
+        "path": "/movies/page/{n}/",
+        "indexable": false,
+        "title": "Фильмы — страница 10 — Lords Genre",
+        "h1": "Фильмы — страница 10",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 24.3
+      },
+      {
+        "path": "/new/",
+        "indexable": false,
+        "title": "Новое — Lords Genre",
+        "h1": "Новое",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 23.2
+      },
+      {
+        "path": "/new/page/{n}/",
+        "indexable": false,
+        "title": "Новое — страница 10 — Lords Genre",
+        "h1": "Новое — страница 10",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 24.6
+      },
+      {
+        "path": "/schedule/",
+        "indexable": false,
+        "title": "Расписание — Lords Genre",
+        "h1": "Расписание",
+        "blocks": [],
+        "cards": 0,
+        "has_player": false,
+        "weight_kb": 6.1
+      },
+      {
+        "path": "/search/",
+        "indexable": false,
+        "title": "Поиск по каталогу — Lords Genre",
+        "h1": "Поиск",
+        "blocks": [],
+        "cards": 0,
+        "has_player": false,
+        "weight_kb": 5.7
+      },
+      {
+        "path": "/series/",
+        "indexable": false,
+        "title": "Сериалы — Lords Genre",
+        "h1": "Сериалы",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 25.8
+      },
+      {
+        "path": "/series/page/{n}/",
+        "indexable": false,
+        "title": "Сериалы — страница 10 — Lords Genre",
+        "h1": "Сериалы — страница 10",
+        "blocks": [],
+        "cards": 24,
+        "has_player": false,
+        "weight_kb": 25.5
+      },
+      {
+        "path": "/title/{slug}/",
+        "indexable": false,
+        "title": "1:11: Время для встречи с тобой — Lords Genre",
+        "h1": "1:11: Время для встречи с тобой",
+        "blocks": [],
+        "cards": 8,
+        "has_player": true,
+        "weight_kb": 13.0
+      },
+      {
+        "path": "/years/",
+        "indexable": true,
+        "title": "Годы выпуска — Lords Genre",
+        "h1": "Годы выпуска",
+        "blocks": [],
+        "cards": 0,
+        "has_player": false,
+        "weight_kb": 8.9
+      },
+      {
+        "path": "/years/{slug}/",
+        "indexable": true,
+        "title": "1964 год — Lords Genre",
+        "h1": "Год выпуска: 1964",
+        "blocks": [],
+        "cards": 1,
+        "has_player": false,
+        "weight_kb": 10.2
+      },
+      {
+        "path": "/years/{slug}/page/{n}/",
+        "indexable": false,
+        "title": "2020 год — страница 2 — Lords Genre",
+        "h1": "Год выпуска: 2020 — страница 2",
+        "blocks": [],
+        "cards": 13,
+        "has_player": false,
+        "weight_kb": 32.9
+      }
+    ]
+  }
+]
