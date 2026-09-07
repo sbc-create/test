@@ -70,6 +70,7 @@ domains:
     purpose: Какие витрины есть, чем они являются и в каком они состоянии.
       Домены, тенанты, назначенный шаблон, признаки и наблюдаемое состояние.
     paths:
+      - factory/site_engine/fleet/
       - factory/site_engine/fleet_registry.py
       - factory/site_engine/fleet_accounts.py
       - factory/site_engine/site_plan.py
@@ -226,6 +227,7 @@ domains:
       - factory/analytics/
       - factory/topvisor/
       - factory/seo/
+      - factory/site_engine/insights/
       - factory/site_engine/seo_binding.py
       - factory/site_engine/freshness.py
       - factory/site_engine/fingerprint.py

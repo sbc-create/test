@@ -18,6 +18,7 @@
 * `factory/analytics/`
 * `factory/topvisor/`
 * `factory/seo/`
+* `factory/site_engine/insights/`
 * `factory/site_engine/seo_binding.py`
 * `factory/site_engine/freshness.py`
 * `factory/site_engine/fingerprint.py`

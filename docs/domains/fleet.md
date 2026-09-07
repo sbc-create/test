@@ -15,6 +15,7 @@
 
 ## Разрешённые пути
 
+* `factory/site_engine/fleet/`
 * `factory/site_engine/fleet_registry.py`
 * `factory/site_engine/fleet_accounts.py`
 * `factory/site_engine/site_plan.py`
