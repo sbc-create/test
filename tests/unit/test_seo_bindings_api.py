@@ -16,6 +16,7 @@ from pathlib import Path
 
 import pytest
 
+from factory.site_engine import seo_binding as sb
 from factory.site_engine.api import seo_bindings as api
 
 ИСТОЧНИКИ = """
@@ -70,7 +71,7 @@ def корень(tmp_path: Path) -> Path:
 
 def test_перечень_витрин_называет_производителя(корень):
     каталог = api.каталог_витрин(корень)
-    assert каталог["contract"] == "seo-route-binding/1.1.0"
+    assert каталог["contract"] == sb.SCHEMA_VERSION
     имена = {s["siteId"]: s["producer"] for s in каталог["sites"]}
     assert имена["demo-lords"] == "computed-routes"
     assert имена["demo-declared"] == "declared-routes"
@@ -155,8 +156,8 @@ def test_отбор_не_меняет_отпечаток_и_счёт_набор�
 
 def test_страница_несёт_версию_контракта_и_происхождение(корень):
     итог = api.страница(корень, "demo-declared", limit=1)
-    assert итог["schemaVersion"] == "seo-route-binding/1.1.0"
-    assert итог["contractVersion"] == "1.1.0"
+    assert итог["schemaVersion"] == sb.SCHEMA_VERSION
+    assert итог["contractVersion"] == sb.CONTRACT_VERSION
     assert итог["provenance"]
     assert итог["snapshotAt"]
 
@@ -198,7 +199,7 @@ def test_адрес_произведения_разрешается_в_связ�
     assert итог["pageType"] == "title"
     assert итог["inheritsFrom"] == ""
     assert итог["binding"]["contentId"] == "p-003"
-    assert итог["schemaVersion"] == "seo-route-binding/1.1.0"
+    assert итог["schemaVersion"] == sb.SCHEMA_VERSION
 
 
 @pytest.mark.parametrize("путь, тип", [

@@ -45,11 +45,11 @@ from factory.site_engine.content_kind import ContentKind, emits_schema, schema_t
 
 #: Версия схемы. SemVer; `latest` запрещён и здесь, и у потребителя: контракт,
 #: на который ссылаются словом «последний», нельзя ни закрепить, ни откатить.
-SCHEMA_VERSION = "seo-route-binding/1.1.0"
+SCHEMA_VERSION = "seo-route-binding/1.2.0"
 
 #: Версия самого контракта, отдельно от версии схемы. Схема описывает форму,
 #: контракт — обещания о содержимом; они меняются по разным поводам.
-CONTRACT_VERSION = "1.1.0"
+CONTRACT_VERSION = "1.2.0"
 
 #: Файл с перечнем пространств имён внешних идентификаторов.
 #:
@@ -185,6 +185,40 @@ class RatingState(str, enum.Enum):
     UNKNOWN = "UNKNOWN"
 
 
+#: Поля, из которых складывается содержательное описание. Перечень закрыт:
+#: поле, которого здесь нет, в контракт не попадает, даже если источник его
+#: прислал. Название и вид сюда не входят намеренно — они называют предмет и
+#: его класс, но ничего о нём не сообщают.
+DESCRIPTIVE_FACTS: tuple[str, ...] = (
+    "year", "genres", "countries", "studios", "crew", "duration",
+    "seasonsCount", "originalName", "alternativeNames", "description",
+    "premiereDate",
+)
+
+
+class FactsState(str, enum.Enum):
+    """Что известно про дополняющий источник, а не про достаточность сведений.
+
+    Списочный ответ поставщика несёт один описательный факт — год. Остальное
+    отдаёт detail, и по каждой записи он либо уже опрошен, либо ещё нет.
+    Состояние отвечает именно на это.
+
+    `ENRICHED` — detail опрошен и что-то добавил. `NOT_ENRICHED` — за записью
+    ещё не ходили: сведения появятся сами, ждать имеет смысл. `ABSENT_AT_SOURCE`
+    — опрошен и не добавил ничего: ждать нечего, нужен другой источник или
+    решение владельца. Слить последние два в одно «нет» значит предложить
+    потребителю ждать того, чего не будет.
+
+    Достаточность сведений здесь не оценивается намеренно. «Хватает ли этого,
+    чтобы писать текст» — решение потребителя, и порог у каждого свой; один
+    год в наборе — это `NOT_ENRICHED` с одним фактом, а не «сведения есть».
+    """
+
+    ENRICHED = "ENRICHED"
+    NOT_ENRICHED = "NOT_ENRICHED"
+    ABSENT_AT_SOURCE = "ABSENT_AT_SOURCE"
+
+
 class ContractViolation(ValueError):
     """Значения нарушают обещания контракта."""
 
@@ -235,6 +269,11 @@ class RouteBinding:
     rating_count: int | None = None
     is_animation: bool | None = None
     display_title: str = ""
+    #: Описательные сведения источника. Ключи — только из DESCRIPTIVE_FACTS.
+    descriptive_facts: dict[str, Any] = dataclasses.field(default_factory=dict)
+    facts_state: FactsState = FactsState.NOT_ENRICHED
+    #: Откуда сведения взяты. Без него их нельзя ни проверить, ни объяснить.
+    facts_provenance: str = ""
     schema_version: str = SCHEMA_VERSION
     contract_version: str = CONTRACT_VERSION
 
@@ -290,6 +329,19 @@ class RouteBinding:
                 isinstance(self.rating_count, bool) or self.rating_count < 0):
             raise ContractViolation(
                 f"счёт голосов {self.rating_count!r} отрицателен или не число")
+
+        # Описательные сведения: состояние и содержимое не расходятся.
+        чужие = sorted(set(self.descriptive_facts) - set(DESCRIPTIVE_FACTS))
+        if чужие:
+            raise ContractViolation(
+                f"описательные сведения содержат поля вне контракта: "
+                f"{', '.join(чужие)}")
+        if self.descriptive_facts and not self.facts_provenance:
+            raise ContractViolation(
+                "описательные сведения без происхождения: их нельзя перепроверить")
+        if self.facts_state is FactsState.ENRICHED and not self.descriptive_facts:
+            raise ContractViolation(
+                "ENRICHED без единого сведения: дополнение объявлено и ничего не дало")
 
         # Отсутствие воспроизведения не превращается в обещание просмотра.
         if self.playback_state is PlaybackState.PLAYABLE:
@@ -404,6 +456,9 @@ class RouteBinding:
             "ratingSource": self.rating_source or None,
             "ratingScale": self.rating_scale,
             "ratingCount": self.rating_count,
+            "descriptiveFacts": dict(self.descriptive_facts),
+            "factsState": self.facts_state.value,
+            "factsProvenance": self.facts_provenance or None,
             "contentRevision": self.content_revision,
             "bindingState": self.binding_state.value,
             "reasonCodes": [c.value for c in self.reason_codes],
@@ -487,10 +542,20 @@ def revision_of(entry: dict) -> str:
     Повторная выгрузка неизменившейся записи обязана дать ту же ревизию —
     иначе потребитель не сможет отличить «данные изменились» от «выгрузку
     сделали заново».
+
+    Описательные сведения входят в ревизию наравне с остальным. Иначе запись,
+    которую только что дополнил detail, приходила бы с прежней ревизией:
+    потребитель, который правильно кэширует по ревизии, не увидел бы ни жанров,
+    ни стран, ни описания — и охват рос бы только на бумаге.
     """
     значимое = {k: entry.get(k) for k in sorted((
         "external_id", "name", "type", "is_series", "tags", "year",
-        "playback", "external_ids", "kinopoisk_rating", "imdb_rating"))}
+        "playback", "external_ids", "kinopoisk_rating", "imdb_rating",
+        # Ключи здесь в том виде, в каком их отдаёт источник: ревизия считается
+        # по записи каталога, а не по уже переведённому в контракт виду.
+        "genres", "countries", "studios", "crew", "duration",
+        "seasons_count", "original_name", "alternative_names",
+        "description", "premiere_date"))}
     сырьё = json.dumps(значимое, sort_keys=True, ensure_ascii=False,
                        default=str)
     return hashlib.sha256(сырьё.encode("utf-8")).hexdigest()[:16]
@@ -509,9 +574,11 @@ def envelope(bindings: Sequence[RouteBinding], *, site_id: str,
              snapshot_at: str, provenance: str) -> dict[str, Any]:
     """Выгрузка целиком со всем, что нужно для её проверки."""
     по_состоянию: dict[str, int] = {}
+    по_сведениям: dict[str, int] = {с.value: 0 for с in FactsState}
     for b in bindings:
         по_состоянию[b.binding_state.value] = по_состоянию.get(
             b.binding_state.value, 0) + 1
+        по_сведениям[b.facts_state.value] += 1
     return {
         "schemaVersion": SCHEMA_VERSION,
         "contractVersion": CONTRACT_VERSION,
@@ -520,6 +587,9 @@ def envelope(bindings: Sequence[RouteBinding], *, site_id: str,
         "provenance": provenance,
         "records": len(bindings),
         "byBindingState": по_состоянию,
+        # Знаменатель обязателен: «сведения есть у стольких-то» без общего
+        # числа записей читается как оценка охвата и всегда завышает его.
+        "byFactsState": по_сведениям,
         "digest": digest(bindings),
         "bindings": [b.as_dict() for b in bindings],
     }

@@ -45,8 +45,10 @@ def export_bindings(kind: str, *, root, site_id: str, spec: dict):
     if kind == "computed-routes":
         from factory.site_engine.adapters import lords_seo_binding as producer
 
+        детали = spec.get("detailCache")
         return producer.export(root / str(spec.get("catalog") or ""),
-                               site_id=site_id)
+                               site_id=site_id,
+                               detail_cache=root / str(детали) if детали else None)
     if kind == "declared-routes":
         from factory.site_engine.adapters import yummy_seo_binding as producer
 

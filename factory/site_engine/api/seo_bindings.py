@@ -22,6 +22,8 @@ import hashlib
 from pathlib import Path
 from typing import Any
 
+from factory.site_engine.seo_binding import SCHEMA_VERSION
+
 #: Файл, описывающий, какая витрина каким производителем обслуживается.
 SOURCES_REF = "config/seo-binding-sources.yaml"
 
@@ -98,6 +100,21 @@ def _отпечаток_входов(root: Path, spec: dict[str, Any]) -> tuple:
                       hashlib.blake2b(путь.read_bytes(),
                                       digest_size=16).hexdigest()
                       if путь.exists() else ""))
+
+    # Кэш detail — тоже вход выгрузки, и он растёт от прогона к прогону.
+    # Не учитывать его значило бы отдавать вчерашний ответ без описательных
+    # сведений ровно тогда, когда дополнение их наконец добыло.
+    #
+    # Здесь не содержимое, а число файлов и самая поздняя отметка времени в
+    # наносекундах: девяносто мегабайт в двенадцати тысячах файлов считать на
+    # каждый запрос дороже самой выгрузки, а наносекунды не сливаются в один
+    # тик — ровно та ловушка, из-за которой у каталога ключ по содержимому.
+    детали = spec.get("detailCache")
+    if детали:
+        каталог = root / str(детали)
+        файлы = list(каталог.glob("*.json")) if каталог.is_dir() else []
+        поздняя = max((ф.stat().st_mtime_ns for ф in файлы), default=0)
+        метки.append((str(детали), f"{len(файлы)}:{поздняя}"))
     return tuple(метки)
 
 
@@ -225,7 +242,7 @@ def каталог_витрин(root: Path) -> dict[str, Any]:
     есть = настройка_есть(root)
     источники = (_sources(root).get("sites") or {})
     итог: dict[str, Any] = {
-        "contract": "seo-route-binding/1.1.0",
+        "contract": SCHEMA_VERSION,
         # Пустой перечень — это утверждение «витрин со связями нет». Делать
         # его можно, только когда настройка так и говорит.
         "sourcesConfigured": есть,

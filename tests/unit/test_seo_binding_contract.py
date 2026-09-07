@@ -323,8 +323,8 @@ def test_среди_принятых_записей_коллизий_нет():
 
 def test_версия_объявлена_и_не_является_словом_latest():
     b = одна()
-    assert b.schema_version == "seo-route-binding/1.1.0"
-    assert b.contract_version == "1.1.0"
+    assert b.schema_version == "seo-route-binding/1.2.0"
+    assert b.contract_version == "1.2.0"
     assert "latest" not in json.dumps(b.as_dict())
 
 

@@ -36,6 +36,7 @@ from factory.site_engine.seo_binding import (
     ID_NAMESPACES,
     BindingState,
     ContentKind,
+    FactsState,
     KindState,
     PlaybackState,
     RatingState,
@@ -111,6 +112,55 @@ def _external_ids(entry: dict) -> dict[str, str]:
     return out
 
 
+#: Как поля источника называются в контракте. Перевод явный, а не по правилу
+#: «снейк в кэмел»: правило однажды переименует поле, которого в контракте нет,
+#: и оно молча приедет к потребителю.
+ОПИСАТЕЛЬНЫЕ_ПОЛЯ: dict[str, str] = {
+    "year": "year",
+    "genres": "genres",
+    "countries": "countries",
+    "studios": "studios",
+    "crew": "crew",
+    "duration": "duration",
+    "seasons_count": "seasonsCount",
+    "original_name": "originalName",
+    "alternative_names": "alternativeNames",
+    "description": "description",
+    "premiere_date": "premiereDate",
+}
+
+#: Признак того, что запись уже опрашивали в detail. Дополнение кладёт его в
+#: запись при слиянии; без него «сведений нет» и «за ними не ходили» неразличимы.
+ПРИЗНАК_ДОПОЛНЕНИЯ = "_detail_fetched_at"
+
+
+#: Единственное описательное поле, которое несёт сам списочный ответ. Всё
+#: остальное приходит только из detail — и это ровно та граница, по которой
+#: различаются состояния дополнения.
+ПОЛЯ_СПИСКА = frozenset({"year"})
+
+
+def _описательные(entry: dict) -> tuple[dict, FactsState]:
+    """Описательные сведения записи и состояние дополняющего источника.
+
+    Пустые значения не переносятся: пустой список жанров — это не «жанров нет»,
+    а «жанры неизвестны», и в контракте им место только через состояние.
+    """
+    сведения = {}
+    из_детали = False
+    for источник, ключ in ОПИСАТЕЛЬНЫЕ_ПОЛЯ.items():
+        значение = entry.get(источник)
+        if значение in (None, "", [], {}):
+            continue
+        сведения[ключ] = значение
+        из_детали = из_детали or источник not in ПОЛЯ_СПИСКА
+    if из_детали:
+        return сведения, FactsState.ENRICHED
+    опрошена = entry.get(ПРИЗНАК_ДОПОЛНЕНИЯ) is not None
+    return сведения, (FactsState.ABSENT_AT_SOURCE if опрошена
+                      else FactsState.NOT_ENRICHED)
+
+
 def bind_entry(entry: dict, *, site_id: str, route: str,
                ambiguous: bool, snapshot_at: str,
                provenance: str) -> RouteBinding:
@@ -137,6 +187,7 @@ def bind_entry(entry: dict, *, site_id: str, route: str,
 
     решение = decide(provider_type=entry.get("type"), tags=entry.get("tags") or (),
                      entity_id=external_id)
+    сведения, состояние_сведений = _описательные(entry)
     состояние_вида, вид, происхождение = kind_state_of(решение)
     состояние_видео, код_видео = playback_of(entry)
     оценка, число, источник_оценки, шкала_оценки = _rating_of(entry)
@@ -170,6 +221,8 @@ def bind_entry(entry: dict, *, site_id: str, route: str,
         playback_observed_at=snapshot_at if состояние_видео is PlaybackState.PLAYABLE else "",
         rating_state=оценка, rating_value=число,
         rating_source=источник_оценки, rating_scale=шкала_оценки,
+        descriptive_facts=сведения, facts_state=состояние_сведений,
+        facts_provenance=provenance if сведения else "",
         content_revision=revision_of(entry), binding_state=связь,
         reason_codes=tuple(dict.fromkeys(причины)), provenance=provenance,
         snapshot_at=snapshot_at)
@@ -208,11 +261,59 @@ def build(entries: Sequence[dict], *, site_id: str, snapshot_at: str,
             for entry, путь in маршруты]
 
 
-def export(catalog_path: str | Path, *, site_id: str) -> dict[str, Any]:
+def _слить_детали(записи: list[dict], каталог_деталей: Path) -> tuple[list[dict], int]:
+    """Записи каталога, дополненные уже полученными ответами detail.
+
+    Списочный ответ поставщика описательных сведений не несёт вовсе — только
+    имя, тип, год, постер и две оценки. Всё остальное отдаёт detail, и по
+    каждой записи оно уже лежит на диске. До сих пор выгрузка контракта читала
+    только список: сведения были получены, сохранены и никуда не доезжали.
+
+    Отсутствующий или битый файл — это «за записью не ходили», а не «у
+    источника ничего нет»: запись остаётся такой, какой была.
+    """
+    if not каталог_деталей.is_dir():
+        return записи, 0
+    слито = 0
+    итог: list[dict] = []
+    for запись in записи:
+        ключ = str(запись.get("external_id") or "").strip()
+        файл = (каталог_деталей / f"{ключ}.json") if ключ else None
+        if файл is None or not файл.is_file():
+            итог.append(запись)
+            continue
+        try:
+            сохранённое = json.loads(файл.read_text("utf-8"))
+        except (OSError, ValueError):
+            итог.append(запись)
+            continue
+        деталь = сохранённое.get("detail") if isinstance(сохранённое, dict) else None
+        if not isinstance(деталь, dict):
+            итог.append(запись)
+            continue
+        # Дополнение ничего не отнимает: пустое поле detail не затирает
+        # заполненное поле списка, и `playback` не трогается вовсе.
+        слияние = dict(запись)
+        for поле, значение in деталь.items():
+            if поле == "playback" or значение in (None, "", [], {}):
+                continue
+            слияние[поле] = значение
+        слияние[ПРИЗНАК_ДОПОЛНЕНИЯ] = деталь.get("_fetched_at") or True
+        итог.append(слияние)
+        слито += 1
+    return итог, слито
+
+
+def export(catalog_path: str | Path, *, site_id: str,
+           detail_cache: str | Path | None = None) -> dict[str, Any]:
     """Выгрузка контракта из кэша каталога витрины.
 
     Повторный вызов на неизменившемся кэше обязан дать тот же отпечаток: в
     него входит содержимое записей и не входит момент выгрузки.
+
+    `detail_cache` — каталог сохранённых ответов detail. Он не обязателен:
+    без него выгрузка остаётся прежней, и все записи получают состояние
+    сведений `NOT_ENRICHED`, а не ложное «у источника ничего нет».
     """
     путь = Path(catalog_path)
     сырьё = json.loads(путь.read_text("utf-8"))
@@ -220,7 +321,13 @@ def export(catalog_path: str | Path, *, site_id: str) -> dict[str, Any]:
     снят = (dt.datetime.fromtimestamp(сырьё["fetched_at_ms"] / 1000, dt.timezone.utc)
             .isoformat() if isinstance(сырьё, dict) and сырьё.get("fetched_at_ms")
             else "")
+    происхождение = f"catalog-cache:{путь.name}"
+    if detail_cache is not None:
+        детали = Path(detail_cache)
+        записи, слито = _слить_детали(list(записи), детали)
+        if слито:
+            происхождение = f"{происхождение}+detail-cache:{детали.name}"
     связи = build(записи, site_id=site_id, snapshot_at=снят,
-                  provenance=f"catalog-cache:{путь.name}")
+                  provenance=происхождение)
     return envelope(связи, site_id=site_id, snapshot_at=снят,
-                    provenance=f"catalog-cache:{путь.name}")
+                    provenance=происхождение)

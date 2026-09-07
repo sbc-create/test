@@ -20,6 +20,7 @@ from factory.site_engine.api.control import (
     SAFE_SETTINGS,
 )
 from factory.site_engine.api.ratelimit import DEFAULT_LIMITS
+from factory.site_engine.seo_binding import SCHEMA_VERSION
 
 ОШИБКА = {
     "type": "object",
@@ -396,7 +397,7 @@ from factory.site_engine.api.ratelimit import DEFAULT_LIMITS
         "scope": "read",
         "idempotent": False,
         "body": None,
-        "success": ("200", "страница выгрузки контракта seo-route-binding/1.1.0 "
+        "success": ("200", f"страница выгрузки контракта {SCHEMA_VERSION} "
                            "с отпечатком всего набора и сводкой по состояниям связи"),
         "errors": {"400": "недопустимые limit, offset или bindingState",
                    "404": "витрина не описана в источниках связей"},

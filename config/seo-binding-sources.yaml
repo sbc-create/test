@@ -16,16 +16,24 @@
 
 version: "1.0.0"
 
+# `detailCache` — каталог сохранённых ответов detail поставщика. Списочный
+# ответ несёт из описательных полей один год; жанры, страны, хронометраж,
+# съёмочную группу и описание отдаёт detail, и они уже лежат на диске. Без
+# этой строки выгрузка их не видит, и потребитель получает пустое описание при
+# наличных сведениях.
 sites:
   lords-01:
     producer: computed-routes
     catalog: var/lords/lords/catalog-cache/lords-01.json
+    detailCache: var/lords/detail-cache
   lords-02:
     producer: computed-routes
     catalog: var/lords/lords/catalog-cache/lords-02.json
+    detailCache: var/lords/detail-cache
   lords-03:
     producer: computed-routes
     catalog: var/lords/lords/catalog-cache/lords-03.json
+    detailCache: var/lords/detail-cache
 
   yummyani-site:
     producer: declared-routes
