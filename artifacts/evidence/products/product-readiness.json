@@ -1,13 +1,13 @@
 {
   "artifact": "TEMPLATE_PRODUCT_READINESS",
-  "average_product": 85,
+  "average_product": 87,
   "average_product_measured": [
     "animedia-portal",
     "basis-video",
     "zona-cinema"
   ],
   "average_integration": 64,
-  "generated_at_utc": "2026-09-07T13:59:21.572774+00:00",
+  "generated_at_utc": "2026-09-07T14:18:55.723872+00:00",
   "rubric": {
     "package": "готовность пакета",
     "data": "данные",
@@ -40,8 +40,8 @@
           "note": "validate exit 2: [warn] network_allowlist пуст: сеть в режиме CLOSED_WORLD будет полностью запрещена для эт"
         },
         "data": {
-          "points": 6,
-          "note": "500 записей — срез, а не каталог"
+          "points": 10,
+          "note": "4000 записей боевого снимка, обогащено 12022; снимок витрины lords-02"
         },
         "functional": {
           "points": 10,
@@ -57,7 +57,7 @@
         },
         "preview": {
           "points": 9,
-          "note": "271 страниц собрано и готово к выкладке; локальная витрина в приёмку не входит"
+          "note": "1337 страниц собрано и готово к выкладке; локальная витрина в приёмку не входит"
         },
         "adapter": {
           "points": 7,
@@ -65,15 +65,15 @@
         },
         "live": {
           "points": 0,
-          "note": "BLOCKED_OWNER_URLS: адрес для приёмки не передан владельцем"
+          "note": "NAME_NOT_RESOLVED: https://zonafilm.space — имя не разрешается в адрес; разрешение имён в этой полосе работает — проверено на посторонних именах, — значит запись отсутствует или ещё не разошлась"
         }
       },
-      "package_readiness": 80,
+      "package_readiness": 86,
       "preview_acceptance": 90,
       "live_acceptance": null,
-      "live_state": "BLOCKED_OWNER_URLS",
-      "total": 70,
-      "product_readiness": 80,
+      "live_state": "NAME_NOT_RESOLVED",
+      "total": 75,
+      "product_readiness": 88,
       "integration_readiness": 80
     },
     "animedia-portal": {
@@ -109,13 +109,13 @@
         },
         "live": {
           "points": 0,
-          "note": "BLOCKED_OWNER_URLS: адрес для приёмки не передан владельцем"
+          "note": "HTTPS_NOT_SERVED: https://animedia.icu — HTTPS не отвечает, при этом порт 80 принимает соединения: хост жив, TLS не обслуживается"
         }
       },
       "package_readiness": 86,
       "preview_acceptance": 90,
       "live_acceptance": null,
-      "live_state": "BLOCKED_OWNER_URLS",
+      "live_state": "HTTPS_NOT_SERVED",
       "total": 75,
       "product_readiness": 88,
       "integration_readiness": 80
@@ -153,7 +153,7 @@
         },
         "live": {
           "points": 0,
-          "note": "BLOCKED_OWNER_URLS: pilot.localhost.test — не боевой адрес; локальные витрины в приёмку не входят"
+          "note": "BLOCKED_OWNER_URLS: адрес для приёмки не передан владельцем"
         }
       },
       "package_readiness": 84,
@@ -210,6 +210,6 @@
       "integration_readiness": 15
     }
   },
-  "average": 56,
+  "average": 57,
   "note": "Приёмка боевой витрины не выводится из готовности пакета и предпросмотра. Фикстура, localhost и стенд в неё не входят."
 }

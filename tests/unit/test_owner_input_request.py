@@ -38,11 +38,35 @@ class TestПолнота:
         assert any("owner" in f and "url" in f for f in поля), (
             "живая приёмка стоит на адресах витрин, а в списке недостающего их нет")
 
-    def test_адреса_названы_для_всех_четырёх_продуктов(self, список):
-        пункт = next(i for i in список if "owner" in i["field"] and "url" in i["field"])
-        текст = (пункт["why"] + пункт["format"] + пункт["example_without_secret"]).lower()
-        for продукт in ("zona-cinema", "animedia", "basis-video", "yummy"):
-            assert продукт in текст, f"{продукт} не назван в запросе адресов"
+    def test_запрос_называет_только_ещё_не_переданное(self, список):
+        """Запрос, просящий уже полученное, обесценивает весь список.
+
+        Первая редакция требовала перечисления всех четырёх продуктов. Владелец
+        передал два адреса, и повторять их в списке недостающего значило бы
+        учить читателя не доверять этому документу.
+        """
+        import json
+        from pathlib import Path
+
+        slot = json.loads((Path(__file__).resolve().parents[2] / "config" /
+                           "live-acceptance.json").read_text(encoding="utf-8"))["products"]
+        ждут = {имя for имя, v in slot.items() if not v.get("base_url")}
+        переданы = set(slot) - ждут
+
+        пункт = next(i for i in список if "owner" in i["field"] and "live_urls" in i["field"])
+        текст = (пункт["why"] + пункт["format"] + пункт["where_to_put"]).lower()
+        for продукт in ждут:
+            assert продукт in текст, f"{продукт} ждёт адреса, но в запросе не назван"
+        for продукт in переданы:
+            assert f"{продукт} —" not in текст, (
+                f"{продукт}: адрес передан, а запрос всё ещё его требует")
+
+    def test_состояние_переданных_адресов_названо(self, список):
+        """Переданный, но нерабочий адрес — состояние, а не отказ витрины."""
+        состояния = [i for i in список if i["field"].startswith("owner.address_state.")]
+        for пункт in состояния:
+            assert "не отказ витрины" in пункт["why"], пункт["field"]
+            assert пункт["blocks_stage"].startswith("PRODUCT_LIVE_ACCEPTANCE")
 
     def test_состояние_названо_как_ожидание_а_не_отказ(self, список):
         пункт = next(i for i in список if "owner" in i["field"] and "url" in i["field"])

@@ -34,6 +34,8 @@ const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 const CONFIG = path.join(__dirname, '..', '..', 'config', 'live-acceptance.json');
 const EVIDENCE = path.join(__dirname, '..', '..', 'artifacts', 'evidence', 'products',
                            'live-acceptance.json');
+const IDENTITY = path.join(__dirname, '..', '..', 'artifacts', 'evidence', 'products',
+                           'live-identity.json');
 
 const WIDTHS = h.ШИРИНЫ;
 
@@ -46,6 +48,16 @@ for (const [product, config] of Object.entries(products)) {
     test.skip(!base,
       `${product}: BLOCKED_OWNER_URLS — адрес действующей витрины не передан. ` +
       'Ожидание входа owner.live_urls, а не провал продукта (docs/INPUT_REQUEST.md).');
+
+    // Адрес есть — но отдаёт ли он именно эту витрину? Пока опознание не
+    // подтвердило разметку рендерера, приёмка не запускается: иначе она
+    // измерит чужую работу и запишет её в наш отчёт. Состояние адреса и
+    // готовность продукта — разные величины и складываться не должны.
+    const identity = h.identityOf(IDENTITY, product);
+    test.skip(!!base && identity?.verdict !== 'SERVES_OUR_STOREFRONT',
+      `${product}: ${identity?.verdict || 'опознание не выполнялось'} — ` +
+      `${identity?.note || 'запустите scripts/live_identity_probe.py'}. ` +
+      'Это состояние адреса, а не отказ продукта.');
 
     for (const route of config.routes) {
       for (const width of WIDTHS) {

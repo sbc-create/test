@@ -42,14 +42,35 @@ class TestПриёмкаВитриныОтдельно:
         assert "live" not in отчёт["integration_dimensions"]
 
     def test_состояние_приёмки_названо_а_не_обозначено_нулём(self, отчёт):
+        """Состояний несколько, и все описывают адрес, а не витрину.
+
+        Первая редакция требовала `BLOCKED_OWNER_URLS` у всех четырёх. Владелец
+        передал адреса, и состояния разошлись: имя не разрешается, TLS не
+        обслуживается, адреса нет. Числа по-прежнему нет ни у кого — приёмка не
+        проводилась, — но одинакового состояния больше нет и быть не должно.
+        """
+        import sys
+        from pathlib import Path
+        sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
+        from product_readiness import ЖДЁТ
+
         for имя, info in отчёт["products"].items():
             assert info["live_acceptance"] is None, (
                 f"{имя}: приёмка боевой витрины выдана числом, хотя не проводилась")
-            assert info["live_state"] == "BLOCKED_OWNER_URLS", имя
+            assert info["live_state"] in ЖДЁТ, (
+                f"{имя}: состояние {info['live_state']!r} не названо по-русски")
 
     def test_причина_объяснена(self, отчёт):
+        """Состояние без объяснения не говорит владельцу, что чинить."""
         for имя, info in отчёт["products"].items():
-            assert "адрес" in info["dimensions"]["live"]["note"].lower(), имя
+            note = info["dimensions"]["live"]["note"]
+            assert ":" in note and len(note.split(":", 1)[1].strip()) > 10, (
+                f"{имя}: состояние названо без объяснения — {note!r}")
+
+    def test_ни_одно_состояние_не_объявлено_отказом_витрины(self, отчёт):
+        for имя, info in отчёт["products"].items():
+            note = info["dimensions"]["live"]["note"].lower()
+            assert "провал" not in note and "дефект" not in note, имя
 
 
 class TestТриВеличиныНезависимы:

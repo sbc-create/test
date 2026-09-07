@@ -222,32 +222,66 @@ def score_adapter(product: str, pkg: dict) -> tuple[int, str]:
     return 7, f"контракт объявлен ({contract}); потребление на этой витрине не проверено"
 
 
+#: Короткие имена состояний приёмки для таблицы. Каждое описывает адрес, а не
+#: витрину: ни одно не является её отказом.
+ЖДЁТ = {
+    "BLOCKED_OWNER_URLS": "ждёт адреса",
+    "PENDING_DNS": "ждёт DNS",
+    "NAME_NOT_RESOLVED": "имя не найдено",
+    "HTTPS_NOT_SERVED": "нет HTTPS",
+    "SERVES_SOMETHING_ELSE": "чужая витрина",
+    "IDENTITY_UNVERIFIED": "не опознан",
+    "IDENTITY_CONFIRMED": "опознан, не проведена",
+}
+
+
 def score_live(product: str, pkg: dict) -> tuple[int, str]:
-    """Приёмка на боевом домене.
+    """Приёмка на действующем сайте: состояние адреса, а не оценка продукта.
 
-    Ноль здесь означает не провал продукта, а отсутствие адреса, на котором
-    приёмку можно провести. Разница существенная: продукт, работающий на трёх
-    витринах в production, и продукт, который не собирается, — это разные вещи,
-    и одинаковый ноль в отчёте их уравнивал бы.
+    Числа здесь нет и быть не может, пока приёмка не проведена. Ноль означал бы
+    «проверяли и не прошло», а верное — «не проверяли и вот почему». Продукт,
+    работающий на трёх витринах, и продукт, который не собирается, одинаковым
+    нулём уравнивались бы.
 
-    Поэтому состояние называется `BLOCKED_OWNER_URLS`, а само измерение
-    вынесено из готовности продукта в готовность интеграции: приёмка проводится
-    средствами фабрики, а её у этих витрин пока нет.
+    Источник — слот адресов `config/live-acceptance.json` и запись опознания
+    `scripts/live_identity_probe.py`, а не поле `domain` в пакете сайта. Пакет
+    описывает цель выкладки; писать туда адрес действующего чужого сайта до
+    подтверждения его личности значило бы объявить его нашей целью.
 
-    Локальные стенды и фикстуры сюда не входят ни при каких условиях — таково
-    решение владельца, и оно верное: витрина на `127.0.0.1` не доказывает
-    ничего о витрине на домене.
+    Состояния и их смысл:
+
+    * `BLOCKED_OWNER_URLS` — адреса нет, ожидание входа;
+    * `PENDING_DNS` — адрес назван, имя ещё не разошлось; по прямому указанию
+      владельца отказом не считается;
+    * `NAME_NOT_RESOLVED` — имя не разрешается, хотя объявлено переданным;
+    * `HTTPS_NOT_SERVED` — хост жив, TLS не обслуживается;
+    * `SERVES_SOMETHING_ELSE` — адрес отвечает, но отдаёт не эту витрину;
+    * `IDENTITY_CONFIRMED` — опознано, приёмку можно проводить.
+
+    Ни одно из них не является дефектом витрины: все они описывают адрес.
     """
-    domain = pkg.get("domain")
-    if not domain:
+    config_path = ROOT / "config" / "live-acceptance.json"
+    identity_path = ROOT / "artifacts" / "evidence" / "products" / "live-identity.json"
+    if not config_path.is_file():
+        return 0, "BLOCKED_OWNER_URLS: слот адресов не заведён"
+    entry = (json.loads(config_path.read_text(encoding="utf-8"))
+             .get("products", {}).get(product, {}))
+    if not entry.get("base_url"):
         return 0, "BLOCKED_OWNER_URLS: адрес для приёмки не передан владельцем"
-    text = str(domain)
-    if text.endswith((".localhost", ".localhost.test", ".test", ".invalid")):
-        return 0, (f"BLOCKED_OWNER_URLS: {text} — не боевой адрес; "
-                   "локальные витрины в приёмку не входят")
-    if not pkg.get("production_authorized"):
-        return 0, f"BLOCKED_OWNER_URLS: production не авторизован ({text})"
-    return 2, f"адрес {text} задан, приёмка не выполнялась"
+
+    адрес = entry["base_url"]
+    if entry.get("status") == "PENDING_DNS":
+        return 0, f"PENDING_DNS: {адрес} — имя ещё не разошлось, отказом не считается"
+
+    if not identity_path.is_file():
+        return 0, f"IDENTITY_UNVERIFIED: {адрес} — опознание не выполнялось"
+    primary = ((json.loads(identity_path.read_text(encoding="utf-8")).get(product) or {})
+               .get("primary") or {})
+    verdict = primary.get("verdict", "IDENTITY_UNVERIFIED")
+    note = primary.get("note", "")
+    if verdict == "SERVES_OUR_STOREFRONT":
+        return 2, f"IDENTITY_CONFIRMED: {адрес} отдаёт эту витрину; приёмка не выполнялась"
+    return 0, f"{verdict}: {адрес} — {note}"
 
 
 def evaluate() -> dict:
@@ -276,12 +310,12 @@ def evaluate() -> dict:
             # Ноль и ожидание читаются одинаково, а означают противоположное:
             # первое — что проверяли и не прошло, второе — что не проверяли и
             # не на чем. Пока адреса нет, числа нет тоже.
-            "live_acceptance": (round(100 * dims["live"]["points"] / MAX)
-                                if not dims["live"]["note"].startswith("BLOCKED_OWNER_URLS")
-                                else None),
-            "live_state": ("BLOCKED_OWNER_URLS"
-                           if dims["live"]["note"].startswith("BLOCKED_OWNER_URLS")
-                           else "MEASURED"),
+            # Числа нет, пока приёмка не проведена. Состояний, при которых её
+            # нельзя провести, теперь несколько — нет адреса, имя не разошлось,
+            # TLS не обслуживается, адрес отдаёт не эту витрину, — и все они
+            # описывают адрес, а не витрину. Ноль уравнял бы их с провалом.
+            "live_acceptance": None,
+            "live_state": dims["live"]["note"].split(":", 1)[0].strip(),
             "total": round(100 * total / (MAX * len(DIMENSIONS))),
         }
     # Две средние, а не одна. Смешивать готовность работающего сайта с
@@ -381,8 +415,8 @@ def main() -> int:
         cells = []
         for n in names:
             info = report["products"][n]
-            if key == "live" and info["live_state"] == "BLOCKED_OWNER_URLS":
-                cells.append(f"{'ждёт адреса':>17}")
+            if key == "live" and info["live_acceptance"] is None:
+                cells.append(f"{ЖДЁТ.get(info['live_state'], 'не проведена'):>17}")
             else:
                 cells.append(f"{info['dimensions'][key]['points']:>17}")
         print(f"{label:30}" + "".join(cells))
@@ -398,7 +432,7 @@ def main() -> int:
             if value is not None:
                 cells.append(f"{value:>17}")
             elif field == "live_acceptance":
-                cells.append(f"{'ждёт адреса':>17}")
+                cells.append(f"{ЖДЁТ.get(report['products'][n]['live_state'], 'не проведена'):>17}")
             else:
                 cells.append(f"{'не измерено':>17}")
         print(f"{label:30}" + "".join(cells))

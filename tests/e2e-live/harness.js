@@ -63,5 +63,27 @@ function classify(status) {
   return status === 200 ? 'OK' : 'FAILED';
 }
 
-module.exports = { МУТИРУЮЩИЕ, ОТКАЗ_ДОСТУПА, ШИРИНЫ, classify, loadConfig,
+
+/**
+ * Опознан ли адрес как наша витрина — по доказательству, а не по настройке.
+ *
+ * Доступность домена и готовность продукта — разные величины. Домен может
+ * отвечать 200 и отдавать чужой сайт, заглушку регистратора или страницу
+ * провайдера: приёмка, запущенная по такому адресу, измерит чужую работу и
+ * запишет её в наш отчёт.
+ *
+ * Поэтому решает не поле в настройках, которое можно проставить рукой, а
+ * запись опознания: `scripts/live_identity_probe.py` ходит на адрес одним
+ * запросом на чтение и ищет разметку рендерера.
+ */
+function identityOf(evidenceFile, product) {
+  let all = {};
+  try { all = JSON.parse(fs.readFileSync(evidenceFile, 'utf8')); } catch { return null; }
+  const entry = all[product];
+  if (!entry) return null;
+  return entry.primary || { verdict: entry.verdict, note: entry.note };
+}
+
+module.exports = {
+  identityOf, МУТИРУЮЩИЕ, ОТКАЗ_ДОСТУПА, ШИРИНЫ, classify, loadConfig,
                    overflowPx, readOnly, record };

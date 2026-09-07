@@ -1,24 +1,39 @@
 {
-  "$comment": "Адреса действующих витрин для приёмки. Заполняет владелец; полоса шаблонов адреса не придумывает. Пока base_url пуст, приёмка продукта помечается BLOCKED_OWNER_URLS — это ожидание входа, а не провал продукта. Запрос входа: docs/INPUT_REQUEST.md, поле owner.live_urls.",
-  "schema_version": 1,
+  "$comment": "Адреса действующих витрин для приёмки. Заполняет владелец; полоса шаблонов адреса не придумывает. Состояние адреса — не готовность продукта: PENDING_DNS означает ожидание разрешения имени, BLOCKED_OWNER_URLS — что адрес не передан, и ни то, ни другое не является отказом витрины. Перед приёмкой каждый адрес проходит проверку личности: доступность домена не означает, что он отдаёт именно эту витрину.",
+  "schema_version": 2,
   "products": {
     "zona-cinema": {
-      "base_url": null,
+      "base_url": "https://zonafilm.space",
+      "status": "OWNER_SUPPLIED",
+      "identity_verified": false,
       "routes": ["/", "/catalog/", "/search/", "/genres/", "/years/"],
-      "note": "маршруты известны: витрину собирает эта фабрика"
+      "note": "адрес передан владельцем 2026-09-07; маршруты известны — витрину собирает эта фабрика"
     },
     "animedia-portal": {
-      "base_url": null,
+      "base_url": "https://animedia.icu",
+      "status": "OWNER_SUPPLIED",
+      "identity_verified": false,
+      "additional_urls": [
+        {
+          "url": "https://animedia.space",
+          "status": "PENDING_DNS",
+          "note": "второй домен той же витрины; до подтверждённого разрешения имени и доступности не считается отказом"
+        }
+      ],
       "routes": ["/", "/catalog/", "/search/", "/genres/", "/years/"],
-      "note": "маршруты известны: витрину собирает эта фабрика"
+      "note": "адреса переданы владельцем 2026-09-07; маршруты известны — витрину собирает эта фабрика"
     },
     "basis-video": {
       "base_url": null,
+      "status": "BLOCKED_OWNER_URLS",
+      "identity_verified": false,
       "routes": ["/", "/catalog/", "/search/"],
-      "note": "маршруты известны: витрину собирает эта фабрика на движке DLE 20"
+      "note": "адрес не предоставлен; ожидание входа owner.live_urls"
     },
     "yummy": {
       "base_url": null,
+      "status": "BLOCKED_OWNER_URLS",
+      "identity_verified": false,
       "routes": [],
       "note": "маршруты не перечислены намеренно: приложение вне фабрики, и угаданный путь дал бы отказ витрины за дефект продукта. Владелец называет адрес, маршруты читаются с него"
     }

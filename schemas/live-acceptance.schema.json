@@ -2,24 +2,49 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://site-factory.local/schemas/live-acceptance.schema.json",
   "title": "Адреса действующих витрин для приёмки",
+  "description": "Адреса передаёт владелец. Полоса шаблонов их не придумывает и не подставляет по умолчанию. Состояние адреса и готовность продукта — разные величины и складываться не должны.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema_version", "products"],
   "properties": {
     "$comment": { "type": "string" },
-    "schema_version": { "const": 1 },
+    "schema_version": { "const": 2 },
     "products": {
       "type": "object",
       "minProperties": 1,
       "additionalProperties": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["base_url", "routes"],
+        "required": ["base_url", "status", "routes"],
         "properties": {
           "base_url": {
-            "description": "Адрес действующей витрины. null означает, что владелец его ещё не передал; выдуманное значение здесь недопустимо.",
+            "description": "Основной адрес витрины. null означает, что владелец его ещё не передал; выдуманное значение здесь недопустимо.",
             "type": ["string", "null"],
             "pattern": "^https://[^/]+/?$"
+          },
+          "status": {
+            "description": "Состояние адреса, а не продукта. OWNER_SUPPLIED — адрес передан и подлежит проверке личности витрины перед приёмкой. PENDING_DNS — адрес передан, но разрешение имени ещё не подтверждено: это ожидание, а не отказ. BLOCKED_OWNER_URLS — адрес не передан.",
+            "enum": ["OWNER_SUPPLIED", "PENDING_DNS", "BLOCKED_OWNER_URLS"]
+          },
+          "additional_urls": {
+            "description": "Прочие адреса той же витрины: второй домен, зеркало, будущий адрес.",
+            "type": "array",
+            "default": [],
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["url", "status"],
+              "properties": {
+                "url": { "type": "string", "pattern": "^https://[^/]+/?$" },
+                "status": { "enum": ["OWNER_SUPPLIED", "PENDING_DNS", "BLOCKED_OWNER_URLS"] },
+                "note": { "type": "string" }
+              }
+            }
+          },
+          "identity_verified": {
+            "description": "Подтверждено ли, что адрес отдаёт именно эту витрину. Пока false, результаты проверок этого адреса продуктом не считаются: доступность домена и готовность продукта — разные величины.",
+            "type": "boolean",
+            "default": false
           },
           "routes": {
             "type": "array",
