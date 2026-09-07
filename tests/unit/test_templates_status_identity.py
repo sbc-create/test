@@ -50,11 +50,33 @@ class TestЛичностьКандидата:
         tree.mkdir()
         subprocess.run(["tar", "-xf", str(archive), "-C", str(tree)], check=True)
 
-        # Пересчёт идёт по содержимому ревизии кандидата, а не по рабочему
-        # дереву: в post-release ветке отпечаток другой, и сравнение с ней
-        # ничего бы не доказало.
-        from factory.templates import digest as digest_mod
-        actual = digest_mod.compute(tree)
+        # Пересчёт идёт по содержимому ревизии кандидата и её же кодом.
+        #
+        # И то, и другое существенно. По рабочему дереву считать нельзя: в
+        # ветке доработок отпечаток другой, и сравнение с ней ничего бы не
+        # доказало. Но и алгоритмом рабочего дерева считать нельзя тоже, а
+        # именно так проверка и делала — и сломалась, как только состав
+        # отпечатка расширили с 21 файла до 28.
+        #
+        # Состав — часть алгоритма, а не его настройка. Меняя состав, мы
+        # задним числом меняем отпечаток каждой прошлой ревизии, и удостоверение
+        # кандидата становится непроверяемым. Соблазн здесь один: переписать
+        # объявленное кандидатом число под новый код. Это подделка удостоверения
+        # задним числом, а не починка проверки.
+        #
+        # Поэтому удостоверение сверяется тем алгоритмом, которым выдано.
+        # Отдельным процессом — чтобы код ревизии не смешивался с рабочим
+        # деревом через уже загруженные модули.
+        probe = (
+            "import json, sys; sys.path.insert(0, %r);"
+            "from factory.templates import digest;"
+            "print(json.dumps(digest.compute()))" % str(tree)
+        )
+        computed = subprocess.run([sys.executable, "-c", probe],
+                                  capture_output=True, text=True, cwd=str(tree), timeout=600)
+        assert computed.returncode == 0, computed.stderr[-2000:]
+        actual = json.loads(computed.stdout.strip().splitlines()[-1])
+
         assert actual["template_digest"] == templates_status.FROZEN_CANDIDATE["template_digest"], (
             f"ревизия {sha[:12]} даёт отпечаток {actual['template_digest'][:16]}, "
             f"а кандидат объявляет "
