@@ -1,5 +1,5 @@
 {
-  "head_sha": "2a400f68c9291297a56565a7af4e756a7cd6a26a",
+  "head_sha": "f7b802e9e00e8b0c2c9a03c3e2da8ad6b3b5b3c0",
   "note": "манифест собран под учётной записью разработчика; привилегированная операция сверяет его без git",
   "template_digest": "2b96f068e7988c8868a3aa2543fe73a228965e110bdafca77f2896030e19b994",
   "template_digest_files": 19,
@@ -12,7 +12,7 @@
     "automation/host/lords-canary-snapshot.py": "3352c191c5f1d019df868760b996399e2fc5c44fe2f254de57ba236cbfb4f023",
     "automation/host/systemd/lords-canary-render@.service": "a64325e42c5a0f1647d1072d332285e645af8fc65991e1388a1a525496ca9dba",
     "automation/host/systemd/lords-canary-switch@.service": "670239a1f21bd13738639031ba2453bb0dd5ff404309dbff2e613ff4cf263cae",
-    "factory/lords/canary.py": "997394d2f2ed3da9fc983170e63abca9a14683297fde5f91ee98009cc9206d05",
+    "factory/lords/canary.py": "3f72fde98d7b0aaeeb0b99324498f2c2dd719f4443dd71c288303c53d8e842b7",
     "factory/lords/live_site.py": "89d90923c25b32425066364186cc7759fc4657b9cee54148701ea984b827bdfd"
   },
   "tree_clean_at_write": true
