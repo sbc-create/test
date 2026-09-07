@@ -1,7 +1,7 @@
 {
   "product": "animedia-portal",
   "base": "http://127.0.0.1:8904",
-  "captured_at_utc": "2026-09-07T07:30:04.997Z",
+  "captured_at_utc": "2026-09-07T08:19:27.961Z",
   "checks": [
     {
       "check": "навигация ведёт на существующие страницы",

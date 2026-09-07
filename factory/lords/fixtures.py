@@ -114,6 +114,21 @@ class Episode:
 class Season:
     number: int
     episodes: tuple[Episode, ...]
+    #: Сколько серий заявлено источником. Отличается от числа доступных у
+    #: продолжающихся историй: источник говорит «в сезоне 24», а посмотреть
+    #: можно семь. Показывать заявленное как доступное значит обещать зрителю
+    #: серии, которых нет, — и обещать со стороны витрины, потому что источник
+    #: сказал правду.
+    #:
+    #: `None` — источник о заявленном числе не говорил, и тогда доступное и
+    #: есть всё, что известно.
+    declared_episodes: int | None = None
+
+    @property
+    def ongoing(self) -> bool:
+        """Сезон выходит: заявлено больше, чем доступно."""
+        return bool(self.declared_episodes
+                    and self.declared_episodes > len(self.episodes))
 
     @property
     def runtime_min(self) -> int | None:

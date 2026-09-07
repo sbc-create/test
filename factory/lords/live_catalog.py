@@ -190,8 +190,15 @@ def seasons_from_detail(raw) -> tuple:
             number = int(str(entry.get("number") or "0").strip() or 0)
         except ValueError:
             continue
-        count = entry.get("episodes_count")
-        count = int(count) if isinstance(count, int) and count > 0 else 0
+        # Источник отдаёт два числа: сколько серий заявлено и сколько доступно.
+        # Рисуются доступные — обещать серии, которых нет, витрина не вправе, —
+        # а заявленное сохраняется рядом, чтобы сказать «7 из 24».
+        declared = entry.get("episodes_count")
+        declared = int(declared) if isinstance(declared, int) and declared > 0 else 0
+        available = entry.get("available_episodes_count")
+        available = int(available) if isinstance(available, int) and available >= 0 else None
+        # Молчание источника о доступности — не повод объявить сезон неполным.
+        count = declared if available is None else available
         episodes = tuple(
             # Длительность не передаётся: списочный ответ источника её не
             # содержит, а поэпизодного запроса в контракте нет. Оставляем
@@ -200,7 +207,8 @@ def seasons_from_detail(raw) -> tuple:
             for i in range(1, count + 1)
         )
         if number and episodes:
-            seasons.append(fx.Season(number=number, episodes=episodes))
+            seasons.append(fx.Season(number=number, episodes=episodes,
+                                     declared_episodes=declared or None))
     return tuple(sorted(seasons, key=lambda s: s.number))
 
 

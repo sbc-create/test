@@ -1330,7 +1330,9 @@ def _calendar(catalog: fx.Catalog, kinds) -> str:
         rows.append(
             f'<li class="episode"><span><a href="{escape(title.path)}">'
             f"{escape(title.name)}</a></span>"
-            f"<span>сезон {last.number}, серий {len(last.episodes)}</span></li>"
+            f"<span>сезон {last.number}, серий "
+            f"{_episodes_label(len(last.episodes), getattr(last, 'declared_episodes', None))}"
+            "</span></li>"
         )
     if not rows:
         return ""
@@ -1402,6 +1404,22 @@ def _collection_cards(ctx, catalog: fx.Catalog) -> str:
 EPISODIC_TYPES = frozenset({fx.SERIES, fx.ANIME, fx.DORAMA})
 
 
+def _episodes_label(available: int, declared: int | None) -> str:
+    """Сколько серий: доступные и, если расходится, заявленные.
+
+    «7 из 24» — проверяемое утверждение: столько можно посмотреть сейчас,
+    столько объявлено всего. Просто «24» на семи доступных — обещание,
+    которого витрина не выполнит; просто «7» — правда, но неполная: зритель не
+    узнает, что история продолжается.
+
+    Когда числа совпадают, второе не печатается: «12 из 12» — шум, а не
+    сведение.
+    """
+    if declared and declared > available:
+        return f"{available} из {declared}"
+    return str(available)
+
+
 def _seasons_block(title: fx.Title) -> str:
     """Раздел сезонов. Три состояния, а не два.
 
@@ -1440,7 +1458,8 @@ def _seasons_block(title: fx.Title) -> str:
         opened = " open" if season.number == 1 else ""
         blocks.append(
             f'<details class="season"{opened}><summary>Сезон {season.number} · '
-            f"{len(season.episodes)} серий</summary><ol>{episodes}</ol></details>"
+            f"{_episodes_label(len(season.episodes), getattr(season, 'declared_episodes', None))}"
+            f" серий</summary><ol>{episodes}</ol></details>"
         )
     return (
         '<section class="seasons"><h2>Сезоны и серии</h2>'
@@ -1710,7 +1729,13 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
     # Длительность в ноль минут — не длительность, а её отсутствие: списочный
     # ответ источника хронометража не даёт вовсе.
     duration = f"{title.runtime_min} мин" if title.runtime_min else ""
-    episodes_fact = str(title.episode_count) if title.episodic and title.episode_count else ""
+    # Число серий: доступные и заявленные. У продолжающейся истории они
+    # расходятся, и разница — это и есть различие «выходит» и «завершено».
+    declared_total = sum(
+        (getattr(s, "declared_episodes", None) or len(s.episodes)) for s in title.seasons)
+    episodes_fact = (
+        _episodes_label(title.episode_count, declared_total)
+        if title.episodic and title.episode_count else "")
 
     def _join(values) -> str:
         """Список имён в строку. Длинный состав режется: страница не афиша."""
