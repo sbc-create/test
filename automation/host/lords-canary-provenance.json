@@ -1,11 +1,11 @@
 {
-  "head_sha": "3ac430ea0a38ab79d12307f6b7e3077d7ac4514f",
+  "head_sha": "ecbe09f237f976bef9dbbf78a83e2c2698d775e6",
   "note": "манифест собран под учётной записью разработчика; привилегированная операция сверяет его без git",
-  "template_digest": "ddbeddb8fcf2ddb5091cc9e87cc83262e05235b739cbb3a53e2f408350c6626a",
+  "template_digest": "cfe8ee2d21d19a71fa3805177890a8eac240a2cffad146ce404f42b503eafa76",
   "template_digest_files": 21,
   "tooling": {
     "automation/host/emit-runtime.py": "44bd651ea800728933c2440665c0c7039f2ca6bfc4a6f4540aa0629e1d5a1f73",
-    "automation/host/lords-canary-apply.sh": "bb67e8e4dfbaca7c951d0c68191e7ed10fec44c667594a140f657f6cec46a10c",
+    "automation/host/lords-canary-apply.sh": "0f5744f9d8a278bd2ba16098aab5871954400a4520fc3592e3f0001fb40ad7b3",
     "automation/host/lords-canary-build.py": "34397c8e960e30c8bc22979428e9a320602c99b4b4a1c31a0a8c8f35d2129df0",
     "automation/host/lords-canary-gates.py": "b514d84ffc5720dfa6c3dd73accda36b7a942645d896416e7982ff7a8c960c51",
     "automation/host/lords-canary-install-and-run.sh": "dc4a59d3d26a2872475fc2caa0c9fcab652f6d955952671b2542907b601a2eb6",
