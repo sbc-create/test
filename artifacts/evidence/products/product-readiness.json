@@ -1,6 +1,6 @@
 {
   "artifact": "TEMPLATE_PRODUCT_READINESS",
-  "generated_at_utc": "2026-09-07T09:54:04.632409+00:00",
+  "generated_at_utc": "2026-09-07T10:09:49.723362+00:00",
   "rubric": {
     "package": "готовность пакета",
     "data": "данные",
@@ -108,7 +108,7 @@
         },
         "functional": {
           "points": 10,
-          "note": "2 проверок: поиск, фильтры, навигация, пагинация; отдельный набор поиска — 4 сценариев"
+          "note": "2 проверок: поиск, фильтры, навигация, пагинация; отдельный набор поиска — 2 сценариев"
         },
         "visual": {
           "points": 10,
@@ -164,20 +164,20 @@
           "note": "предпросмотр не собран"
         },
         "adapter": {
-          "points": 0,
-          "note": "контракт site-admin в пакете не объявлен"
+          "points": 3,
+          "note": "yummy-app/1.0.0: выполнено 4 требований из 8; заблокировано build_gate, working_branch, domains, package"
         },
         "live": {
           "points": 0,
           "note": "BLOCKED: домен не задан владельцем"
         }
       },
-      "package_readiness": 0,
+      "package_readiness": 4,
       "preview_acceptance": 0,
       "live_acceptance": 0,
-      "total": 0
+      "total": 4
     }
   },
-  "average": 56,
+  "average": 57,
   "note": "Приёмка боевой витрины не выводится из готовности пакета и предпросмотра. Фикстура, localhost и стенд в неё не входят."
 }

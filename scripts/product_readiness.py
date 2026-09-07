@@ -195,6 +195,25 @@ def score_preview(product: str) -> tuple[int, str]:
 
 
 def score_adapter(product: str, pkg: dict) -> tuple[int, str]:
+    # У Yummy пакета в фабрике нет, и раздел админки взять неоткуда. Но слой
+    # подключения существует: версионированный контракт потребителя, перечень
+    # требований с владельцами и запрос недостающих входов. Считать это нулём
+    # значило бы сказать, что работы нет, — а она есть и проверяема.
+    if product == "yummy":
+        try:
+            from factory.yummy import adapter_contract as yummy
+
+            assessment = yummy.assess()
+        except Exception as error:  # noqa: BLE001
+            return 0, f"контракт подключения нечитаем: {str(error)[:60]}"
+        доля = len(assessment.satisfied) / max(len(assessment.requirements), 1)
+        # Полного балла нет и быть не может: пакет не заведён, и заведён не
+        # будет, пока владелец не назовёт домены, а Core — ветку.
+        return round(6 * доля), (
+            f"{yummy.CONTRACT_VERSION}: выполнено {len(assessment.satisfied)} требований "
+            f"из {len(assessment.requirements)}; заблокировано "
+            + ", ".join(r.key for r in assessment.blocked))
+
     admin = (pkg.get("admin") or {}) if isinstance(pkg.get("admin"), dict) else {}
     contract = admin.get("contract")
     if not contract:
