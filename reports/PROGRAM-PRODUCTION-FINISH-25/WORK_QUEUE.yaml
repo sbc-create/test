@@ -33,15 +33,19 @@ done:
     evidence: 12 020 записей ENRICHED из 53 257; записей с тремя и более
       фактами 9 965 (18,71 %), было ноль. tests/unit/test_seo_descriptive_facts.py
       — 18 проверок; ответ в CORE_TO_SEO-049
+  - id: ROLLOUT-V5
+    what: кандидат v5 выложен на все три боевые витрины и принят публично
+    evidence: lordfilm47.space, lordserial33.biz, 1lordserials1.online —
+      по нулю провалов каждая; канареечный drop-in снят, копия сохранена;
+      ROLLOUT-V5-THREE-SITES.md
+    note: полный рендер lords-03 занял 3 ч 6 мин CPU; указатель поиска собран
+      из 52 422 записей
   - id: LINT-1
     what: гейт ruff check снова зелёный — 48 нарушений закрыты
     evidence: среди них настоящая ошибка F821 в scripts/release_input_audit.py,
       которую прятало нарушение E741
 
-in_progress:
-  - id: P0-3
-    what: полный рендер трёх витрин закреплённым шаблоном
-    proves: шаблон переживает обновление каталога
+in_progress: []
 
 next:
   - id: P0-4

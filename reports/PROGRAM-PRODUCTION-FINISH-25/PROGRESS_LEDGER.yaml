@@ -114,3 +114,41 @@ checkpoints:
       - "043 §6 — источник оценок исчерпан (19 575 = 19 575), голосов у поставщика нет, ответ в CORE_TO_TEMPLATES-050"
       - "045 — признак индексации виден во флоте со значением, состоянием и источником"
     production_unchanged: [lordfilm47.space, lordserial33.biz, 1lordserials1.online, yummyani.site]
+  - timestamp: "2026-09-07T10:35:00Z"
+    cycle: 39
+    branch: claude/program-production-finish-25
+    head_sha: 501fe562190b29fcb8759e8199a59e12341d0f76
+    core: 100
+    central_admin: 95
+    admin_fleet: PARTIAL
+    families:
+      lords_dark: 95
+      lords_light: 95
+      portal_light: 60
+      pulse: 60
+      editorial: 60
+    seo: 72
+    production: 90
+    global_progress: 88
+    was: 83
+    delta: 5
+    tests: "5366 passed, 3 skipped, 0 failed"
+    reasoning: >-
+      Выкат закрыт: кандидат v5 стоит на всех трёх боевых витринах, все три
+      приняты публично одним и тем же набором проверок по нулю провалов,
+      соседние витрины не задеты, канареечный drop-in снят. lords_dark и
+      lords_light подняты до 95 %: до 100 % не хватает только снятия запрета на
+      индексацию и второй палитры — оба решения не наши. production 75 -> 90 по
+      той же причине: выкладка и приёмка сделаны, индексация закрыта решением
+      владельца.
+    production_releases:
+      lords-01: 813013efff91
+      lords-02: 5478d524aef6
+      lords-03: 362c85c72c3c
+    template_digests:
+      lords-01: ce6c498c3771
+      lords-02: 385d6140087a
+      lords-03: ce6c498c3771
+    defects_fixed_this_cycle:
+      - "template_digest читался как ответ на вопрос, на который не отвечает"
+    sites_unchanged: [yummyani.site, yummyani.org, yummyani.biz]
