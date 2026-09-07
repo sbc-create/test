@@ -58,6 +58,34 @@ h2 { font: 600 clamp(19px, 3vw, 24px)/1.25 var(--font-heading); margin: 32px 0 1
 .intro, .lead { color: var(--color-muted); max-width: 70ch; }
 
 .card-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--gap); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+/* Первый экран. Отделён полосой поверхности, чтобы витрина начиналась
+   собранным блоком, а не заголовком, висящим над списком. */
+.hero { background: var(--color-surface); border-radius: var(--radius);
+  padding: 24px; margin-bottom: 28px; }
+.hero h1 { margin: 0 0 8px; }
+.hero__lead { color: var(--color-muted); max-width: 70ch; margin: 0; }
+.hero__meta { color: var(--color-muted); font-size: 14px; margin: 12px 0 0; }
+
+/* Заголовок раздела и переход к нему. Заголовок остаётся заголовком: ссылкой
+   был он целиком, и подчёркнутая строка посреди страницы съедала иерархию. */
+.home-section__head { display: flex; align-items: baseline; gap: 12px;
+  flex-wrap: wrap; margin: 32px 0 4px; }
+.home-section__head h2 { margin: 0; }
+.home-section__all { font-size: 14px; }
+.home-section__lead { color: var(--color-muted); margin: 0 0 12px; max-width: 70ch; }
+
+/* Ряд материалов. Сетка при шести карточках оставляла на широком экране одну
+   карточку в пустой строке; ряд заканчивается там, где заканчиваются
+   карточки, при любой ширине. */
+.card-rail {
+  list-style: none; margin: 0; padding: 0 0 8px;
+  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(180px, 220px);
+  gap: var(--gap); overflow-x: auto; overscroll-behavior-inline: contain;
+  scroll-snap-type: x proximity;
+}
+.card-rail > .card { scroll-snap-align: start; }
+.card-rail:focus-visible { outline: 3px solid var(--color-primary); outline-offset: 4px; }
 .card { background: var(--color-surface); border-radius: var(--radius); overflow: hidden; }
 .card-link { display: block; text-decoration: none; color: inherit; }
 .card-image { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: #dde2ee; }

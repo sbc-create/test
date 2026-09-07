@@ -30,14 +30,32 @@ if (!product) {
 const OUT = path.join(ROOT, 'artifacts', 'evidence', 'products', product, 'screenshots');
 fs.mkdirSync(OUT, { recursive: true });
 
-/** Страницы, которые владелец откроет первыми. */
-const PAGES = [
-  ['home', '/'],
-  ['catalog', '/catalog/'],
-  ['search', '/search/'],
-  ['genres', '/genres/'],
-  ['not-found', '/404.html'],
-];
+/**
+ * Страницы, которые владелец откроет первыми.
+ *
+ * У каждой витрины они свои: у basis-video нет ни каталога, ни жанров — это
+ * витрина видеоматериалов с лекциями, подборками и новостями. Снимать у неё
+ * `/catalog/` значило бы снимать страницу «не найдено» и называть её
+ * поверхностью продукта.
+ */
+const PAGES_BY_PRODUCT = {
+  'basis-video': [
+    ['home', '/'],
+    ['lekcii', '/lekcii/'],
+    ['collection', '/collections/izbrannoe/'],
+    ['news', '/news/'],
+    ['search', '/search/'],
+    ['not-found', '/404/'],
+  ],
+  default: [
+    ['home', '/'],
+    ['catalog', '/catalog/'],
+    ['search', '/search/'],
+    ['genres', '/genres/'],
+    ['not-found', '/404.html'],
+  ],
+};
+const PAGES = PAGES_BY_PRODUCT[product] || PAGES_BY_PRODUCT.default;
 
 const WIDTHS = [390, 768, 1440];
 
@@ -47,6 +65,11 @@ const probe = () => {
   const empties = [];
   for (const tag of ['p', 'h1', 'h2', 'h3', 'li', 'dd', 'dt', 'section']) {
     for (const el of document.querySelectorAll(tag)) {
+      // Живая область обязана существовать пустой: сообщение, вставленное в
+      // элемент, которого не было в документе, экранный диктор не объявит.
+      // Считать её незаполненной разметкой значит требовать поломки
+      // доступности ради опрятности отчёта.
+      if (el.matches('[role="status"], [role="alert"], [aria-live]')) continue;
       if (el.children.length === 0 && !el.textContent.trim()) {
         empties.push(`${tag}.${el.getAttribute('class') || ''}`);
       }

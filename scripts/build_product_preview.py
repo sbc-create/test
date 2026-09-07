@@ -67,6 +67,11 @@ PRODUCTS = {
     "animedia-portal": "animedia-preview",
 }
 
+#: Витрины на движке DLE. Они собираются штатной командой фабрики, а не
+#: рендерером Lords: у них другой движок, другой источник и другие маршруты.
+#: Предпросмотр здесь только раскладывает готовую сборку под общий стенд.
+DLE_PRODUCTS = {"basis-video": "pilot-local"}
+
 
 def load_catalog(limit: int | None) -> tuple[list[dict], dict]:
     source = CATALOG_CACHE / f"{SNAPSHOT_SITE}.json"
@@ -148,13 +153,76 @@ def build(product: str, *, titles: int, limit: int | None) -> dict:
     return report
 
 
+def latest_build(site: str) -> Path | None:
+    """Последняя сборка витрины DLE. Берётся именно последняя, а не любая."""
+    root = ROOT / "var" / "build" / site
+    if not root.is_dir():
+        return None
+    builds = [p for p in root.iterdir() if (p / "public" / "index.html").is_file()]
+    if not builds:
+        return None
+    return max(builds, key=lambda p: p.stat().st_mtime)
+
+
+def place_dle(product: str) -> dict:
+    """Готовая сборка DLE — под общий стенд предпросмотра.
+
+    Пересборка здесь не делается намеренно: витрина собирается штатной
+    командой фабрики (`python3 -m factory build --site …`), и подменять её
+    своей сборкой значило бы показывать владельцу не тот артефакт, который
+    уйдёт в выкладку.
+    """
+    site = DLE_PRODUCTS[product]
+    build = latest_build(site)
+    if build is None:
+        raise SystemExit(
+            f"BLOCKED: сборки витрины {site} нет — сначала "
+            f"`python3 -m factory build --site {site}`")
+
+    import shutil
+
+    directory = OUT_ROOT / product
+    if directory.exists():
+        shutil.rmtree(directory)
+    shutil.copytree(build / "public", directory)
+
+    manifest = build / "build-manifest.json"
+    report = {
+        "product": product,
+        "package": site,
+        "engine": "dle20",
+        "build_id": build.name,
+        "documents": sum(1 for _ in directory.rglob("*.html")),
+        "files": sum(1 for p in directory.rglob("*") if p.is_file()),
+        "root": str(directory),
+        "build_manifest": (json.loads(manifest.read_text(encoding="utf-8"))
+                           if manifest.is_file() else None),
+        "data_provenance": {"source": "fixture", "note":
+                            "синтетический набор витрины; боевыми данными не является"},
+        "not_acceptance": ("предпросмотр на синтетических данных; приёмкой витрины "
+                           "не является ни при каких условиях"),
+    }
+    (directory / "preview-report.json").write_text(
+        json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return report
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--product", required=True, choices=sorted(PRODUCTS))
+    parser.add_argument("--product", required=True,
+                        choices=sorted(set(PRODUCTS) | set(DLE_PRODUCTS)))
     parser.add_argument("--titles", type=int, default=40)
     parser.add_argument("--limit", type=int, default=None,
                         help="ограничить каталог (для быстрых прогонов)")
     args = parser.parse_args()
+
+    if args.product in DLE_PRODUCTS:
+        report = place_dle(args.product)
+        print(f"{report['product']}: пакет {report['package']}, движок {report['engine']}, "
+              f"сборка {report['build_id']}")
+        print(f"  документов {report['documents']}, файлов {report['files']}")
+        print(f"  {report['root']}")
+        return 0
 
     report = build(args.product, titles=args.titles, limit=args.limit)
     print(f"{report['product']}: пакет {report['package']}, тема {report['theme']}")
