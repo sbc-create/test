@@ -36,9 +36,22 @@ APPLY = ROOT / "automation" / "host" / "lords-canary-apply.sh"
 AUDIT = ROOT / "scripts" / "release_input_audit.py"
 
 
+def _versions_block(text: str) -> str:
+    """Тело таблицы версий и только оно.
+
+    Разбор по всему файлу — ошибка, и она молчала: строки вида
+    `{"version": 1,` из другого места принимались за записи таблицы, номер
+    выходил вида 9113, вставка шла после несуществующей строки и не
+    происходила вовсе. Отпечаток при этом в таблицу не попадал, а команда
+    сообщала об успехе.
+    """
+    match = re.search(r"ARTIFACT_VERSIONS\s*=\s*\{(.*?)\n\}", text, re.S)
+    return match.group(1) if match else ""
+
+
 def current_version() -> int:
-    text = AUDIT.read_text(encoding="utf-8")
-    versions = [int(m) for m in re.findall(r'":\s*(\d+),', text)]
+    block = _versions_block(AUDIT.read_text(encoding="utf-8"))
+    versions = [int(m) for m in re.findall(r'"[0-9a-f]{64}":\s*(\d+),', block)]
     return max(versions) if versions else 0
 
 
@@ -58,9 +71,17 @@ def repin(note: str) -> tuple[str, int]:
     APPLY.write_text(apply_text, encoding="utf-8")
 
     audit_text = AUDIT.read_text(encoding="utf-8")
-    audit_text = audit_text.replace(f'": {version - 1},',
-                                    f'": {version - 1},\n    "{fingerprint}": {version},', 1)
+    block = _versions_block(audit_text)
+    previous = re.search(r'("[0-9a-f]{64}":\s*' + str(version - 1) + r",)", block)
+    if previous is None:
+        raise SystemExit(
+            f"в таблице версий нет записи {version - 1}: вставлять новую некуда")
+    audit_text = audit_text.replace(
+        previous.group(1), f'{previous.group(1)}\n    "{fingerprint}": {version},', 1)
     AUDIT.write_text(audit_text, encoding="utf-8")
+    # Проверка на месте, а не на веру: молчаливая невставка уже случалась.
+    if f'"{fingerprint}": {version},' not in AUDIT.read_text(encoding="utf-8"):
+        raise SystemExit("запись версии не добавилась — таблица не изменилась")
     return fingerprint, version
 
 
