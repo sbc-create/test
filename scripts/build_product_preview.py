@@ -131,7 +131,7 @@ def build(product: str, *, titles: int, limit: int | None) -> dict:
         publisher_id="1", only_title_slugs=slugs)
 
     directory = OUT_ROOT / product
-    directory.mkdir(parents=True, exist_ok=True)
+    serve_mod.clear_directory(directory)
     result = serve_mod.export(site, directory)
 
     report = {

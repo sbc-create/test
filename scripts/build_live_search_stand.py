@@ -97,7 +97,7 @@ def main() -> int:
     site = render_mod.render_site(package, catalog=catalog, environ={},
                                   publisher_id="1", only_title_slugs=slugs)
     directory = Path(args.output)
-    directory.mkdir(parents=True, exist_ok=True)
+    serve_mod.clear_directory(directory)
     result = serve_mod.export(site, directory)
 
     index = site.pages.get(render_mod.SEARCH_INDEX_PATH)

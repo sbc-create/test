@@ -438,6 +438,14 @@ class Catalog:
         pool = self.of_types(kinds) if kinds is not None else self.titles
         counts: dict[int, int] = {}
         for title in pool:
+            # Ноль — отсутствие данных, а не категория. Правило то же, что у
+            # стран строкой ниже, и не применялось оно только здесь: указатель
+            # годов выдавал раздел «Год выпуска: 0» с четырьмя сотнями записей.
+            # У 2 746 записей боевого каталога года нет вовсе, адаптер ставит
+            # им ноль, и страница произведения такой факт не печатает — а
+            # указатель печатал, превращая отсутствие в отдельный год.
+            if not isinstance(title.year, int) or title.year <= 0:
+                continue
             counts[title.year] = counts.get(title.year, 0) + 1
         return tuple((year, counts[year]) for year in sorted(counts, reverse=True))
 
