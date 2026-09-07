@@ -39,6 +39,16 @@ DEFAULT_TOKENS = {
     # Open Sans — гарнитура обоих референсов. Список запасных оставлен: своего
     # файла шрифта у сайта нет, а тянуть чужой хостинг ради начертания незачем.
     "heading_font": "'Open Sans', 'Segoe UI', Roboto, Arial, sans-serif",
+    # Кегль заголовков — часть договора профиля, а не константа темы.
+    # Умолчание совпадает с прежними значениями, поэтому у витрин, которые
+    # его не объявляют, не меняется ничего: 18px/600 у H1 сняты с референса
+    # Lords и остаются его решением.
+    #
+    # Витринам с собственным договором оформления умолчание не годится:
+    # заголовок, крупнее основного текста на семь процентов, иерархии не
+    # создаёт — измерено, шкала выходила 1,07.
+    "h1_size": "1.125rem",
+    "h2_size": "1.05rem",
 }
 
 DEFAULT_LAYOUT = {
@@ -58,9 +68,122 @@ DENSITY = {
 }
 
 
-def tokens_of(profile: dict) -> dict:
+
+#: Нейтральные палитры под выбор зрителя.
+#:
+#: Профиль задаёт ЛИЦО витрины — свой фон и свой акцент. Выбор темы — другое:
+#: это предпочтение зрителя поверх лица. Поэтому здесь только поверхности и
+#: текст; акцент профиля не трогается, иначе витрины перестали бы различаться.
+#:
+#: Значения подобраны так, чтобы обычный и приглушённый текст проходили
+#: WCAG AA на своём фоне; это проверяется тестом, а не глазом.
+SURFACE_PALETTES = {
+    "dark": {
+        "bg": "#111111", "surface": "#181818", "surface_alt": "#1f1f1f",
+        "text": "#e6e6e6", "muted": "#a8a8a8", "border": "#2c2c2c",
+    },
+    "light": {
+        "bg": "#f4f6f8", "surface": "#ffffff", "surface_alt": "#e9edf1",
+        "text": "#151a21", "muted": "#4d5560", "border": "#d3d9df",
+    },
+}
+
+
+def _relative_luminance(color: str) -> float:
+    value = color.strip().lstrip("#")
+    if len(value) == 3:
+        value = "".join(ch * 2 for ch in value)
+    channels = []
+    for i in (0, 2, 4):
+        c = int(value[i:i + 2], 16) / 255
+        channels.append(c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4)
+    r, g, b = channels
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+
+def _contrast(foreground: str, background: str) -> float:
+    a, b = _relative_luminance(foreground), _relative_luminance(background)
+    high, low = max(a, b), min(a, b)
+    return (high + 0.05) / (low + 0.05)
+
+
+def readable_on(color: str, background: str, *, target: float = 4.5) -> str:
+    """Тот же цвет, доведённый до порога контраста на данном фоне.
+
+    Нужен для ссылок. Ссылка красится акцентом профиля — это лицо витрины, — но
+    акцент подобран под родную палитру. На светлой палитре зелёный `#79c142`
+    даёт контраст около двух: axe справедливо считает это нарушением, и
+    прочитать такую ссылку тяжело.
+
+    Менять акцент нельзя: витрины перестали бы различаться. Поэтому цвет
+    ССЫЛКИ вычисляется из акцента — затемняется или осветляется шагами, пока
+    не достигнет порога. Вычисляется, а не подбирается на глаз: подбор не
+    воспроизводится и разъезжается при первой смене палитры.
+    """
+    value = color.strip().lstrip("#")
+    if len(value) == 3:
+        value = "".join(ch * 2 for ch in value)
+    try:
+        r, g, b = (int(value[i:i + 2], 16) for i in (0, 2, 4))
+    except ValueError:
+        return color
+    # Направление выбирается по фону: на светлом темнеем, на тёмном светлеем.
+    darken = _relative_luminance(background) > 0.5
+    for _ in range(64):
+        current = f"#{r:02x}{g:02x}{b:02x}"
+        if _contrast(current, background) >= target:
+            return current
+        if darken:
+            r, g, b = (max(0, int(c * 0.94)) for c in (r, g, b))
+            if r == g == b == 0:
+                return "#000000"
+        else:
+            r, g, b = (min(255, int(c * 1.06) + 2) for c in (r, g, b))
+            if r == g == b == 255:
+                return "#ffffff"
+    return f"#{r:02x}{g:02x}{b:02x}"
+
+
+def _palette_block(selector: str, mode: str, *, accent: str = "", indent: str = "") -> str:
+    """Переопределение поверхностей для одной палитры.
+
+    Вместе с поверхностями переопределяется цвет ссылки: акцент профиля
+    подобран под родную палитру и на чужой может не пройти контраст.
+    """
+    tokens = dict(SURFACE_PALETTES[mode])
+    lines = "".join(
+        f"\n{indent}  --{name.replace('_', '-')}: {value};" for name, value in tokens.items())
+    if accent:
+        link = readable_on(accent, tokens["bg"])
+        lines += f"\n{indent}  --link: {link};"
+    return f"{indent}{selector} {{{lines}\n{indent}}}"
+
+
+def tokens_of(profile: dict, *, declared_theme: str | None = None) -> dict:
+    """Токены палитры витрины. Манифест сильнее профиля.
+
+    `declared_theme` — значение `tenant.theme` из пакета витрины. Когда оно
+    расходится с темой профиля, побеждает пакет: CLAUDE.md ставит манифест
+    первым источником истины, а профиль — четвёртым, и поле манифеста, которое
+    рендерер не читает, выглядит настройкой, ничего не меняя.
+
+    Расхождение не выдумано. Пакет `lords-03` объявляет `lords_light`, а его
+    профиль `lords-curated` — `lords_dark` с тёмными токенами; витрина
+    отрисовывалась тёмной, и семейство `lords_light` состояло из одной витрины
+    вместо двух. Обнаружено измерением яркости полотна, а не чтением: на глаз
+    страница выглядела исправной.
+
+    Здесь только применяется объявленный порядок источников. Какой облик нужен
+    витрине, решает владелец — и решение он выражает манифестом.
+    """
     merged = dict(DEFAULT_TOKENS)
     merged.update((profile.get("theme") or {}).get("tokens") or {})
+    profile_theme = str((profile.get("theme") or {}).get("name") or "")
+    if declared_theme and declared_theme != profile_theme:
+        surface = "light" if declared_theme.endswith("_light") else (
+            "dark" if declared_theme.endswith("_dark") else None)
+        if surface:
+            merged.update(SURFACE_PALETTES[surface])
     return merged
 
 
@@ -155,9 +278,9 @@ def layout_of(profile: dict) -> dict:
     return merged
 
 
-def _stylesheet_base(profile: dict) -> str:
+def _stylesheet_base(profile: dict, *, declared_theme: str | None = None) -> str:
     """Полная таблица стилей сайта. Один файл, без импортов и без внешних ссылок."""
-    t = tokens_of(profile)
+    t = tokens_of(profile, declared_theme=declared_theme)
     lay = layout_of(profile)
     d = DENSITY.get(str(lay.get("density")), DENSITY["comfortable"])
     cols = lay["columns"]
@@ -181,7 +304,39 @@ def _stylesheet_base(profile: dict) -> str:
   --card-pad: {d['card_pad']};
   --card-ratio: {lay['card_ratio']};
   --cols: {cols['mobile']};
+  --link: {readable_on(t['accent'], t['bg'])};
+  --h1: {t['h1_size']};
+  --h2: {t['h2_size']};
   --font: {t['heading_font']};
+  /* Без color-scheme браузер рисует свои полосы прокрутки и элементы
+     управления в чужой теме — страница выходит двухцветной. */
+  color-scheme: light dark;
+}}
+
+/* Явный выбор зрителя. Он идёт первым и побеждает системную настройку. */
+{_palette_block(':root[data-theme="dark"]', 'dark', accent=t['accent'])}
+{_palette_block(':root[data-theme="light"]', 'light', accent=t['accent'])}
+
+/* Системная настройка применяется только по просьбе зрителя — когда он выбрал
+   «как в системе». Это исправление, а не украшение.
+
+   Прежде оба правила стояли без условия на выбор, и системная настройка
+   перебивала палитру профиля всегда. Следствие измерено: витрины семейства
+   lords_dark отрисовывались со светлым полотном яркости 0,919 — ровно как
+   lords_light. Два семейства, объявленные разными, выглядели одинаково у
+   любого зрителя, чья система предпочитает светлую тему, и одинаково же (но
+   тёмными) у того, чья предпочитает тёмную. Требование владельца о явном
+   различии семейств не выполнялось ни при какой настройке.
+
+   Теперь умолчание витрины — палитра её профиля, и это её опознавательный
+   знак. «Как в системе» остаётся одним из трёх равноправных выборов, а не
+   молчаливым умолчанием. Поведение обратимо: `seo.theme_follows_system: true`
+   в пакете возвращает прежнее. */
+@media (prefers-color-scheme: dark) {{
+{_palette_block(':root[data-theme="system"]', 'dark', accent=t['accent'], indent='  ')}
+}}
+@media (prefers-color-scheme: light) {{
+{_palette_block(':root[data-theme="system"]', 'light', accent=t['accent'], indent='  ')}
 }}
 
 *, *::before, *::after {{ box-sizing: border-box; }}
@@ -198,8 +353,19 @@ body {{
   overflow-x: hidden;
 }}
 img, svg {{ max-width: 100%; height: auto; display: block; }}
-a {{ color: var(--accent); text-decoration: none; }}
+a {{ color: var(--link, var(--accent)); text-decoration: none; }}
 a:hover, a:focus-visible {{ text-decoration: underline; }}
+/* Ссылка внутри текста подчёркивается всегда, а не только под указателем.
+   Без подчёркивания она отличается от окружающего текста одним лишь цветом, а
+   это прямо запрещено критерием 1.4.1: зритель, не различающий цвета, ссылки
+   не видит вовсе. Поймано на боевых данных — на фикстуре таких абзацев не
+   было, и проверка молчала.
+   Навигация, фасеты и карточки под правило не подпадают намеренно: они
+   различимы положением и формой, а не цветом, и подчёркивание там только
+   зашумило бы список. */
+p a, dd a, .lede a, li > a:not([class]) {{ text-decoration: underline;
+  text-underline-offset: 0.2em; }}
+.site-nav a, .site-footer ul a, footer ul a {{ text-decoration: none; }}
 :focus-visible {{ outline: 2px solid var(--accent); outline-offset: 2px; }}
 h1, h2, h3 {{ line-height: 1.2; margin: 0 0 .5em; overflow-wrap: anywhere; }}
 /* H1 референса — 18px/600. Прежние 36px/700 съедали первый экран
@@ -207,13 +373,27 @@ h1, h2, h3 {{ line-height: 1.2; margin: 0 0 .5em; overflow-wrap: anywhere; }}
 /* Заголовки не растут вместе с окном: у референса кегль один и тот же
    на 390 и на 1920, а наш h1 доходил до 22px и делал страницу
    похожей на документ, а не на витрину. */
-h1 {{ font-size: 1.125rem; font-weight: 600; }}
-h2 {{ font-size: 1.05rem; font-weight: 600; }}
+h1 {{ font-size: var(--h1); font-weight: 600; }}
+h2 {{ font-size: var(--h2); font-weight: 600; }}
 p {{ margin: 0 0 1em; overflow-wrap: anywhere; }}
 .container {{ width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 16px; }}
 .visually-hidden {{
   position: absolute; width: 1px; height: 1px; margin: -1px;
   clip-path: inset(50%); overflow: hidden; white-space: nowrap;
+}}
+/* Ссылка «перейти к содержимому» обязана появляться при фокусе.
+   Она первая на пути клавиатуры, и до сих пор оставалась высотой в один
+   пиксель даже под фокусом: пользователь получал остановку, которой не видит,
+   и не понимал, куда попал и что нажимать. Обход клавиатурой это и показал —
+   цель высотой 1 px при минимуме 24 по критерию 2.5.8.
+   Правило написано на `:focus-visible`, а не на `:focus`: мышью её открывать
+   незачем, она нужна ровно тому, кто идёт клавишами. */
+a.visually-hidden:focus-visible {{
+  position: fixed; top: 8px; left: 8px; z-index: 100;
+  width: auto; height: auto; margin: 0; clip-path: none; overflow: visible;
+  padding: 10px 16px; min-height: 24px;
+  background: var(--accent); color: var(--accent-text);
+  border-radius: var(--radius); text-decoration: none;
 }}
 
 /* --- шапка ------------------------------------------------------------- */
@@ -302,7 +482,18 @@ main {{ padding: var(--pad) 0 40px; }}
   display: flex; flex-direction: column;
 }}
 .card:hover {{ border-color: var(--accent); }}
-.card__poster {{ position: relative; aspect-ratio: var(--card-ratio); background: var(--surface-alt); }}
+.card__poster {{ position: relative; aspect-ratio: var(--card-ratio); background: var(--surface-alt);
+  display: block; overflow: hidden; }}
+/* Заглушка постера. Лежит под изображением и видна только тогда, когда
+   изображения нет: постеры отдаёт внешний хост поставщика, и часть их не
+   приходит. Пустой серый прямоугольник читается как поломка, буква — как
+   намеренно занятое место. */
+.card__poster-empty {{ position: absolute; inset: 0; display: flex;
+  align-items: center; justify-content: center;
+  font-size: 2.2rem; font-weight: 700; color: var(--muted);
+  background: var(--surface-alt); }}
+.card__poster img {{ position: relative; width: 100%; height: 100%;
+  object-fit: cover; display: block; }}
 .card__poster img {{ width: 100%; height: 100%; object-fit: cover; }}
 /* Верхняя карусель.
 
@@ -329,9 +520,24 @@ main {{ padding: var(--pad) 0 40px; }}
 .rail__link:focus-visible {{ outline: 2px solid var(--accent); outline-offset: 3px; }}
 .rail__poster {{ position: relative; display: block; aspect-ratio: var(--card-ratio);
   background: var(--surface-alt); border-radius: var(--radius); overflow: hidden; }}
-.rail__poster img {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
-.rail__title {{ font-size: .86rem; line-height: 1.3; overflow: hidden;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }}
+.rail__poster img {{ position: relative; width: 100%; height: 100%;
+  object-fit: cover; display: block; }}
+/* Заглушка постера карусели. Лежит под изображением и видна, когда его нет. */
+.rail__poster-empty {{ position: absolute; inset: 0; display: flex;
+  align-items: center; justify-content: center;
+  font-size: 1.8rem; font-weight: 700; color: var(--muted);
+  background: var(--surface-alt); }}
+/* Названию позволено занять столько строк, сколько ему нужно.
+   Прежде здесь стоял зажим в две строки. При обычном размере шрифта он ничего
+   не резал, и потому выглядел безобидно, но зажим считает строки, а не текст:
+   при увеличении шрифта до 200 % в те же две строки помещается вдвое меньше
+   знаков, и часть названия, которую зритель только что видел, исчезает. Это
+   потеря содержимого от изменения размера текста — то самое, что запрещает
+   критерий 1.4.4.
+   Ряд от этого не разъезжается: постеры выровнены сверху, растёт только высота
+   строки заголовков, и то лишь когда шрифт увеличен. В сетке каталога
+   названия и так растут свободно — теперь ряды ведут себя так же. */
+.rail__title {{ font-size: .86rem; line-height: 1.3; overflow-wrap: anywhere; }}
 .rail__link:hover .rail__title {{ color: var(--accent); }}
 .rail__meta {{ color: var(--muted); font-size: .74rem; }}
 .rail__rating {{ position: absolute; left: 6px; bottom: 6px; display: inline-flex;
@@ -368,9 +574,15 @@ main {{ padding: var(--pad) 0 40px; }}
 
 /* Оценка на обложке: тёмная подложка под числом, чтобы оно читалось на любом
    кадре, а не только на тёмном. */
+/* Две оценки ведут себя как одна группа: позиционируется она, а не каждая
+   оценка по отдельности. Иначе абсолютно спозиционированные подписи легли бы
+   одна на другую в том же углу обложки. */
+.card__ratings {{ position: absolute; left: 6px; bottom: 6px; display: flex;
+  flex-wrap: wrap; gap: 4px; max-width: calc(100% - 12px); }}
 .card__rating {{ position: absolute; left: 6px; bottom: 6px; display: inline-flex;
   align-items: baseline; gap: 4px; padding: 2px 6px; border-radius: var(--radius);
   background: rgba(0, 0, 0, .78); }}
+.card__ratings .card__rating {{ position: static; left: auto; bottom: auto; }}
 .card__rating-source {{ color: #cfcfcf; font-size: .66rem; }}
 .card__rating-value {{ color: #fff; font-size: .78rem; font-weight: 600;
   font-variant-numeric: tabular-nums; }}
@@ -402,6 +614,43 @@ main {{ padding: var(--pad) 0 40px; }}
 }}
 .facets h2 {{ font-size: .95rem; margin: 0; grid-column: 1 / -1; }}
 .facets fieldset {{ border: 0; margin: 0; padding: 0; min-width: 0; }}
+/* Значения фасета — ссылки на разделы, а не пункты списка. Оформление
+   отличает их от текста: без него перечень читается как подпись, и по нему
+   никто не нажимает. Цель не меньше 24 px по высоте — критерий 2.5.8. */
+.facet__list {{ list-style: none; margin: 6px 0 0; padding: 0; display: flex;
+  flex-wrap: wrap; gap: 6px; }}
+.facet__chip, .facet__more {{ display: inline-flex; align-items: center;
+  min-height: 44px; padding: 8px 12px; border-radius: var(--radius);
+  background: var(--surface-alt); color: var(--text); text-decoration: none;
+  font-size: .82rem; line-height: 1.2; }}
+.facet__chip:hover, .facet__more:hover {{ background: var(--accent);
+  color: var(--accent-text); }}
+.facet__more {{ font-weight: 600; }}
+/* Разрыв в пагинации — не ссылка: он не должен выглядеть нажимаемым. */
+.pagination__gap {{ padding: 3px 6px; color: var(--muted); user-select: none; }}
+/* Выбор темы. Цели не меньше 44 px по высоте: критерий 2.5.5 и требование
+   задания. Нажатое состояние показано не только цветом — цвет один не
+   различает состояние для тех, кто его не видит. */
+.theme-switch {{ display: inline-flex; gap: 2px; margin-left: 8px;
+  border: 1px solid var(--border); border-radius: var(--radius); padding: 2px; }}
+.theme-switch button {{ min-height: 44px; min-width: 44px; padding: 4px 10px;
+  border: 0; border-radius: calc(var(--radius) - 2px); background: transparent;
+  color: var(--muted); font: inherit; font-size: .78rem; cursor: pointer; }}
+.theme-switch button[aria-pressed="true"] {{ background: var(--accent);
+  color: var(--accent-text); font-weight: 700; }}
+.theme-switch button:hover {{ color: var(--text); }}
+/* Кадр плеера резервирует место до подключения: иначе включение сдвинет всю
+   раскладку. Размер задан пропорцией, а не высотой в пикселях. */
+.player__frame {{ position: relative; aspect-ratio: 16 / 9; width: 100%;
+  background: var(--surface-alt); border-radius: var(--radius);
+  display: flex; align-items: center; justify-content: center; }}
+.player__frame video-player {{ display: block; width: 100%; height: 100%; }}
+/* Запасной текст читается тогда, когда его показали. Прежде он был скрыт
+   всегда, и на его месте зритель видел пустой прямоугольник. */
+.player__fallback {{ margin: 0; padding: 16px 20px; max-width: 46ch;
+  text-align: center; color: var(--text); font-size: .95rem; line-height: 1.5; }}
+.player__frame[data-player-state="unavailable"],
+.player__frame[data-player-state="error"] {{ background: var(--surface); }}
 .facets legend {{ font-size: .78rem; color: var(--muted); padding: 0 0 4px; }}
 .facets select, .facets input {{
   width: 100%; padding: 7px 10px; font: inherit;
@@ -556,10 +805,16 @@ main {{ padding: var(--pad) 0 40px; }}
 """
 
 
-def stylesheet(profile: dict) -> str:
+def stylesheet(profile: dict, *, declared_theme: str | None = None) -> str:
     """Таблица стилей витрины вместе с правилами второй палитры.
 
     Вторая палитра приклеивается в конец, а не подмешивается в `:root`: правила
     ниже по файлу перекрывают верхние, и порядок здесь — часть смысла.
+
+    `declared_theme` проходит насквозь: объявленная в манифесте тема сдвигает
+    поверхность палитры, и разделение функции на базовую и публичную этого
+    менять не должно. Слияние двух линий здесь и состояло в том, чтобы не
+    выбирать между разделением и параметром — обе правки нужны.
     """
-    return _stylesheet_base(profile) + alt_blocks(profile)
+    return (_stylesheet_base(profile, declared_theme=declared_theme)
+            + alt_blocks(profile))

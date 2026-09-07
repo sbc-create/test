@@ -1,0 +1,215 @@
+{
+  "artifact": "TEMPLATE_PRODUCT_READINESS",
+  "average_product": 87,
+  "average_product_measured": [
+    "animedia-portal",
+    "basis-video",
+    "zona-cinema"
+  ],
+  "average_integration": 64,
+  "generated_at_utc": "2026-09-07T16:56:41.407277+00:00",
+  "rubric": {
+    "package": "готовность пакета",
+    "data": "данные",
+    "functional": "поиск, фильтры, навигация",
+    "visual": "визуальная законченность",
+    "responsive": "адаптивность и доступность",
+    "preview": "предпросмотр",
+    "adapter": "адаптер админки",
+    "live": "приёмка боевой витрины"
+  },
+  "product_dimensions": [
+    "package",
+    "data",
+    "functional",
+    "visual",
+    "responsive"
+  ],
+  "integration_dimensions": [
+    "preview",
+    "adapter"
+  ],
+  "measured_products": 3,
+  "max_per_dimension": 10,
+  "products": {
+    "zona-cinema": {
+      "package": "zona-cinema-preview",
+      "dimensions": {
+        "package": {
+          "points": 4,
+          "note": "validate exit 2: [warn] network_allowlist пуст: сеть в режиме CLOSED_WORLD будет полностью запрещена для эт"
+        },
+        "data": {
+          "points": 10,
+          "note": "4000 записей боевого снимка, обогащено 12021; снимок витрины lords-02"
+        },
+        "functional": {
+          "points": 10,
+          "note": "6 проверок: поиск, фильтры, навигация, пагинация"
+        },
+        "visual": {
+          "points": 10,
+          "note": "5 поверхностей на трёх ширинах, замечаний нет"
+        },
+        "responsive": {
+          "points": 10,
+          "note": "15 прогонов axe WCAG 2.2 AA без нарушений"
+        },
+        "preview": {
+          "points": 9,
+          "note": "1337 страниц собрано и готово к выкладке; локальная витрина в приёмку не входит"
+        },
+        "adapter": {
+          "points": 7,
+          "note": "контракт объявлен (site-admin/1.0.0); потребление на этой витрине не проверено"
+        },
+        "live": {
+          "points": 0,
+          "note": "PENDING_DNS: https://zonafilm.space — имя ещё не разошлось, отказом не считается"
+        }
+      },
+      "package_readiness": 86,
+      "preview_acceptance": 90,
+      "live_acceptance": null,
+      "live_state": "PENDING_DNS",
+      "total": 75,
+      "product_readiness": 88,
+      "integration_readiness": 80
+    },
+    "animedia-portal": {
+      "package": "animedia-preview",
+      "dimensions": {
+        "package": {
+          "points": 4,
+          "note": "validate exit 2: [warn] network_allowlist пуст: сеть в режиме CLOSED_WORLD будет полностью запрещена для эт"
+        },
+        "data": {
+          "points": 10,
+          "note": "4000 записей боевого снимка, обогащено 12021; снимок витрины lords-02"
+        },
+        "functional": {
+          "points": 10,
+          "note": "6 проверок: поиск, фильтры, навигация, пагинация"
+        },
+        "visual": {
+          "points": 10,
+          "note": "5 поверхностей на трёх ширинах, замечаний нет"
+        },
+        "responsive": {
+          "points": 10,
+          "note": "15 прогонов axe WCAG 2.2 AA без нарушений"
+        },
+        "preview": {
+          "points": 9,
+          "note": "1396 страниц собрано и готово к выкладке; локальная витрина в приёмку не входит"
+        },
+        "adapter": {
+          "points": 7,
+          "note": "контракт объявлен (site-admin/1.0.0); потребление на этой витрине не проверено"
+        },
+        "live": {
+          "points": 0,
+          "note": "PENDING_DNS: https://animedia.icu — имя ещё не разошлось, отказом не считается"
+        }
+      },
+      "package_readiness": 86,
+      "preview_acceptance": 90,
+      "live_acceptance": null,
+      "live_state": "PENDING_DNS",
+      "total": 75,
+      "product_readiness": 88,
+      "integration_readiness": 80
+    },
+    "basis-video": {
+      "package": "pilot-local",
+      "dimensions": {
+        "package": {
+          "points": 10,
+          "note": "схема и семантика: exit 0"
+        },
+        "data": {
+          "points": 3,
+          "note": "синтетический набор: боевыми данными не является"
+        },
+        "functional": {
+          "points": 10,
+          "note": "2 проверок: поиск, фильтры, навигация, пагинация; отдельный набор поиска — 2 сценариев"
+        },
+        "visual": {
+          "points": 10,
+          "note": "6 поверхностей на трёх ширинах, замечаний нет"
+        },
+        "responsive": {
+          "points": 10,
+          "note": "15 прогонов axe WCAG 2.2 AA без нарушений"
+        },
+        "preview": {
+          "points": 9,
+          "note": "48 страниц собрано и готово к выкладке; локальная витрина в приёмку не входит"
+        },
+        "adapter": {
+          "points": 7,
+          "note": "контракт объявлен (site-admin/1.0.0); потребление на этой витрине не проверено"
+        },
+        "live": {
+          "points": 0,
+          "note": "BLOCKED_OWNER_URLS: адрес для приёмки не передан владельцем"
+        }
+      },
+      "package_readiness": 84,
+      "preview_acceptance": 90,
+      "live_acceptance": null,
+      "live_state": "BLOCKED_OWNER_URLS",
+      "total": 74,
+      "product_readiness": 86,
+      "integration_readiness": 80
+    },
+    "yummy": {
+      "package": "—",
+      "dimensions": {
+        "package": {
+          "points": 0,
+          "note": "BLOCKED: пакета в этой фабрике нет — приложение в другом репозитории"
+        },
+        "data": {
+          "points": 0,
+          "note": "предпросмотр не собран, данные не наблюдались"
+        },
+        "functional": {
+          "points": 0,
+          "note": "работа поиска и фильтров не проверялась"
+        },
+        "visual": {
+          "points": 0,
+          "note": "снимки не сняты"
+        },
+        "responsive": {
+          "points": 0,
+          "note": "доступность и адаптивность не проверялись"
+        },
+        "preview": {
+          "points": 0,
+          "note": "предпросмотр не собран"
+        },
+        "adapter": {
+          "points": 3,
+          "note": "yummy-app/1.0.0: выполнено 4 требований из 8; заблокировано build_gate, working_branch, domains, package"
+        },
+        "live": {
+          "points": 0,
+          "note": "BLOCKED_OWNER_URLS: адрес для приёмки не передан владельцем"
+        }
+      },
+      "package_readiness": 4,
+      "preview_acceptance": 0,
+      "live_acceptance": null,
+      "live_state": "BLOCKED_OWNER_URLS",
+      "total": 4,
+      "product_readiness": null,
+      "product_note": "не измерено этой полосой: приложение вне фабрики, боевые адреса закрыты профилем разрешений, чужая активная ветка не запускается. Известно от ARCHITECT_CORE: ревизия 4460031, три витрины, health healthy на 2026-09-04. Прочитано: 41 маршрут, 66 модульных тестов, 13 браузерных спеков",
+      "integration_readiness": 15
+    }
+  },
+  "average": 57,
+  "note": "Приёмка боевой витрины не выводится из готовности пакета и предпросмотра. Фикстура, localhost и стенд в неё не входят."
+}

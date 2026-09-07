@@ -192,12 +192,7 @@ def build_live_site(
         package, catalog=catalog, environ={}, publisher_id=publisher)
 
     directory = Path(output) if output else PATHS.artifact_dir("lords", "live", site_id)
-    directory.mkdir(parents=True, exist_ok=True)
-    for existing in sorted(directory.rglob("*"), reverse=True):
-        if existing.is_file():
-            existing.unlink()
-        elif existing.is_dir():
-            existing.rmdir()
+    serve_mod.clear_directory(directory)
     export = serve_mod.export(site, directory)
 
     report = dict(site.report)

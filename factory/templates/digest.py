@@ -30,6 +30,25 @@ TEMPLATE_SOURCES: tuple[str, ...] = (
     "factory/lords/theme.py",
     "factory/lords/player.py",
     "factory/lords/pagination.py",
+    # Ниже — то, чего в отпечатке не было, хотя страницы собираются и из них.
+    # Обнаружено на живом примере: правка `Catalog.years()` сняла со всех
+    # витрин раздел `/years/0/`, а отпечаток не сдвинулся ни на бит и версия
+    # осталась прежней. Предполётная проверка canary сверяет отпечаток —
+    # значит, приняла бы другую сборку за ту же самую.
+    #
+    # Состав измерен, а не выбран: `tests/unit/test_template_digest_covers_renderer.py`
+    # собирает страницы в чистом интерпретаторе и требует, чтобы каждый
+    # понадобившийся модуль был здесь. Появится новый — проверка скажет.
+    "factory/lords/fixtures.py",
+    "factory/lords/live_catalog.py",
+    "factory/lords/content_types.py",
+    "factory/lords/recommend.py",
+    "factory/lords/icons.py",
+    "factory/lords/plan.py",
+    # `serve` в сборке страниц не участвует и замером не ловится, но пишет
+    # дерево выкладки: его поведение — часть артефакта. Именно здесь жила
+    # выгрузка, оставлявшая снятые страницы доступными по прежним адресам.
+    "factory/lords/serve.py",
     "factory/templates",
     "schemas/template-manifest.schema.json",
     "tests/e2e-lords/visual-baseline.json",

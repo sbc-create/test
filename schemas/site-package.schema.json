@@ -1320,8 +1320,10 @@
             "lords-general",
             "lords-new",
             "lords-curated",
-            "lords-genre"
-          ]
+            "lords-genre",
+          "zona-cinema",
+          "animedia-portal"
+]
         },
         "theme": {
           "enum": [
@@ -1329,8 +1331,10 @@
             "pulse",
             "editorial",
             "lords_dark",
-            "lords_light"
-          ]
+            "lords_light",
+          "zona_light",
+          "animedia_night"
+]
         },
         "indexing_enabled": {
           "type": "boolean",
@@ -1643,6 +1647,34 @@
             "type": "string",
             "minLength": 1
           }
+        }
+      }
+    },
+    "admin": {
+      "type": "object",
+      "description": "Контракт админки, который потребляет слой шаблонов. Движок админки принадлежит другой полосе и в шаблоны не копируется; здесь объявлено только то, под какую версию контракта написано потребление и какие поверхности оператор вправе править. Объявление нужно затем, что манифест — первый источник истины: несовпадение версии обязано быть видно из пакета, а не выясняться на витрине пропавшим текстом.",
+      "additionalProperties": false,
+      "required": [
+        "contract"
+      ],
+      "properties": {
+        "contract": {
+          "type": "string",
+          "pattern": "^site-admin/\\d+\\.\\d+\\.\\d+$",
+          "description": "Версия контракта, под которую написано потребление."
+        },
+        "editable_surfaces": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "settings",
+              "navigation",
+              "content"
+            ]
+          },
+          "uniqueItems": true,
+          "description": "Что оператор правит через админку на этой витрине."
         }
       }
     }

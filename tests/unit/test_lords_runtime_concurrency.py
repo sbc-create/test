@@ -330,4 +330,10 @@ class TestRuntimeSource:
 
     def test_the_shipped_runtime_compiles(self):
         """Пакет запускает системный python3, а не интерпретатор тестов."""
-        compile(bundle_mod.RUNTIME, "serve.py", "exec")
+        код = compile(bundle_mod.RUNTIME, "serve.py", "exec")
+        # Сборка — половина проверки: пустой текст компилируется тоже. Имена
+        # берутся из самого рантайма, а не выписываются: выписанный список
+        # разошёлся бы с ним ровно так же, как расходятся любые два перечня.
+        имена = {c.co_name for c in код.co_consts if hasattr(c, "co_name")}
+        assert "normalize" in имена, (
+            f"в собранном рантайме нет нормализации адресов: {sorted(имена)}")

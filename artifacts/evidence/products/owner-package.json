@@ -1,0 +1,134 @@
+{
+  "artifact": "OWNER_PREVIEW_PACKAGE",
+  "generated_at_utc": "2026-09-07T10:35:21.186226+00:00",
+  "host": {
+    "hostname": "claude-control-01",
+    "address": "45.131.182.225",
+    "user": "claude",
+    "worktree": "/home/claude/wt-templates-23",
+    "python": "/home/claude/wt-templates-23/.venv/bin/python",
+    "listen": "только 127.0.0.1 — наружу стенд не смотрит"
+  },
+  "index": "http://127.0.0.1:8902",
+  "tunnel": "ssh -N -L 8902:127.0.0.1:8902 -L 8903:127.0.0.1:8903 -L 8904:127.0.0.1:8904 -L 8905:127.0.0.1:8905 claude@45.131.182.225",
+  "start": "cd /home/claude/wt-templates-23 && /home/claude/wt-templates-23/.venv/bin/python scripts/product_preview_stand.py",
+  "status": "cd /home/claude/wt-templates-23 && /home/claude/wt-templates-23/.venv/bin/python scripts/product_preview_stand.py --status",
+  "stop": "cd /home/claude/wt-templates-23 && /home/claude/wt-templates-23/.venv/bin/python scripts/product_preview_stand.py --stop",
+  "not_production": "Это предпросмотр. Ни одна из витрин не выложена: у них нет боевого домена, окружения и разрешения владельца. Приёмкой витрины предпросмотр не является.",
+  "products": {
+    "zona-cinema": {
+      "url": "http://127.0.0.1:8903/",
+      "pages": [
+        {
+          "path": "/",
+          "look_for": "первый экран, карусель «Сейчас смотрят», полные ряды без пустых мест"
+        },
+        {
+          "path": "/catalog/",
+          "look_for": "24 карточки, фасеты сбоку, пагинация"
+        },
+        {
+          "path": "/genres/drama/",
+          "look_for": "выбор жанра меняет состав выдачи, адрес запоминает выбор"
+        },
+        {
+          "path": "/search/",
+          "look_for": "поиск по названию на полном каталоге"
+        },
+        {
+          "path": "/404.html",
+          "look_for": "страница «не найдено» с путём назад"
+        }
+      ],
+      "screenshots_dir": "artifacts/evidence/products/zona-cinema/screenshots",
+      "screenshots": 15,
+      "documents": 1355,
+      "checks_passed": 6,
+      "checks_not_applicable": 0,
+      "checks_failed": 0,
+      "axe_runs": 15,
+      "axe_violations": 0,
+      "readiness": 75,
+      "limits": [
+        "постеры отдаёт внешний хост поставщика; часть их в этой обстановке не загружается, и на их месте видна заглушка с буквой — на боевом домене они придут",
+        "каталог предпросмотра — срез в 4 000 записей из 53 251: полная сборка занимает часы и на облик не влияет"
+      ]
+    },
+    "animedia-portal": {
+      "url": "http://127.0.0.1:8904/",
+      "pages": [
+        {
+          "path": "/",
+          "look_for": "первый экран с поиском, «Продолжающиеся истории», сезоны в каталоге"
+        },
+        {
+          "path": "/anime/",
+          "look_for": "раздел аниме — 507 записей боевого каталога"
+        },
+        {
+          "path": "/catalog/",
+          "look_for": "плотная сетка в шесть колонок"
+        },
+        {
+          "path": "/search/",
+          "look_for": "поиск по названию"
+        },
+        {
+          "path": "/404.html",
+          "look_for": "страница «не найдено»"
+        }
+      ],
+      "screenshots_dir": "artifacts/evidence/products/animedia-portal/screenshots",
+      "screenshots": 15,
+      "documents": 1415,
+      "checks_passed": 6,
+      "checks_not_applicable": 0,
+      "checks_failed": 0,
+      "axe_runs": 15,
+      "axe_violations": 0,
+      "readiness": 75,
+      "limits": [
+        "постеры отдаёт внешний хост поставщика — см. выше",
+        "каталог предпросмотра — срез в 4 000 записей из 53 251"
+      ]
+    },
+    "basis-video": {
+      "url": "http://127.0.0.1:8905/",
+      "pages": [
+        {
+          "path": "/",
+          "look_for": "первый экран, разделы рядами, «Все материалы» рядом с заголовком"
+        },
+        {
+          "path": "/lekcii/",
+          "look_for": "листинг с пагинацией и кнопкой «Показать ещё»"
+        },
+        {
+          "path": "/collections/izbrannoe/",
+          "look_for": "подборка"
+        },
+        {
+          "path": "/news/",
+          "look_for": "новости"
+        },
+        {
+          "path": "/search/",
+          "look_for": "поиск по 28 материалам: опечатка, чужая раскладка и «ё» находят"
+        }
+      ],
+      "screenshots_dir": "artifacts/evidence/products/basis-video/screenshots",
+      "screenshots": 18,
+      "documents": 48,
+      "checks_passed": 2,
+      "checks_not_applicable": 0,
+      "checks_failed": 0,
+      "axe_runs": 15,
+      "axe_violations": 0,
+      "readiness": 74,
+      "limits": [
+        "всё содержимое — синтетический набор «Фикстура: материал NN»: настоящие материалы требуют источника, прав и решения владельца",
+        "поиск работает по указателю на странице: где движок отвечает сам, он и отвечает, скрипт туда не вмешивается"
+      ]
+    }
+  }
+}

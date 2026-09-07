@@ -11,6 +11,8 @@
 
 from __future__ import annotations
 
+import shutil
+from pathlib import Path
 import json
 from dataclasses import dataclass
 from urllib.parse import unquote
@@ -143,10 +145,30 @@ class Application:
         return [response.body]
 
 
+def clear_directory(directory) -> None:
+    """Опустошает каталог выгрузки, оставляя сам каталог.
+
+    Выгрузка добавляет файлы и никогда не удаляет: страница, которую сайт
+    перестал отдавать, остаётся лежать и отвечает как ни в чём не бывало. Так и
+    вышло с разделом `/years/0/` — указатель на него ссылаться перестал, а
+    страница со старым заголовком открывалась по прямой ссылке ещё три часа.
+
+    Идиома была скопирована дословно в две точки вызова из четырёх, и в
+    забытых двух ошибка и жила. Поэтому она здесь одна и названа.
+
+    Обход снятым вручную не делается намеренно: он шёл по `rglob` и `is_dir`,
+    а обе функции идут по символическим ссылкам — очистка каталога со ссылкой
+    наружу вычистила бы и то, что снаружи. `rmtree` ссылку удаляет как запись
+    и за неё не заходит.
+    """
+    root = Path(directory)
+    if root.is_dir():
+        shutil.rmtree(root)
+    root.mkdir(parents=True, exist_ok=True)
+
+
 def export(site: RenderedSite, directory) -> dict:
     """Выгружает собранный сайт в каталог. Используется сборкой пакета стенда."""
-    from pathlib import Path
-
     root = Path(directory)
     written = []
     for path, page in sorted(site.pages.items()):
@@ -157,6 +179,11 @@ def export(site: RenderedSite, directory) -> dict:
         target.write_bytes(page.payload)
         written.append(str(target.relative_to(root)))
     if site.not_found is not None:
-        (root / "404.html").write_text(site.not_found.body, encoding="utf-8")
+        # Байтами, как и все прочие страницы. Текстовый режим здесь делал две
+        # тихие вещи: переводил переносы строк по правилам платформы — то есть
+        # артефакт при тех же входах вышел бы другим на другой системе — и
+        # писал `body` вместо `payload`, а `body` при заданном `raw` является
+        # человекочитаемым описанием, а не содержимым.
+        (root / "404.html").write_bytes(site.not_found.payload)
         written.append("404.html")
     return {"root": str(root), "files": sorted(written)}

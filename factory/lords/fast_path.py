@@ -97,9 +97,13 @@ class _NoNetwork:
         raise RuntimeError(f"быстрый путь не ходит к провайдеру: {name}")
 
 
+#: Поле отчёта, в котором сборка называет несостоявшиеся улучшения.
+DEGRADED_KEY = "degraded"
+
+
 def _apply_cached_enrichment(
     entries: list[dict], site_id: str, var_root: Path | None = None
-) -> list[dict]:
+) -> tuple[list[dict], list[dict]]:
     """Накладывает уже сохранённые detail-данные и признак воспроизводимости.
 
     Без этого шага страницы выходят беднее релиза: пропадают жанровые фильтры и
@@ -108,17 +112,29 @@ def _apply_cached_enrichment(
 
     Бюджет нулевой: ни одного сетевого запроса. Загрузчик заведомо неработающий,
     поэтому выход в сеть невозможен незаметно.
+
+    Возвращает записи и перечень несостоявшихся улучшений. Оба шага — улучшения,
+    а не условия: их отказ не роняет сборку. Но «не ронять» и «не сообщать» —
+    разные вещи, а раньше они были одним: оба `except` заканчивались `pass`.
+
+    Цена этой тишины известна. Признак воспроизводимости управляет верхней
+    каруселью, и при рассогласовании `playable is None` полка исчезала со всех
+    витрин разом. Сборка сообщала об успехе, страницы выходили беднее релиза, и
+    отличить «данных не было» от «шаг упал» было нельзя ничем.
     """
+    degraded: list[dict] = []
+    base_var = Path(var_root) if var_root else PATHS.root / "var"
     try:
-        base_var = Path(var_root) if var_root else PATHS.root / "var"
         cache = detail_enrichment.DetailCache(detail_enrichment.cache_dir(base_var))
         entries, _ = detail_enrichment.enrich_items(
             entries, fetcher=_NoNetwork(), contract=None, cache=cache, budget=0
         )
-    except Exception:  # noqa: BLE001
-        # Обогащение — улучшение, а не условие. Если кэша нет, страницы будут
-        # беднее, и это видно по сличению, а не молча.
-        pass
+    except Exception as error:  # noqa: BLE001 — улучшение, а не условие сборки
+        degraded.append({
+            "stage": "detail_enrichment",
+            "error": f"{type(error).__name__}: {error}"[:300],
+            "effect": "страницы беднее релиза: пропадают жанровые фильтры и полки",
+        })
     try:
         publisher = live_site.publisher_id_for(site_id)
         if publisher:
@@ -127,12 +143,16 @@ def _apply_cached_enrichment(
                 str(publisher),
                 budget=0,
                 cache=playability_mod.PlayabilityCache(
-                    (Path(var_root) if var_root else PATHS.root / "var") / "lords" / "playability.json"
+                    base_var / "lords" / "playability.json"
                 ),
             )
-    except Exception:  # noqa: BLE001
-        pass
-    return entries
+    except Exception as error:  # noqa: BLE001 — улучшение, а не условие сборки
+        degraded.append({
+            "stage": "playability",
+            "error": f"{type(error).__name__}: {error}"[:300],
+            "effect": "верхняя карусель исчезает: при playable is None полка не строится",
+        })
+    return entries, degraded
 
 
 def _relative_for(path: str) -> str:
@@ -163,7 +183,7 @@ def render_from_cache(
     """
     started = time.monotonic()
     entries = live_site.load_live_items(site_id, root=cache_root)
-    entries = _apply_cached_enrichment(entries, site_id, var_root)
+    entries, degraded = _apply_cached_enrichment(entries, site_id, var_root)
     catalog = live_catalog.catalog_from_live(entries)
     seconds_catalog = time.monotonic() - started
 
@@ -177,6 +197,9 @@ def render_from_cache(
         only_title_slugs=only_title_slugs,
         sink=sink,
     )
+    # След доходит до отчёта: список, никуда не попавший, — та же тишина,
+    # только дороже.
+    site.report[DEGRADED_KEY] = degraded
     return site, seconds_catalog, time.monotonic() - started
 
 

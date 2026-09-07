@@ -1,0 +1,175 @@
+{
+  "captured_at_utc": "2026-09-07T09:00:31.779Z",
+  "note": "Цвет в признаки не входит: перекрасить тему не значит сделать новый продукт.",
+  "threshold": 6,
+  "signals": [
+    "typography.body",
+    "typography.h1",
+    "typography.scale",
+    "density.container",
+    "density.gap",
+    "density.flow",
+    "card.ratio",
+    "card.radius",
+    "composition.sections",
+    "composition.navLinks",
+    "composition.headerHeight",
+    "composition.hasRail"
+  ],
+  "metrics": {
+    "zona-cinema": {
+      "typography": {
+        "body": 14,
+        "lineHeight": 21.7,
+        "h1": 28,
+        "h2": 20.8,
+        "scale": 1.35
+      },
+      "density": {
+        "container": 1440,
+        "gap": 28,
+        "flow": "row",
+        "columns": 5
+      },
+      "card": {
+        "ratio": 0.67,
+        "radius": 8
+      },
+      "composition": {
+        "sections": 7,
+        "navLinks": 12,
+        "headerHeight": 110,
+        "hasHero": true,
+        "hasRail": true,
+        "hasSearchInHeader": true,
+        "documentHeight": 4278
+      },
+      "canvas": "rgb(244, 244, 245)"
+    },
+    "animedia-portal": {
+      "typography": {
+        "body": 14,
+        "lineHeight": 21.7,
+        "h1": 22.4,
+        "h2": 18.4,
+        "scale": 1.22
+      },
+      "density": {
+        "container": 1440,
+        "gap": 14,
+        "flow": "row",
+        "columns": 6
+      },
+      "card": {
+        "ratio": 0.67,
+        "radius": 6
+      },
+      "composition": {
+        "sections": 5,
+        "navLinks": 13,
+        "headerHeight": 61,
+        "hasHero": true,
+        "hasRail": false,
+        "hasSearchInHeader": false,
+        "documentHeight": 2935
+      },
+      "canvas": "rgb(15, 20, 25)"
+    },
+    "basis-video": {
+      "typography": {
+        "body": 16,
+        "lineHeight": 24.8,
+        "h1": 34,
+        "h2": 24,
+        "scale": 1.42
+      },
+      "density": {
+        "container": 1180,
+        "gap": 20,
+        "flow": "column",
+        "columns": 6
+      },
+      "card": {
+        "ratio": 1.78,
+        "radius": 10
+      },
+      "composition": {
+        "sections": 4,
+        "navLinks": 4,
+        "headerHeight": 66,
+        "hasHero": true,
+        "hasRail": true,
+        "hasSearchInHeader": true,
+        "documentHeight": 1263
+      },
+      "canvas": "rgb(255, 255, 255)"
+    }
+  },
+  "pairs": [
+    {
+      "pair": [
+        "zona-cinema",
+        "animedia-portal"
+      ],
+      "differing": [
+        "typography.h1: 28 / 22.4",
+        "typography.scale: 1.35 / 1.22",
+        "density.gap: 28 / 14",
+        "card.radius: 8 / 6",
+        "composition.sections: 7 / 5",
+        "composition.navLinks: 12 / 13",
+        "composition.headerHeight: 110 / 61",
+        "composition.hasRail: true / false"
+      ],
+      "same": [
+        "typography.body: 14 / 14",
+        "density.container: 1440 / 1440",
+        "density.flow: row / row",
+        "card.ratio: 0.67 / 0.67"
+      ]
+    },
+    {
+      "pair": [
+        "zona-cinema",
+        "basis-video"
+      ],
+      "differing": [
+        "typography.body: 14 / 16",
+        "typography.h1: 28 / 34",
+        "typography.scale: 1.35 / 1.42",
+        "density.container: 1440 / 1180",
+        "density.gap: 28 / 20",
+        "density.flow: row / column",
+        "card.ratio: 0.67 / 1.78",
+        "card.radius: 8 / 10",
+        "composition.sections: 7 / 4",
+        "composition.navLinks: 12 / 4",
+        "composition.headerHeight: 110 / 66"
+      ],
+      "same": [
+        "composition.hasRail: true / true"
+      ]
+    },
+    {
+      "pair": [
+        "animedia-portal",
+        "basis-video"
+      ],
+      "differing": [
+        "typography.body: 14 / 16",
+        "typography.h1: 22.4 / 34",
+        "typography.scale: 1.22 / 1.42",
+        "density.container: 1440 / 1180",
+        "density.gap: 14 / 20",
+        "density.flow: row / column",
+        "card.ratio: 0.67 / 1.78",
+        "card.radius: 6 / 10",
+        "composition.sections: 5 / 4",
+        "composition.navLinks: 13 / 4",
+        "composition.headerHeight: 61 / 66",
+        "composition.hasRail: false / true"
+      ],
+      "same": []
+    }
+  ]
+}

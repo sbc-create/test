@@ -22,27 +22,21 @@ from __future__ import annotations
 import argparse
 import json
 import re
-import urllib.error
-import urllib.parse
-import urllib.request
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+# Чтение страниц стенда — общая реализация: две дословные копии расходились бы
+# молча, и разные отчёты об одном стенде читались бы как разница витрин.
+from stand_probe import fetch  # noqa: E402
+
 OUT_DIR = ROOT / "artifacts" / "evidence" / "release"
 PORTS = {"lords-01": 9101, "lords-02": 9102, "lords-03": 9103}
 FINGERPRINTS = Path("/srv/site-factory/repo/var/lords/fingerprints")
 TITLE_RE = re.compile(r'href="(/title/[^"]+)"')
-
-
-def fetch(base: str, path: str) -> tuple[int | None, str]:
-    try:
-        with urllib.request.urlopen(base + urllib.parse.quote(path), timeout=30) as r:
-            return r.status, r.read().decode("utf-8", "replace")
-    except urllib.error.HTTPError as e:
-        return e.code, e.read().decode("utf-8", "replace")
-    except (urllib.error.URLError, OSError) as e:
-        return None, str(e)[:160]
 
 
 def snapshot(site: str) -> dict:

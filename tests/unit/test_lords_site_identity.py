@@ -123,6 +123,18 @@ class TestSitemapStatesTheRealReason:
     def test_the_document_is_well_formed_in_every_case(self):
         from xml.etree import ElementTree
 
-        for ctx in (self._ctx("example.test", True), self._ctx("example.test", False),
-                    self._ctx("", False)):
-            ElementTree.fromstring(render._sitemap(ctx, ["/"]).body)
+        # Разбор — половина проверки: он падает на сломанном документе, но
+        # молчит о пустом, а карта из нуля адресов разбирается прекрасно.
+        #
+        # Запретить пустоту нельзя: при выключенной индексации и без домена
+        # пустая карта — верное поведение, и соседние проверки требуют, чтобы
+        # причина была в ней названа. Проверяется поэтому связь: адреса есть
+        # ровно тогда, когда ворота открыты и домен передан.
+        for ctx, ждём_адреса in ((self._ctx("example.test", True), True),
+                                 (self._ctx("example.test", False), False),
+                                 (self._ctx("", False), False)):
+            корень = ElementTree.fromstring(render._sitemap(ctx, ["/"]).body)
+            assert корень.tag.endswith("urlset"), корень.tag
+            assert bool(len(корень)) is ждём_адреса, (
+                f"домен {ctx['domain']!r}, индексация {ctx['indexing_enabled']}: "
+                f"адресов {len(корень)}, ожидалось {'непусто' if ждём_адреса else 'пусто'}")

@@ -9,8 +9,11 @@ export const Breadcrumbs = ({ crumbs, origin }: { crumbs: Crumb[]; origin: strin
   if (crumbs.length === 0) return null
   return (
     <>
-      <nav aria-label="Хлебные крошки">
-        <ol className="row" style={{ listStyle: 'none', padding: 0, margin: '0 0 1rem', gap: '0.5rem' }}>
+      {/* Класс, а не только `aria-label`: встроенный стиль семейство переопределить
+          не может, и оформление крошек оказывалось одинаковым во всех трёх — при
+          том, что плотность и типографика у них разные по замыслу. */}
+      <nav className="breadcrumbs" aria-label="Хлебные крошки">
+        <ol className="breadcrumbs__list">
           {crumbs.map((crumb, index) => (
             <li key={crumb.href}>
               {index < crumbs.length - 1 ? <Link href={crumb.href}>{crumb.title}</Link> : <span>{crumb.title}</span>}

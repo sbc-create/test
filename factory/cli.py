@@ -468,14 +468,35 @@ def cmd_template_audit(args) -> int:
     import json as _json
 
     from factory.templates.audit import audit_site, render_table, report
+    from factory.templates.rubric import KEY_PAGE_SETS
 
-    root = PATHS.root / "artifacts" / "lords" / "preview"
-    sites = [args.site] if getattr(args, "site", None) else sorted(
-        d.name for d in root.iterdir() if d.is_dir()) if root.is_dir() else []
-    if not sites:
-        print("стенд не собран: сначала python3 -m factory lords-preview")
+    pages = getattr(args, "pages", None) or "lords"
+    if pages not in KEY_PAGE_SETS:
+        print(f"неизвестный набор страниц «{pages}»: "
+              f"{', '.join(sorted(KEY_PAGE_SETS))}")
         return EXIT_FAILED
-    scores = [audit_site(root / site, site) for site in sites]
+    expectations = KEY_PAGE_SETS[pages]
+
+    # Корень сборки задаётся явно затем, что стенд направления и сборка пакета
+    # лежат в разных местах: artifacts/lords/preview против var/build/<site>.
+    # Прежде корень был один, и оценка чужой сборки давала «документ не собран»
+    # по всем критериям — отчёт о ненайденных файлах, а не о качестве.
+    if getattr(args, "root", None):
+        root = Path(args.root)
+        if not root.is_dir():
+            print(f"каталог сборки не найден: {root}")
+            return EXIT_FAILED
+        site = args.site or root.name
+        scores = [audit_site(root, site, expectations=expectations)]
+    else:
+        root = PATHS.root / "artifacts" / "lords" / "preview"
+        sites = [args.site] if getattr(args, "site", None) else sorted(
+            d.name for d in root.iterdir() if d.is_dir()) if root.is_dir() else []
+        if not sites:
+            print("стенд не собран: сначала python3 -m factory lords-preview")
+            return EXIT_FAILED
+        scores = [audit_site(root / site, site, expectations=expectations)
+                  for site in sites]
     summary = report(scores, threshold=args.threshold)
     if args.output:
         Path(args.output).write_text(
@@ -1009,6 +1030,10 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--threshold", type=float, default=8.0,
                    help="порог по худшей странице (по умолчанию 8.0)")
     p.add_argument("--output", help="куда записать машиночитаемый отчёт")
+    p.add_argument("--pages", default="lords",
+                   help="набор ключевых страниц: lords, yummy, basis-video")
+    p.add_argument("--root", help="каталог собранного сайта (public/); "
+                                  "без него — стенд artifacts/lords/preview")
     p.set_defaults(func=cmd_template_audit)
 
     p = sub.add_parser("template-new", help="Lords: новый шаблон из манифеста")

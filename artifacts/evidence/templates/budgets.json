@@ -1,5 +1,5 @@
 {
-  "captured_at_utc": "2026-09-04T16:25:58.590Z",
+  "captured_at_utc": "2026-09-07T16:37:18.942Z",
   "budget": {
     "documentKb": 120,
     "scriptKb": 60,
@@ -14,89 +14,89 @@
       "site": "lords-01",
       "page": "home",
       "url": "http://127.0.0.1:8801/",
-      "requests": 34,
-      "documentKb": 26,
-      "scriptKb": 15,
-      "styleKb": 20,
-      "imageKb": 23,
-      "domNodes": 442
+      "requests": 18,
+      "documentKb": 48,
+      "scriptKb": 27,
+      "styleKb": 30,
+      "imageKb": 11,
+      "domNodes": 808
     },
     {
       "site": "lords-01",
       "page": "catalog",
       "url": "http://127.0.0.1:8801/catalog/",
-      "requests": 7,
-      "documentKb": 29,
-      "scriptKb": 15,
-      "styleKb": 20,
-      "imageKb": 2,
-      "domNodes": 216
+      "requests": 4,
+      "documentKb": 31,
+      "scriptKb": 27,
+      "styleKb": 30,
+      "imageKb": 0,
+      "domNodes": 247
     },
     {
       "site": "lords-02",
       "page": "home",
       "url": "http://127.0.0.1:8802/",
-      "requests": 34,
-      "documentKb": 30,
-      "scriptKb": 15,
-      "styleKb": 19,
-      "imageKb": 23,
-      "domNodes": 499
+      "requests": 18,
+      "documentKb": 53,
+      "scriptKb": 27,
+      "styleKb": 30,
+      "imageKb": 11,
+      "domNodes": 888
     },
     {
       "site": "lords-02",
       "page": "catalog",
       "url": "http://127.0.0.1:8802/catalog/",
-      "requests": 7,
-      "documentKb": 28,
-      "scriptKb": 15,
-      "styleKb": 19,
-      "imageKb": 2,
-      "domNodes": 209
+      "requests": 4,
+      "documentKb": 30,
+      "scriptKb": 27,
+      "styleKb": 30,
+      "imageKb": 0,
+      "domNodes": 240
     },
     {
       "site": "lords-03",
       "page": "home",
       "url": "http://127.0.0.1:8803/",
-      "requests": 28,
-      "documentKb": 23,
-      "scriptKb": 15,
-      "styleKb": 19,
-      "imageKb": 19,
-      "domNodes": 377
+      "requests": 18,
+      "documentKb": 45,
+      "scriptKb": 27,
+      "styleKb": 30,
+      "imageKb": 11,
+      "domNodes": 720
     },
     {
       "site": "lords-03",
       "page": "catalog",
       "url": "http://127.0.0.1:8803/catalog/",
-      "requests": 7,
-      "documentKb": 25,
-      "scriptKb": 15,
-      "styleKb": 19,
-      "imageKb": 2,
-      "domNodes": 206
+      "requests": 4,
+      "documentKb": 27,
+      "scriptKb": 27,
+      "styleKb": 30,
+      "imageKb": 0,
+      "domNodes": 234
     },
     {
       "site": "lords-04",
       "page": "home",
       "url": "http://127.0.0.1:8804/",
-      "requests": 15,
-      "documentKb": 15,
-      "scriptKb": 8,
-      "styleKb": 19,
-      "imageKb": 9,
-      "domNodes": 314
+      "requests": 3,
+      "documentKb": 21,
+      "scriptKb": 19,
+      "styleKb": 30,
+      "imageKb": 0,
+      "domNodes": 408
     },
     {
       "site": "lords-04",
       "page": "catalog",
       "url": "http://127.0.0.1:8804/catalog/",
-      "requests": 27,
-      "documentKb": 39,
-      "scriptKb": 8,
-      "styleKb": 19,
-      "imageKb": 19,
-      "domNodes": 369
+      "requests": 3,
+      "documentKb": 45,
+      "scriptKb": 19,
+      "styleKb": 30,
+      "imageKb": 0,
+      "domNodes": 500
     }
   ],
   "inp": [
@@ -104,10 +104,10 @@
       "site": "lords-01",
       "route": "/catalog/",
       "interactions": 3,
-      "worstMs": 16,
+      "worstMs": 160,
       "reporting_threshold_ms": 16,
       "note": "зафиксированы взаимодействия выше порога отчётности",
-      "observer_selfcheck_ms": 128
+      "observer_selfcheck_ms": 160
     }
   ],
   "player": [

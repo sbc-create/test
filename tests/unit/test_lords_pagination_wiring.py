@@ -84,6 +84,13 @@ def test_на_странице_только_один_год():
     for path, page in site.pages.items():
         if "page/" not in path:
             continue
+        # Лента поступлений упорядочена по дате появления, а не по году
+        # выпуска, и блоки годов к ней не применяются намеренно: они
+        # пересобрали бы её обратно в каталог — то самое, чего раздел обещает
+        # не делать. Её собственный порядок проверяется в
+        # `test_lords_new_section_is_by_arrival.py`.
+        if path.startswith("/new/"):
+            continue
         годы = {
             каталог.get(m.rsplit("/", 2)[-2])
             for m in карточки(page.body)

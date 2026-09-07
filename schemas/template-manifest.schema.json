@@ -48,33 +48,57 @@
     "owns": {
       "type": "array",
       "uniqueItems": true,
-      "items": { "$ref": "#/$defs/section_name" },
+      "items": {
+        "$ref": "#/$defs/section_name"
+      },
       "description": "Разделы, которые витрина индексирует. Остальные держит как навигацию с noindex. Разделы home и search сюда не входят: у home владелец self, у search владельца нет вовсе (blueprints/lords/blueprint.yaml)."
     },
     "theme": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name", "tokens"],
+      "required": [
+        "name",
+        "tokens"
+      ],
       "properties": {
         "name": {
           "type": "string",
           "pattern": "^[a-z][a-z0-9_]{2,30}$",
           "description": "Имя темы. Оно же theme_ref и tenant.theme в пакете сайта; проверяется по списку themes в blueprints/lords/blueprint.yaml (factory/validation.py). На CSS не влияет: таблицу стилей строят токены."
         },
-        "tokens": { "$ref": "#/$defs/design_tokens" }
+        "tokens": {
+          "$ref": "#/$defs/design_tokens"
+        }
       }
     },
     "layout": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["density", "hero", "card_ratio", "columns", "facet_position", "home_blocks"],
+      "required": [
+        "density",
+        "hero",
+        "card_ratio",
+        "columns",
+        "facet_position",
+        "home_blocks"
+      ],
       "properties": {
         "density": {
-          "enum": ["airy", "comfortable", "dense", "compact"],
+          "enum": [
+            "airy",
+            "comfortable",
+            "dense",
+            "compact"
+          ],
           "description": "Ключ таблицы отступов factory/lords/theme.py DENSITY. Значения вне таблицы молча дают comfortable."
         },
         "hero": {
-          "enum": ["catalog", "timeline", "editorial", "facets"],
+          "enum": [
+            "catalog",
+            "timeline",
+            "editorial",
+            "facets"
+          ],
           "description": "Оформление первого экрана. Значение попадает в класс .hero--<hero>; правила есть только у перечисленных (factory/lords/theme.py)."
         },
         "card_ratio": {
@@ -85,23 +109,46 @@
         "columns": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["mobile", "tablet", "desktop"],
+          "required": [
+            "mobile",
+            "tablet",
+            "desktop"
+          ],
           "description": "Число колонок сетки на трёх ширинах. Переключается медиазапросами 640px и 1024px, поэтому проверяется на 390, 768 и 1440.",
           "properties": {
-            "mobile": { "type": "integer", "minimum": 1, "maximum": 4 },
-            "tablet": { "type": "integer", "minimum": 2, "maximum": 8 },
-            "desktop": { "type": "integer", "minimum": 3, "maximum": 12 }
+            "mobile": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4
+            },
+            "tablet": {
+              "type": "integer",
+              "minimum": 2,
+              "maximum": 8
+            },
+            "desktop": {
+              "type": "integer",
+              "minimum": 3,
+              "maximum": 12
+            }
           }
         },
         "facet_position": {
-          "enum": ["sidebar", "top", "hero", "none"],
+          "enum": [
+            "sidebar",
+            "top",
+            "hero",
+            "none"
+          ],
           "description": "Где живут фильтры. На CSS влияет только значение sidebar (theme.py: sidebar = facet_position == 'sidebar'); остальные три различаются разметкой и смыслом, но не таблицей стилей."
         },
         "home_blocks": {
           "type": "array",
           "minItems": 2,
           "uniqueItems": true,
-          "items": { "$ref": "#/$defs/home_block" },
+          "items": {
+            "$ref": "#/$defs/home_block"
+          },
           "description": "Состав главной, сверху вниз. Перечислять здесь можно только блоки, у которых есть ветка в factory/lords/render.py _home(): объявленный блок без ветки не рисуется и не сообщает об этом."
         },
         "carousel_heading": {
@@ -124,21 +171,44 @@
     },
     "sections": {
       "type": "object",
-      "required": ["home", "search"],
+      "required": [
+        "home",
+        "search"
+      ],
       "description": "Тексты разделов. Ключ — раздел из blueprints/lords/blueprint.yaml. Тексты попадают на страницу только у владельца раздела (factory/lords/plan.py build_plan).",
-      "propertyNames": { "$ref": "#/$defs/section_name" },
-      "additionalProperties": { "$ref": "#/$defs/section_texts" }
+      "propertyNames": {
+        "$ref": "#/$defs/section_name"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/section_texts"
+      }
     },
     "title_page": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["title_template", "h1_template", "description_template", "intro"],
+      "required": [
+        "title_template",
+        "h1_template",
+        "description_template",
+        "intro"
+      ],
       "description": "Шаблоны страницы произведения. Обязателен, если owns_title_page: true.",
       "properties": {
-        "title_template": { "type": "string", "minLength": 3 },
-        "h1_template": { "type": "string", "minLength": 3 },
-        "description_template": { "type": "string", "minLength": 3 },
-        "intro": { "type": "string" }
+        "title_template": {
+          "type": "string",
+          "minLength": 3
+        },
+        "h1_template": {
+          "type": "string",
+          "minLength": 3
+        },
+        "description_template": {
+          "type": "string",
+          "minLength": 3
+        },
+        "intro": {
+          "type": "string"
+        }
       }
     }
   },
@@ -185,17 +255,48 @@
       "additionalProperties": false,
       "description": "Токены оформления. Перечень закрыт значениями, которые читает factory/lords/theme.py: токен вне перечня не попадёт ни в одну переменную CSS. Незаданный токен берётся из DEFAULT_TOKENS.",
       "properties": {
-        "bg": { "$ref": "#/$defs/color" },
-        "surface": { "$ref": "#/$defs/color" },
-        "surface_alt": { "$ref": "#/$defs/color" },
-        "text": { "$ref": "#/$defs/color" },
-        "muted": { "$ref": "#/$defs/color" },
-        "accent": { "$ref": "#/$defs/color" },
-        "accent_text": { "$ref": "#/$defs/color" },
-        "border": { "$ref": "#/$defs/color" },
-        "radius": { "$ref": "#/$defs/length" },
-        "container": { "$ref": "#/$defs/length" },
-        "heading_font": { "type": "string", "minLength": 3 }
+        "bg": {
+          "$ref": "#/$defs/color"
+        },
+        "surface": {
+          "$ref": "#/$defs/color"
+        },
+        "surface_alt": {
+          "$ref": "#/$defs/color"
+        },
+        "text": {
+          "$ref": "#/$defs/color"
+        },
+        "muted": {
+          "$ref": "#/$defs/color"
+        },
+        "accent": {
+          "$ref": "#/$defs/color"
+        },
+        "accent_text": {
+          "$ref": "#/$defs/color"
+        },
+        "border": {
+          "$ref": "#/$defs/color"
+        },
+        "radius": {
+          "$ref": "#/$defs/length"
+        },
+        "container": {
+          "$ref": "#/$defs/length"
+        },
+        "heading_font": {
+          "type": "string",
+          "minLength": 3
+        },
+        "h1_size": {
+          "$ref": "#/$defs/length",
+          "description": "Кегль заголовка первого уровня. Часть договора витрины, а не константа темы: у Lords он снят с референса и равен 18px, а витрине с собственным договором это умолчание не годится — заголовок, крупнее основного текста на семь процентов, иерархии не создаёт. Незаданный токен берётся из DEFAULT_TOKENS."
+        },
+        "h2_size": {
+          "$ref": "#/$defs/length",
+          "description": "Кегль заголовка второго уровня. См. h1_size."
+        }
       }
     },
     "color": {
@@ -205,20 +306,42 @@
     },
     "length": {
       "type": "string",
-      "pattern": "^[0-9]+(px|rem|em|%)$"
+      "pattern": "^[0-9]+(\\.[0-9]+)?(px|rem|em|%)$",
+      "description": " Дробная часть допускается: кегль заголовков задаётся в rem — «1.75rem», — потому что rem растёт вместе с настройкой размера текста в браузере, а пиксель не растёт. Требовать здесь целое значило бы требовать пикселей, то есть заголовков, не подчиняющихся увеличению текста."
     },
     "section_texts": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["title", "h1", "description"],
+      "required": [
+        "title",
+        "h1",
+        "description"
+      ],
       "properties": {
-        "title": { "type": "string", "minLength": 3, "maxLength": 120 },
-        "h1": { "type": "string", "minLength": 2, "maxLength": 90 },
-        "description": { "type": "string", "minLength": 10, "maxLength": 320 },
-        "intro": { "type": "string" },
+        "title": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 120
+        },
+        "h1": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 90
+        },
+        "description": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 320
+        },
+        "intro": {
+          "type": "string"
+        },
         "editorial_rules": {
           "type": "array",
-          "items": { "type": "string", "minLength": 5 },
+          "items": {
+            "type": "string",
+            "minLength": 5
+          },
           "description": "Редакционные правила раздела. Потребителя в коде нет ни у Lords, ни у Yummy: поле читают люди, на разметку оно не влияет. Описано здесь потому, что оно уже есть в lords-curated, а не потому, что что-то из него следует."
         }
       }

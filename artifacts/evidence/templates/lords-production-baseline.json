@@ -1,0 +1,156 @@
+{
+  "captured_at_utc": "2026-09-05T07:49:22Z",
+  "origin": "локальные порты происхождения 9101-9103 (fixture-staging)",
+  "routes": {
+    "lords-01": {
+      "home": {
+        "status": 200,
+        "bytes": 34746,
+        "ms": 8.7,
+        "sha256": "f1ff77549e3b19a2",
+        "x_robots": "noindex, nofollow",
+        "content_type": "text/html; charset=utf-8"
+      },
+      "catalog": {
+        "status": 200,
+        "bytes": 127824,
+        "ms": 4.7,
+        "sha256": "0f8527fe2935abe5",
+        "x_robots": "noindex, nofollow",
+        "content_type": "text/html; charset=utf-8"
+      },
+      "search": {
+        "status": 200,
+        "bytes": 5281,
+        "ms": 2.8,
+        "sha256": "28290e8314d5fdd7",
+        "x_robots": "noindex, nofollow",
+        "content_type": "text/html; charset=utf-8"
+      },
+      "search_empty": {
+        "status": 200,
+        "bytes": 5281,
+        "ms": 1.6,
+        "sha256": "28290e8314d5fdd7",
+        "x_robots": "noindex, nofollow",
+        "content_type": "text/html; charset=utf-8"
+      },
+      "collections": {
+        "status": 404,
+        "bytes": 4381,
+        "ms": 1.7,
+        "sha256": "cd01c2b80f3dd2b5",
+        "x_robots": "noindex, nofollow",
+        "content_type": "text/html; charset=utf-8"
+      },
+      "not_found": {
+        "status": 404,
+        "bytes": 4381,
+        "ms": 1.6,
+        "sha256": "cd01c2b80f3dd2b5",
+        "x_robots": "noindex, nofollow",
+        "content_type": "text/html; charset=utf-8"
+      }
+    },
+    "lords-02": {
+      "home": {
+        "status": 200,
+        "bytes": 32874,
+        "ms": 2.3,
+        "sha256": "8fbab0dd997a066c",
+        "x_robots": "noindex, nofollow",
+        "content_type": "text/html; charset=utf-8"
+      },
+      "catalog": {
+        "status": 200,
+        "bytes": 127091,
+        "ms": 1.8,
+        "sha256": "963366c4012074da",
+        "x_robots": "noindex, nofollow",
+        "content_type": "text/html; charset=utf-8"
+      },
+      "search": {
+        "status": 200,
+        "bytes": 5268,
+        "ms": 1.4,
+        "sha256": "f42be155bca62930",
+        "x_robots": "noindex, nofollow",
+        "content_type": "text/html; charset=utf-8"
+      },
+      "search_empty": {
+        "status": 200,
+        "bytes": 5268,
+        "ms": 1.2,
+        "sha256": "f42be155bca62930",
+        "x_robots": "noindex, nofollow",
+        "content_type": "text/html; charset=utf-8"
+      },
+      "collections": {
+        "status": 404,
+        "bytes": 4388,
+        "ms": 1.4,
+        "sha256": "2efefa2709114d73",
+        "x_robots": "noindex, nofollow",
+        "content_type": "text/html; charset=utf-8"
+      },
+      "not_found": {
+        "status": 404,
+        "bytes": 4388,
+        "ms": 1.4,
+        "sha256": "2efefa2709114d73",
+        "x_robots": "noindex, nofollow",
+        "content_type": "text/html; charset=utf-8"
+      }
+    },
+    "lords-03": {
+      "home": {
+        "status": 200,
+        "bytes": 23618,
+        "ms": 4.4,
+        "sha256": "261494c38b58f817",
+        "x_robots": "noindex, nofollow",
+        "content_type": "text/html; charset=utf-8"
+      },
+      "catalog": {
+        "status": 200,
+        "bytes": 126600,
+        "ms": 1.8,
+        "sha256": "af89cd0bc1a329d1",
+        "x_robots": "noindex, nofollow",
+        "content_type": "text/html; charset=utf-8"
+      },
+      "search": {
+        "status": 200,
+        "bytes": 5107,
+        "ms": 2.6,
+        "sha256": "f879464efcb3b63b",
+        "x_robots": "noindex, nofollow",
+        "content_type": "text/html; charset=utf-8"
+      },
+      "search_empty": {
+        "status": 200,
+        "bytes": 5107,
+        "ms": 2.3,
+        "sha256": "f879464efcb3b63b",
+        "x_robots": "noindex, nofollow",
+        "content_type": "text/html; charset=utf-8"
+      },
+      "collections": {
+        "status": 404,
+        "bytes": 4230,
+        "ms": 3.4,
+        "sha256": "05cade90b278089b",
+        "x_robots": "noindex, nofollow",
+        "content_type": "text/html; charset=utf-8"
+      },
+      "not_found": {
+        "status": 404,
+        "bytes": 4230,
+        "ms": 1.6,
+        "sha256": "05cade90b278089b",
+        "x_robots": "noindex, nofollow",
+        "content_type": "text/html; charset=utf-8"
+      }
+    }
+  }
+}

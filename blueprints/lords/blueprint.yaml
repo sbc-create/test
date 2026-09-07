@@ -37,10 +37,14 @@ profiles:
   - lords-new
   - lords-curated
   - lords-genre
+  - zona-cinema
+  - animedia-portal
 
 themes:
   - lords_dark
   - lords_light
+  - zona_light
+  - animedia_night
 
 ownership_rule: exactly_one_owner_per_section
 

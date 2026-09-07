@@ -238,8 +238,9 @@ def _yummy_gate() -> dict:
         "crossbrowser": {"engines": ["firefox 153.0", "webkit 26.5"], "checks": 10},
         "not_covered": [
             "живые данные вместо фикстуры",
-            "четыре событийных пути: полки событий пусты по устройству фикстуры, "
-            "наполнить их значило бы показать несуществующий факт",
+            "четыре событийных пути: фикстурная ветка loadHomepageCatalog обходит "
+            "производителя событий — прежнее объяснение про недостаток истории "
+            "проверено и оказалось неверным (TEMPLATE_TO_CORE-011)",
             "состояния плеера loading/slow/timeout/error/retry — нужен поставщик",
             "производительность на production build — сборка падает на "
             "предсуществующих ошибках типов, TEMPLATE_TO_CORE-006",
@@ -311,15 +312,166 @@ def _reference_packs_gate() -> dict:
     }
 
 
+def _post_release_gate() -> dict:
+    """Ворота post-release ветки Yummy: тема, подборки, событийный контур.
+
+    Читается по свидетельствам, скопированным из репозитория Yummy. Ветка
+    отдельная и в релизный артефакт Lords не входит — это условие задачи, а не
+    осторожность: кандидат обязан остаться тем, что проверено вместе с ним.
+    """
+    root = EVIDENCE / "yummy-post-release"
+    if not root.exists():
+        return {"status": NOT_RUN, "reason": "свидетельств post-release ветки нет"}
+
+    theme = sorted(root.glob("theme-axe-*.json"))
+    theme_violations = sum(
+        len(json.loads(f.read_text(encoding="utf-8"))["violations"]) for f in theme)
+    themes = sorted({json.loads(f.read_text(encoding="utf-8"))["theme"] for f in theme})
+
+    def read(name: str) -> dict | None:
+        f = root / name
+        if not f.exists():
+            return None
+        return json.loads(f.read_text(encoding="utf-8"))
+
+    disabled = read("theme-disabled.json")
+    collections = read("collections-preview.json")
+    bypass = read("events-fixture-bypass.json")
+    coll_axe = sorted(root.glob("collections-axe-*.json"))
+    coll_violations = sum(
+        len(json.loads(f.read_text(encoding="utf-8"))["violations"]) for f in coll_axe)
+
+    return {
+        "status": "pass" if theme_violations == 0 and coll_violations == 0 else "fail",
+        "repo": "/srv/sites/yummyani-staging/repo (канонический)",
+        "worktree": "/home/claude/work-templates/theme-ym",
+        "branch": "claude/templates-theme-collections-01",
+        "base_sha": "15ddc6635252c7920dfc6596a489e5c69fe80e5f",
+        "in_release_artifact": False,
+        "in_release_artifact_reason": (
+            "тема и подборки — post-release работа; кандидат Lords обязан остаться "
+            "тем, что проверено вместе с ним"
+        ),
+        "theme": {
+            "flag": "NEXT_PUBLIC_TEMPLATE_THEME_SWITCHER",
+            "default": "disabled",
+            "axe_runs": len(theme),
+            "axe_violations": theme_violations,
+            "themes": themes,
+            "viewports": [390, 768, 1440],
+            "disabled_state": None if not disabled else {
+                "data_theme": disabled.get("dataTheme"),
+                "dark_class": disabled.get("dark"),
+                "bootstrap_scripts": disabled.get("bootstrapScripts"),
+                "toggles": disabled.get("toggles"),
+                "canvas_under_dark_system": disabled.get("canvas"),
+            },
+        },
+        "collections": {
+            "flag": "NEXT_PUBLIC_TEMPLATE_COLLECTIONS",
+            "default": "disabled",
+            "routes": "unreachable",
+            "routes_reason": (
+                "строк нет в page-matrix.ts, посредник отвечает 404; матрица "
+                "принадлежит полосе SEO (TEMPLATE_TO_SEO-002)"
+            ),
+            "source": "отсутствует: Site View API подборок не отдаёт (TEMPLATE_TO_CORE-010)",
+            "preview_surface": "/dev/ui",
+            "rendered_blocks": None if not collections else {
+                "rail": collections.get("rails"),
+                "hub": collections.get("hubs"),
+                "page": collections.get("pages"),
+                "tiles": len(collections.get("tileTitles") or []),
+                "synthetic_notices_visible": collections.get("notices") is not None,
+            },
+            "axe_runs": len(coll_axe),
+            "axe_violations": coll_violations,
+        },
+        "events": {
+            "status": "blocked",
+            "reason": None if not bypass else bypass.get("cause"),
+            "evidence": "yummy-post-release/events-fixture-bypass.json",
+            "handoff": "TEMPLATE_TO_CORE-011",
+            "proof": None if not bypass else {
+                "snapshot_titles": bypass.get("snapshotTitles"),
+                "snapshot_baseline": bypass.get("snapshotBaseline"),
+                "cards": bypass.get("cards"),
+                "badges": len(bypass.get("badges") or []),
+            },
+            "note": (
+                "прежнее объяснение — «у синтетических записей нет истории» — "
+                "проверено и оказалось неверным: снимок прошлого положен и прочитан, "
+                "меток по-прежнему ноль"
+            ),
+        },
+        "evidence": "artifacts/evidence/templates/yummy-post-release/*.json",
+    }
+
+
+def _release_candidate_gate() -> dict:
+    """Состояние кандидата Lords по его собственному машиночитаемому описанию."""
+    f = EVIDENCE / "lords-release-candidate.json"
+    if not f.exists():
+        return {"status": NOT_RUN, "reason": "артефакт кандидата не собран"}
+    d = json.loads(f.read_text(encoding="utf-8"))
+    gates = d.get("gates", [])
+    failed = [g["gate"] for g in gates if g.get("status") != "pass"]
+    return {
+        "status": "pass" if not failed else "fail",
+        "artifact": "LORDS_TEMPLATE_RELEASE_CANDIDATE",
+        "head_sha": d.get("headSha"),
+        "template_digest": d.get("templateDigest"),
+        "gates_passed": len(gates) - len(failed),
+        "gates_total": len(gates),
+        "gates_failed": failed,
+        "handoff": "TEMPLATE_TO_CORE-008",
+        "production_changed": False,
+        "architect_action": "решение о canary на одной витрине",
+        "evidence": "artifacts/evidence/templates/lords-release-candidate.json",
+    }
+
+
+#: Отпечаток замороженного кандидата и ветка, в которой он заморожен. Значения
+#: не вычисляются из текущего рабочего дерева намеренно: статус обязан называть
+#: то, что предлагается к релизу, а post-release ветка трогает
+#: `factory/templates/` и потому даёт другой отпечаток. Один раз статус уже
+#: подменил кандидата веткой доработок — читатель увидел бы «21 файл» там, где
+#: Архитектору передавались 19.
+FROZEN_CANDIDATE = {
+    "branch": "claude/templates-lords-yummy-refpacks-01",
+    "head": "cd2f718ae656e6bfcdc68099601d92078bd1f13f",
+    "template_digest":
+        "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
+    "template_digest_files": 19,
+}
+
+
 def build() -> dict:
     fingerprint = digest_mod.compute()
+    branch = _git("rev-parse", "--abbrev-ref", "HEAD")
+    candidate_branch = branch == FROZEN_CANDIDATE["branch"]
     return {
         "lane": "TEMPLATES",
-        "branch": _git("rev-parse", "--abbrev-ref", "HEAD"),
-        "head": _git("rev-parse", "HEAD"),
+        "branch": FROZEN_CANDIDATE["branch"],
+        "head": FROZEN_CANDIDATE["head"],
         "base_sha": "76552b9a7372c5ad15cfc7d8b1052a10024722a3",
-        "template_digest": fingerprint["template_digest"],
-        "template_digest_files": fingerprint["files"],
+        "template_digest": FROZEN_CANDIDATE["template_digest"],
+        "template_digest_files": FROZEN_CANDIDATE["template_digest_files"],
+        # Ветка, из которой запущен пересчёт. Совпадает с кандидатом — отпечаток
+        # проверяется на месте; не совпадает — называется отдельно и с причиной.
+        "recomputed_from": {
+            "branch": branch,
+            "head": _git("rev-parse", "HEAD"),
+            "template_digest": fingerprint["template_digest"],
+            "template_digest_files": fingerprint["files"],
+            "matches_candidate":
+                fingerprint["template_digest"] == FROZEN_CANDIDATE["template_digest"],
+            "note": (
+                "пересчёт из ветки кандидата: отпечаток проверен на месте"
+                if candidate_branch else
+                "пересчёт из post-release ветки: её отпечаток отличается намеренно, "
+                "кандидату он не принадлежит и в релиз не входит"),
+        },
         "gates": {
             "axe_wcag22aa": _axe_gate(),
             "a11y_manual": _manual_gate(),
@@ -329,6 +481,8 @@ def build() -> dict:
             "yummy_template_fixture": _yummy_gate(),
             "crossbrowser": _crossbrowser_gate(),
             "reference_packs": _reference_packs_gate(),
+            "lords_release_candidate": _release_candidate_gate(),
+            "yummy_post_release": _post_release_gate(),
         },
         "blockers": [
             {
@@ -355,6 +509,45 @@ def build() -> dict:
                 ),
                 "effect": "ворота, которым нужны данные, помечены blocked, а не pass",
                 "recorded_in": "docs/templates/BLOCKERS.md",
+            },
+            {
+                "id": "COLLECTIONS-ROUTE-01",
+                "state": "open",
+                "what": (
+                    "маршрутов /collections нет в src/site-blueprint/page-matrix.ts, "
+                    "и посредник отвечает 404 на всё, чего в матрице нет"
+                ),
+                "effect": (
+                    "раздел проверяется в галерее /dev/ui; публичный маршрут "
+                    "не открывается"
+                ),
+                "owner": "SEO",
+                "recorded_in": "docs/templates/handoff/TEMPLATE_TO_SEO-002-collections-routes.md",
+            },
+            {
+                "id": "COLLECTIONS-SOURCE-01",
+                "state": "open",
+                "what": "Site View API не публикует подборки ни в каком виде",
+                "effect": "состав приходит только из синтетической фикстуры предпросмотра",
+                "owner": "CORE",
+                "recorded_in": "docs/templates/handoff/TEMPLATE_TO_CORE-010-collections-contract.md",
+            },
+            {
+                "id": "EVENTS-FIXTURE-BYPASS-01",
+                "state": "open",
+                "what": (
+                    "loadHomepageCatalog при поднятой фикстуре возвращает "
+                    "catalogVisualHomepageData() до вызова loadContentEvents"
+                ),
+                "effect": (
+                    "событийные метки непроверяемы на фикстуре; снимок прошлого "
+                    "положен и прочитан, меток ноль при 37 карточках"
+                ),
+                "owner": "CORE",
+                "recorded_in": (
+                    "docs/templates/handoff/"
+                    "TEMPLATE_TO_CORE-011-fixture-bypasses-event-producer.md"
+                ),
             },
             {
                 "id": "YUMMY-LIVE-EGRESS-01",

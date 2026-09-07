@@ -7,18 +7,23 @@
 from __future__ import annotations
 
 import json
-import os
 import re
 import socket
 import subprocess
 import sys
-import time
 import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+
+# Инструменты запускаются как сценарии, а не импортируются пакетом: путь к
+# соседнему модулю добавляется явно.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+import stand_env  # noqa: E402
+
 sys.path.insert(0, str(ROOT))
 
 from factory.seo import uniqueness  # noqa: E402
@@ -108,14 +113,7 @@ def observe(port: int, host: str, site_id: str, path: str) -> uniqueness.PageObs
 
 def main() -> int:
     port = free_port()
-    env = dict(os.environ)
-    env.update({
-        "PLAYER_PUBLISHER_ID_A": "stand-publisher-a",
-        "PLAYER_PUBLISHER_ID_B": "stand-publisher-b",
-        "PLAYER_PUBLISHER_ID_C": "stand-publisher-c",
-        "PLAYER_MODE": "mock",
-        "FACTORY_ENVIRONMENT": "staging",
-    })
+    env = stand_env.stand_environment()
 
     seeding = subprocess.run(
         [sys.executable, str(ROOT / "tests/tools/with_app_env.py"), "--scope", "anime", "--push", "--",
@@ -134,14 +132,7 @@ def main() -> int:
     )
     pages: list[uniqueness.PageObservation] = []
     try:
-        deadline = time.time() + 180
-        while time.time() < deadline:
-            try:
-                with socket.create_connection(("127.0.0.1", port), timeout=2):
-                    break
-            except OSError:
-                time.sleep(0.5)
-        else:
+        if not stand_env.wait_for_port(port):
             print("FAIL: сервер не открыл порт")
             return 1
 

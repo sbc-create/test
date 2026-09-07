@@ -204,7 +204,10 @@ class TestFillingThemOpensTheSitemap:
 
         pkg = production_ready(site_id)
         body = render.render_site(pkg, catalog=fx.build_catalog()).pages["/sitemap.xml"].body
-        ElementTree.fromstring(body)
+        корень = ElementTree.fromstring(body)
+        assert корень.tag.endswith("urlset"), корень.tag
+        assert len(корень) >= 1, (
+            f"{site_id}: карта разобралась, но не содержит ни одного адреса")
 
     @pytest.mark.parametrize("site_id", SITES)
     def test_today_the_map_is_deliberately_empty(self, site_id):

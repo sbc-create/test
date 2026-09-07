@@ -86,7 +86,42 @@ def collect() -> list[dict]:
         for blocker in result.blockers:
             items.append(_item(f"{site_id}: {blocker.field}", blocker.reason, "см. schemas/site-package.schema.json",
                                "-", f"sites/{site_id}/", f"{blocker.blocks_stage} → {blocker.status}"))
-    return items
+
+    # Полоса шаблонов: боевые адреса витрин и требования Yummy. Обходом
+    # пакетов ни то, ни другое не находится — у Yummy пакета в фабрике нет
+    # вовсе, а адрес действующего сайта в пакете предпросмотра не хранится.
+    from factory.products import owner_inputs
+    items.extend(owner_inputs.collect())
+
+    return _merge(items)
+
+
+def _merge(items: list[dict]) -> list[dict]:
+    """Одно поле — одна строка, со всеми статусами, которые оно блокирует.
+
+    Две проверки сообщают об одном и том же поле под разными статусами:
+    `content_source.rights_confirmed` выходил дважды на каждый сайт — как
+    `BLOCKED_RIGHTS` и как `BLOCKED_CONTENT_RIGHTS`. Для владельца это два
+    разных требования в документе, смысл которого — один список вместо череды
+    вопросов (§13).
+
+    Статусы объединяются, а не отбрасываются: оба верны, и по каждому потом
+    отчитываются отдельно.
+    """
+    merged: dict[tuple[str, str], dict] = {}
+    for item in items:
+        key = (item["field"], item["where_to_put"])
+        first = merged.get(key)
+        if first is None:
+            merged[key] = dict(item)
+            continue
+        stages = first["blocks_stage"].split("; ")
+        if item["blocks_stage"] not in stages:
+            first["blocks_stage"] = "; ".join([*stages, item["blocks_stage"]])
+        # Объяснения тоже разные: обе причины остаются, ни одна не теряется.
+        if item["why"] not in first["why"]:
+            first["why"] = f"{first['why']} {item['why']}"
+    return list(merged.values())
 
 
 def generate(docs_dir: Path | None = None) -> tuple[Path, Path, list[dict]]:
