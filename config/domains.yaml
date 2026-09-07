@@ -44,6 +44,7 @@ domains:
     purpose: Кто действует и вправе ли. Люди, роли, сессии, приглашения и
       машинные личности AI-клиентов.
     paths:
+      - factory/site_engine/iam/
       - factory/site_engine/operators.py
       - factory/site_engine/accounts.py
       - factory/site_engine/account_app.py

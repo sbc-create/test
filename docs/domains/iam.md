@@ -16,6 +16,7 @@
 
 ## Разрешённые пути
 
+* `factory/site_engine/iam/`
 * `factory/site_engine/operators.py`
 * `factory/site_engine/accounts.py`
 * `factory/site_engine/account_app.py`
