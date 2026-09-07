@@ -48,7 +48,7 @@ WHAT_TO_CHECK = {
         ("/lekcii/", "листинг с пагинацией и кнопкой «Показать ещё»"),
         ("/collections/izbrannoe/", "подборка"),
         ("/news/", "новости"),
-        ("/search/", "страница поиска объясняет себя до запроса"),
+        ("/search/", "поиск по 28 материалам: опечатка, чужая раскладка и «ё» находят"),
     ],
 }
 
@@ -68,8 +68,8 @@ LIMITS = {
     "basis-video": [
         "всё содержимое — синтетический набор «Фикстура: материал NN»: настоящие "
         "материалы требуют источника, прав и решения владельца",
-        "поиск серверный и в статической выгрузке не отрабатывает: это устройство "
-        "предпросмотра, а не витрины",
+        "поиск работает по указателю на странице: где движок отвечает сам, он и "
+        "отвечает, скрипт туда не вмешивается",
     ],
 }
 
@@ -111,12 +111,38 @@ def build() -> dict:
             "readiness": (readiness.get("products") or {}).get(product, {}).get("total"),
             "limits": LIMITS.get(product, []),
         }
+    # Команды собираются из фактических значений хоста, а не из образцов.
+    # Инструкция с `<хост>` и `<путь>` непригодна: её нельзя выполнить, не
+    # догадавшись, чем их заменить.
+    import getpass
+    import socket
+
+    host = socket.gethostname()
+    user = getpass.getuser()
+    try:
+        probe = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        probe.connect(("10.255.255.255", 1))
+        address = probe.getsockname()[0]
+        probe.close()
+    except OSError:
+        address = host
+    python = ROOT / ".venv" / "bin" / "python"
+    ports = sorted({int(str(url).rsplit(":", 1)[1].rstrip("/"))
+                    for url in (plan.get("products") or {}).values()}
+                   | {int(str(plan.get("base", "")).rsplit(":", 1)[1] or 0)} - {0})
+    forwards = " ".join(f"-L {port}:127.0.0.1:{port}" for port in ports)
+
     return {
         "artifact": "OWNER_PREVIEW_PACKAGE",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "host": {"hostname": host, "address": address, "user": user,
+                 "worktree": str(ROOT), "python": str(python),
+                 "listen": "только 127.0.0.1 — наружу стенд не смотрит"},
         "index": plan.get("base"),
-        "tunnel": plan.get("tunnel"),
-        "start": ".venv/bin/python scripts/product_preview_stand.py",
+        "tunnel": f"ssh -N {forwards} {user}@{address}",
+        "start": f"cd {ROOT} && {python} scripts/product_preview_stand.py",
+        "status": f"cd {ROOT} && {python} scripts/product_preview_stand.py --status",
+        "stop": f"cd {ROOT} && {python} scripts/product_preview_stand.py --stop",
         "not_production": ("Это предпросмотр. Ни одна из витрин не выложена: у них нет "
                            "боевого домена, окружения и разрешения владельца. Приёмкой "
                            "витрины предпросмотр не является."),
@@ -140,11 +166,24 @@ def markdown(data: dict) -> str:
         f"{data['start']}",
         "```",
         "",
+        "Стенд отцепляется от оболочки и переживает её завершение. Проверить и",
+        "остановить:",
+        "",
+        "```bash",
+        f"{data['status']}",
+        f"{data['stop']}",
+        "```",
+        "",
         "С своей машины — один туннель на все витрины:",
         "",
         "```bash",
         f"{data.get('tunnel') or '—'}",
         "```",
+        "",
+        f"Хост: `{data['host']['hostname']}` ({data['host']['address']}), "
+        f"пользователь `{data['host']['user']}`.  ",
+        f"Рабочая копия: `{data['host']['worktree']}`.  ",
+        f"Стенд слушает {data['host']['listen']}.",
         "",
         f"Опись со ссылками: {data.get('index') or '—'}",
         "",

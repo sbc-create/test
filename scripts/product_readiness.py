@@ -114,11 +114,25 @@ def score_data(product: str, pkg: dict) -> tuple[int, str]:
 
 
 def score_functional(product: str) -> tuple[int, str]:
-    """Поиск, фильтры и навигация: проверено ли, что они меняют выдачу."""
+    """Поиск, фильтры и навигация: проверено ли, что они меняют выдачу.
+
+    Отдельный набор поиска, если он есть, входит в счёт: у basis-video поиск
+    проверяется восемью сценариями в трёх движках — опечатка, чужая раскладка,
+    «ё», бессмысленный запрос, адрес, поведение без скрипта, — и сводить это к
+    одной строке «поиск отвечает» значило бы потерять предмет проверки.
+    """
     path = EVIDENCE / product / "functional-report.json"
     if not path.is_file():
         return 0, "работа поиска и фильтров не проверялась"
     data = json.loads(path.read_text(encoding="utf-8"))
+    search_report = EVIDENCE / product / "search-report.json"
+    search_checks = 0
+    if search_report.is_file():
+        try:
+            search_checks = len(json.loads(
+                search_report.read_text(encoding="utf-8")).get("checks") or [])
+        except Exception:  # noqa: BLE001
+            search_checks = 0
     checks = data.get("checks") or []
     # `ok: null` — неприменимость, а не провал: серверный поиск в статической
     # выгрузке не работает по устройству, и требовать его здесь значит
@@ -128,7 +142,10 @@ def score_functional(product: str) -> tuple[int, str]:
         return 0, "проверок нет"
     if failed:
         return 4, f"{len(failed)} из {len(checks)} проверок не прошли"
-    return MAX, f"{len(checks)} проверок: поиск, фильтры, навигация, пагинация"
+    подпись = f"{len(checks)} проверок: поиск, фильтры, навигация, пагинация"
+    if search_checks:
+        подпись += f"; отдельный набор поиска — {search_checks} сценариев"
+    return MAX, подпись
 
 
 def score_visual(product: str) -> tuple[int, str]:

@@ -121,21 +121,21 @@ async function cards(page) {
 
   // ---- Поиск --------------------------------------------------------------
   //
-  // У basis-video поиск серверный: страница показывает выдачу, когда движок
-  // отдаёт `page.query`. Предпросмотр — статическая выгрузка, и отработать
-  // запрос она не может по устройству. Это ограничение предпросмотра, а не
-  // витрины, и записывается оно именно так: молча засчитать проверку значило
-  // бы объявить работающим то, что здесь не работало.
-  const serverSideSearch = product === 'basis-video';
+  // Отметка «серверный поиск неприменим» снята: она была верной, пока поиска
+  // не существовало. Теперь витрина отдаёт указатель и ищет по нему на
+  // странице — во всех трёх движках, — и проверка обязана это проверять, а не
+  // ссылаться на прежнее устройство.
+  const serverSideSearch = false;
   await page.goto(`${BASE}/search/`, { waitUntil: 'load' });
-  const field = page.locator('#search-q, input[type="search"], input[name="q"]').first();
+  const field = page.locator('#search-q, #q-main, input[type="search"], input[name="q"]').first();
   if (await field.count()) {
-    await field.fill('матрица');
+    await field.fill(product === 'basis-video' ? 'материал' : 'матрица');
     await field.press('Enter');
     await page.waitForTimeout(2500);
-    const found = await cards(page);
-    const note = (await page.locator('.count, #search-count').first().textContent()
-      .catch(() => '')) || '';
+    const found = await cards(page)
+      + await page.locator('#search-results li').count();
+    const note = (await page.locator('.count, #search-count, #search-hint').first()
+      .textContent().catch(() => '')) || '';
     if (serverSideSearch) {
       const hint = (await page.locator('main .empty').first().textContent()
         .catch(() => '')) || '';

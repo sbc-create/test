@@ -6,17 +6,23 @@
   <input id="q-main" name="q" type="search" value="{{ page.query }}">
   <button type="submit">Найти</button>
 </form>
-{%- if not page.query %}
-{#- Страница без запроса молчала: форма и больше ничего. Зритель, попавший
-    сюда из меню, не понимает, что от него требуется и что найдётся. Строка
-    ниже — не украшение: она отличает «ещё не искали» от «искали и не
-    нашли», а это разные состояния с разными действиями. -#}
-<p class="empty">Введите название материала. Поиск идёт по заголовкам каталога;
-разделы <a href="/lekcii/">лекций</a> и <a href="/news/">новостей</a> открыты и без него.</p>
-{%- endif %}
+{#- Состояние до запроса. Прежде страница показывала форму и больше ничего:
+    зритель не понимал ни что от него требуется, ни что найдётся. -#}
+<p class="empty" id="search-hint"{% if page.index_url %} data-search-index="{{ page.index_url }}" data-search-total="{{ page.index_size }}"{% endif %}>
+  {%- if page.index_url -%}
+  Введите название материала: поиск идёт по {{ page.index_size }} записям каталога.
+  Указатель загружается при первом запросе. Разделы
+  <a href="/lekcii/">лекций</a> и <a href="/news/">новостей</a> открыты и без него.
+  {%- else -%}
+  Введите название материала. Разделы <a href="/lekcii/">лекций</a> и
+  <a href="/news/">новостей</a> открыты и без поиска.
+  {%- endif -%}
+</p>
+{#- Серверная выдача остаётся: где движок работает, он и отвечает, а скрипт
+    туда не вмешивается. -#}
 {%- if page.query %}
 {%- if page['items'] %}
-<ul class="linked-list">
+<ul class="linked-list" id="search-results">
   {%- for item in page['items'] %}
   <li><a href="{{ item.url }}">{{ item.title }}</a></li>
   {%- endfor %}
@@ -24,5 +30,7 @@
 {%- else %}
 <p class="empty">Ничего не найдено. Попробуйте изменить запрос или перейдите в каталог.</p>
 {%- endif %}
+{%- else %}
+<ul class="linked-list" id="search-results" hidden></ul>
 {%- endif %}
 {% endblock %}

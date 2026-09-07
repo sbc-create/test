@@ -670,6 +670,32 @@ class SiteRenderer:
             "prev_url": None, "next_url": None, "query": "", "items": [],
             "jsonld": [],
         }
+        # Указатель поиска отдаётся отдельным документом и забирается страницей
+        # поиска по требованию.
+        #
+        # Прежде поиск был только серверным: страница показывала выдачу, когда
+        # движок отдавал запрос. В статической выгрузке движка нет, и поиск не
+        # работал вовсе — зритель вводил запрос и не получал ничего. Называть
+        # это «неприменимо» было честно, но поиска от этого не появлялось.
+        #
+        # Указатель содержит ровно то, что нужно поиску по названию: адрес,
+        # заголовок и раздел. Ни описаний, ни изображений: они весят больше
+        # всего остального и поиску не нужны.
+        index = [
+            # Берётся `h1`, а не `title`: заголовок страницы несёт суффикс
+            # бренда — «Фикстура: материал 01 — Basis Pilot», — и в выдаче
+            # поиска он повторялся бы у каждой строки.
+            {"u": route.path, "t": route.h1 or route.title or "", "s": route.page_type}
+            for route in self.result.routes
+            if route.page_type in ("title", "article", "episode", "season")
+            and route.indexable and (route.h1 or route.title)
+        ]
+        (self.public / "assets").mkdir(parents=True, exist_ok=True)
+        (self.public / "assets" / "search-index.json").write_text(
+            json.dumps(index, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+        page["index_url"] = "/assets/search-index.json"
+        page["index_size"] = len(index)
+
         file = self._write("/search/", self._tmpl("search.html", page))
         self._register(Route(path="/search/", page_type="search", indexable=False, robots=policy["robots"],
                              canonical=None, in_sitemap=False, file=file, title=page["title"], h1=page["h1"]))

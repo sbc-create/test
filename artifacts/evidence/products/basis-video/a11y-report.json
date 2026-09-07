@@ -1,7 +1,7 @@
 {
   "product": "basis-video",
   "base": "http://127.0.0.1:8905",
-  "captured_at_utc": "2026-09-07T08:59:48.829Z",
+  "captured_at_utc": "2026-09-07T09:53:48.834Z",
   "standard": "WCAG 2.0/2.1/2.2 A+AA",
   "runs": [
     {

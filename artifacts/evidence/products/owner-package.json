@@ -1,9 +1,19 @@
 {
   "artifact": "OWNER_PREVIEW_PACKAGE",
-  "generated_at_utc": "2026-09-07T09:00:39.280465+00:00",
+  "generated_at_utc": "2026-09-07T10:06:19.171556+00:00",
+  "host": {
+    "hostname": "claude-control-01",
+    "address": "45.131.182.225",
+    "user": "claude",
+    "worktree": "/home/claude/wt-templates-23",
+    "python": "/home/claude/wt-templates-23/.venv/bin/python",
+    "listen": "только 127.0.0.1 — наружу стенд не смотрит"
+  },
   "index": "http://127.0.0.1:8902",
-  "tunnel": "ssh -N -L 8902:127.0.0.1:8902 -L 8904:127.0.0.1:8904 -L 8905:127.0.0.1:8905 -L 8903:127.0.0.1:8903 claude@<хост>",
-  "start": ".venv/bin/python scripts/product_preview_stand.py",
+  "tunnel": "ssh -N -L 8902:127.0.0.1:8902 -L 8903:127.0.0.1:8903 -L 8904:127.0.0.1:8904 -L 8905:127.0.0.1:8905 claude@45.131.182.225",
+  "start": "cd /home/claude/wt-templates-23 && /home/claude/wt-templates-23/.venv/bin/python scripts/product_preview_stand.py",
+  "status": "cd /home/claude/wt-templates-23 && /home/claude/wt-templates-23/.venv/bin/python scripts/product_preview_stand.py --status",
+  "stop": "cd /home/claude/wt-templates-23 && /home/claude/wt-templates-23/.venv/bin/python scripts/product_preview_stand.py --stop",
   "not_production": "Это предпросмотр. Ни одна из витрин не выложена: у них нет боевого домена, окружения и разрешения владельца. Приёмкой витрины предпросмотр не является.",
   "products": {
     "zona-cinema": {
@@ -103,21 +113,21 @@
         },
         {
           "path": "/search/",
-          "look_for": "страница поиска объясняет себя до запроса"
+          "look_for": "поиск по 28 материалам: опечатка, чужая раскладка и «ё» находят"
         }
       ],
       "screenshots_dir": "artifacts/evidence/products/basis-video/screenshots",
       "screenshots": 18,
       "documents": 48,
       "checks_passed": 2,
-      "checks_not_applicable": 1,
+      "checks_not_applicable": 0,
       "checks_failed": 0,
       "axe_runs": 15,
       "axe_violations": 0,
       "readiness": 74,
       "limits": [
         "всё содержимое — синтетический набор «Фикстура: материал NN»: настоящие материалы требуют источника, прав и решения владельца",
-        "поиск серверный и в статической выгрузке не отрабатывает: это устройство предпросмотра, а не витрины"
+        "поиск работает по указателю на странице: где движок отвечает сам, он и отвечает, скрипт туда не вмешивается"
       ]
     }
   }

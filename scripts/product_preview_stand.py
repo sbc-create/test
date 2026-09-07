@@ -24,6 +24,8 @@ from __future__ import annotations
 import argparse
 import json
 import mimetypes
+import os
+import signal
 import socketserver
 import sys
 from pathlib import Path
@@ -31,6 +33,10 @@ from wsgiref.simple_server import WSGIRequestHandler, WSGIServer, make_server
 
 ROOT = Path(__file__).resolve().parents[1]
 PREVIEW_ROOT = ROOT / "var" / "product-preview"
+
+#: Где стенд хранит свой идентификатор процесса. В `var/`, а не в `/tmp`:
+#: файл принадлежит рабочей копии и переживает уборку временного каталога.
+PIDFILE = ROOT / "var" / "product-preview-stand.pid"
 
 #: Постоянные порты витрин. Меняются только вместе с адресом, отданным
 #: владельцу, — то есть осознанно.
@@ -143,12 +149,88 @@ def _site_app(product: str):
     return application
 
 
+def _probe(url: str) -> tuple[int | None, str]:
+    """Отвечает ли адрес. Используется и состоянием, и самопроверкой."""
+    import urllib.error
+    import urllib.request
+
+    try:
+        with urllib.request.urlopen(url, timeout=5) as response:
+            return response.status, ""
+    except urllib.error.HTTPError as error:
+        return error.code, ""
+    except Exception as error:  # noqa: BLE001 — недоступность тоже ответ
+        return None, str(error)[:80]
+
+
+def show_status(host: str, ports: dict) -> int:
+    """Состояние стенда: процесс и ответы витрин.
+
+    Проверяется не только корень: витрина, отдающая главную и молчащая на
+    вложенном маршруте, выглядит работающей ровно до первого перехода.
+    """
+    pid = None
+    if PIDFILE.is_file():
+        try:
+            pid = int(PIDFILE.read_text(encoding="utf-8").strip())
+        except ValueError:
+            pid = None
+    alive = False
+    if pid:
+        try:
+            os.kill(pid, 0)
+            alive = True
+        except OSError:
+            alive = False
+    print(f"процесс: {'работает' if alive else 'не найден'}"
+          + (f", pid {pid}" if pid else ""))
+
+    #: Вложенные маршруты у каждой витрины свои: у basis-video нет каталога.
+    deep = {
+        "zona-cinema": ["/", "/catalog/", "/genres/", "/search/"],
+        "animedia-portal": ["/", "/catalog/", "/anime/", "/search/"],
+        "basis-video": ["/", "/lekcii/", "/news/", "/search/"],
+    }
+    bad = 0
+    for name, port in ports.items():
+        for route in deep.get(name, ["/"]):
+            url = f"http://{host}:{port}{route}"
+            code, error = _probe(url)
+            ok = code == 200
+            bad += 0 if ok else 1
+            print(f"  {'OK ' if ok else 'НЕТ'} {code or '—':>4}  {url}"
+                  + (f"  {error}" if error else ""))
+    return 0 if not bad else 1
+
+
+def stop_stand() -> int:
+    if not PIDFILE.is_file():
+        print("стенд не запущен: файла с идентификатором процесса нет")
+        return 0
+    try:
+        pid = int(PIDFILE.read_text(encoding="utf-8").strip())
+    except ValueError:
+        PIDFILE.unlink(missing_ok=True)
+        print("файл с идентификатором повреждён — снят")
+        return 0
+    try:
+        os.kill(pid, signal.SIGTERM)
+        print(f"стенд остановлен, pid {pid}")
+    except ProcessLookupError:
+        print(f"процесса {pid} нет — файл снят")
+    PIDFILE.unlink(missing_ok=True)
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8902,
                         help="базовый порт; каждой витрине достаётся следующий")
     parser.add_argument("--plan", action="store_true", help="напечатать план и выйти")
+    parser.add_argument("--status", action="store_true",
+                        help="проверить, отвечают ли витрины, и выйти")
+    parser.add_argument("--stop", action="store_true", help="остановить стенд и выйти")
     args = parser.parse_args()
 
     products = _products()
@@ -171,6 +253,11 @@ def main() -> int:
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(plan, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
+    if args.status:
+        return show_status(args.host, ports)
+    if args.stop:
+        return stop_stand()
+
     if args.plan:
         print(json.dumps(plan, ensure_ascii=False, indent=2))
         return 0
@@ -189,6 +276,9 @@ def main() -> int:
         threading.Thread(target=server.serve_forever, daemon=True).start()
         servers.append(server)
         print(f"  {name:18} http://{args.host}:{port}/")
+
+    PIDFILE.parent.mkdir(parents=True, exist_ok=True)
+    PIDFILE.write_text(str(os.getpid()), encoding="utf-8")
 
     index = make_server(args.host, args.port, _index_app(plan),
                         server_class=ThreadingWSGIServer, handler_class=QuietHandler)
