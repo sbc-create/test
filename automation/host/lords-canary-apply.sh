@@ -115,7 +115,7 @@ readonly ALLOWED_SITES=(lords-02)
 # (c6a11f65…), производственная линия — до версии 5 (434f9397…), и ни один из
 # двух отпечатков объединённому дереву не принадлежит. Значение ниже поставлено
 # перепином после слияния, а не выбрано из двух прежних.
-readonly EXPECT_DIGEST="381fbd01a40e44ba83e4324b228b0db9067a7cf093457efc68a544509aafd76c"
+readonly EXPECT_DIGEST="a0cfaf7135255d62e70432162cadc554c393c2c01dec3936baddafd8ca694859"
 readonly REFRESH_TIMER="lords-content-refresh.timer"
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
