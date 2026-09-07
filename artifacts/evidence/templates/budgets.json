@@ -1,5 +1,5 @@
 {
-  "captured_at_utc": "2026-09-07T08:44:57.292Z",
+  "captured_at_utc": "2026-09-07T08:48:23.838Z",
   "budget": {
     "documentKb": 120,
     "scriptKb": 60,
@@ -26,7 +26,7 @@
       "page": "catalog",
       "url": "http://127.0.0.1:8801/catalog/",
       "requests": 4,
-      "documentKb": 32,
+      "documentKb": 31,
       "scriptKb": 27,
       "styleKb": 29,
       "imageKb": 0,
@@ -37,7 +37,7 @@
       "page": "home",
       "url": "http://127.0.0.1:8802/",
       "requests": 18,
-      "documentKb": 54,
+      "documentKb": 53,
       "scriptKb": 27,
       "styleKb": 29,
       "imageKb": 11,
@@ -48,7 +48,7 @@
       "page": "catalog",
       "url": "http://127.0.0.1:8802/catalog/",
       "requests": 4,
-      "documentKb": 31,
+      "documentKb": 30,
       "scriptKb": 27,
       "styleKb": 29,
       "imageKb": 0,
@@ -92,7 +92,7 @@
       "page": "catalog",
       "url": "http://127.0.0.1:8804/catalog/",
       "requests": 3,
-      "documentKb": 46,
+      "documentKb": 45,
       "scriptKb": 19,
       "styleKb": 29,
       "imageKb": 0,
@@ -107,7 +107,7 @@
       "worstMs": 48,
       "reporting_threshold_ms": 16,
       "note": "зафиксированы взаимодействия выше порога отчётности",
-      "observer_selfcheck_ms": 128
+      "observer_selfcheck_ms": 136
     }
   ],
   "player": [

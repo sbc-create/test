@@ -185,22 +185,24 @@ class Meta:
     canonical_self: bool = True
 
 
-def _nav_items(sections: list, current: str, texts: dict | None = None) -> str:
-    """Пункты навигации. Подпись берётся у профиля, если он её задал.
+def _nav_items(sections: list, current: str) -> str:
+    """Пункты навигации.
 
-    Прежде подпись всегда бралась из общего перечня, и витрина не могла
-    назвать свой раздел по-своему. Для кинопортала это значило пункт
-    «Расписание», ведущий на перечень сезонов: подпись обещала календарь
-    выхода серий, которого у кино нет и который профиль прямо не заводит.
+    Подпись берётся из общего перечня. Попытка брать её у профиля отменена, и
+    причина записана здесь, чтобы её не повторили: у профиля есть только поле
+    `title` раздела, а это заголовок страницы — «Каталог фильмов и сериалов —
+    …», а не короткое имя пункта меню. Подставленный в навигацию, он переносил
+    её на вторую строку и растил шапку со 110 до 152 пикселей на всех витринах
+    Lords разом. Поймал это эталон раскладки.
 
-    Правка добавочная: у профиля, который своего названия не задал, подпись
-    остаётся прежней, и у витрин Lords не меняется ничего.
+    Короткого собственного имени раздела в договоре профиля нет. Завести его —
+    правка договора, а она принадлежит владельцу и полосе SEO: имя раздела
+    видно в навигации, в крошках и в разметке, и менять его в одном месте
+    нельзя.
     """
-    texts = texts or {}
     out = []
     for section, path in sections:
-        own = (texts.get(section) or {}).get("title")
-        label = own or SECTION_LABELS.get(section, section)
+        label = SECTION_LABELS.get(section, section)
         aria = ' aria-current="page"' if path == current else ""
         out.append(f'<li><a href="{escape(path)}"{aria}>{escape(label)}</a></li>')
     return "".join(out)
@@ -461,7 +463,7 @@ def _header(ctx: dict, meta: Meta) -> str:
         '<button class="nav-toggle" type="button" aria-expanded="false" '
         'aria-controls="site-nav">Меню</button>'
         '<nav class="site-nav" id="site-nav" aria-label="Основная навигация"><ul>'
-        + _nav_items(ctx["nav"], ctx.get("_path", ""), ctx.get("texts"))
+        + _nav_items(ctx["nav"], ctx.get("_path", ""))
         + "</ul></nav>"
         + _header_search(ctx)
         + "</div></header>"
@@ -522,9 +524,7 @@ DEFAULT_BLURB = (
 
 def _footer(ctx: dict) -> str:
     links = "".join(
-        f'<li><a href="{escape(path)}">'
-        f'{escape((( ctx.get("texts") or {}).get(section) or {}).get("title") or SECTION_LABELS.get(section, section))}'
-        f'</a></li>'
+        f'<li><a href="{escape(path)}">{escape(SECTION_LABELS.get(section, section))}</a></li>'
         for section, path in ctx["nav"]
     )
     domain = str(ctx.get("domain") or "")
