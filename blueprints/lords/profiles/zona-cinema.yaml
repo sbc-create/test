@@ -23,6 +23,8 @@ theme:
     border: '#d6d6da'
     radius: 8px
     container: 1280px
+    h1_size: '1.75rem'
+    h2_size: '1.3rem'
     heading_font: '''Open Sans'', ''Segoe UI'', Roboto, Arial, sans-serif'
 layout:
   density: airy

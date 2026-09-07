@@ -649,6 +649,24 @@ def _card_rating(title) -> str:
 
 
 
+def _rail_poster(item) -> str:
+    """Постер карточки карусели или заглушка вместо него.
+
+    Отдельно от `_poster` потому, что у карусели своя запись: она приходит от
+    ранжировщика и несёт не объект каталога, а признаки. Правило то же —
+    заглушка с первой буквой названия, изображение снимает себя при отказе.
+    """
+    letter = escape((getattr(item, "title", "") or "?").strip()[:1].upper())
+    placeholder = f'<span class="rail__poster-empty" aria-hidden="true">{letter}</span>'
+    source = getattr(item, "poster", None) or ""
+    if not source:
+        return placeholder
+    return (
+        f'{placeholder}<img src="{escape(source)}" alt="" loading="lazy" decoding="async"'
+        ' width="400" height="600" onerror="this.remove()">'
+    )
+
+
 def _carousel_card(scored, position: int, shelf_id: str) -> str:
     """Одна карточка карусели.
 
@@ -682,8 +700,10 @@ def _carousel_card(scored, position: int, shelf_id: str) -> str:
         f' data-shelf="{escape(shelf_id)}" data-position="{position}"'
         f' data-content-id="{escape(item.content_id)}">'
         f'<span class="rail__poster">'
-        f'<img src="{escape(item.poster or "")}" alt="" loading="lazy" decoding="async"'
-        f' width="400" height="600">{rating}</span>'
+        # Та же заглушка, что и у карточки списка. Карусель рисовалась своей
+        # разметкой, и запись без постера оставляла в ней серый прямоугольник —
+        # на первом экране, где он заметнее всего.
+        f'{_rail_poster(item)}{rating}</span>'
         f'<span class="rail__title">{escape(item.title)}</span>'
         f'<span class="rail__meta">{escape(meta)}</span>'
         "</a></li>"

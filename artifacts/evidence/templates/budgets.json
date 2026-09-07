@@ -1,5 +1,5 @@
 {
-  "captured_at_utc": "2026-09-07T07:03:23.902Z",
+  "captured_at_utc": "2026-09-07T08:05:43.854Z",
   "budget": {
     "documentKb": 120,
     "scriptKb": 60,
@@ -15,11 +15,11 @@
       "page": "home",
       "url": "http://127.0.0.1:8801/",
       "requests": 18,
-      "documentKb": 46,
+      "documentKb": 48,
       "scriptKb": 27,
       "styleKb": 29,
       "imageKb": 11,
-      "domNodes": 790
+      "domNodes": 808
     },
     {
       "site": "lords-01",
@@ -37,11 +37,11 @@
       "page": "home",
       "url": "http://127.0.0.1:8802/",
       "requests": 18,
-      "documentKb": 52,
+      "documentKb": 53,
       "scriptKb": 27,
       "styleKb": 29,
       "imageKb": 11,
-      "domNodes": 870
+      "domNodes": 888
     },
     {
       "site": "lords-02",
@@ -59,11 +59,11 @@
       "page": "home",
       "url": "http://127.0.0.1:8803/",
       "requests": 18,
-      "documentKb": 43,
+      "documentKb": 45,
       "scriptKb": 27,
       "styleKb": 29,
       "imageKb": 11,
-      "domNodes": 702
+      "domNodes": 720
     },
     {
       "site": "lords-03",
@@ -104,10 +104,10 @@
       "site": "lords-01",
       "route": "/catalog/",
       "interactions": 3,
-      "worstMs": 48,
+      "worstMs": 32,
       "reporting_threshold_ms": 16,
       "note": "зафиксированы взаимодействия выше порога отчётности",
-      "observer_selfcheck_ms": 128
+      "observer_selfcheck_ms": 136
     }
   ],
   "player": [

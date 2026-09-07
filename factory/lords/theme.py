@@ -39,6 +39,16 @@ DEFAULT_TOKENS = {
     # Open Sans — гарнитура обоих референсов. Список запасных оставлен: своего
     # файла шрифта у сайта нет, а тянуть чужой хостинг ради начертания незачем.
     "heading_font": "'Open Sans', 'Segoe UI', Roboto, Arial, sans-serif",
+    # Кегль заголовков — часть договора профиля, а не константа темы.
+    # Умолчание совпадает с прежними значениями, поэтому у витрин, которые
+    # его не объявляют, не меняется ничего: 18px/600 у H1 сняты с референса
+    # Lords и остаются его решением.
+    #
+    # Витринам с собственным договором оформления умолчание не годится:
+    # заголовок, крупнее основного текста на семь процентов, иерархии не
+    # создаёт — измерено, шкала выходила 1,07.
+    "h1_size": "1.125rem",
+    "h2_size": "1.05rem",
 }
 
 DEFAULT_LAYOUT = {
@@ -213,6 +223,8 @@ def stylesheet(profile: dict, *, declared_theme: str | None = None) -> str:
   --card-ratio: {lay['card_ratio']};
   --cols: {cols['mobile']};
   --link: {readable_on(t['accent'], t['bg'])};
+  --h1: {t['h1_size']};
+  --h2: {t['h2_size']};
   --font: {t['heading_font']};
   /* Без color-scheme браузер рисует свои полосы прокрутки и элементы
      управления в чужой теме — страница выходит двухцветной. */
@@ -279,8 +291,8 @@ h1, h2, h3 {{ line-height: 1.2; margin: 0 0 .5em; overflow-wrap: anywhere; }}
 /* Заголовки не растут вместе с окном: у референса кегль один и тот же
    на 390 и на 1920, а наш h1 доходил до 22px и делал страницу
    похожей на документ, а не на витрину. */
-h1 {{ font-size: 1.125rem; font-weight: 600; }}
-h2 {{ font-size: 1.05rem; font-weight: 600; }}
+h1 {{ font-size: var(--h1); font-weight: 600; }}
+h2 {{ font-size: var(--h2); font-weight: 600; }}
 p {{ margin: 0 0 1em; overflow-wrap: anywhere; }}
 .container {{ width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 16px; }}
 .visually-hidden {{
@@ -412,7 +424,13 @@ main {{ padding: var(--pad) 0 40px; }}
 .rail__link:focus-visible {{ outline: 2px solid var(--accent); outline-offset: 3px; }}
 .rail__poster {{ position: relative; display: block; aspect-ratio: var(--card-ratio);
   background: var(--surface-alt); border-radius: var(--radius); overflow: hidden; }}
-.rail__poster img {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
+.rail__poster img {{ position: relative; width: 100%; height: 100%;
+  object-fit: cover; display: block; }}
+/* Заглушка постера карусели. Лежит под изображением и видна, когда его нет. */
+.rail__poster-empty {{ position: absolute; inset: 0; display: flex;
+  align-items: center; justify-content: center;
+  font-size: 1.8rem; font-weight: 700; color: var(--muted);
+  background: var(--surface-alt); }}
 /* Названию позволено занять столько строк, сколько ему нужно.
    Прежде здесь стоял зажим в две строки. При обычном размере шрифта он ничего
    не резал, и потому выглядел безобидно, но зажим считает строки, а не текст:
