@@ -2114,6 +2114,33 @@ def _показатель(поле: dict | None) -> str:
     return показ + (f'<br><span class="mut small">{_e(хвост)}</span>' if хвост else "")
 
 
+#: Подписи подробностей витрины. До них в карточке стояли имена полей как есть,
+#: и читались они как названия того, что показано. Одно из них читалось неверно:
+#: `templateDigest` — это отпечаток артефакта, то есть тарбола, собранного со
+#: всего дерева ревизии. Любая правка теста или отчёта его меняет, не тронув ни
+#: одного шаблонного файла, и две одинаково отрисованные витрины показывают
+#: разное. Подпись обязана говорить, что это отпечаток артефакта, а не ответ на
+#: вопрос «чем отрисован сайт».
+ПОДПИСИ_ПОДРОБНОСТЕЙ: dict[str, str] = {
+    "environment": "Среда",
+    "productionAuthorized": "Разрешён production",
+    "templateDigest": "Отпечаток артефакта шаблона",
+    "rendererRevision": "Ревизия отрисовщика",
+    "toolingRevision": "Ревизия оснастки",
+    "contentSource": "Источник содержимого",
+    "contentSnapshotId": "Снимок содержимого",
+    "contentCount": "Записей в снимке",
+    "rollbackTarget": "Откат на",
+    "deployment": "Выкладка",
+    "adminAdapter": "Адаптер админки",
+    "secretRefs": "Ссылки на секреты",
+    "analyticsConnector": "Подключение аналитики",
+    "indexedPages": "Проиндексировано",
+    "sitemapState": "Карта сайта",
+    "lastSyncAt": "Последняя синхронизация",
+}
+
+
 def _настройки_витрины(сайт: str, состояние: dict | None, hidden: str,
                        предпросмотр: dict | None) -> str:
     """Правка настроек витрины прямо в её карточке во флоте.
@@ -2195,13 +2222,8 @@ def control_center(записи: list, сводка: dict, *, flash: dict | None
             f'<td><details{" open" if сайт in предпросмотр else ""}>'
             '<summary>Подробно</summary><dl class="kv">'
             + "".join(
-                f"<dt>{_e(и)}</dt><dd>{_показатель(поля.get(и))}</dd>"
-                for и in ("environment", "productionAuthorized", "templateDigest",
-                          "rendererRevision", "toolingRevision", "contentSource",
-                          "contentSnapshotId", "contentCount", "rollbackTarget",
-                          "deployment", "adminAdapter", "secretRefs",
-                          "analyticsConnector", "indexedPages", "sitemapState",
-                          "lastSyncAt")
+                f"<dt>{_e(подпись)}</dt><dd>{_показатель(поля.get(и))}</dd>"
+                for и, подпись in ПОДПИСИ_ПОДРОБНОСТЕЙ.items()
             )
             + "</dl>"
             + _настройки_витрины(сайт, настройки.get(сайт), hidden,
