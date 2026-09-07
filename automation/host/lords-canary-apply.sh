@@ -103,7 +103,7 @@ readonly ALLOWED_SITES=(lords-02)
 # Версия 1 объявляла живой каталог CDNVideoHub синтетическим на всех трёх
 # боевых витринах, и по этой метке CORE_TO_OWNER-011 вывел несуществующий
 # блокер выкладки.
-readonly EXPECT_DIGEST="ddbeddb8fcf2ddb5091cc9e87cc83262e05235b739cbb3a53e2f408350c6626a"
+readonly EXPECT_DIGEST="cfe8ee2d21d19a71fa3805177890a8eac240a2cffad146ce404f42b503eafa76"
 readonly REFRESH_TIMER="lords-content-refresh.timer"
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
