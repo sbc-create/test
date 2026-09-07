@@ -5,25 +5,26 @@
   "worktree": "/home/claude/wt-prod-25",
   "baseStage": "PROGRAM-PRODUCTION-FINISH-25",
   "baselineFixedAt": "2026-09-07T14:43:05Z",
-  "headSha": "1e413353eab6ed852b5cd7c798b75ad691dcb20a",
+  "headSha": "ac89db4254f35384cd1ea94752accd3d81932e39",
   "cycle": 4,
   "closed": {
     "0": "правда зафиксирована: карта, три цикла, три общих области",
     "1": "техдолг: отпечаток шаблона, подборки без поставщика, метрика поиска",
     "2": "девять доменов объявлены реестром и сверяются гейтом",
     "3": "контракт отрисовки RenderSpec → ArtifactManifest",
-    "4": "разрыв всех трёх циклов, три переноса: чтение каталога, домен редакции, домен заведения витрин"
+    "4": "разрыв всех трёх циклов и пять переносов: чтение каталога, редакция, заведение витрин, личность, содержимое"
   },
   "cyclesBetweenSubsystems": 0,
   "domainsDeclared": 9,
   "knownBoundaryViolations": 0,
   "unassignedFiles": 10,
-  "tests": "5440 passed, 3 skipped, 1 xfailed, 0 failed",
+  "tests": "5443 passed, 3 skipped, 1 xfailed, 0 failed",
   "productionMutations": 0,
   "next": [
-    "собрать физически оставшиеся семь доменов, по одному за цикл",
+    "fleet, releases, job_runtime, insights — собрать физически",
+    "templates собран не будет тем же приёмом: вернул бы разорванный цикл",
     "версионированные описания Site, ContentItem, Release, Job, AuditEvent",
     "короткие запросы с опечаткой — решение требует замера до и после"
   ],
-  "domainsAssembled": 2
+  "domainsAssembled": 5
 }
