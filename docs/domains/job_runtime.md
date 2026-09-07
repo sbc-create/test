@@ -15,6 +15,7 @@
 
 ## Разрешённые пути
 
+* `factory/job_runtime/`
 * `factory/queue.py`
 * `factory/locks.py`
 * `factory/state.py`

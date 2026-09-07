@@ -15,6 +15,7 @@
 
 ## Разрешённые пути
 
+* `factory/releases/`
 * `factory/lords/release_manifest.py`
 * `factory/lords/refresh_release.py`
 * `factory/lords/template_artifact.py`

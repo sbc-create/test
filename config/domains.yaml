@@ -176,6 +176,7 @@ domains:
     purpose: Как построенное становится выложенным. Сборка, артефакт,
       канарейка, переключение, откат.
     paths:
+      - factory/releases/
       - factory/lords/release_manifest.py
       - factory/lords/refresh_release.py
       - factory/lords/template_artifact.py
@@ -201,6 +202,7 @@ domains:
     purpose: Очередь, исполнитель, таймеры, повторы и замки. Не знает, что
       именно исполняет.
     paths:
+      - factory/job_runtime/
       - factory/queue.py
       - factory/locks.py
       - factory/state.py
