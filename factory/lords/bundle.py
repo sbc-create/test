@@ -34,6 +34,7 @@ EPOCH = 0
 
 RUNTIME = '''#!/usr/bin/env python3
 """Рантайм стенда Lords. Только стандартная библиотека — сеть при старте не нужна."""
+import importlib
 import json
 import os
 import signal
@@ -101,6 +102,14 @@ def search_index():
         lib = str(BASE / "lib")
         if lib not in sys.path:
             sys.path.insert(0, lib)
+        # Кэш импортёра помнит, что каталога не было.
+        #
+        # Служба запускается раньше, чем раскладывается релиз: между стартом и
+        # появлением `lib` проходят секунды, и Python успевает запомнить путь
+        # как отсутствующий. Дальше он туда не заглядывает вовсе — поиск
+        # отвечает «указателя нет» при лежащем рядом указателе. Измерено на
+        # lords-02: библиотека на месте, файл на месте, ответ 503.
+        importlib.invalidate_caches()
         try:
             _search_cache["index"] = json.loads(path.read_text(encoding="utf-8"))
             _search_cache["stamp"] = stamp
