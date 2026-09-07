@@ -20,5 +20,11 @@ module.exports = defineConfig({
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'], launchOptions } },
     { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+    // WebKit добавлен третьим: три семейства задуманы как самостоятельные, и
+    // расхождение движков по типографике и сетке — именно то, что эталон
+    // раскладки обязан ловить. Эталон при этом снимается в Chromium: держать
+    // три набора чисел значило бы сверять браузеры между собой, а не витрину
+    // с самой собой.
+    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
   ],
 });

@@ -284,10 +284,18 @@ def score_visual(family: str) -> tuple[int, str]:
         if not pairs:
             return 5, f"{len(rows)} измерений, различие с соседями не проверено"
         worst = min(len(p["differing"]) for p in pairs)
-        # Эталон раскладки как таковой у этих семейств ещё не заведён, поэтому
-        # полного балла нет: измерен облик и его отличие от соседей.
-        return 8, (f"{len(rows)} измерений на трёх ширинах; расхождение с соседями "
-                   f"не менее {worst} признаков из девяти")
+        baseline = ROOT / "tests" / "e2e-families" / "family-baseline.json"
+        if not baseline.is_file():
+            return 8, (f"{len(rows)} измерений на трёх ширинах; расхождение с соседями "
+                       f"не менее {worst} признаков из девяти; эталона раскладки нет")
+        try:
+            data = json.loads(baseline.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            return 6, "эталон раскладки нечитаем"
+        rows_count = len(data.get("measurements") or {})
+        return MAX, (f"эталон раскладки: {rows_count} измерений, допуск "
+                     f"{data.get('tolerance_px')} px; расхождение с соседними "
+                     f"семействами не менее {worst} признаков из девяти")
     baseline = ROOT / "tests" / "e2e-lords" / "visual-baseline.json"
     if not baseline.is_file():
         return 0, "эталона раскладки нет"
