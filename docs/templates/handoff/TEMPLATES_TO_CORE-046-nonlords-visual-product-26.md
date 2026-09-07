@@ -54,7 +54,7 @@
 ## 3. Что владелец может открыть
 
 Одна команда поднимает все витрины, один туннель их пробрасывает; страницы и
-что на них смотреть перечислены в `docs/templates/OWNER-PREVIEW.md`.
+что на них смотреть перечислены в `docs/templates/OWNER-STATUS.md`.
 
 ```bash
 .venv/bin/python scripts/product_preview_stand.py
