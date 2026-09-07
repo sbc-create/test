@@ -6,7 +6,7 @@
       "status": null,
       "verdict": "NAME_NOT_RESOLVED",
       "note": "имя не разрешается в адрес; разрешение имён в этой полосе работает — проверено на посторонних именах, — значит запись отсутствует или ещё не разошлась",
-      "declared_status": "OWNER_SUPPLIED"
+      "declared_status": "PENDING_DNS"
     },
     "additional": []
   },
@@ -14,25 +14,10 @@
     "primary": {
       "url": "https://animedia.icu",
       "host": "animedia.icu",
-      "address": "192.64.119.247",
-      "ports": {
-        "443": false,
-        "80": true
-      },
       "status": null,
-      "verdict": "HTTPS_NOT_SERVED",
-      "note": "HTTPS не отвечает, при этом порт 80 принимает соединения: хост жив, TLS не обслуживается",
-      "http_diagnostic": {
-        "scheme": "http",
-        "status": 200,
-        "final_url": "http://www.animedia.icu/?from=%40",
-        "server": "",
-        "title": "",
-        "markers_found": [],
-        "bytes": 2963,
-        "note": "диагностика, а не приёмка: объявленный адрес — https"
-      },
-      "declared_status": "OWNER_SUPPLIED"
+      "verdict": "NAME_NOT_RESOLVED",
+      "note": "имя не разрешается в адрес; разрешение имён в этой полосе работает — проверено на посторонних именах, — значит запись отсутствует или ещё не разошлась",
+      "declared_status": "PENDING_DNS"
     },
     "additional": [
       {
