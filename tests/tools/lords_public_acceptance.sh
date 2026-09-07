@@ -47,6 +47,32 @@ check "мусор честно не найден" "$junk" '[ "$junk" -ge 1 ]'
 api=$(curl -s -m 20 "$SITE/api/search?q=матрица" | python3 -c 'import json,sys;print(json.load(sys.stdin)["count"])' 2>/dev/null || echo 0)
 check "api поиска отвечает" "$api" '[ "$api" -ge 1 ]'
 
+echo "=== 3b. разные запросы дают разные ответы"
+# Одинаковый ответ на разные запросы — это и есть неприменённый запрос: именно
+# так выглядела витрина до исправления, отдавая 5268 байт на всё подряд.
+a=$(curl -s -m 20 "$SITE/api/search?q=матрица" | python3 -c 'import json,sys;d=json.load(sys.stdin);print(",".join(x["url"] for x in d.get("results",[])[:5]))' 2>/dev/null || echo "-")
+b=$(curl -s -m 20 "$SITE/api/search?q=ведьмак" | python3 -c 'import json,sys;d=json.load(sys.stdin);print(",".join(x["url"] for x in d.get("results",[])[:5]))' 2>/dev/null || echo "-")
+check "разные запросы — разные ответы" "${a:0:24}… / ${b:0:24}…" '[ -n "$a" ] && [ "$a" != "$b" ]'
+
+# Страница и API отвечают об одном и том же: расхождение означает, что человек
+# и машина видят разные витрины.
+ssr=$(curl -s -m 20 "$SITE/search/?q=матрица" | grep -oE 'href="/title/[^"]+"' | head -1 | sed 's/href="//;s/"//')
+api1=$(printf '%s' "$a" | cut -d, -f1)
+check "страница и API согласованы" "${ssr:-нет} / ${api1:-нет}" '[ -n "$ssr" ] && [ "$ssr" = "$api1" ]'
+
+echo "=== 3c. темы"
+# Механизм тем едет вместе с шаблоном, но переключатель рисуется только тогда,
+# когда витрина объявила вторую палитру. Профили Lords её пока не объявляют,
+# поэтому здесь проверяется честное отсутствие, а не наличие.
+css=$(curl -s -m 20 "$SITE/assets/site.css")
+scheme=$(printf '%s' "$css" | grep -c "prefers-color-scheme" || true)
+toggle=$(curl -s -m 20 "$SITE/" | grep -c "theme-switch" || true)
+if [ "$scheme" -ge 1 ]; then
+  check "переключатель тем есть при объявленной палитре" "$toggle" '[ "$toggle" -ge 1 ]'
+else
+  check "второй палитры нет — переключателя тоже нет" "$toggle" '[ "$toggle" -eq 0 ]'
+fi
+
 echo "=== 4. карточка, длительности, плеер"
 u=$(curl -s -m 20 "$SITE/catalog/" | grep -oE 'href="/title/[^"]+"' | head -1 | sed 's/href="//;s/"//')
 curl -s -m 20 "$SITE$u" > /tmp/card.html
