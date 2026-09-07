@@ -396,13 +396,29 @@ PYEOF
     # дерева фабрики, которого на витрине нет. Берётся она из ЗАКРЕПЛЁННОГО
     # шаблона — иначе поиск отвечал бы по одним правилам, а страницы были бы
     # собраны по другим.
-    install -d "${target}/lib/factory/lords"
-    : > "${target}/lib/factory/__init__.py"
-    : > "${target}/lib/factory/lords/__init__.py"
+    #
+    # Модулей может не быть: закреплённый шаблон старого релиза собран до
+    # появления серверного поиска. Копировать их безусловно означало уронить
+    # весь прогон — и это случилось: обновление lords-01 и lords-03 падало на
+    # `cp: cannot stat .../search.py`, каталог переставал обновляться на двух
+    # витринах из трёх. Витрина со старым шаблоном просто остаётся без
+    # серверного поиска: у неё его и не было.
+    search_ready=1
     for m in search.py search_index.py; do
-      cp -a "${TEMPLATE_ROOT}/factory/lords/${m}" "${target}/lib/factory/lords/${m}"
+      [ -f "${TEMPLATE_ROOT}/factory/lords/${m}" ] || search_ready=0
     done
-    if ! "$PYTHON" "${REPO}/automation/host/lords-build-search-index.py" "$target"; then
+    if [ "$search_ready" = "1" ]; then
+      install -d "${target}/lib/factory/lords"
+      : > "${target}/lib/factory/__init__.py"
+      : > "${target}/lib/factory/lords/__init__.py"
+      for m in search.py search_index.py; do
+        cp -a "${TEMPLATE_ROOT}/factory/lords/${m}" "${target}/lib/factory/lords/${m}"
+      done
+    else
+      log "${site}: в закреплённом шаблоне нет модулей поиска — указатель не собирается"
+    fi
+    if [ "$search_ready" = "1" ] \
+       && ! "$PYTHON" "${REPO}/automation/host/lords-build-search-index.py" "$target"; then
       # Витрина без указателя остаётся рабочей: поиск отвечает названной
       # причиной, а не пустой выдачей. Молчать об этом нельзя — иначе поиск
       # «не находит ничего» и выглядит исправным.
