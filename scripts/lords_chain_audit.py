@@ -144,18 +144,11 @@ def load_catalog(site: str) -> list[dict]:
 
 
 def load_details() -> dict[str, dict]:
-    out: dict[str, dict] = {}
-    if not DETAIL_CACHE.is_dir():
-        return out
-    for path in DETAIL_CACHE.glob("*.json"):
-        try:
-            entry = json.loads(path.read_text(encoding="utf-8"))
-        except Exception:  # noqa: BLE001 — битый файл кэша тоже факт, но не поле
-            continue
-        detail = entry.get("detail")
-        if detail:
-            out[detail.get("id") or path.stem] = detail
-    return out
+    details, broken = enrich_mod.load_cached_details(DETAIL_CACHE)
+    if broken:
+        print(f"кэш обогащения: пропущено битых файлов {len(broken)}: "
+              f"{', '.join(broken[:5])}")
+    return details
 
 
 def sample(ids: list[str], size: int) -> list[str]:

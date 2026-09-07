@@ -60,16 +60,10 @@ def main() -> int:
     # описаний, ни жанров, ни стран, ни длительности — они приходят только из
     # detail. Стенд без обогащения показывает витрину, которой не существует:
     # указатель стран на нём пуст, хотя у 8 348 записей страна есть.
-    details: dict[str, dict] = {}
-    if DETAIL_CACHE.is_dir():
-        for path in DETAIL_CACHE.glob("*.json"):
-            try:
-                entry = json.loads(path.read_text(encoding="utf-8"))
-            except Exception:  # noqa: BLE001 — битый файл кэша не поле
-                continue
-            detail = entry.get("detail")
-            if detail:
-                details[detail.get("id") or path.stem] = detail
+    details, broken = enrich_mod.load_cached_details(DETAIL_CACHE)
+    if broken:
+        print(f"кэш обогащения: пропущено битых файлов {len(broken)}: "
+              f"{', '.join(broken[:5])}")
     merged = [
         enrich_mod.merge_detail(item, details[item["external_id"]])
         if item.get("external_id") in details else item

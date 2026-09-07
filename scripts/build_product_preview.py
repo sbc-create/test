@@ -80,16 +80,10 @@ def load_catalog(limit: int | None) -> tuple[list[dict], dict]:
     raw = json.loads(source.read_text(encoding="utf-8"))
     items = raw["items"] if isinstance(raw, dict) else raw
 
-    details: dict[str, dict] = {}
-    if DETAIL_CACHE.is_dir():
-        for path in DETAIL_CACHE.glob("*.json"):
-            try:
-                entry = json.loads(path.read_text(encoding="utf-8"))
-            except Exception:  # noqa: BLE001 — битый файл кэша не поле
-                continue
-            detail = entry.get("detail")
-            if detail:
-                details[detail.get("id") or path.stem] = detail
+    details, broken = enrich_mod.load_cached_details(DETAIL_CACHE)
+    if broken:
+        print(f"кэш обогащения: пропущено битых файлов {len(broken)}: "
+              f"{', '.join(broken[:5])}")
 
     # Обогащение обязательно: списочный ответ не несёт ни описаний, ни жанров,
     # ни стран, ни длительности. Без него витрина выглядит пустее, чем есть.

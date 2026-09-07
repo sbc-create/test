@@ -204,3 +204,37 @@ def enrich_items(
 
     result = [out.get(i.get("external_id"), i) for i in items]
     return result, report
+
+
+def load_cached_details(cache_dir) -> tuple[dict[str, dict], list[str]]:
+    """Читает сохранённые detail-данные. Возвращает записи и имена битых файлов.
+
+    Один и тот же цикл был скопирован дословно в три сценария, а битый файл
+    пропускался через `except Exception: continue`, не оставляя следа.
+
+    Разница между «данных нет у источника» и «файл кэша испорчен» существенна:
+    первое неисправимо, второе чинится перезаписью кэша. Молчание делало их
+    неразличимыми, а кэш — это 12 010 файлов: если часть перестала
+    разбираться, витрина беднеет ровно настолько же и никто об этом не узнаёт.
+
+    Битое по-прежнему пропускается: обход кэша не место для отказа сборки.
+    Но теперь он говорит, сколько пропустил.
+    """
+    from pathlib import Path
+
+    directory = Path(cache_dir)
+    details: dict[str, dict] = {}
+    broken: list[str] = []
+    if not directory.is_dir():
+        return details, broken
+    for path in sorted(directory.glob("*.json")):
+        try:
+            entry = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError, UnicodeDecodeError):
+            # Обрезанный файл — обычное состояние кэша, прерванного на записи.
+            broken.append(path.name)
+            continue
+        detail = (entry or {}).get("detail") if isinstance(entry, dict) else None
+        if detail:
+            details[str(detail.get("id") or path.stem)] = detail
+    return details, broken
