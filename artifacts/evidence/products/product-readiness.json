@@ -7,7 +7,7 @@
     "zona-cinema"
   ],
   "average_integration": 64,
-  "generated_at_utc": "2026-09-07T14:18:55.723872+00:00",
+  "generated_at_utc": "2026-09-07T14:47:12.574068+00:00",
   "rubric": {
     "package": "готовность пакета",
     "data": "данные",
@@ -65,13 +65,13 @@
         },
         "live": {
           "points": 0,
-          "note": "NAME_NOT_RESOLVED: https://zonafilm.space — имя не разрешается в адрес; разрешение имён в этой полосе работает — проверено на посторонних именах, — значит запись отсутствует или ещё не разошлась"
+          "note": "PENDING_DNS: https://zonafilm.space — имя ещё не разошлось, отказом не считается"
         }
       },
       "package_readiness": 86,
       "preview_acceptance": 90,
       "live_acceptance": null,
-      "live_state": "NAME_NOT_RESOLVED",
+      "live_state": "PENDING_DNS",
       "total": 75,
       "product_readiness": 88,
       "integration_readiness": 80
@@ -109,13 +109,13 @@
         },
         "live": {
           "points": 0,
-          "note": "HTTPS_NOT_SERVED: https://animedia.icu — HTTPS не отвечает, при этом порт 80 принимает соединения: хост жив, TLS не обслуживается"
+          "note": "PENDING_DNS: https://animedia.icu — имя ещё не разошлось, отказом не считается"
         }
       },
       "package_readiness": 86,
       "preview_acceptance": 90,
       "live_acceptance": null,
-      "live_state": "HTTPS_NOT_SERVED",
+      "live_state": "PENDING_DNS",
       "total": 75,
       "product_readiness": 88,
       "integration_readiness": 80

@@ -4,14 +4,20 @@
   "products": {
     "zona-cinema": {
       "base_url": "https://zonafilm.space",
-      "status": "OWNER_SUPPLIED",
+      "status": "PENDING_DNS",
       "identity_verified": false,
-      "routes": ["/", "/catalog/", "/search/", "/genres/", "/years/"],
-      "note": "адрес передан владельцем 2026-09-07; маршруты известны — витрину собирает эта фабрика"
+      "routes": [
+        "/",
+        "/catalog/",
+        "/search/",
+        "/genres/",
+        "/years/"
+      ],
+      "note": "адрес передан владельцем 2026-09-07; домен зарегистрирован и делегирован Cloudflare, но записи A в зоне нет — ожидание разрешения имени, не отказ витрины"
     },
     "animedia-portal": {
       "base_url": "https://animedia.icu",
-      "status": "OWNER_SUPPLIED",
+      "status": "PENDING_DNS",
       "identity_verified": false,
       "additional_urls": [
         {
@@ -20,14 +26,24 @@
           "note": "второй домен той же витрины; до подтверждённого разрешения имени и доступности не считается отказом"
         }
       ],
-      "routes": ["/", "/catalog/", "/search/", "/genres/", "/years/"],
-      "note": "адреса переданы владельцем 2026-09-07; маршруты известны — витрину собирает эта фабрика"
+      "routes": [
+        "/",
+        "/catalog/",
+        "/search/",
+        "/genres/",
+        "/years/"
+      ],
+      "note": "адреса переданы владельцем 2026-09-07; оба домена зарегистрированы и делегированы Cloudflare, записей A в зонах нет — ожидание разрешения имени"
     },
     "basis-video": {
       "base_url": null,
       "status": "BLOCKED_OWNER_URLS",
       "identity_verified": false,
-      "routes": ["/", "/catalog/", "/search/"],
+      "routes": [
+        "/",
+        "/catalog/",
+        "/search/"
+      ],
       "note": "адрес не предоставлен; ожидание входа owner.live_urls"
     },
     "yummy": {
