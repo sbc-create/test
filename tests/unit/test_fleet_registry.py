@@ -153,3 +153,38 @@ def test_каждое_поле_несёт_источник(корень):
     з = fr.site_record(корень, "site-1")
     без_источника = [и for и, н in з.fields.items() if not н.source]
     assert без_источника == [], f"поля без источника: {без_источника}"
+
+
+# --- серверный поиск выложенного релиза --------------------------------------
+
+def test_релиз_без_указателя_честно_говорит_что_поиска_нет(корень):
+    поле = _поле(fr.site_record(корень, "site-1"), "serverSearch")
+    assert поле.state is fr.State.NOT_CONNECTED
+    assert поле.value is None
+    assert "серверного поиска нет" in поле.reason
+
+
+def test_релиз_с_указателем_называет_число_записей(корень):
+    релиз = (корень / "runtime" / "site-1" / "current").resolve()
+    (релиз / "search-index.json").write_text(
+        '{"version": "lords-search-index/1.0.0", "size": 52517, "gram": 3, '
+        '"postings": {}, "items": []}', encoding="utf-8")
+    поле = _поле(fr.site_record(корень, "site-1"), "serverSearch")
+    assert поле.state is fr.State.CONNECTED
+    assert поле.value["records"] == 52517
+    assert поле.value["megabytes"] >= 0
+
+
+def test_указатель_не_разбирается_целиком(корень, monkeypatch):
+    """Указатель весит десятки мегабайт: экран флота не должен его читать.
+
+    Проверяется тем, что после заголовка лежит заведомо неразбираемый хвост —
+    попытка разобрать файл целиком упала бы.
+    """
+    релиз = (корень / "runtime" / "site-1" / "current").resolve()
+    (релиз / "search-index.json").write_text(
+        '{"version": "lords-search-index/1.0.0", "size": 100, ' + "не json" * 5000,
+        encoding="utf-8")
+    поле = _поле(fr.site_record(корень, "site-1"), "serverSearch")
+    assert поле.state is fr.State.CONNECTED
+    assert поле.value["records"] == 100
