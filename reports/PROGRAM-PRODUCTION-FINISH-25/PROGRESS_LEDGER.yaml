@@ -188,3 +188,42 @@ checkpoints:
     background_operations:
       - "системный рендер lords-03 в уже запущенном прогоне со старым окружением — не прерывался"
     sites_unchanged: [yummyani.site, yummyani.org, yummyani.biz]
+  - timestamp: "2026-09-07T14:50:00Z"
+    cycle: 41
+    branch: claude/program-production-finish-25
+    head_sha: 20b757cd6e8f415daba1bfb84d66d81638fe432c
+    core: 100
+    central_admin: 95
+    admin_fleet: PARTIAL
+    families:
+      lords_dark: 95
+      lords_light: 95
+      portal_light: 60
+      pulse: 60
+      editorial: 60
+    seo: 72
+    production: 95
+    global_progress: 91
+    was: 89
+    delta: 2
+    tests: "5366 passed, 3 skipped, 0 failed"
+    reasoning: >-
+      Production-baseline зафиксирован по пяти признакам, каждый проверен
+      отдельно: канареечных переменных нет в окружении боевого процесса, все
+      три витрины взяли закреплённый шаблон сами, полного рендера не
+      потребовалось ни одной, причина релиза lords-03 стала content-refresh
+      вместо canary, публичная приёмка повторена по HTTP и в двух движках.
+      production 92 -> 95: выкат закрыт и флот обновляется сам. До 100 % не
+      хватает снятия запрета на индексацию — решение владельца.
+    baseline_fixed_at: "2026-09-07T14:43:05Z"
+    production_releases:
+      lords-01: ef3f6327b653
+      lords-02: 07cdf9811548
+      lords-03: a42d4f5cb26f
+    measured:
+      - "быстрый путь lords-03: 500 с против 3 ч 6 мин полного рендера"
+      - "изменилось 7 тайтлов из 52 462; база прежнего релиза не тронута"
+    unblocked:
+      - "MODULAR-BOUNDARIES-27 — предусловие выполнено"
+      - "порог отбора кандидатов в поиске — предусловие выполнено"
+    sites_unchanged: [yummyani.site, yummyani.org, yummyani.biz]
