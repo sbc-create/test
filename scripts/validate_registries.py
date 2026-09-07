@@ -32,6 +32,7 @@ MAPPING = {
     # запрещает выдуманный: `null` означает, что владелец его ещё не передал,
     # а любое значение обязано быть настоящим https-адресом.
     "live-acceptance.json": "live-acceptance.schema.json",
+    "debt-accepted.json": "debt-accepted.schema.json",
 }
 
 # Производные артефакты: файл порождается из другого источника и в некоторых

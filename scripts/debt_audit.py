@@ -151,9 +151,16 @@ def check_markers() -> list[Finding]:
     pattern = re.compile(r"\b(TODO|FIXME|HACK|XXX)\b")
     for path in python_files() + sorted(
             p for p in (ROOT / "tests").rglob("*.js") if "node_modules" not in p.parts):
+        if path.resolve() == Path(__file__).resolve():
+            continue  # собственное выражение поиска маркеров — не маркер
         for i, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
             m = pattern.search(line)
-            if m:
+            # Маркер — это комментарий. Те же четыре буквы внутри строкового
+            # литерала бывают данными: матрица разрешений перечисляет
+            # `"git grep -n TODO"` как проверяемую команду, и это не
+            # незавершённая работа, а её описание.
+            комментарий = line.find("#")
+            if m and комментарий != -1 and комментарий < m.start():
                 out.append(Finding(
                     f"маркер {m.group(1)}", "низкий", rel(path), i, line.strip()[:140],
                     "незавершённая работа, о которой знает только этот файл",
@@ -361,6 +368,16 @@ def check_duplication() -> list[Finding]:
             body = "\n".join(l for _, l in window)
             if len(set(l for _, l in window)) < WINDOW - 2:
                 continue  # однообразные блоки вроде списков полей — не дублирование
+            # Одинаковые начала файлов — не дублирование логики. Восемь строк
+            # `import json` / `from pathlib import Path` совпадают у любых двух
+            # сценариев одного проекта, и выносить их некуда: они и так вызов
+            # общего. Первая редакция проверки сообщила о девяти таких парах, и
+            # каждая из них увела бы правку в никуда.
+            if all(l.startswith(("import ", "from ")) or not l for _, l in window):
+                continue
+            импортов = sum(1 for _, l in window if l.startswith(("import ", "from ")))
+            if импортов >= WINDOW - 2:
+                continue
             key = hashlib.sha256(body.encode("utf-8")).hexdigest()
             seen[key].append((rel(path), window[0][0]))
     out = []
@@ -412,6 +429,46 @@ def check_schema_versions() -> list[Finding]:
     return out
 
 
+ACCEPTED = ROOT / "config" / "debt-accepted.json"
+
+
+def _accepted() -> list[dict]:
+    """Осознанно принятый долг: причина и сторож, а не молчаливое исключение.
+
+    Разница существенна. Исключение прячет пункт; принятие называет, почему он
+    остаётся и что не даст ему стать опасным. Проверка ниже требует, чтобы
+    названный сторож существовал: принятие без сторожа — то же исключение,
+    только выглядит убедительнее.
+    """
+    if not ACCEPTED.is_file():
+        return []
+    try:
+        return json.loads(ACCEPTED.read_text(encoding="utf-8")).get("accepted", [])
+    except json.JSONDecodeError:
+        return []
+
+
+def check_accepted_guards() -> list[Finding]:
+    """Сторож, названный в принятом долге, обязан существовать."""
+    out = []
+    for запись in _accepted():
+        guard = str(запись.get("guard", ""))
+        файл = guard.split("::", 1)[0]
+        if not файл or not (ROOT / файл).is_file():
+            # Путь берётся мягко: файл принятого может лежать вне корня —
+            # так его подменяет проверка, — и падать на этом инструменту незачем.
+            try:
+                где = ACCEPTED.relative_to(ROOT).as_posix()
+            except ValueError:
+                где = ACCEPTED.as_posix()
+            out.append(Finding(
+                "принятый долг без сторожа", "высокий", где, 1,
+                f"{запись.get('path')}: сторож {guard!r} не найден",
+                "принятие без сторожа — молчаливое исключение, только убедительнее на вид",
+                "указать существующий тест или снять запись"))
+    return out
+
+
 CHECKS = (
     ("markers", check_markers),
     ("dead_modules", check_dead_modules),
@@ -419,6 +476,7 @@ CHECKS = (
     ("release_fixtures", check_release_fixtures),
     ("duplication", check_duplication),
     ("schema_versions", check_schema_versions),
+    ("accepted_guards", check_accepted_guards),
 )
 
 
@@ -432,6 +490,10 @@ def collect() -> list[Finding]:
         findings.extend(check_exceptions(tree, rel(path)))
     for _, check in CHECKS:
         findings.extend(check())
+    # Принятое помечается, а не выбрасывается: пункт остаётся видимым вместе с
+    # причиной, по которой он остаётся.
+    принято = {(з["kind"], з["path"]) for з in _accepted()}
+    findings = [f for f in findings if (f.kind, f.path) not in принято]
     for finding in findings:
         finding.owner = owner_of(finding.path)
     findings.sort(key=lambda f: (SEVERITY_ORDER.index(f.severity), f.path, f.line))

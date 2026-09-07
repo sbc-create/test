@@ -1,20 +1,19 @@
 {
   "artifact": "TEMPLATE_DEBT_REGISTER",
-  "total": 44,
+  "total": 35,
   "by_severity": {
     "критический": 0,
     "высокий": 1,
-    "средний": 23,
-    "низкий": 20
+    "средний": 16,
+    "низкий": 18
   },
   "by_owner": {
-    "CORE": 6,
-    "TEMPLATES": 38
+    "CORE": 5,
+    "TEMPLATES": 30
   },
   "by_kind": {
-    "маркер TODO": 2,
     "неявное утверждение в тесте": 17,
-    "повторённый блок": 23,
+    "повторённый блок": 16,
     "подавленное исключение": 1,
     "служебный домен в собранном выводе": 1
   },
@@ -42,26 +41,6 @@
     {
       "kind": "повторённый блок",
       "severity": "средний",
-      "owner": "TEMPLATES",
-      "path": "factory/lords/bundle.py",
-      "line": 123,
-      "detail": "8 строк повторяются дословно в: factory/lords/bundle.py, factory/lords/serve.py",
-      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
-      "verify": "вынести в общий модуль и заменить обе копии вызовом"
-    },
-    {
-      "kind": "повторённый блок",
-      "severity": "средний",
-      "owner": "TEMPLATES",
-      "path": "factory/lords/fixtures.py",
-      "line": 146,
-      "detail": "8 строк повторяются дословно в: factory/lords/fixtures.py, factory/lords/live_catalog.py",
-      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
-      "verify": "вынести в общий модуль и заменить обе копии вызовом"
-    },
-    {
-      "kind": "повторённый блок",
-      "severity": "средний",
       "owner": "CORE",
       "path": "factory/site_engine/adapters/lords.py",
       "line": 26,
@@ -83,16 +62,6 @@
       "kind": "повторённый блок",
       "severity": "средний",
       "owner": "CORE",
-      "path": "factory/site_engine/adapters/yummy.py",
-      "line": 9,
-      "detail": "8 строк повторяются дословно в: factory/site_engine/adapters/yummy.py, factory/site_engine/adapters/yummy_events.py",
-      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
-      "verify": "вынести в общий модуль и заменить обе копии вызовом"
-    },
-    {
-      "kind": "повторённый блок",
-      "severity": "средний",
-      "owner": "CORE",
       "path": "factory/verify.py",
       "line": 448,
       "detail": "8 строк повторяются дословно в: factory/verify.py, tests/tools/cross_site_uniqueness.py",
@@ -104,7 +73,7 @@
       "severity": "средний",
       "owner": "TEMPLATES",
       "path": "scripts/build_live_search_stand.py",
-      "line": 20,
+      "line": 56,
       "detail": "8 строк повторяются дословно в: scripts/build_live_search_stand.py, scripts/build_product_preview.py",
       "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
       "verify": "вынести в общий модуль и заменить обе копии вызовом"
@@ -134,7 +103,7 @@
       "severity": "средний",
       "owner": "TEMPLATES",
       "path": "scripts/family_readiness.py",
-      "line": 24,
+      "line": 393,
       "detail": "8 строк повторяются дословно в: scripts/family_readiness.py, scripts/product_readiness.py",
       "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
       "verify": "вынести в общий модуль и заменить обе копии вызовом"
@@ -146,26 +115,6 @@
       "path": "scripts/lords_live_defects.py",
       "line": 25,
       "detail": "8 строк повторяются дословно в: scripts/lords_live_defects.py, scripts/lords_release_baseline.py",
-      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
-      "verify": "вынести в общий модуль и заменить обе копии вызовом"
-    },
-    {
-      "kind": "повторённый блок",
-      "severity": "средний",
-      "owner": "TEMPLATES",
-      "path": "scripts/lords_release_baseline.py",
-      "line": 23,
-      "detail": "8 строк повторяются дословно в: scripts/lords_release_baseline.py, scripts/preview_inventory.py",
-      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
-      "verify": "вынести в общий модуль и заменить обе копии вызовом"
-    },
-    {
-      "kind": "повторённый блок",
-      "severity": "средний",
-      "owner": "TEMPLATES",
-      "path": "scripts/lords_release_candidate.py",
-      "line": 18,
-      "detail": "8 строк повторяются дословно в: scripts/lords_release_candidate.py, scripts/templates_status.py",
       "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
       "verify": "вынести в общий модуль и заменить обе копии вызовом"
     },
@@ -194,7 +143,7 @@
       "severity": "средний",
       "owner": "TEMPLATES",
       "path": "tests/tools/cross_site_uniqueness.py",
-      "line": 7,
+      "line": 109,
       "detail": "8 строк повторяются дословно в: tests/tools/cross_site_uniqueness.py, tests/tools/frontend_http.py",
       "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
       "verify": "вынести в общий модуль и заменить обе копии вызовом"
@@ -223,29 +172,9 @@
       "kind": "повторённый блок",
       "severity": "средний",
       "owner": "TEMPLATES",
-      "path": "tests/unit/test_lords_facets_work_without_js.py",
-      "line": 30,
-      "detail": "8 строк повторяются дословно в: tests/unit/test_lords_facets_work_without_js.py, tests/unit/test_lords_search_honesty.py, tests/unit/test_lords_series_without_seasons.py",
-      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
-      "verify": "вынести в общий модуль и заменить обе копии вызовом"
-    },
-    {
-      "kind": "повторённый блок",
-      "severity": "средний",
-      "owner": "TEMPLATES",
       "path": "tests/unit/test_lords_page_quality.py",
       "line": 53,
       "detail": "8 строк повторяются дословно в: tests/unit/test_lords_page_quality.py, tests/unit/test_lords_template.py",
-      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
-      "verify": "вынести в общий модуль и заменить обе копии вызовом"
-    },
-    {
-      "kind": "повторённый блок",
-      "severity": "средний",
-      "owner": "TEMPLATES",
-      "path": "tests/unit/test_product_readiness_axes.py",
-      "line": 17,
-      "detail": "8 строк повторяются дословно в: tests/unit/test_product_readiness_axes.py, tests/unit/test_template_digest_covers_renderer.py",
       "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
       "verify": "вынести в общий модуль и заменить обе копии вызовом"
     },
@@ -258,16 +187,6 @@
       "detail": "8 строк повторяются дословно в: tests/unit/test_secret_hub_panel_server.py, tests/unit/test_secret_hub_reconcile.py",
       "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
       "verify": "вынести в общий модуль и заменить обе копии вызовом"
-    },
-    {
-      "kind": "маркер TODO",
-      "severity": "низкий",
-      "owner": "TEMPLATES",
-      "path": "scripts/debt_audit.py",
-      "line": 151,
-      "detail": "pattern = re.compile(r\"\\b(TODO|FIXME|HACK|XXX)\\b\")",
-      "risk": "незавершённая работа, о которой знает только этот файл",
-      "verify": "закрыть либо перенести в реестр задач с владельцем"
     },
     {
       "kind": "неявное утверждение в тесте",
@@ -388,16 +307,6 @@
       "detail": "test_no_section_has_two_owners проверяет только отсутствие исключения",
       "risk": "намерение читается из тела, а не из утверждения: следующий правящий не узнает, что именно обязано выполниться",
       "verify": "назвать проверяемое утверждением или комментарием у вызова"
-    },
-    {
-      "kind": "маркер TODO",
-      "severity": "низкий",
-      "owner": "TEMPLATES",
-      "path": "tests/unit/test_permission_matrix.py",
-      "line": 153,
-      "detail": "\"git grep -n TODO\",",
-      "risk": "незавершённая работа, о которой знает только этот файл",
-      "verify": "закрыть либо перенести в реестр задач с владельцем"
     },
     {
       "kind": "неявное утверждение в тесте",

@@ -104,3 +104,37 @@ class TestРеестрВоспроизводим:
         первый = [f.as_dict() for f in debt_audit.collect()]
         второй = [f.as_dict() for f in debt_audit.collect()]
         assert первый == второй
+
+
+class TestПринятыйДолг:
+    """Принятие отличается от исключения тем, что названо и охраняется."""
+
+    def test_каждый_принятый_пункт_называет_сторожа(self):
+        for запись in debt_audit._accepted():
+            guard = запись.get("guard", "")
+            файл = guard.split("::", 1)[0]
+            assert файл and (ROOT / файл).is_file(), (
+                f"{запись.get('path')}: сторож {guard!r} не существует")
+
+    def test_причина_не_отписка(self):
+        """Однострочное «так надо» ничего не объясняет следующему правящему."""
+        for запись in debt_audit._accepted():
+            assert len(запись.get("reason", "")) >= 60, запись.get("path")
+
+    def test_отсутствующий_сторож_становится_пунктом_реестра(self, tmp_path, monkeypatch):
+        import json
+
+        поддельный = tmp_path / "debt-accepted.json"
+        поддельный.write_text(json.dumps({"schema_version": 1, "accepted": [
+            {"kind": "повторённый блок", "path": "factory/x.py",
+             "reason": "причина достаточной длины, объясняющая, почему пункт остаётся принятым",
+             "guard": "tests/unit/такого_файла_нет.py"}]}), encoding="utf-8")
+        monkeypatch.setattr(debt_audit, "ACCEPTED", поддельный)
+        found = debt_audit.check_accepted_guards()
+        assert [f.kind for f in found] == ["принятый долг без сторожа"]
+        assert found[0].severity == "высокий"
+
+    def test_принятое_не_попадает_в_реестр_как_долг(self):
+        принято = {(з["kind"], з["path"]) for з in debt_audit._accepted()}
+        в_реестре = {(f.kind, f.path) for f in debt_audit.collect()}
+        assert not (принято & в_реестре), "принятый пункт учтён дважды"
