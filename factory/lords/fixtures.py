@@ -387,6 +387,9 @@ class Catalog:
     titles: tuple[Title, ...]
     collections: tuple[Collection, ...]
     _by_slug: dict = field(default_factory=dict, repr=False, compare=False)
+    #: Типы, которые источник этого каталога способен отдать в принципе.
+    #: `None` — источник умеет всё (так у фикстур: они сами себе источник).
+    _supported: frozenset | None = field(default=None, repr=False, compare=False)
 
     def by_slug(self, slug: str) -> Title | None:
         return self._by_slug.get(slug)
@@ -442,6 +445,17 @@ class Catalog:
                 # служит первая — та же, из которой получен слаг.
                 labels[slug] = (title.country or "").split(",")[0].strip() or slug
         return _facet(counts, labels, COUNTRIES)
+
+    def supported(self) -> set[str]:
+        """Типы, которые источник этого каталога способен отдать в принципе.
+
+        Отличается от `capabilities` тем же, чем «магазин таким не торгует» от
+        «сегодня нет в наличии». Фикстурный каталог умеет всё: он сам себе
+        источник. У живого перечень свой — см. `live_catalog.ЖИВЫЕ_ТИПЫ`.
+        """
+        from factory.lords import content_types as ct
+
+        return set(ct.CONTENT_TYPES) if self._supported is None else set(self._supported)
 
     def capabilities(self) -> set[str]:
         """Типы, которые стенд действительно может показать.

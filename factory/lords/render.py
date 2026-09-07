@@ -2713,6 +2713,7 @@ def render_site(
         package,
         credentials_available=True,
         api_capabilities=catalog.capabilities(),
+        source_supports=catalog.supported(),
         root=root,
     )
     profile = profiles[site_plan.profile]

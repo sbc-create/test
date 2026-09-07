@@ -20,6 +20,7 @@ import re
 import unicodedata
 from dataclasses import dataclass
 
+from factory.lords import content_types as ct
 from factory.lords import fixtures as fx
 from factory.site_engine.catalog_identity import decide as kind_decide
 
@@ -463,6 +464,23 @@ def title_from_item(entry: dict) -> LiveTitle | None:
     )
 
 
+#: Типы, которые живой источник способен отдать.
+#:
+#: Подборок здесь нет, и это не упущение расчёта, а состояние договора: в
+#: `knowledge/cdnvideohub/content-api.yaml` есть titles, seasons, episodes,
+#: genres и countries — раздела подборок нет вовсе. Параметр `collections`
+#: ниже существует ради стенда и ради будущего источника; ни один живой вызов
+#: его не передаёт, и притворяться, что подборки просто «не подтвердились»,
+#: значит отправить владельца ждать того, чего не будет.
+ЖИВЫЕ_ТИПЫ: frozenset[str] = frozenset(
+    т for т in ct.CONTENT_TYPES if т != "collections")
+
+
+def живые_типы() -> set[str]:
+    """Перечень для `content_types.resolve(source_supports=...)`."""
+    return set(ЖИВЫЕ_ТИПЫ)
+
+
 def catalog_from_live(items, collections=()) -> fx.Catalog:
     """Каталог из записей источника.
 
@@ -485,4 +503,5 @@ def catalog_from_live(items, collections=()) -> fx.Catalog:
         titles.append(title)
 
     by_slug = {t.slug: t for t in titles}
-    return fx.Catalog(titles=tuple(titles), collections=tuple(collections), _by_slug=by_slug)
+    return fx.Catalog(titles=tuple(titles), collections=tuple(collections),
+                      _by_slug=by_slug, _supported=ЖИВЫЕ_ТИПЫ)

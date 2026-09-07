@@ -182,6 +182,7 @@ def build_plan(
     *,
     credentials_available: bool = False,
     api_capabilities: set | None = None,
+    source_supports: set | None = None,
     root: Path | None = None,
 ) -> SitePlan:
     """План одного сайта направления Lords."""
@@ -199,6 +200,7 @@ def build_plan(
         package,
         credentials_available=credentials_available,
         api_capabilities=api_capabilities,
+        source_supports=source_supports,
     )
 
     domain = package.get("domain")

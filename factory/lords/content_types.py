@@ -31,7 +31,21 @@ DISABLED_BY_CONFIG = "disabled_by_config"
 DISABLED_BY_API = "disabled_by_api"
 BLOCKED_CREDENTIALS = "blocked_credentials"
 
-STATES: tuple[str, ...] = (ENABLED, DISABLED_BY_CONFIG, DISABLED_BY_API, BLOCKED_CREDENTIALS)
+#: Тип, которого источник не отдаёт вовсе — не «в этот раз не подтвердил», а
+#: «такого раздела у него нет».
+#:
+#: Различие не терминологическое. `DISABLED_BY_API` читается как «спросили —
+#: не дал» и предлагает ждать: появятся данные, появится и раздел. Ждать при
+#: этом нечего, и владелец, включивший тип в manifest, остаётся с выключенным
+#: разделом и объяснением, которое валит вину на поставщика.
+#:
+#: Ровно это и случилось с подборками: `catalog_from_live` принимает их
+#: параметром, ни один живой вызов их не передаёт, а состояние объявляло, что
+#: их не подтверждает источник.
+UNSUPPORTED_BY_SOURCE = "unsupported_by_source"
+
+STATES: tuple[str, ...] = (ENABLED, DISABLED_BY_CONFIG, DISABLED_BY_API,
+                           BLOCKED_CREDENTIALS, UNSUPPORTED_BY_SOURCE)
 
 #: Человекочитаемые причины. Отчёт обязан отличать «выключили» от «забыли».
 REASONS = {
@@ -40,6 +54,9 @@ REASONS = {
     DISABLED_BY_API: "тип включён в manifest, но источник данных его не подтверждает",
     BLOCKED_CREDENTIALS: "тип включён в manifest, но учётные данные CDNVideoHub не переданы —"
                          " проверить наличие данных нечем",
+    UNSUPPORTED_BY_SOURCE: "тип включён в manifest, но действующий источник такого раздела"
+                           " не отдаёт вовсе — ждать данных нечего, нужен другой источник"
+                           " или решение владельца",
 }
 
 
@@ -73,18 +90,29 @@ def resolve(
     *,
     credentials_available: bool = False,
     api_capabilities: set | None = None,
+    source_supports: set | None = None,
 ) -> dict[str, TypeState]:
     """Фактическое состояние каждого типа.
 
     `api_capabilities` — множество типов, наличие которых подтвердил источник
     данных. `None` означает «источник не опрашивался», и это не то же самое, что
     пустое множество: не опрошенный источник не отвечает «данных нет».
+
+    `source_supports` — типы, которые действующий источник способен отдать в
+    принципе. `None` означает «неизвестно», и тогда поведение прежнее. Знать это
+    отдельно необходимо: «в этот раз не подтвердил» предлагает ждать, а «такого
+    не отдаёт вовсе» — искать другой источник, и подменять второе первым значит
+    отправить владельца ждать того, чего не будет.
     """
     declared = configured(package)
     out: dict[str, TypeState] = {}
     for name in CONTENT_TYPES:
         if not declared[name]:
             state = DISABLED_BY_CONFIG
+        elif source_supports is not None and name not in source_supports:
+            # Проверяется раньше учётных данных: доступ к источнику не меняет
+            # того, что раздела у него нет.
+            state = UNSUPPORTED_BY_SOURCE
         elif not credentials_available:
             state = BLOCKED_CREDENTIALS
         elif api_capabilities is None or name not in api_capabilities:
