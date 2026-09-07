@@ -1295,12 +1295,23 @@ class AdminApp:
         if method == "POST" and not tail:
             return self._settings_apply(session, site, form, flash, label, csrf)
         if method == "POST" and tail == ["rollback"]:
+            сухой = bool(form.get("dryRun"))
             ответ = self._call(
                 "POST",
                 f"/api/v1/settings/{site}/rollback",
                 session,
-                {"dryRun": bool(form.get("dryRun"))},
+                {"dryRun": сухой},
             )
+            if сухой and ответ.status == 200:
+                # Разница показывается, а не пересказывается сообщением.
+                #
+                # Прежде «Проверить откат» отвечал строкой «проверено» и уводил
+                # на ту же страницу: оператор нажимал «Откатить», не увидев, что
+                # именно вернётся. Управляющий слой разницу отдаёт — терялась
+                # она здесь.
+                return self._settings_page(
+                    session, site, None, label, csrf,
+                    предпросмотр=ответ.body.get("diff") or {})
             session.flash = self._flash_from(ответ, success="Прежние значения возвращены.")
             return _redirect(f"{ui._путь()}/settings?site={site}")
         return AdminResponse(status=404, html=ui.page("Не найдено", "<p>Нет такой страницы.</p>"))
