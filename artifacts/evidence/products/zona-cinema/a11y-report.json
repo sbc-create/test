@@ -1,7 +1,7 @@
 {
   "product": "zona-cinema",
   "base": "http://127.0.0.1:8903",
-  "captured_at_utc": "2026-09-07T07:29:42.051Z",
+  "captured_at_utc": "2026-09-07T08:46:47.548Z",
   "standard": "WCAG 2.0/2.1/2.2 A+AA",
   "runs": [
     {
@@ -47,7 +47,7 @@
     {
       "page": "catalog",
       "width": 1440,
-      "rules_passed": 26,
+      "rules_passed": 27,
       "violations": [],
       "overflowX": false,
       "scrollWidth": 1440
@@ -71,7 +71,7 @@
     {
       "page": "genres",
       "width": 1440,
-      "rules_passed": 25,
+      "rules_passed": 26,
       "violations": [],
       "overflowX": false,
       "scrollWidth": 1440
@@ -95,7 +95,7 @@
     {
       "page": "years",
       "width": 1440,
-      "rules_passed": 25,
+      "rules_passed": 26,
       "violations": [],
       "overflowX": false,
       "scrollWidth": 1440
@@ -119,7 +119,7 @@
     {
       "page": "search",
       "width": 1440,
-      "rules_passed": 26,
+      "rules_passed": 27,
       "violations": [],
       "overflowX": false,
       "scrollWidth": 1440

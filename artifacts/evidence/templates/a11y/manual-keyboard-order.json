@@ -1,5 +1,5 @@
 {
-  "captured_at_utc": "2026-09-07T08:19:32.808Z",
+  "captured_at_utc": "2026-09-07T08:44:45.832Z",
   "site": "lords-01",
   "route": "/catalog/",
   "viewport": 1440,
@@ -26,7 +26,7 @@
       "tag": "a",
       "cls": "",
       "id": "",
-      "text": "Главная",
+      "text": "Каталог фильмов и сериалов онл",
       "top": 85,
       "left": 116,
       "focusVisible": true
@@ -37,7 +37,7 @@
       "id": "",
       "text": "Каталог",
       "top": 85,
-      "left": 202,
+      "left": 407,
       "focusVisible": true
     },
     {
@@ -46,7 +46,7 @@
       "id": "",
       "text": "Фильмы",
       "top": 85,
-      "left": 285,
+      "left": 490,
       "focusVisible": true
     },
     {
@@ -55,7 +55,7 @@
       "id": "",
       "text": "Сериалы",
       "top": 85,
-      "left": 371,
+      "left": 577,
       "focusVisible": true
     },
     {
@@ -64,7 +64,7 @@
       "id": "",
       "text": "Мультфильмы",
       "top": 85,
-      "left": 464,
+      "left": 669,
       "focusVisible": true
     },
     {
@@ -73,7 +73,7 @@
       "id": "",
       "text": "Подборки",
       "top": 85,
-      "left": 594,
+      "left": 799,
       "focusVisible": true
     },
     {
@@ -82,7 +82,7 @@
       "id": "",
       "text": "Новое",
       "top": 85,
-      "left": 690,
+      "left": 896,
       "focusVisible": true
     },
     {
@@ -91,7 +91,7 @@
       "id": "",
       "text": "Расписание",
       "top": 85,
-      "left": 762,
+      "left": 968,
       "focusVisible": true
     },
     {
@@ -100,7 +100,7 @@
       "id": "",
       "text": "Жанры",
       "top": 85,
-      "left": 874,
+      "left": 1080,
       "focusVisible": true
     },
     {
@@ -109,7 +109,7 @@
       "id": "",
       "text": "Годы",
       "top": 85,
-      "left": 953,
+      "left": 1158,
       "focusVisible": true
     },
     {
@@ -118,16 +118,16 @@
       "id": "",
       "text": "Страны",
       "top": 85,
-      "left": 1016,
+      "left": 1221,
       "focusVisible": true
     },
     {
       "tag": "a",
       "cls": "",
       "id": "",
-      "text": "Поиск",
+      "text": "Поиск по каталогу",
       "top": 85,
-      "left": 1098,
+      "left": 1303,
       "focusVisible": true
     },
     {

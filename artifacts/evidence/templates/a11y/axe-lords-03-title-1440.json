@@ -8,7 +8,7 @@
     "width": 1440,
     "height": 900
   },
-  "captured_at_utc": "2026-09-07T08:20:48.068Z",
+  "captured_at_utc": "2026-09-07T08:46:00.263Z",
   "axe_version": "4.13.0",
   "tags": [
     "wcag2a",
@@ -17,13 +17,13 @@
     "wcag21aa",
     "wcag22aa"
   ],
-  "rules_passed": 29,
-  "rules_inapplicable": 34,
+  "rules_passed": 30,
+  "rules_inapplicable": 33,
   "violations": [],
   "incomplete": [
     {
       "id": "color-contrast",
-      "nodes": 2
+      "nodes": 3
     }
   ]
 }

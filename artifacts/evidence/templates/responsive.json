@@ -1,5 +1,5 @@
 {
-  "captured_at_utc": "2026-09-07T08:20:11.604Z",
+  "captured_at_utc": "2026-09-07T08:45:24.549Z",
   "sweep": [
     {
       "site": "lords-01",
@@ -2095,29 +2095,29 @@
   "textSpacing": [
     {
       "route": "home",
-      "heightBefore": 9491,
-      "height": 10353,
+      "heightBefore": 9549,
+      "height": 10411,
       "horizontal": false,
       "clipped": []
     },
     {
       "route": "catalog",
-      "heightBefore": 2837,
-      "height": 3348,
+      "heightBefore": 2895,
+      "height": 3406,
       "horizontal": false,
       "clipped": []
     },
     {
       "route": "search",
-      "heightBefore": 1075,
-      "height": 1343,
+      "heightBefore": 1133,
+      "height": 1401,
       "horizontal": false,
       "clipped": []
     },
     {
       "route": "not-found",
-      "heightBefore": 924,
-      "height": 1175,
+      "heightBefore": 982,
+      "height": 1233,
       "horizontal": false,
       "clipped": []
     }
