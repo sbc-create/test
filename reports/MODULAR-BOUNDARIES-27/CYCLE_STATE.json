@@ -5,7 +5,7 @@
   "worktree": "/home/claude/wt-prod-25",
   "baseStage": "PROGRAM-PRODUCTION-FINISH-25",
   "baselineFixedAt": "2026-09-07T14:43:05Z",
-  "headSha": "ac89db4254f35384cd1ea94752accd3d81932e39",
+  "headSha": "60967755f715c48e2d34af9e56427b23ec349b7b",
   "cycle": 4,
   "closed": {
     "0": "правда зафиксирована: карта, три цикла, три общих области",
@@ -18,13 +18,79 @@
   "domainsDeclared": 9,
   "knownBoundaryViolations": 0,
   "unassignedFiles": 10,
-  "tests": "5443 passed, 3 skipped, 1 xfailed, 0 failed",
+  "tests": "5444 passed, 3 skipped, 1 xfailed, 0 failed",
   "productionMutations": 0,
   "next": [
-    "fleet, releases, job_runtime, insights — собрать физически",
-    "templates собран не будет тем же приёмом: вернул бы разорванный цикл",
     "версионированные описания Site, ContentItem, Release, Job, AuditEvent",
-    "короткие запросы с опечаткой — решение требует замера до и после"
+    "короткие запросы с опечаткой — решение требует замера до и после",
+    "снятие временных псевдонимов, когда потребители перейдут на новые пути",
+    "10 файлов вне доменов — распределить или назвать общей опорой"
   ],
-  "domainsAssembled": 5
+  "domainsAssembled": 8,
+  "domains": [
+    {
+      "id": "catalog",
+      "modules": 15,
+      "location": "factory/site_engine/catalog/",
+      "purpose": "содержимое: записи, тождество, рейтинги, воспроизводимость",
+      "packaged": true
+    },
+    {
+      "id": "fleet",
+      "modules": 7,
+      "location": "factory/site_engine/fleet/",
+      "purpose": "витрины: домены, тенанты, план, профили, настройки, состояние",
+      "packaged": true
+    },
+    {
+      "id": "iam",
+      "modules": 4,
+      "location": "factory/site_engine/iam/",
+      "purpose": "личность: люди, роли, сессии, приглашения, машинные личности",
+      "packaged": true
+    },
+    {
+      "id": "editorial",
+      "modules": 4,
+      "location": "factory/site_engine/editorial/",
+      "purpose": "редакция: правки поверх поставщика, разбор, публикация",
+      "packaged": true
+    },
+    {
+      "id": "provisioning",
+      "modules": 3,
+      "location": "factory/site_engine/provisioning/",
+      "purpose": "заведение витрин через публичные контракты остальных",
+      "packaged": true
+    },
+    {
+      "id": "insights",
+      "modules": 3,
+      "location": "factory/site_engine/insights/",
+      "purpose": "наблюдения: связи SEO, свежесть, отпечаток",
+      "packaged": true
+    },
+    {
+      "id": "job_runtime",
+      "modules": 4,
+      "location": "factory/job_runtime/",
+      "purpose": "очередь, замки, состояние заданий, запросы недостающего",
+      "packaged": true
+    },
+    {
+      "id": "releases",
+      "modules": 4,
+      "location": "factory/releases/",
+      "purpose": "манифест, артефакт, канарейка, переключение, откат",
+      "packaged": true
+    },
+    {
+      "id": "templates",
+      "modules": 0,
+      "location": "factory/templates/ + factory/site_engine/template_registry.py",
+      "purpose": "реестр шаблонов, версии, совместимость, манифесты",
+      "packaged": false
+    }
+  ],
+  "modulesMoved": 42
 }

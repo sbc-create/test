@@ -83,3 +83,39 @@ checkpoints:
       вместо копий, реестр, инструкции, проверки. Ленивость не украшение —
       пакет с немедленным реэкспортом втягивает свои модули при импорте самого
       пакета, и связь, безобидная между плоскими модулями, замыкается в кольцо.
+  - timestamp: "2026-09-07T23:30:00Z"
+    cycle: 4
+    branch: claude/program-production-finish-25
+    head_sha: 60967755f715c48e2d34af9e56427b23ec349b7b
+    global_progress: 91
+    was: 91
+    delta: 0
+    tests: "5444 passed, 3 skipped, 1 xfailed, 0 failed"
+    production_mutations: 0
+    domains:
+      - "catalog: 15 модулей, factory/site_engine/catalog/"
+      - "fleet: 7 модулей, factory/site_engine/fleet/"
+      - "iam: 4 модулей, factory/site_engine/iam/"
+      - "editorial: 4 модулей, factory/site_engine/editorial/"
+      - "provisioning: 3 модулей, factory/site_engine/provisioning/"
+      - "insights: 3 модулей, factory/site_engine/insights/"
+      - "job_runtime: 4 модулей, factory/job_runtime/"
+      - "releases: 4 модулей, factory/releases/"
+      - "templates: 0 модулей, factory/templates/ + factory/site_engine/template_registry.py"
+    measured:
+      - "доменов размещено физически: 8 из 9 в пакетах, девятый в двух местах сознательно"
+      - "модулей перенесено: 42"
+      - "циклы между подсистемами: 0"
+      - "нарушения границ: 0"
+      - "распределено файлов: 264 из 274"
+    my_errors_this_cycle:
+      - "сказал «собрать нельзя» вместо «нельзя вот так» — releases и job_runtime
+         собираются в своём месте, и я поторопился выдать первое за вывод"
+      - "перенесённые модули ходили друг к другу через свои обёртки и вернули
+         цикл — вторая встреча с той же ошибкой"
+      - "отсчёт родительских каталогов сломался при переносе; починен отказом
+         от отсчёта, а не подгонкой числа"
+    reasoning: >-
+      Разделение доведено до девяти доменов. Главное не число перенесённых
+      файлов, а то, что переносить стало возможно: пока связь между
+      подсистемами шла в обе стороны, вынести нельзя было ни одну.
