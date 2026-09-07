@@ -1,13 +1,13 @@
 {
   "artifact": "TEMPLATE_PRODUCT_READINESS",
-  "average_product": 87,
+  "average_product": 72,
   "average_product_measured": [
     "animedia-portal",
     "basis-video",
     "zona-cinema"
   ],
-  "average_integration": 64,
-  "generated_at_utc": "2026-09-07T16:56:41.407277+00:00",
+  "average_integration": 30,
+  "generated_at_utc": "2026-09-07T18:26:52.906874+00:00",
   "rubric": {
     "package": "готовность пакета",
     "data": "данные",
@@ -40,8 +40,8 @@
           "note": "validate exit 2: [warn] network_allowlist пуст: сеть в режиме CLOSED_WORLD будет полностью запрещена для эт"
         },
         "data": {
-          "points": 10,
-          "note": "4000 записей боевого снимка, обогащено 12021; снимок витрины lords-02"
+          "points": 0,
+          "note": "предпросмотр не собран, данные не наблюдались"
         },
         "functional": {
           "points": 10,
@@ -56,8 +56,8 @@
           "note": "15 прогонов axe WCAG 2.2 AA без нарушений"
         },
         "preview": {
-          "points": 9,
-          "note": "1337 страниц собрано и готово к выкладке; локальная витрина в приёмку не входит"
+          "points": 0,
+          "note": "предпросмотр не собран"
         },
         "adapter": {
           "points": 7,
@@ -68,13 +68,13 @@
           "note": "PENDING_DNS: https://zonafilm.space — имя ещё не разошлось, отказом не считается"
         }
       },
-      "package_readiness": 86,
-      "preview_acceptance": 90,
+      "package_readiness": 59,
+      "preview_acceptance": 0,
       "live_acceptance": null,
       "live_state": "PENDING_DNS",
-      "total": 75,
-      "product_readiness": 88,
-      "integration_readiness": 80
+      "total": 51,
+      "product_readiness": 68,
+      "integration_readiness": 35
     },
     "animedia-portal": {
       "package": "animedia-preview",
@@ -84,8 +84,8 @@
           "note": "validate exit 2: [warn] network_allowlist пуст: сеть в режиме CLOSED_WORLD будет полностью запрещена для эт"
         },
         "data": {
-          "points": 10,
-          "note": "4000 записей боевого снимка, обогащено 12021; снимок витрины lords-02"
+          "points": 0,
+          "note": "предпросмотр не собран, данные не наблюдались"
         },
         "functional": {
           "points": 10,
@@ -100,8 +100,8 @@
           "note": "15 прогонов axe WCAG 2.2 AA без нарушений"
         },
         "preview": {
-          "points": 9,
-          "note": "1396 страниц собрано и готово к выкладке; локальная витрина в приёмку не входит"
+          "points": 0,
+          "note": "предпросмотр не собран"
         },
         "adapter": {
           "points": 7,
@@ -112,13 +112,13 @@
           "note": "PENDING_DNS: https://animedia.icu — имя ещё не разошлось, отказом не считается"
         }
       },
-      "package_readiness": 86,
-      "preview_acceptance": 90,
+      "package_readiness": 59,
+      "preview_acceptance": 0,
       "live_acceptance": null,
       "live_state": "PENDING_DNS",
-      "total": 75,
-      "product_readiness": 88,
-      "integration_readiness": 80
+      "total": 51,
+      "product_readiness": 68,
+      "integration_readiness": 35
     },
     "basis-video": {
       "package": "pilot-local",
@@ -128,8 +128,8 @@
           "note": "схема и семантика: exit 0"
         },
         "data": {
-          "points": 3,
-          "note": "синтетический набор: боевыми данными не является"
+          "points": 0,
+          "note": "предпросмотр не собран, данные не наблюдались"
         },
         "functional": {
           "points": 10,
@@ -144,8 +144,8 @@
           "note": "15 прогонов axe WCAG 2.2 AA без нарушений"
         },
         "preview": {
-          "points": 9,
-          "note": "48 страниц собрано и готово к выкладке; локальная витрина в приёмку не входит"
+          "points": 0,
+          "note": "предпросмотр не собран"
         },
         "adapter": {
           "points": 7,
@@ -156,13 +156,13 @@
           "note": "BLOCKED_OWNER_URLS: адрес для приёмки не передан владельцем"
         }
       },
-      "package_readiness": 84,
-      "preview_acceptance": 90,
+      "package_readiness": 67,
+      "preview_acceptance": 0,
       "live_acceptance": null,
       "live_state": "BLOCKED_OWNER_URLS",
-      "total": 74,
-      "product_readiness": 86,
-      "integration_readiness": 80
+      "total": 59,
+      "product_readiness": 80,
+      "integration_readiness": 35
     },
     "yummy": {
       "package": "—",
@@ -210,6 +210,6 @@
       "integration_readiness": 15
     }
   },
-  "average": 57,
+  "average": 41,
   "note": "Приёмка боевой витрины не выводится из готовности пакета и предпросмотра. Фикстура, localhost и стенд в неё не входят."
 }
