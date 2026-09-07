@@ -1,6 +1,6 @@
 {
   "artifact": "OWNER_PREVIEW_PACKAGE",
-  "generated_at_utc": "2026-09-07T08:22:51.779212+00:00",
+  "generated_at_utc": "2026-09-07T09:00:39.280465+00:00",
   "index": "http://127.0.0.1:8902",
   "tunnel": "ssh -N -L 8902:127.0.0.1:8902 -L 8904:127.0.0.1:8904 -L 8905:127.0.0.1:8905 -L 8903:127.0.0.1:8903 claude@<хост>",
   "start": ".venv/bin/python scripts/product_preview_stand.py",
