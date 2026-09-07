@@ -1,0 +1,56 @@
+# Шаблон направления Lords. Файл создан `python3 -m factory template-new`
+# из манифеста и проверяется `python3 -m factory template-check`.
+# Форма — schemas/template-manifest.schema.json, смысловые правила —
+# factory/templates/contract.py.
+schema_version: 1
+profile: animedia-portal
+label: Animedia Portal
+purpose: 'Портал аниме: свежие серии и расписание выхода на первом экране. Отличается от соседних
+  витрин тем, что зритель приходит не выбирать, а продолжать — и потому первым делом видит, что вышло
+  и что выйдет.'
+owns_title_page: false
+owns: []
+theme:
+  name: animedia_night
+  tokens:
+    bg: '#0f1419'
+    surface: '#161d24'
+    surface_alt: '#1e2730'
+    text: '#e8edf2'
+    muted: '#94a3b1'
+    accent: '#37b3a4'
+    accent_text: '#08110f'
+    border: '#2a3641'
+    radius: 6px
+    container: 1320px
+    heading_font: '''Open Sans'', ''Segoe UI'', Roboto, Arial, sans-serif'
+layout:
+  density: dense
+  hero: timeline
+  card_ratio: 2 / 3
+  columns:
+    mobile: 2
+    tablet: 4
+    desktop: 6
+  home_blocks:
+  - hero_search
+  - fresh_episodes
+  - calendar
+  - latest_grid
+  - genre_chips
+  carousel_heading: Сейчас выходит
+  show_calendar: true
+  show_collection_cards: false
+  facet_position: top
+sections:
+  home:
+    title: Аниме онлайн — свежие серии и расписание
+    h1: Аниме онлайн
+    description: Свежие серии, расписание выхода и каталог аниме с фильтрами.
+    intro: 'На первом экране — что вышло сегодня и что выйдет на неделе. Даты берутся из источника:
+      если он даты не сообщил, строка остаётся без неё, а не заполняется догадкой.'
+  search:
+    title: Поиск по каталогу аниме
+    h1: Поиск
+    description: Поиск по названиям каталога. Страница закрыта от индексации.
+    intro: ''

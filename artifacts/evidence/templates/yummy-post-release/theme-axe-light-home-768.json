@@ -1,0 +1,9 @@
+{
+  "captured_at_utc": "2026-09-05T07:00:21.789Z",
+  "base": "http://127.0.0.1:3310",
+  "theme": "light",
+  "page": "home",
+  "viewport": 768,
+  "rules_passed": 28,
+  "violations": []
+}

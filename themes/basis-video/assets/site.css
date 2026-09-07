@@ -41,7 +41,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visibl
 .primary-nav a[aria-current="page"] { text-decoration: underline; }
 .site-search { display: flex; align-items: center; gap: 8px; margin-left: auto; }
 .site-search label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.site-search input { padding: 8px 10px; border: 1px solid #b9c0d0; border-radius: var(--radius); min-width: 160px; }
+/* Кегль поля задан явно и не меньше 16px. Без этого поле наследует 13.33px
+   браузерного умолчания, и мобильный Safari при фокусе зумит всю страницу:
+   зритель попадает в поиск и теряет из виду остальную витрину. */
+.site-search input, .search-form input { padding: 8px 10px; border: 1px solid #b9c0d0; border-radius: var(--radius); min-width: 160px; font-size: 16px; }
 .site-search button, .search-form button {
   padding: 8px 14px; border: 0; border-radius: var(--radius);
   background: var(--color-primary); color: #fff; cursor: pointer; font: inherit;

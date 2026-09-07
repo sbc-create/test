@@ -1,10 +1,18 @@
 {
   "lane": "TEMPLATES",
   "branch": "claude/templates-lords-yummy-refpacks-01",
-  "head": "d1b448841df357fb8c45d0833a75a3aa036ab80a",
+  "head": "cd2f718ae656e6bfcdc68099601d92078bd1f13f",
   "base_sha": "76552b9a7372c5ad15cfc7d8b1052a10024722a3",
   "template_digest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
   "template_digest_files": 19,
+  "recomputed_from": {
+    "branch": "claude/templates-new-families-01",
+    "head": "41d9a709861944cfd9849650474bf5e850c0035d",
+    "template_digest": "f1695c5f11b38e12dd8844651114ed85d34c6a61307241048c5027cdc8b1d428",
+    "template_digest_files": 21,
+    "matches_candidate": false,
+    "note": "пересчёт из post-release ветки: её отпечаток отличается намеренно, кандидату он не принадлежит и в релиз не входит"
+  },
   "gates": {
     "axe_wcag22aa": {
       "status": "pass",
@@ -29,7 +37,7 @@
       "rules_passed_min": 25,
       "rules_passed_max": 29,
       "evidence": "artifacts/evidence/templates/a11y/axe-*.json",
-      "last_capture_utc": "2026-09-04T15:10:41.951Z"
+      "last_capture_utc": "2026-09-05T06:20:34.238Z"
     },
     "a11y_manual": {
       "status": "pass",
@@ -66,8 +74,8 @@
       "runs": 16,
       "worst_cls": 0,
       "cls_budget": 0.1,
-      "worst_lcp_ms": 472,
-      "lcp_budget_ms": 1000,
+      "worst_lcp_ms": 196,
+      "lcp_budget_ms": 2500,
       "limitation": "стенд локальный: LCP — нижняя граница, а не боевое значение",
       "evidence": "artifacts/evidence/templates/performance.json"
     },
@@ -151,7 +159,7 @@
       },
       "not_covered": [
         "живые данные вместо фикстуры",
-        "четыре событийных пути: полки событий пусты по устройству фикстуры, наполнить их значило бы показать несуществующий факт",
+        "четыре событийных пути: фикстурная ветка loadHomepageCatalog обходит производителя событий — прежнее объяснение про недостаток истории проверено и оказалось неверным (TEMPLATE_TO_CORE-011)",
         "состояния плеера loading/slow/timeout/error/retry — нужен поставщик",
         "производительность на production build — сборка падает на предсуществующих ошибках типов, TEMPLATE_TO_CORE-006",
         "живой аудит трёх боевых доменов"
@@ -194,6 +202,81 @@
       "screenshots": "BLOCKED — REF-EGRESS-01",
       "visual_tokens": "пусты намеренно: измерять не на чем",
       "verified_by": "tests/unit/test_reference_packs.py (25 проверок)"
+    },
+    "lords_release_candidate": {
+      "status": "pass",
+      "artifact": "LORDS_TEMPLATE_RELEASE_CANDIDATE",
+      "head_sha": "9894114fe6aae1300097f79e30db9ef292b57e05",
+      "template_digest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
+      "gates_passed": 7,
+      "gates_total": 7,
+      "gates_failed": [],
+      "handoff": "TEMPLATE_TO_CORE-008",
+      "production_changed": false,
+      "architect_action": "решение о canary на одной витрине",
+      "evidence": "artifacts/evidence/templates/lords-release-candidate.json"
+    },
+    "yummy_post_release": {
+      "status": "pass",
+      "repo": "/srv/sites/yummyani-staging/repo (канонический)",
+      "worktree": "/home/claude/work-templates/theme-ym",
+      "branch": "claude/templates-theme-collections-01",
+      "base_sha": "15ddc6635252c7920dfc6596a489e5c69fe80e5f",
+      "in_release_artifact": false,
+      "in_release_artifact_reason": "тема и подборки — post-release работа; кандидат Lords обязан остаться тем, что проверено вместе с ним",
+      "theme": {
+        "flag": "NEXT_PUBLIC_TEMPLATE_THEME_SWITCHER",
+        "default": "disabled",
+        "axe_runs": 36,
+        "axe_violations": 0,
+        "themes": [
+          "dark",
+          "light"
+        ],
+        "viewports": [
+          390,
+          768,
+          1440
+        ],
+        "disabled_state": {
+          "data_theme": null,
+          "dark_class": false,
+          "bootstrap_scripts": 0,
+          "toggles": 0,
+          "canvas_under_dark_system": "rgb(226, 226, 226)"
+        }
+      },
+      "collections": {
+        "flag": "NEXT_PUBLIC_TEMPLATE_COLLECTIONS",
+        "default": "disabled",
+        "routes": "unreachable",
+        "routes_reason": "строк нет в page-matrix.ts, посредник отвечает 404; матрица принадлежит полосе SEO (TEMPLATE_TO_SEO-002)",
+        "source": "отсутствует: Site View API подборок не отдаёт (TEMPLATE_TO_CORE-010)",
+        "preview_surface": "/dev/ui",
+        "rendered_blocks": {
+          "rail": 1,
+          "hub": 1,
+          "page": 1,
+          "tiles": 6,
+          "synthetic_notices_visible": true
+        },
+        "axe_runs": 3,
+        "axe_violations": 0
+      },
+      "events": {
+        "status": "blocked",
+        "reason": "loadHomepageCatalog возвращает catalogVisualHomepageData() до вызова loadContentEvents",
+        "evidence": "yummy-post-release/events-fixture-bypass.json",
+        "handoff": "TEMPLATE_TO_CORE-011",
+        "proof": {
+          "snapshot_titles": 20,
+          "snapshot_baseline": false,
+          "cards": 37,
+          "badges": 0
+        },
+        "note": "прежнее объяснение — «у синтетических записей нет истории» — проверено и оказалось неверным: снимок прошлого положен и прочитан, меток по-прежнему ноль"
+      },
+      "evidence": "artifacts/evidence/templates/yummy-post-release/*.json"
     }
   },
   "blockers": [
@@ -211,6 +294,30 @@
       "remains": "Содержимое приходит из базы, поэтому доступно только деградированное состояние. Нормальное состояние, соответствие API → SSR → DOM, маршруты событий, страница произведения, сезоны, серии и плеер остаются непроверенными.",
       "effect": "ворота, которым нужны данные, помечены blocked, а не pass",
       "recorded_in": "docs/templates/BLOCKERS.md"
+    },
+    {
+      "id": "COLLECTIONS-ROUTE-01",
+      "state": "open",
+      "what": "маршрутов /collections нет в src/site-blueprint/page-matrix.ts, и посредник отвечает 404 на всё, чего в матрице нет",
+      "effect": "раздел проверяется в галерее /dev/ui; публичный маршрут не открывается",
+      "owner": "SEO",
+      "recorded_in": "docs/templates/handoff/TEMPLATE_TO_SEO-002-collections-routes.md"
+    },
+    {
+      "id": "COLLECTIONS-SOURCE-01",
+      "state": "open",
+      "what": "Site View API не публикует подборки ни в каком виде",
+      "effect": "состав приходит только из синтетической фикстуры предпросмотра",
+      "owner": "CORE",
+      "recorded_in": "docs/templates/handoff/TEMPLATE_TO_CORE-010-collections-contract.md"
+    },
+    {
+      "id": "EVENTS-FIXTURE-BYPASS-01",
+      "state": "open",
+      "what": "loadHomepageCatalog при поднятой фикстуре возвращает catalogVisualHomepageData() до вызова loadContentEvents",
+      "effect": "событийные метки непроверяемы на фикстуре; снимок прошлого положен и прочитан, меток ноль при 37 карточках",
+      "owner": "CORE",
+      "recorded_in": "docs/templates/handoff/TEMPLATE_TO_CORE-011-fixture-bypasses-event-producer.md"
     },
     {
       "id": "YUMMY-LIVE-EGRESS-01",

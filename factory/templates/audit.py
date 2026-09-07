@@ -108,6 +108,29 @@ def _resolve(root: Path, path: str) -> Path | None:
     return found[0] if found else None
 
 
+def _stylesheets(root: Path, html: str) -> str:
+    """Содержимое локальных таблиц стилей документа.
+
+    Читаются только файлы внутри собранного каталога: внешний адрес не
+    загружается — оценка обязана быть воспроизводимой и не зависеть от сети.
+    Недоступный файл молча пропускается: его отсутствие уже видно критерию
+    как отсутствие правила.
+    """
+    from factory.templates.rubric import parse
+
+    parts = []
+    for href in parse(html).stylesheet_hrefs:
+        if "://" in href or href.startswith("//"):
+            continue
+        candidate = root / href.lstrip("/")
+        if candidate.is_file():
+            try:
+                parts.append(candidate.read_text(encoding="utf-8"))
+            except OSError:
+                continue
+    return "\n".join(parts)
+
+
 def audit_site(
     preview_root: Path,
     site: str,
@@ -143,7 +166,7 @@ def audit_site(
             score.pages.append(missing)
             continue
         html = document.read_text(encoding="utf-8")
-        page = score_page(html, expectation)
+        page = score_page(html, expectation, css=_stylesheets(preview_root, html))
         page.path = str(document.relative_to(preview_root))
         score.pages.append(page)
     return score
@@ -163,7 +186,11 @@ def report(scores: list[SiteScore], threshold: float = 8.0) -> dict:
 
 def render_table(scores: list[SiteScore], threshold: float = 8.0) -> str:
     """Человекочитаемая таблица: строка на страницу, столбец на пакет."""
-    pages = [e.page for e in LORDS_KEY_PAGES]
+    # Строки таблицы — те страницы, которые действительно оценены. Прежде здесь
+    # стоял список Lords, и таблица для чужого набора выходила пустой: все
+    # ячейки «—», потому что имена страниц не совпадали ни с одной строкой.
+    pages = list(dict.fromkeys(p.page for s in scores for p in s.pages)) or [
+        e.page for e in LORDS_KEY_PAGES]
     width = max(len(p) for p in pages) + 2
     header = "страница".ljust(width) + "".join(s.site.rjust(11) for s in scores)
     lines = [header, "-" * len(header)]

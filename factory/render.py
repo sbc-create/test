@@ -197,6 +197,19 @@ class SiteRenderer:
         return bool(self._image(item, required_for=context))
 
     # ------------------------------------------------------------------ контекст сайта
+    def _data_source(self) -> str:
+        """Происхождение данных сборки одной строкой.
+
+        Пустая строка означает «пакет источник не объявил», и это состояние
+        отличается от «источник есть»: подставлять сюда правдоподобное
+        значение нельзя — метка о происхождении, соврав, хуже отсутствующей.
+        """
+        ref = (self.pkg.get("content_source") or {}).get("catalog_ref") or ""
+        digest = str(self.pkg.get("content_package_sha256") or "")
+        if not ref:
+            return ""
+        return f"package:{ref}@{digest[:12]}" if digest else f"package:{ref}"
+
     def build_site_context(self, *, environment: str) -> dict:
         brand = self.pkg["brand"]
         analytics = self.pkg.get("analytics") or {}
@@ -229,6 +242,12 @@ class SiteRenderer:
                 environment=environment,
                 enabled=bool(analytics.get("enabled")),
             ),
+            # Происхождение данных объявляется страницей, а не подразумевается.
+            # Значение берётся из пакета — ссылки на выгрузку каталога и её
+            # контрольной суммы; выдумывать его нечем и не нужно. Читателю
+            # метка ничего не говорит, а проверяющему отвечает на вопрос
+            # «откуда эти данные» без чтения отчёта сборки.
+            "data_source": self._data_source(),
             # Маркер печатается при каждой сборке: Яндекс перепроверяет права, и
             # релиз, потерявший мета-тег, теряет подтверждение вместе с ним.
             "webmaster_verification": analytics_snippet.verification_meta(
