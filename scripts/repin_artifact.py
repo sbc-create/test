@@ -93,12 +93,21 @@ def repin(note: str) -> tuple[str, int]:
         _register(fingerprint, version)
         return fingerprint, version
 
-    apply_text = re.sub(r'readonly EXPECT_DIGEST="[0-9a-f]{64}"',
-                        f'readonly EXPECT_DIGEST="{fingerprint}"', apply_text, count=1)
+    # Выражение ждёт отпечаток, а в файле может стоять что угодно — например,
+    # метка «не закреплён после слияния». Тогда подстановка не срабатывает, и
+    # прежняя редакция сообщала об успехе, не записав пина: отпечаток
+    # оказывался зарегистрирован в таблице и не закреплён в проверке.
+    apply_text, замен = re.subn(r'readonly EXPECT_DIGEST="[^"]*"',
+                                f'readonly EXPECT_DIGEST="{fingerprint}"', apply_text, count=1)
+    if замен != 1:
+        raise SystemExit("строка EXPECT_DIGEST не найдена: пин не записан")
     previous = f"# Версия {version - 1}."
     entry = (f"# Версия {version}. Отличие от версии {version - 1}: {note}\n#\n{previous}")
     apply_text = apply_text.replace(previous, entry, 1)
     APPLY.write_text(apply_text, encoding="utf-8")
+    # Проверка на месте, а не на веру: молчаливая незапись уже случалась дважды.
+    if f'EXPECT_DIGEST="{fingerprint}"' not in APPLY.read_text(encoding="utf-8"):
+        raise SystemExit("пин не записался — файл не изменился")
 
     _register(fingerprint, version)
     return fingerprint, version
