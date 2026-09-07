@@ -4,35 +4,35 @@
   "lcp_budget_ms": 1000,
   "measurements": {
     "lords-01/catalog/1440": {
-      "lcp": 124,
+      "lcp": 140,
       "cls": 0
     },
     "lords-01/catalog/390": {
-      "lcp": 124,
+      "lcp": 184,
       "cls": 0
     },
     "lords-01/home/1440": {
-      "lcp": 240,
+      "lcp": 264,
       "cls": 0
     },
     "lords-01/home/390": {
-      "lcp": 136,
+      "lcp": 264,
       "cls": 0
     },
     "lords-02/catalog/1440": {
-      "lcp": 148,
+      "lcp": 120,
       "cls": 0
     },
     "lords-02/catalog/390": {
-      "lcp": 128,
+      "lcp": 204,
       "cls": 0
     },
     "lords-02/home/1440": {
-      "lcp": 288,
+      "lcp": 332,
       "cls": 0
     },
     "lords-02/home/390": {
-      "lcp": 148,
+      "lcp": 228,
       "cls": 0
     },
     "lords-03/catalog/1440": {
@@ -40,31 +40,31 @@
       "cls": 0
     },
     "lords-03/catalog/390": {
-      "lcp": 160,
+      "lcp": 188,
       "cls": 0
     },
     "lords-03/home/1440": {
-      "lcp": 148,
+      "lcp": 164,
       "cls": 0
     },
     "lords-03/home/390": {
-      "lcp": 208,
+      "lcp": 212,
       "cls": 0
     },
     "lords-04/catalog/1440": {
-      "lcp": 180,
+      "lcp": 164,
       "cls": 0
     },
     "lords-04/catalog/390": {
-      "lcp": 132,
+      "lcp": 180,
       "cls": 0
     },
     "lords-04/home/1440": {
-      "lcp": 184,
+      "lcp": 176,
       "cls": 0
     },
     "lords-04/home/390": {
-      "lcp": 156,
+      "lcp": 128,
       "cls": 0
     }
   }

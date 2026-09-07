@@ -1,5 +1,5 @@
 {
-  "captured_at_utc": "2026-09-06T23:51:39.919Z",
+  "captured_at_utc": "2026-09-07T00:24:47.777Z",
   "budget": {
     "documentKb": 120,
     "scriptKb": 60,
@@ -16,8 +16,8 @@
       "url": "http://127.0.0.1:8801/",
       "requests": 37,
       "documentKb": 48,
-      "scriptKb": 19,
-      "styleKb": 26,
+      "scriptKb": 27,
+      "styleKb": 28,
       "imageKb": 26,
       "domNodes": 790
     },
@@ -27,8 +27,8 @@
       "url": "http://127.0.0.1:8801/catalog/",
       "requests": 7,
       "documentKb": 32,
-      "scriptKb": 19,
-      "styleKb": 26,
+      "scriptKb": 27,
+      "styleKb": 28,
       "imageKb": 2,
       "domNodes": 247
     },
@@ -38,8 +38,8 @@
       "url": "http://127.0.0.1:8802/",
       "requests": 37,
       "documentKb": 53,
-      "scriptKb": 19,
-      "styleKb": 26,
+      "scriptKb": 27,
+      "styleKb": 28,
       "imageKb": 26,
       "domNodes": 870
     },
@@ -49,8 +49,8 @@
       "url": "http://127.0.0.1:8802/catalog/",
       "requests": 7,
       "documentKb": 30,
-      "scriptKb": 19,
-      "styleKb": 26,
+      "scriptKb": 27,
+      "styleKb": 28,
       "imageKb": 2,
       "domNodes": 240
     },
@@ -60,8 +60,8 @@
       "url": "http://127.0.0.1:8803/",
       "requests": 31,
       "documentKb": 44,
-      "scriptKb": 19,
-      "styleKb": 26,
+      "scriptKb": 27,
+      "styleKb": 28,
       "imageKb": 21,
       "domNodes": 702
     },
@@ -71,8 +71,8 @@
       "url": "http://127.0.0.1:8803/catalog/",
       "requests": 7,
       "documentKb": 27,
-      "scriptKb": 19,
-      "styleKb": 26,
+      "scriptKb": 27,
+      "styleKb": 28,
       "imageKb": 2,
       "domNodes": 234
     },
@@ -82,8 +82,8 @@
       "url": "http://127.0.0.1:8804/",
       "requests": 15,
       "documentKb": 18,
-      "scriptKb": 12,
-      "styleKb": 26,
+      "scriptKb": 19,
+      "styleKb": 28,
       "imageKb": 9,
       "domNodes": 360
     },
@@ -93,8 +93,8 @@
       "url": "http://127.0.0.1:8804/catalog/",
       "requests": 27,
       "documentKb": 46,
-      "scriptKb": 12,
-      "styleKb": 26,
+      "scriptKb": 19,
+      "styleKb": 28,
       "imageKb": 19,
       "domNodes": 500
     }
@@ -104,7 +104,7 @@
       "site": "lords-01",
       "route": "/catalog/",
       "interactions": 3,
-      "worstMs": 24,
+      "worstMs": 80,
       "reporting_threshold_ms": 16,
       "note": "зафиксированы взаимодействия выше порога отчётности",
       "observer_selfcheck_ms": 128

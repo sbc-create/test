@@ -313,9 +313,13 @@ def _theme_boot(site_id: str) -> str:
     и непойманное оставило бы страницу без темы, уронив остальной сценарий.
     """
     key = _theme_key(site_id)
+    # Значение «system» тоже ставится атрибутом: системная палитра применяется
+    # только по этому признаку. Без него витрина следовала за системой всегда,
+    # и семейства lords_dark и lords_light выглядели одинаково.
     return (
         "<script>(function(){try{var v=localStorage.getItem('" + key + "');"
-        "if(v==='light'||v==='dark'){document.documentElement.setAttribute('data-theme',v);}"
+        "if(v==='light'||v==='dark'||v==='system')"
+        "{document.documentElement.setAttribute('data-theme',v);}"
         "}catch(e){}})();</script>"
     )
 
@@ -2065,9 +2069,15 @@ APP_JS = r"""/* Lords — поведение интерфейса. Ни одно
  * с отложенным файлом, и если бы тему ставил он, страница успевала бы
  * мигнуть чужой палитрой.
  *
- * Состояние «как в системе» снимает атрибут, а не ставит третье значение:
- * тогда решает медиазапрос prefers-color-scheme, и выбор зрителя не спорит с
- * системой, а уступает ей.
+ * Состояний три, и все три ставят атрибут. Прежде «как в системе» атрибут
+ * снимало, а системная палитра применялась к странице без атрибута — то есть
+ * ко всякой странице, где зритель ничего не выбирал. Следствие измерено:
+ * витрины семейства lords_dark отрисовывались светлыми, ровно как lords_light,
+ * и два семейства выглядели одинаково.
+ *
+ * Умолчание витрины — палитра её профиля: это её опознавательный знак, и
+ * системная настройка не вправе его отменять молча. «Как в системе» остаётся
+ * равноправным выбором, но именно выбором.
  */
 (function () {
   var group = document.querySelector(".theme-switch");
@@ -2075,8 +2085,10 @@ APP_JS = r"""/* Lords — поведение интерфейса. Ни одно
   var key = group.getAttribute("data-theme-key") || "lords-theme";
   var root = document.documentElement;
 
+  /* Умолчание — не «как в системе», а «как задумано витриной»: пока зритель
+     не выбрал, ни одна кнопка не нажата, и действует палитра профиля. */
   function current() {
-    try { return localStorage.getItem(key) || "system"; } catch (e) { return "system"; }
+    try { return localStorage.getItem(key) || ""; } catch (e) { return ""; }
   }
 
   function paint() {
@@ -2089,7 +2101,7 @@ APP_JS = r"""/* Lords — поведение интерфейса. Ни одно
   }
 
   function apply(value) {
-    if (value === "light" || value === "dark") {
+    if (value === "light" || value === "dark" || value === "system") {
       root.setAttribute("data-theme", value);
     } else {
       root.removeAttribute("data-theme");
@@ -2783,7 +2795,10 @@ def render_site(
     site.not_found = _not_found(ctx)
 
     # Ассеты
-    add(Page(path="/assets/site.css", body=theme_mod.stylesheet(profile),
+    add(Page(path="/assets/site.css",
+             body=theme_mod.stylesheet(
+                 profile,
+                 declared_theme=str(((package.get("tenant") or {}).get("theme")) or "") or None),
              content_type="text/css; charset=utf-8"))
     add(Page(path="/assets/app.js", body=APP_JS,
              content_type="text/javascript; charset=utf-8"))

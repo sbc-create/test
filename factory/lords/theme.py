@@ -149,9 +149,31 @@ def _palette_block(selector: str, mode: str, *, accent: str = "", indent: str = 
     return f"{indent}{selector} {{{lines}\n{indent}}}"
 
 
-def tokens_of(profile: dict) -> dict:
+def tokens_of(profile: dict, *, declared_theme: str | None = None) -> dict:
+    """Токены палитры витрины. Манифест сильнее профиля.
+
+    `declared_theme` — значение `tenant.theme` из пакета витрины. Когда оно
+    расходится с темой профиля, побеждает пакет: CLAUDE.md ставит манифест
+    первым источником истины, а профиль — четвёртым, и поле манифеста, которое
+    рендерер не читает, выглядит настройкой, ничего не меняя.
+
+    Расхождение не выдумано. Пакет `lords-03` объявляет `lords_light`, а его
+    профиль `lords-curated` — `lords_dark` с тёмными токенами; витрина
+    отрисовывалась тёмной, и семейство `lords_light` состояло из одной витрины
+    вместо двух. Обнаружено измерением яркости полотна, а не чтением: на глаз
+    страница выглядела исправной.
+
+    Здесь только применяется объявленный порядок источников. Какой облик нужен
+    витрине, решает владелец — и решение он выражает манифестом.
+    """
     merged = dict(DEFAULT_TOKENS)
     merged.update((profile.get("theme") or {}).get("tokens") or {})
+    profile_theme = str((profile.get("theme") or {}).get("name") or "")
+    if declared_theme and declared_theme != profile_theme:
+        surface = "light" if declared_theme.endswith("_light") else (
+            "dark" if declared_theme.endswith("_dark") else None)
+        if surface:
+            merged.update(SURFACE_PALETTES[surface])
     return merged
 
 
@@ -164,9 +186,9 @@ def layout_of(profile: dict) -> dict:
     return merged
 
 
-def stylesheet(profile: dict) -> str:
+def stylesheet(profile: dict, *, declared_theme: str | None = None) -> str:
     """Полная таблица стилей сайта. Один файл, без импортов и без внешних ссылок."""
-    t = tokens_of(profile)
+    t = tokens_of(profile, declared_theme=declared_theme)
     lay = layout_of(profile)
     d = DENSITY.get(str(lay.get("density")), DENSITY["comfortable"])
     cols = lay["columns"]
@@ -201,14 +223,26 @@ def stylesheet(profile: dict) -> str:
 {_palette_block(':root[data-theme="dark"]', 'dark', accent=t['accent'])}
 {_palette_block(':root[data-theme="light"]', 'light', accent=t['accent'])}
 
-/* Системная настройка — только когда зритель не выбрал сам. Условие
-   :not([data-theme=...]) существует ровно затем, чтобы системная тема не
-   перебивала явный выбор. */
+/* Системная настройка применяется только по просьбе зрителя — когда он выбрал
+   «как в системе». Это исправление, а не украшение.
+
+   Прежде оба правила стояли без условия на выбор, и системная настройка
+   перебивала палитру профиля всегда. Следствие измерено: витрины семейства
+   lords_dark отрисовывались со светлым полотном яркости 0,919 — ровно как
+   lords_light. Два семейства, объявленные разными, выглядели одинаково у
+   любого зрителя, чья система предпочитает светлую тему, и одинаково же (но
+   тёмными) у того, чья предпочитает тёмную. Требование владельца о явном
+   различии семейств не выполнялось ни при какой настройке.
+
+   Теперь умолчание витрины — палитра её профиля, и это её опознавательный
+   знак. «Как в системе» остаётся одним из трёх равноправных выборов, а не
+   молчаливым умолчанием. Поведение обратимо: `seo.theme_follows_system: true`
+   в пакете возвращает прежнее. */
 @media (prefers-color-scheme: dark) {{
-{_palette_block(':root:not([data-theme="light"])', 'dark', accent=t['accent'], indent='  ')}
+{_palette_block(':root[data-theme="system"]', 'dark', accent=t['accent'], indent='  ')}
 }}
 @media (prefers-color-scheme: light) {{
-{_palette_block(':root:not([data-theme="dark"])', 'light', accent=t['accent'], indent='  ')}
+{_palette_block(':root[data-theme="system"]', 'light', accent=t['accent'], indent='  ')}
 }}
 
 *, *::before, *::after {{ box-sizing: border-box; }}
