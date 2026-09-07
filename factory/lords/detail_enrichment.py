@@ -238,3 +238,32 @@ def load_cached_details(cache_dir) -> tuple[dict[str, dict], list[str]]:
         if detail:
             details[str(detail.get("id") or path.stem)] = detail
     return details, broken
+
+
+def merge_cached(items: list[dict], details: dict[str, dict]) -> tuple[list[dict], int]:
+    """Накладывает сохранённые detail-данные на записи списка.
+
+    Цикл был выписан трижды — в двух сборщиках витрин и в построителе карты
+    страниц, — и дважды я сам терял в нём возвращаемое значение: `merge_detail`
+    отдаёт новую запись и не правит на месте, потому что правило «detail
+    добавляет, но не отнимает» проще соблюсти, ничего не меняя.
+
+    Ошибка эта тихая и дорогая. Записи остаются необогащёнными, витрина выходит
+    достоверной на вид и беднее себя на целый раздел: у первых четырёх тысяч
+    записей боевого среза страны нет ни у одной — она приходит только из
+    detail, — и указатель стран просто не появляется.
+
+    Возвращает записи и число обогащённых: без него «обогащение не сработало»
+    и «обогащать было нечем» выглядят одинаково.
+    """
+    merged: list[dict] = []
+    enriched = 0
+    for item in items:
+        key = str(item.get("external_id") or item.get("id") or "")
+        detail = details.get(key)
+        if detail:
+            merged.append(merge_detail(item, detail))
+            enriched += 1
+        else:
+            merged.append(item)
+    return merged, enriched

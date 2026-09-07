@@ -87,15 +87,13 @@ def load_catalog(limit: int | None) -> tuple[list[dict], dict]:
 
     # Обогащение обязательно: списочный ответ не несёт ни описаний, ни жанров,
     # ни стран, ни длительности. Без него витрина выглядит пустее, чем есть.
-    merged = [
-        enrich_mod.merge_detail(item, details[item["external_id"]])
-        if item.get("external_id") in details else item
-        for item in items
-    ]
+    merged, обогащено = enrich_mod.merge_cached(items, details)
     if limit:
         merged = merged[:limit]
     return merged, {"snapshot_site": SNAPSHOT_SITE, "records": len(merged),
-                    "enriched": len(details), "source": raw.get("source")
+                    # Число обогащённых записей, а не размер кэша: кэш может
+                    # быть велик и не совпасть со срезом ни одной записью.
+                    "enriched": обогащено, "source": raw.get("source")
                     if isinstance(raw, dict) else None}
 
 

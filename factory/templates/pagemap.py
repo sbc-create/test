@@ -224,19 +224,8 @@ def _catalog(snapshot, limit: int, detail_cache=None):
         # Отбросить возвращённое — значит собрать карту по необогащённым
         # записям и не заметить этого: она выйдет достоверной на вид и беднее
         # витрины на целый раздел.
-        обогащённые = []
-        for item in entries:
-            detail = details.get(str(item.get("external_id") or item.get("id") or ""))
-            if detail:
-                обогащённые.append(detail_enrichment.merge_detail(item, detail))
-                обогащено += 1
-            else:
-                обогащённые.append(item)
-        entries = обогащённые
-        if broken:
-            описание_битых = f", битых файлов кэша {len(broken)}"
-        else:
-            описание_битых = ""
+        entries, обогащено = detail_enrichment.merge_cached(entries, details)
+        описание_битых = f", битых файлов кэша {len(broken)}" if broken else ""
     else:
         описание_битых = ""
 

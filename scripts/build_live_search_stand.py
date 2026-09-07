@@ -64,11 +64,7 @@ def main() -> int:
     if broken:
         print(f"кэш обогащения: пропущено битых файлов {len(broken)}: "
               f"{', '.join(broken[:5])}")
-    merged = [
-        enrich_mod.merge_detail(item, details[item["external_id"]])
-        if item.get("external_id") in details else item
-        for item in items
-    ]
+    merged, _ = enrich_mod.merge_cached(items, details)
     catalog = live_mod.catalog_from_live(merged)
     package, _ = preview_mod._package(args.site)
     # Страницы произведений отрисовываются выборочно: их пятьдесят три тысячи,

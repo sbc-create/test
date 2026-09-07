@@ -1,20 +1,20 @@
 {
   "artifact": "TEMPLATE_DEBT_REGISTER",
-  "total": 27,
+  "total": 25,
   "by_severity": {
     "критический": 0,
     "высокий": 1,
-    "средний": 14,
+    "средний": 12,
     "низкий": 12
   },
   "by_owner": {
     "CORE": 11,
     "SEO": 6,
-    "TEMPLATES": 10
+    "TEMPLATES": 8
   },
   "by_kind": {
     "неявное утверждение в тесте": 11,
-    "повторённый блок": 14,
+    "повторённый блок": 12,
     "подавленное исключение": 1,
     "служебный домен в собранном выводе": 1
   },
@@ -73,16 +73,6 @@
       "kind": "повторённый блок",
       "severity": "средний",
       "owner": "TEMPLATES",
-      "path": "scripts/build_live_search_stand.py",
-      "line": 56,
-      "detail": "8 строк повторяются дословно в: scripts/build_live_search_stand.py, scripts/build_product_preview.py",
-      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
-      "verify": "вынести в общий модуль и заменить обе копии вызовом"
-    },
-    {
-      "kind": "повторённый блок",
-      "severity": "средний",
-      "owner": "TEMPLATES",
       "path": "scripts/demo_canary.py",
       "line": 29,
       "detail": "8 строк повторяются дословно в: scripts/demo_canary.py, scripts/demo_scheduled_run.py",
@@ -106,16 +96,6 @@
       "path": "scripts/family_readiness.py",
       "line": 393,
       "detail": "8 строк повторяются дословно в: scripts/family_readiness.py, scripts/product_readiness.py",
-      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
-      "verify": "вынести в общий модуль и заменить обе копии вызовом"
-    },
-    {
-      "kind": "повторённый блок",
-      "severity": "средний",
-      "owner": "TEMPLATES",
-      "path": "scripts/lords_live_defects.py",
-      "line": 25,
-      "detail": "8 строк повторяются дословно в: scripts/lords_live_defects.py, scripts/lords_release_baseline.py",
       "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
       "verify": "вынести в общий модуль и заменить обе копии вызовом"
     },
