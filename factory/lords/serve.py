@@ -179,6 +179,11 @@ def export(site: RenderedSite, directory) -> dict:
         target.write_bytes(page.payload)
         written.append(str(target.relative_to(root)))
     if site.not_found is not None:
-        (root / "404.html").write_text(site.not_found.body, encoding="utf-8")
+        # Байтами, как и все прочие страницы. Текстовый режим здесь делал две
+        # тихие вещи: переводил переносы строк по правилам платформы — то есть
+        # артефакт при тех же входах вышел бы другим на другой системе — и
+        # писал `body` вместо `payload`, а `body` при заданном `raw` является
+        # человекочитаемым описанием, а не содержимым.
+        (root / "404.html").write_bytes(site.not_found.payload)
         written.append("404.html")
     return {"root": str(root), "files": sorted(written)}
