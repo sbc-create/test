@@ -295,7 +295,10 @@ class LiveTitle:
     @property
     def poster_src(self) -> str:
         """Картинка источника, если она есть; иначе слот, а не битое изображение."""
-        return self.poster_url or self.poster_path
+        # Через проверку схемы: указатель поиска и разметка каруселей берут
+        # это значение напрямую, и непроверенный адрес поставщика дошёл бы до
+        # `img.src` минуя разметку страницы.
+        return fx.safe_poster_src(self.poster_url) or self.poster_path
 
     def as_dict(self) -> dict:
         return {

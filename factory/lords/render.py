@@ -641,11 +641,11 @@ def _poster(title) -> str:
     """
     letter = escape((title.name or "?").strip()[:1].upper())
     placeholder = f'<span class="card__poster-empty" aria-hidden="true">{letter}</span>'
-    source = getattr(title, "poster_url", None) or ""
+    source = fx.safe_poster_src(getattr(title, "poster_url", None))
     if not source:
         return placeholder
     return (
-        f'{placeholder}<img src="{escape(title.poster_src)}" alt="" loading="lazy"'
+        f'{placeholder}<img src="{escape(source)}" alt="" loading="lazy"'
         ' width="400" height="600" onerror="this.remove()">'
     )
 
@@ -699,7 +699,7 @@ def _rail_poster(item) -> str:
     """
     letter = escape((getattr(item, "title", "") or "?").strip()[:1].upper())
     placeholder = f'<span class="rail__poster-empty" aria-hidden="true">{letter}</span>'
-    source = getattr(item, "poster", None) or ""
+    source = fx.safe_poster_src(getattr(item, "poster", None))
     if not source:
         return placeholder
     return (
@@ -1814,7 +1814,8 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
     head = (
         f'<div class="title-head"{_external_id_attrs(title)}>'
         f'<div class="title-head__poster">'
-        f'<img src="{escape(title.poster_src)}" alt="Постер: {escape(name)}" '
+        f'<img src="{escape(fx.safe_poster_src(title.poster_src) or title.poster_path)}" '
+        f'alt="Постер: {escape(name)}" '
         'width="400" height="600"></div><div>'
         f"<h1>{escape(h1)}</h1>"
         + _lede(title.summary)

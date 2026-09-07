@@ -5,67 +5,67 @@
   "lcp_budget_source": "Core Web Vitals; локальный стенд даёт нижнюю границу",
   "measurements": {
     "lords-01/catalog/1440": {
-      "lcp": 0,
+      "lcp": 148,
       "cls": 0
     },
     "lords-01/catalog/390": {
-      "lcp": 496,
+      "lcp": 168,
       "cls": 0
     },
     "lords-01/home/1440": {
-      "lcp": 284,
+      "lcp": 200,
       "cls": 0
     },
     "lords-01/home/390": {
-      "lcp": 744,
-      "cls": 0
-    },
-    "lords-02/catalog/1440": {
-      "lcp": 180,
-      "cls": 0
-    },
-    "lords-02/catalog/390": {
-      "lcp": 308,
-      "cls": 0
-    },
-    "lords-02/home/1440": {
-      "lcp": 1032,
-      "cls": 0
-    },
-    "lords-02/home/390": {
       "lcp": 276,
       "cls": 0
     },
-    "lords-03/catalog/1440": {
-      "lcp": 820,
+    "lords-02/catalog/1440": {
+      "lcp": 276,
       "cls": 0
     },
-    "lords-03/catalog/390": {
-      "lcp": 1028,
+    "lords-02/catalog/390": {
+      "lcp": 872,
       "cls": 0
     },
-    "lords-03/home/1440": {
-      "lcp": 0,
-      "cls": 0
-    },
-    "lords-03/home/390": {
-      "lcp": 416,
-      "cls": 0
-    },
-    "lords-04/catalog/1440": {
+    "lords-02/home/1440": {
       "lcp": 232,
       "cls": 0
     },
+    "lords-02/home/390": {
+      "lcp": 204,
+      "cls": 0
+    },
+    "lords-03/catalog/1440": {
+      "lcp": 592,
+      "cls": 0
+    },
+    "lords-03/catalog/390": {
+      "lcp": 956,
+      "cls": 0
+    },
+    "lords-03/home/1440": {
+      "lcp": 312,
+      "cls": 0
+    },
+    "lords-03/home/390": {
+      "lcp": 976,
+      "cls": 0
+    },
+    "lords-04/catalog/1440": {
+      "lcp": 256,
+      "cls": 0
+    },
     "lords-04/catalog/390": {
-      "lcp": 480,
+      "lcp": 180,
       "cls": 0
     },
     "lords-04/home/1440": {
-      "lcp": 912,
+      "lcp": 272,
       "cls": 0
     },
     "lords-04/home/390": {
-      "lcp": 124,
+      "lcp": 180,
       "cls": 0
     }
   }
