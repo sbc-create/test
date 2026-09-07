@@ -212,3 +212,11 @@ requested_by: ITAPX@yandex.com
 authorized_by: null
 created_at: '2026-08-24T06:00:00Z'
 authorized_at: null
+
+# Контракт админки, под который написано потребление слоем шаблонов.
+# Движок админки сюда не копируется: он принадлежит другой полосе.
+admin:
+  contract: site-admin/1.0.0
+  editable_surfaces:
+  - settings
+  - navigation
