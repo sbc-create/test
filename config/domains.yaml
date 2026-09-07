@@ -248,6 +248,7 @@ domains:
     purpose: Заведение новой витрины через публичные контракты остальных
       доменов, без обходных путей.
     paths:
+      - factory/site_engine/provisioning/
       - factory/site_engine/site_provision.py
       - factory/site_engine/site_request.py
       - factory/site_engine/scaffold.py

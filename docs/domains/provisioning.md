@@ -14,6 +14,7 @@
 
 ## Разрешённые пути
 
+* `factory/site_engine/provisioning/`
 * `factory/site_engine/site_provision.py`
 * `factory/site_engine/site_request.py`
 * `factory/site_engine/scaffold.py`
