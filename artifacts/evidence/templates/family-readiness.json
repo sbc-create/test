@@ -1,6 +1,6 @@
 {
   "artifact": "TEMPLATE_FAMILY_READINESS",
-  "generated_at_utc": "2026-09-07T00:19:58.361589+00:00",
+  "generated_at_utc": "2026-09-07T00:45:37.802090+00:00",
   "rubric": {
     "package": "готовность пакета",
     "adapter": "адаптер админки",
@@ -38,7 +38,7 @@
         },
         "browser": {
           "points": 10,
-          "note": "Chromium 222, Firefox+WebKit 16"
+          "note": "Chromium 230, Firefox+WebKit 16"
         },
         "a11y": {
           "points": 10,
@@ -77,7 +77,7 @@
           },
           "browser": {
             "points": 10,
-            "note": "Chromium 222, Firefox+WebKit 16"
+            "note": "Chromium 230, Firefox+WebKit 16"
           },
           "a11y": {
             "points": 10,
@@ -115,7 +115,7 @@
           },
           "browser": {
             "points": 10,
-            "note": "Chromium 222, Firefox+WebKit 16"
+            "note": "Chromium 230, Firefox+WebKit 16"
           },
           "a11y": {
             "points": 10,
@@ -163,7 +163,7 @@
         },
         "browser": {
           "points": 10,
-          "note": "Chromium 222, Firefox+WebKit 16"
+          "note": "Chromium 230, Firefox+WebKit 16"
         },
         "a11y": {
           "points": 10,
@@ -202,7 +202,7 @@
           },
           "browser": {
             "points": 10,
-            "note": "Chromium 222, Firefox+WebKit 16"
+            "note": "Chromium 230, Firefox+WebKit 16"
           },
           "a11y": {
             "points": 10,
@@ -240,7 +240,7 @@
           },
           "browser": {
             "points": 10,
-            "note": "Chromium 222, Firefox+WebKit 16"
+            "note": "Chromium 230, Firefox+WebKit 16"
           },
           "a11y": {
             "points": 10,
@@ -275,7 +275,7 @@
         },
         "adapter": {
           "points": 10,
-          "note": "site-admin/1.0.0: потребление проверено на 9 витринах, утечек нет"
+          "note": "site-admin/1.0.0: потребление проверено на 12 витринах, утечек нет"
         },
         "content": {
           "points": 6,
@@ -314,7 +314,7 @@
           },
           "adapter": {
             "points": 10,
-            "note": "site-admin/1.0.0: потребление проверено на 9 витринах, утечек нет"
+            "note": "site-admin/1.0.0: потребление проверено на 12 витринах, утечек нет"
           },
           "content": {
             "points": 6,
@@ -361,7 +361,7 @@
         },
         "adapter": {
           "points": 10,
-          "note": "site-admin/1.0.0: потребление проверено на 9 витринах, утечек нет"
+          "note": "site-admin/1.0.0: потребление проверено на 12 витринах, утечек нет"
         },
         "content": {
           "points": 6,
@@ -400,7 +400,7 @@
           },
           "adapter": {
             "points": 10,
-            "note": "site-admin/1.0.0: потребление проверено на 9 витринах, утечек нет"
+            "note": "site-admin/1.0.0: потребление проверено на 12 витринах, утечек нет"
           },
           "content": {
             "points": 6,
@@ -447,7 +447,7 @@
         },
         "adapter": {
           "points": 10,
-          "note": "site-admin/1.0.0: потребление проверено на 9 витринах, утечек нет"
+          "note": "site-admin/1.0.0: потребление проверено на 12 витринах, утечек нет"
         },
         "content": {
           "points": 6,
@@ -486,7 +486,7 @@
           },
           "adapter": {
             "points": 10,
-            "note": "site-admin/1.0.0: потребление проверено на 9 витринах, утечек нет"
+            "note": "site-admin/1.0.0: потребление проверено на 12 витринах, утечек нет"
           },
           "content": {
             "points": 6,
