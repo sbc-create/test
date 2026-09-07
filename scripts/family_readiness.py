@@ -301,7 +301,18 @@ def score_visual(family: str) -> tuple[int, str]:
     return MAX, f"{len(rows)} измерений, допуск {data.get('tolerance_px')} px"
 
 
-def score_admin_preview(site: str) -> tuple[int, str]:
+def score_admin_preview(site: str, family: str) -> tuple[int, str]:
+    """Собирается ли витрина в вид, который можно показать до публикации."""
+    if family in MULTISITE:
+        pages = sorted(FAMILY_STAND.glob(f"{family}*.html")) if FAMILY_STAND.is_dir() else []
+        if not pages:
+            return 3, "стенд семейства не собран"
+        surfaces = {p.stem.replace(f"{family}-", "") for p in pages}
+        # Полного балла нет намеренно: собран предпросмотр слоя шаблонов, а не
+        # путь оператора «правка → предпросмотр → согласование → публикация».
+        # Тот путь живёт в админке, и он принадлежит другой полосе.
+        return 8, (f"{len(pages)} страниц предпросмотра, поверхностей {len(surfaces)}; "
+                   "путь публикации принадлежит админке")
     directory = ROOT / "artifacts" / "lords" / "preview" / site
     if directory.is_dir() and any(directory.glob("*")):
         return MAX, "предпросмотр собран"
@@ -338,7 +349,7 @@ def evaluate() -> dict:
                 "browser": score_browser(family, sites),
                 "a11y": score_a11y(family),
                 "visual": score_visual(family),
-                "admin_preview": score_admin_preview(site),
+                "admin_preview": score_admin_preview(site, family),
                 "live": score_live(site, pkg),
             }
             per_site[site] = {k: {"points": v[0], "note": v[1]} for k, v in scores.items()}

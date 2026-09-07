@@ -26,6 +26,9 @@ import { SiteFooter } from '../src/components/SiteFooter'
 import { CardGrid, type CardItem } from '../src/components/TitleCard'
 import { Pagination } from '../src/components/Pagination'
 import { Breadcrumbs } from '../src/components/Breadcrumbs'
+import { HomeBlocks } from '../src/components/HomeBlocks'
+import { Player } from '../src/components/Player'
+import { PLAYER_SCRIPT_URL } from '../src/player/contract'
 import type { SiteContext } from '../src/lib/site'
 import { CONSUMED_SETTINGS } from '../src/lib/admin-contract'
 
@@ -124,27 +127,155 @@ const context = (
   } as SiteContext
 }
 
-const page = (family: (typeof FAMILIES)[number], tenant: TenantKey | null = null): string => {
+/** Поверхности витрины. Каждая — отдельная страница стенда.
+ *
+ * Одной страницы каталога мало: требование владельца перечисляет пятнадцать
+ * поверхностей, и семейство, различимое на каталоге, может совпадать с
+ * соседним на главной или на странице произведения. Проверять надо то, что
+ * названо, а не то, что первым собралось.
+ */
+const SURFACES = ['catalog', 'home', 'title', 'search', 'search-empty'] as const
+type Surface = (typeof SURFACES)[number]
+
+const HOME_BLOCKS = [
+  { blockType: 'heroSpotlight', heading: 'Смотрят сейчас', items: [] },
+  { blockType: 'latestUpdates', heading: 'Последние поступления' },
+  { blockType: 'genreRails', heading: 'Жанры' },
+  {
+    blockType: 'textSection',
+    heading: 'О витрине',
+    text: 'Раздел собран редакцией. Текст нужен стенду затем, что типографика '
+      + 'семейства измеряется на настоящем абзаце, а не на заголовке.',
+  },
+]
+
+const HOME_DATA = {
+  latest: [],
+  posts: [],
+  schedule: [
+    { label: 'Соляной антракт, серия 4', airsAt: '2026-09-08', href: '/catalog/zapis-3' },
+    { label: 'Медный чертёж, серия 2', airsAt: '2026-09-09', href: null },
+  ],
+  genres: [
+    { id: 1, name: 'Драма', slug: 'drama' },
+    { id: 2, name: 'Комедия', slug: 'comedy' },
+    { id: 3, name: 'Детектив', slug: 'detective' },
+  ],
+}
+
+const surfaceBody = (surface: Surface, site: SiteContext) => {
+  if (surface === 'home') {
+    return (
+      <>
+        <h1>{site.siteName}</h1>
+        <HomeBlocks site={site} blocks={HOME_BLOCKS} data={HOME_DATA} />
+      </>
+    )
+  }
+  if (surface === 'title') {
+    const item = cards[1]
+    return (
+      <>
+        <Breadcrumbs
+          crumbs={[
+            { title: 'Главная', href: '/' },
+            { title: 'Каталог', href: '/catalog' },
+          ]}
+          origin="https://stand.invalid"
+        />
+        <h1>{item.title}</h1>
+        <p className="lede">
+          Описание записи. Нужно стенду затем, что страница произведения — это прежде
+          всего текст, и семейства расходятся именно на нём: шириной колонки, размером
+          и интерлиньяжем.
+        </p>
+        <dl className="facts">
+          <dt>Год</dt>
+          <dd>2019</dd>
+          <dt>Тип</dt>
+          <dd>Сериал</dd>
+          <dt>Сезонов</dt>
+          <dd>2</dd>
+          <dt>Серий</dt>
+          <dd>16</dd>
+        </dl>
+        <Player
+          attributes={
+            {
+              ident: 'player-stand',
+              publisherId: '1',
+              titleId: '1',
+              aggregator: 'kp',
+            } as never
+          }
+          scriptUrl={PLAYER_SCRIPT_URL}
+          season={1}
+          episode={1}
+          unavailableText="Источник видео сейчас недоступен."
+        />
+      </>
+    )
+  }
+  if (surface === 'search') {
+    return (
+      <>
+        <h1>Поиск</h1>
+        <form className="header-search" role="search" action="/search" method="get">
+          <label className="visually-hidden" htmlFor="q">Строка поиска</label>
+          <input id="q" name="q" type="search" defaultValue="перевал" />
+          <button type="submit">Найти</button>
+        </form>
+        <p className="count">Найдено: {cards.length}.</p>
+        <CardGrid items={cards} empty="Ничего не нашлось." />
+      </>
+    )
+  }
+  if (surface === 'search-empty') {
+    return (
+      <>
+        <h1>Поиск</h1>
+        <form className="header-search" role="search" action="/search" method="get">
+          <label className="visually-hidden" htmlFor="q">Строка поиска</label>
+          <input id="q" name="q" type="search" defaultValue="ыыыжжж" />
+          <button type="submit">Найти</button>
+        </form>
+        <p className="count">По запросу «ыыыжжж» ничего не нашлось.</p>
+        <CardGrid items={[]} empty="Ничего не нашлось. Попробуйте другое написание." />
+      </>
+    )
+  }
+  return (
+    <>
+      <Breadcrumbs
+        crumbs={[
+          { title: 'Главная', href: '/' },
+          { title: 'Каталог', href: '/catalog' },
+        ]}
+        origin="https://stand.invalid"
+      />
+      <h1>Каталог</h1>
+      <p className="lede">
+        Раздел показывает записи витрины. Текст подзаголовка нужен стенду затем, что
+        типографика семейства измеряется на настоящем абзаце, а не на заголовке.
+      </p>
+      <CardGrid items={cards} empty="Записей нет." />
+      <Pagination basePath="/catalog" page={2} totalPages={5} />
+    </>
+  )
+}
+
+const page = (
+  family: (typeof FAMILIES)[number],
+  tenant: TenantKey | null = null,
+  surface: Surface = 'catalog',
+): string => {
   const site = context(family, tenant)
   const body = renderToStaticMarkup(
     <>
       <SiteHeader site={site} />
       <main id="content">
         <div className="container">
-          <Breadcrumbs
-            crumbs={[
-              { title: 'Главная', href: '/' },
-              { title: 'Каталог', href: '/catalog' },
-            ]}
-            origin="https://stand.invalid"
-          />
-          <h1>Каталог</h1>
-          <p className="lede">
-            Раздел показывает записи витрины. Текст подзаголовка нужен стенду затем, что
-            типографика семейства измеряется на настоящем абзаце, а не на заголовке.
-          </p>
-          <CardGrid items={cards} empty="Записей нет." />
-          <Pagination basePath="/catalog" page={2} totalPages={5} />
+          {surfaceBody(surface, site)}
         </div>
       </main>
       <SiteFooter site={site} />
@@ -169,8 +300,11 @@ const page = (family: (typeof FAMILIES)[number], tenant: TenantKey | null = null
 fs.mkdirSync(OUT, { recursive: true })
 let pages = 0
 for (const family of FAMILIES) {
-  fs.writeFileSync(path.join(OUT, `${family.theme}.html`), page(family))
-  pages += 1
+  for (const surface of SURFACES) {
+    const name = surface === 'catalog' ? `${family.theme}.html` : `${family.theme}-${surface}.html`
+    fs.writeFileSync(path.join(OUT, name), page(family, null, surface))
+    pages += 1
+  }
   for (const key of Object.keys(TENANTS) as TenantKey[]) {
     fs.writeFileSync(
       path.join(OUT, `${family.theme}-${TENANTS[key].suffix}.html`), page(family, key))
@@ -182,6 +316,7 @@ fs.writeFileSync(
   `${JSON.stringify(
     {
       families: FAMILIES.map((f) => f.theme),
+      surfaces: SURFACES,
       tenants: Object.fromEntries(
         (Object.keys(TENANTS) as TenantKey[]).map((k) => [k, TENANTS[k]])),
       consumedSettings: CONSUMED_SETTINGS,

@@ -23,26 +23,32 @@ fs.mkdirSync(OUT, { recursive: true });
 
 const FAMILIES = ['portal_light', 'pulse', 'editorial'];
 const WIDTHS = [390, 768, 1440];
+// Поверхности берутся из описи стенда, а не перечисляются здесь: перечень в
+// двух местах расходится, и расходится молча.
+const INDEX = JSON.parse(fs.readFileSync(path.join(STAND, 'index.json'), 'utf8'));
+const SURFACES = INDEX.surfaces || ['catalog'];
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
-const url = (family) => `file://${path.join(STAND, `${family}.html`)}`;
+const url = (family, surface = 'catalog') => `file://${path.join(
+  STAND, surface === 'catalog' ? `${family}.html` : `${family}-${surface}.html`)}`;
 
 test.describe('axe WCAG 2.2 AA', () => {
   for (const family of FAMILIES) {
+    for (const surface of SURFACES) {
     for (const width of WIDTHS) {
-      test(`${family}/${width}`, async ({ page }) => {
+      test(`${family}/${surface}/${width}`, async ({ page }) => {
         await page.setViewportSize({ width, height: 900 });
-        await page.goto(url(family), { waitUntil: 'load' });
+        await page.goto(url(family, surface), { waitUntil: 'load' });
         await page.addScriptTag({ path: AXE });
         const result = await page.evaluate(
           async (tags) => window.axe.run(document, { runOnly: { type: 'tag', values: tags } }),
           TAGS,
         );
         fs.writeFileSync(
-          path.join(OUT, `axe-family-${family}-${width}.json`),
+          path.join(OUT, `axe-family-${family}-${surface}-${width}.json`),
           `${JSON.stringify({
             captured_at_utc: new Date().toISOString(),
-            family, width, standard: 'WCAG 2.0/2.1/2.2 A+AA',
+            family, surface, width, standard: 'WCAG 2.0/2.1/2.2 A+AA',
             rules_passed: result.passes.length,
             violations: result.violations.map((v) => ({
               id: v.id, impact: v.impact, help: v.help,
@@ -55,8 +61,9 @@ test.describe('axe WCAG 2.2 AA', () => {
         const described = serious.map(
           (v) => `${v.id} (${v.impact}): ${v.help}\n    ${v.nodes.map((n) => n.target.join(' ')).join('\n    ')}`,
         ).join('\n  ');
-        expect(serious, `${family}/${width}:\n  ${described}`).toEqual([]);
+        expect(serious, `${family}/${surface}/${width}:\n  ${described}`).toEqual([]);
       });
+    }
     }
   }
 });
@@ -99,9 +106,10 @@ test.describe('клавиатура', () => {
 
 test.describe('двукратное увеличение текста', () => {
   for (const family of FAMILIES) {
-    test(`${family}: при 200 % ничего не теряется и не уезжает вбок`, async ({ page }) => {
+    for (const surface of SURFACES) {
+    test(`${family}/${surface}: при 200 % ничего не теряется и не уезжает вбок`, async ({ page }) => {
       await page.setViewportSize({ width: 1280, height: 900 });
-      await page.goto(url(family), { waitUntil: 'load' });
+      await page.goto(url(family, surface), { waitUntil: 'load' });
       await page.addStyleTag({ content: 'html { font-size: 200% !important }' });
       await page.evaluate(
         () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
@@ -123,8 +131,11 @@ test.describe('двукратное увеличение текста', () => {
         const doc = document.documentElement;
         return { clipped, overflowX: doc.scrollWidth > doc.clientWidth + 1 };
       });
-      expect(result.clipped, `${family}: содержимое обрезано при 200 %`).toEqual([]);
-      expect(result.overflowX, `${family}: горизонтальная прокрутка при 200 %`).toBe(false);
+      expect(result.clipped,
+        `${family}/${surface}: содержимое обрезано при 200 %`).toEqual([]);
+      expect(result.overflowX,
+        `${family}/${surface}: горизонтальная прокрутка при 200 %`).toBe(false);
     });
+    }
   }
 });

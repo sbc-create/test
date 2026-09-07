@@ -1,6 +1,7 @@
 {
-  "captured_at_utc": "2026-09-06T22:26:41.509Z",
-  "family": "editorial",
+  "captured_at_utc": "2026-09-07T00:12:40.941Z",
+  "family": "pulse",
+  "surface": "search",
   "width": 1440,
   "standard": "WCAG 2.0/2.1/2.2 A+AA",
   "rules_passed": 26,

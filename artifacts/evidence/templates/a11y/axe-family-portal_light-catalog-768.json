@@ -1,7 +1,8 @@
 {
-  "captured_at_utc": "2026-09-06T22:26:38.230Z",
+  "captured_at_utc": "2026-09-07T00:12:30.426Z",
   "family": "portal_light",
-  "width": 1440,
+  "surface": "catalog",
+  "width": 768,
   "standard": "WCAG 2.0/2.1/2.2 A+AA",
   "rules_passed": 26,
   "violations": []
