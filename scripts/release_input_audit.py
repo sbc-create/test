@@ -71,7 +71,8 @@ PORTS = {"lords-01": 9101, "lords-02": 9102,
     "0eab0ce7ca4a5a9ccb6ee6167511ed58f60379ef38ab0d6670c2433216ee278a": 9109,
     "ddbeddb8fcf2ddb5091cc9e87cc83262e05235b739cbb3a53e2f408350c6626a": 9110,
     "cfe8ee2d21d19a71fa3805177890a8eac240a2cffad146ce404f42b503eafa76": 9111,
-    "e40b937830025085ea64b4c344ccf04bcceaad17056b1f02fa6a29df15c04815": 9112, "lords-03": 9103}
+    "e40b937830025085ea64b4c344ccf04bcceaad17056b1f02fa6a29df15c04815": 9112,
+    "f5a7be720b53b021ec9b4f4f7fe4ba7ec14f5a46d28db4ed147328c6f6ee581a": 9113, "lords-03": 9103}
 
 
 def _git(*args: str, cwd: Path = ROOT) -> str:
