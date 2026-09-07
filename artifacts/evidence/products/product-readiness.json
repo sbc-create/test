@@ -1,6 +1,13 @@
 {
   "artifact": "TEMPLATE_PRODUCT_READINESS",
-  "generated_at_utc": "2026-09-07T11:20:37.157199+00:00",
+  "average_product": 87,
+  "average_product_measured": [
+    "animedia-portal",
+    "basis-video",
+    "zona-cinema"
+  ],
+  "average_integration": 42,
+  "generated_at_utc": "2026-09-07T12:10:59.350644+00:00",
   "rubric": {
     "package": "готовность пакета",
     "data": "данные",
@@ -38,7 +45,7 @@
         },
         "preview": {
           "points": 9,
-          "note": "1355 страниц, адрес http://127.0.0.1:8903/"
+          "note": "1355 страниц собрано и готово к выкладке; локальная витрина в приёмку не входит"
         },
         "adapter": {
           "points": 7,
@@ -46,13 +53,15 @@
         },
         "live": {
           "points": 0,
-          "note": "BLOCKED: домен не задан владельцем"
+          "note": "BLOCKED_OWNER_URLS: адрес для приёмки не передан владельцем"
         }
       },
       "package_readiness": 86,
       "preview_acceptance": 90,
       "live_acceptance": 0,
-      "total": 75
+      "total": 75,
+      "product_readiness": 88,
+      "integration_readiness": 53
     },
     "animedia-portal": {
       "package": "animedia-preview",
@@ -79,7 +88,7 @@
         },
         "preview": {
           "points": 9,
-          "note": "1415 страниц, адрес http://127.0.0.1:8904/"
+          "note": "1415 страниц собрано и готово к выкладке; локальная витрина в приёмку не входит"
         },
         "adapter": {
           "points": 7,
@@ -87,13 +96,15 @@
         },
         "live": {
           "points": 0,
-          "note": "BLOCKED: домен не задан владельцем"
+          "note": "BLOCKED_OWNER_URLS: адрес для приёмки не передан владельцем"
         }
       },
       "package_readiness": 86,
       "preview_acceptance": 90,
       "live_acceptance": 0,
-      "total": 75
+      "total": 75,
+      "product_readiness": 88,
+      "integration_readiness": 53
     },
     "basis-video": {
       "package": "pilot-local",
@@ -120,7 +131,7 @@
         },
         "preview": {
           "points": 9,
-          "note": "48 страниц, адрес http://127.0.0.1:8905/"
+          "note": "48 страниц собрано и готово к выкладке; локальная витрина в приёмку не входит"
         },
         "adapter": {
           "points": 7,
@@ -128,13 +139,15 @@
         },
         "live": {
           "points": 0,
-          "note": "BLOCKED: pilot.localhost.test — не боевой домен"
+          "note": "BLOCKED_OWNER_URLS: pilot.localhost.test — не боевой адрес; локальные витрины в приёмку не входят"
         }
       },
       "package_readiness": 84,
       "preview_acceptance": 90,
       "live_acceptance": 0,
-      "total": 74
+      "total": 74,
+      "product_readiness": 86,
+      "integration_readiness": 53
     },
     "yummy": {
       "package": "—",
@@ -169,13 +182,16 @@
         },
         "live": {
           "points": 0,
-          "note": "BLOCKED: домен не задан владельцем"
+          "note": "BLOCKED_OWNER_URLS: адрес для приёмки не передан владельцем"
         }
       },
       "package_readiness": 4,
       "preview_acceptance": 0,
       "live_acceptance": 0,
-      "total": 4
+      "total": 4,
+      "product_readiness": null,
+      "product_note": "не измерено этой полосой: приложение вне фабрики, боевые адреса закрыты профилем разрешений, чужая активная ветка не запускается. Известно от ARCHITECT_CORE: ревизия 4460031, три витрины, health healthy на 2026-09-04. Прочитано: 41 маршрут, 66 модульных тестов, 13 браузерных спеков",
+      "integration_readiness": 10
     }
   },
   "average": 57,

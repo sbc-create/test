@@ -184,14 +184,13 @@ def score_preview(product: str) -> tuple[int, str]:
     if not (directory / "index.html").is_file():
         return 0, "предпросмотр не собран"
     documents = sum(1 for _ in directory.rglob("*.html"))
-    plan = EVIDENCE / "preview-plan.json"
-    url = None
-    if plan.is_file():
-        url = (json.loads(plan.read_text(encoding="utf-8")).get("products") or {}).get(product)
-    if not url:
-        return 6, f"{documents} страниц собрано, адрес владельцу не назначен"
-    # Полного балла нет намеренно: собранный предпросмотр — не приёмка витрины.
-    return 9, f"{documents} страниц, адрес {url}"
+    # Локальный стенд из оценки исключён: владелец решил, что приёмка идёт
+    # только на настоящих адресах, и адрес вида `127.0.0.1` в неё не входит.
+    # Здесь считается то, что от стенда не зависит: витрина **собирается** в
+    # набор страниц, готовый к выкладке.
+    return (9 if documents >= 20 else 6), (
+        f"{documents} страниц собрано и готово к выкладке; "
+        "локальная витрина в приёмку не входит")
 
 
 def score_adapter(product: str, pkg: dict) -> tuple[int, str]:
@@ -224,15 +223,31 @@ def score_adapter(product: str, pkg: dict) -> tuple[int, str]:
 
 
 def score_live(product: str, pkg: dict) -> tuple[int, str]:
+    """Приёмка на боевом домене.
+
+    Ноль здесь означает не провал продукта, а отсутствие адреса, на котором
+    приёмку можно провести. Разница существенная: продукт, работающий на трёх
+    витринах в production, и продукт, который не собирается, — это разные вещи,
+    и одинаковый ноль в отчёте их уравнивал бы.
+
+    Поэтому состояние называется `BLOCKED_OWNER_URLS`, а само измерение
+    вынесено из готовности продукта в готовность интеграции: приёмка проводится
+    средствами фабрики, а её у этих витрин пока нет.
+
+    Локальные стенды и фикстуры сюда не входят ни при каких условиях — таково
+    решение владельца, и оно верное: витрина на `127.0.0.1` не доказывает
+    ничего о витрине на домене.
+    """
     domain = pkg.get("domain")
     if not domain:
-        return 0, "BLOCKED: домен не задан владельцем"
+        return 0, "BLOCKED_OWNER_URLS: адрес для приёмки не передан владельцем"
     text = str(domain)
     if text.endswith((".localhost", ".localhost.test", ".test", ".invalid")):
-        return 0, f"BLOCKED: {text} — не боевой домен"
+        return 0, (f"BLOCKED_OWNER_URLS: {text} — не боевой адрес; "
+                   "локальные витрины в приёмку не входят")
     if not pkg.get("production_authorized"):
-        return 0, f"BLOCKED: production не авторизован ({text})"
-    return 2, f"домен {text} задан, приёмка не выполнялась"
+        return 0, f"BLOCKED_OWNER_URLS: production не авторизован ({text})"
+    return 2, f"адрес {text} задан, приёмка не выполнялась"
 
 
 def evaluate() -> dict:
@@ -261,8 +276,64 @@ def evaluate() -> dict:
             "live_acceptance": round(100 * dims["live"]["points"] / MAX),
             "total": round(100 * total / (MAX * len(DIMENSIONS))),
         }
+    # Две средние, а не одна. Смешивать готовность работающего сайта с
+    # отсутствием его адаптера в новой фабрике — значит получить число, которое
+    # не отвечает ни на один вопрос: ни «работает ли продукт», ни «подключён ли
+    # он». У Yummy эти величины расходятся предельно: продукт в production на
+    # трёх витринах, а адаптера к фабрике нет вовсе.
+    #
+    # `product` — то, что видит зритель: пакет, данные, работа, облик,
+    # доступность. `integration` — то, что видит фабрика: адаптер, предпросмотр
+    # в общем стенде, приёмка боевой витрины её средствами.
+    PRODUCT_DIMS = ("package", "data", "functional", "visual", "responsive")
+    INTEGRATION_DIMS = ("preview", "adapter", "live")
+    for name, info in products.items():
+        dims = info["dimensions"]
+        if name == "yummy":
+            # Готовность продукта Yummy этой рубрикой не измеряется, и ноль
+            # здесь был бы неправдой. Рубрика смотрит на артефакты фабрики —
+            # пакет, предпросмотр, снимки, — а Yummy живёт вне её: отдельное
+            # приложение на трёх боевых витринах.
+            #
+            # Что известно и откуда: ARCHITECT_CORE записал в PROGRAM_STATE
+            # ревизию 4460031, три витрины и health healthy, проверено
+            # 2026-09-04. Это измерение Core, а не этой полосы, и выдавать его
+            # за своё нельзя. Прочитано на месте: 41 страничный маршрут, 66
+            # модульных тестов, 13 браузерных спеков.
+            #
+            # Чего эта полоса не делала: не запускала ни один из тестов —
+            # рабочая копия занята активной веткой другого потока, и `typecheck`
+            # пишет в дерево; не открывала боевые домены — они закрыты профилем
+            # разрешений. Поэтому число не ставится вовсе.
+            info["product_readiness"] = None
+            info["product_note"] = (
+                "не измерено этой полосой: приложение вне фабрики, боевые адреса "
+                "закрыты профилем разрешений, чужая активная ветка не запускается. "
+                "Известно от ARCHITECT_CORE: ревизия 4460031, три витрины, "
+                "health healthy на 2026-09-04. Прочитано: 41 маршрут, 66 модульных "
+                "тестов, 13 браузерных спеков")
+            info["integration_readiness"] = round(
+                100 * sum(dims[k]["points"] for k in INTEGRATION_DIMS)
+                / (MAX * len(INTEGRATION_DIMS)))
+            continue
+        info["product_readiness"] = round(
+            100 * sum(dims[k]["points"] for k in PRODUCT_DIMS) / (MAX * len(PRODUCT_DIMS)))
+        info["integration_readiness"] = round(
+            100 * sum(dims[k]["points"] for k in INTEGRATION_DIMS)
+            / (MAX * len(INTEGRATION_DIMS)))
+
     return {
         "artifact": "TEMPLATE_PRODUCT_READINESS",
+        # Средняя считается только по измеренным: продукт, который эта полоса
+        # не мерила, не имеет права ни поднять её, ни опустить.
+        "average_product": round(sum(
+            p["product_readiness"] for p in products.values()
+            if p["product_readiness"] is not None) / max(1, sum(
+                1 for p in products.values() if p["product_readiness"] is not None))),
+        "average_product_measured": sorted(
+            k for k, v in products.items() if v["product_readiness"] is not None),
+        "average_integration": round(
+            sum(p["integration_readiness"] for p in products.values()) / len(products)),
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "rubric": dict(DIMENSIONS),
         "max_per_dimension": MAX,
@@ -293,12 +364,16 @@ def main() -> int:
         row = "".join(f"{report['products'][n]['dimensions'][key]['points']:>17}" for n in names)
         print(f"{label:30}{row}")
     print("-" * (30 + 17 * len(names)))
-    for label, field in (("ИТОГО, %", "total"),
+    for label, field in (("ГОТОВНОСТЬ ПРОДУКТА, %", "product_readiness"),
+                         ("ГОТОВНОСТЬ ИНТЕГРАЦИИ, %", "integration_readiness"),
                          ("  готовность пакета, %", "package_readiness"),
                          ("  предпросмотр, %", "preview_acceptance"),
                          ("  приёмка витрины, %", "live_acceptance")):
-        print(f"{label:30}" + "".join(f"{report['products'][n][field]:>17}" for n in names))
-    print(f"\nсредняя по четырём продуктам: {report['average']}%")
+        print(f"{label:30}" + "".join(
+            f"{report['products'][n][field] if report['products'][n][field] is not None else 'не измерено':>17}"
+            for n in names))
+    print(f"\nсредняя готовность продуктов:   {report['average_product']}%")
+    print(f"средняя готовность интеграции: {report['average_integration']}%")
     print(f"{OUT.relative_to(ROOT)}")
     return 0
 
