@@ -142,6 +142,33 @@ _LOADER = """\
     k.async = 1; k.src = r; a.parentNode.insertBefore(k, a);
   })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');"""
 
+#: Тот же загрузчик для TypeScript, написанный типами, а не скопированный.
+#:
+#: Дословный сниппет — функция с семью безымянными параметрами, из которых два
+#: последних не передаются и заполняются внутри. JavaScript это позволяет,
+#: TypeScript — нет: `next build` падал одиннадцатью ошибками типов, и всё
+#: приложение не собиралось из-за одного сгенерированного файла.
+#:
+#: Поведение то же: очередь вызовов до загрузки тега, отметка времени старта,
+#: асинхронный скрипт перед первым существующим скриптом страницы.
+_LOADER_TS = """\
+  if (!window.ym) {
+    // Заглушка копит вызовы до загрузки тега: тег их потом разберёт.
+    const stub = (...args: unknown[]): void => { stub.a.push(args); };
+    stub.a = [] as unknown[][];
+    stub.l = Date.now();
+    window.ym = stub;
+  }
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://mc.yandex.ru/metrika/tag.js';
+  const first = document.getElementsByTagName('script')[0];
+  if (first?.parentNode) {
+    first.parentNode.insertBefore(tag, first);
+  } else {
+    document.head.appendChild(tag);
+  }"""
+
 
 def render_js() -> str:
     """Клиент для темы: обычный JavaScript, подключается как внешний файл.
@@ -275,7 +302,9 @@ def render_ts() -> str:
     lines.append("}")
     lines.append("")
     lines.append("declare global {")
-    lines.append("  interface Window { ym?: (...args: unknown[]) => void }")
+    lines.append("  interface Window {")
+    lines.append("    ym?: ((...args: unknown[]) => void) & { a?: unknown[][]; l?: number };")
+    lines.append("  }")
     lines.append("}")
     lines.append("")
     lines.append("let verdict: AnalyticsVerdict = { active: false, reason: 'не инициализирован' };")
@@ -286,7 +315,7 @@ def render_ts() -> str:
     lines.append("  verdict = decide(config, hostname.toLowerCase());")
     lines.append("  if (!verdict.active || !config) { return verdict; }")
     lines.append("  counterId = config.counterId;")
-    lines.append(_LOADER)
+    lines.append(_LOADER_TS)
     lines.append(f"  window.ym!(counterId, 'init', {_INIT_OPTIONS});")
     lines.append("  return verdict;")
     lines.append("}")
