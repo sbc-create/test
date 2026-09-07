@@ -5,24 +5,25 @@
   "worktree": "/home/claude/wt-prod-25",
   "baseStage": "PROGRAM-PRODUCTION-FINISH-25",
   "baselineFixedAt": "2026-09-07T14:43:05Z",
-  "headSha": "1ae0fb9f7ce8f456dabed831e3632b7c2e57baf5",
+  "headSha": "1e413353eab6ed852b5cd7c798b75ad691dcb20a",
   "cycle": 4,
   "closed": {
     "0": "правда зафиксирована: карта, три цикла, три общих области",
     "1": "техдолг: отпечаток шаблона, подборки без поставщика, метрика поиска",
     "2": "девять доменов объявлены реестром и сверяются гейтом",
     "3": "контракт отрисовки RenderSpec → ArtifactManifest",
-    "4": "первый перенос и разрыв всех трёх циклов между подсистемами"
+    "4": "разрыв всех трёх циклов, три переноса: чтение каталога, домен редакции, домен заведения витрин"
   },
   "cyclesBetweenSubsystems": 0,
   "domainsDeclared": 9,
   "knownBoundaryViolations": 0,
   "unassignedFiles": 10,
-  "tests": "5421 passed, 3 skipped, 1 xfailed, 0 failed",
+  "tests": "5440 passed, 3 skipped, 1 xfailed, 0 failed",
   "productionMutations": 0,
   "next": [
+    "собрать физически оставшиеся семь доменов, по одному за цикл",
     "версионированные описания Site, ContentItem, Release, Job, AuditEvent",
-    "перенос оставшихся модулей по одному за цикл",
     "короткие запросы с опечаткой — решение требует замера до и после"
-  ]
+  ],
+  "domainsAssembled": 2
 }
