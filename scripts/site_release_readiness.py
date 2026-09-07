@@ -20,11 +20,10 @@
 from __future__ import annotations
 
 import json
-import subprocess
+import pathlib
 import sys
 import urllib.error
 import urllib.request
-import pathlib
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -79,7 +78,6 @@ def canary_log_says(*needles: str) -> bool:
 def score_lords(audit: dict, reg: dict) -> dict:
     t = audit.get("template", {})
     runtime = audit.get("runtime", {}).get("lords-02", {})
-    probe = audit.get("liveProbe", {}).get("lords-02", {})
     fingerprint = runtime.get("fingerprint") or {}
 
     out = {}
@@ -107,7 +105,8 @@ def score_lords(audit: dict, reg: dict) -> dict:
         f"расписка о сборке: {receipt.name}" if receipt.is_file()
         else "сборка на живом каталоге идёт или не запускалась (расписки нет)")
     # Ворота разделены надвое честно: часть выполнима без прав, часть — нет.
-    verification = ROOT / "artifacts" / "evidence" / "release" / "staging-verification.lords-02.json"
+    verification = (ROOT / "artifacts" / "evidence" / "release"
+                    / "staging-verification.lords-02.json")
     v = json.loads(verification.read_text(encoding="utf-8")) if verification.is_file() else {}
     passed = v.get("verdict") == "PASS"
     out["preswitch_gates"] = Score(
@@ -251,7 +250,7 @@ def main() -> int:
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps({
         "artifact": "SITE_RELEASE_READINESS",
-        "gates": [{"key": k, "label": l} for k, l in GATES],
+        "gates": [{"key": ключ, "label": подпись} for ключ, подпись in GATES],
         "slots": {name: {"total": totals[name],
                          "gates": {k: {"points": s.points, "note": s.note,
                                        "blocked": s.blocked}

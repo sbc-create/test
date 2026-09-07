@@ -140,10 +140,10 @@ def build() -> str:
         "`responsive.json` → `reflow` |")
 
     spacing = responsive.get("textSpacing", [])
+    сорвано = sum(1 for r in spacing if r.get("horizontal") or r.get("clipped"))
     lines.append(
-        f"| 1.4.12 Text Spacing | Lords | {len(spacing)} | "
-        f"{sum(1 for r in spacing if r.get('horizontal') or r.get('clipped'))} | "
-        f"{PASS if spacing and not any(r.get('horizontal') or r.get('clipped') for r in spacing) else NOT_RUN} | "
+        f"| 1.4.12 Text Spacing | Lords | {len(spacing)} | {сорвано} | "
+        f"{PASS if spacing and not сорвано else NOT_RUN} | "
         "`responsive.json` → `textSpacing` |")
 
     measurements = baseline.get("measurements", {})

@@ -48,7 +48,7 @@ OUT = ROOT / "artifacts" / "evidence" / "templates" / "chain-audit.json"
 
 
 def _num(value) -> bool:
-    return isinstance(value, (int, float)) and not isinstance(value, bool)
+    return isinstance(value, int | float) and not isinstance(value, bool)
 
 
 def _filled(value) -> bool:
@@ -202,7 +202,8 @@ def audit(site: str, sample_size: int) -> dict:
     package, _ = preview_mod._package(site)
     slugs = {}
     for rid in chosen:
-        merged = enrich_mod.merge_detail(by_id[rid], details[rid]) if rid in details else dict(by_id[rid])
+        merged = (enrich_mod.merge_detail(by_id[rid], details[rid])
+                  if rid in details else dict(by_id[rid]))
         title = live_mod.title_from_item(merged)
         if title is None:
             continue

@@ -1,15 +1,22 @@
 """Стенд: рендер только тех страниц, что есть в очереди SEO."""
-import json, sys, time
+import json
+import sys
+import time
 from pathlib import Path
+from urllib.parse import urlparse
+
 sys.path.insert(0, "/home/claude/wt-core-identity-22")
 import yaml
-from factory.lords import live_catalog, render as render_mod
+
+from factory.lords import live_catalog
+from factory.lords import render as render_mod
 from factory.paths import PATHS
 
 site_id, out = sys.argv[1], Path(sys.argv[2])
-queue = json.load(open(sys.argv[3], encoding="utf-8"))
+with open(sys.argv[3], encoding="utf-8") as файл:
+    queue = json.load(файл)
 lords = {"lordfilm47.space", "lordserial33.biz", "1lordserials1.online"}
-from urllib.parse import urlparse
+
 слаги = set()
 for r in queue:
     if r.get("domain") not in lords:
@@ -23,7 +30,9 @@ for r in queue:
 print("страниц к отрисовке:", len(слаги))
 
 package = yaml.safe_load(PATHS.site_package(site_id).read_text(encoding="utf-8"))
-кэш = json.load(open("/srv/site-factory/repo/var/lords/lords/catalog-cache/%s.json" % site_id, encoding="utf-8"))
+кэш_путь = f"/srv/site-factory/repo/var/lords/lords/catalog-cache/{site_id}.json"
+with open(кэш_путь, encoding="utf-8") as файл:
+    кэш = json.load(файл)
 t = time.time()
 catalog = live_catalog.catalog_from_live(кэш["items"])
 print("каталог собран за", round(time.time()-t,1), "с; тайтлов", len(catalog.titles))

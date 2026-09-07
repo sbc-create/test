@@ -1,9 +1,13 @@
 """Сверка отрисованного стенда с контрактом."""
-import json, re, sys, collections
+import collections
+import json
+import re
+import sys
 from pathlib import Path
+
 sys.path.insert(0, "/home/claude/wt-core-identity-22")
 from factory.site_engine.adapters import lords_seo_binding as ad
-from factory.site_engine.seo_binding import BindingState, PlaybackState, digest
+from factory.site_engine.seo_binding import digest
 
 стенд = Path(sys.argv[1])
 env = ad.export("/srv/site-factory/repo/var/lords/lords/catalog-cache/lords-01.json",
@@ -66,10 +70,11 @@ for файл in sorted(стенд.rglob("index.html")):
     if "noindex" in низ:
         итог["страниц с noindex"] += 1
 
+with open("/srv/site-factory/repo/var/lords/lords/catalog-cache/lords-01.json",
+          encoding="utf-8") as файл:
+    кэш = json.load(файл)
 повтор = digest(ad.build(
-    json.load(open("/srv/site-factory/repo/var/lords/lords/catalog-cache/lords-01.json",
-                   encoding="utf-8"))["items"],
-    site_id="lords-01", snapshot_at=env["snapshotAt"],
+    кэш["items"], site_id="lords-01", snapshot_at=env["snapshotAt"],
     provenance=env["provenance"]))
 итог_словарь = dict(итог)
 итог_словарь["digestFirst"] = env["digest"]

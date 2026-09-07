@@ -13,6 +13,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from factory.lords import canary  # noqa: E402
 
+
 def main() -> int:
     staging, snapshot_path = Path(sys.argv[1]), Path(sys.argv[2])
     previous = Path(sys.argv[3]) if len(sys.argv) > 3 and sys.argv[3] else None

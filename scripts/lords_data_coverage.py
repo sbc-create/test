@@ -51,9 +51,9 @@ def _nonempty(value) -> bool:
         return False
     if isinstance(value, str):
         return bool(value.strip())
-    if isinstance(value, (list, tuple, dict)):
+    if isinstance(value, list | tuple | dict):
         return len(value) > 0
-    if isinstance(value, (int, float)):
+    if isinstance(value, int | float):
         return True
     return bool(value)
 

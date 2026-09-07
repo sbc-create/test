@@ -202,7 +202,7 @@ def main() -> int:
         b, a = before["routes"][name], after["routes"][name]
         print(f"  {name:14} {str(b['status']):>5}/{b['bytes']:>7}б → "
               f"{str(a['status']):>5}/{a['bytes']:>7}б")
-    print(f"  соседи: " + ", ".join(
+    print("  соседи: " + ", ".join(
         f"{s}={before['releases'][s]}→{after['releases'][s]}" for s in ("lords-01", "lords-03")))
     if problems:
         print("\n  НАЙДЕНО:")

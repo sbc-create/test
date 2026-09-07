@@ -82,7 +82,7 @@ def collect() -> dict:
     own = MANIFEST.relative_to(ROOT).as_posix()
     dirty = "\n".join(
         line for line in changed.splitlines()
-        if line.strip() and not line.split(maxsplit=1)[-1].strip() == own
+        if line.strip() and line.split(maxsplit=1)[-1].strip() != own
     ).strip()
     return {
         "head_sha": head or None,
@@ -142,7 +142,8 @@ def main() -> int:
                             encoding="utf-8")
         print(f"манифест записан: {MANIFEST}")
         print(f"  commit {data['head_sha']}, дерево чисто: {data['tree_clean_at_write']}")
-        print(f"  отпечаток шаблона {data['template_digest'][:16]}, файлов оснастки {len(data['tooling'])}")
+        print(f"  отпечаток шаблона {data['template_digest'][:16]}, "
+              f"файлов оснастки {len(data['tooling'])}")
         return 0
     return verify()
 

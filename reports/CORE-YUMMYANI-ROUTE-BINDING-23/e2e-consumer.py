@@ -1,10 +1,14 @@
 """Сквозная проверка: контракт получен по HTTP, решение принимает код SEO."""
-import datetime as dt, json, sys
+import datetime as dt
+import json
+import sys
+
 from seo_engine.content import authoritative_kind as ak
 from seo_engine.policy import eligibility as el
 from seo_engine.policy import playback as pb
 
-страница = json.load(open(sys.argv[1], encoding="utf-8"))
+with open(sys.argv[1], encoding="utf-8") as файл:
+    страница = json.load(файл)
 момент = dt.datetime.now(dt.UTC)
 итог = {"BOUND": 0, "решений": {}, "отказов": []}
 for b in страница["bindings"]:

@@ -138,7 +138,8 @@ def _performance_gate() -> dict:
     worst_cls = max(v["cls"] for v in values)
     worst_lcp = max(v["lcp"] for v in values)
     return {
-        "status": "pass" if worst_cls <= d["cls_budget"] and worst_lcp <= d["lcp_budget_ms"] else "fail",
+        "status": ("pass" if worst_cls <= d["cls_budget"]
+                   and worst_lcp <= d["lcp_budget_ms"] else "fail"),
         "runs": len(d["measurements"]),
         "worst_cls": worst_cls,
         "cls_budget": d["cls_budget"],
@@ -188,9 +189,11 @@ def _yummy_gate() -> dict:
         viewports.add(d["viewport"]["width"])
         states.add(d.get("state", "не указано"))
     sweep_file = root / "responsive-sweep.json"
-    sweep = json.loads(sweep_file.read_text(encoding="utf-8")) if sweep_file.exists() else {"rows": []}
+    sweep = (json.loads(sweep_file.read_text(encoding="utf-8"))
+             if sweep_file.exists() else {"rows": []})
     degraded_file = root / "degraded-honesty.json"
-    degraded = json.loads(degraded_file.read_text(encoding="utf-8")) if degraded_file.exists() else {}
+    degraded = (json.loads(degraded_file.read_text(encoding="utf-8"))
+                if degraded_file.exists() else {})
     return {
         "status": "pass" if violations == 0 else "fail",
         "scope": "template-only, fixture normal state",

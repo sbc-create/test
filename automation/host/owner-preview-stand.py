@@ -98,7 +98,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         body = (f'<!doctype html><html lang="ru"><head><meta charset="utf-8">'
                 f'<meta name="robots" content="noindex, nofollow">'
                 f"<title>{code}</title></head><body><h1>{code}</h1>"
-                f"<p>{text}</p></body></html>").encode("utf-8")
+                f"<p>{text}</p></body></html>").encode()
         self.send_response(code)
         self.send_header("Content-Type", "text/html; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
@@ -118,7 +118,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             "<code>X-Robots-Tag</code> на каждом ответе. Ни одна из витрин "
             "не выложена в production: у них нет ни siteId в реестре, ни "
             "домена, ни живого источника контента.</p>"
-            f"<ul>{rows}</ul></body></html>").encode("utf-8")
+            f"<ul>{rows}</ul></body></html>").encode()
         self.send_response(200)
         self.send_header("Content-Type", "text/html; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))

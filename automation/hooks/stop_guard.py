@@ -178,5 +178,5 @@ if __name__ == "__main__":
         main()
     except SystemExit:
         raise
-    except Exception:  # noqa: BLE001 — неожиданный отказ не должен держать сессию
-        raise SystemExit(0)
+    except Exception as ошибка:  # noqa: BLE001 — отказ не должен держать сессию
+        raise SystemExit(0) from ошибка

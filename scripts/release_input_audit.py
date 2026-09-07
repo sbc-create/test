@@ -17,7 +17,6 @@
 """
 from __future__ import annotations
 
-import hashlib
 import json
 import subprocess
 import sys
@@ -130,8 +129,8 @@ def domain_map() -> list[dict]:
 
 
 def runtime_state() -> dict:
-    import os
     import datetime
+    import os
     out = {}
     for site in PORTS:
         base = LORDS_ROOT / site
@@ -150,7 +149,6 @@ def runtime_state() -> dict:
         # та на боевых витринах утверждает «предыдущего релиза нет», хотя
         # каталогов два.
         row["rollback_release"] = releases[-2].name if len(releases) >= 2 else None
-        fingerprint = ROOT.parent / "x"  # заполняется ниже из боевого каталога
         fp = Path("/srv/site-factory/repo/var/lords/fingerprints") / f"{site}.json"
         if fp.is_file():
             row["fingerprint"] = json.loads(fp.read_text(encoding="utf-8"))
@@ -193,9 +191,9 @@ def compatibility() -> dict:
             current = s.split(":", 1)[1].strip()
             sites.append(current)
     return {"status": "declared", "engineContract": contract, "sites": sorted(sites),
-            "generatedAt": next((l.split(":", 1)[1].strip().strip('"')
-                                 for l in text.splitlines()
-                                 if l.strip().startswith("generatedAt:")), None)}
+            "generatedAt": next((строка.split(":", 1)[1].strip().strip('"')
+                                 for строка in text.splitlines()
+                                 if строка.strip().startswith("generatedAt:")), None)}
 
 
 def build() -> dict:

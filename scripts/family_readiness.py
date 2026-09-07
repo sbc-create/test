@@ -198,7 +198,7 @@ def score_ssr_multisite(family: str) -> tuple[int, str]:
 def score_ssr(site: str) -> tuple[int, str]:
     """Отрисовка без единой строки JavaScript: страницы собираются на сервере."""
     code = (
-        "import sys; sys.path.insert(0, %r)\n"
+        "import sys; sys.path.insert(0, %r)\n"  # noqa: UP031
         "from factory.lords import preview as p, render as r, fixtures as fx\n"
         "pkg, _ = p._package(%r)\n"
         "site = r.render_site(pkg, catalog=fx.build_catalog(), environ={})\n"
@@ -339,7 +339,7 @@ def score_live(site: str, pkg: dict) -> tuple[int, str]:
     current = Path("/srv/lords") / site / "current"
     if not current.exists():
         return 2, f"домен {domain} задан, выложенного релиза нет"
-    return 6, f"релиз выложен, приёмка артефакта этой полосы не подтверждена"
+    return 6, "релиз выложен, приёмка артефакта этой полосы не подтверждена"
 
 
 def evaluate() -> dict:
@@ -384,7 +384,7 @@ def evaluate() -> dict:
     return {
         "artifact": "TEMPLATE_FAMILY_READINESS",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
-        "rubric": {k: v for k, v in DIMENSIONS},
+        "rubric": dict(DIMENSIONS),
         "max_per_dimension": MAX,
         "families": families,
         "average": average,

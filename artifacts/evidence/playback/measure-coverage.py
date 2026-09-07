@@ -104,10 +104,12 @@ for site, s in итог.items():
     print(f"\n── {site}: карточек всего {n}")
     print(f"   с валидным дескриптором:      {есть:6}  {есть/n*100:5.1f}%")
     print(
-        f"     из них проба «играет»:      {c.get('DESCRIPTOR_OK_PLAYABLE',0):6}  {c.get('DESCRIPTOR_OK_PLAYABLE',0)/n*100:5.1f}%"
+        f"     из них проба «играет»:      {c.get('DESCRIPTOR_OK_PLAYABLE', 0):6}  "
+        f"{c.get('DESCRIPTOR_OK_PLAYABLE', 0) / n * 100:5.1f}%"
     )
     print(
-        f"     из них не проверялись:      {c.get('DESCRIPTOR_OK_UNPROBED',0):6}  {c.get('DESCRIPTOR_OK_UNPROBED',0)/n*100:5.1f}%"
+        f"     из них не проверялись:      {c.get('DESCRIPTOR_OK_UNPROBED', 0):6}  "
+        f"{c.get('DESCRIPTOR_OK_UNPROBED', 0) / n * 100:5.1f}%"
     )
     print(f"   БЕЗ воспроизведения:          {n-есть:6}  {(n-есть)/n*100:5.1f}%")
     print("   по классам причин:")
@@ -118,7 +120,8 @@ for site, s in итог.items():
         print("   примеры проблемных:")
         for k, ex in list(s["примеры"].items())[:5]:
             print(
-                f"     {k}: {ex['name']!r} тип={ex['type']} сериал={ex['series']} год={ex['year']} ids={ex['ext']}"
+                f"     {k}: {ex['name']!r} тип={ex['type']} сериал={ex['series']} "
+                f"год={ex['year']} ids={ex['ext']}"
             )
 
 Path("/tmp/coverage.json").write_text(
