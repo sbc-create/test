@@ -1030,8 +1030,63 @@ class AdminApp:
         session.flash = self._flash_from(response, success="Настройка применена.")
         return _redirect(f"{ui._путь()}/sites/{site_id}")
 
+    def _настройки_флота(self, session, записи: list) -> dict:
+        """Настройки каждой витрины сводки — тем же маршрутом, что и её страница.
+
+        Отдельного чтения «для флота» здесь нет намеренно: второй путь к тем же
+        данным однажды покажет не то, что покажет страница настроек. Витрина,
+        которая не ответила или закрыта правом, попадает в ответ как отсутствие,
+        и карточка подписывает это словами.
+        """
+        собранное: dict = {}
+        for з in записи:
+            сайт = з.get("siteId") or ""
+            if not сайт:
+                continue
+            ответ = self._settings_state(session, сайт)
+            собранное[сайт] = ответ.body if ответ.status == 200 else None
+        return собранное
+
+    def _fleet_settings(self, session, form: dict, label: str, csrf: str) -> AdminResponse:
+        """Правка настройки из карточки витрины во флоте.
+
+        Запись идёт тем же маршрутом договора, что и со страницы настроек:
+        сверка версии, сухой прогон и журнал остаются на своём месте. Разница
+        только в том, куда возвращается оператор — в сводку, из которой ушёл.
+        """
+        сайт = (form.get("siteId") or "").strip()
+        ключ = (form.get("key") or "").strip()
+        сухой = bool(form.get("dryRun"))
+        значение = self._как_значение((form.get("value") or "").strip())
+        путь = f"/api/v1/sites/{сайт}/settings"
+
+        if сухой:
+            ответ = self._call(
+                "PATCH", путь, session, {"changes": {ключ: значение}, "dryRun": True}
+            )
+            if ответ.status != 200:
+                session.flash = self._flash_from(ответ, success="")
+                return _redirect(f"{ui._путь()}/fleet")
+            # Сравнение показывается в карточке той витрины, которую проверяли,
+            # а не строкой сообщения над списком из пяти витрин.
+            return self._fleet_route(
+                session, "GET", [], {}, None, label, csrf,
+                предпросмотр={сайт: ответ.body.get("diff") or {}},
+            )
+
+        # Версия берётся из формы: свежее чтение перед записью сделало бы сверку
+        # версий бессмысленной и молча затёрло бы чужую правку.
+        тело = {"changes": {ключ: значение}}
+        версия = (form.get("expectedVersion") or "").strip()
+        if версия:
+            тело["expectedVersion"] = версия
+        ответ = self._call("PATCH", путь, session, тело)
+        session.flash = self._flash_from(ответ, success=f"Настройка {ключ} применена.")
+        return _redirect(f"{ui._путь()}/fleet")
+
     def _fleet_route(
-        self, session, method: str, tail: list[str], form: dict, flash, label: str, csrf: str
+        self, session, method: str, tail: list[str], form: dict, flash, label: str,
+        csrf: str, предпросмотр: dict | None = None
     ) -> AdminResponse:
         """Массив витрин. Виден только тому, кто за массив отвечает."""
         # Привязанный к витрине массива не видит: ни экрана, ни ссылки. Иначе
@@ -1047,6 +1102,9 @@ class AdminApp:
                     csrf=csrf,
                 ),
             )
+
+        if method == "POST" and tail == ["settings"]:
+            return self._fleet_settings(session, form, label, csrf)
 
         if method == "POST" and tail == ["switch"]:
             куда = (form.get("siteId") or "").strip()
@@ -1088,8 +1146,12 @@ class AdminApp:
                 записи = отобрано
             return AdminResponse(
                 status=200,
-                html=ui.control_center(записи, собранное["stateCounts"], flash=flash,
-                                       session_label=label, csrf=csrf, запрос=запрос),
+                html=ui.control_center(
+                    записи, собранное["stateCounts"], flash=flash,
+                    session_label=label, csrf=csrf, запрос=запрос,
+                    настройки=self._настройки_флота(session, записи),
+                    предпросмотр=предпросмотр or {},
+                ),
             )
 
         from factory.site_engine.fleet_accounts import FleetAccounts

@@ -14,6 +14,12 @@ const проверить = (у, ч) => {
   if (!у) { провалов++; console.log(`  FAIL ${ч}`); } else console.log(`  PASS ${ч}`);
 };
 
+const раскрыть = async (карточка) => {
+  if (!(await карточка.evaluate((d) => d.open))) {
+    await карточка.locator('summary').click();
+  }
+};
+
 async function войти(ctx, email, база) {
   const p = await ctx.newPage();
   await p.goto(`${база}/admin`, { waitUntil: 'domcontentloaded' });
@@ -48,6 +54,39 @@ async function прогон(движок, имя) {
   проверить(аналитика.includes('Аналитика') && аналитика.includes('SEO'),
             'экран аналитики и SEO открывается');
   проверить(аналитика.includes('ИКС'), 'ИКС на экране, а не устаревший ТИЦ');
+
+  // --- настройка правится в карточке витрины, а не в другом месте ---
+  await супер.goto(`${БАЗА}/admin/fleet`, { waitUntil: 'domcontentloaded' });
+  const карточка = супер.locator('details').filter({ hasText: 'lords-01' }).first();
+  await раскрыть(карточка);
+  const форма = карточка.locator('form[action$="/fleet/settings"]').first();
+  проверить(await форма.count() > 0, 'настройка правится прямо в карточке витрины');
+  проверить(await форма.locator('input[name="expectedVersion"]').count() > 0,
+            'форма несёт версию конфигурации — сверка не потерялась при переезде');
+
+  // Нетронутая форма обязана проходить проверку: незаданная настройка рисуется
+  // тире в колонке «сейчас», и если тире попадает в поле ввода, оператор
+  // получает 422 на своё же текущее состояние, ничего не введя.
+  await форма.locator('button[name="dryRun"][value="1"]').click();
+  await супер.waitForLoadState('domcontentloaded');
+  проверить(!(await супер.content()).includes('invalid_settings'),
+            'нетронутая форма настройки не отвергается');
+
+  const карточка2 = супер.locator('details').filter({ hasText: 'lords-01' }).first();
+  await раскрыть(карточка2);
+  const форма2 = карточка2.locator('form[action$="/fleet/settings"]').first();
+  await форма2.locator('input[name="value"]').fill('partner-e2e');
+  await форма2.locator('button[name="dryRun"][value="1"]').click();
+  await супер.waitForLoadState('domcontentloaded');
+  const послеПроверки = await супер.content();
+  проверить(послеПроверки.includes('станет') && послеПроверки.includes('partner-e2e'),
+            'проверка показывает сравнение, а не строку ответа');
+  // Спрашивается состояние элемента, а не разметка: браузер сериализует
+  // булев атрибут как open="", и проверка по тексту `<details open>` считала
+  // бы раскрытую карточку закрытой.
+  const раскрыта = await супер.locator('details').filter({ hasText: 'lords-01' })
+    .first().evaluate((d) => d.open);
+  проверить(раскрыта, 'сравнение видно сразу, а не за закрытым треугольником');
 
   // --- ширины и отсутствие горизонтальной прокрутки ---
   for (const [ш, в, подпись] of [[390, 780, '390px'], [768, 1024, '768px'],

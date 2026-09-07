@@ -1426,7 +1426,11 @@ def sites_list(данные: dict, *, flash: dict | None, session_label: str, cs
 
 
 def _значение(значение) -> str:
-    """Текущее значение настройки в том виде, в каком его можно ввести обратно."""
+    """Текущее значение настройки для показа.
+
+    Незаданное показывается тире: пустая ячейка читается как пустая строка, а
+    это другое значение. Для поля ввода тире не годится — см. `_ввод`.
+    """
     if значение is None:
         return "—"
     if isinstance(значение, dict | list):
@@ -1434,6 +1438,17 @@ def _значение(значение) -> str:
     if isinstance(значение, bool):
         return "true" if значение else "false"
     return str(значение)
+
+
+def _ввод(значение) -> str:
+    """Текущее значение в том виде, в каком его можно отправить обратно.
+
+    Показ и ввод разошлись на незаданной настройке. В поле подставлялось тире —
+    то же, что рисуется в колонке «сейчас», — и «Проверить» на нетронутой форме
+    возвращало 422: «допустимы только буквы, цифры и знаки». Оператор при этом
+    ничего не вводил и видел отказ на своё же текущее состояние.
+    """
+    return "" if значение is None else _значение(значение)
 
 
 def _разница(diff: dict) -> str:
@@ -1497,7 +1512,7 @@ def settings(
                 f'<input type="hidden" name="key" value="{_e(поле["key"])}">'
                 f'<input type="hidden" name="expectedVersion" value="{_e(версия)}">'
                 f'<input name="value" aria-label="Новое значение {_e(поле["key"])}" '
-                f'value="{_e(_значение(поле.get("value")))}">'
+                f'value="{_e(_ввод(поле.get("value")))}">'
                 '<button name="dryRun" value="1" type="submit">Проверить</button>'
                 '<button name="dryRun" value="" type="submit">Применить</button>'
                 "</form>"
@@ -2099,15 +2114,68 @@ def _показатель(поле: dict | None) -> str:
     return показ + (f'<br><span class="mut small">{_e(хвост)}</span>' if хвост else "")
 
 
+def _настройки_витрины(сайт: str, состояние: dict | None, hidden: str,
+                       предпросмотр: dict | None) -> str:
+    """Правка настроек витрины прямо в её карточке во флоте.
+
+    Состояние может отсутствовать: право `config:read` проверяется на каждом
+    чтении, и молчание здесь — это отказ, а не пустой список настроек. Пустая
+    таблица читалась бы как «настраивать нечего», поэтому причина подписана.
+    """
+    if состояние is None:
+        return ('<p class="mut">Настройки этой витрины отсюда не прочитаны: '
+                "нет права или витрина не ответила.</p>")
+
+    проверка = _разница(предпросмотр) if предпросмотр is not None else ""
+    поля = состояние.get("fields") or []
+    if not поля:
+        return проверка + '<p class="mut">Изменяемых настроек у витрины нет.</p>'
+    if not состояние.get("canWrite"):
+        строки = "".join(
+            f'<tr><td><code>{_e(поле["key"])}</code></td>'
+            f'<td><code>{_e(_значение(поле.get("value")))}</code></td></tr>'
+            for поле in поля
+        )
+        return (проверка
+                + '<p class="mut">Только чтение: нет права config:write.</p>'
+                f'<table class="kv-table">{строки}</table>')
+
+    версия = состояние.get("version", "")
+    строки = "".join(
+        f'<tr><td><code>{_e(поле["key"])}</code></td>'
+        f'<td><form method="post" action="{_путь()}/fleet/settings">{hidden}'
+        f'<input type="hidden" name="siteId" value="{_e(сайт)}">'
+        f'<input type="hidden" name="key" value="{_e(поле["key"])}">'
+        f'<input type="hidden" name="expectedVersion" value="{_e(версия)}">'
+        f'<input name="value" aria-label="Новое значение {_e(поле["key"])} '
+        f'для {_e(сайт)}" value="{_e(_ввод(поле.get("value")))}">'
+        '<button name="dryRun" value="1" type="submit">Проверить</button>'
+        '<button name="dryRun" value="" type="submit">Применить</button>'
+        "</form></td></tr>"
+        for поле in поля
+    )
+    return (проверка
+            + f'<p class="mut">Версия конфигурации: <code>{_e(версия)}</code></p>'
+            f'<table class="kv-table">{строки}</table>')
+
+
 def control_center(записи: list, сводка: dict, *, flash: dict | None,
-                   session_label: str, csrf: str, запрос: str = "") -> str:
+                   session_label: str, csrf: str, запрос: str = "",
+                   настройки: dict | None = None, предпросмотр: dict | None = None) -> str:
     """Единое окно флота: строка на витрину, всё остальное — подробностями.
 
     Экран собран вокруг того, что нужно решить с одного взгляда: где витрина,
     чем собрана, свежо ли содержимое и не молчит ли источник. Разворачивать
     подробности можно тут же, не уходя со страницы: список, который надо
     собирать переходами по сайтам, на практике не собирают.
+
+    Настройки правятся здесь же. Раньше карточка витрины умела только увести в
+    её контур: чтобы поменять одно значение, оператор уходил со сводки, терял
+    её и возвращался обратно руками. Формы те же, что на странице настроек, и
+    ходят тем же маршрутом договора — второго способа записать настройку нет.
     """
+    настройки = настройки or {}
+    предпросмотр = предпросмотр or {}
     hidden = f'<input type="hidden" name="{CSRF_FIELD}" value="{_e(csrf)}">'
     строки = []
     for з in записи:
@@ -2124,7 +2192,8 @@ def control_center(записи: list, сводка: dict, *, flash: dict | None
             f'<td>{_показатель(поля.get("freshnessSeconds"))}</td>'
             f'<td>{_показатель(поля.get("visitors"))}</td>'
             f'<td>{_показатель(поля.get("seoIndexingEnabled"))}</td>'
-            f'<td><details><summary>Подробно</summary><dl class="kv">'
+            f'<td><details{" open" if сайт in предпросмотр else ""}>'
+            '<summary>Подробно</summary><dl class="kv">'
             + "".join(
                 f"<dt>{_e(и)}</dt><dd>{_показатель(поля.get(и))}</dd>"
                 for и in ("environment", "productionAuthorized", "templateDigest",
@@ -2135,7 +2204,9 @@ def control_center(записи: list, сводка: dict, *, flash: dict | None
                           "lastSyncAt")
             )
             + "</dl>"
-            f'<form method="post" action="{_путь()}/fleet/switch">{hidden}'
+            + _настройки_витрины(сайт, настройки.get(сайт), hidden,
+                                 предпросмотр.get(сайт))
+            + f'<form method="post" action="{_путь()}/fleet/switch">{hidden}'
             f'<input type="hidden" name="siteId" value="{_e(сайт)}">'
             "<button type=\"submit\">Открыть контур витрины</button></form>"
             "</details></td></tr>"
