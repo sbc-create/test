@@ -130,6 +130,28 @@ for site in "${SITES[@]}"; do
   # shellcheck disable=SC2064
   trap "rm -rf '${staging}'" EXIT
 
+  # --- РАНТАЙМ ОБНОВЛЯЕТСЯ ДО ВОРОТ ---------------------------------------
+  # Рантайм обновляется независимо от того, менялся ли каталог, и обязательно
+  # ДО ворот сборки.
+  #
+  # Прежде этот блок стоял после сборки, и ворота уводили выполнение мимо него
+  # словами «вход не изменился — сборка пропущена». Витрина с неизменившимся
+  # каталогом не получала исправление рантайма вовсе: измерено на lords-02,
+  # где серверный поиск отвечал 503 при разложенном рядом указателе, потому что
+  # процесс работал на прежнем serve.py. Ошибка в рантайме не должна ждать,
+  # пока поставщик добавит новый тайтл.
+  if [ -n "$current" ]; then
+    fresh_runtime="$(mktemp)"
+    if "$PYTHON" "${REPO}/automation/host/emit-runtime.py" "$fresh_runtime" \
+       && ! cmp -s "$fresh_runtime" "${current}/serve.py"; then
+      log "${site}: рантайм устарел — обновляю и перезапускаю"
+      install -o lords -g lords -m 0644 "$fresh_runtime" "${current}/serve.py"
+      systemctl restart "${site}.service"
+      sleep 2
+    fi
+    rm -f "$fresh_runtime"
+  fi
+
   # --- ВОРОТА ПЕРЕД СБОРКОЙ ------------------------------------------------
   # Решение о необходимости рендера принимается ДО него, а не после.
   #
@@ -300,25 +322,6 @@ PYEOF
   release="$(find "$staging" -type f -print0 | sort -z \
              | xargs -0 sha256sum | sha256sum | cut -c1-12)"
   target="${runtime}/releases/${release}"
-
-  # Рантайм обновляется независимо от того, менялся ли каталог.
-  #
-  # Прежде serve.py переписывался только вместе с новым каталогом релиза, и на
-  # тихих циклах исправление рантайма не доезжало вовсе: после выкладки два
-  # домена из трёх остались со старым файлом, потому что их содержимое в тот
-  # раз не изменилось. Ошибка в рантайме не должна ждать, пока поставщик
-  # добавит новый тайтл.
-  if [ -n "$current" ]; then
-    fresh_runtime="$(mktemp)"
-    if "$PYTHON" "${REPO}/automation/host/emit-runtime.py" "$fresh_runtime" \
-       && ! cmp -s "$fresh_runtime" "${current}/serve.py"; then
-      log "${site}: рантайм устарел — обновляю и перезапускаю"
-      install -o lords -g lords -m 0644 "$fresh_runtime" "${current}/serve.py"
-      systemctl restart "${site}.service"
-      sleep 2
-    fi
-    rm -f "$fresh_runtime"
-  fi
 
   if [ "$current" = "$target" ]; then
     log "${site}: каталог не изменился, релиз ${release} уже работает"
