@@ -91,3 +91,39 @@ class TestПоддельныйТокен:
         for имя in ("cross_site_uniqueness.py", "frontend_http.py"):
             текст = (ROOT / "tests" / "tools" / имя).read_text(encoding="utf-8")
             assert "with_leak_canary" not in текст, имя
+
+
+class TestОжиданиеПортаОдно:
+    """Ожидание порта было выписано четырежды с совпадающими числами.
+
+    Совпадали они случайно: ничто не мешало одному из четырёх разойтись, а
+    разошедшийся срок выглядел бы нестабильным тестом, а не правкой.
+    """
+
+    @pytest.mark.parametrize("имя", ИНСТРУМЕНТЫ + ("admin_smoke.py",))
+    def test_инструмент_не_держит_своего_цикла_ожидания(self, имя):
+        текст = (ROOT / "tests" / "tools" / имя).read_text(encoding="utf-8")
+        assert "deadline = time.time() + 180" not in текст, (
+            f"{имя}: собственный цикл ожидания порта вернулся")
+
+    def test_закрытый_порт_даёт_отказ_а_не_исключение(self):
+        """Не открывшийся порт — обычный исход, о нём сообщает вызывающий."""
+        import socket
+
+        занятый = socket.socket()
+        занятый.bind(("127.0.0.1", 0))
+        свободный = занятый.getsockname()[1]
+        занятый.close()
+        assert stand_env.wait_for_port(свободный, timeout=0.3, interval=0.1) is False
+
+    def test_открытый_порт_обнаруживается(self):
+        import socket
+
+        слушающий = socket.socket()
+        слушающий.bind(("127.0.0.1", 0))
+        слушающий.listen(1)
+        try:
+            порт = слушающий.getsockname()[1]
+            assert stand_env.wait_for_port(порт, timeout=5) is True
+        finally:
+            слушающий.close()

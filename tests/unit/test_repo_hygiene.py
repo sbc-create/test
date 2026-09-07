@@ -89,6 +89,16 @@ def test_javascript_sources_parse():
 
 
 def test_ansible_yaml_parses():
+    """Разбор — половина проверки: он молчит и о пустом, и об отсутствующем.
+
+    Прогон был зелёным и тогда, когда файлов не находилось вовсе: цикл по
+    пустому перечню проходит мгновенно и ничего не утверждает. Именно так
+    выглядел бы переезд каталога или опечатка в маске.
+    """
     import yaml
-    for path in (PATHS.automation / "ansible").rglob("*.yml"):
-        yaml.safe_load(path.read_text(encoding="utf-8"))
+
+    файлы = sorted((PATHS.automation / "ansible").rglob("*.yml"))
+    assert файлы, "файлов ansible не найдено — проверять нечего"
+    for path in файлы:
+        разобрано = yaml.safe_load(path.read_text(encoding="utf-8"))
+        assert разобрано is not None, f"{path.name}: файл разобрался в пустоту"

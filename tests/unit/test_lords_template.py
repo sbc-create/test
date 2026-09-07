@@ -722,8 +722,16 @@ class TestCrossSiteIsolation:
         assert lords_gate.ownership_overlap(plans) == []
 
     def test_no_section_has_two_owners(self):
+        # `owners` поднимает ValueError при двойном владении, и раньше проверка
+        # этим и ограничивалась: намерение жило в комментарии, а не в
+        # утверждении. Следующий правящий не узнал бы из неё, что именно
+        # обязано выполниться, — и не заметил бы, если бы разбор стал
+        # возвращать пустоту вместо отказа.
         profiles = plan_mod.load_profiles()
-        plan_mod.owners(profiles)  # поднимет ValueError при двойном владении
+        owners = plan_mod.owners(profiles)
+        assert owners, "владение разделами не разобрано вовсе"
+        assert len(set(owners.values())) >= 2, (
+            "все разделы у одного владельца — проверять двойное владение не на чем")
 
     def test_type_states_cover_every_declared_type(self):
         for site_id in SITES:

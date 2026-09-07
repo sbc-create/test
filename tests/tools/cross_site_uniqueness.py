@@ -11,7 +11,6 @@ import re
 import socket
 import subprocess
 import sys
-import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -133,14 +132,7 @@ def main() -> int:
     )
     pages: list[uniqueness.PageObservation] = []
     try:
-        deadline = time.time() + 180
-        while time.time() < deadline:
-            try:
-                with socket.create_connection(("127.0.0.1", port), timeout=2):
-                    break
-            except OSError:
-                time.sleep(0.5)
-        else:
+        if not stand_env.wait_for_port(port):
             print("FAIL: сервер не открыл порт")
             return 1
 

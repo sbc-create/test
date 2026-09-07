@@ -59,6 +59,16 @@ OWNERSHIP = (
     ("automation/", "OPS"),
     ("factory/", "CORE"),
     ("scripts/", "TEMPLATES"),
+    # Тесты принадлежат тому, что они проверяют, а не каталогу, в котором
+    # лежат. `tests/operator/` — полоса SEO, `test_secret_hub_*` и
+    # `test_yandex_analytics_*` — Core. Приписывать их полосе шаблонов значит
+    # ставить ей задачи, которых она не вправе выполнять: чужой код правит
+    # чужая полоса.
+    ("tests/operator/", "SEO"),
+    ("tests/unit/test_secret_hub", "CORE"),
+    ("tests/unit/test_yandex_analytics", "CORE"),
+    ("tests/unit/test_topvisor", "CORE"),
+    ("tests/unit/test_contract_fixtures", "CORE"),
     ("tests/", "TEMPLATES"),
     ("var/product-preview/", "TEMPLATES"),
 )

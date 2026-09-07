@@ -271,16 +271,7 @@ def main() -> int:
     responses: dict[str, dict] = {}
 
     try:
-        deadline = time.time() + 180
-        ready = False
-        while time.time() < deadline:
-            try:
-                with socket.create_connection(("127.0.0.1", port), timeout=2):
-                    ready = True
-                    break
-            except OSError:
-                time.sleep(0.5)
-        if not ready:
+        if not stand_env.wait_for_port(port):
             print("FAIL: сервер не открыл порт")
             return 1
 

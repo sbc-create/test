@@ -1,19 +1,20 @@
 {
   "artifact": "TEMPLATE_DEBT_REGISTER",
-  "total": 35,
+  "total": 27,
   "by_severity": {
     "критический": 0,
     "высокий": 1,
-    "средний": 16,
-    "низкий": 18
+    "средний": 14,
+    "низкий": 12
   },
   "by_owner": {
-    "CORE": 5,
-    "TEMPLATES": 30
+    "CORE": 11,
+    "SEO": 6,
+    "TEMPLATES": 10
   },
   "by_kind": {
-    "неявное утверждение в тесте": 17,
-    "повторённый блок": 16,
+    "неявное утверждение в тесте": 11,
+    "повторённый блок": 14,
     "подавленное исключение": 1,
     "служебный домен в собранном выводе": 1
   },
@@ -122,28 +123,8 @@
       "kind": "повторённый блок",
       "severity": "средний",
       "owner": "TEMPLATES",
-      "path": "tests/tools/browser_multisite.py",
-      "line": 36,
-      "detail": "8 строк повторяются дословно в: tests/tools/browser_multisite.py, tests/tools/cross_site_uniqueness.py, tests/tools/frontend_http.py",
-      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
-      "verify": "вынести в общий модуль и заменить обе копии вызовом"
-    },
-    {
-      "kind": "повторённый блок",
-      "severity": "средний",
-      "owner": "TEMPLATES",
-      "path": "tests/tools/browser_multisite.py",
-      "line": 78,
-      "detail": "8 строк повторяются дословно в: tests/tools/browser_multisite.py, tests/tools/cross_site_uniqueness.py",
-      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
-      "verify": "вынести в общий модуль и заменить обе копии вызовом"
-    },
-    {
-      "kind": "повторённый блок",
-      "severity": "средний",
-      "owner": "TEMPLATES",
       "path": "tests/tools/cross_site_uniqueness.py",
-      "line": 109,
+      "line": 114,
       "detail": "8 строк повторяются дословно в: tests/tools/cross_site_uniqueness.py, tests/tools/frontend_http.py",
       "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
       "verify": "вынести в общий модуль и заменить обе копии вызовом"
@@ -181,7 +162,7 @@
     {
       "kind": "повторённый блок",
       "severity": "средний",
-      "owner": "TEMPLATES",
+      "owner": "CORE",
       "path": "tests/unit/test_secret_hub_panel_server.py",
       "line": 32,
       "detail": "8 строк повторяются дословно в: tests/unit/test_secret_hub_panel_server.py, tests/unit/test_secret_hub_reconcile.py",
@@ -191,7 +172,7 @@
     {
       "kind": "неявное утверждение в тесте",
       "severity": "низкий",
-      "owner": "TEMPLATES",
+      "owner": "SEO",
       "path": "tests/operator/test_experiments.py",
       "line": 40,
       "detail": "test_within_limits_ok проверяет только отсутствие исключения",
@@ -201,7 +182,7 @@
     {
       "kind": "неявное утверждение в тесте",
       "severity": "низкий",
-      "owner": "TEMPLATES",
+      "owner": "SEO",
       "path": "tests/operator/test_experiments.py",
       "line": 54,
       "detail": "test_boundary_exactly_10_percent_allowed проверяет только отсутствие исключения",
@@ -211,7 +192,7 @@
     {
       "kind": "неявное утверждение в тесте",
       "severity": "низкий",
-      "owner": "TEMPLATES",
+      "owner": "SEO",
       "path": "tests/operator/test_scheduler.py",
       "line": 29,
       "detail": "test_released_lock_is_reusable проверяет только отсутствие исключения",
@@ -221,7 +202,7 @@
     {
       "kind": "неявное утверждение в тесте",
       "severity": "низкий",
-      "owner": "TEMPLATES",
+      "owner": "SEO",
       "path": "tests/operator/test_scheduler.py",
       "line": 35,
       "detail": "test_stale_lock_from_dead_process_is_reclaimed проверяет только отсутствие исключения",
@@ -231,7 +212,7 @@
     {
       "kind": "неявное утверждение в тесте",
       "severity": "низкий",
-      "owner": "TEMPLATES",
+      "owner": "SEO",
       "path": "tests/operator/test_scheduler.py",
       "line": 50,
       "detail": "test_old_lock_is_reclaimed_by_age проверяет только отсутствие исключения",
@@ -241,7 +222,7 @@
     {
       "kind": "неявное утверждение в тесте",
       "severity": "низкий",
-      "owner": "TEMPLATES",
+      "owner": "SEO",
       "path": "tests/operator/test_scheduler.py",
       "line": 64,
       "detail": "test_corrupt_lock_file_is_reclaimed проверяет только отсутствие исключения",
@@ -251,7 +232,7 @@
     {
       "kind": "неявное утверждение в тесте",
       "severity": "низкий",
-      "owner": "TEMPLATES",
+      "owner": "CORE",
       "path": "tests/unit/test_contract_fixtures.py",
       "line": 51,
       "detail": "test_every_fixture_is_json_serialisable проверяет только отсутствие исключения",
@@ -261,67 +242,7 @@
     {
       "kind": "неявное утверждение в тесте",
       "severity": "низкий",
-      "owner": "TEMPLATES",
-      "path": "tests/unit/test_lords_analytics_slot.py",
-      "line": 86,
-      "detail": "test_module_still_parses проверяет только отсутствие исключения",
-      "risk": "намерение читается из тела, а не из утверждения: следующий правящий не узнает, что именно обязано выполниться",
-      "verify": "назвать проверяемое утверждением или комментарием у вызова"
-    },
-    {
-      "kind": "неявное утверждение в тесте",
-      "severity": "низкий",
-      "owner": "TEMPLATES",
-      "path": "tests/unit/test_lords_production_gate_is_one_commit.py",
-      "line": 202,
-      "detail": "test_the_map_stays_well_formed проверяет только отсутствие исключения",
-      "risk": "намерение читается из тела, а не из утверждения: следующий правящий не узнает, что именно обязано выполниться",
-      "verify": "назвать проверяемое утверждением или комментарием у вызова"
-    },
-    {
-      "kind": "неявное утверждение в тесте",
-      "severity": "низкий",
-      "owner": "TEMPLATES",
-      "path": "tests/unit/test_lords_runtime_concurrency.py",
-      "line": 331,
-      "detail": "test_the_shipped_runtime_compiles проверяет только отсутствие исключения",
-      "risk": "намерение читается из тела, а не из утверждения: следующий правящий не узнает, что именно обязано выполниться",
-      "verify": "назвать проверяемое утверждением или комментарием у вызова"
-    },
-    {
-      "kind": "неявное утверждение в тесте",
-      "severity": "низкий",
-      "owner": "TEMPLATES",
-      "path": "tests/unit/test_lords_site_identity.py",
-      "line": 123,
-      "detail": "test_the_document_is_well_formed_in_every_case проверяет только отсутствие исключения",
-      "risk": "намерение читается из тела, а не из утверждения: следующий правящий не узнает, что именно обязано выполниться",
-      "verify": "назвать проверяемое утверждением или комментарием у вызова"
-    },
-    {
-      "kind": "неявное утверждение в тесте",
-      "severity": "низкий",
-      "owner": "TEMPLATES",
-      "path": "tests/unit/test_lords_template.py",
-      "line": 724,
-      "detail": "test_no_section_has_two_owners проверяет только отсутствие исключения",
-      "risk": "намерение читается из тела, а не из утверждения: следующий правящий не узнает, что именно обязано выполниться",
-      "verify": "назвать проверяемое утверждением или комментарием у вызова"
-    },
-    {
-      "kind": "неявное утверждение в тесте",
-      "severity": "низкий",
-      "owner": "TEMPLATES",
-      "path": "tests/unit/test_repo_hygiene.py",
-      "line": 91,
-      "detail": "test_ansible_yaml_parses проверяет только отсутствие исключения",
-      "risk": "намерение читается из тела, а не из утверждения: следующий правящий не узнает, что именно обязано выполниться",
-      "verify": "назвать проверяемое утверждением или комментарием у вызова"
-    },
-    {
-      "kind": "неявное утверждение в тесте",
-      "severity": "низкий",
-      "owner": "TEMPLATES",
+      "owner": "CORE",
       "path": "tests/unit/test_secret_hub_panel_auth.py",
       "line": 185,
       "detail": "test_registered_key_authenticates проверяет только отсутствие исключения",
@@ -331,7 +252,7 @@
     {
       "kind": "неявное утверждение в тесте",
       "severity": "низкий",
-      "owner": "TEMPLATES",
+      "owner": "CORE",
       "path": "tests/unit/test_secret_hub_panel_auth.py",
       "line": 278,
       "detail": "test_other_codes_still_work_after_one_is_used проверяет только отсутствие исключения",
@@ -341,7 +262,7 @@
     {
       "kind": "неявное утверждение в тесте",
       "severity": "низкий",
-      "owner": "TEMPLATES",
+      "owner": "CORE",
       "path": "tests/unit/test_secret_hub_provider.py",
       "line": 182,
       "detail": "test_accepted_passes проверяет только отсутствие исключения",
@@ -351,7 +272,7 @@
     {
       "kind": "неявное утверждение в тесте",
       "severity": "низкий",
-      "owner": "TEMPLATES",
+      "owner": "CORE",
       "path": "tests/unit/test_yandex_analytics_operator.py",
       "line": 118,
       "detail": "test_collection_never_writes_to_yandex проверяет только отсутствие исключения",

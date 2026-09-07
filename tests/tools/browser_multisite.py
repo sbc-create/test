@@ -14,7 +14,6 @@ import os
 import socket
 import subprocess
 import sys
-import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -75,14 +74,7 @@ def main() -> int:
         cwd=ROOT, env=build_env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
     )
     try:
-        deadline = time.time() + 180
-        while time.time() < deadline:
-            try:
-                with socket.create_connection(("127.0.0.1", port), timeout=2):
-                    break
-            except OSError:
-                time.sleep(0.5)
-        else:
+        if not stand_env.wait_for_port(port):
             print("FAIL: сервер не открыл порт")
             return 1
 

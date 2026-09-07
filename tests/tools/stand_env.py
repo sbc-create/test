@@ -50,4 +50,30 @@ def stand_environment(*, port: int | None = None, with_leak_canary: bool = False
     return env
 
 
-__all__ = ["LEAK_CANARY_TOKEN", "PUBLISHERS", "stand_environment"]
+def wait_for_port(port: int, *, timeout: float = 180.0, interval: float = 0.5) -> bool:
+    """Ждёт, пока порт стенда начнёт принимать соединения.
+
+    Ожидание было выписано четырежды: в `browser_multisite`,
+    `cross_site_uniqueness`, `frontend_http` и `admin_smoke`. Числа во всех
+    четырёх совпадали — 180 секунд, опрос раз в полсекунды, — и совпадали
+    случайно: ничто не мешало одному из них разойтись, а разошедшийся срок
+    выглядел бы как нестабильный тест, а не как правка.
+
+    Возвращает `True`, если порт открылся, и `False`, если срок вышел.
+    Исключение здесь неуместно: не открывшийся порт — обычный исход, о котором
+    вызывающий сообщает по-своему.
+    """
+    import socket
+    import time
+
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        try:
+            with socket.create_connection(("127.0.0.1", port), timeout=2):
+                return True
+        except OSError:
+            time.sleep(interval)
+    return False
+
+
+__all__ = ["LEAK_CANARY_TOKEN", "PUBLISHERS", "stand_environment", "wait_for_port"]
