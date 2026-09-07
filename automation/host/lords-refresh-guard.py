@@ -29,6 +29,25 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from factory.lords import refresh_release as рр  # noqa: E402
 from factory.lords import release_manifest as рм  # noqa: E402
 from factory.lords import template_artifact as та  # noqa: E402
+from factory.templates import digest as отпечаток_источников  # noqa: E402
+
+
+def _источники_шаблона(корень: Path) -> str | None:
+    """Отпечаток шаблонных источников распакованного артефакта.
+
+    Считается здесь, а не в `factory.lords`, намеренно: `factory.templates`
+    импортирует `factory.lords`, и обратный импорт создал бы четвёртый цикл
+    между подсистемами. Сценарий-обёртка вправе видеть оба пакета — он никем
+    не импортируется.
+
+    Отсутствие источников — не отказ. Артефакт, собранный до появления этого
+    расчёта, остаётся годным: поле необязательное, и `None` означает «не
+    посчитан», а не «шаблоны разные».
+    """
+    try:
+        return отпечаток_источников.compute(корень)["template_digest"]
+    except (OSError, KeyError, ValueError):
+        return None
 
 
 def _рантайм(корень: str, сайт: str) -> Path:
@@ -141,6 +160,7 @@ def команда_pin(args) -> int:
         return 3
     if args.json:
         print(json.dumps({"templateRoot": str(корень), "templateDigest": отпечаток,
+                          "templateSourceDigest": _источники_шаблона(корень),
                           "rendererRevision": args.revision,
                           "templateArtifactRef": f"templates/{архив.name}"},
                          ensure_ascii=False))
@@ -235,12 +255,21 @@ def команда_finalize(args) -> int:
                     raise рр.RefreshRefused(
                         f"артефакт ревизии {args.template_revision[:12]} не закреплён: "
                         "сначала pin, иначе манифест сошлётся на то, чего нет")
+                отпечаток_архива = рм.отпечаток_файла(архив)
                 шаблон = {
                     "template_artifact_ref": f"templates/{архив.name}",
-                    "template_digest": рм.отпечаток_файла(архив),
+                    "template_digest": отпечаток_архива,
                     "renderer_revision": args.template_revision,
                     "template_package_ref": f"lords-tooling/{args.template_revision[:12]}",
                 }
+                # Корень уже распакован подкомандой pin — пересобирать его
+                # здесь значило бы считать отпечаток не того, чем отрисовано.
+                корень_шаблона = (_рантайм(args.runtime_root, args.site)
+                                  / та.ПОДКАТАЛОГ / отпечаток_архива)
+                источники = (_источники_шаблона(корень_шаблона)
+                             if корень_шаблона.is_dir() else None)
+                if источники:
+                    шаблон[рм.ИСТОЧНИКИ_ШАБЛОНА] = источники
             рр.записать_манифест(
                 цель, план,
                 content_snapshot_id=args.snapshot,
