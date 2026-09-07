@@ -132,7 +132,7 @@ domains:
     purpose: Правки редакции поверх данных поставщика, очередь разбора и
       публикационный порядок.
     paths:
-      - factory/site_engine/editorial.py
+      - factory/site_engine/editorial/
       - factory/site_engine/review_build.py
       - factory/site_engine/review_queue.py
       - factory/site_engine/publish.py

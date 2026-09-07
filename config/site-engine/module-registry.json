@@ -531,7 +531,7 @@
         "title",
         "seo"
       ],
-      "implementation": "factory/site_engine/editorial.py"
+      "implementation": "factory/site_engine/editorial/core.py"
     },
     {
       "id": "audit",
