@@ -1,0 +1,73 @@
+# Очередь этапа MODULAR-BOUNDARIES-27
+#
+# Порядок задан постановкой: сначала правда, потом долг, потом границы, потом
+# переносы. Перемещать нельзя до появления characterization-тестов — иначе
+# разрыв связи не отличить от поломки.
+
+version: 1
+stage: MODULAR-BOUNDARIES-27
+base_stage: PROGRAM-PRODUCTION-FINISH-25
+baseline_fixed_at: "2026-09-07T14:43:05Z"
+
+done:
+  - id: C0-MAP
+    what: карта зависимостей посчитана разбором ast, а не поиском по строкам
+    evidence: три цикла между подсистемами, три общих области состояния,
+      27 плоских модулей; tests/tools/module_map.py и state_owners.py в дереве
+  - id: C1-DIGEST
+    what: template_source_digest — отпечаток отвечает на вопрос, который по нему задают
+    evidence: 8 проверок; правка теста больше не выглядит сменой шаблона
+  - id: C1-COLLECTIONS
+    what: подборкам некому было поставлять данные, а система винила источник
+    evidence: состояние unsupported_by_source; ложное обещание убрано из двух
+      пакетов при сохранённом намерении владельца
+    finding: FINDING-collections-had-no-supplier.md
+  - id: C1-SEARCH-METRIC
+    what: тест поиска измерял плотность каталога вместо работы указателя
+    evidence: заменён на «не терять то, что нашёл бы матчер»; поймал настоящую
+      потерю с первого прогона
+    finding: FINDING-short-typo-queries-lose-matches.md
+  - id: C2-BOUNDARIES
+    what: девять доменов объявлены реестром и сверяются гейтом
+    evidence: config/domains.yaml, factory/architecture/domains.py,
+      10 проверок; гейт поправил раскладку четырежды
+  - id: C4-MOVE-1
+    what: чтение каталога витрины вернулось в домен каталога
+    evidence: 9 characterization-проверок написаны до переноса и прошли после
+      без единой правки; перечень известных нарушений опустошён
+  - id: C4-CYCLES
+    what: циклы между подсистемами разорваны — было три, стало ноль
+    evidence: slugify и POST_BUILD_STAGES вынесены в опору, точка входа recs
+      вынесена из движка; 14 характеризующих проверок на боевых адресах;
+      tests/unit/test_subsystem_cycles.py закрепляет ноль
+  - id: C3-RENDER-CONTRACT
+    what: RenderSpec → ArtifactManifest как подготовка к отделению рендерера
+    evidence: 19 проверок; отказ при чужой версии и неизвестном поле;
+      отпечаток состава устойчив к порядку и времени
+
+next:
+  - id: C3-DTO
+    what: версионированные описания для Site, ContentItem, Release, Job, AuditEvent
+    note: TemplateManifest и Job частично покрыты существующими схемами;
+      плодить новые поверх без нужды не стал
+  - id: C4-MOVES
+    what: перенос оставшихся модулей по одному за цикл
+    note: 10 файлов не отнесены ни к одному домену; предел в проверке не даёт
+      их числу расти
+  - id: SEARCH-SHORT
+    what: короткие запросы с опечаткой теряются указателем
+    status: воспроизведён, подпорка отвергнута с доказательством
+    apply_when: двуграммы для коротких слов либо окрестность удалений;
+      оба меняют формат указателя и требуют замера до и после
+
+owner_blocked:
+  - id: OWNER-INDEXING
+    what: индексация Lords выключена решением владельца
+  - id: OWNER-RATINGS
+    what: источник рейтингов — договорный фид исчерпан, измерено
+  - id: OWNER-COLLECTIONS
+    what: источник подборок — редакционная курация или другой поставщик
+  - id: OWNER-PALETTE
+    what: вторая палитра Lords — поставка TEMPLATES
+  - id: OWNER-DOMAINS
+    what: домены и права для site-a/b/c
