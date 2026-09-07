@@ -55,13 +55,43 @@ def current_version() -> int:
     return max(versions) if versions else 0
 
 
+def _register(fingerprint: str, version: int) -> None:
+    """Запись отпечатка в таблицу версий. Отдельно от пина — и не зря.
+
+    Прежде запись шла только вместе с правкой пина, и при совпадении пина
+    функция выходила раньше. Отпечаток оказывался закреплён в предполётной
+    проверке и неизвестен таблице версий: отчёт называл номер, которого в
+    таблице нет.
+    """
+    text = AUDIT.read_text(encoding="utf-8")
+    if f'"{fingerprint}"' in _versions_block(text):
+        return
+    previous = re.search(r'("[0-9a-f]{64}":\s*' + str(version - 1) + r",)",
+                         _versions_block(text))
+    if previous is None:
+        raise SystemExit(
+            f"в таблице версий нет записи {version - 1}: вставлять новую некуда")
+    text = text.replace(previous.group(1),
+                        f'{previous.group(1)}\n    "{fingerprint}": {version},', 1)
+    AUDIT.write_text(text, encoding="utf-8")
+    # Проверка на месте, а не на веру: молчаливая невставка уже случалась.
+    if f'"{fingerprint}": {version},' not in AUDIT.read_text(encoding="utf-8"):
+        raise SystemExit("запись версии не добавилась — таблица не изменилась")
+
+
 def repin(note: str) -> tuple[str, int]:
     fingerprint = digest_mod.compute()["template_digest"]
+    known = _versions_block(AUDIT.read_text(encoding="utf-8"))
+    already = re.search(r'"' + fingerprint + r'":\s*(\d+),', known)
+    if already:
+        return fingerprint, int(already.group(1))
     version = current_version() + 1
 
     apply_text = APPLY.read_text(encoding="utf-8")
     if f'EXPECT_DIGEST="{fingerprint}"' in apply_text:
-        return fingerprint, version - 1  # дерево не менялось, пин уже верен
+        # Пин уже верен, а записи в таблице нет: регистрируем и выходим.
+        _register(fingerprint, version)
+        return fingerprint, version
 
     apply_text = re.sub(r'readonly EXPECT_DIGEST="[0-9a-f]{64}"',
                         f'readonly EXPECT_DIGEST="{fingerprint}"', apply_text, count=1)
@@ -70,18 +100,7 @@ def repin(note: str) -> tuple[str, int]:
     apply_text = apply_text.replace(previous, entry, 1)
     APPLY.write_text(apply_text, encoding="utf-8")
 
-    audit_text = AUDIT.read_text(encoding="utf-8")
-    block = _versions_block(audit_text)
-    previous = re.search(r'("[0-9a-f]{64}":\s*' + str(version - 1) + r",)", block)
-    if previous is None:
-        raise SystemExit(
-            f"в таблице версий нет записи {version - 1}: вставлять новую некуда")
-    audit_text = audit_text.replace(
-        previous.group(1), f'{previous.group(1)}\n    "{fingerprint}": {version},', 1)
-    AUDIT.write_text(audit_text, encoding="utf-8")
-    # Проверка на месте, а не на веру: молчаливая невставка уже случалась.
-    if f'"{fingerprint}": {version},' not in AUDIT.read_text(encoding="utf-8"):
-        raise SystemExit("запись версии не добавилась — таблица не изменилась")
+    _register(fingerprint, version)
     return fingerprint, version
 
 
