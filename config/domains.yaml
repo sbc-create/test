@@ -1,0 +1,320 @@
+# Доменные границы Site Factory.
+#
+# Слой над реестром модулей (`config/site-engine/module-registry.json`), а не
+# второй механизм рядом с ним. Реестр описывает модули внутри `site_engine`;
+# здесь описаны домены, которые шире одного пакета: релизы живут в
+# `factory/lords` и `factory/targets`, очередь — в `factory/queue`.
+#
+# Раскладка выведена из кода, а не назначена. Первый черновик не разложил 55
+# файлов, и они оказались информативнее разложенных: почти все — `factory/lords`.
+# Отсюда две единицы, доменами не являющиеся:
+#
+#   site_families — реализации семейств витрин. Потребляют каталог, шаблоны,
+#                   релизы и наблюдения сразу; втиснуть их в один домен значило
+#                   бы назвать их тем, чем они не являются.
+#   control_plane — Control API и единая админка. Не делятся по решению
+#                   владельца: это единый центр управления всеми сайтами и
+#                   AI-клиентами.
+#
+# Что здесь НЕ описано и почему: перемещение файлов. Границы объявляются до
+# переноса, чтобы перенос было с чем сверять.
+
+schema_version: 1
+
+shared:
+  purpose: Общая опора, которую знают все и которая не знает никого.
+  paths:
+    - factory/paths.py
+    - factory/errors.py
+    - factory/redaction.py
+    - factory/database.py
+    - factory/knowledge.py
+    - factory/reference.py
+    - factory/site_engine/contracts.py
+    - factory/retry.py
+    - factory/site_engine/dependencies.py
+    - factory/site_engine/boundaries.py
+  forbidden:
+    - Импорт любого домена. Опора, знающая домен, перестаёт быть опорой.
+
+domains:
+  - id: iam
+    purpose: Кто действует и вправе ли. Люди, роли, сессии, приглашения и
+      машинные личности AI-клиентов.
+    paths:
+      - factory/site_engine/operators.py
+      - factory/site_engine/accounts.py
+      - factory/site_engine/account_app.py
+      - factory/site_engine/account_ui.py
+      - factory/secret_hub/
+      - factory/licensing.py
+    owns:
+      - operators
+      - sessions
+      - invites
+      - ai_identities
+    public_interface:
+      - factory.site_engine.operators
+      - factory.site_engine.accounts
+    forbidden:
+      - catalog
+      - releases
+      - insights
+    check: pytest tests/unit -k "operator or identity or account or secret_hub"
+    rollback: git revert коммита переноса; таблицы не мигрируют
+
+  - id: fleet
+    purpose: Какие витрины есть, чем они являются и в каком они состоянии.
+      Домены, тенанты, назначенный шаблон, признаки и наблюдаемое состояние.
+    paths:
+      - factory/site_engine/fleet_registry.py
+      - factory/site_engine/fleet_accounts.py
+      - factory/site_engine/site_plan.py
+      - factory/site_engine/profiles.py
+      - factory/site_engine/settings_contract.py
+      - factory/site_engine/settings_view.py
+      - factory/site_engine/site_admin_contract.py
+      - factory/inventory.py
+      - factory/portfolio.py
+    owns:
+      - site_profiles
+      - fleet_observations
+      - site_settings
+    public_interface:
+      - factory.site_engine.fleet_registry
+      - factory.site_engine.settings_contract
+    forbidden:
+      - editorial
+      - job_runtime
+    check: pytest tests/unit -k "fleet or settings or profile"
+    rollback: git revert; наблюдения пересобираются сборщиком
+
+  - id: catalog
+    purpose: Содержимое и его тождество. Записи, идентификаторы, вид
+      произведения, рейтинги и состояние воспроизведения.
+    paths:
+      - factory/site_engine/catalog_identity.py
+      - factory/site_engine/content_identity.py
+      - factory/site_engine/content_kind.py
+      - factory/site_engine/store.py
+      - factory/site_engine/ingestion.py
+      - factory/site_engine/providers.py
+      - factory/site_engine/rating_feed.py
+      - factory/site_engine/rating_enrichment.py
+      - factory/site_engine/rating_sources.py
+      - factory/site_engine/rating_discovery.py
+      - factory/site_engine/playback_policy.py
+      - factory/site_engine/title_normalize.py
+      - factory/site_engine/identity_resolver.py
+      - factory/site_engine/kind_overlay.py
+      - factory/recs/
+    owns:
+      - titles
+      - external_title_ids
+      - rating_observations
+      - current_ratings
+      - enrichment_jobs
+    public_interface:
+      - factory.site_engine.store
+      - factory.site_engine.catalog_identity
+      - factory.site_engine.rating_feed
+    forbidden:
+      - templates
+      - releases
+      - control_plane
+    check: pytest tests/unit -k "catalog or rating or identity or ingestion"
+    rollback: git revert; наблюдения рейтингов только добавляются, не переписываются
+
+  - id: editorial
+    purpose: Правки редакции поверх данных поставщика, очередь разбора и
+      публикационный порядок.
+    paths:
+      - factory/site_engine/editorial.py
+      - factory/site_engine/review_build.py
+      - factory/site_engine/review_queue.py
+      - factory/site_engine/publish.py
+    owns:
+      - editorial_overrides
+      - review_queue
+      - publications
+    public_interface:
+      - factory.site_engine.editorial
+    forbidden:
+      - providers
+      - ingestion
+      - releases
+    check: pytest tests/unit -k "editorial or review or publish"
+    rollback: git revert; правки редакции версионируются и не теряются
+
+  - id: templates
+    purpose: Реестр шаблонов, версии, совместимость и манифесты. Не отрисовка —
+      отрисовка принадлежит семейству витрин.
+    paths:
+      - factory/site_engine/template_registry.py
+      - factory/templates/
+      - factory/blueprint.py
+    owns:
+      - template_registry
+      - template_manifests
+    public_interface:
+      - factory.site_engine.template_registry
+      - factory.templates.digest
+    forbidden:
+      - catalog
+      - editorial
+      - insights
+    check: pytest tests/unit -k "template"
+    rollback: git revert; реестр шаблонов только пополняется
+
+  - id: releases
+    purpose: Как построенное становится выложенным. Сборка, артефакт,
+      канарейка, переключение, откат.
+    paths:
+      - factory/lords/release_manifest.py
+      - factory/lords/refresh_release.py
+      - factory/lords/template_artifact.py
+      - factory/lords/canary.py
+      - factory/targets/
+      - factory/build.py
+      - factory/pipeline.py
+      - factory/site_engine/gate.py
+    owns:
+      - release_manifests
+      - release_log
+      - artifacts
+    public_interface:
+      - factory.lords.release_manifest
+      - factory.lords.refresh_release
+    forbidden:
+      - editorial
+      - iam
+    check: pytest tests/unit -k "release or canary or artifact or manifest"
+    rollback: цель отката записана в самом манифесте; переключение атомарно
+
+  - id: job_runtime
+    purpose: Очередь, исполнитель, таймеры, повторы и замки. Не знает, что
+      именно исполняет.
+    paths:
+      - factory/queue.py
+      - factory/locks.py
+      - factory/state.py
+      - factory/input_request.py
+    owns:
+      - job_queue
+      - job_state
+      - locks
+    public_interface:
+      - factory.queue
+      - factory.locks
+    forbidden:
+      - catalog
+      - editorial
+      - templates
+      - insights
+    check: pytest tests/unit -k "queue or lock or retry or pipeline"
+    rollback: git revert; незавершённые задания переигрываются по идемпотентности
+
+  - id: insights
+    purpose: Наблюдения о происходящем. Аналитика, здоровье SEO, доступность,
+      состояние содержимого и журнал действий.
+    paths:
+      - factory/analytics/
+      - factory/topvisor/
+      - factory/seo/
+      - factory/site_engine/seo_binding.py
+      - factory/site_engine/freshness.py
+      - factory/site_engine/fingerprint.py
+      - factory/audit.py
+      - factory/report.py
+      - factory/verify.py
+      - factory/ads.py
+    owns:
+      - audit_log
+      - analytics_snapshots
+      - seo_health
+    public_interface:
+      - factory.audit
+      - factory.site_engine.seo_binding
+    forbidden:
+      - releases
+      - job_runtime
+    check: pytest tests/unit -k "seo or analytics or audit or freshness"
+    rollback: git revert; наблюдения только добавляются
+
+  - id: provisioning
+    purpose: Заведение новой витрины через публичные контракты остальных
+      доменов, без обходных путей.
+    paths:
+      - factory/site_engine/site_provision.py
+      - factory/site_engine/site_request.py
+      - factory/site_engine/scaffold.py
+      - factory/contracts/
+    owns:
+      - site_requests
+      - provisioning_jobs
+    public_interface:
+      - factory.site_engine.site_provision
+    forbidden:
+      - store
+      - editorial
+    check: pytest tests/unit -k "provision or scaffold or site_request"
+    rollback: заведение идемпотентно; незавершённое заведение не оставляет витрины
+
+# --- единицы, доменами не являющиеся ----------------------------------------
+
+control_plane:
+  purpose: Единый центр управления всеми сайтами и AI-клиентами. Control API и
+    универсальная админка.
+  note: >-
+    Не делится. Решение владельца, а не следствие раскладки: разделение
+    центра управления означало бы два места, где принимаются решения о флоте.
+  paths:
+    - factory/site_engine/api/
+    - factory/site_engine/admin/
+    - factory/site_engine/routes.py
+    - factory/site_engine/cache.py
+    - factory/site_engine/mail.py
+    - factory/validation.py
+    - factory/cli.py
+  allowed:
+    - Все домены через их публичные интерфейсы.
+  forbidden:
+    - Внутренности доменов в обход публичного интерфейса.
+    - Прямая запись в таблицы, которыми домен владеет.
+
+site_families:
+  purpose: Реализации семейств витрин. Отрисовка, поиск, плеер, живой каталог
+    конкретного семейства.
+  note: Не домен. Потребляет каталог, шаблоны, релизы и наблюдения сразу.
+    Первый черновик раскладки пытался сделать её доменом и не смог — 55 файлов
+    не легли никуда, и это было признаком ошибки модели, а не файлов.
+  paths:
+    - factory/lords/
+    - factory/site_engine/adapters/
+    - factory/site_engine/renderers.py
+  forbidden:
+    - Импорт control_plane. Витрина не управляет флотом.
+# --- известные нарушения --------------------------------------------------
+#
+# Перечень, а не исключение. Нарушение остаётся нарушением: оно печатается
+# каждым прогоном и закреплено проверкой, которая падает, если список вырастет.
+# Пустая строка здесь — цель этапа.
+#
+# Каждая запись обязана называть, чем она лечится. Долг без плана лечения
+# превращается в договорённость терпеть.
+known_violations:
+  - file: factory/site_engine/rating_feed.py
+    imports: factory.site_engine.api
+    from_domain: catalog
+    to_unit: control_plane
+    why: >-
+      Каталог берёт у управляющего контура приватную функцию
+      `_каталог_витрины`. Нарушение двойное. Направление перевёрнуто: контур
+      управления обязан зависеть от доменов, а не они от него. И берётся
+      приватное имя, то есть устройство, а не интерфейс.
+    fix: >-
+      Чтение каталога витрины принадлежит домену каталога. Функция выносится в
+      модуль каталога, а `api.overview` начинает брать её оттуда. Перенос
+      делается отдельным циклом, начинается characterization-тестом и не
+      совмещается с правкой логики.
+    planned_cycle: 4
