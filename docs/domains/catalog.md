@@ -17,6 +17,7 @@
 
 ## Разрешённые пути
 
+* `factory/site_engine/catalog/`
 * `factory/site_engine/catalog_identity.py`
 * `factory/site_engine/content_identity.py`
 * `factory/site_engine/content_kind.py`

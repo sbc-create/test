@@ -96,6 +96,7 @@ domains:
     purpose: Содержимое и его тождество. Записи, идентификаторы, вид
       произведения, рейтинги и состояние воспроизведения.
     paths:
+      - factory/site_engine/catalog/
       - factory/site_engine/catalog_identity.py
       - factory/site_engine/content_identity.py
       - factory/site_engine/content_kind.py
