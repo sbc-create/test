@@ -152,3 +152,39 @@ checkpoints:
     defects_fixed_this_cycle:
       - "template_digest читался как ответ на вопрос, на который не отвечает"
     sites_unchanged: [yummyani.site, yummyani.org, yummyani.biz]
+  - timestamp: "2026-09-07T11:10:00Z"
+    cycle: 40
+    branch: claude/program-production-finish-25
+    head_sha: d2c0feb4528deab6dd8b94a4ce8e0c291e19a7e6
+    core: 100
+    central_admin: 95
+    admin_fleet: PARTIAL
+    families:
+      lords_dark: 95
+      lords_light: 95
+      portal_light: 60
+      pulse: 60
+      editorial: 60
+    seo: 72
+    production: 92
+    global_progress: 89
+    was: 88
+    delta: 1
+    tests: "5366 passed, 3 skipped, 0 failed"
+    reasoning: >-
+      Приёмка третьей витрины доведена до браузерной: 116 проверок в двух
+      движках, ноль провалов — разделы, запрет индексации и канонические адреса
+      на каждой странице, отсутствие чужих доменов в разметке, поиск глазами
+      посетителя, карточка с плеером, три ширины без прокрутки, ноль ошибок
+      страницы. Готовность отката проверена по существу: цель на месте с
+      каталогом site и манифестом. production 90 -> 92; до 100 % не хватает
+      снятия запрета на индексацию — решение владельца.
+    production_releases:
+      lords-01: 91d5d39959a2
+      lords-02: 0ab112ef72d9
+      lords-03: 362c85c72c3c
+    defects_found_not_fixed:
+      - "navigation.primary в пакетах Lords не читает никто; объявлен несуществующий /collections/"
+    background_operations:
+      - "системный рендер lords-03 в уже запущенном прогоне со старым окружением — не прерывался"
+    sites_unchanged: [yummyani.site, yummyani.org, yummyani.biz]
