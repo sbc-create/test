@@ -86,8 +86,16 @@ def main() -> int:
         ordered = sorted(t.slug for t in catalog.titles)
         step = max(1, len(ordered) // args.titles)
         slugs = frozenset(ordered[::step][:args.titles])
+    # Publisher ID для стенда — заглушка предпросмотра, а не настоящее
+    # значение: настоящее живёт в области секретов и этой полосе недоступно,
+    # выводить его куда бы то ни было запрещено прямо.
+    #
+    # Без него плеер не собирается вовсе: все сорок страниц произведений
+    # показывали «видео недоступно», и проверить состояния плеера было не на
+    # чем. Это была слепота стенда, а не дефект витрины, но отличить одно от
+    # другого удалось только пройдя по страницам глазами.
     site = render_mod.render_site(package, catalog=catalog, environ={},
-                                  only_title_slugs=slugs)
+                                  publisher_id="1", only_title_slugs=slugs)
     directory = Path(args.output)
     directory.mkdir(parents=True, exist_ok=True)
     result = serve_mod.export(site, directory)
