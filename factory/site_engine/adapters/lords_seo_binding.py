@@ -120,6 +120,7 @@ def _external_ids(entry: dict) -> dict[str, str]:
     "genres": "genres",
     "countries": "countries",
     "studios": "studios",
+    "voice_studios": "voiceStudios",
     "crew": "crew",
     "duration": "duration",
     "seasons_count": "seasonsCount",

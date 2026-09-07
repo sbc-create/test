@@ -189,10 +189,14 @@ class RatingState(str, enum.Enum):
 #: поле, которого здесь нет, в контракт не попадает, даже если источник его
 #: прислал. Название и вид сюда не входят намеренно — они называют предмет и
 #: его класс, но ничего о нём не сообщают.
+#: `studios` (студия производства) объявлена схемой поставщика и не приходит
+#: ни разу — поле остаётся, нулевое покрытие называется прямо. `voiceStudios`
+#: (студии озвучивания) приходит и подменой первой не является: это разные
+#: сведения, и выдавать одно за другое запрещено.
 DESCRIPTIVE_FACTS: tuple[str, ...] = (
-    "year", "genres", "countries", "studios", "crew", "duration",
-    "seasonsCount", "originalName", "alternativeNames", "description",
-    "premiereDate",
+    "year", "genres", "countries", "studios", "voiceStudios", "crew",
+    "duration", "seasonsCount", "originalName", "alternativeNames",
+    "description", "premiereDate",
 )
 
 
@@ -553,8 +557,8 @@ def revision_of(entry: dict) -> str:
         "playback", "external_ids", "kinopoisk_rating", "imdb_rating",
         # Ключи здесь в том виде, в каком их отдаёт источник: ревизия считается
         # по записи каталога, а не по уже переведённому в контракт виду.
-        "genres", "countries", "studios", "crew", "duration",
-        "seasons_count", "original_name", "alternative_names",
+        "genres", "countries", "studios", "voice_studios", "crew",
+        "duration", "seasons_count", "original_name", "alternative_names",
         "description", "premiere_date"))}
     сырьё = json.dumps(значимое, sort_keys=True, ensure_ascii=False,
                        default=str)
