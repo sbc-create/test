@@ -281,6 +281,37 @@ def layout_of(profile: dict) -> dict:
 def _stylesheet_base(profile: dict, *, declared_theme: str | None = None) -> str:
     """Полная таблица стилей сайта. Один файл, без импортов и без внешних ссылок."""
     t = tokens_of(profile, declared_theme=declared_theme)
+    # Блоки системной схемы выводятся только у витрин со второй палитрой.
+    #
+    # Они дают поведение выбору «как в системе», а сам выбор доступен лишь там,
+    # где переключатель есть, — то есть где объявлена вторая палитра. У витрины
+    # с одной палитрой атрибут `data-theme="system"` поставить некому, и правила
+    # остаются мёртвым весом: браузер их разбирает, посетитель не видит ничего.
+    #
+    # Требование производственной линии здесь прямое и верное: без второй
+    # палитры таблица стилей не несёт машинерии тем вовсе.
+    системная_схема = ""
+    if theme_switch_available(profile):
+        системная_схема = (
+            "@media (prefers-color-scheme: dark) {\n"
+            + _palette_block(':root[data-theme="system"]', "dark",
+                             accent=t["accent"], indent="  ")
+            + "\n}\n@media (prefers-color-scheme: light) {\n"
+            + _palette_block(':root[data-theme="system"]', "light",
+                             accent=t["accent"], indent="  ")
+            + "\n}"
+        )
+    # Правила явного выбора — по той же причине: выбирать некому там, где
+    # переключателя нет.
+    явный_выбор = ""
+    if theme_switch_available(profile):
+        явный_выбор = (
+            "/* Явный выбор зрителя. Он идёт первым и побеждает системную "
+            "настройку. */\n"
+            + _palette_block(':root[data-theme="dark"]', "dark", accent=t["accent"])
+            + "\n"
+            + _palette_block(':root[data-theme="light"]', "light", accent=t["accent"])
+        )
     lay = layout_of(profile)
     d = DENSITY.get(str(lay.get("density")), DENSITY["comfortable"])
     cols = lay["columns"]
@@ -313,9 +344,7 @@ def _stylesheet_base(profile: dict, *, declared_theme: str | None = None) -> str
   color-scheme: light dark;
 }}
 
-/* Явный выбор зрителя. Он идёт первым и побеждает системную настройку. */
-{_palette_block(':root[data-theme="dark"]', 'dark', accent=t['accent'])}
-{_palette_block(':root[data-theme="light"]', 'light', accent=t['accent'])}
+{явный_выбор}
 
 /* Системная настройка применяется только по просьбе зрителя — когда он выбрал
    «как в системе». Это исправление, а не украшение.
@@ -332,12 +361,7 @@ def _stylesheet_base(profile: dict, *, declared_theme: str | None = None) -> str
    знак. «Как в системе» остаётся одним из трёх равноправных выборов, а не
    молчаливым умолчанием. Поведение обратимо: `seo.theme_follows_system: true`
    в пакете возвращает прежнее. */
-@media (prefers-color-scheme: dark) {{
-{_palette_block(':root[data-theme="system"]', 'dark', accent=t['accent'], indent='  ')}
-}}
-@media (prefers-color-scheme: light) {{
-{_palette_block(':root[data-theme="system"]', 'light', accent=t['accent'], indent='  ')}
-}}
+{системная_схема}
 
 *, *::before, *::after {{ box-sizing: border-box; }}
 html {{ -webkit-text-size-adjust: 100%; }}
