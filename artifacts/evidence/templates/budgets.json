@@ -1,5 +1,5 @@
 {
-  "captured_at_utc": "2026-09-07T08:48:23.838Z",
+  "captured_at_utc": "2026-09-07T09:42:35.769Z",
   "budget": {
     "documentKb": 120,
     "scriptKb": 60,
@@ -17,7 +17,7 @@
       "requests": 18,
       "documentKb": 48,
       "scriptKb": 27,
-      "styleKb": 29,
+      "styleKb": 30,
       "imageKb": 11,
       "domNodes": 808
     },
@@ -28,7 +28,7 @@
       "requests": 4,
       "documentKb": 31,
       "scriptKb": 27,
-      "styleKb": 29,
+      "styleKb": 30,
       "imageKb": 0,
       "domNodes": 247
     },
@@ -39,7 +39,7 @@
       "requests": 18,
       "documentKb": 53,
       "scriptKb": 27,
-      "styleKb": 29,
+      "styleKb": 30,
       "imageKb": 11,
       "domNodes": 888
     },
@@ -50,7 +50,7 @@
       "requests": 4,
       "documentKb": 30,
       "scriptKb": 27,
-      "styleKb": 29,
+      "styleKb": 30,
       "imageKb": 0,
       "domNodes": 240
     },
@@ -61,7 +61,7 @@
       "requests": 18,
       "documentKb": 45,
       "scriptKb": 27,
-      "styleKb": 29,
+      "styleKb": 30,
       "imageKb": 11,
       "domNodes": 720
     },
@@ -72,7 +72,7 @@
       "requests": 4,
       "documentKb": 27,
       "scriptKb": 27,
-      "styleKb": 29,
+      "styleKb": 30,
       "imageKb": 0,
       "domNodes": 234
     },
@@ -83,7 +83,7 @@
       "requests": 3,
       "documentKb": 21,
       "scriptKb": 19,
-      "styleKb": 29,
+      "styleKb": 30,
       "imageKb": 0,
       "domNodes": 408
     },
@@ -94,7 +94,7 @@
       "requests": 3,
       "documentKb": 45,
       "scriptKb": 19,
-      "styleKb": 29,
+      "styleKb": 30,
       "imageKb": 0,
       "domNodes": 500
     }
@@ -104,10 +104,10 @@
       "site": "lords-01",
       "route": "/catalog/",
       "interactions": 3,
-      "worstMs": 48,
+      "worstMs": 24,
       "reporting_threshold_ms": 16,
       "note": "зафиксированы взаимодействия выше порога отчётности",
-      "observer_selfcheck_ms": 136
+      "observer_selfcheck_ms": 128
     }
   ],
   "player": [

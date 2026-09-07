@@ -1,5 +1,5 @@
 {
-  "captured_at_utc": "2026-09-07T08:48:09.535Z",
+  "captured_at_utc": "2026-09-07T09:42:23.679Z",
   "site": "lords-01",
   "route": "/catalog/",
   "viewport": 1440,
@@ -9,8 +9,8 @@
       "cls": "visually-hidden",
       "id": "",
       "text": "Перейти к содержимому",
-      "top": -1,
-      "left": -1,
+      "top": 8,
+      "left": 8,
       "focusVisible": true
     },
     {

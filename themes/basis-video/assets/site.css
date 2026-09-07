@@ -72,7 +72,12 @@ h2 { font: 600 clamp(19px, 3vw, 24px)/1.25 var(--font-heading); margin: 32px 0 1
 .home-section__head { display: flex; align-items: baseline; gap: 12px;
   flex-wrap: wrap; margin: 32px 0 4px; }
 .home-section__head h2 { margin: 0; }
-.home-section__all { font-size: 14px; }
+.home-section__all {
+  font-size: 14px;
+  /* Цель не меньше 24 px по высоте — критерий 2.5.8 уровня AA. Ссылка
+     набирала 22 и попадала под порог: обход клавиатурой это показал. */
+  display: inline-flex; align-items: center; min-height: 24px;
+}
 .home-section__lead { color: var(--color-muted); margin: 0 0 12px; max-width: 70ch; }
 
 /* Ряд материалов. Сетка при шести карточках оставляла на широком экране одну
@@ -86,7 +91,15 @@ h2 { font: 600 clamp(19px, 3vw, 24px)/1.25 var(--font-heading); margin: 32px 0 1
 }
 .card-rail > .card { scroll-snap-align: start; }
 .card-rail:focus-visible { outline: 3px solid var(--color-primary); outline-offset: 4px; }
-.card { background: var(--color-surface); border-radius: var(--radius); overflow: hidden; }
+.card {
+  background: var(--color-surface); border-radius: var(--radius);
+  /* Скругление обрезало углы изображения через `overflow: hidden`, и та же
+     обрезка при двукратном увеличении текста срезала подпись карточки: 190
+     пикселей отведено, 197 нужно. Скругление теперь на самом изображении, а
+     карточка растёт вместе с содержимым. */
+  overflow: visible;
+}
+.card-image { border-radius: var(--radius) var(--radius) 0 0; }
 .card-link { display: block; text-decoration: none; color: inherit; }
 .card-image { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: #dde2ee; }
 .card-title { display: block; padding: 10px 12px 4px; font-weight: 600; }

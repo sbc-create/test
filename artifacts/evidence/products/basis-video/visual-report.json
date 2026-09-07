@@ -1,7 +1,7 @@
 {
   "product": "basis-video",
   "base": "http://127.0.0.1:8905",
-  "captured_at_utc": "2026-09-07T09:00:21.451Z",
+  "captured_at_utc": "2026-09-07T09:49:54.449Z",
   "pages": [
     {
       "page": "home",
@@ -11,7 +11,7 @@
       "overflowX": false,
       "scrollWidth": 390,
       "clientWidth": 390,
-      "documentHeight": 1418,
+      "documentHeight": 1421,
       "cards": 18,
       "emptyTitles": 18,
       "longestTitle": 0,
@@ -28,7 +28,7 @@
       "overflowX": false,
       "scrollWidth": 768,
       "clientWidth": 768,
-      "documentHeight": 1311,
+      "documentHeight": 1314,
       "cards": 18,
       "emptyTitles": 18,
       "longestTitle": 0,
@@ -45,7 +45,7 @@
       "overflowX": false,
       "scrollWidth": 1440,
       "clientWidth": 1440,
-      "documentHeight": 1263,
+      "documentHeight": 1265,
       "cards": 18,
       "emptyTitles": 18,
       "longestTitle": 0,

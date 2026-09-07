@@ -299,6 +299,20 @@ p {{ margin: 0 0 1em; overflow-wrap: anywhere; }}
   position: absolute; width: 1px; height: 1px; margin: -1px;
   clip-path: inset(50%); overflow: hidden; white-space: nowrap;
 }}
+/* Ссылка «перейти к содержимому» обязана появляться при фокусе.
+   Она первая на пути клавиатуры, и до сих пор оставалась высотой в один
+   пиксель даже под фокусом: пользователь получал остановку, которой не видит,
+   и не понимал, куда попал и что нажимать. Обход клавиатурой это и показал —
+   цель высотой 1 px при минимуме 24 по критерию 2.5.8.
+   Правило написано на `:focus-visible`, а не на `:focus`: мышью её открывать
+   незачем, она нужна ровно тому, кто идёт клавишами. */
+a.visually-hidden:focus-visible {{
+  position: fixed; top: 8px; left: 8px; z-index: 100;
+  width: auto; height: auto; margin: 0; clip-path: none; overflow: visible;
+  padding: 10px 16px; min-height: 24px;
+  background: var(--accent); color: var(--accent-text);
+  border-radius: var(--radius); text-decoration: none;
+}}
 
 /* --- шапка ------------------------------------------------------------- */
 .site-header {{

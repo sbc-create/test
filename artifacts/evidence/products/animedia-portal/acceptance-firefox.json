@@ -1,0 +1,218 @@
+{
+  "product": "animedia-portal",
+  "engine": "firefox",
+  "captured_at_utc": "2026-09-07T09:41:11.789Z",
+  "surfaces": {
+    "countries@768": {
+      "overflowX": false,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "cards": 0,
+      "h1": "Страны",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "countries@1440": {
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "cards": 0,
+      "h1": "Страны",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "years@390": {
+      "overflowX": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "cards": 0,
+      "h1": "Годы",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "years@768": {
+      "overflowX": false,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "cards": 0,
+      "h1": "Годы",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "years@1440": {
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "cards": 0,
+      "h1": "Годы",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "search@390": {
+      "overflowX": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "cards": 0,
+      "h1": "Поиск",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "search@768": {
+      "overflowX": false,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "cards": 0,
+      "h1": "Поиск",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "search@1440": {
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "cards": 0,
+      "h1": "Поиск",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "not-found@390": {
+      "overflowX": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "cards": 0,
+      "h1": "Страница не найдена",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "not-found@768": {
+      "overflowX": false,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "cards": 0,
+      "h1": "Страница не найдена",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "not-found@1440": {
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "cards": 0,
+      "h1": "Страница не найдена",
+      "emptyElements": [],
+      "foreignIds": [],
+      "consoleErrors": [],
+      "networkErrors": []
+    }
+  },
+  "keyboard": [
+    {
+      "tag": "a",
+      "text": "Перейти к содержимому",
+      "height": 42,
+      "outline": "solid"
+    },
+    {
+      "tag": "a",
+      "text": "APAnimedia Portal",
+      "height": 30,
+      "outline": "solid"
+    },
+    {
+      "tag": "a",
+      "text": "Главная",
+      "height": 40,
+      "outline": "solid"
+    },
+    {
+      "tag": "a",
+      "text": "Каталог",
+      "height": 40,
+      "outline": "solid"
+    },
+    {
+      "tag": "a",
+      "text": "Фильмы",
+      "height": 40,
+      "outline": "solid"
+    },
+    {
+      "tag": "a",
+      "text": "Сериалы",
+      "height": 40,
+      "outline": "solid"
+    },
+    {
+      "tag": "a",
+      "text": "Мультфильмы",
+      "height": 40,
+      "outline": "solid"
+    },
+    {
+      "tag": "a",
+      "text": "Аниме",
+      "height": 40,
+      "outline": "solid"
+    },
+    {
+      "tag": "a",
+      "text": "Новое",
+      "height": 40,
+      "outline": "solid"
+    },
+    {
+      "tag": "a",
+      "text": "Расписание",
+      "height": 40,
+      "outline": "solid"
+    },
+    {
+      "tag": "a",
+      "text": "Жанры",
+      "height": 40,
+      "outline": "solid"
+    },
+    {
+      "tag": "a",
+      "text": "Годы",
+      "height": 40,
+      "outline": "solid"
+    },
+    {
+      "tag": "a",
+      "text": "Страны",
+      "height": 40,
+      "outline": "solid"
+    },
+    {
+      "tag": "a",
+      "text": "Поиск",
+      "height": 40,
+      "outline": "solid"
+    }
+  ],
+  "zoom200": [],
+  "axe": {
+    "violations": []
+  }
+}
