@@ -170,6 +170,7 @@ else
   run "payload-seo-matrix"  "$TSX $APP_TESTS/seo-matrix.ts"
   run "payload-player"      "$TSX $APP_TESTS/player-contract.ts"
   run "payload-comments"    "$TSX $APP_TESTS/comments-policy.ts"
+  run "payload-catalog"     "$TSX $APP_TESTS/catalog-import.ts"
   run "payload-isolation"   "python3 tests/tools/with_app_env.py --scope anime --push -- $TSX $APP_TESTS/tenant-isolation.ts"
   run "payload-content-api" "python3 tests/tools/with_app_env.py --scope anime --push -- $TSX $APP_TESTS/content-api.ts"
   run "payload-mutation"    "python3 tests/tools/mutation_isolation.py"

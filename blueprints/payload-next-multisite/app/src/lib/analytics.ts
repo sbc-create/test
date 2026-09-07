@@ -285,7 +285,9 @@ export function decide(config: AnalyticsConfig | null, hostname: string): Analyt
 }
 
 declare global {
-  interface Window { ym?: (...args: unknown[]) => void }
+  interface Window {
+    ym?: ((...args: unknown[]) => void) & { a?: unknown[][]; l?: number };
+  }
 }
 
 let verdict: AnalyticsVerdict = { active: false, reason: 'не инициализирован' };
@@ -296,12 +298,32 @@ export function initAnalytics(config: AnalyticsConfig | null, hostname: string):
   verdict = decide(config, hostname.toLowerCase());
   if (!verdict.active || !config) { return verdict; }
   counterId = config.counterId;
-  (function (m, e, t, r, i, k, a) {
-    m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments); };
-    m[i].l = 1 * new Date();
-    k = e.createElement(t); a = e.getElementsByTagName(t)[0];
-    k.async = 1; k.src = r; a.parentNode.insertBefore(k, a);
-  })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
+  // Загрузчик написан типами, а не скопирован сниппетом.
+  //
+  // Канонический сниппет счётчика — функция с семью безымянными параметрами,
+  // которые по очереди становятся окном, документом, строкой и элементом.
+  // TypeScript такое не проверяет и выдал одиннадцать ошибок: сборка
+  // приложения не проходила вовсе, и три семейства шаблонов оставались без
+  // предпросмотра именно из-за этого файла.
+  //
+  // Поведение то же: очередь вызовов до загрузки тега, отметка времени старта,
+  // асинхронный скрипт перед первым существующим скриптом страницы.
+  if (!window.ym) {
+    // Заглушка копит вызовы до загрузки тега: тег их потом разберёт.
+    const stub = (...args: unknown[]): void => { stub.a.push(args); };
+    stub.a = [] as unknown[][];
+    stub.l = Date.now();
+    window.ym = stub;
+  }
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://mc.yandex.ru/metrika/tag.js';
+  const first = document.getElementsByTagName('script')[0];
+  if (first?.parentNode) {
+    first.parentNode.insertBefore(tag, first);
+  } else {
+    document.head.appendChild(tag);
+  }
   window.ym!(counterId, 'init', { clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: false });
   return verdict;
 }

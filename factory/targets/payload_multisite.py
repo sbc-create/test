@@ -140,6 +140,8 @@ class PayloadMultisiteTarget:
             {"id": "migrate_schema", "detail": "синхронизация схемы отдельным шагом после бэкапа",
              "mutation": True},
             {"id": "apply_tenant", "detail": f"конфигурация тенанта {self.site_id} в CMS", "mutation": True},
+            {"id": "import_catalog",
+             "detail": f"каталог из {self.package['content_package_ref']} в CMS", "mutation": True},
             {"id": "start_candidate", "detail": "next start на свободном порту", "mutation": True},
             {"id": "health_check", "detail": f"GET /robots.txt с Host: {self.domain}", "mutation": False},
             {"id": "switch_current", "detail": f"current → {build_id}", "mutation": True, "noop": applied},
@@ -412,6 +414,26 @@ class PayloadMultisiteTarget:
                     field="tenant", blocks_stage="STAGING_DEPLOY")
             record("apply_tenant",
                    applied.stdout.strip().splitlines()[-1] if applied.stdout.strip() else "ok",
+                   mutation=True, kind="database")
+
+            # Каталог грузится тем же выкатом, что и конфигурация тенанта.
+            # Раньше `content_package_ref` пакета не читал никто: сайт поднимался
+            # технически живым и визуально пустым, а увидеть семейство шаблонов
+            # на настоящих данных было негде.
+            pack = PATHS.root / "sites" / self.site_id / self.package["content_package_ref"]
+            if not pack.exists():
+                raise DeployFailed(
+                    f"Пакет контента {pack} не найден — каталог грузить не из чего.",
+                    field="content_package_ref", blocks_stage="STAGING_DEPLOY")
+            imported = self._run_app([str(APP / "node_modules" / ".bin" / "tsx"),
+                                      str(APP / "scripts" / "import-catalog.ts"),
+                                      str(self.package["tenant"]["slug"]), str(pack)])
+            if imported.returncode != 0:
+                raise DeployFailed(
+                    f"Каталог не загружен: {(imported.stdout + imported.stderr).strip()[-600:]}",
+                    field="content_package_ref", blocks_stage="STAGING_DEPLOY")
+            record("import_catalog",
+                   imported.stdout.strip().splitlines()[-1] if imported.stdout.strip() else "ok",
                    mutation=True, kind="database")
         except FactoryError as error:
             rollback_database(f"Шаг выката провалился: {error}")
