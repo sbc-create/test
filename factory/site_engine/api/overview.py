@@ -21,10 +21,10 @@
 from __future__ import annotations
 
 import datetime as dt
-import json
-import os
 from pathlib import Path
 from typing import Any
+
+from factory.site_engine import catalog_snapshot
 
 CONTRACT_VERSION = "admin-overview/1.0.0"
 
@@ -59,26 +59,14 @@ def _iso(момент: dt.datetime) -> str:
 
 
 def _каталог_витрины(root: Path, env: dict[str, str] | None, site_id: str):
-    """Файл каталога витрины и его возраст. None — источник недоступен."""
-    env = env if env is not None else os.environ
-    подкаталог = str(env.get("SITE_ENGINE_CATALOG_DIR", "")).strip()
-    if not подкаталог:
-        return None, None
-    # Путь может быть абсолютным: каталог поставщика законно живёт
-    # вне репозитория, и приклеивать к нему корень значило бы
-    # искать var/... внутри /srv/....
-    основа = Path(подкаталог)
-    if not основа.is_absolute():
-        основа = Path(root) / основа
-    путь = основа / f"{site_id}.json"
-    if not путь.is_file():
-        return None, None
-    try:
-        данные = json.loads(путь.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return None, None
-    возраст = max(0, int(_now().timestamp() - путь.stat().st_mtime))
-    return данные, возраст
+    """Файл каталога витрины и его возраст. None — источник недоступен.
+
+    Совместимость: способность переехала в домен каталога
+    (`site_engine.catalog_snapshot`), а это имя оставлено, чтобы не ломать
+    существующих потребителей внутри контура. Новый код берёт снимок из
+    домена напрямую.
+    """
+    return catalog_snapshot.снимок(root, env, site_id)
 
 
 def _профили(root: Path) -> list[str]:

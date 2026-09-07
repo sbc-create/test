@@ -106,6 +106,7 @@ domains:
       - factory/site_engine/playback_policy.py
       - factory/site_engine/title_normalize.py
       - factory/site_engine/identity_resolver.py
+      - factory/site_engine/catalog_snapshot.py
       - factory/site_engine/kind_overlay.py
       - factory/recs/
     owns:
@@ -117,7 +118,7 @@ domains:
     public_interface:
       - factory.site_engine.store
       - factory.site_engine.catalog_identity
-      - factory.site_engine.rating_feed
+      - factory.site_engine.catalog_snapshot
     forbidden:
       - templates
       - releases
@@ -302,19 +303,4 @@ site_families:
 #
 # Каждая запись обязана называть, чем она лечится. Долг без плана лечения
 # превращается в договорённость терпеть.
-known_violations:
-  - file: factory/site_engine/rating_feed.py
-    imports: factory.site_engine.api
-    from_domain: catalog
-    to_unit: control_plane
-    why: >-
-      Каталог берёт у управляющего контура приватную функцию
-      `_каталог_витрины`. Нарушение двойное. Направление перевёрнуто: контур
-      управления обязан зависеть от доменов, а не они от него. И берётся
-      приватное имя, то есть устройство, а не интерфейс.
-    fix: >-
-      Чтение каталога витрины принадлежит домену каталога. Функция выносится в
-      модуль каталога, а `api.overview` начинает брать её оттуда. Перенос
-      делается отдельным циклом, начинается characterization-тестом и не
-      совмещается с правкой логики.
-    planned_cycle: 4
+known_violations: []

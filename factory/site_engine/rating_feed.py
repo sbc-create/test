@@ -160,8 +160,7 @@ def ratings(
     today: dt.date | None = None,
 ) -> dict[str, Any]:
     """Оценки по записям одной витрины из уже загруженного фида."""
-    from factory.site_engine import rating_sources
-    from factory.site_engine.api import overview as _overview
+    from factory.site_engine import catalog_snapshot, rating_sources
 
     корень = Path(root)
     решение = rating_sources.resolve(корень)
@@ -200,7 +199,7 @@ def ratings(
     # Расположение фида берётся оттуда же, откуда его читает весь остальной
     # движок. Собственный путь здесь означал бы, что оценки читаются из одного
     # файла, а каталог — из другого, и однажды они разойдутся.
-    данные, _ = _overview._каталог_витрины(корень, env, site_id)
+    данные, _ = catalog_snapshot.снимок(корень, env, site_id)
     if данные is None:
         запомненное = _вспомнить(корень, site_id, ttl)
         if запомненное is not None:
