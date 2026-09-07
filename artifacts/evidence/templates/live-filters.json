@@ -1,0 +1,39 @@
+{
+  "captured_at_utc": "2026-09-07T00:38:47.782Z",
+  "base": "http://127.0.0.1:8811",
+  "source": "снимок боевого каталога, 53 251 запись",
+  "filters": [
+    {
+      "key": "жанры-выбор",
+      "section": "жанры",
+      "href": "/genres/",
+      "title": "Жанры",
+      "catalogCards": 24,
+      "sectionCards": 0,
+      "note": "Значений с непустым списком: 221."
+    },
+    {
+      "key": "годы-выбор",
+      "section": "годы",
+      "href": "/years/",
+      "title": "Годы",
+      "catalogCards": 24,
+      "sectionCards": 0,
+      "note": "Значений с непустым списком: 94."
+    },
+    {
+      "key": "страны-выбор",
+      "section": "страны",
+      "href": "/countries/",
+      "title": "Страны",
+      "catalogCards": 24,
+      "sectionCards": 0,
+      "note": "Значений с непустым списком: 0."
+    },
+    {
+      "key": "пагинация-раздела",
+      "href": "/genres/special/",
+      "next": "/genres/special/page/2/"
+    }
+  ]
+}

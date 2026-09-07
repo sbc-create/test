@@ -34,7 +34,7 @@ const ROUTES = [
 // ними: сетка ломается на 610 px, а на 390 и 768 всё в порядке.
 const SWEEP = [320, 360, 390, 414, 480, 560, 640, 720, 768, 900, 1024, 1180, 1280, 1440, 1600, 1920];
 
-const evidence = { captured_at_utc: null, sweep: [], reflow: [], textSpacing: [], console: [] };
+const evidence = { captured_at_utc: null, sweep: [], reflow: [], textSpacing: [], zoom200: [], console: [] };
 
 // Свидетельство собирается по разделам, а не перезаписью файла целиком.
 // Первая версия писала весь объект, и результат зависел от того, какой блок
@@ -51,7 +51,7 @@ function save() {
   let stored = {};
   try { stored = JSON.parse(fs.readFileSync(FILE, 'utf8')); } catch { /* первого файла ещё нет */ }
   const merged = { ...stored, captured_at_utc: new Date().toISOString() };
-  for (const key of ['sweep', 'reflow', 'textSpacing', 'console']) {
+  for (const key of ['sweep', 'reflow', 'textSpacing', 'zoom200', 'console']) {
     if (evidence[key].length) { merged[key] = evidence[key]; }
     else if (!merged[key]) { merged[key] = []; }
   }
@@ -136,6 +136,56 @@ test.describe('1.4.10 Reflow и сплошной проход ширин', () =>
 });
 
 test.describe('1.4.12 Text Spacing', () => {
+  test('увеличение текста до 200 % не съедает названия (1.4.4)', async ({ page }) => {
+    // 1.4.4 отличается от 1.4.10: там масштабируется страница целиком и
+    // спасает узкая раскладка, здесь растёт только шрифт при прежней ширине.
+    // Ломается это иначе — не прокруткой, а обрезкой: содержимое, помещавшееся
+    // в отведённые строки, перестаёт помещаться и пропадает. Критерий требует,
+    // чтобы при увеличении до 200 % не терялись ни содержимое, ни возможность
+    // им пользоваться, поэтому проверяется именно обрезка.
+    await page.setViewportSize({ width: 1280, height: 900 });
+    const failures = [];
+    for (const site of Object.keys(SITES)) {
+      for (const [name, route] of ROUTES) {
+        await page.goto(url(site, route));
+        await page.addStyleTag({ content: 'html { font-size: 200% !important }' });
+        // Перерасчёт раскладки ждём кадром, а не надеждой: измерение сразу
+        // после вставки стиля читает прежние размеры и не видит обрезки.
+        await page.evaluate(
+          () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))),
+        );
+        const result = await page.evaluate(() => {
+          const clipped = [];
+          for (const el of document.querySelectorAll('body *')) {
+            // `visually-hidden` обрезан намеренно и по назначению: он прячет
+            // текст от глаза, оставляя его экранному диктору. Это не потеря.
+            if (el.classList.contains('visually-hidden')) { continue; }
+            const cs = getComputedStyle(el);
+            if (cs.overflow !== 'hidden' && cs.overflowY !== 'hidden') { continue; }
+            if (!el.clientHeight || !el.textContent.trim()) { continue; }
+            if (el.scrollHeight > el.clientHeight + 2) {
+              clipped.push({
+                cls: el.getAttribute('class') || el.tagName.toLowerCase(),
+                need: el.scrollHeight, have: el.clientHeight,
+                text: el.textContent.trim().slice(0, 60),
+              });
+            }
+          }
+          const doc = document.documentElement;
+          return { clipped, overflowX: doc.scrollWidth > doc.clientWidth + 1 };
+        });
+        evidence.zoom200.push({ site, route: name, clipped: result.clipped.length,
+                                overflowX: result.overflowX, examples: result.clipped.slice(0, 4) });
+        for (const c of result.clipped) {
+          failures.push(`${site}${route}: .${c.cls} обрезано ${c.have}/${c.need} px — «${c.text}»`);
+        }
+        if (result.overflowX) { failures.push(`${site}${route}: горизонтальная прокрутка при 200 %`); }
+      }
+    }
+    save();
+    expect(failures, `потеря содержимого при 200 %:\n  ${failures.join('\n  ')}`).toEqual([]);
+  });
+
   test('увеличенные интервалы не режут содержимое', async ({ page }) => {
     // Значения взяты из формулировки критерия, а не выбраны на глаз:
     // межстрочный 1.5×кегль, между абзацами 2×кегль, межбуквенный 0.12×,

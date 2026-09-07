@@ -273,6 +273,70 @@ def _episode_items(season) -> str:
     return "".join(items)
 
 
+#: Подписи выбора темы. «Как в системе» стоит первым: это состояние по
+#: умолчанию, и начинать перечень с него честнее, чем со «светлой».
+THEME_CHOICES = (
+    ("system", "Как в системе", "Авто"),
+    ("light", "Светлая", "Светл"),
+    ("dark", "Тёмная", "Тёмн"),
+)
+
+
+def _theme_key(site_id: str) -> str:
+    """Ключ хранения выбора: свой у каждой витрины, но без её имени.
+
+    Ключ обязан различаться: общий означал бы, что выбор на одной витрине
+    меняет соседнюю — они живут на разных доменах, но в одном браузере, и
+    зритель не ожидает, что настройка перетечёт.
+
+    При этом сам идентификатор витрины в разметку не попадает. `lords-01` —
+    внутренняя классификация фабрики; в публичном подвале ему не место, и
+    страж `test_no_internal_vocabulary_leaks_into_the_footer` справедливо
+    ловил его там. Поэтому ключ — короткий отпечаток идентификатора: он
+    устойчив между сборками, различает витрины и ничего о них не сообщает.
+    """
+    import hashlib
+
+    return "lords-theme:" + hashlib.sha256(site_id.encode("utf-8")).hexdigest()[:12]
+
+
+def _theme_boot(site_id: str) -> str:
+    """Скрипт, ставящий тему ДО первого кадра.
+
+    Тема, выставленная после разбора разметки, даёт вспышку: страница приходит
+    одной и перекрашивается на глазах. На тёмной теме это удар белым в темноте —
+    ровно то, ради чего тему и выбирали. Поэтому скрипт встроенный и стоит в
+    head, до таблицы стилей.
+
+    Обращение к хранилищу обёрнуто: в приватном режиме оно бросает исключение,
+    и непойманное оставило бы страницу без темы, уронив остальной сценарий.
+    """
+    key = _theme_key(site_id)
+    # Значение «system» тоже ставится атрибутом: системная палитра применяется
+    # только по этому признаку. Без него витрина следовала за системой всегда,
+    # и семейства lords_dark и lords_light выглядели одинаково.
+    return (
+        "<script>(function(){try{var v=localStorage.getItem('" + key + "');"
+        "if(v==='light'||v==='dark'||v==='system')"
+        "{document.documentElement.setAttribute('data-theme',v);}"
+        "}catch(e){}})();</script>"
+    )
+
+
+def _theme_switch(site_id: str) -> str:
+    """Видимый выбор темы: три состояния, доступные с клавиатуры."""
+    key = _theme_key(site_id)
+    buttons = "".join(
+        f'<button type="button" data-theme-set="{value}" aria-pressed="false" '
+        f'aria-label="{escape(full)}" title="{escape(full)}">{escape(short)}</button>'
+        for value, full, short in THEME_CHOICES
+    )
+    return (
+        f'<div class="theme-switch" role="group" aria-label="Тема оформления" '
+        f'data-theme-key="{escape(key)}">{buttons}</div>'
+    )
+
+
 def _document(ctx: dict, meta: Meta, body: str) -> str:
     """Полный HTML-документ. Всё встроено, ничего не подгружается извне."""
     brand = ctx["brand"]
@@ -288,6 +352,9 @@ def _document(ctx: dict, meta: Meta, body: str) -> str:
         '<meta charset="utf-8">',
         '<meta name="viewport" content="width=device-width, initial-scale=1">',
         f"<title>{escape(full_title)}</title>",
+        # Тема ставится ДО таблицы стилей и до первого кадра: иначе страница
+        # приходит одной и перекрашивается на глазах.
+        _theme_boot(str(ctx.get("site_id") or "lords")),
     ]
     if описание:
         head.append(f'<meta name="description" content="{escape(описание)}">')
@@ -325,15 +392,6 @@ def _document(ctx: dict, meta: Meta, body: str) -> str:
     if analytics_script:
         head.append(analytics_script)
     head.append('<link rel="stylesheet" href="/assets/site.css">')
-    # Выбор темы применяется ДО отрисовки, иначе страница успевает мигнуть
-    # чужой темой. Сценарий крошечный и встроенный по той же причине: внешний
-    # файл грузится после разбора и мигание не убирает.
-    if ctx.get("theme_switch"):
-        head.append(
-            "<script>(function(){try{var v=localStorage.getItem('lords-theme');"
-            "if(v==='light'||v==='dark'){document.documentElement.dataset.theme=v;}}"
-            "catch(e){}})();</script>"
-        )
     # Раньше здесь стоял серый прямоугольник в data-URI: заглушка, которая
     # занимала место иконки и потому выглядела как решение. Настоящие файлы
     # рисуются из токенов темы и лежат в корне сайта.
@@ -393,43 +451,7 @@ def _header(ctx: dict, meta: Meta) -> str:
         + _nav_items(ctx["nav"], ctx.get("_path", ""))
         + "</ul></nav>"
         + _header_search(ctx)
-        + _theme_switch(ctx)
         + "</div></header>"
-    )
-
-
-def _theme_switch(ctx: dict) -> str:
-    """Переключатель темы: система, светлая, тёмная.
-
-    Рисуется только тогда, когда витрина объявила вторую палитру. Кнопка,
-    которая ничего не меняет, хуже её отсутствия: посетитель считает её
-    сломанной, а не отсутствующей.
-
-    Без JavaScript переключателя нет, и это честно: выбор нужно где-то хранить.
-    Системная тема при этом работает — её даёт медиазапрос, а не сценарий.
-    """
-    if not ctx.get("theme_switch"):
-        return ""
-    кнопки = "".join(
-        f'<button type="button" data-theme-set="{значение}" aria-pressed="false">'
-        f"{подпись}</button>"
-        for значение, подпись in (("system", "Система"), ("light", "Светлая"),
-                                  ("dark", "Тёмная"))
-    )
-    return (
-        '<div class="theme-switch" role="group" aria-label="Тема оформления" hidden>'
-        + кнопки
-        + "</div>"
-        + "<script>(function(){var g=document.querySelector('.theme-switch');"
-        "if(!g)return;g.hidden=false;var r=document.documentElement;"
-        "function cur(){return r.dataset.theme||'system';}"
-        "function mark(){var c=cur();g.querySelectorAll('button').forEach(function(b){"
-        "b.setAttribute('aria-pressed',String(b.dataset.themeSet===c));});}"
-        "g.addEventListener('click',function(e){var b=e.target.closest('button');"
-        "if(!b)return;var v=b.dataset.themeSet;"
-        "try{if(v==='system'){localStorage.removeItem('lords-theme');delete r.dataset.theme;}"
-        "else{localStorage.setItem('lords-theme',v);r.dataset.theme=v;}}catch(err){}"
-        "mark();});mark();})();</script>"
     )
 
 
@@ -494,9 +516,16 @@ def _footer(ctx: dict) -> str:
     blurb = SITE_BLURBS.get(domain, DEFAULT_BLURB)
     year = _dt.date.today().year
     contact = escape(CONTACT_EMAIL)
+    # Выбор темы стоит в подвале, а не в шапке, и это измеренное решение.
+    # В шапке он переносился на отдельную строку и растил её на 62 пикселя —
+    # эталон раскладки поймал это на 1440 и 768. Перенос шапки директива прямо
+    # называет дефектом, а требования к теме — видимость, клавиатура,
+    # сохранение выбора — в подвале выполняются полностью.
+    switch = _theme_switch(str(ctx.get("site_id") or "lords"))
     return (
         '<footer class="site-footer"><div class="container">'
-        f"<ul>{links}</ul>"
+        + switch
+        + f"<ul>{links}</ul>"
         # Идентификатор сайта и имя профиля сборки — внутренняя
         # классификация фабрики; в подвале публичного сайта им не место.
         f"<p>{escape(ctx['brand'])}</p>"
@@ -560,21 +589,35 @@ def _card_rating(title) -> str:
     встречалось ни разу. Подписи и число шли подряд без промежутка и терялись
     среди прочего текста — владелец справедливо считал, что оценок нет.
 
-    На карточке показывается одна оценка, а не обе: две мелкие подписи под
-    обложкой спорят друг с другом. Кинопоиск идёт первым как более знакомый
-    здешнему зрителю; если его нет — IMDb.
+    Показываются ОБЕ оценки, когда обе есть. Прежде показывалась одна —
+    Кинопоиск, иначе IMDb, — и это было решением, а не ошибкой: две мелкие
+    подписи под обложкой спорят друг с другом.
+
+    Решение пересмотрено. Скрытая оценка не теряется в данных, но теряется для
+    зрителя: он не знает, что у записи есть вторая, и не может сравнить. На
+    первой странице боевого каталога таких записей две из двадцати четырёх —
+    у них есть и Кинопоиск, и IMDb, а видна была только первая.
+
+    Компактность решается вёрсткой, а не умолчанием одного из источников.
+    Каждое число подписано своим источником: шкалы воспринимаются по-разному,
+    и 7,4 у одного не равно 7,4 у другого.
     """
+    parts = []
     for label, raw in (("Кинопоиск", getattr(title, "kinopoisk_rating", None)),
                        ("IMDb", getattr(title, "imdb_rating", None))):
         value = _format_rating(raw)
         if value is not None:
-            return (
+            parts.append(
                 f'<span class="card__rating" title="{escape(label)}">'
                 f'<span class="card__rating-source">{escape(label)}</span>'
                 f'<span class="card__rating-value">{escape(value)}</span>'
                 "</span>"
             )
-    return ""
+    if not parts:
+        return ""
+    # Обёртка нужна вёрстке: две оценки обязаны вести себя как одна группа и
+    # переноситься вместе, а не разъезжаться по краям карточки.
+    return f'<span class="card__ratings">{"".join(parts)}</span>' if len(parts) > 1 else parts[0]
 
 
 
@@ -669,19 +712,56 @@ def _grid(titles, *, anchor: bool = False) -> str:
     return f'<div class="grid"{attrs}>' + "".join(_card(t) for t in titles) + "</div>"
 
 
+#: Сколько соседних страниц показывать по каждую сторону от текущей.
+PAGINATION_RADIUS = 2
+
+
 def _pagination(base: str, page: int, pages: int) -> str:
+    """Окно страниц, а не весь каталог ссылками.
+
+    Прежде перечислялись ВСЕ страницы: `range(1, pages + 1)`. На боевом
+    каталоге это 2 253 ссылки при 24 карточках — блок пагинации в сотню раз
+    объёмнее содержимого, основная часть из ~132 тысяч знаков разметки и
+    несколько тысяч пикселей высоты.
+
+    Скрыть лишнее стилями было бы хуже, чем оставить: узлы всё равно приходят
+    по сети, разбираются браузером и читаются экранным диктором. Их не должно
+    быть в разметке.
+
+    Показываются: первая страница, окно вокруг текущей, последняя и переходы
+    «назад»/«вперёд». Разрывы обозначены — без них соседство `1` и `100`
+    читается как ошибка вёрстки.
+    """
     if pages <= 1:
         return ""
+
     def href(n: int) -> str:
         return base if n == 1 else f"{base}page/{n}/"
+
+    window = {1, pages}
+    window.update(range(max(1, page - PAGINATION_RADIUS),
+                        min(pages, page + PAGINATION_RADIUS) + 1))
+    # Разрыв в одну страницу бессмыслен: многоточие занимает столько же места,
+    # сколько сама страница, и прячет достижимый переход.
+    for n in list(window):
+        if n + 2 in window:
+            window.add(n + 1)
+    numbers = sorted(window)
+
     items = []
     if page > 1:
         items.append(f'<li><a rel="prev" href="{escape(href(page - 1))}">Назад</a></li>')
-    for n in range(1, pages + 1):
+    previous = 0
+    for n in numbers:
+        if previous and n > previous + 1:
+            # Разрыв — не ссылка: щёлкать по нему некуда, и объявлять его
+            # экранному диктору как элемент списка незачем.
+            items.append('<li aria-hidden="true" class="pagination__gap">…</li>')
         if n == page:
             items.append(f'<li><span aria-current="page">{n}</span></li>')
         else:
             items.append(f'<li><a href="{escape(href(n))}">{n}</a></li>')
+        previous = n
     if page < pages:
         items.append(f'<li><a rel="next" href="{escape(href(page + 1))}">Вперёд</a></li>')
     return (
@@ -695,23 +775,57 @@ def _options(pairs, name: str) -> str:
     return f'<option value="">{escape(name)}</option>{body}'
 
 
+#: Сколько значений фасета показывать рядом со списком. Полный перечень живёт
+#: на своей странице: 94 года, 64 жанра и 50 стран в панели превращают её в
+#: простыню и отодвигают первую карточку за сгиб.
+FACET_CHIPS = 12
+
+
+def _facet_links(base: str, values, *, title: str, index_url: str) -> str:
+    """Один фасет ссылками на существующие разделы.
+
+    Прежде здесь стоял `<select data-facet=…>` без `name`, без `method` и без
+    `action`. Такое поле не отправляет ничего: оно зацепка для скрипта. Скрипт
+    же работал «поверх встроенного набора данных», а тот при каталоге больше
+    `DATASET_MAX_TITLES` не встраивается вовсе — и выбор года на боевой витрине
+    менял только `select.value`, оставляя адрес и выдачу прежними.
+
+    Поле, которое выглядит рабочим и не работает, — худший вид неисправности:
+    зритель винит каталог, а не управление.
+
+    Ссылки работают без скрипта, воспроизводятся по адресу, переживают
+    перезагрузку и кнопку «назад». Комбинации при этом остаются недоступны:
+    страницы «жанр И год» на статической витрине не существует. Это названо
+    прямо, а не спрятано за молчащим полем.
+    """
+    if not values:
+        return ""
+    shown = values[:FACET_CHIPS]
+    chips = "".join(
+        f'<li><a class="facet__chip" href="{base}{escape(str(slug))}/">{escape(str(label))}</a></li>'
+        for slug, label in shown
+    )
+    more = ""
+    if len(values) > len(shown):
+        more = (f'<li><a class="facet__more" href="{index_url}">'
+                f"Все ({len(values)})</a></li>")
+    return (f'<fieldset><legend>{escape(title)}</legend>'
+            f'<ul class="facet__list">{chips}{more}</ul></fieldset>')
+
+
 def _facets(catalog: fx.Catalog, kinds, *, show_type: bool, row: bool = False,
             with_counts: bool = True) -> str:
-    """Панель фильтров и сортировки. Работает поверх встроенного набора данных.
+    """Панель фильтров: ссылки на разделы, а не поля без имени.
 
     `row` включает раскладку в строку — она нужна там, где фасеты стоят над
     списком: пять полей в колонку отодвигают первую карточку за сгиб, и раздел
     выглядит пустым, хотя в нём полсотни записей.
 
-    `with_counts=False` убирает числа из подписей фильтров. Числа считаются по
-    всему разделу, поэтому одна добавленная запись меняла подпись `2026 (1842)`
-    на `2026 (1843)` — и меняла её на **каждой** странице раздела. Измерено
-    2026-09-03: после перехода на разбиение по годам одна запись всё равно
-    перерисовывала 9266 страниц из 9717, и дифф показал, что расходятся ровно
-    эти счётчики. Числа остаются там, где они полезны и где страница и так
-    меняется от любой правки, — на первой странице раздела.
+    `with_counts=False` убирает числа из подписей. Числа считаются по всему
+    разделу, поэтому одна добавленная запись меняла подпись `2026 (1842)` на
+    `2026 (1843)` — и меняла её на КАЖДОЙ странице раздела. Измерено
+    2026-09-03: одна запись перерисовывала 9266 страниц из 9717.
     """
-    types = [(k, TYPE_LABELS[k]) for k in kinds if catalog.of_type(k)]
     подпись = (lambda label, count: f"{label} ({count})") if with_counts else (
         lambda label, count: str(label))
     genres = [(slug, подпись(label, count)) for slug, label, count in catalog.genres(kinds)]
@@ -719,32 +833,45 @@ def _facets(catalog: fx.Catalog, kinds, *, show_type: bool, row: bool = False,
     countries = [(slug, подпись(label, count)) for slug, label, count in catalog.countries(kinds)]
 
     type_block = ""
-    if show_type and len(types) > 1:
-        type_block = (
-            '<fieldset><legend>Тип</legend>'
-            f'<select id="f-type" data-facet="type" aria-label="Тип">{_options(types, "Любой тип")}</select>'
+    if show_type:
+        types = [(k, TYPE_LABELS[k]) for k in kinds if catalog.of_type(k)]
+        if len(types) > 1:
+            chips = "".join(
+                f'<li><a class="facet__chip" href="/{escape(slug)}/">{escape(label)}</a></li>'
+                for slug, label in types)
+            type_block = ('<fieldset><legend>Тип</legend>'
+                          f'<ul class="facet__list">{chips}</ul></fieldset>')
+
+    # Сортировка остаётся только там, где она действительно работает: она
+    # действует поверх встроенного набора данных, а тот встраивается лишь при
+    # каталоге не больше DATASET_MAX_TITLES. На большом каталоге поле
+    # сортировки не отправляло никуда и меняло только собственное значение —
+    # ровно то, за что убраны поля фасетов. Убрать его совсем значило бы
+    # отнять работающую возможность у малых витрин.
+    sortable = len(catalog.of_types(kinds)) <= DATASET_MAX_TITLES
+    sort_block = ""
+    if sortable:
+        sort_block = (
+            '<fieldset><legend>Сортировка</legend>'
+            f'<select id="f-sort" name="sort" data-facet="sort" aria-label="Сортировка">'
+            f'{_options(SORTS[1:], SORTS[0][1])}</select>'
             "</fieldset>"
         )
+
     css = "facets facets--row" if row else "facets"
-    return (
-        f'<form class="{css}" id="facets" aria-label="Фильтры и сортировка">'
+    body = (
         "<h2>Фильтры</h2>"
         + type_block
-        + '<fieldset><legend>Жанр</legend>'
-        f'<select id="f-genre" data-facet="genre" aria-label="Жанр">{_options(genres, "Любой жанр")}</select>'
-        "</fieldset>"
-        '<fieldset><legend>Год</legend>'
-        f'<select id="f-year" data-facet="year" aria-label="Год">{_options(years, "Любой год")}</select>'
-        "</fieldset>"
-        '<fieldset><legend>Страна</legend>'
-        f'<select id="f-country" data-facet="country" aria-label="Страна">{_options(countries, "Любая страна")}</select>'
-        "</fieldset>"
-        '<fieldset><legend>Сортировка</legend>'
-        f'<select id="f-sort" data-facet="sort" aria-label="Сортировка">{_options(SORTS[1:], SORTS[0][1])}</select>'
-        "</fieldset>"
-        '<button class="facets__reset" type="reset">Сбросить</button>'
-        "</form>"
+        + _facet_links("/genres/", genres, title="Жанр", index_url="/genres/")
+        + _facet_links("/years/", years, title="Год", index_url="/years/")
+        + _facet_links("/countries/", countries, title="Страна", index_url="/countries/")
+        + sort_block
     )
+    # Форма нужна только ради поля сортировки; без него это перечень ссылок, и
+    # оборачивать его в форму значило бы обещать отправку, которой нет.
+    if sortable:
+        return f'<form class="{css}" id="facets" aria-label="Фильтры и сортировка">{body}</form>'
+    return f'<nav class="{css}" id="facets" aria-label="Фильтры">{body}</nav>'
 
 
 #: Выше этого размера полный набор в разметку не встраивается.
@@ -820,6 +947,20 @@ def _by_arrival(titles) -> list:
     )
 
 
+def _lede(text: str) -> str:
+    """Абзац подзаголовка — или ничего, если текста нет.
+
+    Пустой `<p class="lede"></p>` невидим, но не бесплатен: высота у него
+    нулевая, а нижний отступ — четырнадцать пикселей, и они складываются в
+    мёртвое место между заголовком и содержимым. На четырёх витринах таких
+    абзацев набиралось сто сорок шесть.
+
+    Пустое поле — не повод выводить пустой элемент.
+    """
+    text = (text or "").strip()
+    return f'<p class="lede">{escape(text)}</p>' if text else ""
+
+
 def _listing_pages(
     ctx,
     *,
@@ -837,16 +978,29 @@ def _listing_pages(
     show_type: bool = True,
     show_facets: bool = True,
     extra_top: str = "",
+    order: str = "catalog",
 ) -> list:
-    """Список с фасетами, сортировкой и пагинацией. Одна функция на все разделы."""
-    items = _sorted(titles)
+    """Список с фасетами, сортировкой и пагинацией. Одна функция на все разделы.
+
+    `order` выбирает порядок раздела. `catalog` — общий порядок витрины: год
+    выпуска, затем название. `arrival` — лента поступлений: сначала то, что
+    появилось у источника позже.
+
+    Порядок — не оформление. Раздел новинок обещает зрителю ленту поступлений,
+    и пока он получал общий порядок каталога, обещание не выполнялось: раздел
+    повторял каталог запись в запись.
+    """
+    items = _by_arrival(titles) if order == "arrival" else _sorted(titles)
     per_page = ctx["per_page"]
     # Разбиение по блокам годов ограничивает правку одним годом: добавленная
     # запись 2026-го трогает 82 страницы вместо 2216. Договор и цена перехода —
     # adr/0007-pagination-by-year-blocks.md. Пока владелец не согласился на
     # однократную смену состава страниц, поведение прежнее.
-    страницы = pagination_mod.разбить(
-        items, per_page, по_годам=bool(ctx.get("pagination_by_year")))
+    # Блоки годов группируют страницы по году выпуска. Для ленты поступлений это
+    # бессмысленно: она упорядочена по другой величине, и блоки пересобрали бы
+    # её обратно в каталог — то самое, чего раздел обещает не делать.
+    по_годам = bool(ctx.get("pagination_by_year")) and order != "arrival"
+    страницы = pagination_mod.разбить(items, per_page, по_годам=по_годам)
     pages_count = len(страницы)
     out = []
     position = ctx["facet_position"]
@@ -991,7 +1145,7 @@ def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
 
     hero_kind = ctx["hero"]
     hero_body = f'<h1>{escape(text.get("h1") or SECTION_LABELS["home"])}</h1>'
-    hero_body += f'<p class="lede">{escape(text.get("intro", ""))}</p>'
+    hero_body += _lede(text.get("intro", ""))
     if "hero_search" in blocks:
         hero_body += (
             '<form class="header-search" data-block="hero_search" role="search"'
@@ -1189,8 +1343,38 @@ def _collection_cards(ctx, catalog: fx.Catalog) -> str:
 # ---------------------------------------------------------------------------
 # Страница произведения
 # ---------------------------------------------------------------------------
+#: Типы, у которых серии бывают по устройству. Многосерийными бывают не только
+#: «Сериалы»: у аниме и дорам тот же разговор о сезонах.
+EPISODIC_TYPES = frozenset({fx.SERIES, fx.ANIME, fx.DORAMA})
+
+
 def _seasons_block(title: fx.Title) -> str:
+    """Раздел сезонов. Три состояния, а не два.
+
+    Прежде состояний было два, и выбор шёл по `episodic`, то есть по наличию
+    сезонов. Сериал, до которого не дошло обогащение, попадал в ветку фильма и
+    получал текст «У полнометражной записи сезонов нет» — страница
+    одновременно называла запись сериалом и утверждала, что она
+    полнометражная.
+
+    Измерено на боевом каталоге: сезоны приходят только через обогащение, а
+    оно покрывает 12 010 записей из 53 249 (22,6 %) при 20 314 помеченных
+    сериалами. То есть примерно у 86 % сериальных страниц сезонов нет просто
+    потому, что до них не дошло обогащение. Среди обогащённых сериалов сезоны
+    есть у 100 % — данные не теряются, их ещё не запросили.
+
+    Глубина обогащения принадлежит Core. Шаблон обязан не лгать о том, чего не
+    получил: «пока не получено» и «не существует» — разные утверждения, и
+    зритель имеет право их различать.
+    """
     if not title.episodic:
+        if title.content_type in EPISODIC_TYPES:
+            return (
+                '<section class="seasons"><h2>Серии</h2>'
+                '<p class="lede">Список серий пока не получен: сведения о сезонах '
+                "приходят отдельным запросом и до этой записи ещё не дошли. "
+                "Просмотр доступен по ссылке выше.</p></section>"
+            )
         return (
             '<section class="seasons"><h2>О фильме</h2>'
             '<p class="lede">У полнометражной записи сезонов нет: страница ведёт '
@@ -1326,6 +1510,27 @@ def _shown_rating(value) -> float | None:
     if isinstance(value, bool) or not isinstance(value, int | float):
         return None
     return float(value) if value > 0 else None
+
+
+def _external_id_attrs(title) -> str:
+    """Идентификаторы записи у внешних источников — машиночитаемо.
+
+    Не украшение и не разметка для поисковика: это происхождение. Оценку,
+    показанную на странице, без идентификатора нельзя ни проверить, ни
+    обновить, ни сопоставить с той же записью у другого поставщика. Полоса SEO
+    отдельным решением отказалась выпускать оценку без происхождения, и
+    идентификатор — его половина.
+
+    Ссылок здесь нет намеренно: адреса чужих карточек в замороженной базе не
+    объявлены, а придумывать их шаблону запрещено. Значение выдаётся как есть.
+    """
+    parts = []
+    for attr, name in (("kinopoisk_id", "data-kinopoisk-id"),
+                       ("imdb_id", "data-imdb-id")):
+        value = getattr(title, attr, None)
+        if value:
+            parts.append(f' {name}="{escape(str(value))}"')
+    return "".join(parts)
 
 
 def _ratings_block(title) -> str:
@@ -1464,11 +1669,15 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
 
     # Длительность в ноль минут — это не длительность, а её отсутствие: списочный
     # ответ источника хронометража не даёт вовсе.
-    duration = ""
-    if title.runtime_min:
-        duration = f"{title.runtime_min} мин"
-    if title.episodic:
-        duration = (duration + " · " if duration else "") + f"серий {title.episode_count}"
+    # Длительность — только хронометраж. Число серий раньше печаталось в этой
+    # же строке, и получалось «Длительность: серий 12»: подпись говорила об
+    # одном, значение о другом. У числа серий теперь своя строка рядом с
+    # числом сезонов, где ему и место.
+    #
+    # Длительность в ноль минут — не длительность, а её отсутствие: списочный
+    # ответ источника хронометража не даёт вовсе.
+    duration = f"{title.runtime_min} мин" if title.runtime_min else ""
+    episodes_fact = str(title.episode_count) if title.episodic and title.episode_count else ""
 
     def _join(values) -> str:
         """Список имён в строку. Длинный состав режется: страница не афиша."""
@@ -1487,6 +1696,7 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
         ("В ролях", _join(getattr(title, "actors", ()))),
         ("Озвучки", _join(getattr(title, "voices", ()))),
         ("Сезонов", str(getattr(title, "seasons_count", 0) or "") ),
+        ("Серий", episodes_fact),
         # У фикстуры это настоящие жанры. У живого каталога — теги источника:
         # они описывают запись, но жанрами не являются, и называть их жанрами
         # значило бы написать на странице фильма «Жанры: NR».
@@ -1503,11 +1713,12 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
     )
 
     head = (
-        f'<div class="title-head"><div class="title-head__poster">'
+        f'<div class="title-head"{_external_id_attrs(title)}>'
+        f'<div class="title-head__poster">'
         f'<img src="{escape(title.poster_src)}" alt="Постер: {escape(name)}" '
         'width="400" height="600"></div><div>'
         f"<h1>{escape(h1)}</h1>"
-        f'<p class="lede">{escape(title.summary)}</p>'
+        + _lede(title.summary)
         + _ratings_block(title)
         + f'<dl class="facts">{facts_html}</dl></div></div>'
     )
@@ -1516,8 +1727,8 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
         head
         + _player_block(ctx, title, name)
         + _seasons_block(title)
-        + f'<section class="section"><h2>{escape(_about_heading(title))}</h2>'
-        + f'<p class="lede">{escape(tpl.get("intro", ""))}</p></section>'
+        + '<section class="section"><h2>О карточке</h2>'
+        + _lede(tpl.get("intro", "")) + "</section>"
         + _related(catalog, title, kinds, ctx["row_items"])
         + _comments_block(ctx, title)
     )
@@ -1561,7 +1772,49 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
 # ---------------------------------------------------------------------------
 # Поиск, служебные документы и 404
 # ---------------------------------------------------------------------------
-def _search_body(text: dict, items) -> str:
+#: Адрес указателя поиска. Отдельный документ, а не встроенный в страницу
+#: набор: встраивать полный каталог в каждую страницу нельзя, а в одну
+#: страницу поиска — можно и нужно.
+SEARCH_INDEX_PATH = "/search-index.json"
+
+
+def _search_index_page(items) -> Page:
+    """Указатель поиска: то и только то, что нужно поиску по названию.
+
+    Почему отдельным документом. Клиентский набор списка встраивается в
+    страницу и потому ограничен: на боевом каталоге он не отдаётся вовсе, и
+    поиск не находил ничего — ни по адресу, ни при вводе. Ограничение было
+    верным, а следствие — нет: страница честно сообщала, что поиска нет, но
+    поиска от этого не появлялось.
+
+    Указатель решает обе задачи сразу. Он не утяжеляет ни одну страницу, кроме
+    страницы поиска, и забирается один раз по требованию. В нём нет ничего,
+    кроме адреса, названия, оригинального названия, года и типа: постеры,
+    описания, жанры и оценки поиску по названию не нужны, а весят больше всего
+    остального вместе взятого.
+
+    Поля названы одной буквой намеренно. При пятидесяти тысячах записей
+    человекочитаемые ключи — это лишний мегабайт, который платит зритель.
+    """
+    payload = [
+        {
+            "s": t.slug,
+            "n": t.name,
+            **({"o": t.original_name} if getattr(t, "original_name", "") else {}),
+            **({"y": t.year} if t.year else {}),
+            "t": TYPE_LABELS.get(t.content_type, t.content_type),
+        }
+        for t in items
+    ]
+    return Page(
+        path=SEARCH_INDEX_PATH,
+        body=json.dumps(payload, ensure_ascii=False, separators=(",", ":")),
+        content_type="application/json; charset=utf-8",
+        indexable=False,
+    )
+
+
+def _search_body(text: dict, items, *, index_enabled: bool = True) -> str:
     """Тело страницы поиска. Обещание соответствует возможности.
 
     Прежде страница всегда сообщала «поиск идёт по N записям каталога», где N —
@@ -1580,19 +1833,42 @@ def _search_body(text: dict, items) -> str:
     нет» отправляет туда, где выбор работает, — в разделы каталога.
     """
     dataset = _dataset(items)
+    if not dataset and not index_enabled:
+        # Владелец витрины отказался от указателя. Страница возвращается к
+        # прежнему состоянию: сообщает правду и отправляет туда, где выбор
+        # работает без него.
+        note = ('<p class="count" id="search-count">Поиск по названию на этой '
+                'витрине отключён. Воспользуйтесь разделами — '
+                '<a href="/catalog/">каталогом</a>, <a href="/genres/">жанрами</a>, '
+                '<a href="/years/">годами</a> и <a href="/countries/">странами</a>.</p>')
+        return (
+            f'<h1>{escape(text.get("h1", "Поиск"))}</h1>'
+            + _lede(text.get("intro", ""))
+            + note
+        )
     if dataset:
         note = (f'<p class="count" id="search-count">Введите название: поиск идёт по '
                 f'{len(items)} записям каталога.</p>')
     else:
-        note = ('<p class="count" id="search-count">Поиск по названию сейчас '
-                'недоступен: каталог слишком велик, чтобы отдать его страницей '
-                'целиком. Воспользуйтесь разделами — '
-                '<a href="/catalog/">каталогом</a>, <a href="/genres/">жанрами</a>, '
-                '<a href="/years/">годами</a> и <a href="/countries/">странами</a>.</p>')
+        # Прежде здесь стояло сообщение, что поиска нет: набор для клиентского
+        # поиска встраивается в страницу, а на боевом каталоге он не
+        # отдавался. Сообщение было честным, но поиска не заменяло.
+        #
+        # Теперь страница знает, где взять указатель, и забирает его по
+        # требованию — один документ, только на этой странице, только при
+        # первом запросе. Разделы каталога остаются в подсказке: пока
+        # указатель не загрузился, они и есть работающий путь.
+        note = (f'<p class="count" id="search-count" data-search-index="{SEARCH_INDEX_PATH}"'
+                f' data-search-total="{len(items)}">Введите название: поиск идёт по '
+                f'{len(items)} записям каталога. Указатель загружается при первом '
+                'запросе — это несколько секунд на медленной связи. Разделы '
+                '<a href="/catalog/">каталога</a>, <a href="/genres/">жанров</a>, '
+                '<a href="/years/">годов</a> и <a href="/countries/">стран</a> '
+                'работают без него.</p>')
     return (
         f'<h1>{escape(text.get("h1", "Поиск"))}</h1>'
-        f'<p class="lede">{escape(text.get("intro", ""))}</p>'
-        '<form class="header-search" role="search" action="/search/" method="get">'
+        + _lede(text.get("intro", ""))
+        + '<form class="header-search" role="search" action="/search/" method="get">'
         '<label class="visually-hidden" for="search-q">Строка поиска</label>'
         '<input id="search-q" name="q" type="search" placeholder="Название из каталога" '
         'autocomplete="off">'
@@ -1606,7 +1882,7 @@ def _search_body(text: dict, items) -> str:
 def _search_page(ctx, catalog: fx.Catalog, kinds) -> Page:
     text = ctx["texts"].get("search") or {}
     items = _sorted(catalog.of_types(kinds))
-    body = _search_body(text, items)
+    body = _search_body(text, items, index_enabled=bool(ctx.get("search_index_enabled")))
     meta = Meta(
         title=text.get("title", "Поиск"),
         description=text.get("description", "Поиск по каталогу."),
@@ -1727,7 +2003,146 @@ def _sitemap(ctx, indexable_paths) -> Page:
 #: ассета обязаны совпадать, а две независимые строки однажды разойдутся.
 ANALYTICS_ASSET_PATH = analytics_snippet.ANALYTICS_SCRIPT_URL
 
-APP_JS = """/* Lords — поведение интерфейса. Ни одного внешнего запроса. */
+APP_JS = r"""/* Lords — поведение интерфейса. Ни одного внешнего запроса. */
+
+/* Состояния плеера.
+ *
+ * Пустая область — не состояние. На боевой витрине <video-player> имел размер
+ * 0×0, скрипт поставщика был подключён, а запасной текст «Источник видео
+ * сейчас недоступен» оставался hidden: показать его было НЕКОМУ — строка
+ * data-player-fallback не упоминалась больше нигде. Зритель видел большой
+ * пустой прямоугольник без единого слова о том, что произошло.
+ *
+ * Состояния объявляются на обёртке атрибутом data-player-state, чтобы их
+ * можно было увидеть в разметке, а не угадывать по виду: loading → ready,
+ * unavailable или error.
+ *
+ * Повторов нет намеренно: недоступный источник от повторных попыток не
+ * становится доступным, а батарею они жгут.
+ */
+(function () {
+  var frame = document.querySelector(".player__frame");
+  if (!frame) { return; }
+  var fallback = frame.querySelector("[data-player-fallback]");
+  var element = frame.querySelector("video-player");
+  var script = document.querySelector("[data-player-script]");
+  var READY_TIMEOUT_MS = 8000;
+  var settled = false;
+
+  function set(state) {
+    if (settled) { return; }
+    settled = state !== "loading";
+    frame.setAttribute("data-player-state", state);
+    if (fallback) {
+      if (state === "unavailable" || state === "error") {
+        fallback.removeAttribute("hidden");
+      } else {
+        fallback.setAttribute("hidden", "");
+      }
+    }
+  }
+
+  set("loading");
+
+  if (script) {
+    script.addEventListener("error", function () { set("error"); });
+  }
+  if (!element) { set("unavailable"); return; }
+
+  /* Готовность определяется по регистрации элемента, а не по его размеру.
+   *
+   * Прежде здесь проверялось, что элемент «занял место». Признак оказался
+   * ложным: место ему даёт наша собственная зарезервированная область с
+   * заданной пропорцией — она есть всегда, даже когда скрипт провайдера не
+   * загрузился вовсе. Проверено на боевых данных при закрытых внешних
+   * хостах: состояние объявлялось `ready`, плеера не было, запасной текст
+   * оставался скрытым, и зритель получал пустой прямоугольник с пометкой
+   * «готово». Это хуже отсутствия состояний: неверное состояние обманывает и
+   * зрителя, и проверку.
+   *
+   * Настоящий признак — регистрация пользовательского элемента: конструктор
+   * появляется в реестре только после того, как скрипт провайдера его
+   * объявил. Ни размер, ни присутствие тега об этом не говорят.
+   *
+   * Ждать сигнала провайдера по-прежнему нельзя: контракт его не обещает, и
+   * страница осталась бы в загрузке навсегда. Поэтому срок ожидания
+   * ограничен, а по его истечении состояние называется прямо. */
+  function upgraded() {
+    return !!(window.customElements && window.customElements.get("video-player"));
+  }
+
+  function decide() {
+    if (!upgraded()) { set("unavailable"); return; }
+    var box = element.getBoundingClientRect();
+    if (box.width > 1 && box.height > 1) { set("ready"); } else { set("error"); }
+  }
+
+  if (window.customElements && window.customElements.whenDefined) {
+    window.customElements.whenDefined("video-player").then(function () {
+      if (!settled) { decide(); }
+    }).catch(function () { set("error"); });
+  }
+  window.setTimeout(decide, READY_TIMEOUT_MS);
+})();
+
+
+/* Выбор темы.
+ *
+ * Тема ставится встроенным скриптом в head до первого кадра; здесь только
+ * реакция на нажатие и сохранение. Разделение намеренно: обработчик приходит
+ * с отложенным файлом, и если бы тему ставил он, страница успевала бы
+ * мигнуть чужой палитрой.
+ *
+ * Состояний три, и все три ставят атрибут. Прежде «как в системе» атрибут
+ * снимало, а системная палитра применялась к странице без атрибута — то есть
+ * ко всякой странице, где зритель ничего не выбирал. Следствие измерено:
+ * витрины семейства lords_dark отрисовывались светлыми, ровно как lords_light,
+ * и два семейства выглядели одинаково.
+ *
+ * Умолчание витрины — палитра её профиля: это её опознавательный знак, и
+ * системная настройка не вправе его отменять молча. «Как в системе» остаётся
+ * равноправным выбором, но именно выбором.
+ */
+(function () {
+  var group = document.querySelector(".theme-switch");
+  if (!group) { return; }
+  var key = group.getAttribute("data-theme-key") || "lords-theme";
+  var root = document.documentElement;
+
+  /* Умолчание — не «как в системе», а «как задумано витриной»: пока зритель
+     не выбрал, ни одна кнопка не нажата, и действует палитра профиля. */
+  function current() {
+    try { return localStorage.getItem(key) || ""; } catch (e) { return ""; }
+  }
+
+  function paint() {
+    var value = current();
+    var buttons = group.querySelectorAll("button[data-theme-set]");
+    for (var i = 0; i < buttons.length; i += 1) {
+      var pressed = buttons[i].getAttribute("data-theme-set") === value;
+      buttons[i].setAttribute("aria-pressed", pressed ? "true" : "false");
+    }
+  }
+
+  function apply(value) {
+    if (value === "light" || value === "dark" || value === "system") {
+      root.setAttribute("data-theme", value);
+    } else {
+      root.removeAttribute("data-theme");
+    }
+    try { localStorage.setItem(key, value); } catch (e) { /* приватный режим */ }
+    paint();
+  }
+
+  group.addEventListener("click", function (event) {
+    var button = event.target.closest("button[data-theme-set]");
+    if (!button) { return; }
+    apply(button.getAttribute("data-theme-set"));
+  });
+
+  paint();
+})();
+
 (function () {
   "use strict";
 
@@ -1895,6 +2310,122 @@ APP_JS = """/* Lords — поведение интерфейса. Ни одно�
     apply(true);
   }
 })();
+
+/* Поиск по указателю.
+ *
+ * Работает только там, где встроенного набора нет, — на большом каталоге.
+ * Указатель забирается один раз и только по запросу зрителя: тянуть мегабайт
+ * при открытии страницы значило бы платить за поиск, которого не просили.
+ *
+ * Порядок совпадений тот же, что и у серверного сопоставления: точное
+ * совпадение, начало, вхождение. Нестрогого сравнения здесь нет намеренно —
+ * оно стоит дорого в браузере, а строгие совпадения покрывают почти всё; при
+ * пустой выдаче страница говорит об этом прямо, а не молчит.
+ */
+(function () {
+  var note = document.getElementById("search-count");
+  var grid = document.getElementById("grid");
+  var field = document.getElementById("search-q");
+  if (!note || !grid || !field) { return; }
+  var source = note.getAttribute("data-search-index");
+  if (!source) { return; }
+
+  var index = null;
+  var loading = false;
+  var message = note.innerHTML;
+
+  function say(text) { note.textContent = text; }
+
+  function normalize(value) {
+    return (value || "").toLowerCase().replace(/ё/g, "е").replace(/\s+/g, " ").trim();
+  }
+
+  function score(form, query) {
+    if (!form || !query) { return 0; }
+    if (form === query) { return 100; }
+    if (form.indexOf(query) === 0) { return 80; }
+    if (form.indexOf(query) >= 0) { return 60; }
+    return 0;
+  }
+
+  function render(query) {
+    var q = normalize(query);
+    if (q.length < 2) { grid.innerHTML = ""; note.innerHTML = message; return; }
+    var found = [];
+    for (var i = 0; i < index.length; i += 1) {
+      var item = index[i];
+      var best = Math.max(score(normalize(item.n), q), score(normalize(item.o || ""), q));
+      if (best) { found.push([best, normalize(item.n), i, item]); }
+    }
+    found.sort(function (a, b) {
+      if (a[0] !== b[0]) { return b[0] - a[0]; }
+      if (a[1] !== b[1]) { return a[1] < b[1] ? -1 : 1; }
+      return a[2] - b[2];
+    });
+    var shown = found.slice(0, 24);
+    if (!shown.length) {
+      grid.innerHTML = "";
+      say("По запросу «" + query + "» ничего не нашлось.");
+      return;
+    }
+    say("Найдено: " + found.length + (found.length > shown.length
+      ? ". Показаны первые " + shown.length + "." : "."));
+    var html = "";
+    for (var j = 0; j < shown.length; j += 1) {
+      var found_item = shown[j][3];
+      var meta = [found_item.y || "", found_item.t || ""].filter(Boolean).join(" · ");
+      html += '<article class="card"><div class="card__body">'
+        + '<a class="card__title" href="/title/' + encodeURIComponent(found_item.s) + '/">'
+        + found_item.n.replace(/[<>&]/g, "") + "</a>"
+        + (meta ? '<span class="card__meta">' + meta + "</span>" : "")
+        + "</div></article>";
+    }
+    grid.innerHTML = html;
+  }
+
+  function ensure(query) {
+    if (index) { render(query); return; }
+    if (loading) { return; }
+    loading = true;
+    say("Загружается указатель поиска…");
+    var request = new XMLHttpRequest();
+    request.open("GET", source, true);
+    request.onreadystatechange = function () {
+      if (request.readyState !== 4) { return; }
+      loading = false;
+      if (request.status !== 200) {
+        /* Отказ называется отказом. Молчание здесь неотличимо от «ничего не
+           найдено», а это разные вещи с разными действиями зрителя. */
+        say("Указатель поиска не загрузился. Воспользуйтесь разделами каталога.");
+        return;
+      }
+      try { index = JSON.parse(request.responseText); } catch (e) { index = null; }
+      if (!index) {
+        say("Указатель поиска повреждён. Воспользуйтесь разделами каталога.");
+        return;
+      }
+      render(query);
+    };
+    request.send();
+  }
+
+  var timer = null;
+  function schedule() {
+    if (timer) { window.clearTimeout(timer); }
+    timer = window.setTimeout(function () { ensure(field.value); }, 200);
+  }
+
+  field.addEventListener("input", schedule);
+  var form = field.closest("form");
+  if (form) {
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      ensure(field.value);
+    });
+  }
+  var initial = new URLSearchParams(window.location.search).get("q");
+  if (initial) { field.value = initial; ensure(initial); }
+})();
 """
 
 
@@ -1906,12 +2437,29 @@ def _index_page(ctx, *, path, section, pairs, trail_label, indexable) -> Page:
     text = ctx["texts"].get(section) or {}
     title = text.get("title") or SECTION_LABELS.get(section, section)
     h1 = text.get("h1") or title
-    lede = f'<p class="lede">{escape(text.get("intro", ""))}</p>' if text.get("intro") else ""
-    body = (
-        f"<h1>{escape(h1)}</h1>{lede}"
-        f'<p class="count">Значений с непустым списком: {len(pairs)}.</p>'
-        + _chips(pairs)
-    )
+    lede = _lede(text.get("intro", ""))
+    if pairs:
+        body = (
+            f"<h1>{escape(h1)}</h1>{lede}"
+            f'<p class="count">Значений с непустым списком: {len(pairs)}.</p>'
+            + _chips(pairs)
+        )
+    else:
+        # Пустой указатель — тупик, а не страница. Прежде здесь оставались
+        # «Значений с непустым списком: 0» и пустой список: раздел объявлен в
+        # навигации на каждой странице витрины, зритель приходит и упирается в
+        # ноль без объяснения и без выхода.
+        #
+        # Причина у пустоты всегда одна и та же — источник не дал этих
+        # сведений, — и назвать её честнее, чем показать ноль. Ссылки ведут
+        # туда, где выбор работает: раздел без значений не должен уводить
+        # зрителя с витрины.
+        body = (
+            f"<h1>{escape(h1)}</h1>{lede}"
+            '<p class="empty">Источник не сообщил этих сведений ни по одной '
+            'записи каталога, поэтому выбирать здесь пока не из чего. '
+            'Работают <a href="/catalog/">каталог</a> и поиск по названию.</p>'
+        )
     meta = Meta(
         title=title,
         description=text.get("description", f"{title} каталога."),
@@ -1933,8 +2481,8 @@ def _collections_index(ctx, catalog: fx.Catalog, indexable: bool) -> Page:
     )
     body = (
         f'<h1>{escape(text.get("h1") or title)}</h1>'
-        f'<p class="lede">{escape(text.get("intro", ""))}</p>'
-        f'<p class="count">Подборок: {len(catalog.collections)}.</p>'
+        + _lede(text.get("intro", ""))
+        + f'<p class="count">Подборок: {len(catalog.collections)}.</p>'
         f'<div class="grid">{cards}</div>'
     )
     meta = Meta(
@@ -1950,7 +2498,7 @@ def _schedule_page(ctx, catalog: fx.Catalog, kinds, indexable: bool) -> Page:
     title = text.get("title") or SECTION_LABELS["schedule"]
     body = (
         f'<h1>{escape(text.get("h1") or title)}</h1>'
-        f'<p class="lede">{escape(text.get("intro", ""))}</p>'
+        + _lede(text.get("intro", ""))
         + (_calendar(catalog, kinds) or '<p class="empty">Многосерийных записей нет.</p>')
     )
     meta = Meta(
@@ -2001,10 +2549,6 @@ def _context(package: dict, profile: dict, site_plan, player_state,
         "profile": site_plan.profile,
         "brand": brand,
         "tokens": theme_mod.tokens_of(profile),
-        # Переключатель темы включается наличием второй палитры у витрины,
-        # а не отдельным флагом: флаг и палитра однажды разойдутся, и
-        # кнопка останется на витрине, где переключать нечего.
-        "theme_switch": theme_mod.theme_switch_available(profile),
         "carousel_heading": str(layout.get("carousel_heading") or "Новинки"),
         "mark": "".join(word[0] for word in brand.split()[:2]).upper() or "L",
         "language": str(package.get("language") or "ru"),
@@ -2030,6 +2574,12 @@ def _context(package: dict, profile: dict, site_plan, player_state,
         # Выключено по умолчанию: включение меняет состав страниц один раз и
         # требует согласия владельца (adr/0007).
         "pagination_by_year": bool((package.get("seo") or {}).get("pagination_by_year")),
+        # Указатель поиска на большом каталоге весит около мегабайта в сжатом
+        # виде и забирается один раз на странице поиска. Цена заметная, и
+        # решение о ней принадлежит владельцу витрины, а не рендереру: флаг
+        # опускается одной строкой в пакете и возвращает прежнее поведение —
+        # честное сообщение о недоступности поиска и разделы каталога.
+        "search_index_enabled": (package.get("seo") or {}).get("search_index", True) is not False,
         "home_items": 12,
         "row_items": 6,
         "facet_position": str(layout.get("facet_position")),
@@ -2203,7 +2753,8 @@ def render_site(
     def texts_of(section: str) -> dict:
         return ctx["texts"].get(section) or {}
 
-    def listing(section, *, base, titles, subset, trail_label, show_type=True):
+    def listing(section, *, base, titles, subset, trail_label, show_type=True,
+                order="catalog"):
         entry = by_section.get(section)
         if entry is None:
             return
@@ -2215,6 +2766,7 @@ def render_site(
             description=text.get("description", f"{title} каталога."),
             intro=text.get("intro", ""), indexable=entry.indexable,
             trail=(("Главная", "/"), (trail_label, "")), show_type=show_type,
+            order=order,
         ):
             add(page)
 
@@ -2233,7 +2785,8 @@ def render_site(
 
     # Новое
     listing("new_index", base="/new/", titles=pool, subset=kinds,
-            trail_label=texts_of("new_index").get("title") or "Новое")
+            trail_label=texts_of("new_index").get("title") or "Новое",
+            order="arrival")
 
     # Расписание
     if "schedule" in by_section:
@@ -2321,6 +2874,11 @@ def render_site(
     # Поиск и служебные документы
     if "search" in by_section:
         add(_search_page(ctx, catalog, kinds))
+        # Указатель отдаётся только тогда, когда встроенного набора нет: при
+        # малом каталоге он дублировал бы уже встроенные данные.
+        search_items = _sorted(catalog.of_types(kinds))
+        if ctx.get("search_index_enabled") and len(search_items) > DATASET_MAX_TITLES:
+            add(_search_index_page(search_items))
     indexable_paths = sorted(p for p, page in site.pages.items() if page.indexable)
     for icon_page in _icon_pages(ctx):
         add(icon_page)
@@ -2334,7 +2892,10 @@ def render_site(
     site.not_found = _not_found(ctx)
 
     # Ассеты
-    add(Page(path="/assets/site.css", body=theme_mod.stylesheet(profile),
+    add(Page(path="/assets/site.css",
+             body=theme_mod.stylesheet(
+                 profile,
+                 declared_theme=str(((package.get("tenant") or {}).get("theme")) or "") or None),
              content_type="text/css; charset=utf-8"))
     add(Page(path="/assets/app.js", body=APP_JS,
              content_type="text/javascript; charset=utf-8"))

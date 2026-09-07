@@ -72,13 +72,35 @@ class TestNothingIsInvented:
         assert render._shown_rating(junk) is None
 
 
-class TestTheCardShowsOneRating:
-    def test_kinopoisk_wins_when_both_exist(self):
+class TestTheCardShowsEveryAvailableRating:
+    """Решение пересмотрено: карточка показывает ОБЕ оценки, когда обе есть.
+
+    Прежде здесь стояло `test_kinopoisk_wins_when_both_exist`: карточка
+    показывала одну оценку, Кинопоиск или, при его отсутствии, IMDb. Довод был
+    вёрсточный — «две мелкие подписи под обложкой спорят друг с другом», — и
+    он не был ошибкой.
+
+    Пересмотрено по двум причинам.
+
+    Первая: скрытая оценка не теряется в данных, но теряется для зрителя. Он
+    не знает, что у записи есть вторая, и не может сравнить. На первой странице
+    боевого каталога такие записи есть — у двух из двадцати четырёх обе оценки,
+    а видна была одна.
+
+    Вторая: спор подписей — задача вёрстки, а не умолчания источника. Группа
+    `.card__ratings` переносит обе оценки вместе и не даёт им разъехаться.
+
+    Прежний тест не удалён, а заменён на противоположное утверждение с
+    объяснением: удалить его значило бы стереть след решения.
+    """
+
+    def test_both_are_shown_when_both_exist(self):
         html = render._card_rating(rated(7.0, 9.0))
-        assert "Кинопоиск" in html and "IMDb" not in html
+        assert "Кинопоиск" in html and "IMDb" in html
 
     def test_imdb_is_used_when_kinopoisk_is_absent(self):
-        assert "IMDb" in render._card_rating(rated(None, 9.0))
+        html = render._card_rating(rated(None, 9.0))
+        assert "IMDb" in html and "Кинопоиск" not in html
 
     def test_the_card_rating_reaches_the_grid(self):
         html = render._grid([rated(7.28, None)])

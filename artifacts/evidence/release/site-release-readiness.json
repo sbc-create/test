@@ -44,7 +44,7 @@
   ],
   "slots": {
     "lords": {
-      "total": 88,
+      "total": 79,
       "gates": {
         "artifact_identity": {
           "points": 10,
@@ -62,8 +62,8 @@
           "blocked": false
         },
         "render_live": {
-          "points": 9,
-          "note": "расписка о сборке: lords-02.render.json",
+          "points": 0,
+          "note": "сборка на живом каталоге идёт или не запускалась (расписки нет)",
           "blocked": false
         },
         "preswitch_gates": {
@@ -319,5 +319,5 @@
       }
     }
   },
-  "average": 40
+  "average": 39
 }

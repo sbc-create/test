@@ -1,0 +1,42 @@
+{
+  "captured_at_utc": "2026-09-07T00:24:40.816Z",
+  "palettes": {
+    "lords-01": {
+      "theme": "lords_dark",
+      "canvasColor": "rgb(17, 17, 17)",
+      "textColor": "rgb(230, 230, 230)",
+      "canvasLuminance": 0.006,
+      "textLuminance": 0.791,
+      "contrast": 15.13
+    },
+    "lords-02": {
+      "theme": "lords_dark",
+      "canvasColor": "rgb(17, 17, 17)",
+      "textColor": "rgb(230, 230, 230)",
+      "canvasLuminance": 0.006,
+      "textLuminance": 0.791,
+      "contrast": 15.13
+    },
+    "lords-03": {
+      "theme": "lords_light",
+      "canvasColor": "rgb(244, 246, 248)",
+      "textColor": "rgb(21, 26, 33)",
+      "canvasLuminance": 0.919,
+      "textLuminance": 0.01,
+      "contrast": 16.13
+    },
+    "lords-04": {
+      "theme": "lords_light",
+      "canvasColor": "rgb(244, 246, 248)",
+      "textColor": "rgb(21, 26, 33)",
+      "canvasLuminance": 0.919,
+      "textLuminance": 0.01,
+      "contrast": 16.13
+    },
+    "различие": {
+      "dark": 0.006,
+      "light": 0.919,
+      "ratio": 17.30357142857143
+    }
+  }
+}
