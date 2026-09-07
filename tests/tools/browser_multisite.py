@@ -18,6 +18,13 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+
+# Инструменты запускаются как сценарии, а не импортируются пакетом: путь к
+# соседнему модулю добавляется явно.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+import stand_env  # noqa: E402
+
 APP = ROOT / "blueprints" / "payload-next-multisite" / "app"
 
 
@@ -34,17 +41,9 @@ def main() -> int:
         return 2
 
     port = free_port()
-    env = dict(os.environ)
-    env.update({
-        "PLAYER_PUBLISHER_ID_A": "stand-publisher-a",
-        "PLAYER_PUBLISHER_ID_B": "stand-publisher-b",
-        "PLAYER_PUBLISHER_ID_C": "stand-publisher-c",
-        "PLAYER_MODE": "mock",
-        "FACTORY_ENVIRONMENT": "staging",
-        # Заведомо «секретное» значение: тест проверяет, что оно не попало в страницу.
-        "CDNVIDEOHUB_API_TOKEN": "stand-content-api-token-must-not-leak",
-        "FACTORY_MULTISITE_PORT": str(port),
-    })
+    # Заведомо «секретное» значение включено намеренно: его ищет в выдаче
+    # `tests/e2e-multisite/player.spec.js` и требует, чтобы оно там не нашлось.
+    env = stand_env.stand_environment(port=port, with_leak_canary=True)
 
     seeding = subprocess.run(
         [sys.executable, str(ROOT / "tests/tools/with_app_env.py"), "--scope", "anime", "--push", "--",
