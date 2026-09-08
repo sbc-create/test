@@ -1,0 +1,17 @@
+{
+ "handshake": true,
+ "exportDigest": "4c16c636a8b2f3780a82e78be1183f81",
+ "exportRecords": 300,
+ "jobsFromExport": 40,
+ "jobsAfterReplay": 40,
+ "schedulerFirstPlanned": 0,
+ "schedulerSecondPlanned": 0,
+ "processed": 40,
+ "processedUnique": 40,
+ "leaseReclaimed": true,
+ "permanentAttempts": 1,
+ "permanentState": "DEAD_LETTER",
+ "deadStaysDead": false,
+ "jobsAfterRestart": 42,
+ "succeededAfterRestart": 40
+}
