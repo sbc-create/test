@@ -171,9 +171,30 @@ if [ "${PHASE}" = "render" ]; then
 
   rm -rf "${STAGING}"
   mkdir -p "${STAGING}"
+
+  # Снимок замораживается до сборки, и сборка идёт из копии.
+  #
+  # Живой файл переписывается обновлением содержимого каждые десять минут, а
+  # полный рендер идёт часами. Прежняя редакция строила прямо из живого файла и
+  # записывала в расписку только его отпечаток: к концу сборки снимка с этим
+  # отпечатком уже не существовало физически, и предпереключательные ворота
+  # нечем было выполнить — сравнивать построенное было не с чем.
+  FROZEN_DIR="${STAGING_ROOT}/${SITE}.snapshot"
+  FROZEN_SNAPSHOT="${FROZEN_DIR}/${SITE}.json"
+  rm -rf "${FROZEN_DIR}"
+  mkdir -p "${FROZEN_DIR}"
+  cp -a "${SNAPSHOT}" "${FROZEN_SNAPSHOT}" \
+    || die "снимок каталога не заморожен: ${SNAPSHOT}"
+  read -r FROZEN_ITEMS FROZEN_DIGEST < <(
+    "${PYTHON}" "${SCRIPT_DIR}/lords-canary-snapshot.py" "${FROZEN_SNAPSHOT}") \
+    || die "замороженный снимок не прочитан: ${FROZEN_SNAPSHOT}"
+  [ "${FROZEN_DIGEST}" = "${SNAPSHOT_DIGEST}" ] \
+    || die "снимок изменился между чтением и заморозкой: ${FROZEN_DIGEST} вместо ${SNAPSHOT_DIGEST}"
+  log "снимок заморожен: ${FROZEN_SNAPSHOT}"
+
   log "собираю витрину на живом каталоге (полный рендер, это долго)"
   BUILD_STARTED="$(date -u +%s)"
-  LORDS_SNAPSHOT_DIR="${SNAPSHOT_DIR}" \
+  LORDS_SNAPSHOT_DIR="${FROZEN_DIR}" \
     "${PYTHON}" "${SCRIPT_DIR}/lords-canary-build.py" "${SITE}" "${STAGING}" \
     || die "сборка на живом каталоге не выполнена; боевая витрина не тронута"
   PAGES="$(find "${STAGING}" -name index.html | wc -l)"
@@ -190,6 +211,8 @@ if [ "${PHASE}" = "render" ]; then
   "template_digest": "${DIGEST}",
   "content_snapshot_digest": "${SNAPSHOT_DIGEST}",
   "content_snapshot_items": ${SNAPSHOT_ITEMS},
+  "content_snapshot_path": "${FROZEN_SNAPSHOT}",
+  "content_snapshot_source": "${SNAPSHOT}",
   "pages": ${PAGES},
   "staging": "${STAGING}"
 }
@@ -218,7 +241,29 @@ print(json.load(open(sys.argv[1], encoding="utf-8"))["content_snapshot_digest"])
 SNAPSHOT_ITEMS="$("${PYTHON}" -c '
 import json, sys
 print(json.load(open(sys.argv[1], encoding="utf-8"))["content_snapshot_items"])' "${RENDER_RECEIPT}")"
+
+# Путь снимка берётся из расписки, а не вычисляется заново.
+#
+# Прежняя редакция считала его сама, по умолчанию внутри рабочего дерева, где
+# снимка нет никогда. Рендер при этом запускался с указанием на настоящий
+# каталог, и две фазы договаривались о том, что построено, не договариваясь о
+# том, из чего. Отказ выглядел как FileNotFoundError уже под root.
+SNAPSHOT="$("${PYTHON}" -c '
+import json, sys
+print(json.load(open(sys.argv[1], encoding="utf-8")).get("content_snapshot_path") or "")' "${RENDER_RECEIPT}")"
+[ -n "${SNAPSHOT}" ] \
+  || die "расписка о сборке не называет путь снимка: пересоберите кандидата этой же оснасткой"
+[ -f "${SNAPSHOT}" ] \
+  || die "снимок из расписки не существует: ${SNAPSHOT}"
+read -r ACTUAL_ITEMS ACTUAL_DIGEST < <(
+  "${PYTHON}" "${SCRIPT_DIR}/lords-canary-snapshot.py" "${SNAPSHOT}") \
+  || die "снимок из расписки не прочитан: ${SNAPSHOT}"
+[ "${ACTUAL_DIGEST}" = "${SNAPSHOT_DIGEST}" ] \
+  || die "снимок из расписки изменился: ${ACTUAL_DIGEST} вместо ${SNAPSHOT_DIGEST}"
+[ "${ACTUAL_ITEMS}" = "${SNAPSHOT_ITEMS}" ] \
+  || die "в снимке из расписки ${ACTUAL_ITEMS} записей вместо ${SNAPSHOT_ITEMS}"
 log "расписка о сборке принята: снимок ${SNAPSHOT_DIGEST}, записей ${SNAPSHOT_ITEMS}"
+log "снимок кандидата: ${SNAPSHOT}"
 
 CURRENT="$(readlink -f "${RUNTIME}/current" 2>/dev/null || true)"
 [ -n "${CURRENT}" ] || die "у витрины нет текущего релиза: откатываться будет некуда"
