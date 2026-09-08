@@ -320,6 +320,48 @@ if [ "${ok}" != "1" ]; then
   die "витрина не ответила после подмены; возвращена на $(basename "${CURRENT}")"
 fi
 
+# Манифест релиза: без него витрина перестаёт обновляться.
+#
+# Прежняя редакция создавала релиз и переключала ссылку, не оставляя
+# `release-manifest.json`. Дальше происходило вот что: ворота обновления
+# содержимого читают манифест действующего релиза, чтобы взять из него шаблон,
+# и без манифеста отказывают — а при отказе ворот обновление **пропускает
+# витрину**. То есть переключение проходило успешно, витрина отвечала 200, и
+# каталог на ней замирал навсегда, молча.
+#
+# Манифест пишет тот же сторож, что его потом и читает: одна реализация на
+# запись и на проверку, иначе они разойдутся. Он же собирает архив шаблона в
+# хранилище артефактов и сверяет отпечаток архива — манифест, ссылающийся на
+# несуществующий артефакт, не проходит собственные инварианты.
+GUARD="${SCRIPT_DIR}/lords-refresh-guard.py"
+PREV_MANIFEST="${CURRENT}/release-manifest.json"
+if [ -f "${GUARD}" ] && [ -f "${PREV_MANIFEST}" ]; then
+  DOMAIN="$("${PYTHON}" -c '
+import json, sys
+print(json.load(open(sys.argv[1], encoding="utf-8"))["domain"])' "${PREV_MANIFEST}")"
+  THEME="$("${PYTHON}" -c '
+import json, sys
+print(json.load(open(sys.argv[1], encoding="utf-8"))["theme"])' "${PREV_MANIFEST}")"
+  log "пишу манифест релиза ${RELEASE} (домен ${DOMAIN}, тема ${THEME})"
+  if ! "${PYTHON}" "${GUARD}" \
+       --runtime-root "$(dirname "${RUNTIME}")" \
+       --artifact-root "${LORDS_ARTIFACT_ROOT:-$(dirname "${RUNTIME}")/.artifacts}" \
+       adopt "${SITE}" \
+       --revision "${HEAD_SHA}" --repo "${REPO}" \
+       --domain "${DOMAIN}" --theme "${THEME}" \
+       --content-source cdnvideohub-live \
+       --package-ref "lords-tooling/${HEAD_SHA:0:12}" \
+       --snapshot "${SNAPSHOT_DIGEST}" \
+       --content-count "${SNAPSHOT_ITEMS}"; then
+    log "манифест не записан — откатываю: витрина без манифеста перестаёт обновляться"
+    ln -sfn "${CURRENT}" "${RUNTIME}/current"
+    [ "${NEED_RESTART}" = "1" ] && systemctl restart "${SITE}.service"
+    die "манифест релиза не записан; витрина возвращена на $(basename "${CURRENT}")"
+  fi
+else
+  log "ВНИМАНИЕ: сторожа или прежнего манифеста нет — манифест релиза не записан"
+fi
+
 mkdir -p "${AUDIT_DIR}"
 AUDIT="${AUDIT_DIR}/lords-canary-${SITE}-${RELEASE}.json"
 cat > "${AUDIT}" <<JSON
