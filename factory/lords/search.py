@@ -113,6 +113,59 @@ def _variants(query: str) -> tuple[str, ...]:
     return tuple(v for v in out if v)
 
 
+#: Потолок нестрогой оценки. Строгие совпадения начинаются с 60, и нестрогое
+#: не должно до них дотягиваться: иначе запрос с опечаткой встал бы выше
+#: точного названия.
+FUZZY_CEILING = 39
+
+
+def _token_tolerance(token: str) -> int:
+    """Допуск на одно слово запроса. Та же мера, что и у односложного пути."""
+    return max(1, len(token) // 4)
+
+
+def _token_cost(words, token: str) -> int | None:
+    """Наименьшая цена, которой слово запроса находит себе слово в названии.
+
+    Ноль — слово совпало точно или запрос набран началом слова. Иначе цена
+    равна расстоянию. `None` — слово запроса не отвечено ничем, и вся запись
+    тогда не отвечает запросу: искать «матрица колец» и получить «Матрицу»
+    значит найти не то, о чём просили.
+    """
+    tolerance = _token_tolerance(token)
+    best: int | None = None
+    for word in words:
+        if word == token:
+            return 0
+        # Начало слова — обычное сокращение при наборе, а не ошибка. Короче
+        # трёх букв не считается: «во» начинает слишком многое.
+        if len(token) >= 3 and word.startswith(token):
+            return 0
+        if abs(len(word) - len(token)) > tolerance:
+            continue
+        d = distance(word, token, limit=tolerance)
+        if d <= tolerance and (best is None or d < best):
+            best = d
+    return best
+
+
+def _score_by_tokens(form: str, tokens: list[str]) -> int:
+    """Оценка многословного запроса: по самому слабому из совпадений.
+
+    Запись обязана ответить на КАЖДОЕ слово запроса. Иначе нестрогость нашла
+    бы всё подряд: достаточно было бы одного общего слова.
+    """
+    words = form.split()
+    worst = 0
+    for token in tokens:
+        cost = _token_cost(words, token)
+        if cost is None:
+            return 0
+        if cost > worst:
+            worst = cost
+    return min(FUZZY_CEILING, 40 - worst)
+
+
 def _score(form: str, query: str) -> int:
     """Насколько написание отвечает запросу. Ноль — не отвечает."""
     if not form or not query:
@@ -123,6 +176,15 @@ def _score(form: str, query: str) -> int:
         return 80
     if query in form:
         return 60
+    # Многословный запрос меряется по словам. Прежде каждое слово названия
+    # сравнивалось со ВСЕЙ строкой запроса, и слово «дней» никогда не
+    # оказывалось на расстоянии двух от строки «100 днеи» — длины
+    # несопоставимы. Поэтому опечатка в многословном запросе не находилась
+    # вовсе: замер на боевом lordfilm47.space 7 сентября 2026 дал ноль записей
+    # при пяти на том же запросе без опечатки.
+    tokens = query.split()
+    if len(tokens) > 1:
+        return _score_by_tokens(form, tokens)
     # Нестрогое сравнение — по словам: запрос обычно короче полного названия,
     # и сравнивать его целиком с длинной строкой значило бы не найти ничего.
     limit = max(1, len(query) // 4)
