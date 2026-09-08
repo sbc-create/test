@@ -31,22 +31,69 @@ class ArtifactError(Exception):
     """Артефакт недоступен, подменён или непригоден для отрисовки."""
 
 
+def понижение_прав(repo: Path | str) -> tuple[dict, str]:
+    """Как выполнить git в чужом дереве, не давая root доверять этому дереву.
+
+    Дефект LORDS-RELEASE-ADOPT-GIT-PRIVILEGED-33. `adopt` вызывается фазой
+    `switch`, а та идёт от root. Рабочее дерево принадлежит `claude`, и git
+    отказывается работать с каталогом чужого владельца: сборка архива падала,
+    манифест не записывался, и выкладка честно откатывалась уже после подмены
+    ссылки. Три часа отрисовки при этом были целы — ломался последний шаг.
+
+    Лечится не доверием, а понижением прав. `safe.directory` заставил бы root
+    доверять чужому дереву — ровно то, чего избегает
+    `lords-canary-provenance.py`: «без git в привилегированном пути… и без
+    доверия к чужому каталогу». Здесь привилегированный процесс вместо этого
+    перестаёт быть привилегированным на время чтения: потомок переходит под
+    владельца дерева. Движение прав вниз, а не вверх.
+
+    Возвращает добавку к вызову `subprocess` и объяснение для журнала.
+    """
+    if os.geteuid() != 0:
+        return {}, "прав не понижаем: процесс и так не root"
+    try:
+        владелец = os.stat(repo).st_uid
+    except OSError as ошибка:
+        raise ArtifactError(f"дерево {repo} недоступно: {ошибка}") from ошибка
+    if владелец == 0:
+        return {}, "дерево принадлежит root: понижать не к кому"
+
+    import grp
+    import pwd
+
+    запись = pwd.getpwuid(владелец)
+    группы = sorted({g.gr_gid for g in grp.getgrall() if запись.pw_name in g.gr_mem}
+                    | {запись.pw_gid})
+
+    def подготовка() -> None:  # pragma: no cover — исполняется в потомке
+        os.setgroups(группы)
+        os.setgid(запись.pw_gid)
+        os.setuid(владелец)
+
+    return ({"preexec_fn": подготовка},
+            f"git выполняется от {запись.pw_name} (uid {владелец}), а не от root")
+
+
 def собрать(repo: Path | str, revision: str, out: Path | str) -> dict[str, str]:
     """Архив ревизии репозитория. Ревизия — полный SHA, а не ветка.
 
     Ветка — движущаяся ссылка: артефакт, собранный «из ветки», через день
     означает другое содержимое, и отпечаток перестаёт что-либо доказывать.
+
+    Вызов от root в дереве другого владельца выполняется с понижением прав —
+    см. `понижение_прав`.
     """
     if len(revision) != 40 or not all(с in "0123456789abcdef" for с in revision.lower()):
         raise ArtifactError(f"ревизия должна быть полным SHA: {revision!r}")
     цель = Path(out)
     цель.parent.mkdir(parents=True, exist_ok=True)
     временный = цель.with_suffix(цель.suffix + ".tmp")
+    добавка, _ = понижение_прав(repo)
     try:
         with open(временный, "wb") as ф:
             subprocess.run(
                 ["git", "-C", str(repo), "archive", "--format=tar.gz", revision],
-                stdout=ф, stderr=subprocess.PIPE, check=True, timeout=600,
+                stdout=ф, stderr=subprocess.PIPE, check=True, timeout=600, **добавка,
             )
     except subprocess.CalledProcessError as ошибка:
         временный.unlink(missing_ok=True)

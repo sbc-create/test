@@ -1,33 +1,39 @@
 #!/bin/bash
-# Установка и запуск выкладки Lords в отдельном systemd-юните.
+# Установка и запуск ночной выкладки Lords в отдельном systemd-юните.
 #
-# Запускается от root, работает секунды и завершается сразу: сама выкладка
-# продолжается в юните и переживает закрытый терминал. Ждать в открытом SSH не
-# требуется — итог остаётся в файлах.
+# Запускается от root с исполняемой файловой системы (/usr/local/sbin), работает
+# секунды и завершается. Сама выкладка продолжается в юните и переживает
+# закрытый терминал: ждать в открытом SSH не требуется, итог остаётся в файлах.
 #
 # Кандидат:  f8f20dde0efb24e58f239c8e662cdbb5f0bf2bcf
 # Отпечаток: a0cfaf7135255d62e70432162cadc554c393c2c01dec3936baddafd8ca694859
 #
-# Дефект LORDS-RELEASE-INVOCATION-REUSE-32 исправлен: запуск юнита
-# доказывается новой непустой InvocationID во время работы, а не сравнением
-# пустых значений после выгрузки юнита.
+# Исправлены: LORDS-RELEASE-INVOCATION-REUSE-32 (запуск юнита доказывается новой
+# InvocationID во время работы) и LORDS-RELEASE-ADOPT-GIT-PRIVILEGED-33 (архив
+# ревизии собирается до переключения и без привилегий; git в привилегированном
+# пути не участвует).
 set -Eeuo pipefail
-
-SITE="${1:-lords-02}"
 
 if [ "$(id -u)" != "0" ]; then
   echo "запускает root"
   exit 1
 fi
 
+# /run смонтирован noexec: рабочие сценарии туда кладутся как данные и
+# запускаются только через интерпретатор. Сам этот файл обязан лежать на
+# исполняемом разделе — иначе владелец не смог бы его запустить.
+СВОЙ="$(readlink -f "$0")"
+if findmnt -no OPTIONS -T "${СВОЙ}" 2>/dev/null | grep -q noexec; then
+  echo "этот файл лежит на noexec-разделе: ${СВОЙ}"
+  exit 1
+fi
+
 STAMP="$(date -u +%Y%m%d-%H%M%S)"
-UNIT="lords-release-${SITE}-${STAMP}"
+UNIT="lords-release-night-${STAMP}"
 LIB=/run/lords-unit-launch.sh
 RUNNER=/run/lords-release-runner.sh
-VERDICT="/run/${SITE}-release.verdict"
-REPORT="/var/log/site-factory/${SITE}-release-report.json"
-
-rm -f "${VERDICT}" "${REPORT}"
+CONDUCT=/run/lords-release-conduct.sh
+SUMMARY=/var/log/site-factory/lords-release-summary.json
 
 cat > "${LIB}" <<'LIB_EOF'
 @@LIB@@
@@ -37,20 +43,28 @@ cat > "${RUNNER}" <<'RUNNER_EOF'
 @@RUNNER@@
 RUNNER_EOF
 
-chmod 0700 "${LIB}" "${RUNNER}"
+cat > "${CONDUCT}" <<'CONDUCT_EOF'
+@@CONDUCT@@
+CONDUCT_EOF
 
+# Права данных, а не программ: запуск идёт через /bin/bash.
+chmod 0600 "${LIB}" "${RUNNER}" "${CONDUCT}"
+
+# Повторный безопасный запуск: имя юнита уникально, а от одновременных релизов
+# одной витрины защищает flock внутри runner.
 if ! systemd-run --unit="${UNIT}" --service-type=oneshot --no-block --collect \
-     --property=TimeoutStartSec=32400 --property=KillMode=mixed \
+     --property=TimeoutStartSec=43200 --property=KillMode=mixed \
      --property=StandardOutput=journal --property=StandardError=journal \
-     --setenv=LAUNCH_LIB="${LIB}" \
-     /bin/bash "${RUNNER}" "${SITE}" >/dev/null; then
-  echo "юнит ${UNIT} не запустился; витрина не тронута"
+     --setenv=LAUNCH_LIB="${LIB}" --setenv=RUNNER="${RUNNER}" \
+     /bin/bash "${CONDUCT}" >/dev/null; then
+  echo "юнит ${UNIT} не запустился; витрины не тронуты"
   exit 1
 fi
 
-echo "выкладка ${SITE} идёт в юните ${UNIT}"
-echo "терминал можно закрыть: юнит переживёт разрыв SSH"
+echo "ночная выкладка идёт в юните ${UNIT}"
+echo "терминал можно закрыть"
 echo
-echo "итог:   ${VERDICT}"
-echo "отчёт:  ${REPORT}"
-echo "журнал: journalctl -u ${UNIT} -f -o cat"
+echo "свод:    ${SUMMARY}"
+echo "итоги:   /run/lords-0{1,2,3}-release.verdict"
+echo "отчёты:  /var/log/site-factory/lords-0*-release-report.json"
+echo "журналы: /var/log/site-factory/lords-*-release-*.log"
