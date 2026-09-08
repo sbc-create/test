@@ -1,0 +1,53 @@
+{
+ "recordsMeasured": 159882,
+ "byField": {
+  "year": 151644,
+  "genres": 0,
+  "countries": 0,
+  "studio": 0,
+  "director": 0,
+  "cast": 0,
+  "duration": 0,
+  "episodesTotal": 0,
+  "seasonsTotal": 0,
+  "ageRating": 2949,
+  "originalTitle": 0,
+  "alternativeTitles": 0,
+  "description": 0,
+  "synopsis": 0,
+  "plot": 0
+ },
+ "mapping": {
+  "year": "year",
+  "ageRating": "tags(возрастная метка)",
+  "genres": "",
+  "countries": "",
+  "studio": "",
+  "director": "",
+  "cast": "",
+  "duration": "",
+  "episodesTotal": "",
+  "seasonsTotal": "",
+  "originalTitle": "",
+  "alternativeTitles": "",
+  "description": "",
+  "synopsis": "",
+  "plot": ""
+ },
+ "catalogKeys": [
+  "created_at",
+  "external_id",
+  "external_ids",
+  "imdb_rating",
+  "is_series",
+  "kinopoisk_rating",
+  "licensed",
+  "name",
+  "playback",
+  "poster_url",
+  "tags",
+  "type",
+  "updated_at",
+  "year"
+ ]
+}

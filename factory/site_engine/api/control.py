@@ -110,6 +110,24 @@ CACHE_KEY_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$")
 MAX_BODY_KEYS = 32
 
 
+def _целое(значение: Any, имя: str) -> int:
+    """Число из строки запроса. Нечисло — отказ, а не умолчание.
+
+    Умолчание здесь означало бы, что `?offset=abc` тихо вернёт первую
+    страницу: вызывающий получит ответ на вопрос, которого не задавал, и
+    решит, что записей больше нет.
+    """
+    if isinstance(значение, bool):
+        raise ControlDenied(400, "invalid_paging", f"{имя} — целое, не булево")
+    if isinstance(значение, int):
+        return значение
+    try:
+        return int(str(значение).strip())
+    except (TypeError, ValueError) as ошибка:
+        raise ControlDenied(400, "invalid_paging",
+                            f"{имя}={значение!r} — не целое") from ошибка
+
+
 class ControlDenied(Exception):
     """Отказ на ступени конвейера. Несёт код и статус, чтобы ответ был точным."""
 
@@ -1443,8 +1461,14 @@ class ControlApi:
             return ApiResponse(status=200,
                                body=seo_bindings.каталог_витрин(self._root))
         self._check_site_id_soft(site_id)
-        предел = body.get("limit", seo_bindings.DEFAULT_LIMIT)
-        смещение = body.get("offset", 0)
+        # Строка запроса приносит числа строками: `?limit=50&offset=100` даёт
+        # `"50"` и `"100"`. Прикладная функция требует целых — и правильно
+        # требует: приведение типов принадлежит границе, а не правилу. Пока
+        # границы не было, обе величины отвергались, и потребитель мог взять
+        # только первую страницу. Об этом сообщал handoff 043; при проверке
+        # оказалось, что не работает не только offset, но и limit.
+        предел = _целое(body.get("limit", seo_bindings.DEFAULT_LIMIT), "limit")
+        смещение = _целое(body.get("offset", 0), "offset")
         состояние = body.get("bindingState")
         if состояние is not None and not isinstance(состояние, str):
             raise ControlDenied(400, "invalid_binding_state",
