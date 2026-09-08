@@ -7,7 +7,7 @@
 set -Eeuo pipefail
 
 CANARY="${CANARY:-lords-02}"
-ОСТАЛЬНЫЕ="${ОСТАЛЬНЫЕ:-lords-01 lords-03}"
+REST_SITES="${REST_SITES:-lords-01 lords-03}"
 RUNNER="${RUNNER:-/run/lords-release-runner.sh}"
 SUMMARY=/var/log/site-factory/lords-release-summary.json
 STAMP="$(date -u +%Y%m%d-%H%M%S)"
@@ -16,40 +16,40 @@ LOG=/var/log/site-factory/lords-release-conduct-${STAMP}.log
 : > "${LOG}"; chmod 0644 "${LOG}"
 exec > >(tee -a "${LOG}") 2>&1
 
-итоги=""
+summary_items=""
 
-свод() {
+write_summary() {
   {
     printf '{\n  "started_at_utc": "%s",\n' "${STAMP}"
     printf '  "updated_at_utc": "%s",\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
     printf '  "conduct_log": "%s",\n' "${LOG}"
-    printf '  "sites": {%s\n  }\n}\n' "${итоги}"
+    printf '  "sites": {%s\n  }\n}\n' "${summary_items}"
   } > "${SUMMARY}.tmp" && mv -f "${SUMMARY}.tmp" "${SUMMARY}" && chmod 0644 "${SUMMARY}"
 }
 
-выложить() {
-  local сайт="$1" итог=""
-  echo "=== выкладка ${сайт} ==="
+deploy_site() {
+  local site="$1" verdict_text=""
+  echo "=== выкладка ${site} ==="
   # Файл лежит на noexec-разделе: запуск только через интерпретатор.
-  /bin/bash "${RUNNER}" "${сайт}" || true
-  итог="$(cat "/run/${сайт}-release.verdict" 2>/dev/null || echo НЕТ_ИТОГА)"
-  [ -n "${итоги}" ] && итоги="${итоги},"
-  итоги="${итоги}\n    \"${сайт}\": {\"verdict\": \"${итог}\", \"report\": \"/var/log/site-factory/${сайт}-release-report.json\"}"
-  свод
-  echo "=== ${сайт}: ${итог} ==="
-  [ "${итог}" = DEPLOYED_AND_VERIFIED ]
+  /bin/bash "${RUNNER}" "${site}" || true
+  verdict_text="$(cat "/run/${site}-release.verdict" 2>/dev/null || echo "НЕТ_ИТОГА")"
+  [ -n "${summary_items}" ] && summary_items="${summary_items},"
+  summary_items="${summary_items}\n    \"${site}\": {\"verdict\": \"${verdict_text}\", \"report\": \"/var/log/site-factory/${site}-release-report.json\"}"
+  write_summary
+  echo "=== ${site}: ${verdict_text} ==="
+  [ "${verdict_text}" = DEPLOYED_AND_VERIFIED ]
 }
 
-свод
-if ! выложить "${CANARY}"; then
+write_summary
+if ! deploy_site "${CANARY}"; then
   echo "канарейка ${CANARY} не прошла — распространение не начинается"
-  свод
+  write_summary
   exit 1
 fi
 
-for сайт in ${ОСТАЛЬНЫЕ}; do
-  выложить "${сайт}" || echo "витрина ${сайт} не выложена; остальные не тронуты"
+for site in ${REST_SITES}; do
+  deploy_site "${site}" || echo "витрина ${site} не выложена; остальные не тронуты"
 done
 
-свод
+write_summary
 echo "свод: ${SUMMARY}"

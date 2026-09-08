@@ -9,31 +9,63 @@
 # Отпечаток: a0cfaf7135255d62e70432162cadc554c393c2c01dec3936baddafd8ca694859
 #
 # Исправлены: LORDS-RELEASE-INVOCATION-REUSE-32 (запуск юнита доказывается новой
-# InvocationID во время работы) и LORDS-RELEASE-ADOPT-GIT-PRIVILEGED-33 (архив
-# ревизии собирается до переключения и без привилегий; git в привилегированном
-# пути не участвует).
+# InvocationID во время работы), LORDS-RELEASE-ADOPT-GIT-PRIVILEGED-33 (архив
+# ревизии собирается до переключения и без привилегий) и
+# LORDS-NIGHT-RUNNER-NONASCII-VAR-34 (все имена — ASCII).
+#
+#   --self-test   исполнить стартовую часть по-настоящему, ничего не меняя в
+#                 production, и напечатать SELF_TEST=PASS либо SELF_TEST=FAIL.
 set -Eeuo pipefail
 
-if [ "$(id -u)" != "0" ]; then
-  echo "запускает root"
-  exit 1
-fi
+# systemd передаёт юниту скудное окружение, а `env -i` не передаёт ничего: без
+# этой строки readlink, findmnt и mktemp просто не находятся. Проверяется
+# запуском под `env -i`, а не предположением.
+export PATH="${PATH:-/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin}"
+export LC_ALL="${LC_ALL:-C.UTF-8}"
+
+SELF_TEST=0
+case "${1:-}" in
+  --self-test) SELF_TEST=1 ;;
+  "") ;;
+  *) echo "неизвестный аргумент: ${1}"; echo "допустимо: --self-test"; exit 2 ;;
+esac
+
+# Собственный путь. Именно эта строка уронила прошлый запуск: имя переменной
+# было кириллическим, bash разобрал присваивание как имя команды и сообщил
+# «No such file or directory». Теперь имя ASCII, а --self-test исполняет строку
+# по-настоящему, а не только разбирает её.
+self_path="$(readlink -f "$0")"
+[ -f "${self_path}" ] || { echo "не удалось определить собственный путь"; exit 1; }
 
 # /run смонтирован noexec: рабочие сценарии туда кладутся как данные и
 # запускаются только через интерпретатор. Сам этот файл обязан лежать на
 # исполняемом разделе — иначе владелец не смог бы его запустить.
-СВОЙ="$(readlink -f "$0")"
-if findmnt -no OPTIONS -T "${СВОЙ}" 2>/dev/null | grep -q noexec; then
-  echo "этот файл лежит на noexec-разделе: ${СВОЙ}"
+if findmnt -no OPTIONS -T "${self_path}" 2>/dev/null | grep -q noexec; then
+  echo "этот файл лежит на noexec-разделе: ${self_path}"
   exit 1
 fi
 
 STAMP="$(date -u +%Y%m%d-%H%M%S)"
 UNIT="lords-release-night-${STAMP}"
-LIB=/run/lords-unit-launch.sh
-RUNNER=/run/lords-release-runner.sh
-CONDUCT=/run/lords-release-conduct.sh
-SUMMARY=/var/log/site-factory/lords-release-summary.json
+
+if [ "${SELF_TEST}" = 1 ]; then
+  WORKDIR="$(mktemp -d "${TMPDIR:-/tmp}/lords-selftest-XXXXXX")"
+  LIB="${WORKDIR}/lords-unit-launch.sh"
+  RUNNER="${WORKDIR}/lords-release-runner.sh"
+  CONDUCT="${WORKDIR}/lords-release-conduct.sh"
+  LOCK="${WORKDIR}/lords-release-selftest.lock"
+  MOCK="${WORKDIR}/systemd-run-argv"
+  SUMMARY="${WORKDIR}/summary.json"
+else
+  [ "$(id -u)" = "0" ] || { echo "запускает root"; exit 1; }
+  WORKDIR=/run
+  LIB=/run/lords-unit-launch.sh
+  RUNNER=/run/lords-release-runner.sh
+  CONDUCT=/run/lords-release-conduct.sh
+  LOCK=/run/lords-release-launch.lock
+  MOCK=""
+  SUMMARY=/var/log/site-factory/lords-release-summary.json
+fi
 
 cat > "${LIB}" <<'LIB_EOF'
 @@LIB@@
@@ -50,13 +82,196 @@ CONDUCT_EOF
 # Права данных, а не программ: запуск идёт через /bin/bash.
 chmod 0600 "${LIB}" "${RUNNER}" "${CONDUCT}"
 
-# Повторный безопасный запуск: имя юнита уникально, а от одновременных релизов
-# одной витрины защищает flock внутри runner.
-if ! systemd-run --unit="${UNIT}" --service-type=oneshot --no-block --collect \
-     --property=TimeoutStartSec=43200 --property=KillMode=mixed \
-     --property=StandardOutput=journal --property=StandardError=journal \
-     --setenv=LAUNCH_LIB="${LIB}" --setenv=RUNNER="${RUNNER}" \
-     /bin/bash "${CONDUCT}" >/dev/null; then
+# Команда detached-юнита собирается один раз и используется обоими режимами:
+# самопроверка обязана проверять то, что действительно будет запущено.
+UNIT_ARGV=(
+  --unit="${UNIT}" --service-type=oneshot --no-block --collect
+  --property=TimeoutStartSec=43200 --property=KillMode=mixed
+  --property=StandardOutput=journal --property=StandardError=journal
+  --setenv=LAUNCH_LIB="${LIB}" --setenv=RUNNER="${RUNNER}"
+  /bin/bash "${CONDUCT}"
+)
+
+if [ "${SELF_TEST}" = 1 ]; then
+  # ---------------------------------------------------------- самопроверка --
+  #
+  # Production не меняется: файлы пишутся во временный каталог, systemd-run
+  # подменён записью аргументов, состояние витрин снимается до и после.
+  errors=0
+  good() { printf '  ок      %s\n' "$*"; }
+  bad()  { printf '  ОТКАЗ   %s\n' "$*"; errors=$((errors + 1)); }
+  snapshot() {
+    printf '%s|%s|%s|%s' \
+      "$(readlink -f /srv/lords/lords-01/current 2>/dev/null || true)" \
+      "$(readlink -f /srv/lords/lords-02/current 2>/dev/null || true)" \
+      "$(readlink -f /srv/lords/lords-03/current 2>/dev/null || true)" \
+      "$(systemctl is-active lords-content-refresh.timer 2>/dev/null || true)"
+  }
+
+  echo "SELF_TEST: ночная выкладка Lords, каталог ${WORKDIR}"
+  before="$(snapshot)"
+
+  # 1. Собственный путь вычислен и указывает на существующий файл.
+  if [ "${self_path}" = "$(readlink -f "$0")" ] && [ -f "${self_path}" ]; then
+    good "собственный путь: ${self_path}"
+  else
+    bad "собственный путь не совпал"
+  fi
+
+  # 2. Аргументы: неизвестный обязан отвергаться кодом 2.
+  code=0
+  bash "${self_path}" --no-such-argument >/dev/null 2>&1 || code=$?
+  if [ "${code}" = 2 ]; then
+    good "неизвестный аргумент отвергнут кодом 2"
+  else
+    bad "неизвестный аргумент дал код ${code}, ожидался 2"
+  fi
+
+  # 3. Рабочие сценарии созданы и разбираются.
+  for file in "${LIB}" "${RUNNER}" "${CONDUCT}"; do
+    if [ -s "${file}" ]; then
+      good "создан $(basename "${file}"), $(wc -c <"${file}") б"
+      if bash -n "${file}" 2>/dev/null; then
+        good "bash -n $(basename "${file}")"
+      else
+        bad "bash -n не прошёл: ${file}"
+      fi
+    else
+      bad "не создан ${file}"
+    fi
+  done
+
+  # 4. Имена переменных и функций — только ASCII. Проверка исполнением: bash -n
+  #    такую ошибку не видит и видеть не может, она синтаксически корректна.
+  if command -v python3 >/dev/null 2>&1; then
+    if python3 - "${LIB}" "${RUNNER}" "${CONDUCT}" <<'ASCIIEOF'
+import sys
+
+
+def visible(line):
+    out, stack, i = [], [""], 0
+    while i < len(line):
+        c, q = line[i], stack[-1]
+        if q != "'" and line[i:i + 2] == "$(":
+            stack.append("")
+            i += 2
+            continue
+        if c == ")" and len(stack) > 1 and not q:
+            stack.pop()
+            i += 1
+            continue
+        if q:
+            if c == "\\" and q == '"':
+                i += 2
+                continue
+            if c == q:
+                stack[-1] = ""
+            i += 1
+            continue
+        if c in "'\"":
+            stack[-1] = c
+            i += 1
+            continue
+        if c == "#" and (not out or out[-1].isspace()):
+            break
+        out.append(c)
+        i += 1
+    return "".join(out)
+
+
+bad_count = 0
+for path in sys.argv[1:]:
+    marker = None
+    for n, raw in enumerate(open(path, encoding="utf-8").read().splitlines(), 1):
+        if marker is not None:
+            if raw.strip() == marker:
+                marker = None
+            continue
+        cut = raw.split("#", 1)[0]
+        if "<<" in cut:
+            tail = cut.split("<<", 1)[1].strip().lstrip("-").strip("'\"")
+            name = tail.split()[0] if tail else ""
+            if name.isidentifier() or (name and name.isupper()):
+                marker = name
+                continue
+        for word in visible(raw).split():
+            if not word.isascii():
+                print(f"{path}:{n}: {word}")
+                bad_count += 1
+sys.exit(1 if bad_count else 0)
+ASCIIEOF
+    then
+      good "имена переменных и функций ASCII во всех трёх сценариях"
+    else
+      bad "найдены не-ASCII имена"
+    fi
+  else
+    bad "python3 недоступен: проверку имён выполнить нечем"
+  fi
+
+  # 5. Пути, от которых зависит выкладка.
+  for path in /home/claude/wt-release-03 \
+              /home/claude/wt-release-03/.venv/bin/python \
+              /home/claude/wt-release-03/automation/host/lords-canary-apply.sh \
+              /srv/lords /srv/lords/.artifacts /usr/local/sbin /bin/bash; do
+    if [ -e "${path}" ]; then good "путь есть: ${path}"; else bad "пути нет: ${path}"; fi
+  done
+
+  # 6. Блокировка: второй захват обязан отказать.
+  exec 8>"${LOCK}"
+  if flock -n 8; then
+    good "блокировка взята: ${LOCK}"
+    if flock -n "${LOCK}" true 2>/dev/null; then
+      bad "второй захват блокировки прошёл — два релиза смогут идти сразу"
+    else
+      good "второй захват блокировки отвергнут"
+    fi
+  else
+    bad "блокировка не взята"
+  fi
+  exec 8>&-
+
+  # 7. Команда detached-юнита: та самая, что пойдёт в бой.
+  printf '%s\n' "${UNIT_ARGV[@]}" > "${MOCK}"
+  argv_line="$(tr '\n' ' ' < "${MOCK}")"
+  for needed in "--unit=${UNIT}" "--service-type=oneshot" "--no-block" "--collect" \
+                "--property=TimeoutStartSec=43200" \
+                "--setenv=LAUNCH_LIB=${LIB}" "--setenv=RUNNER=${RUNNER}" \
+                "/bin/bash" "${CONDUCT}"; do
+    case "${argv_line}" in
+      *"${needed}"*) good "в команде юнита есть ${needed}" ;;
+      *) bad "в команде юнита нет ${needed}" ;;
+    esac
+  done
+  good "настоящий systemd-run не вызывался: аргументы записаны в ${MOCK}"
+
+  # 8. Дирижёр параметризован — значит связку можно проверять подменой.
+  if grep -q 'RUNNER:-/run/lords-release-runner.sh' "${CONDUCT}"; then
+    good "дирижёр берёт путь runner из окружения"
+  else
+    bad "дирижёр не параметризован: подменить runner нечем"
+  fi
+
+  # 9. Production не тронут.
+  after="$(snapshot)"
+  if [ "${before}" = "${after}" ]; then
+    good "ссылки витрин и таймер не изменились: ${after}"
+  else
+    bad "состояние изменилось: было ${before}, стало ${after}"
+  fi
+
+  rm -rf "${WORKDIR}"
+  echo
+  if [ "${errors}" = 0 ]; then
+    echo "SELF_TEST=PASS"
+    exit 0
+  fi
+  echo "SELF_TEST=FAIL (отказов ${errors})"
+  exit 1
+fi
+
+# --------------------------------------------------------------- выкладка --
+if ! systemd-run "${UNIT_ARGV[@]}" >/dev/null; then
   echo "юнит ${UNIT} не запустился; витрины не тронуты"
   exit 1
 fi

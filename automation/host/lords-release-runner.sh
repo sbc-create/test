@@ -38,8 +38,8 @@ REPORT=/var/log/site-factory/${SITE}-release-report.json
 LOCK=/run/lords-release-${SITE}.lock
 
 SWITCHED=0; IN_ROLLBACK=0; PREV=""; NEW=""; SHOT_OK=0
-REUSED=нет; PHASE=старт; REASON=""
-CHROMIUM_RESULT=не_запускался; FIREFOX_RESULT=не_запускался
+REUSED="нет"; PHASE="старт"; REASON=""
+CHROMIUM_RESULT="не_запускался"; FIREFOX_RESULT="не_запускался"
 IMAGES_OK=0; IMAGES_CHECKED=0; ROUTES_OK=""; SWITCHED_AT=""
 REV=""; ARCHIVE_SHA=""
 
@@ -54,18 +54,18 @@ verdict() { [ -s "${VERDICT}" ] || { printf '%s\n' "$1" > "${VERDICT}"; chmod 06
 # отказе отчёта не оказалось вовсе, и восстанавливать ход пришлось по временам
 # изменения файлов. Частичный отчёт лучше отсутствующего.
 report() {
-  local итог="${1:-в работе}"
+  local verdict_text="${1:-в работе}"
   # Режим errexit восстанавливается ровно тот, что был. Безусловный `set -e` в
   # конце включал бы его и внутри отката, где он снят намеренно: первая же
   # ненулевая команда обрывала бы откат на середине.
-  local было="$-"
+  local shell_opts="$-"
   set +e
   {
     printf '{\n'
     printf '  "site": "%s",\n' "${SITE}"
     printf '  "domain": "%s",\n' "${DOMAIN}"
     printf '  "url": "%s",\n' "${BASE}"
-    printf '  "verdict": "%s",\n' "${итог}"
+    printf '  "verdict": "%s",\n' "${verdict_text}"
     printf '  "phase": "%s",\n' "${PHASE}"
     printf '  "reason": "%s",\n' "${REASON}"
     printf '  "head": "%s",\n' "${HEAD_EXPECT}"
@@ -89,7 +89,7 @@ report() {
     printf '  "updated_at_utc": "%s"\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
     printf '}\n'
   } > "${REPORT}.tmp" && mv -f "${REPORT}.tmp" "${REPORT}" && chmod 0644 "${REPORT}"
-  case "${было}" in *e*) set -e ;; *) set +e ;; esac
+  case "${shell_opts}" in *e*) set -e ;; *) set +e ;; esac
   return 0
 }
 
@@ -113,6 +113,7 @@ on_exit() {
 }
 trap on_exit EXIT
 
+# shellcheck source=automation/host/lords-unit-launch.sh
 . "${LAUNCH_LIB:-$(dirname "$0")/lords-unit-launch.sh}"
 
 shot() {
@@ -128,9 +129,9 @@ rollback() {
   IN_ROLLBACK=1
   set +e
   REASON="$*"
-  PHASE=откат
+  PHASE="откат"
   say "ОТКАТ: $*"
-  report ОТКАТ
+  report "ОТКАТ"
   if [ -z "${PREV}" ] || [ ! -d "${PREV}" ]; then
     say "прежний релиз неизвестен или отсутствует: ${PREV:-пусто}"
     verdict ROLLBACK_FAILED; exit 1
@@ -191,14 +192,14 @@ flock -n 9 || { echo "релиз ${SITE} уже идёт: ${LOCK} занят"; e
 [ "$(id -u)" = 0 ] || stop "runner запускает root"
 
 # ------------------------------------------------------------- предполёт --
-phase предполёт
+phase "предполёт"
 say "витрина ${SITE}, домен ${BASE}, журнал ${LOG}"
 
 # Файл на noexec-разделе нельзя запускать напрямую: /run смонтирован noexec, и
 # основной runner обязан лежать на исполняемой файловой системе.
-СВОЙ="$(readlink -f "$0")"
-if findmnt -no OPTIONS -T "${СВОЙ}" 2>/dev/null | grep -q noexec; then
-  stop "runner лежит на noexec-разделе: ${СВОЙ}"
+self_path="$(readlink -f "$0")"
+if findmnt -no OPTIONS -T "${self_path}" 2>/dev/null | grep -q noexec; then
+  stop "runner лежит на noexec-разделе: ${self_path}"
 fi
 
 HEAD_SHA="$(sudo -u claude git -C "${REPO}" rev-parse HEAD)"
@@ -212,7 +213,7 @@ PIN="$(sed -n 's/^readonly EXPECT_DIGEST="\([0-9a-f]\{64\}\)".*/\1/p' "${HOST}/l
   || stop "реестр версий артефакта не сошёлся с деревом"
 REV="$(cd "${REPO}" && sudo -u claude "${PY}" "${HOST}/lords-canary-provenance.py" --verify)" \
   || stop "манифест происхождения не сошёлся"
-[ "${#REV}" = 40 ] || stop "происхождение вернуло не полный SHA: ${REV}"
+[ "${#REV}" = 40 ] || stop "происхождение вернуло не full SHA: ${REV}"
 say "HEAD ${HEAD_SHA}, отпечаток ${DG}, ревизия оснастки ${REV}"
 
 [ -s "/srv/site-factory/repo/var/lords/lords/catalog-cache/${SITE}.json" ] || stop "нет живого каталога ${SITE}"
@@ -273,16 +274,16 @@ if systemctl is-active --quiet lords-content-refresh.timer; then
   systemctl stop lords-content-refresh.timer
 fi
 
-for ширина in 390 768 1440; do
-  if shot "${BASE}/" "${W}/before-home-${ширина}.png" "${ширина}"; then
+for width in 390 768 1440; do
+  if shot "${BASE}/" "${W}/before-home-${width}.png" "${width}"; then
     SHOT_OK=1
-    say "before-home-${ширина}.png $(stat -c%s "${W}/before-home-${ширина}.png") б"
+    say "before-home-${width}.png $(stat -c%s "${W}/before-home-${width}.png") б"
   fi
 done
 cp -f "${W}/before-home-1440.png" "${W}/before-home.png" 2>/dev/null || true
 
 # --------------------------------------------- сборка или повторное взятие --
-phase сборка
+phase "сборка"
 reuse_ok=0
 if [ -f "${RECEIPT}" ] && [ -d "${STAGING}" ]; then
   R="$("${PY}" - "${RECEIPT}" <<'PYEOF'
@@ -304,7 +305,7 @@ print(len(items or []))' "${R_SNAP}")"
     A_EMPTY="$(find "${STAGING}" -type f -empty | wc -l)"
     A_PLAYERS="$(grep -rl 'video-player' "${STAGING}/title" 2>/dev/null | wc -l)"
     say "снимок ${A_SHA}"
-    say "записей ${A_ITEMS}/${R_ITEMS}, файлов ${A_FILES}/${R_PAGES}, пустых ${A_EMPTY}, с плеером ${A_PLAYERS}"
+    say "записей ${A_ITEMS}/${R_ITEMS}, file_count ${A_FILES}/${R_PAGES}, пустых ${A_EMPTY}, с плеером ${A_PLAYERS}"
     if [ "${A_SHA#${R_SHORT}}" != "${A_SHA}" ] && [ "${A_ITEMS}" = "${R_ITEMS}" ] \
        && [ "${A_FILES}" -ge "${R_PAGES}" ] && [ "${A_EMPTY}" = 0 ] && [ "${A_PLAYERS}" -gt 1000 ]; then
       reuse_ok=1; REUSED=да
@@ -318,7 +319,7 @@ print(len(items or []))' "${R_SNAP}")"
 fi
 
 render_beat() {
-  say "сборка идёт $(( $1 / 60 )) мин, состояние $2, файлов в staging $(find "${STAGING}" -type f 2>/dev/null | wc -l)"
+  say "сборка идёт $(( $1 / 60 )) мин, состояние $2, file_count в staging $(find "${STAGING}" -type f 2>/dev/null | wc -l)"
   report
 }
 
@@ -341,7 +342,7 @@ if [ "${reuse_ok}" = 0 ]; then
 fi
 
 # ------------------------------------------------------- ворота до подмены --
-phase ворота
+phase "ворота"
 SNAP="$("${PY}" -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("content_snapshot_path") or "")' "${RECEIPT}")"
 [ -f "${SNAP}" ] || stop "снимок из расписки не существует: ${SNAP:-пусто}"
 if ! PYTHONPATH=${REPO} "${PY}" "${HOST}/lords-canary-gates.py" "${STAGING}" "${SNAP}" "${PREV}/site" > "${W}/gates.json"; then
@@ -352,7 +353,7 @@ chmod 0644 "${W}/gates.json"
 say "$(cat "${W}/gates.json")"
 
 # ------------------------------------------------------------ переключение --
-phase переключение
+phase "переключение"
 unit_start_confirmed "lords-canary-switch@${SITE}.service" 60 \
   || stop "переключение не начато: новый процесс не появился за 60 с"
 say "переключение начато, InvocationID ${UNIT_RUN_ID}"
@@ -369,7 +370,7 @@ if [ "${switch_ok}" = 0 ]; then
   rollback "переключение не выполнено (Result=${UNIT_RESULT:-нет}), ссылка не на прежнем релизе"
 fi
 [ -n "${NEW}" ] || { SWITCHED=1; rollback "после переключения нет current"; }
-[ "${NEW}" != "${PREV}" ] || stop "ссылка осталась на прежнем релизе: переключения не было"
+[ "${NEW}" != "${PREV}" ] || stop "ссылка осталась на прежнем релизе: переключения не shell_opts"
 SWITCHED=1
 say "ссылка переключена: $(basename "${PREV}") → $(basename "${NEW}") в ${SWITCHED_AT}"
 [ -f "${NEW}/release-manifest.json" ] || rollback "у нового релиза нет release-manifest.json"
@@ -378,9 +379,13 @@ say "манифест нового релиза: $(tr -d '\n ' < "${NEW}/release
 report
 
 # ------------------------------------------------------------ приёмка --
-phase приёмка
+phase "приёмка"
 systemctl is-active --quiet "${SITE}.service" || rollback "служба ${SITE} не работает после переключения"
 
+# Перенаправление выполняет root, а не claude, и это здесь верно: файл должен
+# принадлежать root в каталоге свидетельств, а понижённый процесс пишет в уже
+# открытый дескриптор.
+# shellcheck disable=SC2024
 if ! sudo -u claude "${PY}" "${HOST}/lords-post-switch-verify.py" \
       --site "${SITE}" --expect-digest "${DIGEST_EXPECT}" \
       --previous-release "$(basename "${PREV}")" > "${W}/post-switch-verify.json"; then
@@ -391,16 +396,16 @@ chmod 0644 "${W}/post-switch-verify.json"
 
 # Публичный домен: маршруты, коды, tenant, плеер.
 ok_routes=""
-for маршрут in "/" "/catalog/" "/search/" "/new/"; do
-  код="$(curl -sS -o "${W}/route$(echo "${маршрут}" | tr '/' '_').html" -w '%{http_code}' --max-time 30 "${BASE}${маршрут}" || true)"
-  [ "${код}" = 200 ] || rollback "публичный ${маршрут} ответил ${код:-нет ответа}"
-  ok_routes="${ok_routes}${маршрут}=200 "
+for route in "/" "/catalog/" "/search/" "/new/"; do
+  code="$(curl -sS -o "${W}/route$(echo "${route}" | tr '/' '_').html" -w '%{http_code}' --max-time 30 "${BASE}${route}" || true)"
+  [ "${code}" = 200 ] || rollback "публичный ${route} ответил ${code:-нет ответа}"
+  ok_routes="${ok_routes}${route}=200 "
 done
 grep -q "${DOMAIN}" "${W}/route_.html" || rollback "главная не назвала свой домен"
 TP="$(grep -o 'href="/title/[^"]*"' "${W}/route_.html" | head -1 | cut -d'"' -f2)"
 [ -n "${TP}" ] || rollback "на публичной главной нет ссылок на произведения"
-код="$(curl -sS -o "${W}/public-title.html" -w '%{http_code}' --max-time 30 "${BASE}${TP}" || true)"
-[ "${код}" = 200 ] || rollback "публичная ${TP} ответила ${код}"
+code="$(curl -sS -o "${W}/public-title.html" -w '%{http_code}' --max-time 30 "${BASE}${TP}" || true)"
+[ "${code}" = 200 ] || rollback "публичная ${TP} ответила ${code}"
 ok_routes="${ok_routes}${TP}=200"
 ROUTES_OK="${ok_routes}"
 grep -qi 'video-player\|<iframe' "${W}/public-title.html" || rollback "плеер на публичной ${TP} исчез"
@@ -411,32 +416,32 @@ say "плеер на ${TP} сохранён"
 IMG_JSON="${W}/images.json"
 "${PY}" - "${BASE}" "${W}/route_catalog_.html" "${W}/public-title.html" "${IMG_JSON}" <<'PYEOF' || true
 import json, re, sys, urllib.request
-base, *страницы, out = sys.argv[1:]
-адреса, видел = [], set()
-for стр in страницы:
+base, *pages, out = sys.argv[1:]
+urls, seen = [], set()
+for page in pages:
     try:
-        html = open(стр, encoding="utf-8", errors="replace").read()
+        html = open(page, encoding="utf-8", errors="replace").read()
     except OSError:
         continue
     for src in re.findall(r'<img[^>]+src="([^"]+)"', html):
-        полный = src if src.startswith("http") else base + src
-        if полный not in видел:
-            видел.add(полный); адреса.append(полный)
-проверено, годных, беды = 0, 0, []
-for адрес in адреса[:40]:
-    проверено += 1
+        full = src if src.startswith("http") else base + src
+        if full not in seen:
+            seen.add(full); urls.append(full)
+checked, good, failures = 0, 0, []
+for url in urls[:40]:
+    checked += 1
     try:
-        req = urllib.request.Request(адрес, headers={"User-Agent": "lords-release-check"})
-        with urllib.request.urlopen(req, timeout=20) as ответ:
-            тип = ответ.headers.get("Content-Type", "")
-            тело = ответ.read(200000)
-        if ответ.status == 200 and тип.startswith("image/") and len(тело) > 1200:
-            годных += 1
+        req = urllib.request.Request(url, headers={"User-Agent": "lords-release-check"})
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            ctype = resp.headers.get("Content-Type", "")
+            body = resp.read(200000)
+        if resp.status == 200 and ctype.startswith("image/") and len(body) > 1200:
+            good += 1
         else:
-            беды.append({"url": адрес, "status": ответ.status, "type": тип, "bytes": len(тело)})
-    except Exception as ошибка:
-        беды.append({"url": адрес, "error": str(ошибка)[:120]})
-json.dump({"checked": проверено, "ok": годных, "failures": беды[:10]},
+            failures.append({"url": url, "status": resp.status, "type": ctype, "bytes": len(body)})
+    except Exception as err:
+        failures.append({"url": url, "error": str(err)[:120]})
+json.dump({"checked": checked, "ok": good, "failures": failures[:10]},
           open(out, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
 PYEOF
 if [ -f "${IMG_JSON}" ]; then
@@ -444,12 +449,13 @@ if [ -f "${IMG_JSON}" ]; then
   IMAGES_CHECKED="$("${PY}" -c 'import json,sys; print(json.load(open(sys.argv[1]))["checked"])' "${IMG_JSON}")"
   IMAGES_OK="$("${PY}" -c 'import json,sys; print(json.load(open(sys.argv[1]))["ok"])' "${IMG_JSON}")"
 fi
-say "изображения: годных ${IMAGES_OK} из ${IMAGES_CHECKED} проверенных"
-[ "${IMAGES_CHECKED}" -ge 30 ] || rollback "проверено только ${IMAGES_CHECKED} изображений из требуемых 30"
+say "изображения: good ${IMAGES_OK} из ${IMAGES_CHECKED} проверенных"
+[ "${IMAGES_CHECKED}" -ge 30 ] || rollback "checked только ${IMAGES_CHECKED} изображений из требуемых 30"
 [ "${IMAGES_OK}" -ge 30 ] || rollback "загрузились только ${IMAGES_OK} изображений из ${IMAGES_CHECKED}"
 
 # Штатный набор приёмки в двух движках.
 run_engine() {
+  # shellcheck disable=SC2024  # журнал создаёт root, пишет понижённый процесс
   (cd "${REPO}" && sudo -u claude env PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers \
     RELEASE_BASE="${BASE}" RELEASE_SITE="${SITE}" \
     npx playwright test --config=var/release-acceptance.config.js --project="$1" \
@@ -463,16 +469,16 @@ report
 [ "${CHROMIUM_RESULT}" = pass ] || { tail -40 "${W}/playwright-chromium.log" || true; rollback "приёмка в Chromium не пройдена"; }
 [ "${FIREFOX_RESULT}" = pass ] || { tail -40 "${W}/playwright-firefox.log" || true; rollback "приёмка в Firefox не пройдена"; }
 
-for ширина in 390 768 1440; do
-  shot "${BASE}/" "${W}/after-home-${ширина}.png" "${ширина}" \
-    && say "after-home-${ширина}.png $(stat -c%s "${W}/after-home-${ширина}.png") б" || true
+for width in 390 768 1440; do
+  shot "${BASE}/" "${W}/after-home-${width}.png" "${width}" \
+    && say "after-home-${width}.png $(stat -c%s "${W}/after-home-${width}.png") б" || true
 done
 cp -f "${W}/after-home-1440.png" "${W}/after-home.png" 2>/dev/null || true
 if [ "${SHOT_OK}" = 1 ] && [ ! -s "${W}/after-home.png" ]; then
   rollback "снимок «после» не получен, хотя снимок «до» снялся"
 fi
 
-phase готово
+phase "готово"
 say "релиз $(basename "${NEW}"), прежний $(basename "${PREV}")"
 verdict DEPLOYED_AND_VERIFIED
 exit 0

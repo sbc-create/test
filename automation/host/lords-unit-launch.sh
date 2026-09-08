@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+# Файл подключается через `.` и собственного shebang не имеет намеренно.
 # Запуск systemd-юнита с доказательством, что запуск действительно состоялся.
 #
 # Дефект LORDS-RELEASE-INVOCATION-REUSE-32. Прежняя редакция release-runner
@@ -21,11 +23,14 @@
 
 SYSTEMCTL="${SYSTEMCTL:-systemctl}"
 
-#: Заполняется unit_start_confirmed: InvocationID начатого прогона.
+#: Заполняется unit_start_confirmed: InvocationID начатого прогона. Читается
+#: вызывающим сценарием, поэтому здесь выглядит неиспользуемой.
+# shellcheck disable=SC2034
 UNIT_RUN_ID=""
 #: Заполняется unit_wait: последние наблюдённые Result и ExecMainStatus.
 UNIT_RESULT=""
 UNIT_STATUS=""
+# shellcheck disable=SC2034  # читается вызывающим сценарием
 UNIT_LAST_STATE=""
 
 unit_state() {
@@ -71,6 +76,7 @@ unit_start_confirmed() {
   while [ "${waited}" -lt "${limit}" ]; do
     id="$(${SYSTEMCTL} show -p InvocationID --value "${unit}" 2>/dev/null || true)"
     if [ -n "${id}" ]; then
+      # shellcheck disable=SC2034  # читает вызывающий сценарий
       UNIT_RUN_ID="${id}"
       return 0
     fi
@@ -95,6 +101,7 @@ unit_wait() {
   UNIT_RESULT=""; UNIT_STATUS=""; UNIT_LAST_STATE=""
   while :; do
     st="$(unit_state "${unit}")"
+    # shellcheck disable=SC2034  # читает вызывающий сценарий
     UNIT_LAST_STATE="${st}"
     case "${st}" in
       active|activating|deactivating|reloading)
