@@ -65,6 +65,10 @@ ARTIFACT_ROOT = Path("/srv/lords/.artifacts")
 СТОРОЖ = ОСНАСТКА / "automation" / "host" / "lords-refresh-guard.py"
 PYTHON = Path("/srv/site-factory/repo/.venv/bin/python")
 ТАЙМЕР = "lords-content-refresh.timer"
+ОБНОВЛЕНИЕ_СЛУЖБА = "lords-content-refresh.service"
+#: Наш drop-in канарейки. Имя сортируется позже чужого zz-canary-29.conf,
+#: поэтому на время прогона перекрывает его; после прогона удаляется.
+ДРОПИН = Path("/etc/systemd/system/lords-content-refresh.service.d/zz-canary-deploy.conf")
 #: Рабочий каталог сценария обновления: относительно него живут кэш каталога,
 #: var/ и пакет factory. Значение то же, что в WorkingDirectory штатного юнита.
 СОСТОЯНИЕ_КОРЕНЬ = Path("/srv/site-factory/repo")
@@ -233,25 +237,35 @@ def глагол_canary(args) -> dict:
     if not до["release"]:
         raise Отказ("у витрины нет действующего релиза: откатываться будет некуда")
 
-    окружение = {
-        "FACTORY_REPO": str(ОСНАСТКА),
-        "FACTORY_PYTHON": str(PYTHON),
-        "LORDS_ARTIFACT_ROOT": str(ARTIFACT_ROOT),
-        "LORDS_PINNED_TEMPLATE": "1",
-        "LORDS_CANARY_SITE": сайт,
-        "LORDS_CANARY_REVISION": ревизия,
-        "LORDS_CANARY_REPO": str(ОСНАСТКА),
-        "LORDS_SITES": сайт,
-    }
-    # Рабочий каталог обязателен и равен тому, что задан штатному юниту.
+    # Канарейка идёт ШТАТНЫМ юнитом, а не подпроцессом.
     #
-    # Дефект LORDS-DEPLOYCTL-CWD-39: сценарий обновления зовёт `python -m factory`,
-    # и модуль находится относительно текущего каталога. Приёмщик работает из
-    # корня файловой системы, поэтому первый же вызов дал «No module named
-    # factory» и выкладка отказала за ноль секунд. Штатный юнит объявляет
-    # WorkingDirectory=/srv/site-factory/repo — здесь то же самое, а не догадка.
-    итог = _выполнить(["/bin/bash", str(ОБНОВЛЕНИЕ)], окружение=окружение,
-                      таймаут=float(args.timeout), каталог=str(СОСТОЯНИЕ_КОРЕНЬ))
+    # Дефект LORDS-DEPLOYCTL-CREDENTIALS-40: сценарий запускался напрямую и
+    # отказывал с BLOCKED_INPUT_CDNVIDEOHUB_CREDENTIALS — «Lords читает
+    # credentials только через systemd LoadCredential». Это защита, а не
+    # препятствие: секрет не должен приходить процессу иначе. Обойти её значило
+    # бы сломать то, ради чего она поставлена.
+    #
+    # Юнит получает канареечные переменные через собственный drop-in, как это
+    # уже делает соседняя полоса файлом zz-canary-29.conf. Наш файл сортируется
+    # позже и на время прогона перекрывает её значения; после прогона он
+    # удаляется, и прежняя настройка возвращается сама.
+    ДРОПИН.parent.mkdir(parents=True, exist_ok=True)
+    ДРОПИН.write_text(
+        "[Service]\n"
+        f"Environment=LORDS_CANARY_SITE={сайт}\n"
+        f"Environment=LORDS_CANARY_REVISION={ревизия}\n"
+        f"Environment=LORDS_CANARY_REPO={ОСНАСТКА}\n",
+        encoding="utf-8")
+    os.chmod(ДРОПИН, 0o644)
+    try:
+        перечитать = _выполнить(["systemctl", "daemon-reload"], таймаут=120)
+        if перечитать["code"] != 0:
+            raise Отказ(f"daemon-reload отказал: {перечитать['stderr'][:300]}")
+        итог = _выполнить(["systemctl", "start", "lords-content-refresh.service"],
+                          таймаут=float(args.timeout))
+    finally:
+        ДРОПИН.unlink(missing_ok=True)
+        _выполнить(["systemctl", "daemon-reload"], таймаут=120)
     после = глагол_inspect(argparse.Namespace(site=сайт))
     сменился = после["release"] != до["release"]
     return {

@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -224,19 +225,60 @@ class TestДефектыВыкладки38и39:
         assert 'метка != "before"' in текст, (
             "маркер нового шаблона снова требуется до выкладки")
 
-    def test_обновление_запускается_из_рабочего_каталога(self, помощник):
-        import ast
-        текст = Path(помощник.__file__).read_text(encoding="utf-8")
-        assert "каталог=str(СОСТОЯНИЕ_КОРЕНЬ)" in текст, (
-            "сценарий обновления запускается без рабочего каталога")
+    def test_рабочий_каталог_обеспечен_штатным_юнитом(self, помощник):
+        """Дефект 39 вытеснен дефектом 40, и это правильный исход.
+
+        Сначала рабочий каталог задавался вызову напрямую. Затем выяснилось,
+        что подпроцессом запускать вообще нельзя — credentials приходят только
+        через LoadCredential, — и канарейка ушла в штатный юнит. Юнит объявляет
+        WorkingDirectory сам, поэтому отдельная правка стала лишней: причина
+        устранена целиком, а не заклеена.
+
+        Проверка сторожит именно это: константа обязана совпадать с
+        WorkingDirectory юнита, чтобы расхождение было заметно, если юнит
+        когда-нибудь переедет.
+        """
         assert str(помощник.СОСТОЯНИЕ_КОРЕНЬ) == "/srv/site-factory/repo"
-        # Значение обязано совпадать с WorkingDirectory штатного юнита, иначе
-        # приёмщик и таймер собирают витрину в разных условиях.
-        дерево = ast.parse(текст)
-        assert any(isinstance(у, ast.Assign) and any(
-            getattr(ц, "id", "") == "СОСТОЯНИЕ_КОРЕНЬ" for ц in у.targets)
-            for у in ast.walk(дерево))
+        объявлено = subprocess.run(
+            ["systemctl", "show", "-p", "WorkingDirectory", "--value",
+             помощник.ОБНОВЛЕНИЕ_СЛУЖБА],
+            capture_output=True, text=True).stdout.strip()
+        if объявлено:
+            assert объявлено.rstrip("/").endswith("/srv/site-factory/repo"), объявлено
 
     def test_рабочий_каталог_содержит_пакет_factory(self, помощник):
         """Иначе `python -m factory` не найдёт модуль, как и случилось."""
         assert (помощник.СОСТОЯНИЕ_КОРЕНЬ / "factory").is_dir()
+
+
+class TestКанарейкаИдётШтатнымЮнитом:
+    """Дефект LORDS-DEPLOYCTL-CREDENTIALS-40.
+
+    Сценарий обновления запускался подпроцессом и отказывал:
+    «CREDENTIALS_DIRECTORY не задан: Lords читает credentials только через
+    systemd LoadCredential». Это защита, а не препятствие — секрет не должен
+    приходить процессу иначе, и обойти её значило бы сломать то, ради чего она
+    поставлена. Канарейка идёт штатным юнитом, получающим credentials законно.
+    """
+
+    def test_запускается_служба_а_не_сценарий(self, помощник):
+        текст = Path(помощник.__file__).read_text(encoding="utf-8")
+        assert '"systemctl", "start", "lords-content-refresh.service"' in текст
+        assert '_выполнить(["/bin/bash", str(ОБНОВЛЕНИЕ)]' not in текст, (
+            "сценарий снова запускается напрямую — credentials не придут")
+
+    def test_дропин_удаляется_на_любом_пути(self, помощник):
+        import ast
+        дерево = ast.parse(Path(помощник.__file__).read_text(encoding="utf-8"))
+        нашли = False
+        for узел in ast.walk(дерево):
+            if isinstance(узел, ast.Try) and узел.finalbody:
+                текст = ast.unparse(ast.Module(body=узел.finalbody, type_ignores=[]))
+                if "ДРОПИН.unlink" in текст:
+                    нашли = True
+        assert нашли, "drop-in канарейки не удаляется в finally — чужая настройка не вернётся"
+
+    def test_имя_дропина_сортируется_после_чужого(self, помощник):
+        """Иначе наши переменные не перекрыли бы соседнюю полосу."""
+        assert помощник.ДРОПИН.name > "zz-canary-29.conf"
+        assert помощник.ДРОПИН.name.endswith(".conf")
