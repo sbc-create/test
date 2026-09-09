@@ -261,8 +261,34 @@ def глагол_canary(args) -> dict:
         перечитать = _выполнить(["systemctl", "daemon-reload"], таймаут=120)
         if перечитать["code"] != 0:
             raise Отказ(f"daemon-reload отказал: {перечитать['stderr'][:300]}")
-        итог = _выполнить(["systemctl", "start", "lords-content-refresh.service"],
+
+        # Дождаться простоя, а потом запускать.
+        #
+        # Дефект LORDS-DEPLOYCTL-JOIN-RUNNING-41: `systemctl start` для уже
+        # работающего юнита не запускает второй прогон — он присоединяется к
+        # идущему. Тот загрузил окружение при своём старте, до появления нашего
+        # drop-in, и канареечных переменных не видел. Прогон отрабатывал часы и
+        # выпускал обычное обновление, а выкладка считала его своим.
+        #
+        # Отсюда два правила: сначала простой, потом старт; и запуск обязан
+        # доказать себя новым InvocationID, а не фактом возврата команды.
+        ждали = 0
+        while _выполнить(["systemctl", "is-active", ОБНОВЛЕНИЕ_СЛУЖБА],
+                         таймаут=30)["stdout"].strip() == "active":
+            if ждали >= float(args.wait_idle):
+                raise Отказ(
+                    f"юнит обновления занят дольше {args.wait_idle} с: "
+                    "канарейка не начата, витрина не тронута")
+            time.sleep(20)
+            ждали += 20
+        до = _выполнить(["systemctl", "show", "-p", "InvocationID", "--value",
+                         ОБНОВЛЕНИЕ_СЛУЖБА], таймаут=30)["stdout"].strip()
+        итог = _выполнить(["systemctl", "start", ОБНОВЛЕНИЕ_СЛУЖБА],
                           таймаут=float(args.timeout))
+        после = _выполнить(["systemctl", "show", "-p", "InvocationID", "--value",
+                            ОБНОВЛЕНИЕ_СЛУЖБА], таймаут=30)["stdout"].strip()
+        if после and после == до:
+            raise Отказ("юнит обновления не перезапускался: InvocationID не изменился")
     finally:
         ДРОПИН.unlink(missing_ok=True)
         _выполнить(["systemctl", "daemon-reload"], таймаут=120)
@@ -378,6 +404,8 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("--site", required=True)
     c.add_argument("--revision", required=True)
     c.add_argument("--timeout", type=float, default=43200.0)
+    c.add_argument("--wait-idle", type=float, default=14400.0,
+                   help="сколько ждать простоя юнита обновления")
     rb = под.add_parser("rollback")
     rb.add_argument("--site", required=True)
     rb.add_argument("--reason", default="deploy-rollback")
