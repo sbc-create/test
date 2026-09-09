@@ -26,6 +26,7 @@ import datetime as dt
 import enum
 import hashlib
 import json
+import pathlib
 import re
 from typing import Any
 
@@ -54,13 +55,11 @@ NORMALIZATION_VERSION = "core-route-normalization/1.0.0"
 #: и объявить его тоньше значило бы объявить то, чего каталог не знает.
 KIND_TAXONOMY = "core-catalog/type:2"
 
-#: Теги формы. Заполнены у 2,4 % записей, поэтому отсутствие тега — не
-#: отрицание, а отсутствие измерения.
-FORM_TAGS = {"ona": "ONA", "ova": "OVA", "special": "SPECIAL"}
-
-#: Теги анимации. Значение `False` не выставляется никогда: тег есть — факт,
-#: тега нет — молчание. Отличить «не анимация» от «не помечено» нечем.
-ANIMATION_TAGS = frozenset({"anime", "cartoon"})
+#: Где объявлен словарь тегов поставщика. В коде его нет намеренно: какие
+#: метки означают анимацию или форму — свойство каталога, а не движка, и
+#: условие «если аниме» внутри общего кода означало бы, что следующий тип
+#: витрины потребует правки ядра.
+TAG_VOCABULARY_PATH = "config/catalog-tag-vocabulary.json"
 
 
 class RouteState(str, enum.Enum):
@@ -150,25 +149,40 @@ def catalog_kind(entry: dict[str, Any]) -> tuple[str, str]:
     return "UNKNOWN", "MISSING"
 
 
-def catalog_form(entry: dict[str, Any]) -> str:
-    """Форма произведения по тегам каталога. Пусто — не помечено."""
+def load_tag_vocabulary(root: str | pathlib.Path = ".") -> dict[str, Any]:
+    """Прочитать объявленный словарь тегов. Нет файла — пустой словарь.
+
+    Пустой словарь означает, что про форму и анимацию мы не знаем ничего, и
+    поля останутся незаполненными. Это верное умолчание: выдуманный словарь
+    заполнил бы их уверенно и неправильно.
+    """
+    путь = pathlib.Path(root) / TAG_VOCABULARY_PATH
+    if not путь.exists():
+        return {"animation_tags": [], "form_tags": {}}
+    return json.loads(путь.read_text(encoding="utf-8"))
+
+
+def catalog_form(entry: dict[str, Any], vocabulary: dict[str, Any]) -> str:
+    """Форма произведения по объявленному словарю. Пусто — не помечено."""
     теги = {str(т).lower() for т in (entry.get("tags") or ())}
-    for тег, форма in FORM_TAGS.items():
-        if тег in теги:
-            return форма
+    for тег, форма in (vocabulary.get("form_tags") or {}).items():
+        if str(тег).lower() in теги:
+            return str(форма)
     return ""
 
 
-def catalog_animation(entry: dict[str, Any]) -> bool | None:
+def catalog_animation(entry: dict[str, Any],
+                      vocabulary: dict[str, Any]) -> bool | None:
     """Анимация: `True` или `None`.
 
-    `False` не возвращается никогда. Теги заполнены у 2,4 % записей, поэтому
-    отсутствие метки говорит о том, что запись не помечали, а не о том, что
-    произведение — не анимация. Вернуть здесь `False` значило бы превратить
-    наше молчание в утверждение о мире.
+    `False` не возвращается никогда. Теги заполнены у малой доли записей,
+    поэтому отсутствие метки говорит о том, что запись не помечали, а не о
+    том, что произведение — не анимация. Вернуть здесь `False` значило бы
+    превратить наше молчание в утверждение о мире.
     """
+    метки = {str(т).lower() for т in (vocabulary.get("animation_tags") or ())}
     теги = {str(т).lower() for т in (entry.get("tags") or ())}
-    return True if теги & ANIMATION_TAGS else None
+    return True if теги & метки else None
 
 
 def envelope_digest_of(header: dict[str, Any]) -> str:
@@ -275,6 +289,7 @@ def build(entries: list[dict[str, Any]], *, site_id: str, route_of,
           observed_at: dt.datetime, producer_sha: str, source_digest: str,
           generation_reason: str, content_kind_of,
           source_observed_at: str = "",
+          tag_vocabulary: dict[str, Any] | None = None,
           previous: dict[str, Any] | None = None) -> Snapshot:
     """Построить снимок из записей каталога.
 
@@ -301,6 +316,7 @@ def build(entries: list[dict[str, Any]], *, site_id: str, route_of,
                 f"{source_observed_at}: снимок не мог наблюдать то, что "
                 "появилось позже него")
 
+    словарь = tag_vocabulary or {"animation_tags": [], "form_tags": {}}
     по_ключу: dict[str, list[dict[str, Any]]] = {}
     отклонено: list[dict[str, Any]] = []
 
@@ -353,8 +369,8 @@ def build(entries: list[dict[str, Any]], *, site_id: str, route_of,
             canonical_url=f"https://{site_id}{ключ}/",
             route_kind="title", stable_work_id=идентификатор,
             content_kind=вид, content_kind_state=состояние_вида,
-            content_form=catalog_form(запись),
-            is_animation=catalog_animation(запись),
+            content_form=catalog_form(запись, словарь),
+            is_animation=catalog_animation(запись, словарь),
             state=RouteState.ACTIVE,
             created_at=(прежняя or {}).get("createdAt")
             or observed_at.isoformat(),

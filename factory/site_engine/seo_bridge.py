@@ -27,7 +27,12 @@ import hashlib
 import json
 from typing import Any
 
+import pathlib
+
 from factory.site_engine import route_snapshot
+
+#: Корень репозитория: словарь тегов объявлен файлом, а не кодом.
+_КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
 
 #: Версия контракта передачи. Старшая часть — совместимость.
 BRIDGE_SCHEMA = "core-seo-bridge/1.1.0"
@@ -169,15 +174,16 @@ def content_kind_of(entry: dict[str, Any]) -> dict[str, Any]:
     ровно два класса: назвать аниме аниме каталог не умеет, и притворяться
     обратным здесь нечем.
     """
+    словарь = route_snapshot.load_tag_vocabulary(_КОРЕНЬ)
     вид, состояние = route_snapshot.catalog_kind(entry)
     return {
         "kind": вид,
         "state": состояние,
         "taxonomy": route_snapshot.KIND_TAXONOMY,
-        "form": route_snapshot.catalog_form(entry),
+        "form": route_snapshot.catalog_form(entry, словарь),
         # `None` — не измерено. `False` не бывает: тег есть или его нет, а
         # отличить «не анимация» от «не помечено» нечем.
-        "isAnimation": route_snapshot.catalog_animation(entry),
+        "isAnimation": route_snapshot.catalog_animation(entry, словарь),
     }
 
 

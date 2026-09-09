@@ -36,7 +36,8 @@ def _снимок(записи=None, **ещё):
     поля = {"site_id": "lords-01", "route_of": _адрес, "observed_at": СЕЙЧАС,
             "producer_sha": ПРОИЗВОДИТЕЛЬ, "source_digest": "abc",
             "generation_reason": "full-rebuild",
-            "content_kind_of": rs.catalog_kind}
+            "content_kind_of": rs.catalog_kind,
+            "tag_vocabulary": rs.load_tag_vocabulary(".")}
     поля.update(ещё)
     return build(записи if записи is not None else [_запись()], **поля)
 
@@ -157,25 +158,48 @@ def test_отсутствие_типа_не_превращается_в_филь
     assert rs.catalog_kind({}) == ("UNKNOWN", "MISSING")
 
 
+СЛОВАРЬ = rs.load_tag_vocabulary(".")
+
+
 def test_анимация_без_метки_остаётся_неизвестной_а_не_ложной():
-    """Теги заполнены у 2,4 % записей. Вернуть False значило бы превратить
-    наше молчание в утверждение о мире."""
-    assert rs.catalog_animation({"tags": ["anime"]}) is True
-    assert rs.catalog_animation({"tags": ["13+"]}) is None
-    assert rs.catalog_animation({"tags": []}) is None
-    assert rs.catalog_animation({}) is None
+    """Теги заполнены у малой доли записей. Вернуть False значило бы
+    превратить наше молчание в утверждение о мире."""
+    метка = (СЛОВАРЬ["animation_tags"] or ["anime"])[0]
+    assert rs.catalog_animation({"tags": [метка]}, СЛОВАРЬ) is True
+    assert rs.catalog_animation({"tags": ["13+"]}, СЛОВАРЬ) is None
+    assert rs.catalog_animation({"tags": []}, СЛОВАРЬ) is None
+    assert rs.catalog_animation({}, СЛОВАРЬ) is None
 
 
 def test_ложь_про_анимацию_не_выставляется_никогда():
-    из_каталога = [{"tags": t} for t in ([], ["13+"], ["anime"], ["cartoon"],
-                                         ["ona"], None)]
-    assert False not in {rs.catalog_animation(з) for з in из_каталога}
+    из_каталога = [{"tags": t} for t in ([], ["13+"], СЛОВАРЬ["animation_tags"],
+                                         list(СЛОВАРЬ["form_tags"]), None)]
+    assert False not in {rs.catalog_animation(з, СЛОВАРЬ) for з in из_каталога}
 
 
-def test_форма_берётся_из_тега_а_её_отсутствие_не_значит_обычное():
-    assert rs.catalog_form({"tags": ["ona"]}) == "ONA"
-    assert rs.catalog_form({"tags": ["ova"]}) == "OVA"
-    assert rs.catalog_form({"tags": []}) == ""
+def test_без_объявленного_словаря_ничего_не_измеряется():
+    """Выдуманный словарь заполнил бы поля уверенно и неправильно."""
+    пусто = {"animation_tags": [], "form_tags": {}}
+    assert rs.catalog_animation({"tags": ["что угодно"]}, пусто) is None
+    assert rs.catalog_form({"tags": ["что угодно"]}, пусто) == ""
+
+
+def test_форма_берётся_из_объявленного_тега():
+    тег, форма = next(iter(СЛОВАРЬ["form_tags"].items()))
+    assert rs.catalog_form({"tags": [тег]}, СЛОВАРЬ) == форма
+    assert rs.catalog_form({"tags": []}, СЛОВАРЬ) == ""
+
+
+def test_словарь_тегов_объявлен_файлом_а_не_кодом():
+    """Условие «если аниме» внутри общего кода означало бы, что следующий тип
+    витрины потребует правки ядра."""
+    import pathlib as _p
+    объявлен = _p.Path(rs.TAG_VOCABULARY_PATH)
+    assert объявлен.exists()
+    исходник = _p.Path("factory/site_engine/route_snapshot.py").read_text(
+        encoding="utf-8").lower()
+    for метка in СЛОВАРЬ["animation_tags"]:
+        assert метка.lower() not in исходник, f"метка {метка!r} просочилась в ядро"
 
 
 def test_таксономия_объявлена_вместе_со_значением():
