@@ -49,11 +49,34 @@ import time
 import traceback
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
-try:
-    from automation.deploy import lords_fence as барьер_мод
-except ImportError:  # установленная копия лежит одна, без дерева
-    барьер_мод = None
+def _загрузить_барьер():
+    """Барьер ищется РЯДОМ с файлом, а не от третьего родителя.
+
+    Установленная копия лежит в `/usr/local/libexec/site-factory/` одна.
+    Прежний импорт `automation.deploy.lords_fence` от `parent.parent.parent`
+    указывал в `/usr/local/automation/deploy/`, которого нет: в production
+    импорт падал всегда, `барьер_мод` был `None`, и каждая проверка барьера
+    молча пропускалась. Барьер работал только в дереве, то есть только в
+    тестах. Соседний каталог покрывает обе раскладки — и установленную, и
+    репозиторий, где `lords_fence.py` лежит здесь же.
+    """
+    import importlib.machinery
+    import importlib.util
+
+    путь = Path(__file__).resolve().parent / "lords_fence.py"
+    if not путь.is_file():
+        return None
+    спец = importlib.util.spec_from_loader(
+        "lords_fence", importlib.machinery.SourceFileLoader("lords_fence", str(путь)))
+    модуль = importlib.util.module_from_spec(спец)
+    # Регистрация до исполнения: `dataclasses` разрешает аннотации через
+    # `sys.modules[cls.__module__]`, и без записи класс `Барьер` не строится.
+    sys.modules.setdefault("lords_fence", модуль)
+    спец.loader.exec_module(модуль)
+    return модуль
+
+
+барьер_мод = _загрузить_барьер()
 
 БАЗА = Path("/var/lib/lords-deploy")
 ЗАЯВКИ = БАЗА / "requests"
@@ -126,9 +149,13 @@ def проверить_заявку(сырая: dict) -> dict:
     снимок = str(сырая.get("snapshot_sha256", "") or "")
     if снимок and not ХЕКС64.match(снимок):
         raise Отвергнуто(f"отпечаток снимка негоден: {снимок!r}")
-    поколение = сырая.get("generation", 0)
-    if not isinstance(поколение, int) or isinstance(поколение, bool) or поколение < 0:
-        raise Отвергнуто(f"поколение барьера негодно: {поколение!r}")
+    # Поколение обязательно и положительно. Прежде оно было необязательным со
+    # значением по умолчанию ноль, а ноль отключал барьер на всех этапах: любая
+    # заявка без этого поля проходила захват без единой проверки и могла
+    # переключить витрину. Ни одна из трёх заявок 2026-09-09 поля не несла.
+    поколение = сырая.get("generation")
+    if not isinstance(поколение, int) or isinstance(поколение, bool) or поколение <= 0:
+        raise Отвергнуто(f"поколение барьера обязано быть положительным целым: {поколение!r}")
     маркер = str(сырая.get("expect_marker", "") or "")
     if len(маркер) > 120:
         raise Отвергнуто("маркер шаблона длиннее ста двадцати знаков")
@@ -234,15 +261,18 @@ class Выкладка:
 
         # Барьер при захвате: заявка, вытесненная пока она лежала в очереди,
         # не должна дойти даже до осмотра витрины.
-        поколение = self.заявка.get("generation", 0)
-        if барьер_мод is not None and поколение:
-            решение = барьер_мод.проверить(
-                сайт, generation=поколение, revision=self.заявка["revision"],
-                artifact_sha256=self.заявка["artifact_sha256"], этап="capture")
-            if not решение["allowed"]:
-                сост["detail"] = решение["reason"]
-                сост["fence"] = решение
-                return барьер_мод.ВЫТЕСНЕНА
+        поколение = self.заявка["generation"]
+        if барьер_мод is None:
+            сост["detail"] = ("модуль барьера недоступен рядом с установленной "
+                              "копией: выкладка без барьера запрещена")
+            return "PRECHECK_FAILED_NO_CHANGE"
+        решение = барьер_мод.проверить(
+            сайт, generation=поколение, revision=self.заявка["revision"],
+            artifact_sha256=self.заявка["artifact_sha256"], этап="capture")
+        if not решение["allowed"]:
+            сост["detail"] = решение["reason"]
+            сост["fence"] = решение
+            return барьер_мод.ВЫТЕСНЕНА
 
         self.фаза(сайт, "INSPECT")
         до = self.ctl("inspect", сайт, таймаут=300)
@@ -288,9 +318,8 @@ class Выкладка:
         self.сказать(f"{сайт}: отрисовка закреплённым шаблоном; это часы, не минуты")
         argv_канарейки = ["canary", "--site", сайт,
                           "--revision", self.заявка["revision"]]
-        if поколение:
-            argv_канарейки += ["--generation", str(поколение),
-                               "--artifact-sha256", self.заявка["artifact_sha256"]]
+        argv_канарейки += ["--generation", str(поколение),
+                           "--artifact-sha256", self.заявка["artifact_sha256"]]
         канарейка = self.ctl(*argv_канарейки, таймаут=43200)
         if канарейка.get("verdict") == getattr(барьер_мод, "ВЫТЕСНЕНА", "STALE_FENCED_NO_CHANGE"):
             сост["detail"] = канарейка.get("note", "заявка вытеснена барьером")

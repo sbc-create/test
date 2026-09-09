@@ -37,6 +37,17 @@ from pathlib import Path
 БРОКЕР = Path("/usr/local/libexec/site-factory/lords-deploy-broker")
 
 
+def барьер_модуль():
+    """Барьер лежит рядом с подателем, в том же каталоге."""
+    путь = Path(__file__).resolve().parent / "lords_fence.py"
+    спец = importlib.util.spec_from_loader(
+        "lords_fence", importlib.machinery.SourceFileLoader("lords_fence", str(путь)))
+    модуль = importlib.util.module_from_spec(спец)
+    sys.modules.setdefault("lords_fence", модуль)
+    спец.loader.exec_module(модуль)
+    return модуль
+
+
 def отпечаток(путь: Path) -> str:
     h = hashlib.sha256()
     with путь.open("rb") as ф:
@@ -118,6 +129,23 @@ def main() -> int:
         "expect_marker": args.marker,
         "note": args.note or f"{ветка}@{ревизия[:12]}",
     }
+
+    # Объявление барьера. Поколение растёт всегда, даже для той же ревизии:
+    # повторная подача — осознанное решение выложить заново, и все заявки
+    # прежнего поколения обязаны быть вытеснены им.
+    барьер = барьер_модуль()
+    поколения = {}
+    for сайт in args.sites:
+        объявлен = барьер.объявить(сайт, ревизия, сумма,
+                                   reason=f"{ид} {ветка}@{ревизия[:12]}")
+        поколения[сайт] = объявлен.generation
+    единое = set(поколения.values())
+    if len(единое) != 1:
+        # Витрины идут одной заявкой и обязаны разделять поколение: иначе одно
+        # поле `generation` в заявке было бы верным не для всех.
+        print(f"поколения витрин разошлись: {поколения}", file=sys.stderr)
+        return 1
+    заявка["generation"] = единое.pop()
 
     брокер = схема_брокера()
     try:

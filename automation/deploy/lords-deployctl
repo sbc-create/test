@@ -47,11 +47,34 @@ import sys
 import time
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
-try:
-    from automation.deploy import lords_fence as барьер_мод
-except ImportError:  # установленная копия лежит одна, без дерева
-    барьер_мод = None
+def _загрузить_барьер():
+    """Барьер ищется РЯДОМ с файлом, а не от третьего родителя.
+
+    Установленная копия лежит в `/usr/local/libexec/site-factory/` одна.
+    Прежний импорт `automation.deploy.lords_fence` от `parent.parent.parent`
+    указывал в `/usr/local/automation/deploy/`, которого нет: в production
+    импорт падал всегда, `барьер_мод` был `None`, и каждая проверка барьера
+    молча пропускалась. Барьер работал только в дереве, то есть только в
+    тестах. Соседний каталог покрывает обе раскладки — и установленную, и
+    репозиторий, где `lords_fence.py` лежит здесь же.
+    """
+    import importlib.machinery
+    import importlib.util
+
+    путь = Path(__file__).resolve().parent / "lords_fence.py"
+    if not путь.is_file():
+        return None
+    спец = importlib.util.spec_from_loader(
+        "lords_fence", importlib.machinery.SourceFileLoader("lords_fence", str(путь)))
+    модуль = importlib.util.module_from_spec(спец)
+    # Регистрация до исполнения: `dataclasses` разрешает аннотации через
+    # `sys.modules[cls.__module__]`, и без записи класс `Барьер` не строится.
+    sys.modules.setdefault("lords_fence", модуль)
+    спец.loader.exec_module(модуль)
+    return модуль
+
+
+барьер_мод = _загрузить_барьер()
 
 САЙТЫ = ("lords-01", "lords-02", "lords-03")
 ДОМЕНЫ = {
@@ -252,6 +275,21 @@ def глагол_pin(args) -> dict:
     return {"site": сайт, "revision": ревизия, "pin": json.loads(итог["stdout"].strip())}
 
 
+def требовать_барьер(поколение: int) -> None:
+    """Нет барьера — нет выкладки.
+
+    Прежде отсутствие модуля означало «выкладывай без барьера»: проверка
+    стояла за условием `if барьер_мод is not None`, ложным в установленной
+    копии. Отказ обязан быть закрытым, поэтому недоступный барьер — это
+    `Отказ`, а не тихий пропуск.
+    """
+    if барьер_мод is None:
+        raise Отказ("модуль барьера недоступен рядом с установленной копией: "
+                    "выкладка без барьера запрещена")
+    if not isinstance(поколение, int) or isinstance(поколение, bool) or поколение <= 0:
+        raise Отказ(f"поколение обязано быть положительным целым: {поколение!r}")
+
+
 def глагол_canary(args) -> dict:
     """Канареечная выкладка витрины проверенным путём обновления каталога.
 
@@ -277,13 +315,13 @@ def глагол_canary(args) -> dict:
     # будет объявлен выложенным.
     поколение = getattr(args, "generation", 0) or 0
     отпечаток_артефакта = getattr(args, "artifact_sha256", "") or ""
-    def _барьер(этап: str) -> dict | None:
-        if барьер_мод is None or not поколение:
-            return None
+    требовать_барьер(поколение)
+
+    def _барьер(этап: str) -> dict:
         return барьер_мод.проверить(сайт, generation=поколение, revision=ревизия,
                                     artifact_sha256=отпечаток_артефакта, этап=этап)
     решение = _барьер("pre-render")
-    if решение and not решение["allowed"]:
+    if not решение["allowed"]:
         return {"site": сайт, "verdict": барьер_мод.ВЫТЕСНЕНА, "fence": решение,
                 "release_before": до["release"], "release_after": до["release"],
                 "switched": False,
@@ -332,12 +370,12 @@ def глагол_canary(args) -> dict:
     решение = _барьер("pre-switch")
     после = глагол_inspect(argparse.Namespace(site=сайт))
     сменился = после["release"] != до["release"]
-    if решение and not решение["allowed"]:
+    if not решение["allowed"]:
         return {"site": сайт, "verdict": барьер_мод.ВЫТЕСНЕНА, "fence": решение,
                 "release_before": до["release"], "release_after": после["release"],
                 "switched": сменился,
                 "note": "заявка вытеснена во время отрисовки: результат не принят"}
-    if решение and not решение["allowed"]:
+    if not решение["allowed"]:
         # Отрисовка уже произошла, но объявлять её выложенной нельзя: пока она
         # шла, объявлено другое желаемое состояние.
         return {"site": сайт, "verdict": барьер_мод.ВЫТЕСНЕНА, "fence": решение,

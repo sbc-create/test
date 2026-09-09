@@ -53,6 +53,9 @@ def помощник():
     "artifact_sha256": "b" * 64,
     "artifact_source": "/home/claude/wt-integration-28/var/artifacts/aaaaaaaaaaaa.tar.gz",
     "soak_seconds": 180,
+    # Поколение обязательно с `LORDS-FENCE-FAIL-OPEN-37`: заявка без него больше
+    # не является годной, потому что прежде именно она обходила барьер целиком.
+    "generation": 5,
 }
 
 
