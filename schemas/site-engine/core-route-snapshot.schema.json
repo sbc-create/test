@@ -1,0 +1,80 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "core-route-snapshot/1.1.0",
+ "title": "Снимок маршрутов витрины",
+ "description": "Контракт объявлен здесь, а не только в коде. Контракт, живущий одним кодом, нельзя ни объявить, ни проверить со стороны: именно поэтому producerSha было негде ограничить, и в снимок попала база производителя вместо него самого.",
+ "type": "object",
+ "required": ["schemaVersion", "siteId", "observedAt", "producerSha",
+              "sourceDigest", "sourceDigestAlgorithm", "normalizationVersion",
+              "kindTaxonomy", "recordCount", "completeness", "digest",
+              "envelopeDigest", "orderedBy", "records"],
+ "additionalProperties": true,
+ "properties": {
+  "schemaVersion": {"const": "core-route-snapshot/1.1.0"},
+  "compatibilityRange": {"const": "core-route-snapshot/1.x"},
+  "siteId": {"type": "string", "minLength": 1},
+  "observedAt": {"type": "string", "format": "date-time",
+                 "description": "Не раньше sourceObservedAt: снимок не может наблюдать то, что появилось позже него."},
+  "sourceObservedAt": {"type": "string",
+                       "description": "Когда снят сам источник. Пусто — не сообщено."},
+  "producerSha": {
+   "type": "string", "pattern": "^[0-9a-f]{40}$",
+   "description": "Полный SHA и ничего короче. Сокращённый неоднозначен и не отличает производителя от его базы."},
+  "sourceDigest": {"type": "string", "minLength": 1},
+  "sourceDigestAlgorithm": {
+   "const": "blake2b-128/json-sorted-compact",
+   "description": "Правило объявлено: потребитель не может проверить поле, о правиле которого не сказано."},
+  "normalizationVersion": {"const": "core-route-normalization/1.0.0"},
+  "kindTaxonomy": {
+   "const": "core-catalog/type:2",
+   "description": "Каталог различает ровно два класса. Аниме, мультфильм и документальное он не различает, и объявлять обратное нечем."},
+  "generationReason": {"type": "string"},
+  "previousDigest": {"type": "string"},
+  "recordCount": {"type": "integer", "minimum": 0},
+  "collisionCount": {"type": "integer", "minimum": 0},
+  "rejectedCount": {"type": "integer", "minimum": 0},
+  "completeness": {"enum": ["COMPLETE", "INCOMPLETE"]},
+  "digest": {"type": "string", "pattern": "^[0-9a-f]{32}$",
+             "description": "Отпечаток записей. Заголовка не покрывает — для него envelopeDigest."},
+  "envelopeDigest": {
+   "type": "string", "pattern": "^[0-9a-f]{32}$",
+   "description": "Отпечаток заголовка. Без него витрину, происхождение и время можно переписать, не тронув digest."},
+  "orderedBy": {"const": "routeKey"},
+  "records": {"type": "array", "items": {"$ref": "#/$defs/route"}},
+  "collisions": {"type": "array"},
+  "rejected": {"type": "array"}
+ },
+ "$defs": {
+  "route": {
+   "type": "object",
+   "required": ["siteId", "routeKey", "stableWorkId", "contentKind",
+                "contentKindState", "state"],
+   "properties": {
+    "siteId": {"type": "string"},
+    "routeKey": {"type": "string", "pattern": "^/"},
+    "canonicalUrl": {"type": "string"},
+    "routeKind": {"type": "string"},
+    "stableWorkId": {
+     "type": "string",
+     "description": "Пусто только при COLLISION: выбрать одного из кандидатов нельзя."},
+    "parentWorkId": {"type": "string"},
+    "collidedWorkIds": {
+     "type": "array", "items": {"type": "string"},
+     "description": "При COLLISION — не меньше двух. Объявить столкновение и не назвать кандидатов — то же, что промолчать."},
+    "contentKind": {"enum": ["MOVIE", "SERIES", "UNKNOWN"]},
+    "contentKindState": {"enum": ["AUTHORITATIVE", "CONFLICT", "MISSING"]},
+    "contentForm": {
+     "enum": ["", "ONA", "OVA", "SPECIAL"],
+     "description": "Пусто — не помечено, а не «обычное». Теги заполнены у 2,4 % записей."},
+    "isAnimation": {
+     "type": ["boolean", "null"],
+     "description": "true или null. false не бывает: отличить «не анимация» от «не помечено» нечем."},
+    "state": {"enum": ["ACTIVE", "COLLISION", "TOMBSTONE"]},
+    "createdAt": {"type": "string"},
+    "updatedAt": {"type": "string"},
+    "provenance": {"type": "string"},
+    "reason": {"type": "string"}
+   }
+  }
+ }
+}

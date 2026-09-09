@@ -26,12 +26,41 @@ import datetime as dt
 import enum
 import hashlib
 import json
+import re
 from typing import Any
 
-SNAPSHOT_SCHEMA = "core-route-snapshot/1.0.0"
+SNAPSHOT_SCHEMA = "core-route-snapshot/1.1.0"
 
 #: Совместимый ряд для потребителя. Читается весь старший ряд 1.x.
 COMPATIBILITY_RANGE = "core-route-snapshot/1.x"
+
+#: Полный SHA производителя и ничего короче. Сокращённый SHA неоднозначен и
+#: не отличает производителя от его собственной базы — ровно эта ошибка и была
+#: допущена в первом снимке: восемь знаков, и то была база. Проверка стоит
+#: здесь, у производителя: у него значение есть, а у потребителя только
+#: догадка о нём.
+FULL_SHA = re.compile(r"\A[0-9a-f]{40}\Z")
+
+#: Правило вычисления отпечатка источника. Объявлено, потому что потребитель
+#: не может проверить поле, о правиле которого не сказано.
+SOURCE_DIGEST_ALGORITHM = "blake2b-128/json-sorted-compact"
+
+#: Версия приведения адреса. Производитель и потребитель обязаны приводить
+#: адрес одинаково, а «одинаково» без версии не проверяется.
+NORMALIZATION_VERSION = "core-route-normalization/1.0.0"
+
+#: Ось вида произведения. Каталог различает два класса и сходится с
+#: `is_series` на всех записях без исключения. Третьего значения у него нет,
+#: и объявить его тоньше значило бы объявить то, чего каталог не знает.
+KIND_TAXONOMY = "core-catalog/type:2"
+
+#: Теги формы. Заполнены у 2,4 % записей, поэтому отсутствие тега — не
+#: отрицание, а отсутствие измерения.
+FORM_TAGS = {"ona": "ONA", "ova": "OVA", "special": "SPECIAL"}
+
+#: Теги анимации. Значение `False` не выставляется никогда: тег есть — факт,
+#: тега нет — молчание. Отличить «не анимация» от «не помечено» нечем.
+ANIMATION_TAGS = frozenset({"anime", "cartoon"})
 
 
 class RouteState(str, enum.Enum):
@@ -70,6 +99,12 @@ class RouteRecord:
     #: маршрутов. Нужны в самой записи: разбирающий видит отказ там же, где и
     #: то, между чем предстоит выбирать.
     collided_work_ids: tuple[str, ...] = ()
+    #: Форма произведения, если каталог её пометил: ONA, OVA, SPECIAL.
+    #: Пусто — не помечено, а не «обычное».
+    content_form: str = ""
+    #: Анимация: `True` или `None`. `False` не бывает — тег есть или его нет,
+    #: а отличить «не анимация» от «не помечено» нечем.
+    is_animation: bool | None = None
     created_at: str = ""
     updated_at: str = ""
     provenance: str = ""
@@ -84,6 +119,8 @@ class RouteRecord:
                 "collidedWorkIds": list(self.collided_work_ids),
                 "contentKind": self.content_kind,
                 "contentKindState": self.content_kind_state,
+                "contentForm": self.content_form,
+                "isAnimation": self.is_animation,
                 "state": self.state.value, "createdAt": self.created_at,
                 "updatedAt": self.updated_at, "provenance": self.provenance,
                 "reason": self.reason}
@@ -92,6 +129,58 @@ class RouteRecord:
 #: Поля, не входящие в отпечаток. Время сборки говорит о нашем прогоне, а не
 #: о маршрутах: включив его, мы объявляли бы изменением каждую пересборку.
 DIGEST_EXCLUDED = ("createdAt", "updatedAt")
+
+
+def catalog_kind(entry: dict[str, Any]) -> tuple[str, str]:
+    """Вид произведения так, как его знает каталог.
+
+    Два поля описывают одну вещь: `type` и `is_series`. Они сходятся на всех
+    53 310 записях, и именно поэтому расхождение между ними здесь не
+    сглаживается, а объявляется конфликтом: если они разойдутся, это
+    сообщение об испорченных данных, а не повод выбрать одно из двух.
+    """
+    тип = entry.get("type")
+    сериал = entry.get("is_series")
+    if тип == "movie" and сериал is False:
+        return "MOVIE", "AUTHORITATIVE"
+    if тип == "tv" and сериал is True:
+        return "SERIES", "AUTHORITATIVE"
+    if тип in ("movie", "tv"):
+        return "UNKNOWN", "CONFLICT"
+    return "UNKNOWN", "MISSING"
+
+
+def catalog_form(entry: dict[str, Any]) -> str:
+    """Форма произведения по тегам каталога. Пусто — не помечено."""
+    теги = {str(т).lower() for т in (entry.get("tags") or ())}
+    for тег, форма in FORM_TAGS.items():
+        if тег in теги:
+            return форма
+    return ""
+
+
+def catalog_animation(entry: dict[str, Any]) -> bool | None:
+    """Анимация: `True` или `None`.
+
+    `False` не возвращается никогда. Теги заполнены у 2,4 % записей, поэтому
+    отсутствие метки говорит о том, что запись не помечали, а не о том, что
+    произведение — не анимация. Вернуть здесь `False` значило бы превратить
+    наше молчание в утверждение о мире.
+    """
+    теги = {str(т).lower() for т in (entry.get("tags") or ())}
+    return True if теги & ANIMATION_TAGS else None
+
+
+def envelope_digest_of(header: dict[str, Any]) -> str:
+    """Отпечаток заголовка снимка.
+
+    Отпечаток записей заверяет маршруты и только их: витрину, происхождение,
+    время наблюдения и полноту можно переписать, не тронув его. Отпечаток, не
+    покрывающий тождества артефакта, тождества не заверяет.
+    """
+    сырьё = json.dumps(header, ensure_ascii=False, sort_keys=True,
+                       separators=(",", ":"))
+    return hashlib.blake2b(сырьё.encode("utf-8"), digest_size=16).hexdigest()
 
 
 def digest_of(records: list[dict[str, Any]]) -> str:
@@ -120,6 +209,9 @@ class Snapshot:
     producer_sha: str
     source_digest: str
     generation_reason: str
+    #: Когда снят сам источник. Снимок не может наблюдать то, что появилось
+    #: позже него, и это единственный способ такое заметить.
+    source_observed_at: str = ""
     previous_digest: str = ""
     schema_version: str = SNAPSHOT_SCHEMA
 
@@ -137,15 +229,20 @@ class Snapshot:
         return observation_id(self.site_id, self.source_digest,
                               self.observed_at.date().isoformat())
 
-    def as_dict(self) -> dict[str, Any]:
+    def header(self) -> dict[str, Any]:
+        """Заголовок — всё, чем снимок себя опознаёт, кроме самих маршрутов."""
         return {
             "schemaVersion": self.schema_version,
             "compatibilityRange": COMPATIBILITY_RANGE,
             "observationId": self.observation_id,
             "siteId": self.site_id,
             "observedAt": self.observed_at.isoformat(),
+            "sourceObservedAt": self.source_observed_at,
             "producerSha": self.producer_sha,
             "sourceDigest": self.source_digest,
+            "sourceDigestAlgorithm": SOURCE_DIGEST_ALGORITHM,
+            "normalizationVersion": NORMALIZATION_VERSION,
+            "kindTaxonomy": KIND_TAXONOMY,
             "generationReason": self.generation_reason,
             "previousDigest": self.previous_digest,
             "recordCount": len(self.records),
@@ -154,22 +251,56 @@ class Snapshot:
             "completeness": self.completeness.value,
             "digest": self.digest,
             "orderedBy": "routeKey",
+        }
+
+    @property
+    def envelope_digest(self) -> str:
+        return envelope_digest_of(self.header())
+
+    def as_dict(self) -> dict[str, Any]:
+        return {
+            **self.header(),
+            "envelopeDigest": self.envelope_digest,
             "records": [з.as_dict() for з in self.records],
             "collisions": [dict(с) for с in self.collisions],
             "rejected": [dict(о) for о in self.rejected],
         }
 
 
+class SnapshotRefused(ValueError):
+    """Снимок не собирается: вход не годен."""
+
+
 def build(entries: list[dict[str, Any]], *, site_id: str, route_of,
           observed_at: dt.datetime, producer_sha: str, source_digest: str,
-          generation_reason: str, previous: dict[str, Any] | None = None,
-          content_kind_of=None) -> Snapshot:
+          generation_reason: str, content_kind_of,
+          source_observed_at: str = "",
+          previous: dict[str, Any] | None = None) -> Snapshot:
     """Построить снимок из записей каталога.
 
     `route_of` — функция витрины, дающая адрес. Она передаётся, а не
     вызывается по имени: снимок обязан строиться той же функцией, какой
     витрина строит адреса, и подмена её здесь была бы подменой самого адреса.
+
+    `content_kind_of` обязателен и умолчания не имеет. Прежде он был
+    необязательным, и первый снимок собрали, не передав его: вид произведения
+    вышел пустым у всех 47 684 записей, а потребитель из-за этого не смог
+    допустить ни одной страницы. Забыть передать вид теперь нельзя —
+    единственная причина, по которой параметр не имеет умолчания.
     """
+    if not FULL_SHA.match(producer_sha or ""):
+        raise SnapshotRefused(
+            f"producerSha {producer_sha!r} — не полный SHA. Сокращённый "
+            "неоднозначен и не отличает производителя от его базы; именно так "
+            "в снимок и попала база вместо производителя")
+    if source_observed_at:
+        снят = dt.datetime.fromisoformat(source_observed_at.replace("Z", "+00:00"))
+        if observed_at < снят:
+            raise SnapshotRefused(
+                f"наблюдение {observed_at.isoformat()} раньше снятия источника "
+                f"{source_observed_at}: снимок не мог наблюдать то, что "
+                "появилось позже него")
+
     по_ключу: dict[str, list[dict[str, Any]]] = {}
     отклонено: list[dict[str, Any]] = []
 
@@ -215,15 +346,15 @@ def build(entries: list[dict[str, Any]], *, site_id: str, route_of,
 
         запись = группа[0]
         идентификатор = str(запись.get("external_id"))
-        вид, состояние_вида = ("UNKNOWN", "MISSING")
-        if content_kind_of is not None:
-            вид, состояние_вида = content_kind_of(запись)
+        вид, состояние_вида = content_kind_of(запись)
         прежняя = прежние.get(ключ)
         записи.append(RouteRecord(
             site_id=site_id, route_key=ключ,
             canonical_url=f"https://{site_id}{ключ}/",
             route_kind="title", stable_work_id=идентификатор,
             content_kind=вид, content_kind_state=состояние_вида,
+            content_form=catalog_form(запись),
+            is_animation=catalog_animation(запись),
             state=RouteState.ACTIVE,
             created_at=(прежняя or {}).get("createdAt")
             or observed_at.isoformat(),
@@ -254,6 +385,7 @@ def build(entries: list[dict[str, Any]], *, site_id: str, route_of,
                     observed_at=observed_at, producer_sha=producer_sha,
                     source_digest=source_digest,
                     generation_reason=generation_reason,
+                    source_observed_at=source_observed_at,
                     previous_digest=(previous or {}).get("digest", ""))
 
 

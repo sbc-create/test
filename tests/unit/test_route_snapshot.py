@@ -28,10 +28,21 @@ def _адрес(name, external_id):
     return f"/title/{slugify(name) or external_id.lower()}/"
 
 
+#: Полный SHA. Прежде здесь стояло восемь знаков, и проверки на этом молчали:
+#: оснастка воспроизводила ровно ту ошибку, которую потом нашёл потребитель.
+ПРОИЗВОДИТЕЛЬ = "1f29ed5a8d7c1f56f928d35171cedc548a615f01"
+
+
+def _вид(запись):
+    """Вид произведения из полей каталога — как его считает производитель."""
+    from factory.site_engine.route_snapshot import catalog_kind
+    return catalog_kind(запись)
+
+
 def _снимок(записи, **ещё):
     поля = {"site_id": "lords-01", "route_of": _адрес, "observed_at": СЕЙЧАС,
-            "producer_sha": "2ccfa102", "source_digest": "abc",
-            "generation_reason": "full-rebuild"}
+            "producer_sha": ПРОИЗВОДИТЕЛЬ, "source_digest": "abc",
+            "generation_reason": "full-rebuild", "content_kind_of": _вид}
     поля.update(ещё)
     return build(записи, **поля)
 

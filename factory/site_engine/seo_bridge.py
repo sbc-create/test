@@ -27,8 +27,10 @@ import hashlib
 import json
 from typing import Any
 
+from factory.site_engine import route_snapshot
+
 #: Версия контракта передачи. Старшая часть — совместимость.
-BRIDGE_SCHEMA = "core-seo-bridge/1.0.0"
+BRIDGE_SCHEMA = "core-seo-bridge/1.1.0"
 
 #: Описательные поля продукта. Перечень принадлежит SEO и повторён здесь
 #: намеренно как **ожидание потребителя**: мост обязан ответить про каждое, в
@@ -42,6 +44,11 @@ DESCRIPTIVE_FIELDS: tuple[str, ...] = (
 
 #: Что каталог действительно отдаёт. Измерено, а не предположено.
 SUPPLIED_FIELDS: frozenset[str] = frozenset({"year", "ageRating"})
+
+#: Вид произведения в перечень описательных полей не входит: он не описывает
+#: произведение, а определяет, чем оно является. От него зависит разметка и
+#: то, что странице разрешено обещать, поэтому он идёт отдельным блоком и
+#: обязателен, а не «поставляется при наличии».
 
 #: Возрастные метки, которые каталог несёт тегом. Единственное описательное
 #: сведение, приходящее не полем.
@@ -150,6 +157,30 @@ def rating_of(entry: dict[str, Any]) -> dict[str, Any]:
                       "наших сведениях, и нулём не отображается"}
 
 
+def content_kind_of(entry: dict[str, Any]) -> dict[str, Any]:
+    """Вид произведения для пакета фактов.
+
+    Прежде мост отдавал `providerType` и `isSeries` — сырые поля поставщика.
+    Потребитель ими не пользовался, и правильно делал: истолковать чужое поле
+    значит догадаться, а вид произведения решает, какую разметку выпустить и
+    что странице разрешено обещать.
+
+    Ось объявлена вместе со значением. `taxonomy` говорит, что различаются
+    ровно два класса: назвать аниме аниме каталог не умеет, и притворяться
+    обратным здесь нечем.
+    """
+    вид, состояние = route_snapshot.catalog_kind(entry)
+    return {
+        "kind": вид,
+        "state": состояние,
+        "taxonomy": route_snapshot.KIND_TAXONOMY,
+        "form": route_snapshot.catalog_form(entry),
+        # `None` — не измерено. `False` не бывает: тег есть или его нет, а
+        # отличить «не анимация» от «не помечено» нечем.
+        "isAnimation": route_snapshot.catalog_animation(entry),
+    }
+
+
 def export_record(entry: dict[str, Any], *, site_id: str) -> dict[str, Any]:
     """Одна запись пакета. Только разрешённые поля.
 
@@ -166,6 +197,11 @@ def export_record(entry: dict[str, Any], *, site_id: str) -> dict[str, Any]:
         "displayTitle": str(entry.get("name") or ""),
         "providerType": str(entry.get("type") or ""),
         "isSeries": entry.get("is_series"),
+        # Вид считается **той же функцией**, какой его считает снимок
+        # маршрутов. Две реализации одного правила рано или поздно разойдутся,
+        # и тогда один контракт назовёт произведение фильмом, а другой
+        # сериалом — про одну и ту же запись.
+        "contentKind": content_kind_of(entry),
         "contentRevision": str(entry.get("updated_at") or ""),
         "descriptive": [п.as_dict() for п in descriptive_of(entry)],
         "rating": rating_of(entry),
