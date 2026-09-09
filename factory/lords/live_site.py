@@ -188,12 +188,31 @@ def build_live_site(
             playability = {"error": repr(error)[:200]}
 
     catalog = live_catalog.catalog_from_live(entries)
-    site = render_mod.render_site(
-        package, catalog=catalog, environ={}, publisher_id=publisher)
 
+    # Страницы уходят на диск по мере отрисовки, а не копятся в памяти.
+    #
+    # `RenderedSite.pages` хранит тело каждой страницы, и на боевой витрине их
+    # 61 733. Замер 9 сентября на lords-03: cgroup упёрся в предел 2 ГиБ,
+    # `memory.max` сработал 97 530 раз, `pgsteal` дошёл до 4 099 604, процесс
+    # сжёг 2 ч 52 мин процессорного времени и не записал ни одного файла —
+    # вытеснение по кругу вместо работы. Юнит обновления при этом занят до
+    # десяти часов, и на это время выкладка невозможна ни для одной витрины.
+    #
+    # Механизм потоковой отдачи в рендерере уже был и ровно для этого: при
+    # переданном `sink` страница уходит вызывающему сразу, а в словаре остаётся
+    # запись без тела. Здесь он просто не использовался.
     directory = Path(output) if output else PATHS.artifact_dir("lords", "live", site_id)
     serve_mod.clear_directory(directory)
-    export = serve_mod.export(site, directory)
+    записанные: list[str] = []
+    site = render_mod.render_site(
+        package, catalog=catalog, environ={}, publisher_id=publisher,
+        sink=lambda page: записанные.append(serve_mod.write_page(directory, page)))
+
+    # `not_found` присваивается напрямую и через `sink` не проходит.
+    if site.not_found is not None:
+        (Path(directory) / "404.html").write_bytes(site.not_found.payload)
+        записанные.append("404.html")
+    export = {"root": str(directory), "files": sorted(записанные)}
 
     report = dict(site.report)
     report["documents"] = len(export["files"])

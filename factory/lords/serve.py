@@ -167,17 +167,33 @@ def clear_directory(directory) -> None:
     root.mkdir(parents=True, exist_ok=True)
 
 
+def page_target(root, path: str) -> Path:
+    """Файл, в который ложится страница. Одно правило на выгрузку и на поток.
+
+    Вынесено, потому что правил стало два места: обычная выгрузка и потоковая
+    запись во время отрисовки. Две копии одного правила разошлись бы молча, и
+    каталог, собранный потоком, отличался бы от собранного выгрузкой.
+    """
+    root = Path(root)
+    if path.endswith("/"):
+        return root / path.strip("/") / "index.html"
+    return root / path.lstrip("/")
+
+
+def write_page(root, page) -> str:
+    """Записать одну страницу и вернуть её путь относительно корня."""
+    target = page_target(root, page.path)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(page.payload)
+    return str(target.relative_to(Path(root)))
+
+
 def export(site: RenderedSite, directory) -> dict:
     """Выгружает собранный сайт в каталог. Используется сборкой пакета стенда."""
     root = Path(directory)
     written = []
     for path, page in sorted(site.pages.items()):
-        target = root / path.lstrip("/")
-        if path.endswith("/"):
-            target = root / path.strip("/") / "index.html"
-        target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_bytes(page.payload)
-        written.append(str(target.relative_to(root)))
+        written.append(write_page(root, page))
     if site.not_found is not None:
         # Байтами, как и все прочие страницы. Текстовый режим здесь делал две
         # тихие вещи: переводил переносы строк по правилам платформы — то есть
