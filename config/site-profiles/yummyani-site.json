@@ -242,5 +242,10 @@
     "monitoring-audit": "site-factory/platform"
   },
   "health_endpoint": "/healthz",
-  "coverage_endpoint": "/api/v1/coverage"
+  "coverage_endpoint": "/api/v1/coverage",
+  "route_rules": {
+    "titlePrefixes": [
+      "anime"
+    ]
+  }
 }

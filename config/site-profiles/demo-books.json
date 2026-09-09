@@ -144,5 +144,10 @@
       "limit": 12,
       "position": 0
     }
-  ]
+  ],
+  "route_rules": {
+    "titlePrefixes": [
+      "book"
+    ]
+  }
 }
