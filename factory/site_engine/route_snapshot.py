@@ -291,7 +291,8 @@ def build(entries: list[dict[str, Any]], *, site_id: str, route_of,
           source_observed_at: str = "",
           tag_vocabulary: dict[str, Any] | None = None,
           previous: dict[str, Any] | None = None,
-          route_provenance: str = "catalog+slugify") -> Snapshot:
+          route_provenance: str = "catalog+slugify",
+          canonical_host: str = "") -> Snapshot:
     """Построить снимок из записей каталога.
 
     `route_of` — функция витрины, дающая адрес. Она передаётся, а не
@@ -304,6 +305,12 @@ def build(entries: list[dict[str, Any]], *, site_id: str, route_of,
     это неправда: адрес там не вычислен из названия, а объявлен самой
     витриной. Умолчание сохраняет прежнее значение, поэтому снимки
     Lords не меняются ни на байт.
+
+    `canonical_host` — узел, который попадёт в `canonicalUrl`. Прежде
+    туда подставлялся `site_id`, и для витрины, чей идентификатор не
+    совпадает с доменом, поле переставало быть адресом: `yummyani-site`
+    это имя витрины, а не узел. Умолчание сохраняет прежнее поведение,
+    поэтому снимки Lords не меняются.
 
     `content_kind_of` обязателен и умолчания не имеет. Прежде он был
     необязательным, и первый снимок собрали, не передав его: вид произведения
@@ -374,7 +381,7 @@ def build(entries: list[dict[str, Any]], *, site_id: str, route_of,
         прежняя = прежние.get(ключ)
         записи.append(RouteRecord(
             site_id=site_id, route_key=ключ,
-            canonical_url=f"https://{site_id}{ключ}/",
+            canonical_url=f"https://{canonical_host or site_id}{ключ}/",
             route_kind="title", stable_work_id=идентификатор,
             content_kind=вид, content_kind_state=состояние_вида,
             content_form=catalog_form(запись, словарь),

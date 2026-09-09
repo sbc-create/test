@@ -1,0 +1,166 @@
+{
+ "contract": "core-route-snapshot/1.1.0",
+ "producerSha": "45e45c9149fd0df3c5ca6c5867951daf9588b04e",
+ "producerBranch": "claude/core-unified-identity-provenance-35",
+ "kindTaxonomy": "core-catalog/type:2",
+ "routeProvenance": "showcase-route-table:PublicTitleRoute",
+ "catalogMark": "2026-09-09T16:25:40Z",
+ "catalogFile": "/srv/site-factory/repo/var/lords/lords/catalog-cache/lords-01.json",
+ "catalogEntries": 53313,
+ "liveRequests": 0,
+ "snapshots": {
+  "yummyani-site": {
+   "file": "route-snapshot-yummyani-site.json",
+   "canonicalHost": "yummyani.site",
+   "routeRows": 7303,
+   "canonicalRoutes": 7302,
+   "nonCanonicalAliases": [
+    {
+     "slug": "istorii-ery-seva-tv",
+     "stableWorkId": "019281bb-4921-78b1-9258-3be4a00e92b4",
+     "reason": "NON_CANONICAL_ALIAS: второй адрес того же произведения; снимок объявляет канонический"
+    }
+   ],
+   "routedWithoutCatalogEntry": {
+    "count": 12,
+    "reason": "CATALOG_ENTRY_ABSENT: витрина публикует маршрут, а записи в кэше каталога нет; вид не измерен, не ноль",
+    "stableWorkIds": [
+     "01915292-551c-75d7-87f2-0750cee8b5ae",
+     "019152a3-8535-7022-8cc1-3840b78a679e",
+     "019168a1-e98e-70dc-9dc4-3adccfa33cee",
+     "0191d04d-6dd0-7eee-a91a-5b1e3ff3d7d6",
+     "01927cca-eaa9-7806-bf55-ff0d22975ef5",
+     "0195f6e4-48a2-7800-8c0a-53b5abe43692",
+     "01964880-9cfd-7ee7-8ae5-16ccc47d1f96",
+     "01976d22-1765-716b-a94c-7bafff35ab94",
+     "01976d24-f9ae-77a3-9503-163bfc43d500",
+     "01976d27-d3f8-7107-8936-3abf6e149955",
+     "019efa4f-5c44-7eea-905e-75203127b804",
+     "019f8eff-1eca-70a4-904c-32dafeb5f047"
+    ]
+   },
+   "recordCount": 7302,
+   "collisionCount": 0,
+   "rejectedCount": 0,
+   "completeness": "COMPLETE",
+   "byContentKind": {
+    "SERIES": 5461,
+    "MOVIE": 1829,
+    "UNKNOWN": 12
+   },
+   "byContentKindState": {
+    "AUTHORITATIVE": 7290,
+    "MISSING": 12
+   },
+   "isAnimationTrue": 312,
+   "contentFormSet": 330,
+   "digest": "3136c9780b88d4680ed4d82b8e19559d",
+   "envelopeDigest": "b40327dc121209c4efc3c6dc6fdea8c5",
+   "sourceDigest": "c1ace06d4500ee49d9314aac448e3e35",
+   "sourceObservedAt": "2026-09-06T05:51:46.369666+00:00",
+   "sha256": "24f3b5aea8aa839dbfcf59814c352455f3218f6150426ca97dabdc3332d35866"
+  },
+  "yummyani-org": {
+   "file": "route-snapshot-yummyani-org.json",
+   "canonicalHost": "yummyani.org",
+   "routeRows": 7291,
+   "canonicalRoutes": 7290,
+   "nonCanonicalAliases": [
+    {
+     "slug": "istorii-ery-seva-tv",
+     "stableWorkId": "019281bb-4921-78b1-9258-3be4a00e92b4",
+     "reason": "NON_CANONICAL_ALIAS: второй адрес того же произведения; снимок объявляет канонический"
+    }
+   ],
+   "routedWithoutCatalogEntry": {
+    "count": 12,
+    "reason": "CATALOG_ENTRY_ABSENT: витрина публикует маршрут, а записи в кэше каталога нет; вид не измерен, не ноль",
+    "stableWorkIds": [
+     "01915292-551c-75d7-87f2-0750cee8b5ae",
+     "019152a3-8535-7022-8cc1-3840b78a679e",
+     "019168a1-e98e-70dc-9dc4-3adccfa33cee",
+     "0191d04d-6dd0-7eee-a91a-5b1e3ff3d7d6",
+     "01927cca-eaa9-7806-bf55-ff0d22975ef5",
+     "0195f6e4-48a2-7800-8c0a-53b5abe43692",
+     "01964880-9cfd-7ee7-8ae5-16ccc47d1f96",
+     "01976d22-1765-716b-a94c-7bafff35ab94",
+     "01976d24-f9ae-77a3-9503-163bfc43d500",
+     "01976d27-d3f8-7107-8936-3abf6e149955",
+     "019efa4f-5c44-7eea-905e-75203127b804",
+     "019f8eff-1eca-70a4-904c-32dafeb5f047"
+    ]
+   },
+   "recordCount": 7290,
+   "collisionCount": 0,
+   "rejectedCount": 0,
+   "completeness": "COMPLETE",
+   "byContentKind": {
+    "SERIES": 5459,
+    "MOVIE": 1819,
+    "UNKNOWN": 12
+   },
+   "byContentKindState": {
+    "AUTHORITATIVE": 7278,
+    "MISSING": 12
+   },
+   "isAnimationTrue": 312,
+   "contentFormSet": 330,
+   "digest": "5bd94680f899ac1f4361199d43ae3d57",
+   "envelopeDigest": "0311b2903dcf1be391cdd4a463a430c1",
+   "sourceDigest": "fb2039b24df9064fe90e5bdcbc374bce",
+   "sourceObservedAt": "2026-09-06T05:51:46.699568+00:00",
+   "sha256": "fe7cf1e8bdecdccdb06334da9ea67380d8fb47f002fb357babbd70f4714910ed"
+  },
+  "yummyani-biz": {
+   "file": "route-snapshot-yummyani-biz.json",
+   "canonicalHost": "yummyani.biz",
+   "routeRows": 7291,
+   "canonicalRoutes": 7290,
+   "nonCanonicalAliases": [
+    {
+     "slug": "istorii-ery-seva-tv",
+     "stableWorkId": "019281bb-4921-78b1-9258-3be4a00e92b4",
+     "reason": "NON_CANONICAL_ALIAS: второй адрес того же произведения; снимок объявляет канонический"
+    }
+   ],
+   "routedWithoutCatalogEntry": {
+    "count": 12,
+    "reason": "CATALOG_ENTRY_ABSENT: витрина публикует маршрут, а записи в кэше каталога нет; вид не измерен, не ноль",
+    "stableWorkIds": [
+     "01915292-551c-75d7-87f2-0750cee8b5ae",
+     "019152a3-8535-7022-8cc1-3840b78a679e",
+     "019168a1-e98e-70dc-9dc4-3adccfa33cee",
+     "0191d04d-6dd0-7eee-a91a-5b1e3ff3d7d6",
+     "01927cca-eaa9-7806-bf55-ff0d22975ef5",
+     "0195f6e4-48a2-7800-8c0a-53b5abe43692",
+     "01964880-9cfd-7ee7-8ae5-16ccc47d1f96",
+     "01976d22-1765-716b-a94c-7bafff35ab94",
+     "01976d24-f9ae-77a3-9503-163bfc43d500",
+     "01976d27-d3f8-7107-8936-3abf6e149955",
+     "019efa4f-5c44-7eea-905e-75203127b804",
+     "019f8eff-1eca-70a4-904c-32dafeb5f047"
+    ]
+   },
+   "recordCount": 7290,
+   "collisionCount": 0,
+   "rejectedCount": 0,
+   "completeness": "COMPLETE",
+   "byContentKind": {
+    "SERIES": 5459,
+    "MOVIE": 1819,
+    "UNKNOWN": 12
+   },
+   "byContentKindState": {
+    "AUTHORITATIVE": 7278,
+    "MISSING": 12
+   },
+   "isAnimationTrue": 312,
+   "contentFormSet": 330,
+   "digest": "7705eef258d780e26ec7734f26f5fb6b",
+   "envelopeDigest": "adfe9bda24ba535109c2c7e7d2fbeb28",
+   "sourceDigest": "70b8df889d1eb6dbd65339488584f63f",
+   "sourceObservedAt": "2026-09-06T05:51:47.006334+00:00",
+   "sha256": "01d82d5065d3f0fbe3c2d1190f7e1413b8044a658aa1a7d4270cb24cae58b26b"
+  }
+ }
+}
