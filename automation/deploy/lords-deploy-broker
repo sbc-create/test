@@ -192,6 +192,14 @@ class Выкладка:
         return данные
 
     def публичная(self, сайт: str, метка: str, браузеры: bool) -> dict:
+        # Маркер нового шаблона проверяется ТОЛЬКО после переключения.
+        #
+        # Дефект LORDS-BROKER-MARKER-BEFORE-38: предполётная проверка шла с тем
+        # же маркером и требовала увидеть новый шаблон ДО выкладки. Условие
+        # невыполнимо по построению, и выкладка честно отказывала с
+        # PRECHECK_FAILED_NO_CHANGE, ни разу не дойдя до отрисовки. Проверка,
+        # которую нельзя пройти, не защищает — она просто не пускает.
+        маркер = self.заявка["expect_marker"] if метка != "before" else ""
         свидетельства = СВИДЕТЕЛЬСТВА / self.ид / сайт
         свидетельства.mkdir(parents=True, exist_ok=True)
         subprocess.run(["chown", "-R", "claude:claude", str(СВИДЕТЕЛЬСТВА / self.ид)],
@@ -199,8 +207,8 @@ class Выкладка:
         argv = [sys.executable, str(ПУБЛИЧНАЯ), "--site", сайт,
                 "--domain", ДОМЕНЫ[сайт], "--evidence", str(свидетельства),
                 "--label", метка, "--images", "30"]
-        if self.заявка["expect_marker"]:
-            argv += ["--expect-marker", self.заявка["expect_marker"]]
+        if маркер:
+            argv += ["--expect-marker", маркер]
         if браузеры:
             argv.append("--browsers")
         готово = _как_claude(argv, таймаут=5400)
