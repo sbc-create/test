@@ -330,3 +330,39 @@ class TestКанарейкаНеПрисоединяетсяКЧужомуПро
     def test_ожидание_простоя_ограничено(self, помощник):
         текст = Path(помощник.__file__).read_text(encoding="utf-8")
         assert "--wait-idle" in текст, "ожидание простоя не ограничено по времени"
+
+
+class TestПоколениеПроходитЧерезПриёмщик:
+    """Барьер должен работать на всей цепочке, а не в одном её звене.
+
+    Проверка только внутри помощника оставляла дыру: заявка, вытесненная пока
+    она лежала в очереди, доходила до осмотра витрины и занимала ресурс. Захват
+    — второе из четырёх мест, где поколение обязано предъявляться.
+    """
+
+    def test_поколение_принимается_схемой(self, брокер):
+        принято = брокер.проверить_заявку({**ГОДНАЯ, "generation": 4})
+        assert принято["generation"] == 4
+
+    def test_отрицательное_поколение_отвергается(self, брокер):
+        with pytest.raises(брокер.Отвергнуто):
+            брокер.проверить_заявку({**ГОДНАЯ, "generation": -1})
+
+    def test_поколение_не_строка(self, брокер):
+        with pytest.raises(брокер.Отвергнуто):
+            брокер.проверить_заявку({**ГОДНАЯ, "generation": "4"})
+
+    def test_барьер_спрашивается_при_захвате(self, брокер):
+        текст = (ROOT / "automation" / "deploy" / "lords-deploy-broker").read_text(
+            encoding="utf-8")
+        assert 'этап="capture"' in текст
+
+    def test_поколение_передаётся_помощнику(self, брокер):
+        текст = (ROOT / "automation" / "deploy" / "lords-deploy-broker").read_text(
+            encoding="utf-8")
+        assert '"--generation"' in текст and '"--artifact-sha256"' in текст
+
+    def test_вытеснение_имеет_собственный_статус(self, брокер):
+        текст = (ROOT / "automation" / "deploy" / "lords-deploy-broker").read_text(
+            encoding="utf-8")
+        assert 'return "STALE_FENCED_NO_CHANGE"' in текст

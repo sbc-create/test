@@ -49,6 +49,12 @@ import time
 import traceback
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+try:
+    from automation.deploy import lords_fence as барьер_мод
+except ImportError:  # установленная копия лежит одна, без дерева
+    барьер_мод = None
+
 БАЗА = Path("/var/lib/lords-deploy")
 ЗАЯВКИ = БАЗА / "requests"
 СОСТОЯНИЕ = БАЗА / "state"
@@ -88,7 +94,7 @@ def проверить_заявку(сырая: dict) -> dict:
     опечатку в имени поля, и заявка делает не то, что написано."""
     разрешено = {"deployment_id", "sites", "revision", "artifact_sha256",
                  "artifact_source", "snapshot_sha256", "snapshot_count",
-                 "soak_seconds", "expect_marker", "note"}
+                 "soak_seconds", "expect_marker", "note", "generation"}
     лишние = set(сырая) - разрешено
     if лишние:
         raise Отвергнуто(f"неизвестные поля заявки: {sorted(лишние)}")
@@ -120,6 +126,9 @@ def проверить_заявку(сырая: dict) -> dict:
     снимок = str(сырая.get("snapshot_sha256", "") or "")
     if снимок and not ХЕКС64.match(снимок):
         raise Отвергнуто(f"отпечаток снимка негоден: {снимок!r}")
+    поколение = сырая.get("generation", 0)
+    if not isinstance(поколение, int) or isinstance(поколение, bool) or поколение < 0:
+        raise Отвергнуто(f"поколение барьера негодно: {поколение!r}")
     маркер = str(сырая.get("expect_marker", "") or "")
     if len(маркер) > 120:
         raise Отвергнуто("маркер шаблона длиннее ста двадцати знаков")
@@ -128,6 +137,7 @@ def проверить_заявку(сырая: dict) -> dict:
         "artifact_sha256": отпечаток, "artifact_source": источник,
         "snapshot_sha256": снимок, "snapshot_count": счёт,
         "soak_seconds": выдержка, "expect_marker": маркер,
+        "generation": поколение,
         "note": str(сырая.get("note", ""))[:400],
     }
 
@@ -222,6 +232,18 @@ class Выкладка:
     def выложить_витрину(self, сайт: str) -> str:
         сост = self.состояние["sites"][сайт]
 
+        # Барьер при захвате: заявка, вытесненная пока она лежала в очереди,
+        # не должна дойти даже до осмотра витрины.
+        поколение = self.заявка.get("generation", 0)
+        if барьер_мод is not None and поколение:
+            решение = барьер_мод.проверить(
+                сайт, generation=поколение, revision=self.заявка["revision"],
+                artifact_sha256=self.заявка["artifact_sha256"], этап="capture")
+            if not решение["allowed"]:
+                сост["detail"] = решение["reason"]
+                сост["fence"] = решение
+                return барьер_мод.ВЫТЕСНЕНА
+
         self.фаза(сайт, "INSPECT")
         до = self.ctl("inspect", сайт, таймаут=300)
         if до.get("error"):
@@ -264,8 +286,16 @@ class Выкладка:
 
         self.фаза(сайт, "CANARY")
         self.сказать(f"{сайт}: отрисовка закреплённым шаблоном; это часы, не минуты")
-        канарейка = self.ctl("canary", "--site", сайт,
-                             "--revision", self.заявка["revision"], таймаут=43200)
+        argv_канарейки = ["canary", "--site", сайт,
+                          "--revision", self.заявка["revision"]]
+        if поколение:
+            argv_канарейки += ["--generation", str(поколение),
+                               "--artifact-sha256", self.заявка["artifact_sha256"]]
+        канарейка = self.ctl(*argv_канарейки, таймаут=43200)
+        if канарейка.get("verdict") == getattr(барьер_мод, "ВЫТЕСНЕНА", "STALE_FENCED_NO_CHANGE"):
+            сост["detail"] = канарейка.get("note", "заявка вытеснена барьером")
+            сост["fence"] = канарейка.get("fence")
+            return "STALE_FENCED_NO_CHANGE"
         сост["canary"] = {k: канарейка.get(k) for k in
                           ("release_before", "release_after", "switched", "refresh")}
         if канарейка.get("error"):

@@ -317,6 +317,18 @@ def выпустить() -> int:
             сказать("вшитой заявки нет")
             print("NO_REQUEST_EMBEDDED")
             return 2
+
+        # Барьер объявляется ДО постановки в очередь: заявка обязана нести
+        # поколение, а поколение обязано существовать раньше заявки. Обратный
+        # порядок означал бы заявку без барьера — то есть без защиты.
+        sys.path.insert(0, "/home/claude/wt-integration-28")
+        from automation.deploy import lords_fence as барьер_мод
+        объявленный = барьер_мод.объявить(
+            ЗАЯВКА["sites"][0], ЗАЯВКА["revision"], ЗАЯВКА["artifact_sha256"],
+            reason=f"bootstrap --release {ЗАЯВКА['deployment_id']}")
+        сказать(f"барьер {объявленный.site}: поколение {объявленный.generation}, "
+                f"ревизия {объявленный.desired_revision[:12]}")
+        ЗАЯВКА["generation"] = объявленный.generation
         подать_заявку()
         выполнить(["systemctl", "start", "lords-deploy-broker.path"])
         выполнить(["systemctl", "start", "--no-block", "lords-deploy-broker.service"])
