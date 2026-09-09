@@ -1,0 +1,67 @@
+{
+ "producerNormalization": "core-route-normalization/1.0.0",
+ "consumerNormalization": "seo-route-normalization/1.0.0",
+ "totalMismatches": 0,
+ "bySite": {
+  "lords-01": {
+   "records": 47694,
+   "prefixes": [
+    "title"
+   ],
+   "keyMismatches": 0,
+   "duplicateRouteKeys": 0,
+   "recordsWithoutUrl": 3447,
+   "examples": []
+  },
+  "lords-02": {
+   "records": 47694,
+   "prefixes": [
+    "title"
+   ],
+   "keyMismatches": 0,
+   "duplicateRouteKeys": 0,
+   "recordsWithoutUrl": 3447,
+   "examples": []
+  },
+  "lords-03": {
+   "records": 47694,
+   "prefixes": [
+    "title"
+   ],
+   "keyMismatches": 0,
+   "duplicateRouteKeys": 0,
+   "recordsWithoutUrl": 3447,
+   "examples": []
+  },
+  "yummyani-biz": {
+   "records": 7290,
+   "prefixes": [
+    "anime"
+   ],
+   "keyMismatches": 0,
+   "duplicateRouteKeys": 0,
+   "recordsWithoutUrl": 0,
+   "examples": []
+  },
+  "yummyani-org": {
+   "records": 7290,
+   "prefixes": [
+    "anime"
+   ],
+   "keyMismatches": 0,
+   "duplicateRouteKeys": 0,
+   "recordsWithoutUrl": 0,
+   "examples": []
+  },
+  "yummyani-site": {
+   "records": 7302,
+   "prefixes": [
+    "anime"
+   ],
+   "keyMismatches": 0,
+   "duplicateRouteKeys": 0,
+   "recordsWithoutUrl": 0,
+   "examples": []
+  }
+ }
+}

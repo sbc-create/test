@@ -1,0 +1,64 @@
+{
+ "cycle": "CORE-UNIFIED-IDENTITY-PROVENANCE-35",
+ "baseSha": "974a8bb65c766c3244b9f41cd4437bebdd3e5362",
+ "branch": "claude/core-unified-identity-provenance-35",
+ "consumerSha": "ca2b6ca96a50e644b287c92380a9f0fa70723a38",
+ "consumerModified": false,
+ "contracts": {
+  "routeSnapshot": "core-route-snapshot/1.1.0",
+  "seoBridge": "core-seo-bridge/1.2.0",
+  "seoBridgePrevious": "core-seo-bridge/1.1.0",
+  "kindTaxonomy": "core-catalog/type:2",
+  "legacyBinding": "seo-route-binding/1.0.0 — больше не используется"
+ },
+ "sitesUnderOneContract": [
+  "lords-01", "lords-02", "lords-03",
+  "yummyani-site", "yummyani-org", "yummyani-biz"
+ ],
+ "identity": {
+  "queueTotal": 268,
+  "workPages": 226,
+  "resolvedByRouteSnapshot": 226,
+  "resolvedByLegacyBinding": 0,
+  "matched": 210,
+  "collision": 15,
+  "notInSnapshot": 1,
+  "notAWorkPage": 42,
+  "kindGateBefore": 71,
+  "kindGateAfter": 2,
+  "recordsThatGainedKind": 69,
+  "recordsThatLostMatched": 0
+ },
+ "provenance": {
+  "claimsTotal": 1049,
+  "selfCitedOnMatched": 654,
+  "restoredToVerified": 241,
+  "remainSelfCited": 403,
+  "sourceUnknown": 10,
+  "conflicts": 0,
+  "staleSources": 0,
+  "permissionUnknown": 1049,
+  "permissionPermitted": 0
+ },
+ "safety": {
+  "deployedSha": "none",
+  "productionWrites": 0,
+  "externalRequests": 0,
+  "showcaseDatabaseReads": 0,
+  "seoWorktreeModified": false,
+  "immutableHandoffsEdited": 0,
+  "editorialKeyUsed": false,
+  "ownPagesUsedAsSource": false,
+  "lordsSnapshotsByteIdentical": true,
+  "lordsSnapshotSha256": "0eb0967e08ac56b973452c94c45f21d1544247f064d13307e4b096746cc0f89d"
+ },
+ "handoffsWritten": [
+  "062-core-to-seo-unified-route-snapshot.md",
+  "063-core-to-owner-claim-provenance.md"
+ ],
+ "openItems": [
+  "12 маршрутов на витрину без записи каталога (CORE)",
+  "403 утверждения без восстановимого источника (владелец)",
+  "PERMISSION_UNKNOWN у всех 1049 утверждений (владелец и юристы)"
+ ]
+}

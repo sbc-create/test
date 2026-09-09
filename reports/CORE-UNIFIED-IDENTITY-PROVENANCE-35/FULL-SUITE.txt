@@ -1,0 +1,60 @@
+        control = ControlApi(root=ROOT, env=УПРАВЛЕНИЕ)
+        for путь, узел in описание["paths"].items():
+            if путь not in ЗАПИСЬ:
+                continue
+            метод = ЗАПИСЬ[путь]["method"].upper()
+            assert метод.lower() in узел, f"{путь}: описан не тот метод"
+            конкретный = (
+                путь.replace("{siteId}", "lords-01")
+                .replace("{jobId}", "нет-такого")
+                .replace("{traceId}", "0" * 32)
+                .replace("{itemId}", "нет-такой-записи")
+                .replace("{operatorId}", "нет-такого")
+                .replace("{siteId}", "lords-01")
+            )
+>           ответ = control.handle(
+                метод, конкретный, body=dict(ПРОБНЫЕ_ТЕЛА[путь]), headers=ЗАГОЛОВКИ
+            )
+
+tests/unit/test_site_engine_openapi.py:147: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+factory/site_engine/api/control.py:528: in handle
+    response = self._route(method.upper(), path, body or {}, headers, correlation_id)
+factory/site_engine/api/control.py:684: in _route
+    return self._seo_bindings(rest[1] if len(rest) > 1 else None, body)
+factory/site_engine/api/control.py:1477: in _seo_bindings
+    return ApiResponse(status=200, body=seo_bindings.страница(
+factory/site_engine/api/seo_bindings.py:145: in страница
+    полная = выгрузка(root, site_id)
+factory/site_engine/api/seo_bindings.py:121: in выгрузка
+    собранная = adapters.export_bindings(вид, root=root, site_id=site_id,
+factory/site_engine/adapters/__init__.py:48: in export_bindings
+    return producer.export(root / str(spec.get("catalog") or ""),
+factory/site_engine/adapters/lords_seo_binding.py:215: in export
+    сырьё = json.loads(путь.read_text("utf-8"))
+/usr/lib/python3.10/pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/claude/wt-core-ident-35/var/lords/lords/catalog-cache/lords-01.json')
+mode = 'r', buffering = -1, encoding = 'utf-8', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/claude/wt-core-ident-35/var/lords/lords/catalog-cache/lords-01.json'
+
+/usr/lib/python3.10/pathlib.py:1119: FileNotFoundError
+=========================== short test summary info ============================
+SKIPPED [2] tests/unit/test_analytics_unit_execstart.py:176: в этом дереве нет .venv
+SKIPPED [2] tests/unit/test_lords_apply_python_fragments.py:152: интерпретатор тестов и так 3.10 — сравнивать не с чем
+SKIPPED [1] tests/unit/test_secret_hub_host.py:117: каталог секретов закрыт для этой учётной записи: состояние ключа не измерено (так и задумано)
+FAILED tests/unit/test_site_engine_openapi.py::TestОписание::test_все_описанные_управляющие_маршруты_отвечают
+1 failed, 4576 passed, 5 skipped in 569.14s (0:09:29)

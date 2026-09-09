@@ -1,0 +1,112 @@
+# Очередь работ цикла CORE-UNIFIED-IDENTITY-PROVENANCE-35.
+# Закрытым считается пункт с доказательством в отчёте, а не с намерением.
+base_sha: "974a8bb65c766c3244b9f41cd4437bebdd3e5362"
+branch: "claude/core-unified-identity-provenance-35"
+consumer_sha: "ca2b6ca96a50e644b287c92380a9f0fa70723a38"
+consumer_modified: false
+
+items:
+  - id: 0
+    title: "Воспроизвести handoff 061 на данных, а не на словах"
+    state: CLOSED
+    evidence: ["BASELINE.md", "STAGE0-71-RECORDS.json", "STAGE0-REPRODUCTION.md"]
+    note: >-
+      Все числа воспроизведены. Найдена настоящая причина пустого вида:
+      ветка связи в route_resolution.py проставляет его константами.
+
+  - id: 3
+    title: "Снимок core-route-snapshot/1.1.0 для трёх витрин yummyani"
+    state: CLOSED
+    evidence: ["SNAPSHOT-MANIFEST.json", "generate-yummy-snapshot.py"]
+    note: "7302/7290/7290 записей, 0 столкновений, 0 отклонено."
+
+  - id: 4
+    title: "Правила безопасности вида на полном каталоге"
+    state: CLOSED
+    evidence: ["SNAPSHOT-MANIFEST.json", "CONFORMANCE-268.json"]
+    note: >-
+      Конфликт type/is_series не сглаживается, отсутствие не подменяется
+      умолчанием, isAnimation отсутствует у 6990 из 7302 и не назван false.
+      Проверено на 53 313 записях каталога и на всех шести витринах.
+
+  - id: 5
+    title: "Разбор происхождения 654 утверждений"
+    state: CLOSED
+    evidence: ["PROVENANCE-CLAIMS.json", "classify-provenance.py"]
+    note: "241 восстановлено, 403 невосстановимы, 10 без записи каталога."
+
+  - id: 6
+    title: "Классификация без безымянных UNKNOWN"
+    state: CLOSED
+    evidence: ["PROVENANCE-CLAIMS.json"]
+    note: "У каждого из 1049 утверждений состояние и код причины."
+
+  - id: 7
+    title: "Может ли core-seo-bridge/1.1.0 нести происхождение утверждения"
+    state: CLOSED
+    answer: "нет"
+    evidence: ["verify-bridge-compat.py"]
+    note: "Поднято до 1.2.0 добавлением provenance и reference."
+
+  - id: 8
+    title: "Соответствие потребителя на точном SHA без правок в SEO"
+    state: CLOSED
+    evidence: ["CONFORMANCE-268.json", "verify-consumer-conformance.py"]
+    note: "226 из 226 страниц разобраны снимком; bindings не передавались."
+
+  - id: 9
+    title: "Пересчёт до и после"
+    state: CLOSED
+    evidence: ["FINAL-REPORT.md"]
+
+  - id: 10
+    title: "Тесты: целевые, масштабные и один чистый полный прогон"
+    state: CLOSED
+    evidence: ["FINAL-REPORT.md"]
+
+  - id: 12
+    title: "Готовность к выкладке без самой выкладки"
+    state: CLOSED
+    evidence: ["FINAL-REPORT.md"]
+    deployed_sha: none
+    production_writes: 0
+    external_requests: 0
+
+  - id: 13
+    title: "Обновление координации и неизменяемые handoff"
+    state: CLOSED
+    evidence:
+      - "coordination/v1/handoffs/062-core-to-seo-unified-route-snapshot.md"
+      - "coordination/v1/handoffs/063-core-to-owner-claim-provenance.md"
+
+open_items:
+  - id: 11
+    title: "Canary и откат"
+    state: NOT_APPLICABLE
+    reason: >-
+      Задание запрещает менять production-сайты и production-state, а
+      DEPLOYED_SHA обязан остаться none. Canary на production невозможен без
+      нарушения этого запрета. Изменения — контрактные и не требуют выкладки
+      для проверки: соответствие доказано на неизменённом потребителе.
+      Побайтная неизменность снимков Lords доказана отдельно.
+
+  - id: "yummyani-12-routes"
+    title: "12 маршрутов на витрину без записи каталога"
+    state: OPEN
+    owner: CORE
+    reason: >-
+      Витрина публикует маршрут, каталог записи не имеет. Вид остаётся
+      UNKNOWN/MISSING с причиной CATALOG_ENTRY_ABSENT. Требуется решить,
+      каталог отстал или витрина публикует снятое произведение.
+
+  - id: "claims-403"
+    title: "403 утверждения без восстановимого источника"
+    state: OPEN
+    owner: "владелец и юристы"
+    reason: "handoff 063, вопрос 1"
+
+  - id: "permission-unknown"
+    title: "PERMISSION_UNKNOWN у всех 1049 утверждений"
+    state: OPEN
+    owner: "владелец и юристы"
+    reason: "handoff 063, вопрос 2"
