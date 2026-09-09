@@ -366,3 +366,70 @@ def test_ревизия_оснастки_записывается_и_перен�
         цель2, план2, content_snapshot_id="s2", content_count=11, created_by="тест",
         artifact_root=стенд["artifacts"])
     assert второй[рм.ОСНАСТКА] == "f" * 40
+
+
+class TestПредыдущийРелизСохраняется:
+    """`LORDS-ROLLBACK-POINT-MISSING-39`: точка отката не записывалась никогда.
+
+    Атомарная смена меняла `current` и дописывала журнал, но ссылку `previous`
+    не создавал никто. При этом `lords-refresh-guard` берёт `previous_release`
+    и `rollback_target` именно из неё — и потому всегда писал в rollback.json
+    `null` с примечанием «предыдущего релиза нет: стенд ещё не выкатывался».
+
+    На 2026-09-09 так было у всех трёх боевых витрин Lords одновременно: на
+    диске лежал предыдущий релиз, `current` указывал на более новый, а
+    записанной точки отката не было ни у одной. Наличие каталога точкой отката
+    не является: правило требует сохранённый и проверяемый предыдущий релиз.
+    """
+
+    def _подготовить(self, tmp_path):
+        import json as _json
+        рантайм = tmp_path / "lords-02"
+        (рантайм / "releases").mkdir(parents=True)
+        релизы = []
+        for имя in ("aaaaaaaaaaaa", "bbbbbbbbbbbb"):
+            р = рантайм / "releases" / имя
+            р.mkdir()
+            (р / "release-manifest.json").write_text(
+                _json.dumps({"tenant_id": "lords-02"}), encoding="utf-8")
+            релизы.append(р)
+        (рантайм / "current").symlink_to(релизы[0])
+        return рантайм, релизы
+
+    def test_после_переключения_previous_указывает_на_прежний(self, tmp_path):
+        from factory.lords import refresh_release as мод
+        рантайм, (первый, второй) = self._подготовить(tmp_path)
+
+        итог = мод.переключить(рантайм, второй, expected_current=первый.name,
+                               reason="test", actor="test")
+
+        assert итог["switched"] is True
+        прежний = рантайм / "previous"
+        assert прежний.is_symlink(), "ссылка previous не создана: точки отката нет"
+        assert прежний.resolve().name == первый.name
+
+    def test_повтор_не_ломает_previous(self, tmp_path):
+        from factory.lords import refresh_release as мод
+        рантайм, (первый, второй) = self._подготовить(tmp_path)
+        мод.переключить(рантайм, второй, expected_current=первый.name,
+                        reason="test", actor="test")
+        # Идемпотентный повтор: previous обязан остаться прежним, а не съехать
+        # на сам текущий релиз — иначе откат вёл бы туда же, откуда откатываем.
+        мод.переключить(рантайм, второй, expected_current=второй.name,
+                        reason="test", actor="test")
+        assert (рантайм / "previous").resolve().name == первый.name
+
+    def test_первое_переключение_без_прежнего_не_создаёт_ссылку(self, tmp_path):
+        import json as _json
+        from factory.lords import refresh_release as мод
+        рантайм = tmp_path / "lords-03"
+        (рантайм / "releases").mkdir(parents=True)
+        р = рантайм / "releases" / "cccccccccccc"
+        р.mkdir()
+        (р / "release-manifest.json").write_text(
+            _json.dumps({"tenant_id": "lords-03"}), encoding="utf-8")
+
+        мод.переключить(рантайм, р, expected_current=None, reason="test", actor="test")
+
+        # Откатываться некуда, и врать об этом ссылкой нельзя.
+        assert not (рантайм / "previous").exists()
