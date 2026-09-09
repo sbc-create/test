@@ -56,3 +56,44 @@ hosts:
     methods: [GET]
     token_secret_ref: hub:/var/lib/site-factory-secret-hub/store.sqlite3
     contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+
+  # --- публичная приёмка шести действующих витрин ---------------------------
+  # Внесены ночным заданием владельца от 2026-09-09: приёмка требует внешней
+  # проверки домена, TLS, health, маркера релиза и отсутствия 5xx, а без записи
+  # здесь любой такой запрос отклоняется профилем.
+  #
+  # Владение и соответствие проверены на этом хосте до внесения, а не приняты
+  # на слово:
+  #   * Lords — /etc/nginx/lords/lords-0{1,2,3}.conf, server_name совпадает,
+  #     proxy_pass на 127.0.0.1:9101/9102/9103, живые release-manifest.json;
+  #   * Yummy — /etc/nginx/sites-enabled/yummyani.{biz,org,site}.conf,
+  #     proxy_pass на 127.0.0.1:3101/3102/3103, три healthy-контейнера
+  #     yummyani/web:staging.
+  # То есть этот хост и есть origin всех шести доменов и держит их сертификаты.
+  #
+  # Только GET: приёмка читает, а не пишет. Зона lords-03 записана ровно как в
+  # nginx и живом манифесте — с ведущей единицей, см. D131.
+  - ref: lords-01-public
+    host: lordfilm47.space
+    purpose: "приёмка lords-01: домен, TLS, health, маркер релиза"
+    methods: [GET]
+  - ref: lords-02-public
+    host: lordserial33.biz
+    purpose: "приёмка lords-02: домен, TLS, health, маркер релиза"
+    methods: [GET]
+  - ref: lords-03-public
+    host: 1lordserials1.online
+    purpose: "приёмка lords-03: домен, TLS, health, маркер релиза"
+    methods: [GET]
+  - ref: yummyani-biz-public
+    host: yummyani.biz
+    purpose: "приёмка yummyani.biz: домен, TLS, health"
+    methods: [GET]
+  - ref: yummyani-org-public
+    host: yummyani.org
+    purpose: "приёмка yummyani.org: домен, TLS, health"
+    methods: [GET]
+  - ref: yummyani-site-public
+    host: yummyani.site
+    purpose: "приёмка yummyani.site: домен, TLS, health"
+    methods: [GET]

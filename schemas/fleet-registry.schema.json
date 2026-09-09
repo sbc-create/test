@@ -5,80 +5,204 @@
   "description": "Единственный источник истины соответствия домен → семейство → шаблон → коммит → артефакт → манифест → точка отката. Неустановленное значение обязано быть null: подставлять умолчание вместо неизвестного запрещено, потому что «ноль» и «не измерено» — разные события.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "fleet"],
+  "required": [
+    "schema_version",
+    "fleet"
+  ],
   "properties": {
-    "schema_version": {"const": 1},
-    "generated_by": {"type": "string"},
-    "note": {"type": "string"},
+    "schema_version": {
+      "const": 1
+    },
+    "generated_by": {
+      "type": "string"
+    },
+    "note": {
+      "type": "string"
+    },
     "sources": {
       "type": "object",
       "description": "Откуда взяты значения. Реестр обязан называть источник, иначе его нельзя перепроверить.",
-      "additionalProperties": {"type": "string"}
+      "additionalProperties": {
+        "type": "string"
+      }
     },
     "candidate_release": {
       "type": "object",
       "description": "Кандидат на выкладку. Пока не собран, отпечаток и коммит равны null и не предугадываются.",
       "additionalProperties": false,
       "properties": {
-        "note": {"type": "string"},
-        "branch": {"type": ["string", "null"]},
-        "artifact_sha256": {"$ref": "#/$defs/sha256_or_null"},
-        "commit": {"$ref": "#/$defs/commit_or_null"},
-        "generation": {"type": ["integer", "null"], "minimum": 1}
+        "note": {
+          "type": "string"
+        },
+        "branch": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "artifact_sha256": {
+          "$ref": "#/$defs/sha256_or_null"
+        },
+        "commit": {
+          "$ref": "#/$defs/commit_or_null"
+        },
+        "generation": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        }
       }
     },
     "fleet": {
       "type": "array",
       "minItems": 1,
-      "items": {"$ref": "#/$defs/site"}
+      "items": {
+        "$ref": "#/$defs/site"
+      }
     }
   },
   "$defs": {
     "sha256_or_null": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "pattern": "^[0-9a-f]{64}$",
       "description": "Полные 64 знака. Сокращённый отпечаток доказательством не является."
     },
     "commit_or_null": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "pattern": "^[0-9a-f]{40}$",
       "description": "Полные 40 знаков. Сокращённый SHA в доказательствах запрещён."
     },
     "site": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["domain", "site_id", "family", "deploy_status"],
+      "required": [
+        "domain",
+        "site_id",
+        "family",
+        "deploy_status"
+      ],
       "properties": {
         "domain": {
           "type": "string",
           "pattern": "^(?!-)[a-z0-9-]+(\\.[a-z0-9-]+)+$",
           "description": "Домен записывается ровно так, как он существует. Ведущая цифра законна: 1lordserials1.online — не опечатка."
         },
-        "site_id": {"type": "string", "minLength": 1},
-        "family": {"type": "string", "enum": ["lords", "yummy", "zona", "animedia"]},
-        "theme": {"type": "string"},
-        "runtime_root": {"type": ["string", "null"]},
-        "release_id": {"type": ["string", "null"], "pattern": "^[0-9a-f]{12}$"},
-        "template_package_ref": {"type": ["string", "null"]},
-        "template_artifact_ref": {"type": ["string", "null"]},
-        "template_digest": {"$ref": "#/$defs/sha256_or_null"},
-        "renderer_revision": {"$ref": "#/$defs/commit_or_null"},
-        "tooling_revision": {"$ref": "#/$defs/commit_or_null"},
-        "manifest_production_authorized": {"type": ["boolean", "null"]},
-        "package_production_authorized": {"type": ["boolean", "null"]},
-        "package_domain": {"type": ["string", "null"]},
-        "package_target_ref": {"type": ["string", "null"]},
-        "content_count": {"type": ["integer", "null"], "minimum": 0},
-        "rollback_release_on_disk": {"type": ["string", "null"], "pattern": "^[0-9a-f]{12}$"},
+        "site_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "family": {
+          "type": "string",
+          "enum": [
+            "lords",
+            "yummy",
+            "zona",
+            "animedia"
+          ]
+        },
+        "theme": {
+          "type": "string"
+        },
+        "runtime_root": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "release_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9a-f]{12}$"
+        },
+        "template_package_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "template_artifact_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "template_digest": {
+          "$ref": "#/$defs/sha256_or_null"
+        },
+        "renderer_revision": {
+          "$ref": "#/$defs/commit_or_null"
+        },
+        "tooling_revision": {
+          "$ref": "#/$defs/commit_or_null"
+        },
+        "manifest_production_authorized": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "package_production_authorized": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "package_domain": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "package_target_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "content_count": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "rollback_release_on_disk": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9a-f]{12}$"
+        },
         "rollback_recorded": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "pattern": "^[0-9a-f]{12}$",
           "description": "Точка отката, ЗАПИСАННАЯ в rollback.json. null означает, что записи нет — даже если предыдущий релиз лежит на диске. Наличие каталога доказательством отката не считается."
         },
-        "rollback_defect": {"type": "string"},
-        "domain_conflict": {"type": "string"},
-        "canary_role": {"type": "string"},
-        "note": {"type": "string"},
+        "rollback_defect": {
+          "type": "string"
+        },
+        "domain_conflict": {
+          "type": "string"
+        },
+        "canary_role": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        },
         "deploy_status": {
           "type": "string",
           "enum": [
@@ -88,9 +212,46 @@
             "NO_RUNTIME_ROOT_ON_THIS_HOST",
             "BLOCKED_INPUT_DOMAIN_TARGET",
             "BLOCKED_AUTHORIZATION",
-            "BLOCKED_RIGHTS"
+            "BLOCKED_RIGHTS",
+            "LIVE_STAGING_IMAGE",
+            "LIVE_IMAGE_DRIFT"
           ],
           "description": "Состояние выкладки строго из перечня. Общего «не готово» нет: статус обязан называть причину."
+        },
+        "container": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Имя контейнера, если витрина обслуживается образом, а не каталогом релиза."
+        },
+        "image_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Тег образа. Тег изменяемый и доказательством не является — сверяется с image_digest."
+        },
+        "image_digest": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "description": "Неизменяемый отпечаток образа: именно он говорит, что выложено."
+        },
+        "upstream": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "public_http": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Код внешней проверки. 200 сам по себе приёмкой не является."
         }
       }
     }
