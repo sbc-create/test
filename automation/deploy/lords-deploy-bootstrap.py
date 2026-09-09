@@ -24,15 +24,14 @@
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import os
 import pwd
-import re
 import shutil
 import subprocess
 import sys
-import time
 from pathlib import Path
 
 ИСТОЧНИК = Path("/home/claude/wt-integration-28/automation/deploy")
@@ -40,6 +39,7 @@ LIBEXEC = Path("/usr/local/libexec/site-factory")
 SBIN = Path("/usr/local/sbin")
 UNITS = Path("/etc/systemd/system")
 БАЗА = Path("/var/lib/lords-deploy")
+ТАЙМЕР_ОБНОВЛЕНИЯ = "lords-content-refresh.timer"
 
 #: Отпечатки полезной нагрузки. Файл, не совпавший с записанным здесь, не
 #: устанавливается: источник лежит в дереве пользователя, и доверять ему без
@@ -124,7 +124,8 @@ def поставить_юниты() -> None:
         готово = выполнить(["systemctl", "enable", юнит])
         if готово.returncode != 0:
             raise SystemExit(f"{юнит} не включён: {готово.stderr.strip()}")
-    сказать("юниты включены; наблюдение за очередью поднимается")
+    выполнить(["systemctl", "start", "lords-deploy-broker.path"])
+    сказать("юниты включены, наблюдение за очередью поднято")
 
 
 def самопроверка() -> dict:
@@ -160,24 +161,127 @@ def подать_заявку() -> Path:
     return путь
 
 
+def проверить_установленное() -> list[dict]:
+    """Владельцы, права, пути, рабочий каталог и доставка секретов.
+
+    Проверяется установленная копия, а не исходник: устанавливали одно, а
+    работать будет другое, если установка прошла не так, как думали.
+    """
+    проверки: list[dict] = []
+
+    def проверить(имя: str, условие: bool, деталь: str = "") -> None:
+        проверки.append({"check": имя, "ok": bool(условие), "detail": деталь})
+
+    for имя in ПОЛЕЗНАЯ_НАГРУЗКА:
+        цель = (UNITS / Path(имя).name) if имя.startswith("units/") else (LIBEXEC / имя)
+        ст = цель.stat()
+        режим = ст.st_mode & 0o777
+        ожидаемый = 0o644 if имя.startswith("units/") else 0o755
+        проверить(f"{цель}: владелец root:root", ст.st_uid == 0 and ст.st_gid == 0,
+                  f"uid={ст.st_uid} gid={ст.st_gid}")
+        проверить(f"{цель}: права {oct(ожидаемый)}", режим == ожидаемый, oct(режим))
+        проверить(f"{цель}: путь абсолютный", цель.is_absolute(), str(цель))
+        проверить(f"{цель}: отпечаток совпал",
+                  отпечаток(цель) == ПОЛЕЗНАЯ_НАГРУЗКА[имя])
+
+    # Рабочий каталог сценария обновления. Из-за его отсутствия прошлый прогон
+    # отказал с «No module named factory» за ноль секунд.
+    рабочий = выполнить(["systemctl", "show", "-p", "WorkingDirectory", "--value",
+                         "lords-content-refresh.service"]).stdout.strip()
+    проверить("рабочий каталог обновления — /srv/site-factory/repo",
+              рабочий.rstrip("/").endswith("/srv/site-factory/repo"), рабочий or "пусто")
+
+    # Доставка секретов. Lords читает credentials только через LoadCredential, и
+    # запуск сценария подпроцессом отказывал именно поэтому. Значения секретов
+    # здесь не читаются и не печатаются — только факт объявления.
+    creds = выполнить(["systemctl", "show", "-p", "LoadCredential", "--value",
+                       "lords-content-refresh.service"]).stdout.strip()
+    имена = [ч.split("=", 1)[0] for ч in creds.split() if ч]
+    проверить("юнит обновления объявляет LoadCredential", bool(имена),
+              ", ".join(имена) or "не объявлено")
+
+    # Очередь: заявки я обязан подавать сам, результаты — читать без sudo.
+    claude = pwd.getpwnam("claude")
+    очередь = БАЗА / "requests"
+    ст = очередь.stat()
+    проверить("каталог заявок принадлежит claude", ст.st_uid == claude.pw_uid,
+              f"uid={ст.st_uid}")
+    проверить("каталог заявок доступен на запись владельцу",
+              bool(ст.st_mode & 0o200), oct(ст.st_mode & 0o777))
+    for имя in ("results", "state", "logs"):
+        ст = (БАЗА / имя).stat()
+        проверить(f"каталог {имя} читаем всеми", bool(ст.st_mode & 0o004),
+                  oct(ст.st_mode & 0o777))
+    проверить("очередь пуста: заявок не подано",
+              not list(очередь.glob("*.json")),
+              str([p.name for p in очередь.glob("*.json")]))
+
+    # Наблюдатель поднят — без него заявка осталась бы лежать.
+    состояние = выполнить(["systemctl", "is-active", "lords-deploy-broker.path"]).stdout.strip()
+    проверить("наблюдатель очереди работает", состояние == "active", состояние)
+
+    # Действующие витрины не тронуты установкой.
+    for сайт in ("lords-01", "lords-02", "lords-03"):
+        служба = выполнить(["systemctl", "is-active", f"{сайт}.service"]).stdout.strip()
+        ссылка = Path(f"/srv/lords/{сайт}/current")
+        проверить(f"{сайт}: служба работает, релиз на месте",
+                  служба == "active" and ссылка.exists(),
+                  f"{служба}, {ссылка.resolve().name if ссылка.exists() else 'нет'}")
+    таймер = выполнить(["systemctl", "is-active", ТАЙМЕР_ОБНОВЛЕНИЯ]).stdout.strip()
+    включён = выполнить(["systemctl", "is-enabled", ТАЙМЕР_ОБНОВЛЕНИЯ]).stdout.strip()
+    проверить("таймер обновления каталога не тронут",
+              таймер == "active" and включён == "enabled", f"{таймер}/{включён}")
+    return проверки
+
+
 def main() -> int:
+    р = argparse.ArgumentParser(description="установка приёмщика выкладки Lords")
+    р.add_argument("--install-only", action="store_true",
+                   help="поставить и проверить, ничего не выкладывая")
+    р.add_argument("--deploy", action="store_true",
+                   help="поставить и подать вшитую заявку (нужна вшитая заявка)")
+    args = р.parse_args()
+    if not args.install_only and not args.deploy:
+        print("укажите --install-only или --deploy")
+        return 2
     if os.geteuid() != 0:
         print("устанавливает root")
         return 1
+
     сказать(f"источник {ИСТОЧНИК}")
     установить_файлы()
     создать_каталоги()
     поставить_юниты()
-    самопроверка()
+    отчёт = самопроверка()
+
+    сказать("проверка установленной копии")
+    проверки = проверить_установленное()
+    отказы = [п for п in проверки if not п["ok"]]
+    for п in проверки:
+        сказать(("  ок      " if п["ok"] else "  ОТКАЗ   ") + п["check"]
+                + (f" — {п['detail']}" if п["detail"] else ""))
+    if отказы:
+        сказать(f"INSTALL_FAILED: отказов {len(отказы)}")
+        return 1
+
+    if args.install_only:
+        сказать(f"проверок помощника {len(отчёт.get('checks', []))}, "
+                f"проверок установки {len(проверки)} — все пройдены")
+        сказать("выкладка НЕ запускалась: ни заявки, ни отрисовки, ни переключения")
+        сказать(f"очередь заявок:  {БАЗА / 'requests'} (пишет claude)")
+        сказать(f"результаты:      {БАЗА / 'results'}")
+        сказать(f"журналы:         {БАЗА / 'logs'}")
+        сказать(f"состояние:       {БАЗА / 'state'}")
+        print("INSTALL_ONLY=PASS")
+        return 0
+
+    if ЗАЯВКА is None:
+        сказать("вшитой заявки нет: этот файл собран как устанавливающий")
+        print("NO_REQUEST_EMBEDDED")
+        return 2
     подать_заявку()
-    # Наблюдатель запускается последним: до этого момента очередь могла быть
-    # непустой, и служба стартовала бы раньше самопроверки.
-    выполнить(["systemctl", "start", "lords-deploy-broker.path"])
     выполнить(["systemctl", "start", "--no-block", "lords-deploy-broker.service"])
-    сказать("приёмщик работает; выкладка идёт в юните lords-deploy-broker.service")
-    сказать(f"результаты: {БАЗА / 'results'}")
-    сказать(f"журналы:    {БАЗА / 'logs'}")
-    сказать(f"состояние:  {БАЗА / 'state'}")
+    сказать("приёмщик работает")
     return 0
 
 
