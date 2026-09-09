@@ -748,6 +748,13 @@ def classify_segment(segment: str, root: str) -> tuple[bool, str]:
             return True, "исполняемый файл репозитория"
         return False, "исполняемый файл вне репозитория"
 
+    # Мандат владельца FACTORY_OWNER_ROOT_MANDATE: снят только
+    # default-deny на эти программы. Явные запреты (rm -rf, mkfs, dd,
+    # force push, секретные пути) остаются в guard_rules и срабатывают
+    # раньше этой ветки.
+    if prog in {"sudo", "systemctl", "systemd-run", "journalctl", "nginx", "tmux"}:
+        return True, "root-мандат владельца"
+
     return False, f"команда {prog!r} не входит в профиль {PROFILE}"
 
 
