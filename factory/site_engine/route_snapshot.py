@@ -290,12 +290,20 @@ def build(entries: list[dict[str, Any]], *, site_id: str, route_of,
           generation_reason: str, content_kind_of,
           source_observed_at: str = "",
           tag_vocabulary: dict[str, Any] | None = None,
-          previous: dict[str, Any] | None = None) -> Snapshot:
+          previous: dict[str, Any] | None = None,
+          route_provenance: str = "catalog+slugify") -> Snapshot:
     """Построить снимок из записей каталога.
 
     `route_of` — функция витрины, дающая адрес. Она передаётся, а не
     вызывается по имени: снимок обязан строиться той же функцией, какой
     витрина строит адреса, и подмена её здесь была бы подменой самого адреса.
+
+    `route_provenance` называет, ОТКУДА взят адрес. Прежде строка
+    `catalog+slugify` стояла в теле жёстко и объявлялась для любого
+    снимка. Для витрины, которая ведёт собственную таблицу маршрутов,
+    это неправда: адрес там не вычислен из названия, а объявлен самой
+    витриной. Умолчание сохраняет прежнее значение, поэтому снимки
+    Lords не меняются ни на байт.
 
     `content_kind_of` обязателен и умолчания не имеет. Прежде он был
     необязательным, и первый снимок собрали, не передав его: вид произведения
@@ -356,7 +364,7 @@ def build(entries: list[dict[str, Any]], *, site_id: str, route_of,
                 content_kind_state="MISSING", state=RouteState.COLLISION,
                 collided_work_ids=tuple(sorted(
                     str(з.get("external_id")) for з in группа)),
-                provenance="catalog+slugify",
+                provenance=route_provenance,
                 reason=f"столкновение {len(группа)} записей"))
             continue
 
@@ -375,7 +383,7 @@ def build(entries: list[dict[str, Any]], *, site_id: str, route_of,
             created_at=(прежняя or {}).get("createdAt")
             or observed_at.isoformat(),
             updated_at=observed_at.isoformat(),
-            provenance="catalog+slugify"))
+            provenance=route_provenance))
 
     # Надгробия: маршруты, бывшие в прежнем снимке и исчезнувшие теперь.
     живые = {з.route_key for з in записи}
