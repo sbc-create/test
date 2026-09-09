@@ -240,9 +240,11 @@ def main() -> int:
                    help="поставить и проверить, ничего не выкладывая")
     р.add_argument("--deploy", action="store_true",
                    help="поставить и подать вшитую заявку (нужна вшитая заявка)")
+    р.add_argument("--cancel-stuck", action="store_true",
+                   help="поставить и адресно погасить зависший прогон обновления")
     args = р.parse_args()
-    if not args.install_only and not args.deploy:
-        print("укажите --install-only или --deploy")
+    if not (args.install_only or args.deploy or args.cancel_stuck):
+        print("укажите --install-only, --cancel-stuck или --deploy")
         return 2
     if os.geteuid() != 0:
         print("устанавливает root")
@@ -263,6 +265,33 @@ def main() -> int:
     if отказы:
         сказать(f"INSTALL_FAILED: отказов {len(отказы)}")
         return 1
+
+    if args.cancel_stuck:
+        # Одна команда доводит дело до конца: ставит помощника с глаголом
+        # отмены и тут же гасит именно тот прогон, который сейчас идёт.
+        # Последовательность из двух ручных действий здесь была бы хуже: между
+        # ними InvocationID сменится, и вторая команда промахнётся.
+        текущая = выполнить(["systemctl", "show", "-p", "InvocationID", "--value",
+                             "lords-content-refresh.service"]).stdout.strip()
+        if not текущая:
+            сказать("прогон обновления не идёт: гасить нечего")
+            print("NOTHING_TO_CANCEL")
+            return 0
+        сказать(f"гашу прогон InvocationID={текущая}")
+        готово = выполнить([sys.executable, str(LIBEXEC / "lords-deployctl"),
+                            "cancel-stuck", "--unit", "lords-content-refresh.service",
+                            "--invocation", текущая], таймаут=1800)
+        print(готово.stdout.strip() or готово.stderr.strip()[:2000])
+        try:
+            отчёт = json.loads(готово.stdout or "{}")
+        except json.JSONDecodeError:
+            отчёт = {}
+        вердикт = отчёт.get("verdict", "CANCEL_FAILED")
+        сказать(f"итог отмены: {вердикт}")
+        сказать(f"очередь заявок: {БАЗА / 'requests'} (пишет claude)")
+        print(вердикт)
+        return 0 if вердикт in ("STALE_RENDER_CANCELLED_NO_CHANGE", "already_gone",
+                                "not_stale") else 1
 
     if args.install_only:
         сказать(f"проверок помощника {len(отчёт.get('checks', []))}, "
