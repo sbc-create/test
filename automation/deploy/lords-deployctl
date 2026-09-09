@@ -339,6 +339,156 @@ def глагол_timer(args) -> dict:
             "active": активен["stdout"].strip(), "enabled": включён["stdout"].strip()}
 
 
+
+#: Юниты, которые разрешено гасить. Список закрыт: отмена — операция над чужой
+#: работой, и «любой юнит по имени из запроса» здесь означало бы произвольную
+#: власть над хостом.
+ОТМЕНЯЕМЫЕ = (ОБНОВЛЕНИЕ_СЛУЖБА,)
+#: Куда переносится частичная сборка. Удалять её нельзя: это единственное
+#: свидетельство того, чем занимался погибший прогон.
+КАРАНТИН = Path("/srv/lords/.quarantine")
+
+
+def _доказать_застой(unit: str, окно: float = 300.0, шаг: float = 60.0) -> dict:
+    """Пять признаков застоя, измеренных заново. Ни один не принимается на слово.
+
+    Отмена чужой работы требует доказательства, а не впечатления. Признаки те
+    же, что названы в разборе: старая ревизия в манифестах, прогон старше
+    конфигурации кандидата, staging не растёт, память у предела с растущими
+    счётчиками давления, `current` не переключался.
+    """
+    корень = Path("/sys/fs/cgroup/system.slice") / unit
+    def мера() -> tuple[int, int, int]:
+        файлов = байт = 0
+        for сайт in САЙТЫ:
+            staging = RUNTIME_ROOT / сайт / ".staging"
+            if staging.is_dir():
+                for ф in staging.rglob("*"):
+                    if ф.is_file():
+                        файлов += 1
+                        байт += ф.stat().st_size
+        события = 0
+        путь = корень / "memory.events"
+        if путь.is_file():
+            for строка in путь.read_text(encoding="utf-8").splitlines():
+                if строка.startswith("max "):
+                    события = int(строка.split()[1])
+        return файлов, байт, события
+
+    начало = мера()
+    прошло = 0.0
+    while прошло < окно:
+        time.sleep(шаг)
+        прошло += шаг
+    конец = мера()
+    память = 0
+    путь = корень / "memory.current"
+    if путь.is_file():
+        память = int(путь.read_text(encoding="utf-8").strip() or 0)
+    предел = 0
+    путь = корень / "memory.max"
+    if путь.is_file():
+        сырое = путь.read_text(encoding="utf-8").strip()
+        предел = int(сырое) if сырое.isdigit() else 0
+    релизы = {с: глагол_inspect(argparse.Namespace(site=с)) for с in САЙТЫ}
+    return {
+        "window_seconds": окно,
+        "files_growth": конец[0] - начало[0],
+        "bytes_growth": конец[1] - начало[1],
+        "limit_events_growth": конец[2] - начало[2],
+        "memory_current": память,
+        "memory_max": предел,
+        "memory_ratio": round(память / предел, 4) if предел else None,
+        "releases": {с: р["release"] for с, р in релизы.items()},
+        "renderer_revisions": {с: (р["manifest"] or {}).get("renderer_revision", "")[:12]
+                               for с, р in релизы.items()},
+    }
+
+
+def глагол_cancel_stuck(args) -> dict:
+    """Погасить именно этот прогон и ничего больше.
+
+    Отмена адресная: называется юнит из закрытого списка и точная
+    InvocationID. Если текущая InvocationID другая, значит прогон уже сменился
+    и гасить нечего — операция идемпотентна и возвращает `already_gone`.
+
+    Гашение — типизованная операция systemd (`systemctl stop`), а не сигнал по
+    угаданному PID: `kill` мимо цели убивает чужую работу, и восстановить её
+    будет нечем.
+    """
+    unit = args.unit
+    if unit not in ОТМЕНЯЕМЫЕ:
+        raise Отказ(f"юнит вне списка отменяемых: {unit!r}")
+    текущая = _выполнить(["systemctl", "show", "-p", "InvocationID", "--value", unit],
+                         таймаут=30)["stdout"].strip()
+    if текущая != args.invocation:
+        return {"unit": unit, "requested_invocation": args.invocation,
+                "current_invocation": текущая, "verdict": "already_gone",
+                "note": "прогон уже сменился: гасить нечего"}
+
+    до = {с: глагол_inspect(argparse.Namespace(site=с))["release"] for с in САЙТЫ}
+    доказательство = _доказать_застой(unit, окно=float(args.observe))
+    застой = (доказательство["files_growth"] == 0
+              and доказательство["bytes_growth"] == 0
+              and доказательство["limit_events_growth"] > 0
+              and (доказательство["memory_ratio"] or 0) >= 0.9)
+    if not застой and not args.force_proven:
+        return {"unit": unit, "verdict": "not_stale", "evidence": доказательство,
+                "note": "признаки застоя не подтвердились; прогон не тронут"}
+
+    # Новые запуски — в покой, чтобы место не заняли снова.
+    _выполнить(["systemctl", "stop", ТАЙМЕР], таймаут=120)
+    остановка = _выполнить(["systemctl", "stop", unit], таймаут=float(args.stop_timeout))
+
+    ждали = 0.0
+    while ждали < float(args.stop_timeout):
+        pid = _выполнить(["systemctl", "show", "-p", "MainPID", "--value", unit],
+                         таймаут=30)["stdout"].strip()
+        состояние = _выполнить(["systemctl", "is-active", unit], таймаут=30)["stdout"].strip()
+        if pid in ("", "0") and состояние != "active":
+            break
+        time.sleep(5)
+        ждали += 5
+    иначе_pid = _выполнить(["systemctl", "show", "-p", "MainPID", "--value", unit],
+                           таймаут=30)["stdout"].strip()
+
+    # Частичная сборка — в карантин, а не в корзину.
+    КАРАНТИН.mkdir(parents=True, exist_ok=True)
+    метка = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    перенесено = []
+    for сайт in САЙТЫ:
+        staging = RUNTIME_ROOT / сайт / ".staging"
+        if staging.is_dir() and any(staging.iterdir()):
+            цель = КАРАНТИН / f"{сайт}-{метка}"
+            shutil.move(str(staging), str(цель))
+            staging.mkdir(parents=True, exist_ok=True)
+            перенесено.append(str(цель))
+
+    # Снимается только наш собственный drop-in и только если он наш.
+    снят = False
+    if ДРОПИН.is_file() and "LORDS_CANARY_SITE" in ДРОПИН.read_text(encoding="utf-8"):
+        ДРОПИН.unlink()
+        снят = True
+    _выполнить(["systemctl", "daemon-reload"], таймаут=120)
+    окружение = _выполнить(["systemctl", "show", "-p", "Environment", "--value", unit],
+                           таймаут=30)["stdout"]
+    остались = [ч for ч in окружение.split() if ч.startswith("LORDS_CANARY_")]
+
+    после = {с: глагол_inspect(argparse.Namespace(site=с))["release"] for с in САЙТЫ}
+    сменилось = {с: (до[с], после[с]) for с in САЙТЫ if до[с] != после[с]}
+    вердикт = "STALE_RENDER_CANCELLED_NO_CHANGE" if not сменилось else "RELEASES_CHANGED"
+    return {
+        "unit": unit, "invocation": args.invocation, "verdict": вердикт,
+        "evidence": доказательство,
+        "stop_code": остановка["code"], "main_pid_after": иначе_pid,
+        "quarantined": перенесено, "dropin_removed": снят,
+        "canary_env_left": остались,
+        "releases_before": до, "releases_after": после,
+        "timer_state": _выполнить(["systemctl", "is-active", ТАЙМЕР],
+                                  таймаут=30)["stdout"].strip(),
+    }
+
+
 def глагол_selftest(_args) -> dict:
     """Проверка установленной копии: пути, права, окружение. Ничего не меняет."""
     проверки = []
@@ -386,6 +536,7 @@ def _отвергает(функция, значение) -> bool:
     "canary": глагол_canary,
     "rollback": глагол_rollback,
     "timer": глагол_timer,
+    "cancel-stuck": глагол_cancel_stuck,
     "self-test": глагол_selftest,
 }
 
@@ -410,6 +561,13 @@ def main(argv: list[str] | None = None) -> int:
     rb.add_argument("--site", required=True)
     rb.add_argument("--reason", default="deploy-rollback")
     t = под.add_parser("timer"); t.add_argument("action")
+    cs = под.add_parser("cancel-stuck")
+    cs.add_argument("--unit", required=True)
+    cs.add_argument("--invocation", required=True)
+    cs.add_argument("--observe", type=float, default=300.0)
+    cs.add_argument("--stop-timeout", type=float, default=300.0)
+    cs.add_argument("--force-proven", action="store_true",
+                    help="признаки уже доказаны снаружи и записаны в отчёте")
     под.add_parser("self-test")
 
     args = р.parse_args(argv)
