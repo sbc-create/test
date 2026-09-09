@@ -1,0 +1,7 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Пример объявленного словаря тегов поставщика.",
+  "coverage_note": "Теги заполнены у 2,4 % записей: отсутствие метки — не отрицание.",
+  "animation_tags": ["anime", "cartoon"],
+  "form_tags": {"ona": "ONA", "ova": "OVA", "special": "SPECIAL"}
+}
