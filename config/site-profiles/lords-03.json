@@ -193,7 +193,10 @@
     "enabled": true,
     "indexing_enabled": false,
     "canonical_host": "1lordserials1.online",
-    "editorial_profile": "lords-03-editorial"
+    "editorial_profile": "lords-03-editorial",
+    "title_prefixes": [
+      "title"
+    ]
   },
   "analytics_profile": {
     "enabled": true,
@@ -224,10 +227,5 @@
     "monitoring-audit": "site-factory/platform"
   },
   "health_endpoint": "/healthz",
-  "coverage_endpoint": "/api/v1/coverage",
-  "route_rules": {
-    "titlePrefixes": [
-      "title"
-    ]
-  }
+  "coverage_endpoint": "/api/v1/coverage"
 }

@@ -47,11 +47,14 @@ def test_три_записи_одного_адреса_дают_один_клю�
     assert ключи == {"/title/x"}
 
 
+ПРАВИЛА = {"titlePrefixes": ["anime"]}
+
+
 def test_значимая_часть_пути_не_выбрасывается():
     """Убрав номер сезона, мы повысим долю совпадений и начнём приписывать
     сезону сведения о произведении целиком."""
     н = normalize("https://yummyani.org/anime/x/season/2/episode/5",
-                  profiles=ПРОФИЛИ)
+                  profiles=ПРОФИЛИ, path_rules=ПРАВИЛА)
     assert н.route_key == "/anime/x/season/2/episode/5"
     assert н.route_kind == "episode"
     assert н.parent_key == "/anime/x"
@@ -224,3 +227,40 @@ def test_снимки_разных_витрин_не_пересекаются():
                 site_id="lords-02").as_dict()
     assert lookup(a, "/title/groza")["found"] is False
     assert lookup(b, "/title/tishina")["found"] is False
+
+
+
+def test_без_объявления_профиля_вид_адреса_неизвестен():
+    """Догадка о том, каким префиксом витрина называет произведения, —
+    знание о витрине, а ядро им не располагает. Неизвестное честнее
+    выдуманного."""
+    н = normalize("https://yummyani.org/anime/x/", profiles=ПРОФИЛИ)
+    assert н.state is NormalizeState.OK
+    assert н.route_kind == "unknown-without-profile"
+
+
+def test_с_объявлением_профиля_вид_адреса_известен():
+    н = normalize("https://yummyani.org/anime/x/", profiles=ПРОФИЛИ,
+                  path_rules=ПРАВИЛА)
+    assert н.route_kind == "title"
+
+
+def test_префиксы_объявлены_в_профилях_а_не_в_коде():
+    """Сорок третья витрина принесёт своё объявление, а не правку модуля."""
+    import json
+    import pathlib as _pathlib
+
+    корень = _pathlib.Path(__file__).resolve().parents[2]
+    объявлено = 0
+    for путь in sorted((корень / "config" / "site-profiles").glob("*.json")):
+        профиль = json.loads(путь.read_text(encoding="utf-8"))
+        if (профиль.get("seo_profile") or {}).get("title_prefixes"):
+            объявлено += 1
+    assert объявлено >= 6, "префиксы объявляются профилями"
+
+    import inspect
+
+    from factory.site_engine import route_normalizer
+
+    исходник = inspect.getsource(route_normalizer)
+    assert "anime" not in исходник, "имя раздела витрины в ядре"

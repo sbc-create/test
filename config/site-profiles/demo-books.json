@@ -107,7 +107,10 @@
     "enabled": true,
     "indexing_enabled": false,
     "canonical_host": "demo-books.invalid",
-    "editorial_profile": "demo-books-editorial"
+    "editorial_profile": "demo-books-editorial",
+    "title_prefixes": [
+      "book"
+    ]
   },
   "analytics_profile": {
     "enabled": false,
@@ -144,10 +147,5 @@
       "limit": 12,
       "position": 0
     }
-  ],
-  "route_rules": {
-    "titlePrefixes": [
-      "book"
-    ]
-  }
+  ]
 }

@@ -211,7 +211,10 @@
     "enabled": true,
     "indexing_enabled": false,
     "canonical_host": "yummyani.biz",
-    "editorial_profile": "yummyani-biz-editorial"
+    "editorial_profile": "yummyani-biz-editorial",
+    "title_prefixes": [
+      "anime"
+    ]
   },
   "analytics_profile": {
     "enabled": true,
@@ -242,10 +245,5 @@
     "monitoring-audit": "site-factory/platform"
   },
   "health_endpoint": "/healthz",
-  "coverage_endpoint": "/api/v1/coverage",
-  "route_rules": {
-    "titlePrefixes": [
-      "anime"
-    ]
-  }
+  "coverage_endpoint": "/api/v1/coverage"
 }
