@@ -115,3 +115,26 @@ class TestСвидетельстваИКарантин:
         for признак in ("files_growth", "bytes_growth", "limit_events_growth",
                         "memory_ratio", "renderer_revisions"):
             assert признак in тело, f"признак {признак} не измеряется"
+
+
+class TestЗанятостьЮнита:
+    """Дефект LORDS-DEPLOYCTL-ACTIVATING-42.
+
+    `systemctl is-active` для работающего oneshot отвечает `activating`, а не
+    `active`. Проверка простоя сравнивала только с `active`, поэтому занятый
+    юнит дважды был объявлен свободным: заявка подавалась в чужой прогон и
+    присоединялась к нему вместо запуска своей. Оба раза это стоило часов.
+    """
+
+    def test_все_рабочие_состояния_считаются_занятыми(self, помощник):
+        assert set(помощник.ЗАНЯТЫЕ_СОСТОЯНИЯ) == {
+            "active", "activating", "deactivating", "reloading"}
+
+    def test_ожидание_простоя_пользуется_общей_проверкой(self, помощник):
+        import ast
+        дерево = ast.parse(Path(помощник.__file__).read_text(encoding="utf-8"))
+        функция = next(у for у in ast.walk(дерево) if isinstance(у, ast.FunctionDef)
+                       and у.name == "глагол_canary")
+        тело = ast.unparse(функция)
+        assert "_занят(" in тело, "канарейка снова сравнивает состояние вручную"
+        assert "== 'active'" not in тело, "сравнение с одним 'active' вернулось"
