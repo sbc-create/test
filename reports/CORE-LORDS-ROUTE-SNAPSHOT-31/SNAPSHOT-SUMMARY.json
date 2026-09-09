@@ -1,0 +1,23 @@
+{
+ "lords-01": {
+  "recordCount": 47684,
+  "collisionCount": 3443,
+  "rejectedCount": 0,
+  "completeness": "INCOMPLETE",
+  "digest": "b200d354dbf62c958d0754020fea2ddf"
+ },
+ "lords-02": {
+  "recordCount": 47684,
+  "collisionCount": 3443,
+  "rejectedCount": 0,
+  "completeness": "INCOMPLETE",
+  "digest": "a98f0f3f0abbae9f98cdccb3e3df076a"
+ },
+ "lords-03": {
+  "recordCount": 47684,
+  "collisionCount": 3443,
+  "rejectedCount": 0,
+  "completeness": "INCOMPLETE",
+  "digest": "beab32f4e441d98d1fc7fe7177ddc595"
+ }
+}
