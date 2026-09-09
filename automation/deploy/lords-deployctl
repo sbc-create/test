@@ -1,0 +1,378 @@
+#!/usr/bin/env python3
+"""Узкий привилегированный помощник выкладки Lords. Только эти глаголы.
+
+Почему он такой маленький
+-------------------------
+
+Три ночи подряд выкладка падала, и каждый раз — не в самой выкладке, а в
+параллельном контуре, построенном рядом с работающим. `lords-canary-apply.sh`
+заново реализовывал то, что обновление каталога делает каждые десять минут без
+единого отказа: раскладку релиза, запись манифеста, переключение ссылки. В
+дубликате и жили дефекты — пустой InvocationID, `git archive` от root в чужом
+дереве, страж noexec не в том файле.
+
+Проверенный путь уже содержит канареечный крюк. `lords-content-refresh.sh`
+принимает `LORDS_CANARY_SITE` и `LORDS_CANARY_REVISION`, отключает ворота
+рендера для этой витрины («решение выложить шаблон принято снаружи и не
+пересматривается оптимизацией»), а `lords-refresh-guard finalize` пишет
+манифест с `--reason canary --template-revision` и переключает `current`
+атомарно, под собственным замком, с проверкой ожидаемого предыдущего релиза.
+
+Поэтому здесь нет ни раскладки, ни переключения, ни записи манифеста. Здесь
+только то, что требует прав и чего нет в проверенном пути: внести готовый
+артефакт в хранилище и запустить проверенный путь в канареечном режиме.
+
+Границы
+-------
+
+* витрина — только из белого списка `lords-01`, `lords-02`, `lords-03`;
+* ревизия — ровно сорок шестнадцатеричных знаков;
+* источник артефакта — только из разрешённых префиксов, обычный файл, и его
+  SHA-256 обязан совпасть с заявленным;
+* пути, службы, корни рантайма заданы здесь и не приходят из запроса;
+* произвольная команда не исполняется никогда: `shell=True` в этом файле нет.
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import pwd
+import re
+import shutil
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+САЙТЫ = ("lords-01", "lords-02", "lords-03")
+ДОМЕНЫ = {
+    "lords-01": "lordfilm47.space",
+    "lords-02": "lordserial33.biz",
+    "lords-03": "1lordserials1.online",
+}
+RUNTIME_ROOT = Path("/srv/lords")
+ARTIFACT_ROOT = Path("/srv/lords/.artifacts")
+ХРАНИЛИЩЕ = ARTIFACT_ROOT / "templates"
+ОСНАСТКА = Path("/srv/site-factory/lords-tooling/releases/"
+                "41031da02cb7d3ca1fb30c0bdfeca6fe4b4e21c1")
+ОБНОВЛЕНИЕ = ОСНАСТКА / "automation" / "host" / "lords-content-refresh.sh"
+# Сторож берётся из закреплённой оснастки, а не из рабочего checkout: именно
+# так его находит обновление каталога (GUARD="${REPO}/automation/host/..."),
+# и в /srv/site-factory/repo его вообще нет — самопроверка это и показала.
+СТОРОЖ = ОСНАСТКА / "automation" / "host" / "lords-refresh-guard.py"
+PYTHON = Path("/srv/site-factory/repo/.venv/bin/python")
+ТАЙМЕР = "lords-content-refresh.timer"
+#: Откуда разрешено вносить артефакт. Произвольный путь не принимается: иначе
+#: заявка смогла бы подсунуть в хранилище что угодно.
+ИСТОЧНИКИ = ("/home/claude/wt-release-03/var/artifacts/",
+             "/home/claude/wt-integration-28/var/artifacts/",
+             "/var/lib/lords-deploy/incoming/")
+РЕВИЗИЯ = re.compile(r"^[0-9a-f]{40}$")
+
+
+class Отказ(Exception):
+    """Заявка не принята: причина названа, действий не произведено."""
+
+
+def _сайт(значение: str) -> str:
+    if значение not in САЙТЫ:
+        raise Отказ(f"витрина вне списка: {значение!r}")
+    return значение
+
+
+def _ревизия(значение: str) -> str:
+    if not РЕВИЗИЯ.match(значение or ""):
+        raise Отказ(f"ревизия должна быть полным SHA из сорока знаков: {значение!r}")
+    return значение
+
+
+def отпечаток(путь: Path) -> str:
+    h = hashlib.sha256()
+    with путь.open("rb") as ф:
+        for кусок in iter(lambda: ф.read(1 << 20), b""):
+            h.update(кусок)
+    return h.hexdigest()
+
+
+def _выполнить(argv: list[str], *, окружение: dict | None = None,
+               таймаут: float = 43200.0, как: str | None = None) -> dict:
+    """Запуск списком аргументов. Оболочки нет и не будет.
+
+    `как` понижает права до названного пользователя: git, отрисовка и сборка
+    выполняются не от root. Понижение — движение прав вниз, и только оно здесь
+    возможно: повышения этот файл не умеет.
+    """
+    подготовка = None
+    if как:
+        запись = pwd.getpwnam(как)
+
+        def подготовка() -> None:  # pragma: no cover — исполняется в потомке
+            os.setgid(запись.pw_gid)
+            os.initgroups(запись.pw_name, запись.pw_gid)
+            os.setuid(запись.pw_uid)
+
+    среда = dict(os.environ)
+    среда.setdefault("PATH", "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin")
+    if окружение:
+        среда.update(окружение)
+    начало = time.time()
+    готово = subprocess.run(argv, capture_output=True, text=True, timeout=таймаут,
+                            env=среда, preexec_fn=подготовка)
+    return {
+        "argv": argv,
+        "code": готово.returncode,
+        "stdout": готово.stdout[-20000:],
+        "stderr": готово.stderr[-20000:],
+        "seconds": round(time.time() - начало, 1),
+    }
+
+
+# --------------------------------------------------------------- глаголы --
+
+def глагол_inspect(args) -> dict:
+    сайт = _сайт(args.site)
+    рантайм = RUNTIME_ROOT / сайт
+    текущая = рантайм / "current"
+    релиз = текущая.resolve() if текущая.exists() else None
+    манифест = None
+    if релиз is not None:
+        путь = релиз / "release-manifest.json"
+        if путь.is_file():
+            манифест = json.loads(путь.read_text(encoding="utf-8"))
+    служба = _выполнить(["systemctl", "is-active", f"{сайт}.service"], таймаут=30)
+    таймер = _выполнить(["systemctl", "is-active", ТАЙМЕР], таймаут=30)
+    включён = _выполнить(["systemctl", "is-enabled", ТАЙМЕР], таймаут=30)
+    return {
+        "site": сайт,
+        "domain": ДОМЕНЫ[сайт],
+        "release": релиз.name if релиз else None,
+        "release_path": str(релиз) if релиз else None,
+        "manifest": манифест,
+        "rollback_target": (манифест or {}).get("rollback_target"),
+        "service": служба["stdout"].strip(),
+        "timer_active": таймер["stdout"].strip(),
+        "timer_enabled": включён["stdout"].strip(),
+    }
+
+
+def глагол_import_artifact(args) -> dict:
+    """Внести готовый артефакт в хранилище. Собирать его здесь нечем и незачем.
+
+    Сборка требует git в рабочем дереве пользователя, а git от root в чужом
+    дереве — это дефект LORDS-RELEASE-ADOPT-GIT-PRIVILEGED-33, из-за которого
+    выкладка откатилась уже после подмены ссылки. Артефакт собирает владелец
+    дерева, а сюда приходит готовый файл с заявленным отпечатком.
+    """
+    ревизия = _ревизия(args.revision)
+    источник = Path(args.source).resolve()
+    if not any(str(источник).startswith(п) for п in ИСТОЧНИКИ):
+        raise Отказ(f"источник вне разрешённых префиксов: {источник}")
+    if not источник.is_file():
+        raise Отказ(f"источник не обычный файл: {источник}")
+    фактический = отпечаток(источник)
+    if фактический != args.sha256:
+        raise Отказ(f"отпечаток источника {фактический} вместо заявленного {args.sha256}")
+
+    ХРАНИЛИЩЕ.mkdir(parents=True, exist_ok=True)
+    цель = ХРАНИЛИЩЕ / f"{ревизия[:12]}.tar.gz"
+    if цель.is_file():
+        уже = отпечаток(цель)
+        if уже != фактический:
+            raise Отказ(f"в хранилище другой артефакт {ревизия[:12]}: {уже}")
+        return {"artifact": str(цель), "sha256": уже, "imported": False,
+                "note": "артефакт уже в хранилище и совпадает"}
+    временный = цель.with_suffix(".tar.gz.incoming")
+    shutil.copyfile(источник, временный)
+    os.chmod(временный, 0o644)
+    os.chown(временный, 0, 0)
+    if отпечаток(временный) != фактический:
+        временный.unlink(missing_ok=True)
+        raise Отказ("копия артефакта не совпала с источником")
+    os.replace(временный, цель)
+    return {"artifact": str(цель), "sha256": фактический, "imported": True}
+
+
+def глагол_pin(args) -> dict:
+    """Закрепить артефакт витрины: распаковать в рантайм и назвать корень."""
+    сайт = _сайт(args.site)
+    ревизия = _ревизия(args.revision)
+    архив = ХРАНИЛИЩЕ / f"{ревизия[:12]}.tar.gz"
+    if not архив.is_file():
+        raise Отказ(f"артефакт {ревизия[:12]} не внесён: сначала import-artifact")
+    итог = _выполнить([str(PYTHON), str(СТОРОЖ),
+                       "--runtime-root", str(RUNTIME_ROOT),
+                       "--artifact-root", str(ARTIFACT_ROOT),
+                       "pin", сайт, "--revision", ревизия,
+                       "--repo", str(ОСНАСТКА), "--json"], таймаут=1800)
+    if итог["code"] != 0:
+        raise Отказ(f"pin отказал: {итог['stderr'].strip() or итог['stdout'].strip()}")
+    return {"site": сайт, "revision": ревизия, "pin": json.loads(итог["stdout"].strip())}
+
+
+def глагол_canary(args) -> dict:
+    """Канареечная выкладка витрины проверенным путём обновления каталога.
+
+    Ничего не раскладывается и не переключается здесь: сценарий обновления
+    отрисовывает витрину закреплённым шаблоном, а `finalize` пишет манифест и
+    меняет ссылку под собственным замком. Наша работа — назвать витрину и
+    ревизию и не мешать.
+    """
+    сайт = _сайт(args.site)
+    ревизия = _ревизия(args.revision)
+    архив = ХРАНИЛИЩЕ / f"{ревизия[:12]}.tar.gz"
+    if not архив.is_file():
+        raise Отказ(f"артефакт {ревизия[:12]} не внесён")
+    до = глагол_inspect(argparse.Namespace(site=сайт))
+    if not до["release"]:
+        raise Отказ("у витрины нет действующего релиза: откатываться будет некуда")
+
+    окружение = {
+        "FACTORY_REPO": str(ОСНАСТКА),
+        "FACTORY_PYTHON": str(PYTHON),
+        "LORDS_ARTIFACT_ROOT": str(ARTIFACT_ROOT),
+        "LORDS_PINNED_TEMPLATE": "1",
+        "LORDS_CANARY_SITE": сайт,
+        "LORDS_CANARY_REVISION": ревизия,
+        "LORDS_CANARY_REPO": str(ОСНАСТКА),
+        "LORDS_SITES": сайт,
+    }
+    итог = _выполнить(["/bin/bash", str(ОБНОВЛЕНИЕ)], окружение=окружение,
+                      таймаут=float(args.timeout))
+    после = глагол_inspect(argparse.Namespace(site=сайт))
+    сменился = после["release"] != до["release"]
+    return {
+        "site": сайт,
+        "revision": ревизия,
+        "release_before": до["release"],
+        "release_after": после["release"],
+        "switched": сменился,
+        "manifest_after": после["manifest"],
+        "refresh": {k: итог[k] for k in ("code", "seconds")},
+        "refresh_tail": итог["stdout"][-6000:],
+        "refresh_errors": итог["stderr"][-6000:],
+    }
+
+
+def глагол_rollback(args) -> dict:
+    сайт = _сайт(args.site)
+    до = глагол_inspect(argparse.Namespace(site=сайт))
+    итог = _выполнить([str(PYTHON), str(СТОРОЖ),
+                       "--runtime-root", str(RUNTIME_ROOT),
+                       "--artifact-root", str(ARTIFACT_ROOT),
+                       "rollback", сайт, "--reason", args.reason[:200],
+                       "--actor", "lords-deployctl"], таймаут=1800)
+    после = глагол_inspect(argparse.Namespace(site=сайт))
+    return {
+        "site": сайт,
+        "release_before": до["release"],
+        "release_after": после["release"],
+        "returned": после["release"] != до["release"],
+        "code": итог["code"],
+        "stdout": итог["stdout"][-4000:],
+        "stderr": итог["stderr"][-4000:],
+        "service": после["service"],
+    }
+
+
+def глагол_timer(args) -> dict:
+    if args.action not in ("start", "stop", "status"):
+        raise Отказ(f"действие таймера вне списка: {args.action!r}")
+    if args.action != "status":
+        _выполнить(["systemctl", args.action, ТАЙМЕР], таймаут=60)
+    активен = _выполнить(["systemctl", "is-active", ТАЙМЕР], таймаут=30)
+    включён = _выполнить(["systemctl", "is-enabled", ТАЙМЕР], таймаут=30)
+    return {"timer": ТАЙМЕР, "action": args.action,
+            "active": активен["stdout"].strip(), "enabled": включён["stdout"].strip()}
+
+
+def глагол_selftest(_args) -> dict:
+    """Проверка установленной копии: пути, права, окружение. Ничего не меняет."""
+    проверки = []
+
+    def проверить(имя: str, условие: bool, деталь: str = "") -> None:
+        проверки.append({"check": имя, "ok": bool(условие), "detail": деталь})
+
+    проверить("запущен от root", os.geteuid() == 0, f"euid={os.geteuid()}")
+    свой = Path(__file__).resolve()
+    проверить("собственный путь существует", свой.is_file(), str(свой))
+    смонтирован = _выполнить(["findmnt", "-no", "OPTIONS", "-T", str(свой)], таймаут=30)
+    проверить("раздел собственного файла исполняемый",
+              "noexec" not in смонтирован["stdout"], смонтирован["stdout"].strip())
+    for путь in (ОСНАСТКА, ОБНОВЛЕНИЕ, СТОРОЖ, PYTHON, RUNTIME_ROOT, ARTIFACT_ROOT):
+        проверить(f"путь есть: {путь}", Path(путь).exists())
+    for сайт in САЙТЫ:
+        состояние = глагол_inspect(argparse.Namespace(site=сайт))
+        проверить(f"{сайт}: есть релиз и манифест",
+                  bool(состояние["release"]) and bool(состояние["manifest"]),
+                  str(состояние["release"]))
+        проверить(f"{сайт}: служба работает", состояние["service"] == "active",
+                  состояние["service"])
+    состояние = глагол_inspect(argparse.Namespace(site="lords-02"))
+    проверить("таймер обновления включён", состояние["timer_enabled"] == "enabled",
+              состояние["timer_enabled"])
+    проверить("витрина вне списка отвергается", _отвергает(_сайт, "lords-99"))
+    проверить("короткая ревизия отвергается", _отвергает(_ревизия, "119605bbaca2"))
+    отказов = [п for п in проверки if not п["ok"]]
+    return {"checks": проверки, "failed": len(отказов), "verdict":
+            "SELF_TEST=PASS" if not отказов else "SELF_TEST=FAIL"}
+
+
+def _отвергает(функция, значение) -> bool:
+    try:
+        функция(значение)
+    except Отказ:
+        return True
+    return False
+
+
+ГЛАГОЛЫ = {
+    "inspect": глагол_inspect,
+    "import-artifact": глагол_import_artifact,
+    "pin": глагол_pin,
+    "canary": глагол_canary,
+    "rollback": глагол_rollback,
+    "timer": глагол_timer,
+    "self-test": глагол_selftest,
+}
+
+
+def main(argv: list[str] | None = None) -> int:
+    р = argparse.ArgumentParser(description="узкий помощник выкладки Lords")
+    под = р.add_subparsers(dest="verb", required=True)
+
+    i = под.add_parser("inspect"); i.add_argument("site")
+    a = под.add_parser("import-artifact")
+    a.add_argument("--revision", required=True)
+    a.add_argument("--source", required=True)
+    a.add_argument("--sha256", required=True)
+    p = под.add_parser("pin"); p.add_argument("site"); p.add_argument("--revision", required=True)
+    c = под.add_parser("canary")
+    c.add_argument("--site", required=True)
+    c.add_argument("--revision", required=True)
+    c.add_argument("--timeout", type=float, default=43200.0)
+    rb = под.add_parser("rollback")
+    rb.add_argument("--site", required=True)
+    rb.add_argument("--reason", default="deploy-rollback")
+    t = под.add_parser("timer"); t.add_argument("action")
+    под.add_parser("self-test")
+
+    args = р.parse_args(argv)
+    if os.geteuid() != 0 and args.verb != "self-test":
+        print(json.dumps({"error": "помощник запускает root"}, ensure_ascii=False))
+        return 1
+    try:
+        итог = ГЛАГОЛЫ[args.verb](args)
+    except Отказ as отказ:
+        print(json.dumps({"error": str(отказ)}, ensure_ascii=False, indent=2))
+        return 3
+    print(json.dumps(итог, ensure_ascii=False, indent=2))
+    if args.verb == "self-test" and итог["failed"]:
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

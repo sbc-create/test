@@ -1,0 +1,433 @@
+#!/usr/bin/env python3
+"""Приёмщик заявок на выкладку Lords: конечный автомат с сохранением состояния.
+
+Зачем он есть
+-------------
+
+Три ночи подряд выкладка требовала от владельца ручной root-команды, и каждый
+раз падала на своём же вспомогательном контуре. Приёмщик снимает обе проблемы:
+он ставится один раз, живёт как служба и принимает заявки файлом в каталоге,
+доступном пользователю `claude`. Дальше цикл — подать заявку, прочитать
+результат, исправить, подать снова — идёт без единой новой команды владельца.
+
+Что он НЕ принимает
+-------------------
+
+Заявка не может назвать путь, службу, команду или репозиторий. В ней только:
+идентификатор выкладки, витрины из белого списка, ревизия, отпечатки артефакта
+и снимка. Всё остальное — внутри установленных root-файлов. Заявка, не
+прошедшая схему, отвергается целиком и ничего не запускает.
+
+Автомат
+-------
+
+    INSPECT → PREFLIGHT → BUILD/REUSE → CANARY → SWITCH → POSTFLIGHT
+            → SOAK → COMMIT → NEXT_SITE
+
+Состояние каждой выкладки лежит в `state/<id>.json` и переживает и закрытый
+терминал, и перезапуск сервера: служба поднимается снова и продолжает с
+незавершённой витрины.
+
+Статусы различаются строго, потому что «откат» и «ничего не произошло» — разные
+события, и путать их значит терять доверие к отчёту:
+
+* `PRECHECK_FAILED_NO_CHANGE`  — отвергли до действий, витрина не тронута;
+* `BUILD_FAILED_NO_CHANGE`     — сборка не удалась, ссылка не менялась;
+* `SWITCH_FAILED_NO_CHANGE`    — переключение не состоялось, ссылка не менялась;
+* `ROLLED_BACK_VERIFIED`       — ссылка менялась, возвращена, возврат проверен;
+* `DEPLOYED_AND_VERIFIED`      — выложено и подтверждено на публичном домене.
+"""
+
+from __future__ import annotations
+
+import json
+import os
+import re
+import subprocess
+import sys
+import time
+import traceback
+from pathlib import Path
+
+БАЗА = Path("/var/lib/lords-deploy")
+ЗАЯВКИ = БАЗА / "requests"
+СОСТОЯНИЕ = БАЗА / "state"
+РЕЗУЛЬТАТЫ = БАЗА / "results"
+ЖУРНАЛЫ = БАЗА / "logs"
+СВИДЕТЕЛЬСТВА = БАЗА / "evidence"
+ПРИНЯТЫЕ = БАЗА / "accepted"
+LIBEXEC = Path("/usr/local/libexec/site-factory")
+DEPLOYCTL = LIBEXEC / "lords-deployctl"
+ПУБЛИЧНАЯ = LIBEXEC / "lords-public-check.py"
+САЙТЫ = ("lords-01", "lords-02", "lords-03")
+ДОМЕНЫ = {"lords-01": "lordfilm47.space", "lords-02": "lordserial33.biz",
+          "lords-03": "1lordserials1.online"}
+ХЕКС40 = re.compile(r"^[0-9a-f]{40}$")
+ХЕКС64 = re.compile(r"^[0-9a-f]{64}$")
+ИД = re.compile(r"^[a-z0-9][a-z0-9-]{5,63}$")
+ФАЗЫ = ("INSPECT", "PREFLIGHT", "BUILD_OR_REUSE", "CANARY", "SWITCH",
+        "POSTFLIGHT", "SOAK", "COMMIT", "NEXT_SITE")
+
+
+class Отвергнуто(Exception):
+    """Заявка не прошла проверку. Ничего не запускалось."""
+
+
+def записать_json(путь: Path, данные: dict) -> None:
+    """Атомарная запись. Половина файла читается как испорченный JSON."""
+    путь.parent.mkdir(parents=True, exist_ok=True)
+    временный = путь.with_suffix(путь.suffix + ".tmp")
+    временный.write_text(json.dumps(данные, ensure_ascii=False, indent=2) + "\n",
+                         encoding="utf-8")
+    os.chmod(временный, 0o644)
+    os.replace(временный, путь)
+
+
+def проверить_заявку(сырая: dict) -> dict:
+    """Схема заявки. Лишнее поле — тоже отказ: молчаливое игнорирование скрывает
+    опечатку в имени поля, и заявка делает не то, что написано."""
+    разрешено = {"deployment_id", "sites", "revision", "artifact_sha256",
+                 "artifact_source", "snapshot_sha256", "snapshot_count",
+                 "soak_seconds", "expect_marker", "note"}
+    лишние = set(сырая) - разрешено
+    if лишние:
+        raise Отвергнуто(f"неизвестные поля заявки: {sorted(лишние)}")
+    ид = сырая.get("deployment_id", "")
+    if not ИД.match(str(ид)):
+        raise Отвергнуто(f"идентификатор выкладки негоден: {ид!r}")
+    сайты = сырая.get("sites")
+    if not isinstance(сайты, list) or not сайты:
+        raise Отвергнуто("список витрин пуст")
+    if any(с not in САЙТЫ for с in сайты):
+        raise Отвергнуто(f"витрина вне белого списка: {сайты}")
+    if len(set(сайты)) != len(сайты):
+        raise Отвергнуто("витрина названа дважды")
+    ревизия = str(сырая.get("revision", ""))
+    if not ХЕКС40.match(ревизия):
+        raise Отвергнуто(f"ревизия негодна: {ревизия!r}")
+    отпечаток = str(сырая.get("artifact_sha256", ""))
+    if not ХЕКС64.match(отпечаток):
+        raise Отвергнуто(f"отпечаток артефакта негоден: {отпечаток!r}")
+    источник = str(сырая.get("artifact_source", ""))
+    if not источник.startswith("/") or ".." in источник:
+        raise Отвергнуто(f"источник артефакта негоден: {источник!r}")
+    выдержка = сырая.get("soak_seconds", 180)
+    if not isinstance(выдержка, int) or not 0 <= выдержка <= 3600:
+        raise Отвергнуто(f"выдержка вне границ: {выдержка!r}")
+    счёт = сырая.get("snapshot_count", 0)
+    if not isinstance(счёт, int) or счёт < 0:
+        raise Отвергнуто(f"счёт записей негоден: {счёт!r}")
+    снимок = str(сырая.get("snapshot_sha256", "") or "")
+    if снимок and not ХЕКС64.match(снимок):
+        raise Отвергнуто(f"отпечаток снимка негоден: {снимок!r}")
+    маркер = str(сырая.get("expect_marker", "") or "")
+    if len(маркер) > 120:
+        raise Отвергнуто("маркер шаблона длиннее ста двадцати знаков")
+    return {
+        "deployment_id": ид, "sites": сайты, "revision": ревизия,
+        "artifact_sha256": отпечаток, "artifact_source": источник,
+        "snapshot_sha256": снимок, "snapshot_count": счёт,
+        "soak_seconds": выдержка, "expect_marker": маркер,
+        "note": str(сырая.get("note", ""))[:400],
+    }
+
+
+class Выкладка:
+    def __init__(self, заявка: dict) -> None:
+        self.заявка = заявка
+        self.ид = заявка["deployment_id"]
+        self.путь_состояния = СОСТОЯНИЕ / f"{self.ид}.json"
+        self.журнал = ЖУРНАЛЫ / f"{self.ид}.log"
+        self.состояние = self._загрузить()
+
+    def _загрузить(self) -> dict:
+        if self.путь_состояния.is_file():
+            try:
+                прежнее = json.loads(self.путь_состояния.read_text(encoding="utf-8"))
+                прежнее["resumed"] = прежнее.get("resumed", 0) + 1
+                return прежнее
+            except json.JSONDecodeError:
+                pass
+        return {
+            "deployment_id": self.ид,
+            "request": self.заявка,
+            "started_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "resumed": 0,
+            "phase": "INSPECT",
+            "sites": {с: {"status": "PENDING", "phase": "INSPECT"} for с in self.заявка["sites"]},
+            "verdict": "IN_PROGRESS",
+        }
+
+    # ------------------------------------------------------------ помощь --
+    def сказать(self, текст: str) -> None:
+        строка = f"{time.strftime('%H:%M:%S', time.gmtime())} [{self.ид}] {текст}"
+        print(строка, flush=True)
+        self.журнал.parent.mkdir(parents=True, exist_ok=True)
+        with self.журнал.open("a", encoding="utf-8") as ф:
+            ф.write(строка + "\n")
+        os.chmod(self.журнал, 0o644)
+
+    def сохранить(self) -> None:
+        self.состояние["updated_at_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        записать_json(self.путь_состояния, self.состояние)
+        записать_json(РЕЗУЛЬТАТЫ / f"{self.ид}.json", self.состояние)
+
+    def фаза(self, сайт: str, имя: str) -> None:
+        self.состояние["sites"][сайт]["phase"] = имя
+        self.состояние["phase"] = имя
+        self.сказать(f"{сайт}: фаза {имя}")
+        self.сохранить()
+
+    def ctl(self, *argv: str, таймаут: float = 43200.0) -> dict:
+        готово = subprocess.run([sys.executable, str(DEPLOYCTL), *argv],
+                                capture_output=True, text=True, timeout=таймаут)
+        try:
+            данные = json.loads(готово.stdout or "{}")
+        except json.JSONDecodeError:
+            данные = {"error": "помощник вернул не JSON",
+                      "stdout": готово.stdout[-2000:], "stderr": готово.stderr[-2000:]}
+        данные["_code"] = готово.returncode
+        if готово.returncode != 0 and "error" not in данные:
+            данные["error"] = готово.stderr.strip()[-2000:]
+        return данные
+
+    def публичная(self, сайт: str, метка: str, браузеры: bool) -> dict:
+        свидетельства = СВИДЕТЕЛЬСТВА / self.ид / сайт
+        свидетельства.mkdir(parents=True, exist_ok=True)
+        subprocess.run(["chown", "-R", "claude:claude", str(СВИДЕТЕЛЬСТВА / self.ид)],
+                       capture_output=True)
+        argv = [sys.executable, str(ПУБЛИЧНАЯ), "--site", сайт,
+                "--domain", ДОМЕНЫ[сайт], "--evidence", str(свидетельства),
+                "--label", метка, "--images", "30"]
+        if self.заявка["expect_marker"]:
+            argv += ["--expect-marker", self.заявка["expect_marker"]]
+        if браузеры:
+            argv.append("--browsers")
+        готово = _как_claude(argv, таймаут=5400)
+        try:
+            return json.loads(готово["stdout"] or "{}")
+        except json.JSONDecodeError:
+            return {"passed": False, "failures": ["публичная проверка вернула не JSON"],
+                    "stdout": готово["stdout"][-3000:], "stderr": готово["stderr"][-3000:]}
+
+    # ------------------------------------------------------------ автомат --
+    def выложить_витрину(self, сайт: str) -> str:
+        сост = self.состояние["sites"][сайт]
+
+        self.фаза(сайт, "INSPECT")
+        до = self.ctl("inspect", сайт, таймаут=300)
+        if до.get("error"):
+            сост["detail"] = до["error"]
+            return "PRECHECK_FAILED_NO_CHANGE"
+        сост["release_before"] = до["release"]
+        сост["rollback_target"] = до["release"]
+        self.сказать(f"{сайт}: релиз до {до['release']}, служба {до['service']}")
+
+        self.фаза(сайт, "PREFLIGHT")
+        if до["service"] != "active":
+            сост["detail"] = f"служба витрины не работает: {до['service']}"
+            return "PRECHECK_FAILED_NO_CHANGE"
+        if not до["manifest"]:
+            сост["detail"] = "у действующего релиза нет манифеста"
+            return "PRECHECK_FAILED_NO_CHANGE"
+        внесение = self.ctl("import-artifact", "--revision", self.заявка["revision"],
+                            "--source", self.заявка["artifact_source"],
+                            "--sha256", self.заявка["artifact_sha256"], таймаут=1800)
+        if внесение.get("error"):
+            сост["detail"] = f"артефакт не внесён: {внесение['error']}"
+            return "PRECHECK_FAILED_NO_CHANGE"
+        сост["artifact"] = внесение.get("artifact")
+        до_проверки = self.публичная(сайт, "before", браузеры=False)
+        сост["public_before"] = {"passed": до_проверки.get("passed"),
+                                 "routes": до_проверки.get("routes")}
+        if not до_проверки.get("passed"):
+            сост["detail"] = ("витрина не проходит проверку ещё ДО выкладки: "
+                              + "; ".join(до_проверки.get("failures", []))[:400])
+            return "PRECHECK_FAILED_NO_CHANGE"
+
+        self.фаза(сайт, "BUILD_OR_REUSE")
+        закрепление = self.ctl("pin", сайт, "--revision", self.заявка["revision"],
+                               таймаут=1800)
+        if закрепление.get("error"):
+            сост["detail"] = f"артефакт не закреплён: {закрепление['error']}"
+            return "PRECHECK_FAILED_NO_CHANGE"
+        сост["template_root"] = закрепление.get("pin", {}).get("templateRoot")
+        сост["template_digest"] = закрепление.get("pin", {}).get("templateDigest")
+
+        self.фаза(сайт, "CANARY")
+        self.сказать(f"{сайт}: отрисовка закреплённым шаблоном; это часы, не минуты")
+        канарейка = self.ctl("canary", "--site", сайт,
+                             "--revision", self.заявка["revision"], таймаут=43200)
+        сост["canary"] = {k: канарейка.get(k) for k in
+                          ("release_before", "release_after", "switched", "refresh")}
+        if канарейка.get("error"):
+            сост["detail"] = f"канарейка отказала: {канарейка['error']}"
+            return "BUILD_FAILED_NO_CHANGE"
+        if канарейка.get("refresh", {}).get("code") not in (0, None):
+            сост["detail"] = ("сценарий обновления вернул "
+                              f"{канарейка['refresh']['code']}: "
+                              + (канарейка.get("refresh_errors") or "")[-400:])
+            return "BUILD_FAILED_NO_CHANGE" if not канарейка.get("switched") else "SWITCH_FAILED_NO_CHANGE"
+
+        self.фаза(сайт, "SWITCH")
+        if not канарейка.get("switched"):
+            сост["detail"] = "ссылка не сменилась: нового релиза не появилось"
+            return "SWITCH_FAILED_NO_CHANGE"
+        сост["release_after"] = канарейка["release_after"]
+        манифест = канарейка.get("manifest_after") or {}
+        сост["manifest_after"] = манифест
+        self.сказать(f"{сайт}: {канарейка['release_before']} → {канарейка['release_after']}")
+
+        ожидания = [
+            ("ревизия шаблона в манифесте", манифест.get("renderer_revision"),
+             self.заявка["revision"]),
+        ]
+        расхождения = [f"{имя}: {факт} вместо {ждали}"
+                       for имя, факт, ждали in ожидания if факт != ждали]
+        if расхождения:
+            сост["detail"] = "; ".join(расхождения)
+            return self._откатить(сайт, сост["detail"])
+
+        self.фаза(сайт, "POSTFLIGHT")
+        итог = self.публичная(сайт, "after", браузеры=True)
+        сост["public_after"] = итог
+        if not итог.get("passed"):
+            причина = "; ".join(итог.get("failures", []))[:600]
+            сост["detail"] = f"публичная приёмка не пройдена: {причина}"
+            return self._откатить(сайт, сост["detail"])
+
+        self.фаза(сайт, "SOAK")
+        выдержка = self.заявка["soak_seconds"]
+        self.сказать(f"{сайт}: выдержка {выдержка} с")
+        конец = time.time() + выдержка
+        while time.time() < конец:
+            time.sleep(min(30, max(1, конец - time.time())))
+            текущее = self.ctl("inspect", сайт, таймаут=120)
+            if текущее.get("release") != сост["release_after"]:
+                сост["detail"] = (f"во время выдержки релиз сменился на "
+                                  f"{текущее.get('release')}")
+                return self._откатить(сайт, сост["detail"])
+            if текущее.get("service") != "active":
+                сост["detail"] = f"во время выдержки служба {текущее.get('service')}"
+                return self._откатить(сайт, сост["detail"])
+        повтор = self.публичная(сайт, "soak", браузеры=False)
+        if not повтор.get("passed"):
+            сост["detail"] = ("после выдержки проверка не прошла: "
+                              + "; ".join(повтор.get("failures", []))[:400])
+            return self._откатить(сайт, сост["detail"])
+
+        self.фаза(сайт, "COMMIT")
+        таймер = self.ctl("timer", "start", таймаут=120)
+        сост["timer"] = таймер
+        return "DEPLOYED_AND_VERIFIED"
+
+    def _откатить(self, сайт: str, причина: str) -> str:
+        сост = self.состояние["sites"][сайт]
+        self.сказать(f"{сайт}: откат — {причина}")
+        итог = self.ctl("rollback", "--site", сайт, "--reason", причина[:180], таймаут=1800)
+        сост["rollback"] = итог
+        цель = сост.get("rollback_target")
+        if итог.get("release_after") != цель:
+            сост["detail"] = (f"{причина} | ОТКАТ НЕ ПОДТВЕРЖДЁН: "
+                              f"current={итог.get('release_after')}, ждали {цель}")
+            return "ROLLBACK_FAILED"
+        проверка = self.публичная(сайт, "rollback", браузеры=False)
+        сост["public_rollback"] = {"passed": проверка.get("passed"),
+                                   "routes": проверка.get("routes")}
+        if not проверка.get("passed"):
+            сост["detail"] = f"{причина} | после отката витрина не отвечает как ожидалось"
+            return "ROLLBACK_FAILED"
+        return "ROLLED_BACK_VERIFIED"
+
+    def выполнить(self) -> dict:
+        try:
+            for сайт in self.заявка["sites"]:
+                сост = self.состояние["sites"][сайт]
+                if сост.get("status") == "DEPLOYED_AND_VERIFIED":
+                    self.сказать(f"{сайт}: уже выложена, пропускаю")
+                    continue
+                сост["status"] = "IN_PROGRESS"
+                self.сохранить()
+                try:
+                    статус = self.выложить_витрину(сайт)
+                except Exception as ошибка:  # noqa: BLE001
+                    сост["detail"] = f"исключение: {ошибка}"
+                    сост["traceback"] = traceback.format_exc()[-3000:]
+                    статус = "PRECHECK_FAILED_NO_CHANGE" if сост.get("phase") in (
+                        "INSPECT", "PREFLIGHT") else "SWITCH_FAILED_NO_CHANGE"
+                сост["status"] = статус
+                self.сказать(f"{сайт}: {статус}")
+                self.сохранить()
+                if статус != "DEPLOYED_AND_VERIFIED":
+                    self.сказать(f"{сайт} не выложена — остальные витрины не трогаю")
+                    break
+            статусы = {с: self.состояние["sites"][с]["status"] for с in self.заявка["sites"]}
+            все = all(в == "DEPLOYED_AND_VERIFIED" for в in статусы.values())
+            self.состояние["verdict"] = "DEPLOYED_AND_VERIFIED" if все else "INCOMPLETE"
+            self.состояние["phase"] = "NEXT_SITE" if все else self.состояние["phase"]
+        finally:
+            # Таймер обновления возвращается всегда: остановленный, он замораживает
+            # каталог у всех трёх витрин, и заметно это только через часы.
+            self.состояние["timer_final"] = self.ctl("timer", "start", таймаут=120)
+            self.сохранить()
+        return self.состояние
+
+
+def _как_claude(argv: list[str], таймаут: float = 3600.0) -> dict:
+    import pwd
+    запись = pwd.getpwnam("claude")
+
+    def понизить() -> None:  # pragma: no cover — в потомке
+        os.setgid(запись.pw_gid)
+        os.initgroups(запись.pw_name, запись.pw_gid)
+        os.setuid(запись.pw_uid)
+
+    среда = {
+        "HOME": запись.pw_dir, "USER": "claude", "LOGNAME": "claude",
+        "PATH": "/usr/local/bin:/usr/bin:/bin",
+        "LC_ALL": "C.UTF-8", "LANG": "C.UTF-8",
+    }
+    готово = subprocess.run(argv, capture_output=True, text=True, timeout=таймаут,
+                            env=среда, preexec_fn=понизить, cwd=запись.pw_dir)
+    return {"code": готово.returncode, "stdout": готово.stdout, "stderr": готово.stderr}
+
+
+def обработать(файл: Path) -> None:
+    try:
+        сырая = json.loads(файл.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as ошибка:
+        записать_json(РЕЗУЛЬТАТЫ / f"{файл.stem}.json",
+                      {"verdict": "REJECTED", "error": f"заявка не читается: {ошибка}"})
+        файл.unlink(missing_ok=True)
+        return
+    try:
+        заявка = проверить_заявку(сырая)
+    except Отвергнуто as отказ:
+        записать_json(РЕЗУЛЬТАТЫ / f"{сырая.get('deployment_id', файл.stem)}.json",
+                      {"verdict": "REJECTED", "error": str(отказ), "request": сырая})
+        файл.unlink(missing_ok=True)
+        return
+    ПРИНЯТЫЕ.mkdir(parents=True, exist_ok=True)
+    файл.replace(ПРИНЯТЫЕ / f"{заявка['deployment_id']}.json")
+    Выкладка(заявка).выполнить()
+
+
+def main() -> int:
+    for каталог in (ЗАЯВКИ, СОСТОЯНИЕ, РЕЗУЛЬТАТЫ, ЖУРНАЛЫ, СВИДЕТЕЛЬСТВА, ПРИНЯТЫЕ):
+        каталог.mkdir(parents=True, exist_ok=True)
+    заявки = sorted(ЗАЯВКИ.glob("*.json"))
+    if not заявки:
+        # Восстановление после перезапуска: незавершённая выкладка продолжается.
+        for состояние in sorted(СОСТОЯНИЕ.glob("*.json")):
+            данные = json.loads(состояние.read_text(encoding="utf-8"))
+            if данные.get("verdict") == "IN_PROGRESS":
+                print(f"продолжаю незавершённую выкладку {данные['deployment_id']}")
+                Выкладка(данные["request"]).выполнить()
+        return 0
+    for файл in заявки:
+        обработать(файл)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

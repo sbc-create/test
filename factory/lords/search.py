@@ -148,12 +148,6 @@ def _variants(query: str) -> tuple[str, ...]:
     return tuple(v for v in out if v)
 
 
-#: Потолок нестрогой оценки. Строгие совпадения начинаются с 60, и нестрогое
-#: не должно до них дотягиваться: иначе запрос с опечаткой встал бы выше
-#: точного названия.
-FUZZY_CEILING = 39
-
-
 def _token_tolerance(token: str) -> int:
     """Допуск на одно слово запроса. Та же мера, что и у односложного пути."""
     return max(1, len(token) // 4)
@@ -307,6 +301,46 @@ def _as_index(catalog) -> Index:
 
 
 def _fuzzy_candidates(index: Index, variant: str) -> set[int]:
+    """Кандидаты запроса. Многословный разбирается по словам.
+
+    Отбор ниже сравнивает слова словаря со ВСЕЙ строкой запроса, и для «100
+    днеи» не находил ничего: ни одно слово каталога не стоит на расстоянии
+    двух от строки с пробелом — длины несопоставимы. Пословная оценка при этом
+    уже работала, но до неё не доходило: кандидатов не было.
+
+    Пересечение, а не объединение: запись обязана ответить на каждое слово
+    запроса — то же правило, что и в `_score_by_tokens`. Объединение нашло бы
+    всё, где встречается любое из слов.
+    """
+    tokens = variant.split()
+    if len(tokens) > 1:
+        итог: set[int] | None = None
+        for token in tokens:
+            свои = _candidates_for_token(index, token)
+            итог = свои if итог is None else (итог & свои)
+            if not итог:
+                return set()
+        return итог or set()
+    return _candidates_for_word(index, variant)
+
+
+def _candidates_for_token(index: Index, token: str) -> set[int]:
+    """Кандидаты одного слова запроса, включая совпадение началом слова.
+
+    Начало учитывается отдельно: `_token_cost` считает «матр» → «матрица»
+    нулевой ценой, а отбор по расстоянию такую пару отбрасывает по разнице
+    длин. Кандидат, отброшенный отбором, до оценки не доходит, и правило
+    оценки оставалось бы недостижимым.
+    """
+    свои = _candidates_for_word(index, token)
+    if len(token) >= 3:
+        for word in index.vocabulary:
+            if word.startswith(token):
+                свои |= index.word_items.get(word, set())
+    return свои
+
+
+def _candidates_for_word(index: Index, variant: str) -> set[int]:
     """Записи, до которых нестрогое сравнение вообще может дотянуться.
 
     Отбор идёт по словарю, а не по записям: одно и то же слово встречается в
