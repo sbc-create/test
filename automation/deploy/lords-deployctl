@@ -62,8 +62,15 @@ except ImportError:  # установленная копия лежит одна
 RUNTIME_ROOT = Path("/srv/lords")
 ARTIFACT_ROOT = Path("/srv/lords/.artifacts")
 ХРАНИЛИЩЕ = ARTIFACT_ROOT / "templates"
+# Оснастка обязана содержать 146b68f «боевая сборка пишет страницы на диск, а
+# не копит их в памяти». Прежнее закрепление 41031da0 его не содержало, и это
+# измерено, а не предположено: рендер lords-03 из неё 9 сентября упёрся в предел
+# cgroup 2 ГиБ, простоял в состоянии R час с лишним и не записал ни одного файла,
+# заняв юнит обновления и остановив выкладку всем трём витринам.
+#   git merge-base --is-ancestor 146b68f 41031da0  ->  нет
+#   git merge-base --is-ancestor 146b68f 7982913   ->  да
 ОСНАСТКА = Path("/srv/site-factory/lords-tooling/releases/"
-                "41031da02cb7d3ca1fb30c0bdfeca6fe4b4e21c1")
+                "7982913cdc1a9ef5b39fad0bc396ddb3089b3c74")
 ОБНОВЛЕНИЕ = ОСНАСТКА / "automation" / "host" / "lords-content-refresh.sh"
 # Сторож берётся из закреплённой оснастки, а не из рабочего checkout: именно
 # так его находит обновление каталога (GUARD="${REPO}/automation/host/..."),
