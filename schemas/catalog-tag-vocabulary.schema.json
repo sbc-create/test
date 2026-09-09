@@ -1,0 +1,24 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "catalog-tag-vocabulary.schema.json",
+ "title": "Словарь тегов поставщика каталога",
+ "description": "Какие метки поставщика означают анимацию и форму произведения. Живёт объявлением, а не кодом: условие «если аниме» внутри общего модуля означало бы, что следующий тип витрины потребует правки ядра.",
+ "type": "object",
+ "required": ["schema_version", "animation_tags", "form_tags"],
+ "additionalProperties": false,
+ "properties": {
+  "schema_version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
+  "description": {"type": "string"},
+  "coverage_note": {
+   "type": "string",
+   "description": "Доля помеченных записей. Нужна рядом со словарём: без неё легко прочесть отсутствие метки как отрицание."},
+  "animation_tags": {
+   "type": "array", "items": {"type": "string", "minLength": 1},
+   "uniqueItems": true,
+   "description": "Метки анимации. Пустой список допустим и означает, что про анимацию не известно ничего — поле останется незаполненным, а не ложным."},
+  "form_tags": {
+   "type": "object",
+   "additionalProperties": {"enum": ["ONA", "OVA", "SPECIAL"]},
+   "description": "Метка поставщика → форма произведения. Перечень форм закрыт: новая форма — правка контракта, а не строка в настройке."}
+ }
+}
