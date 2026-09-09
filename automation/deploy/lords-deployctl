@@ -47,6 +47,12 @@ import sys
 import time
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+try:
+    from automation.deploy import lords_fence as барьер_мод
+except ImportError:  # установленная копия лежит одна, без дерева
+    барьер_мод = None
+
 САЙТЫ = ("lords-01", "lords-02", "lords-03")
 ДОМЕНЫ = {
     "lords-01": "lordfilm47.space",
@@ -250,6 +256,26 @@ def глагол_canary(args) -> dict:
     if not до["release"]:
         raise Отказ("у витрины нет действующего релиза: откатываться будет некуда")
 
+    # Барьер ревизий: перед отрисовкой и ещё раз после неё.
+    #
+    # Между двумя проверками проходят часы, и заявка, законная в начале, к
+    # концу может оказаться вытесненной более новым поколением. Вторая проверка
+    # и есть та, ради которой барьер заведён: она стоит перед тем, как результат
+    # будет объявлен выложенным.
+    поколение = getattr(args, "generation", 0) or 0
+    отпечаток_артефакта = getattr(args, "artifact_sha256", "") or ""
+    def _барьер(этап: str) -> dict | None:
+        if барьер_мод is None or not поколение:
+            return None
+        return барьер_мод.проверить(сайт, generation=поколение, revision=ревизия,
+                                    artifact_sha256=отпечаток_артефакта, этап=этап)
+    решение = _барьер("pre-render")
+    if решение and not решение["allowed"]:
+        return {"site": сайт, "verdict": барьер_мод.ВЫТЕСНЕНА, "fence": решение,
+                "release_before": до["release"], "release_after": до["release"],
+                "switched": False,
+                "note": "заявка вытеснена до отрисовки: витрина не тронута"}
+
     # Канарейка идёт ШТАТНЫМ юнитом, а не подпроцессом.
     #
     # Дефект LORDS-DEPLOYCTL-CREDENTIALS-40: сценарий запускался напрямую и
@@ -304,8 +330,16 @@ def глагол_canary(args) -> dict:
     finally:
         ДРОПИН.unlink(missing_ok=True)
         _выполнить(["systemctl", "daemon-reload"], таймаут=120)
+    решение = _барьер("pre-switch")
     после = глагол_inspect(argparse.Namespace(site=сайт))
     сменился = после["release"] != до["release"]
+    if решение and not решение["allowed"]:
+        # Отрисовка уже произошла, но объявлять её выложенной нельзя: пока она
+        # шла, объявлено другое желаемое состояние.
+        return {"site": сайт, "verdict": барьер_мод.ВЫТЕСНЕНА, "fence": решение,
+                "release_before": до["release"], "release_after": после["release"],
+                "switched": сменился,
+                "note": "заявка вытеснена во время отрисовки: результат не принят"}
     return {
         "site": сайт,
         "revision": ревизия,
@@ -649,6 +683,10 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("--site", required=True)
     c.add_argument("--revision", required=True)
     c.add_argument("--timeout", type=float, default=43200.0)
+    c.add_argument("--generation", type=int, default=0,
+                   help="поколение барьера, которому принадлежит заявка")
+    c.add_argument("--artifact-sha256", default="",
+                   help="отпечаток артефакта для сверки с барьером")
     c.add_argument("--wait-idle", type=float, default=14400.0,
                    help="сколько ждать простоя юнита обновления")
     rb = под.add_parser("rollback")
