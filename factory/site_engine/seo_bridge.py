@@ -35,7 +35,7 @@ from factory.site_engine import route_snapshot
 _КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
 
 #: Версия контракта передачи. Старшая часть — совместимость.
-BRIDGE_SCHEMA = "core-seo-bridge/1.1.0"
+BRIDGE_SCHEMA = "core-seo-bridge/1.2.0"
 
 #: Описательные поля продукта. Перечень принадлежит SEO и повторён здесь
 #: намеренно как **ожидание потребителя**: мост обязан ответить про каждое, в
@@ -84,16 +84,37 @@ class FieldState:
 
 @dataclasses.dataclass(frozen=True, slots=True)
 class FieldValue:
-    """Одно поле с состоянием и причиной."""
+    """Одно поле с состоянием, причиной и происхождением.
+
+    `provenance` и `reference` добавлены в 1.2.0. До них потребитель получал
+    значение и не мог узнать, откуда оно: измерено, что 654 утверждения на
+    наших витринах ссылались на нашу же разметку, и отличить их от каталожных
+    было нечем, потому что ссылку на источник контракт не переносил вовсе.
+
+    Происхождение объявляется только там, где объявлено значение. У поля без
+    значения источника нет, и пустая ссылка честнее выдуманной: заполнить её
+    «каталогом» значило бы сказать, что каталог утверждает отсутствие, а он
+    о поле просто молчит.
+
+    Добавление полей не ломает потребителя: `handshake` сверяет старшие
+    версии, а читатель прежних четырёх ключей новых не замечает.
+    """
 
     key: str
     state: str
     value: Any = None
     reason: str = ""
+    #: Откуда взято значение. Пусто — значения нет, а не источник неизвестен.
+    provenance: str = ""
+    #: Ссылка на конкретную запись источника, а не на источник вообще.
+    #: Ссылка вида `catalog:fact_table:` без идентификатора записи —
+    #: это и есть потерянная ссылка, ради которой поле заведено.
+    reference: str = ""
 
     def as_dict(self) -> dict[str, Any]:
         return {"key": self.key, "state": self.state, "value": self.value,
-                "reason": self.reason}
+                "reason": self.reason, "provenance": self.provenance,
+                "reference": self.reference}
 
 
 def _age_from_tags(теги: Any) -> str | None:
@@ -114,15 +135,20 @@ def descriptive_of(entry: dict[str, Any]) -> list[FieldValue]:
     """
     год = entry.get("year")
     возраст = _age_from_tags(entry.get("tags"))
+    запись = str(entry.get("external_id") or "")
     итог: list[FieldValue] = []
     for поле in DESCRIPTIVE_FIELDS:
         if поле == "year":
-            итог.append(FieldValue(поле, FieldState.PRESENT, год)
+            итог.append(FieldValue(поле, FieldState.PRESENT, год,
+                                   provenance="catalog:fact_table",
+                                   reference=f"catalog:fact_table:{запись}")
                         if год not in (None, "", 0)
                         else FieldValue(поле, FieldState.ABSENT,
                                         reason="у этой записи года нет"))
         elif поле == "ageRating":
-            итог.append(FieldValue(поле, FieldState.PRESENT, возраст)
+            итог.append(FieldValue(поле, FieldState.PRESENT, возраст,
+                                   provenance="catalog:tags",
+                                   reference=f"catalog:tags:{запись}")
                         if возраст
                         else FieldValue(поле, FieldState.ABSENT,
                                         reason="возрастной метки нет в тегах"))
