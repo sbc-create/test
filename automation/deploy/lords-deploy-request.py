@@ -90,6 +90,9 @@ def main() -> int:
     р.add_argument("--marker", default=".theme-switch",
                    help="строка, которая обязана появиться в /assets/site.css")
     р.add_argument("--note", default="")
+    р.add_argument("--attempt", type=int, default=1,
+                   help="номер попытки: повтор той же ревизии осознанно, "
+                        "когда причиной отказа был не артефакт")
     args = р.parse_args()
 
     if _git("status", "--porcelain"):
@@ -100,7 +103,11 @@ def main() -> int:
     архив = собрать_артефакт(ревизия)
     сумма = отпечаток(архив)
 
-    ид = f"lords-{'-'.join(s.split('-')[1] for s in args.sites)}-{ревизия[:8]}"
+    # Номер попытки входит в идентификатор. Повтор той же ревизии запрещён
+    # «после той же ошибки» — но отказ по гонке за юнит обновления к артефакту
+    # отношения не имеет, и пересобирать его было бы обманом самого себя.
+    хвост = ревизия[:8] if args.attempt == 1 else f"{ревизия[:8]}-{args.attempt}"
+    ид = f"lords-{'-'.join(s.split('-')[1] for s in args.sites)}-{хвост}"
     заявка = {
         "deployment_id": ид,
         "sites": list(args.sites),
