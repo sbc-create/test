@@ -489,6 +489,87 @@ def глагол_cancel_stuck(args) -> dict:
     }
 
 
+
+#: Каталог drop-in юнита обновления. Только он и только канареечные файлы в нём.
+ДРОПИН_КАТАЛОГ = Path("/etc/systemd/system/lords-content-refresh.service.d")
+#: Что разрешено уносить в карантин. Закреплённая оснастка, срок хранения и
+#: таймаут — не канареечные и не временные: тронуть их значило бы поменять
+#: устройство обновления, а не убрать за собой.
+КАНАРЕЕЧНЫЙ_ПРЕФИКС = "zz-canary-"
+КАРАНТИН_ДРОПИН = КАРАНТИН / "dropins"
+
+
+def глагол_quiesce_dropin(args) -> dict:
+    """Унести в карантин один устаревший канареечный drop-in. Только один.
+
+    Временный файл, который забыли снять, тише всех прочих отказов: он ничего
+    не ломает сразу, а просто заставляет каждый цикл обновления делать полный
+    рендер. Здесь такой файл был оставлен 8 сентября, и с тех пор каждый
+    прогон упирался в предел памяти на часы.
+
+    Три условия, и все обязательны. Имя — точное, без масок: маска однажды
+    заберёт чужое. Отпечаток — заявленный вызывающим: файл, изменившийся между
+    осмотром и переносом, это уже другой файл. Устарелость — доказанная:
+    ревизия, которую везёт канарейка, обязана быть уже выложенной на её
+    витрине, иначе мы уносим чужую незаконченную работу.
+    """
+    имя = args.file
+    if "/" in имя or ".." in имя:
+        raise Отказ(f"имя drop-in должно быть без путей: {имя!r}")
+    # Метасимволы отвергаются отдельно. Маска не совпала бы с настоящим файлом
+    # и вернула бы «уже нет» — то есть тихо соврала бы об успехе там, где на
+    # самом деле ничего не искали. Проверка добавлена после того, как
+    # `zz-canary-*.conf` прошло проверку имени.
+    if any(с in имя for с in "*?[]{}!$`\\ \t"):
+        raise Отказ(f"имя drop-in содержит метасимволы: {имя!r}")
+    if not имя.startswith(КАНАРЕЕЧНЫЙ_ПРЕФИКС) or not имя.endswith(".conf"):
+        raise Отказ(f"в карантин уносятся только {КАНАРЕЕЧНЫЙ_ПРЕФИКС}*.conf: {имя!r}")
+    путь = ДРОПИН_КАТАЛОГ / имя
+    if not путь.is_file():
+        return {"file": имя, "verdict": "already_gone", "note": "файла нет"}
+    фактический = отпечаток(путь)
+    if фактический != args.sha256:
+        raise Отказ(f"отпечаток {имя} — {фактический}, заявлен {args.sha256}")
+
+    текст = путь.read_text(encoding="utf-8")
+    объявлено = {}
+    for строка in текст.splitlines():
+        строка = строка.strip()
+        if строка.startswith("Environment=LORDS_CANARY_"):
+            ключ, _, значение = строка[len("Environment="):].partition("=")
+            объявлено[ключ] = значение
+    сайт = объявлено.get("LORDS_CANARY_SITE", "")
+    ревизия = объявлено.get("LORDS_CANARY_REVISION", "")
+    if not сайт or not ревизия:
+        raise Отказ(f"{имя} не объявляет витрину и ревизию канарейки")
+    _сайт(сайт)
+
+    состояние = глагол_inspect(argparse.Namespace(site=сайт))
+    выложено = (состояние["manifest"] or {}).get("renderer_revision", "")
+    устарел = выложено == ревизия
+    доказательство = {"canary_site": сайт, "canary_revision": ревизия,
+                      "deployed_revision": выложено, "already_deployed": устарел}
+    if not устарел and not args.force_proven:
+        return {"file": имя, "verdict": "not_stale", "evidence": доказательство,
+                "note": "ревизия канарейки ещё не выложена: файл не тронут"}
+
+    КАРАНТИН_ДРОПИН.mkdir(parents=True, exist_ok=True)
+    метка = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    цель = КАРАНТИН_ДРОПИН / f"{имя}.{метка}"
+    shutil.move(str(путь), str(цель))
+    (КАРАНТИН_ДРОПИН / f"{имя}.{метка}.why.json").write_text(
+        json.dumps({"moved_at_utc": метка, "sha256": фактический,
+                    "reason": args.reason[:300], "evidence": доказательство},
+                   ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    _выполнить(["systemctl", "daemon-reload"], таймаут=120)
+    окружение = _выполнить(["systemctl", "show", "-p", "Environment", "--value",
+                            ОБНОВЛЕНИЕ_СЛУЖБА], таймаут=30)["stdout"]
+    остались = [ч for ч in окружение.split() if ч.startswith("LORDS_CANARY_")]
+    return {"file": имя, "verdict": "QUARANTINED" if not остались else "CANARY_ENV_REMAINS",
+            "moved_to": str(цель), "sha256": фактический,
+            "evidence": доказательство, "canary_env_left": остались}
+
+
 def глагол_selftest(_args) -> dict:
     """Проверка установленной копии: пути, права, окружение. Ничего не меняет."""
     проверки = []
@@ -537,6 +618,7 @@ def _отвергает(функция, значение) -> bool:
     "rollback": глагол_rollback,
     "timer": глагол_timer,
     "cancel-stuck": глагол_cancel_stuck,
+    "quiesce-dropin": глагол_quiesce_dropin,
     "self-test": глагол_selftest,
 }
 
@@ -568,6 +650,11 @@ def main(argv: list[str] | None = None) -> int:
     cs.add_argument("--stop-timeout", type=float, default=300.0)
     cs.add_argument("--force-proven", action="store_true",
                     help="признаки уже доказаны снаружи и записаны в отчёте")
+    qd = под.add_parser("quiesce-dropin")
+    qd.add_argument("--file", required=True)
+    qd.add_argument("--sha256", required=True)
+    qd.add_argument("--reason", default="stale canary dropin")
+    qd.add_argument("--force-proven", action="store_true")
     под.add_parser("self-test")
 
     args = р.parse_args(argv)

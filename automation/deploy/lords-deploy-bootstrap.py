@@ -31,6 +31,7 @@ import os
 import pwd
 import shutil
 import subprocess
+import time
 import sys
 from pathlib import Path
 
@@ -234,6 +235,102 @@ def проверить_установленное() -> list[dict]:
     return проверки
 
 
+
+def _ctl(*argv, таймаут=1800.0) -> dict:
+    готово = выполнить([sys.executable, str(LIBEXEC / "lords-deployctl"), *argv],
+                       таймаут=таймаут)
+    try:
+        return json.loads(готово.stdout or "{}")
+    except json.JSONDecodeError:
+        return {"error": (готово.stdout or готово.stderr)[-800:]}
+
+
+def _канареечное_окружение() -> list[str]:
+    вывод = выполнить(["systemctl", "show", "-p", "Environment", "--value",
+                       "lords-content-refresh.service"]).stdout
+    return [ч for ч in вывод.split() if ч.startswith("LORDS_CANARY_")]
+
+
+def выпустить() -> int:
+    """Вся последовательность разблокировки и ровно одна заявка.
+
+    Порядок здесь не декоративный. Таймер сначала — иначе освобождённое место
+    займёт очередной цикл. Гашение раньше карантина — иначе снятый drop-in
+    ничего не изменит для уже идущего прогона, который прочитал его при старте.
+    Доказательство чистого окружения раньше заявки — иначе новый прогон
+    унаследует чужую канарейку. Возврат таймера — только в finally, потому что
+    путей выхода отсюда больше одного.
+    """
+    было_активен = выполнить(["systemctl", "is-active",
+                              "lords-content-refresh.timer"]).stdout.strip()
+    было_включён = выполнить(["systemctl", "is-enabled",
+                              "lords-content-refresh.timer"]).stdout.strip()
+    сказать(f"таймер до начала: {было_активен}/{было_включён}")
+    итог = 1
+    try:
+        сказать("покой таймера")
+        _ctl("timer", "stop", таймаут=120)
+
+        текущая = выполнить(["systemctl", "show", "-p", "InvocationID", "--value",
+                             "lords-content-refresh.service"]).stdout.strip()
+        if текущая:
+            сказать(f"гашу идущий прогон {текущая}")
+            отчёт = _ctl("cancel-stuck", "--unit", "lords-content-refresh.service",
+                         "--invocation", текущая, таймаут=1800)
+            сказать(f"  отмена: {отчёт.get('verdict', отчёт.get('error'))}")
+        else:
+            сказать("прогон не идёт")
+
+        каталог = Path("/etc/systemd/system/lords-content-refresh.service.d")
+        for файл in sorted(каталог.glob("zz-canary-*.conf")):
+            сумма = отпечаток(файл)
+            сказать(f"карантин {файл.name} ({сумма[:12]}…)")
+            отчёт = _ctl("quiesce-dropin", "--file", файл.name, "--sha256", сумма,
+                         "--reason", "устаревшая канарейка: ревизия уже выложена",
+                         таймаут=600)
+            сказать(f"  {отчёт.get('verdict', отчёт.get('error'))}"
+                    f" {отчёт.get('moved_to', '')}")
+
+        выполнить(["systemctl", "daemon-reload"])
+        остались = _канареечное_окружение()
+        if остались:
+            сказать(f"в конфигурации остались {остались} — заявка не подаётся")
+            print("CANARY_ENV_REMAINS")
+            return 1
+        сказать("канареечных переменных в конфигурации нет")
+
+        сказать("жду девяносто секунд полного простоя")
+        подряд = 0
+        while подряд < 90:
+            состояние = выполнить(["systemctl", "is-active",
+                                   "lords-content-refresh.service"]).stdout.strip()
+            подряд = подряд + 10 if состояние != "active" else 0
+            time.sleep(10)
+        сказать("простой подтверждён")
+
+        if ЗАЯВКА is None:
+            сказать("вшитой заявки нет")
+            print("NO_REQUEST_EMBEDDED")
+            return 2
+        подать_заявку()
+        выполнить(["systemctl", "start", "lords-deploy-broker.path"])
+        выполнить(["systemctl", "start", "--no-block", "lords-deploy-broker.service"])
+        сказать(f"заявка {ЗАЯВКА['deployment_id']} подана; выкладка идёт в приёмщике")
+        print("RELEASE_STARTED")
+        итог = 0
+    finally:
+        # Таймер возвращается на любом пути выхода: остановленный, он замораживает
+        # каталог у всех трёх витрин, и заметно это только через часы.
+        if было_включён == "enabled":
+            выполнить(["systemctl", "start", "lords-content-refresh.timer"])
+        сказать("таймер обновления: "
+                + выполнить(["systemctl", "is-active",
+                             "lords-content-refresh.timer"]).stdout.strip()
+                + "/" + выполнить(["systemctl", "is-enabled",
+                                   "lords-content-refresh.timer"]).stdout.strip())
+    return итог
+
+
 def main() -> int:
     р = argparse.ArgumentParser(description="установка приёмщика выкладки Lords")
     р.add_argument("--install-only", action="store_true",
@@ -242,9 +339,13 @@ def main() -> int:
                    help="поставить и подать вшитую заявку (нужна вшитая заявка)")
     р.add_argument("--cancel-stuck", action="store_true",
                    help="поставить и адресно погасить зависший прогон обновления")
+    р.add_argument("--release", action="store_true",
+                   help="полная последовательность: покой таймера, гашение "
+                        "застоя, карантин устаревших канареечных drop-in, "
+                        "доказательство чистого окружения, простой и одна заявка")
     args = р.parse_args()
-    if not (args.install_only or args.deploy or args.cancel_stuck):
-        print("укажите --install-only, --cancel-stuck или --deploy")
+    if not (args.install_only or args.deploy or args.cancel_stuck or args.release):
+        print("укажите --install-only, --cancel-stuck, --release или --deploy")
         return 2
     if os.geteuid() != 0:
         print("устанавливает root")
@@ -265,6 +366,9 @@ def main() -> int:
     if отказы:
         сказать(f"INSTALL_FAILED: отказов {len(отказы)}")
         return 1
+
+    if args.release:
+        return выпустить()
 
     if args.cancel_stuck:
         # Одна команда доводит дело до конца: ставит помощника с глаголом
