@@ -2689,7 +2689,9 @@ def _context(package: dict, profile: dict, site_plan, player_state,
         # Переключатель темы включается наличием второй палитры у витрины,
         # а не отдельным флагом: флаг и палитра однажды разойдутся, и
         # кнопка останется на витрине, где переключать нечего.
-        "theme_switch": theme_mod.theme_switch_available(profile),
+        "theme_switch": theme_mod.theme_switch_available(
+            profile,
+            declared_theme=str(((package.get("tenant") or {}).get("theme")) or "") or None),
         "carousel_heading": str(layout.get("carousel_heading") or "Новинки"),
         "mark": "".join(word[0] for word in brand.split()[:2]).upper() or "L",
         "language": str(package.get("language") or "ru"),

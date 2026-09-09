@@ -159,6 +159,20 @@ def _palette_block(selector: str, mode: str, *, accent: str = "", indent: str = 
     return f"{indent}{selector} {{{lines}\n{indent}}}"
 
 
+def _поверхность(имя: str | None) -> str | None:
+    """Какой поверхности соответствует объявленное имя темы.
+
+    Вынесено из `tokens_of`: то же правило нужно и второй палитре, а два
+    списка окончаний разошлись бы молча.
+    """
+    имя = str(имя or "")
+    if имя.endswith("_light"):
+        return "light"
+    if имя.endswith("_dark"):
+        return "dark"
+    return None
+
+
 def tokens_of(profile: dict, *, declared_theme: str | None = None) -> dict:
     """Токены палитры витрины. Манифест сильнее профиля.
 
@@ -180,8 +194,7 @@ def tokens_of(profile: dict, *, declared_theme: str | None = None) -> dict:
     merged.update((profile.get("theme") or {}).get("tokens") or {})
     profile_theme = str((profile.get("theme") or {}).get("name") or "")
     if declared_theme and declared_theme != profile_theme:
-        surface = "light" if declared_theme.endswith("_light") else (
-            "dark" if declared_theme.endswith("_dark") else None)
+        surface = _поверхность(declared_theme)
         if surface:
             merged.update(SURFACE_PALETTES[surface])
     return merged
@@ -193,7 +206,8 @@ def tokens_of(profile: dict, *, declared_theme: str | None = None) -> dict:
 СХЕМЫ = ("light", "dark")
 
 
-def alt_tokens_of(profile: dict) -> tuple[str, dict] | None:
+def alt_tokens_of(profile: dict, *, declared_theme: str | None = None
+                  ) -> tuple[str, dict] | None:
     """Вторая палитра витрины и то, какой схеме она соответствует.
 
     None означает, что витрина объявила одну палитру. Переключатель тем в этом
@@ -208,7 +222,23 @@ def alt_tokens_of(profile: dict) -> tuple[str, dict] | None:
     палитра = тема.get("tokens_alt") or {}
     схема = str(тема.get("alt_scheme") or "").strip().lower()
     if not палитра:
-        return None
+        # Профиль второй палитры не объявил — но манифест мог назвать
+        # поверхность. Тогда вторая палитра берётся противоположной из
+        # SURFACE_PALETTES: это не вывод цветов арифметикой, которого модуль
+        # избегает, а выбор из наборов, уже проверенных на контраст тестом —
+        # ровно то же, что `tokens_of` делает для основной палитры.
+        #
+        # Витрина lords-02 объявляет `lords_dark` и не объявляла второй
+        # палитры, поэтому переключатель не рисовался вовсе: посетитель не мог
+        # сменить режим, хотя обе палитры давно есть в модуле.
+        поверхность = _поверхность(declared_theme)
+        if поверхность is None:
+            return None
+        противоположная = "light" if поверхность == "dark" else "dark"
+        выведенная = dict(DEFAULT_TOKENS)
+        выведенная.update(тема.get("tokens") or {})
+        выведенная.update(SURFACE_PALETTES[противоположная])
+        return противоположная, выведенная
     if схема not in СХЕМЫ:
         # Палитра есть, а чему она соответствует — не сказано. Догадка здесь
         # означала бы, что светлая тема включается по системной тёмной.
@@ -219,8 +249,8 @@ def alt_tokens_of(profile: dict) -> tuple[str, dict] | None:
     return схема, слитая
 
 
-def theme_switch_available(profile: dict) -> bool:
-    return alt_tokens_of(profile) is not None
+def theme_switch_available(profile: dict, *, declared_theme: str | None = None) -> bool:
+    return alt_tokens_of(profile, declared_theme=declared_theme) is not None
 
 
 def _переменные(t: dict) -> str:
@@ -229,7 +259,7 @@ def _переменные(t: dict) -> str:
     return "\n".join(f"  --{имя.replace('_', '-')}: {t[имя]};" for имя in поля if имя in t)
 
 
-def alt_blocks(profile: dict) -> str:
+def alt_blocks(profile: dict, *, declared_theme: str | None = None) -> str:
     """Правила второй палитры: системная схема и явный выбор посетителя.
 
     Три блока, и каждый нужен. Медиазапрос даёт системную тему тем, кто ничего
@@ -237,13 +267,13 @@ def alt_blocks(profile: dict) -> str:
     отменялся системной настройкой. Два блока по `data-theme` дают сам выбор в
     обе стороны.
     """
-    пара = alt_tokens_of(profile)
+    пара = alt_tokens_of(profile, declared_theme=declared_theme)
     if пара is None:
         return ""
     схема, alt = пара
     основная = "dark" if схема == "light" else "light"
     свои = _переменные(alt)
-    родные = _переменные(tokens_of(profile))
+    родные = _переменные(tokens_of(profile, declared_theme=declared_theme))
     return f"""
 
 /* Вторая палитра витрины: {схема}. */
@@ -291,7 +321,7 @@ def _stylesheet_base(profile: dict, *, declared_theme: str | None = None) -> str
     # Требование производственной линии здесь прямое и верное: без второй
     # палитры таблица стилей не несёт машинерии тем вовсе.
     системная_схема = ""
-    if theme_switch_available(profile):
+    if theme_switch_available(profile, declared_theme=declared_theme):
         системная_схема = (
             "@media (prefers-color-scheme: dark) {\n"
             + _palette_block(':root[data-theme="system"]', "dark",
@@ -304,7 +334,7 @@ def _stylesheet_base(profile: dict, *, declared_theme: str | None = None) -> str
     # Правила явного выбора — по той же причине: выбирать некому там, где
     # переключателя нет.
     явный_выбор = ""
-    if theme_switch_available(profile):
+    if theme_switch_available(profile, declared_theme=declared_theme):
         явный_выбор = (
             "/* Явный выбор зрителя. Он идёт первым и побеждает системную "
             "настройку. */\n"
@@ -841,4 +871,4 @@ def stylesheet(profile: dict, *, declared_theme: str | None = None) -> str:
     выбирать между разделением и параметром — обе правки нужны.
     """
     return (_stylesheet_base(profile, declared_theme=declared_theme)
-            + alt_blocks(profile))
+            + alt_blocks(profile, declared_theme=declared_theme))
