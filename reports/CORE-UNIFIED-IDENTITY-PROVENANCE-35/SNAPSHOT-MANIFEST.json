@@ -161,6 +161,75 @@
    "sourceDigest": "70b8df889d1eb6dbd65339488584f63f",
    "sourceObservedAt": "2026-09-06T05:51:47.006334+00:00",
    "sha256": "01d82d5065d3f0fbe3c2d1190f7e1413b8044a658aa1a7d4270cb24cae58b26b"
+  },
+  "lords-01": {
+   "file": "route-snapshot-lords-01.json",
+   "canonicalHost": "lordfilm47.space",
+   "routeProvenance": "catalog+slugify",
+   "recordCount": 47694,
+   "collisionCount": 3447,
+   "rejectedCount": 0,
+   "completeness": "INCOMPLETE",
+   "byContentKind": {
+    "MOVIE": 27136,
+    "SERIES": 17111,
+    "UNKNOWN": 3447
+   },
+   "byContentKindState": {
+    "AUTHORITATIVE": 44247,
+    "MISSING": 3447
+   },
+   "digest": "73cf180f21aa3070c4edc24e974d14e1",
+   "envelopeDigest": "a7dc8d64c42b30d9ab39ea9dab3759d7",
+   "sourceDigest": "fed82fef14d5d18bb417390013c1bccf",
+   "sourceObservedAt": "2026-09-09T16:25:40Z",
+   "sha256": "1a99924bc97c1ca8ef8bb47d26b8250f5ffa714050ce3dc182a50ddfe479243c"
+  },
+  "lords-02": {
+   "file": "route-snapshot-lords-02.json",
+   "canonicalHost": "lordserial33.biz",
+   "routeProvenance": "catalog+slugify",
+   "recordCount": 47694,
+   "collisionCount": 3447,
+   "rejectedCount": 0,
+   "completeness": "INCOMPLETE",
+   "byContentKind": {
+    "MOVIE": 27136,
+    "SERIES": 17111,
+    "UNKNOWN": 3447
+   },
+   "byContentKindState": {
+    "AUTHORITATIVE": 44247,
+    "MISSING": 3447
+   },
+   "digest": "41ba4a04a4d1f010834fe21cc17246dc",
+   "envelopeDigest": "402b5188667e2e2ae07e1fc81a26b251",
+   "sourceDigest": "fed82fef14d5d18bb417390013c1bccf",
+   "sourceObservedAt": "2026-09-09T16:25:40Z",
+   "sha256": "416ecc3e621c99ad9cd31d00b04e5576e6ef701a8a1adc13cebb414077e35c5f"
+  },
+  "lords-03": {
+   "file": "route-snapshot-lords-03.json",
+   "canonicalHost": "1lordserials1.online",
+   "routeProvenance": "catalog+slugify",
+   "recordCount": 47694,
+   "collisionCount": 3447,
+   "rejectedCount": 0,
+   "completeness": "INCOMPLETE",
+   "byContentKind": {
+    "MOVIE": 27136,
+    "SERIES": 17111,
+    "UNKNOWN": 3447
+   },
+   "byContentKindState": {
+    "AUTHORITATIVE": 44247,
+    "MISSING": 3447
+   },
+   "digest": "66b72e1d3c7e1c3e0bf51be9788e4960",
+   "envelopeDigest": "f132dd25bfb9454c14c2c2b5980de8cb",
+   "sourceDigest": "fed82fef14d5d18bb417390013c1bccf",
+   "sourceObservedAt": "2026-09-09T16:25:40Z",
+   "sha256": "47725d38d51377b9e708e6189e778252b72cba7b1128663249a12e3b52ae0127"
   }
  }
 }
