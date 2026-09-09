@@ -1,0 +1,52 @@
+[Unit]
+Description=Отрисовка витрины Lords: отдельный прогон %i
+Documentation=file:///usr/local/libexec/site-factory/lords-deployctl
+# Зависимости от общего юнита обновления нет намеренно. Общий юнит и был
+# источником беды: заявка присоединялась к чужому прогону, потому что второго
+# экземпляра systemd не заводит. Здесь каждый прогон — свой экземпляр с своим
+# именем, и присоединиться к чужому физически не к чему.
+After=network-online.target
+Wants=network-online.target
+# Два прогона одной витрины не идут одновременно: имя экземпляра содержит
+# витрину, а замок витрины берёт помощник.
+Conflicts=lords-content-refresh.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=no
+
+# Окружение прогона — отдельный неизменяемый файл, а не общий drop-in.
+#
+# Общий изменяемый drop-in дважды подсунул чужие переменные: файл писался после
+# старта юнита и читался следующим прогоном, а не тем, для которого писался.
+# Здесь файл создаётся до запуска, принадлежит одному прогону и после него
+# удаляется помощником.
+EnvironmentFile=/run/lords-deploy/env/%i.env
+
+# Тот же рабочий каталог, что у штатного обновления: относительно него живут
+# кэш каталога, var/ и пакет factory.
+WorkingDirectory=/srv/site-factory/repo
+
+# Учётные данные приходят только через LoadCredential — иначе Lords откажется
+# читать их вовсе. Значение секрета не попадает ни в окружение заявки, ни в
+# журнал, ни в отчёт.
+LoadCredential=cdnvideohub_api_token:/etc/site-factory/secrets/lords/lords-01/cdnvideohub-api-token
+LoadCredential=cdnvideohub_publisher_id:/etc/site-factory/secrets/lords/lords-01/cdnvideohub-publisher-id
+
+ExecStart=/bin/bash /srv/site-factory/lords-tooling/releases/41031da02cb7d3ca1fb30c0bdfeca6fe4b4e21c1/automation/host/lords-content-refresh.sh
+
+# Предел памяти выше общего: потоковая запись страниц снимает основную нагрузку,
+# но запас нужен — измеренная сборка держала 814 МБ одной только разметки.
+MemoryMax=3G
+MemoryHigh=2500M
+# Час вместо десяти: прогон, не уложившийся в час, не «медленный», а зависший,
+# и ждать его девять часов означает занимать ресурс впустую.
+TimeoutStartSec=3600
+KillMode=mixed
+NoNewPrivileges=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+UMask=0022

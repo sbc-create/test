@@ -130,11 +130,66 @@ class TestЗанятостьЮнита:
         assert set(помощник.ЗАНЯТЫЕ_СОСТОЯНИЯ) == {
             "active", "activating", "deactivating", "reloading"}
 
-    def test_ожидание_простоя_пользуется_общей_проверкой(self, помощник):
+    def test_одновременность_запрещена_самим_systemd(self):
+        """Ожидание общего юнита вытеснено более сильной гарантией.
+
+        Пока канарейка шла через общий юнит, приходилось ждать его простоя — и
+        именно там жил дефект 42. Теперь у каждого прогона свой экземпляр, а
+        одновременность с обновлением каталога запрещена `Conflicts=` в самом
+        юните: это не проверка перед стартом, которую можно проспать, а отказ
+        systemd запустить оба.
+        """
+        from pathlib import Path as P
+        юнит = (P(__file__).resolve().parents[2] / "automation" / "deploy"
+                / "units" / "lords-site-render@.service").read_text(encoding="utf-8")
+        assert "Conflicts=lords-content-refresh.service" in юнит
+        assert "EnvironmentFile=/run/lords-deploy/env/%i.env" in юнит
+
+    def test_проверка_занятости_осталась_доступной(self, помощник):
+        """Она нужна остальным местам: гашение, ожидание чужого прогона."""
+        assert callable(помощник._занят)
+
+
+class TestОтдельныйЮнитНаПрогон:
+    """Общего изменяемого drop-in больше нет.
+
+    Он дважды подсунул чужие переменные: файл писался после старта юнита и
+    читался следующим прогоном, а не тем, для которого писался. Отдельный
+    экземпляр снимает это по устройству — присоединяться физически не к чему,
+    а окружение создаётся до запуска и принадлежит ровно одному прогону.
+    """
+
+    def test_канарейка_не_пишет_общий_dropin(self, помощник):
         import ast
         дерево = ast.parse(Path(помощник.__file__).read_text(encoding="utf-8"))
         функция = next(у for у in ast.walk(дерево) if isinstance(у, ast.FunctionDef)
                        and у.name == "глагол_canary")
         тело = ast.unparse(функция)
-        assert "_занят(" in тело, "канарейка снова сравнивает состояние вручную"
-        assert "== 'active'" not in тело, "сравнение с одним 'active' вернулось"
+        assert "ДРОПИН.write_text" not in тело, "общий drop-in снова записывается"
+
+    def test_имя_юнита_содержит_витрину_и_метку_времени(self, помощник):
+        assert "{instance}" in помощник.ЮНИТ_ПРОГОНА
+        assert помощник.ЮНИТ_ПРОГОНА.startswith("lords-site-render@")
+
+    def test_окружение_прогона_создаётся_до_запуска(self, помощник):
+        import ast
+        дерево = ast.parse(Path(помощник.__file__).read_text(encoding="utf-8"))
+        функция = next(у for у in ast.walk(дерево) if isinstance(у, ast.FunctionDef)
+                       and у.name == "глагол_canary")
+        тело = ast.unparse(функция)
+        запись = тело.index("файл_окружения.write_text")
+        запуск = тело.index("'systemctl', 'start', юнит")
+        assert запись < запуск, "окружение пишется после запуска — снова та же ошибка"
+
+    def test_окружение_снимается_в_finally(self, помощник):
+        import ast
+        дерево = ast.parse(Path(помощник.__file__).read_text(encoding="utf-8"))
+        функция = next(у for у in ast.walk(дерево) if isinstance(у, ast.FunctionDef)
+                       and у.name == "глагол_canary")
+        нашли = any("файл_окружения.unlink" in ast.unparse(ast.Module(body=у.finalbody, type_ignores=[]))
+                    for у in ast.walk(функция) if isinstance(у, ast.Try) and у.finalbody)
+        assert нашли, "окружение прогона остаётся после выхода"
+
+    def test_права_окружения_закрыты(self, помощник):
+        текст = Path(помощник.__file__).read_text(encoding="utf-8")
+        assert "os.chmod(файл_окружения, 0o600)" in текст
