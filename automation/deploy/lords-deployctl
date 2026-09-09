@@ -65,6 +65,9 @@ ARTIFACT_ROOT = Path("/srv/lords/.artifacts")
 СТОРОЖ = ОСНАСТКА / "automation" / "host" / "lords-refresh-guard.py"
 PYTHON = Path("/srv/site-factory/repo/.venv/bin/python")
 ТАЙМЕР = "lords-content-refresh.timer"
+#: Рабочий каталог сценария обновления: относительно него живут кэш каталога,
+#: var/ и пакет factory. Значение то же, что в WorkingDirectory штатного юнита.
+СОСТОЯНИЕ_КОРЕНЬ = Path("/srv/site-factory/repo")
 #: Откуда разрешено вносить артефакт. Произвольный путь не принимается: иначе
 #: заявка смогла бы подсунуть в хранилище что угодно.
 ИСТОЧНИКИ = ("/home/claude/wt-release-03/var/artifacts/",
@@ -98,7 +101,8 @@ def отпечаток(путь: Path) -> str:
 
 
 def _выполнить(argv: list[str], *, окружение: dict | None = None,
-               таймаут: float = 43200.0, как: str | None = None) -> dict:
+               таймаут: float = 43200.0, как: str | None = None,
+               каталог: str | None = None) -> dict:
     """Запуск списком аргументов. Оболочки нет и не будет.
 
     `как` понижает права до названного пользователя: git, отрисовка и сборка
@@ -120,7 +124,7 @@ def _выполнить(argv: list[str], *, окружение: dict | None = No
         среда.update(окружение)
     начало = time.time()
     готово = subprocess.run(argv, capture_output=True, text=True, timeout=таймаут,
-                            env=среда, preexec_fn=подготовка)
+                            env=среда, preexec_fn=подготовка, cwd=каталог)
     return {
         "argv": argv,
         "code": готово.returncode,
@@ -239,8 +243,15 @@ def глагол_canary(args) -> dict:
         "LORDS_CANARY_REPO": str(ОСНАСТКА),
         "LORDS_SITES": сайт,
     }
+    # Рабочий каталог обязателен и равен тому, что задан штатному юниту.
+    #
+    # Дефект LORDS-DEPLOYCTL-CWD-39: сценарий обновления зовёт `python -m factory`,
+    # и модуль находится относительно текущего каталога. Приёмщик работает из
+    # корня файловой системы, поэтому первый же вызов дал «No module named
+    # factory» и выкладка отказала за ноль секунд. Штатный юнит объявляет
+    # WorkingDirectory=/srv/site-factory/repo — здесь то же самое, а не догадка.
     итог = _выполнить(["/bin/bash", str(ОБНОВЛЕНИЕ)], окружение=окружение,
-                      таймаут=float(args.timeout))
+                      таймаут=float(args.timeout), каталог=str(СОСТОЯНИЕ_КОРЕНЬ))
     после = глагол_inspect(argparse.Namespace(site=сайт))
     сменился = после["release"] != до["release"]
     return {
