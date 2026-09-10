@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "note": "Матрица версий шаблонов по девяти доменам. Публичная версия берётся из самого домена, а не выводится по классам, размерам или ссылкам.",
-  "updated_at": "2026-09-10T09:44:23Z",
+  "updated_at": "2026-09-10T09:47:21Z",
   "domains": [
     {
       "domain": "1lordserials1.online",
@@ -31,7 +31,7 @@
       "problems": [
         "домен не отдаёт /__template_version"
       ],
-      "checked_at": "2026-09-10T09:34:26Z"
+      "checked_at": "2026-09-10T09:47:21Z"
     },
     {
       "domain": "animedia.space",
@@ -47,7 +47,7 @@
       "problems": [
         "домен не отдаёт /__template_version"
       ],
-      "checked_at": "2026-09-10T09:34:26Z"
+      "checked_at": "2026-09-10T09:47:21Z"
     },
     {
       "domain": "lordfilm47.space",
@@ -133,7 +133,7 @@
       "problems": [
         "домен не отдаёт /__template_version"
       ],
-      "checked_at": "2026-09-10T09:34:25Z"
+      "checked_at": "2026-09-10T09:47:21Z"
     }
   ]
 }

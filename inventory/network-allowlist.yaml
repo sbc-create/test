@@ -97,3 +97,34 @@ hosts:
     host: yummyani.site
     purpose: "приёмка yummyani.site: домен, TLS, health"
     methods: [GET]
+
+  # --- диагностика плеера Yummy ------------------------------------------
+  # Внесён авторизацией владельца от 2026-09-10 РОВНО для одного хоста:
+  # каждая страница Yummy получает 404 от plapi.cdnvideohub.com, и без
+  # исходящего запроса причину не установить.
+  #
+  # Только GET и HEAD: диагностика читает, а не пишет. Wildcard не заводится
+  # намеренно — расширение на *.cdnvideohub.com разрешило бы хосты, которых
+  # владелец не называл.
+  - ref: cdnvideohub-player-api
+    host: plapi.cdnvideohub.com
+    purpose: "диагностика плеера: точный endpoint, статус и CORS"
+    methods: [GET, HEAD]
+    contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+
+  # --- приёмка Zona и Animedia ---------------------------------------------
+  # Внесены 2026-09-10 после того, как записи DNS появились и подтвердились у
+  # авторитетных серверов зоны: все три ведут на 45.131.182.225 — этот хост.
+  # Только GET: приёмка читает.
+  - ref: zona-public
+    host: zonafilm.space
+    purpose: "приёмка zonafilm.space: домен, TLS, health, версия шаблона"
+    methods: [GET]
+  - ref: animedia-icu-public
+    host: animedia.icu
+    purpose: "приёмка animedia.icu: домен, TLS, health, версия шаблона"
+    methods: [GET]
+  - ref: animedia-space-public
+    host: animedia.space
+    purpose: "приёмка animedia.space: домен, TLS, health, версия шаблона"
+    methods: [GET]
