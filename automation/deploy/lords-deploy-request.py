@@ -27,6 +27,7 @@ import importlib.machinery
 import importlib.util
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -101,6 +102,9 @@ def main() -> int:
     р.add_argument("--marker", default=".theme-switch",
                    help="строка, которая обязана появиться в /assets/site.css")
     р.add_argument("--note", default="")
+    р.add_argument("--revision", default=None,
+                   help="полный сороказначный SHA замороженной ревизии семейства; "
+                        "без него берётся HEAD")
     р.add_argument("--attempt", type=int, default=1,
                    help="номер попытки: повтор той же ревизии осознанно, "
                         "когда причиной отказа был не артефакт")
@@ -109,7 +113,29 @@ def main() -> int:
     if _git("status", "--porcelain"):
         print("дерево кандидата не чистое: заявка не подаётся", file=sys.stderr)
         return 1
-    ревизия = _git("rev-parse", "HEAD")
+
+    # Ревизия семейства задаётся явно, а не берётся из HEAD.
+    #
+    # Порядок выкладки — lords-02, затем lords-01, затем lords-03 — тем же
+    # замороженным артефактом. Но между витринами HEAD уходит вперёд: пока шла
+    # отрисовка канарейки, в это дерево легло несколько коммитов. Со «свежим»
+    # HEAD вторая витрина получила бы другой шаблон, чем первая, и «тот же
+    # артефакт» стало бы неправдой. Кэш по имени файла не спасает: имя
+    # считается от ревизии.
+    if args.revision:
+        if not re.fullmatch(r"[0-9a-f]{40}", args.revision):
+            print(f"ревизия должна быть полным SHA из сорока знаков: {args.revision!r}",
+                  file=sys.stderr)
+            return 1
+        существует = subprocess.run(
+            ["git", "-C", str(КАНОНИЧЕСКОЕ_ДЕРЕВО), "cat-file", "-e",
+             f"{args.revision}^{{commit}}"], capture_output=True)
+        if существует.returncode != 0:
+            print(f"ревизии {args.revision} нет в дереве", file=sys.stderr)
+            return 1
+        ревизия = args.revision
+    else:
+        ревизия = _git("rev-parse", "HEAD")
     ветка = _git("rev-parse", "--abbrev-ref", "HEAD")
     архив = собрать_артефакт(ревизия)
     сумма = отпечаток(архив)
