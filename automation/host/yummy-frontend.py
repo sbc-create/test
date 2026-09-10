@@ -60,6 +60,15 @@ def _манифест() -> dict:
 #: но называть шаблоном семейства «lords-nova» на Yummy, Zona и Animedia было
 #: неправдой: имя ядра выдавалось за имя шаблона витрины.
 ЯДРО = "site-factory-nova"
+#: Заголовки ответа, которые обязаны дойти до браузера.
+#:
+#: Прежде наверх переносился только Content-Type, и `Location` терялся:
+#: canonical-редирект «/anime/<слаг>--<uuid>» → «/anime/<слаг>» превращался в
+#: 308 без адреса перехода и с типом application/octet-stream. Снаружи это
+#: выглядело как «карточки строят нерабочие адреса», хотя ломал их посредник.
+ПЕРЕНОСИМЫЕ = ("location", "cache-control", "content-language", "vary",
+               "last-modified", "etag", "content-disposition", "link",
+               "x-nextjs-cache", "x-nextjs-prerender")
 #: Стиль ТОЛЬКО служебного бейджа. Ничего больше: витрина рисуется своим
 #: шаблоном, и подмешивать в неё чужую типографику незачем.
 БЕЙДЖ_СТИЛЬ = (".sf-vbadge{position:fixed;left:8px;bottom:8px;z-index:2147483000;"
@@ -391,9 +400,12 @@ class Обработчик(BaseHTTPRequestHandler):
     def log_message(self, *a):
         pass
 
-    def _отдать(self, тело: bytes, тип="text/html; charset=utf-8", код=200):
+    def _отдать(self, тело: bytes, тип="text/html; charset=utf-8", код=200, ещё=None):
         self.send_response(код)
-        self.send_header("Content-Type", тип)
+        if тип:
+            self.send_header("Content-Type", тип)
+        for имя, значение in (ещё or []):
+            self.send_header(имя, значение)
         self.send_header("Content-Length", str(len(тело)))
         self.send_header("X-Robots-Tag", "noindex, nofollow")
         self.send_header("X-Site-Factory-Template-Revision", МАНИФЕСТ["source_commit"])
@@ -960,7 +972,11 @@ class Обработчик(BaseHTTPRequestHandler):
             соед.request("GET", адрес, headers=заг)
             ответ = соед.getresponse()
             тело = ответ.read()
-            тип = ответ.getheader("Content-Type", "application/octet-stream")
+            # Тип не подменяется на octet-stream: у редиректа тела нет, и
+            # выдумывать ему тип значит ломать переход.
+            тип = ответ.getheader("Content-Type") or ""
+            перенос = [(и, ответ.getheader(и)) for и in ПЕРЕНОСИМЫЕ
+                       if ответ.getheader(и)]
             код = ответ.status
             соед.close()
         except OSError as ош:
@@ -968,7 +984,7 @@ class Обработчик(BaseHTTPRequestHandler):
                             "503", self.данные).encode("utf-8")
             return self._отдать(тело, код=503)
         тело = self._обогатить(тело, тип)
-        return self._отдать(тело, тип, код=код)
+        return self._отдать(тело, тип, код=код, ещё=перенос)
 
     def старое(self, путь: str):
         """Страницы тайтлов и активы — из существующего релиза, с новой оболочкой."""

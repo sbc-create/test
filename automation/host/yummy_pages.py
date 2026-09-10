@@ -135,6 +135,31 @@ def дополнить_постерами(элементы: list[dict], ката
     return элементы
 
 
+#: Единственный контракт адресов: сущность → канонический путь.
+#:
+#: Компоненты не собирают адрес сами. В данных витрины ссылка приходит и в
+#: виде «/anime/<слаг>», и в виде «/anime/<слаг>--<uuid>»; второй отвечает
+#: постоянным редиректом на первый. Публиковать в блоке адрес, который сначала
+#: редиректит, значит гонять посетителя и краулер через лишний переход и
+#: показывать в разметке не тот URL, что в canonical страницы.
+ХВОСТ_UUID = re.compile(
+    r"--[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
+
+
+def канонический_путь(href: str) -> str | None:
+    """Канонический адрес сущности или None, если адрес непригоден.
+
+    None означает «в блоке не публикуем»: сущность без разрешённого
+    канонического пути показывать нельзя.
+    """
+    if not href or not href.startswith("/anime/"):
+        return None
+    путь = href.split("?", 1)[0].split("#", 1)[0].rstrip("/")
+    путь = ХВОСТ_UUID.sub("", путь)
+    хвост = путь[len("/anime/"):]
+    return путь if хвост else None
+
+
 def карточка(з: dict) -> str:
     """Плитка ровно теми классами, которыми её рисует сама витрина."""
     рейтинг = ""
@@ -155,12 +180,16 @@ def карточка(з: dict) -> str:
         # Заглушка только при настоящем отсутствии изображения.
         постер = ('<span class="poster-slot-skeleton" aria-label="Нет постера">'
                   'Нет постера</span>')
+    адрес = канонический_путь(з.get("href"))
+    if not адрес:
+        # Без канонического пути сущность в блоке не публикуется.
+        return ""
     return (
-        f'<article class="portal-catalog-tile">'
-        f'<a class="portal-catalog-image" href="{html.escape(з["href"])}">{рейтинг}'
+        f'<article class="portal-catalog-tile" data-entity="{html.escape(адрес)}">'
+        f'<a class="portal-catalog-image" href="{html.escape(адрес)}">{рейтинг}'
         f'<div class="poster-slot poster-slot--catalog">{постер}</div></a>'
         f'<div class="portal-catalog-info">'
-        f'<a class="portal-catalog-caption" href="{html.escape(з["href"])}">'
+        f'<a class="portal-catalog-caption" href="{html.escape(адрес)}">'
         f'{html.escape(з["name"])}</a></div></article>')
 
 
