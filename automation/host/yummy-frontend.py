@@ -875,14 +875,74 @@ class Обработчик(BaseHTTPRequestHandler):
 
     НАВ_ОТКРЫТИЕ = re.compile(rb'<nav class="portal-nav"[^>]*>')
 
+    #: Пункты возвращаются после гидратации.
+    #:
+    #: Шапку рисует React, и при гидратации он приводит DOM к тому, что
+    #: отрисовал сам: узлы, которых нет в его дереве, удаляются. Разметка
+    #: сервера при этом верна — пункты видны в исходнике и краулеру, — но в
+    #: браузере исчезают через долю секунды после загрузки. Проверка «есть ли
+    #: пункт в HTML» такое пропускает, проверка в браузере ловит: было 4, стало 0.
+    #:
+    #: Поэтому пункты добавляются дважды: в разметку (для клиента без скрипта)
+    #: и скриптом после гидратации. Наблюдатель возвращает их и после
+    #: клиентского перехода, когда React перерисовывает шапку заново.
+    #:
+    #: Тот же скрипт чинит robots. Приложение после гидратации добавляет свой
+    #: тег «noindex, follow» вторым: в разметке сервера тег один и верный, а в
+    #: браузере их два, и второй разрешает обход ссылок. Требование владельца —
+    #: nofollow, поэтому лишний тег снимается, а первый приводится к строгому
+    #: значению. Заголовок ответа X-Robots-Tag при этом уже верен.
+    НАВ_СКРИПТ = """(function(){
+var П=%s;
+function поставить(){
+ var н=document.querySelector('nav.portal-nav');
+ if(!н)return;
+ var перед=н.children[1]||null,добавили=false;
+ for(var i=0;i<П.length;i++){
+  var п=П[i];
+  if(н.querySelector('[data-sf-nav="1"][href="'+п[0]+'"]'))continue;
+  var a=document.createElement('a');
+  a.className='portal-nav-link';a.setAttribute('data-sf-nav','1');a.href=п[0];
+  if(location.pathname.replace(/\/$/,'')===п[0].replace(/\/$/,''))
+   a.setAttribute('aria-current','page');
+  var s=document.createElement('span');
+  s.className='portal-nav-text';s.textContent=п[1];a.appendChild(s);
+  н.insertBefore(a,перед);добавили=true;
+ }
+ return добавили;
+}
+function robots(){
+ var м=document.querySelectorAll('meta[name="robots"]');
+ for(var i=0;i<м.length;i++){
+  if(i===0){if(м[i].content!=="noindex, nofollow")м[i].content="noindex, nofollow";}
+  else м[i].parentNode.removeChild(м[i]);
+ }
+}
+var занято=false;
+function проверить(){if(занято)return;занято=true;поставить();robots();занято=false;}
+проверить();
+document.addEventListener('DOMContentLoaded',проверить);
+new MutationObserver(проверить).observe(document.documentElement,
+ {childList:true,subtree:true});
+})();"""
+
     def _вставить_навигацию(self, тело: bytes) -> bytes:
-        if self.НАВ_МЕТКА.encode() in тело:
-            return тело                      # уже есть: повтор не создаётся
         м = self.НАВ_ОТКРЫТИЕ.search(тело)
         if not м:
             return тело
-        пункты = self._пункты_навигации()
-        return тело[:м.end()] + пункты + тело[м.end():]
+        if self.НАВ_МЕТКА.encode() not in тело:
+            тело = тело[:м.end()] + self._пункты_навигации() + тело[м.end():]
+        if b"data-sf-nav-script" in тело or b"</body>" not in тело:
+            return тело
+        в = ВАРИАНТЫ_МОД.вариант(ВАРИАНТ_ДОМЕНА) if ВАРИАНТЫ_МОД else {}
+        порядок = в.get("нав_порядок") or [а for а, _ in НАВИГАЦИЯ]
+        по_адресу = dict(НАВИГАЦИЯ)
+        пункты = [[а, по_адресу[а]] for а in порядок if а in по_адресу]
+        пункты += [[а, п] for а, п in НАВИГАЦИЯ if а not in порядок]
+        скрипт = ('<script data-sf-nav-script="1">'
+                  + (self.НАВ_СКРИПТ % json.dumps(пункты, ensure_ascii=False))
+                  + "</script>").encode("utf-8")
+        return тело.replace(b"</body>", скрипт + b"</body>", 1)
 
     # --- карточка тайтла ------------------------------------------------
     def _дополнение_карточки(self, путь: str) -> bytes:
