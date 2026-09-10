@@ -208,6 +208,41 @@ def секция(заголовок: str, подпись: str, элементы:
     ".portal-page-lead{margin:4px 0 18px;opacity:.8;font-size:15px}</style>")
 
 
+#: Маршруты, которые витрина отдаёт своими страницами. Ссылки первого экрана
+#: строятся только из них: пункт, ведущий в 404, хуже отсутствующего.
+МАРШРУТЫ = (("/new/", "Новинки"), ("/top/", "Топ-100"),
+            ("/collections/", "Подборки"), ("/schedule/", "Расписание"))
+
+
+def первый_экран(в: dict, активный: str = "") -> str:
+    """Композиция первого экрана — часть профиля домена, а не украшение.
+
+    Три витрины одной семьи не должны открываться одинаково. Каталожная
+    начинает поиском, событийная — рядом разделов, редакционная — вступлением
+    и крупной сеткой. Ничего, кроме существующих маршрутов и формы поиска
+    самой витрины, здесь не появляется: выдумывать фильтры, счётчики и
+    подборки запрещено.
+    """
+    вид = в.get("первый_экран") or "витрина"
+    порядок = в.get("нав_порядок") or [а for а, _ in МАРШРУТЫ]
+    по_адресу = dict(МАРШРУТЫ)
+    пункты = [(а, по_адресу[а]) for а in порядок if а in по_адресу]
+    ряд = "".join(
+        f'<a href="{html.escape(а)}"'
+        + (' aria-current="page"' if а.rstrip("/") == активный.rstrip("/") else "")
+        + f">{html.escape(п)}</a>" for а, п in пункты)
+    ряд = f'<nav class="sf-tabs" aria-label="Разделы витрины">{ряд}</nav>'
+    if вид == "поиск":
+        return (
+            '<form class="sf-find" action="/search" method="get" role="search">'
+            '<label class="sr-only" for="sf-q">Найти аниме по названию</label>'
+            '<input id="sf-q" name="q" placeholder="Найти аниме по названию" '
+            'autocomplete="off"><button type="submit">Найти</button></form>' + ряд)
+    if вид == "лента":
+        return ряд
+    return ""                                # редакционная витрина открывается лидом
+
+
 ГОЛОВА_ТИТУЛ = re.compile(r"<title\b[^>]*>.*?</title>", re.S | re.I)
 ГОЛОВА_ОПИСАНИЕ = re.compile(
     r'<meta\s+(?:name="description"|property="og:(?:title|description|type|site_name)")'
@@ -215,7 +250,8 @@ def секция(заголовок: str, подпись: str, элементы:
 
 
 def собрать(оболочка: dict, заголовок: str, лид: str, тело: str,
-            вариант: dict | None = None, имя_сайта: str = "YummyAnime") -> bytes:
+            вариант: dict | None = None, имя_сайта: str = "YummyAnime",
+            активный: str = "") -> bytes:
     """Страница из головы, шапки и подвала самой витрины.
 
     Профиль домена меняет акцентные токены, плотность сетки и объявляет себя
@@ -237,7 +273,15 @@ def собрать(оболочка: dict, заголовок: str, лид: str,
             ".sf-tabs{display:flex;gap:8px;margin:8px 0 14px}"
             ".sf-tabs a{padding:6px 12px;border:1px solid var(--sf-accent);"
             "border-radius:8px;font-size:13px}"
-            ".sf-tabs a[aria-current]{background:var(--sf-accent);color:#fff}</style>")
+            ".sf-tabs a[aria-current]{background:var(--sf-accent);color:#fff}"
+            ".sf-find{display:flex;gap:8px;margin:6px 0 12px;max-width:560px}"
+            ".sf-find input{flex:1 1 auto;min-width:0;padding:9px 12px;border-radius:9px;"
+            "border:1px solid color-mix(in srgb,currentColor 25%,transparent);"
+            "background:transparent;color:inherit;font:inherit}"
+            ".sf-find button{padding:9px 16px;border-radius:9px;border:0;cursor:pointer;"
+            "background:var(--sf-accent);color:#fff;font:inherit}"
+            ".sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}"
+            "</style>")
     мета = ""
     if в:
         мета = (f'<meta name="site-factory-variant-id" content="{html.escape(в.get("variant_id",""))}">'
@@ -266,7 +310,7 @@ def собрать(оболочка: dict, заголовок: str, лид: str,
         + '<main id="main-content" class="portal-container min-h-dvh min-w-0 flex-1">'
         + f"<h1 class=\"portal-section-bar\">{html.escape(заголовок)}</h1>"
         + f"<p class=\"portal-page-lead\">{html.escape(лид)}</p>"
-        + тело + "</main>" + оболочка["footer"] + "</body></html>"
+        + первый_экран(в, активный) + тело + "</main>" + оболочка["footer"] + "</body></html>"
     ).encode("utf-8")
 
 

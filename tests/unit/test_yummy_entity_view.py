@@ -468,6 +468,45 @@ class TestЗаголовокСтраницы:
         assert 'og:site_name" content="Новые серии и расписание аниме"' in html_
 
 
+class TestПервыйЭкран:
+    """Композиция первого экрана различает витрины, а не только цвет."""
+
+    def экран(self, домен):
+        в = _модуль("yummy_variants").ВАРИАНТЫ[домен]
+        return СТРАНИЦЫ.первый_экран(в, активный="/new")
+
+    def test_каталожная_открывается_поиском(self):
+        э = self.экран("yummyani.site")
+        assert 'action="/search"' in э and 'name="q"' in э
+        assert "sf-tabs" in э
+
+    def test_событийная_открывается_рядом_разделов(self):
+        э = self.экран("yummyani.org")
+        assert "sf-tabs" in э and "sf-find" not in э
+
+    def test_редакционная_открывается_лидом(self):
+        assert self.экран("yummyani.biz") == ""
+
+    def test_три_композиции_различны(self):
+        экраны = [self.экран(д) for д in
+                  ("yummyani.biz", "yummyani.org", "yummyani.site")]
+        assert len(set(экраны)) == 3
+
+    def test_ссылки_только_существующих_маршрутов(self):
+        for домен in ("yummyani.org", "yummyani.site"):
+            адреса = re.findall(r'<a href="([^"]+)"', self.экран(домен))
+            assert set(адреса) <= {"/new/", "/top/", "/collections/", "/schedule/"}
+
+    def test_текущий_раздел_отмечен(self):
+        assert 'href="/new/" aria-current="page"' in self.экран("yummyani.org")
+
+    def test_порядок_разделов_из_профиля(self):
+        первый = {д: re.findall(r'<a href="([^"]+)"', self.экран(д))[0]
+                  for д in ("yummyani.org", "yummyani.site")}
+        assert первый["yummyani.org"] == "/schedule/"
+        assert первый["yummyani.site"] == "/top/"
+
+
 class TestГраница:
     """Фикстура не должна протечь в рантайм."""
 
