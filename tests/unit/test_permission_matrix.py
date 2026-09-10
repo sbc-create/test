@@ -433,26 +433,46 @@ class TestProfileProperties:
     def test_absent_rule_means_a_question_not_a_permission(self):
         assert pm.resolve(None, "pass") == "ask"
 
+    #: Хосты интеграций: аналитика Яндекса (API и документация) и центральный
+    #: Secret Hub — read-only проверка выданного токена CDNVideoHub (D88).
+    ИНТЕГРАЦИИ = {
+        "api-metrika.yandex.net",
+        "api.webmaster.yandex.net",
+        "yandex.ru",
+        "yandex.com",
+        "public-api.cdnvideohub.com",
+        "plapi.cdnvideohub.com",
+    }
+    #: Девять доменов, приёмку которых владелец поручил заданием от 2026-09-09
+    #: («выкладка и проверка всех девяти сайтов»). Публичная проверка домена,
+    #: TLS, health и версии шаблона возможна только обращением к самому домену:
+    #: внутренний ответ контейнера деплоем не является — это уже разбиралось.
+    ПРИЁМКА = {
+        "lordfilm47.space", "lordserial33.biz", "1lordserials1.online",
+        "yummyani.biz", "yummyani.org", "yummyani.site",
+        "zonafilm.space", "animedia.icu", "animedia.space",
+    }
+
     def test_real_inventories_hold_only_what_the_owner_supplied(self):
         """Реестр содержит ровно переданное владельцем — ни строкой больше.
 
         SSH-хосты и DNS-зоны не переданы и обязаны остаться пустыми: их
-        расширение по инициативе агента прямо запрещено. Сетевой allowlist
-        не пуст, потому что владелец разрешил обращения двумя заданиями:
-        автоматизация аналитики Яндекса (API и документация) и центральный
-        Secret Hub — read-only проверка выданного токена CDNVideoHub перед
-        сохранением (D88). Проверяется точный состав: незамеченная лишняя
-        строка здесь — это открытый наружу канал.
+        расширение по инициативе агента прямо запрещено. Сетевой allowlist не
+        пуст: владелец разрешил обращения заданиями об аналитике Яндекса, о
+        Secret Hub и о приёмке девяти доменов.
+
+        Проверяется точный состав, а не «непусто»: незамеченная лишняя строка
+        здесь — это открытый наружу канал. Поэтому список ведётся здесь
+        поимённо и падает на каждой новой записи, пока её не объяснят.
         """
         assert unattended.inventory_hosts() == set()
         assert unattended.inventory_zones() == set()
-        assert unattended.network_hosts() == {
-            "api-metrika.yandex.net",
-            "api.webmaster.yandex.net",
-            "yandex.ru",
-            "yandex.com",
-            "public-api.cdnvideohub.com",
-        }
+        assert unattended.network_hosts() == self.ИНТЕГРАЦИИ | self.ПРИЁМКА
+
+    def test_приёмочные_домены_это_ровно_девять_сайтов(self):
+        """Список приёмки не расширяется: девять доменов — и ни одного больше."""
+        assert len(self.ПРИЁМКА) == 9
+        assert self.ПРИЁМКА <= unattended.network_hosts()
 
 
 class TestWritePaths:
