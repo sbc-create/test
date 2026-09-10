@@ -60,7 +60,9 @@ def _свободный_порт() -> int:
     '<meta name="robots" content="noindex, follow"></head><body>'
     '<header class="portal-header"><nav class="portal-nav" '
     'aria-label="Основное меню"><a class="portal-nav-link" href="/">'
-    '<span class="portal-nav-text">Главная</span></a></nav></header>'
+    '<span class="portal-nav-text">Главная</span></a>'
+    '<a class="portal-nav-link" href="/catalog/top">'
+    '<span class="portal-nav-text">Топ-100</span></a></nav></header>'
     '<main id="main-content" class="portal-container">'
     '<h1>Страница витрины</h1></main>'
     '<footer class="portal-footer">подвал</footer></body></html>')
@@ -231,26 +233,40 @@ class TestКарточкаПоHTTP:
 class TestНавигация:
     """Маршруты витрины обязаны быть в меню, а не только отвечать 200."""
 
-    def test_пункты_добавлены_в_шапку(self, витрина):
+    @staticmethod
+    def _меню(тело: str) -> list[str]:
+        блок = тело[тело.index('<nav class="portal-nav"'):]
+        return re.findall(r'href="([^"]+)"', блок[:блок.index("</nav>")])
+
+    def test_маршруты_есть_в_шапке(self, витрина):
         _, тело = взять(витрина, "/")
-        адреса = re.findall(r'data-sf-nav="1" href="([^"]+)"', тело)
-        assert set(адреса) == {"/new/", "/top/", "/collections/", "/schedule/"}
+        адреса = set(self._меню(тело))
+        assert {"/new/", "/top/", "/collections/", "/schedule/"} <= адреса
+
+    def test_существующий_пункт_перенаправлен_а_не_удвоен(self, витрина):
+        """У витрины уже есть «Топ-100»; второй такой пункт — дефект меню."""
+        _, тело = взять(витрина, "/")
+        адреса = self._меню(тело)
+        assert "/catalog/top" not in адреса
+        assert адреса.count("/top/") == 1
+        assert 'data-sf-nav="1" href="/top/"' not in тело
 
     def test_порядок_из_профиля_домена(self, витрина):
         _, тело = взять(витрина, "/")
-        адреса = re.findall(r'data-sf-nav="1" href="([^"]+)"', тело)
+        свои = re.findall(r'data-sf-nav="1" href="([^"]+)"', тело)
         # editorial-guide ведёт подборками, а не расписанием.
-        assert адреса[0] == "/collections/"
+        assert свои[0] == "/collections/"
 
     def test_текущий_раздел_отмечен(self, витрина):
-        _, тело = взять(витрина, "/top/")
-        assert re.search(r'data-sf-nav="1" href="/top/" aria-current="page"', тело)
+        _, тело = взять(витрина, "/new/")
+        assert re.search(r'data-sf-nav="1" href="/new/" aria-current="page"', тело)
 
     def test_пункты_не_удваиваются(self, витрина):
         _, тело = взять(витрина, "/")
         # Считаются ссылки, а не вхождения метки: она есть и в скрипте,
         # который возвращает пункты после гидратации.
-        assert len(re.findall(r'<a class="portal-nav-link" data-sf-nav="1"', тело)) == 4
+        # Своих пунктов три: «Топ-100» витрины перенаправлен, а не продублирован.
+        assert len(re.findall(r'<a class="portal-nav-link" data-sf-nav="1"', тело)) == 3
 
     def test_пункты_возвращаются_после_гидратации(self, витрина):
         """Шапку рисует React и при гидратации удаляет чужие узлы.

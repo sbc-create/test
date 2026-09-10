@@ -208,8 +208,14 @@ def секция(заголовок: str, подпись: str, элементы:
     ".portal-page-lead{margin:4px 0 18px;opacity:.8;font-size:15px}</style>")
 
 
+ГОЛОВА_ТИТУЛ = re.compile(r"<title\b[^>]*>.*?</title>", re.S | re.I)
+ГОЛОВА_ОПИСАНИЕ = re.compile(
+    r'<meta\s+(?:name="description"|property="og:(?:title|description|type|site_name)")'
+    r'[^>]*>', re.I)
+
+
 def собрать(оболочка: dict, заголовок: str, лид: str, тело: str,
-            вариант: dict | None = None) -> bytes:
+            вариант: dict | None = None, имя_сайта: str = "YummyAnime") -> bytes:
     """Страница из головы, шапки и подвала самой витрины.
 
     Профиль домена меняет акцентные токены, плотность сетки и объявляет себя
@@ -236,9 +242,26 @@ def собрать(оболочка: dict, заголовок: str, лид: str,
     if в:
         мета = (f'<meta name="site-factory-variant-id" content="{html.escape(в.get("variant_id",""))}">'
                 f'<meta name="site-factory-variant-version" content="{html.escape(в.get("variant_version",""))}">')
+    # Заголовок страницы — свой, а не унаследованный от оболочки.
+    #
+    # Оболочка берётся у страницы каталога вместе с её <title>, и раздел
+    # «Расписание выходов» уходил наружу под заголовком «Каталог с
+    # редакционной навигацией». Заголовок и H1 обязаны говорить об одной
+    # странице: расхождение видит и посетитель во вкладке, и поисковик.
+    голова = ГОЛОВА_ТИТУЛ.sub(
+        f"<title>{html.escape(заголовок)} · {html.escape(имя_сайта)}</title>",
+        оболочка["head"], count=1)
+    описание = html.escape(лид[:300])
+    голова = ГОЛОВА_ОПИСАНИЕ.sub("", голова)
+    сводка = (f'<meta name="description" content="{описание}">'
+              f'<meta property="og:title" content="{html.escape(заголовок)}">'
+              f'<meta property="og:description" content="{описание}">'
+              f'<meta property="og:type" content="website">')
+    if в.get("title"):
+        сводка += f'<meta property="og:site_name" content="{html.escape(в["title"])}">'
     return (
         "<!DOCTYPE html><html lang=\"ru\">"
-        + оболочка["head"].replace("</head>", ПУСТО_СТИЛЬ + токены + мета + "</head>", 1)
+        + голова.replace("</head>", ПУСТО_СТИЛЬ + токены + мета + сводка + "</head>", 1)
         + f'<body data-variant="{html.escape(в.get("variant_id", ""))}">' + оболочка["header"]
         + '<main id="main-content" class="portal-container min-h-dvh min-w-0 flex-1">'
         + f"<h1 class=\"portal-section-bar\">{html.escape(заголовок)}</h1>"

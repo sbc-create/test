@@ -853,7 +853,12 @@ class Обработчик(BaseHTTPRequestHandler):
     # работают, а меню о них молчало — это и есть «пункт без исправления».
     НАВ_МЕТКА = 'data-sf-nav="1"'
 
-    def _пункты_навигации(self) -> bytes:
+    #: Адреса витрины, которые ведут туда же, куда наши маршруты. Пункт не
+    #: добавляется рядом с существующим, а существующий перенаправляется:
+    #: два «Топ-100» подряд в одном меню — это не навигация, а дефект.
+    ЗАМЕНА_АДРЕСОВ = {"/catalog/top": "/top/"}
+
+    def _порядок_пунктов(self) -> list[tuple[str, str]]:
         """Пункты в порядке приоритета варианта домена.
 
         Порядок — часть профиля: у расписания свой первый пункт, у каталога
@@ -864,9 +869,14 @@ class Обработчик(BaseHTTPRequestHandler):
         по_адресу = dict(НАВИГАЦИЯ)
         пункты = [(а, по_адресу[а]) for а in порядок if а in по_адресу]
         пункты += [(а, п) for а, п in НАВИГАЦИЯ if а not in порядок]
+        return пункты
+
+    def _пункты_навигации(self, есть_адреса: set) -> bytes:
         текущий = self.path.split("?", 1)[0]
         куски = []
-        for адрес, подпись in пункты:
+        for адрес, подпись in self._порядок_пунктов():
+            if адрес in есть_адреса:
+                continue                     # витрина уже ведёт туда сама
             тек = ' aria-current="page"' if текущий.rstrip("/") == адрес.rstrip("/") else ""
             куски.append(
                 f'<a class="portal-nav-link" {self.НАВ_МЕТКА} href="{адрес}"{тек}>'
@@ -893,14 +903,18 @@ class Обработчик(BaseHTTPRequestHandler):
     #: nofollow, поэтому лишний тег снимается, а первый приводится к строгому
     #: значению. Заголовок ответа X-Robots-Tag при этом уже верен.
     НАВ_СКРИПТ = """(function(){
-var П=%s;
+var П=%s,З=%s;
 function поставить(){
  var н=document.querySelector('nav.portal-nav');
  if(!н)return;
  var перед=н.children[1]||null,добавили=false;
+ for(var а in З){
+  var с=н.querySelectorAll('a[href="'+а+'"]');
+  for(var j=0;j<с.length;j++)с[j].setAttribute('href',З[а]);
+ }
  for(var i=0;i<П.length;i++){
   var п=П[i];
-  if(н.querySelector('[data-sf-nav="1"][href="'+п[0]+'"]'))continue;
+  if(н.querySelector('a[href="'+п[0]+'"],a[href="'+п[0].replace(/\/$/,'')+'"]'))continue;
   var a=document.createElement('a');
   a.className='portal-nav-link';a.setAttribute('data-sf-nav','1');a.href=п[0];
   if(location.pathname.replace(/\/$/,'')===п[0].replace(/\/$/,''))
@@ -926,12 +940,27 @@ new MutationObserver(проверить).observe(document.documentElement,
  {childList:true,subtree:true});
 })();"""
 
+    НАВ_ЗАКРЫТИЕ = re.compile(rb"</nav>")
+
     def _вставить_навигацию(self, тело: bytes) -> bytes:
         м = self.НАВ_ОТКРЫТИЕ.search(тело)
         if not м:
             return тело
         if self.НАВ_МЕТКА.encode() not in тело:
-            тело = тело[:м.end()] + self._пункты_навигации() + тело[м.end():]
+            з = self.НАВ_ЗАКРЫТИЕ.search(тело, м.end())
+            конец = з.start() if з else м.end()
+            блок = тело[м.end():конец]
+            # Существующий «Топ-100» витрины перенаправляется на наш маршрут:
+            # он показывает ту же сотню, но с провайдером и шкалой у каждой
+            # оценки. Второй одноимённый пункт рядом не заводится.
+            for откуда, куда in self.ЗАМЕНА_АДРЕСОВ.items():
+                блок = блок.replace(f'href="{откуда}"'.encode(),
+                                    f'href="{куда}"'.encode())
+            тело = тело[:м.end()] + блок + тело[конец:]
+            есть = set(re.findall(rb'href="([^"]+)"', блок))
+            есть = {а.decode("utf-8", "replace") for а in есть}
+            есть |= {а.rstrip("/") + "/" for а in есть}
+            тело = тело[:м.end()] + self._пункты_навигации(есть) + тело[м.end():]
         if b"data-sf-nav-script" in тело or b"</body>" not in тело:
             return тело
         в = ВАРИАНТЫ_МОД.вариант(ВАРИАНТ_ДОМЕНА) if ВАРИАНТЫ_МОД else {}
@@ -940,7 +969,8 @@ new MutationObserver(проверить).observe(document.documentElement,
         пункты = [[а, по_адресу[а]] for а in порядок if а in по_адресу]
         пункты += [[а, п] for а, п in НАВИГАЦИЯ if а not in порядок]
         скрипт = ('<script data-sf-nav-script="1">'
-                  + (self.НАВ_СКРИПТ % json.dumps(пункты, ensure_ascii=False))
+                  + (self.НАВ_СКРИПТ % (json.dumps(пункты, ensure_ascii=False),
+                                        json.dumps(self.ЗАМЕНА_АДРЕСОВ)))
                   + "</script>").encode("utf-8")
         return тело.replace(b"</body>", скрипт + b"</body>", 1)
 
@@ -1323,7 +1353,11 @@ new MutationObserver(проверить).observe(document.documentElement,
         if ВАРИАНТЫ_МОД is None:
             return ""
         в = ВАРИАНТЫ_МОД.вариант(ВАРИАНТ_ДОМЕНА)
-        return (":root{--sf-accent:" + в.get("акцент", "#ff5c8a")
+        # Меню получает на четыре пункта больше и на узкой ширине налезало
+        # на логотип. Переносится строкой, а не сжимается: наложение текста —
+        # это не «плотнее», это нечитаемо.
+        return (".portal-nav{flex-wrap:wrap}"
+                ":root{--sf-accent:" + в.get("акцент", "#ff5c8a")
                 + ";--sf-accent-2:" + в.get("акцент2", "#ffb347")
                 + ";--sf-grid:" + в.get("плотность",
                                         "repeat(auto-fill,minmax(150px,1fr))") + "}")

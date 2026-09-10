@@ -429,6 +429,45 @@ class TestВарианты:
             assert "canonical" not in в and "домен" not in в
 
 
+class TestЗаголовокСтраницы:
+    """Оболочка берётся у каталога — вместе с его <title>, и это дефект.
+
+    Раздел «Расписание выходов» уходил наружу под заголовком «Каталог с
+    редакционной навигацией»: во вкладке одно, в H1 другое. Здесь закрепляется,
+    что страница объявляет себя сама.
+    """
+
+    ОБОЛОЧКА = {
+        "head": ('<head><title>Каталог с редакционной навигацией</title>'
+                 '<meta name="description" content="чужое описание">'
+                 '<meta property="og:title" content="чужой og"></head>'),
+        "header": "<header></header>", "footer": "<footer></footer>"}
+
+    def собрать(self, заголовок="Расписание выходов", лид="Что выходит и что заявлено."):
+        return СТРАНИЦЫ.собрать(
+            self.ОБОЛОЧКА, заголовок, лид, "",
+            вариант={"title": "Новые серии и расписание аниме",
+                     "акцент": "#4dd0a0"}).decode("utf-8")
+
+    def test_титул_страницы_а_не_оболочки(self):
+        html_ = self.собрать()
+        assert "<title>Расписание выходов · YummyAnime</title>" in html_
+        assert "Каталог с редакционной навигацией" not in html_
+
+    def test_h1_и_титул_об_одной_странице(self):
+        html_ = self.собрать()
+        h1 = re.search(r"<h1[^>]*>(.*?)</h1>", html_, re.S).group(1)
+        титул = re.search(r"<title>(.*?)</title>", html_, re.S).group(1)
+        assert h1.strip() in титул
+
+    def test_описание_и_og_свои(self):
+        html_ = self.собрать()
+        assert html_.count('name="description"') == 1
+        assert "чужое описание" not in html_ and "чужой og" not in html_
+        assert 'og:title" content="Расписание выходов"' in html_
+        assert 'og:site_name" content="Новые серии и расписание аниме"' in html_
+
+
 class TestГраница:
     """Фикстура не должна протечь в рантайм."""
 
