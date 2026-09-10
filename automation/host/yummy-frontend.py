@@ -1459,6 +1459,31 @@ new MutationObserver(проверить).observe(document.documentElement,
         return self._отдать(данные, типы.get(цель.suffix, "application/octet-stream"))
 
 
+def _прогреть(хост: str, порт: int) -> None:
+    """Собрать семейные страницы сразу после старта, не дожидаясь посетителя.
+
+    Холодная сборка раздела — это обращения к главной, каталогу и страницам
+    тайтлов за постерами: десяток секунд. После перезапуска кэш пуст, и первый
+    же запрос упирается в таймаут nginx — снаружи это видно как 502 на
+    работающей витрине. Прогрев переносит ожидание на старт, где его никто
+    не ждёт.
+
+    Прогрев не обязателен: ошибка здесь не должна мешать витрине подняться.
+    """
+    import threading
+    import urllib.request
+
+    def работа():
+        основа = f"http://{хост}:{порт}"
+        for путь in ("/new/", "/collections/", "/schedule/", "/top/"):
+            try:
+                urllib.request.urlopen(основа + путь, timeout=180).read()
+            except Exception:
+                pass
+
+    threading.Thread(target=работа, daemon=True).start()
+
+
 def main() -> int:
     р = argparse.ArgumentParser(description=__doc__)
     р.add_argument("--host", default="127.0.0.1")
@@ -1466,6 +1491,7 @@ def main() -> int:
     args = р.parse_args()
     Обработчик.данные = Данные(КАТАЛОГ_ФАЙЛ)
     сервер = ThreadingHTTPServer((args.host, args.port), Обработчик)
+    _прогреть(args.host, args.port)
     print(f"[nova] {args.host}:{args.port} ревизия {РЕВИЗИЯ[:12]} "
           f"тайтлов {len(Обработчик.данные.items)}", flush=True)
     сервер.serve_forever()
