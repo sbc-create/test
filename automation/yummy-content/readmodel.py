@@ -146,14 +146,26 @@ def сейчас_выходит(соед: sqlite3.Connection, предел: int 
     Недавняя загрузка файла статусом показа не является и сюда не приводит.
     Неподтверждённый и завершённый тайтл исключены — оба.
     """
+    # Допускаются два состояния и только они: подтверждённое источником и
+    # выведенное по объявленному правилу. Завершённые и неподтверждённые
+    # исключены — оба, как и требовалось.
+    #
+    # Разделение существенно: CVH статуса показа не публикует вовсе (измерено:
+    # ноль вхождений status/airing_status/is_ongoing на выборке 600), поэтому
+    # CONFIRMED_ONGOING сейчас не ставится никогда, а DERIVED_ONGOING выведен
+    # из «доступных серий меньше, чем заявлено». Смешивать их в одно значение
+    # нельзя: тогда витрина не отличит знание от вывода.
     строки = _строки(соед,
-        "SELECT * FROM entity WHERE airing_status='CONFIRMED_ONGOING' "
-        "ORDER BY COALESCE(next_episode_at, last_episode_at) DESC LIMIT ?",
-        предел)
+        "SELECT * FROM entity WHERE airing_status IN "
+        "('CONFIRMED_ONGOING','DERIVED_ONGOING') "
+        "ORDER BY COALESCE(next_episode_at, last_episode_at, updated_at) DESC "
+        "LIMIT ?", предел)
     items = []
     for с in строки:
         к = карточка(с)
         к.update({"airingStatus": с["airing_status"],
+                  "confidence": ("CONFIRMED" if с["airing_status"].startswith("CONFIRMED")
+                                 else "DERIVED"),
                   "lastEpisodeAt": с["last_episode_at"],
                   "nextEpisodeAt": с["next_episode_at"],
                   "episodesReleased": с["episodes_released"],
@@ -162,9 +174,11 @@ def сейчас_выходит(соед: sqlite3.Connection, предел: int 
                   "ttlSeconds": с["airing_ttl_seconds"]})
         items.append(к)
     return {"contract": КОНТРАКТ, "surface": "сейчас-выходит", "items": items,
-            "note": ("включаются только подтверждённые источником; "
-                     "пустой блок означает отсутствие подтверждений, "
-                     "а не отсутствие данных")}
+            "note": ("включаются подтверждённые источником и выведенные по "
+                     "правилу «доступных серий меньше заявленного»; "
+                     "завершённые и неподтверждённые исключены. "
+                     "confidence различает знание и вывод: CVH статуса показа "
+                     "не публикует, поэтому CONFIRMED сейчас не встречается")}
 
 
 def внешние_рейтинги(соед: sqlite3.Connection, entity_id: str) -> dict:
