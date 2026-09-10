@@ -668,12 +668,29 @@ class Обработчик(BaseHTTPRequestHandler):
         нужны = [з["href"] for з in элементы
                  if not з.get("src") and з["href"] not in карта]
 
+        def годный(адрес: str) -> bool:
+            """Настоящая обложка, а не заглушка витрины.
+
+            У витрины «/poster/<что угодно>.webp» отвечает 200 и отдаёт
+            SVG-заглушку в 532 байта. Такой адрес — это отсутствие обложки,
+            и показывать его как картинку значит рисовать поддельный постер.
+            Отличается по типу содержимого и размеру.
+            """
+            ответ = self._сырое_наверх(адрес, "")
+            if not ответ:
+                return False
+            тело, тип, код = ответ
+            return код == 200 and "svg" not in (тип or "").lower() and len(тело) > 2000
+
         def достать(href):
             ответ = self._сырое_наверх(href, "")
             if not ответ:
                 return href, None
             м = re.search(rb'"(/poster/[0-9a-f-]{36}\.webp)"', ответ[0])
-            return href, (м.group(1).decode() if м else None)
+            if not м:
+                return href, None
+            адрес = м.group(1).decode()
+            return href, (адрес if годный(адрес) else None)
 
         # Работа ограничена по объёму И по времени: страница обязана
         # отрисоваться быстро даже на холодном кэше. Что не успели разрешить —
@@ -691,8 +708,11 @@ class Обработчик(BaseHTTPRequestHandler):
                     if _t.time() > крайний:
                         break
         for з in элементы:
-            if not з.get("src"):
-                з["src"] = карта.get(з["href"])
+            # Выведенный из адреса постер тоже проверяется: он может оказаться
+            # той же заглушкой.
+            if з.get("src") and з["href"] not in карта:
+                карта[з["href"]] = з["src"] if годный(з["src"]) else None
+            з["src"] = карта.get(з["href"]) or (з.get("src") if з["href"] in карта and карта[з["href"]] else None)
         return элементы
 
     def _карта_постеров(self) -> list:
