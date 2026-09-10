@@ -109,6 +109,27 @@ def _загрузить_страницы():
 
 
 СТРАНИЦЫ = _загрузить_страницы()
+
+
+def _рядом(имя: str, модуль: str):
+    import importlib.machinery
+    import importlib.util
+    путь = Path(__file__).resolve().parent / имя
+    if not путь.is_file():
+        return None
+    спец = importlib.util.spec_from_loader(
+        модуль, importlib.machinery.SourceFileLoader(модуль, str(путь)))
+    м = importlib.util.module_from_spec(спец)
+    sys.modules.setdefault(модуль, м)
+    спец.loader.exec_module(м)
+    return м
+
+
+ЧИТМОДЕЛЬ = _рядом("yummy_readmodel.py", "yummy_readmodel")
+ВАРИАНТЫ_МОД = _рядом("yummy_variants.py", "yummy_variants")
+БАЗА_ЧТЕНИЯ = os.environ.get("YUMMY_READMODEL",
+                             "/srv/lords/.frontend/yummy-readmodel.sqlite3")
+ВАРИАНТ_ДОМЕНА = os.environ.get("YUMMY_VARIANT_DOMAIN", "yummyani.site")
 НА_СТРАНИЦЕ = 60
 
 # Оформление и разделы — свои у каждого семейства.
@@ -466,6 +487,12 @@ class Обработчик(BaseHTTPRequestHandler):
         # расписание рядом с готовым значило бы построить второй продукт на том
         # же домене — ровно то, что уже пришлось разбирать. Поэтому маршрут
         # отдаёт её содержимое под своим адресом.
+        if ВАРИАНТЫ_МОД is not None and путь.rstrip("/") == "/top":
+            тело = self._страница_топ(зпр)
+            if тело is not None:
+                return self._отдать(self._обогатить(тело, "text/html; charset=utf-8"),
+                                    "text/html; charset=utf-8")
+
         if ВЕРХОВОЙ and путь.rstrip("/") == "/schedule":
             ответ = self._сырое_наверх("/catalog/schedule", разбор.query)
             if ответ is not None:
@@ -761,6 +788,55 @@ class Обработчик(BaseHTTPRequestHandler):
         type(self)._карта_до = _t.time() + 600
         return собрано
 
+    def _соединение(self):
+        import sqlite3
+        соед = sqlite3.connect(f"file:{БАЗА_ЧТЕНИЯ}?mode=ro", uri=True, timeout=5)
+        соед.row_factory = sqlite3.Row
+        return соед
+
+    def _страница_топ(self, зпр) -> bytes | None:
+        """Топ на настоящих внешних оценках с указанием провайдера."""
+        оболочка = self._оболочка()
+        if оболочка is None:
+            return None
+        провайдер = (зпр.get("provider") or ["imdb"])[0]
+        if провайдер not in ВАРИАНТЫ_МОД.ПОРЯДОК_ПРОВАЙДЕРОВ:
+            провайдер = "imdb"
+        try:
+            with self._соединение() as соед:
+                свод = ВАРИАНТЫ_МОД.топ(соед, 100, провайдер)
+        except Exception as ош:
+            тело = СТРАНИЦЫ.собрать(
+                оболочка, "Топ",
+                "Оценки сейчас недоступны.",
+                f'<p class="portal-empty">Источник оценок не отвечает: '
+                f'{html.escape(str(ош)[:90])}. Показывать выдуманный порядок нельзя.</p>')
+            return тело
+        в = ВАРИАНТЫ_МОД.вариант(ВАРИАНТ_ДОМЕНА)
+        имена = {"imdb": "IMDb", "kp": "Кинопоиск"}
+        ТЕК = ' aria-current="true"'
+        вкладки = "".join(
+            f'<a href="/top/?provider={p}"{ТЕК if p == провайдер else ""}>{имена[p]}</a>'
+            for p in ВАРИАНТЫ_МОД.ПОРЯДОК_ПРОВАЙДЕРОВ)
+        плитки = []
+        for з in свод["items"]:
+            карта = {"href": з["canonicalPath"], "name": з["title"],
+                     "src": з.get("poster"), "rating": None,
+                     "alt": f'Постер аниме «{з["title"]}»'}
+            разметка = СТРАНИЦЫ.карточка(карта)
+            подпись = ВАРИАНТЫ_МОД.подпись_рейтингов(з["ratings"])
+            разметка = разметка.replace(
+                '<div class="portal-catalog-info">',
+                f'<div class="portal-catalog-info"><span class="sf-rank">#{з["rank"]}</span>{подпись}')
+            плитки.append(разметка)
+        тело = (f'<div class="portal-section-bar">{html.escape(свод["title"])}</div>'
+                f'<div class="sf-tabs">{вкладки}</div>'
+                f'<p class="portal-page-lead">Порядок: {html.escape(свод["order_note"])}. '
+                f'Голоса: {html.escape(свод["votes_note"])}. '
+                f'Доступно записей с оценкой {провайдер}: {свод["available"]}.</p>'
+                f'<div class="portal-catalog-tiles">' + "".join(плитки) + '</div>')
+        return СТРАНИЦЫ.собрать(оболочка, свод["title"], в["лид"], тело)
+
     def _оболочка(self):
         """Голова, шапка и подвал берутся у самой витрины."""
         ответ = self._сырое_наверх("/catalog", "")
@@ -922,6 +998,17 @@ class Обработчик(BaseHTTPRequestHandler):
             f'<meta name="site-factory-artifact-sha256" content="{МАНИФЕСТ["artifact_sha256"]}">'
             f'<meta name="robots" content="noindex, nofollow">'
             f'<style>{БЕЙДЖ_СТИЛЬ}</style>').encode("utf-8")
+        # Ссылки карточек приводятся к каноническому виду.
+        #
+        # Приложение отдаёт часть ссылок как «/anime/<слаг>--<uuid>». Такой
+        # адрес рабочий — он отвечает постоянным редиректом, — но ведёт
+        # посетителя и краулер через лишний переход и расходится с canonical
+        # самой страницы. Единственный контракт адресов требует публиковать
+        # канонический путь, поэтому хвост снимается прямо в разметке.
+        тело = re.sub(
+            rb'(/anime/[a-z0-9-]+?)--[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}'
+            rb'-[0-9a-f]{4}-[0-9a-f]{12}', rb'\1', тело)
+
         # Существующий robots витрины ЗАМЕНЯЕТСЯ, а не дополняется:
         # приложение отдаёт «noindex, follow», и добавление второго тега
         # оставляло бы первым менее строгий. Требование — nofollow.
