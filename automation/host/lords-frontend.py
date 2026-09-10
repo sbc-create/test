@@ -71,11 +71,57 @@ def _манифест() -> dict:
 КАТАЛОГ_ФАЙЛ = os.environ.get("LORDS_CATALOG", "/srv/lords/.frontend/lords-01-catalog.json")
 СТАРЫЙ_КОРЕНЬ = Path(os.environ.get("LORDS_LEGACY_ROOT", "/srv/lords/lords-01/current/site"))
 ИМЯ_ВИТРИНЫ = os.environ.get("LORDS_SITE_NAME", "Lords")
+# Для витрин, где страницы отдаёт приложение, а не каталог файлов: всё, чего
+# нет в новом маршруте, проксируется в него. Так плеер, карточка и любые
+# динамические страницы остаются рабочими — их никто не переписывает.
+ВЕРХОВОЙ = os.environ.get("LORDS_LEGACY_UPSTREAM", "")
 НА_СТРАНИЦЕ = 60
 
+# Оформление и разделы — свои у каждого семейства.
+#
+# Механически переносить Lords на аниме и кинопорталы нельзя: у них разные
+# разделы, разный словарь и разный ритм витрины. Здесь различается палитра,
+# навигация и состав секций главной; общей остаётся только механика.
+ПРОФИЛИ_СЕМЕЙСТВ = {
+    "lords": {
+        "acc": "#6d5cff", "acc2": "#00d4ff", "bg": "#0b0d12", "card": "#161a24",
+        "nav": [("/", "Главная"), ("/catalog/", "Каталог"), ("/new/", "Новинки"),
+                ("/collections/", "Подборки"), ("/schedule/", "Расписание")],
+        "secs": [("Новинки", "/new/", None), ("Фильмы", "/catalog/?kind=Фильм", "Фильм"),
+                 ("Сериалы", "/catalog/?kind=Сериал", "Сериал")],
+        "hero_btn": "Смотреть", "search_ph": "Поиск фильмов и сериалов",
+    },
+    "yummy": {
+        "acc": "#ff5c8a", "acc2": "#ffb347", "bg": "#100a14", "card": "#1c1320",
+        "nav": [("/", "Главная"), ("/catalog/", "Каталог"), ("/new/", "Новинки"),
+                ("/collections/", "Подборки"), ("/schedule/", "Расписание выхода")],
+        "secs": [("Свежие серии", "/new/", None), ("Онгоинги", "/catalog/", None),
+                 ("Полюбившееся", "/collections/", None)],
+        "hero_btn": "Смотреть аниме", "search_ph": "Поиск аниме",
+    },
+    "zona": {
+        "acc": "#2fd07a", "acc2": "#7de08d", "bg": "#08120d", "card": "#11201a",
+        "nav": [("/", "Главная"), ("/catalog/", "Каталог"), ("/new/", "Новинки"),
+                ("/collections/", "Подборки"), ("/schedule/", "Расписание")],
+        "secs": [("Новинки кино", "/new/", None), ("Фильмы", "/catalog/?kind=Фильм", "Фильм"),
+                 ("Сериалы", "/catalog/?kind=Сериал", "Сериал")],
+        "hero_btn": "Смотреть", "search_ph": "Поиск по кинопорталу",
+    },
+    "animedia": {
+        "acc": "#4d7cff", "acc2": "#a78bfa", "bg": "#0a0d18", "card": "#141828",
+        "nav": [("/", "Главная"), ("/catalog/", "Каталог"), ("/new/", "Новинки"),
+                ("/collections/", "Подборки"), ("/schedule/", "Расписание выхода")],
+        "secs": [("Новые эпизоды", "/new/", None), ("Онгоинги", "/catalog/", None),
+                 ("Подборки", "/collections/", None)],
+        "hero_btn": "Начать просмотр", "search_ph": "Поиск аниме и дорам",
+    },
+}
+_П = ПРОФИЛИ_СЕМЕЙСТВ.get(МАНИФЕСТ["template_family"], ПРОФИЛИ_СЕМЕЙСТВ["lords"])
+
+
 СТИЛЬ = """
-:root{--bg:#0b0d12;--bg2:#12151d;--card:#161a24;--line:#232838;--tx:#e8ecf5;--dim:#9aa4bd;
---acc:#6d5cff;--acc2:#00d4ff;--warm:#ffb347;--r:14px}
+:root{--bg:@BG@;--bg2:#12151d;--card:@CARD@;--line:#232838;--tx:#e8ecf5;--dim:#9aa4bd;
+--acc:@ACC@;--acc2:@ACC2@;--warm:#ffb347;--r:14px}
 :root[data-theme=light]{--bg:#f5f6fa;--bg2:#fff;--card:#fff;--line:#e2e6f0;--tx:#12151d;
 --dim:#5a6478;--acc:#5b4bff;--acc2:#0091c2}
 *{box-sizing:border-box}
@@ -144,7 +190,8 @@ font-size:13.5px;color:var(--dim);font-weight:600}
 .vbadge{display:inline-block;margin-left:10px;padding:4px 10px;border-radius:8px;
 background:var(--card);border:1px solid var(--acc);color:var(--acc2);font-size:12px;
 font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-"""
+""".replace("@BG@", _П["bg"]).replace("@CARD@", _П["card"]) \
+    .replace("@ACC@", _П["acc"]).replace("@ACC2@", _П["acc2"])
 
 СКРИПТ = """
 (function(){
@@ -214,8 +261,7 @@ def карточка(з: dict) -> str:
 
 
 def оболочка(тело: str, титул: str, д: Данные, актив: str = "") -> str:
-    нав = [("/", "Главная"), ("/catalog/", "Каталог"), ("/new/", "Новинки"),
-           ("/collections/", "Подборки"), ("/schedule/", "Расписание")]
+    нав = _П["nav"]
     ТЕК = ' aria-current="page"'
     пункты = "".join(
         f'<a href="{u}"{ТЕК if u == актив else ""}>{html.escape(t)}</a>'
@@ -236,7 +282,7 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 <a class="logo" href="/">{html.escape(ИМЯ_ВИТРИНЫ)}</a>
 <nav class="nav">{пункты}</nav>
 <form class="srch" action="/search/" method="get" role="search">
-<input name="q" placeholder="Поиск по названию" aria-label="Поиск">
+<input name="q" placeholder="{_П["search_ph"]}" aria-label="Поиск">
 </form>
 <button class="tsw" type="button" aria-label="Переключить тему">&#9789;</button>
 </div></header>
@@ -300,7 +346,9 @@ class Обработчик(BaseHTTPRequestHandler):
         if путь.rstrip("/") == "/schedule":
             return self._отдать(self.расписание().encode("utf-8"))
 
-        # Всё остальное — из старого релиза, без изменений: там плеер.
+        # Всё остальное — из прежней витрины без изменений: там плеер.
+        if ВЕРХОВОЙ:
+            return self.наверх(разбор)
         return self.старое(путь)
 
     # --- страницы -------------------------------------------------------
@@ -314,7 +362,7 @@ class Обработчик(BaseHTTPRequestHandler):
             f'<div class="hero__m">'
             + "".join(f'<span class="chip">{html.escape(str(x))}</span>'
                       for x in (з.get("kind"), з.get("year")) if x)
-            + f'</div><a class="btn" href="{з["url"]}">Смотреть</a></div></div>'
+            + f'</div><a class="btn" href="{з["url"]}">{_П["hero_btn"]}</a></div></div>'
             for з in новые[:6])
         точки = "".join(f'<b{" data-on" if i == 0 else ""}></b>' for i in range(len(новые[:6])))
         def полоса(титул, ссылка, набор):
@@ -323,11 +371,11 @@ class Обработчик(BaseHTTPRequestHandler):
                     + "".join(карточка(з) for з in набор) + '</div></section>')
         тело = (f'<div class="hero"><div class="hero__track">{герой}</div>'
                 f'<div class="hero__dots">{точки}</div></div>'
-                + полоса("Новинки", "/new/", д.items[:12])
-                + полоса("Фильмы", "/catalog/?kind=Фильм",
-                         [з for з in д.items if з.get("kind") == "Фильм"][:12])
-                + полоса("Сериалы", "/catalog/?kind=Сериал",
-                         [з for з in д.items if з.get("kind") == "Сериал"][:12]))
+                + "".join(
+                    полоса(титул, ссылка,
+                           (д.items if вид is None else
+                            [з for з in д.items if з.get("kind") == вид])[:12])
+                    for титул, ссылка, вид in _П["secs"]))
         return оболочка(тело, "Главная", д, "/")
 
     def список(self, путь: str, зпр: dict) -> str:
@@ -394,6 +442,41 @@ class Обработчик(BaseHTTPRequestHandler):
                 '<p class="empty">Сетка построена по доступному снимку каталога: '
                 'дат выхода серий в нём нет, и выдумывать их нельзя.</p></section>')
         return оболочка(тело, "Расписание", д, "/schedule/")
+
+    def наверх(self, разбор):
+        """Проксирование в прежнее приложение витрины.
+
+        Разметка не переписывается: добавляется только стиль и мета-данные
+        версии, и только в HTML. Всё прочее идёт байт в байт.
+        """
+        import http.client
+        адрес = разбор.path + (("?" + разбор.query) if разбор.query else "")
+        хост, _, порт = ВЕРХОВОЙ.partition(":")
+        try:
+            соед = http.client.HTTPConnection(хост, int(порт or 80), timeout=25)
+            заг = {k: v for k, v in self.headers.items()
+                   if k.lower() not in ("host", "accept-encoding", "connection")}
+            заг["Host"] = self.headers.get("Host", хост)
+            заг["Accept-Encoding"] = "identity"
+            соед.request("GET", адрес, headers=заг)
+            ответ = соед.getresponse()
+            тело = ответ.read()
+            тип = ответ.getheader("Content-Type", "application/octet-stream")
+            код = ответ.status
+            соед.close()
+        except OSError as ош:
+            тело = оболочка(f'<div class="empty">Витрина недоступна: {html.escape(str(ош)[:80])}</div>',
+                            "503", self.данные).encode("utf-8")
+            return self._отдать(тело, код=503)
+        if "text/html" in тип and b"</head>" in тело:
+            вставка = (
+                f'<meta name="site-factory-template-revision" content="{МАНИФЕСТ["source_commit"]}">'
+                f'<meta name="site-factory-design-version" content="{ВЕРСИЯ}">'
+                f'<meta name="site-factory-template-family" content="{СЕМЕЙСТВО}">'
+                f'<meta name="site-factory-build-id" content="{СБОРКА}">'
+                f'<style>{СТИЛЬ}</style>').encode("utf-8")
+            тело = тело.replace(b"</head>", вставка + b"</head>", 1)
+        return self._отдать(тело, тип, код=код)
 
     def старое(self, путь: str):
         """Страницы тайтлов и активы — из существующего релиза, с новой оболочкой."""
