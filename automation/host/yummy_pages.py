@@ -1,0 +1,210 @@
+"""Страницы /new/, /collections/ и /schedule/ в собственном интерфейсе Yummy.
+
+Почему так, а не своим каркасом
+-------------------------------
+
+У приложения витрины этих маршрутов нет — оно отвечает 404. Рисовать их
+универсальной тёмной оболочкой уже пробовали: получилась не витрина Yummy, а
+перекрашенный Lords. Поэтому здесь страница собирается из ЕЁ ЖЕ частей:
+`<head>` со ссылкой на её таблицу стилей, её `<header>`, её `<footer>` и её
+собственные классы карточек (`portal-catalog-tile`, `poster-slot--catalog`,
+`portal-section-bar`). Ничего не перекрашивается и не изобретается.
+
+Откуда данные
+-------------
+
+Из полезной нагрузки самой витрины. Главная отдаёт разделы «Новые серии»,
+«Появилось видео», «Сейчас выходят», «Анонсы» и сезонную подборку; каталог
+отдаёт плитки с рейтингом, постером, типом и годом. Ничего не выдумывается: в
+разделе показывается ровно то, что витрина уже показывает у себя.
+
+Честное пустое состояние
+------------------------
+
+Если данных для раздела нет, страница отвечает 200 и показывает оформленное
+пустое состояние. Выдуманные даты и подставные карточки запрещены: пустое
+состояние честнее придуманного расписания.
+"""
+
+from __future__ import annotations
+
+import html
+import re
+
+# Плитка витрины в полезной нагрузке: href, рейтинг, постер, подпись, тип, год.
+ПЛИТКА = re.compile(
+    r'portal-catalog-tile.{0,120}?\\"href\\":\\"(?P<href>/anime/[^\\"]+)\\"'
+    r'.{0,900}?portal-catalog-rating-value\\",\\"children\\":\\"(?P<rating>[^\\"]*)\\"'
+    r'.{0,900}?\\"alt\\":\\"(?P<alt>[^\\"]*)\\".{0,400}?\\"src\\":\\"(?P<src>[^\\"]+)\\"'
+    r'.{0,900}?portal-catalog-caption\\",\\"children\\":\\"(?P<name>[^\\"]+)\\"',
+    re.S)
+
+#: Карточка в лентах главной: там разметка другая — ссылка, постер и подпись.
+ЛЕНТА = re.compile(
+    r'\\"href\\":\\"(?P<href>/anime/[^\\"]+)\\".{0,600}?'
+    r'\\"alt\\":\\"Постер аниме «(?P<name>[^»]+)»\\"'
+    r'(?:.{0,300}?\\"src\\":\\"(?P<src>[^\\"]+)\\")?',
+    re.S)
+
+
+#: Идентификатор тайтла в адресе: «/anime/<слаг>--<uuid>». Постер витрины
+#: лежит по «/poster/<uuid>.webp» — проверено запросом, отвечает 200.
+#: Это не догадка об адресе, а тот же идентификатор, которым витрина сама
+#: называет тайтл; у адресов без uuid постер не подставляется.
+UUID_В_АДРЕСЕ = re.compile(
+    r"--([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$")
+
+
+def постер_по_адресу(href: str) -> str | None:
+    м = UUID_В_АДРЕСЕ.search(href or "")
+    return f"/poster/{м.group(1)}.webp" if м else None
+
+
+def плитки_каталога(payload: str, предел: int = 60) -> list[dict]:
+    итог, видели = [], set()
+    for м in ПЛИТКА.finditer(payload):
+        href = м.group("href")
+        if href in видели:
+            continue
+        видели.add(href)
+        итог.append({"href": href, "name": м.group("name"),
+                     "src": м.group("src"), "alt": м.group("alt"),
+                     "rating": м.group("rating") or None})
+        if len(итог) >= предел:
+            break
+    return итог
+
+
+#: Заголовки лент главной. Нужны, чтобы ограничить раздел СЛЕДУЮЩИМ
+#: заголовком, а не окном фиксированной длины.
+ЗАГОЛОВКИ_ЛЕНТ = ("Новые серии", "Актуальное", "Появилось видео", "Сейчас выходят",
+                  "Аниме летнего сезона", "Новые серии и обновления", "Новости",
+                  "Новое на сайте", "Анонсы")
+
+
+def раздел_главной(payload: str, заголовок: str, предел: int = 24) -> list[dict]:
+    """Элементы одного раздела главной — строго до следующего заголовка.
+
+    Окно фиксированной длины здесь не годится: разделы идут подряд, и
+    двадцать четыре тысячи знаков перетекали в соседние. Из-за этого «Анонсы»
+    и «Сейчас выходят» возвращали один и тот же набор, а страницы
+    /collections/ и /schedule/ совпадали на сто процентов.
+    """
+    i = payload.find(f'\\"{заголовок}\\"')
+    if i < 0:
+        i = payload.find(заголовок)
+    if i < 0:
+        return []
+    конец = len(payload)
+    for другой in ЗАГОЛОВКИ_ЛЕНТ:
+        if другой == заголовок:
+            continue
+        for образец in (f'\\"{другой}\\"', другой):
+            j = payload.find(образец, i + len(заголовок))
+            if j > i:
+                конец = min(конец, j)
+                break
+    кусок = payload[i:конец]
+    итог, видели = [], set()
+    for м in ЛЕНТА.finditer(кусок):
+        href = м.group("href")
+        if href in видели:
+            continue
+        видели.add(href)
+        итог.append({"href": href, "name": м.group("name"),
+                     "src": м.group("src") or постер_по_адресу(href),
+                     "alt": f'Постер аниме «{м.group("name")}»',
+                     "rating": None})
+        if len(итог) >= предел:
+            break
+    return итог
+
+
+def дополнить_постерами(элементы: list[dict], каталог: list[dict]) -> list[dict]:
+    """Постеры для лент берутся из каталога по адресу тайтла.
+
+    В лентах главной постер лежит не рядом со ссылкой, и по одному только
+    адресу его выводит не всегда: часть адресов без идентификатора. Каталог
+    той же витрины отдаёт `src` явно — здесь эти два источника сводятся по
+    href. Ничего не подставляется наугад: нет совпадения — остаётся заглушка.
+    """
+    по_адресу = {з["href"]: з.get("src") for з in каталог if з.get("src")}
+    for з in элементы:
+        if not з.get("src"):
+            з["src"] = по_адресу.get(з["href"])
+    return элементы
+
+
+def карточка(з: dict) -> str:
+    """Плитка ровно теми классами, которыми её рисует сама витрина."""
+    рейтинг = ""
+    if з.get("rating"):
+        рейтинг = (
+            '<span class="portal-catalog-rating"><span class="portal-catalog-rating-info">'
+            '<svg class="portal-catalog-star" width="14" height="14" viewBox="0 0 24 24" '
+            'aria-hidden="true"><path fill="currentColor" d="M12 2.6l2.7 6.3 6.8.6-5.2 4.5 '
+            '1.6 6.6L12 17.2 6.1 20.6l1.6-6.6L2.5 9.5l6.8-.6z"></path></svg>'
+            f'<span class="portal-catalog-rating-value">{html.escape(з["rating"])}</span>'
+            '</span></span>')
+    if з.get("src"):
+        # Реальное изображение: с размерами и осмысленным alt.
+        постер = (f'<img alt="{html.escape(з.get("alt") or з["name"])}" loading="lazy" '
+                  f'width="230" height="322" decoding="async" '
+                  f'src="{html.escape(з["src"])}">')
+    else:
+        # Заглушка только при настоящем отсутствии изображения.
+        постер = ('<span class="poster-slot-skeleton" aria-label="Нет постера">'
+                  'Нет постера</span>')
+    return (
+        f'<article class="portal-catalog-tile">'
+        f'<a class="portal-catalog-image" href="{html.escape(з["href"])}">{рейтинг}'
+        f'<div class="poster-slot poster-slot--catalog">{постер}</div></a>'
+        f'<div class="portal-catalog-info">'
+        f'<a class="portal-catalog-caption" href="{html.escape(з["href"])}">'
+        f'{html.escape(з["name"])}</a></div></article>')
+
+
+def секция(заголовок: str, подпись: str, элементы: list[dict]) -> str:
+    if not элементы:
+        return (f'<div class="portal-section-bar">{html.escape(заголовок)}</div>'
+                f'<p class="portal-empty">{html.escape(подпись)}</p>')
+    плитки = "".join(карточка(з) for з in элементы)
+    return (f'<div class="portal-section-bar">{html.escape(заголовок)}</div>'
+            f'<div class="portal-catalog-tiles">{плитки}</div>')
+
+
+ПУСТО_СТИЛЬ = (
+    "<style>.portal-empty{margin:12px 0 28px;padding:22px;border-radius:14px;"
+    "border:1px dashed currentColor;opacity:.7;font-size:15px;line-height:1.5}"
+    ".portal-page-lead{margin:4px 0 18px;opacity:.8;font-size:15px}</style>")
+
+
+def собрать(оболочка: dict, заголовок: str, лид: str, тело: str) -> bytes:
+    """Страница из головы, шапки и подвала самой витрины."""
+    return (
+        "<!DOCTYPE html><html lang=\"ru\">"
+        + оболочка["head"].replace("</head>", ПУСТО_СТИЛЬ + "</head>", 1)
+        + "<body>" + оболочка["header"]
+        + '<main id="main-content" class="portal-container min-h-dvh min-w-0 flex-1">'
+        + f"<h1 class=\"portal-section-bar\">{html.escape(заголовок)}</h1>"
+        + f"<p class=\"portal-page-lead\">{html.escape(лид)}</p>"
+        + тело + "</main>" + оболочка["footer"] + "</body></html>"
+    ).encode("utf-8")
+
+
+ГОЛОВА = re.compile(r"<head\b.*?</head>", re.S | re.I)
+ШАПКА = re.compile(r"<header\b.*?</header>", re.S | re.I)
+ПОДВАЛ = re.compile(r"<footer\b.*?</footer>", re.S | re.I)
+
+
+def разобрать_оболочку(html_витрины: str) -> dict | None:
+    г = ГОЛОВА.search(html_витрины)
+    ш = ШАПКА.search(html_витрины)
+    п = ПОДВАЛ.search(html_витрины)
+    if not (г and ш and п):
+        return None
+    голова = г.group(0)
+    # Заголовок страницы заменяется ниже вызывающим кодом; скрипты приложения
+    # не переносятся: страница статическая и гидратация ей не нужна.
+    голова = re.sub(r"<script\b.*?</script>", "", голова, flags=re.S | re.I)
+    return {"head": голова, "header": ш.group(0), "footer": п.group(0)}
