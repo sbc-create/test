@@ -19,6 +19,7 @@ import html
 import json
 import os
 import re
+import subprocess
 import sys
 import unicodedata
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -671,16 +672,32 @@ class Обработчик(BaseHTTPRequestHandler):
         def годный(адрес: str) -> bool:
             """Настоящая обложка, а не заглушка витрины.
 
-            У витрины «/poster/<что угодно>.webp» отвечает 200 и отдаёт
-            SVG-заглушку в 532 байта. Такой адрес — это отсутствие обложки,
-            и показывать его как картинку значит рисовать поддельный постер.
-            Отличается по типу содержимого и размеру.
+            «/poster/<что угодно>.webp» отвечает 200 и отдаёт SVG-заглушку в
+            532 байта — включая заведомо несуществующие идентификаторы.
+            Показывать её как картинку значит рисовать поддельный постер, и
+            браузер такую «обложку» временами считает битой.
+
+            Проверять приходится по ПУБЛИЧНОМУ адресу: постеры отдаёт не
+            приложение (там «/poster/» — это 404), а nginx проксированием на
+            CDN, и на порту 80 он отвечает редиректом на HTTPS. Две прежние
+            попытки — запрос в контейнер и HEAD на порт 80 — отвергали все
+            обложки подряд, и страница оставалась вовсе без постеров.
             """
-            ответ = self._сырое_наверх(адрес, "")
-            if not ответ:
+            хост = self.headers.get("Host", "yummyani.biz").split(":")[0]
+            try:
+                готово = subprocess.run(
+                    ["curl", "-sS", "-I", "-L", "--max-time", "8",
+                     f"https://{хост}{адрес}"],
+                    capture_output=True, text=True, timeout=12).stdout.lower()
+            except (OSError, subprocess.SubprocessError):
                 return False
-            тело, тип, код = ответ
-            return код == 200 and "svg" not in (тип or "").lower() and len(тело) > 2000
+            if "200" not in готово.split("\n")[0]:
+                return False
+            тип = re.search(r"content-type:\s*(\S+)", готово)
+            длина = re.search(r"content-length:\s*(\d+)", готово)
+            if тип and "svg" in тип.group(1):
+                return False
+            return not длина or int(длина.group(1)) > 2000
 
         def достать(href):
             ответ = self._сырое_наверх(href, "")
@@ -696,7 +713,7 @@ class Обработчик(BaseHTTPRequestHandler):
         # отрисоваться быстро даже на холодном кэше. Что не успели разрешить —
         # останется честной заглушкой и разрешится при следующем заходе.
         if нужны:
-            крайний = _t.time() + 6.0
+            крайний = _t.time() + 12.0
             with _cf.ThreadPoolExecutor(max_workers=12) as ex:
                 будущие = {ex.submit(достать, h): h for h in нужны[:36]}
                 for ф in _cf.as_completed(будущие, timeout=None):
