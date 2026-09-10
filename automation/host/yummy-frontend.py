@@ -22,7 +22,7 @@ import re
 import unicodedata
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import parse_qs, unquote, urlparse
+from urllib.parse import parse_qs, quote, unquote, urlparse
 
 РЕВИЗИЯ = os.environ.get("LORDS_TEMPLATE_REVISION", "unknown")
 МАНИФЕСТ_ФАЙЛ = os.environ.get("LORDS_TEMPLATE_MANIFEST",
@@ -423,6 +423,12 @@ class Обработчик(BaseHTTPRequestHandler):
         # Поэтому маршруты списков больше не перехватываются. На одном домене
         # остаётся ОДИН renderer, а nova добавляет только объявление версии.
         if ВЕРХОВОЙ:
+            # Маршруты поиска идут через расширение запроса; остальное — прямо.
+            if путь.rstrip("/") in ("/search", "/api/search"):
+                ответ = self._поиск_наверх(разбор, зпр)
+                if ответ is not None:
+                    тело, тип, код = ответ
+                    return self._отдать(self._обогатить(тело, тип), тип, код=код)
             return self.наверх(разбор)
         return self.старое(путь)
 
@@ -518,14 +524,135 @@ class Обработчик(BaseHTTPRequestHandler):
                 'дат выхода серий в нём нет, и выдумывать их нельзя.</p></section>')
         return оболочка(тело, "Расписание", д, "/schedule/")
 
+    #: Слова, обозначающие форму издания, а не название. Витрина ищет по
+    #: названию, и «Season 3» в запросе — это уточнение, а не часть имени.
+    ИЗДАНИЕ = ("season", "сезон", "сезона", "сезонов", "series", "серия", "серии",
+               "part", "часть", "tv", "ova", "ona", "movie", "фильм", "dreaming")
+
+    def _сузить(self, q: str) -> list[str]:
+        """Последовательно укорачиваемые варианты запроса.
+
+        Приложение ищет по полной строке: «Grand Blue Dreaming Season 3» не
+        находит ничего, хотя «Grand Blue» находит «Необъятный океан». Здесь
+        запрос сокращается справа — сначала отбрасываются слова издания и
+        числа, затем по одному слову с конца. Это расширение поиска, а не
+        подмена: если находит полный запрос, сокращения не используются.
+        """
+        части = [ч for ч in re.split(r"[\s,]+", q.strip()) if ч]
+        варианты = []
+        без_издания = [ч for ч in части
+                       if ч.lower() not in self.ИЗДАНИЕ and not ч.isdigit()]
+        if без_издания and без_издания != части:
+            варианты.append(" ".join(без_издания))
+        основа = без_издания or части
+        for n in range(len(основа) - 1, 0, -1):
+            в = " ".join(основа[:n])
+            if в and в not in варианты:
+                варианты.append(в)
+        return варианты
+
+    def _поиск_наверх(self, разбор, зпр):
+        """Поиск с расширением: полный запрос, затем сокращённые варианты."""
+        q = (зпр.get("q") or [""])[0]
+        ответ = self._сырое_наверх(разбор.path, разбор.query)
+        if q and ответ is not None and self._пусто(разбор.path, ответ[0]):
+            for вариант in self._сузить(q):
+                новый = self._сырое_наверх(разбор.path, f"q={quote(вариант)}")
+                if новый is not None and not self._пусто(разбор.path, новый[0]):
+                    return новый
+        return ответ
+
+    @staticmethod
+    def _пусто(путь: str, тело: bytes) -> bool:
+        if путь.startswith("/api/"):
+            try:
+                return not (json.loads(тело.decode("utf-8", "replace")).get("items") or [])
+            except ValueError:
+                return False
+        return not re.search(rb'href="/anime/', тело)
+
+    def _сырое_наверх(self, путь: str, запрос: str):
+        import http.client
+        безопасно = "/:@!$&'()*+,;=~-._%"
+        адрес = quote(путь, safe=безопасно) + (("?" + quote(запрос, safe=безопасно + "?&=")) if запрос else "")
+        хост, _, порт = ВЕРХОВОЙ.partition(":")
+        try:
+            соед = http.client.HTTPConnection(хост, int(порт or 80), timeout=25)
+            заг = {k: v for k, v in self.headers.items()
+                   if k.lower() not in ("host", "accept-encoding", "connection")}
+            заг["Host"] = self.headers.get("Host", хост)
+            заг["Accept-Encoding"] = "identity"
+            соед.request("GET", адрес, headers=заг)
+            о = соед.getresponse()
+            итог = (о.read(), о.getheader("Content-Type", "application/octet-stream"), о.status)
+            соед.close()
+            return итог
+        except OSError:
+            return None
+
+    def _обогатить(self, тело: bytes, тип: str) -> bytes:
+        """Объявление версии и служебный бейдж в проксируемой странице.
+
+        Вынесено отдельным методом, потому что применяется и к обычному
+        проксированию, и к поиску с расширением запроса: объявление версии
+        обязано быть на ВСЕХ маршрутах, включая выдачу поиска и 404.
+        """
+        if "text/html" not in тип or b"</head>" not in тело:
+            return тело
+        # Только объявление версии и небольшой служебный бейдж. Стиль
+        # приложения не трогается: подмешивать сюда чужую таблицу стилей
+        # значило бы снова перекрашивать готовую витрину.
+        вставка = (
+            f'<meta name="site-factory-template-revision" content="{МАНИФЕСТ["source_commit"]}">'
+            f'<meta name="site-factory-design-version" content="{ВЕРСИЯ}">'
+            f'<meta name="site-factory-template-family" content="{СЕМЕЙСТВО}">'
+            f'<meta name="site-factory-template" content="{ШАБЛОН_СЕМЕЙСТВА}">'
+            f'<meta name="site-factory-core" content="{ЯДРО}">'
+            f'<meta name="site-factory-profile" content="{ПРОФИЛЬ}">'
+            f'<meta name="site-factory-build-id" content="{СБОРКА}">'
+            f'<meta name="site-factory-artifact-sha256" content="{МАНИФЕСТ["artifact_sha256"]}">'
+            f'<meta name="robots" content="noindex, nofollow">'
+            f'<style>{БЕЙДЖ_СТИЛЬ}</style>').encode("utf-8")
+        # Существующий robots витрины ЗАМЕНЯЕТСЯ, а не дополняется:
+        # приложение отдаёт «noindex, follow», и добавление второго тега
+        # оставляло бы первым менее строгий. Требование — nofollow.
+        тело = re.sub(rb'<meta\s+name="robots"[^>]*>',
+                      b'<meta name="robots" content="noindex, nofollow">',
+                      тело, flags=re.I)
+        if not re.search(rb'<meta\s+name="robots"', тело, re.I):
+            вставка += b'<meta name="robots" content="noindex, nofollow">'
+        тело = тело.replace(b"</head>", вставка + b"</head>", 1)
+        # Атрибуты версии на корневом элементе — для машинной проверки.
+        тело = re.sub(rb"<html\b", (
+            f'<html data-template-version="{ВЕРСИЯ}" '
+            f'data-template-family="{СЕМЕЙСТВО}" '
+            f'data-build-id="{СБОРКА}"').encode("utf-8"), тело, count=1)
+        if b"</body>" in тело:
+            бейдж = (f'<div class="sf-vbadge">Template: {СЕМЕЙСТВО} {ВЕРСИЯ} · '
+                     f'{МАНИФЕСТ["source_commit"][:8]}</div>').encode("utf-8")
+            тело = тело.replace(b"</body>", бейдж + b"</body>", 1)
+        return тело
+
     def наверх(self, разбор):
         """Проксирование в прежнее приложение витрины.
+
+        Для маршрутов поиска применяется расширение запроса: если полный
+        запрос не дал результатов, пробуются сокращённые варианты.
 
         Разметка не переписывается: добавляется только стиль и мета-данные
         версии, и только в HTML. Всё прочее идёт байт в байт.
         """
         import http.client
-        адрес = разбор.path + (("?" + разбор.query) if разбор.query else "")
+        # Путь и запрос кодируются перед отправкой наверх.
+        #
+        # http.client пишет строку запроса в ASCII, а маршруты витрины бывают
+        # кириллическими: «/search?q=океан» и любой несуществующий русский
+        # адрес роняли поток обработчика UnicodeEncodeError, и наружу уходил
+        # 502 вместо выдачи поиска и честной страницы 404.
+        безопасно = "/:@!$&'()*+,;=~-._%"
+        адрес = quote(разбор.path, safe=безопасно)
+        if разбор.query:
+            адрес += "?" + quote(разбор.query, safe=безопасно + "?&=")
         хост, _, порт = ВЕРХОВОЙ.partition(":")
         try:
             соед = http.client.HTTPConnection(хост, int(порт or 80), timeout=25)
@@ -543,31 +670,7 @@ class Обработчик(BaseHTTPRequestHandler):
             тело = оболочка(f'<div class="empty">Витрина недоступна: {html.escape(str(ош)[:80])}</div>',
                             "503", self.данные).encode("utf-8")
             return self._отдать(тело, код=503)
-        if "text/html" in тип and b"</head>" in тело:
-            # Только объявление версии и небольшой служебный бейдж. Стиль
-            # приложения не трогается: подмешивать сюда чужую таблицу стилей
-            # значило бы снова перекрашивать готовую витрину.
-            вставка = (
-                f'<meta name="site-factory-template-revision" content="{МАНИФЕСТ["source_commit"]}">'
-                f'<meta name="site-factory-design-version" content="{ВЕРСИЯ}">'
-                f'<meta name="site-factory-template-family" content="{СЕМЕЙСТВО}">'
-                f'<meta name="site-factory-template" content="{ШАБЛОН_СЕМЕЙСТВА}">'
-                f'<meta name="site-factory-core" content="{ЯДРО}">'
-                f'<meta name="site-factory-profile" content="{ПРОФИЛЬ}">'
-                f'<meta name="site-factory-build-id" content="{СБОРКА}">'
-                f'<meta name="site-factory-artifact-sha256" content="{МАНИФЕСТ["artifact_sha256"]}">'
-                f'<meta name="robots" content="noindex, nofollow">'
-                f'<style>{БЕЙДЖ_СТИЛЬ}</style>').encode("utf-8")
-            тело = тело.replace(b"</head>", вставка + b"</head>", 1)
-            # Атрибуты версии на корневом элементе — для машинной проверки.
-            тело = re.sub(rb"<html\b", (
-                f'<html data-template-version="{ВЕРСИЯ}" '
-                f'data-template-family="{СЕМЕЙСТВО}" '
-                f'data-build-id="{СБОРКА}"').encode("utf-8"), тело, count=1)
-            if b"</body>" in тело:
-                бейдж = (f'<div class="sf-vbadge">Template: {СЕМЕЙСТВО} {ВЕРСИЯ} · '
-                         f'{МАНИФЕСТ["source_commit"][:8]}</div>').encode("utf-8")
-                тело = тело.replace(b"</body>", бейдж + b"</body>", 1)
+        тело = self._обогатить(тело, тип)
         return self._отдать(тело, тип, код=код)
 
     def старое(self, путь: str):
