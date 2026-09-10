@@ -68,6 +68,15 @@ def _манифест() -> dict:
 ВЕРСИЯ = МАНИФЕСТ["design_version"]
 СЕМЕЙСТВО = МАНИФЕСТ["template_family"]
 СБОРКА = МАНИФЕСТ["build_id"]
+ПРОФИЛЬ = МАНИФЕСТ.get("profile") or "unknown"
+
+#: Имя общего рантайма. Один артефакт обслуживает все семейства, и это честно —
+#: но называть шаблоном семейства «lords-nova» на Yummy, Zona и Animedia было
+#: неправдой: имя ядра выдавалось за имя шаблона витрины.
+ЯДРО = "site-factory-nova"
+#: Имя шаблона КОНКРЕТНОГО семейства. Отсюда и из версии складывается то, что
+#: домен объявляет о себе.
+ШАБЛОН_СЕМЕЙСТВА = f"{СЕМЕЙСТВО}-nova"
 КАТАЛОГ_ФАЙЛ = os.environ.get("LORDS_CATALOG", "/srv/lords/.frontend/lords-01-catalog.json")
 СТАРЫЙ_КОРЕНЬ = Path(os.environ.get("LORDS_LEGACY_ROOT", "/srv/lords/lords-01/current/site"))
 ИМЯ_ВИТРИНЫ = os.environ.get("LORDS_SITE_NAME", "Lords")
@@ -339,7 +348,9 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 <meta name="site-factory-template-family" content="{СЕМЕЙСТВО}">
 <meta name="site-factory-build-id" content="{СБОРКА}">
 <meta name="site-factory-artifact-sha256" content="{МАНИФЕСТ["artifact_sha256"]}">
-<meta name="site-factory-template" content="lords-nova">
+<meta name="site-factory-template" content="{ШАБЛОН_СЕМЕЙСТВА}">
+<meta name="site-factory-core" content="{ЯДРО}">
+<meta name="site-factory-profile" content="{ПРОФИЛЬ}">
 <link rel="manifest" href="/assets/nova.webmanifest">
 <style>{СТИЛЬ}</style></head><body>
 <header class="hdr"><div class="wrap hdr__in">
@@ -358,7 +369,7 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 
 
 class Обработчик(BaseHTTPRequestHandler):
-    server_version = "lords-nova"
+    server_version = "site-factory-nova"
     данные: Данные = None  # проставляется при запуске
 
     def log_message(self, *a):
@@ -370,7 +381,9 @@ class Обработчик(BaseHTTPRequestHandler):
         self.send_header("Content-Length", str(len(тело)))
         self.send_header("X-Robots-Tag", "noindex, nofollow")
         self.send_header("X-Site-Factory-Template-Revision", МАНИФЕСТ["source_commit"])
-        self.send_header("X-Site-Factory-Template", "lords-nova")
+        self.send_header("X-Site-Factory-Template", ШАБЛОН_СЕМЕЙСТВА)
+        self.send_header("X-Site-Factory-Core", ЯДРО)
+        self.send_header("X-Site-Factory-Profile", ПРОФИЛЬ)
         self.send_header("X-Site-Factory-Template-Family", СЕМЕЙСТВО)
         self.send_header("X-Site-Factory-Template-Version", ВЕРСИЯ)
         self.send_header("X-Site-Factory-Build-Id", СБОРКА)
@@ -390,12 +403,19 @@ class Обработчик(BaseHTTPRequestHandler):
         зпр = parse_qs(разбор.query)
 
         if путь == "/__template_version":
-            return self._отдать(json.dumps(МАНИФЕСТ, ensure_ascii=False).encode("utf-8"),
+            # Ядро, семейство, профиль и версия называются по отдельности:
+            # один артефакт на все семейства допустим, но выдавать имя ядра за
+            # имя шаблона витрины — нет.
+            свод = dict(МАНИФЕСТ)
+            свод["core_runtime"] = ЯДРО
+            свод["family_template"] = ШАБЛОН_СЕМЕЙСТВА
+            return self._отдать(json.dumps(свод, ensure_ascii=False).encode("utf-8"),
                                 "application/json; charset=utf-8")
         if путь == "/healthz":
             return self._отдать(b'{"ok":true}', "application/json")
         if путь == "/assets/nova.webmanifest":
-            м = json.dumps({"name": ИМЯ_ВИТРИНЫ, "template": "lords-nova",
+            м = json.dumps({"name": ИМЯ_ВИТРИНЫ, "template": ШАБЛОН_СЕМЕЙСТВА,
+                            "core": ЯДРО, "family": СЕМЕЙСТВО, "profile": ПРОФИЛЬ,
                             "revision": РЕВИЗИЯ, "display": "standalone"}, ensure_ascii=False)
             return self._отдать(м.encode(), "application/manifest+json")
         if путь == "/robots.txt":
@@ -580,7 +600,9 @@ class Обработчик(BaseHTTPRequestHandler):
                 f'<meta name="site-factory-design-version" content="{ВЕРСИЯ}">'
                 f'<meta name="site-factory-template-family" content="{СЕМЕЙСТВО}">'
                 f'<meta name="site-factory-build-id" content="{СБОРКА}">'
-                f'<meta name="site-factory-template" content="lords-nova">'
+                f'<meta name="site-factory-template" content="{ШАБЛОН_СЕМЕЙСТВА}">'
+                f'<meta name="site-factory-core" content="{ЯДРО}">'
+                f'<meta name="site-factory-profile" content="{ПРОФИЛЬ}">'
                 f'<style>{СТИЛЬ}</style>')
             текст = текст.replace("</head>", вставка + "</head>", 1)
             данные = текст.encode("utf-8")
