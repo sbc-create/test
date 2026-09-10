@@ -208,12 +208,38 @@ def секция(заголовок: str, подпись: str, элементы:
     ".portal-page-lead{margin:4px 0 18px;opacity:.8;font-size:15px}</style>")
 
 
-def собрать(оболочка: dict, заголовок: str, лид: str, тело: str) -> bytes:
-    """Страница из головы, шапки и подвала самой витрины."""
+def собрать(оболочка: dict, заголовок: str, лид: str, тело: str,
+            вариант: dict | None = None) -> bytes:
+    """Страница из головы, шапки и подвала самой витрины.
+
+    Профиль домена меняет акцентные токены, плотность сетки и объявляет себя
+    в разметке: три витрины одной семьи не должны отдавать одинаковый DOM.
+    """
+    в = вариант or {}
+    токены = ""
+    if в:
+        токены = (
+            "<style>:root{--sf-accent:" + в.get("акцент", "#ff5c8a") + ";"
+            "--sf-accent-2:" + в.get("акцент2", "#ffb347") + "}"
+            ".portal-catalog-tiles{grid-template-columns:"
+            + в.get("плотность", "repeat(auto-fill,minmax(150px,1fr))") + "}"
+            ".portal-section-bar{border-left:4px solid var(--sf-accent);padding-left:10px}"
+            ".sf-rank{display:inline-block;margin-right:6px;font-weight:800;"
+            "color:var(--sf-accent)}"
+            ".sf-rates{display:inline-flex;gap:6px;flex-wrap:wrap}"
+            ".sf-rate{font-size:12px;opacity:.85}.sf-rate small{opacity:.7}"
+            ".sf-tabs{display:flex;gap:8px;margin:8px 0 14px}"
+            ".sf-tabs a{padding:6px 12px;border:1px solid var(--sf-accent);"
+            "border-radius:8px;font-size:13px}"
+            ".sf-tabs a[aria-current]{background:var(--sf-accent);color:#fff}</style>")
+    мета = ""
+    if в:
+        мета = (f'<meta name="site-factory-variant-id" content="{html.escape(в.get("variant_id",""))}">'
+                f'<meta name="site-factory-variant-version" content="{html.escape(в.get("variant_version",""))}">')
     return (
         "<!DOCTYPE html><html lang=\"ru\">"
-        + оболочка["head"].replace("</head>", ПУСТО_СТИЛЬ + "</head>", 1)
-        + "<body>" + оболочка["header"]
+        + оболочка["head"].replace("</head>", ПУСТО_СТИЛЬ + токены + мета + "</head>", 1)
+        + f'<body data-variant="{html.escape(в.get("variant_id", ""))}">' + оболочка["header"]
         + '<main id="main-content" class="portal-container min-h-dvh min-w-0 flex-1">'
         + f"<h1 class=\"portal-section-bar\">{html.escape(заголовок)}</h1>"
         + f"<p class=\"portal-page-lead\">{html.escape(лид)}</p>"
