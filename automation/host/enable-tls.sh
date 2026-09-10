@@ -12,6 +12,7 @@ set -Eeuo pipefail
 CERT_DIR=/etc/letsencrypt/live
 NGINX_DIR=/etc/nginx/lords
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
+SAN_NAME="zonafilm.space"
 
 declare -A SITES=(
   [zona-01]="zonafilm.space:9120"
@@ -24,8 +25,16 @@ for site in "${!SITES[@]}"; do
   IFS=: read -r domain port <<< "${SITES[$site]}"
   conf="${NGINX_DIR}/${site}.conf"
 
-  if [ ! -d "${CERT_DIR}/${domain}" ]; then
+  # Сертификат один на три домена (SAN), лежит под именем первого из них.
+  # Проверяется, что он действительно покрывает этот домен, а не просто
+  # существует: чужой сертификат хуже отсутствующего.
+  CERT="${CERT_DIR}/${SAN_NAME}"
+  if [ ! -d "$CERT" ]; then
     echo "[tls] ${domain}: сертификата нет — пропускаю (выпустите certbot)"
+    continue
+  fi
+  if ! openssl x509 -in "${CERT}/fullchain.pem" -noout -text 2>/dev/null | grep -q "DNS:${domain}"; then
+    echo "[tls] ${domain}: сертификат не покрывает этот домен — пропускаю" >&2
     continue
   fi
   if grep -q "listen 443" "$conf" 2>/dev/null; then
@@ -42,8 +51,8 @@ server {
     listen [::]:443 ssl;
     server_name ${domain};
 
-    ssl_certificate     ${CERT_DIR}/${domain}/fullchain.pem;
-    ssl_certificate_key ${CERT_DIR}/${domain}/privkey.pem;
+    ssl_certificate     ${CERT_DIR}/${SAN_NAME}/fullchain.pem;
+    ssl_certificate_key ${CERT_DIR}/${SAN_NAME}/privkey.pem;
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_prefer_server_ciphers off;
 
