@@ -1,0 +1,21 @@
+[Unit]
+Description=nova: пересборка каталогов витрин из отрисованного релиза
+Documentation=file:///srv/site-factory/content-pipeline/refresh.py
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/srv/site-factory/content-pipeline
+# Часть legacy-релизов лежит под правами 0700 пользователя lords, и служба
+# обязана их читать. Перезапуск витрины после публикации тоже требует прав.
+User=root
+ExecStart=/usr/bin/python3 /srv/site-factory/content-pipeline/refresh.py
+# Отказ одной витрины не должен останавливать таймер: остальные пять
+# обновятся, а упавшая попадёт в DLQ и будет повторена следующим циклом.
+SuccessExitStatus=0 1
+TimeoutStartSec=1800
+StateDirectory=nova-catalog-refresh
+
+[Install]
+WantedBy=multi-user.target

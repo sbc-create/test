@@ -1,0 +1,20 @@
+[Unit]
+Description=nova: пересборка каталогов витрин каждые 5 минут
+Documentation=file:///srv/site-factory/content-pipeline/refresh.py
+
+[Timer]
+# Бюджет свежести: legacy-релиз обновляется таймером раз в 10 минут, каталог
+# витрины — раз в 5. В худшем случае запись доезжает до публичной страницы за
+# 15 минут, что и обещано. Больший интервал обещание нарушает.
+OnBootSec=3min
+OnUnitActiveSec=5min
+# Якорь по завершению, а не только по запуску. Без него таймер, чей запуск
+# был убит сигналом, застревает навсегда: OnUnitActiveSec считает от последней
+# АКТИВАЦИИ, а мёртвая служба больше не активируется, и следующий срок
+# становится infinity. Ровно так уже застревал lords-content-refresh.timer.
+OnUnitInactiveSec=5min
+AccuracySec=30s
+Persistent=true
+
+[Install]
+WantedBy=timers.target
