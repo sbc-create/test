@@ -34,6 +34,11 @@ from typing import Any
 ПОРОГ_ГОЛОСОВ = 500.0
 #: Априорная оценка, к которой стягиваются рейтинги с малым числом голосов.
 АПРИОРИ = 7.0
+#: Порог попадания в «Актуальное». Ниже него запись актуальной не считается,
+#: сколько бы места ни осталось в ленте: пустое место честнее наполнителя.
+ПОРОГ_АКТУАЛЬНОСТИ = 0.35
+#: Окно новизны для ленты `new`, суток.
+ОКНО_НОВИЗНЫ = 30
 
 
 def _время(строка: str | None) -> dt.datetime | None:
@@ -108,7 +113,16 @@ def актуальное(соед: sqlite3.Connection, предел: int = 24,
                            "airing": a, "ratingsUsed": len(части)}
         оценённые.append(к)
     оценённые.sort(key=lambda к: (-к["score"], к["entityId"]))
+    # «Актуальное» — витрина, а не каталог. Отдавать 7299 записей под этим
+    # именем значит подменить раздел каталогом: именно этот дефект и чинится.
+    # Поэтому лента ограничена и отбор объявлен: запись без постера показать
+    # нечем, а запись ниже порога актуальной не является.
+    годные = [к for к in оценённые
+              if к.get("poster") and к["score"] >= ПОРОГ_АКТУАЛЬНОСТИ]
+    отсечено = len(оценённые) - len(годные)
     return {"contract": КОНТРАКТ, "surface": "актуальное",
+            "eligible": len(годные), "excluded": отсечено,
+            "threshold": ПОРОГ_АКТУАЛЬНОСТИ,
             "formula": {"weights": {"freshness": ВЕС_СВЕЖЕСТИ,
                                     "rating": ВЕС_РЕЙТИНГА,
                                     "airing": ВЕС_ПОКАЗА},
@@ -116,7 +130,7 @@ def актуальное(соед: sqlite3.Connection, предел: int = 24,
                         "votePrior": ПОРОГ_ГОЛОСОВ, "ratingPrior": АПРИОРИ,
                         "note": ("голоса неизвестны — считаются нулём, "
                                  "рейтинг стягивается к априорному")},
-            "items": оценённые[:предел], "total": len(оценённые)}
+            "items": годные[:предел], "total": len(годные)}
 
 
 def новые_серии(соед: sqlite3.Connection, предел: int = 24) -> dict:
@@ -269,3 +283,45 @@ def разрешить_адрес(соед: sqlite3.Connection, entity_id: str) 
     return {"contract": КОНТРАКТ, "entityId": с["entity_id"],
             "canonicalPath": с["canonical_path"], "outcome": "RESOLVED",
             "reason": "адрес объявлен витриной"}
+
+
+def новые(соед: sqlite3.Connection, предел: int = 24,
+          сейчас: dt.datetime | None = None) -> dict:
+    """Лента `new` — появление произведения на витрине.
+
+    Отдельная поверхность, а не срез «Актуального»: там ранжирование, здесь
+    порядок событий. Сортировка — по доказанному `published_at`; записи
+    старше окна новизны сюда не попадают, сколько бы их ни было.
+    """
+    сейчас = сейчас or dt.datetime.now(dt.timezone.utc)
+    порог = (сейчас - dt.timedelta(days=ОКНО_НОВИЗНЫ)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    строки = _строки(соед,
+        "SELECT * FROM entity WHERE canonical_path IS NOT NULL "
+        "AND published_at IS NOT NULL AND published_at >= ? "
+        "ORDER BY published_at DESC LIMIT ?", порог, предел)
+    return {"contract": КОНТРАКТ, "surface": "new",
+            "windowDays": ОКНО_НОВИЗНЫ,
+            "items": [карточка(с) for с in строки],
+            "note": ("порядок — по доказанному published_at; "
+                     "пустая лента означает отсутствие новых поступлений")}
+
+
+def анонсы(соед: sqlite3.Connection, предел: int = 24,
+           сейчас: dt.datetime | None = None) -> dict:
+    """Только БУДУЩИЕ подтверждённые события.
+
+    Пока источник не отдаёт ни даты премьеры будущего сезона, ни статуса
+    показа, лента пуста — и это ответ, а не заглушка. Заполнять её
+    «ближайшими по году» значило бы выдать догадку за анонс.
+    """
+    сейчас = сейчас or dt.datetime.now(dt.timezone.utc)
+    т = сейчас.strftime("%Y-%m-%dT%H:%M:%SZ")
+    строки = _строки(соед,
+        "SELECT * FROM entity WHERE next_episode_at IS NOT NULL "
+        "AND next_episode_at > ? AND airing_status LIKE 'CONFIRMED%' "
+        "ORDER BY next_episode_at ASC LIMIT ?", т, предел)
+    return {"contract": КОНТРАКТ, "surface": "announcements",
+            "items": [dict(карточка(с), nextEpisodeAt=с["next_episode_at"],
+                           airingStatus=с["airing_status"]) for с in строки],
+            "note": ("только подтверждённые будущие события; выведенный "
+                     "статус сюда не допускается")}
