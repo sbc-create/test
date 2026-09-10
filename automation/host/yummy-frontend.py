@@ -1084,9 +1084,12 @@ new MutationObserver(проверить).observe(document.documentElement,
                 '<div class="portal-catalog-info">',
                 f'<div class="portal-catalog-info"><span class="sf-rank">#{з["rank"]}</span>{подпись}')
             плитки.append(разметка)
-        тело = (f'<div class="portal-section-bar">{html.escape(свод["title"])}</div>'
-                f'<div class="sf-tabs">{вкладки}</div>'
-                f'<p class="portal-page-lead">Порядок: {html.escape(свод["order_note"])}. '
+        # Заголовок уже стоит в H1 страницы: второй такой же полосой — это
+        # «ТОП-100» дважды подряд. Подпись про порядок берётся у свода как
+        # есть: она уже начинается со слова «порядок», и «Порядок: порядок:»
+        # получалось из добавленной сверху подписи.
+        тело = (f'<div class="sf-tabs">{вкладки}</div>'
+                f'<p class="portal-page-lead">{html.escape(свод["order_note"]).capitalize()}. '
                 f'Голоса: {html.escape(свод["votes_note"])}. '
                 f'Доступно записей с оценкой {провайдер}: {свод["available"]}.</p>'
                 f'<div class="portal-catalog-tiles">' + "".join(плитки) + '</div>')
