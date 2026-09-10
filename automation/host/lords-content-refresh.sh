@@ -563,12 +563,27 @@ PYEOF
       --repo "$TEMPLATE_ROOT" --staging "$staging" --current "${current}/site" --record >/dev/null || true
   fi
 
-  # Хранение: удаляются только наши же прежние релизы и никогда текущий.
+  # Хранение: удаляются только наши же прежние релизы, и никогда — текущий или
+  # точка отката.
+  #
+  # Прежде защищался только current, а previous хранение не различало. В ночь
+  # на 2026-09-10 это стоило точки отката: канарейка шла с KEEP_RELEASES=2,
+  # отсчёт идёт по времени изменения, и отвергнутый канареечный релиз оказался
+  # новее известного хорошего. Хранение оставило отвергнутый и удалило
+  # 8bc82400e443 — тот самый, на который витрина только что откатилась.
+  # Ссылка previous стала висячей, то есть точка отката перестала
+  # существовать, а витрина осталась без места, куда возвращаться.
+  # >>> RETENTION-BLOCK-START (исполняется тестом дословно)
+  keep_current="$(readlink -f "${runtime}/current" 2>/dev/null || true)"
+  keep_previous="$(readlink -f "${runtime}/previous" 2>/dev/null || true)"
   mapfile -t old < <(ls -1dt "${runtime}/releases/"*/ 2>/dev/null | tail -n +$((KEEP_RELEASES + 1)))
   for dir in ${old[@]+"${old[@]}"}; do
-    [ "$(readlink -f "$dir")" = "$(readlink -f "${runtime}/current")" ] && continue
+    resolved="$(readlink -f "$dir")"
+    [ -n "$keep_current" ] && [ "$resolved" = "$keep_current" ] && continue
+    [ -n "$keep_previous" ] && [ "$resolved" = "$keep_previous" ] && continue
     rm -rf "$dir"
   done
+  # <<< RETENTION-BLOCK-END
 
   # Проверка ПОСЛЕ удаления старых релизов, а не только после переключения.
   #
