@@ -852,6 +852,10 @@ class Обработчик(BaseHTTPRequestHandler):
     # До неё пункты добавляются здесь, классами самой витрины: маршруты
     # работают, а меню о них молчало — это и есть «пункт без исправления».
     НАВ_МЕТКА = 'data-sf-nav="1"'
+    #: Признак уже вставленных пунктов — именно ссылка, а не голая метка:
+    #: метка встречается и в стиле, который прячет пункты на узкой ширине, и
+    #: проверка по ней молча отключала вставку целиком.
+    НАВ_ПРИЗНАК = b'class="portal-nav-link" data-sf-nav="1"'
 
     #: Адреса витрины, которые ведут туда же, куда наши маршруты. Пункт не
     #: добавляется рядом с существующим, а существующий перенаправляется:
@@ -912,6 +916,7 @@ function поставить(){
   var с=н.querySelectorAll('a[href="'+а+'"]');
   for(var j=0;j<с.length;j++)с[j].setAttribute('href',З[а]);
  }
+ полоса();
  for(var i=0;i<П.length;i++){
   var п=П[i];
   if(н.querySelector('a[href="'+п[0]+'"],a[href="'+п[0].replace(/\/$/,'')+'"]'))continue;
@@ -924,6 +929,20 @@ function поставить(){
   н.insertBefore(a,перед);добавили=true;
  }
  return добавили;
+}
+function полоса(){
+ if(document.querySelector('.sf-mobnav'))return;
+ var ш=document.querySelector('header.portal-header')||document.querySelector('header');
+ if(!ш)return;
+ var н=document.createElement('nav');
+ н.className='sf-mobnav';н.setAttribute('aria-label','Разделы витрины');
+ for(var i=0;i<П.length;i++){
+  var a=document.createElement('a');a.href=П[i][0];a.textContent=П[i][1];
+  if(location.pathname.replace(/\/$/,'')===П[i][0].replace(/\/$/,''))
+   a.setAttribute('aria-current','page');
+  н.appendChild(a);
+ }
+ ш.parentNode.insertBefore(н,ш.nextSibling);
 }
 function robots(){
  var м=document.querySelectorAll('meta[name="robots"]');
@@ -946,7 +965,7 @@ new MutationObserver(проверить).observe(document.documentElement,
         м = self.НАВ_ОТКРЫТИЕ.search(тело)
         if not м:
             return тело
-        if self.НАВ_МЕТКА.encode() not in тело:
+        if self.НАВ_ПРИЗНАК not in тело:
             з = self.НАВ_ЗАКРЫТИЕ.search(тело, м.end())
             конец = з.start() if з else м.end()
             блок = тело[м.end():конец]
@@ -1358,7 +1377,24 @@ new MutationObserver(проверить).observe(document.documentElement,
         # Меню получает на четыре пункта больше и на узкой ширине налезало
         # на логотип. Переносится строкой, а не сжимается: наложение текста —
         # это не «плотнее», это нечитаемо.
+        # На узкой ширине шапка витрины превращается в нижнюю панель из пяти
+        # пунктов, растянутых поровну (`flex:1 1 0`). Три наших пункта сжимали
+        # её до восьми по 51 пикселю, и подписи обрезались многоточием:
+        # «СЛУЧАЙ…», «СООБ…». Панель — не наша, и переверстывать её нельзя.
+        #
+        # Поэтому на мобильной ширине наши пункты уходят из панели, а разделы
+        # витрины показывает своя полоса под шапкой: она прокручивается и
+        # ничего чужого не ломает.
         return (".portal-nav{flex-wrap:wrap}"
+                "@media(max-width:700px){"
+                'nav.portal-nav [data-sf-nav="1"]{display:none}'
+                ".sf-mobnav{display:flex!important}}"
+                ".sf-mobnav{display:none;gap:8px;overflow-x:auto;padding:10px 12px;"
+                "margin:0;-webkit-overflow-scrolling:touch}"
+                ".sf-mobnav a{flex:0 0 auto;padding:7px 14px;border-radius:999px;"
+                "font-size:13px;white-space:nowrap;"
+                "border:1px solid color-mix(in srgb,var(--sf-accent,currentColor) 55%,transparent)}"
+                ".sf-mobnav a[aria-current]{background:var(--sf-accent);color:#fff}"
                 ":root{--sf-accent:" + в.get("акцент", "#ff5c8a")
                 + ";--sf-accent-2:" + в.get("акцент2", "#ffb347")
                 + ";--sf-grid:" + в.get("плотность",
