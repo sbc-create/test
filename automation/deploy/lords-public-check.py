@@ -206,7 +206,11 @@ def main() -> int:
     р.add_argument("--site", required=True)
     р.add_argument("--domain", required=True)
     р.add_argument("--evidence", required=True)
-    р.add_argument("--repo", default="/home/claude/wt-release-03")
+    # Приёмка исполняется из ТОЙ ЖЕ закреплённой оснастки, что и выкладка.
+    # Прежде умолчанием был рабочий каталог /home/claude/wt-release-03, и
+    # исправленный тест приёмки в него не попадал: канарейка проверялась
+    # спекой из чужого дерева.
+    р.add_argument("--repo", default="/srv/site-factory/lords-tooling/current")
     р.add_argument("--label", default="after")
     р.add_argument("--images", type=int, default=30)
     р.add_argument("--expect-marker", default="")

@@ -221,16 +221,35 @@ test.describe('скорость', () => {
       }).observe({ type: 'largest-contentful-paint', buffered: true });
     });
     await page.goto(`${BASE}/`, { waitUntil: 'load' });
-    const before = await page.evaluate(() => window.__cls);
-    await page.evaluate(() => {
-      const b = document.createElement('div');
-      b.style.height = '400px'; b.style.background = '#333';
-      document.body.prepend(b);
-    });
-    await page.waitForFunction(() => window.__cls > 0, null, { timeout: 10_000 });
-    expect(await page.evaluate(() => window.__cls),
-      'наблюдатель сдвига не сработал — нули ниже ничего не значат')
-      .toBeGreaterThan(before + 0.1);
+
+    // Сдвиг раскладки наблюдаем не везде. `layout-shift` — запись только
+    // Chromium: в Firefox `PerformanceObserver.supportedEntryTypes` её не
+    // содержит, наблюдатель не подключается, и `window.__cls` навсегда
+    // остаётся нулём. Прежде самопроверка честно падала по таймауту, и вся
+    // приёмка Firefox объявлялась провалом релиза — хотя провалом был не
+    // шаблон, а попытка измерить в движке то, чего он не умеет.
+    //
+    // Ноль здесь не подставляется: неизмеренное называется неизмеренным с
+    // причиной. LCP Firefox поддерживает и замеряется наравне.
+    const наблюдаемСдвиг = await page.evaluate(() => Boolean(
+      window.PerformanceObserver
+      && Array.isArray(PerformanceObserver.supportedEntryTypes)
+      && PerformanceObserver.supportedEntryTypes.includes('layout-shift')));
+
+    if (наблюдаемСдвиг) {
+      // Самопроверка наблюдателя: нулевой CLS без неё неотличим от
+      // неподключившегося наблюдателя.
+      const before = await page.evaluate(() => window.__cls);
+      await page.evaluate(() => {
+        const b = document.createElement('div');
+        b.style.height = '400px'; b.style.background = '#333';
+        document.body.prepend(b);
+      });
+      await page.waitForFunction(() => window.__cls > 0, null, { timeout: 10_000 });
+      expect(await page.evaluate(() => window.__cls),
+        'наблюдатель сдвига не сработал — нули ниже ничего не значат')
+        .toBeGreaterThan(before + 0.1);
+    }
 
     // Настоящий замер — на чистой загрузке.
     const clean = await page.context().newPage();
@@ -273,11 +292,16 @@ test.describe('скорость', () => {
 
     collected.vitals = {
       ...vitals,
+      cls: наблюдаемСдвиг ? vitals.cls : null,
+      cls_unmeasured_reason: наблюдаемСдвиг ? null
+        : 'PerformanceObserver не поддерживает layout-shift в этом движке',
       interaction_ms: interaction === null ? null : Math.round(interaction * 100) / 100,
       limitation: 'петлевой контур без сети: LCP — нижняя граница, не замер продукта; '
         + 'interaction_ms — задержка обработки нажатия на одном прогоне, а не полевой INP',
     };
-    expect(vitals.cls, `сдвиг раскладки ${vitals.cls.toFixed(3)}`).toBeLessThanOrEqual(0.1);
+    if (наблюдаемСдвиг) {
+      expect(vitals.cls, `сдвиг раскладки ${vitals.cls.toFixed(3)}`).toBeLessThanOrEqual(0.1);
+    }
     if (interaction !== null) {
       expect(interaction, `задержка обработки нажатия ${interaction.toFixed(1)} мс`)
         .toBeLessThanOrEqual(200);
