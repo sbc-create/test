@@ -1,5 +1,5 @@
 [Unit]
-Description=site-factory: мост Registry outbox -> Audit Ledger
+Description=site-factory: мост Registry -> Audit Ledger и публикация ленты
 Documentation=file:///srv/site-factory/repo/docs/runbooks/audit-ledger.md
 # Мост читает outbox реестра и пишет в журнал. Обе базы локальные, но
 # управляющая служба обязана подняться первой: журнал создаёт схему при

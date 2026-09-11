@@ -15,6 +15,7 @@ import argparse, errno, fcntl, json, os, signal, sqlite3, sys, time
 from pathlib import Path
 
 from . import ledger_store as store
+from . import ledger_publisher as pub
 
 РЕЕСТР = os.environ.get("REGISTRY_DB",
                         "/srv/site-factory/registry-core/registry.sqlite3")
@@ -192,6 +193,13 @@ def служить() -> int:
                 if итог["appended"] or итог["failed"]:
                     print("  перенос: " + json.dumps(итог, ensure_ascii=False),
                           flush=True)
+                # Лента журнала тоже нуждается в постоянном сливе. Без этого
+                # outbox копится молча: события записаны, но наружу не ушли, и
+                # потребитель узнаёт об этом только когда чего-то недосчитался.
+                опубл = pub.опубликовать()
+                if опубл["published"]:
+                    print(f"  лента: опубликовано {опубл['published']}, "
+                          f"осталось {опубл['backlog']}", flush=True)
             except Exception as ош:  # noqa: BLE001
                 # Мост обязан пережить недоступность любой из двух баз:
                 # падение здесь означало бы, что перезапуск службы зависит от
