@@ -53,7 +53,6 @@ def main() -> int:
     # нужна, а протокол запуска требует под неё токены — брать их сюда значило
     # бы тащить в тестовый контур права, которых тест не использует.
     окр = dict(os.environ, SITE_ENGINE_CONTROL_WRITES="0",
-               SITE_ENGINE_ADMIN="0",
                AUDIT_LEDGER_DB=str(копия),
                AUDIT_API_BASE=f"http://127.0.0.1:{ПОРТ}",
                AUDIT_FEED=str(врем / "feed.jsonl"),
