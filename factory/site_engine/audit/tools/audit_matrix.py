@@ -102,7 +102,7 @@ for действие, sql in (("UPDATE", "UPDATE ledger_event SET summary='x'"),
 # --- целостность и сверка ----------------------------------------------------
 from factory.site_engine.audit import ledger_store as store
 from factory.site_engine.audit import registry_bridge as rb
-import ledger_publisher as lp
+from .. import ledger_publisher as lp
 c.row_factory = sqlite3.Row
 цепь = store.проверить_цепь(c)
 шаг("цепь хешей сходится", цепь["ok"], f"{цепь['verified']} событий")
