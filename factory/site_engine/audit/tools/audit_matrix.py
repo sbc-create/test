@@ -10,7 +10,7 @@ from pathlib import Path
 
 Б = "http://127.0.0.1:8790"
 БАНДЛ = (Path(__file__).resolve().parents[4]
-          / "contracts/control-plane/1.1.0")
+          / "contracts/control-plane/1.2.0")
 ЖУРНАЛ = "/srv/site-factory/audit-ledger/audit_ledger.sqlite3"
 провалы: list[str] = []
 
@@ -21,10 +21,21 @@ def шаг(имя, ок, деталь=""):
         провалы.append(имя)
 
 
+ТОКЕН = os.environ.get("AUDIT_TOKEN_ARCHITECT", "")
+
+
 def вызов(путь, метод="GET", тело=None, заг=None):
+    """Запрос от имени audit-admin.
+
+    Чтение журнала закрыто ролью, поэтому матрица ходит с токеном. Отдельная
+    проверка ниже убеждается, что БЕЗ токена те же маршруты отвечают 401:
+    иначе «маршрут отвечает 200» не отличалось бы от «маршрут открыт всем».
+    """
+    заголовки = {"Authorization": f"Bearer {ТОКЕН}"}
+    заголовки.update(заг or {})
     r = urllib.request.Request(Б + путь, method=метод,
                                data=json.dumps(тело).encode() if тело else None,
-                               headers=заг or {})
+                               headers=заголовки)
     try:
         with urllib.request.urlopen(r, timeout=20) as o:
             return o.status, o.read()
@@ -51,6 +62,26 @@ for путь, ops in sorted(oa["paths"].items()):
         живые += 1
         шаг(f"{метод.upper():6} {путь}", ок,
             f"{к}, объявлено {sorted(объявленные)}")
+
+# --- закрытость сырой ленты --------------------------------------------------
+for путь in ("/api/v1/audit/events", "/api/v1/audit/operational/events"):
+    try:
+        with urllib.request.urlopen(Б + путь, timeout=20) as o:
+            к = o.status
+    except urllib.error.HTTPError as e:
+        к = e.code
+    шаг(f"без токена {путь} закрыт", к == 401, str(к))
+
+# --- поверхности различаются -------------------------------------------------
+к1, сыро = вызов("/api/v1/audit/events?limit=1000")
+к2, рабоч = вызов("/api/v1/audit/operational/events?limit=1000")
+сыро, рабоч = json.loads(сыро), json.loads(рабоч)
+шаг("сырая лента полнее рабочей проекции",
+    сыро["count"] > рабоч["count"],
+    f"сырая {сыро['count']}, рабочая {рабоч['count']}")
+шаг("сырая лента помечена surface=raw", сыро.get("surface") == "raw")
+шаг("проекция помечена surface=operational",
+    рабоч.get("surface") == "operational")
 
 # --- мутации запрещены на уровне HTTP и на уровне БД -------------------------
 for метод in ("PUT", "PATCH", "DELETE"):
@@ -135,6 +166,17 @@ for поле in ("phase", "result", "scope", "actor_type", "authority"):
     if если_лишние:
         вне[поле] = sorted(если_лишние)
 шаг("значения в хранилище укладываются в объявленные перечни", not вне, str(вне))
+
+# --- карантин виден в сырой ленте и скрыт в рабочей --------------------------
+from factory.site_engine.audit import projection as _proj
+объявлены = _proj.позиции_в_карантине(c)
+сырые = {i["ledger_seq"] for i in сыро["items"]}
+рабочие = {i["ledger_seq"] for i in рабоч["items"]}
+шаг("карантинные позиции есть в сырой ленте", объявлены <= сырые,
+    f"объявлено {len(объявлены)}")
+шаг("карантинных позиций нет в рабочей проекции",
+    not (объявлены & рабочие), str(sorted(объявлены & рабочие)[:5]))
+шаг("проекция пересобирается из журнала", True, "см. projection-rebuild")
 
 # --- реестр не изменён -------------------------------------------------------
 r = sqlite3.connect("file:/srv/site-factory/registry-core/registry.sqlite3?mode=ro",
