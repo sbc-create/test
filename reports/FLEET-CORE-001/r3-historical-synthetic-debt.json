@@ -1,0 +1,89 @@
+{
+ "generated_at": "2026-09-11T14:34:36.971911+00:00",
+ "count": 3,
+ "records": [
+  {
+   "site_id": "synthetic-http-b4e4f1",
+   "canonical_domain": "synthetic-http-b4e4f1.test",
+   "environment": "test",
+   "lifecycle_state": "DRAFT",
+   "created_at": "2026-09-11T11:47:52Z",
+   "updated_at": "2026-09-11T11:47:52Z",
+   "aggregate_version": 1,
+   "events": [
+    "site.registered.v1"
+   ],
+   "actors": [
+    "service:test"
+   ],
+   "correlation_ids": [
+    "777beba2-35e3-4d90-b2af-21189f403f55"
+   ],
+   "provenance_strength": "INDIRECT",
+   "provenance_evidence": "имя вида synthetic-*, environment=test, actor service:test или service:architect в аудите, полный жизненный цикл событий. Выделенных полей created_by и test_run_id в схеме НЕТ, поэтому прямого доказательства принадлежности прогону не существует",
+   "in_production_snapshot": false,
+   "proposed_disposition": "ARCHIVE_THEN_DELETE",
+   "disposition_blocked_by": "требуется отдельное разрешение владельца на hard delete"
+  },
+  {
+   "site_id": "synthetic-npo-1c85d0bd",
+   "canonical_domain": "synthetic-npo-1c85d0bd.test",
+   "environment": "test",
+   "lifecycle_state": "RETIRED",
+   "created_at": "2026-09-11T14:05:58Z",
+   "updated_at": "2026-09-11T14:05:58Z",
+   "aggregate_version": 3,
+   "events": [
+    "site.registered.v1",
+    "site.updated.v1",
+    "site.retired.v1"
+   ],
+   "actors": [
+    "service:architect"
+   ],
+   "correlation_ids": [
+    "14d1ce71-7bb7-4892-b0e2-c90b70ed1122",
+    "55457710-daec-4f3a-8e5e-dc48d1e840c9",
+    "9a99c3fe-ae73-48e6-9f47-73926732759c"
+   ],
+   "provenance_strength": "INDIRECT",
+   "provenance_evidence": "имя вида synthetic-*, environment=test, actor service:test или service:architect в аудите, полный жизненный цикл событий. Выделенных полей created_by и test_run_id в схеме НЕТ, поэтому прямого доказательства принадлежности прогону не существует",
+   "in_production_snapshot": false,
+   "proposed_disposition": "ARCHIVE_THEN_DELETE",
+   "disposition_blocked_by": "требуется отдельное разрешение владельца на hard delete"
+  },
+  {
+   "site_id": "synthetic-npo-30c9237d",
+   "canonical_domain": "synthetic-npo-30c9237d.test",
+   "environment": "test",
+   "lifecycle_state": "RETIRED",
+   "created_at": "2026-09-11T13:06:43Z",
+   "updated_at": "2026-09-11T13:06:43Z",
+   "aggregate_version": 3,
+   "events": [
+    "site.registered.v1",
+    "site.updated.v1",
+    "site.retired.v1"
+   ],
+   "actors": [
+    "service:architect"
+   ],
+   "correlation_ids": [
+    "6b0bb46d-31c5-471c-9ce6-21edb64dfc68",
+    "c56a85d2-ef1d-4962-bae7-74923e758c94",
+    "c85f713a-61f7-4e32-a348-b6f1965f7204"
+   ],
+   "provenance_strength": "INDIRECT",
+   "provenance_evidence": "имя вида synthetic-*, environment=test, actor service:test или service:architect в аудите, полный жизненный цикл событий. Выделенных полей created_by и test_run_id в схеме НЕТ, поэтому прямого доказательства принадлежности прогону не существует",
+   "in_production_snapshot": false,
+   "proposed_disposition": "ARCHIVE_THEN_DELETE",
+   "disposition_blocked_by": "требуется отдельное разрешение владельца на hard delete"
+  }
+ ],
+ "leak_stopped": true,
+ "leak_stopped_by": "N+1 переведён на изолированную временную базу (R3)",
+ "why_not_deleted": "Удаление исторических записей запрещено без отдельного разрешения владельца. Кроме того, их события уже лежат в неизменяемой ленте outbox: удалить запись, оставив событие о ней, значит создать ссылку в никуда",
+ "handoff_to": "FLEET-CORE-002-AUDIT-LEDGER",
+ "handoff_note": "Передаётся как известный технический долг. Ledger обязан учесть, что у этих записей происхождение доказано лишь косвенно, и что схема реестра не несёт полей created_by и test_run_id — их отсутствие и есть причина косвенности",
+ "recommended_schema_followup": "добавить в site поля created_by и test_run_id, чтобы происхождение будущих записей доказывалось прямо, а не выводилось"
+}

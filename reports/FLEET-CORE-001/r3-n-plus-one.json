@@ -1,0 +1,36 @@
+{
+ "verdict": "PASS",
+ "isolation_mode": "EPHEMERAL_DB",
+ "cycles": [
+  {
+   "cycle": 1,
+   "verdict": "PASS",
+   "failures": [],
+   "B_before": 13,
+   "B_after": 13,
+   "H_before": "41e5686d01a52e02cc3080ea9c05a7566a9afa5e5b23ddcc4e9bb9db0fc17606",
+   "H_after": "41e5686d01a52e02cc3080ea9c05a7566a9afa5e5b23ddcc4e9bb9db0fc17606",
+   "set_restored": true,
+   "canonical_net_persistent_delta": 0,
+   "outbox_backlog": 0
+  },
+  {
+   "cycle": 2,
+   "verdict": "PASS",
+   "failures": [],
+   "B_before": 13,
+   "B_after": 13,
+   "H_before": "41e5686d01a52e02cc3080ea9c05a7566a9afa5e5b23ddcc4e9bb9db0fc17606",
+   "H_after": "41e5686d01a52e02cc3080ea9c05a7566a9afa5e5b23ddcc4e9bb9db0fc17606",
+   "set_restored": true,
+   "canonical_net_persistent_delta": 0,
+   "outbox_backlog": 0
+  }
+ ],
+ "counters": {
+  "EPHEMERAL_TEST_RECORD_MUTATIONS": 6,
+  "CANONICAL_TEST_RECORDS_CREATED": 0,
+  "CANONICAL_REGISTRY_RECORD_MUTATIONS": 0,
+  "PRODUCTION_RECORD_MUTATIONS": 0
+ }
+}

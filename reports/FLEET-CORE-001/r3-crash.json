@@ -1,0 +1,8 @@
+{
+ "verdict": "PASS",
+ "failures": [],
+ "B": 13,
+ "H": "41e5686d01a52e02cc3080ea9c05a7566a9afa5e5b23ddcc4e9bb9db0fc17606",
+ "orphan_dirs_cleaned": 1,
+ "canonical_delta": 0
+}

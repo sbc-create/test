@@ -1,7 +1,7 @@
 {
  "verdict": "PASS",
  "failures": [],
- "unfiltered_count": 12,
+ "unfiltered_count": 13,
  "production_active_count": 9,
  "snapshot_count": 9,
  "exact_set_match": true,
@@ -10,7 +10,7 @@
    "case": "A",
    "name": "без фильтров: 200 и полный реестр",
    "pass": true,
-   "detail": "items=12"
+   "detail": "items=13"
   },
   {
    "case": "A",
@@ -76,7 +76,7 @@
    "case": "D",
    "name": "ETag отражает отфильтрованную проекцию",
    "pass": true,
-   "detail": "W/\"cb55bc13b116f83a-29\""
+   "detail": "W/\"cb55bc13b116f83a-32\""
   },
   {
    "case": "D",
@@ -88,7 +88,7 @@
    "case": "E",
    "name": "environment=test: production не протекает",
    "pass": true,
-   "detail": "items=2"
+   "detail": "items=3"
   },
   {
    "case": "F",

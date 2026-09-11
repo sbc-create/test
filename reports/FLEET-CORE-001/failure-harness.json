@@ -10,7 +10,7 @@
   {
    "step": "Registry найден по PID",
    "pass": true,
-   "detail": "1312616"
+   "detail": "1410022"
   },
   {
    "step": "Registry действительно недоступен",
@@ -58,7 +58,7 @@
    "detail": "1"
   }
  ],
- "duration_seconds": 98.5,
+ "duration_seconds": 144.6,
  "public_before": {
   "lordfilm47.space": 200,
   "lordserial33.biz": 200,
@@ -80,5 +80,16 @@
   "zonafilm.space": 200,
   "animedia.icu": 200,
   "animedia.space": 200
+ },
+ "probe_attempts_per_domain": {
+  "lordfilm47.space": 1,
+  "lordserial33.biz": 1,
+  "1lordserials1.online": 1,
+  "yummyani.site": 3,
+  "yummyani.org": 1,
+  "yummyani.biz": 1,
+  "zonafilm.space": 1,
+  "animedia.icu": 1,
+  "animedia.space": 1
  }
 }

@@ -35,16 +35,35 @@ def шаг(имя, условие, деталь=""):
         провалы.append(имя)
 
 
+#: Сколько раз опрашивается публичный домен, прежде чем считать его лежащим.
+#: Один запрос к девяти внешним адресам изредка не укладывается в таймаут, и
+#: harness падал на шуме сети. Проверка, падающая случайно, обесценивает себя
+#: не меньше, чем проверка, проходящая всегда: обе перестают читаться.
+#: Повторы ограничены тремя — настоящий отказ переживёт все три.
+ПОПЫТОК_ДОМЕНА = 3
+ПОПЫТКИ: dict[str, int] = {}
+
+
 def публичный(домен: str) -> int:
-    try:
-        зпр = urllib.request.Request(f"https://{домен}/",
-                                     headers={"User-Agent": "fleet-harness/1.0"})
-        with urllib.request.urlopen(зпр, timeout=20, context=ctx) as о:
-            return о.status
-    except urllib.error.HTTPError as e:
-        return e.code
-    except Exception:
-        return 0
+    задержка = 1.0
+    код = 0
+    for попытка in range(1, ПОПЫТОК_ДОМЕНА + 1):
+        try:
+            зпр = urllib.request.Request(
+                f"https://{домен}/", headers={"User-Agent": "fleet-harness/1.0"})
+            with urllib.request.urlopen(зпр, timeout=25, context=ctx) as о:
+                ПОПЫТКИ[домен] = max(ПОПЫТКИ.get(домен, 0), попытка)
+                return о.status
+        except urllib.error.HTTPError as e:
+            ПОПЫТКИ[домен] = max(ПОПЫТКИ.get(домен, 0), попытка)
+            return e.code          # ответ сервера — не повод повторять
+        except Exception:
+            код = 0
+        if попытка < ПОПЫТОК_ДОМЕНА:
+            time.sleep(задержка)
+            задержка *= 2
+    ПОПЫТКИ[домен] = ПОПЫТОК_ДОМЕНА
+    return код
 
 
 def сборки() -> dict:
@@ -172,7 +191,8 @@ def main() -> int:
                 "failures": провалы, "steps": журнал,
                 "duration_seconds": round(time.time() - t0, 1),
                 "public_before": до_коды if "до_коды" in dir() else {},
-                "public_after": после_коды}
+                "public_after": после_коды,
+                "probe_attempts_per_domain": ПОПЫТКИ}
         ОТЧЁТ.parent.mkdir(parents=True, exist_ok=True)
         ОТЧЁТ.write_text(json.dumps(итог, ensure_ascii=False, indent=1),
                          encoding="utf-8")

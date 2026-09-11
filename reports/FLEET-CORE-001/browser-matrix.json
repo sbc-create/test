@@ -18,7 +18,7 @@
    "viewport": "desktop",
    "http": 200,
    "links": 51,
-   "text_len": 1413,
+   "text_len": 1438,
    "js_errors": 0,
    "pass": true
   },
@@ -28,7 +28,7 @@
    "viewport": "desktop",
    "http": 200,
    "links": 142,
-   "text_len": 6399,
+   "text_len": 6286,
    "js_errors": 0,
    "pass": true
   },
@@ -58,7 +58,7 @@
    "viewport": "mobile",
    "http": 200,
    "links": 51,
-   "text_len": 1413,
+   "text_len": 1438,
    "js_errors": 0,
    "pass": true
   },
@@ -68,7 +68,7 @@
    "viewport": "mobile",
    "http": 200,
    "links": 142,
-   "text_len": 6296,
+   "text_len": 6270,
    "js_errors": 0,
    "pass": true
   },
@@ -98,7 +98,7 @@
    "viewport": "desktop",
    "http": 200,
    "links": 51,
-   "text_len": 1413,
+   "text_len": 1438,
    "js_errors": 0,
    "pass": true
   },
@@ -108,7 +108,7 @@
    "viewport": "desktop",
    "http": 200,
    "links": 142,
-   "text_len": 6312,
+   "text_len": 6286,
    "js_errors": 0,
    "pass": true
   },
@@ -138,7 +138,7 @@
    "viewport": "mobile",
    "http": 200,
    "links": 51,
-   "text_len": 1413,
+   "text_len": 1438,
    "js_errors": 0,
    "pass": true
   },
@@ -148,7 +148,7 @@
    "viewport": "mobile",
    "http": 200,
    "links": 142,
-   "text_len": 6296,
+   "text_len": 6270,
    "js_errors": 0,
    "pass": true
   },
