@@ -1,0 +1,119 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/Capability.v1.json",
+ "title": "Возможность контура",
+ "description": "Что сервис действительно умеет сейчас. AVAILABLE ставится только после живой проверки; PLANNED не имеет права нести адрес, иначе потребитель начнёт в него ходить.",
+ "x-owner": "architect",
+ "x-schema-version": "1.0.0",
+ "x-lifecycle": "ACTIVE",
+ "x-created-at": "2026-09-11T12:56:26Z",
+ "x-updated-at": "2026-09-11T12:56:26Z",
+ "x-compatibility": "BACKWARD_COMPATIBLE_ADDITIVE",
+ "type": "object",
+ "properties": {
+  "capability_id": {
+   "type": "string"
+  },
+  "owner_service": {
+   "type": "string"
+  },
+  "version": {
+   "type": "string"
+  },
+  "status": {
+   "enum": [
+    "AVAILABLE",
+    "DEGRADED",
+    "BLOCKED",
+    "PLANNED",
+    "RETIRED"
+   ]
+  },
+  "read_endpoint": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "command_endpoint": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "event_types": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "required_scopes": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "dependencies": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "last_verified_at": {
+   "type": [
+    "string",
+    "null"
+   ],
+   "format": "date-time"
+  },
+  "evidence_ref": {
+   "type": [
+    "string",
+    "null"
+   ]
+  }
+ },
+ "required": [
+  "capability_id",
+  "owner_service",
+  "version",
+  "status"
+ ],
+ "additionalProperties": true,
+ "allOf": [
+  {
+   "if": {
+    "properties": {
+     "status": {
+      "const": "PLANNED"
+     }
+    }
+   },
+   "then": {
+    "properties": {
+     "read_endpoint": {
+      "const": null
+     },
+     "command_endpoint": {
+      "const": null
+     }
+    }
+   }
+  },
+  {
+   "if": {
+    "properties": {
+     "status": {
+      "const": "AVAILABLE"
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "last_verified_at",
+     "evidence_ref"
+    ]
+   }
+  }
+ ]
+}

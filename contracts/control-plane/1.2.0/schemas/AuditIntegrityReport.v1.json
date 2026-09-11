@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.site-factory.internal/1.2.0/schemas/AuditIntegrityReport.v1.json",
+  "title": "AuditIntegrityReport.v1",
+  "type": "object",
+  "required": [
+    "ok",
+    "checked_events",
+    "tamper_evidence_level"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "ok": {
+      "type": "boolean"
+    },
+    "checked_events": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "broken_at_seq": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Первая позиция, где цепь не сходится."
+    },
+    "reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "tamper_evidence_level": {
+      "const": "LOCAL_HASH_CHAIN"
+    },
+    "checked_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

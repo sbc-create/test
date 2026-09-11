@@ -82,7 +82,27 @@ class SiteEngineApi:
         if rest == ["health"]:
             return self._health()
         if rest == ["sites"]:
-            return self._sites()
+            return self._sites(params)
+        if rest == ["contracts", "manifest"]:
+            return self._contract_file("manifest.json")
+        if rest == ["contracts", "openapi"]:
+            return self._contract_file("openapi.json")
+        if rest == ["contracts", "asyncapi"]:
+            return self._contract_file("asyncapi.json")
+        if rest[:2] == ["contracts", "schemas"] and len(rest) == 3:
+            return self._contract_schema(rest[2])
+        if rest == ["capabilities"]:
+            return self._capabilities()
+        if rest[:1] == ["capabilities"] and len(rest) == 2:
+            return self._capability(rest[1])
+        if rest == ["control-plane", "version"]:
+            return self._control_plane_version()
+        if rest == ["registry", "version"]:
+            return self._registry_version()
+        if rest == ["registry", "snapshot"]:
+            return self._registry_snapshot()
+        if rest == ["events"]:
+            return self._registry_events(params)
         if rest == ["ingestion", "status"]:
             return self._ingestion_status()
         if rest and rest[0] == "sites" and len(rest) >= 2:
@@ -124,7 +144,109 @@ class SiteEngineApi:
             },
         )
 
-    def _sites(self) -> ApiResponse:
+    # --- канонический реестр (FLEET-ARC-001) --------------------------------
+    #
+    # Авторитетом о сайтах становится хранилище реестра, а не каталог
+    # профилей: над файлами нельзя изменить запись и записать событие одной
+    # транзакцией, а без этого нет ни outbox, ни версии, по которой
+    # потребитель отличит «я отстал» от «ничего не менялось».
+    #
+    # Профили остаются на диске и остаются источником первичного наполнения,
+    # поэтому переход обратим. Если хранилища нет или оно недоступно, ответ
+    # собирается по-прежнему из профилей: реестр не должен становиться
+    # единственной точкой отказа для чтения.
+    _РЕЕСТР_БД = "/srv/site-factory/registry-core/registry.sqlite3"
+
+    def _реестр(self):
+        import os
+        import sqlite3
+        # Путь читается на каждом вызове, а не фиксируется при импорте.
+        #
+        # Это единственное, что нужно для изоляции теста: тот же самый
+        # обработчик, те же схемы и тот же предикат работают поверх
+        # временной базы. Тестовая имитация обработчика проверяла бы саму
+        # себя, а не production-код.
+        #
+        # Работающая служба переменной не задаёт и потому не затронута:
+        # умолчание — прежний канонический путь.
+        путь = os.environ.get("REGISTRY_DB") or self._РЕЕСТР_БД
+        if not os.path.exists(путь):
+            return None
+        try:
+            с = sqlite3.connect("file:%s?mode=ro" % путь, uri=True,
+                                timeout=5)
+            с.row_factory = sqlite3.Row
+            return с
+        except Exception:  # noqa: BLE001
+            return None
+
+    def _реестр_запись(self, с, d):
+        import json as _json
+        тип = {"lords": "video-showcase", "zona": "video-showcase",
+               "animedia": "anime-portal", "yummy": "anime-portal"}
+        псевдонимы = [a["alias"] for a in с.execute(
+            "SELECT alias FROM site_alias WHERE site_id=? ORDER BY alias",
+            (d["site_id"],))]
+        d["integration_refs"] = _json.loads(d.get("integration_refs") or "{}")
+        d["aliases"] = псевдонимы
+        # Прежние четыре ключа сохраняются с прежним смыслом, новые поля
+        # приходят дополнительно: аддитивное расширение старого потребителя
+        # не ломает, переименование сломало бы.
+        d["site_type"] = тип.get(d.get("family"), "unknown")
+        d["domains"] = [d["canonical_domain"]] + псевдонимы
+        d["render_mode"] = "static"
+        return d
+
+    def _sites(self, params=None) -> ApiResponse:
+        # Фильтры применяются на стороне сервера и ДО любой нарезки страниц.
+        # Отдать полный реестр в ответ на запрос с фильтром — значит ответить
+        # на другой вопрос: клиент просил production, получил бы двенадцать
+        # записей вместе с демо и синтетикой и посчитал бы их девятью.
+        from factory.site_engine.api import site_filter as _sf
+        # Для обнаружения повторов и пустых значений нужны исходные списки.
+        сырые = getattr(params, "multi", None) or params
+        try:
+            фильтры = _sf.validate_filters(сырые)
+        except _sf.FilterValidationError as ош:
+            # Молчаливое игнорирование недопустимого значения прячет ошибку
+            # вызывающего до момента, когда она станет дорогой.
+            return ApiResponse(422, {
+                "type": "https://contracts.site-factory.internal/problems/"
+                        "filter-validation",
+                "title": "Недопустимое значение фильтра",
+                "status": 422, "detail": ош.detail,
+                "instance": "/api/v1/sites",
+                "error_code": ош.error_code, "retryable": False,
+                "owner": "architect", "parameter": ош.parameter,
+                "safe_public_detail": "параметр запроса недопустим"})
+        с = self._реестр()
+        if с is not None:
+            try:
+                условие, значения = _sf.where_clause(фильтры)
+                sql = ("SELECT * FROM site"
+                       + (" WHERE " + условие if условие else "")
+                       + " ORDER BY site_id")
+                строки = [self._реестр_запись(с, dict(р)) for р in
+                          с.execute(sql, значения)]
+                версия = с.execute(
+                    "SELECT version FROM registry_version WHERE id=1").fetchone()
+                # ETag считается по фактически отфильтрованной проекции:
+                # одинаковый ETag на разные выборки сделал бы кэш ядовитым.
+                import hashlib as _h
+                import json as _j
+                отпечаток = _h.sha256(_j.dumps(
+                    [з["site_id"] for з in строки], sort_keys=True).encode()
+                ).hexdigest()
+                return ApiResponse(200, {"items": строки, "total": len(строки),
+                                         "registry_version": версия["version"],
+                                         "filters_applied": фильтры,
+                                         "etag": 'W/"%s-%d"' % (
+                                             отпечаток[:16], версия["version"]),
+                                         "source": "registry"})
+            except Exception:  # noqa: BLE001
+                pass
+            finally:
+                с.close()
         return ApiResponse(
             200,
             {
@@ -138,8 +260,138 @@ class SiteEngineApi:
                     for b in sorted(self._bindings.values(), key=lambda x: x.profile.site_id)
                 ],
                 "total": len(self._bindings),
+                "source": "profiles",
             },
         )
+
+    # --- contract discovery (FLEET-CORE-001) --------------------------------
+    #
+    # Контракты отдаются только на чтение и только из канонического bundle.
+    # Второго источника контрактов не заводится: разошедшиеся описания одного
+    # и того же API хуже отсутствующих, потому что каждое выглядит истинным.
+    _BUNDLE = "/srv/site-factory/control-plane-contracts/1.0.1"
+
+    def _bundle_path(self, отн: str):
+        import os
+        корень = os.path.realpath(self._BUNDLE)
+        полный = os.path.realpath(os.path.join(корень, отн))
+        # Выход за пределы bundle запрещён: имя схемы приходит из запроса, и
+        # без этой проверки «../» отдал бы произвольный файл службы.
+        if not полный.startswith(корень + os.sep) and полный != корень:
+            return None
+        return полный if os.path.isfile(полный) else None
+
+    def _contract_file(self, имя: str) -> ApiResponse:
+        import json as _json
+        путь = self._bundle_path(имя)
+        if путь is None:
+            return error(404, "SCHEMA_UNKNOWN", "артефакта контракта нет")
+        try:
+            return ApiResponse(200, _json.loads(open(путь, encoding="utf-8").read()))
+        except Exception:  # noqa: BLE001
+            return error(503, "REGISTRY_UNAVAILABLE", "артефакт нечитаем")
+
+    def _contract_schema(self, schema_id: str) -> ApiResponse:
+        имя = schema_id if schema_id.endswith(".json") else schema_id + ".json"
+        return self._contract_file("schemas/" + имя)
+
+    def _capabilities(self) -> ApiResponse:
+        return self._contract_file("capability-catalog.json")
+
+    def _capability(self, capability_id: str) -> ApiResponse:
+        import json as _json
+        путь = self._bundle_path("capability-catalog.json")
+        if путь is None:
+            return error(404, "CAPABILITY_UNKNOWN", "каталога возможностей нет")
+        каталог = _json.loads(open(путь, encoding="utf-8").read())
+        for c in каталог.get("capabilities", []):
+            if c.get("capability_id") == capability_id:
+                return ApiResponse(200, c)
+        return error(404, "CAPABILITY_UNKNOWN", "возможности с таким идентификатором нет")
+
+    def _control_plane_version(self) -> ApiResponse:
+        import json as _json
+        путь = self._bundle_path("manifest.json")
+        манифест = _json.loads(open(путь, encoding="utf-8").read()) if путь else {}
+        ответ = {"control_plane_version": манифест.get("version"),
+                 "bundle": манифест.get("bundle"),
+                 "supported_majors": (манифест.get("compatibility_policy") or {}
+                                      ).get("supported_majors", ["v1"]),
+                 "registry_version": None}
+        с = self._реестр()
+        if с is not None:
+            try:
+                ответ["registry_version"] = с.execute(
+                    "SELECT version FROM registry_version WHERE id=1"
+                ).fetchone()["version"]
+            finally:
+                с.close()
+        return ApiResponse(200, ответ)
+
+    def _registry_version(self) -> ApiResponse:
+        с = self._реестр()
+        if с is None:
+            return error(503, "registry_unavailable", "хранилище реестра недоступно")
+        try:
+            в = с.execute("SELECT version FROM registry_version WHERE id=1").fetchone()
+            return ApiResponse(200, {"registry_version": в["version"],
+                                     "schema_version": "fleet-registry/1.0.0"})
+        finally:
+            с.close()
+
+    def _registry_snapshot(self) -> ApiResponse:
+        import hashlib as _h
+        import json as _json
+        с = self._реестр()
+        if с is None:
+            return error(503, "registry_unavailable", "хранилище реестра недоступно")
+        try:
+            # Тот же предикат, что и у фильтра: две независимые реализации
+            # одного правила разойдутся молча, и каждая будет выглядеть верной.
+            from factory.site_engine.api import site_filter as _sf
+            _усл, _знач = _sf.production_active_where()
+            сайты = [self._реестр_запись(с, dict(р)) for р in с.execute(
+                "SELECT * FROM site WHERE " + _усл + " ORDER BY site_id", _знач)]
+            в = с.execute("SELECT version FROM registry_version WHERE id=1").fetchone()
+            сырое = _json.dumps(сайты, ensure_ascii=False, sort_keys=True,
+                                separators=(",", ":")).encode()
+            отпечаток = _h.sha256(сырое).hexdigest()
+            return ApiResponse(200, {
+                "schema_version": "fleet-registry/1.0.0",
+                "registry_version": в["version"], "count": len(сайты),
+                "checksum": отпечаток,
+                "etag": 'W/"%s-%d"' % (отпечаток[:16], в["version"]),
+                "sites": сайты})
+        finally:
+            с.close()
+
+    def _registry_events(self, params) -> ApiResponse:
+        import json as _json
+        с = self._реестр()
+        if с is None:
+            return error(503, "registry_unavailable", "хранилище реестра недоступно")
+        try:
+            def _ц(имя, умолч):
+                v = (params or {}).get(имя, умолч)
+                if isinstance(v, list):
+                    v = v[0] if v else умолч
+                try:
+                    return int(v)
+                except (TypeError, ValueError):
+                    return умолч
+            after, limit = _ц("after", 0), _ц("limit", 100)
+            строки = []
+            for р in с.execute(
+                    "SELECT * FROM outbox WHERE seq > ? ORDER BY seq LIMIT ?",
+                    (after, min(limit, 1000))):
+                d = dict(р)
+                d["payload"] = _json.loads(d["payload"])
+                строки.append(d)
+            return ApiResponse(200, {
+                "schema_version": "fleet-registry/1.0.0", "items": строки,
+                "next_cursor": строки[-1]["seq"] if строки else after})
+        finally:
+            с.close()
 
     def _site(self, binding: SiteBinding) -> ApiResponse:
         p = binding.profile

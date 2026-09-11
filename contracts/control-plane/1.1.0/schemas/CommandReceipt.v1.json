@@ -1,0 +1,54 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/CommandReceipt.v1.json",
+ "title": "Расписка о приёме команды",
+ "description": "ACCEPTED означает «принято к исполнению», и только это. Трактовать расписку как успех — самая дорогая из возможных ошибок: операция ещё не выполнена, а вызывающий уже считает её завершённой.",
+ "x-owner": "architect",
+ "x-schema-version": "1.0.0",
+ "x-lifecycle": "ACTIVE",
+ "x-created-at": "2026-09-11T12:56:26Z",
+ "x-updated-at": "2026-09-11T12:56:26Z",
+ "x-compatibility": "BACKWARD_COMPATIBLE_ADDITIVE",
+ "type": "object",
+ "properties": {
+  "operation_id": {
+   "type": "string"
+  },
+  "command_id": {
+   "type": "string"
+  },
+  "status": {
+   "enum": [
+    "ACCEPTED",
+    "REJECTED",
+    "BLOCKED"
+   ]
+  },
+  "accepted_at": {
+   "type": "string",
+   "format": "date-time"
+  },
+  "owner_service": {
+   "type": "string"
+  },
+  "status_url": {
+   "type": "string"
+  },
+  "problem": {
+   "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/Problem.v1.json"
+  },
+  "evidence_refs": {
+   "type": "array",
+   "items": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EvidenceRef.json"
+   }
+  }
+ },
+ "required": [
+  "operation_id",
+  "command_id",
+  "status",
+  "owner_service"
+ ],
+ "additionalProperties": true
+}

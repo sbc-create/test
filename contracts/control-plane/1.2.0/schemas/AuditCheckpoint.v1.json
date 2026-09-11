@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.site-factory.internal/1.2.0/schemas/AuditCheckpoint.v1.json",
+  "title": "AuditCheckpoint.v1",
+  "description": "Подписанная хешем отметка состояния цепи. Уровень защиты LOCAL_HASH_CHAIN: обнаруживает изменение задним числом, но не защищает от того, кто перепишет всю цепь целиком.",
+  "type": "object",
+  "required": [
+    "checkpoint_id",
+    "ledger_seq",
+    "chain_root",
+    "event_count",
+    "created_at",
+    "tamper_evidence_level"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "checkpoint_id": {
+      "type": "string"
+    },
+    "ledger_seq": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "chain_root": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "event_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tamper_evidence_level": {
+      "const": "LOCAL_HASH_CHAIN"
+    }
+  }
+}

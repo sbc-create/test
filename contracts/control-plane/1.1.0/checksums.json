@@ -1,0 +1,32 @@
+{
+  "version": "1.1.0",
+  "algorithm": "sha256",
+  "files": {
+    "CHANGELOG.md": "d38585254a1db320c3b464e6b85337e7ab8c7c1eada419b801d0a6fcd1cc6e42",
+    "COMPATIBILITY.md": "1ed4dc967e55eee245ea13085eb161ea212e84bb168c8b79e1a89e86e3bd51c1",
+    "MIGRATION.md": "d6961cddc45eaf599b8f7befbb6233839451c51c3fc6d2baaf21a0fa5ffe7775",
+    "asyncapi.json": "d8319e44ec23adcbb036dbd824fd3fc3c20e66167d7375c282eef6a39d40044d",
+    "capability-catalog.json": "c642f305039c60808ff9b667fa2b94ae52f619b7ebdeb79bd64435a55a7469e4",
+    "error-catalog.json": "877165d122541dcd13abcd31bb279eff72aa18f70290cee1b80b08ed22190b4f",
+    "manifest.json": "d09b6918aad7f20bc6a541798473887f0eae7e3941d97b4da9f7cc0ba0605142",
+    "observability.json": "8cf549297368f9b60f9ac3f9de10f1408cd55cc57fce554fdb7b970bb5ddb235",
+    "openapi.json": "6b1b202436933880753133e7d99ef553d0c70fc66163e4de32a1ebe68e424d8a",
+    "ownership-matrix.json": "d3b92a54d74b10172ebc8f96aa4359829b997a9477c49a7c9a6a4b98ffe1c5d5",
+    "schemas/ActorRef.json": "d24dc2a97260f1f7c5422f67d049ba69f6ed786e4256811addcdc9881f84b821",
+    "schemas/AuditCheckpoint.v1.json": "d5b5dcc50d60120470451d7ec9a6305b4c1c98ed289bfa3f35c2092b5d7f097a",
+    "schemas/AuditEvent.v1.json": "e86f12c83f97c2c91db54f8c75baa570f8d116be88e0a4d99c89de128e30e40d",
+    "schemas/AuditIntegrityReport.v1.json": "27a3c830a1bc5a16dca0f479e820b99fcff4441fb4425a862dbd67884a55ea21",
+    "schemas/Capability.v1.json": "d749ee98bbaf34c34bb66e49494c598d97d11fca14b62e9fbbff3bebf6a960c9",
+    "schemas/CommandEnvelope.v1.json": "7d674d642eddeee8d764f5c351b65afffe89f4db4ea016660a4efb3fea2217bd",
+    "schemas/CommandReceipt.v1.json": "57a977e8de7e9fa1de057db6ce21beb2c2fdb2245c0d5a1d7f17c0a12b369647",
+    "schemas/CorrelationContext.json": "dfdd3985e53ce99c71b6d90d32711d7563fca286863c821015bc15f4ff773629",
+    "schemas/DesiredObservedState.json": "29e3a81ccaec42d96c8198e1368b432bd28b38943d597ad7a951fbae810c5f1c",
+    "schemas/EventEnvelope.v1.json": "14cfea0eb5146e214b6223ee122e8c5c3e2cabc4fdcb189d3b777022c4a38efa",
+    "schemas/EvidenceRef.json": "c2eafc05c9fa2f378018cfd07685fe78d601e0467c83f347ea8a839d12723a2a",
+    "schemas/ObservedValue.json": "b8a8dd77de37c95e7f0cc8ae770c3afe2a713a04fb512e0358b06301e4618d12",
+    "schemas/Page.v1.json": "aa7a03e552bf22778f1875d8f8832c67e865cd445c5e667a6060ea78be074969",
+    "schemas/Problem.v1.json": "dab589a181a95e2cc969f84ab79e46553f3c5cebf26374fa74bdd91cac33346b",
+    "schemas/SiteRef.json": "09de8378ce549c0c477ca76f83e69e46fdf500bb775845cbac5ea3a91a520c5a",
+    "schemas/VersionRef.json": "a5adb79e86c09b887414b2841f954e3b2013f6d9f245b4ac1a666fb1f098c776"
+  }
+}

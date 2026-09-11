@@ -1,0 +1,845 @@
+{
+  "asyncapi": "2.6.0",
+  "info": {
+    "title": "Fleet Control Plane Events",
+    "version": "1.1.0",
+    "description": "Доставка at-least-once. Потребитель обязан быть идемпотентным по event_id и держать durable cursor: повтор события — норма, а не сбой."
+  },
+  "defaultContentType": "application/json",
+  "channels": {
+    "fleet/site.registered.v1": {
+      "subscribe": {
+        "operationId": "site_registered_v1",
+        "x-owner": "architect",
+        "x-consumers": [
+          "templates",
+          "seo",
+          "content",
+          "monitoring",
+          "backup",
+          "qwen"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "AVAILABLE",
+        "x-dedup-key": "event_id",
+        "x-retryable": false,
+        "x-evidence-required": true,
+        "message": {
+          "name": "site.registered.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/site.updated.v1": {
+      "subscribe": {
+        "operationId": "site_updated_v1",
+        "x-owner": "architect",
+        "x-consumers": [
+          "templates",
+          "seo",
+          "content",
+          "monitoring",
+          "backup",
+          "qwen"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "AVAILABLE",
+        "x-dedup-key": "event_id",
+        "x-retryable": false,
+        "x-evidence-required": true,
+        "message": {
+          "name": "site.updated.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/site.activated.v1": {
+      "subscribe": {
+        "operationId": "site_activated_v1",
+        "x-owner": "architect",
+        "x-consumers": [
+          "templates",
+          "seo",
+          "content",
+          "monitoring",
+          "backup",
+          "qwen"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "AVAILABLE",
+        "x-dedup-key": "event_id",
+        "x-retryable": false,
+        "x-evidence-required": true,
+        "message": {
+          "name": "site.activated.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/site.retired.v1": {
+      "subscribe": {
+        "operationId": "site_retired_v1",
+        "x-owner": "architect",
+        "x-consumers": [
+          "templates",
+          "seo",
+          "content",
+          "monitoring",
+          "backup",
+          "qwen"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "AVAILABLE",
+        "x-dedup-key": "event_id",
+        "x-retryable": false,
+        "x-evidence-required": true,
+        "message": {
+          "name": "site.retired.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/template.release.published.v1": {
+      "subscribe": {
+        "operationId": "template_release_published_v1",
+        "x-owner": "templates",
+        "x-consumers": [
+          "architect",
+          "content",
+          "seo"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "template.release.published.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/template.deployment.observed.v1": {
+      "subscribe": {
+        "operationId": "template_deployment_observed_v1",
+        "x-owner": "templates",
+        "x-consumers": [
+          "architect",
+          "monitoring"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "template.deployment.observed.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/content.refresh.completed.v1": {
+      "subscribe": {
+        "operationId": "content_refresh_completed_v1",
+        "x-owner": "content",
+        "x-consumers": [
+          "architect",
+          "seo",
+          "monitoring"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "content.refresh.completed.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/content.refresh.failed.v1": {
+      "subscribe": {
+        "operationId": "content_refresh_failed_v1",
+        "x-owner": "content",
+        "x-consumers": [
+          "architect",
+          "monitoring"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "content.refresh.failed.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/content.freshness.breached.v1": {
+      "subscribe": {
+        "operationId": "content_freshness_breached_v1",
+        "x-owner": "content",
+        "x-consumers": [
+          "monitoring",
+          "seo"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "content.freshness.breached.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/seo.audit.completed.v1": {
+      "subscribe": {
+        "operationId": "seo_audit_completed_v1",
+        "x-owner": "seo",
+        "x-consumers": [
+          "architect",
+          "content"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "seo.audit.completed.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/seo.changeset.proposed.v1": {
+      "subscribe": {
+        "operationId": "seo_changeset_proposed_v1",
+        "x-owner": "seo",
+        "x-consumers": [
+          "architect"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "seo.changeset.proposed.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/seo.publish.completed.v1": {
+      "subscribe": {
+        "operationId": "seo_publish_completed_v1",
+        "x-owner": "seo",
+        "x-consumers": [
+          "architect",
+          "monitoring"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "seo.publish.completed.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/integration.provision.requested.v1": {
+      "subscribe": {
+        "operationId": "integration_provision_requested_v1",
+        "x-owner": "architect",
+        "x-consumers": [
+          "seo",
+          "monitoring"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "integration.provision.requested.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/integration.provision.completed.v1": {
+      "subscribe": {
+        "operationId": "integration_provision_completed_v1",
+        "x-owner": "architect",
+        "x-consumers": [
+          "seo",
+          "monitoring"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "integration.provision.completed.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/integration.provision.failed.v1": {
+      "subscribe": {
+        "operationId": "integration_provision_failed_v1",
+        "x-owner": "architect",
+        "x-consumers": [
+          "seo",
+          "monitoring"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "integration.provision.failed.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/monitor.alert.opened.v1": {
+      "subscribe": {
+        "operationId": "monitor_alert_opened_v1",
+        "x-owner": "monitoring",
+        "x-consumers": [
+          "architect",
+          "qwen"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "monitor.alert.opened.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/monitor.alert.resolved.v1": {
+      "subscribe": {
+        "operationId": "monitor_alert_resolved_v1",
+        "x-owner": "monitoring",
+        "x-consumers": [
+          "architect",
+          "qwen"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "monitor.alert.resolved.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/backup.completed.v1": {
+      "subscribe": {
+        "operationId": "backup_completed_v1",
+        "x-owner": "backup",
+        "x-consumers": [
+          "architect",
+          "monitoring"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "backup.completed.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/backup.failed.v1": {
+      "subscribe": {
+        "operationId": "backup_failed_v1",
+        "x-owner": "backup",
+        "x-consumers": [
+          "architect",
+          "monitoring"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "backup.failed.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/backup.restore.verified.v1": {
+      "subscribe": {
+        "operationId": "backup_restore_verified_v1",
+        "x-owner": "backup",
+        "x-consumers": [
+          "architect"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "backup.restore.verified.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/workflow.started.v1": {
+      "subscribe": {
+        "operationId": "workflow_started_v1",
+        "x-owner": "architect",
+        "x-consumers": [
+          "monitoring",
+          "qwen"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "workflow.started.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/workflow.completed.v1": {
+      "subscribe": {
+        "operationId": "workflow_completed_v1",
+        "x-owner": "architect",
+        "x-consumers": [
+          "monitoring",
+          "qwen"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "workflow.completed.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/workflow.blocked.v1": {
+      "subscribe": {
+        "operationId": "workflow_blocked_v1",
+        "x-owner": "architect",
+        "x-consumers": [
+          "monitoring",
+          "qwen"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "workflow.blocked.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/changeset.approved.v1": {
+      "subscribe": {
+        "operationId": "changeset_approved_v1",
+        "x-owner": "architect",
+        "x-consumers": [
+          "templates",
+          "seo",
+          "content"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "changeset.approved.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/changeset.applied.v1": {
+      "subscribe": {
+        "operationId": "changeset_applied_v1",
+        "x-owner": "architect",
+        "x-consumers": [
+          "templates",
+          "seo",
+          "content"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "changeset.applied.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/changeset.failed.v1": {
+      "subscribe": {
+        "operationId": "changeset_failed_v1",
+        "x-owner": "architect",
+        "x-consumers": [
+          "templates",
+          "seo",
+          "content"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "changeset.failed.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/changeset.rolled_back.v1": {
+      "subscribe": {
+        "operationId": "changeset_rolled_back_v1",
+        "x-owner": "architect",
+        "x-consumers": [
+          "templates",
+          "seo",
+          "content"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "changeset.rolled_back.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/action.recorded.v1": {
+      "subscribe": {
+        "operationId": "action_recorded_v1",
+        "x-owner": "architect",
+        "x-consumers": [
+          "monitoring"
+        ],
+        "x-aggregate-key": "site_id",
+        "x-order-key": "site_id",
+        "x-status": "PLANNED",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "message": {
+          "name": "action.recorded.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/audit.event.appended.v1": {
+      "subscribe": {
+        "operationId": "audit_event_appended_v1",
+        "description": "Журнал добавил событие. Порождается самим журналом и НИКОГДА не поглощается им обратно: иначе каждая запись порождала бы запись о записи и журнал рос бы от самого себя.",
+        "x-owner": "architect",
+        "x-consumers": [
+          "architect",
+          "monitoring",
+          "backup",
+          "qwen"
+        ],
+        "x-aggregate-key": "correlation_id",
+        "x-order-key": "ledger_seq",
+        "x-status": "AVAILABLE",
+        "x-dedup-key": "event_id",
+        "x-retryable": false,
+        "x-evidence-required": false,
+        "x-self-event": true,
+        "message": {
+          "name": "audit.event.appended.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/1.1.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/audit.integrity.failed.v1": {
+      "subscribe": {
+        "operationId": "audit_integrity_failed_v1",
+        "description": "Цепь хешей не сошлась; указана первая расходящаяся позиция.",
+        "x-owner": "architect",
+        "x-consumers": [
+          "architect",
+          "monitoring",
+          "backup",
+          "qwen"
+        ],
+        "x-aggregate-key": "correlation_id",
+        "x-order-key": "ledger_seq",
+        "x-status": "AVAILABLE",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": true,
+        "x-self-event": false,
+        "message": {
+          "name": "audit.integrity.failed.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/1.1.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/audit.ingest.failed.v1": {
+      "subscribe": {
+        "operationId": "audit_ingest_failed_v1",
+        "description": "Событие производителя не принято и отправлено в DLQ с кодом причины.",
+        "x-owner": "architect",
+        "x-consumers": [
+          "architect",
+          "monitoring",
+          "backup",
+          "qwen"
+        ],
+        "x-aggregate-key": "correlation_id",
+        "x-order-key": "ledger_seq",
+        "x-status": "AVAILABLE",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "x-self-event": false,
+        "message": {
+          "name": "audit.ingest.failed.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/1.1.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/audit.action.stalled.v1": {
+      "subscribe": {
+        "operationId": "audit_action_stalled_v1",
+        "description": "Действие начато, но не завершилось ни успехом, ни откатом за отведённое время. Это наблюдение, а не вывод о причине.",
+        "x-owner": "architect",
+        "x-consumers": [
+          "architect",
+          "monitoring",
+          "backup",
+          "qwen"
+        ],
+        "x-aggregate-key": "correlation_id",
+        "x-order-key": "ledger_seq",
+        "x-status": "AVAILABLE",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "x-self-event": false,
+        "message": {
+          "name": "audit.action.stalled.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/1.1.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/audit.reconciliation.failed.v1": {
+      "subscribe": {
+        "operationId": "audit_reconciliation_failed_v1",
+        "description": "Сверка с производителем нашла пропуски или дубли.",
+        "x-owner": "architect",
+        "x-consumers": [
+          "architect",
+          "monitoring",
+          "backup",
+          "qwen"
+        ],
+        "x-aggregate-key": "correlation_id",
+        "x-order-key": "ledger_seq",
+        "x-status": "AVAILABLE",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": true,
+        "x-self-event": false,
+        "message": {
+          "name": "audit.reconciliation.failed.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/1.1.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    },
+    "fleet/audit.backup.stale.v1": {
+      "subscribe": {
+        "operationId": "audit_backup_stale_v1",
+        "description": "Последняя проверенная копия старше допустимого возраста.",
+        "x-owner": "architect",
+        "x-consumers": [
+          "architect",
+          "monitoring",
+          "backup",
+          "qwen"
+        ],
+        "x-aggregate-key": "correlation_id",
+        "x-order-key": "ledger_seq",
+        "x-status": "AVAILABLE",
+        "x-dedup-key": "event_id",
+        "x-retryable": true,
+        "x-evidence-required": false,
+        "x-self-event": false,
+        "message": {
+          "name": "audit.backup.stale.v1",
+          "contentType": "application/json",
+          "payload": {
+            "$ref": "https://contracts.site-factory.internal/1.1.0/schemas/EventEnvelope.v1.json"
+          }
+        }
+      }
+    }
+  },
+  "x-self-event-policy": {
+    "suppressed_types": [
+      "audit.event.appended.v1"
+    ],
+    "rule": "События, которые журнал порождает о собственной работе, публикуются в ленту, но не принимаются обратно на запись.",
+    "delivery": "at-least-once",
+    "consumption": "idempotent",
+    "note": "Ровно-однократная доставка не заявляется: она недостижима, и обещание её означало бы, что потребители не сделают приём идемпотентным."
+  }
+}

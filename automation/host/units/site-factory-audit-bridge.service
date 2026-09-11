@@ -1,0 +1,67 @@
+[Unit]
+Description=site-factory: мост Registry outbox -> Audit Ledger
+Documentation=file:///srv/site-factory/repo/docs/runbooks/audit-ledger.md
+# Мост читает outbox реестра и пишет в журнал. Обе базы локальные, но
+# управляющая служба обязана подняться первой: журнал создаёт схему при
+# первом открытии, и мост не должен опережать её на холодном старте.
+After=network-online.target site-factory-control-api.service
+Wants=network-online.target
+
+# Падающий на старте мост не должен крутиться в цикле: молчаливый перезапуск
+# скрывает отказ, который обязан быть замечен.
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=notify
+NotifyAccess=main
+
+User=claude
+Group=claude
+
+WorkingDirectory=/srv/site-factory/control-api/current
+Environment=PYTHONPATH=/srv/site-factory/control-api/current
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=PYTHONUNBUFFERED=1
+# Токены и пути к данным — из того же файла окружения, что у Control API.
+# В релиз и в Git они не входят.
+EnvironmentFile=-/etc/site-factory/control-api.env
+
+ExecStart=/srv/site-factory/control-api/current/.venv/bin/python -m factory.site_engine.audit.registry_bridge serve
+
+TimeoutStartSec=60
+
+Restart=on-failure
+RestartSec=5
+
+# Мягкая остановка: мост доводит текущий проход до конца. 40 секунд — с
+# запасом на самый долгий проход по невычитанному outbox.
+KillSignal=SIGTERM
+KillMode=mixed
+TimeoutStopSec=40
+
+MemoryMax=256M
+CPUQuota=25%
+TasksMax=32
+
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=full
+ProtectHome=read-only
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_UNIX
+RestrictNamespaces=yes
+RestrictRealtime=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+# Пишет только в каталог данных журнала; код релиза остаётся неизменяемым.
+ReadWritePaths=/srv/site-factory/audit-ledger
+
+# Дамп памяти содержал бы служебные токены.
+LimitCORE=0
+
+[Install]
+WantedBy=multi-user.target

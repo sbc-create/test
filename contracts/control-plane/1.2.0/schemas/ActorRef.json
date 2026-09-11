@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/ActorRef.json",
+  "title": "Инициатор действия",
+  "description": "Кто действует. MODEL выделен отдельно от SERVICE намеренно: модель предлагает, но не обладает правами сама по себе, и её полномочия всегда делегированы через delegated_by.",
+  "x-owner": "architect",
+  "x-schema-version": "1.0.0",
+  "x-lifecycle": "ACTIVE",
+  "x-created-at": "2026-09-11T12:56:26Z",
+  "x-updated-at": "2026-09-11T12:56:26Z",
+  "x-compatibility": "BACKWARD_COMPATIBLE_ADDITIVE",
+  "type": "object",
+  "properties": {
+    "actor_type": {
+      "enum": [
+        "SERVICE",
+        "HUMAN",
+        "MODEL"
+      ]
+    },
+    "actor_id": {
+      "type": "string"
+    },
+    "service_id": {
+      "type": "string"
+    },
+    "delegated_by": {
+      "type": "string"
+    },
+    "declared_scopes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "actor_type",
+    "actor_id"
+  ],
+  "additionalProperties": true
+}

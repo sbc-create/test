@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.site-factory.internal/1.2.0/schemas/QuarantineDecision.v1.json",
+  "title": "QuarantineDecision.v1",
+  "description": "Решение о том, что множество записей журнала непригодно для рабочих решений. Записи при этом не удаляются и не изменяются: журнал только на добавление, и исправление ошибки — тоже запись. Перечень идентификаторов хранится в манифесте доказательств, а не в теле события: шестьдесят строк в payload перестали бы читаться, а хэш манифеста связывает решение со списком не слабее.",
+  "type": "object",
+  "required": [
+    "reason",
+    "owner",
+    "decision_authority",
+    "event_count",
+    "manifest_uri",
+    "manifest_sha256",
+    "first_ledger_seq",
+    "last_ledger_seq",
+    "classified_at",
+    "prompt_id",
+    "prompt_rev"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "reason": {
+      "enum": [
+        "TEST_HARNESS_CONTAMINATION"
+      ]
+    },
+    "owner": {
+      "const": "ARCHITECT"
+    },
+    "decision_authority": {
+      "enum": [
+        "AUTHORIZE",
+        "EXECUTE"
+      ]
+    },
+    "event_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "manifest_uri": {
+      "type": "string"
+    },
+    "manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "first_ledger_seq": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "last_ledger_seq": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "classified_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "prompt_id": {
+      "type": "string"
+    },
+    "prompt_rev": {
+      "type": "string"
+    },
+    "source_commit": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "correction_action_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

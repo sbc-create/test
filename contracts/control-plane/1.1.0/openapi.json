@@ -1,0 +1,952 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Fleet Control Plane",
+    "version": "1.1.0",
+    "description": "Единый внешний контракт внутренних контуров. Единый язык и discovery, но НЕ общая БД: каждый сервис владеет только своими данными."
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8790",
+      "description": "внутренний контур; наружу не публикуется"
+    }
+  ],
+  "paths": {
+    "/api/v1/contracts/manifest": {
+      "get": {
+        "summary": "Манифест bundle",
+        "x-owner": "architect",
+        "x-status": "AVAILABLE",
+        "responses": {
+          "200": {
+            "description": "ok"
+          },
+          "503": {
+            "description": "зависимость недоступна"
+          }
+        }
+      }
+    },
+    "/api/v1/contracts/openapi": {
+      "get": {
+        "summary": "OpenAPI bundle",
+        "x-owner": "architect",
+        "x-status": "AVAILABLE",
+        "responses": {
+          "200": {
+            "description": "ok"
+          },
+          "503": {
+            "description": "зависимость недоступна"
+          }
+        }
+      }
+    },
+    "/api/v1/contracts/asyncapi": {
+      "get": {
+        "summary": "AsyncAPI bundle",
+        "x-owner": "architect",
+        "x-status": "AVAILABLE",
+        "responses": {
+          "200": {
+            "description": "ok"
+          },
+          "503": {
+            "description": "зависимость недоступна"
+          }
+        }
+      }
+    },
+    "/api/v1/contracts/schemas/{schema_id}": {
+      "get": {
+        "summary": "JSON Schema по идентификатору",
+        "x-owner": "architect",
+        "x-status": "AVAILABLE",
+        "responses": {
+          "200": {
+            "description": "схема"
+          },
+          "404": {
+            "description": "нет такой схемы"
+          },
+          "503": {
+            "description": "зависимость недоступна"
+          }
+        },
+        "parameters": [
+          {
+            "name": "schema_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/capabilities": {
+      "get": {
+        "summary": "Каталог возможностей",
+        "x-owner": "architect",
+        "x-status": "AVAILABLE",
+        "responses": {
+          "200": {
+            "description": "ok"
+          },
+          "503": {
+            "description": "зависимость недоступна"
+          }
+        }
+      }
+    },
+    "/api/v1/capabilities/{capability_id}": {
+      "get": {
+        "summary": "Возможность",
+        "x-owner": "architect",
+        "x-status": "AVAILABLE",
+        "responses": {
+          "200": {
+            "description": "возможность"
+          },
+          "404": {
+            "description": "нет такой возможности"
+          },
+          "503": {
+            "description": "зависимость недоступна"
+          }
+        },
+        "parameters": [
+          {
+            "name": "capability_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/control-plane/version": {
+      "get": {
+        "summary": "Версия Control Plane",
+        "x-owner": "architect",
+        "x-status": "AVAILABLE",
+        "responses": {
+          "200": {
+            "description": "ok"
+          },
+          "503": {
+            "description": "зависимость недоступна"
+          }
+        }
+      }
+    },
+    "/api/v1/sites": {
+      "get": {
+        "summary": "Список сайтов",
+        "x-owner": "architect",
+        "x-status": "AVAILABLE",
+        "responses": {
+          "200": {
+            "description": "отфильтрованная выдача; пустой массив при валидной комбинации без совпадений — это ответ, а не ошибка"
+          },
+          "422": {
+            "description": "значение фильтра недопустимо, пусто или противоречиво; error_code из перечня FILTER_VALUE_UNKNOWN, FILTER_VALUE_EMPTY, FILTER_VALUE_CONFLICT"
+          },
+          "503": {
+            "description": "зависимость недоступна"
+          }
+        },
+        "parameters": [
+          {
+            "name": "environment",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "production",
+                "non-production",
+                "test"
+              ]
+            },
+            "description": "сравнение по каноническому значению; регистр не нормализуется, похожие значения не подставляются"
+          },
+          {
+            "name": "lifecycle_state",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "DRAFT",
+                "ACTIVE",
+                "QUARANTINED",
+                "RETIRED"
+              ]
+            },
+            "description": "перечень совпадает с CHECK-ограничением таблицы site"
+          }
+        ],
+        "description": "Без параметров возвращает полный текущий реестр. Параметры применяются на стороне сервера ДО нарезки страниц; два параметра соединяются через AND. Недопустимое, пустое или противоречивое значение не игнорируется, а отвергается с 422 и Problem.v1.",
+        "x-filter-semantics": {
+          "combination": "AND",
+          "applied": "server-side",
+          "order": "фильтр применяется до pagination и cursor slicing",
+          "canonical_predicate": "factory.site_engine.api.site_filter",
+          "shared_with": [
+            "/api/v1/registry/snapshot"
+          ],
+          "silent_ignore": false
+        },
+        "x-examples": {
+          "все": {
+            "request": "/api/v1/sites",
+            "note": "полный реестр"
+          },
+          "боевые действующие": {
+            "request": "/api/v1/sites?environment=production&lifecycle_state=ACTIVE",
+            "note": "ровно та же проекция, что у /api/v1/registry/snapshot"
+          },
+          "неизвестное значение": {
+            "request": "/api/v1/sites?environment=nonsense",
+            "response_status": 422,
+            "error_code": "FILTER_VALUE_UNKNOWN"
+          },
+          "пустое значение": {
+            "request": "/api/v1/sites?environment=",
+            "response_status": 422,
+            "error_code": "FILTER_VALUE_EMPTY"
+          },
+          "конфликт ключа": {
+            "request": "/api/v1/sites?environment=production&environment=test",
+            "response_status": 422,
+            "error_code": "FILTER_VALUE_CONFLICT"
+          },
+          "валидная пустая выдача": {
+            "request": "/api/v1/sites?environment=non-production&lifecycle_state=RETIRED",
+            "response_status": 200,
+            "count": 0
+          }
+        }
+      }
+    },
+    "/api/v1/sites/{site_id}": {
+      "get": {
+        "summary": "Сайт",
+        "x-owner": "architect",
+        "x-status": "AVAILABLE",
+        "responses": {
+          "200": {
+            "description": "запись"
+          },
+          "404": {
+            "description": "нет такого сайта"
+          },
+          "503": {
+            "description": "зависимость недоступна"
+          }
+        },
+        "parameters": [
+          {
+            "name": "site_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/registry/version": {
+      "get": {
+        "summary": "Версия реестра",
+        "x-owner": "architect",
+        "x-status": "AVAILABLE",
+        "responses": {
+          "200": {
+            "description": "ok"
+          },
+          "503": {
+            "description": "зависимость недоступна"
+          }
+        }
+      }
+    },
+    "/api/v1/registry/snapshot": {
+      "get": {
+        "summary": "Снимок ACTIVE production",
+        "x-owner": "architect",
+        "x-status": "AVAILABLE",
+        "responses": {
+          "200": {
+            "description": "ok"
+          },
+          "503": {
+            "description": "зависимость недоступна"
+          }
+        }
+      }
+    },
+    "/api/v1/events": {
+      "get": {
+        "summary": "Лента событий по курсору",
+        "x-owner": "architect",
+        "x-status": "AVAILABLE",
+        "responses": {
+          "200": {
+            "description": "ok"
+          },
+          "503": {
+            "description": "зависимость недоступна"
+          }
+        },
+        "parameters": [
+          {
+            "name": "after",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ]
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Живость",
+        "x-owner": "architect",
+        "x-status": "AVAILABLE",
+        "responses": {
+          "200": {
+            "description": "ok"
+          },
+          "503": {
+            "description": "зависимость недоступна"
+          }
+        }
+      }
+    },
+    "/ready": {
+      "get": {
+        "summary": "Готовность",
+        "x-owner": "architect",
+        "x-status": "AVAILABLE",
+        "responses": {
+          "200": {
+            "description": "готов"
+          },
+          "503": {
+            "description": "не готов"
+          }
+        }
+      }
+    },
+    "/api/v1/actions": {
+      "get": {
+        "summary": "Журнал действий",
+        "x-owner": "architect",
+        "x-status": "PLANNED",
+        "description": "зарезервировано; владелец ещё не реализовал. Адреса нет — обращаться нельзя",
+        "responses": {
+          "501": {
+            "description": "не реализовано"
+          }
+        }
+      }
+    },
+    "/api/v1/workflows": {
+      "get": {
+        "summary": "Процессы",
+        "x-owner": "architect",
+        "x-status": "PLANNED",
+        "description": "зарезервировано; владелец ещё не реализовал. Адреса нет — обращаться нельзя",
+        "responses": {
+          "501": {
+            "description": "не реализовано"
+          }
+        }
+      }
+    },
+    "/api/v1/changesets": {
+      "get": {
+        "summary": "Наборы изменений",
+        "x-owner": "architect",
+        "x-status": "PLANNED",
+        "description": "зарезервировано; владелец ещё не реализовал. Адреса нет — обращаться нельзя",
+        "responses": {
+          "501": {
+            "description": "не реализовано"
+          }
+        }
+      }
+    },
+    "/api/v1/evidence": {
+      "get": {
+        "summary": "Доказательства",
+        "x-owner": "architect",
+        "x-status": "PLANNED",
+        "description": "зарезервировано; владелец ещё не реализовал. Адреса нет — обращаться нельзя",
+        "responses": {
+          "501": {
+            "description": "не реализовано"
+          }
+        }
+      }
+    },
+    "/api/v1/integrations": {
+      "get": {
+        "summary": "Внешние интеграции",
+        "x-owner": "architect",
+        "x-status": "PLANNED",
+        "description": "зарезервировано; владелец ещё не реализовал. Адреса нет — обращаться нельзя",
+        "responses": {
+          "501": {
+            "description": "не реализовано"
+          }
+        }
+      }
+    },
+    "/api/v1/observations": {
+      "get": {
+        "summary": "Наблюдения",
+        "x-owner": "monitoring",
+        "x-status": "PLANNED",
+        "description": "зарезервировано; владелец ещё не реализовал. Адреса нет — обращаться нельзя",
+        "responses": {
+          "501": {
+            "description": "не реализовано"
+          }
+        }
+      }
+    },
+    "/api/v1/alerts": {
+      "get": {
+        "summary": "Оповещения",
+        "x-owner": "monitoring",
+        "x-status": "PLANNED",
+        "description": "зарезервировано; владелец ещё не реализовал. Адреса нет — обращаться нельзя",
+        "responses": {
+          "501": {
+            "description": "не реализовано"
+          }
+        }
+      }
+    },
+    "/api/v1/backups": {
+      "get": {
+        "summary": "Резервные копии",
+        "x-owner": "backup",
+        "x-status": "PLANNED",
+        "description": "зарезервировано; владелец ещё не реализовал. Адреса нет — обращаться нельзя",
+        "responses": {
+          "501": {
+            "description": "не реализовано"
+          }
+        }
+      }
+    },
+    "/api/v1/audit/events": {
+      "get": {
+        "operationId": "listAuditEvents",
+        "summary": "Страница журнала по возрастанию ledger_seq",
+        "description": "Фильтрация выполняется на сервере. Неизвестный параметр — 422, а не молчаливое игнорирование: провайдер не рекламирует того, чего не делает.",
+        "parameters": [
+          {
+            "name": "site_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "producer_service",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "actor_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "actor_type",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "phase",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "result",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "event_type",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "correlation_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "action_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "resource_type",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "resource_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "occurred_from",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "occurred_to",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Страница событий",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "items",
+                    "count"
+                  ],
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "https://contracts.site-factory.internal/1.1.0/schemas/AuditEvent.v1.json"
+                      }
+                    },
+                    "count": {
+                      "type": "integer"
+                    },
+                    "next_cursor": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "has_more": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "https://contracts.site-factory.internal/1.1.0/schemas/Problem.v1.json"
+                }
+              }
+            },
+            "description": "Неизвестный, пустой или противоречивый фильтр"
+          }
+        }
+      },
+      "post": {
+        "operationId": "appendAuditEvent",
+        "summary": "Добавить событие",
+        "description": "Идемпотентно по (producer_service, idempotency_key). Повтор того же содержимого — 200 с тем же event_id; другое содержимое под тем же ключом — 409.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "https://contracts.site-factory.internal/1.1.0/schemas/AuditEvent.v1.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Событие добавлено"
+          },
+          "200": {
+            "description": "Идемпотентный повтор; событие уже существует"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "https://contracts.site-factory.internal/1.1.0/schemas/Problem.v1.json"
+                }
+              }
+            },
+            "description": "Нет или неизвестен токен службы"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "https://contracts.site-factory.internal/1.1.0/schemas/Problem.v1.json"
+                }
+              }
+            },
+            "description": "IDENTITY_SPOOF, AUTHORITY_DENIED или MODEL_PHASE_DENIED"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "https://contracts.site-factory.internal/1.1.0/schemas/Problem.v1.json"
+                }
+              }
+            },
+            "description": "IDEMPOTENCY_CONFLICT"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "https://contracts.site-factory.internal/1.1.0/schemas/Problem.v1.json"
+                }
+              }
+            },
+            "description": "SITE_ID_UNKNOWN, SECRET_IN_PAYLOAD или нарушение схемы"
+          }
+        }
+      },
+      "put": {
+        "operationId": "auditEventsPutDenied",
+        "summary": "Запрещено",
+        "description": "Журнал только на добавление.",
+        "responses": {
+          "405": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "https://contracts.site-factory.internal/1.1.0/schemas/Problem.v1.json"
+                }
+              }
+            },
+            "description": "APPEND_ONLY"
+          }
+        }
+      },
+      "patch": {
+        "operationId": "auditEventsPatchDenied",
+        "summary": "Запрещено",
+        "description": "Журнал только на добавление.",
+        "responses": {
+          "405": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "https://contracts.site-factory.internal/1.1.0/schemas/Problem.v1.json"
+                }
+              }
+            },
+            "description": "APPEND_ONLY"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "auditEventsDeleteDenied",
+        "summary": "Запрещено",
+        "description": "Журнал только на добавление.",
+        "responses": {
+          "405": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "https://contracts.site-factory.internal/1.1.0/schemas/Problem.v1.json"
+                }
+              }
+            },
+            "description": "APPEND_ONLY"
+          }
+        }
+      }
+    },
+    "/api/v1/audit/events/{event_id}": {
+      "get": {
+        "operationId": "getAuditEvent",
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Событие",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://contracts.site-factory.internal/1.1.0/schemas/AuditEvent.v1.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "https://contracts.site-factory.internal/1.1.0/schemas/Problem.v1.json"
+                }
+              }
+            },
+            "description": "Не найдено"
+          }
+        }
+      }
+    },
+    "/api/v1/audit/correlations/{correlation_id}": {
+      "get": {
+        "operationId": "getAuditCorrelation",
+        "summary": "Полная нить действия в порядке фаз",
+        "parameters": [
+          {
+            "name": "correlation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Нить событий"
+          }
+        }
+      }
+    },
+    "/api/v1/audit/actions/{action_id}": {
+      "get": {
+        "operationId": "getAuditAction",
+        "parameters": [
+          {
+            "name": "action_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "События действия"
+          }
+        }
+      }
+    },
+    "/api/v1/audit/integrity": {
+      "get": {
+        "operationId": "getAuditIntegrity",
+        "summary": "Проверка цепи хешей",
+        "responses": {
+          "200": {
+            "description": "Отчёт",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://contracts.site-factory.internal/1.1.0/schemas/AuditIntegrityReport.v1.json"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/audit/checkpoints/latest": {
+      "get": {
+        "operationId": "getLatestAuditCheckpoint",
+        "responses": {
+          "200": {
+            "description": "Отметка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://contracts.site-factory.internal/1.1.0/schemas/AuditCheckpoint.v1.json"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/audit/health": {
+      "get": {
+        "operationId": "getAuditHealth",
+        "summary": "Готовность журнала",
+        "description": "Плоскость обслуживания не обязана дожидаться этого ответа: недоступность журнала не должна гасить сайты.",
+        "responses": {
+          "200": {
+            "description": "Состояние"
+          }
+        }
+      }
+    },
+    "/api/v1/audit/evidence/{evidence_id}/metadata": {
+      "get": {
+        "operationId": "getEvidenceMetadata",
+        "summary": "Метаданные доказательства и результат сверки контрольной суммы",
+        "parameters": [
+          {
+            "name": "evidence_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Метаданные; verified=false при расхождении суммы"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "https://contracts.site-factory.internal/1.1.0/schemas/Problem.v1.json"
+                }
+              }
+            },
+            "description": "EVIDENCE_PATH_DENIED"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "https://contracts.site-factory.internal/1.1.0/schemas/Problem.v1.json"
+                }
+              }
+            },
+            "description": "Не найдено"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SiteRef": {
+        "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/SiteRef.json"
+      },
+      "ActorRef": {
+        "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/ActorRef.json"
+      },
+      "ObservedValue": {
+        "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/ObservedValue.json"
+      },
+      "CorrelationContext": {
+        "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/CorrelationContext.json"
+      },
+      "VersionRef": {
+        "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/VersionRef.json"
+      },
+      "EvidenceRef": {
+        "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EvidenceRef.json"
+      },
+      "DesiredObservedState": {
+        "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/DesiredObservedState.json"
+      },
+      "CommandEnvelope.v1": {
+        "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/CommandEnvelope.v1.json"
+      },
+      "CommandReceipt.v1": {
+        "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/CommandReceipt.v1.json"
+      },
+      "EventEnvelope.v1": {
+        "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+      },
+      "Problem.v1": {
+        "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/Problem.v1.json"
+      },
+      "Page.v1": {
+        "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/Page.v1.json"
+      },
+      "Capability.v1": {
+        "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/Capability.v1.json"
+      }
+    }
+  }
+}

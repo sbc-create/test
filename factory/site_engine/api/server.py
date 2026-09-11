@@ -84,6 +84,22 @@ def _is_control_path(method: str, path: str) -> bool:
     return path.startswith(_CONTROL_GET_PREFIXES)
 
 
+class QueryParams(dict):
+    """Параметры запроса: скаляры для совместимости, списки в `multi`.
+
+    Обычный доступ `params["k"]` даёт последнее значение — так вели себя все
+    прежние обработчики. Полный список значений доступен через `.multi`, и
+    только он позволяет отличить один заданный параметр от повторённого с
+    разными значениями.
+    """
+
+    __slots__ = ("multi",)
+
+    def __init__(self, сырые: dict):
+        super().__init__({k: v[-1] for k, v in сырые.items()})
+        self.multi = {k: list(v) for k, v in сырые.items()}
+
+
 class _Handler(http.server.BaseHTTPRequestHandler):
     server_version = "SiteEngine"
     sys_version = ""
@@ -210,7 +226,20 @@ class _Handler(http.server.BaseHTTPRequestHandler):
     def _handle(self, method: str) -> None:
         parsed = urlparse(self.path)
         path = unquote(parsed.path)
-        query = {k: v[-1] for k, v in parse_qs(parsed.query).items()}
+        # Пустое значение и повтор ключа обязаны доезжать до обработчика.
+        #
+        # Прежде здесь стояло `parse_qs(...)` без `keep_blank_values` и
+        # схлопывание `v[-1]`. Из-за первого `?environment=` терялся целиком
+        # и выглядел как «фильтр не задан»; из-за второго
+        # `?environment=production&environment=test` превращался в одно
+        # значение, и противоречие в запросе становилось невидимым. Оба раза
+        # сервер отвечал 200 на запрос, которого не понимал.
+        #
+        # Скаляры сохранены ради совместимости: `_titles` и `_shelves`
+        # читают `params.get("limit")` и ждут строку, а не список. Исходные
+        # списки лежат рядом, в `.multi`, и их читает только тот, кому нужно
+        # отличить «одно значение» от «несколько».
+        query = QueryParams(parse_qs(parsed.query, keep_blank_values=True))
 
         # Готовность отвечает без токена и без подробностей: её опрашивает
         # supervisor и балансировщик, а не человек. Подробности состояния
@@ -267,6 +296,25 @@ class _Handler(http.server.BaseHTTPRequestHandler):
         if body is None:
             return
 
+        # Журнал аудита обслуживается отдельным обработчиком.
+        #
+        # Он не встраивается в ControlApi намеренно: у того своя модель прав
+        # (Principal), а у журнала — служебные токены, по которым сервер сам
+        # выводит производителя. Смешать две схемы прав в одном месте значит
+        # однажды перепутать, чья проверка сработала.
+        if path.startswith("/api/v1/audit"):
+            try:
+                from factory.site_engine.audit import ledger_api as _la
+                код, тело = _la.обработать(
+                    method, path, query=query, body=body,
+                    headers=self._headers_dict())
+            except Exception:  # noqa: BLE001
+                # Подробности — в журнал процесса, наружу только факт.
+                self._error(500, "internal_error", "внутренняя ошибка журнала")
+                return
+            self._send(код, тело)
+            return
+
         try:
             if _is_control_path(method, path):
                 # Для читающих управляющих маршрутов параметры приходят строкой
@@ -309,10 +357,20 @@ class _Handler(http.server.BaseHTTPRequestHandler):
     def do_PATCH(self) -> None:  # noqa: N802
         self._handle("PATCH")
 
+    def _журнал_ли(self) -> bool:
+        return self.path.split("?", 1)[0].startswith("/api/v1/audit")
+
     def do_DELETE(self) -> None:  # noqa: N802
+        # Для журнала отказ обязан прийти как Problem.v1 с кодом APPEND_ONLY:
+        # общий ответ 405 не отличим от «маршрута не существует», и потребитель
+        # не узнает, что запись неизменяема по замыслу, а не по недосмотру.
+        if self._журнал_ли():
+            return self._handle("DELETE")
         self._error(405, "method_not_allowed", "удаление не предусмотрено")
 
     def do_PUT(self) -> None:  # noqa: N802
+        if self._журнал_ли():
+            return self._handle("PUT")
         self._error(405, "method_not_allowed", "замена целиком не предусмотрена")
 
 

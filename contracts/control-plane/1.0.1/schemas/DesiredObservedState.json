@@ -1,0 +1,43 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/DesiredObservedState.json",
+ "title": "Желаемое и наблюдаемое",
+ "description": "Два состояния хранятся раздельно и никогда не сливаются. Слияние уничтожает само понятие дрейфа: система, где желаемое равно наблюдаемому по определению, не может сообщить о расхождении.",
+ "x-owner": "architect",
+ "x-schema-version": "1.0.0",
+ "x-lifecycle": "ACTIVE",
+ "x-created-at": "2026-09-11T12:56:26Z",
+ "x-updated-at": "2026-09-11T12:56:26Z",
+ "x-compatibility": "BACKWARD_COMPATIBLE_ADDITIVE",
+ "type": "object",
+ "properties": {
+  "desired_state": {
+   "type": "string"
+  },
+  "observed_state": {
+   "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/ObservedValue.json"
+  },
+  "observed_at": {
+   "type": "string",
+   "format": "date-time"
+  },
+  "source": {
+   "type": "string"
+  },
+  "confidence": {
+   "type": "number"
+  },
+  "drift_status": {
+   "enum": [
+    "IN_SYNC",
+    "DRIFT",
+    "UNKNOWN"
+   ]
+  }
+ },
+ "required": [
+  "desired_state",
+  "drift_status"
+ ],
+ "additionalProperties": true
+}
