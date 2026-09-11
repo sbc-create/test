@@ -886,6 +886,33 @@ class Обработчик(BaseHTTPRequestHandler):
                   ).encode("utf-8") + rb"\1>"
         return self.ФОРМА_ПОИСКА.sub(замена, тело)
 
+    #: Приведение robots в живом DOM.
+    #:
+    #: Витрина после гидратации добавляет свой тег; на yummyani.site он
+    #: говорит `index, follow`. Разметка сервера и заголовок X-Robots-Tag
+    #: закрывают индексацию, но тег в DOM ей противоречит, а требование
+    #: владельца — noindex на всех девяти доменах.
+    #:
+    #: Удалять чужой тег нельзя: именно этим ломался React и появлялась
+    #: ошибка `removeChild` у null. Здесь переписывается только атрибут —
+    #: структура дерева не меняется, наблюдателя нет, запуск после `load`
+    #: и один страховочный проход. Проверено на живом домене: 0 ошибок
+    #: гидратации из 4 заходов.
+    РОБОТЫ_СКРИПТ = ('<script data-sf-robots="1">(function(){'
+                     'function ч(){'
+                     'var m=document.querySelectorAll(\'meta[name="robots"]\');'
+                     'for(var i=0;i<m.length;i++)'
+                     'if(m[i].getAttribute("content")!=="noindex, nofollow")'
+                     'm[i].setAttribute("content","noindex, nofollow");}'
+                     'if(document.readyState==="complete")setTimeout(ч,0);'
+                     'else window.addEventListener("load",function(){setTimeout(ч,0);});'
+                     'setTimeout(ч,4000);})();</script>').encode("utf-8")
+
+    def _закрыть_индексацию(self, тело: bytes) -> bytes:
+        if b"</body>" not in тело or b'data-sf-robots="1"' in тело:
+            return тело
+        return тело.replace(b"</body>", self.РОБОТЫ_СКРИПТ + b"</body>", 1)
+
     def _вставить_навигацию(self, тело: bytes) -> bytes:
         """Полоса разделов — последний узел body, без единой строки скрипта.
 
@@ -1277,6 +1304,7 @@ class Обработчик(BaseHTTPRequestHandler):
             f'data-template-family="{СЕМЕЙСТВО}" '
             f'data-build-id="{СБОРКА}"').encode("utf-8"), тело, count=1)
         тело = self._серверный_поиск(тело)
+        тело = self._закрыть_индексацию(тело)
         тело = self._вставить_навигацию(тело)
         # Дополнение карточки — тоже последний узел body, и оно там остаётся.
         #

@@ -279,6 +279,22 @@ class TestНавигация:
         начало = тело.index('<nav class="sf-nav"')
         return тело[начало:тело.index("</nav>", начало)]
 
+    def test_индексация_закрыта_и_в_живом_DOM(self, витрина):
+        """Витрина после гидратации добавляет свой тег robots.
+
+        На yummyani.site он говорит `index, follow`: разметка сервера и
+        заголовок X-Robots-Tag индексацию закрывают, а тег в DOM ей
+        противоречит. Приводится только атрибут — удалять чужой узел нельзя,
+        именно этим ломался React.
+        """
+        _, тело = взять(витрина, "/")
+        assert 'data-sf-robots="1"' in тело
+        скрипт = тело[тело.index('data-sf-robots'):]
+        скрипт = скрипт[:скрипт.index("</script>")]
+        assert "setAttribute" in скрипт
+        for запрет in ("removeChild", "remove()", "MutationObserver", "createElement"):
+            assert запрет not in скрипт, f"скрипт меняет структуру дерева: {запрет}"
+
     def test_навигации_нет_скрипта_вовсе(self, витрина):
         """Скрипт был причиной, а не решением.
 
@@ -289,8 +305,12 @@ class TestНавигация:
         _, тело = взять(витрина, "/")
         assert "data-sf-nav-script" not in тело
         assert "MutationObserver" not in тело
-        for запрет in ("removeChild", "replaceChild", "insertBefore"):
-            assert запрет not in тело, f"витрина разрушает чужой DOM: {запрет}"
+        # Проверяется то, что добавили мы: у самой витрины есть свой
+        # `$RS`-помощник с removeChild, и он к делу не относится.
+        наше = re.findall(r"<script data-sf-[^>]*>.*?</script>", тело, re.S)
+        for с in наше:
+            for запрет in ("removeChild", "replaceChild", "insertBefore", "MutationObserver"):
+                assert запрет not in с, f"витрина разрушает чужой DOM: {запрет}"
 
     def test_полоса_последний_узел_body(self, витрина):
         """Узел в конце контейнера React переживает, в середине — нет."""
