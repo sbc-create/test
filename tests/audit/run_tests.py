@@ -7,7 +7,8 @@
 Это проверяется здесь же — обещание изоляции без проверки ничего не стоит.
 """
 from __future__ import annotations
-import os, shutil, sqlite3, subprocess, sys, tempfile, time, urllib.error, urllib.request
+import ctypes, os, shutil, signal, sqlite3, subprocess, sys, tempfile, time
+import urllib.error, urllib.request
 from pathlib import Path
 
 КАНОН = "/srv/site-factory/audit-ledger/audit_ledger.sqlite3"
@@ -18,6 +19,20 @@ from pathlib import Path
           "AUDIT_TOKEN_REGISTRY": "reg-local-token",
           "AUDIT_TOKEN_QWEN": "qwen-local-token",
           "AUDIT_TOKEN_TEMPLATES": "tpl-local-token"}
+
+
+#: Сигнал ребёнку при смерти родителя. Без него убитая -9 обвязка оставляет
+#: эфемерный экземпляр жить: finally не выполняется, порт остаётся занят, и
+#: следующий прогон падает на чужом сервере, приняв его за свой.
+PR_SET_PDEATHSIG = 1
+
+
+def _умереть_с_родителем() -> None:
+    try:
+        ctypes.CDLL("libc.so.6", use_errno=True).prctl(
+            PR_SET_PDEATHSIG, signal.SIGKILL, 0, 0, 0)
+    except OSError:
+        pass
 
 
 def снимок(путь: str) -> dict:
@@ -63,7 +78,7 @@ def main() -> int:
         [str(выпуск / ".venv/bin/python"), "-m", "factory.site_engine.api.server",
          "--root", "/srv/site-factory/repo", "--host", "127.0.0.1",
          "--port", str(ПОРТ)],
-        cwd=выпуск, env=окр,
+        cwd=выпуск, env=окр, preexec_fn=_умереть_с_родителем,
         stdout=(врем / "server.log").open("w"), stderr=subprocess.STDOUT)
     try:
         for _ in range(80):
@@ -84,7 +99,11 @@ def main() -> int:
         код = p.returncode
     finally:
         сервер.terminate()
-        сервер.wait(timeout=30)
+        try:
+            сервер.wait(timeout=30)
+        except subprocess.TimeoutExpired:
+            сервер.kill()
+            сервер.wait(timeout=10)
     после = снимок(КАНОН)
     расхождения = {k: (до[k], после[k]) for k in
                    ("count", "last_seq", "chain_root", "checkpoint")
