@@ -405,12 +405,23 @@ def test_r2_рабочая_проекция_открыта_службам():
 
 
 def test_r2_карантинные_не_попадают_в_проекцию():
-    к, сыро = гет("/api/v1/audit/events?event_type=test.observed.v1&limit=1000")
-    к2, рабоч = гет("/api/v1/audit/operational/events"
-                    "?event_type=test.observed.v1&limit=1000", токен=ТОКЕН_QWEN)
-    assert к == к2 == 200
-    assert сыро["count"] > 0, "в копии нет тестовых событий — проверять нечего"
-    assert рабоч["count"] == 0, "карантинные события видны в рабочей проекции"
+    from factory.site_engine.audit import projection as pr
+    c = store.открыть(ЖУРНАЛ)
+    try:
+        объявлены = pr.позиции_в_карантине(c)
+    finally:
+        c.close()
+    assert объявлены, "в копии нет карантинных позиций — проверять нечего"
+    к, рабоч = гет("/api/v1/audit/operational/events?limit=1000",
+                   токен=ТОКЕН_QWEN)
+    assert к == 200
+    видимые = {i["ledger_seq"] for i in рабоч["items"]}
+    assert not (видимые & объявлены), \
+        f"в рабочей проекции видны карантинные позиции: " \
+        f"{sorted(видимые & объявлены)[:5]}"
+    к2, сыро = гет("/api/v1/audit/events?limit=1000")
+    сырые = {i["ledger_seq"] for i in сыро["items"]}
+    assert объявлены <= сырые, "сырая лента потеряла карантинные записи"
 
 
 def test_r2_include_quarantined_только_для_admin():

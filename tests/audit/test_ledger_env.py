@@ -145,9 +145,10 @@ def test_31_три_синтетические_записи_не_изменены
     # Долг зафиксирован в журнале, по одному событию на запись.
     ж = sqlite3.connect(f"file:{ЖУРНАЛ}?mode=ro", uri=True)
     n = ж.execute("SELECT count(*) FROM ledger_event WHERE "
-                  "event_type='technical.debt.observed.v1'").fetchone()[0]
+                  "event_type='technical.debt.observed.v1' AND "
+                  "resource_id LIKE 'synthetic%'").fetchone()[0]
     ж.close()
-    assert n == 3
+    assert n == 3, f"событий о долге по синтетическим записям: {n}"
 
 
 # 32, 33
