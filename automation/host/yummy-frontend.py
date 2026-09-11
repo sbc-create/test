@@ -911,12 +911,11 @@ var П=%s,З=%s;
 function поставить(){
  var н=document.querySelector('nav.portal-nav');
  if(!н)return;
- var перед=н.children[1]||null,добавили=false;
  for(var а in З){
   var с=н.querySelectorAll('a[href="'+а+'"]');
   for(var j=0;j<с.length;j++)с[j].setAttribute('href',З[а]);
  }
- полоса();
+ var перед=н.children[1]||null;
  for(var i=0;i<П.length;i++){
   var п=П[i];
   if(н.querySelector('a[href="'+п[0]+'"],a[href="'+п[0].replace(/\/$/,'')+'"]'))continue;
@@ -926,14 +925,13 @@ function поставить(){
    a.setAttribute('aria-current','page');
   var s=document.createElement('span');
   s.className='portal-nav-text';s.textContent=п[1];a.appendChild(s);
-  н.insertBefore(a,перед);добавили=true;
+  н.insertBefore(a,перед);
  }
- return добавили;
 }
 function полоса(){
  if(document.querySelector('.sf-mobnav'))return;
  var ш=document.querySelector('header.portal-header')||document.querySelector('header');
- if(!ш)return;
+ if(!ш||!ш.parentNode)return;
  var н=document.createElement('nav');
  н.className='sf-mobnav';н.setAttribute('aria-label','Разделы витрины');
  for(var i=0;i<П.length;i++){
@@ -944,42 +942,69 @@ function полоса(){
  }
  ш.parentNode.insertBefore(н,ш.nextSibling);
 }
-function robots(){
- var м=document.querySelectorAll('meta[name="robots"]');
- for(var i=0;i<м.length;i++){
-  if(i===0){if(м[i].content!=="noindex, nofollow")м[i].content="noindex, nofollow";}
-  else м[i].parentNode.removeChild(м[i]);
- }
+function дополнение(){
+ var д=document.querySelector('.sf-entity[data-sf-move="1"]');
+ if(!д)return;
+ var м=document.querySelector('main#main-content')||document.querySelector('main');
+ if(!м)return;
+ д.removeAttribute('data-sf-move');
+ м.appendChild(д);            // переносится СВОЙ узел, чужие не трогаются
 }
 var занято=false;
-function проверить(){if(занято)return;занято=true;поставить();robots();занято=false;}
-проверить();
-document.addEventListener('DOMContentLoaded',проверить);
-new MutationObserver(проверить).observe(document.documentElement,
- {childList:true,subtree:true});
+function проверить(){
+ if(занято)return;
+ занято=true;
+ try{поставить();полоса();дополнение();}finally{занято=false;}
+}
+function начать(){
+ проверить();
+ new MutationObserver(проверить).observe(document.body,{childList:true,subtree:true});
+}
+// Только ПОСЛЕ гидратации. Скрипт стоит перед </body> и выполняется раньше,
+// чем React восстановит дерево: вставка до гидратации — это расхождение
+// разметки, Minified React error #418, и дальше React пересобирает поддерево
+// и спотыкается об узлы, которых не создавал.
+if(document.readyState==='complete')setTimeout(начать,0);
+else window.addEventListener('load',function(){setTimeout(начать,0);});
 })();"""
 
     НАВ_ЗАКРЫТИЕ = re.compile(rb"</nav>")
 
+    #: Формы поиска витрины отправляются только скриптом (`router.push`), и
+    #: ни `action`, ни `method` у них нет. Пока клиентская часть цела, это
+    #: незаметно; стоит ей упасть — и «Найти» перестаёт делать что-либо, а
+    #: пользователь остаётся на той же странице без единого объяснения.
+    #:
+    #: Серверный fallback добавляется атрибутами к существующей форме: ни
+    #: одного нового узла, ни одного удалённого. Обработчик витрины по-прежнему
+    #: перехватывает отправку и уходит в свой маршрут; без JavaScript браузер
+    #: отправляет тот же запрос обычным GET на тот же канонический адрес.
+    МАРШРУТ_ПОИСКА = "/search"
+    ФОРМА_ПОИСКА = re.compile(
+        rb'<form(?![^>]*\saction=)((?=[^>]*\bclass="[^"]*portal-search-row)[^>]*)>')
+
+    def _серверный_поиск(self, тело: bytes) -> bytes:
+        """Форма поиска получает action и method — работу без JavaScript."""
+        замена = (f'<form action="{self.МАРШРУТ_ПОИСКА}" method="get"'
+                  ).encode("utf-8") + rb"\1>"
+        return self.ФОРМА_ПОИСКА.sub(замена, тело)
+
     def _вставить_навигацию(self, тело: bytes) -> bytes:
-        м = self.НАВ_ОТКРЫТИЕ.search(тело)
-        if not м:
+        """Разделы витрины добавляются скриптом после гидратации.
+
+        Раньше пункты стояли ещё и в разметке сервера. Это и было причиной
+        `Minified React error #418`: React восстанавливает дерево по своей
+        разметке, видит в контейнере чужих детей и пересобирает поддерево
+        заново — а вместе с этим ломается вся клиентская часть страницы,
+        включая поиск. Снаружи это выглядело как «подсказки не кликаются и
+        кнопка не работает», хотя поиск был цел, а разрушен был React.
+
+        Поэтому в разметку сервера не вносится ни одного узла. Единственное,
+        что добавляется, — скрипт перед `</body>`: он ждёт `load`, то есть
+        конца гидратации, и только добавляет узлы, никогда не удаляя чужие.
+        """
+        if self.НАВ_ОТКРЫТИЕ.search(тело) is None:
             return тело
-        if self.НАВ_ПРИЗНАК not in тело:
-            з = self.НАВ_ЗАКРЫТИЕ.search(тело, м.end())
-            конец = з.start() if з else м.end()
-            блок = тело[м.end():конец]
-            # Существующий «Топ-100» витрины перенаправляется на наш маршрут:
-            # он показывает ту же сотню, но с провайдером и шкалой у каждой
-            # оценки. Второй одноимённый пункт рядом не заводится.
-            for откуда, куда in self.ЗАМЕНА_АДРЕСОВ.items():
-                блок = блок.replace(f'href="{откуда}"'.encode(),
-                                    f'href="{куда}"'.encode())
-            тело = тело[:м.end()] + блок + тело[конец:]
-            есть = set(re.findall(rb'href="([^"]+)"', блок))
-            есть = {а.decode("utf-8", "replace") for а in есть}
-            есть |= {а.rstrip("/") + "/" for а in есть}
-            тело = тело[:м.end()] + self._пункты_навигации(есть) + тело[м.end():]
         if b"data-sf-nav-script" in тело or b"</body>" not in тело:
             return тело
         в = ВАРИАНТЫ_МОД.вариант(ВАРИАНТ_ДОМЕНА) if ВАРИАНТЫ_МОД else {}
@@ -1355,17 +1380,19 @@ new MutationObserver(проверить).observe(document.documentElement,
             f'<html data-template-version="{ВЕРСИЯ}" '
             f'data-template-family="{СЕМЕЙСТВО}" '
             f'data-build-id="{СБОРКА}"').encode("utf-8"), тело, count=1)
+        тело = self._серверный_поиск(тело)
         тело = self._вставить_навигацию(тело)
-        # Дополнение карточки встаёт ПЕРЕД подвалом, а не в середину
-        # содержимого: страницу тайтла витрина досылает потоком, и вставка
-        # между её кусками рискует разойтись с гидратацией.
+        # Дополнение карточки кладётся В КОНЕЦ body, а на место его переносит
+        # тот же скрипт после гидратации.
+        #
+        # Вставка в середину контейнера — это чужой ребёнок в дереве React:
+        # при гидратации он пересобирает поддерево, и вместе с ним перестаёт
+        # работать вся клиентская часть страницы. Узел в конце контейнера
+        # React переживает, а переносим мы свой собственный узел — ничего
+        # чужого при этом не удаляется и не перемещается.
         доп = self._дополнение_карточки(unquote(urlparse(self.path).path))
-        if доп:
-            куда = тело.rfind(b"<footer")
-            if куда > 0:
-                тело = тело[:куда] + доп + тело[куда:]
-            elif b"</body>" in тело:
-                тело = тело.replace(b"</body>", доп + b"</body>", 1)
+        if доп and b"</body>" in тело:
+            тело = тело.replace(b"</body>", доп + b"</body>", 1)
         if b"</body>" in тело:
             бейдж = (f'<div class="sf-vbadge">Template: {СЕМЕЙСТВО} {ВЕРСИЯ} · '
                      f'{МАНИФЕСТ["source_commit"][:8]}</div>').encode("utf-8")

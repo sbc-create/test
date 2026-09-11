@@ -276,7 +276,12 @@ def карточка_тайтла(с: dict, каппы: dict | None = None,
     сущность = f' data-entity="{_э(с.get("entity_id"))}"' if есть(с.get("entity_id")) else ""
     канон = f' data-canonical="{_э(путь)}"' if путь else ""
     return (
-        f'<section class="sf-entity" data-contract="{КОНТРАКТ}"{сущность}{канон}>'
+        # `data-sf-move` — метка для рантайма: блок приходит в конце body и
+        # переносится на место после гидратации. В разметку витрины его
+        # нельзя класть сразу: чужой ребёнок в контейнере React ломает
+        # гидратацию, а с ней и всю клиентскую часть страницы.
+        f'<section class="sf-entity" data-sf-move="1" '
+        f'data-contract="{КОНТРАКТ}"{сущность}{канон}>'
         + фон
         + '<div class="sf-entity__in">'
         + "".join(шапка)
