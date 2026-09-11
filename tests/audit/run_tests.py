@@ -94,7 +94,9 @@ def main() -> int:
             return 1
         p = subprocess.run(
             [str(выпуск / ".venv/bin/python"), "-m", "pytest",
-             "tests/audit/", "-q"] + sys.argv[1:],
+             # Кэш pytest пишется в рабочий каталог: внутри релиза он
+             # менял бы отпечаток неизменяемого артефакта.
+             "tests/audit/", "-q", "-p", "no:cacheprovider"] + sys.argv[1:],
             cwd=str(КОРЕНЬ), env=окр)
         код = p.returncode
     finally:

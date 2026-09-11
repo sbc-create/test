@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Валидация bundle: схемы, примеры, уникальность $id, секреты, инвентарь."""
 from __future__ import annotations
-import hashlib, json, re, sys, urllib.request
+import hashlib, json, os, re, sys, urllib.request
 from pathlib import Path
 
 # Версия задаётся аргументом, а не зашита в путь: копия валидатора под каждую
@@ -11,7 +11,10 @@ from pathlib import Path
 ВЕРСИЯ = sys.argv[1] if len(sys.argv) > 1 else "1.2.0"
 ПРЕДЫДУЩАЯ = sys.argv[2] if len(sys.argv) > 2 else None
 КОРЕНЬ = БАЗА / ВЕРСИЯ
-ОТЧЁТ = БАЗА / "evidence"
+# Отчёт — рабочий вывод, а не часть поставки: записанный внутрь релиза, он
+# менял бы отпечаток артефакта при каждом запуске проверки.
+ОТЧЁТ = Path(os.environ.get("CONTRACT_EVIDENCE_DIR",
+                            "/srv/site-factory/audit-ledger/evidence"))
 провалы: list[str] = []
 
 def шаг(имя, условие, деталь=""):
