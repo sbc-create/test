@@ -1164,7 +1164,11 @@ class Обработчик(BaseHTTPRequestHandler):
             f'<meta name="site-factory-build-id" content="{СБОРКА}">'
             f'<meta name="site-factory-artifact-sha256" content="{МАНИФЕСТ["artifact_sha256"]}">'
             f'<meta name="robots" content="noindex, nofollow">'
-            f'<style>{БЕЙДЖ_СТИЛЬ}{self._токены_варианта()}</style>').encode("utf-8")
+            # Стиль собственных компонентов витрины: на её страницах живут
+            # `sf-*` плитки, и без него они теряют пропорции постеров —
+            # 230×129 вместо 2:3. В чужую разметку этот стиль не попадает.
+            f'<style>{БЕЙДЖ_СТИЛЬ}{ВИД.СТИЛЬ if ВИД else ""}'
+            f'{self._токены_варианта()}</style>').encode("utf-8")
         тело = тело.replace(b"</head>", вставка + b"</head>", 1)
         тело = тело.replace(
             b'<html data-sf-own="1"',
