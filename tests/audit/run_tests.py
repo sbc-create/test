@@ -20,15 +20,27 @@ from pathlib import Path
           "AUDIT_TOKEN_TEMPLATES": "tpl-local-token"}
 
 
-def событий(путь: str) -> int:
+def снимок(путь: str) -> dict:
     c = sqlite3.connect(f"file:{путь}?mode=ro", uri=True)
     n = c.execute("SELECT count(*) FROM ledger_event").fetchone()[0]
+    посл = c.execute("SELECT coalesce(max(ledger_seq),0) FROM ledger_event").fetchone()[0]
+    корень = c.execute("SELECT event_hash FROM ledger_event "
+                       "ORDER BY ledger_seq DESC LIMIT 1").fetchone()
+    cp = c.execute("SELECT checkpoint_id FROM ledger_checkpoint "
+                   "ORDER BY ledger_seq DESC LIMIT 1").fetchone()
+    ids = {r[0] for r in c.execute("SELECT event_id FROM ledger_event")}
     c.close()
-    return n
+    return {"count": n, "last_seq": посл,
+            "chain_root": корень[0] if корень else None,
+            "checkpoint": cp[0] if cp else None, "ids": ids}
+
+
+def событий(путь: str) -> int:
+    return снимок(путь)["count"]
 
 
 def main() -> int:
-    до = событий(КАНОН)
+    до = снимок(КАНОН)
     врем = Path(tempfile.mkdtemp(prefix="ledger-tests-"))
     копия = врем / "ephemeral.sqlite3"
     ист = sqlite3.connect(f"file:{КАНОН}?mode=ro", uri=True)
@@ -62,17 +74,25 @@ def main() -> int:
                   (врем / "server.log").read_text()[-2000:])
             return 1
         p = subprocess.run(
-            ["/home/claude/work-test/.venv/bin/python", "-m", "pytest",
+            [str(выпуск / ".venv/bin/python"), "-m", "pytest",
              "tests/audit/", "-q"] + sys.argv[1:],
             cwd=str(КОРЕНЬ), env=окр)
         код = p.returncode
     finally:
         сервер.terminate()
         сервер.wait(timeout=30)
-    после = событий(КАНОН)
-    print(f"\n  канонический журнал: было {до}, стало {после}")
-    if до != после:
-        print("  ИЗОЛЯЦИЯ НАРУШЕНА: тесты записали в канонический журнал")
+    после = снимок(КАНОН)
+    расхождения = {k: (до[k], после[k]) for k in
+                   ("count", "last_seq", "chain_root", "checkpoint")
+                   if до[k] != после[k]}
+    добавленные = после["ids"] - до["ids"]
+    print(f"\n  канонический журнал: было {до['count']}, стало {после['count']}")
+    print(f"  последняя позиция: {до['last_seq']} -> {после['last_seq']}")
+    print(f"  корень цепи неизменен: {до['chain_root'] == после['chain_root']}")
+    print(f"  checkpoint неизменен: {до['checkpoint'] == после['checkpoint']}")
+    print(f"  новых event_id: {len(добавленные)}")
+    if расхождения or добавленные:
+        print(f"  ИЗОЛЯЦИЯ НАРУШЕНА: {расхождения}, новые {sorted(добавленные)[:5]}")
         return 1
     print(f"  эфемерная копия: {событий(str(копия))} событий, каталог {врем}")
     shutil.rmtree(врем, ignore_errors=True)
