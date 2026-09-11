@@ -851,17 +851,6 @@ class Обработчик(BaseHTTPRequestHandler):
     #
     # До неё пункты добавляются здесь, классами самой витрины: маршруты
     # работают, а меню о них молчало — это и есть «пункт без исправления».
-    НАВ_МЕТКА = 'data-sf-nav="1"'
-    #: Признак уже вставленных пунктов — именно ссылка, а не голая метка:
-    #: метка встречается и в стиле, который прячет пункты на узкой ширине, и
-    #: проверка по ней молча отключала вставку целиком.
-    НАВ_ПРИЗНАК = b'class="portal-nav-link" data-sf-nav="1"'
-
-    #: Адреса витрины, которые ведут туда же, куда наши маршруты. Пункт не
-    #: добавляется рядом с существующим, а существующий перенаправляется:
-    #: два «Топ-100» подряд в одном меню — это не навигация, а дефект.
-    ЗАМЕНА_АДРЕСОВ = {"/catalog/top": "/top/"}
-
     def _порядок_пунктов(self) -> list[tuple[str, str]]:
         """Пункты в порядке приоритета варианта домена.
 
@@ -875,101 +864,6 @@ class Обработчик(BaseHTTPRequestHandler):
         пункты += [(а, п) for а, п in НАВИГАЦИЯ if а not in порядок]
         return пункты
 
-    def _пункты_навигации(self, есть_адреса: set) -> bytes:
-        текущий = self.path.split("?", 1)[0]
-        куски = []
-        for адрес, подпись in self._порядок_пунктов():
-            if адрес in есть_адреса:
-                continue                     # витрина уже ведёт туда сама
-            тек = ' aria-current="page"' if текущий.rstrip("/") == адрес.rstrip("/") else ""
-            куски.append(
-                f'<a class="portal-nav-link" {self.НАВ_МЕТКА} href="{адрес}"{тек}>'
-                f'<span class="portal-nav-text">{html.escape(подпись)}</span></a>')
-        return "".join(куски).encode("utf-8")
-
-    НАВ_ОТКРЫТИЕ = re.compile(rb'<nav class="portal-nav"[^>]*>')
-
-    #: Пункты возвращаются после гидратации.
-    #:
-    #: Шапку рисует React, и при гидратации он приводит DOM к тому, что
-    #: отрисовал сам: узлы, которых нет в его дереве, удаляются. Разметка
-    #: сервера при этом верна — пункты видны в исходнике и краулеру, — но в
-    #: браузере исчезают через долю секунды после загрузки. Проверка «есть ли
-    #: пункт в HTML» такое пропускает, проверка в браузере ловит: было 4, стало 0.
-    #:
-    #: Поэтому пункты добавляются дважды: в разметку (для клиента без скрипта)
-    #: и скриптом после гидратации. Наблюдатель возвращает их и после
-    #: клиентского перехода, когда React перерисовывает шапку заново.
-    #:
-    #: Тот же скрипт чинит robots. Приложение после гидратации добавляет свой
-    #: тег «noindex, follow» вторым: в разметке сервера тег один и верный, а в
-    #: браузере их два, и второй разрешает обход ссылок. Требование владельца —
-    #: nofollow, поэтому лишний тег снимается, а первый приводится к строгому
-    #: значению. Заголовок ответа X-Robots-Tag при этом уже верен.
-    НАВ_СКРИПТ = """(function(){
-var П=%s,З=%s;
-function поставить(){
- var н=document.querySelector('nav.portal-nav');
- if(!н)return;
- for(var а in З){
-  var с=н.querySelectorAll('a[href="'+а+'"]');
-  for(var j=0;j<с.length;j++)с[j].setAttribute('href',З[а]);
- }
- var перед=н.children[1]||null;
- for(var i=0;i<П.length;i++){
-  var п=П[i];
-  if(н.querySelector('a[href="'+п[0]+'"],a[href="'+п[0].replace(/\/$/,'')+'"]'))continue;
-  var a=document.createElement('a');
-  a.className='portal-nav-link';a.setAttribute('data-sf-nav','1');a.href=п[0];
-  if(location.pathname.replace(/\/$/,'')===п[0].replace(/\/$/,''))
-   a.setAttribute('aria-current','page');
-  var s=document.createElement('span');
-  s.className='portal-nav-text';s.textContent=п[1];a.appendChild(s);
-  н.insertBefore(a,перед);
- }
-}
-function полоса(){
- if(document.querySelector('.sf-mobnav'))return;
- var ш=document.querySelector('header.portal-header')||document.querySelector('header');
- if(!ш||!ш.parentNode)return;
- var н=document.createElement('nav');
- н.className='sf-mobnav';н.setAttribute('aria-label','Разделы витрины');
- for(var i=0;i<П.length;i++){
-  var a=document.createElement('a');a.href=П[i][0];a.textContent=П[i][1];
-  if(location.pathname.replace(/\/$/,'')===П[i][0].replace(/\/$/,''))
-   a.setAttribute('aria-current','page');
-  н.appendChild(a);
- }
- ш.parentNode.insertBefore(н,ш.nextSibling);
-}
-function дополнение(){
- var д=document.querySelector('.sf-entity[data-sf-move="1"]');
- if(!д)return;
- var м=document.querySelector('main#main-content')||document.querySelector('main');
- if(!м)return;
- д.removeAttribute('data-sf-move');
- м.appendChild(д);            // переносится СВОЙ узел, чужие не трогаются
-}
-var занято=false;
-function проверить(){
- if(занято)return;
- занято=true;
- try{поставить();полоса();дополнение();}finally{занято=false;}
-}
-function начать(){
- проверить();
- new MutationObserver(проверить).observe(document.body,{childList:true,subtree:true});
-}
-// Только ПОСЛЕ гидратации. Скрипт стоит перед </body> и выполняется раньше,
-// чем React восстановит дерево: вставка до гидратации — это расхождение
-// разметки, Minified React error #418, и дальше React пересобирает поддерево
-// и спотыкается об узлы, которых не создавал.
-if(document.readyState==='complete')setTimeout(начать,0);
-else window.addEventListener('load',function(){setTimeout(начать,0);});
-})();"""
-
-    НАВ_ЗАКРЫТИЕ = re.compile(rb"</nav>")
-
     #: Формы поиска витрины отправляются только скриптом (`router.push`), и
     #: ни `action`, ни `method` у них нет. Пока клиентская часть цела, это
     #: незаметно; стоит ей упасть — и «Найти» перестаёт делать что-либо, а
@@ -979,6 +873,9 @@ else window.addEventListener('load',function(){setTimeout(начать,0);});
     #: одного нового узла, ни одного удалённого. Обработчик витрины по-прежнему
     #: перехватывает отправку и уходит в свой маршрут; без JavaScript браузер
     #: отправляет тот же запрос обычным GET на тот же канонический адрес.
+    #:
+    #: Бисекция на живом домене показала, что к гидратации эти атрибуты
+    #: отношения не имеют: без них ошибка оставалась, без скрипта — исчезала.
     МАРШРУТ_ПОИСКА = "/search"
     ФОРМА_ПОИСКА = re.compile(
         rb'<form(?![^>]*\saction=)((?=[^>]*\bclass="[^"]*portal-search-row)[^>]*)>')
@@ -990,33 +887,32 @@ else window.addEventListener('load',function(){setTimeout(начать,0);});
         return self.ФОРМА_ПОИСКА.sub(замена, тело)
 
     def _вставить_навигацию(self, тело: bytes) -> bytes:
-        """Разделы витрины добавляются скриптом после гидратации.
+        """Полоса разделов — последний узел body, без единой строки скрипта.
 
-        Раньше пункты стояли ещё и в разметке сервера. Это и было причиной
-        `Minified React error #418`: React восстанавливает дерево по своей
-        разметке, видит в контейнере чужих детей и пересобирает поддерево
-        заново — а вместе с этим ломается вся клиентская часть страницы,
-        включая поиск. Снаружи это выглядело как «подсказки не кликаются и
-        кнопка не работает», хотя поиск был цел, а разрушен был React.
+        Раньше пункты добавлялись в шапку витрины: сначала в разметке сервера,
+        потом скриптом после `load`. Оба способа ломали гидратацию, и вместе с
+        ней — всю клиентскую часть страницы, включая поиск. Второй способ на
+        локальном адресе не воспроизводился ни разу: страница успевала
+        восстановиться до `load`. На публичном домене она приходит потоком, и
+        к `load` React ещё достраивает поздние границы — наблюдатель вставлял
+        пункты ровно в этот момент.
 
-        Поэтому в разметку сервера не вносится ни одного узла. Единственное,
-        что добавляется, — скрипт перед `</body>`: он ждёт `load`, то есть
-        конца гидратации, и только добавляет узлы, никогда не удаляя чужие.
+        Дело не в тайминге, а в месте. Узел в конце `body` React переживает:
+        служебный бейдж живёт там с 1.2.0 и ошибок не даёт — это подтвердила
+        бисекция на живом домене. Поэтому разделы стоят там же, обычной
+        разметкой: ни наблюдателя, ни гонки, ни зависимости от JavaScript.
         """
-        if self.НАВ_ОТКРЫТИЕ.search(тело) is None:
+        if b"</body>" not in тело or b'class="sf-nav"' in тело:
             return тело
-        if b"data-sf-nav-script" in тело or b"</body>" not in тело:
-            return тело
-        в = ВАРИАНТЫ_МОД.вариант(ВАРИАНТ_ДОМЕНА) if ВАРИАНТЫ_МОД else {}
-        порядок = в.get("нав_порядок") or [а for а, _ in НАВИГАЦИЯ]
-        по_адресу = dict(НАВИГАЦИЯ)
-        пункты = [[а, по_адресу[а]] for а in порядок if а in по_адресу]
-        пункты += [[а, п] for а, п in НАВИГАЦИЯ if а not in порядок]
-        скрипт = ('<script data-sf-nav-script="1">'
-                  + (self.НАВ_СКРИПТ % (json.dumps(пункты, ensure_ascii=False),
-                                        json.dumps(self.ЗАМЕНА_АДРЕСОВ)))
-                  + "</script>").encode("utf-8")
-        return тело.replace(b"</body>", скрипт + b"</body>", 1)
+        текущий = unquote(urlparse(self.path).path).rstrip("/")
+        куски = []
+        for адрес, подпись in self._порядок_пунктов():
+            тек = ' aria-current="page"' if текущий == адрес.rstrip("/") else ""
+            куски.append(f'<a href="{адрес}"{тек}>{html.escape(подпись)}</a>')
+        полоса = ('<nav class="sf-nav" aria-label="Разделы витрины">'
+                  + "".join(куски) + "</nav>").encode("utf-8")
+        return тело.replace(b"</body>", полоса + b"</body>", 1)
+
 
     # --- карточка тайтла ------------------------------------------------
     def _дополнение_карточки(self, путь: str) -> bytes:
@@ -1382,14 +1278,13 @@ else window.addEventListener('load',function(){setTimeout(начать,0);});
             f'data-build-id="{СБОРКА}"').encode("utf-8"), тело, count=1)
         тело = self._серверный_поиск(тело)
         тело = self._вставить_навигацию(тело)
-        # Дополнение карточки кладётся В КОНЕЦ body, а на место его переносит
-        # тот же скрипт после гидратации.
+        # Дополнение карточки — тоже последний узел body, и оно там остаётся.
         #
-        # Вставка в середину контейнера — это чужой ребёнок в дереве React:
-        # при гидратации он пересобирает поддерево, и вместе с ним перестаёт
-        # работать вся клиентская часть страницы. Узел в конце контейнера
-        # React переживает, а переносим мы свой собственный узел — ничего
-        # чужого при этом не удаляется и не перемещается.
+        # Вставка в середину дерева React ломает восстановление страницы, а
+        # перенос скриптом после гидратации — та же гонка, только позже. Блок
+        # дополняет карточку витрины и показывается под содержимым страницы;
+        # встроить его в саму карточку может только владелец приложения —
+        # см. docs/handoff/YUMMY-HEADER-NAV.md.
         доп = self._дополнение_карточки(unquote(urlparse(self.path).path))
         if доп and b"</body>" in тело:
             тело = тело.replace(b"</body>", доп + b"</body>", 1)
@@ -1404,27 +1299,23 @@ else window.addEventListener('load',function(){setTimeout(начать,0);});
         if ВАРИАНТЫ_МОД is None:
             return ""
         в = ВАРИАНТЫ_МОД.вариант(ВАРИАНТ_ДОМЕНА)
-        # Меню получает на четыре пункта больше и на узкой ширине налезало
-        # на логотип. Переносится строкой, а не сжимается: наложение текста —
-        # это не «плотнее», это нечитаемо.
-        # На узкой ширине шапка витрины превращается в нижнюю панель из пяти
-        # пунктов, растянутых поровну (`flex:1 1 0`). Три наших пункта сжимали
-        # её до восьми по 51 пикселю, и подписи обрезались многоточием:
-        # «СЛУЧАЙ…», «СООБ…». Панель — не наша, и переверстывать её нельзя.
-        #
-        # Поэтому на мобильной ширине наши пункты уходят из панели, а разделы
-        # витрины показывает своя полоса под шапкой: она прокручивается и
-        # ничего чужого не ломает.
-        return (".portal-nav{flex-wrap:wrap}"
-                "@media(max-width:700px){"
-                'nav.portal-nav [data-sf-nav="1"]{display:none}'
-                ".sf-mobnav{display:flex!important}}"
-                ".sf-mobnav{display:none;gap:8px;overflow-x:auto;padding:10px 12px;"
-                "margin:0;-webkit-overflow-scrolling:touch}"
-                ".sf-mobnav a{flex:0 0 auto;padding:7px 14px;border-radius:999px;"
-                "font-size:13px;white-space:nowrap;"
-                "border:1px solid color-mix(in srgb,var(--sf-accent,currentColor) 55%,transparent)}"
-                ".sf-mobnav a[aria-current]{background:var(--sf-accent);color:#fff}"
+        # Полоса стоит последним узлом body и поднимается наверх стилем.
+        # Место в разметке выбрано не для красоты: любой узел внутри дерева
+        # React ломает восстановление страницы, а узел в конце контейнера —
+        # нет. Содержимое страницы сдвигается отступом body, чтобы полоса
+        # ничего не перекрывала.
+        return ("body{padding-top:38px}"
+                ".sf-nav{position:fixed;top:0;left:0;right:0;z-index:2147482000;"
+                "display:flex;gap:6px;align-items:center;height:38px;padding:0 10px;"
+                "overflow-x:auto;background:#12101a;border-bottom:1px solid "
+                "color-mix(in srgb,var(--sf-accent,#888) 45%,transparent)}"
+                ".sf-nav a{flex:0 0 auto;padding:5px 12px;border-radius:999px;"
+                "font:600 12px/1.2 system-ui,sans-serif;color:#e8e6f0;white-space:nowrap;"
+                "border:1px solid color-mix(in srgb,var(--sf-accent,#888) 55%,transparent)}"
+                ".sf-nav a[aria-current]{background:var(--sf-accent,#888);color:#12101a}"
+                ".sf-nav a:focus-visible{outline:2px solid var(--sf-accent,#fff);"
+                "outline-offset:2px}"
+                ".sf-vbadge{bottom:8px}"
                 ":root{--sf-accent:" + в.get("акцент", "#ff5c8a")
                 + ";--sf-accent-2:" + в.get("акцент2", "#ffb347")
                 + ";--sf-grid:" + в.get("плотность",
