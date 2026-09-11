@@ -41,7 +41,7 @@ def test_23_перерыв_ленты_не_теряет_событий(tmp_path,
     Такое падение обязано дать повтор, а не потерю: повтор потребитель
     отсеет по event_id, потерю не заметит никто.
     """
-    import ledger_publisher as lp
+    from factory.site_engine.audit import ledger_publisher as lp
     копия = tmp_path / "l.sqlite3"
     shutil.copyfile(ЖУРНАЛ, копия)
     лента = tmp_path / "feed.jsonl"
@@ -82,7 +82,7 @@ def test_23_перерыв_ленты_не_теряет_событий(tmp_path,
 
 # 27
 def test_27_backup_и_изолированное_восстановление():
-    import ledger_backup as bk
+    from factory.site_engine.audit import ledger_backup as bk
     м = bk.создать()
     r = bk.восстановить(Path(bk.КАТАЛОГ) / м["backup_file"])
     assert r["restore_verdict"] == "PASS", r["mismatches"]

@@ -7,7 +7,8 @@ from pathlib import Path
 import pytest
 
 from factory.site_engine.audit import ledger_store as store
-import ledger_identity as ident, ledger_api as api
+from factory.site_engine.audit import ledger_identity as ident
+from factory.site_engine.audit import ledger_api as api
 
 # Тесты пишут события, а журнал — только на добавление: удалить написанное
 # нельзя. Поэтому прогон идёт по эфемерной копии (`run_tests.py` поднимает
@@ -34,7 +35,22 @@ def пост(тело, токен=ТОКЕН, доп=None):
         return e.code, json.loads(e.read() or b"{}")
 
 
-def гет(путь):
+def гет(путь, токен=None):
+    """Чтение журнала. По умолчанию — от имени audit-admin.
+
+    Сырая лента закрыта ролью: анонимный запрос к ней обязан получить 401, и
+    это проверяется отдельным тестом, а не случайным отсутствием заголовка.
+    """
+    зап = urllib.request.Request(
+        Б + путь, headers={"Authorization": f"Bearer {токен or ТОКЕН}"})
+    try:
+        with urllib.request.urlopen(зап, timeout=20) as o:
+            return o.status, json.loads(o.read() or b"{}")
+    except urllib.error.HTTPError as e:
+        return e.code, json.loads(e.read() or b"{}")
+
+
+def гет_без_токена(путь):
     try:
         with urllib.request.urlopen(Б + путь, timeout=20) as o:
             return o.status, json.loads(o.read() or b"{}")
@@ -107,7 +123,7 @@ def test_05_crash_после_commit_не_даёт_дубль(врем):
 
 # 6
 def test_06_registry_replay_без_дублей():
-    import registry_bridge as rb
+    from factory.site_engine.audit import registry_bridge as rb
     до = rb.сверка()
     rb.перенести(); rb.перенести()
     после = rb.сверка()
@@ -293,7 +309,7 @@ def test_21_секрет_в_payload_отклоняется():
 
 # 22, 23, 24, 25
 def test_22_курсор_потребителя_переживает_перезапуск():
-    import registry_bridge as rb
+    from factory.site_engine.audit import registry_bridge as rb
     ж = sqlite3.connect(ЖУРНАЛ); ж.row_factory = sqlite3.Row
     поз = ж.execute("SELECT position FROM consumer_cursor WHERE consumer=?",
                     (rb.ПОТРЕБИТЕЛЬ,)).fetchone()
@@ -304,7 +320,7 @@ def test_22_курсор_потребителя_переживает_перез�
 
 
 def test_24_сверка_находит_пропуск(tmp_path, monkeypatch):
-    import registry_bridge as rb
+    from factory.site_engine.audit import registry_bridge as rb
     ж_копия = tmp_path / "l.sqlite3"
     shutil.copyfile(ЖУРНАЛ, ж_копия)
     c = sqlite3.connect(ж_копия)
@@ -320,7 +336,7 @@ def test_24_сверка_находит_пропуск(tmp_path, monkeypatch):
 
 
 def test_25_dlq_принимает_исчерпавшее(врем):
-    import registry_bridge as rb
+    from factory.site_engine.audit import registry_bridge as rb
     rb._в_dlq(врем, 1, "SITE_ID_UNKNOWN", "нет такого сайта", 3, {"x": 1})
     n = врем.execute("SELECT count(*) c FROM ledger_dlq").fetchone()["c"]
     assert n == 1
@@ -356,7 +372,7 @@ def test_30_production_snapshot_девять():
 
 # 38
 def test_38_backlog_после_сверки_ноль():
-    import ledger_publisher as lp
+    from factory.site_engine.audit import ledger_publisher as lp
     итог = lp.опубликовать()
     assert итог["backlog"] == 0 and итог["self_event_recursion"] == 0
 
@@ -368,3 +384,79 @@ def test_health_и_целостность():
     assert h["tamper_evidence_level"] == "LOCAL_HASH_CHAIN"
     к, i = гет("/api/v1/audit/integrity")
     assert к == 200 and i["ok"] is True
+
+
+# --- R2: поверхности, роли, отзыв токена ------------------------------------
+
+def test_r2_сырая_лента_требует_роли():
+    к, _ = гет_без_токена("/api/v1/audit/events")
+    assert к == 401, "сырая лента отдаётся без токена"
+    к2, т2 = гет("/api/v1/audit/events", токен=ТОКЕН_QWEN)
+    assert к2 == 403 and т2["error_code"] == "ROLE_DENIED"
+
+
+def test_r2_рабочая_проекция_открыта_службам():
+    к, т = гет("/api/v1/audit/operational/events?limit=1000", токен=ТОКЕН_QWEN)
+    assert к == 200 and т["surface"] == "operational"
+    к2, т2 = гет("/api/v1/audit/events?limit=1000")
+    assert к2 == 200 and т2["surface"] == "raw"
+    # Рабочая поверхность не может быть шире сырой.
+    assert т["count"] <= т2["count"]
+
+
+def test_r2_карантинные_не_попадают_в_проекцию():
+    к, сыро = гет("/api/v1/audit/events?event_type=test.observed.v1&limit=1000")
+    к2, рабоч = гет("/api/v1/audit/operational/events"
+                    "?event_type=test.observed.v1&limit=1000", токен=ТОКЕН_QWEN)
+    assert к == к2 == 200
+    assert сыро["count"] > 0, "в копии нет тестовых событий — проверять нечего"
+    assert рабоч["count"] == 0, "карантинные события видны в рабочей проекции"
+
+
+def test_r2_include_quarantined_только_для_admin():
+    к, _ = гет("/api/v1/audit/operational/events?include_quarantined=true")
+    assert к == 200
+    к2, т2 = гет("/api/v1/audit/operational/events?include_quarantined=true",
+                 токен=ТОКЕН_QWEN)
+    assert к2 == 403 and т2["error_code"] == "ROLE_DENIED"
+
+
+def test_r2_нить_показывает_число_скрытых():
+    к, сыро = гет("/api/v1/audit/events?event_type=test.observed.v1&limit=1000")
+    нити = [i["correlation_id"] for i in сыро["items"] if i.get("action_id")]
+    assert нити, "в копии нет загрязнённой нити"
+    corr = нити[0]
+    к2, рабоч = гет(f"/api/v1/audit/correlations/{corr}", токен=ТОКЕН_QWEN)
+    assert к2 == 200 and рабоч["count"] == 0
+    assert рабоч["quarantined_count"] > 0, "скрытые события не посчитаны"
+    к3, полн = гет(f"/api/v1/audit/correlations/{corr}?include_quarantined=true")
+    assert полн["count"] == рабоч["quarantined_count"]
+
+
+def test_r2_проекция_пересобирается_из_журнала(tmp_path):
+    from factory.site_engine.audit import projection as pr
+    c = store.открыть(ЖУРНАЛ)
+    try:
+        было = pr.позиции_в_карантине(c)
+        pr.пересобрать(c)
+        стало = pr.позиции_в_карантине(c)
+    finally:
+        c.close()
+    assert было == стало, "пересборка из журнала дала другой результат"
+
+
+def test_r2_отозванный_токен_отклонён(monkeypatch):
+    from factory.site_engine.audit import ledger_identity as li
+    import hashlib
+    отпечаток = hashlib.sha256(ТОКЕН.encode()).hexdigest()[:12]
+    monkeypatch.setenv(li.ОТОЗВАННЫЕ, отпечаток)
+    with pytest.raises(li.IdentityError) as ош:
+        li.опознать({"authorization": f"Bearer {ТОКЕН}"})
+    assert ош.value.error_code == "TOKEN_REVOKED" and ош.value.status == 403
+
+
+def test_r2_неверный_токен_отклонён():
+    from factory.site_engine.audit import ledger_identity as li
+    with pytest.raises(li.IdentityError) as ош:
+        li.опознать({"authorization": "Bearer заведомо-не-тот-токен-0000"})
+    assert ош.value.error_code == "UNAUTHENTICATED"
