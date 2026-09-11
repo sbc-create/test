@@ -1,0 +1,176 @@
+{
+ "verdict": "PASS",
+ "engines": [
+  "chromium",
+  "firefox"
+ ],
+ "viewports": [
+  "desktop",
+  "mobile"
+ ],
+ "checks": 16,
+ "failures": [],
+ "public_mutations": 0,
+ "rows": [
+  {
+   "domain": "lordfilm47.space",
+   "engine": "chromium",
+   "viewport": "desktop",
+   "http": 200,
+   "links": 51,
+   "text_len": 1413,
+   "js_errors": 0,
+   "pass": true
+  },
+  {
+   "domain": "yummyani.site",
+   "engine": "chromium",
+   "viewport": "desktop",
+   "http": 200,
+   "links": 142,
+   "text_len": 6399,
+   "js_errors": 0,
+   "pass": true
+  },
+  {
+   "domain": "zonafilm.space",
+   "engine": "chromium",
+   "viewport": "desktop",
+   "http": 200,
+   "links": 51,
+   "text_len": 1548,
+   "js_errors": 0,
+   "pass": true
+  },
+  {
+   "domain": "animedia.icu",
+   "engine": "chromium",
+   "viewport": "desktop",
+   "http": 200,
+   "links": 51,
+   "text_len": 1661,
+   "js_errors": 0,
+   "pass": true
+  },
+  {
+   "domain": "lordfilm47.space",
+   "engine": "chromium",
+   "viewport": "mobile",
+   "http": 200,
+   "links": 51,
+   "text_len": 1413,
+   "js_errors": 0,
+   "pass": true
+  },
+  {
+   "domain": "yummyani.site",
+   "engine": "chromium",
+   "viewport": "mobile",
+   "http": 200,
+   "links": 142,
+   "text_len": 6383,
+   "js_errors": 0,
+   "pass": true
+  },
+  {
+   "domain": "zonafilm.space",
+   "engine": "chromium",
+   "viewport": "mobile",
+   "http": 200,
+   "links": 51,
+   "text_len": 1548,
+   "js_errors": 0,
+   "pass": true
+  },
+  {
+   "domain": "animedia.icu",
+   "engine": "chromium",
+   "viewport": "mobile",
+   "http": 200,
+   "links": 51,
+   "text_len": 1661,
+   "js_errors": 0,
+   "pass": true
+  },
+  {
+   "domain": "lordfilm47.space",
+   "engine": "firefox",
+   "viewport": "desktop",
+   "http": 200,
+   "links": 51,
+   "text_len": 1413,
+   "js_errors": 0,
+   "pass": true
+  },
+  {
+   "domain": "yummyani.site",
+   "engine": "firefox",
+   "viewport": "desktop",
+   "http": 200,
+   "links": 142,
+   "text_len": 6399,
+   "js_errors": 0,
+   "pass": true
+  },
+  {
+   "domain": "zonafilm.space",
+   "engine": "firefox",
+   "viewport": "desktop",
+   "http": 200,
+   "links": 51,
+   "text_len": 1548,
+   "js_errors": 0,
+   "pass": true
+  },
+  {
+   "domain": "animedia.icu",
+   "engine": "firefox",
+   "viewport": "desktop",
+   "http": 200,
+   "links": 51,
+   "text_len": 1661,
+   "js_errors": 0,
+   "pass": true
+  },
+  {
+   "domain": "lordfilm47.space",
+   "engine": "firefox",
+   "viewport": "mobile",
+   "http": 200,
+   "links": 51,
+   "text_len": 1413,
+   "js_errors": 0,
+   "pass": true
+  },
+  {
+   "domain": "yummyani.site",
+   "engine": "firefox",
+   "viewport": "mobile",
+   "http": 200,
+   "links": 142,
+   "text_len": 6383,
+   "js_errors": 0,
+   "pass": true
+  },
+  {
+   "domain": "zonafilm.space",
+   "engine": "firefox",
+   "viewport": "mobile",
+   "http": 200,
+   "links": 51,
+   "text_len": 1548,
+   "js_errors": 0,
+   "pass": true
+  },
+  {
+   "domain": "animedia.icu",
+   "engine": "firefox",
+   "viewport": "mobile",
+   "http": 200,
+   "links": 51,
+   "text_len": 1661,
+   "js_errors": 0,
+   "pass": true
+  }
+ ]
+}

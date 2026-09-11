@@ -1,0 +1,110 @@
+{
+ "schema_version": "1.0.0",
+ "generated_at": "2026-09-11T12:57:59Z",
+ "http_semantics": {
+  "200": "завершённый синхронный результат",
+  "201": "ресурс создан",
+  "202": "асинхронная команда ПРИНЯТА, но не выполнена",
+  "400": "запрос не разобран",
+  "401": "не аутентифицирован",
+  "403": "нет прав",
+  "404": "ресурс неизвестен",
+  "409": "конфликт состояния или ключа идемпотентности",
+  "412": "предусловие версии не выполнено",
+  "422": "схема или бизнес-правило нарушены",
+  "429": "ограничение частоты",
+  "503": "зависимость недоступна"
+ },
+ "errors": [
+  {
+   "error_code": "REGISTRY_UNAVAILABLE",
+   "status": 503,
+   "retryable": true,
+   "owner": "architect",
+   "detail": "хранилище реестра недоступно"
+  },
+  {
+   "error_code": "SITE_NOT_FOUND",
+   "status": 404,
+   "retryable": false,
+   "owner": "architect",
+   "detail": "сайта с таким site_id нет"
+  },
+  {
+   "error_code": "SCHEMA_UNKNOWN",
+   "status": 404,
+   "retryable": false,
+   "owner": "architect",
+   "detail": "схемы с таким идентификатором нет"
+  },
+  {
+   "error_code": "CAPABILITY_UNKNOWN",
+   "status": 404,
+   "retryable": false,
+   "owner": "architect",
+   "detail": "возможности с таким идентификатором нет"
+  },
+  {
+   "error_code": "IDEMPOTENCY_KEY_REQUIRED",
+   "status": 422,
+   "retryable": false,
+   "owner": "architect",
+   "detail": "мутация без Idempotency-Key не принимается"
+  },
+  {
+   "error_code": "VERSION_CONFLICT",
+   "status": 412,
+   "retryable": false,
+   "owner": "architect",
+   "detail": "expected_version не совпал; перечитайте и повторите"
+  },
+  {
+   "error_code": "DOMAIN_TAKEN",
+   "status": 409,
+   "retryable": false,
+   "owner": "architect",
+   "detail": "домен уже принадлежит другому сайту"
+  },
+  {
+   "error_code": "UNAUTHORIZED",
+   "status": 401,
+   "retryable": false,
+   "owner": "architect",
+   "detail": "служебный токен отсутствует или неверен"
+  },
+  {
+   "error_code": "NOT_IMPLEMENTED",
+   "status": 501,
+   "retryable": false,
+   "owner": "architect",
+   "detail": "пространство имён зарезервировано, владелец ещё не реализовал"
+  },
+  {
+   "error_code": "DEADLINE_EXCEEDED",
+   "status": 503,
+   "retryable": true,
+   "owner": "architect",
+   "detail": "истёк срок; НЕ считать успехом и не помечать SUCCEEDED"
+  }
+ ],
+ "reliability_rules": {
+  "idempotency": "Idempotency-Key обязателен для всех мутаций",
+  "concurrency": "If-Match / expected_version; несовпадение — 412",
+  "correlation": "X-Correlation-ID обязателен",
+  "timeout": "ограниченный дедлайн, распространяется вниз по цепочке",
+  "retry": "только retryable=true",
+  "backoff": "экспоненциальный с джиттером и верхней границей",
+  "circuit_breaker": "обязателен для внешних провайдеров",
+  "backpressure": "ограниченная очередь; переполнение — 429, не молчание",
+  "cursor": "durable, переживает перезапуск потребителя",
+  "dead_letter": "терминальное состояние; НИКОГДА не SUCCESS",
+  "stale_heartbeat": "не считается RUNNING",
+  "terminal_statuses": [
+   "SUCCEEDED",
+   "FAILED",
+   "BLOCKED",
+   "CANCELLED"
+  ],
+  "serving_plane": "публичные сайты не зависят синхронно от Control Plane; last-known-good — для выдачи, но не источник истины"
+ }
+}

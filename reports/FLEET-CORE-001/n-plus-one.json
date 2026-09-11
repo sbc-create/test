@@ -1,0 +1,9 @@
+{
+ "verdict": "PASS",
+ "synthetic_site_id": "synthetic-npo-30c9237d",
+ "failures": [],
+ "production_active_before": 9,
+ "production_active_after": 9,
+ "lifecycle_final": "RETIRED",
+ "outbox_backlog": 0
+}

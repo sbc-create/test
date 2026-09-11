@@ -1,0 +1,456 @@
+{
+ "openapi": "3.0.3",
+ "info": {
+  "title": "Fleet Control Plane",
+  "version": "1.0.0",
+  "description": "Единый внешний контракт внутренних контуров. Единый язык и discovery, но НЕ общая БД: каждый сервис владеет только своими данными."
+ },
+ "servers": [
+  {
+   "url": "http://127.0.0.1:8790",
+   "description": "внутренний контур; наружу не публикуется"
+  }
+ ],
+ "paths": {
+  "/api/v1/contracts/manifest": {
+   "get": {
+    "summary": "Манифест bundle",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "ok"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    }
+   }
+  },
+  "/api/v1/contracts/openapi": {
+   "get": {
+    "summary": "OpenAPI bundle",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "ok"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    }
+   }
+  },
+  "/api/v1/contracts/asyncapi": {
+   "get": {
+    "summary": "AsyncAPI bundle",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "ok"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    }
+   }
+  },
+  "/api/v1/contracts/schemas/{schema_id}": {
+   "get": {
+    "summary": "JSON Schema по идентификатору",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "схема"
+     },
+     "404": {
+      "description": "нет такой схемы"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    },
+    "parameters": [
+     {
+      "name": "schema_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/v1/capabilities": {
+   "get": {
+    "summary": "Каталог возможностей",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "ok"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    }
+   }
+  },
+  "/api/v1/capabilities/{capability_id}": {
+   "get": {
+    "summary": "Возможность",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "возможность"
+     },
+     "404": {
+      "description": "нет такой возможности"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    },
+    "parameters": [
+     {
+      "name": "capability_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/v1/control-plane/version": {
+   "get": {
+    "summary": "Версия Control Plane",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "ok"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    }
+   }
+  },
+  "/api/v1/sites": {
+   "get": {
+    "summary": "Список сайтов",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "ok"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    },
+    "parameters": [
+     {
+      "name": "environment",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      },
+      "x-status": "PLANNED",
+      "description": "объявлен, но провайдером ещё не применяется: ответ не фильтруется. Для ACTIVE production используйте /api/v1/registry/snapshot"
+     },
+     {
+      "name": "lifecycle_state",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      },
+      "x-status": "PLANNED",
+      "description": "объявлен, но провайдером ещё не применяется: ответ не фильтруется. Для ACTIVE production используйте /api/v1/registry/snapshot"
+     }
+    ],
+    "x-known-gap": {
+     "gap_id": "SITES_QUERY_FILTER_NOT_APPLIED",
+     "owner": "architect",
+     "detail": "параметры environment и lifecycle_state принимаются, но не влияют на выдачу; провайдер возвращает весь реестр",
+     "workaround": "/api/v1/registry/snapshot даёт ровно ACTIVE production",
+     "fix_requires": "аддитивная правка _sites() в Control API",
+     "status": "BLOCKED_PENDING_OWNER_APPROVAL"
+    }
+   }
+  },
+  "/api/v1/sites/{site_id}": {
+   "get": {
+    "summary": "Сайт",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "запись"
+     },
+     "404": {
+      "description": "нет такого сайта"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    },
+    "parameters": [
+     {
+      "name": "site_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/v1/registry/version": {
+   "get": {
+    "summary": "Версия реестра",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "ok"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    }
+   }
+  },
+  "/api/v1/registry/snapshot": {
+   "get": {
+    "summary": "Снимок ACTIVE production",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "ok"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    }
+   }
+  },
+  "/api/v1/events": {
+   "get": {
+    "summary": "Лента событий по курсору",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "ok"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    },
+    "parameters": [
+     {
+      "name": "after",
+      "in": "query",
+      "schema": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "limit",
+      "in": "query",
+      "schema": {
+       "type": "integer"
+      }
+     }
+    ]
+   }
+  },
+  "/health": {
+   "get": {
+    "summary": "Живость",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "ok"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    }
+   }
+  },
+  "/ready": {
+   "get": {
+    "summary": "Готовность",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "готов"
+     },
+     "503": {
+      "description": "не готов"
+     }
+    }
+   }
+  },
+  "/api/v1/actions": {
+   "get": {
+    "summary": "Журнал действий",
+    "x-owner": "architect",
+    "x-status": "PLANNED",
+    "description": "зарезервировано; владелец ещё не реализовал. Адреса нет — обращаться нельзя",
+    "responses": {
+     "501": {
+      "description": "не реализовано"
+     }
+    }
+   }
+  },
+  "/api/v1/workflows": {
+   "get": {
+    "summary": "Процессы",
+    "x-owner": "architect",
+    "x-status": "PLANNED",
+    "description": "зарезервировано; владелец ещё не реализовал. Адреса нет — обращаться нельзя",
+    "responses": {
+     "501": {
+      "description": "не реализовано"
+     }
+    }
+   }
+  },
+  "/api/v1/changesets": {
+   "get": {
+    "summary": "Наборы изменений",
+    "x-owner": "architect",
+    "x-status": "PLANNED",
+    "description": "зарезервировано; владелец ещё не реализовал. Адреса нет — обращаться нельзя",
+    "responses": {
+     "501": {
+      "description": "не реализовано"
+     }
+    }
+   }
+  },
+  "/api/v1/evidence": {
+   "get": {
+    "summary": "Доказательства",
+    "x-owner": "architect",
+    "x-status": "PLANNED",
+    "description": "зарезервировано; владелец ещё не реализовал. Адреса нет — обращаться нельзя",
+    "responses": {
+     "501": {
+      "description": "не реализовано"
+     }
+    }
+   }
+  },
+  "/api/v1/integrations": {
+   "get": {
+    "summary": "Внешние интеграции",
+    "x-owner": "architect",
+    "x-status": "PLANNED",
+    "description": "зарезервировано; владелец ещё не реализовал. Адреса нет — обращаться нельзя",
+    "responses": {
+     "501": {
+      "description": "не реализовано"
+     }
+    }
+   }
+  },
+  "/api/v1/observations": {
+   "get": {
+    "summary": "Наблюдения",
+    "x-owner": "monitoring",
+    "x-status": "PLANNED",
+    "description": "зарезервировано; владелец ещё не реализовал. Адреса нет — обращаться нельзя",
+    "responses": {
+     "501": {
+      "description": "не реализовано"
+     }
+    }
+   }
+  },
+  "/api/v1/alerts": {
+   "get": {
+    "summary": "Оповещения",
+    "x-owner": "monitoring",
+    "x-status": "PLANNED",
+    "description": "зарезервировано; владелец ещё не реализовал. Адреса нет — обращаться нельзя",
+    "responses": {
+     "501": {
+      "description": "не реализовано"
+     }
+    }
+   }
+  },
+  "/api/v1/backups": {
+   "get": {
+    "summary": "Резервные копии",
+    "x-owner": "backup",
+    "x-status": "PLANNED",
+    "description": "зарезервировано; владелец ещё не реализовал. Адреса нет — обращаться нельзя",
+    "responses": {
+     "501": {
+      "description": "не реализовано"
+     }
+    }
+   }
+  }
+ },
+ "components": {
+  "schemas": {
+   "SiteRef": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/SiteRef.json"
+   },
+   "ActorRef": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/ActorRef.json"
+   },
+   "ObservedValue": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/ObservedValue.json"
+   },
+   "CorrelationContext": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/CorrelationContext.json"
+   },
+   "VersionRef": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/VersionRef.json"
+   },
+   "EvidenceRef": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EvidenceRef.json"
+   },
+   "DesiredObservedState": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/DesiredObservedState.json"
+   },
+   "CommandEnvelope.v1": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/CommandEnvelope.v1.json"
+   },
+   "CommandReceipt.v1": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/CommandReceipt.v1.json"
+   },
+   "EventEnvelope.v1": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+   },
+   "Problem.v1": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/Problem.v1.json"
+   },
+   "Page.v1": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/Page.v1.json"
+   },
+   "Capability.v1": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/Capability.v1.json"
+   }
+  }
+ }
+}

@@ -1,0 +1,78 @@
+{
+ "schema_version": "1.0.0",
+ "entries": [
+  {
+   "name": "registry.api.v1",
+   "owner": "architect",
+   "kind": "http",
+   "classification": "CANONICAL",
+   "detail": "GET /api/v1/sites, sites/{id}, registry/version, snapshot, events"
+  },
+  {
+   "name": "registry.events.outbox",
+   "owner": "architect",
+   "kind": "events",
+   "classification": "CANONICAL",
+   "detail": "site.*.v1 через durable outbox"
+  },
+  {
+   "name": "control-plane.contracts",
+   "owner": "architect",
+   "kind": "http",
+   "classification": "CANONICAL",
+   "detail": "contracts/manifest|openapi|asyncapi|schemas, capabilities"
+  },
+  {
+   "name": "config/site-profiles",
+   "owner": "architect",
+   "kind": "files",
+   "classification": "COMPATIBLE_LEGACY",
+   "detail": "первичное наполнение реестра; читается при недоступности БД",
+   "migration": "источник истины — registry.sqlite3; профили остаются для отката"
+  },
+  {
+   "name": "config/portfolio.json",
+   "owner": "seo",
+   "kind": "files",
+   "classification": "COMPATIBLE_LEGACY",
+   "detail": "реестр портфеля клиентов, пуст; production-доменов не содержит"
+  },
+  {
+   "name": "config/portfolio.fixture.json",
+   "owner": "seo",
+   "kind": "files",
+   "classification": "COMPATIBLE_LEGACY",
+   "detail": "синтетический тенант example-fixture.test, synthetic:true"
+  },
+  {
+   "name": "inventory/portfolios.yaml",
+   "owner": "seo",
+   "kind": "files",
+   "classification": "UNKNOWN",
+   "detail": "production-доменов не содержит; владелец подтверждён не был",
+   "migration": "FLEET-SEO-003.R2 — подтвердить владельца и назначение"
+  },
+  {
+   "name": "site-factory-seo-dryrun.service",
+   "owner": "seo",
+   "kind": "unit",
+   "classification": "COMPATIBLE_LEGACY",
+   "detail": "bin/seo-operator dry-run --fixture; вне полномочий ARCHITECT"
+  },
+  {
+   "name": "COMPATIBILITY_MATRIX.yaml",
+   "owner": "architect",
+   "kind": "files",
+   "classification": "CONFLICTING",
+   "detail": "снимок живого состояния; seoEngineApi 1.4.0 против 1.5.0 у SEO",
+   "migration": "пересоздавать запросом GET /api/v1/compatibility, не руками"
+  },
+  {
+   "name": "templates/seo/content/monitoring/backup APIs",
+   "owner": "various",
+   "kind": "http",
+   "classification": "PLANNED",
+   "detail": "собственных API нет; контракты объявлены, реализаций нет"
+  }
+ ]
+}

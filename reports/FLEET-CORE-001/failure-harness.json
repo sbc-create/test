@@ -1,0 +1,84 @@
+{
+ "verdict": "PASS",
+ "failures": [],
+ "steps": [
+  {
+   "step": "до простоя: все публичные домены 200",
+   "pass": true,
+   "detail": "9/9"
+  },
+  {
+   "step": "Registry найден по PID",
+   "pass": true,
+   "detail": "1107672"
+  },
+  {
+   "step": "Registry действительно недоступен",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "step": "во время простоя: все публичные домены 200",
+   "pass": true,
+   "detail": "9/9"
+  },
+  {
+   "step": "build_id витрин не изменился во время простоя",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "step": "мутация при простое отклонена",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "step": "Registry восстановлен",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "step": "после восстановления: все публичные домены 200",
+   "pass": true,
+   "detail": "9/9"
+  },
+  {
+   "step": "build_id витрин не изменился после",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "step": "после восстановления snapshot сошёлся: 9",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "step": "слушатель ровно один",
+   "pass": true,
+   "detail": "1"
+  }
+ ],
+ "duration_seconds": 92.3,
+ "public_before": {
+  "lordfilm47.space": 200,
+  "lordserial33.biz": 200,
+  "1lordserials1.online": 200,
+  "yummyani.site": 200,
+  "yummyani.org": 200,
+  "yummyani.biz": 200,
+  "zonafilm.space": 200,
+  "animedia.icu": 200,
+  "animedia.space": 200
+ },
+ "public_after": {
+  "lordfilm47.space": 200,
+  "lordserial33.biz": 200,
+  "1lordserials1.online": 200,
+  "yummyani.site": 200,
+  "yummyani.org": 200,
+  "yummyani.biz": 200,
+  "zonafilm.space": 200,
+  "animedia.icu": 200,
+  "animedia.space": 200
+ }
+}
