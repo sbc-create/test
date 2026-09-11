@@ -1,0 +1,32 @@
+{
+ "run_id": "027631de-ce9c-40d0-864c-62743e759ac5",
+ "started_at": "2026-09-11T11:41:34Z",
+ "finished_at": "2026-09-11T11:41:34Z",
+ "duration_seconds": 0.001,
+ "input_registry_version": 19,
+ "verdict": "DIVERGENCE_FOUND",
+ "findings": [
+  {
+   "kind": "DRIFT",
+   "site_id": "lords-03",
+   "field": "build_id",
+   "registry": null,
+   "manifest": "20260910T124530Z-a1691c56-nova"
+  },
+  {
+   "kind": "DRIFT",
+   "site_id": "lords-02",
+   "field": "build_id",
+   "registry": null,
+   "manifest": "20260910T124530Z-a1691c56-nova"
+  }
+ ],
+ "metrics": {
+  "active_production": 9,
+  "expected": 9,
+  "outbox_backlog": 19,
+  "outbox_oldest_unpublished": "2026-09-11T11:37:39Z"
+ },
+ "heartbeat_at": "2026-09-11T11:41:34Z",
+ "timed_out": false
+}

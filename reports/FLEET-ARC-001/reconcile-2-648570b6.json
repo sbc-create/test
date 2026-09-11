@@ -1,0 +1,17 @@
+{
+ "run_id": "648570b6-873c-4773-aebc-ab96195fbab8",
+ "started_at": "2026-09-11T11:42:48Z",
+ "finished_at": "2026-09-11T11:42:48Z",
+ "duration_seconds": 0.0,
+ "input_registry_version": 25,
+ "verdict": "SUCCESS",
+ "findings": [],
+ "metrics": {
+  "active_production": 9,
+  "expected": 9,
+  "outbox_backlog": 25,
+  "outbox_oldest_unpublished": "2026-09-11T11:37:39Z"
+ },
+ "heartbeat_at": "2026-09-11T11:42:48Z",
+ "timed_out": false
+}
