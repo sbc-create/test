@@ -49,7 +49,12 @@ def main() -> int:
         ист.backup(наз)
     наз.close(); ист.close()
 
-    окр = dict(os.environ, AUDIT_LEDGER_DB=str(копия),
+    # Эфемерный экземпляр поднимается ради журнала. Управляющая запись ему не
+    # нужна, а протокол запуска требует под неё токены — брать их сюда значило
+    # бы тащить в тестовый контур права, которых тест не использует.
+    окр = dict(os.environ, SITE_ENGINE_CONTROL_WRITES="0",
+               SITE_ENGINE_ADMIN="0",
+               AUDIT_LEDGER_DB=str(копия),
                AUDIT_API_BASE=f"http://127.0.0.1:{ПОРТ}",
                AUDIT_FEED=str(врем / "feed.jsonl"),
                SITE_ENGINE_HTTP="1", SITE_ENGINE_ADMIN="1",
