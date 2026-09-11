@@ -895,18 +895,22 @@ class Обработчик(BaseHTTPRequestHandler):
     #:
     #: Удалять чужой тег нельзя: именно этим ломался React и появлялась
     #: ошибка `removeChild` у null. Здесь переписывается только атрибут —
-    #: структура дерева не меняется, наблюдателя нет, запуск после `load`
-    #: и один страховочный проход. Проверено на живом домене: 0 ошибок
-    #: гидратации из 4 заходов.
+    #: структура дерева не меняется и наблюдателя нет. Запуск ранний:
+    #: витрина добавляет свой тег раньше `load`, и приёмка на второй
+    #: секунде видела `index, follow` — краулер с коротким бюджетом
+    #: исполнения увидел бы то же. Измерено на живом домене: 0 ошибок
+    #: гидратации из 4 заходов, тег строгий уже на второй секунде.
     РОБОТЫ_СКРИПТ = ('<script data-sf-robots="1">(function(){'
                      'function ч(){'
                      'var m=document.querySelectorAll(\'meta[name="robots"]\');'
                      'for(var i=0;i<m.length;i++)'
                      'if(m[i].getAttribute("content")!=="noindex, nofollow")'
                      'm[i].setAttribute("content","noindex, nofollow");}'
-                     'if(document.readyState==="complete")setTimeout(ч,0);'
-                     'else window.addEventListener("load",function(){setTimeout(ч,0);});'
-                     'setTimeout(ч,4000);})();</script>').encode("utf-8")
+                     'ч();'
+                     'document.addEventListener("DOMContentLoaded",ч);'
+                     'window.addEventListener("load",ч);'
+                     'for(var t=200;t<=6000;t+=400)setTimeout(ч,t);'
+                     '})();</script>').encode("utf-8")
 
     def _закрыть_индексацию(self, тело: bytes) -> bytes:
         if b"</body>" not in тело or b'data-sf-robots="1"' in тело:
