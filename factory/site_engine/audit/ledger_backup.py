@@ -57,11 +57,26 @@ def _слепок(c) -> dict:
                    "ledger_checkpoint ORDER BY ledger_seq DESC LIMIT 1").fetchone()
     посл = c.execute("SELECT event_hash FROM ledger_event ORDER BY ledger_seq "
                      "DESC LIMIT 1").fetchone()
+    # Проекция и карантин входят в слепок: восстановить журнал, но не
+    # восстановить решение о непригодности части записей значило бы вернуть
+    # шестьдесят тестовых событий в рабочие решения.
+    исключены = proj.позиции_в_карантине(c)
+    сост = proj.состояние(c) or {}
+    курсоры = c.execute("SELECT consumer, position FROM consumer_cursor").fetchall()
+    решений = c.execute(
+        "SELECT count(*) n FROM ledger_event WHERE event_type IN (?, ?)",
+        (qr.СОБЫТИЕ_КАРАНТИН, qr.СОБЫТИЕ_ОТМЕНА)).fetchone()["n"]
     return {"count": r["n"], "last_seq": r["s"],
             "last_event_hash": посл["event_hash"] if посл else None,
             "checkpoint_id": cp["checkpoint_id"] if cp else None,
             "checkpoint_upto_seq": cp["ledger_seq"] if cp else None,
-            "chain_root": cp["chain_root"] if cp else None}
+            "chain_root": cp["chain_root"] if cp else None,
+            "operational_count": r["n"] - len(исключены),
+            "quarantined_count": len(исключены),
+            "quarantine_decisions": решений,
+            "projection_active_table": сост.get("active_table")
+                                       or proj.активная(c),
+            "consumer_cursors": {x["consumer"]: x["position"] for x in курсоры}}
 
 
 def создать() -> dict:
