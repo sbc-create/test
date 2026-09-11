@@ -4,7 +4,7 @@ from __future__ import annotations
 import hashlib, json, re, sys, urllib.request
 from pathlib import Path
 
-КОРЕНЬ = Path("/srv/site-factory/control-plane-contracts/1.0.0")
+КОРЕНЬ = Path("/srv/site-factory/control-plane-contracts/1.0.1")
 ОТЧЁТ = Path("/srv/site-factory/control-plane-contracts/evidence")
 провалы: list[str] = []
 
@@ -94,13 +94,21 @@ for p in КОРЕНЬ.rglob("*"):
 шаг("секретов в артефактах нет", not найдено, "; ".join(найдено[:2]))
 
 # --- статические списки сайтов ----------------------------------------------
+# Ищутся ФАКТИЧЕСКИЕ боевые домены, а не всё, похожее на домен.
+# Прежняя регулярка принимала за домен питоновский путь модуля
+# (`factory.site_engine`, `api.site_filter`) и объявляла OpenAPI статическим
+# списком сайтов. Проверка, дающая ложную тревогу, обесценивает себя: её
+# начинают отключать вместо того, чтобы читать.
+БОЕВЫЕ = {"lordfilm47.space", "lordserial33.biz", "1lordserials1.online",
+          "yummyani.biz", "yummyani.org", "yummyani.site",
+          "zonafilm.space", "animedia.icu", "animedia.space"}
 списки = []
 for p in КОРЕНЬ.rglob("*"):
     if p.is_file():
         т = p.read_text(encoding="utf-8", errors="replace")
-        доменов = set(re.findall(r"[a-z0-9-]+\.(?:space|biz|online|site|org|icu)", т))
-        if len(доменов) >= 3:
-            списки.append(f"{p.name}: {len(доменов)}")
+        найденные = {д for д in БОЕВЫЕ if д in т}
+        if len(найденные) >= 3:
+            списки.append(f"{p.name}: {sorted(найденные)[:3]}")
 шаг("статических production-списков не создано", not списки, "; ".join(списки))
 
 # --- инвентарь ---------------------------------------------------------------

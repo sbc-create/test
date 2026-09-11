@@ -1,7 +1,7 @@
 {
  "bundle": "fleet-control-plane-contracts",
- "version": "1.0.0",
- "generated_at": "2026-09-11T13:12:13Z",
+ "version": "1.0.1",
+ "generated_at": "2026-09-11T14:04:52Z",
  "owner": "architect",
  "compatibility_policy": {
   "url_major": "/api/v1",
@@ -43,13 +43,13 @@
  "checksums": "checksums.json",
  "schemas_count": 13,
  "capabilities": {
-  "available": 7,
+  "available": 8,
   "planned": 12,
   "blocked": 0
  },
  "depends_on": {
   "prompt": "FLEET-ARC-001.R1",
   "commit": "4d8cb5a",
-  "registry_version_at_build": 26
+  "registry_version_at_build": 29
  }
 }

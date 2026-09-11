@@ -10,7 +10,7 @@
   {
    "step": "Registry найден по PID",
    "pass": true,
-   "detail": "1107672"
+   "detail": "1312616"
   },
   {
    "step": "Registry действительно недоступен",
@@ -58,7 +58,7 @@
    "detail": "1"
   }
  ],
- "duration_seconds": 92.3,
+ "duration_seconds": 98.5,
  "public_before": {
   "lordfilm47.space": 200,
   "lordserial33.biz": 200,

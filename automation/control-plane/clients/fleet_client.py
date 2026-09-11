@@ -101,17 +101,13 @@ class FleetClient:
         return т.get("items", [])
 
     def active_production_sites(self) -> list[dict]:
-        """Девять сайтов берутся из реестра, а не из списка в коде.
+        """Девять сайтов берутся сервер-сайд фильтром, а не обходом.
 
-        Источник — `/api/v1/registry/snapshot`, каноническая проекция ACTIVE
-        production. Фильтры `/api/v1/sites?environment=&lifecycle_state=`
-        объявлены в OpenAPI, но провайдером ПОКА НЕ РЕАЛИЗОВАНЫ: он вернёт
-        весь реестр, и потребитель посчитал бы одиннадцать записей девятью,
-        включив демо и синтетику. Пока фильтры не реализованы, единственный
-        честный источник числа девять — снимок.
+        До 1.0.1 здесь стоял `snapshot()`, потому что провайдер объявлял
+        параметры и не применял их. Обход защищал клиента, но оставлял
+        контракт лживым, поэтому починен был провайдер, а не клиент.
         """
-        снимок, _ = self.snapshot()
-        return снимок.get("sites", [])
+        return self.sites(environment="production", lifecycle_state="ACTIVE")
 
     def snapshot(self) -> tuple[dict, str | None]:
         к, т, h = self._get("/api/v1/registry/snapshot")

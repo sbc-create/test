@@ -75,7 +75,7 @@ export class FleetClient {
     return body.items ?? [];
   }
 
-  /** Девять сайтов берутся из реестра, а не из списка в коде. */
+  /** Девять сайтов берутся сервер-сайд фильтром (bundle 1.0.1). */
   activeProductionSites = () => this.sites("production", "ACTIVE");
 
   async snapshot(): Promise<{ body: Record<string, unknown>; etag: string | null }> {

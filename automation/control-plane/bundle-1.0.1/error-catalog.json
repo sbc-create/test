@@ -1,6 +1,6 @@
 {
  "schema_version": "1.0.0",
- "generated_at": "2026-09-11T12:57:59Z",
+ "generated_at": "2026-09-11T14:01:38Z",
  "http_semantics": {
   "200": "завершённый синхронный результат",
   "201": "ресурс создан",
@@ -85,6 +85,27 @@
    "retryable": true,
    "owner": "architect",
    "detail": "истёк срок; НЕ считать успехом и не помечать SUCCEEDED"
+  },
+  {
+   "error_code": "FILTER_VALUE_UNKNOWN",
+   "status": 422,
+   "retryable": false,
+   "owner": "architect",
+   "detail": "значение не входит в канонический перечень"
+  },
+  {
+   "error_code": "FILTER_VALUE_EMPTY",
+   "status": 422,
+   "retryable": false,
+   "owner": "architect",
+   "detail": "параметр задан пустым значением"
+  },
+  {
+   "error_code": "FILTER_VALUE_CONFLICT",
+   "status": 422,
+   "retryable": false,
+   "owner": "architect",
+   "detail": "параметр повторён с разными значениями"
   }
  ],
  "reliability_rules": {

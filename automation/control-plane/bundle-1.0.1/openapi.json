@@ -2,7 +2,7 @@
  "openapi": "3.0.3",
  "info": {
   "title": "Fleet Control Plane",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Единый внешний контракт внутренних контуров. Единый язык и discovery, но НЕ общая БД: каждый сервис владеет только своими данными."
  },
  "servers": [
@@ -150,7 +150,10 @@
     "x-status": "AVAILABLE",
     "responses": {
      "200": {
-      "description": "ok"
+      "description": "отфильтрованная выдача; пустой массив при валидной комбинации без совпадений — это ответ, а не ошибка"
+     },
+     "422": {
+      "description": "значение фильтра недопустимо, пусто или противоречиво; error_code из перечня FILTER_VALUE_UNKNOWN, FILTER_VALUE_EMPTY, FILTER_VALUE_CONFLICT"
      },
      "503": {
       "description": "зависимость недоступна"
@@ -160,29 +163,73 @@
      {
       "name": "environment",
       "in": "query",
+      "required": false,
       "schema": {
-       "type": "string"
+       "type": "string",
+       "enum": [
+        "production",
+        "non-production",
+        "test"
+       ]
       },
-      "x-status": "PLANNED",
-      "description": "объявлен, но провайдером ещё не применяется: ответ не фильтруется. Для ACTIVE production используйте /api/v1/registry/snapshot"
+      "description": "сравнение по каноническому значению; регистр не нормализуется, похожие значения не подставляются"
      },
      {
       "name": "lifecycle_state",
       "in": "query",
+      "required": false,
       "schema": {
-       "type": "string"
+       "type": "string",
+       "enum": [
+        "DRAFT",
+        "ACTIVE",
+        "QUARANTINED",
+        "RETIRED"
+       ]
       },
-      "x-status": "PLANNED",
-      "description": "объявлен, но провайдером ещё не применяется: ответ не фильтруется. Для ACTIVE production используйте /api/v1/registry/snapshot"
+      "description": "перечень совпадает с CHECK-ограничением таблицы site"
      }
     ],
-    "x-known-gap": {
-     "gap_id": "SITES_QUERY_FILTER_NOT_APPLIED",
-     "owner": "architect",
-     "detail": "параметры environment и lifecycle_state принимаются, но не влияют на выдачу; провайдер возвращает весь реестр",
-     "workaround": "/api/v1/registry/snapshot даёт ровно ACTIVE production",
-     "fix_requires": "аддитивная правка _sites() в Control API",
-     "status": "BLOCKED_PENDING_OWNER_APPROVAL"
+    "description": "Без параметров возвращает полный текущий реестр. Параметры применяются на стороне сервера ДО нарезки страниц; два параметра соединяются через AND. Недопустимое, пустое или противоречивое значение не игнорируется, а отвергается с 422 и Problem.v1.",
+    "x-filter-semantics": {
+     "combination": "AND",
+     "applied": "server-side",
+     "order": "фильтр применяется до pagination и cursor slicing",
+     "canonical_predicate": "factory.site_engine.api.site_filter",
+     "shared_with": [
+      "/api/v1/registry/snapshot"
+     ],
+     "silent_ignore": false
+    },
+    "x-examples": {
+     "все": {
+      "request": "/api/v1/sites",
+      "note": "полный реестр"
+     },
+     "боевые действующие": {
+      "request": "/api/v1/sites?environment=production&lifecycle_state=ACTIVE",
+      "note": "ровно та же проекция, что у /api/v1/registry/snapshot"
+     },
+     "неизвестное значение": {
+      "request": "/api/v1/sites?environment=nonsense",
+      "response_status": 422,
+      "error_code": "FILTER_VALUE_UNKNOWN"
+     },
+     "пустое значение": {
+      "request": "/api/v1/sites?environment=",
+      "response_status": 422,
+      "error_code": "FILTER_VALUE_EMPTY"
+     },
+     "конфликт ключа": {
+      "request": "/api/v1/sites?environment=production&environment=test",
+      "response_status": 422,
+      "error_code": "FILTER_VALUE_CONFLICT"
+     },
+     "валидная пустая выдача": {
+      "request": "/api/v1/sites?environment=non-production&lifecycle_state=RETIRED",
+      "response_status": 200,
+      "count": 0
+     }
     }
    }
   },

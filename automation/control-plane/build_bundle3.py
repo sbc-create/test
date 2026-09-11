@@ -9,7 +9,7 @@ AVAILABLE не объявляется по намерению. Каждая та
 from __future__ import annotations
 import datetime as dt, hashlib, json, pathlib, urllib.error, urllib.request
 
-ВЕРСИЯ = "1.0.0"
+ВЕРСИЯ = "1.0.1"
 КОРЕНЬ = pathlib.Path("/srv/site-factory/control-plane-contracts") / ВЕРСИЯ
 БАЗА = "http://127.0.0.1:8790"
 СЕЙЧАС = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -26,6 +26,8 @@ def жив(путь: str) -> tuple[bool, int]:
 
 
 ПРОВЕРЯЕМЫЕ = [
+ ("registry.sites.filter", "architect",
+  "/api/v1/sites?environment=production&lifecycle_state=ACTIVE", []),
  ("registry.sites.read", "architect", "/api/v1/sites",
   ["site.registered.v1","site.updated.v1","site.activated.v1","site.retired.v1"]),
  ("registry.snapshot.read", "architect", "/api/v1/registry/snapshot", []),

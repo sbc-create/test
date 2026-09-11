@@ -68,7 +68,7 @@
    "viewport": "mobile",
    "http": 200,
    "links": 142,
-   "text_len": 6383,
+   "text_len": 6296,
    "js_errors": 0,
    "pass": true
   },
@@ -108,7 +108,7 @@
    "viewport": "desktop",
    "http": 200,
    "links": 142,
-   "text_len": 6399,
+   "text_len": 6312,
    "js_errors": 0,
    "pass": true
   },
@@ -148,7 +148,7 @@
    "viewport": "mobile",
    "http": 200,
    "links": 142,
-   "text_len": 6383,
+   "text_len": 6296,
    "js_errors": 0,
    "pass": true
   },

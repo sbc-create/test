@@ -1,0 +1,178 @@
+{
+ "verdict": "PASS",
+ "failures": [],
+ "unfiltered_count": 12,
+ "production_active_count": 9,
+ "snapshot_count": 9,
+ "exact_set_match": true,
+ "rows": [
+  {
+   "case": "A",
+   "name": "без фильтров: 200 и полный реестр",
+   "pass": true,
+   "detail": "items=12"
+  },
+  {
+   "case": "A",
+   "name": "прежние ключи на месте (совместимость)",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "case": "B",
+   "name": "environment=production: только production",
+   "pass": true,
+   "detail": "items=9"
+  },
+  {
+   "case": "B",
+   "name": "утечки demo/test нет",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "case": "C",
+   "name": "lifecycle_state=ACTIVE: все записи ACTIVE",
+   "pass": true,
+   "detail": "items=9"
+  },
+  {
+   "case": "D",
+   "name": "AND-фильтр даёт ровно 9",
+   "pass": true,
+   "detail": "items=9"
+  },
+  {
+   "case": "D",
+   "name": "множество совпадает со снимком точно",
+   "pass": true,
+   "detail": "разница=[]"
+  },
+  {
+   "case": "D",
+   "name": "demo-books отсутствует",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "case": "D",
+   "name": "синтетических записей нет",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "case": "D",
+   "name": "site_id уникальны",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "case": "D",
+   "name": "порядок по site_id",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "case": "D",
+   "name": "ETag отражает отфильтрованную проекцию",
+   "pass": true,
+   "detail": "W/\"cb55bc13b116f83a-29\""
+  },
+  {
+   "case": "D",
+   "name": "применённые фильтры объявлены в ответе",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "case": "E",
+   "name": "environment=test: production не протекает",
+   "pass": true,
+   "detail": "items=2"
+  },
+  {
+   "case": "F",
+   "name": "lifecycle_state=DRAFT: ACTIVE не протекает",
+   "pass": true,
+   "detail": "items=2"
+  },
+  {
+   "case": "F",
+   "name": "demo-books классифицирован как DRAFT non-production",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "case": "G",
+   "name": "неизвестная среда -> 422",
+   "pass": true,
+   "detail": "HTTP 422"
+  },
+  {
+   "case": "G",
+   "name": "Problem.v1 валиден",
+   "pass": true,
+   "detail": "FILTER_VALUE_UNKNOWN"
+  },
+  {
+   "case": "H",
+   "name": "неизвестное состояние -> 422",
+   "pass": true,
+   "detail": "HTTP 422"
+  },
+  {
+   "case": "H",
+   "name": "Problem.v1 валиден",
+   "pass": true,
+   "detail": "FILTER_VALUE_UNKNOWN"
+  },
+  {
+   "case": "I",
+   "name": "пустое значение -> 422",
+   "pass": true,
+   "detail": "HTTP 422"
+  },
+  {
+   "case": "I",
+   "name": "Problem.v1 валиден",
+   "pass": true,
+   "detail": "FILTER_VALUE_EMPTY"
+  },
+  {
+   "case": "J",
+   "name": "конфликт повторного ключа -> 422",
+   "pass": true,
+   "detail": "HTTP 422"
+  },
+  {
+   "case": "J",
+   "name": "Problem.v1 валиден",
+   "pass": true,
+   "detail": "FILTER_VALUE_CONFLICT"
+  },
+  {
+   "case": "K",
+   "name": "фильтр применён до нарезки (весь набор отфильтрован)",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "case": "K",
+   "name": "повторный запрос стабилен (без дублей и пропусков)",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "case": "L",
+   "name": "валидная комбинация без совпадений -> 200 и пустой массив",
+   "pass": true,
+   "detail": "HTTP 200, items=0"
+  },
+  {
+   "case": "L",
+   "name": "fallback-записей нет",
+   "pass": true,
+   "detail": ""
+  }
+ ]
+}

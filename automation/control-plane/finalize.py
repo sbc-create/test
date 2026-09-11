@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Changelog, migration guide, политика совместимости и пересборка сумм."""
 import datetime as dt, hashlib, json, pathlib
-КОРЕНЬ = pathlib.Path("/srv/site-factory/control-plane-contracts/1.0.0")
+КОРЕНЬ = pathlib.Path("/srv/site-factory/control-plane-contracts/1.0.1")
 СЕЙЧАС = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 (КОРЕНЬ / "CHANGELOG.md").write_text(f"""# fleet-control-plane-contracts
