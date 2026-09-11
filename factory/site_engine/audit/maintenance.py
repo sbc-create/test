@@ -130,7 +130,7 @@ def main(argv: list[str] | None = None) -> int:
         if a.команда == "inventory":
             итог = инвентаризация(соед)
             print(json.dumps({
-                "candidates": len(итог["candidates"]),
+                "candidates": итог["candidate_count"],
                 "ambiguous": итог["ambiguous"],
                 "registry_events": итог["registry_events"],
                 "production_events": итог["production_events"],

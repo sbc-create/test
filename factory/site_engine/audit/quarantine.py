@@ -80,7 +80,7 @@ def проверить_однозначность(соед: sqlite3.Connection,
                             "event_id": с["event_id"], "причины": причины})
     реестровых = sum(1 for с in кандидаты
                      if с["producer_service"] == "registry")
-    return {"candidates": len(кандидаты), "ambiguous": len(спорные),
+    return {"candidate_count": len(кандидаты), "ambiguous": len(спорные),
             "ambiguous_detail": спорные, "registry_events": реестровых,
             "production_events": sum(
                 1 for с in кандидаты
