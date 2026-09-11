@@ -26,6 +26,10 @@ from . import quarantine as qr
 ИМЯ_ПРОЕКЦИИ = "operational"
 ОСНОВНАЯ = "operational_index"
 ТЕНЕВАЯ = "operational_index_shadow"
+#: Две таблицы чередуются. Собирать всегда в одну и ту же значит после второй
+#: пересборки получить точку отката, указывающую на текущую же таблицу: откат
+#: формально настроен, а откатываться некуда.
+ПАРА = (ОСНОВНАЯ, ТЕНЕВАЯ)
 
 СХЕМА = """
 CREATE TABLE IF NOT EXISTS projection_state (
@@ -89,6 +93,12 @@ def _наполнить(соед: sqlite3.Connection, таблица: str, *,
     return {"total": всего, "excluded": исключено}
 
 
+def запасная(соед: sqlite3.Connection) -> str:
+    """Та из пары, которая сейчас не обслуживает запросы."""
+    текущая = активная(соед)
+    return ПАРА[1] if текущая == ПАРА[0] else ПАРА[0]
+
+
 def пересобрать_в_тени(соед: sqlite3.Connection, *,
                        source_commit: str | None = None) -> dict[str, Any]:
     """Собрать проекцию заново в теневой таблице и сверить со старой.
@@ -99,21 +109,24 @@ def пересобрать_в_тени(соед: sqlite3.Connection, *,
     подготовить(соед)
     отметка = соед.execute(
         "SELECT coalesce(max(ledger_seq), 0) s FROM ledger_event").fetchone()["s"]
-    соед.executescript(ТАБЛИЦА.format(имя=ТЕНЕВАЯ))
-    итог = _наполнить(соед, ТЕНЕВАЯ, до_позиции=отметка)
+    тень = запасная(соед)
+    соед.executescript(ТАБЛИЦА.format(имя=тень))
+    итог = _наполнить(соед, тень, до_позиции=отметка)
     соед.commit()
 
     текущая = активная(соед)
-    было = {r[0] for r in соед.execute(
-        f"SELECT ledger_seq FROM {текущая} WHERE excluded=1")} \
-        if текущая != ТЕНЕВАЯ else set()
+    try:
+        было = {r[0] for r in соед.execute(
+            f"SELECT ledger_seq FROM {текущая} WHERE excluded=1")}
+    except sqlite3.OperationalError:
+        было = set()
     стало = {r[0] for r in соед.execute(
-        f"SELECT ledger_seq FROM {ТЕНЕВАЯ} WHERE excluded=1")}
+        f"SELECT ledger_seq FROM {тень} WHERE excluded=1")}
     return {"watermark_seq": отметка, "event_count": итог["total"],
             "excluded_count": итог["excluded"],
             "newly_excluded": sorted(стало - было),
             "no_longer_excluded": sorted(было - стало),
-            "shadow_table": ТЕНЕВАЯ, "active_table": текущая}
+            "shadow_table": тень, "active_table": текущая}
 
 
 def догнать(соед: sqlite3.Connection, таблица: str, *,
@@ -137,13 +150,14 @@ def догнать(соед: sqlite3.Connection, таблица: str, *,
 
 def переключить(соед: sqlite3.Connection, *,
                 source_commit: str | None = None) -> dict[str, Any]:
-    """Сделать теневую проекцию активной одной транзакцией."""
-    отметка = соед.execute(
-        f"SELECT coalesce(max(ledger_seq), 0) s FROM {ТЕНЕВАЯ}").fetchone()["s"]
-    догнать(соед, ТЕНЕВАЯ, с_позиции=отметка)
-    итог = соед.execute(
-        f"SELECT count(*) n, sum(excluded) e FROM {ТЕНЕВАЯ}").fetchone()
+    """Сделать собранную проекцию активной одной транзакцией."""
     прежняя = активная(соед)
+    тень = запасная(соед)
+    отметка = соед.execute(
+        f"SELECT coalesce(max(ledger_seq), 0) s FROM {тень}").fetchone()["s"]
+    догнать(соед, тень, с_позиции=отметка)
+    итог = соед.execute(
+        f"SELECT count(*) n, sum(excluded) e FROM {тень}").fetchone()
     with соед:
         соед.execute(
             "INSERT INTO projection_state(name, active_table, rollback_table, "
@@ -155,11 +169,11 @@ def переключить(соед: sqlite3.Connection, *,
             "event_count=excluded.event_count, "
             "excluded_count=excluded.excluded_count, "
             "built_at=excluded.built_at, source_commit=excluded.source_commit",
-            (ИМЯ_ПРОЕКЦИИ, ТЕНЕВАЯ, прежняя,
-             соед.execute(f"SELECT coalesce(max(ledger_seq),0) s FROM {ТЕНЕВАЯ}")
+            (ИМЯ_ПРОЕКЦИИ, тень, прежняя,
+             соед.execute(f"SELECT coalesce(max(ledger_seq),0) s FROM {тень}")
              .fetchone()["s"], итог["n"], итог["e"] or 0, store.сейчас(),
              source_commit))
-    return {"active_table": ТЕНЕВАЯ, "rollback_table": прежняя,
+    return {"active_table": тень, "rollback_table": прежняя,
             "event_count": итог["n"], "excluded_count": итог["e"] or 0}
 
 
