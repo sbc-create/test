@@ -244,6 +244,7 @@ def первый_экран(в: dict, активный: str = "") -> str:
 
 
 ГОЛОВА_ТИТУЛ = re.compile(r"<title\b[^>]*>.*?</title>", re.S | re.I)
+ГОЛОВА_РОБОТЫ = re.compile(r'<meta\s+name="robots"[^>]*>', re.I)
 ГОЛОВА_ОПИСАНИЕ = re.compile(
     r'<meta\s+(?:name="description"|property="og:(?:title|description|type|site_name)")'
     r'[^>]*>', re.I)
@@ -297,6 +298,10 @@ def собрать(оболочка: dict, заголовок: str, лид: str,
         оболочка["head"], count=1)
     описание = html.escape(лид[:300])
     голова = ГОЛОВА_ОПИСАНИЕ.sub("", голова)
+    # Голова копируется у витрины вместе с её мета-тегом robots. Страница
+    # наша, дерева React на ней нет, и тег приводится к строгому значению
+    # здесь же — второй тег рядом с первым был бы конфликтом директив.
+    голова = ГОЛОВА_РОБОТЫ.sub("", голова)
     сводка = (f'<meta name="description" content="{описание}">'
               f'<meta property="og:title" content="{html.escape(заголовок)}">'
               f'<meta property="og:description" content="{описание}">'
@@ -304,7 +309,10 @@ def собрать(оболочка: dict, заголовок: str, лид: str,
     if в.get("title"):
         сводка += f'<meta property="og:site_name" content="{html.escape(в["title"])}">'
     return (
-        "<!DOCTYPE html><html lang=\"ru\">"
+        # `data-sf-own` — признак собственной страницы витрины. Только на
+        # ней посредник объявляет версию: в чужую разметку он не пишет
+        # ничего, иначе ломается восстановление страницы React.
+        "<!DOCTYPE html><html data-sf-own=\"1\" lang=\"ru\">"
         + голова.replace("</head>", ПУСТО_СТИЛЬ + токены + мета + сводка + "</head>", 1)
         + f'<body data-variant="{html.escape(в.get("variant_id", ""))}">' + оболочка["header"]
         + '<main id="main-content" class="portal-container min-h-dvh min-w-0 flex-1">'
