@@ -296,6 +296,55 @@
         "h2_size": {
           "$ref": "#/$defs/length",
           "description": "Кегль заголовка второго уровня. См. h1_size."
+        },
+        "gutter": {
+          "type": "string",
+          "pattern": "^\\d{1,3}px$",
+          "description": "Боковой отступ контейнера до 1024 px. У референсов Lords — 5px; умолчание 16px повторяет прежнее поведение витрин, которые токен не объявляют."
+        },
+        "gutter_wide": {
+          "type": "string",
+          "pattern": "^\\d{1,3}px$",
+          "description": "Боковой отступ контейнера с 1024 px. У референсов Lords — 12px."
+        },
+        "gutter_mode": {
+          "enum": [
+            "padding",
+            "margin"
+          ],
+          "description": "Чем создаётся боковой отступ: внутренним полем (прежнее поведение) или внешним. Разница невидима глазом и видна измерению: при padding ширина блока равна ширине окна, при margin — на два отступа меньше, как у референсов."
+        },
+        "header_min_height": {
+          "type": "string",
+          "pattern": "^\\d{1,3}px$",
+          "description": "Минимальная высота строки шапки. У референсов Lords — 70px; умолчание 60px."
+        },
+        "header_position": {
+          "enum": [
+            "static",
+            "relative",
+            "sticky"
+          ],
+          "description": "Положение шапки. У всех трёх референсов Lords header.sticky = false и position = relative; умолчание sticky повторяет прежнее поведение."
+        },
+        "header_search": {
+          "enum": [
+            "stacked",
+            "inline"
+          ],
+          "description": "Форма поиска в шапке: отдельной строкой во всю ширину (прежнее поведение) или в одной строке с меню, как у референсов."
+        },
+        "button_size": {
+          "type": "string",
+          "description": "Кегль кнопки шапки. Умолчание inherit: прежде правило объявляло font: inherit, и подстановка конкретного значения подняла бы кегль кнопки на всех витринах."
+        },
+        "button_weight": {
+          "type": "string",
+          "description": "Начертание кнопки шапки. Умолчание inherit по той же причине."
+        },
+        "button_line_height": {
+          "type": "string",
+          "description": "Межстрочный интервал кнопки шапки. У референсов Lords — 40px; умолчание inherit."
         }
       }
     },
