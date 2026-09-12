@@ -160,6 +160,79 @@ def ссылки(сведения: dict) -> dict[str, Any]:
     }
 
 
+def перекрёстная_таблица(сведения: dict, м: dict) -> dict[str, Any]:
+    """route_key → site_id → семейство → группы дефектов → evidence_id.
+
+    Гранулярность ограничена данными: в манифесте `evidence_hash` привязан к
+    паре (сайт, дефект), а не к отдельному маршруту. Выдавать пороутовый
+    evidence_id значило бы придумать связь, которой в артефактах нет.
+
+    Звена `link_key` в таблице нет вовсе: перечень адресов карточек не
+    сохранялся, и построить его не из чего.
+    """
+    записи = сведения["audit-manifest.json"]["data"]["records"]
+    по_домену: dict[str, dict] = {}
+    for з in записи:
+        домен = з.get("domain")
+        if not домен:
+            continue
+        узел = по_домену.setdefault(домен, {"site_id": з.get("site_id"),
+                                            "defects": {}})
+        узел["defects"][з["defect_id"]] = {
+            "evidence_id": з.get("evidence_hash"),
+            "severity": з.get("severity"), "owner": з.get("owner"),
+            "status": з.get("status")}
+
+    def семейство(site_id: str | None) -> str:
+        return (site_id or "").split("-")[0] or "неизвестно"
+
+    строки = []
+    for ключ in м["members"]:
+        домен, _, маршрут = ключ.partition("|")
+        узел = по_домену.get(домен, {})
+        site_id = узел.get("site_id")
+        маршрутные = {д: св for д, св in (узел.get("defects") or {}).items()
+                      if "ROUTE" in д}
+        строки.append({
+            "link_key": None,
+            "route_key": ключ,
+            "route": маршрут,
+            "domain": домен,
+            "site_id": site_id,
+            "family": семейство(site_id),
+            "defect_groups": sorted(маршрутные),
+            "evidence_ids": sorted({св["evidence_id"] for св in маршрутные.values()
+                                    if св.get("evidence_id")}),
+            "evidence_class": "observed_http",
+        })
+    без_группы = [с["route_key"] for с in строки if not с["defect_groups"]]
+    return {
+        "granularity": "evidence_id привязан к паре (сайт, дефект); пороутовых "
+                       "идентификаторов доказательств в артефактах нет",
+        "link_key_available": False,
+        "rows": строки,
+        "routes_unmapped_to_defect_group": без_группы,
+        "by_site": _свод(строки, "site_id"),
+        "by_family": _свод(строки, "family"),
+        "by_defect_group": _свод_групп(строки),
+    }
+
+
+def _свод(строки: list[dict], поле: str) -> dict[str, int]:
+    итог: dict[str, int] = {}
+    for с in строки:
+        итог[str(с.get(поле))] = итог.get(str(с.get(поле)), 0) + 1
+    return dict(sorted(итог.items()))
+
+
+def _свод_групп(строки: list[dict]) -> dict[str, int]:
+    итог: dict[str, int] = {}
+    for с in строки:
+        for г in с["defect_groups"]:
+            итог[г] = итог.get(г, 0) + 1
+    return dict(sorted(итог.items()))
+
+
 def главное(корень: pathlib.Path) -> dict[str, Any]:
     сведения = разобрать(корень)
     отсутствуют = [и for и in ФАЙЛЫ if not сведения[и]["present"]]
@@ -167,7 +240,9 @@ def главное(корень: pathlib.Path) -> dict[str, Any]:
         return {"error": "нет артефактов", "missing": отсутствуют}
     м = маршруты(сведения)
     л = ссылки(сведения)
+    таблица = перекрёстная_таблица(сведения, м)
     return {
+        "crosswalk": таблица,
         "artifacts": {и: {k: v for k, v in сведения[и].items() if k != "data"}
                       for и in ФАЙЛЫ},
         "broken_existing_routes": м,
