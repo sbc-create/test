@@ -94,6 +94,11 @@ OPERATOR = "operator"
     "tls.certificate": "architect",
     "analytics.counter": "architect",
     "seo.project": "architect",
+    # Предложение SEO-контента. Домен принадлежит SEO, но каноническую
+    # строку пишет control-plane: запись обязана пройти проверку схемы, прав,
+    # реестра и отпечатков, а эта проверка живёт здесь. Иначе «владею»
+    # незаметно превратилось бы в «пишу напрямую».
+    "seo.content.proposal": "control-plane",
     # Ресурс существует только для испытаний механизма.
     "fake.resource": "control-plane",
 }

@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ClaimErratum.v1.json",
+  "title": "Исправление числовых утверждений прежнего события журнала",
+  "description": "Журнал только дополняется: исправление — новая запись со ссылкой на прежнюю, а не правка прежней.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "event_type",
+    "source_event_id",
+    "source_ledger_seq",
+    "source_event_type",
+    "subject_producer",
+    "correction_actor",
+    "correction_authority",
+    "idempotency_key",
+    "reason_code",
+    "claim_namespace",
+    "claim_corrections",
+    "evidence_refs"
+  ],
+  "properties": {
+    "event_type": {
+      "const": "audit.claim.erratum.v1"
+    },
+    "source_event_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "source_ledger_seq": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "source_event_type": {
+      "type": "string"
+    },
+    "subject_producer": {
+      "type": "string"
+    },
+    "correction_actor": {
+      "type": "string"
+    },
+    "correction_authority": {
+      "type": "string"
+    },
+    "reason_code": {
+      "type": "string",
+      "enum": [
+        "RECOMPUTED_FROM_PINNED_EVIDENCE",
+        "EVIDENCE_INSUFFICIENT",
+        "UNIT_MISMATCH",
+        "SOURCE_DATA_LOST"
+      ]
+    },
+    "claim_namespace": {
+      "type": "object",
+      "required": [
+        "ref",
+        "sha256"
+      ],
+      "properties": {
+        "ref": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string"
+        },
+        "pointer": {
+          "type": "string"
+        }
+      }
+    },
+    "claim_corrections": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "disposition"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "pattern": "^/"
+          },
+          "previous_value": {},
+          "disposition": {
+            "type": "string",
+            "enum": [
+              "CORRECTED",
+              "WITHDRAWN_UNVERIFIED"
+            ]
+          },
+          "replacement_value": {}
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "disposition": {
+                  "const": "CORRECTED"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "replacement_value"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "disposition": {
+                  "const": "WITHDRAWN_UNVERIFIED"
+                }
+              }
+            },
+            "then": {
+              "not": {
+                "required": [
+                  "replacement_value"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
