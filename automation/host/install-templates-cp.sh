@@ -30,7 +30,13 @@ cp -a "$REPO/factory/__init__.py" "$RELEASE/factory/__init__.py"
 chown -R claude:claude "$RELEASE"
 
 # Отпечаток артефакта: что именно поедет в работу.
-ARTIFACT="$(find "$RELEASE" -name '*.py' -type f | sort | xargs sha256sum | sha256sum | cut -d' ' -f1)"
+#
+# Считается по СОДЕРЖИМОМУ и относительным путям. Первая версия хэшировала
+# вывод sha256sum вместе с абсолютными путями, и один и тот же код через
+# `releases/<sha>/` и через `current/` давал разные отпечатки — сравнение
+# «установлено против работает» ломалось на пустом месте.
+ARTIFACT="$(cd "$RELEASE" && find . -name '*.py' -type f | LC_ALL=C sort \
+  | xargs sha256sum | sha256sum | cut -d' ' -f1)"
 printf '{"commit":"%s","artifact_sha256":"%s","installed_at":"%s"}\n' \
   "$COMMIT" "$ARTIFACT" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > "$RELEASE/release-manifest.json"
 chown claude:claude "$RELEASE/release-manifest.json"
@@ -77,6 +83,9 @@ systemctl restart templates-cp-consumer.service
 sleep 4
 systemctl is-active templates-cp-consumer.service
 RUNNING="$(systemctl show templates-cp-consumer -p MainPID --value)"
-RUN_ART="$(tr -d '\n' < "${ROOT}/current/release-manifest.json")"
+RUN_ART="$(cd "${ROOT}/current" && find . -name '*.py' -type f | LC_ALL=C sort \
+  | xargs sha256sum | sha256sum | cut -d' ' -f1)"
+[[ "$RUN_ART" == "$ARTIFACT" ]] \
+  || { log "ОТКАЗ: работает артефакт ${RUN_ART}, установлен ${ARTIFACT}"; exit 4; }
 log "работает pid=${RUNNING}; манифест: ${RUN_ART}"
 log "установлено: ${RELEASE}"
