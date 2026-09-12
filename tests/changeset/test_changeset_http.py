@@ -123,13 +123,37 @@ def test_http_фильтры_применяются_на_сервере():
     assert к4 == 422 and т4["error_code"] == "FILTER_VALUE_UNKNOWN"
 
 
-def test_http_история_переходов_доступна():
+def test_http_валидация_читает_настоящий_реестр():
+    """Через HTTP работает настоящий реестр, а не подставной.
+
+    Идентификаторы испытаний в нём отсутствуют — и валидация обязана это
+    заметить. Успех здесь означал бы, что проверка site_id ничего не
+    проверяет, а домен или выдуманная строка прошли бы наравне с настоящим
+    ключом.
+    """
+    к, создан = зов("POST", "/api/v1/changesets", заявка(), служба="templates")
+    cid = создан["changeset_id"]
+    к2, т2 = зов("POST", f"/api/v1/changesets/{cid}/validate")
+    assert к2 == 422, т2
+    assert т2["error_code"] == "SITE_ID_UNKNOWN", т2
+
+
+def test_http_домен_не_принимается_как_ключ():
+    к, создан = зов("POST", "/api/v1/changesets",
+                    заявка(target_site_ids=["yummyani.org"]), служба="templates")
+    assert к == 201, создан
+    к2, т2 = зов("POST", f"/api/v1/changesets/{создан['changeset_id']}/validate")
+    assert к2 == 422 and т2["error_code"] == "SITE_ID_UNKNOWN", т2
+
+
+def test_http_история_переходов_записывается():
+    """Неудачная валидация тоже оставляет след: решение видно целиком."""
     к, создан = зов("POST", "/api/v1/changesets", заявка(), служба="templates")
     cid = создан["changeset_id"]
     к2, т2 = зов("GET", f"/api/v1/changesets/{cid}/transitions")
     assert к2 == 200 and т2["count"] == 0, т2
-    к3, т3 = зов("POST", f"/api/v1/changesets/{cid}/validate")
-    assert к3 == 200, т3
+    зов("POST", f"/api/v1/changesets/{cid}/validate")
     к4, т4 = зов("GET", f"/api/v1/changesets/{cid}/transitions")
-    assert т4["count"] == 2, т4
-    assert [i["to_status"] for i in т4["items"]] == ["VALIDATING", "VALIDATED"]
+    assert [i["to_status"] for i in т4["items"]] == ["VALIDATING",
+                                                     "VALIDATION_FAILED"], т4
+    assert all(i["actor_role"] == "validator" for i in т4["items"]), т4
