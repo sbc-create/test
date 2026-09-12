@@ -325,3 +325,75 @@ class ФейковыйTopvisor(_Базовый):
         self._после_эффекта(внешний)
         return {"external_id": внешний, "created": True, "project_id": номер,
                 "fingerprint": _отпечаток(о)}
+
+
+class ФейковаяВитрина(_Базовый):
+    """Витрина шаблона: сюда ставится тег счётчика.
+
+    Существует ради одного вопроса, который иначе остаётся без ответа:
+    создание счётчика и УСТАНОВКА тега — разные события. Успешный create
+    возвращает идентификатор, но ничего не говорит о том, что витрина этот
+    идентификатор отдаёт. Проверяется именно отдача.
+    """
+
+    provider_type = "template"
+    resource_kind = "counter_tag"
+
+    def __init__(self, мир: Мир | None = None, html: str | None = None) -> None:
+        super().__init__(мир)
+        self.html = html or "<html><head></head><body>витрина</body></html>"
+        self._счётчик: int | None = None
+
+    def установить_счётчик(self, номер: int | None) -> None:
+        """Публичный идентификатор передаётся явно, а не дописывается в намерение.
+
+        Намерение неизменяемо, и подсовывать в него служебное поле значило бы
+        сделать «неизменяемое» условным — ровно то, на что потом никто не
+        рассчитывает.
+        """
+        self._счётчик = int(номер) if номер else None
+
+    def observe(self, *, site_id: str, intent: Any) -> Наблюдение:
+        self._перед_вызовом()
+        ключ = self._ключ(site_id)
+        о = self.мир.объекты.get(ключ)
+        if о is None:
+            return Наблюдение(существует=False)
+        return Наблюдение(существует=True, external_id=ключ,
+                          fingerprint=_отпечаток(о), подробности=dict(о),
+                          владение_подтверждено=о.get("owner") == site_id)
+
+    def plan(self, *, site_id: str, intent: Any, observed: Наблюдение) -> dict:
+        номер = self._счётчик
+        if not номер:
+            raise ProviderError(
+                "COUNTER_ID_REQUIRED",
+                "публичный идентификатор счётчика не передан: ставить тег "
+                "нечем, а пустой тег выглядел бы установленным")
+        целевое = {"owner": site_id, "counter_id": int(номер),
+                   "placement": "head"}
+        return {"resource_kind": self.resource_kind, "target": целевое,
+                "expected_fingerprint": _отпечаток(целевое),
+                "empty": bool(observed.существует
+                              and (observed.подробности or {}).get("counter_id")
+                              == int(номер))}
+
+    def apply(self, *, site_id: str, plan: dict, idempotency_key: str) -> dict:
+        self._перед_вызовом()
+        ключ = self._ключ(site_id)
+        номер = plan["target"]["counter_id"]
+        существующий = self.мир.объекты.get(ключ)
+        if существующий and существующий.get("counter_id") == номер:
+            return {"external_id": ключ, "created": False,
+                    "fingerprint": _отпечаток(существующий)}
+        self.мир.объекты[ключ] = {**plan["target"], "_provider": self.provider_type}
+        # Тег ставится в разметку — это и есть наблюдаемое следствие.
+        self.html = self.html.replace(
+            "</head>", f'<script data-counter="{номер}"></script></head>')
+        self.мир.эффект("create", idempotency_key, ключ)
+        self._после_эффекта(ключ)
+        return {"external_id": ключ, "created": True,
+                "fingerprint": _отпечаток(plan["target"])}
+
+    def тег_установлен(self, номер: int) -> bool:
+        return f'data-counter="{номер}"' in self.html

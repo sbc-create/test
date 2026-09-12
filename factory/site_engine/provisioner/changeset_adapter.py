@@ -23,13 +23,12 @@ from factory.site_engine.provisioner.providers.base import ProviderError
     "tls.certificate": ("tls", "certificate"),
     "analytics.counter": ("analytics", "counter"),
     "seo.project": ("seo_rank", "project"),
+    "template.build": ("template", "counter_tag"),
 }
 
 
 class ProviderTargetAdapter:
     """Один внешний ресурс как цель контура изменений."""
-
-    owner_service = "architect"
 
     def __init__(self, провайдер, намерение, связи, *,
                  resource_type: str, changeset_id: str | None = None) -> None:
@@ -39,6 +38,20 @@ class ProviderTargetAdapter:
         self.resource_type = resource_type
         self.changeset_id = changeset_id
         self._эффектов = 0
+
+    @property
+    def owner_service(self) -> str:
+        """Владелец берётся из канонической матрицы, а не задаётся здесь.
+
+        Жёстко объявленный владелец однажды разойдётся с матрицей, и контур
+        отвергнет изменение с OWNERSHIP_MISMATCH — причём отвергнет
+        правильно, а искать причину будут в другом месте. Ресурс шаблона
+        принадлежит службе templates, внешние ресурсы провайдеров —
+        архитектору, и адаптер обязан говорить об этом одно и то же с
+        матрицей.
+        """
+        from factory.site_engine.changeset import model as _M
+        return _M.ЕДИНСТВЕННЫЙ_ПИСАТЕЛЬ.get(self.resource_type, "architect")
 
     # --- контракт контура -------------------------------------------------
     def capabilities(self) -> dict[str, Any]:

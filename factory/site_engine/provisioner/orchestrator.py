@@ -34,6 +34,10 @@ from factory.site_engine.provisioner.providers.base import ProviderError
     ("dns", "dns.record_set"),
     ("tls", "tls.certificate"),
     ("analytics", "analytics.counter"),
+    # Установка тега идёт ПОСЛЕ создания счётчика и отдельным набором
+    # изменений: полученный идентификатор и отданная витриной разметка —
+    # разные события, и успех первого ничего не говорит о втором.
+    ("template", "template.build"),
     ("seo_rank", "seo.project"),
 )
 
@@ -82,6 +86,16 @@ class Provisioner:
             шаг.отказ = "PROVIDER_NOT_CONNECTED"
             return шаг
 
+        # Публичный идентификатор счётчика передаётся дальше по контуру —
+        # и только он. Токенов и внутренних полей провайдера здесь не бывает.
+        if имя == "template":
+            счётчик = self.связи.найти(site_id, "analytics", "counter")
+            публичный = self._публичный_счётчик(счётчик)
+            if публичный is None:
+                шаг.отказ = "COUNTER_ID_REQUIRED"
+                return шаг
+            провайдер.установить_счётчик(публичный)
+
         адаптер = ProviderTargetAdapter(провайдер, намерение, self.связи,
                                         resource_type=resource_type)
         заявка = {
@@ -93,12 +107,26 @@ class Provisioner:
             "correlation_id": намерение.correlation_id,
             "requested_change": {"canonical_domain": намерение.canonical_domain},
         }
+        # Предлагает Provisioner (архитектор). Владелец ресурса может быть
+        # другим — это разные вещи: предложить изменение и владеть ресурсом.
         создано = S.создать(self.соед, заявка, producer_service="architect",
                             actor_id="service:architect", actor_type="SERVICE")
         cid = создано["changeset_id"]
         шаг.changeset_id = cid
         адаптер.changeset_id = cid
         движок = E.Engine(self.соед, адаптер=адаптер, реестр=self.реестр)
+
+        # Повтор с тем же ключом вернул уже завершённый набор. Это сделанная
+        # работа, а не отказ: гнать её через валидацию заново значит получить
+        # TRANSITION_NOT_ALLOWED и объявить успех неудачей.
+        если_готово = S.получить(self.соед, cid)
+        if создано.get("idempotent_replay") and если_готово and \
+                если_готово["status"] in M.ТЕРМИНАЛЬНЫЕ:
+            шаг.статус = если_готово["status"]
+            связь = self.связи.найти(*_ключ_связи(resource_type, site_id))
+            if связь is not None:
+                шаг.external_id = связь.external_id
+            return шаг
 
         try:
             движок.валидировать(cid, actor_id="service:control-plane",
@@ -126,6 +154,15 @@ class Provisioner:
         результаты = (итог.get("results") or {}).get(site_id) or {}
         шаг.public = (результаты.get("apply") or {}).get("public")
         return шаг
+
+    def _публичный_счётчик(self, связь) -> int | None:
+        """Только публичный номер счётчика из внешнего идентификатора."""
+        if связь is None:
+            return None
+        провайдер = self.провайдеры.get("analytics")
+        о = (провайдер.мир.объекты.get(связь.external_id) or {}) if провайдер else {}
+        номер = о.get("public_counter_id")
+        return int(номер) if номер else None
 
     def _применить_с_повторами(self, движок, cid: str, маркер: int) -> dict:
         """Повтор только для временных отказов и с ограниченным числом попыток.

@@ -50,8 +50,8 @@ def test_02_повтор_не_создаёт_второй_объект(обвя�
     п, первый = _провести(обвязка)
     второй = п.провести(намерение("shop.test", "k-1"), "s-1")
     мир = обвязка["мир"]
-    assert мир.эффектов("create") == 4, "по одному объекту на провайдера"
-    assert len(первый["links"]) == len(второй["links"]) == 4
+    assert мир.эффектов("create") == 5, "по одному объекту на провайдера"
+    assert len(первый["links"]) == len(второй["links"]) == 5
 
 
 # --- 3. два одинаковых вызова ------------------------------------------------
@@ -187,13 +187,45 @@ def test_10_templates_получает_только_публичный_id(обв
 
 def test_11_тег_ставится_через_changeset(обвязка):
     п, свод = _провести(обвязка)
-    шаг = next(ш for ш in свод["steps"] if ш["имя"] == "analytics")
-    assert шаг["changeset_id"], "изменение без набора недопустимо"
-    набор = S.получить(обвязка["соед"], шаг["changeset_id"])
+    аналитика = next(ш for ш in свод["steps"] if ш["имя"] == "analytics")
+    assert аналитика["changeset_id"], "изменение без набора недопустимо"
+    набор = S.получить(обвязка["соед"], аналитика["changeset_id"])
     assert набор["status"] == M.SUCCEEDED
     assert набор["resource_type"] == "analytics.counter"
     # Одобрение выдано человеком, а не Provisioner'ом.
     assert набор["approval"]["approver_type"] == "HUMAN"
+
+    # Установка тега — ОТДЕЛЬНЫЙ набор изменений. Успешное создание счётчика
+    # ничего не говорит о том, что витрина его отдаёт.
+    витрина_шаг = next(ш for ш in свод["steps"] if ш["имя"] == "template")
+    набор_тега = S.получить(обвязка["соед"], витрина_шаг["changeset_id"])
+    assert набор_тега["status"] == M.SUCCEEDED
+    assert набор_тега["resource_type"] == "template.build"
+    assert набор_тега["changeset_id"] != набор["changeset_id"]
+
+    номер = обвязка["провайдеры"]["analytics"].мир.объекты[
+        обвязка["связи"].найти("s-1", "analytics", "counter").external_id
+    ]["public_counter_id"]
+    assert обвязка["провайдеры"]["template"].тег_установлен(номер), (
+        "счётчик создан, но витрина тег не отдаёт")
+
+
+def test_11b_витрина_получает_только_публичный_номер(обвязка):
+    п, свод = _провести(обвязка)
+    витрина = обвязка["провайдеры"]["template"]
+    ключ = f"template:counter_tag:s-1"
+    объект = обвязка["мир"].объекты[ключ]
+    assert set(объект) <= {"owner", "counter_id", "placement", "_provider"}
+    assert isinstance(объект["counter_id"], int)
+
+
+def test_11c_без_счётчика_тег_не_ставится(обвязка):
+    """Пустой тег выглядел бы установленным — это хуже отсутствия."""
+    витрина = обвязка["провайдеры"]["template"]
+    витрина.установить_счётчик(None)
+    with pytest.raises(B.ProviderError) as ош:
+        витрина.plan(site_id="s-1", intent=намерение(), observed=None)
+    assert ош.value.error_code == "COUNTER_ID_REQUIRED"
 
 
 # --- 12–13. роль Qwen --------------------------------------------------------
@@ -355,3 +387,58 @@ def test_20_готовность_вычисляется_а_не_хранится
     assert "DNS_READY" in г["reached"] and "TLS_READY" in г["reached"]
     # Жизненный цикл реестра не переопределяется.
     assert г["details"]["lifecycle_state"] == "DRAFT"
+
+
+# --- 10. наблюдаемость -------------------------------------------------------
+
+def test_21_показатели_собираются_из_состояния(обвязка):
+    from factory.site_engine.provisioner import health as H
+    п, свод = _провести(обвязка)
+    м = H.собрать(связи=обвязка["связи"], соед_наборов=обвязка["соед"])
+    assert м.ready is True
+    assert м.links_total == 5 and м.onboarding_sites == 1
+    assert м.duplicate_effects == 0, "дубль внешнего объекта — отказ, а не метрика"
+    assert м.dlq_depth == 0
+    assert м.changesets_failed == 0 and м.stuck_changesets == []
+    assert м.provider_error_rate == 0.0
+    assert м.stage_durations_sec, "длительность стадий обязана считаться"
+
+
+def test_22_дубль_эффекта_поднимает_тревогу(обвязка):
+    from factory.site_engine.provisioner import health as H
+    связи = обвязка["связи"]
+    for ключ in ("a", "b"):
+        связи.начать_действие(ключ, site_id="s-1", provider_type="analytics",
+                              resource_kind="counter", operation="apply")
+        связи.завершить_действие(ключ, состояние="SUCCEEDED",
+                                 external_id="counter-1")
+    м = H.собрать(связи=связи, соед_наборов=обвязка["соед"])
+    assert м.duplicate_effects == 1
+    assert any(а["code"] == "DUPLICATE_PROVIDER_EFFECT" and а["severity"] == "P0"
+               for а in м.alerts)
+    assert м.ready is False
+
+
+def test_23_застрявший_набор_обнаружен(обвязка):
+    """Набор, которого никто не одобрил, действительно висит.
+
+    Подменить статус напрямую нельзя: хранилище не даёт менять его мимо
+    машины переходов — и правильно делает. Поэтому застревание создаётся
+    по-настоящему: предложение без одобряющего остаётся ждать вечно.
+    """
+    import datetime as d
+    from factory.site_engine.provisioner import health as H
+    обвязка["реестр"].добавить("s-1", domain="shop.test")
+    п = _provisioner(обвязка, одобряющий=None)
+    свод = п.провести(намерение(), "s-1")
+    assert свод["steps"][0]["отказ"] == "APPROVAL_REQUIRED"
+
+    сейчас = H.собрать(связи=обвязка["связи"], соед_наборов=обвязка["соед"])
+    assert сейчас.stuck_changesets == [], "только что созданный не застрял"
+
+    поздно = d.datetime.now(d.timezone.utc) + d.timedelta(hours=2)
+    м = H.собрать(связи=обвязка["связи"], соед_наборов=обвязка["соед"],
+                  сейчас=поздно)
+    assert м.stuck_changesets, "набор без движения обязан быть замечен"
+    assert any(а["code"] == "CHANGESET_STUCK" for а in м.alerts)
+    assert м.ready is False
