@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.site-factory.internal/1.3.0/schemas/Approval.v1.json",
+  "title": "Approval.v1",
+  "description": "Разрешение на КОНКРЕТНЫЙ план для КОНКРЕТНЫХ целей. Поле binding перечисляет всё, изменение чего обязано аннулировать разрешение; signature связывает его арифметически, а не обещанием исполнителя.",
+  "type": "object",
+  "required": [
+    "approver_id",
+    "approver_service",
+    "approver_type",
+    "approved_at",
+    "expires_at",
+    "policy_version",
+    "binding",
+    "signature"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "approver_id": {
+      "type": "string"
+    },
+    "approver_service": {
+      "type": "string"
+    },
+    "approver_type": {
+      "enum": [
+        "SERVICE",
+        "HUMAN"
+      ],
+      "description": "MODEL отсутствует намеренно: модель не одобряет изменения."
+    },
+    "approved_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "policy_version": {
+      "type": "string"
+    },
+    "binding": {
+      "type": "object"
+    },
+    "signature": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "revoked_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "revoked_by": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

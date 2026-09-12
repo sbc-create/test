@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.site-factory.internal/1.3.0/schemas/AdapterCapabilities.v1.json",
+  "title": "AdapterCapabilities.v1",
+  "description": "Что умеет целевой адаптер. Реальные адаптеры Templates, Content, SEO и провайдеров в 1.3.0 не подключены.",
+  "type": "object",
+  "required": [
+    "adapter",
+    "owner_service",
+    "resource_types",
+    "operations",
+    "supports_dry_run",
+    "supports_observe",
+    "supports_rollback"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "adapter": {
+      "type": "string"
+    },
+    "owner_service": {
+      "type": "string"
+    },
+    "resource_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "operations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "reversible_operations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "supports_dry_run": {
+      "type": "boolean"
+    },
+    "supports_observe": {
+      "type": "boolean"
+    },
+    "supports_rollback": {
+      "type": "boolean"
+    },
+    "environment": {
+      "type": "string"
+    }
+  }
+}

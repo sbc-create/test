@@ -74,6 +74,11 @@ OPERATOR = "operator"
     "changeset": "control-plane",
     "template.structure": "templates",
     "template.build": "templates",
+    # Выкладка релиза шаблона. Владелец домена — Templates, но записывать
+    # канонические связи он не вправе: их единственный писатель — Registry.
+    # Исполняет отдельная личность templates-executor и только по
+    # короткоживущему разрешению; постоянного EXECUTE у Templates нет.
+    "template.release": "templates",
     "content.catalog": "content",
     "content.ratings": "content",
     "seo.text": "seo",
@@ -124,6 +129,18 @@ RISK_HIGH = "HIGH"
 НЕОБРАТИМЫЕ_ОПЕРАЦИИ = frozenset({"delete", "purge", "destroy", "truncate"})
 
 ОПЕРАЦИИ = frozenset({"create", "update", "patch", "publish", "rollback"})
+
+#: Действия, допустимые для конкретного рода ресурса. Перечень закрыт:
+#: подстановочный `*` означал бы «что угодно», а ограничение, допускающее что
+#: угодно, ограничением не является.
+ДЕЙСТВИЯ_РЕСУРСА: dict[str, frozenset[str]] = {
+    "template.release": frozenset({"publish", "rollback"}),
+}
+
+
+def действия_ресурса(resource_type: str) -> frozenset[str]:
+    """Что разрешено делать с этим родом ресурса."""
+    return ДЕЙСТВИЯ_РЕСУРСА.get(resource_type, ОПЕРАЦИИ)
 
 
 # --- таблица переходов -------------------------------------------------------

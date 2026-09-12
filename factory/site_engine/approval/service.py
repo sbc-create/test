@@ -35,10 +35,12 @@ import json
 import os
 import sys
 import threading
+import uuid as _uuid
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
 
 from factory.site_engine.approval import keyring as K
+from factory.site_engine.changeset import model as M
 from factory.site_engine.credentials import store as C
 
 ПРИВАТНЫЙ = "approval-signing-key"
@@ -50,9 +52,50 @@ from factory.site_engine.credentials import store as C
 #: Разные операции, разный круг: та же служба, что просит одобрить, не должна
 #: автоматически получать право забрать разрешение на исполнение.
 ДОПУЩЕНЫ_К_ОДОБРЕНИЮ = frozenset({"control-api"})
+#: Запрашивает разрешение ТОЛЬКО рабочий процесс контура. Ни предлагающая
+#: служба, ни сам исполнитель просить за себя не вправе: иначе разрешение
+#: перестаёт быть разрешением и становится самообслуживанием.
 ДОПУЩЕНЫ_К_РАЗРЕШЕНИЮ = frozenset({"changeset-worker"})
-#: Кому вообще может быть адресовано разрешение на исполнение.
-ДОПУСТИМАЯ_АУДИТОРИЯ = frozenset({"changeset-worker"})
+#: Кому может быть адресовано разрешение на исполнение.
+ДОПУСТИМАЯ_АУДИТОРИЯ = frozenset({"changeset-worker", "templates-executor"})
+#: Какая аудитория какой род ресурса исполняет. Пара обязана совпасть: иначе
+#: разрешение на шаблон предъявят исполнителю чужого ресурса.
+АУДИТОРИЯ_РЕСУРСА = {
+    "templates-executor": frozenset({"template.release"}),
+}
+#: Кто выдал разрешение. Проставляется службой, а не вызывающим.
+ИЗДАТЕЛЬ = "site-factory-approval-signer"
+#: Версия контракта разрешения. Растёт вместе с обязательными притязаниями.
+ВЕРСИЯ_КОНТРАКТА_РАЗРЕШЕНИЯ = "execution-grant/1.1.0"
+
+#: Притязания, без которых разрешение не выдаётся. Ни одно не является
+#: необязательным: «опциональное» притязание безопасности — это притязание,
+#: которое однажды не придёт, и проверка молча пропустит его.
+ОБЯЗАТЕЛЬНЫЕ_ПРИТЯЗАНИЯ = (
+    "typ", "issuer", "audience", "subject", "changeset_id", "site_id",
+    "environment", "resource_kind", "action", "plan_hash", "approval_hash",
+    "artifact_digest", "registry_fingerprint", "policy_version",
+    "contract_version", "fencing_token", "jti", "idempotency_key",
+    "issued_at", "not_before", "expires_at",
+)
+
+
+def _окружение_сайта(site_id: str):
+    """Окружение и версия реестра из КАНОНИЧЕСКОГО реестра."""
+    from factory.site_engine.changeset.registry_client import (
+        RegistryClient, RegistryUnavailable)
+    try:
+        клиент = RegistryClient()
+        запись = клиент.сайт(site_id)
+        return ((запись or {}).get("environment"), клиент.версия())
+    except RegistryUnavailable:
+        return None, None
+
+
+def _отпечаток_реестра(версия) -> str:
+    return hashlib.sha256(
+        f"registry-version:{версия}".encode("utf-8")).hexdigest()[:16]
+
 
 #: Срок жизни разрешения. Короткий намеренно: разрешение — это право начать
 #: сейчас, а не бумага на будущее.
@@ -336,18 +379,84 @@ class Обработчик(BaseHTTPRequestHandler):
             raise Отказ("AUDIENCE_MISMATCH", "аренда принадлежит другому исполнителю",
                         409)
 
-        истекает = _сейчас() + _d.timedelta(seconds=СРОК_РАЗРЕШЕНИЯ_СЕК)
+        # Окружение берётся из РЕЕСТРА, а не из запроса: окружение,
+        # присланное вызывающим, — это заявка на то, какие правила к нему
+        # применить, и её бы всегда заполняли выгодно.
+        цели = sorted(набор.get("target_site_ids") or [])
+        if len(цели) != 1:
+            raise Отказ("GRANT_SINGLE_TARGET_REQUIRED",
+                        "разрешение выдаётся на один сайт: набор с несколькими "
+                        "целями исполняется по одному разрешению на цель")
+        site_id = цели[0]
+        окружение, версия_реестра = _окружение_сайта(site_id)
+        if окружение is None:
+            raise Отказ("SITE_UNKNOWN",
+                        f"сайт {site_id} реестру неизвестен", 409)
+
+        # Production отвергается ДО подписи, а не после. Подписанное
+        # разрешение, которое «всё равно не применят», однажды применят.
+        from factory.site_engine.changeset import policy as POL
+        if окружение not in POL.АВТО_ОКРУЖЕНИЯ and not POL.AUTONOMOUS_PRODUCTION_APPLY:
+            raise Отказ(
+                "PRODUCTION_APPLY_DISABLED",
+                f"окружение {окружение}: автономное применение выключено; "
+                f"разрешение не выдаётся", 403)
+
+        род = набор["resource_type"]
+        допустимые = АУДИТОРИЯ_РЕСУРСА.get(аудитория)
+        if допустимые is not None and род not in допустимые:
+            raise Отказ("AUDIENCE_RESOURCE_MISMATCH",
+                        f"аудитория {аудитория} не исполняет ресурс {род}", 403)
+        действие = набор.get("operation_type")
+        if действие not in M.действия_ресурса(род):
+            raise Отказ("ACTION_NOT_ALLOWED",
+                        f"действие {действие} не объявлено для ресурса {род}",
+                        403)
+
+        план = (набор.get("dry_run_result") or {}).get("per_site_plan") or {}
+        план_цели = план.get(site_id) or {}
+        одобрение = набор.get("approval") or {}
+        выдано = _сейчас()
+        истекает = выдано + _d.timedelta(seconds=СРОК_РАЗРЕШЕНИЯ_СЕК)
         полезное = {
-            "typ": "execution-grant", "changeset_id": cid,
-            "audience": аудитория, "fencing_token": маркер,
+            "typ": "execution-grant",
+            "issuer": ИЗДАТЕЛЬ,
+            "audience": аудитория,
+            "subject": аудитория,
+            "changeset_id": cid,
+            "site_id": site_id,
+            "environment": окружение,
+            "resource_kind": род,
+            "action": действие,
             "plan_hash": набор["plan_hash"],
+            "approval_hash": hashlib.sha256(
+                json.dumps(POL.связка(набор), ensure_ascii=False,
+                           sort_keys=True).encode("utf-8")).hexdigest(),
+            "approval_ref": одобрение.get("signature", "")[:64] or None,
+            "artifact_digest": план_цели.get("expected_fingerprint")
+                               or набор.get("expected_resource_fingerprint"),
+            "build_id": набор.get("build_id"),
+            "registry_version": набор.get("base_registry_version"),
+            "registry_fingerprint": _отпечаток_реестра(версия_реестра),
             "expected_resource_fingerprint": набор.get(
                 "expected_resource_fingerprint"),
-            "base_registry_version": набор.get("base_registry_version"),
             "policy_version": набор.get("policy_version"),
-            "target_site_ids": sorted(набор.get("target_site_ids") or []),
+            "contract_version": ВЕРСИЯ_КОНТРАКТА_РАЗРЕШЕНИЯ,
+            "fencing_token": маркер,
+            "jti": str(_uuid.uuid4()),
+            "idempotency_key": f"grant:{cid}:{аудитория}:{маркер}",
+            "issued_at": выдано.isoformat().replace("+00:00", "Z"),
+            "not_before": выдано.isoformat().replace("+00:00", "Z"),
             "expires_at": истекает.isoformat().replace("+00:00", "Z"),
+            "target_site_ids": цели,
         }
+        отсутствуют = [к for к in ОБЯЗАТЕЛЬНЫЕ_ПРИТЯЗАНИЯ if полезное.get(к) in (None, "")]
+        if отсутствуют:
+            # Неполное разрешение не выдаётся: исполнитель отверг бы его, а
+            # выдавать заведомо негодное — значит прятать дефект в чужую
+            # проверку.
+            raise Отказ("GRANT_CLAIMS_INCOMPLETE",
+                        f"не удалось заполнить притязания: {отсутствуют}", 500)
         тело_grant = json.dumps(полезное, ensure_ascii=False, sort_keys=True,
                                 separators=(",", ":"))
         подпись = K.подписать(self.состояние.pem, тело_grant)

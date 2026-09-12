@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.site-factory.internal/1.3.0/schemas/ChangeSet.v1.json",
+  "title": "ChangeSet.v1",
+  "description": "Предложение изменения и ход его исполнения. Поле status только читается: состояние вычисляет сервер по таблице переходов, и задать его в запросе нельзя — иначе машина состояний стала бы рекомендацией.",
+  "type": "object",
+  "required": [
+    "changeset_id",
+    "schema_version",
+    "status",
+    "version",
+    "resource_type",
+    "resource_id",
+    "operation_type",
+    "target_site_ids",
+    "producer_service",
+    "actor_id",
+    "actor_type",
+    "idempotency_key",
+    "correlation_id",
+    "requested_change",
+    "created_at",
+    "updated_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "changeset_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "schema_version": {
+      "const": "fleet-changeset/1.0.0"
+    },
+    "status": {
+      "enum": [
+        "PROPOSED",
+        "VALIDATING",
+        "VALIDATED",
+        "AWAITING_APPROVAL",
+        "APPROVED",
+        "APPLYING",
+        "VERIFYING",
+        "SUCCEEDED",
+        "VALIDATION_FAILED",
+        "REJECTED",
+        "STALE",
+        "EXPIRED",
+        "CANCELLED",
+        "APPLY_FAILED",
+        "ROLLING_BACK",
+        "ROLLED_BACK",
+        "ROLLBACK_FAILED",
+        "MANUAL_INTERVENTION_REQUIRED"
+      ],
+      "readOnly": true
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Оптимистическая блокировка набора."
+    },
+    "resource_type": {
+      "type": "string"
+    },
+    "resource_id": {
+      "type": "string"
+    },
+    "operation_type": {
+      "enum": [
+        "create",
+        "patch",
+        "publish",
+        "rollback",
+        "update"
+      ]
+    },
+    "target_site_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      },
+      "description": "Только site_id; домен ключом не является."
+    },
+    "canary_site_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Подмножество целей, применяемое первым."
+    },
+    "producer_service": {
+      "type": "string"
+    },
+    "actor_id": {
+      "type": "string"
+    },
+    "actor_type": {
+      "enum": [
+        "SERVICE",
+        "HUMAN",
+        "MODEL"
+      ]
+    },
+    "idempotency_key": {
+      "type": "string"
+    },
+    "correlation_id": {
+      "type": "string"
+    },
+    "causation_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "base_registry_version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "expected_resource_fingerprint": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "requested_change": {
+      "type": "object",
+      "description": "Данные, а не программа: команды, пути, адреса и SQL отклоняются."
+    },
+    "risk_class": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "LOW",
+        "MEDIUM",
+        "HIGH",
+        null
+      ]
+    },
+    "policy_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "plan_hash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "expires_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "dry_run_result": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "verification_plan": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "rollback_plan": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "approval": {
+      "anyOf": [
+        {
+          "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Approval.v1.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/EvidenceRef.json"
+      }
+    },
+    "failure_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "targets": {
+      "type": "array",
+      "items": {
+        "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/ChangeSetTarget.v1.json"
+      }
+    },
+    "transitions": {
+      "type": "array",
+      "items": {
+        "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/ChangeSetTransition.v1.json"
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

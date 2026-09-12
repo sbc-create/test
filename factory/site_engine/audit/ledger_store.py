@@ -39,11 +39,14 @@ from __future__ import annotations
 import datetime as dt
 import hashlib
 import json
+import os
 import re
 import sqlite3
 import uuid
 from pathlib import Path
 from typing import Any
+
+from factory.site_engine.audit import erratum as _ERRATUM
 
 СХЕМА = "fleet-audit-ledger/1.0.0"
 ГЕНЕЗИС_ХЭШ = "0" * 64
@@ -147,6 +150,7 @@ CREATE TABLE IF NOT EXISTS ledger_event (
   payload_hash      TEXT NOT NULL,
   prev_hash         TEXT NOT NULL,
   event_hash        TEXT NOT NULL,
+  erratum_payload   TEXT,
   UNIQUE (producer_service, idempotency_key)
 );
 CREATE INDEX IF NOT EXISTS ix_le_site ON ledger_event(site_id, ledger_seq);
@@ -230,6 +234,11 @@ def открыть(путь: str | Path) -> sqlite3.Connection:
     с = sqlite3.connect(п, timeout=30, isolation_level=None)
     с.row_factory = sqlite3.Row
     с.executescript(DDL)
+    # Колонка добавляется отдельно: DDL с IF NOT EXISTS не изменит таблицу,
+    # которая уже создана, и на живой базе поле просто не появилось бы.
+    столбцы = {ряд[1] for ряд in с.execute("PRAGMA table_info(ledger_event)")}
+    if "erratum_payload" not in столбцы:
+        с.execute("ALTER TABLE ledger_event ADD COLUMN erratum_payload TEXT")
     return с
 
 
@@ -247,6 +256,50 @@ def _проверить_секреты(тело: dict[str, Any]) -> None:
             "SECRET_IN_PAYLOAD",
             "в событии обнаружен секрет; журнал не принимает секреты ни в "
             "каком виде — ни в summary, ни в payload, ни в ссылках")
+
+
+#: Корни, из которых разрешено читать документы доказательств. Путь приходит
+#: из запроса, и без ограничения корнем он однажды укажет на чужой файл.
+КОРНИ_ДОКАЗАТЕЛЬСТВ = tuple(
+    п for п in os.environ.get(
+        "AUDIT_EVIDENCE_ROOTS",
+        "/srv/site-factory/audit-evidence").split(":") if п.strip())
+
+
+def _документ_пространства(пространство: dict[str, Any]) -> Any:
+    """Прочитать документ, в котором живут исправляемые утверждения.
+
+    Содержимое сверяется по SHA-256: ссылка без отпечатка означала бы, что
+    исправление привязано к файлу, который мог измениться после записи.
+    """
+    from pathlib import Path as _Path
+    ссылка = str((пространство or {}).get("ref") or "")
+    ожидаемый = str((пространство or {}).get("sha256") or "").lower()
+    указатель = str((пространство or {}).get("pointer") or "")
+    if not ссылка or not ожидаемый:
+        raise LedgerError("ERRATUM_NAMESPACE_INCOMPLETE",
+                          "claim_namespace обязан содержать ref и sha256")
+    полный = _Path(ссылка).resolve()
+    if not any(str(полный).startswith(str(_Path(к).resolve()) + os.sep)
+               for к in КОРНИ_ДОКАЗАТЕЛЬСТВ):
+        raise LedgerError("ERRATUM_NAMESPACE_OUTSIDE_ROOT",
+                          f"документ вне разрешённых корней: {полный}", 403)
+    if not полный.is_file():
+        raise LedgerError("ERRATUM_NAMESPACE_MISSING",
+                          f"документ доказательств не найден: {полный}", 404)
+    сырое = полный.read_bytes()
+    фактический = hashlib.sha256(сырое).hexdigest()
+    if фактический != ожидаемый.removeprefix("sha256:"):
+        raise LedgerError("ERRATUM_NAMESPACE_HASH_MISMATCH",
+                          "отпечаток документа доказательств не совпал")
+    документ = json.loads(сырое.decode("utf-8"))
+    if указатель:
+        from factory.site_engine.audit.erratum import _по_пути
+        есть, документ = _по_пути(документ, указатель)
+        if not есть:
+            raise LedgerError("ERRATUM_NAMESPACE_POINTER_MISSING",
+                              f"указатель {указатель} не разрешается в документе")
+    return документ
 
 
 def append(соед: sqlite3.Connection, событие: dict[str, Any], *,
@@ -306,6 +359,19 @@ def append(соед: sqlite3.Connection, событие: dict[str, Any], *,
 
     _проверить_секреты(событие)
 
+    # Исправление утверждений — отдельный контракт со своими запретами.
+    # Проверка идёт ДО записи: журнал только дополняется, и негодную запись
+    # потом не убрать.
+    if событие.get("event_type") == _ERRATUM.ТИП:
+        исходное = соед.execute(
+            "SELECT * FROM ledger_event WHERE event_id=?",
+            (событие.get("source_event_id"),)).fetchone()
+        _ERRATUM.проверить(
+            событие,
+            документ_пространства=_документ_пространства(
+                событие.get("claim_namespace")),
+            исходное=dict(исходное) if исходное else None)
+
     тело = {k: событие.get(k) for k in ПОЛЯ}
     тело["evidence_refs"] = событие.get("evidence_refs") or []
     тело.update({"schema_version": СХЕМА, "producer_service": producer_service,
@@ -315,6 +381,8 @@ def append(соед: sqlite3.Connection, событие: dict[str, Any], *,
     # Время сервера назначает сервер. Клиентское occurred_at сохраняется
     # отдельно: расхождение часов — это факт, а не повод подменять одно другим.
     тело["received_at"] = сейчас()
+    if событие.get("event_type") == _ERRATUM.ТИП:
+        тело["corrects_event_id"] = событие.get("source_event_id")
 
     соед.execute("BEGIN IMMEDIATE")
     try:
@@ -349,6 +417,17 @@ def append(соед: sqlite3.Connection, событие: dict[str, Any], *,
         значения = [json.dumps(тело[k], ensure_ascii=False)
                     if k == "evidence_refs" else тело.get(k) for k in ПОЛЯ]
         значения += [payload_hash, prev_hash, event_hash]
+        if событие.get("event_type") == _ERRATUM.ТИП:
+            # Поля исправления не вмещаются в закрытый перечень ПОЛЯ, а терять
+            # их нельзя: без них проекция не построится.
+            столбцы.append("erratum_payload")
+            значения.append(json.dumps(
+                {k: событие.get(k) for k in (
+                    "source_event_id", "source_ledger_seq", "source_event_type",
+                    "subject_producer", "correction_actor",
+                    "correction_authority", "reason_code", "claim_namespace",
+                    "claim_corrections")},
+                ensure_ascii=False))
         соед.execute(
             "INSERT INTO ledger_event(%s) VALUES(%s)" % (
                 ",".join(столбцы), ",".join("?" * len(столбцы))), значения)
@@ -403,3 +482,30 @@ def checkpoint(соед: sqlite3.Connection) -> dict[str, Any]:
          п["verified"], сейчас()))
     return {"checkpoint_id": cid, "ledger_seq": посл["ledger_seq"] if посл else 0,
             "chain_root": п["chain_root"], "event_count": п["verified"]}
+
+
+def исправления(соед: sqlite3.Connection,
+                source_event_id: str) -> list[dict[str, Any]]:
+    """Все errata, относящиеся к исходному событию. Порядок — по seq."""
+    строки = соед.execute(
+        "SELECT event_id, ledger_seq, stored_at, erratum_payload, evidence_refs "
+        "FROM ledger_event WHERE event_type=? AND corrects_event_id=? "
+        "ORDER BY ledger_seq", (_ERRATUM.ТИП, source_event_id)).fetchall()
+    итог = []
+    for с in строки:
+        нагрузка = json.loads(с["erratum_payload"] or "{}")
+        итог.append({**нагрузка, "event_id": с["event_id"],
+                     "ledger_seq": с["ledger_seq"],
+                     "stored_at": с["stored_at"],
+                     "evidence_refs": json.loads(с["evidence_refs"] or "[]")})
+    return итог
+
+
+def проекция_утверждений(соед: sqlite3.Connection, source_event_id: str,
+                         исходные: dict[str, Any]) -> dict[str, Any]:
+    """Действующие значения утверждений после всех исправлений.
+
+    Проекция строится из журнала каждый раз заново и ничего не хранит от
+    себя: второе хранилище немедленно разошлось бы с первым.
+    """
+    return _ERRATUM.действующее(исходные, исправления(соед, source_event_id))
