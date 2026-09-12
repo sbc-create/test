@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/SiteRef.json",
+  "title": "Ссылка на сайт",
+  "description": "Единственный допустимый способ сослаться на сайт между сервисами. Домен приводится для читаемости, но ключом является site_id: домен может смениться, идентификатор — нет.",
+  "x-owner": "architect",
+  "x-schema-version": "1.0.0",
+  "x-lifecycle": "ACTIVE",
+  "x-created-at": "2026-09-11T12:56:26Z",
+  "x-updated-at": "2026-09-11T12:56:26Z",
+  "x-compatibility": "BACKWARD_COMPATIBLE_ADDITIVE",
+  "type": "object",
+  "properties": {
+    "site_id": {
+      "type": "string"
+    },
+    "canonical_domain": {
+      "type": "string"
+    },
+    "registry_version": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "site_id"
+  ],
+  "additionalProperties": true
+}

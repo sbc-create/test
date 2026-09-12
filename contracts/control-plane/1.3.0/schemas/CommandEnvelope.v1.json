@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/CommandEnvelope.v1.json",
+  "title": "Команда",
+  "description": "Просьба изменить состояние, адресованная владельцу данных. Приём команды не равен её выполнению; результат приходит отдельным событием.",
+  "x-owner": "architect",
+  "x-schema-version": "1.0.0",
+  "x-lifecycle": "ACTIVE",
+  "x-created-at": "2026-09-11T12:56:26Z",
+  "x-updated-at": "2026-09-11T12:56:26Z",
+  "x-compatibility": "BACKWARD_COMPATIBLE_ADDITIVE",
+  "type": "object",
+  "properties": {
+    "command_id": {
+      "type": "string"
+    },
+    "command_type": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "string"
+    },
+    "actor_ref": {
+      "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/ActorRef.json"
+    },
+    "target_ref": {
+      "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/SiteRef.json"
+    },
+    "idempotency_key": {
+      "type": "string"
+    },
+    "expected_version": {
+      "type": "integer"
+    },
+    "requested_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "deadline_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "correlation_context": {
+      "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/CorrelationContext.json"
+    },
+    "payload": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "command_id",
+    "command_type",
+    "schema_version",
+    "actor_ref",
+    "idempotency_key",
+    "requested_at",
+    "correlation_context"
+  ],
+  "additionalProperties": true
+}

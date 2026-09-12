@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.site-factory.internal/1.3.0/schemas/ChangeSetTransition.v1.json",
+  "title": "ChangeSetTransition.v1",
+  "description": "Один состоявшийся переход. Записи не изменяются и не удаляются: история решений сохраняется целиком.",
+  "type": "object",
+  "required": [
+    "changeset_id",
+    "action",
+    "from_status",
+    "to_status",
+    "actor_id",
+    "actor_role",
+    "occurred_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "seq": {
+      "type": "integer"
+    },
+    "changeset_id": {
+      "type": "string"
+    },
+    "action": {
+      "type": "string"
+    },
+    "from_status": {
+      "enum": [
+        "PROPOSED",
+        "VALIDATING",
+        "VALIDATED",
+        "AWAITING_APPROVAL",
+        "APPROVED",
+        "APPLYING",
+        "VERIFYING",
+        "SUCCEEDED",
+        "VALIDATION_FAILED",
+        "REJECTED",
+        "STALE",
+        "EXPIRED",
+        "CANCELLED",
+        "APPLY_FAILED",
+        "ROLLING_BACK",
+        "ROLLED_BACK",
+        "ROLLBACK_FAILED",
+        "MANUAL_INTERVENTION_REQUIRED"
+      ]
+    },
+    "to_status": {
+      "enum": [
+        "PROPOSED",
+        "VALIDATING",
+        "VALIDATED",
+        "AWAITING_APPROVAL",
+        "APPROVED",
+        "APPLYING",
+        "VERIFYING",
+        "SUCCEEDED",
+        "VALIDATION_FAILED",
+        "REJECTED",
+        "STALE",
+        "EXPIRED",
+        "CANCELLED",
+        "APPLY_FAILED",
+        "ROLLING_BACK",
+        "ROLLED_BACK",
+        "ROLLBACK_FAILED",
+        "MANUAL_INTERVENTION_REQUIRED"
+      ]
+    },
+    "actor_id": {
+      "type": "string"
+    },
+    "actor_role": {
+      "enum": [
+        "proposer",
+        "validator",
+        "approver",
+        "executor",
+        "operator"
+      ]
+    },
+    "reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "before_fingerprint": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "after_fingerprint": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "correlation_id": {
+      "type": "string"
+    },
+    "causation_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

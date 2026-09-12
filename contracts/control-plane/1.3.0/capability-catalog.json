@@ -1,0 +1,564 @@
+{
+  "schema_version": "1.0.0",
+  "bundle_version": "1.3.0",
+  "generated_at": "2026-09-11T14:04:12Z",
+  "count": 40,
+  "available": 22,
+  "planned": 18,
+  "blocked": 0,
+  "capabilities": [
+    {
+      "capability_id": "registry.sites.filter",
+      "owner_service": "architect",
+      "version": "1.0.1",
+      "status": "AVAILABLE",
+      "read_endpoint": "/api/v1/sites?environment=production&lifecycle_state=ACTIVE",
+      "command_endpoint": null,
+      "event_types": [],
+      "required_scopes": [
+        "registry:read"
+      ],
+      "dependencies": [],
+      "last_verified_at": "2026-09-11T14:04:12Z",
+      "evidence_ref": "live-probe:/api/v1/sites?environment=production&lifecycle_state=ACTIVE:HTTP200",
+      "verified_http_status": 200
+    },
+    {
+      "capability_id": "registry.sites.read",
+      "owner_service": "architect",
+      "version": "1.0.1",
+      "status": "AVAILABLE",
+      "read_endpoint": "/api/v1/sites",
+      "command_endpoint": null,
+      "event_types": [
+        "site.registered.v1",
+        "site.updated.v1",
+        "site.activated.v1",
+        "site.retired.v1"
+      ],
+      "required_scopes": [
+        "registry:read"
+      ],
+      "dependencies": [],
+      "last_verified_at": "2026-09-11T14:04:12Z",
+      "evidence_ref": "live-probe:/api/v1/sites:HTTP200",
+      "verified_http_status": 200
+    },
+    {
+      "capability_id": "registry.snapshot.read",
+      "owner_service": "architect",
+      "version": "1.0.1",
+      "status": "AVAILABLE",
+      "read_endpoint": "/api/v1/registry/snapshot",
+      "command_endpoint": null,
+      "event_types": [],
+      "required_scopes": [
+        "registry:read"
+      ],
+      "dependencies": [],
+      "last_verified_at": "2026-09-11T14:04:12Z",
+      "evidence_ref": "live-probe:/api/v1/registry/snapshot:HTTP200",
+      "verified_http_status": 200
+    },
+    {
+      "capability_id": "registry.version.read",
+      "owner_service": "architect",
+      "version": "1.0.1",
+      "status": "AVAILABLE",
+      "read_endpoint": "/api/v1/registry/version",
+      "command_endpoint": null,
+      "event_types": [],
+      "required_scopes": [
+        "registry:read"
+      ],
+      "dependencies": [],
+      "last_verified_at": "2026-09-11T14:04:12Z",
+      "evidence_ref": "live-probe:/api/v1/registry/version:HTTP200",
+      "verified_http_status": 200
+    },
+    {
+      "capability_id": "registry.events.replay",
+      "owner_service": "architect",
+      "version": "1.0.1",
+      "status": "AVAILABLE",
+      "read_endpoint": "/api/v1/events",
+      "command_endpoint": null,
+      "event_types": [
+        "site.registered.v1",
+        "site.updated.v1",
+        "site.activated.v1",
+        "site.retired.v1"
+      ],
+      "required_scopes": [
+        "registry:read"
+      ],
+      "dependencies": [],
+      "last_verified_at": "2026-09-11T14:04:12Z",
+      "evidence_ref": "live-probe:/api/v1/events:HTTP200",
+      "verified_http_status": 200
+    },
+    {
+      "capability_id": "contracts.discovery",
+      "owner_service": "architect",
+      "version": "1.0.1",
+      "status": "AVAILABLE",
+      "read_endpoint": "/api/v1/contracts/manifest",
+      "command_endpoint": null,
+      "event_types": [],
+      "required_scopes": [
+        "registry:read"
+      ],
+      "dependencies": [],
+      "last_verified_at": "2026-09-11T14:04:12Z",
+      "evidence_ref": "live-probe:/api/v1/contracts/manifest:HTTP200",
+      "verified_http_status": 200
+    },
+    {
+      "capability_id": "capabilities.directory",
+      "owner_service": "architect",
+      "version": "1.0.1",
+      "status": "AVAILABLE",
+      "read_endpoint": "/api/v1/capabilities",
+      "command_endpoint": null,
+      "event_types": [],
+      "required_scopes": [
+        "registry:read"
+      ],
+      "dependencies": [],
+      "last_verified_at": "2026-09-11T14:04:12Z",
+      "evidence_ref": "live-probe:/api/v1/capabilities:HTTP200",
+      "verified_http_status": 200
+    },
+    {
+      "capability_id": "control-plane.version",
+      "owner_service": "architect",
+      "version": "1.0.1",
+      "status": "AVAILABLE",
+      "read_endpoint": "/api/v1/control-plane/version",
+      "command_endpoint": null,
+      "event_types": [],
+      "required_scopes": [
+        "registry:read"
+      ],
+      "dependencies": [],
+      "last_verified_at": "2026-09-11T14:04:12Z",
+      "evidence_ref": "live-probe:/api/v1/control-plane/version:HTTP200",
+      "verified_http_status": 200
+    },
+    {
+      "capability_id": "registry.commands.write",
+      "owner_service": "architect",
+      "version": "1.0.1",
+      "status": "PLANNED",
+      "read_endpoint": null,
+      "command_endpoint": null,
+      "event_types": [
+        "site.registered.v1"
+      ],
+      "required_scopes": [
+        "registry:write"
+      ],
+      "dependencies": [
+        "contracts.discovery"
+      ],
+      "last_verified_at": null,
+      "evidence_ref": null,
+      "planned_reason": "командный API существует, но выносится наружу после IAM (FLEET-CORE-003)"
+    },
+    {
+      "capability_id": "actions.ledger",
+      "owner_service": "architect",
+      "version": "1.0.1",
+      "status": "PLANNED",
+      "read_endpoint": null,
+      "command_endpoint": null,
+      "event_types": [
+        "action.recorded.v1"
+      ],
+      "required_scopes": [
+        "actions:read"
+      ],
+      "dependencies": [],
+      "last_verified_at": null,
+      "evidence_ref": null,
+      "planned_reason": "FLEET-CORE-002"
+    },
+    {
+      "capability_id": "workflows.engine",
+      "owner_service": "architect",
+      "version": "1.0.1",
+      "status": "PLANNED",
+      "read_endpoint": null,
+      "command_endpoint": null,
+      "event_types": [
+        "workflow.started.v1"
+      ],
+      "required_scopes": [
+        "workflow:read"
+      ],
+      "dependencies": [],
+      "last_verified_at": null,
+      "evidence_ref": null,
+      "planned_reason": "FLEET-CORE-004"
+    },
+    {
+      "capability_id": "changesets.controller",
+      "owner_service": "architect",
+      "version": "1.0.1",
+      "status": "PLANNED",
+      "read_endpoint": null,
+      "command_endpoint": null,
+      "event_types": [
+        "changeset.approved.v1"
+      ],
+      "required_scopes": [
+        "changeset:read"
+      ],
+      "dependencies": [],
+      "last_verified_at": null,
+      "evidence_ref": null,
+      "planned_reason": "владелец не реализован"
+    },
+    {
+      "capability_id": "evidence.store",
+      "owner_service": "architect",
+      "version": "1.0.1",
+      "status": "PLANNED",
+      "read_endpoint": null,
+      "command_endpoint": null,
+      "event_types": [],
+      "required_scopes": [
+        "evidence:read"
+      ],
+      "dependencies": [],
+      "last_verified_at": null,
+      "evidence_ref": null,
+      "planned_reason": "FLEET-CORE-002"
+    },
+    {
+      "capability_id": "integrations.provisioner",
+      "owner_service": "architect",
+      "version": "1.0.1",
+      "status": "PLANNED",
+      "read_endpoint": null,
+      "command_endpoint": null,
+      "event_types": [
+        "integration.provision.completed.v1"
+      ],
+      "required_scopes": [
+        "integration:write"
+      ],
+      "dependencies": [],
+      "last_verified_at": null,
+      "evidence_ref": null,
+      "planned_reason": "создание счётчиков Метрики и проектов Topvisor; владелец не реализован"
+    },
+    {
+      "capability_id": "templates.releases",
+      "owner_service": "templates",
+      "version": "1.0.1",
+      "status": "PLANNED",
+      "read_endpoint": null,
+      "command_endpoint": null,
+      "event_types": [
+        "template.release.published.v1"
+      ],
+      "required_scopes": [
+        "templates:read"
+      ],
+      "dependencies": [],
+      "last_verified_at": null,
+      "evidence_ref": null,
+      "planned_reason": "владелец не реализован"
+    },
+    {
+      "capability_id": "content.catalog",
+      "owner_service": "content",
+      "version": "1.0.1",
+      "status": "PLANNED",
+      "read_endpoint": null,
+      "command_endpoint": null,
+      "event_types": [
+        "content.refresh.completed.v1"
+      ],
+      "required_scopes": [
+        "content:read"
+      ],
+      "dependencies": [],
+      "last_verified_at": null,
+      "evidence_ref": null,
+      "planned_reason": "владелец не реализован"
+    },
+    {
+      "capability_id": "seo.audits",
+      "owner_service": "seo",
+      "version": "1.0.1",
+      "status": "PLANNED",
+      "read_endpoint": null,
+      "command_endpoint": null,
+      "event_types": [
+        "seo.audit.completed.v1"
+      ],
+      "required_scopes": [
+        "seo:read"
+      ],
+      "dependencies": [],
+      "last_verified_at": null,
+      "evidence_ref": null,
+      "planned_reason": "владелец не реализован"
+    },
+    {
+      "capability_id": "monitoring.observations",
+      "owner_service": "monitoring",
+      "version": "1.0.1",
+      "status": "PLANNED",
+      "read_endpoint": null,
+      "command_endpoint": null,
+      "event_types": [
+        "monitor.alert.opened.v1"
+      ],
+      "required_scopes": [
+        "monitoring:read"
+      ],
+      "dependencies": [],
+      "last_verified_at": null,
+      "evidence_ref": null,
+      "planned_reason": "владелец не реализован"
+    },
+    {
+      "capability_id": "backup.runs",
+      "owner_service": "backup",
+      "version": "1.0.1",
+      "status": "PLANNED",
+      "read_endpoint": null,
+      "command_endpoint": null,
+      "event_types": [
+        "backup.completed.v1"
+      ],
+      "required_scopes": [
+        "backup:read"
+      ],
+      "dependencies": [],
+      "last_verified_at": null,
+      "evidence_ref": null,
+      "planned_reason": "владелец не реализован"
+    },
+    {
+      "capability_id": "qwen.planner",
+      "owner_service": "qwen",
+      "version": "1.0.1",
+      "status": "PLANNED",
+      "read_endpoint": null,
+      "command_endpoint": null,
+      "event_types": [],
+      "required_scopes": [
+        "qwen:propose"
+      ],
+      "dependencies": [
+        "contracts.discovery"
+      ],
+      "last_verified_at": null,
+      "evidence_ref": null,
+      "planned_reason": "MODEL-actor; только предложения, production apply выключен"
+    },
+    {
+      "id": "audit.append",
+      "status": "AVAILABLE",
+      "description": "Идемпотентное добавление события с проверкой личности и полномочий."
+    },
+    {
+      "id": "audit.query",
+      "status": "AVAILABLE",
+      "description": "Серверная фильтрация и курсорная разбивка по ledger_seq."
+    },
+    {
+      "id": "audit.correlation",
+      "status": "AVAILABLE",
+      "description": "Сборка нити действия по correlation_id и action_id."
+    },
+    {
+      "id": "audit.integrity",
+      "status": "AVAILABLE",
+      "description": "Проверка цепи хешей, уровень LOCAL_HASH_CHAIN."
+    },
+    {
+      "id": "audit.backup.local",
+      "status": "AVAILABLE",
+      "description": "Копия и проверенное восстановление в изоляции на этом хосте."
+    },
+    {
+      "id": "audit.backup.off_host",
+      "status": "PLANNED",
+      "description": "Копия вне хоста. Останется PLANNED, пока восстановление на другом хосте не выполнено и не измерено."
+    },
+    {
+      "id": "audit.autonomous_apply",
+      "status": "PLANNED",
+      "description": "Автономное применение в production. Владельцем не включено."
+    },
+    {
+      "id": "audit.operational_projection",
+      "status": "AVAILABLE",
+      "description": "Рабочая проекция журнала без карантинных записей; поверхность для Templates, Content, SEO, Monitoring, Backup и Qwen."
+    },
+    {
+      "id": "audit.quarantine",
+      "status": "AVAILABLE",
+      "description": "Логическое изъятие множества записей новым событием без удаления и изменения исходных."
+    },
+    {
+      "id": "audit.raw_feed",
+      "status": "AVAILABLE",
+      "description": "Полная история; требует роли audit-admin."
+    },
+    {
+      "id": "audit.token_revocation",
+      "status": "AVAILABLE",
+      "description": "Отзыв токена по отпечатку без изменения исходного кода и без перевыпуска остальных."
+    },
+    {
+      "capability_id": "changeset.propose",
+      "owner_service": "control-plane",
+      "version": "1.3.0",
+      "status": "AVAILABLE",
+      "read_endpoint": "/api/v1/changesets",
+      "command_endpoint": "/api/v1/changesets",
+      "event_types": [
+        "changeset.proposed.v1"
+      ],
+      "required_scopes": [
+        "changeset:propose"
+      ],
+      "dependencies": [
+        "registry.sites.filter"
+      ]
+    },
+    {
+      "capability_id": "changeset.validate",
+      "owner_service": "control-plane",
+      "version": "1.3.0",
+      "status": "AVAILABLE",
+      "read_endpoint": "/api/v1/changesets/{changeset_id}",
+      "command_endpoint": "/api/v1/changesets/{changeset_id}/validate",
+      "event_types": [
+        "changeset.validated.v1",
+        "changeset.validation_failed.v1"
+      ],
+      "required_scopes": [
+        "changeset:validate"
+      ],
+      "dependencies": []
+    },
+    {
+      "capability_id": "changeset.approve",
+      "owner_service": "control-plane",
+      "version": "1.3.0",
+      "status": "AVAILABLE",
+      "read_endpoint": "/api/v1/changesets/{changeset_id}",
+      "command_endpoint": "/api/v1/changesets/{changeset_id}/approve",
+      "event_types": [
+        "changeset.approved.v1",
+        "changeset.rejected.v1"
+      ],
+      "required_scopes": [
+        "changeset:approve"
+      ],
+      "dependencies": []
+    },
+    {
+      "capability_id": "changeset.apply",
+      "owner_service": "control-plane",
+      "version": "1.3.0",
+      "status": "AVAILABLE",
+      "read_endpoint": "/api/v1/workflows",
+      "command_endpoint": "/api/v1/changesets/{changeset_id}/apply",
+      "event_types": [
+        "changeset.applied.v1",
+        "changeset.succeeded.v1"
+      ],
+      "required_scopes": [
+        "changeset:apply"
+      ],
+      "dependencies": [
+        "audit.append",
+        "registry.sites.filter"
+      ]
+    },
+    {
+      "capability_id": "changeset.rollback",
+      "owner_service": "control-plane",
+      "version": "1.3.0",
+      "status": "AVAILABLE",
+      "read_endpoint": "/api/v1/changesets/{changeset_id}",
+      "command_endpoint": "/api/v1/changesets/{changeset_id}/rollback",
+      "event_types": [
+        "changeset.rolled_back.v1",
+        "changeset.rollback_failed.v1"
+      ],
+      "required_scopes": [
+        "changeset:apply"
+      ],
+      "dependencies": []
+    },
+    {
+      "capability_id": "changeset.production_apply",
+      "owner_service": "control-plane",
+      "version": "1.3.0",
+      "status": "PLANNED",
+      "read_endpoint": null,
+      "command_endpoint": null,
+      "event_types": [],
+      "required_scopes": [
+        "changeset:apply:production"
+      ],
+      "dependencies": [
+        "REGISTRY_CORE_GIT_PROVENANCE",
+        "OFF_HOST_BACKUP",
+        "LIVE_CONSUMER_ADAPTERS"
+      ],
+      "note": "Выключено: применение в production требует закрытия долгов."
+    },
+    {
+      "capability_id": "changeset.adapter.templates",
+      "owner_service": "templates",
+      "version": "1.3.0",
+      "status": "PLANNED",
+      "read_endpoint": null,
+      "command_endpoint": null,
+      "event_types": [],
+      "required_scopes": [],
+      "dependencies": [
+        "changeset.apply"
+      ],
+      "note": "Реальный адаптер не подключён."
+    },
+    {
+      "capability_id": "changeset.adapter.content",
+      "owner_service": "content",
+      "version": "1.3.0",
+      "status": "PLANNED",
+      "read_endpoint": null,
+      "command_endpoint": null,
+      "event_types": [],
+      "required_scopes": [],
+      "dependencies": [
+        "changeset.apply"
+      ],
+      "note": "Реальный адаптер не подключён."
+    },
+    {
+      "capability_id": "changeset.adapter.seo",
+      "owner_service": "seo",
+      "version": "1.3.0",
+      "status": "PLANNED",
+      "read_endpoint": null,
+      "command_endpoint": null,
+      "event_types": [],
+      "required_scopes": [],
+      "dependencies": [
+        "changeset.apply"
+      ],
+      "note": "Реальный адаптер не подключён."
+    }
+  ]
+}

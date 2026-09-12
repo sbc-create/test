@@ -302,6 +302,23 @@ class _Handler(http.server.BaseHTTPRequestHandler):
         # (Principal), а у журнала — служебные токены, по которым сервер сам
         # выводит производителя. Смешать две схемы прав в одном месте значит
         # однажды перепутать, чья проверка сработала.
+        # Контур изменений. Отдельный обработчик по той же причине, что и у
+        # журнала: у него своя матрица ролей, и смешивать её с правами
+        # ControlApi значит однажды перепутать, чья проверка сработала.
+        if path.startswith("/api/v1/changesets") or \
+                path.startswith("/api/v1/workflows"):
+            try:
+                from factory.site_engine.changeset import api as _cs
+                код, тело = _cs.обработать(
+                    method, path, query=query, body=body,
+                    headers=self._headers_dict())
+            except Exception:  # noqa: BLE001
+                self._error(500, "internal_error",
+                            "внутренняя ошибка контура изменений")
+                return
+            self._send(код, тело)
+            return
+
         if path.startswith("/api/v1/audit"):
             try:
                 from factory.site_engine.audit import ledger_api as _la
@@ -358,7 +375,10 @@ class _Handler(http.server.BaseHTTPRequestHandler):
         self._handle("PATCH")
 
     def _журнал_ли(self) -> bool:
-        return self.path.split("?", 1)[0].startswith("/api/v1/audit")
+        путь = self.path.split("?", 1)[0]
+        return (путь.startswith("/api/v1/audit")
+                or путь.startswith("/api/v1/changesets")
+                or путь.startswith("/api/v1/workflows"))
 
     def do_DELETE(self) -> None:  # noqa: N802
         # Для журнала отказ обязан прийти как Problem.v1 с кодом APPEND_ONLY:

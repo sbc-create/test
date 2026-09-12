@@ -1,0 +1,415 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-09-11T12:57:59Z",
+  "rule": "У каждого ресурса ровно один писатель. Два независимых писателя одного поля — это не гибкость, а гарантированное расхождение.",
+  "resources": [
+    {
+      "resource": "site.identity",
+      "fields": [
+        "site_id",
+        "canonical_domain",
+        "aliases",
+        "family",
+        "environment",
+        "lifecycle_state"
+      ],
+      "single_writer": "architect",
+      "readers": [
+        "templates",
+        "seo",
+        "content",
+        "monitoring",
+        "backup",
+        "qwen"
+      ],
+      "commands": [
+        "register",
+        "update",
+        "activate",
+        "retire"
+      ],
+      "emits": [
+        "site.registered.v1",
+        "site.updated.v1",
+        "site.activated.v1",
+        "site.retired.v1"
+      ],
+      "consumes": [],
+      "source_of_truth": "registry.sqlite3 (architect)",
+      "retention_owner": "architect",
+      "secret_class": "NONE",
+      "mutation_policy": "command API + Idempotency-Key + If-Match"
+    },
+    {
+      "resource": "site.template_binding",
+      "fields": [
+        "template_id",
+        "template_version",
+        "build_id",
+        "release_id"
+      ],
+      "single_writer": "architect",
+      "note": "Templates ПРЕДЛАГАЕТ значения событием, но записывает их в реестр architect. Иначе у поля было бы два писателя.",
+      "readers": [
+        "templates",
+        "seo",
+        "content",
+        "monitoring",
+        "qwen"
+      ],
+      "commands": [
+        "update"
+      ],
+      "emits": [
+        "site.updated.v1"
+      ],
+      "consumes": [
+        "template.release.published.v1",
+        "template.deployment.observed.v1"
+      ],
+      "source_of_truth": "registry.sqlite3 (architect)",
+      "retention_owner": "architect",
+      "secret_class": "NONE",
+      "mutation_policy": "command API"
+    },
+    {
+      "resource": "template.artifact",
+      "fields": [
+        "artifact_sha256",
+        "design_version",
+        "source_commit",
+        "built_at"
+      ],
+      "single_writer": "templates",
+      "readers": [
+        "architect",
+        "seo",
+        "qwen"
+      ],
+      "commands": [],
+      "emits": [
+        "template.release.published.v1"
+      ],
+      "consumes": [
+        "changeset.approved.v1"
+      ],
+      "source_of_truth": "templates (собственное хранилище)",
+      "retention_owner": "templates",
+      "secret_class": "NONE",
+      "mutation_policy": "PLANNED"
+    },
+    {
+      "resource": "content.catalog",
+      "fields": [
+        "entity_id",
+        "canonical_path",
+        "published_at",
+        "airing_status",
+        "episodes_released"
+      ],
+      "single_writer": "content",
+      "readers": [
+        "architect",
+        "seo",
+        "monitoring",
+        "qwen"
+      ],
+      "commands": [],
+      "emits": [
+        "content.refresh.completed.v1",
+        "content.refresh.failed.v1",
+        "content.freshness.breached.v1"
+      ],
+      "consumes": [
+        "site.activated.v1"
+      ],
+      "source_of_truth": "content (yummy-content.sqlite3)",
+      "retention_owner": "content",
+      "secret_class": "NONE",
+      "mutation_policy": "PLANNED"
+    },
+    {
+      "resource": "seo.audit",
+      "fields": [
+        "audit_id",
+        "findings",
+        "proposals"
+      ],
+      "single_writer": "seo",
+      "readers": [
+        "architect",
+        "qwen"
+      ],
+      "commands": [],
+      "emits": [
+        "seo.audit.completed.v1",
+        "seo.changeset.proposed.v1",
+        "seo.publish.completed.v1"
+      ],
+      "consumes": [
+        "site.activated.v1",
+        "content.refresh.completed.v1"
+      ],
+      "source_of_truth": "seo (собственное хранилище)",
+      "retention_owner": "seo",
+      "secret_class": "NONE",
+      "mutation_policy": "PLANNED"
+    },
+    {
+      "resource": "integration.external_resource",
+      "fields": [
+        "provider",
+        "public_id",
+        "provisioned_at"
+      ],
+      "single_writer": "architect",
+      "note": "Счётчики Метрики и проекты Topvisor создаёт ТОЛЬКО architect. SEO запрашивает и использует выданный public_id, но не создаёт ресурс сам: иначе два контура заводили бы дубли у провайдера.",
+      "readers": [
+        "seo",
+        "monitoring",
+        "qwen"
+      ],
+      "commands": [
+        "provision_integration"
+      ],
+      "emits": [
+        "integration.provision.requested.v1",
+        "integration.provision.completed.v1",
+        "integration.provision.failed.v1"
+      ],
+      "consumes": [],
+      "source_of_truth": "architect",
+      "retention_owner": "architect",
+      "secret_class": "REF_ONLY (только несекретные public ID и имена ссылок)",
+      "mutation_policy": "PLANNED"
+    },
+    {
+      "resource": "monitoring.observation",
+      "fields": [
+        "observation_id",
+        "metric",
+        "observed_value",
+        "slo_state"
+      ],
+      "single_writer": "monitoring",
+      "readers": [
+        "architect",
+        "qwen",
+        "seo"
+      ],
+      "commands": [],
+      "emits": [
+        "monitor.alert.opened.v1",
+        "monitor.alert.resolved.v1"
+      ],
+      "consumes": [
+        "site.activated.v1",
+        "site.retired.v1"
+      ],
+      "source_of_truth": "monitoring",
+      "retention_owner": "monitoring",
+      "secret_class": "NONE",
+      "mutation_policy": "PLANNED"
+    },
+    {
+      "resource": "backup.run",
+      "fields": [
+        "run_id",
+        "policy_ref",
+        "checksum",
+        "restore_verified_at"
+      ],
+      "single_writer": "backup",
+      "readers": [
+        "architect",
+        "monitoring",
+        "qwen"
+      ],
+      "commands": [],
+      "emits": [
+        "backup.completed.v1",
+        "backup.failed.v1",
+        "backup.restore.verified.v1"
+      ],
+      "consumes": [
+        "site.activated.v1"
+      ],
+      "source_of_truth": "backup",
+      "retention_owner": "backup",
+      "secret_class": "NONE",
+      "mutation_policy": "PLANNED"
+    },
+    {
+      "resource": "qwen.proposal",
+      "fields": [
+        "proposal_id",
+        "changeset",
+        "rationale"
+      ],
+      "single_writer": "qwen",
+      "note": "Qwen — actor_type=MODEL. Пишет только собственные предложения и не владеет ни одним доменным ресурсом. Применение предложения делает владелец данных через ChangeSet и policy.",
+      "readers": [
+        "architect"
+      ],
+      "commands": [],
+      "emits": [],
+      "consumes": [
+        "site.activated.v1",
+        "monitor.alert.opened.v1"
+      ],
+      "source_of_truth": "qwen",
+      "retention_owner": "qwen",
+      "secret_class": "NONE",
+      "mutation_policy": "PROPOSAL_ONLY; production apply запрещён"
+    },
+    {
+      "resource": "audit.event",
+      "fields": [
+        "event_id",
+        "ledger_seq",
+        "event_type",
+        "phase",
+        "result",
+        "scope",
+        "site_id",
+        "actor_id",
+        "authority",
+        "correlation_id",
+        "prev_hash",
+        "event_hash"
+      ],
+      "single_writer": "architect",
+      "readers": [
+        "architect",
+        "registry",
+        "templates",
+        "seo",
+        "content",
+        "monitoring",
+        "backup",
+        "qwen"
+      ],
+      "commands": [
+        "append"
+      ],
+      "emits": [
+        "audit.action.stalled.v1",
+        "audit.backup.stale.v1",
+        "audit.event.appended.v1",
+        "audit.event_set.quarantine_revoked.v1",
+        "audit.event_set.quarantined.v1",
+        "audit.ingest.failed.v1",
+        "audit.integrity.failed.v1",
+        "audit.projection.rebuilt.v1",
+        "audit.reconciliation.failed.v1"
+      ],
+      "consumes": [
+        "site.registered.v1",
+        "site.updated.v1",
+        "site.activated.v1",
+        "site.retired.v1"
+      ],
+      "source_of_truth": "audit_ledger.sqlite3 (architect)",
+      "retention_owner": "architect",
+      "secret_class": "NONE",
+      "mutation_policy": "append-only; UPDATE и DELETE запрещены триггерами БД и отвечают 405 APPEND_ONLY",
+      "note": "Реестр остаётся источником истины о сайтах. Журнал хранит факты о произошедшем и вторым реестром не является."
+    },
+    {
+      "resource": "audit.operational_projection",
+      "fields": [
+        "ledger_seq",
+        "excluded",
+        "exclusion_reason",
+        "quarantine_event_id"
+      ],
+      "single_writer": "architect",
+      "readers": [
+        "architect",
+        "templates",
+        "seo",
+        "content",
+        "monitoring",
+        "backup",
+        "qwen"
+      ],
+      "commands": [
+        "rebuild",
+        "switch"
+      ],
+      "emits": [
+        "audit.projection.rebuilt.v1"
+      ],
+      "consumes": [
+        "audit.event_set.quarantined.v1",
+        "audit.event_set.quarantine_revoked.v1"
+      ],
+      "source_of_truth": "ledger_event (проекция пересобирается из журнала)",
+      "retention_owner": "architect",
+      "secret_class": "NONE",
+      "mutation_policy": "полная пересборка из журнала; частичных правок нет",
+      "note": "Проекция не является источником истины: при любом расхождении верен журнал, а проекция пересобирается."
+    },
+    {
+      "resource": "changeset",
+      "fields": [
+        "changeset_id",
+        "status",
+        "plan_hash",
+        "approval",
+        "target_site_ids",
+        "risk_class"
+      ],
+      "single_writer": "control-plane",
+      "readers": [
+        "architect",
+        "templates",
+        "seo",
+        "content",
+        "monitoring",
+        "backup",
+        "qwen"
+      ],
+      "commands": [
+        "apply",
+        "approve",
+        "cancel",
+        "reject",
+        "revoke-approval",
+        "rollback",
+        "validate"
+      ],
+      "emits": [
+        "changeset.applied.v1",
+        "changeset.apply_failed.v1",
+        "changeset.applying.v1",
+        "changeset.approval_requested.v1",
+        "changeset.approved.v1",
+        "changeset.cancelled.v1",
+        "changeset.expired.v1",
+        "changeset.manual_intervention_required.v1",
+        "changeset.proposed.v1",
+        "changeset.rejected.v1",
+        "changeset.rollback_failed.v1",
+        "changeset.rolled_back.v1",
+        "changeset.rolling_back.v1",
+        "changeset.stale.v1",
+        "changeset.succeeded.v1",
+        "changeset.validated.v1",
+        "changeset.validating.v1",
+        "changeset.validation_failed.v1",
+        "changeset.verify_failed.v1"
+      ],
+      "consumes": [
+        "site.registered.v1",
+        "site.updated.v1",
+        "site.retired.v1"
+      ],
+      "source_of_truth": "changesets.sqlite3 (control-plane)",
+      "retention_owner": "control-plane",
+      "secret_class": "NONE",
+      "mutation_policy": "только машина переходов; прямая запись status запрещена триггером БД",
+      "note": "Реестр остаётся источником истины о сайтах, журнал аудита — об истории. Хранилище наборов хранит только ход предложения."
+    }
+  ]
+}
