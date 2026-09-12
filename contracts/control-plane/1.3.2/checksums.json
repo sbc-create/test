@@ -6,10 +6,10 @@
     "COMPATIBILITY.md": "284af82828cf9fc8eb6660dd5874b6f544dbd6b8631c299a5919fa431efbceba",
     "MIGRATION.md": "d6961cddc45eaf599b8f7befbb6233839451c51c3fc6d2baaf21a0fa5ffe7775",
     "asyncapi.json": "29fbf2bdd4721ab4c724f246fd935f22df2fb5c9422a0ad0aff282d5da236e4c",
-    "capability-catalog.json": "ad47bbe6d25fb99b76a3f2dc9c8773d8dfc2140203385dd104c13567b83a550d",
+    "capability-catalog.json": "447facf89a28283cb090bb16dd67f914146d8de0c3135da0bd32027cbfeaa35d",
     "changeset-resource-map.json": "53952ee3e1887d717c48d13530d0d7cc3ec62fab8d0707b977c6543649952191",
     "error-catalog.json": "2ed8f649903fe7fc9e5546cf78594278b71b747ff37e051499589498af1f8218",
-    "manifest.json": "a17c993331ffa74094181b8d23f5ce1c3fac19b21b3bed0bd21821e7dc2ca01e",
+    "manifest.json": "67d69ce79ceb7d8576b358b321032c2b83a41a4676fda7c52a1da0e626dbe68a",
     "observability.json": "8cf549297368f9b60f9ac3f9de10f1408cd55cc57fce554fdb7b970bb5ddb235",
     "openapi.json": "4e47983d8373f991d55a8fb0188efc0248fca9bef8d685b423a762c2fb3674b5",
     "ownership-matrix.json": "eef59ef6c54078b27fc8cbb7390d72e11870a6069451f7621b33abb53e1c94f6",
@@ -36,7 +36,7 @@
     "schemas/Problem.v1.json": "a49213248269f674c544ebd4e0868071bac0fb80526ccb174baa4daa04e6a078",
     "schemas/ProjectionState.v1.json": "060029f1ade38771b0dd8650aeed81e565b934eac829ec32378f3d6ab8a503c5",
     "schemas/QuarantineDecision.v1.json": "8cfdf11c420b98785444685bdf2c93c8e4199724ddc5051b5cf724e1daca657d",
-    "schemas/SeoContentProposal.v1.json": "8c43633e0c955b161a427bb01e20efac8133242eaae1195007339a2429c81c37",
+    "schemas/SeoContentProposal.v1.json": "83826086d3525d5833806f294836189e6acdf1a94ebfb80cf12f8581b92df7d1",
     "schemas/SiteRef.json": "231a10684f834156c04663276d634d3f7ed4e368ed0ea89bf72ca24078bee468",
     "schemas/VersionRef.json": "a6f1c84c33f3dea6f62ba370ccfca5186187a84558aaf02add7e658a3f707a41"
   }

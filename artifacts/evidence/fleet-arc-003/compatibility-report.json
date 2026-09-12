@@ -1,0 +1,15 @@
+{
+  "from": "1.3.1",
+  "to": "1.3.2",
+  "kind": "additive_within_major_v1",
+  "resources_removed": [],
+  "channels_lost_availability": [],
+  "single_correction": {
+    "resource": "qwen.proposal",
+    "field": "single_writer",
+    "from": "qwen",
+    "to": "control-plane",
+    "why": "Объявление противоречило действовавшей и в 1.3.1 политике QWEN_PERSISTENT_WRITER=NO. Опереться на право, которого политика не давала, было нельзя, поэтому исправление никого не ломает."
+  },
+  "consumer_1_3_1_still_works": true
+}

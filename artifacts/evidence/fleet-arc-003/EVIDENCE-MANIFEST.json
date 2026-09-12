@@ -1,0 +1,94 @@
+{
+  "prompt_id": "FLEET-ARC-003-SEO-CANONICAL-PROPOSAL",
+  "prompt_rev": "R1",
+  "generated_at": "2026-09-12T20:36:25Z",
+  "source_repository": "https://github.com/sbc-create/test.git",
+  "source_branch": "claude/arc-seo-canonical-proposal-003",
+  "source_commit": "529ada7cc15ee44973a7c8793e0072d3bce182de",
+  "contract_bundle_before": "1.3.1",
+  "contract_bundle_after": "1.3.2",
+  "contract_artifact_sha256": "f2b0daa93fddc9ac363613d2c47365645ed84945e8d4f7eb9492fd1ce484bdc5",
+  "canonical_resource_kind": "seo.content.proposal",
+  "artifacts": {
+    "FLEET-SEO-003-R4-HANDOFF.md": {
+      "sha256": "836498786e85db86a8b64bac48ce1b4f1ebf7cc3768ac901ffd12e4ad654960f",
+      "bytes": 8827
+    },
+    "adapter-probe.json": {
+      "sha256": "a6560a6021eebad9b2a1a41cf35ab98349cff729975eb2b7b589dbb482eb2de5",
+      "bytes": 565
+    },
+    "candidate-bundle-manifest.json": {
+      "sha256": "84c07a4fb3d9425978866df4f626d5d9710439b5a8298610299d277df065d55b",
+      "bytes": 1643
+    },
+    "capability-catalog-diff.json": {
+      "sha256": "d3006efd424f27b3eb53e34cbfaca068a7403ddd4c5b5cf74de058031b2111c4",
+      "bytes": 233
+    },
+    "changeset-resource-map.json": {
+      "sha256": "53952ee3e1887d717c48d13530d0d7cc3ec62fab8d0707b977c6543649952191",
+      "bytes": 1813
+    },
+    "compatibility-report.json": {
+      "sha256": "0a2d751e9e0cd6256cf4db6145edd03cd4374626cc043cbcc06be27b6d714107",
+      "bytes": 644
+    },
+    "contract-bundle-diff.json": {
+      "sha256": "09413acccf4561518e8517f180bb889498edea19e0c08df2cea02e5c893f3515",
+      "bytes": 602
+    },
+    "event-schemas.json": {
+      "sha256": "de3fa30819d8b7b6a6d53e525e20ac4536289b44c18cdc9b3c72e70b5d2539bc",
+      "bytes": 2683
+    },
+    "ownership-matrix-diff.json": {
+      "sha256": "ef7ada81dff57f57b6ecb7a7d3307a6b6530721f0f56a5374784ef854f7f5338",
+      "bytes": 2018
+    },
+    "production-after.json": {
+      "sha256": "c0bd4cc49f4ac7e502b09cff3c9526ef341880858e5e34f737c4e377b2bcacb4",
+      "bytes": 4001
+    },
+    "production-before.json": {
+      "sha256": "9a86d19d75fac7feb65e795b12dc6ba450a3c1fcefd37dfa000f7cafba17d9c2",
+      "bytes": 4000
+    },
+    "production-delta.json": {
+      "sha256": "078184e0517466b79430c8f4e3b5c5d4fda42f3bd20ffe2a13b634f61fd2a568",
+      "bytes": 601
+    },
+    "resource-schema.json": {
+      "sha256": "83826086d3525d5833806f294836189e6acdf1a94ebfb80cf12f8581b92df7d1",
+      "bytes": 6772
+    },
+    "role-separation.json": {
+      "sha256": "1e4a53cba19f910f3fca418bfe5fffc3842252283bcc383eaa3225ee4a9c2fd8",
+      "bytes": 746
+    },
+    "rollback-restore-forward.json": {
+      "sha256": "360d371f18a472b23d54457601377e43c7edc0858dd8ad7ee08bce2c6c374558",
+      "bytes": 1791
+    },
+    "secrets-scan.json": {
+      "sha256": "bed4bd9787d0274ee72dbf131e1cc32e25d508ddc6a87056cf6593654ba0e57d",
+      "bytes": 109
+    },
+    "source-to-artifact-digest-proof.json": {
+      "sha256": "8a72a3718f55f5ae124864aa48a6d5bfa88349234917b16a4b127894751b4cf0",
+      "bytes": 676
+    },
+    "suite-results.json": {
+      "sha256": "3b1488a7dcd2e2746167fd16f754b67538a211ed5075f8ef82322158062065a0",
+      "bytes": 998
+    }
+  },
+  "artifact_count": 18,
+  "reproduce": [
+    "git clone https://github.com/sbc-create/test.git && git checkout 529ada7cc15ee44973a7c8793e0072d3bce182de",
+    "PYTHONPATH=. python3 contracts/control-plane/build_132.py",
+    "python3 contracts/control-plane/validate_bundle.py 1.3.2 1.3.1",
+    "ARC003_RELEASE=$PWD PYTHONPATH=$PWD python3 tests/arc_seo/run_arc003.py",
+    "ARC003_RELEASE=$PWD PYTHONPATH=$PWD python3 tests/arc_seo/rollback_cycle.py"
+  ]
+}

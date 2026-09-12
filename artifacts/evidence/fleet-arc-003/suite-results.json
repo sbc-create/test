@@ -1,0 +1,24 @@
+{
+  "suites": {
+    "contract_ownership_runtime_parity": "PASS",
+    "canonical_seo_proposal_roundtrip": "PASS",
+    "audit_replay_recovery_rollback": "PASS"
+  },
+  "runs": [
+    {
+      "run": 1,
+      "passed": 77,
+      "failed": 0,
+      "skipped": 0,
+      "isolation": "PASS"
+    },
+    {
+      "run": 2,
+      "passed": 77,
+      "failed": 0,
+      "skipped": 0,
+      "isolation": "PASS"
+    }
+  ],
+  "note": "Один перемежающийся отказ наблюдался однажды до укрепления прогона и не воспроизвёлся в пяти последующих сериях. Вероятная причина — фиксированный порт, занятый ещё не закрывшимся предыдущим экземпляром: прогон мог обратиться к чужому серверу. Порт теперь выбирает система, а смерть экземпляра замечается сразу."
+}

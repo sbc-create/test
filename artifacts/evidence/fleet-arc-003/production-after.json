@@ -1,0 +1,132 @@
+{
+  "audit": {
+    "business_events": 54,
+    "chain_root": "fc1db28d6c8be70810d7530efabe0378a4634dd251db10c9f1ab8d7ad1e0bc87",
+    "checkpoint": "cp-8b5e50e291f9",
+    "events": 114,
+    "last_seq": 114,
+    "outbox_backlog": 0
+  },
+  "changeset": {
+    "changesets": 0,
+    "outbox_backlog": 0,
+    "transitions": 0
+  },
+  "public_sites": {
+    "yummyani.biz": {
+      "bytes": 250034,
+      "sha256": "e55c31ead8807fac",
+      "status": 200
+    },
+    "yummyani.org": {
+      "bytes": 250306,
+      "sha256": "1c759ee24335552d",
+      "status": 200
+    },
+    "yummyani.site": {
+      "bytes": 250780,
+      "sha256": "022fa807bb338189",
+      "status": 200
+    }
+  },
+  "registry": {
+    "digest": "68d678520783569f2fe3cb0a6dbed79511d25e8d9035ba1b1b1d9a53ce036e1a",
+    "outbox": 32,
+    "production_active": 9,
+    "production_active_ids": [
+      "animedia-01",
+      "animedia-02",
+      "lords-01",
+      "lords-02",
+      "lords-03",
+      "yummyani-biz",
+      "yummyani-org",
+      "yummyani-site",
+      "zona-01"
+    ],
+    "sites": 13,
+    "synthetic": [
+      [
+        "synthetic-http-b4e4f1",
+        1
+      ],
+      [
+        "synthetic-npo-1c85d0bd",
+        3
+      ],
+      [
+        "synthetic-npo-30c9237d",
+        3
+      ]
+    ],
+    "version": 32
+  },
+  "release_manifest": {
+    "data_root": "/srv/site-factory/repo",
+    "deployed_at": "2026-09-12T18:33:34Z",
+    "digest": "ce7fabc413e2796c8c63b24ecbcb8217d970cedacc6be68dcd8376b94a433bc4",
+    "previous_sha": "6cd5a5ed8df8ed2e5401d1186346e65d9e8adaaa",
+    "sha": "e698e2adf50223c4b922efae5ff019355751f2a1",
+    "source": "/srv/site-factory/repo",
+    "unit": "site-factory-control-api.service"
+  },
+  "releases": {
+    "count": 5,
+    "current": "e698e2adf50223c4b922efae5ff019355751f2a1",
+    "ids": [
+      "4f26172c7e0853f14765c773bc4df9b369533b2d",
+      "6712f9a5820f748f452f7c9206ca2ff6e8d2def6",
+      "6cd5a5ed8df8ed2e5401d1186346e65d9e8adaaa",
+      "e698e2adf50223c4b922efae5ff019355751f2a1",
+      "f3c8188ea2f2fcad8ddf51a2933e098f3ca3943d"
+    ]
+  },
+  "served_bundle": {
+    "files": {
+      "asyncapi.json": "6fc9a6b0a4bd00e7",
+      "capability-catalog.json": "0f95160a82477618",
+      "checksums.json": "fedf1a7b16999181",
+      "error-catalog.json": "ab6b95e47a279071",
+      "manifest.json": "2afc6e4ca113555c",
+      "observability.json": "8cf549297368f9b6",
+      "openapi.json": "4e47983d8373f991",
+      "ownership-matrix.json": "2cd90e9d757faa25"
+    },
+    "version": "1.3.1"
+  },
+  "services": {
+    "lords-01.service": "running",
+    "lords-02.service": "running",
+    "lords-03.service": "running",
+    "lords-canary-render@lords-02.service": "dead",
+    "lords-canary-switch@lords-02.service": "failed",
+    "lords-content-refresh.service": "dead",
+    "lords-deploy-broker.service": "dead",
+    "lords-nova-01.service": "running",
+    "lords-site-render@lords-02-20260910T061307Z.service": "failed",
+    "nova-animedia-01.service": "running",
+    "nova-animedia-02.service": "running",
+    "nova-catalog-refresh.service": "start",
+    "nova-lords-02.service": "running",
+    "nova-lords-03.service": "running",
+    "nova-yummy-biz.service": "running",
+    "nova-yummy-org.service": "running",
+    "nova-yummy-site.service": "running",
+    "nova-zona-01.service": "running",
+    "site-factory-approval-signer.service": "running",
+    "site-factory-audit-bridge.service": "running",
+    "site-factory-backup.service": "dead",
+    "site-factory-changeset-worker.service": "running",
+    "site-factory-control-api.service": "running",
+    "site-factory-docker-firewall.service": "exited",
+    "site-factory-health.service": "dead",
+    "site-factory-restore-proof.service": "dead",
+    "site-factory-secret-hub.service": "running",
+    "site-factory-secret-panel.service": "running",
+    "site-factory-selfcheck.service": "failed",
+    "site-factory-seo-dryrun.service": "dead",
+    "site-factory-worker.service": "dead"
+  },
+  "site_units_active": 12,
+  "taken_at": "2026-09-12T20:34:44Z"
+}

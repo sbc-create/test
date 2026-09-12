@@ -1,0 +1,30 @@
+{
+  "PRODUCTION_REGISTRY_DELTA": 0,
+  "PRODUCTION_REGISTRY_DIGEST_UNCHANGED": true,
+  "PRODUCTION_CHANGESET_BUSINESS_DELTA": 0,
+  "PRODUCTION_AUDIT_BUSINESS_DELTA": 0,
+  "PRODUCTION_AUDIT_CHAIN_ROOT_UNCHANGED": true,
+  "PRODUCTION_ACTIVE_SITES": "9/9",
+  "PRODUCTION_RELEASES_UNCHANGED": true,
+  "SERVED_BUNDLE_UNCHANGED": true,
+  "SITE_UNITS_ACTIVE": [
+    12,
+    12
+  ],
+  "PUBLIC_SITES": {
+    "yummyani.biz": [
+      200,
+      200
+    ],
+    "yummyani.org": [
+      200,
+      200
+    ],
+    "yummyani.site": [
+      200,
+      200
+    ]
+  },
+  "SYNTHETIC_UNCHANGED": true,
+  "DIFFERENCES": {}
+}

@@ -1,0 +1,68 @@
+{
+  "added": [
+    "seo.content.proposal"
+  ],
+  "removed": [],
+  "writer_changed": {
+    "qwen.proposal": {
+      "from": "qwen",
+      "to": "control-plane"
+    }
+  },
+  "new_resource": {
+    "resource": "seo.content.proposal",
+    "fields": [
+      "proposal_id",
+      "site_id",
+      "entity_id",
+      "entity_kind",
+      "surface",
+      "locale",
+      "fact_pack_ref",
+      "source_snapshot_sha256",
+      "artifact_ref",
+      "artifact_digest",
+      "model_version",
+      "prompt_version",
+      "policy_version",
+      "requested_by",
+      "correlation_id",
+      "causation_id",
+      "idempotency_key",
+      "operations"
+    ],
+    "single_writer": "control-plane",
+    "domain_owner": "seo",
+    "content_author": "qwen",
+    "requester": "seo",
+    "approver": "human_owner",
+    "executor": "control-plane",
+    "readers": [
+      "architect",
+      "seo",
+      "control-plane",
+      "qwen",
+      "monitoring",
+      "backup"
+    ],
+    "commands": [
+      "propose"
+    ],
+    "emits": [
+      "seo.changeset.proposed.v1",
+      "seo.content.proposal.accepted.v1",
+      "seo.content.proposal.rejected.v1"
+    ],
+    "consumes": [
+      "site.registered.v1",
+      "site.updated.v1",
+      "content.refresh.completed.v1"
+    ],
+    "source_of_truth": "changesets.sqlite3 (control-plane)",
+    "retention_owner": "control-plane",
+    "secret_class": "NONE",
+    "mutation_policy": "только через канонический приём предложения; поля target_environment, owner_service, audience и site_kind выводятся сервером, присланные значения лишь сверяются",
+    "note": "Не подмена seo.audit: тот описывает результат обследования и хранит предложения вложенным списком без собственного идентификатора, версии и ключа идемпотентности."
+  },
+  "qwen_contradiction_resolved": true
+}

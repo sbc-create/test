@@ -1,0 +1,75 @@
+{
+  "channels": {
+    "fleet/seo.changeset.proposed.v1": {
+      "operationId": "seo_changeset_proposed_v1",
+      "x-owner": "control-plane",
+      "x-consumers": [
+        "architect"
+      ],
+      "x-aggregate-key": "changeset_id",
+      "x-order-key": "site_id",
+      "x-status": "AVAILABLE",
+      "x-dedup-key": "event_id",
+      "x-retryable": true,
+      "x-evidence-required": false,
+      "message": {
+        "name": "seo.changeset.proposed.v1",
+        "contentType": "application/json",
+        "payload": {
+          "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+        }
+      },
+      "description": "Предложение SEO дошло до канонического набора изменений. Производитель — control-plane: событие пишет тот, кто сделал запись."
+    },
+    "fleet/seo.content.proposal.accepted.v1": {
+      "operationId": "seo_content_proposal_accepted_v1",
+      "description": "Каноническое предложение SEO-контента принято и устойчиво записано; создан набор изменений.",
+      "x-owner": "control-plane",
+      "x-consumers": [
+        "architect",
+        "seo",
+        "monitoring",
+        "backup",
+        "qwen"
+      ],
+      "x-aggregate-key": "proposal_id",
+      "x-order-key": "proposal_id",
+      "x-status": "AVAILABLE",
+      "x-dedup-key": "idempotency_key",
+      "x-retryable": true,
+      "x-evidence-required": true,
+      "message": {
+        "name": "seo.content.proposal.accepted.v1",
+        "contentType": "application/json",
+        "payload": {
+          "$ref": "https://contracts.site-factory.internal/1.3.2/schemas/EventEnvelope.v1.json"
+        }
+      }
+    },
+    "fleet/seo.content.proposal.rejected.v1": {
+      "operationId": "seo_content_proposal_rejected_v1",
+      "description": "Предложение отклонено до любого эффекта; причина — код ошибки.",
+      "x-owner": "control-plane",
+      "x-consumers": [
+        "architect",
+        "seo",
+        "monitoring",
+        "backup",
+        "qwen"
+      ],
+      "x-aggregate-key": "proposal_id",
+      "x-order-key": "proposal_id",
+      "x-status": "AVAILABLE",
+      "x-dedup-key": "idempotency_key",
+      "x-retryable": true,
+      "x-evidence-required": false,
+      "message": {
+        "name": "seo.content.proposal.rejected.v1",
+        "contentType": "application/json",
+        "payload": {
+          "$ref": "https://contracts.site-factory.internal/1.3.2/schemas/EventEnvelope.v1.json"
+        }
+      }
+    }
+  }
+}

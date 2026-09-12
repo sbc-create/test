@@ -1,0 +1,9 @@
+{
+  "rule": "Отпечаток набора считается по отсортированной карте sha256 всех его файлов. Совпадение в источнике, в артефакте и в том, что отдаёт рантайм, доказывает, что это один и тот же набор.",
+  "source_commit": "529ada7cc15ee44973a7c8793e0072d3bce182de",
+  "source_branch": "claude/arc-seo-canonical-proposal-003",
+  "bundle_dir": "contracts/control-plane/1.3.2",
+  "bundle_sha256": "f2b0daa93fddc9ac363613d2c47365645ed84945e8d4f7eb9492fd1ce484bdc5",
+  "files": 37,
+  "runtime_check": "tests/arc_seo/test_suite1...::test_s1_12"
+}

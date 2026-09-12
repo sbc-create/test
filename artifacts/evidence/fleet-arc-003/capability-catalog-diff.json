@@ -1,0 +1,14 @@
+{
+  "added": [
+    "qwen.content.draft",
+    "seo.content.authoring",
+    "seo.content.proposal"
+  ],
+  "status_changed": {
+    "changeset.adapter.seo": {
+      "from": "PLANNED",
+      "to": "AVAILABLE"
+    }
+  },
+  "removed": []
+}

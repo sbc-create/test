@@ -1,0 +1,53 @@
+{
+  "schema_version": "fleet-changeset-resource-map/1.0.0",
+  "bundle_version": "1.3.2",
+  "rule": "Вид ресурса обслуживается контуром изменений только при наличии подключённого адаптера. Запись здесь без адаптера означала бы объявленную, но неисполнимую возможность.",
+  "resources": [
+    {
+      "resource_kind": "seo.content.proposal",
+      "schema": "https://contracts.site-factory.internal/1.3.2/schemas/SeoContentProposal.v1.json",
+      "adapter": "factory.site_engine.seo_authoring.adapter:SeoContentAdapter",
+      "adapter_status": "AVAILABLE",
+      "single_writer": "control-plane",
+      "domain_owner": "seo",
+      "content_author": "qwen",
+      "operations": [
+        "update",
+        "patch"
+      ],
+      "reversible": true,
+      "changeset_resource_id": "{entity_id}:{surface}:{locale}",
+      "emits": [
+        "seo.changeset.proposed.v1",
+        "seo.content.proposal.accepted.v1"
+      ],
+      "probe": {
+        "executable": true,
+        "capabilities": {
+          "adapter": "seo.content",
+          "owner_service": "control-plane",
+          "resource_types": [
+            "seo.content.proposal"
+          ],
+          "operations": [
+            "update",
+            "patch"
+          ],
+          "reversible_operations": [
+            "update",
+            "patch"
+          ],
+          "supports_dry_run": true,
+          "supports_observe": true,
+          "supports_rollback": true,
+          "environment": "non-production",
+          "live_writes": false
+        },
+        "dry_run_effects": 0,
+        "total_effects": 0,
+        "owner_service": "control-plane",
+        "plan_reversible": true
+      }
+    }
+  ]
+}

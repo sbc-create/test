@@ -1,0 +1,21 @@
+{
+  "resource_kind": "seo.content.proposal",
+  "domain_owner": "seo",
+  "content_author": "qwen",
+  "canonical_requester": "seo",
+  "durable_writer": "control-plane",
+  "approver": "human_owner",
+  "executor": "control-plane",
+  "event_producer_contour": "control-plane",
+  "event_producer_identity": "changeset-worker",
+  "event_producer_note": "Журнал различает личности процессов намеренно: по записи видно, какой процесс её сделал. control-plane — контур, changeset-worker — публикующая личность.",
+  "qwen_roles": [
+    "proposer"
+  ],
+  "qwen_forbidden_actions": [
+    "apply",
+    "approve",
+    "grant_authority",
+    "rollback"
+  ]
+}

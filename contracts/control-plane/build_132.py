@@ -175,7 +175,7 @@ def собрать() -> dict:
             "event_types": ["changeset.applied.v1", "changeset.succeeded.v1"],
             "required_scopes": ["changeset:apply"],
             "dependencies": ["changeset.apply", "seo.content.proposal"],
-            "evidence_ref": "artifacts/fleet-arc-003/adapter-probe.json",
+            "evidence_ref": "artifacts/evidence/fleet-arc-003/adapter-probe.json",
             "note": ("Статус вычислен исполнением: наблюдение, план и сухой "
                      "прогон на эфемерном хранилище, ноль эффектов."),
         },

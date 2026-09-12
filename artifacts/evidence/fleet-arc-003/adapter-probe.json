@@ -1,0 +1,27 @@
+{
+  "executable": true,
+  "capabilities": {
+    "adapter": "seo.content",
+    "owner_service": "control-plane",
+    "resource_types": [
+      "seo.content.proposal"
+    ],
+    "operations": [
+      "update",
+      "patch"
+    ],
+    "reversible_operations": [
+      "update",
+      "patch"
+    ],
+    "supports_dry_run": true,
+    "supports_observe": true,
+    "supports_rollback": true,
+    "environment": "non-production",
+    "live_writes": false
+  },
+  "dry_run_effects": 0,
+  "total_effects": 0,
+  "owner_service": "control-plane",
+  "plan_reversible": true
+}
