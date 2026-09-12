@@ -441,3 +441,90 @@ class TestSignerНеОракул:
         assert здоровье["grants_issued"] == 0
         assert здоровье["accepts_raw_payload"] is False
         assert здоровье["refusals"] >= 3
+
+
+# =============================================================================
+# D. Токены управляющего слоя: ротация с сохранением прав и атрибуция
+# =============================================================================
+
+class TestПринципалыУправляющегоСлоя:
+    """Отзыв здесь — это ЗАМЕНА значения: Control API сверяет само значение."""
+
+    @pytest.fixture()
+    def файл(self, tmp_path):
+        from factory.site_engine.credentials import control_principals as CP
+        п = tmp_path / "site-engine-control-tokens"
+        п.write_text("ops-token-aaaa=read,jobs:write,config:write|"
+                     "ro-token-bbbb=read\n", encoding="utf-8")
+        return п
+
+    def test_ротация_меняет_значения(self, файл):
+        from factory.site_engine.credentials import control_principals as CP
+        до = CP.состояние(файл)
+        итог = CP.ротировать(файл)
+        после = CP.состояние(файл)
+        assert итог["rotated"] == 2
+        assert {з["fingerprint"] for з in до} & {з["fingerprint"] for з in после} == set()
+
+    def test_области_переносятся_дословно(self, файл):
+        from factory.site_engine.credentials import control_principals as CP
+        до = [з["scopes"] for з in CP.состояние(файл)]
+        CP.ротировать(файл)
+        после = [з["scopes"] for з in CP.состояние(файл)]
+        assert до == после, (
+            "ротация, попутно меняющая права, — это изменение доступа, "
+            "и обнаруживают его тогда, когда что-то перестало работать")
+
+    def test_прежнее_значение_перестаёт_быть_принципалом(self, файл):
+        from factory.site_engine.credentials import control_principals as CP
+        прежние = {т for т, _ in CP.разобрать(файл.read_text("utf-8"))}
+        CP.ротировать(файл)
+        текущие = {т for т, _ in CP.разобрать(файл.read_text("utf-8"))}
+        assert прежние & текущие == set()
+
+    def test_файл_остаётся_закрытым(self, файл):
+        import stat as _stat
+        from factory.site_engine.credentials import control_principals as CP
+        CP.ротировать(файл)
+        assert oct(_stat.S_IMODE(файл.stat().st_mode)) == "0o400"
+
+    def test_отсутствие_принципалов_названо(self, tmp_path):
+        from factory.site_engine.credentials import control_principals as CP
+        п = tmp_path / "нет"
+        with pytest.raises(CP.PrincipalError) as ош:
+            CP.ротировать(п)
+        assert ош.value.error_code == "PRINCIPALS_MISSING"
+
+    def test_значения_не_печатаются(self, файл):
+        from factory.site_engine.credentials import control_principals as CP
+        итог = CP.ротировать(файл)
+        сырое = json.dumps(итог, ensure_ascii=False)
+        for т, _ in CP.разобрать(файл.read_text("utf-8")):
+            assert т not in сырое, "значение попало в вывод инструмента"
+
+
+class TestАтрибуцияДействий:
+    """Журнал обязан отвечать на вопрос «кто действовал»."""
+
+    def test_отпечаток_действующего_сохраняется(self):
+        from factory.redaction import redact_obj
+        итог = redact_obj({"extra": {"actor_token": "c88b18c1fc56"}})
+        assert итог["extra"]["actor_token"] == "c88b18c1fc56", (
+            "затирая отпечаток, система перестаёт отвечать на вопрос, "
+            "ради которого он и заводился")
+
+    def test_сырой_токен_в_том_же_поле_затирается(self):
+        from factory.redaction import redact_obj
+        итог = redact_obj({"actor_token": "Ab3xK9zQmR7tLpW2vNc5YsD8fG1hJ4eU"})
+        assert итог["actor_token"] != "Ab3xK9zQmR7tLpW2vNc5YsD8fG1hJ4eU"
+
+    def test_разрешение_не_по_одной_лишь_форме(self):
+        """Двенадцать шестнадцатеричных знаков может быть и коротким паролем."""
+        from factory.redaction import redact_obj
+        assert redact_obj({"password": "c88b18c1fc56"})["password"] != "c88b18c1fc56"
+
+    def test_перечень_полей_отпечатков_закрыт(self):
+        from factory.redaction import ПОЛЯ_ОТПЕЧАТКОВ
+        assert "actor_token" in ПОЛЯ_ОТПЕЧАТКОВ
+        assert "password" not in ПОЛЯ_ОТПЕЧАТКОВ
+        assert "secret" not in ПОЛЯ_ОТПЕЧАТКОВ
