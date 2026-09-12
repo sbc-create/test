@@ -83,14 +83,37 @@ def изолировать_окружение() -> dict[str, bool]:
     return убрано
 
 
+#: Имя credential собственной личности.
+CREDENTIAL = "audit-token-templates"
+
+
 def _токен() -> str:
-    т = os.environ.get(ПЕРЕМЕННАЯ, "").strip()
-    if not т:
+    """Только своя личность и только через LoadCredential.
+
+    Прежде токен приходил из общего EnvironmentFile — а значит вместе с ним в
+    процесс попадали чужие личности и приватный ключ подписи, и убрать их
+    можно было лишь ПОСЛЕ старта. Теперь systemd кладёт в приватный каталог
+    юнита ровно один файл: чужого здесь нет физически.
+    """
+    каталог = os.environ.get("CREDENTIALS_DIRECTORY", "").strip()
+    if каталог:
+        путь = os.path.join(каталог, CREDENTIAL)
+        if os.path.isfile(путь):
+            with open(путь, encoding="utf-8") as ф:
+                значение = ф.read().strip()
+            if значение:
+                return значение
+    if os.environ.get(ПЕРЕМЕННАЯ, "").strip():
         raise ImportError_(
-            "SERVICE_TOKEN_MISSING",
-            f"{ПЕРЕМЕННАЯ} не внедрён: запуск обязан идти через systemd с "
-            f"EnvironmentFile, а не из оболочки")
-    return т
+            "CREDENTIAL_ENV_FORBIDDEN",
+            f"{ПЕРЕМЕННАЯ} пришёл окружением; передача учётных данных "
+            f"окружением запрещена — юнит обязан объявить "
+            f"LoadCredential={CREDENTIAL}")
+    raise ImportError_(
+        "SERVICE_TOKEN_MISSING",
+        f"credential {CREDENTIAL} не передан: запуск обязан идти через "
+        f"systemd с LoadCredential")
+    return ""
 
 
 def собрать(каталог: str | Path) -> dict[str, Any]:

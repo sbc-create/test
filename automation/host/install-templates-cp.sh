@@ -24,6 +24,16 @@ SERVICE_USER=templates-cp
 
 REPO="${REPO:-/home/claude/wt-integration-28}"
 COMMIT="$(git -C "$REPO" rev-parse HEAD)"
+
+# Манифест объявляет коммит, а копируется рабочее дерево. Если дерево грязное
+# по устанавливаемым путям, манифест соврёт о происхождении — и это ровно тот
+# класс дефекта «в репозитории одно, в работе другое», который потом ищут
+# часами. Отказ здесь дешевле.
+DIRTY="$(git -C "$REPO" status --porcelain -- factory/templates_cp factory/__init__.py)"
+if [[ -n "$DIRTY" ]]; then
+  printf '[templates-cp] ОТКАЗ: рабочее дерево грязное по устанавливаемым путям:\n%s\n' "$DIRTY" >&2
+  exit 5
+fi
 ROOT=/srv/templates-cp
 RELEASE="${ROOT}/releases/${COMMIT}"
 STATE=/var/lib/templates-cp
