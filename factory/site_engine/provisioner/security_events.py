@@ -25,6 +25,7 @@ from typing import Any
 РОТАЦИЯ = "security.credentials_rotated.v1"
 РЕЛИЗ = "release.control_plane_deployed.v1"
 ОТКАТ = "release.rollback_drill_completed.v1"
+ПРИНЦИПАЛЫ = "security.control_principals_rotated.v1"
 
 
 class LedgerRefused(RuntimeError):
@@ -101,6 +102,18 @@ def релиз(*, commit: str, artifact_sha256: str) -> dict[str, Any]:
         after_hash="sha256:" + artifact_sha256)
 
 
+def принципалы(*, отпечатки: list[str], областей: list[str]) -> dict[str, Any]:
+    """Ротация токенов управляющего слоя. Значений в событии нет."""
+    ключ = "control-principals:" + ",".join(sorted(отпечатки))
+    return _событие(
+        ПРИНЦИПАЛЫ, ключ,
+        f"ротированы токены управляющего слоя: {len(отпечатки)} принципалов, "
+        f"области сохранены дословно; прежние значения перестали быть "
+        f"принципалами и отвергаются authoritative verifier",
+        resource_type="integration.provisioning",
+        resource_id="site-factory/control-api-principals")
+
+
 def откат(*, с_релиза: str, на_релиз: str, вернулись_секреты: int,
           вернулись_полномочия: int) -> dict[str, Any]:
     """Проверка отката в обе стороны. Значений секретов в событии нет."""
@@ -122,6 +135,9 @@ if __name__ == "__main__":
     if что == "rotation":
         с = ротация(личностей=int(sys.argv[2]), отозвано=int(sys.argv[3]),
                     активный_kid=sys.argv[4], отозванные_kid=sys.argv[5:])
+    elif что == "principals":
+        с = принципалы(отпечатки=sys.argv[2].split(","),
+                       областей=sys.argv[3].split(",") if len(sys.argv) > 3 else [])
     elif что == "rollback":
         с = откат(с_релиза=sys.argv[2], на_релиз=sys.argv[3],
                   вернулись_секреты=int(sys.argv[4]),
