@@ -456,14 +456,42 @@ def test_r2_проекция_пересобирается_из_журнала(tm
     assert было == стало, "пересборка из журнала дала другой результат"
 
 
-def test_r2_отозванный_токен_отклонён(monkeypatch):
+def test_r2_отозванный_токен_отклонён(monkeypatch, tmp_path):
+    """Отзыв живёт в реестре отпечатков, а не в переменной окружения.
+
+    Прежний механизм передавал список отозванных окружением — то есть тем же
+    каналом, которым раздавались сами токены. Теперь и отпечатки служб, и
+    список отозванных приходят одним credential, и сырых значений у
+    проверяющего нет вовсе.
+    """
     from factory.site_engine.audit import ledger_identity as li
-    import hashlib
-    отпечаток = hashlib.sha256(ТОКЕН.encode()).hexdigest()[:12]
-    monkeypatch.setenv(li.ОТОЗВАННЫЕ, отпечаток)
+    import hashlib, json
+    отпечаток = hashlib.sha256(ТОКЕН.encode()).hexdigest()
+    каталог = tmp_path / "credentials"
+    каталог.mkdir()
+    (каталог / li.ОТПЕЧАТКИ).write_text(json.dumps({
+        "services": {"architect": отпечаток}, "revoked": [отпечаток]}),
+        encoding="utf-8")
+    monkeypatch.setenv("CREDENTIALS_DIRECTORY", str(каталог))
     with pytest.raises(li.IdentityError) as ош:
         li.опознать({"authorization": f"Bearer {ТОКЕН}"})
     assert ош.value.error_code == "TOKEN_REVOKED" and ош.value.status == 403
+
+
+def test_r2_отпечатки_не_содержат_сырых_токенов(monkeypatch, tmp_path):
+    """Компрометация проверяющего не должна выдавать личности служб."""
+    from factory.site_engine.audit import ledger_identity as li
+    import hashlib, json
+    каталог = tmp_path / "credentials"
+    каталог.mkdir()
+    содержимое = json.dumps({
+        "services": {"architect": hashlib.sha256(ТОКЕН.encode()).hexdigest()},
+        "revoked": []})
+    (каталог / li.ОТПЕЧАТКИ).write_text(содержимое, encoding="utf-8")
+    monkeypatch.setenv("CREDENTIALS_DIRECTORY", str(каталог))
+    assert ТОКЕН not in содержимое
+    кто = li.опознать({"authorization": f"Bearer {ТОКЕН}"})
+    assert кто["producer_service"] == "architect"
 
 
 def test_r2_неверный_токен_отклонён():
