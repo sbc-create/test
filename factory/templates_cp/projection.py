@@ -193,6 +193,27 @@ class Проекция:
                  json.dumps(событие, ensure_ascii=False), причина, попыток,
                  _сейчас(), _сейчас()))
 
+    def очередь_разбора(self) -> list[dict]:
+        """Что лежит в DLQ. Для повторной обработки после починки причины."""
+        import json as _json
+        строки = self.соед.execute(
+            "SELECT event_id, seq, payload, reason, attempts FROM dlq "
+            "ORDER BY seq, rowid").fetchall()
+        итог = []
+        for с in строки:
+            try:
+                тело = _json.loads(с["payload"] or "{}")
+            except ValueError:
+                тело = {}
+            итог.append({"event_id": с["event_id"], "seq": с["seq"],
+                         "reason": с["reason"], "attempts": с["attempts"],
+                         "event": тело})
+        return итог
+
+    def убрать_из_dlq(self, event_id: str) -> None:
+        with self.соед:
+            self.соед.execute("DELETE FROM dlq WHERE event_id=?", (event_id,))
+
     @property
     def глубина_dlq(self) -> int:
         return self.соед.execute("SELECT COUNT(*) c FROM dlq").fetchone()["c"]

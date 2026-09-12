@@ -80,6 +80,27 @@ def команда_observe(аргументы) -> int:
     return 0 if успешных == len(наблюдения) and наблюдения else 1
 
 
+def команда_dlq(аргументы) -> int:
+    """Показать отложенные события или разобрать их заново."""
+    from factory.templates_cp.consumer import Потребитель
+    клиент, проекция = RegistryClient(БАЗА), _проекция()
+    очередь = проекция.очередь_разбора()
+    if not аргументы.redrive:
+        print(json.dumps({"depth": len(очередь), "items": [
+            {k: з[k] for k in ("event_id", "seq", "reason", "attempts")}
+            for з in очередь]}, ensure_ascii=False, indent=1))
+        проекция.закрыть()
+        return 0
+    потребитель = Потребитель(клиент, проекция,
+                              журнал=lambda в, д: print(
+                                  f"[templates-cp] {в} {json.dumps(д, ensure_ascii=False)}"))
+    свод = потребитель.разобрать_dlq()
+    свод["depth_after"] = проекция.глубина_dlq
+    print(json.dumps(свод, ensure_ascii=False, indent=1))
+    проекция.закрыть()
+    return 0 if свод["still_failing"] == 0 else 1
+
+
 def команда_capabilities(_) -> int:
     """Что объявлено Control Plane. Источник решения о том, что можно делать."""
     клиент = RegistryClient(БАЗА)
@@ -96,9 +117,13 @@ def main(argv: list[str] | None = None) -> int:
     н = под.add_parser("observe", help="живое наблюдение production-сайтов")
     н.add_argument("--out", help="сохранить результат в файл")
     под.add_parser("capabilities", help="показать объявленные возможности")
+    д = под.add_parser("dlq", help="отложенные события и их повторный разбор")
+    д.add_argument("--redrive", action="store_true",
+                   help="прогнать отложенные события заново текущим кодом")
     а = р.parse_args(argv)
     return {"sync": команда_sync, "observe": команда_observe,
-            "capabilities": команда_capabilities}[а.команда](а)
+            "capabilities": команда_capabilities,
+            "dlq": команда_dlq}[а.команда](а)
 
 
 if __name__ == "__main__":
