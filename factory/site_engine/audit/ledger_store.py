@@ -366,11 +366,17 @@ def append(соед: sqlite3.Connection, событие: dict[str, Any], *,
         исходное = соед.execute(
             "SELECT * FROM ledger_event WHERE event_id=?",
             (событие.get("source_event_id"),)).fetchone()
-        _ERRATUM.проверить(
-            событие,
-            документ_пространства=_документ_пространства(
-                событие.get("claim_namespace")),
-            исходное=dict(исходное) if исходное else None)
+        try:
+            _ERRATUM.проверить(
+                событие,
+                документ_пространства=_документ_пространства(
+                    событие.get("claim_namespace")),
+                исходное=dict(исходное) if исходное else None)
+        except _ERRATUM.ErratumError as ош:
+            # Своя иерархия ошибок у каждого контракта — верно, но наружу
+            # журнал обязан отвечать одним типом: иначе HTTP-слой не узнает
+            # отказ и отдаст 500 там, где есть точная причина.
+            raise LedgerError(ош.error_code, ош.detail, ош.status) from ош
 
     тело = {k: событие.get(k) for k in ПОЛЯ}
     тело["evidence_refs"] = событие.get("evidence_refs") or []

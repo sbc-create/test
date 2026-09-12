@@ -24,6 +24,11 @@ from factory.site_engine.provisioner.providers.base import ProviderError
     "analytics.counter": ("analytics", "counter"),
     "seo.project": ("seo_rank", "project"),
     "template.build": ("template", "counter_tag"),
+    # Канонический род ресурса из bundle 1.3.1. Без записи здесь контур не
+    # смог бы исполнить ресурс, который контракт уже объявил, — то самое
+    # расхождение плана и реализации, ради устранения которого версия и
+    # поднималась.
+    "template.release": ("template", "counter_tag"),
 }
 
 
