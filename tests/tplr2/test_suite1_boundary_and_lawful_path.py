@@ -368,3 +368,100 @@ class TestРасхождениеИКомпенсация:
         assert ош.value.error_code == "TRANSITION_NOT_ALLOWED"
         assert цель["мир"].эффектов("create") == создано
         assert цель["мир"].эффектов("delete") == удалено
+
+
+# =============================================================================
+# 6. Один минимальный ПОЛНЫЙ цикл, сцепленный от предложения до терминала
+# =============================================================================
+
+class TestПолныйЦикл:
+    """Предложение → набор → валидация → одобрение → разрешение → исполнитель
+    → эффект → наблюдение → сверка → каноническое терминальное состояние.
+
+    Разрешение выпускается ОТДЕЛЬНЫМ тестовым ключом стенда — именно так
+    задание и разрешает проводить цикл. Боевая служба подписи при этом
+    аудиторию templates-executor не выдаёт, и это отдельная, отмеченная
+    недостающая способность: она перекрывает боевую проводку, а не эфемерную
+    приёмку.
+    """
+
+    def test_цикл_проходит_целиком(self, стенд):
+        from factory.site_engine.provisioner.templates_executor import (
+            TemplatesExecutor)
+
+        # 1. Templates предлагает. 2. Набор создан. 3. Валидация. 4. Одобрение.
+        цель = собрать_цель(стенд)
+        cid, движок = довести_до_approved(стенд, цель, ключ="full-cycle-1")
+        набор = S.получить(стенд["соед"], cid)
+        assert набор["status"] == M.APPROVED
+        assert набор["producer_service"] == "templates"
+        assert набор["approval"]["approver_id"] != набор["actor_id"]
+
+        # 5. Аренда и маркер ограждения.
+        аренда = S.взять_аренду(стенд["соед"], cid, "changeset-worker")
+        маркер = аренда["fencing_token"]
+        план = набор["dry_run_result"]["per_site_plan"][стенд["site_id"]]
+        baseline = план["before_fingerprint"]
+        основа = {"changeset_id": cid, "site_id": стенд["site_id"],
+                  "plan_hash": набор["plan_hash"],
+                  "artifact_digest": план["expected_fingerprint"],
+                  "registry_fingerprint": отпечаток_реестра(стенд),
+                  "fencing_token": маркер}
+
+        # 6. Короткоживущее разрешение, связанное со всеми притязаниями.
+        подпись, полезное = выпустить_grant(стенд, **основа)
+        assert полезное["audience"] == G.АУДИТОРИЯ
+        assert полезное["resource_kind"] == "template.release"
+        for притязание in G.ОБЯЗАТЕЛЬНЫЕ:
+            assert полезное.get(притязание), f"нет притязания {притязание}"
+
+        # 7. Исполняет Templates Executor, и только по разрешению.
+        исполнитель = TemplatesExecutor(
+            стенд["tmp"] / "cycle.sqlite3", цель["адаптер"], набор_ключей(стенд),
+            наблюдатель=lambda s: f"template:counter_tag:{s}")
+        исход = исполнитель.выполнить(
+            подпись=подпись, полезное=полезное, ожидания=ожидания(**основа),
+            план=план, idempotency_key="full-cycle-effect")
+        assert исход.applied and исход.fence_winner and исход.effects == 1
+        assert исход.claims["audience"] == G.АУДИТОРИЯ
+
+        # 8. Наблюдение и сверка — состояние читается заново.
+        наблюдение = цель["адаптер"].observe(
+            site_id=стенд["site_id"], resource_id=набор["resource_id"])
+        assert наблюдение["fingerprint"] != baseline, "эффект обязан быть виден"
+        сверка = цель["адаптер"].verify(site_id=стенд["site_id"], plan=план,
+                                        observed=наблюдение)
+        assert сверка["ok"] is True and сверка["mismatch"] is None
+
+        # 9. Каноническое терминальное состояние — переходами, а не записью.
+        итог = движок.применить(cid, actor_id="service:control-plane",
+                                служба="control-plane", fencing_token=маркер)
+        assert итог["status"] == M.SUCCEEDED
+        assert M.SUCCEEDED in M.ТЕРМИНАЛЬНЫЕ
+
+        # Эффект ровно один на весь цикл: повтор через контур его не удвоил.
+        assert цель["мир"].эффектов("create") == 1
+        assert цель["витрина"].тег_установлен(90000001)
+
+    def test_цикл_без_разрешения_не_исполняется(self, стенд):
+        """Тот же цикл, но исполнитель вызван без разрешения."""
+        from factory.site_engine.provisioner.templates_executor import (
+            TemplatesExecutor)
+        цель = собрать_цель(стенд)
+        cid, _ = довести_до_approved(стенд, цель, ключ="full-cycle-2")
+        аренда = S.взять_аренду(стенд["соед"], cid, "changeset-worker")
+        набор = S.получить(стенд["соед"], cid)
+        план = набор["dry_run_result"]["per_site_plan"][стенд["site_id"]]
+        основа = {"changeset_id": cid, "site_id": стенд["site_id"],
+                  "plan_hash": набор["plan_hash"],
+                  "artifact_digest": план["expected_fingerprint"],
+                  "registry_fingerprint": отпечаток_реестра(стенд),
+                  "fencing_token": аренда["fencing_token"]}
+        исполнитель = TemplatesExecutor(стенд["tmp"] / "cycle2.sqlite3",
+                                        цель["адаптер"], набор_ключей(стенд))
+        with pytest.raises(G.GrantError) as ош:
+            исполнитель.выполнить(подпись="", полезное={},
+                                  ожидания=ожидания(**основа), план=план,
+                                  idempotency_key="no-grant")
+        assert ош.value.error_code == "GRANT_MISSING"
+        assert цель["мир"].эффектов("create") == 0
