@@ -20,6 +20,17 @@ PRESENT = "PRESENT"
 ABSENT = "ABSENT"
 UNVERIFIED = "UNVERIFIED"
 
+#: Режим адаптера. В R1 ни один адаптер не писал в живого провайдера, и
+#: называть его SHADOW_READY было преувеличением: «готов» звучит как
+#: «остался один шаг», а шагов не сделано ни одного.
+FAKE_SHADOW_ONLY = "FAKE_SHADOW_ONLY"
+LIVE = "LIVE"
+
+#: Состояние endpoint отдельно от состояния ВОЗМОЖНОСТЕЙ. Ответ 401
+#: доказывает, что адрес существует и требует авторизации, и ничего не
+#: говорит о том, какие операции доступны предъявителю токена.
+OBSERVED_UNAUTHENTICATED = "OBSERVED_UNAUTHENTICATED"
+
 
 @dataclass(frozen=True)
 class Возможности:
@@ -40,6 +51,13 @@ class Возможности:
     egress_hosts: tuple[str, ...] = ()
     credential_ref: str | None = None
     credential_present: bool = False
+    #: Режим адаптера контура, а не состояние провайдера. Смешивать их —
+    #: значит выдавать наличие кода за наличие интеграции.
+    adapter_mode: str = FAKE_SHADOW_ONLY
+    #: Наблюдаемое состояние endpoint, если оно отличается от api_status.
+    endpoint_state: str | None = None
+    #: Подтверждены ли операции ПОД АВТОРИЗАЦИЕЙ.
+    authenticated_capability: str = UNVERIFIED
     evidence: tuple[str, ...] = ()
     notes: str = ""
 
@@ -62,6 +80,8 @@ DNS = Возможности(
     egress_hosts=(),
     credential_ref=None,
     credential_present=False,
+    adapter_mode=FAKE_SHADOW_ONLY,
+    authenticated_capability=UNVERIFIED,
     evidence=("config/directions/lords.json: nameservers april/pablo.ns.cloudflare.com",
               "inventory/dns-zones.yaml: zones: [] — ни одной разрешённой зоны",
               "inventory/network-allowlist.yaml: хоста API провайдера нет"),
@@ -73,36 +93,52 @@ DNS = Возможности(
 TLS = Возможности(
     provider_type="tls",
     provider="Let's Encrypt через локальный certbot",
-    api_status=PRESENT,
-    endpoint="ACME (через certbot, прямые вызовы из контура не выполняются)",
-    auth="ACME account на хосте, контуру не передаётся",
-    operations=("observe", "verify_chain", "verify_expiry"),
-    idempotency="продление идемпотентно по сроку действия",
-    quotas="лимиты Let's Encrypt на выпуск; в R1 выпуск не выполняется",
-    consistency="немедленная после успешного выпуска",
+    # Сертификат и таймер доказывают, что на хосте РАБОТАЕТ ACME-клиент. Про
+    # API провайдера они не говорят ничего: контур к ACME не обращается, и
+    # назвать это «TLS Provider API подтверждён» было подменой предмета.
+    api_status=UNVERIFIED,
+    endpoint=None,
+    auth="ACME account принадлежит certbot на хосте и контуру не передаётся",
+    operations=(),
+    idempotency=UNVERIFIED,
+    quotas="лимиты Let's Encrypt на выпуск; выпуск из контура не выполняется",
+    consistency=UNVERIFIED,
     paid_operations="нет",
-    sandbox="staging-контур ACME существует, в R1 не используется",
+    sandbox="staging-контур ACME существует; не использовался",
     egress_hosts=(),
     credential_ref="host:certbot",
-    credential_present=True,
+    credential_present=False,
+    adapter_mode=FAKE_SHADOW_ONLY,
+    authenticated_capability=UNVERIFIED,
     evidence=("живой сертификат yummyani.site: issuer Let's Encrypt YR2, "
               "notBefore Aug 24 2026, notAfter Nov 22 2026",
               "/etc/letsencrypt/renewal/: 5+ конфигураций продления",
-              "certbot.timer активен"),
-    notes="Контур наблюдает TLS и проверяет цепочку и срок. Выпуск остаётся за "
-          "certbot: второй ACME-клиент рядом означал бы гонку за один аккаунт.")
+              "certbot.timer активен",
+              "обращений контура к ACME не выполнялось"),
+    notes="Подтверждено НАЛИЧИЕ локального ACME-клиента, а не доступ к API "
+          "провайдера. Адаптер работает только на fake-провайдере.")
+
+#: Что именно подтверждает наблюдение за TLS: автоматизация на хосте есть,
+#: доступа к API провайдера из контура нет.
+TLS_АВТОМАТИЗАЦИЯ = "LOCAL_ACME_CLIENT_PRESENT"
 
 #: Яндекс Метрика. Контракт заморожен по официальной документации, хост в
 #: allowlist, endpoint отвечает. Не хватает только credential.
 METRIKA = Возможности(
     provider_type="analytics",
     provider="Яндекс Метрика",
-    api_status=PRESENT,
+    # Endpoint наблюдался, возможности — нет. Ответ 401 доказывает адрес и
+    # требование авторизации; какие операции доступны предъявителю токена,
+    # без токена проверить нечем.
+    api_status=UNVERIFIED,
+    endpoint_state=OBSERVED_UNAUTHENTICATED,
     endpoint="https://api-metrika.yandex.net",
     api_version="management/v1, stat/v1",
     doc_source="knowledge/YANDEX_ANALYTICS_CONTRACT.yaml (заморожен 2026-08-23 "
                "по yandex.ru/dev/metrika)",
     auth="заголовок Authorization: OAuth {token}",
+    # Перечень взят из замороженной документации. Это ОПИСАННЫЕ операции, а
+    # не проверенные: ни одна не выполнялась под авторизацией.
     operations=("list_counters", "get_counter", "create_counter", "list_goals",
                 "create_goal"),
     scopes="определяются выданным OAuth-токеном; без токена не проверены",
@@ -113,8 +149,10 @@ METRIKA = Возможности(
     paid_operations="нет",
     sandbox=ABSENT,
     egress_hosts=("api-metrika.yandex.net",),
-    credential_ref="file:/etc/site-factory/secrets/yandex_oauth_token",
+    credential_ref="file-ref:yandex_oauth_token",
     credential_present=False,
+    adapter_mode=FAKE_SHADOW_ONLY,
+    authenticated_capability=UNVERIFIED,
     evidence=("GET https://api-metrika.yandex.net/management/v1/counters -> 401 "
               "unauthorized (read-only проба: endpoint существует и требует "
               "авторизации)",
@@ -136,6 +174,8 @@ TOPVISOR = Возможности(
     egress_hosts=(),
     credential_ref=None,
     credential_present=False,
+    adapter_mode=FAKE_SHADOW_ONLY,
+    authenticated_capability=UNVERIFIED,
     evidence=("inventory/network-allowlist.yaml: записи нет",
               "config/data-sources.json: источника нет",
               "knowledge/: замороженного контракта нет"),
@@ -149,12 +189,25 @@ def матрица() -> list[dict[str, Any]]:
     return [в.в_словарь() for в in МАТРИЦА]
 
 
-def проверяемые() -> list[str]:
-    """Типы провайдеров, по которым возможна живая работа."""
+def живые() -> list[str]:
+    """Типы провайдеров, по которым ВОЗМОЖНА живая работа.
+
+    Требуются три вещи разом: подтверждённый API, выданный credential и
+    адаптер в живом режиме. Любые две без третьей живой работы не дают.
+    """
     return [в.provider_type for в in МАТРИЦА
-            if в.api_status == PRESENT and в.credential_present]
+            if в.api_status == PRESENT and в.credential_present
+            and в.adapter_mode == LIVE]
+
+
+def production_onboarding_готов() -> bool:
+    """Готовность production onboarding. Ни один провайдер не живой."""
+    return bool(живые())
 
 
 if __name__ == "__main__":
-    print(json.dumps({"matrix": матрица(), "usable_live": проверяемые()},
+    print(json.dumps({"matrix": матрица(), "usable_live": живые(),
+                      "tls_automation": TLS_АВТОМАТИЗАЦИЯ,
+                      "production_onboarding_ready":
+                          production_onboarding_готов()},
                      ensure_ascii=False, indent=1))

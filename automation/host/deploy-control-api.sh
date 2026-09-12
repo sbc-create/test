@@ -16,6 +16,7 @@
 set -uo pipefail
 
 BASE=/srv/site-factory/control-api
+CURRENT_REAL="$(readlink -f /srv/site-factory/control-api/current 2>/dev/null || echo /srv/site-factory/control-api/current)"
 RELEASES="$BASE/releases"
 CURRENT="$BASE/current"
 PREVIOUS="$BASE/previous"
@@ -55,16 +56,16 @@ digest_of() {
 # и засвидетельствовать себя. Пол хранится рядом с учётными данными и
 # переживает смену символической ссылки — иначе откат тихо возвращал бы
 # закрытые дыры вместе со старым кодом.
-generation_of() {
-  local dir="$1"
-  PYTHONPATH="$dir" python3 -c "
-import json, sys
-try:
-    from factory.site_engine.credentials.generation import ПОКОЛЕНИЕ
-except Exception:
-    ПОКОЛЕНИЕ = 1          # релиз без понятия о поколении считается первым
-print(ПОКОЛЕНИЕ)
-" 2>/dev/null || echo 1
+# Поколение целевого релиза и допустимость его выкладки.
+#
+# Считает ОСНАСТКА текущего релиза, читая ФАЙЛ целевого, а не импортируя его
+# модуль: импорт берёт то, что первым оказалось в sys.path, и однажды это
+# будет рабочее дерево, а не релиз. Такая ошибка молчалива — предохранитель
+# просто перестаёт измерять то, что должен, и создаёт уверенность.
+generation_check() {
+  local dir="$1" allow="${2:-deny}"
+  ( cd "$CURRENT_REAL" && python3 -m factory.site_engine.credentials.generation \
+      check "$dir" "$allow" 2>/dev/null )
 }
 
 security_floor() {
@@ -75,17 +76,17 @@ print(json.loads(п.read_text()).get('generation', 0) if п.is_file() else 0)
 " 2>/dev/null || echo 0
 }
 
-# Отказ выкладывать релиз ниже пола. --force-security-downgrade существует
-# только для осознанного решения владельца и называется прямо, а не прячется
-# за общим --force.
+# Отказ делать рабочим релиз ниже пола. --force-security-downgrade назван
+# прямо и не прячется за общим --force: осознанное понижение защиты обязано
+# выглядеть как осознанное понижение защиты.
 assert_generation_allowed() {
-  local dir="$1" allow="${2:-}"
-  local gen floor
-  gen="$(generation_of "$dir")"; floor="$(security_floor)"
-  say "поколение безопасности: релиз ${gen}, пол ${floor}"
-  if [ "$gen" -lt "$floor" ] && [ "$allow" != "yes" ]; then
-    die "ОТКАЗ: релиз поколения ${gen} ниже установленного пола ${floor}; он вернул бы закрытые дыры. Для осознанного понижения нужен --force-security-downgrade"
-  fi
+  local dir="$1" allow="deny" out=""
+  [ "${2:-}" = "yes" ] && allow="allow"
+  out="$(generation_check "$dir" "$allow")" || {
+    say "$out"
+    die "ОТКАЗ: $(printf '%s' "$out" | python3 -c "import json,sys; print(json.load(sys.stdin).get('reason',''))" 2>/dev/null); для осознанного понижения нужен --force-security-downgrade"
+  }
+  say "поколение безопасности: $out"
 }
 
 current_sha() { [ -L "$CURRENT" ] && basename "$(readlink -f "$CURRENT")" || echo ""; }
@@ -216,7 +217,7 @@ MANIFEST
   say "манифест записан"
 
   # Пол поднимается только вперёд и только после успешной выкладки.
-  PYTHONPATH="$target" python3 -m factory.site_engine.credentials.generation raise \
+  ( cd "$target" && python3 -m factory.site_engine.credentials.generation raise ) \
     >/dev/null 2>&1 && say "пол безопасности: $(security_floor)"
 
   # Уборка: релизы, на которые никто не ссылается, старше последних KEEP.

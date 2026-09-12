@@ -37,15 +37,29 @@ from pathlib import Path
 ФАЙЛ_ПОЛА = Path("/etc/site-factory/credentials/security-floor.json")
 
 
+class ПолНедоступен(RuntimeError):
+    """Пол существует, но прочитать его нельзя."""
+
+
 def пол(путь: Path | None = None) -> int:
-    """Минимальное допустимое поколение. Ноль означает «пол не установлен»."""
+    """Минимальное допустимое поколение.
+
+    Ноль означает «пол не установлен» — и только это. Невозможность прочитать
+    установленный пол нулём НЕ является: тихо превратив отказ в доступе в
+    «ограничений нет», предохранитель открывался бы ровно в тех условиях, где
+    он нужнее всего.
+    """
     п = путь or ФАЙЛ_ПОЛА
-    if not п.is_file():
-        return 0
     try:
+        if not п.is_file():
+            return 0
         return int(json.loads(п.read_text("utf-8")).get("generation", 0))
-    except (ValueError, OSError):
-        return 0
+    except PermissionError as ош:
+        raise ПолНедоступен(
+            f"{п}: нет доступа; проверка поколения выполняется от имени, "
+            f"которому пол читать нельзя") from ош
+    except (ValueError, OSError) as ош:
+        raise ПолНедоступен(f"{п}: пол не разобран ({ош})") from ош
 
 
 def поднять_пол(путь: Path | None = None) -> dict:
@@ -60,10 +74,59 @@ def поднять_пол(путь: Path | None = None) -> dict:
     return {"previous": текущий, "current": новый}
 
 
+def поколение_релиза(каталог: Path) -> int:
+    """Поколение ЧУЖОГО релиза по его файлам.
+
+    Читается файл, а не импортируется модуль: импорт берёт то, что первым
+    оказалось в sys.path, и однажды это будет текущий каталог, а не релиз.
+    Ошибка такого рода молчалива — предохранитель просто перестаёт измерять
+    то, что должен.
+    """
+    ф = Path(каталог) / "factory/site_engine/credentials/generation.py"
+    if not ф.is_file():
+        return 1                      # релиз без понятия о поколении
+    for строка in ф.read_text("utf-8", errors="replace").splitlines():
+        строка = строка.strip()
+        if строка.startswith("ПОКОЛЕНИЕ") and "=" in строка:
+            try:
+                return int(строка.split("=", 1)[1].split("#")[0].strip())
+            except ValueError:
+                return 1
+    return 1
+
+
+def допустимо_ли(поколение: int, пол_значение: int, *,
+                 разрешено_понижение: bool = False) -> tuple[bool, str]:
+    """Можно ли сделать этот релиз рабочим."""
+    if поколение >= пол_значение:
+        return True, ""
+    if разрешено_понижение:
+        return True, (f"понижение с {пол_значение} до {поколение} разрешено "
+                      f"явно")
+    return False, (f"релиз поколения {поколение} ниже пола {пол_значение}: он "
+                   f"вернул бы закрытые дыры")
+
+
 if __name__ == "__main__":
     import sys
     if len(sys.argv) > 1 and sys.argv[1] == "raise":
         print(json.dumps(поднять_пол(), ensure_ascii=False))
+    elif len(sys.argv) > 2 and sys.argv[1] == "check":
+        г = поколение_релиза(Path(sys.argv[2]))
+        try:
+            текущий_пол = пол()
+        except ПолНедоступен as ош:
+            # Неизвестный пол — повод отказать, а не разрешить.
+            print(json.dumps({"generation": г, "floor": None, "allowed": False,
+                              "reason": str(ош)}, ensure_ascii=False))
+            sys.exit(3)
+        можно, причина = допустимо_ли(
+            г, текущий_пол, разрешено_понижение=(len(sys.argv) > 3
+                                                 and sys.argv[3] == "allow"))
+        print(json.dumps({"generation": г, "floor": текущий_пол,
+                          "allowed": можно, "reason": причина},
+                         ensure_ascii=False))
+        sys.exit(0 if можно else 3)
     else:
         print(json.dumps({"generation": ПОКОЛЕНИЕ, "floor": пол(),
                           "properties": list(СВОЙСТВА)}, ensure_ascii=False))
