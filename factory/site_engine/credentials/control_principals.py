@@ -101,10 +101,51 @@ def ротировать(путь: Path | None = None) -> dict[str, Any]:
     return {"rotated": len(соответствие), "mapping": соответствие}
 
 
+def отозвать(отпечатки: list[str], путь: Path | None = None) -> dict[str, Any]:
+    """Убрать принципалов НАВСЕГДА, без замены.
+
+    Отзыв без замены — не то же самое, что ротация: принципал исчезает
+    целиком, и предъявитель его значения опознаётся как никто. Пустой перечень
+    означает «никому ничего», а не «всем можно»: разбор пустой строки даёт
+    пустой словарь принципалов, и каждый запрос отвергается на опознании.
+    """
+    п = путь or ФАЙЛ
+    if not п.is_file():
+        raise PrincipalError("PRINCIPALS_MISSING", f"{п} не найден")
+    прежние = разобрать(п.read_text("utf-8"))
+    просят = {о.strip().lower() for о in отпечатки if о.strip()}
+    оставить, убрано = [], []
+    for токен, области in прежние:
+        отп = _отпечаток(токен)[:12]
+        if отп in просят or "all" in просят:
+            убрано.append({"fingerprint": отп, "scopes": sorted(области)})
+        else:
+            оставить.append((токен, области))
+    if not убрано:
+        raise PrincipalError("PRINCIPAL_NOT_FOUND",
+                             f"ни один из {sorted(просят)} не найден")
+
+    врем = п.with_suffix(п.suffix + ".new")
+    старый_umask = os.umask(0o077)
+    try:
+        врем.write_text(собрать(оставить) + ("\n" if оставить else ""),
+                        encoding="utf-8")
+        os.chmod(врем, 0o400)
+        os.replace(врем, п)
+    finally:
+        os.umask(старый_umask)
+    return {"revoked": убрано, "remaining": [
+        {"fingerprint": _отпечаток(т)[:12], "scopes": sorted(о)}
+        for т, о in оставить]}
+
+
 if __name__ == "__main__":
     import sys
     если = sys.argv[1] if len(sys.argv) > 1 else "status"
-    if если == "rotate":
+    if если == "revoke":
+        print(json.dumps(отозвать(sys.argv[2].split(",")), ensure_ascii=False,
+                         indent=1))
+    elif если == "rotate":
         print(json.dumps(ротировать(), ensure_ascii=False, indent=1))
     else:
         print(json.dumps({"principals": состояние()}, ensure_ascii=False, indent=1))

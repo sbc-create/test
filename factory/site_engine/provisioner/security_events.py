@@ -26,6 +26,7 @@ from typing import Any
 РЕЛИЗ = "release.control_plane_deployed.v1"
 ОТКАТ = "release.rollback_drill_completed.v1"
 ПРИНЦИПАЛЫ = "security.control_principals_rotated.v1"
+ОТЗЫВ = "security.control_principals_revoked.v1"
 
 
 class LedgerRefused(RuntimeError):
@@ -114,6 +115,24 @@ def принципалы(*, отпечатки: list[str], областей: lis
         resource_id="site-factory/control-api-principals")
 
 
+def отзыв(*, отпечатки: list[str], решение: str) -> dict[str, Any]:
+    """Окончательный отзыв принципалов без замены.
+
+    Событие несёт отпечатки и решение, но не значения и не «обнаруженного
+    задним числом владельца»: владелец, которого не установили измерением,
+    в журнале выглядел бы установленным.
+    """
+    ключ = "control-principals-revoked:" + ",".join(sorted(отпечатки))
+    return _событие(
+        ОТЗЫВ, ключ,
+        f"окончательно отозваны {len(отпечатки)} принципалов Control API без "
+        f"замены по решению владельца; активных принципалов не осталось, "
+        f"запись управляющего слоя выключена, сырые копии значений "
+        f"уничтожены; исторически неустановленных владельцев: 2",
+        resource_type="integration.provisioning",
+        resource_id="site-factory/control-api-principals")
+
+
 def откат(*, с_релиза: str, на_релиз: str, вернулись_секреты: int,
           вернулись_полномочия: int) -> dict[str, Any]:
     """Проверка отката в обе стороны. Значений секретов в событии нет."""
@@ -135,6 +154,9 @@ if __name__ == "__main__":
     if что == "rotation":
         с = ротация(личностей=int(sys.argv[2]), отозвано=int(sys.argv[3]),
                     активный_kid=sys.argv[4], отозванные_kid=sys.argv[5:])
+    elif что == "revoked":
+        с = отзыв(отпечатки=sys.argv[2].split(","),
+                  решение=sys.argv[3] if len(sys.argv) > 3 else "owner")
     elif что == "principals":
         с = принципалы(отпечатки=sys.argv[2].split(","),
                        областей=sys.argv[3].split(",") if len(sys.argv) > 3 else [])
