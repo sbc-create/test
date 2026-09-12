@@ -63,6 +63,10 @@ from typing import Any
 #: личности, а не по тому, что клиент написал в теле запроса.
 ПРАВА_СЛУЖБ: dict[str, set[str]] = {
     "architect":   {"OBSERVE", "PROPOSE", "EXECUTE", "AUTHORIZE"},
+    # Мост контура изменений. Публикует факты исполнения, но не разрешения:
+    # раньше он писал под личностью architect и получал вместе с ней
+    # AUTHORIZE — полномочие, которое мосту не нужно ни для чего.
+    "control-plane": {"OBSERVE", "EXECUTE"},
     "registry":    {"OBSERVE", "EXECUTE"},
     "templates":   {"OBSERVE", "PROPOSE", "EXECUTE"},
     "content":     {"OBSERVE", "PROPOSE", "EXECUTE"},

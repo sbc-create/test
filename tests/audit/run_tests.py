@@ -7,7 +7,9 @@
 Это проверяется здесь же — обещание изоляции без проверки ничего не стоит.
 """
 from __future__ import annotations
-import ctypes, os, shutil, signal, sqlite3, subprocess, sys, tempfile, time
+import ctypes
+import hashlib
+import json, os, shutil, signal, sqlite3, subprocess, sys, tempfile, time
 import urllib.error, urllib.request
 from pathlib import Path
 
@@ -67,12 +69,25 @@ def main() -> int:
     # Эфемерный экземпляр поднимается ради журнала. Управляющая запись ему не
     # нужна, а протокол запуска требует под неё токены — брать их сюда значило
     # бы тащить в тестовый контур права, которых тест не использует.
+    # Серверу сырые токены не передаются: он опознаёт службы по ОТПЕЧАТКАМ.
+    # Раздача значений проверяющему вернула бы ровно ту модель, где утечка на
+    # стороне проверки выдаёт личности всех служб сразу.
+    креды = врем / "credentials"
+    креды.mkdir(parents=True, exist_ok=True)
+    отпечатки = {имя.removeprefix("AUDIT_TOKEN_").lower():
+                 hashlib.sha256(значение.encode()).hexdigest()
+                 for имя, значение in ТОКЕНЫ.items()}
+    (креды / "audit-token-fingerprints").write_text(
+        json.dumps({"services": отпечатки, "revoked": []}), encoding="utf-8")
     окр = dict(os.environ, SITE_ENGINE_CONTROL_WRITES="0",
                AUDIT_LEDGER_DB=str(копия),
                AUDIT_API_BASE=f"http://127.0.0.1:{ПОРТ}",
                AUDIT_FEED=str(врем / "feed.jsonl"),
                SITE_ENGINE_HTTP="1", SITE_ENGINE_ADMIN="1",
-               SITE_ENGINE_API_ENABLED="1", **ТОКЕНЫ)
+               SITE_ENGINE_API_ENABLED="1",
+               CREDENTIALS_DIRECTORY=str(креды))
+    # Значения нужны только клиенту тестов, но не серверу.
+    окр.update(ТОКЕНЫ)
     выпуск = Path(ВЫПУСК).resolve()
     сервер = subprocess.Popen(
         [str(выпуск / ".venv/bin/python"), "-m", "factory.site_engine.api.server",

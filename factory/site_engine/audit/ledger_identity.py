@@ -13,9 +13,18 @@ from __future__ import annotations
 
 import hashlib
 import hmac
+import json
 import os
 
+from factory.site_engine.credentials import store as C
+
 ПРЕФИКС = "AUDIT_TOKEN_"
+
+#: Credential с ОТПЕЧАТКАМИ служебных токенов. Верификатору сырые значения
+#: не нужны: чтобы ответить «этот токен принадлежит службе X», достаточно
+#: сравнить SHA-256. Хранение сырых токенов у проверяющего означало бы, что
+#: компрометация Control API выдаёт личности всех девяти служб сразу.
+ОТПЕЧАТКИ = "audit-token-fingerprints"
 
 #: Отозванные токены — список отпечатков через запятую. Отзыв нужен отдельно
 #: от замены значения: пока старый токен просто заменяют, он остаётся годным
@@ -31,7 +40,8 @@ import os
 
 #: Тип актора по умолчанию для каждой службы. Qwen — MODEL: это не деталь
 #: оформления, а то, что запрещает ему исполняющие фазы.
-ТИП_АКТОРА = {"architect": "SERVICE", "registry": "SERVICE",
+ТИП_АКТОРА = {"architect": "SERVICE", "control-plane": "SERVICE",
+              "registry": "SERVICE",
               "templates": "SERVICE", "content": "SERVICE", "seo": "SERVICE",
               "monitoring": "SERVICE", "backup": "SERVICE",
               "integrations": "SERVICE", "qwen": "MODEL",
@@ -44,19 +54,43 @@ class IdentityError(RuntimeError):
         self.error_code, self.detail, self.status = code, detail, status
 
 
-def _реестр_токенов() -> dict[str, str]:
-    """Имя службы → токен. Пусто означает «запись выключена», а не «всем можно»."""
-    итог = {}
+def _реестр_отпечатков() -> tuple[dict[str, str], set[str]]:
+    """Имя службы → SHA-256 её токена, плюс множество отозванных отпечатков.
+
+    Пустой реестр означает «запись выключена», а не «всем можно».
+    """
+    сырое = C.получить_или_none(ОТПЕЧАТКИ)
+    if сырое:
+        данные = json.loads(сырое)
+        службы = {k.lower(): v.lower()
+                  for k, v in (данные.get("services") or {}).items() if v}
+        отозваны = {x.lower() for x in (данные.get("revoked") or []) if x}
+        return службы, отозваны
+
+    if not C.послабление_включено():
+        # Молча вернуть пустой реестр нельзя: это выглядело бы как «запись
+        # выключена по решению», а на деле означает несконфигурированный юнит.
+        raise IdentityError(
+            "LEDGER_IDENTITY_NOT_PROVISIONED",
+            f"credential {ОТПЕЧАТКИ} не передан: юнит обязан объявить "
+            f"LoadCredential; передача служебных токенов окружением "
+            f"запрещена", 503)
+
+    # Переходный режим на время поэтапного перевода служб.
+    службы = {}
     for k, v in os.environ.items():
         if k.startswith(ПРЕФИКС) and v.strip():
-            итог[k[len(ПРЕФИКС):].lower()] = v.strip()
-    return итог
+            службы[k[len(ПРЕФИКС):].lower()] = hashlib.sha256(
+                v.strip().encode("utf-8")).hexdigest()
+    отозваны = {x.strip().lower()
+                for x in os.environ.get(ОТОЗВАННЫЕ, "").split(",") if x.strip()}
+    return службы, отозваны
 
 
 def опознать(заголовки: dict[str, str]) -> dict[str, str]:
     """Вернуть опознанную службу. Заявленное клиентом имя только сверяется."""
-    токены = _реестр_токенов()
-    if not токены:
+    отпечатки, отозваны = _реестр_отпечатков()
+    if not отпечатки:
         raise IdentityError(
             "LEDGER_WRITE_DISABLED",
             "ни один служебный токен не настроен: запись в журнал выключена",
@@ -66,23 +100,21 @@ def опознать(заголовки: dict[str, str]) -> dict[str, str]:
     if not предъявлен:
         raise IdentityError("UNAUTHENTICATED", "служебный токен не предъявлен")
 
+    полный = hashlib.sha256(
+        предъявлен.encode("utf-8", "surrogatepass")).hexdigest()
     опознана = None
-    for служба, ожидаемый in токены.items():
-        # Сравнение постоянного времени по БАЙТАМ. На строках
-        # `compare_digest` выбрасывает TypeError, если во входе есть не-ASCII,
-        # — и присланный кем-то не-ASCII токен ронял бы endpoint вместо
-        # честного отказа. Кодирование убирает и эту зависимость от алфавита.
-        if hmac.compare_digest(предъявлен.encode("utf-8", "surrogatepass"),
-                               ожидаемый.encode("utf-8", "surrogatepass")):
+    for служба, ожидаемый in отпечатки.items():
+        # Сравнение постоянного времени: вычисленный отпечаток против
+        # записанного. Сырого токена у верификатора нет вовсе.
+        if hmac.compare_digest(полный.encode("ascii"),
+                               ожидаемый.encode("ascii")):
             опознана = служба
             break
     if опознана is None:
         raise IdentityError("UNAUTHENTICATED", "служебный токен не распознан")
 
-    отпечаток = hashlib.sha256(предъявлен.encode()).hexdigest()[:12]
-    отозваны = {x.strip() for x in os.environ.get(ОТОЗВАННЫЕ, "").split(",")
-                if x.strip()}
-    if отпечаток in отозваны:
+    отпечаток = полный[:12]
+    if полный in отозваны or отпечаток in отозваны:
         # Отдельный код, а не «не распознан»: владельцу важно отличать чужой
         # токен от своего же, выведенного из обращения.
         raise IdentityError("TOKEN_REVOKED",

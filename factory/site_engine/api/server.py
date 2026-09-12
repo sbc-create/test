@@ -470,7 +470,10 @@ def main(argv: list[str] | None = None) -> int:
                         help="выставить наружу; по умолчанию только 127.0.0.1")
     args = parser.parse_args(argv)
 
-    env = dict(os.environ)
+    # Секреты берутся из credentials, а не из окружения: окружение
+    # наследуется потомками и отдаётся юниту целиком вместе с чужим.
+    from factory.site_engine.credentials.overlay import наложить as _наложить
+    env = _наложить(dict(os.environ))
     if not http_enabled(env):
         print("SITE_ENGINE_HTTP не включён — служба не поднята", flush=True)
         return 64

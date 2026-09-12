@@ -22,12 +22,19 @@ class LedgerUnavailable(RuntimeError):
     """Журнал аудита недоступен."""
 
 
+#: Собственная личность моста. Одна, своя, и никаких «или чужая, если своей
+#: нет»: запасной вариант через чужой токен означал бы, что мост при сбое
+#: конфигурации начинает писать в журнал от имени другой службы.
+ЛИЧНОСТЬ = "audit-token-control-plane"
+
+
 def _токен() -> str:
-    т = os.environ.get("AUDIT_TOKEN_CONTROL_PLANE") \
-        or os.environ.get("AUDIT_TOKEN_ARCHITECT", "")
-    if not т:
-        raise LedgerUnavailable("служебный токен журнала не настроен")
-    return т
+    from factory.site_engine.credentials import store as C
+    try:
+        return C.получить(ЛИЧНОСТЬ,
+                          запасная_переменная="AUDIT_TOKEN_CONTROL_PLANE")
+    except C.CredentialError as ош:
+        raise LedgerUnavailable(f"{ош.error_code}: {ош.detail}") from ош
 
 
 def доступен(таймаут: float = 5.0) -> bool:

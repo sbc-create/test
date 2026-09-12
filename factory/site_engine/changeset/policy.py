@@ -9,10 +9,11 @@
 from __future__ import annotations
 
 import hashlib
-import hmac
 import json
-import os
 from typing import Any
+
+from factory.site_engine.approval import client as ПОДПИСЬ
+from factory.site_engine.approval import keyring as K
 
 from . import model as M
 from .store import ChangeSetError, канон, сейчас
@@ -32,19 +33,6 @@ AUTONOMOUS_PRODUCTION_APPLY = False
 
 #: Окружения, где применение разрешено без участия человека.
 АВТО_ОКРУЖЕНИЯ = frozenset({"test", "non-production"})
-
-
-def _секрет() -> bytes:
-    """Ключ подписи одобрения.
-
-    Берётся из окружения, в код и в Git не попадает. Отсутствие ключа — не
-    повод подписывать пустой строкой: это повод отказаться подписывать.
-    """
-    к = os.environ.get("CHANGESET_APPROVAL_KEY", "").strip()
-    if not к:
-        raise ChangeSetError("APPROVAL_KEY_MISSING",
-                             "ключ подписи одобрения не настроен", 503)
-    return к.encode("utf-8")
 
 
 def связка(набор: dict[str, Any]) -> dict[str, Any]:
@@ -68,10 +56,29 @@ def связка(набор: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def подпись(набор: dict[str, Any], *, approver: str, expires_at: str) -> str:
-    тело = канон({**связка(набор), "approver": approver,
+def тело_подписи(набор: dict[str, Any], *, approver: str,
+                 expires_at: str) -> str:
+    """Ровно то, что подписывается. Строится здесь, а не у signer.
+
+    Signer не должен уметь собирать тело сам: тогда он смог бы подписать не
+    то, что показали одобряющему.
+    """
+    return канон({**связка(набор), "approver": approver,
                   "expires_at": expires_at})
-    return hmac.new(_секрет(), тело.encode("utf-8"), hashlib.sha256).hexdigest()
+
+
+def подпись(набор: dict[str, Any], *, approver: str, expires_at: str) -> str:
+    """Подпись выдаёт выделенная служба. Приватного ключа здесь нет.
+
+    Симметричная схема требовала бы отдать тот же секрет каждому, кто лишь
+    проверяет подпись, — и любой проверяющий смог бы выписать разрешение
+    сам. Здесь подписывает один процесс, а проверяют все.
+    """
+    try:
+        return ПОДПИСЬ.подписать(тело_подписи(набор, approver=approver,
+                                              expires_at=expires_at))
+    except K.KeyringError as ош:
+        raise ChangeSetError(ош.error_code, ош.detail, 503) from ош
 
 
 def одобрить(набор: dict[str, Any], *, approver_id: str, approver_service: str,
@@ -125,12 +132,18 @@ def проверить_одобрение(набор: dict[str, Any], *, сей�
         raise ChangeSetError(
             "APPROVAL_BINDING_MISMATCH",
             f"после одобрения изменилось: {различия}", 409)
-    ожидаемая = подпись(набор, approver=запись["approver_id"],
+    # Проверка локальная и по ПУБЛИЧНОМУ ключу: она обязана работать и
+    # тогда, когда служба подписи недоступна, иначе её падение остановило бы
+    # проверку всех уже выданных одобрений.
+    тело = тело_подписи(набор, approver=запись["approver_id"],
                         expires_at=запись["expires_at"])
-    if not hmac.compare_digest(ожидаемая.encode(),
-                               str(запись["signature"]).encode()):
-        raise ChangeSetError("APPROVAL_SIGNATURE_INVALID",
-                             "подпись одобрения не совпала", 403)
+    try:
+        ПОДПИСЬ.проверить(str(запись.get("signature") or ""), тело)
+    except K.KeyringError as ош:
+        # Отозванный ключ отличается от неверной подписи отдельным кодом:
+        # это не подделка, а попытка воспользоваться выведенным из обращения
+        # разрешением, и владельцу важно видеть разницу.
+        raise ChangeSetError(ош.error_code, ош.detail, 403) from ош
 
 
 def применение_разрешено(набор: dict[str, Any], окружения: set[str]) -> None:

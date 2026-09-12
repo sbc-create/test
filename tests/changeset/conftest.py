@@ -17,10 +17,14 @@ from factory.site_engine.changeset.testing import FakeRegistry
 @pytest.fixture()
 def бд(tmp_path, monkeypatch):
     monkeypatch.setenv("CHANGESET_DB", str(tmp_path / "changesets.sqlite3"))
-    monkeypatch.setenv("CHANGESET_APPROVAL_KEY", "ключ-испытания-0123456789")
-    соед = S.открыть(tmp_path / "changesets.sqlite3")
-    yield соед
-    соед.close()
+    # Подпись проверяется НАСТОЯЩИМ путём: эфемерные ключи в каталоге
+    # credentials и живая служба подписи. Заглушка проверяла бы не то, что
+    # работает в контуре.
+    from factory.site_engine.approval import testing as ПОДПИСЬ_ТЕСТ
+    with ПОДПИСЬ_ТЕСТ.эфемерный_signer(tmp_path / "credentials", monkeypatch):
+        соед = S.открыть(tmp_path / "changesets.sqlite3")
+        yield соед
+        соед.close()
 
 
 @pytest.fixture()
