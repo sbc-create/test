@@ -24,6 +24,7 @@ from typing import Any
 
 РОТАЦИЯ = "security.credentials_rotated.v1"
 РЕЛИЗ = "release.control_plane_deployed.v1"
+ОТКАТ = "release.rollback_drill_completed.v1"
 
 
 class LedgerRefused(RuntimeError):
@@ -100,12 +101,31 @@ def релиз(*, commit: str, artifact_sha256: str) -> dict[str, Any]:
         after_hash="sha256:" + artifact_sha256)
 
 
+def откат(*, с_релиза: str, на_релиз: str, вернулись_секреты: int,
+          вернулись_полномочия: int) -> dict[str, Any]:
+    """Проверка отката в обе стороны. Значений секретов в событии нет."""
+    ключ = f"rollback-drill:{с_релиза[:12]}->{на_релиз[:12]}"
+    return _событие(
+        ОТКАТ, ключ,
+        f"проведён откат {с_релиза[:12]} → {на_релиз[:12]} и возврат вперёд; "
+        f"общий файл окружения не вернулся, отозванных секретов "
+        f"восстановлено {вернулись_секреты}, лишних полномочий возвращено "
+        f"{вернулись_полномочия}; реестр, журнал и контур изменений сохранены",
+        resource_type="integration.provisioning",
+        resource_id="site-factory/control-api",
+        commit_sha=на_релиз, release_id=на_релиз[:12])
+
+
 if __name__ == "__main__":
     import sys
     что = sys.argv[1]
     if что == "rotation":
         с = ротация(личностей=int(sys.argv[2]), отозвано=int(sys.argv[3]),
                     активный_kid=sys.argv[4], отозванные_kid=sys.argv[5:])
+    elif что == "rollback":
+        с = откат(с_релиза=sys.argv[2], на_релиз=sys.argv[3],
+                  вернулись_секреты=int(sys.argv[4]),
+                  вернулись_полномочия=int(sys.argv[5]))
     elif что == "release":
         с = релиз(commit=sys.argv[2], artifact_sha256=sys.argv[3])
     else:
