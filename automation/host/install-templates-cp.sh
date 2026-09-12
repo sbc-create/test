@@ -43,6 +43,10 @@ cat > "$UNIT" <<UNITEOF
 Description=site-factory: потребитель событий Registry для Templates
 After=network-online.target site-factory-control-api.service
 Wants=site-factory-control-api.service
+# Бюджет рестартов задаётся в [Unit]: в [Service] systemd эти ключи
+# игнорирует с предупреждением, и ограничение молча не действует.
+StartLimitIntervalSec=300
+StartLimitBurst=5
 
 [Service]
 Type=simple
@@ -57,10 +61,6 @@ Environment=TEMPLATES_CP_STATE=${STATE}/projection.sqlite3
 ExecStart=/usr/bin/python3 -m factory.templates_cp.consumer
 Restart=on-failure
 RestartSec=5
-# Ограниченный бюджет рестартов: бесконечный цикл перезапусков — это не
-# отказоустойчивость, а способ исчерпать StartLimit и потерять службу.
-StartLimitIntervalSec=300
-StartLimitBurst=5
 TimeoutStopSec=20
 KillSignal=SIGTERM
 
