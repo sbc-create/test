@@ -25,7 +25,20 @@ theme:
     accent_text: "#0d0d0d"
     border: "#333333"
     radius: "4px"
-    container: "1240px"
+    # Ниже — значения, снятые с закреплённых референсов Lords
+    # (`docs/product/LORDS-REFERENCE-MEASUREMENTS.md`, замер 2026-08-27):
+    # контейнер 1100px, боковой отступ 5px до 1024 и 12px с 1024,
+    # шапка 70px в одну строку и не липкая, кнопка 16px/40px/600.
+    container: "1100px"
+    gutter: "5px"
+    gutter_wide: "12px"
+    gutter_mode: "margin"
+    header_min_height: "70px"
+    header_position: "relative"
+    header_search: "inline"
+    button_size: "1rem"
+    button_weight: "600"
+    button_line_height: "40px"
     heading_font: "'Open Sans', 'Segoe UI', Roboto, Arial, sans-serif"
 
 layout:

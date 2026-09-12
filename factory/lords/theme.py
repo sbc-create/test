@@ -49,6 +49,38 @@ DEFAULT_TOKENS = {
     # создаёт — измерено, шкала выходила 1,07.
     "h1_size": "1.125rem",
     "h2_size": "1.05rem",
+    # Ниже — то, что до сих пор было зашито в правила и потому одинаково у
+    # всех витрин. Умолчания равны прежним значениям: витрина, которая их не
+    # объявляет, не меняется ни на пиксель. Объявляет — получает своё, и
+    # общему отрисовщику не нужно знать, какая это витрина.
+    #
+    # Боковой отступ контейнера. У референсов Lords он 5px на узких ширинах и
+    # 12px с 1024 — измерено, а не выбрано.
+    "gutter": "16px",
+    "gutter_wide": "16px",
+    # Чем создаётся боковой отступ контейнера: внутренним полем (`padding`,
+    # прежнее поведение) или внешним (`margin`). Разница невидима глазом, но
+    # видна измерению: при `padding` ширина самого блока равна ширине окна, а
+    # у референсов она на два отступа меньше. Сравнивать ширины контейнеров,
+    # созданных разными способами, нельзя — это разные величины.
+    "gutter_mode": "padding",
+    # Шапка. `sticky` у референсов не встречается ни на одной ширине:
+    # header.sticky = false у всех трёх.
+    "header_min_height": "60px",
+    "header_position": "sticky",
+    # Поиск в шапке: `stacked` — отдельной строкой во всю ширину (прежнее
+    # поведение), `inline` — в одной строке с меню, как у референсов.
+    "header_search": "stacked",
+    # Умолчание — наследование, а не конкретные значения.
+    #
+    # Прежде здесь стояло `font: inherit`, то есть кегль, начертание и
+    # межстрочный интервал брались у родителя. Подстановка «1rem/400/normal»
+    # выглядит тем же самым и им не является: основной кегль витрины 14px,
+    # и кнопка поиска выросла бы до 16px на всех витринах разом. Наследование
+    # сохраняет прежний вид у всех, кто своих значений не объявляет.
+    "button_size": "inherit",
+    "button_weight": "inherit",
+    "button_line_height": "inherit",
 }
 
 DEFAULT_LAYOUT = {
@@ -348,6 +380,82 @@ def _stylesheet_base(profile: dict, *, declared_theme: str | None = None) -> str
     hero = str(lay.get("hero"))
     sidebar = str(lay.get("facet_position")) == "sidebar"
 
+    # Способ создания бокового отступа — договор профиля.
+    if t.get("gutter_mode") == "margin":
+        container_box = ("width: calc(100% - 2 * var(--gutter));"
+                         " max-width: var(--container); margin: 0 auto; padding: 0;")
+        container_box_wide = "width: calc(100% - 2 * var(--gutter-wide));"
+    else:
+        container_box = ("width: 100%; max-width: var(--container);"
+                         " margin: 0 auto; padding: 0 var(--gutter);")
+        container_box_wide = "padding: 0 var(--gutter-wide);"
+
+    # Поиск в одной строке с меню — договор профиля, а не свойство движка.
+    #
+    # Прежде форма занимала всю ширину и переносилась на вторую строку: шапка
+    # выходила 110 px на десктопе и 204 px на 768 против 70 px у референса.
+    # Правило включается токеном, поэтому витрины, которые его не объявляют,
+    # получают прежнюю раскладку без единого изменения.
+    inline_header = ""
+    if t.get("header_search") == "inline":
+        inline_header = (
+            # Поиск живёт в той же строке на ЛЮБОЙ ширине: перенос формы и
+            # добавлял те самые лишние сорок пикселей высоты. `min-width: 0`
+            # обязателен — без него flex-элемент не сжимается ниже своего
+            # содержимого и строка выходит за окно (проверено: на 768
+            # появлялась горизонтальная прокрутка).
+            # Одна строка на всех ширинах. Переносился и поиск, и меню:
+            # на 768 меню занимало всю ширину и уезжало на свою строку —
+            # шапка выходила 204 px вместо 70.
+            ".header-row { padding-top: 0; padding-bottom: 0;"
+            " flex-wrap: nowrap; }\n"
+            ".header-search { width: auto; flex: 1 1 120px; min-width: 0;"
+            " padding-bottom: 0; }\n"
+            ".header-search input { min-width: 0; }\n"
+            # Кнопка отправки тоже обязана сжиматься. С `flex: 0 0 auto` она
+            # держала свои 80 px и выносила строку за окно на 360 px —
+            # горизонтальная прокрутка появлялась ровно из-за неё.
+            ".header-search button { flex: 0 1 auto; min-width: 0; }\n"
+            # Название витрины сжимается с многоточием, а не толкает соседей.
+            ".brand { min-width: 0; }\n"
+            ".brand__name { min-width: 0; overflow: hidden;"
+            " text-overflow: ellipsis; white-space: nowrap; }\n"
+            # На узких ширинах сжимается поле ввода, а не кнопка: подпись
+            # «Найти» в сжатой кнопке не помещалась и вылезала за неё —
+            # документ получал четыре лишних пикселя ширины. Измерено:
+            # scrollWidth кнопки 39 при clientWidth 29.
+            "@media (max-width: 420px) {\n"
+            "  .header-search { flex: 1 1 60px; }\n"
+            "  .header-search button { flex: 0 0 auto; padding: 9px 8px;"
+            " font-size: .85rem; white-space: nowrap; }\n"
+            "}\n"
+            # Меню не растягивается на всю строку и не переносится. Если
+            # пунктов больше, чем помещается, строка прокручивается —
+            # прокрутка внутри меню лучше, чем прокрутка всей страницы.
+            # До 900 px меню не участвует в строке вовсе: открытое, оно
+            # раскрывается ПОД шапкой. Иначе при `nowrap` оно распирало
+            # строку и страница получала горизонтальную прокрутку, а при
+            # `wrap` уезжало на свою строку и шапка вырастала втрое.
+            "@media (max-width: 899px) {\n"
+            "  .site-nav { display: none; }\n"
+            "  .site-nav[data-open=\"true\"] {\n"
+            "    display: block; position: absolute; left: 0; right: 0; top: 100%;\n"
+            "    background: var(--surface); border-bottom: 1px solid var(--border);\n"
+            "    padding: 0 var(--gutter) 8px; z-index: 19;\n"
+            "  }\n"
+            "  .site-nav ul { flex-wrap: wrap; }\n"
+            "}\n"
+            "@media (min-width: 900px) {\n"
+            # `flex: 1 1 0` обязателен. С `width: auto` базовый размер
+            # элемента равен содержимому меню, и оно распирало строку, хотя
+            # прокрутка внутри была объявлена: страница получала
+            # горизонтальную прокрутку на 1024.
+            "  .site-nav { flex: 1 1 0; width: auto; display: block;"
+            " min-width: 0; overflow-x: auto; }\n"
+            "  .site-nav ul { padding: 0; flex-wrap: nowrap; }\n"
+            "  .nav-toggle { display: none; }\n"
+            "}\n")
+
     return f"""/* Lords — {profile.get('profile', 'unknown')}. Сгенерировано фабрикой. */
 :root {{
   --bg: {t['bg']};
@@ -360,6 +468,12 @@ def _stylesheet_base(profile: dict, *, declared_theme: str | None = None) -> str
   --border: {t['border']};
   --radius: {t['radius']};
   --container: {t['container']};
+  --gutter: {t['gutter']};
+  --gutter-wide: {t['gutter_wide']};
+  --header-min-h: {t['header_min_height']};
+  --btn-size: {t['button_size']};
+  --btn-weight: {t['button_weight']};
+  --btn-lh: {t['button_line_height']};
   --gap: {d['gap']};
   --pad: {d['pad']};
   --card-pad: {d['card_pad']};
@@ -430,7 +544,10 @@ h1, h2, h3 {{ line-height: 1.2; margin: 0 0 .5em; overflow-wrap: anywhere; }}
 h1 {{ font-size: var(--h1); font-weight: 600; }}
 h2 {{ font-size: var(--h2); font-weight: 600; }}
 p {{ margin: 0 0 1em; overflow-wrap: anywhere; }}
-.container {{ width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 16px; }}
+.container {{ {container_box} }}
+@media (min-width: 1024px) {{
+  .container {{ {container_box_wide} }}
+}}
 .visually-hidden {{
   position: absolute; width: 1px; height: 1px; margin: -1px;
   clip-path: inset(50%); overflow: hidden; white-space: nowrap;
@@ -452,13 +569,13 @@ a.visually-hidden:focus-visible {{
 
 /* --- шапка ------------------------------------------------------------- */
 .site-header {{
-  position: sticky; top: 0; z-index: 20;
+  position: {t['header_position']}; top: 0; z-index: 20;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
 }}
 .header-row {{
   display: flex; align-items: center; gap: 12px;
-  min-height: 60px; flex-wrap: wrap; padding: 8px 16px;
+  min-height: var(--header-min-h); flex-wrap: wrap; padding: 8px var(--gutter);
   max-width: var(--container); margin: 0 auto;
 }}
 .brand {{ display: flex; align-items: baseline; gap: 8px; font-weight: 700; color: var(--text); }}
@@ -491,7 +608,9 @@ a.visually-hidden:focus-visible {{
 }}
 .header-search button {{
   flex: 0 0 auto; padding: 9px 16px; border: 0; border-radius: var(--radius);
-  background: var(--accent); color: var(--accent-text); font: inherit; cursor: pointer;
+  background: var(--accent); color: var(--accent-text); cursor: pointer;
+  font-family: inherit; font-size: var(--btn-size); font-weight: var(--btn-weight);
+  line-height: var(--btn-lh);
 }}
 
 /* --- уведомление стенда ------------------------------------------------- */
@@ -856,6 +975,12 @@ main {{ padding: var(--pad) 0 40px; }}
 }}
 
 /* профиль: hero={hero}, фасеты={'сбоку' if sidebar else 'в шапке раздела'} */
+
+/* Раскладка шапки по договору профиля. Блок идёт последним:
+   при равной специфичности побеждает последнее правило, и
+   помещённый выше он проигрывал базовым — кнопка поиска
+   оставалась несжимаемой и выносила строку за окно. */
+{inline_header}
 """
 
 
