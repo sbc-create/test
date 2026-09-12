@@ -195,7 +195,11 @@ def build(product: str, *, titles: int, limit: int | None,
         "theme": (package.get("tenant") or {}).get("theme"),
         "profile": (package.get("tenant") or {}).get("seo_profile"),
         "documents": len(site.pages),
-        "title_pages": len(slugs) if slugs is not None else len(catalog.titles),
+        # Фактически отрисованные страницы, а не размер среза и не размер
+        # каталога. Каталог из 4000 записей даёт 3868 страниц: часть записей
+        # витрина не публикует. Отчёт, называющий 4000, завышает сам себя —
+        # и именно такое число потом цитируют как проверенное.
+        "title_pages": len(карта.routes),
         "route_map": карта_маршрутов["summary"],
         "files": len(result["files"]),
         "root": str(directory),

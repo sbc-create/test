@@ -324,7 +324,7 @@ class TestНеизменностьПлеера:
         import pathlib
         import re
         живой = pathlib.Path("/srv/lords/zona-01/current/site")
-        кандидат = pathlib.Path("var/candidate/zona-cinema")
+        кандидат = pathlib.Path("var/candidate-v2/zona-cinema")
         assert живой.is_dir() and кандидат.is_dir()
         a = hashlib.sha256((живой / "assets/app.js").read_bytes()).hexdigest()
         b = hashlib.sha256((кандидат / "assets/app.js").read_bytes()).hexdigest()
