@@ -1539,14 +1539,139 @@ def _comments_block(ctx, title: fx.Title) -> str:
     )
 
 
-def _related(catalog: fx.Catalog, title: fx.Title, kinds, limit: int) -> str:
-    """Похожее — только по признакам самой записи, без сторонних источников."""
+#: Указатели для подбора похожего, по одному на (каталог, набор типов).
+#:
+#: Ключ — тождество объекта каталога: каталог неизменяем в пределах сборки, а
+#: пересчитывать указатели на каждой из 53 тысяч страниц бессмысленно.
+_УКАЗАТЕЛИ_ПОХОЖЕГО: dict = {}
+
+
+def _указатели(catalog: fx.Catalog, kinds) -> dict:
+    ключ = (id(catalog), tuple(sorted(kinds)))
+    готовое = _УКАЗАТЕЛИ_ПОХОЖЕГО.get(ключ)
+    if готовое is not None:
+        return готовое
+    pool = list(catalog.of_types(kinds))
+    по_жанру: dict[str, list] = {}
+    for t in pool:
+        for ж in t.genre_slugs:
+            по_жанру.setdefault(ж, []).append(t)
+    по_годам = sorted(pool, key=lambda t: (t.year, t.slug))
+    годы = [t.year for t in по_годам]
+    по_типу: dict[str, list] = {}
+    for t in по_годам:
+        по_типу.setdefault(t.content_type, []).append(t)
+    указатели = {"pool": pool, "по_жанру": по_жанру, "по_годам": по_годам,
+                 "годы": годы,
+                 "по_типу": {к: (с, [t.year for t in с]) for к, с in по_типу.items()}}
+    _УКАЗАТЕЛИ_ПОХОЖЕГО.clear()      # один каталог за раз; память не копим
+    _УКАЗАТЕЛИ_ПОХОЖЕГО[ключ] = указатели
+    return указатели
+
+
+def _ближайшие_по_году(список, годы, цель: int, нужно: int, исключить: set,
+                       тип=None, тот_же_тип=None):
+    """Ближайшие по году, при равном расстоянии — по слагу.
+
+    Расстояние набирается пачками: все записи на одном расстоянии
+    рассматриваются вместе и упорядочиваются по слагу. Брать сначала левую,
+    потом правую сторону значило бы нарушить порядок при равном расстоянии.
+    """
+    import bisect
+    i = bisect.bisect_left(годы, цель)
+    л, п = i - 1, i
+    собрано = []
+    while len(собрано) < нужно and (л >= 0 or п < len(список)):
+        расстояния = []
+        if л >= 0:
+            расстояния.append(abs(годы[л] - цель))
+        if п < len(список):
+            расстояния.append(abs(годы[п] - цель))
+        d = min(расстояния)
+        пачка = []
+        while л >= 0 and abs(годы[л] - цель) == d:
+            пачка.append(список[л]); л -= 1
+        while п < len(список) and abs(годы[п] - цель) == d:
+            пачка.append(список[п]); п += 1
+        пригодные = [t for t in пачка if t.slug not in исключить
+                     and (тип is None
+                          or (t.content_type == тип) is тот_же_тип)]
+        пригодные.sort(key=lambda t: t.slug)
+        собрано.extend(пригодные)
+    return собрано[:нужно]
+
+
+def _похожие(catalog: fx.Catalog, title: fx.Title, kinds, limit: int) -> list:
+    """Те же записи, что дал бы полный перебор, но без него.
+
+    Определение порядка — `(-совпавших жанров, другой тип, |разница лет|,
+    слаг)`. Полный перебор сортировал весь каталог на КАЖДОЙ странице: на
+    53 344 записях это約 150 минут только на этот блок, и полная сборка не
+    завершалась вовсе.
+
+    Порядок сохранён точно. Любая запись с хотя бы одним общим жанром идёт
+    раньше любой записи без общих жанров, поэтому первые `limit` ищутся среди
+    жанровых соседей; добирать из остальных приходится, только если соседей
+    не хватило, и тогда порядок среди них определяется уже без жанров —
+    сначала тот же тип, затем ближайший год.
+    """
+    у = _указатели(catalog, kinds)
+    свои = set(title.genre_slugs)
+    исключить = {title.slug}
+
+    # Число общих жанров накапливается по ходу обхода. Считать пересечение
+    # заново для каждого кандидата — а их бывает под двадцать тысяч — значит
+    # выполнить ту же работу ещё раз внутри сравнения.
+    соседи = {}
+    общих_жанров: dict = {}
+    for ж in свои:
+        for t in у["по_жанру"].get(ж, ()):
+            if t.slug != title.slug:
+                соседи[t.slug] = t
+                общих_жанров[t.slug] = общих_жанров.get(t.slug, 0) + 1
+
+    выбор = []
+    if соседи:
+        import heapq
+
+        def порядок(other):
+            return (-общих_жанров[other.slug],
+                    other.content_type != title.content_type,
+                    abs(other.year - title.year), other.slug)
+
+        выбор = heapq.nsmallest(min(limit, len(соседи)), соседи.values(),
+                                key=порядок)
+        исключить.update(соседи)      # ключи и есть слаги
+
+    if len(выбор) < limit:
+        # Добор без общих жанров: сначала свой тип, затем чужие.
+        свой, свои_годы = у["по_типу"].get(title.content_type, ([], []))
+        выбор += _ближайшие_по_году(свой, свои_годы, title.year,
+                                    limit - len(выбор), исключить)
+        исключить.update(t.slug for t in выбор)
+    if len(выбор) < limit:
+        выбор += _ближайшие_по_году(у["по_годам"], у["годы"], title.year,
+                                    limit - len(выбор), исключить,
+                                    тип=title.content_type, тот_же_тип=False)
+    return выбор[:limit]
+
+
+def _related_полным_перебором(catalog: fx.Catalog, title: fx.Title, kinds,
+                              limit: int) -> list:
+    """Определение порядка как оно есть. Нужно тестам, а не сборке."""
     pool = [t for t in catalog.of_types(kinds) if t.slug != title.slug]
+
     def score(other: fx.Title) -> tuple:
         shared = len(set(other.genre_slugs) & set(title.genre_slugs))
         same_type = other.content_type == title.content_type
         return (-shared, not same_type, abs(other.year - title.year), other.slug)
-    picks = sorted(pool, key=score)[:limit]
+
+    return sorted(pool, key=score)[:limit]
+
+
+def _related(catalog: fx.Catalog, title: fx.Title, kinds, limit: int) -> str:
+    """Похожее — только по признакам самой записи, без сторонних источников."""
+    picks = _похожие(catalog, title, kinds, limit)
     if not picks:
         return ""
     return (
@@ -2880,9 +3005,14 @@ def render_site(
         # по отдельности — значит однажды пропустить новый, и ссылка в никуда
         # вернётся. Ограниченный каталог закрывает их все разом, потому что
         # ниже по течению все они читают его.
+        оставшиеся = [t for t in catalog.titles if t.slug in only_title_slugs]
+        # Указатель по слагу пересобирается вместе с каталогом. Без него
+        # `by_slug` отдаёт None на всё, и подборки — единственное место, где
+        # он используется, — молча выходят пустыми: страница есть, карточек
+        # нет, и ни одна проверка паритета этого не заметит.
         catalog = type(catalog)(
-            titles=[t for t in catalog.titles if t.slug in only_title_slugs],
-            collections=catalog.collections)
+            titles=оставшиеся, collections=catalog.collections,
+            _by_slug={t.slug: t for t in оставшиеся})
     profiles = plan_mod.load_profiles(root)
     site_plan = plan_mod.build_plan(
         package,

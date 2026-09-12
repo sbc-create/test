@@ -432,6 +432,33 @@ def _facet(counts: dict[str, int], labels: dict[str, str],
     return tuple((slug, label, counts[slug]) for slug, label in known + rest if slug)
 
 
+#: Сводки каталога считаются один раз на каталог.
+#:
+#: Каталог неизменяем, и `of_types`, `genres`, `years`, `countries` — чистые
+#: функции от него и набора типов. Пересчитывались они на КАЖДОЙ странице
+#: списка: на полном каталоге это 186 секунд из 203 в отрисовке ста пятидесяти
+#: страниц, то есть двадцать часов на витрину. Результат не меняется — меняется
+#: только число проходов по пятидесяти трём тысячам записей.
+#:
+#: Ключ хранит сам каталог, а не только его идентификатор: иначе после сборки
+#: мусора новый объект мог бы занять тот же адрес и получить чужой ответ.
+_ПАМЯТЬ: dict = {}
+
+
+def _запомнить(каталог, ключ, вычислить):
+    ячейка = _ПАМЯТЬ.get(id(каталог))
+    if ячейка is None or ячейка[0] is not каталог:
+        # Один каталог за раз: сборка идёт по одному, и держать прежние
+        # каталоги значило бы держать и их записи.
+        _ПАМЯТЬ.clear()
+        ячейка = (каталог, {})
+        _ПАМЯТЬ[id(каталог)] = ячейка
+    хранилище = ячейка[1]
+    if ключ not in хранилище:
+        хранилище[ключ] = вычислить()
+    return хранилище[ключ]
+
+
 @dataclass(frozen=True)
 class Catalog:
     titles: tuple[Title, ...]
@@ -442,11 +469,13 @@ class Catalog:
         return self._by_slug.get(slug)
 
     def of_type(self, kind: str) -> tuple[Title, ...]:
-        return tuple(t for t in self.titles if t.content_type == kind)
+        return _запомнить(self, ("of_type", kind), lambda:
+                          tuple(t for t in self.titles if t.content_type == kind))
 
     def of_types(self, kinds) -> tuple[Title, ...]:
-        allowed = set(kinds)
-        return tuple(t for t in self.titles if t.content_type in allowed)
+        allowed = frozenset(kinds)
+        return _запомнить(self, ("of_types", allowed), lambda:
+                          tuple(t for t in self.titles if t.content_type in allowed))
 
     def collection(self, slug: str) -> Collection | None:
         for item in self.collections:
@@ -454,7 +483,11 @@ class Catalog:
                 return item
         return None
 
-    def genres(self, kinds=None) -> tuple[tuple[str, str, int], ...]:
+    def genres(self, kinds=None):
+        ключ = ("genres", None if kinds is None else frozenset(kinds))
+        return _запомнить(self, ключ, lambda: self._genres(kinds))
+
+    def _genres(self, kinds=None) -> tuple[tuple[str, str, int], ...]:
         """Жанры, за которыми стоит хотя бы одно произведение доступных типов."""
         pool = self.of_types(kinds) if kinds is not None else self.titles
         counts: dict[str, int] = {}
@@ -469,7 +502,11 @@ class Catalog:
                     labels[slug] = names[index]
         return _facet(counts, labels, GENRES)
 
-    def years(self, kinds=None) -> tuple[tuple[int, int], ...]:
+    def years(self, kinds=None):
+        ключ = ("years", None if kinds is None else frozenset(kinds))
+        return _запомнить(self, ключ, lambda: self._years(kinds))
+
+    def _years(self, kinds=None) -> tuple[tuple[int, int], ...]:
         pool = self.of_types(kinds) if kinds is not None else self.titles
         counts: dict[int, int] = {}
         for title in pool:
@@ -484,7 +521,11 @@ class Catalog:
             counts[title.year] = counts.get(title.year, 0) + 1
         return tuple((year, counts[year]) for year in sorted(counts, reverse=True))
 
-    def countries(self, kinds=None) -> tuple[tuple[str, str, int], ...]:
+    def countries(self, kinds=None):
+        ключ = ("countries", None if kinds is None else frozenset(kinds))
+        return _запомнить(self, ключ, lambda: self._countries(kinds))
+
+    def _countries(self, kinds=None) -> tuple[tuple[str, str, int], ...]:
         pool = self.of_types(kinds) if kinds is not None else self.titles
         counts: dict[str, int] = {}
         labels: dict[str, str] = {}

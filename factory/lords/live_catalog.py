@@ -16,8 +16,10 @@
 
 from __future__ import annotations
 
+import json
 import re
 import unicodedata
+from pathlib import Path
 from dataclasses import dataclass
 
 from factory.lords import fixtures as fx
@@ -474,6 +476,32 @@ def title_from_item(entry: dict) -> LiveTitle | None:
     )
 
 
+#: Закреплённые адреса действующей выкладки. Снимаются один раз и хранятся
+#: как данные, а не выводятся алгоритмом: публичный URL, который уже
+#: опубликован и проиндексирован, не должен зависеть от того, в каком порядке
+#: сегодня пришла выгрузка.
+ЗАКРЕПЛЁННЫЕ = Path(__file__).resolve().parents[2] / "data" / "lords" / "route-ledger.json"
+_кэш_закреплённых: dict | None = None
+
+
+def загрузить_закреплённые() -> dict:
+    """Карта `external_id -> slug`. Отсутствие файла — не ошибка.
+
+    Без файла политика назначит адреса своим правилом: это верно для нового
+    каталога и для тестов. Молчаливая подмена опасна только в обратную
+    сторону — если бы отсутствие карты трактовалось как «адреса менять
+    нельзя», сборка бы падала там, где закреплять ещё нечего.
+    """
+    global _кэш_закреплённых
+    if _кэш_закреплённых is None:
+        try:
+            _кэш_закреплённых = json.loads(
+                ЗАКРЕПЛЁННЫЕ.read_text(encoding="utf-8"))["assignments"]
+        except (OSError, KeyError, ValueError):
+            _кэш_закреплённых = {}
+    return _кэш_закреплённых
+
+
 def catalog_from_live(items, collections=()) -> fx.Catalog:
     """Каталог из записей источника.
 
@@ -481,19 +509,41 @@ def catalog_from_live(items, collections=()) -> fx.Catalog:
     без одного тайтла лучше витрины без всех.
     """
     titles: list[LiveTitle] = []
-    seen: dict[str, int] = {}
     for entry in items or []:
         title = title_from_item(entry)
         if title is None:
             continue
-        # Слаг — первичный ключ адреса. Совпадение имён встречается, и второй
-        # тайтл обязан получить собственный адрес, а не затереть первый.
-        count = seen.get(title.slug, 0)
-        seen[title.slug] = count + 1
-        if count:
-            from dataclasses import replace
-            title = replace(title, slug=f"{title.slug}-{count + 1}")
         titles.append(title)
 
-    by_slug = {t.slug: t for t in titles}
+    # Адреса назначает политика маршрутов, а не порядок записей.
+    #
+    # Прежде второе совпадение имени получало суффикс `-2` по позиции в
+    # выгрузке. Это давало два независимых дефекта. Адрес зависел от порядка
+    # строк: перестановка снимка меняла публичный URL произведения. И суффикс
+    # попадал в настоящее название — «Акулы» получали `akuly-2`, уже занятый
+    # фильмом «Акулы 2»; на полном каталоге таких столкновений 206, и словарь
+    # ниже молча оставлял последнюю запись. По адресу сиквела открывалась
+    # чужая карточка: код ответа 200, сущность не та.
+    from dataclasses import replace as _replace
+
+    from factory.lords import urlmap as _um
+
+    записи = [{"external_id": t.external_id, "year": t.year,
+               "type": t.content_type, "created_at": t.created_at,
+               "_natural": t.slug} for t in titles]
+    назначение = _um.назначить(записи, закреплённые=загрузить_закреплённые(),
+                               слаг_из=lambda з: з["_natural"])
+    titles = [_replace(t, slug=назначение.by_id[t.external_id]) for t in titles]
+
+    by_slug: dict[str, LiveTitle] = {}
+    for t in titles:
+        # Fail closed. Прежде здесь стоял dict comprehension, и совпадение
+        # адресов заканчивалось тихой заменой сущности — единственный след
+        # дефекта исчезал ровно в том месте, где его следовало заметить.
+        if t.slug in by_slug:
+            raise _um.UrlMapError(
+                "ROUTE_COLLISION",
+                f"адрес {t.slug} назначен дважды: "
+                f"{by_slug[t.slug].external_id} и {t.external_id}")
+        by_slug[t.slug] = t
     return fx.Catalog(titles=tuple(titles), collections=tuple(collections), _by_slug=by_slug)

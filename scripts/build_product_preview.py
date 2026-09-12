@@ -73,7 +73,94 @@ PRODUCTS = {
 DLE_PRODUCTS = {"basis-video": "pilot-local"}
 
 
-def load_catalog(limit: int | None) -> tuple[list[dict], dict]:
+ПРЕЖНИЕ_МАРШРУТЫ = ROOT / "data" / "lords" / "previous-routes.json"
+
+
+def _потерявшие_адрес(catalog) -> list[tuple[str, str, str]]:
+    """Сущности, у которых публичный адрес был и сменился.
+
+    Прежний адрес для большинства сущностей выводится из названия; в файле
+    лежит только невыводимое — суффиксные адреса и владельцы спорных адресов.
+    Отсутствие файла означает, что закреплять ещё нечего, и страж молчит.
+    """
+    try:
+        прежнее = json.loads(ПРЕЖНИЕ_МАРШРУТЫ.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return []
+    суффиксные = прежнее.get("suffixed", {})
+    спорные = прежнее.get("contested_owner", {})
+
+    сейчас = {t.external_id: t.slug for t in catalog.titles}
+    прежний = {}
+    for t in catalog.titles:
+        естественный = live_mod.slugify(t.name) or t.external_id.lower()
+        прежний[t.external_id] = суффиксные.get(t.external_id, естественный)
+
+    владелец = {}
+    for ид, с in прежний.items():
+        владелец[с] = ид
+    владелец.update(спорные)
+
+    потеряли = []
+    for ид, было in прежний.items():
+        стало = сейчас.get(ид)
+        if стало is not None and стало != было and владелец.get(было) == ид:
+            потеряли.append((ид, было, стало))
+    return потеряли
+
+
+def _переезды(catalog, карта) -> tuple[dict, list]:
+    """Старый адрес → новый, когда содержимое переехало.
+
+    Адрес меняет владельца: прежде по нему отдавалась одна сущность, теперь
+    он принадлежит другой. Если прежняя на этой витрине по-прежнему
+    публикуется, читателя надо привести к ней — один переход, без цепочек.
+
+    Считается ПО ВИТРИНЕ, а не по каталогу. Витрина публикует не все виды, и
+    «кто отдавался по адресу» — это последняя ОТРИСОВАННАЯ запись с этим
+    адресом, а не глобальный владелец: запись невыпускаемого вида страницы не
+    получала и перекрыть ничего не могла.
+
+    Второе значение — надгробия: адреса, чья прежняя сущность на этой витрине
+    больше не публикуется. Их не прячем: адрес, ставший 404, должен быть
+    назван с причиной.
+    """
+    try:
+        прежнее = json.loads(ПРЕЖНИЕ_МАРШРУТЫ.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}, []
+    суффиксные = прежнее.get("suffixed", {})
+
+    собрано = set(карта.slugs if hasattr(карта, "slugs") else карта.слаги)
+
+    отдавалось = {}
+    новый = {}
+    for t_ in catalog.titles:                       # порядок источника сохранён
+        новый[t_.external_id] = t_.slug
+        if t_.slug not in собрано:
+            # Запись невыпускаемого вида страницы не получала и перекрыть
+            # ничего не могла. Считать её владельцем адреса значило бы
+            # объявить надгробием адрес, который на этой витрине жил.
+            continue
+        естественный = live_mod.slugify(t_.name) or t_.external_id.lower()
+        старый = суффиксные.get(t_.external_id, естественный)
+        отдавалось[старый] = t_                     # последний перекрывал прежних
+    переезды, надгробия = {}, []
+    for старый, владелец in sorted(отдавалось.items()):
+        if старый in собрано:
+            continue
+        цель = новый.get(владелец.external_id)
+        if цель and цель in собрано:
+            переезды[f"/title/{старый}/"] = f"/title/{цель}/"
+        else:
+            надгробия.append({"path": f"/title/{старый}/",
+                              "reason": "OWNER_NOT_PUBLISHED_ON_STOREFRONT",
+                              "entity": владелец.external_id})
+    return переезды, надгробия
+
+
+def load_catalog(limit: int | None,
+                 shuffle_seed: int | None = None) -> tuple[list[dict], dict]:
     source = CATALOG_CACHE / f"{SNAPSHOT_SITE}.json"
     if not source.is_file():
         raise SystemExit(f"BLOCKED: снимка каталога нет — {source}")
@@ -90,7 +177,16 @@ def load_catalog(limit: int | None) -> tuple[list[dict], dict]:
     merged, обогащено = enrich_mod.merge_cached(items, details)
     if limit:
         merged = merged[:limit]
+    if shuffle_seed is not None:
+        # Перестановка входа — проверка, а не режим сборки. Адрес не должен
+        # зависеть от порядка строк в выгрузке, и единственный способ это
+        # показать — собрать из тех же записей в другом порядке и сверить
+        # отпечатки. Порядок задаётся зерном, чтобы проверка повторялась.
+        import random as _random
+        merged = list(merged)
+        _random.Random(shuffle_seed).shuffle(merged)
     return merged, {"snapshot_site": SNAPSHOT_SITE, "records": len(merged),
+                    "shuffle_seed": shuffle_seed,
                     # Число обогащённых записей, а не размер кэша: кэш может
                     # быть велик и не совпасть со срезом ни одной записью.
                     "enriched": обогащено, "source": raw.get("source")
@@ -117,13 +213,13 @@ def _карточные_цели(site) -> set[str]:
 
 
 def build(product: str, *, titles: int, limit: int | None,
-          out_root: Path | None = None) -> dict:
+          out_root: Path | None = None, shuffle_seed: int | None = None) -> dict:
     package_name = PRODUCTS.get(product)
     if package_name is None:
         raise SystemExit(f"неизвестный продукт: {product}")
 
     started = time.perf_counter()
-    items, provenance = load_catalog(limit)
+    items, provenance = load_catalog(limit, shuffle_seed)
     catalog = live_mod.catalog_from_live(items)
     package, _ = preview_mod._package(package_name)
 
@@ -167,8 +263,57 @@ def build(product: str, *, titles: int, limit: int | None,
             f"срез не сходится сам с собой: {len(паритет.orphan_targets)} "
             f"карточек ведут на несуществующие адреса; пример: "
             f"{list(паритет.orphan_targets)[:3]}")
+    # Страж устойчивости публичных адресов.
+    #
+    # Паритет карточек и страниц ничего не говорит о том, ЧЬЯ страница лежит
+    # по адресу. Сущность, которая уже год публикуется по своему URL, не
+    # должна его лишиться из-за того, что в каталог добавили запись с похожим
+    # названием. Проверка идёт по закреплённым прежним адресам и падает до
+    # выгрузки: подменённый адрес дешевле не собрать, чем потом искать.
+    потеряли = _потерявшие_адрес(catalog)
+    if потеряли:
+        примеры = "; ".join(f"{и}: {было} -> {стало}"
+                            for и, было, стало in потеряли[:3])
+        raise SystemExit(
+            f"публичный адрес сменился у {len(потеряли)} сущностей, которые его "
+            f"занимали: {примеры}")
+
+    переезды, надгробия = _переезды(catalog, карта)
+    # Цепочек и петель не бывает по построению: цель переезда обязана быть
+    # собранной страницей, а собранная страница переездом не является.
+    петли = [а for а, ц in переезды.items() if ц in переезды or ц == а]
+    if петли:
+        raise SystemExit(f"переезды образуют цепочку: {петли[:3]}")
+
+    # Ни один адрес витрины не исчезает молча.
+    #
+    # Страж выше проверяет назначение: не сменился ли адрес у сущности,
+    # которая его занимала. Этого мало — витрина публикует не все виды, и
+    # адрес может пропасть именно на ней, тогда как назначение в порядке.
+    #
+    # Надгробие — это адрес, который был живым и станет 404. Причина в записи
+    # объясняет, ПОЧЕМУ так вышло, но не делает потерю приемлемой: принять её
+    # должен человек, а не сборка. Поэтому любое надгробие останавливает
+    # сборку, пока не перечислено в `data/lords/route-tombstones.json`.
+    принятые = set()
+    файл_надгробий = ROOT / "data" / "lords" / "route-tombstones.json"
+    if файл_надгробий.is_file():
+        try:
+            принятые = {з["path"] for з in
+                        json.loads(файл_надгробий.read_text(encoding="utf-8"))
+                        .get("accepted", [])}
+        except (ValueError, KeyError, TypeError):
+            принятые = set()
+    непринятые = [н for н in надгробия if н["path"] not in принятые]
+    if непринятые:
+        raise SystemExit(
+            f"адреса станут 404 и это нигде не принято: {len(непринятые)}; "
+            f"пример {непринятые[0]['path']} ({непринятые[0]['reason']}); "
+            f"перечислите их в {файл_надгробий} вместе с причиной")
+
     карта_маршрутов = {
         "summary": {"version": карта.version, "routes": len(карта.routes),
+                    "redirects": len(переезды), "tombstones": len(надгробия),
                     "route_map_sha256": карта.отпечаток,
                     "card_targets": len(цели),
                     "orphan_targets": len(паритет.orphan_targets),
@@ -185,6 +330,10 @@ def build(product: str, *, titles: int, limit: int | None,
                          f"запрещена")
     serve_mod.clear_directory(directory)
     result = serve_mod.export(site, directory)
+    (directory / "redirects.json").write_text(
+        json.dumps({"version": "lords-redirects/1.0.0", "moved": переезды,
+                    "tombstones": надгробия}, ensure_ascii=False, indent=1) + "\n",
+        encoding="utf-8")
     (directory / "route-map.json").write_text(
         json.dumps(карта_маршрутов["map"], ensure_ascii=False, indent=1) + "\n",
         encoding="utf-8")
@@ -278,6 +427,10 @@ def main() -> int:
                         help="корень выгрузки; по умолчанию var/product-preview")
     parser.add_argument("--limit", type=int, default=None,
                         help="ограничить каталог (для быстрых прогонов)")
+    parser.add_argument("--shuffle-seed", type=int, default=None,
+                        dest="shuffle_seed",
+                        help="переставить входные записи заданным зерном; "
+                             "проверка независимости адресов от порядка входа")
     args = parser.parse_args()
 
     if args.product in DLE_PRODUCTS:
@@ -289,7 +442,7 @@ def main() -> int:
         return 0
 
     report = build(args.product, titles=args.titles, limit=args.limit,
-                   out_root=args.out)
+                   out_root=args.out, shuffle_seed=args.shuffle_seed)
     print(f"{report['product']}: пакет {report['package']}, тема {report['theme']}")
     print(f"  записей {report['data_provenance']['records']}, "
           f"обогащено {report['data_provenance']['enriched']}, "

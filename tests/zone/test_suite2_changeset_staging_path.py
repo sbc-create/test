@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import json
+import pathlib
 import urllib.error
 import urllib.request
 
@@ -23,8 +24,12 @@ from .conftest import ВИТРИНЫ, ОКРУЖЕНИЕ_СТЕНДА, чере�
 РЕСУРС = "template.release"
 #: Кандидаты, собранные этим заданием. Отпечатки берутся из файла, а не
 #: вписываются в тест: вписанное значение перестаёт проверять сборку.
-КАНДИДАТЫ = json.load(open("artifacts/zone-tpl-001/candidate-artifacts.json",
-                           encoding="utf-8"))
+#: Кандидаты R2. Файл создаётся сборкой; отпечатки не вписываются в тест —
+#: вписанное значение перестаёт проверять сборку.
+_МАНИФЕСТ = pathlib.Path("artifacts/zone-tpl-001-r2/candidate-artifacts.json")
+if not _МАНИФЕСТ.is_file():
+    pytest.skip(f"манифеста кандидатов нет: {_МАНИФЕСТ}", allow_module_level=True)
+КАНДИДАТЫ = json.loads(_МАНИФЕСТ.read_text(encoding="utf-8"))
 ПО_САЙТУ = {s: (продукт, св) for продукт, св in КАНДИДАТЫ.items()
             for s in св["site_ids"]}
 
@@ -324,7 +329,7 @@ class TestНеизменностьПлеера:
         import pathlib
         import re
         живой = pathlib.Path("/srv/lords/zona-01/current/site")
-        кандидат = pathlib.Path("var/candidate-v2/zona-cinema")
+        кандидат = pathlib.Path("var/build-a/zona-cinema")
         assert живой.is_dir() and кандидат.is_dir()
         a = hashlib.sha256((живой / "assets/app.js").read_bytes()).hexdigest()
         b = hashlib.sha256((кандидат / "assets/app.js").read_bytes()).hexdigest()

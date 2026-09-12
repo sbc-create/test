@@ -11,9 +11,9 @@
 
 from __future__ import annotations
 
+import json
 import shutil
 from pathlib import Path
-import json
 from dataclasses import dataclass
 from urllib.parse import unquote
 
@@ -73,9 +73,16 @@ def normalize(path: str) -> str:
 class Application:
     """WSGI-приложение одного сайта стенда."""
 
-    def __init__(self, site: RenderedSite):
+    def __init__(self, site: RenderedSite, redirects: dict | None = None):
         self.site = site
         self.pages = site.pages
+        # Переезды адресов: старый адрес → новый, ровно один переход.
+        #
+        # Возникают, когда адрес меняет владельца: прежде по нему отдавалась
+        # одна сущность, теперь адрес принадлежит другой, а прежняя переехала.
+        # Отдавать 404 читателю, у которого этот адрес в закладках, незачем —
+        # содержимое никуда не делось, оно переехало.
+        self.redirects = dict(redirects or {})
 
     # -- ответы ------------------------------------------------------------
     def _headers(self, page_type: str, length: int, extra=()) -> tuple:
@@ -106,6 +113,12 @@ class Application:
 
         page = self.pages.get(path)
         if page is None:
+            переезд = self.redirects.get(path)
+            # Цель переезда обязана существовать. Переход на несобранную
+            # страницу — это 404 через лишний шаг, а цепочка переходов
+            # начинается ровно с того, что целью назначают ещё один переезд.
+            if переезд and переезд in self.pages and переезд not in self.redirects:
+                return self._text(308, "", extra=(("Location", переезд),))
             miss = self.site.not_found
             body = miss.body if miss else "Страница не найдена"
             payload = body.encode("utf-8")
@@ -143,6 +156,27 @@ class Application:
         if environ.get("REQUEST_METHOD") == "HEAD":
             return [b""]
         return [response.body]
+
+
+#: Имя файла переездов в выгруженном дереве.
+ПЕРЕЕЗДЫ = "redirects.json"
+
+
+def переезды_из_каталога(directory) -> dict:
+    """Карта переездов рядом с выгруженной витриной.
+
+    Отсутствие файла — не ошибка: витрина без переездов их и не объявляет.
+    А вот молчаливое игнорирование существующего файла было бы ошибкой:
+    тринадцать адресов, у которых сменился владелец, стали бы 404 у читателя,
+    и узнали бы об этом не мы.
+    """
+    файл = Path(directory) / ПЕРЕЕЗДЫ
+    try:
+        данные = json.loads(файл.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    переезды = данные.get("moved") or {}
+    return {str(а): str(ц) for а, ц in переезды.items()}
 
 
 def clear_directory(directory) -> None:
