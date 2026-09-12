@@ -10,6 +10,7 @@ import concurrent.futures as fut
 import json
 import sqlite3
 import uuid
+from pathlib import Path
 
 import pytest
 
