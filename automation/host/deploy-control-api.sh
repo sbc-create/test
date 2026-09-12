@@ -49,6 +49,45 @@ digest_of() {
       -print0 | sort -z | xargs -0 sha256sum 2>/dev/null | sha256sum | cut -d" " -f1 )
 }
 
+# Поколение модели безопасности целевого релиза.
+#
+# Проверяет ОСНАСТКА, а не сам релиз: версия, которой не доверяют, не может
+# и засвидетельствовать себя. Пол хранится рядом с учётными данными и
+# переживает смену символической ссылки — иначе откат тихо возвращал бы
+# закрытые дыры вместе со старым кодом.
+generation_of() {
+  local dir="$1"
+  PYTHONPATH="$dir" python3 -c "
+import json, sys
+try:
+    from factory.site_engine.credentials.generation import ПОКОЛЕНИЕ
+except Exception:
+    ПОКОЛЕНИЕ = 1          # релиз без понятия о поколении считается первым
+print(ПОКОЛЕНИЕ)
+" 2>/dev/null || echo 1
+}
+
+security_floor() {
+  python3 -c "
+import json, pathlib
+п = pathlib.Path('/etc/site-factory/credentials/security-floor.json')
+print(json.loads(п.read_text()).get('generation', 0) if п.is_file() else 0)
+" 2>/dev/null || echo 0
+}
+
+# Отказ выкладывать релиз ниже пола. --force-security-downgrade существует
+# только для осознанного решения владельца и называется прямо, а не прячется
+# за общим --force.
+assert_generation_allowed() {
+  local dir="$1" allow="${2:-}"
+  local gen floor
+  gen="$(generation_of "$dir")"; floor="$(security_floor)"
+  say "поколение безопасности: релиз ${gen}, пол ${floor}"
+  if [ "$gen" -lt "$floor" ] && [ "$allow" != "yes" ]; then
+    die "ОТКАЗ: релиз поколения ${gen} ниже установленного пола ${floor}; он вернул бы закрытые дыры. Для осознанного понижения нужен --force-security-downgrade"
+  fi
+}
+
 current_sha() { [ -L "$CURRENT" ] && basename "$(readlink -f "$CURRENT")" || echo ""; }
 
 cmd_status() {
@@ -176,6 +215,10 @@ sys.exit(0 if r.ok else 70)
 MANIFEST
   say "манифест записан"
 
+  # Пол поднимается только вперёд и только после успешной выкладки.
+  PYTHONPATH="$target" python3 -m factory.site_engine.credentials.generation raise \
+    >/dev/null 2>&1 && say "пол безопасности: $(security_floor)"
+
   # Уборка: релизы, на которые никто не ссылается, старше последних KEEP.
   local keep_sha="$full" prev_sha="$before"
   ls -1t "$RELEASES" 2>/dev/null | tail -n +$((KEEP + 1)) | while read -r old; do
@@ -192,6 +235,7 @@ cmd_rollback() {
   while [ $# -gt 0 ]; do
     case "$1" in
       --to) to="${2:-}"; shift 2 ;;
+      --force-security-downgrade) ALLOW_DOWNGRADE=yes; shift ;;
       *) die "неизвестный аргумент: $1" ;;
     esac
   done
@@ -204,6 +248,7 @@ cmd_rollback() {
     target="$(readlink -f "$PREVIOUS")"
   fi
   say "откат на $(basename "$target")"
+  assert_generation_allowed "$target" "${ALLOW_DOWNGRADE:-}"
 
   # Тот же протокол и на откате: версия, которая не проходит проверку, не
   # станет рабочей только оттого, что она старая.

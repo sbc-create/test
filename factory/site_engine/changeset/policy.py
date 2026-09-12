@@ -67,16 +67,20 @@ def тело_подписи(набор: dict[str, Any], *, approver: str,
                   "expires_at": expires_at})
 
 
-def подпись(набор: dict[str, Any], *, approver: str, expires_at: str) -> str:
-    """Подпись выдаёт выделенная служба. Приватного ключа здесь нет.
+def подпись(набор: dict[str, Any], *, approver: str, expires_at: str,
+            approver_service: str = "", approver_type: str = "") -> str:
+    """Подпись выдаёт выделенная служба по ССЫЛКЕ на набор изменений.
 
-    Симметричная схема требовала бы отдать тот же секрет каждому, кто лишь
-    проверяет подпись, — и любой проверяющий смог бы выписать разрешение
-    сам. Здесь подписывает один процесс, а проверяют все.
+    Готовое тело ей не отправляется и отправлено быть не может: служба, что
+    подписывает присланное, — нотариус, заверяющий чужой текст не читая.
+    Каноническое состояние она читает сама и сама решает, подлежит ли оно
+    подписи.
     """
     try:
-        return ПОДПИСЬ.подписать(тело_подписи(набор, approver=approver,
-                                              expires_at=expires_at))
+        return ПОДПИСЬ.подписать_одобрение(
+            changeset_id=набор["changeset_id"], approver_id=approver,
+            approver_service=approver_service, approver_type=approver_type,
+            expires_at=expires_at)
     except K.KeyringError as ош:
         raise ChangeSetError(ош.error_code, ош.detail, 503) from ош
 
@@ -111,7 +115,9 @@ def одобрить(набор: dict[str, Any], *, approver_id: str, approver_s
         "policy_version": POLICY_VERSION,
         "binding": связка(набор),
         "signature": подпись(набор, approver=approver_id,
-                             expires_at=expires_at),
+                             expires_at=expires_at,
+                             approver_service=approver_service,
+                             approver_type=approver_type),
     }
     return запись
 

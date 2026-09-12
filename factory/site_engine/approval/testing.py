@@ -1,11 +1,8 @@
 """Эфемерная служба подписи для испытаний.
 
-Существует, чтобы тесты шли ПО ТОМУ ЖЕ пути, что и рабочий контур: ключи в
-каталоге credentials, подпись через сетевой вызов, проверка — локально по
-публичному ключу. Подменять подпись заглушкой было бы удобнее и проверяло бы
-не то, что потом работает.
-
-Ключи создаются на каждый запуск и живут только в предоставленном каталоге.
+Тесты идут ПО ТОМУ ЖЕ пути, что и рабочий контур: ключи в каталоге
+credentials, вызывающие опознаются по своим токенам, каноническое состояние
+служба читает сама. Заглушка проверяла бы не то, что потом работает.
 """
 from __future__ import annotations
 
@@ -21,16 +18,25 @@ from factory.site_engine.approval import keyring as K
 from factory.site_engine.approval import service as S
 
 
-def подготовить_каталог(каталог: Path) -> dict[str, str]:
-    """Создать эфемерные ключи и токен. Возвращает kid и путь."""
+def подготовить_каталог(каталог: Path) -> dict[str, object]:
+    """Эфемерные ключи и токены вызывающих. Живут только здесь."""
     каталог.mkdir(parents=True, exist_ok=True)
     kid, pem, публичный = K.создать_ключ()
     (каталог / S.ПРИВАТНЫЙ).write_text(pem, encoding="utf-8")
     (каталог / S.НАБОР).write_text(
         K.НаборКлючей([K.Ключ(kid, публичный, "ACTIVE")]).в_json(),
         encoding="utf-8")
-    (каталог / S.ТОКЕН).write_text(secrets.token_urlsafe(24), encoding="utf-8")
-    return {"kid": kid, "dir": str(каталог)}
+    import hashlib
+    вызывающие = {}
+    значения = {}
+    for имя in ("control-api", "changeset-worker"):
+        значение = secrets.token_urlsafe(24)
+        (каталог / f"approval-caller-{имя}").write_text(значение, encoding="utf-8")
+        вызывающие[имя] = hashlib.sha256(значение.encode()).hexdigest()
+        значения[имя] = значение
+    (каталог / S.ВЫЗЫВАЮЩИЕ).write_text(
+        json.dumps({"callers": вызывающие}), encoding="utf-8")
+    return {"kid": kid, "dir": str(каталог), "caller_tokens": значения}
 
 
 def _свободный_порт() -> int:
@@ -40,13 +46,15 @@ def _свободный_порт() -> int:
 
 
 @contextlib.contextmanager
-def эфемерный_signer(каталог: Path, monkeypatch=None):
+def эфемерный_signer(каталог: Path, monkeypatch=None, *,
+                     вызывающий: str = "control-api"):
     """Поднять службу подписи на время теста."""
     сведения = подготовить_каталог(каталог)
     порт = _свободный_порт()
     установить = (monkeypatch.setenv if monkeypatch else os.environ.__setitem__)
     установить("CREDENTIALS_DIRECTORY", str(каталог))
     установить("APPROVAL_SIGNER_BASE", f"http://127.0.0.1:{порт}")
+    установить("APPROVAL_CALLER", вызывающий)
 
     S.Обработчик.состояние = S.Состояние()
     from http.server import ThreadingHTTPServer
@@ -54,7 +62,8 @@ def эфемерный_signer(каталог: Path, monkeypatch=None):
     поток = threading.Thread(target=сервер.serve_forever, daemon=True)
     поток.start()
     try:
-        yield {**сведения, "port": порт}
+        yield {**сведения, "port": порт,
+               "base": f"http://127.0.0.1:{порт}"}
     finally:
         сервер.shutdown()
         сервер.server_close()

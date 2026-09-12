@@ -108,7 +108,10 @@ Environment=APPROVAL_SIGNER_PORT=8795
 # Единственный процесс контура, которому принадлежит приватный ключ.
 LoadCredential=approval-signing-key:${CRED}/approval-signing-key
 LoadCredential=approval-verify-keys:${CRED}/approval-verify-keys
-LoadCredential=approval-signer-token:${CRED}/approval-signer-token
+LoadCredential=approval-caller-fingerprints:${CRED}/approval-caller-fingerprints
+# Каноническое состояние служба читает САМА — иначе ей пришлось бы верить
+# тому, что прислал вызывающий.
+EnvironmentFile=-${NEW_ENV}
 NoNewPrivileges=true
 CapabilityBoundingSet=
 AmbientCapabilities=
@@ -151,17 +154,33 @@ dropin() {
   log "${unit}: $# credential(ов)"
 }
 
+# Имя личности и имя вызывающего секретами не являются и задаются юнитом:
+# по ним журнал и служба подписи различают процессы, а не по тому, кем они
+# себя назвали.
+identity_env() {
+  local unit="$1"; shift
+  printf '%s\n' "$@" >> "/etc/systemd/system/${unit}.d/10-credentials.conf"
+}
+
 # Control API опознаёт службы по ОТПЕЧАТКАМ токенов, сырых значений не хранит.
 dropin site-factory-control-api.service \
-  audit-token-fingerprints approval-verify-keys approval-signer-token \
+  audit-token-fingerprints approval-verify-keys approval-caller-control-api \
   site-engine-control-tokens
+identity_env site-factory-control-api.service "Environment=APPROVAL_CALLER=control-api"
 
 # Мосту нужна ровно его собственная личность.
-dropin site-factory-audit-bridge.service audit-token-control-plane
+dropin site-factory-audit-bridge.service audit-token-audit-bridge
+identity_env site-factory-audit-bridge.service \
+  "Environment=AUDIT_LEDGER_IDENTITY=audit-bridge"
 
-# Рабочий процесс только ПРОВЕРЯЕТ одобрения — ему достаточно публичного ключа.
+# Рабочий процесс только ПРОВЕРЯЕТ одобрения — ему достаточно публичного
+# ключа; разрешение на исполнение он просит под собственным именем.
 dropin site-factory-changeset-worker.service \
-  approval-verify-keys audit-token-control-plane
+  approval-verify-keys audit-token-changeset-worker \
+  approval-caller-changeset-worker
+identity_env site-factory-changeset-worker.service \
+  "Environment=AUDIT_LEDGER_IDENTITY=changeset-worker" \
+  "Environment=APPROVAL_CALLER=changeset-worker"
 
 systemctl daemon-reload
 log "drop-in'ы записаны; перезапуск выполняется отдельным шагом"

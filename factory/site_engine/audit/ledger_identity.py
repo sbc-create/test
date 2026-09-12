@@ -40,8 +40,8 @@ from factory.site_engine.credentials import store as C
 
 #: Тип актора по умолчанию для каждой службы. Qwen — MODEL: это не деталь
 #: оформления, а то, что запрещает ему исполняющие фазы.
-ТИП_АКТОРА = {"architect": "SERVICE", "control-plane": "SERVICE",
-              "registry": "SERVICE",
+ТИП_АКТОРА = {"architect": "SERVICE", "audit-bridge": "SERVICE",
+              "changeset-worker": "SERVICE", "registry": "SERVICE",
               "templates": "SERVICE", "content": "SERVICE", "seo": "SERVICE",
               "monitoring": "SERVICE", "backup": "SERVICE",
               "integrations": "SERVICE", "qwen": "MODEL",
