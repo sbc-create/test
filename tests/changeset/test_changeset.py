@@ -652,3 +652,47 @@ def test_24f_production_цель_блокируется_выключенной_�
     assert ош.value.error_code == "AUTONOMOUS_PRODUCTION_APPLY_DISABLED"
     assert S.получить(бд, cid)["status"] == M.VALIDATION_FAILED
     assert адаптер.эффектов() == 0
+
+
+# --- копия и восстановление хранилища ---------------------------------------
+
+def test_копия_и_восстановление_заполненного_хранилища(бд, двигатель, адаптер,
+                                                        tmp_path, monkeypatch):
+    """Копия проверяется на хранилище С СОДЕРЖИМЫМ.
+
+    Развернуть пустую базу и объявить восстановление работающим — значит
+    проверить обёртку, а не то, ради чего копия делается.
+    """
+    from factory.site_engine.changeset import backup as B
+
+    адаптер.посеять("test-alpha-0001", "res-1", {"title": "старое"})
+    адаптер.посеять("test-beta-0002", "res-1", {"title": "старое"})
+    успешный = создать(бд)
+    довести_до_одобрения(бд, двигатель, успешный)
+    аренда = S.взять_аренду(бд, успешный, "worker-1")
+    двигатель.применить(успешный, actor_id="service:control-plane",
+                        служба="control-plane",
+                        fencing_token=аренда["fencing_token"])
+    отклонённый = создать(бд, target_site_ids=["test-beta-0002"])
+    двигатель.валидировать(отклонённый, actor_id="service:control-plane",
+                           служба="control-plane")
+    двигатель.запросить_одобрение(отклонённый, actor_id="service:templates",
+                                  служба="templates",
+                                  expires_at="2099-01-01T00:00:00Z")
+    S.применить_переход(бд, отклонённый, "reject", actor_id="human:owner",
+                        служба="human_owner", роль=M.APPROVER,
+                        reason="не сейчас")
+
+    monkeypatch.setattr(B, "КАТАЛОГ", tmp_path / "backups")
+    м = B.создать()
+    слепок = м["source_snapshot"]
+    assert слепок["changesets"] == 2, слепок
+    assert слепок["transitions"] >= 10, слепок
+    assert слепок["by_status"] == {M.SUCCEEDED: 1, M.REJECTED: 1}, слепок
+
+    r = B.восстановить(Path(B.КАТАЛОГ) / м["backup_file"])
+    assert r["restore_verdict"] == "PASS", r["mismatches"]
+    assert r["restored_snapshot"]["transition_digest"] == \
+        слепок["transition_digest"], "история решений восстановлена не целиком"
+    assert "cs_no_direct_status" in r["guards"], \
+        "запрет прямой записи состояния не пережил восстановление"
