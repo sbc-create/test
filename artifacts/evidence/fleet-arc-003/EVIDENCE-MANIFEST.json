@@ -1,17 +1,17 @@
 {
   "prompt_id": "FLEET-ARC-003-SEO-CANONICAL-PROPOSAL",
   "prompt_rev": "R1",
-  "generated_at": "2026-09-12T20:36:25Z",
+  "generated_at": "2026-09-12T20:38:29Z",
   "source_repository": "https://github.com/sbc-create/test.git",
   "source_branch": "claude/arc-seo-canonical-proposal-003",
-  "source_commit": "529ada7cc15ee44973a7c8793e0072d3bce182de",
+  "source_commit": "d604a81943a209f55fdd6a2d46df69eec4161044",
   "contract_bundle_before": "1.3.1",
   "contract_bundle_after": "1.3.2",
   "contract_artifact_sha256": "f2b0daa93fddc9ac363613d2c47365645ed84945e8d4f7eb9492fd1ce484bdc5",
   "canonical_resource_kind": "seo.content.proposal",
   "artifacts": {
     "FLEET-SEO-003-R4-HANDOFF.md": {
-      "sha256": "836498786e85db86a8b64bac48ce1b4f1ebf7cc3768ac901ffd12e4ad654960f",
+      "sha256": "b06115d951cfb58376a52def4222c99f1824bca9af3a7fac351562ceabedcd88",
       "bytes": 8827
     },
     "adapter-probe.json": {
@@ -85,7 +85,7 @@
   },
   "artifact_count": 18,
   "reproduce": [
-    "git clone https://github.com/sbc-create/test.git && git checkout 529ada7cc15ee44973a7c8793e0072d3bce182de",
+    "git clone https://github.com/sbc-create/test.git && git checkout d604a81943a209f55fdd6a2d46df69eec4161044",
     "PYTHONPATH=. python3 contracts/control-plane/build_132.py",
     "python3 contracts/control-plane/validate_bundle.py 1.3.2 1.3.1",
     "ARC003_RELEASE=$PWD PYTHONPATH=$PWD python3 tests/arc_seo/run_arc003.py",

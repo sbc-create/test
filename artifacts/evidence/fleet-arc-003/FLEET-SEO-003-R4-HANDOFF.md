@@ -100,9 +100,9 @@ from factory.site_engine.changeset.registry_client import RegistryClient
 ```
 source_repository   https://github.com/sbc-create/test.git
 source_branch       claude/arc-seo-canonical-proposal-003
-source_commit       529ada7cc15ee44973a7c8793e0072d3bce182de
+source_commit       d604a81943a209f55fdd6a2d46df69eec4161044
 contract_version    1.3.2
-contract_artifact   e9a22609bd98528187df129bf5a5a92a4f5bc4a81fbab101a9c9606f604c6fa7
+contract_artifact   f2b0daa93fddc9ac363613d2c47365645ed84945e8d4f7eb9492fd1ce484bdc5
 resource_kind       seo.content.proposal
 adapter_status      AVAILABLE
 evidence_path       artifacts/evidence/fleet-arc-003/
