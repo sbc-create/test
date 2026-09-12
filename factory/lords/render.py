@@ -2840,6 +2840,7 @@ def render_site(
     environ: dict | None = None,
     publisher_id: str | None = None,
     only_title_slugs: frozenset[str] | None = None,
+    restrict_cards_to_rendered: bool = False,
     sink: Callable[[Page], None] | None = None,
 ) -> RenderedSite:
     """Полный сайт одного пакета: страницы, ассеты и отчёт о сборке.
@@ -2848,6 +2849,17 @@ def render_site(
     случае все типы находятся в состоянии `blocked_credentials`, разделов не
     возникает, и рендерер честно отдаёт сайт без каталога вместо витрины с
     выдуманным содержимым.
+
+    `restrict_cards_to_rendered` связывает списки с отрисованными страницами.
+    По умолчанию (`False`) поведение прежнее и верное для быстрого пути: там
+    неотрисованные страницы уже лежат в базовом релизе, и ограничивать списки
+    значило бы стереть ссылки на существующие страницы.
+
+    Для ПЕРВОЙ сборки базы нет, и тот же режим оставляет карточки, ведущие в
+    никуда: именно так витрины Zona и Animedia получили около четырёх тысяч
+    ссылок на девятнадцать существующих страниц. Сборщик первой раскладки
+    обязан передавать `True` — тогда карточки и маршруты происходят из одного
+    множества.
 
     `only_title_slugs` ограничивает отрисовку страниц произведений названными.
     По умолчанию (`None`) поведение прежнее — отрисовываются все. Ограничение
@@ -2860,6 +2872,17 @@ def render_site(
     Появление и исчезновение произведения требует полного цикла.
     """
     catalog = catalog if catalog is not None else fx.build_catalog()
+    if restrict_cards_to_rendered and only_title_slugs is not None:
+        # Каталог ограничивается ОДИН раз и до всего остального.
+        #
+        # Источников карточек много: главная, типовые разделы, расписание,
+        # рекомендации на самих страницах произведений. Ограничивать каждый
+        # по отдельности — значит однажды пропустить новый, и ссылка в никуда
+        # вернётся. Ограниченный каталог закрывает их все разом, потому что
+        # ниже по течению все они читают его.
+        catalog = type(catalog)(
+            titles=[t for t in catalog.titles if t.slug in only_title_slugs],
+            collections=catalog.collections)
     profiles = plan_mod.load_profiles(root)
     site_plan = plan_mod.build_plan(
         package,
@@ -2878,6 +2901,11 @@ def render_site(
     collections_on = site_plan.type_states["collections"].active
     by_section = {page.section: page for page in site_plan.pages}
     pool = catalog.of_types(kinds)
+    if restrict_cards_to_rendered and only_title_slugs is not None:
+        # Карточки и страницы — из одного множества. Иначе список обещает
+        # страницу, которой в этом релизе нет, и обещание нарушается при
+        # первом же переходе.
+        pool = [t for t in pool if t.slug in only_title_slugs]
 
     site = RenderedSite(site_id=ctx["site_id"], profile=site_plan.profile,
                         brand=ctx["brand"], plan=site_plan)

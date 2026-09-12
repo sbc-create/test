@@ -97,7 +97,27 @@ def load_catalog(limit: int | None) -> tuple[list[dict], dict]:
                     if isinstance(raw, dict) else None}
 
 
-def build(product: str, *, titles: int, limit: int | None) -> dict:
+#: Адрес карточки в разметке. Кавычки, плюс и скобки исключены: в виджете
+#: поиска есть JS-шаблон `"/title/" + encodeURIComponent(...)`, и он ссылкой
+#: страницы не является.
+_ССЫЛКА = __import__("re").compile(r'href="(/title/[a-z0-9\-/]*)"')
+
+
+def _карточные_цели(site) -> set[str]:
+    """Все адреса карточек, которые отдаёт собранный сайт."""
+    from factory.lords import urlmap as um
+    цели = set()
+    for страница in site.pages.values():
+        тело = страница.body
+        if isinstance(тело, bytes):
+            тело = тело.decode("utf-8", "replace")
+        for сырой in _ССЫЛКА.findall(тело):
+            цели.add(um.нормализовать(сырой))
+    return цели
+
+
+def build(product: str, *, titles: int, limit: int | None,
+          out_root: Path | None = None) -> dict:
     package_name = PRODUCTS.get(product)
     if package_name is None:
         raise SystemExit(f"неизвестный продукт: {product}")
@@ -110,7 +130,13 @@ def build(product: str, *, titles: int, limit: int | None) -> dict:
     # Страницы произведений отрисовываются выборкой равным шагом, а не с
     # начала: начало каталога — самые свежие записи, они заполнены лучше
     # хвоста, и первые N завысили бы любую оценку полноты.
-    slugs: frozenset[str] = frozenset()
+    # `titles <= 0` означает «все», а не «ни одной».
+    #
+    # Прежде ноль давал пустое множество, и рендер отрисовывал нуль страниц
+    # произведений, продолжая раскладывать карточки по всему каталогу. Для
+    # раскладки витрины нужен именно полный набор: каталог опубликовал четыре
+    # тысячи сущностей, и витрина обязана отдавать их все.
+    slugs: frozenset[str] | None = None
     if titles > 0:
         ordered = sorted(t.slug for t in catalog.titles)
         step = max(1, len(ordered) // titles)
@@ -120,11 +146,48 @@ def build(product: str, *, titles: int, limit: int | None) -> dict:
         package, catalog=catalog, environ={},
         # Publisher ID — заглушка предпросмотра. Настоящее значение живёт в
         # области секретов, недоступно этой полосе и выводу не подлежит.
-        publisher_id="1", only_title_slugs=slugs)
+        publisher_id="1", only_title_slugs=slugs,
+        # Списки следуют за отрисованными страницами. Прежде здесь карточки
+        # брались из полного каталога, а страницы — из выборки: срез уходил в
+        # раскладку витрины, и около четырёх тысяч карточек вели на девятнадцать
+        # существующих адресов.
+        restrict_cards_to_rendered=slugs is not None)
 
-    directory = OUT_ROOT / product
+    # Карта маршрутов и паритет считаются ДО выгрузки: срез, который не
+    # сходится сам с собой, не должен попасть на диск и быть принятым за
+    # годный к раскладке.
+    from factory.lords import urlmap as um
+    отрисованные = {а[len("/title/"):].strip("/") for а in site.pages
+                    if а.startswith("/title/") and а.count("/") == 3}
+    карта = um.построить(отрисованные)
+    цели = _карточные_цели(site)
+    паритет = um.паритет(цели, карта)
+    if not паритет.ок:
+        raise SystemExit(
+            f"срез не сходится сам с собой: {len(паритет.orphan_targets)} "
+            f"карточек ведут на несуществующие адреса; пример: "
+            f"{list(паритет.orphan_targets)[:3]}")
+    карта_маршрутов = {
+        "summary": {"version": карта.version, "routes": len(карта.routes),
+                    "route_map_sha256": карта.отпечаток,
+                    "card_targets": len(цели),
+                    "orphan_targets": len(паритет.orphan_targets),
+                    "unreferenced_routes": len(паритет.unreferenced_routes)},
+        "map": карта.в_словарь()}
+
+    # Каталог назначения задаётся явно. Срез, из которого уже провизионированы
+    # витрины, перезаписывать нельзя: кандидат обязан быть отдельным и
+    # неизменяемым, иначе «собрать кандидата» означало бы стереть основание
+    # действующего релиза.
+    directory = (Path(out_root) if out_root else OUT_ROOT) / product
+    if directory.exists() and (directory / "release-provisioned.marker").is_file():
+        raise SystemExit(f"{directory}: срез уже провизионирован, перезапись "
+                         f"запрещена")
     serve_mod.clear_directory(directory)
     result = serve_mod.export(site, directory)
+    (directory / "route-map.json").write_text(
+        json.dumps(карта_маршрутов["map"], ensure_ascii=False, indent=1) + "\n",
+        encoding="utf-8")
 
     report = {
         "product": product,
@@ -132,7 +195,8 @@ def build(product: str, *, titles: int, limit: int | None) -> dict:
         "theme": (package.get("tenant") or {}).get("theme"),
         "profile": (package.get("tenant") or {}).get("seo_profile"),
         "documents": len(site.pages),
-        "title_pages": len(slugs),
+        "title_pages": len(slugs) if slugs is not None else len(catalog.titles),
+        "route_map": карта_маршрутов["summary"],
         "files": len(result["files"]),
         "root": str(directory),
         "seconds": round(time.perf_counter() - started, 1),
@@ -203,7 +267,11 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--product", required=True,
                         choices=sorted(set(PRODUCTS) | set(DLE_PRODUCTS)))
-    parser.add_argument("--titles", type=int, default=40)
+    parser.add_argument("--titles", type=int, default=40,
+                        help="сколько страниц произведений отрисовать; "
+                             "0 и меньше означает «все»")
+    parser.add_argument("--out", default=None,
+                        help="корень выгрузки; по умолчанию var/product-preview")
     parser.add_argument("--limit", type=int, default=None,
                         help="ограничить каталог (для быстрых прогонов)")
     args = parser.parse_args()
@@ -216,7 +284,8 @@ def main() -> int:
         print(f"  {report['root']}")
         return 0
 
-    report = build(args.product, titles=args.titles, limit=args.limit)
+    report = build(args.product, titles=args.titles, limit=args.limit,
+                   out_root=args.out)
     print(f"{report['product']}: пакет {report['package']}, тема {report['theme']}")
     print(f"  записей {report['data_provenance']['records']}, "
           f"обогащено {report['data_provenance']['enriched']}, "
