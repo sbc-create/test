@@ -81,6 +81,14 @@ OPERATOR = "operator"
     "monitoring.observation": "monitoring",
     "backup.snapshot": "backup",
     "integration.provisioning": "architect",
+    # Внешние ресурсы провайдеров. Единственный писатель — Integration
+    # Provisioner на стороне архитектора: два писателя одной DNS-зоны или
+    # одного счётчика означают гонку, в которой побеждает последний
+    # записавший, а узнают об этом по расхождению статистики.
+    "dns.record_set": "architect",
+    "tls.certificate": "architect",
+    "analytics.counter": "architect",
+    "seo.project": "architect",
     # Ресурс существует только для испытаний механизма.
     "fake.resource": "control-plane",
 }

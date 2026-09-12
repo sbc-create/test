@@ -53,11 +53,16 @@ class Engine:
                     "DRY_RUN_HAD_EFFECTS",
                     f"сухой прогон создал {сухо['effects']} эффектов", 500)
             POL.применение_разрешено(набор, set(план["environments"]))
-        except S.ChangeSetError as e:
+        except (S.ChangeSetError, A.AdapterError) as e:
+            # Отказ адаптера на планировании — такой же исход валидации, как
+            # и отказ политики. Без этой ветки набор оставался бы в VALIDATING
+            # навсегда: перехода из него больше никто не сделает.
             S.применить_переход(self.соед, cid, "validate_fail",
                                 actor_id=actor_id, служба=служба,
                                 роль=M.VALIDATOR, reason=f"{e.error_code}: {e.detail}",
                                 поля={"failure_reason": f"{e.error_code}: {e.detail}"})
+            if isinstance(e, A.AdapterError):
+                raise S.ChangeSetError(e.error_code, e.detail, 422) from e
             raise
         S.применить_переход(
             self.соед, cid, "validate_ok", actor_id=actor_id, служба=служба,
