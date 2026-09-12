@@ -220,3 +220,31 @@ class TestИмпортАудита:
                            ensure_ascii=False)
         for опасное in ("AUDIT_TOKEN", "Bearer ", "PRIVATE KEY", "password"):
             assert опасное not in сырое
+
+
+class TestИзоляцияУчётныхДанных:
+    """Процесс импорта не вправе держать чужую личность и ключ подписи."""
+
+    def test_чужие_токены_и_ключ_подписи_убираются(self, monkeypatch):
+        monkeypatch.setenv(AI.ПЕРЕМЕННАЯ, "своё")
+        monkeypatch.setenv("AUDIT_TOKEN_ARCHITECT", "чужое")
+        monkeypatch.setenv("AUDIT_TOKEN_QWEN", "чужое")
+        monkeypatch.setenv("CHANGESET_APPROVAL_KEY", "приватный")
+        убрано = AI.изолировать_окружение()
+        assert "AUDIT_TOKEN_ARCHITECT" in убрано
+        assert "CHANGESET_APPROVAL_KEY" in убрано
+        assert os.environ.get("AUDIT_TOKEN_ARCHITECT") is None
+        assert os.environ.get("CHANGESET_APPROVAL_KEY") is None
+        # Своя личность обязана остаться — иначе импорт нечем подписать.
+        assert os.environ.get(AI.ПЕРЕМЕННАЯ) == "своё"
+
+    def test_потомок_не_унаследует_ключ(self, monkeypatch):
+        monkeypatch.setenv(AI.ПЕРЕМЕННАЯ, "своё")
+        monkeypatch.setenv("CHANGESET_APPROVAL_KEY", "приватный")
+        AI.изолировать_окружение()
+        import subprocess
+        вывод = subprocess.run(
+            [sys.executable, "-c",
+             "import os; print(os.environ.get('CHANGESET_APPROVAL_KEY'))"],
+            capture_output=True, text=True).stdout.strip()
+        assert вывод == "None"
