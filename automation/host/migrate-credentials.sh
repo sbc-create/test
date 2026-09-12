@@ -38,14 +38,29 @@ log "выдача учётных данных по личностям"
 PYTHONPATH="$REPO" python3 -m factory.site_engine.credentials.provision ensure >/dev/null
 
 # --- несекретная конфигурация ------------------------------------------------
+# Файл собирается во ВРЕМЕННЫЙ и подменяется только после проверки.
+#
+# Первая версия писала прямо в целевой файл. Перенаправление обрезает файл до
+# запуска команды, и когда источник оказался уже выведенным из обращения,
+# grep не нашёл ни строки, pipefail оборвал скрипт — а рабочая конфигурация
+# к тому моменту была стёрта. Службы пережили это только потому, что
+# перезапуска не случилось.
 if [[ -f "$OLD_ENV" ]]; then
+  TMP_ENV="$(mktemp)"
   {
     echo "# Несекретная конфигурация контура. Секреты здесь запрещены:"
     echo "# они выдаются через systemd LoadCredential из ${CRED}."
-    grep -vE "$SECRET_NAMES" "$OLD_ENV" | grep -vE '^\s*#' | grep -vE '^\s*$'
-  } > "$NEW_ENV"
-  chmod 0644 "$NEW_ENV"
-  log "несекретная конфигурация: $(grep -cE '^[A-Z]' "$NEW_ENV") переменных"
+    grep -vE "$SECRET_NAMES" "$OLD_ENV" | grep -vE '^\s*#' | grep -vE '^\s*$' || true
+  } > "$TMP_ENV"
+  COUNT="$(grep -cE '^[A-Z_]+=' "$TMP_ENV" || true)"
+  EXISTING="$( [[ -f "$NEW_ENV" ]] && grep -cE '^[A-Z_]+=' "$NEW_ENV" || echo 0 )"
+  if (( COUNT >= EXISTING && COUNT > 0 )); then
+    install -m 0644 "$TMP_ENV" "$NEW_ENV"
+    log "несекретная конфигурация: ${COUNT} переменных"
+  else
+    log "конфигурация не тронута: источник дал ${COUNT}, действующая ${EXISTING}"
+  fi
+  rm -f "$TMP_ENV"
 fi
 
 # --- учётная запись службы подписи -------------------------------------------
@@ -54,6 +69,24 @@ if ! getent passwd "$SIGNER_USER" >/dev/null; then
   log "создана учётная запись ${SIGNER_USER}"
 fi
 usermod -G "" "$SIGNER_USER"
+
+# --- непривилегированные учётные записи автономных служб ---------------------
+# Заводятся заранее, до развёртывания самих служб: граница, созданная вместе с
+# сервисом, обычно создаётся «потом», а потом сервис уже работает под тем, под
+# чем его запустили в первый раз.
+#
+# qwen — MODEL. Он не должен уметь ни стать оператором, ни подписать, ни
+# дотянуться до docker, sudo и ключей SSH.
+for_each_service_account() {
+  local name="$1"
+  if ! getent passwd "$name" >/dev/null; then
+    useradd --system --no-create-home --shell /usr/sbin/nologin "$name"
+    log "создана учётная запись ${name}"
+  fi
+  usermod -G "" "$name"
+}
+for_each_service_account qwen
+for_each_service_account provider-adapters
 
 # --- юнит службы подписи ------------------------------------------------------
 cat > /etc/systemd/system/site-factory-approval-signer.service <<UNIT
@@ -132,3 +165,24 @@ dropin site-factory-changeset-worker.service \
 
 systemctl daemon-reload
 log "drop-in'ы записаны; перезапуск выполняется отдельным шагом"
+
+# --- вывод общего файла из обращения ------------------------------------------
+# Выполняется отдельной командой, ПОСЛЕ того как службы перезапущены и
+# проверены: удалить источник до перевода значило бы уронить их все разом.
+#
+# Значения не сохраняются нигде. Они уже отозваны, и «резервная копия на
+# всякий случай» была бы просто ещё одним местом, где лежит скомпрометированный
+# секрет.
+if [[ "${1:-}" == "finalize" ]]; then
+  if [[ -f "$OLD_ENV" ]]; then
+    {
+      echo "# Файл выведен из обращения $(date -u +%Y-%m-%dT%H:%M:%SZ)."
+      echo "# Секреты раздаются через systemd LoadCredential из ${CRED},"
+      echo "# по одному файлу на личность. Прежние значения ОТОЗВАНЫ:"
+      echo "# их отпечатки в ${CRED}/audit-token-fingerprints, поле revoked."
+      echo "# Несекретная конфигурация: ${NEW_ENV}"
+    } > "$OLD_ENV"
+    chmod 0644 "$OLD_ENV"
+    log "общий файл выведен из обращения: секретов в нём не осталось"
+  fi
+fi
