@@ -69,7 +69,14 @@ WantedBy=multi-user.target
 UNITEOF
 
 systemctl daemon-reload
-systemctl enable --now templates-cp-consumer.service >/dev/null
-sleep 3
+systemctl enable templates-cp-consumer.service >/dev/null
+# Именно restart, а не `enable --now`: на уже активной службе `--now`
+# ничего не делает, и новая копия молча не поедет в работу. Это тот же
+# класс дефекта, что «исправлено в репозитории, но не выложено».
+systemctl restart templates-cp-consumer.service
+sleep 4
 systemctl is-active templates-cp-consumer.service
+RUNNING="$(systemctl show templates-cp-consumer -p MainPID --value)"
+RUN_ART="$(tr -d '\n' < "${ROOT}/current/release-manifest.json")"
+log "работает pid=${RUNNING}; манифест: ${RUN_ART}"
 log "установлено: ${RELEASE}"
