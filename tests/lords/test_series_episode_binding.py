@@ -21,7 +21,7 @@ import pytest
 КАНДИДАТ = КОРЕНЬ / "var" / "lords-candidate"
 
 СЕЗОН = re.compile(r"<summary>Сезон (\d+) · (\d+) сери[йя]</summary>")
-СЕРИЯ = re.compile(r'<li class="episode"><span>Серия (\d+)</span></li>')
+СЕРИЯ = re.compile(r'<li class="episode"><span>Серия (\d+)</span>')
 ПЛЕЕР = re.compile(r'class="player__frame"')
 ИСТОЧНИК = re.compile(
     r'(<iframe[^>]+src="|<video\b|<video-player\b|\.m3u8|\.mp4)', re.I)

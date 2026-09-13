@@ -1499,11 +1499,18 @@ def _seasons_block(title: fx.Title) -> str:
                 "приходят отдельным запросом и до этой записи ещё не дошли. "
                 "Просмотр доступен по ссылке выше.</p></section>"
             )
-        return (
-            '<section class="seasons"><h2>О фильме</h2>'
-            '<p class="lede">У полнометражной записи сезонов нет: страница ведёт '
-            "к одному просмотру, а не к списку серий.</p></section>"
-        )
+        # У фильма раздела сезонов нет вовсе.
+        #
+        # Прежде здесь стоял блок с заголовком «О фильме» и фразой «У
+        # полнометражной записи сезонов нет». Он давал на странице ВТОРОЙ
+        # заголовок «О фильме» — ровно такой же, как у содержательного
+        # раздела ниже, — и становился первым длинным абзацем страницы, то
+        # есть занимал место описания технической репликой.
+        #
+        # Зрителю, открывшему фильм, не нужно сообщать, что у фильма нет
+        # серий: он этого и не искал. Раздел, существующий чтобы заполнить
+        # раскладку, заполняет её мусором.
+        return ""
     blocks = []
     for season in title.seasons:
         episodes = _episode_items(season)
@@ -1522,19 +1529,27 @@ def _seasons_block(title: fx.Title) -> str:
 def _comments_block(ctx, title: fx.Title) -> str:
     if not ctx["comments_enabled"]:
         return ""
+    # Формы здесь нет намеренно.
+    #
+    # Прежде блок рисовал поле ввода и кнопку «Отправить», и оба были
+    # выключены. Выключенная форма — обещание возможности, которой не
+    # существует: зритель видит место для своего текста, пробует написать и
+    # ничего не получает. Честнее сказать, что комментариев пока нет, и не
+    # показывать орудие, которое не работает.
+    #
+    # Блок остаётся видимым и оформленным: он сообщает состояние, а не
+    # притворяется рабочим.
+    пояснение = (
+        "На стенде комментарии выключены: запись синтетическая, а публиковать "
+        "чужие тексты стенд не станет."
+        if ctx.get("fixture_catalog") else
+        "Комментарии на витрине пока не открыты. Когда они появятся, здесь "
+        "будет форма и лента обсуждения."
+    )
     return (
         '<section class="comments" aria-labelledby="comments-heading">'
         '<h2 id="comments-heading">Комментарии</h2>'
-        + ('<p class="comments__note">На стенде комментарии выключены: писать не о чем — '
-           "запись синтетическая, а публиковать чужие тексты стенд не станет. "
-           "Форма показана, чтобы блок занимал своё место в раскладке.</p>"
-           if ctx.get("fixture_catalog") else
-           '<p class="comments__note">Комментарии скоро откроются.</p>')
-        +
-        "<form><label class=\"visually-hidden\" for=\"comment\">Текст комментария</label>"
-        '<textarea id="comment" disabled placeholder="Комментарии пока закрыты">'
-        "</textarea>"
-        '<button type="button" disabled>Отправить</button></form>'
+        f'<p class="comments__note comments__note--empty">{пояснение}</p>'
         "</section>"
     )
 
@@ -1980,20 +1995,27 @@ def _title_page(ctx, catalog: fx.Catalog, title: fx.Title, kinds, indexable: boo
         + f'<dl class="facts">{facts_html}</dl></div></div>'
     )
 
-    body = (
-        head
-        + _player_block(ctx, title, name)
-        + _seasons_block(title)
-        # Заголовок по виду произведения — из производственной линии: прежнее
-        # «О карточке» стояло и над фильмом, и над сериалом. Подавление пустого
-        # абзаца — отсюда: сто сорок шесть пустых `<p class="lede">` давали по
-        # четырнадцать пикселей мёртвого места каждый. Изменения независимы, и
-        # выбирать между ними не нужно.
-        + f'<section class="section"><h2>{escape(_about_heading(title))}</h2>'
-        + _lede(tpl.get("intro", "")) + "</section>"
-        + _related(catalog, title, kinds, ctx["row_items"])
-        + _comments_block(ctx, title)
-    )
+    # Состав страницы произведения объявляет семейство.
+    #
+    # Пока порядок был зашит в код, страница тайтла у Lords и Zona выходила
+    # ОДИНАКОВОЙ: те же разделы, тот же порядок, тот же словарь классов —
+    # измерено отпечатком семейств. Два шаблона, отличающиеся только цветом,
+    # двумя шаблонами не являются.
+    #
+    # Умолчание повторяет прежний порядок, поэтому профиль, который состава
+    # не объявляет, не меняется ни на строку.
+    ПОРЯДОК_ПО_УМОЛЧАНИЮ = ("player", "seasons", "about", "related", "comments")
+    # Источник состава — блок `title_page` профиля, он же `tpl`. Пакет сайта
+    # тут ни при чём: композицией владеет семейство, а не отдельная витрина.
+    состав = (tpl.get("sections") if isinstance(tpl, dict) else None) or ПОРЯДОК_ПО_УМОЛЧАНИЮ
+    куски = {
+        "player": lambda: _player_block(ctx, title, name),
+        "seasons": lambda: _seasons_block(title),
+        "about": lambda: _about_section(title, tpl.get("intro", "")),
+        "related": lambda: _related(catalog, title, kinds, ctx["row_items"]),
+        "comments": lambda: _comments_block(ctx, title),
+    }
+    body = head + "".join(куски[имя]() for имя in состав if имя in куски)
 
     # Тип разметки берётся из установленного вида, а не из наличия сезонов.
     # Прежнее правило — `Movie`, если сезоны не загружены — объявляло фильмом
@@ -2972,6 +2994,15 @@ def _schema_type_of(title) -> str:
         # иначе проверки на фикстурах теряют смысл вместе с разметкой.
         return "TVSeries" if getattr(title, "episodic", False) else "Movie"
     return ""
+
+
+def _about_section(title, intro: str) -> str:
+    """Содержательный раздел. Пустого заголовка не бывает."""
+    текст = (intro or "").strip()
+    if not текст:
+        return ""
+    return (f'<section class="section"><h2>{escape(_about_heading(title))}</h2>'
+            + _lede(текст) + "</section>")
 
 
 def _about_heading(title) -> str:
