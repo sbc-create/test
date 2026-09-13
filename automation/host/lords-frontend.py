@@ -618,7 +618,7 @@ border:1px solid @LINE@;background:@CARD@;font-size:13px;font-weight:600;color:#
 /* Крошки, страница тайтла. */
 .crumbs{background:#e3e7eb;border-bottom:1px solid @LINE@;font-size:12px;color:#5b6470;
 padding:9px 18px}
-.crumbs a{color:@ACCDK@;font-weight:600}
+.crumbs a{color:@ACCDK@;font-weight:600;display:inline-block;padding:5px 2px}
 .crumbs b{font-weight:600;color:@INK@}
 .tw{display:grid;grid-template-columns:1fr;gap:18px;background:@CARD@;padding:18px;
 margin:14px 0;border:1px solid @LINE@;border-radius:4px}
@@ -630,12 +630,16 @@ object-fit:cover;display:block}
 .tw h1{font-size:20px;line-height:1.3;font-weight:700;margin:0 0 12px;color:@INK@}
 .plot p{margin:0 0 10px;font-size:13.5px;line-height:1.62;color:#333a42}
 .plot .none{color:@DIM@;font-style:italic}
+.plot a{display:inline-block;padding:5px 2px;color:@ACCDK@;font-weight:600}
 .facts{display:grid;grid-template-columns:1fr;gap:4px 26px;margin:14px 0 0;font-size:13px}
 @media(min-width:720px){.facts{grid-template-columns:1fr 1fr}}
 .facts div{display:flex;gap:6px;padding:3px 0;border-bottom:1px dotted #dfe4e9}
 .facts dt{font-weight:700;color:#39414a;flex:0 0 auto}
 .facts dd{margin:0;color:#4d555e}
-.facts a{color:@ACCDK@;font-weight:600}
+.facts a{color:@ACCDK@;font-weight:600;display:inline-block;padding:5px 2px}
+/* Высота ссылки жанра — 14 px по строке, и пальцем в неё не попасть.
+   Измерено пробой целей касания: 238 попаданий ниже 24 px, и все —
+   эти ссылки. Отступ поднимает цель до 24 px, не меняя типографики. */
 .rates{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 0}
 .rate{border:2px solid;border-radius:4px;padding:8px 14px;font-size:13px;font-weight:700;
 background:#fff}
@@ -680,6 +684,7 @@ font-size:13px;font-weight:600;background:#fff;color:#3f4750}
 .empty{background:@CARD@;border:1px solid @LINE@;border-radius:4px;padding:44px 22px;
 text-align:center;color:#4d555e;margin:14px 0}
 .empty b{display:block;font-size:17px;color:@INK@;margin-bottom:8px}
+.empty a{display:inline-block;padding:6px 2px;color:@ACCDK@;font-weight:600}
 .nf{text-align:center;padding:56px 20px}
 .nf b{display:block;font-size:64px;font-weight:800;color:@ACC@;line-height:1}
 .nf h1{font-size:20px;margin:10px 0 8px}
@@ -729,13 +734,14 @@ font-family:system-ui,sans-serif;color:@INK@}
 font-family:system-ui,sans-serif;font-size:14px;cursor:pointer}
 .ztop__b{display:flex;gap:18px;padding:0 26px 12px;font-size:13.5px;
 font-family:system-ui,sans-serif;color:@DIM@;flex-wrap:wrap}
-.ztop__b a{color:@ACC@;font-weight:600}
+.ztop__b a{color:@ACC@;font-weight:600;display:inline-block;padding:5px 2px}
 .ztop__b a[aria-current]{color:@INK@;box-shadow:inset 0 -2px 0 @ACC@}
 .zwrap{padding:0 26px}
 /* Крупная шрифтовая пара: заголовки с засечками, служебный текст без. */
 .zh{font-size:30px;line-height:1.2;font-weight:700;margin:26px 0 6px;letter-spacing:-.4px}
 .zh--sm{font-size:22px;margin:30px 0 6px}
 .zsub{font-family:system-ui,sans-serif;font-size:14px;color:@DIM@;margin:0 0 20px}
+.zsub a{display:inline-block;padding:5px 2px;color:@ACC@;font-weight:600}
 /* Главная: карточки-плитки, постер сверху, текст снизу, полоса оценок внизу. */
 .zg{display:grid;gap:22px;grid-template-columns:repeat(2,1fr)}
 @media(min-width:700px){.zg{grid-template-columns:repeat(3,1fr)}}
@@ -785,7 +791,7 @@ margin:32px 0;font-family:system-ui,sans-serif;font-size:14px}
 .zpg em{font-style:normal;color:@DIM@}
 /* Страница произведения: широкий баннер, постер внахлёст, полоса оценок. */
 .zcr{font-family:system-ui,sans-serif;font-size:13px;color:@DIM@;padding:14px 26px 0}
-.zcr a{color:@ACC@;font-weight:600}
+.zcr a{color:@ACC@;font-weight:600;display:inline-block;padding:5px 2px}
 .zban{position:relative;margin:12px 26px 0;border-radius:14px;min-height:186px;
 background:linear-gradient(120deg,#1a2433,#0f1620 60%,#16233a);overflow:hidden}
 .zban__img{position:absolute;inset:0;opacity:.42}
@@ -857,6 +863,7 @@ font-family:system-ui,sans-serif;font-size:14px}
 background:@ALT@;margin:20px 0}
 .zempty b{display:block;font-size:22px;margin-bottom:8px}
 .zempty p{margin:0;font-family:system-ui,sans-serif;font-size:14.5px;color:@DIM@}
+.zempty a{display:inline-block;padding:6px 2px;color:@ACC@;font-weight:600}
 .znf{padding:70px 26px;text-align:center}
 .znf b{display:block;font-size:78px;line-height:1;color:@ACC@;font-weight:700}
 .znf h1{font-size:26px;margin:12px 0 10px}
@@ -1570,7 +1577,8 @@ class ВидЛордс(Вид):
             тело = ('<h1 class="lead">Поиск по каталогу</h1>'
                     '<div class="empty"><b>Введите название</b>'
                     "Поиск идёт по русскому и оригинальному названию. "
-                    "Форма издания в запросе не мешает: «Бункер 1-3 сезон» найдёт «Бункер».</div>")
+                    "Форма издания в запросе не мешает: «Бункер 1-3 сезон» найдёт «Бункер». "
+                    '<a href="/catalog/">Открыть каталог целиком</a></div>')
         elif найдено:
             тело = (f'<h1 class="lead">Поиск: {html.escape(q)} — {len(найдено)} совпадений</h1>'
                     + self.сетка(найдено))
@@ -1578,7 +1586,8 @@ class ВидЛордс(Вид):
             тело = (f'<h1 class="lead">Поиск: {html.escape(q)}</h1>'
                     '<div class="empty"><b>Ничего не найдено</b>'
                     f"По запросу «{html.escape(q)}» в снимке каталога совпадений нет. "
-                    "Проверьте написание или откройте каталог целиком.</div>")
+                    "Проверьте написание. "
+                    '<a href="/catalog/">Открыть каталог целиком</a></div>')
         return self.оболочка(тело, f"Поиск — {self.имя}", "/search/", актив="")
 
     def тайтл(self, запись: dict, деталь: dict) -> str:
@@ -1902,7 +1911,8 @@ class ВидЗона(Вид):
                     "поиск идёт по русскому и оригинальному написанию.</p>"
                     '<div class="zempty"><b>Запрос пуст</b>'
                     "<p>Наберите название в строке сверху. Слова «сезон» и «серия» "
-                    "в запросе поиску не мешают.</p></div>")
+                    "в запросе поиску не мешают. "
+                    '<a href="/catalog/">Открыть каталог целиком</a></p></div>')
         elif найдено:
             тело = (f'<h1 class="zh">«{html.escape(q)}»</h1>'
                     f'<p class="zsub">Совпадений: {len(найдено)}</p>' + self.лента(найдено))
@@ -1910,7 +1920,8 @@ class ВидЗона(Вид):
             тело = (f'<h1 class="zh">«{html.escape(q)}»</h1>'
                     '<div class="zempty"><b>Совпадений нет</b>'
                     f"<p>По запросу «{html.escape(q)}» в снимке каталога ничего не нашлось. "
-                    "Проверьте написание или откройте каталог целиком.</p></div>")
+                    "Проверьте написание. "
+                    '<a href="/catalog/">Открыть каталог целиком</a></p></div>')
         return self.оболочка(f'<div class="zwrap">{тело}</div>',
                              f"Поиск — {self.имя}", "/search/", актив="")
 
