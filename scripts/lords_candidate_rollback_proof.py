@@ -13,6 +13,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import pathlib
@@ -70,6 +71,30 @@ def главное(аргв=None) -> int:
     if отпечатки["candidate"] == отпечатки["previous"]:
         raise SystemExit("артефакты совпадают: откат нечем отличить от возврата")
 
+    # Признак различия ВЫЧИСЛЯЕТСЯ, а не выбирается заранее.
+    #
+    # Прежде здесь стояла проверка на `--container: 1100px` в таблице стилей.
+    # Она различала артефакты ровно до тех пор, пока прежний не получил тот же
+    # контейнер — после чего «откат» и «возврат» давали одинаковый ответ, и
+    # доказательство перестало что-либо доказывать, ничем этого не показав.
+    #
+    # Поэтому ищется файл, который у двух артефактов ДЕЙСТВИТЕЛЬНО разный, и
+    # сравниваются его отпечатки на каждом шаге.
+    различающий = None
+    for отн in ("assets/app.js", "assets/site.css", "search/index.html",
+                "index.html", "catalog/index.html"):
+        a, b = кандидат / отн, прежний / отн
+        if a.is_file() and b.is_file():
+            да = hashlib.sha256(a.read_bytes()).hexdigest()
+            дб = hashlib.sha256(b.read_bytes()).hexdigest()
+            if да != дб:
+                различающий = {"path": "/" + отн, "candidate": да, "previous": дб}
+                break
+    if различающий is None:
+        raise SystemExit(
+            "у артефактов не нашлось различающегося файла: подставить один "
+            "вместо другого можно, но доказать подстановку нечем")
+
     корень = КОРЕНЬ / "var" / "rollback-stand"
     корень.mkdir(parents=True, exist_ok=True)
     ссылка = корень / "current"
@@ -95,11 +120,17 @@ def главное(аргв=None) -> int:
                 cwd=str(ссылка), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             time.sleep(1.5)
             ответы = опросить(база, ПУТИ)
-            css = urllib.request.urlopen(база + "/assets/site.css", timeout=15).read()
-            шаги.append({"шаг": имя, "цель": цель.name,
+            тело = urllib.request.urlopen(база + различающий["path"], timeout=15).read()
+            отдан = hashlib.sha256(тело).hexdigest()
+            чей = ("candidate" if отдан == различающий["candidate"]
+                   else "previous" if отдан == различающий["previous"] else "НЕИЗВЕСТНО")
+            шаги.append({"шаг": имя, "цель": str(цель),
                          "artifact_sha256": artifact_mod.отпечаток(цель),
                          "ответы": ответы,
-                         "container_1100": b"--container: 1100px" in css})
+                         "разделитель": различающий["path"],
+                         "отдан_чей": чей,
+                         "совпало_с_ожиданием": чей == ("previous" if имя == "rollback"
+                                                        else "candidate")})
     finally:
         сервер.terminate()
         try:
@@ -107,7 +138,8 @@ def главное(аргв=None) -> int:
         except Exception:
             сервер.kill()
 
-    итог = {"fingerprints": отпечатки, "steps": шаги,
+    итог = {"fingerprints": отпечатки, "discriminator": различающий, "steps": шаги,
+            "every_step_served_expected": all(ш["совпало_с_ожиданием"] for ш in шаги),
             "rollback_executed": any(ш["шаг"] == "rollback" for ш in шаги),
             "restore_forward_executed": any(ш["шаг"] == "restore_forward" for ш in шаги),
             "all_http_200": all(о["status"] == 200 for ш in шаги
@@ -117,7 +149,7 @@ def главное(аргв=None) -> int:
     путь.write_text(json.dumps(итог, ensure_ascii=False, indent=1) + "\n",
                     encoding="utf-8")
     print(json.dumps(итог, ensure_ascii=False, indent=1))
-    return 0 if итог["all_http_200"] else 1
+    return 0 if (итог["all_http_200"] and итог["every_step_served_expected"]) else 1
 
 
 if __name__ == "__main__":

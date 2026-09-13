@@ -23,13 +23,38 @@ const LABEL = process.argv[4] || 'current';
 if (!BASE || !OUT) { console.error('нужны базовый адрес и выходной каталог'); process.exit(2); }
 
 const WIDTHS = [360, 390, 768, 1024, 1366, 1440, 1920];
-const PAGES = [
+/**
+ * Страницы замера — по одному архетипу на слот.
+ *
+ * Два слота прежде указывали не туда, и это не мелочь: проверка пропорции
+ * постера на них не находила элемента вовсе, и двадцать одна строка матрицы
+ * молча числилась «нет элемента».
+ *
+ * `/genres/` — это указатель жанров, а не жанровый каталог: карточек на нём
+ * нет и быть не должно. Архетип живёт по адресу `/genres/<жанр>/`, и слаг
+ * берётся из самой витрины, а не вписывается сюда: вписанный однажды, он
+ * переживёт удаление жанра и начнёт молча измерять 404.
+ *
+ * `/search/` без запроса — это пустое состояние, а не выдача. Результаты
+ * появляются только с запросом, и измерять надо их.
+ */
+const PAGES_БАЗА = [
   ['home', '/'],
   ['catalog', '/catalog/'],
-  ['genres', '/genres/'],
-  ['search', '/search/'],
+  ['genres', null],            // подставляется первым жанром витрины
+  ['search', '/search/?q=' + encodeURIComponent('бег')],
   ['not-found', '/404.html'],
 ];
+
+async function первыйЖанр(page, база) {
+  await page.goto(база + '/genres/', { waitUntil: 'domcontentloaded' });
+  const путь = await page.evaluate(() => {
+    const a = document.querySelector('a[href^="/genres/"][href$="/"]:not([href="/genres/"])');
+    return a ? new URL(a.href).pathname : null;
+  });
+  if (!путь) throw new Error('на /genres/ нет ни одной ссылки на жанр');
+  return путь;
+}
 
 const probe = () => {
   const doc = document.documentElement;
@@ -146,7 +171,14 @@ const probe = () => {
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
   const browser = await chromium.launch();
-  const результат = { label: LABEL, base: BASE, measured_at: new Date().toISOString(), pages: {} };
+  // Слаг жанра выясняется у витрины один раз, до замеров.
+  const разведка = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const разведчик = await разведка.newPage();
+  const жанр = await первыйЖанр(разведчик, BASE);
+  await разведка.close();
+  const PAGES = PAGES_БАЗА.map(([имя, путь]) => [имя, путь === null ? жанр : путь]);
+  const результат = { label: LABEL, base: BASE, measured_at: new Date().toISOString(),
+                      routes: Object.fromEntries(PAGES), pages: {} };
   for (const [имя, путь] of PAGES) {
     результат.pages[имя] = { url: BASE + путь, viewports: {} };
     for (const w of WIDTHS) {

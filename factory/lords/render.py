@@ -2095,11 +2095,18 @@ def _search_body(text: dict, items, *, index_enabled: bool = True) -> str:
     нет» отправляет туда, где выбор работает, — в разделы каталога.
     """
     dataset = _dataset(items)
+    # Сообщения поиска объявляются экранным диктором.
+    #
+    # Число найденного, «ничего не нашлось» и «указатель загружается» пишутся
+    # в этот элемент уже после загрузки страницы. Без `aria-live` диктор их не
+    # произнесёт: для него страница осталась прежней, а зрячий читатель видит
+    # изменение сразу. Проверено измерением: живых областей на витрине было
+    # ноль.
     if not dataset and not index_enabled:
         # Владелец витрины отказался от указателя. Страница возвращается к
         # прежнему состоянию: сообщает правду и отправляет туда, где выбор
         # работает без него.
-        note = ('<p class="count" id="search-count">Поиск по названию на этой '
+        note = ('<p class="count" id="search-count" role="status" aria-live="polite">Поиск по названию на этой '
                 'витрине отключён. Воспользуйтесь разделами — '
                 '<a href="/catalog/">каталогом</a>, <a href="/genres/">жанрами</a>, '
                 '<a href="/years/">годами</a> и <a href="/countries/">странами</a>.</p>')
@@ -2109,7 +2116,7 @@ def _search_body(text: dict, items, *, index_enabled: bool = True) -> str:
             + note
         )
     if dataset:
-        note = (f'<p class="count" id="search-count">Введите название: поиск идёт по '
+        note = (f'<p class="count" id="search-count" role="status" aria-live="polite">Введите название: поиск идёт по '
                 f'{len(items)} записям каталога.</p>')
     else:
         # Прежде здесь стояло сообщение, что поиска нет: набор для клиентского
@@ -2120,7 +2127,7 @@ def _search_body(text: dict, items, *, index_enabled: bool = True) -> str:
         # требованию — один документ, только на этой странице, только при
         # первом запросе. Разделы каталога остаются в подсказке: пока
         # указатель не загрузился, они и есть работающий путь.
-        note = (f'<p class="count" id="search-count" data-search-index="{SEARCH_INDEX_PATH}"'
+        note = (f'<p class="count" id="search-count" role="status" aria-live="polite" data-search-index="{SEARCH_INDEX_PATH}"'
                 f' data-search-total="{len(items)}">Введите название: поиск идёт по '
                 f'{len(items)} записям каталога. Указатель загружается при первом '
                 'запросе — это несколько секунд на медленной связи. Разделы '
@@ -2636,8 +2643,29 @@ APP_JS = r"""/* Lords — поведение интерфейса. Ни одно
     for (var j = 0; j < shown.length; j += 1) {
       var found_item = shown[j][3];
       var meta = [found_item.y || "", found_item.t || ""].filter(Boolean).join(" · ");
-      html += '<article class="card"><div class="card__body">'
-        + '<a class="card__title" href="/title/' + encodeURIComponent(found_item.s) + '/">'
+      /* Карточка поиска обязана быть той же карточкой.
+         Прежде здесь строилось только тело: ни блока постера, ни его
+         пропорции. Из-за этого выдача поиска отличалась от каталога
+         геометрией — карточки другой высоты и другой сетки, — а проверка
+         пропорции постера на странице поиска не находила элемента вовсе.
+
+         Изображения здесь нет и взяться ему неоткуда: указатель поиска
+         хранит слаг, название, год и тип, но не адрес постера. Добавить его
+         значит вырастить указатель на 1,9 МиБ при 5,1 МиБ нынешних — это
+         продуктовое решение о весе страницы, а не правка вёрстки. Поэтому
+         рисуется то же состояние «без изображения», что и на сервере: рамка
+         нужной пропорции с первой буквой названия. Выдумывать картинку
+         нельзя, а молча терять блок — тем более. */
+      var буква = (found_item.n || "?").trim().slice(0, 1).toUpperCase()
+        .replace(/[<>&]/g, "");
+      var адрес = "/title/" + encodeURIComponent(found_item.s) + "/";
+      html += '<article class="card" data-slug="'
+        + String(found_item.s).replace(/[<>&"]/g, "") + '">'
+        + '<a class="card__poster" href="' + адрес + '" tabindex="-1" aria-hidden="true">'
+        + '<span class="card__poster-empty" aria-hidden="true">' + буква + "</span>"
+        + "</a>"
+        + '<div class="card__body">'
+        + '<a class="card__title" href="' + адрес + '">'
         + found_item.n.replace(/[<>&]/g, "") + "</a>"
         + (meta ? '<span class="card__meta">' + meta + "</span>" : "")
         + "</div></article>";
