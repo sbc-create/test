@@ -59,8 +59,74 @@ from pathlib import Path
 ВИТРИНЫ = {
     "lords-01": {"unit": "lords-nova-01.service", "domain": "lordfilm47.space",
                  "manifest": "template-manifest.json", "family": "lords",
-                 "profile": "lords-general"},
+                 "profile": "lords-general", "port": 9110},
+    "zona-01": {"unit": "nova-zona-01.service", "domain": "zonafilm.space",
+                "manifest": "template-manifest-zona-01.json", "family": "zona",
+                "profile": "zona-general", "port": 9120},
 }
+
+#: Каталоги, из которых разрешено брать артефакт. Путь вне этого списка —
+#: отказ. Иначе привилегированный запуск с `--artifact /любой/файл` записывает
+#: произвольные байты в файл, который исполняет каждая витрина парка.
+РАЗРЕШЁННЫЕ_ИСТОЧНИКИ = (
+    Path("/home/claude/wt-lords-r2/automation/host"),
+    Path("/srv/site-factory/repo/automation/host"),
+    ФРОНТ / ".rollback",
+)
+
+
+def проверить_источник(путь: Path) -> Path:
+    """Артефакт обязан быть обычным файлом из разрешённого каталога.
+
+    Проверки идут по РАЗРЕШЁННОМУ пути (`resolve`), а не по написанному: иначе
+    `.../automation/host/../../../etc/passwd` проходит проверку префикса, а
+    символическая ссылка из разрешённого каталога уводит куда угодно. Оба
+    случая закрываются одним сравнением после разрешения.
+    """
+    if путь.is_symlink():
+        raise Отказ(f"артефакт — символическая ссылка: {путь}")
+    разрешённый = путь.resolve(strict=False)
+    if not разрешённый.is_file():
+        raise Отказ(f"артефакта нет или это не обычный файл: {разрешённый}")
+    for корень in РАЗРЕШЁННЫЕ_ИСТОЧНИКИ:
+        база = корень.resolve(strict=False)
+        if разрешённый == база or база in разрешённый.parents:
+            return разрешённый
+    raise Отказ(f"артефакт вне разрешённых каталогов: {разрешённый}; "
+                f"разрешены {[str(к) for к in РАЗРЕШЁННЫЕ_ИСТОЧНИКИ]}")
+
+
+def доказать_цепочку(витрина: str, описание: dict) -> dict:
+    """Сверка «сайт → домен → nginx → порт → юнит» с живой конфигурацией.
+
+    Имя юнита в таблице выше — не источник истины, а ОЖИДАНИЕ. Истина лежит в
+    nginx и systemd, и перед перезапуском ожидание обязано с ней совпасть.
+    Догадка «сайт lords-01 обслуживается юнитом lords-01.service» выглядит
+    очевидной и неверна: этот юнит слушает 9101 и публично не проксируется, а
+    домен отдаёт `lords-nova-01.service` на 9110.
+    """
+    import importlib.util
+    модуль_путь = Path(__file__).resolve().parents[1] / "scripts" / "prove_serving_chain.py"
+    if not модуль_путь.is_file():
+        raise Отказ(f"нет доказателя цепочки: {модуль_путь}")
+    спец = importlib.util.spec_from_file_location("prove_serving_chain", модуль_путь)
+    доказатель = importlib.util.module_from_spec(спец)
+    спец.loader.exec_module(доказатель)
+    цепь = доказатель.цепочка(описание["domain"], доказатель.юниты())
+    if цепь.get("upstream_port") != описание["port"]:
+        raise Отказ(f"{витрина}: nginx ведёт домен {описание['domain']} на порт "
+                    f"{цепь.get('upstream_port')}, ожидался {описание['port']}")
+    if цепь.get("unit") != описание["unit"]:
+        raise Отказ(f"{витрина}: домен {описание['domain']} обслуживает юнит "
+                    f"{цепь.get('unit')!r}, а не {описание['unit']!r}")
+    ожидаемый_манифест = str(ФРОНТ / описание["manifest"])
+    if цепь.get("manifest_path") != ожидаемый_манифест:
+        raise Отказ(f"{витрина}: юнит читает манифест {цепь.get('manifest_path')!r}, "
+                    f"ожидался {ожидаемый_манифест!r}")
+    if цепь.get("executable") != str(АРТЕФАКТ):
+        raise Отказ(f"{витрина}: юнит исполняет {цепь.get('executable')!r}, "
+                    f"а не {АРТЕФАКТ}")
+    return цепь
 
 #: Адреса, по которым проверяется здоровье витрины после перезапуска. Пустая
 #: двухсотка здоровьем не считается: у страницы обязано быть тело.
@@ -140,13 +206,18 @@ def установить(арг) -> int:
     витрина = ВИТРИНЫ.get(арг.site)
     if not витрина:
         raise Отказ(f"витрина {арг.site!r} вне перечня: {sorted(ВИТРИНЫ)}")
-    источник = Path(арг.artifact)
-    if not источник.is_file():
-        raise Отказ(f"артефакта нет: {источник}")
+    источник = проверить_источник(Path(арг.artifact))
     отпечаток = _sha(источник)
-    if арг.expect_sha256 and арг.expect_sha256 != отпечаток:
+    # Отпечаток сверяется ДО первой записи и обязателен. Прежде проверка была
+    # условной (`if арг.expect_sha256`), то есть запуск без флага устанавливал
+    # что угодно: единственное, что отличало артефакт от произвольного файла,
+    # можно было просто не указать.
+    if арг.expect_sha256 != отпечаток:
         raise Отказ(f"отпечаток артефакта не тот: ожидался {арг.expect_sha256}, "
                     f"получен {отпечаток}")
+    # Юнит определяется по живым nginx и systemd, а не по таблице. Совпадение
+    # не удостоверено — выкладки не будет.
+    цепь = доказать_цепочку(арг.site, витрина)
     манифест = ФРОНТ / витрина["manifest"]
 
     метка = f"{_сейчас()}-{арг.site}"
@@ -166,6 +237,7 @@ def установить(арг) -> int:
     # Манифест пишется ПЕРВЫМ: рантайм читает его при старте, и артефакт без
     # манифеста своей версии поднялся бы на прежней ветке отрисовки.
     _атомарно(манифест, (json.dumps(новый_манифест, ensure_ascii=False, indent=2) + "\n").encode())
+    манифест.chmod(0o644)
     _атомарно(АРТЕФАКТ, источник.read_bytes())
     АРТЕФАКТ.chmod(0o755)
 
@@ -179,6 +251,9 @@ def установить(арг) -> int:
         "artifact_sha256": отпечаток, "previous_artifact_sha256": прежний["artifact_sha256"],
         "manifest": новый_манифест, "previous_manifest": прежний["manifest_content"],
         "restart_ok": ок, "restart_output": вывод, "health": проба,
+        "proven_chain": {к: цепь.get(к) for к in
+                         ("nginx_config", "upstream_port", "unit", "executable",
+                          "manifest_path", "verdict")},
         "at_utc": _сейчас(),
     }
     if not ок or not проба["ok"]:
@@ -194,7 +269,12 @@ def установить(арг) -> int:
         запись["auto_rolled_back"] = True
         запись["rollback_restart_ok"] = возврат_ок
         запись["rollback_output"] = возврат_вывод
-        запись["health_after_rollback"] = _проба(витрина["domain"])
+        здоровье = _проба(витрина["domain"])
+        запись["health_after_rollback"] = здоровье
+        отданные = {п.get("artifact") for п in здоровье["checks"] if п.get("artifact")}
+        запись["served_artifact_after_rollback"] = sorted(отданные)
+        запись["baseline_fingerprint_match"] = (
+            отданные == {прежний["artifact_sha256"]} if отданные else False)
         запись["verdict"] = "ROLLED_BACK_NO_CHANGE"
     else:
         запись["verdict"] = "DEPLOYED_AND_VERIFIED"
@@ -220,19 +300,29 @@ def откатить(арг) -> int:
     АРТЕФАКТ.chmod(0o755)
     ок, вывод = _юнит("restart", витрина["unit"])
     time.sleep(4)
+    здоровье = _проба(витрина["domain"])
+    # Отпечаток на диске и отпечаток, ОТДАННЫЙ домену, — разные утверждения.
+    # Первый доказывает, что файл вернули; второй — что витрина его подхватила.
+    # Возврат без второго означает, что служба ещё держит прежний код в памяти.
+    отданные = {п.get("artifact") for п in здоровье["checks"] if п.get("artifact")}
     запись = {
         "action": "rollback", "site": арг.site, "point": str(точка),
         "artifact_before_rollback": было,
         "artifact_after_rollback": _sha(АРТЕФАКТ),
         "expected_artifact": сохранено["artifact_sha256"],
+        "served_artifact_after_rollback": sorted(отданные),
         "restored_manifest": сохранено.get("manifest_content"),
         "restart_ok": ок, "restart_output": вывод,
-        "health": _проба(витрина["domain"]), "at_utc": _сейчас(),
+        "health": здоровье, "at_utc": _сейчас(),
     }
+    запись["disk_fingerprint_match"] = (
+        запись["artifact_after_rollback"] == сохранено["artifact_sha256"])
+    запись["served_fingerprint_match"] = (
+        отданные == {сохранено["artifact_sha256"]} if отданные else False)
     запись["verdict"] = (
         "ROLLED_BACK_VERIFIED"
-        if (запись["artifact_after_rollback"] == сохранено["artifact_sha256"]
-            and ок and запись["health"]["ok"]) else "ROLLBACK_FAILED")
+        if (запись["disk_fingerprint_match"] and запись["served_fingerprint_match"]
+            and ок and здоровье["ok"]) else "ROLLBACK_FAILED")
     _напечатать(запись, арг.record)
     return 0 if запись["verdict"] == "ROLLED_BACK_VERIFIED" else 1
 
@@ -266,7 +356,8 @@ def main(argv=None) -> int:
     у = под.add_parser("install", help="выложить артефакт на витрину")
     у.add_argument("--site", required=True)
     у.add_argument("--artifact", required=True)
-    у.add_argument("--expect-sha256", default="")
+    у.add_argument("--expect-sha256", required=True,
+                   help="ожидаемый sha256 артефакта; без него установка не начинается")
     у.add_argument("--design-version", required=True)
     у.add_argument("--commit", required=True)
     у.add_argument("--build-id", required=True)
