@@ -1,0 +1,1527 @@
+{
+ "prompt_id": "TEMPLATES-LORDS-ZONA-CANARY-004",
+ "generated_at_utc": "2026-09-13T22:28:06Z",
+ "task_branch": "claude/templates-lords-zona-canary-004",
+ "task_commit": "e74448903eae2c9e9f19f393668f2dbfe5328702",
+ "files_total": 271,
+ "summary": {
+  "browser": {
+   "pages_measured": 131,
+   "viewports": [
+    "1024x768",
+    "1366x768",
+    "1440x900",
+    "360x800",
+    "390x844",
+    "430x932",
+    "768x1024"
+   ],
+   "clicks_total": 64,
+   "clicks_by_site": {
+    "lords": 32,
+    "zona": 32
+   },
+   "click_failures": 0,
+   "back_navigation_ok": 64,
+   "contrast_failures": 0,
+   "horizontal_overflow_pages": 0,
+   "broken_images": 0,
+   "covered_text": 0,
+   "small_touch_targets": 0,
+   "focus_visible_pages": 131,
+   "console_errors_total": 14,
+   "console_errors_outside_404": 0
+  },
+  "routes_lords": {
+   "ROUTE_FAILURES": 0,
+   "SOFT_404": 0,
+   "WRONG_ENTITY_200": 0,
+   "BROKEN_INTERNAL_LINKS": 0,
+   "REDIRECT_LOOPS": 0,
+   "REDIRECT_CHAINS_GT1": 0,
+   "ORPHAN_PAGES": 0,
+   "PAGES_CHECKED": 900
+  },
+  "routes_zona": {
+   "ROUTE_FAILURES": 0,
+   "SOFT_404": 0,
+   "WRONG_ENTITY_200": 0,
+   "BROKEN_INTERNAL_LINKS": 0,
+   "REDIRECT_LOOPS": 0,
+   "REDIRECT_CHAINS_GT1": 0,
+   "ORPHAN_PAGES": 0,
+   "PAGES_CHECKED": 900
+  },
+  "entity_lords": {
+   "CHECKED": 40,
+   "ROUTE_FAILURES": 0,
+   "SOFT_404": 0,
+   "WRONG_ENTITY_200": 0,
+   "METADATA_DRIFT": 0,
+   "CANONICAL_HOST_FAILURES": 0,
+   "OK": 40
+  },
+  "entity_zona": {
+   "CHECKED": 40,
+   "ROUTE_FAILURES": 0,
+   "SOFT_404": 0,
+   "WRONG_ENTITY_200": 0,
+   "METADATA_DRIFT": 0,
+   "CANONICAL_HOST_FAILURES": 0,
+   "OK": 40
+  },
+  "archetypes_lords": {
+   "ARCHETYPES_CHECKED": 10,
+   "ARCHETYPES_OK": 10,
+   "EPISODE_BOUNDARIES_OK": 7,
+   "EPISODE_BOUNDARIES_TOTAL": 7,
+   "BEYOND_LAST_STATUS": 404
+  },
+  "archetypes_zona": {
+   "ARCHETYPES_CHECKED": 9,
+   "ARCHETYPES_OK": 9,
+   "EPISODE_BOUNDARIES_OK": 7,
+   "EPISODE_BOUNDARIES_TOTAL": 7,
+   "BEYOND_LAST_STATUS": 404
+  },
+  "player": {
+   "checked": 7,
+   "passed": 7,
+   "states": [
+    "available",
+    "loading",
+    "provider",
+    "provider_error",
+    "timeout",
+    "no_source",
+    "unavailable"
+   ]
+  },
+  "distinctness": {
+   "verdict": "DISTINCT",
+   "distinct_features": 6,
+   "shared_classes": [
+    "skip",
+    "vh"
+   ],
+   "style_differs_without_colour": true
+  },
+  "reference_compare": {
+   "reference": "https://lordfilm-hit.org",
+   "close": 622,
+   "divergent": 50,
+   "no_data": 108,
+   "divergent_by_feature": {
+    "высота подвала": 10,
+    "доля плеера": 15,
+    "высота плеера": 15,
+    "переполнение по горизонтали": 6,
+    "ширина контейнера": 3,
+    "желоб": 1
+   }
+  },
+  "serving_chain": {
+   "lordfilm47.space": {
+    "verdict": "PROVEN",
+    "unit": "lords-nova-01.service",
+    "port": 9110
+   },
+   "lordserial33.biz": {
+    "verdict": "PROVEN",
+    "unit": "nova-lords-02.service",
+    "port": 9111
+   },
+   "1lordserials1.online": {
+    "verdict": "PROVEN",
+    "unit": "nova-lords-03.service",
+    "port": 9112
+   },
+   "zonafilm.space": {
+    "verdict": "PROVEN",
+    "unit": "nova-zona-01.service",
+    "port": 9120
+   },
+   "animedia.icu": {
+    "verdict": "PROVEN",
+    "unit": "nova-animedia-01.service",
+    "port": 9121
+   },
+   "animedia.space": {
+    "verdict": "PROVEN",
+    "unit": "nova-animedia-02.service",
+    "port": 9122
+   },
+   "yummyani.site": {
+    "verdict": "MISMATCH",
+    "unit": "nova-yummy-site.service",
+    "port": 9132
+   }
+  },
+  "suite": {
+   "exit_code": 1,
+   "summary_line": "3 failed, 6257 passed, 94 skipped, 1 xfailed, 19 warnings in 1569.87s (0:26:09)",
+   "failed": [
+    "tests/integration/test_yummy_runtime_contract.py::TestОбъявлениеКонтракта::test_поверхности_названы_числом_а_не_словом",
+    "tests/test_schemas.py::test_every_schema_has_a_valid_fixture",
+    "tests/unit/test_yummy_entity_view.py::TestЛенты::test_пост_рисуется_с_источником_и_датой"
+   ]
+  }
+ },
+ "files": [
+  {
+   "path": "archetypes-lords-local.json",
+   "bytes": 4744,
+   "sha256": "7dcac1e7bb1a3c730a446f6e339c9c31dca1a816836aa21daf4a89070bd27176"
+  },
+  {
+   "path": "archetypes-zona-local.json",
+   "bytes": 4349,
+   "sha256": "f5c7d41508103d7471302ba2eb505af25b34fef292077ed8124ab8be667773d5"
+  },
+  {
+   "path": "browser-audit/audit.json",
+   "bytes": 122048,
+   "sha256": "b01f97eef7eb621bd52da67b012c1ca439b91fcaf074945864ae60726f89f41f"
+  },
+  {
+   "path": "browser-audit/lords/catalog-1024.png",
+   "bytes": 6933547,
+   "sha256": "3cacd9ab8a88e3d2e7339e20dc35c64440525e3da4d4026b89136ecc1b43168f"
+  },
+  {
+   "path": "browser-audit/lords/catalog-1366.png",
+   "bytes": 3849553,
+   "sha256": "9337b2e1a661115f7ec45402f082a9708f59dd29bfa83655d33a199b91d47896"
+  },
+  {
+   "path": "browser-audit/lords/catalog-1440.png",
+   "bytes": 3872080,
+   "sha256": "0a92b62bce6f2dc330ecc91b5c92511bf927f3cd6a3ec087df77e5405ea9da5d"
+  },
+  {
+   "path": "browser-audit/lords/catalog-360.png",
+   "bytes": 255800,
+   "sha256": "5d2a1b103329685fe01465915bc9b91c6244509670168f8fb1a2979fa19ba19d"
+  },
+  {
+   "path": "browser-audit/lords/catalog-390.png",
+   "bytes": 312139,
+   "sha256": "c837c7a40a8c7d5fbcc33e850aab3d753d51be1f35e5177016328532ac6b8dcd"
+  },
+  {
+   "path": "browser-audit/lords/catalog-430.png",
+   "bytes": 406558,
+   "sha256": "e94053e8db508298c596840b75aaa3b3cd19b4ba5c983e299214ccefc78fef4b"
+  },
+  {
+   "path": "browser-audit/lords/catalog-768.png",
+   "bytes": 859951,
+   "sha256": "d5ae61f3ff961df4a56332ad6e4537c3e67679cece3824950789f3c2bb284649"
+  },
+  {
+   "path": "browser-audit/lords/category-1024.png",
+   "bytes": 6485756,
+   "sha256": "7f1e1693b7057158931f2cdaa4498e3c2c1756bbe72dd32d6afea3ddeb03b54d"
+  },
+  {
+   "path": "browser-audit/lords/category-1366.png",
+   "bytes": 3598386,
+   "sha256": "f7158824f2d510cd4bb3d6ca806315a6159f43480bfebd474673dd4b58aa5d30"
+  },
+  {
+   "path": "browser-audit/lords/category-1440.png",
+   "bytes": 3616823,
+   "sha256": "3ba4725368f29e2985fa96806509db674cf5d1a48125fbe7d8055165b04a3bdf"
+  },
+  {
+   "path": "browser-audit/lords/category-360.png",
+   "bytes": 223412,
+   "sha256": "9523bbc144c2704d97c758243529a6440cc9936b99dbcfb85cf03584642ea39c"
+  },
+  {
+   "path": "browser-audit/lords/category-390.png",
+   "bytes": 271965,
+   "sha256": "286c6c377b8cc51a74474bc068d6d11297bf8cf0630347c05f857f75da246dca"
+  },
+  {
+   "path": "browser-audit/lords/category-430.png",
+   "bytes": 348614,
+   "sha256": "04e107c210643ee0503098473a3353239415b601a3c4b122183c4a2e86313081"
+  },
+  {
+   "path": "browser-audit/lords/category-768.png",
+   "bytes": 811020,
+   "sha256": "8a3f50171b9202a4478edd79230db16d4a078bad26a053108b90eab743773817"
+  },
+  {
+   "path": "browser-audit/lords/episode-1-1440.png",
+   "bytes": 1048281,
+   "sha256": "751aacab4c945ba7ac3f5e3f07843b6e802f20571a06f75d784e61767b5c0509"
+  },
+  {
+   "path": "browser-audit/lords/episode-210-1024.png",
+   "bytes": 962404,
+   "sha256": "0af821d965f9f299b21a3c4a2fa6acfa39b190f337abb9e6f2f4571071935af3"
+  },
+  {
+   "path": "browser-audit/lords/episode-210-1366.png",
+   "bytes": 1117040,
+   "sha256": "18a22f670cedf56f8bfae2486810e1452c6d22bb5755f912f893c2ee2e4b8c4b"
+  },
+  {
+   "path": "browser-audit/lords/episode-210-1440.png",
+   "bytes": 1129448,
+   "sha256": "0b1f7b46d89ebb16ac7246abceac12e4a2669803f29a222c273e7d96d5c0b5f9"
+  },
+  {
+   "path": "browser-audit/lords/episode-210-360.png",
+   "bytes": 137765,
+   "sha256": "d14bdff315aa35f620e990f032dc2d17c682d9620af541be6457e1727a97c5d4"
+  },
+  {
+   "path": "browser-audit/lords/episode-210-390.png",
+   "bytes": 159746,
+   "sha256": "c4aab7fffc0e5cdf699e885f3b5f7c1f69104b797e25f65da237c3fd64dba2eb"
+  },
+  {
+   "path": "browser-audit/lords/episode-210-430.png",
+   "bytes": 211786,
+   "sha256": "1ba07256b331d1a52928b9fbf478787f67391a3a263e398887ddd854a16b36c0"
+  },
+  {
+   "path": "browser-audit/lords/episode-210-768.png",
+   "bytes": 538183,
+   "sha256": "19dc27f18921261d96295ce4327caa211d0e3f0b21647f2117b55f063c708ac3"
+  },
+  {
+   "path": "browser-audit/lords/home-1024.png",
+   "bytes": 7038384,
+   "sha256": "d4cc6852be5e9bc83b43efaa3b9fca4eef6a4bff54c12251465337a47e8051e0"
+  },
+  {
+   "path": "browser-audit/lords/home-1366.png",
+   "bytes": 3898122,
+   "sha256": "f21b9fddf3364084715c05c5cc2981cc19b3e56951151b2ad380d6ebcd9c4444"
+  },
+  {
+   "path": "browser-audit/lords/home-1440.png",
+   "bytes": 3917606,
+   "sha256": "b5b9554b9bcc5242253cb62cc1d0b81ee647f56809018a5623dd00454a48b33d"
+  },
+  {
+   "path": "browser-audit/lords/home-360.png",
+   "bytes": 305663,
+   "sha256": "8be0a250127f77f6044e5e0dac5db4a8eee535570db702ee269efeb5329b1eef"
+  },
+  {
+   "path": "browser-audit/lords/home-390.png",
+   "bytes": 367715,
+   "sha256": "8c7882ce05e9f01f05c81ed9d95efac905a15a8bfce50d80529bc3dba8000b6e"
+  },
+  {
+   "path": "browser-audit/lords/home-430.png",
+   "bytes": 465036,
+   "sha256": "d5a079f23f96c23a6cd370f672c082daa959b4a425987db3bd0b1fb3b36b6bc5"
+  },
+  {
+   "path": "browser-audit/lords/home-768.png",
+   "bytes": 922246,
+   "sha256": "cade7202ecdd2f316049e1da507c945962bab8ca19a9c34a75b79a735e487206"
+  },
+  {
+   "path": "browser-audit/lords/long-title-1024.png",
+   "bytes": 721767,
+   "sha256": "c98a9772a824d450a49884ab1ac05e257a282478e964fa203722cac7a0262d85"
+  },
+  {
+   "path": "browser-audit/lords/long-title-1366.png",
+   "bytes": 830077,
+   "sha256": "0b596fe0a515a4efad3f03e895b183b545fe413617fcd54f55eab9fae78d7cc3"
+  },
+  {
+   "path": "browser-audit/lords/long-title-1440.png",
+   "bytes": 1342615,
+   "sha256": "59693c8a61e922ae39b07ddbfe813a475afeb5c1003f63382444f784a74866e1"
+  },
+  {
+   "path": "browser-audit/lords/long-title-360.png",
+   "bytes": 61371,
+   "sha256": "f73046bb8516a37503f61e984dbc163b46ea20ecad25db483abafe3896ce0f80"
+  },
+  {
+   "path": "browser-audit/lords/long-title-390.png",
+   "bytes": 76276,
+   "sha256": "26d0ff4e29a75f73d4aa66f161ade6c9ca4d286b88a97eda4c81361a905dbb2a"
+  },
+  {
+   "path": "browser-audit/lords/long-title-430.png",
+   "bytes": 126420,
+   "sha256": "c52fdbe5e04fcef79079c677af1af7d976f4a93071ab0f823015087179fd260c"
+  },
+  {
+   "path": "browser-audit/lords/long-title-768.png",
+   "bytes": 287035,
+   "sha256": "20b6c584a9f86293e408acb568bd327b3d3cfaa2f7b8c2e63858adab440d1855"
+  },
+  {
+   "path": "browser-audit/lords/new-1440.png",
+   "bytes": 3871435,
+   "sha256": "234781fc9b79188c6dcb375301a0550ab34f2795efc9e7fdb4e0b58bad715aa8"
+  },
+  {
+   "path": "browser-audit/lords/no-image-1024.png",
+   "bytes": 455074,
+   "sha256": "a605b3a9269315f14d3a369f86daf1e19f22ba5459b0c8ee34b88d9c05aa3156"
+  },
+  {
+   "path": "browser-audit/lords/no-image-1366.png",
+   "bytes": 557632,
+   "sha256": "33dc1ee8568bb4a6428fba5efc4f923cffce6a703685f160ff58b1a84e371569"
+  },
+  {
+   "path": "browser-audit/lords/no-image-1440.png",
+   "bytes": 571358,
+   "sha256": "e3bf23a6335229fd181b5d259cc7c54462e13b27e38de89091215b07772be64a"
+  },
+  {
+   "path": "browser-audit/lords/no-image-360.png",
+   "bytes": 177925,
+   "sha256": "fc2bfedbcbad88f8317768ac106ea51bc84d3508e886073f6eea5dbdd91fce23"
+  },
+  {
+   "path": "browser-audit/lords/no-image-390.png",
+   "bytes": 212445,
+   "sha256": "59d6a0d65e238e97070ea6d427d6dffec9575df4b5de799e13d0e59c34bb704c"
+  },
+  {
+   "path": "browser-audit/lords/no-image-430.png",
+   "bytes": 260983,
+   "sha256": "20eb37c8866d4b73da47edc1c09cd2632add427e80f3c6c24a38d5872fe49b67"
+  },
+  {
+   "path": "browser-audit/lords/no-image-768.png",
+   "bytes": 744552,
+   "sha256": "88e14b91090f03ff119b9861f63034530e73df5530ea2f17caf67aa633e478f4"
+  },
+  {
+   "path": "browser-audit/lords/no-poster-1024.png",
+   "bytes": 423949,
+   "sha256": "a4b8310e33df964dfaab7aeb58f418d3282362cc4e3c520e93ed02a61f4a9614"
+  },
+  {
+   "path": "browser-audit/lords/no-poster-1366.png",
+   "bytes": 525240,
+   "sha256": "dba923014a5df32aa83b2a4875facce77c548b5099ce4f0ab2104cf47ebac18d"
+  },
+  {
+   "path": "browser-audit/lords/no-poster-1440.png",
+   "bytes": 537309,
+   "sha256": "6cf3867313719f12447174db1386c7be3b53dab6025b72acf1248867394436b3"
+  },
+  {
+   "path": "browser-audit/lords/no-poster-360.png",
+   "bytes": 147313,
+   "sha256": "d3ece180be42a7983297e7af6536baea763a7ad809582aadeeb51da5b2648e39"
+  },
+  {
+   "path": "browser-audit/lords/no-poster-390.png",
+   "bytes": 180230,
+   "sha256": "82731746997871420f81f4e1f68d0965fce7f2b5d518f4136d0b722a869cc6d2"
+  },
+  {
+   "path": "browser-audit/lords/no-poster-430.png",
+   "bytes": 230760,
+   "sha256": "7ff6d475929285c8640a8963d41d1aeb958b04baea8e2ecdec054a77af6c5f24"
+  },
+  {
+   "path": "browser-audit/lords/no-poster-768.png",
+   "bytes": 719309,
+   "sha256": "5834d4b43230a446d42b5f1b9edf0653e77f16bad0359628b92b90b1ecf6381c"
+  },
+  {
+   "path": "browser-audit/lords/not-found-1024.png",
+   "bytes": 88169,
+   "sha256": "b228573f6d885befc378dc94169a3ae6d69b6064e241464c01cceae330fd6d3f"
+  },
+  {
+   "path": "browser-audit/lords/not-found-1366.png",
+   "bytes": 126237,
+   "sha256": "5c61fa61ea0ed6cd1a3ed84939c4f73f60934c4c03476a843c2fa52f9c8c6116"
+  },
+  {
+   "path": "browser-audit/lords/not-found-1440.png",
+   "bytes": 134474,
+   "sha256": "c748e8652f709f8c4f6d55391bf8c9321cbe42aae239c87663832c5be87ea13d"
+  },
+  {
+   "path": "browser-audit/lords/not-found-360.png",
+   "bytes": 32016,
+   "sha256": "bc3898086230729c9e0b922781960a1fe6e8f43d3f60ccff99e50dad22522e05"
+  },
+  {
+   "path": "browser-audit/lords/not-found-390.png",
+   "bytes": 33464,
+   "sha256": "fa54c3a2d21f2515d2556d0bbdf58b55b622da13488f54cc995fb05715ac8f2b"
+  },
+  {
+   "path": "browser-audit/lords/not-found-430.png",
+   "bytes": 34054,
+   "sha256": "fbf171c5d6b364f2354466c5eab0fdea3fe7c928ddbef4f9a79c6441336a8853"
+  },
+  {
+   "path": "browser-audit/lords/not-found-768.png",
+   "bytes": 39882,
+   "sha256": "f4ef6b7a55eef3527a698e25460cfeed75210144455649c880cb5ddb3874c36f"
+  },
+  {
+   "path": "browser-audit/lords/search-empty-1024.png",
+   "bytes": 84262,
+   "sha256": "4f061ccfc4a4c579cc9a45c5f14164f22b576b1c99d3348f17ef33dd0f62c63b"
+  },
+  {
+   "path": "browser-audit/lords/search-empty-1366.png",
+   "bytes": 121833,
+   "sha256": "48fba75e903e208969edce549566a1edd5d4f7be4afc187d210f3a3db5a3217d"
+  },
+  {
+   "path": "browser-audit/lords/search-empty-1440.png",
+   "bytes": 129745,
+   "sha256": "604b6855f801d9f3afd0c0d1adaa6e4541d8ac16bf5ea21afd2e8dac63427e53"
+  },
+  {
+   "path": "browser-audit/lords/search-empty-360.png",
+   "bytes": 29641,
+   "sha256": "63adf1af39770b706cc2ff31a8dc3542e30ce233c02be0380902dea4abab4aa7"
+  },
+  {
+   "path": "browser-audit/lords/search-empty-390.png",
+   "bytes": 30317,
+   "sha256": "8c3a797047f737fc9bcb9b6976d0ea0fcb3764f1771cbbbebb443c27dc117941"
+  },
+  {
+   "path": "browser-audit/lords/search-empty-430.png",
+   "bytes": 30858,
+   "sha256": "62d436fcccc54881a0f5e1a650509d374908120f3bbc146148edc654d53948ee"
+  },
+  {
+   "path": "browser-audit/lords/search-empty-768.png",
+   "bytes": 35740,
+   "sha256": "a55214e71103352ed8b99d449e8e0708ee944ea8dab65d01d6f0264de26e11eb"
+  },
+  {
+   "path": "browser-audit/lords/search-results-1024.png",
+   "bytes": 15698091,
+   "sha256": "90f932f7213e9d1f3aad5c427696834bccbd57f0020e17aa8fe5a134ef8bb6a6"
+  },
+  {
+   "path": "browser-audit/lords/search-results-1366.png",
+   "bytes": 8687587,
+   "sha256": "be630b18f263cc30274d0068d5d1d1d2f2731a148ad75b4be57861fa9230f129"
+  },
+  {
+   "path": "browser-audit/lords/search-results-1440.png",
+   "bytes": 8726743,
+   "sha256": "de743c633e10a92db294630ea14771a9c909c72ec3be1e35b68f2104935cda98"
+  },
+  {
+   "path": "browser-audit/lords/search-results-360.png",
+   "bytes": 310461,
+   "sha256": "86461e5a9aa3087eea419fbd139f271f456d9f7ce49d816b2beff478c34ff445"
+  },
+  {
+   "path": "browser-audit/lords/search-results-390.png",
+   "bytes": 390745,
+   "sha256": "b37f865bd5295fae96d4f020aa1e40fc9c06203beb63ecfad5eabbfacabfd688"
+  },
+  {
+   "path": "browser-audit/lords/search-results-430.png",
+   "bytes": 489232,
+   "sha256": "2574f22afa24b94ba8102d476c49b4ce04872942c952645c7938f3f75157280c"
+  },
+  {
+   "path": "browser-audit/lords/search-results-768.png",
+   "bytes": 913911,
+   "sha256": "9465ee9bb61fe8cd2aa06eb53f57e917f2fcffa678c41d47b0af943dbe145e0f"
+  },
+  {
+   "path": "browser-audit/lords/season-1440.png",
+   "bytes": 203860,
+   "sha256": "bee51d744b36deed23fa92e3f00015fe24dee6cf23885501649c73876c053592"
+  },
+  {
+   "path": "browser-audit/lords/title-film-1440.png",
+   "bytes": 1282616,
+   "sha256": "5a56e0abc73f6b83ae2d2976dc4f4d0a333fe1b2063f35b8545e2496e67e5e23"
+  },
+  {
+   "path": "browser-audit/lords/title-series-1024.png",
+   "bytes": 1161591,
+   "sha256": "c19aa159c699344a6521c2abec98681102ed57940ee496ac24eb51d0820ea944"
+  },
+  {
+   "path": "browser-audit/lords/title-series-1366.png",
+   "bytes": 1325866,
+   "sha256": "5b1713e287428e0a5ac2f7733d5abb95fd900936fb4ed94b4fbd9d0f51ccf768"
+  },
+  {
+   "path": "browser-audit/lords/title-series-1440.png",
+   "bytes": 1341716,
+   "sha256": "a2e7eb205f87dd005598a25b15fcdebe178196344f07a5ebace537ca8b7dfabe"
+  },
+  {
+   "path": "browser-audit/lords/title-series-360.png",
+   "bytes": 61363,
+   "sha256": "de29f4163cd39f3ce0db12066a0531c04d497480d41c1eea741f8908a6346562"
+  },
+  {
+   "path": "browser-audit/lords/title-series-390.png",
+   "bytes": 118427,
+   "sha256": "1a7756d6d84e521cc4d027dd6d61b3eae1cc15d8427f86c10318e65d065d3f45"
+  },
+  {
+   "path": "browser-audit/lords/title-series-430.png",
+   "bytes": 186467,
+   "sha256": "b6932d9ae1e372d9d15bf68dc51554bfd03f5d994e25926776769c6c10de4008"
+  },
+  {
+   "path": "browser-audit/lords/title-series-768.png",
+   "bytes": 385956,
+   "sha256": "329cb9f32dcacff601bcbebeddb11497ab59d67ae77cdf09e75397e49f188e35"
+  },
+  {
+   "path": "browser-audit/zona/catalog-1024.png",
+   "bytes": 1594713,
+   "sha256": "ab9bc2dedc7cbc9df1652fb981f7af7936564a8241581142d3849f1f3b187559"
+  },
+  {
+   "path": "browser-audit/zona/catalog-1366.png",
+   "bytes": 1620757,
+   "sha256": "1b3be737b1aa8bb258764ad3b3ef53537db728a69a18d26592e5cc1a5a35dae0"
+  },
+  {
+   "path": "browser-audit/zona/catalog-1440.png",
+   "bytes": 1618198,
+   "sha256": "ff295f8420f71c2f7ea0a8664afcddb44b6739b522c91ae3eed1b04a76a6c45c"
+  },
+  {
+   "path": "browser-audit/zona/catalog-360.png",
+   "bytes": 94782,
+   "sha256": "30f74719886b6b03ad3a4fcfb50b3c20901725ecd699b9ccfed8d60947543d53"
+  },
+  {
+   "path": "browser-audit/zona/catalog-390.png",
+   "bytes": 61851,
+   "sha256": "4820b8faf841f963d92a23c8af34c5466baeba8f5f2277b399d6e2b1618a1936"
+  },
+  {
+   "path": "browser-audit/zona/catalog-430.png",
+   "bytes": 65583,
+   "sha256": "1d2fba0857d009943a0dc31c0576b710a9a839c6d888a7514511fbc2d04b3669"
+  },
+  {
+   "path": "browser-audit/zona/catalog-768.png",
+   "bytes": 98818,
+   "sha256": "dfbd2e4a70c36a2a48e792b16d7b4961f01b84c562d405a8c2b9b27e7909ca4a"
+  },
+  {
+   "path": "browser-audit/zona/category-1024.png",
+   "bytes": 1627397,
+   "sha256": "145b788665cb5c12f557417d47227604a30399d496db862c671779cdfce7c71e"
+  },
+  {
+   "path": "browser-audit/zona/category-1366.png",
+   "bytes": 1651845,
+   "sha256": "f66269b2d640cd254e213580b09cafc2b96e7c69492d4262ef0c8519d4487317"
+  },
+  {
+   "path": "browser-audit/zona/category-1440.png",
+   "bytes": 1650114,
+   "sha256": "f48df99705742ff8371b654e1fa4b375e64cdfda97070f8c9990fb52a40cd59d"
+  },
+  {
+   "path": "browser-audit/zona/category-360.png",
+   "bytes": 101526,
+   "sha256": "90f3a1c25982cb931b390283dac1785d288080f2bd81a4a25333d0f1a70ff85d"
+  },
+  {
+   "path": "browser-audit/zona/category-390.png",
+   "bytes": 111343,
+   "sha256": "28717450c1274d850f65a5fd5019a334c0953b719240dba41f7b1c2070a7fc9f"
+  },
+  {
+   "path": "browser-audit/zona/category-430.png",
+   "bytes": 66684,
+   "sha256": "8405b064bb651299a5a3793f8ca132eb6425e97b80b116107eeb71244d48bf95"
+  },
+  {
+   "path": "browser-audit/zona/category-768.png",
+   "bytes": 102211,
+   "sha256": "45c81e50e04d572d56afbf351f57b5e9d1daee6b3bb50df2dd7a02fd1f5ea7a7"
+  },
+  {
+   "path": "browser-audit/zona/episode-182-1024.png",
+   "bytes": 276590,
+   "sha256": "700d34e02e6e4a0b0af73b7c85f6556382461c9465a89c80f9e11f3b15252828"
+  },
+  {
+   "path": "browser-audit/zona/episode-182-1366.png",
+   "bytes": 245254,
+   "sha256": "d811cdb83401afa52a5e922d931465515ef2a929a405db12edaa3b7ef42a42ef"
+  },
+  {
+   "path": "browser-audit/zona/episode-182-1440.png",
+   "bytes": 247363,
+   "sha256": "c31f9c5285c525e22a08e5169d323933bf7c12adcf0cc44ece04bbebca2d14df"
+  },
+  {
+   "path": "browser-audit/zona/episode-182-360.png",
+   "bytes": 51994,
+   "sha256": "a56c3e161c94fbc9a5f840f81e9f9094ec92c81966025f5f86ce4be6217f9af3"
+  },
+  {
+   "path": "browser-audit/zona/episode-182-390.png",
+   "bytes": 60149,
+   "sha256": "53cdbc46bfb79b8d3a16e21e27717ce07afd23fd9cf2a4fddccfccb7ef930768"
+  },
+  {
+   "path": "browser-audit/zona/episode-182-430.png",
+   "bytes": 51224,
+   "sha256": "4657287012159e1e25297f521a79c66c84381174ec63882afdfe0101e63ed37d"
+  },
+  {
+   "path": "browser-audit/zona/episode-182-768.png",
+   "bytes": 65972,
+   "sha256": "eef019116b87e4db053e55538cc53b4689e274655c252ec41480fc10ad62c7be"
+  },
+  {
+   "path": "browser-audit/zona/home-1024.png",
+   "bytes": 1599681,
+   "sha256": "236dcb96e6371e6ca0b2d2a158aa9b234c2723539a6fa146306128d9826d623b"
+  },
+  {
+   "path": "browser-audit/zona/home-1366.png",
+   "bytes": 1775287,
+   "sha256": "9136e27b4ee3304e134a11c5b6bbb664914e6559e7a856f508bea66611fb5603"
+  },
+  {
+   "path": "browser-audit/zona/home-1440.png",
+   "bytes": 1968339,
+   "sha256": "bda4e68ed963d8cc733ed9659e4f776a90f50008c3b5207a051d916fb70efcd7"
+  },
+  {
+   "path": "browser-audit/zona/home-360.png",
+   "bytes": 238004,
+   "sha256": "640b47e2abff9e70104aaa0987eab8bf3f4b24fc7ba6352e1c09fd9c9062a2af"
+  },
+  {
+   "path": "browser-audit/zona/home-390.png",
+   "bytes": 282401,
+   "sha256": "0333e3080355c7948f54580f26a6e0d8df7f0c94ec153af7ffd533abc5bbd0fa"
+  },
+  {
+   "path": "browser-audit/zona/home-430.png",
+   "bytes": 230205,
+   "sha256": "001945f4b9d07b24c7f70de4b4afe7be8432b9364245810241a039179f727bd8"
+  },
+  {
+   "path": "browser-audit/zona/home-768.png",
+   "bytes": 427221,
+   "sha256": "8e0851d6a079f4b470b5a1bc4c46c5d8583dea83aae67c10f31f6d370c2f7447"
+  },
+  {
+   "path": "browser-audit/zona/long-title-1024.png",
+   "bytes": 1373651,
+   "sha256": "6e7ec915ada73b9078fbd4b2137b828ca55d88d5011d9541af6a6d1fcf253525"
+  },
+  {
+   "path": "browser-audit/zona/long-title-1366.png",
+   "bytes": 1598713,
+   "sha256": "f1f99e5c93210f49fdeb800ea8a03384c59358b0c7373caeff814895da9acee3"
+  },
+  {
+   "path": "browser-audit/zona/long-title-1440.png",
+   "bytes": 1754005,
+   "sha256": "5745452dd60b612b37c0f67b7294173d845f1b7283eb8391269ccf75ef5d7ced"
+  },
+  {
+   "path": "browser-audit/zona/long-title-360.png",
+   "bytes": 244655,
+   "sha256": "48305f85e68598ca3e4d313baa78935b797da71f379a86604783b1742feb7f39"
+  },
+  {
+   "path": "browser-audit/zona/long-title-390.png",
+   "bytes": 280593,
+   "sha256": "4acb321f2de349c96be520619fb07223d2eeba2d1fa46355eefda176b6092c1d"
+  },
+  {
+   "path": "browser-audit/zona/long-title-430.png",
+   "bytes": 352066,
+   "sha256": "44148f1a157095ce0521d898acf0f82ad6c85a6b61f2577272f2a2a930916f51"
+  },
+  {
+   "path": "browser-audit/zona/long-title-768.png",
+   "bytes": 742921,
+   "sha256": "4beac0e716cd28f8867455c14f1f0286238003d81134a31bc67984f193f1706c"
+  },
+  {
+   "path": "browser-audit/zona/new-1440.png",
+   "bytes": 1594511,
+   "sha256": "12f0272e3e55c458089d51a439509f9b0d69dc19295b3a647c98f2a0ccf4e4d5"
+  },
+  {
+   "path": "browser-audit/zona/no-image-1024.png",
+   "bytes": 1162359,
+   "sha256": "6fb99df3ae2eebec1446a4d0760a889e69760b6c37a897800f52fd13a32f0947"
+  },
+  {
+   "path": "browser-audit/zona/no-image-1366.png",
+   "bytes": 1354439,
+   "sha256": "b8aa817c7e3077c37747ae9e95af7fa136092fa98cdb456b2c38894f9df255dc"
+  },
+  {
+   "path": "browser-audit/zona/no-image-1440.png",
+   "bytes": 1507618,
+   "sha256": "90da9650dab0c85359eaafc0c61409231e75495c6c0cd647ea7c2b94931f424b"
+  },
+  {
+   "path": "browser-audit/zona/no-image-360.png",
+   "bytes": 245073,
+   "sha256": "5c04d7906698f88d0aa06d8ca010bacb93ec747668ea6d963da6565aa8865594"
+  },
+  {
+   "path": "browser-audit/zona/no-image-390.png",
+   "bytes": 281160,
+   "sha256": "0d6757f9e95ce815a15e9e0f10709f079fa99d714385b40f8b869a23eb1f15e8"
+  },
+  {
+   "path": "browser-audit/zona/no-image-430.png",
+   "bytes": 352073,
+   "sha256": "c7a20394c471e91db4aa9cd016b235ea66164e63b54feae18951605246551ca2"
+  },
+  {
+   "path": "browser-audit/zona/no-image-768.png",
+   "bytes": 742925,
+   "sha256": "d6a26c762fceef935a005f323a952b05b449cfeedf2d2acc45ecbe263ca6e1aa"
+  },
+  {
+   "path": "browser-audit/zona/no-poster-1024.png",
+   "bytes": 1162368,
+   "sha256": "bbded6e5551263394fb68c6868359c5c389c0e3588e476d04458fdf7575b5a2e"
+  },
+  {
+   "path": "browser-audit/zona/no-poster-1366.png",
+   "bytes": 1354453,
+   "sha256": "693c2ee33b1124ee97e037c9cded4667d51cd49d49ffdff6cb409984507617b4"
+  },
+  {
+   "path": "browser-audit/zona/no-poster-1440.png",
+   "bytes": 1507637,
+   "sha256": "b4c5b7d7b7cfcf291a372b63652bce1abdc429650ef3fb1cd487249b380923a1"
+  },
+  {
+   "path": "browser-audit/zona/no-poster-360.png",
+   "bytes": 245073,
+   "sha256": "5c04d7906698f88d0aa06d8ca010bacb93ec747668ea6d963da6565aa8865594"
+  },
+  {
+   "path": "browser-audit/zona/no-poster-390.png",
+   "bytes": 281160,
+   "sha256": "0d6757f9e95ce815a15e9e0f10709f079fa99d714385b40f8b869a23eb1f15e8"
+  },
+  {
+   "path": "browser-audit/zona/no-poster-430.png",
+   "bytes": 352073,
+   "sha256": "c7a20394c471e91db4aa9cd016b235ea66164e63b54feae18951605246551ca2"
+  },
+  {
+   "path": "browser-audit/zona/no-poster-768.png",
+   "bytes": 742925,
+   "sha256": "d6a26c762fceef935a005f323a952b05b449cfeedf2d2acc45ecbe263ca6e1aa"
+  },
+  {
+   "path": "browser-audit/zona/not-found-1024.png",
+   "bytes": 66890,
+   "sha256": "34e07a0641d95d2309acfe5a3d4679d91b1717d25ed5e5c1e8c2c4b7fcd5f2e8"
+  },
+  {
+   "path": "browser-audit/zona/not-found-1366.png",
+   "bytes": 68781,
+   "sha256": "cd7f05c1856262dcec858fda17023244865554bc7cef3f9ea7113b93e459f6af"
+  },
+  {
+   "path": "browser-audit/zona/not-found-1440.png",
+   "bytes": 70523,
+   "sha256": "0984c484c0de9611d9d97da6b2b2fe47bacc146780d9cdf90d73af00bddee2ec"
+  },
+  {
+   "path": "browser-audit/zona/not-found-360.png",
+   "bytes": 33001,
+   "sha256": "b1bd4682028b47102cd349c25015ccc8ba390d8a3a4c3c607e96072035ed11a6"
+  },
+  {
+   "path": "browser-audit/zona/not-found-390.png",
+   "bytes": 39511,
+   "sha256": "8d1efedea5869e55b286ed4ac6ab5e8c420182d16cc9f235fbbe9a156f82cadb"
+  },
+  {
+   "path": "browser-audit/zona/not-found-430.png",
+   "bytes": 47585,
+   "sha256": "98e551c3251a0b98138382c4b2b229a9fa90ac89ed353e36fef055f3da6f37de"
+  },
+  {
+   "path": "browser-audit/zona/not-found-768.png",
+   "bytes": 53526,
+   "sha256": "60752036b94210fa0a869aad0a44667bfb0417d54f5afb3d414e7f894e841504"
+  },
+  {
+   "path": "browser-audit/zona/search-empty-1024.png",
+   "bytes": 63683,
+   "sha256": "f1a39ebec5faec05b4617e672a50a4d1def3f62035db6f5e84fda8494fb1a321"
+  },
+  {
+   "path": "browser-audit/zona/search-empty-1366.png",
+   "bytes": 65354,
+   "sha256": "5b3a27b71234baaef9179f148599293429c9022c2f22c4680106ad32ae8e9075"
+  },
+  {
+   "path": "browser-audit/zona/search-empty-1440.png",
+   "bytes": 67141,
+   "sha256": "3381bff1589c910f1f576880f2095cbc32cd7f7c4c15b1a289e01cf19eb02c71"
+  },
+  {
+   "path": "browser-audit/zona/search-empty-360.png",
+   "bytes": 40897,
+   "sha256": "7f0c593b439ca074f81238dcf3f4e6884fcb8a068e252e59460341044dc5c44f"
+  },
+  {
+   "path": "browser-audit/zona/search-empty-390.png",
+   "bytes": 44378,
+   "sha256": "0caa12cbcb22b9772e994a535189aa1a9856c82c792d83132c4deaa99074afcc"
+  },
+  {
+   "path": "browser-audit/zona/search-empty-430.png",
+   "bytes": 49144,
+   "sha256": "a429ea9c9e2d0613101cab7a40d85df305a7678120fbad5b6e3cf7817fbc269d"
+  },
+  {
+   "path": "browser-audit/zona/search-empty-768.png",
+   "bytes": 57024,
+   "sha256": "55a070561ff27234166b09fe3929dfb3b1c86658f3e61d86d26c23e728f36bdf"
+  },
+  {
+   "path": "browser-audit/zona/search-results-1024.png",
+   "bytes": 1593456,
+   "sha256": "240ed05b9f91d8de29f777a7a588bbb4feabfa17d3f6c9d0417d14a9328406ad"
+  },
+  {
+   "path": "browser-audit/zona/search-results-1366.png",
+   "bytes": 1622080,
+   "sha256": "e3b6958d94fe3fe99fe6b61e536438b7b9a67db26a2e193ab2f54ebe3c9d55cc"
+  },
+  {
+   "path": "browser-audit/zona/search-results-1440.png",
+   "bytes": 1619745,
+   "sha256": "7bfc40f29ca87670e6198a99f5b902f5e98ee4af2e7ded1d9e510f7577624a29"
+  },
+  {
+   "path": "browser-audit/zona/search-results-360.png",
+   "bytes": 93654,
+   "sha256": "5f4e212690edb7149ffc67239a3726ee52af4cdbc463cbb8557da28af2a0ebd7"
+  },
+  {
+   "path": "browser-audit/zona/search-results-390.png",
+   "bytes": 55726,
+   "sha256": "c0821ddb82ae54ef046dbebfcca26a987e6c869fde3159cc937e8093d8ee2a5c"
+  },
+  {
+   "path": "browser-audit/zona/search-results-430.png",
+   "bytes": 58883,
+   "sha256": "a042e5554092875a7d7252387716e638ed30eec9b20989627e17a6a932f44293"
+  },
+  {
+   "path": "browser-audit/zona/search-results-768.png",
+   "bytes": 101115,
+   "sha256": "d91f1755b81c4ac12d738e985a936e1dcf077f288136db43f50f368440668291"
+  },
+  {
+   "path": "browser-audit/zona/title-film-1440.png",
+   "bytes": 1531068,
+   "sha256": "186890e658f56d872ae4f6cb417d6d49488c14a4890e8c458fc15c181137177a"
+  },
+  {
+   "path": "browser-audit/zona/title-series-1024.png",
+   "bytes": 1398251,
+   "sha256": "636371752801030f89f39b7fb024c299db89999547fcef1161179bb955c2220d"
+  },
+  {
+   "path": "browser-audit/zona/title-series-1366.png",
+   "bytes": 1559661,
+   "sha256": "c96dfdc3ca2ef7f3447d2970414daf9fc3555d27a9ff10de80c4dcc965c1bf58"
+  },
+  {
+   "path": "browser-audit/zona/title-series-1440.png",
+   "bytes": 1709161,
+   "sha256": "1de9556a260c8428b36cd7bf8f70b190e6b5852fb11f7e5880a3c7857c201ff3"
+  },
+  {
+   "path": "browser-audit/zona/title-series-360.png",
+   "bytes": 42402,
+   "sha256": "956c6376130ecad1edfb8c584906003ef461547be6369309fe9557d006f2e3d4"
+  },
+  {
+   "path": "browser-audit/zona/title-series-390.png",
+   "bytes": 49137,
+   "sha256": "fc1158a597d23fd91d1710c47557b75b66ee638b2049508beb2bd0c9b859f5c5"
+  },
+  {
+   "path": "browser-audit/zona/title-series-430.png",
+   "bytes": 58205,
+   "sha256": "44ecf3a39d3ca6ddfb5d2ea97499a94cf613ea584c4a2c44d1c4bd9a5f9716ea"
+  },
+  {
+   "path": "browser-audit/zona/title-series-768.png",
+   "bytes": 60084,
+   "sha256": "f439011bf1c866b80d33dc599543628299310233e8ee1866c2aa206f5cb0dc4b"
+  },
+  {
+   "path": "distinctness/distinctness.json",
+   "bytes": 2001,
+   "sha256": "a5a792a26934b2af08d0b264ae2cf2c6bec2670bebad10c53f3ad5d3d29be338"
+  },
+  {
+   "path": "distinctness/lords-catalog-blind.png",
+   "bytes": 1067484,
+   "sha256": "6587ebb0a6d34b0bf091df2559f9f13b04e8476c2d0171bb86ceec448b507774"
+  },
+  {
+   "path": "distinctness/lords-home-blind.png",
+   "bytes": 1065713,
+   "sha256": "de42648b6d9cf017f20f95dee547f91d33cc44b29c11508017c86cb7837829a5"
+  },
+  {
+   "path": "distinctness/lords-title-blind.png",
+   "bytes": 302147,
+   "sha256": "7a7890c571f15e52efca97ae77009af722061f4a3758885a051675142b8b9638"
+  },
+  {
+   "path": "distinctness/zona-catalog-blind.png",
+   "bytes": 183925,
+   "sha256": "6f7aa449035f5ed5a76a5938233ee24e52c71e06ffdb9d6038639e5714d32c20"
+  },
+  {
+   "path": "distinctness/zona-home-blind.png",
+   "bytes": 935784,
+   "sha256": "73207237e35c2ecf1a618685e2dbf83ef7368ece3f2a00b55fbe10547c22800e"
+  },
+  {
+   "path": "distinctness/zona-title-blind.png",
+   "bytes": 415926,
+   "sha256": "1a04922e7182eddc28a0d5a85c92ce23aa8d3bae40f66dd00dcb2184f74d22da"
+  },
+  {
+   "path": "entity-parity-lords-local.json",
+   "bytes": 37468,
+   "sha256": "238a798245b45805f2bea7fcf063f5ffb1535173015c01522764923b4ef7ee55"
+  },
+  {
+   "path": "entity-parity-zona-local.json",
+   "bytes": 35261,
+   "sha256": "81e343c8564cff28d541bdf7b5f7f61c2597288278265c2d49c45cf6f7f86aa1"
+  },
+  {
+   "path": "final-shots/lords-404-1440.png",
+   "bytes": 130507,
+   "sha256": "3d27ee2599c6d06bbdb67718857693617b1e795df2609c4dd1adceab6b941bd4"
+  },
+  {
+   "path": "final-shots/lords-catalog-1440.png",
+   "bytes": 1069580,
+   "sha256": "e7639a03b684ecc5b26fb62ba55e1daf9008c3e4840c1f90d75f43110c82437e"
+  },
+  {
+   "path": "final-shots/lords-ep210-1440.png",
+   "bytes": 882234,
+   "sha256": "e85ba9a3987f53e2ff80bae9fcd234b74fb3748234f8d6b94949520ea8430f4e"
+  },
+  {
+   "path": "final-shots/lords-home-1440.png",
+   "bytes": 1067827,
+   "sha256": "5435dbbcf57881a5d0696d2cebd94a1efc0ce9d5b8549dc2ef6f6d6604a87d45"
+  },
+  {
+   "path": "final-shots/lords-home-390.png",
+   "bytes": 400492,
+   "sha256": "1050036e9979bca9abef516cab62e2652910c97003ffd3c534befae6dc75df10"
+  },
+  {
+   "path": "final-shots/lords-home-768.png",
+   "bytes": 833745,
+   "sha256": "a5d3b9e397c5035e344a4fd1b1f889cefc7eb7f0c2a876cf18f44d08bf7e9b2b"
+  },
+  {
+   "path": "final-shots/lords-title-1440.png",
+   "bytes": 468415,
+   "sha256": "0a8e43b22cbbbe661e9621cec926435ef7a3a4eb9a3051cdc58243a633107413"
+  },
+  {
+   "path": "final-shots/zona-404-1440.png",
+   "bytes": 68105,
+   "sha256": "379ea589554bfae77fcb7ef2410b6ce0f3815f3f33da3f12a18d853db2eb0586"
+  },
+  {
+   "path": "final-shots/zona-catalog-1440.png",
+   "bytes": 185015,
+   "sha256": "eb1f30b45cd0520064f18324b16d8c800db518b708e3c35562855de3fbd9aa63"
+  },
+  {
+   "path": "final-shots/zona-home-1440.png",
+   "bytes": 936728,
+   "sha256": "e894e9aa491d4a9ee331f9418b7775fbce417c661de22c0824edc020a686bdd9"
+  },
+  {
+   "path": "final-shots/zona-home-390.png",
+   "bytes": 56997,
+   "sha256": "a1aed19949be33772aee543d3c7c47b193bcf245cea1f958e42081f61882ceff"
+  },
+  {
+   "path": "final-shots/zona-home-768.png",
+   "bytes": 211565,
+   "sha256": "8a9fd9be210a49f9ba4449304461c3a58c3a41bac63c6b36c57d0d1b71f0a70e"
+  },
+  {
+   "path": "final-shots/zona-title-1440.png",
+   "bytes": 408615,
+   "sha256": "06ab103c2ec1455cce156b7c8c302244959318a9df2ca260a7ef9fc305ce42d3"
+  },
+  {
+   "path": "lords-install-attempt.json",
+   "bytes": 2803,
+   "sha256": "1a5cdc075b16225045204121c0f25e51375413a65cab8acfbec723c69040c379"
+  },
+  {
+   "path": "lords-status-before.json",
+   "bytes": 1219,
+   "sha256": "63a8a2f1ced37c90c4399c0a7f30309e70ff8b8da92b9cd680967868e53cce7d"
+  },
+  {
+   "path": "neighbours-after.json",
+   "bytes": 7424,
+   "sha256": "94b612c796816b961b17390ee09581f89f0de7b2af0a6d8f903ae3ced9c324af"
+  },
+  {
+   "path": "neighbours-final.json",
+   "bytes": 7416,
+   "sha256": "0c5bc9c979a861a67e19602c68f42b295c21dcd5129d62e0684228f4cbec44e2"
+  },
+  {
+   "path": "player-states/available.png",
+   "bytes": 44459,
+   "sha256": "8479fda65dfb57646043b7c7a6cec620373bcc9b8fae83afeb90b39da52c3f88"
+  },
+  {
+   "path": "player-states/loading.png",
+   "bytes": 888676,
+   "sha256": "c200ef8d6021f8542dae4d7ab66d9d836343601573ef68c08bc0db793a42c9c6"
+  },
+  {
+   "path": "player-states/no_source.png",
+   "bytes": 22119,
+   "sha256": "5759482f11e019de613ee965f981097f188777a153b063ef19a92f35c657a411"
+  },
+  {
+   "path": "player-states/player-six-states.json",
+   "bytes": 4670,
+   "sha256": "15e3841117bce30543f4da4b62de30347ad63f1b00cf14c3c1d525b8674d80e1"
+  },
+  {
+   "path": "player-states/provider-error.png",
+   "bytes": 18267,
+   "sha256": "6b2d66fd44bff0fb7b6b61e447acc62044576d41a5650855aed4abd2bf35c93e"
+  },
+  {
+   "path": "player-states/provider.png",
+   "bytes": 330695,
+   "sha256": "ac162e19cf3a472a74f4b5128a5ef946a659717e7329bfbef56b87fa9cb4e99e"
+  },
+  {
+   "path": "player-states/timeout.png",
+   "bytes": 17395,
+   "sha256": "a9d26e0ab03d76aacaf5962fd237fc8b7ef6b00c2f6a263879744ff22697af82"
+  },
+  {
+   "path": "player-states/unavailable.png",
+   "bytes": 24312,
+   "sha256": "651d168b16e74c9d38a0a5abad707fd4f53e493f5330d772b81f87a7772d397e"
+  },
+  {
+   "path": "reference-compare/cand-catalog-1024.png",
+   "bytes": 979284,
+   "sha256": "f06a44533691b1b50233c6680a172351ef9a7b76697759c73831f357034b3a0c"
+  },
+  {
+   "path": "reference-compare/cand-catalog-1366.png",
+   "bytes": 1092355,
+   "sha256": "806e209bec42931aec946493b24116e82dda39b0af7cfe0402f9ded2e1c2614f"
+  },
+  {
+   "path": "reference-compare/cand-catalog-1440.png",
+   "bytes": 1103023,
+   "sha256": "2383acaa7d840113d1287ccb01e0b84af2a06a58c5bd586935521255f2afbb7d"
+  },
+  {
+   "path": "reference-compare/cand-catalog-360.png",
+   "bytes": 318657,
+   "sha256": "2472ca95a0f5a63322b7f722a97c662530d4a0d80b5fb5dd6bc3f33843be0d11"
+  },
+  {
+   "path": "reference-compare/cand-catalog-390.png",
+   "bytes": 378498,
+   "sha256": "b09586365b646b0b557852a59530803f5323d6e0d47ca87f2ecce579a56619db"
+  },
+  {
+   "path": "reference-compare/cand-catalog-768.png",
+   "bytes": 815249,
+   "sha256": "d633c3cc5e28256eea1c794defbe22061861cf0593303fb8560eb00cb6737476"
+  },
+  {
+   "path": "reference-compare/cand-home-1024.png",
+   "bytes": 1008593,
+   "sha256": "dca15432bf20bcaa695c8fe8221224c682e33cc63f87d097e277510884248e83"
+  },
+  {
+   "path": "reference-compare/cand-home-1366.png",
+   "bytes": 1057054,
+   "sha256": "0da90adc591d2b92b52a2324eec3494a5dcee613455e3e8047b885aa4bc31489"
+  },
+  {
+   "path": "reference-compare/cand-home-1440.png",
+   "bytes": 1067827,
+   "sha256": "5435dbbcf57881a5d0696d2cebd94a1efc0ce9d5b8549dc2ef6f6d6604a87d45"
+  },
+  {
+   "path": "reference-compare/cand-home-360.png",
+   "bytes": 354808,
+   "sha256": "71365a3875c852ea3edc962c17254c2a79db0e0291a5d2d3638fb43cecf262c8"
+  },
+  {
+   "path": "reference-compare/cand-home-390.png",
+   "bytes": 400492,
+   "sha256": "1050036e9979bca9abef516cab62e2652910c97003ffd3c534befae6dc75df10"
+  },
+  {
+   "path": "reference-compare/cand-home-768.png",
+   "bytes": 833745,
+   "sha256": "a5d3b9e397c5035e344a4fd1b1f889cefc7eb7f0c2a876cf18f44d08bf7e9b2b"
+  },
+  {
+   "path": "reference-compare/cand-new-1024.png",
+   "bytes": 929667,
+   "sha256": "93bc82fd5742e85a5b88d8052f0b7b53ae212e2494706974e5049cdf9735484c"
+  },
+  {
+   "path": "reference-compare/cand-new-1366.png",
+   "bytes": 1058387,
+   "sha256": "63437bebddf2640fe36a3229f9509a112638e2d0df458f81436651701935f8dc"
+  },
+  {
+   "path": "reference-compare/cand-new-1440.png",
+   "bytes": 1069023,
+   "sha256": "68547869691442a77186d25b293bb1a60b5d62b7bdd23e13d82fc2d8b7a56b89"
+  },
+  {
+   "path": "reference-compare/cand-new-360.png",
+   "bytes": 297099,
+   "sha256": "0f57a2e76cd7c23f6cfa20d134828ae67bd5c8eca3dc640a3cba166bb860c6e3"
+  },
+  {
+   "path": "reference-compare/cand-new-390.png",
+   "bytes": 348198,
+   "sha256": "e3f6292a9889c30b9e2c1a1885f3ebcccc036a2c65e5292154071d5b524f3109"
+  },
+  {
+   "path": "reference-compare/cand-new-768.png",
+   "bytes": 721041,
+   "sha256": "148a8c9ce5c9314165b357ce02e8907c718e40a891e6d05101ef6532485f4e0e"
+  },
+  {
+   "path": "reference-compare/cand-not_found-1024.png",
+   "bytes": 88231,
+   "sha256": "5b47f0c2acc8575529a90c9731324d5a82b54123579c1e4a387997e3690ebf23"
+  },
+  {
+   "path": "reference-compare/cand-not_found-1366.png",
+   "bytes": 126050,
+   "sha256": "f60a36179079dff60b76428905f7cfd8fa6bed0c9a8240a0241ba85ebc2956d0"
+  },
+  {
+   "path": "reference-compare/cand-not_found-1440.png",
+   "bytes": 133438,
+   "sha256": "397f8268bba670277a325f50d169b99f36140af34c33791c6cc5a8fb72636222"
+  },
+  {
+   "path": "reference-compare/cand-not_found-360.png",
+   "bytes": 33388,
+   "sha256": "c697777921f9a45f73161ecaf64ead9cdd3d2ec32cc50356af5af533b4d5cbe3"
+  },
+  {
+   "path": "reference-compare/cand-not_found-390.png",
+   "bytes": 33913,
+   "sha256": "8ffd98c96ac3a750e356661ab4ed5d983774f8605809a89d59e607fe5e97fd62"
+  },
+  {
+   "path": "reference-compare/cand-not_found-768.png",
+   "bytes": 39660,
+   "sha256": "49b04406e875f212bbf0ded16c70d32a231357617b5063f410aee08e6633dbf5"
+  },
+  {
+   "path": "reference-compare/cand-search_empty-1024.png",
+   "bytes": 85633,
+   "sha256": "4cdc09fbb56a8521a9c0474fcb8cfd312b3998c9ec4b5a79dac43e8333d02d98"
+  },
+  {
+   "path": "reference-compare/cand-search_empty-1366.png",
+   "bytes": 122576,
+   "sha256": "d07b11fa11283133dfada0f4cae4de724adbec4d9b729e228bccc5f1efdf5e56"
+  },
+  {
+   "path": "reference-compare/cand-search_empty-1440.png",
+   "bytes": 129613,
+   "sha256": "cac6a8cd282d569023a33b5ccfc89793bdac7993725f449e851c56f1923fa193"
+  },
+  {
+   "path": "reference-compare/cand-search_empty-360.png",
+   "bytes": 31636,
+   "sha256": "2f9c0e7acfc77962f91a3a70caf23607c2a330e8813e60b0b55c0f1b19dda2ca"
+  },
+  {
+   "path": "reference-compare/cand-search_empty-390.png",
+   "bytes": 31434,
+   "sha256": "39278a6aeb51c510b7654f706603d4b062e47a1bd53f22e4a8dab731dc95329c"
+  },
+  {
+   "path": "reference-compare/cand-search_empty-768.png",
+   "bytes": 37875,
+   "sha256": "658421860f041104c1980b277f7a80fae35fae4d9eaff17f939ad52cdc8071e6"
+  },
+  {
+   "path": "reference-compare/cand-search_results-1024.png",
+   "bytes": 946648,
+   "sha256": "c673b1b83d24a09888d3a1e4482d646a1bdf8d6177c70a193ec2f0694f0d5436"
+  },
+  {
+   "path": "reference-compare/cand-search_results-1366.png",
+   "bytes": 1074591,
+   "sha256": "4a34ec3fa4769045a6a2c435f9c3348b9a257ca8b722ebfd993429014098bdc0"
+  },
+  {
+   "path": "reference-compare/cand-search_results-1440.png",
+   "bytes": 1085049,
+   "sha256": "01029d3049c81540bbc59526bdb0fa41a262172f2427c4659eee98022e184381"
+  },
+  {
+   "path": "reference-compare/cand-search_results-360.png",
+   "bytes": 368615,
+   "sha256": "14fc02f73daec653cda2979fe1081d2e8d1c3edb998154bfe428185db5a3cac7"
+  },
+  {
+   "path": "reference-compare/cand-search_results-390.png",
+   "bytes": 432800,
+   "sha256": "6d7e3dcaf20e9e17e3284d45a1ce24c48b05f4c7ab83d1024c7da073bea191c6"
+  },
+  {
+   "path": "reference-compare/cand-search_results-768.png",
+   "bytes": 837305,
+   "sha256": "6d7e552d75033e74d71f6e61637b82a4431dc69bcfc8b2afbba113f8147a3786"
+  },
+  {
+   "path": "reference-compare/cand-series_catalog-1024.png",
+   "bytes": 813010,
+   "sha256": "f9f66e32d7a62d1640a1601838acaccfc1e8ccd4d8a7aea7d4ed10f705cb7788"
+  },
+  {
+   "path": "reference-compare/cand-series_catalog-1366.png",
+   "bytes": 977250,
+   "sha256": "a7dfc04b1114efb54f18e56c29cfb7c9bdf7ab597c2daff2bcf3dfa4a2e1f0fa"
+  },
+  {
+   "path": "reference-compare/cand-series_catalog-1440.png",
+   "bytes": 987331,
+   "sha256": "e2ad77d5452cbce71d8db147e1347c170ed386aaa6b769dd4ab0f911b6b9b101"
+  },
+  {
+   "path": "reference-compare/cand-series_catalog-360.png",
+   "bytes": 256952,
+   "sha256": "14458057192636205e1cc5e56a24d20d0841b98829915efaf5eb5c2e01967c6f"
+  },
+  {
+   "path": "reference-compare/cand-series_catalog-390.png",
+   "bytes": 301309,
+   "sha256": "6ae95827b17b3ae3879bbf3cc54724ad50c7864d3a0efc0d89de1724a35a72ba"
+  },
+  {
+   "path": "reference-compare/cand-series_catalog-768.png",
+   "bytes": 693243,
+   "sha256": "0f3d93d2f3b60421cd1bb6d9824b200a3493e59e368e1f736910855a20a74c74"
+  },
+  {
+   "path": "reference-compare/cand-title_film-1024.png",
+   "bytes": 274462,
+   "sha256": "1036a134cafbfaa644605e043b007fbd5129b804da529602d7480d58bc52786f"
+  },
+  {
+   "path": "reference-compare/cand-title_film-1366.png",
+   "bytes": 312409,
+   "sha256": "d9b5e9a02691e761fad7ab531c41a015fbe2935755d404f7f55af72b09cc1817"
+  },
+  {
+   "path": "reference-compare/cand-title_film-1440.png",
+   "bytes": 320721,
+   "sha256": "d1cfed748365891a594ed3676c63e3698f4a2055b5719159b17282956f24616e"
+  },
+  {
+   "path": "reference-compare/cand-title_film-360.png",
+   "bytes": 269627,
+   "sha256": "4f2396c593f6b844abebc277f9ff67bad26ec5e58663c92cd1e1d956d37742e6"
+  },
+  {
+   "path": "reference-compare/cand-title_film-390.png",
+   "bytes": 308115,
+   "sha256": "2737f7a0da56f9788c3361c0e2eb15a3e86ac677eda1d656fb50715b6a6e2258"
+  },
+  {
+   "path": "reference-compare/cand-title_film-768.png",
+   "bytes": 221184,
+   "sha256": "80e6928e45ccfa399849bf9ea4c7f831337fd4d622ed2f0b7c940fe66f098cc7"
+  },
+  {
+   "path": "reference-compare/cand-title_series-1024.png",
+   "bytes": 389834,
+   "sha256": "4c91963b788fc077543209f359e997ebd87bd1afc2ce1f8e70047e1d81b404ef"
+  },
+  {
+   "path": "reference-compare/cand-title_series-1366.png",
+   "bytes": 460337,
+   "sha256": "0a336a814ff98c15940978e077e34568ecac4e25eca38a7f85786b5ae14c0694"
+  },
+  {
+   "path": "reference-compare/cand-title_series-1440.png",
+   "bytes": 468415,
+   "sha256": "0a8e43b22cbbbe661e9621cec926435ef7a3a4eb9a3051cdc58243a633107413"
+  },
+  {
+   "path": "reference-compare/cand-title_series-360.png",
+   "bytes": 252932,
+   "sha256": "354175af85bf465baaef2ab1c58ac0ba38071f4ca58785d2db337b24056827aa"
+  },
+  {
+   "path": "reference-compare/cand-title_series-390.png",
+   "bytes": 285247,
+   "sha256": "57082a60e508e67999665031f17426cc934916a32528fbf2889b2731a7cf8f78"
+  },
+  {
+   "path": "reference-compare/cand-title_series-768.png",
+   "bytes": 267292,
+   "sha256": "b7cf87d69699bfa4a4606fb8d0260ae4e192d358aed2a6defcd1017ee2529bcf"
+  },
+  {
+   "path": "reference-compare/cand-title_series_long-1024.png",
+   "bytes": 307638,
+   "sha256": "0dc7bdbb854bebde13db2cf0224f2aeb9ccfa08683f90d946d3cf4030ac55938"
+  },
+  {
+   "path": "reference-compare/cand-title_series_long-1366.png",
+   "bytes": 359752,
+   "sha256": "11ada0a263ac98e587946fac7b27572071e8fa59a0bcb3b26daabb904bf8c90e"
+  },
+  {
+   "path": "reference-compare/cand-title_series_long-1440.png",
+   "bytes": 367589,
+   "sha256": "748f1ba37922d8c90823e2707b37101149b4d8c61087432a137f355807c5f31f"
+  },
+  {
+   "path": "reference-compare/cand-title_series_long-360.png",
+   "bytes": 274372,
+   "sha256": "74f2105b887f0091c2e78a2968f8bd691b9be581724b5ae571ef35cb45f6dd5a"
+  },
+  {
+   "path": "reference-compare/cand-title_series_long-390.png",
+   "bytes": 313686,
+   "sha256": "be8cfa2a4bba5612123a3a9da402b460f3439e5485568b0b27bd87b53c9c0742"
+  },
+  {
+   "path": "reference-compare/cand-title_series_long-768.png",
+   "bytes": 240599,
+   "sha256": "6e96651acf5a1a4b646d6fbcf5a88780296772c03e58d1d3390ccacd8690adae"
+  },
+  {
+   "path": "reference-compare/reference-compare.json",
+   "bytes": 316866,
+   "sha256": "2dc71dd6f84603317f0aef9556efa8f096dfbfb188463b5f05a130fa600763c5"
+  },
+  {
+   "path": "release-manifest-lords-01.json",
+   "bytes": 351,
+   "sha256": "17140b890d193ca9ab6d9fd44f0a5559422dba6616e92d9b990203773c763cef"
+  },
+  {
+   "path": "release-manifest-zona-01.json",
+   "bytes": 349,
+   "sha256": "7a5cfba3ad25e3e11a48f72870842d45ee66a2602041fdc4716f21b22ec832a6"
+  },
+  {
+   "path": "route-crawl-lords.json",
+   "bytes": 33378,
+   "sha256": "28baedab1a625e28f1a822dd4145df392afb51cc6dcaf7be040a0f008f863cd5"
+  },
+  {
+   "path": "route-crawl-zona.json",
+   "bytes": 32093,
+   "sha256": "e46118d9da0cbfd04e2ccf622590aa378a0bc675a273d496562c9d92b227ec3c"
+  },
+  {
+   "path": "served-candidate-loopback.json",
+   "bytes": 6101,
+   "sha256": "80ca0b48e98bec3611569c15a9af231ef63694e95ed73e7507373a8d5f3cee3e"
+  },
+  {
+   "path": "serving-chain.json",
+   "bytes": 14532,
+   "sha256": "f103dc67c90205554a4dc5296258833ef8c984a9c5ae7cab0fa1b49c021189df"
+  },
+  {
+   "path": "suite/exit_code",
+   "bytes": 2,
+   "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+   "path": "suite/junit.xml",
+   "bytes": 1062908,
+   "sha256": "b762dc548b9b39af5dbf70328a197376947e700ec55cd51da25d3275b9f9ede0"
+  },
+  {
+   "path": "suite/pytest.log",
+   "bytes": 850860,
+   "sha256": "ca9499e8b31e8562bd1823afba376ecbc19db2965c31947ca7fb836abe37dd02"
+  },
+  {
+   "path": "suite/release-critical-exit",
+   "bytes": 2,
+   "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+   "path": "suite/release-critical.log",
+   "bytes": 1861,
+   "sha256": "00321b344cc4f40bd0454bfcb20d62d304bc20439d6ab011b52983b1b02ee4ab"
+  },
+  {
+   "path": "zona-baseline-404-scale.json",
+   "bytes": 698,
+   "sha256": "4cf41e37f2f847fb99627ad655b793c0566244d7a25f60a3948c5d13a720bec2"
+  },
+  {
+   "path": "zona-status-before.json",
+   "bytes": 1214,
+   "sha256": "79a8e01cf4bab149f89fb4d59db7832b34e0cd05aaf85a944ad3767472a11da9"
+  }
+ ]
+}

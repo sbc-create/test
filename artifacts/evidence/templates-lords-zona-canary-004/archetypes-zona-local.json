@@ -1,0 +1,198 @@
+{
+ "taken_at_utc": "2026-09-13T22:22:12Z",
+ "base": "http://127.0.0.1:9311",
+ "archetypes": [
+  {
+   "archetype": "film_no_seasons",
+   "url": "/title/chay-na-plyazhe/",
+   "status": 200,
+   "problems": [],
+   "h1": "Чай на пляже",
+   "episode_links": 0,
+   "player_state": "noaccess",
+   "ok": true
+  },
+  {
+   "archetype": "no_stream",
+   "url": "/title/chay-na-plyazhe/",
+   "status": 200,
+   "problems": [],
+   "h1": "Чай на пляже",
+   "episode_links": 0,
+   "player_state": "noaccess",
+   "ok": true
+  },
+  {
+   "archetype": "series_one_season",
+   "url": "/title/pylayuschee-leto/",
+   "status": 200,
+   "problems": [],
+   "h1": "Пылающее лето",
+   "episode_links": 29,
+   "player_state": "noaccess",
+   "ok": true
+  },
+  {
+   "archetype": "empty_synopsis",
+   "url": "/title/novyy-tenti-lishniy-specvypuski/",
+   "status": 200,
+   "problems": [],
+   "h1": "Новый Тэнти — лишний! Спецвыпуски",
+   "episode_links": 6,
+   "player_state": "noaccess",
+   "ok": true
+  },
+  {
+   "archetype": "series_multi_season",
+   "url": "/title/pati/",
+   "status": 200,
+   "problems": [],
+   "h1": "Пати",
+   "episode_links": 12,
+   "player_state": "noaccess",
+   "ok": true
+  },
+  {
+   "archetype": "no_poster",
+   "url": "/title/horoshaya-doch-2/",
+   "status": 200,
+   "problems": [],
+   "h1": "Хорошая дочь",
+   "episode_links": 0,
+   "player_state": "noaccess",
+   "ok": true
+  },
+  {
+   "archetype": "long_title",
+   "url": "/title/zabota-ob-odarennoy-devushke-v-prestizhnoy-shkole-polnoy-vysokoklassnyh-ucheniko/",
+   "status": 200,
+   "problems": [],
+   "h1": "Забота об одарённой девушке: В престижной школе, полной высококлассных учеников, я буду тайно заботиться о самой красивой девушке (не имеющей никаких жизненных навыков)",
+   "episode_links": 0,
+   "player_state": "noaccess",
+   "ok": true
+  },
+  {
+   "archetype": "special_chars",
+   "url": "/title/ubiystva-v-marbl-holl/",
+   "status": 200,
+   "problems": [],
+   "h1": "Убийства в Марбл-Холл",
+   "episode_links": 0,
+   "player_state": "noaccess",
+   "ok": true
+  },
+  {
+   "archetype": "cyrillic",
+   "url": "/title/ubiystva-v-marbl-holl/",
+   "status": 200,
+   "problems": [],
+   "h1": "Убийства в Марбл-Холл",
+   "episode_links": 0,
+   "player_state": "noaccess",
+   "ok": true
+  }
+ ],
+ "episode_boundaries": {
+  "url": "/title/rokovaya-sudba/",
+  "total_episodes": 182,
+  "checked": [
+   {
+    "episode": 1,
+    "status": 200,
+    "h1": true,
+    "title": true,
+    "description": true,
+    "canonical": true,
+    "schema": true,
+    "breadcrumbs": true,
+    "og": true,
+    "ok": true
+   },
+   {
+    "episode": 2,
+    "status": 200,
+    "h1": true,
+    "title": true,
+    "description": true,
+    "canonical": true,
+    "schema": true,
+    "breadcrumbs": true,
+    "og": true,
+    "ok": true
+   },
+   {
+    "episode": 99,
+    "status": 200,
+    "h1": true,
+    "title": true,
+    "description": true,
+    "canonical": true,
+    "schema": true,
+    "breadcrumbs": true,
+    "og": true,
+    "ok": true
+   },
+   {
+    "episode": 100,
+    "status": 200,
+    "h1": true,
+    "title": true,
+    "description": true,
+    "canonical": true,
+    "schema": true,
+    "breadcrumbs": true,
+    "og": true,
+    "ok": true
+   },
+   {
+    "episode": 101,
+    "status": 200,
+    "h1": true,
+    "title": true,
+    "description": true,
+    "canonical": true,
+    "schema": true,
+    "breadcrumbs": true,
+    "og": true,
+    "ok": true
+   },
+   {
+    "episode": 181,
+    "status": 200,
+    "h1": true,
+    "title": true,
+    "description": true,
+    "canonical": true,
+    "schema": true,
+    "breadcrumbs": true,
+    "og": true,
+    "ok": true
+   },
+   {
+    "episode": 182,
+    "status": 200,
+    "h1": true,
+    "title": true,
+    "description": true,
+    "canonical": true,
+    "schema": true,
+    "breadcrumbs": true,
+    "og": true,
+    "ok": true
+   }
+  ],
+  "problems": [],
+  "listed_on_title_page": 182,
+  "beyond_last_episode": 183,
+  "beyond_last_status": 404,
+  "ok": true
+ },
+ "counters": {
+  "ARCHETYPES_CHECKED": 9,
+  "ARCHETYPES_OK": 9,
+  "EPISODE_BOUNDARIES_OK": 7,
+  "EPISODE_BOUNDARIES_TOTAL": 7,
+  "BEYOND_LAST_STATUS": 404
+ }
+}

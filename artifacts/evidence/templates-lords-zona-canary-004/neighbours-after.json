@@ -1,0 +1,204 @@
+{
+ "label": "neighbours-after-attempt",
+ "taken_at_utc": "2026-09-13T21:35:39Z",
+ "pages": [
+  {
+   "url": "https://lordfilm47.space/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "https://lordfilm47.space/",
+   "bytes": 22942,
+   "html_sha256": "9a85c08e170539bb72a4953db21e5878ae04285defe048faef7e96b4fed23fab",
+   "css_sha256": "9b8e595eae129c029c35667fac1917ed739740877ffde594f9c12df1c164889d",
+   "css_bytes": 5476,
+   "js_sha256": "913a1abc4839899507df78ecd74283209ea6bb931b4d6a753d046857ffc0aca2",
+   "js_bytes": 841,
+   "declared": {
+    "family": "lords",
+    "design_version": "1.0.2",
+    "build_id": "20260910T124530Z-a1691c56-nova",
+    "artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "source_commit": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee",
+    "profile": "lords-general",
+    "template": "lords-nova"
+   },
+   "footer_marker": "lords 1.0.2 · a1691c56"
+  },
+  {
+   "url": "https://lordserial33.biz/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "https://lordserial33.biz/",
+   "bytes": 22944,
+   "html_sha256": "c246ee0a2d187ccbc93738f444c4256a8f77a53fb8b309668efbc662da2fee4a",
+   "css_sha256": "9b8e595eae129c029c35667fac1917ed739740877ffde594f9c12df1c164889d",
+   "css_bytes": 5476,
+   "js_sha256": "913a1abc4839899507df78ecd74283209ea6bb931b4d6a753d046857ffc0aca2",
+   "js_bytes": 841,
+   "declared": {
+    "family": "lords",
+    "design_version": "1.0.2",
+    "build_id": "20260910T124530Z-a1691c56-nova",
+    "artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "source_commit": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee",
+    "profile": "lords-new",
+    "template": "lords-nova"
+   },
+   "footer_marker": "lords 1.0.2 · a1691c56"
+  },
+  {
+   "url": "https://1lordserials1.online/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "https://1lordserials1.online/",
+   "bytes": 22951,
+   "html_sha256": "90d83c9f341868adcd0fea8aa4888a880369af1a04ae3a2555529fd396b2189f",
+   "css_sha256": "9b8e595eae129c029c35667fac1917ed739740877ffde594f9c12df1c164889d",
+   "css_bytes": 5476,
+   "js_sha256": "913a1abc4839899507df78ecd74283209ea6bb931b4d6a753d046857ffc0aca2",
+   "js_bytes": 841,
+   "declared": {
+    "family": "lords",
+    "design_version": "1.0.2",
+    "build_id": "20260910T124530Z-a1691c56-nova",
+    "artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "source_commit": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee",
+    "profile": "lords-curated",
+    "template": "lords-nova"
+   },
+   "footer_marker": "lords 1.0.2 · a1691c56"
+  },
+  {
+   "url": "https://zonafilm.space/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "https://zonafilm.space/",
+   "bytes": 23866,
+   "html_sha256": "54b44b29700b99022f78a450b94e9b255f35974efc93e1ac389b18479ee09a9d",
+   "css_sha256": "a2f302bc84a6f351ff6074bf0476dca9c2cafe482f0f68cca0b0dba91a975c95",
+   "css_bytes": 5476,
+   "js_sha256": "913a1abc4839899507df78ecd74283209ea6bb931b4d6a753d046857ffc0aca2",
+   "js_bytes": 841,
+   "declared": {
+    "family": "zona",
+    "design_version": "1.0.2",
+    "build_id": "20260910T124530Z-a1691c56-nova",
+    "artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "source_commit": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee",
+    "profile": "zona-general",
+    "template": "zona-nova"
+   },
+   "footer_marker": "zona 1.0.2 · a1691c56"
+  },
+  {
+   "url": "https://animedia.icu/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "https://animedia.icu/",
+   "bytes": 24139,
+   "html_sha256": "d06587edf8c91b739b6ac0059c4f156dd4763dd825ee78d0c3b7e5ac4aeba78d",
+   "css_sha256": "184decf035962f55b79e51daf8983ffb60b3ea350637004166fa39a235697bb8",
+   "css_bytes": 5476,
+   "js_sha256": "913a1abc4839899507df78ecd74283209ea6bb931b4d6a753d046857ffc0aca2",
+   "js_bytes": 841,
+   "declared": {
+    "family": "animedia",
+    "design_version": "1.0.2",
+    "build_id": "20260910T124530Z-a1691c56-nova",
+    "artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "source_commit": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee",
+    "profile": "animedia-general",
+    "template": "animedia-nova"
+   },
+   "footer_marker": "animedia 1.0.2 · a1691c56"
+  },
+  {
+   "url": "https://animedia.space/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "https://animedia.space/",
+   "bytes": 24139,
+   "html_sha256": "d06587edf8c91b739b6ac0059c4f156dd4763dd825ee78d0c3b7e5ac4aeba78d",
+   "css_sha256": "184decf035962f55b79e51daf8983ffb60b3ea350637004166fa39a235697bb8",
+   "css_bytes": 5476,
+   "js_sha256": "913a1abc4839899507df78ecd74283209ea6bb931b4d6a753d046857ffc0aca2",
+   "js_bytes": 841,
+   "declared": {
+    "family": "animedia",
+    "design_version": "1.0.2",
+    "build_id": "20260910T124530Z-a1691c56-nova",
+    "artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "source_commit": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee",
+    "profile": "animedia-general",
+    "template": "animedia-nova"
+   },
+   "footer_marker": "animedia 1.0.2 · a1691c56"
+  },
+  {
+   "url": "https://yummyani.site/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "https://yummyani.site/",
+   "bytes": 248394,
+   "html_sha256": "6291214f63f147c169096485917ec89eece77b88f78e88f18eae97b67481dc3e",
+   "css_sha256": "",
+   "css_bytes": 0,
+   "js_sha256": "bca2339ffa8f2c916f224d63734bb359ddbc64233984c4e061b243ed67a2d3f0",
+   "js_bytes": 133744,
+   "declared": {
+    "family": "yummy",
+    "design_version": "1.4.5",
+    "build_id": "20260911T151617Z-b8d02371-yummy",
+    "artifact_sha256": "98c6e704b17deb62f385cd4b2f612a859215348da68b73c678e4c4aed5383fe8",
+    "source_commit": "b8d02371bd19e11aa7592387dfa6f8247dbaf2f0",
+    "profile": "yummy-anime",
+    "template": "yummy-nova"
+   },
+   "footer_marker": "yummy 1.4.5 · 83a2e306"
+  },
+  {
+   "url": "https://yummyani.biz/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "https://yummyani.biz/",
+   "bytes": 247639,
+   "html_sha256": "c67f1a20dbb1e48a6d536de2d8e00c0f4e7a848e8b6238d7caf0b2bd4b17bc71",
+   "css_sha256": "",
+   "css_bytes": 0,
+   "js_sha256": "861f8a7405fd5386d9f5ab11cd8527130bdcc2efbe6b99fad218834cb5212b19",
+   "js_bytes": 133482,
+   "declared": {
+    "family": "yummy",
+    "design_version": "1.4.5",
+    "build_id": "20260911T151617Z-b8d02371-yummy",
+    "artifact_sha256": "98c6e704b17deb62f385cd4b2f612a859215348da68b73c678e4c4aed5383fe8",
+    "source_commit": "b8d02371bd19e11aa7592387dfa6f8247dbaf2f0",
+    "profile": "yummy-anime",
+    "template": "yummy-nova"
+   },
+   "footer_marker": "yummy 1.4.5 · 83a2e306"
+  },
+  {
+   "url": "https://yummyani.org/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "https://yummyani.org/",
+   "bytes": 248092,
+   "html_sha256": "67e11546737e0e9fb152f52727ea7d4a286a92614e3b7415de01db28196ac145",
+   "css_sha256": "",
+   "css_bytes": 0,
+   "js_sha256": "07bf099684c27b89f9422b60830d04d9e077f7dfa886b37d174b07ca71be84b9",
+   "js_bytes": 133636,
+   "declared": {
+    "family": "yummy",
+    "design_version": "1.4.5",
+    "build_id": "20260911T151617Z-b8d02371-yummy",
+    "artifact_sha256": "98c6e704b17deb62f385cd4b2f612a859215348da68b73c678e4c4aed5383fe8",
+    "source_commit": "b8d02371bd19e11aa7592387dfa6f8247dbaf2f0",
+    "profile": "yummy-anime",
+    "template": "yummy-nova"
+   },
+   "footer_marker": "yummy 1.4.5 · 83a2e306"
+  }
+ ]
+}

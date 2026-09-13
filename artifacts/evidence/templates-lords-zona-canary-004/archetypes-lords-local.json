@@ -1,0 +1,208 @@
+{
+ "taken_at_utc": "2026-09-13T22:22:12Z",
+ "base": "http://127.0.0.1:9310",
+ "archetypes": [
+  {
+   "archetype": "film_no_seasons",
+   "url": "/title/chas-rasplaty-2/",
+   "status": 200,
+   "problems": [],
+   "h1": "Час расплаты",
+   "episode_links": 0,
+   "player_state": "playable",
+   "ok": true
+  },
+  {
+   "archetype": "no_stream",
+   "url": "/title/chay-na-plyazhe/",
+   "status": 200,
+   "problems": [],
+   "h1": "Чай на пляже",
+   "episode_links": 0,
+   "player_state": "nosource",
+   "ok": true
+  },
+  {
+   "archetype": "series_one_season",
+   "url": "/title/pylayuschee-leto/",
+   "status": 200,
+   "problems": [],
+   "h1": "Пылающее лето",
+   "episode_links": 29,
+   "player_state": "nosource",
+   "ok": true
+  },
+  {
+   "archetype": "empty_synopsis",
+   "url": "/title/novyy-tenti-lishniy-specvypuski/",
+   "status": 200,
+   "problems": [],
+   "h1": "Новый Тэнти — лишний! Спецвыпуски",
+   "episode_links": 6,
+   "player_state": "nosource",
+   "ok": true
+  },
+  {
+   "archetype": "series_multi_season",
+   "url": "/title/pochini-i-proday-klassicheskie-avtomobili/",
+   "status": 200,
+   "problems": [],
+   "h1": "Почини и продай: Классические автомобили",
+   "episode_links": 38,
+   "player_state": "playable",
+   "ok": true
+  },
+  {
+   "archetype": "eps_210plus",
+   "url": "/title/doktor-slamp/",
+   "status": 200,
+   "problems": [],
+   "h1": "Доктор Сламп",
+   "episode_links": 243,
+   "player_state": "nosource",
+   "ok": true
+  },
+  {
+   "archetype": "no_poster",
+   "url": "/title/horoshaya-doch-2/",
+   "status": 200,
+   "problems": [],
+   "h1": "Хорошая дочь",
+   "episode_links": 0,
+   "player_state": "nosource",
+   "ok": true
+  },
+  {
+   "archetype": "long_title",
+   "url": "/title/ya-byl-predan-tovarischami-v-glubine-podzemelya-no-blagodarya-svoemu-navyku-besk/",
+   "status": 200,
+   "problems": [],
+   "h1": "Я был предан товарищами в глубине подземелья, но благодаря своему навыку «Бесконечная гача» я обрёл союзников девять тысяч девятьсот девяносто девятого уровня, чтобы отомстить бывшим соратникам и всему миру!",
+   "episode_links": 12,
+   "player_state": "playable",
+   "ok": true
+  },
+  {
+   "archetype": "special_chars",
+   "url": "/title/dni-sakamoto-chast-2/",
+   "status": 200,
+   "problems": [],
+   "h1": "Дни Сакамото. Часть 2",
+   "episode_links": 0,
+   "player_state": "nosource",
+   "ok": true
+  },
+  {
+   "archetype": "cyrillic",
+   "url": "/title/dni-sakamoto-chast-2/",
+   "status": 200,
+   "problems": [],
+   "h1": "Дни Сакамото. Часть 2",
+   "episode_links": 0,
+   "player_state": "nosource",
+   "ok": true
+  }
+ ],
+ "episode_boundaries": {
+  "url": "/title/bezuprechnyy-mir/",
+  "total_episodes": 286,
+  "checked": [
+   {
+    "episode": 1,
+    "status": 200,
+    "h1": true,
+    "title": true,
+    "description": true,
+    "canonical": true,
+    "schema": true,
+    "breadcrumbs": true,
+    "og": true,
+    "ok": true
+   },
+   {
+    "episode": 2,
+    "status": 200,
+    "h1": true,
+    "title": true,
+    "description": true,
+    "canonical": true,
+    "schema": true,
+    "breadcrumbs": true,
+    "og": true,
+    "ok": true
+   },
+   {
+    "episode": 99,
+    "status": 200,
+    "h1": true,
+    "title": true,
+    "description": true,
+    "canonical": true,
+    "schema": true,
+    "breadcrumbs": true,
+    "og": true,
+    "ok": true
+   },
+   {
+    "episode": 100,
+    "status": 200,
+    "h1": true,
+    "title": true,
+    "description": true,
+    "canonical": true,
+    "schema": true,
+    "breadcrumbs": true,
+    "og": true,
+    "ok": true
+   },
+   {
+    "episode": 101,
+    "status": 200,
+    "h1": true,
+    "title": true,
+    "description": true,
+    "canonical": true,
+    "schema": true,
+    "breadcrumbs": true,
+    "og": true,
+    "ok": true
+   },
+   {
+    "episode": 209,
+    "status": 200,
+    "h1": true,
+    "title": true,
+    "description": true,
+    "canonical": true,
+    "schema": true,
+    "breadcrumbs": true,
+    "og": true,
+    "ok": true
+   },
+   {
+    "episode": 210,
+    "status": 200,
+    "h1": true,
+    "title": true,
+    "description": true,
+    "canonical": true,
+    "schema": true,
+    "breadcrumbs": true,
+    "og": true,
+    "ok": true
+   }
+  ],
+  "problems": [],
+  "listed_on_title_page": 286,
+  "beyond_last_episode": 287,
+  "beyond_last_status": 404,
+  "ok": true
+ },
+ "counters": {
+  "ARCHETYPES_CHECKED": 10,
+  "ARCHETYPES_OK": 10,
+  "EPISODE_BOUNDARIES_OK": 7,
+  "EPISODE_BOUNDARIES_TOTAL": 7,
+  "BEYOND_LAST_STATUS": 404
+ }
+}
