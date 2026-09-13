@@ -167,6 +167,41 @@ const TOUCH_PROBE = `(() => {
   return bad;
 })()`;
 
+/**
+ * Перекрытие: текст, который есть в разметке, но которого не видно.
+ *
+ * Этот дефект пробы не ловят ни одной. Контраст считается по вычисленным
+ * цветам — он отличный. Щелчок проходит — ссылка на месте. Сущность совпадает
+ * — разметка верна. А подписи на карточке не видно, потому что постер получил
+ * `z-index:1`, а подпись осталась без слоя и ушла под него.
+ *
+ * Ловится это одним способом: спросить у документа, какой элемент лежит в
+ * середине подписи. Если не она сама и не её потомок — её закрыли.
+ */
+const OVERLAP_PROBE = `(() => {
+  const covered = [];
+  // Проверяются подписи и значки, которые лежат ПОВЕРХ изображений: именно они
+  // и уязвимы к перестановке слоёв.
+  const sel = '.c__cap, .c__t, .c__badge, .c__y, .zt__t, .zr__t, .zhead h1, .tw h1';
+  for (const el of document.querySelectorAll(sel)) {
+    const r = el.getBoundingClientRect();
+    if (r.width < 2 || r.height < 2) continue;
+    if (r.bottom < 0 || r.top > innerHeight) continue;
+    const x = Math.min(innerWidth - 2, Math.max(1, r.x + r.width / 2));
+    const y = Math.min(innerHeight - 2, Math.max(1, r.y + r.height / 2));
+    const top = document.elementFromPoint(x, y);
+    if (!top) continue;
+    const свой = top === el || el.contains(top) || top.contains(el);
+    if (!свой) {
+      covered.push({ selector: String(el.className).slice(0, 30),
+                     text: (el.textContent || '').trim().slice(0, 40),
+                     covered_by: String(top.className || top.tagName).slice(0, 30) });
+      if (covered.length > 6) break;
+    }
+  }
+  return covered;
+})()`;
+
 const FOCUS_PROBE = `(() => {
   const first = document.querySelector('main a, main button');
   if (!first) return { ok: false, why: 'нет фокусируемого элемента в main' };
@@ -223,6 +258,7 @@ async function measure(page, url, tag, viewport, dir) {
   const images = await page.evaluate(IMAGES_PROBE);
   const touch = await page.evaluate(TOUCH_PROBE);
   const focus = await page.evaluate(FOCUS_PROBE);
+  const covered = await page.evaluate(OVERLAP_PROBE);
 
   const shot = `${tag}-${viewport.w}.png`;
   await page.screenshot({ path: path.join(dir, shot), fullPage: viewport.w >= 1024 });
@@ -234,7 +270,7 @@ async function measure(page, url, tag, viewport, dir) {
     contrast_failures: contrast, overflow: overflow.overflow, overflow_guilty: overflow.guilty,
     images_total: images.total, broken_images: images.broken,
     images_not_started: images.not_started.length,
-    small_touch_targets: touch, focus_visible: focus,
+    small_touch_targets: touch, focus_visible: focus, covered_text: covered,
   };
 }
 
@@ -331,7 +367,7 @@ async function main() {
   fs.writeFileSync(path.join(OUT, 'audit.json'), JSON.stringify(report, null, 1));
 
   // Сводка на экран: она и есть то, что читает человек.
-  let cErr = 0, cOver = 0, cContrast = 0, cImg = 0, cClickBad = 0, cPages = 0;
+  let cErr = 0, cOver = 0, cContrast = 0, cImg = 0, cClickBad = 0, cPages = 0, cCovered = 0;
   for (const [id, s] of Object.entries(report.sites)) {
     for (const p of s.pages) {
       cPages++;
@@ -339,13 +375,15 @@ async function main() {
       cOver += p.overflow > 1 ? 1 : 0;
       cContrast += p.contrast_failures.length;
       cImg += p.broken_images.length;
+      cCovered += (p.covered_text || []).length;
     }
     cClickBad += s.clicks.filter(c => !c.ok).length;
     console.log(`${id}: страниц ${s.pages.length}, кликов ${s.clicks.length}, ` +
                 `неудачных кликов ${s.clicks.filter(c => !c.ok).length}`);
   }
   console.log(`ИТОГО страниц=${cPages} console_errors=${cErr} overflow=${cOver} ` +
-              `contrast=${cContrast} broken_images=${cImg} click_failures=${cClickBad}`);
+              `contrast=${cContrast} broken_images=${cImg} covered_text=${cCovered} ` +
+              `click_failures=${cClickBad}`);
   console.log(`отчёт: ${path.join(OUT, 'audit.json')}`);
   process.exit(0);
 }
