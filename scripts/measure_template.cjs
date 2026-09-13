@@ -20,6 +20,7 @@ const crypto = require('crypto');
 const BASE = process.argv[2];
 const OUT = process.argv[3];
 const LABEL = process.argv[4] || 'current';
+const СХЕМА = process.argv[5] || 'light';
 if (!BASE || !OUT) { console.error('нужны базовый адрес и выходной каталог'); process.exit(2); }
 
 const WIDTHS = [360, 390, 768, 1024, 1366, 1440, 1920];
@@ -71,14 +72,21 @@ const probe = () => {
   // `main` тянется во всю ширину окна, и измерять его значит всегда получать
   // ширину вьюпорта: контейнер 1240 px и контейнер 1100 px выглядели бы
   // одинаково. Берём элемент с непустым max-width, самый широкий из таких.
-  const кандидаты = [...document.querySelectorAll('.container, main, .layout, .page, .wrap')];
-  const ограничивающие = кандидаты.filter((el) => {
-    const mw = getComputedStyle(el).maxWidth;
-    return mw && mw !== 'none';
+  // Ограничивающий блок ищется по НАБЛЮДАЕМОМУ признаку, а не по списку
+  // классов.
+  //
+  // Список классов уже дважды выбрал не тот элемент: сначала `main`, шириной
+  // во всё окно, потом `main.glavnoe` — внутренний блок эталона шириной 370
+  // при настоящем контейнере 380. Классы у чужого сайта свои, и угадывать их
+  // бессмысленно. Признак контейнера: он уже окна, он высокий, и он самый
+  // широкий из таких.
+  const всеКандидаты = [...document.querySelectorAll('body *')].filter((el) => {
+    const r = el.getBoundingClientRect();
+    return r.width > 40 && r.width < doc.clientWidth - 1 && r.height > 100;
   });
-  const main = (ограничивающие.length ? ограничивающие : кандидаты)
-    .reduce((a, b) => (a && a.getBoundingClientRect().width >= b.getBoundingClientRect().width ? a : b),
-            null) || document.body;
+  const main = всеКандидаты
+    .reduce((a, b) => (a && a.getBoundingClientRect().width >= b.getBoundingClientRect().width ? a : b), null)
+    || document.body;
   const mainRect = main.getBoundingClientRect();
   const mainMaxWidth = getComputedStyle(main).maxWidth;
   const mainSelector = main.className || main.tagName;
@@ -177,13 +185,14 @@ const probe = () => {
   const жанр = await первыйЖанр(разведчик, BASE);
   await разведка.close();
   const PAGES = PAGES_БАЗА.map(([имя, путь]) => [имя, путь === null ? жанр : путь]);
-  const результат = { label: LABEL, base: BASE, measured_at: new Date().toISOString(),
+  const результат = { label: LABEL, base: BASE, color_scheme: СХЕМА,
+                      measured_at: new Date().toISOString(),
                       routes: Object.fromEntries(PAGES), pages: {} };
   for (const [имя, путь] of PAGES) {
     результат.pages[имя] = { url: BASE + путь, viewports: {} };
     for (const w of WIDTHS) {
       const ctx = await browser.newContext({ viewport: { width: w, height: 900 },
-                                             deviceScaleFactor: 1 });
+                                             colorScheme: СХЕМА, deviceScaleFactor: 1 });
       const page = await ctx.newPage();
       const ошибки = [];
       const неудачные = [];
