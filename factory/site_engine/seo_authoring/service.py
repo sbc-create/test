@@ -14,7 +14,6 @@ from __future__ import annotations
 import hashlib
 import json
 import sqlite3
-import uuid
 from typing import Any
 
 from factory.site_engine.changeset import model as M
@@ -31,6 +30,26 @@ from .schema import ProposalRejected
 
 #: Кто делает устойчивую запись. Ровно один.
 DURABLE_WRITER = "control-plane"
+
+
+def устойчивый_идентификатор(requester_service: str, idempotency_key: str) -> str:
+    """Идентификатор предложения выводится из намерения, а не из случайности.
+
+    Случайный `uuid4` выглядел безобидно: он лишь называет запись. Но он
+    попадал в содержимое заявки набора изменений, а по этому содержимому
+    контур отличает повтор от новой заявки. Два логически одинаковых
+    запроса с одним ключом оказывались НЕСРАВНИМЫ по построению, и второй
+    получал 409 там, где обязан получить повтор. После аварии между
+    созданием набора и вставкой предложения повтор упирался в тот же
+    ложный конфликт, а набор оставался сиротой.
+
+    Пара (служба-заказчик, ключ идемпотентности) уже уникальна в таблице,
+    поэтому вывод из неё не создаёт новых столкновений: два разных
+    предложения с одним идентификатором означали бы два предложения с одним
+    ключом, что запрещено и без того.
+    """
+    основа = f"{requester_service}\x00{idempotency_key}".encode("utf-8")
+    return "scp-" + hashlib.sha256(основа).hexdigest()[:20]
 
 СХЕМА_ТАБЛИЦ = """
 CREATE TABLE IF NOT EXISTS seo_content_proposal (
@@ -272,15 +291,19 @@ class SeoProposalService:
     def _записать(self, п: dict[str, Any], *, requester_service: str,
                   actor_id: str, actor_type: str, content_author: str,
                   отпечаток_заявки: str, снимок: dict) -> dict[str, Any]:
-        proposal_id = "scp-" + uuid.uuid4().hex[:20]
+        proposal_id = устойчивый_идентификатор(requester_service,
+                                               п["idempotency_key"])
         т = CS.сейчас()
         заявка_набора = {
             "resource_type": SCH.RESOURCE_KIND,
             "resource_id": f"{п['entity_id']}:{п['surface']}:{п['locale']}",
             "operation_type": "update",
             "target_site_ids": [п["site_id"]],
+            # Содержимое заявки — каноническое намерение клиента и ничего
+            # больше. Серверные идентификаторы сюда не попадают: по этому
+            # полю контур сравнивает повторы, и любое серверное значение
+            # сделало бы два одинаковых запроса несравнимыми.
             "requested_change": {
-                "proposal_id": proposal_id,
                 "entity_id": п["entity_id"],
                 "entity_kind": п["entity_kind"],
                 "surface": п["surface"],
@@ -294,7 +317,7 @@ class SeoProposalService:
             "policy_version": п["policy_version"],
         }
         try:
-            with self.соед:
+            with CS.транзакция(self.соед):
                 # Набор изменений создаёт control-plane — единственный
                 # устойчивый писатель. Служба-заказчик здесь только названа.
                 итог = CS.создать(self.соед, заявка_набора,

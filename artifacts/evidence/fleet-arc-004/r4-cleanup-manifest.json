@@ -1,0 +1,168 @@
+{
+  "prompt_id": "FLEET-ARC-004-SEO-R4-RECOVERY",
+  "database": "/srv/site-factory/changeset-store/changesets.sqlite3",
+  "cleanup_executed": false,
+  "requires_owner_confirmation": true,
+  "owner": "владелец Changeset Store (Control Plane)",
+  "rule": "Только перечисленные ниже неизменяемые идентификаторы. Ни одного условия по resource_kind, status, owner, времени или шаблону: такое условие однажды совпадёт с чужой записью, и узнают об этом после удаления.",
+  "forbidden": [
+    "DELETE FROM seo_content_proposal (без WHERE по proposal_id)",
+    "DELETE ... WHERE resource_kind = 'seo.content.proposal'",
+    "DELETE ... WHERE status = 'PROPOSED'",
+    "любой DELETE по времени, владельцу или маске"
+  ],
+  "audit_events_note": "Восемь событий журнала аудита (seq 115–122) НЕ удаляются: журнал только на добавление, и удаление разрушило бы цепь хешей. Для них предусмотрен логический карантин механизмом CORE-002.",
+  "rows": [
+    {
+      "order": 1,
+      "table": "seo_content_proposal",
+      "key_column": "proposal_id",
+      "key_value": "scp-73748fecccd3449eb645"
+    },
+    {
+      "order": 2,
+      "table": "changeset_target",
+      "key_columns": [
+        "changeset_id",
+        "site_id"
+      ],
+      "key_values": [
+        "dc33c060-d5f8-4e7e-ba25-d25551343b99",
+        "demo-books"
+      ]
+    },
+    {
+      "order": 3,
+      "table": "changeset_outbox",
+      "key_column": "seq",
+      "key_value": 1
+    },
+    {
+      "order": 3,
+      "table": "changeset_outbox",
+      "key_column": "seq",
+      "key_value": 2
+    },
+    {
+      "order": 4,
+      "table": "changeset",
+      "key_column": "changeset_id",
+      "key_value": "dc33c060-d5f8-4e7e-ba25-d25551343b99"
+    },
+    {
+      "order": 1,
+      "table": "seo_content_proposal",
+      "key_column": "proposal_id",
+      "key_value": "scp-bd2278f8760c4863aeab"
+    },
+    {
+      "order": 2,
+      "table": "changeset_target",
+      "key_columns": [
+        "changeset_id",
+        "site_id"
+      ],
+      "key_values": [
+        "c62e806e-b716-46d4-b56e-a03e99d62963",
+        "synthetic-http-b4e4f1"
+      ]
+    },
+    {
+      "order": 3,
+      "table": "changeset_outbox",
+      "key_column": "seq",
+      "key_value": 3
+    },
+    {
+      "order": 3,
+      "table": "changeset_outbox",
+      "key_column": "seq",
+      "key_value": 4
+    },
+    {
+      "order": 4,
+      "table": "changeset",
+      "key_column": "changeset_id",
+      "key_value": "c62e806e-b716-46d4-b56e-a03e99d62963"
+    },
+    {
+      "order": 1,
+      "table": "seo_content_proposal",
+      "key_column": "proposal_id",
+      "key_value": "scp-0af93b732e0a40c7811a"
+    },
+    {
+      "order": 2,
+      "table": "changeset_target",
+      "key_columns": [
+        "changeset_id",
+        "site_id"
+      ],
+      "key_values": [
+        "13f46164-b1fe-44f6-bf1a-a6c2139a01e3",
+        "demo-books"
+      ]
+    },
+    {
+      "order": 3,
+      "table": "changeset_outbox",
+      "key_column": "seq",
+      "key_value": 5
+    },
+    {
+      "order": 3,
+      "table": "changeset_outbox",
+      "key_column": "seq",
+      "key_value": 6
+    },
+    {
+      "order": 4,
+      "table": "changeset",
+      "key_column": "changeset_id",
+      "key_value": "13f46164-b1fe-44f6-bf1a-a6c2139a01e3"
+    },
+    {
+      "order": 1,
+      "table": "seo_content_proposal",
+      "key_column": "proposal_id",
+      "key_value": "scp-ed47904ad7ee436a8d49"
+    },
+    {
+      "order": 2,
+      "table": "changeset_target",
+      "key_columns": [
+        "changeset_id",
+        "site_id"
+      ],
+      "key_values": [
+        "212f12c9-bcb5-4665-aa61-560c9db32509",
+        "synthetic-http-b4e4f1"
+      ]
+    },
+    {
+      "order": 3,
+      "table": "changeset_outbox",
+      "key_column": "seq",
+      "key_value": 7
+    },
+    {
+      "order": 3,
+      "table": "changeset_outbox",
+      "key_column": "seq",
+      "key_value": 8
+    },
+    {
+      "order": 4,
+      "table": "changeset",
+      "key_column": "changeset_id",
+      "key_value": "212f12c9-bcb5-4665-aa61-560c9db32509"
+    }
+  ],
+  "row_count": 20,
+  "verification_after": {
+    "seo_content_proposal": 0,
+    "changeset": 0,
+    "changeset_target": 0,
+    "changeset_outbox": 0
+  }
+}

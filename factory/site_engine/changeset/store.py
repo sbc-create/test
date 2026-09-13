@@ -180,6 +180,39 @@ def открыть(путь: str | Path | None = None) -> sqlite3.Connection:
     return с
 
 
+class транзакция:
+    """Явная транзакция. `with соединением` её НЕ открывает.
+
+    Соединение создаётся с `isolation_level=None`, то есть в режиме
+    автофиксации: каждый оператор фиксируется сам по себе, а `with соед`
+    лишь вызывает commit в конце и rollback при исключении — откатывать
+    при этом уже нечего. Полагаться на него как на транзакцию значит
+    получить «одну неделимую запись», которая на деле распадается на
+    несколько, и узнать об этом только по осиротевшей строке после аварии.
+    """
+
+    def __init__(self, соед: sqlite3.Connection):
+        self.соед = соед
+        self.свой = False
+
+    def __enter__(self) -> sqlite3.Connection:
+        if not self.соед.in_transaction:
+            # IMMEDIATE, а не DEFERRED: блокировка берётся сразу, и две
+            # одновременные записи расходятся здесь, а не на середине.
+            self.соед.execute("BEGIN IMMEDIATE")
+            self.свой = True
+        return self.соед
+
+    def __exit__(self, тип, значение, след) -> bool:
+        if not self.свой:
+            return False
+        if тип is None:
+            self.соед.execute("COMMIT")
+        else:
+            self.соед.execute("ROLLBACK")
+        return False
+
+
 def канон(данные: Any) -> str:
     """Каноническая форма для хэширования: порядок ключей не должен влиять."""
     return json.dumps(данные, ensure_ascii=False, sort_keys=True,

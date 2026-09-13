@@ -1,0 +1,355 @@
+{
+  "prompt_id": "FLEET-ARC-004-SEO-R4-RECOVERY",
+  "database": "/srv/site-factory/changeset-store/changesets.sqlite3",
+  "read_only": true,
+  "expected_rows_reported_by_seo": 12,
+  "actual_table_counts": {
+    "seo_content_proposal": 4,
+    "changeset": 4,
+    "changeset_target": 4,
+    "changeset_transition": 0,
+    "changeset_outbox": 8
+  },
+  "actual_core_rows": 12,
+  "core_rows_explained": "12 = 4 предложения + 4 набора + 4 цели. Восемь записей исходящего ящика — зависимые, они уже опубликованы; восемь событий журнала аудита неизменяемы и удалению не подлежат ни при каких условиях.",
+  "categories": {
+    "PROVEN_R4_TEST": 4
+  },
+  "production_active_sites": [
+    "animedia-01",
+    "animedia-02",
+    "lords-01",
+    "lords-02",
+    "lords-03",
+    "yummyani-biz",
+    "yummyani-org",
+    "yummyani-site",
+    "zona-01"
+  ],
+  "records": [
+    {
+      "category": "PROVEN_R4_TEST",
+      "provenance_markers_matched": 6,
+      "provenance_markers": {
+        "fake_shadow_marker": true,
+        "r4_prompt_version": true,
+        "harness_idempotency_key": true,
+        "harness_correlation_id": true,
+        "r4_time_window": true,
+        "non_production_site": true
+      },
+      "proposal": {
+        "table": "seo_content_proposal",
+        "primary_key": "scp-73748fecccd3449eb645",
+        "changeset_id": "dc33c060-d5f8-4e7e-ba25-d25551343b99",
+        "site_id": "demo-books",
+        "site_environment": "non-production",
+        "site_lifecycle": "DRAFT",
+        "site_is_production_active": false,
+        "resource_kind": "seo.content.proposal",
+        "requester_service": "seo",
+        "content_author": "qwen",
+        "durable_writer": "control-plane",
+        "owner_service": "seo",
+        "idempotency_key": "probe-demo-books",
+        "correlation_id": "corr-probe-demo-books",
+        "causation_id": "cause-probe-demo-books",
+        "payload_digest": "320a2d7937110a78f975ed2c1f9f09ea93ceb0588dd563c643fd9aedff1e3a11",
+        "artifact_digest": "7df8193245f4958c318be85ac6c1d3c633458a08b3a3c29585d1fa58257e9422",
+        "source_snapshot_sha256": "0219b7b1a89f3a2cd4479b9a033565057ddb374407c1d382c0d32d9543a441d1",
+        "model_version": "deterministic-qwen/0.0.0+fake_shadow",
+        "prompt_version": "seo-r4-prompt/1.0.0",
+        "accepted_at": "2026-09-13T03:14:06.996253Z"
+      },
+      "changeset": {
+        "table": "changeset",
+        "primary_key": "dc33c060-d5f8-4e7e-ba25-d25551343b99",
+        "status": "PROPOSED",
+        "producer_service": "control-plane",
+        "idempotency_key": "seo-proposal:probe-demo-books",
+        "created_at": "2026-09-13T03:14:06.996504Z"
+      },
+      "dependent_targets": [
+        {
+          "table": "changeset_target",
+          "primary_key": [
+            "dc33c060-d5f8-4e7e-ba25-d25551343b99",
+            "demo-books"
+          ],
+          "state": "PENDING"
+        }
+      ],
+      "dependent_outbox": [
+        {
+          "table": "changeset_outbox",
+          "primary_key": 1,
+          "event_type": "changeset.proposed.v1",
+          "published_at": "2026-09-13T03:14:11.713526Z"
+        },
+        {
+          "table": "changeset_outbox",
+          "primary_key": 2,
+          "event_type": "seo.changeset.proposed.v1",
+          "published_at": "2026-09-13T03:14:11.759995Z"
+        }
+      ],
+      "audit_events": [
+        {
+          "ledger_seq": 115,
+          "event_id": "ab560173-c575-4cfe-beab-f6dd48c196f3",
+          "event_type": "changeset.proposed.v1",
+          "occurred_at": "2026-09-13T03:14:07.093013Z"
+        },
+        {
+          "ledger_seq": 116,
+          "event_id": "44bfafa1-802d-4d9a-b2f9-f14f3f2258cf",
+          "event_type": "seo.changeset.proposed.v1",
+          "occurred_at": "2026-09-13T03:14:06.996253Z"
+        }
+      ]
+    },
+    {
+      "category": "PROVEN_R4_TEST",
+      "provenance_markers_matched": 6,
+      "provenance_markers": {
+        "fake_shadow_marker": true,
+        "r4_prompt_version": true,
+        "harness_idempotency_key": true,
+        "harness_correlation_id": true,
+        "r4_time_window": true,
+        "non_production_site": true
+      },
+      "proposal": {
+        "table": "seo_content_proposal",
+        "primary_key": "scp-bd2278f8760c4863aeab",
+        "changeset_id": "c62e806e-b716-46d4-b56e-a03e99d62963",
+        "site_id": "synthetic-http-b4e4f1",
+        "site_environment": "test",
+        "site_lifecycle": "DRAFT",
+        "site_is_production_active": false,
+        "resource_kind": "seo.content.proposal",
+        "requester_service": "seo",
+        "content_author": "qwen",
+        "durable_writer": "control-plane",
+        "owner_service": "seo",
+        "idempotency_key": "probe-synthetic-http-b4e4f1",
+        "correlation_id": "corr-probe-synthetic-http-b4e4f1",
+        "causation_id": "cause-probe-synthetic-http-b4e4f1",
+        "payload_digest": "4e36f4f7dac9a6a0df36a02691adc610d3826bb2aed195e5ed9f787a405279a6",
+        "artifact_digest": "7707f04896de14f268ac04f6b9002bf811c47e3fa39590efa2b6aad25d407862",
+        "source_snapshot_sha256": "4b838ef95c5d9d70c70026f4eebbbbf042b02c8ca7740b78ce89e370e79ac7bf",
+        "model_version": "deterministic-qwen/0.0.0+fake_shadow",
+        "prompt_version": "seo-r4-prompt/1.0.0",
+        "accepted_at": "2026-09-13T03:14:07.251936Z"
+      },
+      "changeset": {
+        "table": "changeset",
+        "primary_key": "c62e806e-b716-46d4-b56e-a03e99d62963",
+        "status": "PROPOSED",
+        "producer_service": "control-plane",
+        "idempotency_key": "seo-proposal:probe-synthetic-http-b4e4f1",
+        "created_at": "2026-09-13T03:14:07.252099Z"
+      },
+      "dependent_targets": [
+        {
+          "table": "changeset_target",
+          "primary_key": [
+            "c62e806e-b716-46d4-b56e-a03e99d62963",
+            "synthetic-http-b4e4f1"
+          ],
+          "state": "PENDING"
+        }
+      ],
+      "dependent_outbox": [
+        {
+          "table": "changeset_outbox",
+          "primary_key": 3,
+          "event_type": "changeset.proposed.v1",
+          "published_at": "2026-09-13T03:14:11.809801Z"
+        },
+        {
+          "table": "changeset_outbox",
+          "primary_key": 4,
+          "event_type": "seo.changeset.proposed.v1",
+          "published_at": "2026-09-13T03:14:11.898098Z"
+        }
+      ],
+      "audit_events": [
+        {
+          "ledger_seq": 117,
+          "event_id": "3c689873-d0ca-45e0-b875-4bcb3188d3cf",
+          "event_type": "changeset.proposed.v1",
+          "occurred_at": "2026-09-13T03:14:07.340413Z"
+        },
+        {
+          "ledger_seq": 118,
+          "event_id": "c548fdca-a8e0-4a93-8d03-495e0d08003f",
+          "event_type": "seo.changeset.proposed.v1",
+          "occurred_at": "2026-09-13T03:14:07.251936Z"
+        }
+      ]
+    },
+    {
+      "category": "PROVEN_R4_TEST",
+      "provenance_markers_matched": 6,
+      "provenance_markers": {
+        "fake_shadow_marker": true,
+        "r4_prompt_version": true,
+        "harness_idempotency_key": true,
+        "harness_correlation_id": true,
+        "r4_time_window": true,
+        "non_production_site": true
+      },
+      "proposal": {
+        "table": "seo_content_proposal",
+        "primary_key": "scp-0af93b732e0a40c7811a",
+        "changeset_id": "13f46164-b1fe-44f6-bf1a-a6c2139a01e3",
+        "site_id": "demo-books",
+        "site_environment": "non-production",
+        "site_lifecycle": "DRAFT",
+        "site_is_production_active": false,
+        "resource_kind": "seo.content.proposal",
+        "requester_service": "seo",
+        "content_author": "qwen",
+        "durable_writer": "control-plane",
+        "owner_service": "seo",
+        "idempotency_key": "s2-demo-books",
+        "correlation_id": "corr-s2-demo-books",
+        "causation_id": "cause-s2-demo-books",
+        "payload_digest": "9ed477ff5d9d4fe21ee8e0cf0457d4d3f3da33925123cdc459187348c70d33fb",
+        "artifact_digest": "7df8193245f4958c318be85ac6c1d3c633458a08b3a3c29585d1fa58257e9422",
+        "source_snapshot_sha256": "0219b7b1a89f3a2cd4479b9a033565057ddb374407c1d382c0d32d9543a441d1",
+        "model_version": "deterministic-qwen/0.0.0+fake_shadow",
+        "prompt_version": "seo-r4-prompt/1.0.0",
+        "accepted_at": "2026-09-13T03:16:10.710432Z"
+      },
+      "changeset": {
+        "table": "changeset",
+        "primary_key": "13f46164-b1fe-44f6-bf1a-a6c2139a01e3",
+        "status": "PROPOSED",
+        "producer_service": "control-plane",
+        "idempotency_key": "seo-proposal:s2-demo-books",
+        "created_at": "2026-09-13T03:16:10.710574Z"
+      },
+      "dependent_targets": [
+        {
+          "table": "changeset_target",
+          "primary_key": [
+            "13f46164-b1fe-44f6-bf1a-a6c2139a01e3",
+            "demo-books"
+          ],
+          "state": "PENDING"
+        }
+      ],
+      "dependent_outbox": [
+        {
+          "table": "changeset_outbox",
+          "primary_key": 5,
+          "event_type": "changeset.proposed.v1",
+          "published_at": "2026-09-13T03:16:12.659439Z"
+        },
+        {
+          "table": "changeset_outbox",
+          "primary_key": 6,
+          "event_type": "seo.changeset.proposed.v1",
+          "published_at": "2026-09-13T03:16:12.971014Z"
+        }
+      ],
+      "audit_events": [
+        {
+          "ledger_seq": 119,
+          "event_id": "1a272094-7427-4051-abbf-4c1df1d2975f",
+          "event_type": "changeset.proposed.v1",
+          "occurred_at": "2026-09-13T03:16:10.751724Z"
+        },
+        {
+          "ledger_seq": 120,
+          "event_id": "439a1073-7968-4312-bad4-2b3cfc173d1f",
+          "event_type": "seo.changeset.proposed.v1",
+          "occurred_at": "2026-09-13T03:16:10.710432Z"
+        }
+      ]
+    },
+    {
+      "category": "PROVEN_R4_TEST",
+      "provenance_markers_matched": 6,
+      "provenance_markers": {
+        "fake_shadow_marker": true,
+        "r4_prompt_version": true,
+        "harness_idempotency_key": true,
+        "harness_correlation_id": true,
+        "r4_time_window": true,
+        "non_production_site": true
+      },
+      "proposal": {
+        "table": "seo_content_proposal",
+        "primary_key": "scp-ed47904ad7ee436a8d49",
+        "changeset_id": "212f12c9-bcb5-4665-aa61-560c9db32509",
+        "site_id": "synthetic-http-b4e4f1",
+        "site_environment": "test",
+        "site_lifecycle": "DRAFT",
+        "site_is_production_active": false,
+        "resource_kind": "seo.content.proposal",
+        "requester_service": "seo",
+        "content_author": "qwen",
+        "durable_writer": "control-plane",
+        "owner_service": "seo",
+        "idempotency_key": "s2-synthetic-http-b4e4f1",
+        "correlation_id": "corr-s2-synthetic-http-b4e4f1",
+        "causation_id": "cause-s2-synthetic-http-b4e4f1",
+        "payload_digest": "2ac7a99cb77c803a81da1c39244787bca2696350d6f731027d94aaffcabb7b86",
+        "artifact_digest": "7707f04896de14f268ac04f6b9002bf811c47e3fa39590efa2b6aad25d407862",
+        "source_snapshot_sha256": "4b838ef95c5d9d70c70026f4eebbbbf042b02c8ca7740b78ce89e370e79ac7bf",
+        "model_version": "deterministic-qwen/0.0.0+fake_shadow",
+        "prompt_version": "seo-r4-prompt/1.0.0",
+        "accepted_at": "2026-09-13T03:16:10.805767Z"
+      },
+      "changeset": {
+        "table": "changeset",
+        "primary_key": "212f12c9-bcb5-4665-aa61-560c9db32509",
+        "status": "PROPOSED",
+        "producer_service": "control-plane",
+        "idempotency_key": "seo-proposal:s2-synthetic-http-b4e4f1",
+        "created_at": "2026-09-13T03:16:10.805973Z"
+      },
+      "dependent_targets": [
+        {
+          "table": "changeset_target",
+          "primary_key": [
+            "212f12c9-bcb5-4665-aa61-560c9db32509",
+            "synthetic-http-b4e4f1"
+          ],
+          "state": "PENDING"
+        }
+      ],
+      "dependent_outbox": [
+        {
+          "table": "changeset_outbox",
+          "primary_key": 7,
+          "event_type": "changeset.proposed.v1",
+          "published_at": "2026-09-13T03:16:13.313752Z"
+        },
+        {
+          "table": "changeset_outbox",
+          "primary_key": 8,
+          "event_type": "seo.changeset.proposed.v1",
+          "published_at": "2026-09-13T03:16:13.685555Z"
+        }
+      ],
+      "audit_events": [
+        {
+          "ledger_seq": 121,
+          "event_id": "2acb80ab-6a80-4233-a5a0-a5dbd56952bf",
+          "event_type": "changeset.proposed.v1",
+          "occurred_at": "2026-09-13T03:16:10.847641Z"
+        },
+        {
+          "ledger_seq": 122,
+          "event_id": "417d22ef-fefc-48de-be78-fa71a3ab981d",
+          "event_type": "seo.changeset.proposed.v1",
+          "occurred_at": "2026-09-13T03:16:10.805767Z"
+        }
+      ]
+    }
+  ]
+}
