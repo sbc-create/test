@@ -1,0 +1,70 @@
+{
+ "results": [
+  {
+   "name": "lords-episode-1",
+   "url": "http://127.0.0.1:9310/title/bezuprechnyy-mir/season-1/episode-1/",
+   "state": "ok",
+   "ok": true,
+   "frame_difference": 0.9941,
+   "note": "кадры сменились после щелчка — воспроизведение идёт"
+  },
+  {
+   "name": "lords-episode-210",
+   "url": "http://127.0.0.1:9310/title/bezuprechnyy-mir/season-1/episode-210/",
+   "state": "ok",
+   "ok": true,
+   "frame_difference": 0.9908,
+   "note": "кадры сменились после щелчка — воспроизведение идёт"
+  },
+  {
+   "name": "lords-title-konan",
+   "url": "http://127.0.0.1:9310/title/detektiv-konan/",
+   "state": "ok",
+   "ok": true,
+   "frame_difference": 0.9938,
+   "note": "кадры сменились после щелчка — воспроизведение идёт"
+  },
+  {
+   "name": "lords-nosource",
+   "url": "http://127.0.0.1:9310/title/sinora-volpe/",
+   "state": "nosource",
+   "heading": "Источник для этой записи не передан",
+   "text": "У записи нет идентификатора ни одного из разрешённых агрегаторов, поэтому запрашивать у провайдера нечего. Как только источник появится в каталоге, плеер включится здесь сам.",
+   "visible": true,
+   "hasElement": false,
+   "hasScript": false,
+   "spinner": false,
+   "fakePlay": false,
+   "expected": "nosource",
+   "ok": true
+  },
+  {
+   "name": "zona-noaccess",
+   "url": "http://127.0.0.1:9311/title/akuloboroten/",
+   "state": "noaccess",
+   "heading": "Просмотр на витрине не подключён",
+   "text": "Витрине не выдан идентификатор издателя, и обращаться к провайдеру ей нечем. Это настройка витрины, а не состояние записи: каталог, описание и список серий на странице доступны полностью.",
+   "visible": true,
+   "hasElement": false,
+   "hasScript": false,
+   "spinner": false,
+   "fakePlay": false,
+   "expected": "noaccess",
+   "ok": true
+  },
+  {
+   "name": "zona-noaccess-2",
+   "url": "http://127.0.0.1:9311/title/ubiystva-v-marbl-holl/",
+   "state": "noaccess",
+   "heading": "Просмотр на витрине не подключён",
+   "text": "Витрине не выдан идентификатор издателя, и обращаться к провайдеру ей нечем. Это настройка витрины, а не состояние записи: каталог, описание и список серий на странице доступны полностью.",
+   "visible": true,
+   "hasElement": false,
+   "hasScript": false,
+   "spinner": false,
+   "fakePlay": false,
+   "expected": "noaccess",
+   "ok": true
+  }
+ ]
+}

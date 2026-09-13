@@ -1,0 +1,138 @@
+{
+ "label": "candidate-loopback",
+ "taken_at_utc": "2026-09-13T20:29:51Z",
+ "pages": [
+  {
+   "url": "http://127.0.0.1:9310/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "http://127.0.0.1:9310/",
+   "bytes": 42059,
+   "html_sha256": "aae66ebc6d3160a452a2c751189875f30f3dcb3227570e3b1404ca3ad51f2bdc",
+   "css_sha256": "ca280d46dd103875ac14f6c9a46d882342869006c4ae43c521a8b7cb2c12e785",
+   "css_bytes": 10391,
+   "js_sha256": "dd069317d584a8bfbe113d66bd4df90ef42d4e758dc16fbe2411b10d12270c83",
+   "js_bytes": 138,
+   "declared": {
+    "family": "lords",
+    "design_version": "1.1.0",
+    "build_id": "20260913T203000Z-94524e6a-nova",
+    "artifact_sha256": "daed37118a20d693a9cd51e869ed721ed41b16815801f1855145fd1ceb4a9319",
+    "source_commit": "94524e6a2a49a27e0d8f0f9a91fad7df4f4d87de",
+    "profile": "lords-general",
+    "template": "lords-nova"
+   },
+   "footer_marker": "lords 1.1.0 · 94524e6a"
+  },
+  {
+   "url": "http://127.0.0.1:9310/catalog/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "http://127.0.0.1:9310/catalog/",
+   "bytes": 42181,
+   "html_sha256": "131a43af0e3101982ee301a267cd8f07fff1f15f4bd55578561a5a6c4bd9ff28",
+   "css_sha256": "ca280d46dd103875ac14f6c9a46d882342869006c4ae43c521a8b7cb2c12e785",
+   "css_bytes": 10391,
+   "js_sha256": "dd069317d584a8bfbe113d66bd4df90ef42d4e758dc16fbe2411b10d12270c83",
+   "js_bytes": 138,
+   "declared": {
+    "family": "lords",
+    "design_version": "1.1.0",
+    "build_id": "20260913T203000Z-94524e6a-nova",
+    "artifact_sha256": "daed37118a20d693a9cd51e869ed721ed41b16815801f1855145fd1ceb4a9319",
+    "source_commit": "94524e6a2a49a27e0d8f0f9a91fad7df4f4d87de",
+    "profile": "lords-general",
+    "template": "lords-nova"
+   },
+   "footer_marker": "lords 1.1.0 · 94524e6a"
+  },
+  {
+   "url": "http://127.0.0.1:9310/title/detektiv-konan/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "http://127.0.0.1:9310/title/detektiv-konan/",
+   "bytes": 100777,
+   "html_sha256": "7df9496344566f3436e4c875daaea524ea27cc06988c9fa595010efa936c6933",
+   "css_sha256": "ca280d46dd103875ac14f6c9a46d882342869006c4ae43c521a8b7cb2c12e785",
+   "css_bytes": 10391,
+   "js_sha256": "615bd9aa1885e83203638614968b83f16de94d4aff0c31a7588bcb091e5cd377",
+   "js_bytes": 3138,
+   "declared": {
+    "family": "lords",
+    "design_version": "1.1.0",
+    "build_id": "20260913T203000Z-94524e6a-nova",
+    "artifact_sha256": "daed37118a20d693a9cd51e869ed721ed41b16815801f1855145fd1ceb4a9319",
+    "source_commit": "94524e6a2a49a27e0d8f0f9a91fad7df4f4d87de",
+    "profile": "lords-general",
+    "template": "lords-nova"
+   },
+   "footer_marker": "lords 1.1.0 · 94524e6a"
+  },
+  {
+   "url": "http://127.0.0.1:9310/title/bezuprechnyy-mir/season-1/episode-210/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "http://127.0.0.1:9310/title/bezuprechnyy-mir/season-1/episode-210/",
+   "bytes": 35928,
+   "html_sha256": "324547a4c5b8b3655ba119dc9d7e5239edfc77392d1969f7bab1f6e8cd24dbd7",
+   "css_sha256": "ca280d46dd103875ac14f6c9a46d882342869006c4ae43c521a8b7cb2c12e785",
+   "css_bytes": 10391,
+   "js_sha256": "58d5faa55f6d5f0616951fe7b36177a3870c6c73e8b6681ed9984c3087e6a8d9",
+   "js_bytes": 1993,
+   "declared": {
+    "family": "lords",
+    "design_version": "1.1.0",
+    "build_id": "20260913T203000Z-94524e6a-nova",
+    "artifact_sha256": "daed37118a20d693a9cd51e869ed721ed41b16815801f1855145fd1ceb4a9319",
+    "source_commit": "94524e6a2a49a27e0d8f0f9a91fad7df4f4d87de",
+    "profile": "lords-general",
+    "template": "lords-nova"
+   },
+   "footer_marker": "lords 1.1.0 · 94524e6a"
+  },
+  {
+   "url": "http://127.0.0.1:9311/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "http://127.0.0.1:9311/",
+   "bytes": 26152,
+   "html_sha256": "641f9f880cd9ba42569f444d21a161848a55a2a89c3ff5e8e49993d70ef5a006",
+   "css_sha256": "0398a8dac6ec12dee9f3c86b86b49fd5b8948136869834a9aa1bddb58c568ba7",
+   "css_bytes": 12173,
+   "js_sha256": "dd069317d584a8bfbe113d66bd4df90ef42d4e758dc16fbe2411b10d12270c83",
+   "js_bytes": 138,
+   "declared": {
+    "family": "zona",
+    "design_version": "1.1.0",
+    "build_id": "20260913T203000Z-94524e6a-nova",
+    "artifact_sha256": "daed37118a20d693a9cd51e869ed721ed41b16815801f1855145fd1ceb4a9319",
+    "source_commit": "94524e6a2a49a27e0d8f0f9a91fad7df4f4d87de",
+    "profile": "zona-general",
+    "template": "zona-nova"
+   },
+   "footer_marker": "zona 1.1.0 · 94524e6a"
+  },
+  {
+   "url": "http://127.0.0.1:9311/title/akuloboroten/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "http://127.0.0.1:9311/title/akuloboroten/",
+   "bytes": 21391,
+   "html_sha256": "9035e8b58061e911ff51d1a9f253cea37f30f898c6eaf8062c594e9ac9fe2344",
+   "css_sha256": "0398a8dac6ec12dee9f3c86b86b49fd5b8948136869834a9aa1bddb58c568ba7",
+   "css_bytes": 12173,
+   "js_sha256": "16119a50e7cfd6e58a6fc247c4300bbc51c93a7432ed213509fc258f6dd6e968",
+   "js_bytes": 373,
+   "declared": {
+    "family": "zona",
+    "design_version": "1.1.0",
+    "build_id": "20260913T203000Z-94524e6a-nova",
+    "artifact_sha256": "daed37118a20d693a9cd51e869ed721ed41b16815801f1855145fd1ceb4a9319",
+    "source_commit": "94524e6a2a49a27e0d8f0f9a91fad7df4f4d87de",
+    "profile": "zona-general",
+    "template": "zona-nova"
+   },
+   "footer_marker": "zona 1.1.0 · 94524e6a"
+  }
+ ]
+}

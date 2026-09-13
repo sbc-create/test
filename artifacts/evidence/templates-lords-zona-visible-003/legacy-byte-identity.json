@@ -1,0 +1,74 @@
+{
+ "claim": "новый артефакт при manifest design_version=1.0.2 отдаёт те же байты, что живая витрина zona-01 на прежнем артефакте",
+ "live": "https://zonafilm.space",
+ "candidate": "127.0.0.1:9312 (новый артефакт)",
+ "manifest": "/srv/lords/.frontend/template-manifest-zona-01.json (1.0.2, не менялся)",
+ "checked_at_utc": "2026-09-13T18:35:42Z",
+ "all_identical": true,
+ "pages": [
+  {
+   "path": "/",
+   "live_status": 200,
+   "candidate_status": 200,
+   "live_sha256": "54b44b29700b99022f78a450b94e9b255f35974efc93e1ac389b18479ee09a9d",
+   "candidate_sha256": "54b44b29700b99022f78a450b94e9b255f35974efc93e1ac389b18479ee09a9d",
+   "identical": true
+  },
+  {
+   "path": "/catalog/",
+   "live_status": 200,
+   "candidate_status": 200,
+   "live_sha256": "858a5b76db6212ba0ea27fffff4901e2145d1998bf36abd52d9b17c7a014834d",
+   "candidate_sha256": "858a5b76db6212ba0ea27fffff4901e2145d1998bf36abd52d9b17c7a014834d",
+   "identical": true
+  },
+  {
+   "path": "/new/",
+   "live_status": 200,
+   "candidate_status": 200,
+   "live_sha256": "ce36b6354aaba154f3571b02652e3c59ffedb2b21c7a61b0cc522c526bdd9dd4",
+   "candidate_sha256": "ce36b6354aaba154f3571b02652e3c59ffedb2b21c7a61b0cc522c526bdd9dd4",
+   "identical": true
+  },
+  {
+   "path": "/collections/",
+   "live_status": 200,
+   "candidate_status": 200,
+   "live_sha256": "5f37e4bf8cea4b866ae27f694633ef68675b611da66bcecc04c03c9e36be65fa",
+   "candidate_sha256": "5f37e4bf8cea4b866ae27f694633ef68675b611da66bcecc04c03c9e36be65fa",
+   "identical": true
+  },
+  {
+   "path": "/search/?q=%D0%B4%D0%BE%D0%BC",
+   "live_status": 200,
+   "candidate_status": 200,
+   "live_sha256": "efdeea236062fa6887fe85b259f400bc51b6f6678f31618c190ee2f569d054be",
+   "candidate_sha256": "efdeea236062fa6887fe85b259f400bc51b6f6678f31618c190ee2f569d054be",
+   "identical": true
+  },
+  {
+   "path": "/schedule/",
+   "live_status": 200,
+   "candidate_status": 200,
+   "live_sha256": "7f0307a1362b9cd49dce097a6eeaa2e530973e3c7dc3885c1938b89c5e7098b7",
+   "candidate_sha256": "7f0307a1362b9cd49dce097a6eeaa2e530973e3c7dc3885c1938b89c5e7098b7",
+   "identical": true
+  },
+  {
+   "path": "/title/sinora-volpe/",
+   "live_status": 404,
+   "candidate_status": 404,
+   "live_sha256": "9c385f3c05a36846a7938f1f45be7fcab271930d10d00f8a9c88e8da2ff8913d",
+   "candidate_sha256": "9c385f3c05a36846a7938f1f45be7fcab271930d10d00f8a9c88e8da2ff8913d",
+   "identical": true
+  },
+  {
+   "path": "/robots.txt",
+   "live_status": 200,
+   "candidate_status": 200,
+   "live_sha256": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1",
+   "candidate_sha256": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1",
+   "identical": true
+  }
+ ]
+}
