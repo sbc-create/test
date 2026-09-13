@@ -590,7 +590,8 @@ font-size:13px;color:#4a535d;font-weight:600}
 .c{position:relative;display:block;background:@BAR@;overflow:hidden;border-radius:3px}
 .c:hover .c__img{transform:scale(1.04)}
 .c__p{display:block;position:relative;aspect-ratio:2/3;overflow:hidden;background:#22272e}
-.c__img{width:100%;height:100%;object-fit:cover;transition:transform .25s}
+.c__img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;
+transition:transform .25s}
 .c__none{position:absolute;inset:0;display:grid;place-items:center;text-align:center;
 padding:10px;color:#8b95a1;font-size:12px;font-weight:600;
 background:repeating-linear-gradient(135deg,#242a32 0 9px,#1e242b 9px 18px)}
@@ -623,7 +624,9 @@ padding:9px 18px}
 margin:14px 0;border:1px solid @LINE@;border-radius:4px}
 @media(min-width:720px){.tw{grid-template-columns:180px 1fr}}
 .tw__ps{position:relative;border-radius:4px;overflow:hidden;background:#22272e;aspect-ratio:2/3}
-.tw__ps img{width:100%;height:100%;object-fit:cover}
+.tw__ps img,.tw__img{position:relative;z-index:1;width:100%;height:100%;
+object-fit:cover;display:block}
+.tw__ps .c__none{font-size:13px}
 .tw h1{font-size:20px;line-height:1.3;font-weight:700;margin:0 0 12px;color:@INK@}
 .plot p{margin:0 0 10px;font-size:13.5px;line-height:1.62;color:#333a42}
 .plot .none{color:@DIM@;font-style:italic}
@@ -688,6 +691,8 @@ color:#5b6470;font-size:12.5px}
 .ft__g{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between}
 .vb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:#4d555e;
 border:1px solid @LINE@;border-radius:3px;padding:4px 8px;background:@SHEET@}
+
+img[hidden]{display:none}
 """
 
 ЗОНА_СТИЛЬ = """
@@ -739,7 +744,8 @@ font-family:system-ui,sans-serif;color:@DIM@;flex-wrap:wrap}
 border-radius:10px;overflow:hidden;transition:box-shadow .18s,transform .18s}
 .zt:hover{box-shadow:0 10px 30px #16191d1f;transform:translateY(-3px)}
 .zt__p{display:block;aspect-ratio:2/3;background:@ALT@;position:relative}
-.zt__p img{width:100%;height:100%;object-fit:cover}
+.zt__p img,.zt__img{position:relative;z-index:1;width:100%;height:100%;
+object-fit:cover;display:block}
 .zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:14px;
 text-align:center;color:@MUTE@;font-family:system-ui,sans-serif;font-size:13px;
 background:linear-gradient(160deg,#eef1f6,#dfe5ed)}
@@ -758,7 +764,8 @@ border-radius:10px;align-items:start}
 .zr:hover{background:@ALT@}
 .zr+.zr{border-top:1px solid @LINE@}
 .zr__p{display:block;aspect-ratio:2/3;border-radius:6px;overflow:hidden;background:@ALT@;position:relative}
-.zr__p img{width:100%;height:100%;object-fit:cover}
+.zr__p img,.zr__img{position:relative;z-index:1;width:100%;height:100%;
+object-fit:cover;display:block}
 .zr__none{position:absolute;inset:0;display:grid;place-items:center;font-size:11px;
 text-align:center;color:@MUTE@;font-family:system-ui,sans-serif;padding:6px;
 background:linear-gradient(160deg,#eef1f6,#dfe5ed)}
@@ -788,7 +795,8 @@ position:relative;z-index:2}
 @media(min-width:760px){.zhead{grid-template-columns:186px 1fr;align-items:end}}
 .zhead__ps{border-radius:12px;overflow:hidden;aspect-ratio:2/3;background:@ALT@;
 box-shadow:0 14px 40px #0000004d;border:4px solid #fff;position:relative}
-.zhead__ps img{width:100%;height:100%;object-fit:cover}
+.zhead__ps img,.zhead__img{position:relative;z-index:1;width:100%;height:100%;
+object-fit:cover;display:block}
 .zhead__x{padding:0 0 10px}
 .zhead h1{font-size:32px;line-height:1.18;margin:0 0 6px;letter-spacing:-.5px}
 @media(max-width:759px){.zhead h1{font-size:25px}}
@@ -861,6 +869,8 @@ font-family:system-ui,sans-serif;font-size:13px;color:@DIM@;
 display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between;align-items:center}
 .zvb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;
 border:1px solid @LINE@;border-radius:6px;padding:5px 9px;background:@ALT@;color:#4d555e}
+
+img[hidden]{display:none}
 """
 
 
@@ -1058,6 +1068,43 @@ def разметка_плеера(вид, запись: dict, деталь: dict
 #: кавычка ломает разбор всего файла.
 ТЕКУЩАЯ_СТРАНИЦА = ' aria-current="page"'
 ТЕКУЩИЙ_ПУНКТ = ' aria-current="true"'
+
+
+def заглушка_постера(запись: dict, класс_заглушки: str, класс_картинки: str,
+                     ширина: int = 300, высота: int = 450) -> str:
+    """Постер с заглушкой ПОД ним, а не вместо него.
+
+    Заглушка рисуется всегда и лежит слоем ниже изображения. Так закрываются
+    сразу два случая, и по-разному:
+
+    * постера нет в снимке — заглушка сразу видна и говорит «не передан»;
+    * постер объявлен, но провайдер его не отдал — изображение снимается
+      обработчиком ошибки, и из-под него открывается заглушка «не открылся».
+
+    Разница в словах не косметическая: «не передан» — это состояние наших
+    данных, «не открылся» — состояние чужого хранилища. Измерено: из 48 постеров
+    страницы каталога семь адресов отвечают ошибкой у самого провайдера, и без
+    заглушки на их месте оставался бы значок сломанной картинки.
+    """
+    первая = html.escape((запись.get("title") or "?")[:1].upper())
+    постер = запись.get("poster")
+    подпись = "постер не открылся" if постер else "постер не передан"
+    заглушка = f'<span class="{класс_заглушки}"><b>{первая}</b>{подпись}</span>'
+    if not постер:
+        return заглушка
+    картинка = (f'<img class="{класс_картинки}" src="{html.escape(постер)}" alt="" '
+                f'loading="lazy" width="{ширина}" height="{высота}" data-poster>')
+    return заглушка + картинка
+
+
+#: Снятие изображения, которого нет. Слушатель стоит на фазе перехвата: событие
+#: `error` у `<img>` не всплывает, и обычный делегированный обработчик его не
+#: увидит. Один слушатель на документ вместо атрибута у каждой карточки: на
+#: странице каталога их сорок восемь.
+СКРИПТ_ПОСТЕРОВ = (
+    "document.addEventListener('error',function(e){var i=e.target;"
+    "if(i&&i.tagName==='IMG'&&i.hasAttribute('data-poster'))i.hidden=true;},true);"
+)
 
 
 def _склеить(части) -> str:
@@ -1402,7 +1449,7 @@ class ВидЛордс(Вид):
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 {_мета_версии()}
-<style>{self.се["стиль"]()}</style></head>
+<style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}</script></head>
 <body><div class="backdrop"></div>
 <a class="skip" href="#main">Перейти к содержимому</a>
 <div class="sheet">
@@ -1423,13 +1470,7 @@ class ВидЛордс(Вид):
     # --- составные части ---------------------------------------------
     def карточка(self, запись: dict) -> str:
         деталь = self.деталь(запись["slug"])
-        постер = запись.get("poster")
-        if постер:
-            изо = (f'<img class="c__img" src="{html.escape(постер)}" alt="" loading="lazy" '
-                   f'width="300" height="450">')
-        else:
-            первая = html.escape((запись["title"] or "?")[:1].upper())
-            изо = (f'<span class="c__none"><b>{первая}</b>постер не передан</span>')
+        изо = заглушка_постера(запись, "c__none", "c__img")
         значок = ""
         сезоны = деталь.get("seasons") or []
         if сезоны:
@@ -1549,10 +1590,7 @@ class ВидЛордс(Вид):
                       ("/catalog/?kind=Фильм", "Фильмы")
         звенья = [("/", self.имя), раздел_вида, ("", имя)]
 
-        постер = запись.get("poster")
-        изо = (f'<img src="{html.escape(постер)}" alt="Постер: {html.escape(имя)}" '
-               f'width="360" height="540">' if постер else
-               f'<span class="c__none"><b>{html.escape(имя[:1].upper())}</b>постер не передан</span>')
+        изо = заглушка_постера(запись, "c__none", "tw__img", 360, 540)
 
         описание = деталь.get("description") or деталь.get("short_description") or ""
         сюжет = (f'<div class="plot"><p>{html.escape(описание)}</p></div>' if описание else
@@ -1718,7 +1756,7 @@ class ВидЗона(Вид):
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 {_мета_версии()}
-<style>{self.се["стиль"]()}</style></head>
+<style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}</script></head>
 <body><a class="skip" href="#main">Перейти к содержимому</a>
 <div class="zs">
 <aside class="zrail">
@@ -1745,10 +1783,7 @@ class ВидЗона(Вид):
     # --- составные части ---------------------------------------------
     def плитка(self, запись: dict) -> str:
         деталь = self.деталь(запись["slug"])
-        постер = запись.get("poster")
-        изо = (f'<img src="{html.escape(постер)}" alt="" loading="lazy" width="300" height="450">'
-               if постер else
-               '<span class="zt__none">постер<br>не передан</span>')
+        изо = заглушка_постера(запись, "zt__none", "zt__img")
         мета = " · ".join(str(ч) for ч in (запись.get("kind"), запись.get("year")) if ч)
         кп = _число(деталь.get("kinopoisk_rating"))
         им = _число(деталь.get("imdb_rating"))
@@ -1767,9 +1802,7 @@ class ВидЗона(Вид):
 
     def строка(self, запись: dict) -> str:
         деталь = self.деталь(запись["slug"])
-        постер = запись.get("poster")
-        изо = (f'<img src="{html.escape(постер)}" alt="" loading="lazy" width="184" height="276">'
-               if постер else '<span class="zr__none">нет постера</span>')
+        изо = заглушка_постера(запись, "zr__none", "zr__img", 184, 276)
         части = [запись.get("kind"), запись.get("year")]
         части += (деталь.get("countries") or [])[:1]
         части += (деталь.get("genres") or [])[:2]
@@ -1892,9 +1925,7 @@ class ВидЗона(Вид):
         постер = запись.get("poster")
         фон = (f'<div class="zban__img"><img src="{html.escape(деталь.get("backdrop_url") or постер or "")}" alt=""></div>'
                if (деталь.get("backdrop_url") or постер) else "")
-        изо = (f'<img src="{html.escape(постер)}" alt="Постер: {html.escape(имя)}" '
-               f'width="372" height="558">' if постер else
-               '<span class="zt__none">постер<br>не передан</span>')
+        изо = заглушка_постера(запись, "zt__none", "zhead__img", 372, 558)
         ориг = (f'<p class="zhead__o">{html.escape(деталь["original_name"])}</p>'
                 if деталь.get("original_name") else "")
 

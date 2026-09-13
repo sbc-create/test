@@ -106,14 +106,48 @@ const OVERFLOW_PROBE = `(() => {
   return { overflow: Math.max(0, over), guilty };
 })()`;
 
+/**
+ * Битым считается изображение, чья загрузка ЗАВЕРШИЛАСЬ ошибкой и которое при
+ * этом осталось на экране.
+ *
+ * Два ложных срабатывания пришлось исключить по очереди, и оба выглядели
+ * убедительно.
+ *
+ * Первое: проба считала битым всё, что не загружено. Постеры ленивые, ниже
+ * экрана они не начинают грузиться вовсе, и счётчик показывал 431. Ни одного
+ * дефекта за этим не стояло.
+ *
+ * Второе: после прокрутки осталось 30, и они выглядели как отказ провайдера.
+ * Проверка прямым запросом из того же браузера показала, что все они
+ * отдаются за сотни миллисекунд: изображения просто не успели долистаться до
+ * видимой области к моменту замера. `complete === false` — это «ещё не
+ * начиналось», и приравнивать его к ошибке неверно.
+ *
+ * Остаётся единственное честное определение: `complete && naturalWidth === 0`.
+ * Изображение, которое отказало И которое витрина уже прикрыла заглушкой,
+ * посетителю не видно и в счётчик не идёт — заглушка и есть правильный ответ
+ * на отказ чужого хранилища.
+ */
 const IMAGES_PROBE = `(() => {
-  const bad = [];
+  const bad = [], pending = [];
   for (const img of document.images) {
-    if (!img.complete || img.naturalWidth === 0) {
-      bad.push({ src: String(img.currentSrc || img.src).slice(0, 120), alt: img.alt });
-    }
+    // Три разных состояния, и путать их нельзя:
+    //   complete && naturalWidth > 0  — загружено;
+    //   complete && naturalWidth == 0 — ЗАГРУЗКА ЗАВЕРШИЛАСЬ ОШИБКОЙ;
+    //   !complete                     — ленивое изображение ещё не начинало.
+    // Первая версия пробы считала битым всё, что не загружено, и насчитала 30
+    // «битых» постеров, каждый из которых по прямому запросу отдаётся за
+    // сотни миллисекунд. Ленивая картинка ниже экрана — не дефект страницы.
+    const rec = { src: String(img.currentSrc || img.src).slice(0, 120), alt: img.alt };
+    if (!img.complete) { pending.push(rec); continue; }
+    if (img.naturalWidth > 0) continue;
+    const hidden = img.hidden || img.offsetParent === null ||
+                   getComputedStyle(img).display === 'none' ||
+                   getComputedStyle(img).visibility === 'hidden';
+    // Ошибка, которую витрина уже прикрыла заглушкой, посетителю не видна.
+    if (!hidden) bad.push(rec);
   }
-  return { total: document.images.length, broken: bad };
+  return { total: document.images.length, broken: bad, not_started: pending };
 })()`;
 
 /** Цели касания: ссылка и кнопка меньше 24 px по меньшей стороне неудобны
@@ -152,7 +186,28 @@ async function measure(page, url, tag, viewport, dir) {
 
   await page.setViewportSize({ width: viewport.w, height: viewport.h });
   const resp = await page.goto(url, { waitUntil: 'load', timeout: 45000 });
-  await page.waitForTimeout(350);
+  // Постеры ленивые и приезжают из внешнего CDN. Считать битым изображение,
+  // которое просто ещё не доехало, — это измерять собственное нетерпение:
+  // первая версия пробы насчитала 431 «битую» картинку там, где их не было ни
+  // одной. Поэтому сначала прокрутка (ленивые начинают грузиться), потом
+  // ожидание завершения, и только затем подсчёт.
+  await page.evaluate(async () => {
+    window.scrollTo(0, document.body.scrollHeight);
+    await new Promise(r => setTimeout(r, 150));
+    window.scrollTo(0, 0);
+  });
+  await page.waitForTimeout(400);
+  await page.evaluate(() => Promise.all(
+    Array.from(document.images)
+      .filter(i => !i.complete)
+      .map(i => new Promise(res => {
+        const done = () => res();
+        i.addEventListener('load', done, { once: true });
+        i.addEventListener('error', done, { once: true });
+        setTimeout(done, 8000);
+      }))
+  ));
+  await page.waitForTimeout(250);
 
   const contrast = await page.evaluate(CONTRAST_PROBE);
   const overflow = await page.evaluate(OVERFLOW_PROBE);
@@ -169,6 +224,7 @@ async function measure(page, url, tag, viewport, dir) {
     screenshot: shot, console_errors, failed_requests: failed,
     contrast_failures: contrast, overflow: overflow.overflow, overflow_guilty: overflow.guilty,
     images_total: images.total, broken_images: images.broken,
+    images_not_started: images.not_started.length,
     small_touch_targets: touch, focus_visible: focus,
   };
 }
