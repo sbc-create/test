@@ -1,0 +1,40 @@
+{
+  "prompt_id": "FLEET-ARC-004-SEO-R4-RECOVERY",
+  "subject": "перемежающийся отказ одной проверки в наборе tests/arc_seo",
+  "status": "NOT_REPRODUCED",
+  "observations": [
+    {
+      "when": "2026-09-12, сессия FLEET-ARC-003",
+      "result": "1 failed, 76 passed",
+      "name_captured": false,
+      "note": "вывод не сохранён; имя проверки установить не удалось"
+    },
+    {
+      "when": "2026-09-13, сессия FLEET-ARC-004",
+      "result": "1 failed, 76 passed",
+      "name_captured": false,
+      "note": "при немедленном повторе — 77 passed"
+    }
+  ],
+  "dedicated_hunt": {
+    "runs": 8,
+    "failures": 0,
+    "log": "/tmp/flaky.txt",
+    "conclusion": "за восемь последовательных прогонов не воспроизведён"
+  },
+  "additional_clean_runs": {
+    "arc_003_session": 6,
+    "arc_004_session": 5,
+    "note": "включая две финальные серии, цикл отката и регрессионные прогоны"
+  },
+  "isolation_held_in_every_run": true,
+  "isolation_note": "канонические Registry, ChangeSet Store и Audit Ledger не изменялись ни в одном прогоне, включая оба неудачных",
+  "mitigation_applied": {
+    "what": "порт эфемерного экземпляра выбирает операционная система; смерть экземпляра замечается сразу",
+    "why": "фиксированный порт мог оказаться занят ещё не закрывшимся предыдущим экземпляром, и прогон обратился бы к чужому серверу",
+    "proven": false,
+    "honest_status": "правдоподобная причина, не доказанная: связь с наблюдавшимися отказами не установлена"
+  },
+  "open": true,
+  "why_not_closed": "причина не установлена, имя проверки не зафиксировано; закрывать наблюдение как решённое оснований нет"
+}
