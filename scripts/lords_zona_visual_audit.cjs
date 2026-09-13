@@ -209,7 +209,16 @@ async function measure(page, url, tag, viewport, dir) {
   ));
   await page.waitForTimeout(250);
 
-  const contrast = await page.evaluate(CONTRAST_PROBE);
+  // Контраст меряется в ОБЕИХ системных темах. Прежний дефект жил ровно
+  // здесь: при светлой теме системы чужой CSS красил поверхности в белый, а
+  // наш — текст в почти белый. Одна тема этого не показывает.
+  const contrast = [];
+  for (const scheme of ['light', 'dark']) {
+    await page.emulateMedia({ colorScheme: scheme });
+    await page.waitForTimeout(120);
+    for (const c of await page.evaluate(CONTRAST_PROBE)) contrast.push({ ...c, scheme });
+  }
+  await page.emulateMedia({ colorScheme: 'light' });
   const overflow = await page.evaluate(OVERFLOW_PROBE);
   const images = await page.evaluate(IMAGES_PROBE);
   const touch = await page.evaluate(TOUCH_PROBE);
@@ -259,6 +268,9 @@ async function clickCards(page, base, picks) {
         el.click({ timeout: 10000 }),
       ]);
       const landed = new URL(page.url()).pathname;
+      // URL обязан смениться: щелчок, после которого адрес тот же, — это не
+      // переход, даже если страница что-то показала.
+      const urlChanged = landed !== pick.from.split('?')[0];
       const info = await page.evaluate(() => ({
         h1: (document.querySelector('h1') || {}).textContent || '',
         title: document.title,
@@ -269,8 +281,18 @@ async function clickCards(page, base, picks) {
         poster: !!document.querySelector('.tw__ps img, .zhead__ps img, .tw__ps .c__none, .zhead__ps .zt__none'),
         bodyText: document.body.innerText.trim().length,
       }));
+      // Возврат браузера: посетитель обязан вернуться туда, откуда ушёл, а не
+      // на главную и не в пустую историю. Проверяется настоящей кнопкой, а не
+      // переходом по собранному адресу.
+      let backOk = null, backTo = null;
+      try {
+        await page.goBack({ waitUntil: 'load', timeout: 30000 });
+        backTo = new URL(page.url()).pathname + new URL(page.url()).search;
+        backOk = backTo === pick.from;
+      } catch (e) { backOk = false; backTo = String(e.message).slice(0, 60); }
       results.push({
-        ...pick, ok: landed === pick.href && info.bodyText > 200,
+        ...pick, ok: landed === pick.href && info.bodyText > 200 && backOk === true,
+        url_changed: urlChanged, back_ok: backOk, back_to: backTo,
         landed, top_element: top, h1: info.h1.slice(0, 80), title: info.title.slice(0, 90),
         canonical: info.canonical, ld_blocks: info.ld, crumbs: info.crumbs,
         player: info.player, poster: info.poster, body_chars: info.bodyText,

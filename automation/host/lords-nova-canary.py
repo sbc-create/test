@@ -106,7 +106,10 @@ def доказать_цепочку(витрина: str, описание: dict)
     домен отдаёт `lords-nova-01.service` на 9110.
     """
     import importlib.util
-    модуль_путь = Path(__file__).resolve().parents[1] / "scripts" / "prove_serving_chain.py"
+    # parents[2], а не [1]: файл лежит в automation/host/, и один уровень вверх
+    # даёт automation/, где никаких scripts/ нет. Ошибка на единицу в пути к
+    # доказателю превращала бы обязательную сверку в отказ на ровном месте.
+    модуль_путь = Path(__file__).resolve().parents[2] / "scripts" / "prove_serving_chain.py"
     if not модуль_путь.is_file():
         raise Отказ(f"нет доказателя цепочки: {модуль_путь}")
     спец = importlib.util.spec_from_file_location("prove_serving_chain", модуль_путь)

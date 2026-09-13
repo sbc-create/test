@@ -1042,9 +1042,22 @@ def разметка_плеера(вид, запись: dict, деталь: dict
  var f=document.querySelector('[data-player]'); if(!f) return;
  var el=f.querySelector('video-player'), st=f.querySelector('[data-player-state]');
  if(!el){return}
- var done=false;
- function state(k,t,p){ if(done&&k!=='ok')return; f.setAttribute('data-state',k);
-  if(k==='ok'){ if(st)st.hidden=true; el.hidden=false; done=true; return }
+ // `поднялся` означает только одно: элемент провайдера появился на экране.
+ // Раньше этот же флаг ГЛУШИЛ все последующие состояния, и отказ, пришедший
+ // после подъёма, до зрителя не доходил вовсе.
+ //
+ // А приходит он именно так. Обычная последовательность у провайдера —
+ // сначала элемент поднимается, и только потом выясняется, что дорожки для
+ // этой серии нет: событие `noData` прилетает ПОСЛЕ `ok`. Со старым флагом
+ // зритель получал поднявшийся плеер, который молча ничего не играет, —
+ // то есть ровно тот чёрный прямоугольник, ради которого состояния и заводили.
+ //
+ // Поэтому отказ провайдера и отказ его скрипта перебивают успех всегда, а
+ // флаг гасит только запоздавший таймаут: пятнадцать секунд не повод объявлять
+ // сломанным то, что уже играет.
+ var поднялся=false;
+ function state(k,t,p){ f.setAttribute('data-state',k);
+  if(k==='ok'){ if(st)st.hidden=true; el.hidden=false; поднялся=true; return }
   el.hidden=true; if(!st)return; st.hidden=false;
   st.innerHTML='<b></b><p></p>'; st.firstChild.textContent=t;
   st.lastChild.textContent=p; }
@@ -1059,7 +1072,7 @@ def разметка_плеера(вид, запись: dict, деталь: dict
  var seen=setInterval(function(){
   if(el.shadowRoot||el.children.length){clearInterval(seen);state('ok');}},250);
  setTimeout(function(){ clearInterval(seen);
-  if(!done) state('slow','Плеер не поднялся',
+  if(!поднялся) state('slow','Плеер не поднялся',
    'Скрипт провайдера загрузился, но проигрыватель не запустился за пятнадцать секунд. Обновите страницу; описание и серии доступны и сейчас.');},15000);
 })();
 """

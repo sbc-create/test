@@ -213,3 +213,22 @@ class TestОткат:
         вердикт = текст[текст.index('запись["verdict"] = (\n        "ROLLED_BACK_VERIFIED"'):]
         голова = вердикт[:400]
         assert "disk_fingerprint_match" in голова and "served_fingerprint_match" in голова
+
+
+class TestДоказательЦепочкиНаходится:
+    """Путь к доказателю — часть привилегированного пути.
+
+    Ошибка на единицу в `parents[...]` превращает обязательную сверку в отказ
+    на ровном месте: установщик не находит доказатель и отказывается работать.
+    Проверяется именно существование файла по тому пути, который вычисляет сам
+    установщик, а не по написанному от руки.
+    """
+
+    def test_путь_вычисляется_и_файл_существует(self, уст):
+        from pathlib import Path
+        путь = Path(уст.__file__).resolve().parents[2] / "scripts" / "prove_serving_chain.py"
+        assert путь.is_file(), f"доказателя нет по вычисленному пути: {путь}"
+
+    def test_установщик_ссылается_именно_на_этот_путь(self):
+        текст = ИСХОДНИК.read_text(encoding="utf-8")
+        assert 'parents[2] / "scripts" / "prove_serving_chain.py"' in текст
