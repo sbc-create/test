@@ -120,7 +120,27 @@ readonly REFRESH_TIMER="lords-content-refresh.timer"
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 REPO="$(cd -- "${SCRIPT_DIR}/../.." && pwd)"
-PYTHON="${FACTORY_PYTHON:-${REPO}/.venv/bin/python}"
+# Интерпретатор выбирается по наличию, а не по предположению о раскладке.
+#
+# Прежде путь был жёстко `${REPO}/.venv/bin/python`. В рабочем дереве, где
+# venv лежит не внутри копии репозитория, сценарий падал на первой же строке
+# предполётной проверки — и падал непонятно: «манифест происхождения не
+# сошёлся». Причина была не в происхождении, а в отсутствии файла, и
+# диагностика уводила ровно в другую сторону.
+#
+# Порядок: явное указание владельца, затем venv рядом с деревом, затем
+# системный python3. Если не годится ни один — отказ называет это прямо.
+if [ -n "${FACTORY_PYTHON:-}" ]; then
+  PYTHON="${FACTORY_PYTHON}"
+elif [ -x "${REPO}/.venv/bin/python" ]; then
+  PYTHON="${REPO}/.venv/bin/python"
+elif command -v python3 >/dev/null 2>&1; then
+  PYTHON="$(command -v python3)"
+else
+  echo "[canary] ОТКАЗ: интерпретатор python не найден (ни FACTORY_PYTHON, ни ${REPO}/.venv, ни python3)" >&2
+  exit 2
+fi
+[ -x "${PYTHON}" ] || { echo "[canary] ОТКАЗ: ${PYTHON} не исполняется" >&2; exit 2; }
 AUDIT_DIR="${LORDS_CANARY_AUDIT:-/var/log/site-factory}"
 STAGING_ROOT="${LORDS_CANARY_STAGING:-${REPO}/var/canary-staging}"
 STAGING="${STAGING_ROOT}/${SITE}"
