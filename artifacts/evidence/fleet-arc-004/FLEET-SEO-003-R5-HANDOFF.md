@@ -98,7 +98,7 @@ I.требовать_эфемерное(окр["CHANGESET_DB"])  # отказ, �
 
 ```
 source_branch     claude/core-idempotency-fingerprint-004
-source_commit     <SOURCE_COMMIT>
+source_commit     eb3af5a5e1eec770c19a51c9fe091e6edaee5320
 evidence_path     artifacts/evidence/fleet-arc-004/
 fix_modules       factory/site_engine/changeset/store.py (транзакция)
                   factory/site_engine/changeset/isolation.py (новый)
