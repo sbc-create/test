@@ -512,7 +512,7 @@ def сезон_по_номеру(деталь: dict, номер: int) -> dict | 
 #   acc   — фон под БЕЛЫМ текстом (кнопки, таблетки, значки): 5.03:1
 #   accdk — зелёный ТЕКСТ на светлом (ссылки, крошки): 6.17:1 на фоне крошек
 ЛОРДС_ТОКЕНЫ = {
-    "ink": "#1f2329", "dim": "#5b6470", "page": "#0e1013", "sheet": "#eef1f4",
+    "ink": "#1f2329", "dim": "#5b6470", "page": "#111111", "sheet": "#eef1f4",
     "card": "#ffffff", "line": "#d7dde3", "acc": "#3f7d26", "accdk": "#2f5e1c",
     "kp": "#b34700", "imdb": "#f5c518", "bar": "#171a1e",
     "mute": "#5f6874", "onbar": "#8a939e",
@@ -573,7 +573,11 @@ text-transform:uppercase;letter-spacing:.3px;color:#39414a}
 .hd__s button{border:0;background:#fff;color:#6a737d;padding:0 11px;cursor:pointer;font-size:14px}
 .hd__s button:hover{color:@ACCDK@}
 /* Заголовок раздела и вкладки-таблетки — прямо из эталона. */
-.lead{font-size:17px;font-weight:700;color:#3a4149;margin:16px 0 12px}
+.lead{font-size:20px;font-weight:600;color:#3a4149;margin:16px 0 12px}
+/* Заголовок раздела у эталона — 24px при 14px основного текста.
+   Было 17px: страница открывалась почти без заголовка. 20px — шаг к
+   эталону, который остаётся в ритме этой типографики; остаточное
+   расхождение названо в отчёте, а не сглажено. */
 .tabs{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin:0 0 12px}
 .tabs__pill{display:inline-flex;align-items:center;gap:7px;background:@ACC@;color:#fff;
 font-weight:700;font-size:15px;padding:10px 18px;border-radius:4px}
@@ -627,7 +631,7 @@ margin:14px 0;border:1px solid @LINE@;border-radius:4px}
 .tw__ps img,.tw__img{position:relative;z-index:1;width:100%;height:100%;
 object-fit:cover;display:block}
 .tw__ps .c__none{font-size:13px}
-.tw h1{font-size:20px;line-height:1.3;font-weight:700;margin:0 0 12px;color:@INK@}
+.tw h1{font-size:20px;line-height:1.3;font-weight:600;margin:0 0 12px;color:@INK@}
 .plot p{margin:0 0 10px;font-size:13.5px;line-height:1.62;color:#333a42}
 .plot .none{color:@DIM@;font-style:italic}
 .plot a{display:inline-block;padding:5px 2px;color:@ACCDK@;font-weight:600}
@@ -687,7 +691,7 @@ text-align:center;color:#4d555e;margin:14px 0}
 .empty a{display:inline-block;padding:6px 2px;color:@ACCDK@;font-weight:600}
 .nf{text-align:center;padding:56px 20px}
 .nf b{display:block;font-size:64px;font-weight:800;color:@ACC@;line-height:1}
-.nf h1{font-size:20px;margin:10px 0 8px}
+.nf h1{font-size:20px;font-weight:600;margin:10px 0 8px}
 .nf p{color:#4d555e;margin:0 auto 18px;max-width:460px}
 .nf a{display:inline-block;background:@ACC@;color:#fff;font-weight:700;padding:11px 22px;
 border-radius:4px}
