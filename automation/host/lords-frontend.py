@@ -833,7 +833,10 @@ font-family:system-ui,sans-serif;font-size:14px}
 .zaside dt{font-size:11.5px;letter-spacing:.9px;text-transform:uppercase;color:@DIM@;
 font-weight:700;margin-bottom:3px}
 .zaside dd{margin:0;color:@INK@;line-height:1.5}
-.zaside a{color:@ACC@;font-weight:600}
+.zaside a{color:@ACC@;font-weight:600;display:inline-block;padding:5px 2px}
+/* Ссылки жанров в колонке фактов Zona были 16px по высоте — та же
+   болезнь, что раньше вылечили у Lords в `.facts a`, и ровно так же
+   её нашла проба целей касания, а не чтение. */
 /* Плеер Zona: без вкладок, рамка со скруглением и подпись сверху. */
 .zpl{margin:0 26px}
 .zpl__h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:0 0 10px}
