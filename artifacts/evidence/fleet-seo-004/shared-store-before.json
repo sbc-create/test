@@ -1,0 +1,107 @@
+{
+ "changeset_store": {
+  "path": "/srv/site-factory/changeset-store/changesets.sqlite3",
+  "exists": true,
+  "tables": [
+   "changeset",
+   "changeset_dlq",
+   "changeset_lease",
+   "changeset_lock",
+   "changeset_outbox",
+   "changeset_target",
+   "changeset_transition",
+   "cs_guard",
+   "fencing_counter",
+   "seo_content_proposal",
+   "sqlite_sequence"
+  ],
+  "rows": {
+   "changeset": 4,
+   "changeset_dlq": 0,
+   "changeset_lease": 0,
+   "changeset_lock": 0,
+   "changeset_outbox": 8,
+   "changeset_target": 4,
+   "changeset_transition": 0,
+   "cs_guard": 0,
+   "fencing_counter": 0,
+   "seo_content_proposal": 4,
+   "sqlite_sequence": 1
+  },
+  "identifier_hash": {
+   "changeset": "601ced4831148f3d609859bd459bce07efa7b5f5b36a67401d2fda460f4b3b67",
+   "changeset_dlq": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "changeset_lease": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "changeset_lock": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "changeset_outbox": "6fa3703f5c50f50bcb61e15ee6562bde72854e1fb465b48631ea63365d0c9afd",
+   "changeset_target": "601ced4831148f3d609859bd459bce07efa7b5f5b36a67401d2fda460f4b3b67",
+   "changeset_transition": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "cs_guard": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "fencing_counter": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "seo_content_proposal": "f61a0e182615443ea5ca0f3576a65237e6c585987b7f37b85344b707780b3303",
+   "sqlite_sequence": "d7e7d500a2d12d5e0dea5d2af349f004e96b8fd9eb40be3d2dbb866603e5f200"
+  },
+  "content_hash": {
+   "changeset": "f824fee8b57a70cde284a36d092f40930d5b0be06225b8d7225c5ba6330db951",
+   "changeset_dlq": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "changeset_lease": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "changeset_lock": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "changeset_outbox": "cb3eb2a2633dfb807050ca57f78eb7144f11bf79bab673f56db5a88e33e4269a",
+   "changeset_target": "f1b642c6453d8f982cee3a27edb0631a276e4a3d646eec09b591613d407a5846",
+   "changeset_transition": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "cs_guard": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "fencing_counter": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "seo_content_proposal": "1276b72ad390ba489fe1a49285f360477a56d21b740b83db7888016287ed3e4a",
+   "sqlite_sequence": "31b4fee15f94fcef855decf844ea7d22cddefee47d1c1992f37c08025d5a099d"
+  },
+  "key_rows": 12,
+  "outbox_rows": 8
+ },
+ "file": {
+  "path": "/srv/site-factory/changeset-store/changesets.sqlite3",
+  "exists": true,
+  "bytes": 94208,
+  "sha256": "8b8b657ebbed738fccf65b5b42677a4c085d902a0429979ce5ec8ac06a61b7a2"
+ },
+ "audit_ledger": {
+  "path": "/srv/site-factory/audit-ledger/audit_ledger.sqlite3",
+  "exists": true,
+  "event_tables": {
+   "ledger_event": 122,
+   "ledger_outbox": 122
+  },
+  "r4_tail_events": {
+   "seo.changeset.proposed.v1": 4,
+   "changeset.proposed.v1": 4
+  },
+  "r4_tail_total": 8,
+  "events_by_type": {
+   "ledger_event": {
+    "audit.claim.erratum.v1": 1,
+    "audit.event_set.quarantined.v1": 1,
+    "changeset.proposed.v1": 4,
+    "ledger.genesis.v1": 1,
+    "prompt.result.imported.v1": 7,
+    "registry.baseline.observed.v1": 1,
+    "registry.site.activated.v1": 9,
+    "registry.site.registered.v1": 13,
+    "registry.site.retired.v1": 2,
+    "registry.site.updated.v1": 8,
+    "release.control_plane_deployed.v1": 1,
+    "release.rollback_drill_completed.v1": 1,
+    "security.control_principals_revoked.v1": 1,
+    "security.control_principals_rotated.v1": 1,
+    "security.credentials_rotated.v1": 1,
+    "seo.changeset.proposed.v1": 4,
+    "technical.debt.observed.v1": 4,
+    "templates.fleet_audit.imported.v1": 1,
+    "test.observed.v1": 60,
+    "unverified.observation.v1": 1
+   },
+   "ledger_outbox": {
+    "audit.event.appended.v1": 122
+   }
+  }
+ },
+ "mode": "READ_ONLY"
+}

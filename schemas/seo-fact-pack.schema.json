@@ -1,0 +1,208 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SEOFactPack.v1",
+  "description": "Неизменяемый снимок фактов о сущности, из которого только и может вырасти текст. Схема закрыта для неизвестных полей: открытая приняла бы опечатку в имени поля за дополнительные данные, и факт без источника прошёл бы дальше как факт.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "resource_kind",
+    "site_id",
+    "entity_type",
+    "entity_id",
+    "title_id",
+    "locale",
+    "event_type",
+    "event_id",
+    "facts"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "seo.fact_pack/1.0.0"
+    },
+    "resource_kind": {
+      "const": "seo.fact_pack"
+    },
+    "site_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{1,127}$",
+      "description": "Единственный ключ витрины; домен ключом не является."
+    },
+    "entity_type": {
+      "enum": [
+        "title",
+        "season",
+        "episode"
+      ]
+    },
+    "entity_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "title_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "season_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 256
+    },
+    "episode_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 256
+    },
+    "locale": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Правка фактов создаёт новую версию, а не правит старую."
+    },
+    "event_type": {
+      "enum": [
+        "title.created",
+        "title.updated",
+        "season.created",
+        "season.updated",
+        "episode.created",
+        "episode.updated",
+        "metadata.corrected"
+      ]
+    },
+    "event_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "facts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/fact"
+      },
+      "description": "Значения сущности живут здесь и только здесь. Скалярных полей у пакета нет намеренно: поле без факта не существует, поэтому «подставить значение по умолчанию» технически не к чему."
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "Отпечаток пакета. `event_id` в него не входит: повторная доставка того же содержимого обязана дать тот же отпечаток."
+    }
+  },
+  "$defs": {
+    "fact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fact_id",
+        "source_id",
+        "provider",
+        "retrieved_at",
+        "snapshot_hash",
+        "field_path",
+        "confidence"
+      ],
+      "properties": {
+        "fact_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "source_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "retrieved_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "snapshot_hash": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "field_path": {
+          "enum": [
+            "/canonical_title_ru",
+            "/original_title",
+            "/alternative_titles",
+            "/work_type",
+            "/year",
+            "/year_end",
+            "/countries",
+            "/genres",
+            "/age_rating",
+            "/release_status",
+            "/season_count",
+            "/declared_episode_count",
+            "/actual_episode_count",
+            "/season_number",
+            "/episode_in_season_number",
+            "/episode_absolute_number",
+            "/episode_source_number",
+            "/episode_display_number",
+            "/synopsis_short",
+            "/synopsis_long",
+            "/characters",
+            "/creators",
+            "/previous_season_ref",
+            "/previous_episode_ref",
+            "/spoiler_level",
+            "/video_availability",
+            "/season_synopsis",
+            "/episode_synopsis",
+            "/episode_title",
+            "/distinctive_feature",
+            "/premise_subject",
+            "/premise_conflict",
+            "/setting",
+            "/season_arc",
+            "/season_position",
+            "/episode_focus",
+            "/studio",
+            "/franchise_id",
+            "/source_material"
+          ],
+          "description": "Список закрыт: свободная форма позволила бы завести поле на ходу."
+        },
+        "value": {
+          "description": "Любое значение; смысл задаёт field_path."
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "conflict_status": {
+          "enum": [
+            "NONE",
+            "CONFLICT",
+            "RESOLVED",
+            "SUPERSEDED"
+          ],
+          "description": "CONFLICT означает, что источники расходятся. Значение поля в этом случае не выдаётся: выбирать удобный вариант — это и есть выдумывание."
+        },
+        "source_license": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "Политика использования источника. UNKNOWN — не «свободно»."
+        }
+      }
+    }
+  }
+}

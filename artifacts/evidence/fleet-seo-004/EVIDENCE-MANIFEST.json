@@ -1,0 +1,404 @@
+{
+ "prompt_id": "FLEET-SEO-004-CONTENT-QUALITY",
+ "prompt_rev": "R1",
+ "corpus": {
+  "golden": {
+   "title": 45,
+   "season": 40,
+   "episode": 119,
+   "negative": 18,
+   "edge_or_negative": 116,
+   "total": 222
+  },
+  "holdout": {
+   "title": 120,
+   "season": 90,
+   "episode": 100,
+   "edge_or_negative": 67,
+   "total": 310
+  }
+ },
+ "runs": {
+  "golden": {
+   "statuses": {
+    "PASSED": 136,
+    "NEEDS_FACTS": 68,
+    "REJECTED": 16,
+    "FACT_CONFLICT": 1,
+    "NOINDEX_RECOMMENDED": 1
+   },
+   "expectation_mismatches": 0,
+   "template_collisions_allowed": 8,
+   "counters": {
+    "contradicted": 5,
+    "unsupported_material": 0,
+    "player_false": 5,
+    "identity_errors": 4,
+    "number_errors": 2,
+    "language_critical": 0,
+    "cliches": 0,
+    "grammar": 0,
+    "structured_errors": 0,
+    "canonical_conflicts": 0,
+    "visible_mismatches": 0,
+    "fake_review_markup": 0,
+    "exact_duplicates": 1,
+    "normalized_duplicates": 0,
+    "cross_site_copies": 0,
+    "unresolved_near_duplicates": 0,
+    "keyword_stuffing": 0,
+    "injection_detected": 2,
+    "injection_escaped": 2,
+    "notes_emitted": 261,
+    "notes_rejected": 5,
+    "faq_emitted": 159
+   },
+   "accepted_counters": {
+    "contradicted": 0,
+    "unsupported_material": 0,
+    "player_false": 0,
+    "identity_errors": 0,
+    "number_errors": 0,
+    "language_critical": 0,
+    "cliches": 0,
+    "structured_errors": 0,
+    "canonical_conflicts": 0,
+    "visible_mismatches": 0,
+    "fake_review_markup": 0,
+    "unresolved_near_duplicates": 0,
+    "keyword_stuffing": 0,
+    "exact_duplicates": 0,
+    "normalized_duplicates": 0,
+    "cross_site_copies": 0,
+    "injection_escaped": 0
+   },
+   "claim_verdicts": {
+    "SUPPORTED": 3105,
+    "NON_FACTUAL_STYLE": 752,
+    "CONTRADICTED": 5
+   },
+   "corpus_patterns": {
+    "total": 151,
+    "repeated_opening_rate": 0.0199,
+    "repeated_ending_rate": 0.1192,
+    "repeated_frame_rate": 0.404,
+    "budget": 0.02,
+    "within_budget": true,
+    "frame_note": "repeated_frame_rate — вступление после снятия имён и чисел. Бюджет 2% относится к repeated_opening_rate; рамка показана отдельно и у страниц серий одинакова по устройству"
+   },
+   "blind_scores": {
+    "average": 94.08,
+    "lowest": 47.0,
+    "highest": 100.0
+   },
+   "body_length": {
+    "min": 66,
+    "max": 530,
+    "average": 277,
+    "within_700_1400": 0
+   },
+   "store": {
+    "fact_packs": 222,
+    "drafts": 222,
+    "notes": 261,
+    "events": 222,
+    "duplicate_drafts": 0,
+    "orphan_notes": 0,
+    "orphan_drafts": 0,
+    "orphan_events": 0,
+    "orphan_records": 0,
+    "status_passed": 136,
+    "status_rejected": 16,
+    "status_needs_facts": 68,
+    "status_fact_conflict": 1,
+    "status_review_required": 0,
+    "status_omit": 0,
+    "status_noindex_recommended": 1
+   },
+   "writer": {
+    "mode": "FAKE_SHADOW",
+    "model_version": "deterministic-composer/1.0.0",
+    "live_calls": 0,
+    "model_downloads": 0,
+    "calls": 222
+   },
+   "budget": {
+    "SEO_BUDGET_CAP": 10000,
+    "SEO_BUDGET_CURRENCY": "UNSPECIFIED",
+    "PAID_PROVIDERS_ENABLED": "NO",
+    "PAID_SPEND": 0.0,
+    "refused_calls": [],
+    "allowed_free_calls": 222
+   }
+  },
+  "holdout": {
+   "statuses": {
+    "PASSED": 246,
+    "REJECTED": 37,
+    "REVIEW_REQUIRED": 2,
+    "NEEDS_FACTS": 25
+   },
+   "expectation_mismatches": 0,
+   "counters": {
+    "contradicted": 0,
+    "unsupported_material": 0,
+    "player_false": 0,
+    "identity_errors": 0,
+    "number_errors": 0,
+    "language_critical": 0,
+    "cliches": 0,
+    "grammar": 0,
+    "structured_errors": 0,
+    "canonical_conflicts": 0,
+    "visible_mismatches": 0,
+    "fake_review_markup": 0,
+    "exact_duplicates": 0,
+    "normalized_duplicates": 0,
+    "cross_site_copies": 0,
+    "unresolved_near_duplicates": 0,
+    "keyword_stuffing": 0,
+    "injection_detected": 0,
+    "injection_escaped": 0,
+    "notes_emitted": 552,
+    "notes_rejected": 0,
+    "faq_emitted": 308
+   },
+   "accepted_counters": {
+    "contradicted": 0,
+    "unsupported_material": 0,
+    "player_false": 0,
+    "identity_errors": 0,
+    "number_errors": 0,
+    "language_critical": 0,
+    "cliches": 0,
+    "structured_errors": 0,
+    "canonical_conflicts": 0,
+    "visible_mismatches": 0,
+    "fake_review_markup": 0,
+    "unresolved_near_duplicates": 0,
+    "keyword_stuffing": 0,
+    "exact_duplicates": 0,
+    "normalized_duplicates": 0,
+    "cross_site_copies": 0,
+    "injection_escaped": 0
+   },
+   "blind_scores": {
+    "average": 96.24,
+    "lowest": 87.0,
+    "highest": 100.0
+   },
+   "store": {
+    "fact_packs": 310,
+    "drafts": 310,
+    "notes": 552,
+    "events": 310,
+    "duplicate_drafts": 0,
+    "orphan_notes": 0,
+    "orphan_drafts": 0,
+    "orphan_events": 0,
+    "orphan_records": 0,
+    "status_passed": 246,
+    "status_rejected": 37,
+    "status_needs_facts": 25,
+    "status_fact_conflict": 0,
+    "status_review_required": 2,
+    "status_omit": 0,
+    "status_noindex_recommended": 0
+   },
+   "writer": {
+    "mode": "FAKE_SHADOW",
+    "model_version": "deterministic-composer/1.0.0",
+    "live_calls": 0,
+    "model_downloads": 0,
+    "calls": 310
+   }
+  }
+ },
+ "tests": {
+  "command": "python3 -m pytest tests/seo_content/ -q",
+  "exit_code": 0,
+  "summary": "286 passed in 136.66s (0:02:16)",
+  "passed": 286,
+  "failed": 0,
+  "skipped": 0,
+  "xfailed": 0,
+  "error": 0
+ },
+ "repository": {
+  "base": "0d24e262cf22cca097c4e20fc98a9f521e69095c",
+  "changed": [
+   "artifacts/evidence/fleet-seo-004/EVIDENCE-MANIFEST.json",
+   "artifacts/evidence/fleet-seo-004/golden-run.json",
+   "artifacts/evidence/fleet-seo-004/holdout-run.json",
+   "artifacts/evidence/fleet-seo-004/shared-store-after.json",
+   "artifacts/evidence/fleet-seo-004/shared-store-before.json",
+   "docs/seo-content/QWEN-SHADOW-ONBOARDING-HANDOFF.md",
+   "docs/seo-content/README.md",
+   "docs/seo-content/blind-judge-rubric.md",
+   "docs/seo-content/examples/accepted.md",
+   "docs/seo-content/examples/rejected.md",
+   "docs/seo-content/free-services.md",
+   "factory/seo_content/__init__.py",
+   "factory/seo_content/budget.py",
+   "factory/seo_content/claims.py",
+   "factory/seo_content/dedup.py",
+   "factory/seo_content/draft.py",
+   "factory/seo_content/editorial.py",
+   "factory/seo_content/factpack.py",
+   "factory/seo_content/gate.py",
+   "factory/seo_content/identity.py",
+   "factory/seo_content/injection.py",
+   "factory/seo_content/judge.py",
+   "factory/seo_content/language.py",
+   "factory/seo_content/lexicon.py",
+   "factory/seo_content/pipeline.py",
+   "factory/seo_content/prompts/editorial_note.v1.md",
+   "factory/seo_content/prompts/episode.v1.md",
+   "factory/seo_content/prompts/season.v1.md",
+   "factory/seo_content/prompts/title.v1.md",
+   "factory/seo_content/store.py",
+   "factory/seo_content/structured_data.py",
+   "factory/seo_content/testing.py",
+   "factory/seo_content/writer.py",
+   "schemas/seo-content-draft.schema.json",
+   "schemas/seo-editorial-note.schema.json",
+   "schemas/seo-fact-pack.schema.json",
+   "scripts/seo_content/build_evidence.py",
+   "scripts/seo_content/export_examples.py",
+   "scripts/seo_content/observe_shared_store.py",
+   "scripts/seo_content/run_corpus.py",
+   "tests/seo_content/conftest.py",
+   "tests/seo_content/fixtures/build_fixtures.py",
+   "tests/seo_content/fixtures/golden.json",
+   "tests/seo_content/fixtures/holdout.json",
+   "tests/seo_content/test_claims_mutation.py",
+   "tests/seo_content/test_episode_identity_210.py",
+   "tests/seo_content/test_factpack.py",
+   "tests/seo_content/test_injection_and_writer.py",
+   "tests/seo_content/test_language_and_notes.py",
+   "tests/seo_content/test_schemas_and_corpus.py",
+   "tests/seo_content/test_store_and_idempotency.py",
+   "tests/seo_content/test_structured_data.py",
+   "tests/seo_content/test_uniqueness.py"
+  ],
+  "production_paths_touched": [],
+  "PRODUCTION_MUTATIONS": 0
+ },
+ "shared_store": {
+  "mode": "READ_ONLY",
+  "before": {
+   "key_rows": 12,
+   "outbox_rows": 8,
+   "rows": {
+    "changeset": 4,
+    "changeset_dlq": 0,
+    "changeset_lease": 0,
+    "changeset_lock": 0,
+    "changeset_outbox": 8,
+    "changeset_target": 4,
+    "changeset_transition": 0,
+    "cs_guard": 0,
+    "fencing_counter": 0,
+    "seo_content_proposal": 4,
+    "sqlite_sequence": 1
+   },
+   "audit_r4_tail": {
+    "seo.changeset.proposed.v1": 4,
+    "changeset.proposed.v1": 4
+   },
+   "file_sha256": "8b8b657ebbed738fccf65b5b42677a4c085d902a0429979ce5ec8ac06a61b7a2"
+  },
+  "after": {
+   "key_rows": 12,
+   "outbox_rows": 8,
+   "rows": {
+    "changeset": 4,
+    "changeset_dlq": 0,
+    "changeset_lease": 0,
+    "changeset_lock": 0,
+    "changeset_outbox": 8,
+    "changeset_target": 4,
+    "changeset_transition": 0,
+    "cs_guard": 0,
+    "fencing_counter": 0,
+    "seo_content_proposal": 4,
+    "sqlite_sequence": 1
+   },
+   "audit_r4_tail": {
+    "seo.changeset.proposed.v1": 4,
+    "changeset.proposed.v1": 4
+   },
+   "file_sha256": "8b8b657ebbed738fccf65b5b42677a4c085d902a0429979ce5ec8ac06a61b7a2"
+  },
+  "comparison": {
+   "SHARED_STORE_WRITES": 0,
+   "SHARED_STORE_IDENTIFIER_DELTA": 0,
+   "SHARED_STORE_CONTENT_HASH_DELTA": 0,
+   "FILE_SHA256_CHANGED": false,
+   "details": [],
+   "AUDIT_LEDGER_APPENDS": 0,
+   "R4_AUDIT_EVENTS_OBSERVED": 8
+  },
+  "SHARED_STORE_WRITES": 0,
+  "SHARED_STORE_IDENTIFIER_DELTA": 0,
+  "SHARED_STORE_CONTENT_HASH_DELTA": 0,
+  "OWNER_CLEANUP_STATUS": "PENDING",
+  "cleanup_owner": "Changeset Store/Control Plane"
+ },
+ "not_evaluated": {
+  "LIVE_QWEN_QUALITY": "живой Qwen не разрешён владельцем",
+  "HUMAN_REVIEW_STATUS": "человеческой выборки не было",
+  "SEMANTIC_SIMILARITY": "локальных embeddings нет; порог 0,92 не мерялся",
+  "SPELLING": "LanguageTool отсутствует, публичный сервис не используется",
+  "FULL_MORPHOLOGY": "pymorphy отсутствует; проверены только счётные формы",
+  "RICH_RESULT_DISPLAY": "показ решает поисковая система, а не разметка",
+  "FREE_SERVICE_LIMITS": "официальные источники недоступны (403)"
+ },
+ "artifacts": [
+  {
+   "path": "artifacts/evidence/fleet-seo-004/golden-run.json",
+   "sha256": "bcd0660032ebf6d3ba2dc9571294b4eddb0470479a19cdba8c382e2bfa2a9521",
+   "bytes": 396066
+  },
+  {
+   "path": "artifacts/evidence/fleet-seo-004/holdout-run.json",
+   "sha256": "65d70cf978e68b19af84eacdfc1ebf95e7e997e5795f36d95e7b7d0ca739bb61",
+   "bytes": 631552
+  },
+  {
+   "path": "artifacts/evidence/fleet-seo-004/shared-store-after.json",
+   "sha256": "530ec81bf0d635e77badfea9330a70cecfc6ac78a08656f207a4c8fc9473ae76",
+   "bytes": 4344
+  },
+  {
+   "path": "artifacts/evidence/fleet-seo-004/shared-store-before.json",
+   "sha256": "707bcdd889756167e048af09d62085fec9f4bca0069912a40aa7eba3da01bcc8",
+   "bytes": 4107
+  },
+  {
+   "path": "schemas/seo-content-draft.schema.json",
+   "sha256": "aea68d882b19a583f5b290dcd9f9f1fccb1a1021499c358cb9d73cca1140680c",
+   "bytes": 8955
+  },
+  {
+   "path": "schemas/seo-editorial-note.schema.json",
+   "sha256": "c907a6903763bff1540edef069fe953b7c42f4ff35807cccd9f5019138fe9b0e",
+   "bytes": 3721
+  },
+  {
+   "path": "schemas/seo-fact-pack.schema.json",
+   "sha256": "b5775ad658795d3d4677255192124a59df29cc2e25b59369be00b8e3fd156ba6",
+   "bytes": 6262
+  },
+  {
+   "path": "tests/seo_content/fixtures/golden.json",
+   "sha256": "460ff528b556cf2cb6cf6cc47c83ab90a485afd24d377beb555fa294ce083bcf",
+   "bytes": 1777295
+  },
+  {
+   "path": "tests/seo_content/fixtures/holdout.json",
+   "sha256": "8989b53286e84e50664c9cf5c9c4fd3226b8d5065d77265cb681b1e0bf00ef2f",
+   "bytes": 2862176
+  }
+ ]
+}

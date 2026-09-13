@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SeoEditorialNote.v1",
+  "$id": "seo-editorial-note.schema.json",
+  "description": "Редакционная заметка. Не отзыв, не комментарий зрителя и не UGC. Полей автора-человека, оценки, времени, лайков и ответов здесь нет физически, и схема закрыта — прислать их нельзя даже по ошибке.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "resource_kind",
+    "comment_mode",
+    "author_type",
+    "note_id",
+    "site_id",
+    "entity_type",
+    "entity_id",
+    "locale",
+    "text",
+    "fact_refs",
+    "angle",
+    "model_version",
+    "prompt_version"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "seo.editorial_note/1.0.0"
+    },
+    "resource_kind": {
+      "const": "seo.editorial_note"
+    },
+    "comment_mode": {
+      "const": "EDITORIAL_COMMENTARY"
+    },
+    "author_type": {
+      "const": "EDITORIAL_AI"
+    },
+    "note_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "site_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{1,127}$"
+    },
+    "entity_type": {
+      "enum": [
+        "title",
+        "season",
+        "episode"
+      ]
+    },
+    "entity_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "locale": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "fact_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      },
+      "description": "Заметка без ссылок на факты не создаётся: полезная мысль обязана на чём-то стоять."
+    },
+    "angle": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "description": "Чем эта мысль отличается от основного описания и от прочих заметок."
+    },
+    "model_version": {
+      "type": "string"
+    },
+    "prompt_version": {
+      "type": "string"
+    }
+  },
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "aggregateRating"
+        ]
+      },
+      {
+        "required": [
+          "author_avatar"
+        ]
+      },
+      {
+        "required": [
+          "author_name"
+        ]
+      },
+      {
+        "required": [
+          "dislikes"
+        ]
+      },
+      {
+        "required": [
+          "helpful_count"
+        ]
+      },
+      {
+        "required": [
+          "likes"
+        ]
+      },
+      {
+        "required": [
+          "nickname"
+        ]
+      },
+      {
+        "required": [
+          "persona"
+        ]
+      },
+      {
+        "required": [
+          "posted_at"
+        ]
+      },
+      {
+        "required": [
+          "rating"
+        ]
+      },
+      {
+        "required": [
+          "rating_value"
+        ]
+      },
+      {
+        "required": [
+          "replies"
+        ]
+      },
+      {
+        "required": [
+          "reply_to"
+        ]
+      },
+      {
+        "required": [
+          "reviewRating"
+        ]
+      },
+      {
+        "required": [
+          "review_body"
+        ]
+      },
+      {
+        "required": [
+          "stars"
+        ]
+      },
+      {
+        "required": [
+          "upvotes"
+        ]
+      },
+      {
+        "required": [
+          "user_id"
+        ]
+      },
+      {
+        "required": [
+          "watched_at"
+        ]
+      }
+    ]
+  }
+}
