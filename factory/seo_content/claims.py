@@ -23,19 +23,23 @@ from typing import Any, Iterable, Sequence
 
 from .draft import Claim, ClaimVerdict
 from .factpack import SEOFactPack, VideoAvailability
+from .language import форма_числительного
 from . import lexicon as LEX
+from . import numerals as NUM
 
 ГОД = re.compile(r"\b(1[89]\d{2}|20\d{2})\b")
+#: Формы слова «серия» при счёте: 1 серия, 2 серии, 5 серий.
+СЧЁТНЫЕ_ФОРМЫ_СЕРИИ = ("серия", "серии", "серий")
 КОЛИЧЕСТВО_СЕЗОНОВ = re.compile(
     r"\b(\d{1,3})\s+сезон(?:а|ов)?\b", re.I)
 КОЛИЧЕСТВО_СЕРИЙ = re.compile(
     r"\b(\d{1,4})\s+сери(?:я|и|й)\b", re.I)
 НОМЕР_СЕРИИ = re.compile(
     r"(?:\bсери(?:я|и|ю|е)\s*[№#]?\s*(\d{1,4})\b"
-    r"|\b(\d{1,4})[-‐-―]?\s*(?:я|ая|й)\s+сери(?:я|и|ю|е))", re.I)
+    r"|\b(\d{1,4})[-‐-―]?\s*(?:я|ая|й|го|ой|ый)\s+сери(?:я|и|ю|е))", re.I)
 НОМЕР_СЕЗОНА = re.compile(
-    r"(?:\bсезон\s*[№#]?\s*(\d{1,3})\b|\b(\d{1,3})[-‐-―]?\s*(?:й|ый|ой)\s+сезон)",
-    re.I)
+    r"(?:\bсезон\s*[№#]?\s*(\d{1,3})\b"
+    r"|\b(\d{1,3})[-‐-―]?\s*(?:й|ый|ой|го)\s+сезон)", re.I)
 КАВЫЧКИ = re.compile(r"[«\"]([^»\"]{2,80})[»\"]")
 ИМЯ = re.compile(r"\b([А-ЯЁ][а-яё]{2,}(?:\s+[А-ЯЁ][а-яё]{2,}){0,2})")
 ПРЕДЛОЖЕНИЕ = re.compile(r"[^.!?]+[.!?]?")
@@ -161,15 +165,66 @@ class ClaimExtractor:
             утверждения.extend(self._из_текста(поле, текст))
         return ClaimReport(утверждения)
 
+    #: Поля, в которых название стоит без кавычек, потому что поле и есть
+    #: название страницы.
+    #: Описание тоже открывается названием — там оно называет страницу, а не
+    #: утверждает год, жанр или страну. Замена привязана к началу строки,
+    #: поэтому жанр, названный дальше по тексту, остаётся утверждением.
+    ИМЕНУЮЩИЕ_ПОЛЯ = ("meta_title", "meta_description", "h1_recommendation",
+                      "h1")
+
+    def _без_собственного_имени(self, поле: str, текст: str) -> str:
+        """Текст, в котором собственное название заменено меткой.
+
+        Название — личность страницы, а не утверждение о ней. Произведение
+        «2012» не заявляет год выпуска, «Драма» не заявляет жанр, «Россия» не
+        заявляет страну. Без этой замены разбор опровергал бы факт названием
+        того же самого произведения.
+
+        Заменяются только те вхождения, где название используется как имя:
+        в кавычках — везде, без кавычек — в полях, которые сами являются
+        названием страницы.
+        """
+        итог = текст
+        for имя in sorted(self._допустимые_названия_исходные(), key=len,
+                          reverse=True):
+            if len(имя) < 2:
+                continue
+            итог = re.sub(rf"[«\"]{re.escape(имя)}[»\"]", "〈НАЗВАНИЕ〉",
+                          итог, flags=re.I)
+            if поле in self.ИМЕНУЮЩИЕ_ПОЛЯ:
+                итог = re.sub(rf"^\s*{re.escape(имя)}", "〈НАЗВАНИЕ〉", итог,
+                              flags=re.I)
+        return итог
+
+    def _допустимые_названия_исходные(self) -> list[str]:
+        имена: list[str] = []
+        for путь in ("/canonical_title_ru", "/original_title",
+                     "/episode_title"):
+            з = self.pack.value(путь)
+            if з:
+                имена.append(str(з))
+        for а in self.pack.value("/alternative_titles") or []:
+            имена.append(str(а))
+        return имена
+
     def _из_текста(self, поле: str, текст: str) -> list[Claim]:
         найдено: list[Claim] = []
-        найдено.extend(self._годы(поле, текст))
-        найдено.extend(self._тип_произведения(поле, текст))
+        # Собственное название убирается до разбора: иначе «2012», «Драма» и
+        # «Россия» опровергали бы год, жанр и страну сами собой.
+        безымянный = self._без_собственного_имени(поле, текст)
+        # Числовые проверки смотрят на текст, где числительные словами
+        # заменены цифрами. Без этого «две тысячи четырнадцатого года» и
+        # «сто шестая серия» проходили мимо всех числовых ворот — а именно
+        # так число и пишут по-русски, когда оно невелико.
+        числовой = NUM.в_цифрах(безымянный)
+        найдено.extend(self._годы(поле, числовой))
+        найдено.extend(self._тип_произведения(поле, безымянный))
         найдено.extend(self._названия(поле, текст))
-        найдено.extend(self._страны(поле, текст))
-        найдено.extend(self._жанры(поле, текст))
+        найдено.extend(self._страны(поле, безымянный))
+        найдено.extend(self._жанры(поле, безымянный))
         найдено.extend(self._имена(поле, текст))
-        найдено.extend(self._числа(поле, текст))
+        найдено.extend(self._числа(поле, числовой))
         найдено.extend(self._статус(поле, текст))
         найдено.extend(self._доступность(поле, текст))
         найдено.extend(self._стиль(поле, текст, найдено))
@@ -433,7 +488,7 @@ class ClaimExtractor:
         """Последовательности основ по каждому факту. Считается один раз."""
         if getattr(self, "_кэш_фраз", None) is None:
             self._кэш_фраз = [
-                (ф.fact_id, LEX.основы_токенов(str(ф.value)))
+                (ф.fact_id, LEX.основы_токенов(NUM.в_цифрах(str(ф.value))))
                 for ф in self.pack.facts
                 if self.pack.value(ф.field_path) is not None]
         return self._кэш_фраз
@@ -597,22 +652,33 @@ class ClaimExtractor:
         факт_э = self.pack.fact_id_for("/actual_episode_count") or \
             self.pack.fact_id_for("/declared_episode_count")
         допустимые = {int(з) for з in (заявлено, фактически) if з is not None}
+        номера_серий = {int(з) for з in (
+            self.pack.value("/episode_display_number"),
+            self.pack.value("/episode_in_season_number")) if з is not None}
+        факт_н = self.pack.fact_id_for("/episode_display_number") or \
+            self.pack.fact_id_for("/episode_in_season_number")
+
         for м in КОЛИЧЕСТВО_СЕРИЙ.finditer(текст):
             найдено = int(м.group(1))
-            if not допустимые:
-                итог.append(self._claim(
-                    text=м.group(0), field=поле, claim_type="episode_count",
-                    verdict=ClaimVerdict.UNSUPPORTED,
-                    detail="числа серий в фактах нет"))
-            elif найдено in допустимые:
-                итог.append(self._claim(
-                    text=м.group(0), field=поле, claim_type="episode_count",
-                    verdict=ClaimVerdict.SUPPORTED, fact_id=факт_э))
-            else:
-                итог.append(self._claim(
-                    text=м.group(0), field=поле, claim_type="episode_count",
-                    verdict=ClaimVerdict.CONTRADICTED, fact_id=факт_э,
-                    detail=f"в тексте {найдено}, в фактах {sorted(допустимые)}"))
+            форма = м.group(0).split()[-1].lower().replace("ё", "е")
+            # Количество или номер решает форма существительного: при ста
+            # шести количество пишется «серий», и «106 серия» — это номер, а
+            # не счёт. Правило механическое, поэтому проверяемое.
+            ожидаемая = СЧЁТНЫЕ_ФОРМЫ_СЕРИИ[форма_числительного(найдено)]
+            это_номер = форма != ожидаемая
+            if not это_номер and найдено in номера_серий and \
+                    найдено not in допустимые:
+                это_номер = True
+            if это_номер:
+                итог.extend(self._решить(
+                    поле, м.group(0), "episode_number", найдено,
+                    номера_серий, факт_н,
+                    "номера серии (/episode_display_number, "
+                    "/episode_in_season_number) в фактах нет"))
+                continue
+            итог.extend(self._решить(
+                поле, м.group(0), "episode_count", найдено, допустимые,
+                факт_э, "числа серий в фактах нет"))
 
         итог.extend(self._номер(поле, текст, НОМЕР_СЕРИИ, "episode_number",
                                 ("/episode_display_number",
@@ -620,6 +686,21 @@ class ClaimExtractor:
         итог.extend(self._номер(поле, текст, НОМЕР_СЕЗОНА, "season_number",
                                 ("/season_number",)))
         return итог
+
+    def _решить(self, поле: str, текст: str, тип: str, найдено: int,
+                допустимые: set, факт: str | None,
+                нет_факта: str) -> list[Claim]:
+        if not допустимые:
+            return [self._claim(text=текст, field=поле, claim_type=тип,
+                                verdict=ClaimVerdict.UNSUPPORTED,
+                                detail=нет_факта)]
+        if найдено in допустимые:
+            return [self._claim(text=текст, field=поле, claim_type=тип,
+                                verdict=ClaimVerdict.SUPPORTED, fact_id=факт)]
+        return [self._claim(text=текст, field=поле, claim_type=тип,
+                            verdict=ClaimVerdict.CONTRADICTED, fact_id=факт,
+                            detail=f"в тексте {найдено}, в фактах "
+                                   f"{sorted(допустимые)}")]
 
     def _номер(self, поле: str, текст: str, шаблон: re.Pattern, тип: str,
                пути: Sequence[str]) -> list[Claim]:
@@ -630,6 +711,20 @@ class ClaimExtractor:
         итог: list[Claim] = []
         for м in шаблон.finditer(текст):
             найдено = int(next(г for г in м.groups() if г))
+            # Ссылка на другой сезон или другую серию — обычная речь:
+            # «продолжение первого сезона» на странице четвёртого не ошибка.
+            # Отличить её от отставшего номера можно ровно одним способом:
+            # посмотреть, стоит ли это место в значении какого-то факта.
+            if найдено not in значения:
+                цитата = self._цитата_из_факта(текст, м)
+                if цитата is not None and цитата != факт:
+                    итог.append(self._claim(
+                        text=м.group(0), field=поле, claim_type=тип,
+                        verdict=ClaimVerdict.SUPPORTED, fact_id=цитата,
+                        detail="номер назван внутри факта с собственным "
+                               "источником — это ссылка, а не личность "
+                               "страницы"))
+                    continue
             if not значения:
                 итог.append(self._claim(
                     text=м.group(0), field=поле, claim_type=тип,

@@ -1,33 +1,35 @@
 {
- "cases": 222,
+ "cases": 236,
  "statuses": {
-  "PASSED": 136,
+  "PASSED": 147,
+  "REVIEW_REQUIRED": 1,
   "NEEDS_FACTS": 68,
-  "REJECTED": 16,
+  "REJECTED": 18,
   "FACT_CONFLICT": 1,
   "NOINDEX_RECOMMENDED": 1
  },
  "reason_codes": {
+  "NEAR_DUPLICATE_REVIEW": 1,
   "NEEDS_FACTS": 68,
-  "DUPLICATE": 11,
+  "DUPLICATE": 12,
   "FACT_CONFLICT": 1,
   "PROMPT_INJECTION_ESCAPED": 2,
   "CONTRADICTED_CLAIMS": 1,
   "PLAYER_AVAILABILITY_FALSE_CLAIM": 1,
-  "EPISODE_IDENTITY_CONFLICT": 4,
-  "IDENTITY_DETAIL": 4,
+  "EPISODE_IDENTITY_CONFLICT": 5,
+  "IDENTITY_DETAIL": 5,
   "DOORWAY_RISK": 1
  },
  "claim_verdicts": {
-  "SUPPORTED": 3105,
-  "NON_FACTUAL_STYLE": 752,
+  "SUPPORTED": 3519,
+  "NON_FACTUAL_STYLE": 830,
   "CONTRADICTED": 5
  },
  "counters": {
   "contradicted": 5,
   "unsupported_material": 0,
   "player_false": 5,
-  "identity_errors": 4,
+  "identity_errors": 5,
   "number_errors": 2,
   "language_critical": 0,
   "cliches": 0,
@@ -43,9 +45,9 @@
   "keyword_stuffing": 0,
   "injection_detected": 2,
   "injection_escaped": 2,
-  "notes_emitted": 261,
+  "notes_emitted": 292,
   "notes_rejected": 5,
-  "faq_emitted": 159
+  "faq_emitted": 191
  },
  "accepted_counters": {
   "contradicted": 0,
@@ -67,28 +69,28 @@
   "injection_escaped": 0
  },
  "store": {
-  "fact_packs": 222,
-  "drafts": 222,
-  "notes": 261,
-  "events": 222,
+  "fact_packs": 236,
+  "drafts": 236,
+  "notes": 292,
+  "events": 236,
   "duplicate_drafts": 0,
   "orphan_notes": 0,
   "orphan_drafts": 0,
   "orphan_events": 0,
   "orphan_records": 0,
-  "status_passed": 136,
-  "status_rejected": 16,
+  "status_passed": 147,
+  "status_rejected": 18,
   "status_needs_facts": 68,
   "status_fact_conflict": 1,
-  "status_review_required": 0,
+  "status_review_required": 1,
   "status_omit": 0,
   "status_noindex_recommended": 1
  },
  "corpus_patterns": {
-  "total": 151,
-  "repeated_opening_rate": 0.0199,
-  "repeated_ending_rate": 0.1192,
-  "repeated_frame_rate": 0.404,
+  "total": 165,
+  "repeated_opening_rate": 0.0182,
+  "repeated_ending_rate": 0.1091,
+  "repeated_frame_rate": 0.3879,
   "top_openings": [
    [
     "полынный сад мультсериал 2011 года производства южной кореи ",
@@ -136,7 +138,7 @@
    ],
    [
     "имя мультсериал число года производства южной кореи в центре",
-    3
+    4
    ]
   ],
   "budget": 0.02,
@@ -145,18 +147,18 @@
  },
  "expectations": {
   "mismatches": 0,
-  "template_collisions_allowed": 8,
+  "template_collisions_allowed": 9,
   "detail": []
  },
  "blind_scores": {
-  "average": 94.08,
+  "average": 94.18,
   "lowest": 47.0,
   "highest": 100.0
  },
  "body_length": {
   "min": 66,
   "max": 530,
-  "average": 277,
+  "average": 287,
   "within_700_1400": 0
  },
  "budget": {
@@ -165,14 +167,14 @@
   "PAID_PROVIDERS_ENABLED": "NO",
   "PAID_SPEND": 0.0,
   "refused_calls": [],
-  "allowed_free_calls": 222
+  "allowed_free_calls": 236
  },
  "writer": {
   "mode": "FAKE_SHADOW",
   "model_version": "deterministic-composer/1.0.0",
   "live_calls": 0,
   "model_downloads": 0,
-  "calls": 222
+  "calls": 236
  },
  "records": [
   {
@@ -4021,10 +4023,12 @@
     "season",
     "sparse"
    ],
-   "status": "PASSED",
-   "reasons": [],
+   "status": "REVIEW_REQUIRED",
+   "reasons": [
+    "NEAR_DUPLICATE_REVIEW"
+   ],
    "warnings": [],
-   "blind_score": 97.5,
+   "blind_score": 92.5,
    "judge_critical": [],
    "identity": {
     "code": "OK",
@@ -8117,6 +8121,682 @@
    }
   },
   {
+   "case_id": "hard-title-is-number",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "status": "PASSED",
+   "reasons": [],
+   "warnings": [],
+   "blind_score": 98.5,
+   "judge_critical": [],
+   "identity": {
+    "code": "OK",
+    "ok": true,
+    "problems": [],
+    "numbers": {},
+    "display_number": null
+   },
+   "draft_id": "draft-5dd4daef1895aebda71a77ab57f4356d",
+   "created": true,
+   "body_len": 474,
+   "meta_title_len": 48,
+   "meta_description_len": 155,
+   "notes": [
+    "Над сериалом «2012» работали: производством занималась Студия «Северный контур».",
+    "У сериала «2012» есть литературная основа — сборник «Полустанки».",
+    "Сериал «2012» помечен в каталоге как 6+: это формальная отметка каталога, а не оценка содержания."
+   ],
+   "notes_rejected": [],
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "texts": {
+    "meta_title": "2012 (2009) — сериал, меха и фантастика, Франция",
+    "meta_description": "2012 — сериал 2009 года. В центре — водитель школьного автобуса Клавдия Рыбина. Съёмка не сходится с проектом карьера, и прежние расчёты больше не годятся.",
+    "h1": "2012",
+    "body": "«2012» — сериал 2009 года производства Франции. Центральная фигура — водитель школьного автобуса Клавдия Рыбина; всё это разворачивается на перевале в снегопад. Начинается с того, что съёмка не сходится с проектом карьера, и прежние расчёты больше не годятся. По каталогу это меха и фантастика. Литературная основа — сборник «Полустанки». На витрине — 1 сезон и 8 серий; вышел полностью. В ролях: Наталья Ёлкина — Клавдия Рыбина. Особенность — музыка звучит только в титрах."
+   }
+  },
+  {
+   "case_id": "hard-title-is-genre",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "status": "PASSED",
+   "reasons": [],
+   "warnings": [],
+   "blind_score": 98.5,
+   "judge_critical": [],
+   "identity": {
+    "code": "OK",
+    "ok": true,
+    "problems": [],
+    "numbers": {},
+    "display_number": null
+   },
+   "draft_id": "draft-87eaed054726a20c59a1f4cb2d461959",
+   "created": true,
+   "body_len": 363,
+   "meta_title_len": 45,
+   "meta_description_len": 162,
+   "notes": [
+    "Над фильмом «Драма» работали: производством занималась Анимационная студия «Кадр-9».",
+    "Фильм «Драма» помечен в каталоге как 12+: это формальная отметка каталога, а не оценка содержания."
+   ],
+   "notes_rejected": [],
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "texts": {
+    "meta_title": "Драма (2025) — фильм, комедия, Великобритания",
+    "meta_description": "Драма — фильм 2025 года. В центре — электрик подстанции Аркадий Незнамов. Из архива пропадает опись, а разрешения ждать неоткуда. Жанры: комедия. Статус: выходит.",
+    "h1": "Драма",
+    "body": "«Драма» — фильм 2025 года производства Великобритании. Главное действующее лицо — электрик подстанции Аркадий Незнамов; действие происходит в котельной посреди отопительного сезона. Начинается с того, что из архива пропадает опись, а разрешения ждать неоткуда. Заявленные жанры — комедия. Статус выхода: выходит. Исполнители ролей: Вадим Кулеш — Аркадий Незнамов."
+   }
+  },
+  {
+   "case_id": "hard-title-is-country",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "status": "PASSED",
+   "reasons": [],
+   "warnings": [],
+   "blind_score": 97.5,
+   "judge_critical": [],
+   "identity": {
+    "code": "OK",
+    "ok": true,
+    "problems": [],
+    "numbers": {},
+    "display_number": null
+   },
+   "draft_id": "draft-6172718a2aba958975fcf9dacaa4dd67",
+   "created": true,
+   "body_len": 470,
+   "meta_title_len": 40,
+   "meta_description_len": 154,
+   "notes": [
+    "Над аниме «Россия» работали: производством занималась Объединение «Пятый павильон».",
+    "У аниме «Россия» есть литературная основа — цикл рассказов «Верхний ярус».",
+    "Аниме «Россия» помечено в каталоге как 16+: это формальная отметка каталога, а не оценка содержания."
+   ],
+   "notes_rejected": [],
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "texts": {
+    "meta_title": "Россия (2008) — аниме, детектив, Франция",
+    "meta_description": "Россия — аниме 2008 года. В центре — смотритель водонапорной башни Тамара Летова. Музею предписывают освободить здание, и решение откладывают до комиссии.",
+    "h1": "Россия",
+    "body": "«Россия» — аниме 2008 года производства Франции. Центральная фигура — смотритель водонапорной башни Тамара Летова; всё это разворачивается на подстанции в грозу. Отправная точка — музею предписывают освободить здание, и решение откладывают до комиссии. По каталогу это детектив. Всего 3 сезона и 12 серий; завершён. Отличительная черта — весь сезон снят одним оператором на плёнку. В основе — цикл рассказов «Верхний ярус». Исполнители ролей: Ксения Ким — Тамара Летова."
+   }
+  },
+  {
+   "case_id": "hard-title-latin",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "status": "PASSED",
+   "reasons": [],
+   "warnings": [],
+   "blind_score": 98.5,
+   "judge_critical": [],
+   "identity": {
+    "code": "OK",
+    "ok": true,
+    "problems": [],
+    "numbers": {},
+    "display_number": null
+   },
+   "draft_id": "draft-ef25f2a5741c9a786c2cfec419e4e7cb",
+   "created": true,
+   "body_len": 493,
+   "meta_title_len": 60,
+   "meta_description_len": 167,
+   "notes": [
+    "Над мультсериалом «Silo» работали: производством занималась Студия «Северный контур».",
+    "У мультсериала «Silo» есть литературная основа — заводская многотиражка.",
+    "Мультсериал «Silo» помечен в каталоге как 18+: это формальная отметка каталога, а не оценка содержания."
+   ],
+   "notes_rejected": [],
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "texts": {
+    "meta_title": "Silo (2009) — мультсериал, психологический и мистика, Япония",
+    "meta_description": "Silo — мультсериал 2009 года. В центре — оператор котельной Никита Ошуров. Станция теряет резервный передатчик, а спорить уже поздно. Жанры: психологический и мистика.",
+    "h1": "Silo",
+    "body": "«Silo» — мультсериал 2009 года производства Японии и Китая. В центре истории — оператор котельной Никита Ошуров; действие происходит в проектном бюро перед сдачей. Завязка: станция теряет резервный передатчик, а спорить уже поздно. Жанровая отметка каталога — психологический и мистика. Исполнители ролей: Тимур Барсов — Никита Ошуров. Литературная основа — заводская многотиражка. Отличительная черта — каждая серия открывается прогнозом погоды. На витрине — 4 сезона и 13 серий; анонсирован."
+   }
+  },
+  {
+   "case_id": "hard-title-mixed",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "status": "PASSED",
+   "reasons": [],
+   "warnings": [],
+   "blind_score": 98.5,
+   "judge_critical": [],
+   "identity": {
+    "code": "OK",
+    "ok": true,
+    "problems": [],
+    "numbers": {},
+    "display_number": null
+   },
+   "draft_id": "draft-a79d5b90015977a1c38a7a710b2880ed",
+   "created": true,
+   "body_len": 457,
+   "meta_title_len": 54,
+   "meta_description_len": 157,
+   "notes": [
+    "Над документальным фильмом «Агент S.W.A.T.» работали: производством занималась Студия «Ортодокс».",
+    "Документальный фильм «Агент S.W.A.T.» помечен в каталоге как 6+: это формальная отметка каталога, а не оценка содержания."
+   ],
+   "notes_rejected": [],
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "texts": {
+    "meta_title": "Агент S.W.A.T. (2010) — документальный фильм, семейный",
+    "meta_description": "Агент S.W.A.T. — документальный фильм 2010 года. В центре — пасечник с кочевой пасекой Галина Тюрина. Жанры: семейный и приключения. Статус: вышел полностью.",
+    "h1": "Агент S.W.A.T.",
+    "body": "«Агент S.W.A.T.» (S.W.A.T.) — документальный фильм 2010 года производства России. Центральная фигура — пасечник с кочевой пасекой Галина Тюрина; всё это разворачивается в районном центре зимой. Завязка: бюро получает два взаимоисключающих задания, и решать приходится на месте. Заявленные жанры — семейный и приключения. В ролях: Инна Бахметьева — Галина Тюрина. Отличительная черта — все натурные сцены сняты в одном районе. Статус выхода: вышел полностью."
+   }
+  },
+  {
+   "case_id": "hard-name-hyphen",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "status": "PASSED",
+   "reasons": [],
+   "warnings": [],
+   "blind_score": 98.5,
+   "judge_critical": [],
+   "identity": {
+    "code": "OK",
+    "ok": true,
+    "problems": [],
+    "numbers": {},
+    "display_number": null
+   },
+   "draft_id": "draft-1e12fc14eb57426cb78c04326effe5c8",
+   "created": true,
+   "body_len": 416,
+   "meta_title_len": 61,
+   "meta_description_len": 170,
+   "notes": [
+    "Над полнометражным аниме «Сотый километр» работали: производством занималась Кинокомпания «Разъезд».",
+    "У полнометражного аниме «Сотый километр» есть литературная основа — повесть «Сухое русло».",
+    "Полнометражное аниме «Сотый километр» помечено в каталоге как 12+: это формальная отметка каталога, а не оценка содержания."
+   ],
+   "notes_rejected": [],
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "texts": {
+    "meta_title": "Сотый километр (2011) — полнометражное аниме, постапокалипсис",
+    "meta_description": "Сотый километр — полнометражное аниме 2011 года. В центре — архивист Пётр Петров-Водкин. Тренера отстраняют перед игрой, а бумага приходит задним числом. Статус: выходит.",
+    "h1": "Сотый километр",
+    "body": "«Сотый километр» — полнометражное аниме 2011 года производства США. В центре истории — архивист Пётр Петров-Водкин; действие происходит на кордоне за тридцать километров от трассы. Начинается с того, что тренера отстраняют перед игрой, а бумага приходит задним числом. По каталогу это постапокалипсис и драма. Роли исполняют: Илья Кожин — Пётр Петров-Водкин. Статус выхода: выходит. В основе — повесть «Сухое русло»."
+   }
+  },
+  {
+   "case_id": "hard-year-range",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "status": "PASSED",
+   "reasons": [],
+   "warnings": [],
+   "blind_score": 97.5,
+   "judge_critical": [],
+   "identity": {
+    "code": "OK",
+    "ok": true,
+    "problems": [],
+    "numbers": {},
+    "display_number": null
+   },
+   "draft_id": "draft-e74a90a992994fcc59ae1c5d2966b0da",
+   "created": true,
+   "body_len": 464,
+   "meta_title_len": 42,
+   "meta_description_len": 163,
+   "notes": [
+    "Над OVA «Ржаное поле» работали: производством занималась Студия «Северный контур».",
+    "У OVA «Ржаное поле» есть литературная основа — судовой журнал.",
+    "OVA «Ржаное поле» помечено в каталоге как 16+: это формальная отметка каталога, а не оценка содержания."
+   ],
+   "notes_rejected": [],
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "texts": {
+    "meta_title": "Ржаное поле (2014) — OVA: описание и факты",
+    "meta_description": "Ржаное поле — OVA 2014 года. В центре — фельдъегерь районной связи Лидия Мещерская. Склад опечатывают вместе с товаром, и срок истекает через неделю. Жанры: драма.",
+    "h1": "Ржаное поле",
+    "body": "«Ржаное поле» — OVA 2014–2019 годов производства Японии. Центральная фигура — фельдъегерь районной связи Лидия Мещерская; события разворачиваются на пасеке в предгорьях. Исходное положение: склад опечатывают вместе с товаром, и срок истекает через неделю. Заявленные жанры — драма. Исполнители ролей: Анна Ветрова — Лидия Мещерская. Литературная основа — судовой журнал. Что выделяет работу: в каждой серии меняется рассказчик. Всего 3 сезона и 24 серии; завершён."
+   }
+  },
+  {
+   "case_id": "hard-spoiler-full",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "status": "PASSED",
+   "reasons": [],
+   "warnings": [],
+   "blind_score": 98.5,
+   "judge_critical": [],
+   "identity": {
+    "code": "OK",
+    "ok": true,
+    "problems": [],
+    "numbers": {},
+    "display_number": null
+   },
+   "draft_id": "draft-d46836dc5b9d0ed777a1f145d34af830",
+   "created": true,
+   "body_len": 472,
+   "meta_title_len": 65,
+   "meta_description_len": 153,
+   "notes": [
+    "Над сериалом «Высокая вода» работали: производством занималась Студия «Ортодокс».",
+    "Сериал «Высокая вода» помечен в каталоге как 18+: это формальная отметка каталога, а не оценка содержания."
+   ],
+   "notes_rejected": [],
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "texts": {
+    "meta_title": "Высокая вода (2013) — сериал, исторический и военный, Южная Корея",
+    "meta_description": "Высокая вода — сериал 2013 года. В центре — заведующая фельдшерским пунктом Фёдор Лунёв. Рыбнадзор закрывает протоку в путину, а отменить решение нельзя.",
+    "h1": "Высокая вода",
+    "body": "«Высокая вода» — сериал 2013 года производства Южной Кореи. Основной герой — заведующая фельдшерским пунктом Фёдор Лунёв; события разворачиваются в санатории, закрытом на реконструкцию. Отправная точка — рыбнадзор закрывает протоку в путину, а отменить решение нельзя. Жанровая отметка каталога — исторический и военный. Исполнители ролей: Глеб Тарин — Фёдор Лунёв. Отдельно стоит отметить: хронометраж серий убывает к финалу. На витрине — 4 сезона и 8 серий; анонсирован."
+   }
+  },
+  {
+   "case_id": "hard-title-declinable",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "status": "PASSED",
+   "reasons": [],
+   "warnings": [],
+   "blind_score": 97.5,
+   "judge_critical": [],
+   "identity": {
+    "code": "OK",
+    "ok": true,
+    "problems": [],
+    "numbers": {},
+    "display_number": null
+   },
+   "draft_id": "draft-81231922d28cba04496b4fb76e60930e",
+   "created": true,
+   "body_len": 379,
+   "meta_title_len": 39,
+   "meta_description_len": 157,
+   "notes": [
+    "Над фильмом «Бункер» работали: производством занималась Кинокомпания «Разъезд».",
+    "У фильма «Бункер» есть литературная основа — повесть «Сухое русло».",
+    "Фильм «Бункер» помечен в каталоге как 6+: это формальная отметка каталога, а не оценка содержания."
+   ],
+   "notes_rejected": [],
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "texts": {
+    "meta_title": "Бункер (2014) — фильм, вестерн, Франция",
+    "meta_description": "Бункер — фильм 2014 года. В центре — оценщик страховой конторы Ульяна Сотникова. Кабельную линию перерубают, и записи об этом никто не ведёт. Жанры: вестерн.",
+    "h1": "Бункер",
+    "body": "«Бункер» — фильм 2014 года производства Франции. Основной герой — оценщик страховой конторы Ульяна Сотникова; всё это разворачивается на лесной делянке в распутицу. Завязка: кабельную линию перерубают, и записи об этом никто не ведёт. Заявленные жанры — вестерн. Статус выхода: вышел полностью. В основе — повесть «Сухое русло». Роли исполняют: Жанна Порядина — Ульяна Сотникова."
+   }
+  },
+  {
+   "case_id": "hard-genre-two-words",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "status": "PASSED",
+   "reasons": [],
+   "warnings": [],
+   "blind_score": 98.5,
+   "judge_critical": [],
+   "identity": {
+    "code": "OK",
+    "ok": true,
+    "problems": [],
+    "numbers": {},
+    "display_number": null
+   },
+   "draft_id": "draft-02b057fd8b3c99469dbcb875a4f1d434",
+   "created": true,
+   "body_len": 426,
+   "meta_title_len": 64,
+   "meta_description_len": 156,
+   "notes": [
+    "Над аниме «Лунный карьер» работали: производством занималась Анимационная студия «Кадр-9».",
+    "У аниме «Лунный карьер» есть литературная основа — судовой журнал.",
+    "Аниме «Лунный карьер» помечено в каталоге как 12+: это формальная отметка каталога, а не оценка содержания."
+   ],
+   "notes_rejected": [],
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "texts": {
+    "meta_title": "Лунный карьер (2015) — аниме, научная фантастика, Великобритания",
+    "meta_description": "Лунный карьер — аниме 2015 года. В центре — часовщик в привокзальной мастерской Юрий Дробыш. Пункт остаётся без единственной машины, а подписать это некому.",
+    "h1": "Лунный карьер",
+    "body": "«Лунный карьер» — аниме 2015 года производства Великобритании. В центре истории — часовщик в привокзальной мастерской Юрий Дробыш; всё это разворачивается в общежитии при комбинате. Завязка: пункт остаётся без единственной машины, а подписать это некому. Жанровая отметка каталога — научная фантастика. Литературная основа — судовой журнал. На витрине — 2 сезона и 12 серий; выходит. Роли исполняют: Артём Вагин — Юрий Дробыш."
+   }
+  },
+  {
+   "case_id": "hard-country-two-words",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "status": "PASSED",
+   "reasons": [],
+   "warnings": [],
+   "blind_score": 98.5,
+   "judge_critical": [],
+   "identity": {
+    "code": "OK",
+    "ok": true,
+    "problems": [],
+    "numbers": {},
+    "display_number": null
+   },
+   "draft_id": "draft-de7afa91ec6b8fd5314a8e0f3e2b81c3",
+   "created": true,
+   "body_len": 455,
+   "meta_title_len": 58,
+   "meta_description_len": 159,
+   "notes": [
+    "Над мультсериалом «Дикий покос» работали: производством занималась Объединение «Пятый павильон».",
+    "Мультсериал «Дикий покос» помечен в каталоге как 16+: это формальная отметка каталога, а не оценка содержания."
+   ],
+   "notes_rejected": [],
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "texts": {
+    "meta_title": "Дикий покос (2016) — мультсериал, исторический и биография",
+    "meta_description": "Дикий покос — мультсериал 2016 года. В центре — сторож речного порта Раиса Дьяконова. Находка на дне карьера не значится в реестре, и жители узнают последними.",
+    "h1": "Дикий покос",
+    "body": "«Дикий покос» — мультсериал 2016 года производства Южной Кореи. В центре истории — сторож речного порта Раиса Дьяконова; действие происходит на путях у контейнерного терминала. Отправная точка — находка на дне карьера не значится в реестре, и жители узнают последними. Жанровая отметка каталога — исторический и биография. На витрине — 3 сезона и 13 серий; завершён. Особенность — камера ни разу не покидает здание. В ролях: Софья Марич — Раиса Дьяконова."
+   }
+  },
+  {
+   "case_id": "hard-zero-season",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "status": "REJECTED",
+   "reasons": [
+    "DUPLICATE:word_run"
+   ],
+   "warnings": [],
+   "blind_score": 88.5,
+   "judge_critical": [
+    "DUPLICATE_BLOCKED"
+   ],
+   "identity": {
+    "code": "OK",
+    "ok": true,
+    "problems": [],
+    "numbers": {},
+    "display_number": null
+   },
+   "draft_id": "draft-9cef21cc5d0d407a861c438d31b80135",
+   "created": true,
+   "body_len": 448,
+   "meta_title_len": 59,
+   "meta_description_len": 155,
+   "notes": [
+    "Над документальным фильмом «Тонкий лёд Чусовой» работали: производством занималась Кинокомпания «Разъезд».",
+    "Документальный фильм «Тонкий лёд Чусовой» помечен в каталоге как 18+: это формальная отметка каталога, а не оценка содержания."
+   ],
+   "notes_rejected": [],
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "texts": {
+    "meta_title": "Тонкий лёд Чусовой (2017) — документальный фильм, мелодрама",
+    "meta_description": "Тонкий лёд Чусовой — документальный фильм 2017 года. В центре — мастер по ремонту лифтов Степан Ильчук. Судно ставят на прикол, а обещанного срока уже нет.",
+    "h1": "Тонкий лёд Чусовой",
+    "body": "«Тонкий лёд Чусовой» — документальный фильм 2017 года производства Японии и Китая. В центре истории — мастер по ремонту лифтов Степан Ильчук; всё это разворачивается в привокзальной гостинице. Начинается с того, что судно ставят на прикол, а обещанного срока уже нет. Жанровая отметка каталога — мелодрама. Отдельно стоит отметить: все натурные сцены сняты в одном районе. В ролях: Кирилл Дёмин — Степан Ильчук. На витрине — 0 сезонов; анонсирован."
+   }
+  },
+  {
+   "case_id": "hard-episode-zero",
+   "kind": "episode",
+   "tags": [
+    "edge",
+    "hard-russian",
+    "boundary"
+   ],
+   "status": "PASSED",
+   "reasons": [],
+   "warnings": [],
+   "blind_score": 98.0,
+   "judge_critical": [],
+   "identity": {
+    "code": "OK",
+    "ok": true,
+    "problems": [],
+    "numbers": {
+     "in_season": 0,
+     "absolute": 0,
+     "source": null,
+     "display": 0,
+     "url": 0
+    },
+    "display_number": 0
+   },
+   "draft_id": "draft-e981cfffa82193afc63cdfd7eb485e01",
+   "created": true,
+   "body_len": 78,
+   "meta_title_len": 32,
+   "meta_description_len": 74,
+   "notes": [],
+   "notes_rejected": [],
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS",
+     "REJECTED"
+    ]
+   },
+   "texts": {
+    "meta_title": "Сонная слобода, сезон 1, серия 0",
+    "meta_description": "Сонная слобода, сезон 1, серия 0. Спешл снимали до начала основных съёмок.",
+    "h1": "Сонная слобода. Сезон 1. Серия 0",
+    "body": "Серия 0 1-го сезона «Сонная слобода». Спешл снимали до начала основных съёмок."
+   }
+  },
+  {
+   "case_id": "hard-episode-title-equals-series",
+   "kind": "episode",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "status": "REJECTED",
+   "reasons": [
+    "EPISODE_IDENTITY_CONFLICT:DECLARED_ACTUAL_DIVERGENCE",
+    "IDENTITY_DETAIL:каталог заявляет 24 серий, фактически доступно 12: утверждать любое из чисел как единственное нельзя"
+   ],
+   "warnings": [],
+   "blind_score": 78.5,
+   "judge_critical": [
+    "ENTITY_IDENTITY:DECLARED_ACTUAL_DIVERGENCE"
+   ],
+   "identity": {
+    "code": "DECLARED_ACTUAL_DIVERGENCE",
+    "ok": false,
+    "problems": [
+     "каталог заявляет 24 серий, фактически доступно 12: утверждать любое из чисел как единственное нельзя"
+    ],
+    "numbers": {
+     "in_season": 7,
+     "absolute": null,
+     "source": null,
+     "display": 7,
+     "url": 7
+    },
+    "display_number": 7
+   },
+   "draft_id": "draft-9e423e480ddb4e61929b0f7e4487cbd3",
+   "created": true,
+   "body_len": 101,
+   "meta_title_len": 48,
+   "meta_description_len": 94,
+   "notes": [],
+   "notes_rejected": [],
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "REJECTED"
+    ]
+   },
+   "texts": {
+    "meta_title": "Заречный тупик, сезон 2, серия 7: Заречный тупик",
+    "meta_description": "Заречный тупик, сезон 2, серия 7: Заречный тупик. Серия возвращает действие к событиям начала.",
+    "h1": "Заречный тупик. Сезон 2. Серия 7 — Заречный тупик",
+    "body": "Серия 7 2-го сезона «Заречный тупик» — «Заречный тупик». Серия возвращает действие к событиям начала."
+   }
+  },
+  {
    "case_id": "poor-episode-001",
    "kind": "episode",
    "tags": [
@@ -10737,5 +11417,5 @@
   }
  ],
  "corpus": "tests/seo_content/fixtures/golden.json",
- "db": "/tmp/tmptonp5x60/seo-drafts.sqlite3"
+ "db": "/tmp/tmpgzswfujd/seo-drafts.sqlite3"
 }

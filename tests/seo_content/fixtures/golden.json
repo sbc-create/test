@@ -2,7 +2,7 @@
  "generated_by": "tests/seo_content/fixtures/build_fixtures.py",
  "synthetic": true,
  "disclaimer": "Случаи вымышлены. Названия не соответствуют существующим произведениям, витрины носят идентификаторы seo-test-*, боевого каталога корпус не касается.",
- "count": 222,
+ "count": 236,
  "cases": [
   {
    "case_id": "title-0001",
@@ -51022,6 +51022,3833 @@
      "seo-test-0004"
     ]
    }
+  },
+  {
+   "case_id": "hard-title-is-number",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "event": {
+    "event_type": "title.created",
+    "event_id": "ev-hard-700",
+    "site_id": "seo-test-0001",
+    "entity_id": "title-hard-700",
+    "title_id": "title-hard-700",
+    "entity_type": "title",
+    "locale": "ru",
+    "facts": [
+     {
+      "fact_id": "f-type",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "d353936c2cd50b14a6e00343265ef2d9",
+      "field_path": "/work_type",
+      "value": "series",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-country",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "0923b4ccdfb26c4d06a2b75988a9dcd9",
+      "field_path": "/countries",
+      "value": [
+       "Франция"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-genre",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "02def6e39538eeb92e27c66404a15cfd",
+      "field_path": "/genres",
+      "value": [
+       "меха",
+       "фантастика"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-age",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "c4c027197519ab16674a6ee43b9e01a9",
+      "field_path": "/age_rating",
+      "value": "6+",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-status",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "5c4418d6b2a9d5f1ef29899e57930229",
+      "field_path": "/release_status",
+      "value": "released",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-video",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "a257bb3f3b087b8703ea7da84272ec61",
+      "field_path": "/video_availability",
+      "value": "UNAVAILABLE",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-studio",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "893c4be772a39f4e0c7f72bd11af6ee4",
+      "field_path": "/studio",
+      "value": "Студия «Северный контур»",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-spoiler",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "efb4baad300e14d373a2848e3ee2f522",
+      "field_path": "/spoiler_level",
+      "value": "PREMISE",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-subject",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "3929f644e5d6e86967a235a81483eb54",
+      "field_path": "/premise_subject",
+      "value": "водитель школьного автобуса Клавдия Рыбина",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-setting",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "a443f8b8c43e26d920a7fe01955dbec6",
+      "field_path": "/setting",
+      "value": "на перевале в снегопад",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-conflict",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "afee65b3633647c72bed6c041240bb28",
+      "field_path": "/premise_conflict",
+      "value": "съёмка не сходится с проектом карьера, и прежние расчёты больше не годятся",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-chars",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "1e45c43a017e6c69f40ff9865c2191b1",
+      "field_path": "/characters",
+      "value": [
+       {
+        "name": "Клавдия Рыбина",
+        "actor": "Наталья Ёлкина"
+       }
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-seasons",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "2fafd3f78180670cb221bc72f947818e",
+      "field_path": "/season_count",
+      "value": 1,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-declared",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "b51c56e905fec5046d9f505ca0993df2",
+      "field_path": "/declared_episode_count",
+      "value": 8,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-actual",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "070cdab3c39513592ed15c172219fb8f",
+      "field_path": "/actual_episode_count",
+      "value": 8,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-source",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "d80cafe9ddb9696e31b2dbb18b11a99c",
+      "field_path": "/source_material",
+      "value": "сборник «Полустанки»",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-feature",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "051709adc3fa08e19058de90074d0635",
+      "field_path": "/distinctive_feature",
+      "value": "музыка звучит только в титрах",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-hard700-0",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "ec5a6c9720ad08332b8d5672da38a578",
+      "field_path": "/canonical_title_ru",
+      "value": "2012",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-hard700-1",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "3020186582c02a0c940d6f9d38860e42",
+      "field_path": "/year",
+      "value": 2009,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     }
+    ]
+   },
+   "route": {
+    "url": "/title/hard-title-is-number/",
+    "resolved_entity_id": "title-hard-700",
+    "canonical": "/title/hard-title-is-number/",
+    "breadcrumbs": [
+     "Главная",
+     "Каталог",
+     "hard-title-is-number"
+    ]
+   },
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "site": {
+    "site_id": "seo-test-0001",
+    "site_url": "https://seo-test-0001.invalid",
+    "own_angle": "разбор устройства произведения",
+    "same_catalog": false,
+    "sibling_sites": []
+   },
+   "note": "название — число: его нельзя принять за год выпуска"
+  },
+  {
+   "case_id": "hard-title-is-genre",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "event": {
+    "event_type": "title.created",
+    "event_id": "ev-hard-701",
+    "site_id": "seo-test-0001",
+    "entity_id": "title-hard-701",
+    "title_id": "title-hard-701",
+    "entity_type": "title",
+    "locale": "ru",
+    "facts": [
+     {
+      "fact_id": "f-type",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "4dad251ece2e632ed081277346954b8b",
+      "field_path": "/work_type",
+      "value": "movie",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-country",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "1dfca1e2370a6649c89a869b3ed5fb0c",
+      "field_path": "/countries",
+      "value": [
+       "Великобритания"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-age",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "5846d8b1c0526e1749a20c3ec582e299",
+      "field_path": "/age_rating",
+      "value": "12+",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-status",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "51db5358257349c431f76c59791b2de2",
+      "field_path": "/release_status",
+      "value": "ongoing",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-video",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "cd3822b515f7de2965d264682e515e3c",
+      "field_path": "/video_availability",
+      "value": "UNKNOWN",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-studio",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "10a3368342e9608bfeda6dc4ee327f92",
+      "field_path": "/studio",
+      "value": "Анимационная студия «Кадр-9»",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-spoiler",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "efb4baad300e14d373a2848e3ee2f522",
+      "field_path": "/spoiler_level",
+      "value": "PREMISE",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-year",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "3bb8eaaf7f2920f1c36b6955b5787f73",
+      "field_path": "/year",
+      "value": 2025,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-subject",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "c0713b26cdc443348c839515189a968d",
+      "field_path": "/premise_subject",
+      "value": "электрик подстанции Аркадий Незнамов",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-setting",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "46bb8e9b9befbd4ad34097b6888f5233",
+      "field_path": "/setting",
+      "value": "в котельной посреди отопительного сезона",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-conflict",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "d033a7f8233ae99953cf507e18e87951",
+      "field_path": "/premise_conflict",
+      "value": "из архива пропадает опись, а разрешения ждать неоткуда",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-chars",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "657dd849f5417ff21a39c0abf588b723",
+      "field_path": "/characters",
+      "value": [
+       {
+        "name": "Аркадий Незнамов",
+        "actor": "Вадим Кулеш"
+       }
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-hard701-0",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "23aa0fbd494c1e751862abb0340c3b75",
+      "field_path": "/canonical_title_ru",
+      "value": "Драма",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-hard701-1",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "c3684984c3bdf459698d84676770128f",
+      "field_path": "/genres",
+      "value": [
+       "комедия"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     }
+    ]
+   },
+   "route": {
+    "url": "/title/hard-title-is-genre/",
+    "resolved_entity_id": "title-hard-701",
+    "canonical": "/title/hard-title-is-genre/",
+    "breadcrumbs": [
+     "Главная",
+     "Каталог",
+     "hard-title-is-genre"
+    ]
+   },
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "site": {
+    "site_id": "seo-test-0001",
+    "site_url": "https://seo-test-0001.invalid",
+    "own_angle": "разбор устройства произведения",
+    "same_catalog": false,
+    "sibling_sites": []
+   },
+   "note": "название совпадает со словом жанра"
+  },
+  {
+   "case_id": "hard-title-is-country",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "event": {
+    "event_type": "title.created",
+    "event_id": "ev-hard-702",
+    "site_id": "seo-test-0001",
+    "entity_id": "title-hard-702",
+    "title_id": "title-hard-702",
+    "entity_type": "title",
+    "locale": "ru",
+    "facts": [
+     {
+      "fact_id": "f-type",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "05ddb67f485fc0fa48d030e1d148511c",
+      "field_path": "/work_type",
+      "value": "anime",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-genre",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "63fa6900750efc3f6b68b19aabccade4",
+      "field_path": "/genres",
+      "value": [
+       "детектив"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-age",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "df8f4c4b85df4bf66c4ad5b7986db572",
+      "field_path": "/age_rating",
+      "value": "16+",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-status",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "0f95ff9d3074dec6618f7de8a4ef881d",
+      "field_path": "/release_status",
+      "value": "completed",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-video",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "852a622be52a7d14de709fe1a710ed14",
+      "field_path": "/video_availability",
+      "value": "AVAILABLE",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-studio",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "b8158c1461ed7fb213ca36187bc7dae6",
+      "field_path": "/studio",
+      "value": "Объединение «Пятый павильон»",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-spoiler",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "efb4baad300e14d373a2848e3ee2f522",
+      "field_path": "/spoiler_level",
+      "value": "PREMISE",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-year",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "4ecaa96f95dae9924e31b2646014278f",
+      "field_path": "/year",
+      "value": 2008,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-subject",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "1cf39ef5e8b492bc4e5b0e2f2512a2f5",
+      "field_path": "/premise_subject",
+      "value": "смотритель водонапорной башни Тамара Летова",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-setting",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "8bca6ea02159e79952f98d1f0fb9505a",
+      "field_path": "/setting",
+      "value": "на подстанции в грозу",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-conflict",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "035458d9b7f55542e70abb3286af0bba",
+      "field_path": "/premise_conflict",
+      "value": "музею предписывают освободить здание, и решение откладывают до комиссии",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-chars",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "a591fe91466c1ff473a6c1d9bb6e16cb",
+      "field_path": "/characters",
+      "value": [
+       {
+        "name": "Тамара Летова",
+        "actor": "Ксения Ким"
+       }
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-seasons",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "e08b1636e95d6c18fe8fa36b88bc9627",
+      "field_path": "/season_count",
+      "value": 3,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-declared",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "4aff10c94280434cf7f955938380a6b7",
+      "field_path": "/declared_episode_count",
+      "value": 12,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-actual",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "1e4d718433cd60ef0b34bbac25e4c46b",
+      "field_path": "/actual_episode_count",
+      "value": 12,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-source",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "c5c1218dedb0fb9320da0720e4810d49",
+      "field_path": "/source_material",
+      "value": "цикл рассказов «Верхний ярус»",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-feature",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "bc090f1bc62369bde89505c70484040c",
+      "field_path": "/distinctive_feature",
+      "value": "весь сезон снят одним оператором на плёнку",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-hard702-0",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "d3d37a34fc40b8f5367a6f56fe3abcfd",
+      "field_path": "/canonical_title_ru",
+      "value": "Россия",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-hard702-1",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "0923b4ccdfb26c4d06a2b75988a9dcd9",
+      "field_path": "/countries",
+      "value": [
+       "Франция"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     }
+    ]
+   },
+   "route": {
+    "url": "/title/hard-title-is-country/",
+    "resolved_entity_id": "title-hard-702",
+    "canonical": "/title/hard-title-is-country/",
+    "breadcrumbs": [
+     "Главная",
+     "Каталог",
+     "hard-title-is-country"
+    ]
+   },
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "site": {
+    "site_id": "seo-test-0001",
+    "site_url": "https://seo-test-0001.invalid",
+    "own_angle": "разбор устройства произведения",
+    "same_catalog": false,
+    "sibling_sites": []
+   },
+   "note": "название совпадает с названием страны"
+  },
+  {
+   "case_id": "hard-title-latin",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "event": {
+    "event_type": "title.created",
+    "event_id": "ev-hard-703",
+    "site_id": "seo-test-0001",
+    "entity_id": "title-hard-703",
+    "title_id": "title-hard-703",
+    "entity_type": "title",
+    "locale": "ru",
+    "facts": [
+     {
+      "fact_id": "f-type",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "f386c3a4ea4243ca368416f4bb09d9a9",
+      "field_path": "/work_type",
+      "value": "cartoon",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-country",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "5bec2dee73d879da6f2f6ba1b0c97f3b",
+      "field_path": "/countries",
+      "value": [
+       "Япония",
+       "Китай"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-genre",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "621484097e633f2b7841873954b7f026",
+      "field_path": "/genres",
+      "value": [
+       "психологический",
+       "мистика"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-age",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "05cbb5d35c1482f1e21d8c651eeb79f5",
+      "field_path": "/age_rating",
+      "value": "18+",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-status",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "f7c1e61acc4f04c65f334ee40bdc2c35",
+      "field_path": "/release_status",
+      "value": "announced",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-video",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "a257bb3f3b087b8703ea7da84272ec61",
+      "field_path": "/video_availability",
+      "value": "UNAVAILABLE",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-studio",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "893c4be772a39f4e0c7f72bd11af6ee4",
+      "field_path": "/studio",
+      "value": "Студия «Северный контур»",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-spoiler",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "efb4baad300e14d373a2848e3ee2f522",
+      "field_path": "/spoiler_level",
+      "value": "PREMISE",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-year",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "3020186582c02a0c940d6f9d38860e42",
+      "field_path": "/year",
+      "value": 2009,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-subject",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "57613747dc7a8074904598353a51ef80",
+      "field_path": "/premise_subject",
+      "value": "оператор котельной Никита Ошуров",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-setting",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "663376f3527f7a241700a48449075d09",
+      "field_path": "/setting",
+      "value": "в проектном бюро перед сдачей",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-conflict",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "850a10c5fcd13cb2ad6da25a44177f87",
+      "field_path": "/premise_conflict",
+      "value": "станция теряет резервный передатчик, а спорить уже поздно",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-chars",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "ad92a0f5a2b4cc1e89322029241fe994",
+      "field_path": "/characters",
+      "value": [
+       {
+        "name": "Никита Ошуров",
+        "actor": "Тимур Барсов"
+       }
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-seasons",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "4002c1b4a64fca4df6252b8e311a851a",
+      "field_path": "/season_count",
+      "value": 4,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-declared",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "544dea87e7e9f9f925fe1dcb249dd3c7",
+      "field_path": "/declared_episode_count",
+      "value": 13,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-actual",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "13747ce1a73f3b56ad71c4d733ca8db2",
+      "field_path": "/actual_episode_count",
+      "value": 13,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-source",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "01ec518461ed5ec6b72d815740ef589a",
+      "field_path": "/source_material",
+      "value": "заводская многотиражка",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-feature",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "f45d30dc60d0f3cf083d6ffb8058302b",
+      "field_path": "/distinctive_feature",
+      "value": "каждая серия открывается прогнозом погоды",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-hard703-0",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "13c57217274ca05a39fcdb113d99bdaf",
+      "field_path": "/canonical_title_ru",
+      "value": "Silo",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-hard703-1",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "f8e5b9811b8e87b6ac5c063e8b735a3e",
+      "field_path": "/original_title",
+      "value": "Silo",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     }
+    ]
+   },
+   "route": {
+    "url": "/title/hard-title-latin/",
+    "resolved_entity_id": "title-hard-703",
+    "canonical": "/title/hard-title-latin/",
+    "breadcrumbs": [
+     "Главная",
+     "Каталог",
+     "hard-title-latin"
+    ]
+   },
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "site": {
+    "site_id": "seo-test-0001",
+    "site_url": "https://seo-test-0001.invalid",
+    "own_angle": "разбор устройства произведения",
+    "same_catalog": false,
+    "sibling_sites": []
+   },
+   "note": "название целиком латиницей — смешения алфавитов здесь нет"
+  },
+  {
+   "case_id": "hard-title-mixed",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "event": {
+    "event_type": "title.created",
+    "event_id": "ev-hard-704",
+    "site_id": "seo-test-0001",
+    "entity_id": "title-hard-704",
+    "title_id": "title-hard-704",
+    "entity_type": "title",
+    "locale": "ru",
+    "facts": [
+     {
+      "fact_id": "f-type",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "418753916e12e135088d25b1c554ea0c",
+      "field_path": "/work_type",
+      "value": "documentary",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-country",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "1ed16350b79002d8bb2e99655c345d59",
+      "field_path": "/countries",
+      "value": [
+       "Россия"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-genre",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "ba5a9bf9c5025ffc43b90c3fc096c13c",
+      "field_path": "/genres",
+      "value": [
+       "семейный",
+       "приключения"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-age",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "c4c027197519ab16674a6ee43b9e01a9",
+      "field_path": "/age_rating",
+      "value": "6+",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-status",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "5c4418d6b2a9d5f1ef29899e57930229",
+      "field_path": "/release_status",
+      "value": "released",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-video",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "cd3822b515f7de2965d264682e515e3c",
+      "field_path": "/video_availability",
+      "value": "UNKNOWN",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-studio",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "e2adac13172e297046ec4e04ce297a3e",
+      "field_path": "/studio",
+      "value": "Студия «Ортодокс»",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-spoiler",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "efb4baad300e14d373a2848e3ee2f522",
+      "field_path": "/spoiler_level",
+      "value": "PREMISE",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-year",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "09d286407af9d6c77987230ef0c5f34e",
+      "field_path": "/year",
+      "value": 2010,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-subject",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "2383fc655238c415c42f0d386eb1432a",
+      "field_path": "/premise_subject",
+      "value": "пасечник с кочевой пасекой Галина Тюрина",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-setting",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "4ce856b053cc99f334102ee8ff9fd1ac",
+      "field_path": "/setting",
+      "value": "в районном центре зимой",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-conflict",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "49da8803c1731b4d0e347fe56027c493",
+      "field_path": "/premise_conflict",
+      "value": "бюро получает два взаимоисключающих задания, и решать приходится на месте",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-chars",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "3d4ac1b35e91e56d3a89faef03298d0a",
+      "field_path": "/characters",
+      "value": [
+       {
+        "name": "Галина Тюрина",
+        "actor": "Инна Бахметьева"
+       }
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-feature",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "bb3dc128673e10eaa2b9c96ff59dfc95",
+      "field_path": "/distinctive_feature",
+      "value": "все натурные сцены сняты в одном районе",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-hard704-0",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "bbf5d67567787ecf42dd25dbc1ed6868",
+      "field_path": "/canonical_title_ru",
+      "value": "Агент S.W.A.T.",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-hard704-1",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "e2f5495b4ac38ba6e00edac2b89cd0f4",
+      "field_path": "/original_title",
+      "value": "S.W.A.T.",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     }
+    ]
+   },
+   "route": {
+    "url": "/title/hard-title-mixed/",
+    "resolved_entity_id": "title-hard-704",
+    "canonical": "/title/hard-title-mixed/",
+    "breadcrumbs": [
+     "Главная",
+     "Каталог",
+     "hard-title-mixed"
+    ]
+   },
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "site": {
+    "site_id": "seo-test-0001",
+    "site_url": "https://seo-test-0001.invalid",
+    "own_angle": "разбор устройства произведения",
+    "same_catalog": false,
+    "sibling_sites": []
+   },
+   "note": "точки внутри названия не делят его на предложения"
+  },
+  {
+   "case_id": "hard-name-hyphen",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "event": {
+    "event_type": "title.created",
+    "event_id": "ev-hard-705",
+    "site_id": "seo-test-0001",
+    "entity_id": "title-hard-705",
+    "title_id": "title-hard-705",
+    "entity_type": "title",
+    "locale": "ru",
+    "facts": [
+     {
+      "fact_id": "f-title",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "eeee85265b2d46a1ad42ccf84f2961b3",
+      "field_path": "/canonical_title_ru",
+      "value": "Сотый километр",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-type",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "7926baa31abbc0a03179622f25f20fac",
+      "field_path": "/work_type",
+      "value": "anime_movie",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-country",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "20853067d225623f32a854de25c2a7ca",
+      "field_path": "/countries",
+      "value": [
+       "США"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-genre",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "d4a962ad0a81d0351747cd7ab9b2c8d3",
+      "field_path": "/genres",
+      "value": [
+       "постапокалипсис",
+       "драма"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-age",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "5846d8b1c0526e1749a20c3ec582e299",
+      "field_path": "/age_rating",
+      "value": "12+",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-status",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "51db5358257349c431f76c59791b2de2",
+      "field_path": "/release_status",
+      "value": "ongoing",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-video",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "852a622be52a7d14de709fe1a710ed14",
+      "field_path": "/video_availability",
+      "value": "AVAILABLE",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-studio",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "a68e00398aaec295a3ab58bbb057e4c4",
+      "field_path": "/studio",
+      "value": "Кинокомпания «Разъезд»",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-spoiler",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "efb4baad300e14d373a2848e3ee2f522",
+      "field_path": "/spoiler_level",
+      "value": "PREMISE",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-year",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "0c664632d5cd13f6b29d68f23f7d015d",
+      "field_path": "/year",
+      "value": 2011,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-setting",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "ed4c3dd3ac7fb26c9aedea2a8b7c8a6e",
+      "field_path": "/setting",
+      "value": "на кордоне за тридцать километров от трассы",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-conflict",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "ecc384bb32c1cbe3654002ebbc99e9f2",
+      "field_path": "/premise_conflict",
+      "value": "тренера отстраняют перед игрой, а бумага приходит задним числом",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-source",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "b8ffd70fe3bd9fbcfff4f7f9284dfbf2",
+      "field_path": "/source_material",
+      "value": "повесть «Сухое русло»",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-hard705-0",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "fca384b0baf78e51d85d350d1e6c37c1",
+      "field_path": "/characters",
+      "value": [
+       {
+        "name": "Пётр Петров-Водкин",
+        "actor": "Илья Кожин"
+       }
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-hard705-1",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "7d70106a76f39181c4487eb9cc516b8e",
+      "field_path": "/premise_subject",
+      "value": "архивист Пётр Петров-Водкин",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     }
+    ]
+   },
+   "route": {
+    "url": "/title/hard-name-hyphen/",
+    "resolved_entity_id": "title-hard-705",
+    "canonical": "/title/hard-name-hyphen/",
+    "breadcrumbs": [
+     "Главная",
+     "Каталог",
+     "hard-name-hyphen"
+    ]
+   },
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "site": {
+    "site_id": "seo-test-0001",
+    "site_url": "https://seo-test-0001.invalid",
+    "own_angle": "разбор устройства произведения",
+    "same_catalog": false,
+    "sibling_sites": []
+   },
+   "note": "фамилия с дефисом — одно имя, а не два слова"
+  },
+  {
+   "case_id": "hard-year-range",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "event": {
+    "event_type": "title.created",
+    "event_id": "ev-hard-706",
+    "site_id": "seo-test-0001",
+    "entity_id": "title-hard-706",
+    "title_id": "title-hard-706",
+    "entity_type": "title",
+    "locale": "ru",
+    "facts": [
+     {
+      "fact_id": "f-title",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "29a947fdf79ebc402f5bb3c919af3be6",
+      "field_path": "/canonical_title_ru",
+      "value": "Ржаное поле",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-type",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "06e7cef9de6ab83d47fa1bd0dd2ff878",
+      "field_path": "/work_type",
+      "value": "ova",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-country",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "388a78ebf892072708517e6658cdbb45",
+      "field_path": "/countries",
+      "value": [
+       "Япония"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-genre",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "c7f9719666ce61e9a69fdaf5824fd765",
+      "field_path": "/genres",
+      "value": [
+       "драма"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-age",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "df8f4c4b85df4bf66c4ad5b7986db572",
+      "field_path": "/age_rating",
+      "value": "16+",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-status",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "0f95ff9d3074dec6618f7de8a4ef881d",
+      "field_path": "/release_status",
+      "value": "completed",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-video",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "a257bb3f3b087b8703ea7da84272ec61",
+      "field_path": "/video_availability",
+      "value": "UNAVAILABLE",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-studio",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "893c4be772a39f4e0c7f72bd11af6ee4",
+      "field_path": "/studio",
+      "value": "Студия «Северный контур»",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-spoiler",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "efb4baad300e14d373a2848e3ee2f522",
+      "field_path": "/spoiler_level",
+      "value": "PREMISE",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-subject",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "043b9623694fe2d40ddcd4dd38323ca8",
+      "field_path": "/premise_subject",
+      "value": "фельдъегерь районной связи Лидия Мещерская",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-setting",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "d25ee466f3bda87c1f95a4426f479899",
+      "field_path": "/setting",
+      "value": "на пасеке в предгорьях",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-conflict",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "352476caefe0365248e48dbd23762d75",
+      "field_path": "/premise_conflict",
+      "value": "склад опечатывают вместе с товаром, и срок истекает через неделю",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-chars",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "b039ebb8d75a0b1dabb20a6d2e4aa173",
+      "field_path": "/characters",
+      "value": [
+       {
+        "name": "Лидия Мещерская",
+        "actor": "Анна Ветрова"
+       }
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-seasons",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "e08b1636e95d6c18fe8fa36b88bc9627",
+      "field_path": "/season_count",
+      "value": 3,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-declared",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "53f0bf89cc2c4b10c70143b55ba7f74e",
+      "field_path": "/declared_episode_count",
+      "value": 24,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-actual",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "335c70a3952fbaf95d4f734ec11e2780",
+      "field_path": "/actual_episode_count",
+      "value": 24,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-source",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "cb40dd52e8199f54fde030e64b74adcb",
+      "field_path": "/source_material",
+      "value": "судовой журнал",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-feature",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "b806db9d078f27226496b37753180e22",
+      "field_path": "/distinctive_feature",
+      "value": "в каждой серии меняется рассказчик",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-hard706-0",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "84c7326c11e51fd7b2d9307746adad44",
+      "field_path": "/year",
+      "value": 2014,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-hard706-1",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "2faff2ca1a3b723412df9dafd46f91ad",
+      "field_path": "/year_end",
+      "value": 2019,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     }
+    ]
+   },
+   "route": {
+    "url": "/title/hard-year-range/",
+    "resolved_entity_id": "title-hard-706",
+    "canonical": "/title/hard-year-range/",
+    "breadcrumbs": [
+     "Главная",
+     "Каталог",
+     "hard-year-range"
+    ]
+   },
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "site": {
+    "site_id": "seo-test-0001",
+    "site_url": "https://seo-test-0001.invalid",
+    "own_angle": "разбор устройства произведения",
+    "same_catalog": false,
+    "sibling_sites": []
+   },
+   "note": "диапазон лет: оба года законны"
+  },
+  {
+   "case_id": "hard-spoiler-full",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "event": {
+    "event_type": "title.created",
+    "event_id": "ev-hard-707",
+    "site_id": "seo-test-0001",
+    "entity_id": "title-hard-707",
+    "title_id": "title-hard-707",
+    "entity_type": "title",
+    "locale": "ru",
+    "facts": [
+     {
+      "fact_id": "f-title",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "46ce4a591ffba96fc0406b1122a87fd5",
+      "field_path": "/canonical_title_ru",
+      "value": "Высокая вода",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-type",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "d353936c2cd50b14a6e00343265ef2d9",
+      "field_path": "/work_type",
+      "value": "series",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-country",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "51d2cb7d7e1403308945f927d6d5781e",
+      "field_path": "/countries",
+      "value": [
+       "Южная Корея"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-genre",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "86970c809b713ca01590d3f30d6b86ce",
+      "field_path": "/genres",
+      "value": [
+       "исторический",
+       "военный"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-age",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "05cbb5d35c1482f1e21d8c651eeb79f5",
+      "field_path": "/age_rating",
+      "value": "18+",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-status",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "f7c1e61acc4f04c65f334ee40bdc2c35",
+      "field_path": "/release_status",
+      "value": "announced",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-video",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "cd3822b515f7de2965d264682e515e3c",
+      "field_path": "/video_availability",
+      "value": "UNKNOWN",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-studio",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "e2adac13172e297046ec4e04ce297a3e",
+      "field_path": "/studio",
+      "value": "Студия «Ортодокс»",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-year",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "10196a892752992d40bc824c61cfbf25",
+      "field_path": "/year",
+      "value": 2013,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-subject",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "a4c4224d4d91025aec3033dcf3704ec6",
+      "field_path": "/premise_subject",
+      "value": "заведующая фельдшерским пунктом Фёдор Лунёв",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-setting",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "30c29017390001eb13c45bee1cdaad97",
+      "field_path": "/setting",
+      "value": "в санатории, закрытом на реконструкцию",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-conflict",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "07db9d376665f6513fa3a26b616eddd4",
+      "field_path": "/premise_conflict",
+      "value": "рыбнадзор закрывает протоку в путину, а отменить решение нельзя",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-chars",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "85edebeb322c13c752cf529fe9390c1c",
+      "field_path": "/characters",
+      "value": [
+       {
+        "name": "Фёдор Лунёв",
+        "actor": "Глеб Тарин"
+       }
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-seasons",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "4002c1b4a64fca4df6252b8e311a851a",
+      "field_path": "/season_count",
+      "value": 4,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-declared",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "b51c56e905fec5046d9f505ca0993df2",
+      "field_path": "/declared_episode_count",
+      "value": 8,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-actual",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "070cdab3c39513592ed15c172219fb8f",
+      "field_path": "/actual_episode_count",
+      "value": 8,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-feature",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "ea34007b57eda6726c16f931f87e4a4f",
+      "field_path": "/distinctive_feature",
+      "value": "хронометраж серий убывает к финалу",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-hard707-0",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "0e936e0800d7d704896a94a4481f3802",
+      "field_path": "/spoiler_level",
+      "value": "FULL",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     }
+    ]
+   },
+   "route": {
+    "url": "/title/hard-spoiler-full/",
+    "resolved_entity_id": "title-hard-707",
+    "canonical": "/title/hard-spoiler-full/",
+    "breadcrumbs": [
+     "Главная",
+     "Каталог",
+     "hard-spoiler-full"
+    ]
+   },
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "site": {
+    "site_id": "seo-test-0001",
+    "site_url": "https://seo-test-0001.invalid",
+    "own_angle": "разбор устройства произведения",
+    "same_catalog": false,
+    "sibling_sites": []
+   },
+   "note": "разрешён полный уровень спойлеров"
+  },
+  {
+   "case_id": "hard-title-declinable",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "event": {
+    "event_type": "title.created",
+    "event_id": "ev-hard-708",
+    "site_id": "seo-test-0001",
+    "entity_id": "title-hard-708",
+    "title_id": "title-hard-708",
+    "entity_type": "title",
+    "locale": "ru",
+    "facts": [
+     {
+      "fact_id": "f-type",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "4dad251ece2e632ed081277346954b8b",
+      "field_path": "/work_type",
+      "value": "movie",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-country",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "0923b4ccdfb26c4d06a2b75988a9dcd9",
+      "field_path": "/countries",
+      "value": [
+       "Франция"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-genre",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "f8eb30960d2bb5b4889b79a3593690bf",
+      "field_path": "/genres",
+      "value": [
+       "вестерн"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-age",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "c4c027197519ab16674a6ee43b9e01a9",
+      "field_path": "/age_rating",
+      "value": "6+",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-status",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "5c4418d6b2a9d5f1ef29899e57930229",
+      "field_path": "/release_status",
+      "value": "released",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-video",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "852a622be52a7d14de709fe1a710ed14",
+      "field_path": "/video_availability",
+      "value": "AVAILABLE",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-studio",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "a68e00398aaec295a3ab58bbb057e4c4",
+      "field_path": "/studio",
+      "value": "Кинокомпания «Разъезд»",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-spoiler",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "efb4baad300e14d373a2848e3ee2f522",
+      "field_path": "/spoiler_level",
+      "value": "PREMISE",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-year",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "84c7326c11e51fd7b2d9307746adad44",
+      "field_path": "/year",
+      "value": 2014,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-subject",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "7e71ee3d4bea00713c963741d86727b2",
+      "field_path": "/premise_subject",
+      "value": "оценщик страховой конторы Ульяна Сотникова",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-setting",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "49d4fdc414fd04ffb2a748f674cd80f6",
+      "field_path": "/setting",
+      "value": "на лесной делянке в распутицу",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-conflict",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "e4598ebba7fea1ea3eee08c74993958c",
+      "field_path": "/premise_conflict",
+      "value": "кабельную линию перерубают, и записи об этом никто не ведёт",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-chars",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "c82335efc60b2f8ef16d1d70de242628",
+      "field_path": "/characters",
+      "value": [
+       {
+        "name": "Ульяна Сотникова",
+        "actor": "Жанна Порядина"
+       }
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-source",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "b8ffd70fe3bd9fbcfff4f7f9284dfbf2",
+      "field_path": "/source_material",
+      "value": "повесть «Сухое русло»",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-hard708-0",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "524e5e8c8ad2c7a1e829e38f52fefb6e",
+      "field_path": "/canonical_title_ru",
+      "value": "Бункер",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     }
+    ]
+   },
+   "route": {
+    "url": "/title/hard-title-declinable/",
+    "resolved_entity_id": "title-hard-708",
+    "canonical": "/title/hard-title-declinable/",
+    "breadcrumbs": [
+     "Главная",
+     "Каталог",
+     "hard-title-declinable"
+    ]
+   },
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "site": {
+    "site_id": "seo-test-0001",
+    "site_url": "https://seo-test-0001.invalid",
+    "own_angle": "разбор устройства произведения",
+    "same_catalog": false,
+    "sibling_sites": []
+   },
+   "note": "название склоняется — в кавычках склонять нельзя"
+  },
+  {
+   "case_id": "hard-genre-two-words",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "event": {
+    "event_type": "title.created",
+    "event_id": "ev-hard-709",
+    "site_id": "seo-test-0001",
+    "entity_id": "title-hard-709",
+    "title_id": "title-hard-709",
+    "entity_type": "title",
+    "locale": "ru",
+    "facts": [
+     {
+      "fact_id": "f-title",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "a3905b8da2aa28aea33ef9c48471abc3",
+      "field_path": "/canonical_title_ru",
+      "value": "Лунный карьер",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-type",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "05ddb67f485fc0fa48d030e1d148511c",
+      "field_path": "/work_type",
+      "value": "anime",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-country",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "1dfca1e2370a6649c89a869b3ed5fb0c",
+      "field_path": "/countries",
+      "value": [
+       "Великобритания"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-age",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "5846d8b1c0526e1749a20c3ec582e299",
+      "field_path": "/age_rating",
+      "value": "12+",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-status",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "51db5358257349c431f76c59791b2de2",
+      "field_path": "/release_status",
+      "value": "ongoing",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-video",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "a257bb3f3b087b8703ea7da84272ec61",
+      "field_path": "/video_availability",
+      "value": "UNAVAILABLE",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-studio",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "10a3368342e9608bfeda6dc4ee327f92",
+      "field_path": "/studio",
+      "value": "Анимационная студия «Кадр-9»",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-spoiler",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "efb4baad300e14d373a2848e3ee2f522",
+      "field_path": "/spoiler_level",
+      "value": "PREMISE",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-year",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "9eebe743fddcbdd07faf03fe72020365",
+      "field_path": "/year",
+      "value": 2015,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-subject",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "184862e416d5befddd8a5a5a623fcedf",
+      "field_path": "/premise_subject",
+      "value": "часовщик в привокзальной мастерской Юрий Дробыш",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-setting",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "cd1cac21f3649e3c954d39e81c3b432e",
+      "field_path": "/setting",
+      "value": "в общежитии при комбинате",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-conflict",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "dd99d1febcb27cad20a97b1159f20375",
+      "field_path": "/premise_conflict",
+      "value": "пункт остаётся без единственной машины, а подписать это некому",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-chars",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "c50916f8a861823639e8ebc407834370",
+      "field_path": "/characters",
+      "value": [
+       {
+        "name": "Юрий Дробыш",
+        "actor": "Артём Вагин"
+       }
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-seasons",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "6729c8f6c37725a1043a8d516d8fe3b3",
+      "field_path": "/season_count",
+      "value": 2,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-declared",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "4aff10c94280434cf7f955938380a6b7",
+      "field_path": "/declared_episode_count",
+      "value": 12,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-actual",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "1e4d718433cd60ef0b34bbac25e4c46b",
+      "field_path": "/actual_episode_count",
+      "value": 12,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-source",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "cb40dd52e8199f54fde030e64b74adcb",
+      "field_path": "/source_material",
+      "value": "судовой журнал",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-hard709-0",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "2e21ea20adda90538438c03ad48a9448",
+      "field_path": "/genres",
+      "value": [
+       "научная фантастика"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     }
+    ]
+   },
+   "route": {
+    "url": "/title/hard-genre-two-words/",
+    "resolved_entity_id": "title-hard-709",
+    "canonical": "/title/hard-genre-two-words/",
+    "breadcrumbs": [
+     "Главная",
+     "Каталог",
+     "hard-genre-two-words"
+    ]
+   },
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "site": {
+    "site_id": "seo-test-0001",
+    "site_url": "https://seo-test-0001.invalid",
+    "own_angle": "разбор устройства произведения",
+    "same_catalog": false,
+    "sibling_sites": []
+   },
+   "note": "жанр из двух слов сравнивается целиком"
+  },
+  {
+   "case_id": "hard-country-two-words",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "event": {
+    "event_type": "title.created",
+    "event_id": "ev-hard-710",
+    "site_id": "seo-test-0001",
+    "entity_id": "title-hard-710",
+    "title_id": "title-hard-710",
+    "entity_type": "title",
+    "locale": "ru",
+    "facts": [
+     {
+      "fact_id": "f-title",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "d0090d1b77c8708b55b645645734f086",
+      "field_path": "/canonical_title_ru",
+      "value": "Дикий покос",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-type",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "f386c3a4ea4243ca368416f4bb09d9a9",
+      "field_path": "/work_type",
+      "value": "cartoon",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-genre",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "57741e485c388ef688f1787a01fb8af0",
+      "field_path": "/genres",
+      "value": [
+       "исторический",
+       "биография"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-age",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "df8f4c4b85df4bf66c4ad5b7986db572",
+      "field_path": "/age_rating",
+      "value": "16+",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-status",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "0f95ff9d3074dec6618f7de8a4ef881d",
+      "field_path": "/release_status",
+      "value": "completed",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-video",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "cd3822b515f7de2965d264682e515e3c",
+      "field_path": "/video_availability",
+      "value": "UNKNOWN",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-studio",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "b8158c1461ed7fb213ca36187bc7dae6",
+      "field_path": "/studio",
+      "value": "Объединение «Пятый павильон»",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-spoiler",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "efb4baad300e14d373a2848e3ee2f522",
+      "field_path": "/spoiler_level",
+      "value": "PREMISE",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-year",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "ef3ac682c8898cb12dbc081d53fe454e",
+      "field_path": "/year",
+      "value": 2016,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-subject",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "8e4af533f15c28d07fa8ba40f6f0147b",
+      "field_path": "/premise_subject",
+      "value": "сторож речного порта Раиса Дьяконова",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-setting",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "b01cb9642bed615ea8a94482911d9fda",
+      "field_path": "/setting",
+      "value": "на путях у контейнерного терминала",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-conflict",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "21479bcab52f3744e49aeb73787ff756",
+      "field_path": "/premise_conflict",
+      "value": "находка на дне карьера не значится в реестре, и жители узнают последними",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-chars",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "d60a198a05d50004039da459069da5d6",
+      "field_path": "/characters",
+      "value": [
+       {
+        "name": "Раиса Дьяконова",
+        "actor": "Софья Марич"
+       }
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-seasons",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "e08b1636e95d6c18fe8fa36b88bc9627",
+      "field_path": "/season_count",
+      "value": 3,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-declared",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "544dea87e7e9f9f925fe1dcb249dd3c7",
+      "field_path": "/declared_episode_count",
+      "value": 13,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-actual",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "13747ce1a73f3b56ad71c4d733ca8db2",
+      "field_path": "/actual_episode_count",
+      "value": 13,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-feature",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "65688b89419c466bc0e01f1a591f470a",
+      "field_path": "/distinctive_feature",
+      "value": "камера ни разу не покидает здание",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-hard710-0",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "51d2cb7d7e1403308945f927d6d5781e",
+      "field_path": "/countries",
+      "value": [
+       "Южная Корея"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     }
+    ]
+   },
+   "route": {
+    "url": "/title/hard-country-two-words/",
+    "resolved_entity_id": "title-hard-710",
+    "canonical": "/title/hard-country-two-words/",
+    "breadcrumbs": [
+     "Главная",
+     "Каталог",
+     "hard-country-two-words"
+    ]
+   },
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "site": {
+    "site_id": "seo-test-0001",
+    "site_url": "https://seo-test-0001.invalid",
+    "own_angle": "разбор устройства произведения",
+    "same_catalog": false,
+    "sibling_sites": []
+   },
+   "note": "страна из двух слов в родительном падеже"
+  },
+  {
+   "case_id": "hard-zero-season",
+   "kind": "negative",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "event": {
+    "event_type": "title.created",
+    "event_id": "ev-hard-711",
+    "site_id": "seo-test-0001",
+    "entity_id": "title-hard-711",
+    "title_id": "title-hard-711",
+    "entity_type": "title",
+    "locale": "ru",
+    "facts": [
+     {
+      "fact_id": "f-title",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "2e1527618cc3557de19619264f86ed64",
+      "field_path": "/canonical_title_ru",
+      "value": "Тонкий лёд Чусовой",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-type",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "418753916e12e135088d25b1c554ea0c",
+      "field_path": "/work_type",
+      "value": "documentary",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-country",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "5bec2dee73d879da6f2f6ba1b0c97f3b",
+      "field_path": "/countries",
+      "value": [
+       "Япония",
+       "Китай"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-genre",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "62d1ec82ed373bc4b1b898de7b05bdfb",
+      "field_path": "/genres",
+      "value": [
+       "мелодрама"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-age",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "05cbb5d35c1482f1e21d8c651eeb79f5",
+      "field_path": "/age_rating",
+      "value": "18+",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-status",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "f7c1e61acc4f04c65f334ee40bdc2c35",
+      "field_path": "/release_status",
+      "value": "announced",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-video",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "852a622be52a7d14de709fe1a710ed14",
+      "field_path": "/video_availability",
+      "value": "AVAILABLE",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-studio",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "a68e00398aaec295a3ab58bbb057e4c4",
+      "field_path": "/studio",
+      "value": "Кинокомпания «Разъезд»",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-spoiler",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "efb4baad300e14d373a2848e3ee2f522",
+      "field_path": "/spoiler_level",
+      "value": "PREMISE",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-year",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "7d318bc829adeb4caa777ff554dcd20a",
+      "field_path": "/year",
+      "value": 2017,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-subject",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "8b6b9ff9a87aa0159f47a0e1523aa026",
+      "field_path": "/premise_subject",
+      "value": "мастер по ремонту лифтов Степан Ильчук",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-setting",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "e8c0400fb9da303b105568eec1bfd381",
+      "field_path": "/setting",
+      "value": "в привокзальной гостинице",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-conflict",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "7187557b1cc7c553d944f4f3cce43085",
+      "field_path": "/premise_conflict",
+      "value": "судно ставят на прикол, а обещанного срока уже нет",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-chars",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "aa8eee011468a544877cd10ab3926b12",
+      "field_path": "/characters",
+      "value": [
+       {
+        "name": "Степан Ильчук",
+        "actor": "Кирилл Дёмин"
+       }
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-feature",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "bb3dc128673e10eaa2b9c96ff59dfc95",
+      "field_path": "/distinctive_feature",
+      "value": "все натурные сцены сняты в одном районе",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-hard711-0",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "371d564891400ab049ade253205807bb",
+      "field_path": "/season_count",
+      "value": 0,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     }
+    ]
+   },
+   "route": {
+    "url": "/title/hard-zero-season/",
+    "resolved_entity_id": "title-hard-711",
+    "canonical": "/title/hard-zero-season/",
+    "breadcrumbs": [
+     "Главная",
+     "Каталог",
+     "hard-zero-season"
+    ]
+   },
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS"
+    ],
+    "allow_duplicate_rejection": true,
+    "no_contradicted": true,
+    "no_unsupported_material": true,
+    "identity_ok": true
+   },
+   "site": {
+    "site_id": "seo-test-0001",
+    "site_url": "https://seo-test-0001.invalid",
+    "own_angle": "разбор устройства произведения",
+    "same_catalog": false,
+    "sibling_sites": []
+   },
+   "note": "ноль сезонов — законное значение, а не отсутствие факта"
+  },
+  {
+   "case_id": "hard-episode-zero",
+   "kind": "episode",
+   "tags": [
+    "edge",
+    "hard-russian",
+    "boundary"
+   ],
+   "event": {
+    "event_type": "episode.created",
+    "event_id": "ev-hard-ep0",
+    "site_id": "seo-test-0001",
+    "entity_id": "title-hard-ep0",
+    "title_id": "title-hard-720",
+    "season_id": "title-hard-720-s1",
+    "episode_id": "title-hard-ep0",
+    "entity_type": "episode",
+    "locale": "ru",
+    "facts": [
+     {
+      "fact_id": "f-title",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "8fe8b9eb72262a3bc2bc045c4cd5e785",
+      "field_path": "/canonical_title_ru",
+      "value": "Сонная слобода",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-type",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "7926baa31abbc0a03179622f25f20fac",
+      "field_path": "/work_type",
+      "value": "anime_movie",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-country",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "1ed16350b79002d8bb2e99655c345d59",
+      "field_path": "/countries",
+      "value": [
+       "Россия"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-genre",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "5ccd4fa8c79bab21a44f1f48eb5aa614",
+      "field_path": "/genres",
+      "value": [
+       "мюзикл",
+       "комедия"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-age",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "c4c027197519ab16674a6ee43b9e01a9",
+      "field_path": "/age_rating",
+      "value": "6+",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-status",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "5c4418d6b2a9d5f1ef29899e57930229",
+      "field_path": "/release_status",
+      "value": "released",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-video",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "a257bb3f3b087b8703ea7da84272ec61",
+      "field_path": "/video_availability",
+      "value": "UNAVAILABLE",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-studio",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "10a3368342e9608bfeda6dc4ee327f92",
+      "field_path": "/studio",
+      "value": "Анимационная студия «Кадр-9»",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-spoiler",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "efb4baad300e14d373a2848e3ee2f522",
+      "field_path": "/spoiler_level",
+      "value": "PREMISE",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-year",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "f5f4c06a9e240b10b5a5409a54310937",
+      "field_path": "/year",
+      "value": 2018,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-subject",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "47cdb4d0e9b99e6eff7a1b22576e9db4",
+      "field_path": "/premise_subject",
+      "value": "инструктор спасательной станции Нина Абрамова",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-setting",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "8dc187127b35cc16284ad6918517c67d",
+      "field_path": "/setting",
+      "value": "на дебаркадере у старого причала",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-conflict",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "28bd90bd30e2b424f256b71c9f964262",
+      "field_path": "/premise_conflict",
+      "value": "на опытном поле подменяют семена, и старый порядок больше не работает",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-chars",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "28fcc6c25310b189729064d19616f148",
+      "field_path": "/characters",
+      "value": [
+       {
+        "name": "Нина Абрамова",
+        "actor": "Ольга Белых"
+       }
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-source",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "198525d2e4659689f6e5e8c5cecfd26a",
+      "field_path": "/source_material",
+      "value": "дневник смотрителя",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-snum",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "8bf49082a2de1e43cc4f541d578e3634",
+      "field_path": "/season_number",
+      "value": 1,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-ein",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "cfaf29184d982ac1de527fb114e6c3a6",
+      "field_path": "/episode_in_season_number",
+      "value": 0,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-edisp",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "8a2986c7e41511349aebd7b2df5943a7",
+      "field_path": "/episode_display_number",
+      "value": 0,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-eabs",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "2d9da4b291fe0466a70cb381ee4995d1",
+      "field_path": "/episode_absolute_number",
+      "value": 0,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-eact",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "1e4d718433cd60ef0b34bbac25e4c46b",
+      "field_path": "/actual_episode_count",
+      "value": 12,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-efocus",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "8a49044d992179d25a2e7a1ef8821bed",
+      "field_path": "/episode_focus",
+      "value": "спешл снимали до начала основных съёмок",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     }
+    ]
+   },
+   "route": {
+    "url": "/title/hard-ep0/season/1/episode/0",
+    "resolved_entity_id": "title-hard-ep0",
+    "url_number": 0,
+    "numbering_scheme": "display",
+    "season_url_number": 1,
+    "canonical": "/title/hard-ep0/season/1/episode/0",
+    "breadcrumbs": []
+   },
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "NEEDS_FACTS",
+     "REJECTED"
+    ]
+   },
+   "site": {
+    "site_id": "seo-test-0001",
+    "site_url": "https://seo-test-0001.invalid",
+    "own_angle": "разбор устройства произведения",
+    "same_catalog": false,
+    "sibling_sites": []
+   },
+   "note": "нулевая серия: номер ноль — не отсутствие номера"
+  },
+  {
+   "case_id": "hard-episode-title-equals-series",
+   "kind": "episode",
+   "tags": [
+    "edge",
+    "hard-russian"
+   ],
+   "event": {
+    "event_type": "episode.created",
+    "event_id": "ev-hard-same",
+    "site_id": "seo-test-0001",
+    "entity_id": "title-hard-same",
+    "title_id": "title-hard-721",
+    "season_id": "title-hard-721-s2",
+    "episode_id": "title-hard-same",
+    "entity_type": "episode",
+    "locale": "ru",
+    "facts": [
+     {
+      "fact_id": "f-title",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "579e2a6c9ee2765b7bf48be57e68896b",
+      "field_path": "/canonical_title_ru",
+      "value": "Заречный тупик",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-type",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "06e7cef9de6ab83d47fa1bd0dd2ff878",
+      "field_path": "/work_type",
+      "value": "ova",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-country",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "20853067d225623f32a854de25c2a7ca",
+      "field_path": "/countries",
+      "value": [
+       "США"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-genre",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "94ce0ec500827d2f3132bcf649b6bebf",
+      "field_path": "/genres",
+      "value": [
+       "повседневность"
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-age",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "5846d8b1c0526e1749a20c3ec582e299",
+      "field_path": "/age_rating",
+      "value": "12+",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-status",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "51db5358257349c431f76c59791b2de2",
+      "field_path": "/release_status",
+      "value": "ongoing",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-video",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "cd3822b515f7de2965d264682e515e3c",
+      "field_path": "/video_availability",
+      "value": "UNKNOWN",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-studio",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "b8158c1461ed7fb213ca36187bc7dae6",
+      "field_path": "/studio",
+      "value": "Объединение «Пятый павильон»",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-spoiler",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "efb4baad300e14d373a2848e3ee2f522",
+      "field_path": "/spoiler_level",
+      "value": "PREMISE",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-year",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "1e5ac34df6e217b3e8de8be7e3a1d056",
+      "field_path": "/year",
+      "value": 2019,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-subject",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "0414ac766fba87729188b52cee60d8a9",
+      "field_path": "/premise_subject",
+      "value": "паспортистка домоуправления Борис Наливкин",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-setting",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "d81166fa0336680388581f4d77616814",
+      "field_path": "/setting",
+      "value": "на закрытой станции у границы области",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-conflict",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "a7c2b54e76c34689007b562c25179505",
+      "field_path": "/premise_conflict",
+      "value": "колокол снимают на реставрацию, а спросить не у кого",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-chars",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "7c832152715c26bdae489fe82a096cd2",
+      "field_path": "/characters",
+      "value": [
+       {
+        "name": "Борис Наливкин",
+        "actor": "Роман Стеблов"
+       }
+      ],
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-declared",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "53f0bf89cc2c4b10c70143b55ba7f74e",
+      "field_path": "/declared_episode_count",
+      "value": 24,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-source",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "1aa8bed6bfff33a4fdd7967c3907ce3b",
+      "field_path": "/source_material",
+      "value": "пьеса «Переправа»",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-feature",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "b806db9d078f27226496b37753180e22",
+      "field_path": "/distinctive_feature",
+      "value": "в каждой серии меняется рассказчик",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-snum",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "17e4829299682ae73999d16478b6e2d6",
+      "field_path": "/season_number",
+      "value": 2,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-ein",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "dbc04b22f78445752913e4f5bb7cf654",
+      "field_path": "/episode_in_season_number",
+      "value": 7,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-edisp",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "7e9dbcc8a9d5633d81745e437e8227e1",
+      "field_path": "/episode_display_number",
+      "value": 7,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-eact",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "1e4d718433cd60ef0b34bbac25e4c46b",
+      "field_path": "/actual_episode_count",
+      "value": 12,
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-etitle",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "8ee200c00f09fcaa26c64dfe67e7cd2f",
+      "field_path": "/episode_title",
+      "value": "Заречный тупик",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     },
+     {
+      "fact_id": "f-efocus",
+      "source_id": "src-catalog",
+      "provider": "internal_catalog",
+      "retrieved_at": "2026-09-01T00:00:00Z",
+      "snapshot_hash": "a2462e285986edf2c96836a5e4eacd31",
+      "field_path": "/episode_focus",
+      "value": "серия возвращает действие к событиям начала",
+      "confidence": 1.0,
+      "conflict_status": "NONE",
+      "source_license": "internal"
+     }
+    ]
+   },
+   "route": {
+    "url": "/title/hard-same/season/2/episode/7",
+    "resolved_entity_id": "title-hard-same",
+    "url_number": 7,
+    "numbering_scheme": "display",
+    "season_url_number": 2,
+    "canonical": "/title/hard-same/season/2/episode/7",
+    "breadcrumbs": []
+   },
+   "expect": {
+    "status_in": [
+     "PASSED",
+     "REVIEW_REQUIRED",
+     "REJECTED"
+    ]
+   },
+   "site": {
+    "site_id": "seo-test-0001",
+    "site_url": "https://seo-test-0001.invalid",
+    "own_angle": "разбор устройства произведения",
+    "same_catalog": false,
+    "sibling_sites": []
+   },
+   "note": "заголовок серии совпадает с названием произведения"
   },
   {
    "case_id": "poor-episode-001",

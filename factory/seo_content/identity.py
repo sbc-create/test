@@ -24,7 +24,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
-from typing import Any, Iterable, Mapping
+from typing import Any, Iterable, Mapping, Sequence
 
 from .factpack import SEOFactPack
 
@@ -266,47 +266,75 @@ def resolve(pack: SEOFactPack, route: Route) -> IdentityReport:
 # --- устаревшие номера в готовом тексте -----------------------------------
 
 _НОМЕР_СЕРИИ = re.compile(
-    r"(?:(\d{1,4})\s*[-‐-―]?\s*(?:я|й|ая|ой)?\s*сери(?:я|и|ю|е|ей)"
+    r"(?:(\d{1,4})\s*[-‐-―]?\s*(?:я|й|ая|ой|го)?\s*сери(?:я|и|ю|е|ей)"
     r"|сери(?:я|и|ю|е|ей)\s*[№#]?\s*(\d{1,4}))", re.I)
 _НОМЕР_СЕЗОНА = re.compile(
-    r"(?:(\d{1,3})\s*[-‐-―]?\s*(?:й|ый|ой)?\s*сезон"
+    r"(?:(\d{1,3})\s*[-‐-―]?\s*(?:й|ый|ой|го)?\s*сезон"
     r"|сезон\s*[№#]?\s*(\d{1,3}))", re.I)
 
 
 def _номера(текст: str, шаблон: re.Pattern) -> list[int]:
+    """Номера из текста, включая записанные словами.
+
+    «Сто шестая серия» — такое же утверждение о номере, как «106 серия», и
+    отставший номер, написанный прописью, ничем не лучше отставшего номера
+    цифрами.
+    """
+    from . import numerals as NUM
     найдено: list[int] = []
-    for м in шаблон.finditer(текст or ""):
+    for м in шаблон.finditer(NUM.в_цифрах(текст or "")):
         for г in м.groups():
             if г:
                 найдено.append(int(г))
     return найдено
 
 
+#: Поверхности, на которых страница называет САМУ СЕБЯ. Здесь чужой номер —
+#: всегда ошибка: заголовок, крошки и canonical не рассказывают о соседних
+#: сериях, они опознают эту.
+ОПОЗНАЮЩИЕ = ("meta_title", "h1", "h1_recommendation", "canonical",
+              "breadcrumbs", "url", "og_title", "jsonld", "slug")
+
+
 def stale_number_scan(поверхности: Mapping[str, Any], *,
                       episode_number: int | None,
-                      season_number: int | None) -> list[str]:
+                      season_number: int | None,
+                      fact_texts: Sequence[str] = ()) -> list[str]:
     """Найти номер, отставший от разрешённой личности.
 
     Требование задания: после разрешения личности нигде не должно остаться
     «100 серия» — ни в заголовке, ни в описании, ни в H1, ни в тексте, ни в
-    хлебных крошках, ни в canonical, ни в OpenGraph, ни в JSON-LD. Поэтому
-    проверяются все поверхности сразу, а не одна витрина.
+    хлебных крошках, ни в canonical, ни в OpenGraph, ни в JSON-LD.
+
+    Но «устаревший» и «чужой» — не одно и то же. Описание четвёртого сезона
+    законно говорит «продолжение первого сезона»: это ссылка, а не отставший
+    заголовок. Поэтому поверхности разделены. Там, где страница называет
+    себя, чужой номер — ошибка всегда. В свободном тексте номер прощается,
+    только если он стоит в значении какого-то факта: тогда он пришёл из
+    данных, а не остался от прежней сборки.
     """
     беды: list[str] = []
+    из_фактов = " ".join(str(ф) for ф in fact_texts)
     for имя, значение in sorted(поверхности.items()):
         if значение is None:
             continue
         текст = значение if isinstance(значение, str) else str(значение)
+        опознающая = any(имя.startswith(о) for о in ОПОЗНАЮЩИЕ)
+        if not опознающая and из_фактов:
+            допустимые_серии = set(_номера(из_фактов, _НОМЕР_СЕРИИ))
+            допустимые_сезоны = set(_номера(из_фактов, _НОМЕР_СЕЗОНА))
+        else:
+            допустимые_серии = допустимые_сезоны = set()
         if episode_number is not None:
             чужие = [n for n in _номера(текст, _НОМЕР_СЕРИИ)
-                     if n != episode_number]
+                     if n != episode_number and n not in допустимые_серии]
             if чужие:
                 беды.append(
                     f"{имя}: номер серии {sorted(set(чужие))} вместо "
                     f"{episode_number}")
         if season_number is not None:
             чужие = [n for n in _номера(текст, _НОМЕР_СЕЗОНА)
-                     if n != season_number]
+                     if n != season_number and n not in допустимые_сезоны]
             if чужие:
                 беды.append(
                     f"{имя}: номер сезона {sorted(set(чужие))} вместо "

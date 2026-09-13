@@ -203,7 +203,9 @@ def evaluate(входы: GateInputs) -> GateOutcome:
              "url": входы.route.url},
             episode_number=номер if pack.entity_type == "episode" else None,
             season_number=int(сезон) if сезон is not None
-            and pack.entity_type in ("season", "episode") else None)
+            and pack.entity_type in ("season", "episode") else None,
+            fact_texts=[str(ф.value) for ф in pack.facts
+                        if pack.value(ф.field_path) is not None])
         if отставшие:
             статус = GateStatus.REJECTED
             причины.append("STALE_NUMBER:" + "; ".join(отставшие))

@@ -936,6 +936,132 @@ def отрицательные(пул: list[str], сайт: str) -> list[dict]:
     return случаи
 
 
+def трудные_случаи(пул: list[str], сайт: str) -> list[dict]:
+    """Случаи, на которых спотыкается именно русский разбор.
+
+    Каждый подобран под известную слабость: название-число неотличимо от
+    года, название-жанр — от жанра, название-страна — от страны, а имя с
+    дефисом разваливается на два слова при любой наивной токенизации.
+    """
+    случаи: list[dict] = []
+    i = 700
+
+    def событие(n, факты, *, entity="title"):
+        eid = f"title-hard-{n:03d}"
+        return {"event_type": "title.created", "event_id": f"ev-hard-{n:03d}",
+                "site_id": сайт, "entity_id": eid, "title_id": eid,
+                "entity_type": entity, "locale": "ru", "facts": факты}
+
+    #: (метка, что подменяем, ожидание)
+    трудные = [
+        ("title-is-number", [("/canonical_title_ru", "2012"),
+                             ("/year", 2009)],
+         "название — число: его нельзя принять за год выпуска"),
+        ("title-is-genre", [("/canonical_title_ru", "Драма"),
+                            ("/genres", ["комедия"])],
+         "название совпадает со словом жанра"),
+        ("title-is-country", [("/canonical_title_ru", "Россия"),
+                              ("/countries", ["Франция"])],
+         "название совпадает с названием страны"),
+        ("title-latin", [("/canonical_title_ru", "Silo"),
+                         ("/original_title", "Silo")],
+         "название целиком латиницей — смешения алфавитов здесь нет"),
+        ("title-mixed", [("/canonical_title_ru", "Агент S.W.A.T."),
+                         ("/original_title", "S.W.A.T.")],
+         "точки внутри названия не делят его на предложения"),
+        ("name-hyphen", [("/characters",
+                          [{"name": "Пётр Петров-Водкин",
+                            "actor": "Илья Кожин"}]),
+                         ("/premise_subject",
+                          "архивист Пётр Петров-Водкин")],
+         "фамилия с дефисом — одно имя, а не два слова"),
+        ("year-range", [("/year", 2014), ("/year_end", 2019)],
+         "диапазон лет: оба года законны"),
+        ("spoiler-full", [("/spoiler_level", "FULL")],
+         "разрешён полный уровень спойлеров"),
+        ("title-declinable", [("/canonical_title_ru", "Бункер")],
+         "название склоняется — в кавычках склонять нельзя"),
+        ("genre-two-words", [("/genres", ["научная фантастика"])],
+         "жанр из двух слов сравнивается целиком"),
+        ("country-two-words", [("/countries", ["Южная Корея"])],
+         "страна из двух слов в родительном падеже"),
+        ("zero-season", [("/season_count", 0)],
+         "ноль сезонов — законное значение, а не отсутствие факта"),
+    ]
+    for метка, подмены, пояснение in трудные:
+        факты = факты_тайтла(i, пул=пул)
+        for k, (путь, значение) in enumerate(подмены):
+            # Идентификатор факта должен быть уникален внутри пакета: два
+            # подмена подряд с одним префиксом давали одинаковый fact_id, и
+            # пакет справедливо отказывался собираться.
+            факты = заменить(факты, _факт(f"f-hard{i}-{k}", путь, значение))
+        случаи.append(случай(
+            f"hard-{метка}", "negative", ["edge", "hard-russian"],
+            событие(i, факты),
+            маршрут_тайтла(f"hard-{метка}", f"title-hard-{i:03d}"),
+            {"status_in": ["PASSED", "REVIEW_REQUIRED", "NEEDS_FACTS"],
+             "allow_duplicate_rejection": True, "no_contradicted": True,
+             "no_unsupported_material": True, "identity_ok": True},
+            note=пояснение))
+        i += 1
+
+    # Серия с номером ноль — спешл перед первой серией.
+    факты0 = [ф for ф in факты_тайтла(i, пул=пул)
+              if ф["field_path"] not in ("/season_count",)]
+    for ф in (_факт("f-snum", "/season_number", 1),
+              _факт("f-ein", "/episode_in_season_number", 0),
+              _факт("f-edisp", "/episode_display_number", 0),
+              _факт("f-eabs", "/episode_absolute_number", 0),
+              _факт("f-eact", "/actual_episode_count", 12),
+              _факт("f-efocus", "/episode_focus",
+                    "спешл снимали до начала основных съёмок")):
+        факты0 = заменить(факты0, ф)
+    eid = "title-hard-ep0"
+    случаи.append(случай(
+        "hard-episode-zero", "episode", ["edge", "hard-russian", "boundary"],
+        {"event_type": "episode.created", "event_id": "ev-hard-ep0",
+         "site_id": сайт, "entity_id": eid, "title_id": "title-hard-720",
+         "season_id": "title-hard-720-s1", "episode_id": eid,
+         "entity_type": "episode", "locale": "ru", "facts": факты0},
+        {"url": "/title/hard-ep0/season/1/episode/0",
+         "resolved_entity_id": eid, "url_number": 0,
+         "numbering_scheme": "display", "season_url_number": 1,
+         "canonical": "/title/hard-ep0/season/1/episode/0",
+         "breadcrumbs": []},
+        {"status_in": ["PASSED", "REVIEW_REQUIRED", "NEEDS_FACTS",
+                       "REJECTED"]},
+        note="нулевая серия: номер ноль — не отсутствие номера"))
+
+    # Заголовок серии совпадает с названием тайтла.
+    факты_с = [ф for ф in факты_тайтла(i + 1, пул=пул)
+               if ф["field_path"] not in ("/season_count",)]
+    название = _название(i + 1, пул)
+    for ф in (_факт("f-snum", "/season_number", 2),
+              _факт("f-ein", "/episode_in_season_number", 7),
+              _факт("f-edisp", "/episode_display_number", 7),
+              _факт("f-eact", "/actual_episode_count", 12),
+              _факт("f-etitle", "/episode_title", название),
+              _факт("f-efocus", "/episode_focus",
+                    "серия возвращает действие к событиям начала")):
+        факты_с = заменить(факты_с, ф)
+    eid = "title-hard-same"
+    случаи.append(случай(
+        "hard-episode-title-equals-series", "episode",
+        ["edge", "hard-russian"],
+        {"event_type": "episode.created", "event_id": "ev-hard-same",
+         "site_id": сайт, "entity_id": eid, "title_id": "title-hard-721",
+         "season_id": "title-hard-721-s2", "episode_id": eid,
+         "entity_type": "episode", "locale": "ru", "facts": факты_с},
+        {"url": "/title/hard-same/season/2/episode/7",
+         "resolved_entity_id": eid, "url_number": 7,
+         "numbering_scheme": "display", "season_url_number": 2,
+         "canonical": "/title/hard-same/season/2/episode/7",
+         "breadcrumbs": []},
+        {"status_in": ["PASSED", "REVIEW_REQUIRED", "REJECTED"]},
+        note="заголовок серии совпадает с названием произведения"))
+    return случаи
+
+
 def бедные_серии(пул: list[str], сайт: str, сколько: int = 50) -> list[dict]:
     """Пятьдесят серий с одним и тем же скудным пакетом фактов.
 
@@ -1039,6 +1165,7 @@ def собрать(пул: list[str], сайт: str, *, тайтлов: int, с�
     корпус += серии(пул, сайт, 400, серий)
     if с_отрицательными:
         корпус += отрицательные(пул, сайт)
+        корпус += трудные_случаи(пул, сайт)
         корпус += бедные_серии(пул, сайт)
         корпус += дубли(пул)
     return корпус

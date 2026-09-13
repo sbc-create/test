@@ -5,10 +5,10 @@
   "golden": {
    "title": 45,
    "season": 40,
-   "episode": 119,
-   "negative": 18,
-   "edge_or_negative": 116,
-   "total": 222
+   "episode": 121,
+   "negative": 30,
+   "edge_or_negative": 130,
+   "total": 236
   },
   "holdout": {
    "title": 120,
@@ -21,19 +21,20 @@
  "runs": {
   "golden": {
    "statuses": {
-    "PASSED": 136,
+    "PASSED": 147,
+    "REVIEW_REQUIRED": 1,
     "NEEDS_FACTS": 68,
-    "REJECTED": 16,
+    "REJECTED": 18,
     "FACT_CONFLICT": 1,
     "NOINDEX_RECOMMENDED": 1
    },
    "expectation_mismatches": 0,
-   "template_collisions_allowed": 8,
+   "template_collisions_allowed": 9,
    "counters": {
     "contradicted": 5,
     "unsupported_material": 0,
     "player_false": 5,
-    "identity_errors": 4,
+    "identity_errors": 5,
     "number_errors": 2,
     "language_critical": 0,
     "cliches": 0,
@@ -49,9 +50,9 @@
     "keyword_stuffing": 0,
     "injection_detected": 2,
     "injection_escaped": 2,
-    "notes_emitted": 261,
+    "notes_emitted": 292,
     "notes_rejected": 5,
-    "faq_emitted": 159
+    "faq_emitted": 191
    },
    "accepted_counters": {
     "contradicted": 0,
@@ -73,45 +74,45 @@
     "injection_escaped": 0
    },
    "claim_verdicts": {
-    "SUPPORTED": 3105,
-    "NON_FACTUAL_STYLE": 752,
+    "SUPPORTED": 3519,
+    "NON_FACTUAL_STYLE": 830,
     "CONTRADICTED": 5
    },
    "corpus_patterns": {
-    "total": 151,
-    "repeated_opening_rate": 0.0199,
-    "repeated_ending_rate": 0.1192,
-    "repeated_frame_rate": 0.404,
+    "total": 165,
+    "repeated_opening_rate": 0.0182,
+    "repeated_ending_rate": 0.1091,
+    "repeated_frame_rate": 0.3879,
     "budget": 0.02,
     "within_budget": true,
     "frame_note": "repeated_frame_rate — вступление после снятия имён и чисел. Бюджет 2% относится к repeated_opening_rate; рамка показана отдельно и у страниц серий одинакова по устройству"
    },
    "blind_scores": {
-    "average": 94.08,
+    "average": 94.18,
     "lowest": 47.0,
     "highest": 100.0
    },
    "body_length": {
     "min": 66,
     "max": 530,
-    "average": 277,
+    "average": 287,
     "within_700_1400": 0
    },
    "store": {
-    "fact_packs": 222,
-    "drafts": 222,
-    "notes": 261,
-    "events": 222,
+    "fact_packs": 236,
+    "drafts": 236,
+    "notes": 292,
+    "events": 236,
     "duplicate_drafts": 0,
     "orphan_notes": 0,
     "orphan_drafts": 0,
     "orphan_events": 0,
     "orphan_records": 0,
-    "status_passed": 136,
-    "status_rejected": 16,
+    "status_passed": 147,
+    "status_rejected": 18,
     "status_needs_facts": 68,
     "status_fact_conflict": 1,
-    "status_review_required": 0,
+    "status_review_required": 1,
     "status_omit": 0,
     "status_noindex_recommended": 1
    },
@@ -120,7 +121,7 @@
     "model_version": "deterministic-composer/1.0.0",
     "live_calls": 0,
     "model_downloads": 0,
-    "calls": 222
+    "calls": 236
    },
    "budget": {
     "SEO_BUDGET_CAP": 10000,
@@ -128,14 +129,14 @@
     "PAID_PROVIDERS_ENABLED": "NO",
     "PAID_SPEND": 0.0,
     "refused_calls": [],
-    "allowed_free_calls": 222
+    "allowed_free_calls": 236
    }
   },
   "holdout": {
    "statuses": {
-    "PASSED": 246,
-    "REJECTED": 37,
-    "REVIEW_REQUIRED": 2,
+    "PASSED": 217,
+    "REJECTED": 46,
+    "REVIEW_REQUIRED": 22,
     "NEEDS_FACTS": 25
    },
    "expectation_mismatches": 0,
@@ -183,7 +184,7 @@
     "injection_escaped": 0
    },
    "blind_scores": {
-    "average": 96.24,
+    "average": 95.65,
     "lowest": 87.0,
     "highest": 100.0
    },
@@ -197,11 +198,11 @@
     "orphan_drafts": 0,
     "orphan_events": 0,
     "orphan_records": 0,
-    "status_passed": 246,
-    "status_rejected": 37,
+    "status_passed": 217,
+    "status_rejected": 46,
     "status_needs_facts": 25,
     "status_fact_conflict": 0,
-    "status_review_required": 2,
+    "status_review_required": 22,
     "status_omit": 0,
     "status_noindex_recommended": 0
    },
@@ -217,8 +218,8 @@
  "tests": {
   "command": "python3 -m pytest tests/seo_content/ -q",
   "exit_code": 0,
-  "summary": "286 passed in 136.66s (0:02:16)",
-  "passed": 286,
+  "summary": "353 passed in 111.12s (0:01:51)",
+  "passed": 353,
   "failed": 0,
   "skipped": 0,
   "xfailed": 0,
@@ -251,6 +252,7 @@
    "factory/seo_content/judge.py",
    "factory/seo_content/language.py",
    "factory/seo_content/lexicon.py",
+   "factory/seo_content/numerals.py",
    "factory/seo_content/pipeline.py",
    "factory/seo_content/prompts/editorial_note.v1.md",
    "factory/seo_content/prompts/episode.v1.md",
@@ -271,6 +273,7 @@
    "tests/seo_content/fixtures/build_fixtures.py",
    "tests/seo_content/fixtures/golden.json",
    "tests/seo_content/fixtures/holdout.json",
+   "tests/seo_content/test_adversarial.py",
    "tests/seo_content/test_claims_mutation.py",
    "tests/seo_content/test_episode_identity_210.py",
    "tests/seo_content/test_factpack.py",
@@ -357,13 +360,13 @@
  "artifacts": [
   {
    "path": "artifacts/evidence/fleet-seo-004/golden-run.json",
-   "sha256": "bcd0660032ebf6d3ba2dc9571294b4eddb0470479a19cdba8c382e2bfa2a9521",
-   "bytes": 396066
+   "sha256": "bb9065e113ad4d96d408339a645ede0c778c7ebbf632e3eb438376b57e73cc6a",
+   "bytes": 429844
   },
   {
    "path": "artifacts/evidence/fleet-seo-004/holdout-run.json",
-   "sha256": "65d70cf978e68b19af84eacdfc1ebf95e7e997e5795f36d95e7b7d0ca739bb61",
-   "bytes": 631552
+   "sha256": "fcf579b14cad525713ff7ecae55afea8323461e5c49264ed34007397024fcdfe",
+   "bytes": 633302
   },
   {
    "path": "artifacts/evidence/fleet-seo-004/shared-store-after.json",
@@ -392,13 +395,13 @@
   },
   {
    "path": "tests/seo_content/fixtures/golden.json",
-   "sha256": "460ff528b556cf2cb6cf6cc47c83ab90a485afd24d377beb555fa294ce083bcf",
-   "bytes": 1777295
+   "sha256": "8d63b2c944822427a6d42e71e251a5cca585da6c5cded88ed14eb1146ad32821",
+   "bytes": 1896050
   },
   {
    "path": "tests/seo_content/fixtures/holdout.json",
-   "sha256": "8989b53286e84e50664c9cf5c9c4fd3226b8d5065d77265cb681b1e0bf00ef2f",
-   "bytes": 2862176
+   "sha256": "a1190851b0c0cce3911b1f95b9d43cf3f245737e658c73f9cecb562c63b00afb",
+   "bytes": 2862595
   }
  ]
 }
