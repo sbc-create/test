@@ -1,0 +1,159 @@
+{
+  "generated_at": "2026-09-14T16:27:11Z",
+  "note": "Состав целей после изменения. Значений, отпечатков и версий здесь нет: реестр их не содержит, а хранилище не опрашивалось.",
+  "portfolios": [
+    {
+      "id": "yami",
+      "title": "YummyAnime (yummyani.site / .org / .biz)",
+      "enabled": true,
+      "blocked_target": null,
+      "deployable": true,
+      "restartable_units": [],
+      "consumers": [
+        {
+          "id": "yami-staging-compose",
+          "kind": "file_mount",
+          "title": "Docker Compose стенд yummyani-staging",
+          "unit": null,
+          "directory": "/srv/sites/yummyani-staging/runtime/cdnvideohub",
+          "delivers": [
+            "api_token",
+            "publisher_id"
+          ],
+          "file_mode": "0440",
+          "group": "ubuntu",
+          "reload": "none"
+        }
+      ]
+    },
+    {
+      "id": "lords",
+      "title": "Lords staging (lords-01, lords-02, lords-03)",
+      "enabled": true,
+      "blocked_target": null,
+      "deployable": true,
+      "restartable_units": [
+        "lords-01.service",
+        "lords-02.service",
+        "lords-03.service"
+      ],
+      "consumers": [
+        {
+          "id": "lords-01",
+          "kind": "systemd_credential",
+          "title": "lords-01.service",
+          "unit": "lords-01.service",
+          "directory": "/etc/site-factory/secrets/lords/lords-01",
+          "delivers": [
+            "api_token",
+            "publisher_id"
+          ],
+          "file_mode": "0400",
+          "group": "root",
+          "reload": "systemd"
+        },
+        {
+          "id": "lords-02",
+          "kind": "systemd_credential",
+          "title": "lords-02.service",
+          "unit": "lords-02.service",
+          "directory": "/etc/site-factory/secrets/lords/lords-02",
+          "delivers": [
+            "api_token",
+            "publisher_id"
+          ],
+          "file_mode": "0400",
+          "group": "root",
+          "reload": "systemd"
+        },
+        {
+          "id": "lords-03",
+          "kind": "systemd_credential",
+          "title": "lords-03.service",
+          "unit": "lords-03.service",
+          "directory": "/etc/site-factory/secrets/lords/lords-03",
+          "delivers": [
+            "api_token",
+            "publisher_id"
+          ],
+          "file_mode": "0400",
+          "group": "root",
+          "reload": "systemd"
+        }
+      ]
+    },
+    {
+      "id": "zona",
+      "title": "Zona — zonafilm.space (сайт zona-01)",
+      "enabled": true,
+      "blocked_target": null,
+      "deployable": true,
+      "restartable_units": [
+        "nova-zona-01.service"
+      ],
+      "consumers": [
+        {
+          "id": "zona-01",
+          "kind": "player_config",
+          "title": "zonafilm.space — витрина zona-01 (nova-zona-01.service)",
+          "unit": "nova-zona-01.service",
+          "directory": "/etc/site-factory/secrets/zona/zona-01",
+          "delivers": [
+            "publisher_id"
+          ],
+          "file_mode": "0440",
+          "group": "lords",
+          "reload": "systemd"
+        }
+      ]
+    },
+    {
+      "id": "animedia",
+      "title": "Animedia / AMD — animedia.icu и animedia.space (сайты animedia-01, animedia-02)",
+      "enabled": true,
+      "blocked_target": null,
+      "deployable": true,
+      "restartable_units": [
+        "nova-animedia-01.service",
+        "nova-animedia-02.service"
+      ],
+      "consumers": [
+        {
+          "id": "animedia-01",
+          "kind": "player_config",
+          "title": "animedia.icu — витрина animedia-01 (nova-animedia-01.service)",
+          "unit": "nova-animedia-01.service",
+          "directory": "/etc/site-factory/secrets/animedia/animedia-01",
+          "delivers": [
+            "publisher_id"
+          ],
+          "file_mode": "0440",
+          "group": "lords",
+          "reload": "systemd"
+        },
+        {
+          "id": "animedia-02",
+          "kind": "player_config",
+          "title": "animedia.space — витрина animedia-02 (nova-animedia-02.service)",
+          "unit": "nova-animedia-02.service",
+          "directory": "/etc/site-factory/secrets/animedia/animedia-02",
+          "delivers": [
+            "publisher_id"
+          ],
+          "file_mode": "0440",
+          "group": "lords",
+          "reload": "systemd"
+        }
+      ]
+    },
+    {
+      "id": "amedia",
+      "title": "Amedia",
+      "enabled": true,
+      "blocked_target": "BLOCKED_TARGET",
+      "deployable": false,
+      "restartable_units": [],
+      "consumers": []
+    }
+  ]
+}
