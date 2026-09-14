@@ -104,6 +104,51 @@ def _рядом_с_каталогом(шаблон: str) -> str:
 # нет в новом маршруте, проксируется в него. Так плеер, карточка и любые
 # динамические страницы остаются рабочими — их никто не переписывает.
 ВЕРХОВОЙ = os.environ.get("LORDS_LEGACY_UPSTREAM", "")
+
+#: Счётчик Яндекс Метрики этой витрины. Публичное число, не секрет: оно и так
+#: видно в исходном коде любой страницы. Значение задаёт unit витрины, потому
+#: что один процесс обслуживает один домен, а счётчик привязан к домену.
+#: Пустое значение означает «счётчика нет» и даёт страницу без тега — не тег,
+#: который молчит. Молчащий тег неотличим от работающего до первого отчёта.
+СЧЁТЧИК_МЕТРИКИ = os.environ.get("LORDS_METRIKA_COUNTER", "").strip()
+
+
+def тег_метрики() -> str:
+    """Официальный тег Метрики или пустая строка.
+
+    Про единственность инициализации. Тег вставляется в четырёх местах —
+    в две оболочки собственных страниц и в два места, где размечается чужой
+    HTML (проксируемый и взятый из прежнего релиза). Пересечься они не должны,
+    но «не должны» — это не «не могут»: достаточно одной страницы, которая
+    пройдёт обоими путями, и счётчик получит два просмотра одного визита.
+    Поэтому защёлка стоит в самом теге, а не в рассуждении о том, где он
+    окажется.
+
+    Загрузка асинхронная: аналитика не имеет права задерживать отрисовку.
+    Вебвизор выключен намеренно — он включается отдельным решением владельца,
+    и реестр аналитики требует от него `false`.
+    """
+    if not СЧЁТЧИК_МЕТРИКИ.isdigit():
+        return ""
+    н = СЧЁТЧИК_МЕТРИКИ
+    return (
+        f'<script data-metrika-counter="{н}">'
+        "(function(){"
+        "if(window.__sfMetrikaReady){return;}window.__sfMetrikaReady=1;"
+        "(function(m,e,t,r,i,k,a){"
+        "m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};"
+        "m[i].l=1*new Date();"
+        "for(var j=0;j<e.scripts.length;j++){if(e.scripts[j].src===r){return;}}"
+        "k=e.createElement(t),a=e.getElementsByTagName(t)[0],"
+        "k.async=1,k.src=r,a.parentNode.insertBefore(k,a)"
+        '})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");'
+        f'ym({н},"init",{{trackLinks:true,accurateTrackBounce:true,webvisor:false}});'
+        "})();"
+        "</script>"
+        f'<noscript><div><img src="https://mc.yandex.ru/watch/{н}" '
+        'style="position:absolute;left:-9999px" alt=""></div></noscript>'
+    )
+
 НА_СТРАНИЦЕ = 60
 
 # Оформление и разделы — свои у каждого семейства.
@@ -372,7 +417,7 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 <meta name="site-factory-core" content="{ЯДРО}">
 <meta name="site-factory-profile" content="{ПРОФИЛЬ}">
 <link rel="manifest" href="/assets/nova.webmanifest">
-<style>{СТИЛЬ}</style></head><body>
+{тег_метрики()}<style>{СТИЛЬ}</style></head><body>
 <header class="hdr"><div class="wrap hdr__in">
 <a class="logo" href="/">{html.escape(ИМЯ_ВИТРИНЫ)}</a>
 <nav class="nav">{пункты}</nav>
@@ -2189,6 +2234,7 @@ def _мета_версии() -> str:
         f'<meta name="site-factory-template" content="{ШАБЛОН_СЕМЕЙСТВА}">'
         f'<meta name="site-factory-core" content="{ЯДРО}">'
         f'<meta name="site-factory-profile" content="{ПРОФИЛЬ}">'
+        + тег_метрики()
     )
 
 
@@ -2524,7 +2570,8 @@ class Обработчик(BaseHTTPRequestHandler):
                 f'<meta name="site-factory-design-version" content="{ВЕРСИЯ}">'
                 f'<meta name="site-factory-template-family" content="{СЕМЕЙСТВО}">'
                 f'<meta name="site-factory-build-id" content="{СБОРКА}">'
-                f'<style>{СТИЛЬ}</style>').encode("utf-8")
+                + тег_метрики()
+                + f'<style>{СТИЛЬ}</style>').encode("utf-8")
             тело = тело.replace(b"</head>", вставка + b"</head>", 1)
         return self._отдать(тело, тип, код=код)
 
@@ -2569,7 +2616,8 @@ class Обработчик(BaseHTTPRequestHandler):
                 f'<meta name="site-factory-template" content="{ШАБЛОН_СЕМЕЙСТВА}">'
                 f'<meta name="site-factory-core" content="{ЯДРО}">'
                 f'<meta name="site-factory-profile" content="{ПРОФИЛЬ}">'
-                f'<style>{СТИЛЬ}</style>')
+                + тег_метрики()
+                + f'<style>{СТИЛЬ}</style>')
             текст = текст.replace("</head>", вставка + "</head>", 1)
             данные = текст.encode("utf-8")
         типы = {".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8",

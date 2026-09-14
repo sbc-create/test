@@ -1,0 +1,55 @@
+{
+ "method": "curl, отданный HTML; браузерная часть — tests/e2e/test_live_metrika_tag.py",
+ "canary_domain": "1lordserials1.online",
+ "routes": [
+  {
+   "route": "/",
+   "http": 200,
+   "tag_occurrences": 1,
+   "init_calls": 1
+  },
+  {
+   "route": "/catalog/",
+   "http": 200,
+   "tag_occurrences": 1,
+   "init_calls": 1
+  },
+  {
+   "route": "/new/",
+   "http": 200,
+   "tag_occurrences": 1,
+   "init_calls": 1
+  },
+  {
+   "route": "/collections/",
+   "http": 200,
+   "tag_occurrences": 1,
+   "init_calls": 1
+  },
+  {
+   "route": "/schedule/",
+   "http": 200,
+   "tag_occurrences": 1,
+   "init_calls": 1
+  },
+  {
+   "route": "/catalog/?kind=Фильм",
+   "http": 200,
+   "tag_occurrences": 1,
+   "init_calls": 1
+  },
+  {
+   "route": "/nonexistent-page-check",
+   "http": 404,
+   "tag_occurrences": 1,
+   "init_calls": 1
+  },
+  {
+   "route": "/title/netlennyy/",
+   "http": 200,
+   "tag_occurrences": 1,
+   "init_calls": 1
+  }
+ ],
+ "note": "Страница 404 и страница тайтла идут разными путями в коде рендерера (собственная оболочка и HTML прежнего релиза); тег проверен на обоих."
+}

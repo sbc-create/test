@@ -1,0 +1,13 @@
+Доступ к Topvisor: подтверждён
+  идентификатор пользователя : 512504
+  баланс                     : 0
+  тариф                      : XS
+  стоимость тарифа           : 0
+  проектов в аккаунте        : 7
+    #33238820 zonafilm.space — zonafilm — витрина фильмов и сериалов Zona
+    #32531595 yummyani.biz — yummyani.biz — жанры, каталог и релизы
+    #32531569 yummyani.org — yummyani.org — онгоинги, оценки и обновления
+    #32531550 yummyani.site — yummyani.site — сезоны и новые серии аниме
+    #32531542 1lordserials1.online — 1lordserials1 — подборки и рекомендации
+    #32531521 lordserial33.biz — lordserial33 — сериалы, сезоны и эпизоды
+    #32531504 lordfilm47.space — lordfilm47 — витрина фильмов и сериалов

@@ -3,7 +3,7 @@
   "provider": "yandex",
   "note": "Реестр аналитики. Здесь хранятся ТОЛЬКО публичные идентификаторы счётчиков и проверяемые статусы; OAuth-токен и client secret сюда не попадают ни при каких условиях. Заполняется командой `python3 -m factory --json analytics apply --confirm-writes`; вручную не редактируется. Три домена YummyAnime — три независимых счётчика, зеркалами их объединять запрещено: у каждого сайта собственная аудитория и собственный отчёт.",
   "seo_indexing_enabled": false,
-  "updated_at": "2026-08-27T14:09:14Z",
+  "updated_at": "2026-09-14T16:44:19Z",
   "properties": [
     {
       "domain": "yummyani.site",
@@ -274,6 +274,31 @@
         "season_select": 602711760,
         "title_view": 602711759
       }
+    },
+    {
+      "domain": "zonafilm.space",
+      "site_id": "zona-01",
+      "counter_name": "Zona — zonafilm.space",
+      "counter_id": 112582938,
+      "counter_state": "created",
+      "analytics_enabled": true,
+      "webvisor": false,
+      "allowed_hosts": [
+        "zonafilm.space"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": true,
+        "host_id": null,
+        "verification_status": "BLOCKED_DEPLOYMENT",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": "2026-09-14T16:44:19Z",
+      "problems": [],
+      "goal_ids": {}
     }
   ]
 }

@@ -1,0 +1,70 @@
+{
+ "authoritative_source": "systemd units (реально обслуживающие процессы) + config/analytics.json + inventory/network-allowlist.yaml",
+ "active_production_sites": [
+  {
+   "domain": "lordfilm47.space",
+   "site_id": "lords-01",
+   "family": "lords",
+   "canonical_url": "https://lordfilm47.space/",
+   "serving_unit": "lords-nova-01",
+   "renderer": "/srv/lords/.frontend/lords-frontend.py (nova)",
+   "metrika_counter_id": 112010269,
+   "metrika_counter_source": "config/analytics.json + readback API Метрики (аккаунт 512504)",
+   "topvisor_project_id": 32531504,
+   "tag_occurrences_in_html": 1,
+   "init_calls_in_html": 1,
+   "foreign_counters_in_html": 0,
+   "html_sha256": "ccc108f93233a69962740d7f7278b932513d0f0f8ca47ac9351c2344dbbff537",
+   "indexing_policy": "noindex, nofollow — не изменялась"
+  },
+  {
+   "domain": "lordserial33.biz",
+   "site_id": "lords-02",
+   "family": "lords",
+   "canonical_url": "https://lordserial33.biz/",
+   "serving_unit": "nova-lords-02",
+   "renderer": "/srv/lords/.frontend/lords-frontend.py (nova)",
+   "metrika_counter_id": 112010274,
+   "metrika_counter_source": "config/analytics.json + readback API Метрики (аккаунт 512504)",
+   "topvisor_project_id": 32531521,
+   "tag_occurrences_in_html": 1,
+   "init_calls_in_html": 1,
+   "foreign_counters_in_html": 0,
+   "html_sha256": "1115481a722a1ebd2eb89945a96254b4e924a294a598de441f1acfb443e49200",
+   "indexing_policy": "noindex, nofollow — не изменялась"
+  },
+  {
+   "domain": "1lordserials1.online",
+   "site_id": "lords-03",
+   "family": "lords",
+   "canonical_url": "https://1lordserials1.online/",
+   "serving_unit": "nova-lords-03",
+   "renderer": "/srv/lords/.frontend/lords-frontend.py (nova)",
+   "metrika_counter_id": 112010277,
+   "metrika_counter_source": "config/analytics.json + readback API Метрики (аккаунт 512504)",
+   "topvisor_project_id": 32531542,
+   "tag_occurrences_in_html": 1,
+   "init_calls_in_html": 1,
+   "foreign_counters_in_html": 0,
+   "html_sha256": "8fb1515680f672fef14b7ba8bec114fcbd9e53c4328d4ae2411987f204f63555",
+   "indexing_policy": "noindex, nofollow — не изменялась"
+  },
+  {
+   "domain": "zonafilm.space",
+   "site_id": "zona-01",
+   "family": "zona",
+   "canonical_url": "https://zonafilm.space/",
+   "serving_unit": "nova-zona-01",
+   "renderer": "/srv/lords/.frontend/lords-frontend.py (nova)",
+   "metrika_counter_id": 112582938,
+   "metrika_counter_source": "config/analytics.json + readback API Метрики (аккаунт 512504)",
+   "topvisor_project_id": 33238820,
+   "tag_occurrences_in_html": 1,
+   "init_calls_in_html": 1,
+   "foreign_counters_in_html": 0,
+   "html_sha256": "4a9557be763f9bc9c9d3cbc3c65b61371ab9837caeef107558ef37255bf73b94",
+   "indexing_policy": "noindex, nofollow — не изменялась"
+  }
+ ],
+ "note_on_previously_suggested_list": "В задании назывался домен lordserial13.biz. В inventory, в реестре аналитики, в allowlist и в systemd-юнитах такого домена нет; реально обслуживается lordserial33.biz. Использован inventory."
+}

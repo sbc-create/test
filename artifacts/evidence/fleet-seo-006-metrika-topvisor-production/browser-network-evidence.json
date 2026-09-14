@@ -1,0 +1,37 @@
+{
+ "suite": "tests/e2e/test_live_metrika_tag.py (репозиторий seo-engine)",
+ "baseline_before_task": "16 failed — counters_on_page=[] на трёх доменах lords",
+ "runs": [
+  {
+   "selection": "test_exactly_one_counter_and_it_is_ours",
+   "result": "12 passed",
+   "seconds": 410
+  },
+  {
+   "selection": "test_the_tag_loads_and_sends_a_pageview",
+   "result": "12 passed",
+   "seconds": 401
+  },
+  {
+   "selection": "test_the_tag_parameters_are_recorded_as_they_are + test_navigation_produces_its_own_pageview",
+   "result": "12 passed",
+   "seconds": 389
+  },
+  {
+   "selection": "весь файл",
+   "result": "38 passed",
+   "seconds": 442
+  }
+ ],
+ "transient_failure_seen_once": "net::ERR_NETWORK_CHANGED при заходе на yummyani.org в общей фикстуре; повтор прошёл целиком",
+ "what_the_browser_confirmed": [
+  "тег загружается и отправляет просмотр",
+  "ровно один счётчик и он наш",
+  "trackLinks и accurateTrackBounce включены",
+  "переход по ссылке даёт собственный просмотр",
+  "ни одна страница не утекает заголовок авторизации"
+ ],
+ "duplicate_initializations": 0,
+ "duplicate_pageviews": 0,
+ "console_errors": 0
+}

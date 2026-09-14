@@ -1,0 +1,41 @@
+{
+ "prompt_id": "FLEET-SEO-006-METRIKA-TOPVISOR-PRODUCTION",
+ "changed_artifact": "/srv/lords/.frontend/lords-frontend.py",
+ "artifact_sha256_before": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+ "artifact_sha256_after": "07a71f98bbd4f7e8b6cdae88706f290209e3aacf6797a6523fd0276c8c595a93",
+ "lkg_backup": "lords-frontend.py.lkg-20260914T163551Z",
+ "rollback_command": "sudo install -o root -g root -m 0755 /srv/lords/.frontend/lords-frontend.py.lkg-<TS> /srv/lords/.frontend/lords-frontend.py && sudo systemctl restart lords-nova-01 nova-lords-02 nova-lords-03 nova-zona-01",
+ "rollback_also_requires": "удалить drop-in /etc/systemd/system/<unit>.service.d/metrika.conf и выполнить daemon-reload; без этого откат рендерера всё равно уберёт тег, потому что переменная без кода ничего не делает",
+ "canary_domain": "1lordserials1.online",
+ "canary_verified_before_rollout": true,
+ "units_restarted": [
+  "nova-lords-03",
+  "lords-nova-01",
+  "nova-lords-02",
+  "nova-zona-01"
+ ],
+ "units_not_touched": [
+  "lords-01.service",
+  "lords-02.service",
+  "lords-03.service",
+  "animedia-*",
+  "site-factory-*",
+  "caddy/nginx",
+  "postgres"
+ ],
+ "production_mutations": 6,
+ "production_mutation_list": [
+  "заменён файл рендерера /srv/lords/.frontend/lords-frontend.py (добавлен тег аналитики)",
+  "drop-in LORDS_METRIKA_COUNTER для nova-lords-03",
+  "drop-in LORDS_METRIKA_COUNTER для lords-nova-01",
+  "drop-in LORDS_METRIKA_COUNTER для nova-lords-02",
+  "drop-in LORDS_METRIKA_COUNTER для nova-zona-01",
+  "создан счётчик Метрики 112582938 для zonafilm.space"
+ ],
+ "topvisor_mutations": 1,
+ "topvisor_mutation_list": [
+  "создан проект #33238820 для zonafilm.space (бесплатно)"
+ ],
+ "paid_operations": 0,
+ "spend": 0
+}

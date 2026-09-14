@@ -1,0 +1,21 @@
+{
+ "scope": "PRODUCTION_SCOPE=LORDS_AND_ZONA_ONLY",
+ "checked": {
+  "yummyani.site": {
+   "http": 200,
+   "mc_yandex_occurrences": 4,
+   "changed_by_this_task": false
+  },
+  "animedia.icu": {
+   "http": 200,
+   "mc_yandex_occurrences": 0,
+   "changed_by_this_task": false
+  },
+  "animedia.space": {
+   "http": 200,
+   "mc_yandex_occurrences": 0,
+   "changed_by_this_task": false
+  }
+ },
+ "note": "У yummyani тег был до задачи и остался; Animedia как были без тега, так и остались — они вне области."
+}

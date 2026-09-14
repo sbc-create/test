@@ -1,0 +1,63 @@
+{
+ "account_user_id": 512504,
+ "note": "Токен и любые credentials сюда не попадают: только публичные идентификаторы.",
+ "counters": [
+  {
+   "counter_id": 111881037,
+   "site": "yummyani.site",
+   "status": "Active",
+   "name": "YummyAnime — yummyani.site",
+   "webvisor": true,
+   "mirrors": []
+  },
+  {
+   "counter_id": 111881038,
+   "site": "yummyani.org",
+   "status": "Active",
+   "name": "YummyAnime — yummyani.org",
+   "webvisor": true,
+   "mirrors": []
+  },
+  {
+   "counter_id": 111881039,
+   "site": "yummyani.biz",
+   "status": "Active",
+   "name": "YummyAnime — yummyani.biz",
+   "webvisor": true,
+   "mirrors": []
+  },
+  {
+   "counter_id": 112010269,
+   "site": "lordfilm47.space",
+   "status": "Active",
+   "name": "Lords — lordfilm47.space",
+   "webvisor": true,
+   "mirrors": []
+  },
+  {
+   "counter_id": 112010274,
+   "site": "lordserial33.biz",
+   "status": "Active",
+   "name": "Lords — lordserial33.biz",
+   "webvisor": true,
+   "mirrors": []
+  },
+  {
+   "counter_id": 112010277,
+   "site": "1lordserials1.online",
+   "status": "Active",
+   "name": "Lords — 1lordserials1.online",
+   "webvisor": true,
+   "mirrors": []
+  },
+  {
+   "counter_id": 112582938,
+   "site": "zonafilm.space",
+   "status": "Active",
+   "name": "Zona — zonafilm.space",
+   "webvisor": false,
+   "mirrors": []
+  }
+ ],
+ "duplicate_domains": []
+}
