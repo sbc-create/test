@@ -1,6 +1,7 @@
-# Тесты контура публикации, 2026-09-14T16:56:21Z
-# /srv/site-factory/repo/.venv/bin/python -m pytest tests/test_nova_publish.py tests/test_nova_details_backfill.py -q
+# Тесты контура, 2026-09-14T17:30:51Z
+# pytest tests/test_rating_gateway.py tests/test_nova_publish.py tests/test_nova_details_backfill.py -q
 
-......................................................                   [100%]
-54 passed in 2.39s
+........................................................................ [ 98%]
+.                                                                        [100%]
+73 passed in 1.87s
 PYTEST_EXIT_CODE=0
