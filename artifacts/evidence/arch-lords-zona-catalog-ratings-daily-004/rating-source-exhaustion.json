@@ -1,0 +1,123 @@
+{
+  "question": "Существует ли на этом хосте хоть один источник оценок, кроме CDNVideoHub?",
+  "method": "обход всех БД, кэшей, read-model'ей и клиентского кода поставщика",
+  "checked": [
+    {
+      "store": "CDNVideoHub titles (список)",
+      "kind": "API",
+      "kp_values": 19588,
+      "imdb_values": 27050,
+      "of_total": 53399,
+      "verdict": "основной и единственный источник"
+    },
+    {
+      "store": "CDNVideoHub titles/{id} (detail)",
+      "kind": "API",
+      "probe": "673 свежих запроса адресно по записям без оценки, но с внешним ид",
+      "kp_gained": 0,
+      "imdb_gained": 0,
+      "rating_fields_in_response": [
+        "kinopoisk_rating",
+        "imdb_rating"
+      ],
+      "verdict": "оценок сверх списка не отдаёт"
+    },
+    {
+      "store": "postgres factory_anime",
+      "kind": "CMS БД",
+      "tables": 30,
+      "largest_table_rows": 32,
+      "rating_columns": [],
+      "verdict": "учебная CMS на 8 тайтлов; полей оценок нет"
+    },
+    {
+      "store": "yummy-readmodel.sqlite3 → external_rating",
+      "kind": "производный read-model",
+      "rows": 14598,
+      "sources": [
+        "catalog:cdnvideohub",
+        "catalog:cdnvideohub:detail"
+      ],
+      "kp_with_value": 176,
+      "imdb_with_value": 261,
+      "absent_status_rows": {
+        "kp": 7123,
+        "imdb": 7038
+      },
+      "intersection_with_our_catalog": {
+        "kp": 176,
+        "imdb": 261
+      },
+      "could_add": {
+        "kp": 0,
+        "imdb": 0
+      },
+      "value_conflicts": {
+        "kp": 0,
+        "imdb": 0
+      },
+      "verdict": "производное того же провайдера; все значения уже есть у нас и совпадают. Независимая система на том же источнике пришла к тому же выводу: 7123 и 7038 записей помечены ABSENT"
+    },
+    {
+      "store": "postgres yummyani_site / yummyani_org / yummyani_biz",
+      "kind": "CMS БД",
+      "rating_columns": [
+        "Title.ageRating"
+      ],
+      "verdict": "возрастной рейтинг, а не оценка"
+    },
+    {
+      "store": "postgres seo_engine",
+      "kind": "SEO БД",
+      "rating_columns": [
+        "content_drafts.quality_score",
+        "content_drafts.similarity_score"
+      ],
+      "verdict": "метрики текстов, к оценкам произведений отношения не имеют"
+    },
+    {
+      "store": "клиент yummyani (src/modules/catalog)",
+      "kind": "исходный код",
+      "external_providers_found": [
+        "kinopoisk",
+        "myanimelist",
+        "imdb"
+      ],
+      "usage": "external-references.ts строит ИСХОДЯЩИЕ ССЫЛКИ на карточки по внешним ид",
+      "fetches_ratings": false,
+      "verdict": "адаптеров получения оценок нет"
+    },
+    {
+      "store": "Secret Hub",
+      "kind": "учётные данные",
+      "rating_provider_credentials": [],
+      "present": [
+        "cdnvideohub-api-token",
+        "cdnvideohub-publisher-id"
+      ],
+      "verdict": "ключей TMDb, Shikimori, MyAnimeList, AniList, OMDb нет"
+    },
+    {
+      "store": "factory/site_engine/providers.py",
+      "kind": "реестр провайдеров",
+      "registered_adapters": [
+        "cdnvideohub"
+      ],
+      "verdict": "других адаптеров не зарегистрировано"
+    }
+  ],
+  "conclusion": {
+    "additional_ratings_obtainable": 0,
+    "kp_ceiling_pct": 36.68,
+    "imdb_ceiling_pct": 50.66,
+    "target_pct": 90,
+    "blocker": "порог недостижим без подключения нового внешнего провайдера оценок; задача запрещает заводить платные аккаунты",
+    "owner_decision_required": true,
+    "join_keys_available_if_approved": {
+      "kinopoisk_ids": 46712,
+      "imdb_ids": 45071,
+      "of_total": 53399
+    },
+    "status": "BLOCKED_UPSTREAM_RATINGS"
+  }
+}
