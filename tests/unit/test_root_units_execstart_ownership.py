@@ -172,13 +172,38 @@ class TestShippedContract:
         assert provenance["file_count"] == release["file_count"]
 
     def test_every_file_records_its_source_commit(self):
-        """Файл без провенанса в root-owned дереве — байт без ответа «откуда»."""
+        """Файл без провенанса в root-owned дереве — байт без ответа «откуда».
+
+        `SELF` — законный источник: это коммит самой транзакции. Его хеша во
+        время сборки ещё нет, и подставлять туда что-то похожее на хеш было бы
+        враньём. Совпадение `SELF` с фактическим коммитом проверяет
+        `verify-self-reference.sh` уже после фиксации.
+        """
         provenance = json.loads(
             (HARDENING / "release" / "provenance.json").read_text(encoding="utf-8"))
         assert provenance["files"]
         for item in provenance["files"]:
-            assert len(item["source_commit"]) == 40, item["path"]
+            commit = item["source_commit"]
+            assert commit == "SELF" or len(commit) == 40, item["path"]
             assert len(item["sha256"]) == 64, item["path"]
+
+    def test_self_reference_is_verifiable_not_promised(self):
+        """Самоссылка обязана иметь подтверждающий механизм."""
+        verifier = HARDENING / "verify-self-reference.sh"
+        assert verifier.exists(), (
+            "манифест ссылается на SELF, но проверить это нечем — "
+            "тогда совпадение коммитов остаётся обещанием")
+        text = verifier.read_text(encoding="utf-8")
+        assert "git" in text and "sha256" in text
+
+    def test_all_transaction_commits_coincide_by_construction(self):
+        """Источник кода и источник транзакции — один объект, а не два сверенных."""
+        manifest = json.loads((HARDENING / "manifest.json").read_text(encoding="utf-8"))
+        primary = manifest["sources"][0]
+        assert primary["commit"] == "SELF", (
+            "первичный источник обязан быть самоссылкой: иначе SOURCE_COMMIT и "
+            "TRANSACTION_COMMIT — разные коммиты, и их идентичность пришлось бы "
+            "доказывать отдельно на каждый файл")
 
     def test_transaction_does_not_publish_anything(self):
         """Закрепление не расширяет публичную поверхность.
