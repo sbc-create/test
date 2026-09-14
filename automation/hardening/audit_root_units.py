@@ -267,10 +267,45 @@ def audit_unit(view: UnitView) -> list[Problem]:
     for env_file in view.env_files:
         problems.extend(_check_path(view.name, env_file, kind="EnvironmentFile"))
 
-    if view.working_directory:
+    if view.working_directory and _cwd_is_code(view):
         problems.extend(_check_path(view.name, view.working_directory,
-                                    kind="WorkingDirectory"))
+                                    kind="WorkingDirectory (в пути импорта)"))
     return problems
+
+
+def cwd_is_code_reason(view: UnitView) -> str:
+    """Почему рабочий каталог этого юнита является (или нет) путём к коду.
+
+    Рабочий каталог — код не всегда, и разница здесь не косметическая: если
+    считать его кодом всегда, проверка объявит нарушителями юниты, у которых
+    рабочий каталог — место для ДАННЫХ, и настоящие находки утонут среди них.
+
+    * ``python -m модуль`` — интерпретатор кладёт cwd первым элементом
+      ``sys.path``: подменённый там модуль исполнится. Это код.
+    * ``python /путь/скрипт.py`` — первым элементом становится каталог самого
+      скрипта, а не cwd. Это не код (каталог скрипта проверяется отдельно).
+    * ``node /путь/скрипт.mjs`` — разрешение модулей идёт от каталога
+      импортирующего файла, cwd в нём не участвует. Это не код.
+    * shell — cwd влияет только через ``PATH`` с относительным элементом;
+      сам ``PATH`` проверяется отдельно и целиком.
+    """
+    for command in view.exec_starts:
+        tokens = _tokenize(command)
+        if not tokens:
+            continue
+        executable = Path(tokens[0]).name
+        if executable.startswith("python"):
+            arguments = [t for t in tokens[1:] if not t.startswith("-")]
+            if "-m" in tokens[1:]:
+                return "python -m: cwd первым элементом sys.path"
+            if arguments:
+                return ""
+            return "python без скрипта: cwd попадает в sys.path"
+    return ""
+
+
+def _cwd_is_code(view: UnitView) -> bool:
+    return bool(cwd_is_code_reason(view))
 
 
 def audit(unit_dir: Path | None = None, only: list[str] | None = None) -> dict:
@@ -310,6 +345,82 @@ def audit(unit_dir: Path | None = None, only: list[str] | None = None) -> dict:
     }
 
 
+def _interpreter_of(view: UnitView) -> str:
+    """Что реально исполняет код этого юнита."""
+    for command in view.exec_starts:
+        tokens = _tokenize(command)
+        if not tokens:
+            continue
+        executable = Path(tokens[0])
+        name = executable.name
+        if name.startswith(("python", "node", "bash", "sh", "perl", "ruby")):
+            return str(executable)
+        if executable.is_file():
+            shebang = _shebang_interpreter(executable)
+            if shebang:
+                return f"{shebang} (шебанг)"
+        return "—"
+    return "—"
+
+
+def _transitive_code(view: UnitView) -> list[str]:
+    """Пути, откуда юнит может подгрузить код помимо самого ExecStart."""
+    out = []
+    for name in CODE_PATH_VARS:
+        value = view.environment.get(name)
+        if not value:
+            continue
+        separator = ":" if name in ("PYTHONPATH", "PATH") else None
+        for candidate in (value.split(separator) if separator else [value]):
+            if candidate and candidate not in out:
+                out.append(f"{name}={candidate}")
+    if view.working_directory and _cwd_is_code(view):
+        out.append(f"WorkingDirectory={view.working_directory}")
+    for env_file in view.env_files:
+        out.append(f"EnvironmentFile={env_file}")
+    return out
+
+
+def table(unit_dir: Path | None = None, included: set[str] | None = None) -> list[dict]:
+    """Строка на каждый root-юнит хоста — включая чистые.
+
+    Таблица только по нарушителям отвечала бы на вопрос «что сломано», но не на
+    вопрос «что проверено». Второй здесь важнее: объём аудита должен быть виден.
+    """
+    directory = unit_dir or UNIT_DIR
+    included = included or set()
+    rows = []
+    if not directory.is_dir():
+        return rows
+    for unit in sorted(p for p in directory.glob("*.service") if p.is_file()):
+        view = read_unit(unit)
+        if view is None or not view.runs_as_root:
+            continue
+        problems = audit_unit(view)
+        exec_start = view.exec_starts[0] if view.exec_starts else "—"
+        primary = Path(_tokenize(exec_start)[0]) if view.exec_starts else None
+        owner = _owner(primary) if primary else None
+        mode = _mode(primary) if primary else None
+        writable = sorted({p.path for p in
+                           [Problem(**{"unit": q["unit"], "path": q["path"],
+                                       "reason": q["reason"]}) for q in
+                            [p.as_dict() for p in problems]]})
+        rows.append({
+            "unit": view.name,
+            "exec_start": exec_start,
+            "interpreter": _interpreter_of(view),
+            "transitive_code": _transitive_code(view),
+            "owner_group": (f"{owner}:{mode:04o}" if owner and mode is not None else "—"),
+            "writable_by_claude": writable,
+            "credential_access": view.holds_credentials,
+            "affected": bool(problems),
+            "included_in_transaction": view.name in included,
+            "cwd_is_code": cwd_is_code_reason(view) or "нет",
+            "problem_count": len(problems),
+        })
+    return rows
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="audit_root_units",
@@ -318,7 +429,18 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--only", action="append",
                         help="проверить только названный unit (можно повторять)")
     parser.add_argument("--json", action="store_true", help="машинный вывод")
+    parser.add_argument("--table", action="store_true",
+                        help="строка на каждый root-юнит, включая чистые")
+    parser.add_argument("--included", default="",
+                        help="через запятую: юниты, входящие в транзакцию")
     args = parser.parse_args(argv)
+
+    if args.table:
+        included = {u.strip() for u in args.included.split(",") if u.strip()}
+        rows = table(Path(args.unit_dir), included)
+        print(json.dumps({"row_count": len(rows), "rows": rows},
+                         ensure_ascii=False, indent=2))
+        return 0
 
     report = audit(Path(args.unit_dir), args.only)
     if args.json:

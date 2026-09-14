@@ -1,0 +1,454 @@
+{
+  "row_count": 27,
+  "rows": [
+    {
+      "unit": "iscsi.service",
+      "exec_start": "/sbin/iscsiadm -m node --loginall=automatic",
+      "interpreter": "—",
+      "transitive_code": [],
+      "owner_group": "root:0755",
+      "writable_by_claude": [],
+      "credential_access": false,
+      "affected": false,
+      "included_in_transaction": false,
+      "cwd_is_code": "нет",
+      "problem_count": 0
+    },
+    {
+      "unit": "lords-canary-switch@.service",
+      "exec_start": "/home/claude/wt-release-03/automation/host/lords-canary-apply.sh switch %i",
+      "interpreter": "/usr/bin/env (шебанг)",
+      "transitive_code": [
+        "FACTORY_PYTHON=/home/claude/wt-release-03/.venv/bin/python"
+      ],
+      "owner_group": "claude:0775",
+      "writable_by_claude": [
+        "/home/claude",
+        "/home/claude/wt-release-03",
+        "/home/claude/wt-release-03/.venv",
+        "/home/claude/wt-release-03/.venv/bin",
+        "/home/claude/wt-release-03/.venv/bin/python",
+        "/home/claude/wt-release-03/automation",
+        "/home/claude/wt-release-03/automation/host",
+        "/home/claude/wt-release-03/automation/host/lords-canary-apply.sh"
+      ],
+      "credential_access": false,
+      "affected": true,
+      "included_in_transaction": true,
+      "cwd_is_code": "нет",
+      "problem_count": 16
+    },
+    {
+      "unit": "lords-content-refresh.service",
+      "exec_start": "/srv/site-factory/lords-tooling/releases/0b0722f3705c519444b82473d95f6b5734f0128e/automation/host/lords-content-refresh.sh",
+      "interpreter": "/usr/bin/env (шебанг)",
+      "transitive_code": [
+        "FACTORY_PYTHON=/srv/site-factory/repo/.venv/bin/python"
+      ],
+      "owner_group": "root:0555",
+      "writable_by_claude": [
+        "/srv/site-factory",
+        "/srv/site-factory/repo",
+        "/srv/site-factory/repo/.venv/bin",
+        "/srv/site-factory/repo/.venv/bin/python"
+      ],
+      "credential_access": true,
+      "affected": true,
+      "included_in_transaction": true,
+      "cwd_is_code": "нет",
+      "problem_count": 7
+    },
+    {
+      "unit": "lords-deploy-broker.service",
+      "exec_start": "/usr/local/libexec/site-factory/lords-deploy-broker",
+      "interpreter": "/usr/bin/env (шебанг)",
+      "transitive_code": [],
+      "owner_group": "root:0755",
+      "writable_by_claude": [],
+      "credential_access": false,
+      "affected": false,
+      "included_in_transaction": false,
+      "cwd_is_code": "нет",
+      "problem_count": 0
+    },
+    {
+      "unit": "lords-site-render@.service",
+      "exec_start": "/bin/bash /srv/site-factory/lords-tooling/releases/41031da02cb7d3ca1fb30c0bdfeca6fe4b4e21c1/automation/host/lords-content-refresh.sh",
+      "interpreter": "/bin/bash",
+      "transitive_code": [
+        "EnvironmentFile=/run/lords-deploy/env/%i.env"
+      ],
+      "owner_group": "root:0755",
+      "writable_by_claude": [
+        "/srv/site-factory",
+        "/srv/site-factory/lords-tooling/releases/41031da02cb7d3ca1fb30c0bdfeca6fe4b4e21c1/automation",
+        "/srv/site-factory/lords-tooling/releases/41031da02cb7d3ca1fb30c0bdfeca6fe4b4e21c1/automation/host",
+        "/srv/site-factory/lords-tooling/releases/41031da02cb7d3ca1fb30c0bdfeca6fe4b4e21c1/automation/host/lords-content-refresh.sh"
+      ],
+      "credential_access": true,
+      "affected": true,
+      "included_in_transaction": true,
+      "cwd_is_code": "нет",
+      "problem_count": 4
+    },
+    {
+      "unit": "multipath-tools.service",
+      "exec_start": "/sbin/modprobe -a scsi_dh_alua scsi_dh_emc scsi_dh_rdac dm-multipath",
+      "interpreter": "—",
+      "transitive_code": [],
+      "owner_group": "root:0777",
+      "writable_by_claude": [],
+      "credential_access": false,
+      "affected": false,
+      "included_in_transaction": false,
+      "cwd_is_code": "нет",
+      "problem_count": 0
+    },
+    {
+      "unit": "nova-catalog-refresh.service",
+      "exec_start": "/usr/bin/python3 /srv/site-factory/content-pipeline/refresh.py",
+      "interpreter": "/usr/bin/python3",
+      "transitive_code": [],
+      "owner_group": "root:0777",
+      "writable_by_claude": [
+        "/srv/site-factory",
+        "/srv/site-factory/content-pipeline",
+        "/srv/site-factory/content-pipeline/refresh.py"
+      ],
+      "credential_access": false,
+      "affected": true,
+      "included_in_transaction": true,
+      "cwd_is_code": "нет",
+      "problem_count": 5
+    },
+    {
+      "unit": "nova-daily-refresh.service",
+      "exec_start": "/srv/site-factory/repo/automation/host/nova-daily-refresh.sh",
+      "interpreter": "/usr/bin/env (шебанг)",
+      "transitive_code": [
+        "NOVA_TOOLS=/srv/site-factory/repo/automation/host"
+      ],
+      "owner_group": "claude:0775",
+      "writable_by_claude": [
+        "/srv/site-factory",
+        "/srv/site-factory/repo",
+        "/srv/site-factory/repo/automation",
+        "/srv/site-factory/repo/automation/host",
+        "/srv/site-factory/repo/automation/host/nova-daily-refresh.sh"
+      ],
+      "credential_access": true,
+      "affected": true,
+      "included_in_transaction": true,
+      "cwd_is_code": "нет",
+      "problem_count": 16
+    },
+    {
+      "unit": "os-vol-format@.service",
+      "exec_start": "/usr/local/sbin/os-vol-format.sh %i",
+      "interpreter": "/usr/bin/env (шебанг)",
+      "transitive_code": [],
+      "owner_group": "root:0755",
+      "writable_by_claude": [],
+      "credential_access": false,
+      "affected": false,
+      "included_in_transaction": false,
+      "cwd_is_code": "нет",
+      "problem_count": 0
+    },
+    {
+      "unit": "os-vol-mount@.service",
+      "exec_start": "/usr/local/sbin/os-vol-mount.sh %i",
+      "interpreter": "/usr/bin/env (шебанг)",
+      "transitive_code": [],
+      "owner_group": "root:0755",
+      "writable_by_claude": [],
+      "credential_access": false,
+      "affected": false,
+      "included_in_transaction": false,
+      "cwd_is_code": "нет",
+      "problem_count": 0
+    },
+    {
+      "unit": "site-factory-backup.service",
+      "exec_start": "/srv/site-factory/repo/automation/host/site-factory-backup.sh",
+      "interpreter": "/usr/bin/env (шебанг)",
+      "transitive_code": [
+        "EnvironmentFile=/etc/site-factory/environment"
+      ],
+      "owner_group": "claude:0775",
+      "writable_by_claude": [
+        "/srv/site-factory",
+        "/srv/site-factory/repo",
+        "/srv/site-factory/repo/automation",
+        "/srv/site-factory/repo/automation/host",
+        "/srv/site-factory/repo/automation/host/site-factory-backup.sh"
+      ],
+      "credential_access": false,
+      "affected": true,
+      "included_in_transaction": true,
+      "cwd_is_code": "нет",
+      "problem_count": 9
+    },
+    {
+      "unit": "site-factory-docker-firewall.service",
+      "exec_start": "/usr/local/sbin/site-factory-docker-firewall",
+      "interpreter": "/bin/bash (шебанг)",
+      "transitive_code": [],
+      "owner_group": "root:0755",
+      "writable_by_claude": [],
+      "credential_access": false,
+      "affected": false,
+      "included_in_transaction": false,
+      "cwd_is_code": "нет",
+      "problem_count": 0
+    },
+    {
+      "unit": "site-factory-health.service",
+      "exec_start": "/srv/site-factory/repo/automation/host/site-factory-health.sh",
+      "interpreter": "/usr/bin/env (шебанг)",
+      "transitive_code": [
+        "EnvironmentFile=/etc/site-factory/environment"
+      ],
+      "owner_group": "claude:0775",
+      "writable_by_claude": [
+        "/srv/site-factory",
+        "/srv/site-factory/repo",
+        "/srv/site-factory/repo/automation",
+        "/srv/site-factory/repo/automation/host",
+        "/srv/site-factory/repo/automation/host/site-factory-health.sh"
+      ],
+      "credential_access": false,
+      "affected": true,
+      "included_in_transaction": true,
+      "cwd_is_code": "нет",
+      "problem_count": 9
+    },
+    {
+      "unit": "site-factory-restore-proof.service",
+      "exec_start": "/srv/site-factory/repo/.venv/bin/python tests/tools/restore_proof.py",
+      "interpreter": "/srv/site-factory/repo/.venv/bin/python",
+      "transitive_code": [
+        "EnvironmentFile=/etc/site-factory/environment"
+      ],
+      "owner_group": "claude:0777",
+      "writable_by_claude": [
+        "/srv/site-factory",
+        "/srv/site-factory/repo",
+        "/srv/site-factory/repo/.venv/bin",
+        "/srv/site-factory/repo/.venv/bin/python"
+      ],
+      "credential_access": false,
+      "affected": true,
+      "included_in_transaction": true,
+      "cwd_is_code": "нет",
+      "problem_count": 6
+    },
+    {
+      "unit": "site-factory-secret-hub-import@.service",
+      "exec_start": "/opt/site-factory-secret-hub/venv/bin/python -m factory.secret_hub.rootcmd import %i",
+      "interpreter": "/opt/site-factory-secret-hub/venv/bin/python",
+      "transitive_code": [
+        "PYTHONPATH=/srv/site-factory/repo",
+        "WorkingDirectory=/srv/site-factory/repo"
+      ],
+      "owner_group": "root:0777",
+      "writable_by_claude": [
+        "/srv/site-factory",
+        "/srv/site-factory/repo"
+      ],
+      "credential_access": true,
+      "affected": true,
+      "included_in_transaction": true,
+      "cwd_is_code": "python -m: cwd первым элементом sys.path",
+      "problem_count": 6
+    },
+    {
+      "unit": "site-factory-secret-hub.service",
+      "exec_start": "/opt/site-factory-secret-hub/venv/bin/python -m factory.secret_hub serve",
+      "interpreter": "/opt/site-factory-secret-hub/venv/bin/python",
+      "transitive_code": [
+        "PYTHONPATH=/srv/site-factory/repo",
+        "WorkingDirectory=/srv/site-factory/repo"
+      ],
+      "owner_group": "root:0777",
+      "writable_by_claude": [
+        "/srv/site-factory",
+        "/srv/site-factory/repo"
+      ],
+      "credential_access": true,
+      "affected": true,
+      "included_in_transaction": true,
+      "cwd_is_code": "python -m: cwd первым элементом sys.path",
+      "problem_count": 6
+    },
+    {
+      "unit": "snap.lxd.activate.service",
+      "exec_start": "/usr/bin/snap run lxd.activate",
+      "interpreter": "—",
+      "transitive_code": [
+        "EnvironmentFile=/etc/environment"
+      ],
+      "owner_group": "root:0755",
+      "writable_by_claude": [],
+      "credential_access": false,
+      "affected": false,
+      "included_in_transaction": false,
+      "cwd_is_code": "нет",
+      "problem_count": 0
+    },
+    {
+      "unit": "snap.lxd.daemon.service",
+      "exec_start": "/usr/bin/snap run lxd.daemon",
+      "interpreter": "—",
+      "transitive_code": [
+        "EnvironmentFile=/etc/environment"
+      ],
+      "owner_group": "root:0755",
+      "writable_by_claude": [],
+      "credential_access": false,
+      "affected": false,
+      "included_in_transaction": false,
+      "cwd_is_code": "нет",
+      "problem_count": 0
+    },
+    {
+      "unit": "snap.lxd.user-daemon.service",
+      "exec_start": "/usr/bin/snap run lxd.user-daemon",
+      "interpreter": "—",
+      "transitive_code": [
+        "EnvironmentFile=/etc/environment"
+      ],
+      "owner_group": "root:0755",
+      "writable_by_claude": [],
+      "credential_access": false,
+      "affected": false,
+      "included_in_transaction": false,
+      "cwd_is_code": "нет",
+      "problem_count": 0
+    },
+    {
+      "unit": "sshd.service",
+      "exec_start": "/usr/sbin/sshd -t",
+      "interpreter": "—",
+      "transitive_code": [
+        "EnvironmentFile=/etc/default/ssh"
+      ],
+      "owner_group": "root:0755",
+      "writable_by_claude": [],
+      "credential_access": false,
+      "affected": false,
+      "included_in_transaction": false,
+      "cwd_is_code": "нет",
+      "problem_count": 0
+    },
+    {
+      "unit": "syslog.service",
+      "exec_start": "/usr/sbin/rsyslogd -n -iNONE",
+      "interpreter": "—",
+      "transitive_code": [],
+      "owner_group": "root:0755",
+      "writable_by_claude": [],
+      "credential_access": false,
+      "affected": false,
+      "included_in_transaction": false,
+      "cwd_is_code": "нет",
+      "problem_count": 0
+    },
+    {
+      "unit": "vmtoolsd.service",
+      "exec_start": "/usr/bin/vmtoolsd",
+      "interpreter": "—",
+      "transitive_code": [],
+      "owner_group": "root:0755",
+      "writable_by_claude": [],
+      "credential_access": false,
+      "affected": false,
+      "included_in_transaction": false,
+      "cwd_is_code": "нет",
+      "problem_count": 0
+    },
+    {
+      "unit": "yummy-catalog-index.service",
+      "exec_start": "/usr/local/bin/yummy-catalog-index-sync",
+      "interpreter": "/usr/bin/env (шебанг)",
+      "transitive_code": [],
+      "owner_group": "root:0755",
+      "writable_by_claude": [],
+      "credential_access": false,
+      "affected": false,
+      "included_in_transaction": false,
+      "cwd_is_code": "нет",
+      "problem_count": 0
+    },
+    {
+      "unit": "yummy-catalog-watchdog.service",
+      "exec_start": "/usr/local/bin/yummy-catalog-index-watchdog",
+      "interpreter": "/usr/bin/env (шебанг)",
+      "transitive_code": [],
+      "owner_group": "root:0755",
+      "writable_by_claude": [],
+      "credential_access": false,
+      "affected": false,
+      "included_in_transaction": false,
+      "cwd_is_code": "нет",
+      "problem_count": 0
+    },
+    {
+      "unit": "yummy-enrich.service",
+      "exec_start": "/usr/bin/node /srv/sites/yummyani-staging/repo/scripts/enrich-episode-details.mjs",
+      "interpreter": "/usr/bin/node",
+      "transitive_code": [],
+      "owner_group": "root:0755",
+      "writable_by_claude": [
+        "/srv/sites",
+        "/srv/sites/yummyani-staging",
+        "/srv/sites/yummyani-staging/repo",
+        "/srv/sites/yummyani-staging/repo/scripts",
+        "/srv/sites/yummyani-staging/repo/scripts/enrich-episode-details.mjs"
+      ],
+      "credential_access": false,
+      "affected": true,
+      "included_in_transaction": true,
+      "cwd_is_code": "нет",
+      "problem_count": 9
+    },
+    {
+      "unit": "yummy-episode-watcher.service",
+      "exec_start": "/usr/bin/node /srv/sites/yummyani-staging/repo/scripts/episode-watcher.mjs",
+      "interpreter": "/usr/bin/node",
+      "transitive_code": [],
+      "owner_group": "root:0755",
+      "writable_by_claude": [
+        "/srv/sites",
+        "/srv/sites/yummyani-staging",
+        "/srv/sites/yummyani-staging/repo",
+        "/srv/sites/yummyani-staging/repo/scripts",
+        "/srv/sites/yummyani-staging/repo/scripts/episode-watcher.mjs"
+      ],
+      "credential_access": false,
+      "affected": true,
+      "included_in_transaction": true,
+      "cwd_is_code": "нет",
+      "problem_count": 9
+    },
+    {
+      "unit": "yummy-watchdog.service",
+      "exec_start": "/usr/bin/node /srv/sites/yummyani-staging/repo/scripts/watchdog-run.mjs",
+      "interpreter": "/usr/bin/node",
+      "transitive_code": [],
+      "owner_group": "root:0755",
+      "writable_by_claude": [
+        "/srv/sites",
+        "/srv/sites/yummyani-staging",
+        "/srv/sites/yummyani-staging/repo",
+        "/srv/sites/yummyani-staging/repo/scripts",
+        "/srv/sites/yummyani-staging/repo/scripts/watchdog-run.mjs"
+      ],
+      "credential_access": false,
+      "affected": true,
+      "included_in_transaction": true,
+      "cwd_is_code": "нет",
+      "problem_count": 9
+    }
+  ]
+}

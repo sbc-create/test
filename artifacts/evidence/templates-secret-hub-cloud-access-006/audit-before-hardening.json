@@ -23,7 +23,7 @@
     "site-factory-secret-hub-import@.service",
     "site-factory-secret-hub.service"
   ],
-  "problem_count": 144,
+  "problem_count": 111,
   "problems": [
     {
       "unit": "lords-canary-switch@.service",
@@ -106,21 +106,6 @@
       "reason": "FACTORY_PYTHON: принадлежит claude"
     },
     {
-      "unit": "lords-canary-switch@.service",
-      "path": "/home/claude/wt-release-03",
-      "reason": "WorkingDirectory: принадлежит claude"
-    },
-    {
-      "unit": "lords-canary-switch@.service",
-      "path": "/home/claude/wt-release-03",
-      "reason": "WorkingDirectory: открыт на запись не владельцу (0775)"
-    },
-    {
-      "unit": "lords-canary-switch@.service",
-      "path": "/home/claude",
-      "reason": "WorkingDirectory: принадлежит claude"
-    },
-    {
       "unit": "lords-content-refresh.service",
       "path": "/srv/site-factory",
       "reason": "ExecStart: принадлежит claude"
@@ -156,21 +141,6 @@
       "reason": "FACTORY_PYTHON: принадлежит claude"
     },
     {
-      "unit": "lords-content-refresh.service",
-      "path": "/srv/site-factory/repo",
-      "reason": "WorkingDirectory: принадлежит claude"
-    },
-    {
-      "unit": "lords-content-refresh.service",
-      "path": "/srv/site-factory/repo",
-      "reason": "WorkingDirectory: открыт на запись не владельцу (0775)"
-    },
-    {
-      "unit": "lords-content-refresh.service",
-      "path": "/srv/site-factory",
-      "reason": "WorkingDirectory: принадлежит claude"
-    },
-    {
       "unit": "lords-site-render@.service",
       "path": "/srv/site-factory/lords-tooling/releases/41031da02cb7d3ca1fb30c0bdfeca6fe4b4e21c1/automation/host/lords-content-refresh.sh",
       "reason": "аргумент-скрипт: открыт на запись не владельцу (0775)"
@@ -191,21 +161,6 @@
       "reason": "аргумент-скрипт: принадлежит claude"
     },
     {
-      "unit": "lords-site-render@.service",
-      "path": "/srv/site-factory/repo",
-      "reason": "WorkingDirectory: принадлежит claude"
-    },
-    {
-      "unit": "lords-site-render@.service",
-      "path": "/srv/site-factory/repo",
-      "reason": "WorkingDirectory: открыт на запись не владельцу (0775)"
-    },
-    {
-      "unit": "lords-site-render@.service",
-      "path": "/srv/site-factory",
-      "reason": "WorkingDirectory: принадлежит claude"
-    },
-    {
       "unit": "nova-catalog-refresh.service",
       "path": "/srv/site-factory/content-pipeline/refresh.py",
       "reason": "аргумент-скрипт: принадлежит claude"
@@ -229,21 +184,6 @@
       "unit": "nova-catalog-refresh.service",
       "path": "/srv/site-factory",
       "reason": "аргумент-скрипт: принадлежит claude"
-    },
-    {
-      "unit": "nova-catalog-refresh.service",
-      "path": "/srv/site-factory/content-pipeline",
-      "reason": "WorkingDirectory: принадлежит claude"
-    },
-    {
-      "unit": "nova-catalog-refresh.service",
-      "path": "/srv/site-factory/content-pipeline",
-      "reason": "WorkingDirectory: открыт на запись не владельцу (0775)"
-    },
-    {
-      "unit": "nova-catalog-refresh.service",
-      "path": "/srv/site-factory",
-      "reason": "WorkingDirectory: принадлежит claude"
     },
     {
       "unit": "nova-daily-refresh.service",
@@ -324,21 +264,6 @@
       "unit": "nova-daily-refresh.service",
       "path": "/srv/site-factory",
       "reason": "NOVA_TOOLS: принадлежит claude"
-    },
-    {
-      "unit": "nova-daily-refresh.service",
-      "path": "/srv/site-factory/repo",
-      "reason": "WorkingDirectory: принадлежит claude"
-    },
-    {
-      "unit": "nova-daily-refresh.service",
-      "path": "/srv/site-factory/repo",
-      "reason": "WorkingDirectory: открыт на запись не владельцу (0775)"
-    },
-    {
-      "unit": "nova-daily-refresh.service",
-      "path": "/srv/site-factory",
-      "reason": "WorkingDirectory: принадлежит claude"
     },
     {
       "unit": "site-factory-backup.service",
@@ -461,21 +386,6 @@
       "reason": "ExecStart: принадлежит claude"
     },
     {
-      "unit": "site-factory-restore-proof.service",
-      "path": "/srv/site-factory/repo",
-      "reason": "WorkingDirectory: принадлежит claude"
-    },
-    {
-      "unit": "site-factory-restore-proof.service",
-      "path": "/srv/site-factory/repo",
-      "reason": "WorkingDirectory: открыт на запись не владельцу (0775)"
-    },
-    {
-      "unit": "site-factory-restore-proof.service",
-      "path": "/srv/site-factory",
-      "reason": "WorkingDirectory: принадлежит claude"
-    },
-    {
       "unit": "site-factory-secret-hub-import@.service",
       "path": "/srv/site-factory/repo",
       "reason": "PYTHONPATH: принадлежит claude"
@@ -493,17 +403,17 @@
     {
       "unit": "site-factory-secret-hub-import@.service",
       "path": "/srv/site-factory/repo",
-      "reason": "WorkingDirectory: принадлежит claude"
+      "reason": "WorkingDirectory (в пути импорта): принадлежит claude"
     },
     {
       "unit": "site-factory-secret-hub-import@.service",
       "path": "/srv/site-factory/repo",
-      "reason": "WorkingDirectory: открыт на запись не владельцу (0775)"
+      "reason": "WorkingDirectory (в пути импорта): открыт на запись не владельцу (0775)"
     },
     {
       "unit": "site-factory-secret-hub-import@.service",
       "path": "/srv/site-factory",
-      "reason": "WorkingDirectory: принадлежит claude"
+      "reason": "WorkingDirectory (в пути импорта): принадлежит claude"
     },
     {
       "unit": "site-factory-secret-hub.service",
@@ -523,17 +433,17 @@
     {
       "unit": "site-factory-secret-hub.service",
       "path": "/srv/site-factory/repo",
-      "reason": "WorkingDirectory: принадлежит claude"
+      "reason": "WorkingDirectory (в пути импорта): принадлежит claude"
     },
     {
       "unit": "site-factory-secret-hub.service",
       "path": "/srv/site-factory/repo",
-      "reason": "WorkingDirectory: открыт на запись не владельцу (0775)"
+      "reason": "WorkingDirectory (в пути импорта): открыт на запись не владельцу (0775)"
     },
     {
       "unit": "site-factory-secret-hub.service",
       "path": "/srv/site-factory",
-      "reason": "WorkingDirectory: принадлежит claude"
+      "reason": "WorkingDirectory (в пути импорта): принадлежит claude"
     },
     {
       "unit": "yummy-enrich.service",
@@ -581,31 +491,6 @@
       "reason": "аргумент-скрипт: принадлежит claude"
     },
     {
-      "unit": "yummy-enrich.service",
-      "path": "/srv/sites/yummyani-staging/repo",
-      "reason": "WorkingDirectory: принадлежит claude"
-    },
-    {
-      "unit": "yummy-enrich.service",
-      "path": "/srv/sites/yummyani-staging/repo",
-      "reason": "WorkingDirectory: открыт на запись не владельцу (0775)"
-    },
-    {
-      "unit": "yummy-enrich.service",
-      "path": "/srv/sites/yummyani-staging",
-      "reason": "WorkingDirectory: принадлежит claude"
-    },
-    {
-      "unit": "yummy-enrich.service",
-      "path": "/srv/sites/yummyani-staging",
-      "reason": "WorkingDirectory: открыт на запись не владельцу (0775)"
-    },
-    {
-      "unit": "yummy-enrich.service",
-      "path": "/srv/sites",
-      "reason": "WorkingDirectory: принадлежит claude"
-    },
-    {
       "unit": "yummy-episode-watcher.service",
       "path": "/srv/sites/yummyani-staging/repo/scripts/episode-watcher.mjs",
       "reason": "аргумент-скрипт: принадлежит claude"
@@ -651,31 +536,6 @@
       "reason": "аргумент-скрипт: принадлежит claude"
     },
     {
-      "unit": "yummy-episode-watcher.service",
-      "path": "/srv/sites/yummyani-staging/repo",
-      "reason": "WorkingDirectory: принадлежит claude"
-    },
-    {
-      "unit": "yummy-episode-watcher.service",
-      "path": "/srv/sites/yummyani-staging/repo",
-      "reason": "WorkingDirectory: открыт на запись не владельцу (0775)"
-    },
-    {
-      "unit": "yummy-episode-watcher.service",
-      "path": "/srv/sites/yummyani-staging",
-      "reason": "WorkingDirectory: принадлежит claude"
-    },
-    {
-      "unit": "yummy-episode-watcher.service",
-      "path": "/srv/sites/yummyani-staging",
-      "reason": "WorkingDirectory: открыт на запись не владельцу (0775)"
-    },
-    {
-      "unit": "yummy-episode-watcher.service",
-      "path": "/srv/sites",
-      "reason": "WorkingDirectory: принадлежит claude"
-    },
-    {
       "unit": "yummy-watchdog.service",
       "path": "/srv/sites/yummyani-staging/repo/scripts/watchdog-run.mjs",
       "reason": "аргумент-скрипт: принадлежит claude"
@@ -719,31 +579,6 @@
       "unit": "yummy-watchdog.service",
       "path": "/srv/sites",
       "reason": "аргумент-скрипт: принадлежит claude"
-    },
-    {
-      "unit": "yummy-watchdog.service",
-      "path": "/srv/sites/yummyani-staging/repo",
-      "reason": "WorkingDirectory: принадлежит claude"
-    },
-    {
-      "unit": "yummy-watchdog.service",
-      "path": "/srv/sites/yummyani-staging/repo",
-      "reason": "WorkingDirectory: открыт на запись не владельцу (0775)"
-    },
-    {
-      "unit": "yummy-watchdog.service",
-      "path": "/srv/sites/yummyani-staging",
-      "reason": "WorkingDirectory: принадлежит claude"
-    },
-    {
-      "unit": "yummy-watchdog.service",
-      "path": "/srv/sites/yummyani-staging",
-      "reason": "WorkingDirectory: открыт на запись не владельцу (0775)"
-    },
-    {
-      "unit": "yummy-watchdog.service",
-      "path": "/srv/sites",
-      "reason": "WorkingDirectory: принадлежит claude"
     }
   ],
   "clean": false

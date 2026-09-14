@@ -1,0 +1,360 @@
+{
+  "release_id": "6fcd33701aef-947fbe17f73b",
+  "root_units": 27,
+  "pinned_units": 13,
+  "finding_count": 0,
+  "findings": [],
+  "global_clean": true,
+  "rows": [
+    {
+      "unit": "iscsi.service",
+      "pinned": false,
+      "credential_access": false,
+      "code_paths": [
+        "ExecStart=/sbin/iscsiadm",
+        "ExecStart=/lib/open-iscsi/activate-storage.sh"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "lords-canary-switch@.service",
+      "pinned": true,
+      "credential_access": false,
+      "code_paths": [
+        "ExecStart=/opt/site-factory/runtime/6fcd33701aef-947fbe17f73b/bundle/automation/host/lords-canary-apply.sh",
+        "FACTORY_PYTHON=/opt/site-factory/runtime/6fcd33701aef-947fbe17f73b/venv/bin/python",
+        "PYTHONPATH=/opt/site-factory/runtime/6fcd33701aef-947fbe17f73b/bundle",
+        "PATH=/usr/local/sbin",
+        "PATH=/usr/local/bin",
+        "PATH=/usr/sbin",
+        "PATH=/usr/bin",
+        "PATH=/sbin",
+        "PATH=/bin"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "lords-content-refresh.service",
+      "pinned": true,
+      "credential_access": true,
+      "code_paths": [
+        "ExecStart=/opt/site-factory/runtime/relocated/lords-tooling-0b0722f3/automation/host/lords-content-refresh.sh",
+        "FACTORY_PYTHON=/opt/site-factory/runtime/6fcd33701aef-947fbe17f73b/venv/bin/python",
+        "PATH=/usr/local/sbin",
+        "PATH=/usr/local/bin",
+        "PATH=/usr/sbin",
+        "PATH=/usr/bin",
+        "PATH=/sbin",
+        "PATH=/bin"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "lords-deploy-broker.service",
+      "pinned": false,
+      "credential_access": false,
+      "code_paths": [
+        "ExecStart=/usr/local/libexec/site-factory/lords-deploy-broker"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "lords-site-render@.service",
+      "pinned": true,
+      "credential_access": true,
+      "code_paths": [
+        "ExecStart=/bin/bash",
+        "аргумент-скрипт=/opt/site-factory/runtime/relocated/lords-tooling-41031da0/automation/host/lords-content-refresh.sh",
+        "FACTORY_PYTHON=/opt/site-factory/runtime/6fcd33701aef-947fbe17f73b/venv/bin/python",
+        "PATH=/usr/local/sbin",
+        "PATH=/usr/local/bin",
+        "PATH=/usr/sbin",
+        "PATH=/usr/bin",
+        "PATH=/sbin",
+        "PATH=/bin",
+        "EnvironmentFile=/run/lords-deploy/env/%i.env"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "multipath-tools.service",
+      "pinned": false,
+      "credential_access": false,
+      "code_paths": [
+        "ExecStart=/sbin/modprobe",
+        "ExecStart=/sbin/multipathd"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "nova-catalog-refresh.service",
+      "pinned": true,
+      "credential_access": false,
+      "code_paths": [
+        "ExecStart=/usr/bin/python3",
+        "аргумент-скрипт=/opt/site-factory/runtime/relocated/content-pipeline/refresh.py",
+        "PATH=/usr/local/sbin",
+        "PATH=/usr/local/bin",
+        "PATH=/usr/sbin",
+        "PATH=/usr/bin",
+        "PATH=/sbin",
+        "PATH=/bin"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "nova-daily-refresh.service",
+      "pinned": true,
+      "credential_access": true,
+      "code_paths": [
+        "ExecStart=/opt/site-factory/runtime/6fcd33701aef-947fbe17f73b/bundle/automation/host/nova-daily-refresh.sh",
+        "FACTORY_PYTHON=/opt/site-factory/runtime/6fcd33701aef-947fbe17f73b/venv/bin/python",
+        "NOVA_TOOLS=/opt/site-factory/runtime/6fcd33701aef-947fbe17f73b/bundle/automation/host",
+        "PYTHONPATH=/opt/site-factory/runtime/6fcd33701aef-947fbe17f73b/bundle",
+        "PATH=/usr/local/sbin",
+        "PATH=/usr/local/bin",
+        "PATH=/usr/sbin",
+        "PATH=/usr/bin",
+        "PATH=/sbin",
+        "PATH=/bin"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "os-vol-format@.service",
+      "pinned": false,
+      "credential_access": false,
+      "code_paths": [
+        "ExecStart=/usr/local/sbin/os-vol-format.sh"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "os-vol-mount@.service",
+      "pinned": false,
+      "credential_access": false,
+      "code_paths": [
+        "ExecStart=/usr/local/sbin/os-vol-mount.sh"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "site-factory-backup.service",
+      "pinned": true,
+      "credential_access": false,
+      "code_paths": [
+        "ExecStart=/opt/site-factory/runtime/6fcd33701aef-947fbe17f73b/bundle/automation/host/site-factory-backup.sh",
+        "PATH=/usr/local/sbin",
+        "PATH=/usr/local/bin",
+        "PATH=/usr/sbin",
+        "PATH=/usr/bin",
+        "PATH=/sbin",
+        "PATH=/bin",
+        "EnvironmentFile=/etc/site-factory/environment"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "site-factory-docker-firewall.service",
+      "pinned": false,
+      "credential_access": false,
+      "code_paths": [
+        "ExecStart=/usr/local/sbin/site-factory-docker-firewall"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "site-factory-health.service",
+      "pinned": true,
+      "credential_access": false,
+      "code_paths": [
+        "ExecStart=/opt/site-factory/runtime/6fcd33701aef-947fbe17f73b/bundle/automation/host/site-factory-health.sh",
+        "PATH=/usr/local/sbin",
+        "PATH=/usr/local/bin",
+        "PATH=/usr/sbin",
+        "PATH=/usr/bin",
+        "PATH=/sbin",
+        "PATH=/bin",
+        "EnvironmentFile=/etc/site-factory/environment"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "site-factory-restore-proof.service",
+      "pinned": true,
+      "credential_access": false,
+      "code_paths": [
+        "ExecStart=/opt/site-factory/runtime/6fcd33701aef-947fbe17f73b/venv/bin/python",
+        "аргумент-скрипт=/opt/site-factory/runtime/6fcd33701aef-947fbe17f73b/bundle/tests/tools/restore_proof.py",
+        "PYTHONPATH=/opt/site-factory/runtime/6fcd33701aef-947fbe17f73b/bundle",
+        "PATH=/usr/local/sbin",
+        "PATH=/usr/local/bin",
+        "PATH=/usr/sbin",
+        "PATH=/usr/bin",
+        "PATH=/sbin",
+        "PATH=/bin",
+        "EnvironmentFile=/etc/site-factory/environment"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "site-factory-secret-hub-import@.service",
+      "pinned": true,
+      "credential_access": true,
+      "code_paths": [
+        "ExecStart=/opt/site-factory-secret-hub/venv/bin/python",
+        "PYTHONPATH=/opt/site-factory/runtime/6fcd33701aef-947fbe17f73b/bundle",
+        "PATH=/usr/local/sbin",
+        "PATH=/usr/local/bin",
+        "PATH=/usr/sbin",
+        "PATH=/usr/bin",
+        "PATH=/sbin",
+        "PATH=/bin",
+        "WorkingDirectory=/opt/site-factory/runtime/6fcd33701aef-947fbe17f73b/bundle"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "site-factory-secret-hub.service",
+      "pinned": true,
+      "credential_access": true,
+      "code_paths": [
+        "ExecStart=/opt/site-factory-secret-hub/venv/bin/python",
+        "PYTHONPATH=/opt/site-factory/runtime/6fcd33701aef-947fbe17f73b/bundle",
+        "PATH=/usr/local/sbin",
+        "PATH=/usr/local/bin",
+        "PATH=/usr/sbin",
+        "PATH=/usr/bin",
+        "PATH=/sbin",
+        "PATH=/bin",
+        "WorkingDirectory=/opt/site-factory/runtime/6fcd33701aef-947fbe17f73b/bundle"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "snap.lxd.activate.service",
+      "pinned": false,
+      "credential_access": false,
+      "code_paths": [
+        "ExecStart=/usr/bin/snap",
+        "EnvironmentFile=/etc/environment"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "snap.lxd.daemon.service",
+      "pinned": false,
+      "credential_access": false,
+      "code_paths": [
+        "ExecStart=/usr/bin/snap",
+        "EnvironmentFile=/etc/environment"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "snap.lxd.user-daemon.service",
+      "pinned": false,
+      "credential_access": false,
+      "code_paths": [
+        "ExecStart=/usr/bin/snap",
+        "EnvironmentFile=/etc/environment"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "sshd.service",
+      "pinned": false,
+      "credential_access": false,
+      "code_paths": [
+        "ExecStart=/usr/sbin/sshd",
+        "ExecStart=/usr/sbin/sshd",
+        "EnvironmentFile=/etc/default/ssh"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "syslog.service",
+      "pinned": false,
+      "credential_access": false,
+      "code_paths": [
+        "ExecStart=/usr/sbin/rsyslogd"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "vmtoolsd.service",
+      "pinned": false,
+      "credential_access": false,
+      "code_paths": [
+        "ExecStart=/usr/bin/vmtoolsd"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "yummy-catalog-index.service",
+      "pinned": false,
+      "credential_access": false,
+      "code_paths": [
+        "ExecStart=/usr/local/bin/yummy-catalog-index-sync"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "yummy-catalog-watchdog.service",
+      "pinned": false,
+      "credential_access": false,
+      "code_paths": [
+        "ExecStart=/usr/local/bin/yummy-catalog-index-watchdog"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "yummy-enrich.service",
+      "pinned": true,
+      "credential_access": false,
+      "code_paths": [
+        "ExecStart=/usr/bin/node",
+        "аргумент-скрипт=/opt/site-factory/runtime/relocated/yummy-scripts/enrich-episode-details.mjs",
+        "PATH=/usr/local/sbin",
+        "PATH=/usr/local/bin",
+        "PATH=/usr/sbin",
+        "PATH=/usr/bin",
+        "PATH=/sbin",
+        "PATH=/bin"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "yummy-episode-watcher.service",
+      "pinned": true,
+      "credential_access": false,
+      "code_paths": [
+        "ExecStart=/usr/bin/node",
+        "аргумент-скрипт=/opt/site-factory/runtime/relocated/yummy-scripts/episode-watcher.mjs",
+        "PATH=/usr/local/sbin",
+        "PATH=/usr/local/bin",
+        "PATH=/usr/sbin",
+        "PATH=/usr/bin",
+        "PATH=/sbin",
+        "PATH=/bin"
+      ],
+      "clean": true
+    },
+    {
+      "unit": "yummy-watchdog.service",
+      "pinned": true,
+      "credential_access": false,
+      "code_paths": [
+        "ExecStart=/usr/bin/node",
+        "аргумент-скрипт=/opt/site-factory/runtime/relocated/yummy-scripts/watchdog-run.mjs",
+        "PATH=/usr/local/sbin",
+        "PATH=/usr/local/bin",
+        "PATH=/usr/sbin",
+        "PATH=/usr/bin",
+        "PATH=/sbin",
+        "PATH=/bin"
+      ],
+      "clean": true
+    }
+  ]
+}

@@ -50,7 +50,7 @@ OWNER_NAMED = {
 #: Каталоги, принадлежащие агенту. Код root'а не имеет права резолвиться сюда
 #: ни одним из способов — включая владение родительским каталогом: владелец
 #: переименует подкаталог и подставит свой, какими бы ни были права на сам файл.
-AGENT_ROOTS = ("/srv/site-factory", "/home/")
+AGENT_ROOTS = ("/srv/site-factory", "/srv/sites", "/home/")
 
 
 @pytest.fixture(scope="module")
@@ -112,11 +112,39 @@ class TestShippedContract:
                 "переносить имеет смысл только то, что лежит у агента")
             assert "note" in item and item["note"]
 
-    def test_out_of_scope_units_are_named_not_forgotten(self, manifest):
-        """Чужой продукт не чинится молча — и не замалчивается."""
+    def test_nothing_affected_is_left_out_of_scope(self, manifest):
+        """Ноль по «целевым» юнитам — не ноль.
+
+        Граница root либо закрыта на хосте, либо нет. Юнит другого продукта,
+        исполняющий от root файл `0664 claude:claude`, держит её открытой ровно
+        так же, как свой. Поэтому перечень вне области обязан быть пуст, а
+        причина этого — записана.
+        """
         out = manifest["out_of_scope"]
-        assert out["units"], "перечень вне области обязан быть явным"
-        assert out["vector"] and out["note"]
+        assert out["units"] == [], (
+            "затронутые юниты выведены за область: "
+            f"{out['units']} — это отчёт о нуле, которого нет")
+        assert out["note"], "пустой перечень обязан объяснять, почему он пуст"
+
+    def test_every_affected_host_unit_is_covered(self, manifest):
+        """Сверка с фактическим хостом, а не с собственным перечнем."""
+        if not audit_mod.UNIT_DIR.is_dir():
+            pytest.skip("systemd на этой машине нет: состояние хоста не измерено")
+        report = audit_mod.audit()
+        affected = set(report["units_with_problems"])
+        covered = {u["unit"] for u in manifest["units"]}
+        missing = affected - covered
+        assert not missing, (
+            "затронуты, но не входят в транзакцию: " + ", ".join(sorted(missing)))
+
+    def test_freezing_someone_elses_product_is_declared(self, manifest):
+        """Заморозка чужого кода — последствие, а не деталь реализации."""
+        coordination = manifest.get("coordination_required") or []
+        assert coordination, (
+            "перенос скриптов чужого продукта останавливает действие его выкладок; "
+            "это обязано быть объявлено, а не обнаружено потом")
+        for item in coordination:
+            assert item["units"] and item["consequence"] and item["owner_action"]
 
     def test_no_archive_is_shipped(self):
         """Якорем доверия служит текстовый провенанс, а не архив.
@@ -190,6 +218,36 @@ class TestShippedContract:
             "сам хаб импортирует factory из каталога агента — без него "
             "закрепление соседей было бы представлением")
         assert len(holders) >= 5
+
+
+class TestSimulationProvesGlobalZero:
+    """Каким станет хост — посчитано до того, как что-то тронуто.
+
+    Установщик проверяет результат у себя, но получить такой отчёт можно только
+    выполнив операцию, а отчёт операции о самой себе — слабейшее из
+    доказательств. Симуляция отвечает на тот же вопрос заранее.
+    """
+
+    @pytest.fixture
+    def report(self, manifest, release):
+        import simulate_post_transaction as sim
+        return sim.simulate(manifest, release["release_id"])
+
+    def test_no_root_unit_keeps_agent_writable_code(self, report):
+        assert report["global_clean"], (
+            "после транзакции остались бы нарушения:\n"
+            + "\n".join(f"  {f['unit']}: {f['kind']}={f['path']} — {f['reason']}"
+                        for f in report["findings"][:10]))
+
+    def test_every_root_unit_on_the_host_is_examined(self, report):
+        assert report["root_units"] >= 27, (
+            "симуляция обязана охватывать все root-юниты хоста, а не только "
+            f"закрепляемые (охвачено {report['root_units']})")
+
+    def test_credential_units_are_clean_after(self, report):
+        dirty = [r["unit"] for r in report["rows"]
+                 if r["credential_access"] and not r["clean"]]
+        assert not dirty, f"юниты с credentials остались бы грязными: {dirty}"
 
 
 class TestAuditImplementation:

@@ -31,12 +31,16 @@
     "site-factory-health.service",
     "site-factory-backup.service",
     "site-factory-restore-proof.service",
-    "nova-catalog-refresh.service"
+    "nova-catalog-refresh.service",
+    "yummy-enrich.service",
+    "yummy-episode-watcher.service",
+    "yummy-watchdog.service"
   ],
   "relocate": [
     "lords-tooling-0b0722f3",
     "lords-tooling-41031da0",
-    "content-pipeline"
+    "content-pipeline",
+    "yummy-scripts"
   ],
   "host_divergences": [
     {
@@ -44,7 +48,7 @@
       "host_path": "/srv/site-factory/repo/automation/host/nova-daily-refresh.sh",
       "pinned_commit": "2bb47ded21f2e889f9cdf7cfd77e5835885cfb78",
       "pinned_sha256": "249973fdb1fc038f6efd1bfd465741f81b9d02b632d4fdb24cf492d71b40487c",
-      "host_sha256": "66c7cc1639db195942f9fbaa2b071c95882441fa03bafeeca101372062a509d7"
+      "host_sha256": "7612826a1871b280661294abc80afeee5f05dc226925d7c1cf000a179002b084"
     }
   ],
   "host_divergence_note": "Рабочая копия на хосте разошлась с отсмотренным коммитом: закрепляется версия коммита. Владеющая сессия обязана закоммитить правку, после чего манифест пересобирается.",

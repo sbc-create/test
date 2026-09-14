@@ -90,6 +90,11 @@
       "id": "content-pipeline",
       "from": "/srv/site-factory/content-pipeline",
       "note": "Конвейер каталога Nova. Кода нет ни в одном отсмотренном коммите, поэтому он переносится как есть с записью sha256 каждого файла: перенос прав — не повод подменять содержимое."
+    },
+    {
+      "id": "yummy-scripts",
+      "from": "/srv/sites/yummyani-staging/repo/scripts",
+      "note": "Скрипты Yami (17 файлов, 132 КБ). Живут в отдельном репозитории продукта, которого в этом дереве нет, поэтому переносятся как есть с записью sha256. Импортируют только встроенные модули Node и соседний файл того же каталога — внешних зависимостей, ломающихся при переносе, у них нет (проверено разбором import)."
     }
   ],
 
@@ -212,16 +217,45 @@
       "vector": "WorkingDirectory и аргумент-скрипт ведут в /srv/site-factory/content-pipeline",
       "exec_start": "/usr/bin/python3 {relocated}/content-pipeline/refresh.py",
       "working_directory": "{relocated}/content-pipeline"
+    },
+    {
+      "unit": "yummy-enrich.service",
+      "tier": 1,
+      "holds_credentials": false,
+      "vector": "аргумент-скрипт ведёт в /srv/sites/yummyani-staging/repo/scripts (claude:claude 0664)",
+      "exec_start": "/usr/bin/node {relocated}/yummy-scripts/enrich-episode-details.mjs",
+      "note": "WorkingDirectory намеренно НЕ переопределяется: у этого юнита это путь к данным продукта. Node разрешает модули от каталога импортирующего файла, а не от cwd, поэтому рабочий каталог путём к коду здесь не является — проверено правилом `cwd_is_code` аудита."
+    },
+    {
+      "unit": "yummy-episode-watcher.service",
+      "tier": 1,
+      "holds_credentials": false,
+      "vector": "аргумент-скрипт ведёт в /srv/sites/yummyani-staging/repo/scripts (claude:claude 0664)",
+      "exec_start": "/usr/bin/node {relocated}/yummy-scripts/episode-watcher.mjs"
+    },
+    {
+      "unit": "yummy-watchdog.service",
+      "tier": 1,
+      "holds_credentials": false,
+      "vector": "аргумент-скрипт ведёт в /srv/sites/yummyani-staging/repo/scripts (claude:claude 0664)",
+      "exec_start": "/usr/bin/node {relocated}/yummy-scripts/watchdog-run.mjs",
+      "note": "Импортирует соседний watcher-watchdog.mjs — он переезжает тем же каталогом, поэтому относительный импорт продолжает разрешаться."
     }
   ],
 
   "out_of_scope": {
-    "note": "Затронуты тем же дефектом, но принадлежат другому продукту (Yami). Правятся тем же способом и теми, кто ими владеет: менять чужой продукт в транзакции про Secret Hub — расширение, которого никто не согласовывал.",
-    "units": [
-      "yummy-enrich.service",
-      "yummy-episode-watcher.service",
-      "yummy-watchdog.service"
-    ],
-    "vector": "WorkingDirectory и аргумент-скрипт ведут в /srv/site-factory"
-  }
+    "note": "Пусто намеренно. Прежняя редакция выводила три юнита Yami за область как «чужой продукт». Это неверный критерий: граница root либо закрыта на хосте, либо нет, и юнит другого продукта, исполняющий от root файл 0664 claude:claude, держит её открытой ровно так же. Все 13 затронутых юнитов включены в транзакцию.",
+    "units": [],
+    "vector": ""
+  },
+
+  "coordination_required": [
+    {
+      "id": "yummy-scripts-freeze",
+      "units": ["yummy-enrich.service", "yummy-episode-watcher.service", "yummy-watchdog.service"],
+      "consequence": "После закрепления эти юниты исполняют СНИМОК скриптов, а не живой каталог продукта. Новая выкладка Yami перестанет вступать в силу сама: продукту потребуется перезакрепление на каждом релизе — тот же шаг, что уже делает lords-tooling.",
+      "why_not_left_alone": "Оставить их незакреплёнными значило бы оставить границу root открытой и отчитаться нулём, которого нет.",
+      "owner_action": "Согласовать с владельцем Yami перезакрепление в его конвейере выкладки."
+    }
+  ]
 }

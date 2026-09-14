@@ -34,6 +34,7 @@ RELEASE_JSON=""
 MANIFEST=""
 SOURCE_REPO="/srv/site-factory/repo"
 PROVENANCE=""
+STAGE_FROM_BOOTSTRAP=""
 for arg in "$@"; do
   case "$arg" in
     --dry-run) DRY_RUN=1 ;;
@@ -41,6 +42,7 @@ for arg in "$@"; do
     --manifest=*) MANIFEST="${arg#*=}" ;;
     --provenance=*) PROVENANCE="${arg#*=}" ;;
     --source-repo=*) SOURCE_REPO="${arg#*=}" ;;
+    --stage=*) STAGE_FROM_BOOTSTRAP="${arg#*=}" ;;
     *) fail "неизвестный аргумент: $arg" ;;
   esac
 done
@@ -126,13 +128,25 @@ fi
 # ========================= 3-4. Root-owned staging =======================
 # Всё, что дальше исполняется или копируется, лежит под root и недоступно
 # агенту на запись.
-install -d -m 0700 -o root -g root "$STAGING_ROOT"
-STAGE="${STAGING_ROOT}/${RELEASE_ID}"
-install -d -m 0755 -o root -g root "$STAGE"
+# Загрузчик уже создал уникальный root-owned каталог и проверил в нём хеши
+# всех управляющих файлов. Создавать второй незачем: лишний каталог — лишнее
+# место, где что-то может оказаться не тем, чем кажется.
+if [ -n "$STAGE_FROM_BOOTSTRAP" ]; then
+  STAGE="$STAGE_FROM_BOOTSTRAP"
+  [ -d "$STAGE" ] || fail "каталог загрузчика ${STAGE} не существует"
+  owner="$(stat -c '%U' "$STAGE")"
+  [ "$owner" = "root" ] || fail "каталог загрузчика принадлежит ${owner}, а не root"
+else
+  install -d -m 0700 -o root -g root "$STAGING_ROOT"
+  STAGE="$(mktemp -d "${STAGING_ROOT}/txn-XXXXXXXXXXXX")"
+  chown root:root "$STAGE"
+  chmod 0700 "$STAGE"
+fi
 install -m 0600 -o root -g root "$RELEASE_JSON" "${STAGE}/release.json"
 install -m 0600 -o root -g root "$PROVENANCE" "${STAGE}/provenance.json"
 install -m 0600 -o root -g root "$MANIFEST" "${STAGE}/manifest.json"
 install -m 0700 -o root -g root "${HERE}/audit_root_units.py" "${STAGE}/audit_root_units.py"
+install -m 0700 -o root -g root "${HERE}/host_checks.py" "${STAGE}/host_checks.py"
 say "staging: ${STAGE} (root:root 0700)"
 
 # ========================= 6. Бэкап ======================================
@@ -156,6 +170,23 @@ systemctl list-unit-files --no-legend > "${BACKUP_DIR}/unit-files.txt" 2>/dev/nu
 printf '%s\n' "$RELEASE_ID" > "${BACKUP_DIR}/release-id"
 say "бэкап:  $BACKUP_DIR"
 
+# --- baseline: наблюдаемое состояние ДО единого изменения ----------------
+# Без него «вернулись как было» означало бы «скрипт дошёл до конца». Снимок
+# берётся до первой мутации и сравнивается с состоянием после отката.
+UNITS_CSV="$(printf '%s,' "${UNITS[@]}")"
+UNITS_CSV="${UNITS_CSV%,}"
+BASELINE="${BACKUP_DIR}/baseline.json"
+HOST_CHECKS="${STAGE}/host_checks.py"
+[ -f "$HOST_CHECKS" ] || HOST_CHECKS="${HERE}/host_checks.py"
+if [ -f "$HOST_CHECKS" ]; then
+  "$PY" "$HOST_CHECKS" --units "$UNITS_CSV" --pinned-root "$PINNED_ROOT" \
+        --snapshot "$BASELINE" >/dev/null 2>&1 \
+    || warn "baseline снят частично: часть измерений недоступна"
+  say "baseline: $BASELINE"
+else
+  warn "host_checks.py не найден: baseline не снят, сравнение после отката будет невозможно"
+fi
+
 # --- откат: восстанавливает ровно то, что было снято выше ----------------
 ROLLED_BACK=0
 rollback() {
@@ -176,7 +207,23 @@ rollback() {
   for t in "${STOPPED_TIMERS[@]:-}"; do
     [ -n "$t" ] && systemctl start "$t" >/dev/null 2>&1 || true
   done
-  warn "откат завершён: юниты и таймеры возвращены в прежнее состояние"
+
+  # Сравнение с baseline: откат обязан доказать себя, а не отчитаться о себе.
+  if [ -f "$BASELINE" ] && [ -f "$HOST_CHECKS" ]; then
+    if "$PY" "$HOST_CHECKS" --units "$UNITS_CSV" --pinned-root "$PINNED_ROOT" \
+             --compare "$BASELINE" > "${BACKUP_DIR}/rollback-compare.json" 2>&1; then
+      warn "откат подтверждён: состояние совпало с baseline"
+    else
+      warn "ОТКАТ НЕПОЛНЫЙ: состояние разошлось с baseline, см. ${BACKUP_DIR}/rollback-compare.json"
+      "$PY" -c '
+import json,sys
+d=json.load(open(sys.argv[1]))
+for line in (d.get("differences") or [])[:10]: print("  РАСХОЖДЕНИЕ:", line)
+' "${BACKUP_DIR}/rollback-compare.json" 2>/dev/null || true
+    fi
+  else
+    warn "откат выполнен, но сравнить с baseline нечем"
+  fi
 }
 trap 'rollback' ERR
 
@@ -368,40 +415,92 @@ for unit in "${UNITS[@]}"; do
 done
 say "эффективные ExecStart проверены"
 
-# ========================= 11. Аудит границы ============================
+# ========================= 11. Аудит границы — ГЛОБАЛЬНО =================
+# Ноль по целевым юнитам недостаточен: граница root либо закрыта на хосте, либо
+# нет. Юнит, оставшийся с кодом агента, держит её открытой независимо от того,
+# входил ли он в чью-то область.
 AUDIT_OUT="${BACKUP_DIR}/audit-after.json"
 if "${VENV_DIR}/bin/python" "${STAGE}/audit_root_units.py" --json > "$AUDIT_OUT" 2>/dev/null; then
-  say "аудит: нарушений нет во ВСЕЙ цепочке исполнения root-юнитов"
+  say "аудит: ГЛОБАЛЬНО чисто — ни один root-юнит хоста не берёт код у агента"
 else
   REMAINING="$("$PY" -c '
 import json,sys
 d=json.load(open(sys.argv[1]))
 print(",".join(d["units_with_problems"]))' "$AUDIT_OUT" 2>/dev/null || echo "?")"
-  SCOPED="$("$PY" - "$AUDIT_OUT" "${STAGE}/release.json" <<'PYEOF'
-import json, sys
-audit = json.load(open(sys.argv[1]))
-scope = set(json.load(open(sys.argv[2]))["units"])
-print(",".join(sorted(set(audit["units_with_problems"]) & scope)))
-PYEOF
-)"
-  if [ -n "$SCOPED" ]; then
-    fail "после закрепления в ЦЕЛЕВЫХ юнитах остались нарушения: ${SCOPED}"
-  fi
-  warn "вне области транзакции остались нарушения: ${REMAINING}"
-  warn "это ожидаемо: юниты чужого продукта в транзакцию не входят (см. out_of_scope)"
+  fail "после закрепления остались root-юниты с кодом агента: ${REMAINING}"
 fi
 
-# ========================= 12. Smoke ====================================
-systemctl is-active --quiet site-factory-secret-hub.service \
-  || fail "хаб Secret Hub не активен после закрепления"
-systemctl is-active --quiet site-factory-secret-panel.service \
-  || warn "панель Secret Hub не активна (будет поднята ниже, если дошли до публикации)"
-for site in zonafilm.space animedia.icu animedia.space lordfilm47.space; do
-  code="$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 -k \
-          --resolve "${site}:443:127.0.0.1" "https://${site}/" || echo 000)"
-  [ "$code" = "200" ] || fail "витрина ${site} отвечает ${code} после закрепления"
-done
-say "smoke: витрины Lords/Zona/Animedia отвечают 200"
+# ========================= 12. Проверки хоста ============================
+# Владельцы и права закреплённого дерева, символические ссылки, активность
+# юнитов и таймеров, здоровье конвейера, здоровье и отпечаток витрин,
+# отсутствие следов значений секретов.
+CHECKS_OUT="${BACKUP_DIR}/host-checks-after.json"
+"$PY" "$HOST_CHECKS" --units "$UNITS_CSV" --pinned-root "$PINNED_ROOT" \
+      --snapshot "$CHECKS_OUT" >/dev/null 2>&1 \
+  || fail "проверки хоста не выполнились"
+
+"$PY" - "$CHECKS_OUT" "$BASELINE" <<'PYEOF' || fail "проверки хоста не пройдены"
+import json, sys
+current = json.load(open(sys.argv[1], encoding="utf-8"))
+problems = []
+
+tree = current.get("pinned_tree") or {}
+if not tree.get("present"):
+    problems.append("закреплённое дерево отсутствует")
+elif tree.get("problems"):
+    problems.extend(f"права закреплённого дерева: {p}" for p in tree["problems"][:5])
+
+for unit, row in (current.get("unit_activity") or {}).items():
+    if row.get("active") == "failed":
+        problems.append(f"{unit}: состояние failed после закрепления")
+
+for site, row in (current.get("showcases") or {}).items():
+    if row.get("status") != "200":
+        problems.append(f"витрина {site}: код {row.get('status')}")
+    if row.get("healthz") not in ("200", ""):
+        problems.append(f"витрина {site}: /healthz {row.get('healthz')}")
+
+refresh = current.get("content_refresh") or {}
+if refresh.get("present") and refresh.get("last_result") not in (None, "", "success"):
+    problems.append(f"конвейер каталога: последний результат {refresh['last_result']}")
+
+# Отпечаток отдаваемого контента обязан совпасть с baseline: транзакция меняет
+# пути к коду, а не то, что видит посетитель.
+try:
+    baseline = json.load(open(sys.argv[2], encoding="utf-8"))
+except OSError:
+    baseline = {}
+for site, before in (baseline.get("showcases") or {}).items():
+    after = (current.get("showcases") or {}).get(site) or {}
+    if before.get("fingerprint") and before["fingerprint"] != after.get("fingerprint"):
+        problems.append(f"витрина {site}: отпечаток контента изменился")
+
+if problems:
+    print("[harden] ОТКАЗ: проверки хоста:", file=sys.stderr)
+    for line in problems[:15]:
+        print(f"  {line}", file=sys.stderr)
+    raise SystemExit(1)
+print("[harden] проверки хоста пройдены: права, юниты, витрины, отпечатки, конвейер")
+PYEOF
+
+# Утечка значений: смотрим на то, что транзакция создала, и на журнал.
+LEAK_OUT="${BACKUP_DIR}/leak-scan.json"
+"$PY" - "$HOST_CHECKS" "$PINNED_ROOT" "$UNITS_CSV" "$LEAK_OUT" <<'PYEOF' || fail "обнаружены следы значений секретов"
+import importlib.util, json, sys
+spec = importlib.util.spec_from_file_location("host_checks", sys.argv[1])
+module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(module)
+units = [u for u in sys.argv[3].split(",") if u]
+paths = [sys.argv[2], "/etc/systemd/system"]
+report = module.credential_leak_scan(paths, units)
+json.dump(report, open(sys.argv[4], "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+if not report["clean"]:
+    print("[harden] ОТКАЗ: следы значений секретов:", file=sys.stderr)
+    for line in report["findings"][:10]:
+        print(f"  {line}", file=sys.stderr)
+    raise SystemExit(1)
+print("[harden] утечек значений не обнаружено")
+PYEOF
 
 # ========================= 13. Возврат триггеров ========================
 for t in "${STOPPED_TIMERS[@]:-}"; do
