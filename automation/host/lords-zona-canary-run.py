@@ -42,7 +42,11 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-КОРЕНЬ = Path(__file__).resolve().parents[1]
+# parents[2], а не [1]: файл лежит в automation/host/, и один уровень вверх
+# даёт automation/, отчего пути складывались в automation/automation/host/.
+# Та же ошибка на единицу уже была в установщике; здесь её поймал сухой
+# прогон — ради этого он и нужен.
+КОРЕНЬ = Path(__file__).resolve().parents[2]
 УСТАНОВЩИК = КОРЕНЬ / "automation" / "host" / "lords-nova-canary.py"
 ОТПЕЧАТКИ = КОРЕНЬ / "scripts" / "served_fingerprints.py"
 ОБХОД = КОРЕНЬ / "scripts" / "route_crawl.py"
@@ -172,6 +176,78 @@ def откатить(сайт: str, точка: str, запись: Path) -> tupl
     return код == 0, отчёт
 
 
+def сухой_прогон(сайт: str, арг, выход: Path) -> dict:
+    """Всё, что проверяемо без единой записи и без root.
+
+    Владелец вправе увидеть, что именно произойдёт, ДО того как выдаст права.
+    Сухой прогон повторяет все проверки установщика — источник артефакта,
+    отпечаток, доказанную цепочку «домен → nginx → порт → юнит → файл →
+    манифест» — и снимает базовые отпечатки домена. Не делает ровно одного:
+    не пишет.
+    """
+    опис = dict(ВИТРИНЫ[сайт])
+    опис.update(арг.профили.get(сайт, {}))
+    домен = опис["domain"]
+    итог: dict = {"site": сайт, "domain": домен, "checks": [], "ok": True}
+
+    def отметить(имя, ок, подробность=""):
+        итог["checks"].append({"check": имя, "ok": bool(ок), "detail": str(подробность)[:200]})
+        итог["ok"] &= bool(ок)
+        журнал(f"   {'OK    ' if ок else 'ПРОВАЛ'} {имя}: {подробность}")
+
+    журнал(f"{сайт}: сухой прогон, записей не будет")
+    try:
+        import importlib.util
+        спец = importlib.util.spec_from_file_location("nova_canary", УСТАНОВЩИК)
+        уст = importlib.util.module_from_spec(спец)
+        спец.loader.exec_module(уст)
+    except Exception as ош:  # noqa: BLE001
+        отметить("установщик загружается", False, ош)
+        return итог
+    отметить("установщик загружается", True, УСТАНОВЩИК.name)
+
+    if сайт not in уст.ВИТРИНЫ:
+        отметить("витрина в перечне установщика", False, sorted(уст.ВИТРИНЫ))
+        return итог
+    отметить("витрина в перечне установщика", True, сайт)
+
+    try:
+        источник = уст.проверить_источник(Path(арг.artifact))
+        отметить("источник артефакта разрешён", True, источник)
+    except Exception as ош:  # noqa: BLE001
+        отметить("источник артефакта разрешён", False, ош)
+        return итог
+
+    отпечаток = уст._sha(источник)
+    отметить("отпечаток артефакта совпал с ожидаемым",
+             отпечаток == арг.expect_sha256, отпечаток[:16])
+
+    try:
+        цепь = уст.доказать_цепочку(сайт, уст.ВИТРИНЫ[сайт])
+        отметить("цепочка обслуживания доказана", цепь.get("verdict") == "PROVEN",
+                 f"{цепь.get('unit')} ← 127.0.0.1:{цепь.get('upstream_port')}")
+    except Exception as ош:  # noqa: BLE001
+        отметить("цепочка обслуживания доказана", False, ош)
+
+    база = объявленное(отпечатки(домен, "dry-baseline", выход / f"{сайт}-fp-dry.json"))
+    отметить("домен отвечает и объявляет себя", bool(база["artifacts"]),
+             f"версия {база['versions']} артефакт {[а[:12] for а in база['artifacts']]}")
+    отметить("домен ещё не на кандидате", база["artifacts"] != [арг.expect_sha256],
+             "иначе устанавливать нечего")
+
+    каталог = Path(опис["catalog"])
+    отметить("снимок каталога на месте", каталог.is_file(), каталог)
+    боковой = каталог.with_name(каталог.name.replace("-catalog.json", "-details.json"))
+    отметить("боковой файл подробностей на месте", боковой.is_file(), боковой)
+
+    итог["would_restart_unit"] = уст.ВИТРИНЫ[сайт]["unit"]
+    итог["would_write"] = [str(уст.АРТЕФАКТ),
+                           str(уст.ФРОНТ / уст.ВИТРИНЫ[сайт]["manifest"])]
+    журнал(f"   записал бы: {итог['would_write']}")
+    журнал(f"   перезапустил бы: {итог['would_restart_unit']}")
+    return итог
+
+
 def провести(сайт: str, арг, выход: Path) -> dict:
     опис = dict(ВИТРИНЫ[сайт])
     опис.update(арг.профили.get(сайт, {}))
@@ -267,6 +343,9 @@ def main(argv=None) -> int:
     р.add_argument("--profiles", help="JSON с настройками витрин (архетипы, границы)")
     р.add_argument("--sites", default="lords-01,zona-01",
                    help="порядок витрин; Zona берётся только после PASS Lords")
+    р.add_argument("--dry-run", action="store_true",
+                   help="проверить всё проверяемое и НЕ ПИСАТЬ ничего; "
+                        "запускается без root")
     арг = р.parse_args(argv)
     арг.профили = json.loads(Path(арг.profiles).read_text(encoding="utf-8")) if арг.profiles else {}
 
@@ -281,6 +360,18 @@ def main(argv=None) -> int:
     сводка = {"started_at_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
               "artifact_sha256": арг.expect_sha256, "commit": арг.commit,
               "build_id": арг.build_id, "sites": []}
+    if арг.dry_run:
+        сводка["mode"] = "dry-run"
+        for сайт in порядок:
+            сводка["sites"].append(сухой_прогон(сайт, арг, выход))
+        все_ок = all(с["ok"] for с in сводка["sites"])
+        сводка["verdict"] = "DRY_RUN_READY" if все_ок else "DRY_RUN_BLOCKED"
+        (выход / "canary-dry-run.json").write_text(
+            json.dumps(сводка, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        журнал(f"ИТОГ сухого прогона: {сводка['verdict']}")
+        журнал(f"свидетельства: {выход / 'canary-dry-run.json'}")
+        return 0 if все_ок else 1
+
     for сайт in порядок:
         итог = провести(сайт, арг, выход)
         сводка["sites"].append(итог)

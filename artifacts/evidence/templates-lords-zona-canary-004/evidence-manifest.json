@@ -1,9 +1,9 @@
 {
  "prompt_id": "TEMPLATES-LORDS-ZONA-CANARY-004",
- "generated_at_utc": "2026-09-14T05:39:44Z",
+ "generated_at_utc": "2026-09-14T06:06:47Z",
  "task_branch": "claude/templates-lords-zona-canary-004",
- "task_commit": "77c0a78f8378aa6effa832538c70f5bd8c624e2e",
- "files_total": 276,
+ "task_commit": "75d90596efceb1e3b6d568a0c7a394607498827b",
+ "files_total": 280,
  "summary": {
   "browser": {
    "pages_measured": 131,
@@ -994,6 +994,21 @@
    "sha256": "f439011bf1c866b80d33dc599543628299310233e8ee1866c2aa206f5cb0dc4b"
   },
   {
+   "path": "canary-dry/canary-dry-run.json",
+   "bytes": 3674,
+   "sha256": "6fe7ece79fe28d57fb8848e0bd8af6aa5ab7a04d0724d4ca4efaafafd408aa83"
+  },
+  {
+   "path": "canary-dry/lords-01-fp-dry.json",
+   "bytes": 2620,
+   "sha256": "c1fe9519503271fc342c48ed8acdf8bc459663bdd80a8945e17ca8e30008bfde"
+  },
+  {
+   "path": "canary-dry/zona-01-fp-dry.json",
+   "bytes": 2596,
+   "sha256": "803613d6ee6021cb5d82aff8265eb8adba8f10794a5236a2d396c45932c6b73f"
+  },
+  {
    "path": "canary-run-profiles.json",
    "bytes": 741,
    "sha256": "51ec7f701cc97253da87da9f3c30c729cbe566fca999e21653c06c454e1388a7"
@@ -1487,6 +1502,11 @@
    "path": "release-manifest-zona-01.json",
    "bytes": 349,
    "sha256": "7a5cfba3ad25e3e11a48f72870842d45ee66a2602041fdc4716f21b22ec832a6"
+  },
+  {
+   "path": "root-path-enumeration.json",
+   "bytes": 3286,
+   "sha256": "04a77ec2ed0e4d0771e12958df87babbae62989fc1659e57c095bc025625a2f1"
   },
   {
    "path": "route-crawl-lords.json",
