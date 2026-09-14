@@ -128,6 +128,37 @@ class TestShippedContract:
             "sha256 бандла разошёлся с записанным в release.json: "
             "хеш, который не сходится, не является доказательством")
 
+    def test_transaction_does_not_publish_anything(self):
+        """Закрепление не расширяет публичную поверхность.
+
+        Закрепление сужает поверхность, публикация расширяет. В одной атомарной
+        операции они несовместимы: отказ публикации откатил бы удавшееся
+        закрепление, то есть вернул бы дыру из-за проблемы с nginx.
+
+        Здесь проверяется, что установщик не изменяет конфигурацию nginx и не
+        зовёт публикатор. Чтение `/etc/nginx` в бэкап разрешено: снять копию
+        перед работой — не то же самое, что править.
+        """
+        text = (HARDENING / "pin-root-units.sh").read_text(encoding="utf-8")
+        forbidden = (
+            "install-secret-hub.sh",   # штатный публикатор
+            "ensure_include",          # добавление include в vhost
+            "nginx -s reload",
+            "systemctl reload nginx",
+            "systemctl restart nginx",
+        )
+        for token in forbidden:
+            assert token not in text, (
+                f"установщик содержит публикующую операцию «{token}»: "
+                "закрепление и публикация обязаны оставаться разными шагами")
+
+        for line in text.splitlines():
+            stripped = line.strip()
+            if stripped.startswith("#") or "/etc/nginx" not in stripped:
+                continue
+            assert stripped.startswith(("cp -a", "install -d")), (
+                f"строка трогает /etc/nginx не только на чтение: {stripped}")
+
     def test_credential_units_are_covered(self, manifest):
         """Юнит с расшифрованными credentials — худший случай из всех."""
         holders = [u["unit"] for u in manifest["units"] if u.get("holds_credentials")]
