@@ -1,0 +1,26 @@
+TEMPLATES-ZONA-ANIMEDIA-VISUAL-PARITY-005 — прогоны и настоящие exit codes
+
+ЗАПУЩЕНО
+--------
+$ python3 -m pytest tests/unit/test_lords_template.py tests/lords/test_canary_run_orchestrator.py -q --no-header -p no:cacheprovider
+130 passed in 6.48s
+exit code: 0
+
+Смысл прогона: подтвердить, что база не тронута. Изменений кода в этой задаче
+нет, поэтому результат и обязан совпадать с исходным.
+
+$ node <baseline.js>   (Chromium, 3 витрины, 1440x900)           exit code: 0
+$ node <probe.js>      (Chromium, хосты постеров и hero-ссылки)  exit code: 0
+$ node <shots.js>      (Chromium, 9 снимков на 3 вьюпортах)      exit code: 0
+
+НЕ ЗАПУСКАЛОСЬ
+--------------
+Регрессии этапа 5, визуальная приёмка этапа 6, accessibility, Firefox и WebKit.
+Причина одна и та же: они сравнивают кандидата с оригиналом, оригинал недоступен,
+кандидата нет. Запускать их сейчас значило бы получить зелёный прогон, ничего
+не проверяющий.
+
+SKIPPED / XFAILED
+-----------------
+0 / 0. Ни один тест не пропущен, не помечен xfail и не удалён.
+Ни одна чужая pytest-сессия не остановлена.

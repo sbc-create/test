@@ -1,0 +1,221 @@
+{
+ "verdict": "BLOCKED_REFERENCE",
+ "note": "Ячейка получает BLOCKED_REFERENCE, а не FAIL и не PASS: оригинал недоступен, сравнивать не с чем. Угадывание недоступной страницы запрещено заданием.",
+ "zona": {
+  "reference": "https://w140.zona.plus/",
+  "allowed_paths_in_inventory": [
+   "/"
+  ],
+  "cells": {
+   "Главная": {
+    "reference_captured": false,
+    "candidate_captured": true,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Каталог фильмов": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Каталог сериалов": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Фильтр по году": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Остальные фильтры": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Недавно добавленные фильмы": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Недавно добавленные сериалы": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Карточка фильма": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Карточка сериала": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Сезоны и список серий": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Переключение серии": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Поиск и подсказки": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Результаты поиска": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Пустой результат поиска": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Настоящая 404": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Состояния отсутствия постера/рейтинга/описания/плеера": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   }
+  }
+ },
+ "animedia": {
+  "reference": "https://amd.online/",
+  "allowed_paths_in_inventory": [
+   "/"
+  ],
+  "cells": {
+   "Главная": {
+    "reference_captured": false,
+    "candidate_captured": true,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Аниме-каталог": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Полный набор фильтров": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Онгоинги": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Завершённые": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Анонсы": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Новые серии": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Блок «Сегодня выйдет»": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Расписание": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Карточка TV-аниме": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Карточка OVA": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Карточка ONA": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Карточка аниме-фильма": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Карточка ongoing и completed": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Плеер и недоступное состояние": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Подборки": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Рецензии": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Дневники/редакционные публикации": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Комментарии": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Пользовательские списки": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Топы и лидерборд": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Поиск": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Мобильное меню": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   },
+   "Настоящая 404": {
+    "reference_captured": false,
+    "candidate_captured": false,
+    "status": "BLOCKED_REFERENCE"
+   }
+  }
+ },
+ "second_blocker": "Даже при открытии сети inventory/reference-sources.yaml разрешает обоим референсам ровно один путь «/». Для остальных страниц владельцу нужно расширить allowed_paths, иначе они останутся BLOCKED_REFERENCE."
+}

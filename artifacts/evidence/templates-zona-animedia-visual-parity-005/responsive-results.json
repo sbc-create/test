@@ -1,0 +1,181 @@
+{
+ "taken_at_utc": "2026-09-14T11:11:09Z",
+ "shots": [
+  {
+   "site": "animedia-01",
+   "viewport": "1440x900",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "https://animedia.icu/",
+   "status": 200,
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-005/screenshots/before/animedia-01-home-1440x900.png"
+  },
+  {
+   "site": "animedia-01",
+   "viewport": "768x1024",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "https://animedia.icu/",
+   "status": 200,
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-005/screenshots/before/animedia-01-home-768x1024.png"
+  },
+  {
+   "site": "animedia-01",
+   "viewport": "390x844",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "https://animedia.icu/",
+   "status": 200,
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-005/screenshots/before/animedia-01-home-390x844.png"
+  },
+  {
+   "site": "animedia-02",
+   "viewport": "1440x900",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "https://animedia.space/",
+   "status": 200,
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-005/screenshots/before/animedia-02-home-1440x900.png"
+  },
+  {
+   "site": "animedia-02",
+   "viewport": "768x1024",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "https://animedia.space/",
+   "status": 200,
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-005/screenshots/before/animedia-02-home-768x1024.png"
+  },
+  {
+   "site": "animedia-02",
+   "viewport": "390x844",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "https://animedia.space/",
+   "status": 200,
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-005/screenshots/before/animedia-02-home-390x844.png"
+  },
+  {
+   "site": "zona-01",
+   "viewport": "1440x900",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "https://zonafilm.space/",
+   "status": 200,
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-005/screenshots/before/zona-01-home-1440x900.png"
+  },
+  {
+   "site": "zona-01",
+   "viewport": "768x1024",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "https://zonafilm.space/",
+   "status": 200,
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-005/screenshots/before/zona-01-home-768x1024.png"
+  },
+  {
+   "site": "zona-01",
+   "viewport": "390x844",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "https://zonafilm.space/",
+   "status": 200,
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-005/screenshots/before/zona-01-home-390x844.png"
+  }
+ ],
+ "responsive": [
+  {
+   "site": "animedia-01",
+   "viewport": "1440x900",
+   "scroll_width": 1440,
+   "inner_width": 1440,
+   "horizontal_overflow": false,
+   "left_rail": null
+  },
+  {
+   "site": "animedia-01",
+   "viewport": "768x1024",
+   "scroll_width": 768,
+   "inner_width": 768,
+   "horizontal_overflow": false,
+   "left_rail": null
+  },
+  {
+   "site": "animedia-01",
+   "viewport": "390x844",
+   "scroll_width": 537,
+   "inner_width": 390,
+   "horizontal_overflow": true,
+   "left_rail": null
+  },
+  {
+   "site": "animedia-02",
+   "viewport": "1440x900",
+   "scroll_width": 1440,
+   "inner_width": 1440,
+   "horizontal_overflow": false,
+   "left_rail": null
+  },
+  {
+   "site": "animedia-02",
+   "viewport": "768x1024",
+   "scroll_width": 768,
+   "inner_width": 768,
+   "horizontal_overflow": false,
+   "left_rail": null
+  },
+  {
+   "site": "animedia-02",
+   "viewport": "390x844",
+   "scroll_width": 537,
+   "inner_width": 390,
+   "horizontal_overflow": true,
+   "left_rail": null
+  },
+  {
+   "site": "zona-01",
+   "viewport": "1440x900",
+   "scroll_width": 1440,
+   "inner_width": 1440,
+   "horizontal_overflow": false,
+   "left_rail": {
+    "x": 0,
+    "w": 246,
+    "h": 900
+   }
+  },
+  {
+   "site": "zona-01",
+   "viewport": "768x1024",
+   "scroll_width": 768,
+   "inner_width": 768,
+   "horizontal_overflow": false,
+   "left_rail": {
+    "x": 0,
+    "w": 768,
+    "h": 532
+   }
+  },
+  {
+   "site": "zona-01",
+   "viewport": "390x844",
+   "scroll_width": 390,
+   "inner_width": 390,
+   "horizontal_overflow": false,
+   "left_rail": {
+    "x": 0,
+    "w": 390,
+    "h": 606
+   }
+  }
+ ]
+}

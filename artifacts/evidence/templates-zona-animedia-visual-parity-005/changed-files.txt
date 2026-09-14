@@ -1,0 +1,3 @@
+?? artifacts/evidence/templates-zona-animedia-visual-parity-005/
+?? artifacts/evidence/templates-zona-canary-r2-verify/
+?? artifacts/evidence/templates-zona-served-fingerprint-r2/canary-run/

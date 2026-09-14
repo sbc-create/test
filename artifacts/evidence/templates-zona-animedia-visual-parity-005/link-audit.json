@@ -1,0 +1,118 @@
+{
+ "taken_at_utc": "2026-09-14T11:10:32Z",
+ "sites": {
+  "animedia-01": {
+   "base": "https://animedia.icu",
+   "poster_hosts": {
+    "poster.cdnvideohub.com": 42
+   },
+   "hero_links_checked": [
+    {
+     "url": "https://animedia.icu/title/ubiystva-v-marbl-holl/",
+     "status": 404
+    },
+    {
+     "url": "https://animedia.icu/title/akuloboroten/",
+     "status": 404
+    },
+    {
+     "url": "https://animedia.icu/title/yad-skazka-dlya-vzroslyh/",
+     "status": 404
+    },
+    {
+     "url": "https://animedia.icu/title/smertelnyy-strim-dom-mediuma/",
+     "status": 404
+    },
+    {
+     "url": "https://animedia.icu/title/prizrak-doma-fringl/",
+     "status": 404
+    },
+    {
+     "url": "https://animedia.icu/title/odno-nevernoe-reshenie/",
+     "status": 404
+    }
+   ],
+   "hero_404": 6,
+   "hero_total": 6,
+   "unique_title_links": 12
+  },
+  "animedia-02": {
+   "base": "https://animedia.space",
+   "poster_hosts": {
+    "poster.cdnvideohub.com": 42
+   },
+   "hero_links_checked": [
+    {
+     "url": "https://animedia.space/title/ubiystva-v-marbl-holl/",
+     "status": 404
+    },
+    {
+     "url": "https://animedia.space/title/akuloboroten/",
+     "status": 404
+    },
+    {
+     "url": "https://animedia.space/title/yad-skazka-dlya-vzroslyh/",
+     "status": 404
+    },
+    {
+     "url": "https://animedia.space/title/smertelnyy-strim-dom-mediuma/",
+     "status": 404
+    },
+    {
+     "url": "https://animedia.space/title/prizrak-doma-fringl/",
+     "status": 404
+    },
+    {
+     "url": "https://animedia.space/title/odno-nevernoe-reshenie/",
+     "status": 404
+    }
+   ],
+   "hero_404": 6,
+   "hero_total": 6,
+   "unique_title_links": 12
+  },
+  "zona-01": {
+   "base": "https://zonafilm.space",
+   "poster_hosts": {
+    "poster.cdnvideohub.com": 20
+   },
+   "hero_links_checked": [
+    {
+     "url": "https://zonafilm.space/title/ubiystva-v-marbl-holl/",
+     "status": 200
+    },
+    {
+     "url": "https://zonafilm.space/title/akuloboroten/",
+     "status": 200
+    },
+    {
+     "url": "https://zonafilm.space/title/yad-skazka-dlya-vzroslyh/",
+     "status": 200
+    },
+    {
+     "url": "https://zonafilm.space/title/smertelnyy-strim-dom-mediuma/",
+     "status": 200
+    },
+    {
+     "url": "https://zonafilm.space/title/prizrak-doma-fringl/",
+     "status": 200
+    },
+    {
+     "url": "https://zonafilm.space/title/odno-nevernoe-reshenie/",
+     "status": 200
+    },
+    {
+     "url": "https://zonafilm.space/title/pora-proschatsya/",
+     "status": 200
+    },
+    {
+     "url": "https://zonafilm.space/title/gospodin-uchenyy-vasha-zhena-snova-buntuet/",
+     "status": 200
+    }
+   ],
+   "hero_404": 0,
+   "hero_total": 8,
+   "unique_title_links": 12
+  }
+ }
+}

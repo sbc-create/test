@@ -1,0 +1,58 @@
+{
+ "prompt_id": "TEMPLATES-ZONA-ANIMEDIA-VISUAL-PARITY-005",
+ "prompt_rev": "R1",
+ "collected_at_utc": "2026-09-14T11:09:34Z",
+ "verdict": "BLOCKED_REFERENCE",
+ "summary": "Ни один из двух обязательных референсов недоступен. Отказ наступает до сети — на guard профиля UNATTENDED_SAFE, и он структурный, а не транзиентный.",
+ "references": [
+  {
+   "ref": "zona-w140",
+   "url": "https://w140.zona.plus/",
+   "required_for": "Zona",
+   "attempt": {
+    "command": "curl -sS -L --max-time 25 https://w140.zona.plus/",
+    "result": "no allow rule matched for segment 'curl'; профиль: хост «w140.zona.plus» не входит в переданные контракты",
+    "reached_network": false,
+    "attempts": 1
+   },
+   "pack": "config/reference-packs/reference-pack.zona-w140.json",
+   "pack_access_status": "blocked_policy",
+   "pack_checked_at": "2026-09-04T00:00:00Z",
+   "observations_in_pack": 0,
+   "verified_observations": 0,
+   "in_network_allowlist": false,
+   "status": "BLOCKED_REFERENCE"
+  },
+  {
+   "ref": "amd-online",
+   "url": "https://amd.online/",
+   "required_for": "Animedia",
+   "attempt": {
+    "command": "curl -sS -L --max-time 20 https://amd.online/",
+    "result": "no allow rule matched for segment 'curl'; профиль: хост «amd.online» не входит в переданные контракты",
+    "reached_network": false,
+    "attempts": 1
+   },
+   "pack": "config/reference-packs/reference-pack.amd-online.json",
+   "pack_access_status": "blocked_policy",
+   "pack_checked_at": "2026-09-04T00:00:00Z",
+   "observations_in_pack": 8,
+   "verified_observations": 0,
+   "observations_note": "все восемь помечены verified=\"unverified\" и происходят из документа Change Request v2.0 §3, а не из измерения",
+   "prior_failure": "D35 (22.08.2026): прокси среды отклонял CONNECT с net::ERR_TUNNEL_CONNECTION_FAILED",
+   "in_network_allowlist": false,
+   "status": "BLOCKED_REFERENCE"
+  }
+ ],
+ "policy": {
+  "inventory/reference-sources.yaml": "обе записи присутствуют как ui_reference, read_only",
+  "inventory/network-allowlist.yaml": "записей о w140.zona.plus и amd.online НЕТ",
+  "rule": "«Каждая строка приходит из задания владельца. Расширять список по инициативе агента запрещено: отсутствие записи означает BLOCKED_INPUT, а не «разрешено всё».»",
+  "consequence": "внесение хостов в allowlist самим агентом прямо запрещено и здесь не выполнялось"
+ },
+ "measurement_tool": {
+  "path": "tests/tools/measure_reference.js",
+  "exists": true,
+  "ready": "запускается без правки кода, как только доступ откроют (заявлено в обоих packs)"
+ }
+}

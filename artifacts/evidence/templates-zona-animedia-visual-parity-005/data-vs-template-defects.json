@@ -1,0 +1,187 @@
+{
+ "measured_at_utc": "2026-09-14T11:09:34Z",
+ "viewport": "1440x900",
+ "browser": "chromium",
+ "dpr": 1,
+ "method": "Chromium, waitUntil=networkidle + 2.5 c, reducedMotion=reduce; замеры из DOM и вычисленных стилей",
+ "note": "TEMPLATE-дефект принадлежит шаблону и чинится в этой задаче. DATA-дефект принадлежит контентному конвейеру и здесь не чинится.",
+ "template_defects": [
+  {
+   "id": "TPL-AMD-01",
+   "site": [
+    "animedia-01",
+    "animedia-02"
+   ],
+   "defect": "Главная Animedia выводит обычные фильмы каталога Zona, а не аниме",
+   "evidence": "заголовки карточек: «Убийства в Марбл-Холл», «Акулоборотень», «Яд: Сказка для взрослых» — те же slug'и, что на zonafilm.space",
+   "claimed_in_prompt": true,
+   "reproduced": true,
+   "class": "cross-profile contamination"
+  },
+  {
+   "id": "TPL-AMD-02",
+   "site": [
+    "animedia-01",
+    "animedia-02"
+   ],
+   "defect": "6 из 6 ссылок hero-слайдера отдают hard 404",
+   "evidence": "все шесть /title/<slug>/ → 404 на обоих доменах; те же slug'и на zonafilm.space → 200",
+   "root_cause": "карточки строятся из чужого каталога, а маршрутизация витрины таких сущностей не знает",
+   "claimed_in_prompt": true,
+   "reproduced": true,
+   "class": "hard-404 from visible link"
+  },
+  {
+   "id": "TPL-AMD-03",
+   "site": [
+    "animedia-01",
+    "animedia-02"
+   ],
+   "defect": "42 видимые ссылки используют всего 12 уникальных тайтлов; блоки «Новые эпизоды», «Онгоинги» и «Подборки» показывают одну выборку",
+   "evidence": "title_links_total=42, title_links_unique=12 на обоих доменах",
+   "claimed_in_prompt": true,
+   "reproduced": true,
+   "class": "duplicated rail data without reason"
+  },
+  {
+   "id": "TPL-AMD-04",
+   "site": [
+    "animedia-01",
+    "animedia-02"
+   ],
+   "defect": "Горизонтальное переполнение на 390 px",
+   "evidence": "scrollWidth > innerWidth на 390x844 на обоих доменах; на 768 и 1440 переполнения нет",
+   "claimed_in_prompt": false,
+   "reproduced": true,
+   "class": "horizontal overflow",
+   "found_by": "эта задача"
+  },
+  {
+   "id": "TPL-AMD-05",
+   "site": [
+    "animedia-01",
+    "animedia-02"
+   ],
+   "defect": "Универсальная тёмно-синяя кино-витрина вместо специализированного аниме-портала",
+   "evidence": "body background rgb(10,13,24); профиль семейства animedia в automation/host/lords-frontend.py задаёт bg #0a0d18, acc #4d7cff — тот же каркас, что у lords/zona, отличаются только токены",
+   "claimed_in_prompt": true,
+   "reproduced": true,
+   "parity_check": "НЕВОЗМОЖЕН: оригинал amd.online недоступен, его палитра в packs числится непроверенной"
+  },
+  {
+   "id": "TPL-ZONA-01",
+   "site": [
+    "zona-01"
+   ],
+   "defect": "Постоянная левая колонка на desktop вместо верхней горизонтальной шапки",
+   "evidence": "элемент .zrail: x=0, w=246, h=900 при 1440x900",
+   "claimed_in_prompt": true,
+   "reproduced": true
+  },
+  {
+   "id": "TPL-ZONA-02",
+   "site": [
+    "zona-01"
+   ],
+   "defect": "Белый фон и serif-типографика",
+   "evidence": "body background rgb(255,255,255); font-family «PT Serif», Georgia, serif; размер 16 px",
+   "claimed_in_prompt": true,
+   "reproduced": true,
+   "parity_check": "НЕВОЗМОЖЕН: палитра и шрифты оригинала не измерены — w140.zona.plus недоступен"
+  },
+  {
+   "id": "TPL-ZONA-03",
+   "site": [
+    "zona-01"
+   ],
+   "defect": "Три секции главной вместо заявленных пяти",
+   "evidence": "на главной присутствуют «Кино» и «Сериалы» (h2) при заголовке страницы; профиль zona объявляет secs = «Новинки кино», «Фильмы», «Сериалы»",
+   "claimed_in_prompt": true,
+   "reproduced": true,
+   "parity_check": "состав пяти секций взят из текста задания, а не из измерения оригинала"
+  },
+  {
+   "id": "TPL-BOTH-01",
+   "site": [
+    "zona-01",
+    "animedia-01",
+    "animedia-02"
+   ],
+   "defect": "Постеры подключаются прямой внешней ссылкой на poster.cdnvideohub.com вместо локального проксирования",
+   "evidence": "все 42 и 20 видимых изображений имеют host poster.cdnvideohub.com; для сравнения Lords отдаёт постеры по собственному пути /poster/…",
+   "consequence": "в сети, где этот CDN недоступен, разом отказывают все видимые постеры — именно это и описано в baseline как «0 из 42» и «20 из 20»",
+   "claimed_in_prompt": false,
+   "reproduced": true,
+   "class": "broken poster embedding (структурный риск)",
+   "found_by": "эта задача"
+  }
+ ],
+ "not_reproduced": [
+  {
+   "claim": "Zona: на главной не загрузились 20 из 20 постеров",
+   "measured": "images_visible=20, images_broken=0",
+   "verdict": "НЕ ВОСПРОИЗВЁЛСЯ в этой сети",
+   "interpretation": "наблюдение зависит от доступности внешнего poster.cdnvideohub.com у зрителя; причина остаётся в силе как TPL-BOTH-01. Дефект НЕ объявляется исправленным: в шаблоне ничего не менялось."
+  },
+  {
+   "claim": "Animedia: после полной загрузки не отобразился ни один из 42 постеров",
+   "measured": "images_visible=42, images_broken=0 на обоих доменах",
+   "verdict": "НЕ ВОСПРОИЗВЁЛСЯ в этой сети",
+   "interpretation": "то же основание; дефект НЕ объявляется исправленным"
+  }
+ ],
+ "data_defects": [
+  {
+   "id": "DATA-01",
+   "owner": "контентный конвейер /srv/site-factory/content-pipeline",
+   "defect": "Каталог Animedia — не аниме: витринам подан срез каталога Zona",
+   "evidence": "совпадение slug'ов и названий с zonafilm.space",
+   "status": "ANIMEDIA_DATA_READINESS=FAIL"
+  },
+  {
+   "id": "DATA-02",
+   "owner": "контентный конвейер",
+   "defect": "Нет достоверного времени и номера серии для расписания",
+   "status": "подтверждено ранее измеренным покрытием деталей; в этой задаче не чинится"
+  },
+  {
+   "id": "DATA-03",
+   "owner": "контентный конвейер и провайдер cdnvideohub",
+   "defect": "Нет КП/IMDb, описаний, студий, source ID и player bindings на значительной части каталога",
+   "status": "вне объёма этой задачи"
+  }
+ ],
+ "counters_measured": {
+  "BROKEN_VISIBLE_IMAGES": {
+   "animedia-01": 0,
+   "animedia-02": 0,
+   "zona-01": 0
+  },
+  "HARD_404_FROM_VISIBLE_LINKS": {
+   "animedia-01": 6,
+   "animedia-02": 6,
+   "zona-01": 0
+  },
+  "CONSOLE_ERRORS": {
+   "animedia-01": 0,
+   "animedia-02": 0,
+   "zona-01": 0
+  },
+  "HORIZONTAL_OVERFLOW_390": {
+   "animedia-01": 1,
+   "animedia-02": 1,
+   "zona-01": 0
+  },
+  "CROSS_PROFILE_CONTAMINATION": {
+   "animedia-01": 1,
+   "animedia-02": 1,
+   "zona-01": 0
+  },
+  "DUPLICATED_RAIL_DATA_WITHOUT_REASON": {
+   "animedia-01": 1,
+   "animedia-02": 1,
+   "zona-01": 1
+  }
+ },
+ "counters_note": "Это измерение ТЕКУЩЕГО production-состояния, а не результат исправления. Целевые нули не достигнуты и не могли быть достигнуты: исправления в этой задаче не вносились."
+}
