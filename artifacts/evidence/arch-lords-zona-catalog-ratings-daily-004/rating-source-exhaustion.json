@@ -104,6 +104,24 @@
         "cdnvideohub"
       ],
       "verdict": "других адаптеров не зарегистрировано"
+    },
+    {
+      "store": "CDNVideoHub titles/filters",
+      "kind": "API",
+      "facets_returned": [
+        "countries",
+        "genres",
+        "tags",
+        "years"
+      ],
+      "rating_facet": false,
+      "payload_bytes": 3164,
+      "verdict": "фасета оценки нет вовсе — поставщик, у которого оценки есть, выставил бы их фильтром"
+    },
+    {
+      "store": "CDNVideoHub titles/search",
+      "kind": "API",
+      "verdict": "поиск по той же коллекции titles; полей, которых нет в коллекции, он содержать не может"
     }
   ],
   "conclusion": {
@@ -118,6 +136,12 @@
       "imdb_ids": 45071,
       "of_total": 53399
     },
-    "status": "BLOCKED_UPSTREAM_RATINGS"
+    "status": "BLOCKED_UPSTREAM_RATINGS",
+    "contract_endpoints_exercised": [
+      "titles (534 страницы)",
+      "titles/{id} (673 адресных запроса)",
+      "titles/filters",
+      "titles/search"
+    ]
   }
 }
