@@ -1,0 +1,8 @@
+{
+  "prompt_id": "ARCH-LORDS-DATA-LINEAGE-001",
+  "artifacts": {
+    "HANDOFF.md": "242172e2aecd145b918a05637789afc795a7668ae60fda26d98bb63a53d45473",
+    "coverage-baseline.json": "2e4a4bc88ec67b1541e0351d92fa8fb56f20c9d0c1d6fc9de6f822015450a096"
+  },
+  "manifest_sha256": "791cdaefb8769b0884a48ff960cf5b6db81561509ef5b35b24fd6227e432e2ef"
+}
