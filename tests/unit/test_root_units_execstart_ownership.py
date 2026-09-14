@@ -118,15 +118,39 @@ class TestShippedContract:
         assert out["units"], "перечень вне области обязан быть явным"
         assert out["vector"] and out["note"]
 
-    def test_bundle_hash_matches_the_recorded_one(self, release):
+    def test_no_archive_is_shipped(self):
+        """Якорем доверия служит текстовый провенанс, а не архив.
+
+        Правило репозитория «архивы в git не хранятся» проверяется отдельным
+        тестом (`test_repo_hygiene`). Обходить его исключением в `.gitignore`
+        было бы подгонкой под задачу, а пофайловый провенанс и без того
+        строже: один общий хеш сказал бы «не сошлось», не назвав виновника.
+        """
+        assert not list((HARDENING / "release").glob("*.tar.gz"))
+        assert not list((HARDENING / "release").glob("*.zip"))
+
+    def test_aggregate_digest_matches_the_provenance(self, release):
+        """Совокупный отпечаток обязан пересчитываться из провенанса."""
         import hashlib
-        bundle = HARDENING / "release" / "site-factory-pinned-runtime.tar.gz"
-        if not bundle.exists():
-            pytest.skip("бандл не выложен в release/")
-        got = hashlib.sha256(bundle.read_bytes()).hexdigest()
-        assert got == release["bundle_sha256"], (
-            "sha256 бандла разошёлся с записанным в release.json: "
-            "хеш, который не сходится, не является доказательством")
+        provenance = json.loads(
+            (HARDENING / "release" / "provenance.json").read_text(encoding="utf-8"))
+        digest = hashlib.sha256()
+        for item in sorted(provenance["files"], key=lambda f: f["path"]):
+            digest.update(item["path"].encode())
+            digest.update(item["sha256"].encode())
+        assert digest.hexdigest() == release["aggregate_sha256"], (
+            "release.json и provenance.json разошлись: отпечаток, который не "
+            "сходится, не является доказательством")
+        assert provenance["file_count"] == release["file_count"]
+
+    def test_every_file_records_its_source_commit(self):
+        """Файл без провенанса в root-owned дереве — байт без ответа «откуда»."""
+        provenance = json.loads(
+            (HARDENING / "release" / "provenance.json").read_text(encoding="utf-8"))
+        assert provenance["files"]
+        for item in provenance["files"]:
+            assert len(item["source_commit"]) == 40, item["path"]
+            assert len(item["sha256"]) == 64, item["path"]
 
     def test_transaction_does_not_publish_anything(self):
         """Закрепление не расширяет публичную поверхность.

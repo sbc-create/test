@@ -10,7 +10,7 @@
     "relocated_root": "/opt/site-factory/runtime/relocated",
     "staging_root": "/root/site-factory-hardening",
     "backup_root": "/var/backups/site-factory-hardening",
-    "bundle_name": "site-factory-pinned-runtime.tar.gz",
+    "provenance_note": "Архива нет намеренно. Установщик выкладывает файлы `git archive` прямо из названных коммитов и сверяет каждый по release/provenance.json. Один общий хеш архива сказал бы «не сошлось», не назвав виновника; пофайловый провенанс называет конкретный путь. Вдобавок правило репозитория запрещает архивы в git (tests/unit/test_repo_hygiene.py), и обходить его исключением было бы подгонкой под задачу.",
     "owner": "root",
     "group": "root",
     "directory_mode": "0755",

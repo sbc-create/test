@@ -14,8 +14,8 @@ install -d -m 0700 -o root -g root "$S"
 git -C /srv/site-factory/repo archive "$C" automation/hardening | tar -x -C "$S"
 echo "f35ee20b66c75d7ba1207b780cc7aad52c3081f90a5b5201c9acb032cff7fe15  $S/automation/hardening/pin-root-units.sh" | sha256sum -c -
 bash "$S/automation/hardening/pin-root-units.sh" \
-  --bundle="$S/automation/hardening/release/site-factory-pinned-runtime.tar.gz" \
   --release="$S/automation/hardening/release/release.json" \
+  --provenance="$S/automation/hardening/release/provenance.json" \
   --manifest="$S/automation/hardening/manifest.json"'
 ```
 
@@ -34,10 +34,10 @@ bash /srv/site-factory/repo/automation/hardening/pin-root-units.sh --dry-run
 | ветка | `claude/templates-secret-hub-cloud-access-006` |
 | путь установщика в коммите | `automation/hardening/pin-root-units.sh` |
 | SHA-256 установщика | `f35ee20b66c75d7ba1207b780cc7aad52c3081f90a5b5201c9acb032cff7fe15` |
-| бандл | `automation/hardening/release/site-factory-pinned-runtime.tar.gz` |
-| SHA-256 бандла | `a7367e26d4e290df27f40d1b6f6898e7956cd34cbfc55f5db7190a9dd278dbbf` |
-| release_id | `6fcd33701aef-a7367e26d4e2` |
-| файлов в бандле | 168, у каждого записан свой sha256 и коммит-источник |
+| провенанс | `automation/hardening/release/provenance.json` (168 файлов) |
+| совокупный отпечаток | `947fbe17f73bf402d0d88d2752c3c408dd717b0f9870391a96a1017f96c71f1f` |
+| release_id | `6fcd33701aef-947fbe17f73b` |
+| файлов | 168, у каждого свой sha256 и коммит-источник |
 | закреплённый рантайм | `/opt/site-factory/runtime/6fcd33701aef-a7367e26d4e2` |
 | бэкап | `/var/backups/site-factory-hardening/<UTC-метка>` |
 
@@ -52,8 +52,13 @@ bash /srv/site-factory/repo/automation/hardening/pin-root-units.sh --dry-run
   рабочей копии значило бы повторить ровно тот дефект, который транзакция
   закрывает.
 * **`sha256sum -c` до запуска** — закрывает окно между извлечением и запуском.
-* **бандл проверяется дважды** — установщиком до копирования в staging и ещё
-  раз после (шаги 2 и 5).
+* **архива нет** — установщик выкладывает файлы `git archive` прямо из
+  названных коммитов и сверяет **каждый** по `provenance.json`. Общий хеш
+  архива сказал бы «не сошлось», не назвав виновника; пофайловая сверка
+  называет конкретный путь. Вдобавок правило репозитория запрещает архивы в
+  git, и обходить его исключением было бы подгонкой под задачу.
+* **совокупный отпечаток пересчитывается** из `provenance.json` и сверяется с
+  `release.json` до того, как будет выложен хоть один байт.
 
 ## Что изменится
 

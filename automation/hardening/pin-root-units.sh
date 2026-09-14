@@ -30,21 +30,23 @@ STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 BACKUP_DIR="${BACKUP_ROOT}/${STAMP}"
 
 DRY_RUN=0
-BUNDLE=""
 RELEASE_JSON=""
 MANIFEST=""
+SOURCE_REPO="/srv/site-factory/repo"
+PROVENANCE=""
 for arg in "$@"; do
   case "$arg" in
     --dry-run) DRY_RUN=1 ;;
-    --bundle=*) BUNDLE="${arg#*=}" ;;
     --release=*) RELEASE_JSON="${arg#*=}" ;;
     --manifest=*) MANIFEST="${arg#*=}" ;;
+    --provenance=*) PROVENANCE="${arg#*=}" ;;
+    --source-repo=*) SOURCE_REPO="${arg#*=}" ;;
     *) fail "неизвестный аргумент: $arg" ;;
   esac
 done
 
-BUNDLE="${BUNDLE:-${HERE}/site-factory-pinned-runtime.tar.gz}"
-RELEASE_JSON="${RELEASE_JSON:-${HERE}/release.json}"
+RELEASE_JSON="${RELEASE_JSON:-${HERE}/release/release.json}"
+PROVENANCE="${PROVENANCE:-${HERE}/release/provenance.json}"
 MANIFEST="${MANIFEST:-${HERE}/manifest.json}"
 PY=/usr/bin/python3
 
@@ -61,22 +63,36 @@ ACTUAL_HOST="$(hostname)"
   || fail "хост «${ACTUAL_HOST}», ожидался «${EXPECT_HOST}». Транзакция привязана к конкретной машине намеренно."
 say "хост: $ACTUAL_HOST"
 
-for f in "$BUNDLE" "$RELEASE_JSON" "$MANIFEST"; do
+for f in "$RELEASE_JSON" "$PROVENANCE" "$MANIFEST"; do
   [ -f "$f" ] || fail "нет файла $f"
 done
+[ -d "${SOURCE_REPO}/.git" ] || fail "нет репозитория-источника ${SOURCE_REPO}"
 
-# ========================= 2. Хеши и коммит ==============================
-WANT_SHA="$("$PY" -c 'import json,sys;print(json.load(open(sys.argv[1]))["bundle_sha256"])' "$RELEASE_JSON")"
+# ========================= 2. Коммит и совокупный отпечаток ==============
 RELEASE_ID="$("$PY" -c 'import json,sys;print(json.load(open(sys.argv[1]))["release_id"])' "$RELEASE_JSON")"
 SRC_COMMIT="$("$PY" -c 'import json,sys;print(json.load(open(sys.argv[1]))["primary_source_commit"])' "$RELEASE_JSON")"
-GOT_SHA="$(sha256sum "$BUNDLE" | cut -d' ' -f1)"
-[ "$WANT_SHA" = "$GOT_SHA" ] \
-  || fail "sha256 бандла не совпал:
-  ожидался $WANT_SHA
-  получен  $GOT_SHA"
+AGGREGATE="$("$PY" -c 'import json,sys;print(json.load(open(sys.argv[1]))["aggregate_sha256"])' "$RELEASE_JSON")"
+
+# Совокупный отпечаток пересчитывается из provenance.json и обязан совпасть с
+# записанным в release.json. Это ловит рассогласование двух файлов до того, как
+# хоть один байт будет выложен.
+"$PY" - "$PROVENANCE" "$AGGREGATE" <<'PYEOF' || exit 1
+import hashlib, json, sys
+prov = json.load(open(sys.argv[1], encoding="utf-8"))
+digest = hashlib.sha256()
+for item in sorted(prov["files"], key=lambda f: f["path"]):
+    digest.update(item["path"].encode())
+    digest.update(item["sha256"].encode())
+got = digest.hexdigest()
+if got != sys.argv[2]:
+    print(f"[harden] ОТКАЗ: provenance.json не сходится с release.json\n"
+          f"  release.json    {sys.argv[2]}\n  из provenance   {got}", file=sys.stderr)
+    raise SystemExit(1)
+print(f"[harden] провенанс: {prov['file_count']} файлов, совокупный отпечаток сходится")
+PYEOF
+
 say "релиз:  $RELEASE_ID"
 say "коммит: $SRC_COMMIT"
-say "бандл:  sha256 совпал до копирования"
 
 DIVERGENCES="$("$PY" -c '
 import json,sys
@@ -112,17 +128,12 @@ fi
 # агенту на запись.
 install -d -m 0700 -o root -g root "$STAGING_ROOT"
 STAGE="${STAGING_ROOT}/${RELEASE_ID}"
-rm -rf "$STAGE"
 install -d -m 0755 -o root -g root "$STAGE"
-install -m 0600 -o root -g root "$BUNDLE" "${STAGE}/bundle.tar.gz"
 install -m 0600 -o root -g root "$RELEASE_JSON" "${STAGE}/release.json"
+install -m 0600 -o root -g root "$PROVENANCE" "${STAGE}/provenance.json"
 install -m 0600 -o root -g root "$MANIFEST" "${STAGE}/manifest.json"
 install -m 0700 -o root -g root "${HERE}/audit_root_units.py" "${STAGE}/audit_root_units.py"
-
-# ========================= 5. Повторная проверка после копии =============
-COPY_SHA="$(sha256sum "${STAGE}/bundle.tar.gz" | cut -d' ' -f1)"
-[ "$COPY_SHA" = "$WANT_SHA" ] || fail "sha256 разошёлся ПОСЛЕ копирования в staging — копия повреждена или подменена"
-say "бандл:  sha256 совпал после копирования в root-owned staging"
+say "staging: ${STAGE} (root:root 0700)"
 
 # ========================= 6. Бэкап ======================================
 install -d -m 0700 -o root -g root "$BACKUP_ROOT"
@@ -192,7 +203,47 @@ install -d -m 0755 -o root -g root "$PINNED_ROOT"
 rm -rf "$PINNED_DIR"
 install -d -m 0755 -o root -g root "$PINNED_DIR"
 install -d -m 0755 -o root -g root "$BUNDLE_DIR"
-tar -xzf "${STAGE}/bundle.tar.gz" -C "$BUNDLE_DIR" --no-same-owner --no-same-permissions
+
+# Файлы выкладываются прямо из объектной базы git по полному хешу коммита и
+# сверяются ПОШТУЧНО. Архива нет: один общий хеш сказал бы «не сошлось», не
+# назвав виновника, а содержимое коммита и так адресуется его хешем — подменить
+# его, не сменив хеш, нельзя.
+#
+# `safe.directory` нужен потому, что репозиторий принадлежит не root: без него
+# git откажется читать чужое дерево. Это чтение, а не доверие — доверие даёт
+# сверка sha256 каждого файла ниже.
+"$PY" - "${STAGE}/provenance.json" "$SOURCE_REPO" "$BUNDLE_DIR" <<'PYEOF' || fail "выкладка не прошла проверку провенанса"
+import hashlib, json, os, subprocess, sys
+from pathlib import Path
+
+provenance, repo, dest = sys.argv[1], sys.argv[2], Path(sys.argv[3])
+files = json.load(open(provenance, encoding="utf-8"))["files"]
+
+bad, written = [], 0
+for item in files:
+    blob = subprocess.run(
+        ["git", "-c", f"safe.directory={repo}", "-C", repo, "show",
+         f"{item['source_commit']}:{item['path']}"],
+        capture_output=True, check=False)
+    if blob.returncode != 0:
+        bad.append(f"{item['path']}: нет в коммите {item['source_commit'][:12]}")
+        continue
+    got = hashlib.sha256(blob.stdout).hexdigest()
+    if got != item["sha256"]:
+        bad.append(f"{item['path']}: sha256 {got[:16]}… вместо {item['sha256'][:16]}…")
+        continue
+    target = dest / item["path"]
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(blob.stdout)
+    written += 1
+
+if bad:
+    print("[harden] ОТКАЗ: расхождение провенанса:", file=sys.stderr)
+    for line in bad[:10]:
+        print(f"  {line}", file=sys.stderr)
+    raise SystemExit(1)
+print(f"[harden] выложено и сверено файлов: {written}")
+PYEOF
 chown -R root:root "$PINNED_DIR"
 find "$BUNDLE_DIR" -type d -exec chmod 0755 {} +
 find "$BUNDLE_DIR" -type f -exec chmod 0644 {} +
