@@ -1,0 +1,34 @@
+TEMPLATES-ZONA-ANIMEDIA-VISUAL-PARITY-006 — прогоны и настоящие exit codes
+
+ЗАПУЩЕНО
+--------
+$ python3 -m pytest tests/unit/test_lords_template.py tests/unit/test_lords_page_quality.py \
+      tests/lords/test_canary_run_orchestrator.py tests/lords/test_rollback_served_fingerprint.py -q
+200 passed in 24.19s                                              exit code: 0
+
+$ python3 -m pytest tests/zone -q
+68 passed, 86 skipped, 3 warnings in 79.37s                       exit code: 0
+
+$ node tests/tools/measure_reference.js https://w140.zona.plus/ … 390,768,1024,1440,1920
+{"measured":5,"errors":0}                                         exit code: 0
+$ node tests/tools/measure_reference.js https://amd.online/ …     {"measured":5,"errors":0}   exit code: 0
+$ node tests/tools/measure_reference_palette.js (оба эталона, оба кандидата)                  exit code: 0
+$ node <verify006.js>  15 кадров, 16 страниц, sweep 320–1920                                  exit code: 0
+$ node <imgcheck.js>   BROKEN_TOTAL 0 после полной прокрутки                                  exit code: 0
+$ python3 <lords-unchanged-proof>  6 маршрутов, побайтовое совпадение                         exit code: 0
+
+НЕ ЗАПУСКАЛОСЬ
+--------------
+$ python3 -m pytest tests/unit tests/lords tests/zone -q
+Прогон всех трёх наборов разом превышает 10 минут и был прерван по таймауту
+(exit 143). Вместо повтора той же команды набор сужен — результаты выше.
+Наборы tests/e2e-lords, Firefox и WebKit не запускались.
+
+SKIPPED / XFAILED
+-----------------
+skipped: 86 — все в tests/zone, все по одной причине: в этом рабочем дереве нет
+локальных сборок (`var/build-a/...`). Пропуски существовали до задачи и не
+связаны с изменениями шаблонов.
+xfailed: 0.
+Ни одного skip и ни одного xfail в этой задаче не добавлено, ни один тест не
+удалён и не ослаблен. Чужие pytest-сессии не останавливались.

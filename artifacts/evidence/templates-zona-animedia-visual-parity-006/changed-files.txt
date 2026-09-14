@@ -1,0 +1,7 @@
+ M automation/host/lords-frontend.py
+ M inventory/network-allowlist.yaml
+ M tests/tools/measure_reference.js
+?? artifacts/evidence/templates-zona-animedia-visual-parity-006/
+?? artifacts/evidence/templates-zona-canary-r2-verify/
+?? artifacts/evidence/templates-zona-served-fingerprint-r2/canary-run/
+?? tests/tools/measure_reference_palette.js

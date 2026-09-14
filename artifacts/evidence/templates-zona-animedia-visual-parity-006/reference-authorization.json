@@ -1,0 +1,28 @@
+{
+ "prompt_id": "TEMPLATES-ZONA-ANIMEDIA-VISUAL-PARITY-006",
+ "reference_allowlist_status": "PASS",
+ "как_получен_доступ": "Штатным путём: разрешение даёт ЗАПИСЬ В РЕЕСТРЕ inventory/network-allowlist.yaml, а не правка guard'а. docs/UNATTENDED_SAFE.md: «Разрешение даёт запись в реестре, а не форма команды». Guard читает реестр сам через seo_operator.unattended.network_hosts(). Hooks, guard_rules и guardrails не изменялись и не обходились.",
+ "внесено": [
+  {
+   "ref": "zona-w140-ui-reference",
+   "host": "w140.zona.plus",
+   "methods": [
+    "GET"
+   ]
+  },
+  {
+   "ref": "amd-online-ui-reference",
+   "host": "amd.online",
+   "methods": [
+    "GET"
+   ]
+  }
+ ],
+ "wildcard": "не заводился: разрешены ровно два названных хоста",
+ "проверка": {
+  "w140.zona.plus": "HTTP 200",
+  "amd.online": "HTTP 200"
+ },
+ "что_измерялось": "только числа: ширина контейнера и полей, высота и поведение шапки, кегли и начертания, цвета поверхностей, число колонок сетки, зазор, пропорция карточки, наличие горизонтальной прокрутки",
+ "что_НЕ_сохранялось": "тексты, изображения, разметка, стили, шрифты, бренд, каталог, рекламные и publisher ID эталонов. Оформление кандидатов написано своё."
+}

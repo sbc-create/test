@@ -1,0 +1,1087 @@
+{
+  "url": "http://127.0.0.1:9301/",
+  "measured_at": "2026-09-14T16:56:51.018Z",
+  "viewports": {
+    "390": {
+      "documentWidth": 390,
+      "scrollHeight": 2436,
+      "horizontalOverflow": false,
+      "contentWidth": 358,
+      "gutter": 16,
+      "header": {
+        "height": 113.44,
+        "position": "fixed",
+        "sticky": true
+      },
+      "typography": {
+        "body": {
+          "fontSize": 13,
+          "lineHeight": 17.88,
+          "fontWeight": "400"
+        },
+        "h1": {
+          "fontSize": 26,
+          "lineHeight": 31.72,
+          "fontWeight": "600"
+        },
+        "h2": {
+          "fontSize": 22.1,
+          "lineHeight": 30.39,
+          "fontWeight": "400"
+        },
+        "a": {
+          "fontSize": 13,
+          "lineHeight": 17.88,
+          "fontWeight": "400"
+        },
+        "p": {
+          "fontSize": 13,
+          "lineHeight": 17.88,
+          "fontWeight": "400"
+        },
+        "button": {
+          "fontSize": 14,
+          "lineHeight": "normal",
+          "fontWeight": "600"
+        }
+      },
+      "cardAspectRatios": [
+        {
+          "ratio": 0.67,
+          "count": 44
+        },
+        {
+          "ratio": 0.56,
+          "count": 3
+        },
+        {
+          "ratio": 0.57,
+          "count": 1
+        }
+      ],
+      "topLevelSections": [
+        {
+          "index": 0,
+          "tag": "h1",
+          "height": 95.16,
+          "childCount": 0
+        },
+        {
+          "index": 1,
+          "tag": "p",
+          "height": 17.88,
+          "childCount": 0
+        },
+        {
+          "index": 2,
+          "tag": "nav",
+          "height": 201.38,
+          "childCount": 14
+        },
+        {
+          "index": 3,
+          "tag": "section",
+          "height": 373.28,
+          "childCount": 2
+        },
+        {
+          "index": 4,
+          "tag": "section",
+          "height": 342.91,
+          "childCount": 2
+        },
+        {
+          "index": 5,
+          "tag": "section",
+          "height": 373.28,
+          "childCount": 2
+        },
+        {
+          "index": 6,
+          "tag": "section",
+          "height": 379.02,
+          "childCount": 2
+        },
+        {
+          "index": 7,
+          "tag": "section",
+          "height": 198,
+          "childCount": 2
+        }
+      ],
+      "sectionCount": 8,
+      "grids": [
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        }
+      ],
+      "player": null,
+      "linkCount": 74,
+      "imageCount": 48,
+      "paginationLinks": 0,
+      "httpStatus": 200
+    },
+    "768": {
+      "documentWidth": 768,
+      "scrollHeight": 2313,
+      "horizontalOverflow": false,
+      "contentWidth": 736,
+      "gutter": 16,
+      "header": {
+        "height": 137.44,
+        "position": "fixed",
+        "sticky": true
+      },
+      "typography": {
+        "body": {
+          "fontSize": 13,
+          "lineHeight": 17.88,
+          "fontWeight": "400"
+        },
+        "h1": {
+          "fontSize": 26,
+          "lineHeight": 31.72,
+          "fontWeight": "600"
+        },
+        "h2": {
+          "fontSize": 22.1,
+          "lineHeight": 30.39,
+          "fontWeight": "400"
+        },
+        "a": {
+          "fontSize": 13,
+          "lineHeight": 17.88,
+          "fontWeight": "400"
+        },
+        "p": {
+          "fontSize": 13,
+          "lineHeight": 17.88,
+          "fontWeight": "400"
+        },
+        "button": {
+          "fontSize": 14,
+          "lineHeight": "normal",
+          "fontWeight": "600"
+        }
+      },
+      "cardAspectRatios": [
+        {
+          "ratio": 0.67,
+          "count": 42
+        },
+        {
+          "ratio": 0.56,
+          "count": 5
+        },
+        {
+          "ratio": 0.57,
+          "count": 1
+        }
+      ],
+      "topLevelSections": [
+        {
+          "index": 0,
+          "tag": "h1",
+          "height": 31.72,
+          "childCount": 0
+        },
+        {
+          "index": 1,
+          "tag": "p",
+          "height": 17.88,
+          "childCount": 0
+        },
+        {
+          "index": 2,
+          "tag": "nav",
+          "height": 117.63,
+          "childCount": 14
+        },
+        {
+          "index": 3,
+          "tag": "section",
+          "height": 369.91,
+          "childCount": 2
+        },
+        {
+          "index": 4,
+          "tag": "section",
+          "height": 369.91,
+          "childCount": 2
+        },
+        {
+          "index": 5,
+          "tag": "section",
+          "height": 369.91,
+          "childCount": 2
+        },
+        {
+          "index": 6,
+          "tag": "section",
+          "height": 411.02,
+          "childCount": 2
+        },
+        {
+          "index": 7,
+          "tag": "section",
+          "height": 180.13,
+          "childCount": 2
+        }
+      ],
+      "sectionCount": 8,
+      "grids": [
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        }
+      ],
+      "player": null,
+      "linkCount": 74,
+      "imageCount": 48,
+      "paginationLinks": 0,
+      "httpStatus": 200
+    },
+    "1024": {
+      "documentWidth": 1024,
+      "scrollHeight": 2253,
+      "horizontalOverflow": false,
+      "contentWidth": 992,
+      "gutter": 16,
+      "header": {
+        "height": 137.44,
+        "position": "fixed",
+        "sticky": true
+      },
+      "typography": {
+        "body": {
+          "fontSize": 13,
+          "lineHeight": 17.88,
+          "fontWeight": "400"
+        },
+        "h1": {
+          "fontSize": 26,
+          "lineHeight": 31.72,
+          "fontWeight": "600"
+        },
+        "h2": {
+          "fontSize": 22.1,
+          "lineHeight": 30.39,
+          "fontWeight": "400"
+        },
+        "a": {
+          "fontSize": 13,
+          "lineHeight": 17.88,
+          "fontWeight": "400"
+        },
+        "p": {
+          "fontSize": 13,
+          "lineHeight": 17.88,
+          "fontWeight": "400"
+        },
+        "button": {
+          "fontSize": 14,
+          "lineHeight": "normal",
+          "fontWeight": "600"
+        }
+      },
+      "cardAspectRatios": [
+        {
+          "ratio": 0.67,
+          "count": 41
+        },
+        {
+          "ratio": 0.56,
+          "count": 6
+        },
+        {
+          "ratio": 0.57,
+          "count": 1
+        }
+      ],
+      "topLevelSections": [
+        {
+          "index": 0,
+          "tag": "h1",
+          "height": 31.72,
+          "childCount": 0
+        },
+        {
+          "index": 1,
+          "tag": "p",
+          "height": 17.88,
+          "childCount": 0
+        },
+        {
+          "index": 2,
+          "tag": "nav",
+          "height": 75.75,
+          "childCount": 14
+        },
+        {
+          "index": 3,
+          "tag": "section",
+          "height": 369.91,
+          "childCount": 2
+        },
+        {
+          "index": 4,
+          "tag": "section",
+          "height": 369.91,
+          "childCount": 2
+        },
+        {
+          "index": 5,
+          "tag": "section",
+          "height": 369.91,
+          "childCount": 2
+        },
+        {
+          "index": 6,
+          "tag": "section",
+          "height": 411.02,
+          "childCount": 2
+        },
+        {
+          "index": 7,
+          "tag": "section",
+          "height": 162.25,
+          "childCount": 2
+        }
+      ],
+      "sectionCount": 8,
+      "grids": [
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        }
+      ],
+      "player": null,
+      "linkCount": 74,
+      "imageCount": 48,
+      "paginationLinks": 0,
+      "httpStatus": 200
+    },
+    "1440": {
+      "documentWidth": 1440,
+      "scrollHeight": 2302,
+      "horizontalOverflow": false,
+      "contentWidth": 1400,
+      "gutter": 20,
+      "header": {
+        "height": 69,
+        "position": "fixed",
+        "sticky": true
+      },
+      "typography": {
+        "body": {
+          "fontSize": 13,
+          "lineHeight": 17.88,
+          "fontWeight": "400"
+        },
+        "h1": {
+          "fontSize": 30,
+          "lineHeight": 36.6,
+          "fontWeight": "600"
+        },
+        "h2": {
+          "fontSize": 22.1,
+          "lineHeight": 30.39,
+          "fontWeight": "400"
+        },
+        "a": {
+          "fontSize": 13,
+          "lineHeight": 17.88,
+          "fontWeight": "400"
+        },
+        "p": {
+          "fontSize": 13,
+          "lineHeight": 17.88,
+          "fontWeight": "400"
+        },
+        "button": {
+          "fontSize": 14,
+          "lineHeight": "normal",
+          "fontWeight": "600"
+        }
+      },
+      "cardAspectRatios": [
+        {
+          "ratio": 0.67,
+          "count": 41
+        },
+        {
+          "ratio": 0.56,
+          "count": 6
+        },
+        {
+          "ratio": 0.57,
+          "count": 1
+        }
+      ],
+      "topLevelSections": [
+        {
+          "index": 0,
+          "tag": "h1",
+          "height": 36.59,
+          "childCount": 0
+        },
+        {
+          "index": 1,
+          "tag": "p",
+          "height": 17.88,
+          "childCount": 0
+        },
+        {
+          "index": 2,
+          "tag": "nav",
+          "height": 75.75,
+          "childCount": 14
+        },
+        {
+          "index": 3,
+          "tag": "section",
+          "height": 396.91,
+          "childCount": 2
+        },
+        {
+          "index": 4,
+          "tag": "section",
+          "height": 396.91,
+          "childCount": 2
+        },
+        {
+          "index": 5,
+          "tag": "section",
+          "height": 396.91,
+          "childCount": 2
+        },
+        {
+          "index": 6,
+          "tag": "section",
+          "height": 443.02,
+          "childCount": 2
+        },
+        {
+          "index": 7,
+          "tag": "section",
+          "height": 162.25,
+          "childCount": 2
+        }
+      ],
+      "sectionCount": 8,
+      "grids": [
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        }
+      ],
+      "player": null,
+      "linkCount": 74,
+      "imageCount": 48,
+      "paginationLinks": 0,
+      "httpStatus": 200
+    },
+    "1920": {
+      "documentWidth": 1920,
+      "scrollHeight": 2302,
+      "horizontalOverflow": false,
+      "contentWidth": 1400,
+      "gutter": 260,
+      "header": {
+        "height": 69,
+        "position": "fixed",
+        "sticky": true
+      },
+      "typography": {
+        "body": {
+          "fontSize": 13,
+          "lineHeight": 17.88,
+          "fontWeight": "400"
+        },
+        "h1": {
+          "fontSize": 30,
+          "lineHeight": 36.6,
+          "fontWeight": "600"
+        },
+        "h2": {
+          "fontSize": 22.1,
+          "lineHeight": 30.39,
+          "fontWeight": "400"
+        },
+        "a": {
+          "fontSize": 13,
+          "lineHeight": 17.88,
+          "fontWeight": "400"
+        },
+        "p": {
+          "fontSize": 13,
+          "lineHeight": 17.88,
+          "fontWeight": "400"
+        },
+        "button": {
+          "fontSize": 14,
+          "lineHeight": "normal",
+          "fontWeight": "600"
+        }
+      },
+      "cardAspectRatios": [
+        {
+          "ratio": 0.67,
+          "count": 41
+        },
+        {
+          "ratio": 0.56,
+          "count": 6
+        },
+        {
+          "ratio": 0.57,
+          "count": 1
+        }
+      ],
+      "topLevelSections": [
+        {
+          "index": 0,
+          "tag": "h1",
+          "height": 36.59,
+          "childCount": 0
+        },
+        {
+          "index": 1,
+          "tag": "p",
+          "height": 17.88,
+          "childCount": 0
+        },
+        {
+          "index": 2,
+          "tag": "nav",
+          "height": 75.75,
+          "childCount": 14
+        },
+        {
+          "index": 3,
+          "tag": "section",
+          "height": 396.91,
+          "childCount": 2
+        },
+        {
+          "index": 4,
+          "tag": "section",
+          "height": 396.91,
+          "childCount": 2
+        },
+        {
+          "index": 5,
+          "tag": "section",
+          "height": 396.91,
+          "childCount": 2
+        },
+        {
+          "index": 6,
+          "tag": "section",
+          "height": 443.02,
+          "childCount": 2
+        },
+        {
+          "index": 7,
+          "tag": "section",
+          "height": 162.25,
+          "childCount": 2
+        }
+      ],
+      "sectionCount": 8,
+      "grids": [
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        }
+      ],
+      "player": null,
+      "linkCount": 74,
+      "imageCount": 48,
+      "paginationLinks": 0,
+      "httpStatus": 200
+    }
+  },
+  "errors": []
+}

@@ -1,0 +1,238 @@
+{
+  "url": "https://w140.zona.plus/",
+  "measured_at": "2026-09-14T16:44:45.384Z",
+  "viewports": {
+    "390": {
+      "httpStatus": 200,
+      "body_background": "rgb(30, 37, 43)",
+      "body_color": "rgb(255, 255, 255)",
+      "body_font_family": "zonasans, sans-serif",
+      "html_background": "rgba(0, 0, 0, 0)",
+      "header_background": "rgb(84, 103, 120)",
+      "header_color": "rgb(255, 255, 255)",
+      "dominant_surfaces": [
+        {
+          "color": "rgba(255, 255, 255, 0.05)",
+          "area_px": 1316172,
+          "rgb": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "a": 0.05
+          }
+        },
+        {
+          "color": "rgba(0, 0, 0, 0.3)",
+          "area_px": 71736,
+          "rgb": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 0.3
+          }
+        },
+        {
+          "color": "rgb(84, 103, 120)",
+          "area_px": 64744,
+          "rgb": {
+            "r": 84,
+            "g": 103,
+            "b": 120,
+            "a": 1
+          }
+        },
+        {
+          "color": "rgb(29, 34, 43)",
+          "area_px": 23126,
+          "rgb": {
+            "r": 29,
+            "g": 34,
+            "b": 43,
+            "a": 1
+          }
+        },
+        {
+          "color": "rgb(0, 119, 255)",
+          "area_px": 576,
+          "rgb": {
+            "r": 0,
+            "g": 119,
+            "b": 255,
+            "a": 1
+          }
+        },
+        {
+          "color": "rgb(255, 119, 0)",
+          "area_px": 576,
+          "rgb": {
+            "r": 255,
+            "g": 119,
+            "b": 0,
+            "a": 1
+          }
+        }
+      ],
+      "link_colors": [
+        {
+          "color": "rgb(0, 0, 238)",
+          "count": 86,
+          "rgb": {
+            "r": 0,
+            "g": 0,
+            "b": 238,
+            "a": 1
+          }
+        },
+        {
+          "color": "rgb(255, 255, 255)",
+          "count": 6,
+          "rgb": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "a": 1
+          }
+        },
+        {
+          "color": "rgba(0, 0, 0, 0.54)",
+          "count": 2,
+          "rgb": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 0.54
+          }
+        },
+        {
+          "color": "rgb(255, 165, 0)",
+          "count": 1,
+          "rgb": {
+            "r": 255,
+            "g": 165,
+            "b": 0,
+            "a": 1
+          }
+        }
+      ],
+      "card_like_count": 1,
+      "heading_count": 88,
+      "nav_link_count": 4
+    },
+    "1440": {
+      "httpStatus": 200,
+      "body_background": "rgb(30, 37, 43)",
+      "body_color": "rgb(255, 255, 255)",
+      "body_font_family": "zonasans, sans-serif",
+      "html_background": "rgba(0, 0, 0, 0)",
+      "header_background": "rgb(84, 103, 120)",
+      "header_color": "rgb(255, 255, 255)",
+      "dominant_surfaces": [
+        {
+          "color": "rgba(255, 255, 255, 0.05)",
+          "area_px": 1871067,
+          "rgb": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "a": 0.05
+          }
+        },
+        {
+          "color": "rgba(0, 0, 0, 0.3)",
+          "area_px": 306743,
+          "rgb": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 0.3
+          }
+        },
+        {
+          "color": "rgb(84, 103, 120)",
+          "area_px": 160389,
+          "rgb": {
+            "r": 84,
+            "g": 103,
+            "b": 120,
+            "a": 1
+          }
+        },
+        {
+          "color": "rgb(255, 255, 255)",
+          "area_px": 13755,
+          "rgb": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "a": 1
+          }
+        },
+        {
+          "color": "rgb(0, 119, 255)",
+          "area_px": 576,
+          "rgb": {
+            "r": 0,
+            "g": 119,
+            "b": 255,
+            "a": 1
+          }
+        },
+        {
+          "color": "rgb(255, 119, 0)",
+          "area_px": 576,
+          "rgb": {
+            "r": 255,
+            "g": 119,
+            "b": 0,
+            "a": 1
+          }
+        }
+      ],
+      "link_colors": [
+        {
+          "color": "rgb(0, 0, 238)",
+          "count": 86,
+          "rgb": {
+            "r": 0,
+            "g": 0,
+            "b": 238,
+            "a": 1
+          }
+        },
+        {
+          "color": "rgb(255, 255, 255)",
+          "count": 6,
+          "rgb": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "a": 1
+          }
+        },
+        {
+          "color": "rgba(0, 0, 0, 0.54)",
+          "count": 2,
+          "rgb": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 0.54
+          }
+        },
+        {
+          "color": "rgb(255, 165, 0)",
+          "count": 1,
+          "rgb": {
+            "r": 255,
+            "g": 165,
+            "b": 0,
+            "a": 1
+          }
+        }
+      ],
+      "card_like_count": 1,
+      "heading_count": 88,
+      "nav_link_count": 4
+    }
+  }
+}

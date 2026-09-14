@@ -1,0 +1,1047 @@
+{
+  "url": "http://127.0.0.1:9302/",
+  "measured_at": "2026-09-14T17:05:53.324Z",
+  "viewports": {
+    "390": {
+      "documentWidth": 390,
+      "scrollHeight": 16086,
+      "horizontalOverflow": false,
+      "contentWidth": 378,
+      "gutter": 6,
+      "header": {
+        "height": 128,
+        "position": "relative",
+        "sticky": false
+      },
+      "typography": {
+        "body": {
+          "fontSize": 14,
+          "lineHeight": 20.3,
+          "fontWeight": "400"
+        },
+        "h1": {
+          "fontSize": 16,
+          "lineHeight": 20.8,
+          "fontWeight": "500"
+        },
+        "h2": {
+          "fontSize": 16,
+          "lineHeight": 23.2,
+          "fontWeight": "700"
+        },
+        "a": {
+          "fontSize": 14,
+          "lineHeight": 20.3,
+          "fontWeight": "400"
+        },
+        "p": {
+          "fontSize": 13,
+          "lineHeight": 18.85,
+          "fontWeight": "400"
+        },
+        "button": {
+          "fontSize": 13,
+          "lineHeight": "normal",
+          "fontWeight": "700"
+        }
+      },
+      "cardAspectRatios": [
+        {
+          "ratio": 0.86,
+          "count": 96
+        }
+      ],
+      "topLevelSections": [
+        {
+          "index": 0,
+          "tag": "h1",
+          "height": 41.59,
+          "childCount": 0
+        },
+        {
+          "index": 1,
+          "tag": "p",
+          "height": 18.84,
+          "childCount": 0
+        },
+        {
+          "index": 2,
+          "tag": "section",
+          "height": 3805.81,
+          "childCount": 2
+        },
+        {
+          "index": 3,
+          "tag": "section",
+          "height": 3805.81,
+          "childCount": 2
+        },
+        {
+          "index": 4,
+          "tag": "section",
+          "height": 208.38,
+          "childCount": 2
+        },
+        {
+          "index": 5,
+          "tag": "section",
+          "height": 3805.81,
+          "childCount": 2
+        },
+        {
+          "index": 6,
+          "tag": "section",
+          "height": 3805.81,
+          "childCount": 2
+        },
+        {
+          "index": 7,
+          "tag": "section",
+          "height": 188.08,
+          "childCount": 2
+        }
+      ],
+      "sectionCount": 8,
+      "grids": [
+        {
+          "columns": 2,
+          "gap": 10,
+          "children": 24
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        }
+      ],
+      "player": null,
+      "linkCount": 107,
+      "imageCount": 96,
+      "paginationLinks": 0,
+      "httpStatus": 200
+    },
+    "768": {
+      "documentWidth": 768,
+      "scrollHeight": 12764,
+      "horizontalOverflow": false,
+      "contentWidth": 766,
+      "gutter": 1,
+      "header": {
+        "height": 92,
+        "position": "relative",
+        "sticky": false
+      },
+      "typography": {
+        "body": {
+          "fontSize": 14,
+          "lineHeight": 20.3,
+          "fontWeight": "400"
+        },
+        "h1": {
+          "fontSize": 16,
+          "lineHeight": 20.8,
+          "fontWeight": "500"
+        },
+        "h2": {
+          "fontSize": 16,
+          "lineHeight": 23.2,
+          "fontWeight": "700"
+        },
+        "a": {
+          "fontSize": 14,
+          "lineHeight": 20.3,
+          "fontWeight": "400"
+        },
+        "p": {
+          "fontSize": 13,
+          "lineHeight": 18.85,
+          "fontWeight": "400"
+        },
+        "button": {
+          "fontSize": 13,
+          "lineHeight": "normal",
+          "fontWeight": "700"
+        }
+      },
+      "cardAspectRatios": [
+        {
+          "ratio": 0.86,
+          "count": 96
+        }
+      ],
+      "topLevelSections": [
+        {
+          "index": 0,
+          "tag": "h1",
+          "height": 20.8,
+          "childCount": 0
+        },
+        {
+          "index": 1,
+          "tag": "p",
+          "height": 18.84,
+          "childCount": 0
+        },
+        {
+          "index": 2,
+          "tag": "section",
+          "height": 3017.44,
+          "childCount": 2
+        },
+        {
+          "index": 3,
+          "tag": "section",
+          "height": 3017.44,
+          "childCount": 2
+        },
+        {
+          "index": 4,
+          "tag": "section",
+          "height": 167.78,
+          "childCount": 2
+        },
+        {
+          "index": 5,
+          "tag": "section",
+          "height": 3017.44,
+          "childCount": 2
+        },
+        {
+          "index": 6,
+          "tag": "section",
+          "height": 3017.44,
+          "childCount": 2
+        },
+        {
+          "index": 7,
+          "tag": "section",
+          "height": 147.48,
+          "childCount": 2
+        }
+      ],
+      "sectionCount": 8,
+      "grids": [
+        {
+          "columns": 3,
+          "gap": 10,
+          "children": 24
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        }
+      ],
+      "player": null,
+      "linkCount": 107,
+      "imageCount": 96,
+      "paginationLinks": 0,
+      "httpStatus": 200
+    },
+    "1024": {
+      "documentWidth": 1024,
+      "scrollHeight": 15939,
+      "horizontalOverflow": false,
+      "contentWidth": 1022,
+      "gutter": 1,
+      "header": {
+        "height": 92,
+        "position": "relative",
+        "sticky": false
+      },
+      "typography": {
+        "body": {
+          "fontSize": 14,
+          "lineHeight": 20.3,
+          "fontWeight": "400"
+        },
+        "h1": {
+          "fontSize": 16,
+          "lineHeight": 20.8,
+          "fontWeight": "500"
+        },
+        "h2": {
+          "fontSize": 16,
+          "lineHeight": 23.2,
+          "fontWeight": "700"
+        },
+        "a": {
+          "fontSize": 14,
+          "lineHeight": 20.3,
+          "fontWeight": "400"
+        },
+        "p": {
+          "fontSize": 13,
+          "lineHeight": 18.85,
+          "fontWeight": "400"
+        },
+        "button": {
+          "fontSize": 13,
+          "lineHeight": "normal",
+          "fontWeight": "700"
+        }
+      },
+      "cardAspectRatios": [
+        {
+          "ratio": 0.86,
+          "count": 96
+        }
+      ],
+      "topLevelSections": [
+        {
+          "index": 0,
+          "tag": "h1",
+          "height": 20.8,
+          "childCount": 0
+        },
+        {
+          "index": 1,
+          "tag": "p",
+          "height": 18.84,
+          "childCount": 0
+        },
+        {
+          "index": 2,
+          "tag": "section",
+          "height": 3811.19,
+          "childCount": 2
+        },
+        {
+          "index": 3,
+          "tag": "section",
+          "height": 3811.19,
+          "childCount": 2
+        },
+        {
+          "index": 4,
+          "tag": "section",
+          "height": 167.78,
+          "childCount": 2
+        },
+        {
+          "index": 5,
+          "tag": "section",
+          "height": 3811.19,
+          "childCount": 2
+        },
+        {
+          "index": 6,
+          "tag": "section",
+          "height": 3811.19,
+          "childCount": 2
+        },
+        {
+          "index": 7,
+          "tag": "section",
+          "height": 147.48,
+          "childCount": 2
+        }
+      ],
+      "sectionCount": 8,
+      "grids": [
+        {
+          "columns": 3,
+          "gap": 10,
+          "children": 24
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        }
+      ],
+      "player": null,
+      "linkCount": 107,
+      "imageCount": 96,
+      "paginationLinks": 0,
+      "httpStatus": 200
+    },
+    "1440": {
+      "documentWidth": 1440,
+      "scrollHeight": 12640,
+      "horizontalOverflow": false,
+      "contentWidth": 1438,
+      "gutter": 1,
+      "header": {
+        "height": 92,
+        "position": "relative",
+        "sticky": false
+      },
+      "typography": {
+        "body": {
+          "fontSize": 14,
+          "lineHeight": 20.3,
+          "fontWeight": "400"
+        },
+        "h1": {
+          "fontSize": 16,
+          "lineHeight": 20.8,
+          "fontWeight": "500"
+        },
+        "h2": {
+          "fontSize": 16,
+          "lineHeight": 23.2,
+          "fontWeight": "700"
+        },
+        "a": {
+          "fontSize": 14,
+          "lineHeight": 20.3,
+          "fontWeight": "400"
+        },
+        "p": {
+          "fontSize": 13,
+          "lineHeight": 18.85,
+          "fontWeight": "400"
+        },
+        "button": {
+          "fontSize": 13,
+          "lineHeight": "normal",
+          "fontWeight": "700"
+        }
+      },
+      "cardAspectRatios": [
+        {
+          "ratio": 0.86,
+          "count": 96
+        }
+      ],
+      "topLevelSections": [
+        {
+          "index": 0,
+          "tag": "h1",
+          "height": 20.8,
+          "childCount": 0
+        },
+        {
+          "index": 1,
+          "tag": "p",
+          "height": 18.84,
+          "childCount": 0
+        },
+        {
+          "index": 2,
+          "tag": "section",
+          "height": 2991.31,
+          "childCount": 2
+        },
+        {
+          "index": 3,
+          "tag": "section",
+          "height": 2991.31,
+          "childCount": 2
+        },
+        {
+          "index": 4,
+          "tag": "section",
+          "height": 147.48,
+          "childCount": 2
+        },
+        {
+          "index": 5,
+          "tag": "section",
+          "height": 2991.31,
+          "childCount": 2
+        },
+        {
+          "index": 6,
+          "tag": "section",
+          "height": 2991.31,
+          "childCount": 2
+        },
+        {
+          "index": 7,
+          "tag": "section",
+          "height": 147.48,
+          "childCount": 2
+        }
+      ],
+      "sectionCount": 8,
+      "grids": [
+        {
+          "columns": 4,
+          "gap": 10,
+          "children": 24
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        }
+      ],
+      "player": null,
+      "linkCount": 107,
+      "imageCount": 96,
+      "paginationLinks": 0,
+      "httpStatus": 200
+    },
+    "1920": {
+      "documentWidth": 1920,
+      "scrollHeight": 7934,
+      "horizontalOverflow": false,
+      "contentWidth": 1918,
+      "gutter": 1,
+      "header": {
+        "height": 92,
+        "position": "relative",
+        "sticky": false
+      },
+      "typography": {
+        "body": {
+          "fontSize": 14,
+          "lineHeight": 20.3,
+          "fontWeight": "400"
+        },
+        "h1": {
+          "fontSize": 16,
+          "lineHeight": 20.8,
+          "fontWeight": "500"
+        },
+        "h2": {
+          "fontSize": 16,
+          "lineHeight": 23.2,
+          "fontWeight": "700"
+        },
+        "a": {
+          "fontSize": 14,
+          "lineHeight": 20.3,
+          "fontWeight": "400"
+        },
+        "p": {
+          "fontSize": 13,
+          "lineHeight": 18.85,
+          "fontWeight": "400"
+        },
+        "button": {
+          "fontSize": 13,
+          "lineHeight": "normal",
+          "fontWeight": "700"
+        }
+      },
+      "cardAspectRatios": [
+        {
+          "ratio": 0.86,
+          "count": 96
+        }
+      ],
+      "topLevelSections": [
+        {
+          "index": 0,
+          "tag": "h1",
+          "height": 20.8,
+          "childCount": 0
+        },
+        {
+          "index": 1,
+          "tag": "p",
+          "height": 18.84,
+          "childCount": 0
+        },
+        {
+          "index": 2,
+          "tag": "section",
+          "height": 1814.81,
+          "childCount": 2
+        },
+        {
+          "index": 3,
+          "tag": "section",
+          "height": 1814.81,
+          "childCount": 2
+        },
+        {
+          "index": 4,
+          "tag": "section",
+          "height": 147.48,
+          "childCount": 2
+        },
+        {
+          "index": 5,
+          "tag": "section",
+          "height": 1814.81,
+          "childCount": 2
+        },
+        {
+          "index": 6,
+          "tag": "section",
+          "height": 1814.81,
+          "childCount": 2
+        },
+        {
+          "index": 7,
+          "tag": "section",
+          "height": 147.48,
+          "childCount": 2
+        }
+      ],
+      "sectionCount": 8,
+      "grids": [
+        {
+          "columns": 6,
+          "gap": 10,
+          "children": 24
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        },
+        {
+          "columns": 1,
+          "gap": 0,
+          "children": 1
+        }
+      ],
+      "player": null,
+      "linkCount": 107,
+      "imageCount": 96,
+      "paginationLinks": 0,
+      "httpStatus": 200
+    }
+  },
+  "errors": []
+}

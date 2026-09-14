@@ -1,0 +1,307 @@
+{
+  "url": "https://w140.zona.plus/",
+  "measured_at": "2026-09-14T16:42:59.213Z",
+  "viewports": {
+    "390": {
+      "documentWidth": 390,
+      "scrollHeight": 1843,
+      "horizontalOverflow": true,
+      "contentWidth": 358,
+      "gutter": 16,
+      "header": {
+        "height": 116.59,
+        "position": "fixed",
+        "sticky": true
+      },
+      "typography": {
+        "body": {
+          "fontSize": 11,
+          "lineHeight": 15.13,
+          "fontWeight": "400"
+        },
+        "h2": {
+          "fontSize": 18.7,
+          "lineHeight": 26.18,
+          "fontWeight": "400"
+        },
+        "h3": {
+          "fontSize": 12.1,
+          "lineHeight": 16.5,
+          "fontWeight": "400"
+        },
+        "a": {
+          "fontSize": 13.2,
+          "lineHeight": 15.13,
+          "fontWeight": "500"
+        },
+        "p": {
+          "fontSize": 16.5,
+          "lineHeight": 16.5,
+          "fontWeight": "400"
+        },
+        "button": {
+          "fontSize": 13.33,
+          "lineHeight": "normal",
+          "fontWeight": "400"
+        }
+      },
+      "cardAspectRatios": [],
+      "topLevelSections": [
+        {
+          "index": 0,
+          "tag": "div",
+          "height": 1200.44,
+          "childCount": 5
+        }
+      ],
+      "sectionCount": 1,
+      "grids": [],
+      "player": null,
+      "linkCount": 93,
+      "imageCount": 1,
+      "paginationLinks": 0,
+      "httpStatus": 200
+    },
+    "768": {
+      "documentWidth": 768,
+      "scrollHeight": 2101,
+      "horizontalOverflow": false,
+      "contentWidth": 736,
+      "gutter": 16,
+      "header": {
+        "height": 137.8,
+        "position": "fixed",
+        "sticky": true
+      },
+      "typography": {
+        "body": {
+          "fontSize": 13,
+          "lineHeight": 17.88,
+          "fontWeight": "400"
+        },
+        "h2": {
+          "fontSize": 22.1,
+          "lineHeight": 30.94,
+          "fontWeight": "400"
+        },
+        "h3": {
+          "fontSize": 14.3,
+          "lineHeight": 19.5,
+          "fontWeight": "400"
+        },
+        "a": {
+          "fontSize": 15.6,
+          "lineHeight": 17.88,
+          "fontWeight": "500"
+        },
+        "p": {
+          "fontSize": 19.5,
+          "lineHeight": 19.5,
+          "fontWeight": "400"
+        },
+        "button": {
+          "fontSize": 13.33,
+          "lineHeight": "normal",
+          "fontWeight": "400"
+        }
+      },
+      "cardAspectRatios": [],
+      "topLevelSections": [
+        {
+          "index": 0,
+          "tag": "div",
+          "height": 1399.17,
+          "childCount": 5
+        }
+      ],
+      "sectionCount": 1,
+      "grids": [],
+      "player": null,
+      "linkCount": 93,
+      "imageCount": 1,
+      "paginationLinks": 0,
+      "httpStatus": 200
+    },
+    "1024": {
+      "documentWidth": 1024,
+      "scrollHeight": 2101,
+      "horizontalOverflow": false,
+      "contentWidth": 992,
+      "gutter": 16,
+      "header": {
+        "height": 137.8,
+        "position": "fixed",
+        "sticky": true
+      },
+      "typography": {
+        "body": {
+          "fontSize": 13,
+          "lineHeight": 17.88,
+          "fontWeight": "400"
+        },
+        "h2": {
+          "fontSize": 22.1,
+          "lineHeight": 30.94,
+          "fontWeight": "400"
+        },
+        "h3": {
+          "fontSize": 14.3,
+          "lineHeight": 19.5,
+          "fontWeight": "400"
+        },
+        "a": {
+          "fontSize": 15.6,
+          "lineHeight": 17.88,
+          "fontWeight": "500"
+        },
+        "p": {
+          "fontSize": 19.5,
+          "lineHeight": 19.5,
+          "fontWeight": "400"
+        },
+        "button": {
+          "fontSize": 13.33,
+          "lineHeight": "normal",
+          "fontWeight": "400"
+        }
+      },
+      "cardAspectRatios": [],
+      "topLevelSections": [
+        {
+          "index": 0,
+          "tag": "div",
+          "height": 1399.17,
+          "childCount": 5
+        }
+      ],
+      "sectionCount": 1,
+      "grids": [],
+      "player": null,
+      "linkCount": 93,
+      "imageCount": 1,
+      "paginationLinks": 0,
+      "httpStatus": 200
+    },
+    "1440": {
+      "documentWidth": 1440,
+      "scrollHeight": 2058,
+      "horizontalOverflow": false,
+      "contentWidth": 1400,
+      "gutter": 20,
+      "header": {
+        "height": 68.89,
+        "position": "fixed",
+        "sticky": true
+      },
+      "typography": {
+        "body": {
+          "fontSize": 13,
+          "lineHeight": 17.88,
+          "fontWeight": "400"
+        },
+        "h2": {
+          "fontSize": 22.1,
+          "lineHeight": 30.94,
+          "fontWeight": "400"
+        },
+        "h3": {
+          "fontSize": 14.3,
+          "lineHeight": 19.5,
+          "fontWeight": "400"
+        },
+        "a": {
+          "fontSize": 15.6,
+          "lineHeight": 17.88,
+          "fontWeight": "500"
+        },
+        "p": {
+          "fontSize": 19.5,
+          "lineHeight": 19.5,
+          "fontWeight": "400"
+        },
+        "button": {
+          "fontSize": 13.33,
+          "lineHeight": "normal",
+          "fontWeight": "400"
+        }
+      },
+      "cardAspectRatios": [],
+      "topLevelSections": [
+        {
+          "index": 0,
+          "tag": "div",
+          "height": 1425.42,
+          "childCount": 5
+        }
+      ],
+      "sectionCount": 1,
+      "grids": [],
+      "player": null,
+      "linkCount": 93,
+      "imageCount": 1,
+      "paginationLinks": 0,
+      "httpStatus": 200
+    },
+    "1920": {
+      "documentWidth": 1920,
+      "scrollHeight": 2058,
+      "horizontalOverflow": false,
+      "contentWidth": 1400,
+      "gutter": 260,
+      "header": {
+        "height": 68.89,
+        "position": "fixed",
+        "sticky": true
+      },
+      "typography": {
+        "body": {
+          "fontSize": 13,
+          "lineHeight": 17.88,
+          "fontWeight": "400"
+        },
+        "h2": {
+          "fontSize": 22.1,
+          "lineHeight": 30.94,
+          "fontWeight": "400"
+        },
+        "h3": {
+          "fontSize": 14.3,
+          "lineHeight": 19.5,
+          "fontWeight": "400"
+        },
+        "a": {
+          "fontSize": 15.6,
+          "lineHeight": 17.88,
+          "fontWeight": "500"
+        },
+        "p": {
+          "fontSize": 19.5,
+          "lineHeight": 19.5,
+          "fontWeight": "400"
+        },
+        "button": {
+          "fontSize": 13.33,
+          "lineHeight": "normal",
+          "fontWeight": "400"
+        }
+      },
+      "cardAspectRatios": [],
+      "topLevelSections": [
+        {
+          "index": 0,
+          "tag": "div",
+          "height": 1425.42,
+          "childCount": 5
+        }
+      ],
+      "sectionCount": 1,
+      "grids": [],
+      "player": null,
+      "linkCount": 93,
+      "imageCount": 1,
+      "paginationLinks": 0,
+      "httpStatus": 200
+    }
+  },
+  "errors": []
+}

@@ -128,3 +128,20 @@ hosts:
     host: animedia.space
     purpose: "приёмка animedia.space: домен, TLS, health, версия шаблона"
     methods: [GET]
+
+  # --- визуальные эталоны интерфейса (read-only) ---------------------------
+  # Внесены заданием владельца TEMPLATES-ZONA-ANIMEDIA-VISUAL-PARITY-006
+  # (OWNER_AUTHORIZATION_REFERENCE_GET_ALLOWLIST=APPROVED). Только GET и только
+  # измерение интерфейса: каркас, сетка, размеры, интервалы, типографика, цвета,
+  # плотность, компоненты и поведение на изломах. Тексты, изображения, бренд и
+  # код эталонов не сохраняются и в наши витрины не переносятся — это условие
+  # inventory/reference-sources.yaml, и задание на паритет его не смягчает.
+  # Wildcard не заводится намеренно: разрешены ровно два названных хоста.
+  - ref: zona-w140-ui-reference
+    host: w140.zona.plus
+    purpose: "UI reference: измерение каркаса, сетки и типографики Zona"
+    methods: [GET]
+  - ref: amd-online-ui-reference
+    host: amd.online
+    purpose: "UI reference: измерение каркаса, сетки и типографики Animedia"
+    methods: [GET]

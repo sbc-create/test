@@ -1,0 +1,69 @@
+{
+ "taken_at_utc": "2026-09-14T17:10:16Z",
+ "method": "полная прокрутка до низа, затем ожидание — lazy-изображения обязаны догрузиться",
+ "pages": [
+  {
+   "id": "zona-candidate",
+   "path": "/",
+   "total": 48,
+   "broken": 0,
+   "samples": []
+  },
+  {
+   "id": "zona-candidate",
+   "path": "/catalog/",
+   "total": 48,
+   "broken": 0,
+   "samples": []
+  },
+  {
+   "id": "zona-candidate",
+   "path": "/new/",
+   "total": 48,
+   "broken": 0,
+   "samples": []
+  },
+  {
+   "id": "animedia-candidate",
+   "path": "/",
+   "total": 96,
+   "broken": 0,
+   "samples": []
+  },
+  {
+   "id": "animedia-candidate",
+   "path": "/catalog/",
+   "total": 48,
+   "broken": 0,
+   "samples": []
+  },
+  {
+   "id": "animedia-candidate",
+   "path": "/new/",
+   "total": 48,
+   "broken": 0,
+   "samples": []
+  },
+  {
+   "id": "animedia-candidate",
+   "path": "/schedule/",
+   "total": 0,
+   "broken": 0,
+   "samples": []
+  },
+  {
+   "id": "animedia-proddata",
+   "path": "/",
+   "total": 24,
+   "broken": 0,
+   "samples": []
+  },
+  {
+   "id": "animedia-proddata",
+   "path": "/catalog/",
+   "total": 48,
+   "broken": 0,
+   "samples": []
+  }
+ ]
+}

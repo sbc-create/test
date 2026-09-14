@@ -1,0 +1,10 @@
+{
+ "schema_version": 1,
+ "template_family": "zona",
+ "design_version": "1.2.0",
+ "source_commit": "preview",
+ "build_id": "preview-006",
+ "artifact_sha256": "f40b7f5e2fef11470668e54b0cf2d2419253c092a6807685eef421e2f9ee439b",
+ "profile": "zona-general",
+ "built_at": "2026-09-14T00:00:00Z"
+}

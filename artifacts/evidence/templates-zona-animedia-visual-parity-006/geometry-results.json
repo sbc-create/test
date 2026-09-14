@@ -1,0 +1,116 @@
+{
+ "zona": {
+  "390": {
+   "content_ref": 358,
+   "content_cand": 358,
+   "d_content": 0,
+   "d_gutter": 0,
+   "d_header": 3.15,
+   "overflow_ref": true,
+   "overflow_cand": false,
+   "body_ref": 11,
+   "body_cand": 13
+  },
+  "768": {
+   "content_ref": 736,
+   "content_cand": 736,
+   "d_content": 0,
+   "d_gutter": 0,
+   "d_header": 0.36,
+   "overflow_ref": false,
+   "overflow_cand": false,
+   "body_ref": 13,
+   "body_cand": 13
+  },
+  "1024": {
+   "content_ref": 992,
+   "content_cand": 992,
+   "d_content": 0,
+   "d_gutter": 0,
+   "d_header": 0.36,
+   "overflow_ref": false,
+   "overflow_cand": false,
+   "body_ref": 13,
+   "body_cand": 13
+  },
+  "1440": {
+   "content_ref": 1400,
+   "content_cand": 1400,
+   "d_content": 0,
+   "d_gutter": 0,
+   "d_header": 0.11,
+   "overflow_ref": false,
+   "overflow_cand": false,
+   "body_ref": 13,
+   "body_cand": 13
+  },
+  "1920": {
+   "content_ref": 1400,
+   "content_cand": 1400,
+   "d_content": 0,
+   "d_gutter": 0,
+   "d_header": 0.11,
+   "overflow_ref": false,
+   "overflow_cand": false,
+   "body_ref": 13,
+   "body_cand": 13
+  }
+ },
+ "animedia": {
+  "390": {
+   "content_ref": 378,
+   "content_cand": 378,
+   "d_content": 0,
+   "d_gutter": 0,
+   "d_header": 2,
+   "overflow_ref": false,
+   "overflow_cand": false,
+   "body_ref": 14,
+   "body_cand": 14
+  },
+  "768": {
+   "content_ref": 766,
+   "content_cand": 766,
+   "d_content": 0,
+   "d_gutter": 0,
+   "d_header": 2,
+   "overflow_ref": false,
+   "overflow_cand": false,
+   "body_ref": 14,
+   "body_cand": 14
+  },
+  "1024": {
+   "content_ref": 1022,
+   "content_cand": 1022,
+   "d_content": 0,
+   "d_gutter": 0,
+   "d_header": 2,
+   "overflow_ref": false,
+   "overflow_cand": false,
+   "body_ref": 14,
+   "body_cand": 14
+  },
+  "1440": {
+   "content_ref": 1438,
+   "content_cand": 1438,
+   "d_content": 0,
+   "d_gutter": 0,
+   "d_header": 2,
+   "overflow_ref": false,
+   "overflow_cand": false,
+   "body_ref": 14,
+   "body_cand": 14
+  },
+  "1920": {
+   "content_ref": 1918,
+   "content_cand": 1918,
+   "d_content": 0,
+   "d_gutter": 0,
+   "d_header": 2,
+   "overflow_ref": false,
+   "overflow_cand": false,
+   "body_ref": 14,
+   "body_cand": 14
+  }
+ }
+}

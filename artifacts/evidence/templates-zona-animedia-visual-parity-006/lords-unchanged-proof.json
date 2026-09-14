@@ -1,0 +1,61 @@
+{
+ "проверено_utc": "2026-09-14",
+ "пары": [
+  {
+   "путь": "/",
+   "status_head": 200,
+   "status_cand": 200,
+   "sha_head": "3dd56a386c66697bc0929b1f7bccf8fa2d57ec0984450f7acaee2ce62b200dd1",
+   "sha_cand": "3dd56a386c66697bc0929b1f7bccf8fa2d57ec0984450f7acaee2ce62b200dd1",
+   "байты": 42518,
+   "совпало": true
+  },
+  {
+   "путь": "/catalog/",
+   "status_head": 200,
+   "status_cand": 200,
+   "sha_head": "3bd3a32a246d768392a08fc070434cf9227714af3f3a081d0eb7ffbc4b01fbe4",
+   "sha_cand": "3bd3a32a246d768392a08fc070434cf9227714af3f3a081d0eb7ffbc4b01fbe4",
+   "байты": 42625,
+   "совпало": true
+  },
+  {
+   "путь": "/new/",
+   "status_head": 200,
+   "status_cand": 200,
+   "sha_head": "b8504c9c20cd23e2d99cb715c5192f9eb18f4ea9fd64b58ad4c1111021977950",
+   "sha_cand": "b8504c9c20cd23e2d99cb715c5192f9eb18f4ea9fd64b58ad4c1111021977950",
+   "байты": 42549,
+   "совпало": true
+  },
+  {
+   "путь": "/healthz",
+   "status_head": 200,
+   "status_cand": 200,
+   "sha_head": "4062edaf750fb8074e7e83e0c9028c94e32468a8b6f1614774328ef045150f93",
+   "sha_cand": "4062edaf750fb8074e7e83e0c9028c94e32468a8b6f1614774328ef045150f93",
+   "байты": 11,
+   "совпало": true
+  },
+  {
+   "путь": "/catalog/?kind=Фильм",
+   "status_head": 200,
+   "status_cand": 200,
+   "sha_head": "9d1a8a13dc14521980ff7e816aeff259addb8d99822120b8cb56c6fc694e034c",
+   "sha_cand": "9d1a8a13dc14521980ff7e816aeff259addb8d99822120b8cb56c6fc694e034c",
+   "байты": 42612,
+   "совпало": true
+  },
+  {
+   "путь": "/nope/",
+   "status_head": 404,
+   "status_cand": 404,
+   "sha_head": "538fc4d1ee58067c5eccc47f75d4871eda1a6b480824aba1a264fd6d5fa53f35",
+   "sha_cand": "538fc4d1ee58067c5eccc47f75d4871eda1a6b480824aba1a264fd6d5fa53f35",
+   "байты": 13961,
+   "совпало": true
+  }
+ ],
+ "LORDS_SERVED_FINGERPRINT_UNCHANGED": "YES",
+ "метод": "Один и тот же манифест Lords 1.1.0 и один и тот же снимок каталога поданы двум витринам: одна исполняет файл из git HEAD, другая — файл кандидата. Сравниваются БАЙТЫ ответа, поэтому влияние данных исключено."
+}

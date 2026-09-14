@@ -149,7 +149,7 @@ const measureInPage = () => {
       const measurements = await page.evaluate(measureInPage);
       measurements.httpStatus = response ? response.status() : null;
       result.viewports[width] = measurements;
-      await page.screenshot({ path: path.join(outDir, `amd-online-${width}.png`), fullPage: false });
+      await page.screenshot({ path: path.join(outDir, `${path.basename(outDir)}-${width}.png`), fullPage: false });
     } catch (error) {
       result.errors.push({ stage: `viewport-${width}`, message: String(error).slice(0, 400) });
     } finally {

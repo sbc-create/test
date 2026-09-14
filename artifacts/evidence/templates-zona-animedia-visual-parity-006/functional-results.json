@@ -1,0 +1,3190 @@
+{
+ "taken_at_utc": "2026-09-14T17:07:17Z",
+ "shots": [
+  {
+   "id": "zona-candidate",
+   "viewport": "390x844",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "http://127.0.0.1:9301/",
+   "status": 200,
+   "utc": "2026-09-14T17:07:22Z",
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-006/screenshots/after/zona-candidate-home-390x844.png"
+  },
+  {
+   "id": "zona-candidate",
+   "viewport": "768x1024",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "http://127.0.0.1:9301/",
+   "status": 200,
+   "utc": "2026-09-14T17:07:27Z",
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-006/screenshots/after/zona-candidate-home-768x1024.png"
+  },
+  {
+   "id": "zona-candidate",
+   "viewport": "1440x900",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "http://127.0.0.1:9301/",
+   "status": 200,
+   "utc": "2026-09-14T17:07:32Z",
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-006/screenshots/after/zona-candidate-home-1440x900.png"
+  },
+  {
+   "id": "animedia-candidate",
+   "viewport": "390x844",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "http://127.0.0.1:9302/",
+   "status": 200,
+   "utc": "2026-09-14T17:08:01Z",
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-006/screenshots/after/animedia-candidate-home-390x844.png"
+  },
+  {
+   "id": "animedia-candidate",
+   "viewport": "768x1024",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "http://127.0.0.1:9302/",
+   "status": 200,
+   "utc": "2026-09-14T17:08:04Z",
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-006/screenshots/after/animedia-candidate-home-768x1024.png"
+  },
+  {
+   "id": "animedia-candidate",
+   "viewport": "1440x900",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "http://127.0.0.1:9302/",
+   "status": 200,
+   "utc": "2026-09-14T17:08:07Z",
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-006/screenshots/after/animedia-candidate-home-1440x900.png"
+  },
+  {
+   "id": "animedia-proddata",
+   "viewport": "390x844",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "http://127.0.0.1:9303/",
+   "status": 200,
+   "utc": "2026-09-14T17:08:35Z",
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-006/screenshots/after/animedia-proddata-home-390x844.png"
+  },
+  {
+   "id": "animedia-proddata",
+   "viewport": "768x1024",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "http://127.0.0.1:9303/",
+   "status": 200,
+   "utc": "2026-09-14T17:08:38Z",
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-006/screenshots/after/animedia-proddata-home-768x1024.png"
+  },
+  {
+   "id": "animedia-proddata",
+   "viewport": "1440x900",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "http://127.0.0.1:9303/",
+   "status": 200,
+   "utc": "2026-09-14T17:08:41Z",
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-006/screenshots/after/animedia-proddata-home-1440x900.png"
+  },
+  {
+   "id": "zona-reference",
+   "viewport": "390x844",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "https://w140.zona.plus/",
+   "status": 200,
+   "utc": "2026-09-14T17:09:06Z",
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-006/screenshots/reference/zona-reference-home-390x844.png"
+  },
+  {
+   "id": "zona-reference",
+   "viewport": "768x1024",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "https://w140.zona.plus/",
+   "status": 200,
+   "utc": "2026-09-14T17:09:13Z",
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-006/screenshots/reference/zona-reference-home-768x1024.png"
+  },
+  {
+   "id": "zona-reference",
+   "viewport": "1440x900",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "https://w140.zona.plus/",
+   "status": 200,
+   "utc": "2026-09-14T17:09:19Z",
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-006/screenshots/reference/zona-reference-home-1440x900.png"
+  },
+  {
+   "id": "animedia-reference",
+   "viewport": "390x844",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "https://amd.online/",
+   "status": 200,
+   "utc": "2026-09-14T17:09:24Z",
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-006/screenshots/reference/animedia-reference-home-390x844.png"
+  },
+  {
+   "id": "animedia-reference",
+   "viewport": "768x1024",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "https://amd.online/",
+   "status": 200,
+   "utc": "2026-09-14T17:09:31Z",
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-006/screenshots/reference/animedia-reference-home-768x1024.png"
+  },
+  {
+   "id": "animedia-reference",
+   "viewport": "1440x900",
+   "dpr": 1,
+   "browser": "chromium",
+   "theme": "default",
+   "url": "https://amd.online/",
+   "status": 200,
+   "utc": "2026-09-14T17:09:41Z",
+   "file": "artifacts/evidence/templates-zona-animedia-visual-parity-006/screenshots/reference/animedia-reference-home-1440x900.png"
+  }
+ ],
+ "pages": [
+  {
+   "id": "zona-candidate",
+   "path": "/",
+   "status": 200,
+   "imgs": 48,
+   "broken": 0,
+   "brokenSamples": [],
+   "titleLinks": [
+    "/title/na-kryuchke/",
+    "/title/littl-lorreyn/",
+    "/title/ya-ne-umru-ot-lyubvi/",
+    "/title/bez-polumer-kak-sozdavalsya-finalnyy-sezon-vo-vse-tyazhkie/",
+    "/title/istoriya-o-gorillah-rasskaz-devida-attenboro/",
+    "/title/lola-dast/",
+    "/title/sibil/",
+    "/title/istoriya-keyt-bush/",
+    "/title/kvadratura-kruga-istoriya-hipgnosis/",
+    "/title/semya/",
+    "/title/vzroslye/",
+    "/title/parasomniya/",
+    "/title/ng-morskie-odissei-otkryvaya-tihiy-okean/",
+    "/title/prizraki/",
+    "/title/nikto-ne-budet-skuchat-po-nam/",
+    "/title/glavnyy-podozrevaemyy/",
+    "/title/taynaya-strast/",
+    "/title/velvet-novaya-imperiya/",
+    "/title/rechnye-monstry/",
+    "/title/mramornye-shershni/",
+    "/title/odin-den-v-moem-tele/",
+    "/title/imperator-karlos/",
+    "/title/klan-chernaya-vdova/",
+    "/title/amazoniya/",
+    "/title/chto-prineset-zavtrashniy-den/",
+    "/title/glavnaya-zlodeyka/",
+    "/title/netlennyy/",
+    "/title/nochnoy-uzhas/",
+    "/title/ya-protiv-sebya/",
+    "/title/tayna-zhertva-na-pricele/",
+    "/title/sozdana-dlya-lyubvi/",
+    "/title/interval/",
+    "/title/ego-cel/",
+    "/title/sleduya-za-ney/",
+    "/title/gruzovik-smerti-2/",
+    "/title/vospominaniya-pokoynika/",
+    "/title/seriynyy-chistilschik/",
+    "/title/vo-vseoruzhii-sila-artefaktov/",
+    "/title/zhavoronok-vzyvaet-k-nebu/",
+    "/title/podpolnyy-mir/",
+    "/title/berezhno-otnositsya-k-zhenschine/",
+    "/title/prishedshiy-iz-drevnosti-2/",
+    "/title/dikaya-yaponiya/",
+    "/title/ne-sbezhat-ot-zhguchey-lyubvi/",
+    "/title/zakatnaya-lyubov/",
+    "/title/podozritelnye-sosedi/",
+    "/title/smertonosnye-ohotniki/",
+    "/title/skazochnye-vershiny-germanii/"
+   ],
+   "sections": [
+    {
+     "h": "Популярные новинки фильмов",
+     "slugs": [
+      "/title/na-kryuchke/",
+      "/title/littl-lorreyn/",
+      "/title/ya-ne-umru-ot-lyubvi/",
+      "/title/bez-polumer-kak-sozdavalsya-finalnyy-sezon-vo-vse-tyazhkie/",
+      "/title/istoriya-o-gorillah-rasskaz-devida-attenboro/",
+      "/title/lola-dast/",
+      "/title/sibil/",
+      "/title/istoriya-keyt-bush/",
+      "/title/kvadratura-kruga-istoriya-hipgnosis/",
+      "/title/semya/",
+      "/title/vzroslye/",
+      "/title/parasomniya/"
+     ],
+     "empty": false
+    },
+    {
+     "h": "Популярные сериалы",
+     "slugs": [
+      "/title/ng-morskie-odissei-otkryvaya-tihiy-okean/",
+      "/title/prizraki/",
+      "/title/nikto-ne-budet-skuchat-po-nam/",
+      "/title/glavnyy-podozrevaemyy/",
+      "/title/taynaya-strast/",
+      "/title/velvet-novaya-imperiya/",
+      "/title/rechnye-monstry/",
+      "/title/mramornye-shershni/",
+      "/title/odin-den-v-moem-tele/",
+      "/title/imperator-karlos/",
+      "/title/klan-chernaya-vdova/",
+      "/title/amazoniya/"
+     ],
+     "empty": false
+    },
+    {
+     "h": "Добавленные недавно фильмы",
+     "slugs": [
+      "/title/chto-prineset-zavtrashniy-den/",
+      "/title/glavnaya-zlodeyka/",
+      "/title/netlennyy/",
+      "/title/nochnoy-uzhas/",
+      "/title/ya-protiv-sebya/",
+      "/title/tayna-zhertva-na-pricele/",
+      "/title/sozdana-dlya-lyubvi/",
+      "/title/interval/",
+      "/title/ego-cel/",
+      "/title/sleduya-za-ney/",
+      "/title/gruzovik-smerti-2/",
+      "/title/vospominaniya-pokoynika/"
+     ],
+     "empty": false
+    },
+    {
+     "h": "Новые серии",
+     "slugs": [
+      "/title/seriynyy-chistilschik/",
+      "/title/vo-vseoruzhii-sila-artefaktov/",
+      "/title/zhavoronok-vzyvaet-k-nebu/",
+      "/title/podpolnyy-mir/",
+      "/title/berezhno-otnositsya-k-zhenschine/",
+      "/title/prishedshiy-iz-drevnosti-2/",
+      "/title/dikaya-yaponiya/",
+      "/title/ne-sbezhat-ot-zhguchey-lyubvi/",
+      "/title/zakatnaya-lyubov/",
+      "/title/podozritelnye-sosedi/",
+      "/title/smertonosnye-ohotniki/",
+      "/title/skazochnye-vershiny-germanii/"
+     ],
+     "empty": false
+    },
+    {
+     "h": "Новые трейлеры",
+     "slugs": [],
+     "empty": true
+    }
+   ],
+   "h1": "Кинопортал: что смотреть и где это найти",
+   "bodyText": "",
+   "console_errors": [],
+   "requests_failed": [],
+   "link_statuses": [
+    {
+     "href": "/title/na-kryuchke/",
+     "status": 200
+    },
+    {
+     "href": "/title/littl-lorreyn/",
+     "status": 200
+    },
+    {
+     "href": "/title/ya-ne-umru-ot-lyubvi/",
+     "status": 200
+    },
+    {
+     "href": "/title/bez-polumer-kak-sozdavalsya-finalnyy-sezon-vo-vse-tyazhkie/",
+     "status": 200
+    },
+    {
+     "href": "/title/istoriya-o-gorillah-rasskaz-devida-attenboro/",
+     "status": 200
+    },
+    {
+     "href": "/title/lola-dast/",
+     "status": 200
+    },
+    {
+     "href": "/title/sibil/",
+     "status": 200
+    },
+    {
+     "href": "/title/istoriya-keyt-bush/",
+     "status": 200
+    },
+    {
+     "href": "/title/kvadratura-kruga-istoriya-hipgnosis/",
+     "status": 200
+    },
+    {
+     "href": "/title/semya/",
+     "status": 200
+    },
+    {
+     "href": "/title/vzroslye/",
+     "status": 200
+    },
+    {
+     "href": "/title/parasomniya/",
+     "status": 200
+    },
+    {
+     "href": "/title/ng-morskie-odissei-otkryvaya-tihiy-okean/",
+     "status": 200
+    },
+    {
+     "href": "/title/prizraki/",
+     "status": 200
+    },
+    {
+     "href": "/title/nikto-ne-budet-skuchat-po-nam/",
+     "status": 200
+    },
+    {
+     "href": "/title/glavnyy-podozrevaemyy/",
+     "status": 200
+    },
+    {
+     "href": "/title/taynaya-strast/",
+     "status": 200
+    },
+    {
+     "href": "/title/velvet-novaya-imperiya/",
+     "status": 200
+    },
+    {
+     "href": "/title/rechnye-monstry/",
+     "status": 200
+    },
+    {
+     "href": "/title/mramornye-shershni/",
+     "status": 200
+    },
+    {
+     "href": "/title/odin-den-v-moem-tele/",
+     "status": 200
+    },
+    {
+     "href": "/title/imperator-karlos/",
+     "status": 200
+    },
+    {
+     "href": "/title/klan-chernaya-vdova/",
+     "status": 200
+    },
+    {
+     "href": "/title/amazoniya/",
+     "status": 200
+    },
+    {
+     "href": "/title/chto-prineset-zavtrashniy-den/",
+     "status": 200
+    },
+    {
+     "href": "/title/glavnaya-zlodeyka/",
+     "status": 200
+    },
+    {
+     "href": "/title/netlennyy/",
+     "status": 200
+    },
+    {
+     "href": "/title/nochnoy-uzhas/",
+     "status": 200
+    },
+    {
+     "href": "/title/ya-protiv-sebya/",
+     "status": 200
+    },
+    {
+     "href": "/title/tayna-zhertva-na-pricele/",
+     "status": 200
+    },
+    {
+     "href": "/title/sozdana-dlya-lyubvi/",
+     "status": 200
+    },
+    {
+     "href": "/title/interval/",
+     "status": 200
+    },
+    {
+     "href": "/title/ego-cel/",
+     "status": 200
+    },
+    {
+     "href": "/title/sleduya-za-ney/",
+     "status": 200
+    },
+    {
+     "href": "/title/gruzovik-smerti-2/",
+     "status": 200
+    },
+    {
+     "href": "/title/vospominaniya-pokoynika/",
+     "status": 200
+    },
+    {
+     "href": "/title/seriynyy-chistilschik/",
+     "status": 200
+    },
+    {
+     "href": "/title/vo-vseoruzhii-sila-artefaktov/",
+     "status": 200
+    },
+    {
+     "href": "/title/zhavoronok-vzyvaet-k-nebu/",
+     "status": 200
+    },
+    {
+     "href": "/title/podpolnyy-mir/",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "id": "zona-candidate",
+   "path": "/catalog/",
+   "status": 200,
+   "imgs": 48,
+   "broken": 24,
+   "brokenSamples": [
+    "https://poster.cdnvideohub.com/01a09cd5-609f-7526-bcb1-8fa9b9c8fcef.webp",
+    "https://poster.cdnvideohub.com/01a09ccb-3231-7526-8934-d5f0fbbdaed4.webp",
+    "https://poster.cdnvideohub.com/01a09ca4-5152-7526-95f5-c84895903c1e.webp"
+   ],
+   "titleLinks": [
+    "/title/chto-prineset-zavtrashniy-den/",
+    "/title/glavnaya-zlodeyka/",
+    "/title/netlennyy/",
+    "/title/nochnoy-uzhas/",
+    "/title/ya-protiv-sebya/",
+    "/title/seriynyy-chistilschik/",
+    "/title/tayna-zhertva-na-pricele/",
+    "/title/sozdana-dlya-lyubvi/",
+    "/title/interval/",
+    "/title/ego-cel/",
+    "/title/sleduya-za-ney/",
+    "/title/gruzovik-smerti-2/",
+    "/title/vospominaniya-pokoynika/",
+    "/title/vo-vseoruzhii-sila-artefaktov/",
+    "/title/zhavoronok-vzyvaet-k-nebu/",
+    "/title/podpolnyy-mir/",
+    "/title/berezhno-otnositsya-k-zhenschine/",
+    "/title/dedushkina-lampa/",
+    "/title/ovosch-supergeroy-morkkorm/",
+    "/title/violonchelist-gosyu-1982/",
+    "/title/gorod-dozhdya/",
+    "/title/ryba/",
+    "/title/ksi-avant/",
+    "/title/korolevskie-kosmicheskie-sily-krylya-honneamiz/",
+    "/title/generator-gaul/",
+    "/title/tenti-lishniy-v-lyubvi/",
+    "/title/prishedshiy-iz-drevnosti-2/",
+    "/title/ispoved-shamana/",
+    "/title/operaciya-vozmezdie/",
+    "/title/dni-sakamoto-chast-2/",
+    "/title/shiku-bentu-i-chudesnoe-derevo-guavy/",
+    "/title/dikaya-yaponiya/",
+    "/title/chas-rasplaty/",
+    "/title/tayna-zakoldovannogo-zamka/",
+    "/title/monashki-v-bikini/",
+    "/title/zlaya-monahinya/",
+    "/title/za-maskoy/",
+    "/title/klub-ohotnikov/",
+    "/title/dvoynaya-zhizn-nyani/",
+    "/title/pohititeli-dush/",
+    "/title/piklbolisty/",
+    "/title/bez-prava-na-strah/",
+    "/title/littl-lorreyn/",
+    "/title/lyubov-pod-shum-priboya/",
+    "/title/mest-korallovogo-aspida/",
+    "/title/ee-posledniy-pacient/",
+    "/title/muhi/",
+    "/title/ne-sbezhat-ot-zhguchey-lyubvi/"
+   ],
+   "sections": [],
+   "h1": "Весь каталог",
+   "bodyText": "",
+   "console_errors": [],
+   "requests_failed": [],
+   "link_statuses": [
+    {
+     "href": "/title/chto-prineset-zavtrashniy-den/",
+     "status": 200
+    },
+    {
+     "href": "/title/glavnaya-zlodeyka/",
+     "status": 200
+    },
+    {
+     "href": "/title/netlennyy/",
+     "status": 200
+    },
+    {
+     "href": "/title/nochnoy-uzhas/",
+     "status": 200
+    },
+    {
+     "href": "/title/ya-protiv-sebya/",
+     "status": 200
+    },
+    {
+     "href": "/title/seriynyy-chistilschik/",
+     "status": 200
+    },
+    {
+     "href": "/title/tayna-zhertva-na-pricele/",
+     "status": 200
+    },
+    {
+     "href": "/title/sozdana-dlya-lyubvi/",
+     "status": 200
+    },
+    {
+     "href": "/title/interval/",
+     "status": 200
+    },
+    {
+     "href": "/title/ego-cel/",
+     "status": 200
+    },
+    {
+     "href": "/title/sleduya-za-ney/",
+     "status": 200
+    },
+    {
+     "href": "/title/gruzovik-smerti-2/",
+     "status": 200
+    },
+    {
+     "href": "/title/vospominaniya-pokoynika/",
+     "status": 200
+    },
+    {
+     "href": "/title/vo-vseoruzhii-sila-artefaktov/",
+     "status": 200
+    },
+    {
+     "href": "/title/zhavoronok-vzyvaet-k-nebu/",
+     "status": 200
+    },
+    {
+     "href": "/title/podpolnyy-mir/",
+     "status": 200
+    },
+    {
+     "href": "/title/berezhno-otnositsya-k-zhenschine/",
+     "status": 200
+    },
+    {
+     "href": "/title/dedushkina-lampa/",
+     "status": 200
+    },
+    {
+     "href": "/title/ovosch-supergeroy-morkkorm/",
+     "status": 200
+    },
+    {
+     "href": "/title/violonchelist-gosyu-1982/",
+     "status": 200
+    },
+    {
+     "href": "/title/gorod-dozhdya/",
+     "status": 200
+    },
+    {
+     "href": "/title/ryba/",
+     "status": 200
+    },
+    {
+     "href": "/title/ksi-avant/",
+     "status": 200
+    },
+    {
+     "href": "/title/korolevskie-kosmicheskie-sily-krylya-honneamiz/",
+     "status": 200
+    },
+    {
+     "href": "/title/generator-gaul/",
+     "status": 200
+    },
+    {
+     "href": "/title/tenti-lishniy-v-lyubvi/",
+     "status": 200
+    },
+    {
+     "href": "/title/prishedshiy-iz-drevnosti-2/",
+     "status": 200
+    },
+    {
+     "href": "/title/ispoved-shamana/",
+     "status": 200
+    },
+    {
+     "href": "/title/operaciya-vozmezdie/",
+     "status": 200
+    },
+    {
+     "href": "/title/dni-sakamoto-chast-2/",
+     "status": 200
+    },
+    {
+     "href": "/title/shiku-bentu-i-chudesnoe-derevo-guavy/",
+     "status": 200
+    },
+    {
+     "href": "/title/dikaya-yaponiya/",
+     "status": 200
+    },
+    {
+     "href": "/title/chas-rasplaty/",
+     "status": 200
+    },
+    {
+     "href": "/title/tayna-zakoldovannogo-zamka/",
+     "status": 200
+    },
+    {
+     "href": "/title/monashki-v-bikini/",
+     "status": 200
+    },
+    {
+     "href": "/title/zlaya-monahinya/",
+     "status": 200
+    },
+    {
+     "href": "/title/za-maskoy/",
+     "status": 200
+    },
+    {
+     "href": "/title/klub-ohotnikov/",
+     "status": 200
+    },
+    {
+     "href": "/title/dvoynaya-zhizn-nyani/",
+     "status": 200
+    },
+    {
+     "href": "/title/pohititeli-dush/",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "id": "zona-candidate",
+   "path": "/new/",
+   "status": 200,
+   "imgs": 48,
+   "broken": 24,
+   "brokenSamples": [
+    "https://poster.cdnvideohub.com/01a09cd5-609f-7526-bcb1-8fa9b9c8fcef.webp",
+    "https://poster.cdnvideohub.com/01a09ccb-3231-7526-8934-d5f0fbbdaed4.webp",
+    "https://poster.cdnvideohub.com/01a09ca4-5152-7526-95f5-c84895903c1e.webp"
+   ],
+   "titleLinks": [
+    "/title/chto-prineset-zavtrashniy-den/",
+    "/title/glavnaya-zlodeyka/",
+    "/title/netlennyy/",
+    "/title/nochnoy-uzhas/",
+    "/title/ya-protiv-sebya/",
+    "/title/seriynyy-chistilschik/",
+    "/title/tayna-zhertva-na-pricele/",
+    "/title/sozdana-dlya-lyubvi/",
+    "/title/interval/",
+    "/title/ego-cel/",
+    "/title/sleduya-za-ney/",
+    "/title/gruzovik-smerti-2/",
+    "/title/vospominaniya-pokoynika/",
+    "/title/vo-vseoruzhii-sila-artefaktov/",
+    "/title/zhavoronok-vzyvaet-k-nebu/",
+    "/title/podpolnyy-mir/",
+    "/title/berezhno-otnositsya-k-zhenschine/",
+    "/title/dedushkina-lampa/",
+    "/title/ovosch-supergeroy-morkkorm/",
+    "/title/violonchelist-gosyu-1982/",
+    "/title/gorod-dozhdya/",
+    "/title/ryba/",
+    "/title/ksi-avant/",
+    "/title/korolevskie-kosmicheskie-sily-krylya-honneamiz/",
+    "/title/generator-gaul/",
+    "/title/tenti-lishniy-v-lyubvi/",
+    "/title/prishedshiy-iz-drevnosti-2/",
+    "/title/ispoved-shamana/",
+    "/title/operaciya-vozmezdie/",
+    "/title/dni-sakamoto-chast-2/",
+    "/title/shiku-bentu-i-chudesnoe-derevo-guavy/",
+    "/title/dikaya-yaponiya/",
+    "/title/chas-rasplaty/",
+    "/title/tayna-zakoldovannogo-zamka/",
+    "/title/monashki-v-bikini/",
+    "/title/zlaya-monahinya/",
+    "/title/za-maskoy/",
+    "/title/klub-ohotnikov/",
+    "/title/dvoynaya-zhizn-nyani/",
+    "/title/pohititeli-dush/",
+    "/title/piklbolisty/",
+    "/title/bez-prava-na-strah/",
+    "/title/littl-lorreyn/",
+    "/title/lyubov-pod-shum-priboya/",
+    "/title/mest-korallovogo-aspida/",
+    "/title/ee-posledniy-pacient/",
+    "/title/muhi/",
+    "/title/ne-sbezhat-ot-zhguchey-lyubvi/"
+   ],
+   "sections": [],
+   "h1": "Что нового",
+   "bodyText": "",
+   "console_errors": [],
+   "requests_failed": [],
+   "link_statuses": [
+    {
+     "href": "/title/chto-prineset-zavtrashniy-den/",
+     "status": 200
+    },
+    {
+     "href": "/title/glavnaya-zlodeyka/",
+     "status": 200
+    },
+    {
+     "href": "/title/netlennyy/",
+     "status": 200
+    },
+    {
+     "href": "/title/nochnoy-uzhas/",
+     "status": 200
+    },
+    {
+     "href": "/title/ya-protiv-sebya/",
+     "status": 200
+    },
+    {
+     "href": "/title/seriynyy-chistilschik/",
+     "status": 200
+    },
+    {
+     "href": "/title/tayna-zhertva-na-pricele/",
+     "status": 200
+    },
+    {
+     "href": "/title/sozdana-dlya-lyubvi/",
+     "status": 200
+    },
+    {
+     "href": "/title/interval/",
+     "status": 200
+    },
+    {
+     "href": "/title/ego-cel/",
+     "status": 200
+    },
+    {
+     "href": "/title/sleduya-za-ney/",
+     "status": 200
+    },
+    {
+     "href": "/title/gruzovik-smerti-2/",
+     "status": 200
+    },
+    {
+     "href": "/title/vospominaniya-pokoynika/",
+     "status": 200
+    },
+    {
+     "href": "/title/vo-vseoruzhii-sila-artefaktov/",
+     "status": 200
+    },
+    {
+     "href": "/title/zhavoronok-vzyvaet-k-nebu/",
+     "status": 200
+    },
+    {
+     "href": "/title/podpolnyy-mir/",
+     "status": 200
+    },
+    {
+     "href": "/title/berezhno-otnositsya-k-zhenschine/",
+     "status": 200
+    },
+    {
+     "href": "/title/dedushkina-lampa/",
+     "status": 200
+    },
+    {
+     "href": "/title/ovosch-supergeroy-morkkorm/",
+     "status": 200
+    },
+    {
+     "href": "/title/violonchelist-gosyu-1982/",
+     "status": 200
+    },
+    {
+     "href": "/title/gorod-dozhdya/",
+     "status": 200
+    },
+    {
+     "href": "/title/ryba/",
+     "status": 200
+    },
+    {
+     "href": "/title/ksi-avant/",
+     "status": 200
+    },
+    {
+     "href": "/title/korolevskie-kosmicheskie-sily-krylya-honneamiz/",
+     "status": 200
+    },
+    {
+     "href": "/title/generator-gaul/",
+     "status": 200
+    },
+    {
+     "href": "/title/tenti-lishniy-v-lyubvi/",
+     "status": 200
+    },
+    {
+     "href": "/title/prishedshiy-iz-drevnosti-2/",
+     "status": 200
+    },
+    {
+     "href": "/title/ispoved-shamana/",
+     "status": 200
+    },
+    {
+     "href": "/title/operaciya-vozmezdie/",
+     "status": 200
+    },
+    {
+     "href": "/title/dni-sakamoto-chast-2/",
+     "status": 200
+    },
+    {
+     "href": "/title/shiku-bentu-i-chudesnoe-derevo-guavy/",
+     "status": 200
+    },
+    {
+     "href": "/title/dikaya-yaponiya/",
+     "status": 200
+    },
+    {
+     "href": "/title/chas-rasplaty/",
+     "status": 200
+    },
+    {
+     "href": "/title/tayna-zakoldovannogo-zamka/",
+     "status": 200
+    },
+    {
+     "href": "/title/monashki-v-bikini/",
+     "status": 200
+    },
+    {
+     "href": "/title/zlaya-monahinya/",
+     "status": 200
+    },
+    {
+     "href": "/title/za-maskoy/",
+     "status": 200
+    },
+    {
+     "href": "/title/klub-ohotnikov/",
+     "status": 200
+    },
+    {
+     "href": "/title/dvoynaya-zhizn-nyani/",
+     "status": 200
+    },
+    {
+     "href": "/title/pohititeli-dush/",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "id": "zona-candidate",
+   "path": "/search/?q=а",
+   "status": 200,
+   "imgs": 118,
+   "broken": 94,
+   "brokenSamples": [
+    "https://poster.cdnvideohub.com/019fd875-5f1c-7623-9425-48ffd7dca658.webp",
+    "https://poster.cdnvideohub.com/019fd6fa-2336-736d-b426-1aafa8ed541a.webp",
+    "https://poster.cdnvideohub.com/019fc7a8-87ef-78c2-a251-7cd3b5e35cfc.webp"
+   ],
+   "titleLinks": [
+    "/title/anonimnoe-pogruzhenie/",
+    "/title/albatros/",
+    "/title/akuloboroten/",
+    "/title/akuliy-shtorm/",
+    "/title/amazoniya/",
+    "/title/aeroplan-2-prodolzhenie/",
+    "/title/amerikanskiy-koyot/",
+    "/title/aeroportnyy-kapellan/",
+    "/title/amneziya/",
+    "/title/agata-kristian-igra-v-ubiystvo/",
+    "/title/angely-pri-smerti/",
+    "/title/atlas-king/",
+    "/title/akula-yurskogo-perioda-4-mehanicheskiy-mako/",
+    "/title/ataka-grizli/",
+    "/title/avtopilot/",
+    "/title/agent-vremeni-3/",
+    "/title/andon/",
+    "/title/akuliy-ugar/",
+    "/title/asy-i-malenkaya-lindan/",
+    "/title/aist-po-imeni-yaren/",
+    "/title/absolyutnaya-vershina-boga-voyny/",
+    "/title/anna-pidzhen/",
+    "/title/appartamenty-2/",
+    "/title/ambicioznyy-boss/",
+    "/title/avariya-lyubvi/",
+    "/title/avariynyy-vyhod/",
+    "/title/ariya-remiks/",
+    "/title/afera-po-persidski/",
+    "/title/amitivill-poteryannaya-kaseta/",
+    "/title/andre-idiot/",
+    "/title/agatya/",
+    "/title/avariya/",
+    "/title/ariella/",
+    "/title/anakondy/",
+    "/title/astral-6-oni-uzhe-zdes/",
+    "/title/alfa-muzhskaya-yarost/",
+    "/title/amitivillskiy-reks/",
+    "/title/alius-rassledovanie-konkretnogo-incidenta/",
+    "/title/avtostopom-k-baltiyskomu-moryu/",
+    "/title/amerikanka-za-granicey/",
+    "/title/amadeu/",
+    "/title/alfa/",
+    "/title/a-dalshe-tuman/",
+    "/title/akula-v-akvaparke/",
+    "/title/astronavt/",
+    "/title/agnes-protiv-mira/",
+    "/title/amerikanskiy-eksperiment/",
+    "/title/akkuratnaya-i-simpatichnaya-devochka-v-moey-novoy-shkole-podruga-detstva-s-kotor/",
+    "/title/akuly-na-rayone/",
+    "/title/agentstvo-dobryh-uslug-mahoro/",
+    "/title/amerikanskiy-samuray/",
+    "/title/anorgazmiya/",
+    "/title/ah-eta-pustota-eta-uzhasnaya-pustota/",
+    "/title/adile-nashit/",
+    "/title/arena-rezhissera/",
+    "/title/aktivy/",
+    "/title/anderkard/",
+    "/title/avtobus-francuzskiy-futbolnyy-bunt/",
+    "/title/aktrisa-prizrak/",
+    "/title/aida-vozvraschaetsya/",
+    "/title/aynali/",
+    "/title/avantyura-princessy/",
+    "/title/akuly-v-prage/",
+    "/title/assasin-smertelnaya-bitva/",
+    "/title/altarniki/",
+    "/title/avstraliyskie-voyny/",
+    "/title/astronom/",
+    "/title/angel-gneva/",
+    "/title/akademiya/",
+    "/title/anatomiya-odnogo-mgnoveniya/",
+    "/title/ahmed-i-ahmed/",
+    "/title/ariel/",
+    "/title/ayron-meyden-pylayuschee-stremlenie/",
+    "/title/autsaydery/",
+    "/title/adel-nepravednyy/",
+    "/title/anafema-pechat-zla/",
+    "/title/astronomiya/",
+    "/title/agenty-vremeni/",
+    "/title/arhiv-rassledovaniy-bukinisticheskogo-magazina-bibliya/",
+    "/title/aprelskaya-nevesta/",
+    "/title/aladdin/",
+    "/title/astral-shkola-koshmarov/",
+    "/title/angel-nischih/",
+    "/title/alibi/",
+    "/title/advokatskoe-byuro-yamady-todoroki/",
+    "/title/amerikanskie-gladiatory/",
+    "/title/absolyutnaya-cennost-romantiki/",
+    "/title/akakage-nindzya-v-maske/",
+    "/title/amrum/",
+    "/title/aromat-zhasmina/",
+    "/title/a-potom-sluchaetsya-zhizn/",
+    "/title/ad-v-rayckom-ugolke/",
+    "/title/aromat-privyazannosti/",
+    "/title/atele-koldovskih-kolpakov/",
+    "/title/agentura/",
+    "/title/amerikanskiy-zasov/",
+    "/title/adskiy-skeyt/",
+    "/title/angel-po-sosedstvu-2/",
+    "/title/avantyurist-pozhirayuschiy-demonov-ya-edinstvennyy-kto-stanovitsya-silnee-pozhir/",
+    "/title/agent-svyshe/",
+    "/title/angel-i-dyavol/",
+    "/title/azize/",
+    "/title/absolyutnyy-ekonomist/",
+    "/title/adepta-sororitas-pokayanie/",
+    "/title/agenty-chetyreh-sezonov-vesenniy-tanec/",
+    "/title/alisa-v-strane-chudes-pogruzhenie-v-stranu-chudes/",
+    "/title/a-potom-sel/",
+    "/title/akademiya-edinorogov-tayny-raskryty/",
+    "/title/angel-yavilsya-v-biblioteke/",
+    "/title/arkan-dlya-lebedya/",
+    "/title/ayris/",
+    "/title/ayris-2-2/",
+    "/title/arbuzogolovye-dom-doktora-krou/",
+    "/title/advokat-prizrakov/",
+    "/title/autsaydery-2/",
+    "/title/ay-devyshka-s-kassety-2018/",
+    "/title/a-ty-ne-izmenilsya/",
+    "/title/amsterdamskiy-koshmar-2/",
+    "/title/angkor-zemlya-bogov/",
+    "/title/afrikanskie-ohotniki/"
+   ],
+   "sections": [],
+   "h1": "«а»",
+   "bodyText": "",
+   "console_errors": [],
+   "requests_failed": [],
+   "link_statuses": [
+    {
+     "href": "/title/anonimnoe-pogruzhenie/",
+     "status": 200
+    },
+    {
+     "href": "/title/albatros/",
+     "status": 200
+    },
+    {
+     "href": "/title/akuloboroten/",
+     "status": 200
+    },
+    {
+     "href": "/title/akuliy-shtorm/",
+     "status": 200
+    },
+    {
+     "href": "/title/amazoniya/",
+     "status": 200
+    },
+    {
+     "href": "/title/aeroplan-2-prodolzhenie/",
+     "status": 200
+    },
+    {
+     "href": "/title/amerikanskiy-koyot/",
+     "status": 200
+    },
+    {
+     "href": "/title/aeroportnyy-kapellan/",
+     "status": 200
+    },
+    {
+     "href": "/title/amneziya/",
+     "status": 200
+    },
+    {
+     "href": "/title/agata-kristian-igra-v-ubiystvo/",
+     "status": 200
+    },
+    {
+     "href": "/title/angely-pri-smerti/",
+     "status": 200
+    },
+    {
+     "href": "/title/atlas-king/",
+     "status": 200
+    },
+    {
+     "href": "/title/akula-yurskogo-perioda-4-mehanicheskiy-mako/",
+     "status": 200
+    },
+    {
+     "href": "/title/ataka-grizli/",
+     "status": 200
+    },
+    {
+     "href": "/title/avtopilot/",
+     "status": 200
+    },
+    {
+     "href": "/title/agent-vremeni-3/",
+     "status": 200
+    },
+    {
+     "href": "/title/andon/",
+     "status": 200
+    },
+    {
+     "href": "/title/akuliy-ugar/",
+     "status": 200
+    },
+    {
+     "href": "/title/asy-i-malenkaya-lindan/",
+     "status": 200
+    },
+    {
+     "href": "/title/aist-po-imeni-yaren/",
+     "status": 200
+    },
+    {
+     "href": "/title/absolyutnaya-vershina-boga-voyny/",
+     "status": 200
+    },
+    {
+     "href": "/title/anna-pidzhen/",
+     "status": 200
+    },
+    {
+     "href": "/title/appartamenty-2/",
+     "status": 200
+    },
+    {
+     "href": "/title/ambicioznyy-boss/",
+     "status": 200
+    },
+    {
+     "href": "/title/avariya-lyubvi/",
+     "status": 200
+    },
+    {
+     "href": "/title/avariynyy-vyhod/",
+     "status": 200
+    },
+    {
+     "href": "/title/ariya-remiks/",
+     "status": 200
+    },
+    {
+     "href": "/title/afera-po-persidski/",
+     "status": 200
+    },
+    {
+     "href": "/title/amitivill-poteryannaya-kaseta/",
+     "status": 200
+    },
+    {
+     "href": "/title/andre-idiot/",
+     "status": 200
+    },
+    {
+     "href": "/title/agatya/",
+     "status": 200
+    },
+    {
+     "href": "/title/avariya/",
+     "status": 200
+    },
+    {
+     "href": "/title/ariella/",
+     "status": 200
+    },
+    {
+     "href": "/title/anakondy/",
+     "status": 200
+    },
+    {
+     "href": "/title/astral-6-oni-uzhe-zdes/",
+     "status": 200
+    },
+    {
+     "href": "/title/alfa-muzhskaya-yarost/",
+     "status": 200
+    },
+    {
+     "href": "/title/amitivillskiy-reks/",
+     "status": 200
+    },
+    {
+     "href": "/title/alius-rassledovanie-konkretnogo-incidenta/",
+     "status": 200
+    },
+    {
+     "href": "/title/avtostopom-k-baltiyskomu-moryu/",
+     "status": 200
+    },
+    {
+     "href": "/title/amerikanka-za-granicey/",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "id": "zona-candidate",
+   "path": "/search/?q=zzzqqq",
+   "status": 200,
+   "imgs": 0,
+   "broken": 0,
+   "brokenSamples": [],
+   "titleLinks": [],
+   "sections": [],
+   "h1": "«zzzqqq»",
+   "bodyText": "",
+   "console_errors": [],
+   "requests_failed": [],
+   "link_statuses": []
+  },
+  {
+   "id": "zona-candidate",
+   "path": "/nope/",
+   "status": 404,
+   "imgs": 0,
+   "broken": 0,
+   "brokenSamples": [],
+   "titleLinks": [],
+   "sections": [],
+   "h1": "Страница не найдена",
+   "bodyText": "",
+   "console_errors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+   ],
+   "requests_failed": [],
+   "link_statuses": []
+  },
+  {
+   "id": "animedia-candidate",
+   "path": "/",
+   "status": 200,
+   "imgs": 96,
+   "broken": 64,
+   "brokenSamples": [
+    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9",
+    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9",
+    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9"
+   ],
+   "titleLinks": [
+    "/title/obrazec-028/",
+    "/title/obrazec-056/",
+    "/title/obrazec-084/",
+    "/title/obrazec-112/",
+    "/title/obrazec-027/",
+    "/title/obrazec-055/",
+    "/title/obrazec-083/",
+    "/title/obrazec-111/",
+    "/title/obrazec-026/",
+    "/title/obrazec-082/",
+    "/title/obrazec-025/",
+    "/title/obrazec-053/",
+    "/title/obrazec-081/",
+    "/title/obrazec-109/",
+    "/title/obrazec-024/",
+    "/title/obrazec-052/",
+    "/title/obrazec-080/",
+    "/title/obrazec-108/",
+    "/title/obrazec-023/",
+    "/title/obrazec-051/",
+    "/title/obrazec-079/",
+    "/title/obrazec-107/",
+    "/title/obrazec-050/",
+    "/title/obrazec-106/",
+    "/title/obrazec-021/",
+    "/title/obrazec-049/",
+    "/title/obrazec-077/",
+    "/title/obrazec-105/",
+    "/title/obrazec-020/",
+    "/title/obrazec-048/",
+    "/title/obrazec-076/",
+    "/title/obrazec-104/",
+    "/title/obrazec-019/",
+    "/title/obrazec-047/",
+    "/title/obrazec-075/",
+    "/title/obrazec-103/",
+    "/title/obrazec-018/",
+    "/title/obrazec-074/",
+    "/title/obrazec-017/",
+    "/title/obrazec-045/",
+    "/title/obrazec-073/",
+    "/title/obrazec-101/",
+    "/title/obrazec-016/",
+    "/title/obrazec-044/",
+    "/title/obrazec-072/",
+    "/title/obrazec-100/",
+    "/title/obrazec-015/",
+    "/title/obrazec-043/",
+    "/title/obrazec-054/",
+    "/title/obrazec-110/",
+    "/title/obrazec-022/",
+    "/title/obrazec-078/",
+    "/title/obrazec-046/",
+    "/title/obrazec-102/",
+    "/title/obrazec-071/",
+    "/title/obrazec-099/",
+    "/title/obrazec-014/",
+    "/title/obrazec-042/",
+    "/title/obrazec-070/",
+    "/title/obrazec-098/",
+    "/title/obrazec-013/",
+    "/title/obrazec-041/",
+    "/title/obrazec-069/",
+    "/title/obrazec-097/",
+    "/title/obrazec-012/",
+    "/title/obrazec-040/",
+    "/title/obrazec-068/",
+    "/title/obrazec-096/",
+    "/title/obrazec-011/",
+    "/title/obrazec-039/",
+    "/title/obrazec-067/",
+    "/title/obrazec-095/",
+    "/title/obrazec-119/",
+    "/title/obrazec-089/",
+    "/title/obrazec-059/",
+    "/title/obrazec-029/",
+    "/title/obrazec-117/",
+    "/title/obrazec-087/",
+    "/title/obrazec-057/",
+    "/title/obrazec-115/",
+    "/title/obrazec-085/",
+    "/title/obrazec-113/",
+    "/title/obrazec-093/",
+    "/title/obrazec-091/",
+    "/title/obrazec-065/",
+    "/title/obrazec-009/",
+    "/title/obrazec-063/",
+    "/title/obrazec-037/",
+    "/title/obrazec-007/",
+    "/title/obrazec-061/",
+    "/title/obrazec-035/",
+    "/title/obrazec-005/",
+    "/title/obrazec-033/",
+    "/title/obrazec-003/",
+    "/title/obrazec-031/",
+    "/title/obrazec-001/"
+   ],
+   "sections": [
+    {
+     "h": "Онгоинги",
+     "slugs": [
+      "/title/obrazec-028/",
+      "/title/obrazec-056/",
+      "/title/obrazec-084/",
+      "/title/obrazec-112/",
+      "/title/obrazec-027/",
+      "/title/obrazec-055/",
+      "/title/obrazec-083/",
+      "/title/obrazec-111/",
+      "/title/obrazec-026/",
+      "/title/obrazec-082/",
+      "/title/obrazec-025/",
+      "/title/obrazec-053/",
+      "/title/obrazec-081/",
+      "/title/obrazec-109/",
+      "/title/obrazec-024/",
+      "/title/obrazec-052/",
+      "/title/obrazec-080/",
+      "/title/obrazec-108/",
+      "/title/obrazec-023/",
+      "/title/obrazec-051/",
+      "/title/obrazec-079/",
+      "/title/obrazec-107/",
+      "/title/obrazec-050/",
+      "/title/obrazec-106/"
+     ],
+     "empty": false
+    },
+    {
+     "h": "Новые эпизоды",
+     "slugs": [
+      "/title/obrazec-021/",
+      "/title/obrazec-049/",
+      "/title/obrazec-077/",
+      "/title/obrazec-105/",
+      "/title/obrazec-020/",
+      "/title/obrazec-048/",
+      "/title/obrazec-076/",
+      "/title/obrazec-104/",
+      "/title/obrazec-019/",
+      "/title/obrazec-047/",
+      "/title/obrazec-075/",
+      "/title/obrazec-103/",
+      "/title/obrazec-018/",
+      "/title/obrazec-074/",
+      "/title/obrazec-017/",
+      "/title/obrazec-045/",
+      "/title/obrazec-073/",
+      "/title/obrazec-101/",
+      "/title/obrazec-016/",
+      "/title/obrazec-044/",
+      "/title/obrazec-072/",
+      "/title/obrazec-100/",
+      "/title/obrazec-015/",
+      "/title/obrazec-043/"
+     ],
+     "empty": false
+    },
+    {
+     "h": "Сегодня выйдет",
+     "slugs": [],
+     "empty": true
+    },
+    {
+     "h": "Новые аниме",
+     "slugs": [
+      "/title/obrazec-054/",
+      "/title/obrazec-110/",
+      "/title/obrazec-022/",
+      "/title/obrazec-078/",
+      "/title/obrazec-046/",
+      "/title/obrazec-102/",
+      "/title/obrazec-071/",
+      "/title/obrazec-099/",
+      "/title/obrazec-014/",
+      "/title/obrazec-042/",
+      "/title/obrazec-070/",
+      "/title/obrazec-098/",
+      "/title/obrazec-013/",
+      "/title/obrazec-041/",
+      "/title/obrazec-069/",
+      "/title/obrazec-097/",
+      "/title/obrazec-012/",
+      "/title/obrazec-040/",
+      "/title/obrazec-068/",
+      "/title/obrazec-096/",
+      "/title/obrazec-011/",
+      "/title/obrazec-039/",
+      "/title/obrazec-067/",
+      "/title/obrazec-095/"
+     ],
+     "empty": false
+    },
+    {
+     "h": "Топ по оценкам",
+     "slugs": [
+      "/title/obrazec-119/",
+      "/title/obrazec-089/",
+      "/title/obrazec-059/",
+      "/title/obrazec-029/",
+      "/title/obrazec-117/",
+      "/title/obrazec-087/",
+      "/title/obrazec-057/",
+      "/title/obrazec-115/",
+      "/title/obrazec-085/",
+      "/title/obrazec-113/",
+      "/title/obrazec-093/",
+      "/title/obrazec-091/",
+      "/title/obrazec-065/",
+      "/title/obrazec-009/",
+      "/title/obrazec-063/",
+      "/title/obrazec-037/",
+      "/title/obrazec-007/",
+      "/title/obrazec-061/",
+      "/title/obrazec-035/",
+      "/title/obrazec-005/",
+      "/title/obrazec-033/",
+      "/title/obrazec-003/",
+      "/title/obrazec-031/",
+      "/title/obrazec-001/"
+     ],
+     "empty": false
+    },
+    {
+     "h": "Подборки",
+     "slugs": [],
+     "empty": true
+    }
+   ],
+   "h1": "Аниме-портал: онгоинги, новые эпизоды и расписание",
+   "bodyText": "",
+   "console_errors": [],
+   "requests_failed": [],
+   "link_statuses": [
+    {
+     "href": "/title/obrazec-028/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-056/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-084/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-112/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-027/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-055/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-083/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-111/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-026/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-082/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-025/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-053/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-081/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-109/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-024/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-052/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-080/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-108/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-023/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-051/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-079/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-107/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-050/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-106/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-021/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-049/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-077/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-105/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-020/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-048/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-076/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-104/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-019/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-047/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-075/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-103/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-018/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-074/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-017/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-045/",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "id": "animedia-candidate",
+   "path": "/catalog/",
+   "status": 200,
+   "imgs": 48,
+   "broken": 15,
+   "brokenSamples": [
+    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9",
+    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9",
+    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9"
+   ],
+   "titleLinks": [
+    "/title/obrazec-001/",
+    "/title/obrazec-002/",
+    "/title/obrazec-003/",
+    "/title/obrazec-004/",
+    "/title/obrazec-005/",
+    "/title/obrazec-006/",
+    "/title/obrazec-007/",
+    "/title/obrazec-008/",
+    "/title/obrazec-009/",
+    "/title/obrazec-010/",
+    "/title/obrazec-011/",
+    "/title/obrazec-012/",
+    "/title/obrazec-013/",
+    "/title/obrazec-014/",
+    "/title/obrazec-015/",
+    "/title/obrazec-016/",
+    "/title/obrazec-017/",
+    "/title/obrazec-018/",
+    "/title/obrazec-019/",
+    "/title/obrazec-020/",
+    "/title/obrazec-021/",
+    "/title/obrazec-022/",
+    "/title/obrazec-023/",
+    "/title/obrazec-024/",
+    "/title/obrazec-025/",
+    "/title/obrazec-026/",
+    "/title/obrazec-027/",
+    "/title/obrazec-028/",
+    "/title/obrazec-029/",
+    "/title/obrazec-030/",
+    "/title/obrazec-031/",
+    "/title/obrazec-032/",
+    "/title/obrazec-033/",
+    "/title/obrazec-034/",
+    "/title/obrazec-035/",
+    "/title/obrazec-036/",
+    "/title/obrazec-037/",
+    "/title/obrazec-038/",
+    "/title/obrazec-039/",
+    "/title/obrazec-040/",
+    "/title/obrazec-041/",
+    "/title/obrazec-042/",
+    "/title/obrazec-043/",
+    "/title/obrazec-044/",
+    "/title/obrazec-045/",
+    "/title/obrazec-046/",
+    "/title/obrazec-047/",
+    "/title/obrazec-048/"
+   ],
+   "sections": [],
+   "h1": "Весь каталог",
+   "bodyText": "",
+   "console_errors": [],
+   "requests_failed": [],
+   "link_statuses": [
+    {
+     "href": "/title/obrazec-001/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-002/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-003/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-004/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-005/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-006/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-007/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-008/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-009/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-010/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-011/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-012/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-013/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-014/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-015/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-016/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-017/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-018/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-019/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-020/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-021/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-022/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-023/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-024/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-025/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-026/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-027/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-028/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-029/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-030/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-031/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-032/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-033/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-034/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-035/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-036/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-037/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-038/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-039/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-040/",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "id": "animedia-candidate",
+   "path": "/new/",
+   "status": 200,
+   "imgs": 48,
+   "broken": 15,
+   "brokenSamples": [
+    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9",
+    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9",
+    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9"
+   ],
+   "titleLinks": [
+    "/title/obrazec-028/",
+    "/title/obrazec-056/",
+    "/title/obrazec-084/",
+    "/title/obrazec-112/",
+    "/title/obrazec-027/",
+    "/title/obrazec-055/",
+    "/title/obrazec-083/",
+    "/title/obrazec-111/",
+    "/title/obrazec-026/",
+    "/title/obrazec-054/",
+    "/title/obrazec-082/",
+    "/title/obrazec-110/",
+    "/title/obrazec-025/",
+    "/title/obrazec-053/",
+    "/title/obrazec-081/",
+    "/title/obrazec-109/",
+    "/title/obrazec-024/",
+    "/title/obrazec-052/",
+    "/title/obrazec-080/",
+    "/title/obrazec-108/",
+    "/title/obrazec-023/",
+    "/title/obrazec-051/",
+    "/title/obrazec-079/",
+    "/title/obrazec-107/",
+    "/title/obrazec-022/",
+    "/title/obrazec-050/",
+    "/title/obrazec-078/",
+    "/title/obrazec-106/",
+    "/title/obrazec-021/",
+    "/title/obrazec-049/",
+    "/title/obrazec-077/",
+    "/title/obrazec-105/",
+    "/title/obrazec-020/",
+    "/title/obrazec-048/",
+    "/title/obrazec-076/",
+    "/title/obrazec-104/",
+    "/title/obrazec-019/",
+    "/title/obrazec-047/",
+    "/title/obrazec-075/",
+    "/title/obrazec-103/",
+    "/title/obrazec-018/",
+    "/title/obrazec-046/",
+    "/title/obrazec-074/",
+    "/title/obrazec-102/",
+    "/title/obrazec-017/",
+    "/title/obrazec-045/",
+    "/title/obrazec-073/",
+    "/title/obrazec-101/"
+   ],
+   "sections": [],
+   "h1": "Что нового",
+   "bodyText": "",
+   "console_errors": [],
+   "requests_failed": [],
+   "link_statuses": [
+    {
+     "href": "/title/obrazec-028/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-056/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-084/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-112/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-027/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-055/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-083/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-111/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-026/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-054/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-082/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-110/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-025/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-053/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-081/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-109/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-024/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-052/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-080/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-108/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-023/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-051/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-079/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-107/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-022/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-050/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-078/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-106/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-021/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-049/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-077/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-105/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-020/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-048/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-076/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-104/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-019/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-047/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-075/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-103/",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "id": "animedia-candidate",
+   "path": "/schedule/",
+   "status": 200,
+   "imgs": 0,
+   "broken": 0,
+   "brokenSamples": [],
+   "titleLinks": [],
+   "sections": [],
+   "h1": "Расписание выхода серий",
+   "bodyText": "",
+   "console_errors": [],
+   "requests_failed": [],
+   "link_statuses": []
+  },
+  {
+   "id": "animedia-candidate",
+   "path": "/search/?q=образец",
+   "status": 200,
+   "imgs": 120,
+   "broken": 86,
+   "brokenSamples": [
+    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9",
+    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9",
+    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9"
+   ],
+   "titleLinks": [
+    "/title/obrazec-001/",
+    "/title/obrazec-002/",
+    "/title/obrazec-003/",
+    "/title/obrazec-004/",
+    "/title/obrazec-005/",
+    "/title/obrazec-006/",
+    "/title/obrazec-007/",
+    "/title/obrazec-008/",
+    "/title/obrazec-009/",
+    "/title/obrazec-010/",
+    "/title/obrazec-011/",
+    "/title/obrazec-012/",
+    "/title/obrazec-013/",
+    "/title/obrazec-014/",
+    "/title/obrazec-015/",
+    "/title/obrazec-016/",
+    "/title/obrazec-017/",
+    "/title/obrazec-018/",
+    "/title/obrazec-019/",
+    "/title/obrazec-020/",
+    "/title/obrazec-021/",
+    "/title/obrazec-022/",
+    "/title/obrazec-023/",
+    "/title/obrazec-024/",
+    "/title/obrazec-025/",
+    "/title/obrazec-026/",
+    "/title/obrazec-027/",
+    "/title/obrazec-028/",
+    "/title/obrazec-029/",
+    "/title/obrazec-030/",
+    "/title/obrazec-031/",
+    "/title/obrazec-032/",
+    "/title/obrazec-033/",
+    "/title/obrazec-034/",
+    "/title/obrazec-035/",
+    "/title/obrazec-036/",
+    "/title/obrazec-037/",
+    "/title/obrazec-038/",
+    "/title/obrazec-039/",
+    "/title/obrazec-040/",
+    "/title/obrazec-041/",
+    "/title/obrazec-042/",
+    "/title/obrazec-043/",
+    "/title/obrazec-044/",
+    "/title/obrazec-045/",
+    "/title/obrazec-046/",
+    "/title/obrazec-047/",
+    "/title/obrazec-048/",
+    "/title/obrazec-049/",
+    "/title/obrazec-050/",
+    "/title/obrazec-051/",
+    "/title/obrazec-052/",
+    "/title/obrazec-053/",
+    "/title/obrazec-054/",
+    "/title/obrazec-055/",
+    "/title/obrazec-056/",
+    "/title/obrazec-057/",
+    "/title/obrazec-058/",
+    "/title/obrazec-059/",
+    "/title/obrazec-060/",
+    "/title/obrazec-061/",
+    "/title/obrazec-062/",
+    "/title/obrazec-063/",
+    "/title/obrazec-064/",
+    "/title/obrazec-065/",
+    "/title/obrazec-066/",
+    "/title/obrazec-067/",
+    "/title/obrazec-068/",
+    "/title/obrazec-069/",
+    "/title/obrazec-070/",
+    "/title/obrazec-071/",
+    "/title/obrazec-072/",
+    "/title/obrazec-073/",
+    "/title/obrazec-074/",
+    "/title/obrazec-075/",
+    "/title/obrazec-076/",
+    "/title/obrazec-077/",
+    "/title/obrazec-078/",
+    "/title/obrazec-079/",
+    "/title/obrazec-080/",
+    "/title/obrazec-081/",
+    "/title/obrazec-082/",
+    "/title/obrazec-083/",
+    "/title/obrazec-084/",
+    "/title/obrazec-085/",
+    "/title/obrazec-086/",
+    "/title/obrazec-087/",
+    "/title/obrazec-088/",
+    "/title/obrazec-089/",
+    "/title/obrazec-090/",
+    "/title/obrazec-091/",
+    "/title/obrazec-092/",
+    "/title/obrazec-093/",
+    "/title/obrazec-094/",
+    "/title/obrazec-095/",
+    "/title/obrazec-096/",
+    "/title/obrazec-097/",
+    "/title/obrazec-098/",
+    "/title/obrazec-099/",
+    "/title/obrazec-100/",
+    "/title/obrazec-101/",
+    "/title/obrazec-102/",
+    "/title/obrazec-103/",
+    "/title/obrazec-104/",
+    "/title/obrazec-105/",
+    "/title/obrazec-106/",
+    "/title/obrazec-107/",
+    "/title/obrazec-108/",
+    "/title/obrazec-109/",
+    "/title/obrazec-110/",
+    "/title/obrazec-111/",
+    "/title/obrazec-112/",
+    "/title/obrazec-113/",
+    "/title/obrazec-114/",
+    "/title/obrazec-115/",
+    "/title/obrazec-116/",
+    "/title/obrazec-117/",
+    "/title/obrazec-118/",
+    "/title/obrazec-119/",
+    "/title/obrazec-120/"
+   ],
+   "sections": [],
+   "h1": "«образец»",
+   "bodyText": "",
+   "console_errors": [],
+   "requests_failed": [],
+   "link_statuses": [
+    {
+     "href": "/title/obrazec-001/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-002/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-003/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-004/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-005/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-006/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-007/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-008/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-009/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-010/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-011/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-012/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-013/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-014/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-015/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-016/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-017/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-018/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-019/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-020/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-021/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-022/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-023/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-024/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-025/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-026/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-027/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-028/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-029/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-030/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-031/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-032/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-033/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-034/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-035/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-036/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-037/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-038/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-039/",
+     "status": 200
+    },
+    {
+     "href": "/title/obrazec-040/",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "id": "animedia-candidate",
+   "path": "/search/?q=zzzqqq",
+   "status": 200,
+   "imgs": 0,
+   "broken": 0,
+   "brokenSamples": [],
+   "titleLinks": [],
+   "sections": [],
+   "h1": "«zzzqqq»",
+   "bodyText": "",
+   "console_errors": [],
+   "requests_failed": [],
+   "link_statuses": []
+  },
+  {
+   "id": "animedia-candidate",
+   "path": "/nope/",
+   "status": 404,
+   "imgs": 0,
+   "broken": 0,
+   "brokenSamples": [],
+   "titleLinks": [],
+   "sections": [],
+   "h1": "Страница не найдена",
+   "bodyText": "",
+   "console_errors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+   ],
+   "requests_failed": [],
+   "link_statuses": []
+  },
+  {
+   "id": "animedia-proddata",
+   "path": "/",
+   "status": 200,
+   "imgs": 24,
+   "broken": 0,
+   "brokenSamples": [],
+   "titleLinks": [
+    "/title/kaydzyu-nomer-vosem-rabochiy-den-narumi/",
+    "/title/chuvstvennye-slova/",
+    "/title/stranniki-duhovnogo-mira/",
+    "/title/chasha-snega/",
+    "/title/proekt-kirameki/",
+    "/title/po-tu-storonu-granicy-rassvet/",
+    "/title/ubiyca-bogov-final/",
+    "/title/spisok-nano/",
+    "/title/mobilnyy-voin-gandam-gquuuuuux-nachalo/",
+    "/title/lyubovnyy-van-pis/",
+    "/title/poketun-2025/",
+    "/title/poketun/",
+    "/title/poketun-2024/",
+    "/title/bog-bogatstva-chzhanlun-dou/",
+    "/title/izobrazi-otvraschenie-i-pokazhi-mne-svoi-trusiki-3/",
+    "/title/agent-vremeni-3/",
+    "/title/asy-i-malenkaya-lindan/",
+    "/title/proekt-kapsul-geroi/",
+    "/title/mificheskie-zveri-6/",
+    "/title/zadniy-pereulok-ulicy-guyuy/",
+    "/title/absolyutnaya-vershina-boga-voyny/",
+    "/title/master-budte-skromnee/",
+    "/title/bezuprechnyy-mir-nebesa-v-ogne-devyati-bedstviy/",
+    "/title/malenkoe-lekarstvo-fei-horoshenkogo-lekarstva/"
+   ],
+   "sections": [
+    {
+     "h": "Онгоинги",
+     "slugs": [],
+     "empty": true
+    },
+    {
+     "h": "Новые эпизоды",
+     "slugs": [],
+     "empty": true
+    },
+    {
+     "h": "Сегодня выйдет",
+     "slugs": [],
+     "empty": true
+    },
+    {
+     "h": "Новые аниме",
+     "slugs": [
+      "/title/kaydzyu-nomer-vosem-rabochiy-den-narumi/",
+      "/title/chuvstvennye-slova/",
+      "/title/stranniki-duhovnogo-mira/",
+      "/title/chasha-snega/",
+      "/title/proekt-kirameki/",
+      "/title/po-tu-storonu-granicy-rassvet/",
+      "/title/ubiyca-bogov-final/",
+      "/title/spisok-nano/",
+      "/title/mobilnyy-voin-gandam-gquuuuuux-nachalo/",
+      "/title/lyubovnyy-van-pis/",
+      "/title/poketun-2025/",
+      "/title/poketun/"
+     ],
+     "empty": false
+    },
+    {
+     "h": "Топ по оценкам",
+     "slugs": [
+      "/title/poketun-2024/",
+      "/title/bog-bogatstva-chzhanlun-dou/",
+      "/title/izobrazi-otvraschenie-i-pokazhi-mne-svoi-trusiki-3/",
+      "/title/agent-vremeni-3/",
+      "/title/asy-i-malenkaya-lindan/",
+      "/title/proekt-kapsul-geroi/",
+      "/title/mificheskie-zveri-6/",
+      "/title/zadniy-pereulok-ulicy-guyuy/",
+      "/title/absolyutnaya-vershina-boga-voyny/",
+      "/title/master-budte-skromnee/",
+      "/title/bezuprechnyy-mir-nebesa-v-ogne-devyati-bedstviy/",
+      "/title/malenkoe-lekarstvo-fei-horoshenkogo-lekarstva/"
+     ],
+     "empty": false
+    },
+    {
+     "h": "Подборки",
+     "slugs": [],
+     "empty": true
+    }
+   ],
+   "h1": "Аниме-портал: онгоинги, новые эпизоды и расписание",
+   "bodyText": "",
+   "console_errors": [],
+   "requests_failed": [],
+   "link_statuses": [
+    {
+     "href": "/title/kaydzyu-nomer-vosem-rabochiy-den-narumi/",
+     "status": 200
+    },
+    {
+     "href": "/title/chuvstvennye-slova/",
+     "status": 200
+    },
+    {
+     "href": "/title/stranniki-duhovnogo-mira/",
+     "status": 200
+    },
+    {
+     "href": "/title/chasha-snega/",
+     "status": 200
+    },
+    {
+     "href": "/title/proekt-kirameki/",
+     "status": 200
+    },
+    {
+     "href": "/title/po-tu-storonu-granicy-rassvet/",
+     "status": 200
+    },
+    {
+     "href": "/title/ubiyca-bogov-final/",
+     "status": 200
+    },
+    {
+     "href": "/title/spisok-nano/",
+     "status": 200
+    },
+    {
+     "href": "/title/mobilnyy-voin-gandam-gquuuuuux-nachalo/",
+     "status": 200
+    },
+    {
+     "href": "/title/lyubovnyy-van-pis/",
+     "status": 200
+    },
+    {
+     "href": "/title/poketun-2025/",
+     "status": 200
+    },
+    {
+     "href": "/title/poketun/",
+     "status": 200
+    },
+    {
+     "href": "/title/poketun-2024/",
+     "status": 200
+    },
+    {
+     "href": "/title/bog-bogatstva-chzhanlun-dou/",
+     "status": 200
+    },
+    {
+     "href": "/title/izobrazi-otvraschenie-i-pokazhi-mne-svoi-trusiki-3/",
+     "status": 200
+    },
+    {
+     "href": "/title/agent-vremeni-3/",
+     "status": 200
+    },
+    {
+     "href": "/title/asy-i-malenkaya-lindan/",
+     "status": 200
+    },
+    {
+     "href": "/title/proekt-kapsul-geroi/",
+     "status": 200
+    },
+    {
+     "href": "/title/mificheskie-zveri-6/",
+     "status": 200
+    },
+    {
+     "href": "/title/zadniy-pereulok-ulicy-guyuy/",
+     "status": 200
+    },
+    {
+     "href": "/title/absolyutnaya-vershina-boga-voyny/",
+     "status": 200
+    },
+    {
+     "href": "/title/master-budte-skromnee/",
+     "status": 200
+    },
+    {
+     "href": "/title/bezuprechnyy-mir-nebesa-v-ogne-devyati-bedstviy/",
+     "status": 200
+    },
+    {
+     "href": "/title/malenkoe-lekarstvo-fei-horoshenkogo-lekarstva/",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "id": "animedia-proddata",
+   "path": "/catalog/",
+   "status": 200,
+   "imgs": 48,
+   "broken": 15,
+   "brokenSamples": [
+    "https://poster.cdnvideohub.com/019fa7c1-6f19-78c2-be13-fad9b658ea4d.webp",
+    "https://poster.cdnvideohub.com/019f9c67-1e86-78c2-b701-04f8ee1a502f.webp",
+    "https://poster.cdnvideohub.com/019f952b-95b4-78c2-b1f5-3ea24647f651.webp"
+   ],
+   "titleLinks": [
+    "/title/kaydzyu-nomer-vosem-rabochiy-den-narumi/",
+    "/title/chuvstvennye-slova/",
+    "/title/stranniki-duhovnogo-mira/",
+    "/title/chasha-snega/",
+    "/title/proekt-kirameki/",
+    "/title/po-tu-storonu-granicy-rassvet/",
+    "/title/ubiyca-bogov-final/",
+    "/title/spisok-nano/",
+    "/title/mobilnyy-voin-gandam-gquuuuuux-nachalo/",
+    "/title/lyubovnyy-van-pis/",
+    "/title/poketun-2025/",
+    "/title/poketun/",
+    "/title/poketun-2024/",
+    "/title/bog-bogatstva-chzhanlun-dou/",
+    "/title/izobrazi-otvraschenie-i-pokazhi-mne-svoi-trusiki-3/",
+    "/title/agent-vremeni-3/",
+    "/title/asy-i-malenkaya-lindan/",
+    "/title/proekt-kapsul-geroi/",
+    "/title/mificheskie-zveri-6/",
+    "/title/zadniy-pereulok-ulicy-guyuy/",
+    "/title/absolyutnaya-vershina-boga-voyny/",
+    "/title/master-budte-skromnee/",
+    "/title/bezuprechnyy-mir-nebesa-v-ogne-devyati-bedstviy/",
+    "/title/malenkoe-lekarstvo-fei-horoshenkogo-lekarstva/",
+    "/title/malenkoe-lekarstvo-fei-horoshenkogo-lekarstva-2/",
+    "/title/malenkoe-lekarstvo-fei-horoshenkogo-lekarstva-3/",
+    "/title/princessa-geroy/",
+    "/title/zvezdnye-voyny-videniya-predstavlyayut-devyatyy-dzheday/",
+    "/title/1999-otdel-protivodeystviya-okkultizmu/",
+    "/title/upravlenie-vospominaniyami-2026/",
+    "/title/stat-pobeditelem/",
+    "/title/moya-geroyskaya-akademiya-ya-tozhe-geroy/",
+    "/title/u-menya-malo-druzey-epizod-0/",
+    "/title/rassekaya-nebosvod/",
+    "/title/i-nastupit-rassvet/",
+    "/title/sanka-rea-ova/",
+    "/title/vechnaya-volya-4/",
+    "/title/u-menya-malo-druzey-dopolnenie/",
+    "/title/odnomu-lish-bogu-vedomyy-mir-ii/",
+    "/title/odnomu-lish-bogu-vedomyy-mir-iii-bogini/",
+    "/title/eto-korol-6/",
+    "/title/nu-ne-mozhet-moya-sestrenka-byt-takoy-miloy-2-final/",
+    "/title/voennaya-hronika-milenkoy-devochki-2-ona/",
+    "/title/nu-ne-mozhet-moya-sestrenka-byt-takoy-miloy-specvypuski/",
+    "/title/nu-ne-mozhet-moya-sestrenka-byt-takoy-miloy-2/",
+    "/title/strelok-s-chernoy-skaly/",
+    "/title/kiborg-009-vozmezdie/",
+    "/title/silneyshiy-istoriya-yunsyao-li/"
+   ],
+   "sections": [],
+   "h1": "Весь каталог",
+   "bodyText": "",
+   "console_errors": [],
+   "requests_failed": [],
+   "link_statuses": [
+    {
+     "href": "/title/kaydzyu-nomer-vosem-rabochiy-den-narumi/",
+     "status": 200
+    },
+    {
+     "href": "/title/chuvstvennye-slova/",
+     "status": 200
+    },
+    {
+     "href": "/title/stranniki-duhovnogo-mira/",
+     "status": 200
+    },
+    {
+     "href": "/title/chasha-snega/",
+     "status": 200
+    },
+    {
+     "href": "/title/proekt-kirameki/",
+     "status": 200
+    },
+    {
+     "href": "/title/po-tu-storonu-granicy-rassvet/",
+     "status": 200
+    },
+    {
+     "href": "/title/ubiyca-bogov-final/",
+     "status": 200
+    },
+    {
+     "href": "/title/spisok-nano/",
+     "status": 200
+    },
+    {
+     "href": "/title/mobilnyy-voin-gandam-gquuuuuux-nachalo/",
+     "status": 200
+    },
+    {
+     "href": "/title/lyubovnyy-van-pis/",
+     "status": 200
+    },
+    {
+     "href": "/title/poketun-2025/",
+     "status": 200
+    },
+    {
+     "href": "/title/poketun/",
+     "status": 200
+    },
+    {
+     "href": "/title/poketun-2024/",
+     "status": 200
+    },
+    {
+     "href": "/title/bog-bogatstva-chzhanlun-dou/",
+     "status": 200
+    },
+    {
+     "href": "/title/izobrazi-otvraschenie-i-pokazhi-mne-svoi-trusiki-3/",
+     "status": 200
+    },
+    {
+     "href": "/title/agent-vremeni-3/",
+     "status": 200
+    },
+    {
+     "href": "/title/asy-i-malenkaya-lindan/",
+     "status": 200
+    },
+    {
+     "href": "/title/proekt-kapsul-geroi/",
+     "status": 200
+    },
+    {
+     "href": "/title/mificheskie-zveri-6/",
+     "status": 200
+    },
+    {
+     "href": "/title/zadniy-pereulok-ulicy-guyuy/",
+     "status": 200
+    },
+    {
+     "href": "/title/absolyutnaya-vershina-boga-voyny/",
+     "status": 200
+    },
+    {
+     "href": "/title/master-budte-skromnee/",
+     "status": 200
+    },
+    {
+     "href": "/title/bezuprechnyy-mir-nebesa-v-ogne-devyati-bedstviy/",
+     "status": 200
+    },
+    {
+     "href": "/title/malenkoe-lekarstvo-fei-horoshenkogo-lekarstva/",
+     "status": 200
+    },
+    {
+     "href": "/title/malenkoe-lekarstvo-fei-horoshenkogo-lekarstva-2/",
+     "status": 200
+    },
+    {
+     "href": "/title/malenkoe-lekarstvo-fei-horoshenkogo-lekarstva-3/",
+     "status": 200
+    },
+    {
+     "href": "/title/princessa-geroy/",
+     "status": 200
+    },
+    {
+     "href": "/title/zvezdnye-voyny-videniya-predstavlyayut-devyatyy-dzheday/",
+     "status": 200
+    },
+    {
+     "href": "/title/1999-otdel-protivodeystviya-okkultizmu/",
+     "status": 200
+    },
+    {
+     "href": "/title/upravlenie-vospominaniyami-2026/",
+     "status": 200
+    },
+    {
+     "href": "/title/stat-pobeditelem/",
+     "status": 200
+    },
+    {
+     "href": "/title/moya-geroyskaya-akademiya-ya-tozhe-geroy/",
+     "status": 200
+    },
+    {
+     "href": "/title/u-menya-malo-druzey-epizod-0/",
+     "status": 200
+    },
+    {
+     "href": "/title/rassekaya-nebosvod/",
+     "status": 200
+    },
+    {
+     "href": "/title/i-nastupit-rassvet/",
+     "status": 200
+    },
+    {
+     "href": "/title/sanka-rea-ova/",
+     "status": 200
+    },
+    {
+     "href": "/title/vechnaya-volya-4/",
+     "status": 200
+    },
+    {
+     "href": "/title/u-menya-malo-druzey-dopolnenie/",
+     "status": 200
+    },
+    {
+     "href": "/title/odnomu-lish-bogu-vedomyy-mir-ii/",
+     "status": 200
+    },
+    {
+     "href": "/title/odnomu-lish-bogu-vedomyy-mir-iii-bogini/",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "id": "animedia-proddata",
+   "path": "/schedule/",
+   "status": 200,
+   "imgs": 0,
+   "broken": 0,
+   "brokenSamples": [],
+   "titleLinks": [],
+   "sections": [],
+   "h1": "Расписание выхода серий",
+   "bodyText": "",
+   "console_errors": [],
+   "requests_failed": [],
+   "link_statuses": []
+  }
+ ],
+ "sweep": [
+  {
+   "id": "zona-candidate",
+   "width": 320,
+   "scroll_width": 320,
+   "overflow": false
+  },
+  {
+   "id": "zona-candidate",
+   "width": 360,
+   "scroll_width": 360,
+   "overflow": false
+  },
+  {
+   "id": "zona-candidate",
+   "width": 390,
+   "scroll_width": 390,
+   "overflow": false
+  },
+  {
+   "id": "zona-candidate",
+   "width": 414,
+   "scroll_width": 414,
+   "overflow": false
+  },
+  {
+   "id": "zona-candidate",
+   "width": 480,
+   "scroll_width": 480,
+   "overflow": false
+  },
+  {
+   "id": "zona-candidate",
+   "width": 560,
+   "scroll_width": 560,
+   "overflow": false
+  },
+  {
+   "id": "zona-candidate",
+   "width": 640,
+   "scroll_width": 640,
+   "overflow": false
+  },
+  {
+   "id": "zona-candidate",
+   "width": 768,
+   "scroll_width": 768,
+   "overflow": false
+  },
+  {
+   "id": "zona-candidate",
+   "width": 900,
+   "scroll_width": 900,
+   "overflow": false
+  },
+  {
+   "id": "zona-candidate",
+   "width": 1024,
+   "scroll_width": 1024,
+   "overflow": false
+  },
+  {
+   "id": "zona-candidate",
+   "width": 1180,
+   "scroll_width": 1180,
+   "overflow": false
+  },
+  {
+   "id": "zona-candidate",
+   "width": 1280,
+   "scroll_width": 1280,
+   "overflow": false
+  },
+  {
+   "id": "zona-candidate",
+   "width": 1440,
+   "scroll_width": 1440,
+   "overflow": false
+  },
+  {
+   "id": "zona-candidate",
+   "width": 1600,
+   "scroll_width": 1600,
+   "overflow": false
+  },
+  {
+   "id": "zona-candidate",
+   "width": 1920,
+   "scroll_width": 1920,
+   "overflow": false
+  },
+  {
+   "id": "animedia-candidate",
+   "width": 320,
+   "scroll_width": 320,
+   "overflow": false
+  },
+  {
+   "id": "animedia-candidate",
+   "width": 360,
+   "scroll_width": 360,
+   "overflow": false
+  },
+  {
+   "id": "animedia-candidate",
+   "width": 390,
+   "scroll_width": 390,
+   "overflow": false
+  },
+  {
+   "id": "animedia-candidate",
+   "width": 414,
+   "scroll_width": 414,
+   "overflow": false
+  },
+  {
+   "id": "animedia-candidate",
+   "width": 480,
+   "scroll_width": 480,
+   "overflow": false
+  },
+  {
+   "id": "animedia-candidate",
+   "width": 560,
+   "scroll_width": 560,
+   "overflow": false
+  },
+  {
+   "id": "animedia-candidate",
+   "width": 640,
+   "scroll_width": 640,
+   "overflow": false
+  },
+  {
+   "id": "animedia-candidate",
+   "width": 768,
+   "scroll_width": 768,
+   "overflow": false
+  },
+  {
+   "id": "animedia-candidate",
+   "width": 900,
+   "scroll_width": 900,
+   "overflow": false
+  },
+  {
+   "id": "animedia-candidate",
+   "width": 1024,
+   "scroll_width": 1024,
+   "overflow": false
+  },
+  {
+   "id": "animedia-candidate",
+   "width": 1180,
+   "scroll_width": 1180,
+   "overflow": false
+  },
+  {
+   "id": "animedia-candidate",
+   "width": 1280,
+   "scroll_width": 1280,
+   "overflow": false
+  },
+  {
+   "id": "animedia-candidate",
+   "width": 1440,
+   "scroll_width": 1440,
+   "overflow": false
+  },
+  {
+   "id": "animedia-candidate",
+   "width": 1600,
+   "scroll_width": 1600,
+   "overflow": false
+  },
+  {
+   "id": "animedia-candidate",
+   "width": 1920,
+   "scroll_width": 1920,
+   "overflow": false
+  },
+  {
+   "id": "animedia-proddata",
+   "width": 320,
+   "scroll_width": 320,
+   "overflow": false
+  },
+  {
+   "id": "animedia-proddata",
+   "width": 360,
+   "scroll_width": 360,
+   "overflow": false
+  },
+  {
+   "id": "animedia-proddata",
+   "width": 390,
+   "scroll_width": 390,
+   "overflow": false
+  },
+  {
+   "id": "animedia-proddata",
+   "width": 414,
+   "scroll_width": 414,
+   "overflow": false
+  },
+  {
+   "id": "animedia-proddata",
+   "width": 480,
+   "scroll_width": 480,
+   "overflow": false
+  },
+  {
+   "id": "animedia-proddata",
+   "width": 560,
+   "scroll_width": 560,
+   "overflow": false
+  },
+  {
+   "id": "animedia-proddata",
+   "width": 640,
+   "scroll_width": 640,
+   "overflow": false
+  },
+  {
+   "id": "animedia-proddata",
+   "width": 768,
+   "scroll_width": 768,
+   "overflow": false
+  },
+  {
+   "id": "animedia-proddata",
+   "width": 900,
+   "scroll_width": 900,
+   "overflow": false
+  },
+  {
+   "id": "animedia-proddata",
+   "width": 1024,
+   "scroll_width": 1024,
+   "overflow": false
+  },
+  {
+   "id": "animedia-proddata",
+   "width": 1180,
+   "scroll_width": 1180,
+   "overflow": false
+  },
+  {
+   "id": "animedia-proddata",
+   "width": 1280,
+   "scroll_width": 1280,
+   "overflow": false
+  },
+  {
+   "id": "animedia-proddata",
+   "width": 1440,
+   "scroll_width": 1440,
+   "overflow": false
+  },
+  {
+   "id": "animedia-proddata",
+   "width": 1600,
+   "scroll_width": 1600,
+   "overflow": false
+  },
+  {
+   "id": "animedia-proddata",
+   "width": 1920,
+   "scroll_width": 1920,
+   "overflow": false
+  }
+ ]
+}

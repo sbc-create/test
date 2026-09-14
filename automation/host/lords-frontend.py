@@ -32,6 +32,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import copy
 import json
 import os
 import re
@@ -424,10 +425,21 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 
 ОФОРМЛЕНИЕ_1_1 = "1.1.0"
 
+#: Версия оформления Zona и Animedia, переработанных по измеренным эталонам
+#: (TEMPLATES-ZONA-ANIMEDIA-VISUAL-PARITY-006). Lords остаётся на 1.1.0 и
+#: поэтому отдаёт прежние байты: его ветка кода не меняется вовсе.
+ОФОРМЛЕНИЕ_1_2 = "1.2.0"
+
+#: Версии, несущие оформление 1.1+. Набор, а не одно значение: витрина
+#: включает оформление СВОИМ манифестом, и добавление следующей версии не
+#: должно переводить на неё соседей. Свойство «переход по одной витрине»
+#: сохраняется — меняется только то, сколько версий код умеет исполнять.
+ОФОРМЛЕНИЕ_ВЕРСИИ = {ОФОРМЛЕНИЕ_1_1, ОФОРМЛЕНИЕ_1_2}
+
 #: Включено ли новое оформление на ЭТОЙ витрине. Решает манифест витрины, а не
 #: наличие кода: один артефакт обслуживает шесть витрин, и переход делается по
 #: одной. Витрина на 1.0.2 исполняет прежние ветки и отдаёт прежние байты.
-ОФОРМЛЕНИЕ_НОВОЕ = (ВЕРСИЯ == ОФОРМЛЕНИЕ_1_1)
+ОФОРМЛЕНИЕ_НОВОЕ = (ВЕРСИЯ in ОФОРМЛЕНИЕ_ВЕРСИИ)
 
 #: Сколько карточек на странице каталога в новом оформлении. Кратно и шести
 #: (сетка Lords), и четырём (сетка Zona), поэтому последний ряд не рваный.
@@ -518,11 +530,35 @@ def сезон_по_номеру(деталь: dict, номер: int) -> dict | 
     "mute": "#5f6874", "onbar": "#8a939e",
 }
 
+# Палитра Zona 1.2.0 измерена на эталоне (`tests/tools/measure_reference_palette.js`,
+# 2026-09-14): подложка rgb(30,37,43), текст белый, поверхность шапки
+# rgb(84,103,120). Взяты ИЗМЕРЕНИЯ, а не разметка эталона: оформление ниже
+# написано своё.
+#
+# Акцент разведён на две роли по той же причине, что и у Lords. Синий эталона
+# rgb(0,119,255) как ТЕКСТ на подложке даёт 3.6:1 — ниже требуемых 4.5.
+# Поэтому:
+#   acc   — синий ТЕКСТ на тёмном (ссылки, пункты): 6.3:1
+#   accdk — фон под БЕЛЫМ текстом (кнопки, активный пункт): 6.2:1
 ЗОНА_ТОКЕНЫ = {
-    "ink": "#16191d", "dim": "#59616b", "page": "#ffffff", "alt": "#f5f7fa",
-    "rail": "#10161f", "railink": "#e8edf5", "line": "#e3e8ee",
-    "acc": "#1a5fd0", "accdk": "#14489f", "warm": "#8a5a00",
-    "mute": "#5f6874",
+    "ink": "#ffffff", "dim": "#aeb9c5", "page": "#1e252b", "alt": "#28303a",
+    "rail": "#546778", "railink": "#ffffff", "line": "#3a4450",
+    "acc": "#4d9bff", "accdk": "#0a5bd0", "warm": "#ffb454",
+    "mute": "#8d9aa8", "surf": "#232b34",
+}
+
+# Палитра Animedia 1.2.0 измерена на эталоне (`tests/tools/measure_reference_palette.js`,
+# 2026-09-14): основа rgb(255,255,255), текст rgb(22,22,22), акцент rgb(197,7,37),
+# служебные поверхности rgb(249,249,249) и rgb(240,240,240). Это измерения;
+# оформление ниже написано своё.
+#
+#   acc   — красный ТЕКСТ на белом: 7.4:1
+#   accdk — фон под БЕЛЫМ текстом: тот же красный, белое на нём 7.4:1
+АНИМЕДИА_ТОКЕНЫ = {
+    "ink": "#161616", "dim": "#5c6370", "page": "#ffffff", "alt": "#f9f9f9",
+    "rail": "#ffffff", "railink": "#161616", "line": "#e4e4e4",
+    "acc": "#c50725", "accdk": "#c50725", "warm": "#b26a00",
+    "mute": "#757b85", "surf": "#f0f0f0",
 }
 
 #: Общая часть: сброс, доступность и то, что обязано быть на каждой странице
@@ -705,184 +741,397 @@ img[hidden]{display:none}
 """
 
 ЗОНА_СТИЛЬ = """
+/* Оформление Zona 1.2.0. Числа — измеренные на эталоне; разметка и правила
+   написаны свои. Ключевые цели измерения (см. artifacts/evidence/
+   templates-zona-animedia-visual-parity-006/reference/zona-w140/):
+     контейнер 1400 max, поля 20 (16 на узком), шапка горизонтальная и
+     закреплённая высотой 69 на десктопе, кегль тела 13/17.9,
+     h2 22.1 нормального начертания, ссылки 15.6 полужирные. */
 body{background:@PAGE@;color:@INK@;
-font:16px/1.62 'PT Serif',Georgia,'Times New Roman',serif}
-/* Композиция: постоянная боковая колонка слева, содержимое во всю ширину. */
-.zs{display:grid;grid-template-columns:1fr;max-width:1440px;margin:0 auto;min-height:100vh}
-@media(min-width:1000px){.zs{grid-template-columns:246px 1fr}}
-.zrail{background:@RAIL@;color:@RAILINK@;padding:20px 18px 30px}
-@media(min-width:1000px){.zrail{position:sticky;top:0;height:100vh;overflow:auto}}
-.zrail__logo{font-size:22px;font-weight:700;letter-spacing:-.3px;color:#fff;
-display:block;margin:0 0 4px}
-.zrail__sub{font-size:12.5px;color:#8e9bad;font-family:system-ui,sans-serif;margin:0 0 22px}
-.zrail__t{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#79879b;
-font-family:system-ui,sans-serif;font-weight:700;margin:20px 0 8px}
-.zrail__n{display:flex;flex-direction:column;gap:1px}
-.zrail__n a{padding:9px 12px;border-radius:6px;font-size:15px;color:#d3dbe6;
-font-family:system-ui,sans-serif}
-.zrail__n a:hover{background:#1c2532;color:#fff}
-.zrail__n a[aria-current]{background:@ACC@;color:#fff;font-weight:600}
-.zrail__g{display:flex;flex-wrap:wrap;gap:5px}
-.zrail__g a{font-size:12.5px;font-family:system-ui,sans-serif;padding:5px 9px;
-border:1px solid #2a3341;border-radius:999px;color:#b9c4d2}
-.zrail__g a:hover{border-color:@ACC@;color:#fff}
-.zmain{min-width:0;padding:0 0 40px}
-/* Шапка содержимого в два ряда: поиск, затем состояние выборки. */
-.ztop{border-bottom:1px solid @LINE@;background:@PAGE@;position:sticky;top:0;z-index:40}
-.ztop__a{display:flex;align-items:center;gap:16px;padding:14px 26px}
-.ztop__s{flex:1;display:flex;border:2px solid @LINE@;border-radius:8px;overflow:hidden;
-background:#fff;max-width:640px}
-.ztop__s input{flex:1;border:0;padding:11px 14px;font-size:15px;
-font-family:system-ui,sans-serif;color:@INK@}
-.ztop__s button{border:0;background:@ACC@;color:#fff;padding:0 20px;font-weight:600;
-font-family:system-ui,sans-serif;font-size:14px;cursor:pointer}
-.ztop__b{display:flex;gap:18px;padding:0 26px 12px;font-size:13.5px;
-font-family:system-ui,sans-serif;color:@DIM@;flex-wrap:wrap}
+font:13px/1.375 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif;
+padding-top:117px}
+@media(min-width:768px){body{padding-top:138px}}
+@media(min-width:1280px){body{padding-top:69px}}
+.zs{min-height:100vh;display:block}
+.zmain{min-width:0}
+.zwrap{max-width:1400px;margin:0 auto;padding:0 16px}
+@media(min-width:1280px){.zwrap{padding:0 20px}}
+
+/* Шапка: горизонтальная, закреплённая. Постоянной левой колонки нет ни на
+   одной ширине — это и было главным расхождением с эталоном. */
+.zhd{position:fixed;top:0;left:0;right:0;z-index:60;background:@RAIL@;
+color:@RAILINK@;box-shadow:0 1px 0 rgba(0,0,0,.25)}
+.zhd__in{max-width:1400px;margin:0 auto;padding:14px 16px;display:flex;
+align-items:center;gap:12px;flex-wrap:wrap}
+@media(min-width:768px){.zhd__in{padding:25px 16px;gap:14px}}
+@media(min-width:1280px){.zhd__in{padding:0 20px;height:69px;flex-wrap:nowrap;gap:14px}}
+.zhd__logo{font-size:19px;font-weight:700;letter-spacing:-.3px;color:#fff;
+white-space:nowrap;flex:0 0 auto}
+/* Пункты в одну строку с горизонтальной прокруткой: перенос на узком экране
+   поднимал шапку до 185 px против измеренных на эталоне 117. */
+.zhd__n{display:flex;gap:2px;flex:1 0 100%;order:3;min-width:0;
+overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.zhd__n::-webkit-scrollbar{display:none}
+@media(min-width:1280px){.zhd__n{flex:1 1 auto;order:0;overflow:visible}}
+.zhd__n a{padding:9px 10px;border-radius:6px;font-size:15.6px;font-weight:500;
+color:#eef3f8;white-space:nowrap;flex:0 0 auto}
+.zhd__n a:hover{background:rgba(255,255,255,.14)}
+.zhd__n a[aria-current]{background:@ACCDK@;color:#fff}
+.zhd__s{display:flex;flex:1 1 140px;min-width:0;max-width:420px;
+border-radius:6px;overflow:hidden;background:#fff}
+.zhd__s input{flex:1;min-width:0;border:0;padding:9px 12px;font-size:14px;
+color:@PAGE@;font-family:inherit}
+.zhd__s button{border:0;background:@ACCDK@;color:#fff;padding:0 16px;
+font-weight:600;font-size:14px;cursor:pointer;font-family:inherit}
+/* Жанры вынесены из шапки в тело главной: третий ряд поднимал шапку до
+   170 px против измеренных на эталоне 137.8. */
+
+/* Прежние узлы каркаса остаются объявленными: на них ссылаются страницы
+   каталога, поиска и произведения. Боковая колонка больше не раскладывается. */
+.zrail,.zrail__logo,.zrail__sub,.zrail__t,.zrail__n,.zrail__g{display:none}
+.ztop{border-bottom:1px solid @LINE@;background:@PAGE@}
+.ztop__a{display:flex;align-items:center;gap:16px;padding:12px 0}
+.ztop__s{flex:1;display:flex;border:1px solid @LINE@;border-radius:6px;
+overflow:hidden;background:@ALT@;max-width:640px}
+.ztop__s input{flex:1;border:0;padding:10px 13px;font-size:14px;
+background:transparent;color:@INK@;font-family:inherit}
+.ztop__s button{border:0;background:@ACCDK@;color:#fff;padding:0 18px;
+font-weight:600;font-size:14px;cursor:pointer;font-family:inherit}
+.ztop__b{display:flex;gap:16px;padding:0 0 10px;font-size:13px;color:@DIM@;
+flex-wrap:wrap}
 .ztop__b a{color:@ACC@;font-weight:600;display:inline-block;padding:5px 2px}
 .ztop__b a[aria-current]{color:@INK@;box-shadow:inset 0 -2px 0 @ACC@}
-.zwrap{padding:0 26px}
-/* Крупная шрифтовая пара: заголовки с засечками, служебный текст без. */
-.zh{font-size:30px;line-height:1.2;font-weight:700;margin:26px 0 6px;letter-spacing:-.4px}
-.zh--sm{font-size:22px;margin:30px 0 6px}
-.zsub{font-family:system-ui,sans-serif;font-size:14px;color:@DIM@;margin:0 0 20px}
+
+/* Типографика по измерению: h2 22.1 нормального начертания. */
+.zh{font-size:26px;line-height:1.22;font-weight:600;margin:22px 0 6px;
+letter-spacing:-.3px}
+@media(min-width:1280px){.zh{font-size:30px}}
+.zh--sm{font-size:22.1px;font-weight:400;margin:26px 0 6px;letter-spacing:0}
+.zsub{font-size:13px;color:@DIM@;margin:0 0 18px}
 .zsub a{display:inline-block;padding:5px 2px;color:@ACC@;font-weight:600}
-/* Главная: карточки-плитки, постер сверху, текст снизу, полоса оценок внизу. */
-.zg{display:grid;gap:22px;grid-template-columns:repeat(2,1fr)}
-@media(min-width:700px){.zg{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:1180px){.zg{grid-template-columns:repeat(4,1fr)}}
-.zt{display:flex;flex-direction:column;background:#fff;border:1px solid @LINE@;
-border-radius:10px;overflow:hidden;transition:box-shadow .18s,transform .18s}
-.zt:hover{box-shadow:0 10px 30px #16191d1f;transform:translateY(-3px)}
+.zcr{font-size:12.5px;color:@DIM@;padding:12px 0 0}
+.zcr a{color:@ACC@}
+
+/* Пять горизонтальных лент. Управление мышью, клавиатурой и свайпом. */
+.zsec{margin:26px 0 30px}
+.zsec__h{display:flex;align-items:baseline;justify-content:space-between;
+gap:12px;margin:0 0 10px}
+.zsec__h h2{font-size:22.1px;font-weight:400;margin:0;letter-spacing:0}
+.zsec__h a{font-size:13px;color:@ACC@;font-weight:600;white-space:nowrap}
+.zrl{position:relative}
+.zrl__vp{overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;
+scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+scrollbar-width:thin;padding:2px 0 10px}
+.zrl__track{display:flex;gap:12px;min-width:min-content}
+.zrl__track>*{flex:0 0 132px;scroll-snap-align:start}
+@media(min-width:768px){.zrl__track>*{flex-basis:150px}}
+@media(min-width:1280px){.zrl__track>*{flex-basis:168px}}
+.zrl__btn{position:absolute;top:34%;transform:translateY(-50%);z-index:5;
+width:34px;height:52px;border:0;border-radius:5px;cursor:pointer;
+background:rgba(16,21,26,.82);color:#fff;font-size:18px;line-height:1;
+display:none;align-items:center;justify-content:center}
+@media(min-width:1024px){.zrl:hover .zrl__btn,.zrl__btn:focus-visible{display:flex}}
+.zrl__btn--p{left:-6px}
+.zrl__btn--n{right:-6px}
+.zrl__btn[disabled]{opacity:.32;cursor:default}
+
+/* Сетка каталога и карточка. Пропорция постера 2:3. */
+.zg{display:grid;gap:14px;grid-template-columns:repeat(2,1fr)}
+@media(min-width:560px){.zg{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:900px){.zg{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:1280px){.zg{grid-template-columns:repeat(6,1fr)}}
+.zt{display:flex;flex-direction:column;background:@SURF@;
+border:1px solid @LINE@;border-radius:8px;overflow:hidden;
+transition:border-color .16s,transform .16s}
+.zt:hover{border-color:@ACC@;transform:translateY(-2px)}
 .zt__p{display:block;aspect-ratio:2/3;background:@ALT@;position:relative}
 .zt__p img,.zt__img{position:relative;z-index:1;width:100%;height:100%;
 object-fit:cover;display:block}
-.zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:14px;
-text-align:center;color:@MUTE@;font-family:system-ui,sans-serif;font-size:13px;
-background:linear-gradient(160deg,#eef1f6,#dfe5ed)}
-.zt__b{display:block;padding:13px 14px 10px;flex:1}
-.zt__t{display:block;font-size:17px;line-height:1.3;font-weight:700;margin:0 0 5px}
-.zt__m{display:block;font-family:system-ui,sans-serif;font-size:13px;color:@DIM@}
-.zt__r{display:flex;gap:12px;padding:9px 14px;border-top:1px solid @LINE@;
-background:@ALT@;font-family:system-ui,sans-serif;font-size:13px;font-weight:600}
-.zt__r b{color:@ACC@}.zt__r i{font-style:normal;color:@WARM@}
-.zt__r em{font-style:normal;color:@MUTE@;font-weight:500}
-/* Каталог и поиск: строки-списки, постер слева. Это не сетка главной. */
-.zl{display:flex;flex-direction:column;gap:2px}
-.zr{display:grid;grid-template-columns:74px 1fr;gap:16px;padding:14px 12px;
-border-radius:10px;align-items:start}
-@media(min-width:700px){.zr{grid-template-columns:92px 1fr}}
-.zr:hover{background:@ALT@}
-.zr+.zr{border-top:1px solid @LINE@}
-.zr__p{display:block;aspect-ratio:2/3;border-radius:6px;overflow:hidden;background:@ALT@;position:relative}
-.zr__p img,.zr__img{position:relative;z-index:1;width:100%;height:100%;
-object-fit:cover;display:block}
-.zr__none{position:absolute;inset:0;display:grid;place-items:center;font-size:11px;
-text-align:center;color:@MUTE@;font-family:system-ui,sans-serif;padding:6px;
-background:linear-gradient(160deg,#eef1f6,#dfe5ed)}
-.zr__t{display:block;font-size:19px;font-weight:700;margin:0 0 4px;line-height:1.28}
-.zr__m{display:block;font-family:system-ui,sans-serif;font-size:13.5px;color:@DIM@;margin:0 0 6px}
-.zr__d{display:block;font-size:14.5px;color:#39414a;margin:0;
+.zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:12px;
+text-align:center;color:@MUTE@;font-size:12px;line-height:1.3}
+.zt__none b{display:block;font-size:24px;font-weight:700;color:@DIM@;margin-bottom:4px}
+.zt__b{padding:8px 9px 10px;display:flex;flex-direction:column;gap:4px;flex:1}
+.zt__t{font-size:13.5px;font-weight:600;line-height:1.28;
 display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.zr__r{display:flex;gap:12px;margin-top:7px;font-family:system-ui,sans-serif;
-font-size:13px;font-weight:600}
-.zr__r b{color:@ACC@}.zr__r i{font-style:normal;color:@WARM@}
-/* Листалка — крупная, текстовая, не плитками. */
-.zpg{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;
-margin:32px 0;font-family:system-ui,sans-serif;font-size:14px}
-.zpg a{padding:9px 15px;border:1px solid @LINE@;border-radius:8px;font-weight:600;color:@ACC@}
-.zpg a:hover{border-color:@ACC@;background:@ALT@}
-.zpg span[aria-current]{padding:9px 15px;border-radius:8px;background:@ACC@;color:#fff;font-weight:600}
-.zpg em{font-style:normal;color:@DIM@}
-/* Страница произведения: широкий баннер, постер внахлёст, полоса оценок. */
-.zcr{font-family:system-ui,sans-serif;font-size:13px;color:@DIM@;padding:14px 26px 0}
-.zcr a{color:@ACC@;font-weight:600;display:inline-block;padding:5px 2px}
-.zban{position:relative;margin:12px 26px 0;border-radius:14px;min-height:186px;
-background:linear-gradient(120deg,#1a2433,#0f1620 60%,#16233a);overflow:hidden}
-.zban__img{position:absolute;inset:0;opacity:.42}
-.zban__img img{width:100%;height:100%;object-fit:cover}
-.zhead{display:grid;grid-template-columns:1fr;gap:20px;padding:0 26px;margin:-92px 0 0;
-position:relative;z-index:2}
-@media(min-width:760px){.zhead{grid-template-columns:186px 1fr;align-items:end}}
-.zhead__ps{border-radius:12px;overflow:hidden;aspect-ratio:2/3;background:@ALT@;
-box-shadow:0 14px 40px #0000004d;border:4px solid #fff;position:relative}
-.zhead__ps img,.zhead__img{position:relative;z-index:1;width:100%;height:100%;
-object-fit:cover;display:block}
-.zhead__x{padding:0 0 10px}
-.zhead h1{font-size:32px;line-height:1.18;margin:0 0 6px;letter-spacing:-.5px}
-@media(max-width:759px){.zhead h1{font-size:25px}}
-.zhead__o{font-family:system-ui,sans-serif;font-size:14px;color:@DIM@;margin:0 0 10px}
-.zstrip{display:flex;flex-wrap:wrap;gap:10px;margin:18px 26px 0;padding:14px 16px;
-background:@ALT@;border:1px solid @LINE@;border-radius:12px;
-font-family:system-ui,sans-serif;font-size:14px}
-.zstrip div{display:flex;flex-direction:column;gap:2px;padding-right:18px}
-.zstrip div+div{border-left:1px solid @LINE@;padding-left:18px}
-.zstrip dt{font-size:11.5px;letter-spacing:.9px;text-transform:uppercase;color:@DIM@;font-weight:700}
-.zstrip dd{margin:0;font-size:17px;font-weight:700;color:@INK@}
-.zstrip .zacc{color:@ACC@}.zstrip .zwarm{color:@WARM@}
-/* Тело: основной текст слева, факты колонкой справа. */
-.zbody{display:grid;grid-template-columns:1fr;gap:28px;padding:0 26px;margin:26px 0 0}
-@media(min-width:980px){.zbody{grid-template-columns:minmax(0,1fr) 316px}}
-.zsec{margin:0 0 28px}
-.zsec h2{font-size:22px;margin:0 0 10px;font-weight:700}
-.zsec p{margin:0 0 12px;font-size:16px;line-height:1.7}
-.zsec .none{color:@DIM@;font-style:italic;font-size:15px}
-.zaside{font-family:system-ui,sans-serif;font-size:14px}
-.zaside dl{margin:0;background:@ALT@;border:1px solid @LINE@;border-radius:12px;padding:16px 18px}
-.zaside div{padding:7px 0}
-.zaside div+div{border-top:1px solid @LINE@}
-.zaside dt{font-size:11.5px;letter-spacing:.9px;text-transform:uppercase;color:@DIM@;
-font-weight:700;margin-bottom:3px}
-.zaside dd{margin:0;color:@INK@;line-height:1.5}
-.zaside a{color:@ACC@;font-weight:600;display:inline-block;padding:5px 2px}
-/* Ссылки жанров в колонке фактов Zona были 16px по высоте — та же
-   болезнь, что раньше вылечили у Lords в `.facts a`, и ровно так же
-   её нашла проба целей касания, а не чтение. */
-/* Плеер Zona: без вкладок, рамка со скруглением и подпись сверху. */
-.zpl{margin:0 26px}
-.zpl__h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:0 0 10px}
-.zpl__h h2{font-size:22px;margin:0;font-weight:700}
-.zpl__h span{font-family:system-ui,sans-serif;font-size:13.5px;color:@DIM@}
-.zpl__f{position:relative;aspect-ratio:16/9;background:#0c1017;border-radius:14px;
-overflow:hidden;display:grid;place-items:center;border:1px solid @LINE@}
-.zpl__f video-player{display:block;width:100%;height:100%}
-.zpl__s{max-width:540px;text-align:center;padding:26px 22px;
-font-family:system-ui,sans-serif;color:#cfd8e2}
-.zpl__s b{display:block;font-size:17px;color:#fff;margin-bottom:8px;font-weight:600}
-.zpl__s p{margin:0;font-size:14px;line-height:1.6;color:#a9b4c1}
-.zpl__s code{background:#141a22;padding:2px 6px;border-radius:4px;font-size:12.5px;color:#cfd8e2}
-/* Сезоны Zona: списком с подписями, а не плитками-номерами. */
-.zsea{border:1px solid @LINE@;border-radius:12px;overflow:hidden;margin:0 0 16px}
-.zsea__h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
-background:@ALT@;padding:12px 16px;font-family:system-ui,sans-serif}
-.zsea__h b{font-size:15px}
-.zsea__h span{font-size:13px;color:@DIM@}
-.zeps{display:flex;flex-wrap:wrap;gap:6px;padding:14px 16px}
-.zeps a{font-family:system-ui,sans-serif;font-size:13.5px;font-weight:600;padding:7px 12px;
-border:1px solid @LINE@;border-radius:8px;color:@ACC@}
-.zeps a:hover{background:@ALT@;border-color:@ACC@}
-.zeps a[aria-current]{background:@ACC@;color:#fff;border-color:@ACC@}
-.zeps a[data-off]{color:@MUTE@}
-.zepnav{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:18px 0 0;
-font-family:system-ui,sans-serif;font-size:14px}
-.zepnav a{padding:10px 16px;border:1px solid @LINE@;border-radius:8px;font-weight:600;color:@ACC@}
-.zepnav span{padding:10px 16px;border:1px solid @LINE@;border-radius:8px;color:@MUTE@}
-.zempty{padding:56px 24px;text-align:center;border:1px solid @LINE@;border-radius:14px;
-background:@ALT@;margin:20px 0}
-.zempty b{display:block;font-size:22px;margin-bottom:8px}
-.zempty p{margin:0;font-family:system-ui,sans-serif;font-size:14.5px;color:@DIM@}
-.zempty a{display:inline-block;padding:6px 2px;color:@ACC@;font-weight:600}
-.znf{padding:70px 26px;text-align:center}
-.znf b{display:block;font-size:78px;line-height:1;color:@ACC@;font-weight:700}
-.znf h1{font-size:26px;margin:12px 0 10px}
-.znf p{font-family:system-ui,sans-serif;font-size:15px;color:@DIM@;max-width:470px;
-margin:0 auto 20px}
-.znf a{display:inline-block;background:@ACC@;color:#fff;font-family:system-ui,sans-serif;
-font-weight:600;padding:12px 24px;border-radius:8px}
-.zft{border-top:1px solid @LINE@;margin:40px 26px 0;padding:22px 0 10px;
-font-family:system-ui,sans-serif;font-size:13px;color:@DIM@;
-display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between;align-items:center}
+.zt__m{display:block;font-size:12px;color:@DIM@}
+.zt__r{display:flex;gap:9px;font-size:12px;color:@DIM@;margin-top:auto;
+padding-top:4px;flex-wrap:wrap}
+.zt__r b{color:@WARM@;font-weight:700}
+.zt__r i{color:@WARM@;font-style:normal;font-weight:700}
+.zt__r em{color:@MUTE@;font-style:italic}
+
+/* Строка списка: постер слева. Это не сетка главной. */
+.zl{display:flex;flex-direction:column;gap:10px}
+.zr{display:grid;grid-template-columns:64px 1fr;gap:12px;padding:10px;
+background:@SURF@;border:1px solid @LINE@;border-radius:8px;align-items:start}
+@media(min-width:768px){.zr{grid-template-columns:82px 1fr}}
+.zr:hover{border-color:@ACC@}
+.zr__p{aspect-ratio:2/3;background:@ALT@;border-radius:5px;overflow:hidden;
+position:relative}
+.zr__p img,.zr__img{width:100%;height:100%;object-fit:cover;display:block;
+position:relative;z-index:1}
+.zr__none{position:absolute;inset:0;display:grid;place-items:center;
+text-align:center;color:@MUTE@;font-size:11px;padding:6px}
+.zr__t{display:block;font-size:15px;font-weight:600;line-height:1.3;margin-bottom:3px}
+.zr__m{display:block;font-size:12.5px;color:@DIM@;margin-bottom:5px}
+.zr__d{font-size:12.5px;color:@DIM@;line-height:1.45;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zr__r{display:flex;gap:10px;font-size:12px;color:@DIM@;margin-top:6px;flex-wrap:wrap}
+
+/* Фильтры, пагинация, служебные состояния. */
+.zstrip{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 6px}
+.zstrip a{background:@SURF@;border:1px solid @LINE@;border-radius:6px;
+padding:7px 12px;font-size:13px;color:@DIM@;font-weight:600}
+.zstrip a:hover{border-color:@ACC@;color:@INK@}
+.zstrip a[aria-current]{background:@ACCDK@;color:#fff;border-color:@ACCDK@}
+.zpg{display:flex;gap:7px;justify-content:center;margin:26px 0;flex-wrap:wrap}
+.zpg a,.zpg span{padding:8px 13px;border-radius:6px;border:1px solid @LINE@;
+background:@SURF@;font-size:13.5px;min-width:40px;text-align:center}
+.zpg span{background:@ACCDK@;color:#fff;border-color:@ACCDK@}
+.zempty,.znf{padding:52px 18px;text-align:center;color:@DIM@}
+.znf b{display:block;font-size:44px;font-weight:700;color:@ACC@;margin-bottom:6px}
+.znf h1{font-size:24px;margin:0 0 8px;color:@INK@;font-weight:600}
+.znf a{display:inline-block;margin-top:14px;background:@ACCDK@;color:#fff;
+padding:11px 22px;border-radius:6px;font-weight:600}
+.zsea__h{font-size:13px;color:@DIM@;margin:0 0 14px}
+.zsea{margin:0 0 20px}
+
+/* Страница произведения. */
+.zban{position:relative;border-radius:10px;overflow:hidden;background:@ALT@;
+margin:18px 0 0;max-height:280px}
+.zban__img{width:100%;height:100%;object-fit:cover;display:block;opacity:.42}
+.zhead{display:grid;grid-template-columns:1fr;gap:18px;margin:18px 0 8px}
+@media(min-width:768px){.zhead{grid-template-columns:208px 1fr}}
+.zhead__ps{aspect-ratio:2/3;border-radius:8px;overflow:hidden;background:@ALT@;
+position:relative;max-width:208px}
+.zhead__x{min-width:0}
+.zhead__o{font-size:14px;color:@DIM@;margin:0 0 10px}
+.zbody{font-size:14.5px;line-height:1.62;color:@INK@;max-width:70ch}
+.zaside{background:@SURF@;border:1px solid @LINE@;border-radius:8px;
+padding:14px 16px;font-size:13px;color:@DIM@}
+.zaside a{color:@ACC@;font-weight:600}
+.zeps{display:grid;gap:7px;margin:14px 0}
+.zeps a,.zeps span{display:block;padding:9px 12px;border-radius:6px;
+border:1px solid @LINE@;background:@SURF@;font-size:13.5px}
+.zeps span{opacity:.55}
+.zeps a[aria-current]{background:@ACCDK@;color:#fff;border-color:@ACCDK@}
+.zepnav{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+.zepnav a{background:@SURF@;border:1px solid @LINE@;border-radius:6px;
+padding:9px 14px;font-size:13.5px;color:@ACC@;font-weight:600}
+
+/* Плеер: кадр зарезервирован заранее, состояние объявляется словами. */
+.zpl{margin:18px 0}
+.zpl__f{aspect-ratio:16/9;background:#0d1217;border:1px solid @LINE@;
+border-radius:8px;overflow:hidden;position:relative}
+.zpl__h{font-size:22.1px;font-weight:400;margin:22px 0 10px}
+.zpl__s{position:absolute;inset:0;display:grid;place-items:center;padding:22px;
+text-align:center;color:@DIM@;font-size:13.5px;line-height:1.5}
+
+.zft{border-top:1px solid @LINE@;margin:36px 0 0;padding:20px 0 30px;
+font-size:12.5px;color:@DIM@;display:flex;gap:14px;flex-wrap:wrap;
+justify-content:space-between;align-items:center}
 .zvb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;
-border:1px solid @LINE@;border-radius:6px;padding:5px 9px;background:@ALT@;color:#4d555e}
+border:1px solid @LINE@;border-radius:5px;padding:5px 9px;background:@SURF@;
+color:@MUTE@}
+
+img[hidden]{display:none}
+"""
+
+
+АНИМЕДИА_СТИЛЬ = """
+/* Оформление Animedia 1.2.0. Числа измерены на эталоне (см. artifacts/evidence/
+   templates-zona-animedia-visual-parity-006/reference/amd-online/):
+     контейнер почти во всю ширину (поля 6 на узком, 1 дальше), шапка 90 на
+     десктопе и 126 на узком и НЕ закреплённая, кегль тела 14, h2 16/700,
+     ссылки 17/400, пропорция карточки 0.86, сетка 3 колонки до 1024 и 4 от
+     1440 с зазором 10. Разметка и правила — свои. */
+body{background:@PAGE@;color:@INK@;
+font:14px/1.45 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif}
+.zs{min-height:100vh;display:block}
+.zmain{min-width:0}
+.zwrap{max-width:100%;margin:0 auto;padding:0 6px}
+@media(min-width:768px){.zwrap{padding:0 1px}}
+
+/* Шапка: обычная, не закреплённая. Плотное меню разделов в одну строку. */
+.zhd{position:relative;background:@RAIL@;color:@RAILINK@;
+border-bottom:2px solid @ACC@}
+.zhd__in{max-width:100%;margin:0 auto;padding:12px 6px;display:flex;
+align-items:center;gap:10px;flex-wrap:wrap;min-height:126px}
+@media(min-width:768px){.zhd__in{padding:10px 1px;min-height:90px;flex-wrap:nowrap}}
+.zhd__logo{font-size:22px;font-weight:800;letter-spacing:-.4px;color:@ACC@;
+white-space:nowrap;flex:0 0 auto}
+.zhd__n{display:flex;gap:2px;flex:1 0 100%;order:3;min-width:0;
+overflow-x:auto;scrollbar-width:none}
+.zhd__n::-webkit-scrollbar{display:none}
+@media(min-width:768px){.zhd__n{flex:1 1 auto;order:0;overflow-x:auto}}
+.zhd__n a{padding:7px 9px;border-radius:4px;font-size:17px;font-weight:400;
+color:@INK@;white-space:nowrap;flex:0 0 auto}
+.zhd__n a:hover{background:@ALT@;color:@ACC@}
+.zhd__n a[aria-current]{color:@ACC@;font-weight:700;box-shadow:inset 0 -2px 0 @ACC@}
+.zhd__s{display:flex;flex:1 1 150px;min-width:0;max-width:340px;
+border:1px solid @LINE@;border-radius:4px;overflow:hidden;background:@PAGE@}
+.zhd__s input{flex:1;min-width:0;border:0;padding:8px 10px;font-size:14px;
+color:@INK@;font-family:inherit;background:transparent}
+.zhd__s button{border:0;background:@ACC@;color:#fff;padding:0 14px;
+font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
+
+/* Служебная полоса состояния данных. */
+.ast{background:@ALT@;border:1px solid @LINE@;border-left:4px solid @ACC@;
+border-radius:4px;padding:14px 16px;margin:14px 0;font-size:13.5px;
+line-height:1.55;color:@INK@}
+.ast b{display:block;font-size:15px;font-weight:700;margin-bottom:5px;color:@ACC@}
+.ast code{background:@SURF@;padding:1px 5px;border-radius:3px;font-size:12.5px}
+
+.zrail,.zrail__logo,.zrail__sub,.zrail__t,.zrail__n,.zrail__g{display:none}
+.ztop{border-bottom:1px solid @LINE@;background:@PAGE@}
+.ztop__a{display:flex;align-items:center;gap:14px;padding:10px 0}
+.ztop__s{flex:1;display:flex;border:1px solid @LINE@;border-radius:4px;
+overflow:hidden;background:@PAGE@;max-width:600px}
+.ztop__s input{flex:1;border:0;padding:9px 12px;font-size:14px;
+background:transparent;color:@INK@;font-family:inherit}
+.ztop__s button{border:0;background:@ACC@;color:#fff;padding:0 16px;
+font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
+.ztop__b{display:flex;gap:14px;padding:0 0 9px;font-size:13px;color:@DIM@;
+flex-wrap:wrap}
+.ztop__b a{color:@ACC@;font-weight:700;display:inline-block;padding:4px 2px}
+
+/* Типографика по измерению: h2 16/700, ссылки 17/400. */
+.zh{font-size:16px;line-height:1.3;font-weight:500;margin:16px 0 5px}
+.zh--sm{font-size:16px;font-weight:700;margin:20px 0 5px}
+.zsub{font-size:13px;color:@DIM@;margin:0 0 14px}
+.zsub a{color:@ACC@;font-weight:700;padding:4px 2px;display:inline-block}
+.zcr{font-size:12.5px;color:@DIM@;padding:10px 0 0}
+.zcr a{color:@ACC@}
+
+.zsec{margin:18px 0 22px}
+.zsec__h{display:flex;align-items:center;justify-content:space-between;
+gap:10px;margin:0 0 9px;border-bottom:1px solid @LINE@;padding-bottom:6px}
+.zsec__h h2{font-size:16px;font-weight:700;margin:0}
+.zsec__h a{font-size:13px;color:@ACC@;font-weight:700;white-space:nowrap}
+.zrl{position:relative}
+.zrl__vp{overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;
+scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:2px 0 8px}
+.zrl__track{display:flex;gap:10px;min-width:min-content}
+.zrl__track>*{flex:0 0 132px;scroll-snap-align:start}
+@media(min-width:1440px){.zrl__track>*{flex-basis:150px}}
+.zrl__btn{position:absolute;top:34%;transform:translateY(-50%);z-index:5;
+width:30px;height:48px;border:1px solid @LINE@;border-radius:4px;cursor:pointer;
+background:rgba(255,255,255,.94);color:@ACC@;font-size:17px;line-height:1;
+display:none;align-items:center;justify-content:center}
+@media(min-width:1024px){.zrl:hover .zrl__btn,.zrl__btn:focus-visible{display:flex}}
+.zrl__btn--p{left:-4px}
+.zrl__btn--n{right:-4px}
+
+/* Плотная сетка: 3 колонки до 1024, 4 от 1440, зазор 10. */
+.zg{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}
+@media(min-width:560px){.zg{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:1440px){.zg{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:1800px){.zg{grid-template-columns:repeat(6,1fr)}}
+.zt{display:flex;flex-direction:column;background:@PAGE@;
+border:1px solid @LINE@;border-radius:4px;overflow:hidden;
+transition:border-color .14s,box-shadow .14s}
+.zt:hover{border-color:@ACC@;box-shadow:0 4px 14px rgba(0,0,0,.09)}
+/* Пропорция постера 0.86 — измерена на эталоне. */
+.zt__p{display:block;aspect-ratio:86/100;background:@SURF@;position:relative}
+.zt__p img,.zt__img{position:relative;z-index:1;width:100%;height:100%;
+object-fit:cover;display:block}
+.zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:10px;
+text-align:center;color:@MUTE@;font-size:11.5px;line-height:1.3}
+.zt__none b{display:block;font-size:22px;font-weight:800;color:@DIM@;margin-bottom:3px}
+.zt__b{padding:7px 8px 9px;display:flex;flex-direction:column;gap:3px;flex:1}
+.zt__t{font-size:13px;font-weight:700;line-height:1.26;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zt__m{display:block;font-size:11.5px;color:@DIM@}
+.zt__r{display:flex;gap:8px;font-size:11.5px;color:@DIM@;margin-top:auto;
+padding-top:3px;flex-wrap:wrap}
+.zt__r b,.zt__r i{color:@ACC@;font-weight:700;font-style:normal}
+.zt__r em{color:@MUTE@;font-style:italic}
+
+.zl{display:flex;flex-direction:column;gap:8px}
+.zr{display:grid;grid-template-columns:58px 1fr;gap:10px;padding:8px;
+background:@PAGE@;border:1px solid @LINE@;border-radius:4px;align-items:start}
+@media(min-width:768px){.zr{grid-template-columns:74px 1fr}}
+.zr:hover{border-color:@ACC@}
+.zr__p{aspect-ratio:86/100;background:@SURF@;border-radius:3px;overflow:hidden;
+position:relative}
+.zr__p img,.zr__img{width:100%;height:100%;object-fit:cover;display:block;
+position:relative;z-index:1}
+.zr__none{position:absolute;inset:0;display:grid;place-items:center;
+text-align:center;color:@MUTE@;font-size:10.5px;padding:5px}
+.zr__t{display:block;font-size:14px;font-weight:700;line-height:1.3;margin-bottom:2px}
+.zr__m{display:block;font-size:12px;color:@DIM@;margin-bottom:4px}
+.zr__d{font-size:12px;color:@DIM@;line-height:1.42;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zr__r{display:flex;gap:9px;font-size:11.5px;color:@DIM@;margin-top:5px;flex-wrap:wrap}
+
+.zstrip{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 5px}
+.zstrip a{background:@ALT@;border:1px solid @LINE@;border-radius:4px;
+padding:6px 10px;font-size:12.5px;color:@INK@;font-weight:600}
+.zstrip a:hover{border-color:@ACC@;color:@ACC@}
+.zstrip a[aria-current]{background:@ACC@;color:#fff;border-color:@ACC@}
+.zpg{display:flex;gap:5px;justify-content:center;margin:22px 0;flex-wrap:wrap}
+.zpg a,.zpg span{padding:7px 12px;border-radius:4px;border:1px solid @LINE@;
+background:@PAGE@;font-size:13px;min-width:36px;text-align:center}
+.zpg span{background:@ACC@;color:#fff;border-color:@ACC@}
+.zempty,.znf{padding:44px 16px;text-align:center;color:@DIM@}
+.znf b{display:block;font-size:40px;font-weight:800;color:@ACC@;margin-bottom:5px}
+.znf h1{font-size:21px;margin:0 0 7px;color:@INK@;font-weight:700}
+.znf a{display:inline-block;margin-top:12px;background:@ACC@;color:#fff;
+padding:10px 20px;border-radius:4px;font-weight:700}
+.zsea__h{font-size:13px;color:@DIM@;margin:0 0 12px}
+.zsea{margin:0 0 18px}
+
+/* Расписание: день, время и номер серии. Пустое значение названо словами. */
+.asch{display:grid;gap:10px;margin:12px 0}
+@media(min-width:900px){.asch{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1440px){.asch{grid-template-columns:repeat(4,1fr)}}
+.asch__d{border:1px solid @LINE@;border-radius:4px;background:@PAGE@;overflow:hidden}
+.asch__d h3{margin:0;padding:8px 11px;font-size:13px;font-weight:700;
+background:@ALT@;border-bottom:1px solid @LINE@}
+.asch__l{margin:0;padding:0;list-style:none}
+.asch__l li{display:flex;gap:9px;align-items:baseline;padding:7px 11px;
+border-bottom:1px solid @LINE@;font-size:12.5px}
+.asch__l li:last-child{border-bottom:0}
+.asch__t{color:@ACC@;font-weight:700;flex:0 0 42px;font-variant-numeric:tabular-nums}
+.asch__e{color:@DIM@;margin-left:auto;flex:0 0 auto;font-size:11.5px}
+.asch__n{color:@MUTE@;font-style:italic}
+
+.zban{position:relative;border-radius:4px;overflow:hidden;background:@SURF@;
+margin:14px 0 0;max-height:240px}
+.zban__img{width:100%;height:100%;object-fit:cover;display:block;opacity:.5}
+.zhead{display:grid;grid-template-columns:1fr;gap:14px;margin:14px 0 6px}
+@media(min-width:768px){.zhead{grid-template-columns:190px 1fr}}
+.zhead__ps{aspect-ratio:86/100;border-radius:4px;overflow:hidden;background:@SURF@;
+position:relative;max-width:190px}
+.zhead__x{min-width:0}
+.zhead__o{font-size:13.5px;color:@DIM@;margin:0 0 9px}
+.zbody{font-size:14px;line-height:1.6;color:@INK@;max-width:72ch}
+.zaside{background:@ALT@;border:1px solid @LINE@;border-radius:4px;
+padding:12px 14px;font-size:13px;color:@DIM@}
+.zaside a{color:@ACC@;font-weight:700}
+.zeps{display:grid;gap:5px;margin:12px 0}
+@media(min-width:768px){.zeps{grid-template-columns:repeat(2,1fr)}}
+.zeps a,.zeps span{display:block;padding:8px 11px;border-radius:4px;
+border:1px solid @LINE@;background:@PAGE@;font-size:13px}
+.zeps span{opacity:.5}
+.zeps a[aria-current]{background:@ACC@;color:#fff;border-color:@ACC@}
+.zepnav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.zepnav a{background:@ALT@;border:1px solid @LINE@;border-radius:4px;
+padding:8px 12px;font-size:13px;color:@ACC@;font-weight:700}
+
+.zpl{margin:14px 0}
+.zpl__f{aspect-ratio:16/9;background:#101010;border:1px solid @LINE@;
+border-radius:4px;overflow:hidden;position:relative}
+.zpl__h{font-size:16px;font-weight:700;margin:18px 0 9px}
+.zpl__s{position:absolute;inset:0;display:grid;place-items:center;padding:20px;
+text-align:center;color:#d8d8d8;font-size:13px;line-height:1.5}
+
+.zft{border-top:2px solid @ACC@;margin:28px 0 0;padding:16px 0 26px;
+font-size:12.5px;color:@DIM@;display:flex;gap:12px;flex-wrap:wrap;
+justify-content:space-between;align-items:center}
+.zvb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;
+border:1px solid @LINE@;border-radius:4px;padding:4px 8px;background:@ALT@;
+color:@MUTE@}
 
 img[hidden]{display:none}
 """
@@ -926,6 +1175,18 @@ def _подставить(шаблон: str, токены: dict) -> str:
                    ("Сериалы", "/catalog/?kind=Сериал", "Сериал")],
         "лид": "Кинопортал: что смотреть и где это найти",
         "метка": "Z",
+    },
+    "animedia": {
+        "вид": "animedia",
+        "токены": АНИМЕДИА_ТОКЕНЫ,
+        "стиль": lambda: _общее(АНИМЕДИА_ТОКЕНЫ) + _подставить(АНИМЕДИА_СТИЛЬ, АНИМЕДИА_ТОКЕНЫ),
+        "нав": [("/", "Главная"), ("/catalog/", "Каталог аниме"),
+                ("/new/", "Новые эпизоды"), ("/schedule/", "Расписание"),
+                ("/collections/", "Подборки")],
+        "поиск": "Название аниме",
+        "полосы": [],
+        "лид": "Аниме-портал: онгоинги, новые эпизоды и расписание",
+        "метка": "A",
     },
 }
 
@@ -1097,6 +1358,27 @@ def разметка_плеера(вид, запись: dict, деталь: dict
 ТЕКУЩИЙ_ПУНКТ = ' aria-current="true"'
 
 
+#: Отдавать ли постеры своим адресом вместо прямой ссылки на внешний CDN.
+#: Механизм в проекте уже есть: путь `/poster/` и снимок кэша
+#: `yummyani-poster-cache.conf`, — но включён он `sub_filter`-ом только в
+#: vhost lords-01. Пока владелец не включит тот же снимок для zona-01 и
+#: animedia-01, переписывать адрес нельзя: страница ссылалась бы на путь,
+#: которого на этих доменах нет, и постеры отказали бы все разом. Поэтому
+#: переключатель, а не молчаливая смена поведения; значение по умолчанию
+#: сохраняет нынешний адрес.
+ПОСТЕРЫ_СВОИМ_АДРЕСОМ = os.environ.get("LORDS_POSTER_SAME_ORIGIN", "") == "1"
+ВНЕШНИЙ_ПОСТЕР = "https://poster.cdnvideohub.com/"
+
+
+def _адрес_постера(адрес: str | None) -> str | None:
+    """Адрес постера: свой путь либо адрес источника, без третьего варианта."""
+    if not адрес:
+        return адрес
+    if ПОСТЕРЫ_СВОИМ_АДРЕСОМ and адрес.startswith(ВНЕШНИЙ_ПОСТЕР):
+        return "/poster/" + адрес[len(ВНЕШНИЙ_ПОСТЕР):]
+    return адрес
+
+
 def заглушка_постера(запись: dict, класс_заглушки: str, класс_картинки: str,
                      ширина: int = 300, высота: int = 450) -> str:
     """Постер с заглушкой ПОД ним, а не вместо него.
@@ -1114,7 +1396,7 @@ def заглушка_постера(запись: dict, класс_заглуш�
     заглушки на их месте оставался бы значок сломанной картинки.
     """
     первая = html.escape((запись.get("title") or "?")[:1].upper())
-    постер = запись.get("poster")
+    постер = _адрес_постера(запись.get("poster"))
     подпись = "постер не открылся" if постер else "постер не передан"
     заглушка = f'<span class="{класс_заглушки}"><b>{первая}</b>{подпись}</span>'
     if not постер:
@@ -1131,6 +1413,19 @@ def заглушка_постера(запись: dict, класс_заглуш�
 СКРИПТ_ПОСТЕРОВ = (
     "document.addEventListener('error',function(e){var i=e.target;"
     "if(i&&i.tagName==='IMG'&&i.hasAttribute('data-poster'))i.hidden=true;},true);"
+)
+
+#: Скрипт горизонтальных лент. Отдельная константа, а не дополнение к
+#: СКРИПТ_ПОСТЕРОВ: тот подключают обе витрины, и дописывание в него изменило
+#: бы байты, которые отдаёт Lords. Здесь ровно кнопочная прокрутка; свайп,
+#: колесо и клавиатура работают нативно и без скрипта.
+СКРИПТ_ЛЕНТ = (
+    "document.addEventListener('click',function(e){"
+    "var b=e.target.closest('[data-rl]');if(!b)return;"
+    "var v=document.getElementById(b.getAttribute('aria-controls'));if(!v)return;"
+    "var d=Math.max(160,Math.round(v.clientWidth*0.86));"
+    "v.scrollBy({left:b.getAttribute('data-rl')==='next'?d:-d,behavior:'smooth'});"
+    "});"
 )
 
 
@@ -1801,36 +2096,34 @@ class ВидЗона(Вид):
                          if описание else "")
         канон = (f'<link rel="canonical" href="{html.escape(self.канон(путь))}">'
                  if путь and код == 200 else "")
-        return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="zona-rail">
+        return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="zona-top">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(титул)}</title>{описание_мета}{канон}
 <meta name="robots" content="noindex, nofollow">
 {_открытый_граф(og or {})}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 {_мета_версии()}
-<style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}</script></head>
+<style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}
+{СКРИПТ_ЛЕНТ}</script></head>
 <body><a class="skip" href="#main">Перейти к содержимому</a>
 <div class="zs">
-<aside class="zrail">
-<a class="zrail__logo" href="/">{html.escape(self.имя)}</a>
-<p class="zrail__sub">Кинопортал · тестовая витрина</p>
-<p class="zrail__t">Разделы</p>
-<nav class="zrail__n" aria-label="Разделы">{нав}</nav>
-<p class="zrail__t">Жанры</p>
-<div class="zrail__g">{жанры}</div>
-</aside>
-<div class="zmain">
-<div class="ztop"><div class="ztop__a">
-<form class="ztop__s" action="/search/" method="get" role="search">
+<header class="zhd">
+<div class="zhd__in">
+<a class="zhd__logo" href="/">{html.escape(self.имя)}</a>
+<nav class="zhd__n" aria-label="Разделы">{нав}</nav>
+<form class="zhd__s" action="/search/" method="get" role="search">
 <label class="vh" for="q">Поиск по каталогу</label>
 <input id="q" name="q" placeholder="{html.escape(self.се["поиск"])}">
 <button type="submit">Найти</button></form>
-</div><div class="ztop__b">{_склеить([сверху])}</div></div>{крошки}
+</div>
+</header>
+<div class="zmain">
+<div class="zwrap">{_склеить([f'<div class="ztop"><div class="ztop__b">{сверху}</div></div>' if сверху else ""])}{крошки}
 <main id="main">{тело}</main>
 <footer class="zft">
 <span>{html.escape(self.имя)} · тестовая витрина, закрыта от индексации</span>
 <span class="zvb">Template: {СЕМЕЙСТВО} {ВЕРСИЯ} · {МАНИФЕСТ["source_commit"][:8]}</span>
-</footer></div></div>{схемы}</body></html>"""
+</footer></div></div></div>{схемы}</body></html>"""
 
     # --- составные части ---------------------------------------------
     def плитка(self, запись: dict) -> str:
@@ -1878,6 +2171,39 @@ class ВидЗона(Вид):
     def лента(self, набор) -> str:
         return '<div class="zl">' + "".join(self.строка(з) for з in набор) + "</div>"
 
+    def карусель(self, ключ: str, набор) -> str:
+        """Горизонтальная лента: мышь, клавиатура и свайп.
+
+        Прокрутка нативная, поэтому свайп и колесо работают без единой строки
+        скрипта, а клавиатура — потому что область получает фокус. Кнопки
+        добавляют мышиный способ и ничего не заменяют: при выключенном
+        JavaScript лента остаётся прокручиваемой.
+        """
+        плитки = "".join(self.плитка(з) for з in набор)
+        ид = f"rl-{ключ}"
+        return (f'<div class="zrl">'
+                f'<button class="zrl__btn zrl__btn--p" type="button" data-rl="prev"'
+                f' aria-controls="{ид}" aria-label="Пролистать назад">&#8249;</button>'
+                f'<div class="zrl__vp" id="{ид}" tabindex="0" role="group"'
+                f' aria-label="Лента произведений">'
+                f'<div class="zrl__track">{плитки}</div></div>'
+                f'<button class="zrl__btn zrl__btn--n" type="button" data-rl="next"'
+                f' aria-controls="{ид}" aria-label="Пролистать вперёд">&#8250;</button>'
+                f'</div>')
+
+    def секция(self, ключ: str, титул: str, ссылка: str, набор, пусто: str) -> str:
+        """Секция главной. Пустой набор показывает причину, а не исчезает.
+
+        Секция, которая пропадает при отсутствии данных, неотличима от секции,
+        которую забыли реализовать. Поэтому состав объявлен всегда, а нехватка
+        данных названа словами.
+        """
+        ссылка_html = f'<a href="{ссылка}">Весь раздел</a>' if ссылка else ""
+        шапка = (f'<div class="zsec__h"><h2>{html.escape(титул)}</h2>{ссылка_html}</div>')
+        тело = (self.карусель(ключ, набор) if набор
+                else f'<div class="zempty">{html.escape(пусто)}</div>')
+        return f'<section class="zsec">{шапка}{тело}</section>'
+
     def плитки(self, набор) -> str:
         return '<div class="zg">' + "".join(self.плитка(з) for з in набор) + "</div>"
 
@@ -1904,23 +2230,83 @@ class ВидЗона(Вид):
 
     # --- страницы -----------------------------------------------------
     def главная(self) -> str:
-        свежие = sorted(self.д.items, key=lambda з: з.get("published_at") or "",
-                        reverse=True)[:8]
+        """Пять горизонтальных лент, и ни одна не повторяет выборку другой.
+
+        Повтор одной выборки под тремя заголовками — дефект, который витрина
+        показывает зрителю как три разных раздела. Поэтому здесь ведётся один
+        набор занятых slug: запись, попавшая в ленту выше, ниже не повторяется.
+        Ленту, для которой источник не передал данных, заменяет названная
+        причина, а не молчание и не чужая выборка.
+        """
+        занято: set = set()
+
+        def оценка(з: dict) -> float:
+            д = self.деталь(з["slug"])
+            значения = [д.get("kinopoisk_rating"), д.get("imdb_rating")]
+            числа = [float(v) for v in значения
+                     if isinstance(v, (int, float)) or
+                     (isinstance(v, str) and v.replace(".", "", 1).isdigit())]
+            return max(числа) if числа else 0.0
+
+        def свежесть(з: dict) -> str:
+            return з.get("published_at") or ""
+
+        #: Пул для «популярного» ограничен намеренно: сортировать 50 тысяч
+        #: записей по оценке на каждый запрос незачем, а «популярное среди
+        #: недавнего» — честная формулировка того, что здесь считается.
+        ПУЛ = 400
+
+        def выбрать(вид: str | None, ключ, сколько: int = 12,
+                    пул: int | None = None, условие=None) -> list:
+            подходящие = [з for з in self.д.items
+                          if (вид is None or з.get("kind") == вид)
+                          and (условие is None or условие(з))]
+            if пул:
+                подходящие = sorted(подходящие, key=свежесть, reverse=True)[:пул]
+            отобрано = []
+            for з in sorted(подходящие, key=ключ, reverse=True):
+                if з["slug"] in занято:
+                    continue
+                занято.add(з["slug"])
+                отобрано.append(з)
+                if len(отобрано) >= сколько:
+                    break
+            return отобрано
+
+        def есть_серии(з: dict) -> bool:
+            return bool(self.деталь(з["slug"]).get("seasons"))
+
+        ленты = [
+            ("pop-films", "Популярные новинки фильмов", "/catalog/?kind=Фильм",
+             выбрать("Фильм", оценка, пул=ПУЛ),
+             "Источник не передал оценок ни одному из недавних фильмов."),
+            ("pop-series", "Популярные сериалы", "/catalog/?kind=Сериал",
+             выбрать("Сериал", оценка, пул=ПУЛ),
+             "Источник не передал оценок ни одному из недавних сериалов."),
+            ("new-films", "Добавленные недавно фильмы", "/catalog/?kind=Фильм",
+             выбрать("Фильм", свежесть),
+             "В снимке каталога нет фильмов с датой добавления."),
+            ("new-eps", "Новые серии", "/catalog/?kind=Сериал",
+             выбрать("Сериал", свежесть, условие=есть_серии),
+             "Источник не передал ни одного сериала со списком серий, "
+             "поэтому показывать в этой ленте нечего."),
+            ("trailers", "Новые трейлеры", "",
+             [],
+             "Трейлеры источником не передаются: в снимке каталога нет ни поля "
+             "трейлера, ни ссылки на него. Выдумывать их нельзя."),
+        ]
+        жанры = "".join(
+            f'<a href="/catalog/?genre={html.escape(код)}">{html.escape(имя)}</a>'
+            for код, имя in self.индекс["genre_names"][:14])
         куски = [f'<h1 class="zh">{html.escape(self.се["лид"])}</h1>'
-                 f'<p class="zsub">В снимке каталога {len(self.д.items)} записей. '
-                 f"Ниже — то, что появилось последним.</p>"
-                 + self.плитки(свежие)]
-        for титул, ссылка, вид in self.се["полосы"]:
-            набор = [з for з in self.д.items if з.get("kind") == вид][:6]
-            if набор:
-                куски.append(f'<h2 class="zh zh--sm">{html.escape(титул)}</h2>'
-                             f'<p class="zsub"><a href="{ссылка}">Открыть весь раздел</a></p>'
-                             + self.лента(набор))
+                 f'<p class="zsub">В снимке каталога {len(self.д.items)} записей.</p>'
+                 + (f'<nav class="zstrip" aria-label="Жанры">{жанры}</nav>' if жанры else "")]
+        куски += [self.секция(*л) for л in ленты]
         return self.оболочка(
-            f'<div class="zwrap">{_склеить(куски)}</div>',
+            _склеить(куски),
             f"{self.имя} — кинопортал", "/", актив="/",
             описание=f"{self.имя}: фильмы, сериалы и анимация.",
-            сверху="<span>Обзор каталога</span>")
+            сверху="")
 
     def список(self, разд: str, зпр: dict) -> str:
         имена = {"/catalog": "Весь каталог", "/new": "Что нового", "/collections": "Подборки"}
@@ -2192,7 +2578,243 @@ def _мета_версии() -> str:
     )
 
 
-ВИДЫ_1_1 = {"lords": ВидЛордс, "zona": ВидЗона}
+#: Виды записей, которые семейство Animedia считает своими. Перечень закрытый:
+#: витрина аниме, показывающая обычные фильмы, — это не «широкий каталог», а
+#: подмешанный чужой профиль.
+АНИМЕ_ВИДЫ = ("Аниме", "ТВ", "OVA", "ONA", "Аниме-фильм", "Онгоинг", "Донхуа")
+
+
+class ВидАнимедиа(ВидЗона):
+    """Аниме-портал: светлая основа, плотная сетка, свои разделы.
+
+    От Zona наследуется только механика страниц — маршруты, карточка
+    произведения, сезоны и серии. Оформление, состав главной и словарь
+    разделов свои: механически переносить кинопортал на аниме нельзя, и
+    именно это расхождение было главным дефектом витрины.
+
+    Отдельная забота этого вида — НЕ показать чужой каталог. Если снимок
+    пришёл не аниме-каталогом, витрина говорит об этом прямо и не рисует
+    ни одной чужой карточки. Подменять отсутствующие данные соседним
+    каталогом нельзя: зритель получил бы витрину аниме, целиком состоящую
+    из обычных фильмов, — ровно то, что здесь измерено на живых доменах.
+    """
+
+    def __init__(self, *а, **кв):
+        super().__init__(*а, **кв)
+        всего = len(self.д.items)
+        свои = [з for з in self.д.items if з.get("kind") in АНИМЕ_ВИДЫ]
+        self.готовность = {
+            "записей_в_снимке": всего,
+            "из_них_аниме": len(свои),
+            "доля": round(len(свои) / всего, 4) if всего else 0.0,
+            "готово": bool(свои) and (len(свои) / всего if всего else 0) >= 0.5,
+        }
+        # Чужие записи снимаются НА УРОВНЕ ДАННЫХ вида, а не на каждой странице:
+        # иначе каталог, поиск, маршрут тайтла и рекомендации пришлось бы
+        # чинить по отдельности, и любой забытый путь снова показал бы чужое.
+        if len(свои) != всего:
+            свой_срез = copy.copy(self.д)
+            свой_срез.items = свои
+            свой_срез.years = sorted({з["year"] for з in свои if з.get("year")},
+                                     reverse=True)
+            свой_срез.kinds = sorted({з["kind"] for з in свои if з.get("kind")})
+            self.д = свой_срез
+
+    def плитка(self, запись: dict) -> str:
+        """Карточка с пропорцией постера 0.86 — измеренной на эталоне.
+
+        Размеры проставляются в разметке, а не только в CSS: браузер обязан
+        зарезервировать место до загрузки изображения, иначе сетка прыгает.
+        """
+        деталь = self.деталь(запись["slug"])
+        изо = заглушка_постера(запись, "zt__none", "zt__img", 172, 200)
+        мета = " · ".join(str(ч) for ч in (запись.get("kind"), запись.get("year")) if ч)
+        кп = _число(деталь.get("kinopoisk_rating"))
+        им = _число(деталь.get("imdb_rating"))
+        части = []
+        if кп:
+            части.append(f"<span>КП <b>{кп}</b></span>")
+        if им:
+            части.append(f"<span>IMDb <i>{им}</i></span>")
+        if not части:
+            части.append("<span><em>оценки нет</em></span>")
+        оценка = f'<span class="zt__r">{"".join(части)}</span>'
+        return (f'<a class="zt" href="{запись["url"]}">'
+                f'<span class="zt__p">{изо}</span>'
+                f'<span class="zt__b"><span class="zt__t">{html.escape(запись["title"])}</span>'
+                f'<span class="zt__m">{html.escape(мета)}</span>{оценка}</span></a>')
+
+    def секция(self, ключ: str, титул: str, ссылка: str, набор, пусто: str) -> str:
+        """Секция аниме-портала — плотная сетка, а не горизонтальная лента.
+
+        На эталоне измерено: сетка в 3 колонки до 1024 и в 4 от 1440 с зазором
+        10, и за первый экран видно объём каталога. Лента Zona здесь была бы
+        чужим ритмом.
+        """
+        ссылка_html = f'<a href="{ссылка}">Весь раздел</a>' if ссылка else ""
+        шапка = f'<div class="zsec__h"><h2>{html.escape(титул)}</h2>{ссылка_html}</div>'
+        тело = (self.плитки(набор) if набор
+                else f'<div class="zempty">{html.escape(пусто)}</div>')
+        return f'<section class="zsec">{шапка}{тело}</section>'
+
+    # --- честное состояние данных -------------------------------------
+    def полоса_готовности(self) -> str:
+        г = self.готовность
+        if г["готово"]:
+            return ""
+        return (
+            '<div class="ast" role="status">'
+            '<b>Каталог аниме источником не передан</b>'
+            f'В снимке {г["записей_в_снимке"]} записей, и записей аниме среди них '
+            f'{г["из_них_аниме"]}. Остальное — каталог другой витрины, и показывать '
+            'его здесь нельзя: это была бы витрина аниме, собранная из обычных '
+            'фильмов. Оформление, сетка и все разделы ниже работают — им не хватает '
+            'только своих данных. Требуется действие владельца контентного '
+            'конвейера: передать витрине аниме-каталог '
+            '(<code>ANIMEDIA_DATA_READINESS=FAIL</code>).'
+            '</div>')
+
+    # --- каркас --------------------------------------------------------
+    def оболочка(self, тело: str, титул: str, путь: str, *, актив: str = "",
+                 описание: str = "", разметка: str = "", код: int = 200,
+                 сверху: str = "", крошки: str = "", og: dict | None = None) -> str:
+        нав = "".join(
+            f'<a href="{u}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
+            for u, t in self.се["нав"])
+        схемы = "".join(f'<script type="application/ld+json">{р}</script>'
+                        for р in ([разметка] if разметка else []))
+        описание_мета = (f'<meta name="description" content="{html.escape(описание)}">'
+                         if описание else "")
+        канон = (f'<link rel="canonical" href="{html.escape(self.канон(путь))}">'
+                 if путь and код == 200 else "")
+        return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="animedia-portal">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{html.escape(титул)}</title>{описание_мета}{канон}
+<meta name="robots" content="noindex, nofollow">
+{_открытый_граф(og or {})}
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+{_мета_версии()}
+<style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}
+{СКРИПТ_ЛЕНТ}</script></head>
+<body><a class="skip" href="#main">Перейти к содержимому</a>
+<div class="zs">
+<header class="zhd">
+<div class="zhd__in">
+<a class="zhd__logo" href="/">{html.escape(self.имя)}</a>
+<nav class="zhd__n" aria-label="Разделы">{нав}</nav>
+<form class="zhd__s" action="/search/" method="get" role="search">
+<label class="vh" for="q">Поиск по каталогу аниме</label>
+<input id="q" name="q" placeholder="{html.escape(self.се["поиск"])}">
+<button type="submit">Найти</button></form>
+</div>
+</header>
+<div class="zmain">
+<div class="zwrap">{_склеить([f'<div class="ztop"><div class="ztop__b">{сверху}</div></div>' if сверху else ""])}{крошки}
+<main id="main">{тело}</main>
+<footer class="zft">
+<span>{html.escape(self.имя)} · тестовая витрина, закрыта от индексации</span>
+<span class="zvb">Template: {СЕМЕЙСТВО} {ВЕРСИЯ} · {МАНИФЕСТ["source_commit"][:8]}</span>
+</footer></div></div></div>{схемы}</body></html>"""
+
+    # --- главная -------------------------------------------------------
+    def главная(self) -> str:
+        занято: set = set()
+
+        def оценка(з: dict) -> float:
+            д = self.деталь(з["slug"])
+            числа = []
+            for v in (д.get("kinopoisk_rating"), д.get("imdb_rating")):
+                try:
+                    числа.append(float(v))
+                except (TypeError, ValueError):
+                    pass
+            return max(числа) if числа else 0.0
+
+        def свежесть(з: dict) -> str:
+            return з.get("published_at") or ""
+
+        def есть_серии(з: dict) -> bool:
+            return bool(self.деталь(з["slug"]).get("seasons"))
+
+        def выбрать(ключ, сколько: int = 24, условие=None, пул: int | None = None) -> list:
+            подходящие = [з for з in self.д.items if условие is None or условие(з)]
+            if пул:
+                подходящие = sorted(подходящие, key=свежесть, reverse=True)[:пул]
+            отобрано = []
+            for з in sorted(подходящие, key=ключ, reverse=True):
+                if з["slug"] in занято:
+                    continue
+                занято.add(з["slug"])
+                отобрано.append(з)
+                if len(отобрано) >= сколько:
+                    break
+            return отобрано
+
+        ленты = [
+            ("ongoing", "Онгоинги", "/catalog/",
+             выбрать(свежесть, условие=есть_серии),
+             "Источник не передал ни одного тайтла со списком серий, "
+             "поэтому определить выходящие сейчас нечем."),
+            ("new-eps", "Новые эпизоды", "/new/",
+             выбрать(свежесть, условие=есть_серии),
+             "Новых эпизодов в снимке нет: номер и дата выхода серии источником "
+             "не передаются."),
+            ("today", "Сегодня выйдет", "",
+             [],
+             "Время выхода серий источником не передаётся ни одним полем, "
+             "поэтому сегодняшний день собрать не из чего. Выдумывать время "
+             "и номер серии нельзя."),
+            ("new-anime", "Новые аниме", "/new/",
+             выбрать(свежесть),
+             "В снимке нет аниме с датой добавления."),
+            ("top", "Топ по оценкам", "/catalog/",
+             выбрать(оценка, пул=400),
+             "Источник не передал оценок ни одному тайтлу."),
+            ("collections", "Подборки", "",
+             [],
+             "Подборки собираются редакцией, и источника редакционных подборок "
+             "витрине не передано."),
+        ]
+        куски = [self.полоса_готовности(),
+                 f'<h1 class="zh">{html.escape(self.се["лид"])}</h1>',
+                 f'<p class="zsub">В снимке каталога {len(self.д.items)} записей аниме.</p>']
+        куски += [self.секция(*л) for л in ленты]
+        return self.оболочка(
+            _склеить(куски),
+            f"{self.имя} — аниме-портал", "/", актив="/",
+            описание=f"{self.имя}: аниме, онгоинги и расписание выхода серий.",
+            сверху="")
+
+    # --- расписание ----------------------------------------------------
+    def расписание(self) -> str:
+        """Расписание выхода серий.
+
+        Дни недели объявлены всегда: раздел, исчезающий без данных,
+        неотличим от нереализованного. Время и номер серии берутся только из
+        источника; их отсутствие названо словами, а не заполнено правдоподобным
+        значением — выдуманное расписание хуже пустого.
+        """
+        дни = ("Понедельник", "Вторник", "Среда", "Четверг",
+               "Пятница", "Суббота", "Воскресенье")
+        карточки = []
+        for день in дни:
+            карточки.append(
+                f'<div class="asch__d"><h3>{день}</h3>'
+                f'<ul class="asch__l"><li><span class="asch__n">'
+                f'источник не передал времени и номера серии</span></li></ul></div>')
+        тело = (self.полоса_готовности()
+                + '<h1 class="zh">Расписание выхода серий</h1>'
+                + '<p class="zsub">Время и номер серии берутся из источника. '
+                  'Пока источник их не передаёт, дни показаны пустыми: '
+                  'правдоподобное расписание опаснее пустого, потому что ему верят.</p>'
+                + f'<div class="asch">{"".join(карточки)}</div>')
+        return self.оболочка(тело, f"Расписание — {self.имя}", "/schedule/",
+                             актив="/schedule/",
+                             описание="Расписание выхода серий аниме.")
+
+
+ВИДЫ_1_1 = {"lords": ВидЛордс, "zona": ВидЗона,
+           "animedia": ВидАнимедиа}
 
 
 def построить_индекс(данные: "Данные", подробности: Подробности) -> dict:
@@ -2352,6 +2974,12 @@ class Обработчик(BaseHTTPRequestHandler):
 
     def маршрут_1_1(self, путь: str, зпр: dict):
         в = self.вид()
+        # Расписание — собственный раздел семейства, а не синоним новинок.
+        # Переход на /new/ остаётся для тех семейств, у которых своего
+        # расписания нет: подменять раздел соседним честнее, чем отдавать 404,
+        # но только там, где раздела действительно не существует.
+        if путь.rstrip("/") == "/schedule" and hasattr(в, "расписание"):
+            return self._отдать(в.расписание().encode("utf-8"))
         if путь in self.ПРЕЖНИЕ_АДРЕСА:
             return self._переход(self.ПРЕЖНИЕ_АДРЕСА[путь])
         обрезанный = путь.rstrip("/") or "/"
