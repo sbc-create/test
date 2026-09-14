@@ -132,7 +132,16 @@ Lords не тронут: `test_lords_is_untouched` сверяет состав �
 | `factory knowledge verify` | целостность OK |
 | `bin/secret-hub-install --preflight` | PREFLIGHT=pass |
 
-Единственный провал — `test_job_result.py::test_real_pilot_results_are_schema_valid`.
+К этому добавлены **два намеренно падающих теста** в
+`tests/unit/test_root_units_execstart_ownership.py`: они фиксируют находку о
+хосте (root-юниты исполняют файлы, открытые на запись учётной записи агента —
+см. `FINDING-root-units-run-agent-writable-scripts.md`). Провал здесь — это
+сообщение о дефекте, а не поломка: правило фабрики запрещает гасить такой тест
+`xfail`'ом или пропуском. Он станет зелёным, когда `ExecStart` пяти юнитов
+переедет в root-owned каталог.
+
+Единственный провал, не относящийся к этой работе, —
+`test_job_result.py::test_real_pilot_results_are_schema_valid`.
 Он **не** вызван этим изменением и к нему не относится: тест требует
 `artifacts/jobs/pilot-local/*.json` — рантайм-артефакты пилота, которые
 `.gitignore` не отслеживает. В свежем worktree их нет ни при каком коде.
@@ -163,6 +172,7 @@ Lords не тронут: `test_lords_is_untouched` сверяет состав �
 
 | Файл | Что в нём |
 | --- | --- |
+| `FINDING-root-units-run-agent-writable-scripts.md` | находка: root-юниты исполняют файлы, открытые на запись агенту; не эксплуатировалась |
 | `targets.json` | состав целей после изменения: способ доставки, unit'ы, что именно доставляется |
 | `reachability.json` | ответы панели на петле и nginx по семи доменам |
 | `panel-security.json` | граница аутентификации, CSRF, no-store, флаги cookie |
