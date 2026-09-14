@@ -376,6 +376,28 @@ class TestДопустимыеТранспортныеРазличия:
         assert запись["verdict"] == "ROLLBACK_FAILED"
 
 
+class TestТочкаОткатаТребуетОпоры:
+    """Точка без измеренного снимка сделала бы откат недоказуемым позже."""
+
+    def test_молчащий_домен_останавливает_до_записи(self, уст, стенд, monkeypatch):
+        monkeypatch.setattr(уст, "_проба",
+                            lambda домен: {"domain": домен, "checks": [], "ok": False})
+        with pytest.raises(уст.Отказ) as ош:
+            уст._точка_отката("20260914T090000Z-zona-01",
+                              стенд["manifest"], ДОМЕН)
+        assert "не ответил" in str(ош.value)
+        assert not (стенд["front"] / ".rollback" / "20260914T090000Z-zona-01"
+                    / "point.json").exists(), "точка записана несмотря на отказ"
+        assert стенд["artifact"].read_bytes() == БАЙТЫ_КАНДИДАТА, "артефакт тронут"
+
+    def test_снимок_ложится_в_точку(self, уст, стенд, monkeypatch):
+        monkeypatch.setattr(уст, "_проба", lambda домен: _проба(уст, РЕЛИЗ_БАЗЫ))
+        каталог = уст._точка_отката("20260914T090100Z-zona-01", стенд["manifest"], ДОМЕН)
+        данные = json.loads((каталог / "point.json").read_text(encoding="utf-8"))
+        assert set(данные["served_snapshot"]) == set(уст.ПРОБЫ)
+        assert all("structure" in с for с in данные["served_snapshot"].values())
+
+
 class TestОжиданиеОграничено:
     def test_ожидание_имеет_предел_и_журнал(self, уст, стенд, monkeypatch):
         _, запись = запустить(уст, стенд, monkeypatch, _проба(уст, РЕЛИЗ_КАНДИДАТА))

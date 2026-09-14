@@ -382,6 +382,12 @@ def _точка_отката(метка: str, манифест: Path, домен
     каталог.mkdir(parents=True, exist_ok=True)
     if not АРТЕФАКТ.is_file():
         raise Отказ(f"нечего сохранять: {АРТЕФАКТ} не существует")
+    снимок = _снимок_отданного(_проба(домен)) if домен else None
+    if домен and not снимок:
+        # Отказ ДО единственной записи: установка, откат которой потом нечем
+        # будет доказать, не начинается. Молчащий домен — не мелкая помеха, а
+        # отсутствие той самой опоры, ради которой точка и снимается.
+        raise Отказ(f"{домен} не ответил: снимать точку отката не с чего")
     shutil.copy2(АРТЕФАКТ, каталог / "lords-frontend.py")
     if манифест.is_file():
         shutil.copy2(манифест, каталог / манифест.name)
@@ -390,7 +396,7 @@ def _точка_отката(метка: str, манифест: Path, домен
         "artifact_sha256": _sha(каталог / "lords-frontend.py"),
         "manifest": манифест.name,
         "manifest_content": json.loads(манифест.read_text(encoding="utf-8")) if манифест.is_file() else None,
-        "served_snapshot": _снимок_отданного(_проба(домен)) if домен else None,
+        "served_snapshot": снимок,
     }, ensure_ascii=False, indent=1), encoding="utf-8")
     return каталог
 
