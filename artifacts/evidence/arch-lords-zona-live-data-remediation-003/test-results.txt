@@ -1,0 +1,6 @@
+# Сфокусированные тесты backfill'а, 2026-09-14T15:17:37Z
+# команда: /srv/site-factory/repo/.venv/bin/python -m pytest tests/test_nova_details_backfill.py -q
+
+....................................                                     [100%]
+36 passed in 1.42s
+PYTEST_EXIT_CODE=0

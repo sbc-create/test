@@ -1,0 +1,82 @@
+{
+  "run_id": "rollout-lords-003",
+  "site": "lords-01",
+  "mode": "apply",
+  "inputs": {
+    "catalog": "/srv/site-factory/content-pipeline/state/lords-01/catalog.lkg.json",
+    "upstream": "/srv/site-factory/repo/var/lords/lords/catalog-cache/lords-01.json",
+    "render_state": "/srv/site-factory/repo/var/lords/render-state/lords-01.titles.json",
+    "detail_cache": "/srv/site-factory/repo/var/lords/detail-cache"
+  },
+  "output": "/srv/lords/.frontend/lords-01-details.json",
+  "catalog_revision": "da1a8183bb2488fbb2298fb83ca24521",
+  "scope": "full",
+  "scope_slugs": null,
+  "catalog_items": 52683,
+  "upstream_items": 53390,
+  "render_state_slugs": 53184,
+  "ambiguous_slugs_total": 206,
+  "before": {
+    "entries": 14938,
+    "kp": 3907,
+    "imdb": 4999,
+    "description": 9201,
+    "poster_url": 6,
+    "external_ids": 14923,
+    "sources": 6
+  },
+  "after": {
+    "entries": 52565,
+    "kp": 19283,
+    "imdb": 26649,
+    "description": 11856,
+    "poster_url": 52152,
+    "external_ids": 52493,
+    "sources": 51753
+  },
+  "planned": {
+    "inserted": 37627,
+    "updated": 14926,
+    "preserved": 6,
+    "carried_outside_catalog": 6,
+    "rejected": 124
+  },
+  "rejections": {
+    "ambiguous_slug": 121,
+    "no_id_mapping": 3
+  },
+  "upstream_missing": 0,
+  "wrong_entity_candidates": 121,
+  "fields_changed": {
+    "id": 37627,
+    "name": 52553,
+    "type": 52553,
+    "year": 49822,
+    "poster_url": 52146,
+    "poster_source": 52146,
+    "external_ids": 52468,
+    "playable": 52553,
+    "sources": 51747,
+    "kinopoisk_rating": 15376,
+    "imdb_rating": 21650,
+    "ratings_source": 26791,
+    "description_source": 11835,
+    "original_name": 2781,
+    "description": 2655,
+    "seasons": 8451,
+    "genres": 3065,
+    "countries": 2763
+  },
+  "nonempty_regressions": 0,
+  "nonempty_regression_sample": [],
+  "before_digest": "68d97fa95d5a3b35c2fbfac55aced04b83caeaf0effcd75ab4c34f6c7dae40b6",
+  "content_digest": "65cbe59769c52d87bf426ab7d564d92a2ecce75d8f45aecf5552bed08c83dbb5",
+  "expected_sha256": "9c0e5f507f24935a0a61edd56aa4f035dcef7bcffd6abcb0b6698034940c4a8b",
+  "duration_sec": 90.49,
+  "production_mutations": 1,
+  "before_image": "/srv/site-factory/repo/var/lords/backfill-backups/lords-01-details.json.before.rollout-lords-003",
+  "before_image_sha256": "96596c8de032b1c1c1698dd756abf9df67f5d83fd051ce75516fb640fca5dedf",
+  "rollback_command": "install -m 664 -o claude -g claude /srv/site-factory/repo/var/lords/backfill-backups/lords-01-details.json.before.rollout-lords-003 /srv/lords/.frontend/lords-01-details.json && systemctl restart lords-nova-01.service",
+  "written": true,
+  "written_sha256": "9c0e5f507f24935a0a61edd56aa4f035dcef7bcffd6abcb0b6698034940c4a8b"
+}

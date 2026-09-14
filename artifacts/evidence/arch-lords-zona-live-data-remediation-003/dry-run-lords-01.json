@@ -1,0 +1,82 @@
+{
+  "run_id": "stage-lords-003",
+  "site": "lords-01",
+  "mode": "dry-run",
+  "inputs": {
+    "catalog": "/srv/site-factory/content-pipeline/state/lords-01/catalog.lkg.json",
+    "upstream": "/srv/site-factory/repo/var/lords/lords/catalog-cache/lords-01.json",
+    "render_state": "/srv/site-factory/repo/var/lords/render-state/lords-01.titles.json",
+    "detail_cache": "/srv/site-factory/repo/var/lords/detail-cache"
+  },
+  "output": "/srv/lords/.frontend/lords-01-details.json",
+  "catalog_revision": "da1a8183bb2488fbb2298fb83ca24521",
+  "scope": "full",
+  "scope_slugs": null,
+  "catalog_items": 52683,
+  "upstream_items": 53390,
+  "render_state_slugs": 53184,
+  "ambiguous_slugs_total": 206,
+  "before": {
+    "entries": 14933,
+    "kp": 3905,
+    "imdb": 4997,
+    "description": 9199,
+    "poster_url": 0,
+    "external_ids": 14918,
+    "sources": 0
+  },
+  "after": {
+    "entries": 52565,
+    "kp": 19283,
+    "imdb": 26649,
+    "description": 11856,
+    "poster_url": 52152,
+    "external_ids": 52493,
+    "sources": 51753
+  },
+  "planned": {
+    "inserted": 37632,
+    "updated": 14927,
+    "preserved": 0,
+    "carried_outside_catalog": 6,
+    "rejected": 124
+  },
+  "rejections": {
+    "ambiguous_slug": 121,
+    "no_id_mapping": 3
+  },
+  "upstream_missing": 0,
+  "wrong_entity_candidates": 121,
+  "fields_changed": {
+    "id": 37632,
+    "name": 52559,
+    "type": 52559,
+    "year": 49828,
+    "poster_url": 52152,
+    "poster_source": 52152,
+    "external_ids": 52474,
+    "playable": 52559,
+    "imdb_rating": 21652,
+    "ratings_source": 26795,
+    "sources": 51753,
+    "kinopoisk_rating": 15378,
+    "original_name": 2783,
+    "description": 2657,
+    "description_source": 11838,
+    "seasons": 1122,
+    "genres": 3067,
+    "countries": 2764
+  },
+  "seasons_normalized": 0,
+  "renderer_contract_violations": 0,
+  "nonempty_regressions": 0,
+  "nonempty_regression_sample": [],
+  "before_digest": "0d0a2dc455dad664053a4bad0543b7afd5822730f41ef2d6555c04e82aa67ddc",
+  "content_digest": "3f5147c14fca8eb041ad5fdfcdd97f63e820b2f6ee6039dd7bc1f5412fa6868d",
+  "expected_sha256": "40e2bfebafddc0beb5f82adf4b16c1c964a54765815132a61102ed56bfac523a",
+  "duration_sec": 95.56,
+  "production_mutations": 0,
+  "staging_out": "/tmp/nova-staging/lords-01-details.json",
+  "staging_sha256": "40e2bfebafddc0beb5f82adf4b16c1c964a54765815132a61102ed56bfac523a",
+  "note": "сухой прогон: ни один production-файл не записан; для записи нужен явный --apply"
+}

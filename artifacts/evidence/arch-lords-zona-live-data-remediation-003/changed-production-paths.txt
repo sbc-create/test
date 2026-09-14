@@ -1,0 +1,7 @@
+/srv/lords/.frontend/lords-01-details.json   # боковой файл витрины lords-01
+/srv/lords/.frontend/zona-01-details.json    # боковой файл витрины zona-01
+/srv/site-factory/repo/var/lords/backfill-backups/  # резервные копии (новый каталог)
+
+Перезапущены только: lords-nova-01.service, nova-zona-01.service
+Не изменялись: шаблоны, версия шаблона 1.1.0, SEO, player/video runtime,
+аналитика, DNS/TLS/nginx, права, пакеты, другие сайты.

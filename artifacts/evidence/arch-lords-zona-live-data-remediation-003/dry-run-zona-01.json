@@ -1,0 +1,82 @@
+{
+  "run_id": "stage-zona-003",
+  "site": "zona-01",
+  "mode": "dry-run",
+  "inputs": {
+    "catalog": "/srv/site-factory/content-pipeline/state/zona-01/catalog.lkg.json",
+    "upstream": "/srv/site-factory/repo/var/lords/lords/catalog-cache/lords-01.json",
+    "render_state": "/srv/site-factory/repo/var/lords/render-state/lords-01.titles.json",
+    "detail_cache": "/srv/site-factory/repo/var/lords/detail-cache"
+  },
+  "output": "/srv/lords/.frontend/zona-01-details.json",
+  "catalog_revision": "0c1250eeac669614b5775178c02a0ddb",
+  "scope": "full",
+  "scope_slugs": null,
+  "catalog_items": 3868,
+  "upstream_items": 53390,
+  "render_state_slugs": 53184,
+  "ambiguous_slugs_total": 206,
+  "before": {
+    "entries": 1553,
+    "kp": 79,
+    "imdb": 467,
+    "description": 214,
+    "poster_url": 0,
+    "external_ids": 1553,
+    "sources": 0
+  },
+  "after": {
+    "entries": 3851,
+    "kp": 228,
+    "imdb": 1059,
+    "description": 2321,
+    "poster_url": 3744,
+    "external_ids": 3816,
+    "sources": 3291
+  },
+  "planned": {
+    "inserted": 2298,
+    "updated": 1553,
+    "preserved": 0,
+    "carried_outside_catalog": 0,
+    "rejected": 17
+  },
+  "rejections": {
+    "ambiguous_slug": 15,
+    "no_id_mapping": 2
+  },
+  "upstream_missing": 0,
+  "wrong_entity_candidates": 15,
+  "fields_changed": {
+    "id": 2298,
+    "name": 3851,
+    "original_name": 2183,
+    "type": 3851,
+    "year": 3455,
+    "description": 2107,
+    "description_source": 2321,
+    "poster_url": 3744,
+    "poster_source": 3744,
+    "external_ids": 3809,
+    "playable": 3851,
+    "seasons": 860,
+    "genres": 2298,
+    "countries": 2191,
+    "imdb_rating": 592,
+    "ratings_source": 1113,
+    "sources": 3291,
+    "kinopoisk_rating": 149
+  },
+  "seasons_normalized": 0,
+  "renderer_contract_violations": 0,
+  "nonempty_regressions": 0,
+  "nonempty_regression_sample": [],
+  "before_digest": "6bf2b7e0d703875d889c7745ff788f384ce552c7734731a8759e990477b890db",
+  "content_digest": "4641fd14b4878cf3f26144091e0fc8d9b32555b8f50a973d3ef6a8a2a570b518",
+  "expected_sha256": "963f69003e2d5503e343e5a46b13cf3e5b1f619a609512ffd600ef2cc80ba54c",
+  "duration_sec": 10.8,
+  "production_mutations": 0,
+  "staging_out": "/tmp/nova-staging/zona-01-details.json",
+  "staging_sha256": "963f69003e2d5503e343e5a46b13cf3e5b1f619a609512ffd600ef2cc80ba54c",
+  "note": "сухой прогон: ни один production-файл не записан; для записи нужен явный --apply"
+}

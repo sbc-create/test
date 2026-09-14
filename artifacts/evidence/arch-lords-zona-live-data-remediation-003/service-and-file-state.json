@@ -1,0 +1,11 @@
+{
+  "captured_at": "2026-09-14T15:17:13Z",
+  "services": {
+    "lords-nova-01": {"active": "active", "main_pid": 1992596, "nrestarts": 0},
+    "nova-zona-01": {"active": "active", "main_pid": 2011837, "nrestarts": 0}
+  },
+  "production_files": {
+    "lords-01": {"path": "/srv/lords/.frontend/lords-01-details.json", "sha256": "40e2bfebafddc0beb5f82adf4b16c1c964a54765815132a61102ed56bfac523a", "size": 73620559, "owner": "claude:claude", "mode": "664"},
+    "zona-01": {"path": "/srv/lords/.frontend/zona-01-details.json", "sha256": "963f69003e2d5503e343e5a46b13cf3e5b1f619a609512ffd600ef2cc80ba54c", "size": 6615635, "owner": "claude:claude", "mode": "664"}
+  }
+}

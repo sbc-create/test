@@ -1,0 +1,16 @@
+===== lords-01
+  SOURCE_HAS_VALUE      kp=19283 imdb=26649
+  VALUE_REACHED_SIDECAR kp=19283 imdb=26649
+  AVAILABLE_UPSTREAM_TO_RENDER_LOSS = 0
+  excluded (documented): ambiguous_slug=121 no_id_mapping=3
+  sidecar entries=52565 catalog=52683 coverage=99%
+===== zona-01
+  SOURCE_HAS_VALUE      kp=228 imdb=1059
+  VALUE_REACHED_SIDECAR kp=228 imdb=1059
+  AVAILABLE_UPSTREAM_TO_RENDER_LOSS = 0
+  excluded (documented): ambiguous_slug=15 no_id_mapping=2
+  sidecar entries=3851 catalog=3868 coverage=99%
+=== LORDS home 48-sample ===
+  cards=48 KP_shown=9 IMDb_shown=14
+=== ZONA home ===
+  cards=20 KP_shown=0 IMDb_shown=2

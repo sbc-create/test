@@ -1,0 +1,72 @@
+{
+  "lords-01": {
+    "site": "lords-01",
+    "domain": "https://lordfilm47.space",
+    "catalog_items": 52683,
+    "sidecar_entries": 52565,
+    "routes": {
+      "/healthz": "200",
+      "/": "200",
+      "/catalog/": "200",
+      "/new/": "200"
+    },
+    "random_titles": {
+      "checked": 100,
+      "codes": {
+        "200": 100
+      },
+      "failures": [],
+      "failure_count": 0
+    },
+    "rating_lineage": {
+      "checked_entities": 40,
+      "mismatches": [],
+      "mismatch_count": 0
+    },
+    "home_cards": {
+      "links": 36,
+      "broken": []
+    },
+    "sidecar_coverage": {
+      "kp": 19283,
+      "imdb": 26649,
+      "description": 11856,
+      "poster_url": 52152
+    }
+  },
+  "zona-01": {
+    "site": "zona-01",
+    "domain": "https://zonafilm.space",
+    "catalog_items": 3868,
+    "sidecar_entries": 3851,
+    "routes": {
+      "/healthz": "200",
+      "/": "200",
+      "/catalog/": "200",
+      "/new/": "200"
+    },
+    "random_titles": {
+      "checked": 100,
+      "codes": {
+        "200": 100
+      },
+      "failures": [],
+      "failure_count": 0
+    },
+    "rating_lineage": {
+      "checked_entities": 33,
+      "mismatches": [],
+      "mismatch_count": 0
+    },
+    "home_cards": {
+      "links": 12,
+      "broken": []
+    },
+    "sidecar_coverage": {
+      "kp": 228,
+      "imdb": 1059,
+      "description": 2321,
+      "poster_url": 3744
+    }
+  }
+}
