@@ -39,6 +39,7 @@ import argparse
 import json
 import subprocess
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -66,6 +67,12 @@ from pathlib import Path
     "ROUTE_FAILURES": 0, "SOFT_404": 0, "WRONG_ENTITY_200": 0,
     "BROKEN_INTERNAL_LINKS": 0, "REDIRECT_LOOPS": 0, "REDIRECT_CHAINS_GT1": 0,
 }
+
+#: Финальная проверка — не один запрос. Витрина, которая отдала кандидата один
+#: раз и сползла обратно, обязана быть поймана, а одиночный запрос этого не
+#: видит. Проверок несколько, подряд, и засчитываются они только все вместе.
+ФИНАЛЬНЫХ_ПРОВЕРОК = 3
+ФИНАЛЬНЫЙ_ИНТЕРВАЛ = 5
 
 
 def журнал(*ч) -> None:
@@ -322,11 +329,35 @@ def провести(сайт: str, арг, выход: Path) -> dict:
         итог["verdict"] = "RESTORE_FORWARD_FAILED"
         return итог
 
-    журнал(f"{сайт}: шаг 8 — короткая проверка после возврата")
-    финал = объявленное(отпечатки(домен, "final", выход / f"{сайт}-fp-final.json"))
-    держит = (финал["artifacts"] == [арг.expect_sha256] and финал["statuses"] == [200])
-    шаги.append({"step": "final_check", "declared": финал, "ok": держит})
-    итог["verdict"] = "CANARY_ACTIVE_VERIFIED" if держит else "FINAL_CHECK_FAILED"
+    журнал(f"{сайт}: шаг 8 — {ФИНАЛЬНЫХ_ПРОВЕРОК} последовательные публичные проверки")
+    проверки, держит = [], True
+    for попытка in range(1, ФИНАЛЬНЫХ_ПРОВЕРОК + 1):
+        if попытка > 1:
+            time.sleep(ФИНАЛЬНЫЙ_ИНТЕРВАЛ)
+        финал = объявленное(отпечатки(домен, f"final-{попытка}",
+                                      выход / f"{сайт}-fp-final-{попытка}.json"))
+        ок_шага = (финал["artifacts"] == [арг.expect_sha256]
+                   and финал["versions"] == [арг.design_version]
+                   and финал["statuses"] == [200])
+        проверки.append({"attempt": попытка, "declared": финал, "ok": ок_шага})
+        журнал(f"   попытка {попытка}: {'OK' if ок_шага else 'ПРОВАЛ'} "
+               f"версия {финал['versions']}")
+        держит &= ок_шага
+    шаги.append({"step": "final_check", "checks": проверки, "ok": держит})
+    if not держит:
+        # Витрину нельзя оставить на кандидате, который не подтвердился: любой
+        # провал заканчивается здоровым прежним релизом, а не «почти получилось».
+        журнал(f"{сайт}: финальная проверка не прошла — возврат на прежний релиз")
+        _, аварийный = откатить(сайт, вперёд.get("rollback_point") or точка,
+                                выход / f"{сайт}-rollback-after-final.json")
+        шаги.append({"step": "rollback_after_final",
+                     "verdict": аварийный.get("verdict"),
+                     "disk_match": аварийный.get("disk_fingerprint_match"),
+                     "served_match": аварийный.get("served_fingerprint_match")})
+        итог["verdict"] = "FINAL_CHECK_FAILED"
+        итог["public_check"] = проверка
+        return итог
+    итог["verdict"] = "CANARY_ACTIVE_VERIFIED"
     итог["public_check"] = проверка
     итог["public_urls"] = [f"https://{домен}/", f"https://{домен}/catalog/"]
     return итог

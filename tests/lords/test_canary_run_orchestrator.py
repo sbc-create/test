@@ -80,6 +80,7 @@ class TestПорядокШагов:
     """Сценарий обязан останавливаться там, где написано, и не идти дальше."""
 
     def _подменить(self, сц, monkeypatch, *, установка, отдаёт, ворота_ок, откат=None):
+        monkeypatch.setattr(сц, "ФИНАЛЬНЫЙ_ИНТЕРВАЛ", 0)
         monkeypatch.setattr(сц, "установить", lambda сайт, арг, запись: (
             установка.get("code", True), установка))
         monkeypatch.setattr(сц, "откатить", lambda сайт, точка, запись: (
@@ -152,15 +153,45 @@ class TestПорядокШагов:
                         отдаёт=[self._снимок("1.0.2", "a" * 64),
                                 self._снимок("1.1.0", "b" * 64),
                                 self._снимок("1.0.2", "a" * 64),
+                                self._снимок("1.1.0", "b" * 64),
+                                self._снимок("1.1.0", "b" * 64),
                                 self._снимок("1.1.0", "b" * 64)], ворота_ок=True)
         итог = сц.провести("lords-01", self.Арг(), tmp_path)
         assert итог["verdict"] == "CANARY_ACTIVE_VERIFIED"
+        финал = [ш for ш in итог["steps"] if ш["step"] == "final_check"][0]
+        assert len(финал["checks"]) == сц.ФИНАЛЬНЫХ_ПРОВЕРОК
+        assert all(п["ok"] for п in финал["checks"])
         шаги = [ш["step"] for ш in итог["steps"]]
         assert шаги == ["baseline", "install", "served_changed", "public_gates",
                         "rollback_drill", "baseline_restored", "restore_forward",
                         "final_check"]
         assert итог["public_urls"] == ["https://lordfilm47.space/",
                                        "https://lordfilm47.space/catalog/"]
+
+
+    def test_сползание_между_запросами_ловится_и_откатывается(self, сц, monkeypatch, tmp_path):
+        """Один запрос увидел кандидата, следующий — прежний релиз.
+
+        Одиночная финальная проверка объявила бы это успехом. Витрину нельзя
+        оставлять на неподтверждённом кандидате: порядок обязан вернуть её.
+        """
+        self._подменить(сц, monkeypatch,
+                        установка={"verdict": "DEPLOYED_AND_VERIFIED",
+                                   "rollback_point": "/tmp/точка"},
+                        отдаёт=[self._снимок("1.0.2", "a" * 64),
+                                self._снимок("1.1.0", "b" * 64),
+                                self._снимок("1.0.2", "a" * 64),
+                                self._снимок("1.1.0", "b" * 64),
+                                self._снимок("1.0.2", "a" * 64),
+                                self._снимок("1.1.0", "b" * 64)], ворота_ок=True)
+        итог = сц.провести("lords-01", self.Арг(), tmp_path)
+        assert итог["verdict"] == "FINAL_CHECK_FAILED"
+        шаги = [ш["step"] for ш in итог["steps"]]
+        assert "rollback_after_final" in шаги, шаги
+        assert "public_urls" not in итог, "неподтверждённую витрину не объявляют доступной"
+
+    def test_финальная_проверка_не_одиночная(self, сц):
+        assert сц.ФИНАЛЬНЫХ_ПРОВЕРОК >= 3
 
 
 class TestZonaТолькоПослеLords:

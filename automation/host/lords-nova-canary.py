@@ -40,6 +40,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -136,6 +137,36 @@ def доказать_цепочку(витрина: str, описание: dict)
 ПРОБЫ = ("/healthz", "/", "/catalog/")
 МИНИМУМ_ТЕЛА = 2000
 
+#: Пауза после перезапуска юнита, прежде чем спрашивать домен.
+ПАУЗА_ПОСЛЕ_ПЕРЕЗАПУСКА = 4
+
+#: Ограниченное ожидание схождения. Перезапущенная служба отвечает не мгновенно,
+#: и первый ответ может прийти от ещё не умершего прежнего процесса — это
+#: единственная задержка, которую разрешено переждать. Предел жёсткий, каждая
+#: попытка записывается, а отданный ТРЕТИЙ релиз прекращает ожидание немедленно:
+#: это не запаздывание, а неправильная витрина.
+СХОЖДЕНИЕ_ПОПЫТОК = 6
+СХОЖДЕНИЕ_ИНТЕРВАЛ = 3.0
+СХОЖДЕНИЕ_ТАЙМАУТ = 30.0
+
+#: Личность релиза, как её объявляет сам рантайм. Имена слева намеренно
+#: совпадают с полями манифеста: сверка идёт с манифестом точки отката целиком,
+#: а не по одному полю.
+ЗАГОЛОВКИ_РЕЛИЗА = {
+    "template_family": "X-Site-Factory-Template-Family",
+    "design_version": "X-Site-Factory-Template-Version",
+    "build_id": "X-Site-Factory-Build-Id",
+    "artifact_sha256": "X-Site-Factory-Artifact-Sha256",
+    "source_commit": "X-Site-Factory-Template-Revision",
+}
+
+СТИЛЬ = re.compile(rb"<style[^>]*>(.*?)</style>", re.S)
+СКРИПТ = re.compile(rb"<script(?![^>]*\bsrc=)[^>]*>(.*?)</script>", re.S)
+
+#: Последняя вынесенная запись: вердикт должен быть проверяем тестом, не разбором
+#: печати.
+ПОСЛЕДНЯЯ_ЗАПИСЬ: dict = {}
+
 
 class Отказ(Exception):
     """Отказ до записи либо с уже выполненным возвратом. Всегда с причиной."""
@@ -164,19 +195,161 @@ def _юнит(действие: str, юнит: str) -> tuple[bool, str]:
     return р.returncode == 0, (р.stderr or р.stdout or "").strip()[:300]
 
 
+def _структура(тело: bytes) -> dict:
+    """Отпечаток того, что РЕАЛЬНО пришло, а не того, что о себе объявили.
+
+    Манифест — самоотчёт рантайма: он утверждает версию и может утверждать её
+    неверно. Эти отпечатки берутся из самого ответа, поэтому манифестом их не
+    подделать. Нормализуются только переводы строк: их переписывание по пути —
+    свойство канала, а не релиза. Всё прочее содержимое входит как есть, и
+    подмена хотя бы одного байта разметки, стиля или скрипта видна.
+    """
+    нормализованное = тело.replace(b"\r\n", b"\n")
+    стиль = b"".join(с.group(1) for с in СТИЛЬ.finditer(нормализованное))
+    скрипт = b"".join(с.group(1) for с in СКРИПТ.finditer(нормализованное))
+    return {"html_sha256": hashlib.sha256(нормализованное).hexdigest(),
+            "css_sha256": hashlib.sha256(стиль).hexdigest(),
+            "js_sha256": hashlib.sha256(скрипт).hexdigest(),
+            "bytes": len(нормализованное)}
+
+
+def _релиз_манифеста(манифест: dict | None) -> dict:
+    return {к: str((манифест or {}).get(к, "")) for к in ЗАГОЛОВКИ_РЕЛИЗА}
+
+
+def _ключ_релиза(релиз: dict) -> tuple:
+    return tuple(релиз.get(к, "") for к in sorted(ЗАГОЛОВКИ_РЕЛИЗА))
+
+
+def _объявленные(проба: dict) -> set:
+    """Личности релиза, объявленные доменом. Молчание — не «то же самое»."""
+    return {_ключ_релиза(п["declared"]) for п in проба.get("checks", [])
+            if п.get("declared")}
+
+
+def _снимок_отданного(проба: dict) -> dict:
+    """Что домен отдавал: по адресу — код, конец пути, число переходов, структура."""
+    return {п["path"]: {"status": п.get("status"),
+                        "final_url": п.get("final_url"),
+                        "redirects": п.get("redirects"),
+                        "structure": п.get("structure")}
+            for п in проба.get("checks", []) if п.get("structure")}
+
+
+def _сверить_структуру(сейчас: dict, опорный: dict | None) -> tuple[bool, list]:
+    """Измеренное против измеренного. Отсутствие опоры — не совпадение."""
+    if not опорный:
+        return False, []
+    пусто = {"status": None, "final_url": None, "redirects": None, "structure": None}
+    различия = []
+    for путь in sorted(set(сейчас) | set(опорный)):
+        было, стало = опорный.get(путь, пусто), сейчас.get(путь, пусто)
+        if было != стало:
+            различия.append({"path": путь, "expected": было, "actual": стало})
+    return (not различия), различия
+
+
+class _Переходы(urllib.request.HTTPRedirectHandler):
+    """Переходы считаются, а не обрабатываются молча: лишний переход — дефект."""
+
+    def __init__(self):
+        self.цепочка = []
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        self.цепочка.append({"from": req.full_url, "code": code, "to": newurl})
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
+def _кэш_диагностика(домен: str) -> dict:
+    """Запрос мимо кэша — ТОЛЬКО диагностика.
+
+    Когда обычный публичный адрес отдал не то, полезно знать, кэш это или
+    витрина. Но успех по адресу с обходом кэша ничего не подтверждает: зритель
+    ходит по обычному адресу, и проверкой засчитывается только он. В вердикт
+    этот результат не входит.
+    """
+    адрес = f"https://{домен}/?nova-cache-bust={_сейчас()}"
+    итог = {"url": адрес, "role": "диагностика, в вердикт не входит"}
+    try:
+        запрос = urllib.request.Request(адрес, headers={"User-Agent": "nova-canary-diag"})
+        with urllib.request.urlopen(запрос, timeout=30) as ответ:
+            тело = ответ.read()
+            итог["status"] = ответ.status
+            итог["declared"] = {имя: (ответ.headers.get(заг) or "")
+                                for имя, заг in ЗАГОЛОВКИ_РЕЛИЗА.items()}
+            итог["structure"] = _структура(тело)
+    except (urllib.error.HTTPError, OSError) as ош:
+        итог["status"] = getattr(ош, "code", -1)
+        итог["error"] = str(ош)[:120]
+    return итог
+
+
+def _дождаться_релиза(домен: str, ожидаемый: dict, прежний: dict) -> dict:
+    """Ограниченное ожидание схождения — и ничего сверх него.
+
+    Переждать разрешено ровно одно: доигрывающий перезапуск. Всё остальное
+    ожиданием не лечится, поэтому релиз, которого здесь быть не должно,
+    прекращает проверку сразу, не расходуя попытки.
+    """
+    ожидаемый_ключ, прежний_ключ = _ключ_релиза(ожидаемый), _ключ_релиза(прежний)
+    журнал, начало, проба = [], time.monotonic(), None
+    for попытка in range(1, СХОЖДЕНИЕ_ПОПЫТОК + 1):
+        проба = _проба(домен)
+        объявленные = _объявленные(проба)
+        шаг = {"attempt": попытка,
+               "elapsed_s": round(time.monotonic() - начало, 2),
+               "declared": sorted(list(к) for к in объявленные),
+               "health_ok": проба.get("ok", False)}
+        if объявленные == {ожидаемый_ключ}:
+            шаг["outcome"] = "converged"
+            журнал.append(шаг)
+            break
+        чужие = объявленные - {ожидаемый_ключ, прежний_ключ}
+        if чужие:
+            шаг["outcome"] = "wrong_release"
+            шаг["unexpected"] = sorted(list(к) for к in чужие)
+            журнал.append(шаг)
+            break
+        шаг["outcome"] = "not_converged"
+        журнал.append(шаг)
+        if (попытка == СХОЖДЕНИЕ_ПОПЫТОК
+                or time.monotonic() - начало >= СХОЖДЕНИЕ_ТАЙМАУТ):
+            break
+        time.sleep(СХОЖДЕНИЕ_ИНТЕРВАЛ)
+    return {"health": проба, "log": журнал, "attempts": len(журнал),
+            "waited_s": round(time.monotonic() - начало, 2),
+            "limit": {"attempts": СХОЖДЕНИЕ_ПОПЫТОК,
+                      "interval_s": СХОЖДЕНИЕ_ИНТЕРВАЛ,
+                      "timeout_s": СХОЖДЕНИЕ_ТАЙМАУТ}}
+
+
 def _проба(домен: str) -> dict:
+    """Ответ НАСТОЯЩЕГО домена по https: тот же Host и SNI, что у посетителя.
+
+    Снимается и объявленное — заголовки, и измеренное — структура тела. Первое
+    говорит, какой манифест подхватил рантайм; второе — что он на самом деле
+    отрисовал. Сравнивать их между собой нельзя, требовать оба — нужно.
+    """
     итог = {"domain": домен, "checks": [], "ok": True}
     for путь in ПРОБЫ:
         адрес = f"https://{домен}{путь}"
         запись = {"path": путь}
         try:
+            счётчик = _Переходы()
+            открыватель = urllib.request.build_opener(счётчик)
             запрос = urllib.request.Request(адрес, headers={"User-Agent": "nova-canary"})
-            with urllib.request.urlopen(запрос, timeout=30) as ответ:
+            with открыватель.open(запрос, timeout=30) as ответ:
                 тело = ответ.read()
                 запись["status"] = ответ.status
                 запись["bytes"] = len(тело)
-                запись["version"] = ответ.headers.get("X-Site-Factory-Template-Version", "")
-                запись["artifact"] = ответ.headers.get("X-Site-Factory-Artifact-Sha256", "")
+                запись["final_url"] = ответ.url
+                запись["redirects"] = len(счётчик.цепочка)
+                запись["redirect_chain"] = счётчик.цепочка
+                запись["declared"] = {имя: (ответ.headers.get(заг) or "")
+                                      for имя, заг in ЗАГОЛОВКИ_РЕЛИЗА.items()}
+                запись["version"] = запись["declared"]["design_version"]
+                запись["artifact"] = запись["declared"]["artifact_sha256"]
+                запись["structure"] = _структура(тело)
         except (urllib.error.HTTPError, OSError) as ош:
             запись["status"] = getattr(ош, "code", -1)
             запись["error"] = str(ош)[:120]
@@ -188,7 +361,13 @@ def _проба(домен: str) -> dict:
     return итог
 
 
-def _точка_отката(метка: str, манифест: Path) -> Path:
+def _точка_отката(метка: str, манифест: Path, домен: str = "") -> Path:
+    """Точка отката — полный договор о возврате.
+
+    Файла и манифеста мало: вернуть их и объявить успех значит поверить
+    рантайму на слово. Поэтому здесь же сохраняется ИЗМЕРЕННЫЙ ответ домена до
+    изменения — единственная честная опора, с которой потом сверяется откат.
+    """
     каталог = ОТКАТЫ / метка
     каталог.mkdir(parents=True, exist_ok=True)
     if not АРТЕФАКТ.is_file():
@@ -201,6 +380,7 @@ def _точка_отката(метка: str, манифест: Path) -> Path:
         "artifact_sha256": _sha(каталог / "lords-frontend.py"),
         "manifest": манифест.name,
         "manifest_content": json.loads(манифест.read_text(encoding="utf-8")) if манифест.is_file() else None,
+        "served_snapshot": _снимок_отданного(_проба(домен)) if домен else None,
     }, ensure_ascii=False, indent=1), encoding="utf-8")
     return каталог
 
@@ -224,7 +404,7 @@ def установить(арг) -> int:
     манифест = ФРОНТ / витрина["manifest"]
 
     метка = f"{_сейчас()}-{арг.site}"
-    точка = _точка_отката(метка, манифест)
+    точка = _точка_отката(метка, манифест, витрина["domain"])
     прежний = json.loads((точка / "point.json").read_text(encoding="utf-8"))
 
     новый_манифест = {
@@ -276,8 +456,18 @@ def установить(арг) -> int:
         запись["health_after_rollback"] = здоровье
         отданные = {п.get("artifact") for п in здоровье["checks"] if п.get("artifact")}
         запись["served_artifact_after_rollback"] = sorted(отданные)
+        # Сверяется с МАНИФЕСТОМ точки, а не с отпечатком её файла: файл в парке
+        # общий на все витрины, манифест — свой у каждой.
+        ожидаемый_релиз = _релиз_манифеста(прежний.get("manifest_content"))
+        совпала_структура, различия = _сверить_структуру(
+            _снимок_отданного(здоровье), прежний.get("served_snapshot"))
+        запись["baseline_release_match"] = (
+            all(ожидаемый_релиз.values())
+            and _объявленные(здоровье) == {_ключ_релиза(ожидаемый_релиз)})
+        запись["baseline_structure_match"] = совпала_структура
+        запись["baseline_structure_diff"] = различия
         запись["baseline_fingerprint_match"] = (
-            отданные == {прежний["artifact_sha256"]} if отданные else False)
+            запись["baseline_release_match"] and запись["baseline_structure_match"])
         запись["verdict"] = "ROLLED_BACK_NO_CHANGE"
     else:
         запись["verdict"] = "DEPLOYED_AND_VERIFIED"
@@ -295,6 +485,8 @@ def откатить(арг) -> int:
     сохранено = json.loads((точка / "point.json").read_text(encoding="utf-8"))
     манифест = ФРОНТ / витрина["manifest"]
     было = _sha(АРТЕФАКТ) if АРТЕФАКТ.is_file() else ""
+    прежний_релиз = _релиз_манифеста(
+        json.loads(манифест.read_text(encoding="utf-8")) if манифест.is_file() else None)
 
     if сохранено.get("manifest_content") is not None:
         _атомарно(манифест, (json.dumps(сохранено["manifest_content"],
@@ -302,30 +494,58 @@ def откатить(арг) -> int:
     _атомарно(АРТЕФАКТ, (точка / "lords-frontend.py").read_bytes())
     АРТЕФАКТ.chmod(0o755)
     ок, вывод = _юнит("restart", витрина["unit"])
-    time.sleep(4)
-    здоровье = _проба(витрина["domain"])
-    # Отпечаток на диске и отпечаток, ОТДАННЫЙ домену, — разные утверждения.
-    # Первый доказывает, что файл вернули; второй — что витрина его подхватила.
-    # Возврат без второго означает, что служба ещё держит прежний код в памяти.
-    отданные = {п.get("artifact") for п in здоровье["checks"] if п.get("artifact")}
+    time.sleep(ПАУЗА_ПОСЛЕ_ПЕРЕЗАПУСКА)
+
+    ожидаемый_релиз = _релиз_манифеста(сохранено.get("manifest_content"))
+    схождение = _дождаться_релиза(витрина["domain"], ожидаемый_релиз, прежний_релиз)
+    здоровье = схождение["health"] or {"domain": витрина["domain"], "checks": [], "ok": False}
+
+    # Отпечаток ФАЙЛА на диске и отпечаток, ОТДАННЫЙ домену, — разные величины,
+    # и раньше их сравнивали друг с другом. Исполняемый файл в парке ОДИН на все
+    # витрины, а манифест — свой у каждой: после выката соседней витрины файл на
+    # диске законно принадлежит другой сборке, чем объявленный этой витриной
+    # релиз. Их равенство было совпадением, и его отсутствие роняло полностью
+    # удавшийся откат. Утверждений теперь три, и обязательны все:
+    #   диск      — файл вернули;
+    #   релиз     — домен объявляет ИМЕННО манифест точки отката, целиком;
+    #   структура — ИЗМЕРЕННАЯ страница совпала с тем, что домен отдавал до
+    #               установки; манифестом такое совпадение не подделать.
+    отданные = {п.get("artifact") for п in здоровье.get("checks", []) if п.get("artifact")}
+    совпала_структура, различия = _сверить_структуру(
+        _снимок_отданного(здоровье), сохранено.get("served_snapshot"))
     запись = {
         "action": "rollback", "site": арг.site, "point": str(точка),
         "artifact_before_rollback": было,
         "artifact_after_rollback": _sha(АРТЕФАКТ),
         "expected_artifact": сохранено["artifact_sha256"],
+        "expected_release": ожидаемый_релиз,
+        "served_release": sorted(list(к) for к in _объявленные(здоровье)),
         "served_artifact_after_rollback": sorted(отданные),
         "restored_manifest": сохранено.get("manifest_content"),
         "restart_ok": ок, "restart_output": вывод,
+        "convergence": схождение,
+        "cache_diagnostic": _кэш_диагностика(витрина["domain"]),
         "health": здоровье, "at_utc": _сейчас(),
     }
     запись["disk_fingerprint_match"] = (
         запись["artifact_after_rollback"] == сохранено["artifact_sha256"])
+    # Пустое не равно пустому: точка без манифеста объявляет пустой релиз, и
+    # молчащий домен «совпал» бы с ней. Ожидаемый релиз обязан быть заполнен.
+    запись["served_release_match"] = (
+        all(ожидаемый_релиз.values())
+        and _объявленные(здоровье) == {_ключ_релиза(ожидаемый_релиз)})
+    запись["served_structure_match"] = совпала_структура
+    запись["structure_diff"] = различия
+    if not сохранено.get("served_snapshot"):
+        # Точка прежнего образца структуру доказать не может — значит не
+        # доказывает. Откат при этом выполнен; недоказанным объявлен вердикт.
+        запись["served_structure_reason"] = "POINT_WITHOUT_SERVED_SNAPSHOT"
     запись["served_fingerprint_match"] = (
-        отданные == {сохранено["artifact_sha256"]} if отданные else False)
+        запись["served_release_match"] and запись["served_structure_match"])
     запись["verdict"] = (
         "ROLLED_BACK_VERIFIED"
         if (запись["disk_fingerprint_match"] and запись["served_fingerprint_match"]
-            and ок and здоровье["ok"]) else "ROLLBACK_FAILED")
+            and ок and здоровье.get("ok")) else "ROLLBACK_FAILED")
     _напечатать(запись, арг.record)
     return 0 if запись["verdict"] == "ROLLED_BACK_VERIFIED" else 1
 
@@ -345,6 +565,8 @@ def состояние(арг) -> int:
 
 
 def _напечатать(запись: dict, куда: str | None) -> None:
+    global ПОСЛЕДНЯЯ_ЗАПИСЬ
+    ПОСЛЕДНЯЯ_ЗАПИСЬ = запись
     текст = json.dumps(запись, ensure_ascii=False, indent=1)
     if куда:
         Path(куда).parent.mkdir(parents=True, exist_ok=True)
