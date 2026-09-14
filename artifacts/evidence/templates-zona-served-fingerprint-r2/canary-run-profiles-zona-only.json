@@ -1,0 +1,11 @@
+{
+ "zona-01": {
+  "limit": 400,
+  "sample": 30,
+  "archetypes": "/home/claude/wt-lords-r2/artifacts/evidence/templates-zona-served-fingerprint-r2/archetypes-zona-plan.json",
+  "boundary_url": "/title/rokovaya-sudba/",
+  "boundary_total": 182,
+  "points": "1,2,99,100,101,181,182",
+  "note": "В снимке zona-01 самый длинный сериал — 182 серии; двухсот десятой у источника нет, и выдумывать её нельзя. Границы проверяются по фактическому пределу 182."
+ }
+}

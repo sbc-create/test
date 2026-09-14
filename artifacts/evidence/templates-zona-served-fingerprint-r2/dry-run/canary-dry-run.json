@@ -1,0 +1,67 @@
+{
+ "started_at_utc": "2026-09-14T08:44:39Z",
+ "artifact_sha256": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+ "commit": "7dc251d",
+ "build_id": "20260913T2300Z-8ececc6c-nova",
+ "sites": [
+  {
+   "site": "zona-01",
+   "domain": "zonafilm.space",
+   "checks": [
+    {
+     "check": "установщик загружается",
+     "ok": true,
+     "detail": "lords-nova-canary.py"
+    },
+    {
+     "check": "витрина в перечне установщика",
+     "ok": true,
+     "detail": "zona-01"
+    },
+    {
+     "check": "источник артефакта разрешён",
+     "ok": true,
+     "detail": "/home/claude/wt-lords-r2/automation/host/lords-frontend.py"
+    },
+    {
+     "check": "отпечаток артефакта совпал с ожидаемым",
+     "ok": true,
+     "detail": "a51dade469321e30"
+    },
+    {
+     "check": "цепочка обслуживания доказана",
+     "ok": true,
+     "detail": "nova-zona-01.service ← 127.0.0.1:9120"
+    },
+    {
+     "check": "домен отвечает и объявляет себя",
+     "ok": true,
+     "detail": "версия ['1.0.2'] артефакт ['9229879ee5ab']"
+    },
+    {
+     "check": "домен ещё не на кандидате",
+     "ok": true,
+     "detail": "иначе устанавливать нечего"
+    },
+    {
+     "check": "снимок каталога на месте",
+     "ok": true,
+     "detail": "/srv/lords/.frontend/zona-01-catalog.json"
+    },
+    {
+     "check": "боковой файл подробностей на месте",
+     "ok": true,
+     "detail": "/srv/lords/.frontend/zona-01-details.json"
+    }
+   ],
+   "ok": true,
+   "would_restart_unit": "nova-zona-01.service",
+   "would_write": [
+    "/srv/lords/.frontend/lords-frontend.py",
+    "/srv/lords/.frontend/template-manifest-zona-01.json"
+   ]
+  }
+ ],
+ "mode": "dry-run",
+ "verdict": "DRY_RUN_READY"
+}

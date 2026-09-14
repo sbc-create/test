@@ -1,0 +1,61 @@
+{
+ "домен": "zonafilm.space",
+ "две_пробы_подряд_совпали": true,
+ "различия": [],
+ "адреса": [
+  "/",
+  "/catalog/",
+  "/healthz"
+ ],
+ "структура": {
+  "/": {
+   "html_sha256": "54b44b29700b9902",
+   "css_sha256": "a2f302bc84a6f351",
+   "js_sha256": "913a1abc48398995",
+   "bytes": 23866
+  },
+  "/catalog/": {
+   "html_sha256": "858a5b76db6212ba",
+   "css_sha256": "a2f302bc84a6f351",
+   "js_sha256": "913a1abc48398995",
+   "bytes": 29615
+  },
+  "/healthz": {
+   "html_sha256": "4062edaf750fb807",
+   "css_sha256": "e3b0c44298fc1c14",
+   "js_sha256": "e3b0c44298fc1c14",
+   "bytes": 11
+  }
+ },
+ "объявленный_релиз_совпал_с_манифестом_юнита": true,
+ "ожидаемый_релиз": {
+  "template_family": "zona",
+  "design_version": "1.0.2",
+  "build_id": "20260910T124530Z-a1691c56-nova",
+  "artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+  "source_commit": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee"
+ },
+ "объявлено_доменом": [
+  {
+   "template_family": "zona",
+   "design_version": "1.0.2",
+   "build_id": "20260910T124530Z-a1691c56-nova",
+   "artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+   "source_commit": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee"
+  }
+ ],
+ "отрицательный_контроль_подмена_html_видна": true,
+ "отрицательный_контроль_различие": [
+  "/"
+ ],
+ "статусы": [
+  200,
+  200,
+  200
+ ],
+ "переходов": [
+  0,
+  0,
+  0
+ ]
+}

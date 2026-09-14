@@ -1,0 +1,121 @@
+{
+ "taken_at_utc": "2026-09-14T08:27:14Z",
+ "units_scanned": 170,
+ "chains": [
+  {
+   "domain": "zonafilm.space",
+   "nginx_config": "/etc/nginx/lords/zona-01.conf",
+   "upstream_port": 9120,
+   "units_listening_on_port": [
+    "nova-zona-01.service"
+   ],
+   "unit": "nova-zona-01.service",
+   "exec_start": "/usr/bin/python3 /srv/lords/.frontend/lords-frontend.py --port 9120",
+   "executable": "/srv/lords/.frontend/lords-frontend.py",
+   "executable_sha256": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+   "manifest_path": "/srv/lords/.frontend/template-manifest-zona-01.json",
+   "manifest": {
+    "schema_version": 1,
+    "template_family": "zona",
+    "design_version": "1.0.2",
+    "source_commit": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee",
+    "build_id": "20260910T124530Z-a1691c56-nova",
+    "artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "profile": "zona-general",
+    "built_at": "2026-09-10T12:45:30Z"
+   },
+   "manifest_sha256": "ff646687c45248b5d14f07fc8d6b654b03d34afba4c5fbe8d9a65f2973b96158",
+   "catalog_path": "/srv/lords/.frontend/zona-01-catalog.json",
+   "site_name": "Zona Cinema",
+   "unit_state": {
+    "MainPID": "3753972",
+    "NRestarts": "0",
+    "ActiveState": "active",
+    "FragmentPath": "/etc/systemd/system/nova-zona-01.service"
+   },
+   "served": {
+    "ok": true,
+    "body": {
+     "schema_version": 1,
+     "template_family": "zona",
+     "design_version": "1.0.2",
+     "source_commit": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee",
+     "build_id": "20260910T124530Z-a1691c56-nova",
+     "artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+     "profile": "zona-general",
+     "built_at": "2026-09-10T12:45:30Z",
+     "core_runtime": "site-factory-nova",
+     "family_template": "zona-nova"
+    },
+    "headers": {
+     "artifact": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+     "version": "1.0.2",
+     "build": "20260910T124530Z-a1691c56-nova"
+    }
+   },
+   "executable_is_manifest_build": false,
+   "shared_executable_note": "общий файл парка принадлежит другой сборке, чем объявляет манифест этой витрины; версию оформления выбирает манифест",
+   "closes_loop": true,
+   "unmet": [],
+   "verdict": "PROVEN"
+  },
+  {
+   "domain": "lordfilm47.space",
+   "nginx_config": "/etc/nginx/lords/lords-01.conf",
+   "upstream_port": 9110,
+   "units_listening_on_port": [
+    "lords-nova-01.service"
+   ],
+   "unit": "lords-nova-01.service",
+   "exec_start": "/usr/bin/python3 /srv/lords/.frontend/lords-frontend.py --port 9110",
+   "executable": "/srv/lords/.frontend/lords-frontend.py",
+   "executable_sha256": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+   "manifest_from": "умолчание рантайма (юнит его не задаёт)",
+   "manifest_path": "/srv/lords/.frontend/template-manifest.json",
+   "manifest": {
+    "schema_version": 1,
+    "template_family": "lords",
+    "design_version": "1.1.0",
+    "source_commit": "7dc251d",
+    "build_id": "20260913T2300Z-8ececc6c-nova",
+    "artifact_sha256": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+    "profile": "lords-general",
+    "built_at": "2026-09-14T07:42:54Z"
+   },
+   "manifest_sha256": "aa9734b133ae1f1660d8bc0223db67b4ac71c5b103727f94926e2158d0556ef2",
+   "catalog_path": "/srv/lords/.frontend/lords-01-catalog.json",
+   "site_name": "Lordfilm",
+   "unit_state": {
+    "MainPID": "3945441",
+    "NRestarts": "0",
+    "ActiveState": "active",
+    "FragmentPath": "/etc/systemd/system/lords-nova-01.service"
+   },
+   "served": {
+    "ok": true,
+    "body": {
+     "schema_version": 1,
+     "template_family": "lords",
+     "design_version": "1.1.0",
+     "source_commit": "7dc251d",
+     "build_id": "20260913T2300Z-8ececc6c-nova",
+     "artifact_sha256": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+     "profile": "lords-general",
+     "built_at": "2026-09-14T07:42:54Z",
+     "core_runtime": "site-factory-nova",
+     "family_template": "lords-nova"
+    },
+    "headers": {
+     "artifact": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+     "version": "1.1.0",
+     "build": "20260913T2300Z-8ececc6c-nova"
+    }
+   },
+   "executable_is_manifest_build": true,
+   "shared_executable_note": "",
+   "closes_loop": true,
+   "unmet": [],
+   "verdict": "PROVEN"
+  }
+ ]
+}

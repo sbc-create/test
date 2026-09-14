@@ -1,0 +1,65 @@
+{
+ "command": "python3 -m pytest -q -p no:randomly",
+ "summary_line": "4 failed, 6315 passed, 94 skipped, 1 xfailed, 19 warnings in 1714.01s (0:28:34)",
+ "exit_code": 1,
+ "passed": 6315,
+ "failed": 4,
+ "skipped": 94,
+ "xfailed": 1,
+ "failing_tests": [
+  "tests/integration/test_yummy_runtime_contract.py::TestОбъявлениеКонтракта::test_поверхности_названы_числом_а_не_словом",
+  "tests/test_schemas.py::test_every_schema_has_a_valid_fixture",
+  "tests/unit/test_yummy_entity_view.py::TestЛенты::test_пост_рисуется_с_источником_и_датой",
+  "tests/zone/test_suite3_full_catalog_route_policy.py::TestУстойчивостьПубличныхАдресов::test_действующие_адреса_остались_за_своими_сущностями"
+ ],
+ "inherited_check": {
+  "method": "git worktree на чистом родительском коммите 7dc251d, те же четыре теста запущены там же, в той же среде",
+  "worktree_commit": "7dc251d",
+  "result": "4 failed — ровно те же",
+  "conclusion": "правка R2 не добавила ни одного провала"
+ },
+ "fourth_failure_cause": {
+  "test": "tests/zone/test_suite3_full_catalog_route_policy.py::TestУстойчивостьПубличныхАдресов::test_действующие_адреса_остались_за_своими_сущностями",
+  "reads": [
+   "/srv/site-factory/repo/var/lords/lords/catalog-cache/lords-02.json",
+   "/srv/site-factory/repo/var/lords/detail-cache",
+   "data/lords/route-ledger.json"
+  ],
+  "snapshot_rebuilt_at": "2026-09-14 08:55 UTC, владелец root (таймер обновления парка)",
+  "why_not_mine": "тест не импортирует ни одного изменённого модуля; диф R2 не затрагивает factory/, data/ и подсистему zone — только canary-инструменты, их тесты и документы",
+  "not_fixed_because": "исправление означало бы правку data/lords/route-ledger.json, то есть изменение публичных адресов Lords. Задача прямо запрещает изменять Lords и production. Провал не скрыт, не ослаблен и не помечен skip.",
+  "affected_entities": 1
+ },
+ "changed_files_suite": {
+  "command": "python3 -m pytest tests/lords/test_rollback_served_fingerprint.py tests/lords/test_serving_chain_proof.py tests/lords/test_nova_canary_installer.py tests/lords/test_canary_run_orchestrator.py -q -p no:randomly",
+  "result": "83 passed",
+  "exit_code": 0
+ },
+ "lords_suite": {
+  "command": "python3 -m pytest tests/lords -q -p no:randomly",
+  "result": "228 passed",
+  "exit_code": 0
+ },
+ "before_fix": {
+  "command": "python3 -m pytest tests/lords/test_rollback_served_fingerprint.py tests/lords/test_serving_chain_proof.py -q -p no:randomly при файлах из 7dc251d",
+  "result": "14 failed, 2 passed, 25 errors",
+  "exit_code": 1,
+  "log": "artifacts/evidence/templates-zona-served-fingerprint-r2/pytest-before-fix.log"
+ },
+ "focused_lords_unit_suite": {
+  "command": "python3 -m pytest tests/lords tests/unit -q -p no:randomly",
+  "summary_line": "1 failed, 5786 passed, 8 skipped, 1 xfailed, 15 warnings in 1964.49s (0:32:44)",
+  "passed": 5786,
+  "failed": 1,
+  "skipped": 8,
+  "xfailed": 1,
+  "exit_code": 1,
+  "failing_tests": [
+   "tests/unit/test_yummy_entity_view.py::TestЛенты::test_пост_рисуется_с_источником_и_датой"
+  ],
+  "note": "тот же унаследованный провал Yummy; воспроизводится на чистом 7dc251d",
+  "log": "artifacts/evidence/templates-zona-served-fingerprint-r2/pytest-focused.log"
+ },
+ "skipped_or_xfail_added_by_r2": 0,
+ "tests_deleted_or_weakened": 0
+}

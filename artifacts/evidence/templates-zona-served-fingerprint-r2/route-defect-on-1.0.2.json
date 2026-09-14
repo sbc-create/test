@@ -1,0 +1,40 @@
+{
+ "вопрос": "устарел ли план архетипов Zona или это дефект самой версии 1.0.2",
+ "lords_01_на_1_1_0": {
+  "home_status": 200,
+  "links_found": 48,
+  "sampled": [
+   {
+    "url": "https://lordfilm47.space/title/vo-vseoruzhii-sila-artefaktov/",
+    "status": 200
+   },
+   {
+    "url": "https://lordfilm47.space/title/podpolnyy-mir/",
+    "status": 200
+   },
+   {
+    "url": "https://lordfilm47.space/title/ispoved-shamana/",
+    "status": 200
+   }
+  ]
+ },
+ "zona_01_на_1_0_2": {
+  "home_status": 200,
+  "links_found": 42,
+  "sampled": [
+   {
+    "url": "https://zonafilm.space/title/ubiystva-v-marbl-holl/",
+    "status": 404
+   },
+   {
+    "url": "https://zonafilm.space/title/akuloboroten/",
+    "status": 404
+   },
+   {
+    "url": "https://zonafilm.space/title/yad-skazka-dlya-vzroslyh/",
+    "status": 404
+   }
+  ]
+ },
+ "вывод": "Ссылки с главной Zona ведут в 404 на версии 1.0.2 — тот самый дефект маршрутов card→title, ради которого и делался кандидат 1.1.0. План архетипов не устарел: во время прогона 07:42 Zona стояла на 1.1.0, и архетипы прошли 9/9. На Lords, который сейчас на 1.1.0, те же маршруты отвечают 200."
+}

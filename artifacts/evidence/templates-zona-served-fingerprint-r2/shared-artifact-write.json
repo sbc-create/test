@@ -1,0 +1,11 @@
+{
+ "вопрос": "команда записала бы общий файл lords-frontend.py — не затронет ли это Lords",
+ "shared_on_disk_sha256": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+ "candidate_sha256": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+ "identical": true,
+ "вывод": "Запись общего файла — побайтная запись того же содержимого: на диске уже лежит кандидат a51dad, поскольку Lords выкачен на 1.1.0. Lords не затрагивается и по другой причине: его манифест не переписывается, а его юнит lords-nova-01.service не перезапускается — команда перезапускает только nova-zona-01.service.",
+ "lords_manifest_untouched": "/srv/lords/.frontend/template-manifest.json",
+ "would_restart": [
+  "nova-zona-01.service"
+ ]
+}

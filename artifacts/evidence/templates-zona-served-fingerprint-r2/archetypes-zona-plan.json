@@ -1,0 +1,101 @@
+{
+ "film_no_seasons": {
+  "slug": "chay-na-plyazhe",
+  "url": "/title/chay-na-plyazhe/",
+  "title": "Чай на пляже",
+  "kind": "Фильм",
+  "seasons": 0,
+  "episodes": 0,
+  "has_desc": true,
+  "has_poster": true,
+  "kp": false
+ },
+ "no_stream": {
+  "slug": "chay-na-plyazhe",
+  "url": "/title/chay-na-plyazhe/",
+  "title": "Чай на пляже",
+  "kind": "Фильм",
+  "seasons": 0,
+  "episodes": 0,
+  "has_desc": true,
+  "has_poster": true,
+  "kp": false
+ },
+ "series_one_season": {
+  "slug": "pylayuschee-leto",
+  "url": "/title/pylayuschee-leto/",
+  "title": "Пылающее лето",
+  "kind": "Сериал",
+  "seasons": 1,
+  "episodes": 29,
+  "has_desc": true,
+  "has_poster": true,
+  "kp": false
+ },
+ "empty_synopsis": {
+  "slug": "novyy-tenti-lishniy-specvypuski",
+  "url": "/title/novyy-tenti-lishniy-specvypuski/",
+  "title": "Новый Тэнти — лишний! Спецвыпуски",
+  "kind": "Сериал",
+  "seasons": 1,
+  "episodes": 6,
+  "has_desc": false,
+  "has_poster": true,
+  "kp": false
+ },
+ "series_multi_season": {
+  "slug": "pati",
+  "url": "/title/pati/",
+  "title": "Пати",
+  "kind": "Сериал",
+  "seasons": 2,
+  "episodes": 12,
+  "has_desc": false,
+  "has_poster": true,
+  "kp": true
+ },
+ "no_poster": {
+  "slug": "horoshaya-doch-2",
+  "url": "/title/horoshaya-doch-2/",
+  "title": "Хорошая дочь",
+  "kind": "Сериал",
+  "seasons": 0,
+  "episodes": 0,
+  "has_desc": false,
+  "has_poster": false,
+  "kp": false
+ },
+ "long_title": {
+  "slug": "zabota-ob-odarennoy-devushke-v-prestizhnoy-shkole-polnoy-vysokoklassnyh-ucheniko",
+  "url": "/title/zabota-ob-odarennoy-devushke-v-prestizhnoy-shkole-polnoy-vysokoklassnyh-ucheniko/",
+  "title": "Забота об одарённой девушке: В престижной школе, полной высококлассных учеников, я буду тайно заботиться о самой красивой девушке (не имеющей никаких жизненных навыков)",
+  "kind": "Сериал",
+  "seasons": 0,
+  "episodes": 0,
+  "has_desc": false,
+  "has_poster": true,
+  "kp": false
+ },
+ "special_chars": {
+  "slug": "ubiystva-v-marbl-holl",
+  "url": "/title/ubiystva-v-marbl-holl/",
+  "title": "Убийства в Марбл-Холл",
+  "kind": "Сериал",
+  "seasons": 0,
+  "episodes": 0,
+  "has_desc": false,
+  "has_poster": true,
+  "kp": false
+ },
+ "cyrillic": {
+  "slug": "ubiystva-v-marbl-holl",
+  "url": "/title/ubiystva-v-marbl-holl/",
+  "title": "Убийства в Марбл-Холл",
+  "kind": "Сериал",
+  "seasons": 0,
+  "episodes": 0,
+  "has_desc": false,
+  "has_poster": true,
+  "kp": false
+ }
+}

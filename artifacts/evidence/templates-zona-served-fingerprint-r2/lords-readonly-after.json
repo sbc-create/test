@@ -1,0 +1,58 @@
+{
+ "taken_at_utc": "2026-09-14T08:31:04Z",
+ "site": "lords-01",
+ "domain": "lordfilm47.space",
+ "unit": "lords-nova-01.service",
+ "unit_state": {
+  "MainPID": "3945441",
+  "NRestarts": "0",
+  "ActiveState": "active",
+  "ActiveEnterTimestamp": "Mon 2026-09-14 08:18:20 UTC"
+ },
+ "shared_executable_sha256": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+ "manifest": {
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.1.0",
+  "source_commit": "7dc251d",
+  "build_id": "20260913T2300Z-8ececc6c-nova",
+  "artifact_sha256": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+  "profile": "lords-general",
+  "built_at": "2026-09-14T07:42:54Z"
+ },
+ "pages": [
+  {
+   "url": "https://lordfilm47.space/healthz",
+   "status": 200,
+   "final_url": "https://lordfilm47.space/healthz",
+   "bytes": 11,
+   "html_sha256": "4062edaf750fb8074e7e83e0c9028c94e32468a8b6f1614774328ef045150f93",
+   "design_version": "1.1.0",
+   "artifact_sha256": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+   "build_id": "20260913T2300Z-8ececc6c-nova",
+   "source_commit": "7dc251d"
+  },
+  {
+   "url": "https://lordfilm47.space/",
+   "status": 200,
+   "final_url": "https://lordfilm47.space/",
+   "bytes": 41424,
+   "html_sha256": "566f72dcf6d6e454699c187c4ad17cd92ab86f15d67c632111bdbbe8203341a6",
+   "design_version": "1.1.0",
+   "artifact_sha256": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+   "build_id": "20260913T2300Z-8ececc6c-nova",
+   "source_commit": "7dc251d"
+  },
+  {
+   "url": "https://lordfilm47.space/catalog/",
+   "status": 200,
+   "final_url": "https://lordfilm47.space/catalog/",
+   "bytes": 41416,
+   "html_sha256": "066d8b678d330c693172110d4f43aff7d944024eb7c1add9061d0d40cacb0b8d",
+   "design_version": "1.1.0",
+   "artifact_sha256": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+   "build_id": "20260913T2300Z-8ececc6c-nova",
+   "source_commit": "7dc251d"
+  }
+ ]
+}

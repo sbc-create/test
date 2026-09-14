@@ -1,0 +1,15 @@
+{
+ "описание": "Боевой вход zona-01 на реализации до исправления: домен здоров, все ответы 200, объявлен прежний релиз 1.0.2 — и всё равно ROLLBACK_FAILED.",
+ "результат": {
+  "exit_code": 1,
+  "verdict": "ROLLBACK_FAILED",
+  "disk_fingerprint_match": true,
+  "served_fingerprint_match": false,
+  "expected_artifact": "0f367108a797cace0b56c9bd49f5f1f716ae16a346c55be64af4ad19a9d04e84",
+  "served_artifact_after_rollback": [
+   "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd"
+  ],
+  "health_ok": true,
+  "restart_ok": true
+ }
+}

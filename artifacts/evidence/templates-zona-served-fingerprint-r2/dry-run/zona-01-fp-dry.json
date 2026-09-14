@@ -1,0 +1,72 @@
+{
+ "label": "dry-baseline",
+ "taken_at_utc": "2026-09-14T08:44:40Z",
+ "pages": [
+  {
+   "url": "https://zonafilm.space/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "https://zonafilm.space/",
+   "bytes": 23866,
+   "html_sha256": "54b44b29700b99022f78a450b94e9b255f35974efc93e1ac389b18479ee09a9d",
+   "css_sha256": "a2f302bc84a6f351ff6074bf0476dca9c2cafe482f0f68cca0b0dba91a975c95",
+   "css_bytes": 5476,
+   "js_sha256": "913a1abc4839899507df78ecd74283209ea6bb931b4d6a753d046857ffc0aca2",
+   "js_bytes": 841,
+   "declared": {
+    "family": "zona",
+    "design_version": "1.0.2",
+    "build_id": "20260910T124530Z-a1691c56-nova",
+    "artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "source_commit": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee",
+    "profile": "zona-general",
+    "template": "zona-nova"
+   },
+   "footer_marker": "zona 1.0.2 · a1691c56"
+  },
+  {
+   "url": "https://zonafilm.space/catalog/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "https://zonafilm.space/catalog/",
+   "bytes": 29615,
+   "html_sha256": "858a5b76db6212ba0ea27fffff4901e2145d1998bf36abd52d9b17c7a014834d",
+   "css_sha256": "a2f302bc84a6f351ff6074bf0476dca9c2cafe482f0f68cca0b0dba91a975c95",
+   "css_bytes": 5476,
+   "js_sha256": "913a1abc4839899507df78ecd74283209ea6bb931b4d6a753d046857ffc0aca2",
+   "js_bytes": 841,
+   "declared": {
+    "family": "zona",
+    "design_version": "1.0.2",
+    "build_id": "20260910T124530Z-a1691c56-nova",
+    "artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "source_commit": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee",
+    "profile": "zona-general",
+    "template": "zona-nova"
+   },
+   "footer_marker": "zona 1.0.2 · a1691c56"
+  },
+  {
+   "url": "https://zonafilm.space/new/",
+   "redirects": [],
+   "status": 200,
+   "final_url": "https://zonafilm.space/new/",
+   "bytes": 29531,
+   "html_sha256": "ce36b6354aaba154f3571b02652e3c59ffedb2b21c7a61b0cc522c526bdd9dd4",
+   "css_sha256": "a2f302bc84a6f351ff6074bf0476dca9c2cafe482f0f68cca0b0dba91a975c95",
+   "css_bytes": 5476,
+   "js_sha256": "913a1abc4839899507df78ecd74283209ea6bb931b4d6a753d046857ffc0aca2",
+   "js_bytes": 841,
+   "declared": {
+    "family": "zona",
+    "design_version": "1.0.2",
+    "build_id": "20260910T124530Z-a1691c56-nova",
+    "artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "source_commit": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee",
+    "profile": "zona-general",
+    "template": "zona-nova"
+   },
+   "footer_marker": "zona 1.0.2 · a1691c56"
+  }
+ ]
+}

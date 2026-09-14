@@ -1,0 +1,18 @@
+{
+ "command": "sudo -n python3 /home/claude/wt-lords-r2/automation/host/lords-zona-canary-run.py --artifact /home/claude/wt-lords-r2/automation/host/lords-frontend.py --expect-sha256 a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346 --commit 7dc251d --build-id 20260913T2300Z-8ececc6c-nova --design-version 1.1.0 --sites zona-01 --profiles /home/claude/wt-lords-r2/artifacts/evidence/templates-zona-served-fingerprint-r2/canary-run-profiles-zona-only.json --out /home/claude/wt-lords-r2/artifacts/evidence/templates-zona-served-fingerprint-r2/canary-run",
+ "checks": {
+  "все флаги есть в --help": true,
+  "неизвестные флаги": [],
+  "обязательные пути на месте": true,
+  "отсутствующие пути": [],
+  "--sites ровно zona-01": true,
+  "lords-01 не встречается в команде": true,
+  "витрины в профиле": [
+   "zona-01"
+  ],
+  "в профиле нет lords-01": true,
+  "--out не трогает свидетельства R1": true,
+  "--out свободен": true,
+  "expect-sha256 совпал с артефактом": true
+ }
+}

@@ -1,0 +1,57 @@
+{
+ "site": "lords-01",
+ "statement": "Lords — защищённая витрина: в этой задаче не устанавливалась, не перезапускалась, не откатывалась.",
+ "before": {
+  "source": "artifacts/evidence/templates-zona-served-fingerprint-r2/forensic-root-cause.json",
+  "taken_at_utc": "2026-09-14T08:20Z (первый снимок задачи)",
+  "status": 200,
+  "design_version": "1.1.0",
+  "artifact_sha256": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+  "source_commit": "7dc251d",
+  "build_id": "20260913T2300Z-8ececc6c-nova"
+ },
+ "after": {
+  "source": "artifacts/evidence/templates-zona-served-fingerprint-r2/lords-readonly-after.json",
+  "taken_at_utc": "2026-09-14T08:31:04Z",
+  "design_version": "1.1.0",
+  "artifact_sha256": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+  "source_commit": "7dc251d",
+  "build_id": "20260913T2300Z-8ececc6c-nova",
+  "unit_state": {
+   "MainPID": "3945441",
+   "NRestarts": "0",
+   "ActiveState": "active",
+   "ActiveEnterTimestamp": "Mon 2026-09-14 08:18:20 UTC"
+  },
+  "shared_executable_sha256": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+  "public": [
+   {
+    "url": "https://lordfilm47.space/healthz",
+    "status": 200,
+    "html_sha256": "4062edaf750fb8074e7e83e0c9028c94e32468a8b6f1614774328ef045150f93"
+   },
+   {
+    "url": "https://lordfilm47.space/",
+    "status": 200,
+    "html_sha256": "566f72dcf6d6e454699c187c4ad17cd92ab86f15d67c632111bdbbe8203341a6"
+   },
+   {
+    "url": "https://lordfilm47.space/catalog/",
+    "status": 200,
+    "html_sha256": "066d8b678d330c693172110d4f43aff7d944024eb7c1add9061d0d40cacb0b8d"
+   }
+  ]
+ },
+ "LORDS_MUTATIONS": 0,
+ "LORDS_RESTARTS": 0,
+ "LORDS_VERSION_BEFORE": "1.1.0",
+ "LORDS_VERSION_AFTER": "1.1.0",
+ "LORDS_FINGERPRINT_DELTA": 0,
+ "changed_fields": [],
+ "serving_chain_verdict": "PROVEN",
+ "unit_pid_at_first_chain_proof": "3945441 (08:24:23Z)",
+ "unit_pid_now": "3945441",
+ "restart_attribution": "ActiveEnterTimestamp юнита — 2026-09-14 08:18:20 UTC, то есть перезапуск произошёл ДО первого снимка этой задачи и не ею: привилегий на restart у сессии нет, ни одной привилегированной команды не выполнялось. С момента первого доказательства цепочки в 08:24:23Z MainPID и NRestarts неизменны.",
+ "privileged_commands_run": 0,
+ "systemctl_restart_calls": 0
+}

@@ -1,0 +1,30 @@
+SKIPPED [1] tests/zone/test_suite5_full_artifact_changeset.py:265: полной сборки нет: /home/claude/wt-lords-r2/var/build-a/zona-cinema
+SKIPPED [1] tests/zone/test_suite5_full_artifact_changeset.py:269: полной сборки нет: /home/claude/wt-lords-r2/var/build-a/zona-cinema
+SKIPPED [1] tests/zone/test_suite7_redirects.py:34: сборки с переездами нет: /home/claude/wt-lords-r2/var/build-a/zona-cinema
+SKIPPED [1] tests/zone/test_suite7_redirects.py:39: сборки с переездами нет: /home/claude/wt-lords-r2/var/build-a/zona-cinema
+SKIPPED [1] tests/zone/test_suite7_redirects.py:43: сборки с переездами нет: /home/claude/wt-lords-r2/var/build-a/zona-cinema
+SKIPPED [1] tests/zone/test_suite7_redirects.py:48: сборки с переездами нет: /home/claude/wt-lords-r2/var/build-a/zona-cinema
+SKIPPED [1] tests/zone/test_suite7_redirects.py:52: сборки с переездами нет: /home/claude/wt-lords-r2/var/build-a/zona-cinema
+SKIPPED [1] tests/zone/test_suite7_redirects.py:57: сборки с переездами нет: /home/claude/wt-lords-r2/var/build-a/zona-cinema
+SKIPPED [1] tests/zone/test_suite7_redirects.py:119: сборки с переездами нет: /home/claude/wt-lords-r2/var/build-a/zona-cinema
+SKIPPED [1] tests/zone/test_suite7_redirects.py:34: сборки с переездами нет: /home/claude/wt-lords-r2/var/build-a/animedia-portal
+SKIPPED [1] tests/zone/test_suite7_redirects.py:39: сборки с переездами нет: /home/claude/wt-lords-r2/var/build-a/animedia-portal
+SKIPPED [1] tests/zone/test_suite7_redirects.py:43: сборки с переездами нет: /home/claude/wt-lords-r2/var/build-a/animedia-portal
+SKIPPED [1] tests/zone/test_suite7_redirects.py:48: сборки с переездами нет: /home/claude/wt-lords-r2/var/build-a/animedia-portal
+SKIPPED [1] tests/zone/test_suite7_redirects.py:52: сборки с переездами нет: /home/claude/wt-lords-r2/var/build-a/animedia-portal
+SKIPPED [1] tests/zone/test_suite7_redirects.py:57: сборки с переездами нет: /home/claude/wt-lords-r2/var/build-a/animedia-portal
+SKIPPED [1] tests/zone/test_suite7_redirects.py:119: сборки с переездами нет: /home/claude/wt-lords-r2/var/build-a/animedia-portal
+SKIPPED [1] tests/zone/test_suite7_redirects.py:34: сборки с переездами нет: /home/claude/wt-lords-r2/var/build-a/lords-02
+SKIPPED [1] tests/zone/test_suite7_redirects.py:39: сборки с переездами нет: /home/claude/wt-lords-r2/var/build-a/lords-02
+SKIPPED [1] tests/zone/test_suite7_redirects.py:43: сборки с переездами нет: /home/claude/wt-lords-r2/var/build-a/lords-02
+SKIPPED [1] tests/zone/test_suite7_redirects.py:48: сборки с переездами нет: /home/claude/wt-lords-r2/var/build-a/lords-02
+SKIPPED [1] tests/zone/test_suite7_redirects.py:52: сборки с переездами нет: /home/claude/wt-lords-r2/var/build-a/lords-02
+SKIPPED [1] tests/zone/test_suite7_redirects.py:57: сборки с переездами нет: /home/claude/wt-lords-r2/var/build-a/lords-02
+SKIPPED [1] tests/zone/test_suite7_redirects.py:119: сборки с переездами нет: /home/claude/wt-lords-r2/var/build-a/lords-02
+XFAIL tests/unit/test_yummy_adapter_contract.py::TestВоротаСборкиОстаютсяЗакрытыми::test_декларация_наблюдателя_совпадает_с_реализацией - TEMPLATE_TO_CORE-007 открыт: декларация наблюдателя отстала от реализации; правка принадлежит Core
+FAILED tests/integration/test_yummy_runtime_contract.py::TestОбъявлениеКонтракта::test_поверхности_названы_числом_а_не_словом
+FAILED tests/test_schemas.py::test_every_schema_has_a_valid_fixture - Asserti...
+FAILED tests/unit/test_yummy_entity_view.py::TestЛенты::test_пост_рисуется_с_источником_и_датой
+FAILED tests/zone/test_suite3_full_catalog_route_policy.py::TestУстойчивостьПубличныхАдресов::test_действующие_адреса_остались_за_своими_сущностями
+4 failed, 6315 passed, 94 skipped, 1 xfailed, 19 warnings in 1714.01s (0:28:34)
+EXIT=1

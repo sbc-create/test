@@ -1,0 +1,1414 @@
+EEEEEEEEEEEEEEEEEEEEEEEEE.FF.FFFFFFFFFFFF                                [100%]
+==================================== ERRORS ====================================
+____ ERROR at setup of TestБоевойСлучай.test_откат_признаётся_состоявшимся _____
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_откат_признаётся_состоявш0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d613af0>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+_ ERROR at setup of TestБоевойСлучай.test_диск_и_отданное_остались_раздельными_утверждениями _
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_диск_и_отданное_остались_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d5472e0>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+_ ERROR at setup of TestБоевойСлучай.test_объявленный_отпечаток_НЕ_сверяется_с_файлом _
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_объявленный_отпечаток_НЕ_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d6120b0>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+_ ERROR at setup of TestНастоящиеНесовпаденияОстаютсяКрасными.test_публично_остался_кандидат _
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_публично_остался_кандидат0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d5f0940>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+_ ERROR at setup of TestНастоящиеНесовпаденияОстаютсяКрасными.test_чужой_релиз_отвергается_немедленно _
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_чужой_релиз_отвергается_н0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d613d90>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+_ ERROR at setup of TestНастоящиеНесовпаденияОстаютсяКрасными.test_неверный_build_id _
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_неверный_build_id0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d545ea0>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+_ ERROR at setup of TestНастоящиеНесовпаденияОстаютсяКрасными.test_неверный_коммит _
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_неверный_коммит0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d6120e0>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+_ ERROR at setup of TestНастоящиеНесовпаденияОстаютсяКрасными.test_неверное_семейство _
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_неверное_семейство0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d50d4e0>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+_ ERROR at setup of TestНастоящиеНесовпаденияОстаютсяКрасными.test_заголовки_верны_а_разметка_подменена _
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_заголовки_верны_а_разметк0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d6135e0>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+_ ERROR at setup of TestНастоящиеНесовпаденияОстаютсяКрасными.test_подменён_только_встроенный_css _
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_подменён_только_встроенны0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d612cb0>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+_ ERROR at setup of TestНастоящиеНесовпаденияОстаютсяКрасными.test_неполный_ответ _
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_неполный_ответ0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d50f8e0>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+_ ERROR at setup of TestНастоящиеНесовпаденияОстаютсяКрасными.test_ошибочный_переход _
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_ошибочный_переход0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d549a80>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+__ ERROR at setup of TestНастоящиеНесовпаденияОстаютсяКрасными.test_пятисотый __
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_пятисотый0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d527160>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+_ ERROR at setup of TestНастоящиеНесовпаденияОстаютсяКрасными.test_домен_молчит _
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_домен_молчит0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d50e080>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+_ ERROR at setup of TestНастоящиеНесовпаденияОстаютсяКрасными.test_диск_не_восстановлен _
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_диск_не_восстановлен0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d54a470>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+_ ERROR at setup of TestНастоящиеНесовпаденияОстаютсяКрасными.test_перезапуск_не_удался _
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_перезапуск_не_удался0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d5b1030>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+_ ERROR at setup of TestНастоящиеНесовпаденияОстаютсяКрасными.test_точка_без_манифеста_не_подтверждается_молчанием _
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_точка_без_манифеста_не_по0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9dc7d7b0>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+_ ERROR at setup of TestНастоящиеНесовпаденияОстаютсяКрасными.test_точка_без_снимка_отданного_не_подтверждается _
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_точка_без_снимка_отданног0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d526fe0>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+_ ERROR at setup of TestДопустимыеТранспортныеРазличия.test_порядок_и_регистр_заголовков _
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_порядок_и_регистр_заголов0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d5f32e0>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+_ ERROR at setup of TestДопустимыеТранспортныеРазличия.test_перевод_строки_crlf _
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_перевод_строки_crlf0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d5f2ef0>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+_ ERROR at setup of TestДопустимыеТранспортныеРазличия.test_нормализация_переносов_не_прячет_подмену _
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_нормализация_переносов_не0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d610e20>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+_ ERROR at setup of TestТочкаОткатаТребуетОпоры.test_молчащий_домен_останавливает_до_записи _
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_молчащий_домен_останавлив0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d52c790>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+__ ERROR at setup of TestТочкаОткатаТребуетОпоры.test_снимок_ложится_в_точку ___
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_снимок_ложится_в_точку0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9dbae5c0>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+_ ERROR at setup of TestОжиданиеОграничено.test_ожидание_имеет_предел_и_журнал _
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_ожидание_имеет_предел_и_ж0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d526620>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+_ ERROR at setup of TestОжиданиеОграничено.test_схождение_с_первой_попытки_не_ждёт _
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+tmp_path = PosixPath('/tmp/pytest-of-claude/pytest-1505/test_схождение_с_первой_попытк0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5a9d52c490>
+
+    @pytest.fixture
+    def стенд(уст, tmp_path, monkeypatch):
+        """Точка отката боевого случая Zona: файл кандидата, манифест прежнего релиза."""
+        фронт = tmp_path / "frontend"
+        фронт.mkdir()
+        артефакт = фронт / "lords-frontend.py"
+        артефакт.write_bytes(БАЙТЫ_КАНДИДАТА)
+        манифест = фронт / "template-manifest-zona-01.json"
+        манифест.write_text(json.dumps(РЕЛИЗ_КАНДИДАТА, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+    
+        точка = фронт / ".rollback" / "20260914T074300Z-zona-01"
+        точка.mkdir(parents=True)
+        (точка / "lords-frontend.py").write_bytes(БАЙТЫ_КАНДИДАТА)
+>       снимок = _проба(уст, РЕЛИЗ_БАЗЫ)
+
+tests/lords/test_rollback_served_fingerprint.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/lords/test_rollback_served_fingerprint.py:131: in _проба
+    страницы.append(_проверка(уст, путь, релиз, тело=b"ok\n", **своё))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+уст = <module 'nova_canary_fp' from '/home/claude/wt-lords-r2/automation/host/lords-nova-canary.py'>
+путь = '/healthz'
+релиз = {'schema_version': 1, 'template_family': 'zona', 'design_version': '1.0.2', 'source_commit': 'a1691c568d5b53a6f5a09f3c79cc3b76c52821ee', ...}
+версия_тела = '1.0.2', статус = 200, тело = b'ok\n', конечный = None
+переходов = 0, объявленное = None
+
+    def _проверка(уст, путь: str, релиз: dict, *, версия_тела: str | None = None,
+                  статус: int = 200, тело: bytes | None = None,
+                  конечный: str | None = None, переходов: int = 0,
+                  объявленное: dict | None = None) -> dict:
+        версия_тела = версия_тела or релиз["design_version"]
+        тело = тело if тело is not None else _тело(версия_тела, путь)
+        объявленное = объявленное if объявленное is not None else {
+>           к: str(релиз[к]) for к in уст.ЗАГОЛОВКИ_РЕЛИЗА
+        }
+E       AttributeError: module 'nova_canary_fp' has no attribute 'ЗАГОЛОВКИ_РЕЛИЗА'
+
+tests/lords/test_rollback_served_fingerprint.py:108: AttributeError
+=================================== FAILURES ===================================
+_ TestПроверкаНеОслаблена.test_отданное_складывается_из_двух_обязательных_частей _
+
+self = <tests.lords.test_rollback_served_fingerprint.TestПроверкаНеОслаблена object at 0x7f5a9d5b3400>
+
+    def test_отданное_складывается_из_двух_обязательных_частей(self):
+        текст = ИСХОДНИК.read_text(encoding="utf-8")
+        assert 'запись["served_fingerprint_match"] = (' in текст
+        место = текст.index('запись["served_fingerprint_match"] = (')
+        кусок = текст[место:место + 200]
+>       assert "served_release_match" in кусок and "served_structure_match" in кусок
+E       assert ('served_release_match' in 'запись["served_fingerprint_match"] = (\n        отданные == {сохранено["artifact_sha256"]} if отданные else False)\n    запись["verdict"] = (\n        "ROLLED_BACK_VERIFIED"\n        if (запись["disk_fing')
+
+tests/lords/test_rollback_served_fingerprint.py:430: AssertionError
+_________ TestПроверкаНеОслаблена.test_кэшелом_не_участвует_в_вердикте _________
+
+self = <tests.lords.test_rollback_served_fingerprint.TestПроверкаНеОслаблена object at 0x7f5a9d5b3220>
+
+    def test_кэшелом_не_участвует_в_вердикте(self):
+        текст = ИСХОДНИК.read_text(encoding="utf-8")
+>       assert "cache_diagnostic" in текст, "диагностика кэша должна быть записана"
+E       AssertionError: диагностика кэша должна быть записана
+E       assert 'cache_diagnostic' in '#!/usr/bin/env python3\n"""Выкладка артефакта nova на ОДНУ витрину и штатный откат.\n\n## Почему отдельная процедура\...int(f"ОТКАЗ: {ош}", file=sys.stderr)\n        return 2\n\n\nif __name__ == "__main__":\n    raise SystemExit(main())\n'
+
+tests/lords/test_rollback_served_fingerprint.py:434: AssertionError
+___ TestБоевойСлучай.test_общий_файл_другой_сборки_не_ломает_доказательство ____
+
+self = <tests.lords.test_serving_chain_proof.TestБоевойСлучай object at 0x7f5a9d545180>
+доказатель = <module 'prove_chain' from '/home/claude/wt-lords-r2/scripts/prove_serving_chain.py'>
+
+    def test_общий_файл_другой_сборки_не_ломает_доказательство(self, доказатель):
+>       замкнулся, невыполненные = доказатель.замыкание(цепь_zona())
+E       AttributeError: module 'prove_chain' has no attribute 'замыкание'
+
+tests/lords/test_serving_chain_proof.py:59: AttributeError
+__ TestБоевойСлучай.test_расхождение_файла_и_манифеста_названо_а_не_спрятано ___
+
+self = <tests.lords.test_serving_chain_proof.TestБоевойСлучай object at 0x7f5a9d5459c0>
+доказатель = <module 'prove_chain' from '/home/claude/wt-lords-r2/scripts/prove_serving_chain.py'>
+
+    def test_расхождение_файла_и_манифеста_названо_а_не_спрятано(self, доказатель):
+        текст = ИСХОДНИК.read_text(encoding="utf-8")
+>       assert "executable_is_manifest_build" in текст
+E       assert 'executable_is_manifest_build' in '#!/usr/bin/env python3\n"""Кто на самом деле отдаёт публичный домен: цепочка от имени до файла.\n\nИмя юнита НЕ вывод...6]}")\n    print(f"\\nотчёт: {арг.out}")\n    return 0\n\n\nif __name__ == "__main__":\n    raise SystemExit(main())\n'
+
+tests/lords/test_serving_chain_proof.py:65: AssertionError
+_ TestНастоящиеРасхожденияОстаютсяКрасными.test_отданный_артефакт_не_из_манифеста_юнита _
+
+self = <tests.lords.test_serving_chain_proof.TestНастоящиеРасхожденияОстаютсяКрасными object at 0x7f5a9d545960>
+доказатель = <module 'prove_chain' from '/home/claude/wt-lords-r2/scripts/prove_serving_chain.py'>
+
+    def test_отданный_артефакт_не_из_манифеста_юнита(self, доказатель):
+        цепь = цепь_zona()
+        цепь["served"]["headers"]["artifact"] = "f" * 64
+>       self._провал(доказатель, цепь, "отданный артефакт = манифест юнита")
+
+tests/lords/test_serving_chain_proof.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.lords.test_serving_chain_proof.TestНастоящиеРасхожденияОстаютсяКрасными object at 0x7f5a9d545960>
+доказатель = <module 'prove_chain' from '/home/claude/wt-lords-r2/scripts/prove_serving_chain.py'>
+цепь = {'domain': 'zonafilm.space', 'executable': '/srv/lords/.frontend/lords-frontend.py', 'executable_sha256': 'a51dade4693...10T124530Z-a1691c56-nova', 'artifact_sha256': '9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd'}, ...}
+ожидаемое = 'отданный артефакт = манифест юнита'
+
+    def _провал(self, доказатель, цепь, ожидаемое):
+>       замкнулся, невыполненные = доказатель.замыкание(цепь)
+E       AttributeError: module 'prove_chain' has no attribute 'замыкание'
+
+tests/lords/test_serving_chain_proof.py:71: AttributeError
+_ TestНастоящиеРасхожденияОстаютсяКрасными.test_отданная_сборка_не_из_манифеста_юнита _
+
+self = <tests.lords.test_serving_chain_proof.TestНастоящиеРасхожденияОстаютсяКрасными object at 0x7f5a9d544040>
+доказатель = <module 'prove_chain' from '/home/claude/wt-lords-r2/scripts/prove_serving_chain.py'>
+
+    def test_отданная_сборка_не_из_манифеста_юнита(self, доказатель):
+        цепь = цепь_zona()
+        цепь["served"]["headers"]["build"] = "20260101T000000Z-подмена"
+>       self._провал(доказатель, цепь, "отданная сборка = манифест юнита")
+
+tests/lords/test_serving_chain_proof.py:83: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.lords.test_serving_chain_proof.TestНастоящиеРасхожденияОстаютсяКрасными object at 0x7f5a9d544040>
+доказатель = <module 'prove_chain' from '/home/claude/wt-lords-r2/scripts/prove_serving_chain.py'>
+цепь = {'domain': 'zonafilm.space', 'executable': '/srv/lords/.frontend/lords-frontend.py', 'executable_sha256': 'a51dade4693...10T124530Z-a1691c56-nova', 'artifact_sha256': '9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd'}, ...}
+ожидаемое = 'отданная сборка = манифест юнита'
+
+    def _провал(self, доказатель, цепь, ожидаемое):
+>       замкнулся, невыполненные = доказатель.замыкание(цепь)
+E       AttributeError: module 'prove_chain' has no attribute 'замыкание'
+
+tests/lords/test_serving_chain_proof.py:71: AttributeError
+_ TestНастоящиеРасхожденияОстаютсяКрасными.test_отданная_версия_не_из_манифеста_юнита _
+
+self = <tests.lords.test_serving_chain_proof.TestНастоящиеРасхожденияОстаютсяКрасными object at 0x7f5a9d545b40>
+доказатель = <module 'prove_chain' from '/home/claude/wt-lords-r2/scripts/prove_serving_chain.py'>
+
+    def test_отданная_версия_не_из_манифеста_юнита(self, доказатель):
+        """Условие, которого прежде не было вовсе."""
+        цепь = цепь_zona()
+        цепь["served"]["headers"]["version"] = "1.1.0"
+>       self._провал(доказатель, цепь, "отданная версия = манифест юнита")
+
+tests/lords/test_serving_chain_proof.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.lords.test_serving_chain_proof.TestНастоящиеРасхожденияОстаютсяКрасными object at 0x7f5a9d545b40>
+доказатель = <module 'prove_chain' from '/home/claude/wt-lords-r2/scripts/prove_serving_chain.py'>
+цепь = {'domain': 'zonafilm.space', 'executable': '/srv/lords/.frontend/lords-frontend.py', 'executable_sha256': 'a51dade4693...10T124530Z-a1691c56-nova', 'artifact_sha256': '9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd'}, ...}
+ожидаемое = 'отданная версия = манифест юнита'
+
+    def _провал(self, доказатель, цепь, ожидаемое):
+>       замкнулся, невыполненные = доказатель.замыкание(цепь)
+E       AttributeError: module 'prove_chain' has no attribute 'замыкание'
+
+tests/lords/test_serving_chain_proof.py:71: AttributeError
+_ TestНастоящиеРасхожденияОстаютсяКрасными.test_юнит_исполняет_посторонний_файл _
+
+self = <tests.lords.test_serving_chain_proof.TestНастоящиеРасхожденияОстаютсяКрасными object at 0x7f5a9d5464a0>
+доказатель = <module 'prove_chain' from '/home/claude/wt-lords-r2/scripts/prove_serving_chain.py'>
+
+    def test_юнит_исполняет_посторонний_файл(self, доказатель):
+>       self._провал(доказатель, цепь_zona(executable="/tmp/чужой-frontend.py"),
+                     "юнит исполняет общий артефакт парка")
+
+tests/lords/test_serving_chain_proof.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.lords.test_serving_chain_proof.TestНастоящиеРасхожденияОстаютсяКрасными object at 0x7f5a9d5464a0>
+доказатель = <module 'prove_chain' from '/home/claude/wt-lords-r2/scripts/prove_serving_chain.py'>
+цепь = {'domain': 'zonafilm.space', 'executable': '/tmp/чужой-frontend.py', 'executable_sha256': 'a51dade469321e3078b8a7eee12...10T124530Z-a1691c56-nova', 'artifact_sha256': '9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd'}, ...}
+ожидаемое = 'юнит исполняет общий артефакт парка'
+
+    def _провал(self, доказатель, цепь, ожидаемое):
+>       замкнулся, невыполненные = доказатель.замыкание(цепь)
+E       AttributeError: module 'prove_chain' has no attribute 'замыкание'
+
+tests/lords/test_serving_chain_proof.py:71: AttributeError
+________ TestНастоящиеРасхожденияОстаютсяКрасными.test_юнит_не_активен _________
+
+self = <tests.lords.test_serving_chain_proof.TestНастоящиеРасхожденияОстаютсяКрасными object at 0x7f5a9d545ed0>
+доказатель = <module 'prove_chain' from '/home/claude/wt-lords-r2/scripts/prove_serving_chain.py'>
+
+    def test_юнит_не_активен(self, доказатель):
+>       self._провал(доказатель, цепь_zona(unit_state={"ActiveState": "failed"}),
+                     "юнит активен")
+
+tests/lords/test_serving_chain_proof.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.lords.test_serving_chain_proof.TestНастоящиеРасхожденияОстаютсяКрасными object at 0x7f5a9d545ed0>
+доказатель = <module 'prove_chain' from '/home/claude/wt-lords-r2/scripts/prove_serving_chain.py'>
+цепь = {'domain': 'zonafilm.space', 'executable': '/srv/lords/.frontend/lords-frontend.py', 'executable_sha256': 'a51dade4693...10T124530Z-a1691c56-nova', 'artifact_sha256': '9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd'}, ...}
+ожидаемое = 'юнит активен'
+
+    def _провал(self, доказатель, цепь, ожидаемое):
+>       замкнулся, невыполненные = доказатель.замыкание(цепь)
+E       AttributeError: module 'prove_chain' has no attribute 'замыкание'
+
+tests/lords/test_serving_chain_proof.py:71: AttributeError
+________ TestНастоящиеРасхожденияОстаютсяКрасными.test_домен_не_ответил ________
+
+self = <tests.lords.test_serving_chain_proof.TestНастоящиеРасхожденияОстаютсяКрасными object at 0x7f5a9d545a50>
+доказатель = <module 'prove_chain' from '/home/claude/wt-lords-r2/scripts/prove_serving_chain.py'>
+
+    def test_домен_не_ответил(self, доказатель):
+        цепь = цепь_zona()
+        цепь["served"] = {"ok": False, "headers": {}}
+>       замкнулся, невыполненные = доказатель.замыкание(цепь)
+E       AttributeError: module 'prove_chain' has no attribute 'замыкание'
+
+tests/lords/test_serving_chain_proof.py:102: AttributeError
+_ TestНастоящиеРасхожденияОстаютсяКрасными.test_пустая_цепочка_не_доказательство _
+
+self = <tests.lords.test_serving_chain_proof.TestНастоящиеРасхожденияОстаютсяКрасными object at 0x7f5a9d546680>
+доказатель = <module 'prove_chain' from '/home/claude/wt-lords-r2/scripts/prove_serving_chain.py'>
+
+    def test_пустая_цепочка_не_доказательство(self, доказатель):
+>       замкнулся, невыполненные = доказатель.замыкание({})
+E       AttributeError: module 'prove_chain' has no attribute 'замыкание'
+
+tests/lords/test_serving_chain_proof.py:107: AttributeError
+______ TestПравилоНеОслаблено.test_отпечаток_файла_не_сверяется_с_релизом ______
+
+self = <tests.lords.test_serving_chain_proof.TestПравилоНеОслаблено object at 0x7f5a9d547790>
+доказатель = <module 'prove_chain' from '/home/claude/wt-lords-r2/scripts/prove_serving_chain.py'>
+
+    def test_отпечаток_файла_не_сверяется_с_релизом(self, доказатель):
+        """Убранное условие не имеет права вернуться в правило."""
+        import inspect
+>       текст = inspect.getsource(доказатель.замыкание)
+E       AttributeError: module 'prove_chain' has no attribute 'замыкание'
+
+tests/lords/test_serving_chain_proof.py:116: AttributeError
+_______________ TestПравилоНеОслаблено.test_условий_стало_больше _______________
+
+self = <tests.lords.test_serving_chain_proof.TestПравилоНеОслаблено object at 0x7f5a9d547430>
+доказатель = <module 'prove_chain' from '/home/claude/wt-lords-r2/scripts/prove_serving_chain.py'>
+
+    def test_условий_стало_больше(self, доказатель):
+>       _, невыполненные = доказатель.замыкание({})
+E       AttributeError: module 'prove_chain' has no attribute 'замыкание'
+
+tests/lords/test_serving_chain_proof.py:121: AttributeError
+___________ TestПравилоНеОслаблено.test_вердикт_требует_всех_условий ___________
+
+self = <tests.lords.test_serving_chain_proof.TestПравилоНеОслаблено object at 0x7f5a9d546f80>
+доказатель = <module 'prove_chain' from '/home/claude/wt-lords-r2/scripts/prove_serving_chain.py'>
+
+    def test_вердикт_требует_всех_условий(self, доказатель):
+        for поле in ("отданный артефакт = манифест юнита",
+                     "отданная сборка = манифест юнита",
+                     "отданная версия = манифест юнита",
+                     "юнит исполняет общий артефакт парка",
+                     "юнит активен",
+                     "домен ответил"):
+>           _, все = доказатель.замыкание({})
+E           AttributeError: module 'prove_chain' has no attribute 'замыкание'
+
+tests/lords/test_serving_chain_proof.py:131: AttributeError
+=========================== short test summary info ============================
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestБоевойСлучай::test_откат_признаётся_состоявшимся
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestБоевойСлучай::test_диск_и_отданное_остались_раздельными_утверждениями
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestБоевойСлучай::test_объявленный_отпечаток_НЕ_сверяется_с_файлом
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestНастоящиеНесовпаденияОстаютсяКрасными::test_публично_остался_кандидат
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestНастоящиеНесовпаденияОстаютсяКрасными::test_чужой_релиз_отвергается_немедленно
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestНастоящиеНесовпаденияОстаютсяКрасными::test_неверный_build_id
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestНастоящиеНесовпаденияОстаютсяКрасными::test_неверный_коммит
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestНастоящиеНесовпаденияОстаютсяКрасными::test_неверное_семейство
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestНастоящиеНесовпаденияОстаютсяКрасными::test_заголовки_верны_а_разметка_подменена
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestНастоящиеНесовпаденияОстаютсяКрасными::test_подменён_только_встроенный_css
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestНастоящиеНесовпаденияОстаютсяКрасными::test_неполный_ответ
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestНастоящиеНесовпаденияОстаютсяКрасными::test_ошибочный_переход
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestНастоящиеНесовпаденияОстаютсяКрасными::test_пятисотый
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestНастоящиеНесовпаденияОстаютсяКрасными::test_домен_молчит
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestНастоящиеНесовпаденияОстаютсяКрасными::test_диск_не_восстановлен
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestНастоящиеНесовпаденияОстаютсяКрасными::test_перезапуск_не_удался
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestНастоящиеНесовпаденияОстаютсяКрасными::test_точка_без_манифеста_не_подтверждается_молчанием
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestНастоящиеНесовпаденияОстаютсяКрасными::test_точка_без_снимка_отданного_не_подтверждается
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestДопустимыеТранспортныеРазличия::test_порядок_и_регистр_заголовков
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestДопустимыеТранспортныеРазличия::test_перевод_строки_crlf
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestДопустимыеТранспортныеРазличия::test_нормализация_переносов_не_прячет_подмену
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestТочкаОткатаТребуетОпоры::test_молчащий_домен_останавливает_до_записи
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestТочкаОткатаТребуетОпоры::test_снимок_ложится_в_точку
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestОжиданиеОграничено::test_ожидание_имеет_предел_и_журнал
+ERROR tests/lords/test_rollback_served_fingerprint.py::TestОжиданиеОграничено::test_схождение_с_первой_попытки_не_ждёт
+FAILED tests/lords/test_rollback_served_fingerprint.py::TestПроверкаНеОслаблена::test_отданное_складывается_из_двух_обязательных_частей
+FAILED tests/lords/test_rollback_served_fingerprint.py::TestПроверкаНеОслаблена::test_кэшелом_не_участвует_в_вердикте
+FAILED tests/lords/test_serving_chain_proof.py::TestБоевойСлучай::test_общий_файл_другой_сборки_не_ломает_доказательство
+FAILED tests/lords/test_serving_chain_proof.py::TestБоевойСлучай::test_расхождение_файла_и_манифеста_названо_а_не_спрятано
+FAILED tests/lords/test_serving_chain_proof.py::TestНастоящиеРасхожденияОстаютсяКрасными::test_отданный_артефакт_не_из_манифеста_юнита
+FAILED tests/lords/test_serving_chain_proof.py::TestНастоящиеРасхожденияОстаютсяКрасными::test_отданная_сборка_не_из_манифеста_юнита
+FAILED tests/lords/test_serving_chain_proof.py::TestНастоящиеРасхожденияОстаютсяКрасными::test_отданная_версия_не_из_манифеста_юнита
+FAILED tests/lords/test_serving_chain_proof.py::TestНастоящиеРасхожденияОстаютсяКрасными::test_юнит_исполняет_посторонний_файл
+FAILED tests/lords/test_serving_chain_proof.py::TestНастоящиеРасхожденияОстаютсяКрасными::test_юнит_не_активен
+FAILED tests/lords/test_serving_chain_proof.py::TestНастоящиеРасхожденияОстаютсяКрасными::test_домен_не_ответил
+FAILED tests/lords/test_serving_chain_proof.py::TestНастоящиеРасхожденияОстаютсяКрасными::test_пустая_цепочка_не_доказательство
+FAILED tests/lords/test_serving_chain_proof.py::TestПравилоНеОслаблено::test_отпечаток_файла_не_сверяется_с_релизом
+FAILED tests/lords/test_serving_chain_proof.py::TestПравилоНеОслаблено::test_условий_стало_больше
+FAILED tests/lords/test_serving_chain_proof.py::TestПравилоНеОслаблено::test_вердикт_требует_всех_условий
+14 failed, 2 passed, 25 errors in 5.51s
+EXIT=1

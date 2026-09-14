@@ -1,0 +1,117 @@
+{
+ "prompt_id": "TEMPLATES-ZONA-SERVED-FINGERPRINT-R2",
+ "source_report": "artifacts/templates-lords-zona-canary-004/canary-run/canary-run.json",
+ "root_cause": "served_fingerprint_match сравнивал ДВЕ РАЗНЫЕ ВЕЛИЧИНЫ: отданный заголовок X-Site-Factory-Artifact-Sha256 (значение поля artifact_sha256 из манифеста, то есть объявленная ЛИЧНОСТЬ РЕЛИЗА) против point.json.artifact_sha256 (sha256 ФИЗИЧЕСКОГО файла lords-frontend.py, сохранённого в точке отката). Исполняемый файл один общий на все витрины парка, манифесты — раздельные по витринам, поэтому эти величины совпадают лишь случайно.",
+ "why_disk_matched_but_served_did_not": "Точка отката lords-01 (07:42:31) снята ДО первой установки, когда общий файл на диске был подлинной сборкой 1.0.2 — physical hash совпал с объявленным в манифесте 1.0.2. Точка отката zona-01 (07:43:00) снята ПОСЛЕ restore-forward Lords, который уже записал в общий файл кандидата a51dad. Поэтому точка Zona сохранила исполняемый файл a51dad вместе с манифестом 1.0.2. Откат корректно восстановил ровно это: диск a51dad (== expected, disk_match=true), манифест 1.0.2, а домен объявил artifact_sha256 манифеста 1.0.2 — 9229879e. Сверка 9229879e == a51dad дала false.",
+ "evidence": {
+  "shared_executable": "АРТЕФАКТ = ФРОНТ / 'lords-frontend.py' — один файл на lords-01 и zona-01",
+  "per_site_manifests": {
+   "lords-01": "template-manifest.json",
+   "zona-01": "template-manifest-zona-01.json"
+  },
+  "point_records_file_hash": "lords-nova-canary.py:201  'artifact_sha256': _sha(каталог / 'lords-frontend.py')",
+  "served_header_is_manifest_field": "lords-frontend.py:2242  send_header('X-Site-Factory-Artifact-Sha256', МАНИФЕСТ['artifact_sha256'])",
+  "verifier_compared_the_two": "lords-nova-canary.py:323-324  отданные == {сохранено['artifact_sha256']}"
+ },
+ "zona_rollback_drill": {
+  "artifact_before_rollback": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+  "artifact_after_rollback": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+  "expected_artifact": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+  "served_artifact_after_rollback": [
+   "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd"
+  ],
+  "restored_manifest_design_version": "1.0.2",
+  "restored_manifest_artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+  "disk_fingerprint_match": true,
+  "served_fingerprint_match": false,
+  "verdict": "ROLLBACK_FAILED",
+  "point": "/srv/lords/.frontend/.rollback/20260914T074300Z-zona-01",
+  "at_utc": "20260914T074317Z",
+  "health_all_200": true,
+  "health_checks": [
+   {
+    "path": "/healthz",
+    "status": 200,
+    "bytes": 11,
+    "version": "1.0.2",
+    "artifact": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "ok": true
+   },
+   {
+    "path": "/",
+    "status": 200,
+    "bytes": 23866,
+    "version": "1.0.2",
+    "artifact": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "ok": true
+   },
+   {
+    "path": "/catalog/",
+    "status": 200,
+    "bytes": 29615,
+    "version": "1.0.2",
+    "artifact": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "ok": true
+   }
+  ]
+ },
+ "lords_rollback_drill_for_contrast": {
+  "artifact_before_rollback": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+  "artifact_after_rollback": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+  "expected_artifact": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+  "served_artifact_after_rollback": [
+   "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd"
+  ],
+  "disk_fingerprint_match": true,
+  "served_fingerprint_match": true,
+  "verdict": "ROLLED_BACK_VERIFIED",
+  "point": "/srv/lords/.frontend/.rollback/20260914T074231Z-lords-01",
+  "note": "точка снята до любой установки, поэтому физический файл и объявленный релиз совпали"
+ },
+ "public_state_was_actually_correct": {
+  "claim": "Откат Zona на самом деле полностью удался; несовпадение было ложным.",
+  "measured_structure_identical_baseline_vs_after_rollback": true,
+  "first_material_difference": null,
+  "urls_compared": [
+   "https://zonafilm.space/",
+   "https://zonafilm.space/catalog/",
+   "https://zonafilm.space/new/"
+  ],
+  "baseline_taken_at": "2026-09-14T07:42:58Z",
+  "after_rollback_taken_at": "2026-09-14T07:43:17Z",
+  "orchestrator_step6_baseline_restored_ok": true,
+  "note": "Снимок after-rollback побайтно совпал с baseline по html_sha256, css_sha256, js_sha256, footer_marker, статусам и отсутствию переходов на всех трёх адресах."
+ },
+ "transport_factors_examined": {
+  "redirects": "пусто на всех адресах в обоих снимках",
+  "final_url": "совпадает с запрошенным на всех адресах",
+  "status": "200 на всех адресах в обоих снимках",
+  "host_tls_sni": "запрос шёл на настоящий домен по https, Host и SNI — zonafilm.space",
+  "content_encoding_chunking_line_endings": "исключены: отпечатки тела и встроенных CSS/JS совпали побайтно, различие в декодировании изменило бы их",
+  "cache_age_via_x_cache": "исключены: baseline и after-rollback различались бы, а они идентичны; при этом заголовок отражал именно смену манифеста",
+  "timestamps": {
+   "install": "07:42:58+",
+   "rollback": "20260914T074317Z",
+   "http_check": "2026-09-14T07:43:17Z"
+  },
+  "other_upstream_or_stale_worker": "исключено: restart_ok=true, и объявленная версия сменилась с 1.1.0 на 1.0.2 в том же ответе — старый worker отдал бы 1.1.0"
+ },
+ "live_state_readonly": {
+  "lords-01": {
+   "status": 200,
+   "design_version": "1.1.0",
+   "artifact_sha256": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+   "source_commit": "7dc251d",
+   "build_id": "20260913T2300Z-8ececc6c-nova"
+  },
+  "zona-01": {
+   "status": 200,
+   "design_version": "1.0.2",
+   "artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+   "source_commit": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee",
+   "build_id": "20260910T124530Z-a1691c56-nova"
+  },
+  "shared_executable_sha256": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346"
+ },
+ "live_state_demonstrates_root_cause": "Прямо сейчас общий бинарник на диске = a51dad (сборка 1.1.0), а zonafilm.space объявляет artifact_sha256 = 9229879e. Физический отпечаток и объявленный релиз расходятся штатно и постоянно — сравнивать их между собой нельзя в принципе."
+}
