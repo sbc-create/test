@@ -1,0 +1,49 @@
+{
+ "action": "status",
+ "site": "zona-01",
+ "artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+ "manifest": {
+  "schema_version": 1,
+  "template_family": "zona",
+  "design_version": "1.0.2",
+  "source_commit": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee",
+  "build_id": "20260910T124530Z-a1691c56-nova",
+  "artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+  "profile": "zona-general",
+  "built_at": "2026-09-10T12:45:30Z"
+ },
+ "health": {
+  "domain": "zonafilm.space",
+  "checks": [
+   {
+    "path": "/healthz",
+    "status": 200,
+    "bytes": 11,
+    "version": "1.0.2",
+    "artifact": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "ok": true
+   },
+   {
+    "path": "/",
+    "status": 200,
+    "bytes": 23866,
+    "version": "1.0.2",
+    "artifact": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "ok": true
+   },
+   {
+    "path": "/catalog/",
+    "status": 200,
+    "bytes": 29615,
+    "version": "1.0.2",
+    "artifact": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+    "ok": true
+   }
+  ],
+  "ok": true
+ },
+ "rollback_points": [
+  "20260913T185414Z-lords-01",
+  "20260913T210350Z-lords-01"
+ ]
+}

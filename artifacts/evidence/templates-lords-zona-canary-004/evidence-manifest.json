@@ -1,9 +1,9 @@
 {
  "prompt_id": "TEMPLATES-LORDS-ZONA-CANARY-004",
- "generated_at_utc": "2026-09-13T22:28:06Z",
+ "generated_at_utc": "2026-09-14T05:29:20Z",
  "task_branch": "claude/templates-lords-zona-canary-004",
- "task_commit": "e74448903eae2c9e9f19f393668f2dbfe5328702",
- "files_total": 271,
+ "task_commit": "bdd9473d2ad0b8f48d9b038c1c7e2c239214fd32",
+ "files_total": 273,
  "summary": {
   "browser": {
    "pages_measured": 131,
@@ -1104,6 +1104,11 @@
    "sha256": "63a8a2f1ced37c90c4399c0a7f30309e70ff8b8da92b9cd680967868e53cce7d"
   },
   {
+   "path": "lords-status-final.json",
+   "bytes": 1250,
+   "sha256": "2e0867a31fcc0d8d9952e767de3384b2e265a9ba1d4b02e440034e024b7d8006"
+  },
+  {
    "path": "neighbours-after.json",
    "bytes": 7424,
    "sha256": "94b612c796816b961b17390ee09581f89f0de7b2af0a6d8f903ae3ced9c324af"
@@ -1522,6 +1527,11 @@
    "path": "zona-status-before.json",
    "bytes": 1214,
    "sha256": "79a8e01cf4bab149f89fb4d59db7832b34e0cd05aaf85a944ad3767472a11da9"
+  },
+  {
+   "path": "zona-status-final.json",
+   "bytes": 1245,
+   "sha256": "b7bbe67098e9fefd656c9873c28d0bf0efdc82d4c7ab9e9b23db948b9b550289"
   }
  ]
 }
