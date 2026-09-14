@@ -1,0 +1,35 @@
+{
+  "catalog_total": 53377,
+  "detail_files": 18599,
+  "before": {
+    "kp": 910,
+    "imdb": 1362,
+    "description": 2671,
+    "poster": 3930
+  },
+  "after": {
+    "canonical_id": 53377,
+    "kp": 19584,
+    "imdb": 27040,
+    "any_rating": 27201,
+    "both_ratings": 19423,
+    "description": 2671,
+    "poster": 52964,
+    "external_ids": 53304,
+    "kp_id": 46710,
+    "imdb_id": 45058,
+    "source_binding": 52578,
+    "player_binding": 0,
+    "playable": 52578,
+    "seasons": 1889
+  },
+  "upstream_eligible": {
+    "kp": 19584,
+    "imdb": 27040,
+    "description": 2671,
+    "poster": 52964,
+    "playback": 52578
+  },
+  "lost_ingestion_to_projection": {},
+  "detail_sampled": 4000
+}
