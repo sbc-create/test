@@ -1,12 +1,12 @@
 {
-  "release_id": "6fcd33701aef-947fbe17f73b",
+  "release_id": "self-947fbe17f73bf402",
   "aggregate_sha256": "947fbe17f73bf402d0d88d2752c3c408dd717b0f9870391a96a1017f96c71f1f",
-  "primary_source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e",
+  "primary_source_commit": "SELF",
   "sources": [
     {
-      "commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e",
+      "commit": "SELF",
       "ref": "claude/templates-secret-hub-cloud-access-006",
-      "note": "Ветка этой задачи: пакет factory, автоматизация host, restore_proof, конфигурация и схемы."
+      "note": "«SELF» — тот самый коммит, в котором лежит этот манифест. Разные коммиты для кода и для файлов транзакции пришлось бы сверять на идентичность отдельно; самоссылка убирает вопрос целиком: SOURCE_COMMIT, TRANSACTION_COMMIT, INSTALLER_COMMIT, PROVENANCE_COMMIT и MANIFEST_COMMIT совпадают по построению. Значение подставляет сборщик из рабочего дерева и подтверждает сверка после коммита; установщик разрешает его в переданный ему SOURCE_COMMIT."
     },
     {
       "commit": "2bb47ded21f2e889f9cdf7cfd77e5835885cfb78",

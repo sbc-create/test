@@ -55,17 +55,28 @@ def git(*args) -> bytes:
 files, divergences = [], []
 
 for source in doc["sources"]:
-    full = git("rev-parse", source["commit"] + "^{commit}").decode().strip()
+    self_ref = source["commit"] == "SELF"
+    if self_ref:
+        # «SELF» — коммит, которым эта работа будет зафиксирована. Его хеша
+        # ещё не существует, поэтому содержимое берётся из рабочего дерева, а
+        # совпадение дерева с будущим коммитом подтверждается сверкой ПОСЛЕ
+        # коммита (`--verify-self`). Без этой сверки самоссылка была бы
+        # обещанием, а не свойством.
+        full = "SELF"
+        listing = git("ls-files", "--", *source["paths"]).decode().split()
+    else:
+        full = git("rev-parse", source["commit"] + "^{commit}").decode().strip()
+        # Перечень файлов берётся из коммита, а не из рабочего дерева: дерево
+        # может быть изменено, и собранный из него релиз не соответствовал бы
+        # никакому отсмотренному состоянию.
+        listing = git("ls-tree", "-r", "--name-only", full, "--", *source["paths"]).decode().split()
 
-    # Перечень файлов берётся из коммита, а не из рабочего дерева: дерево может
-    # быть изменено, и собранный из него релиз не соответствовал бы никакому
-    # отсмотренному состоянию.
-    listing = git("ls-tree", "-r", "--name-only", full, "--", *source["paths"]).decode().split()
     if not listing:
-        raise SystemExit(f"[release] ОТКАЗ: в коммите {full[:12]} нет ни одного из путей")
+        raise SystemExit(f"[release] ОТКАЗ: в источнике {full[:12]} нет ни одного из путей")
 
     for path in sorted(listing):
-        blob = git("show", f"{full}:{path}")
+        blob = (Path(repo, path).read_bytes() if self_ref
+                else git("show", f"{full}:{path}"))
         files.append({
             "path": path,
             "sha256": hashlib.sha256(blob).hexdigest(),
@@ -102,8 +113,13 @@ for item in sorted(files, key=lambda f: f["path"]):
 digest = aggregate.hexdigest()
 
 primary = doc["sources"][0]
-primary_full = git("rev-parse", primary["commit"] + "^{commit}").decode().strip()
-release_id = f"{primary_full[:12]}-{digest[:12]}"
+primary_full = ("SELF" if primary["commit"] == "SELF"
+                else git("rev-parse", primary["commit"] + "^{commit}").decode().strip())
+# Имя релиза не может содержать хеш ещё не созданного коммита, поэтому при
+# самоссылке оно строится только из совокупного отпечатка содержимого. Это и
+# честнее: релиз определяется тем, что в нём лежит.
+release_id = (f"self-{digest[:16]}" if primary_full == "SELF"
+              else f"{primary_full[:12]}-{digest[:12]}")
 
 (out_dir / "provenance.json").write_text(
     json.dumps({"file_count": len(files), "files": sorted(files, key=lambda f: f["path"])},
@@ -113,7 +129,8 @@ release_id = f"{primary_full[:12]}-{digest[:12]}"
     "release_id": release_id,
     "aggregate_sha256": digest,
     "primary_source_commit": primary_full,
-    "sources": [{"commit": git("rev-parse", s["commit"] + "^{commit}").decode().strip(),
+    "sources": [{"commit": ("SELF" if s["commit"] == "SELF"
+                            else git("rev-parse", s["commit"] + "^{commit}").decode().strip()),
                  "ref": s.get("ref", ""), "note": s["note"]} for s in doc["sources"]],
     "file_count": len(files),
     "pinned_root": doc["release"]["pinned_root"],

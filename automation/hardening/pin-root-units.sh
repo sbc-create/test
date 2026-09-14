@@ -259,21 +259,33 @@ install -d -m 0755 -o root -g root "$BUNDLE_DIR"
 # `safe.directory` нужен потому, что репозиторий принадлежит не root: без него
 # git откажется читать чужое дерево. Это чтение, а не доверие — доверие даёт
 # сверка sha256 каждого файла ниже.
+SFH_SELF_COMMIT="${SFH_COMMIT:-}" \
 "$PY" - "${STAGE}/provenance.json" "$SOURCE_REPO" "$BUNDLE_DIR" <<'PYEOF' || fail "выкладка не прошла проверку провенанса"
 import hashlib, json, os, subprocess, sys
 from pathlib import Path
 
 provenance, repo, dest = sys.argv[1], sys.argv[2], Path(sys.argv[3])
 files = json.load(open(provenance, encoding="utf-8"))["files"]
+# «SELF» разрешается в коммит, который назвал владелец в своей команде. Так
+# источник кода и источник самой транзакции — один и тот же объект git, и
+# сверять два коммита на идентичность не требуется.
+self_commit = os.environ.get("SFH_SELF_COMMIT", "")
 
 bad, written = [], 0
 for item in files:
+    commit = item["source_commit"]
+    if commit == "SELF":
+        if not self_commit:
+            bad.append(f"{item['path']}: провенанс ссылается на SELF, "
+                       "но коммит транзакции не передан")
+            continue
+        commit = self_commit
     blob = subprocess.run(
         ["git", "-c", f"safe.directory={repo}", "-C", repo, "show",
-         f"{item['source_commit']}:{item['path']}"],
+         f"{commit}:{item['path']}"],
         capture_output=True, check=False)
     if blob.returncode != 0:
-        bad.append(f"{item['path']}: нет в коммите {item['source_commit'][:12]}")
+        bad.append(f"{item['path']}: нет в коммите {commit[:12]}")
         continue
     got = hashlib.sha256(blob.stdout).hexdigest()
     if got != item["sha256"]:
