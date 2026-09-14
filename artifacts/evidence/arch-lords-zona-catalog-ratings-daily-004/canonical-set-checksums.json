@@ -1,0 +1,17 @@
+{
+  "canonical_snapshot": {
+    "unique_ids": 53393,
+    "checksum": "f74e34cd1234ce7429162ce76b06c015ee5f658bfd6b0ddbbfd737c51abf2fbd"
+  },
+  "lords-01": {
+    "unique_ids": 53393,
+    "checksum": "f74e34cd1234ce7429162ce76b06c015ee5f658bfd6b0ddbbfd737c51abf2fbd"
+  },
+  "zona-01": {
+    "unique_ids": 53393,
+    "checksum": "f74e34cd1234ce7429162ce76b06c015ee5f658bfd6b0ddbbfd737c51abf2fbd"
+  },
+  "identical": true,
+  "parity_pct": 100.0,
+  "matches_canonical": true
+}

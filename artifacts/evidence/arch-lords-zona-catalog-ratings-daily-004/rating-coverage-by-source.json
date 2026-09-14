@@ -1,0 +1,79 @@
+{
+  "lords-01": {
+    "published": 53393,
+    "kinopoisk": {
+      "count": 19585,
+      "pct": 36.68
+    },
+    "imdb": {
+      "count": 27044,
+      "pct": 50.65
+    },
+    "any_trusted": {
+      "count": 27205,
+      "pct": 50.95
+    },
+    "missing_reason_codes": {
+      "kinopoisk": {
+        "NOT_AVAILABLE_AT_SOURCE": 27137,
+        "NO_EXTERNAL_ID": 6671
+      },
+      "imdb": {
+        "NOT_AVAILABLE_AT_SOURCE": 18288,
+        "NO_EXTERNAL_ID": 8061
+      }
+    }
+  },
+  "zona-01": {
+    "published": 53393,
+    "kinopoisk": {
+      "count": 19585,
+      "pct": 36.68
+    },
+    "imdb": {
+      "count": 27044,
+      "pct": 50.65
+    },
+    "any_trusted": {
+      "count": 27205,
+      "pct": 50.95
+    },
+    "missing_reason_codes": {
+      "kinopoisk": {
+        "NOT_AVAILABLE_AT_SOURCE": 27137,
+        "NO_EXTERNAL_ID": 6671
+      },
+      "imdb": {
+        "NOT_AVAILABLE_AT_SOURCE": 18288,
+        "NO_EXTERNAL_ID": 8061
+      }
+    }
+  },
+  "sources_configured": {
+    "cdnvideohub": {
+      "role": "primary content+ratings",
+      "credentials": "Secret Hub: lords/lords-0X/cdnvideohub-api-token"
+    },
+    "tmdb": {
+      "configured": false,
+      "reason": "нет credentials в Secret Hub и нет адаптера в реестре провайдеров"
+    },
+    "shikimori": {
+      "configured": false,
+      "reason": "то же"
+    },
+    "myanimelist": {
+      "configured": false,
+      "reason": "то же; внешние ид myanimelist есть у 7009 записей, но источник не подключён"
+    },
+    "anilist": {
+      "configured": false,
+      "reason": "то же"
+    },
+    "omdb": {
+      "configured": false,
+      "reason": "то же"
+    }
+  },
+  "note": "Оценки отдаёт только CDNVideoHub. Detail-эндпоинт тех же оценок почти не добавляет: на выборке 3000 записей — одна оценка КП и одна IMDb сверх списка. Иных настроенных источников рейтингов в Secret Hub и реестре провайдеров нет."
+}

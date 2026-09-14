@@ -1,0 +1,23 @@
+{
+  "lords-01": {
+    "canonical_missing_on_site": {
+      "count": 0,
+      "ids": []
+    },
+    "site_extra_vs_canonical": {
+      "count": 0,
+      "ids": []
+    }
+  },
+  "zona-01": {
+    "canonical_missing_on_site": {
+      "count": 0,
+      "ids": []
+    },
+    "site_extra_vs_canonical": {
+      "count": 0,
+      "ids": []
+    }
+  },
+  "unexplained_stage_loss": 0
+}

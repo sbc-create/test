@@ -1,0 +1,56 @@
+{
+  "lords-01": {
+    "site": "lords-01",
+    "domain": "https://lordfilm47.space",
+    "catalog_items": 53399,
+    "details": 53399,
+    "routes": {
+      "/healthz": "200",
+      "/": "200",
+      "/catalog/": "200",
+      "/new/": "200"
+    },
+    "stratified": {
+      "checked": 520,
+      "non_200": 0,
+      "empty_h1": 0,
+      "failures": [],
+      "rating_mismatches": 0,
+      "mismatch_sample": []
+    },
+    "home_cards": {
+      "links": 36,
+      "broken": []
+    }
+  },
+  "zona-01": {
+    "site": "zona-01",
+    "domain": "https://zonafilm.space",
+    "catalog_items": 53399,
+    "details": 53399,
+    "routes": {
+      "/healthz": "200",
+      "/": "200",
+      "/catalog/": "200",
+      "/new/": "200"
+    },
+    "stratified": {
+      "checked": 520,
+      "non_200": 0,
+      "empty_h1": 0,
+      "failures": [],
+      "rating_mismatches": 0,
+      "mismatch_sample": []
+    },
+    "home_cards": {
+      "links": 13,
+      "broken": []
+    }
+  },
+  "parity": {
+    "lords_only": 0,
+    "zona_only": 0,
+    "identical": true,
+    "size": 53399
+  }
+}

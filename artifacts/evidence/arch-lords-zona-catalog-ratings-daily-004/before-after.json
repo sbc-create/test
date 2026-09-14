@@ -1,0 +1,62 @@
+{
+  "source_base_commit": "e47227b",
+  "before": {
+    "note": "состояние после задачи 003, измерено заново в начале 004",
+    "lords-01": {
+      "catalog_items": 52683,
+      "details": 52565,
+      "kp": 19283,
+      "imdb": 26649,
+      "description": 11856,
+      "poster": 52152
+    },
+    "zona-01": {
+      "catalog_items": 3868,
+      "details": 3851,
+      "kp": 228,
+      "imdb": 1059,
+      "description": 214,
+      "poster": 0
+    },
+    "catalog_source": "обход собственного отрисованного релиза витрины (content-pipeline/refresh.py)",
+    "parity": "наборы canonical ID витрин не совпадали: Lords 52 564, Zona 3 851"
+  },
+  "after": {
+    "lords-01": {
+      "catalog_items": 53399,
+      "details": 53399,
+      "kp": 19588,
+      "imdb": 27050,
+      "description": 13394,
+      "poster": 52986
+    },
+    "zona-01": {
+      "catalog_items": 53399,
+      "details": 53399,
+      "kp": 19588,
+      "imdb": 27050,
+      "description": 13381,
+      "poster": 52986
+    },
+    "catalog_source": "канонический снимок поставщика (automation/host/nova-catalog-publish.py)",
+    "parity": "наборы canonical ID витрин совпадают побайтно"
+  },
+  "delta": {
+    "lords-01": {
+      "catalog_items": 716,
+      "details": 834,
+      "kp": 305,
+      "imdb": 401,
+      "description": 1538,
+      "poster": 834
+    },
+    "zona-01": {
+      "catalog_items": 49531,
+      "details": 49548,
+      "kp": 19360,
+      "imdb": 25991,
+      "description": 13167,
+      "poster": 52986
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "run_id": "daily-20260914T164837Z",
+  "started_at": "2026-09-14T16:48:37Z",
+  "finished_at": "2026-09-14T16:49:45Z",
+  "exit_code": 1,
+  "steps": {
+    "catalog": "ok",
+    "details": "ok",
+    "publish": "refused"
+  },
+  "snapshot": null,
+  "parity": null,
+  "sites": null,
+  "detail_backfill": {
+    "requests_made": 120,
+    "gained_cached": 120,
+    "gained_description": 106,
+    "before": {
+      "titles": 53399,
+      "cached": 19477,
+      "cached_pct": 36.47,
+      "with_description": 13070,
+      "description_pct": 24.48
+    },
+    "after": {
+      "titles": 53399,
+      "cached": 19597,
+      "cached_pct": 36.7,
+      "with_description": 13176,
+      "description_pct": 24.67
+    }
+  },
+  "gates": {
+    "lords-01": {
+      "catalog_items": 53393,
+      "unique_canonical_ids": 53393,
+      "id_set_checksum": "f74e34cd1234ce7429162ce76b06c015ee5f658bfd6b0ddbbfd737c51abf2fbd",
+      "kp": 19585,
+      "kp_pct": 36.68,
+      "imdb": 27044,
+      "imdb_pct": 50.65,
+      "description_pct": 23.28,
+      "poster_pct": 99.23
+    },
+    "zona-01": {
+      "catalog_items": 53393,
+      "unique_canonical_ids": 53393,
+      "id_set_checksum": "f74e34cd1234ce7429162ce76b06c015ee5f658bfd6b0ddbbfd737c51abf2fbd",
+      "kp": 19585,
+      "kp_pct": 36.68,
+      "imdb": 27044,
+      "imdb_pct": 50.65,
+      "description_pct": 23.25,
+      "poster_pct": 99.23
+    },
+    "violations": []
+  },
+  "rollback": {
+    "available": false,
+    "command": null
+  }
+}

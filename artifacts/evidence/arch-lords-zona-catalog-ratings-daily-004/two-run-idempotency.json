@@ -1,0 +1,100 @@
+{
+  "run1": {
+    "run_id": "idem-run1",
+    "snapshot_items": 53393,
+    "parity": {
+      "checksums": {
+        "lords-01": "f74e34cd1234ce7429162ce76b06c015ee5f658bfd6b0ddbbfd737c51abf2fbd",
+        "zona-01": "f74e34cd1234ce7429162ce76b06c015ee5f658bfd6b0ddbbfd737c51abf2fbd"
+      },
+      "identical": true,
+      "lords-01_only": 0,
+      "zona-01_only": 0,
+      "parity_pct": 100.0
+    },
+    "sites": {
+      "lords-01": {
+        "catalog_items": 53393,
+        "distinct_canonical_ids": 53393,
+        "duplicate_ids": 0,
+        "id_set_checksum": "f74e34cd1234ce7429162ce76b06c015ee5f658bfd6b0ddbbfd737c51abf2fbd"
+      },
+      "zona-01": {
+        "catalog_items": 53393,
+        "distinct_canonical_ids": 53393,
+        "duplicate_ids": 0,
+        "id_set_checksum": "f74e34cd1234ce7429162ce76b06c015ee5f658bfd6b0ddbbfd737c51abf2fbd"
+      }
+    },
+    "coverage": {
+      "lords-01": {
+        "kp": 19585,
+        "imdb": 27044,
+        "desc": 12428
+      },
+      "zona-01": {
+        "kp": 19585,
+        "imdb": 27044,
+        "desc": 12415
+      }
+    }
+  },
+  "run2": {
+    "run_id": "idem-run2",
+    "snapshot_items": 53393,
+    "parity": {
+      "checksums": {
+        "lords-01": "f74e34cd1234ce7429162ce76b06c015ee5f658bfd6b0ddbbfd737c51abf2fbd",
+        "zona-01": "f74e34cd1234ce7429162ce76b06c015ee5f658bfd6b0ddbbfd737c51abf2fbd"
+      },
+      "identical": true,
+      "lords-01_only": 0,
+      "zona-01_only": 0,
+      "parity_pct": 100.0
+    },
+    "sites": {
+      "lords-01": {
+        "catalog_items": 53393,
+        "distinct_canonical_ids": 53393,
+        "duplicate_ids": 0,
+        "id_set_checksum": "f74e34cd1234ce7429162ce76b06c015ee5f658bfd6b0ddbbfd737c51abf2fbd"
+      },
+      "zona-01": {
+        "catalog_items": 53393,
+        "distinct_canonical_ids": 53393,
+        "duplicate_ids": 0,
+        "id_set_checksum": "f74e34cd1234ce7429162ce76b06c015ee5f658bfd6b0ddbbfd737c51abf2fbd"
+      }
+    },
+    "coverage": {
+      "lords-01": {
+        "kp": 19585,
+        "imdb": 27044,
+        "desc": 12428
+      },
+      "zona-01": {
+        "kp": 19585,
+        "imdb": 27044,
+        "desc": 12415
+      }
+    }
+  },
+  "checks": {
+    "lords-01": {
+      "no_duplicates": true,
+      "id_set_not_shrunk": true,
+      "checksum_stable": true,
+      "ratings_not_lost": true,
+      "catalog_not_shrunk": true
+    },
+    "zona-01": {
+      "no_duplicates": true,
+      "id_set_not_shrunk": true,
+      "checksum_stable": true,
+      "ratings_not_lost": true,
+      "catalog_not_shrunk": true
+    }
+  },
+  "parity_consistent": true,
+  "verdict": "PASS"
+}

@@ -1,0 +1,17 @@
+{
+  "note": "Записи, не дошедшие до публикации, с поимённой причиной.",
+  "api_rejected": {
+    "count": 0,
+    "reason": "нет id или name — записи без стабильного идентификатора"
+  },
+  "slug_collisions_resolved": {
+    "note": "Столкновения slug'ов не отправляют запись в карантин: адрес разводится суффиксом -N, обе записи публикуются.",
+    "canonical_unique_slugs_needed": 53393,
+    "published_unique_slugs": 53393
+  },
+  "publish_rejections": {
+    "lords-01": {},
+    "zona-01": {}
+  },
+  "total_quarantined": 0
+}

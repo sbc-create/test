@@ -1,0 +1,34 @@
+[Unit]
+Description=nova: суточное пополнение каталога и метаданных витрин Lords и Zona
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/srv/site-factory/repo
+
+# Токен и Publisher ID приходят из Secret Hub через systemd, а не из
+# окружения: переменные видны в `systemctl show` и в /proc/<pid>/environ,
+# файлы — нет. Передаются ИМЕНА credentials, путь собирает потребитель.
+LoadCredential=cdnvideohub_api_token:/etc/site-factory/secrets/lords/lords-01/cdnvideohub-api-token
+LoadCredential=cdnvideohub_publisher_id:/etc/site-factory/secrets/lords/lords-01/cdnvideohub-publisher-id
+Environment=CDNVIDEOHUB_API_TOKEN_CREDENTIAL=cdnvideohub_api_token
+Environment=CDNVIDEOHUB_PUBLISHER_ID_CREDENTIAL=cdnvideohub_publisher_id
+Environment=NOVA_TOOLS=/srv/site-factory/repo/automation/host
+
+ExecStart=/srv/site-factory/repo/automation/host/nova-daily-refresh.sh
+
+# Полный обход источника — около одиннадцати минут, добор подробностей с
+# ограничением частоты — дольше. Жёсткий предел здесь оборвал бы прогон на
+# середине, а не защитил от зависания.
+TimeoutStartSec=6h
+Restart=no
+
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/srv/lords /srv/site-factory/repo/var /srv/site-factory/repo/artifacts /var/log/site-factory
+ReadOnlyPaths=/etc/site-factory
+InaccessiblePaths=/etc/site-factory/secrets
+ProtectKernelTunables=yes
+ProtectKernelModules=yes

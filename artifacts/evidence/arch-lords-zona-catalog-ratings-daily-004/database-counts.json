@@ -1,0 +1,35 @@
+{
+  "catalog_cache": {
+    "path": "/srv/site-factory/repo/var/lords/lords/catalog-cache/lords-01.json",
+    "rows": 53393,
+    "unique_external_ids": 53393,
+    "fetched_at": "2026-09-14T16:15:28Z",
+    "base_full_at_ms": 1789402598999
+  },
+  "by_type": {
+    "movie": 33075,
+    "tv": 20318
+  },
+  "external_id_presence": {
+    "kinopoisk": 46715,
+    "imdb": 45074,
+    "myanimelist": 7012,
+    "mydramalist": 8259
+  },
+  "ratings_present_in_source": {
+    "kinopoisk": 19585,
+    "imdb": 27044
+  },
+  "detail_cache": {
+    "path": "/srv/site-factory/repo/var/lords/detail-cache",
+    "files": 19021
+  },
+  "render_state": {
+    "path": "/srv/site-factory/repo/var/lords/render-state/lords-01.titles.json",
+    "entries": 53393
+  },
+  "slug_ledger": {
+    "path": "/srv/site-factory/repo/var/lords/slug-ledger.json",
+    "entries": 53393
+  }
+}

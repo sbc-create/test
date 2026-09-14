@@ -1,0 +1,25 @@
+{
+  "unit": "nova-daily-refresh.service",
+  "timer": "nova-daily-refresh.timer",
+  "schedule": "OnCalendar=*-*-* 03:30:00 UTC, Persistent=true, RandomizedDelaySec=300",
+  "freshness_sla_hours": 26,
+  "systemctl_show": {
+    "NextElapseUSecRealtime": "Tue 2026-09-15 03:30:34 UTC",
+    "Persistent": "yes",
+    "ActiveState": "active",
+    "UnitFileState": "enabled"
+  },
+  "steps": [
+    "каталог (factory lords-live --incremental)",
+    "подробности (nova-detail-backfill.py)",
+    "публикация обеих витрин одним поколением (nova-catalog-publish.py)",
+    "гейты и отчёт"
+  ],
+  "exit_non_zero_on": [
+    "каталог < 52000",
+    "наборы canonical ID витрин разошлись",
+    "публикация отклонена"
+  ],
+  "concurrency": "flock в nova-catalog-publish.py; Type=oneshot без Restart",
+  "last_known_good": "публикация отклоняется при пустом или обвалившемся снимке; витрины остаются на прежнем поколении"
+}

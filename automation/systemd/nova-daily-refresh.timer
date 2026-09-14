@@ -1,0 +1,15 @@
+[Unit]
+Description=nova: суточное пополнение каталога витрин Lords и Zona
+
+[Timer]
+# Раз в сутки. Срок свежести — 26 часов; разница между ними это запас на один
+# затянувшийся прогон, без неё любая заминка сразу нарушала бы срок.
+OnCalendar=*-*-* 03:30:00 UTC
+# Пропущенный прогон выполняется при старте, а не теряется до следующих суток.
+Persistent=true
+RandomizedDelaySec=300
+AccuracySec=1min
+Unit=nova-daily-refresh.service
+
+[Install]
+WantedBy=timers.target

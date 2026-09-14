@@ -1,0 +1,27 @@
+{
+  "site": "zona-01",
+  "unit": "nova-zona-01.service",
+  "rollback_target": {
+    "catalog": "/srv/site-factory/repo/var/lords/arc004-backups/zona-01-catalog.json.before.20260914T161637Z",
+    "details": "/srv/site-factory/repo/var/lords/arc004-backups/zona-01-details.json.before.20260914T161637Z"
+  },
+  "rolled_back": {
+    "catalog_count": 3868,
+    "sha256": "69a9c9ed5f74a5341281252d328225309a08aca0b002454c8cb8c7064c1e1a03",
+    "healthz": "200",
+    "root": "200",
+    "catalog": "200",
+    "seconds": 6
+  },
+  "restored": {
+    "catalog_count": 53393,
+    "sha256": "d4daa478bcac9e06f65e55c4c8bf6e0dfa944a16a6af6f2eb5baacc1b0e6813f",
+    "healthz": "200",
+    "root": "200",
+    "catalog": "200",
+    "seconds": 7,
+    "sha_matches_pre_drill": true
+  },
+  "lords_untouched": true,
+  "verdict": "PASS"
+}

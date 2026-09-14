@@ -1,0 +1,39 @@
+{
+  "endpoint": "https://public-api.cdnvideohub.com/api/v1/titles",
+  "contract": "knowledge/cdnvideohub/content-api.yaml",
+  "mode": "incremental",
+  "mode_reason": "",
+  "pages": 1,
+  "requests_made": 1,
+  "retries_made": 0,
+  "stopped_by": "has_more",
+  "stopped_by_meaning": "источник ответил has_more=false — естественный конец, а не предел страниц",
+  "items_returned": 53393,
+  "rejected_count": 0,
+  "rejected_reason": "нет id или name",
+  "sections": {
+    "animation": {
+      "count": 240,
+      "enabled": true
+    },
+    "collections": {
+      "enabled": false,
+      "reason": "в контракте нет endpoint подборок"
+    },
+    "movies": {
+      "count": 33075,
+      "enabled": true
+    },
+    "series": {
+      "count": 0,
+      "enabled": false,
+      "reason": "материалов 0, минимум 1"
+    }
+  },
+  "cursor_loop_protection": "refuse_repeated_cursor=true; повтор курсора прекращает обход ошибкой",
+  "page_cap_behaviour": "достижение max_pages поднимает SourceError, а не завершает обход молча",
+  "partial_response_behaviour": "отсутствие поля items — SourceError, ответ не принимается",
+  "rate_limit": "min_interval_ms=250; Retry-After учитывается; retry_on_status=(429,500,502,503,504)",
+  "verdict": "PASS",
+  "verdict_reason": "обход завершён по has_more=false, повторов курсора нет, предел страниц не достигнут"
+}

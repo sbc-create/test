@@ -1,0 +1,98 @@
+{
+  "lords-01": {
+    "published": 53393,
+    "name": {
+      "count": 53393,
+      "pct": 100.0
+    },
+    "original_name": {
+      "count": 16352,
+      "pct": 30.63
+    },
+    "year": {
+      "count": 50651,
+      "pct": 94.86
+    },
+    "type": {
+      "count": 53393,
+      "pct": 100.0
+    },
+    "genres": {
+      "count": 18729,
+      "pct": 35.08
+    },
+    "countries": {
+      "count": 11549,
+      "pct": 21.63
+    },
+    "description": {
+      "count": 12428,
+      "pct": 23.28
+    },
+    "poster_url": {
+      "count": 52980,
+      "pct": 99.23
+    },
+    "external_ids": {
+      "count": 53320,
+      "pct": 99.86
+    },
+    "sources": {
+      "count": 52583,
+      "pct": 98.48
+    },
+    "seasons": {
+      "count": 8914,
+      "pct": 16.7
+    },
+    "silent_empty_required_fields": 0
+  },
+  "zona-01": {
+    "published": 53393,
+    "name": {
+      "count": 53393,
+      "pct": 100.0
+    },
+    "original_name": {
+      "count": 16352,
+      "pct": 30.63
+    },
+    "year": {
+      "count": 50651,
+      "pct": 94.86
+    },
+    "type": {
+      "count": 53393,
+      "pct": 100.0
+    },
+    "genres": {
+      "count": 18729,
+      "pct": 35.08
+    },
+    "countries": {
+      "count": 11549,
+      "pct": 21.63
+    },
+    "description": {
+      "count": 12415,
+      "pct": 23.25
+    },
+    "poster_url": {
+      "count": 52980,
+      "pct": 99.23
+    },
+    "external_ids": {
+      "count": 53320,
+      "pct": 99.86
+    },
+    "sources": {
+      "count": 52584,
+      "pct": 98.48
+    },
+    "seasons": {
+      "count": 8916,
+      "pct": 16.7
+    },
+    "silent_empty_required_fields": 0
+  }
+}
