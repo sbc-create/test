@@ -7,12 +7,12 @@
 
 ```bash
 sudo /bin/bash -c 'set -eu
-C=67e6b2fe16097405215357d3a24d28e85237f7f5
+C=4a4eebe029b9816e8a605c210a924a66fa411cee
 S=/root/site-factory-hardening/src
 install -d -m 0700 -o root -g root /root/site-factory-hardening
 install -d -m 0700 -o root -g root "$S"
 git -C /srv/site-factory/repo archive "$C" automation/hardening | tar -x -C "$S"
-echo "f35ee20b66c75d7ba1207b780cc7aad52c3081f90a5b5201c9acb032cff7fe15  $S/automation/hardening/pin-root-units.sh" | sha256sum -c -
+echo "fce7bc36d3c426f1b8fe47134a21607ca541361d29be2ed6c3d7244af9ff03ba  $S/automation/hardening/pin-root-units.sh" | sha256sum -c -
 bash "$S/automation/hardening/pin-root-units.sh" \
   --release="$S/automation/hardening/release/release.json" \
   --provenance="$S/automation/hardening/release/provenance.json" \
@@ -30,10 +30,10 @@ bash /srv/site-factory/repo/automation/hardening/pin-root-units.sh --dry-run
 
 | Поле | Значение |
 | --- | --- |
-| source commit | `67e6b2fe16097405215357d3a24d28e85237f7f5` |
+| source commit | `4a4eebe029b9816e8a605c210a924a66fa411cee` |
 | ветка | `claude/templates-secret-hub-cloud-access-006` |
 | путь установщика в коммите | `automation/hardening/pin-root-units.sh` |
-| SHA-256 установщика | `f35ee20b66c75d7ba1207b780cc7aad52c3081f90a5b5201c9acb032cff7fe15` |
+| SHA-256 установщика | `fce7bc36d3c426f1b8fe47134a21607ca541361d29be2ed6c3d7244af9ff03ba` |
 | провенанс | `automation/hardening/release/provenance.json` (168 файлов) |
 | совокупный отпечаток | `947fbe17f73bf402d0d88d2752c3c408dd717b0f9870391a96a1017f96c71f1f` |
 | release_id | `6fcd33701aef-947fbe17f73b` |
