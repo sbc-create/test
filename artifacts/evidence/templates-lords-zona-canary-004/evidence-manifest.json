@@ -1,9 +1,9 @@
 {
  "prompt_id": "TEMPLATES-LORDS-ZONA-CANARY-004",
- "generated_at_utc": "2026-09-14T05:29:20Z",
+ "generated_at_utc": "2026-09-14T05:39:44Z",
  "task_branch": "claude/templates-lords-zona-canary-004",
- "task_commit": "bdd9473d2ad0b8f48d9b038c1c7e2c239214fd32",
- "files_total": 273,
+ "task_commit": "77c0a78f8378aa6effa832538c70f5bd8c624e2e",
+ "files_total": 276,
  "summary": {
   "browser": {
    "pages_measured": 131,
@@ -174,9 +174,19 @@
    "sha256": "7dcac1e7bb1a3c730a446f6e339c9c31dca1a816836aa21daf4a89070bd27176"
   },
   {
+   "path": "archetypes-lords-plan.json",
+   "bytes": 3135,
+   "sha256": "20473e1dfb6283267cca79daa057e5a8bdf77c43a48df2e172ce26b1a0336311"
+  },
+  {
    "path": "archetypes-zona-local.json",
    "bytes": 4349,
    "sha256": "f5c7d41508103d7471302ba2eb505af25b34fef292077ed8124ab8be667773d5"
+  },
+  {
+   "path": "archetypes-zona-plan.json",
+   "bytes": 2691,
+   "sha256": "12b2514023aa334e11ca8a37052b4e3bf5219617a5b76d183d4e6f9ed15da87b"
   },
   {
    "path": "browser-audit/audit.json",
@@ -982,6 +992,11 @@
    "path": "browser-audit/zona/title-series-768.png",
    "bytes": 60084,
    "sha256": "f439011bf1c866b80d33dc599543628299310233e8ee1866c2aa206f5cb0dc4b"
+  },
+  {
+   "path": "canary-run-profiles.json",
+   "bytes": 741,
+   "sha256": "51ec7f701cc97253da87da9f3c30c729cbe566fca999e21653c06c454e1388a7"
   },
   {
    "path": "distinctness/distinctness.json",
