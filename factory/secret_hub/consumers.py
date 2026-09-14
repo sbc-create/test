@@ -14,6 +14,19 @@
     имени PID 1 и кладёт копию в tmpfs, доступную только этому процессу; в
     окружении, ``systemctl show`` и журнале значения нет.
 
+``player_config``
+    Root-owned JSON-документ витрины плюс drop-in с ``LORDS_PLAYER_CONFIG``.
+    Так устроены витрины Lords/Nova: фронтенд читает Publisher ID из документа
+    при старте (``_конфиг_плеера``), а не из каталога credentials. Сырое
+    значение он разобрать не смог бы и молча показал бы страницу без плеера,
+    поэтому здесь пишется документ, а не строка.
+
+    Этот способ несёт ровно Publisher ID. API Token витрине не кладётся: его
+    читает конвейер обновления каталога, а не витрина, и для направлений Zona
+    и Animedia такого конвейера на хосте пока нет. Записать токен «про запас»
+    значило бы создать копию секрета без потребителя — и без того, кто заметит
+    её устаревание.
+
 Порядок применения одинаков для обеих и продиктован требованием отката:
 
 1. снять предыдущее состояние (бэкап файлов) — до единой мутации;
@@ -30,6 +43,7 @@ Yami его вообще нет — контейнер читает файл п�
 """
 from __future__ import annotations
 
+import json
 import os
 import shutil
 import stat
@@ -39,7 +53,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from factory.errors import BlockedTarget
-from factory.secret_hub import SECRET_FIELDS
 from factory.secret_hub.crypto import Secret
 from factory.secret_hub.registry import Consumer, Portfolio
 
@@ -69,6 +82,59 @@ LoadCredential={publisher_credential}:{publisher_path}
 Environment=CDNVIDEOHUB_API_TOKEN_CREDENTIAL={api_credential}
 Environment=CDNVIDEOHUB_PUBLISHER_ID_CREDENTIAL={publisher_credential}
 """
+
+#: Drop-in витрины. Здесь нет ни `LoadCredential`, ни значения — только путь к
+#: JSON-документу, который витрина читает при старте.
+#:
+#: `LoadCredential` тут был бы хуже, чем бесполезен: витрина читает не каталог
+#: credentials, а файл по `LORDS_PLAYER_CONFIG`, и вдобавок systemd отказывается
+#: запускать unit, если источник credential'а исчез. Одна такая строка на
+#: работающей витрине превращает отсутствие файла в отказ старта, то есть в
+#: погашенный production-сайт.
+PLAYER_DROPIN_TEMPLATE = """# Сгенерировано Secret Hub. Правки будут перезаписаны.
+#
+# Значения секретов здесь отсутствуют: передаётся только путь к документу
+# витрины. Сам документ лежит вне репозитория, принадлежит root и открыт на
+# чтение группе, от имени которой работает витрина.
+#
+# Переменная читается фронтендом Lords/Nova один раз, при импорте модуля
+# (`_конфиг_плеера`), поэтому новое значение вступает в силу перезапуском
+# unit'а, а не перечитыванием файла на лету.
+[Service]
+Environment=LORDS_PLAYER_CONFIG={player_path}
+"""
+
+#: Что пишется в документ витрины кроме самого значения. Провенанс здесь —
+#: не украшение: файл живёт вне git, и через полгода вопрос «откуда это
+#: значение и кто его положил» иначе не имеет ответа.
+PLAYER_DOCUMENT_PROVENANCE = (
+    "Secret Hub, потребитель «{consumer}» ({title}). "
+    "Значение введено владельцем в панели и применено операцией apply."
+)
+PLAYER_DOCUMENT_NOTE = (
+    "Файл создаётся и перезаписывается автоматически. Править вручную нельзя: "
+    "следующий apply перезапишет правку, а расхождение между хранилищем и "
+    "витриной ничем не обнаруживается."
+)
+
+
+def _document_for(consumer: Consumer, field_name: str, value: Secret) -> str:
+    """Что именно ложится в файл потребителя.
+
+    Для сырых доставок — само значение и ничего больше. Для витрины — JSON,
+    потому что фронтенд разбирает документ, а не строку: сырое значение он
+    молча счёл бы отсутствующим и показал бы страницу без плеера, не сообщив
+    об ошибке.
+    """
+    if consumer.kind != "player_config":
+        return value.reveal()
+    document = {
+        "publisher_id": value.reveal(),
+        "provenance": PLAYER_DOCUMENT_PROVENANCE.format(
+            consumer=consumer.id, title=consumer.title),
+        "note": PLAYER_DOCUMENT_NOTE,
+    }
+    return json.dumps(document, ensure_ascii=False, indent=1) + "\n"
 
 
 def _now_tag() -> str:
@@ -284,7 +350,7 @@ def check_target(consumer: Consumer) -> list[str]:
     blocked = _creatable(consumer.directory)
     if blocked:
         problems.append(blocked)
-    if consumer.kind == "systemd_credential":
+    if consumer.kind in {"systemd_credential", "player_config"}:
         if not consumer.unit:
             problems.append("не указан unit")
         elif not _unit_exists(consumer.unit):
@@ -322,7 +388,7 @@ def _unit_exists(unit: str) -> bool:
 def verify_written(consumer: Consumer) -> list[str]:
     """Проверка после записи: файл на месте, права те, владелец root."""
     problems: list[str] = []
-    for name in SECRET_FIELDS:
+    for name in consumer.fields:
         path = consumer.path_for(name)
         state, info = _probe(path)
         if state == "absent":
@@ -348,6 +414,15 @@ def verify_written(consumer: Consumer) -> list[str]:
 
 
 def _write_dropin(consumer: Consumer, rollback: Rollback) -> None:
+    if consumer.kind == "player_config" and consumer.dropin:
+        rollback.capture(consumer.dropin)
+        consumer.dropin.parent.mkdir(parents=True, exist_ok=True, mode=0o755)
+        _write_atomically(
+            consumer.dropin,
+            PLAYER_DROPIN_TEMPLATE.format(player_path=consumer.path_for("publisher_id")),
+            0o644,
+        )
+        return
     if consumer.kind != "systemd_credential" or not consumer.dropin:
         return
     rollback.capture(consumer.dropin)
@@ -400,12 +475,14 @@ def _apply_consumer(consumer: Consumer, values: dict[str, Secret], *,
 
     try:
         _ensure_directory(consumer)
-        for name in SECRET_FIELDS:
+        for name in consumer.fields:
             rollback.capture(consumer.path_for(name))
-        for name in SECRET_FIELDS:
-            _write_atomically(consumer.path_for(name), values[name].reveal(), consumer.file_mode)
+        for name in consumer.fields:
+            _write_atomically(consumer.path_for(name),
+                              _document_for(consumer, name, values[name]),
+                              consumer.file_mode)
         if os.geteuid() == 0:
-            for name in SECRET_FIELDS:
+            for name in consumer.fields:
                 shutil.chown(consumer.path_for(name), user=consumer.owner, group=consumer.group)
         _write_dropin(consumer, rollback)
 
@@ -492,7 +569,7 @@ def describe(portfolio: Portfolio) -> list[dict]:
     for consumer in portfolio.consumers:
         problems = check_target(consumer)
         files: list[dict] = []
-        for name in SECRET_FIELDS:
+        for name in consumer.fields:
             path = consumer.path_for(name)
             state, info = _probe(path)
             entry: dict = {

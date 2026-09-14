@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-09-14T16:12:10Z",
+  "panel_loopback": {
+    "url": "http://127.0.0.1:8459/__factory-secrets",
+    "status": 200,
+    "note": "панель жива и слушает петлю; наружу её должен выводить nginx"
+  },
+  "nginx_public_path": {
+    "yummyani.site": "HTTP/1.1 404 Not Found",
+    "yummyani.org": "HTTP/1.1 404 Not Found",
+    "yummyani.biz": "HTTP/1.1 404 Not Found",
+    "zonafilm.space": "HTTP/1.1 308 Permanent Redirect",
+    "animedia.icu": "HTTP/1.1 404 Not Found",
+    "animedia.space": "HTTP/1.1 404 Not Found",
+    "lordfilm47.space": "HTTP/1.1 308 Permanent Redirect"
+  },
+  "verdict": "Ни один vhost не проксирует /__factory-secrets. Сниппет /etc/nginx/snippets/secret-hub.d/enroll.conf установлен и корректен (proxy_pass на 127.0.0.1:8459), но строки include в HTTPS-блоке yummyani.site.conf нет. Публичного HTTPS-адреса панели не существует."
+}

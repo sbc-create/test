@@ -14,6 +14,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from factory.errors import BlockedInput
+from factory.secret_hub import SECRET_FIELDS
 
 #: Путь к реестру. Переопределяется переменной — в тестах и при переносе стенда.
 CONFIG_ENV = "SECRET_HUB_CONFIG"
@@ -53,6 +54,23 @@ class Consumer:
     credential_names: dict[str, str] = field(default_factory=dict)
     compose_file: Path | None = None
     expect_mount_target: str | None = None
+
+    @property
+    def fields(self) -> tuple[str, ...]:
+        """Поля, которые этот потребитель действительно получает.
+
+        Не всякий потребитель читает оба. Витрина Lords/Nova читает только
+        Publisher ID, а API Token читает конвейер обновления каталога — и это
+        разные процессы с разным временем жизни. Записать потребителю поле,
+        которого он не читает, значило бы положить секрет туда, где его никто
+        не ждёт: лишняя копия без назначения и без того, кто заметит её
+        устаревание.
+
+        Порядок берётся из ``SECRET_FIELDS``, а не из порядка ключей в JSON:
+        он определяет порядок записи и порядок отката, и зависеть от того, как
+        редактор отсортировал файл конфигурации, эти вещи не должны.
+        """
+        return tuple(name for name in SECRET_FIELDS if name in self.files)
 
     def path_for(self, field_name: str) -> Path:
         return self.directory / self.files[field_name]

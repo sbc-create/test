@@ -36,6 +36,37 @@ portfolios:
     blueprint: lords
     note: "Новое направление, реализуемое в этой фабрике."
 
+  - id: zona
+    label: Zona
+    status: implemented
+    purpose: "Витрина Zona на общем фронтенде Lords/Nova."
+    secret_scope: cdnvideohub/zona
+    blueprint: lords
+    sites: [zona-01]
+    note: >-
+      Канонический production-сайт zona-01 (zonafilm.space) работает на хосте:
+      unit nova-zona-01.service, vhost /etc/nginx/lords/zona-01.conf. Домен
+      w140.zona.plus — визуальный референс, а не сайт направления: целью
+      Secret Hub он не является и в реестр не вносится.
+
+  - id: animedia
+    label: Animedia / AMD
+    status: implemented
+    purpose: "Витрины Animedia на общем фронтенде Lords/Nova."
+    secret_scope: cdnvideohub/animedia
+    blueprint: lords
+    sites: [animedia-01, animedia-02]
+    note: >-
+      Канонические production-сайты animedia-01 (animedia.icu) и animedia-02
+      (animedia.space) работают на хосте: unit'ы nova-animedia-01.service и
+      nova-animedia-02.service. Оба сайта делят один набор credentials — так же,
+      как три сайта Lords: набор принадлежит направлению, а не домену. Домен
+      amd.online — визуальный референс (inventory/reference-sources.yaml), а не
+      сайт направления, и целью Secret Hub не является.
+      Направление `amedia` осталось отдельной нетронутой записью: её blueprint
+      не совпадает с фронтендом витрин Animedia, а пакетов к ней по-прежнему не
+      подключено. Объединять их догадкой нельзя (D91).
+
 # Пакеты вне направлений
 # ----------------------
 # `pilot-local`, `site-a`, `site-b` и `site-c` находятся в состоянии

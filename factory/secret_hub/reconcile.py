@@ -174,8 +174,6 @@ def audit(hub) -> dict:
     import stat as stat_mod
     import subprocess
 
-    from factory.secret_hub import SECRET_FIELDS
-
     rows = []
     for portfolio in hub.config.portfolios:
         if portfolio.blocked_target is not None or not portfolio.consumers:
@@ -190,9 +188,19 @@ def audit(hub) -> dict:
                 mode = stat_mod.S_IMODE(info.st_mode)
                 entry["directory_mode"] = format(mode, "04o")
                 entry["directory_owner_root"] = info.st_uid == 0 and info.st_gid == 0
-                if mode & 0o077:
+                # Сверка идёт с объявленным режимом, а не с «0700 и точка».
+                # Потребитель, работающий не от root, читает секрет только
+                # через группу, и схема поэтому разрешает 0750. Жёсткая
+                # проверка на 0o077 объявляла законную цель неисправной — и
+                # такой отчёт хуже отсутствующего: он приучает не читать.
+                # Миру каталог при этом не открывается ни при каком режиме.
+                if mode != consumer.directory_mode:
                     entry["problems"].append(
-                        f"каталог {directory} доступен группе или миру ({mode:04o})")
+                        f"каталог {directory}: режим {mode:04o}, "
+                        f"объявлен {consumer.directory_mode:04o}")
+                if mode & 0o007:
+                    entry["problems"].append(
+                        f"каталог {directory} доступен миру ({mode:04o})")
                 if info.st_uid != 0:
                     entry["problems"].append(f"каталог {directory} не принадлежит root")
             except FileNotFoundError:
@@ -202,7 +210,11 @@ def audit(hub) -> dict:
                     f"каталог {directory} не проверен ({exc.__class__.__name__})")
 
             files = []
-            for field_name in SECRET_FIELDS:
+            # Поля берутся у потребителя, а не из общего списка: витрина
+            # получает только Publisher ID, и спрашивать у неё файл токена
+            # значит отчитаться о ненайденном файле, которого и не должно
+            # быть. «Нет того, чего не обещали» — не дефект.
+            for field_name in consumer.fields:
                 path = consumer.path_for(field_name)
                 item = {"field": field_name, "path": str(path)}
                 try:
@@ -211,10 +223,13 @@ def audit(hub) -> dict:
                     item.update(mode=format(mode, "04o"),
                                 owner_root=info.st_uid == 0 and info.st_gid == 0,
                                 empty=info.st_size == 0)
-                    if mode != 0o400:
-                        entry["problems"].append(f"{path}: режим {mode:04o}, ожидается 0400")
-                    if info.st_uid != 0 or info.st_gid != 0:
-                        entry["problems"].append(f"{path}: владелец не root:root")
+                    if mode != consumer.file_mode:
+                        entry["problems"].append(
+                            f"{path}: режим {mode:04o}, объявлен {consumer.file_mode:04o}")
+                    if mode & 0o007:
+                        entry["problems"].append(f"{path} доступен миру ({mode:04o})")
+                    if info.st_uid != 0:
+                        entry["problems"].append(f"{path}: владелец не root")
                     if info.st_size == 0:
                         entry["problems"].append(f"{path}: файл пуст")
                 except FileNotFoundError:
@@ -228,13 +243,27 @@ def audit(hub) -> dict:
                 try:
                     text = consumer.dropin.read_text(encoding="utf-8")
                     entry["dropin_has_loadcredential"] = "LoadCredential=" in text
+                    # Что считается допустимой строкой, зависит от способа
+                    # доставки. Витрина получает путь к документу
+                    # (LORDS_PLAYER_CONFIG=...), а не имя credential'а, и
+                    # LoadCredential в её drop-in'е быть не должно: systemd
+                    # отказывается стартовать unit с исчезнувшим источником
+                    # credential'а, то есть такая строка гасит витрину.
+                    if consumer.kind == "player_config":
+                        allowed = ("LORDS_PLAYER_CONFIG=",)
+                        if entry["dropin_has_loadcredential"]:
+                            entry["problems"].append(
+                                f"{consumer.dropin}: LoadCredential в drop-in витрины — "
+                                "отсутствие файла станет отказом старта")
+                    else:
+                        allowed = ("_FILE=", "_CREDENTIAL=")
+                        if not entry["dropin_has_loadcredential"]:
+                            entry["problems"].append(f"{consumer.dropin}: нет LoadCredential")
                     # В drop-in не должно быть ничего, кроме путей и имён.
                     suspicious = [ln for ln in text.splitlines()
                                   if ln.strip().startswith("Environment=")
-                                  and "_FILE=" not in ln and "_CREDENTIAL=" not in ln]
+                                  and not any(token in ln for token in allowed)]
                     entry["dropin_only_paths"] = not suspicious
-                    if not entry["dropin_has_loadcredential"]:
-                        entry["problems"].append(f"{consumer.dropin}: нет LoadCredential")
                     if suspicious:
                         entry["problems"].append(
                             f"{consumer.dropin}: подозрительные Environment-строки")

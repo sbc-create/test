@@ -33,8 +33,8 @@ def _write(tmp_path: Path, document: dict) -> Path:
 
 
 class TestShippedRegistry:
-    def test_three_portfolios_are_described(self, config):
-        assert config.ids() == ("yami", "lords", "amedia")
+    def test_shipped_portfolios_are_described(self, config):
+        assert config.ids() == ("yami", "lords", "zona", "animedia", "amedia")
 
     def test_registry_contains_no_secret_values(self, repo_root):
         """В git не должно попасть ни значения, ни отпечатка."""
@@ -44,7 +44,17 @@ class TestShippedRegistry:
             assert "api_token" not in json.dumps(portfolio.get("blocked_target") or {})
             for consumer in portfolio.get("consumers", []):
                 # `files` — имена файлов; значения там быть не может по схеме.
-                assert set(consumer["files"]) == {"api_token", "publisher_id"}
+                # Какие поля доставляются, решает `kind`: сырые доставки несут
+                # оба, витрина — только Publisher ID. Проверяется поэтому не
+                # фиксированная пара, а что ключи взяты из закрытого перечня и
+                # что перечень не пуст: неизвестный ключ означал бы, что в
+                # реестр попало что-то кроме имени файла.
+                keys = set(consumer["files"])
+                assert keys and keys <= {"api_token", "publisher_id"}
+                if consumer["kind"] in {"file_mount", "systemd_credential"}:
+                    assert keys == {"api_token", "publisher_id"}
+                if consumer["kind"] == "player_config":
+                    assert keys == {"publisher_id"}
         assert "fingerprint" not in text
         assert "sha256:" not in text
 

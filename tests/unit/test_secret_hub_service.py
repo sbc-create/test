@@ -136,8 +136,18 @@ class TestStatusShape:
             assert required in row, f"status не показывает «{required}»"
 
     def test_status_of_all_portfolios_lists_every_configured_direction(self, hub):
+        """Каждое направление реестра — и ни одного сверх него.
+
+        Сверка идёт с самим реестром, а не со списком имён в тесте: направления
+        добавляются конфигурацией, и зашитый перечень пришлось бы править при
+        каждом добавлении — ровно то «переписывание приложения», которого
+        требование просит избежать. Смысл проверки сохраняется: и пропущенное
+        направление, и лишнее провалят её.
+        """
         response = hub.handle({"op": "status"})
-        assert {row["portfolio"] for row in response["portfolios"]} == {"yami", "lords", "amedia"}
+        expected = {portfolio.id for portfolio in hub.config.portfolios}
+        assert {row["portfolio"] for row in response["portfolios"]} == expected
+        assert expected >= {"yami", "lords", "zona", "animedia", "amedia"}
 
     def test_status_includes_master_key_state_without_the_key(self, hub):
         response = hub.handle({"op": "status"})
@@ -302,7 +312,8 @@ class TestSocketTransport:
             assert status["world_accessible"] is False, "сокет доступен миру"
 
             response = service.request(hub.config.socket_path, {"op": "list"})
-            assert {p["portfolio"] for p in response["portfolios"]} == {"yami", "lords", "amedia"}
+            assert ({p["portfolio"] for p in response["portfolios"]}
+                    == {portfolio.id for portfolio in hub.config.portfolios})
         finally:
             _shutdown(hub.config.socket_path)
             thread.join(5)

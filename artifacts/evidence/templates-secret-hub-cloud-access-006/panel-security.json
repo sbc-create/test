@@ -1,0 +1,75 @@
+{
+  "generated_at": "2026-09-14T16:12:25Z",
+  "target": "живой процесс site-factory-secret-panel.service на 127.0.0.1:8459",
+  "unauthenticated_page": {
+    "status": 200,
+    "title": "Secret Hub — вход",
+    "leaks_direction_names_or_fields": {
+      "yami": false,
+      "lords": false,
+      "amedia": false,
+      "zona": false,
+      "animedia": false,
+      "api_token": false,
+      "publisher": false,
+      "Применить": false,
+      "Заменить": false
+    }
+  },
+  "response_headers": {
+    "Cache-Control": "no-store, max-age=0",
+    "Content-Security-Policy": "default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; connect-src 'self'; form-action 'none'; base-uri 'none'; frame-ancestors 'none'",
+    "X-Frame-Options": "DENY",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "no-referrer",
+    "Set-Cookie": "__Secure-sfpanel=N72tIXIU3h64R1UsBleSE-JTVC0wXxYDaeG-bMCfBLM; Max-Age=900; Path=/__factory-secrets; Secure; HttpOnly; SameSite=Strict"
+  },
+  "cookie_flags": {
+    "prefix___Secure": true,
+    "Secure": true,
+    "HttpOnly": true,
+    "SameSite_Strict": true,
+    "path_scoped_to_panel": true
+  },
+  "mutating_routes_without_session": {
+    "/api/portfolio/save": {
+      "status": 401
+    },
+    "/api/portfolio/apply": {
+      "status": 401
+    }
+  },
+  "mutating_routes_with_session_without_csrf": {
+    "/api/portfolio/save": {
+      "status": 403
+    },
+    "/api/portfolio/apply": {
+      "status": 403
+    }
+  },
+  "mutating_routes_with_session_and_wrong_csrf": {
+    "/api/portfolio/save": {
+      "status": 403
+    },
+    "/api/portfolio/apply": {
+      "status": 403
+    }
+  },
+  "get_with_query_string": {
+    "path": "/__factory-secrets?api_token=x",
+    "status": 404,
+    "note": "секрет в URL невозможен: путь с query отдаёт 404"
+  },
+  "no_store_on_every_probed_path": {
+    "/__factory-secrets": "no-store, max-age=0",
+    "/__factory-secrets/state": "no-store, max-age=0",
+    "/__factory-secrets/api/portfolio/save": "no-store, max-age=0",
+    "/": "no-store, max-age=0"
+  },
+  "expectations": {
+    "mutating without session": "401",
+    "mutating with session but without CSRF": "403",
+    "mutating with session and wrong CSRF": "403",
+    "GET with query string": "404"
+  }
+}
