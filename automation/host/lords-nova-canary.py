@@ -227,6 +227,15 @@ def _объявленные(проба: dict) -> set:
             if п.get("declared")}
 
 
+def _объявленные_имена(проба: dict) -> list:
+    """То же, что `_объявленные`, но читаемо в отчёте: поля названы."""
+    видно = {}
+    for п in проба.get("checks", []):
+        if п.get("declared"):
+            видно[_ключ_релиза(п["declared"])] = dict(п["declared"])
+    return [видно[к] for к in sorted(видно)]
+
+
 def _снимок_отданного(проба: dict) -> dict:
     """Что домен отдавал: по адресу — код, конец пути, число переходов, структура."""
     return {п["path"]: {"status": п.get("status"),
@@ -298,7 +307,7 @@ def _дождаться_релиза(домен: str, ожидаемый: dict, 
         объявленные = _объявленные(проба)
         шаг = {"attempt": попытка,
                "elapsed_s": round(time.monotonic() - начало, 2),
-               "declared": sorted(list(к) for к in объявленные),
+               "declared": _объявленные_имена(проба),
                "health_ok": проба.get("ok", False)}
         if объявленные == {ожидаемый_ключ}:
             шаг["outcome"] = "converged"
@@ -307,7 +316,8 @@ def _дождаться_релиза(домен: str, ожидаемый: dict, 
         чужие = объявленные - {ожидаемый_ключ, прежний_ключ}
         if чужие:
             шаг["outcome"] = "wrong_release"
-            шаг["unexpected"] = sorted(list(к) for к in чужие)
+            шаг["unexpected"] = [о for о in _объявленные_имена(проба)
+                                 if _ключ_релиза(о) in чужие]
             журнал.append(шаг)
             break
         шаг["outcome"] = "not_converged"
@@ -519,7 +529,7 @@ def откатить(арг) -> int:
         "artifact_after_rollback": _sha(АРТЕФАКТ),
         "expected_artifact": сохранено["artifact_sha256"],
         "expected_release": ожидаемый_релиз,
-        "served_release": sorted(list(к) for к in _объявленные(здоровье)),
+        "served_release": _объявленные_имена(здоровье),
         "served_artifact_after_rollback": sorted(отданные),
         "restored_manifest": сохранено.get("manifest_content"),
         "restart_ok": ок, "restart_output": вывод,
