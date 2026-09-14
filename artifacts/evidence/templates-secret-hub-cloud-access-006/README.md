@@ -121,6 +121,28 @@ Lords не тронут: `test_lords_is_untouched` сверяет состав �
 обновления для Zona и Animedia не существует (D132). Это отсутствующий unit, а
 не необязательное поле.
 
+## Прогоны тестов
+
+| Команда | Результат |
+| --- | --- |
+| `pytest tests/unit -k secret_hub` | 444 passed, 1 skipped |
+| `pytest tests/unit` (весь набор) | 2551 passed, **1 failed**, 5 skipped |
+| `ruff check factory/secret_hub tests/unit/test_secret_hub_showcase_targets.py` | чисто |
+| `scripts/validate_registries.py` | `config/secret-hub.json → secret-hub.schema.json` OK |
+| `factory knowledge verify` | целостность OK |
+| `bin/secret-hub-install --preflight` | PREFLIGHT=pass |
+
+Единственный провал — `test_job_result.py::test_real_pilot_results_are_schema_valid`.
+Он **не** вызван этим изменением и к нему не относится: тест требует
+`artifacts/jobs/pilot-local/*.json` — рантайм-артефакты пилота, которые
+`.gitignore` не отслеживает. В свежем worktree их нет ни при каком коде.
+Проверено прямо: на базовом коммите `a7f7cb6` в другом рабочем дереве падает
+ровно этот тест и только он. Скрывать его нельзя, чинить в рамках этой задачи —
+тоже: он о состоянии рабочего дерева, а не о Secret Hub.
+
+Пропуски (5) — среды, а не обход: отсутствие `.venv` в дереве, интерпретатор
+3.10 и закрытый для этой учётной записи каталог секретов.
+
 ## Откат
 
 Изменения этой ветки — только файлы репозитория; на хосте не изменено ничего.
@@ -144,4 +166,5 @@ Lords не тронут: `test_lords_is_untouched` сверяет состав �
 | `targets.json` | состав целей после изменения: способ доставки, unit'ы, что именно доставляется |
 | `reachability.json` | ответы панели на петле и nginx по семи доменам |
 | `panel-security.json` | граница аутентификации, CSRF, no-store, флаги cookie |
-| `pytest-secret-hub.txt` | полный прогон `tests/unit -k secret_hub` |
+| `pytest-secret-hub.txt` | прогон `tests/unit -k secret_hub` |
+| `pytest-unit-full.txt` | прогон всего `tests/unit` |

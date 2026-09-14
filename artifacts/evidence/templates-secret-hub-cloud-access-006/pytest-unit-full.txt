@@ -1,0 +1,14 @@
+........................................................................ [ 98%]
+.....................................                                    [100%]
+=================================== FAILURES ===================================
+E   AssertionError: пилот обязан оставить результат задания
+    assert []
+/srv/site-factory/repo/var/worktrees/secret-hub-006/tests/unit/test_job_result.py:69: AssertionError: пилот обязан оставить результат задания
+=========================== short test summary info ============================
+SKIPPED [2] tests/unit/test_analytics_unit_execstart.py:176: в этом дереве нет .venv
+SKIPPED [2] tests/unit/test_lords_apply_python_fragments.py:152: интерпретатор тестов и так 3.10 — сравнивать не с чем
+SKIPPED [1] tests/unit/test_secret_hub_host.py:117: каталог секретов закрыт для этой учётной записи: состояние ключа не измерено (так и задумано)
+FAILED tests/unit/test_job_result.py::test_real_pilot_results_are_schema_valid
+1 failed, 2551 passed, 5 skipped in 331.53s (0:05:31)
+
+[exited with code 0]
