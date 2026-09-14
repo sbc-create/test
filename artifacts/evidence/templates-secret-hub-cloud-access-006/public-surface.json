@@ -1,0 +1,214 @@
+{
+  "generated_at": "2026-09-14T16:50:06Z",
+  "question": "существует ли публичный HTTPS-путь к панели Secret Hub (127.0.0.1:8459)",
+  "public_listeners": {
+    "22": "sshd",
+    "80": "nginx",
+    "443": "nginx",
+    "note": "остальные 30 сокетов слушают только 127.0.0.1"
+  },
+  "vhosts": [
+    {
+      "file": "/etc/nginx/lords/animedia-01.conf",
+      "server_name": [
+        "animedia.icu www.animedia.icu",
+        "animedia.icu"
+      ],
+      "locations": [
+        "^~ /.well-known/acme-challenge/",
+        "/",
+        "= /healthz",
+        "/",
+        "= /healthz"
+      ],
+      "loopback_upstreams": [
+        "9121"
+      ],
+      "proxies_panel_port_8459": false
+    },
+    {
+      "file": "/etc/nginx/lords/animedia-02.conf",
+      "server_name": [
+        "animedia.space www.animedia.space",
+        "animedia.space"
+      ],
+      "locations": [
+        "^~ /.well-known/acme-challenge/",
+        "/",
+        "= /healthz",
+        "/",
+        "= /healthz"
+      ],
+      "loopback_upstreams": [
+        "9122"
+      ],
+      "proxies_panel_port_8459": false
+    },
+    {
+      "file": "/etc/nginx/lords/lords-01.conf",
+      "server_name": [
+        "lordfilm47.space www.lordfilm47.space",
+        "www.lordfilm47.space",
+        "lordfilm47.space"
+      ],
+      "locations": [
+        "^~ /.well-known/acme-challenge/",
+        "/",
+        "/",
+        "= /healthz",
+        "= /readyz"
+      ],
+      "loopback_upstreams": [
+        "9110"
+      ],
+      "proxies_panel_port_8459": false
+    },
+    {
+      "file": "/etc/nginx/lords/lords-02.conf",
+      "server_name": [
+        "lordserial33.biz www.lordserial33.biz",
+        "www.lordserial33.biz",
+        "lordserial33.biz"
+      ],
+      "locations": [
+        "^~ /.well-known/acme-challenge/",
+        "/",
+        "/",
+        "= /healthz",
+        "= /readyz"
+      ],
+      "loopback_upstreams": [
+        "9111"
+      ],
+      "proxies_panel_port_8459": false
+    },
+    {
+      "file": "/etc/nginx/lords/lords-03.conf",
+      "server_name": [
+        "1lordserials1.online www.1lordserials1.online",
+        "www.1lordserials1.online",
+        "1lordserials1.online"
+      ],
+      "locations": [
+        "^~ /.well-known/acme-challenge/",
+        "/",
+        "/",
+        "= /healthz",
+        "= /readyz"
+      ],
+      "loopback_upstreams": [
+        "9112"
+      ],
+      "proxies_panel_port_8459": false
+    },
+    {
+      "file": "/etc/nginx/lords/zona-01.conf",
+      "server_name": [
+        "zonafilm.space www.zonafilm.space",
+        "zonafilm.space"
+      ],
+      "locations": [
+        "^~ /.well-known/acme-challenge/",
+        "/",
+        "= /healthz",
+        "/",
+        "= /healthz"
+      ],
+      "loopback_upstreams": [
+        "9120"
+      ],
+      "proxies_panel_port_8459": false
+    },
+    {
+      "file": "/etc/nginx/sites-enabled/000-default-deny",
+      "server_name": [
+        "_"
+      ],
+      "locations": [
+        "= /healthz",
+        "/"
+      ],
+      "loopback_upstreams": [],
+      "proxies_panel_port_8459": false
+    },
+    {
+      "file": "/etc/nginx/sites-enabled/000-yummyani-https-default-deny.conf",
+      "server_name": [
+        "_"
+      ],
+      "locations": [
+        "/"
+      ],
+      "loopback_upstreams": [],
+      "proxies_panel_port_8459": false
+    },
+    {
+      "file": "/etc/nginx/sites-enabled/yummyani.biz.conf",
+      "server_name": [
+        "yummyani.biz www.yummyani.biz",
+        "www.yummyani.biz",
+        "yummyani.biz"
+      ],
+      "locations": [
+        "^~ /.well-known/acme-challenge/",
+        "/",
+        "^~ /.well-known/acme-challenge/",
+        "/",
+        "^~ /.well-known/acme-challenge/",
+        "/"
+      ],
+      "loopback_upstreams": [
+        "9130"
+      ],
+      "proxies_panel_port_8459": false
+    },
+    {
+      "file": "/etc/nginx/sites-enabled/yummyani.org.conf",
+      "server_name": [
+        "yummyani.org www.yummyani.org",
+        "www.yummyani.org",
+        "yummyani.org"
+      ],
+      "locations": [
+        "^~ /.well-known/acme-challenge/",
+        "/",
+        "^~ /.well-known/acme-challenge/",
+        "/",
+        "^~ /.well-known/acme-challenge/",
+        "/"
+      ],
+      "loopback_upstreams": [
+        "9131"
+      ],
+      "proxies_panel_port_8459": false
+    },
+    {
+      "file": "/etc/nginx/sites-enabled/yummyani.site.conf",
+      "server_name": [
+        "yummyani.site www.yummyani.site",
+        "www.yummyani.site",
+        "yummyani.site"
+      ],
+      "locations": [
+        "^~ /.well-known/acme-challenge/",
+        "/",
+        "^~ /.well-known/acme-challenge/",
+        "/",
+        "^~ /.well-known/acme-challenge/",
+        "^~ /__yummy-activate",
+        "/"
+      ],
+      "loopback_upstreams": [
+        "9132"
+      ],
+      "proxies_panel_port_8459": false
+    }
+  ],
+  "unreadable": [
+    {
+      "path": "/etc/nginx/conf.d/lords.conf",
+      "error": "PermissionError"
+    }
+  ],
+  "verdict": "Ни один vhost не проксирует 8459. Публичны только 22/80/443; 443 держит nginx, конфигурация которого принадлежит root и не имеет каталога, открытого на запись учётной записи агента. Сниппет панели /etc/nginx/snippets/secret-hub.d/enroll.conf установлен и корректен, но строка include в HTTPS-блок не добавлена. Ближайший спроектированный шов — location ^~ /__yummy-activate в yummyani.site.conf, который подключает /etc/nginx/snippets/yummyani-activate/*.conf; этот каталог не существует, и создать его нельзя: родитель root:root 0755."
+}
