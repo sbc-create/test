@@ -1,0 +1,71 @@
+{
+  "purpose": "Проверить исправление на шести характерных случаях до раскатки.",
+  "size": 6,
+  "cases": {
+    "без_описания": {
+      "slug": "vospominaniya-pokoynika",
+      "canonical_id": "01a09f5e-af2a-7a39-bde1-23c6049fae19",
+      "up_kp": null,
+      "up_imdb": null,
+      "up_description": false,
+      "up_source_id": "5026307",
+      "card_kp": null,
+      "card_imdb": null
+    },
+    "без_постера": {
+      "note": "в каталоге нет записей без постера — случай отсутствует, подменять нечем"
+    },
+    "без_source_id": {
+      "slug": "monashki-v-bikini",
+      "canonical_id": "01a09adf-d055-78fe-85f4-712eaa89be3c",
+      "up_kp": null,
+      "up_imdb": null,
+      "up_description": false,
+      "up_source_id": null,
+      "card_kp": null,
+      "card_imdb": null
+    },
+    "оценки_есть_upstream_но_не_показаны": {
+      "slug": "dni-sakamoto-chast-2",
+      "canonical_id": "01a09bba-5f87-7901-b838-5bfe4f989e95",
+      "up_kp": 7.363,
+      "up_imdb": 7.5,
+      "up_description": false,
+      "up_source_id": "4870795",
+      "card_kp": null,
+      "card_imdb": null
+    },
+    "без_привязки_плеера": {
+      "slug": "vospominaniya-pokoynika",
+      "canonical_id": "01a09f5e-af2a-7a39-bde1-23c6049fae19",
+      "up_kp": null,
+      "up_imdb": null,
+      "up_description": false,
+      "up_source_id": "5026307",
+      "card_kp": null,
+      "card_imdb": null
+    },
+    "контрольная_полностью_заполненная": {
+      "slug": "chas-rasplaty-2",
+      "canonical_id": "019b303b-6537-7224-b044-9da54223bf25",
+      "up_kp": 7.042,
+      "up_imdb": 6.3,
+      "up_description": true,
+      "up_source_id": "8085",
+      "card_kp": "7.042",
+      "card_imdb": "6.3"
+    }
+  },
+  "expectations": {
+    "оценки_есть_upstream_но_не_показаны": "после исправления показывает число",
+    "контрольная_полностью_заполненная": "НЕ меняется: ни одно поле",
+    "без_описания": "остаётся без описания, код UPSTREAM_ABSENT",
+    "без_привязки_плеера": "player_id остаётся пустым, состояние pending"
+  },
+  "abort_if": [
+    "контрольная карточка изменилась",
+    "любое непустое значение стало пустым",
+    "slug сменил каноническую сущность",
+    "число записей уменьшилось"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "run_id": "dry-001",
+  "mode": "dry-run",
+  "snapshot": "/tmp/arc002-1001/work/snapshot/lords-01.json",
+  "target": "/tmp/arc002-1001/work/lords-01-details.json",
+  "catalog_items": 53379,
+  "rendered_slugs": 53378,
+  "written_entries": 53172,
+  "before_entries": 0,
+  "before_digest": null,
+  "after_digest": "b2a8efdd25d28d17a8a1abee3d42b147f8c160c772f06821713e868bd4cc915a",
+  "stats": {
+    "записей": 53172,
+    "без_slug": 1,
+    "изменено": 0,
+    "новых": 53172,
+    "полей_изменено": {
+      "id": 53172,
+      "name": 53172,
+      "type": 53172,
+      "year": 50445,
+      "poster_url": 52764,
+      "poster_source": 52764,
+      "external_ids": 53099,
+      "sources": 52376,
+      "playable": 53172,
+      "kinopoisk_rating": 19503,
+      "imdb_rating": 26949,
+      "ratings_source": 27110,
+      "original_name": 16111,
+      "genres": 18472,
+      "countries": 11349,
+      "description": 12204,
+      "description_source": 12204,
+      "seasons": 8804
+    },
+    "сохранено_прежних": 0
+  },
+  "duration_sec": 74.73,
+  "production_mutations": 0,
+  "note": "сухой прогон: ни один файл не записан; для записи нужен явный --apply"
+}

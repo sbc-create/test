@@ -1,0 +1,49 @@
+{
+  "contract": "lords.title.end-to-end/1.0.0",
+  "checks": [
+    {
+      "id": "CANONICAL_ID_ALWAYS",
+      "status": "PASS",
+      "evidence": "проекция сохраняет external_id; проверено на 48 карточках и на снимке из 53 379 записей"
+    },
+    {
+      "id": "NO_SILENT_DROP",
+      "status": "PASS",
+      "evidence": "потери upstream→normalized по полям: {'source_id': 0, 'description': 0, 'poster': 0, 'kp': 0, 'imdb': 0, 'player_binding': 0, 'recommendations': 0}"
+    },
+    {
+      "id": "SOURCE_ID_HAS_PROVIDER",
+      "status": "PASS",
+      "evidence": "тест test_привязка_к_источнику_с_провайдером; канонический id источником не подставляется"
+    },
+    {
+      "id": "RATING_BELONGS_TO_ENTITY",
+      "status": "PASS",
+      "evidence": "тест test_кп_и_imdb_не_путаются на живом снимке"
+    },
+    {
+      "id": "PLAYER_SAME_ENTITY",
+      "status": "PASS_WITH_LIMIT",
+      "evidence": "player_id отсутствует у поставщика (0 из 53 379); привязка не выдумывается, состояние pending"
+    },
+    {
+      "id": "NO_NULL_OVERWRITE",
+      "status": "PASS",
+      "evidence": "тест test_пустое_значение_не_затирает_непустое"
+    },
+    {
+      "id": "NO_CROSS_TITLE_MAPPING",
+      "status": "PASS",
+      "evidence": "тест test_чужая_привязка_прекращает_работу"
+    },
+    {
+      "id": "RECOMMENDATIONS_VALID",
+      "status": "PASS",
+      "evidence": "тест test_лента_не_короче_минимума_когда_каталог_позволяет"
+    }
+  ],
+  "summary": {
+    "PASS": 7,
+    "PASS_WITH_LIMIT": 1
+  }
+}

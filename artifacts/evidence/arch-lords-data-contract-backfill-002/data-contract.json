@@ -1,0 +1,77 @@
+{
+  "contract": "lords.title.end-to-end/1.0.0",
+  "stages": [
+    "upstream",
+    "raw_ingest",
+    "normalization",
+    "entity_resolution",
+    "persistence_catalog",
+    "api_release_data",
+    "lords_renderer"
+  ],
+  "invariants": [
+    {
+      "id": "CANONICAL_ID_ALWAYS",
+      "rule": "У каждой записи есть стабильный канонический идентификатор, и он не меняется между стадиями."
+    },
+    {
+      "id": "NO_SILENT_DROP",
+      "rule": "Поле, доступное upstream, не исчезает между стадиями. Отсутствие допустимо только с кодом UPSTREAM_ABSENT."
+    },
+    {
+      "id": "SOURCE_ID_HAS_PROVIDER",
+      "rule": "Идентификатор источника всегда сопровождается провайдером и происхождением; канонический идентификатор записи источником не подставляется."
+    },
+    {
+      "id": "RATING_BELONGS_TO_ENTITY",
+      "rule": "Оценка Кинопоиска и оценка IMDb относятся к тому же произведению и не смешиваются между собой."
+    },
+    {
+      "id": "PLAYER_SAME_ENTITY",
+      "rule": "Привязка плеера указывает на ту же каноническую сущность."
+    },
+    {
+      "id": "NO_NULL_OVERWRITE",
+      "rule": "Пустое значение не записывается поверх непустого."
+    },
+    {
+      "id": "NO_CROSS_TITLE_MAPPING",
+      "rule": "Slug не меняет произведение; несовпадение прекращает работу."
+    },
+    {
+      "id": "RECOMMENDATIONS_VALID",
+      "rule": "Рекомендации — существующие канонические идентификаторы, без текущей карточки и без дублей, не менее шести."
+    }
+  ],
+  "required_fields": [
+    "id",
+    "external_ids.kinopoisk",
+    "external_ids.imdb",
+    "ratings.kinopoisk",
+    "ratings.imdb",
+    "description",
+    "description_source",
+    "poster",
+    "poster_source",
+    "sources[].provider",
+    "sources[].source_id",
+    "sources[].player_id",
+    "sources[].availability_status",
+    "recommendation_ids[]"
+  ],
+  "reason_codes": [
+    "UPSTREAM_ABSENT",
+    "INGEST_DROP",
+    "NORMALIZATION_DROP",
+    "ENTITY_MISMATCH",
+    "PERSISTENCE_DROP",
+    "SERVING_DROP",
+    "SOURCE_ID_MISSING",
+    "PLAYER_UNBOUND",
+    "RATING_ID_MISSING",
+    "RATING_VALUE_MISSING",
+    "DESCRIPTION_MISSING",
+    "POSTER_MISSING",
+    "UNKNOWN_BLOCKED"
+  ]
+}

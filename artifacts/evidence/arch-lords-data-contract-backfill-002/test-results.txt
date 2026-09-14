@@ -1,0 +1,11 @@
+=== tests/contract002 + tests/lineage ===
+...................................................                      [100%]
+51 passed in 2.04s
+exit=0
+
+=== tests/unit -k lords (без медленных и браузерных) ===
+..............................................                           [100%]
+=========================== short test summary info ============================
+SKIPPED [2] tests/unit/test_lords_apply_python_fragments.py:152: интерпретатор тестов и так 3.10 — сравнивать не с чем
+980 passed, 2 skipped, 2426 deselected in 125.55s (0:02:05)
+exit=0

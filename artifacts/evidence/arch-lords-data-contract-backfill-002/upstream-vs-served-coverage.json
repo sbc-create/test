@@ -1,0 +1,63 @@
+{
+  "catalog_total": 53379,
+  "live_sample": 48,
+  "stages": {
+    "upstream": {
+      "source_id": 52579,
+      "description": 2671,
+      "poster": 52966,
+      "kp": 19584,
+      "imdb": 27040,
+      "player_binding": 0,
+      "recommendations": 53379
+    },
+    "normalized_stored": {
+      "source_id": 52579,
+      "description": 2671,
+      "poster": 52966,
+      "kp": 19584,
+      "imdb": 27040,
+      "player_binding": 0,
+      "recommendations": 53379
+    },
+    "api_release_dry_run": {
+      "source_id": 52376,
+      "description": 12204,
+      "poster": 52764,
+      "kp": 19503,
+      "imdb": 26949,
+      "player_binding": 0,
+      "recommendations": 53172
+    },
+    "live_served_sample": {
+      "source_id": 0,
+      "description": 14,
+      "poster": 48,
+      "kp": 1,
+      "imdb": 1,
+      "player_binding": 0,
+      "recommendations": 0
+    }
+  },
+  "deltas": {
+    "upstream_to_normalized": {
+      "source_id": 0,
+      "description": 0,
+      "poster": 0,
+      "kp": 0,
+      "imdb": 0,
+      "player_binding": 0,
+      "recommendations": 0
+    },
+    "normalized_to_api": {
+      "source_id": -203,
+      "description": 9533,
+      "poster": -202,
+      "kp": -81,
+      "imdb": -91,
+      "player_binding": 0,
+      "recommendations": -207
+    }
+  },
+  "note": "live_served измерен на выборке из 48 карточек главной; остальные стадии — по всему каталогу. Сравнивать их напрямую нельзя, поэтому доли считаются отдельно."
+}

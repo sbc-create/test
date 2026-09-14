@@ -1,0 +1,1224 @@
+{
+  "generated_at": null,
+  "homepage": {
+    "status": 200,
+    "cards": [
+      {
+        "slug": "vospominaniya-pokoynika",
+        "url": "/title/vospominaniya-pokoynika/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09f5e-a643-7526-a797-c4ffc1f11c1e.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "vysokogore",
+        "url": "/title/vysokogore/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/0191878d-0a69-7d81-a89f-9b7a88d31d4e.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "zhavoronok-vzyvaet-k-nebu",
+        "url": "/title/zhavoronok-vzyvaet-k-nebu/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09eba-3b28-7a22-84d5-12420a62f67d.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "berezhno-otnositsya-k-zhenschine",
+        "url": "/title/berezhno-otnositsya-k-zhenschine/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09ea5-a988-7526-9912-2bff13748c3b.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "vo-vseoruzhii-sila-artefaktov",
+        "url": "/title/vo-vseoruzhii-sila-artefaktov/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09eec-82de-7526-a4af-cd5a9e3d1e22.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "podpolnyy-mir",
+        "url": "/title/podpolnyy-mir/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09ea8-b80c-7526-909c-23ffa876012c.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "ispoved-shamana",
+        "url": "/title/ispoved-shamana/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09c73-5914-7526-88bc-040237183efb.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "operaciya-vozmezdie-2",
+        "url": "/title/operaciya-vozmezdie-2/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09bc4-7a54-7526-b100-3e0412f6ebf2.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "ne-sbezhat-ot-zhguchey-lyubvi",
+        "url": "/title/ne-sbezhat-ot-zhguchey-lyubvi/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09a27-f0a4-7526-9431-5ace1d80557f.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "zakatnaya-lyubov",
+        "url": "/title/zakatnaya-lyubov/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09a26-988c-7526-863e-bfb67633aa67.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "lyubov-tenti-lishniy",
+        "url": "/title/lyubov-tenti-lishniy/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01925c2d-6018-7e0d-abf2-75d382dfa40b.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "dni-sakamoto-chast-2",
+        "url": "/title/dni-sakamoto-chast-2/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09bba-5c8f-7526-a699-69070f6114b6.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "vospominaniya-pokoynika",
+        "url": "/title/vospominaniya-pokoynika/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09f5e-a643-7526-a797-c4ffc1f11c1e.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "ispoved-shamana",
+        "url": "/title/ispoved-shamana/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09c73-5914-7526-88bc-040237183efb.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "operaciya-vozmezdie-2",
+        "url": "/title/operaciya-vozmezdie-2/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09bc4-7a54-7526-b100-3e0412f6ebf2.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "shiku-bentu-i-chudesnoe-derevo-guavy",
+        "url": "/title/shiku-bentu-i-chudesnoe-derevo-guavy/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09b14-567f-7526-8166-df261d54f453.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "chas-rasplaty-2",
+        "url": "/title/chas-rasplaty-2/",
+        "kp_shown": "7.042",
+        "imdb_shown": "6.3",
+        "poster_src": "/poster/019b303b-6537-7224-b044-9da54223bf25.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "tayna-zakoldovannogo-zamka",
+        "url": "/title/tayna-zakoldovannogo-zamka/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09ae0-b963-78fe-bdfe-6d1e78c099ee.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "monashki-v-bikini",
+        "url": "/title/monashki-v-bikini/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09adf-c719-7526-9c1e-3b548ea7a261.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "zlaya-monahinya",
+        "url": "/title/zlaya-monahinya/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09adf-029c-7526-8183-daa3119bd6e5.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "klub-ohotnikov",
+        "url": "/title/klub-ohotnikov/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09ad1-77d4-78fe-b1f5-02631a2a68c2.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "za-maskoy",
+        "url": "/title/za-maskoy/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09ad5-8f3d-78fe-81e8-cd93615d0dfc.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "pohititeli-dush",
+        "url": "/title/pohititeli-dush/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09ac3-dc3e-7526-871b-4b4eb35b11fe.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "dvoynaya-zhizn-nyani",
+        "url": "/title/dvoynaya-zhizn-nyani/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09acd-3da9-7526-b744-89b02aef71fe.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "vysokogore",
+        "url": "/title/vysokogore/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/0191878d-0a69-7d81-a89f-9b7a88d31d4e.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "zhavoronok-vzyvaet-k-nebu",
+        "url": "/title/zhavoronok-vzyvaet-k-nebu/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09eba-3b28-7a22-84d5-12420a62f67d.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "berezhno-otnositsya-k-zhenschine",
+        "url": "/title/berezhno-otnositsya-k-zhenschine/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09ea5-a988-7526-9912-2bff13748c3b.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "vo-vseoruzhii-sila-artefaktov",
+        "url": "/title/vo-vseoruzhii-sila-artefaktov/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09eec-82de-7526-a4af-cd5a9e3d1e22.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "podpolnyy-mir",
+        "url": "/title/podpolnyy-mir/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09ea8-b80c-7526-909c-23ffa876012c.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "ne-sbezhat-ot-zhguchey-lyubvi",
+        "url": "/title/ne-sbezhat-ot-zhguchey-lyubvi/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09a27-f0a4-7526-9431-5ace1d80557f.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "zakatnaya-lyubov",
+        "url": "/title/zakatnaya-lyubov/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09a26-988c-7526-863e-bfb67633aa67.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "lyubov-tenti-lishniy",
+        "url": "/title/lyubov-tenti-lishniy/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01925c2d-6018-7e0d-abf2-75d382dfa40b.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "dni-sakamoto-chast-2",
+        "url": "/title/dni-sakamoto-chast-2/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09bba-5c8f-7526-a699-69070f6114b6.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "sinora-volpe",
+        "url": "/title/sinora-volpe/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/0191516a-ab94-7521-afa6-0be107bcacd2.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "dikaya-yaponiya",
+        "url": "/title/dikaya-yaponiya/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09b05-d22e-78fe-8ebe-a180c2261968.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "podozritelnye-sosedi",
+        "url": "/title/podozritelnye-sosedi/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a09a22-fd2c-7526-8a4f-17f2e786ec7c.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "schenyachiy-patrul-dinofilm",
+        "url": "/title/schenyachiy-patrul-dinofilm/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a089f5-0907-7526-b5da-eb1c05ea7ac5.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "vpered",
+        "url": "/title/vpered/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a085c0-9ccb-7526-8759-5b41cbf4e986.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "multachki-bayki-iz-radiator-springs",
+        "url": "/title/multachki-bayki-iz-radiator-springs/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a07066-55c2-7afa-9729-0c18bde3bd69.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "supersemeyka",
+        "url": "/title/supersemeyka/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a0705a-49a0-7afa-a916-a31b2686a932.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "tofu-boy",
+        "url": "/title/tofu-boy/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a06d37-a9be-7afa-a9e9-09525c763b94.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "lego-zvezdnye-voyny-mandalorec",
+        "url": "/title/lego-zvezdnye-voyny-mandalorec/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a061f2-0e8f-79f6-b786-8db9fc31b522.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "dan",
+        "url": "/title/dan/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a05292-dac1-7637-a15b-6428f6240b87.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "hranitel-lev-geroi-savanny",
+        "url": "/title/hranitel-lev-geroi-savanny/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a05278-1e17-7622-9bfa-c3c136952cb6.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "korol-lev-3-akuna-matata",
+        "url": "/title/korol-lev-3-akuna-matata/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a05277-6aa4-7622-b850-3450a19dbb8a.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "korol-lev-2-gordost-simby",
+        "url": "/title/korol-lev-2-gordost-simby/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a05276-f3c1-7622-ae2e-b3663f1f637d.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "legenda-o-zvezdnoy-princesse",
+        "url": "/title/legenda-o-zvezdnoy-princesse/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a05245-4c06-7622-a62b-82d08a05aa93.webp",
+        "poster_fallback_markup_present": true
+      },
+      {
+        "slug": "poteryannaya-glava-mest-yuki",
+        "url": "/title/poteryannaya-glava-mest-yuki/",
+        "kp_shown": null,
+        "imdb_shown": null,
+        "poster_src": "/poster/01a04341-88b7-7622-a482-533ab6df78c5.webp",
+        "poster_fallback_markup_present": true
+      }
+    ]
+  },
+  "titles": [
+    {
+      "slug": "vospominaniya-pokoynika",
+      "status": 200,
+      "bytes": 19924,
+      "meta_description": "Воспоминания покойника: Фильм 2024",
+      "meta_description_len": 34,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "vysokogore",
+      "status": 200,
+      "bytes": 20095,
+      "meta_description": "Высокогорье: Сериал 2024",
+      "meta_description_len": 24,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "zhavoronok-vzyvaet-k-nebu",
+      "status": 200,
+      "bytes": 20286,
+      "meta_description": "Жаворонок взывает к небу: Сериал 2026",
+      "meta_description_len": 37,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "berezhno-otnositsya-k-zhenschine",
+      "status": 200,
+      "bytes": 20356,
+      "meta_description": "Бережно относиться к женщине: Сериал 2025",
+      "meta_description_len": 41,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "vo-vseoruzhii-sila-artefaktov",
+      "status": 200,
+      "bytes": 20357,
+      "meta_description": "Во всеоружии: Сила артефактов: Сериал 2026",
+      "meta_description_len": 42,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "podpolnyy-mir",
+      "status": 200,
+      "bytes": 20136,
+      "meta_description": "Подпольный Мир: Сериал 2026",
+      "meta_description_len": 27,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "ispoved-shamana",
+      "status": 200,
+      "bytes": 19810,
+      "meta_description": "Исповедь шамана: Фильм 2026",
+      "meta_description_len": 27,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "operaciya-vozmezdie-2",
+      "status": 200,
+      "bytes": 19892,
+      "meta_description": "Операция «Возмездие»: Фильм 2026",
+      "meta_description_len": 32,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "ne-sbezhat-ot-zhguchey-lyubvi",
+      "status": 200,
+      "bytes": 20315,
+      "meta_description": "Не сбежать от жгучей любви: Сериал 2025",
+      "meta_description_len": 39,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "zakatnaya-lyubov",
+      "status": 200,
+      "bytes": 20156,
+      "meta_description": "Закатная Любовь: Сериал 2024",
+      "meta_description_len": 28,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "lyubov-tenti-lishniy",
+      "status": 200,
+      "bytes": 20240,
+      "meta_description": "Любовь: Тэнти лишний!: Сериал 2014",
+      "meta_description_len": 34,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "dni-sakamoto-chast-2",
+      "status": 200,
+      "bytes": 20232,
+      "meta_description": "Дни Сакамото. Часть 2: Сериал 2025",
+      "meta_description_len": 34,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "vospominaniya-pokoynika",
+      "status": 200,
+      "bytes": 19924,
+      "meta_description": "Воспоминания покойника: Фильм 2024",
+      "meta_description_len": 34,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "ispoved-shamana",
+      "status": 200,
+      "bytes": 19810,
+      "meta_description": "Исповедь шамана: Фильм 2026",
+      "meta_description_len": 27,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "operaciya-vozmezdie-2",
+      "status": 200,
+      "bytes": 19892,
+      "meta_description": "Операция «Возмездие»: Фильм 2026",
+      "meta_description_len": 32,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "shiku-bentu-i-chudesnoe-derevo-guavy",
+      "status": 200,
+      "bytes": 20090,
+      "meta_description": "Шику Бенту и чудесное дерево гуавы: Фильм 2024",
+      "meta_description_len": 46,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "chas-rasplaty-2",
+      "status": 200,
+      "bytes": 26058,
+      "meta_description": "Специалист по реверс-инжинирингу Майкл Дженнингс соглашается принять участие в секретном проекте, за который ему обещают огромный гонорар. Когда всё заканчивается, Майклу стирают п",
+      "meta_description_len": 180,
+      "no_data_notice": false,
+      "kp_shown": "Кинопоиск 7.042",
+      "imdb_shown": "6.3",
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "tayna-zakoldovannogo-zamka",
+      "status": 200,
+      "bytes": 19979,
+      "meta_description": "Тайна заколдованного замка: Фильм 2025",
+      "meta_description_len": 38,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "monashki-v-bikini",
+      "status": 200,
+      "bytes": 19821,
+      "meta_description": "Монашки в бикини: Фильм 2025",
+      "meta_description_len": 28,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "zlaya-monahinya",
+      "status": 200,
+      "bytes": 19775,
+      "meta_description": "Злая монахиня: Фильм 2025",
+      "meta_description_len": 25,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "klub-ohotnikov",
+      "status": 200,
+      "bytes": 19788,
+      "meta_description": "Клуб охотников: Фильм 2026",
+      "meta_description_len": 26,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "za-maskoy",
+      "status": 200,
+      "bytes": 19693,
+      "meta_description": "За маской: Фильм 2024",
+      "meta_description_len": 21,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "pohititeli-dush",
+      "status": 200,
+      "bytes": 19791,
+      "meta_description": "Похитители душ: Фильм 2026",
+      "meta_description_len": 26,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "dvoynaya-zhizn-nyani",
+      "status": 200,
+      "bytes": 19862,
+      "meta_description": "Двойная жизнь няни: Фильм 2026",
+      "meta_description_len": 30,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "vysokogore",
+      "status": 200,
+      "bytes": 20095,
+      "meta_description": "Высокогорье: Сериал 2024",
+      "meta_description_len": 24,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "zhavoronok-vzyvaet-k-nebu",
+      "status": 200,
+      "bytes": 20286,
+      "meta_description": "Жаворонок взывает к небу: Сериал 2026",
+      "meta_description_len": 37,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "berezhno-otnositsya-k-zhenschine",
+      "status": 200,
+      "bytes": 20356,
+      "meta_description": "Бережно относиться к женщине: Сериал 2025",
+      "meta_description_len": 41,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "vo-vseoruzhii-sila-artefaktov",
+      "status": 200,
+      "bytes": 20357,
+      "meta_description": "Во всеоружии: Сила артефактов: Сериал 2026",
+      "meta_description_len": 42,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "podpolnyy-mir",
+      "status": 200,
+      "bytes": 20136,
+      "meta_description": "Подпольный Мир: Сериал 2026",
+      "meta_description_len": 27,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "ne-sbezhat-ot-zhguchey-lyubvi",
+      "status": 200,
+      "bytes": 20315,
+      "meta_description": "Не сбежать от жгучей любви: Сериал 2025",
+      "meta_description_len": 39,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "zakatnaya-lyubov",
+      "status": 200,
+      "bytes": 20156,
+      "meta_description": "Закатная Любовь: Сериал 2024",
+      "meta_description_len": 28,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "lyubov-tenti-lishniy",
+      "status": 200,
+      "bytes": 20240,
+      "meta_description": "Любовь: Тэнти лишний!: Сериал 2014",
+      "meta_description_len": 34,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "dni-sakamoto-chast-2",
+      "status": 200,
+      "bytes": 20232,
+      "meta_description": "Дни Сакамото. Часть 2: Сериал 2025",
+      "meta_description_len": 34,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "sinora-volpe",
+      "status": 200,
+      "bytes": 20128,
+      "meta_description": "Синьора Вольпе: Сериал 2022",
+      "meta_description_len": 27,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "dikaya-yaponiya",
+      "status": 200,
+      "bytes": 20105,
+      "meta_description": "Дикая Япония: Сериал 2025",
+      "meta_description_len": 25,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "podozritelnye-sosedi",
+      "status": 200,
+      "bytes": 20264,
+      "meta_description": "Подозрительные соседи: Сериал 2026",
+      "meta_description_len": 34,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "schenyachiy-patrul-dinofilm",
+      "status": 200,
+      "bytes": 19811,
+      "meta_description": "Щенячий патруль: Динофильм: Мультфильм 2026",
+      "meta_description_len": 43,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "vpered",
+      "status": 200,
+      "bytes": 19466,
+      "meta_description": "Вперёд: Мультфильм",
+      "meta_description_len": 18,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "multachki-bayki-iz-radiator-springs",
+      "status": 200,
+      "bytes": 19909,
+      "meta_description": "Мультачки: Байки из Радиатор-Спрингс: Мультфильм",
+      "meta_description_len": 48,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "supersemeyka",
+      "status": 200,
+      "bytes": 19562,
+      "meta_description": "Суперсемейка: Мультфильм",
+      "meta_description_len": 24,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "tofu-boy",
+      "status": 200,
+      "bytes": 19491,
+      "meta_description": "Тофу-бой: Мультфильм",
+      "meta_description_len": 20,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "lego-zvezdnye-voyny-mandalorec",
+      "status": 200,
+      "bytes": 19836,
+      "meta_description": "ЛЕГО Звездные войны: Мандалорец: Мультфильм",
+      "meta_description_len": 43,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "dan",
+      "status": 200,
+      "bytes": 19425,
+      "meta_description": "Дан!: Мультфильм",
+      "meta_description_len": 16,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "hranitel-lev-geroi-savanny",
+      "status": 200,
+      "bytes": 19928,
+      "meta_description": "Хранитель Лев: Герои саванны: Мультфильм 2015",
+      "meta_description_len": 45,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "korol-lev-3-akuna-matata",
+      "status": 200,
+      "bytes": 19874,
+      "meta_description": "Король Лев 3: Акуна Матата: Мультфильм 2004",
+      "meta_description_len": 43,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "korol-lev-2-gordost-simby",
+      "status": 200,
+      "bytes": 19909,
+      "meta_description": "Король Лев 2: Гордость Симбы: Мультфильм 1998",
+      "meta_description_len": 45,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "legenda-o-zvezdnoy-princesse",
+      "status": 200,
+      "bytes": 19942,
+      "meta_description": "Легенда о Звёздной принцессе: Мультфильм 2025",
+      "meta_description_len": 45,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    },
+    {
+      "slug": "poteryannaya-glava-mest-yuki",
+      "status": 200,
+      "bytes": 19918,
+      "meta_description": "Потерянная глава: Месть Юки: Мультфильм 2025",
+      "meta_description_len": 44,
+      "no_data_notice": false,
+      "kp_shown": null,
+      "imdb_shown": null,
+      "player_markup": true,
+      "source_id_shown": null
+    }
+  ],
+  "posters": {
+    "/poster/01a09f5e-a643-7526-a797-c4ffc1f11c1e.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "51780",
+      "bytes": 51780,
+      "looks_like_webp": true
+    },
+    "/poster/0191878d-0a69-7d81-a89f-9b7a88d31d4e.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "63108",
+      "bytes": 63108,
+      "looks_like_webp": true
+    },
+    "/poster/01a09eba-3b28-7a22-84d5-12420a62f67d.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "218810",
+      "bytes": 218810,
+      "looks_like_webp": true
+    },
+    "/poster/01a09ea5-a988-7526-9912-2bff13748c3b.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "44816",
+      "bytes": 44816,
+      "looks_like_webp": true
+    },
+    "/poster/01a09eec-82de-7526-a4af-cd5a9e3d1e22.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "44624",
+      "bytes": 44624,
+      "looks_like_webp": true
+    },
+    "/poster/01a09ea8-b80c-7526-909c-23ffa876012c.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "44052",
+      "bytes": 44052,
+      "looks_like_webp": true
+    },
+    "/poster/01a09c73-5914-7526-88bc-040237183efb.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "37014",
+      "bytes": 37014,
+      "looks_like_webp": true
+    },
+    "/poster/01a09bc4-7a54-7526-b100-3e0412f6ebf2.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "20704",
+      "bytes": 20704,
+      "looks_like_webp": true
+    },
+    "/poster/01a09a27-f0a4-7526-9431-5ace1d80557f.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "46702",
+      "bytes": 46702,
+      "looks_like_webp": true
+    },
+    "/poster/01a09a26-988c-7526-863e-bfb67633aa67.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "28208",
+      "bytes": 28208,
+      "looks_like_webp": true
+    },
+    "/poster/01925c2d-6018-7e0d-abf2-75d382dfa40b.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "20888",
+      "bytes": 20888,
+      "looks_like_webp": true
+    },
+    "/poster/01a09bba-5c8f-7526-a699-69070f6114b6.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "143706",
+      "bytes": 143706,
+      "looks_like_webp": true
+    },
+    "/poster/01a09b14-567f-7526-8166-df261d54f453.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "33528",
+      "bytes": 33528,
+      "looks_like_webp": true
+    },
+    "/poster/019b303b-6537-7224-b044-9da54223bf25.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "106634",
+      "bytes": 106634,
+      "looks_like_webp": true
+    },
+    "/poster/01a09ae0-b963-78fe-bdfe-6d1e78c099ee.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "44620",
+      "bytes": 44620,
+      "looks_like_webp": true
+    },
+    "/poster/01a09adf-c719-7526-9c1e-3b548ea7a261.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "48320",
+      "bytes": 48320,
+      "looks_like_webp": true
+    },
+    "/poster/01a09adf-029c-7526-8183-daa3119bd6e5.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "27540",
+      "bytes": 27540,
+      "looks_like_webp": true
+    },
+    "/poster/01a09ad1-77d4-78fe-b1f5-02631a2a68c2.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "44698",
+      "bytes": 44698,
+      "looks_like_webp": true
+    },
+    "/poster/01a09ad5-8f3d-78fe-81e8-cd93615d0dfc.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "24406",
+      "bytes": 24406,
+      "looks_like_webp": true
+    },
+    "/poster/01a09ac3-dc3e-7526-871b-4b4eb35b11fe.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "73158",
+      "bytes": 73158,
+      "looks_like_webp": true
+    },
+    "/poster/01a09acd-3da9-7526-b744-89b02aef71fe.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "27290",
+      "bytes": 27290,
+      "looks_like_webp": true
+    },
+    "/poster/0191516a-ab94-7521-afa6-0be107bcacd2.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "47336",
+      "bytes": 47336,
+      "looks_like_webp": true
+    },
+    "/poster/01a09b05-d22e-78fe-8ebe-a180c2261968.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "5622",
+      "bytes": 5622,
+      "looks_like_webp": true
+    },
+    "/poster/01a09a22-fd2c-7526-8a4f-17f2e786ec7c.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "27556",
+      "bytes": 27556,
+      "looks_like_webp": true
+    },
+    "/poster/01a089f5-0907-7526-b5da-eb1c05ea7ac5.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "37516",
+      "bytes": 37516,
+      "looks_like_webp": true
+    },
+    "/poster/01a085c0-9ccb-7526-8759-5b41cbf4e986.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "29874",
+      "bytes": 29874,
+      "looks_like_webp": true
+    },
+    "/poster/01a07066-55c2-7afa-9729-0c18bde3bd69.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "34386",
+      "bytes": 34386,
+      "looks_like_webp": true
+    },
+    "/poster/01a0705a-49a0-7afa-a916-a31b2686a932.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "20226",
+      "bytes": 20226,
+      "looks_like_webp": true
+    },
+    "/poster/01a06d37-a9be-7afa-a9e9-09525c763b94.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "73488",
+      "bytes": 73488,
+      "looks_like_webp": true
+    },
+    "/poster/01a061f2-0e8f-79f6-b786-8db9fc31b522.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "9826",
+      "bytes": 9826,
+      "looks_like_webp": true
+    },
+    "/poster/01a05292-dac1-7637-a15b-6428f6240b87.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "33038",
+      "bytes": 33038,
+      "looks_like_webp": true
+    },
+    "/poster/01a05278-1e17-7622-9bfa-c3c136952cb6.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "30070",
+      "bytes": 30070,
+      "looks_like_webp": true
+    },
+    "/poster/01a05277-6aa4-7622-b850-3450a19dbb8a.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "26470",
+      "bytes": 26470,
+      "looks_like_webp": true
+    },
+    "/poster/01a05276-f3c1-7622-ae2e-b3663f1f637d.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "27238",
+      "bytes": 27238,
+      "looks_like_webp": true
+    },
+    "/poster/01a05245-4c06-7622-a62b-82d08a05aa93.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "26846",
+      "bytes": 26846,
+      "looks_like_webp": true
+    },
+    "/poster/01a04341-88b7-7622-a482-533ab6df78c5.webp": {
+      "status": 200,
+      "content_type": "image/webp",
+      "content_length": "21964",
+      "bytes": 21964,
+      "looks_like_webp": true
+    }
+  }
+}
