@@ -1,7 +1,7 @@
 {
-  "run_id": "daily-20260914T165219Z",
-  "started_at": "2026-09-14T16:52:19Z",
-  "finished_at": "2026-09-14T16:54:23Z",
+  "run_id": "daily-20260914T171452Z",
+  "started_at": "2026-09-14T17:14:52Z",
+  "finished_at": "2026-09-14T17:16:23Z",
   "exit_code": 0,
   "steps": {
     "catalog": "ok",
@@ -11,7 +11,7 @@
   "snapshot": {
     "path": "/srv/site-factory/repo/var/lords/lords/catalog-cache/lords-01.json",
     "items": 53399,
-    "fetched_at": "2026-09-14T16:37:19Z",
+    "fetched_at": "2026-09-14T16:59:53Z",
     "id_set_checksum": "4b05d8f409b68438f8affe8d2b6f832eeef580ba2b35430ac959ed839c309d5a"
   },
   "parity": {
@@ -40,8 +40,8 @@
         "imdb_pct": 50.66,
         "any_rating": 27211,
         "any_rating_pct": 50.96,
-        "description": 13394,
-        "description_pct": 25.08,
+        "description": 14583,
+        "description_pct": 27.31,
         "poster_url": 52986,
         "poster_pct": 99.23,
         "source_id": 52589,
@@ -62,8 +62,8 @@
       "rejections": {},
       "without_poster": 413,
       "expected_sha256": {
-        "catalog": "b8cf91d361eb992f6331a2faa235d756bcc43d3d89911427a7fb16f5951630f7",
-        "details": "cc8f646bf4b2bdb4c75f32d0967fdeedeb1bc24b316e114ebcf1012d16c0f305"
+        "catalog": "734f5597a1bfbf9efa8595631ebf0197944e00ed706de6b6758bcd80541b0e90",
+        "details": "38fe3e78fe23f6d6bf634d8dbb8286b344cf5444407640137902a48b19c0d4e7"
       }
     },
     "zona-01": {
@@ -81,8 +81,8 @@
         "imdb_pct": 50.66,
         "any_rating": 27211,
         "any_rating_pct": 50.96,
-        "description": 13381,
-        "description_pct": 25.06,
+        "description": 14570,
+        "description_pct": 27.29,
         "poster_url": 52986,
         "poster_pct": 99.23,
         "source_id": 52590,
@@ -103,28 +103,28 @@
       "rejections": {},
       "without_poster": 413,
       "expected_sha256": {
-        "catalog": "fd9c62bd76d9915125a786262b22d7fcbe2687e1d643d85522d5744508427d57",
-        "details": "4f49b79332954873405e9ebaf7505be234a92622ea3243e0d138b5a23230b0d7"
+        "catalog": "315859a580bc0fffec844f36123f3b785d35151301b1b3cfcca03cc38d356cd8",
+        "details": "798be4433def2ad1dca477e0db5675921ca6601fd62f1fb494e93833d0b978b0"
       }
     }
   },
   "detail_backfill": {
-    "requests_made": 120,
-    "gained_cached": 120,
-    "gained_description": 111,
+    "requests_made": 40,
+    "gained_cached": 40,
+    "gained_description": 32,
     "before": {
       "titles": 53399,
-      "cached": 19717,
-      "cached_pct": 36.92,
-      "with_description": 13270,
-      "description_pct": 24.85
+      "cached": 21333,
+      "cached_pct": 39.95,
+      "with_description": 14538,
+      "description_pct": 27.23
     },
     "after": {
       "titles": 53399,
-      "cached": 19837,
-      "cached_pct": 37.15,
-      "with_description": 13381,
-      "description_pct": 25.06
+      "cached": 21373,
+      "cached_pct": 40.03,
+      "with_description": 14570,
+      "description_pct": 27.29
     }
   },
   "gates": {
@@ -136,7 +136,7 @@
       "kp_pct": 36.68,
       "imdb": 27050,
       "imdb_pct": 50.66,
-      "description_pct": 25.08,
+      "description_pct": 27.31,
       "poster_pct": 99.23
     },
     "zona-01": {
@@ -147,13 +147,34 @@
       "kp_pct": 36.68,
       "imdb": 27050,
       "imdb_pct": 50.66,
-      "description_pct": 25.06,
+      "description_pct": 27.29,
       "poster_pct": 99.23
     },
+    "rating_targets": {
+      "kp_pct": 90.0,
+      "imdb_pct": 90.0,
+      "hard_gate": false
+    },
+    "rating_baseline_previous": {
+      "lords-01": {
+        "kp_pct": 36.68,
+        "imdb_pct": 50.66
+      },
+      "zona-01": {
+        "kp_pct": 36.68,
+        "imdb_pct": 50.66
+      }
+    },
+    "warnings": [
+      "lords-01: KP 36.68% < заявленных 90.0% (потолок источника; отказом не считается)",
+      "lords-01: IMDb 50.66% < заявленных 90.0% (потолок источника; отказом не считается)",
+      "zona-01: KP 36.68% < заявленных 90.0% (потолок источника; отказом не считается)",
+      "zona-01: IMDb 50.66% < заявленных 90.0% (потолок источника; отказом не считается)"
+    ],
     "violations": []
   },
   "rollback": {
     "available": true,
-    "command": "cp -p /srv/site-factory/repo/var/lords/publish-backups/lords-01-catalog.json.before.daily-20260914T165219Z /srv/lords/.frontend/lords-01-catalog.json && cp -p /srv/site-factory/repo/var/lords/publish-backups/lords-01-details.json.before.daily-20260914T165219Z /srv/lords/.frontend/lords-01-details.json && cp -p /srv/site-factory/repo/var/lords/publish-backups/zona-01-catalog.json.before.daily-20260914T165219Z /srv/lords/.frontend/zona-01-catalog.json && cp -p /srv/site-factory/repo/var/lords/publish-backups/zona-01-details.json.before.daily-20260914T165219Z /srv/lords/.frontend/zona-01-details.json && sudo -n systemctl restart lords-nova-01.service && sudo -n systemctl restart nova-zona-01.service"
+    "command": "cp -p /srv/site-factory/repo/var/lords/publish-backups/lords-01-catalog.json.before.daily-20260914T171452Z /srv/lords/.frontend/lords-01-catalog.json && cp -p /srv/site-factory/repo/var/lords/publish-backups/lords-01-details.json.before.daily-20260914T171452Z /srv/lords/.frontend/lords-01-details.json && cp -p /srv/site-factory/repo/var/lords/publish-backups/zona-01-catalog.json.before.daily-20260914T171452Z /srv/lords/.frontend/zona-01-catalog.json && cp -p /srv/site-factory/repo/var/lords/publish-backups/zona-01-details.json.before.daily-20260914T171452Z /srv/lords/.frontend/zona-01-details.json && sudo -n systemctl restart lords-nova-01.service && sudo -n systemctl restart nova-zona-01.service"
   }
 }

@@ -1,0 +1,51 @@
+{
+  "note": "Гейт покрытия оценками проверен срабатыванием, а не описанием.",
+  "declared_targets": {
+    "kp_pct": 90.0,
+    "imdb_pct": 90.0
+  },
+  "measured": {
+    "kp_pct": 36.68,
+    "imdb_pct": 50.66
+  },
+  "default_mode": {
+    "hard_gate": false,
+    "reason": "источник объективно не достигает порога; job, падающий каждые сутки по неустранимой причине, перестают читать, и настоящий отказ тонет вместе с ним",
+    "observed": {
+      "exit_code": 0,
+      "violations": [],
+      "warnings": 4
+    }
+  },
+  "hard_mode_test": {
+    "env": "NOVA_RATINGS_GATE_HARD=1",
+    "observed": {
+      "exit_code": 1,
+      "violations": [
+        "lords-01: KP 36.68% < заявленных 90.0%",
+        "lords-01: IMDb 50.66% < заявленных 90.0%",
+        "zona-01: KP 36.68% < заявленных 90.0%",
+        "zona-01: IMDb 50.66% < заявленных 90.0%"
+      ]
+    },
+    "verdict": "PASS"
+  },
+  "regression_test": {
+    "setup": "baseline искусственно завышен до 80% по обеим метрикам",
+    "observed": {
+      "exit_code": 1,
+      "violations": [
+        "lords-01: KP просело 80.0% → 36.68% — оценки теряются по дороге",
+        "lords-01: IMDb просело 80.0% → 50.66% — оценки теряются по дороге",
+        "zona-01: KP просело 80.0% → 36.68% — оценки теряются по дороге",
+        "zona-01: IMDb просело 80.0% → 50.66% — оценки теряются по дороге"
+      ]
+    },
+    "verdict": "PASS"
+  },
+  "restored": {
+    "exit_code": 0,
+    "violations": [],
+    "parity_identical": true
+  }
+}

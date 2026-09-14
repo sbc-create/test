@@ -1,0 +1,75 @@
+{
+  "snapshot_items": 53399,
+  "sample_per_group": 300,
+  "groups": {
+    "kp_id_no_kp_rating": {
+      "population": 27140,
+      "sampled": 300,
+      "detail_yielded_kp": 0,
+      "detail_yielded_imdb": 0,
+      "errors": 0,
+      "yield_pct_kp": 0.0,
+      "yield_pct_imdb": 0.0
+    },
+    "imdb_id_no_imdb_rating": {
+      "population": 18288,
+      "sampled": 300,
+      "detail_yielded_kp": 0,
+      "detail_yielded_imdb": 0,
+      "errors": 0,
+      "yield_pct_kp": 0.0,
+      "yield_pct_imdb": 0.0
+    },
+    "no_external_id_at_all": {
+      "population": 73,
+      "sampled": 73,
+      "detail_yielded_kp": 0,
+      "detail_yielded_imdb": 0,
+      "errors": 0,
+      "yield_pct_kp": 0.0,
+      "yield_pct_imdb": 0.0
+    }
+  },
+  "detail_response_fields": [
+    "alternative_names",
+    "available_voices",
+    "backdrop_url",
+    "countries",
+    "country_codes",
+    "created_at",
+    "crew",
+    "description",
+    "duration",
+    "english_name",
+    "external_ids",
+    "genre_codes",
+    "genres",
+    "id",
+    "imdb_rating",
+    "is_series",
+    "kinopoisk_rating",
+    "licensed",
+    "name",
+    "original_name",
+    "poster_url",
+    "premiere_date",
+    "seasons",
+    "seasons_count",
+    "short_description",
+    "source_qualities",
+    "source_types",
+    "tags",
+    "type",
+    "voice_studios",
+    "year",
+    "year_end"
+  ],
+  "rating_fields_present": [
+    "duration",
+    "imdb_rating",
+    "kinopoisk_rating"
+  ],
+  "requests_made": 673,
+  "retries_made": 0,
+  "checked_at": "2026-09-14T17:05:10Z"
+}
