@@ -1,0 +1,53 @@
+{
+  "release_id": "6fcd33701aef-a7367e26d4e2",
+  "bundle": "/srv/site-factory/repo/var/worktrees/secret-hub-006/var/hardening/site-factory-pinned-runtime.tar.gz",
+  "bundle_sha256": "a7367e26d4e290df27f40d1b6f6898e7956cd34cbfc55f5db7190a9dd278dbbf",
+  "primary_source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e",
+  "sources": [
+    {
+      "commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e",
+      "ref": "claude/templates-secret-hub-cloud-access-006",
+      "note": "Ветка этой задачи: пакет factory, автоматизация host, restore_proof, конфигурация и схемы."
+    },
+    {
+      "commit": "2bb47ded21f2e889f9cdf7cfd77e5835885cfb78",
+      "ref": "",
+      "note": "Суточное пополнение каталога Nova. В ветке этой задачи файлов нет; рабочая копия на хосте совпадает с этим коммитом байт в байт — сверено sha256 до сборки."
+    },
+    {
+      "commit": "f47b63a76de7409715e22cc2f272b96f0c435de2",
+      "ref": "",
+      "note": "Канареечная выкладка Lords. ВНИМАНИЕ: рабочая копия на хосте (/home/claude/wt-release-03) с этим коммитом НЕ совпадает — там незакоммиченная правка чужой сессии. Закрепляется проверенная версия из коммита. Закреплять непроверенные байты означало бы оставить root на коде, который никто не смотрел; расхождение вынесено в отчёт владельцу."
+    }
+  ],
+  "file_count": 168,
+  "pinned_root": "/opt/site-factory/runtime",
+  "units": [
+    "site-factory-secret-hub.service",
+    "site-factory-secret-hub-import@.service",
+    "nova-daily-refresh.service",
+    "lords-content-refresh.service",
+    "lords-site-render@.service",
+    "lords-canary-switch@.service",
+    "site-factory-health.service",
+    "site-factory-backup.service",
+    "site-factory-restore-proof.service",
+    "nova-catalog-refresh.service"
+  ],
+  "relocate": [
+    "lords-tooling-0b0722f3",
+    "lords-tooling-41031da0",
+    "content-pipeline"
+  ],
+  "host_divergences": [
+    {
+      "path": "automation/host/nova-daily-refresh.sh",
+      "host_path": "/srv/site-factory/repo/automation/host/nova-daily-refresh.sh",
+      "pinned_commit": "2bb47ded21f2e889f9cdf7cfd77e5835885cfb78",
+      "pinned_sha256": "249973fdb1fc038f6efd1bfd465741f81b9d02b632d4fdb24cf492d71b40487c",
+      "host_sha256": "66c7cc1639db195942f9fbaa2b071c95882441fa03bafeeca101372062a509d7"
+    }
+  ],
+  "host_divergence_note": "Рабочая копия на хосте разошлась с отсмотренным коммитом: закрепляется версия коммита. Владеющая сессия обязана закоммитить свою правку, после чего бандл пересобирается — иначе после установки будет исполняться не то, что сейчас лежит на хосте.",
+  "note": "Бандл детерминирован: та же пара коммитов даёт тот же sha256. Значений секретов в нём нет — только код и конфигурация."
+}

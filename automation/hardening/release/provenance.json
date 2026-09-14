@@ -1,0 +1,845 @@
+{
+ "file_count": 168,
+ "files": [
+  {
+   "path": "automation/host/backup-retention.sh",
+   "sha256": "2d9bf17e655df150a6a1c690d381ab62b6bd8ed8228c327a5fa238e8f5666a5d",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "automation/host/backup-space-precheck.sh",
+   "sha256": "ef95892f54a2e8ab5ea36f6fbae4cc19215359ebff7d22c13b95b1f4424924a5",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "automation/host/lords-canary-apply.sh",
+   "sha256": "a6dd3f86e265d7be246ddc9235da7ebbbf5a0db7a459135c745ac3a980c60857",
+   "source_commit": "f47b63a76de7409715e22cc2f272b96f0c435de2"
+  },
+  {
+   "path": "automation/host/lords-canary-build.py",
+   "sha256": "34397c8e960e30c8bc22979428e9a320602c99b4b4a1c31a0a8c8f35d2129df0",
+   "source_commit": "f47b63a76de7409715e22cc2f272b96f0c435de2"
+  },
+  {
+   "path": "automation/host/lords-canary-gates.py",
+   "sha256": "b514d84ffc5720dfa6c3dd73accda36b7a942645d896416e7982ff7a8c960c51",
+   "source_commit": "f47b63a76de7409715e22cc2f272b96f0c435de2"
+  },
+  {
+   "path": "automation/host/lords-canary-provenance.py",
+   "sha256": "e8e07139726e00864e255447e50af8e6d4374877b8e5c6984804ae8c81291ebd",
+   "source_commit": "f47b63a76de7409715e22cc2f272b96f0c435de2"
+  },
+  {
+   "path": "automation/host/lords-canary-snapshot.py",
+   "sha256": "3352c191c5f1d019df868760b996399e2fc5c44fe2f254de57ba236cbfb4f023",
+   "source_commit": "f47b63a76de7409715e22cc2f272b96f0c435de2"
+  },
+  {
+   "path": "automation/host/nova-catalog-publish.py",
+   "sha256": "7226ad5a62e870a92cfb46a0ffef8773f79af15b9b44551bf9dce61abaf1160f",
+   "source_commit": "2bb47ded21f2e889f9cdf7cfd77e5835885cfb78"
+  },
+  {
+   "path": "automation/host/nova-daily-refresh.sh",
+   "sha256": "249973fdb1fc038f6efd1bfd465741f81b9d02b632d4fdb24cf492d71b40487c",
+   "source_commit": "2bb47ded21f2e889f9cdf7cfd77e5835885cfb78"
+  },
+  {
+   "path": "automation/host/nova-detail-backfill.py",
+   "sha256": "32a431d8af6ffccb542f3c2d555e3944d2de4cf43a85af7c18fef78f103373b4",
+   "source_commit": "2bb47ded21f2e889f9cdf7cfd77e5835885cfb78"
+  },
+  {
+   "path": "automation/host/nova-details-backfill.py",
+   "sha256": "c023ba8cda871875959743f6d1e60e16818e42221d65a7b7f6d6bc840d34d0e1",
+   "source_commit": "2bb47ded21f2e889f9cdf7cfd77e5835885cfb78"
+  },
+  {
+   "path": "automation/host/site-backup-retention.sh",
+   "sha256": "259bb8c2cce22f2fb4a6a9ecb5978d04d1f71ded2db7b544266160f54a83d90f",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "automation/host/site-factory-backup.sh",
+   "sha256": "63d3b489b69601e078f44c3404253a38c50cbad2dba5d75801814b56f2cf4dad",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "automation/host/site-factory-health.sh",
+   "sha256": "aa9236a04cd101036a4a6c78702af00059fc928a2db2327da395faf9790ea6c6",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "config/analytics.json",
+   "sha256": "55b4d17c959641375e9c049a1c45eab7aaef9bfa8cba8dcd19ab0439762760de",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "config/content-backlog.json",
+   "sha256": "188825d63181a2a479fc0e774503a5befafa5ae1a544bbc6c47f2881b98f8bfb",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "config/data-sources.json",
+   "sha256": "5221fa7653847d05d62227f95bf4ac198ada6398ab9a18c7365ac39025a694fe",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "config/directions/lords.json",
+   "sha256": "a64cef4e54645be3b14c397b5a774858242c93d8f9b2cec3635ef158747ab10e",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "config/editorial-calendar.json",
+   "sha256": "8d22abf2bf51fff5327920442de50eacd4f47c572af144d170784f374d113ac7",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "config/editorial-sources.json",
+   "sha256": "10a1352acb991492312451c0ca1d21841b7c855f349c52bf8e009ce6c33c3551",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "config/experiments.json",
+   "sha256": "ea452dca2415be67d1fcb6945d647889c1dd6f748677b716e53f61ad76c3a4bc",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "config/portfolio.fixture.json",
+   "sha256": "6fbc4a19d4560330a5248b5b1cadfa4bb5399b3893a4be763afdb7cf3b1a40e1",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "config/portfolio.json",
+   "sha256": "58df0677565fef5c7a46d31aed3278b9e44cc0d4a95f50f5bf8df23a022c7415",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "config/secret-hub.json",
+   "sha256": "b939671a990f8adcc3c39164d1ce3b6732cdebd0db891ebac521a45000fa1bb5",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/__init__.py",
+   "sha256": "f089fb79fa8bceb2184c956a525201d257236266dd334587637a09ddf91d557e",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/__main__.py",
+   "sha256": "dd38a3ef7b7e4f0bec26ebde8907f3a4c3dfd2a53f738512563881b5f08e8c6f",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/ads.py",
+   "sha256": "2ebc14e0275cac7ea245245f94a32efc97decad383bf67ad9e6a64c82890f34f",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/analytics/__init__.py",
+   "sha256": "a90e7f12f3c5a87b361e4694d166034d953346b3cc1053270e8e1b711314acf6",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/analytics/cli.py",
+   "sha256": "69c95d593be59afacf9c1fa8507b4508eb4b3c49231aadc07aa11a2c2e064cc8",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/analytics/client_codegen.py",
+   "sha256": "26a07f7defc227b1a77573a994591487a233f2d6d9d85a6a472d4d33a46118c9",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/analytics/credentials.py",
+   "sha256": "c8f7d4ff16075aa0db00bad5d15490664095e8eaa8c0af4c69d9c8679ccaae7a",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/analytics/events.py",
+   "sha256": "a09077c5a3ec13e0326cc13c4df86d2dc0fa039acc1044636c135fd7d8699c33",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/analytics/gate.py",
+   "sha256": "f31f3558490961473ca0f3a7a156aae79d0c2182380cf636890792185544a0d6",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/analytics/registry.py",
+   "sha256": "b6926ace651aad51d480914d6838b9adf48ba62cdde0619ff84dd761d8da0f38",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/analytics/snippet.py",
+   "sha256": "39abfb61deae6759fcb7bf7a6701ee7fca5a1cad60f657f387dd816ae2725fe1",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/analytics/transport.py",
+   "sha256": "eac01f9990f9e601e5ed6ad7fa3c1ded0a9f00e80c467eaf8b5a0a12fec7bcba",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/analytics/yandex.py",
+   "sha256": "5d975a67e827f3f1ec1e11b0159edbe7153ce098c0c0c58bc907937982d28446",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/audit.py",
+   "sha256": "96d6ab9b811646bb5a46a8eeb4965058d498e874f2f805431e4afc36fd58e973",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/blueprint.py",
+   "sha256": "e56665a1f83bf475cff331e39f82befd73aeebb8ebc45fe70c0a10c6a49dde92",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/build.py",
+   "sha256": "46c293c46025ba35e1dc59e181407fa5464fd873f850890218a4770207afc0bd",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/cli.py",
+   "sha256": "a52c86f8b7a95b25f18cfbd4dd7d680259a35082fb20119f161be6fa2d002a3e",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/contracts/__init__.py",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/contracts/fixtures.py",
+   "sha256": "3e6d8e8fdb14e62d2ff9a61bc986dc5bd927ada31ed1987f692b6b7c5e05e5fc",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/contracts/mock_server.py",
+   "sha256": "08b98abd4c4aa406b1f08287adb737ab3f29578299f7a63b8a736de9faed99a3",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/contracts/provider_conformance.py",
+   "sha256": "efb3186aafd8a1fa37308197243a02d63234500e4b2dfc468b0c2e14f0001711",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/contracts/schema_compat.py",
+   "sha256": "c43eb468c78d9cdf161928bfbbfb9eb1c7b2f0926cc0d859fbd8ee42b5b221de",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/contracts/template_boundary.py",
+   "sha256": "24ceb00c24757aedaff224c07dffe181edbb3b644e8c01a5e45d1fce8fc73825",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/database.py",
+   "sha256": "f322408035a120dfec4029270055aa78788099b6e7986e14569691a52fa12855",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/errors.py",
+   "sha256": "9f8ca8daf564f4fc16639a3b94a319c02d8a977aedd6dd8d9110dc7d684594da",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/input_request.py",
+   "sha256": "df84ce49486172d33d22a2ab8382e504609ab0e39c4b7574d085475ac385ed0e",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/inventory.py",
+   "sha256": "63018037e10d96b65b85304c3f0328e1519250548bc5288ba677abf6aacf7a75",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/knowledge.py",
+   "sha256": "2abd8c217fac5baf59494f7ed3cdae7acaceaca5fa8221119cc43edda5f4c667",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/licensing.py",
+   "sha256": "cb25bb55c45a08a4c6ee31110201c95a69189c218a211eaf208fbaa473b074e4",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/locks.py",
+   "sha256": "1196e0c889859352f2cc8dba4491a1e4800f134175a4eb3bc53c55c56e8d813b",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/__init__.py",
+   "sha256": "cf797dc44fa5d5988c484ef79413cfecf54002d8fdb3ba3302d3e6a68c4a020d",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/bundle.py",
+   "sha256": "7a1df40f50730723ca829fb6690181ccfe95be9ea293d036dace192b0d806b04",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/content_api.py",
+   "sha256": "4fe4d28d70b66cb82fd4bda4a0afb684e2c4972fad7a6b300e8790c67078b77a",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/content_live.py",
+   "sha256": "24b502f6f6e80c3da75a1e19ddd9335234217b5dd306a3d35cddd50548140788",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/content_types.py",
+   "sha256": "8177c15b1c6beb5b1240162281a91c66fce9c457a3df5890621bd327268a8e8d",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/detail_enrichment.py",
+   "sha256": "e3d2e9ba2e01f0b9c17b732fedff68a584babc3f96a495517d20b2d2671a294d",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/fixtures.py",
+   "sha256": "3c29af2ac9963a7f66fc2e0a50088cbc915647f53393365895e1437ab573c409",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/gate.py",
+   "sha256": "405c00a10b421431116cd5ebfd29c64888ba13228a98fddfcedd8cbed206325b",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/gates.py",
+   "sha256": "e15e18dd6ab6ccde9b15534ec4ebca73ea71bc2b0255d3d3a644c19a3bd6cd42",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/icons.py",
+   "sha256": "f8101b3f43dd248889c4aaad27c9f8394f49ff042bc87f98f6bb095adca7de75",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/live_build.py",
+   "sha256": "673f4501b3f2c98c23bbb581e3079fb5fe24c9ebfae0018020fdf6df7a645f5c",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/live_bundle.py",
+   "sha256": "219f7838ad9d4762d204bba499ce2d94d9a7f228f15602e3f89b6804053b1bcb",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/live_catalog.py",
+   "sha256": "2207cfa0f5e125e2026e1dec0b40b0f0c9fa9933afa19af5fc06b4096dfe12c4",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/live_site.py",
+   "sha256": "89d90923c25b32425066364186cc7759fc4657b9cee54148701ea984b827bdfd",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/nginx_check.py",
+   "sha256": "ef7335e78a109a077d58410340d3e419cd46bcaeb9e69602e602f573966432a1",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/plan.py",
+   "sha256": "eaf4048b58ec426041ac5ce13245a6ffe36b193d02afe154f2ad267d3e6699b2",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/playability.py",
+   "sha256": "19f7570424a2733aca592d06b3a9e08443ff5a7c344856e2dc8e9514f10a18db",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/player.py",
+   "sha256": "01bf4ec540121bdbfcc914e7a46d6479e89cdc22c22cd5c0316ba51274819b84",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/preview.py",
+   "sha256": "ad3330b0abb2c510acb7b7ea26816a25956076d60fd6c373bdef7c88419cc829",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/recommend.py",
+   "sha256": "e2b564fa88afa85f69e35128ca63026925e6c33134d245c244dde65645196647",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/render.py",
+   "sha256": "26bcf114d1f236afe0daa88c0a8a686b4f7ffcd9e2656bc4f30ece6f1450aff3",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/serve.py",
+   "sha256": "878a34fed8e0586a4ccb9e867513b351a5ca49ba570e827c87268626a2e527c1",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/staging.py",
+   "sha256": "34ba7c509fd72baa3e9eedc1497a01e22abf83f391b09ec4abbd5d433c469ce7",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/lords/theme.py",
+   "sha256": "d8e0bf003c5e89edad37802f95fd9ffb7c542d6d539feb002a407fd8ed6d086b",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/paths.py",
+   "sha256": "84bd6ef36a8a62baac20f028c1509d050b5dbda37e6bab96792906dc4b2f3314",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/pipeline.py",
+   "sha256": "2ef3c5d300137e299d295a41750526bfa77ceae25f4a6cb162c87c10732a0752",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/portfolio.py",
+   "sha256": "6e4575aaeda6392ca6be2fe8fb6c269f182809aba2463cbd3581d47b19d90dc2",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/queue.py",
+   "sha256": "33a82b001a81ed9dad7ba896e5f7612e279551709644a8d65c706bc62e4bb9e0",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/recs/__init__.py",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/recs/cli.py",
+   "sha256": "0dc333c61caee88c866f37007aefaf623f68532b45896195f54999739c921b21",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/recs/editorial.py",
+   "sha256": "da746f4fa2cae1d724c7f6e52fc6ddb0913caa02c28e85d3a5a16770a9bd2230",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/recs/events.py",
+   "sha256": "22df10202e03efeb2b5a17d45c0363774cf6bc1a990a6edb4e9ab4fb444f12b0",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/recs/model.py",
+   "sha256": "19df190b9954e65641378d37d664da0f962fcf5f0c35a6be644ee843ec2d1342",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/recs/ranker.py",
+   "sha256": "04140c004917a5738e4f29272800030babd6c7d2d7fadf8f46fad3d969b5f412",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/recs/shelves.py",
+   "sha256": "3885069e1c30e279d892e3767586ff446477cf129294aa4fe67de8eec88ce4c1",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/recs/store.py",
+   "sha256": "4ec5913acfdaa21c640c36af15f59f81fabc59465e01c17744ee9e27c1dd0ece",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/redaction.py",
+   "sha256": "cf2920cedfb2dc3d000f6da41811b2fae70dbf91e80e5531a67d1900b4c86cee",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/reference.py",
+   "sha256": "c1ca90f325d78c68d16adf3e45f8949dd4fbfe7682d3cdf5c9f2b5aa3d2c70bd",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/render.py",
+   "sha256": "6a7514ce0cde0abf88da4a34e6fe78f547b4e812741cefe29530ec66c8a5d614",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/report.py",
+   "sha256": "df9f71a67602f14d62cdc17a94fda81480d4e7ca2bf1fd7ef0719473929a3e4c",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/retry.py",
+   "sha256": "4b008c3ef960e14cc964a714c216b41eb37e3f7ee1f47661dca9ff1c844ac0a6",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/secret_hub/__init__.py",
+   "sha256": "24e44139588a2f0e972b0b55ba2debecc59a3b54cb93b202ea9abb131b8f3e5e",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/secret_hub/__main__.py",
+   "sha256": "09ef1d269c9c2de7cd67053095e6dbcf051e655b8b2e96305cbe0cc989fdc7ec",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/secret_hub/cli.py",
+   "sha256": "66c16aeaf1bb783f80c31261a82ec994392a10650a8fc46ff1d9eecee2cd81f8",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/secret_hub/consumers.py",
+   "sha256": "e3fab16b3a9116a41d34aef522b8e2712554f43c9ef660a022ce2e05a789ab4b",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/secret_hub/crypto.py",
+   "sha256": "769dc242148432785d46c44d4088680c41c0c0a68046743db2d683ef9d1b9300",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/secret_hub/migrate.py",
+   "sha256": "0c928b4f93fcfadaf12f1612bd74630c51085e109846aca1904c04c88020e05f",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/secret_hub/panel/__init__.py",
+   "sha256": "8297def0393bb48b49f6f545328ec3d382e927b8488cc3eeea75bdff61c20fd0",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/secret_hub/panel/__main__.py",
+   "sha256": "a9f2d6d992681b609b1b5dce5d90df74537b1af41a6d2117f66b1479128ca1a6",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/secret_hub/panel/auth.py",
+   "sha256": "c1b5d407f60eb184514397a5311b6dd384c38bd298ca65a3b9bbd0b9e7434d93",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/secret_hub/panel/server.py",
+   "sha256": "799992fef60e2a8d21d397a5d60f06d6bed540a659eaf1554726ad8ca1fa3697",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/secret_hub/panel/store.py",
+   "sha256": "37d9b38c3dd5c9b83ac0306890660fa614f3cae4cee8e53deb4251c6869b0946",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/secret_hub/panel/ui.py",
+   "sha256": "bc6a69c19634cff250aef8d0b97f16786e85acab392cb26dd349ec15600c498a",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/secret_hub/provider.py",
+   "sha256": "b59aa81a10849a95a19895afb55d850b1bd757ae0fd95013a0001fdaca1f2c71",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/secret_hub/publish.py",
+   "sha256": "56cea38742e903b95f0478b9d08e6efeadf22dabdb63c251fbccc8176767ea07",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/secret_hub/reconcile.py",
+   "sha256": "b054457c765bdab7d016a902a78b481a1ef0ad3e3c947ad0e3e95890b9df4bc7",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/secret_hub/registry.py",
+   "sha256": "133b076b3686cb4116daa16a5e5ae56d0fa9df2c03fb599c205db5414b6fe9f3",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/secret_hub/rootcmd.py",
+   "sha256": "fb7709d1f54c5fad07582d8f1f90ec57ea2f244c34384c50764560067eedb26c",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/secret_hub/service.py",
+   "sha256": "c551377af1daa6541b49d8f489305c9f453f500c68aad860ad1dbc5b277a0ab0",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/secret_hub/store.py",
+   "sha256": "4e8a64811afd334ebd711a93bd0860ade293e6c1cd5d7a3f545b4d6abb4e5b21",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/seo/__init__.py",
+   "sha256": "788f3a1b6ca69ab002bf404771eaf8054aa55bd24e0d3b38d2a135033b81f3c3",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/seo/crawl.py",
+   "sha256": "cdf86e36d2617bf73ac1c3e52306d6b83f73a671a307227649003c0dd4f21c89",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/seo/lint.py",
+   "sha256": "f4f36440c11ee187c356d15f4ea8cab004ebf9c3e9487559183fdbd264d9fb1a",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/seo/matrix.py",
+   "sha256": "b38e7be8a257dac9aaa6d18eb13ae56103c17816148644f76dbd07bd855092a6",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/seo/model.py",
+   "sha256": "0230006ed9e659cb014349da6fb5d0f663dc4f168e6227d26c2e5012ddce0fff",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/seo/preview.py",
+   "sha256": "04574de441dc3acfcd8aec586a30ba03bb86b57d1fe02ac07593389f976a27fb",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/seo/provenance.py",
+   "sha256": "2403fae0e77e22f11333c5198bd1be8099d5528b5c3421594c8e29d47af5fddf",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/seo/render_check.py",
+   "sha256": "1978501550874a9677090fc44bef01744bee174a3a8f9f0ca4ab5a067568cdff",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/seo/report.py",
+   "sha256": "115057f276d81e7280c0d58a1e2edf8a0242bd744d7ee8d1fd80fc73e5647e50",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/seo/uniqueness.py",
+   "sha256": "b80314a9792ab848b12c058924dabe4210ef9da4368e079d4ea53e37e698b626",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/seo/validate.py",
+   "sha256": "43ea315acec361adce45ffebf42ae88ac3f12ca8d4234bdfe7b2f455c8030d11",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/state.py",
+   "sha256": "57d519079e81ac79a720e3a045edd9bc884022aff29149dcc36b344be6cced4f",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/targets/__init__.py",
+   "sha256": "33fb32260f1d4bf73c7055962ee109f1cac7afe7bb318bfa47522d7345ba3271",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/targets/base.py",
+   "sha256": "0c968289d7732f1f9f064c16f5e48c605a9fd504f321e7fbe165775ae2c0e62f",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/targets/local_disposable.py",
+   "sha256": "456680c77278a53a3b9400fc4c9fc26057c4d60038a726ec8001788beb4e7882",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/targets/payload_multisite.py",
+   "sha256": "1f3d0101ed023ae4a19c4d2f8c7b219aeb2a47464b955043c275c32f3e60b2d2",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/targets/ssh_ansible.py",
+   "sha256": "dd389751660a809fcd9ebda1613bc49d2fc8af43be9c1af53100d56e53813435",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/topvisor/__init__.py",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/topvisor/cli.py",
+   "sha256": "8b44c96aff38ff4c40619e9bda4e20ba6468a166f471c082dd38eb7367fa8764",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/topvisor/client.py",
+   "sha256": "348ed31fdc36356f09a8c0c885d54fc5bbaf369ed1299d42b960594812653e73",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/topvisor/credentials.py",
+   "sha256": "121e897ebae55a1491a849b7858d3e5a475c12c4247afd08b2489e40118f1698",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/topvisor/enroll.py",
+   "sha256": "32958e292f044409107fed4edc011f4edebe8620fb9ea5f4d5d39c206e154ea0",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/topvisor/manifest.py",
+   "sha256": "ab48b13684cef520ab6711f556a255bef4c0740ad3e6908c5346cc1edd1ad626",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/topvisor/plan.py",
+   "sha256": "2512569d857a9af89e28c742951247f4ae2cec547f399817e10c0f43d75a321e",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/validation.py",
+   "sha256": "55ad7f2f0534b7968a68279fcf896171f27a5fccc42cd5e32d9a7fc7b0b5a763",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/verify.py",
+   "sha256": "302a73ed6a6b5bf46a44887c8680d3a3eaec0da8e24d9ded8a4468e2bd50ee17",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "factory/vk.py",
+   "sha256": "b98f2d414871724e4f7c9a03fe288d7deb8c07d4ae5525acd43bb601f4af40f7",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "inventory/README.md",
+   "sha256": "212ca80641d4deb57226776f0d5e5a83e1c6c4314de79d767d3febe7e5dd01c4",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "inventory/dle-distributions.yaml",
+   "sha256": "2127382555acf3db20fe73bcd2c2fd7eb5f154af48771980a17a2a6c58cf4832",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "inventory/dle-licenses.yaml",
+   "sha256": "cab7310c55bf9d6481b85531d33c51fecac86d2dd91e97eb2716b7f3bb2e2d7e",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "inventory/dns-zones.yaml",
+   "sha256": "19a23cb56490da3e121db8b2329fd15437bd96c5958d9e8c29bc7323acb3366f",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "inventory/network-allowlist.yaml",
+   "sha256": "ec212905794850312bd5f3a2a55575d7773487a77fab53623673ad6be5ecf2df",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "inventory/portfolios.yaml",
+   "sha256": "6a6f768f826fa2cca05c7a8775e00e13aaaa5d1f9c9ddf58fb8557fe88b5c689",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "inventory/public-suffixes.yaml",
+   "sha256": "b9429f2802a6ddd3d688823bea09bb15f05ead4e67622ccaf54fe26450497168",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "inventory/reference-sources.yaml",
+   "sha256": "82c90b8df4ec03678fa4ae5f4b92c44f616d18787578895fbecc97991b240eab",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "inventory/ssh-hosts.yaml",
+   "sha256": "4d68e3eab38be6309a8f95b49c911172c2049cf4d643e8a9ccd6f2423b0aae8a",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "inventory/targets.yaml",
+   "sha256": "326565fc505ece67634840110edf70d7abc6bcf1a16dc30e8adedba54ca71c81",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "pyproject.toml",
+   "sha256": "e9f6c712323907586cdbfea96f5bab9fbb878caebf43a34e422bd61f12dcb51d",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "requirements.txt",
+   "sha256": "0fcb4262346ad1f79bf3485bb4ca087aa1cc3151ec36345f762e48d4837c040c",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "schemas/analytics-registry.schema.json",
+   "sha256": "ceb48f5d2a66327287fe30f30942d4d8804278e6f8df9cd7e2764a52452c66c7",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "schemas/content-backlog.schema.json",
+   "sha256": "f96e8066d66c0ddca10ff76fa68fa45e103a2bbba59f6f0bded0b92bfb3f2784",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "schemas/data-source-registry.schema.json",
+   "sha256": "5ead40ed4e0639eca968cb7083ca92683b5b8e368c4ac3bf9762b3a72b2848d1",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "schemas/editorial-calendar.schema.json",
+   "sha256": "129eeaa5d68fb31e0cf5115449b4bd0c33fb8c3ee40b20bab762b1ff6b9c528b",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "schemas/editorial-sources.schema.json",
+   "sha256": "94e092be752480443b79ec0a421d3a57f535819e62c2a7500695de28df8f190c",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "schemas/experiment-registry.schema.json",
+   "sha256": "cfb79816dfbcf72928ecc7e9c272ca55074d43b3ddaec5f51cc2f54142ff5d66",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "schemas/job-result.schema.json",
+   "sha256": "fbd40ea35d351883a5ec9ff8dea5f1568a629034495c2a9fa95583f16e3f45c9",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "schemas/keyword-plan.schema.json",
+   "sha256": "9a3945bf1d106296f45823db8b5588ecc8234918904c4ae663a8d4ed323c097d",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "schemas/page-metadata.schema.json",
+   "sha256": "2b27550e6b2ebc83ddd7c73b0e60ee3a1773279017873f049f354b5c590cb747",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "schemas/portfolio-registry.schema.json",
+   "sha256": "f2064c59593003de4e498e8c974614ef29959079927149aba21cb8a1eab1ffd8",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "schemas/secret-hub.schema.json",
+   "sha256": "1201c51f511b2c1414e22c42d9055d2602276ff08d62890cb9511c9519f57d7e",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "schemas/seo-audit.schema.json",
+   "sha256": "f42eaf6ce027121f2df9809cb29e973f862f19164d677157ad98d7f670818a57",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "schemas/site-matrix.schema.json",
+   "sha256": "28b04f5e046d2cefe52c54b4a6fb5faaf053ba5c6cc4b8fa3d1d5a9be415a580",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "schemas/site-package.schema.json",
+   "sha256": "caa75fa94fbb85368a144b8798476e871c5ace147aed639daeb85fc0fc6f2d3c",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  },
+  {
+   "path": "tests/tools/restore_proof.py",
+   "sha256": "d521cb6193a8677f2af080216eaeef1f76f01336f0c06ce76c1dc4220cba0911",
+   "source_commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e"
+  }
+ ]
+}

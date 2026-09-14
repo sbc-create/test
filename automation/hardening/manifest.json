@@ -1,0 +1,227 @@
+{
+  "schema_version": 2,
+  "note": "Единственный источник истины для сборки закреплённого рантайма, установщика и аудита. Значений секретов здесь нет и быть не может: перечислены только пути, коммиты и имена unit'ов.",
+
+  "root_cause": "Код, который исполняет root, резолвится через /srv/site-factory (владелец claude) или /home/claude: как ExecStart, как PYTHONPATH, как WorkingDirectory или как интерпретатор. Владение каталогом достаточно: даже при режиме 0755 владелец переименует подкаталог и подставит свой. Поэтому закреплять релиз ВНУТРИ /srv/site-factory бессмысленно — что и произошло с lords-tooling: ExecStart там указывает на неизменяемый релиз, но его родительский каталог принадлежит агенту.",
+
+  "release": {
+    "pinned_root": "/opt/site-factory/runtime",
+    "current_link": "/opt/site-factory/runtime/current",
+    "relocated_root": "/opt/site-factory/runtime/relocated",
+    "staging_root": "/root/site-factory-hardening",
+    "backup_root": "/var/backups/site-factory-hardening",
+    "bundle_name": "site-factory-pinned-runtime.tar.gz",
+    "owner": "root",
+    "group": "root",
+    "directory_mode": "0755",
+    "file_mode": "0644",
+    "executable_mode": "0755",
+    "note": "/opt принадлежит root на всём пути. Это и есть единственное требование к месту: закрепление имеет смысл только там, где ни один родитель не принадлежит агенту."
+  },
+
+  "pinned_path_env": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+  "pinned_path_note": "PATH задаётся явно в каждом drop-in'е. Шебанги скриптов — `#!/usr/bin/env bash`, интерпретатор ищется по PATH. Байты скриптов не переписываются: правка шебанга разошлась бы с коммитом-источником и сломала бы проверку провенанса. Фиксируется сам PATH — все перечисленные каталоги принадлежат root.",
+
+  "sources": [
+    {
+      "commit": "6fcd33701aefd3e83e36aafdedf0873ec4647a4e",
+      "ref": "claude/templates-secret-hub-cloud-access-006",
+      "note": "Ветка этой задачи: пакет factory, автоматизация host, restore_proof, конфигурация и схемы.",
+      "paths": [
+        "factory",
+        "config",
+        "schemas",
+        "inventory",
+        "requirements.txt",
+        "pyproject.toml",
+        "automation/host/site-factory-health.sh",
+        "automation/host/site-factory-backup.sh",
+        "automation/host/backup-space-precheck.sh",
+        "automation/host/backup-retention.sh",
+        "automation/host/site-backup-retention.sh",
+        "tests/tools/restore_proof.py"
+      ]
+    },
+    {
+      "commit": "2bb47de",
+      "note": "Суточное пополнение каталога Nova. В ветке этой задачи файлов нет; рабочая копия на хосте совпадает с этим коммитом байт в байт — сверено sha256 до сборки.",
+      "verify_host_copies": {
+        "automation/host/nova-daily-refresh.sh": "/srv/site-factory/repo/automation/host/nova-daily-refresh.sh"
+      },
+      "paths": [
+        "automation/host/nova-daily-refresh.sh",
+        "automation/host/nova-catalog-publish.py",
+        "automation/host/nova-detail-backfill.py",
+        "automation/host/nova-details-backfill.py"
+      ]
+    },
+    {
+      "commit": "f47b63a",
+      "note": "Канареечная выкладка Lords. ВНИМАНИЕ: рабочая копия на хосте (/home/claude/wt-release-03) с этим коммитом НЕ совпадает — там незакоммиченная правка чужой сессии. Закрепляется проверенная версия из коммита. Закреплять непроверенные байты означало бы оставить root на коде, который никто не смотрел; расхождение вынесено в отчёт владельцу.",
+      "paths": [
+        "automation/host/lords-canary-apply.sh",
+        "automation/host/lords-canary-provenance.py",
+        "automation/host/lords-canary-snapshot.py",
+        "automation/host/lords-canary-build.py",
+        "automation/host/lords-canary-gates.py"
+      ]
+    }
+  ],
+
+  "venv": {
+    "path_suffix": "venv",
+    "requirements": "requirements.txt",
+    "required_modules": ["yaml", "jsonschema", "cryptography", "webauthn"],
+    "note": "Интерпретатор строится установщиком внутрь закреплённого каталога и принадлежит root. Тихий откат на системный python3 запрещён: это способ объявить службу настроенной и упасть на ImportError (рассуждение — automation/secret-hub/bootstrap-venv.sh)."
+  },
+
+  "relocate": [
+    {
+      "id": "lords-tooling-0b0722f3",
+      "from": "/srv/site-factory/lords-tooling/releases/0b0722f3705c519444b82473d95f6b5734f0128e",
+      "note": "Существующий закреплённый релиз переносится КАК ЕСТЬ, байт в байт, под root-owned родитель. Поведение не меняется — меняется только владелец пути. Пересборка из другого коммита здесь была бы подменой версии боевого конвейера каталога под видом починки прав."
+    },
+    {
+      "id": "lords-tooling-41031da0",
+      "from": "/srv/site-factory/lords-tooling/releases/41031da02cb7d3ca1fb30c0bdfeca6fe4b4e21c1",
+      "note": "То же для рендера витрин."
+    },
+    {
+      "id": "content-pipeline",
+      "from": "/srv/site-factory/content-pipeline",
+      "note": "Конвейер каталога Nova. Кода нет ни в одном отсмотренном коммите, поэтому он переносится как есть с записью sha256 каждого файла: перенос прав — не повод подменять содержимое."
+    }
+  ],
+
+  "units": [
+    {
+      "unit": "site-factory-secret-hub.service",
+      "tier": 1,
+      "holds_credentials": true,
+      "vector": "PYTHONPATH и WorkingDirectory ведут в /srv/site-factory/repo",
+      "severity": "критическая: root-процесс с мастер-ключом импортирует factory из каталога, которым владеет агент",
+      "environment": {
+        "PYTHONPATH": "{bundle}",
+        "SECRET_HUB_CONFIG": "{bundle}/config/secret-hub.json"
+      },
+      "working_directory": "{bundle}",
+      "note": "ExecStart и интерпретатор уже root-owned; менять их не нужно. Достаточно увести импорт и рабочий каталог в закреплённый bundle. SECRET_HUB_CONFIG переезжает вместе с кодом: реестр направлений — тоже вход, влияющий на то, куда пишутся секреты."
+    },
+    {
+      "unit": "site-factory-secret-hub-import@.service",
+      "tier": 1,
+      "holds_credentials": true,
+      "vector": "PYTHONPATH и WorkingDirectory ведут в /srv/site-factory/repo",
+      "environment": {
+        "PYTHONPATH": "{bundle}",
+        "SECRET_HUB_CONFIG": "{bundle}/config/secret-hub.json"
+      },
+      "working_directory": "{bundle}"
+    },
+    {
+      "unit": "nova-daily-refresh.service",
+      "tier": 1,
+      "holds_credentials": true,
+      "vector": "ExecStart, NOVA_TOOLS и WorkingDirectory ведут в /srv/site-factory/repo",
+      "exec_start": "{bundle}/automation/host/nova-daily-refresh.sh",
+      "working_directory": "{bundle}",
+      "environment": {
+        "NOVA_TOOLS": "{bundle}/automation/host",
+        "FACTORY_PYTHON": "{venv}/bin/python",
+        "FACTORY_REPO": "/srv/site-factory/repo",
+        "PYTHONPATH": "{bundle}"
+      },
+      "note": "FACTORY_REPO намеренно остаётся рабочей копией: это путь к ДАННЫМ (var, artifacts, каталоги витрин). Код приходит только из {bundle}."
+    },
+    {
+      "unit": "lords-content-refresh.service",
+      "tier": 1,
+      "holds_credentials": true,
+      "vector": "FACTORY_PYTHON и WorkingDirectory ведут в /srv/site-factory/repo; ExecStart закреплён, но его родитель принадлежит агенту",
+      "exec_start": "{relocated}/lords-tooling-0b0722f3/automation/host/lords-content-refresh.sh",
+      "working_directory": "{relocated}/lords-tooling-0b0722f3",
+      "environment": {
+        "FACTORY_PYTHON": "{venv}/bin/python",
+        "FACTORY_REPO": "{relocated}/lords-tooling-0b0722f3",
+        "LORDS_ARTIFACT_ROOT": "/srv/lords/.artifacts"
+      },
+      "note": "Версия конвейера не меняется: те же байты под root-owned родителем."
+    },
+    {
+      "unit": "lords-site-render@.service",
+      "tier": 1,
+      "holds_credentials": true,
+      "vector": "WorkingDirectory и аргумент-скрипт ведут в /srv/site-factory",
+      "exec_start": "/bin/bash {relocated}/lords-tooling-41031da0/automation/host/lords-content-refresh.sh",
+      "working_directory": "{relocated}/lords-tooling-41031da0",
+      "environment": {
+        "FACTORY_PYTHON": "{venv}/bin/python"
+      }
+    },
+    {
+      "unit": "lords-canary-switch@.service",
+      "tier": 1,
+      "holds_credentials": false,
+      "vector": "ExecStart, FACTORY_PYTHON и WorkingDirectory ведут в /home/claude/wt-release-03",
+      "exec_start": "{bundle}/automation/host/lords-canary-apply.sh switch %i",
+      "working_directory": "{bundle}",
+      "environment": {
+        "FACTORY_PYTHON": "{venv}/bin/python",
+        "PYTHONPATH": "{bundle}",
+        "LORDS_CANARY_STAGING": "/srv/lords/.canary-staging"
+      },
+      "note": "Каталог подготовки уведён из рабочей копии чужой сессии в /srv/lords, который уже перечислен в ReadWritePaths этого юнита. Это путь к данным, но зависимость службы от чужого worktree всё равно лишняя: он может исчезнуть или сменить ветку под работающей службой."
+    },
+    {
+      "unit": "site-factory-health.service",
+      "tier": 1,
+      "holds_credentials": false,
+      "vector": "ExecStart ведёт в /srv/site-factory/repo",
+      "exec_start": "{bundle}/automation/host/site-factory-health.sh",
+      "working_directory": "{bundle}"
+    },
+    {
+      "unit": "site-factory-backup.service",
+      "tier": 1,
+      "holds_credentials": false,
+      "vector": "ExecStart ведёт в /srv/site-factory/repo",
+      "exec_start": "{bundle}/automation/host/site-factory-backup.sh",
+      "working_directory": "{bundle}",
+      "environment": {
+        "FACTORY_REPO": "/srv/site-factory/repo"
+      },
+      "note": "Соседи (backup-space-precheck, backup-retention) резолвятся через dirname \"$0\" и приезжают из закреплённого каталога. FACTORY_REPO — путь к данным: бэкап обязан копировать живую рабочую копию, а не самого себя."
+    },
+    {
+      "unit": "site-factory-restore-proof.service",
+      "tier": 1,
+      "holds_credentials": false,
+      "vector": "интерпретатор /srv/site-factory/repo/.venv — символическая ссылка в /home/claude/work-test/.venv",
+      "exec_start": "{venv}/bin/python {bundle}/tests/tools/restore_proof.py",
+      "working_directory": "{bundle}",
+      "environment": {
+        "PYTHONPATH": "{bundle}",
+        "FACTORY_ROOT": "/srv/site-factory/repo"
+      },
+      "note": "Подменялся не скрипт, а интерпретатор. Файл вычисляет ROOT = parents[2] и импортирует factory, поэтому пакет обязан приехать закреплённым вместе с ним."
+    },
+    {
+      "unit": "nova-catalog-refresh.service",
+      "tier": 1,
+      "holds_credentials": false,
+      "vector": "WorkingDirectory и аргумент-скрипт ведут в /srv/site-factory/content-pipeline",
+      "exec_start": "/usr/bin/python3 {relocated}/content-pipeline/refresh.py",
+      "working_directory": "{relocated}/content-pipeline"
+    }
+  ],
+
+  "out_of_scope": {
+    "note": "Затронуты тем же дефектом, но принадлежат другому продукту (Yami). Правятся тем же способом и теми, кто ими владеет: менять чужой продукт в транзакции про Secret Hub — расширение, которого никто не согласовывал.",
+    "units": [
+      "yummy-enrich.service",
+      "yummy-episode-watcher.service",
+      "yummy-watchdog.service"
+    ],
+    "vector": "WorkingDirectory и аргумент-скрипт ведут в /srv/site-factory"
+  }
+}
