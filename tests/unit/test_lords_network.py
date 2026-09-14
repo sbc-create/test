@@ -45,8 +45,21 @@ def _fixture_plan(package: dict) -> lords_plan.SitePlan:
 # Реестр направлений
 # --------------------------------------------------------------------------
 class TestPortfolioRegistry:
-    def test_three_directions_are_declared(self):
-        assert set(portfolio_registry.load()) == {"amedia", "yami", "lords"}
+    def test_every_declared_direction_is_loaded(self):
+        """Реестр читается целиком: без потерь и без добавлений.
+
+        Перечень имён здесь не зашит. Направления объявляются реестром и растут
+        вместе с портфелем, а зашитый список пришлось бы править при каждом
+        добавлении — и он молча разошёлся бы с файлом, который призван
+        стеречь. Сверка идёт с самим файлом: и пропавшее направление, и лишнее
+        провалят проверку.
+        """
+        import yaml
+        declared = yaml.safe_load(
+            portfolio_registry.registry_path().read_text(encoding="utf-8"))
+        expected = {item["id"] for item in declared["portfolios"]}
+        assert set(portfolio_registry.load()) == expected
+        assert expected >= {"amedia", "yami", "lords", "zona", "animedia"}
 
     def test_each_direction_has_its_own_secret_scope(self):
         scopes = [p.secret_scope for p in portfolio_registry.load().values()]
