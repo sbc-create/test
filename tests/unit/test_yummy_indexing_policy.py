@@ -74,7 +74,7 @@ class TestПолитикаПоДомену:
 
     def test_по_умолчанию_открыт_ровно_один_домен(self, monkeypatch):
         м = _загрузить(monkeypatch, YUMMY_VARIANT_DOMAIN="yummyani.site")
-        assert м.ОТКРЫТЫЕ_ДОМЕНЫ == frozenset({"yummyani.site"}), (
+        assert sorted(м.ОТКРЫТЫЕ_ДОМЕНЫ) == ["yummyani.site"], (
             "список открытых доменов по умолчанию должен содержать один адрес")
 
     def test_список_задаётся_окружением(self, monkeypatch):
