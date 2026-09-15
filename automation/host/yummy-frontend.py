@@ -166,6 +166,24 @@ def _рядом(имя: str, модуль: str):
 БАЗА_ЧТЕНИЯ = os.environ.get("YUMMY_READMODEL",
                              "/srv/lords/.frontend/yummy-readmodel.sqlite3")
 ВАРИАНТ_ДОМЕНА = os.environ.get("YUMMY_VARIANT_DOMAIN", "yummyani.site")
+
+#: Домены, открытые для индексации. Решение принимается по домену варианта.
+#
+#: Раньше витрина закрывала индексацию безусловно: `X-Robots-Tag` на каждом
+#: ответе и `Disallow: /` в `robots.txt`. Для стенда это верно, но yummyani.site
+#: — основной продвигаемый домен владельца, и глобальный запрет на слое витрины
+#: перекрывал верное решение приложения. Обратная ошибка тише и опаснее: сайт
+#: месяцами не индексируется, а внешне отвечает 200.
+#
+#: Список задаётся переменной окружения, поэтому политика меняется юнитом, а не
+#: правкой кода. Значение по умолчанию открывает ровно один домен: yummyani.org
+#: и yummyani.biz получают другой YUMMY_VARIANT_DOMAIN и остаются закрытыми.
+ОТКРЫТЫЕ_ДОМЕНЫ = frozenset(
+    д.strip() for д in os.environ.get(
+        "YUMMY_INDEXABLE_DOMAINS", "yummyani.site").split(",") if д.strip())
+
+#: Открыт ли индексации домен этого процесса.
+ИНДЕКСИРУЕТСЯ = ВАРИАНТ_ДОМЕНА in ОТКРЫТЫЕ_ДОМЕНЫ
 НА_СТРАНИЦЕ = 60
 
 # Оформление и разделы — свои у каждого семейства.
@@ -464,7 +482,15 @@ class Обработчик(BaseHTTPRequestHandler):
         for имя, значение in (ещё or []):
             self.send_header(имя, значение)
         self.send_header("Content-Length", str(len(тело)))
-        self.send_header("X-Robots-Tag", "noindex, nofollow")
+        # На открытом домене заголовок не отправляется вовсе.
+        #
+        # Здесь нет ветки `index, follow`: при конфликте директив побеждает
+        # самая строгая, поэтому глобальный `index` на слое витрины перекрыл бы
+        # `noindex`, который приложение осознанно ставит на /search, /admin,
+        # /dev и технические дубли. Отсутствие заголовка оставляет решение
+        # приложению — по маршруту, а не по всему домену.
+        if not ИНДЕКСИРУЕТСЯ:
+            self.send_header("X-Robots-Tag", "noindex, nofollow")
         self.send_header("X-Site-Factory-Template-Revision", МАНИФЕСТ["source_commit"])
         self.send_header("X-Site-Factory-Template", ШАБЛОН_СЕМЕЙСТВА)
         self.send_header("X-Site-Factory-Core", ЯДРО)
@@ -527,8 +553,14 @@ class Обработчик(BaseHTTPRequestHandler):
                             "core": ЯДРО, "family": СЕМЕЙСТВО, "profile": ПРОФИЛЬ,
                             "revision": РЕВИЗИЯ, "display": "standalone"}, ensure_ascii=False)
             return self._отдать(м.encode(), "application/manifest+json")
-        if путь == "/robots.txt":
+        if путь == "/robots.txt" and not ИНДЕКСИРУЕТСЯ:
             return self._отдать(b"User-agent: *\nDisallow: /\n", "text/plain; charset=utf-8")
+        # На открытом домене /robots.txt не перехватывается.
+        #
+        # Свой ответ пришлось бы держать в синхроне с приложением, а он уже
+        # знает и точечные запреты (/search, /admin, /dev, /catalog/random), и
+        # адрес карты сайта. Второй список разошёлся бы с первым молча, поэтому
+        # запрос уходит приложению вместе с остальными.
 
         # Единый renderer семейства: страницы рисует приложение YummyAnime.
         #
