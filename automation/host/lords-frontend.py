@@ -1125,7 +1125,10 @@ font-family:system-ui,sans-serif;color:#cfd8e2}
 background:@ALT@;padding:12px 16px;font-family:system-ui,sans-serif}
 .zsea__h b{font-size:15px}
 .zsea__h span{font-size:13px;color:@DIM@}
-.zeps{display:flex;flex-wrap:wrap;gap:6px;padding:14px 16px}
+/* То же ограничение высоты, что и у animedia: длинный сериал не должен
+   растягивать страницу. Короткий список до предела не дорастает. */
+.zeps{display:flex;flex-wrap:wrap;gap:6px;padding:14px 16px;max-height:440px;
+overflow-y:auto;overscroll-behavior:contain}
 .zeps a{font-family:system-ui,sans-serif;font-size:13.5px;font-weight:600;padding:7px 12px;
 border:1px solid @LINE@;border-radius:8px;color:@ACC@}
 .zeps a:hover{background:@ALT@;border-color:@ACC@}
@@ -1569,8 +1572,16 @@ position:relative;max-width:190px}
 .zaside{background:@ALT@;border:1px solid @LINE@;border-radius:4px;
 padding:12px 14px;font-size:13px;color:@DIM@}
 .zaside a{color:@ACC@;font-weight:700}
-.zeps{display:grid;gap:5px;margin:12px 0}
-@media(min-width:768px){.zeps{grid-template-columns:repeat(2,1fr)}}
+/* Список серий: высота ограничена, прокрутка появляется сама.
+   У «Детектива Конана» 1212 серий, и без ограничения список растягивал
+   страницу на десятки экранов, отодвигая всё, что под ним. `max-height`
+   ничего не отнимает у коротких списков: сериал на двенадцать серий до
+   предела не дорастает, и полосы прокрутки у него не появляется.
+   `overscroll-behavior` не даёт прокрутке списка утащить за собой страницу
+   на телефоне. Все серии остаются в разметке — ни одна не скрыта. */
+.zeps{display:grid;gap:5px;margin:12px 0;max-height:440px;overflow-y:auto;
+overscroll-behavior:contain;padding-right:4px}
+@media(min-width:768px){.zeps{grid-template-columns:repeat(2,1fr);max-height:520px}}
 .zeps a,.zeps span{display:block;padding:8px 11px;border-radius:4px;
 border:1px solid @LINE@;background:@PAGE@;font-size:13px}
 .zeps span{opacity:.5}
