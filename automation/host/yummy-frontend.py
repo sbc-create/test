@@ -75,6 +75,27 @@ def _манифест() -> dict:
                "background:#1b1b1fdd;color:#ffb4a2;border:1px solid #ff7f5c;"
                "border-radius:8px;padding:4px 9px;font:600 11px/1.2 ui-monospace,"
                "SFMono-Regular,Menlo,monospace;pointer-events:none}")
+#: Показывать ли видимый бейдж сборки. По умолчанию нет.
+#:
+#: Бейдж — инструмент диагностики выкладки, и на стенде он полезен. На рабочем
+#: домене он оказывается в тексте, который читает посетитель и индексирует
+#: поиск: «Template: yummy 1.4.5 · cf558484». Служебная строка в публичном HTML
+#: не становится безобидной оттого, что мелкая, — она просто перестаёт быть
+#: заметной нам, оставаясь заметной снаружи.
+#:
+#: Сведения о сборке никуда не исчезают: их по-прежнему несут мета-теги
+#: site-factory-* и атрибуты data-template-*, которыми пользуется приёмка
+#: выкладки. Убран ровно видимый читателю слой.
+ПОКАЗЫВАТЬ_БЕЙДЖ = os.environ.get("LORDS_TEMPLATE_BADGE", "") == "1"
+
+
+def _бейдж_подвала() -> str:
+    """Служебный бейдж в подвале — только при включённой диагностике."""
+    if not ПОКАЗЫВАТЬ_БЕЙДЖ:
+        return ""
+    return (f'<span class="vbadge">Template: {СЕМЕЙСТВО} {ВЕРСИЯ} · '
+            f'{МАНИФЕСТ["source_commit"][:8]}</span>')
+
 #: Имя шаблона КОНКРЕТНОГО семейства. Отсюда и из версии складывается то, что
 #: домен объявляет о себе.
 ШАБЛОН_СЕМЕЙСТВА = f"{СЕМЕЙСТВО}-nova"
@@ -444,8 +465,7 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 <button class="tsw" type="button" aria-label="Переключить тему">&#9789;</button>
 </div></header>
 <main class="wrap">{тело}</main>
-<footer class="ft"><div class="wrap">{html.escape(ИМЯ_ВИТРИНЫ)} · тестовая витрина, закрыта от индексации
-<span class="vbadge">Template: {СЕМЕЙСТВО} {ВЕРСИЯ} · {МАНИФЕСТ["source_commit"][:8]}</span>
+<footer class="ft"><div class="wrap">{html.escape(ИМЯ_ВИТРИНЫ)}{_бейдж_подвала()}
 </div></footer>
 <script>{СКРИПТ}</script></body></html>"""
 
@@ -1188,7 +1208,7 @@ class Обработчик(BaseHTTPRequestHandler):
             (f'<html data-sf-own="1" data-template-version="{ВЕРСИЯ}" '
              f'data-template-family="{СЕМЕЙСТВО}" '
              f'data-build-id="{СБОРКА}"').encode("utf-8"), 1)
-        if b"</body>" in тело:
+        if ПОКАЗЫВАТЬ_БЕЙДЖ and b"</body>" in тело:
             бейдж = (f'<div class="sf-vbadge">Template: {СЕМЕЙСТВО} {ВЕРСИЯ} · '
                      f'{МАНИФЕСТ["source_commit"][:8]}</div>').encode("utf-8")
             тело = тело.replace(b"</body>", бейдж + b"</body>", 1)
