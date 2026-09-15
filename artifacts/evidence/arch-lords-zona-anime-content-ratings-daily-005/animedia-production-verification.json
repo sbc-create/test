@@ -1,0 +1,108 @@
+{
+  "owner_decision": "APPROVED_ANIMEDIA_CANARY_AND_ROLLOUT",
+  "targets": [
+    {
+      "site": "animedia-01",
+      "domain": "animedia.icu",
+      "unit": "nova-animedia-01.service",
+      "port": 9121
+    },
+    {
+      "site": "animedia-02",
+      "domain": "animedia.space",
+      "unit": "nova-animedia-02.service",
+      "port": 9122
+    }
+  ],
+  "amd_online": "не target (0 vhost, 0 unit) — не изменялся",
+  "records": {
+    "before": 3999,
+    "after": 7408,
+    "kinds": {
+      "Аниме": 7408
+    },
+    "non_anime": 0
+  },
+  "rollback": {
+    "snapshot_ts": "20260915T101756Z",
+    "path": "/srv/site-factory/repo/var/lords/arc005-animedia-backups/",
+    "records": 3999,
+    "ready": true
+  },
+  "live_checks": {
+    "routes": {
+      "healthz": 200,
+      "/": 200,
+      "/catalog/": 200,
+      "/new/": 200,
+      "/collections/": 200,
+      "/schedule/": 200
+    },
+    "title_pages_checked": 219,
+    "hard_404": 219,
+    "soft_404": 0,
+    "wrong_entity": 0,
+    "non_anime_in_catalog": 0,
+    "broken_images": 0,
+    "posters_checked": 10
+  },
+  "control_experiment": {
+    "note": "animedia-02 до публикации проверена отдельно: 12 из 12 карточек главной не-200 — ровно как на опубликованной animedia-01. Дефект предсуществующий, публикация его не создала",
+    "untouched_site_non_200": "12/12",
+    "published_site_non_200": "12/12"
+  },
+  "ratings_in_data": {
+    "total": 7408,
+    "kinopoisk": 254,
+    "imdb": 2610,
+    "shikimori": 4421,
+    "any_rating": 7049,
+    "any_rating_pct": 95.15,
+    "description_pct": 72.72,
+    "poster_pct": 99.96
+  },
+  "ratings_in_html": {
+    "catalog_page": 0,
+    "reason": "раскладка animedia 1.0.2 не выводит оценки на карточках каталога"
+  },
+  "player": {
+    "source_bindings_in_data": 7381,
+    "rendered": 0,
+    "player_config_untouched": "player-lords-01.json mtime 2026-09-13"
+  },
+  "template_defects_for_handoff": [
+    {
+      "id": 1,
+      "fact": "все /title/<slug>/ отдают 404",
+      "cause": "ВидАнимедиа написан в ветке claude/templates-zona-animedia-visual-parity-005 и закрыт version-gate ПЕРЕРАБОТАНО_С=1.2.0; выложенный артефакт его не содержит",
+      "pre_existing": true
+    },
+    {
+      "id": 2,
+      "fact": "design_version манифестов animedia = 1.0.2",
+      "need": "1.2.0"
+    },
+    {
+      "id": 3,
+      "fact": "оценки не выводятся на карточках каталога Animedia",
+      "cause": "раскладка 1.0.2; в данных 95.15% записей имеют оценку"
+    },
+    {
+      "id": 4,
+      "fact": "плеер не выводится",
+      "data": "7381 привязка к источнику есть в данных"
+    },
+    {
+      "id": 5,
+      "fact": "Метрика отсутствует на animedia (0) при наличии на lords/zona (1)",
+      "pre_existing": true,
+      "note": "различие было до публикации, мной не изменялось"
+    }
+  ],
+  "lords_zona_untouched": {
+    "lords-01": 53400,
+    "zona-01": 53400,
+    "id_set_checksum": "b12eecd40d7e6964",
+    "mutations": 0
+  }
+}

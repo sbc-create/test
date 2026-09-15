@@ -1,0 +1,112 @@
+{
+  "run_id": "rollout-animedia-02",
+  "started_at": "2026-09-15T10:25:48Z",
+  "mode": "apply",
+  "snapshot": {
+    "path": "/srv/site-factory/repo/var/lords/lords/catalog-cache/lords-01.json",
+    "items": 53411,
+    "fetched_at": "2026-09-15T09:36:28Z",
+    "id_set_checksum": "8c3272d2b53073059d27746e85e41ee0f52c5e52f8938efc7231e2a3c5771f49"
+  },
+  "ledger": {
+    "path": "/srv/site-factory/repo/var/lords/slug-ledger.json",
+    "seeded": 0
+  },
+  "ratings_store": {
+    "path": "/srv/site-factory/repo/var/lords/ratings-store.json",
+    "entries": 21626
+  },
+  "sites": {
+    "animedia-02": {
+      "catalog_items": 7408,
+      "catalog_items_before": 3999,
+      "details_entries": 7408,
+      "distinct_canonical_ids": 7408,
+      "duplicate_ids": 0,
+      "id_set_checksum": "b4a92dcd0f05e6826426e21157e05803313e27ed82b2561b93475cc12a25ba3a",
+      "coverage": {
+        "published": 7408,
+        "kp": 254,
+        "kp_pct": 3.43,
+        "imdb": 2610,
+        "imdb_pct": 35.23,
+        "any_rating": 2628,
+        "any_rating_pct": 35.48,
+        "description": 5387,
+        "description_pct": 72.72,
+        "poster_url": 7405,
+        "poster_pct": 99.96,
+        "source_id": 7381,
+        "source_id_pct": 99.64,
+        "external_id_binding": 7386,
+        "external_id_pct": 99.7
+      },
+      "coverage_by_source": {
+        "published": 7408,
+        "by_source": {
+          "imdb": {
+            "count": 2610,
+            "pct": 35.23
+          },
+          "kinopoisk": {
+            "count": 254,
+            "pct": 3.43
+          },
+          "shikimori": {
+            "count": 4421,
+            "pct": 59.68
+          }
+        }
+      },
+      "secondary_rating_providers": {
+        "store_entries": 21626,
+        "applied": 2257,
+        "applied_by_source": {
+          "imdb": 2257
+        },
+        "rejections": {}
+      },
+      "missing_rating_reasons": {
+        "kinopoisk": {
+          "NOT_AVAILABLE_AT_SOURCE": 4623,
+          "NO_EXTERNAL_ID": 2531
+        },
+        "imdb": {
+          "NO_EXTERNAL_ID": 4737,
+          "NOT_AVAILABLE_AT_SOURCE": 61
+        }
+      },
+      "rejections": {},
+      "without_poster": 3,
+      "anime_only": true,
+      "anime_by_signal": {
+        "myanimelist_id": 7018,
+        "genre_anime": 286,
+        "animation+origin": 104
+      },
+      "production_blocked": null,
+      "expected_sha256": {
+        "catalog": "a19016763d1a30e967b901ee9ccdd169ab274d1c36597f4fae4854fb6daae854",
+        "details": "05429ae16f032e80213399ce1768339da125bd09f60db7074553a3e6ba0ab347"
+      }
+    }
+  },
+  "production_mutations": 2,
+  "parity": {
+    "checksums": {},
+    "identical": false
+  },
+  "before_images": {
+    "animedia-02.catalog": {
+      "backup": "/srv/site-factory/repo/var/lords/publish-backups/animedia-02-catalog.json.before.rollout-animedia-02",
+      "sha256": "6391a156d22cf4e216e06820eb144cbcab07beb409a74fb18389744669850309"
+    }
+  },
+  "rollback_command": "cp -p /srv/site-factory/repo/var/lords/publish-backups/animedia-02-catalog.json.before.rollout-animedia-02 /srv/lords/.frontend/animedia-02-catalog.json && sudo -n systemctl restart nova-animedia-02.service",
+  "written_sha256": {
+    "animedia-02.catalog": "a19016763d1a30e967b901ee9ccdd169ab274d1c36597f4fae4854fb6daae854",
+    "animedia-02.details": "05429ae16f032e80213399ce1768339da125bd09f60db7074553a3e6ba0ab347"
+  },
+  "duration_sec": 20.4,
+  "finished_at": "2026-09-15T10:26:08Z"
+}
