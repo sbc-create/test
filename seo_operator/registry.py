@@ -46,6 +46,9 @@ class Site:
     editorial_account: str | None = None
     moderation_enabled: bool = False
     synthetic: bool = False
+    #: Решение владельца об индексации: "open" или "closed". Умолчание
+    #: закрытое — открытие это письменное решение, а не то, что случается само.
+    indexing_expected: str = "closed"
 
     @property
     def domain(self) -> str:
@@ -104,6 +107,7 @@ def load_portfolio(path: Path | None = None) -> Portfolio:
             editorial_account=s.get("editorial_account"),
             moderation_enabled=s.get("moderation_enabled", False),
             synthetic=s.get("synthetic", False),
+            indexing_expected=s.get("indexing_expected", "closed"),
         )
         for s in data.get("sites", [])
     ]

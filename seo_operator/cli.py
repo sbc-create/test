@@ -209,7 +209,10 @@ def _add_indexing_lock_findings(op: Operator, result) -> None:
             profile_measured=measured,
         )
         states.append(state)
-        result.findings.extend({**f, "site_id": site.site_id} for f in lock_findings(state))
+        result.findings.extend(
+            {**f, "site_id": site.site_id}
+            for f in lock_findings(state, expected=site.indexing_expected)
+        )
 
     if not states:
         return

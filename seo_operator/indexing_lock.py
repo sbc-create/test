@@ -102,10 +102,43 @@ def read_state(
     )
 
 
-def findings(state: LockState) -> list[dict]:
-    """Расхождение слоёв — критическая находка. Согласованное состояние — нет."""
-    if state.verdict != MIXED:
-        return []
+def findings(state: LockState, *, expected: str = "closed") -> list[dict]:
+    """Две разные находки, и путать их нельзя.
+
+    ``LCK-001`` — слои говорят разное. Витрина держится не замыслом, а тем, что
+    из запретов действуют не все; куда она при этом «склоняется», неважно.
+
+    ``LCK-002`` — слои согласованы, но согласованы не на том, что решил владелец.
+    Это не дефект конфигурации, а расхождение с решением: либо решение не
+    доведено до публичного адреса, либо состояние изменили без решения.
+
+    ``expected`` — ``"open"`` или ``"closed"``, из реестра портфеля. Умолчание
+    ``"closed"``: открытие это письменное решение, а не то, что случается само.
+    """
+    if state.verdict == MIXED:
+        return _mixed_finding(state)
+    if state.verdict != expected.upper():
+        return [
+            {
+                "id": "LCK-002",
+                "category": "indexing",
+                "severity": "критично",
+                "summary": (
+                    f"состояние индексации {state.verdict} расходится с решением "
+                    f"владельца {expected.upper()}"
+                ),
+                "affected_urls": [],
+                "recommendation": (
+                    "привести витрину к решению владельца либо изменить решение "
+                    "в реестре портфеля — расхождение не должно жить молча"
+                ),
+                "evidence": f"слои: закрыты {state.closed_layers}, открыты {state.open_layers}",
+            }
+        ]
+    return []
+
+
+def _mixed_finding(state: LockState) -> list[dict]:
     return [
         {
             "id": "LCK-001",

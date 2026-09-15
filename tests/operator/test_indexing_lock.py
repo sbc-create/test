@@ -2,7 +2,15 @@
 
 from __future__ import annotations
 
-from seo_operator.indexing_lock import CLOSED, MIXED, OPEN, findings, read_state, summarize
+from seo_operator.indexing_lock import (
+    CLOSED,
+    LAYERS,
+    MIXED,
+    OPEN,
+    findings,
+    read_state,
+    summarize,
+)
 
 CLOSED_HEADERS = "HTTP/2 200\r\nx-robots-tag: noindex, nofollow\r\n"
 OPEN_HEADERS = "HTTP/2 200\r\ncontent-type: text/html\r\n"
@@ -31,8 +39,17 @@ def test_all_four_layers_closed_is_clean() -> None:
     assert findings(s) == []
 
 
-def test_all_four_layers_open_is_not_a_finding() -> None:
-    """Открытый сайт — решение владельца, а не дефект. Проверка о согласованности."""
+def test_all_four_layers_open_is_a_consistent_state() -> None:
+    """Открытый сайт — состояние, а не дефект сам по себе.
+
+    Прежде этого было достаточно, чтобы промолчать: проверка спрашивала только
+    про согласованность слоёв. Теперь согласованности мало — состояние
+    сверяется ещё и с решением владельца, потому что «все слои открыты» без
+    такого решения это не порядок, а незамеченное открытие.
+
+    Сам вердикт при этом остаётся OPEN, и когда владелец решил открыть, находки
+    нет: см. test_open_site_expected_open_is_clean.
+    """
     s = state(
         response_headers=OPEN_HEADERS,
         robots_txt=OPEN_ROBOTS,
@@ -40,7 +57,8 @@ def test_all_four_layers_open_is_not_a_finding() -> None:
         profile_indexing_enabled=True,
     )
     assert s.verdict == OPEN
-    assert findings(s) == []
+    assert s.open_layers == LAYERS
+    assert findings(s, expected="open") == []
 
 
 def test_the_real_2026_09_15_drift_is_critical() -> None:
@@ -146,6 +164,67 @@ def test_drift_is_still_caught_without_the_profile_layer() -> None:
     )
     assert s.verdict == MIXED
     assert [f["id"] for f in findings(s)] == ["LCK-001"]
+
+
+def test_closed_site_expected_closed_is_clean() -> None:
+    assert findings(state(), expected="closed") == []
+
+
+def test_open_site_expected_open_is_clean() -> None:
+    """Витрина, открытая решением владельца, — не дефект.
+
+    Требовать «закрыто у всех» после письменного решения открыть одну площадку
+    значило бы требовать откатить это решение.
+    """
+    s = state(
+        response_headers=OPEN_HEADERS,
+        robots_txt=OPEN_ROBOTS,
+        html=OPEN_HTML,
+        profile_indexing_enabled=True,
+    )
+    assert s.verdict == OPEN
+    assert findings(s, expected="open") == []
+
+
+def test_closed_site_where_owner_decided_open_is_reported() -> None:
+    """Решение владельца не дошло до публичного адреса — это находка.
+
+    Ровно это и произошло: флаг подняли в приложении, а посредник перед ним
+    продолжал закрывать витрину.
+    """
+    found = findings(state(), expected="open")
+    assert [f["id"] for f in found] == ["LCK-002"]
+    assert "OPEN" in found[0]["summary"] and "CLOSED" in found[0]["summary"]
+
+
+def test_open_site_where_owner_decided_closed_is_reported() -> None:
+    s = state(
+        response_headers=OPEN_HEADERS,
+        robots_txt=OPEN_ROBOTS,
+        html=OPEN_HTML,
+        profile_indexing_enabled=True,
+    )
+    assert [f["id"] for f in findings(s, expected="closed")] == ["LCK-002"]
+
+
+def test_mixed_state_outranks_the_expectation_check() -> None:
+    """Расхождение слоёв важнее несовпадения с ожиданием.
+
+    Пока слои говорят разное, вопрос «то ли это, что решил владелец» не имеет
+    определённого ответа: витрина не в одном состоянии, а между двумя.
+    """
+    found = findings(state(html=OPEN_HTML), expected="open")
+    assert [f["id"] for f in found] == ["LCK-001"]
+
+
+def test_expectation_defaults_to_closed() -> None:
+    s = state(
+        response_headers=OPEN_HEADERS,
+        robots_txt=OPEN_ROBOTS,
+        html=OPEN_HTML,
+        profile_indexing_enabled=True,
+    )
+    assert [f["id"] for f in findings(s)] == ["LCK-002"]
 
 
 def test_layer_order_puts_the_header_last() -> None:
