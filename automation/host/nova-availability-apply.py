@@ -12,6 +12,7 @@
 Без `--apply` инструмент ничего не пишет в рабочие файлы — только в каталог,
 указанный `--staging-out`.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -33,8 +34,12 @@ from factory.lords import source_availability as доступность  # noqa:
 #: паре «профиль + идентификатор», поэтому витрины разных семейств не делят
 #: между собой ни карантин, ни историю подтверждений.
 ПРОФИЛЬ_ВИТРИНЫ = {
-    "lords-01": "lords", "lords-02": "lords", "lords-03": "lords",
-    "zona-01": "lords", "animedia-01": "yami", "animedia-02": "yami",
+    "lords-01": "lords",
+    "lords-02": "lords",
+    "lords-03": "lords",
+    "zona-01": "lords",
+    "animedia-01": "yami",
+    "animedia-02": "yami",
 }
 
 
@@ -73,8 +78,9 @@ def атомарно(путь: pathlib.Path, данные: str) -> None:
         raise
 
 
-def метрики(отчёты: list[гейт.Отчёт], карантин_url: int,
-            уникальных_тайтлов: int, записей_реестра: int) -> dict:
+def метрики(
+    отчёты: list[гейт.Отчёт], карантин_url: int, уникальных_тайтлов: int, записей_реестра: int
+) -> dict:
     """Метрики в том виде, в каком их читает владелец.
 
     Разрыв поставщика показывается отдельной строкой и не растворяется в
@@ -108,10 +114,12 @@ def главная() -> int:
     р.add_argument("--registry", required=True)
     р.add_argument("--sites", default=",".join(sorted(ПРОФИЛЬ_ВИТРИНЫ)))
     р.add_argument("--catalog-dir", default=str(ЛОГОВО))
-    р.add_argument("--staging-out", default=None,
-                   help="куда положить результат; без него ничего не пишется")
-    р.add_argument("--apply", action="store_true",
-                   help="переписать рабочие файлы витрин (production-операция)")
+    р.add_argument(
+        "--staging-out", default=None, help="куда положить результат; без него ничего не пишется"
+    )
+    р.add_argument(
+        "--apply", action="store_true", help="переписать рабочие файлы витрин (production-операция)"
+    )
     а = р.parse_args()
 
     каталоги = pathlib.Path(а.catalog_dir)
@@ -131,16 +139,15 @@ def главная() -> int:
             print(json.dumps({"error": "site not allowed", "site": сайт}, ensure_ascii=False))
             return 2
         каталог = json.loads((каталоги / f"{сайт}-catalog.json").read_text(encoding="utf-8"))
-        подробности = json.loads(
-            (каталоги / f"{сайт}-details.json").read_text(encoding="utf-8"))
+        подробности = json.loads((каталоги / f"{сайт}-details.json").read_text(encoding="utf-8"))
 
         def статус(ид: str, _п: str = профиль) -> str:
             з = реестр.записи.get(доступность.ключ(_п, ид)) if ид else None
             return з.effective_status if з else доступность.UNKNOWN
 
         новый_каталог, новые_подробности, отчёт = гейт.применить(
-            каталог, подробности, статус,
-            включено=флаг_витрины(сайт), site=сайт)
+            каталог, подробности, статус, включено=флаг_витрины(сайт), site=сайт
+        )
         отчёты.append(отчёт)
         карантин_url += отчёт.quarantined_titles
         for слаг in отчёт.quarantined_slugs:
@@ -153,17 +160,24 @@ def главная() -> int:
         if а.apply:
             цель = каталоги
         if цель is not None:
-            атомарно(цель / f"{сайт}-catalog.json",
-                     json.dumps(новый_каталог, ensure_ascii=False))
-            атомарно(цель / f"{сайт}-details.json",
-                     json.dumps(новые_подробности, ensure_ascii=False))
+            атомарно(цель / f"{сайт}-catalog.json", json.dumps(новый_каталог, ensure_ascii=False))
+            атомарно(
+                цель / f"{сайт}-details.json", json.dumps(новые_подробности, ensure_ascii=False)
+            )
 
-    записей = len([з for з in реестр.записи.values()
-                   if з.effective_status == доступность.SOURCE_UNAVAILABLE])
-    print(json.dumps({
-        "per_site": [о.как_словарь() for о in отчёты],
-        "totals": метрики(отчёты, карантин_url, len(уникальные), записей),
-    }, ensure_ascii=False, indent=1))
+    записей = len(
+        [з for з in реестр.записи.values() if з.effective_status == доступность.SOURCE_UNAVAILABLE]
+    )
+    print(
+        json.dumps(
+            {
+                "per_site": [о.как_словарь() for о in отчёты],
+                "totals": метрики(отчёты, карантин_url, len(уникальные), записей),
+            },
+            ensure_ascii=False,
+            indent=1,
+        )
+    )
     return 0
 
 

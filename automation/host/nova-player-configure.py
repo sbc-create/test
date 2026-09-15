@@ -15,6 +15,7 @@
 Границы жёсткие. Список целей закрыт, посторонняя витрина отклоняется до любых
 действий. Операция трогает только player-контур: боковой файл и перезапуск юнита.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -152,9 +153,7 @@ def перезапуск(цель: Цель) -> None:
     # Витрина поднимает каталог с диска: до готовности она не отвечает.
     for _ in range(60):
         time.sleep(1)
-        готово = subprocess.run(
-            ["systemctl", "is-active", "--quiet", цель.юнит], timeout=20
-        )
+        готово = subprocess.run(["systemctl", "is-active", "--quiet", цель.юнит], timeout=20)
         if готово.returncode == 0:
             return
     raise SystemExit(f"{цель.сайт}: юнит {цель.юнит} не поднялся после перезапуска")
@@ -296,13 +295,24 @@ def применить(цель: Цель, сколько: int) -> dict:
         # из-за этого нельзя.
         with contextlib.suppress(Exception):
             перезапуск(цель)
-        return {"site": цель.сайт, "domain": цель.домен, "status": "ROLLED_BACK",
-                "reason": str(e), "rows": строки_отказа}
+        return {
+            "site": цель.сайт,
+            "domain": цель.домен,
+            "status": "ROLLED_BACK",
+            "reason": str(e),
+            "rows": строки_отказа,
+        }
     if резерв is not None:
         резерв.unlink(missing_ok=True)
-    return {"site": цель.сайт, "domain": цель.домен, "status": "CONFIGURED",
-            "source_mode": режим_источника(цель),
-            "checked": len(строки), "player_working": ок, "rows": строки}
+    return {
+        "site": цель.сайт,
+        "domain": цель.домен,
+        "status": "CONFIGURED",
+        "source_mode": режим_источника(цель),
+        "checked": len(строки),
+        "player_working": ок,
+        "rows": строки,
+    }
 
 
 def откатить(цель: Цель) -> dict:
@@ -315,8 +325,7 @@ def откатить(цель: Цель) -> dict:
 
 def главная() -> int:
     р = argparse.ArgumentParser(description="PLAYER_CONFIGURE для шести витрин")
-    р.add_argument("--sites", required=True,
-                   help="через запятую: " + ", ".join(sorted(ЦЕЛИ)))
+    р.add_argument("--sites", required=True, help="через запятую: " + ", ".join(sorted(ЦЕЛИ)))
     р.add_argument("--apply", action="store_true", help="без него — только план")
     р.add_argument("--rollback", action="store_true", help="снять привязку плеера")
     р.add_argument("--checks", type=int, default=5, help="сколько карточек проверить")
@@ -325,12 +334,15 @@ def главная() -> int:
     просьба = [s.strip() for s in а.sites.split(",") if s.strip()]
     чужие = [s for s in просьба if s not in ЦЕЛИ]
     if чужие:
-        print(json.dumps({"error": "target not allowed", "sites": чужие},
-                         ensure_ascii=False))
+        print(json.dumps({"error": "target not allowed", "sites": чужие}, ensure_ascii=False))
         return 2
     if os.geteuid() != 0:
-        print(json.dumps({"error": "нужен root: Publisher ID читается из защищённого файла"},
-                         ensure_ascii=False))
+        print(
+            json.dumps(
+                {"error": "нужен root: Publisher ID читается из защищённого файла"},
+                ensure_ascii=False,
+            )
+        )
         return 2
 
     итог = []
@@ -341,9 +353,17 @@ def главная() -> int:
         elif а.apply:
             итог.append(применить(ц, а.checks))
         else:
-            итог.append({"site": ц.сайт, "domain": ц.домен, "unit": ц.юнит,
-                         "profile": ц.профиль, "sidecar": str(боковой_файл(ц)),
-                         "source_mode": режим_источника(ц), "status": "PLANNED"})
+            итог.append(
+                {
+                    "site": ц.сайт,
+                    "domain": ц.домен,
+                    "unit": ц.юнит,
+                    "profile": ц.профиль,
+                    "sidecar": str(боковой_файл(ц)),
+                    "source_mode": режим_источника(ц),
+                    "status": "PLANNED",
+                }
+            )
     print(json.dumps(итог, ensure_ascii=False, indent=1))
     плохо = [с for с in итог if с.get("status") == "ROLLED_BACK"]
     return 1 if плохо else 0
