@@ -115,6 +115,61 @@ def _crawl_real_portfolio(op: Operator) -> tuple[dict, list[str]]:
     return pages, notes
 
 
+#: Адрес, который каждая витрина объявляет в config/SITE-MATRIX.json.
+#: Объявление, которому ничего не соответствует, хуже отсутствующего — на него
+#: ссылаются как на существующее, поэтому цикл его проверяет.
+DECLARED_COVERAGE_ENDPOINT = "/api/v1/coverage"
+
+
+def _add_infrastructure_findings(op: Operator, result) -> None:
+    """robots.txt, карта сайта, обработка отсутствующего адреса, объявленный endpoint."""
+    from seo_operator.datasources.livecrawl import CrawlNotAllowedError
+    from seo_operator.infrastructure_probe import as_dicts, curl_probe, probe_site
+
+    for site in op.portfolio.sites:
+        if site.synthetic:
+            continue
+        try:
+            found = probe_site(
+                site.base_url,
+                fetcher=curl_probe,
+                # Ожидание берётся у витрины, а не угадывается. Источника
+                # редакционной политики у цикла пока нет, поэтому содержимое
+                # карты не оценивается вовсе: и «должна быть пустой», и «должна
+                # быть полной» были бы выдумкой. Первый вариант этой стадии
+                # выбрал «пустая» и объявил дефектом нормальные карты Lords с
+                # их пятьюдесятью тысячами адресов.
+                expect_sitemap_entries=None,
+                coverage_endpoint=DECLARED_COVERAGE_ENDPOINT,
+            )
+        except CrawlNotAllowedError as exc:
+            result.notes.append(f"инфраструктура {site.site_id} не проверена: {exc}")
+            continue
+        result.findings.extend(
+            {**f, "site_id": site.site_id} for f in as_dicts(found)
+        )
+
+
+def _add_eligibility_note(op: Operator, result, pages_by_site: dict) -> None:
+    """Поадресный вердикт по тем страницам, которые цикл действительно видел."""
+    from seo_operator.eligibility import classify_all, summarize
+
+    verdicts = []
+    for site in op.portfolio.sites:
+        pages = pages_by_site.get(site.site_id)
+        if not pages:
+            continue
+        verdicts.extend(classify_all(pages, site_host=site.domain))
+    if not verdicts:
+        return
+    summary = summarize(verdicts)
+    result.notes.append(
+        f"готовность адресов: обойдено {summary.total}, READY {summary.ready}, "
+        f"HOLD {summary.hold}, UNKNOWN {summary.unknown} "
+        f"(покрытие {summary.coverage_percent}%) — это выборка обхода, а не весь корпус"
+    )
+
+
 def cmd_run(args, mode: Mode) -> int:
     op = _operator(args.fixture)
     pages_by_site = {}
@@ -127,6 +182,10 @@ def cmd_run(args, mode: Mode) -> int:
 
     result = op.run(mode, pages_by_site=pages_by_site, today=date.today())
     result.notes.extend(crawl_notes)
+
+    if not args.fixture and not args.no_crawl:
+        _add_infrastructure_findings(op, result)
+        _add_eligibility_note(op, result, pages_by_site)
 
     if args.json:
         print(json.dumps(result.to_dict(), ensure_ascii=False, indent=2, default=str))

@@ -63,11 +63,18 @@ def check_robots(probe: Probe) -> list[ProbeFinding]:
     return out
 
 
-def check_sitemap(probe: Probe, *, expect_entries: bool) -> list[ProbeFinding]:
+def check_sitemap(probe: Probe, *, expect_entries: bool | None) -> list[ProbeFinding]:
     """Карта сайта. ``expect_entries`` отражает решение витрины, а не догадку.
 
     Пустая карта не всегда дефект: витрина, чьи страницы дублируют соседнюю,
     сознательно не предъявляет их поиску. Поэтому ожидание передаётся снаружи.
+
+    ``None`` означает «политика публикации неизвестна», и тогда содержимое карты
+    не оценивается вовсе. Это не то же самое, что ``False``: подставив вместо
+    неизвестности «карта должна быть пустой», проверка объявила нормальные карты
+    Lords с их пятьюдесятью тысячами адресов дефектом — ровно это и произошло на
+    первом подключении к суточному циклу. Отсутствие политики — причина
+    промолчать, а не повод выбрать любую из двух и выдать за решение витрины.
     """
     out = []
     if probe.status_code != 200:
@@ -81,6 +88,8 @@ def check_sitemap(probe: Probe, *, expect_entries: bool) -> list[ProbeFinding]:
             _finding("INF-004", "высокая", probe.url, f"карта сайта отдана как {ctype or '?'}")
         )
     has_entries = "<loc>" in probe.body
+    if expect_entries is None:
+        return out
     if expect_entries and not has_entries:
         out.append(
             _finding(
@@ -148,11 +157,45 @@ def check_declared_endpoint(
     return []
 
 
+#: Разделитель для -w у curl. Не начинается с «@»: curl принимает ведущий «@»
+#: за имя файла с форматом, молча теряет весь формат и возвращает один лишь
+#: ответ. На этом первые два прогона проверки дали 28 и 36 находок из воздуха.
+_WRITE_OUT_SEPARATOR = "::probe::"
+
+
+def curl_probe(url: str) -> Probe:
+    """Единственное место сетевого запроса в этом модуле. Метод один — GET.
+
+    Переходы выполняются: канонизация слеша отдаёт 308, и без перехода проверка
+    измеряла бы редирект вместо самого адреса. Код и тип берутся у последнего
+    ответа цепочки.
+    """
+    import subprocess
+
+    from seo_operator.datasources.livecrawl import ensure_allowed
+
+    ensure_allowed(url)
+    proc = subprocess.run(
+        [
+            "curl", "-sS", "-L", "--get", "--max-time", "25",
+            "-w", f"{_WRITE_OUT_SEPARATOR}%{{http_code}}{_WRITE_OUT_SEPARATOR}%{{content_type}}",
+            url,
+        ],
+        capture_output=True,
+        text=True,
+    )
+    parts = proc.stdout.split(_WRITE_OUT_SEPARATOR)
+    body = parts[0] if parts else ""
+    code = int(parts[1]) if len(parts) > 1 and parts[1].strip().isdigit() else None
+    ctype = parts[2].strip() if len(parts) > 2 else None
+    return Probe(url=url, status_code=code, content_type=ctype, body=body)
+
+
 def probe_site(
     base_url: str,
     *,
     fetcher: Fetcher,
-    expect_sitemap_entries: bool,
+    expect_sitemap_entries: bool | None,
     coverage_endpoint: str | None = None,
 ) -> list[ProbeFinding]:
     base = base_url.rstrip("/")

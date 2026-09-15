@@ -61,6 +61,19 @@ def test_entries_where_none_are_expected_are_reported() -> None:
     assert [f.id for f in check_sitemap(probe(body=body), expect_entries=False)] == ["INF-006"]
 
 
+def test_unknown_policy_judges_the_sitemap_neither_way() -> None:
+    """Неизвестная политика — причина промолчать, а не выбрать любую сторону.
+
+    Подставив вместо неизвестности «карта должна быть пустой», проверка
+    объявила дефектом нормальные карты Lords с пятьюдесятью тысячами адресов.
+    Обратная подстановка так же неверна.
+    """
+    full = "<urlset><url><loc>https://x/</loc></url></urlset>"
+    empty = "<urlset></urlset>"
+    assert check_sitemap(probe(body=full), expect_entries=None) == []
+    assert check_sitemap(probe(body=empty), expect_entries=None) == []
+
+
 def test_sitemap_served_as_html_is_a_finding() -> None:
     body = "<urlset><url><loc>https://x/</loc></url></urlset>"
     found = check_sitemap(probe(ctype="text/html", body=body), expect_entries=True)
