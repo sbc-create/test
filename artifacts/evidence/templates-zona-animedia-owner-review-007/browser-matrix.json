@@ -1,5 +1,5 @@
 {
- "taken_at_utc": "2026-09-14T18:06:02Z",
+ "taken_at_utc": "2026-09-15T10:19:19Z",
  "browsers": {
   "chromium": {
    "status": "OK",
@@ -253,7 +253,10 @@
      "family": "zona",
      "path": "/",
      "status": 200,
-     "console_errors": [],
+     "console_errors": [
+      "[JavaScript Error: \"Cookie “metrika_enabled” has been rejected for invalid domain.\" {file: \"http://127.0.0.1:9301/\" line: 0}]",
+      "[JavaScript Error: \"Cookie “metrika_enabled” has been rejected for invalid domain.\" {file: \"http://127.0.0.1:9301/\" line: 0}]"
+     ],
      "overflow": false,
      "h1": true,
      "imgsNoAlt": 0,
@@ -272,7 +275,10 @@
      "family": "zona",
      "path": "/catalog/",
      "status": 200,
-     "console_errors": [],
+     "console_errors": [
+      "[JavaScript Error: \"Cookie “metrika_enabled” has been rejected for invalid domain.\" {file: \"http://127.0.0.1:9301/catalog/\" line: 0}]",
+      "[JavaScript Error: \"Cookie “metrika_enabled” has been rejected for invalid domain.\" {file: \"http://127.0.0.1:9301/catalog/\" line: 0}]"
+     ],
      "overflow": false,
      "h1": true,
      "imgsNoAlt": 0,
@@ -291,7 +297,10 @@
      "family": "zona",
      "path": "/new/",
      "status": 200,
-     "console_errors": [],
+     "console_errors": [
+      "[JavaScript Error: \"Cookie “metrika_enabled” has been rejected for invalid domain.\" {file: \"http://127.0.0.1:9301/new/\" line: 0}]",
+      "[JavaScript Error: \"Cookie “metrika_enabled” has been rejected for invalid domain.\" {file: \"http://127.0.0.1:9301/new/\" line: 0}]"
+     ],
      "overflow": false,
      "h1": true,
      "imgsNoAlt": 0,
@@ -310,7 +319,10 @@
      "family": "zona",
      "path": "/search/?q=%D0%B0",
      "status": 200,
-     "console_errors": [],
+     "console_errors": [
+      "[JavaScript Error: \"Cookie “metrika_enabled” has been rejected for invalid domain.\" {file: \"http://127.0.0.1:9301/search/?q=%D0%B0\" line: 0}",
+      "[JavaScript Error: \"Cookie “metrika_enabled” has been rejected for invalid domain.\" {file: \"http://127.0.0.1:9301/search/?q=%D0%B0\" line: 0}"
+     ],
      "overflow": false,
      "h1": true,
      "imgsNoAlt": 0,
@@ -329,7 +341,10 @@
      "family": "zona",
      "path": "/title/akuloboroten/",
      "status": 200,
-     "console_errors": [],
+     "console_errors": [
+      "[JavaScript Error: \"Cookie “metrika_enabled” has been rejected for invalid domain.\" {file: \"http://127.0.0.1:9301/title/akuloboroten/\" line:",
+      "[JavaScript Error: \"Cookie “metrika_enabled” has been rejected for invalid domain.\" {file: \"http://127.0.0.1:9301/title/akuloboroten/\" line:"
+     ],
      "overflow": false,
      "h1": true,
      "imgsNoAlt": 0,
@@ -348,7 +363,10 @@
      "family": "zona",
      "path": "/nope/",
      "status": 404,
-     "console_errors": [],
+     "console_errors": [
+      "[JavaScript Error: \"Cookie “metrika_enabled” has been rejected for invalid domain.\" {file: \"http://127.0.0.1:9301/nope/\" line: 0}]",
+      "[JavaScript Error: \"Cookie “metrika_enabled” has been rejected for invalid domain.\" {file: \"http://127.0.0.1:9301/nope/\" line: 0}]"
+     ],
      "overflow": false,
      "h1": true,
      "imgsNoAlt": 0,
