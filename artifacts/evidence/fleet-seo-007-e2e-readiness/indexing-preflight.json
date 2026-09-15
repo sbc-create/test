@@ -1,0 +1,93 @@
+{
+ "policy_now": "noindex, nofollow на всех четырёх; не изменялась",
+ "rule": "индексацию можно предлагать только когда выполнены все условия разом",
+ "per_domain": {
+  "lordfilm47.space": {
+   "conditions": {
+    "sitemap_built": true,
+    "sitemap_served": false,
+    "canonical": true,
+    "schema": false,
+    "content_pages_exist": true,
+    "analytics_survives_clean_build": true,
+    "template_accepted_by_owner": false,
+    "production_canary_confirmed": false,
+    "no_hard_404_in_published_links": true,
+    "no_wrong_entity": true
+   },
+   "ready_to_propose_indexing": false,
+   "blocking": [
+    "production_canary_confirmed",
+    "schema",
+    "sitemap_served",
+    "template_accepted_by_owner"
+   ]
+  },
+  "lordserial33.biz": {
+   "conditions": {
+    "sitemap_built": true,
+    "sitemap_served": false,
+    "canonical": false,
+    "schema": false,
+    "content_pages_exist": true,
+    "analytics_survives_clean_build": true,
+    "template_accepted_by_owner": false,
+    "production_canary_confirmed": false,
+    "no_hard_404_in_published_links": true,
+    "no_wrong_entity": true
+   },
+   "ready_to_propose_indexing": false,
+   "blocking": [
+    "canonical",
+    "production_canary_confirmed",
+    "schema",
+    "sitemap_served",
+    "template_accepted_by_owner"
+   ]
+  },
+  "1lordserials1.online": {
+   "conditions": {
+    "sitemap_built": true,
+    "sitemap_served": false,
+    "canonical": false,
+    "schema": false,
+    "content_pages_exist": true,
+    "analytics_survives_clean_build": true,
+    "template_accepted_by_owner": false,
+    "production_canary_confirmed": false,
+    "no_hard_404_in_published_links": true,
+    "no_wrong_entity": true
+   },
+   "ready_to_propose_indexing": false,
+   "blocking": [
+    "canonical",
+    "production_canary_confirmed",
+    "schema",
+    "sitemap_served",
+    "template_accepted_by_owner"
+   ]
+  },
+  "zonafilm.space": {
+   "conditions": {
+    "sitemap_built": true,
+    "sitemap_served": false,
+    "canonical": true,
+    "schema": false,
+    "content_pages_exist": true,
+    "analytics_survives_clean_build": true,
+    "template_accepted_by_owner": false,
+    "production_canary_confirmed": false,
+    "no_hard_404_in_published_links": true,
+    "no_wrong_entity": true
+   },
+   "ready_to_propose_indexing": false,
+   "blocking": [
+    "production_canary_confirmed",
+    "schema",
+    "sitemap_served",
+    "template_accepted_by_owner"
+   ]
+  }
+ },
+ "ready_domains": 0
+}

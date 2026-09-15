@@ -1,17 +1,27 @@
 {
- "prompt_id": "FLEET-SEO-007-E2E-READINESS-CLOSEOUT",
- "source_branch": "claude/fleet-seo-006-metrika-topvisor-production",
- "source_commit": "90cb4b03b92ac73091c6947fdecfd2173708a549",
- "task_branch": "claude/fleet-seo-007-e2e-readiness",
- "base_commit": "0a2658c (вершина ветки шаблонов Zona/Animedia)",
+ "prompt_id": "FLEET-SEO-008-TECHNICAL-CLOSEOUT-AND-RENDERER-HANDOFF",
+ "branch": "claude/fleet-seo-007-e2e-readiness",
  "files_sha256": {
   "MERGE-PACKET.md": "a36a0a388cec8f399af27c43572c29b4d90626a2f4673787a45e66dcebbecabc",
+  "RENDERER-HANDOFF.md": "2e9ee0448ad632db6ff02e9dcbda846191af8300ea2aeb5f99d5db7895aa43a8",
+  "indexing-preflight.json": "b5c6ac2e1e4423b71d15a5b52a896baa92c442dbd82dcbcec63b98b7d33fd82b",
   "metrika-reporting-readback.json": "1121db41a84c78acd3d8d8f5c4958e2367bd8289f01104bd9dbc02e48f9c6b92",
   "noindex-readiness-matrix.json": "dde52cd57670afe5328040f82fab5015d7dd6f898d5efd57d0f77187f2010d7c",
   "route-coverage.json": "c130f982d1a2e9364b24abf065777c03ef35a3dea874252d81011575c242688c",
   "seo-contour-audit.json": "7f2999898e6127804cd09e4705f68eb792b4cb140fd6a1d801305d11b1c13559",
+  "seo-health-2026-09-15.json": "95e20f368d7404acafe4d1fce53b8c5840e9f3ad6fc58f032eaaefc60d6090e7",
+  "sitemap-verification.json": "df56c41027480fbd71e95c3b981ebfd276dfd6b9c9ed50c8ccaa5dca639c7e9a",
   "topvisor-keyword-pack.json": "9caa088252d98d632186b9b122f73ad87ba2d03e7047272041bd042885a1f760",
   "topvisor-launch-options.json": "8ddbe11bcfd8ee23da9ad1ade577004f4216b7fe0e7e95b8125f249c000206c9",
+  "topvisor-packs/extended/lords-01.json": "31e1bfa3e2c99f22f7a1adebb26ebfaddff1ce66654ba49454cea510f2a24f62",
+  "topvisor-packs/extended/lords-02.json": "4b12b892a07f922b9a19ab6320eb100f2b7b231138b47027be3b8c5ec25f3262",
+  "topvisor-packs/extended/lords-03.json": "523dcbf3b9202c34466d845a4e05588a3f6626918fd4f82c514da30f3b2f9898",
+  "topvisor-packs/extended/zona-01.json": "32c2c9acbd899bb0d012c8995d98e86dae7f7a568ba71c547aff101e825eb3a3",
+  "topvisor-packs/minimal/lords-01.json": "e4118db804d24b928e61e27cbf91333c384f4912673a6776fd7580f822ab5491",
+  "topvisor-packs/minimal/lords-02.json": "46c9e3235306cb97951eedd95a242246746dc0672403284a052611e9fc1f51b9",
+  "topvisor-packs/minimal/lords-03.json": "0a91caea396a350eac5a0d8f6d8fa2883381f17eda340e5e015021bade815ba7",
+  "topvisor-packs/minimal/zona-01.json": "26612aa3de7bb796dd72ad413ca1b889aa4df660c5632690e75702e6dbd8468b",
+  "topvisor-packs.json": "8e870bfe32a34c49e6a3b4941e246c3d6fa15a0664f1fef8cbe8a53da904557c",
   "webvisor-state.json": "23daa7e6e3a2c34352c0ccc82261b8a1612510ef983a643281a504f7acc3bc32"
  }
 }

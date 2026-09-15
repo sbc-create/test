@@ -1,0 +1,34 @@
+# НЕ УСТАНОВЛЕН. Файл подготовлен для общей транзакции hardening.
+#
+# Новый root-unit в обход общей транзакции — это новая дыра в границе root,
+# открытая ради удобства одного отчёта. Поэтому здесь лежит текст, а не
+# установленная служба, и выдавать одно за другое нельзя.
+[Unit]
+Description=Ежедневный бесплатный аудит SEO-контура витрин Lords и Zona
+Documentation=file:/srv/site-factory/repo/automation/host/seo-daily-report.py
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=lords
+Group=lords
+WorkingDirectory=/srv/site-factory/repo
+ExecStart=/srv/site-factory/repo/.venv/bin/python \
+    /srv/site-factory/repo/automation/host/seo-daily-report.py \
+    --out /srv/lords/.seo-reports
+# Платного в отчёте нет ничего: съём позиций он запускать не умеет.
+# Ненулевой код возврата при критическом нарушении обязан быть виден
+# планировщику, поэтому SuccessExitStatus не расширяется.
+TimeoutStartSec=900
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/srv/lords/.seo-reports
+CapabilityBoundingSet=
+RestrictAddressFamilies=AF_INET AF_INET6
+SystemCallFilter=@system-service
+
+[Install]
+WantedBy=multi-user.target

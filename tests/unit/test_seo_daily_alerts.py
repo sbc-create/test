@@ -26,6 +26,9 @@ spec.loader.exec_module(М)
     "sitemap_http": 200, "sitemap_url_count": 120,
     "canonical_present": True, "canonical_absolute": True,
     "json_ld_blocks": 1, "soft_404": False,
+    "json_ld_types": ["WebSite", "BreadcrumbList", "Movie"],
+    "sitemap_shards": [{"shard": "sitemap-1.xml", "http": 200, "urls": 45000},
+                       {"shard": "sitemap-2.xml", "http": 200, "urls": 8405}],
     "renderer_build_id": "b1", "renderer_template_revision": "r1",
 }
 
@@ -39,6 +42,8 @@ spec.loader.exec_module(М)
     "SITEMAP_EMPTY": {"sitemap_url_count": 0},
     "CANONICAL_MISSING": {"canonical_present": False},
     "SOFT_404": {"soft_404": True},
+    "SCHEMA_MISSING": {"json_ld_types": []},
+    "SITEMAP_INDEX_MISSING": {"sitemap_shards": []},
 }
 
 
@@ -75,6 +80,14 @@ def test_исчезновение_проекта_topvisor_замечается()
     вчера = dict(ЗДОРОВЫЙ)
     сегодня = dict(ЗДОРОВЫЙ) | {"topvisor_project_id": None}
     assert "TOPVISOR_PROJECT_CHANGED" in [t["rule"] for t in М.тревоги(сегодня, вчера)]
+
+
+def test_критические_правила_дают_ненулевой_код():
+    """Отчёт, всегда возвращающий ноль, молчит и тогда, когда тега больше нет."""
+    assert "METRIKA_TAG_MISSING" in М.КРИТИЧЕСКИЕ
+    assert "INDEXING_UNEXPECTEDLY_OPEN" in М.КРИТИЧЕСКИЕ
+    # Пустой sitemap при закрытой индексации подождёт до утра — он не критичен.
+    assert "SITEMAP_EMPTY" not in М.КРИТИЧЕСКИЕ
 
 
 def test_отчёт_не_запускает_платное():

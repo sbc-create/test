@@ -1,0 +1,200 @@
+{
+ "schema": "seo.daily_health/1.0.0",
+ "date": "2026-09-15",
+ "paid_operations": 0,
+ "position_check_started": false,
+ "sites": [
+  {
+   "domain": "lordfilm47.space",
+   "site_id": "lords-01",
+   "http": 200,
+   "metrika_counter_id": 112010269,
+   "metrika_tag_present": true,
+   "metrika_tag_occurrences": 1,
+   "metrika_init_calls": 1,
+   "metrika_foreign_counters": [],
+   "topvisor_project_id": 32531504,
+   "x_robots_tag": "noindex, nofollow",
+   "meta_robots": "noindex, nofollow",
+   "robots_txt_http": 200,
+   "robots_txt_disallow_all": true,
+   "sitemap_http": 308,
+   "sitemap_url_count": 0,
+   "canonical_present": true,
+   "canonical_absolute": true,
+   "json_ld_blocks": 0,
+   "soft_404": false,
+   "json_ld_types": [],
+   "sitemap_shards": [],
+   "renderer_build_id": "20260913T2300Z-8ececc6c-nova",
+   "renderer_template_revision": "7dc251d"
+  },
+  {
+   "domain": "lordserial33.biz",
+   "site_id": "lords-02",
+   "http": 200,
+   "metrika_counter_id": 112010274,
+   "metrika_tag_present": true,
+   "metrika_tag_occurrences": 1,
+   "metrika_init_calls": 1,
+   "metrika_foreign_counters": [],
+   "topvisor_project_id": 32531521,
+   "x_robots_tag": "noindex, nofollow",
+   "meta_robots": "noindex, nofollow",
+   "robots_txt_http": 200,
+   "robots_txt_disallow_all": true,
+   "sitemap_http": 200,
+   "sitemap_url_count": 0,
+   "canonical_present": false,
+   "canonical_absolute": false,
+   "json_ld_blocks": 0,
+   "soft_404": false,
+   "json_ld_types": [],
+   "sitemap_shards": [],
+   "renderer_build_id": "20260910T124530Z-a1691c56-nova",
+   "renderer_template_revision": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee"
+  },
+  {
+   "domain": "1lordserials1.online",
+   "site_id": "lords-03",
+   "http": 200,
+   "metrika_counter_id": 112010277,
+   "metrika_tag_present": true,
+   "metrika_tag_occurrences": 1,
+   "metrika_init_calls": 1,
+   "metrika_foreign_counters": [],
+   "topvisor_project_id": 32531542,
+   "x_robots_tag": "noindex, nofollow",
+   "meta_robots": "noindex, nofollow",
+   "robots_txt_http": 200,
+   "robots_txt_disallow_all": true,
+   "sitemap_http": 200,
+   "sitemap_url_count": 0,
+   "canonical_present": false,
+   "canonical_absolute": false,
+   "json_ld_blocks": 0,
+   "soft_404": false,
+   "json_ld_types": [],
+   "sitemap_shards": [],
+   "renderer_build_id": "20260910T124530Z-a1691c56-nova",
+   "renderer_template_revision": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee"
+  },
+  {
+   "domain": "zonafilm.space",
+   "site_id": "zona-01",
+   "http": 200,
+   "metrika_counter_id": 112582938,
+   "metrika_tag_present": true,
+   "metrika_tag_occurrences": 1,
+   "metrika_init_calls": 1,
+   "metrika_foreign_counters": [],
+   "topvisor_project_id": 33238820,
+   "x_robots_tag": "noindex, nofollow",
+   "meta_robots": "noindex, nofollow",
+   "robots_txt_http": 200,
+   "robots_txt_disallow_all": true,
+   "sitemap_http": 308,
+   "sitemap_url_count": 0,
+   "canonical_present": true,
+   "canonical_absolute": true,
+   "json_ld_blocks": 0,
+   "soft_404": false,
+   "json_ld_types": [],
+   "sitemap_shards": [],
+   "renderer_build_id": "20260913T2300Z-8ececc6c-nova",
+   "renderer_template_revision": "7dc251d"
+  }
+ ],
+ "alerts": [
+  {
+   "rule": "SITEMAP_EMPTY",
+   "domain": "lordfilm47.space",
+   "detail": "sitemap пуст или не отдаётся"
+  },
+  {
+   "rule": "SCHEMA_MISSING",
+   "domain": "lordfilm47.space",
+   "detail": "структурированных данных на странице нет"
+  },
+  {
+   "rule": "SITEMAP_INDEX_MISSING",
+   "domain": "lordfilm47.space",
+   "detail": "индекса карты сайта нет"
+  },
+  {
+   "rule": "SITEMAP_EMPTY",
+   "domain": "lordserial33.biz",
+   "detail": "sitemap пуст или не отдаётся"
+  },
+  {
+   "rule": "CANONICAL_MISSING",
+   "domain": "lordserial33.biz",
+   "detail": "на главной нет canonical"
+  },
+  {
+   "rule": "SCHEMA_MISSING",
+   "domain": "lordserial33.biz",
+   "detail": "структурированных данных на странице нет"
+  },
+  {
+   "rule": "SITEMAP_INDEX_MISSING",
+   "domain": "lordserial33.biz",
+   "detail": "индекса карты сайта нет"
+  },
+  {
+   "rule": "SITEMAP_EMPTY",
+   "domain": "1lordserials1.online",
+   "detail": "sitemap пуст или не отдаётся"
+  },
+  {
+   "rule": "CANONICAL_MISSING",
+   "domain": "1lordserials1.online",
+   "detail": "на главной нет canonical"
+  },
+  {
+   "rule": "SCHEMA_MISSING",
+   "domain": "1lordserials1.online",
+   "detail": "структурированных данных на странице нет"
+  },
+  {
+   "rule": "SITEMAP_INDEX_MISSING",
+   "domain": "1lordserials1.online",
+   "detail": "индекса карты сайта нет"
+  },
+  {
+   "rule": "SITEMAP_EMPTY",
+   "domain": "zonafilm.space",
+   "detail": "sitemap пуст или не отдаётся"
+  },
+  {
+   "rule": "SCHEMA_MISSING",
+   "domain": "zonafilm.space",
+   "detail": "структурированных данных на странице нет"
+  },
+  {
+   "rule": "SITEMAP_INDEX_MISSING",
+   "domain": "zonafilm.space",
+   "detail": "индекса карты сайта нет"
+  }
+ ],
+ "alert_delivery_status": "NOT_CONFIGURED",
+ "alert_delivery_note": "Внешний канал доставки не настроен. Файл на диске уведомлением не является: никто его не получит, пока за ним не придут.",
+ "compared_with": null,
+ "new_alerts": [
+  "CANONICAL_MISSING@1lordserials1.online",
+  "CANONICAL_MISSING@lordserial33.biz",
+  "SCHEMA_MISSING@1lordserials1.online",
+  "SCHEMA_MISSING@lordfilm47.space",
+  "SCHEMA_MISSING@lordserial33.biz",
+  "SCHEMA_MISSING@zonafilm.space",
+  "SITEMAP_EMPTY@1lordserials1.online",
+  "SITEMAP_EMPTY@lordfilm47.space",
+  "SITEMAP_EMPTY@lordserial33.biz",
+  "SITEMAP_EMPTY@zonafilm.space",
+  "SITEMAP_INDEX_MISSING@1lordserials1.online",
+  "SITEMAP_INDEX_MISSING@lordfilm47.space",
+  "SITEMAP_INDEX_MISSING@lordserial33.biz",
+  "SITEMAP_INDEX_MISSING@zonafilm.space"
+ ],
+ "closed_alerts": []
+}

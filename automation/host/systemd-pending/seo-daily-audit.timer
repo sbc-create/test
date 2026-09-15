@@ -1,0 +1,12 @@
+# НЕ УСТАНОВЛЕН. Подготовлен для общей транзакции hardening.
+[Unit]
+Description=Ежедневный запуск аудита SEO-контура
+
+[Timer]
+# Раннее утро по Москве: отчёт должен быть готов до начала рабочего дня.
+OnCalendar=*-*-* 04:20:00
+Persistent=true
+RandomizedDelaySec=600
+
+[Install]
+WantedBy=timers.target

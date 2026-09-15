@@ -49,6 +49,19 @@ def _взять(url: str, timeout: int = 25) -> tuple[str, str, int]:
     return зг, тело, int(коды[-1]) if коды else 0
 
 
+def _шарды(домен: str) -> list[dict]:
+    """Части карты и число URL в каждой. Пусто — карты нет."""
+    _, индекс, код = _взять(f"https://{домен}/sitemap.xml")
+    if код != 200 or "<sitemapindex" not in индекс:
+        return []
+    из = []
+    for адрес in re.findall(r"<loc>([^<]+)</loc>", индекс):
+        _, часть, к = _взять(адрес)
+        из.append({"shard": адрес.rsplit("/", 1)[-1], "http": к,
+                   "urls": часть.count("<loc>")})
+    return из
+
+
 def осмотреть(домен: str, данные: dict) -> dict:
     счёт = данные["counter"]
     зг, тело, код = _взять(f"https://{домен}/")
@@ -78,6 +91,8 @@ def осмотреть(домен: str, данные: dict) -> dict:
         "canonical_absolute": bool(canon) and canon[0].startswith("https://"),
         "json_ld_blocks": тело.count("application/ld+json"),
         "soft_404": нет_код == 200,
+        "json_ld_types": sorted(set(re.findall(r'"@type"\s*:\s*"([A-Za-z]+)"', тело))),
+        "sitemap_shards": _шарды(домен),
         "renderer_build_id": (re.findall(
             r'<meta name="site-factory-build-id" content="([^"]*)"', тело) or [""])[0],
         "renderer_template_revision": (re.findall(
@@ -106,7 +121,20 @@ def осмотреть(домен: str, данные: dict) -> dict:
      "на главной нет canonical"),
     ("SOFT_404", lambda с: с["soft_404"],
      "несуществующая страница отвечает 200"),
+    ("SCHEMA_MISSING", lambda с: not с.get("json_ld_types"),
+     "структурированных данных на странице нет"),
+    ("SITEMAP_INDEX_MISSING", lambda с: not с.get("sitemap_shards"),
+     "индекса карты сайта нет"),
 )
+
+
+#: Нарушения, при которых прогон обязан завершиться ненулевым кодом. Здесь
+#: только то, что ломает сбор данных или открывает закрытое: пустой sitemap
+#: при `noindex` подождёт до утра, пропавший тег — нет.
+КРИТИЧЕСКИЕ = frozenset({
+    "METRIKA_TAG_MISSING", "METRIKA_WRONG_COUNTER", "METRIKA_DUPLICATE_INIT",
+    "HTTP_NOT_OK", "INDEXING_UNEXPECTEDLY_OPEN", "ROBOTS_TXT_LOST",
+})
 
 
 def тревоги(снимок: dict, вчера: dict | None) -> list[dict]:
@@ -151,6 +179,16 @@ def главное(argv: list[str] | None = None) -> int:
         сайты.append(с)
         все_тревоги += тревоги(с, прежние.get(домен))
 
+    # Что появилось и что закрылось со вчера. Список тревог сам по себе не
+    # показывает движения: тридцать одинаковых дней выглядят как один.
+    вчерашние = set()
+    if предыдущие:
+        было_полностью = json.loads(предыдущие[-1].read_text(encoding="utf-8"))
+        вчерашние = {(a["rule"], a["domain"]) for a in было_полностью.get("alerts", [])}
+    сегодняшние = {(a["rule"], a["domain"]) for a in все_тревоги}
+    новые = sorted(f"{r}@{d}" for r, d in сегодняшние - вчерашние)
+    закрытые = sorted(f"{r}@{d}" for r, d in вчерашние - сегодняшние)
+
     отчёт = {
         "schema": "seo.daily_health/1.0.0",
         "date": день,
@@ -163,13 +201,20 @@ def главное(argv: list[str] | None = None) -> int:
             "Внешний канал доставки не настроен. Файл на диске уведомлением не "
             "является: никто его не получит, пока за ним не придут.",
         "compared_with": предыдущие[-1].name if предыдущие else None,
+        "new_alerts": новые,
+        "closed_alerts": закрытые,
     }
     файл.write_text(json.dumps(отчёт, ensure_ascii=False, indent=1), encoding="utf-8")
+    критические = [a for a in все_тревоги if a["rule"] in КРИТИЧЕСКИЕ]
     print(json.dumps({"report": str(файл), "sites": len(сайты),
                       "alerts": len(все_тревоги),
+                      "critical": len(критические),
+                      "new_alerts": новые, "closed_alerts": закрытые,
                       "alert_rules": [a["rule"] for a in все_тревоги]},
                      ensure_ascii=False))
-    return 0
+    # Ненулевой код возврата — единственное, что заметит планировщик. Отчёт,
+    # всегда возвращающий ноль, молчит и тогда, когда тега больше нет.
+    return 1 if критические else 0
 
 
 if __name__ == "__main__":

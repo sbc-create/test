@@ -1,0 +1,3218 @@
+[
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Бренд",
+  "intent": "навигационное: ищут саму витрину",
+  "priority": 1,
+  "query": "Lordserial",
+  "reason": "запрос по бренду показывает, находят ли витрину по имени",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "имя витрины (LORDS_SITE_NAME)",
+  "target_page": "https://lordserial33.biz/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Бренд",
+  "intent": "навигационное: ищут саму витрину",
+  "priority": 1,
+  "query": "Lordserial смотреть онлайн",
+  "reason": "запрос по бренду показывает, находят ли витрину по имени",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "имя витрины (LORDS_SITE_NAME)",
+  "target_page": "https://lordserial33.biz/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Разделы",
+  "intent": "навигационное",
+  "priority": 3,
+  "query": "каталог фильмов и сериалов",
+  "reason": "раздел /catalog/ существует и отдаёт 200",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "навигация витрины",
+  "target_page": "https://lordserial33.biz/catalog/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Разделы",
+  "intent": "навигационное",
+  "priority": 3,
+  "query": "новинки фильмов и сериалов",
+  "reason": "раздел /new/ существует и отдаёт 200",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "навигация витрины",
+  "target_page": "https://lordserial33.biz/new/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Разделы",
+  "intent": "навигационное",
+  "priority": 3,
+  "query": "подборки фильмов и сериалов",
+  "reason": "раздел /collections/ существует и отдаёт 200",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "навигация витрины",
+  "target_page": "https://lordserial33.biz/collections/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Виды",
+  "intent": "транзакционное",
+  "priority": 1,
+  "query": "смотреть фильмы онлайн",
+  "reason": "в каталоге 32756 записей этого вида",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "каталог 905d3062b1b7eef6269cc44e7408f448, поле kind",
+  "target_page": "https://lordserial33.biz/catalog/?kind=Фильм"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Виды",
+  "intent": "транзакционное",
+  "priority": 1,
+  "query": "смотреть сериалы онлайн",
+  "reason": "в каталоге 19819 записей этого вида",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "каталог 905d3062b1b7eef6269cc44e7408f448, поле kind",
+  "target_page": "https://lordserial33.biz/catalog/?kind=Сериал"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Виды",
+  "intent": "транзакционное",
+  "priority": 2,
+  "query": "смотреть мультфильмы онлайн",
+  "reason": "в каталоге 109 записей этого вида",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "каталог 905d3062b1b7eef6269cc44e7408f448, поле kind",
+  "target_page": "https://lordserial33.biz/catalog/?kind=Мультфильм"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Жанры",
+  "intent": "транзакционное",
+  "priority": 2,
+  "query": "западный контент смотреть онлайн",
+  "reason": "жанр встречается у 36037 записей",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле genres",
+  "target_page": "https://lordserial33.biz/catalog/?genre=западный контент"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Жанры",
+  "intent": "транзакционное",
+  "priority": 2,
+  "query": "драма смотреть онлайн",
+  "reason": "жанр встречается у 22295 записей",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле genres",
+  "target_page": "https://lordserial33.biz/catalog/?genre=драма"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Жанры",
+  "intent": "транзакционное",
+  "priority": 2,
+  "query": "комедия смотреть онлайн",
+  "reason": "жанр встречается у 14872 записей",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле genres",
+  "target_page": "https://lordserial33.biz/catalog/?genre=комедия"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Жанры",
+  "intent": "транзакционное",
+  "priority": 2,
+  "query": "триллер смотреть онлайн",
+  "reason": "жанр встречается у 10311 записей",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле genres",
+  "target_page": "https://lordserial33.biz/catalog/?genre=триллер"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Жанры",
+  "intent": "транзакционное",
+  "priority": 2,
+  "query": "дорама смотреть онлайн",
+  "reason": "жанр встречается у 9495 записей",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле genres",
+  "target_page": "https://lordserial33.biz/catalog/?genre=дорама"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Жанры",
+  "intent": "транзакционное",
+  "priority": 2,
+  "query": "боевик смотреть онлайн",
+  "reason": "жанр встречается у 9475 записей",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле genres",
+  "target_page": "https://lordserial33.biz/catalog/?genre=боевик"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Жанры",
+  "intent": "транзакционное",
+  "priority": 2,
+  "query": "мелодрама смотреть онлайн",
+  "reason": "жанр встречается у 8308 записей",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле genres",
+  "target_page": "https://lordserial33.biz/catalog/?genre=мелодрама"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Жанры",
+  "intent": "транзакционное",
+  "priority": 2,
+  "query": "аниме смотреть онлайн",
+  "reason": "жанр встречается у 7287 записей",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле genres",
+  "target_page": "https://lordserial33.biz/catalog/?genre=аниме"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Жанры",
+  "intent": "транзакционное",
+  "priority": 2,
+  "query": "криминал смотреть онлайн",
+  "reason": "жанр встречается у 6704 записей",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле genres",
+  "target_page": "https://lordserial33.biz/catalog/?genre=криминал"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Жанры",
+  "intent": "транзакционное",
+  "priority": 2,
+  "query": "фэнтези смотреть онлайн",
+  "reason": "жанр встречается у 6024 записей",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле genres",
+  "target_page": "https://lordserial33.biz/catalog/?genre=фэнтези"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Жанры",
+  "intent": "транзакционное",
+  "priority": 2,
+  "query": "ужасы смотреть онлайн",
+  "reason": "жанр встречается у 5661 записей",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле genres",
+  "target_page": "https://lordserial33.biz/catalog/?genre=ужасы"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Жанры",
+  "intent": "транзакционное",
+  "priority": 2,
+  "query": "приключения смотреть онлайн",
+  "reason": "жанр встречается у 5250 записей",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле genres",
+  "target_page": "https://lordserial33.biz/catalog/?genre=приключения"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Годы",
+  "intent": "транзакционное",
+  "priority": 3,
+  "query": "фильмы 2026 года смотреть",
+  "reason": "за 2026 год в каталоге 2126 записей",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле year",
+  "target_page": "https://lordserial33.biz/catalog/?year=2026"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Годы",
+  "intent": "транзакционное",
+  "priority": 3,
+  "query": "фильмы 2025 года смотреть",
+  "reason": "за 2025 год в каталоге 4476 записей",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле year",
+  "target_page": "https://lordserial33.biz/catalog/?year=2025"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Годы",
+  "intent": "транзакционное",
+  "priority": 3,
+  "query": "фильмы 2024 года смотреть",
+  "reason": "за 2024 год в каталоге 4057 записей",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле year",
+  "target_page": "https://lordserial33.biz/catalog/?year=2024"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Годы",
+  "intent": "транзакционное",
+  "priority": 3,
+  "query": "фильмы 2023 года смотреть",
+  "reason": "за 2023 год в каталоге 3837 записей",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле year",
+  "target_page": "https://lordserial33.biz/catalog/?year=2023"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Годы",
+  "intent": "транзакционное",
+  "priority": 3,
+  "query": "фильмы 2022 года смотреть",
+  "reason": "за 2022 год в каталоге 4448 записей",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле year",
+  "target_page": "https://lordserial33.biz/catalog/?year=2022"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "0,0 МГц смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/0-0-mgc/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "0,0 МГц 2019",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/0-0-mgc/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "0.0MHz",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/0-0-mgc/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "0,1% мира смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/0-1-mira/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "0,1% мира 2022",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/0-1-mira/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "Hao xiang qu ni de shi jie ai ni",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/0-1-mira/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "007: Координаты «Скайфолл» смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/007-koordinaty-skayfoll/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "007: Координаты «Скайфолл» 2012",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/007-koordinaty-skayfoll/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "Skyfall",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/007-koordinaty-skayfoll/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "007: СПЕКТР смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/007-spektr/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "007: СПЕКТР 2015",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/007-spektr/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "Spectre",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/007-spektr/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "009-1 смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/009-1/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "009-1 2006",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/009-1/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "009-1: Конец начала смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/009-1-konec-nachala/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "009-1: Конец начала 2013",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/009-1-konec-nachala/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "009-1: The End of the Beginning",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/009-1-konec-nachala/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "03:34 Землетрясение в Чили смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/03-34-zemletryasenie-v-chili/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "03:34 Землетрясение в Чили 2011",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/03-34-zemletryasenie-v-chili/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "03:34 Terremoto en Chile",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/03-34-zemletryasenie-v-chili/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "+1 смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/1/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "+1 2013",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/1/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "1+1: Голливудская история смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/1-1-gollivudskaya-istoriya/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "1+1: Голливудская история 2017",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/1-1-gollivudskaya-istoriya/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "The Upside",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/1-1-gollivudskaya-istoriya/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "1+1. Нарушая правила смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/1-1-narushaya-pravila/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "1+1. Нарушая правила 2016",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/1-1-narushaya-pravila/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "Inseparables",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/1-1-narushaya-pravila/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "1 смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/1-2/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "1 2013",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/1-2/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "1+2=Рай смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/1-2-ray/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "1+2=Рай 1990",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/1-2-ray/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "1+2 = Paradise",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/1-2-ray/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "1+Эверест смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/1-everest/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "1+Эверест 2017",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/1-everest/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "L'ascension",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/1-everest/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "1 ночь и 2 дня Сезон 4 смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/1-noch-i-2-dnya-sezon-4/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "1 ночь и 2 дня Сезон 4 2019",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/1-noch-i-2-dnya-sezon-4/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "2 Days & 1 Night Season 4",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/1-noch-i-2-dnya-sezon-4/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10 000 км: Любовь на расстоянии смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10-000-km-lyubov-na-rasstoyanii/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10 000 км: Любовь на расстоянии 2014",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10-000-km-lyubov-na-rasstoyanii/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "10.000 Km",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/10-000-km-lyubov-na-rasstoyanii/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10 000 лет до н.э. смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10-000-let-do-n-e/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10 000 лет до н.э. 2008",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10-000-let-do-n-e/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "10,000 BC",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/10-000-let-do-n-e/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10.5 баллов смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10-5-ballov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10.5 баллов 2004",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10-5-ballov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "10.5",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/10-5-ballov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10,5 баллов: Апокалипсис смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10-5-ballov-apokalipsis/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10,5 баллов: Апокалипсис 2006",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10-5-ballov-apokalipsis/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "10.5: Apocalypse",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/10-5-ballov-apokalipsis/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10 дней хорошего человека смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10-dney-horoshego-cheloveka/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10 дней хорошего человека 2023",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10-dney-horoshego-cheloveka/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "Iyi Adamin 10 Günü",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/10-dney-horoshego-cheloveka/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10 дней плохого парня смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10-dney-plohogo-parnya/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10 дней плохого парня 2023",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10-dney-plohogo-parnya/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "Kötü Adamin 10 Günü",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/10-dney-plohogo-parnya/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10 дней в сумасшедшем доме смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10-dney-v-sumasshedshem-dome/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10 дней в сумасшедшем доме 2015",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10-dney-v-sumasshedshem-dome/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "10 Days in a Madhouse",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/10-dney-v-sumasshedshem-dome/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10 грязных поступков смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10-gryaznyh-postupkov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10 грязных поступков 2005",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10-gryaznyh-postupkov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "Dirty Deeds",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/10-gryaznyh-postupkov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10 лет любви смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10-let-lyubvi/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10 лет любви 2022",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10-let-lyubvi/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "Shi nian yi pin wen ru yan",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/10-let-lyubvi/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10 лет спустя смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10-let-spustya-2/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10 лет спустя 2011",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10-let-spustya-2/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "10 Years",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/10-let-spustya-2/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10 минут назад смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10-minut-nazad/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10 минут назад 2023",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10-minut-nazad/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "10 Minutes Ago",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/10-minut-nazad/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10 минут спустя смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10-minut-spustya/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10 минут спустя 2019",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10-minut-spustya/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "10 Minutes Gone",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/10-minut-spustya/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10 на 10 смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10-na-10/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10 на 10 2018",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10-na-10/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "10x10",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/10-na-10/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10 обещаний моей собаке смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10-obeschaniy-moey-sobake/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10 обещаний моей собаке 2008",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10-obeschaniy-moey-sobake/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "Inu to watashi no 10 no yakusoku",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/10-obeschaniy-moey-sobake/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10 очков на будущее смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10-ochkov-na-buduschee/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10 очков на будущее 2022",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10-ochkov-na-buduschee/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "Mirai e no 10 Count",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/10-ochkov-na-buduschee/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10 правил смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10-pravil/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10 правил 2014",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10-pravil/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "10 pravidel jak sbalit holku",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/10-pravil/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10 правил соблазнения смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10-pravil-soblazneniya/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10 правил соблазнения 2012",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10-pravil-soblazneniya/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "10 regole per fare innamorare",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/10-pravil-soblazneniya/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10 причин моей ненависти смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10-prichin-moey-nenavisti/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10 причин моей ненависти 2009",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10-prichin-moey-nenavisti/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "10 Things I Hate About You",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/10-prichin-moey-nenavisti/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10 причин моей ненависти (1999) смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10-prichin-moey-nenavisti-1999/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10 причин моей ненависти (1999) 1999",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10-prichin-moey-nenavisti-1999/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10 секретов смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10-sekretov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10 секретов 2020",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10-sekretov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "10 no Himitsu",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/10-sekretov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10 шагов к успеху смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10-shagov-k-uspehu/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10 шагов к успеху 2006",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10-shagov-k-uspehu/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "10 Items or Less",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/10-shagov-k-uspehu/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10 жизней (2024) смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10-zhizney-2024/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10 жизней (2024) 2024",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10-zhizney-2024/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "10 Lives",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/10-zhizney-2024/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "100 атлетов смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/100-atletov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "100 атлетов 2023",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/100-atletov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "Physical: 100",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/100-atletov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "100 дней до экзаменов смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/100-dney-do-ekzamenov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "100 дней до экзаменов 2025",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/100-dney-do-ekzamenov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "100 dni do matury",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/100-dney-do-ekzamenov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "100 дней на жизнь смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/100-dney-na-zhizn/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "100 дней на жизнь 2019",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/100-dney-na-zhizn/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "100 Days to Live",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/100-dney-na-zhizn/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "100 дней с мистером Высокомерие смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/100-dney-s-misterom-vysokomerie/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "100 дней с мистером Высокомерие 2004",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/100-dney-s-misterom-vysokomerie/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "Naesarang ssagaji",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/100-dney-s-misterom-vysokomerie/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "100 футов смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/100-futov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "100 футов 2008",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/100-futov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "100 Feet",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/100-futov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "100 градусов ниже нуля смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/100-gradusov-nizhe-nulya/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "100 градусов ниже нуля 2013",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/100-gradusov-nizhe-nulya/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "100 Degrees Below Zero",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/100-gradusov-nizhe-nulya/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "100 лет Warner Bros. смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/100-let-warner-bros/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "100 лет Warner Bros. 2023",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/100-let-warner-bros/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "100 Years of Warner Bros.",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/100-let-warner-bros/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "100% любовь смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/100-lyubov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "100% любовь 2011",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/100-lyubov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "100% Love",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/100-lyubov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "100 метров смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/100-metrov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "100 метров 2016",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/100-metrov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "100 metros",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/100-metrov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "100 ночей Хиро смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/100-nochey-hiro/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "100 ночей Хиро 2025",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/100-nochey-hiro/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "100 Nights of Hero",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/100-nochey-hiro/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "100 поваров смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/100-povarov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "100 поваров 2026",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/100-povarov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "100 Cooks",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/100-povarov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "100 самых страшных киномоментов - 1 Часть смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/100-samyh-strashnyh-kinomomentov-1-chast/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "100 самых страшных киномоментов - 1 Часть 2004",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/100-samyh-strashnyh-kinomomentov-1-chast/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "The 100 Scariest Movie Moments",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/100-samyh-strashnyh-kinomomentov-1-chast/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "100 шагов: Успеть до старших классов смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/100-shagov-uspet-do-starshih-klassov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "100 шагов: Успеть до старших классов 2014",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/100-shagov-uspet-do-starshih-klassov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "100 Things to Do Before High School",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/100-shagov-uspet-do-starshih-klassov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "100% тигр смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/100-tigr/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "100% тигр 2024",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/100-tigr/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "The Lost Tiger",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/100-tigr/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "100% волк смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/100-volk/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "100% волк 2020",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/100-volk/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "100% Wolf",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/100-volk/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "100% волк: Легенда о Лунном камне смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/100-volk-legenda-o-lunnom-kamne/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "100% волк: Легенда о Лунном камне 2020",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/100-volk-legenda-o-lunnom-kamne/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "100% Wolf: Legend of the Moonstone",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/100-volk-legenda-o-lunnom-kamne/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "1000 океанов смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/1000-okeanov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "1000 океанов 2008",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/1000-okeanov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "Tausend Ozeane",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/1000-okeanov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "1000 женщин в жанре хоррор смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/1000-zhenschin-v-zhanre-horror/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "1000 женщин в жанре хоррор 2025",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/1000-zhenschin-v-zhanre-horror/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "1000 Women in Horror",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/1000-zhenschin-v-zhanre-horror/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "10000 часов смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/10000-chasov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "10000 часов 2014",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/10000-chasov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "10 000 timmar",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/10000-chasov/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "1001 грамм смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/1001-gramm/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "1001 грамм 2014",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/1001-gramm/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "1001 Gram",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/1001-gramm/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "1001 ночь (сериал 2006 – 2009) смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/1001-noch-serial-2006-2009/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "1001 ночь (сериал 2006 – 2009) 2006",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/1001-noch-serial-2006-2009/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "Binbir Gece",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/1001-noch-serial-2006-2009/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "101 далматинец смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/101-dalmatinec/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "101 далматинец 1996",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/101-dalmatinec/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "101 Dalmatians",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/101-dalmatinec/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "101-е предложение (сериал 2006) смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/101-e-predlozhenie-serial-2006/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "101-е предложение (сериал 2006) 2006",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/101-e-predlozhenie-serial-2006/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "101 beonjjae peuroposeu",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/101-e-predlozhenie-serial-2006/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы",
+  "intent": "транзакционное: конкретное произведение",
+  "priority": 1,
+  "query": "101 способ жениться смотреть онлайн",
+  "reason": "страница произведения существует",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле name",
+  "target_page": "https://lordserial33.biz/title/101-sposob-zhenitsya/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: уточнение",
+  "intent": "транзакционное с уточнением года",
+  "priority": 2,
+  "query": "101 способ жениться 2023",
+  "reason": "одноимённые произведения различаются годом",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности, поля name и year",
+  "target_page": "https://lordserial33.biz/title/101-sposob-zhenitsya/"
+ },
+ {
+  "device": "desktop+mobile",
+  "domain": "lordserial33.biz",
+  "group": "Тайтлы: оригинальное название",
+  "intent": "транзакционное по оригинальному названию",
+  "priority": 3,
+  "query": "101 Marriages",
+  "reason": "оригинальное название подтверждено данными",
+  "region": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "source": "подробности каталога, поле original_name",
+  "target_page": "https://lordserial33.biz/title/101-sposob-zhenitsya/"
+ }
+]

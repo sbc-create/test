@@ -36,6 +36,7 @@ import copy
 import json
 import os
 import re
+import sys
 import unicodedata
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -105,6 +106,16 @@ def _рядом_с_каталогом(шаблон: str) -> str:
 # нет в новом маршруте, проксируется в него. Так плеер, карточка и любые
 # динамические страницы остаются рабочими — их никто не переписывает.
 ВЕРХОВОЙ = os.environ.get("LORDS_LEGACY_UPSTREAM", "")
+
+# SEO-слой вынесен отдельным модулем: аналитика, canonical, структурированные
+# данные и sitemap. Рядом с рендерером, но не внутри него — чтобы переработка
+# шаблонов не могла его потерять, как уже однажды потеряла тег Метрики.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import seo_layer as SEO  # noqa: E402
+
+#: Каталог готовых файлов sitemap. Пусто — карта не отдаётся: отдавать пустую
+#: карту хуже, чем не отдавать никакой.
+SITEMAP_DIR = os.environ.get("LORDS_SITEMAP_DIR", "").strip()
 
 #: Счётчик Яндекс Метрики этой витрины. Публичное число, не секрет: оно и так
 #: видно в исходном коде любой страницы. Значение задаёт unit витрины — один
@@ -2914,9 +2925,21 @@ class Обработчик(BaseHTTPRequestHandler):
         pass
 
     def _отдать(self, тело: bytes, тип="text/html; charset=utf-8", код=200):
-        # Тег аналитики добавляется здесь и только здесь: это единственная
-        # точка, через которую уходит каждый ответ витрины.
-        тело = со_счётчиком(тело, тип)
+        # SEO-слой применяется здесь и только здесь: это единственная точка,
+        # через которую уходит каждый ответ витрины. Шаблон её не минует.
+        try:
+            путь_запроса = unquote(urlparse(self.path).path)
+            тело = SEO.обогатить(
+                тело, тип, хост=(self.headers.get("Host") or "").split(":")[0],
+                путь=(self.path or "/"), counter=СЧЁТЧИК_МЕТРИКИ,
+                имя_сайта=ИМЯ_ВИТРИНЫ,
+                сущность=getattr(self, "_seo_сущность", None),
+                поиск="/search/?q={search_term_string}",
+                код=код)
+        except Exception:
+            # Аналитика и разметка не вправе уронить страницу. Их отсутствие
+            # заметит ежедневный аудит; пятисотая ошибка заметит читатель.
+            pass
         self.send_response(код)
         self.send_header("Content-Type", тип)
         self.send_header("Content-Length", str(len(тело)))
@@ -2959,6 +2982,17 @@ class Обработчик(BaseHTTPRequestHandler):
                             "core": ЯДРО, "family": СЕМЕЙСТВО, "profile": ПРОФИЛЬ,
                             "revision": РЕВИЗИЯ, "display": "standalone"}, ensure_ascii=False)
             return self._отдать(м.encode(), "application/manifest+json")
+        if путь == "/sitemap.xml" or re.fullmatch(r"/sitemap-\d+\.xml", путь):
+            # Карта отдаётся только из готовых файлов. Собирать её на каждый
+            # запрос значило бы отдавать разное содержимое на одинаковый адрес.
+            if not SITEMAP_DIR:
+                return self._отдать(b"", "text/plain; charset=utf-8", код=404)
+            файл = Path(SITEMAP_DIR) / путь.lstrip("/")
+            try:
+                данные = файл.read_bytes()
+            except OSError:
+                return self._отдать(b"", "text/plain; charset=utf-8", код=404)
+            return self._отдать(данные, "application/xml; charset=utf-8")
         if путь == "/robots.txt":
             return self._отдать(b"User-agent: *\nDisallow: /\n", "text/plain; charset=utf-8")
         if путь in ("/favicon.svg", "/favicon.ico"):

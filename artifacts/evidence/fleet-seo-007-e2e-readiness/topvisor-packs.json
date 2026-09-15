@@ -1,0 +1,60 @@
+{
+ "minimal": {
+  "queries_per_site": {
+   "lords-01": 47,
+   "lords-02": 47,
+   "lords-03": 46,
+   "zona-01": 47
+  },
+  "queries_total": 187,
+  "sites": 4,
+  "regions": 1,
+  "region_id": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "recommended_frequency": "раз в неделю",
+  "checks_per_run": 374,
+  "pack_sha256": "2b30869d043259bb7933675394765eca759a9d6cbf23d72084ae9dc509e49d0f",
+  "uploaded": false
+ },
+ "extended": {
+  "queries_per_site": {
+   "lords-01": 201,
+   "lords-02": 201,
+   "lords-03": 200,
+   "zona-01": 201
+  },
+  "queries_total": 803,
+  "sites": 4,
+  "regions": 1,
+  "region_id": 213,
+  "searchers": [
+   "Яндекс",
+   "Google"
+  ],
+  "recommended_frequency": "раз в 3 дня",
+  "checks_per_run": 1606,
+  "pack_sha256": "14eb1e07fec974380e6533b4d5c28cc2561e98750f2352edc8a564310e5d9fa8",
+  "uploaded": false
+ },
+ "cost": {
+  "status": "COST_UNKNOWN",
+  "verified_source": "get/bank_2/info: тариф XS, стоимость тарифа 0, баланс 0",
+  "formula": "стоимость = число запросов × регионы × поисковые системы × цена одного съёма × частота в месяц",
+  "known": {
+   "запросы": {
+    "minimal": 187,
+    "extended": 803
+   },
+   "регионы": 1,
+   "поисковые системы": 2
+  },
+  "unknown": [
+   "цена одного съёма"
+  ],
+  "why": "бесплатные методы API цену съёма не отдают, а узнать её списанием означало бы потратить деньги ради проверки стоимости",
+  "owner_must_approve": "верхний предел месячного расхода в рублях"
+ }
+}

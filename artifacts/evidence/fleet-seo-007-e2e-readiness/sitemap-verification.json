@@ -1,0 +1,254 @@
+{
+ "per_domain": {
+  "lordfilm47.space": {
+   "shards": 2,
+   "urls": 53405,
+   "foreign_domain_urls": 0,
+   "duplicate_urls": 0,
+   "samples": [
+    {
+     "shard": "sitemap-1.xml",
+     "position": "начало",
+     "url": "https://lordfilm47.space/",
+     "http": "200",
+     "slug": "",
+     "title": "Lordfilm — фильмы и сериалы онлайн",
+     "ok": true
+    },
+    {
+     "shard": "sitemap-1.xml",
+     "position": "середина",
+     "url": "https://lordfilm47.space/title/strannye-angely/",
+     "http": "200",
+     "slug": "strannye-angely",
+     "title": "Странные Ангелы — смотреть онлайн — Lordfilm",
+     "ok": true
+    },
+    {
+     "shard": "sitemap-1.xml",
+     "position": "конец",
+     "url": "https://lordfilm47.space/title/pozhiznennyy-prigovor/",
+     "http": "200",
+     "slug": "pozhiznennyy-prigovor",
+     "title": "Пожизненный приговор — смотреть онлайн — Lordfilm",
+     "ok": true
+    },
+    {
+     "shard": "sitemap-2.xml",
+     "position": "начало",
+     "url": "https://lordfilm47.space/title/pozhirateli-3/",
+     "http": "200",
+     "slug": "pozhirateli-3",
+     "title": "Пожиратели — смотреть онлайн — Lordfilm",
+     "ok": true
+    },
+    {
+     "shard": "sitemap-2.xml",
+     "position": "середина",
+     "url": "https://lordfilm47.space/title/klub-ubiystv-marlou/",
+     "http": "200",
+     "slug": "klub-ubiystv-marlou",
+     "title": "Клуб убийств Марлоу — смотреть онлайн — Lordfilm",
+     "ok": true
+    },
+    {
+     "shard": "sitemap-2.xml",
+     "position": "конец",
+     "url": "https://lordfilm47.space/title/007-doroga-k-millionu/",
+     "http": "200",
+     "slug": "007-doroga-k-millionu",
+     "title": "007: Дорога к миллиону — смотреть онлайн — Lordfil",
+     "ok": true
+    }
+   ]
+  },
+  "lordserial33.biz": {
+   "shards": 2,
+   "urls": 52689,
+   "foreign_domain_urls": 0,
+   "duplicate_urls": 0,
+   "samples": [
+    {
+     "shard": "sitemap-1.xml",
+     "position": "начало",
+     "url": "https://lordserial33.biz/",
+     "http": "200",
+     "slug": "",
+     "title": "Главная — Lordserial",
+     "ok": true
+    },
+    {
+     "shard": "sitemap-1.xml",
+     "position": "середина",
+     "url": "https://lordserial33.biz/title/t-o-varischi-na-veka/",
+     "http": "200",
+     "slug": "t-o-varischi-na-veka",
+     "title": "Т(о)варищи на века — lordserial33.biz",
+     "ok": true
+    },
+    {
+     "shard": "sitemap-1.xml",
+     "position": "конец",
+     "url": "https://lordserial33.biz/title/mirovye-vedmy-podnimayutsya-v-nebo/",
+     "http": "200",
+     "slug": "mirovye-vedmy-podnimayutsya-v-nebo",
+     "title": "Мировые ведьмы поднимаются в небо! — lordserial33.",
+     "ok": true
+    },
+    {
+     "shard": "sitemap-2.xml",
+     "position": "начало",
+     "url": "https://lordserial33.biz/title/mirnaya-zhizn-bratev-serial-2017/",
+     "http": "200",
+     "slug": "mirnaya-zhizn-bratev-serial-2017",
+     "title": "Мирная жизнь братьев (сериал 2017) — lordserial33.",
+     "ok": true
+    },
+    {
+     "shard": "sitemap-2.xml",
+     "position": "середина",
+     "url": "https://lordserial33.biz/title/dobro-pozhalovat-v-samdalli/",
+     "http": "200",
+     "slug": "dobro-pozhalovat-v-samdalli",
+     "title": "Добро пожаловать в Самдалли — lordserial33.biz",
+     "ok": true
+    },
+    {
+     "shard": "sitemap-2.xml",
+     "position": "конец",
+     "url": "https://lordserial33.biz/title/strasti-zhanny-d-ark/",
+     "http": "200",
+     "slug": "strasti-zhanny-d-ark",
+     "title": "Страсти Жанны д&#x27;Арк — lordserial33.biz",
+     "ok": true
+    }
+   ]
+  },
+  "1lordserials1.online": {
+   "shards": 2,
+   "urls": 52581,
+   "foreign_domain_urls": 0,
+   "duplicate_urls": 0,
+   "samples": [
+    {
+     "shard": "sitemap-1.xml",
+     "position": "начало",
+     "url": "https://1lordserials1.online/",
+     "http": "200",
+     "slug": "",
+     "title": "Главная — Lordserials",
+     "ok": true
+    },
+    {
+     "shard": "sitemap-1.xml",
+     "position": "середина",
+     "url": "https://1lordserials1.online/title/i-togda-ya-uhozhu/",
+     "http": "200",
+     "slug": "i-togda-ya-uhozhu",
+     "title": "И тогда я ухожу — 1lordserials1.online",
+     "ok": true
+    },
+    {
+     "shard": "sitemap-1.xml",
+     "position": "конец",
+     "url": "https://1lordserials1.online/title/metronom-istoriya-francii/",
+     "http": "200",
+     "slug": "metronom-istoriya-francii",
+     "title": "Метроном. История Франции — 1lordserials1.online",
+     "ok": true
+    },
+    {
+     "shard": "sitemap-2.xml",
+     "position": "начало",
+     "url": "https://1lordserials1.online/title/metod-kominski-serial-2018-2021/",
+     "http": "200",
+     "slug": "metod-kominski-serial-2018-2021",
+     "title": "Метод Комински (сериал 2018 – 2021) — 1lordserials",
+     "ok": true
+    },
+    {
+     "shard": "sitemap-2.xml",
+     "position": "середина",
+     "url": "https://1lordserials1.online/title/dnevnik-basketbolista-1995/",
+     "http": "200",
+     "slug": "dnevnik-basketbolista-1995",
+     "title": "Дневник баскетболиста (1995) — 1lordserials1.onlin",
+     "ok": true
+    },
+    {
+     "shard": "sitemap-2.xml",
+     "position": "конец",
+     "url": "https://1lordserials1.online/title/strasti-zhanny-d-ark/",
+     "http": "200",
+     "slug": "strasti-zhanny-d-ark",
+     "title": "Страсти Жанны д&#x27;Арк — 1lordserials1.online",
+     "ok": true
+    }
+   ]
+  },
+  "zonafilm.space": {
+   "shards": 2,
+   "urls": 53405,
+   "foreign_domain_urls": 0,
+   "duplicate_urls": 0,
+   "samples": [
+    {
+     "shard": "sitemap-1.xml",
+     "position": "начало",
+     "url": "https://zonafilm.space/",
+     "http": "200",
+     "slug": "",
+     "title": "Zona — кинопортал",
+     "ok": true
+    },
+    {
+     "shard": "sitemap-1.xml",
+     "position": "середина",
+     "url": "https://zonafilm.space/title/strannye-angely/",
+     "http": "200",
+     "slug": "strannye-angely",
+     "title": "Странные Ангелы — смотреть онлайн — Zona",
+     "ok": true
+    },
+    {
+     "shard": "sitemap-1.xml",
+     "position": "конец",
+     "url": "https://zonafilm.space/title/pozhiznennyy-prigovor/",
+     "http": "200",
+     "slug": "pozhiznennyy-prigovor",
+     "title": "Пожизненный приговор — смотреть онлайн — Zona",
+     "ok": true
+    },
+    {
+     "shard": "sitemap-2.xml",
+     "position": "начало",
+     "url": "https://zonafilm.space/title/pozhirateli-3/",
+     "http": "200",
+     "slug": "pozhirateli-3",
+     "title": "Пожиратели — смотреть онлайн — Zona",
+     "ok": true
+    },
+    {
+     "shard": "sitemap-2.xml",
+     "position": "середина",
+     "url": "https://zonafilm.space/title/klub-ubiystv-marlou/",
+     "http": "200",
+     "slug": "klub-ubiystv-marlou",
+     "title": "Клуб убийств Марлоу — смотреть онлайн — Zona",
+     "ok": true
+    },
+    {
+     "shard": "sitemap-2.xml",
+     "position": "конец",
+     "url": "https://zonafilm.space/title/007-doroga-k-millionu/",
+     "http": "200",
+     "slug": "007-doroga-k-millionu",
+     "title": "007: Дорога к миллиону — смотреть онлайн — Zona",
+     "ok": true
+    }
+   ]
+  }
+ },
+ "failed_samples": 0,
+ "method": "по три пробы на шард: начало, середина, конец; проверяется код ответа и сущность страницы"
+}
