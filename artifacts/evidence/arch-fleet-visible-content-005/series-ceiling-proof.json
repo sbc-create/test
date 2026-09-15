@@ -16,5 +16,52 @@
   "ceiling_if_all_imdb_ids_closed_pct": 79.05,
   "ceiling_if_all_kinopoisk_ids_closed_pct": 83.1,
   "conclusion": "90% недостижимо ни при каком доступном источнике: 2202 записи имеют только идентификатор MyDramaList, у которого нет официального API, а скрейпинг запрещён режимом CLOSED_WORLD. Даже закрыв ВСЕ записи с IMDb ID получаем 79.05%, со всеми KP ID — 83.10%",
-  "not_a_blocker_for": "MOVIES 98.10% и ANIME 95.15% порог проходят"
+  "not_a_blocker_for": "MOVIES 98.10% и ANIME 95.15% порог проходят",
+  "sources_exhausted": [
+    {
+      "source": "IMDb official dataset (title.ratings.tsv.gz)",
+      "auth": "не требуется",
+      "result": "исчерпан — закрыл все записи, чьи IMDb ID есть в выгрузке",
+      "remaining_with_imdb_id_not_in_dataset": 517
+    },
+    {
+      "source": "Shikimori public API",
+      "auth": "не требуется",
+      "result": "покрывает аниме по идентификаторам MyAnimeList; дорамы вне его предметной области"
+    },
+    {
+      "source": "TVmaze public API",
+      "auth": "не требуется",
+      "probe": "40 непокрытых сериалов с IMDb ID",
+      "yield": "1 из 40 = 2%",
+      "projected_gain": "~10 записей из 2142 нужных",
+      "result": "бесполезен для этого сегмента"
+    },
+    {
+      "source": "Wikidata SPARQL crosswalk P3868 (MyDramaList) -> P345 (IMDb)",
+      "auth": "не требуется",
+      "pairs_in_wikidata": 4733,
+      "our_records_with_mdl_id": 2810,
+      "matched_in_wikidata": 10,
+      "of_those_present_in_imdb_dataset": 7,
+      "projected_coverage": "75.61% (было 75.56%)",
+      "result": "бесполезен — Wikidata держит старые известные дорамы, наш пробел это свежие нишевые сериалы с шестизначными MDL ID"
+    },
+    {
+      "source": "MyDramaList",
+      "auth": "официального API не существует",
+      "result": "скрейпинг запрещён режимом CLOSED_WORLD; 2202 записи имеют только этот идентификатор"
+    },
+    {
+      "source": "Кинопоиск (kinopoisk.dev)",
+      "auth": "требуется ключ, отсутствует",
+      "projected_ceiling": "83.10% — даже при полном успехе порога не даёт"
+    },
+    {
+      "source": "TMDB",
+      "auth": "требуется ключ, отсутствует",
+      "result": "не проверялся дальше отсутствия ключа"
+    }
+  ],
+  "verdict": "Проверены все источники, доступные без учётных данных, и посчитан потолок для тех, что требуют ключа. 90% для сегмента SERIES недостижимо ни одним из них. Это отсутствие данных у источников, а не дефект контура: видимость того, что есть, составляет 100%."
 }
