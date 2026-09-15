@@ -1,0 +1,211 @@
+{
+ "status": "CURRENT",
+ "per_domain": {
+  "1lordserials1.online": {
+   "counter_id": 112010277,
+   "windows": {
+    "D-1": {
+     "visits_total": 33.0,
+     "organic_visits": 0
+    },
+    "D-8": {
+     "visits_total": 47.0,
+     "organic_visits": 0
+    },
+    "L7": {
+     "visits_total": 67.0,
+     "organic_visits": 0
+    },
+    "P7": {
+     "visits_total": 181.0,
+     "organic_visits": 1.0
+    },
+    "L28": {
+     "visits_total": 286.0,
+     "organic_visits": 1.0
+    },
+    "P28": {
+     "visits_total": 0.0,
+     "organic_visits": 0
+    }
+   }
+  },
+  "lordfilm47.space": {
+   "counter_id": 112010269,
+   "windows": {
+    "D-1": {
+     "visits_total": 25.0,
+     "organic_visits": 0
+    },
+    "D-8": {
+     "visits_total": 120.0,
+     "organic_visits": 0
+    },
+    "L7": {
+     "visits_total": 74.0,
+     "organic_visits": 0
+    },
+    "P7": {
+     "visits_total": 370.0,
+     "organic_visits": 1.0
+    },
+    "L28": {
+     "visits_total": 516.0,
+     "organic_visits": 1.0
+    },
+    "P28": {
+     "visits_total": 0.0,
+     "organic_visits": 0
+    }
+   }
+  },
+  "lordserial33.biz": {
+   "counter_id": 112010274,
+   "windows": {
+    "D-1": {
+     "visits_total": 37.0,
+     "organic_visits": 0
+    },
+    "D-8": {
+     "visits_total": 35.0,
+     "organic_visits": 0
+    },
+    "L7": {
+     "visits_total": 212.0,
+     "organic_visits": 0
+    },
+    "P7": {
+     "visits_total": 277.0,
+     "organic_visits": 1.0
+    },
+    "L28": {
+     "visits_total": 532.0,
+     "organic_visits": 1.0
+    },
+    "P28": {
+     "visits_total": 0.0,
+     "organic_visits": 0
+    }
+   }
+  },
+  "yummyani.biz": {
+   "counter_id": 111881039,
+   "windows": {
+    "D-1": {
+     "visits_total": 20.0,
+     "organic_visits": 0
+    },
+    "D-8": {
+     "visits_total": 49.0,
+     "organic_visits": 0
+    },
+    "L7": {
+     "visits_total": 340.0,
+     "organic_visits": 0
+    },
+    "P7": {
+     "visits_total": 250.0,
+     "organic_visits": 1.0
+    },
+    "L28": {
+     "visits_total": 719.0,
+     "organic_visits": 1.0
+    },
+    "P28": {
+     "visits_total": 0.0,
+     "organic_visits": 0
+    }
+   }
+  },
+  "yummyani.org": {
+   "counter_id": 111881038,
+   "windows": {
+    "D-1": {
+     "visits_total": 25.0,
+     "organic_visits": 0
+    },
+    "D-8": {
+     "visits_total": 42.0,
+     "organic_visits": 0
+    },
+    "L7": {
+     "visits_total": 341.0,
+     "organic_visits": 0
+    },
+    "P7": {
+     "visits_total": 278.0,
+     "organic_visits": 1.0
+    },
+    "L28": {
+     "visits_total": 778.0,
+     "organic_visits": 1.0
+    },
+    "P28": {
+     "visits_total": 0.0,
+     "organic_visits": 0
+    }
+   }
+  },
+  "yummyani.site": {
+   "counter_id": 111881037,
+   "windows": {
+    "D-1": {
+     "visits_total": 1287.0,
+     "organic_visits": 1036.0
+    },
+    "D-8": {
+     "visits_total": 125.0,
+     "organic_visits": 44.0
+    },
+    "L7": {
+     "visits_total": 3144.0,
+     "organic_visits": 2057.0
+    },
+    "P7": {
+     "visits_total": 1292.0,
+     "organic_visits": 376.0
+    },
+    "L28": {
+     "visits_total": 4643.0,
+     "organic_visits": 2433.0
+    },
+    "P28": {
+     "visits_total": 0.0,
+     "organic_visits": 0
+    }
+   }
+  },
+  "zonafilm.space": {
+   "counter_id": 112582938,
+   "windows": {
+    "D-1": {
+     "visits_total": 27.0,
+     "organic_visits": 0
+    },
+    "D-8": {
+     "visits_total": 0.0,
+     "organic_visits": 0
+    },
+    "L7": {
+     "visits_total": 27.0,
+     "organic_visits": 0
+    },
+    "P7": {
+     "visits_total": 0.0,
+     "organic_visits": 0
+    },
+    "L28": {
+     "visits_total": 27.0,
+     "organic_visits": 0
+    },
+    "P28": {
+     "visits_total": 0.0,
+     "organic_visits": 0
+    }
+   }
+  }
+ },
+ "age_hours": 0.0,
+ "measured_at": "2026-09-15T11:27:09.077229+00:00",
+ "note": "Метрика, first-party. Платных источников не использовано."
+}

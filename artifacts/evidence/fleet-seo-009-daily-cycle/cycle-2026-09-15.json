@@ -2,7 +2,7 @@
  "schema": "seo.daily_cycle/1.0.0",
  "report_id": "seo-daily-2026-09-15",
  "date": "2026-09-15",
- "cutoff_utc": "2026-09-15T10:59:04Z",
+ "cutoff_utc": "2026-09-15T11:28:21Z",
  "inventory_version": "seo_inventory/1",
  "inventory": {
   "1lordserials1.online": {
@@ -229,351 +229,351 @@
    "https://old.yummyani.me/"
   ]
  },
- "coverage_snapshot_sha256": "0f41c302f17d006d3dd039d594a788c4157690fa3aa3ea31547002dd457f9a76",
+ "coverage_snapshot_sha256": "b45c5c53454a1a277c88eede4f6fc85d2aa81b76310312fee8d2f5f71b46102b",
  "coverage": {
   "lordfilm47.space": {
    "site_id": "lords-01",
    "domain": "lordfilm47.space",
    "family": "lords",
-   "catalog_revision": "b12eecd40d7e6964067f1e2f63f97f67",
-   "catalog_total": 53400,
-   "details_total": 53400,
+   "catalog_revision": "024cfd7c3b9d3c043d647017139be1a9",
+   "catalog_total": 53416,
+   "details_total": 53416,
    "segments": {
     "FILMS": {
-     "entries": 35876,
-     "details_available": 35876,
+     "entries": 35880,
+     "details_available": 35880,
      "fields": {
       "slug": {
-       "TOTAL": 35876,
-       "COVERED": 35876,
+       "TOTAL": 35880,
+       "COVERED": 35880,
        "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 35876,
-       "ELIGIBLE_COVERED": 35876,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35880,
        "ELIGIBLE_COVERAGE": 1.0
       },
       "title": {
-       "TOTAL": 35876,
-       "COVERED": 35876,
+       "TOTAL": 35880,
+       "COVERED": 35880,
        "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 35876,
-       "ELIGIBLE_COVERED": 35876,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35880,
        "ELIGIBLE_COVERAGE": 1.0
       },
       "year": {
-       "TOTAL": 35876,
-       "COVERED": 35158,
+       "TOTAL": 35880,
+       "COVERED": 35162,
        "RAW_COVERAGE": 0.98,
-       "ELIGIBLE": 35876,
-       "ELIGIBLE_COVERED": 35158,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35162,
        "ELIGIBLE_COVERAGE": 0.98
       },
       "kind": {
-       "TOTAL": 35876,
-       "COVERED": 35876,
+       "TOTAL": 35880,
+       "COVERED": 35880,
        "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 35876,
-       "ELIGIBLE_COVERED": 35876,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35880,
        "ELIGIBLE_COVERAGE": 1.0
       },
       "poster": {
-       "TOTAL": 35876,
-       "COVERED": 35798,
+       "TOTAL": 35880,
+       "COVERED": 35802,
        "RAW_COVERAGE": 0.9978,
-       "ELIGIBLE": 35876,
-       "ELIGIBLE_COVERED": 35798,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35802,
        "ELIGIBLE_COVERAGE": 0.9978
       },
       "url": {
-       "TOTAL": 35876,
-       "COVERED": 35876,
+       "TOTAL": 35880,
+       "COVERED": 35880,
        "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 35876,
-       "ELIGIBLE_COVERED": 35876,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35880,
        "ELIGIBLE_COVERAGE": 1.0
       },
       "details.name": {
-       "TOTAL": 35876,
-       "COVERED": 35876,
+       "TOTAL": 35880,
+       "COVERED": 35880,
        "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 35876,
-       "ELIGIBLE_COVERED": 35876,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35880,
        "ELIGIBLE_COVERAGE": 1.0
       },
       "details.original_name": {
-       "TOTAL": 35876,
+       "TOTAL": 35880,
        "COVERED": 35220,
-       "RAW_COVERAGE": 0.9817,
-       "ELIGIBLE": 35876,
+       "RAW_COVERAGE": 0.9816,
+       "ELIGIBLE": 35880,
        "ELIGIBLE_COVERED": 35220,
-       "ELIGIBLE_COVERAGE": 0.9817
+       "ELIGIBLE_COVERAGE": 0.9816
       },
       "details.description": {
-       "TOTAL": 35876,
+       "TOTAL": 35880,
        "COVERED": 28893,
-       "RAW_COVERAGE": 0.8054,
-       "ELIGIBLE": 35876,
+       "RAW_COVERAGE": 0.8053,
+       "ELIGIBLE": 35880,
        "ELIGIBLE_COVERED": 28893,
-       "ELIGIBLE_COVERAGE": 0.8054
+       "ELIGIBLE_COVERAGE": 0.8053
       },
       "details.genres": {
-       "TOTAL": 35876,
+       "TOTAL": 35880,
        "COVERED": 35874,
-       "RAW_COVERAGE": 0.9999,
-       "ELIGIBLE": 35876,
+       "RAW_COVERAGE": 0.9998,
+       "ELIGIBLE": 35880,
        "ELIGIBLE_COVERED": 35874,
-       "ELIGIBLE_COVERAGE": 0.9999
+       "ELIGIBLE_COVERAGE": 0.9998
       },
       "details.poster_url": {
-       "TOTAL": 35876,
-       "COVERED": 35798,
+       "TOTAL": 35880,
+       "COVERED": 35802,
        "RAW_COVERAGE": 0.9978,
-       "ELIGIBLE": 35876,
-       "ELIGIBLE_COVERED": 35798,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35802,
        "ELIGIBLE_COVERAGE": 0.9978
       },
       "details.year": {
-       "TOTAL": 35876,
-       "COVERED": 35158,
+       "TOTAL": 35880,
+       "COVERED": 35162,
        "RAW_COVERAGE": 0.98,
-       "ELIGIBLE": 35876,
-       "ELIGIBLE_COVERED": 35158,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35162,
        "ELIGIBLE_COVERAGE": 0.98
       },
       "details.type": {
-       "TOTAL": 35876,
-       "COVERED": 35876,
+       "TOTAL": 35880,
+       "COVERED": 35880,
        "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 35876,
-       "ELIGIBLE_COVERED": 35876,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35880,
        "ELIGIBLE_COVERAGE": 1.0
       },
       "details.external_ids": {
-       "TOTAL": 35876,
-       "COVERED": 35871,
+       "TOTAL": 35880,
+       "COVERED": 35875,
        "RAW_COVERAGE": 0.9999,
-       "ELIGIBLE": 35876,
-       "ELIGIBLE_COVERED": 35871,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35875,
        "ELIGIBLE_COVERAGE": 0.9999
       }
      },
      "ratings": {
       "kinopoisk": {
-       "TOTAL": 35876,
-       "ELIGIBLE": 34476,
+       "TOTAL": 35880,
+       "ELIGIBLE": 34477,
        "COVERED": 0,
        "RAW_COVERAGE": 0.0,
        "ELIGIBLE_COVERAGE": 0.0,
-       "MISSING_SOURCE": 1400,
+       "MISSING_SOURCE": 1403,
        "UNMATCHED_IDENTITY": 0,
-       "SOURCE_NOT_INTEGRATED": 34476
+       "SOURCE_NOT_INTEGRATED": 34477
       },
       "imdb": {
-       "TOTAL": 35876,
-       "ELIGIBLE": 33749,
+       "TOTAL": 35880,
+       "ELIGIBLE": 33753,
        "COVERED": 6714,
        "RAW_COVERAGE": 0.1871,
        "ELIGIBLE_COVERAGE": 0.1989,
        "MISSING_SOURCE": 2127,
-       "UNMATCHED_IDENTITY": 27035,
+       "UNMATCHED_IDENTITY": 27039,
        "SOURCE_NOT_INTEGRATED": 0
       },
       "shikimori": {
-       "TOTAL": 35876,
+       "TOTAL": 35880,
        "ELIGIBLE": 1536,
        "COVERED": 1536,
        "RAW_COVERAGE": 0.0428,
        "ELIGIBLE_COVERAGE": 1.0,
-       "MISSING_SOURCE": 34340,
+       "MISSING_SOURCE": 34344,
        "UNMATCHED_IDENTITY": 0,
        "SOURCE_NOT_INTEGRATED": 0
       },
       "myanimelist": {
-       "TOTAL": 35876,
+       "TOTAL": 35880,
        "ELIGIBLE": 3821,
        "COVERED": 0,
        "RAW_COVERAGE": 0.0,
        "ELIGIBLE_COVERAGE": 0.0,
-       "MISSING_SOURCE": 32055,
+       "MISSING_SOURCE": 32059,
        "UNMATCHED_IDENTITY": 0,
        "SOURCE_NOT_INTEGRATED": 3821
       },
       "amd": {
-       "TOTAL": 35876,
+       "TOTAL": 35880,
        "ELIGIBLE": 0,
        "COVERED": 0,
        "RAW_COVERAGE": 0.0,
        "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 35876,
+       "MISSING_SOURCE": 35880,
        "UNMATCHED_IDENTITY": 0,
        "SOURCE_NOT_INTEGRATED": 0
       }
      }
     },
     "SERIES": {
-     "entries": 17524,
-     "details_available": 17524,
+     "entries": 17536,
+     "details_available": 17536,
      "fields": {
       "slug": {
-       "TOTAL": 17524,
-       "COVERED": 17524,
+       "TOTAL": 17536,
+       "COVERED": 17536,
        "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 17524,
-       "ELIGIBLE_COVERED": 17524,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
        "ELIGIBLE_COVERAGE": 1.0
       },
       "title": {
-       "TOTAL": 17524,
-       "COVERED": 17524,
+       "TOTAL": 17536,
+       "COVERED": 17536,
        "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 17524,
-       "ELIGIBLE_COVERED": 17524,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
        "ELIGIBLE_COVERAGE": 1.0
       },
       "year": {
-       "TOTAL": 17524,
-       "COVERED": 15500,
-       "RAW_COVERAGE": 0.8845,
-       "ELIGIBLE": 17524,
-       "ELIGIBLE_COVERED": 15500,
-       "ELIGIBLE_COVERAGE": 0.8845
+       "TOTAL": 17536,
+       "COVERED": 15512,
+       "RAW_COVERAGE": 0.8846,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 15512,
+       "ELIGIBLE_COVERAGE": 0.8846
       },
       "kind": {
-       "TOTAL": 17524,
-       "COVERED": 17524,
+       "TOTAL": 17536,
+       "COVERED": 17536,
        "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 17524,
-       "ELIGIBLE_COVERED": 17524,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
        "ELIGIBLE_COVERAGE": 1.0
       },
       "poster": {
-       "TOTAL": 17524,
-       "COVERED": 17189,
+       "TOTAL": 17536,
+       "COVERED": 17201,
        "RAW_COVERAGE": 0.9809,
-       "ELIGIBLE": 17524,
-       "ELIGIBLE_COVERED": 17189,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17201,
        "ELIGIBLE_COVERAGE": 0.9809
       },
       "url": {
-       "TOTAL": 17524,
-       "COVERED": 17524,
+       "TOTAL": 17536,
+       "COVERED": 17536,
        "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 17524,
-       "ELIGIBLE_COVERED": 17524,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
        "ELIGIBLE_COVERAGE": 1.0
       },
       "details.name": {
-       "TOTAL": 17524,
-       "COVERED": 17524,
+       "TOTAL": 17536,
+       "COVERED": 17536,
        "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 17524,
-       "ELIGIBLE_COVERED": 17524,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
        "ELIGIBLE_COVERAGE": 1.0
       },
       "details.original_name": {
-       "TOTAL": 17524,
+       "TOTAL": 17536,
        "COVERED": 15360,
-       "RAW_COVERAGE": 0.8765,
-       "ELIGIBLE": 17524,
+       "RAW_COVERAGE": 0.8759,
+       "ELIGIBLE": 17536,
        "ELIGIBLE_COVERED": 15360,
-       "ELIGIBLE_COVERAGE": 0.8765
+       "ELIGIBLE_COVERAGE": 0.8759
       },
       "details.description": {
-       "TOTAL": 17524,
+       "TOTAL": 17536,
        "COVERED": 11206,
-       "RAW_COVERAGE": 0.6395,
-       "ELIGIBLE": 17524,
+       "RAW_COVERAGE": 0.639,
+       "ELIGIBLE": 17536,
        "ELIGIBLE_COVERED": 11206,
-       "ELIGIBLE_COVERAGE": 0.6395
+       "ELIGIBLE_COVERAGE": 0.639
       },
       "details.genres": {
-       "TOTAL": 17524,
+       "TOTAL": 17536,
        "COVERED": 17524,
-       "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 17524,
+       "RAW_COVERAGE": 0.9993,
+       "ELIGIBLE": 17536,
        "ELIGIBLE_COVERED": 17524,
-       "ELIGIBLE_COVERAGE": 1.0
+       "ELIGIBLE_COVERAGE": 0.9993
       },
       "details.poster_url": {
-       "TOTAL": 17524,
-       "COVERED": 17189,
+       "TOTAL": 17536,
+       "COVERED": 17201,
        "RAW_COVERAGE": 0.9809,
-       "ELIGIBLE": 17524,
-       "ELIGIBLE_COVERED": 17189,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17201,
        "ELIGIBLE_COVERAGE": 0.9809
       },
       "details.year": {
-       "TOTAL": 17524,
-       "COVERED": 15500,
-       "RAW_COVERAGE": 0.8845,
-       "ELIGIBLE": 17524,
-       "ELIGIBLE_COVERED": 15500,
-       "ELIGIBLE_COVERAGE": 0.8845
+       "TOTAL": 17536,
+       "COVERED": 15512,
+       "RAW_COVERAGE": 0.8846,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 15512,
+       "ELIGIBLE_COVERAGE": 0.8846
       },
       "details.type": {
-       "TOTAL": 17524,
-       "COVERED": 17524,
+       "TOTAL": 17536,
+       "COVERED": 17536,
        "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 17524,
-       "ELIGIBLE_COVERED": 17524,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
        "ELIGIBLE_COVERAGE": 1.0
       },
       "details.external_ids": {
-       "TOTAL": 17524,
-       "COVERED": 17456,
+       "TOTAL": 17536,
+       "COVERED": 17467,
        "RAW_COVERAGE": 0.9961,
-       "ELIGIBLE": 17524,
-       "ELIGIBLE_COVERED": 17456,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17467,
        "ELIGIBLE_COVERAGE": 0.9961
       }
      },
      "ratings": {
       "kinopoisk": {
-       "TOTAL": 17524,
-       "ELIGIBLE": 12245,
+       "TOTAL": 17536,
+       "ELIGIBLE": 12251,
        "COVERED": 0,
        "RAW_COVERAGE": 0.0,
        "ELIGIBLE_COVERAGE": 0.0,
-       "MISSING_SOURCE": 5279,
+       "MISSING_SOURCE": 5285,
        "UNMATCHED_IDENTITY": 0,
-       "SOURCE_NOT_INTEGRATED": 12245
+       "SOURCE_NOT_INTEGRATED": 12251
       },
       "imdb": {
-       "TOTAL": 17524,
-       "ELIGIBLE": 11328,
+       "TOTAL": 17536,
+       "ELIGIBLE": 11336,
        "COVERED": 10491,
-       "RAW_COVERAGE": 0.5987,
-       "ELIGIBLE_COVERAGE": 0.9261,
-       "MISSING_SOURCE": 6196,
-       "UNMATCHED_IDENTITY": 837,
+       "RAW_COVERAGE": 0.5983,
+       "ELIGIBLE_COVERAGE": 0.9255,
+       "MISSING_SOURCE": 6200,
+       "UNMATCHED_IDENTITY": 845,
        "SOURCE_NOT_INTEGRATED": 0
       },
       "shikimori": {
-       "TOTAL": 17524,
+       "TOTAL": 17536,
        "ELIGIBLE": 2885,
        "COVERED": 2885,
-       "RAW_COVERAGE": 0.1646,
+       "RAW_COVERAGE": 0.1645,
        "ELIGIBLE_COVERAGE": 1.0,
-       "MISSING_SOURCE": 14639,
+       "MISSING_SOURCE": 14651,
        "UNMATCHED_IDENTITY": 0,
        "SOURCE_NOT_INTEGRATED": 0
       },
       "myanimelist": {
-       "TOTAL": 17524,
+       "TOTAL": 17536,
        "ELIGIBLE": 3197,
        "COVERED": 0,
        "RAW_COVERAGE": 0.0,
        "ELIGIBLE_COVERAGE": 0.0,
-       "MISSING_SOURCE": 14327,
+       "MISSING_SOURCE": 14339,
        "UNMATCHED_IDENTITY": 0,
        "SOURCE_NOT_INTEGRATED": 3197
       },
       "amd": {
-       "TOTAL": 17524,
+       "TOTAL": 17536,
        "ELIGIBLE": 0,
        "COVERED": 0,
        "RAW_COVERAGE": 0.0,
        "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 17524,
+       "MISSING_SOURCE": 17536,
        "UNMATCHED_IDENTITY": 0,
        "SOURCE_NOT_INTEGRATED": 0
       }
@@ -585,741 +585,9 @@
    "site_id": "lords-02",
    "domain": "lordserial33.biz",
    "family": "lords",
-   "catalog_revision": "8fd1a36852ac22ed37d7cfb75ae1a44d",
-   "catalog_total": 52696,
-   "details_total": 0,
-   "segments": {
-    "FILMS": {
-     "entries": 32859,
-     "details_available": 0,
-     "fields": {
-      "slug": {
-       "TOTAL": 32859,
-       "COVERED": 32859,
-       "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 32859,
-       "ELIGIBLE_COVERED": 32859,
-       "ELIGIBLE_COVERAGE": 1.0
-      },
-      "title": {
-       "TOTAL": 32859,
-       "COVERED": 32859,
-       "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 32859,
-       "ELIGIBLE_COVERED": 32859,
-       "ELIGIBLE_COVERAGE": 1.0
-      },
-      "year": {
-       "TOTAL": 32859,
-       "COVERED": 3278,
-       "RAW_COVERAGE": 0.0998,
-       "ELIGIBLE": 32859,
-       "ELIGIBLE_COVERED": 3278,
-       "ELIGIBLE_COVERAGE": 0.0998
-      },
-      "kind": {
-       "TOTAL": 32859,
-       "COVERED": 32859,
-       "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 32859,
-       "ELIGIBLE_COVERED": 32859,
-       "ELIGIBLE_COVERAGE": 1.0
-      },
-      "poster": {
-       "TOTAL": 32859,
-       "COVERED": 32785,
-       "RAW_COVERAGE": 0.9977,
-       "ELIGIBLE": 32859,
-       "ELIGIBLE_COVERED": 32785,
-       "ELIGIBLE_COVERAGE": 0.9977
-      },
-      "url": {
-       "TOTAL": 32859,
-       "COVERED": 32859,
-       "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 32859,
-       "ELIGIBLE_COVERED": 32859,
-       "ELIGIBLE_COVERAGE": 1.0
-      },
-      "details.name": {
-       "TOTAL": 32859,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.original_name": {
-       "TOTAL": 32859,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.description": {
-       "TOTAL": 32859,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.genres": {
-       "TOTAL": 32859,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.poster_url": {
-       "TOTAL": 32859,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.year": {
-       "TOTAL": 32859,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.type": {
-       "TOTAL": 32859,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.external_ids": {
-       "TOTAL": 32859,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      }
-     },
-     "ratings": {
-      "kinopoisk": {
-       "TOTAL": 32859,
-       "ELIGIBLE": 0,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 32859,
-       "UNMATCHED_IDENTITY": 0,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "imdb": {
-       "TOTAL": 32859,
-       "ELIGIBLE": 0,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 32859,
-       "UNMATCHED_IDENTITY": 0,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "shikimori": {
-       "TOTAL": 32859,
-       "ELIGIBLE": 0,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 32859,
-       "UNMATCHED_IDENTITY": 0,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "myanimelist": {
-       "TOTAL": 32859,
-       "ELIGIBLE": 0,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 32859,
-       "UNMATCHED_IDENTITY": 0,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "amd": {
-       "TOTAL": 32859,
-       "ELIGIBLE": 0,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 32859,
-       "UNMATCHED_IDENTITY": 0,
-       "BLOCKED": "подробности каталога не собраны"
-      }
-     }
-    },
-    "SERIES": {
-     "entries": 19837,
-     "details_available": 0,
-     "fields": {
-      "slug": {
-       "TOTAL": 19837,
-       "COVERED": 19837,
-       "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 19837,
-       "ELIGIBLE_COVERED": 19837,
-       "ELIGIBLE_COVERAGE": 1.0
-      },
-      "title": {
-       "TOTAL": 19837,
-       "COVERED": 19837,
-       "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 19837,
-       "ELIGIBLE_COVERED": 19837,
-       "ELIGIBLE_COVERAGE": 1.0
-      },
-      "year": {
-       "TOTAL": 19837,
-       "COVERED": 10654,
-       "RAW_COVERAGE": 0.5371,
-       "ELIGIBLE": 19837,
-       "ELIGIBLE_COVERED": 10654,
-       "ELIGIBLE_COVERAGE": 0.5371
-      },
-      "kind": {
-       "TOTAL": 19837,
-       "COVERED": 19837,
-       "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 19837,
-       "ELIGIBLE_COVERED": 19837,
-       "ELIGIBLE_COVERAGE": 1.0
-      },
-      "poster": {
-       "TOTAL": 19837,
-       "COVERED": 19562,
-       "RAW_COVERAGE": 0.9861,
-       "ELIGIBLE": 19837,
-       "ELIGIBLE_COVERED": 19562,
-       "ELIGIBLE_COVERAGE": 0.9861
-      },
-      "url": {
-       "TOTAL": 19837,
-       "COVERED": 19837,
-       "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 19837,
-       "ELIGIBLE_COVERED": 19837,
-       "ELIGIBLE_COVERAGE": 1.0
-      },
-      "details.name": {
-       "TOTAL": 19837,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.original_name": {
-       "TOTAL": 19837,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.description": {
-       "TOTAL": 19837,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.genres": {
-       "TOTAL": 19837,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.poster_url": {
-       "TOTAL": 19837,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.year": {
-       "TOTAL": 19837,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.type": {
-       "TOTAL": 19837,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.external_ids": {
-       "TOTAL": 19837,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      }
-     },
-     "ratings": {
-      "kinopoisk": {
-       "TOTAL": 19837,
-       "ELIGIBLE": 0,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 19837,
-       "UNMATCHED_IDENTITY": 0,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "imdb": {
-       "TOTAL": 19837,
-       "ELIGIBLE": 0,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 19837,
-       "UNMATCHED_IDENTITY": 0,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "shikimori": {
-       "TOTAL": 19837,
-       "ELIGIBLE": 0,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 19837,
-       "UNMATCHED_IDENTITY": 0,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "myanimelist": {
-       "TOTAL": 19837,
-       "ELIGIBLE": 0,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 19837,
-       "UNMATCHED_IDENTITY": 0,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "amd": {
-       "TOTAL": 19837,
-       "ELIGIBLE": 0,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 19837,
-       "UNMATCHED_IDENTITY": 0,
-       "BLOCKED": "подробности каталога не собраны"
-      }
-     }
-    }
-   }
-  },
-  "1lordserials1.online": {
-   "site_id": "lords-03",
-   "domain": "1lordserials1.online",
-   "family": "lords",
-   "catalog_revision": "225a820ab45fb78bbe61916190679dc4",
-   "catalog_total": 52587,
-   "details_total": 0,
-   "segments": {
-    "FILMS": {
-     "entries": 32752,
-     "details_available": 0,
-     "fields": {
-      "slug": {
-       "TOTAL": 32752,
-       "COVERED": 32752,
-       "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 32752,
-       "ELIGIBLE_COVERED": 32752,
-       "ELIGIBLE_COVERAGE": 1.0
-      },
-      "title": {
-       "TOTAL": 32752,
-       "COVERED": 32752,
-       "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 32752,
-       "ELIGIBLE_COVERED": 32752,
-       "ELIGIBLE_COVERAGE": 1.0
-      },
-      "year": {
-       "TOTAL": 32752,
-       "COVERED": 3269,
-       "RAW_COVERAGE": 0.0998,
-       "ELIGIBLE": 32752,
-       "ELIGIBLE_COVERED": 3269,
-       "ELIGIBLE_COVERAGE": 0.0998
-      },
-      "kind": {
-       "TOTAL": 32752,
-       "COVERED": 32752,
-       "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 32752,
-       "ELIGIBLE_COVERED": 32752,
-       "ELIGIBLE_COVERAGE": 1.0
-      },
-      "poster": {
-       "TOTAL": 32752,
-       "COVERED": 32678,
-       "RAW_COVERAGE": 0.9977,
-       "ELIGIBLE": 32752,
-       "ELIGIBLE_COVERED": 32678,
-       "ELIGIBLE_COVERAGE": 0.9977
-      },
-      "url": {
-       "TOTAL": 32752,
-       "COVERED": 32752,
-       "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 32752,
-       "ELIGIBLE_COVERED": 32752,
-       "ELIGIBLE_COVERAGE": 1.0
-      },
-      "details.name": {
-       "TOTAL": 32752,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.original_name": {
-       "TOTAL": 32752,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.description": {
-       "TOTAL": 32752,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.genres": {
-       "TOTAL": 32752,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.poster_url": {
-       "TOTAL": 32752,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.year": {
-       "TOTAL": 32752,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.type": {
-       "TOTAL": 32752,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.external_ids": {
-       "TOTAL": 32752,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      }
-     },
-     "ratings": {
-      "kinopoisk": {
-       "TOTAL": 32752,
-       "ELIGIBLE": 0,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 32752,
-       "UNMATCHED_IDENTITY": 0,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "imdb": {
-       "TOTAL": 32752,
-       "ELIGIBLE": 0,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 32752,
-       "UNMATCHED_IDENTITY": 0,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "shikimori": {
-       "TOTAL": 32752,
-       "ELIGIBLE": 0,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 32752,
-       "UNMATCHED_IDENTITY": 0,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "myanimelist": {
-       "TOTAL": 32752,
-       "ELIGIBLE": 0,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 32752,
-       "UNMATCHED_IDENTITY": 0,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "amd": {
-       "TOTAL": 32752,
-       "ELIGIBLE": 0,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 32752,
-       "UNMATCHED_IDENTITY": 0,
-       "BLOCKED": "подробности каталога не собраны"
-      }
-     }
-    },
-    "SERIES": {
-     "entries": 19835,
-     "details_available": 0,
-     "fields": {
-      "slug": {
-       "TOTAL": 19835,
-       "COVERED": 19835,
-       "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 19835,
-       "ELIGIBLE_COVERED": 19835,
-       "ELIGIBLE_COVERAGE": 1.0
-      },
-      "title": {
-       "TOTAL": 19835,
-       "COVERED": 19835,
-       "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 19835,
-       "ELIGIBLE_COVERED": 19835,
-       "ELIGIBLE_COVERAGE": 1.0
-      },
-      "year": {
-       "TOTAL": 19835,
-       "COVERED": 10660,
-       "RAW_COVERAGE": 0.5374,
-       "ELIGIBLE": 19835,
-       "ELIGIBLE_COVERED": 10660,
-       "ELIGIBLE_COVERAGE": 0.5374
-      },
-      "kind": {
-       "TOTAL": 19835,
-       "COVERED": 19835,
-       "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 19835,
-       "ELIGIBLE_COVERED": 19835,
-       "ELIGIBLE_COVERAGE": 1.0
-      },
-      "poster": {
-       "TOTAL": 19835,
-       "COVERED": 19550,
-       "RAW_COVERAGE": 0.9856,
-       "ELIGIBLE": 19835,
-       "ELIGIBLE_COVERED": 19550,
-       "ELIGIBLE_COVERAGE": 0.9856
-      },
-      "url": {
-       "TOTAL": 19835,
-       "COVERED": 19835,
-       "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 19835,
-       "ELIGIBLE_COVERED": 19835,
-       "ELIGIBLE_COVERAGE": 1.0
-      },
-      "details.name": {
-       "TOTAL": 19835,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.original_name": {
-       "TOTAL": 19835,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.description": {
-       "TOTAL": 19835,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.genres": {
-       "TOTAL": 19835,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.poster_url": {
-       "TOTAL": 19835,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.year": {
-       "TOTAL": 19835,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.type": {
-       "TOTAL": 19835,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "details.external_ids": {
-       "TOTAL": 19835,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE": 0,
-       "ELIGIBLE_COVERED": 0,
-       "ELIGIBLE_COVERAGE": null,
-       "BLOCKED": "подробности каталога не собраны"
-      }
-     },
-     "ratings": {
-      "kinopoisk": {
-       "TOTAL": 19835,
-       "ELIGIBLE": 0,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 19835,
-       "UNMATCHED_IDENTITY": 0,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "imdb": {
-       "TOTAL": 19835,
-       "ELIGIBLE": 0,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 19835,
-       "UNMATCHED_IDENTITY": 0,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "shikimori": {
-       "TOTAL": 19835,
-       "ELIGIBLE": 0,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 19835,
-       "UNMATCHED_IDENTITY": 0,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "myanimelist": {
-       "TOTAL": 19835,
-       "ELIGIBLE": 0,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 19835,
-       "UNMATCHED_IDENTITY": 0,
-       "BLOCKED": "подробности каталога не собраны"
-      },
-      "amd": {
-       "TOTAL": 19835,
-       "ELIGIBLE": 0,
-       "COVERED": 0,
-       "RAW_COVERAGE": null,
-       "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 19835,
-       "UNMATCHED_IDENTITY": 0,
-       "BLOCKED": "подробности каталога не собраны"
-      }
-     }
-    }
-   }
-  },
-  "zonafilm.space": {
-   "site_id": "zona-01",
-   "domain": "zonafilm.space",
-   "family": "zona",
-   "catalog_revision": "b12eecd40d7e6964067f1e2f63f97f67",
-   "catalog_total": 53400,
-   "details_total": 53400,
+   "catalog_revision": "c58a55b26f271a7516b30d3052ae5f1b",
+   "catalog_total": 53412,
+   "details_total": 53412,
    "segments": {
     "FILMS": {
      "entries": 35876,
@@ -1492,170 +760,870 @@
      }
     },
     "SERIES": {
-     "entries": 17524,
-     "details_available": 17524,
+     "entries": 17536,
+     "details_available": 17536,
      "fields": {
       "slug": {
-       "TOTAL": 17524,
-       "COVERED": 17524,
+       "TOTAL": 17536,
+       "COVERED": 17536,
        "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 17524,
-       "ELIGIBLE_COVERED": 17524,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
        "ELIGIBLE_COVERAGE": 1.0
       },
       "title": {
-       "TOTAL": 17524,
-       "COVERED": 17524,
+       "TOTAL": 17536,
+       "COVERED": 17536,
        "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 17524,
-       "ELIGIBLE_COVERED": 17524,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
        "ELIGIBLE_COVERAGE": 1.0
       },
       "year": {
-       "TOTAL": 17524,
-       "COVERED": 15500,
-       "RAW_COVERAGE": 0.8845,
-       "ELIGIBLE": 17524,
-       "ELIGIBLE_COVERED": 15500,
-       "ELIGIBLE_COVERAGE": 0.8845
+       "TOTAL": 17536,
+       "COVERED": 15512,
+       "RAW_COVERAGE": 0.8846,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 15512,
+       "ELIGIBLE_COVERAGE": 0.8846
       },
       "kind": {
-       "TOTAL": 17524,
-       "COVERED": 17524,
+       "TOTAL": 17536,
+       "COVERED": 17536,
        "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 17524,
-       "ELIGIBLE_COVERED": 17524,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
        "ELIGIBLE_COVERAGE": 1.0
       },
       "poster": {
-       "TOTAL": 17524,
-       "COVERED": 17189,
+       "TOTAL": 17536,
+       "COVERED": 17201,
        "RAW_COVERAGE": 0.9809,
-       "ELIGIBLE": 17524,
-       "ELIGIBLE_COVERED": 17189,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17201,
        "ELIGIBLE_COVERAGE": 0.9809
       },
       "url": {
-       "TOTAL": 17524,
-       "COVERED": 17524,
+       "TOTAL": 17536,
+       "COVERED": 17536,
        "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 17524,
-       "ELIGIBLE_COVERED": 17524,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
        "ELIGIBLE_COVERAGE": 1.0
       },
       "details.name": {
-       "TOTAL": 17524,
-       "COVERED": 17524,
+       "TOTAL": 17536,
+       "COVERED": 17536,
        "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 17524,
-       "ELIGIBLE_COVERED": 17524,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
        "ELIGIBLE_COVERAGE": 1.0
       },
       "details.original_name": {
-       "TOTAL": 17524,
+       "TOTAL": 17536,
        "COVERED": 15360,
-       "RAW_COVERAGE": 0.8765,
-       "ELIGIBLE": 17524,
+       "RAW_COVERAGE": 0.8759,
+       "ELIGIBLE": 17536,
        "ELIGIBLE_COVERED": 15360,
-       "ELIGIBLE_COVERAGE": 0.8765
+       "ELIGIBLE_COVERAGE": 0.8759
       },
       "details.description": {
-       "TOTAL": 17524,
+       "TOTAL": 17536,
        "COVERED": 11205,
-       "RAW_COVERAGE": 0.6394,
-       "ELIGIBLE": 17524,
+       "RAW_COVERAGE": 0.639,
+       "ELIGIBLE": 17536,
        "ELIGIBLE_COVERED": 11205,
-       "ELIGIBLE_COVERAGE": 0.6394
+       "ELIGIBLE_COVERAGE": 0.639
       },
       "details.genres": {
-       "TOTAL": 17524,
+       "TOTAL": 17536,
        "COVERED": 17524,
-       "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 17524,
+       "RAW_COVERAGE": 0.9993,
+       "ELIGIBLE": 17536,
        "ELIGIBLE_COVERED": 17524,
-       "ELIGIBLE_COVERAGE": 1.0
+       "ELIGIBLE_COVERAGE": 0.9993
       },
       "details.poster_url": {
-       "TOTAL": 17524,
-       "COVERED": 17189,
+       "TOTAL": 17536,
+       "COVERED": 17201,
        "RAW_COVERAGE": 0.9809,
-       "ELIGIBLE": 17524,
-       "ELIGIBLE_COVERED": 17189,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17201,
        "ELIGIBLE_COVERAGE": 0.9809
       },
       "details.year": {
-       "TOTAL": 17524,
-       "COVERED": 15500,
-       "RAW_COVERAGE": 0.8845,
-       "ELIGIBLE": 17524,
-       "ELIGIBLE_COVERED": 15500,
-       "ELIGIBLE_COVERAGE": 0.8845
+       "TOTAL": 17536,
+       "COVERED": 15512,
+       "RAW_COVERAGE": 0.8846,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 15512,
+       "ELIGIBLE_COVERAGE": 0.8846
       },
       "details.type": {
-       "TOTAL": 17524,
-       "COVERED": 17524,
+       "TOTAL": 17536,
+       "COVERED": 17536,
        "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 17524,
-       "ELIGIBLE_COVERED": 17524,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
        "ELIGIBLE_COVERAGE": 1.0
       },
       "details.external_ids": {
-       "TOTAL": 17524,
-       "COVERED": 17456,
+       "TOTAL": 17536,
+       "COVERED": 17467,
        "RAW_COVERAGE": 0.9961,
-       "ELIGIBLE": 17524,
-       "ELIGIBLE_COVERED": 17456,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17467,
        "ELIGIBLE_COVERAGE": 0.9961
       }
      },
      "ratings": {
       "kinopoisk": {
-       "TOTAL": 17524,
-       "ELIGIBLE": 12245,
+       "TOTAL": 17536,
+       "ELIGIBLE": 12251,
        "COVERED": 0,
        "RAW_COVERAGE": 0.0,
        "ELIGIBLE_COVERAGE": 0.0,
-       "MISSING_SOURCE": 5279,
+       "MISSING_SOURCE": 5285,
        "UNMATCHED_IDENTITY": 0,
-       "SOURCE_NOT_INTEGRATED": 12245
+       "SOURCE_NOT_INTEGRATED": 12251
       },
       "imdb": {
-       "TOTAL": 17524,
-       "ELIGIBLE": 11328,
+       "TOTAL": 17536,
+       "ELIGIBLE": 11336,
        "COVERED": 10491,
-       "RAW_COVERAGE": 0.5987,
-       "ELIGIBLE_COVERAGE": 0.9261,
-       "MISSING_SOURCE": 6196,
-       "UNMATCHED_IDENTITY": 837,
+       "RAW_COVERAGE": 0.5983,
+       "ELIGIBLE_COVERAGE": 0.9255,
+       "MISSING_SOURCE": 6200,
+       "UNMATCHED_IDENTITY": 845,
        "SOURCE_NOT_INTEGRATED": 0
       },
       "shikimori": {
-       "TOTAL": 17524,
+       "TOTAL": 17536,
        "ELIGIBLE": 2885,
        "COVERED": 2885,
-       "RAW_COVERAGE": 0.1646,
+       "RAW_COVERAGE": 0.1645,
        "ELIGIBLE_COVERAGE": 1.0,
-       "MISSING_SOURCE": 14639,
+       "MISSING_SOURCE": 14651,
        "UNMATCHED_IDENTITY": 0,
        "SOURCE_NOT_INTEGRATED": 0
       },
       "myanimelist": {
-       "TOTAL": 17524,
+       "TOTAL": 17536,
        "ELIGIBLE": 3197,
        "COVERED": 0,
        "RAW_COVERAGE": 0.0,
        "ELIGIBLE_COVERAGE": 0.0,
-       "MISSING_SOURCE": 14327,
+       "MISSING_SOURCE": 14339,
        "UNMATCHED_IDENTITY": 0,
        "SOURCE_NOT_INTEGRATED": 3197
       },
       "amd": {
-       "TOTAL": 17524,
+       "TOTAL": 17536,
        "ELIGIBLE": 0,
        "COVERED": 0,
        "RAW_COVERAGE": 0.0,
        "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 17524,
+       "MISSING_SOURCE": 17536,
+       "UNMATCHED_IDENTITY": 0,
+       "SOURCE_NOT_INTEGRATED": 0
+      }
+     }
+    }
+   }
+  },
+  "1lordserials1.online": {
+   "site_id": "lords-03",
+   "domain": "1lordserials1.online",
+   "family": "lords",
+   "catalog_revision": "c58a55b26f271a7516b30d3052ae5f1b",
+   "catalog_total": 53412,
+   "details_total": 53412,
+   "segments": {
+    "FILMS": {
+     "entries": 35876,
+     "details_available": 35876,
+     "fields": {
+      "slug": {
+       "TOTAL": 35876,
+       "COVERED": 35876,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 35876,
+       "ELIGIBLE_COVERED": 35876,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "title": {
+       "TOTAL": 35876,
+       "COVERED": 35876,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 35876,
+       "ELIGIBLE_COVERED": 35876,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "year": {
+       "TOTAL": 35876,
+       "COVERED": 35158,
+       "RAW_COVERAGE": 0.98,
+       "ELIGIBLE": 35876,
+       "ELIGIBLE_COVERED": 35158,
+       "ELIGIBLE_COVERAGE": 0.98
+      },
+      "kind": {
+       "TOTAL": 35876,
+       "COVERED": 35876,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 35876,
+       "ELIGIBLE_COVERED": 35876,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "poster": {
+       "TOTAL": 35876,
+       "COVERED": 35798,
+       "RAW_COVERAGE": 0.9978,
+       "ELIGIBLE": 35876,
+       "ELIGIBLE_COVERED": 35798,
+       "ELIGIBLE_COVERAGE": 0.9978
+      },
+      "url": {
+       "TOTAL": 35876,
+       "COVERED": 35876,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 35876,
+       "ELIGIBLE_COVERED": 35876,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "details.name": {
+       "TOTAL": 35876,
+       "COVERED": 35876,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 35876,
+       "ELIGIBLE_COVERED": 35876,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "details.original_name": {
+       "TOTAL": 35876,
+       "COVERED": 35220,
+       "RAW_COVERAGE": 0.9817,
+       "ELIGIBLE": 35876,
+       "ELIGIBLE_COVERED": 35220,
+       "ELIGIBLE_COVERAGE": 0.9817
+      },
+      "details.description": {
+       "TOTAL": 35876,
+       "COVERED": 28881,
+       "RAW_COVERAGE": 0.805,
+       "ELIGIBLE": 35876,
+       "ELIGIBLE_COVERED": 28881,
+       "ELIGIBLE_COVERAGE": 0.805
+      },
+      "details.genres": {
+       "TOTAL": 35876,
+       "COVERED": 35874,
+       "RAW_COVERAGE": 0.9999,
+       "ELIGIBLE": 35876,
+       "ELIGIBLE_COVERED": 35874,
+       "ELIGIBLE_COVERAGE": 0.9999
+      },
+      "details.poster_url": {
+       "TOTAL": 35876,
+       "COVERED": 35798,
+       "RAW_COVERAGE": 0.9978,
+       "ELIGIBLE": 35876,
+       "ELIGIBLE_COVERED": 35798,
+       "ELIGIBLE_COVERAGE": 0.9978
+      },
+      "details.year": {
+       "TOTAL": 35876,
+       "COVERED": 35158,
+       "RAW_COVERAGE": 0.98,
+       "ELIGIBLE": 35876,
+       "ELIGIBLE_COVERED": 35158,
+       "ELIGIBLE_COVERAGE": 0.98
+      },
+      "details.type": {
+       "TOTAL": 35876,
+       "COVERED": 35876,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 35876,
+       "ELIGIBLE_COVERED": 35876,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "details.external_ids": {
+       "TOTAL": 35876,
+       "COVERED": 35871,
+       "RAW_COVERAGE": 0.9999,
+       "ELIGIBLE": 35876,
+       "ELIGIBLE_COVERED": 35871,
+       "ELIGIBLE_COVERAGE": 0.9999
+      }
+     },
+     "ratings": {
+      "kinopoisk": {
+       "TOTAL": 35876,
+       "ELIGIBLE": 34476,
+       "COVERED": 0,
+       "RAW_COVERAGE": 0.0,
+       "ELIGIBLE_COVERAGE": 0.0,
+       "MISSING_SOURCE": 1400,
+       "UNMATCHED_IDENTITY": 0,
+       "SOURCE_NOT_INTEGRATED": 34476
+      },
+      "imdb": {
+       "TOTAL": 35876,
+       "ELIGIBLE": 33749,
+       "COVERED": 6714,
+       "RAW_COVERAGE": 0.1871,
+       "ELIGIBLE_COVERAGE": 0.1989,
+       "MISSING_SOURCE": 2127,
+       "UNMATCHED_IDENTITY": 27035,
+       "SOURCE_NOT_INTEGRATED": 0
+      },
+      "shikimori": {
+       "TOTAL": 35876,
+       "ELIGIBLE": 1536,
+       "COVERED": 1536,
+       "RAW_COVERAGE": 0.0428,
+       "ELIGIBLE_COVERAGE": 1.0,
+       "MISSING_SOURCE": 34340,
+       "UNMATCHED_IDENTITY": 0,
+       "SOURCE_NOT_INTEGRATED": 0
+      },
+      "myanimelist": {
+       "TOTAL": 35876,
+       "ELIGIBLE": 3821,
+       "COVERED": 0,
+       "RAW_COVERAGE": 0.0,
+       "ELIGIBLE_COVERAGE": 0.0,
+       "MISSING_SOURCE": 32055,
+       "UNMATCHED_IDENTITY": 0,
+       "SOURCE_NOT_INTEGRATED": 3821
+      },
+      "amd": {
+       "TOTAL": 35876,
+       "ELIGIBLE": 0,
+       "COVERED": 0,
+       "RAW_COVERAGE": 0.0,
+       "ELIGIBLE_COVERAGE": null,
+       "MISSING_SOURCE": 35876,
+       "UNMATCHED_IDENTITY": 0,
+       "SOURCE_NOT_INTEGRATED": 0
+      }
+     }
+    },
+    "SERIES": {
+     "entries": 17536,
+     "details_available": 17536,
+     "fields": {
+      "slug": {
+       "TOTAL": 17536,
+       "COVERED": 17536,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "title": {
+       "TOTAL": 17536,
+       "COVERED": 17536,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "year": {
+       "TOTAL": 17536,
+       "COVERED": 15512,
+       "RAW_COVERAGE": 0.8846,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 15512,
+       "ELIGIBLE_COVERAGE": 0.8846
+      },
+      "kind": {
+       "TOTAL": 17536,
+       "COVERED": 17536,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "poster": {
+       "TOTAL": 17536,
+       "COVERED": 17201,
+       "RAW_COVERAGE": 0.9809,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17201,
+       "ELIGIBLE_COVERAGE": 0.9809
+      },
+      "url": {
+       "TOTAL": 17536,
+       "COVERED": 17536,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "details.name": {
+       "TOTAL": 17536,
+       "COVERED": 17536,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "details.original_name": {
+       "TOTAL": 17536,
+       "COVERED": 15360,
+       "RAW_COVERAGE": 0.8759,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 15360,
+       "ELIGIBLE_COVERAGE": 0.8759
+      },
+      "details.description": {
+       "TOTAL": 17536,
+       "COVERED": 11205,
+       "RAW_COVERAGE": 0.639,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 11205,
+       "ELIGIBLE_COVERAGE": 0.639
+      },
+      "details.genres": {
+       "TOTAL": 17536,
+       "COVERED": 17524,
+       "RAW_COVERAGE": 0.9993,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17524,
+       "ELIGIBLE_COVERAGE": 0.9993
+      },
+      "details.poster_url": {
+       "TOTAL": 17536,
+       "COVERED": 17201,
+       "RAW_COVERAGE": 0.9809,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17201,
+       "ELIGIBLE_COVERAGE": 0.9809
+      },
+      "details.year": {
+       "TOTAL": 17536,
+       "COVERED": 15512,
+       "RAW_COVERAGE": 0.8846,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 15512,
+       "ELIGIBLE_COVERAGE": 0.8846
+      },
+      "details.type": {
+       "TOTAL": 17536,
+       "COVERED": 17536,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "details.external_ids": {
+       "TOTAL": 17536,
+       "COVERED": 17467,
+       "RAW_COVERAGE": 0.9961,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17467,
+       "ELIGIBLE_COVERAGE": 0.9961
+      }
+     },
+     "ratings": {
+      "kinopoisk": {
+       "TOTAL": 17536,
+       "ELIGIBLE": 12251,
+       "COVERED": 0,
+       "RAW_COVERAGE": 0.0,
+       "ELIGIBLE_COVERAGE": 0.0,
+       "MISSING_SOURCE": 5285,
+       "UNMATCHED_IDENTITY": 0,
+       "SOURCE_NOT_INTEGRATED": 12251
+      },
+      "imdb": {
+       "TOTAL": 17536,
+       "ELIGIBLE": 11336,
+       "COVERED": 10491,
+       "RAW_COVERAGE": 0.5983,
+       "ELIGIBLE_COVERAGE": 0.9255,
+       "MISSING_SOURCE": 6200,
+       "UNMATCHED_IDENTITY": 845,
+       "SOURCE_NOT_INTEGRATED": 0
+      },
+      "shikimori": {
+       "TOTAL": 17536,
+       "ELIGIBLE": 2885,
+       "COVERED": 2885,
+       "RAW_COVERAGE": 0.1645,
+       "ELIGIBLE_COVERAGE": 1.0,
+       "MISSING_SOURCE": 14651,
+       "UNMATCHED_IDENTITY": 0,
+       "SOURCE_NOT_INTEGRATED": 0
+      },
+      "myanimelist": {
+       "TOTAL": 17536,
+       "ELIGIBLE": 3197,
+       "COVERED": 0,
+       "RAW_COVERAGE": 0.0,
+       "ELIGIBLE_COVERAGE": 0.0,
+       "MISSING_SOURCE": 14339,
+       "UNMATCHED_IDENTITY": 0,
+       "SOURCE_NOT_INTEGRATED": 3197
+      },
+      "amd": {
+       "TOTAL": 17536,
+       "ELIGIBLE": 0,
+       "COVERED": 0,
+       "RAW_COVERAGE": 0.0,
+       "ELIGIBLE_COVERAGE": null,
+       "MISSING_SOURCE": 17536,
+       "UNMATCHED_IDENTITY": 0,
+       "SOURCE_NOT_INTEGRATED": 0
+      }
+     }
+    }
+   }
+  },
+  "zonafilm.space": {
+   "site_id": "zona-01",
+   "domain": "zonafilm.space",
+   "family": "zona",
+   "catalog_revision": "024cfd7c3b9d3c043d647017139be1a9",
+   "catalog_total": 53416,
+   "details_total": 53416,
+   "segments": {
+    "FILMS": {
+     "entries": 35880,
+     "details_available": 35880,
+     "fields": {
+      "slug": {
+       "TOTAL": 35880,
+       "COVERED": 35880,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35880,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "title": {
+       "TOTAL": 35880,
+       "COVERED": 35880,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35880,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "year": {
+       "TOTAL": 35880,
+       "COVERED": 35162,
+       "RAW_COVERAGE": 0.98,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35162,
+       "ELIGIBLE_COVERAGE": 0.98
+      },
+      "kind": {
+       "TOTAL": 35880,
+       "COVERED": 35880,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35880,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "poster": {
+       "TOTAL": 35880,
+       "COVERED": 35802,
+       "RAW_COVERAGE": 0.9978,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35802,
+       "ELIGIBLE_COVERAGE": 0.9978
+      },
+      "url": {
+       "TOTAL": 35880,
+       "COVERED": 35880,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35880,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "details.name": {
+       "TOTAL": 35880,
+       "COVERED": 35880,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35880,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "details.original_name": {
+       "TOTAL": 35880,
+       "COVERED": 35220,
+       "RAW_COVERAGE": 0.9816,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35220,
+       "ELIGIBLE_COVERAGE": 0.9816
+      },
+      "details.description": {
+       "TOTAL": 35880,
+       "COVERED": 28881,
+       "RAW_COVERAGE": 0.8049,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 28881,
+       "ELIGIBLE_COVERAGE": 0.8049
+      },
+      "details.genres": {
+       "TOTAL": 35880,
+       "COVERED": 35874,
+       "RAW_COVERAGE": 0.9998,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35874,
+       "ELIGIBLE_COVERAGE": 0.9998
+      },
+      "details.poster_url": {
+       "TOTAL": 35880,
+       "COVERED": 35802,
+       "RAW_COVERAGE": 0.9978,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35802,
+       "ELIGIBLE_COVERAGE": 0.9978
+      },
+      "details.year": {
+       "TOTAL": 35880,
+       "COVERED": 35162,
+       "RAW_COVERAGE": 0.98,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35162,
+       "ELIGIBLE_COVERAGE": 0.98
+      },
+      "details.type": {
+       "TOTAL": 35880,
+       "COVERED": 35880,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35880,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "details.external_ids": {
+       "TOTAL": 35880,
+       "COVERED": 35875,
+       "RAW_COVERAGE": 0.9999,
+       "ELIGIBLE": 35880,
+       "ELIGIBLE_COVERED": 35875,
+       "ELIGIBLE_COVERAGE": 0.9999
+      }
+     },
+     "ratings": {
+      "kinopoisk": {
+       "TOTAL": 35880,
+       "ELIGIBLE": 34477,
+       "COVERED": 0,
+       "RAW_COVERAGE": 0.0,
+       "ELIGIBLE_COVERAGE": 0.0,
+       "MISSING_SOURCE": 1403,
+       "UNMATCHED_IDENTITY": 0,
+       "SOURCE_NOT_INTEGRATED": 34477
+      },
+      "imdb": {
+       "TOTAL": 35880,
+       "ELIGIBLE": 33753,
+       "COVERED": 6714,
+       "RAW_COVERAGE": 0.1871,
+       "ELIGIBLE_COVERAGE": 0.1989,
+       "MISSING_SOURCE": 2127,
+       "UNMATCHED_IDENTITY": 27039,
+       "SOURCE_NOT_INTEGRATED": 0
+      },
+      "shikimori": {
+       "TOTAL": 35880,
+       "ELIGIBLE": 1536,
+       "COVERED": 1536,
+       "RAW_COVERAGE": 0.0428,
+       "ELIGIBLE_COVERAGE": 1.0,
+       "MISSING_SOURCE": 34344,
+       "UNMATCHED_IDENTITY": 0,
+       "SOURCE_NOT_INTEGRATED": 0
+      },
+      "myanimelist": {
+       "TOTAL": 35880,
+       "ELIGIBLE": 3821,
+       "COVERED": 0,
+       "RAW_COVERAGE": 0.0,
+       "ELIGIBLE_COVERAGE": 0.0,
+       "MISSING_SOURCE": 32059,
+       "UNMATCHED_IDENTITY": 0,
+       "SOURCE_NOT_INTEGRATED": 3821
+      },
+      "amd": {
+       "TOTAL": 35880,
+       "ELIGIBLE": 0,
+       "COVERED": 0,
+       "RAW_COVERAGE": 0.0,
+       "ELIGIBLE_COVERAGE": null,
+       "MISSING_SOURCE": 35880,
+       "UNMATCHED_IDENTITY": 0,
+       "SOURCE_NOT_INTEGRATED": 0
+      }
+     }
+    },
+    "SERIES": {
+     "entries": 17536,
+     "details_available": 17536,
+     "fields": {
+      "slug": {
+       "TOTAL": 17536,
+       "COVERED": 17536,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "title": {
+       "TOTAL": 17536,
+       "COVERED": 17536,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "year": {
+       "TOTAL": 17536,
+       "COVERED": 15512,
+       "RAW_COVERAGE": 0.8846,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 15512,
+       "ELIGIBLE_COVERAGE": 0.8846
+      },
+      "kind": {
+       "TOTAL": 17536,
+       "COVERED": 17536,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "poster": {
+       "TOTAL": 17536,
+       "COVERED": 17201,
+       "RAW_COVERAGE": 0.9809,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17201,
+       "ELIGIBLE_COVERAGE": 0.9809
+      },
+      "url": {
+       "TOTAL": 17536,
+       "COVERED": 17536,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "details.name": {
+       "TOTAL": 17536,
+       "COVERED": 17536,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "details.original_name": {
+       "TOTAL": 17536,
+       "COVERED": 15360,
+       "RAW_COVERAGE": 0.8759,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 15360,
+       "ELIGIBLE_COVERAGE": 0.8759
+      },
+      "details.description": {
+       "TOTAL": 17536,
+       "COVERED": 11205,
+       "RAW_COVERAGE": 0.639,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 11205,
+       "ELIGIBLE_COVERAGE": 0.639
+      },
+      "details.genres": {
+       "TOTAL": 17536,
+       "COVERED": 17524,
+       "RAW_COVERAGE": 0.9993,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17524,
+       "ELIGIBLE_COVERAGE": 0.9993
+      },
+      "details.poster_url": {
+       "TOTAL": 17536,
+       "COVERED": 17201,
+       "RAW_COVERAGE": 0.9809,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17201,
+       "ELIGIBLE_COVERAGE": 0.9809
+      },
+      "details.year": {
+       "TOTAL": 17536,
+       "COVERED": 15512,
+       "RAW_COVERAGE": 0.8846,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 15512,
+       "ELIGIBLE_COVERAGE": 0.8846
+      },
+      "details.type": {
+       "TOTAL": 17536,
+       "COVERED": 17536,
+       "RAW_COVERAGE": 1.0,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17536,
+       "ELIGIBLE_COVERAGE": 1.0
+      },
+      "details.external_ids": {
+       "TOTAL": 17536,
+       "COVERED": 17467,
+       "RAW_COVERAGE": 0.9961,
+       "ELIGIBLE": 17536,
+       "ELIGIBLE_COVERED": 17467,
+       "ELIGIBLE_COVERAGE": 0.9961
+      }
+     },
+     "ratings": {
+      "kinopoisk": {
+       "TOTAL": 17536,
+       "ELIGIBLE": 12251,
+       "COVERED": 0,
+       "RAW_COVERAGE": 0.0,
+       "ELIGIBLE_COVERAGE": 0.0,
+       "MISSING_SOURCE": 5285,
+       "UNMATCHED_IDENTITY": 0,
+       "SOURCE_NOT_INTEGRATED": 12251
+      },
+      "imdb": {
+       "TOTAL": 17536,
+       "ELIGIBLE": 11336,
+       "COVERED": 10491,
+       "RAW_COVERAGE": 0.5983,
+       "ELIGIBLE_COVERAGE": 0.9255,
+       "MISSING_SOURCE": 6200,
+       "UNMATCHED_IDENTITY": 845,
+       "SOURCE_NOT_INTEGRATED": 0
+      },
+      "shikimori": {
+       "TOTAL": 17536,
+       "ELIGIBLE": 2885,
+       "COVERED": 2885,
+       "RAW_COVERAGE": 0.1645,
+       "ELIGIBLE_COVERAGE": 1.0,
+       "MISSING_SOURCE": 14651,
+       "UNMATCHED_IDENTITY": 0,
+       "SOURCE_NOT_INTEGRATED": 0
+      },
+      "myanimelist": {
+       "TOTAL": 17536,
+       "ELIGIBLE": 3197,
+       "COVERED": 0,
+       "RAW_COVERAGE": 0.0,
+       "ELIGIBLE_COVERAGE": 0.0,
+       "MISSING_SOURCE": 14339,
+       "UNMATCHED_IDENTITY": 0,
+       "SOURCE_NOT_INTEGRATED": 3197
+      },
+      "amd": {
+       "TOTAL": 17536,
+       "ELIGIBLE": 0,
+       "COVERED": 0,
+       "RAW_COVERAGE": 0.0,
+       "ELIGIBLE_COVERAGE": null,
+       "MISSING_SOURCE": 17536,
        "UNMATCHED_IDENTITY": 0,
        "SOURCE_NOT_INTEGRATED": 0
       }
@@ -2589,7 +2557,7 @@
   }
  },
  "traffic": {
-  "status": "OK",
+  "status": "CURRENT",
   "per_domain": {
    "1lordserials1.online": {
     "counter_id": 112010277,
@@ -2795,7 +2763,10 @@
     }
    }
   },
-  "note": "Метрика, first-party. Платных источников не использовано."
+  "age_hours": 0.0,
+  "measured_at": "2026-09-15T11:27:09.077229+00:00",
+  "note": "Метрика, first-party. Платных источников не использовано.",
+  "credential_note": "сегодняшний сбор не удался; показан последний удавшийся снимок"
  },
  "gap_queue_top": [
   {
@@ -2803,8 +2774,8 @@
    "domain": "lordfilm47.space",
    "segment": "FILMS",
    "source": "kinopoisk",
-   "records_affected": 34476,
-   "why": "идентификаторы kinopoisk есть у 34476 записей, оценок нет ни одной",
+   "records_affected": 34477,
+   "why": "идентификаторы kinopoisk есть у 34477 записей, оценок нет ни одной",
    "owner_layer": "content-pipeline (сбор рейтингов)"
   },
   {
@@ -2812,178 +2783,34 @@
    "domain": "zonafilm.space",
    "segment": "FILMS",
    "source": "kinopoisk",
+   "records_affected": 34477,
+   "why": "идентификаторы kinopoisk есть у 34477 записей, оценок нет ни одной",
+   "owner_layer": "content-pipeline (сбор рейтингов)"
+  },
+  {
+   "kind": "RATING_SOURCE_NOT_INTEGRATED",
+   "domain": "lordserial33.biz",
+   "segment": "FILMS",
+   "source": "kinopoisk",
    "records_affected": 34476,
    "why": "идентификаторы kinopoisk есть у 34476 записей, оценок нет ни одной",
    "owner_layer": "content-pipeline (сбор рейтингов)"
   },
   {
-   "kind": "FIELD_SOURCE_MISSING",
-   "domain": "lordserial33.biz",
-   "segment": "FILMS",
-   "field": "details.name",
-   "records_affected": 32859,
-   "why": "подробности каталога не собраны",
-   "owner_layer": "content-pipeline (сбор подробностей)"
-  },
-  {
-   "kind": "FIELD_SOURCE_MISSING",
-   "domain": "lordserial33.biz",
-   "segment": "FILMS",
-   "field": "details.original_name",
-   "records_affected": 32859,
-   "why": "подробности каталога не собраны",
-   "owner_layer": "content-pipeline (сбор подробностей)"
-  },
-  {
-   "kind": "FIELD_SOURCE_MISSING",
-   "domain": "lordserial33.biz",
-   "segment": "FILMS",
-   "field": "details.description",
-   "records_affected": 32859,
-   "why": "подробности каталога не собраны",
-   "owner_layer": "content-pipeline (сбор подробностей)"
-  },
-  {
-   "kind": "FIELD_SOURCE_MISSING",
-   "domain": "lordserial33.biz",
-   "segment": "FILMS",
-   "field": "details.genres",
-   "records_affected": 32859,
-   "why": "подробности каталога не собраны",
-   "owner_layer": "content-pipeline (сбор подробностей)"
-  },
-  {
-   "kind": "FIELD_SOURCE_MISSING",
-   "domain": "lordserial33.biz",
-   "segment": "FILMS",
-   "field": "details.poster_url",
-   "records_affected": 32859,
-   "why": "подробности каталога не собраны",
-   "owner_layer": "content-pipeline (сбор подробностей)"
-  },
-  {
-   "kind": "FIELD_SOURCE_MISSING",
-   "domain": "lordserial33.biz",
-   "segment": "FILMS",
-   "field": "details.year",
-   "records_affected": 32859,
-   "why": "подробности каталога не собраны",
-   "owner_layer": "content-pipeline (сбор подробностей)"
-  },
-  {
-   "kind": "FIELD_SOURCE_MISSING",
-   "domain": "lordserial33.biz",
-   "segment": "FILMS",
-   "field": "details.type",
-   "records_affected": 32859,
-   "why": "подробности каталога не собраны",
-   "owner_layer": "content-pipeline (сбор подробностей)"
-  },
-  {
-   "kind": "FIELD_SOURCE_MISSING",
-   "domain": "lordserial33.biz",
-   "segment": "FILMS",
-   "field": "details.external_ids",
-   "records_affected": 32859,
-   "why": "подробности каталога не собраны",
-   "owner_layer": "content-pipeline (сбор подробностей)"
-  },
-  {
-   "kind": "FIELD_SOURCE_MISSING",
+   "kind": "RATING_SOURCE_NOT_INTEGRATED",
    "domain": "1lordserials1.online",
    "segment": "FILMS",
-   "field": "details.name",
-   "records_affected": 32752,
-   "why": "подробности каталога не собраны",
-   "owner_layer": "content-pipeline (сбор подробностей)"
-  },
-  {
-   "kind": "FIELD_SOURCE_MISSING",
-   "domain": "1lordserials1.online",
-   "segment": "FILMS",
-   "field": "details.original_name",
-   "records_affected": 32752,
-   "why": "подробности каталога не собраны",
-   "owner_layer": "content-pipeline (сбор подробностей)"
-  },
-  {
-   "kind": "FIELD_SOURCE_MISSING",
-   "domain": "1lordserials1.online",
-   "segment": "FILMS",
-   "field": "details.description",
-   "records_affected": 32752,
-   "why": "подробности каталога не собраны",
-   "owner_layer": "content-pipeline (сбор подробностей)"
-  },
-  {
-   "kind": "FIELD_SOURCE_MISSING",
-   "domain": "1lordserials1.online",
-   "segment": "FILMS",
-   "field": "details.genres",
-   "records_affected": 32752,
-   "why": "подробности каталога не собраны",
-   "owner_layer": "content-pipeline (сбор подробностей)"
-  },
-  {
-   "kind": "FIELD_SOURCE_MISSING",
-   "domain": "1lordserials1.online",
-   "segment": "FILMS",
-   "field": "details.poster_url",
-   "records_affected": 32752,
-   "why": "подробности каталога не собраны",
-   "owner_layer": "content-pipeline (сбор подробностей)"
-  },
-  {
-   "kind": "FIELD_SOURCE_MISSING",
-   "domain": "1lordserials1.online",
-   "segment": "FILMS",
-   "field": "details.year",
-   "records_affected": 32752,
-   "why": "подробности каталога не собраны",
-   "owner_layer": "content-pipeline (сбор подробностей)"
-  },
-  {
-   "kind": "FIELD_SOURCE_MISSING",
-   "domain": "1lordserials1.online",
-   "segment": "FILMS",
-   "field": "details.type",
-   "records_affected": 32752,
-   "why": "подробности каталога не собраны",
-   "owner_layer": "content-pipeline (сбор подробностей)"
-  },
-  {
-   "kind": "FIELD_SOURCE_MISSING",
-   "domain": "1lordserials1.online",
-   "segment": "FILMS",
-   "field": "details.external_ids",
-   "records_affected": 32752,
-   "why": "подробности каталога не собраны",
-   "owner_layer": "content-pipeline (сбор подробностей)"
-  },
-  {
-   "kind": "FIELD_COVERAGE_BELOW_TARGET",
-   "domain": "lordserial33.biz",
-   "segment": "FILMS",
-   "field": "year",
-   "records_affected": 29581,
-   "why": "покрытие 10.0% при цели 90%",
-   "owner_layer": "content-pipeline"
-  },
-  {
-   "kind": "FIELD_COVERAGE_BELOW_TARGET",
-   "domain": "1lordserials1.online",
-   "segment": "FILMS",
-   "field": "year",
-   "records_affected": 29483,
-   "why": "покрытие 10.0% при цели 90%",
-   "owner_layer": "content-pipeline"
+   "source": "kinopoisk",
+   "records_affected": 34476,
+   "why": "идентификаторы kinopoisk есть у 34476 записей, оценок нет ни одной",
+   "owner_layer": "content-pipeline (сбор рейтингов)"
   },
   {
    "kind": "RATING_COVERAGE_BELOW_TARGET",
    "domain": "lordfilm47.space",
    "segment": "FILMS",
    "source": "imdb",
-   "records_affected": 27035,
+   "records_affected": 27039,
    "why": "покрытие 19.9% при цели 90%",
    "owner_layer": "content-pipeline"
   },
@@ -2992,39 +2819,183 @@
    "domain": "zonafilm.space",
    "segment": "FILMS",
    "source": "imdb",
+   "records_affected": 27039,
+   "why": "покрытие 19.9% при цели 90%",
+   "owner_layer": "content-pipeline"
+  },
+  {
+   "kind": "RATING_COVERAGE_BELOW_TARGET",
+   "domain": "lordserial33.biz",
+   "segment": "FILMS",
+   "source": "imdb",
    "records_affected": 27035,
    "why": "покрытие 19.9% при цели 90%",
    "owner_layer": "content-pipeline"
   },
   {
-   "kind": "FIELD_SOURCE_MISSING",
+   "kind": "RATING_COVERAGE_BELOW_TARGET",
+   "domain": "1lordserials1.online",
+   "segment": "FILMS",
+   "source": "imdb",
+   "records_affected": 27035,
+   "why": "покрытие 19.9% при цели 90%",
+   "owner_layer": "content-pipeline"
+  },
+  {
+   "kind": "RATING_SOURCE_NOT_INTEGRATED",
+   "domain": "lordfilm47.space",
+   "segment": "SERIES",
+   "source": "kinopoisk",
+   "records_affected": 12251,
+   "why": "идентификаторы kinopoisk есть у 12251 записей, оценок нет ни одной",
+   "owner_layer": "content-pipeline (сбор рейтингов)"
+  },
+  {
+   "kind": "RATING_SOURCE_NOT_INTEGRATED",
    "domain": "lordserial33.biz",
    "segment": "SERIES",
+   "source": "kinopoisk",
+   "records_affected": 12251,
+   "why": "идентификаторы kinopoisk есть у 12251 записей, оценок нет ни одной",
+   "owner_layer": "content-pipeline (сбор рейтингов)"
+  },
+  {
+   "kind": "RATING_SOURCE_NOT_INTEGRATED",
+   "domain": "1lordserials1.online",
+   "segment": "SERIES",
+   "source": "kinopoisk",
+   "records_affected": 12251,
+   "why": "идентификаторы kinopoisk есть у 12251 записей, оценок нет ни одной",
+   "owner_layer": "content-pipeline (сбор рейтингов)"
+  },
+  {
+   "kind": "RATING_SOURCE_NOT_INTEGRATED",
+   "domain": "zonafilm.space",
+   "segment": "SERIES",
+   "source": "kinopoisk",
+   "records_affected": 12251,
+   "why": "идентификаторы kinopoisk есть у 12251 записей, оценок нет ни одной",
+   "owner_layer": "content-pipeline (сбор рейтингов)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "yummyani.site",
+   "segment": "ANIME",
    "field": "details.name",
-   "records_affected": 19837,
+   "records_affected": 7299,
    "why": "подробности каталога не собраны",
    "owner_layer": "content-pipeline (сбор подробностей)"
   },
   {
    "kind": "FIELD_SOURCE_MISSING",
-   "domain": "lordserial33.biz",
-   "segment": "SERIES",
+   "domain": "yummyani.site",
+   "segment": "ANIME",
    "field": "details.original_name",
-   "records_affected": 19837,
+   "records_affected": 7299,
    "why": "подробности каталога не собраны",
    "owner_layer": "content-pipeline (сбор подробностей)"
   },
   {
    "kind": "FIELD_SOURCE_MISSING",
-   "domain": "lordserial33.biz",
-   "segment": "SERIES",
+   "domain": "yummyani.site",
+   "segment": "ANIME",
    "field": "details.description",
-   "records_affected": 19837,
+   "records_affected": 7299,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "yummyani.site",
+   "segment": "ANIME",
+   "field": "details.genres",
+   "records_affected": 7299,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "yummyani.site",
+   "segment": "ANIME",
+   "field": "details.poster_url",
+   "records_affected": 7299,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "yummyani.site",
+   "segment": "ANIME",
+   "field": "details.year",
+   "records_affected": 7299,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "yummyani.site",
+   "segment": "ANIME",
+   "field": "details.type",
+   "records_affected": 7299,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "yummyani.site",
+   "segment": "ANIME",
+   "field": "details.external_ids",
+   "records_affected": 7299,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "yummyani.org",
+   "segment": "ANIME",
+   "field": "details.name",
+   "records_affected": 7299,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "yummyani.org",
+   "segment": "ANIME",
+   "field": "details.original_name",
+   "records_affected": 7299,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "yummyani.org",
+   "segment": "ANIME",
+   "field": "details.description",
+   "records_affected": 7299,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "yummyani.org",
+   "segment": "ANIME",
+   "field": "details.genres",
+   "records_affected": 7299,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "yummyani.org",
+   "segment": "ANIME",
+   "field": "details.poster_url",
+   "records_affected": 7299,
    "why": "подробности каталога не собраны",
    "owner_layer": "content-pipeline (сбор подробностей)"
   }
  ],
- "gap_queue_total": 88,
+ "gap_queue_total": 72,
  "content": {
   "planned": 1,
   "generated": 1,
@@ -3099,7 +3070,7 @@
   "INVENTORY_RECONCILE": "OK",
   "CATALOG_SNAPSHOT": "OK",
   "COVERAGE_MATRIX": "OK",
-  "TRAFFIC_AND_INDEX_DATA": "OK",
+  "TRAFFIC_AND_INDEX_DATA": "CURRENT",
   "QUALIFIED_GAP_QUEUE": "OK",
   "CONTENT_PLAN": "OK",
   "GENERATION_OR_EDIT": "OK",

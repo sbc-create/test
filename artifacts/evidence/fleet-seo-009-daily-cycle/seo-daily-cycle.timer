@@ -1,0 +1,12 @@
+[Unit]
+Description=Ежедневный запуск SEO-цикла
+
+[Timer]
+# Раннее утро по Москве: отчёт готов до начала рабочего дня.
+OnCalendar=*-*-* 04:20:00
+Persistent=true
+RandomizedDelaySec=600
+Unit=seo-daily-cycle.service
+
+[Install]
+WantedBy=timers.target

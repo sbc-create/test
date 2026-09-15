@@ -1,0 +1,22 @@
+[Unit]
+Description=Суточный SEO-цикл портфеля Lords, Zona, Yummy и Animedia
+Documentation=file:/home/claude/wt-seo007/automation/host/seo-daily-cycle.py
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/claude/wt-seo007
+# Привилегий служба не получает и не просит. Токен Метрики принадлежит root и
+# планировщику недоступен намеренно: трафик берётся из последнего снимка, а
+# его возраст показывается в отчёте. Вчерашнее число, выданное за сегодняшнее,
+# хуже отсутствующего — по нему принимают решения как по свежему.
+#
+# Это пользовательский юнит. Новой границы root он не открывает и в транзакцию
+# hardening не входит. Постоянное место — системный юнит с LoadCredential,
+# он подготовлен в automation/host/systemd-pending/ и ждёт той транзакции.
+ExecStart=/srv/site-factory/repo/.venv/bin/python \
+    /home/claude/wt-seo007/automation/host/seo-daily-cycle.py \
+    --out /home/claude/wt-seo007/artifacts/seo-daily
+ExecStartPost=/srv/site-factory/repo/.venv/bin/python \
+    /home/claude/wt-seo007/automation/host/seo-daily-report.py \
+    --out /home/claude/wt-seo007/artifacts/seo-daily
+TimeoutStartSec=1800

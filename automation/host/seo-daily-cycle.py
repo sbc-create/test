@@ -47,7 +47,17 @@ import seo_inventory as INV       # noqa: E402
 
 
 def _прочитать(путь: str) -> dict:
-    """Каталоги лежат под чужой учётной записью; читаются через sudo -n."""
+    """Прочитать каталог. Сначала напрямую — привилегии здесь не нужны.
+
+    Привилегированное чтение оставлено запасным путём и намеренно не первым:
+    ежедневная задача, привыкшая ходить под sudo, однажды понадобится с ним
+    там, где без него обошлись бы.
+    """
+    ф = pathlib.Path(путь)
+    try:
+        return json.loads(ф.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        pass
     r = subprocess.run(["sudo", "-n", "cat", путь], capture_output=True, text=True)
     if r.returncode != 0 or not r.stdout.strip():
         return {}
@@ -58,19 +68,38 @@ def _прочитать(путь: str) -> dict:
 
 
 # --- 3. трафик -------------------------------------------------------------
-def трафик(домены: dict[str, dict], день: str) -> dict:
+def трафик(домены: dict[str, dict], день: str, каталог: pathlib.Path) -> dict:
     """Органика и просмотры из Метрики. Без платных источников.
 
     Окна сравнения раздельные: вчера против того же дня неделю назад, 7 к 7 и
     28 к 28. Сегодняшний текст сегодняшним трафиком не оценивается — между
     публикацией и поиском лежат дни.
     """
+    снимок_файл = каталог / "traffic-snapshot.json"
     try:
         sys.path.insert(0, str(КОРЕНЬ))
         from factory.analytics.yandex import YandexAnalyticsProvider
         p = YandexAnalyticsProvider(dry_run=True)
     except Exception as ош:
-        return {"status": "UNAVAILABLE", "reason": type(ош).__name__}
+        # Токен планировщику недоступен: он принадлежит root, а цикл работает
+        # без привилегий. Показывается последний снимок с его возрастом —
+        # той же дисциплиной, что и для съёма позиций. Вчерашнее число,
+        # выданное за сегодняшнее, хуже отсутствующего: по нему принимают
+        # решения как по свежему.
+        if снимок_файл.exists():
+            снимок = json.loads(снимок_файл.read_text(encoding="utf-8"))
+            измерено = dt.datetime.fromisoformat(снимок["measured_at"])
+            возраст = (dt.datetime.now(dt.timezone.utc) - измерено).total_seconds() / 3600
+            return {**снимок, "status": "STALE" if возраст > 26 else "CURRENT",
+                    "age_hours": round(возраст, 1),
+                    "credential_note":
+                        "измерено отдельным привилегированным прогоном: "
+                        "токен Метрики принадлежит root и планировщику "
+                        "недоступен. Постоянное решение — системный юнит с "
+                        "LoadCredential, он ждёт транзакции hardening."}
+        return {"status": "NOT_MEASURED", "reason": type(ош).__name__,
+                "credential_note": "токен планировщику недоступен, а прежнего "
+                                   "снимка нет: измерять было нечем"}
 
     из: dict[str, dict] = {}
     сегодня = dt.date.fromisoformat(день)
@@ -103,8 +132,33 @@ def трафик(домены: dict[str, dict], день: str) -> dict:
             except Exception as ош:
                 по_окнам[имя] = {"error": type(ош).__name__}
         из[домен] = {"counter_id": счёт, "windows": по_окнам}
-    return {"status": "OK", "per_domain": из,
-            "note": "Метрика, first-party. Платных источников не использовано."}
+    # Измерение засчитывается только если хоть одно окно вернуло число.
+    # Прежняя редакция возвращала CURRENT безусловно, и полностью
+    # провалившийся сбор попадал в отчёт владельца как свежий: окна были
+    # заполнены записями об ошибке, а статус говорил «измерено сегодня».
+    # Это ровно то, чего нельзя делать с чужими решениями — по такому числу
+    # их принимают как по измеренному.
+    измерено = any("visits_total" in о for в in из.values()
+                   for о in в["windows"].values())
+    if not измерено:
+        if снимок_файл.exists():
+            прежний = json.loads(снимок_файл.read_text(encoding="utf-8"))
+            измерен_в = dt.datetime.fromisoformat(прежний["measured_at"])
+            часы = (dt.datetime.now(dt.timezone.utc) - измерен_в).total_seconds() / 3600
+            return {**прежний, "status": "STALE" if часы > 26 else "CURRENT",
+                    "age_hours": round(часы, 1),
+                    "credential_note": "сегодняшний сбор не удался; показан "
+                                       "последний удавшийся снимок"}
+        return {"status": "NOT_MEASURED", "per_domain": из,
+                "reason": "ни одно окно не вернуло числа",
+                "credential_note": "токен Метрики принадлежит root и "
+                                   "планировщику недоступен"}
+    снимок = {"status": "CURRENT", "per_domain": из, "age_hours": 0.0,
+              "measured_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+              "note": "Метрика, first-party. Платных источников не использовано."}
+    снимок_файл.write_text(json.dumps(снимок, ensure_ascii=False, indent=1),
+                           encoding="utf-8")
+    return снимок
 
 
 # --- 5. очередь пробелов ---------------------------------------------------
@@ -184,7 +238,7 @@ def главное(argv: list[str] | None = None) -> int:
     стадии["COVERAGE_MATRIX"] = "OK" if матрица else "NO_DATA"
 
     # 3. трафик
-    тр = трафик(домены, день)
+    тр = трафик(домены, день, каталог)
     стадии["TRAFFIC_AND_INDEX_DATA"] = тр["status"]
 
     # 5. очередь
