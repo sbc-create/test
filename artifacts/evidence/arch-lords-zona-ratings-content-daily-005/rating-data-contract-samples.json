@@ -1,0 +1,90 @@
+{
+  "required_fields": [
+    "canonical_title_id",
+    "external_id",
+    "source",
+    "value",
+    "value_on_ten",
+    "scale",
+    "votes",
+    "retrieved_at",
+    "provider",
+    "match_state"
+  ],
+  "entries_with_complete_provenance": 21626,
+  "entries_total": 21626,
+  "samples": [
+    {
+      "canonical_title_id": "0191511d-13ea-7102-a04c-3113b8e96f01",
+      "external_id": "24478470",
+      "match_state": "external_id_exact",
+      "provider": "imdb-datasets",
+      "retrieved_at": "2026-09-14T17:54:13Z",
+      "scale": 10.0,
+      "source": "imdb",
+      "value": 6.3,
+      "value_on_ten": 6.3,
+      "votes": 6337
+    },
+    {
+      "canonical_title_id": "0191511d-1735-7c53-accd-521ce8cb1499",
+      "external_id": "19869122",
+      "match_state": "external_id_exact",
+      "provider": "imdb-datasets",
+      "retrieved_at": "2026-09-14T17:54:13Z",
+      "scale": 10.0,
+      "source": "imdb",
+      "value": 7.0,
+      "value_on_ten": 7.0,
+      "votes": 2114
+    },
+    {
+      "canonical_title_id": "0191511d-17da-7640-a98f-e9c3a206435f",
+      "external_id": "15944018",
+      "match_state": "external_id_exact",
+      "provider": "imdb-datasets",
+      "retrieved_at": "2026-09-14T17:54:13Z",
+      "scale": 10.0,
+      "source": "imdb",
+      "value": 5.3,
+      "value_on_ten": 5.3,
+      "votes": 2545
+    },
+    {
+      "canonical_title_id": "0191511d-25ee-732f-929c-135445da746c",
+      "external_id": "20672534",
+      "match_state": "external_id_exact",
+      "provider": "imdb-datasets",
+      "retrieved_at": "2026-09-14T17:54:13Z",
+      "scale": 10.0,
+      "source": "imdb",
+      "value": 5.5,
+      "value_on_ten": 5.5,
+      "votes": 8506
+    },
+    {
+      "canonical_title_id": "0191511d-2a96-74e9-9443-391173f60192",
+      "external_id": "20201212",
+      "match_state": "external_id_exact",
+      "provider": "imdb-datasets",
+      "retrieved_at": "2026-09-14T17:54:13Z",
+      "scale": 10.0,
+      "source": "imdb",
+      "value": 6.5,
+      "value_on_ten": 6.5,
+      "votes": 3448
+    },
+    {
+      "canonical_title_id": "0191511d-2b8a-7bd9-a4f2-5e2a57b0978b",
+      "external_id": "27267852",
+      "match_state": "external_id_exact",
+      "provider": "imdb-datasets",
+      "retrieved_at": "2026-09-14T17:54:13Z",
+      "scale": 10.0,
+      "source": "imdb",
+      "value": 7.3,
+      "value_on_ten": 7.3,
+      "votes": 415
+    }
+  ]
+}

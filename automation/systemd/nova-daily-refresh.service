@@ -1,5 +1,5 @@
 [Unit]
-Description=nova: суточное пополнение каталога и метаданных витрин Lords и Zona
+Description=nova: суточное пополнение каталога, оценок и метаданных витрин Lords и Zona
 After=network-online.target
 Wants=network-online.target
 
@@ -7,20 +7,26 @@ Wants=network-online.target
 Type=oneshot
 WorkingDirectory=/srv/site-factory/repo
 
-# Токен и Publisher ID приходят из Secret Hub через systemd, а не из
-# окружения: переменные видны в `systemctl show` и в /proc/<pid>/environ,
-# файлы — нет. Передаются ИМЕНА credentials, путь собирает потребитель.
+# ЗАМЕЧАНИЕ О ГРАНИЦЕ ПРИВИЛЕГИЙ. Юнит работает под root и получает учётные
+# данные, а сценарий и модули лежат в /srv/site-factory/repo, где каталоги
+# принадлежат обычной учётной записи. Кто может писать туда, тот выполняет код
+# от root. Это свойство всего контура Lords, а не только этого юнита:
+# lords-content-refresh устроен так же и появился раньше.
+#
+# Попытка запускать из неизменяемой копии /usr/local/lib/nova проверена и
+# отклонена: там лежит лишь часть пакета factory, и шаги каталога и публикации
+# отказывают. Частичное укрепление ценой неработающего конвейера — не
+# укрепление. Правильное исправление — перенести automation/host и factory под
+# root-владение целиком либо выделить юниту собственную учётную запись; это
+# затрагивает чужие контуры и вынесено в отчёт владельцу.
+ExecStart=/srv/site-factory/repo/automation/host/nova-daily-refresh.sh
+Environment=NOVA_TOOLS=/srv/site-factory/repo/automation/host
+
 LoadCredential=cdnvideohub_api_token:/etc/site-factory/secrets/lords/lords-01/cdnvideohub-api-token
 LoadCredential=cdnvideohub_publisher_id:/etc/site-factory/secrets/lords/lords-01/cdnvideohub-publisher-id
 Environment=CDNVIDEOHUB_API_TOKEN_CREDENTIAL=cdnvideohub_api_token
 Environment=CDNVIDEOHUB_PUBLISHER_ID_CREDENTIAL=cdnvideohub_publisher_id
-Environment=NOVA_TOOLS=/srv/site-factory/repo/automation/host
 
-ExecStart=/srv/site-factory/repo/automation/host/nova-daily-refresh.sh
-
-# Полный обход источника — около одиннадцати минут, добор подробностей с
-# ограничением частоты — дольше. Жёсткий предел здесь оборвал бы прогон на
-# середине, а не защитил от зависания.
 TimeoutStartSec=6h
 Restart=no
 

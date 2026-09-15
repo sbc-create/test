@@ -1,0 +1,38 @@
+{
+  "baseline_commit": "262fce4",
+  "before": {
+    "catalog": 53399,
+    "kp_pct": 36.68,
+    "imdb_pct": 50.66,
+    "combined_pct": 50.96,
+    "description_pct": 23.28,
+    "poster_pct": 99.23,
+    "providers": []
+  },
+  "after": {
+    "lords-01": {
+      "catalog": 53400,
+      "kp_pct": 36.68,
+      "imdb_pct": 82.87,
+      "displayable_pct": 83.18,
+      "combined_pct": 91.46,
+      "description_pct": 75.09,
+      "poster_pct": 99.23,
+      "source_binding_pct": 98.48
+    },
+    "zona-01": {
+      "catalog": 53400,
+      "kp_pct": 36.68,
+      "imdb_pct": 82.87,
+      "displayable_pct": 83.18,
+      "combined_pct": 91.46,
+      "description_pct": 75.07,
+      "poster_pct": 99.23,
+      "source_binding_pct": 98.49
+    },
+    "providers": [
+      "imdb-datasets",
+      "shikimori"
+    ]
+  }
+}

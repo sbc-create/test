@@ -1,0 +1,53 @@
+{
+  "catalog_total": 53400,
+  "completed_at": "2026-09-15T03:32:29Z",
+  "coverage_after": {
+    "count": 48837,
+    "pct": 91.46
+  },
+  "coverage_before": {
+    "count": 48832,
+    "pct": 91.45
+  },
+  "duration_sec": 12.4,
+  "providers": [
+    "imdb-datasets",
+    "shikimori"
+  ],
+  "quarantined_total": 588,
+  "run_id": "rb-20260915T033218Z",
+  "sources": {
+    "imdb": {
+      "dataset": {
+        "bytes": 8636218,
+        "fetched_at": "2026-09-15T03:32:18Z",
+        "path": "/srv/site-factory/repo/var/lords/rating-sources/title.ratings.tsv.gz",
+        "seconds": 0.2,
+        "url": "https://datasets.imdbws.com/title.ratings.tsv.gz"
+      },
+      "dataset_rows": 1709783,
+      "fetched": 924,
+      "license_note": "IMDb разрешает доступ к наборам данных для личного и некоммерческого использования; применимость к этим витринам определяет владелец",
+      "matched": 5,
+      "missing_external_id": 3644,
+      "provider": "imdb-datasets",
+      "provider_errors": 0,
+      "ratings_added": 5,
+      "rejected": 0
+    },
+    "shikimori": {
+      "endpoint": "https://shikimori.io/api/animes",
+      "fetched": 281,
+      "matched": 98,
+      "missing_external_id": 4282,
+      "provider": "shikimori",
+      "provider_errors": 0,
+      "quarantined_wrong_entity": 98,
+      "ratings_added": 0,
+      "rejected": 0,
+      "requests": 6
+    }
+  },
+  "started_at": "2026-09-15T03:32:16Z",
+  "store_entries": 21626
+}

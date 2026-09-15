@@ -1,0 +1,89 @@
+{
+  "total": 588,
+  "by_reason": {
+    "IDENTIFIER_MISMATCH": 588
+  },
+  "samples": [
+    {
+      "canonical_title_id": "01927e4c-58ea-71f2-aeb8-be4d1246e250",
+      "external_id": "10049",
+      "our_title": "Вместе с господином [ТВ-2]",
+      "reason": "IDENTIFIER_MISMATCH",
+      "source": "shikimori",
+      "source_title": "Внук Нурарихёна: Тысячелетняя столица духов"
+    },
+    {
+      "canonical_title_id": "01922b07-9850-7b5b-9574-9dfa6200c787",
+      "external_id": "10481",
+      "our_title": "Детективное агентство \"Отохимэ\"",
+      "reason": "IDENTIFIER_MISMATCH",
+      "source": "shikimori",
+      "source_title": "Принцесса объединений"
+    },
+    {
+      "canonical_title_id": "01930804-37f2-7fdb-950e-9df3b2b3812c",
+      "external_id": "12783",
+      "our_title": "Упавшая с небес: Вечный хозяин",
+      "reason": "IDENTIFIER_MISMATCH",
+      "source": "shikimori",
+      "source_title": "Утраченное небесами: Мой хозяин навсегда"
+    },
+    {
+      "canonical_title_id": "01960b9d-c28a-773a-bfc7-2aced8641a6d",
+      "external_id": "14719",
+      "our_title": "Невероятные приключения ДжоДжо",
+      "reason": "IDENTIFIER_MISMATCH",
+      "source": "shikimori",
+      "source_title": "Невероятное приключение ДжоДжо"
+    },
+    {
+      "canonical_title_id": "01923029-0f2f-7854-93b4-5e2df5a56634",
+      "external_id": "16385",
+      "our_title": "Жаркие деньки",
+      "reason": "IDENTIFIER_MISMATCH",
+      "source": "shikimori",
+      "source_title": "Собачьи дни 3"
+    },
+    {
+      "canonical_title_id": "0191511f-7e4f-7dcf-bc18-f1ce2df873ff",
+      "external_id": "16512",
+      "our_title": "Выжившие среди демонов 2",
+      "reason": "IDENTIFIER_MISMATCH",
+      "source": "shikimori",
+      "source_title": "Выживший дьявол 2"
+    },
+    {
+      "canonical_title_id": "01915135-257f-7e5b-b5e5-0556f6d202d9",
+      "external_id": "16524",
+      "our_title": "Гаргантия на зеленой планете",
+      "reason": "IDENTIFIER_MISMATCH",
+      "source": "shikimori",
+      "source_title": "Гаргантия на просторах зелёной планеты"
+    },
+    {
+      "canonical_title_id": "01915130-fc6b-79ca-94dd-35ae00ee88ee",
+      "external_id": "16397",
+      "our_title": "Фотографируя девушек",
+      "reason": "IDENTIFIER_MISMATCH",
+      "source": "shikimori",
+      "source_title": "Сними меня"
+    },
+    {
+      "canonical_title_id": "0191d4c8-395f-74b4-983a-e286c3e8b76b",
+      "external_id": "1604",
+      "our_title": "Учитель-мафиози Реборн!",
+      "reason": "IDENTIFIER_MISMATCH",
+      "source": "shikimori",
+      "source_title": "Репетитор-киллер Реборн!"
+    },
+    {
+      "canonical_title_id": "0191511f-2967-78bf-ac42-332f893044e4",
+      "external_id": "16355",
+      "our_title": "Режущий грань добра и зла",
+      "reason": "IDENTIFIER_MISMATCH",
+      "source": "shikimori",
+      "source_title": "Отсекающие и разделяющие преступные лезвия"
+    }
+  ],
+  "note": "несовпадение названия при совпавшем идентификаторе — именно тот случай, ради которого проверка вторым признаком и заведена; такие записи на витрину не попадают"
+}

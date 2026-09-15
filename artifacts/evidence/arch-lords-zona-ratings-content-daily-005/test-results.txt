@@ -1,0 +1,7 @@
+# Тесты контура, 2026-09-15T05:14:01Z
+# pytest tests/test_rating_sources.py tests/test_rating_gateway.py tests/test_nova_publish.py tests/test_nova_details_backfill.py -q
+
+........................................................................ [ 75%]
+........................                                                 [100%]
+96 passed in 7.27s
+PYTEST_EXIT_CODE=0

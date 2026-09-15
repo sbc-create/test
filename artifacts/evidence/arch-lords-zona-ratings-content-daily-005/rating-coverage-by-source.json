@@ -1,0 +1,63 @@
+{
+  "catalog_total": 53400,
+  "per_site": {
+    "lords-01": {
+      "kinopoisk": {
+        "count": 19588,
+        "pct": 36.68,
+        "origin": "cdnvideohub (первичный)"
+      },
+      "imdb": {
+        "count": 44255,
+        "pct": 82.87,
+        "origin": "cdnvideohub + imdb-datasets"
+      },
+      "shikimori": {
+        "count": 4421,
+        "pct": 8.28,
+        "origin": "shikimori api",
+        "rendered_publicly": false,
+        "reason": "витрина отображает только КП и IMDb; поле задано кодом рендерера"
+      },
+      "displayable_in_html": {
+        "count": 44416,
+        "pct": 83.18
+      },
+      "combined_real": {
+        "count": 48837,
+        "pct": 91.46
+      }
+    },
+    "zona-01": {
+      "kinopoisk": {
+        "count": 19588,
+        "pct": 36.68,
+        "origin": "cdnvideohub (первичный)"
+      },
+      "imdb": {
+        "count": 44255,
+        "pct": 82.87,
+        "origin": "cdnvideohub + imdb-datasets"
+      },
+      "shikimori": {
+        "count": 4421,
+        "pct": 8.28,
+        "origin": "shikimori api",
+        "rendered_publicly": false,
+        "reason": "витрина отображает только КП и IMDb; поле задано кодом рендерера"
+      },
+      "displayable_in_html": {
+        "count": 44416,
+        "pct": 83.18
+      },
+      "combined_real": {
+        "count": 48837,
+        "pct": 91.46
+      }
+    }
+  },
+  "store_by_source": {
+    "imdb": 17205,
+    "shikimori": 4421
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "new_production_secrets_introduced": 0,
+  "sources_requiring_secrets_activated": 0,
+  "note": "оба подключённых источника работают без учётных данных, поэтому условие «не вводить новый production-секрет до укрепления» выполнено тем, что секретов не вводилось вовсе",
+  "finding": {
+    "issue": "файлы, исполняемые root-юнитами, принадлежат обычной учётной записи и доступны ей на запись: кто может их переписать, тот выполняет код от root и видит credentials",
+    "affected": [
+      {
+        "unit": "nova-daily-refresh.service",
+        "exec": "/srv/site-factory/repo/automation/host/nova-daily-refresh.sh",
+        "owner": "claude:claude 775",
+        "loads_credentials": true
+      },
+      {
+        "unit": "nova-catalog-refresh.service",
+        "exec": "/srv/site-factory/content-pipeline/refresh.py",
+        "owner": "claude:claude 775",
+        "loads_credentials": false,
+        "note": "существовал до этой задачи"
+      }
+    ],
+    "attempted_fix": {
+      "action": "неизменяемая копия /usr/local/lib/nova (root:root 0555/0444)",
+      "result": "отклонена: копия несёт лишь часть пакета factory, шаги каталога и публикации отказали (exit 1). Частичное укрепление ценой неработающего конвейера — не укрепление",
+      "installed_copy_retained": true,
+      "path": "/usr/local/lib/nova"
+    },
+    "correct_fix_requires_owner": "перенести automation/host и factory под root-владение целиком либо выделить юниту собственную учётную запись; затрагивает чужие контуры"
+  },
+  "secrets_in_artifacts": 0
+}

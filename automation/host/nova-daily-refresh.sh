@@ -59,6 +59,7 @@ REPORT="${REPORTS}/${RUN_ID}.json"
 log() { printf '[nova-daily] %s\n' "$*"; }
 
 STATUS_CATALOG="skipped"; STATUS_DETAILS="skipped"; STATUS_PUBLISH="skipped"
+STATUS_RATINGS="skipped"
 CODE=0
 STARTED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 
@@ -84,6 +85,23 @@ if "$PYTHON" "${TOOLS}/nova-detail-backfill.py" --budget "$DETAIL_BUDGET" \
 else
   STATUS_DETAILS="failed"
   log "добор подробностей не выполнен; страницы останутся беднее"
+fi
+
+# ------------------------------------------------------------ 2b. оценки
+# Внешние источники оценок. Ходит только за тем, чего не хватает, и
+# складывает в хранилище; публикация берёт оттуда готовое и в сеть не ходит.
+# Поэтому отказ источника стоит одного непополненного прогона, а не витрины
+# без оценок.
+#
+# Выгрузка IMDb обновляется раз в сутки: она меняется ежедневно, а весит
+# восемь мегабайт — перекачивать её чаще незачем, реже — значит показывать
+# вчерашние числа дольше, чем нужно.
+log "шаг 2b: оценки из внешних источников"
+if "$PYTHON" "${TOOLS}/nova-ratings-backfill.py" --refresh-dataset      > "${STATE}/last-ratings.json" 2>&1; then
+  STATUS_RATINGS="ok"
+else
+  STATUS_RATINGS="failed"
+  log "добор оценок не выполнен; публикация пойдёт на прежнем хранилище"
 fi
 
 # ------------------------------------------------------------ 3. публикация
@@ -145,6 +163,21 @@ for site in ("lords-01", "zona-01"):
 if len(set(суммы.values())) != 1:
     нарушения.append("наборы canonical ID витрин разошлись")
 
+# Пустой список провайдеров — отказ, а не тишина: витрина, переставшая
+# пополняться оценками, внешне неотличима от исправной.
+try:
+    оц = json.loads(Path("/srv/site-factory/repo/var/lords/daily-state/last-ratings.json").read_text(encoding="utf-8"))
+except Exception:
+    оц = {}
+if not (оц.get("providers") or []):
+    нарушения.append("список провайдеров оценок пуст")
+else:
+    дано = sum((и.get("fetched") or 0) for и in (оц.get("sources") or {}).values())
+    добавлено = sum((и.get("ratings_added") or 0) for и in (оц.get("sources") or {}).values())
+    # Ноль изменений допустим только когда источник действительно опрошен.
+    if добавлено == 0 and дано == 0:
+        нарушения.append("провайдеры не опрошены: fetched=0 и ratings_added=0")
+
 # Оценки: недостижение заявленного порога и регрессия — разные события.
 предупреждения = []
 база = {}
@@ -189,10 +222,16 @@ fi
 
 # -------------------------------------------------------------- 5. отчёт
 "$PYTHON" - "$REPORT" "$RUN_ID" "$STARTED_AT" "$STATUS_CATALOG" "$STATUS_DETAILS" \
-  "$STATUS_PUBLISH" "$CODE" "$GATES_JSON" <<'PYEOF'
+  "$STATUS_PUBLISH" "$CODE" "$GATES_JSON" "$STATUS_RATINGS" <<'PYEOF'
 import json, sys, time
 from pathlib import Path
 (путь, run_id, начало, кат, дет, пуб, код, гейты) = sys.argv[1:9]
+оценки_статус = sys.argv[9] if len(sys.argv) > 9 else "skipped"
+оценки = {}
+try:
+    оценки = json.loads(Path("/srv/site-factory/repo/var/lords/daily-state/last-ratings.json").read_text(encoding="utf-8"))
+except Exception:
+    оценки = {}
 публикация = {}
 try:
     публикация = json.loads(Path("/srv/site-factory/repo/var/lords/daily-state/last-publish.json").read_text(encoding="utf-8"))
@@ -208,7 +247,18 @@ except Exception:
     "started_at": начало,
     "finished_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
     "exit_code": int(код),
-    "steps": {"catalog": кат, "details": дет, "publish": пуб},
+    "steps": {"catalog": кат, "details": дет, "ratings": оценки_статус,
+              "publish": пуб},
+    "ratings": {
+        "providers": оценки.get("providers") or [],
+        "sources": оценки.get("sources") or {},
+        "coverage_before": оценки.get("coverage_before"),
+        "coverage_after": оценки.get("coverage_after"),
+        "store_entries": оценки.get("store_entries"),
+        "quarantined_total": оценки.get("quarantined_total"),
+        "started_at": оценки.get("started_at"),
+        "completed_at": оценки.get("completed_at"),
+    },
     "snapshot": публикация.get("snapshot"),
     "parity": публикация.get("parity"),
     "sites": публикация.get("sites"),

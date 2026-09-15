@@ -1,0 +1,121 @@
+{
+  "layer1_canonical_db": {
+    "rows": 53400,
+    "unique_canonical_ids": 53400,
+    "duplicates": 0,
+    "external_ids": {
+      "kinopoisk": 46721,
+      "imdb": 45077,
+      "myanimelist": 7018,
+      "mydramalist": 8260
+    },
+    "primary_ratings": {
+      "kinopoisk": 19588,
+      "imdb": 27050
+    }
+  },
+  "layer2_ratings_store": {
+    "entries": 21626,
+    "by_source": {
+      "imdb": 17205,
+      "shikimori": 4421
+    },
+    "orphans_vs_canonical": 0,
+    "provenance_complete": 21626
+  },
+  "layer2_quarantine": {
+    "entries": 588
+  },
+  "layer34_lords-01": {
+    "catalog_items": 53400,
+    "unique_slugs": 53400,
+    "duplicate_slugs": 0,
+    "details": 53400,
+    "unique_canonical_ids": 53400,
+    "orphans_vs_canonical": 0,
+    "missing_vs_canonical": 0,
+    "id_set_checksum": "b12eecd40d7e6964067f1e2f63f97f674258beac27ada8c768277520e9b73520",
+    "description": 40099,
+    "poster": 52987,
+    "source_binding": 52590,
+    "external_ids": 53327,
+    "kp": 19588,
+    "imdb": 44255,
+    "ratings_by_source": {
+      "imdb": 17205,
+      "shikimori": 4421
+    },
+    "displayable_any": 44416,
+    "combined_real_rating": 48837,
+    "description_pct": 75.09,
+    "poster_pct": 99.23,
+    "source_binding_pct": 98.48,
+    "kp_pct": 36.68,
+    "imdb_pct": 82.87,
+    "displayable_any_pct": 83.18,
+    "combined_real_rating_pct": 91.46,
+    "routes": {
+      "/healthz": "200",
+      "/": "200",
+      "/catalog/": "200",
+      "/new/": "200"
+    },
+    "stratified": {
+      "checked": 520,
+      "non_200": 0,
+      "empty": 0,
+      "rating_mismatches": 0,
+      "failures": [],
+      "mismatch_sample": []
+    }
+  },
+  "layer34_zona-01": {
+    "catalog_items": 53400,
+    "unique_slugs": 53400,
+    "duplicate_slugs": 0,
+    "details": 53400,
+    "unique_canonical_ids": 53400,
+    "orphans_vs_canonical": 0,
+    "missing_vs_canonical": 0,
+    "id_set_checksum": "b12eecd40d7e6964067f1e2f63f97f674258beac27ada8c768277520e9b73520",
+    "description": 40086,
+    "poster": 52987,
+    "source_binding": 52591,
+    "external_ids": 53327,
+    "kp": 19588,
+    "imdb": 44255,
+    "ratings_by_source": {
+      "imdb": 17205,
+      "shikimori": 4421
+    },
+    "displayable_any": 44416,
+    "combined_real_rating": 48837,
+    "description_pct": 75.07,
+    "poster_pct": 99.23,
+    "source_binding_pct": 98.49,
+    "kp_pct": 36.68,
+    "imdb_pct": 82.87,
+    "displayable_any_pct": 83.18,
+    "combined_real_rating_pct": 91.46,
+    "routes": {
+      "/healthz": "200",
+      "/": "200",
+      "/catalog/": "200",
+      "/new/": "200"
+    },
+    "stratified": {
+      "checked": 520,
+      "non_200": 0,
+      "empty": 0,
+      "rating_mismatches": 0,
+      "failures": [],
+      "mismatch_sample": []
+    }
+  },
+  "parity": {
+    "identical": true,
+    "lords_only": 0,
+    "zona_only": 0,
+    "size": 53400
+  }
+}

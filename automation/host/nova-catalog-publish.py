@@ -57,6 +57,7 @@ from factory.lords.nova_publish import (  # noqa: E402
 ФРОНТ = Path("/srv/lords/.frontend")
 
 СНИМОК = ВАР / "lords" / "catalog-cache" / "lords-01.json"
+ХРАНИЛИЩЕ_ОЦЕНОК = ВАР / "ratings-store.json"
 ДЕТАЛИ = ВАР / "detail-cache"
 РЕЕСТР = ВАР / "slug-ledger.json"
 КОПИИ = ВАР / "publish-backups"
@@ -94,6 +95,16 @@ def цели(site_id: str, корень: Path = ФРОНТ) -> Цели:
                 подробности=корень / f"{site_id}-details.json")
 
 
+def _прочитать_json(путь: Path) -> dict:
+    if not путь.is_file():
+        return {}
+    try:
+        д = json.loads(путь.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    return д if isinstance(д, dict) else {}
+
+
 def _прочитать(путь: Path, ключ: str) -> dict:
     if not путь.is_file():
         return {}
@@ -128,6 +139,7 @@ def записать_атомарно(путь: Path, текст: str) -> str:
 
 
 def выполнить(*, снимок_путь: Path = СНИМОК, детали: Path = ДЕТАЛИ,
+              хранилище: Path = ХРАНИЛИЩЕ_ОЦЕНОК,
               реестр_путь: Path = РЕЕСТР, корень: Path = ФРОНТ,
               сайты: list[str] | None = None, применить: bool = False,
               черновик: Path | None = None, копии: Path = КОПИИ,
@@ -141,6 +153,7 @@ def выполнить(*, снимок_путь: Path = СНИМОК, детал
             raise PublishError(f"витрина {s} не входит в профиль публикации")
 
     снимок = загрузить_снимок(снимок_путь)
+    хранилище_оценок = _прочитать_json(хранилище)
     реестр = РеестрСлагов.загрузить(реестр_путь)
     засеяно = засеять_реестр(реестр) if корень == ФРОНТ else 0
 
@@ -152,6 +165,7 @@ def выполнить(*, снимок_путь: Path = СНИМОК, детал
                      "fetched_at": снимок.получен,
                      "id_set_checksum": снимок.отпечаток},
         "ledger": {"path": str(реестр_путь), "seeded": засеяно},
+        "ratings_store": {"path": str(хранилище), "entries": len(хранилище_оценок)},
         "sites": {},
         "production_mutations": 0,
     }
@@ -164,14 +178,11 @@ def выполнить(*, снимок_путь: Path = СНИМОК, детал
             снимок=снимок, реестр=реестр, детали_кэш=детали, site_id=site_id,
             прежние_подробности=прежние, читатель=читатель)
 
-        # Вторичные источники оценок. Сегодня их не зарегистрировано, и вызов
-        # ничего не делает — это его нормальное состояние. Место для него
-        # именно здесь, до проверок и записи: оценка, добытая после публикации,
-        # доедет до витрины только следующим прогоном.
-        внешние_по_ид = {ид: (з.get("external_ids") or {})
-                         for ид, з in снимок.записи.items()}
-        подробности["details"], отчёт_оценок = rating_gateway.обогатить(
-            подробности["details"], внешние_по_ид)
+        # Накопленные внешние оценки. Публикация берёт готовое из хранилища и
+        # в сеть не ходит: иначе временный отказ источника означал бы витрину
+        # без оценок, а не один непополненный прогон.
+        подробности["details"], отчёт_оценок = rating_gateway.применить_хранилище(
+            подробности["details"], хранилище_оценок)
 
         беды = проверить_контракт_рендерера(подробности["details"])
         if беды:
@@ -307,6 +318,7 @@ def main(argv=None) -> int:
     ap.add_argument("--snapshot", type=Path, default=СНИМОК)
     ap.add_argument("--detail-cache", type=Path, default=ДЕТАЛИ)
     ap.add_argument("--ledger", type=Path, default=РЕЕСТР)
+    ap.add_argument("--ratings-store", type=Path, default=ХРАНИЛИЩЕ_ОЦЕНОК)
     ap.add_argument("--front", type=Path, default=ФРОНТ)
     ap.add_argument("--staging-out", type=Path, default=None)
     ap.add_argument("--backup-dir", type=Path, default=КОПИИ)
@@ -318,6 +330,7 @@ def main(argv=None) -> int:
     run_id = a.run_id or f"pub-{uuid.uuid4().hex[:12]}"
     try:
         отчёт = выполнить(снимок_путь=a.snapshot, детали=a.detail_cache,
+                          хранилище=a.ratings_store,
                           реестр_путь=a.ledger, корень=a.front,
                           сайты=[s for s in a.sites.split(",") if s],
                           применить=a.apply, черновик=a.staging_out,

@@ -1,0 +1,56 @@
+{
+  "active_providers": [
+    "imdb-datasets",
+    "shikimori"
+  ],
+  "providers": [
+    {
+      "name": "imdb-datasets",
+      "source": "imdb",
+      "kind": "official dataset",
+      "url": "https://datasets.imdbws.com/title.ratings.tsv.gz",
+      "auth": "не требуется",
+      "join_key": "imdb (tconst)",
+      "terms": "IMDb разрешает доступ к наборам данных для личного и некоммерческого использования; применимость к этим витринам определяет владелец"
+    },
+    {
+      "name": "shikimori",
+      "source": "shikimori",
+      "kind": "public API",
+      "url": "https://shikimori.io/api/animes",
+      "auth": "не требуется, обязателен User-Agent",
+      "join_key": "myanimelist id",
+      "terms": "открытый API; пакет до 50 записей, обход с паузой"
+    }
+  ],
+  "secretless": true,
+  "note": "оба источника работают без учётных данных; новых production-секретов не вводилось",
+  "rejected_for_lack_of_credentials": [
+    {
+      "name": "TMDB",
+      "url": "https://api.themoviedb.org/3",
+      "probe": "HTTP 401 без ключа",
+      "needs": "api_key"
+    },
+    {
+      "name": "kinopoisk.dev",
+      "url": "https://api.kinopoisk.dev/v1.4",
+      "probe": "HTTP 301/401 без ключа",
+      "needs": "X-API-KEY"
+    },
+    {
+      "name": "kinopoiskapiunofficial",
+      "url": "https://kinopoiskapiunofficial.tech",
+      "probe": "HTTP 401 без ключа",
+      "needs": "X-API-KEY"
+    }
+  ],
+  "rejected_for_reliability": [
+    {
+      "name": "Jikan (MyAnimeList)",
+      "url": "https://api.jikan.moe/v4",
+      "probe": "HTTP 504 на 5 из 6 запросов",
+      "note": "источник тех же данных, что Shikimori, но нестабилен; выбран Shikimori"
+    }
+  ]
+}

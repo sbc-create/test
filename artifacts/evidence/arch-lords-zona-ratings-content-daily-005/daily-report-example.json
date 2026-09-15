@@ -1,0 +1,285 @@
+{
+  "run_id": "daily-20260915T033131Z",
+  "started_at": "2026-09-15T03:31:31Z",
+  "finished_at": "2026-09-15T03:33:34Z",
+  "exit_code": 0,
+  "steps": {
+    "catalog": "ok",
+    "details": "ok",
+    "ratings": "ok",
+    "publish": "ok"
+  },
+  "ratings": {
+    "providers": [
+      "imdb-datasets",
+      "shikimori"
+    ],
+    "sources": {
+      "imdb": {
+        "provider": "imdb-datasets",
+        "dataset": {
+          "url": "https://datasets.imdbws.com/title.ratings.tsv.gz",
+          "bytes": 8636218,
+          "path": "/srv/site-factory/repo/var/lords/rating-sources/title.ratings.tsv.gz",
+          "seconds": 0.2,
+          "fetched_at": "2026-09-15T03:32:18Z"
+        },
+        "dataset_rows": 1709783,
+        "fetched": 924,
+        "matched": 5,
+        "ratings_added": 5,
+        "rejected": 0,
+        "missing_external_id": 3644,
+        "provider_errors": 0,
+        "license_note": "IMDb разрешает доступ к наборам данных для личного и некоммерческого использования; применимость к этим витринам определяет владелец"
+      },
+      "shikimori": {
+        "provider": "shikimori",
+        "endpoint": "https://shikimori.io/api/animes",
+        "requests": 6,
+        "provider_errors": 0,
+        "fetched": 281,
+        "matched": 98,
+        "ratings_added": 0,
+        "rejected": 0,
+        "quarantined_wrong_entity": 98,
+        "missing_external_id": 4282
+      }
+    },
+    "coverage_before": {
+      "count": 48832,
+      "pct": 91.45
+    },
+    "coverage_after": {
+      "count": 48837,
+      "pct": 91.46
+    },
+    "store_entries": 21626,
+    "quarantined_total": 588,
+    "started_at": "2026-09-15T03:32:16Z",
+    "completed_at": "2026-09-15T03:32:29Z"
+  },
+  "snapshot": {
+    "path": "/srv/site-factory/repo/var/lords/lords/catalog-cache/lords-01.json",
+    "items": 53400,
+    "fetched_at": "2026-09-15T03:16:31Z",
+    "id_set_checksum": "b12eecd40d7e6964067f1e2f63f97f674258beac27ada8c768277520e9b73520"
+  },
+  "parity": {
+    "checksums": {
+      "lords-01": "b12eecd40d7e6964067f1e2f63f97f674258beac27ada8c768277520e9b73520",
+      "zona-01": "b12eecd40d7e6964067f1e2f63f97f674258beac27ada8c768277520e9b73520"
+    },
+    "identical": true,
+    "lords-01_only": 0,
+    "zona-01_only": 0,
+    "parity_pct": 100.0
+  },
+  "sites": {
+    "lords-01": {
+      "catalog_items": 53400,
+      "catalog_items_before": 53399,
+      "details_entries": 53400,
+      "distinct_canonical_ids": 53400,
+      "duplicate_ids": 0,
+      "id_set_checksum": "b12eecd40d7e6964067f1e2f63f97f674258beac27ada8c768277520e9b73520",
+      "coverage": {
+        "published": 53400,
+        "kp": 19588,
+        "kp_pct": 36.68,
+        "imdb": 44255,
+        "imdb_pct": 82.87,
+        "any_rating": 44416,
+        "any_rating_pct": 83.18,
+        "description": 40099,
+        "description_pct": 75.09,
+        "poster_url": 52987,
+        "poster_pct": 99.23,
+        "source_id": 52590,
+        "source_id_pct": 98.48,
+        "external_id_binding": 53327,
+        "external_id_pct": 99.86
+      },
+      "coverage_by_source": {
+        "published": 53400,
+        "by_source": {
+          "imdb": {
+            "count": 44255,
+            "pct": 82.87
+          },
+          "kinopoisk": {
+            "count": 19588,
+            "pct": 36.68
+          },
+          "shikimori": {
+            "count": 4421,
+            "pct": 8.28
+          }
+        }
+      },
+      "secondary_rating_providers": {
+        "store_entries": 21626,
+        "applied": 5,
+        "applied_by_source": {
+          "imdb": 5
+        },
+        "rejections": {
+          "ALREADY_PRESENT_FROM_PRIMARY": 17200
+        }
+      },
+      "missing_rating_reasons": {
+        "kinopoisk": {
+          "NOT_AVAILABLE_AT_SOURCE": 27140,
+          "NO_EXTERNAL_ID": 6672
+        },
+        "imdb": {
+          "NO_EXTERNAL_ID": 8062,
+          "NOT_AVAILABLE_AT_SOURCE": 1083
+        }
+      },
+      "rejections": {},
+      "without_poster": 413,
+      "expected_sha256": {
+        "catalog": "f979f8e636bedf5b7973a35ab649e4c67071502aba42d3017e89530f25eee5af",
+        "details": "0203d4ee6dfecb2b0dc52fbfe222e961740dbae52affe50779252ecdbc46fab1"
+      }
+    },
+    "zona-01": {
+      "catalog_items": 53400,
+      "catalog_items_before": 53399,
+      "details_entries": 53400,
+      "distinct_canonical_ids": 53400,
+      "duplicate_ids": 0,
+      "id_set_checksum": "b12eecd40d7e6964067f1e2f63f97f674258beac27ada8c768277520e9b73520",
+      "coverage": {
+        "published": 53400,
+        "kp": 19588,
+        "kp_pct": 36.68,
+        "imdb": 44255,
+        "imdb_pct": 82.87,
+        "any_rating": 44416,
+        "any_rating_pct": 83.18,
+        "description": 40086,
+        "description_pct": 75.07,
+        "poster_url": 52987,
+        "poster_pct": 99.23,
+        "source_id": 52591,
+        "source_id_pct": 98.49,
+        "external_id_binding": 53327,
+        "external_id_pct": 99.86
+      },
+      "coverage_by_source": {
+        "published": 53400,
+        "by_source": {
+          "imdb": {
+            "count": 44255,
+            "pct": 82.87
+          },
+          "kinopoisk": {
+            "count": 19588,
+            "pct": 36.68
+          },
+          "shikimori": {
+            "count": 4421,
+            "pct": 8.28
+          }
+        }
+      },
+      "secondary_rating_providers": {
+        "store_entries": 21626,
+        "applied": 5,
+        "applied_by_source": {
+          "imdb": 5
+        },
+        "rejections": {
+          "ALREADY_PRESENT_FROM_PRIMARY": 17200
+        }
+      },
+      "missing_rating_reasons": {
+        "kinopoisk": {
+          "NOT_AVAILABLE_AT_SOURCE": 27140,
+          "NO_EXTERNAL_ID": 6672
+        },
+        "imdb": {
+          "NO_EXTERNAL_ID": 8062,
+          "NOT_AVAILABLE_AT_SOURCE": 1083
+        }
+      },
+      "rejections": {},
+      "without_poster": 413,
+      "expected_sha256": {
+        "catalog": "3c8f1e0b37977a7ee71f0a2aa061659178c0fe52a114de5f5dee57d8a60a64de",
+        "details": "5c3f50b2c01412f4cb2665c6eb9b6c7646cf38f9e12a6aa1c607d3849547869f"
+      }
+    }
+  },
+  "detail_backfill": {
+    "requests_made": 1,
+    "gained_cached": 1,
+    "gained_description": 1,
+    "before": {
+      "titles": 53400,
+      "cached": 53399,
+      "cached_pct": 100.0,
+      "with_description": 40085,
+      "description_pct": 75.07
+    },
+    "after": {
+      "titles": 53400,
+      "cached": 53400,
+      "cached_pct": 100.0,
+      "with_description": 40086,
+      "description_pct": 75.07
+    }
+  },
+  "gates": {
+    "lords-01": {
+      "catalog_items": 53400,
+      "unique_canonical_ids": 53400,
+      "id_set_checksum": "b12eecd40d7e6964067f1e2f63f97f674258beac27ada8c768277520e9b73520",
+      "kp": 19588,
+      "kp_pct": 36.68,
+      "imdb": 44255,
+      "imdb_pct": 82.87,
+      "description_pct": 75.09,
+      "poster_pct": 99.23
+    },
+    "zona-01": {
+      "catalog_items": 53400,
+      "unique_canonical_ids": 53400,
+      "id_set_checksum": "b12eecd40d7e6964067f1e2f63f97f674258beac27ada8c768277520e9b73520",
+      "kp": 19588,
+      "kp_pct": 36.68,
+      "imdb": 44255,
+      "imdb_pct": 82.87,
+      "description_pct": 75.07,
+      "poster_pct": 99.23
+    },
+    "rating_targets": {
+      "kp_pct": 90.0,
+      "imdb_pct": 90.0,
+      "hard_gate": false
+    },
+    "rating_baseline_previous": {
+      "lords-01": {
+        "kp_pct": 36.68,
+        "imdb_pct": 82.87
+      },
+      "zona-01": {
+        "kp_pct": 36.68,
+        "imdb_pct": 82.87
+      }
+    },
+    "warnings": [
+      "lords-01: KP 36.68% < заявленных 90.0% (потолок источника; отказом не считается)",
+      "lords-01: IMDb 82.87% < заявленных 90.0% (потолок источника; отказом не считается)",
+      "zona-01: KP 36.68% < заявленных 90.0% (потолок источника; отказом не считается)",
+      "zona-01: IMDb 82.87% < заявленных 90.0% (потолок источника; отказом не считается)"
+    ],
+    "violations": []
+  },
+  "rollback": {
+    "available": true,
+    "command": "cp -p /srv/site-factory/repo/var/lords/publish-backups/lords-01-catalog.json.before.daily-20260915T033131Z /srv/lords/.frontend/lords-01-catalog.json && cp -p /srv/site-factory/repo/var/lords/publish-backups/lords-01-details.json.before.daily-20260915T033131Z /srv/lords/.frontend/lords-01-details.json && cp -p /srv/site-factory/repo/var/lords/publish-backups/zona-01-catalog.json.before.daily-20260915T033131Z /srv/lords/.frontend/zona-01-catalog.json && cp -p /srv/site-factory/repo/var/lords/publish-backups/zona-01-details.json.before.daily-20260915T033131Z /srv/lords/.frontend/zona-01-details.json && sudo -n systemctl restart lords-nova-01.service && sudo -n systemctl restart nova-zona-01.service"
+  }
+}
