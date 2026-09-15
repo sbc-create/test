@@ -1,0 +1,44 @@
+{
+ "roles": {
+  "1lordserials1.online": "MANAGED_PRODUCTION",
+  "amd.online": "REFERENCE_SOURCE",
+  "animedia.icu": "ONBOARDING",
+  "animedia.space": "ONBOARDING",
+  "lordfilm-hit.org": "REFERENCE_SOURCE",
+  "lordfilm47.space": "MANAGED_PRODUCTION",
+  "lordserial33.biz": "MANAGED_PRODUCTION",
+  "lordserials.fan": "REFERENCE_SOURCE",
+  "old.yummyani.me": "UNKNOWN",
+  "ru.yummyani.me": "UNKNOWN",
+  "w140.zona.plus": "REFERENCE_SOURCE",
+  "yummyani.biz": "MANAGED_PRODUCTION",
+  "yummyani.me": "REDIRECT_ONLY",
+  "yummyani.org": "MANAGED_PRODUCTION",
+  "yummyani.site": "MANAGED_PRODUCTION",
+  "zonafilm.space": "MANAGED_PRODUCTION"
+ },
+ "diff": {
+  "added": [],
+  "removed": [],
+  "changed": [],
+  "in_production_not_in_inventory": [
+   "lordfilm-hit.org",
+   "old.yummyani.me",
+   "ru.yummyani.me",
+   "yummyani.me"
+  ],
+  "in_inventory_not_in_production": [],
+  "redirect_targets": [
+   "https://old.yummyani.me/"
+  ]
+ },
+ "managed": [
+  "1lordserials1.online",
+  "lordfilm47.space",
+  "lordserial33.biz",
+  "yummyani.biz",
+  "yummyani.org",
+  "yummyani.site",
+  "zonafilm.space"
+ ]
+}

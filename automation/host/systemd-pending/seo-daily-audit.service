@@ -15,8 +15,16 @@ User=lords
 Group=lords
 WorkingDirectory=/srv/site-factory/repo
 ExecStart=/srv/site-factory/repo/.venv/bin/python \
+    /srv/site-factory/repo/automation/host/seo-daily-cycle.py \
+    --out /srv/lords/.seo-reports
+ExecStartPost=/srv/site-factory/repo/.venv/bin/python \
     /srv/site-factory/repo/automation/host/seo-daily-report.py \
     --out /srv/lords/.seo-reports
+# Токен Метрики передаётся systemd'ом, а не читается из файла процессом: файл
+# доступен только root, а служба работает от lords. Значение не появляется ни
+# в окружении, ни в командной строке, ни в журнале.
+LoadCredential=yandex_oauth:/etc/site-factory/secrets/yandex_oauth_token
+Environment=YANDEX_OAUTH_TOKEN_FILE=%d/yandex_oauth
 # Платного в отчёте нет ничего: съём позиций он запускать не умеет.
 # Ненулевой код возврата при критическом нарушении обязан быть виден
 # планировщику, поэтому SuccessExitStatus не расширяется.

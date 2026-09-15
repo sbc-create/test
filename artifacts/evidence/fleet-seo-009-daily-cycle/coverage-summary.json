@@ -1,0 +1,467 @@
+{
+ "lordfilm47.space": {
+  "FILMS": {
+   "entries": 35876,
+   "details": 35876,
+   "ratings": {
+    "kinopoisk": {
+     "eligible": 34476,
+     "covered": 0,
+     "eligible_coverage": 0.0,
+     "missing_source": 1400,
+     "not_integrated": 34476
+    },
+    "imdb": {
+     "eligible": 33749,
+     "covered": 6714,
+     "eligible_coverage": 0.1989,
+     "missing_source": 2127,
+     "not_integrated": 0
+    },
+    "shikimori": {
+     "eligible": 1536,
+     "covered": 1536,
+     "eligible_coverage": 1.0,
+     "missing_source": 34340,
+     "not_integrated": 0
+    },
+    "myanimelist": {
+     "eligible": 3821,
+     "covered": 0,
+     "eligible_coverage": 0.0,
+     "missing_source": 32055,
+     "not_integrated": 3821
+    }
+   },
+   "fields": {
+    "slug": 1.0,
+    "title": 1.0,
+    "year": 0.98,
+    "kind": 1.0,
+    "poster": 0.9978,
+    "url": 1.0,
+    "details.name": 1.0,
+    "details.original_name": 0.9817,
+    "details.description": 0.8054,
+    "details.genres": 0.9999,
+    "details.poster_url": 0.9978,
+    "details.year": 0.98,
+    "details.type": 1.0,
+    "details.external_ids": 0.9999
+   }
+  },
+  "SERIES": {
+   "entries": 17524,
+   "details": 17524,
+   "ratings": {
+    "kinopoisk": {
+     "eligible": 12245,
+     "covered": 0,
+     "eligible_coverage": 0.0,
+     "missing_source": 5279,
+     "not_integrated": 12245
+    },
+    "imdb": {
+     "eligible": 11328,
+     "covered": 10491,
+     "eligible_coverage": 0.9261,
+     "missing_source": 6196,
+     "not_integrated": 0
+    },
+    "shikimori": {
+     "eligible": 2885,
+     "covered": 2885,
+     "eligible_coverage": 1.0,
+     "missing_source": 14639,
+     "not_integrated": 0
+    },
+    "myanimelist": {
+     "eligible": 3197,
+     "covered": 0,
+     "eligible_coverage": 0.0,
+     "missing_source": 14327,
+     "not_integrated": 3197
+    }
+   },
+   "fields": {
+    "slug": 1.0,
+    "title": 1.0,
+    "year": 0.8845,
+    "kind": 1.0,
+    "poster": 0.9809,
+    "url": 1.0,
+    "details.name": 1.0,
+    "details.original_name": 0.8765,
+    "details.description": 0.6395,
+    "details.genres": 1.0,
+    "details.poster_url": 0.9809,
+    "details.year": 0.8845,
+    "details.type": 1.0,
+    "details.external_ids": 0.9961
+   }
+  }
+ },
+ "lordserial33.biz": {
+  "FILMS": {
+   "entries": 32859,
+   "details": 0,
+   "ratings": {},
+   "fields": {
+    "slug": 1.0,
+    "title": 1.0,
+    "year": 0.0998,
+    "kind": 1.0,
+    "poster": 0.9977,
+    "url": 1.0,
+    "details.name": null,
+    "details.original_name": null,
+    "details.description": null,
+    "details.genres": null,
+    "details.poster_url": null,
+    "details.year": null,
+    "details.type": null,
+    "details.external_ids": null
+   }
+  },
+  "SERIES": {
+   "entries": 19836,
+   "details": 0,
+   "ratings": {},
+   "fields": {
+    "slug": 1.0,
+    "title": 1.0,
+    "year": 0.537,
+    "kind": 1.0,
+    "poster": 0.986,
+    "url": 1.0,
+    "details.name": null,
+    "details.original_name": null,
+    "details.description": null,
+    "details.genres": null,
+    "details.poster_url": null,
+    "details.year": null,
+    "details.type": null,
+    "details.external_ids": null
+   }
+  }
+ },
+ "1lordserials1.online": {
+  "FILMS": {
+   "entries": 32752,
+   "details": 0,
+   "ratings": {},
+   "fields": {
+    "slug": 1.0,
+    "title": 1.0,
+    "year": 0.0998,
+    "kind": 1.0,
+    "poster": 0.9977,
+    "url": 1.0,
+    "details.name": null,
+    "details.original_name": null,
+    "details.description": null,
+    "details.genres": null,
+    "details.poster_url": null,
+    "details.year": null,
+    "details.type": null,
+    "details.external_ids": null
+   }
+  },
+  "SERIES": {
+   "entries": 19835,
+   "details": 0,
+   "ratings": {},
+   "fields": {
+    "slug": 1.0,
+    "title": 1.0,
+    "year": 0.5374,
+    "kind": 1.0,
+    "poster": 0.9856,
+    "url": 1.0,
+    "details.name": null,
+    "details.original_name": null,
+    "details.description": null,
+    "details.genres": null,
+    "details.poster_url": null,
+    "details.year": null,
+    "details.type": null,
+    "details.external_ids": null
+   }
+  }
+ },
+ "zonafilm.space": {
+  "FILMS": {
+   "entries": 35876,
+   "details": 35876,
+   "ratings": {
+    "kinopoisk": {
+     "eligible": 34476,
+     "covered": 0,
+     "eligible_coverage": 0.0,
+     "missing_source": 1400,
+     "not_integrated": 34476
+    },
+    "imdb": {
+     "eligible": 33749,
+     "covered": 6714,
+     "eligible_coverage": 0.1989,
+     "missing_source": 2127,
+     "not_integrated": 0
+    },
+    "shikimori": {
+     "eligible": 1536,
+     "covered": 1536,
+     "eligible_coverage": 1.0,
+     "missing_source": 34340,
+     "not_integrated": 0
+    },
+    "myanimelist": {
+     "eligible": 3821,
+     "covered": 0,
+     "eligible_coverage": 0.0,
+     "missing_source": 32055,
+     "not_integrated": 3821
+    }
+   },
+   "fields": {
+    "slug": 1.0,
+    "title": 1.0,
+    "year": 0.98,
+    "kind": 1.0,
+    "poster": 0.9978,
+    "url": 1.0,
+    "details.name": 1.0,
+    "details.original_name": 0.9817,
+    "details.description": 0.805,
+    "details.genres": 0.9999,
+    "details.poster_url": 0.9978,
+    "details.year": 0.98,
+    "details.type": 1.0,
+    "details.external_ids": 0.9999
+   }
+  },
+  "SERIES": {
+   "entries": 17524,
+   "details": 17524,
+   "ratings": {
+    "kinopoisk": {
+     "eligible": 12245,
+     "covered": 0,
+     "eligible_coverage": 0.0,
+     "missing_source": 5279,
+     "not_integrated": 12245
+    },
+    "imdb": {
+     "eligible": 11328,
+     "covered": 10491,
+     "eligible_coverage": 0.9261,
+     "missing_source": 6196,
+     "not_integrated": 0
+    },
+    "shikimori": {
+     "eligible": 2885,
+     "covered": 2885,
+     "eligible_coverage": 1.0,
+     "missing_source": 14639,
+     "not_integrated": 0
+    },
+    "myanimelist": {
+     "eligible": 3197,
+     "covered": 0,
+     "eligible_coverage": 0.0,
+     "missing_source": 14327,
+     "not_integrated": 3197
+    }
+   },
+   "fields": {
+    "slug": 1.0,
+    "title": 1.0,
+    "year": 0.8845,
+    "kind": 1.0,
+    "poster": 0.9809,
+    "url": 1.0,
+    "details.name": 1.0,
+    "details.original_name": 0.8765,
+    "details.description": 0.6394,
+    "details.genres": 1.0,
+    "details.poster_url": 0.9809,
+    "details.year": 0.8845,
+    "details.type": 1.0,
+    "details.external_ids": 0.9961
+   }
+  }
+ },
+ "animedia.icu": {
+  "ANIME": {
+   "entries": 7408,
+   "details": 7408,
+   "ratings": {
+    "kinopoisk": {
+     "eligible": 4870,
+     "covered": 0,
+     "eligible_coverage": 0.0,
+     "missing_source": 2538,
+     "not_integrated": 4870
+    },
+    "imdb": {
+     "eligible": 2563,
+     "covered": 2257,
+     "eligible_coverage": 0.8806,
+     "missing_source": 4845,
+     "not_integrated": 0
+    },
+    "shikimori": {
+     "eligible": 4421,
+     "covered": 4421,
+     "eligible_coverage": 1.0,
+     "missing_source": 2987,
+     "not_integrated": 0
+    },
+    "myanimelist": {
+     "eligible": 7018,
+     "covered": 0,
+     "eligible_coverage": 0.0,
+     "missing_source": 390,
+     "not_integrated": 7018
+    }
+   },
+   "fields": {
+    "slug": 1.0,
+    "title": 1.0,
+    "year": 0.9564,
+    "kind": 1.0,
+    "poster": 0.9996,
+    "url": 1.0,
+    "details.name": 1.0,
+    "details.original_name": 0.9619,
+    "details.description": 0.7272,
+    "details.genres": 1.0,
+    "details.poster_url": 0.9996,
+    "details.year": 0.9564,
+    "details.type": 1.0,
+    "details.external_ids": 0.997
+   }
+  }
+ },
+ "animedia.space": {
+  "ANIME": {
+   "entries": 7408,
+   "details": 7408,
+   "ratings": {
+    "kinopoisk": {
+     "eligible": 4870,
+     "covered": 0,
+     "eligible_coverage": 0.0,
+     "missing_source": 2538,
+     "not_integrated": 4870
+    },
+    "imdb": {
+     "eligible": 2563,
+     "covered": 2257,
+     "eligible_coverage": 0.8806,
+     "missing_source": 4845,
+     "not_integrated": 0
+    },
+    "shikimori": {
+     "eligible": 4421,
+     "covered": 4421,
+     "eligible_coverage": 1.0,
+     "missing_source": 2987,
+     "not_integrated": 0
+    },
+    "myanimelist": {
+     "eligible": 7018,
+     "covered": 0,
+     "eligible_coverage": 0.0,
+     "missing_source": 390,
+     "not_integrated": 7018
+    }
+   },
+   "fields": {
+    "slug": 1.0,
+    "title": 1.0,
+    "year": 0.9564,
+    "kind": 1.0,
+    "poster": 0.9996,
+    "url": 1.0,
+    "details.name": 1.0,
+    "details.original_name": 0.9619,
+    "details.description": 0.7272,
+    "details.genres": 1.0,
+    "details.poster_url": 0.9996,
+    "details.year": 0.9564,
+    "details.type": 1.0,
+    "details.external_ids": 0.997
+   }
+  }
+ },
+ "yummyani.site": {
+  "ANIME": {
+   "entries": 7299,
+   "details": 0,
+   "ratings": {},
+   "fields": {
+    "slug": 1.0,
+    "title": 1.0,
+    "year": 0.9559,
+    "kind": 1.0,
+    "poster": 0.9996,
+    "url": 1.0,
+    "details.name": null,
+    "details.original_name": null,
+    "details.description": null,
+    "details.genres": null,
+    "details.poster_url": null,
+    "details.year": null,
+    "details.type": null,
+    "details.external_ids": null
+   }
+  }
+ },
+ "yummyani.org": {
+  "ANIME": {
+   "entries": 7299,
+   "details": 0,
+   "ratings": {},
+   "fields": {
+    "slug": 1.0,
+    "title": 1.0,
+    "year": 0.9559,
+    "kind": 1.0,
+    "poster": 0.9996,
+    "url": 1.0,
+    "details.name": null,
+    "details.original_name": null,
+    "details.description": null,
+    "details.genres": null,
+    "details.poster_url": null,
+    "details.year": null,
+    "details.type": null,
+    "details.external_ids": null
+   }
+  }
+ },
+ "yummyani.biz": {
+  "ANIME": {
+   "entries": 7299,
+   "details": 0,
+   "ratings": {},
+   "fields": {
+    "slug": 1.0,
+    "title": 1.0,
+    "year": 0.9559,
+    "kind": 1.0,
+    "poster": 0.9996,
+    "url": 1.0,
+    "details.name": null,
+    "details.original_name": null,
+    "details.description": null,
+    "details.genres": null,
+    "details.poster_url": null,
+    "details.year": null,
+    "details.type": null,
+    "details.external_ids": null
+   }
+  }
+ }
+}

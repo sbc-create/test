@@ -1,0 +1,230 @@
+{
+ "total": 88,
+ "top": [
+  {
+   "kind": "RATING_SOURCE_NOT_INTEGRATED",
+   "domain": "lordfilm47.space",
+   "segment": "FILMS",
+   "source": "kinopoisk",
+   "records_affected": 34476,
+   "why": "идентификаторы kinopoisk есть у 34476 записей, оценок нет ни одной",
+   "owner_layer": "content-pipeline (сбор рейтингов)"
+  },
+  {
+   "kind": "RATING_SOURCE_NOT_INTEGRATED",
+   "domain": "zonafilm.space",
+   "segment": "FILMS",
+   "source": "kinopoisk",
+   "records_affected": 34476,
+   "why": "идентификаторы kinopoisk есть у 34476 записей, оценок нет ни одной",
+   "owner_layer": "content-pipeline (сбор рейтингов)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "lordserial33.biz",
+   "segment": "FILMS",
+   "field": "details.name",
+   "records_affected": 32859,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "lordserial33.biz",
+   "segment": "FILMS",
+   "field": "details.original_name",
+   "records_affected": 32859,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "lordserial33.biz",
+   "segment": "FILMS",
+   "field": "details.description",
+   "records_affected": 32859,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "lordserial33.biz",
+   "segment": "FILMS",
+   "field": "details.genres",
+   "records_affected": 32859,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "lordserial33.biz",
+   "segment": "FILMS",
+   "field": "details.poster_url",
+   "records_affected": 32859,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "lordserial33.biz",
+   "segment": "FILMS",
+   "field": "details.year",
+   "records_affected": 32859,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "lordserial33.biz",
+   "segment": "FILMS",
+   "field": "details.type",
+   "records_affected": 32859,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "lordserial33.biz",
+   "segment": "FILMS",
+   "field": "details.external_ids",
+   "records_affected": 32859,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "1lordserials1.online",
+   "segment": "FILMS",
+   "field": "details.name",
+   "records_affected": 32752,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "1lordserials1.online",
+   "segment": "FILMS",
+   "field": "details.original_name",
+   "records_affected": 32752,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "1lordserials1.online",
+   "segment": "FILMS",
+   "field": "details.description",
+   "records_affected": 32752,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "1lordserials1.online",
+   "segment": "FILMS",
+   "field": "details.genres",
+   "records_affected": 32752,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "1lordserials1.online",
+   "segment": "FILMS",
+   "field": "details.poster_url",
+   "records_affected": 32752,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "1lordserials1.online",
+   "segment": "FILMS",
+   "field": "details.year",
+   "records_affected": 32752,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "1lordserials1.online",
+   "segment": "FILMS",
+   "field": "details.type",
+   "records_affected": 32752,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "1lordserials1.online",
+   "segment": "FILMS",
+   "field": "details.external_ids",
+   "records_affected": 32752,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_COVERAGE_BELOW_TARGET",
+   "domain": "lordserial33.biz",
+   "segment": "FILMS",
+   "field": "year",
+   "records_affected": 29581,
+   "why": "покрытие 10.0% при цели 90%",
+   "owner_layer": "content-pipeline"
+  },
+  {
+   "kind": "FIELD_COVERAGE_BELOW_TARGET",
+   "domain": "1lordserials1.online",
+   "segment": "FILMS",
+   "field": "year",
+   "records_affected": 29483,
+   "why": "покрытие 10.0% при цели 90%",
+   "owner_layer": "content-pipeline"
+  },
+  {
+   "kind": "RATING_COVERAGE_BELOW_TARGET",
+   "domain": "lordfilm47.space",
+   "segment": "FILMS",
+   "source": "imdb",
+   "records_affected": 27035,
+   "why": "покрытие 19.9% при цели 90%",
+   "owner_layer": "content-pipeline"
+  },
+  {
+   "kind": "RATING_COVERAGE_BELOW_TARGET",
+   "domain": "zonafilm.space",
+   "segment": "FILMS",
+   "source": "imdb",
+   "records_affected": 27035,
+   "why": "покрытие 19.9% при цели 90%",
+   "owner_layer": "content-pipeline"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "lordserial33.biz",
+   "segment": "SERIES",
+   "field": "details.name",
+   "records_affected": 19836,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "lordserial33.biz",
+   "segment": "SERIES",
+   "field": "details.original_name",
+   "records_affected": 19836,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  },
+  {
+   "kind": "FIELD_SOURCE_MISSING",
+   "domain": "lordserial33.biz",
+   "segment": "SERIES",
+   "field": "details.description",
+   "records_affected": 19836,
+   "why": "подробности каталога не собраны",
+   "owner_layer": "content-pipeline (сбор подробностей)"
+  }
+ ]
+}

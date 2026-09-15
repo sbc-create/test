@@ -1,0 +1,12 @@
+{
+ "prompt_id": "FLEET-SEO-009-R2-DAILY-CONTENT-COVERAGE-QWEN",
+ "report_id": "seo-daily-2026-09-15",
+ "coverage_snapshot_sha256": "64b2794ecaeff2f831b97ad6d161917df6f40e83b7fc0a3b23c884d44f900ff7",
+ "files_sha256": {
+  "coverage-summary.json": "0e2413672cbef1c6522154658042061aefae278284a8d023203be4b254bae74b",
+  "cycle-2026-09-15.json": "b638f16f2ddbc12e371b30587d40b28bf1f0e995061ad531f5e573672e10f196",
+  "gap-queue.json": "c040398e0ed1c223cd5d556f9dd3c70c98651fcbe6783a3823a4ef9d19b5325e",
+  "inventory-classification.json": "6d06772519c06c36cb0811f1f9013074faf0ece76e138f457b99cf8248341bab",
+  "traffic.json": "1b8f532f139e3a73906c4dea01f368bf2799cf9d28d907741fdd41e8cb0f21f6"
+ }
+}
