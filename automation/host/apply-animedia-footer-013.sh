@@ -30,12 +30,15 @@ set -Eeuo pipefail
 FRONT=/srv/lords/.frontend
 ARTIFACT="${FRONT}/lords-frontend.py"
 ROLLBACKS="${FRONT}/.rollback"
-SOURCE="${SOURCE:-/srv/site-factory/repo/automation/host/lords-frontend.py}"
+#: По умолчанию берётся артефакт из ветки задачи. В рабочем дереве
+#: /srv/site-factory/repo лежит незакоммиченная копия соседней задачи, и её
+#: сумма не совпадёт — скрипт откажется, а не подменит файл молча.
+SOURCE="${SOURCE:-/home/claude/wt-yummy-013/automation/host/lords-frontend.py}"
 
 #: Ожидаемая сумма исправленного артефакта. Несовпадение — отказ: применять
 #: «какой-то другой файл» этим скриптом нельзя, иначе он превращается в
 #: произвольную запись в файл, который исполняют шесть витрин.
-EXPECTED_SHA=c2230def39bd47b49bd23244dca617c2210ad2562eeae59fb6cd010b210fed9e
+EXPECTED_SHA=13ea42e2dd77e5ddf6522e10b9fb84dff8b949f6425a9eecc2481f259b35bc3c
 
 UNIT_1=nova-animedia-01.service
 PORT_1=9121

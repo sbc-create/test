@@ -1865,7 +1865,17 @@ def разметка_плеера(вид, запись: dict, деталь: dict
  // флаг гасит только запоздавший таймаут: пятнадцать секунд не повод объявлять
  // сломанным то, что уже играет.
  var поднялся=false;
- function state(k,t,p){ f.setAttribute('data-state',k);
+ var seen;
+ // Отказ обязан перебивать успех НАВСЕГДА, а не до следующего тика таймера.
+ // Обычный порядок у провайдера — сначала элемент поднимается, потом приходит
+ // `noData`; таймер `seen` продолжал работать и следующим тиком возвращал
+ // состояние `ok`, пряча уже показанное объяснение. Зритель получал пустую
+ // рамку вместо ответа — ровно то, против чего эти состояния и заведены.
+ var отказ=false;
+ function state(k,t,p){
+  if(отказ&&k==='ok') return;
+  if(k!=='ok'&&k!=='loading'){ отказ=true; if(typeof seen!=='undefined') clearInterval(seen); }
+  f.setAttribute('data-state',k);
   if(k==='ok'){ if(st)st.hidden=true; el.hidden=false; поднялся=true; return }
   el.hidden=true; if(!st)return; st.hidden=false;
   st.innerHTML='<b></b><p></p>'; st.firstChild.textContent=t;
@@ -1878,7 +1888,7 @@ def разметка_плеера(вид, запись: dict, деталь: dict
  if(s){ s.addEventListener('error',function(){
   state('error','Скрипт плеера не загрузился',
    'Браузер не смог получить скрипт провайдера: его мог заблокировать расширение или сеть. Страница и список серий продолжают работать.');}); }
- var seen=setInterval(function(){
+ seen=setInterval(function(){
   if(el.shadowRoot||el.children.length){clearInterval(seen);state('ok');}},250);
  setTimeout(function(){ clearInterval(seen);
   if(!поднялся) state('slow','Плеер не поднялся',
@@ -3307,13 +3317,12 @@ class ВидАнимедиа(ВидЗона):
                          if описание else "")
         канон = (f'<link rel="canonical" href="{html.escape(self.канон(путь))}">'
                  if путь and код == 200 else "")
-        # Отметки выпуска — версия шаблона, семейство, build id, commit,
-        # sha артефакта — из публичной страницы убраны: ни один потребитель их
-        # не спрашивал, а посетителю они сообщали только внутреннюю
-        # классификацию сборки. `data-design` оставлен: это селектор ветки
-        # отрисовки, на нём держится CSS, и к идентичности выпуска он не
-        # относится. Витрины lords и zona свои отметки сохраняют — правка
-        # намеренно сидит в ветке animedia и соседей не касается.
+        # Отметки выпуска — версия шаблона, семейство, build id, commit, sha
+        # артефакта — из публичной страницы убраны: ни один потребитель их не
+        # спрашивал, а посетителю они сообщали внутреннюю классификацию сборки.
+        # `data-design` оставлен: это селектор ветки отрисовки, на нём держится
+        # CSS, и к идентичности выпуска он не относится. Витрины lords и zona
+        # свои отметки сохраняют — правка сидит в ветке animedia.
         return f"""<!doctype html><html lang="ru" data-design="animedia-portal">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(титул)}</title>{описание_мета}{канон}
