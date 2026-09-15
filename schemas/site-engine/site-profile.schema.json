@@ -361,6 +361,117 @@
           "minLength": 1
         }
       }
+    },
+    "player": {
+      "type": "object",
+      "description": "Привязка витрины к паре учётных данных поставщика видео. Значения секретов здесь не хранятся — только ссылки.",
+      "properties": {
+        "provider": {
+          "type": "string"
+        },
+        "credential_profile": {
+          "type": "string"
+        },
+        "publisher_id_ref": {
+          "type": "string"
+        },
+        "sidecar": {
+          "type": "string"
+        },
+        "source_mode": {
+          "type": "string",
+          "enum": [
+            "external-ids",
+            "provider-id"
+          ]
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "provider",
+        "credential_profile",
+        "publisher_id_ref"
+      ],
+      "additionalProperties": false
+    },
+    "backup_policy_ref": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Метаданные реестра витрин. Кодом сегодня не читаются: их пишет и читает человек, ведущий реестр. Объявлены здесь потому, что шесть живых профилей их уже содержат, а строгая схема обязана описывать то, что в реестре действительно лежит."
+    },
+    "content_profile_ref": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Метаданные реестра витрин. Кодом сегодня не читаются: их пишет и читает человек, ведущий реестр. Объявлены здесь потому, что шесть живых профилей их уже содержат, а строгая схема обязана описывать то, что в реестре действительно лежит."
+    },
+    "monitoring_profile_ref": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Метаданные реестра витрин. Кодом сегодня не читаются: их пишет и читает человек, ведущий реестр. Объявлены здесь потому, что шесть живых профилей их уже содержат, а строгая схема обязана описывать то, что в реестре действительно лежит."
+    },
+    "registry_note": {
+      "type": "string",
+      "description": "Метаданные реестра витрин. Кодом сегодня не читаются: их пишет и читает человек, ведущий реестр. Объявлены здесь потому, что шесть живых профилей их уже содержат, а строгая схема обязана описывать то, что в реестре действительно лежит."
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "production",
+        "staging",
+        "local"
+      ]
+    },
+    "family": {
+      "type": "string",
+      "description": "Семейство оформления витрины: lords, zona, animedia, yummy."
+    },
+    "lifecycle_state": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "PAUSED",
+        "RETIRED",
+        "PLANNED"
+      ]
+    },
+    "deployment": {
+      "type": "object",
+      "description": "Что именно выложено на витрину: семейство и версия шаблона, сборка.",
+      "properties": {
+        "template_family": {
+          "type": "string"
+        },
+        "template_version": {
+          "type": "string"
+        },
+        "build_id": {
+          "type": "string"
+        },
+        "artifact_sha256": {
+          "type": "string"
+        },
+        "deployed_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "manifest_path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": true
     }
   },
   "anyOf": [
