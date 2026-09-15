@@ -17,21 +17,21 @@ from seo_operator.technical_seo import Page
 
 
 def good_page(**kw) -> Page:
-    defaults = dict(
-        url="https://lordfilm47.space/title/007-doroga-k-millionu/",
-        status_code=200,
-        title="007: Дорога к миллиону — смотреть онлайн",
-        description="Описание фильма, собранное из подтверждённых сведений каталога.",
-        h1=["007: Дорога к миллиону"],
-        canonical="https://lordfilm47.space/title/007-doroga-k-millionu/",
-        indexable=False,
-        rendered_text_length=1525,
-        open_graph={"og:title": "007: Дорога к миллиону"},
-        structured_data=[{"@type": "WebSite"}, {"@type": "BreadcrumbList"}],
-        internal_links_in=4,
-        internal_links_out=12,
-        player_available=True,
-    )
+    defaults = {
+        "url": "https://lordfilm47.space/title/007-doroga-k-millionu/",
+        "status_code": 200,
+        "title": "007: Дорога к миллиону — смотреть онлайн",
+        "description": "Описание фильма, собранное из подтверждённых сведений каталога.",
+        "h1": ["007: Дорога к миллиону"],
+        "canonical": "https://lordfilm47.space/title/007-doroga-k-millionu/",
+        "indexable": False,
+        "rendered_text_length": 1525,
+        "open_graph": {"og:title": "007: Дорога к миллиону"},
+        "structured_data": [{"@type": "WebSite"}, {"@type": "BreadcrumbList"}],
+        "internal_links_in": 4,
+        "internal_links_out": 12,
+        "player_available": True,
+    }
     defaults.update(kw)
     return Page(**defaults)
 
