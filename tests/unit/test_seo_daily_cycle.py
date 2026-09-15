@@ -143,11 +143,19 @@ def test_отчёт_выпускается_даже_без_публикации(
 
 
 def test_недоступность_qwen_не_останавливает_цикл():
+    """Отчёт выпускается и без второго мнения: отсутствие оценки не отменяет
+    фактов, а остановленный сбор отменил бы."""
     C = _модуль("_cycle", "seo-daily-cycle.py")
-    q = C.оценка_qwen()
+    q = C.оценка_qwen({"report_id": "t", "date": "2026-09-15",
+                       "coverage": {}, "traffic": {}, "content": {},
+                       "gap_queue_total": 0, "gap_queue_top": [],
+                       "inventory": {}, "topvisor": {}})
     assert q["status"] in ("OK", "UNAVAILABLE")
     assert q.get("verdict") in ("IMPROVING", "STABLE", "DECLINING",
                                "INSUFFICIENT_DATA")
+    # Причина названа словами, а не кодом: «недоступно» без причины через
+    # месяц читается как «не сделали».
+    assert q["status"] != "UNAVAILABLE" or q.get("reason")
 
 
 def test_локальный_файл_не_считается_доставкой():
