@@ -18,10 +18,11 @@
 from __future__ import annotations
 
 import argparse
+import contextlib
+import grp
 import json
 import os
 import pwd
-import grp
 import shutil
 import subprocess
 import sys
@@ -290,10 +291,11 @@ def применить(цель: Цель, сколько: int) -> dict:
             os.replace(резерв, путь)
         else:
             путь.unlink(missing_ok=True)
-        try:
+        # Откат уже сделан: боковой файл возвращён. Если и перезапуск не удался,
+        # витрина поднимется прежней конфигурацией сама — ронять отчёт об откате
+        # из-за этого нельзя.
+        with contextlib.suppress(Exception):
             перезапуск(цель)
-        except Exception:
-            pass
         return {"site": цель.сайт, "domain": цель.домен, "status": "ROLLED_BACK",
                 "reason": str(e), "rows": строки_отказа}
     if резерв is not None:
