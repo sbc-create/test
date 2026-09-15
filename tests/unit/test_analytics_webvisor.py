@@ -174,21 +174,37 @@ def test_the_fake_really_rejects_the_deprecated_field(token):
 
 
 # ------------------------------------------------------- сериализация JSON
-def test_visor_is_sent_as_a_real_json_boolean(token):
-    """`false`, а не `"false"`, не `0` и не `False`: проверяются сырые байты."""
+def test_visor_is_sent_as_a_json_integer(token):
+    """Ноль, а не `false`: поле целочисленное, и это проверено живым API.
+
+    Прежняя редакция этой проверки требовала настоящего булева и прямо
+    запрещала `0`. Написана она была против поддельной Метрики и живым API
+    не проверялась ни разу, а он на булево отвечает:
+
+        HTTP 400 Could not read JSON, error in line 1, column 253,
+        path: counter.code_options.visor
+
+    Обманчиво здесь то, что в том же `code_options` есть и настоящие булевы
+    поля (`ytm`, `ssr`), поэтому отказ выглядел как «API не поддерживает
+    выключение записи сессий», и год считался таковым. GET возвращает
+    `"visor": 1` — поле целое.
+
+    Проверяемое здесь свойство прежнее: запись сессий выключается. Изменился
+    не инвариант, а представление значения на проводе — то самое, из-за
+    которого инвариант не выполнялся вовсе.
+    """
     fake = Metrika()
     _provider(fake, token).ensure_webvisor_disabled(111881037)
     raw = next(raw for m, _, _, raw in fake.requests if m == "PUT")
     text = raw.decode("utf-8")
 
-    assert '"visor": false' in text or '"visor":false' in text, text
-    assert '"visor": "false"' not in text
-    assert '"visor": 0' not in text
+    assert '"visor": 0' in text or '"visor":0' in text, text
+    assert '"visor": "0"' not in text, "строка вместо числа"
     assert "False" not in text, "в теле оказался Python-литерал вместо JSON"
 
     body = json.loads(text)
     value = body["counter"]["code_options"]["visor"]
-    assert value is False and isinstance(value, bool)
+    assert value == 0 and isinstance(value, int) and not isinstance(value, bool)
 
 
 def test_request_declares_json_content_type(token):
@@ -214,7 +230,7 @@ def test_other_code_options_survive(token):
     _provider(fake, token).ensure_webvisor_disabled(111881037)
     sent = fake.puts()[0]["counter"]["code_options"]
 
-    assert sent[VISOR_OPTION] is False
+    assert sent[VISOR_OPTION] == 0  # поле целочисленное: булево API отвергает
     for key, value in EXISTING_OPTIONS.items():
         if key == VISOR_OPTION:
             continue

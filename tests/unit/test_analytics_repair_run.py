@@ -42,6 +42,12 @@ LIVE = {
     "lordfilm47.space": 112010269,
     "lordserial33.biz": 112010274,
     "1lordserials1.online": 112010277,
+    # Zona заведена 2026-09-14 задачей FLEET-SEO-006: витрина
+    # zonafilm.space публична и обслуживается юнитом nova-zona-01, а
+    # счётчика у неё не было вовсе. В трёх профилях стоял 112010269 —
+    # счётчик lordfilm47.space, и он один на два домена собирал бы
+    # визиты двух сайтов в один отчёт.
+    "zonafilm.space": 112582938,
 }
 
 
@@ -170,7 +176,7 @@ def test_repair_run_disables_the_visor_without_creating_anything(
     assert all(w.startswith("PUT ") for w in provider.writes()), provider.writes()
     assert len(provider.writes()) == len(LIVE), "по одному PUT на счётчик — не больше"
     for counter in provider.counters:
-        assert counter["code_options"][VISOR_OPTION] is False
+        assert counter["code_options"][VISOR_OPTION] == 0
         # Остальные настройки кода счётчика не тронуты.
         assert counter["code_options"]["clickmap"] is True
         assert counter["code_options"]["async"] is True
