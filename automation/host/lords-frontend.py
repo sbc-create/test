@@ -105,6 +105,173 @@ def _рядом_с_каталогом(шаблон: str) -> str:
 # нет в новом маршруте, проксируется в него. Так плеер, карточка и любые
 # динамические страницы остаются рабочими — их никто не переписывает.
 ВЕРХОВОЙ = os.environ.get("LORDS_LEGACY_UPSTREAM", "")
+#: Счётчик Яндекс Метрики этой витрины. Публичное число, не секрет: оно и так
+#: видно в исходном коде любой страницы. Значение задаёт unit витрины, потому
+#: что один процесс обслуживает один домен, а счётчик привязан к домену.
+#: Пустое значение означает «счётчика нет» и даёт страницу без тега — не тег,
+#: который молчит. Молчащий тег неотличим от работающего до первого отчёта.
+СЧЁТЧИК_МЕТРИКИ = os.environ.get("LORDS_METRIKA_COUNTER", "").strip()
+
+
+def тег_метрики() -> str:
+    """Официальный тег Метрики или пустая строка.
+
+    Про единственность инициализации. Тег вставляется в четырёх местах —
+    в две оболочки собственных страниц и в два места, где размечается чужой
+    HTML (проксируемый и взятый из прежнего релиза). Пересечься они не должны,
+    но «не должны» — это не «не могут»: достаточно одной страницы, которая
+    пройдёт обоими путями, и счётчик получит два просмотра одного визита.
+    Поэтому защёлка стоит в самом теге, а не в рассуждении о том, где он
+    окажется.
+
+    Загрузка асинхронная: аналитика не имеет права задерживать отрисовку.
+    Вебвизор выключен намеренно — он включается отдельным решением владельца,
+    и реестр аналитики требует от него `false`.
+    """
+    if not СЧЁТЧИК_МЕТРИКИ.isdigit():
+        return ""
+    н = СЧЁТЧИК_МЕТРИКИ
+    return (
+        f'<script data-metrika-counter="{н}">'
+        "(function(){"
+        "if(window.__sfMetrikaReady){return;}window.__sfMetrikaReady=1;"
+        "(function(m,e,t,r,i,k,a){"
+        "m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};"
+        "m[i].l=1*new Date();"
+        "for(var j=0;j<e.scripts.length;j++){if(e.scripts[j].src===r){return;}}"
+        "k=e.createElement(t),a=e.getElementsByTagName(t)[0],"
+        "k.async=1,k.src=r,a.parentNode.insertBefore(k,a)"
+        '})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");'
+        f'ym({н},"init",{{trackLinks:true,accurateTrackBounce:true,webvisor:false}});'
+        "})();"
+        "</script>"
+        f'<noscript><div><img src="https://mc.yandex.ru/watch/{н}" '
+        'style="position:absolute;left:-9999px" alt=""></div></noscript>'
+    )
+
+#: Контракт многоисточниковых оценок. Единственное место, где объявлено,
+#: какие источники бывают и как каждый подписывается. Подпись привязана к
+#: ключу жёстко: показать Shikimori под подписью «КП» значило бы соврать о
+#: происхождении числа, а оценка без верного источника — это не оценка.
+#:
+#: Ключ → (подпись, шкала по умолчанию, это ли оценка пользователей витрины).
+ИСТОЧНИКИ_ОЦЕНОК = {
+    "kp":        ("КП",         10.0, False),
+    "imdb":      ("IMDb",       10.0, False),
+    "shikimori": ("Shikimori",  10.0, False),
+    "mal":       ("MyAnimeList", 10.0, False),
+    "amd":       ("AMD",        10.0, True),
+}
+
+#: Порядок вывода. Фиксированный, а не по величине: переставлять источники
+#: местами в зависимости от значения значит каждый раз показывать зрителю
+#: разную картину одних и тех же данных.
+ПОРЯДОК_ОЦЕНОК = ("kp", "imdb", "shikimori", "mal", "amd")
+
+
+def _число_оценки(значение) -> str:
+    """Оценка как число или пусто. Ноль и null оценкой не являются."""
+    if значение is None or isinstance(значение, bool):
+        return ""
+    try:
+        ч = float(значение)
+    except (TypeError, ValueError):
+        return ""
+    if ч <= 0:
+        return ""
+    return f"{ч:.1f}".rstrip("0").rstrip(".") if ч % 1 else f"{int(ч)}"
+
+
+def оценки_по_источникам(деталь: dict) -> list:
+    """Разбор `ratings_by_source` в список готовых к выводу оценок.
+
+    Принимаются две формы записи источника: число и объект
+    ``{"value": …, "scale": …, "votes": …}``. Вторая нужна затем, чтобы шкала
+    и число голосов приходили вместе со значением, а не додумывались витриной.
+
+    Чего здесь не происходит: не выдумывается шкала, если источник её не
+    прислал, — берётся объявленная контрактом; не показывается ноль, пустое и
+    null; не подставляется чужая подпись. Источник, которого в данных нет,
+    просто отсутствует — «нет оценки» и «оценка 0» это разные утверждения.
+
+    Совместимость: пока `ratings_by_source` не пришёл, читаются прежние поля
+    `kinopoisk_rating` и `imdb_rating`. Это не догадка о данных, а те же два
+    источника под своими подписями.
+    """
+    сырое = деталь.get("ratings_by_source")
+    собрано = {}
+    if isinstance(сырое, dict):
+        собрано.update(сырое)
+    else:
+        for ключ, поле in (("kp", "kinopoisk_rating"), ("imdb", "imdb_rating")):
+            if деталь.get(поле) is not None:
+                собрано[ключ] = деталь[поле]
+    готово = []
+    for ключ in ПОРЯДОК_ОЦЕНОК:
+        if ключ not in собрано:
+            continue
+        подпись, шкала_по_умолчанию, пользовательская = ИСТОЧНИКИ_ОЦЕНОК[ключ]
+        запись = собрано[ключ]
+        if isinstance(запись, dict):
+            значение = _число_оценки(запись.get("value"))
+            шкала = запись.get("scale") or шкала_по_умолчанию
+            голоса = запись.get("votes")
+        else:
+            значение = _число_оценки(запись)
+            шкала = шкала_по_умолчанию
+            голоса = None
+        if not значение:
+            continue
+        try:
+            голосов = int(голоса) if голоса is not None else None
+        except (TypeError, ValueError):
+            голосов = None
+        готово.append({
+            "ключ": ключ, "подпись": подпись, "значение": значение,
+            "шкала": f"{float(шкала):g}", "голоса": голосов if (голосов or 0) > 0 else None,
+            "пользовательская": пользовательская,
+        })
+    return готово
+
+
+def разметка_оценок(деталь: dict, класс: str = "rbs", пусто: bool = True) -> str:
+    """Компонент оценок. Один на все семейства, вид задаёт CSS семейства.
+
+    Оценка витрины (AMD) отделена от внешних явной группой: смешать их в один
+    ряд значило бы выдать мнение зрителей одной витрины за оценку агрегатора.
+
+    Доступность: список размечен как список, каждая оценка читается целиком —
+    «КП 7.4 из 10, 1234 голоса», — потому что вслух «7.4» без источника и
+    шкалы не значит ничего.
+    """
+    оценки = оценки_по_источникам(деталь)
+    if not оценки:
+        if not пусто:
+            return ""
+        return (f'<p class="{класс} {класс}--none">'
+                "<span>Оценок пока нет: источник их не передал</span></p>")
+    def элемент(о):
+        голоса = (f'<span class="{класс}__v">{о["голоса"]} голос.</span>'
+                  if о["голоса"] else "")
+        вслух = (f'{о["подпись"]} {о["значение"]} из {о["шкала"]}'
+                 + (f', {о["голоса"]} голосов' if о["голоса"] else ""))
+        return (f'<li class="{класс}__i" data-source="{о["ключ"]}">'
+                f'<span class="vh">{html.escape(вслух)}</span>'
+                f'<span class="{класс}__s" aria-hidden="true">{html.escape(о["подпись"])}</span>'
+                f'<span class="{класс}__n" aria-hidden="true">{о["значение"]}'
+                f'<small>/{о["шкала"]}</small></span>{голоса}</li>')
+    внешние = [о for о in оценки if not о["пользовательская"]]
+    свои = [о for о in оценки if о["пользовательская"]]
+    части = []
+    if внешние:
+        части.append(f'<ul class="{класс}__l">' + "".join(элемент(о) for о in внешние) + "</ul>")
+    if свои:
+        части.append(f'<ul class="{класс}__l {класс}__l--own" '
+                     f'aria-label="Оценка зрителей витрины">'
+                     + "".join(элемент(о) for о in свои) + "</ul>")
+    return f'<div class="{класс}" role="group" aria-label="Оценки">' + "".join(части) + "</div>"
+
+
 НА_СТРАНИЦЕ = 60
 
 # Оформление и разделы — свои у каждого семейства.
@@ -373,7 +540,7 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 <meta name="site-factory-core" content="{ЯДРО}">
 <meta name="site-factory-profile" content="{ПРОФИЛЬ}">
 <link rel="manifest" href="/assets/nova.webmanifest">
-<style>{СТИЛЬ}</style></head><body>
+{тег_метрики()}<style>{СТИЛЬ}</style></head><body>
 <header class="hdr"><div class="wrap hdr__in">
 <a class="logo" href="/">{html.escape(ИМЯ_ВИТРИНЫ)}</a>
 <nav class="nav">{пункты}</nav>
@@ -759,6 +926,25 @@ color:#5b6470;font-size:12.5px}
 border:1px solid @LINE@;border-radius:3px;padding:4px 8px;background:@SHEET@}
 
 img[hidden]{display:none}
+
+/* Оценки по источникам. Разметка общая, вид свой у каждого семейства. */
+.rbs{margin:14px 0;display:flex;flex-direction:column;gap:8px}
+.rbs__l{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.rbs__i{display:flex;align-items:baseline;gap:6px;padding:6px 11px;border-radius:6px;
+white-space:nowrap}
+.rbs__s{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.rbs__n{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.rbs__n small{font-size:11px;font-weight:400;opacity:.72}
+.rbs__v{font-size:11px;opacity:.75;font-variant-numeric:tabular-nums}
+.rbs__l--own{border-top:1px dashed currentColor;padding-top:8px;margin-top:2px;opacity:.95}
+.rbs--none{margin:14px 0;font-size:13px;font-style:italic}
+@media(max-width:400px){.rbs__i{padding:5px 8px}.rbs__n{font-size:14px}}
+.rbs__i{background:@CARD@;border:1px solid @LINE@;color:@INK@}
+.rbs__s{color:@ACCDK@}
+.rbs__i[data-source=imdb] .rbs__n{color:@KP@}
+.rbs__l--own{color:@DIM@}
+.rbs--none{color:@MUTE@}
+
 """
 
 #: Прежнее оформление Zona 1.1.0. Оставлено намеренно: артефакт один на
@@ -945,6 +1131,24 @@ display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between;align-items:c
 border:1px solid @LINE@;border-radius:6px;padding:5px 9px;background:@ALT@;color:#4d555e}
 
 img[hidden]{display:none}
+
+/* Оценки по источникам. Разметка общая, вид свой у каждого семейства. */
+.rbs{margin:14px 0;display:flex;flex-direction:column;gap:8px}
+.rbs__l{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.rbs__i{display:flex;align-items:baseline;gap:6px;padding:6px 11px;border-radius:6px;
+white-space:nowrap}
+.rbs__s{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.rbs__n{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.rbs__n small{font-size:11px;font-weight:400;opacity:.72}
+.rbs__v{font-size:11px;opacity:.75;font-variant-numeric:tabular-nums}
+.rbs__l--own{border-top:1px dashed currentColor;padding-top:8px;margin-top:2px;opacity:.95}
+.rbs--none{margin:14px 0;font-size:13px;font-style:italic}
+@media(max-width:400px){.rbs__i{padding:5px 8px}.rbs__n{font-size:14px}}
+.rbs__i{background:#fff;border:1px solid @LINE@;color:@INK@}
+.rbs__s{color:@ACC@}
+.rbs__l--own{color:@DIM@}
+.rbs--none{color:@MUTE@}
+
 """
 
 
@@ -1143,6 +1347,25 @@ border:1px solid @LINE@;border-radius:5px;padding:5px 9px;background:@SURF@;
 color:@MUTE@}
 
 img[hidden]{display:none}
+
+/* Оценки по источникам. Разметка общая, вид свой у каждого семейства. */
+.rbs{margin:14px 0;display:flex;flex-direction:column;gap:8px}
+.rbs__l{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.rbs__i{display:flex;align-items:baseline;gap:6px;padding:6px 11px;border-radius:6px;
+white-space:nowrap}
+.rbs__s{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.rbs__n{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.rbs__n small{font-size:11px;font-weight:400;opacity:.72}
+.rbs__v{font-size:11px;opacity:.75;font-variant-numeric:tabular-nums}
+.rbs__l--own{border-top:1px dashed currentColor;padding-top:8px;margin-top:2px;opacity:.95}
+.rbs--none{margin:14px 0;font-size:13px;font-style:italic}
+@media(max-width:400px){.rbs__i{padding:5px 8px}.rbs__n{font-size:14px}}
+.rbs__i{background:@SURF@;border:1px solid @LINE@;color:@INK@}
+.rbs__s{color:@ACC@}
+.rbs__n{color:@WARM@}
+.rbs__l--own{color:@DIM@}
+.rbs--none{color:@MUTE@}
+
 """
 
 
@@ -1342,6 +1565,25 @@ border:1px solid @LINE@;border-radius:4px;padding:4px 8px;background:@ALT@;
 color:@MUTE@}
 
 img[hidden]{display:none}
+
+/* Оценки по источникам. Разметка общая, вид свой у каждого семейства. */
+.rbs{margin:14px 0;display:flex;flex-direction:column;gap:8px}
+.rbs__l{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.rbs__i{display:flex;align-items:baseline;gap:6px;padding:6px 11px;border-radius:6px;
+white-space:nowrap}
+.rbs__s{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.rbs__n{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.rbs__n small{font-size:11px;font-weight:400;opacity:.72}
+.rbs__v{font-size:11px;opacity:.75;font-variant-numeric:tabular-nums}
+.rbs__l--own{border-top:1px dashed currentColor;padding-top:8px;margin-top:2px;opacity:.95}
+.rbs--none{margin:14px 0;font-size:13px;font-style:italic}
+@media(max-width:400px){.rbs__i{padding:5px 8px}.rbs__n{font-size:14px}}
+.rbs__i{background:@ALT@;border:1px solid @LINE@;color:@INK@}
+.rbs__s{color:@ACC@}
+.rbs__n{color:@INK@}
+.rbs__l--own{color:@DIM@}
+.rbs--none{color:@MUTE@}
+
 """
 
 
@@ -2145,11 +2387,11 @@ class ВидЛордс(Вид):
         таблица = ("".join(f"<div><dt>{html.escape(м)}</dt><dd>{з}</dd></div>" for м, з in пары))
         таблица = f'<dl class="facts">{таблица}</dl>' if пары else ""
 
-        плитки = "".join(
-            f'<div class="rate rate--{вид}">{html.escape(метка)} {html.escape(значение)}'
-            f"<small>источник: CDNVideoHub</small></div>"
-            for вид, метка, значение in оценки(деталь))
-        плитки = f'<div class="rates">{плитки}</div>' if плитки else ""
+        # Единый компонент оценок: подпись источника принадлежит источнику,
+        # а не витрине. Прежняя строка подписывала любую оценку как
+        # «источник: CDNVideoHub», хотя это поставщик каталога, а не тот, кто
+        # выставил оценку.
+        плитки = разметка_оценок(деталь, "rbs")
 
         сезон_старт = сезоны[0]["n"] if сезоны else 1
         код, внутри = разметка_плеера(self, запись, деталь, сезон_старт, 1)
@@ -2632,10 +2874,6 @@ class ВидЗона(Вид):
                 if деталь.get("original_name") else "")
 
         полоса = []
-        for вид, метка, значение in оценки(деталь):
-            класс = "zacc" if вид == "kp" else "zwarm"
-            полоса.append(f'<div><dt>{html.escape(метка)}</dt>'
-                          f'<dd class="{класс}">{html.escape(значение)}</dd></div>')
         if запись.get("year"):
             полоса.append(f'<div><dt>Год</dt><dd>{запись["year"]}</dd></div>')
         if сезоны:
@@ -2644,6 +2882,10 @@ class ВидЗона(Вид):
         if длит:
             полоса.append(f'<div><dt>Хронометраж</dt><dd>{html.escape(длит)}</dd></div>')
         полоса_html = (f'<dl class="zstrip">{"".join(полоса)}</dl>' if полоса else "")
+        # Оценки вынесены в общий компонент: подпись источника принадлежит
+        # источнику. Прежняя полоса красила КП и IMDb цветом, но не называла
+        # шкалу и не умела показать больше двух источников.
+        полоса_html += разметка_оценок(деталь, "rbs")
 
         описание = деталь.get("description") or деталь.get("short_description") or ""
         сюжет = (f'<section class="zsec"><h2>О чём это</h2><p>{html.escape(описание)}</p></section>'
@@ -2837,6 +3079,7 @@ def _мета_версии() -> str:
         f'<meta name="site-factory-template" content="{ШАБЛОН_СЕМЕЙСТВА}">'
         f'<meta name="site-factory-core" content="{ЯДРО}">'
         f'<meta name="site-factory-profile" content="{ПРОФИЛЬ}">'
+        + тег_метрики()
     )
 
 
@@ -3418,7 +3661,8 @@ class Обработчик(BaseHTTPRequestHandler):
                 f'<meta name="site-factory-design-version" content="{ВЕРСИЯ}">'
                 f'<meta name="site-factory-template-family" content="{СЕМЕЙСТВО}">'
                 f'<meta name="site-factory-build-id" content="{СБОРКА}">'
-                f'<style>{СТИЛЬ}</style>').encode("utf-8")
+                + тег_метрики()
+                + f'<style>{СТИЛЬ}</style>').encode("utf-8")
             тело = тело.replace(b"</head>", вставка + b"</head>", 1)
         return self._отдать(тело, тип, код=код)
 
@@ -3463,7 +3707,8 @@ class Обработчик(BaseHTTPRequestHandler):
                 f'<meta name="site-factory-template" content="{ШАБЛОН_СЕМЕЙСТВА}">'
                 f'<meta name="site-factory-core" content="{ЯДРО}">'
                 f'<meta name="site-factory-profile" content="{ПРОФИЛЬ}">'
-                f'<style>{СТИЛЬ}</style>')
+                + тег_метрики()
+                + f'<style>{СТИЛЬ}</style>')
             текст = текст.replace("</head>", вставка + "</head>", 1)
             данные = текст.encode("utf-8")
         типы = {".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8",
