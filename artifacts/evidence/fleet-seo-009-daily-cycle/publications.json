@@ -1,0 +1,37 @@
+[
+ {
+  "date": "2026-09-15",
+  "action_id": "seo-009-layer-live-001",
+  "deploy_id": "nova-seo-layer-20260915T104745Z",
+  "kind": "SEO_LAYER_CANONICAL_SCHEMA_SITEMAP",
+  "what": "canonical, структурированные данные и карта сайта выведены на четыре управляемые витрины Lords и Zona",
+  "domains": [
+   "lordfilm47.space",
+   "lordserial33.biz",
+   "1lordserials1.online",
+   "zonafilm.space"
+  ],
+  "urls": [
+   "https://lordfilm47.space/",
+   "https://lordfilm47.space/sitemap.xml",
+   "https://lordserial33.biz/",
+   "https://lordserial33.biz/sitemap.xml",
+   "https://1lordserials1.online/",
+   "https://1lordserials1.online/sitemap.xml",
+   "https://zonafilm.space/",
+   "https://zonafilm.space/sitemap.xml"
+  ],
+  "sitemap_urls_published": 212080,
+  "canary": "1lordserials1.online",
+  "live_verified": true,
+  "verification": "все четыре домена: тег Метрики 1, canonical 1, JSON-LD есть, индекс карты 200 с двумя шардами; 404 без canonical и схемы",
+  "rollback_reference": "/srv/lords/.frontend/lords-frontend.py.lkg-20260915T104745Z",
+  "content_hash": "620fa353972fa6de381a5ced",
+  "alerts_closed": [
+   "SITEMAP_EMPTY×4",
+   "SITEMAP_INDEX_MISSING×4",
+   "CANONICAL_MISSING×2",
+   "SCHEMA_MISSING×4"
+  ]
+ }
+]

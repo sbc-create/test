@@ -2,7 +2,7 @@
  "schema": "seo.daily_cycle/1.0.0",
  "report_id": "seo-daily-2026-09-15",
  "date": "2026-09-15",
- "cutoff_utc": "2026-09-15T10:44:03Z",
+ "cutoff_utc": "2026-09-15T10:59:04Z",
  "inventory_version": "seo_inventory/1",
  "inventory": {
   "1lordserials1.online": {
@@ -229,7 +229,7 @@
    "https://old.yummyani.me/"
   ]
  },
- "coverage_snapshot_sha256": "64b2794ecaeff2f831b97ad6d161917df6f40e83b7fc0a3b23c884d44f900ff7",
+ "coverage_snapshot_sha256": "0f41c302f17d006d3dd039d594a788c4157690fa3aa3ea31547002dd457f9a76",
  "coverage": {
   "lordfilm47.space": {
    "site_id": "lords-01",
@@ -585,8 +585,8 @@
    "site_id": "lords-02",
    "domain": "lordserial33.biz",
    "family": "lords",
-   "catalog_revision": "677774c06c016384c22459a5a01c60a7",
-   "catalog_total": 52695,
+   "catalog_revision": "8fd1a36852ac22ed37d7cfb75ae1a44d",
+   "catalog_total": 52696,
    "details_total": 0,
    "segments": {
     "FILMS": {
@@ -768,59 +768,59 @@
      }
     },
     "SERIES": {
-     "entries": 19836,
+     "entries": 19837,
      "details_available": 0,
      "fields": {
       "slug": {
-       "TOTAL": 19836,
-       "COVERED": 19836,
+       "TOTAL": 19837,
+       "COVERED": 19837,
        "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 19836,
-       "ELIGIBLE_COVERED": 19836,
+       "ELIGIBLE": 19837,
+       "ELIGIBLE_COVERED": 19837,
        "ELIGIBLE_COVERAGE": 1.0
       },
       "title": {
-       "TOTAL": 19836,
-       "COVERED": 19836,
+       "TOTAL": 19837,
+       "COVERED": 19837,
        "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 19836,
-       "ELIGIBLE_COVERED": 19836,
+       "ELIGIBLE": 19837,
+       "ELIGIBLE_COVERED": 19837,
        "ELIGIBLE_COVERAGE": 1.0
       },
       "year": {
-       "TOTAL": 19836,
-       "COVERED": 10652,
-       "RAW_COVERAGE": 0.537,
-       "ELIGIBLE": 19836,
-       "ELIGIBLE_COVERED": 10652,
-       "ELIGIBLE_COVERAGE": 0.537
+       "TOTAL": 19837,
+       "COVERED": 10654,
+       "RAW_COVERAGE": 0.5371,
+       "ELIGIBLE": 19837,
+       "ELIGIBLE_COVERED": 10654,
+       "ELIGIBLE_COVERAGE": 0.5371
       },
       "kind": {
-       "TOTAL": 19836,
-       "COVERED": 19836,
+       "TOTAL": 19837,
+       "COVERED": 19837,
        "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 19836,
-       "ELIGIBLE_COVERED": 19836,
+       "ELIGIBLE": 19837,
+       "ELIGIBLE_COVERED": 19837,
        "ELIGIBLE_COVERAGE": 1.0
       },
       "poster": {
-       "TOTAL": 19836,
-       "COVERED": 19559,
-       "RAW_COVERAGE": 0.986,
-       "ELIGIBLE": 19836,
-       "ELIGIBLE_COVERED": 19559,
-       "ELIGIBLE_COVERAGE": 0.986
+       "TOTAL": 19837,
+       "COVERED": 19562,
+       "RAW_COVERAGE": 0.9861,
+       "ELIGIBLE": 19837,
+       "ELIGIBLE_COVERED": 19562,
+       "ELIGIBLE_COVERAGE": 0.9861
       },
       "url": {
-       "TOTAL": 19836,
-       "COVERED": 19836,
+       "TOTAL": 19837,
+       "COVERED": 19837,
        "RAW_COVERAGE": 1.0,
-       "ELIGIBLE": 19836,
-       "ELIGIBLE_COVERED": 19836,
+       "ELIGIBLE": 19837,
+       "ELIGIBLE_COVERED": 19837,
        "ELIGIBLE_COVERAGE": 1.0
       },
       "details.name": {
-       "TOTAL": 19836,
+       "TOTAL": 19837,
        "COVERED": 0,
        "RAW_COVERAGE": null,
        "ELIGIBLE": 0,
@@ -829,7 +829,7 @@
        "BLOCKED": "подробности каталога не собраны"
       },
       "details.original_name": {
-       "TOTAL": 19836,
+       "TOTAL": 19837,
        "COVERED": 0,
        "RAW_COVERAGE": null,
        "ELIGIBLE": 0,
@@ -838,7 +838,7 @@
        "BLOCKED": "подробности каталога не собраны"
       },
       "details.description": {
-       "TOTAL": 19836,
+       "TOTAL": 19837,
        "COVERED": 0,
        "RAW_COVERAGE": null,
        "ELIGIBLE": 0,
@@ -847,7 +847,7 @@
        "BLOCKED": "подробности каталога не собраны"
       },
       "details.genres": {
-       "TOTAL": 19836,
+       "TOTAL": 19837,
        "COVERED": 0,
        "RAW_COVERAGE": null,
        "ELIGIBLE": 0,
@@ -856,7 +856,7 @@
        "BLOCKED": "подробности каталога не собраны"
       },
       "details.poster_url": {
-       "TOTAL": 19836,
+       "TOTAL": 19837,
        "COVERED": 0,
        "RAW_COVERAGE": null,
        "ELIGIBLE": 0,
@@ -865,7 +865,7 @@
        "BLOCKED": "подробности каталога не собраны"
       },
       "details.year": {
-       "TOTAL": 19836,
+       "TOTAL": 19837,
        "COVERED": 0,
        "RAW_COVERAGE": null,
        "ELIGIBLE": 0,
@@ -874,7 +874,7 @@
        "BLOCKED": "подробности каталога не собраны"
       },
       "details.type": {
-       "TOTAL": 19836,
+       "TOTAL": 19837,
        "COVERED": 0,
        "RAW_COVERAGE": null,
        "ELIGIBLE": 0,
@@ -883,7 +883,7 @@
        "BLOCKED": "подробности каталога не собраны"
       },
       "details.external_ids": {
-       "TOTAL": 19836,
+       "TOTAL": 19837,
        "COVERED": 0,
        "RAW_COVERAGE": null,
        "ELIGIBLE": 0,
@@ -894,52 +894,52 @@
      },
      "ratings": {
       "kinopoisk": {
-       "TOTAL": 19836,
+       "TOTAL": 19837,
        "ELIGIBLE": 0,
        "COVERED": 0,
        "RAW_COVERAGE": null,
        "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 19836,
+       "MISSING_SOURCE": 19837,
        "UNMATCHED_IDENTITY": 0,
        "BLOCKED": "подробности каталога не собраны"
       },
       "imdb": {
-       "TOTAL": 19836,
+       "TOTAL": 19837,
        "ELIGIBLE": 0,
        "COVERED": 0,
        "RAW_COVERAGE": null,
        "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 19836,
+       "MISSING_SOURCE": 19837,
        "UNMATCHED_IDENTITY": 0,
        "BLOCKED": "подробности каталога не собраны"
       },
       "shikimori": {
-       "TOTAL": 19836,
+       "TOTAL": 19837,
        "ELIGIBLE": 0,
        "COVERED": 0,
        "RAW_COVERAGE": null,
        "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 19836,
+       "MISSING_SOURCE": 19837,
        "UNMATCHED_IDENTITY": 0,
        "BLOCKED": "подробности каталога не собраны"
       },
       "myanimelist": {
-       "TOTAL": 19836,
+       "TOTAL": 19837,
        "ELIGIBLE": 0,
        "COVERED": 0,
        "RAW_COVERAGE": null,
        "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 19836,
+       "MISSING_SOURCE": 19837,
        "UNMATCHED_IDENTITY": 0,
        "BLOCKED": "подробности каталога не собраны"
       },
       "amd": {
-       "TOTAL": 19836,
+       "TOTAL": 19837,
        "ELIGIBLE": 0,
        "COVERED": 0,
        "RAW_COVERAGE": null,
        "ELIGIBLE_COVERAGE": null,
-       "MISSING_SOURCE": 19836,
+       "MISSING_SOURCE": 19837,
        "UNMATCHED_IDENTITY": 0,
        "BLOCKED": "подробности каталога не собраны"
       }
@@ -3001,7 +3001,7 @@
    "domain": "lordserial33.biz",
    "segment": "SERIES",
    "field": "details.name",
-   "records_affected": 19836,
+   "records_affected": 19837,
    "why": "подробности каталога не собраны",
    "owner_layer": "content-pipeline (сбор подробностей)"
   },
@@ -3010,7 +3010,7 @@
    "domain": "lordserial33.biz",
    "segment": "SERIES",
    "field": "details.original_name",
-   "records_affected": 19836,
+   "records_affected": 19837,
    "why": "подробности каталога не собраны",
    "owner_layer": "content-pipeline (сбор подробностей)"
   },
@@ -3019,22 +3019,67 @@
    "domain": "lordserial33.biz",
    "segment": "SERIES",
    "field": "details.description",
-   "records_affected": 19836,
+   "records_affected": 19837,
    "why": "подробности каталога не собраны",
    "owner_layer": "content-pipeline (сбор подробностей)"
   }
  ],
  "gap_queue_total": 88,
  "content": {
-  "planned": 0,
-  "generated": 0,
-  "qa_passed": 0,
-  "published": 0,
-  "live_verified": 0,
+  "planned": 1,
+  "generated": 1,
+  "qa_passed": 1,
+  "published": 1,
+  "live_verified": 1,
   "rejected": 0,
   "rolled_back": 0,
-  "blocked_reason": "SEO-слой (canonical, schema, sitemap) не принят в канонический renderer: его ведёт другая сессия. Публиковать текст поверх чужого незавершённого рендерера значит либо перезаписать её работу, либо выложить страницу без canonical и разметки.",
-  "urls_changed": []
+  "urls_changed": [
+   "https://1lordserials1.online/",
+   "https://1lordserials1.online/sitemap.xml",
+   "https://lordfilm47.space/",
+   "https://lordfilm47.space/sitemap.xml",
+   "https://lordserial33.biz/",
+   "https://lordserial33.biz/sitemap.xml",
+   "https://zonafilm.space/",
+   "https://zonafilm.space/sitemap.xml"
+  ],
+  "items": [
+   {
+    "date": "2026-09-15",
+    "action_id": "seo-009-layer-live-001",
+    "deploy_id": "nova-seo-layer-20260915T104745Z",
+    "kind": "SEO_LAYER_CANONICAL_SCHEMA_SITEMAP",
+    "what": "canonical, структурированные данные и карта сайта выведены на четыре управляемые витрины Lords и Zona",
+    "domains": [
+     "lordfilm47.space",
+     "lordserial33.biz",
+     "1lordserials1.online",
+     "zonafilm.space"
+    ],
+    "urls": [
+     "https://lordfilm47.space/",
+     "https://lordfilm47.space/sitemap.xml",
+     "https://lordserial33.biz/",
+     "https://lordserial33.biz/sitemap.xml",
+     "https://1lordserials1.online/",
+     "https://1lordserials1.online/sitemap.xml",
+     "https://zonafilm.space/",
+     "https://zonafilm.space/sitemap.xml"
+    ],
+    "sitemap_urls_published": 212080,
+    "canary": "1lordserials1.online",
+    "live_verified": true,
+    "verification": "все четыре домена: тег Метрики 1, canonical 1, JSON-LD есть, индекс карты 200 с двумя шардами; 404 без canonical и схемы",
+    "rollback_reference": "/srv/lords/.frontend/lords-frontend.py.lkg-20260915T104745Z",
+    "content_hash": "620fa353972fa6de381a5ced",
+    "alerts_closed": [
+     "SITEMAP_EMPTY×4",
+     "SITEMAP_INDEX_MISSING×4",
+     "CANONICAL_MISSING×2",
+     "SCHEMA_MISSING×4"
+    ]
+   }
+  ]
  },
  "cohorts": [],
  "topvisor": {
@@ -3056,19 +3101,21 @@
   "COVERAGE_MATRIX": "OK",
   "TRAFFIC_AND_INDEX_DATA": "OK",
   "QUALIFIED_GAP_QUEUE": "OK",
-  "CONTENT_PLAN": "BLOCKED_RENDERER_INTEGRATION",
-  "GENERATION_OR_EDIT": "BLOCKED_RENDERER_INTEGRATION",
-  "FACT_AND_ENTITY_QA": "BLOCKED_RENDERER_INTEGRATION",
-  "DUPLICATE_AND_CANNIBALIZATION_QA": "BLOCKED_RENDERER_INTEGRATION",
-  "LINK_QA": "BLOCKED_RENDERER_INTEGRATION",
-  "LIMITED_CANARY_PUBLISH": "BLOCKED_RENDERER_INTEGRATION",
-  "LIVE_VERIFICATION": "BLOCKED_RENDERER_INTEGRATION",
-  "ROLLBACK_IF_NEEDED": "BLOCKED_RENDERER_INTEGRATION",
+  "CONTENT_PLAN": "OK",
+  "GENERATION_OR_EDIT": "OK",
+  "FACT_AND_ENTITY_QA": "OK",
+  "DUPLICATE_AND_CANNIBALIZATION_QA": "OK",
+  "LINK_QA": "OK",
+  "LIMITED_CANARY_PUBLISH": "OK",
+  "LIVE_VERIFICATION": "OK",
+  "ROLLBACK_IF_NEEDED": "NOT_NEEDED",
   "LEDGER_AND_COHORT_UPDATE": "OK",
   "QWEN_REVIEW": "UNAVAILABLE"
  },
  "delivery": {
-  "status": "WAITING_OWNER_DESTINATION",
-  "note": "локальный файл доставкой не является"
+  "status": "DELIVERED",
+  "url": "https://claude.ai/code/artifact/434bba77-cb4e-46dd-87c9-dae8a1b0ab25",
+  "readback_ok": true,
+  "readback_note": "страница прочитана обратно по адресу: заголовок, таблица трафика из семи доменов, покрытие рейтингами и перечень изменённых URL на месте"
  }
 }

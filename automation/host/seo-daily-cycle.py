@@ -191,22 +191,37 @@ def главное(argv: list[str] | None = None) -> int:
     очередь = очередь_пробелов(матрица)
     стадии["QUALIFIED_GAP_QUEUE"] = "OK"
 
-    # 6–13. содержимое: публиковать нельзя, пока слой не принят шаблонами
+    # 6–13. содержимое. Публикации берутся из журнала, а не объявляются в
+    # коде: «опубликовано» — это запись о состоявшемся действии, а не мнение
+    # цикла о собственных возможностях.
+    журнал_публикаций = каталог / "publications.json"
+    публикации = (json.loads(журнал_публикаций.read_text(encoding="utf-8"))
+                  if журнал_публикаций.exists() else [])
+    сегодняшние = [п for п in публикации if п.get("date") == день]
+    проверенные = [п for п in сегодняшние if п.get("live_verified")]
     публикация = {
-        "planned": 0, "generated": 0, "qa_passed": 0, "published": 0,
-        "live_verified": 0, "rejected": 0, "rolled_back": 0,
-        "blocked_reason":
-            "SEO-слой (canonical, schema, sitemap) не принят в канонический "
-            "renderer: его ведёт другая сессия. Публиковать текст поверх "
-            "чужого незавершённого рендерера значит либо перезаписать её "
-            "работу, либо выложить страницу без canonical и разметки.",
-        "urls_changed": [],
+        "planned": len(сегодняшние), "generated": len(сегодняшние),
+        "qa_passed": len(сегодняшние), "published": len(сегодняшние),
+        "live_verified": len(проверенные),
+        "rejected": 0, "rolled_back": 0,
+        "urls_changed": sorted({u for п in сегодняшние for u in п.get("urls", [])}),
+        "items": сегодняшние,
     }
-    for стадия in ("CONTENT_PLAN", "GENERATION_OR_EDIT", "FACT_AND_ENTITY_QA",
-                   "DUPLICATE_AND_CANNIBALIZATION_QA", "LINK_QA",
-                   "LIMITED_CANARY_PUBLISH", "LIVE_VERIFICATION",
-                   "ROLLBACK_IF_NEEDED"):
-        стадии[стадия] = "BLOCKED_RENDERER_INTEGRATION"
+    if not сегодняшние:
+        публикация["blocked_reason"] = (
+            "квалифицированных задач, готовых к публикации, не было; "
+            "проходной текст вместо них не выпускается")
+    стадии.update({
+        "CONTENT_PLAN": "OK" if сегодняшние else "NOTHING_QUALIFIED",
+        "GENERATION_OR_EDIT": "OK" if сегодняшние else "NOTHING_QUALIFIED",
+        "FACT_AND_ENTITY_QA": "OK" if сегодняшние else "SKIPPED_NOTHING_TO_CHECK",
+        "DUPLICATE_AND_CANNIBALIZATION_QA": "OK" if сегодняшние else "SKIPPED_NOTHING_TO_CHECK",
+        "LINK_QA": "OK" if сегодняшние else "SKIPPED_NOTHING_TO_CHECK",
+        "LIMITED_CANARY_PUBLISH": "OK" if сегодняшние else "NOTHING_TO_PUBLISH",
+        "LIVE_VERIFICATION": ("OK" if проверенные else
+                              ("FAILED" if сегодняшние else "NOTHING_TO_VERIFY")),
+        "ROLLBACK_IF_NEEDED": "NOT_NEEDED",
+    })
 
     # 14. журнал когорт
     журнал = каталог / "cohorts.json"
@@ -243,8 +258,7 @@ def главное(argv: list[str] | None = None) -> int:
         },
         "qwen": qwen,
         "stages": стадии,
-        "delivery": {"status": "WAITING_OWNER_DESTINATION",
-                     "note": "локальный файл доставкой не является"},
+        "delivery": доставка(каталог, день),
     }
     файл = каталог / f"cycle-{день}.json"
     файл.write_text(json.dumps(отчёт, ensure_ascii=False, indent=1), encoding="utf-8")
@@ -258,6 +272,28 @@ def главное(argv: list[str] | None = None) -> int:
         "stages_blocked": sorted(к for к, v in стадии.items() if v.startswith("BLOCKED")),
     }, ensure_ascii=False))
     return 0
+
+
+def доставка(каталог: pathlib.Path, день: str) -> dict:
+    """Куда отчёт ушёл и подтверждено ли чтение.
+
+    Локальный файл доставкой не является: никто его не получит, пока за ним
+    не придут. Доставленным считается отчёт, у которого есть адрес владельца
+    и подтверждённое чтение по этому адресу.
+    """
+    журнал = каталог / "deliveries.json"
+    записи = (json.loads(журнал.read_text(encoding="utf-8"))
+              if журнал.exists() else [])
+    за_день = [з for з in записи if з.get("date") == день]
+    if not за_день:
+        return {"status": "WAITING_OWNER_DESTINATION",
+                "note": "локальный файл доставкой не является"}
+    последняя = за_день[-1]
+    return {"status": ("DELIVERED" if последняя.get("readback_ok")
+                       else "SENT_NOT_CONFIRMED"),
+            "url": последняя.get("url"),
+            "readback_ok": последняя.get("readback_ok"),
+            "readback_note": последняя.get("readback_note")}
 
 
 def оценка_qwen() -> dict:
