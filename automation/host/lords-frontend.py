@@ -999,7 +999,7 @@ font-family:system-ui,sans-serif;color:@DIM@;flex-wrap:wrap}
 .zt{display:flex;flex-direction:column;background:#fff;border:1px solid @LINE@;
 border-radius:10px;overflow:hidden;transition:box-shadow .18s,transform .18s}
 .zt:hover{box-shadow:0 10px 30px #16191d1f;transform:translateY(-3px)}
-.zt__p{display:block;aspect-ratio:2/3;background:@ALT@;position:relative}
+.zt__p{display:block;aspect-ratio:2/3;background:@ALT@;position:relative;flex:0 0 auto}
 .zt__p img,.zt__img{position:relative;z-index:1;width:100%;height:100%;
 object-fit:cover;display:block}
 .zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:14px;
@@ -1234,7 +1234,10 @@ gap:12px;margin:0 0 10px}
 .zrl__vp{overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;
 scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
 scrollbar-width:thin;padding:2px 0 10px}
-.zrl__track{display:flex;gap:12px;min-width:min-content}
+/* align-items:flex-start обязателен: по умолчанию флекс растягивает все
+   карточки до высоты самой высокой, и постер с заданной пропорцией
+   перерастает её — измерено 0.56 вместо 0.67 в лентах с длинными названиями. */
+.zrl__track{display:flex;gap:12px;min-width:min-content;align-items:flex-start}
 .zrl__track>*{flex:0 0 132px;scroll-snap-align:start}
 @media(min-width:768px){.zrl__track>*{flex-basis:150px}}
 @media(min-width:1280px){.zrl__track>*{flex-basis:168px}}
@@ -1248,7 +1251,7 @@ display:none;align-items:center;justify-content:center}
 .zrl__btn[disabled]{opacity:.32;cursor:default}
 
 /* Сетка каталога и карточка. Пропорция постера 2:3. */
-.zg{display:grid;gap:14px;grid-template-columns:repeat(2,1fr)}
+.zg{display:grid;gap:14px;grid-template-columns:repeat(2,1fr);align-items:start}
 @media(min-width:560px){.zg{grid-template-columns:repeat(3,1fr)}}
 @media(min-width:900px){.zg{grid-template-columns:repeat(4,1fr)}}
 @media(min-width:1280px){.zg{grid-template-columns:repeat(6,1fr)}}
@@ -1256,8 +1259,11 @@ display:none;align-items:center;justify-content:center}
 border:1px solid @LINE@;border-radius:8px;overflow:hidden;
 transition:border-color .16s,transform .16s}
 .zt:hover{border-color:@ACC@;transform:translateY(-2px)}
-.zt__p{display:block;aspect-ratio:2/3;background:@ALT@;position:relative}
-.zt__p img,.zt__img{position:relative;z-index:1;width:100%;height:100%;
+.zt__p{display:block;aspect-ratio:2/3;background:@ALT@;position:relative;flex:0 0 auto}
+/* Изображение выводится из потока: часть «постеров» каталога на деле
+   широкоформатные кадры, и картинка в потоке задавала контейнеру свою
+   высоту, перебивая пропорцию — измерено 0.56 (16:9) вместо 0.67. */
+.zt__p img,.zt__img{position:absolute;inset:0;z-index:1;width:100%;height:100%;
 object-fit:cover;display:block}
 .zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:12px;
 text-align:center;color:@MUTE@;font-size:12px;line-height:1.3}
@@ -1280,8 +1286,8 @@ background:@SURF@;border:1px solid @LINE@;border-radius:8px;align-items:start}
 .zr:hover{border-color:@ACC@}
 .zr__p{aspect-ratio:2/3;background:@ALT@;border-radius:5px;overflow:hidden;
 position:relative}
-.zr__p img,.zr__img{width:100%;height:100%;object-fit:cover;display:block;
-position:relative;z-index:1}
+.zr__p img,.zr__img{position:absolute;inset:0;width:100%;height:100%;
+object-fit:cover;display:block;z-index:1}
 .zr__none{position:absolute;inset:0;display:grid;place-items:center;
 text-align:center;color:@MUTE@;font-size:11px;padding:6px}
 .zr__t{display:block;font-size:15px;font-weight:600;line-height:1.3;margin-bottom:3px}
@@ -1442,7 +1448,7 @@ gap:10px;margin:0 0 9px;border-bottom:1px solid @LINE@;padding-bottom:6px}
 .zrl{position:relative}
 .zrl__vp{overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;
 scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:2px 0 8px}
-.zrl__track{display:flex;gap:10px;min-width:min-content}
+.zrl__track{display:flex;gap:10px;min-width:min-content;align-items:flex-start}
 .zrl__track>*{flex:0 0 132px;scroll-snap-align:start}
 @media(min-width:1440px){.zrl__track>*{flex-basis:150px}}
 .zrl__btn{position:absolute;top:34%;transform:translateY(-50%);z-index:5;
@@ -1454,7 +1460,7 @@ display:none;align-items:center;justify-content:center}
 .zrl__btn--n{right:-4px}
 
 /* Плотная сетка: 3 колонки до 1024, 4 от 1440, зазор 10. */
-.zg{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}
+.zg{display:grid;gap:10px;grid-template-columns:repeat(2,1fr);align-items:start}
 @media(min-width:560px){.zg{grid-template-columns:repeat(3,1fr)}}
 @media(min-width:1440px){.zg{grid-template-columns:repeat(4,1fr)}}
 @media(min-width:1800px){.zg{grid-template-columns:repeat(6,1fr)}}
@@ -1463,8 +1469,8 @@ border:1px solid @LINE@;border-radius:4px;overflow:hidden;
 transition:border-color .14s,box-shadow .14s}
 .zt:hover{border-color:@ACC@;box-shadow:0 4px 14px rgba(0,0,0,.09)}
 /* Пропорция постера 0.86 — измерена на эталоне. */
-.zt__p{display:block;aspect-ratio:86/100;background:@SURF@;position:relative}
-.zt__p img,.zt__img{position:relative;z-index:1;width:100%;height:100%;
+.zt__p{display:block;aspect-ratio:86/100;background:@SURF@;position:relative;flex:0 0 auto}
+.zt__p img,.zt__img{position:absolute;inset:0;z-index:1;width:100%;height:100%;
 object-fit:cover;display:block}
 .zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:10px;
 text-align:center;color:@MUTE@;font-size:11.5px;line-height:1.3}
@@ -1485,8 +1491,8 @@ background:@PAGE@;border:1px solid @LINE@;border-radius:4px;align-items:start}
 .zr:hover{border-color:@ACC@}
 .zr__p{aspect-ratio:86/100;background:@SURF@;border-radius:3px;overflow:hidden;
 position:relative}
-.zr__p img,.zr__img{width:100%;height:100%;object-fit:cover;display:block;
-position:relative;z-index:1}
+.zr__p img,.zr__img{position:absolute;inset:0;width:100%;height:100%;
+object-fit:cover;display:block;z-index:1}
 .zr__none{position:absolute;inset:0;display:grid;place-items:center;
 text-align:center;color:@MUTE@;font-size:10.5px;padding:5px}
 .zr__t{display:block;font-size:14px;font-weight:700;line-height:1.3;margin-bottom:2px}
