@@ -1,0 +1,12 @@
+[Unit]
+Description=nova: перепроверка карантина каждые пять минут
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=5min
+# Разброс нужен, чтобы шесть витрин не стучались к поставщику в одну секунду.
+RandomizedDelaySec=45
+Persistent=true
+
+[Install]
+WantedBy=timers.target

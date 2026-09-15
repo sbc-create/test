@@ -1,0 +1,28 @@
+[Unit]
+Description=nova: полная суточная сверка доступности каталога
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/srv/site-factory/repo
+
+LoadCredential=cdnvideohub_api_token:/etc/site-factory/secrets/lords/lords-01/cdnvideohub-api-token
+LoadCredential=cdnvideohub_publisher_id:/etc/site-factory/secrets/lords/lords-01/cdnvideohub-publisher-id
+
+# Полный проход один раз в сутки. Частота ограничителя подобрана так, чтобы
+# каталог на 53 тысячи записей проходился за пару часов и не превращался в
+# нагрузочное тестирование поставщика.
+ExecStart=/usr/bin/python3 /srv/site-factory/repo/automation/host/nova-source-verify.py \
+    --site lords-01 --mode full --rps 6 --threads 4 \
+    --emit-availability /srv/site-factory/repo/var/lords/source-availability.json
+ExecStart=/usr/bin/python3 /srv/site-factory/repo/automation/host/nova-source-verify.py \
+    --site animedia-01 --mode full --rps 4 --threads 3 \
+    --emit-availability /srv/site-factory/repo/var/lords/source-availability.json
+
+TimeoutStartSec=6h
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/srv/site-factory/repo/var
+InaccessiblePaths=/etc/site-factory/secrets

@@ -39,6 +39,7 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .venv/
+.venv
 # Test output
 test-results/
 playwright-report/

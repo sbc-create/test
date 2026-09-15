@@ -31,8 +31,9 @@
 from __future__ import annotations
 
 import argparse
-import html
+import contextlib
 import copy
+import html
 import json
 import os
 import re
@@ -57,7 +58,7 @@ def _манифест() -> dict:
     try:
         м = json.loads(Path(МАНИФЕСТ_ФАЙЛ).read_text(encoding="utf-8"))
     except (OSError, ValueError) as ош:
-        raise SystemExit(f"нет манифеста шаблона {МАНИФЕСТ_ФАЙЛ}: {ош}")
+        raise SystemExit(f"нет манифеста шаблона {МАНИФЕСТ_ФАЙЛ}: {ош}") from ош
     нет = [п for п in ("schema_version", "template_family", "design_version",
                        "source_commit", "build_id", "artifact_sha256", "profile",
                        "built_at") if п not in м]
@@ -444,6 +445,12 @@ class Данные:
         сырое = json.loads(Path(путь).read_text(encoding="utf-8"))
         self.items = сырое["items"]
         self.absent = сырое.get("fields_absent", [])
+        # Карантин записей без видео у поставщика. Флаг живёт в самом каталоге,
+        # а не в конфигурации витрины: артефакт самодостаточен, и выложенный
+        # каталог не может разойтись с тем, по каким правилам он собран.
+        # Значение по умолчанию — выключено: витрина без нового поля ведёт себя
+        # ровно как прежде.
+        self.карантин_включён = bool(сырое.get("availability_gate", False))
         for з in self.items:
             з["_n"] = нормализовать(з["title"])
             # Все известные формы названия: русское, оригинальное, синонимы
@@ -506,7 +513,7 @@ class Данные:
                 допуск = 1 if len(цель) < 8 else 2
                 for ф in формы:
                     if abs(len(ф) - len(цель)) <= допуск and \
-                            sum(1 for a, b in zip(ф, цель) if a != b) <= допуск:
+                            sum(1 for a, b in zip(ф, цель, strict=False) if a != b) <= допуск:
                         мягкие.append(з)
                         break
         итог, видели = [], set()
@@ -625,7 +632,7 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 ПЕРЕРАБОТАНО_С = {"zona": ОФОРМЛЕНИЕ_1_2, "animedia": ОФОРМЛЕНИЕ_1_2}
 
 #: Исполняет ли ЭТА витрина переработанное оформление своего семейства.
-ОФОРМЛЕНИЕ_ПЕРЕРАБОТАННОЕ = (ВЕРСИЯ == ПЕРЕРАБОТАНО_С.get(СЕМЕЙСТВО))
+ОФОРМЛЕНИЕ_ПЕРЕРАБОТАННОЕ = (ПЕРЕРАБОТАНО_С.get(СЕМЕЙСТВО) == ВЕРСИЯ)
 
 #: Включено ли новое оформление на ЭТОЙ витрине. Решает манифест витрины, а не
 #: наличие кода: один артефакт обслуживает шесть витрин, и переход делается по
@@ -2016,7 +2023,7 @@ class Вид:
 
     кл_состояния = "pl__state"
 
-    def __init__(self, семейство: dict, данные: "Данные", подробности: Подробности,
+    def __init__(self, семейство: dict, данные: Данные, подробности: Подробности,
                  индекс: dict, имя_витрины: str):
         self.се = семейство
         self.д = данные
@@ -2170,7 +2177,7 @@ def страницы(текущая: int, всего: int, окно: int = 2) ->
     return итог
 
 
-def отбор(данные: "Данные", индекс: dict, зпр: dict, раздел: str) -> tuple[list, dict]:
+def отбор(данные: Данные, индекс: dict, зпр: dict, раздел: str) -> tuple[list, dict]:
     """Выборка каталога по параметрам запроса. Возвращает (набор, выбранное)."""
     набор = данные.items
     вид = (зпр.get("kind") or [None])[0]
@@ -2835,7 +2842,7 @@ class ВидЗона(Вид):
             д = self.деталь(з["slug"])
             значения = [д.get("kinopoisk_rating"), д.get("imdb_rating")]
             числа = [float(v) for v in значения
-                     if isinstance(v, (int, float)) or
+                     if isinstance(v, int | float) or
                      (isinstance(v, str) and v.replace(".", "", 1).isdigit())]
             return max(числа) if числа else 0.0
 
@@ -3328,10 +3335,8 @@ class ВидАнимедиа(ВидЗона):
             д = self.деталь(з["slug"])
             числа = []
             for v in (д.get("kinopoisk_rating"), д.get("imdb_rating")):
-                try:
+                with contextlib.suppress(TypeError, ValueError):
                     числа.append(float(v))
-                except (TypeError, ValueError):
-                    pass
             return max(числа) if числа else 0.0
 
         def свежесть(з: dict) -> str:
@@ -3447,7 +3452,7 @@ if ОФОРМЛЕНИЕ_ПЕРЕРАБОТАННОЕ:
     ВИДЫ_1_1["animedia"] = ВидАнимедиа
 
 
-def построить_индекс(данные: "Данные", подробности: Подробности) -> dict:
+def построить_индекс(данные: Данные, подробности: Подробности) -> dict:
     """Индексы, которые дешевле построить один раз при старте.
 
     По slug — чтобы страница тайтла не искала запись перебором пятидесяти двух
@@ -3482,14 +3487,14 @@ class Обработчик(BaseHTTPRequestHandler):
     def _отдать(self, тело: bytes, тип="text/html; charset=utf-8", код=200):
         # SEO-слой применяется здесь и только здесь: через эту точку уходит
         # каждый ответ витрины.
-        try:
+        # Отказ SEO-слоя не имеет права уронить ответ витрины: страница важнее
+        # разметки, которую он добавляет.
+        with contextlib.suppress(Exception):
             тело = SEO.обогатить(
                 тело, тип, хост=(self.headers.get("Host") or "").split(":")[0],
                 путь=(self.path or "/"), counter=os.environ.get("LORDS_METRIKA_COUNTER", ""),
                 имя_сайта=ИМЯ_ВИТРИНЫ,
                 поиск="/search/?q={search_term_string}", код=код)
-        except Exception:
-            pass
         self.send_response(код)
         self.send_header("Content-Type", тип)
         self.send_header("Content-Length", str(len(тело)))
@@ -3511,7 +3516,6 @@ class Обработчик(BaseHTTPRequestHandler):
         self.do_GET()
 
     def do_GET(self):
-        д = self.данные
         разбор = urlparse(self.path)
         путь = unquote(разбор.path)
         зпр = parse_qs(разбор.query)
@@ -3660,6 +3664,14 @@ class Обработчик(BaseHTTPRequestHandler):
             # которой нет, и она же ломает любой обход ссылок.
             return self._отдать(в.не_найдено(путь).encode("utf-8"), код=404)
         деталь = в.деталь(slug)
+        # Запись в карантине публично не существует. Обычно её уже нет в
+        # каталоге, и до сюда дело не доходит, но проверка нужна и здесь:
+        # каталог и подробности выкладываются разными файлами, и в промежутке
+        # между ними посетитель не должен увидеть карточку с плеером, которому
+        # нечего показать. Настоящая 404, а не пустой контейнер.
+        if (в.д.карантин_включён and isinstance(деталь, dict)
+                and деталь.get("source_status") == "SOURCE_UNAVAILABLE"):
+            return self._отдать(в.не_найдено(путь).encode("utf-8"), код=404)
         н_сезона, н_серии = совпало.group("s"), совпало.group("e")
         if н_сезона is None:
             return self._отдать(в.тайтл(запись, деталь).encode("utf-8"))
@@ -3742,12 +3754,11 @@ class Обработчик(BaseHTTPRequestHandler):
         д = self.данные
         q = (зпр.get("q") or [""])[0]
         найдено = д.искать(q)
-        подпись = (": " + html.escape(q)) if q else ""
         пусто_хвост = (" по запросу «" + html.escape(q) + "»") if q else ""
         тело = (f'<section class="sec"><div class="sec__h">'
                 f'<h2>Поиск{": " + html.escape(q) if q else ""}</h2>'
                 f'<a href="/catalog/">В каталог →</a></div>'
-                + (f'<div class="grid">' + "".join(карточка(з) for з in найдено) + '</div>'
+                + ('<div class="grid">' + "".join(карточка(з) for з in найдено) + '</div>'
                    if найдено else
                    f'<div class="empty">Ничего не найдено{пусто_хвост}.</div>')
                 + '</section>')

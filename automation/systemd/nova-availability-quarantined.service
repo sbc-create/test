@@ -1,0 +1,29 @@
+[Unit]
+Description=nova: перепроверка записей в карантине и новых записей
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/srv/site-factory/repo
+
+# Учётные данные приходят только через LoadCredential: значение Publisher ID не
+# должно попадать ни в окружение процесса, ни в журнал.
+LoadCredential=cdnvideohub_api_token:/etc/site-factory/secrets/lords/lords-01/cdnvideohub-api-token
+LoadCredential=cdnvideohub_publisher_id:/etc/site-factory/secrets/lords/lords-01/cdnvideohub-publisher-id
+
+# Проход намеренно узкий: только карантин и записи без достоверной истории.
+# Полный каталог здесь ходить не должен — это десятки тысяч запросов.
+ExecStart=/usr/bin/python3 /srv/site-factory/repo/automation/host/nova-source-verify.py \
+    --site lords-01 --mode quarantined --confirm-media --rps 2 --threads 2 \
+    --emit-availability /srv/site-factory/repo/var/lords/source-availability.json
+ExecStart=/usr/bin/python3 /srv/site-factory/repo/automation/host/nova-source-verify.py \
+    --site animedia-01 --mode quarantined --confirm-media --rps 2 --threads 2 \
+    --emit-availability /srv/site-factory/repo/var/lords/source-availability.json
+
+TimeoutStartSec=20m
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/srv/site-factory/repo/var
+InaccessiblePaths=/etc/site-factory/secrets
