@@ -33,6 +33,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 ЛОГОВО = Path("/srv/lords/.frontend")
+ПРОФИЛИ_ВИТРИН = Path("/srv/site-factory/repo/config/site-profiles")
 ОБРАЗЕЦ = ЛОГОВО / "player-lords-01.json"
 ПЛЕЙЛИСТ = "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist"
 
@@ -97,6 +98,22 @@ def владение_образца() -> tuple[int, int, int]:
     return pwd.getpwnam("claude").pw_uid, grp.getgrnam("claude").gr_gid, 0o644
 
 
+def режим_источника(цель: Цель) -> str:
+    """Режим выбора источника из профиля витрины.
+
+    Значение живёт в git, а не в аргументах запуска: боковой файл обязан
+    восстанавливаться из канонической конфигурации, иначе после чистой пересборки
+    витрина тихо вернётся к прежнему неполному покрытию.
+    """
+    файл = ПРОФИЛИ_ВИТРИН / f"{цель.сайт}.json"
+    try:
+        профиль = json.loads(файл.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return "external-ids"
+    режим = str((профиль.get("player") or {}).get("source_mode") or "").strip()
+    return режим if режим in ("external-ids", "provider-id") else "external-ids"
+
+
 def боковой_файл(цель: Цель) -> Path:
     return ЛОГОВО / f"player-{цель.сайт}.json"
 
@@ -106,6 +123,7 @@ def записать(цель: Цель, pub: str) -> None:
     uid, gid, режим = владение_образца()
     содержимое = {
         "publisher_id": pub,
+        "source_mode": режим_источника(цель),
         "provenance": f"Secret Hub, профиль {цель.профиль}"
         + (f" (пара витрины {цель.секрет_витрины})" if цель.секрет_витрины else ""),
         "note": "значение вне git; файл читает рендерер витрины по соглашению имени",
@@ -281,6 +299,7 @@ def применить(цель: Цель, сколько: int) -> dict:
     if резерв is not None:
         резерв.unlink(missing_ok=True)
     return {"site": цель.сайт, "domain": цель.домен, "status": "CONFIGURED",
+            "source_mode": режим_источника(цель),
             "checked": len(строки), "player_working": ок, "rows": строки}
 
 
@@ -322,7 +341,7 @@ def главная() -> int:
         else:
             итог.append({"site": ц.сайт, "domain": ц.домен, "unit": ц.юнит,
                          "profile": ц.профиль, "sidecar": str(боковой_файл(ц)),
-                         "status": "PLANNED"})
+                         "source_mode": режим_источника(ц), "status": "PLANNED"})
     print(json.dumps(итог, ensure_ascii=False, indent=1))
     плохо = [с for с in итог if с.get("status") == "ROLLED_BACK"]
     return 1 if плохо else 0

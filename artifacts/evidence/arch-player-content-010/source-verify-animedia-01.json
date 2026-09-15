@@ -1,0 +1,63 @@
+{
+ "site": "animedia-01",
+ "domain": "animedia.icu",
+ "profile": "yami",
+ "total": 7408,
+ "bound": 7408,
+ "unbound": [],
+ "no_content": [],
+ "wrong_entity": [],
+ "http_error": [
+  [
+   "grobnica-imperatora-bitva-za-hante",
+   204
+  ],
+  [
+   "horoshenkoe-lekarstvo-lovcy-serdec",
+   204
+  ],
+  [
+   "kapsula-sakury",
+   204
+  ],
+  [
+   "letopis-opustoshennogo-boga-gora-linlun",
+   204
+  ],
+  [
+   "milyy-dom-chi-ova",
+   204
+  ],
+  [
+   "moya-reinkarnaciya-v-otome-igre-v-kachestve-glavnoy-zlodeyki-film-2",
+   204
+  ],
+  [
+   "nefritovaya-dinastiya-2-2",
+   204
+  ],
+  [
+   "nevesta-charodeya-tv-2-chast-2",
+   204
+  ],
+  [
+   "perdyaschiy-goro",
+   204
+  ],
+  [
+   "randevu-s-zhiznyu-vremya-do-svidaniya",
+   204
+  ],
+  [
+   "zagadki-magicheskoy-akademii",
+   204
+  ],
+  [
+   "zahvatit-serdce-etogo-dnya",
+   204
+  ]
+ ],
+ "by_aggr": {
+  "cvh": 7408
+ }
+}

@@ -1,0 +1,80 @@
+=== lords-01 desktop 19:12:04
+  desktop: 50/50
+
+desktop: REAL_PLAYBACK_OK=49/50
+  ttff p50=1839ms p75=2007ms p95=2414ms
+  отказы: [["PROVIDER_NO_TRACK","https://lordfilm47.space/title/vlyubitsya-v-tebya-2/"]]
+=== lords-01 mobile 19:15:44
+  mobile: 50/50
+
+mobile: REAL_PLAYBACK_OK=49/50
+  ttff p50=1909ms p75=2059ms p95=2751ms
+  отказы: [["PROVIDER_NO_TRACK","https://lordfilm47.space/title/vlyubitsya-v-tebya-2/"]]
+=== lords-02 desktop 19:19:26
+  desktop: 50/50
+
+desktop: REAL_PLAYBACK_OK=49/50
+  ttff p50=1843ms p75=2011ms p95=2670ms
+  отказы: [["PROVIDER_NO_TRACK","https://lordserial33.biz/title/vlyubitsya-v-tebya-2/"]]
+=== lords-02 mobile 19:23:02
+  mobile: 50/50
+
+mobile: REAL_PLAYBACK_OK=49/50
+  ttff p50=1864ms p75=2006ms p95=2186ms
+  отказы: [["PROVIDER_NO_TRACK","https://lordserial33.biz/title/vlyubitsya-v-tebya-2/"]]
+=== lords-03 desktop 19:26:37
+  desktop: 50/50
+
+desktop: REAL_PLAYBACK_OK=49/50
+  ttff p50=15046ms p75=15644ms p95=16626ms
+  отказы: [["PROVIDER_NO_TRACK","https://1lordserials1.online/title/vlyubitsya-v-tebya-2/"]]
+=== lords-03 mobile 19:32:36
+  mobile: 50/50
+
+mobile: REAL_PLAYBACK_OK=49/50
+  ttff p50=10970ms p75=11922ms p95=14157ms
+  отказы: [["ERROR","https://1lordserials1.online/title/vlyubitsya-v-tebya-2/"]]
+=== zona-01 desktop 19:38:44
+  desktop: 50/50
+
+desktop: REAL_PLAYBACK_OK=49/50
+  ttff p50=1926ms p75=2015ms p95=2433ms
+  отказы: [["PROVIDER_NO_TRACK","https://zonafilm.space/title/vlyubitsya-v-tebya-2/"]]
+=== zona-01 mobile 19:42:25
+  mobile: 50/50
+
+mobile: REAL_PLAYBACK_OK=49/50
+  ttff p50=1884ms p75=1939ms p95=2432ms
+  отказы: [["ERROR","https://zonafilm.space/title/vlyubitsya-v-tebya-2/"]]
+=== animedia-01 desktop 19:46:05
+  desktop: 50/50
+
+desktop: REAL_PLAYBACK_OK=49/50
+  ttff p50=15097ms p75=15478ms p95=16233ms
+  отказы: [["CONSOLE_ERRORS","https://animedia.icu/title/perevorot-voennogo-dvizheniya-5/"]]
+=== animedia-01 mobile 19:52:15
+  mobile: 50/50
+
+mobile: REAL_PLAYBACK_OK=48/50
+  ttff p50=10502ms p75=12272ms p95=15285ms
+  отказы: [["PLAYBACK_STALLED_AT_0.09","https://animedia.icu/title/bezotvetstvennyy-kapitan-taylor-ova-3/"],["CONSOLE_ERRORS","https://animedia.icu/title/perevorot-voennogo-dvizheniya-5/"]]
+=== animedia-02 desktop 19:58:33
+  desktop: 50/50
+
+desktop: REAL_PLAYBACK_OK=49/50
+  ttff p50=15119ms p75=15635ms p95=16228ms
+  отказы: [["CONSOLE_ERRORS","https://animedia.space/title/perevorot-voennogo-dvizheniya-5/"]]
+=== animedia-02 mobile 20:04:32
+  mobile: 50/50
+
+mobile: REAL_PLAYBACK_OK=48/50
+  ttff p50=11093ms p75=12433ms p95=15024ms
+  отказы: [["CONSOLE_ERRORS","https://animedia.space/title/perevorot-voennogo-dvizheniya-5/"],["NETWORK_ERRORS","https://animedia.space/title/van-pis-nachalo-priklyucheniy/"]]
+=== long titles 20:10:38
+    at HTMLElement.fe (https://player.cdnvi @ https://player.cdnvideohub.com/s2/stable/video-player.umd.js 
+  desktop: 50/52
+
+desktop: REAL_PLAYBACK_OK=44/52
+  ttff p50=1816ms p75=2445ms p95=15967ms
+  отказы: [["CONSOLE_ERRORS","https://lordfilm47.space/title/santa-barbara/season-1/episode-100/"],["CONSOLE_ERRORS","https://lordfilm47.space/title/svet-tvoey-lyubvi/season-1/episode-673/"],["CONSOLE_ERRORS","https://lordfilm47.space/title/pokemon/season-11/episode-40/"],["CONSOLE_ERRORS","https://lordfilm47.space/title/pokemon/season-18/episode-42/"],["CONSOLE_ERRORS","https://lordfilm47.space/title/pokemon/season-18/episode-43/"],["CONSOLE_ERRORS","https://lordfilm47.space/title/pokemon/season-25/episode-54/"],["CONSOLE_ERRORS","https://animedia.icu/title/pokemon/season-11/episode-40/"],["CONSOLE_ERRORS","https://animedia.icu/title/pokemon/season-25/episode-54/"]]
+MATRIX5_DONE 20:14:59
