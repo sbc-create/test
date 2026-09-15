@@ -224,5 +224,12 @@
     "monitoring-audit": "site-factory/platform"
   },
   "health_endpoint": "/healthz",
-  "coverage_endpoint": "/api/v1/coverage"
+  "coverage_endpoint": "/api/v1/coverage",
+  "player": {
+    "provider": "cdnvideohub",
+    "credential_profile": "lords",
+    "publisher_id_ref": "secret://cdnvideohub/lords/lords-03/publisher-id",
+    "sidecar": "/srv/lords/.frontend/player-lords-03.json",
+    "note": "Привязка витрины к паре учётных данных провайдера. Здесь только ссылка: значение Publisher ID живёт в Secret Hub и в git не попадает. Боковой файл создаёт операция PLAYER_CONFIGURE."
+  }
 }
