@@ -452,6 +452,15 @@ class TestProfileProperties:
         "yummyani.biz", "yummyani.org", "yummyani.site",
         "zonafilm.space", "animedia.icu", "animedia.space",
     }
+    #: Два визуальных эталона интерфейса. Внесены заданием владельца
+    #: TEMPLATES-ZONA-ANIMEDIA-VISUAL-PARITY-006
+    #: (OWNER_AUTHORIZATION_REFERENCE_GET_ALLOWLIST=APPROVED) и нужны затем,
+    #: чтобы оформление Zona и Animedia сверялось с ИЗМЕРЕНИЕМ, а не с оценкой
+    #: на глаз. Только GET и только чтение интерфейса: тексты, изображения и
+    #: идентификаторы эталонов сохранять запрещает inventory/reference-sources.yaml.
+    ЭТАЛОНЫ = {
+        "w140.zona.plus", "amd.online",
+    }
 
     def test_real_inventories_hold_only_what_the_owner_supplied(self):
         """Реестр содержит ровно переданное владельцем — ни строкой больше.
@@ -459,7 +468,8 @@ class TestProfileProperties:
         SSH-хосты и DNS-зоны не переданы и обязаны остаться пустыми: их
         расширение по инициативе агента прямо запрещено. Сетевой allowlist не
         пуст: владелец разрешил обращения заданиями об аналитике Яндекса, о
-        Secret Hub и о приёмке девяти доменов.
+        Secret Hub, о приёмке девяти доменов и об измерении двух визуальных
+        эталонов интерфейса.
 
         Проверяется точный состав, а не «непусто»: незамеченная лишняя строка
         здесь — это открытый наружу канал. Поэтому список ведётся здесь
@@ -467,7 +477,7 @@ class TestProfileProperties:
         """
         assert unattended.inventory_hosts() == set()
         assert unattended.inventory_zones() == set()
-        assert unattended.network_hosts() == self.ИНТЕГРАЦИИ | self.ПРИЁМКА
+        assert unattended.network_hosts() == self.ИНТЕГРАЦИИ | self.ПРИЁМКА | self.ЭТАЛОНЫ
 
     def test_приёмочные_домены_это_ровно_девять_сайтов(self):
         """Список приёмки не расширяется: девять доменов — и ни одного больше."""

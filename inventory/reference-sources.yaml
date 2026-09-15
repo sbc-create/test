@@ -11,11 +11,21 @@ sources:
   - ref: amd-online
     url: https://amd.online/
     kind: ui_reference
-    provenance: "Change Request v2.0 от 22.08.2026, раздел 3"
+    provenance: "Change Request v2.0 от 22.08.2026, раздел 3; маршруты добавлены
+      заданием TEMPLATES-ZONA-ANIMEDIA-OWNER-REVIEW-007"
     read_only: true
     purpose: "измерение информационной архитектуры, плотности и поведения интерфейса"
+    # Точные пути, перечисленные поимённо. Wildcard не заводится: разрешено
+    # ровно то, что названо, и каждый путь взят из разметки самой главной.
     allowed_paths:
       - /
+      - /anime/
+      - /ongoingi/
+      - /raspisanie.html
+      - /anime_reviews/
+      - /anime-collections/
+      - /leaderboard/
+      - /anime/ghanr/3d/
     viewports: [390, 768, 1024, 1440, 1920]
     store:
       measurements: true
@@ -26,11 +36,18 @@ sources:
   - ref: zona-w140
     url: https://w140.zona.plus/
     kind: ui_reference
-    provenance: "Задание владельца потоку TEMPLATES от 04.09.2026: «подготовь шаблоны по референсам w140.zona.plus и amd.online»"
+    provenance: "Задание владельца потоку TEMPLATES от 04.09.2026: «подготовь шаблоны
+      по референсам w140.zona.plus и amd.online»; маршруты добавлены заданием
+      TEMPLATES-ZONA-ANIMEDIA-OWNER-REVIEW-007"
     read_only: true
     purpose: "измерение информационной архитектуры, плотности карточек и поведения шапки второго референса"
+    # Точные пути, перечисленные поимённо; wildcard не заводится.
     allowed_paths:
       - /
+      - /movies/
+      - /tvseries/
+      - /updates/
+      - /movies/chelovek-pauk-novyi-den
     viewports: [390, 768, 1024, 1440, 1920]
     store:
       measurements: true

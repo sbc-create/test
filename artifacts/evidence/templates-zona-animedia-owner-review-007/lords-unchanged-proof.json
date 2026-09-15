@@ -1,0 +1,82 @@
+{
+ "проверено_utc": "2026-09-15",
+ "метод": "Оба сервера подняты на ОДНОМ замороженном снимке каталога и одном манифесте Lords 1.1.0: один исполняет файл из git HEAD, другой — файл кандидата. Заморозка обязательна: боевой каталог Lords переписывает таймер каждые 5 минут, и без неё сравнение измеряет дрейф данных, а не изменения кода.",
+ "повод": "перепроверка после правки версионирования оформления",
+ "пары": [
+  {
+   "путь": "/",
+   "status": 200,
+   "sha_head": "a3783fc741acf6918c8e91e154e7fd1546431ae3b006b8f06a8b1e4797e8428f",
+   "sha_cand": "a3783fc741acf6918c8e91e154e7fd1546431ae3b006b8f06a8b1e4797e8428f",
+   "байты": 42570,
+   "совпало": true
+  },
+  {
+   "путь": "/catalog/",
+   "status": 200,
+   "sha_head": "a1bd5670e87875cd98a8b6bf4ef7759978a3ff9305d0e43bf3efb6b2c31e2042",
+   "sha_cand": "a1bd5670e87875cd98a8b6bf4ef7759978a3ff9305d0e43bf3efb6b2c31e2042",
+   "байты": 42654,
+   "совпало": true
+  },
+  {
+   "путь": "/new/",
+   "status": 200,
+   "sha_head": "7b18df2d7193f7f551f97879f390f8d012bd495db4acf7590e2952599563bad1",
+   "sha_cand": "7b18df2d7193f7f551f97879f390f8d012bd495db4acf7590e2952599563bad1",
+   "байты": 42578,
+   "совпало": true
+  },
+  {
+   "путь": "/healthz",
+   "status": 200,
+   "sha_head": "4062edaf750fb8074e7e83e0c9028c94e32468a8b6f1614774328ef045150f93",
+   "sha_cand": "4062edaf750fb8074e7e83e0c9028c94e32468a8b6f1614774328ef045150f93",
+   "байты": 11,
+   "совпало": true
+  },
+  {
+   "путь": "/catalog/?kind=Фильм",
+   "status": 200,
+   "sha_head": "2b0c9e7a81c7859850622536f6f34d5d62cd4196ca8633840e8860b860961db7",
+   "sha_cand": "2b0c9e7a81c7859850622536f6f34d5d62cd4196ca8633840e8860b860961db7",
+   "байты": 42561,
+   "совпало": true
+  },
+  {
+   "путь": "/nope/",
+   "status": 404,
+   "sha_head": "538fc4d1ee58067c5eccc47f75d4871eda1a6b480824aba1a264fd6d5fa53f35",
+   "sha_cand": "538fc4d1ee58067c5eccc47f75d4871eda1a6b480824aba1a264fd6d5fa53f35",
+   "байты": 13961,
+   "совпало": true
+  },
+  {
+   "путь": "/title/vospominaniya-pokoynika/",
+   "status": 200,
+   "sha_head": "53cb6cd94f5189b81e783a9e5ea7329081c3e8f12b7d24a6b273601fb551e5ca",
+   "sha_cand": "53cb6cd94f5189b81e783a9e5ea7329081c3e8f12b7d24a6b273601fb551e5ca",
+   "байты": 22586,
+   "совпало": true
+  },
+  {
+   "путь": "/search/?q=а",
+   "status": 200,
+   "sha_head": "110a8134517ebadf8e3db1e44dbf20936ea6848ece4a06adba8e4bc1a6048b26",
+   "sha_cand": "110a8134517ebadf8e3db1e44dbf20936ea6848ece4a06adba8e4bc1a6048b26",
+   "байты": 82800,
+   "совпало": true
+  },
+  {
+   "путь": "/collections/",
+   "status": 200,
+   "sha_head": "d1a61317fae3e8154daa9bf8c39864d1339be71cf65201e13efd73788f0b3589",
+   "sha_cand": "d1a61317fae3e8154daa9bf8c39864d1339be71cf65201e13efd73788f0b3589",
+   "байты": 42718,
+   "совпало": true
+  }
+ ],
+ "маршрутов": 9,
+ "разошлось": 0,
+ "LORDS_SERVED_FINGERPRINT_UNCHANGED": "YES"
+}

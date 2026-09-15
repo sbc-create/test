@@ -436,6 +436,19 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 #: сохраняется — меняется только то, сколько версий код умеет исполнять.
 ОФОРМЛЕНИЕ_ВЕРСИИ = {ОФОРМЛЕНИЕ_1_1, ОФОРМЛЕНИЕ_1_2}
 
+#: Семейства, переработанные по измеренным эталонам, и версия, с которой
+#: переработка включается. Ниже этой версии витрина исполняет прежние ветки.
+#:
+#: Проверка нужна потому, что артефакт ОДИН на шесть витрин. Без неё выкладка
+#: артефакта ради Animedia сменила бы оформление боевой Zona, которая стоит на
+#: 1.1.0 и о смене не просила, — то есть ровно то, что запрещает принцип
+#: «переход делается по одной витрине». Здесь оформление 1.2.0 достаётся
+#: только той витрине, чей манифест его объявил.
+ПЕРЕРАБОТАНО_С = {"zona": ОФОРМЛЕНИЕ_1_2, "animedia": ОФОРМЛЕНИЕ_1_2}
+
+#: Исполняет ли ЭТА витрина переработанное оформление своего семейства.
+ОФОРМЛЕНИЕ_ПЕРЕРАБОТАННОЕ = (ВЕРСИЯ == ПЕРЕРАБОТАНО_С.get(СЕМЕЙСТВО))
+
 #: Включено ли новое оформление на ЭТОЙ витрине. Решает манифест витрины, а не
 #: наличие кода: один артефакт обслуживает шесть витрин, и переход делается по
 #: одной. Витрина на 1.0.2 исполняет прежние ветки и отдаёт прежние байты.
@@ -540,6 +553,14 @@ def сезон_по_номеру(деталь: dict, номер: int) -> dict | 
 # Поэтому:
 #   acc   — синий ТЕКСТ на тёмном (ссылки, пункты): 6.3:1
 #   accdk — фон под БЕЛЫМ текстом (кнопки, активный пункт): 6.2:1
+#: Палитра прежнего оформления Zona 1.1.0 — светлый лист с засечками.
+ЗОНА_ТОКЕНЫ_1_1 = {
+    "ink": "#16191d", "dim": "#59616b", "page": "#ffffff", "alt": "#f5f7fa",
+    "rail": "#10161f", "railink": "#e8edf5", "line": "#e3e8ee",
+    "acc": "#1a5fd0", "accdk": "#14489f", "warm": "#8a5a00",
+    "mute": "#5f6874",
+}
+
 ЗОНА_ТОКЕНЫ = {
     "ink": "#ffffff", "dim": "#aeb9c5", "page": "#1e252b", "alt": "#28303a",
     "rail": "#546778", "railink": "#ffffff", "line": "#3a4450",
@@ -739,6 +760,193 @@ border:1px solid @LINE@;border-radius:3px;padding:4px 8px;background:@SHEET@}
 
 img[hidden]{display:none}
 """
+
+#: Прежнее оформление Zona 1.1.0. Оставлено намеренно: артефакт один на
+#: шесть витрин, и витрина, чей манифест остался на 1.1.0, обязана отдавать
+#: ПРЕЖНИЕ байты даже после выкладки этого файла ради соседа.
+ЗОНА_СТИЛЬ_1_1 = """
+body{background:@PAGE@;color:@INK@;
+font:16px/1.62 'PT Serif',Georgia,'Times New Roman',serif}
+/* Композиция: постоянная боковая колонка слева, содержимое во всю ширину. */
+.zs{display:grid;grid-template-columns:1fr;max-width:1440px;margin:0 auto;min-height:100vh}
+@media(min-width:1000px){.zs{grid-template-columns:246px 1fr}}
+.zrail{background:@RAIL@;color:@RAILINK@;padding:20px 18px 30px}
+@media(min-width:1000px){.zrail{position:sticky;top:0;height:100vh;overflow:auto}}
+.zrail__logo{font-size:22px;font-weight:700;letter-spacing:-.3px;color:#fff;
+display:block;margin:0 0 4px}
+.zrail__sub{font-size:12.5px;color:#8e9bad;font-family:system-ui,sans-serif;margin:0 0 22px}
+.zrail__t{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#79879b;
+font-family:system-ui,sans-serif;font-weight:700;margin:20px 0 8px}
+.zrail__n{display:flex;flex-direction:column;gap:1px}
+.zrail__n a{padding:9px 12px;border-radius:6px;font-size:15px;color:#d3dbe6;
+font-family:system-ui,sans-serif}
+.zrail__n a:hover{background:#1c2532;color:#fff}
+.zrail__n a[aria-current]{background:@ACC@;color:#fff;font-weight:600}
+.zrail__g{display:flex;flex-wrap:wrap;gap:5px}
+.zrail__g a{font-size:12.5px;font-family:system-ui,sans-serif;padding:5px 9px;
+border:1px solid #2a3341;border-radius:999px;color:#b9c4d2}
+.zrail__g a:hover{border-color:@ACC@;color:#fff}
+.zmain{min-width:0;padding:0 0 40px}
+/* Шапка содержимого в два ряда: поиск, затем состояние выборки. */
+.ztop{border-bottom:1px solid @LINE@;background:@PAGE@;position:sticky;top:0;z-index:40}
+.ztop__a{display:flex;align-items:center;gap:16px;padding:14px 26px}
+.ztop__s{flex:1;display:flex;border:2px solid @LINE@;border-radius:8px;overflow:hidden;
+background:#fff;max-width:640px}
+.ztop__s input{flex:1;border:0;padding:11px 14px;font-size:15px;
+font-family:system-ui,sans-serif;color:@INK@}
+.ztop__s button{border:0;background:@ACC@;color:#fff;padding:0 20px;font-weight:600;
+font-family:system-ui,sans-serif;font-size:14px;cursor:pointer}
+.ztop__b{display:flex;gap:18px;padding:0 26px 12px;font-size:13.5px;
+font-family:system-ui,sans-serif;color:@DIM@;flex-wrap:wrap}
+.ztop__b a{color:@ACC@;font-weight:600;display:inline-block;padding:5px 2px}
+.ztop__b a[aria-current]{color:@INK@;box-shadow:inset 0 -2px 0 @ACC@}
+.zwrap{padding:0 26px}
+/* Крупная шрифтовая пара: заголовки с засечками, служебный текст без. */
+.zh{font-size:30px;line-height:1.2;font-weight:700;margin:26px 0 6px;letter-spacing:-.4px}
+.zh--sm{font-size:22px;margin:30px 0 6px}
+.zsub{font-family:system-ui,sans-serif;font-size:14px;color:@DIM@;margin:0 0 20px}
+.zsub a{display:inline-block;padding:5px 2px;color:@ACC@;font-weight:600}
+/* Главная: карточки-плитки, постер сверху, текст снизу, полоса оценок внизу. */
+.zg{display:grid;gap:22px;grid-template-columns:repeat(2,1fr)}
+@media(min-width:700px){.zg{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:1180px){.zg{grid-template-columns:repeat(4,1fr)}}
+.zt{display:flex;flex-direction:column;background:#fff;border:1px solid @LINE@;
+border-radius:10px;overflow:hidden;transition:box-shadow .18s,transform .18s}
+.zt:hover{box-shadow:0 10px 30px #16191d1f;transform:translateY(-3px)}
+.zt__p{display:block;aspect-ratio:2/3;background:@ALT@;position:relative}
+.zt__p img,.zt__img{position:relative;z-index:1;width:100%;height:100%;
+object-fit:cover;display:block}
+.zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:14px;
+text-align:center;color:@MUTE@;font-family:system-ui,sans-serif;font-size:13px;
+background:linear-gradient(160deg,#eef1f6,#dfe5ed)}
+.zt__b{display:block;padding:13px 14px 10px;flex:1}
+.zt__t{display:block;font-size:17px;line-height:1.3;font-weight:700;margin:0 0 5px}
+.zt__m{display:block;font-family:system-ui,sans-serif;font-size:13px;color:@DIM@}
+.zt__r{display:flex;gap:12px;padding:9px 14px;border-top:1px solid @LINE@;
+background:@ALT@;font-family:system-ui,sans-serif;font-size:13px;font-weight:600}
+.zt__r b{color:@ACC@}.zt__r i{font-style:normal;color:@WARM@}
+.zt__r em{font-style:normal;color:@MUTE@;font-weight:500}
+/* Каталог и поиск: строки-списки, постер слева. Это не сетка главной. */
+.zl{display:flex;flex-direction:column;gap:2px}
+.zr{display:grid;grid-template-columns:74px 1fr;gap:16px;padding:14px 12px;
+border-radius:10px;align-items:start}
+@media(min-width:700px){.zr{grid-template-columns:92px 1fr}}
+.zr:hover{background:@ALT@}
+.zr+.zr{border-top:1px solid @LINE@}
+.zr__p{display:block;aspect-ratio:2/3;border-radius:6px;overflow:hidden;background:@ALT@;position:relative}
+.zr__p img,.zr__img{position:relative;z-index:1;width:100%;height:100%;
+object-fit:cover;display:block}
+.zr__none{position:absolute;inset:0;display:grid;place-items:center;font-size:11px;
+text-align:center;color:@MUTE@;font-family:system-ui,sans-serif;padding:6px;
+background:linear-gradient(160deg,#eef1f6,#dfe5ed)}
+.zr__t{display:block;font-size:19px;font-weight:700;margin:0 0 4px;line-height:1.28}
+.zr__m{display:block;font-family:system-ui,sans-serif;font-size:13.5px;color:@DIM@;margin:0 0 6px}
+.zr__d{display:block;font-size:14.5px;color:#39414a;margin:0;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zr__r{display:flex;gap:12px;margin-top:7px;font-family:system-ui,sans-serif;
+font-size:13px;font-weight:600}
+.zr__r b{color:@ACC@}.zr__r i{font-style:normal;color:@WARM@}
+/* Листалка — крупная, текстовая, не плитками. */
+.zpg{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;
+margin:32px 0;font-family:system-ui,sans-serif;font-size:14px}
+.zpg a{padding:9px 15px;border:1px solid @LINE@;border-radius:8px;font-weight:600;color:@ACC@}
+.zpg a:hover{border-color:@ACC@;background:@ALT@}
+.zpg span[aria-current]{padding:9px 15px;border-radius:8px;background:@ACC@;color:#fff;font-weight:600}
+.zpg em{font-style:normal;color:@DIM@}
+/* Страница произведения: широкий баннер, постер внахлёст, полоса оценок. */
+.zcr{font-family:system-ui,sans-serif;font-size:13px;color:@DIM@;padding:14px 26px 0}
+.zcr a{color:@ACC@;font-weight:600;display:inline-block;padding:5px 2px}
+.zban{position:relative;margin:12px 26px 0;border-radius:14px;min-height:186px;
+background:linear-gradient(120deg,#1a2433,#0f1620 60%,#16233a);overflow:hidden}
+.zban__img{position:absolute;inset:0;opacity:.42}
+.zban__img img{width:100%;height:100%;object-fit:cover}
+.zhead{display:grid;grid-template-columns:1fr;gap:20px;padding:0 26px;margin:-92px 0 0;
+position:relative;z-index:2}
+@media(min-width:760px){.zhead{grid-template-columns:186px 1fr;align-items:end}}
+.zhead__ps{border-radius:12px;overflow:hidden;aspect-ratio:2/3;background:@ALT@;
+box-shadow:0 14px 40px #0000004d;border:4px solid #fff;position:relative}
+.zhead__ps img,.zhead__img{position:relative;z-index:1;width:100%;height:100%;
+object-fit:cover;display:block}
+.zhead__x{padding:0 0 10px}
+.zhead h1{font-size:32px;line-height:1.18;margin:0 0 6px;letter-spacing:-.5px}
+@media(max-width:759px){.zhead h1{font-size:25px}}
+.zhead__o{font-family:system-ui,sans-serif;font-size:14px;color:@DIM@;margin:0 0 10px}
+.zstrip{display:flex;flex-wrap:wrap;gap:10px;margin:18px 26px 0;padding:14px 16px;
+background:@ALT@;border:1px solid @LINE@;border-radius:12px;
+font-family:system-ui,sans-serif;font-size:14px}
+.zstrip div{display:flex;flex-direction:column;gap:2px;padding-right:18px}
+.zstrip div+div{border-left:1px solid @LINE@;padding-left:18px}
+.zstrip dt{font-size:11.5px;letter-spacing:.9px;text-transform:uppercase;color:@DIM@;font-weight:700}
+.zstrip dd{margin:0;font-size:17px;font-weight:700;color:@INK@}
+.zstrip .zacc{color:@ACC@}.zstrip .zwarm{color:@WARM@}
+/* Тело: основной текст слева, факты колонкой справа. */
+.zbody{display:grid;grid-template-columns:1fr;gap:28px;padding:0 26px;margin:26px 0 0}
+@media(min-width:980px){.zbody{grid-template-columns:minmax(0,1fr) 316px}}
+.zsec{margin:0 0 28px}
+.zsec h2{font-size:22px;margin:0 0 10px;font-weight:700}
+.zsec p{margin:0 0 12px;font-size:16px;line-height:1.7}
+.zsec .none{color:@DIM@;font-style:italic;font-size:15px}
+.zaside{font-family:system-ui,sans-serif;font-size:14px}
+.zaside dl{margin:0;background:@ALT@;border:1px solid @LINE@;border-radius:12px;padding:16px 18px}
+.zaside div{padding:7px 0}
+.zaside div+div{border-top:1px solid @LINE@}
+.zaside dt{font-size:11.5px;letter-spacing:.9px;text-transform:uppercase;color:@DIM@;
+font-weight:700;margin-bottom:3px}
+.zaside dd{margin:0;color:@INK@;line-height:1.5}
+.zaside a{color:@ACC@;font-weight:600;display:inline-block;padding:5px 2px}
+/* Ссылки жанров в колонке фактов Zona были 16px по высоте — та же
+   болезнь, что раньше вылечили у Lords в `.facts a`, и ровно так же
+   её нашла проба целей касания, а не чтение. */
+/* Плеер Zona: без вкладок, рамка со скруглением и подпись сверху. */
+.zpl{margin:0 26px}
+.zpl__h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:0 0 10px}
+.zpl__h h2{font-size:22px;margin:0;font-weight:700}
+.zpl__h span{font-family:system-ui,sans-serif;font-size:13.5px;color:@DIM@}
+.zpl__f{position:relative;aspect-ratio:16/9;background:#0c1017;border-radius:14px;
+overflow:hidden;display:grid;place-items:center;border:1px solid @LINE@}
+.zpl__f video-player{display:block;width:100%;height:100%}
+.zpl__s{max-width:540px;text-align:center;padding:26px 22px;
+font-family:system-ui,sans-serif;color:#cfd8e2}
+.zpl__s b{display:block;font-size:17px;color:#fff;margin-bottom:8px;font-weight:600}
+.zpl__s p{margin:0;font-size:14px;line-height:1.6;color:#a9b4c1}
+.zpl__s code{background:#141a22;padding:2px 6px;border-radius:4px;font-size:12.5px;color:#cfd8e2}
+/* Сезоны Zona: списком с подписями, а не плитками-номерами. */
+.zsea{border:1px solid @LINE@;border-radius:12px;overflow:hidden;margin:0 0 16px}
+.zsea__h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+background:@ALT@;padding:12px 16px;font-family:system-ui,sans-serif}
+.zsea__h b{font-size:15px}
+.zsea__h span{font-size:13px;color:@DIM@}
+.zeps{display:flex;flex-wrap:wrap;gap:6px;padding:14px 16px}
+.zeps a{font-family:system-ui,sans-serif;font-size:13.5px;font-weight:600;padding:7px 12px;
+border:1px solid @LINE@;border-radius:8px;color:@ACC@}
+.zeps a:hover{background:@ALT@;border-color:@ACC@}
+.zeps a[aria-current]{background:@ACC@;color:#fff;border-color:@ACC@}
+.zeps a[data-off]{color:@MUTE@}
+.zepnav{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:18px 0 0;
+font-family:system-ui,sans-serif;font-size:14px}
+.zepnav a{padding:10px 16px;border:1px solid @LINE@;border-radius:8px;font-weight:600;color:@ACC@}
+.zepnav span{padding:10px 16px;border:1px solid @LINE@;border-radius:8px;color:@MUTE@}
+.zempty{padding:56px 24px;text-align:center;border:1px solid @LINE@;border-radius:14px;
+background:@ALT@;margin:20px 0}
+.zempty b{display:block;font-size:22px;margin-bottom:8px}
+.zempty p{margin:0;font-family:system-ui,sans-serif;font-size:14.5px;color:@DIM@}
+.zempty a{display:inline-block;padding:6px 2px;color:@ACC@;font-weight:600}
+.znf{padding:70px 26px;text-align:center}
+.znf b{display:block;font-size:78px;line-height:1;color:@ACC@;font-weight:700}
+.znf h1{font-size:26px;margin:12px 0 10px}
+.znf p{font-family:system-ui,sans-serif;font-size:15px;color:@DIM@;max-width:470px;
+margin:0 auto 20px}
+.znf a{display:inline-block;background:@ACC@;color:#fff;font-family:system-ui,sans-serif;
+font-weight:600;padding:12px 24px;border-radius:8px}
+.zft{border-top:1px solid @LINE@;margin:40px 26px 0;padding:22px 0 10px;
+font-family:system-ui,sans-serif;font-size:13px;color:@DIM@;
+display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between;align-items:center}
+.zvb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;
+border:1px solid @LINE@;border-radius:6px;padding:5px 9px;background:@ALT@;color:#4d555e}
+
+img[hidden]{display:none}
+"""
+
 
 ЗОНА_СТИЛЬ = """
 /* Оформление Zona 1.2.0. Числа — измеренные на эталоне; разметка и правила
@@ -1166,7 +1374,9 @@ def _подставить(шаблон: str, токены: dict) -> str:
     "zona": {
         "вид": "zona",
         "токены": ЗОНА_ТОКЕНЫ,
-        "стиль": lambda: _общее(ЗОНА_ТОКЕНЫ) + _подставить(ЗОНА_СТИЛЬ, ЗОНА_ТОКЕНЫ),
+        "стиль": (lambda: _общее(ЗОНА_ТОКЕНЫ) + _подставить(ЗОНА_СТИЛЬ, ЗОНА_ТОКЕНЫ))
+                  if ОФОРМЛЕНИЕ_ПЕРЕРАБОТАННОЕ else
+                  (lambda: _общее(ЗОНА_ТОКЕНЫ_1_1) + _подставить(ЗОНА_СТИЛЬ_1_1, ЗОНА_ТОКЕНЫ_1_1)),
         "нав": [("/", "Обзор"), ("/new/", "Что нового"),
                 ("/catalog/?kind=Фильм", "Кино"), ("/catalog/?kind=Сериал", "Сериалы"),
                 ("/catalog/?kind=Мультфильм", "Анимация"), ("/catalog/", "Весь каталог")],
@@ -2096,6 +2306,39 @@ class ВидЗона(Вид):
                          if описание else "")
         канон = (f'<link rel="canonical" href="{html.escape(self.канон(путь))}">'
                  if путь and код == 200 else "")
+        # Витрина на 1.1.0 отдаёт ПРЕЖНИЙ каркас: артефакт общий, и выкладка
+        # ради соседнего семейства не имеет права сменить ей оформление.
+        if not ОФОРМЛЕНИЕ_ПЕРЕРАБОТАННОЕ:
+            return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="zona-rail">
+    <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{html.escape(титул)}</title>{описание_мета}{канон}
+    <meta name="robots" content="noindex, nofollow">
+    {_открытый_граф(og or {})}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    {_мета_версии()}
+    <style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}</script></head>
+    <body><a class="skip" href="#main">Перейти к содержимому</a>
+    <div class="zs">
+    <aside class="zrail">
+    <a class="zrail__logo" href="/">{html.escape(self.имя)}</a>
+    <p class="zrail__sub">Кинопортал · тестовая витрина</p>
+    <p class="zrail__t">Разделы</p>
+    <nav class="zrail__n" aria-label="Разделы">{нав}</nav>
+    <p class="zrail__t">Жанры</p>
+    <div class="zrail__g">{жанры}</div>
+    </aside>
+    <div class="zmain">
+    <div class="ztop"><div class="ztop__a">
+    <form class="ztop__s" action="/search/" method="get" role="search">
+    <label class="vh" for="q">Поиск по каталогу</label>
+    <input id="q" name="q" placeholder="{html.escape(self.се["поиск"])}">
+    <button type="submit">Найти</button></form>
+    </div><div class="ztop__b">{_склеить([сверху])}</div></div>{крошки}
+    <main id="main">{тело}</main>
+    <footer class="zft">
+    <span>{html.escape(self.имя)} · тестовая витрина, закрыта от индексации</span>
+    <span class="zvb">Template: {СЕМЕЙСТВО} {ВЕРСИЯ} · {МАНИФЕСТ["source_commit"][:8]}</span>
+    </footer></div></div>{схемы}</body></html>"""
         return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="zona-top">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(титул)}</title>{описание_мета}{канон}
@@ -2238,6 +2481,25 @@ class ВидЗона(Вид):
         Ленту, для которой источник не передал данных, заменяет названная
         причина, а не молчание и не чужая выборка.
         """
+        if not ОФОРМЛЕНИЕ_ПЕРЕРАБОТАННОЕ:
+            свежие = sorted(self.д.items, key=lambda з: з.get("published_at") or "",
+                            reverse=True)[:8]
+            куски = [f'<h1 class="zh">{html.escape(self.се["лид"])}</h1>'
+                     f'<p class="zsub">В снимке каталога {len(self.д.items)} записей. '
+                     f"Ниже — то, что появилось последним.</p>"
+                     + self.плитки(свежие)]
+            for титул, ссылка, вид in self.се["полосы"]:
+                набор = [з for з in self.д.items if з.get("kind") == вид][:6]
+                if набор:
+                    куски.append(f'<h2 class="zh zh--sm">{html.escape(титул)}</h2>'
+                                 f'<p class="zsub"><a href="{ссылка}">Открыть весь раздел</a></p>'
+                                 + self.лента(набор))
+            return self.оболочка(
+                f'<div class="zwrap">{_склеить(куски)}</div>',
+                f"{self.имя} — кинопортал", "/", актив="/",
+                описание=f"{self.имя}: фильмы, сериалы и анимация.",
+                сверху="<span>Обзор каталога</span>")
+
         занято: set = set()
 
         def оценка(з: dict) -> float:
@@ -2813,8 +3075,12 @@ class ВидАнимедиа(ВидЗона):
                              описание="Расписание выхода серий аниме.")
 
 
-ВИДЫ_1_1 = {"lords": ВидЛордс, "zona": ВидЗона,
-           "animedia": ВидАнимедиа}
+#: Вид Animedia появляется только у витрины, объявившей переработанное
+#: оформление. Витрина на 1.0.2/1.1.0 исполняет прежнюю ветку и отдаёт прежние
+#: байты — как и было до этой задачи.
+ВИДЫ_1_1 = {"lords": ВидЛордс, "zona": ВидЗона}
+if ОФОРМЛЕНИЕ_ПЕРЕРАБОТАННОЕ:
+    ВИДЫ_1_1["animedia"] = ВидАнимедиа
 
 
 def построить_индекс(данные: "Данные", подробности: Подробности) -> dict:

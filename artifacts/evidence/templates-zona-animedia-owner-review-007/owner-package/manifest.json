@@ -1,0 +1,1930 @@
+{
+ "prompt_id": "TEMPLATES-ZONA-ANIMEDIA-OWNER-REVIEW-007",
+ "собрано_utc": "2026-09-14",
+ "что_в_пакете": "Парные композиты «было | стало» по каждому архетипу и размеру, два contact sheet и измеренные ориентиры эталонов.",
+ "почему_нет_кадров_эталона": "Кадры эталонов — страницы третьих лиц с их постерами, названиями и брендингом. Они сняты и хранятся локально в evidence по санкционированной политике измерения (inventory/reference-sources.yaml, store.screenshots: true), но наружу не публикуются. Паритет судится по числам и цветам, и они здесь приведены полностью.",
+ "viewports": [
+  "390x844",
+  "768x1024",
+  "1440x900"
+ ],
+ "dpr": 1,
+ "browser": "chromium",
+ "тема": "по умолчанию",
+ "пары": [
+  {
+   "family": "animedia",
+   "archetype": "404",
+   "viewport": "1440x900",
+   "file": "pairs/animedia-404-1440x900.png",
+   "before": {
+    "url": "https://animedia.icu/nope/",
+    "status": 404,
+    "sha256": "6daef40dd3ec436b433b42a50ec86179a3ad070aaa04139cff1d57f9c48f6740",
+    "contentWidth": 1392,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/nope/",
+    "status": 404,
+    "sha256": "8d456ddbb230dcb5bafb1aae71d2b4beb432814327ce3960d5389d1cdf7a53f6",
+    "contentWidth": 1438,
+    "overflow": false,
+    "headerH": 92,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "404",
+   "viewport": "390x844",
+   "file": "pairs/animedia-404-390x844.png",
+   "before": {
+    "url": "https://animedia.icu/nope/",
+    "status": 404,
+    "sha256": "7f01a3a91d6ff753bc1a0858aed79773e3d0048293bdfe4afda3c0d5cbbfb907",
+    "contentWidth": 342,
+    "overflow": true,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/nope/",
+    "status": 404,
+    "sha256": "3308ea9df5a5f22b1bd2206ac3927eb1aac56fb096e800ddc92abf72f4f9053f",
+    "contentWidth": 378,
+    "overflow": false,
+    "headerH": 128,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "404",
+   "viewport": "768x1024",
+   "file": "pairs/animedia-404-768x1024.png",
+   "before": {
+    "url": "https://animedia.icu/nope/",
+    "status": 404,
+    "sha256": "9d52d461b463674f4ab5cbaffaf879eb0e46f7f1cbd91b6d13e1305e43338c92",
+    "contentWidth": 720,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/nope/",
+    "status": 404,
+    "sha256": "7c5f4e7c64429f6ebcf1b344825b48a3a80d7a0a729cb63a0fcc95d34d97db77",
+    "contentWidth": 766,
+    "overflow": false,
+    "headerH": 92,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "главная",
+   "viewport": "1440x900",
+   "file": "pairs/animedia-home-1440x900.png",
+   "before": {
+    "url": "https://animedia.icu/",
+    "status": 200,
+    "sha256": "f12b7d0a180ec91d8591e3dd671dec1e2e6b4b274489f64066841239ee2e1ca0",
+    "contentWidth": 1392,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/",
+    "status": 200,
+    "sha256": "9c15037d25e5764827a32347131bfdf3bb2287e2724198602f8ff898ac9a26a5",
+    "contentWidth": 1438,
+    "overflow": false,
+    "headerH": 92,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "главная",
+   "viewport": "390x844",
+   "file": "pairs/animedia-home-390x844.png",
+   "before": {
+    "url": "https://animedia.icu/",
+    "status": 200,
+    "sha256": "91ed8fa1206efaa1f936894de51277f598aa916cde4390c05c6f5a94ff731134",
+    "contentWidth": 342,
+    "overflow": true,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/",
+    "status": 200,
+    "sha256": "6c8245603c6c55c0d5991b7473249de383390474d131097536f4eba6fe5071b9",
+    "contentWidth": 378,
+    "overflow": false,
+    "headerH": 128,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "главная",
+   "viewport": "768x1024",
+   "file": "pairs/animedia-home-768x1024.png",
+   "before": {
+    "url": "https://animedia.icu/",
+    "status": 200,
+    "sha256": "84e3e3d51aa8235f3f6de4c4e847719de5a1dfb1fea6b4eaeaff127b8c8b35e5",
+    "contentWidth": 720,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/",
+    "status": 200,
+    "sha256": "2734693088c899ba8084a6345abd91d7bb522ddec126e98f4395758ed55766c7",
+    "contentWidth": 766,
+    "overflow": false,
+    "headerH": 92,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "каталог аниме",
+   "viewport": "1440x900",
+   "file": "pairs/animedia-catalog-1440x900.png",
+   "before": {
+    "url": "https://animedia.icu/catalog/",
+    "status": 200,
+    "sha256": "3b50f4b0b7a513f3d202eeac4ad6dd305a96ede5d5fd8b5963334ab3cc7a9041",
+    "contentWidth": 1392,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/catalog/",
+    "status": 200,
+    "sha256": "f8dc02021e908a316bf2391b114de73057fd46e3b771634dc957530869aa9470",
+    "contentWidth": 1438,
+    "overflow": false,
+    "headerH": 92,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "каталог аниме",
+   "viewport": "390x844",
+   "file": "pairs/animedia-catalog-390x844.png",
+   "before": {
+    "url": "https://animedia.icu/catalog/",
+    "status": 200,
+    "sha256": "62530bf8eee24b75280e2359e6470d10a42f38c32026f1ebac120ce6a9fe82d2",
+    "contentWidth": 342,
+    "overflow": true,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/catalog/",
+    "status": 200,
+    "sha256": "3c2c2a21bbf7b1d64ce2b8d2dfcfc6a01a975da31ef30f55c5457688a1478de1",
+    "contentWidth": 378,
+    "overflow": false,
+    "headerH": 128,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "каталог аниме",
+   "viewport": "768x1024",
+   "file": "pairs/animedia-catalog-768x1024.png",
+   "before": {
+    "url": "https://animedia.icu/catalog/",
+    "status": 200,
+    "sha256": "ef17e80023a4e2efa76e30c9a3b5c1919330db119d080951abfe1a0bf6d3d367",
+    "contentWidth": 720,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/catalog/",
+    "status": 200,
+    "sha256": "567be333daab12c8a4fbdaab65bc0d1d93fa1625de93784eb6b0a6df8fc08e7a",
+    "contentWidth": 766,
+    "overflow": false,
+    "headerH": 92,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "новые серии",
+   "viewport": "1440x900",
+   "file": "pairs/animedia-new-episodes-1440x900.png",
+   "before": {
+    "url": "https://animedia.icu/new/",
+    "status": 200,
+    "sha256": "8576316a2d0e02b02e90b996e082e5cbb3c7984b2d65aa82408329d59572ae19",
+    "contentWidth": 1392,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/new/",
+    "status": 200,
+    "sha256": "b304ad4480994bd17be73bea9c8be680811feb6904fb4967d2d57be18ee0bba2",
+    "contentWidth": 1438,
+    "overflow": false,
+    "headerH": 92,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "новые серии",
+   "viewport": "390x844",
+   "file": "pairs/animedia-new-episodes-390x844.png",
+   "before": {
+    "url": "https://animedia.icu/new/",
+    "status": 200,
+    "sha256": "05212a43350b3826935439ccfc633b226ce5b54c09116de761a0040148e6eb7a",
+    "contentWidth": 342,
+    "overflow": true,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/new/",
+    "status": 200,
+    "sha256": "75c7dea0b62c481994e3ed2d8254a7651035511971cec1a147e1c97ac961ee53",
+    "contentWidth": 378,
+    "overflow": false,
+    "headerH": 128,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "новые серии",
+   "viewport": "768x1024",
+   "file": "pairs/animedia-new-episodes-768x1024.png",
+   "before": {
+    "url": "https://animedia.icu/new/",
+    "status": 200,
+    "sha256": "b76db0ba7ba6e7c23ec725c3d1610833f469f4dd9cd3462bcaa570429f255de5",
+    "contentWidth": 720,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/new/",
+    "status": 200,
+    "sha256": "a41d9ada94b270023a7e4795423d7464d8089af986253e0d18305da601a99548",
+    "contentWidth": 766,
+    "overflow": false,
+    "headerH": 92,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "поиск",
+   "viewport": "1440x900",
+   "file": "pairs/animedia-search-1440x900.png",
+   "before": {
+    "url": "https://animedia.icu/search/?q=%D0%BE%D0%B1%D1%80%D0%B0%D0%B7%D0%B5%D1%86",
+    "status": 200,
+    "sha256": "c3c1b66ad55179763c970251447855264ac4839cc2392e5fdcf4fec2f0f90c6b",
+    "contentWidth": 1392,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/search/?q=%D0%BE%D0%B1%D1%80%D0%B0%D0%B7%D0%B5%D1%86",
+    "status": 200,
+    "sha256": "42afce124b0aabe6736ebe5fedf5b3f32978bfa0e862a62578489bb43a7d30d7",
+    "contentWidth": 1438,
+    "overflow": false,
+    "headerH": 92,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "поиск",
+   "viewport": "390x844",
+   "file": "pairs/animedia-search-390x844.png",
+   "before": {
+    "url": "https://animedia.icu/search/?q=%D0%BE%D0%B1%D1%80%D0%B0%D0%B7%D0%B5%D1%86",
+    "status": 200,
+    "sha256": "75f47c2ff88f97ef32e9f0644ba1292ab8a1628d8840308d3cc0648b47cf29f9",
+    "contentWidth": 342,
+    "overflow": true,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/search/?q=%D0%BE%D0%B1%D1%80%D0%B0%D0%B7%D0%B5%D1%86",
+    "status": 200,
+    "sha256": "e649fd516b8f36741c8ee4e79314313b45e9d4fcb54277c33dd9451f776db3f0",
+    "contentWidth": 378,
+    "overflow": false,
+    "headerH": 128,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "поиск",
+   "viewport": "768x1024",
+   "file": "pairs/animedia-search-768x1024.png",
+   "before": {
+    "url": "https://animedia.icu/search/?q=%D0%BE%D0%B1%D1%80%D0%B0%D0%B7%D0%B5%D1%86",
+    "status": 200,
+    "sha256": "fd0af541270780411f65df95097ca38bcbffa42b9021a2727fc715eb48b458da",
+    "contentWidth": 720,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/search/?q=%D0%BE%D0%B1%D1%80%D0%B0%D0%B7%D0%B5%D1%86",
+    "status": 200,
+    "sha256": "4ddcb22fe9d44ead1a2302df9228e505528a50f0ef13f068fe1a15847173044c",
+    "contentWidth": 766,
+    "overflow": false,
+    "headerH": 92,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "пустой результат",
+   "viewport": "1440x900",
+   "file": "pairs/animedia-empty-result-1440x900.png",
+   "before": {
+    "url": "https://animedia.icu/search/?q=zzzqqq",
+    "status": 200,
+    "sha256": "7b9133ef45e9af35ee01274f2f04a7af9edf09a4c01379c3a5f27ffa5de32cf4",
+    "contentWidth": 1392,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/search/?q=zzzqqq",
+    "status": 200,
+    "sha256": "e8f035ecdb691f116a718ff8028d5115a5fdc30878fbc02e45406363315b37e2",
+    "contentWidth": 1438,
+    "overflow": false,
+    "headerH": 92,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "пустой результат",
+   "viewport": "390x844",
+   "file": "pairs/animedia-empty-result-390x844.png",
+   "before": {
+    "url": "https://animedia.icu/search/?q=zzzqqq",
+    "status": 200,
+    "sha256": "755d9238ec50e1aec2588ed9d7655fdd111ec01b9131b0622aa3d71e7d40866d",
+    "contentWidth": 342,
+    "overflow": true,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/search/?q=zzzqqq",
+    "status": 200,
+    "sha256": "7cea8882b972323b2d33b16561d71484c7e0b7ef1b3ecb07cf86e9878ab77ca3",
+    "contentWidth": 378,
+    "overflow": false,
+    "headerH": 128,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "пустой результат",
+   "viewport": "768x1024",
+   "file": "pairs/animedia-empty-result-768x1024.png",
+   "before": {
+    "url": "https://animedia.icu/search/?q=zzzqqq",
+    "status": 200,
+    "sha256": "e63e0659ec86cdc45c372d9c4eb0c63cde618800f0bd7ef5ec8a19999ee6b1f2",
+    "contentWidth": 720,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/search/?q=zzzqqq",
+    "status": 200,
+    "sha256": "6fbbe7e4dad0e380c0b4d6d09001da1ef075d54362739e6681c846572409f15c",
+    "contentWidth": 766,
+    "overflow": false,
+    "headerH": 92,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "расписание",
+   "viewport": "1440x900",
+   "file": "pairs/animedia-schedule-1440x900.png",
+   "before": {
+    "url": "https://animedia.icu/schedule/",
+    "status": 200,
+    "sha256": "1bd1f9b07c20668329b6b66e39d4c6779ee8a64c6591b69544230c21ddb9b17b",
+    "contentWidth": 1392,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/schedule/",
+    "status": 200,
+    "sha256": "72dff34f7ab8a244954bc951ee670036ab747962a8750623c77b642c16b79346",
+    "contentWidth": 1438,
+    "overflow": false,
+    "headerH": 92,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "расписание",
+   "viewport": "390x844",
+   "file": "pairs/animedia-schedule-390x844.png",
+   "before": {
+    "url": "https://animedia.icu/schedule/",
+    "status": 200,
+    "sha256": "d154f8a305e56946eb4dfda975cc52a57084ad65740c652ada88313627e353dc",
+    "contentWidth": 342,
+    "overflow": true,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/schedule/",
+    "status": 200,
+    "sha256": "1fc8fb5c5d592c813935523b542cbc5988931c1aeaf6efdd7100034898ef4dd2",
+    "contentWidth": 378,
+    "overflow": false,
+    "headerH": 128,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "расписание",
+   "viewport": "768x1024",
+   "file": "pairs/animedia-schedule-768x1024.png",
+   "before": {
+    "url": "https://animedia.icu/schedule/",
+    "status": 200,
+    "sha256": "e3ff92c0f0ceede147338b425f8f05fe1be4ef2000df9a07621da7dea825fec4",
+    "contentWidth": 720,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/schedule/",
+    "status": 200,
+    "sha256": "7429dc320d24d9e439f4de74c7fdb7774a806e1b7db49c1c85939a16d98843ed",
+    "contentWidth": 766,
+    "overflow": false,
+    "headerH": 92,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "результаты фильтра",
+   "viewport": "1440x900",
+   "file": "pairs/animedia-filter-1440x900.png",
+   "before": {
+    "url": "https://animedia.icu/catalog/?kind=%D0%A2%D0%92",
+    "status": 200,
+    "sha256": "0a12d0d0e817e63297101cc672792f3a075aa880463525df84a79e0d008a42b7",
+    "contentWidth": 1392,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/catalog/?kind=%D0%A2%D0%92",
+    "status": 200,
+    "sha256": "4a20ad19e2782e12da56ad3cd5400443c14f4e61aa845b89699b61a85fc15100",
+    "contentWidth": 1438,
+    "overflow": false,
+    "headerH": 92,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "результаты фильтра",
+   "viewport": "390x844",
+   "file": "pairs/animedia-filter-390x844.png",
+   "before": {
+    "url": "https://animedia.icu/catalog/?kind=%D0%A2%D0%92",
+    "status": 200,
+    "sha256": "69262abb34c84ec907c6a5cc4a94057087f62d6070693e7772adfc4ae432e509",
+    "contentWidth": 342,
+    "overflow": true,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/catalog/?kind=%D0%A2%D0%92",
+    "status": 200,
+    "sha256": "8eaec23068665bd68b3b9051d09412ac4c874b1d2678c4ed938c97c8b3038b5d",
+    "contentWidth": 378,
+    "overflow": false,
+    "headerH": 128,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "результаты фильтра",
+   "viewport": "768x1024",
+   "file": "pairs/animedia-filter-768x1024.png",
+   "before": {
+    "url": "https://animedia.icu/catalog/?kind=%D0%A2%D0%92",
+    "status": 200,
+    "sha256": "5e8be6b1bc1ac02e4ca8243fdb0e1f67f5e22db34b156c32498055767be9e55d",
+    "contentWidth": 720,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/catalog/?kind=%D0%A2%D0%92",
+    "status": 200,
+    "sha256": "8bbdbbf075ece28c042da2991f6c6f98927f4e1db91fc1310b8ee1c68e68c4dc",
+    "contentWidth": 766,
+    "overflow": false,
+    "headerH": 92,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "страница аниме",
+   "viewport": "1440x900",
+   "file": "pairs/animedia-title-1440x900.png",
+   "before": {
+    "url": "https://animedia.icu/title/obrazec-001/",
+    "status": 404,
+    "sha256": "6daef40dd3ec436b433b42a50ec86179a3ad070aaa04139cff1d57f9c48f6740",
+    "contentWidth": 1392,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/title/obrazec-001/",
+    "status": 200,
+    "sha256": "41ef46d264047ef8819661b2998e2e787cf7de918f672f5844c72c4f2eade0d8",
+    "contentWidth": 1438,
+    "overflow": false,
+    "headerH": 92,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "страница аниме",
+   "viewport": "390x844",
+   "file": "pairs/animedia-title-390x844.png",
+   "before": {
+    "url": "https://animedia.icu/title/obrazec-001/",
+    "status": 404,
+    "sha256": "7f01a3a91d6ff753bc1a0858aed79773e3d0048293bdfe4afda3c0d5cbbfb907",
+    "contentWidth": 342,
+    "overflow": true,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/title/obrazec-001/",
+    "status": 200,
+    "sha256": "faa44f2600463ae295ffe357c3d8698b55696d1968605ea5f7978cd239a4d28e",
+    "contentWidth": 378,
+    "overflow": false,
+    "headerH": 128,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "animedia",
+   "archetype": "страница аниме",
+   "viewport": "768x1024",
+   "file": "pairs/animedia-title-768x1024.png",
+   "before": {
+    "url": "https://animedia.icu/title/obrazec-001/",
+    "status": 404,
+    "sha256": "9d52d461b463674f4ab5cbaffaf879eb0e46f7f1cbd91b6d13e1305e43338c92",
+    "contentWidth": 720,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(10, 13, 24)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9302/title/obrazec-001/",
+    "status": 200,
+    "sha256": "ab281453d6562b5e01facc1c4fb2c509b9fe45105439de9d65f12a1d64978313",
+    "contentWidth": 766,
+    "overflow": false,
+    "headerH": 92,
+    "bg": "rgb(255, 255, 255)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "404",
+   "viewport": "1440x900",
+   "file": "pairs/zona-404-1440x900.png",
+   "before": {
+    "url": "https://zonafilm.space/nope/",
+    "status": 404,
+    "sha256": "08ccbd7495ccca8e55e7634a0a6f1c80f225fc00d5a3eceb96e33a94d5d2dc05",
+    "contentWidth": 1194,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/nope/",
+    "status": 404,
+    "sha256": "59ae1aed90bb981cedc24e585a14b0cfda323a1c3caf2f76f9d9e779f15a27cb",
+    "contentWidth": 1400,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "404",
+   "viewport": "390x844",
+   "file": "pairs/zona-404-390x844.png",
+   "before": {
+    "url": "https://zonafilm.space/nope/",
+    "status": 404,
+    "sha256": "37808c24e2f408c7a9c98fcba464a8293d56954a24b49eb7d15016e63ec5e8f1",
+    "contentWidth": 354,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/nope/",
+    "status": 404,
+    "sha256": "2eb23b3068daa4d88be4c98d624c57fde7162b608f2ba23fe1614bfcf61c593c",
+    "contentWidth": 358,
+    "overflow": false,
+    "headerH": 113.44,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "404",
+   "viewport": "768x1024",
+   "file": "pairs/zona-404-768x1024.png",
+   "before": {
+    "url": "https://zonafilm.space/nope/",
+    "status": 404,
+    "sha256": "6d43b14b74a13ae0cf77b3c159fe61d8865f4bffd390ad5d017bc3ea364b9fc1",
+    "contentWidth": 732,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/nope/",
+    "status": 404,
+    "sha256": "ad8e3eb3f3f0f908b7bf404c373a81febedd58c1347edc5714f9320ed1028357",
+    "contentWidth": 736,
+    "overflow": false,
+    "headerH": 137.44,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "главная",
+   "viewport": "1440x900",
+   "file": "pairs/zona-home-1440x900.png",
+   "before": {
+    "url": "https://zonafilm.space/",
+    "status": 200,
+    "sha256": "7fb2459429935ed38ae582c227bc36cd3827e76f73f184a7946e09ec9b37185c",
+    "contentWidth": 1194,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/",
+    "status": 200,
+    "sha256": "349a19d92c42dca77b899782979f8b016fa47a2804b9e1ef2c9b991993592c39",
+    "contentWidth": 1400,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "главная",
+   "viewport": "390x844",
+   "file": "pairs/zona-home-390x844.png",
+   "before": {
+    "url": "https://zonafilm.space/",
+    "status": 200,
+    "sha256": "9492e565b1d2962a53c9204ce3e628bc030c0fd203e07b992bdf9c8d9786cf91",
+    "contentWidth": 354,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/",
+    "status": 200,
+    "sha256": "bc963f4f08a018da79b0c21c9ad306e7dfd7c0b27ce5fd7e96873f78dec2a3fd",
+    "contentWidth": 358,
+    "overflow": false,
+    "headerH": 113.44,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "главная",
+   "viewport": "768x1024",
+   "file": "pairs/zona-home-768x1024.png",
+   "before": {
+    "url": "https://zonafilm.space/",
+    "status": 200,
+    "sha256": "500f7fb53dd735ac02f6587fbd807d0a0b13edcd4c998bfa6e8caeee0af21e70",
+    "contentWidth": 732,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/",
+    "status": 200,
+    "sha256": "dd81a5f37f6c39f0842c87ff9c5e6bc9a2f831cd54ff18137fe1b485c7d22093",
+    "contentWidth": 736,
+    "overflow": false,
+    "headerH": 137.44,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "каталог",
+   "viewport": "1440x900",
+   "file": "pairs/zona-catalog-1440x900.png",
+   "before": {
+    "url": "https://zonafilm.space/catalog/",
+    "status": 200,
+    "sha256": "26d432153d8d75aa9eb2d9794eb57fd26802f4ddc3bfad726197b77159639827",
+    "contentWidth": 1194,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/catalog/",
+    "status": 200,
+    "sha256": "86b679c3c7cd664f171eb3f142094cc58a628aa07deba7054c0012b2d5152fad",
+    "contentWidth": 1400,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "каталог",
+   "viewport": "390x844",
+   "file": "pairs/zona-catalog-390x844.png",
+   "before": {
+    "url": "https://zonafilm.space/catalog/",
+    "status": 200,
+    "sha256": "adcd509dbbd6f7f67e03af03f32a4a5cc31563ace735955c254739ee318dd8e3",
+    "contentWidth": 354,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/catalog/",
+    "status": 200,
+    "sha256": "6a32a06d296c2346c54a0f6624762eeb0553a2151e30ea72c1a6b26dc424370a",
+    "contentWidth": 358,
+    "overflow": false,
+    "headerH": 113.44,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "каталог",
+   "viewport": "768x1024",
+   "file": "pairs/zona-catalog-768x1024.png",
+   "before": {
+    "url": "https://zonafilm.space/catalog/",
+    "status": 200,
+    "sha256": "9ef42ec6b713daca2e162e69ef6978bbcce84b5a5adb87d5bb327c4357c01122",
+    "contentWidth": 732,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/catalog/",
+    "status": 200,
+    "sha256": "1366114fd0c69d098a8835db7836d702bda1570ebb8f857b9dd5e44cd42fdba6",
+    "contentWidth": 736,
+    "overflow": false,
+    "headerH": 137.44,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "новинки",
+   "viewport": "1440x900",
+   "file": "pairs/zona-new-1440x900.png",
+   "before": {
+    "url": "https://zonafilm.space/new/",
+    "status": 200,
+    "sha256": "d2a20501ef7fbadc28776af9634d1a7e6279b2aaed46fdb7594f278a400e4b66",
+    "contentWidth": 1194,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/new/",
+    "status": 200,
+    "sha256": "2bb49a48dd2cffb5e05d4aaebfc2a6f0e1ada1411bba8dacdcb81ea45a4ef8e6",
+    "contentWidth": 1400,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "новинки",
+   "viewport": "390x844",
+   "file": "pairs/zona-new-390x844.png",
+   "before": {
+    "url": "https://zonafilm.space/new/",
+    "status": 200,
+    "sha256": "4bc66021b3e1b32759f53b08d1a7785f1ab8bf88252a4be5d994e7171ddc3274",
+    "contentWidth": 354,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/new/",
+    "status": 200,
+    "sha256": "26b85af5d3cc020e871be00584acd5b7970fca0ac3bb96ea1e42e163c0bbde8f",
+    "contentWidth": 358,
+    "overflow": false,
+    "headerH": 113.44,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "новинки",
+   "viewport": "768x1024",
+   "file": "pairs/zona-new-768x1024.png",
+   "before": {
+    "url": "https://zonafilm.space/new/",
+    "status": 200,
+    "sha256": "484020a386a2a565f88dcf256d1252781a502bd5a53025b22b12a6fb1af35532",
+    "contentWidth": 732,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/new/",
+    "status": 200,
+    "sha256": "b45ebfcaf82b295d346c2b9eaa1664aa540f330ebff079f092c3ceadd83b7bb7",
+    "contentWidth": 736,
+    "overflow": false,
+    "headerH": 137.44,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "поиск",
+   "viewport": "1440x900",
+   "file": "pairs/zona-search-1440x900.png",
+   "before": {
+    "url": "https://zonafilm.space/search/?q=%D0%B0",
+    "status": 200,
+    "sha256": "22a33212c55a8edfdc4f2dc2c86e5f6e926b11beb3bf1eb3ebf941b6b9088742",
+    "contentWidth": 1194,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/search/?q=%D0%B0",
+    "status": 200,
+    "sha256": "185365e9aa1cc592297d481545741b2836a73b41d03a95aad005115a31562065",
+    "contentWidth": 1400,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "поиск",
+   "viewport": "390x844",
+   "file": "pairs/zona-search-390x844.png",
+   "before": {
+    "url": "https://zonafilm.space/search/?q=%D0%B0",
+    "status": 200,
+    "sha256": "c8874c1f768d32ffa2d8d3d78ff367be5fc061163c90e389e375ac3d8ac85287",
+    "contentWidth": 354,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/search/?q=%D0%B0",
+    "status": 200,
+    "sha256": "42a5f308159ca936133f2f98b134e38f49e62c13e3258e1c65f25100210b9ed5",
+    "contentWidth": 358,
+    "overflow": false,
+    "headerH": 113.44,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "поиск",
+   "viewport": "768x1024",
+   "file": "pairs/zona-search-768x1024.png",
+   "before": {
+    "url": "https://zonafilm.space/search/?q=%D0%B0",
+    "status": 200,
+    "sha256": "8faaa8a905602bf46f20b2759cee3886a234039bd444393cabfa19e4e0a9ef77",
+    "contentWidth": 732,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/search/?q=%D0%B0",
+    "status": 200,
+    "sha256": "2e3b7887c3c2d7f9af0c5be3166e3a56de09d5ca26e0b111f56bc9162be4cb5f",
+    "contentWidth": 736,
+    "overflow": false,
+    "headerH": 137.44,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "пустой результат",
+   "viewport": "1440x900",
+   "file": "pairs/zona-empty-result-1440x900.png",
+   "before": {
+    "url": "https://zonafilm.space/search/?q=zzzqqq",
+    "status": 200,
+    "sha256": "edffb69cb5a8814f6dd7e647cda580639aeb8050a44b48f536ac9247f83fa0cc",
+    "contentWidth": 1194,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/search/?q=zzzqqq",
+    "status": 200,
+    "sha256": "2aeec6a331c180a70be0adb662ed3078c460aaa50535de2cc0017b800fb3ca08",
+    "contentWidth": 1400,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "пустой результат",
+   "viewport": "390x844",
+   "file": "pairs/zona-empty-result-390x844.png",
+   "before": {
+    "url": "https://zonafilm.space/search/?q=zzzqqq",
+    "status": 200,
+    "sha256": "5a7c84fc162e86b36a5836f26a3c6203e5a6bf787ecfed72b8388bd57b9a825e",
+    "contentWidth": 354,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/search/?q=zzzqqq",
+    "status": 200,
+    "sha256": "5e8332fa8999d2f631448b23bdfba67a1957c9cb07bdf5812557f88624cf6030",
+    "contentWidth": 358,
+    "overflow": false,
+    "headerH": 113.44,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "пустой результат",
+   "viewport": "768x1024",
+   "file": "pairs/zona-empty-result-768x1024.png",
+   "before": {
+    "url": "https://zonafilm.space/search/?q=zzzqqq",
+    "status": 200,
+    "sha256": "5f3e873318f4ec77f9ffa0fade0e30a0d1c0660c664dc8b9570f1df741b4f186",
+    "contentWidth": 732,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/search/?q=zzzqqq",
+    "status": 200,
+    "sha256": "5ddc3b5af80baf0e736c987f16b5273d822abbb5b51801985bcf9d5dc3539227",
+    "contentWidth": 736,
+    "overflow": false,
+    "headerH": 137.44,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "результаты фильтра",
+   "viewport": "1440x900",
+   "file": "pairs/zona-filter-1440x900.png",
+   "before": {
+    "url": "https://zonafilm.space/catalog/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC",
+    "status": 200,
+    "sha256": "102c37ce1619d4df1319109dd9ce68f9e958c75d21439f7ccb318535111bf108",
+    "contentWidth": 1194,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/catalog/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC",
+    "status": 200,
+    "sha256": "062ad45a9cb059f92035a4912b063655e2f7793c6a019f7ae663b6aecede8a5d",
+    "contentWidth": 1400,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "результаты фильтра",
+   "viewport": "390x844",
+   "file": "pairs/zona-filter-390x844.png",
+   "before": {
+    "url": "https://zonafilm.space/catalog/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC",
+    "status": 200,
+    "sha256": "b56f0d97910ba70193587196e81f7d1b3909ae0d41a93a3847b88359f25a52ad",
+    "contentWidth": 354,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/catalog/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC",
+    "status": 200,
+    "sha256": "2b192bf46b51adfa9e37d5d4078f8ea406f5fb42d55f8e24fd0dd32ec75d2ec7",
+    "contentWidth": 358,
+    "overflow": false,
+    "headerH": 113.44,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "результаты фильтра",
+   "viewport": "768x1024",
+   "file": "pairs/zona-filter-768x1024.png",
+   "before": {
+    "url": "https://zonafilm.space/catalog/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC",
+    "status": 200,
+    "sha256": "ed81ec508a3168e4c9b4995fb5156369667c3326c7917695eb43ce994f2fcdbd",
+    "contentWidth": 732,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/catalog/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC",
+    "status": 200,
+    "sha256": "c29a46924067c30f108654c263c9b2d8582ba7bbc3dc90c273ed21c064ba7083",
+    "contentWidth": 736,
+    "overflow": false,
+    "headerH": 137.44,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "страница тайтла",
+   "viewport": "1440x900",
+   "file": "pairs/zona-title-1440x900.png",
+   "before": {
+    "url": "https://zonafilm.space/title/akuloboroten/",
+    "status": 200,
+    "sha256": "6077ce3176321a67afe497cf246311517187c9d8f0f64d947e5a7c03b695389e",
+    "contentWidth": 1194,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/title/akuloboroten/",
+    "status": 200,
+    "sha256": "3b5e39ff751f1e05da8390a8033ac82c1e5f43533caeb42bf77f02364dbb07df",
+    "contentWidth": 1400,
+    "overflow": false,
+    "headerH": 69,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "страница тайтла",
+   "viewport": "390x844",
+   "file": "pairs/zona-title-390x844.png",
+   "before": {
+    "url": "https://zonafilm.space/title/akuloboroten/",
+    "status": 200,
+    "sha256": "5c97bba891afc97942657961825881af0b0cccb8c8c66b6da85a7907d1c457d6",
+    "contentWidth": 354,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/title/akuloboroten/",
+    "status": 200,
+    "sha256": "17190a0050a93e040e2adec4e9f3dd757be018cbb10e040bcd63a99e7fbdce97",
+    "contentWidth": 358,
+    "overflow": false,
+    "headerH": 113.44,
+    "bg": "rgb(30, 37, 43)"
+   }
+  },
+  {
+   "family": "zona",
+   "archetype": "страница тайтла",
+   "viewport": "768x1024",
+   "file": "pairs/zona-title-768x1024.png",
+   "before": {
+    "url": "https://zonafilm.space/title/akuloboroten/",
+    "status": 200,
+    "sha256": "e9d9e2b779cfcf5ec3ad9fa30f18ed3664202f03fd74e78d5478b03af0425eaa",
+    "contentWidth": 732,
+    "overflow": false,
+    "headerH": null,
+    "bg": "rgb(255, 255, 255)"
+   },
+   "after": {
+    "url": "http://127.0.0.1:9301/title/akuloboroten/",
+    "status": 200,
+    "sha256": "f989c006c3f4b44171e91aa4542ab4dade00261952aff3905535f9af453b3c9c",
+    "contentWidth": 736,
+    "overflow": false,
+    "headerH": 137.44,
+    "bg": "rgb(30, 37, 43)"
+   }
+  }
+ ],
+ "эталон_измерено": {
+  "zona": {
+   "маршрутов_снято": 4,
+   "архетипы": {
+    "главная": {
+     "390x844": {
+      "contentWidth": 358,
+      "headerH": 116.59,
+      "overflow": true,
+      "bg": "rgb(30, 37, 43)",
+      "color": "rgb(255, 255, 255)",
+      "size": "11px",
+      "imgs": 1,
+      "links": 95,
+      "status": 200,
+      "url": "https://w140.zona.plus/",
+      "sha256": "f454703d4c12a983c74af0d8c82e207648f03651040f8afdb78554b3b54b4a91"
+     },
+     "768x1024": {
+      "contentWidth": 736,
+      "headerH": 137.8,
+      "overflow": false,
+      "bg": "rgb(30, 37, 43)",
+      "color": "rgb(255, 255, 255)",
+      "size": "13px",
+      "imgs": 1,
+      "links": 95,
+      "status": 200,
+      "url": "https://w140.zona.plus/",
+      "sha256": "eefdc034c31a957286d30c1a141a371435079c992263627def139baff5c94e18"
+     },
+     "1440x900": {
+      "contentWidth": 1400,
+      "headerH": 68.89,
+      "overflow": false,
+      "bg": "rgb(30, 37, 43)",
+      "color": "rgb(255, 255, 255)",
+      "size": "13px",
+      "imgs": 1,
+      "links": 95,
+      "status": 200,
+      "url": "https://w140.zona.plus/",
+      "sha256": "0ef42afdcab6ca5ecf6e98394d89bf702dab236ba84ffa2d2a32eead67f0c6b7"
+     }
+    },
+    "каталог фильмов": {
+     "390x844": {
+      "contentWidth": 0,
+      "headerH": 116.59,
+      "overflow": true,
+      "bg": "rgb(30, 37, 43)",
+      "color": "rgb(255, 255, 255)",
+      "size": "11px",
+      "imgs": 1,
+      "links": 68,
+      "status": 200,
+      "url": "https://w140.zona.plus/movies/",
+      "sha256": "3170bad1aa65e33f7dc57b0c45c271bb111ddb1d57771143942d699f8133d13f"
+     },
+     "768x1024": {
+      "contentWidth": 600,
+      "headerH": 137.8,
+      "overflow": false,
+      "bg": "rgb(30, 37, 43)",
+      "color": "rgb(255, 255, 255)",
+      "size": "13px",
+      "imgs": 1,
+      "links": 68,
+      "status": 200,
+      "url": "https://w140.zona.plus/movies/",
+      "sha256": "221e9c6685192057cca63a955134a53da7fb910f0e5411a19fdcc5ec43e97f97"
+     },
+     "1440x900": {
+      "contentWidth": 1400,
+      "headerH": 68.89,
+      "overflow": false,
+      "bg": "rgb(30, 37, 43)",
+      "color": "rgb(255, 255, 255)",
+      "size": "13px",
+      "imgs": 1,
+      "links": 68,
+      "status": 200,
+      "url": "https://w140.zona.plus/movies/",
+      "sha256": "9a6c762018704e1e4a56c4a0999e70983994db9d19741c1d71f7f42efae24551"
+     }
+    },
+    "каталог сериалов": {
+     "390x844": {
+      "contentWidth": 0,
+      "headerH": 116.59,
+      "overflow": true,
+      "bg": "rgb(30, 37, 43)",
+      "color": "rgb(255, 255, 255)",
+      "size": "11px",
+      "imgs": 1,
+      "links": 68,
+      "status": 200,
+      "url": "https://w140.zona.plus/tvseries/",
+      "sha256": "19d31fc8b94d3badb84df4f1c82c4a4880eeecb12703cef82a1c105ccf79f1d9"
+     },
+     "768x1024": {
+      "contentWidth": 600,
+      "headerH": 137.8,
+      "overflow": false,
+      "bg": "rgb(30, 37, 43)",
+      "color": "rgb(255, 255, 255)",
+      "size": "13px",
+      "imgs": 1,
+      "links": 68,
+      "status": 200,
+      "url": "https://w140.zona.plus/tvseries/",
+      "sha256": "9905b6397708a87ef542ee45ff89ad7a81781d2700019d3dd46dfdf805f1b24b"
+     },
+     "1440x900": {
+      "contentWidth": 1400,
+      "headerH": 68.89,
+      "overflow": false,
+      "bg": "rgb(30, 37, 43)",
+      "color": "rgb(255, 255, 255)",
+      "size": "13px",
+      "imgs": 1,
+      "links": 68,
+      "status": 200,
+      "url": "https://w140.zona.plus/tvseries/",
+      "sha256": "446a316d948eb5c0f5ffc48b303f14500453c28d90ce86c30ab89f0cfa2c5ea5"
+     }
+    },
+    "страница тайтла": {
+     "390x844": {
+      "contentWidth": 358,
+      "headerH": 116.59,
+      "overflow": true,
+      "bg": "rgb(30, 37, 43)",
+      "color": "rgb(255, 255, 255)",
+      "size": "11px",
+      "imgs": 2,
+      "links": 14,
+      "status": 200,
+      "url": "https://w140.zona.plus/movies/chelovek-pauk-novyi-den",
+      "sha256": "04a5c1aeb070494f753542e524f346c39bb2546c0ed1ce97f9688f97ad8894ac"
+     },
+     "768x1024": {
+      "contentWidth": 720,
+      "headerH": 137.8,
+      "overflow": false,
+      "bg": "rgb(30, 37, 43)",
+      "color": "rgb(255, 255, 255)",
+      "size": "13px",
+      "imgs": 2,
+      "links": 18,
+      "status": 200,
+      "url": "https://w140.zona.plus/movies/chelovek-pauk-novyi-den",
+      "sha256": "c9199837b76e00e09e754c573bff4f859b77afb6f6270bab313578df22b549b9"
+     },
+     "1440x900": {
+      "contentWidth": 1424,
+      "headerH": 57,
+      "overflow": false,
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 0)",
+      "size": "16px",
+      "imgs": 2,
+      "links": 18,
+      "status": 200,
+      "url": "https://w140.zona.plus/movies/chelovek-pauk-novyi-den",
+      "sha256": "98d3b10f04c6a004ccf255f36bc4cf424e614c8102cfa474d2ad514a04d050e3"
+     }
+    }
+   },
+   "палитра": {
+    "основа": {
+     "ref": "rgb(30, 37, 43)",
+     "cand": "rgb(30, 37, 43)",
+     "deltaE00": 0.0
+    },
+    "текст": {
+     "ref": "rgb(255, 255, 255)",
+     "cand": "rgb(255, 255, 255)",
+     "deltaE00": 0.0
+    },
+    "поверхность шапки": {
+     "ref": "rgb(84, 103, 120)",
+     "cand": "rgb(84, 103, 120)",
+     "deltaE00": 0.0
+    }
+   },
+   "геометрия_главной": {
+    "390": {
+     "content_ref": 358,
+     "content_cand": 358,
+     "d_content": 0,
+     "d_gutter": 0,
+     "d_header": 3.15,
+     "overflow_ref": true,
+     "overflow_cand": false,
+     "body_ref": 11,
+     "body_cand": 13
+    },
+    "768": {
+     "content_ref": 736,
+     "content_cand": 736,
+     "d_content": 0,
+     "d_gutter": 0,
+     "d_header": 0.36,
+     "overflow_ref": false,
+     "overflow_cand": false,
+     "body_ref": 13,
+     "body_cand": 13
+    },
+    "1024": {
+     "content_ref": 992,
+     "content_cand": 992,
+     "d_content": 0,
+     "d_gutter": 0,
+     "d_header": 0.36,
+     "overflow_ref": false,
+     "overflow_cand": false,
+     "body_ref": 13,
+     "body_cand": 13
+    },
+    "1440": {
+     "content_ref": 1400,
+     "content_cand": 1400,
+     "d_content": 0,
+     "d_gutter": 0,
+     "d_header": 0.11,
+     "overflow_ref": false,
+     "overflow_cand": false,
+     "body_ref": 13,
+     "body_cand": 13
+    },
+    "1920": {
+     "content_ref": 1400,
+     "content_cand": 1400,
+     "d_content": 0,
+     "d_gutter": 0,
+     "d_header": 0.11,
+     "overflow_ref": false,
+     "overflow_cand": false,
+     "body_ref": 13,
+     "body_cand": 13
+    }
+   }
+  },
+  "animedia": {
+   "маршрутов_снято": 8,
+   "архетипы": {
+    "главная": {
+     "390x844": {
+      "contentWidth": 378,
+      "headerH": 126,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 155,
+      "links": 378,
+      "status": 200,
+      "url": "https://amd.online/",
+      "sha256": "d824b1fd734e498e8524f9b915edbd33a0d8d325b91352361397ed8199e9f843"
+     },
+     "768x1024": {
+      "contentWidth": 766,
+      "headerH": 90,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 155,
+      "links": 378,
+      "status": 200,
+      "url": "https://amd.online/",
+      "sha256": "6599508210f3874244f83c0bff7e2fe6c0a4051c2816db4891b97e690a80b95b"
+     },
+     "1440x900": {
+      "contentWidth": 1438,
+      "headerH": 90,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 155,
+      "links": 378,
+      "status": 200,
+      "url": "https://amd.online/",
+      "sha256": "c8996a86c3974b225ac1acb56b21ec1a89c588142a269836368198f4acbbc1b4"
+     }
+    },
+    "каталог аниме": {
+     "390x844": {
+      "contentWidth": 378,
+      "headerH": 126,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 155,
+      "links": 378,
+      "status": 200,
+      "url": "https://amd.online/anime/",
+      "sha256": "d824b1fd734e498e8524f9b915edbd33a0d8d325b91352361397ed8199e9f843"
+     },
+     "768x1024": {
+      "contentWidth": 766,
+      "headerH": 90,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 155,
+      "links": 378,
+      "status": 200,
+      "url": "https://amd.online/anime/",
+      "sha256": "6599508210f3874244f83c0bff7e2fe6c0a4051c2816db4891b97e690a80b95b"
+     },
+     "1440x900": {
+      "contentWidth": 1438,
+      "headerH": 90,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 155,
+      "links": 378,
+      "status": 200,
+      "url": "https://amd.online/anime/",
+      "sha256": "c8996a86c3974b225ac1acb56b21ec1a89c588142a269836368198f4acbbc1b4"
+     }
+    },
+    "онгоинги": {
+     "390x844": {
+      "contentWidth": 370,
+      "headerH": 126,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 33,
+      "links": 201,
+      "status": 200,
+      "url": "https://amd.online/ongoingi/",
+      "sha256": "f4b90d5c3d1d4df6523d998f0ea344d96ad4a13123a68b7579c37f04fe1eb59b"
+     },
+     "768x1024": {
+      "contentWidth": 766,
+      "headerH": 90,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 33,
+      "links": 201,
+      "status": 200,
+      "url": "https://amd.online/ongoingi/",
+      "sha256": "6e885a2987b3dc9eca7ac9441b9b12d704ef5a6d372c2a21e2ad710705ea4f46"
+     },
+     "1440x900": {
+      "contentWidth": 1438,
+      "headerH": 90,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 33,
+      "links": 201,
+      "status": 200,
+      "url": "https://amd.online/ongoingi/",
+      "sha256": "1c556758b09fd44dd1adcb5c65cc45e2249155b18ea47ef2f8f25bfb0002be11"
+     }
+    },
+    "расписание": {
+     "390x844": {
+      "contentWidth": 370,
+      "headerH": 126,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 64,
+      "links": 221,
+      "status": 200,
+      "url": "https://amd.online/raspisanie.html",
+      "sha256": "f5bd26e290f3fd9ab49bd7038c6604ad9ca4a8b9ef5c0a5b179d101e846f326e"
+     },
+     "768x1024": {
+      "contentWidth": 766,
+      "headerH": 90,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 64,
+      "links": 221,
+      "status": 200,
+      "url": "https://amd.online/raspisanie.html",
+      "sha256": "0dcf224b4bae2573d7ea596564b8b0866b96475423988a8628841e07764efff8"
+     },
+     "1440x900": {
+      "contentWidth": 1438,
+      "headerH": 90,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 64,
+      "links": 221,
+      "status": 200,
+      "url": "https://amd.online/raspisanie.html",
+      "sha256": "508aede52396962810e025a1c9542469fa71f6a95f7d78a1974096cbba780618"
+     }
+    },
+    "рецензии": {
+     "390x844": {
+      "contentWidth": 370,
+      "headerH": 126,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 61,
+      "links": 322,
+      "status": 200,
+      "url": "https://amd.online/anime_reviews/",
+      "sha256": "24513be4bc8c0dc39fa2522726075fc7b22efec50193555156fdd53000dedf55"
+     },
+     "768x1024": {
+      "contentWidth": 766,
+      "headerH": 90,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 61,
+      "links": 322,
+      "status": 200,
+      "url": "https://amd.online/anime_reviews/",
+      "sha256": "c94b904144fc46dab29ade465b90ad221e8a05a9232ef510cf6ac7ce3092d17f"
+     },
+     "1440x900": {
+      "contentWidth": 1438,
+      "headerH": 90,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 61,
+      "links": 322,
+      "status": 200,
+      "url": "https://amd.online/anime_reviews/",
+      "sha256": "b97636732bef157e5986296354c789d005fce9053f94ee1aa4db326b353ea48d"
+     }
+    },
+    "подборки": {
+     "390x844": {
+      "contentWidth": 370,
+      "headerH": 126,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 33,
+      "links": 226,
+      "status": 200,
+      "url": "https://amd.online/anime-collections/",
+      "sha256": "0ccc4848e430bf9e6901b77264ae84f6816a0a56153c809ce5bd44b91ffefed9"
+     },
+     "768x1024": {
+      "contentWidth": 766,
+      "headerH": 90,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 33,
+      "links": 226,
+      "status": 200,
+      "url": "https://amd.online/anime-collections/",
+      "sha256": "f135ee4642a09bb78ffa8a46c9fdaace4778fb4cdeb58e725b77283c1208d736"
+     },
+     "1440x900": {
+      "contentWidth": 1438,
+      "headerH": 90,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 33,
+      "links": 226,
+      "status": 200,
+      "url": "https://amd.online/anime-collections/",
+      "sha256": "7dfe982871e1978dab6b260b8a81f0c81cfc853b6ec4fcc7bc935ae39b795832"
+     }
+    },
+    "топы": {
+     "390x844": {
+      "contentWidth": 370,
+      "headerH": 126,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 346,
+      "links": 583,
+      "status": 200,
+      "url": "https://amd.online/leaderboard/",
+      "sha256": "596269ee806245e556400b06cc508b1e6400b444c229a233e8c497e2710a6637"
+     },
+     "768x1024": {
+      "contentWidth": 766,
+      "headerH": 90,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 346,
+      "links": 583,
+      "status": 200,
+      "url": "https://amd.online/leaderboard/",
+      "sha256": "3e9bb9fab1e0c2ad9d6377e3a09c56f670cff3c6acaeaa7d48523919f1400cf0"
+     },
+     "1440x900": {
+      "contentWidth": 1438,
+      "headerH": 90,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 346,
+      "links": 583,
+      "status": 200,
+      "url": "https://amd.online/leaderboard/",
+      "sha256": "82db8c2fd94bf10884e3c52f08a70c5632893fdf882c65857eda265a0d893162"
+     }
+    },
+    "результаты фильтра": {
+     "390x844": {
+      "contentWidth": 370,
+      "headerH": 126,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 33,
+      "links": 201,
+      "status": 200,
+      "url": "https://amd.online/anime/ghanr/3d/",
+      "sha256": "559023c34b6627953e6133e5e7272b89f63879ed368abc751e6ab6122b6845a6"
+     },
+     "768x1024": {
+      "contentWidth": 766,
+      "headerH": 90,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 33,
+      "links": 201,
+      "status": 200,
+      "url": "https://amd.online/anime/ghanr/3d/",
+      "sha256": "59bfe343d6cb1706290c603b9217d0ff18951a2d350b870a3ccb2c8e91fe4be3"
+     },
+     "1440x900": {
+      "contentWidth": 1438,
+      "headerH": 90,
+      "overflow": false,
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(22, 22, 22)",
+      "size": "14px",
+      "imgs": 33,
+      "links": 201,
+      "status": 200,
+      "url": "https://amd.online/anime/ghanr/3d/",
+      "sha256": "2a22958c67ee0c8484ded6870151ec120498cefaeeb8ca37995d59f1cd8fdf8f"
+     }
+    }
+   },
+   "палитра": {
+    "основа": {
+     "ref": "rgb(255, 255, 255)",
+     "cand": "rgb(255, 255, 255)",
+     "deltaE00": 0.0
+    },
+    "текст": {
+     "ref": "rgb(22, 22, 22)",
+     "cand": "rgb(22, 22, 22)",
+     "deltaE00": 0.0
+    },
+    "поверхность шапки": {
+     "ref": "rgb(255, 255, 255)",
+     "cand": "rgb(255, 255, 255)",
+     "deltaE00": 0.0,
+     "ref_raw": "rgba(0, 0, 0, 0)",
+     "примечание": "Шапка эталона прозрачна, её фактическая поверхность — фон страницы. Сравнение прозрачного значения с непрозрачным давало ΔE00=100 — артефакт разбора, а не расхождение оформления."
+    }
+   },
+   "геометрия_главной": {
+    "390": {
+     "content_ref": 378,
+     "content_cand": 378,
+     "d_content": 0,
+     "d_gutter": 0,
+     "d_header": 2,
+     "overflow_ref": false,
+     "overflow_cand": false,
+     "body_ref": 14,
+     "body_cand": 14
+    },
+    "768": {
+     "content_ref": 766,
+     "content_cand": 766,
+     "d_content": 0,
+     "d_gutter": 0,
+     "d_header": 2,
+     "overflow_ref": false,
+     "overflow_cand": false,
+     "body_ref": 14,
+     "body_cand": 14
+    },
+    "1024": {
+     "content_ref": 1022,
+     "content_cand": 1022,
+     "d_content": 0,
+     "d_gutter": 0,
+     "d_header": 2,
+     "overflow_ref": false,
+     "overflow_cand": false,
+     "body_ref": 14,
+     "body_cand": 14
+    },
+    "1440": {
+     "content_ref": 1438,
+     "content_cand": 1438,
+     "d_content": 0,
+     "d_gutter": 0,
+     "d_header": 2,
+     "overflow_ref": false,
+     "overflow_cand": false,
+     "body_ref": 14,
+     "body_cand": 14
+    },
+    "1920": {
+     "content_ref": 1918,
+     "content_cand": 1918,
+     "d_content": 0,
+     "d_gutter": 0,
+     "d_header": 2,
+     "overflow_ref": false,
+     "overflow_cand": false,
+     "body_ref": 14,
+     "body_cand": 14
+    }
+   }
+  }
+ },
+ "оценки": {
+  "zona": {
+   "общий": 9.33,
+   "минимум": 8.5,
+   "по_вьюпортам": {
+    "390": 10.0,
+    "768": 10.0,
+    "1024": 10.0,
+    "1440": 10.0,
+    "1920": 10.0
+   }
+  },
+  "animedia": {
+   "общий": 9.39,
+   "минимум": 8.0,
+   "по_вьюпортам": {
+    "390": 10.0,
+    "768": 10.0,
+    "1024": 10.0,
+    "1440": 10.0,
+    "1920": 10.0
+   }
+  }
+ },
+ "ворота": {
+  "HORIZONTAL_OVERFLOW": 0,
+  "BROKEN_IMAGES": 0,
+  "HARD_404_FROM_VISIBLE_LINKS": 0,
+  "SOFT_404": 0,
+  "WRONG_ENTITY_200": 0,
+  "REDIRECT_LOOPS": 0,
+  "DUPLICATED_SECTION_SELECTIONS": 0,
+  "CRITICAL_CONSOLE_ERRORS": 0
+ },
+ "ANIMEDIA_DATA_READINESS": "FAIL",
+ "PRODUCTION_MUTATIONS": 0
+}

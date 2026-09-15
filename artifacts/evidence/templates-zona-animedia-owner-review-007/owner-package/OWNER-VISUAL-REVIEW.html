@@ -1,0 +1,171 @@
+<title>Приёмка Zona и Animedia</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#f7f8fa;--surf:#fff;--ink:#12171d;--mut:#5d6673;--line:#dde2e8;
+--ok:#1f7a45;--warn:#8a5a00;--fail:#b3261e;--acc:#2f5d8a;--shadow:0 1px 2px rgba(18,23,29,.06)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#11151a;--surf:#171d24;
+--ink:#e8ecf2;--mut:#98a3b2;--line:#2a323c;--ok:#5fcf8e;--warn:#e0a33c;--fail:#ff8a80;
+--acc:#7fb0e0;--shadow:0 1px 2px rgba(0,0,0,.4)}}
+:root[data-theme=dark]{--bg:#11151a;--surf:#171d24;--ink:#e8ecf2;--mut:#98a3b2;--line:#2a323c;
+--ok:#5fcf8e;--warn:#e0a33c;--fail:#ff8a80;--acc:#7fb0e0;--shadow:0 1px 2px rgba(0,0,0,.4)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+font:16px/1.55 'IBM Plex Sans',system-ui,-apple-system,Segoe UI,sans-serif}
+.mono{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+font-variant-numeric:tabular-nums}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+header.top{border-bottom:1px solid var(--line);background:var(--surf)}
+.top__in{display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;padding:28px 0 22px}
+h1{font-size:clamp(23px,3vw,32px);margin:0;letter-spacing:-.4px;text-wrap:balance;flex:1 1 300px}
+.sub{color:var(--mut);font-size:14.5px;margin:6px 0 0;max-width:68ch}
+.badge{font-size:12.5px;font-weight:600;padding:5px 11px;border-radius:999px;
+border:1px solid var(--line);color:var(--mut);white-space:nowrap}
+.badge.pend{color:var(--warn);border-color:currentColor}
+main{padding:26px 0 70px}
+.card{background:var(--surf);border:1px solid var(--line);border-radius:10px;
+padding:20px 22px;margin:0 0 22px;box-shadow:var(--shadow)}
+h2{font-size:21px;margin:0;letter-spacing:-.2px}
+h3{font-size:16px;margin:0 0 12px;letter-spacing:.02em}
+h4{font-size:14px;margin:0 0 10px;text-transform:uppercase;letter-spacing:.09em;color:var(--mut)}
+p{margin:0 0 12px;max-width:72ch}
+.note{font-size:14px;color:var(--mut)}
+.cap{font-size:12.5px;color:var(--mut);margin:8px 0 0}
+.decide{display:grid;gap:12px;grid-template-columns:1fr}
+@media(min-width:760px){.decide{grid-template-columns:1fr 1fr}}
+.dec{border:1px solid var(--line);border-radius:8px;padding:14px 16px;background:var(--bg)}
+.dec b{display:block;font-size:15px;margin-bottom:4px}
+.dec .opts{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.opt{font-size:12.5px;font-weight:600;padding:5px 10px;border-radius:6px;
+border:1px solid var(--line);color:var(--mut)}
+.gates{display:flex;flex-wrap:wrap;gap:8px}
+.g{display:flex;gap:8px;align-items:baseline;border:1px solid var(--line);
+border-radius:6px;padding:6px 10px;font-size:12.5px;background:var(--bg)}
+.ok{color:var(--ok)}.warn{color:var(--warn)}.fail{color:var(--fail)}
+.fam{background:var(--surf);border:1px solid var(--line);border-radius:10px;
+padding:22px;margin:0 0 24px;box-shadow:var(--shadow)}
+.fam__h{display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:18px}
+.dot{width:13px;height:13px;border-radius:3px;background:var(--id);flex:0 0 auto;
+box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}
+.score{font-size:23px;font-weight:600;margin-left:auto}
+.score small{font-size:13px;color:var(--mut);font-weight:400}
+.chip{font-size:12px;color:var(--mut);border:1px solid var(--line);
+border-radius:999px;padding:4px 10px}
+.ref{border:1px solid var(--line);border-radius:8px;padding:16px 18px;background:var(--bg)}
+.sws{display:flex;flex-wrap:wrap;gap:16px;margin:12px 0 0}
+.sw{display:flex;gap:9px;align-items:center}
+.sw__c{width:26px;height:26px;border-radius:5px;border:1px solid var(--line);display:block}
+.sw__t{display:flex;flex-direction:column;font-size:12px;line-height:1.35}
+.sw__t b{font-size:12.5px}
+.d{font-size:11.5px;font-weight:600}
+.tw{overflow-x:auto;margin:14px 0 0}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:620px}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);font-weight:600}
+.ct{margin-top:24px}
+.sheet{margin:0}
+.sheet img,.shot img{width:100%;height:auto;display:block;border:1px solid var(--line);
+border-radius:7px;background:var(--surf)}
+.arch{margin:0 0 22px;padding-top:16px;border-top:1px dashed var(--line)}
+.arch h4{color:var(--ink);text-transform:none;letter-spacing:0;font-size:15px;font-weight:600}
+.shots{display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:900px){.shots{grid-template-columns:repeat(3,1fr)}}
+.shot{margin:0}
+figcaption{display:flex;flex-direction:column;gap:2px;margin-top:6px;font-size:11.5px;color:var(--mut)}
+.vp{font-weight:600;color:var(--ink)}
+a{color:var(--acc)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:3px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<header class="top"><div class="wrap"><div class="top__in">
+<div style="flex:1 1 320px">
+<h1>Приёмка Zona и Animedia</h1>
+<p class="sub">Кандидаты переработаны по измеренным эталонам. Ниже — сравнение «было / стало»
+по каждому архетипу на трёх размерах и измеренные ориентиры эталона. Production не изменялся.</p>
+</div>
+<span class="badge pend">решение владельца — ожидается</span>
+<span class="badge">production не тронут</span>
+</div></div></header>
+<main class="wrap">
+
+<div class="card">
+<h3>Нужны два отдельных решения</h3>
+<div class="decide">
+<div class="dec"><b>Zona</b><span class="note">Оформление переработано, данные боевые.</span>
+<div class="opts"><span class="opt">ACCEPT</span><span class="opt">REVISE</span><span class="opt">PENDING</span></div></div>
+<div class="dec"><b>Animedia</b><span class="note">Оформление переработано. Каталог аниме
+источником <b class="fail">не передан</b> — по данным витрина не кандидат в production
+даже при принятом внешнем виде.</span>
+<div class="opts"><span class="opt">ACCEPT</span><span class="opt">REVISE</span><span class="opt">PENDING</span></div></div>
+</div></div>
+
+<div class="card"><h3>Ворота</h3><div class="gates"><div class="g"><span class="mono">HORIZONTAL_OVERFLOW</span><b class="ok">0</b></div><div class="g"><span class="mono">BROKEN_IMAGES</span><b class="ok">0</b></div><div class="g"><span class="mono">HARD_404_FROM_VISIBLE_LINKS</span><b class="ok">0</b></div><div class="g"><span class="mono">SOFT_404</span><b class="ok">0</b></div><div class="g"><span class="mono">WRONG_ENTITY_200</span><b class="ok">0</b></div><div class="g"><span class="mono">REDIRECT_LOOPS</span><b class="ok">0</b></div><div class="g"><span class="mono">DUPLICATED_SECTION_SELECTIONS</span><b class="ok">0</b></div><div class="g"><span class="mono">CRITICAL_CONSOLE_ERRORS</span><b class="ok">0</b></div></div>
+<p class="cap">Считано в Chromium после полной прокрутки страниц; без прокрутки счётчик
+изображений показывал 337 — это были ещё не загруженные lazy-кадры, а не битые.</p></div>
+
+<section class="fam" id="zona" style="--id:#546778">
+<header class="fam__h">
+<span class="dot"></span>
+<h2>Zona</h2>
+<span class="score mono">9.33<small>/10</small></span>
+<span class="chip">минимум измерения 8.5</span>
+</header>
+<div class="ref">
+<h4>Измерено на эталоне</h4>
+<p class="note">Снято маршрутов эталона: <b>4</b>. Кадры эталона намеренно
+не публикуются — это страницы третьих лиц. Паритет судится по числам, и они здесь целиком.</p>
+<div class="sws"><div class="sw"><span class="sw__c" style="background:rgb(30, 37, 43)"></span><span class="sw__c" style="background:rgb(30, 37, 43)"></span><span class="sw__t"><b>основа</b><span class="mono">rgb(30, 37, 43)</span><span class="d ok">ΔE00 0.0</span></span></div><div class="sw"><span class="sw__c" style="background:rgb(255, 255, 255)"></span><span class="sw__c" style="background:rgb(255, 255, 255)"></span><span class="sw__t"><b>текст</b><span class="mono">rgb(255, 255, 255)</span><span class="d ok">ΔE00 0.0</span></span></div><div class="sw"><span class="sw__c" style="background:rgb(84, 103, 120)"></span><span class="sw__c" style="background:rgb(84, 103, 120)"></span><span class="sw__t"><b>поверхность шапки</b><span class="mono">rgb(84, 103, 120)</span><span class="d ok">ΔE00 0.0</span></span></div></div>
+<p class="cap">Левый квадрат — кандидат, правый — эталон.</p>
+<div class="tw"><table>
+<thead><tr><th>вьюпорт</th><th>контейнер эталона</th><th>контейнер кандидата</th>
+<th>Δ контейнер</th><th>Δ поля</th><th>Δ шапка</th><th>кегль эт./канд.</th></tr></thead>
+<tbody><tr><td class="mono">390</td><td class="mono">358</td><td class="mono">358</td><td class="mono ok">0</td><td class="mono ok">0</td><td class="mono ok">3.15</td><td class="mono">11 / 13</td></tr><tr><td class="mono">768</td><td class="mono">736</td><td class="mono">736</td><td class="mono ok">0</td><td class="mono ok">0</td><td class="mono ok">0.36</td><td class="mono">13 / 13</td></tr><tr><td class="mono">1024</td><td class="mono">992</td><td class="mono">992</td><td class="mono ok">0</td><td class="mono ok">0</td><td class="mono ok">0.36</td><td class="mono">13 / 13</td></tr><tr><td class="mono">1440</td><td class="mono">1400</td><td class="mono">1400</td><td class="mono ok">0</td><td class="mono ok">0</td><td class="mono ok">0.11</td><td class="mono">13 / 13</td></tr><tr><td class="mono">1920</td><td class="mono">1400</td><td class="mono">1400</td><td class="mono ok">0</td><td class="mono ok">0</td><td class="mono ok">0.11</td><td class="mono">13 / 13</td></tr></tbody></table></div>
+<p class="cap">Допуск — 4 px. Все значения в пикселях при DPR 1.</p></div>
+<h4 class="ct">Все архетипы и размеры одним листом</h4>
+<figure class="sheet"><img loading="lazy" src="zona-contact-sheet.png"
+ alt="Zona: contact sheet, было и стало"></figure>
+<h4 class="ct">Постранично: слева было, справа стало</h4>
+<section class="arch"><h4>404</h4><div class="shots"><figure class="shot"><img loading="lazy" src="pairs/zona-404-1440x900.png" alt="zona 404 1440x900: было и стало"><figcaption><span class="vp mono">1440x900</span><span class="meta mono">было 404 · стало 404</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/zona-404-390x844.png" alt="zona 404 390x844: было и стало"><figcaption><span class="vp mono">390x844</span><span class="meta mono">было 404 · стало 404</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/zona-404-768x1024.png" alt="zona 404 768x1024: было и стало"><figcaption><span class="vp mono">768x1024</span><span class="meta mono">было 404 · стало 404</span></figcaption></figure></div></section><section class="arch"><h4>главная</h4><div class="shots"><figure class="shot"><img loading="lazy" src="pairs/zona-home-1440x900.png" alt="zona главная 1440x900: было и стало"><figcaption><span class="vp mono">1440x900</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/zona-home-390x844.png" alt="zona главная 390x844: было и стало"><figcaption><span class="vp mono">390x844</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/zona-home-768x1024.png" alt="zona главная 768x1024: было и стало"><figcaption><span class="vp mono">768x1024</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure></div></section><section class="arch"><h4>каталог</h4><div class="shots"><figure class="shot"><img loading="lazy" src="pairs/zona-catalog-1440x900.png" alt="zona каталог 1440x900: было и стало"><figcaption><span class="vp mono">1440x900</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/zona-catalog-390x844.png" alt="zona каталог 390x844: было и стало"><figcaption><span class="vp mono">390x844</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/zona-catalog-768x1024.png" alt="zona каталог 768x1024: было и стало"><figcaption><span class="vp mono">768x1024</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure></div></section><section class="arch"><h4>новинки</h4><div class="shots"><figure class="shot"><img loading="lazy" src="pairs/zona-new-1440x900.png" alt="zona новинки 1440x900: было и стало"><figcaption><span class="vp mono">1440x900</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/zona-new-390x844.png" alt="zona новинки 390x844: было и стало"><figcaption><span class="vp mono">390x844</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/zona-new-768x1024.png" alt="zona новинки 768x1024: было и стало"><figcaption><span class="vp mono">768x1024</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure></div></section><section class="arch"><h4>поиск</h4><div class="shots"><figure class="shot"><img loading="lazy" src="pairs/zona-search-1440x900.png" alt="zona поиск 1440x900: было и стало"><figcaption><span class="vp mono">1440x900</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/zona-search-390x844.png" alt="zona поиск 390x844: было и стало"><figcaption><span class="vp mono">390x844</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/zona-search-768x1024.png" alt="zona поиск 768x1024: было и стало"><figcaption><span class="vp mono">768x1024</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure></div></section><section class="arch"><h4>пустой результат</h4><div class="shots"><figure class="shot"><img loading="lazy" src="pairs/zona-empty-result-1440x900.png" alt="zona пустой результат 1440x900: было и стало"><figcaption><span class="vp mono">1440x900</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/zona-empty-result-390x844.png" alt="zona пустой результат 390x844: было и стало"><figcaption><span class="vp mono">390x844</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/zona-empty-result-768x1024.png" alt="zona пустой результат 768x1024: было и стало"><figcaption><span class="vp mono">768x1024</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure></div></section><section class="arch"><h4>результаты фильтра</h4><div class="shots"><figure class="shot"><img loading="lazy" src="pairs/zona-filter-1440x900.png" alt="zona результаты фильтра 1440x900: было и стало"><figcaption><span class="vp mono">1440x900</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/zona-filter-390x844.png" alt="zona результаты фильтра 390x844: было и стало"><figcaption><span class="vp mono">390x844</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/zona-filter-768x1024.png" alt="zona результаты фильтра 768x1024: было и стало"><figcaption><span class="vp mono">768x1024</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure></div></section><section class="arch"><h4>страница тайтла</h4><div class="shots"><figure class="shot"><img loading="lazy" src="pairs/zona-title-1440x900.png" alt="zona страница тайтла 1440x900: было и стало"><figcaption><span class="vp mono">1440x900</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/zona-title-390x844.png" alt="zona страница тайтла 390x844: было и стало"><figcaption><span class="vp mono">390x844</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/zona-title-768x1024.png" alt="zona страница тайтла 768x1024: было и стало"><figcaption><span class="vp mono">768x1024</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure></div></section>
+</section>
+<section class="fam" id="animedia" style="--id:#c50725">
+<header class="fam__h">
+<span class="dot"></span>
+<h2>Animedia</h2>
+<span class="score mono">9.39<small>/10</small></span>
+<span class="chip">минимум измерения 8.0</span>
+</header>
+<div class="ref">
+<h4>Измерено на эталоне</h4>
+<p class="note">Снято маршрутов эталона: <b>8</b>. Кадры эталона намеренно
+не публикуются — это страницы третьих лиц. Паритет судится по числам, и они здесь целиком.</p>
+<div class="sws"><div class="sw"><span class="sw__c" style="background:rgb(255, 255, 255)"></span><span class="sw__c" style="background:rgb(255, 255, 255)"></span><span class="sw__t"><b>основа</b><span class="mono">rgb(255, 255, 255)</span><span class="d ok">ΔE00 0.0</span></span></div><div class="sw"><span class="sw__c" style="background:rgb(22, 22, 22)"></span><span class="sw__c" style="background:rgb(22, 22, 22)"></span><span class="sw__t"><b>текст</b><span class="mono">rgb(22, 22, 22)</span><span class="d ok">ΔE00 0.0</span></span></div><div class="sw"><span class="sw__c" style="background:rgb(255, 255, 255)"></span><span class="sw__c" style="background:rgb(255, 255, 255)"></span><span class="sw__t"><b>поверхность шапки</b><span class="mono">rgb(255, 255, 255)</span><span class="d ok">ΔE00 0.0</span></span></div></div>
+<p class="cap">Левый квадрат — кандидат, правый — эталон.</p>
+<div class="tw"><table>
+<thead><tr><th>вьюпорт</th><th>контейнер эталона</th><th>контейнер кандидата</th>
+<th>Δ контейнер</th><th>Δ поля</th><th>Δ шапка</th><th>кегль эт./канд.</th></tr></thead>
+<tbody><tr><td class="mono">390</td><td class="mono">378</td><td class="mono">378</td><td class="mono ok">0</td><td class="mono ok">0</td><td class="mono ok">2</td><td class="mono">14 / 14</td></tr><tr><td class="mono">768</td><td class="mono">766</td><td class="mono">766</td><td class="mono ok">0</td><td class="mono ok">0</td><td class="mono ok">2</td><td class="mono">14 / 14</td></tr><tr><td class="mono">1024</td><td class="mono">1022</td><td class="mono">1022</td><td class="mono ok">0</td><td class="mono ok">0</td><td class="mono ok">2</td><td class="mono">14 / 14</td></tr><tr><td class="mono">1440</td><td class="mono">1438</td><td class="mono">1438</td><td class="mono ok">0</td><td class="mono ok">0</td><td class="mono ok">2</td><td class="mono">14 / 14</td></tr><tr><td class="mono">1920</td><td class="mono">1918</td><td class="mono">1918</td><td class="mono ok">0</td><td class="mono ok">0</td><td class="mono ok">2</td><td class="mono">14 / 14</td></tr></tbody></table></div>
+<p class="cap">Допуск — 4 px. Все значения в пикселях при DPR 1.</p></div>
+<h4 class="ct">Все архетипы и размеры одним листом</h4>
+<figure class="sheet"><img loading="lazy" src="animedia-contact-sheet.png"
+ alt="Animedia: contact sheet, было и стало"></figure>
+<h4 class="ct">Постранично: слева было, справа стало</h4>
+<section class="arch"><h4>404</h4><div class="shots"><figure class="shot"><img loading="lazy" src="pairs/animedia-404-1440x900.png" alt="animedia 404 1440x900: было и стало"><figcaption><span class="vp mono">1440x900</span><span class="meta mono">было 404 · стало 404</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/animedia-404-390x844.png" alt="animedia 404 390x844: было и стало"><figcaption><span class="vp mono">390x844</span><span class="meta mono">было 404 · стало 404 · переполнение было</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/animedia-404-768x1024.png" alt="animedia 404 768x1024: было и стало"><figcaption><span class="vp mono">768x1024</span><span class="meta mono">было 404 · стало 404</span></figcaption></figure></div></section><section class="arch"><h4>главная</h4><div class="shots"><figure class="shot"><img loading="lazy" src="pairs/animedia-home-1440x900.png" alt="animedia главная 1440x900: было и стало"><figcaption><span class="vp mono">1440x900</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/animedia-home-390x844.png" alt="animedia главная 390x844: было и стало"><figcaption><span class="vp mono">390x844</span><span class="meta mono">было 200 · стало 200 · переполнение было</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/animedia-home-768x1024.png" alt="animedia главная 768x1024: было и стало"><figcaption><span class="vp mono">768x1024</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure></div></section><section class="arch"><h4>каталог аниме</h4><div class="shots"><figure class="shot"><img loading="lazy" src="pairs/animedia-catalog-1440x900.png" alt="animedia каталог аниме 1440x900: было и стало"><figcaption><span class="vp mono">1440x900</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/animedia-catalog-390x844.png" alt="animedia каталог аниме 390x844: было и стало"><figcaption><span class="vp mono">390x844</span><span class="meta mono">было 200 · стало 200 · переполнение было</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/animedia-catalog-768x1024.png" alt="animedia каталог аниме 768x1024: было и стало"><figcaption><span class="vp mono">768x1024</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure></div></section><section class="arch"><h4>новые серии</h4><div class="shots"><figure class="shot"><img loading="lazy" src="pairs/animedia-new-episodes-1440x900.png" alt="animedia новые серии 1440x900: было и стало"><figcaption><span class="vp mono">1440x900</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/animedia-new-episodes-390x844.png" alt="animedia новые серии 390x844: было и стало"><figcaption><span class="vp mono">390x844</span><span class="meta mono">было 200 · стало 200 · переполнение было</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/animedia-new-episodes-768x1024.png" alt="animedia новые серии 768x1024: было и стало"><figcaption><span class="vp mono">768x1024</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure></div></section><section class="arch"><h4>поиск</h4><div class="shots"><figure class="shot"><img loading="lazy" src="pairs/animedia-search-1440x900.png" alt="animedia поиск 1440x900: было и стало"><figcaption><span class="vp mono">1440x900</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/animedia-search-390x844.png" alt="animedia поиск 390x844: было и стало"><figcaption><span class="vp mono">390x844</span><span class="meta mono">было 200 · стало 200 · переполнение было</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/animedia-search-768x1024.png" alt="animedia поиск 768x1024: было и стало"><figcaption><span class="vp mono">768x1024</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure></div></section><section class="arch"><h4>пустой результат</h4><div class="shots"><figure class="shot"><img loading="lazy" src="pairs/animedia-empty-result-1440x900.png" alt="animedia пустой результат 1440x900: было и стало"><figcaption><span class="vp mono">1440x900</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/animedia-empty-result-390x844.png" alt="animedia пустой результат 390x844: было и стало"><figcaption><span class="vp mono">390x844</span><span class="meta mono">было 200 · стало 200 · переполнение было</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/animedia-empty-result-768x1024.png" alt="animedia пустой результат 768x1024: было и стало"><figcaption><span class="vp mono">768x1024</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure></div></section><section class="arch"><h4>расписание</h4><div class="shots"><figure class="shot"><img loading="lazy" src="pairs/animedia-schedule-1440x900.png" alt="animedia расписание 1440x900: было и стало"><figcaption><span class="vp mono">1440x900</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/animedia-schedule-390x844.png" alt="animedia расписание 390x844: было и стало"><figcaption><span class="vp mono">390x844</span><span class="meta mono">было 200 · стало 200 · переполнение было</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/animedia-schedule-768x1024.png" alt="animedia расписание 768x1024: было и стало"><figcaption><span class="vp mono">768x1024</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure></div></section><section class="arch"><h4>результаты фильтра</h4><div class="shots"><figure class="shot"><img loading="lazy" src="pairs/animedia-filter-1440x900.png" alt="animedia результаты фильтра 1440x900: было и стало"><figcaption><span class="vp mono">1440x900</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/animedia-filter-390x844.png" alt="animedia результаты фильтра 390x844: было и стало"><figcaption><span class="vp mono">390x844</span><span class="meta mono">было 200 · стало 200 · переполнение было</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/animedia-filter-768x1024.png" alt="animedia результаты фильтра 768x1024: было и стало"><figcaption><span class="vp mono">768x1024</span><span class="meta mono">было 200 · стало 200</span></figcaption></figure></div></section><section class="arch"><h4>страница аниме</h4><div class="shots"><figure class="shot"><img loading="lazy" src="pairs/animedia-title-1440x900.png" alt="animedia страница аниме 1440x900: было и стало"><figcaption><span class="vp mono">1440x900</span><span class="meta mono">было 404 · стало 200</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/animedia-title-390x844.png" alt="animedia страница аниме 390x844: было и стало"><figcaption><span class="vp mono">390x844</span><span class="meta mono">было 404 · стало 200 · переполнение было</span></figcaption></figure><figure class="shot"><img loading="lazy" src="pairs/animedia-title-768x1024.png" alt="animedia страница аниме 768x1024: было и стало"><figcaption><span class="vp mono">768x1024</span><span class="meta mono">было 404 · стало 200</span></figcaption></figure></div></section>
+</section>
+
+<div class="card"><h3>Чего у эталона получить не удалось</h3>
+<p class="note">Отсутствующая страница не заменялась снимком главной и не называется проверенной.</p>
+<div class="tw"><table><thead><tr><th>витрина</th><th>архетип</th><th>маршрут</th>
+<th>причина</th><th>статус</th></tr></thead><tbody><tr><td>zona</td><td>новинки</td><td class="mono">/updates/</td><td>ссылка есть в разметке главной эталона, но сам адрес отдаёт 404 — проверено на трёх вьюпортах</td><td class="mono warn">MISSING_AT_REFERENCE</td></tr><tr><td>zona</td><td>поиск и результаты поиска</td><td class="mono">—</td><td>поиск на эталоне выполняется отправкой формы; задание прямо запрещает отправку форм, а угадывать параметр запроса значило бы придумать маршрут</td><td class="mono warn">BLOCKED_BY_TASK_RULE</td></tr><tr><td>zona</td><td>пустой результат</td><td class="mono">—</td><td>достижим только через поиск — см. предыдущую строку</td><td class="mono warn">BLOCKED_BY_TASK_RULE</td></tr><tr><td>zona</td><td>результаты фильтра</td><td class="mono">—</td><td>на эталоне фильтр задаётся параметрами запроса, перечислить точный путь без отправки формы нельзя</td><td class="mono warn">BLOCKED_BY_TASK_RULE</td></tr><tr><td>animedia</td><td>поиск и пустой результат</td><td class="mono">—</td><td>то же: поиск через форму</td><td class="mono warn">BLOCKED_BY_TASK_RULE</td></tr><tr><td>animedia</td><td>страница аниме</td><td class="mono">—</td><td>в разметке каталога эталона прямых ссылок вида /anime/&lt;тайтл&gt;/ не обнаружено; найденные глубокие пути ведут на жанровые выборки, и они сняты как «результаты фильтра». Придумывать адрес тайтла запрещено.</td><td class="mono warn">NOT_DISCOVERABLE</td></tr></tbody></table></div></div>
+
+<div class="card"><h3>Что осталось открытым</h3>
+<p><b>Данные Animedia.</b> Каталог — срез Zona: 3995 из 3999 адресов совпадают с боевой Zona.
+Шаблон это больше не прячет: на боевых данных витрина показывает названное состояние нехватки
+и ни одной чужой карточки. Исправление — на стороне контентного конвейера.</p>
+<p><b>Постеры своим адресом.</b> Штатный механизм в проекте есть, но включён только для Lords;
+для Zona и Animedia нужна правка vhost, а её эта задача не разрешала. В шаблоне сделан
+переключатель, по умолчанию выключенный.</p>
+<p><b>Рецензии, комментарии, списки.</b> Компоненты и честные пустые состояния — есть.
+Фиктивных пользователей и выдуманных отзывов нет и не будет: для включения нужен источник
+и аутентификация.</p></div>
+
+</main>

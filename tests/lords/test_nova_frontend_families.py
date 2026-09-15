@@ -512,3 +512,56 @@ class TestАвтоматСостоянийПлеера:
             подпись = лордс._подпись_плеера(код)
             assert подпись and подпись != "состояние неизвестно", (
                 f"состояние {код} без подписи")
+
+
+@pytest.fixture(scope="module")
+def зона_1_2(tmp_path_factory):
+    return _поднять(tmp_path_factory.mktemp("zona12"), "zona-01", "zona", версия="1.2.0")
+
+
+@pytest.fixture(scope="module")
+def анимедиа_1_2(tmp_path_factory):
+    return _поднять(tmp_path_factory.mktemp("amd12"), "animedia-01", "animedia",
+                    версия="1.2.0")
+
+
+class TestПереработкаВключаетсяВерсией:
+    """Оформление 1.2.0 достаётся только витрине, объявившей его манифестом.
+
+    Артефакт один на шесть витрин. Если бы переработка включалась наличием
+    кода, выкладка файла ради Animedia сменила бы вид боевой Zona, которая
+    стоит на 1.1.0 и об этом не просила. Здесь проверяется именно это: на
+    1.1.0 отдаётся прежнее оформление, на 1.2.0 — переработанное.
+    """
+
+    def test_zona_1_1_0_отдаёт_прежнее_оформление(self, зона):
+        з = запросить(зона, "/").тело
+        assert 'data-design="zona-rail"' in з
+        assert "'PT Serif'" in з
+
+    def test_zona_1_2_0_отдаёт_переработанное(self, зона_1_2):
+        з = запросить(зона_1_2, "/").тело
+        assert 'data-design="zona-top"' in з
+        assert 'class="zhd"' in з and '<aside class="zrail"' not in з
+        assert "font:13px/1.375 ui-sans-serif" in з.split("</style>")[0]
+        assert "'PT Serif'" not in з
+
+    def test_zona_1_2_0_пять_секций_главной(self, зона_1_2):
+        з = запросить(зона_1_2, "/").тело
+        assert з.count('<section class="zsec">') == 5
+
+    def test_animedia_1_2_0_свой_вид_а_не_lords(self, анимедиа_1_2):
+        а = запросить(анимедиа_1_2, "/").тело
+        assert 'data-design="animedia-portal"' in а
+        assert 'data-design="lords-sheet"' not in а
+
+    def test_animedia_1_2_0_не_показывает_чужой_каталог(self, анимедиа_1_2):
+        """Записи не своего вида не попадают на витрину вовсе."""
+        а = запросить(анимедиа_1_2, "/").тело
+        assert "Каталог аниме источником не передан" in а or 'class="zt"' in а
+        assert 'class="ast"' in а or 'class="zt"' in а
+
+    def test_animedia_1_2_0_расписание_свой_раздел(self, анимедиа_1_2):
+        о = запросить(анимедиа_1_2, "/schedule/")
+        assert о.статус == 200
+        assert 'class="asch"' in о.тело
