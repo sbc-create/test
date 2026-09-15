@@ -80,13 +80,49 @@ def cmd_factory_portfolio(args) -> int:
     return 0 if view["counts"]["ready"] else 3
 
 
+#: Что именно обходит суточный цикл на каждом сайте. Набор один для всех витрин
+#: и потому повторяем.
+#:
+#: Здесь только страницы для читателя. robots.txt, карта сайта и проверка
+#: обработки 404 сюда не входят сознательно: это не HTML-страницы, и постраничные
+#: проверки честно сообщили бы про них «нет title», «нет H1», «код 404» — три
+#: находки из ничего на каждой витрине. Их место — отдельная стадия проверки
+#: инфраструктуры с собственными ожиданиями, и она пока не написана.
+DAILY_CRAWL_PATHS = ("/", "/catalog/")
+
+
+def _crawl_real_portfolio(op: Operator) -> tuple[dict, list[str]]:
+    """Обход рабочих сайтов. Отказ одного сайта не отменяет остальные."""
+    from seo_operator.datasources.livecrawl import CrawlNotAllowedError, crawl_portfolio
+
+    sites = [
+        {"site_id": s.site_id, "base_url": s.base_url, "synthetic": s.synthetic}
+        for s in op.portfolio.sites
+    ]
+    notes: list[str] = []
+    pages: dict = {}
+    for site in sites:
+        try:
+            pages.update(
+                crawl_portfolio([site], paths_for=lambda _s: DAILY_CRAWL_PATHS)
+            )
+        except CrawlNotAllowedError as exc:
+            notes.append(f"обход {site['site_id']} не выполнен: {exc}")
+    return pages, notes
+
+
 def cmd_run(args, mode: Mode) -> int:
     op = _operator(args.fixture)
     pages_by_site = {}
-    if args.fixture and FIXTURE_PAGES.exists():
-        pages_by_site = {"fixture-anime": _load_pages(FIXTURE_PAGES)}
+    crawl_notes: list[str] = []
+    if args.fixture:
+        if FIXTURE_PAGES.exists():
+            pages_by_site = {"fixture-anime": _load_pages(FIXTURE_PAGES)}
+    elif not args.no_crawl:
+        pages_by_site, crawl_notes = _crawl_real_portfolio(op)
 
     result = op.run(mode, pages_by_site=pages_by_site, today=date.today())
+    result.notes.extend(crawl_notes)
 
     if args.json:
         print(json.dumps(result.to_dict(), ensure_ascii=False, indent=2, default=str))
@@ -183,6 +219,11 @@ def main(argv=None) -> int:
             "--fixture",
             action="store_true",
             help="использовать синтетический тенант вместо реального портфеля",
+        )
+        p.add_argument(
+            "--no-crawl",
+            action="store_true",
+            help="не обходить живые витрины (только офлайн-часть цикла)",
         )
         p.add_argument("--json", action="store_true", help="машиночитаемый вывод")
         p.add_argument("--out", help="записать отчёт в файл")

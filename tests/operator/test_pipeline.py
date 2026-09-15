@@ -112,12 +112,31 @@ class TestDryRun:
 
 class TestBlockers:
     def test_empty_real_portfolio_is_reported_as_a_blocker(self, tmp_path):
+        """Пустой рабочий реестр — блокер.
+
+        Проверка описывает поведение, а не содержимое config/portfolio.json.
+        Раньше она брала реальный реестр и опиралась на то, что он пуст; когда
+        реестр заполнили девятью работающими доменами, тест упал, хотя само
+        поведение не менялось. Пустой портфель строится здесь явно.
+        """
+        from seo_operator.registry import Portfolio
+
+        op = Operator(
+            portfolio=Portfolio(sites=[], note="пустой реестр для проверки блокера"),
+            audit_log=AuditLog(tmp_path / "a.jsonl"),
+        )
+        result = op.run(Mode.INVENTORY, today=TODAY)
+        assert any("портфель пуст" in b for b in result.blockers)
+
+    def test_filled_real_portfolio_is_not_reported_as_empty(self, tmp_path):
+        """Обратная сторона: заполненный реестр не объявляется пустым."""
         op = Operator(
             portfolio=load_portfolio(Path("config/portfolio.json")),
             audit_log=AuditLog(tmp_path / "a.jsonl"),
         )
         result = op.run(Mode.INVENTORY, today=TODAY)
-        assert any("портфель пуст" in b for b in result.blockers)
+        assert not any("портфель пуст" in b for b in result.blockers)
+        assert len(op.portfolio.real_sites) >= 1
 
     def test_unavailable_sources_are_listed(self, tmp_path):
         result = operator(tmp_path).run(Mode.INVENTORY, today=TODAY)
