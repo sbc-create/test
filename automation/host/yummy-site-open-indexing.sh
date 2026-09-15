@@ -46,17 +46,17 @@ fail() { printf '!! %s\n' "$*" >&2; }
 
 check_open() {
   local errors=0 code headers robots html
-  headers=$(curl -sSI --max-time 25 "https://${OPEN_DOMAIN}/" || true)
+  headers=$(curl -sSI --max-time "$REQUEST_TIMEOUT" "https://${OPEN_DOMAIN}/" || true)
   code=$(printf '%s' "$headers" | awk 'NR==1{print $2}')
   [ "$code" = "200" ] || { fail "${OPEN_DOMAIN}: код ${code:-нет ответа}"; errors=1; }
   if printf '%s' "$headers" | grep -qi 'x-robots-tag'; then
     fail "${OPEN_DOMAIN}: заголовок X-Robots-Tag всё ещё отдаётся"; errors=1
   fi
-  robots=$(curl -sS --max-time 25 "https://${OPEN_DOMAIN}/robots.txt" || true)
+  robots=$(curl -sS --max-time "$REQUEST_TIMEOUT" "https://${OPEN_DOMAIN}/robots.txt" || true)
   if printf '%s' "$robots" | grep -qE '^[[:space:]]*Disallow:[[:space:]]*/[[:space:]]*$'; then
     fail "${OPEN_DOMAIN}: robots.txt всё ещё содержит Disallow: /"; errors=1
   fi
-  html=$(curl -sS --max-time 30 "https://${OPEN_DOMAIN}/" || true)
+  html=$(curl -sS --max-time "$REQUEST_TIMEOUT" "https://${OPEN_DOMAIN}/" || true)
   if printf '%s' "$html" | grep -qi 'name="robots"[^>]*content="[^"]*noindex'; then
     fail "${OPEN_DOMAIN}: meta robots всё ещё noindex"; errors=1
   fi
@@ -81,12 +81,29 @@ check_closed() {
   return $errors
 }
 
+# Сколько ждать готовности и сколько отводить одному запросу.
+#
+# Обе величины измерены, а не выбраны. `systemctl restart` при Type=simple
+# возвращается сразу после fork и готовности не дожидается. Порт витрина
+# занимает мгновенно, но ПЕРВЫЙ запрос после старта идёт 44 секунды: прогреваются
+# модель чтения и кеш вышестоящего приложения. Прежние 25 секунд на запрос и
+# ожидание без требования кода 200 приводили к тому, что проверки шли по ещё не
+# прогретой службе и видели 502 — именно на этом выкладка 2026-09-15T20:16Z
+# откатилась, хотя сама правка верна.
+REQUEST_TIMEOUT=90
+READINESS_ATTEMPTS=6
+
 wait_for_service() {
   local n=0
-  until curl -sS -o /dev/null --max-time 10 "https://${OPEN_DOMAIN}/" 2>/dev/null; do
+  # `-f` обязателен: без него curl считает успехом и 502, и ожидание готовности
+  # становится холостым — оно завершалось на первом же ответе шлюза.
+  until curl -fsS -o /dev/null --max-time "$REQUEST_TIMEOUT" "https://${OPEN_DOMAIN}/" 2>/dev/null; do
     n=$((n + 1))
-    [ "$n" -ge 30 ] && return 1
-    sleep 2
+    if [ "$n" -ge "$READINESS_ATTEMPTS" ]; then
+      return 1
+    fi
+    printf '   прогрев, попытка %s из %s\n' "$n" "$READINESS_ATTEMPTS"
+    sleep 5
   done
   return 0
 }
@@ -146,10 +163,17 @@ fi
 step "установка и перезапуск ${UNIT} (службы .org и .biz не трогаются)"
 install -o root -g root -m 0755 "$SOURCE" "$TARGET"
 systemctl restart "$UNIT"
-wait_for_service || fail "служба не отвечает после перезапуска"
+
+step "ожидание готовности (первый запрос после старта идёт до минуты)"
+READY=0
+if wait_for_service; then
+  READY=1
+else
+  fail "служба не отдала 200 после перезапуска"
+fi
 
 step "проверка на публичном адресе"
-if check_open && check_closed; then
+if [ "$READY" = "1" ] && check_open && check_closed; then
   step "готово: ${OPEN_DOMAIN} открыт, остальные восемь закрыты"
   printf 'YUMMYANI_SITE_PUBLIC_INDEXING=OPEN_PASS\n'
   printf 'OTHER_DOMAINS_INDEXING=LOCKED_PASS\n'
@@ -163,6 +187,11 @@ if [ -n "${PROFILE_BACKUP:-}" ]; then
   cp -p "$PROFILE_BACKUP" "$PROFILE"
 fi
 systemctl restart "$UNIT"
-wait_for_service || true
-fail "откат выполнен, копии сохранены: $BACKUP ${PROFILE_BACKUP:-}"
+if wait_for_service; then
+  fail "откат выполнен и подтверждён: витрина снова отвечает 200"
+else
+  fail "ВНИМАНИЕ: после отката витрина не отдала 200 за отведённое время."
+  fail "Проверьте вручную: curl -sSI https://${OPEN_DOMAIN}/ и systemctl status ${UNIT}"
+fi
+fail "копии сохранены: $BACKUP ${PROFILE_BACKUP:-}"
 exit 1
