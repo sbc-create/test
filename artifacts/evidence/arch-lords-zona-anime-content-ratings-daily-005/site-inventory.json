@@ -1,0 +1,164 @@
+{
+  "note": "Секретных значений здесь нет: только логические псевдонимы, под которыми их выдаёт Secret Hub.",
+  "sites": [
+    {
+      "domain": "lordfilm47.space",
+      "production_host": "45.131.182.225",
+      "site_id": "lords-01",
+      "family": "Lords",
+      "content_type": "фильмы+сериалы+аниме",
+      "catalog_source": "канонический снимок CDNVideoHub",
+      "cdnvideohub_profile": "lords",
+      "secret_alias_api_token": "cdnvideohub_api_token (scope cdnvideohub/lords)",
+      "secret_alias_publisher_id": "cdnvideohub_publisher_id (scope cdnvideohub/lords)",
+      "rating_sources": [
+        "IMDb",
+        "imdb",
+        "shikimori",
+        "КП"
+      ],
+      "titles": 53400,
+      "catalog_built_at": "2026-09-15T03:16:31Z",
+      "unit": "lords-nova-01.service",
+      "unit_state": "active",
+      "daily_update": "nova-daily-refresh.timer (канонический снимок)",
+      "blocker": "—"
+    },
+    {
+      "domain": "lordserial33.biz",
+      "production_host": "45.131.182.225",
+      "site_id": "lords-02",
+      "family": "Lords",
+      "content_type": "фильмы+сериалы+аниме",
+      "catalog_source": "обход отрисованного релиза витрины",
+      "cdnvideohub_profile": "lords",
+      "secret_alias_api_token": "cdnvideohub_api_token (scope cdnvideohub/lords)",
+      "secret_alias_publisher_id": "cdnvideohub_publisher_id (scope cdnvideohub/lords)",
+      "rating_sources": [
+        "—"
+      ],
+      "titles": 52684,
+      "catalog_built_at": "2026-09-15T03:54:34Z",
+      "unit": "nova-lords-02.service",
+      "unit_state": "active",
+      "daily_update": "nova-catalog-refresh.timer (обход релиза)",
+      "blocker": "каталог собирается обходом релиза; на канонический снимок не переведён"
+    },
+    {
+      "domain": "1lordserials1.online",
+      "production_host": "45.131.182.225",
+      "site_id": "lords-03",
+      "family": "Lords",
+      "content_type": "фильмы+сериалы+аниме",
+      "catalog_source": "обход отрисованного релиза витрины",
+      "cdnvideohub_profile": "lords",
+      "secret_alias_api_token": "cdnvideohub_api_token (scope cdnvideohub/lords)",
+      "secret_alias_publisher_id": "cdnvideohub_publisher_id (scope cdnvideohub/lords)",
+      "rating_sources": [
+        "—"
+      ],
+      "titles": 52576,
+      "catalog_built_at": "2026-09-15T04:04:51Z",
+      "unit": "nova-lords-03.service",
+      "unit_state": "active",
+      "daily_update": "nova-catalog-refresh.timer (обход релиза)",
+      "blocker": "каталог собирается обходом релиза; на канонический снимок не переведён"
+    },
+    {
+      "domain": "zonafilm.space",
+      "production_host": "45.131.182.225",
+      "site_id": "zona-01",
+      "family": "Zona",
+      "content_type": "фильмы+сериалы+аниме",
+      "catalog_source": "канонический снимок CDNVideoHub",
+      "cdnvideohub_profile": "lords",
+      "secret_alias_api_token": "cdnvideohub_api_token (scope cdnvideohub/lords)",
+      "secret_alias_publisher_id": "cdnvideohub_publisher_id (scope cdnvideohub/lords)",
+      "rating_sources": [
+        "IMDb",
+        "imdb",
+        "shikimori",
+        "КП"
+      ],
+      "titles": 53400,
+      "catalog_built_at": "2026-09-15T03:16:31Z",
+      "unit": "nova-zona-01.service",
+      "unit_state": "active",
+      "daily_update": "nova-daily-refresh.timer (канонический снимок)",
+      "blocker": "—"
+    },
+    {
+      "domain": "animedia.icu",
+      "production_host": "45.131.182.225",
+      "site_id": "animedia-01",
+      "family": "Animedia",
+      "content_type": "объявлен аниме",
+      "catalog_source": "обход отрисованного релиза витрины",
+      "cdnvideohub_profile": "не назначен",
+      "secret_alias_api_token": "отсутствует (аниме-области нет)",
+      "secret_alias_publisher_id": "отсутствует (аниме-области нет)",
+      "rating_sources": [
+        "—"
+      ],
+      "titles": 3999,
+      "catalog_built_at": "2026-09-10T14:24:05Z",
+      "unit": "nova-animedia-01.service",
+      "unit_state": "active",
+      "daily_update": "nova-catalog-refresh.timer (обход релиза)",
+      "blocker": "каталог — копия среза Zona (3995/3999 совпадают), аниме в нём 131; боковой файл отсутствует; аниме-профиля и аниме-credentials в Secret Hub нет"
+    },
+    {
+      "domain": "animedia.space",
+      "production_host": "45.131.182.225",
+      "site_id": "animedia-02",
+      "family": "Animedia",
+      "content_type": "объявлен аниме",
+      "catalog_source": "обход отрисованного релиза витрины",
+      "cdnvideohub_profile": "не назначен",
+      "secret_alias_api_token": "отсутствует (аниме-области нет)",
+      "secret_alias_publisher_id": "отсутствует (аниме-области нет)",
+      "rating_sources": [
+        "—"
+      ],
+      "titles": 3999,
+      "catalog_built_at": "2026-09-10T14:24:16Z",
+      "unit": "nova-animedia-02.service",
+      "unit_state": "active",
+      "daily_update": "nova-catalog-refresh.timer (обход релиза)",
+      "blocker": "каталог — копия среза Zona (3995/3999 совпадают), аниме в нём 131; боковой файл отсутствует; аниме-профиля и аниме-credentials в Secret Hub нет"
+    }
+  ],
+  "amd_online": {
+    "declared_in": "inventory/reference-sources.yaml",
+    "kind": "ui_reference",
+    "read_only": true,
+    "is_production_target": false,
+    "proof": [
+      "нет записи в inventory/targets.yaml",
+      "нет vhost в /etc/nginx",
+      "нет systemd-юнита",
+      "нет каталога в /srv/lords/.frontend"
+    ],
+    "is_allowed_data_source": false,
+    "proof_not_source": [
+      "reference-sources.yaml прямо запрещает сохранять каталог, тексты и идентификаторы: store.page_text=false, store.images=false, store.identifiers=false",
+      "хост отсутствует в inventory/network-allowlist.yaml",
+      "knowledge/DECISIONS.md D35: независимое измерение не выполнено, прокси среды отклоняет CONNECT"
+    ],
+    "conclusion": "amd.online объявлен источником визуального референса и только им. Использовать его как источник оценок нельзя без изменения authoritative inventory владельцем."
+  },
+  "network_allowlist": {
+    "declared_hosts": [
+      "api-metrika.yandex.net",
+      "api.webmaster.yandex.net",
+      "yandex.ru",
+      "yandex.com",
+      "public-api.cdnvideohub.com"
+    ],
+    "used_but_not_declared": [
+      "datasets.imdbws.com",
+      "shikimori.io"
+    ],
+    "finding": "источники оценок, подключённые по решению владельца в предыдущей задаче, не внесены в inventory/network-allowlist.yaml"
+  }
+}

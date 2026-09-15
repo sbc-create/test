@@ -1,0 +1,109 @@
+{
+  "gates": {
+    "lords-01": {
+      "MOVIES": {
+        "total": 31166,
+        "data_pct": 98.12,
+        "public_pct": 98.12,
+        "data_gate": "PASS",
+        "public_gate": "PASS",
+        "by_source": {
+          "imdb": 30461,
+          "kinopoisk": 19175
+        },
+        "none": 587,
+        "multi_source": 19057
+      },
+      "SERIES": {
+        "total": 14826,
+        "data_pct": 75.6,
+        "public_pct": 75.6,
+        "data_gate": "FAIL",
+        "public_gate": "FAIL",
+        "by_source": {
+          "imdb": 11184,
+          "kinopoisk": 159
+        },
+        "none": 3617,
+        "multi_source": 134
+      },
+      "ANIME": {
+        "total": 7408,
+        "data_pct": 95.15,
+        "public_pct": 35.48,
+        "data_gate": "PASS",
+        "public_gate": "FAIL",
+        "by_source": {
+          "imdb": 2610,
+          "kinopoisk": 254,
+          "shikimori": 4421
+        },
+        "none": 359,
+        "multi_source": 236
+      },
+      "UNKNOWN": {
+        "total": 0,
+        "note": "записей нет"
+      }
+    },
+    "zona-01": {
+      "MOVIES": {
+        "total": 31166,
+        "data_pct": 98.12,
+        "public_pct": 98.12,
+        "data_gate": "PASS",
+        "public_gate": "PASS",
+        "by_source": {
+          "imdb": 30461,
+          "kinopoisk": 19175
+        },
+        "none": 587,
+        "multi_source": 19057
+      },
+      "SERIES": {
+        "total": 14826,
+        "data_pct": 75.6,
+        "public_pct": 75.6,
+        "data_gate": "FAIL",
+        "public_gate": "FAIL",
+        "by_source": {
+          "imdb": 11184,
+          "kinopoisk": 159
+        },
+        "none": 3617,
+        "multi_source": 134
+      },
+      "ANIME": {
+        "total": 7408,
+        "data_pct": 95.15,
+        "public_pct": 35.48,
+        "data_gate": "PASS",
+        "public_gate": "FAIL",
+        "by_source": {
+          "imdb": 2610,
+          "kinopoisk": 254,
+          "shikimori": 4421
+        },
+        "none": 359,
+        "multi_source": 236
+      },
+      "UNKNOWN": {
+        "total": 0,
+        "note": "записей нет"
+      }
+    }
+  },
+  "note": "Аниме-фильм считается только в ANIME: иначе он удвоил бы знаменатель MOVIES и оба процента стали бы неправдой.",
+  "series_ceiling": {
+    "value_pct": 75.6,
+    "reason": "2199 записей только с MyDramaList (официального API нет), 512 с IMDb ID отсутствуют в выгрузке IMDb, 69 без идентификаторов",
+    "kinopoisk_key_would_add": 1115,
+    "kinopoisk_key_ceiling_pct": 83.1
+  },
+  "anime_public_gap": {
+    "data_pct": 95.15,
+    "public_pct": 35.48,
+    "cause": "4421 оценка Shikimori не выводится рендерером",
+    "unblocked_by": "docs/handoff/RENDERER_RATINGS_HANDOFF.md"
+  }
+}

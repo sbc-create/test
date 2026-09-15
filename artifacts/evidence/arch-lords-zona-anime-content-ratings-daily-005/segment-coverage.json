@@ -1,0 +1,112 @@
+{
+  "lords-01": {
+    "segments": {
+      "MOVIES": {
+        "total": 31166,
+        "data": 30579,
+        "public": 30579,
+        "none": 587,
+        "by_source": {
+          "imdb": 30461,
+          "kinopoisk": 19175
+        },
+        "multi": 19057,
+        "stale": 0,
+        "data_pct": 98.12,
+        "public_pct": 98.12
+      },
+      "SERIES": {
+        "total": 14826,
+        "data": 11209,
+        "public": 11209,
+        "none": 3617,
+        "by_source": {
+          "imdb": 11184,
+          "kinopoisk": 159
+        },
+        "multi": 134,
+        "stale": 0,
+        "data_pct": 75.6,
+        "public_pct": 75.6
+      },
+      "ANIME": {
+        "total": 7408,
+        "data": 7049,
+        "public": 2628,
+        "none": 359,
+        "by_source": {
+          "imdb": 2610,
+          "kinopoisk": 254,
+          "shikimori": 4421
+        },
+        "multi": 236,
+        "stale": 0,
+        "data_pct": 95.15,
+        "public_pct": 35.48
+      }
+    },
+    "classified_by": {
+      "type_movie": 31166,
+      "type_tv": 14826,
+      "myanimelist_id": 7018,
+      "animation+origin": 104,
+      "genre_anime": 286
+    },
+    "total": 53400
+  },
+  "zona-01": {
+    "segments": {
+      "MOVIES": {
+        "total": 31166,
+        "data": 30579,
+        "public": 30579,
+        "none": 587,
+        "by_source": {
+          "imdb": 30461,
+          "kinopoisk": 19175
+        },
+        "multi": 19057,
+        "stale": 0,
+        "data_pct": 98.12,
+        "public_pct": 98.12
+      },
+      "SERIES": {
+        "total": 14826,
+        "data": 11209,
+        "public": 11209,
+        "none": 3617,
+        "by_source": {
+          "imdb": 11184,
+          "kinopoisk": 159
+        },
+        "multi": 134,
+        "stale": 0,
+        "data_pct": 75.6,
+        "public_pct": 75.6
+      },
+      "ANIME": {
+        "total": 7408,
+        "data": 7049,
+        "public": 2628,
+        "none": 359,
+        "by_source": {
+          "imdb": 2610,
+          "kinopoisk": 254,
+          "shikimori": 4421
+        },
+        "multi": 236,
+        "stale": 0,
+        "data_pct": 95.15,
+        "public_pct": 35.48
+      }
+    },
+    "classified_by": {
+      "type_movie": 31166,
+      "type_tv": 14826,
+      "myanimelist_id": 7018,
+      "animation+origin": 104,
+      "genre_anime": 286
+    },
+    "total": 53400
+  }
+}

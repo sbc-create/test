@@ -1,0 +1,87 @@
+{
+  "animedia": {
+    "targets": [
+      {
+        "site_id": "animedia-01",
+        "domain": "animedia.icu",
+        "unit": "nova-animedia-01.service",
+        "port": 9121
+      },
+      {
+        "site_id": "animedia-02",
+        "domain": "animedia.space",
+        "unit": "nova-animedia-02.service",
+        "port": 9122
+      }
+    ],
+    "catalog": {
+      "count": 3999,
+      "built_at": "2026-09-10T14:24:05Z",
+      "kinds": {
+        "Фильм": 2301,
+        "Сериал": 1493,
+        "Аниме": 131,
+        "Мультфильм": 74
+      },
+      "details_sidecar": "отсутствует",
+      "overlap_with_zona": "3995 из 3999 (99%)",
+      "own_entries": 4
+    },
+    "verdict_catalog": "не аниме-каталог, а копия среза Zona; наполнение аниме-каталогом не выполнялось",
+    "blocker_1_data": {
+      "issue": "анимешного источника нет",
+      "evidence": [
+        "config/site-profiles/animedia-0X.json объявляют directions [movie, series] и ссылаются на тот же alias cdnvideohub_api_token, что и Lords",
+        "в Secret Hub существует только scope cdnvideohub/lords для lords-01..03",
+        "portfolios.yaml: направление amedia status=registered, ни один пакет не подключён"
+      ],
+      "consequence": "наполнить Animedia из lords-профиля значило бы сделать ещё одну копию того же каталога — ровно то, что задание запрещает"
+    },
+    "blocker_2_template": {
+      "issue": "у семейства animedia нет раскладки страницы тайтла",
+      "evidence": [
+        "lords-frontend.py: ВИДЫ_1_1 = {\"lords\": ВидЛордс, \"zona\": ВидЗона}",
+        "template-manifest-animedia-01.json: design_version 1.0.2",
+        "теневой запуск текущего рендерера на каталоге animedia: / и /catalog/ отдают 200, все /title/<slug>/ отдают 503",
+        "живой публичный домен: 12 из 12 карточек главной не-200"
+      ],
+      "owner": "контур «Шаблоны»",
+      "consequence": "наполнять каталог до появления раскладки бессмысленно: карточки вели бы на недоступные страницы"
+    },
+    "public_state_now": {
+      "healthz": 200,
+      "/": 200,
+      "/catalog/": 200,
+      "title_pages": "недоступны (404 у работающего процесса, 503 у текущего рендерера)"
+    },
+    "rollout_performed": false,
+    "reason": "оба блокера принадлежат другим контурам; контентная раскатка их не устраняет"
+  },
+  "amd_online": {
+    "audit_performed": true,
+    "method": "authoritative inventory, без обращения к хосту",
+    "declared_as": {
+      "file": "inventory/reference-sources.yaml",
+      "kind": "ui_reference",
+      "read_only": true,
+      "allowed_paths": [
+        "/"
+      ],
+      "store": {
+        "measurements": true,
+        "screenshots": true,
+        "page_text": false,
+        "images": false,
+        "identifiers": false
+      }
+    },
+    "is_production_target": false,
+    "is_allowed_data_source": false,
+    "network_allowlist_entry": false,
+    "prior_decision": "D35 — независимое измерение не выполнено, прокси отклоняет CONNECT",
+    "own_user_rating_imported": 0,
+    "external_fields_quarantined": 0,
+    "verdict": "источник визуального референса и только он; запись прямо запрещает сохранять каталог, тексты и идентификаторы. Импорт оценок оттуда означал бы расширение списка источников по инициативе агента",
+    "unblocks": "внести хост в network-allowlist и изменить kind в reference-sources"
+  }
+}
