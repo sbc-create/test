@@ -35,6 +35,7 @@ import html
 import json
 import os
 import re
+import sys
 import unicodedata
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -104,6 +105,16 @@ def _рядом_с_каталогом(шаблон: str) -> str:
 # нет в новом маршруте, проксируется в него. Так плеер, карточка и любые
 # динамические страницы остаются рабочими — их никто не переписывает.
 ВЕРХОВОЙ = os.environ.get("LORDS_LEGACY_UPSTREAM", "")
+
+# SEO-слой отдельным модулем: аналитика, canonical, структурированные данные и
+# карта сайта. Рядом с рендерером, но не внутри него — чтобы переработка
+# шаблонов не могла его потерять, как уже однажды потеряла тег Метрики.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import seo_layer as SEO  # noqa: E402
+
+#: Каталог готовых файлов карты сайта. Пусто — карта не отдаётся: отдавать
+#: пустую карту хуже, чем не отдавать никакой.
+SITEMAP_DIR = os.environ.get("LORDS_SITEMAP_DIR", "").strip()
 
 #: Счётчик Яндекс Метрики этой витрины. Публичное число, не секрет: оно и так
 #: видно в исходном коде любой страницы. Значение задаёт unit витрины, потому
@@ -417,7 +428,7 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 <meta name="site-factory-core" content="{ЯДРО}">
 <meta name="site-factory-profile" content="{ПРОФИЛЬ}">
 <link rel="manifest" href="/assets/nova.webmanifest">
-{тег_метрики()}<style>{СТИЛЬ}</style></head><body>
+<style>{СТИЛЬ}</style></head><body>
 <header class="hdr"><div class="wrap hdr__in">
 <a class="logo" href="/">{html.escape(ИМЯ_ВИТРИНЫ)}</a>
 <nav class="nav">{пункты}</nav>
@@ -2234,7 +2245,6 @@ def _мета_версии() -> str:
         f'<meta name="site-factory-template" content="{ШАБЛОН_СЕМЕЙСТВА}">'
         f'<meta name="site-factory-core" content="{ЯДРО}">'
         f'<meta name="site-factory-profile" content="{ПРОФИЛЬ}">'
-        + тег_метрики()
     )
 
 
@@ -2274,6 +2284,18 @@ class Обработчик(BaseHTTPRequestHandler):
         pass
 
     def _отдать(self, тело: bytes, тип="text/html; charset=utf-8", код=200):
+        # SEO-слой применяется здесь и только здесь: через эту точку уходит
+        # каждый ответ витрины, и новому шаблону нечего забывать.
+        try:
+            тело = SEO.обогатить(
+                тело, тип, хост=(self.headers.get("Host") or "").split(":")[0],
+                путь=(self.path or "/"), counter=СЧЁТЧИК_МЕТРИКИ,
+                имя_сайта=ИМЯ_ВИТРИНЫ,
+                поиск="/search/?q={search_term_string}", код=код)
+        except Exception:
+            # Разметка не вправе уронить страницу: её пропажу заметит
+            # ежедневный аудит, а пятисотую ошибку — читатель.
+            pass
         self.send_response(код)
         self.send_header("Content-Type", тип)
         self.send_header("Content-Length", str(len(тело)))
@@ -2316,6 +2338,16 @@ class Обработчик(BaseHTTPRequestHandler):
                             "core": ЯДРО, "family": СЕМЕЙСТВО, "profile": ПРОФИЛЬ,
                             "revision": РЕВИЗИЯ, "display": "standalone"}, ensure_ascii=False)
             return self._отдать(м.encode(), "application/manifest+json")
+        if путь == "/sitemap.xml" or re.fullmatch(r"/sitemap-\d+\.xml", путь):
+            # Карта отдаётся только из готовых файлов: собирать её на каждый
+            # запрос значило бы отдавать разное на одинаковый адрес.
+            if not SITEMAP_DIR:
+                return self._отдать(b"", "text/plain; charset=utf-8", код=404)
+            try:
+                данные = (Path(SITEMAP_DIR) / путь.lstrip("/")).read_bytes()
+            except OSError:
+                return self._отдать(b"", "text/plain; charset=utf-8", код=404)
+            return self._отдать(данные, "application/xml; charset=utf-8")
         if путь == "/robots.txt":
             return self._отдать(b"User-agent: *\nDisallow: /\n", "text/plain; charset=utf-8")
         if путь in ("/favicon.svg", "/favicon.ico"):
@@ -2570,8 +2602,7 @@ class Обработчик(BaseHTTPRequestHandler):
                 f'<meta name="site-factory-design-version" content="{ВЕРСИЯ}">'
                 f'<meta name="site-factory-template-family" content="{СЕМЕЙСТВО}">'
                 f'<meta name="site-factory-build-id" content="{СБОРКА}">'
-                + тег_метрики()
-                + f'<style>{СТИЛЬ}</style>').encode("utf-8")
+                        + f'<style>{СТИЛЬ}</style>').encode("utf-8")
             тело = тело.replace(b"</head>", вставка + b"</head>", 1)
         return self._отдать(тело, тип, код=код)
 
@@ -2616,8 +2647,7 @@ class Обработчик(BaseHTTPRequestHandler):
                 f'<meta name="site-factory-template" content="{ШАБЛОН_СЕМЕЙСТВА}">'
                 f'<meta name="site-factory-core" content="{ЯДРО}">'
                 f'<meta name="site-factory-profile" content="{ПРОФИЛЬ}">'
-                + тег_метрики()
-                + f'<style>{СТИЛЬ}</style>')
+                        + f'<style>{СТИЛЬ}</style>')
             текст = текст.replace("</head>", вставка + "</head>", 1)
             данные = текст.encode("utf-8")
         типы = {".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8",
