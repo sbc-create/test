@@ -1,0 +1,154 @@
+{
+  "lordfilm47.space": {
+    "MOVIES": {
+      "total": 31170,
+      "data": 30579,
+      "data_pct": 98.1,
+      "sample": 50,
+      "sample_with_data": 47,
+      "sample_visible": 47,
+      "visible_pct": 100.0,
+      "pages_ok": 50
+    },
+    "SERIES": {
+      "total": 14838,
+      "data": 11212,
+      "data_pct": 75.56,
+      "sample": 50,
+      "sample_with_data": 40,
+      "sample_visible": 40,
+      "visible_pct": 100.0,
+      "pages_ok": 50
+    },
+    "ANIME": {
+      "total": 7408,
+      "data": 7049,
+      "data_pct": 95.15,
+      "sample": 50,
+      "sample_with_data": 47,
+      "sample_visible": 47,
+      "visible_pct": 100.0,
+      "pages_ok": 50
+    }
+  },
+  "lordserial33.biz": {
+    "MOVIES": {
+      "total": 31166,
+      "data": 30579,
+      "data_pct": 98.12,
+      "sample": 50,
+      "sample_with_data": 49,
+      "sample_visible": 49,
+      "visible_pct": 100.0,
+      "pages_ok": 50
+    },
+    "SERIES": {
+      "total": 14838,
+      "data": 11212,
+      "data_pct": 75.56,
+      "sample": 50,
+      "sample_with_data": 40,
+      "sample_visible": 40,
+      "visible_pct": 100.0,
+      "pages_ok": 50
+    },
+    "ANIME": {
+      "total": 7408,
+      "data": 7049,
+      "data_pct": 95.15,
+      "sample": 50,
+      "sample_with_data": 47,
+      "sample_visible": 47,
+      "visible_pct": 100.0,
+      "pages_ok": 50
+    }
+  },
+  "1lordserials1.online": {
+    "MOVIES": {
+      "total": 31166,
+      "data": 30579,
+      "data_pct": 98.12,
+      "sample": 50,
+      "sample_with_data": 49,
+      "sample_visible": 49,
+      "visible_pct": 100.0,
+      "pages_ok": 50
+    },
+    "SERIES": {
+      "total": 14838,
+      "data": 11212,
+      "data_pct": 75.56,
+      "sample": 50,
+      "sample_with_data": 40,
+      "sample_visible": 40,
+      "visible_pct": 100.0,
+      "pages_ok": 50
+    },
+    "ANIME": {
+      "total": 7408,
+      "data": 7049,
+      "data_pct": 95.15,
+      "sample": 50,
+      "sample_with_data": 47,
+      "sample_visible": 47,
+      "visible_pct": 100.0,
+      "pages_ok": 50
+    }
+  },
+  "zonafilm.space": {
+    "MOVIES": {
+      "total": 31170,
+      "data": 30579,
+      "data_pct": 98.1,
+      "sample": 50,
+      "sample_with_data": 47,
+      "sample_visible": 47,
+      "visible_pct": 100.0,
+      "pages_ok": 50
+    },
+    "SERIES": {
+      "total": 14838,
+      "data": 11212,
+      "data_pct": 75.56,
+      "sample": 50,
+      "sample_with_data": 40,
+      "sample_visible": 40,
+      "visible_pct": 100.0,
+      "pages_ok": 50
+    },
+    "ANIME": {
+      "total": 7408,
+      "data": 7049,
+      "data_pct": 95.15,
+      "sample": 50,
+      "sample_with_data": 47,
+      "sample_visible": 47,
+      "visible_pct": 100.0,
+      "pages_ok": 50
+    }
+  },
+  "animedia.icu": {
+    "ANIME": {
+      "total": 7408,
+      "data": 7049,
+      "data_pct": 95.15,
+      "sample": 50,
+      "sample_with_data": 48,
+      "sample_visible": 48,
+      "visible_pct": 100.0,
+      "pages_ok": 50
+    }
+  },
+  "animedia.space": {
+    "ANIME": {
+      "total": 7408,
+      "data": 7049,
+      "data_pct": 95.15,
+      "sample": 50,
+      "sample_with_data": 48,
+      "sample_visible": 48,
+      "visible_pct": 100.0,
+      "pages_ok": 50
+    }
+  }
+}

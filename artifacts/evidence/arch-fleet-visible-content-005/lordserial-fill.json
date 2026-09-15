@@ -1,0 +1,197 @@
+{
+  "run_id": "lordserial-fill",
+  "started_at": "2026-09-15T11:00:37Z",
+  "mode": "apply",
+  "snapshot": {
+    "path": "/srv/site-factory/repo/var/lords/lords/catalog-cache/lords-01.json",
+    "items": 53412,
+    "fetched_at": "2026-09-15T10:11:46Z",
+    "id_set_checksum": "c58a55b26f271a7516b30d3052ae5f1b9e790cd5595ae4a553dd1951db22d71e"
+  },
+  "ledger": {
+    "path": "/srv/site-factory/repo/var/lords/slug-ledger.json",
+    "seeded": 0
+  },
+  "ratings_store": {
+    "path": "/srv/site-factory/repo/var/lords/ratings-store.json",
+    "entries": 21626
+  },
+  "sites": {
+    "lords-02": {
+      "catalog_items": 53412,
+      "catalog_items_before": 52696,
+      "details_entries": 53412,
+      "distinct_canonical_ids": 53412,
+      "duplicate_ids": 0,
+      "id_set_checksum": "c58a55b26f271a7516b30d3052ae5f1b9e790cd5595ae4a553dd1951db22d71e",
+      "coverage": {
+        "published": 53412,
+        "kp": 19591,
+        "kp_pct": 36.68,
+        "imdb": 44258,
+        "imdb_pct": 82.86,
+        "any_rating": 44419,
+        "any_rating_pct": 83.16,
+        "description": 40086,
+        "description_pct": 75.05,
+        "poster_url": 52999,
+        "poster_pct": 99.23,
+        "source_id": 52599,
+        "source_id_pct": 98.48,
+        "external_id_binding": 53338,
+        "external_id_pct": 99.86
+      },
+      "coverage_by_source": {
+        "published": 53412,
+        "by_source": {
+          "imdb": {
+            "count": 44258,
+            "pct": 82.86
+          },
+          "kinopoisk": {
+            "count": 19591,
+            "pct": 36.68
+          },
+          "shikimori": {
+            "count": 4421,
+            "pct": 8.28
+          }
+        }
+      },
+      "secondary_rating_providers": {
+        "store_entries": 21626,
+        "applied": 17205,
+        "applied_by_source": {
+          "imdb": 17205
+        },
+        "rejections": {}
+      },
+      "missing_rating_reasons": {
+        "kinopoisk": {
+          "NOT_AVAILABLE_AT_SOURCE": 27143,
+          "NO_EXTERNAL_ID": 6678
+        },
+        "imdb": {
+          "NO_EXTERNAL_ID": 8066,
+          "NOT_AVAILABLE_AT_SOURCE": 1088
+        }
+      },
+      "rejections": {},
+      "without_poster": 413,
+      "anime_only": false,
+      "anime_by_signal": {
+        "myanimelist_id": 7018,
+        "genre_anime": 286,
+        "animation+origin": 104
+      },
+      "production_blocked": null,
+      "expected_sha256": {
+        "catalog": "6248e0d3e993e74bf5122a058c183587ec38f34751cca41c7106a15b2aa7bd89",
+        "details": "1ee2cf0115ec5498060784dc7101b3655befdf96cff2cd492cd5bd662576e376"
+      }
+    },
+    "lords-03": {
+      "catalog_items": 53412,
+      "catalog_items_before": 52588,
+      "details_entries": 53412,
+      "distinct_canonical_ids": 53412,
+      "duplicate_ids": 0,
+      "id_set_checksum": "c58a55b26f271a7516b30d3052ae5f1b9e790cd5595ae4a553dd1951db22d71e",
+      "coverage": {
+        "published": 53412,
+        "kp": 19591,
+        "kp_pct": 36.68,
+        "imdb": 44258,
+        "imdb_pct": 82.86,
+        "any_rating": 44419,
+        "any_rating_pct": 83.16,
+        "description": 40086,
+        "description_pct": 75.05,
+        "poster_url": 52999,
+        "poster_pct": 99.23,
+        "source_id": 52599,
+        "source_id_pct": 98.48,
+        "external_id_binding": 53338,
+        "external_id_pct": 99.86
+      },
+      "coverage_by_source": {
+        "published": 53412,
+        "by_source": {
+          "imdb": {
+            "count": 44258,
+            "pct": 82.86
+          },
+          "kinopoisk": {
+            "count": 19591,
+            "pct": 36.68
+          },
+          "shikimori": {
+            "count": 4421,
+            "pct": 8.28
+          }
+        }
+      },
+      "secondary_rating_providers": {
+        "store_entries": 21626,
+        "applied": 17205,
+        "applied_by_source": {
+          "imdb": 17205
+        },
+        "rejections": {}
+      },
+      "missing_rating_reasons": {
+        "kinopoisk": {
+          "NOT_AVAILABLE_AT_SOURCE": 27143,
+          "NO_EXTERNAL_ID": 6678
+        },
+        "imdb": {
+          "NO_EXTERNAL_ID": 8066,
+          "NOT_AVAILABLE_AT_SOURCE": 1088
+        }
+      },
+      "rejections": {},
+      "without_poster": 413,
+      "anime_only": false,
+      "anime_by_signal": {
+        "myanimelist_id": 7018,
+        "genre_anime": 286,
+        "animation+origin": 104
+      },
+      "production_blocked": null,
+      "expected_sha256": {
+        "catalog": "74e78868d31985cab6d53babc835aa0a1ecc9525de936bc05593b0672042ef5d",
+        "details": "d45da39b107902b06495b4648fada6799c39bbcc4a6747cc0959ebaec07b3846"
+      }
+    }
+  },
+  "production_mutations": 4,
+  "parity": {
+    "checksums": {
+      "lords-02": "c58a55b26f271a7516b30d3052ae5f1b9e790cd5595ae4a553dd1951db22d71e",
+      "lords-03": "c58a55b26f271a7516b30d3052ae5f1b9e790cd5595ae4a553dd1951db22d71e"
+    },
+    "identical": true,
+    "lords-02_only": 0,
+    "lords-03_only": 0,
+    "parity_pct": 100.0
+  },
+  "before_images": {
+    "lords-02.catalog": {
+      "backup": "/srv/site-factory/repo/var/lords/publish-backups/lords-02-catalog.json.before.lordserial-fill",
+      "sha256": "1605f24d9dd02c1d2bd3726ae2b9560cab670b4cef592559f56901508365efee"
+    },
+    "lords-03.catalog": {
+      "backup": "/srv/site-factory/repo/var/lords/publish-backups/lords-03-catalog.json.before.lordserial-fill",
+      "sha256": "cddcce5e72f72357de0a82913d94d1ee9278dce5c9aecd9f275d7056f7532d8d"
+    }
+  },
+  "rollback_command": "cp -p /srv/site-factory/repo/var/lords/publish-backups/lords-02-catalog.json.before.lordserial-fill /srv/lords/.frontend/lords-02-catalog.json && cp -p /srv/site-factory/repo/var/lords/publish-backups/lords-03-catalog.json.before.lordserial-fill /srv/lords/.frontend/lords-03-catalog.json && sudo -n systemctl restart nova-lords-02.service && sudo -n systemctl restart nova-lords-03.service",
+  "written_sha256": {
+    "lords-02.catalog": "6248e0d3e993e74bf5122a058c183587ec38f34751cca41c7106a15b2aa7bd89",
+    "lords-02.details": "1ee2cf0115ec5498060784dc7101b3655befdf96cff2cd492cd5bd662576e376",
+    "lords-03.catalog": "74e78868d31985cab6d53babc835aa0a1ecc9525de936bc05593b0672042ef5d",
+    "lords-03.details": "d45da39b107902b06495b4648fada6799c39bbcc4a6747cc0959ebaec07b3846"
+  },
+  "duration_sec": 45.94,
+  "finished_at": "2026-09-15T11:01:23Z"
+}

@@ -1,0 +1,47 @@
+{
+  "integration_branch": "claude/arch-fleet-visible-content-005",
+  "base_commit": "cae3d3451dcd90339ed982542cf9fc0644043151",
+  "integrated_source_commits": {
+    "templates": "60870de482b9f8b912aea9a4246397d076868cd3 (origin/claude/templates-zona-animedia-visual-parity-005)",
+    "architect": "cae3d3451dcd90339ed982542cf9fc0644043151"
+  },
+  "artifact": {
+    "path": "/srv/lords/.frontend/lords-frontend.py",
+    "sha256": "f2c14ac62a92606c1509d1023d4089885945b9ed4c78f236c8d4b8d3074603fb",
+    "size": "246084",
+    "brings": [
+      "ВидАнимедиа (раскладка страницы тайтла аниме)",
+      "ПЕРЕРАБОТАНО_С version gate",
+      "блок .rbs — оценки по источникам с подписями"
+    ]
+  },
+  "manifests_changed": {
+    "animedia-01": "1.0.2 -> 1.2.0",
+    "animedia-02": "1.0.2 -> 1.2.0",
+    "lords-02": "1.0.2 -> 1.1.0",
+    "lords-03": "1.0.2 -> 1.1.0",
+    "lords-01": "1.1.0 (без изменений)",
+    "zona-01": "1.1.0 (без изменений)"
+  },
+  "baseline": {
+    "animedia_title_404": "219/219",
+    "lordserial_details": 0,
+    "visible_rating_sources": [
+      "КП",
+      "IMDb"
+    ]
+  },
+  "after": {
+    "animedia_title_404": 0,
+    "lordserial_details": 53412,
+    "visible_rating_sources": [
+      "КП",
+      "IMDb",
+      "Shikimori"
+    ]
+  },
+  "rollback": {
+    "artifact": "var/lords/arc005-integration-backups/lords-frontend.py.before.20260915T105514Z",
+    "manifests": "тот же каталог, суффикс .before.20260915T105514Z"
+  }
+}

@@ -1,0 +1,205 @@
+{
+  "run_id": "sync-fleet",
+  "started_at": "2026-09-15T11:02:37Z",
+  "mode": "apply",
+  "snapshot": {
+    "path": "/srv/site-factory/repo/var/lords/lords/catalog-cache/lords-01.json",
+    "items": 53416,
+    "fetched_at": "2026-09-15T10:44:07Z",
+    "id_set_checksum": "024cfd7c3b9d3c043d647017139be1a92a7b9bb443967ad1d8e7407604a0e0c4"
+  },
+  "ledger": {
+    "path": "/srv/site-factory/repo/var/lords/slug-ledger.json",
+    "seeded": 0
+  },
+  "ratings_store": {
+    "path": "/srv/site-factory/repo/var/lords/ratings-store.json",
+    "entries": 21626
+  },
+  "sites": {
+    "lords-01": {
+      "catalog_items": 53416,
+      "catalog_items_before": 53400,
+      "details_entries": 53416,
+      "distinct_canonical_ids": 53416,
+      "duplicate_ids": 0,
+      "id_set_checksum": "024cfd7c3b9d3c043d647017139be1a92a7b9bb443967ad1d8e7407604a0e0c4",
+      "coverage": {
+        "published": 53416,
+        "kp": 19591,
+        "kp_pct": 36.68,
+        "imdb": 44258,
+        "imdb_pct": 82.86,
+        "any_rating": 44419,
+        "any_rating_pct": 83.16,
+        "description": 40099,
+        "description_pct": 75.07,
+        "poster_url": 53003,
+        "poster_pct": 99.23,
+        "source_id": 52600,
+        "source_id_pct": 98.47,
+        "external_id_binding": 53342,
+        "external_id_pct": 99.86
+      },
+      "coverage_by_source": {
+        "published": 53416,
+        "by_source": {
+          "imdb": {
+            "count": 44258,
+            "pct": 82.86
+          },
+          "kinopoisk": {
+            "count": 19591,
+            "pct": 36.68
+          },
+          "shikimori": {
+            "count": 4421,
+            "pct": 8.28
+          }
+        }
+      },
+      "secondary_rating_providers": {
+        "store_entries": 21626,
+        "applied": 0,
+        "applied_by_source": {},
+        "rejections": {
+          "ALREADY_PRESENT_FROM_PRIMARY": 17205
+        }
+      },
+      "missing_rating_reasons": {
+        "kinopoisk": {
+          "NOT_AVAILABLE_AT_SOURCE": 27144,
+          "NO_EXTERNAL_ID": 6681
+        },
+        "imdb": {
+          "NO_EXTERNAL_ID": 8066,
+          "NOT_AVAILABLE_AT_SOURCE": 1092
+        }
+      },
+      "rejections": {},
+      "without_poster": 413,
+      "anime_only": false,
+      "anime_by_signal": {
+        "myanimelist_id": 7018,
+        "genre_anime": 286,
+        "animation+origin": 104
+      },
+      "production_blocked": null,
+      "expected_sha256": {
+        "catalog": "49c7253972931a75588592fd2fe5b83dff511ec46484c8c4dfeca6e245a6ad42",
+        "details": "f6b0b48e083f6c3243b020be0594fe9b5e621b464907c1a0ccf8166dfe2b7776"
+      }
+    },
+    "zona-01": {
+      "catalog_items": 53416,
+      "catalog_items_before": 53400,
+      "details_entries": 53416,
+      "distinct_canonical_ids": 53416,
+      "duplicate_ids": 0,
+      "id_set_checksum": "024cfd7c3b9d3c043d647017139be1a92a7b9bb443967ad1d8e7407604a0e0c4",
+      "coverage": {
+        "published": 53416,
+        "kp": 19591,
+        "kp_pct": 36.68,
+        "imdb": 44258,
+        "imdb_pct": 82.86,
+        "any_rating": 44419,
+        "any_rating_pct": 83.16,
+        "description": 40086,
+        "description_pct": 75.04,
+        "poster_url": 53003,
+        "poster_pct": 99.23,
+        "source_id": 52601,
+        "source_id_pct": 98.47,
+        "external_id_binding": 53342,
+        "external_id_pct": 99.86
+      },
+      "coverage_by_source": {
+        "published": 53416,
+        "by_source": {
+          "imdb": {
+            "count": 44258,
+            "pct": 82.86
+          },
+          "kinopoisk": {
+            "count": 19591,
+            "pct": 36.68
+          },
+          "shikimori": {
+            "count": 4421,
+            "pct": 8.28
+          }
+        }
+      },
+      "secondary_rating_providers": {
+        "store_entries": 21626,
+        "applied": 0,
+        "applied_by_source": {},
+        "rejections": {
+          "ALREADY_PRESENT_FROM_PRIMARY": 17205
+        }
+      },
+      "missing_rating_reasons": {
+        "kinopoisk": {
+          "NOT_AVAILABLE_AT_SOURCE": 27144,
+          "NO_EXTERNAL_ID": 6681
+        },
+        "imdb": {
+          "NO_EXTERNAL_ID": 8066,
+          "NOT_AVAILABLE_AT_SOURCE": 1092
+        }
+      },
+      "rejections": {},
+      "without_poster": 413,
+      "anime_only": false,
+      "anime_by_signal": {
+        "myanimelist_id": 7018,
+        "genre_anime": 286,
+        "animation+origin": 104
+      },
+      "production_blocked": null,
+      "expected_sha256": {
+        "catalog": "504e2087d324cc7a95611e2fc063df2587bd95789473f2d4611a41852e2ea289",
+        "details": "1a9f3b935eb8ad48a13d9c9839f953139868b753f1774eba3a02ddf3f5b60e34"
+      }
+    }
+  },
+  "production_mutations": 4,
+  "parity": {
+    "checksums": {
+      "lords-01": "024cfd7c3b9d3c043d647017139be1a92a7b9bb443967ad1d8e7407604a0e0c4",
+      "zona-01": "024cfd7c3b9d3c043d647017139be1a92a7b9bb443967ad1d8e7407604a0e0c4"
+    },
+    "identical": true,
+    "lords-01_only": 0,
+    "zona-01_only": 0,
+    "parity_pct": 100.0
+  },
+  "before_images": {
+    "lords-01.catalog": {
+      "backup": "/srv/site-factory/repo/var/lords/publish-backups/lords-01-catalog.json.before.sync-fleet",
+      "sha256": "cbd47c6191d320815ddc0fc1c27e9a22b7c80bcf0be785224e066ad76a23bce9"
+    },
+    "lords-01.details": {
+      "backup": "/srv/site-factory/repo/var/lords/publish-backups/lords-01-details.json.before.sync-fleet",
+      "sha256": "da3e4bc9e5ab9387802b1abef5455268770e1920def3515c5ef3d70e1a24d5a2"
+    },
+    "zona-01.catalog": {
+      "backup": "/srv/site-factory/repo/var/lords/publish-backups/zona-01-catalog.json.before.sync-fleet",
+      "sha256": "bb4bbc97f8834efec8720319befe291d940158e815d051643d277cff809d35a5"
+    },
+    "zona-01.details": {
+      "backup": "/srv/site-factory/repo/var/lords/publish-backups/zona-01-details.json.before.sync-fleet",
+      "sha256": "bf7ee7281fe958fa9d4b7abf5d8a5d71c3ec96735d950dd126eae6a773ef8113"
+    }
+  },
+  "rollback_command": "cp -p /srv/site-factory/repo/var/lords/publish-backups/lords-01-catalog.json.before.sync-fleet /srv/lords/.frontend/lords-01-catalog.json && cp -p /srv/site-factory/repo/var/lords/publish-backups/lords-01-details.json.before.sync-fleet /srv/lords/.frontend/lords-01-details.json && cp -p /srv/site-factory/repo/var/lords/publish-backups/zona-01-catalog.json.before.sync-fleet /srv/lords/.frontend/zona-01-catalog.json && cp -p /srv/site-factory/repo/var/lords/publish-backups/zona-01-details.json.before.sync-fleet /srv/lords/.frontend/zona-01-details.json && sudo -n systemctl restart lords-nova-01.service && sudo -n systemctl restart nova-zona-01.service",
+  "written_sha256": {
+    "lords-01.catalog": "49c7253972931a75588592fd2fe5b83dff511ec46484c8c4dfeca6e245a6ad42",
+    "lords-01.details": "f6b0b48e083f6c3243b020be0594fe9b5e621b464907c1a0ccf8166dfe2b7776",
+    "zona-01.catalog": "504e2087d324cc7a95611e2fc063df2587bd95789473f2d4611a41852e2ea289",
+    "zona-01.details": "1a9f3b935eb8ad48a13d9c9839f953139868b753f1774eba3a02ddf3f5b60e34"
+  },
+  "duration_sec": 58.84,
+  "finished_at": "2026-09-15T11:03:36Z"
+}
