@@ -2650,19 +2650,23 @@ class ВидЗона(Вид):
         # Витрина на 1.1.0 отдаёт ПРЕЖНИЙ каркас: артефакт общий, и выкладка
         # ради соседнего семейства не имеет права сменить ей оформление.
         if not ОФОРМЛЕНИЕ_ПЕРЕРАБОТАННОЕ:
-            return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="zona-rail">
+            # Отметки выпуска убраны из публичной страницы по той же причине,
+            # что и в ветке animedia: ни один потребитель их не спрашивал, а
+            # посетителю они сообщали внутреннюю классификацию сборки.
+            # `noindex, nofollow` остаётся: витрина закрыта, и эта правка
+            # индексации не касается.
+            return f"""<!doctype html><html lang="ru" data-design="zona-rail">
     <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
     <title>{html.escape(титул)}</title>{описание_мета}{канон}
     <meta name="robots" content="noindex, nofollow">
     {_открытый_граф(og or {})}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    {_мета_версии()}
     <style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}</script></head>
     <body><a class="skip" href="#main">Перейти к содержимому</a>
     <div class="zs">
     <aside class="zrail">
     <a class="zrail__logo" href="/">{html.escape(self.имя)}</a>
-    <p class="zrail__sub">Кинопортал · тестовая витрина</p>
+    <p class="zrail__sub">Кинопортал</p>
     <p class="zrail__t">Разделы</p>
     <nav class="zrail__n" aria-label="Разделы">{нав}</nav>
     <p class="zrail__t">Жанры</p>
@@ -2677,16 +2681,15 @@ class ВидЗона(Вид):
     </div><div class="ztop__b">{_склеить([сверху])}</div></div>{крошки}
     <main id="main">{тело}</main>
     <footer class="zft">
-    <span>{html.escape(self.имя)} · тестовая витрина, закрыта от индексации</span>
-    <span class="zvb">Template: {СЕМЕЙСТВО} {ВЕРСИЯ} · {МАНИФЕСТ["source_commit"][:8]}</span>
+    <span>{html.escape(self.имя)}</span>
+    {_строка_связи()}
     </footer></div></div>{схемы}</body></html>"""
-        return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="zona-top">
+        return f"""<!doctype html><html lang="ru" data-design="zona-top">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(титул)}</title>{описание_мета}{канон}
 <meta name="robots" content="noindex, nofollow">
 {_открытый_граф(og or {})}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-{_мета_версии()}
 <style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}
 {СКРИПТ_ЛЕНТ}</script></head>
 <body><a class="skip" href="#main">Перейти к содержимому</a>
@@ -2705,8 +2708,8 @@ class ВидЗона(Вид):
 <div class="zwrap">{_склеить([f'<div class="ztop"><div class="ztop__b">{сверху}</div></div>' if сверху else ""])}{крошки}
 <main id="main">{тело}</main>
 <footer class="zft">
-<span>{html.escape(self.имя)} · тестовая витрина, закрыта от индексации</span>
-<span class="zvb">Template: {СЕМЕЙСТВО} {ВЕРСИЯ} · {МАНИФЕСТ["source_commit"][:8]}</span>
+<span>{html.escape(self.имя)}</span>
+{_строка_связи()}
 </footer></div></div></div>{схемы}</body></html>"""
 
     # --- составные части ---------------------------------------------
