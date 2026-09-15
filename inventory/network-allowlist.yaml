@@ -56,3 +56,37 @@ hosts:
     methods: [GET]
     token_secret_ref: hub:/var/lib/site-factory-secret-hub/store.sqlite3
     contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+
+  # --- собственные публичные витрины: только приёмка --------------------------
+  # Внесены заданием TEMPLATES-YUMMY-EPISODES-LIVE-DEPLOY-013: без записи живая
+  # проверка выкаченного релиза неисполнима — guard отклоняет запрос к домену,
+  # которого нет в этом файле, и приёмка остаётся словом вместо измерения.
+  #
+  # Это не расширение периметра интеграций: перечислены ровно пять уже
+  # работающих собственных доменов, и только читающие методы. Ни один из них не
+  # принимает от фабрики форм, credentials и записи. Значение каждого host взято
+  # из совпадения двух независимых источников на этом же хосте — nginx
+  # `server_name` (/etc/nginx/sites-available/<domain>.conf, для animedia —
+  # Description юнита) и `domains[]` в config/site-profiles/<site_id>.json;
+  # для Yummy третьим совпадением служит YUMMY_VARIANT_DOMAIN в ExecStart юнита.
+  # Wildcard намеренно нет: он разрешил бы поддомен, которого никто не проверял.
+  - ref: yummyani-site-public
+    host: yummyani.site
+    purpose: "приёмка выкаченного релиза: episode selector, footer, contacts, индексация"
+    methods: [GET, HEAD]
+  - ref: yummyani-org-public
+    host: yummyani.org
+    purpose: "приёмка выкаченного релиза: episode selector, footer, contacts"
+    methods: [GET, HEAD]
+  - ref: yummyani-biz-public
+    host: yummyani.biz
+    purpose: "приёмка выкаченного релиза: episode selector, footer, contacts"
+    methods: [GET, HEAD]
+  - ref: animedia-icu-public
+    host: animedia.icu
+    purpose: "приёмка выкаченного релиза: footer и contact-блок"
+    methods: [GET, HEAD]
+  - ref: animedia-space-public
+    host: animedia.space
+    purpose: "приёмка выкаченного релиза: footer и contact-блок"
+    methods: [GET, HEAD]
