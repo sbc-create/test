@@ -45,23 +45,49 @@ step() { printf '\n== %s\n' "$*"; }
 fail() { printf '!! %s\n' "$*" >&2; }
 
 check_open() {
-  local errors=0 code headers robots html
-  headers=$(curl -sSI --max-time "$REQUEST_TIMEOUT" "https://${OPEN_DOMAIN}/" || true)
-  code=$(printf '%s' "$headers" | awk 'NR==1{print $2}')
+  # Страница берётся ОДНИМ запросом вместе с заголовками: прежде их брали
+  # разными, и проверки могли судить о разных ответах. Плюс `-f` и повтор —
+  # без них неудачный запрос давал пустое тело, `|| true` его проглатывал, и
+  # отсутствие canonical в пустоте объявлялось дефектом страницы. Именно так
+  # выкладка 2026-09-15T20:42Z откатилась при фактически верном результате.
+  local errors=0 code headers_file body_file
+  headers_file=$(mktemp)
+  body_file=$(mktemp)
+
+  if ! curl -fsS -D "$headers_file" -o "$body_file" \
+       --retry 3 --retry-delay 3 --retry-all-errors \
+       --max-time "$REQUEST_TIMEOUT" "https://${OPEN_DOMAIN}/"; then
+    fail "${OPEN_DOMAIN}: страница не получена за ${REQUEST_TIMEOUT}s"
+    rm -f "$headers_file" "$body_file"
+    return 1
+  fi
+  if [ ! -s "$body_file" ]; then
+    # Пустое тело — отдельная причина отказа, а не «на странице нет canonical».
+    fail "${OPEN_DOMAIN}: ответ получен, но тело пустое"
+    rm -f "$headers_file" "$body_file"
+    return 1
+  fi
+
+  code=$(awk 'toupper($1) ~ /^HTTP/ {c=$2} END{print c}' "$headers_file")
   [ "$code" = "200" ] || { fail "${OPEN_DOMAIN}: код ${code:-нет ответа}"; errors=1; }
-  if printf '%s' "$headers" | grep -qi 'x-robots-tag'; then
+  if grep -qi '^x-robots-tag' "$headers_file"; then
     fail "${OPEN_DOMAIN}: заголовок X-Robots-Tag всё ещё отдаётся"; errors=1
   fi
-  robots=$(curl -sS --max-time "$REQUEST_TIMEOUT" "https://${OPEN_DOMAIN}/robots.txt" || true)
-  if printf '%s' "$robots" | grep -qE '^[[:space:]]*Disallow:[[:space:]]*/[[:space:]]*$'; then
-    fail "${OPEN_DOMAIN}: robots.txt всё ещё содержит Disallow: /"; errors=1
-  fi
-  html=$(curl -sS --max-time "$REQUEST_TIMEOUT" "https://${OPEN_DOMAIN}/" || true)
-  if printf '%s' "$html" | grep -qi 'name="robots"[^>]*content="[^"]*noindex'; then
+  if grep -qi 'name="robots"[^>]*content="[^"]*noindex' "$body_file"; then
     fail "${OPEN_DOMAIN}: meta robots всё ещё noindex"; errors=1
   fi
-  if ! printf '%s' "$html" | grep -qi "rel=\"canonical\"[^>]*href=\"https://${OPEN_DOMAIN}"; then
+  if ! grep -qi "rel=\"canonical\"[^>]*href=\"https://${OPEN_DOMAIN}" "$body_file"; then
     fail "${OPEN_DOMAIN}: canonical не указывает на собственный домен"; errors=1
+  fi
+  rm -f "$headers_file" "$body_file"
+
+  local robots
+  if ! robots=$(curl -fsS --retry 3 --retry-delay 3 --retry-all-errors \
+                --max-time "$REQUEST_TIMEOUT" "https://${OPEN_DOMAIN}/robots.txt"); then
+    fail "${OPEN_DOMAIN}: robots.txt не получен"; return 1
+  fi
+  if printf '%s' "$robots" | grep -qE '^[[:space:]]*Disallow:[[:space:]]*/[[:space:]]*$'; then
+    fail "${OPEN_DOMAIN}: robots.txt всё ещё содержит Disallow: /"; errors=1
   fi
   return $errors
 }
@@ -69,11 +95,19 @@ check_open() {
 check_closed() {
   local errors=0 d headers robots
   for d in "${CLOSED_DOMAINS[@]}"; do
-    headers=$(curl -sSI --max-time 25 "https://${d}/" || true)
+    # Здесь `|| true` недопустим по той же причине: неполученный ответ
+    # означал бы «запрет пропал» и валил выкладку, которая ни при чём.
+    if ! headers=$(curl -fsSI --retry 3 --retry-delay 3 --retry-all-errors \
+                   --max-time "$REQUEST_TIMEOUT" "https://${d}/"); then
+      fail "${d}: заголовки не получены — состояние домена не измерено"; errors=1; continue
+    fi
     if ! printf '%s' "$headers" | grep -qi 'x-robots-tag.*noindex'; then
       fail "${d}: пропал X-Robots-Tag: noindex — домен не должен был открыться"; errors=1
     fi
-    robots=$(curl -sS --max-time 25 "https://${d}/robots.txt" || true)
+    if ! robots=$(curl -fsS --retry 3 --retry-delay 3 --retry-all-errors \
+                  --max-time "$REQUEST_TIMEOUT" "https://${d}/robots.txt"); then
+      fail "${d}: robots.txt не получен — состояние домена не измерено"; errors=1; continue
+    fi
     if ! printf '%s' "$robots" | grep -qE '^[[:space:]]*Disallow:[[:space:]]*/[[:space:]]*$'; then
       fail "${d}: robots.txt больше не запрещает обход"; errors=1
     fi
