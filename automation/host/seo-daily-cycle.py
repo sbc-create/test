@@ -282,8 +282,16 @@ def главное(argv: list[str] | None = None) -> int:
     когорты = json.loads(журнал.read_text(encoding="utf-8")) if журнал.exists() else []
     стадии["LEDGER_AND_COHORT_UPDATE"] = "OK"
 
-    # 16. Qwen
-    qwen = оценка_qwen()
+    предварительный = {
+        "report_id": f"seo-daily-{день}", "date": день,
+        "coverage": матрица, "traffic": тр, "content": публикация,
+        "gap_queue_total": len(очередь), "gap_queue_top": очередь[:10],
+        "inventory": домены,
+        "coverage_snapshot_sha256": COV.отпечаток(матрица),
+        "topvisor": {"daily_runs": 0, "paid_operations": 0},
+    }
+    # 16. Qwen оценивает уже собранные факты и не вычисляет их заново.
+    qwen = оценка_qwen(предварительный)
     стадии["QWEN_REVIEW"] = qwen["status"]
 
     отчёт = {
@@ -350,19 +358,15 @@ def доставка(каталог: pathlib.Path, день: str) -> dict:
             "readback_note": последняя.get("readback_note")}
 
 
-def оценка_qwen() -> dict:
+def оценка_qwen(отчёт: dict) -> dict:
     """Независимая оценка. Недоступность модели цикл не останавливает."""
-    try:
-        sys.path.insert(0, str(КОРЕНЬ))
-        from factory.content_quality import qwen as Q  # type: ignore
-    except Exception:
-        Q = None
-    if Q is None:
-        return {"status": "UNAVAILABLE",
-                "reason": "адаптер Qwen живёт в ветке SEO-движка и в этом "
-                          "репозитории отсутствует",
-                "verdict": "INSUFFICIENT_DATA"}
-    return {"status": "UNAVAILABLE", "verdict": "INSUFFICIENT_DATA"}
+    import importlib.util
+    путь = СВОЙ / "seo_qwen_review.py"
+    spec = importlib.util.spec_from_file_location("_qwen_review", путь)
+    м = importlib.util.module_from_spec(spec)
+    sys.modules["_qwen_review"] = м
+    spec.loader.exec_module(м)
+    return м.оценить(отчёт, корень=КОРЕНЬ)
 
 
 if __name__ == "__main__":
