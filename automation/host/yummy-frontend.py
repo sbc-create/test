@@ -187,6 +187,27 @@ def _рядом(имя: str, модуль: str):
 БАЗА_ЧТЕНИЯ = os.environ.get("YUMMY_READMODEL",
                              "/srv/lords/.frontend/yummy-readmodel.sqlite3")
 ВАРИАНТ_ДОМЕНА = os.environ.get("YUMMY_VARIANT_DOMAIN", "yummyani.site")
+
+#: Домены, которым владелец разрешил индексацию. Решение принято 2026-09-15 и
+#: названо поимённо: открыт только yummyani.site, остальные площадки остаются
+#: закрытыми.
+#:
+#: Список решает ровно два вопроса — слать ли `X-Robots-Tag: noindex` и отдавать
+#: ли собственный `robots.txt` с `Disallow: /`. Оба слоя стоят ПЕРЕД приложением
+#: и перекрывают его: приложение уже отдавало разрешающий robots.txt и
+#: `meta robots: index, follow`, а наружу уходили запреты этого посредника.
+#: Поэтому поднятия флага в приложении оказалось недостаточно и решение
+#: владельца не вступало в силу.
+ДОМЕНЫ_С_ОТКРЫТОЙ_ИНДЕКСАЦИЕЙ = frozenset({"yummyani.site"})
+
+#: Домен берётся БЕЗ умолчания именно здесь. У `ВАРИАНТ_ДОМЕНА` умолчание —
+#: `yummyani.site`, и экземпляр с незаданной переменной молча считался бы
+#: открытым. Ошибаться в эту сторону нельзя: незаданная переменная означает
+#: «закрыто», а не «вероятно, это главный домен».
+ИНДЕКСАЦИЯ_ОТКРЫТА = (
+    os.environ.get("YUMMY_VARIANT_DOMAIN") in ДОМЕНЫ_С_ОТКРЫТОЙ_ИНДЕКСАЦИЕЙ
+)
+
 НА_СТРАНИЦЕ = 60
 
 # Оформление и разделы — свои у каждого семейства.
@@ -484,7 +505,8 @@ class Обработчик(BaseHTTPRequestHandler):
         for имя, значение in (ещё or []):
             self.send_header(имя, значение)
         self.send_header("Content-Length", str(len(тело)))
-        self.send_header("X-Robots-Tag", "noindex, nofollow")
+        if not ИНДЕКСАЦИЯ_ОТКРЫТА:
+            self.send_header("X-Robots-Tag", "noindex, nofollow")
         self.send_header("X-Site-Factory-Template-Revision", МАНИФЕСТ["source_commit"])
         self.send_header("X-Site-Factory-Template", ШАБЛОН_СЕМЕЙСТВА)
         self.send_header("X-Site-Factory-Core", ЯДРО)
@@ -547,8 +569,11 @@ class Обработчик(BaseHTTPRequestHandler):
                             "core": ЯДРО, "family": СЕМЕЙСТВО, "profile": ПРОФИЛЬ,
                             "revision": РЕВИЗИЯ, "display": "standalone"}, ensure_ascii=False)
             return self._отдать(м.encode(), "application/manifest+json")
-        if путь == "/robots.txt":
+        if путь == "/robots.txt" and not ИНДЕКСАЦИЯ_ОТКРЫТА:
             return self._отдать(b"User-agent: *\nDisallow: /\n", "text/plain; charset=utf-8")
+        # На открытом домене robots.txt не перехватывается: документ отдаёт
+        # приложение, и источник истины остаётся один. Свой ответ здесь означал
+        # бы вторую версию правил, расходящуюся с первой при каждой правке.
 
         # Единый renderer семейства: страницы рисует приложение YummyAnime.
         #
