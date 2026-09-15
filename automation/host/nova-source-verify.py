@@ -25,6 +25,11 @@ import unicodedata
 import urllib.error
 import urllib.request
 
+# Модуль реестра живёт в пакете фабрики: логика переходов должна быть одна и
+# та же у живой проверки и у тестов на фикстурах.
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2]))
+from factory.lords import source_availability as доступность  # noqa: E402
+
 ЛОГОВО = pathlib.Path("/srv/lords/.frontend")
 API = "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist"
 КЭШ = pathlib.Path("/srv/site-factory/repo/var/lords/source-verify-cache")
@@ -104,27 +109,57 @@ def спросить(pub: str, домен: str, аггр: str, ид: str, огр
             # то есть настоящая непокрытая запись пряталась среди сбоев.
             if код == 204 or not тело.strip():
                 return {"http": 204, "items": 0, "title": None, "stream": False,
-                        "reason": "NO_CONTENT_AT_PROVIDER"}
+                        "first": None, "reason": "NO_CONTENT_AT_PROVIDER"}
             j = json.loads(тело)
             items = j.get("items") or []
             return {"http": 200, "items": len(items),
                     "title": j.get("titleName"),
+                    "first": items[0] if items else None,
                     "stream": bool(items and (items[0].get("cvhId") or items[0].get("vkId")))}
         except urllib.error.HTTPError as e:
             # 429/5xx — отступаем и пробуем снова; остальное окончательно.
             if e.code in (429, 500, 502, 503, 504) and попытка + 1 < попыток:
-                time.sleep(задержка); задержка *= 2; continue
+                time.sleep(задержка)
+                задержка *= 2
+                continue
             return {"http": e.code, "items": 0, "title": None, "stream": False}
         except Exception as e:
             if попытка + 1 < попыток:
-                time.sleep(задержка); задержка *= 2; continue
+                time.sleep(задержка)
+                задержка *= 2
+                continue
             return {"http": -1, "items": 0, "title": None, "stream": False,
                     "error": str(e)[:120]}
     return {"http": -1, "items": 0, "title": None, "stream": False}
 
 
+def дескриптор_отвечает(pub: str, домен: str, элемент: dict, огр: Ограничитель) -> bool:
+    """Проверка последнего звена цепочки: у дорожки есть рабочий дескриптор.
+
+    Плейлист может перечислить серию, у которой нет воспроизводимого видео.
+    Возврат из карантина по такому ответу вернул бы на витрину карточку с
+    неработающим плеером — то есть ровно то, ради чего карантин и заведён.
+    """
+    vk = str((элемент or {}).get("vkId") or "").strip()
+    if not vk:
+        return False
+    url = f"https://plapi.cdnvideohub.com/api/v1/player/sv/video/{vk}"
+    заг = {"Accept": "application/json", "Origin": f"https://{домен}",
+           "x-origin": f"https://{домен}"}
+    огр.ждать()
+    try:
+        with urllib.request.urlopen(urllib.request.Request(url, headers=заг),
+                                    timeout=30) as о:
+            if о.status != 200:
+                return False
+            тело = о.read().decode("utf-8", "replace")
+        return bool(json.loads(тело).get("unitedVideoId"))
+    except Exception:
+        return False
+
+
 def прогон(сайт: str, предел: int | None, rps: float, потоков: int,
-           только: list[str] | None) -> dict:
+           только: list[str] | None, подтверждать: bool = False) -> dict:
     профиль, домен = СЕМЕЙСТВО[сайт]
     pub = pathlib.Path(СЕКРЕТ[профиль]).read_text(encoding="utf-8").strip()
     детали = json.loads((ЛОГОВО / f"{сайт}-details.json").read_text())["details"]
@@ -151,7 +186,11 @@ def прогон(сайт: str, предел: int | None, rps: float, поток
         очередь.put(пара)
     итог = {"site": сайт, "domain": домен, "profile": профиль,
             "total": len(записи), "bound": 0, "unbound": [], "no_content": [],
-            "wrong_entity": [], "http_error": [], "by_aggr": {}}
+            "wrong_entity": [], "http_error": [], "by_aggr": {},
+            # Наблюдения копятся отдельно от сводки: реестр интересует не то,
+            # сколько записей отказало, а что именно ответил поставщик по
+            # каждому собственному идентификатору.
+            "наблюдения": []}
     замок = threading.Lock()
 
     def работник():
@@ -165,7 +204,8 @@ def прогон(сайт: str, предел: int | None, rps: float, поток
                 if not (аггр and ид):
                     итог["unbound"].append(слаг)
                     итог["by_aggr"]["—"] = итог["by_aggr"].get("—", 0) + 1
-                    очередь.task_done(); continue
+                    очередь.task_done()
+                    continue
                 итог["bound"] += 1
                 итог["by_aggr"][аггр] = итог["by_aggr"].get(аггр, 0) + 1
             ключ = f"{аггр}:{ид}"
@@ -174,6 +214,26 @@ def прогон(сайт: str, предел: int | None, rps: float, поток
                 ответ = спросить(pub, домен, аггр, ид, огр)
                 with замок:
                     кэш[ключ] = ответ
+
+            # Наблюдение для реестра строится только для связывания по
+            # собственному ключу поставщика: статус доступности принадлежит
+            # паре «профиль + его идентификатор», и подменять её внешним
+            # идентификатором нельзя.
+            if аггр == "cvh":
+                медиа = False
+                if подтверждать and ответ.get("http") == 200 and ответ.get("stream"):
+                    медиа = дескриптор_отвечает(pub, домен, ответ.get("first") or {}, огр)
+                набл = доступность.Наблюдение(
+                    http=ответ.get("http"),
+                    items=int(ответ.get("items") or 0),
+                    stream=bool(ответ.get("stream")),
+                    entity_ok=True,
+                    media_ok=медиа,
+                    reason=str(ответ.get("reason") or ответ.get("error") or ""),
+                )
+                with замок:
+                    итог["наблюдения"].append((ид, набл))
+
             with замок:
                 if ответ.get("http") != 200:
                     итог["http_error"].append([слаг, ответ.get("http")])
@@ -219,13 +279,41 @@ def главная() -> int:
     р.add_argument("--threads", type=int, default=4)
     р.add_argument("--slugs", default=None, help="файл со списком слагов")
     р.add_argument("--out", default=None)
+    р.add_argument("--emit-availability", default=None,
+                   help="путь к реестру доступности source-availability.json")
+    р.add_argument("--mode", choices=("full", "quarantined"), default="full",
+                   help="full — весь каталог; quarantined — только карантин и "
+                        "записи, которых в реестре ещё нет")
+    р.add_argument("--confirm-media", action="store_true",
+                   help="проверять дескриптор видео; нужен для возврата из карантина")
     а = р.parse_args()
 
     только = None
     if а.slugs:
         только = [с.strip() for с in pathlib.Path(а.slugs).read_text().split() if с.strip()]
 
-    итог = прогон(а.site, а.limit, а.rps, а.threads, только)
+    профиль_сайта = СЕМЕЙСТВО[а.site][0]
+    реестр_путь = pathlib.Path(а.emit_availability) if а.emit_availability else None
+    if а.mode == "quarantined":
+        # Пятиминутный проход не имеет права ходить по всему каталогу: это
+        # десятки тысяч запросов каждые пять минут. Ему нужны только те, чей
+        # статус может измениться, — карантин и записи без достоверной истории.
+        if реестр_путь is None:
+            print(json.dumps({"error": "--mode quarantined требует --emit-availability"},
+                             ensure_ascii=False))
+            return 2
+        реестр = доступность.загрузить(реестр_путь)
+        интересные = реестр.карантин(профиль_сайта)
+        детали = json.loads((ЛОГОВО / f"{а.site}-details.json").read_text())["details"]
+        только = [
+            слаг for слаг, д in детали.items()
+            if isinstance(д, dict)
+            and (str(д.get("id") or "").lower() in интересные
+                 or not реестр.записи.get(
+                     доступность.ключ(профиль_сайта, str(д.get("id") or "").lower())))
+        ]
+
+    итог = прогон(а.site, а.limit, а.rps, а.threads, только, подтверждать=а.confirm_media)
     сводка = {k: v for k, v in итог.items() if not isinstance(v, list)}
     сводка["unbound"] = len(итог["unbound"])
     сводка["no_content"] = len(итог["no_content"])
@@ -233,8 +321,25 @@ def главная() -> int:
     сводка["http_error"] = len(итог["http_error"])
     print(json.dumps(сводка, ensure_ascii=False, indent=1))
     if а.out:
-        pathlib.Path(а.out).write_text(json.dumps(итог, ensure_ascii=False, indent=1),
-                                       encoding="utf-8")
+        без_наблюдений = {k: v for k, v in итог.items() if k != "наблюдения"}
+        pathlib.Path(а.out).write_text(
+            json.dumps(без_наблюдений, ensure_ascii=False, indent=1), encoding="utf-8")
+
+    if реестр_путь is not None:
+        # Порча файла состояния не должна заменить целое предыдущее поколение:
+        # модуль поднимет исключение, и мы выйдем ненулевым кодом, ничего не
+        # переписав.
+        try:
+            реестр = доступность.применить_наблюдения(
+                реестр_путь, профиль_сайта, итог["наблюдения"])
+        except доступность.ПовреждённоеСостояние as e:
+            print(json.dumps({"error": "STATE_CORRUPT", "detail": str(e)},
+                             ensure_ascii=False))
+            return 3
+        print(json.dumps({"availability": реестр.сводка(профиль_сайта),
+                          "generation_id": реестр.generation_id,
+                          "observed": len(итог["наблюдения"])},
+                         ensure_ascii=False, indent=1))
     return 0 if not итог["wrong_entity"] else 1
 
 

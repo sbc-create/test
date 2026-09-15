@@ -214,7 +214,8 @@
     "zero_downtime_switch": true
   },
   "feature_flags": {
-    "ad_slots_enabled": false
+    "ad_slots_enabled": false,
+    "availability_gate_enabled": false
   },
   "owners": {
     "content-ingestion": "site-factory/content",
