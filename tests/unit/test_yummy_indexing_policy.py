@@ -118,3 +118,56 @@ class TestГлобальныйЗапретСнят:
     def test_закрытый_домен_отдаёт_прежний_запрет(self):
         """Поведение стенда не меняется."""
         assert 'b"User-agent: *\\nDisallow: /\\n"' in _исходник()
+
+
+СЦЕНАРИЙ = КОРЕНЬ / "automation" / "host" / "yummy-indexing-apply.sh"
+
+
+def _сценарий() -> str:
+    return СЦЕНАРИЙ.read_text(encoding="utf-8")
+
+
+class TestСценарийПрименения:
+    """Выкладка обязана быть обратимой и узкой.
+
+    Точки отката для yummy на хосте не было: в `.rollback` лежат только
+    lords-01 и zona-01. Сценарий обязан создать её сам, до первой мутации.
+    """
+
+    def test_сценарий_существует(self):
+        assert СЦЕНАРИЙ.is_file(), (
+            "правку нужно чем-то применять: адаптер цели — operator_applied, "
+            "фабрика обязана отдать оператору идемпотентный сценарий")
+
+    def test_перезапускается_только_витрина_site(self):
+        т = _сценарий()
+        assert "nova-yummy-site.service" in т
+        for чужой in ("nova-yummy-org", "nova-yummy-biz", "lords-nova",
+                      "nova-zona", "nova-animedia", "nginx"):
+            assert f"systemctl restart {чужой}" not in т, (
+                f"сценарий перезапускает {чужой} — за пределами scope")
+
+    def test_снапшот_снимается_до_мутации(self):
+        """Порядок важен: `install` после `cp` исходного файла, не наоборот."""
+        т = _сценарий()
+        снимок = т.index('cp -a "${TARGET}" "${SNAPSHOT}"')
+        выкладка = т.index('install -m 0755 -o root -g root "${SOURCE}"')
+        assert снимок < выкладка, (
+            "файл выкладывается раньше снимка — откатываться будет не на что")
+
+    def test_есть_автооткат_по_ошибке(self):
+        т = _сценарий()
+        assert 'trap \'restore "${SNAPSHOT}"\' ERR' in т
+        assert "set -Eeuo pipefail" in т, (
+            "без -E ловушка ERR не сработает внутри функции")
+
+    def test_приёмка_проверяет_соседние_площадки(self):
+        """Правка не должна открыть .org и .biz."""
+        т = _сценарий()
+        assert "yummyani.org" in т and "yummyani.biz" in т
+        assert "ПЕРЕСТАЛ быть закрытым" in т
+
+    def test_идемпотентность(self):
+        т = _сценарий()
+        assert 'if [ "${SOURCE_SUM}" = "${TARGET_SUM}" ]; then' in т, (
+            "повторный запуск обязан обойтись без выкладки и перезапуска")
