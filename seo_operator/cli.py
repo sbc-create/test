@@ -150,6 +150,97 @@ def _add_infrastructure_findings(op: Operator, result) -> None:
         )
 
 
+#: Где лежат профили витрин. В репозитории их нет — источник живёт на
+#: управляющем хосте, поэтому путь задаётся переменной. Без него слой профиля
+#: не измеряется и в вердикт не входит, а не считается открытым.
+SITE_PROFILES_DIR_ENV = "SEO_SITE_PROFILES_DIR"
+
+
+def _profile_indexing_flag(site_id: str) -> tuple[bool | None, bool]:
+    """Значение флага публикации и признак того, что слой вообще измерялся."""
+    directory = os.environ.get(SITE_PROFILES_DIR_ENV)
+    if not directory:
+        return None, False
+    path = Path(directory) / f"{site_id}.json"
+    if not path.exists():
+        return None, False
+    try:
+        profile = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        # Профиль есть, но прочитать не вышло — это измеренный слой без ответа,
+        # и он обязан поднять тревогу, а не промолчать.
+        return None, True
+    return profile.get("seo_profile", {}).get("indexing_enabled"), True
+
+
+def _add_indexing_lock_findings(op: Operator, result) -> None:
+    """Слои запрета индексации обязаны говорить одно и то же.
+
+    Опасно не открытое и не закрытое состояние, а расхождение: один слой сняли,
+    остальные держат, и снаружи всё выглядит по-прежнему. Цикл не задавал этого
+    вопроса — и 2026-09-15 не заметил, как на одной витрине выкатили мета-тег
+    `index, follow` поверх запрещающих заголовка и robots.txt.
+    """
+    from seo_operator.datasources.livecrawl import CrawlNotAllowedError
+    from seo_operator.indexing_lock import findings as lock_findings
+    from seo_operator.indexing_lock import read_state, summarize
+    from seo_operator.infrastructure_probe import curl_probe
+
+    states = []
+    for site in op.portfolio.sites:
+        if site.synthetic:
+            continue
+        base = site.base_url.rstrip("/")
+        try:
+            page = curl_probe(f"{base}/")
+            robots = curl_probe(f"{base}/robots.txt")
+        except CrawlNotAllowedError as exc:
+            result.notes.append(f"замок {site.site_id} не проверен: {exc}")
+            continue
+        flag, measured = _profile_indexing_flag(site.site_id)
+        state = read_state(
+            site.site_id,
+            # curl_probe не возвращает заголовки отдельно; признак заголовка
+            # берётся тем же запросом через отдельный вызов ниже.
+            response_headers=_response_headers(f"{base}/"),
+            robots_txt=robots.body,
+            html=page.body,
+            profile_indexing_enabled=flag,
+            profile_measured=measured,
+        )
+        states.append(state)
+        result.findings.extend({**f, "site_id": site.site_id} for f in lock_findings(state))
+
+    if not states:
+        return
+    summary = summarize(states)
+    note = (
+        f"замок индексации: закрыт полностью на {summary['closed']} из {summary['total']}, "
+        f"расходится на {summary['mixed']}, открыт на {summary['open']}"
+    )
+    if summary["mixed_sites"]:
+        note += f"; расхождение: {', '.join(summary['mixed_sites'])}"
+    if states[0].unmeasured_layers:
+        note += (
+            f" (слои не измерялись: {', '.join(states[0].unmeasured_layers)} — "
+            f"задайте {SITE_PROFILES_DIR_ENV})"
+        )
+    result.notes.append(note)
+
+
+def _response_headers(url: str) -> str:
+    """Только заголовки ответа. Отдельный запрос: тело здесь не нужно."""
+    import subprocess
+
+    from seo_operator.datasources.livecrawl import ensure_allowed
+
+    ensure_allowed(url)
+    proc = subprocess.run(
+        ["curl", "-sSI", "-L", "--max-time", "25", url], capture_output=True, text=True
+    )
+    return proc.stdout
+
+
 def _add_eligibility_note(op: Operator, result, pages_by_site: dict) -> None:
     """Поадресный вердикт по тем страницам, которые цикл действительно видел."""
     from seo_operator.eligibility import classify_all, summarize
@@ -185,6 +276,7 @@ def cmd_run(args, mode: Mode) -> int:
 
     if not args.fixture and not args.no_crawl:
         _add_infrastructure_findings(op, result)
+        _add_indexing_lock_findings(op, result)
         _add_eligibility_note(op, result, pages_by_site)
 
     if args.json:
