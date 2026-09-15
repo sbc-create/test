@@ -264,6 +264,57 @@ def _add_eligibility_note(op: Operator, result, pages_by_site: dict) -> None:
     )
 
 
+def cmd_indexing_drift(args) -> int:
+    """Read-only сверка индексации с решением владельца.
+
+    Ничего не меняет. Возврат 1 означает расхождение — в том числе когда
+    состояние домена не удалось измерить: молчание не проходит как «в порядке».
+    """
+    import subprocess as _sp
+
+    from seo_operator.indexing_drift import Response, check_portfolio
+
+    РАЗДЕЛИТЕЛЬ = "::drift::"
+
+    def получить(url: str) -> Response:
+        # Один GET: код, заголовки и тело из одного ответа. HEAD как
+        # единственное доказательство не используется намеренно.
+        готово = _sp.run(
+            ["curl", "-sS", "-D", "-", "--max-time", str(args.timeout),
+             "-w", f"{РАЗДЕЛИТЕЛЬ}%{{http_code}}", url],
+            capture_output=True, text=True,
+        )
+        if готово.returncode != 0:
+            return Response(None, "", "", error=f"curl {готово.returncode}")
+        вывод = готово.stdout
+        код = None
+        if РАЗДЕЛИТЕЛЬ in вывод:
+            вывод, _, хвост = вывод.rpartition(РАЗДЕЛИТЕЛЬ)
+            код = int(хвост) if хвост.strip().isdigit() else None
+        # Делим по ПЕРВОЙ пустой строке, а не по последней: в HTML пустые
+        # строки встречаются, и разбиение с конца отдавало под видом заголовков
+        # кусок разметки. Из-за этого закрытые витрины Lords показывались как
+        # «слои разошлись». Переходов здесь нет — блок заголовков ровно один.
+        заголовки, разделитель, тело = вывод.partition("\r\n\r\n")
+        if not разделитель:
+            заголовки, _, тело = вывод.partition("\n\n")
+        return Response(код, заголовки, тело)
+
+    сайты = json.loads((REPO_ROOT / "config" / "portfolio.json").read_text(encoding="utf-8"))
+    отчёт = check_portfolio(сайты["sites"], fetcher=получить)
+
+    for d in отчёт.domains:
+        метка = "OK  " if d.matches else "ДРЕЙФ"
+        print(f"{метка} {d.domain:24} ожидание={d.expected:10} факт={d.actual:10} "
+              f"{'; '.join(d.reasons)}")
+    сводка = отчёт.summary()
+    print(f"\nитого: открыт {сводка['open']}, закрыт {сводка['closed']}, "
+          f"расходится {сводка['mixed']}, не измерено {сводка['unmeasured']}")
+    if args.json:
+        print(json.dumps(сводка, ensure_ascii=False))
+    return 0 if отчёт.ok else 1
+
+
 def cmd_run(args, mode: Mode) -> int:
     op = _operator(args.fixture)
     pages_by_site = {}
@@ -419,6 +470,13 @@ def main(argv=None) -> int:
         p.add_argument("--out", help="записать отчёт в файл")
 
     p = sub.add_parser(
+        "indexing-drift",
+        help="read-only сверка индексации с решением владельца (ничего не меняет)",
+    )
+    p.add_argument("--timeout", type=int, default=60, help="срок одного запроса")
+    p.add_argument("--json", action="store_true", help="машиночитаемая сводка")
+
+    p = sub.add_parser(
         "analytics-collect",
         help="read-only сбор показателей Метрики и Вебмастера",
     )
@@ -429,6 +487,8 @@ def main(argv=None) -> int:
 
     args = parser.parse_args(argv)
 
+    if args.command == "indexing-drift":
+        return cmd_indexing_drift(args)
     if args.command == "analytics-collect":
         return cmd_analytics_collect(args)
     if args.command == "probe":
