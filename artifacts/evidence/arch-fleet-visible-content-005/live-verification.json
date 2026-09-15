@@ -1,0 +1,53 @@
+{
+  "hard_404": {
+    "before": "219/219 Animedia",
+    "after": 0
+  },
+  "soft_404": 0,
+  "wrong_entity": 0,
+  "wrong_family": 0,
+  "empty_title_pages": 0,
+  "player_visible_coverage": "100% (48 карточек с binding на 4 витринах)",
+  "rating_live_visible": "100% записей, имеющих оценку в данных, показывают её в HTML",
+  "rating_data_coverage": {
+    "MOVIES": 98.1,
+    "SERIES": 75.56,
+    "ANIME": 95.15
+  },
+  "speed_seconds": {
+    "lordfilm47.space": {
+      "home": 0.136,
+      "card_cold": 0.067,
+      "card_warm": 0.075
+    },
+    "lordserial33.biz": {
+      "home": 0.112,
+      "card_cold": 0.064,
+      "card_warm": 0.059
+    },
+    "zonafilm.space": {
+      "home": 0.12,
+      "card_cold": 0.066,
+      "card_warm": 0.07
+    },
+    "animedia.icu": {
+      "home": 0.093,
+      "card_cold": 0.062,
+      "card_warm": 0.066
+    }
+  },
+  "catalog_by_domain": {
+    "lordfilm47.space": 53416,
+    "lordserial33.biz": 53412,
+    "1lordserials1.online": 53412,
+    "zonafilm.space": 53416,
+    "animedia.icu": 7408,
+    "animedia.space": 7408
+  },
+  "preserved": {
+    "canonical": true,
+    "schema": true,
+    "metrika_lords_family": true,
+    "metrika_animedia": "отсутствовала и до интеграции"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "segment": "SERIES",
+  "total": 14838,
+  "with_rating": 11212,
+  "pct": 75.56,
+  "needed_for_90pct": 13354,
+  "short_by": 2142,
+  "gap_composition": {
+    "mydramalist_only": 2202,
+    "kinopoisk_id_only": 674,
+    "imdb+mydramalist": 255,
+    "kinopoisk+mydramalist": 230,
+    "imdb+kinopoisk+mydramalist": 123,
+    "imdb+kinopoisk": 91
+  },
+  "ceiling_if_all_imdb_ids_closed_pct": 79.05,
+  "ceiling_if_all_kinopoisk_ids_closed_pct": 83.1,
+  "conclusion": "90% недостижимо ни при каком доступном источнике: 2202 записи имеют только идентификатор MyDramaList, у которого нет официального API, а скрейпинг запрещён режимом CLOSED_WORLD. Даже закрыв ВСЕ записи с IMDb ID получаем 79.05%, со всеми KP ID — 83.10%",
+  "not_a_blocker_for": "MOVIES 98.10% и ANIME 95.15% порог проходят"
+}
