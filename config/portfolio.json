@@ -1,5 +1,69 @@
 {
   "version": 1,
-  "note": "РЕАЛЬНЫЙ реестр портфеля. На 2026-08-22 он пуст: ни один из 15-20 сайтов не передан оператору - нет доменов, доступов к CMS и подтверждения прав. Заполняется владельцем; оператор не добавляет сюда сайты самостоятельно. Синтетический тенант для dry-run лежит отдельно в config/portfolio.fixture.json и никогда не смешивается с этим файлом.",
-  "sites": []
+  "note": "РЕАЛЬНЫЙ реестр портфеля. Заполнен 2026-09-15 заданием SEO-PREINDEX-READINESS-LOCKED-01: владелец назвал домены в тексте задания, каждый подтверждён живым ответом HTTP 200 и профилем config/site-profiles/<site_id>.json на управляющем хосте. Ничего не добавлено по инициативе оператора. risk_tier у всех рабочих сайтов high по одному документированному правилу: происхождение контента не подтверждено и индексация закрыта, поэтому осторожность максимальная; это правило, а не отдельная оценка каждого сайта. tone_of_voice, rubrics и editorial_account намеренно НЕ заполнены: подтверждённого источника этих сведений нет, а выдумывать их запрещено. moderation_enabled опущен и потому false: пока индексация закрыта, редакционная публикация от лица сайта не ведётся. Синтетический тенант лежит отдельно в config/portfolio.fixture.json и никогда не смешивается с этим файлом. amd.online в реестр НЕ входит: это чужой сайт AniMedia.Online, не наша инфраструктура (ни одного маркера site-factory, собственный контактный домен amedia.online), он классифицирован REFERENCE.",
+  "sites": [
+    {
+      "site_id": "lords-01",
+      "name": "Lordfilm",
+      "base_url": "https://lordfilm47.space",
+      "risk_tier": "high",
+      "synthetic": false
+    },
+    {
+      "site_id": "lords-02",
+      "name": "Lordserial",
+      "base_url": "https://lordserial33.biz",
+      "risk_tier": "high",
+      "synthetic": false
+    },
+    {
+      "site_id": "lords-03",
+      "name": "Lordserials",
+      "base_url": "https://1lordserials1.online",
+      "risk_tier": "high",
+      "synthetic": false
+    },
+    {
+      "site_id": "zona-01",
+      "name": "Zona",
+      "base_url": "https://zonafilm.space",
+      "risk_tier": "high",
+      "synthetic": false
+    },
+    {
+      "site_id": "animedia-01",
+      "name": "Animedia",
+      "base_url": "https://animedia.icu",
+      "risk_tier": "high",
+      "synthetic": false
+    },
+    {
+      "site_id": "animedia-02",
+      "name": "Animedia",
+      "base_url": "https://animedia.space",
+      "risk_tier": "high",
+      "synthetic": false
+    },
+    {
+      "site_id": "yummyani-site",
+      "name": "YummyAnime",
+      "base_url": "https://yummyani.site",
+      "risk_tier": "high",
+      "synthetic": false
+    },
+    {
+      "site_id": "yummyani-org",
+      "name": "YummyAnime",
+      "base_url": "https://yummyani.org",
+      "risk_tier": "high",
+      "synthetic": false
+    },
+    {
+      "site_id": "yummyani-biz",
+      "name": "YummyAnime",
+      "base_url": "https://yummyani.biz",
+      "risk_tier": "high",
+      "synthetic": false
+    }
+  ]
 }
