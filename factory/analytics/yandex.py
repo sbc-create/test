@@ -473,6 +473,9 @@ class YandexAnalyticsProvider:
     def ensure_webvisor_disabled(self, counter_id: int) -> dict:
         """Выключает запись сессий через ``code_options.visor``. Идемпотентна.
 
+    Значение передаётся числом: поле целочисленное, и булево Метрика не
+    принимает. Подробности — рядом с самим присваиванием.
+
         Порядок именно такой, и каждый шаг обязателен:
 
         1. GET — узнать фактическое состояние и **весь** текущий ``code_options``;
@@ -494,8 +497,16 @@ class YandexAnalyticsProvider:
                     "planned": True, "reason": "режим плана"}
 
         # Существующие настройки сохраняются: меняется ровно один ключ.
+        #
+        # Ноль, а не ``False``. Метрика хранит `code_options.visor` целым
+        # числом — GET возвращает `1`, — и на булево значение отвечает
+        # `HTTP 400 Could not read JSON … path: counter.code_options.visor`.
+        # Обманчиво здесь то, что в том же объекте есть и настоящие булевы
+        # поля (`ytm`, `ssr`), поэтому ошибка выглядела необъяснимой и год
+        # читалась как «API не поддерживает выключение». Поддерживает —
+        # не поддерживает оно подмены типа.
         options = dict(counter.get("code_options") or {})
-        options[VISOR_OPTION] = False
+        options[VISOR_OPTION] = 0
         self.metrika.request(
             "PUT",
             f"/management/v1/counter/{counter_id}",

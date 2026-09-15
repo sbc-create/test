@@ -1,0 +1,118 @@
+{
+ "lordfilm47.space": {
+  "x_robots_tag": [
+   "noindex, nofollow"
+  ],
+  "meta_robots": [
+   "noindex, nofollow"
+  ],
+  "canonical_on_home": [
+   "https://lordfilm47.space/"
+  ],
+  "canonical_absolute": true,
+  "canonical_same_host": true,
+  "title_present": true,
+  "description_present": true,
+  "json_ld_blocks": 0,
+  "robots_txt_http": [
+   "200"
+  ],
+  "robots_txt_bytes": 26,
+  "robots_txt_disallow_all": true,
+  "sitemap_http": [
+   "308"
+  ],
+  "sitemap_url_count": 0,
+  "sitemap_foreign_urls": 0,
+  "missing_page_http": [
+   "404"
+  ],
+  "soft_404": false
+ },
+ "lordserial33.biz": {
+  "x_robots_tag": [
+   "noindex, nofollow"
+  ],
+  "meta_robots": [
+   "noindex, nofollow"
+  ],
+  "canonical_on_home": [],
+  "canonical_absolute": false,
+  "canonical_same_host": false,
+  "title_present": true,
+  "description_present": false,
+  "json_ld_blocks": 0,
+  "robots_txt_http": [
+   "200"
+  ],
+  "robots_txt_bytes": 26,
+  "robots_txt_disallow_all": true,
+  "sitemap_http": [
+   "200"
+  ],
+  "sitemap_url_count": 0,
+  "sitemap_foreign_urls": 0,
+  "missing_page_http": [
+   "404"
+  ],
+  "soft_404": false
+ },
+ "1lordserials1.online": {
+  "x_robots_tag": [
+   "noindex, nofollow"
+  ],
+  "meta_robots": [
+   "noindex, nofollow"
+  ],
+  "canonical_on_home": [],
+  "canonical_absolute": false,
+  "canonical_same_host": false,
+  "title_present": true,
+  "description_present": false,
+  "json_ld_blocks": 0,
+  "robots_txt_http": [
+   "200"
+  ],
+  "robots_txt_bytes": 26,
+  "robots_txt_disallow_all": true,
+  "sitemap_http": [
+   "200"
+  ],
+  "sitemap_url_count": 0,
+  "sitemap_foreign_urls": 0,
+  "missing_page_http": [
+   "404"
+  ],
+  "soft_404": false
+ },
+ "zonafilm.space": {
+  "x_robots_tag": [
+   "noindex, nofollow"
+  ],
+  "meta_robots": [
+   "noindex, nofollow"
+  ],
+  "canonical_on_home": [
+   "https://zonafilm.space/"
+  ],
+  "canonical_absolute": true,
+  "canonical_same_host": true,
+  "title_present": true,
+  "description_present": true,
+  "json_ld_blocks": 0,
+  "robots_txt_http": [
+   "200"
+  ],
+  "robots_txt_bytes": 26,
+  "robots_txt_disallow_all": true,
+  "sitemap_http": [
+   "308"
+  ],
+  "sitemap_url_count": 0,
+  "sitemap_foreign_urls": 0,
+  "missing_page_http": [
+   "404"
+  ],
+  "soft_404": false
+ }
+}

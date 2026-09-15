@@ -1,0 +1,69 @@
+{
+ "policy_now": "noindex, nofollow — заголовок и мета согласованы на всех четырёх",
+ "policy_changed_by_this_task": false,
+ "per_domain": {
+  "lordfilm47.space": {
+   "metrika": "готово",
+   "topvisor_project": "готово",
+   "robots_txt": "отдаётся, Disallow: / — согласован с политикой",
+   "sitemap": "ПУСТО — 0 URL; блокер снятия noindex",
+   "canonical": "есть, абсолютный",
+   "meta_description": "есть",
+   "json_ld": "ОТСУТСТВУЕТ — структурированных данных нет ни на одной странице",
+   "soft_404": "нет, несуществующая страница отвечает 404",
+   "content_rights": "не подтверждены: rights_confirmed=false в пакетах сайтов",
+   "legal": "владелец и документы не заданы (legal.owner=null)",
+   "production_authorized": "false в пакетах — снимает только владелец",
+   "ready_to_remove_noindex": false
+  },
+  "lordserial33.biz": {
+   "metrika": "готово",
+   "topvisor_project": "готово",
+   "robots_txt": "отдаётся, Disallow: / — согласован с политикой",
+   "sitemap": "ПУСТО — 0 URL; блокер снятия noindex",
+   "canonical": "ОТСУТСТВУЕТ на главной — блокер",
+   "meta_description": "ОТСУТСТВУЕТ — блокер",
+   "json_ld": "ОТСУТСТВУЕТ — структурированных данных нет ни на одной странице",
+   "soft_404": "нет, несуществующая страница отвечает 404",
+   "content_rights": "не подтверждены: rights_confirmed=false в пакетах сайтов",
+   "legal": "владелец и документы не заданы (legal.owner=null)",
+   "production_authorized": "false в пакетах — снимает только владелец",
+   "ready_to_remove_noindex": false
+  },
+  "1lordserials1.online": {
+   "metrika": "готово",
+   "topvisor_project": "готово",
+   "robots_txt": "отдаётся, Disallow: / — согласован с политикой",
+   "sitemap": "ПУСТО — 0 URL; блокер снятия noindex",
+   "canonical": "ОТСУТСТВУЕТ на главной — блокер",
+   "meta_description": "ОТСУТСТВУЕТ — блокер",
+   "json_ld": "ОТСУТСТВУЕТ — структурированных данных нет ни на одной странице",
+   "soft_404": "нет, несуществующая страница отвечает 404",
+   "content_rights": "не подтверждены: rights_confirmed=false в пакетах сайтов",
+   "legal": "владелец и документы не заданы (legal.owner=null)",
+   "production_authorized": "false в пакетах — снимает только владелец",
+   "ready_to_remove_noindex": false
+  },
+  "zonafilm.space": {
+   "metrika": "готово",
+   "topvisor_project": "готово",
+   "robots_txt": "отдаётся, Disallow: / — согласован с политикой",
+   "sitemap": "ПУСТО — 0 URL; блокер снятия noindex",
+   "canonical": "есть, абсолютный",
+   "meta_description": "есть",
+   "json_ld": "ОТСУТСТВУЕТ — структурированных данных нет ни на одной странице",
+   "soft_404": "нет, несуществующая страница отвечает 404",
+   "content_rights": "не подтверждены: rights_confirmed=false в пакетах сайтов",
+   "legal": "владелец и документы не заданы (legal.owner=null)",
+   "production_authorized": "false в пакетах — снимает только владелец",
+   "ready_to_remove_noindex": false
+  }
+ },
+ "blockers_summary": [
+  "sitemap пуст на всех четырёх доменах",
+  "canonical и description отсутствуют на lordserial33.biz и 1lordserials1.online",
+  "структурированных данных (JSON-LD) нет нигде",
+  "права на контент не подтверждены, юридические сведения не заданы",
+  "production_authorized=false во всех пакетах"
+ ]
+}

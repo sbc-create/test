@@ -1,0 +1,45 @@
+{
+ "period": "2026-09-14..2026-09-15",
+ "accuracy": "full",
+ "source": "api-metrika.yandex.net /stat/v1/data",
+ "traffic_origin": "собственные браузерные проверки и HTTP-запросы задач 006/007; искусственный трафик не создавался",
+ "per_domain": {
+  "lordfilm47.space": {
+   "counter_id": 112010269,
+   "pageviews_total": 44.0,
+   "domains_seen": {
+    "lordfilm47.space": 44.0
+   },
+   "foreign_domains": {},
+   "isolation_ok": true
+  },
+  "lordserial33.biz": {
+   "counter_id": 112010274,
+   "pageviews_total": 51.0,
+   "domains_seen": {
+    "lordserial33.biz": 51.0
+   },
+   "foreign_domains": {},
+   "isolation_ok": true
+  },
+  "1lordserials1.online": {
+   "counter_id": 112010277,
+   "pageviews_total": 45.0,
+   "domains_seen": {
+    "1lordserials1.online": 45.0
+   },
+   "foreign_domains": {},
+   "isolation_ok": true
+  },
+  "zonafilm.space": {
+   "counter_id": 112582938,
+   "pageviews_total": 28.0,
+   "domains_seen": {
+    "zonafilm.space": 28.0
+   },
+   "foreign_domains": {},
+   "isolation_ok": true
+  }
+ },
+ "cross_domain_mixups": 0
+}

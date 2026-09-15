@@ -1,0 +1,17 @@
+{
+ "prompt_id": "FLEET-SEO-007-E2E-READINESS-CLOSEOUT",
+ "source_branch": "claude/fleet-seo-006-metrika-topvisor-production",
+ "source_commit": "90cb4b03b92ac73091c6947fdecfd2173708a549",
+ "task_branch": "claude/fleet-seo-007-e2e-readiness",
+ "base_commit": "0a2658c (вершина ветки шаблонов Zona/Animedia)",
+ "files_sha256": {
+  "MERGE-PACKET.md": "a36a0a388cec8f399af27c43572c29b4d90626a2f4673787a45e66dcebbecabc",
+  "metrika-reporting-readback.json": "1121db41a84c78acd3d8d8f5c4958e2367bd8289f01104bd9dbc02e48f9c6b92",
+  "noindex-readiness-matrix.json": "dde52cd57670afe5328040f82fab5015d7dd6f898d5efd57d0f77187f2010d7c",
+  "route-coverage.json": "c130f982d1a2e9364b24abf065777c03ef35a3dea874252d81011575c242688c",
+  "seo-contour-audit.json": "7f2999898e6127804cd09e4705f68eb792b4cb140fd6a1d801305d11b1c13559",
+  "topvisor-keyword-pack.json": "9caa088252d98d632186b9b122f73ad87ba2d03e7047272041bd042885a1f760",
+  "topvisor-launch-options.json": "8ddbe11bcfd8ee23da9ad1ade577004f4216b7fe0e7e95b8125f249c000206c9",
+  "webvisor-state.json": "23daa7e6e3a2c34352c0ccc82261b8a1612510ef983a643281a504f7acc3bc32"
+ }
+}

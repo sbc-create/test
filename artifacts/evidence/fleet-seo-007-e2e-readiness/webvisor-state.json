@@ -1,0 +1,80 @@
+{
+ "required_state": "OFF",
+ "checked_at": "2026-09-14T18:07:19Z",
+ "api_contract_fix": "code_options.visor — целое число; булево значение Метрика отвергает с HTTP 400",
+ "counters": [
+  {
+   "counter_id": 111881037,
+   "domain": "yummyani.site",
+   "registry_webvisor": false,
+   "api_webvisor": false,
+   "client_tag_webvisor": false,
+   "tag_param": "webvisor:false — задан явно в теге рендерера",
+   "owner_login": "sbc.claude",
+   "match": true
+  },
+  {
+   "counter_id": 111881038,
+   "domain": "yummyani.org",
+   "registry_webvisor": false,
+   "api_webvisor": false,
+   "client_tag_webvisor": false,
+   "tag_param": "webvisor:false — задан явно в теге рендерера",
+   "owner_login": "sbc.claude",
+   "match": true
+  },
+  {
+   "counter_id": 111881039,
+   "domain": "yummyani.biz",
+   "registry_webvisor": false,
+   "api_webvisor": false,
+   "client_tag_webvisor": false,
+   "tag_param": "webvisor:false — задан явно в теге рендерера",
+   "owner_login": "sbc.claude",
+   "match": true
+  },
+  {
+   "counter_id": 112010269,
+   "domain": "lordfilm47.space",
+   "registry_webvisor": false,
+   "api_webvisor": false,
+   "client_tag_webvisor": false,
+   "tag_param": "webvisor:false — задан явно в теге рендерера",
+   "owner_login": "sbc.claude",
+   "match": true
+  },
+  {
+   "counter_id": 112010274,
+   "domain": "lordserial33.biz",
+   "registry_webvisor": false,
+   "api_webvisor": false,
+   "client_tag_webvisor": false,
+   "tag_param": "webvisor:false — задан явно в теге рендерера",
+   "owner_login": "sbc.claude",
+   "match": true
+  },
+  {
+   "counter_id": 112010277,
+   "domain": "1lordserials1.online",
+   "registry_webvisor": false,
+   "api_webvisor": false,
+   "client_tag_webvisor": false,
+   "tag_param": "webvisor:false — задан явно в теге рендерера",
+   "owner_login": "sbc.claude",
+   "match": true
+  },
+  {
+   "counter_id": 112582938,
+   "domain": "zonafilm.space",
+   "registry_webvisor": false,
+   "api_webvisor": false,
+   "client_tag_webvisor": false,
+   "tag_param": "webvisor:false — задан явно в теге рендерера",
+   "owner_login": "sbc.claude",
+   "match": true
+  }
+ ],
+ "mismatches": 0,
+ "snapshot_before": "artifacts/evidence/fleet-seo-006-metrika-topvisor-production/metrika-api-readback.json (все шесть были True)",
+ "note_registry_read": "состояние реестра прочитано напрямую из config/analytics.json"
+}

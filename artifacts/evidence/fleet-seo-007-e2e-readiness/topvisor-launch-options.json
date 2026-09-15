@@ -1,0 +1,45 @@
+{
+ "pack_sha256": "9caa088252d98d632186b9b122f73ad87ba2d03e7047272041bd042885a1f760",
+ "keywords_total": 23,
+ "cost_source": "get/bank_2/info: тариф XS, стоимость тарифа 0, баланс 0. Цену одного съёма бесплатные методы API не отдают, поэтому COST_UNKNOWN. Придумывать число вместо неё нельзя.",
+ "options": {
+  "минимальный": {
+   "keywords_per_site": 3,
+   "regions": 1,
+   "searchers": 2,
+   "frequency": "раз в неделю",
+   "sites": 4,
+   "checks_per_run": 24,
+   "cost_per_check": "COST_UNKNOWN",
+   "daily_cost": "COST_UNKNOWN",
+   "monthly_cost": "COST_UNKNOWN",
+   "max_possible_spend": "COST_UNKNOWN"
+  },
+  "рабочий": {
+   "keywords_per_site": 6,
+   "regions": 1,
+   "searchers": 2,
+   "frequency": "раз в 3 дня",
+   "sites": 4,
+   "checks_per_run": 48,
+   "cost_per_check": "COST_UNKNOWN",
+   "daily_cost": "COST_UNKNOWN",
+   "monthly_cost": "COST_UNKNOWN",
+   "max_possible_spend": "COST_UNKNOWN"
+  },
+  "расширенный": {
+   "keywords_per_site": 6,
+   "regions": 3,
+   "searchers": 2,
+   "frequency": "ежедневно",
+   "sites": 4,
+   "checks_per_run": 144,
+   "cost_per_check": "COST_UNKNOWN",
+   "daily_cost": "COST_UNKNOWN",
+   "monthly_cost": "COST_UNKNOWN",
+   "max_possible_spend": "COST_UNKNOWN"
+  }
+ },
+ "uploaded": false,
+ "paid_operations": 0
+}

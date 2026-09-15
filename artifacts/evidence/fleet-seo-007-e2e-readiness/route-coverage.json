@@ -1,0 +1,286 @@
+{
+ "per_domain": {
+  "lordfilm47.space": {
+   "counter_id": 112010269,
+   "title_pages_checked": 5,
+   "routes": [
+    {
+     "route": "/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/catalog/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/new/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/title/berezhno-otnositsya-k-zhenschine/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/title/bez-prava-na-strah/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/title/chas-rasplaty/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/title/chto-prineset-zavtrashniy-den/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/title/dedushkina-lampa/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    }
+   ]
+  },
+  "lordserial33.biz": {
+   "counter_id": 112010274,
+   "title_pages_checked": 5,
+   "routes": [
+    {
+     "route": "/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/catalog/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/new/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/title/berezhno-otnositsya-k-zhenschine/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/title/bez-prava-na-strah/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/title/chas-rasplaty-2/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/title/chto-prineset-zavtrashniy-den/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/title/delo-ob-ukuse-sobaki/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    }
+   ]
+  },
+  "1lordserials1.online": {
+   "counter_id": 112010277,
+   "title_pages_checked": 5,
+   "routes": [
+    {
+     "route": "/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/catalog/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/new/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/title/berezhno-otnositsya-k-zhenschine/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/title/bez-prava-na-strah/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/title/chas-rasplaty-2/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/title/chto-prineset-zavtrashniy-den/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/title/delo-ob-ukuse-sobaki/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    }
+   ]
+  },
+  "zonafilm.space": {
+   "counter_id": 112582938,
+   "title_pages_checked": 5,
+   "routes": [
+    {
+     "route": "/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/catalog/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/new/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/title/berezhno-otnositsya-k-zhenschine/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/title/bez-prava-na-strah/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/title/chas-rasplaty/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/title/chto-prineset-zavtrashniy-den/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    },
+    {
+     "route": "/title/dedushkina-lampa/",
+     "http": "200",
+     "tags": 1,
+     "init": 1,
+     "foreign_counters": [],
+     "ok": true
+    }
+   ]
+  }
+ },
+ "failed_routes": 0,
+ "required": "/ , /catalog/ , /new/ и минимум пять страниц тайтлов на домен"
+}

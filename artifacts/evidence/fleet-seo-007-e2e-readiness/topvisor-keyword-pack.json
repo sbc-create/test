@@ -1,0 +1,398 @@
+{
+ "1lordserials1.online": {
+  "catalog_revision": "fab4b764a49345e5d34079546bee4d0d",
+  "catalog_total": 52576,
+  "keywords": [
+   {
+    "device": "desktop+mobile",
+    "domain": "1lordserials1.online",
+    "group": "Виды контента",
+    "intent": "транзакционное: намерение смотреть",
+    "priority": 1,
+    "query": "смотреть фильмы онлайн",
+    "reason": "в каталоге 32753 записей этого вида — раздел реально наполнен",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "каталог lords-03-catalog.json, поле kind, ревизия fab4b764a49345e5d34079546bee4d0d",
+    "target_page": "https://1lordserials1.online/catalog/?kind=Фильм"
+   },
+   {
+    "device": "desktop+mobile",
+    "domain": "1lordserials1.online",
+    "group": "Виды контента",
+    "intent": "транзакционное: намерение смотреть",
+    "priority": 1,
+    "query": "смотреть сериалы онлайн",
+    "reason": "в каталоге 19823 записей этого вида — раздел реально наполнен",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "каталог lords-03-catalog.json, поле kind, ревизия fab4b764a49345e5d34079546bee4d0d",
+    "target_page": "https://1lordserials1.online/catalog/?kind=Сериал"
+   },
+   {
+    "device": "desktop+mobile",
+    "domain": "1lordserials1.online",
+    "group": "Разделы витрины",
+    "intent": "навигационное",
+    "priority": 3,
+    "query": "каталог фильмов и сериалов",
+    "reason": "раздел /catalog/ существует и отдаёт HTTP 200",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "навигация витрины (nav рендерера)",
+    "target_page": "https://1lordserials1.online/catalog/"
+   },
+   {
+    "device": "desktop+mobile",
+    "domain": "1lordserials1.online",
+    "group": "Разделы витрины",
+    "intent": "навигационное",
+    "priority": 3,
+    "query": "новинки фильмов и сериалов",
+    "reason": "раздел /new/ существует и отдаёт HTTP 200",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "навигация витрины (nav рендерера)",
+    "target_page": "https://1lordserials1.online/new/"
+   },
+   {
+    "device": "desktop+mobile",
+    "domain": "1lordserials1.online",
+    "group": "Разделы витрины",
+    "intent": "навигационное",
+    "priority": 3,
+    "query": "подборки фильмов и сериалов",
+    "reason": "раздел /collections/ существует и отдаёт HTTP 200",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "навигация витрины (nav рендерера)",
+    "target_page": "https://1lordserials1.online/collections/"
+   }
+  ],
+  "site_id": "lords-03"
+ },
+ "lordfilm47.space": {
+  "catalog_revision": "b12eecd40d7e6964067f1e2f63f97f67",
+  "catalog_total": 53400,
+  "keywords": [
+   {
+    "device": "desktop+mobile",
+    "domain": "lordfilm47.space",
+    "group": "Виды контента",
+    "intent": "транзакционное: намерение смотреть",
+    "priority": 1,
+    "query": "смотреть фильмы онлайн",
+    "reason": "в каталоге 31751 записей этого вида — раздел реально наполнен",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "каталог lords-01-catalog.json, поле kind, ревизия b12eecd40d7e6964067f1e2f63f97f67",
+    "target_page": "https://lordfilm47.space/catalog/?kind=Фильм"
+   },
+   {
+    "device": "desktop+mobile",
+    "domain": "lordfilm47.space",
+    "group": "Виды контента",
+    "intent": "транзакционное: намерение смотреть",
+    "priority": 1,
+    "query": "смотреть сериалы онлайн",
+    "reason": "в каталоге 17524 записей этого вида — раздел реально наполнен",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "каталог lords-01-catalog.json, поле kind, ревизия b12eecd40d7e6964067f1e2f63f97f67",
+    "target_page": "https://lordfilm47.space/catalog/?kind=Сериал"
+   },
+   {
+    "device": "desktop+mobile",
+    "domain": "lordfilm47.space",
+    "group": "Виды контента",
+    "intent": "транзакционное: намерение смотреть",
+    "priority": 2,
+    "query": "смотреть мультфильмы онлайн",
+    "reason": "в каталоге 4125 записей этого вида — раздел реально наполнен",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "каталог lords-01-catalog.json, поле kind, ревизия b12eecd40d7e6964067f1e2f63f97f67",
+    "target_page": "https://lordfilm47.space/catalog/?kind=Мультфильм"
+   },
+   {
+    "device": "desktop+mobile",
+    "domain": "lordfilm47.space",
+    "group": "Разделы витрины",
+    "intent": "навигационное",
+    "priority": 3,
+    "query": "каталог фильмов и сериалов",
+    "reason": "раздел /catalog/ существует и отдаёт HTTP 200",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "навигация витрины (nav рендерера)",
+    "target_page": "https://lordfilm47.space/catalog/"
+   },
+   {
+    "device": "desktop+mobile",
+    "domain": "lordfilm47.space",
+    "group": "Разделы витрины",
+    "intent": "навигационное",
+    "priority": 3,
+    "query": "новинки фильмов и сериалов",
+    "reason": "раздел /new/ существует и отдаёт HTTP 200",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "навигация витрины (nav рендерера)",
+    "target_page": "https://lordfilm47.space/new/"
+   },
+   {
+    "device": "desktop+mobile",
+    "domain": "lordfilm47.space",
+    "group": "Разделы витрины",
+    "intent": "навигационное",
+    "priority": 3,
+    "query": "подборки фильмов и сериалов",
+    "reason": "раздел /collections/ существует и отдаёт HTTP 200",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "навигация витрины (nav рендерера)",
+    "target_page": "https://lordfilm47.space/collections/"
+   }
+  ],
+  "site_id": "lords-01"
+ },
+ "lordserial33.biz": {
+  "catalog_revision": "905d3062b1b7eef6269cc44e7408f448",
+  "catalog_total": 52684,
+  "keywords": [
+   {
+    "device": "desktop+mobile",
+    "domain": "lordserial33.biz",
+    "group": "Виды контента",
+    "intent": "транзакционное: намерение смотреть",
+    "priority": 1,
+    "query": "смотреть фильмы онлайн",
+    "reason": "в каталоге 32756 записей этого вида — раздел реально наполнен",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "каталог lords-02-catalog.json, поле kind, ревизия 905d3062b1b7eef6269cc44e7408f448",
+    "target_page": "https://lordserial33.biz/catalog/?kind=Фильм"
+   },
+   {
+    "device": "desktop+mobile",
+    "domain": "lordserial33.biz",
+    "group": "Виды контента",
+    "intent": "транзакционное: намерение смотреть",
+    "priority": 1,
+    "query": "смотреть сериалы онлайн",
+    "reason": "в каталоге 19819 записей этого вида — раздел реально наполнен",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "каталог lords-02-catalog.json, поле kind, ревизия 905d3062b1b7eef6269cc44e7408f448",
+    "target_page": "https://lordserial33.biz/catalog/?kind=Сериал"
+   },
+   {
+    "device": "desktop+mobile",
+    "domain": "lordserial33.biz",
+    "group": "Виды контента",
+    "intent": "транзакционное: намерение смотреть",
+    "priority": 2,
+    "query": "смотреть мультфильмы онлайн",
+    "reason": "в каталоге 109 записей этого вида — раздел реально наполнен",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "каталог lords-02-catalog.json, поле kind, ревизия 905d3062b1b7eef6269cc44e7408f448",
+    "target_page": "https://lordserial33.biz/catalog/?kind=Мультфильм"
+   },
+   {
+    "device": "desktop+mobile",
+    "domain": "lordserial33.biz",
+    "group": "Разделы витрины",
+    "intent": "навигационное",
+    "priority": 3,
+    "query": "каталог фильмов и сериалов",
+    "reason": "раздел /catalog/ существует и отдаёт HTTP 200",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "навигация витрины (nav рендерера)",
+    "target_page": "https://lordserial33.biz/catalog/"
+   },
+   {
+    "device": "desktop+mobile",
+    "domain": "lordserial33.biz",
+    "group": "Разделы витрины",
+    "intent": "навигационное",
+    "priority": 3,
+    "query": "новинки фильмов и сериалов",
+    "reason": "раздел /new/ существует и отдаёт HTTP 200",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "навигация витрины (nav рендерера)",
+    "target_page": "https://lordserial33.biz/new/"
+   },
+   {
+    "device": "desktop+mobile",
+    "domain": "lordserial33.biz",
+    "group": "Разделы витрины",
+    "intent": "навигационное",
+    "priority": 3,
+    "query": "подборки фильмов и сериалов",
+    "reason": "раздел /collections/ существует и отдаёт HTTP 200",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "навигация витрины (nav рендерера)",
+    "target_page": "https://lordserial33.biz/collections/"
+   }
+  ],
+  "site_id": "lords-02"
+ },
+ "zonafilm.space": {
+  "catalog_revision": "b12eecd40d7e6964067f1e2f63f97f67",
+  "catalog_total": 53400,
+  "keywords": [
+   {
+    "device": "desktop+mobile",
+    "domain": "zonafilm.space",
+    "group": "Виды контента",
+    "intent": "транзакционное: намерение смотреть",
+    "priority": 1,
+    "query": "смотреть фильмы онлайн",
+    "reason": "в каталоге 31751 записей этого вида — раздел реально наполнен",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "каталог zona-01-catalog.json, поле kind, ревизия b12eecd40d7e6964067f1e2f63f97f67",
+    "target_page": "https://zonafilm.space/catalog/?kind=Фильм"
+   },
+   {
+    "device": "desktop+mobile",
+    "domain": "zonafilm.space",
+    "group": "Виды контента",
+    "intent": "транзакционное: намерение смотреть",
+    "priority": 1,
+    "query": "смотреть сериалы онлайн",
+    "reason": "в каталоге 17524 записей этого вида — раздел реально наполнен",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "каталог zona-01-catalog.json, поле kind, ревизия b12eecd40d7e6964067f1e2f63f97f67",
+    "target_page": "https://zonafilm.space/catalog/?kind=Сериал"
+   },
+   {
+    "device": "desktop+mobile",
+    "domain": "zonafilm.space",
+    "group": "Виды контента",
+    "intent": "транзакционное: намерение смотреть",
+    "priority": 2,
+    "query": "смотреть мультфильмы онлайн",
+    "reason": "в каталоге 4125 записей этого вида — раздел реально наполнен",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "каталог zona-01-catalog.json, поле kind, ревизия b12eecd40d7e6964067f1e2f63f97f67",
+    "target_page": "https://zonafilm.space/catalog/?kind=Мультфильм"
+   },
+   {
+    "device": "desktop+mobile",
+    "domain": "zonafilm.space",
+    "group": "Разделы витрины",
+    "intent": "навигационное",
+    "priority": 3,
+    "query": "каталог фильмов и сериалов",
+    "reason": "раздел /catalog/ существует и отдаёт HTTP 200",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "навигация витрины (nav рендерера)",
+    "target_page": "https://zonafilm.space/catalog/"
+   },
+   {
+    "device": "desktop+mobile",
+    "domain": "zonafilm.space",
+    "group": "Разделы витрины",
+    "intent": "навигационное",
+    "priority": 3,
+    "query": "новинки фильмов и сериалов",
+    "reason": "раздел /new/ существует и отдаёт HTTP 200",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "навигация витрины (nav рендерера)",
+    "target_page": "https://zonafilm.space/new/"
+   },
+   {
+    "device": "desktop+mobile",
+    "domain": "zonafilm.space",
+    "group": "Разделы витрины",
+    "intent": "навигационное",
+    "priority": 3,
+    "query": "подборки фильмов и сериалов",
+    "reason": "раздел /collections/ существует и отдаёт HTTP 200",
+    "region": 213,
+    "searcher": [
+     "Яндекс",
+     "Google"
+    ],
+    "source": "навигация витрины (nav рендерера)",
+    "target_page": "https://zonafilm.space/collections/"
+   }
+  ],
+  "site_id": "zona-01"
+ }
+}
