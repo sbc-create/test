@@ -1,0 +1,176 @@
+{
+  "run_id": "anime-stage",
+  "started_at": "2026-09-15T05:56:19Z",
+  "mode": "staging",
+  "snapshot": {
+    "path": "/srv/site-factory/repo/var/lords/lords/catalog-cache/lords-01.json",
+    "items": 53400,
+    "fetched_at": "2026-09-15T05:35:51Z",
+    "id_set_checksum": "b12eecd40d7e6964067f1e2f63f97f674258beac27ada8c768277520e9b73520"
+  },
+  "ledger": {
+    "path": "/srv/site-factory/repo/var/lords/slug-ledger.json",
+    "seeded": 0
+  },
+  "ratings_store": {
+    "path": "/srv/site-factory/repo/var/lords/ratings-store.json",
+    "entries": 21626
+  },
+  "sites": {
+    "animedia-01": {
+      "catalog_items": 7408,
+      "catalog_items_before": 3999,
+      "details_entries": 7408,
+      "distinct_canonical_ids": 7408,
+      "duplicate_ids": 0,
+      "id_set_checksum": "b4a92dcd0f05e6826426e21157e05803313e27ed82b2561b93475cc12a25ba3a",
+      "coverage": {
+        "published": 7408,
+        "kp": 254,
+        "kp_pct": 3.43,
+        "imdb": 2610,
+        "imdb_pct": 35.23,
+        "any_rating": 2628,
+        "any_rating_pct": 35.48,
+        "description": 5387,
+        "description_pct": 72.72,
+        "poster_url": 7405,
+        "poster_pct": 99.96,
+        "source_id": 7381,
+        "source_id_pct": 99.64,
+        "external_id_binding": 7386,
+        "external_id_pct": 99.7
+      },
+      "coverage_by_source": {
+        "published": 7408,
+        "by_source": {
+          "imdb": {
+            "count": 2610,
+            "pct": 35.23
+          },
+          "kinopoisk": {
+            "count": 254,
+            "pct": 3.43
+          },
+          "shikimori": {
+            "count": 4421,
+            "pct": 59.68
+          }
+        }
+      },
+      "secondary_rating_providers": {
+        "store_entries": 21626,
+        "applied": 2257,
+        "applied_by_source": {
+          "imdb": 2257
+        },
+        "rejections": {}
+      },
+      "missing_rating_reasons": {
+        "kinopoisk": {
+          "NOT_AVAILABLE_AT_SOURCE": 4623,
+          "NO_EXTERNAL_ID": 2531
+        },
+        "imdb": {
+          "NO_EXTERNAL_ID": 4737,
+          "NOT_AVAILABLE_AT_SOURCE": 61
+        }
+      },
+      "rejections": {},
+      "without_poster": 3,
+      "anime_only": true,
+      "anime_by_signal": {
+        "myanimelist_id": 7018,
+        "genre_anime": 286,
+        "animation+origin": 104
+      },
+      "production_blocked": "у семейства animedia нет раскладки страницы тайтла: ВИДЫ_1_1 = {lords, zona}, все /title/ отдают 503",
+      "expected_sha256": {
+        "catalog": "52cef3e40cf93ac7a11ef661dc5ca8d2cc84043fbf455921210ef5126030b059",
+        "details": "e3dac8f518135e843c8a415983dff56374071b67f97c3b420be3f8338e3e9f7b"
+      }
+    },
+    "animedia-02": {
+      "catalog_items": 7408,
+      "catalog_items_before": 3999,
+      "details_entries": 7408,
+      "distinct_canonical_ids": 7408,
+      "duplicate_ids": 0,
+      "id_set_checksum": "b4a92dcd0f05e6826426e21157e05803313e27ed82b2561b93475cc12a25ba3a",
+      "coverage": {
+        "published": 7408,
+        "kp": 254,
+        "kp_pct": 3.43,
+        "imdb": 2610,
+        "imdb_pct": 35.23,
+        "any_rating": 2628,
+        "any_rating_pct": 35.48,
+        "description": 5387,
+        "description_pct": 72.72,
+        "poster_url": 7405,
+        "poster_pct": 99.96,
+        "source_id": 7381,
+        "source_id_pct": 99.64,
+        "external_id_binding": 7386,
+        "external_id_pct": 99.7
+      },
+      "coverage_by_source": {
+        "published": 7408,
+        "by_source": {
+          "imdb": {
+            "count": 2610,
+            "pct": 35.23
+          },
+          "kinopoisk": {
+            "count": 254,
+            "pct": 3.43
+          },
+          "shikimori": {
+            "count": 4421,
+            "pct": 59.68
+          }
+        }
+      },
+      "secondary_rating_providers": {
+        "store_entries": 21626,
+        "applied": 2257,
+        "applied_by_source": {
+          "imdb": 2257
+        },
+        "rejections": {}
+      },
+      "missing_rating_reasons": {
+        "kinopoisk": {
+          "NOT_AVAILABLE_AT_SOURCE": 4623,
+          "NO_EXTERNAL_ID": 2531
+        },
+        "imdb": {
+          "NO_EXTERNAL_ID": 4737,
+          "NOT_AVAILABLE_AT_SOURCE": 61
+        }
+      },
+      "rejections": {},
+      "without_poster": 3,
+      "anime_only": true,
+      "anime_by_signal": {
+        "myanimelist_id": 7018,
+        "genre_anime": 286,
+        "animation+origin": 104
+      },
+      "production_blocked": "у семейства animedia нет раскладки страницы тайтла: ВИДЫ_1_1 = {lords, zona}, все /title/ отдают 503",
+      "expected_sha256": {
+        "catalog": "1baaa12e4b7edd19470fcc115c8c96fb2017f6fdaecf234465d0aba915d4f769",
+        "details": "f9bff0d5967717fb93d6dc2f4941330540889edd5e1c9225a6d289e839694e95"
+      }
+    }
+  },
+  "production_mutations": 0,
+  "parity": {
+    "checksums": {},
+    "identical": false
+  },
+  "staging_dir": "/tmp/animedia-staging",
+  "note": "без --apply production не изменяется",
+  "duration_sec": 27.72,
+  "finished_at": "2026-09-15T05:56:46Z"
+}

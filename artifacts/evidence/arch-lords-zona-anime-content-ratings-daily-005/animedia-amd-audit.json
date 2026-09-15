@@ -55,7 +55,45 @@
       "title_pages": "недоступны (404 у работающего процесса, 503 у текущего рендерера)"
     },
     "rollout_performed": false,
-    "reason": "оба блокера принадлежат другим контурам; контентная раскатка их не устраняет"
+    "reason": "оба блокера принадлежат другим контурам; контентная раскатка их не устраняет",
+    "prepared_catalog": {
+      "status": "собран и проверен, публикация закрыта блокером шаблона",
+      "titles": 7408,
+      "anime": 7408,
+      "non_anime": 0,
+      "previous": 3999,
+      "previous_anime": 131,
+      "signals": {
+        "myanimelist_id": 7018,
+        "genre_anime": 286,
+        "animation+origin": 104
+      },
+      "coverage": {
+        "shikimori_pct": 59.68,
+        "imdb_pct": 35.23,
+        "kinopoisk_pct": 3.43,
+        "description_pct": 72.72,
+        "poster_pct": 99.96
+      },
+      "shadow_verification": {
+        "renderer": "текущий, раскладка zona (проверка данных, манифест Animedia не трогался)",
+        "routes": {
+          "healthz": 200,
+          "/": 200,
+          "/catalog/": 200,
+          "/new/": 200
+        },
+        "title_pages_checked": 200,
+        "non_200": 0,
+        "empty": 0,
+        "kinds": {
+          "Аниме": 7408
+        }
+      },
+      "staging_path": "/tmp/animedia-staging/",
+      "apply_after_unblock": "python3 automation/host/nova-catalog-publish.py --apply --sites animedia-01,animedia-02",
+      "guard": "инструмент отказывает в --apply, пока в профиле стоит production_заблокирована"
+    }
   },
   "amd_online": {
     "audit_performed": true,
