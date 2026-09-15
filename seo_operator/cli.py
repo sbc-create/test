@@ -13,8 +13,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
-from datetime import date
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 from seo_operator.audit import AuditLog
@@ -27,6 +28,9 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 FIXTURE_PORTFOLIO = REPO_ROOT / "config" / "portfolio.fixture.json"
 REAL_PORTFOLIO = REPO_ROOT / "config" / "portfolio.json"
 FIXTURE_PAGES = REPO_ROOT / "tests" / "fixtures" / "crawl.fixture-anime.json"
+#: Куда ложатся ежедневные отчёты, пока адресат доставки не задан. Каталог
+#: рабочий, а не репозиторный: отчёт — результат прогона, а не исходный текст.
+REPORT_SPOOL = REPO_ROOT / "var" / "reports" / "seo"
 
 
 def _load_pages(path: Path):
@@ -134,7 +138,33 @@ def cmd_run(args, mode: Mode) -> int:
         Path(args.out).write_text(daily_report(result), encoding="utf-8")
         print(f"\nотчёт записан: {args.out}", file=sys.stderr)
 
+    if not args.no_spool:
+        _spool_report(args, result)
+
     return 0
+
+
+def _spool_report(args, result) -> None:
+    """Сложить отчёт в spool. Адресат доставки не задан — отчёт всё равно цел.
+
+    Блокер доставки не является поводом терять отчёт: цикл, отработавший без
+    читателя, обязан оставить след.
+    """
+    from seo_operator.report_spool import store
+
+    root = Path(args.spool) if args.spool else REPORT_SPOOL
+    entry = store(
+        root,
+        run_id=getattr(result, "run_id", None)
+        or datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ"),
+        day=date.today(),
+        markdown=daily_report(result),
+        payload=result.to_dict(),
+        destination=os.environ.get("SEO_REPORT_DESTINATION") or None,
+    )
+    print(f"\nотчёт сохранён: {entry.markdown_path}", file=sys.stderr)
+    if entry.owner_action:
+        print(f"OWNER_ACTION_REQUIRED: {entry.owner_action}", file=sys.stderr)
 
 
 def cmd_weekly(args) -> int:
@@ -224,6 +254,12 @@ def main(argv=None) -> int:
             "--no-crawl",
             action="store_true",
             help="не обходить живые витрины (только офлайн-часть цикла)",
+        )
+        p.add_argument("--spool", help="каталог накопления ежедневных отчётов")
+        p.add_argument(
+            "--no-spool",
+            action="store_true",
+            help="не складывать отчёт в spool (для разовых ручных прогонов)",
         )
         p.add_argument("--json", action="store_true", help="машиночитаемый вывод")
         p.add_argument("--out", help="записать отчёт в файл")
