@@ -1,0 +1,324 @@
+{
+  "artifact": "RELEASE_INPUT_AUDIT",
+  "schemaVersion": 1,
+  "lane": "ARCHITECT_CORE",
+  "iteration": "SITE-FACTORY-RELEASE-LIVE-CIRCUIT-03",
+  "branch": "claude/core-release-live-circuit-03-lords",
+  "headSha": "210d060129e996e13d31047a6cfd82ac90911d0d",
+  "template": {
+    "templateId": "lords",
+    "scope": "только направление lords: все девятнадцать файлов лежат в blueprints/lords, factory/lords, factory/templates и схеме манифеста; ни Yummy, ни zona, ни animedia, ни basis-video артефакт не описывает",
+    "artifactVersion": 3,
+    "digest": "ca3d395ade25fb295735a20ad1477e385c9f149a69976b875d0d9af2f5a5f939",
+    "files": 19,
+    "members": [
+      {
+        "path": "blueprints/lords/blueprint.yaml",
+        "sha256": "37899ca82f4acddc5fabbb9a27c9535392c53088bfc75033b0d5b0da7cd0579f",
+        "bytes": 3481
+      },
+      {
+        "path": "blueprints/lords/profiles/lords-curated.yaml",
+        "sha256": "46a30054c7cc9b5e2a6a912fe9dc5810ea96a573b7801eb4bede7e89ed459147",
+        "bytes": 4449
+      },
+      {
+        "path": "blueprints/lords/profiles/lords-general.yaml",
+        "sha256": "a952c409be6f3373081c5e5de987c70bc807d84e58f419c5226a75ca532f4cdc",
+        "bytes": 8299
+      },
+      {
+        "path": "blueprints/lords/profiles/lords-genre.yaml",
+        "sha256": "092ba3f11f463e9daa5db8ec3a16238e4523e376384e4ba2c2399cd51b96aa9f",
+        "bytes": 5538
+      },
+      {
+        "path": "blueprints/lords/profiles/lords-new.yaml",
+        "sha256": "42cc53303998f3326a47f13803c818bd3db288690e0ab54559124c2e94d96ad5",
+        "bytes": 5139
+      },
+      {
+        "path": "factory/lords/pagination.py",
+        "sha256": "00322d6b3714023dbf898781861b83b79f845fbe422c9cd3720428fac6d8a607",
+        "bytes": 5085
+      },
+      {
+        "path": "factory/lords/player.py",
+        "sha256": "01bf4ec540121bdbfcc914e7a46d6479e89cdc22c22cd5c0316ba51274819b84",
+        "bytes": 13346
+      },
+      {
+        "path": "factory/lords/render.py",
+        "sha256": "251ce1436d5a5632cc99751f58a5857e9d7c0e4f39dcdc17df8a864ad65895d3",
+        "bytes": 118281
+      },
+      {
+        "path": "factory/lords/theme.py",
+        "sha256": "60a71655853fbffe055bb30e358413b0c002ca7a2c8c4b80672ac7a59c4d89a3",
+        "bytes": 25015
+      },
+      {
+        "path": "factory/templates/__init__.py",
+        "sha256": "4479b8b66223b8b608a440081fa13f2179e3a3036b93c01e8994664360ef1aca",
+        "bytes": 718
+      },
+      {
+        "path": "factory/templates/audit.py",
+        "sha256": "c598efa4833875fb7b0b30d6b604a0ba0b94f5c11507806818d4ec44330e7e7a",
+        "bytes": 8128
+      },
+      {
+        "path": "factory/templates/contract.py",
+        "sha256": "ee46d6408bbca9392d945bb8f9b0268e24d26d66d941580991ec642809709b74",
+        "bytes": 18476
+      },
+      {
+        "path": "factory/templates/digest.py",
+        "sha256": "e0376c7a3bdc1675f80bea93b697951f4207a44650a6dd801bd70b7116ba3c29",
+        "bytes": 3660
+      },
+      {
+        "path": "factory/templates/fixture.py",
+        "sha256": "8fab8adeb0bf8dfc3b4e41b961132543de10dd72a0fcac090b74e27bf0e0d8e5",
+        "bytes": 8246
+      },
+      {
+        "path": "factory/templates/pagemap.py",
+        "sha256": "7009083f589233873b9980201aec3495f1218e296f5bbdf36183b9df49217c24",
+        "bytes": 6883
+      },
+      {
+        "path": "factory/templates/rubric.py",
+        "sha256": "be9830b0d9d267df6db6adba058f0f03719a483e0d4a04e29601a285cfd09dd9",
+        "bytes": 24948
+      },
+      {
+        "path": "factory/templates/scaffold.py",
+        "sha256": "b4678e4ed568894d86afb541d2ab09f09604d5895716e6a96368610dc5084a23",
+        "bytes": 10710
+      },
+      {
+        "path": "schemas/template-manifest.schema.json",
+        "sha256": "f98137b2120a26c045a174fcbc84c1ba19cfdc5a5b152fea9fb31b3f970831c2",
+        "bytes": 12118
+      },
+      {
+        "path": "tests/e2e-lords/visual-baseline.json",
+        "sha256": "638d571651352fcbd04f02be5537ced68f7a5b6fb23ded2a946259c9caec4553",
+        "bytes": 7774
+      }
+    ],
+    "pinnedInApplyScript": "ca3d395ade25fb295735a20ad1477e385c9f149a69976b875d0d9af2f5a5f939",
+    "reproduction": {
+      "candidateSha": {
+        "sha": "cd2f718ae656e6bfcdc68099601d92078bd1f13f",
+        "status": "reproduced",
+        "template_digest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
+        "files": 19
+      },
+      "canaryBaseSha": {
+        "sha": "21d2c21dfc50c01b2fdd5a13821a29f3cbce1626",
+        "status": "reproduced",
+        "template_digest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
+        "files": 19
+      }
+    },
+    "history": [
+      {
+        "version": 1,
+        "digest": "52b56d557564717adcf32011c3494bc8c548eae1a96e010f7bd499351e0847dc",
+        "acceptedBy": "TEMPLATE_TO_CORE-008 / CORE_TO_OWNER-011",
+        "state": "заменён"
+      },
+      {
+        "version": 2,
+        "digest": "7b38ca10685a75c3d52527746208539cc30015fc1bfb3fce010a9491616ed965",
+        "difference": "метка происхождения данных перестала быть зашитой строкой fixture/test",
+        "state": "заменён, в production не выкладывался"
+      },
+      {
+        "version": 3,
+        "digest": "ca3d395ade25fb295735a20ad1477e385c9f149a69976b875d0d9af2f5a5f939",
+        "difference": "длительность серии стала неизвестной, а не нулевой",
+        "state": "собран для canary"
+      }
+    ]
+  },
+  "deployedCheckout": {
+    "path": "/srv/site-factory/repo",
+    "sha": "568863d350c320e4101ac17417c846ca4b7265c0",
+    "branch": "claude/day05-lords-merged",
+    "clean": true,
+    "artifact": {
+      "status": "undefined",
+      "reason": "в ревизии нет factory/templates/digest.py: артефакт не определён"
+    }
+  },
+  "compatibility": {
+    "status": "declared",
+    "engineContract": "1.2.0",
+    "sites": [
+      "demo-books",
+      "lords-01",
+      "lords-02",
+      "lords-03",
+      "yummyani-biz",
+      "yummyani-org",
+      "yummyani-site"
+    ],
+    "generatedAt": "2026-09-04T15:32:37Z"
+  },
+  "domains": [
+    {
+      "site_id": "lords-01",
+      "domain": "lordfilm47.space",
+      "profile": "lords-general",
+      "runtime_root": "/srv/lords/lords-01",
+      "port": 9101,
+      "launched": false
+    },
+    {
+      "site_id": "lords-02",
+      "domain": "lordserial33.biz",
+      "profile": "lords-new",
+      "runtime_root": "/srv/lords/lords-02",
+      "port": 9102,
+      "launched": false
+    },
+    {
+      "site_id": "lords-03",
+      "domain": "1lordserials1.online",
+      "profile": "lords-curated",
+      "runtime_root": "/srv/lords/lords-03",
+      "port": 9103,
+      "launched": false
+    }
+  ],
+  "runtime": {
+    "lords-01": {
+      "site_id": "lords-01",
+      "current_release": "3ddba1290c6e",
+      "switched_at_utc": "2026-09-05T19:12:43.214084Z",
+      "switched_by_uid": 0,
+      "releases": [
+        "95d8f17054e5",
+        "3ddba1290c6e"
+      ],
+      "rollback_release": "95d8f17054e5",
+      "fingerprint": {
+        "catalog": "eaacf89aefe9919ebb1ce28c5334958af6f907f708c2d071996e61fe221d2d50",
+        "enrichment": "97f72ad11acfc35804293b603a3d1fea4409923f52aea1c08dc481d6ede1a665",
+        "playability": "64e81fff34e8b43132fcee55221e7188412d1c89cbfc81ad9548e78b6e78ea61",
+        "renderer_version": "1d53c49349999bbb9fce668823cd385d983882b71809c56048336b3163dcc3f6",
+        "template_version": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "site_profile": "c1a5421354318f0308bf33414e03d073ae5687049697495e9ffdaba4f6792e7f",
+        "shelf_configuration": "9afd91927736355aa1585620ed4843964fee8d22adb8b2b2ae876dcf9379d31c",
+        "route_registry": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+        "schema_version": "1.0",
+        "seo_contract_version": "1.0",
+        "editorial_overrides": "",
+        "assets": "",
+        "fingerprint": "44afb47b933467b071eee852aeff1591f984de5d98444fe2f9aed0ec3b956894"
+      }
+    },
+    "lords-02": {
+      "site_id": "lords-02",
+      "current_release": "2baf922e8864",
+      "switched_at_utc": "2026-09-05T19:17:48.333164Z",
+      "switched_by_uid": 0,
+      "releases": [
+        "1335d087089b",
+        "2baf922e8864"
+      ],
+      "rollback_release": "1335d087089b",
+      "fingerprint": {
+        "catalog": "eaacf89aefe9919ebb1ce28c5334958af6f907f708c2d071996e61fe221d2d50",
+        "enrichment": "97f72ad11acfc35804293b603a3d1fea4409923f52aea1c08dc481d6ede1a665",
+        "playability": "64e81fff34e8b43132fcee55221e7188412d1c89cbfc81ad9548e78b6e78ea61",
+        "renderer_version": "1d53c49349999bbb9fce668823cd385d983882b71809c56048336b3163dcc3f6",
+        "template_version": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "site_profile": "ca913f8c6d5c1da13af28e477d2f6a1c9316d699745ece4edce3f427b8847e2d",
+        "shelf_configuration": "9afd91927736355aa1585620ed4843964fee8d22adb8b2b2ae876dcf9379d31c",
+        "route_registry": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+        "schema_version": "1.0",
+        "seo_contract_version": "1.0",
+        "editorial_overrides": "",
+        "assets": "",
+        "fingerprint": "187f5ac45243c8edaca73190d128ac2d4c9ccc59ee0e9f2d2df5432a9f45c90b"
+      }
+    },
+    "lords-03": {
+      "site_id": "lords-03",
+      "current_release": "3d8a64f020e2",
+      "switched_at_utc": "2026-09-05T19:20:33.971193Z",
+      "switched_by_uid": 0,
+      "releases": [
+        "4711b52bfa21",
+        "3d8a64f020e2"
+      ],
+      "rollback_release": "4711b52bfa21",
+      "fingerprint": {
+        "catalog": "eaacf89aefe9919ebb1ce28c5334958af6f907f708c2d071996e61fe221d2d50",
+        "enrichment": "97f72ad11acfc35804293b603a3d1fea4409923f52aea1c08dc481d6ede1a665",
+        "playability": "64e81fff34e8b43132fcee55221e7188412d1c89cbfc81ad9548e78b6e78ea61",
+        "renderer_version": "1d53c49349999bbb9fce668823cd385d983882b71809c56048336b3163dcc3f6",
+        "template_version": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "site_profile": "8a9155aa30a2c172deba057e5abcd7761886a4cd53a72a49cba9247609289d66",
+        "shelf_configuration": "9afd91927736355aa1585620ed4843964fee8d22adb8b2b2ae876dcf9379d31c",
+        "route_registry": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+        "schema_version": "1.0",
+        "seo_contract_version": "1.0",
+        "editorial_overrides": "",
+        "assets": "",
+        "fingerprint": "6f40c892792c7ec75f27443265eca51afc74a47a3b597b49fbf46a19435749ad"
+      }
+    }
+  },
+  "liveProbe": {
+    "lords-01": {
+      "home": {
+        "status": 200,
+        "bytes": 32753
+      },
+      "data_source_label": "fixture/test",
+      "catalog": {
+        "status": 200,
+        "bytes": 125941
+      }
+    },
+    "lords-02": {
+      "home": {
+        "status": 200,
+        "bytes": 30298
+      },
+      "data_source_label": "fixture/test",
+      "catalog": {
+        "status": 200,
+        "bytes": 125514
+      }
+    },
+    "lords-03": {
+      "home": {
+        "status": 200,
+        "bytes": 21909
+      },
+      "data_source_label": "fixture/test",
+      "catalog": {
+        "status": 200,
+        "bytes": 125089
+      }
+    }
+  },
+  "templateIdRegistration": {
+    "lords": "зарегистрирован: lords-01, lords-02, lords-03 в COMPATIBILITY_MATRIX",
+    "yummy": "зарегистрирован: yummyani-site, yummyani-org, yummyani-biz",
+    "zona-cinema": "НЕ зарегистрирован ни в PROGRAM_STATE, ни в COMPATIBILITY_MATRIX",
+    "animedia-portal": "НЕ зарегистрирован ни в PROGRAM_STATE, ни в COMPATIBILITY_MATRIX",
+    "basis-video": "НЕ зарегистрирован: PENDING_ARCHITECT_CONFIRMATION",
+    "lords-04": "профиль lords-genre существует в репозитории, но витрины lords-04 в матрице совместимости нет",
+    "note": "поиск по /srv/site-factory/coordination/v1 не нашёл упоминаний basis-video, zona-cinema и animedia-portal ни в одном файле"
+  },
+  "unknownSites": [
+    "demo-books"
+  ]
+}

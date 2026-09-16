@@ -1,0 +1,957 @@
+{
+  "zonafilm.space": {
+    "domain": "zonafilm.space",
+    "registration": {
+      "registered": true,
+      "status": [
+        "client transfer prohibited",
+        "add period"
+      ],
+      "registrar": "NameCheap, Inc.",
+      "nameservers": [
+        "paris.ns.cloudflare.com",
+        "piers.ns.cloudflare.com"
+      ],
+      "registered_at": "2026-09-07T13:43:31.937Z",
+      "expires_at": "2027-09-07T13:43:31.937Z",
+      "updated_at": "2026-09-07T14:05:29.159Z"
+    },
+    "resolvers": {
+      "cloudflare": {
+        "A": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "AAAA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "CNAME": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "NS": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "NS",
+              "ttl": 86400,
+              "value": "paris.ns.cloudflare.com"
+            },
+            {
+              "type": "NS",
+              "ttl": 86400,
+              "value": "piers.ns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        },
+        "SOA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        }
+      },
+      "google": {
+        "A": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "AAAA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "CNAME": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "NS": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "NS",
+              "ttl": 21600,
+              "value": "paris.ns.cloudflare.com"
+            },
+            {
+              "type": "NS",
+              "ttl": 21600,
+              "value": "piers.ns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        },
+        "SOA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        }
+      },
+      "quad9": {
+        "A": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "AAAA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "CNAME": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "NS": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "NS",
+              "ttl": 900,
+              "value": "paris.ns.cloudflare.com"
+            },
+            {
+              "type": "NS",
+              "ttl": 900,
+              "value": "piers.ns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        },
+        "SOA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        }
+      },
+      "yandex": {
+        "A": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "AAAA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "CNAME": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "NS": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "NS",
+              "ttl": 900,
+              "value": "paris.ns.cloudflare.com"
+            },
+            {
+              "type": "NS",
+              "ttl": 900,
+              "value": "piers.ns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        },
+        "SOA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        }
+      }
+    },
+    "a_records_by_resolver": {
+      "cloudflare": [],
+      "google": [],
+      "quad9": [],
+      "yandex": []
+    },
+    "resolvers_agree": true,
+    "resolved": false,
+    "a_ttl_seconds": [],
+    "nameservers_by_resolver": {
+      "cloudflare": [
+        "paris.ns.cloudflare.com",
+        "piers.ns.cloudflare.com"
+      ],
+      "google": [
+        "paris.ns.cloudflare.com",
+        "piers.ns.cloudflare.com"
+      ],
+      "quad9": [
+        "paris.ns.cloudflare.com",
+        "piers.ns.cloudflare.com"
+      ],
+      "yandex": [
+        "paris.ns.cloudflare.com",
+        "piers.ns.cloudflare.com"
+      ]
+    },
+    "points_to_control_host": false,
+    "state": "PENDING_DNS",
+    "note": "имя не разрешается ни одним из независимых резолверов; это ожидание разрешения, а не отказ витрины"
+  },
+  "animedia.icu": {
+    "domain": "animedia.icu",
+    "registration": {
+      "registered": true,
+      "status": [
+        "server transfer prohibited",
+        "client transfer prohibited",
+        "add period"
+      ],
+      "registrar": "NameCheap, Inc.",
+      "nameservers": [
+        "paris.ns.cloudflare.com",
+        "piers.ns.cloudflare.com"
+      ],
+      "registered_at": "2026-09-07T13:49:24.0Z",
+      "expires_at": "2027-09-07T23:59:59.0Z",
+      "updated_at": "2026-09-07T13:49:29.0Z"
+    },
+    "resolvers": {
+      "cloudflare": {
+        "A": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "AAAA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "CNAME": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "NS": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "NS",
+              "ttl": 86400,
+              "value": "paris.ns.cloudflare.com"
+            },
+            {
+              "type": "NS",
+              "ttl": 86400,
+              "value": "piers.ns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        },
+        "SOA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        }
+      },
+      "google": {
+        "A": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "AAAA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "CNAME": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "NS": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "NS",
+              "ttl": 21600,
+              "value": "paris.ns.cloudflare.com"
+            },
+            {
+              "type": "NS",
+              "ttl": 21600,
+              "value": "piers.ns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        },
+        "SOA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        }
+      },
+      "quad9": {
+        "A": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "AAAA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "CNAME": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "NS": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "NS",
+              "ttl": 43200,
+              "value": "paris.ns.cloudflare.com"
+            },
+            {
+              "type": "NS",
+              "ttl": 43200,
+              "value": "piers.ns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        },
+        "SOA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        }
+      },
+      "yandex": {
+        "A": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "AAAA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "CNAME": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "NS": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "NS",
+              "ttl": 3600,
+              "value": "piers.ns.cloudflare.com"
+            },
+            {
+              "type": "NS",
+              "ttl": 3600,
+              "value": "paris.ns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        },
+        "SOA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        }
+      }
+    },
+    "a_records_by_resolver": {
+      "cloudflare": [],
+      "google": [],
+      "quad9": [],
+      "yandex": []
+    },
+    "resolvers_agree": true,
+    "resolved": false,
+    "a_ttl_seconds": [],
+    "nameservers_by_resolver": {
+      "cloudflare": [
+        "paris.ns.cloudflare.com",
+        "piers.ns.cloudflare.com"
+      ],
+      "google": [
+        "paris.ns.cloudflare.com",
+        "piers.ns.cloudflare.com"
+      ],
+      "quad9": [
+        "paris.ns.cloudflare.com",
+        "piers.ns.cloudflare.com"
+      ],
+      "yandex": [
+        "paris.ns.cloudflare.com",
+        "piers.ns.cloudflare.com"
+      ]
+    },
+    "points_to_control_host": false,
+    "state": "PENDING_DNS",
+    "note": "имя не разрешается ни одним из независимых резолверов; это ожидание разрешения, а не отказ витрины"
+  },
+  "animedia.space": {
+    "domain": "animedia.space",
+    "registration": {
+      "registered": true,
+      "status": [
+        "client transfer prohibited",
+        "add period"
+      ],
+      "registrar": "NameCheap, Inc.",
+      "nameservers": [
+        "paris.ns.cloudflare.com",
+        "piers.ns.cloudflare.com"
+      ],
+      "registered_at": "2026-09-07T13:49:24.074Z",
+      "expires_at": "2027-09-07T13:49:24.074Z",
+      "updated_at": "2026-09-07T14:08:49.242Z"
+    },
+    "resolvers": {
+      "cloudflare": {
+        "A": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "AAAA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "CNAME": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "NS": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "NS",
+              "ttl": 86400,
+              "value": "paris.ns.cloudflare.com"
+            },
+            {
+              "type": "NS",
+              "ttl": 86400,
+              "value": "piers.ns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        },
+        "SOA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        }
+      },
+      "google": {
+        "A": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "AAAA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "CNAME": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "NS": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "NS",
+              "ttl": 21600,
+              "value": "paris.ns.cloudflare.com"
+            },
+            {
+              "type": "NS",
+              "ttl": 21600,
+              "value": "piers.ns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        },
+        "SOA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 543,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        }
+      },
+      "quad9": {
+        "A": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "AAAA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "CNAME": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "NS": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "NS",
+              "ttl": 43200,
+              "value": "paris.ns.cloudflare.com"
+            },
+            {
+              "type": "NS",
+              "ttl": 43200,
+              "value": "piers.ns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        },
+        "SOA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        }
+      },
+      "yandex": {
+        "A": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "AAAA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "CNAME": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": true
+        },
+        "NS": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "NS",
+              "ttl": 899,
+              "value": "piers.ns.cloudflare.com"
+            },
+            {
+              "type": "NS",
+              "ttl": 899,
+              "value": "paris.ns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        },
+        "SOA": {
+          "rcode": 0,
+          "rcode_name": "NOERROR",
+          "records": [
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "paris.ns.cloudflare.com dns.cloudflare.com"
+            }
+          ],
+          "authority_only": false
+        }
+      }
+    },
+    "a_records_by_resolver": {
+      "cloudflare": [],
+      "google": [],
+      "quad9": [],
+      "yandex": []
+    },
+    "resolvers_agree": true,
+    "resolved": false,
+    "a_ttl_seconds": [],
+    "nameservers_by_resolver": {
+      "cloudflare": [
+        "paris.ns.cloudflare.com",
+        "piers.ns.cloudflare.com"
+      ],
+      "google": [
+        "paris.ns.cloudflare.com",
+        "piers.ns.cloudflare.com"
+      ],
+      "quad9": [
+        "paris.ns.cloudflare.com",
+        "piers.ns.cloudflare.com"
+      ],
+      "yandex": [
+        "paris.ns.cloudflare.com",
+        "piers.ns.cloudflare.com"
+      ]
+    },
+    "points_to_control_host": false,
+    "state": "PENDING_DNS",
+    "note": "имя не разрешается ни одним из независимых резолверов; это ожидание разрешения, а не отказ витрины"
+  }
+}

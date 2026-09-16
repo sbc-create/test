@@ -26,8 +26,19 @@ def test_settings_json_is_valid_and_safe():
     assert permissions["defaultMode"] != "bypassPermissions"
     assert settings.get("disableBypassPermissionsMode") == "disable"
     deny = " ".join(permissions["deny"])
-    for pattern in ("ssh", "rm -rf", "sudo", "git push --force", "mkfs", "Read(**/.env)"):
+    # Запреты, которые владелец не снимал ни одним заданием.
+    for pattern in ("ssh", "rm -rf", "rm -fr", "mkfs", "dd ", "shred",
+                    "git push --force", "git reset --hard", "git clean",
+                    "Read(**/.env)", "Bash(su *)"):
         assert pattern in deny, f"нет deny-правила для: {pattern}"
+    # `Bash(sudo *)` снят намеренно: владелец выдал полный root-мандат
+    # (задание от 2026-09-09, `FACTORY_OWNER_ROOT_MANDATE`). Запрет живёт
+    # не здесь, а в hook'е и действует, как только мандат снят, — это
+    # проверяет test_guard_rules.py::
+    # test_privilege_denied_without_the_owner_mandate. Проверка названа
+    # вслух, чтобы снятое правило не выглядело потерянным.
+    assert "Bash(sudo *)" not in permissions["deny"], (
+        "правило вернулось — значит, мандат отозван; верните и эту проверку")
 
 
 def test_file_rules_use_read_and_edit_not_write():

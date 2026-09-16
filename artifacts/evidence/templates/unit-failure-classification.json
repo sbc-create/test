@@ -1,0 +1,45 @@
+{
+  "id": "UNIT-FAIL-01",
+  "test": "tests/unit/test_job_result.py::test_real_pilot_results_are_schema_valid",
+  "classification": "environment_missing_artifact",
+  "verdict": "не дефект кода и не дефект шаблонного слоя",
+  "captured_at_utc": "2026-09-04T13:25:04Z",
+  "head": "f2fc6ea45a991efb1aae2781ff9c9888a4f3401b",
+  "what_the_test_asserts": "что результаты задания, оставленные прогоном пилота в artifacts/jobs/pilot-local/, валидны по schemas/job-result.schema.json",
+  "why_it_failed": "Каталог artifacts/* закрыт .gitignore целиком. В worktree, созданном из ветки, результатов пилота нет, потому что пилот в нём не запускался. Тест падает на строке `assert results` — до всякой проверки схемы.",
+  "evidence": [
+    {
+      "claim": "ветка не касается ни теста, ни валидатора, ни схемы, ни конвейера",
+      "command": "git diff --stat 76552b9..HEAD -- tests/unit/test_job_result.py factory/validation.py schemas/job-result.schema.json factory/pipeline.py factory/queue.py",
+      "result": "пустой вывод — ни одного изменённого файла"
+    },
+    {
+      "claim": "в свежем worktree результатов пилота нет",
+      "command": "ls artifacts/jobs/pilot-local/",
+      "result": "No such file or directory"
+    },
+    {
+      "claim": "в основном рабочем дереве они есть",
+      "command": "ls /srv/site-factory/repo/artifacts/jobs/pilot-local/*.json | wc -l",
+      "result": "261"
+    },
+    {
+      "claim": "с этими же файлами тест проходит — то есть код и схема согласны",
+      "command": "cp -r /srv/site-factory/repo/artifacts/jobs/pilot-local artifacts/jobs/pilot-local && pytest tests/unit/test_job_result.py",
+      "result": "10 passed"
+    }
+  ],
+  "action_taken": "Результаты пилота скопированы в artifacts/ рабочего дерева потока. Каталог закрыт .gitignore, в коммит ничего не попадает. Пилот этим потоком не запускался: он относится к конвейеру фабрики, а не к шаблонам, и запускать его ради зелёного счётчика значило бы выйти за границы полосы.",
+  "known_since": "Провал зафиксирован до этого потока: status.json потока SITE-FACTORY-HARDENING-AND-PARALLEL-TEMPLATES-01 от 03.09.2026 называет его известным и объясняет той же причиной.",
+  "required_artifact": {
+    "path": "artifacts/jobs/pilot-local/",
+    "files": 261,
+    "sha256_of_set": "bf9cd466ff5f06c48bfbd69cfba2af40772efc3df8920057345e4bade59c6f7a",
+    "algorithm": "sha256 по отсортированным именам и содержимому",
+    "source": "/srv/site-factory/repo/artifacts/jobs/pilot-local (основное дерево)",
+    "tracked_by_git": false,
+    "why_untracked": "artifacts/* закрыт .gitignore; в набор свидетельств не входит"
+  },
+  "suite_claim_rule": "Полный набор называется зелёным только с этим artefact. Без него набор даёт один провал, и это состояние окружения, а не кода. Оба утверждения приводятся вместе; подменять второе первым запрещено.",
+  "reverified_at_utc": "2026-09-04T14:05:18Z"
+}

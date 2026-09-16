@@ -85,7 +85,12 @@ class TestNothingIsInvented:
         assert title.country == ""
         assert title.studio == ""
         assert title.summary == ""
-        assert title.runtime_min == 0
+        # Отсутствующая длительность — None, а не ноль. Прежнее ожидание
+        # закрепляло ровно ту выдумку, которую запрещает название класса:
+        # ноль минут — это утверждение «фильм идёт ноль минут», а не
+        # «длительность не передана». Разница видна зрителю — на боевых
+        # витринах она печаталась как «0 мин» у каждой серии.
+        assert title.runtime_min is None
         assert title.age_rating == ""
         assert title.original_name == ""
 

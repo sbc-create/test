@@ -1,13 +1,13 @@
 # Сгенерировано `python3 -m factory knowledge freeze`. Вручную не редактируется.
 schema_version: 1
-freeze_version: 2026-08-30-lords-full-catalog
-frozen_at: '2026-08-30T11:12:17Z'
+freeze_version: unversioned
+frozen_at: '2026-09-12T09:34:02Z'
 file_count: 13
-aggregate_sha256: b9b182cdeac646adf6f5f80ece6d27b210309c82d95f5b4f87a3d00b65febb37
+aggregate_sha256: 537c1562bd6b13622b3ca9eeab8809a28efefde62c2c336040c4463c890b6632
 files:
 - path: knowledge/DECISIONS.md
-  sha256: 9b6d5de51c20ba049e17eeccf02c866939bf56761e5e9c40467533f0a02390df
-  bytes: 85959
+  sha256: 551ebf2b8f379b5ab97ed015c4ce389d5aeb9cc18d0ddc23761cd11f57db11e4
+  bytes: 101844
 - path: knowledge/DLE_20_COMPATIBILITY.md
   sha256: 3ae18bd0c3abd391d16378ec296f14c3bc2162cd6ed9d1a2c58855420f816e0f
   bytes: 7042
@@ -42,5 +42,5 @@ files:
   sha256: 6ed1cdf655b2f4b5a4ac0b8f85c6c7a1bc895615de5c8d092c9cdd83c06acbbf
   bytes: 5209
 - path: knowledge/cdnvideohub/content-api.yaml
-  sha256: 2d3a66bba04d61bfe27d4fe915332f06bec65a9a753ce5d6fd0ab1265692c493
-  bytes: 9291
+  sha256: cb8899502b8ca8c6db5d62c28426d8646939f8d42dcb03d0d92a3cd7cccee0ef
+  bytes: 9744

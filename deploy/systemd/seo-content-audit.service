@@ -1,0 +1,39 @@
+# суточный аудит текстового слоя
+#
+# Заведено по входящему запросу HANDOFF-2026-09-05-019-SEO-TO-CORE.
+# Настройка systemd принадлежит CORE; сам цикл принадлежит SEO.
+#
+# Один повтор через пятнадцать минут и не больше: задание читает чужие сайты,
+# и настойчивый повтор превращается в нагрузку. Второй отказ подряд — запись
+# состояния и ожидание следующего срока.
+#
+# Идемпотентность обеспечивает само задание ключом отчётного периода
+# (report_date + domain): повторный запуск в тот же период записывает ноль строк.
+[Unit]
+Description=суточный аудит текстового слоя
+Documentation=file:///srv/site-factory/coordination/v1/handoffs/019-seo-to-core-scorecard-schedule.md
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=3600
+StartLimitBurst=2
+
+[Service]
+Type=oneshot
+WorkingDirectory=/srv/site-factory/repo
+# Команда проверяется до запуска: отсутствующая обёртка обязана давать
+# понятный отказ, а не молчаливое падение под именем задания.
+ExecStartPre=/bin/sh -c 'command -v seo-engine >/dev/null || { echo "нет команды seo-engine: обёртка ещё не поставлена"; exit 78; }'
+ExecStart=/usr/bin/env seo-engine content-audit --limit 50
+TimeoutStartSec=1800
+Restart=on-failure
+RestartSec=900
+# Задание ничего не публикует и не меняет production: только читает и пишет
+# собственные строки. Ограничения ниже делают это проверяемым, а не обещанным.
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ReadWritePaths=/srv/site-factory/repo/var /srv/site-factory/repo/artifacts
+
+[Install]
+WantedBy=multi-user.target

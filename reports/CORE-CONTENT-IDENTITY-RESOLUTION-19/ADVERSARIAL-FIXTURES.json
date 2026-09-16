@@ -1,0 +1,1553 @@
+{
+ "version": "adversarial/1.0.0",
+ "note": "Набор построен ПРОТИВ реализации, а не под неё: большинство случаев обязаны дать отказ, неоднозначность или противоречие. Один ошибочный AUTO_ACCEPT здесь — блокирующая ошибка задачи.",
+ "count": 59,
+ "cases": [
+  {
+   "id": "SAME-TITLE-DIFF-YEAR-1",
+   "note": "«Хищник» 1987 и 2018 — разные фильмы",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Predator",
+    "release_year": 1987,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Predator",
+     "release_year": 2018,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": [
+     "YEAR_INCOMPATIBLE"
+    ]
+   }
+  },
+  {
+   "id": "REMAKE-1",
+   "note": "оригинал против ремейка при совпавшем годе выпуска записи",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Suspiria",
+    "release_year": 1977,
+    "content_kind": "MOVIE",
+    "is_remake": false
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Suspiria",
+     "release_year": 1977,
+     "content_kind": "MOVIE",
+     "is_remake": true
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": [
+     "ORIGINAL_VS_REMAKE"
+    ]
+   }
+  },
+  {
+   "id": "MOVIE-VS-SERIES-1",
+   "note": "название и год совпали, вид разный",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Fargo",
+    "release_year": 1996,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Fargo",
+     "release_year": 1996,
+     "content_kind": "SERIES"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": [
+     "KIND_MOVIE_VS_SERIES"
+    ]
+   }
+  },
+  {
+   "id": "MOVIE-VS-SERIES-2",
+   "note": "мини-сериал не становится фильмом",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Chernobyl",
+    "release_year": 2019,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Chernobyl",
+     "release_year": 2019,
+     "content_kind": "MINISERIES"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": [
+     "KIND_MOVIE_VS_SERIES"
+    ]
+   }
+  },
+  {
+   "id": "SEASON-VS-SPECIAL-1",
+   "note": "SERIES против OVA: разные вещи с одним названием",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Gintama",
+    "release_year": 2015,
+    "content_kind": "SERIES"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Gintama",
+     "release_year": 2015,
+     "content_kind": "OVA"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": [
+     "SEASON_VS_SPECIAL"
+    ]
+   }
+  },
+  {
+   "id": "SEASON-VS-SPECIAL-2",
+   "note": "SERIES против ONA: разные вещи с одним названием",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Gintama",
+    "release_year": 2015,
+    "content_kind": "SERIES"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Gintama",
+     "release_year": 2015,
+     "content_kind": "ONA"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": [
+     "SEASON_VS_SPECIAL"
+    ]
+   }
+  },
+  {
+   "id": "SEASON-VS-SPECIAL-3",
+   "note": "SEASON против SPECIAL: разные вещи с одним названием",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Gintama",
+    "release_year": 2015,
+    "content_kind": "SEASON"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Gintama",
+     "release_year": 2015,
+     "content_kind": "SPECIAL"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": [
+     "SEASON_VS_SPECIAL"
+    ]
+   }
+  },
+  {
+   "id": "SEASON-VS-SPECIAL-4",
+   "note": "MINISERIES против ONA: разные вещи с одним названием",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Gintama",
+    "release_year": 2015,
+    "content_kind": "MINISERIES"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Gintama",
+     "release_year": 2015,
+     "content_kind": "ONA"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": [
+     "SEASON_VS_SPECIAL"
+    ]
+   }
+  },
+  {
+   "id": "EXT-ID-DIFFERS-1",
+   "note": "всё совпало, кроме идентификатора того же источника",
+   "subject": {
+    "entity_id": "s",
+    "external_ids": {
+     "kp": "111"
+    },
+    "original_title": "Drive",
+    "release_year": 2011,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "external_ids": {
+      "kp": "222"
+     },
+     "original_title": "Drive",
+     "release_year": 2011,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": [
+     "EXTERNAL_ID_DIFFERS"
+    ]
+   }
+  },
+  {
+   "id": "EPISODES-INCOMPATIBLE-1",
+   "note": "12 серий против 334: это франшиза, а не сезон",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "JoJo",
+    "release_year": 2022,
+    "content_kind": "SERIES",
+    "episode_count": 12
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "JoJo",
+     "release_year": 2022,
+     "content_kind": "SERIES",
+     "episode_count": 334
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": [
+     "EPISODE_COUNT_INCOMPATIBLE"
+    ]
+   }
+  },
+  {
+   "id": "EPISODES-SLACK-OK",
+   "note": "расхождение в одну серию допустимо: сезон ещё выходит",
+   "subject": {
+    "entity_id": "s",
+    "external_ids": {
+     "mal": "1"
+    },
+    "original_title": "Frieren",
+    "release_year": 2023,
+    "content_kind": "SERIES",
+    "episode_count": 27
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "external_ids": {
+      "mal": "1"
+     },
+     "original_title": "Frieren",
+     "release_year": 2023,
+     "content_kind": "SERIES",
+     "episode_count": 28
+    }
+   ],
+   "expect": {
+    "status": "RESOLVED_EXACT_ID",
+    "mustNotAutoAccept": false,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "ORIGIN-DIFFERS-1",
+   "note": "совпало название и год, разошлись страна и студия",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "The Ring",
+    "release_year": 1998,
+    "content_kind": "MOVIE",
+    "country": "Japan",
+    "studio": "Omega"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "The Ring",
+     "release_year": 1998,
+     "content_kind": "MOVIE",
+     "country": "USA",
+     "studio": "DreamWorks"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": [
+     "ORIGIN_DIFFERS"
+    ]
+   }
+  },
+  {
+   "id": "ORIGIN-ONE-DIFF-OK",
+   "note": "одно расхождение — это разное написание, не другое произведение",
+   "subject": {
+    "entity_id": "s",
+    "external_ids": {
+     "kp": "5"
+    },
+    "original_title": "Solaris",
+    "release_year": 1972,
+    "content_kind": "MOVIE",
+    "country": "USSR",
+    "studio": "Mosfilm"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "external_ids": {
+      "kp": "5"
+     },
+     "original_title": "Solaris",
+     "release_year": 1972,
+     "content_kind": "MOVIE",
+     "country": "СССР",
+     "studio": "Mosfilm"
+    }
+   ],
+   "expect": {
+    "status": "RESOLVED_EXACT_ID",
+    "mustNotAutoAccept": false,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "AMBIGUOUS-CLOSE-1",
+   "note": "два кандидата в пределах зазора — выбирать нечем",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Twin Peaks",
+    "release_year": 1990,
+    "content_kind": "SERIES"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Twin Peaks",
+     "release_year": 1990,
+     "content_kind": "SERIES"
+    },
+    {
+     "entity_id": "b",
+     "original_title": "Twin Peaks",
+     "release_year": 1991,
+     "content_kind": "SERIES"
+    }
+   ],
+   "expect": {
+    "status": "AMBIGUOUS",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "AMBIGUOUS-CLOSE-2",
+   "note": "два разных произведения одного года и названия",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Crash",
+    "release_year": 2004,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Crash",
+     "release_year": 2004,
+     "content_kind": "MOVIE",
+     "country": "USA"
+    },
+    {
+     "entity_id": "b",
+     "original_title": "Crash",
+     "release_year": 2004,
+     "content_kind": "MOVIE",
+     "country": "Canada"
+    }
+   ],
+   "expect": {
+    "status": "AMBIGUOUS",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "MISSING-YEAR-1",
+   "note": "без года одного названия недостаточно",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Ghost",
+    "release_year": null,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Ghost",
+     "release_year": 1990,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "AMBIGUOUS",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "WRONG-YEAR-SLACK",
+   "note": "расхождение на год допустимо — даты релиза по странам расходятся",
+   "subject": {
+    "entity_id": "s",
+    "external_ids": {
+     "imdb": "7"
+    },
+    "original_title": "Parasite",
+    "release_year": 2019,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "external_ids": {
+      "imdb": "7"
+     },
+     "original_title": "Parasite",
+     "release_year": 2020,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "RESOLVED_EXACT_ID",
+    "mustNotAutoAccept": false,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "WRONG-YEAR-TOO-FAR",
+   "note": "расхождение на два года без доказательства — противоречие",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Dune",
+    "release_year": 1984,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Dune",
+     "release_year": 2021,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": [
+     "YEAR_INCOMPATIBLE"
+    ]
+   }
+  },
+  {
+   "id": "DURATION-CONFLICT-1",
+   "note": "95 минут против 24: полный метр против серии",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Cup of Snow",
+    "release_year": 2026,
+    "content_kind": "MOVIE",
+    "duration": 95
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Cup of Snow",
+     "release_year": 2026,
+     "content_kind": "MOVIE",
+     "duration": 24
+    }
+   ],
+   "expect": {
+    "status": "UNMATCHED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "DURATION-ZERO-ABSENT",
+   "note": "нулевая длительность отсутствует как признак, а не совпадает",
+   "subject": {
+    "entity_id": "s",
+    "external_ids": {
+     "kp": "9"
+    },
+    "original_title": "Short Work",
+    "release_year": 2020,
+    "content_kind": "SHORT",
+    "duration": null
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "external_ids": {
+      "kp": "9"
+     },
+     "original_title": "Short Work",
+     "release_year": 2020,
+     "content_kind": "SHORT",
+     "duration": 12
+    }
+   ],
+   "expect": {
+    "status": "RESOLVED_EXACT_ID",
+    "mustNotAutoAccept": false,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "TRANSLIT-1",
+   "note": "кириллица и латиница одного названия",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Атака титанов",
+    "release_year": 2013,
+    "content_kind": "SERIES",
+    "country": "Japan"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Ataka titanov",
+     "release_year": 2013,
+     "content_kind": "SERIES",
+     "country": "Japan"
+    }
+   ],
+   "expect": {
+    "status": "RESOLVED_HIGH_CONFIDENCE",
+    "mustNotAutoAccept": false,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "ALIAS-1",
+   "note": "совпадение по альтернативному названию",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Shingeki no Kyojin",
+    "alternative_titles": [
+     "Атака титанов"
+    ],
+    "release_year": 2013,
+    "content_kind": "SERIES",
+    "country": "Japan"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Attack on Titan",
+     "alternative_titles": [
+      "Атака титанов"
+     ],
+     "release_year": 2013,
+     "content_kind": "SERIES",
+     "country": "Japan"
+    }
+   ],
+   "expect": {
+    "status": "RESOLVED_HIGH_CONFIDENCE",
+    "mustNotAutoAccept": false,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "ROMAN-1",
+   "note": "«Рокки IV» и «Рокки 4» — одно произведение",
+   "subject": {
+    "entity_id": "s",
+    "external_ids": {
+     "kp": "4"
+    },
+    "original_title": "Рокки IV",
+    "release_year": 1985,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "external_ids": {
+      "kp": "4"
+     },
+     "original_title": "Рокки 4",
+     "release_year": 1985,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "RESOLVED_EXACT_ID",
+    "mustNotAutoAccept": false,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "SEQUEL-VS-SEASON",
+   "note": "«Рокки 4» — не четвёртый сезон «Рокки»",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Рокки 4",
+    "release_year": 1985,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Рокки",
+     "release_year": 1976,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": [
+     "YEAR_INCOMPATIBLE"
+    ]
+   }
+  },
+  {
+   "id": "COUR-1",
+   "note": "часть 2 третьего сезона — не отдельное произведение с тем же названием",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Атака титанов сезон 3 часть 2",
+    "release_year": 2019,
+    "content_kind": "SERIES",
+    "episode_count": 10
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Атака титанов 3 часть 2",
+     "release_year": 2019,
+     "content_kind": "SERIES",
+     "episode_count": 10
+    }
+   ],
+   "expect": {
+    "status": "RESOLVED_HIGH_CONFIDENCE",
+    "mustNotAutoAccept": false,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "NO-CANDIDATES",
+   "note": "кандидатов нет вовсе",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Nothing",
+    "release_year": 2000,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [],
+   "expect": {
+    "status": "UNMATCHED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "EMPTY-TITLES",
+   "note": "пустые названия не совпадают друг с другом",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "",
+    "release_year": 2000,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "",
+     "release_year": 2000,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "RESOLVED_HIGH_CONFIDENCE",
+    "mustNotAutoAccept": false,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "NEAR-TITLE-1",
+   "note": "«Дом» и «Дом 2» — разные произведения одного года",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Дом",
+    "release_year": 2021,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "x",
+     "original_title": "Дом 2",
+     "release_year": 2021,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "UNMATCHED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "NEAR-TITLE-2",
+   "note": "«Мост» и «Мосты» — разные произведения одного года",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Мост",
+    "release_year": 2021,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "x",
+     "original_title": "Мосты",
+     "release_year": 2021,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "UNMATCHED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "NEAR-TITLE-3",
+   "note": "«Игра» и «Игры» — разные произведения одного года",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Игра",
+    "release_year": 2021,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "x",
+     "original_title": "Игры",
+     "release_year": 2021,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "UNMATCHED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "NEAR-TITLE-4",
+   "note": "«Один» и «Одни» — разные произведения одного года",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Один",
+    "release_year": 2021,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "x",
+     "original_title": "Одни",
+     "release_year": 2021,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "UNMATCHED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "NEAR-TITLE-5",
+   "note": "«Побег» и «Побеги» — разные произведения одного года",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Побег",
+    "release_year": 2021,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "x",
+     "original_title": "Побеги",
+     "release_year": 2021,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "UNMATCHED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "NEAR-TITLE-6",
+   "note": "«Тень» и «Тени» — разные произведения одного года",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Тень",
+    "release_year": 2021,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "x",
+     "original_title": "Тени",
+     "release_year": 2021,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "UNMATCHED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "NEAR-TITLE-7",
+   "note": "«Волк» и «Волки» — разные произведения одного года",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Волк",
+    "release_year": 2021,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "x",
+     "original_title": "Волки",
+     "release_year": 2021,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "UNMATCHED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "NEAR-TITLE-8",
+   "note": "«Сон» и «Сны» — разные произведения одного года",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Сон",
+    "release_year": 2021,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "x",
+     "original_title": "Сны",
+     "release_year": 2021,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "UNMATCHED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "NEAR-TITLE-9",
+   "note": "«Путь» и «Пути» — разные произведения одного года",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Путь",
+    "release_year": 2021,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "x",
+     "original_title": "Пути",
+     "release_year": 2021,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "UNMATCHED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "NEAR-TITLE-10",
+   "note": "«Свет» и «Светы» — разные произведения одного года",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Свет",
+    "release_year": 2021,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "x",
+     "original_title": "Светы",
+     "release_year": 2021,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "UNMATCHED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "KIND-CROSS-1",
+   "note": "MOVIE против SERIES при полном совпадении названия и года",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Same Name",
+    "release_year": 2015,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Same Name",
+     "release_year": 2015,
+     "content_kind": "SERIES"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "KIND-CROSS-2",
+   "note": "MOVIE против OVA при полном совпадении названия и года",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Same Name",
+    "release_year": 2015,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Same Name",
+     "release_year": 2015,
+     "content_kind": "OVA"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "KIND-CROSS-3",
+   "note": "MOVIE против ONA при полном совпадении названия и года",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Same Name",
+    "release_year": 2015,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Same Name",
+     "release_year": 2015,
+     "content_kind": "ONA"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "KIND-CROSS-4",
+   "note": "SERIES против MOVIE при полном совпадении названия и года",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Same Name",
+    "release_year": 2015,
+    "content_kind": "SERIES"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Same Name",
+     "release_year": 2015,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "KIND-CROSS-5",
+   "note": "SERIES против SPECIAL при полном совпадении названия и года",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Same Name",
+    "release_year": 2015,
+    "content_kind": "SERIES"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Same Name",
+     "release_year": 2015,
+     "content_kind": "SPECIAL"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "KIND-CROSS-6",
+   "note": "OVA против MOVIE при полном совпадении названия и года",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Same Name",
+    "release_year": 2015,
+    "content_kind": "OVA"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Same Name",
+     "release_year": 2015,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "KIND-CROSS-7",
+   "note": "ONA против MOVIE при полном совпадении названия и года",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Same Name",
+    "release_year": 2015,
+    "content_kind": "ONA"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Same Name",
+     "release_year": 2015,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "KIND-CROSS-8",
+   "note": "SPECIAL против SERIES при полном совпадении названия и года",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Same Name",
+    "release_year": 2015,
+    "content_kind": "SPECIAL"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Same Name",
+     "release_year": 2015,
+     "content_kind": "SERIES"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "KIND-CROSS-9",
+   "note": "SHORT против SERIES при полном совпадении названия и года",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Same Name",
+    "release_year": 2015,
+    "content_kind": "SHORT"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Same Name",
+     "release_year": 2015,
+     "content_kind": "SERIES"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "KIND-CROSS-10",
+   "note": "DOCUMENTARY против SERIES при полном совпадении названия и года",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Same Name",
+    "release_year": 2015,
+    "content_kind": "DOCUMENTARY"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Same Name",
+     "release_year": 2015,
+     "content_kind": "SERIES"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "KIND-CROSS-11",
+   "note": "MUSIC против SERIES при полном совпадении названия и года",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Same Name",
+    "release_year": 2015,
+    "content_kind": "MUSIC"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Same Name",
+     "release_year": 2015,
+     "content_kind": "SERIES"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "KIND-CROSS-12",
+   "note": "SEASON против MOVIE при полном совпадении названия и года",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Same Name",
+    "release_year": 2015,
+    "content_kind": "SEASON"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Same Name",
+     "release_year": 2015,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "CONFLICTED",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "EXACT-ID-WINS-1",
+   "note": "«Ёлки» и «Елки» — один идентификатор, разное написание",
+   "subject": {
+    "entity_id": "s",
+    "external_ids": {
+     "kp": "101"
+    },
+    "original_title": "Ёлки",
+    "release_year": 2021,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "external_ids": {
+      "kp": "101"
+     },
+     "original_title": "Елки",
+     "release_year": 2021,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "RESOLVED_EXACT_ID",
+    "mustNotAutoAccept": false,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "EXACT-ID-WINS-2",
+   "note": "«Тайна» и «Тайна.» — один идентификатор, разное написание",
+   "subject": {
+    "entity_id": "s",
+    "external_ids": {
+     "kp": "102"
+    },
+    "original_title": "Тайна",
+    "release_year": 2021,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "external_ids": {
+      "kp": "102"
+     },
+     "original_title": "Тайна.",
+     "release_year": 2021,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "RESOLVED_EXACT_ID",
+    "mustNotAutoAccept": false,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "EXACT-ID-WINS-3",
+   "note": "«Дюна» и «Дюна (2021)» — один идентификатор, разное написание",
+   "subject": {
+    "entity_id": "s",
+    "external_ids": {
+     "kp": "103"
+    },
+    "original_title": "Дюна",
+    "release_year": 2021,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "external_ids": {
+      "kp": "103"
+     },
+     "original_title": "Дюна (2021)",
+     "release_year": 2021,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "RESOLVED_EXACT_ID",
+    "mustNotAutoAccept": false,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "EXACT-ID-WINS-4",
+   "note": "«Ханма» и «Hanma» — один идентификатор, разное написание",
+   "subject": {
+    "entity_id": "s",
+    "external_ids": {
+     "kp": "104"
+    },
+    "original_title": "Ханма",
+    "release_year": 2021,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "external_ids": {
+      "kp": "104"
+     },
+     "original_title": "Hanma",
+     "release_year": 2021,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "RESOLVED_EXACT_ID",
+    "mustNotAutoAccept": false,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "EXACT-ID-WINS-5",
+   "note": "«Наруто» и «Naruto» — один идентификатор, разное написание",
+   "subject": {
+    "entity_id": "s",
+    "external_ids": {
+     "kp": "105"
+    },
+    "original_title": "Наруто",
+    "release_year": 2021,
+    "content_kind": "MOVIE"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "external_ids": {
+      "kp": "105"
+     },
+     "original_title": "Naruto",
+     "release_year": 2021,
+     "content_kind": "MOVIE"
+    }
+   ],
+   "expect": {
+    "status": "RESOLVED_EXACT_ID",
+    "mustNotAutoAccept": false,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "MANY-CLOSE-1",
+   "note": "три кандидата в пределах зазора",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Series 1",
+    "release_year": 2020,
+    "content_kind": "SERIES"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Series 1",
+     "release_year": 2020,
+     "content_kind": "SERIES"
+    },
+    {
+     "entity_id": "b",
+     "original_title": "Series 1",
+     "release_year": 2020,
+     "content_kind": "SERIES"
+    },
+    {
+     "entity_id": "d",
+     "original_title": "Series 1",
+     "release_year": 2021,
+     "content_kind": "SERIES"
+    }
+   ],
+   "expect": {
+    "status": "AMBIGUOUS",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "MANY-CLOSE-2",
+   "note": "три кандидата в пределах зазора",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Series 2",
+    "release_year": 2020,
+    "content_kind": "SERIES"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Series 2",
+     "release_year": 2020,
+     "content_kind": "SERIES"
+    },
+    {
+     "entity_id": "b",
+     "original_title": "Series 2",
+     "release_year": 2020,
+     "content_kind": "SERIES"
+    },
+    {
+     "entity_id": "d",
+     "original_title": "Series 2",
+     "release_year": 2021,
+     "content_kind": "SERIES"
+    }
+   ],
+   "expect": {
+    "status": "AMBIGUOUS",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "MANY-CLOSE-3",
+   "note": "три кандидата в пределах зазора",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Series 3",
+    "release_year": 2020,
+    "content_kind": "SERIES"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Series 3",
+     "release_year": 2020,
+     "content_kind": "SERIES"
+    },
+    {
+     "entity_id": "b",
+     "original_title": "Series 3",
+     "release_year": 2020,
+     "content_kind": "SERIES"
+    },
+    {
+     "entity_id": "d",
+     "original_title": "Series 3",
+     "release_year": 2021,
+     "content_kind": "SERIES"
+    }
+   ],
+   "expect": {
+    "status": "AMBIGUOUS",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "MANY-CLOSE-4",
+   "note": "три кандидата в пределах зазора",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Series 4",
+    "release_year": 2020,
+    "content_kind": "SERIES"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Series 4",
+     "release_year": 2020,
+     "content_kind": "SERIES"
+    },
+    {
+     "entity_id": "b",
+     "original_title": "Series 4",
+     "release_year": 2020,
+     "content_kind": "SERIES"
+    },
+    {
+     "entity_id": "d",
+     "original_title": "Series 4",
+     "release_year": 2021,
+     "content_kind": "SERIES"
+    }
+   ],
+   "expect": {
+    "status": "AMBIGUOUS",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  },
+  {
+   "id": "MANY-CLOSE-5",
+   "note": "три кандидата в пределах зазора",
+   "subject": {
+    "entity_id": "s",
+    "original_title": "Series 5",
+    "release_year": 2020,
+    "content_kind": "SERIES"
+   },
+   "candidates": [
+    {
+     "entity_id": "a",
+     "original_title": "Series 5",
+     "release_year": 2020,
+     "content_kind": "SERIES"
+    },
+    {
+     "entity_id": "b",
+     "original_title": "Series 5",
+     "release_year": 2020,
+     "content_kind": "SERIES"
+    },
+    {
+     "entity_id": "d",
+     "original_title": "Series 5",
+     "release_year": 2021,
+     "content_kind": "SERIES"
+    }
+   ],
+   "expect": {
+    "status": "AMBIGUOUS",
+    "mustNotAutoAccept": true,
+    "conflictsInclude": []
+   }
+  }
+ ]
+}

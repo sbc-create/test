@@ -1,0 +1,13 @@
+{
+  "captured_at_utc": "2026-09-04T15:50:09.537Z",
+  "base": "http://127.0.0.1:3210",
+  "empty_in_fixture": [
+    "newEpisodes",
+    "newSeasons",
+    "playbackAvailable",
+    "recentlyUpdated",
+    "carousel"
+  ],
+  "headings_without_content": [],
+  "note": "событийные полки пусты намеренно; проверяется отсутствие визуальных дыр"
+}

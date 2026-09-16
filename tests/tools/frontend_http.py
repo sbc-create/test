@@ -21,6 +21,13 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+
+# Инструменты запускаются как сценарии, а не импортируются пакетом: путь к
+# соседнему модулю добавляется явно.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+import stand_env  # noqa: E402
+
 APP = ROOT / "blueprints" / "payload-next-multisite" / "app"
 ARTIFACT = ROOT / "var" / "artifacts" / "frontend-http.json"
 
@@ -240,15 +247,8 @@ def check_comments(port: int, results: Results) -> None:
 
 def main() -> int:
     port = free_port()
-    env = dict(os.environ)
-    env.update({
-        # Publisher ID приходит из окружения по имени секрета, а не из CMS.
-        "PLAYER_PUBLISHER_ID_A": "stand-publisher-a",
-        "PLAYER_PUBLISHER_ID_B": "stand-publisher-b",
-        "PLAYER_PUBLISHER_ID_C": "stand-publisher-c",
-        "PLAYER_MODE": "mock",
-        "FACTORY_ENVIRONMENT": "staging",
-    })
+    # Publisher ID приходит из окружения по имени секрета, а не из CMS.
+    env = stand_env.stand_environment()
     # Стенд наполняется здесь же: тест не должен зависеть от того, что кто-то
     # раньше запустил seed вручную и оставил базу в нужном состоянии.
     seeding = subprocess.run(
@@ -271,16 +271,7 @@ def main() -> int:
     responses: dict[str, dict] = {}
 
     try:
-        deadline = time.time() + 180
-        ready = False
-        while time.time() < deadline:
-            try:
-                with socket.create_connection(("127.0.0.1", port), timeout=2):
-                    ready = True
-                    break
-            except OSError:
-                time.sleep(0.5)
-        if not ready:
+        if not stand_env.wait_for_port(port):
             print("FAIL: сервер не открыл порт")
             return 1
 

@@ -1,0 +1,333 @@
+#!/usr/bin/env python3
+"""Ворота обновления каталога: шаблон берётся из релиза, а не из рабочего дерева.
+
+Три подкоманды, ровно по трём местам, где терялась выложенная работа.
+
+    plan     — из какого артефакта отрисовывать эту витрину. Печатает путь.
+    adopt    — завести манифест действующему релизу, закрепив ревизию, которой
+               он фактически собран. Разовый шаг для витрин, выложенных до
+               появления манифестов.
+    finalize — записать манифест нового релиза и атомарно переключить `current`
+               с проверкой ожидаемого предыдущего.
+
+Сценарий обновления вызывает `plan` перед отрисовкой и `finalize` вместо
+`ln -sfn`. Между ними он ничего не решает про шаблон: решение принято здесь и
+записано.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import sys
+import time
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+from factory.lords import refresh_release as рр  # noqa: E402
+from factory.lords import release_manifest as рм  # noqa: E402
+from factory.lords import template_artifact as та  # noqa: E402
+
+
+def _рантайм(корень: str, сайт: str) -> Path:
+    return Path(корень) / сайт
+
+
+def команда_plan(args) -> int:
+    рантайм = _рантайм(args.runtime_root, args.site)
+    try:
+        план = рр.план(рантайм, artifact_root=args.artifact_root,
+                       state_root=args.state_root)
+    except (рр.RefreshRefused, рм.ManifestError, та.ArtifactError) as отказ:
+        print(f"ОТКАЗ {args.site}: {отказ}", file=sys.stderr)
+        return 3
+    if args.json:
+        печать = dict(план)
+        печать.pop("manifest", None)
+        print(json.dumps(печать, ensure_ascii=False))
+    else:
+        print(план["templateRoot"])
+    return 0
+
+
+def команда_adopt(args) -> int:
+    """Манифест для релиза, выложенного до появления манифестов.
+
+    Ревизия не угадывается: она передаётся явно и проверяется тем, что архив
+    этой ревизии собирается. Артефакт складывается рядом с витриной, потому что
+    релиз обязан оставаться восстановимым и после того, как рабочее дерево
+    уедет вперёд.
+    """
+    рантайм = _рантайм(args.runtime_root, args.site)
+    релиз = рр.текущий_релиз(рантайм)
+    if релиз is None:
+        print(f"ОТКАЗ {args.site}: нет действующего релиза", file=sys.stderr)
+        return 3
+    путь_манифеста = релиз / рр.МАНИФЕСТ
+    if путь_манифеста.is_file() and not args.force:
+        print(f"{args.site}: манифест уже есть — {путь_манифеста}")
+        return 0
+
+    хранилище = Path(args.artifact_root) / "templates"
+    хранилище.mkdir(parents=True, exist_ok=True)
+    архив = хранилище / f"{args.revision[:12]}.tar.gz"
+    if not архив.is_file():
+        собрано = та.собрать(args.repo, args.revision, архив)
+        отпечаток = собрано["digest"]
+    else:
+        отпечаток = рм.отпечаток_файла(архив)
+
+    тайтлы = релиз / "site" / "title"
+    страниц = len(list(тайтлы.glob("*"))) if тайтлы.is_dir() else 0
+    прежний = (рантайм / "previous")
+    манифест = {
+        "tenant_id": args.site,
+        "domain": args.domain,
+        "theme": args.theme,
+        "template_package_ref": args.package_ref,
+        "template_artifact_ref": f"templates/{архив.name}",
+        "template_digest": отпечаток,
+        "renderer_revision": args.revision,
+        "content_snapshot_id": args.snapshot or f"adopted-{релиз.name}",
+        "content_source": args.content_source,
+        "content_count": args.content_count or страниц,
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "created_by": f"adopt:{os.getenv('USER') or os.getuid()}",
+        "previous_release": прежний.resolve().name if прежний.exists() else None,
+        "rollback_target": прежний.resolve().name if прежний.exists() else None,
+        "release_reason": "adopt-existing-release",
+        "production_authorized": True,
+        "manifest_version": рм.ВЕРСИЯ,
+        "adopted": True,
+        "adopted_note": (
+            "манифест заведён действующему релизу задним числом: ревизия "
+            "передана явно и подтверждена сборкой архива, счёт записей взят "
+            "со страниц самого релиза"
+        ),
+    }
+    беды = рм.нарушения(манифест, artifact_root=args.artifact_root)
+    if беды:
+        print(f"ОТКАЗ {args.site}: " + "; ".join(беды), file=sys.stderr)
+        return 3
+    путь_манифеста.write_text(json.dumps(манифест, ensure_ascii=False, indent=2) + "\n",
+                              encoding="utf-8")
+    print(f"{args.site}: манифест заведён, отпечаток шаблона {отпечаток[:16]}, "
+          f"записей {манифест['content_count']}")
+    return 0
+
+
+def команда_pin(args) -> int:
+    """Закрепить артефакт ревизии и распаковать его. Печатает корень шаблона.
+
+    Отдельная подкоманда, потому что канареечная выкладка отрисовывает витрину
+    НЕ тем шаблоном, что записан в её действующем манифесте. Это единственный
+    законный случай расхождения, и он назван явно: молчаливая подмена корня
+    отрисовки и есть исходный дефект.
+    """
+    рантайм = _рантайм(args.runtime_root, args.site)
+    хранилище = Path(args.artifact_root) / "templates"
+    хранилище.mkdir(parents=True, exist_ok=True)
+    архив = хранилище / f"{args.revision[:12]}.tar.gz"
+    try:
+        if not архив.is_file():
+            та.собрать(args.repo, args.revision, архив)
+        отпечаток = рм.отпечаток_файла(архив)
+        корень = та.распаковать(архив, отпечаток, рантайм / та.ПОДКАТАЛОГ,
+                                state_root=args.state_root)
+    except (та.ArtifactError, рм.ManifestError) as отказ:
+        print(f"ОТКАЗ {args.site}: {отказ}", file=sys.stderr)
+        return 3
+    if args.json:
+        print(json.dumps({"templateRoot": str(корень), "templateDigest": отпечаток,
+                          "rendererRevision": args.revision,
+                          "templateArtifactRef": f"templates/{архив.name}"},
+                         ensure_ascii=False))
+    else:
+        print(корень)
+    return 0
+
+
+def команда_rollback(args) -> int:
+    """Вернуть витрину на цель отката, названную её же манифестом.
+
+    Цель не передаётся аргументом. Аргумент означал бы, что откатиться можно
+    куда угодно, включая релиз другой витрины или тот, которого нет; манифест
+    же называет ровно тот релиз, поверх которого текущий был выложен.
+
+    Откат идёт через тот же замок и ту же проверку ожидаемого состояния, что и
+    выкладка: откат, затирающий чужую операцию, — это вторая авария поверх
+    первой.
+    """
+    рантайм = _рантайм(args.runtime_root, args.site)
+    try:
+        with рр.замок(рантайм, timeout=args.lock_timeout):
+            текущий = рр.текущий_релиз(рантайм)
+            if текущий is None:
+                raise рр.RefreshRefused("у витрины нет действующего релиза")
+            манифест = рм.прочитать(текущий / рр.МАНИФЕСТ)
+            цель_имя = str(манифест.get("rollback_target") or "")
+            if not цель_имя:
+                raise рр.RefreshRefused(
+                    "манифест не называет цель отката: это первый релиз витрины "
+                    "или манифест неполон — возвращаться некуда")
+            цель = рантайм / "releases" / цель_имя
+            if not (цель / рр.МАНИФЕСТ).is_file():
+                raise рр.RefreshRefused(
+                    f"цель отката {цель_имя} недоступна: каталог удалён хранением "
+                    "или манифеста в нём нет")
+            итог = рр.переключить(рантайм, цель, expected_current=текущий.name,
+                                  reason=args.reason, actor=args.actor)
+    except (рр.RefreshRefused, рм.ManifestError) as отказ:
+        print(f"ОТКАЗ {args.site}: {отказ}", file=sys.stderr)
+        return 3
+    print(json.dumps(итог, ensure_ascii=False))
+    return 0
+
+
+def команда_promote(args) -> int:
+    """Вернуть витрину на релиз, который был снят откатом.
+
+    Ограничение то же по строгости, что и у отката, только зеркальное: целевой
+    релиз обязан называть текущий своим предыдущим. Это ровно тот релиз, что
+    стоял до отката, и никакой другой — «переключить куда угодно» здесь нет.
+    """
+    рантайм = _рантайм(args.runtime_root, args.site)
+    try:
+        with рр.замок(рантайм, timeout=args.lock_timeout):
+            текущий = рр.текущий_релиз(рантайм)
+            if текущий is None:
+                raise рр.RefreshRefused("у витрины нет действующего релиза")
+            цель = рантайм / "releases" / args.release
+            манифест = рм.прочитать(цель / рр.МАНИФЕСТ)
+            если_предыдущий = str(манифест.get("previous_release") or "")
+            if если_предыдущий != текущий.name:
+                raise рр.RefreshRefused(
+                    f"релиз {args.release} называет предыдущим {если_предыдущий!r}, "
+                    f"а витрина сейчас на {текущий.name!r}: это не возврат снятого "
+                    "релиза, а переключение на посторонний")
+            беды = рм.нарушения(манифест, artifact_root=args.artifact_root)
+            if беды:
+                raise рр.RefreshRefused("целевой релиз не удовлетворяет инвариантам: "
+                                        + "; ".join(беды))
+            итог = рр.переключить(рантайм, цель, expected_current=текущий.name,
+                                  reason=args.reason, actor=args.actor)
+    except (рр.RefreshRefused, рм.ManifestError) as отказ:
+        print(f"ОТКАЗ {args.site}: {отказ}", file=sys.stderr)
+        return 3
+    print(json.dumps(итог, ensure_ascii=False))
+    return 0
+
+
+def команда_finalize(args) -> int:
+    рантайм = _рантайм(args.runtime_root, args.site)
+    try:
+        with рр.замок(рантайм, timeout=args.lock_timeout):
+            план = рр.план(рантайм, artifact_root=args.artifact_root,
+                       state_root=args.state_root)
+            цель = Path(args.target)
+            шаблон = None
+            if args.template_revision:
+                архив = (Path(args.artifact_root) / "templates"
+                         / f"{args.template_revision[:12]}.tar.gz")
+                if not архив.is_file():
+                    raise рр.RefreshRefused(
+                        f"артефакт ревизии {args.template_revision[:12]} не закреплён: "
+                        "сначала pin, иначе манифест сошлётся на то, чего нет")
+                шаблон = {
+                    "template_artifact_ref": f"templates/{архив.name}",
+                    "template_digest": рм.отпечаток_файла(архив),
+                    "renderer_revision": args.template_revision,
+                    "template_package_ref": f"lords-tooling/{args.template_revision[:12]}",
+                }
+            рр.записать_манифест(
+                цель, план,
+                content_snapshot_id=args.snapshot,
+                content_count=args.content_count,
+                created_by=args.actor,
+                artifact_root=args.artifact_root,
+                release_reason=args.reason,
+                template=шаблон,
+                tooling_revision=args.tooling_revision,
+            )
+            итог = рр.переключить(рантайм, цель,
+                                  expected_current=план["currentRelease"],
+                                  reason=args.reason, actor=args.actor)
+    except (рр.RefreshRefused, рм.ManifestError, та.ArtifactError) as отказ:
+        print(f"ОТКАЗ {args.site}: {отказ}", file=sys.stderr)
+        return 3
+    print(json.dumps(итог, ensure_ascii=False))
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    р = argparse.ArgumentParser(description=__doc__,
+                                formatter_class=argparse.RawDescriptionHelpFormatter)
+    р.add_argument("--runtime-root", default="/srv/lords")
+    р.add_argument("--artifact-root", default="/srv/lords/.artifacts")
+    р.add_argument("--state-root", default="/srv/site-factory/repo",
+                   help="корень общего изменяемого состояния (var/)")
+    под = р.add_subparsers(dest="команда", required=True)
+
+    p = под.add_parser("plan")
+    p.add_argument("site")
+    p.add_argument("--json", action="store_true")
+    p.set_defaults(func=команда_plan)
+
+    a = под.add_parser("adopt")
+    a.add_argument("site")
+    a.add_argument("--revision", required=True, help="полный SHA ревизии отрисовщика")
+    a.add_argument("--repo", default="/srv/site-factory/repo")
+    a.add_argument("--domain", required=True)
+    a.add_argument("--theme", required=True)
+    a.add_argument("--content-source", required=True)
+    a.add_argument("--package-ref", default="")
+    a.add_argument("--snapshot", default="")
+    a.add_argument("--content-count", type=int, default=0)
+    a.add_argument("--force", action="store_true")
+    a.set_defaults(func=команда_adopt)
+
+    pn = под.add_parser("pin")
+    pn.add_argument("site")
+    pn.add_argument("--revision", required=True)
+    pn.add_argument("--repo", default="/home/claude/wt-prod-25")
+    pn.add_argument("--json", action="store_true")
+    pn.set_defaults(func=команда_pin)
+
+    rb = под.add_parser("rollback")
+    rb.add_argument("site")
+    rb.add_argument("--reason", default="rollback")
+    rb.add_argument("--actor", default="operator")
+    rb.add_argument("--lock-timeout", type=float, default=300.0)
+    rb.set_defaults(func=команда_rollback)
+
+    pr = под.add_parser("promote")
+    pr.add_argument("site")
+    pr.add_argument("--release", required=True)
+    pr.add_argument("--reason", default="restore-after-rollback")
+    pr.add_argument("--actor", default="operator")
+    pr.add_argument("--lock-timeout", type=float, default=300.0)
+    pr.set_defaults(func=команда_promote)
+
+    f = под.add_parser("finalize")
+    f.add_argument("site")
+    f.add_argument("--target", required=True)
+    f.add_argument("--snapshot", required=True)
+    f.add_argument("--content-count", type=int, required=True)
+    f.add_argument("--actor", default="lords-content-refresh")
+    f.add_argument("--reason", default="content-refresh")
+    f.add_argument("--lock-timeout", type=float, default=300.0)
+    f.add_argument("--tooling-revision", default="",
+                   help="ревизия оснастки, которой собран релиз")
+    f.add_argument("--template-revision", default="",
+                   help="выложить другой шаблон: только вместе с причиной, "
+                        "отличной от content-refresh")
+    f.set_defaults(func=команда_finalize)
+
+    args = р.parse_args(argv)
+    return args.func(args)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

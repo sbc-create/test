@@ -20,7 +20,8 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, replace, field
+from datetime import datetime, timedelta, timezone
 
 #: Метка происхождения. Попадает в каждую запись, в HTML и в манифест сборки.
 SOURCE = "fixture/test"
@@ -99,21 +100,80 @@ TYPE_QUOTA: tuple[tuple[str, int], ...] = (
 AGE_RATINGS = ("6+", "12+", "16+", "18+")
 
 
+
+#: Схемы, допустимые для адреса постера. Правило взято из данных, а не
+#: выдумано: в снимке боевого каталога 19 658 адресов постеров, и все —
+#: `https`. Относительный путь витрины разрешён отдельной ветвью: это
+#: собственная заглушка, а не внешний адрес.
+SAFE_POSTER_SCHEMES = ("https://",)
+
+
+def safe_poster_src(value) -> str:
+    """Адрес постера, пригодный для подстановки в `src`, или пустая строка.
+
+    Значение приходит из ответа поставщика. Экранирование не даёт ему вырваться
+    из атрибута, но схему до сих пор не проверял никто: `javascript:`, `data:`,
+    `file:` попали бы на страницу такими, как пришли.
+
+    Исполняемым `<img src="javascript:…">` в нынешних браузерах не является, и
+    дело не в этом. Дело в том, что каждый посетитель делает запрос по этому
+    адресу: подставив чужой хост, поставщик получает обращение от каждого
+    зрителя витрины. И в том, что тот же адрес завтра понадобится в ссылке или
+    `srcset`, где правила иные.
+
+    Протокольно-относительный `//хост/путь` отвергается тоже: он наследует
+    схему страницы и уводит запрос ровно так же, а на схему не похож.
+    """
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    if text.startswith("//"):
+        return ""
+    if text.startswith("/"):
+        return text  # собственный путь витрины
+    lowered = text.lower()
+    return text if lowered.startswith(SAFE_POSTER_SCHEMES) else ""
+
+
 @dataclass(frozen=True)
 class Episode:
     number: int
     name: str
-    runtime_min: int
+    #: Длительность в минутах или None, если источник её не передал. Ноль
+    #: здесь не «пусто», а утверждение «серия идёт ноль минут» — утверждение
+    #: ложное, и печаталось оно на боевых витринах у каждой серии.
+    runtime_min: int | None = None
 
 
 @dataclass(frozen=True)
 class Season:
     number: int
     episodes: tuple[Episode, ...]
+    #: Сколько серий заявлено источником. Отличается от числа доступных у
+    #: продолжающихся историй: источник говорит «в сезоне 24», а посмотреть
+    #: можно семь. Показывать заявленное как доступное значит обещать зрителю
+    #: серии, которых нет, — и обещать со стороны витрины, потому что источник
+    #: сказал правду.
+    #:
+    #: `None` — источник о заявленном числе не говорил, и тогда доступное и
+    #: есть всё, что известно.
+    declared_episodes: int | None = None
 
     @property
-    def runtime_min(self) -> int:
-        return sum(e.runtime_min for e in self.episodes)
+    def ongoing(self) -> bool:
+        """Сезон выходит: заявлено больше, чем доступно."""
+        return bool(self.declared_episodes
+                    and self.declared_episodes > len(self.episodes))
+
+    @property
+    def runtime_min(self) -> int | None:
+        """Суммарная длительность сезона или None, если ничего не известно.
+
+        Сумма неизвестных величин — не ноль. Складывается только известное;
+        если известного нет вовсе, сезон честно не имеет длительности.
+        """
+        known = [e.runtime_min for e in self.episodes if e.runtime_min]
+        return sum(known) if known else None
 
 
 @dataclass(frozen=True)
@@ -132,6 +192,25 @@ class Title:
     age_rating: str
     summary: str
     seasons: tuple[Season, ...] = ()
+    #: Момент попадания записи в каталог. Проставляется сборкой каталога, а не
+    #: здесь: он обязан быть детерминированным и разным у разных записей.
+    #:
+    #: Поле не украшение. Полка «недавно добавленные» отбирает по нему, и пока
+    #: его не было, полка выходила пустой, карусель не рендерилась, и весь
+    #: браузерный набор о ней ничего не проверял, оставаясь зелёным.
+    created_at: str | None = None
+    #: Подтверждено ли воспроизведение. `True` — поток проверен, `False` —
+    #: проверен и не работает, `None` — не проверялся вовсе.
+    #:
+    #: Ранжировщик пускает в полки только подтверждённые: показывать в карусели
+    #: запись, которая не откроется, значит обманывать зрителя. Пока поля не
+    #: было, ни одна фикстурная запись не проходила допуск, и полка выходила
+    #: пустой при любом наборе данных.
+    playable: bool | None = None
+    #: Оценки источников. `None` означает «источник оценки не давал» — не ноль
+    #: и не среднее: подставленное число выглядело бы как чужая оценка.
+    kinopoisk_rating: float | None = None
+    imdb_rating: float | None = None
     #: Происхождение. Единственное допустимое значение в этом модуле.
     source: str = SOURCE
 
@@ -250,10 +329,29 @@ def _seasons_for(kind: str, index: int) -> tuple[Season, ...]:
     return tuple(seasons)
 
 
+#: Хвосты названий. Синтетические, как и всё в этом модуле; их работа —
+#: растянуть длину имён до наблюдаемого в боевом каталоге диапазона, а не
+#: изобразить настоящие произведения.
+_SUBTITLES = (
+    "Возвращение к началу",
+    "Хроника долгого лета",
+    "История одной переправы",
+    "Между двух берегов",
+    "Последняя ночь навигации",
+)
+
+
 def _make_title(kind: str, index: int, ordinal: int) -> Title:
     a = ordinal % len(_ADJECTIVES)
     n = (ordinal * 5 + index) % len(_NOUNS)
     name = f"{_ADJECTIVES[a]} {_NOUNS[n]}"
+    # Каждой третьей записи достаётся подзаголовок. Это не украшение выдуманным
+    # содержанием, а покрытие длины: у имён из двух слов потолок — двадцать
+    # знаков, тогда как в боевом каталоге названия доходят до тридцати четырёх
+    # и длиннее. Ворота, меряющие перенос, обрезку и увеличение текста, на
+    # коротких именах молчат и выглядят зелёными, ничего не проверив.
+    if ordinal % 3 == 2:
+        name = f"{name}: {_SUBTITLES[(ordinal * 2 + index) % len(_SUBTITLES)]}"
     slug = f"{_ADJ_SLUG[a]}-{_TRANSLIT[n]}-{2016 + (ordinal % 10)}"
     original = f"{_LATIN_LEFT[a]} {_LATIN_RIGHT[n]}"
     year = YEARS[ordinal % len(YEARS)]
@@ -301,6 +399,39 @@ _COLLECTION_SPECS: tuple[tuple[str, str, str], ...] = (
 )
 
 
+def _facet(counts: dict[str, int], labels: dict[str, str],
+           vocabulary: tuple[tuple[str, str], ...]) -> tuple[tuple[str, str, int], ...]:
+    """Фасет по данным, а не по словарю.
+
+    Прежде значения пересекались с зашитым перечнем `GENRES`/`COUNTRIES`, и
+    всё, чего в нём нет, исчезало молча: ни ошибки, ни записи в журнале.
+    Перечень фикстурный и на английских слагах — `canada`, `france`, — а живой
+    источник отдаёт русские названия, из которых `slugify` делает
+    транслитерацию: `kanada`, `franciya`. Совпасть они не могут никогда, и на
+    боевой витрине страница «Страны» была пуста при шестидесяти шести странах
+    в данных.
+
+    Теперь перечень задаёт только ПОРЯДОК известных значений и их подписи;
+    состав задают данные. Подпись неизвестного значения берётся из самих
+    данных — она там и есть, в исходном виде.
+    """
+    # Курируемый перечень ведёт намеренно, даже если частота у него ниже.
+    # Источник отдаёт вперемешку жанры и пометки: на живом каталоге «западный
+    # контент» встречается 964 раза, а «драма» — 505, и ставить первым
+    # «западный контент» значило бы возглавить список жанров тем, что жанром
+    # не является. Отбор в перечне уже сделан человеком; данные добавляют
+    # хвост, а не переписывают начало.
+    known = [(slug, label) for slug, label in vocabulary if counts.get(slug)]
+    seen = {slug for slug, _ in known}
+    # Остальное — по убыванию частоты: у длинного перечня порядок обязан быть
+    # осмысленным, а алфавит транслитерации осмысленным не является.
+    rest = sorted(
+        ((slug, labels.get(slug) or slug) for slug in counts if slug and slug not in seen),
+        key=lambda pair: (-counts[pair[0]], pair[1]),
+    )
+    return tuple((slug, label, counts[slug]) for slug, label in known + rest if slug)
+
+
 @dataclass(frozen=True)
 class Catalog:
     titles: tuple[Title, ...]
@@ -327,28 +458,48 @@ class Catalog:
         """Жанры, за которыми стоит хотя бы одно произведение доступных типов."""
         pool = self.of_types(kinds) if kinds is not None else self.titles
         counts: dict[str, int] = {}
+        labels: dict[str, str] = {}
         for title in pool:
-            for slug in title.genre_slugs:
+            names = tuple(title.genres or ())
+            for index, slug in enumerate(title.genre_slugs):
+                if not slug:
+                    continue
                 counts[slug] = counts.get(slug, 0) + 1
-        return tuple(
-            (slug, label, counts[slug]) for slug, label in GENRES if counts.get(slug)
-        )
+                if slug not in labels and index < len(names) and names[index]:
+                    labels[slug] = names[index]
+        return _facet(counts, labels, GENRES)
 
     def years(self, kinds=None) -> tuple[tuple[int, int], ...]:
         pool = self.of_types(kinds) if kinds is not None else self.titles
         counts: dict[int, int] = {}
         for title in pool:
+            # Ноль — отсутствие данных, а не категория. Правило то же, что у
+            # стран строкой ниже, и не применялось оно только здесь: указатель
+            # годов выдавал раздел «Год выпуска: 0» с четырьмя сотнями записей.
+            # У 2 746 записей боевого каталога года нет вовсе, адаптер ставит
+            # им ноль, и страница произведения такой факт не печатает — а
+            # указатель печатал, превращая отсутствие в отдельный год.
+            if not isinstance(title.year, int) or title.year <= 0:
+                continue
             counts[title.year] = counts.get(title.year, 0) + 1
         return tuple((year, counts[year]) for year in sorted(counts, reverse=True))
 
     def countries(self, kinds=None) -> tuple[tuple[str, str, int], ...]:
         pool = self.of_types(kinds) if kinds is not None else self.titles
         counts: dict[str, int] = {}
+        labels: dict[str, str] = {}
         for title in pool:
-            counts[title.country_slug] = counts.get(title.country_slug, 0) + 1
-        return tuple(
-            (slug, label, counts[slug]) for slug, label in COUNTRIES if counts.get(slug)
-        )
+            slug = title.country_slug
+            if not slug:
+                # Пустое значение — отсутствие данных, а не категория:
+                # посадочная страница под него вела бы в никуда.
+                continue
+            counts[slug] = counts.get(slug, 0) + 1
+            if slug not in labels:
+                # У записи может быть несколько стран через запятую; подписью
+                # служит первая — та же, из которой получен слаг.
+                labels[slug] = (title.country or "").split(",")[0].strip() or slug
+        return _facet(counts, labels, COUNTRIES)
 
     def capabilities(self) -> set[str]:
         """Типы, которые стенд действительно может показать.
@@ -372,6 +523,35 @@ class Catalog:
         }
 
 
+#: Точка отсчёта дат каталога стенда. Значение синтетическое и намеренно
+#: постоянное: оно задаёт порядок «свежести», не претендуя быть настоящей датой.
+CATALOG_EPOCH = datetime(2026, 1, 1, tzinfo=timezone.utc)
+
+#: Раскладка состояний воспроизведения по кругу. Одиннадцать позиций: девять
+#: подтверждённых, одна отказавшая, одна непроверенная. Пропорция взята так,
+#: чтобы подтверждённых хватало на полки, а обе прочие ветки всё равно попадали
+#: на стенд и под ворота.
+PLAYBACK_MIX = (True, True, True, True, False, True, True, True, None, True, True)
+
+#: Раскладка оценок по кругу. Семь позиций покрывают все четыре случая, которые
+#: рендерер обязан различать: обе оценки, только Кинопоиск, только IMDb, ни
+#: одной. Без них полка «высокие оценки» не набиралась вовсе, а показ двух
+#: оценок на карточке — работа отдельного цикла — на стенде не появлялся ни
+#: разу, и ворота о нём молчали.
+#:
+#: Числа синтетические и намеренно разные у двух источников: равные значения
+#: скрыли бы путаницу шкал, а 7,4 у одного не равно 7,4 у другого.
+RATING_MIX = (
+    (8.1, 7.4),
+    (7.6, None),
+    (None, 8.3),
+    (None, None),
+    (6.9, 7.8),
+    (8.7, None),
+    (None, 6.4),
+)
+
+
 def build_catalog() -> Catalog:
     """Детерминированный каталог стенда. Ни сети, ни случайности, ни времени."""
     titles: list[Title] = []
@@ -382,13 +562,31 @@ def build_catalog() -> Catalog:
     # Слаги обязаны быть уникальными: адрес — это первичный ключ сайта.
     seen: dict[str, int] = {}
     unique: list[Title] = []
-    from dataclasses import replace
     for title in titles:
         count = seen.get(title.slug, 0)
         seen[title.slug] = count + 1
         if count:
             title = replace(title, slug=f"{title.slug}-{count + 1}")
         unique.append(title)
+
+    # Даты добавления: фиксированная точка отсчёта и шаг в сутки по порядку
+    # записи. Ни `datetime.now`, ни случайности — иначе каталог перестанет быть
+    # воспроизводимым, а вместе с ним поплывут отпечаток сборки и эталон
+    # раскладки. Порядок обратный: первая запись — самая свежая.
+    # Смесь состояний намеренная, а не «всё работает». Стенд обязан показывать
+    # и запасные состояния плеера: если бы все записи были подтверждены, ветки
+    # «поток не работает» и «не проверялся» не отрисовывались бы никогда, и
+    # ворота молчали бы о них ровно так же, как молчали о карусели.
+    unique = [
+        replace(
+            title,
+            created_at=(CATALOG_EPOCH - timedelta(days=position)).isoformat(),
+            playable=PLAYBACK_MIX[position % len(PLAYBACK_MIX)],
+            kinopoisk_rating=RATING_MIX[position % len(RATING_MIX)][0],
+            imdb_rating=RATING_MIX[position % len(RATING_MIX)][1],
+        )
+        for position, title in enumerate(unique)
+    ]
 
     by_length = sorted(unique, key=lambda t: (-t.runtime_min, t.slug))
     single_season = [t for t in unique if len(t.seasons) == 1]

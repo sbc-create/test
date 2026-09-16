@@ -19,7 +19,14 @@ import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from typing import Any
 
-from factory.contracts.fixtures import EDGES, STATES, VIEW_MODELS, all_fixtures, edge_fixture, fixture
+from factory.contracts.fixtures import (
+    EDGES,
+    STATES,
+    VIEW_MODELS,
+    all_fixtures,
+    edge_fixture,
+    fixture,
+)
 
 JSON_HEADERS = {"content-type": "application/json; charset=utf-8"}
 

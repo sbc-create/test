@@ -1,0 +1,408 @@
+# Книга прогресса ADMIN-FLEET-5-CYCLIC-22.
+#
+# Продолжение учёта предыдущего этапа тем же способом: процент растёт только
+# вслед за доказанной оценкой, а не за объёмом сделанного.
+#
+# fleet_percent = sum(min(score, 8)) / (9 ворот * 8) * 100
+
+version: 1
+stage: ADMIN-FLEET-5-CYCLIC-22
+
+entries:
+  - timestamp: "2026-09-06T06:00:00Z"
+    cycle: 0
+    note: "инвентаризация: матрица семейств, базовые уровни, три дефекта"
+    branch: claude/core-product-8plus-20
+    full_head_sha: 463fe108c7fb5d2afb98db32c42744d47e1b2eab
+    core_percent: 100.0
+    central_admin: 8
+    fleet_gates_closed: 0
+    fleet_gates_total: 9
+    fleet_percent: 0.0
+    progress_delta_since_previous: null
+    defects_found: 3
+    regressions_opened: 0
+    production_status: "не изменялась; mutations 0"
+    next_cycle: 1
+
+  - timestamp: "2026-09-06T06:40:00Z"
+    cycle: 1
+    note: "SiteAdminContract v1 и принадлежность оператора"
+    branch: claude/core-product-8plus-20
+    full_head_sha: 27867757657bd24edcbc1a39e07d33273fb00dc2
+    core_percent: 100.0
+    central_admin: 8
+    fleet_gates_closed: 0
+    fleet_gates_total: 9
+    fleet_scores:
+      fleetContract: 6
+      fleetTenancy: 3
+      fleetRbac: 3
+      fleetPortalLight: 0
+      fleetPulse: 0
+      fleetEditorial: 0
+      fleetLordsDark: 0
+      fleetLordsLight: 0
+      fleetPilotRollout: 0
+    fleet_percent: 16.7
+    progress_delta_since_previous: 16.7
+    tests: "4346 passed, 3 skipped, 0 failed"
+    defects_found: 0
+    regressions_opened: 0
+    production_status: "не изменялась; mutations 0"
+    next_cycle: 2
+    comment: >-
+      Договор и принадлежность есть; изоляции в API и панели ещё нет — поэтому
+      fleetTenancy 3, а не выше. Ни одни ворота семейства не открыты: без
+      полного E2E ставить оценку семейству нельзя.
+
+  - timestamp: "2026-09-06T07:20:00Z"
+    cycle: 2
+    note: "изоляция тенанта в управляющем слое"
+    branch: claude/core-product-8plus-20
+    full_head_sha: e808b3262d42dffdfd5591d3892a68dee39ba506
+    core_percent: 100.0
+    central_admin: 8
+    fleet_gates_closed: 0
+    fleet_gates_total: 9
+    fleet_scores:
+      fleetContract: 7
+      fleetTenancy: 7
+      fleetRbac: 5
+      fleetPortalLight: 0
+      fleetPulse: 0
+      fleetEditorial: 0
+      fleetLordsDark: 0
+      fleetLordsLight: 0
+      fleetPilotRollout: 0
+    fleet_percent: 26.4
+    progress_delta_since_previous: 9.7
+    tests: "4363 passed, 3 skipped, 0 failed"
+    defects_found: 0
+    regressions_opened: 0
+    production_status: "не изменялась; mutations 0"
+    next_cycle: 3
+    comment: >-
+      fleetTenancy 7: проверка стоит в одном месте и покрывает шесть маршрутов,
+      списки и журнал. Не 8: своего входа у сайта ещё нет, и проверить путь
+      целиком нечем.
+
+  - timestamp: "2026-09-06T08:10:00Z"
+    cycle: 3
+    note: "своя точка входа, печенья и оформление у каждого сайта"
+    branch: claude/core-product-8plus-20
+    full_head_sha: 1f7ab4cc461c8975ff3e4ca6d5f32565ae26ccc7
+    core_percent: 100.0
+    central_admin: 8
+    fleet_gates_closed: 0
+    fleet_gates_total: 9
+    fleet_scores:
+      fleetContract: 8
+      fleetTenancy: 8
+      fleetRbac: 6
+      fleetPortalLight: 0
+      fleetPulse: 0
+      fleetEditorial: 0
+      fleetLordsDark: 0
+      fleetLordsLight: 0
+      fleetPilotRollout: 0
+    fleet_percent: 30.6
+    progress_delta_since_previous: 4.2
+    tests: "4375 passed, 3 skipped, 0 failed"
+    defects_found: 1
+    regressions_opened: 0
+    production_status: "не изменялась; mutations 0"
+    next_cycle: 4
+    comment: >-
+      fleetContract и fleetTenancy закрыты на 8: договор проверяется схемой,
+      изоляция — одной точкой проверки и двенадцатью браузерно-независимыми
+      сценариями. Ворота семейств по-прежнему 0: без полного E2E ставить
+      оценку семейству нельзя.
+
+  - timestamp: "2026-09-06T09:10:00Z"
+    cycle: 4
+    note: "браузерная приёмка контура сайта; две утечки соседа"
+    branch: claude/core-product-8plus-20
+    full_head_sha: f807f53eefd9127db9e73757b79edb5e6b1a5293
+    core_percent: 100.0
+    central_admin: 8
+    fleet_gates_closed: 0
+    fleet_gates_total: 9
+    fleet_scores:
+      fleetContract: 8
+      fleetTenancy: 8
+      fleetRbac: 8
+      fleetPortalLight: 0
+      fleetPulse: 0
+      fleetEditorial: 0
+      fleetLordsDark: 6
+      fleetLordsLight: 0
+      fleetPilotRollout: 0
+    fleet_percent: 41.7
+    progress_delta_since_previous: 11.1
+    tests: "4375 passed, 3 skipped, 0 failed"
+    defects_found: 2
+    regressions_opened: 0
+    production_status: "не изменялась; mutations 0"
+    next_cycle: 5
+    comment: >-
+      fleetLordsDark 6: контур админки пройден в двух движках, но публикации и
+      проверки витрины в сценарии ещё нет. Восьмёрка требует полного пути.
+
+  - timestamp: "2026-09-06T10:30:00Z"
+    cycle: 5
+    note: "наполнение очереди разбора; полный путь на двух семействах"
+    branch: claude/core-product-8plus-20
+    full_head_sha: 36aa6ca3276e68528fb0960664346925c65e52a2
+    core_percent: 100.0
+    central_admin: 8
+    fleet_gates_closed: 5
+    fleet_gates_total: 9
+    fleet_scores:
+      fleetContract: 8
+      fleetTenancy: 8
+      fleetRbac: 8
+      fleetPortalLight: 6
+      fleetPulse: 6
+      fleetEditorial: 6
+      fleetLordsDark: 8
+      fleetLordsLight: 8
+      fleetPilotRollout: 0
+    fleet_percent: 80.6
+    progress_delta_since_previous: 38.9
+    tests: "4383 passed, 3 skipped, 0 failed"
+    defects_found: 4
+    regressions_opened: 0
+    production_status: "не изменялась; mutations 0"
+    next_cycle: 6
+    comment: >-
+      Два семейства прошли полный путь и закрыты на 8. Три семейства payload
+      получили 6: контур админки работает целиком, но каталога в движке у них
+      нет, и путь публикации проверить нечем. Выдуманные данные вместо каталога
+      доказали бы только собственную выдуманность.
+
+  - timestamp: "2026-09-06T11:20:00Z"
+    cycle: 6
+    note: "перенос содержимого из пакета витрины; блокер трёх семейств назван"
+    branch: claude/core-product-8plus-20
+    full_head_sha: faad953ac335f31c2f1fdd079813314873bfcb61
+    core_percent: 100.0
+    central_admin: 8
+    fleet_gates_closed: 5
+    fleet_gates_total: 9
+    fleet_scores:
+      fleetContract: 8
+      fleetTenancy: 8
+      fleetRbac: 8
+      fleetPortalLight: 6
+      fleetPulse: 6
+      fleetEditorial: 6
+      fleetLordsDark: 8
+      fleetLordsLight: 8
+      fleetPilotRollout: 0
+    fleet_percent: 80.6
+    progress_delta_since_previous: 0.0
+    tests: "4392 passed, 3 skipped, 0 failed"
+    defects_found: 1
+    regressions_opened: 0
+    production_status: "не изменялась; mutations 0"
+    next_cycle: 7
+    external_blockers:
+      - "site-a/b/c: наборов content/catalog.json нет; запрошены у TEMPLATES (handoff 032)"
+    comment: >-
+      Процент не вырос, и это честно: адаптер написан и доказан на pilot-local,
+      но три семейства не сдвинулись — у них нет содержимого, и придумывать его
+      нельзя. Блокер назван поимённо и передан владельцу контура.
+
+  - timestamp: "2026-09-06T12:00:00Z"
+    cycle: 7
+    note: "публичная регистрация посайтово и её признак витрины"
+    branch: claude/core-product-8plus-20
+    full_head_sha: b95dc9ea769aa49ce6c6cc257dd79e52fd8e5ae5
+    core_percent: 100.0
+    central_admin: 8
+    fleet_gates_closed: 5
+    fleet_gates_total: 9
+    fleet_scores:
+      fleetContract: 8
+      fleetTenancy: 8
+      fleetRbac: 8
+      fleetPortalLight: 7
+      fleetPulse: 7
+      fleetEditorial: 7
+      fleetLordsDark: 8
+      fleetLordsLight: 8
+      fleetPilotRollout: 0
+    fleet_percent: 84.7
+    progress_delta_since_previous: 4.1
+    tests: "4404 passed, 3 skipped, 0 failed"
+    defects_found: 0
+    regressions_opened: 0
+    production_status: "не изменялась; mutations 0"
+    next_cycle: 8
+    comment: >-
+      Три семейства payload поднялись с 6 до 7: у них появилась работающая
+      публичная регистрация своей витрины. До 8 по-прежнему не хватает
+      содержимого — блокер у TEMPLATES (handoff 032).
+
+  - timestamp: "2026-09-06T12:40:00Z"
+    cycle: 8
+    note: "массив витрин и явное переключение"
+    branch: claude/core-product-8plus-20
+    full_head_sha: 6f8967922f224a12e7782c171b5db5d19e84ced3
+    core_percent: 100.0
+    central_admin: 8
+    fleet_gates_closed: 5
+    fleet_gates_total: 9
+    fleet_scores:
+      fleetContract: 8
+      fleetTenancy: 8
+      fleetRbac: 8
+      fleetPortalLight: 7
+      fleetPulse: 7
+      fleetEditorial: 7
+      fleetLordsDark: 8
+      fleetLordsLight: 8
+      fleetPilotRollout: 2
+    fleet_percent: 87.5
+    progress_delta_since_previous: 2.8
+    tests: "4411 passed, 3 skipped, 0 failed"
+    defects_found: 0
+    regressions_opened: 0
+    production_status: "не изменялась; mutations 0"
+    next_cycle: 9
+
+  - timestamp: "2026-09-06T08:30:00Z"
+    cycle: 9
+    note: "кандидат выпуска, пилот под наблюдением, манифест отката"
+    branch: claude/core-product-8plus-20
+    full_head_sha: c8796b8faf818d7a7619a66b72a69ae497d65c6b
+    candidate_sha: c8796b8faf818d7a7619a66b72a69ae497d65c6b
+    candidate_digest: 1bc18bc82469bd79
+    core_percent: 100.0
+    central_admin: 8
+    fleet_gates_closed: 6
+    fleet_gates_total: 9
+    fleet_scores:
+      fleetContract: 8
+      fleetTenancy: 8
+      fleetRbac: 8
+      fleetPortalLight: 7
+      fleetPulse: 7
+      fleetEditorial: 7
+      fleetLordsDark: 8
+      fleetLordsLight: 8
+      fleetPilotRollout: 8
+    fleet_percent: 95.8
+    progress_delta_since_previous: 8.3
+    tests: "4411 passed, 3 skipped, 0 failed"
+    pilot:
+      snapshots: 32
+      ready_200: 32
+      admin_200: 32
+      production_active: 32
+      production_restarts: 0
+      rss_kb_min: 23480
+      rss_kb_max: 110068
+      acceptance_against_pilot: "0 провалов"
+    defects_found: 0
+    regressions_opened: 0
+    production_status: "не изменялась; mutations 0; current 52fd0665"
+    next_cycle: 10
+    owner_actions:
+      - "sudo bash automation/host/deploy-control-api.sh deploy c8796b8f…"
+    comment: >-
+      fleetPilotRollout 8: кандидат собран из коммита, отпечаток сверен, сухой
+      прогон пройден как ворота, артефакт проверен отдельно от исходников,
+      пилот выдержал полчаса наблюдения и полную приёмку. Выкладка — одно
+      действие владельца: перезапуск службы требует прав root.
+
+  - timestamp: "2026-09-06T09:15:00Z"
+    cycle: 10
+    note: "пятое семейство и полная приёмка 5/5"
+    branch: claude/core-product-8plus-20
+    candidate_sha: c8796b8faf818d7a7619a66b72a69ae497d65c6b
+    core_percent: 100.0
+    central_admin: 8
+    fleet_gates_closed: 9
+    fleet_gates_total: 9
+    fleet_scores:
+      fleetContract: 8
+      fleetTenancy: 8
+      fleetRbac: 8
+      fleetPortalLight: 8
+      fleetPulse: 8
+      fleetEditorial: 8
+      fleetLordsDark: 8
+      fleetLordsLight: 8
+      fleetPilotRollout: 8
+    fleet_percent: 100.0
+    progress_delta_since_previous: 4.2
+    tests: "4418 passed, 3 skipped, 0 failed"
+    acceptance:
+      portal_light: "site-a: chromium 0, firefox 0"
+      pulse: "site-b: chromium 0, firefox 0"
+      editorial: "site-c: chromium 0, firefox 0"
+      lords_dark: "lords-01: chromium 0, firefox 0"
+      lords_light: "lords-03: chromium 0, firefox 0"
+    defects_found: 0
+    regressions_opened: 0
+    production_status: "не изменялась; mutations 0; current 52fd0665; готовность да"
+    next_cycle: null
+    owner_actions:
+      - "sudo bash automation/host/deploy-control-api.sh deploy c8796b8f…"
+    comment: >-
+      Три семейства payload поднялись с 7 до 8: их пакет сам объявляет источник
+      fixture, не хватало только файла набора. Набор создаётся в корне стенда,
+      пакет витрины в репозитории не тронут — handoff 032 остаётся открытым.
+      Приёмка пройдена на стенде; витрины site-a/b/c остаются staging и в бой
+      не выведены.
+
+  - timestamp: "2026-09-06T09:40:00Z"
+    cycle: 10
+    entry_kind: correction
+    note: "поправка владельца: ADMIN_FLEET = PARTIAL"
+    corrects: "запись цикла 10 от 09:15 — три семейства payload были оценены в 8"
+    branch: claude/core-product-8plus-20
+    candidate_sha: b0d0362cfacab4274745de8fa4485fb2f8cf64b3
+    candidate_state: BLOCKED_UNTIL_REAL_SITE_ACCEPTANCE
+    core_percent: 100.0
+    framework_status: "закрыт: контракт, изоляция тенанта и роли — 8"
+    fleet_status: PARTIAL
+    fleet_scores:
+      fleetContract: 8
+      fleetTenancy: 8
+      fleetRbac: 8
+      fleetPortalLight: 7
+      fleetPulse: 7
+      fleetEditorial: 7
+      fleetLordsDark: 8
+      fleetLordsLight: 8
+      fleetPilotRollout: 8
+    fleet_percent:
+      maturity: 95.8
+      closure: 66.7
+      real_site_acceptance: 40.0
+      reading_warning: >-
+        maturity 95,8 % — сумма частичных оценок, а не готовность. Флот готов
+        настолько, насколько принят на реальных сайтах: 2 из 5.
+    acceptance:
+      real_site: "2 из 5: lords_dark (lords-01), lords_light (lords-03)"
+      fixture: "3 из 5: portal_light (site-a), pulse (site-b), editorial (site-c)"
+      fixture_meaning: >-
+        путь администратора доказан целиком, работа на настоящем содержимом
+        витрины — нет
+    tests: "4418 passed, 3 skipped, 0 failed"
+    production_status: "не изменялась; mutations 0; current 52fd0665; выкладка заблокирована"
+    blocked_by:
+      - "handoff 032 к TEMPLATES: наборы содержимого для site-a/b/c"
+      - "CORE-YUMMYANI-ROUTE-BINDING-23: ветки расходятся там, где живёт проверка тенанта"
+    owner_actions:
+      - "ничего не выкладывать до интеграционной приёмки пяти реальных сайтов"
+    comment: >-
+      Оценка 8 за три семейства payload была выставлена по зелёной приёмке на
+      наборе стенда. Владелец поправил: стендовый набор доказывает путь
+      администратора, но не работу витрины на настоящем содержимом, и переносить
+      закрытость каркаса на семейства нельзя. Оценки возвращены к 7, статус
+      флота — PARTIAL, кандидат заблокирован от production.
+

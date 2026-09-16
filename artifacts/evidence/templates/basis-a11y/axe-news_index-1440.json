@@ -1,0 +1,17 @@
+{
+  "captured_at_utc": "2026-09-05T17:33:15.514Z",
+  "site": "pilot-local",
+  "build": "dbefbb0eed312308",
+  "page_type": "news_index",
+  "viewport": 1440,
+  "url": "http://127.0.0.1:8821/news/",
+  "rules_passed": 26,
+  "violations": [],
+  "targets_total": 15,
+  "failing_aa": [],
+  "small_inputs": [],
+  "overflow": {
+    "scrollWidth": 1440,
+    "clientWidth": 1440
+  }
+}

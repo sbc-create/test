@@ -1,0 +1,165 @@
+{
+  "captured_at_utc": "2026-09-07T00:39:57.392Z",
+  "contract": "site-admin/1.0.0",
+  "consumed_settings": [
+    "commentsEnabled",
+    "defaultDescription",
+    "maxLength",
+    "rightsNotice",
+    "rulesText",
+    "tagline"
+  ],
+  "consumption": [
+    {
+      "family": "portal_light",
+      "tenant": "tenant-b",
+      "navigation": [
+        "Вторая витрина",
+        "Расписание",
+        "Обзоры"
+      ],
+      "rightsNoticeVisible": true
+    },
+    {
+      "family": "pulse",
+      "tenant": "tenant-b",
+      "navigation": [
+        "ВТОРАЯ ВИТРИНА",
+        "Расписание",
+        "Обзоры"
+      ],
+      "rightsNoticeVisible": true
+    },
+    {
+      "family": "pulse",
+      "tenant": "tenant-b",
+      "navigation": [
+        "ВТОРАЯ ВИТРИНА",
+        "Расписание",
+        "Обзоры"
+      ],
+      "rightsNoticeVisible": true
+    },
+    {
+      "family": "portal_light",
+      "tenant": "tenant-a",
+      "navigation": [
+        "Первая витрина",
+        "Каталог",
+        "Подборки",
+        "Новости"
+      ],
+      "rightsNoticeVisible": true
+    },
+    {
+      "family": "pulse",
+      "tenant": "tenant-a",
+      "navigation": [
+        "ПЕРВАЯ ВИТРИНА",
+        "Каталог",
+        "Подборки",
+        "Новости"
+      ],
+      "rightsNoticeVisible": true
+    },
+    {
+      "family": "portal_light",
+      "tenant": "tenant-b",
+      "navigation": [
+        "Вторая витрина",
+        "Расписание",
+        "Обзоры"
+      ],
+      "rightsNoticeVisible": true
+    },
+    {
+      "family": "pulse",
+      "tenant": "tenant-a",
+      "navigation": [
+        "ПЕРВАЯ ВИТРИНА",
+        "Каталог",
+        "Подборки",
+        "Новости"
+      ],
+      "rightsNoticeVisible": true
+    },
+    {
+      "family": "pulse",
+      "tenant": "tenant-b",
+      "navigation": [
+        "ВТОРАЯ ВИТРИНА",
+        "Расписание",
+        "Обзоры"
+      ],
+      "rightsNoticeVisible": true
+    },
+    {
+      "family": "editorial",
+      "tenant": "tenant-a",
+      "navigation": [
+        "Первая витрина",
+        "Каталог",
+        "Подборки",
+        "Новости"
+      ],
+      "rightsNoticeVisible": true
+    },
+    {
+      "family": "portal_light",
+      "tenant": "tenant-a",
+      "navigation": [
+        "Первая витрина",
+        "Каталог",
+        "Подборки",
+        "Новости"
+      ],
+      "rightsNoticeVisible": true
+    },
+    {
+      "family": "editorial",
+      "tenant": "tenant-b",
+      "navigation": [
+        "Вторая витрина",
+        "Расписание",
+        "Обзоры"
+      ],
+      "rightsNoticeVisible": true
+    },
+    {
+      "family": "portal_light",
+      "tenant": "tenant-b",
+      "navigation": [
+        "Вторая витрина",
+        "Расписание",
+        "Обзоры"
+      ],
+      "rightsNoticeVisible": true
+    }
+  ],
+  "isolation": [
+    {
+      "family": "portal_light",
+      "leaks": []
+    },
+    {
+      "family": "editorial",
+      "leaks": []
+    },
+    {
+      "family": "pulse",
+      "leaks": []
+    },
+    {
+      "family": "portal_light",
+      "leaks": []
+    },
+    {
+      "family": "pulse",
+      "leaks": []
+    },
+    {
+      "family": "editorial",
+      "leaks": []
+    }
+  ]
+}

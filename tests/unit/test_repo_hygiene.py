@@ -28,11 +28,23 @@ def test_no_secret_material_tracked():
         assert not path.endswith((".pem", ".key", ".p12", ".pfx")), path
 
 
+#: Каталог ядра DLE — именно каталог с таким именем, а не любой путь, где эти
+#: буквы встретились. Подстрочный поиск ловил свой же `factory/site_engine/`.
+DLE_CORE_DIR = re.compile(r"(^|/)engine/")
+
+
 def test_no_dle_core_patches():
     """Ядро DLE не модифицируется: в репозитории нет ни патчей, ни копий ядра."""
     for path in _tracked_files():
-        assert "engine/" not in path or path.startswith(("docs/", "knowledge/", "blueprints/")), path
+        assert not DLE_CORE_DIR.search(path) or path.startswith(("docs/", "knowledge/", "blueprints/")), path
         assert not path.endswith(".patch"), path
+
+
+def test_dle_core_guard_still_catches_a_real_copy():
+    """Уточнение проверки не должно её обезоружить."""
+    assert DLE_CORE_DIR.search("engine/inc/init.php")
+    assert DLE_CORE_DIR.search("sites/lords-01/engine/classes/parse.class.php")
+    assert not DLE_CORE_DIR.search("factory/site_engine/gate.py")
 
 
 def test_no_world_writable_files_tracked():
@@ -77,6 +89,16 @@ def test_javascript_sources_parse():
 
 
 def test_ansible_yaml_parses():
+    """Разбор — половина проверки: он молчит и о пустом, и об отсутствующем.
+
+    Прогон был зелёным и тогда, когда файлов не находилось вовсе: цикл по
+    пустому перечню проходит мгновенно и ничего не утверждает. Именно так
+    выглядел бы переезд каталога или опечатка в маске.
+    """
     import yaml
-    for path in (PATHS.automation / "ansible").rglob("*.yml"):
-        yaml.safe_load(path.read_text(encoding="utf-8"))
+
+    файлы = sorted((PATHS.automation / "ansible").rglob("*.yml"))
+    assert файлы, "файлов ansible не найдено — проверять нечего"
+    for path in файлы:
+        разобрано = yaml.safe_load(path.read_text(encoding="utf-8"))
+        assert разобрано is not None, f"{path.name}: файл разобрался в пустоту"

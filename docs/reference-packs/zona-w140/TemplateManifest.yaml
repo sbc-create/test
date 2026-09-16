@@ -1,0 +1,70 @@
+# Манифест шаблона Zona (w140.zona.plus) — архитектурный черновик.
+#
+# Черновик означает ровно одно: ни одна величина здесь не измерена на
+# референсе, потому что референс недоступен. Структура — наша.
+
+schemaVersion: 1
+templateId: zona-video-portal
+templateVersion: 0.0.1-draft
+family: reference-draft
+
+status: draft
+productionEnabled: false
+indexingEnabled: false
+
+reference:
+  url: https://w140.zona.plus/
+  provenance: задание владельца потоку TEMPLATES от 04.09.2026
+  access: blocked_policy
+  blocker: REF-EGRESS-01
+  observations: 0
+
+compatibility:
+  status: pending
+  onIncompatibleContract: fail_build
+  apiVersionRange: pending
+  sdkVersionRange: pending
+  seoContractVersionRange: pending
+  allowLatest: false
+
+previewCapabilities:
+  requiresDatabase: false
+  requiresSecrets: false
+  states: [normal, empty, degraded, not_found]
+
+performanceBudgets:
+  lcpMs: 2500
+  cls: 0.1
+  inpMs: 200
+
+featureFlags:
+  adSlots:
+    default: disabled
+    onDisabled: no_dom
+    onEnabled: reserve_geometry
+    networkIntegration: forbidden
+
+routes:
+    - routeId: home
+      pageType: homepage
+      path: /
+      blockOrder: [header, search, shelves, footer]
+    - routeId: catalog
+      pageType: catalog
+      path: /catalog
+      blockOrder: [header, search, shelves, footer]
+    - routeId: title
+      pageType: title
+      path: /title/{slug}
+      blockOrder: [header, search, shelves, footer]
+    - routeId: search
+      pageType: search
+      path: /search
+      blockOrder: [header, search, shelves, footer]
+    - routeId: not-found
+      pageType: error
+      path: '*'
+      blockOrder: [header, search, shelves, footer]
+
+blocks:
+  source: blocks.yaml

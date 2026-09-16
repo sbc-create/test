@@ -1,0 +1,283 @@
+{
+  "schema_version": "1.0",
+  "generated_from": "config/site-profiles/*.json",
+  "note": "Файл производный. Правится профиль, а не матрица.",
+  "sites": [
+    {
+      "site_id": "lords-01",
+      "site_type": "video-showcase",
+      "domains": [
+        "lordfilm47.space"
+      ],
+      "locale": "ru-RU",
+      "timezone": "Europe/Moscow",
+      "theme": {
+        "name": "lords-showcase"
+      },
+      "directions": [
+        "movie",
+        "series"
+      ],
+      "providers": [
+        "cdnvideohub-public-v1"
+      ],
+      "render_mode": "static",
+      "modules": [
+        "cache-invalidation",
+        "content-catalog",
+        "content-ingestion",
+        "episodes-seasons",
+        "homepage-shelves",
+        "monitoring-audit",
+        "playback-availability",
+        "provider-adapters",
+        "ratings",
+        "renderer-adapters",
+        "seo",
+        "site-configuration"
+      ],
+      "seo": {
+        "enabled": true,
+        "indexing_enabled": false,
+        "canonical_host": "lordfilm47.space"
+      },
+      "normalized_content_source": {
+        "kind": "content-ingestion",
+        "ref": "local"
+      },
+      "keep_releases": 2,
+      "health_endpoint": "/healthz",
+      "coverage_endpoint": "/api/v1/coverage"
+    },
+    {
+      "site_id": "lords-02",
+      "site_type": "video-showcase",
+      "domains": [
+        "lordserial33.biz"
+      ],
+      "locale": "ru-RU",
+      "timezone": "Europe/Moscow",
+      "theme": {
+        "name": "lords-showcase"
+      },
+      "directions": [
+        "movie",
+        "series"
+      ],
+      "providers": [
+        "cdnvideohub-public-v1"
+      ],
+      "render_mode": "static",
+      "modules": [
+        "cache-invalidation",
+        "content-catalog",
+        "content-ingestion",
+        "episodes-seasons",
+        "homepage-shelves",
+        "monitoring-audit",
+        "playback-availability",
+        "provider-adapters",
+        "ratings",
+        "renderer-adapters",
+        "seo",
+        "site-configuration"
+      ],
+      "seo": {
+        "enabled": true,
+        "indexing_enabled": false,
+        "canonical_host": "lordserial33.biz"
+      },
+      "normalized_content_source": {
+        "kind": "content-ingestion",
+        "ref": "local"
+      },
+      "keep_releases": 2,
+      "health_endpoint": "/healthz",
+      "coverage_endpoint": "/api/v1/coverage"
+    },
+    {
+      "site_id": "lords-03",
+      "site_type": "video-showcase",
+      "domains": [
+        "1lordserials1.online"
+      ],
+      "locale": "ru-RU",
+      "timezone": "Europe/Moscow",
+      "theme": {
+        "name": "lords-showcase"
+      },
+      "directions": [
+        "movie",
+        "series"
+      ],
+      "providers": [
+        "cdnvideohub-public-v1"
+      ],
+      "render_mode": "static",
+      "modules": [
+        "cache-invalidation",
+        "content-catalog",
+        "content-ingestion",
+        "episodes-seasons",
+        "homepage-shelves",
+        "monitoring-audit",
+        "playback-availability",
+        "provider-adapters",
+        "ratings",
+        "renderer-adapters",
+        "seo",
+        "site-configuration"
+      ],
+      "seo": {
+        "enabled": true,
+        "indexing_enabled": false,
+        "canonical_host": "1lordserials1.online"
+      },
+      "normalized_content_source": {
+        "kind": "content-ingestion",
+        "ref": "local"
+      },
+      "keep_releases": 2,
+      "health_endpoint": "/healthz",
+      "coverage_endpoint": "/api/v1/coverage"
+    },
+    {
+      "site_id": "yummyani-biz",
+      "site_type": "anime-portal",
+      "domains": [
+        "yummyani.biz"
+      ],
+      "locale": "ru-RU",
+      "timezone": "Europe/Moscow",
+      "theme": {
+        "name": "yummy-portal"
+      },
+      "directions": [
+        "anime"
+      ],
+      "providers": [
+        "cdnvideohub-public-v1"
+      ],
+      "render_mode": "hybrid",
+      "modules": [
+        "cache-invalidation",
+        "content-catalog",
+        "content-ingestion",
+        "episodes-seasons",
+        "homepage-shelves",
+        "monitoring-audit",
+        "news-announcements",
+        "playback-availability",
+        "provider-adapters",
+        "ratings",
+        "renderer-adapters",
+        "seo",
+        "site-configuration"
+      ],
+      "seo": {
+        "enabled": true,
+        "indexing_enabled": false,
+        "canonical_host": "yummyani.biz"
+      },
+      "normalized_content_source": {
+        "kind": "content-ingestion",
+        "ref": "local"
+      },
+      "keep_releases": 2,
+      "health_endpoint": "/healthz",
+      "coverage_endpoint": "/api/v1/coverage"
+    },
+    {
+      "site_id": "yummyani-org",
+      "site_type": "anime-portal",
+      "domains": [
+        "yummyani.org"
+      ],
+      "locale": "ru-RU",
+      "timezone": "Europe/Moscow",
+      "theme": {
+        "name": "yummy-portal"
+      },
+      "directions": [
+        "anime"
+      ],
+      "providers": [
+        "cdnvideohub-public-v1"
+      ],
+      "render_mode": "hybrid",
+      "modules": [
+        "cache-invalidation",
+        "content-catalog",
+        "content-ingestion",
+        "episodes-seasons",
+        "homepage-shelves",
+        "monitoring-audit",
+        "news-announcements",
+        "playback-availability",
+        "provider-adapters",
+        "ratings",
+        "renderer-adapters",
+        "seo",
+        "site-configuration"
+      ],
+      "seo": {
+        "enabled": true,
+        "indexing_enabled": false,
+        "canonical_host": "yummyani.org"
+      },
+      "normalized_content_source": {
+        "kind": "content-ingestion",
+        "ref": "local"
+      },
+      "keep_releases": 2,
+      "health_endpoint": "/healthz",
+      "coverage_endpoint": "/api/v1/coverage"
+    },
+    {
+      "site_id": "yummyani-site",
+      "site_type": "anime-portal",
+      "domains": [
+        "yummyani.site"
+      ],
+      "locale": "ru-RU",
+      "timezone": "Europe/Moscow",
+      "theme": {
+        "name": "yummy-portal"
+      },
+      "directions": [
+        "anime"
+      ],
+      "providers": [
+        "cdnvideohub-public-v1"
+      ],
+      "render_mode": "hybrid",
+      "modules": [
+        "cache-invalidation",
+        "content-catalog",
+        "content-ingestion",
+        "episodes-seasons",
+        "homepage-shelves",
+        "monitoring-audit",
+        "news-announcements",
+        "playback-availability",
+        "provider-adapters",
+        "ratings",
+        "renderer-adapters",
+        "seo",
+        "site-configuration"
+      ],
+      "seo": {
+        "enabled": true,
+        "indexing_enabled": false,
+        "canonical_host": "yummyani.site"
+      },
+      "normalized_content_source": {
+        "kind": "content-ingestion",
+        "ref": "local"
+      },
+      "keep_releases": 2,
+      "health_endpoint": "/healthz",
+      "coverage_endpoint": "/api/v1/coverage"
+    }
+  ]
+}

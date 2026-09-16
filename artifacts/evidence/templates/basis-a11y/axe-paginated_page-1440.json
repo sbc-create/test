@@ -1,0 +1,17 @@
+{
+  "captured_at_utc": "2026-09-05T17:33:20.534Z",
+  "site": "pilot-local",
+  "build": "dbefbb0eed312308",
+  "page_type": "paginated_page",
+  "viewport": 1440,
+  "url": "http://127.0.0.1:8821/lekcii/page/2/",
+  "rules_passed": 26,
+  "violations": [],
+  "targets_total": 19,
+  "failing_aa": [],
+  "small_inputs": [],
+  "overflow": {
+    "scrollWidth": 1440,
+    "clientWidth": 1440
+  }
+}

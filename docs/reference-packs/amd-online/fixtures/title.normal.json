@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "templateId": "animedia-anime-portal",
+  "fixtureVersion": "0.0.1-draft",
+  "generatedAt": "2026-09-04T00:00:00Z",
+  "deterministic": true,
+  "synthetic": true,
+  "note": "Фикстура описывает нашу структуру. Данных референса в ней нет и быть не может: референс недоступен.",
+  "items": []
+}

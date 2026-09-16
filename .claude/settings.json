@@ -4,7 +4,6 @@
     "defaultMode": "default",
     "deny": [
       "Bash(sftp *)",
-      "Bash(sudo *)",
       "Bash(su *)",
       "Bash(doas *)",
       "Bash(rm -rf *)",
@@ -25,8 +24,8 @@
       "Bash(git reset --hard*)",
       "Bash(git clean *)",
       "Bash(git filter-branch*)",
-      "Bash(certbot *)",
-      "Bash(systemctl *)",
+      "Bash(certbot delete*)",
+      "Bash(certbot revoke*)",
       "Read(.env)",
       "Read(**/.env)",
       "Read(**/.env.*)",

@@ -1,0 +1,110 @@
+# Перечень идентификаторов, которыми разрешено адресовать плеер.
+#
+# Зачем отдельный файл. Базовый перечень живёт в замороженном полученном
+# документе knowledge/cdnvideohub/PLAYER_CONTRACT.yaml и переписывать его нельзя:
+# это чужой документ, а не наша настройка. Здесь описано только то, что вправе
+# решать эксплуатация — сузить базовый перечень или включить идентификатор,
+# у которого есть запись авторизации. Базовый перечень тут не дублируется:
+# две копии одного списка неизбежно разъезжаются.
+#
+# Правило разрешения (factory/lords/playback_policy.py):
+#   1. основа — allowed из контракта поставщика;
+#   2. enabled: false убирает идентификатор даже из основы;
+#   3. идентификатор ВНЕ основы включается только при enabled: true И
+#      authorization.status: granted с доказательством. Иначе — отказ ворот,
+#      а не молчаливое расширение;
+#   4. scope сужает по профилю сайта и типу содержимого.
+#
+# Автоматического отката к невключённому идентификатору не существует нигде:
+# отсутствие разрешённого идентификатора — это причина IDENTIFIER_*, а не повод
+# подставить другой.
+
+schema_version: 1
+policy_version: "1.0.0"
+
+providers:
+  cdnvideohub:
+    contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+    contract_version: CDNVIDEOHUB_KNOWLEDGE_PACK_v1.0
+    # Ключ, по которому из контракта читается базовый перечень.
+    baseline_attribute: data-aggregator
+
+    identifiers:
+
+      kp:
+        enabled: true
+        note: "Кинопоиск. В базовом перечне контракта."
+
+      mali:
+        enabled: true
+        note: "MyAnimeList. В базовом перечне контракта."
+
+      mdl:
+        enabled: true
+        note: "MyDramaList. В базовом перечне контракта."
+
+      imdb:
+        enabled: false
+        flag: PLAYBACK_IDENTIFIER_IMDB
+        note: >-
+          Вне базового перечня. Правило PC-2 переданного контракта прямо
+          запрещает IMDb в роли playback identifier.
+        measured:
+          date: "2026-09-05"
+          titles_unlocked: 645
+          provider_response: "HTTP 200 с потоком по aggr=imdb"
+          name_match: "59 из 59 совпали точно"
+          note: >-
+            Поставщик поток отдаёт. Это измерение возможности, а не разрешения:
+            ответ 200 не подтверждает право на production-использование.
+        authorization:
+          status: absent
+          checked_at: "2026-09-05"
+          searched:
+            - "git history контракта: единственный коммит e4fd83d, 2026-08-22"
+            - "knowledge/SOURCE_REGISTRY.yaml: SRC-CDNVIDEOHUB, partially_provided"
+            - "docs/CR2_CHECKPOINT_REPORT.md, раздел 7"
+            - "docs/adr/ADR-001..006"
+            - "docs/BLOCKERS.md"
+            - "coordination/ (handoffs, releases, incidents)"
+          not_confirmation: >-
+            docs/BLOCKERS.md называет IMDb среди разрешённых владельцем
+            источников ОЦЕНОК («Кинопоиск/IMDb/MAL по подтверждённым
+            идентификаторам»). Это разрешение на метаданные рейтинга, а не на
+            адресацию плеера. Принять его за подтверждение PC-2 было бы
+            подменой предмета разрешения.
+          required_to_enable:
+            - "письменное подтверждение поставщика или владельца, что aggr=imdb допустим в production"
+            - "точное соответствие type/title/year перед привязкой"
+            - "включение сначала на изолированном canary"
+        scope:
+          site_profiles: []
+          content_types: []
+
+      cvh:
+        enabled: false
+        flag: PLAYBACK_IDENTIFIER_CVH
+        note: >-
+          Собственный канонический идентификатор поставщика (external_id).
+          Вне базового перечня контракта.
+        measured:
+          date: "2026-09-05"
+          candidates: 64
+          provider_response: "HTTP 200 по aggr=cvh для обоих названных адресов"
+          hazard: >-
+            Для многосезонных сериалов возвращается франшиза целиком.
+            Идентификаторы «ДжоДжо: Каменный океан, часть 3» (2022) и
+            «ДжоДжо ТВ-2, сезон 1» (2014) различны, а плейлист один и тот же,
+            на 334 серии. Привязка показала бы зрителю не тот сезон.
+        authorization:
+          status: absent
+          checked_at: "2026-09-05"
+          required_to_enable:
+            - "подтверждённое разрешение на aggr=cvh"
+            - "строгое совпадение type/title/year"
+            - "только content_type=movie: смешение сезонов доказано для сериалов"
+        scope:
+          # Даже при будущем включении сериалы недопустимы: решение владельца
+          # от 2026-09-05, обоснование — смешение сезона и франшизы выше.
+          site_profiles: []
+          content_types: [movie]

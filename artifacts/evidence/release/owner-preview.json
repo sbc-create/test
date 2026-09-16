@@ -1,0 +1,20 @@
+{
+  "base": "http://127.0.0.1:8901",
+  "tunnel": "ssh -N -L 8901:127.0.0.1:8901 claude@<хост>",
+  "indexing": "закрыта заголовком X-Robots-Tag на каждом ответе",
+  "production": "ни одна витрина не выложена: нет siteId, домена и живого источника",
+  "families": {
+    "animedia-portal": {
+      "url": "http://127.0.0.1:8901/animedia-portal/",
+      "root": "/home/claude/work-templates/families/artifacts/lords/preview/animedia-preview"
+    },
+    "basis-video": {
+      "url": "http://127.0.0.1:8901/basis-video/",
+      "root": "/home/claude/work-templates/families/var/build/pilot-local/dbefbb0eed312308/public"
+    },
+    "zona-cinema": {
+      "url": "http://127.0.0.1:8901/zona-cinema/",
+      "root": "/home/claude/work-templates/families/artifacts/lords/preview/zona-cinema-preview"
+    }
+  }
+}

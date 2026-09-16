@@ -1,0 +1,273 @@
+{
+  "artifact": "TEMPLATE_DEBT_REGISTER",
+  "total": 25,
+  "by_severity": {
+    "критический": 0,
+    "высокий": 1,
+    "средний": 12,
+    "низкий": 12
+  },
+  "by_owner": {
+    "CORE": 11,
+    "SEO": 6,
+    "TEMPLATES": 8
+  },
+  "by_kind": {
+    "неявное утверждение в тесте": 11,
+    "повторённый блок": 12,
+    "подавленное исключение": 1,
+    "служебный домен в собранном выводе": 1
+  },
+  "findings": [
+    {
+      "kind": "подавленное исключение",
+      "severity": "высокий",
+      "owner": "CORE",
+      "path": "factory/verify.py",
+      "line": 396,
+      "detail": "except Exception без следа в теле",
+      "risk": "отказ проходит молча: сбой источника, прав или разбора выглядит как успех",
+      "verify": "тест, воспроизводящий отказ, обязан увидеть его в состоянии или журнале"
+    },
+    {
+      "kind": "повторённый блок",
+      "severity": "средний",
+      "owner": "CORE",
+      "path": "factory/analytics/credentials.py",
+      "line": 51,
+      "detail": "8 строк повторяются дословно в: factory/analytics/credentials.py, factory/secret_hub/crypto.py",
+      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
+      "verify": "вынести в общий модуль и заменить обе копии вызовом"
+    },
+    {
+      "kind": "повторённый блок",
+      "severity": "средний",
+      "owner": "CORE",
+      "path": "factory/site_engine/adapters/lords.py",
+      "line": 26,
+      "detail": "8 строк повторяются дословно в: factory/site_engine/adapters/lords.py, factory/site_engine/adapters/yummy.py",
+      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
+      "verify": "вынести в общий модуль и заменить обе копии вызовом"
+    },
+    {
+      "kind": "повторённый блок",
+      "severity": "средний",
+      "owner": "CORE",
+      "path": "factory/site_engine/adapters/lords.py",
+      "line": 29,
+      "detail": "8 строк повторяются дословно в: factory/site_engine/adapters/lords.py, factory/site_engine/adapters/yummy.py, factory/site_engine/adapters/yummy_events.py",
+      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
+      "verify": "вынести в общий модуль и заменить обе копии вызовом"
+    },
+    {
+      "kind": "повторённый блок",
+      "severity": "средний",
+      "owner": "CORE",
+      "path": "factory/verify.py",
+      "line": 448,
+      "detail": "8 строк повторяются дословно в: factory/verify.py, tests/tools/cross_site_uniqueness.py",
+      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
+      "verify": "вынести в общий модуль и заменить обе копии вызовом"
+    },
+    {
+      "kind": "повторённый блок",
+      "severity": "средний",
+      "owner": "TEMPLATES",
+      "path": "scripts/demo_canary.py",
+      "line": 29,
+      "detail": "8 строк повторяются дословно в: scripts/demo_canary.py, scripts/demo_scheduled_run.py",
+      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
+      "verify": "вынести в общий модуль и заменить обе копии вызовом"
+    },
+    {
+      "kind": "повторённый блок",
+      "severity": "средний",
+      "owner": "TEMPLATES",
+      "path": "scripts/demo_editorial.py",
+      "line": 19,
+      "detail": "8 строк повторяются дословно в: scripts/demo_editorial.py, tests/operator/test_editorial.py",
+      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
+      "verify": "вынести в общий модуль и заменить обе копии вызовом"
+    },
+    {
+      "kind": "повторённый блок",
+      "severity": "средний",
+      "owner": "TEMPLATES",
+      "path": "scripts/family_readiness.py",
+      "line": 393,
+      "detail": "8 строк повторяются дословно в: scripts/family_readiness.py, scripts/product_readiness.py",
+      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
+      "verify": "вынести в общий модуль и заменить обе копии вызовом"
+    },
+    {
+      "kind": "повторённый блок",
+      "severity": "средний",
+      "owner": "TEMPLATES",
+      "path": "tests/tools/cross_site_uniqueness.py",
+      "line": 114,
+      "detail": "8 строк повторяются дословно в: tests/tools/cross_site_uniqueness.py, tests/tools/frontend_http.py",
+      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
+      "verify": "вынести в общий модуль и заменить обе копии вызовом"
+    },
+    {
+      "kind": "повторённый блок",
+      "severity": "средний",
+      "owner": "TEMPLATES",
+      "path": "tests/tools/lords_stand.py",
+      "line": 73,
+      "detail": "8 строк повторяются дословно в: tests/tools/lords_stand.py, tests/tools/template_stand.py",
+      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
+      "verify": "вынести в общий модуль и заменить обе копии вызовом"
+    },
+    {
+      "kind": "повторённый блок",
+      "severity": "средний",
+      "owner": "TEMPLATES",
+      "path": "tests/unit/test_lords_analytics_asset.py",
+      "line": 12,
+      "detail": "8 строк повторяются дословно в: tests/unit/test_lords_analytics_asset.py, tests/unit/test_lords_ratings_schedule.py",
+      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
+      "verify": "вынести в общий модуль и заменить обе копии вызовом"
+    },
+    {
+      "kind": "повторённый блок",
+      "severity": "средний",
+      "owner": "TEMPLATES",
+      "path": "tests/unit/test_lords_page_quality.py",
+      "line": 53,
+      "detail": "8 строк повторяются дословно в: tests/unit/test_lords_page_quality.py, tests/unit/test_lords_template.py",
+      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
+      "verify": "вынести в общий модуль и заменить обе копии вызовом"
+    },
+    {
+      "kind": "повторённый блок",
+      "severity": "средний",
+      "owner": "CORE",
+      "path": "tests/unit/test_secret_hub_panel_server.py",
+      "line": 32,
+      "detail": "8 строк повторяются дословно в: tests/unit/test_secret_hub_panel_server.py, tests/unit/test_secret_hub_reconcile.py",
+      "risk": "правка в одной копии и пропуск в другой — именно так очистка каталога оказалась забыта в двух точках вызова из четырёх",
+      "verify": "вынести в общий модуль и заменить обе копии вызовом"
+    },
+    {
+      "kind": "неявное утверждение в тесте",
+      "severity": "низкий",
+      "owner": "SEO",
+      "path": "tests/operator/test_experiments.py",
+      "line": 40,
+      "detail": "test_within_limits_ok проверяет только отсутствие исключения",
+      "risk": "намерение читается из тела, а не из утверждения: следующий правящий не узнает, что именно обязано выполниться",
+      "verify": "назвать проверяемое утверждением или комментарием у вызова"
+    },
+    {
+      "kind": "неявное утверждение в тесте",
+      "severity": "низкий",
+      "owner": "SEO",
+      "path": "tests/operator/test_experiments.py",
+      "line": 54,
+      "detail": "test_boundary_exactly_10_percent_allowed проверяет только отсутствие исключения",
+      "risk": "намерение читается из тела, а не из утверждения: следующий правящий не узнает, что именно обязано выполниться",
+      "verify": "назвать проверяемое утверждением или комментарием у вызова"
+    },
+    {
+      "kind": "неявное утверждение в тесте",
+      "severity": "низкий",
+      "owner": "SEO",
+      "path": "tests/operator/test_scheduler.py",
+      "line": 29,
+      "detail": "test_released_lock_is_reusable проверяет только отсутствие исключения",
+      "risk": "намерение читается из тела, а не из утверждения: следующий правящий не узнает, что именно обязано выполниться",
+      "verify": "назвать проверяемое утверждением или комментарием у вызова"
+    },
+    {
+      "kind": "неявное утверждение в тесте",
+      "severity": "низкий",
+      "owner": "SEO",
+      "path": "tests/operator/test_scheduler.py",
+      "line": 35,
+      "detail": "test_stale_lock_from_dead_process_is_reclaimed проверяет только отсутствие исключения",
+      "risk": "намерение читается из тела, а не из утверждения: следующий правящий не узнает, что именно обязано выполниться",
+      "verify": "назвать проверяемое утверждением или комментарием у вызова"
+    },
+    {
+      "kind": "неявное утверждение в тесте",
+      "severity": "низкий",
+      "owner": "SEO",
+      "path": "tests/operator/test_scheduler.py",
+      "line": 50,
+      "detail": "test_old_lock_is_reclaimed_by_age проверяет только отсутствие исключения",
+      "risk": "намерение читается из тела, а не из утверждения: следующий правящий не узнает, что именно обязано выполниться",
+      "verify": "назвать проверяемое утверждением или комментарием у вызова"
+    },
+    {
+      "kind": "неявное утверждение в тесте",
+      "severity": "низкий",
+      "owner": "SEO",
+      "path": "tests/operator/test_scheduler.py",
+      "line": 64,
+      "detail": "test_corrupt_lock_file_is_reclaimed проверяет только отсутствие исключения",
+      "risk": "намерение читается из тела, а не из утверждения: следующий правящий не узнает, что именно обязано выполниться",
+      "verify": "назвать проверяемое утверждением или комментарием у вызова"
+    },
+    {
+      "kind": "неявное утверждение в тесте",
+      "severity": "низкий",
+      "owner": "CORE",
+      "path": "tests/unit/test_contract_fixtures.py",
+      "line": 51,
+      "detail": "test_every_fixture_is_json_serialisable проверяет только отсутствие исключения",
+      "risk": "намерение читается из тела, а не из утверждения: следующий правящий не узнает, что именно обязано выполниться",
+      "verify": "назвать проверяемое утверждением или комментарием у вызова"
+    },
+    {
+      "kind": "неявное утверждение в тесте",
+      "severity": "низкий",
+      "owner": "CORE",
+      "path": "tests/unit/test_secret_hub_panel_auth.py",
+      "line": 185,
+      "detail": "test_registered_key_authenticates проверяет только отсутствие исключения",
+      "risk": "намерение читается из тела, а не из утверждения: следующий правящий не узнает, что именно обязано выполниться",
+      "verify": "назвать проверяемое утверждением или комментарием у вызова"
+    },
+    {
+      "kind": "неявное утверждение в тесте",
+      "severity": "низкий",
+      "owner": "CORE",
+      "path": "tests/unit/test_secret_hub_panel_auth.py",
+      "line": 278,
+      "detail": "test_other_codes_still_work_after_one_is_used проверяет только отсутствие исключения",
+      "risk": "намерение читается из тела, а не из утверждения: следующий правящий не узнает, что именно обязано выполниться",
+      "verify": "назвать проверяемое утверждением или комментарием у вызова"
+    },
+    {
+      "kind": "неявное утверждение в тесте",
+      "severity": "низкий",
+      "owner": "CORE",
+      "path": "tests/unit/test_secret_hub_provider.py",
+      "line": 182,
+      "detail": "test_accepted_passes проверяет только отсутствие исключения",
+      "risk": "намерение читается из тела, а не из утверждения: следующий правящий не узнает, что именно обязано выполниться",
+      "verify": "назвать проверяемое утверждением или комментарием у вызова"
+    },
+    {
+      "kind": "неявное утверждение в тесте",
+      "severity": "низкий",
+      "owner": "CORE",
+      "path": "tests/unit/test_yandex_analytics_operator.py",
+      "line": 118,
+      "detail": "test_collection_never_writes_to_yandex проверяет только отсутствие исключения",
+      "risk": "намерение читается из тела, а не из утверждения: следующий правящий не узнает, что именно обязано выполниться",
+      "verify": "назвать проверяемое утверждением или комментарием у вызова"
+    },
+    {
+      "kind": "служебный домен в собранном выводе",
+      "severity": "низкий",
+      "owner": "TEMPLATES",
+      "path": "var/product-preview/basis-video/404/index.html",
+      "line": 1,
+      "detail": "localhost в витрине basis-video: пакет объявляет pilot.localhost.test",
+      "risk": "витрина не может быть выложена, пока адрес не передан владельцем",
+      "verify": "ожидание входа owner.live_urls; после адреса — повторная сборка"
+    }
+  ]
+}

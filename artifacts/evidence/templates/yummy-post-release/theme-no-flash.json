@@ -1,0 +1,14 @@
+{
+  "captured_at_utc": "2026-09-05T06:59:37.924Z",
+  "base": "http://127.0.0.1:3310",
+  "trace": [
+    {
+      "at": "interactive",
+      "dark": true
+    },
+    {
+      "at": "complete",
+      "dark": true
+    }
+  ]
+}

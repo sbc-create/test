@@ -37,9 +37,13 @@ class QueueItem:
                 "path": str(self.path.relative_to(PATHS.root))}
 
 
-def enqueue(site_id: str, *, action: str = "create", environment: str = "staging", job_id: str | None = None) -> QueueItem:
+def enqueue(site_id: str, *, action: str = "create", environment: str = "staging", job_id: str | None = None, traceparent: str | None = None) -> QueueItem:
     job_id = job_id or f"{site_id}-{action}-{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}"
     payload = {"job_id": job_id, "site_id": site_id, "action": action, "environment": environment,
+               # Контекст следа кладётся в само задание: исполнитель работает в
+               # другом процессе и другим временем, и без переноса цепочка
+               # обрывается ровно там, где начинается асинхронная часть.
+               **({"traceparent": traceparent} if traceparent else {}),
                "enqueued_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
     path = stage_dir("inbox") / f"{job_id}.json"
     if path.exists():

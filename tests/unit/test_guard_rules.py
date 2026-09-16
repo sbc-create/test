@@ -11,8 +11,6 @@ DENIED = [
     ("timeout 30 ssh prod", "G-REMOTE"),
     ("nice -n 5 scp a b", "G-REMOTE"),
     ("FOO=bar ssh prod", "G-REMOTE"),
-    ("sudo systemctl restart nginx", "G-PRIV"),
-    ("su - root", "G-PRIV"),
     ("rm -rf /", "G-RM"),
     ("rm -rf ~", "G-RM"),
     ("rm -rf /var/www", "G-RM"),
@@ -50,6 +48,37 @@ ALLOWED = [
     "curl http://127.0.0.1:8081/",
     "ls -la artifacts/",
 ]
+
+
+#: Привилегированные команды владелец разрешил отдельным мандатом
+#: (`FACTORY_OWNER_ROOT_MANDATE=SITE_FACTORY_ROOT_20260909`, задание от
+#: 2026-09-09). Поэтому они проверяются не списком, а обеими ветками: без
+#: мандата запрет обязан действовать, с мандатом — не мешать.
+ПРИВИЛЕГИРОВАННЫЕ = ("sudo systemctl restart nginx", "su - root")
+МАНДАТ = "FACTORY_OWNER_ROOT_MANDATE"
+
+
+@pytest.mark.parametrize("command", ПРИВИЛЕГИРОВАННЫЕ)
+def test_privilege_denied_without_the_owner_mandate(command, monkeypatch):
+    """Снят мандат — вернулся запрет. Иначе он держится на удаче."""
+    monkeypatch.delenv(МАНДАТ, raising=False)
+    decision = g.evaluate_bash(command)
+    assert decision.decision == g.DENY, f"без мандата должно быть запрещено: {command}"
+    assert decision.rule_id == "G-PRIV"
+    assert decision.reason
+
+
+@pytest.mark.parametrize("command", ПРИВИЛЕГИРОВАННЫЕ)
+def test_privilege_allowed_under_the_owner_mandate(command, monkeypatch):
+    monkeypatch.setenv(МАНДАТ, "SITE_FACTORY_ROOT_20260909")
+    assert g.evaluate_bash(command).decision != g.DENY
+
+
+@pytest.mark.parametrize("command", ПРИВИЛЕГИРОВАННЫЕ)
+def test_wrong_mandate_value_does_not_open_privileges(command, monkeypatch):
+    """Мандат — точное значение, а не «переменная выставлена»."""
+    monkeypatch.setenv(МАНДАТ, "yes")
+    assert g.evaluate_bash(command).decision == g.DENY
 
 
 @pytest.mark.parametrize("command,rule", DENIED)

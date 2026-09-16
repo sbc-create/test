@@ -1,0 +1,8 @@
+{
+  "captured_at_utc": "2026-09-04T15:50:08.266Z",
+  "base": "http://127.0.0.1:3210",
+  "fixture_titles": 24,
+  "dom_links": 24,
+  "dom_first": "/anime/catalog-fixture-01",
+  "dom_last": "/anime/catalog-fixture-24"
+}

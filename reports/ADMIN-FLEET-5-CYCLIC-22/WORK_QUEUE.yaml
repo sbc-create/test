@@ -1,0 +1,141 @@
+# Очередь работ ADMIN-FLEET-5-CYCLIC-22.
+#
+# Рабочий артефакт отчёта. Каноническое состояние программы —
+# /srv/site-factory/coordination/v1/.
+#
+# Центральная админка не закрывает ни одни ворота флота: она одна на весь
+# массив, а флот — это своя админка на каждом сайте. Оценка ставится только по
+# полному зелёному E2E выбранного сайта семейства.
+
+version: 1
+stage: ADMIN-FLEET-5-CYCLIC-22
+branch: claude/core-product-8plus-20
+base_head: 463fe108c7fb5d2afb98db32c42744d47e1b2eab
+previous_stage: CORE-FINALIZATION-CYCLIC-21
+
+# Семейства взяты из перечня tenant.theme в schemas/site-package.schema.json —
+# того самого, по которому проверяется пакет. Не из памяти и не из названий
+# каталогов.
+template_families:
+  - id: portal_light
+    sites: [site-a]
+    blueprint: payload-next-multisite
+    live: false
+    note: "домен site-a.localhost; боевого сайта у семейства нет"
+  - id: pulse
+    sites: [site-b]
+    blueprint: payload-next-multisite
+    live: false
+    note: "домен site-b.localhost"
+  - id: editorial
+    sites: [site-c]
+    blueprint: payload-next-multisite
+    live: false
+    note: "домен site-c.localhost"
+  - id: lords_dark
+    sites: [lords-01, lords-02]
+    blueprint: lords
+    live: true
+    domains: [lordfilm47.space, lordserial33.biz]
+  - id: lords_light
+    sites: [lords-03, lords-04]
+    blueprint: lords
+    live: true
+    domains: [1lordserials1.online]
+    note: "lords-04 без домена"
+
+baselines:
+  centralAdmin:
+    score: 8
+    evidence: reports/CORE-FINALIZATION-CYCLIC-21/cycles/CYCLE-05.md
+    note: "тринадцать разделов, два движка; на флот не переносится"
+  adminFleet:
+    portal_light: 0
+    pulse: 0
+    editorial: 0
+    lords_dark: 0
+    lords_light: 0
+    note: >-
+      Ноль у всех пяти по факту, а не по строгости: своей админки у сайта нет
+      вовсе. Каталог операторов глобальный — в factory/site_engine/operators.py
+      нет ни site_id, ни tenant_id; вход по одной точке /admin, витрина
+      выбирается параметром запроса. Единственный контур, уже разделённый по
+      сайтам, — публичные учётные записи.
+  templates:
+    source: coordination/v1/status/templates.json
+    gates:
+      LORDS_TEMPLATE_ARTIFACT: pass
+      YUMMY_FIXTURE_GATE: pass
+      YUMMY_BUILD_GATE: blocked
+      YUMMY_LIVE_GATE: blocked
+      THEME_PREVIEW_GATE: pass
+      COLLECTIONS_PREVIEW_GATE: partial
+      TEMPLATE_RELEASE_CANDIDATE: conditional
+  seo:
+    source: coordination/v1/status/seo.json
+    iteration: SEO-PAGE-QUALITY-AUTODRAFT-21
+    gates: "5 из 5 DONE"
+  production:
+    checkout: "claude/day05-lords-merged @ 568863d"
+    synced_with_branch: false
+    mutations_this_stage: 0
+
+defects_found_in_inventory:
+  - id: FLEET-INV-001
+    severity: P1
+    title: "Три боевые витрины не привязаны ни к одному семейству шаблонов"
+    detail: >-
+      yummyani-site, yummyani-org и yummyani-biz имеют профиль движка и живые
+      домены, но не имеют пакета sites/<id>/package.yaml и, значит, не
+      объявляют theme_ref. Их семейство шаблона не определено ничем, кроме
+      темы движка «yummy-portal», которой нет в перечне схемы.
+    owner: CORE + TEMPLATES
+  - id: FLEET-INV-002
+    severity: P2
+    title: "demo-books тоже без пакета"
+    detail: "витрина типа reading-catalog существует в движке и не объявляет семейства"
+  - id: FLEET-INV-003
+    severity: P2
+    title: "Столкновение номеров handoff"
+    detail: >-
+      В coordination/v1/handoffs два файла с номером 026 и два с номером 028
+      (028-core-to-seo-join-keys.md написан 2026-09-05 19:42,
+      028-core-to-templates-yummy-event-routes.md — 2026-09-06 04:50 другим
+      потоком). Нумерация общая, а выдача номеров ничем не защищена. Ссылаться
+      следует полным именем файла.
+
+gates:
+  - id: fleetContract
+    score: 0
+    state: pending
+    priority: 1
+    note: "SiteAdminContract v1 и общий Admin Engine без пяти копий логики"
+  - id: fleetTenancy
+    score: 0
+    state: pending
+    priority: 1
+    note: "проверенный site_id в каждом запросе; смена тенанта невозможна"
+  - id: fleetRbac
+    score: 0
+    state: pending
+    priority: 1
+    note: "операторы с областью видимости одного сайта; super-admin отдельно"
+  - id: fleetPortalLight
+    score: 0
+    state: pending
+  - id: fleetPulse
+    score: 0
+    state: pending
+  - id: fleetEditorial
+    score: 0
+    state: pending
+  - id: fleetLordsDark
+    score: 0
+    state: pending
+  - id: fleetLordsLight
+    score: 0
+    state: pending
+  - id: fleetPilotRollout
+    score: 0
+    state: pending
+    priority: 3

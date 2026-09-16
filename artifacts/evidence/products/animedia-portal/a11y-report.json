@@ -1,0 +1,128 @@
+{
+  "product": "animedia-portal",
+  "base": "http://127.0.0.1:8904",
+  "captured_at_utc": "2026-09-07T08:58:58.834Z",
+  "standard": "WCAG 2.0/2.1/2.2 A+AA",
+  "runs": [
+    {
+      "page": "home",
+      "width": 390,
+      "rules_passed": 25,
+      "violations": [],
+      "overflowX": false,
+      "scrollWidth": 390
+    },
+    {
+      "page": "home",
+      "width": 768,
+      "rules_passed": 25,
+      "violations": [],
+      "overflowX": false,
+      "scrollWidth": 768
+    },
+    {
+      "page": "home",
+      "width": 1440,
+      "rules_passed": 25,
+      "violations": [],
+      "overflowX": false,
+      "scrollWidth": 1440
+    },
+    {
+      "page": "catalog",
+      "width": 390,
+      "rules_passed": 26,
+      "violations": [],
+      "overflowX": false,
+      "scrollWidth": 390
+    },
+    {
+      "page": "catalog",
+      "width": 768,
+      "rules_passed": 26,
+      "violations": [],
+      "overflowX": false,
+      "scrollWidth": 768
+    },
+    {
+      "page": "catalog",
+      "width": 1440,
+      "rules_passed": 26,
+      "violations": [],
+      "overflowX": false,
+      "scrollWidth": 1440
+    },
+    {
+      "page": "genres",
+      "width": 390,
+      "rules_passed": 25,
+      "violations": [],
+      "overflowX": false,
+      "scrollWidth": 390
+    },
+    {
+      "page": "genres",
+      "width": 768,
+      "rules_passed": 25,
+      "violations": [],
+      "overflowX": false,
+      "scrollWidth": 768
+    },
+    {
+      "page": "genres",
+      "width": 1440,
+      "rules_passed": 25,
+      "violations": [],
+      "overflowX": false,
+      "scrollWidth": 1440
+    },
+    {
+      "page": "years",
+      "width": 390,
+      "rules_passed": 25,
+      "violations": [],
+      "overflowX": false,
+      "scrollWidth": 390
+    },
+    {
+      "page": "years",
+      "width": 768,
+      "rules_passed": 25,
+      "violations": [],
+      "overflowX": false,
+      "scrollWidth": 768
+    },
+    {
+      "page": "years",
+      "width": 1440,
+      "rules_passed": 25,
+      "violations": [],
+      "overflowX": false,
+      "scrollWidth": 1440
+    },
+    {
+      "page": "search",
+      "width": 390,
+      "rules_passed": 26,
+      "violations": [],
+      "overflowX": false,
+      "scrollWidth": 390
+    },
+    {
+      "page": "search",
+      "width": 768,
+      "rules_passed": 26,
+      "violations": [],
+      "overflowX": false,
+      "scrollWidth": 768
+    },
+    {
+      "page": "search",
+      "width": 1440,
+      "rules_passed": 26,
+      "violations": [],
+      "overflowX": false,
+      "scrollWidth": 1440
+    }
+  ]
+}

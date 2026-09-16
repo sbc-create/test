@@ -1,0 +1,133 @@
+{
+  "artifact": "LORDS_LIVE_DEFECTS",
+  "site_id": "lords-02",
+  "base": "http://127.0.0.1:9102",
+  "note": "проверка обращением к работающей витрине, а не чтением кода",
+  "defects": [
+    {
+      "defect": "episode_duration_false_zero",
+      "reproduced": true,
+      "pages_checked": 20,
+      "pages_with_zero": 12,
+      "distinct_values_seen": [
+        "0"
+      ],
+      "examples": [
+        {
+          "path": "/title/100-dney-do-proschaniya-dorogoy/",
+          "zero_spans": 1
+        },
+        {
+          "path": "/title/100-dney-do-proschaniya-dorogoy/",
+          "zero_spans": 1
+        },
+        {
+          "path": "/title/100-povarov/",
+          "zero_spans": 8
+        },
+        {
+          "path": "/title/100-povarov/",
+          "zero_spans": 8
+        },
+        {
+          "path": "/title/100-prichin-ne-byt-imperatorom/",
+          "zero_spans": 24
+        }
+      ],
+      "verdict": "воспроизводится: единственное встречающееся значение — ноль, то есть длительности нет ни у одной серии, и отсутствие печатается как «0 мин»"
+    },
+    {
+      "defect": "flat_episode_list",
+      "reproduced": false,
+      "worst_seen": {
+        "path": "/title/100-prichin-ne-byt-imperatorom/",
+        "episodes": 24,
+        "seasons": 1,
+        "collapsible_groups": 1
+      },
+      "verdict": "не воспроизводится на осмотренной выборке: серии сгруппированы по сезонам в <details> со сворачиванием"
+    },
+    {
+      "defect": "filters_do_not_change_selection",
+      "reproduced": false,
+      "by_kind": {
+        "genres": {
+          "index_status": 200,
+          "landings": 3,
+          "probe": {
+            "landing_a": "/genres/drama/",
+            "landing_b": "/genres/historical/",
+            "titles_a": 24,
+            "titles_b": 1,
+            "overlap_between_landings": 0,
+            "overlap_a_with_catalog": 0,
+            "changes_selection": true
+          }
+        },
+        "years": {
+          "index_status": 200,
+          "landings": 94,
+          "probe": {
+            "landing_a": "/years/2026/",
+            "landing_b": "/years/0/",
+            "titles_a": 24,
+            "titles_b": 24,
+            "overlap_between_landings": 0,
+            "overlap_a_with_catalog": 24,
+            "changes_selection": true
+          }
+        },
+        "countries": {
+          "index_status": 200,
+          "landings": 0,
+          "probe": null
+        }
+      },
+      "verdict": "не воспроизводится: посадочные страницы жанров и годов отдают выборку, отличную от каталога. Отдельно: у стран ноль посадочных — не дефект фильтра, а отсутствие данных о странах в списочном ответе источника"
+    },
+    {
+      "defect": "search_exact_match_only",
+      "reproduced": true,
+      "empty_page_status": 200,
+      "cases": {
+        "точное слово из названия": {
+          "query": "поваров",
+          "status": 200,
+          "titles": 0,
+          "same_as_empty_page": true
+        },
+        "та же с заглавной": {
+          "query": "Поваров",
+          "status": 200,
+          "titles": 0,
+          "same_as_empty_page": true
+        },
+        "опечатка": {
+          "query": "поворов",
+          "status": 200,
+          "titles": 0,
+          "same_as_empty_page": true
+        },
+        "неверная раскладка": {
+          "query": "gjdfhjd",
+          "status": 200,
+          "titles": 0,
+          "same_as_empty_page": true
+        },
+        "транслитерация": {
+          "query": "povarov",
+          "status": 200,
+          "titles": 0,
+          "same_as_empty_page": true
+        },
+        "заведомо отсутствующее": {
+          "query": "зззззз",
+          "status": 200,
+          "titles": 0,
+          "same_as_empty_page": true
+        }
+      },
+      "verdict": "воспроизводится в тяжёлой форме: выдача пуста на ВСЕ запросы, включая точное слово из настоящего названия, и байт в байт совпадает со страницей без запроса. Форма отправляет GET на статический документ, рантайм строку запроса не разбирает вовсе"
+    }
+  ]
+}

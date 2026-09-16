@@ -1,0 +1,41 @@
+# Какая витрина каким производителем связей обслуживается.
+#
+# Настройка, а не код, по той же причине, по которой в ядре нет имён витрин:
+# добавление витрины должно быть правкой настройки. Список производителей при
+# этом закрыт и живёт в коде — новый производитель это новый адаптер, а не
+# строка здесь.
+#
+# Два вида производителей отличаются тем, откуда берётся адрес страницы:
+#
+#   lords            — адрес вычисляется функцией движка витрины и её же
+#                      правилом разведения совпадений. Отсюда номерные адреса,
+#                      зависящие от порядка ответа источника, и неоднозначные
+#                      маршруты, которые закрываются fail-closed.
+#   declared-routes  — витрина объявляет соответствие сама, таблицей маршрутов.
+#                      Ни номерных адресов, ни неоднозначности не возникает.
+
+version: "1.0.0"
+
+sites:
+  lords-01:
+    producer: computed-routes
+    catalog: var/lords/lords/catalog-cache/lords-01.json
+  lords-02:
+    producer: computed-routes
+    catalog: var/lords/lords/catalog-cache/lords-02.json
+  lords-03:
+    producer: computed-routes
+    catalog: var/lords/lords/catalog-cache/lords-03.json
+
+  yummyani-site:
+    producer: declared-routes
+    routes: var/yummyani/routes/yummyani-site.json
+    catalog: var/lords/lords/catalog-cache/lords-01.json
+  yummyani-org:
+    producer: declared-routes
+    routes: var/yummyani/routes/yummyani-org.json
+    catalog: var/lords/lords/catalog-cache/lords-01.json
+  yummyani-biz:
+    producer: declared-routes
+    routes: var/yummyani/routes/yummyani-biz.json
+    catalog: var/lords/lords/catalog-cache/lords-01.json

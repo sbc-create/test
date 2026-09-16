@@ -1,0 +1,11 @@
+{
+  "verdict": "PASS",
+  "findings": [
+    {
+      "severity": "info",
+      "what": "метка происхождения данных изменилась",
+      "before": "fixture/test",
+      "after": "cdnvideohub-live"
+    }
+  ]
+}

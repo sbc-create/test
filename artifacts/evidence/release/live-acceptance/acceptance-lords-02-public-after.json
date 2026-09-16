@@ -1,0 +1,81 @@
+{
+  "captured_at_utc": "2026-09-06T09:23:39.007Z",
+  "base": "https://lordserial33.biz",
+  "site": "lords-02-public-after",
+  "routes": {
+    "home": {
+      "status": 200,
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "catalog": {
+      "status": 200,
+      "consoleErrors": [
+        "Failed to load resource: net::ERR_NETWORK_CHANGED"
+      ],
+      "networkErrors": []
+    },
+    "catalog-page-2": {
+      "status": 200,
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "genres": {
+      "status": 200,
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "years": {
+      "status": 200,
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "countries": {
+      "status": 200,
+      "consoleErrors": [
+        "Failed to load resource: net::ERR_NETWORK_CHANGED"
+      ],
+      "networkErrors": []
+    },
+    "search": {
+      "status": 200,
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "search-empty": {
+      "status": 200,
+      "consoleErrors": [],
+      "networkErrors": []
+    },
+    "not-found": {
+      "status": 404,
+      "consoleErrors": [],
+      "networkErrors": []
+    }
+  },
+  "vitals": {
+    "cls": 0,
+    "lcp": 96,
+    "interaction_ms": 23.4,
+    "limitation": "петлевой контур без сети: LCP — нижняя граница, не замер продукта; interaction_ms — задержка обработки нажатия на одном прогоне, а не полевой INP"
+  },
+  "title": {
+    "href": "/title/100-dney-do-proschaniya-dorogoy/",
+    "player": {
+      "height": 725,
+      "width": 1208,
+      "ratio": "auto",
+      "text": "Просмотр<p>Для просмотра нужен JavaScript: плеер подключается скриптом провайдера.</p>Источник видео сейчас недоступен. "
+    }
+  },
+  "episodes": {
+    "count": 0,
+    "seasons": 0,
+    "durations": [],
+    "zero": 0
+  },
+  "ssr": {
+    "cards_without_js": 48,
+    "h1": "Каталог"
+  }
+}

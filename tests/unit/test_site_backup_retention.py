@@ -21,8 +21,6 @@ import os
 import subprocess
 from pathlib import Path
 
-import pytest
-
 REPO = Path(__file__).resolve().parents[2]
 SCRIPT = REPO / "automation" / "host" / "site-backup-retention.sh"
 
@@ -107,7 +105,7 @@ def test_service_unit_runs_retention_after_the_backup() -> None:
     unit = (REPO / "automation" / "host" / "systemd" / "yummy-site-backup.service").read_text(
         encoding="utf-8"
     )
-    lines = [l for l in unit.splitlines() if l.startswith("ExecStart")]
+    lines = [ln for ln in unit.splitlines() if ln.startswith("ExecStart")]
     assert len(lines) == 2, f"ожидались копирование и удержание, найдено: {lines}"
     assert "backup.sh" in lines[0]
     assert "site-backup-retention.sh" in lines[1]

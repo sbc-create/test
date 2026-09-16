@@ -1,0 +1,22 @@
+[Unit]
+Description=Приёмщик заявок на выкладку Lords
+Documentation=file:///usr/local/libexec/site-factory/lords-deploy-broker
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=no
+# Выкладка одной витрины — часы отрисовки. Ограничение по времени здесь
+# означало бы убийство отрисовки на середине, поэтому его нет.
+TimeoutStartSec=0
+KillMode=mixed
+ExecStart=/usr/local/libexec/site-factory/lords-deploy-broker
+# Таймер обновления каталога возвращается даже если служба убита: остановленный,
+# он замораживает каталог у всех трёх витрин, и заметно это только через часы.
+ExecStopPost=/bin/systemctl start lords-content-refresh.timer
+NoNewPrivileges=no
+UMask=0022
+
+[Install]
+WantedBy=multi-user.target

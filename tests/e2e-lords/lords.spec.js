@@ -114,16 +114,20 @@ test.describe('раскладка на трёх ширинах', () => {
 });
 
 test.describe('каталог: фильтры, сортировка, пагинация', () => {
-  test('фильтр по жанру сокращает список', async ({ page }) => {
+  test('фильтр по жанру ведёт на раздел и сокращает список', async ({ page }) => {
+    // Фасеты стали ссылками на существующие разделы, а не полями выбора.
+    // Прежняя редакция выбирала значение в `#f-genre`; у того поля не было ни
+    // `name`, ни `method`, и на боевом каталоге выбор не менял ничего —
+    // клиентский набор данных при 52 725 записях не встраивается.
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(url('lords-01', '/catalog/'));
     const before = await page.locator('.card').count();
-    const value = await page.locator('#f-genre option').nth(1).getAttribute('value');
-    await page.selectOption('#f-genre', value);
-    await page.waitForFunction(
-      (n) => document.querySelectorAll('.card').length !== n,
-      before,
-    );
+    const chip = page.locator('#facets a[href^="/genres/"]').first();
+    const href = await chip.getAttribute('href');
+    expect(href, 'фасет жанра не является ссылкой').toBeTruthy();
+    await chip.click();
+    // Адрес обязан измениться: это и есть воспроизводимое состояние выбора.
+    await expect(page).toHaveURL(new RegExp(href.replace(/[/]/g, '\\/') + '$'));
     const after = await page.locator('.card').count();
     expect(after).toBeGreaterThan(0);
     expect(after).not.toBe(before);
@@ -143,14 +147,16 @@ test.describe('каталог: фильтры, сортировка, пагин�
     expect(await page.locator('.card__title').first().innerText()).not.toBe(first);
   });
 
-  test('сброс возвращает полный список', async ({ page }) => {
+  test('возврат из раздела восстанавливает полный список', async ({ page }) => {
+    // Отдельной кнопки «Сбросить» больше нет: фасеты — ссылки, и сбросом
+    // служит переход назад или на сам каталог. Кнопка формы сбрасывала поля,
+    // но на боевом каталоге ничего не меняла — набора данных там нет.
     await page.goto(url('lords-01', '/catalog/'));
     const before = await page.locator('.card').count();
-    const value = await page.locator('#f-genre option').nth(1).getAttribute('value');
-    await page.selectOption('#f-genre', value);
-    await page.waitForFunction((n) => document.querySelectorAll('.card').length !== n, before);
-    await page.locator('.facets__reset').click();
-    await page.waitForFunction((n) => document.querySelectorAll('.card').length === n, before);
+    await page.locator('#facets a[href^="/genres/"]').first().click();
+    await expect(page).toHaveURL(/\/genres\//);
+    await page.goBack();
+    await expect(page).toHaveURL(/\/catalog\/$/);
     expect(await page.locator('.card').count()).toBe(before);
   });
 
@@ -188,12 +194,19 @@ test.describe('страница произведения', () => {
     await expect(page.locator('.seasons')).toContainText('сезонов нет');
   });
 
-  test('вместо плеера стоит заглушка с диагностическим статусом', async ({ page }) => {
+  test('вместо плеера стоит вежливая заглушка без служебного кода', async ({ page }) => {
     await page.goto(url('lords-01', '/movies/'));
     await page.locator('.card__title').first().click();
-    await expect(page.locator('.player__frame')).toBeVisible();
-    await expect(page.locator('.player__status'))
-      .toHaveText('BLOCKED_INPUT_CDNVIDEOHUB_CREDENTIALS');
+    const frame = page.locator('.player__frame');
+    await expect(frame).toBeVisible();
+    // Заглушка узнаётся по своим признакам: кадр зарезервирован, состояние
+    // объяснено обычной фразой. Служебного кода на публичной странице нет ни
+    // текстом, ни атрибутом — REQ-LORDS-PLAYER-LIVE и решение D128.
+    await expect(frame).toContainText('временно недоступно');
+    const html = await page.content();
+    expect(html).not.toContain('BLOCKED_INPUT');
+    expect(html).not.toContain('CDNVIDEOHUB_CREDENTIALS');
+    expect(await page.locator('.player__status').count()).toBe(0);
     expect(await page.locator('iframe').count()).toBe(0);
   });
 

@@ -100,11 +100,7 @@ def build_preview(site_id: str, *, output: Path | None = None) -> PreviewResult:
     catalog = fx.build_catalog()
     site = render_mod.render_site(package, catalog=catalog, environ={})
     directory = Path(output) if output else PATHS.artifact_dir("lords", "preview", site_id)
-    for existing in sorted(directory.rglob("*"), reverse=True):
-        if existing.is_file():
-            existing.unlink()
-        elif existing.is_dir():
-            existing.rmdir()
+    serve_mod.clear_directory(directory)
     export = serve_mod.export(site, directory)
 
     report = dict(site.report)

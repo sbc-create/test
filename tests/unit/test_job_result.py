@@ -1,5 +1,6 @@
 """REQ-DOD: отчёт не может утверждать непроведённую проверку."""
 import json
+from pathlib import Path
 
 import pytest
 
@@ -63,19 +64,52 @@ def test_secrets_never_reach_the_result(monkeypatch):
     assert "hunter2secret" not in text
 
 
-def test_real_pilot_results_are_schema_valid():
+#: Настоящие результаты пилота, закреплённые как фикстуры.
+#:
+#: Прежде тест читал artifacts/jobs/pilot-local — runtime-состояние, которое
+#: появляется только там, где задание реально прогонялось, и в git не хранится.
+#: Тот же файл проходил в одном рабочем каталоге и падал в свежем: исход зависел
+#: не от кода, а от того, что осталось на диске. Гейт, который так себя ведёт,
+#: ничего не гарантирует.
+#:
+#: Фикстуры — это настоящие результаты боевых прогонов (BLOCKED_SEO и DONE),
+#: проверенные на отсутствие секретов. Живые артефакты по-прежнему проверяются,
+#: когда они есть, но их отсутствие больше не роняет набор.
+FIXTURE_DIR = Path(__file__).resolve().parents[1] / "fixtures" / "job-results"
+
+
+def _результаты_пилота():
+    фикстуры = sorted(FIXTURE_DIR.glob("*.json"))
     job_dir = PATHS.artifacts / "jobs" / "pilot-local"
-    results = sorted(job_dir.glob("*.json")) if job_dir.exists() else []
-    assert results, "пилот обязан оставить результат задания"
-    for path in results:
+    живые = sorted(job_dir.glob("*.json")) if job_dir.exists() else []
+    return фикстуры, живые
+
+
+def test_real_pilot_results_are_schema_valid():
+    фикстуры, живые = _результаты_пилота()
+    assert фикстуры, (
+        "фикстуры настоящих результатов пилота обязаны лежать в репозитории: "
+        "без них проверка зависит от runtime-состояния рабочего каталога")
+    for path in фикстуры + живые:
         assert validate_result(json.loads(path.read_text(encoding="utf-8"))) == [], path
+
+
+def test_фикстуры_покрывают_и_успех_и_блокировку():
+    """Одного исхода мало: схема обязана держать оба."""
+    статусы = {json.loads(p.read_text(encoding="utf-8"))["status"]
+               for p in sorted(FIXTURE_DIR.glob("*.json"))}
+    assert len(статусы) >= 2, f"фикстуры покрывают только {статусы}"
 
 
 def test_done_never_hides_a_failed_critical_check():
     """DONE допустим только когда ни одна критическая проверка не провалена, а
-    любая невыполненная проверка честно названа в отчёте."""
-    job_dir = PATHS.artifacts / "jobs" / "pilot-local"
-    for path in sorted(job_dir.glob("*.json")):
+    любая невыполненная проверка честно названа в отчёте.
+
+    Проверяются и фикстуры, и живые артефакты. Прежде тест обходил только
+    живые, и на пустом каталоге проходил, ничего не проверив.
+    """
+    фикстуры, живые = _результаты_пилота()
+    for path in фикстуры + живые:
         data = json.loads(path.read_text(encoding="utf-8"))
         if data["status"] != "DONE":
             continue

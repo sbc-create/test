@@ -1,0 +1,663 @@
+{
+  "schema_version": "1.0",
+  "modules": [
+    {
+      "id": "core-contracts",
+      "status": "IMPLEMENTED",
+      "purpose": "Схемы и типы, на которые ссылаются все остальные. Ничего не делает сам.",
+      "owns": "определения нормализованной модели и контрактов",
+      "public_interface": [
+        "schemas/site-engine/*.schema.json",
+        "factory.site_engine.contracts"
+      ],
+      "inputs": [],
+      "outputs": [
+        "JSON Schema",
+        "типы"
+      ],
+      "events": [],
+      "depends_on": [],
+      "forbidden": [
+        "любой модуль, любой фреймворк, любая БД, любой поставщик"
+      ],
+      "errors": [
+        "SchemaError"
+      ],
+      "metrics": [],
+      "cache_tags": [],
+      "implementation": "factory/site_engine/contracts.py"
+    },
+    {
+      "id": "site-configuration",
+      "status": "IMPLEMENTED",
+      "purpose": "Профиль сайта: всё, что отличает сайт от сайта.",
+      "owns": "профили сайтов и флаги",
+      "public_interface": [
+        "factory.site_engine.profiles",
+        "factory.site_engine.scaffold"
+      ],
+      "inputs": [
+        "config/site-profiles/*.json"
+      ],
+      "outputs": [
+        "SiteProfile",
+        "новый профиль сайта"
+      ],
+      "events": [],
+      "depends_on": [
+        "core-contracts"
+      ],
+      "forbidden": [
+        "provider-adapters",
+        "content-ingestion",
+        "renderer-adapters"
+      ],
+      "errors": [
+        "ProfileNotFound",
+        "ProfileInvalid"
+      ],
+      "metrics": [
+        "profiles_loaded"
+      ],
+      "cache_tags": [],
+      "implementation": "factory/site_engine/profiles.py"
+    },
+    {
+      "id": "provider-adapters",
+      "status": "ADAPTED",
+      "purpose": "Перевод чужого API в наш контракт. Знает про HTTP, не знает про витрины.",
+      "owns": "сырые ответы поставщика",
+      "public_interface": [
+        "factory.site_engine.adapters.yummy_events",
+        "factory.site_engine.providers.ProviderAdapter"
+      ],
+      "inputs": [
+        "внешний API"
+      ],
+      "outputs": [
+        "RawTitle",
+        "RawSeason"
+      ],
+      "events": [
+        "перевод чужого формата в ContentEvent"
+      ],
+      "depends_on": [
+        "core-contracts"
+      ],
+      "forbidden": [
+        "renderer-adapters",
+        "seo-bridge",
+        "shelves",
+        "editorial"
+      ],
+      "errors": [
+        "ProviderUnavailable",
+        "ProviderContractBroken"
+      ],
+      "metrics": [
+        "provider_requests",
+        "provider_failures"
+      ],
+      "cache_tags": [],
+      "implementation": "factory/site_engine/providers.py"
+    },
+    {
+      "id": "content-ingestion",
+      "status": "ADAPTED",
+      "purpose": "Обход поставщика и наполнение нормализованного хранилища.",
+      "owns": "состояние обхода и полноту",
+      "public_interface": [
+        "factory.site_engine.ingestion"
+      ],
+      "inputs": [
+        "ProviderAdapter"
+      ],
+      "outputs": [
+        "IngestionRun",
+        "CoverageReport"
+      ],
+      "events": [
+        "TITLE_CREATED",
+        "TITLE_UPDATED",
+        "EPISODE_ADDED",
+        "SEASON_ADDED",
+        "SOURCE_ANOMALY"
+      ],
+      "depends_on": [
+        "core-contracts",
+        "provider-adapters",
+        "normalized-content"
+      ],
+      "forbidden": [
+        "seo-bridge",
+        "renderer-adapters",
+        "shelves",
+        "editorial"
+      ],
+      "errors": [
+        "SourceError",
+        "CatalogTruncation"
+      ],
+      "metrics": [
+        "titles_seen",
+        "pages_walked",
+        "detail_failures"
+      ],
+      "cache_tags": [],
+      "implementation": "factory/site_engine/ingestion.py"
+    },
+    {
+      "id": "normalized-content",
+      "status": "IMPLEMENTED",
+      "purpose": "Нормализованное хранилище: единственный источник правды о содержимом.",
+      "owns": "Title, Season, Episode и их канонические идентификаторы",
+      "public_interface": [
+        "factory.site_engine.store.NormalizedStore"
+      ],
+      "inputs": [
+        "записи от ingestion"
+      ],
+      "outputs": [
+        "Title",
+        "Season",
+        "Episode"
+      ],
+      "events": [],
+      "depends_on": [
+        "core-contracts"
+      ],
+      "forbidden": [
+        "provider-adapters",
+        "renderer-adapters",
+        "seo-bridge"
+      ],
+      "errors": [
+        "TitleNotFound"
+      ],
+      "metrics": [
+        "titles_stored"
+      ],
+      "cache_tags": [
+        "catalog",
+        "title"
+      ],
+      "implementation": "factory/site_engine/store.py"
+    },
+    {
+      "id": "catalog",
+      "status": "CONTRACT_ONLY",
+      "purpose": "Выборки по нормализованному хранилищу: фильтры, сортировки, страницы.",
+      "owns": "правила выборки, но не сами данные",
+      "public_interface": [
+        "CatalogQuery"
+      ],
+      "inputs": [
+        "NormalizedStore"
+      ],
+      "outputs": [
+        "Page[Title]"
+      ],
+      "events": [],
+      "depends_on": [
+        "core-contracts",
+        "normalized-content"
+      ],
+      "forbidden": [
+        "provider-adapters",
+        "content-ingestion",
+        "seo-bridge"
+      ],
+      "errors": [
+        "QueryInvalid"
+      ],
+      "metrics": [
+        "catalog_queries"
+      ],
+      "cache_tags": [
+        "catalog"
+      ],
+      "implementation": null
+    },
+    {
+      "id": "episodes-seasons",
+      "status": "CONTRACT_ONLY",
+      "purpose": "Сезоны, серии и дельта серий.",
+      "owns": "счётчики сезонов и вывод о прибавке",
+      "public_interface": [
+        "EpisodeDelta"
+      ],
+      "inputs": [
+        "NormalizedStore"
+      ],
+      "outputs": [
+        "Season",
+        "Episode"
+      ],
+      "events": [
+        "EPISODE_ADDED",
+        "SEASON_ADDED"
+      ],
+      "depends_on": [
+        "core-contracts",
+        "normalized-content"
+      ],
+      "forbidden": [
+        "renderer-adapters",
+        "seo-bridge"
+      ],
+      "errors": [],
+      "metrics": [
+        "episodes_added"
+      ],
+      "cache_tags": [
+        "title",
+        "shelf:new-episodes"
+      ],
+      "implementation": null
+    },
+    {
+      "id": "playback",
+      "status": "CONTRACT_ONLY",
+      "purpose": "Признак «смотрибельно» и ничего кроме.",
+      "owns": "PlaybackAvailability",
+      "public_interface": [
+        "PlaybackProbe"
+      ],
+      "inputs": [
+        "NormalizedStore"
+      ],
+      "outputs": [
+        "PlaybackAvailability"
+      ],
+      "events": [
+        "PLAYBACK_AVAILABLE",
+        "PLAYBACK_UNAVAILABLE"
+      ],
+      "depends_on": [
+        "core-contracts",
+        "normalized-content"
+      ],
+      "forbidden": [
+        "seo-bridge",
+        "editorial"
+      ],
+      "errors": [],
+      "metrics": [
+        "playable_titles"
+      ],
+      "cache_tags": [
+        "title",
+        "shelf:watchable"
+      ],
+      "implementation": null
+    },
+    {
+      "id": "shelves",
+      "status": "CONTRACT_ONLY",
+      "purpose": "Состав и порядок полок витрины.",
+      "owns": "полки",
+      "public_interface": [
+        "ShelfBuilder"
+      ],
+      "inputs": [
+        "catalog",
+        "episodes-seasons",
+        "ratings"
+      ],
+      "outputs": [
+        "Shelf"
+      ],
+      "events": [],
+      "depends_on": [
+        "core-contracts",
+        "normalized-content"
+      ],
+      "forbidden": [
+        "provider-adapters",
+        "content-ingestion",
+        "seo-bridge"
+      ],
+      "errors": [],
+      "metrics": [
+        "shelves_built"
+      ],
+      "cache_tags": [
+        "shelf"
+      ],
+      "implementation": null
+    },
+    {
+      "id": "ratings",
+      "status": "CONTRACT_ONLY",
+      "purpose": "Оценки из подтверждённых владельцем источников.",
+      "owns": "Rating",
+      "public_interface": [
+        "RatingSource"
+      ],
+      "inputs": [
+        "внешние идентификаторы"
+      ],
+      "outputs": [
+        "Rating"
+      ],
+      "events": [
+        "RATING_UPDATED"
+      ],
+      "depends_on": [
+        "core-contracts",
+        "normalized-content"
+      ],
+      "forbidden": [
+        "renderer-adapters",
+        "seo-bridge"
+      ],
+      "errors": [
+        "RatingSourceUnavailable"
+      ],
+      "metrics": [
+        "ratings_known"
+      ],
+      "cache_tags": [
+        "ratings"
+      ],
+      "implementation": null
+    },
+    {
+      "id": "schedule",
+      "status": "CONTRACT_ONLY",
+      "purpose": "Календарь выхода серий.",
+      "owns": "ScheduleItem",
+      "public_interface": [
+        "ScheduleSource"
+      ],
+      "inputs": [
+        "normalized-content"
+      ],
+      "outputs": [
+        "ScheduleItem"
+      ],
+      "events": [
+        "SCHEDULE_UPDATED"
+      ],
+      "depends_on": [
+        "core-contracts",
+        "normalized-content"
+      ],
+      "forbidden": [
+        "seo-bridge"
+      ],
+      "errors": [
+        "ScheduleSourceMissing"
+      ],
+      "metrics": [],
+      "cache_tags": [
+        "schedule"
+      ],
+      "implementation": null
+    },
+    {
+      "id": "announcements",
+      "status": "CONTRACT_ONLY",
+      "purpose": "Анонсы и новости.",
+      "owns": "Announcement",
+      "public_interface": [
+        "AnnouncementSource"
+      ],
+      "inputs": [
+        "normalized-content",
+        "editorial"
+      ],
+      "outputs": [
+        "Announcement"
+      ],
+      "events": [
+        "ANNOUNCEMENT_UPDATED"
+      ],
+      "depends_on": [
+        "core-contracts",
+        "normalized-content"
+      ],
+      "forbidden": [
+        "provider-adapters"
+      ],
+      "errors": [],
+      "metrics": [],
+      "cache_tags": [
+        "announcements"
+      ],
+      "implementation": null
+    },
+    {
+      "id": "cache-invalidation",
+      "status": "IMPLEMENTED",
+      "purpose": "Теги, их сброс и политика кэша. Правил показа не устанавливает.",
+      "owns": "теги кэша и их отображение из событий",
+      "public_interface": [
+        "factory.site_engine.cache.CacheProvider",
+        "factory.site_engine.cache.InvalidationRequest"
+      ],
+      "inputs": [
+        "ContentEvent",
+        "CachePolicy"
+      ],
+      "outputs": [
+        "CacheResult"
+      ],
+      "events": [],
+      "depends_on": [
+        "core-contracts"
+      ],
+      "forbidden": [
+        "provider-adapters",
+        "renderer-adapters",
+        "seo-bridge",
+        "shelves",
+        "catalog"
+      ],
+      "errors": [],
+      "metrics": [
+        "cache_hit",
+        "cache_miss",
+        "cache_stale",
+        "cache_error"
+      ],
+      "cache_tags": [
+        "*"
+      ],
+      "implementation": "factory/site_engine/cache.py"
+    },
+    {
+      "id": "seo-bridge",
+      "status": "CONTRACT_ONLY",
+      "purpose": "Мост между нормализованным контентом и SEO. Каталогом не владеет.",
+      "owns": "SeoDocument",
+      "public_interface": [
+        "SeoBridge"
+      ],
+      "inputs": [
+        "normalized-content"
+      ],
+      "outputs": [
+        "SeoDocument"
+      ],
+      "events": [],
+      "depends_on": [
+        "core-contracts",
+        "normalized-content"
+      ],
+      "forbidden": [
+        "provider-adapters",
+        "content-ingestion"
+      ],
+      "errors": [],
+      "metrics": [],
+      "cache_tags": [
+        "seo"
+      ],
+      "implementation": null
+    },
+    {
+      "id": "editorial",
+      "status": "IMPLEMENTED",
+      "purpose": "Редакционный слой: правки поверх данных поставщика, не вместо них.",
+      "owns": "EditorialOverride, Draft, Revision, Publication",
+      "public_interface": [
+        "factory.site_engine.editorial"
+      ],
+      "inputs": [
+        "редакторские действия"
+      ],
+      "outputs": [
+        "EditorialOverride",
+        "Revision"
+      ],
+      "events": [],
+      "depends_on": [
+        "core-contracts",
+        "audit"
+      ],
+      "forbidden": [
+        "provider-adapters",
+        "content-ingestion"
+      ],
+      "errors": [
+        "RevisionConflict",
+        "PermissionDenied"
+      ],
+      "metrics": [
+        "overrides_active"
+      ],
+      "cache_tags": [
+        "title",
+        "seo"
+      ],
+      "implementation": "factory/site_engine/editorial.py"
+    },
+    {
+      "id": "audit",
+      "status": "IMPLEMENTED",
+      "purpose": "Кто, когда и почему изменил. Запись только добавляется.",
+      "owns": "AuditEvent",
+      "public_interface": [
+        "factory.site_engine.audit"
+      ],
+      "inputs": [
+        "действия модулей"
+      ],
+      "outputs": [
+        "AuditEvent"
+      ],
+      "events": [],
+      "depends_on": [
+        "core-contracts"
+      ],
+      "forbidden": [
+        "provider-adapters",
+        "renderer-adapters"
+      ],
+      "errors": [],
+      "metrics": [
+        "audit_events"
+      ],
+      "cache_tags": [],
+      "implementation": "factory/site_engine/audit.py"
+    },
+    {
+      "id": "monitoring",
+      "status": "CONTRACT_ONLY",
+      "purpose": "Покрытие, здоровье, пороги и тревоги.",
+      "owns": "метрики и тревоги",
+      "public_interface": [
+        "HealthReport",
+        "CoverageReport"
+      ],
+      "inputs": [
+        "все модули"
+      ],
+      "outputs": [
+        "HealthReport"
+      ],
+      "events": [],
+      "depends_on": [
+        "core-contracts"
+      ],
+      "forbidden": [],
+      "errors": [],
+      "metrics": [
+        "coverage_ratio"
+      ],
+      "cache_tags": [],
+      "implementation": null
+    },
+    {
+      "id": "renderer-adapters",
+      "status": "ADAPTED",
+      "purpose": "Перевод нормализованного контента в страницы. Данными не владеет.",
+      "owns": "страницы",
+      "public_interface": [
+        "factory.site_engine.renderers.RendererAdapter"
+      ],
+      "inputs": [
+        "Shelf",
+        "Title"
+      ],
+      "outputs": [
+        "страницы"
+      ],
+      "events": [],
+      "depends_on": [
+        "core-contracts",
+        "site-configuration"
+      ],
+      "forbidden": [
+        "provider-adapters",
+        "content-ingestion",
+        "cache-invalidation"
+      ],
+      "errors": [
+        "RenderFailed"
+      ],
+      "metrics": [
+        "pages_rendered"
+      ],
+      "cache_tags": [],
+      "implementation": "factory/site_engine/renderers.py"
+    },
+    {
+      "id": "site-engine-api",
+      "status": "IMPLEMENTED",
+      "purpose": "Чтение нормализованного контента снаружи модульного монолита. Собственных данных не имеет и ничего не изменяет.",
+      "owns": "формой ответов и их совместимостью",
+      "public_interface": [
+        "factory.site_engine.api"
+      ],
+      "inputs": [
+        "SiteProfile",
+        "NormalizedStore"
+      ],
+      "outputs": [
+        "ApiResponse",
+        "OpenAPI"
+      ],
+      "events": [],
+      "depends_on": [
+        "core-contracts",
+        "site-configuration",
+        "normalized-content"
+      ],
+      "forbidden": [
+        "provider-adapters",
+        "content-ingestion",
+        "renderer-adapters"
+      ],
+      "errors": [
+        "ApiDisabled"
+      ],
+      "metrics": [
+        "api_requests"
+      ],
+      "cache_tags": [],
+      "implementation": "factory/site_engine/api/app.py"
+    }
+  ]
+}

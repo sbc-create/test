@@ -458,6 +458,108 @@ def cmd_db(args) -> int:
     return EXIT_OK
 
 
+def cmd_template_audit(args) -> int:
+    """Оценка ключевых страниц собранного стенда по рубрике шаблона.
+
+    Порог берётся по худшей странице, а не по средней: среднее скрывает провал,
+    а владелец открывает не среднее. Разделы, выключенные профилем, в оценку не
+    входят — их отсутствие исполняет решение владельца, а не проваливает его.
+    """
+    import json as _json
+
+    from factory.templates.audit import audit_site, render_table, report
+    from factory.templates.rubric import KEY_PAGE_SETS
+
+    pages = getattr(args, "pages", None) or "lords"
+    if pages not in KEY_PAGE_SETS:
+        print(f"неизвестный набор страниц «{pages}»: "
+              f"{', '.join(sorted(KEY_PAGE_SETS))}")
+        return EXIT_FAILED
+    expectations = KEY_PAGE_SETS[pages]
+
+    # Корень сборки задаётся явно затем, что стенд направления и сборка пакета
+    # лежат в разных местах: artifacts/lords/preview против var/build/<site>.
+    # Прежде корень был один, и оценка чужой сборки давала «документ не собран»
+    # по всем критериям — отчёт о ненайденных файлах, а не о качестве.
+    if getattr(args, "root", None):
+        root = Path(args.root)
+        if not root.is_dir():
+            print(f"каталог сборки не найден: {root}")
+            return EXIT_FAILED
+        site = args.site or root.name
+        scores = [audit_site(root, site, expectations=expectations)]
+    else:
+        root = PATHS.root / "artifacts" / "lords" / "preview"
+        sites = [args.site] if getattr(args, "site", None) else sorted(
+            d.name for d in root.iterdir() if d.is_dir()) if root.is_dir() else []
+        if not sites:
+            print("стенд не собран: сначала python3 -m factory lords-preview")
+            return EXIT_FAILED
+        scores = [audit_site(root / site, site, expectations=expectations)
+                  for site in sites]
+    summary = report(scores, threshold=args.threshold)
+    if args.output:
+        Path(args.output).write_text(
+            _json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    _print(summary, args.json)
+    if not args.json:
+        print(render_table(scores, threshold=args.threshold))
+        for site in scores:
+            for page in site.pages:
+                if page.applies and page.score < args.threshold:
+                    print(f"\n{site.site} {page.page} = {page.score}")
+                    for check in page.failures:
+                        print(f"    [{check.status}] {check.criterion}: {check.detail}")
+    return EXIT_OK if summary["meets_threshold"] else EXIT_FAILED
+
+
+def cmd_template_check(args) -> int:
+    """Проверка шаблонов направления по контракту.
+
+    Без `--manifest` проверяются все шаблоны в blueprints/lords/profiles/ и
+    правила между ними: один владелец на раздел, один владелец страниц
+    произведений, совпадение реестра блоков с рендерером.
+    """
+    from factory.templates import contract
+
+    if getattr(args, "manifest", None):
+        manifest = contract.load_manifest(Path(args.manifest))
+        problems = contract.validate_manifest(manifest, where=str(args.manifest))
+    else:
+        problems = contract.validate_repository()
+    _print({"problems": [str(p) for p in problems]}, args.json)
+    if not args.json:
+        for problem in problems:
+            print(f"  - {problem}")
+        print("шаблоны приняты" if not problems else f"претензий: {len(problems)}")
+    return EXIT_OK if not problems else EXIT_FAILED
+
+
+def cmd_template_new(args) -> int:
+    """Новый шаблон из манифеста. Ingestion, API и служебная логика не копируются."""
+    import yaml
+
+    from factory.templates import contract
+    from factory.templates import scaffold as scaffold_mod
+
+    if getattr(args, "example", False):
+        print(yaml.safe_dump(scaffold_mod.example_manifest(args.example),
+                             allow_unicode=True, sort_keys=False))
+        return EXIT_OK
+    if not getattr(args, "manifest", None):
+        print("нужен --manifest или --example <имя>", file=sys.stderr)
+        return EXIT_FAILED
+    manifest = contract.load_manifest(Path(args.manifest))
+    result = scaffold_mod.scaffold(manifest, force=args.force, dry_run=args.dry_run)
+    _print(result.as_dict(), args.json)
+    if not args.json:
+        for problem in result.problems:
+            print(f"  - {problem}")
+        for changed, action in result.changes:
+            print(f"  {'будет изменён' if args.dry_run else 'изменён'} {changed}: {action}")
+    return EXIT_OK if result.ok else EXIT_FAILED
+
+
 def cmd_blueprint(args) -> int:
     status = blueprint.check(args.blueprint)
     _print(status.as_dict(), args.json)
@@ -524,7 +626,7 @@ def cmd_lords_preview(args) -> int:
     return 0
 
 
-def cmd_lords_live(args) -> int:  # noqa: ARG001 — команда без аргументов
+def cmd_lords_live(args) -> int:
     """Собирает три сайта Lords на живом каталоге. Ничего не применяет.
 
     Значения читаются из каталога systemd credentials и в вывод не попадают:
@@ -534,21 +636,49 @@ def cmd_lords_live(args) -> int:  # noqa: ARG001 — команда без ар�
     # окружение нет намеренно: переменные видны в `systemctl show` и в
     # /proc/<pid>/environ, а существующий запасной путь однажды окажется
     # использованным в production.
-    from factory.lords import live_build
+    from factory.lords import content_live, live_build
     try:
         credentials = live_build.Credentials.from_credentials_dir()
     except live_build.LiveBuildError as error:
         print(f"BLOCKED_INPUT_CDNVIDEOHUB_CREDENTIALS: {error}")
         return 2
 
-    report = live_build.build_live(credentials=credentials)
+    report = live_build.build_live(
+        credentials=credentials, incremental=bool(getattr(args, "incremental", False)))
     target = live_build.write_report(report)
 
     for site_id, entry in sorted(report["sites"].items()):
         print(f"  {site_id}: {entry['status']}, записей {entry['item_count']}, "
               f"страниц {entry['pages']}, разделы {', '.join(entry['sections_enabled']) or '—'}")
+        # Режим виден всегда: молчаливый откат к полному обходу выглядел бы как
+        # исправная работа инкрементального, и разницу в десять минут никто бы
+        # не связал с причиной.
+        # Про приращение сообщается только когда оно состоялось. Прежде строка
+        # печаталась и при отказе источника — «приращение: изменено 0,
+        # добавлено 0» рядом со статусом STALE читалось как «ничего не
+        # изменилось», хотя означало «обхода не было вовсе».
+        if entry.get("status") == content_live.FRESH and entry.get("mode") == "incremental":
+            print(f"    приращение: изменено {entry.get('replaced', 0)}, "
+                  f"добавлено {entry.get('added', 0)}")
+        elif entry.get("status") != content_live.FRESH:
+            print(f"    {entry.get('reason', 'причина не указана')}")
+        elif entry.get("mode_reason"):
+            print(f"    полный обход: {entry['mode_reason']}")
 
     problems = live_build.verify_report(report)
+    if problems and live_build.source_unavailable_but_fresh_enough(report):
+        # Источник недоступен, но последний удачный ответ ещё свеж. Это не
+        # поломка фабрики, и объявлять её сломанной нельзя: иначе внешний 502
+        # неотличим от собственного отказа, и настоящая поломка теряется среди
+        # чужих. Витрина остаётся на прежнем релизе — как и должна.
+        возраст = max(
+            (e.get("cache_age_ms") or 0) for e in (report.get("sites") or {}).values()
+        )
+        print("источник недоступен; витрина оставлена на последнем удачном ответе "
+              f"({возраст // 60000} мин назад)")
+        for problem in problems:
+            print(f"  — {problem}")
+        return 0
     if problems:
         print("живой каталог непригоден:")
         for problem in problems:
@@ -576,6 +706,76 @@ def cmd_lords_staging(args) -> int:  # noqa: ARG001 — команда без а
     for item in summary["not_touched"]:
         print(f"  — {item}")
     return 0
+
+
+def cmd_lords_canary(args) -> int:
+    """Выкладка одной витрины Lords и откат её же.
+
+    Команда делает ровно одно: раскладывает релиз в
+    `<runtime>/<site>/releases/<отпечаток>` и переключает ссылку `current`.
+    Ни nginx, ни сертификатов, ни systemd, ни соседних витрин — в отличие от
+    `automation/host/lords-staging-apply.sh`, который применяет конфигурацию
+    всем трём разом и потому поэтапную выкладку выразить не может.
+
+    Отпечаток шаблона сверяется до первой записи: без сверки выкатилось бы
+    то, что оказалось в дереве, а не названный артефакт.
+    """
+    from factory.lords import canary as canary_mod
+    from factory.lords import preview as preview_mod
+    from factory.templates import digest as digest_mod
+
+    root = Path(args.runtime_root) if args.runtime_root else canary_mod.DEFAULT_ROOT
+
+    if args.rollback:
+        try:
+            result = canary_mod.rollback(args.site, root=root, health=canary_mod.serve_health)
+        except canary_mod.CanaryRefused as exc:
+            print(f"откат отклонён: {exc}")
+            return 2
+        print(f"{args.site}: {result.detail}")
+        return 0 if result.switched else 1
+
+    fingerprint = digest_mod.compute()
+    print(f"отпечаток шаблона в дереве: {fingerprint['template_digest'][:16]} "
+          f"({fingerprint['files']} файлов)")
+
+    built = preview_mod.build_preview(args.site)
+    payload = Path(built.report["directory"]).parent / f"{args.site}-canary"
+    # Рантайм и страницы кладутся рядом ровно так, как их ожидает витрина:
+    # serve.py в корне релиза, документы в site/.
+    import shutil
+    if payload.exists():
+        shutil.rmtree(payload)
+    (payload / "site").mkdir(parents=True)
+    for item in Path(built.report["directory"]).rglob("*"):
+        if item.is_file():
+            target = payload / "site" / item.relative_to(built.report["directory"])
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(item, target)
+    from factory.lords.bundle import RUNTIME
+    (payload / "serve.py").write_text(RUNTIME, encoding="utf-8")
+
+    plan = canary_mod.plan(
+        args.site, payload=payload,
+        template_digest=fingerprint["template_digest"],
+        expect_template_digest=args.expect_digest,
+        root=root,
+    )
+    print(f"витрина: {plan.site_id} ({plan.site_dir})")
+    print(f"текущий релиз: {plan.current_release}  →  новый: {plan.new_release}")
+    if not plan.allowed:
+        print("выкладка отклонена до единой записи:")
+        for refusal in plan.refusals:
+            print(f"  — {refusal}")
+        return 2
+
+    result = canary_mod.apply(plan, health=canary_mod.serve_health, dry_run=args.dry_run)
+    if result.dry_run:
+        print("сухой прогон: ни одной записи не сделано")
+        print(f"  переключил бы {result.would['switch_from']} → {result.would['switch_to']}")
+        return 0
+    print(result.detail)
+    return 0 if result.switched else 1
 
 
 def cmd_lords_bundle(args) -> int:
@@ -819,6 +1019,31 @@ def main(argv: list[str] | None = None) -> int:
     analytics_cli.register(sub)
     secret_hub_cli.register(sub)
 
+    p = sub.add_parser("template-check",
+                       help="Lords: проверка шаблонов по контракту (schemas/template-manifest.schema.json)")
+    p.add_argument("--manifest", help="один манифест; без него — все шаблоны направления")
+    p.set_defaults(func=cmd_template_check)
+
+    p = sub.add_parser("template-audit",
+                       help="Lords: оценка ключевых страниц стенда по рубрике шаблона")
+    p.add_argument("--site", help="один пакет направления; без него — все собранные")
+    p.add_argument("--threshold", type=float, default=8.0,
+                   help="порог по худшей странице (по умолчанию 8.0)")
+    p.add_argument("--output", help="куда записать машиночитаемый отчёт")
+    p.add_argument("--pages", default="lords",
+                   help="набор ключевых страниц: lords, yummy, basis-video")
+    p.add_argument("--root", help="каталог собранного сайта (public/); "
+                                  "без него — стенд artifacts/lords/preview")
+    p.set_defaults(func=cmd_template_audit)
+
+    p = sub.add_parser("template-new", help="Lords: новый шаблон из манифеста")
+    p.add_argument("--manifest", help="путь к манифесту (YAML или JSON)")
+    p.add_argument("--example", nargs="?", const="lords-example",
+                   help="напечатать заготовку манифеста и выйти")
+    p.add_argument("--force", action="store_true", help="перезаписать существующий шаблон")
+    p.add_argument("--dry-run", action="store_true", help="показать правки, ничего не записывая")
+    p.set_defaults(func=cmd_template_new)
+
     p = sub.add_parser("lords-plan", help="Lords: dry-run плана сайтов и ворот дублей")
     p.add_argument("--site", help="только один сайт направления")
     p.add_argument("--assume-source", choices=["none", "fixture"], default="none",
@@ -836,12 +1061,27 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--site", help="один сайт направления; без него — все")
     p.set_defaults(func=cmd_lords_bundle)
 
+    p = sub.add_parser("lords-canary",
+                       help="Lords: выкладка ОДНОЙ витрины и откат её же")
+    p.add_argument("--site", required=True, help="единственная витрина, которую трогаем")
+    p.add_argument("--expect-digest", help="отпечаток шаблона, который обязан быть выложен")
+    p.add_argument("--dry-run", action="store_true", help="показать план, ничего не менять")
+    p.add_argument("--rollback", action="store_true", help="вернуть витрину на прежний релиз")
+    p.add_argument("--runtime-root", help="корень рантайма витрин (по умолчанию /srv/lords)")
+    p.set_defaults(func=cmd_lords_canary)
+
     p = sub.add_parser("lords-staging",
                        help="Lords: конфигурация публичного fixture-staging трёх сайтов")
     p.set_defaults(func=cmd_lords_staging)
 
     p = sub.add_parser("lords-live",
                        help="Lords: собрать три сайта на живом каталоге CDNVideoHub")
+    p.add_argument(
+        "--incremental", action="store_true",
+        help=("запрашивать у источника только изменения с отметки прошлой удачной "
+              "загрузки и сливать их с каталогом. При любом сомнении — отметки нет, "
+              "кэш пуст, пора сверять исчезнувшие — выполняется полный обход"),
+    )
     p.set_defaults(func=cmd_lords_live)
 
     p = sub.add_parser("env-report", help="read-only отчёт об окружении")

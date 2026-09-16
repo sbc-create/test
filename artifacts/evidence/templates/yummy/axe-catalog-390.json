@@ -1,0 +1,27 @@
+{
+  "captured_at_utc": "2026-09-04T16:22:35.564Z",
+  "base": "http://127.0.0.1:3210",
+  "page": "catalog",
+  "route": "/catalog",
+  "url": "http://127.0.0.1:3210/catalog",
+  "viewport": {
+    "name": "mobile",
+    "width": 390,
+    "height": 844
+  },
+  "state": "normal (fixture)",
+  "axe_version": "4.13.0",
+  "rules_passed": 28,
+  "rules_inapplicable": 35,
+  "violations": [],
+  "incomplete": [
+    {
+      "id": "aria-valid-attr-value",
+      "nodes": 2
+    },
+    {
+      "id": "color-contrast",
+      "nodes": 21
+    }
+  ]
+}

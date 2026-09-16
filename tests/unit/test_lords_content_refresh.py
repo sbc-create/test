@@ -327,3 +327,77 @@ class TestEnrichmentIsNotSilent:
         assert "[покрытие]" in text, (
             "покрытие описаниями не печатается: рост или его отсутствие не видно"
         )
+
+
+class TestХранениеНеУдаляетТочкуОтката:
+    """`LORDS-RETENTION-EATS-ROLLBACK-42`: хранение съело точку отката.
+
+    В ночь на 2026-09-10 канарейка lords-02 шла с `LORDS_KEEP_RELEASES=2`.
+    Приёмка не прошла (Firefox), витрина откатилась на `8bc82400e443` — и
+    следующее обновление каталога удалило именно его: отсчёт идёт по времени
+    изменения, а отвергнутый канареечный релиз оказался новее известного
+    хорошего. Хранение оставило отвергнутый и удалило тот, на который только
+    что откатились. Ссылка `previous` стала висячей: точка отката перестала
+    существовать.
+
+    Блок хранения исполняется здесь ДОСЛОВНО — вырезается из самого сценария
+    между маркерами, а не переписывается в тест. Копия доказывала бы поведение
+    копии.
+    """
+
+    МАРКЕР_НАЧАЛА = "# >>> RETENTION-BLOCK-START"
+    МАРКЕР_КОНЦА = "# <<< RETENTION-BLOCK-END"
+
+    def _блок(self):
+        текст = SCRIPT.read_text(encoding="utf-8")
+        начало = текст.index(self.МАРКЕР_НАЧАЛА)
+        конец = текст.index(self.МАРКЕР_КОНЦА)
+        return текст[начало:конец]
+
+    def _стенд(self, tmp_path, keep=2):
+        import os, time
+        runtime = tmp_path / "lords-02"
+        (runtime / "releases").mkdir(parents=True)
+        имена = ["старый", "откатный", "отвергнутый", "текущий"]
+        пути = {}
+        for i, имя in enumerate(имена):
+            п = runtime / "releases" / имя
+            п.mkdir()
+            # Время изменения растёт по списку: «отвергнутый» новее «откатного»,
+            # ровно как канареечный релиз был новее известного хорошего.
+            os.utime(п, (time.time() + i, time.time() + i))
+            пути[имя] = п
+        (runtime / "current").symlink_to(пути["текущий"])
+        (runtime / "previous").symlink_to(пути["откатный"])
+        return runtime, пути
+
+    def _исполнить(self, runtime, keep):
+        import subprocess, textwrap
+        сценарий = textwrap.dedent(f"""
+            set -u
+            runtime={runtime!s}
+            KEEP_RELEASES={keep}
+            {self._блок()}
+        """)
+        готово = subprocess.run(["bash", "-c", сценарий],
+                                capture_output=True, text=True, timeout=60)
+        assert готово.returncode == 0, готово.stderr
+        return готово
+
+    def test_точка_отката_переживает_хранение(self, tmp_path):
+        runtime, пути = self._стенд(tmp_path)
+        self._исполнить(runtime, keep=2)
+        assert пути["откатный"].is_dir(), (
+            "хранение удалило точку отката: витрине некуда возвращаться")
+        assert (runtime / "previous").resolve().is_dir(), "ссылка previous стала висячей"
+
+    def test_текущий_релиз_переживает_хранение(self, tmp_path):
+        runtime, пути = self._стенд(tmp_path)
+        self._исполнить(runtime, keep=2)
+        assert пути["текущий"].is_dir(), "хранение удалило текущий релиз"
+
+    def test_лишние_релизы_всё_же_удаляются(self, tmp_path):
+        """Защита точки отката не должна превращаться в отказ от хранения."""
+        runtime, пути = self._стенд(tmp_path)
+        self._исполнить(runtime, keep=2)
+        assert not пути["старый"].exists(), "хранение перестало удалять лишнее"
