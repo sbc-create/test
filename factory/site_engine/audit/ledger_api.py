@@ -10,7 +10,6 @@ from __future__ import annotations
 import json
 import os
 import sqlite3
-import sys
 from pathlib import Path
 from typing import Any
 
@@ -211,7 +210,7 @@ def обработать(метод: str, путь: str, *, query: dict | None =
     if метод != "GET":
         return _проблема(405, "METHOD_NOT_ALLOWED", "метод не поддержан")
 
-    q = {k: (v[-1] if isinstance(v, (list, tuple)) else v)
+    q = {k: (v[-1] if isinstance(v, list | tuple) else v)
          for k, v in (query or {}).items()}
     multi = getattr(query, "multi", None) or {}
 
@@ -352,16 +351,19 @@ def _список(соед, q: dict, multi: dict, *, включая: bool = True
             где.append(f"{k} = ?")
             знач.append(q[k])
     if "occurred_from" in q:
-        где.append("received_at >= ?"); знач.append(q["occurred_from"])
+        где.append("received_at >= ?")
+        знач.append(q["occurred_from"])
     if "occurred_to" in q:
-        где.append("received_at <= ?"); знач.append(q["occurred_to"])
+        где.append("received_at <= ?")
+        знач.append(q["occurred_to"])
     try:
         after = int(q.get("after", 0))
         limit = min(int(q.get("limit", 100)), 1000)
     except (TypeError, ValueError):
         return _проблема(422, "FILTER_VALUE_INVALID",
                          "after и limit обязаны быть целыми")
-    где.append("ledger_seq > ?"); знач.append(after)
+    где.append("ledger_seq > ?")
+    знач.append(after)
     sql = ("SELECT * FROM ledger_event WHERE " + " AND ".join(где)
            + proj.условие(соед, включая_карантин=включая)
            + " ORDER BY ledger_seq LIMIT ?")
@@ -391,7 +393,7 @@ def _доказательство(соед, evidence_id: str) -> tuple[int, Any]
                                  "ссылка выходит за разрешённые корни")
             если_есть = Path(путь)
             метаданные = dict(e)
-            if не_существует := (not если_есть.is_file()):
+            if not если_есть.is_file():
                 метаданные["verified"] = False
                 метаданные["verification"] = "MISSING"
             else:

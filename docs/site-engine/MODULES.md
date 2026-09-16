@@ -20,7 +20,7 @@
 | `cache-invalidation` | реализован | теги кэша и их отображение из событий | `factory/site_engine/cache.py` |
 | `seo-bridge` | описан контрактом, кода пока нет | SeoDocument | — |
 | `editorial` | реализован | EditorialOverride, Draft, Revision, Publication | `factory/site_engine/editorial.py` |
-| `audit` | реализован | AuditEvent | `factory/site_engine/audit.py` |
+| `audit` | реализован | AuditEvent | `factory/site_engine/audit/events.py` |
 | `monitoring` | описан контрактом, кода пока нет | метрики и тревоги | — |
 | `renderer-adapters` | подключён адаптером к существующей реализации | страницы | `factory/site_engine/renderers.py` |
 | `site-engine-api` | реализован | формой ответов и их совместимостью | `factory/site_engine/api/app.py` |

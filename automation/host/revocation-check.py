@@ -9,6 +9,7 @@
 
 Значения не печатаются никогда: наружу идут только отпечатки и коды ответов.
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -18,7 +19,7 @@ import urllib.error
 import urllib.request
 
 БАЗА = "http://127.0.0.1:8790"
-САЙТ = "demo-books"            # окружение non-production, DRAFT
+САЙТ = "demo-books"  # окружение non-production, DRAFT
 
 #: Область → маршрут, которым она пользуется.
 МАРШРУТЫ = {
@@ -36,16 +37,18 @@ def отпечаток(значение: str) -> str:
 
 def проба(метод: str, путь: str, токен: str) -> tuple[int, str]:
     зпр = urllib.request.Request(
-        БАЗА + путь, method=метод,
+        БАЗА + путь,
+        method=метод,
         data=b"{}" if метод in ("POST", "PATCH") else None,
-        headers={"Content-Type": "application/json",
-                 "Authorization": "Bearer " + токен})
+        headers={"Content-Type": "application/json", "Authorization": "Bearer " + токен},
+    )
     try:
         with urllib.request.urlopen(зпр, timeout=10) as о:
             return о.status, "ПРИНЯТ"
     except urllib.error.HTTPError as ош:
-        return ош.code, {401: "ОТКАЗ-неопознан", 403: "ОТКАЗ-нет-прав",
-                         404: "маршрута нет"}.get(ош.code, "иной")
+        return ош.code, {401: "ОТКАЗ-неопознан", 403: "ОТКАЗ-нет-прав", 404: "маршрута нет"}.get(
+            ош.code, "иной"
+        )
     except Exception as ош:
         return 0, type(ош).__name__
 
@@ -58,18 +61,25 @@ def проверить(значения: dict[str, list[str]]) -> dict:
             метод, путь = МАРШРУТЫ[область]
             код, исход = проба(метод, путь, токен)
             принято += 1 if исход == "ПРИНЯТ" else 0
-            итог.append({"fingerprint": отпечаток(токен), "scope": область,
-                         "route": f"{метод} {путь}", "status": код,
-                         "outcome": исход})
-    return {"checks": итог, "accepted": принято,
-            "all_refused": принято == 0}
+            итог.append(
+                {
+                    "fingerprint": отпечаток(токен),
+                    "scope": область,
+                    "route": f"{метод} {путь}",
+                    "status": код,
+                    "outcome": исход,
+                }
+            )
+    return {"checks": итог, "accepted": принято, "all_refused": принято == 0}
 
 
 if __name__ == "__main__":
     # Вход: путь к файлу вида `токен=области|токен=области` (прежние значения).
     источник = sys.argv[1]
     вход = {}
-    for кусок in open(источник, encoding="utf-8").read().strip().split("|"):
+    with open(источник, encoding="utf-8") as ф:
+        сырое = ф.read().strip()
+    for кусок in сырое.split("|"):
         т, _, о = кусок.strip().partition("=")
         if т.strip():
             вход[т.strip()] = [x.strip() for x in о.split(",") if x.strip()]

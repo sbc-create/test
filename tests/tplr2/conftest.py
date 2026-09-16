@@ -11,7 +11,6 @@ import datetime as _d
 import json
 import socket
 import threading
-from pathlib import Path
 
 import pytest
 
@@ -64,7 +63,9 @@ class РеестрHTTP:
                     тело = {"items": реестр.сайты(),
                             "registry_version": реестр.версия()}
                 else:
-                    self.send_response(404); self.end_headers(); return
+                    self.send_response(404)
+                    self.end_headers()
+                    return
                 сырое = json.dumps(тело).encode()
                 self.send_response(200)
                 self.send_header("Content-Type", "application/json")

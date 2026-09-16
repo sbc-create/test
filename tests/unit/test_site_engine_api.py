@@ -42,7 +42,13 @@ def наполнить(store: InMemoryStore, сколько: int = 5) -> None:
 
 
 @pytest.fixture
-def api() -> SiteEngineApi:
+def api(tmp_path, monkeypatch) -> SiteEngineApi:
+    # Тот же повод, что и в админке: `_реестр` по умолчанию открывает
+    # канонический реестр машины, и список сайтов приходил из живого флота, а не
+    # из трёх объявленных здесь. Несуществующий путь возвращает обработчик к
+    # профилям, то есть к тому составу, который тест и описывает.
+    monkeypatch.setenv("REGISTRY_DB", str(tmp_path / "нет-реестра.sqlite3"))
+
     def loader(profile):
         store = InMemoryStore(profile.site_id)
         наполнить(store)

@@ -85,7 +85,8 @@ def проверить_адрес(url: str, разрешённые_хосты: f
     try:
         сведения = socket.getaddrinfo(хост, 443, proto=socket.IPPROTO_TCP)
     except socket.gaierror as ош:
-        raise ProviderError("DNS_RESOLVE_FAILED", f"{хост}: {ош}", retryable=True)
+        raise ProviderError("DNS_RESOLVE_FAILED", f"{хост}: {ош}",
+                            retryable=True) from ош
     for запись in сведения:
         адрес = ipaddress.ip_address(запись[4][0])
         if (адрес.is_private or адрес.is_loopback or адрес.is_link_local

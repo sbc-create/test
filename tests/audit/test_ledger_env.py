@@ -6,8 +6,16 @@
 """
 from __future__ import annotations
 
-import hashlib, json, os, shutil, sqlite3, subprocess, sys, urllib.error, urllib.request
+import hashlib
+import json
+import os
+import shutil
+import sqlite3
+import subprocess
+import urllib.error
+import urllib.request
 from pathlib import Path
+
 import pytest
 
 from factory.site_engine.audit import ledger_store as store
@@ -160,7 +168,7 @@ def test_32_публичные_сайты_только_читаются():
                                             "Cache-Control": "no-cache"})
         методы.add("GET")
         последняя = None
-        for попытка in range(3):
+        for _ in range(3):
             try:
                 with urllib.request.urlopen(r, timeout=40) as o:
                     assert o.status == 200, f"{домен}: {o.status}"
@@ -230,7 +238,7 @@ def test_35_секретов_не_раскрыто():
     c.close()
     if опасно.search(текст):
         утечки.append("ledger_event: образец секрета")
-    утечки += [f"ledger_event: живой токен" for t in живые_токены if t in текст]
+    утечки += ["ledger_event: живой токен" for t in живые_токены if t in текст]
     assert not утечки, утечки
 
 

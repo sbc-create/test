@@ -9,8 +9,16 @@
 которую ни разу не разворачивали, — это предположение о копии, а не копия.
 """
 from __future__ import annotations
-import argparse, hashlib, json, os, sqlite3, sys, tempfile
+
+import argparse
+import hashlib
+import json
+import os
+import sqlite3
+import sys
+import tempfile
 from pathlib import Path
+
 from . import ledger_store as store
 from . import projection as proj
 from . import quarantine as qr
@@ -92,7 +100,8 @@ def создать() -> dict:
     наз = sqlite3.connect(цель)
     with наз:
         ист.backup(наз)
-    наз.close(); ист.close()
+    наз.close()
+    ист.close()
     сумма = hashlib.sha256(цель.read_bytes()).hexdigest()
     манифест = {"backup_file": цель.name, "created_at": store.сейчас(),
                 "sha256": сумма, "size": цель.stat().st_size,

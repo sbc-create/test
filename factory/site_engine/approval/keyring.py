@@ -31,8 +31,7 @@ from typing import Any
 
 from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives.asymmetric.ed25519 import (
-    Ed25519PrivateKey, Ed25519PublicKey)
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
 
 АЛГОРИТМ = "Ed25519"
 ПРЕФИКС = "ed25519"
@@ -115,7 +114,7 @@ class НаборКлючей:
         self.ключи = {к.kid: к for к in ключи}
 
     @classmethod
-    def из_json(cls, текст: str) -> "НаборКлючей":
+    def из_json(cls, текст: str) -> НаборКлючей:
         данные = json.loads(текст)
         записи = данные.get("keys", данные if isinstance(данные, list) else [])
         return cls([Ключ(kid=з["kid"], публичный=з["public"],

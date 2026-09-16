@@ -82,8 +82,7 @@ from factory.site_engine.credentials import store as C
 
 def _окружение_сайта(site_id: str):
     """Окружение и версия реестра из КАНОНИЧЕСКОГО реестра."""
-    from factory.site_engine.changeset.registry_client import (
-        RegistryClient, RegistryUnavailable)
+    from factory.site_engine.changeset.registry_client import RegistryClient, RegistryUnavailable
     try:
         клиент = RegistryClient()
         запись = клиент.сайт(site_id)
@@ -94,7 +93,7 @@ def _окружение_сайта(site_id: str):
 
 def _отпечаток_реестра(версия) -> str:
     return hashlib.sha256(
-        f"registry-version:{версия}".encode("utf-8")).hexdigest()[:16]
+        f"registry-version:{версия}".encode()).hexdigest()[:16]
 
 
 #: Срок жизни разрешения. Короткий намеренно: разрешение — это право начать
@@ -117,8 +116,8 @@ def _сейчас() -> _d.datetime:
 def _разобрать_время(значение: str) -> _d.datetime:
     try:
         return _d.datetime.fromisoformat(str(значение).replace("Z", "+00:00"))
-    except (ValueError, TypeError):
-        raise Отказ("TIMESTAMP_INVALID", f"время {значение!r} не разобрано")
+    except (ValueError, TypeError) as ош:
+        raise Отказ("TIMESTAMP_INVALID", f"время {значение!r} не разобрано") from ош
 
 
 class Состояние:
@@ -175,8 +174,7 @@ def _набор_изменений(changeset_id: str) -> dict[str, Any]:
 
 
 def _версия_реестра() -> int | None:
-    from factory.site_engine.changeset.registry_client import (RegistryClient,
-                                                               RegistryUnavailable)
+    from factory.site_engine.changeset.registry_client import RegistryClient, RegistryUnavailable
     try:
         return RegistryClient().версия()
     except RegistryUnavailable:
@@ -222,8 +220,8 @@ class Обработчик(BaseHTTPRequestHandler):
             raise Отказ("BODY_SIZE", f"тело вне предела {ПРЕДЕЛ_ТЕЛА} байт", 413)
         try:
             данные = json.loads(self.rfile.read(длина) or b"{}")
-        except ValueError:
-            raise Отказ("BODY_MALFORMED", "тело не разобрано", 400)
+        except ValueError as ош:
+            raise Отказ("BODY_MALFORMED", "тело не разобрано", 400) from ош
         if not isinstance(данные, dict):
             raise Отказ("BODY_MALFORMED", "ожидается объект", 400)
         # Сюда пытаются протащить готовое тело подписи. Такого параметра нет,
@@ -292,7 +290,6 @@ class Обработчик(BaseHTTPRequestHandler):
             raise Отказ("CHANGESET_ID_REQUIRED", "нужна ссылка на набор изменений")
         набор = _набор_изменений(cid)
 
-        from factory.site_engine.changeset import model as M
         from factory.site_engine.changeset import policy as POL
         if набор["status"] != M.AWAITING_APPROVAL:
             raise Отказ("CHANGESET_STATE_INVALID",
@@ -352,7 +349,6 @@ class Обработчик(BaseHTTPRequestHandler):
             raise Отказ("FENCING_TOKEN_REQUIRED", "нужен целый fencing_token")
 
         набор = _набор_изменений(cid)
-        from factory.site_engine.changeset import model as M
         from factory.site_engine.changeset import policy as POL
         if набор["status"] != M.APPROVED:
             raise Отказ("CHANGESET_STATE_INVALID",
@@ -368,7 +364,7 @@ class Обработчик(BaseHTTPRequestHandler):
                                     .replace("+00:00", "Z"))
         except Exception as ош:
             raise Отказ(getattr(ош, "error_code", "APPROVAL_INVALID"),
-                        getattr(ош, "detail", str(ош)), 403)
+                        getattr(ош, "detail", str(ош)), 403) from ош
 
         аренда = _аренда(cid)
         if аренда is None or аренда["fencing_token"] != маркер:

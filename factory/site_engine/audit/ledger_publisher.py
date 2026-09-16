@@ -6,8 +6,11 @@
 запись о записи, и журнал рос бы сам от себя без внешних причин.
 """
 from __future__ import annotations
-import json, os, sys, time
+
+import json
+import os
 from pathlib import Path
+
 from . import ledger_store as store
 
 ЖУРНАЛ = os.environ.get("AUDIT_LEDGER_DB",
@@ -38,8 +41,7 @@ def опубликовать(предел: int = 5000) -> dict:
                         "WHERE published_at IS NULL").fetchone()["c"]
     # Проверка отсутствия рекурсии: самособытий в самом журнале быть не должно.
     рекурсия = c.execute(
-        "SELECT count(*) c FROM ledger_event WHERE event_type IN (%s)"
-        % ",".join("?" * len(САМОСОБЫТИЯ)), tuple(САМОСОБЫТИЯ)).fetchone()["c"]
+        "SELECT count(*) c FROM ledger_event WHERE event_type IN ({})".format(",".join("?" * len(САМОСОБЫТИЯ))), tuple(САМОСОБЫТИЯ)).fetchone()["c"]
     c.close()
     return {"published": опубликовано, "backlog": backlog,
             "self_event_recursion": рекурсия, "feed": str(ЛЕНТА)}

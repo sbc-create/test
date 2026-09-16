@@ -196,6 +196,21 @@ def сейчас() -> str:
 
 _ЗАМОК_СХЕМЫ = threading.Lock()
 
+#: Отметка «схема применена целиком», и почему она нужна именно отметкой.
+#:
+#: `executescript` не атомарен для СТОРОННЕГО соединения: он выполняет
+#: операторы по очереди, и каждый DDL фиксируется сам по себе. Таблица
+#: `changeset` создаётся первой, поэтому проверка «есть ли `changeset`»
+#: отвечала «да» уже в тот момент, когда `changeset_transition` ещё не
+#: существовало. Второй поток уходил по быстрому пути и падал на
+#: `no such table: changeset_transition` — двадцать одновременных подач
+#: теряли часть предложений на ровном месте.
+#:
+#: `PRAGMA user_version` записывается ПОСЛЕДНИМ шагом и фиксируется после
+#: всех остальных, поэтому увидеть отметку можно только вместе с полной
+#: схемой. Частично применённой схемы для читателя больше не существует.
+ВЕРСИЯ_СХЕМЫ = 1
+
 #: Столбцы, появившиеся после первой версии схемы. CREATE TABLE IF NOT EXISTS
 #: о старой таблице молчит: она существует, и оператор проходит мимо, — а
 #: запись в несуществующий столбец падает уже на рабочем контуре.
@@ -228,10 +243,22 @@ END"""),
 
 
 def _дорастить(с: sqlite3.Connection) -> None:
+    """Довести старую схему до текущей. Повторный и параллельный вызов безвреден.
+
+    Проверка «чего не хватает» и сам ALTER — два разных оператора, поэтому между
+    ними успевает вклиниться другой писатель: оба увидят отсутствующий столбец и
+    оба попробуют его добавить. Второй получит `duplicate column name`. Это не
+    ошибка состояния, а сообщение «уже сделано», и различать их обязан код, а не
+    оператор: иначе миграция остаётся идемпотентной только в одиночном прогоне.
+    """
     for таблица, столбец, тип in ДОРАЩИВАНИЕ:
         есть = {r[1] for r in с.execute(f"PRAGMA table_info({таблица})")}
         if столбец and столбец not in есть:
-            с.execute(f"ALTER TABLE {таблица} ADD COLUMN {столбец} {тип}")
+            try:
+                с.execute(f"ALTER TABLE {таблица} ADD COLUMN {столбец} {тип}")
+            except sqlite3.OperationalError as ош:
+                if "duplicate column name" not in str(ош):
+                    raise
     # Наличие проверяется чтением: CREATE TRIGGER берёт исключительную
     # блокировку, а выполнять его при каждом открытии значило бы вернуть
     # ровно ту давку, ради устранения которой схема и применяется однажды.
@@ -239,7 +266,16 @@ def _дорастить(с: sqlite3.Connection) -> None:
         "SELECT name FROM sqlite_master WHERE type='trigger'")}
     for имя, ddl in СТОРОЖА:
         if имя not in имена:
-            с.execute(ddl)
+            try:
+                с.execute(ddl)
+            except sqlite3.OperationalError as ош:
+                if "already exists" not in str(ош):
+                    raise
+
+
+def _отметка(с: sqlite3.Connection) -> int:
+    """Версия схемы, записанная в самой базе. 0 — схемы ещё нет."""
+    return int(с.execute("PRAGMA user_version").fetchone()[0])
 
 
 def _обеспечить_схему(с: sqlite3.Connection) -> None:
@@ -251,21 +287,28 @@ def _обеспечить_схему(с: sqlite3.Connection) -> None:
     друга. Поэтому двадцать одновременных подач получали не ожидание, а сразу
     «database is locked»: `timeout=30` в этом случае не работает.
 
-    Проверка наличия таблицы — обычное чтение и блокировки не требует. Замок
-    снимает гонку внутри процесса; повтор — между процессами.
+    Проверка отметки — обычное чтение и блокировки не требует. Замок снимает
+    гонку внутри процесса; повтор — между процессами.
+
+    Спрашивать надо именно про отметку, а не про первую таблицу: `changeset`
+    появляется в начале скрипта, и сосед, увидевший её, уходил доращивать
+    схему, которой ещё нет целиком. Отметка же фиксируется последней.
     """
-    if с.execute("SELECT 1 FROM sqlite_master WHERE type='table' "
-                 "AND name='changeset'").fetchone():
+    if _отметка(с) == ВЕРСИЯ_СХЕМЫ:
         _дорастить(с)
         return
     with _ЗАМОК_СХЕМЫ:
-        if с.execute("SELECT 1 FROM sqlite_master WHERE type='table' "
-                     "AND name='changeset'").fetchone():
+        if _отметка(с) == ВЕРСИЯ_СХЕМЫ:
             return
         предел = time.monotonic() + 30
         while True:
             try:
+                # Порядок обязателен: сначала схема целиком, затем доращивание,
+                # и только потом отметка. Любой другой порядок снова показал бы
+                # соседу готовность раньше времени.
                 с.executescript(СХЕМА)
+                _дорастить(с)
+                с.execute(f"PRAGMA user_version = {ВЕРСИЯ_СХЕМЫ}")
                 return
             except sqlite3.OperationalError as ош:
                 if "locked" not in str(ош) or time.monotonic() >= предел:
@@ -514,7 +557,7 @@ def применить_переход(соед: sqlite3.Connection, cid: str, д
             [п.в_состояние, т]
         for k, v in (поля or {}).items():
             обновления.append(f"{k}=?")
-            значения.append(v if isinstance(v, (str, int, float, type(None)))
+            значения.append(v if isinstance(v, str | int | float | type(None))
                             else канон(v))
         значения.append(cid)
         # Снимаем защиту ровно на одну операцию: триггер запрещает менять
@@ -654,10 +697,8 @@ def получить(соед: sqlite3.Connection, cid: str) -> dict | None:
                  "dry_run_result", "verification_plan", "rollback_plan",
                  "approval", "evidence_refs"):
         if d.get(поле):
-            try:
+            with contextlib.suppress(ValueError, TypeError):
                 d[поле] = json.loads(d[поле])
-            except (ValueError, TypeError):
-                pass
     d["targets"] = [dict(x) for x in соед.execute(
         "SELECT * FROM changeset_target WHERE changeset_id=? ORDER BY "
         "is_canary DESC, site_id", (cid,))]

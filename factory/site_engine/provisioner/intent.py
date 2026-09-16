@@ -13,7 +13,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass
 from typing import Any
 
 СХЕМА = "onboarding-intent/1.0.0"
@@ -57,7 +57,7 @@ class OnboardingIntent:
     site_id: str | None = None          # известен при adoption существующего
 
     @classmethod
-    def разобрать(cls, сырое: dict[str, Any]) -> "OnboardingIntent":
+    def разобрать(cls, сырое: dict[str, Any]) -> OnboardingIntent:
         обязательные = ("requested_by", "canonical_domain", "template_family",
                         "template_profile", "language", "region",
                         "correlation_id", "idempotency_key")

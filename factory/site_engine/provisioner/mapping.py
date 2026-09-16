@@ -20,9 +20,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
-import time
 from dataclasses import dataclass
-from typing import Any, Iterable
 
 СОЗДАНО = "CREATED"
 ПРИНЯТО = "ADOPTED"

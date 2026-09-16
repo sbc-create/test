@@ -16,7 +16,7 @@ import json
 from dataclasses import dataclass, field
 from typing import Any
 
-from .base import Наблюдение, ProviderError, проверить_запись
+from .base import ProviderError, Наблюдение, проверить_запись
 
 ПОТЕРЯ_ОТВЕТА = "lost_response"
 ПАДЕНИЕ_ПОСЛЕ_ЭФФЕКТА = "crash_after_effect"

@@ -135,7 +135,8 @@ def создать() -> dict:
     наз = sqlite3.connect(цель)
     with наз:
         ист.backup(наз)
-    наз.close(); ист.close()
+    наз.close()
+    ист.close()
     сумма = hashlib.sha256(цель.read_bytes()).hexdigest()
     отметка_до = прочитать_отметку()
     отметка_после = поднять_отметку(слепок["high_water"])

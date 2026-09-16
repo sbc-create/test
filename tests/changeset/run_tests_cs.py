@@ -8,6 +8,7 @@
 """
 from __future__ import annotations
 
+import contextlib
 import ctypes
 import hashlib
 import json
@@ -40,11 +41,9 @@ PR_SET_PDEATHSIG = 1
 
 
 def _умереть_с_родителем() -> None:
-    try:
+    with contextlib.suppress(OSError):
         ctypes.CDLL("libc.so.6", use_errno=True).prctl(
             PR_SET_PDEATHSIG, signal.SIGKILL, 0, 0, 0)
-    except OSError:
-        pass
 
 
 def снимок(путь: str, таблица: str, ключ: str) -> dict:
@@ -114,7 +113,8 @@ def main() -> int:
     наз = sqlite3.connect(врем / "ledger.sqlite3")
     with наз:
         ист.backup(наз)
-    наз.close(); ист.close()
+    наз.close()
+    ист.close()
 
     # Сервер поднимается из РАБОЧЕГО ДЕРЕВА, а не из выложённого релиза.
     # Релиз приколот к коммиту и от ветки отстаёт на всё, что в ней сделано;

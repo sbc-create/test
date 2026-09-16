@@ -25,7 +25,6 @@ from factory.site_engine.credentials import provision as PR
 
 from .conftest import через_час
 
-
 # =============================================================================
 # A. Жизненный цикл учётных данных
 # =============================================================================
@@ -142,7 +141,7 @@ class TestМатрицаПолномочий:
     def test_модель_не_получает_исполнительных_полномочий(self):
         assert store.ПРАВА_СЛУЖБ["qwen"] == {"OBSERVE", "PROPOSE"}
         assert ident.ТИП_АКТОРА["qwen"] == "MODEL"
-        assert store.ФАЗЫ_ЗАПРЕЩЁННЫЕ_МОДЕЛИ >= {"AUTHORIZED", "SUCCEEDED"}
+        assert {"AUTHORIZED", "SUCCEEDED"} <= store.ФАЗЫ_ЗАПРЕЩЁННЫЕ_МОДЕЛИ
 
     def test_рабочий_процесс_не_получает_authorize(self):
         assert M.APPROVER not in M.ПРАВА["control-plane"]
@@ -150,7 +149,7 @@ class TestМатрицаПолномочий:
 
     def test_qwen_только_предлагает(self):
         assert M.ПРАВА["qwen"] == {M.PROPOSER}
-        assert M.ЗАПРЕЩЕНО_МОДЕЛИ >= {"approve", "apply", "rollback"}
+        assert {"approve", "apply", "rollback"} <= M.ЗАПРЕЩЕНО_МОДЕЛИ
 
     def test_мост_обязан_назвать_личность(self, monkeypatch):
         from factory.site_engine.changeset import audit_bridge as AB
@@ -452,7 +451,6 @@ class TestПринципалыУправляющегоСлоя:
 
     @pytest.fixture()
     def файл(self, tmp_path):
-        from factory.site_engine.credentials import control_principals as CP
         п = tmp_path / "site-engine-control-tokens"
         п.write_text("ops-token-aaaa=read,jobs:write,config:write|"
                      "ro-token-bbbb=read\n", encoding="utf-8")
@@ -484,6 +482,7 @@ class TestПринципалыУправляющегоСлоя:
 
     def test_файл_остаётся_закрытым(self, файл):
         import stat as _stat
+
         from factory.site_engine.credentials import control_principals as CP
         CP.ротировать(файл)
         assert oct(_stat.S_IMODE(файл.stat().st_mode)) == "0o400"

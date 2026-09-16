@@ -84,7 +84,9 @@ class РеестрHTTP:
                     тело = {"items": реестр.сайты(),
                             "registry_version": реестр.версия()}
                 else:
-                    self.send_response(404); self.end_headers(); return
+                    self.send_response(404)
+                    self.end_headers()
+                    return
                 сырое = json.dumps(тело).encode()
                 self.send_response(200)
                 self.send_header("Content-Type", "application/json")
@@ -107,8 +109,8 @@ class РеестрHTTP:
 
 def подготовить_ключи(каталог: Path) -> dict:
     """Отдельный тестовый ключ. В боевом наборе доверия его нет."""
-    import secrets as _secrets
     import hashlib as _h
+    import secrets as _secrets
     import sys
     sys.path.insert(0, str(РЕЛИЗ))
     from factory.site_engine.approval import keyring as K

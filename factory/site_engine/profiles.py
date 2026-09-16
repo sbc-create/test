@@ -15,6 +15,10 @@ from factory.site_engine.contracts import ContractError
 
 PROFILE_DIR = Path("config/site-profiles")
 
+#: Таблица семейств витрин. Лежит в конфигурации, а не в коде: ядро не обязано
+#: знать, какие семейства существуют, чтобы их обслуживать.
+FAMILIES_PATH = Path("config/site-engine/site-families.json")
+
 #: Способы получить нормализованный контент. Список закрыт: неизвестный вид —
 #: это не «ещё один вариант», а незамеченная опечатка.
 NORMALIZED_CONTENT_KINDS = ("content-ingestion", "site-engine-api", "adapter")
@@ -140,3 +144,52 @@ def load_profile(site_id: str, root: Path | str = ".") -> SiteProfile:
 def load_all(root: Path | str = ".") -> list[SiteProfile]:
     directory = Path(root) / PROFILE_DIR
     return [load_profile(path.stem, root) for path in sorted(directory.glob("*.json"))]
+
+
+def load_families(root: Path | str = ".") -> dict[str, Any]:
+    """Таблица семейств витрин: тип сайта и утверждённые профили онбординга.
+
+    Раньше эта таблица лежала прямо в ядре — словарями в `api/app.py` и
+    `provisioner/qwen.py`. Ядро обслуживает разные семейства, и знание о том,
+    что `lords` — витрина видео, а `yummy` — портал аниме, делало его
+    непереносимым: появление следующего семейства требовало правки двух файлов
+    ядра вместо одной записи в конфигурации.
+    """
+    path = Path(root) / FAMILIES_PATH
+    if not path.exists():
+        raise ProfileNotFound(f"таблицы семейств нет: {path}")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def site_type_of(family: str, root: Path | str = ".") -> str:
+    """Тип сайта по семейству. Неизвестное семейство названо неизвестным.
+
+    Подставлять сюда правдоподобное умолчание нельзя: потребитель примет догадку
+    за измеренное значение. «Неизвестно» — не догадка, а честный ответ, поэтому
+    отсутствие таблицы даёт его же, а не отказ: это обогащение списка сайтов, и
+    ронять из-за него весь ответ хуже, чем вернуть неизвестный тип.
+
+    Права выдавать по этому же принципу нельзя — см. `approved_profiles_of`.
+    """
+    try:
+        таблица = load_families(root)
+    except ProfileNotFound:
+        return "unknown"
+    запись = таблица.get("families", {}).get(family) or {}
+    return запись.get("site_type") or таблица.get("unknown_site_type", "unknown")
+
+
+def approved_profiles_of(family: str, root: Path | str = ".") -> tuple[str, ...] | None:
+    """Утверждённые профили онбординга семейства, либо None для неизвестного.
+
+    `None` и пустой набор — разные ответы: первый значит «семейство не
+    объявлено», второй — «объявлено, но профилей нет». Свести их вместе значит
+    разрешить модели придумать шаблон, которого нет.
+
+    Отсутствие таблицы здесь — отказ, а не «unknown»: эта функция решает, что
+    модели позволено создать. Пропавший файл не должен превращаться в разрешение.
+    """
+    запись = load_families(root).get("families", {}).get(family)
+    if запись is None:
+        return None
+    return tuple(запись.get("approved_profiles", ()))

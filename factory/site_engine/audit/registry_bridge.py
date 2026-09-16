@@ -11,11 +11,19 @@
 """
 from __future__ import annotations
 
-import argparse, errno, fcntl, json, os, signal, sqlite3, sys, time
+import argparse
+import errno
+import fcntl
+import json
+import os
+import signal
+import sqlite3
+import sys
+import time
 from pathlib import Path
 
-from . import ledger_store as store
 from . import ledger_publisher as pub
+from . import ledger_store as store
 
 РЕЕСТР = os.environ.get("REGISTRY_DB",
                         "/srv/site-factory/registry-core/registry.sqlite3")
@@ -50,8 +58,10 @@ def занять_замок():
         if e.errno in (errno.EAGAIN, errno.EACCES):
             raise УжеЗапущен(f"мост уже работает, замок {ЗАМОК} занят") from e
         raise
-    ф.seek(0); ф.truncate()
-    ф.write(str(os.getpid())); ф.flush()
+    ф.seek(0)
+    ф.truncate()
+    ф.write(str(os.getpid()))
+    ф.flush()
     return ф
 
 

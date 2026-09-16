@@ -7,10 +7,21 @@
 Это проверяется здесь же — обещание изоляции без проверки ничего не стоит.
 """
 from __future__ import annotations
+
+import contextlib
 import ctypes
 import hashlib
-import json, os, shutil, signal, sqlite3, subprocess, sys, tempfile, time
-import urllib.error, urllib.request
+import json
+import os
+import shutil
+import signal
+import sqlite3
+import subprocess
+import sys
+import tempfile
+import time
+import urllib.error
+import urllib.request
 from pathlib import Path
 
 КАНОН = "/srv/site-factory/audit-ledger/audit_ledger.sqlite3"
@@ -30,11 +41,9 @@ PR_SET_PDEATHSIG = 1
 
 
 def _умереть_с_родителем() -> None:
-    try:
+    with contextlib.suppress(OSError):
         ctypes.CDLL("libc.so.6", use_errno=True).prctl(
             PR_SET_PDEATHSIG, signal.SIGKILL, 0, 0, 0)
-    except OSError:
-        pass
 
 
 def снимок(путь: str) -> dict:
@@ -64,7 +73,8 @@ def main() -> int:
     наз = sqlite3.connect(копия)
     with наз:
         ист.backup(наз)
-    наз.close(); ист.close()
+    наз.close()
+    ист.close()
 
     # Эфемерный экземпляр поднимается ради журнала. Управляющая запись ему не
     # нужна, а протокол запуска требует под неё токены — брать их сюда значило

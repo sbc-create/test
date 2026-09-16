@@ -29,22 +29,22 @@ from __future__ import annotations
 
 import hashlib
 import json
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 
-from factory.site_engine.provisioner.intent import IntentError, OnboardingIntent
+from factory.site_engine.profiles import approved_profiles_of
+from factory.site_engine.provisioner.intent import OnboardingIntent
 
 РОЛЬ = "AI_ORCHESTRATOR_AND_CONTENT_AUTHOR"
 АКТОР = {"actor_id": "service:qwen", "actor_type": "MODEL", "service": "qwen"}
 
 #: Только утверждённые связки семейства и профиля. Свободный ввод здесь
 #: означал бы, что модель придумывает шаблон, которого нет.
-УТВЕРЖДЁННЫЕ_ПРОФИЛИ = {
-    "yummy": ("catalog-search", "catalog-editorial", "catalog-schedule"),
-    "lords": ("lords-general", "lords-new", "lords-curated"),
-    "zona": ("zona-general",),
-    "animedia": ("animedia-general",),
-}
+#:
+#: Перечень живёт в `config/site-engine/site-families.json`, а не здесь: ядро
+#: обслуживает разные семейства, и появление следующего не должно требовать
+#: коммита в модуль.
+КОРЕНЬ_КОНФИГУРАЦИИ = "."
 
 СТАТУС_ЧЕРНОВИКА = "DRAFT"
 
@@ -109,7 +109,7 @@ class QwenКонтракт:
     def создать_намерение(self, заявка: dict[str, Any]) -> OnboardingIntent:
         семейство = str(заявка.get("template_family") or "").strip()
         профиль = str(заявка.get("template_profile") or "").strip()
-        допустимые = УТВЕРЖДЁННЫЕ_ПРОФИЛИ.get(семейство)
+        допустимые = approved_profiles_of(семейство, КОРЕНЬ_КОНФИГУРАЦИИ)
         if допустимые is None:
             raise QwenDenied("TEMPLATE_FAMILY_NOT_APPROVED",
                              f"семейство {семейство!r} не входит в утверждённый перечень")

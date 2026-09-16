@@ -10,15 +10,13 @@
 """
 from __future__ import annotations
 
-import hashlib
-import json
 import re
 from typing import Any
 
 from . import adapter as A
 from . import model as M
 from .registry_client import RegistryClient, RegistryUnavailable
-from .store import ChangeSetError, канон, хэш
+from .store import ChangeSetError, хэш
 
 #: Признаки того, что в значение пытаются протащить исполняемое или адрес.
 ОПАСНЫЕ_ОБРАЗЦЫ = (
@@ -61,7 +59,7 @@ def проверить_содержимое(значение: Any, *, глуби
         for i, v in enumerate(значение):
             проверить_содержимое(v, глубина=глубина + 1, путь=f"{путь}[{i}]")
         return
-    if значение is None or isinstance(значение, (bool, int, float)):
+    if значение is None or isinstance(значение, bool | int | float):
         return
     if not isinstance(значение, str):
         raise ChangeSetError("PAYLOAD_TYPE_INVALID",

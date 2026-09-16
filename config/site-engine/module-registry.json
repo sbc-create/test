@@ -560,7 +560,7 @@
         "audit_events"
       ],
       "cache_tags": [],
-      "implementation": "factory/site_engine/audit.py"
+      "implementation": "factory/site_engine/audit/events.py"
     },
     {
       "id": "monitoring",

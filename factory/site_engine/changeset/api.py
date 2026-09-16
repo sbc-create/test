@@ -11,8 +11,6 @@
 """
 from __future__ import annotations
 
-import json
-import os
 from typing import Any
 
 from ..audit import ledger_identity as ident
@@ -205,7 +203,7 @@ def _создать(соед, тело: dict, служба: str, actor_id: str,
 
 
 def _список(соед, q: dict) -> tuple[int, Any]:
-    q = {k: (v[-1] if isinstance(v, (list, tuple)) else v) for k, v in q.items()}
+    q = {k: (v[-1] if isinstance(v, list | tuple) else v) for k, v in q.items()}
     неизвестные = [k for k in q if k not in ФИЛЬТРЫ + СЛУЖЕБНЫЕ]
     if неизвестные:
         return _проблема(422, "FILTER_UNKNOWN",

@@ -2,13 +2,19 @@
 from __future__ import annotations
 
 import concurrent.futures as fut
-import hashlib, json, os, shutil, sqlite3, subprocess, sys, tempfile, urllib.error, urllib.request, uuid
+import hashlib
+import json
+import os
+import shutil
+import sqlite3
+import urllib.error
+import urllib.request
+import uuid
 from pathlib import Path
+
 import pytest
 
 from factory.site_engine.audit import ledger_store as store
-from factory.site_engine.audit import ledger_identity as ident
-from factory.site_engine.audit import ledger_api as api
 
 # Тесты пишут события, а журнал — только на добавление: удалить написанное
 # нельзя. Поэтому прогон идёт по эфемерной копии (`run_tests.py` поднимает
@@ -84,7 +90,8 @@ def test_01_append_и_чтение():
 # 2, 3
 def test_02_идемпотентность_тот_же_payload():
     e = событие()
-    к1, a = пост(e); к2, b = пост(e)
+    к1, a = пост(e)
+    к2, b = пост(e)
     assert к1 == 201 and к2 == 200
     assert a["event_id"] == b["event_id"] and b["idempotent_replay"] is True
 
@@ -125,7 +132,8 @@ def test_05_crash_после_commit_не_даёт_дубль(врем):
 def test_06_registry_replay_без_дублей():
     from factory.site_engine.audit import registry_bridge as rb
     до = rb.сверка()
-    rb.перенести(); rb.перенести()
+    rb.перенести()
+    rb.перенести()
     после = rb.сверка()
     assert после["duplicates"] == 0 and после["missing_count"] == 0
     assert после["in_ledger"] == до["in_ledger"]
@@ -167,7 +175,7 @@ def test_11_неавторизованный_post():
                                headers={"Content-Type": "application/json"})
     try:
         urllib.request.urlopen(r, timeout=20)
-        assert False, "принято без токена"
+        raise AssertionError("принято без токена")
     except urllib.error.HTTPError as e:
         assert e.code in (401, 403)
 
@@ -241,7 +249,7 @@ def test_17_delete_невозможен(врем):
     store.append(врем, событие(), producer_service="architect",
                  actor_id="service:architect", actor_type="SERVICE",
                  authority="OBSERVE")
-    with pytest.raises(Exception):
+    with pytest.raises(sqlite3.DatabaseError):
         врем.execute("DELETE FROM ledger_event")
 
 
@@ -249,7 +257,8 @@ def test_17_delete_невозможен(врем):
 def test_18_bit_flip_обнаруживается(tmp_path):
     копия = tmp_path / "copy.sqlite3"
     shutil.copyfile(ЖУРНАЛ, копия)
-    c = sqlite3.connect(копия); c.row_factory = sqlite3.Row
+    c = sqlite3.connect(копия)
+    c.row_factory = sqlite3.Row
     assert store.проверить_цепь(c)["ok"], "копия изначально повреждена"
     # Триггеры запрещают UPDATE — правим в обход, как это сделал бы тот, кто
     # получил доступ к файлу. Именно такой случай цепь и обязана поймать.
@@ -310,7 +319,8 @@ def test_21_секрет_в_payload_отклоняется():
 # 22, 23, 24, 25
 def test_22_курсор_потребителя_переживает_перезапуск():
     from factory.site_engine.audit import registry_bridge as rb
-    ж = sqlite3.connect(ЖУРНАЛ); ж.row_factory = sqlite3.Row
+    ж = sqlite3.connect(ЖУРНАЛ)
+    ж.row_factory = sqlite3.Row
     поз = ж.execute("SELECT position FROM consumer_cursor WHERE consumer=?",
                     (rb.ПОТРЕБИТЕЛЬ,)).fetchone()
     ж.close()
@@ -328,7 +338,8 @@ def test_24_сверка_находит_пропуск(tmp_path, monkeypatch):
     ушло = c.execute("SELECT idempotency_key FROM ledger_event WHERE "
                      "producer_service='registry' LIMIT 1").fetchone()[0]
     c.execute("DELETE FROM ledger_event WHERE idempotency_key=?", (ушло,))
-    c.commit(); c.close()
+    c.commit()
+    c.close()
     monkeypatch.setattr(rb, "ЖУРНАЛ", str(ж_копия))
     с = rb.сверка()
     assert с["missing_count"] == 1 and ушло in с["missing"]
@@ -464,8 +475,10 @@ def test_r2_отозванный_токен_отклонён(monkeypatch, tmp_pa
     список отозванных приходят одним credential, и сырых значений у
     проверяющего нет вовсе.
     """
+    import hashlib
+    import json
+
     from factory.site_engine.audit import ledger_identity as li
-    import hashlib, json
     отпечаток = hashlib.sha256(ТОКЕН.encode()).hexdigest()
     каталог = tmp_path / "credentials"
     каталог.mkdir()
@@ -480,8 +493,10 @@ def test_r2_отозванный_токен_отклонён(monkeypatch, tmp_pa
 
 def test_r2_отпечатки_не_содержат_сырых_токенов(monkeypatch, tmp_path):
     """Компрометация проверяющего не должна выдавать личности служб."""
+    import hashlib
+    import json
+
     from factory.site_engine.audit import ledger_identity as li
-    import hashlib, json
     каталог = tmp_path / "credentials"
     каталог.mkdir()
     содержимое = json.dumps({

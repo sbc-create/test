@@ -171,8 +171,7 @@ class TestИсправленияR1:
 
     def test_владелец_ресурса_совпадает_с_матрицей(self):
         from factory.site_engine.changeset import model as M
-        from factory.site_engine.provisioner.changeset_adapter import (
-            ProviderTargetAdapter, ТИПЫ)
+        from factory.site_engine.provisioner.changeset_adapter import ТИПЫ, ProviderTargetAdapter
         for resource_type in ТИПЫ:
             адаптер = ProviderTargetAdapter(None, None, None,
                                             resource_type=resource_type)

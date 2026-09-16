@@ -13,7 +13,6 @@
 """
 from __future__ import annotations
 
-import json
 from typing import Any
 
 from . import adapter as A
@@ -162,7 +161,6 @@ class Engine:
                 поля={"failure_reason": S.канон(дрейф["drift"])})
             raise S.ChangeSetError("PLAN_STALE",
                                    f"план устарел: {дрейф['drift']}", 409)
-        планы = набор["dry_run_result"]["per_site_plan"]
         POL.применение_разрешено(
             набор, set(набор["dry_run_result"].get("environments") or []))
 
@@ -311,9 +309,9 @@ class Engine:
         for site_id in список:
             было = отпечатки.get(site_id) or планы[site_id]["before_fingerprint"]
             try:
-                r = ад.rollback(site_id=site_id, plan=планы[site_id],
-                                before_fingerprint=было,
-                                fencing_token=fencing_token)
+                ад.rollback(site_id=site_id, plan=планы[site_id],
+                            before_fingerprint=было,
+                            fencing_token=fencing_token)
             except A.AdapterError as e:
                 неудачи.append(f"{site_id}: {e.error_code}")
                 S.обновить_цель(self.соед, cid, site_id,

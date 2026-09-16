@@ -322,7 +322,15 @@ class _Handler(http.server.BaseHTTPRequestHandler):
             self._send(код, тело, доп)
             return
 
-        if path.startswith("/api/v1/audit"):
+        # Со слэшем, и это не придирка к строке. Журнал обслуживает только
+        # вложенные маршруты — /events, /health, /correlations/..., — а ровно
+        # `/api/v1/audit` с самого начала принадлежал управляющему API и отдаёт
+        # его журнал действий с полем `entries`. Проверка без слэша забирала
+        # себе и его: управляющий токен журналу неизвестен, и маршрут, годами
+        # отвечавший 200, начал отвечать 401. Отличается не только доступ, но и
+        # форма ответа, так что потребитель получал чужой контракт под своим
+        # адресом.
+        if path.startswith("/api/v1/audit/"):
             try:
                 from factory.site_engine.audit import ledger_api as _la
                 код, тело = _la.обработать(
@@ -379,7 +387,7 @@ class _Handler(http.server.BaseHTTPRequestHandler):
 
     def _журнал_ли(self) -> bool:
         путь = self.path.split("?", 1)[0]
-        return (путь.startswith("/api/v1/audit")
+        return (путь.startswith("/api/v1/audit/")
                 or путь.startswith("/api/v1/changesets")
                 or путь.startswith("/api/v1/workflows"))
 

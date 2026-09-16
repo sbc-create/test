@@ -5,7 +5,14 @@
 каждый объявленный путь вызывается, и расхождение объявляется расхождением.
 """
 from __future__ import annotations
-import json, os, re, sqlite3, subprocess, sys, urllib.error, urllib.request
+
+import json
+import os
+import re
+import sqlite3
+import sys
+import urllib.error
+import urllib.request
 from pathlib import Path
 
 Б = "http://127.0.0.1:8790"
@@ -100,9 +107,11 @@ for действие, sql in (("UPDATE", "UPDATE ledger_event SET summary='x'"),
         шаг(f"{действие} в обход API запрещён триггером", True, str(e)[:60])
 
 # --- целостность и сверка ----------------------------------------------------
-from factory.site_engine.audit import ledger_store as store
-from factory.site_engine.audit import registry_bridge as rb
-from .. import ledger_publisher as lp
+from factory.site_engine.audit import ledger_store as store  # noqa: E402
+from factory.site_engine.audit import registry_bridge as rb  # noqa: E402
+
+from .. import ledger_publisher as lp  # noqa: E402
+
 c.row_factory = sqlite3.Row
 цепь = store.проверить_цепь(c)
 шаг("цепь хешей сходится", цепь["ok"], f"{цепь['verified']} событий")
@@ -168,7 +177,8 @@ for поле in ("phase", "result", "scope", "actor_type", "authority"):
 шаг("значения в хранилище укладываются в объявленные перечни", not вне, str(вне))
 
 # --- карантин виден в сырой ленте и скрыт в рабочей --------------------------
-from factory.site_engine.audit import projection as _proj
+from factory.site_engine.audit import projection as _proj  # noqa: E402
+
 объявлены = _proj.позиции_в_карантине(c)
 сырые = {i["ledger_seq"] for i in сыро["items"]}
 рабочие = {i["ledger_seq"] for i in рабоч["items"]}

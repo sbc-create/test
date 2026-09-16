@@ -175,9 +175,6 @@ class TestЗаконныйЦикл:
 
     def test_тестовый_ключ_не_доверен_боевым_набором(self, стенд):
         """Публичная часть тестового ключа отсутствует в боевом наборе."""
-        боевой = json.loads(
-            open("/etc/site-factory/credentials/approval-verify-keys").read()
-            if False else "{}") if False else None
         with urllib.request.urlopen("http://127.0.0.1:8795/jwks", timeout=10) as о:
             боевой = json.loads(о.read())
         боевые_kid = {к["kid"] for к in боевой["keys"]}
@@ -213,7 +210,7 @@ class TestОтрицательные:
 
     def test_03_недопустимое_состояние_набора(self, стенд):
         ц = цель(стенд, "-3")
-        заявка = {"resource_type": РЕСУРС, "resource_id": "r", 
+        заявка = {"resource_type": РЕСУРС, "resource_id": "r",
                   "operation_type": "publish",
                   "target_site_ids": [стенд["site_id"]],
                   "idempotency_key": "neg-3", "correlation_id": "neg-3",

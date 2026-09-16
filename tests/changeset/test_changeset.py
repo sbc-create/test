@@ -8,17 +8,14 @@ from __future__ import annotations
 
 import concurrent.futures as fut
 import datetime as _d
-import json
 import sqlite3
 import time
-import uuid
 from pathlib import Path
 
 import pytest
 
-from factory.site_engine.changeset import adapter as A
-from factory.site_engine.changeset import backup as B
 from factory.site_engine.changeset import audit_bridge as AB
+from factory.site_engine.changeset import backup as B
 from factory.site_engine.changeset import engine as E
 from factory.site_engine.changeset import model as M
 from factory.site_engine.changeset import planner as P
@@ -26,9 +23,12 @@ from factory.site_engine.changeset import policy as POL
 from factory.site_engine.changeset import store as S
 from factory.site_engine.changeset import worker as WK
 from factory.site_engine.changeset.testing import (
-    РЕСУРС, FakeRegistry, довести_до_одобрения, заявка, создать,
-    срок_через)
-
+    РЕСУРС,
+    довести_до_одобрения,
+    заявка,
+    создать,
+    срок_через,
+)
 
 # --- 1. все разрешённые переходы проходят -----------------------------------
 
@@ -169,6 +169,50 @@ def test_04_двадцать_параллельных_предложений(tmp
     созданий = sum(1 for о in ответы if о.get("idempotent_replay") is False)
     assert len(ids) == 1, f"создано разных наборов: {len(ids)}"
     assert созданий == 1, f"создание произошло {созданий} раз"
+
+
+def test_04c_схема_видна_целиком_каждому_из_двадцати(tmp_path):
+    """Гонка миграции: половина схемы не должна быть видна соседу как готовая.
+
+    `executescript` фиксирует каждый DDL отдельно, поэтому `changeset`
+    появлялась заметно раньше `changeset_transition`. Поток, проверявший
+    готовность по первой таблице, уходил доращивать схему, которой ещё нет
+    целиком, и падал на `no such table: changeset_transition`. Падал не всегда,
+    и потому выглядел «нестабильным тестом», а не потерей предложений.
+
+    Здесь двадцать соединений открывают ПУСТУЮ базу одновременно. Каждое обязано
+    увидеть схему целиком и записать своё предложение: `map` перевыбрасывает
+    исключение любого потока, поэтому уцелевшая гонка провалит тест, а не
+    растворится в статистике.
+    """
+    бд = tmp_path / "гонка.sqlite3"
+
+    def открыть_и_подать(n):
+        с = S.открыть(бд)
+        try:
+            # Именно та таблица, на которой гонка себя обнаруживала.
+            с.execute("SELECT count(*) FROM changeset_transition").fetchone()
+            assert с.execute("PRAGMA user_version").fetchone()[0] == S.ВЕРСИЯ_СХЕМЫ, (
+                "отметка схемы выставлена раньше, чем схема применена целиком"
+            )
+            return S.создать(с, заявка(idempotency_key=f"гонка-{n:03d}"),
+                             producer_service="templates",
+                             actor_id="service:templates", actor_type="SERVICE")
+        finally:
+            с.close()
+
+    with fut.ThreadPoolExecutor(max_workers=20) as п:
+        ответы = list(п.map(открыть_и_подать, range(20)))
+
+    # Ключи разные, поэтому идемпотентность здесь ничего не схлопывает: двадцать
+    # поданных предложений обязаны стать двадцатью наборами. Потеря хотя бы
+    # одного и есть та цена гонки, которую «нестабильный тест» прятал.
+    assert len({о["changeset_id"] for о in ответы}) == 20
+    с = S.открыть(бд)
+    try:
+        assert с.execute("SELECT count(*) FROM changeset").fetchone()[0] == 20
+    finally:
+        с.close()
 
 
 def test_04b_тот_же_ключ_с_другим_содержимым_конфликт(бд):

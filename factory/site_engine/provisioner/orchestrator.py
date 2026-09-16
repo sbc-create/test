@@ -15,11 +15,11 @@
 """
 from __future__ import annotations
 
-import json
 import random
 import time
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Any
 
 from factory.site_engine.changeset import engine as E
 from factory.site_engine.changeset import model as M
@@ -27,7 +27,6 @@ from factory.site_engine.changeset import store as S
 from factory.site_engine.provisioner import readiness as R
 from factory.site_engine.provisioner.changeset_adapter import ProviderTargetAdapter
 from factory.site_engine.provisioner.mapping import Связи
-from factory.site_engine.provisioner.providers.base import ProviderError
 
 #: Шаги onboarding и ресурсы, которые их закрывают.
 ШАГИ = (
@@ -67,7 +66,8 @@ class Provisioner:
 
     def __init__(self, *, соед_наборов, связи: Связи, реестр,
                  провайдеры: dict[str, Any], одобряющий: Callable | None = None,
-                 сон: Callable[[float], None] = time.sleep) -> None:
+                 сон: Callable[[float], None] = time.sleep,
+                 требовать_журнал: bool = True) -> None:
         self.соед = соед_наборов
         self.связи = связи
         self.реестр = реестр
@@ -75,6 +75,11 @@ class Provisioner:
         self.сон = сон
         #: Одобрение выдаётся не Provisioner'ом: он PROPOSER и не более.
         self.одобряющий = одобряющий
+        #: Требование журнала снимается только эфемерной обвязкой испытаний —
+        #: тем же рычагом, что и у `Engine`. Умолчание остаётся строгим:
+        #: внешний эффект без записи в журнал запрещён, потому что изменение,
+        #: которого нет в истории, нельзя ни проверить, ни осознанно отменить.
+        self.требовать_журнал = требовать_журнал
         self.шаги: list[Шаг] = []
 
     # --- один ресурс ------------------------------------------------------
@@ -114,7 +119,8 @@ class Provisioner:
         cid = создано["changeset_id"]
         шаг.changeset_id = cid
         адаптер.changeset_id = cid
-        движок = E.Engine(self.соед, адаптер=адаптер, реестр=self.реестр)
+        движок = E.Engine(self.соед, адаптер=адаптер, реестр=self.реестр,
+                          требовать_журнал=self.требовать_журнал)
 
         # Повтор с тем же ключом вернул уже завершённый набор. Это сделанная
         # работа, а не отказ: гнать её через валидацию заново значит получить

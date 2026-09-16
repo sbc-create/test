@@ -61,7 +61,7 @@ def отправить(событие: dict[str, Any], *, таймаут: float 
     except urllib.error.HTTPError as ош:
         raise LedgerRefused("LEDGER_REFUSED",
                             f"HTTP {ош.code}: "
-                            f"{ош.read().decode('utf-8','replace')[:300]}")
+                            f"{ош.read().decode('utf-8','replace')[:300]}") from ош
 
 
 def _событие(тип: str, ключ: str, сводка: str, **поля) -> dict[str, Any]:

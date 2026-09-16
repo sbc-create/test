@@ -37,6 +37,13 @@ REPO = Path(__file__).resolve().parents[2]
 @pytest.fixture
 def sandbox(tmp_path, monkeypatch):
     monkeypatch.setattr(PATHS, "root", tmp_path)
+    # Реестр песочницы — несуществующий файл, и это обязательная часть изоляции.
+    # `SiteEngineApi._реестр` читает `REGISTRY_DB`, а по умолчанию — канонический
+    # реестр машины. На хосте, где он есть, админка показывала сайты живого
+    # флота вместо профилей песочницы, и проверки списка витрин падали не на
+    # своём содержимом. Отсутствующий файл возвращает обработчик к профилям —
+    # ровно к тем, что песочница только что и разложила.
+    monkeypatch.setenv("REGISTRY_DB", str(tmp_path / "нет-реестра.sqlite3"))
     profiles = tmp_path / "config" / "site-profiles"
     profiles.mkdir(parents=True)
     # За основу берётся настоящий профиль, а не выдуманный: набор обязательных

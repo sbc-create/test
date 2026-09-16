@@ -54,7 +54,7 @@ def _единственное(значение, параметр: str) -> str | 
     """
     if значение is None:
         return None
-    if isinstance(значение, (list, tuple)):
+    if isinstance(значение, list | tuple):
         уникальные = {str(v) for v in значение}
         if len(уникальные) > 1:
             raise FilterValidationError(

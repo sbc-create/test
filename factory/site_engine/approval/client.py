@@ -39,7 +39,7 @@ def _токен() -> str:
     try:
         return C.получить(f"approval-caller-{имя}")
     except C.CredentialError as ош:
-        raise K.KeyringError(ош.error_code, ош.detail)
+        raise K.KeyringError(ош.error_code, ош.detail) from ош
 
 
 def набор_ключей() -> K.НаборКлючей:
@@ -67,10 +67,10 @@ def _запрос(путь: str, тело: dict, *, таймаут: float) -> di
             детали = разобрано.get("detail", подробности)
         except ValueError:
             код, детали = "SIGNER_REFUSED", подробности
-        raise K.KeyringError(код, f"HTTP {ош.code}: {детали}")
+        raise K.KeyringError(код, f"HTTP {ош.code}: {детали}") from ош
     except (urllib.error.URLError, OSError) as ош:
         raise K.KeyringError("SIGNER_UNAVAILABLE",
-                             f"служба подписи недоступна: {ош}")
+                             f"служба подписи недоступна: {ош}") from ош
 
 
 def подписать_одобрение(*, changeset_id: str, approver_id: str,

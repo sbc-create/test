@@ -69,7 +69,7 @@ def test_http_без_токена_отказ():
     r = urllib.request.Request(Б + "/api/v1/changesets", method="GET")
     try:
         urllib.request.urlopen(r, timeout=20)
-        assert False, "список наборов отдан без токена"
+        raise AssertionError("список наборов отдан без токена")
     except urllib.error.HTTPError as e:
         assert e.code in (401, 403)
 

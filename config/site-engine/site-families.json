@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "_purpose": "Различия семейств витрин: тип сайта и утверждённые профили онбординга. Таблица живёт здесь, а не в коде ядра, потому что ядро обслуживает разные семейства и не должно требовать правки при появлении следующего. Добавление семейства — запись в этот файл, а не коммит в api/app.py и provisioner/qwen.py.",
+  "families": {
+    "lords": {
+      "site_type": "video-showcase",
+      "approved_profiles": ["lords-general", "lords-new", "lords-curated"]
+    },
+    "zona": {
+      "site_type": "video-showcase",
+      "approved_profiles": ["zona-general"]
+    },
+    "animedia": {
+      "site_type": "anime-portal",
+      "approved_profiles": ["animedia-general"]
+    },
+    "yummy": {
+      "site_type": "anime-portal",
+      "approved_profiles": ["catalog-search", "catalog-editorial", "catalog-schedule"]
+    }
+  },
+  "unknown_site_type": "unknown"
+}

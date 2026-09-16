@@ -16,8 +16,15 @@ from factory.site_engine.changeset import store as S
 from factory.site_engine.provisioner import grant as G
 from factory.site_engine.provisioner.templates_executor import TemplatesExecutor
 
-from ._путь import (выпустить_grant, довести_до_approved, запросить_grant,
-                    набор_ключей, ожидания, отпечаток_реестра, собрать_цель)
+from ._путь import (
+    выпустить_grant,
+    довести_до_approved,
+    запросить_grant,
+    набор_ключей,
+    ожидания,
+    отпечаток_реестра,
+    собрать_цель,
+)
 
 КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
 EVIDENCE = КОРЕНЬ / "artifacts/tpl-r2/credential-boundary.json"
@@ -347,8 +354,9 @@ class TestРасхождениеИКомпенсация:
         assert цель["мир"].эффектов("delete") == 1
 
     def test_повторная_доставка_не_повторяет_ни_apply_ни_rollback(self, стенд):
-        from factory.site_engine.provisioner.providers import fake as F
         import pytest as _pytest
+
+        from factory.site_engine.provisioner.providers import fake as F
         цель = собрать_цель(стенд)
         cid, движок = довести_до_approved(стенд, цель)
         аренда = S.взять_аренду(стенд["соед"], cid, "changeset-worker")
@@ -386,8 +394,7 @@ class TestПолныйЦикл:
     """
 
     def test_цикл_проходит_целиком(self, стенд):
-        from factory.site_engine.provisioner.templates_executor import (
-            TemplatesExecutor)
+        from factory.site_engine.provisioner.templates_executor import TemplatesExecutor
 
         # 1. Templates предлагает. 2. Набор создан. 3. Валидация. 4. Одобрение.
         цель = собрать_цель(стенд)
@@ -445,8 +452,7 @@ class TestПолныйЦикл:
 
     def test_цикл_без_разрешения_не_исполняется(self, стенд):
         """Тот же цикл, но исполнитель вызван без разрешения."""
-        from factory.site_engine.provisioner.templates_executor import (
-            TemplatesExecutor)
+        from factory.site_engine.provisioner.templates_executor import TemplatesExecutor
         цель = собрать_цель(стенд)
         cid, _ = довести_до_approved(стенд, цель, ключ="full-cycle-2")
         аренда = S.взять_аренду(стенд["соед"], cid, "changeset-worker")

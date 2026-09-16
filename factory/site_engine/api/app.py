@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any
 
 from factory.site_engine.contracts import Title
-from factory.site_engine.profiles import SiteProfile, load_profile
+from factory.site_engine.profiles import SiteProfile, load_profile, site_type_of
 from factory.site_engine.store import MAX_LIMIT, InMemoryStore
 
 API_VERSION = "v1"
@@ -63,9 +63,15 @@ class SiteBinding:
 
 
 class SiteEngineApi:
-    def __init__(self, bindings: dict[str, SiteBinding], *, env: dict[str, str] | None = None):
+    def __init__(self, bindings: dict[str, SiteBinding], *,
+                 env: dict[str, str] | None = None,
+                 root: Path | str = "."):
         self._bindings = bindings
         self._env = env
+        # Корень приходит снаружи, а не выводится из рабочего каталога:
+        # служба запускается из каталога выложенного релиза, а конфигурация
+        # лежит в репозитории, и `.` указывал бы не туда.
+        self._root = root
 
     # ------------------------------------------------------------- маршруты
     def handle(self, path: str, params: dict[str, Any] | None = None) -> ApiResponse:
@@ -173,7 +179,7 @@ class SiteEngineApi:
         if not os.path.exists(путь):
             return None
         try:
-            с = sqlite3.connect("file:%s?mode=ro" % путь, uri=True,
+            с = sqlite3.connect(f"file:{путь}?mode=ro", uri=True,
                                 timeout=5)
             с.row_factory = sqlite3.Row
             return с
@@ -182,8 +188,6 @@ class SiteEngineApi:
 
     def _реестр_запись(self, с, d):
         import json as _json
-        тип = {"lords": "video-showcase", "zona": "video-showcase",
-               "animedia": "anime-portal", "yummy": "anime-portal"}
         псевдонимы = [a["alias"] for a in с.execute(
             "SELECT alias FROM site_alias WHERE site_id=? ORDER BY alias",
             (d["site_id"],))]
@@ -192,7 +196,7 @@ class SiteEngineApi:
         # Прежние четыре ключа сохраняются с прежним смыслом, новые поля
         # приходят дополнительно: аддитивное расширение старого потребителя
         # не ломает, переименование сломало бы.
-        d["site_type"] = тип.get(d.get("family"), "unknown")
+        d["site_type"] = site_type_of(d.get("family") or "", self._root)
         d["domains"] = [d["canonical_domain"]] + псевдонимы
         d["render_mode"] = "static"
         return d
@@ -296,7 +300,8 @@ class SiteEngineApi:
         if путь is None:
             return error(404, "SCHEMA_UNKNOWN", "артефакта контракта нет")
         try:
-            return ApiResponse(200, _json.loads(open(путь, encoding="utf-8").read()))
+            with open(путь, encoding="utf-8") as ф:
+                return ApiResponse(200, _json.load(ф))
         except Exception:  # noqa: BLE001
             return error(503, "REGISTRY_UNAVAILABLE", "артефакт нечитаем")
 
@@ -312,7 +317,8 @@ class SiteEngineApi:
         путь = self._bundle_path("capability-catalog.json")
         if путь is None:
             return error(404, "CAPABILITY_UNKNOWN", "каталога возможностей нет")
-        каталог = _json.loads(open(путь, encoding="utf-8").read())
+        with open(путь, encoding="utf-8") as ф:
+            каталог = _json.load(ф)
         for c in каталог.get("capabilities", []):
             if c.get("capability_id") == capability_id:
                 return ApiResponse(200, c)
@@ -321,7 +327,11 @@ class SiteEngineApi:
     def _control_plane_version(self) -> ApiResponse:
         import json as _json
         путь = self._bundle_path("manifest.json")
-        манифест = _json.loads(open(путь, encoding="utf-8").read()) if путь else {}
+        if путь:
+            with open(путь, encoding="utf-8") as ф:
+                манифест = _json.load(ф)
+        else:
+            манифест = {}
         ответ = {"control_plane_version": манифест.get("version"),
                  "bundle": манифест.get("bundle"),
                  "supported_majors": (манифест.get("compatibility_policy") or {}
@@ -680,4 +690,4 @@ def create_api(
         else:
             store, adapter_name = loader(profile)
         bindings[site_id] = SiteBinding(profile=profile, store=store, adapter_name=adapter_name)
-    return SiteEngineApi(bindings, env=env)
+    return SiteEngineApi(bindings, env=env, root=root)

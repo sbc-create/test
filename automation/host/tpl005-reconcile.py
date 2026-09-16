@@ -17,6 +17,7 @@
 Вывод по выборке метрикой не является. Тридцать проверенных ссылок не
 превращаются в сто шестьдесят шесть оттого, что остальные похожи.
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -25,8 +26,14 @@ import pathlib
 import sys
 from typing import Any
 
-ФАЙЛЫ = ("routes.json", "card-links.json", "browser-matrix.json",
-         "functional.json", "measurements.json", "audit-manifest.json")
+ФАЙЛЫ = (
+    "routes.json",
+    "card-links.json",
+    "browser-matrix.json",
+    "functional.json",
+    "measurements.json",
+    "audit-manifest.json",
+)
 
 #: Семейство по домену — из манифеста аудита, а не по имени.
 СЕМЕЙСТВО_ПО_ДОМЕНУ: dict[str, str] = {}
@@ -51,7 +58,7 @@ def нормализовать(маршрут: str) -> str:
     м = (маршрут or "").strip()
     for префикс in ("https://", "http://"):
         if м.startswith(префикс):
-            м = "/" + м[len(префикс):].partition("/")[2]
+            м = "/" + м[len(префикс) :].partition("/")[2]
     м = м.split("#", 1)[0].split("?", 1)[0]
     return м or "/"
 
@@ -67,14 +74,18 @@ def разобрать(корень: pathlib.Path) -> dict[str, Any]:
         if not п.is_file():
             сведения[имя] = {"path": str(п), "present": False}
             continue
-        сведения[имя] = {"path": str(п), "present": True,
-                         "sha256": sha256_файла(п),
-                         "bytes": п.stat().st_size,
-                         "data": json.loads(п.read_text("utf-8"))}
+        сведения[имя] = {
+            "path": str(п),
+            "present": True,
+            "sha256": sha256_файла(п),
+            "bytes": п.stat().st_size,
+            "data": json.loads(п.read_text("utf-8")),
+        }
     return сведения
 
 
 # --- метрика 1: сломанные существующие маршруты ------------------------------
+
 
 def маршруты(сведения: dict) -> dict[str, Any]:
     д = сведения["routes.json"]["data"]
@@ -99,18 +110,17 @@ def маршруты(сведения: dict) -> dict[str, Any]:
             коды[str(код)] = коды.get(str(код), 0) + 1
             if isinstance(код, int) and код >= 400:
                 сломанные.add(ключ)
-                разбор.setdefault(домен, {"site_id": для_домена.get(домен),
-                                          "broken": 0})
+                разбор.setdefault(домен, {"site_id": для_домена.get(домен), "broken": 0})
                 разбор[домен]["broken"] += 1
     return {
         "unit": "пара (домен, нормализованный маршрут), объявленный самой "
-                "витриной на стартовой странице и отвечающий кодом >= 400",
+        "витриной на стартовой странице и отвечающий кодом >= 400",
         "source": "routes.json → <домен>.checked[].final_status",
         "eligibility": "маршрут присутствует в <домен>.routes_from_home",
         "denominator": len(пригодные),
         "exclusions": исключено,
         "normalization": "схема и хост отброшены; query и fragment отброшены; "
-                         "хвостовой слэш значащий",
+        "хвостовой слэш значащий",
         "dedup_key": "домен|маршрут",
         "formula": "|{(домен,маршрут) : пригоден и final_status >= 400}|",
         "recomputed": len(сломанные),
@@ -125,6 +135,7 @@ def маршруты(сведения: dict) -> dict[str, Any]:
 
 # --- метрика 2: затронутые уникальные ссылки ---------------------------------
 
+
 def ссылки(сведения: dict) -> dict[str, Any]:
     д = сведения["card-links.json"]["data"]
     по_доменам = {}
@@ -133,12 +144,14 @@ def ссылки(сведения: dict) -> dict[str, Any]:
         уник = int(з.get("уникальных_карточек") or 0)
         проверено = int(з.get("проверено") or 0)
         коды = {str(к): int(v) for к, v in (з.get("коды") or {}).items()}
-        сломано_наблюдаемо = sum(v for к, v in коды.items()
-                                 if к.isdigit() and int(к) >= 400)
-        по_доменам[домен] = {"unique_cards": уник, "checked": проверено,
-                             "observed_broken": сломано_наблюдаемо,
-                             "codes": коды,
-                             "unchecked": max(0, уник - проверено)}
+        сломано_наблюдаемо = sum(v for к, v in коды.items() if к.isdigit() and int(к) >= 400)
+        по_доменам[домен] = {
+            "unique_cards": уник,
+            "checked": проверено,
+            "observed_broken": сломано_наблюдаемо,
+            "codes": коды,
+            "unchecked": max(0, уник - проверено),
+        }
         уникальных += уник
         наблюдено += сломано_наблюдаемо
         выведено += max(0, уник - проверено)
@@ -176,12 +189,13 @@ def перекрёстная_таблица(сведения: dict, м: dict) ->
         домен = з.get("domain")
         if not домен:
             continue
-        узел = по_домену.setdefault(домен, {"site_id": з.get("site_id"),
-                                            "defects": {}})
+        узел = по_домену.setdefault(домен, {"site_id": з.get("site_id"), "defects": {}})
         узел["defects"][з["defect_id"]] = {
             "evidence_id": з.get("evidence_hash"),
-            "severity": з.get("severity"), "owner": з.get("owner"),
-            "status": з.get("status")}
+            "severity": з.get("severity"),
+            "owner": з.get("owner"),
+            "status": з.get("status"),
+        }
 
     def семейство(site_id: str | None) -> str:
         return (site_id or "").split("-")[0] or "неизвестно"
@@ -191,24 +205,26 @@ def перекрёстная_таблица(сведения: dict, м: dict) ->
         домен, _, маршрут = ключ.partition("|")
         узел = по_домену.get(домен, {})
         site_id = узел.get("site_id")
-        маршрутные = {д: св for д, св in (узел.get("defects") or {}).items()
-                      if "ROUTE" in д}
-        строки.append({
-            "link_key": None,
-            "route_key": ключ,
-            "route": маршрут,
-            "domain": домен,
-            "site_id": site_id,
-            "family": семейство(site_id),
-            "defect_groups": sorted(маршрутные),
-            "evidence_ids": sorted({св["evidence_id"] for св in маршрутные.values()
-                                    if св.get("evidence_id")}),
-            "evidence_class": "observed_http",
-        })
+        маршрутные = {д: св for д, св in (узел.get("defects") or {}).items() if "ROUTE" in д}
+        строки.append(
+            {
+                "link_key": None,
+                "route_key": ключ,
+                "route": маршрут,
+                "domain": домен,
+                "site_id": site_id,
+                "family": семейство(site_id),
+                "defect_groups": sorted(маршрутные),
+                "evidence_ids": sorted(
+                    {св["evidence_id"] for св in маршрутные.values() if св.get("evidence_id")}
+                ),
+                "evidence_class": "observed_http",
+            }
+        )
     без_группы = [с["route_key"] for с in строки if not с["defect_groups"]]
     return {
         "granularity": "evidence_id привязан к паре (сайт, дефект); пороутовых "
-                       "идентификаторов доказательств в артефактах нет",
+        "идентификаторов доказательств в артефактах нет",
         "link_key_available": False,
         "rows": строки,
         "routes_unmapped_to_defect_group": без_группы,
@@ -243,13 +259,14 @@ def главное(корень: pathlib.Path) -> dict[str, Any]:
     таблица = перекрёстная_таблица(сведения, м)
     return {
         "crosswalk": таблица,
-        "artifacts": {и: {k: v for k, v in сведения[и].items() if k != "data"}
-                      for и in ФАЙЛЫ},
+        "artifacts": {и: {k: v for k, v in сведения[и].items() if k != "data"} for и in ФАЙЛЫ},
         "broken_existing_routes": м,
         "affected_unique_links": л,
-        "claims": {"broken_existing_routes_reported": 49,
-                   "affected_unique_links_reported": 166,
-                   "eligible_unique_links_reported": 169},
+        "claims": {
+            "broken_existing_routes_reported": 49,
+            "affected_unique_links_reported": 166,
+            "eligible_unique_links_reported": 169,
+        },
         "verdict": {
             "routes_reproduce": м["recomputed"] == 49,
             "links_reproduce": False,
@@ -259,6 +276,5 @@ def главное(корень: pathlib.Path) -> dict[str, Any]:
 
 
 if __name__ == "__main__":
-    корень = pathlib.Path(sys.argv[1] if len(sys.argv) > 1
-                          else "artifacts/fleet-audit")
+    корень = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else "artifacts/fleet-audit")
     print(json.dumps(главное(корень), ensure_ascii=False, indent=1))

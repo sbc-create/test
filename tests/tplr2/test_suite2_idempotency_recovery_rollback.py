@@ -15,8 +15,14 @@ from factory.site_engine.changeset import store as S
 from factory.site_engine.provisioner.providers import fake as F
 from factory.site_engine.provisioner.templates_executor import TemplatesExecutor
 
-from ._путь import (выпустить_grant, довести_до_approved, набор_ключей,
-                    ожидания, отпечаток_реестра, собрать_цель)
+from ._путь import (
+    выпустить_grant,
+    довести_до_approved,
+    набор_ключей,
+    ожидания,
+    отпечаток_реестра,
+    собрать_цель,
+)
 
 
 def _стенд_исполнителя(стенд, *, ключ_набора: str, журнал: str):

@@ -447,7 +447,7 @@ def append(соед: sqlite3.Connection, событие: dict[str, Any], *,
                     "claim_corrections")},
                 ensure_ascii=False))
         соед.execute(
-            "INSERT INTO ledger_event(%s) VALUES(%s)" % (
+            "INSERT INTO ledger_event({}) VALUES({})".format(
                 ",".join(столбцы), ",".join("?" * len(столбцы))), значения)
         seq = соед.execute("SELECT last_insert_rowid() s").fetchone()["s"]
         # Событие о добавлении — в тот же транзакции. Но САМО оно в журнал не

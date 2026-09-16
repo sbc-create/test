@@ -15,7 +15,7 @@ from __future__ import annotations
 from typing import Any
 
 from factory.site_engine.changeset import adapter as A
-from factory.site_engine.provisioner.providers.base import ProviderError
+from factory.site_engine.provisioner.providers import ProviderError
 
 #: resource_type контура → (provider_type, resource_kind)
 ТИПЫ = {

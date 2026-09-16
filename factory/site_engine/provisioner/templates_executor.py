@@ -28,12 +28,13 @@ from __future__ import annotations
 
 import datetime as _d
 import sqlite3
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
-from factory.site_engine.changeset import adapter as A
 from factory.site_engine.approval import keyring as K
+from factory.site_engine.changeset import adapter as A
 from factory.site_engine.provisioner import grant as G
 
 DDL = """

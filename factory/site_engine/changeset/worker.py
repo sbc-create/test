@@ -58,7 +58,10 @@ def занять_замок():
         if e.errno in (errno.EAGAIN, errno.EACCES):
             raise УжеЗапущен(f"процесс уже работает, замок {ЗАМОК} занят") from e
         raise
-    ф.seek(0); ф.truncate(); ф.write(str(os.getpid())); ф.flush()
+    ф.seek(0)
+    ф.truncate()
+    ф.write(str(os.getpid()))
+    ф.flush()
     return ф
 
 

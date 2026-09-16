@@ -12,6 +12,7 @@
 Состояние клиент НЕ задаёт. В запросе нет поля `status`: клиент просит
 выполнить ДЕЙСТВИЕ, а состояние — вывод сервера.
 """
+
 from __future__ import annotations
 
 import json
@@ -23,8 +24,13 @@ from typing import Any
 #: отдельно, чтобы проверка паритета могла сверить его с OpenAPI, а не
 #: угадывать по именам методов.
 ДЕЙСТВИЯ: tuple[str, ...] = (
-    "validate", "approve", "reject", "revoke-approval",
-    "apply", "rollback", "cancel",
+    "validate",
+    "approve",
+    "reject",
+    "revoke-approval",
+    "apply",
+    "rollback",
+    "cancel",
 )
 
 БАЗА = "/api/v1/changesets"
@@ -37,8 +43,9 @@ class ОшибкаКонтура(RuntimeError):
     на стороне потребителя — значит зависеть от его формулировки.
     """
 
-    def __init__(self, статус: int, error_code: str, detail: str,
-                 тело: dict[str, Any] | None = None):
+    def __init__(
+        self, статус: int, error_code: str, detail: str, тело: dict[str, Any] | None = None
+    ):
         super().__init__(f"{статус} {error_code}: {detail}")
         self.статус, self.error_code, self.detail = статус, error_code, detail
         self.тело = тело or {}
@@ -56,11 +63,16 @@ class КлиентИзменений:
 
     # --- низкий уровень ---------------------------------------------------
 
-    def _зов(self, метод: str, путь: str, *, тело: dict | None = None,
-             версия: int | None = None,
-             request_id: str = "") -> tuple[dict[str, Any], dict[str, str]]:
-        заг = {"Content-Type": "application/json",
-               "Authorization": "Bearer " + self._токен}
+    def _зов(
+        self,
+        метод: str,
+        путь: str,
+        *,
+        тело: dict | None = None,
+        версия: int | None = None,
+        request_id: str = "",
+    ) -> tuple[dict[str, Any], dict[str, str]]:
+        заг = {"Content-Type": "application/json", "Authorization": "Bearer " + self._токен}
         if версия is not None:
             # И заголовком, и полем тела — но никогда обоими сразу с разными
             # значениями: сервер такой запрос отклоняет, и правильно делает.
@@ -73,13 +85,11 @@ class КлиентИзменений:
                 request_id.encode("latin-1")
             except UnicodeEncodeError:
                 raise ValueError(
-                    "request_id передаётся заголовком и должен быть "
-                    "представим в latin-1") from None
+                    "request_id передаётся заголовком и должен быть " "представим в latin-1"
+                ) from None
             заг["X-Request-Id"] = request_id
-        данные = (json.dumps(тело, ensure_ascii=False).encode("utf-8")
-                  if тело is not None else None)
-        зап = urllib.request.Request(self.база + путь, method=метод,
-                                     headers=заг, data=данные)
+        данные = json.dumps(тело, ensure_ascii=False).encode("utf-8") if тело is not None else None
+        зап = urllib.request.Request(self.база + путь, method=метод, headers=заг, data=данные)
         try:
             with urllib.request.urlopen(зап, timeout=self.таймаут) as о:
                 сырое = о.read() or b"{}"
@@ -91,9 +101,11 @@ class КлиентИзменений:
             except ValueError:
                 т = {}
             raise ОшибкаКонтура(
-                e.code, str(т.get("error_code") or "UNKNOWN"),
+                e.code,
+                str(т.get("error_code") or "UNKNOWN"),
                 str(т.get("detail") or сырое[:200].decode("utf-8", "replace")),
-                т) from e
+                т,
+            ) from e
 
     # --- чтение -----------------------------------------------------------
 
@@ -117,30 +129,37 @@ class КлиентИзменений:
 
     # --- действия ---------------------------------------------------------
 
-    def предложить(self, заявка: dict[str, Any], *,
-                   request_id: str = "") -> dict[str, Any]:
+    def предложить(self, заявка: dict[str, Any], *, request_id: str = "") -> dict[str, Any]:
         тело, _ = self._зов("POST", БАЗА, тело=заявка, request_id=request_id)
         return тело
 
-    def _действие(self, cid: str, действие: str, тело: dict | None = None, *,
-                  версия: int | None = None,
-                  request_id: str = "") -> dict[str, Any]:
+    def _действие(
+        self,
+        cid: str,
+        действие: str,
+        тело: dict | None = None,
+        *,
+        версия: int | None = None,
+        request_id: str = "",
+    ) -> dict[str, Any]:
         if действие not in ДЕЙСТВИЯ:
             raise ValueError(f"действие {действие!r} контуром не предусмотрено")
-        ответ, _ = self._зов("POST", f"{БАЗА}/{cid}/{действие}",
-                             тело=тело or {}, версия=версия,
-                             request_id=request_id)
+        ответ, _ = self._зов(
+            "POST",
+            f"{БАЗА}/{cid}/{действие}",
+            тело=тело or {},
+            версия=версия,
+            request_id=request_id,
+        )
         return ответ
 
     def валидировать(self, cid: str, **kw) -> dict[str, Any]:
         return self._действие(cid, "validate", **kw)
 
-    def одобрить(self, cid: str, *, expires_at: str, reason: str = "",
-                 **kw) -> dict[str, Any]:
+    def одобрить(self, cid: str, *, expires_at: str, reason: str = "", **kw) -> dict[str, Any]:
         """`expires_at` обязателен: бессрочное одобрение не отличается от его
         отсутствия, и служба подписи его не выдаёт."""
-        return self._действие(cid, "approve",
-                              {"expires_at": expires_at, "reason": reason}, **kw)
+        return self._действие(cid, "approve", {"expires_at": expires_at, "reason": reason}, **kw)
 
     def отклонить(self, cid: str, *, reason: str = "", **kw) -> dict[str, Any]:
         return self._действие(cid, "reject", {"reason": reason}, **kw)
@@ -149,8 +168,7 @@ class КлиентИзменений:
         return self._действие(cid, "revoke-approval", {}, **kw)
 
     def применить(self, cid: str, *, worker_id: str = "", **kw) -> dict[str, Any]:
-        return self._действие(cid, "apply",
-                              {"worker_id": worker_id} if worker_id else {}, **kw)
+        return self._действие(cid, "apply", {"worker_id": worker_id} if worker_id else {}, **kw)
 
     def откатить(self, cid: str, **kw) -> dict[str, Any]:
         return self._действие(cid, "rollback", {}, **kw)

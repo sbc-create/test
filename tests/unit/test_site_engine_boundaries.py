@@ -118,6 +118,38 @@ class TestНамеренноСломанное:
         )
         assert boundaries.check(песочница).passed
 
+    def test_пакет_собирает_свой_публичный_интерфейс(self, песочница: Path):
+        """`__init__` пакета вправе импортировать собственный подмодуль.
+
+        Иначе гейт запрещал бы ровно то, чего требует: публичный интерфейс
+        пакета собирается только импортом того, что внутри него лежит.
+        """
+        пакет = песочница / "factory/site_engine/provisioner/providers"
+        пакет.mkdir(parents=True, exist_ok=True)
+        (пакет / "base.py").write_text("class ProviderError(RuntimeError):\n    pass\n",
+                                       encoding="utf-8")
+        (пакет / "__init__.py").write_text(
+            "from factory.site_engine.provisioner.providers.base import ProviderError\n\n"
+            '__all__ = ["ProviderError"]\n',
+            encoding="utf-8")
+        assert boundaries.check(песочница).passed
+
+    def test_чужой_модуль_в_тот_же_подмодуль_не_пускают(self, песочница: Path):
+        """Исключение узкое: снаружи пакета глубокий импорт остаётся нарушением."""
+        пакет = песочница / "factory/site_engine/provisioner/providers"
+        пакет.mkdir(parents=True, exist_ok=True)
+        (пакет / "base.py").write_text("class ProviderError(RuntimeError):\n    pass\n",
+                                       encoding="utf-8")
+        (пакет / "__init__.py").write_text("", encoding="utf-8")
+        чужой = песочница / "factory/site_engine/provisioner/orchestrator.py"
+        чужой.parent.mkdir(parents=True, exist_ok=True)
+        чужой.write_text(
+            "from factory.site_engine.provisioner.providers.base import ProviderError\n",
+            encoding="utf-8")
+        result = boundaries.check(песочница)
+        assert not result.passed
+        assert any("лезет во внутренние файлы" in p for p in result.problems)
+
     def test_несуществующая_реализация_отклоняется(self, песочница: Path):
         path = песочница / "config/site-engine/module-registry.json"
         data = json.loads(path.read_text(encoding="utf-8"))
