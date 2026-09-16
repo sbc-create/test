@@ -115,6 +115,22 @@ class Экземпляр:
 #: набору важно лишь, что реестр НЕ ПУСТ.
 САЙТЫ_ПРОГОНА = ("ephemeral-ledger-site-a", "ephemeral-ledger-site-b")
 
+#: Окружение и состояние каждого сайта прогона.
+#:
+#: Они разные намеренно. `/api/v1/registry/snapshot` отдаёт не весь реестр, а
+#: только production в состоянии ACTIVE. Если бы все записи были одинаковыми,
+#: снимок совпал бы с реестром при любом фильтре — в том числе при сломанном, —
+#: и проверка ничего бы не значила. Один подходящий и один неподходящий сайт
+#: делают результат отличимым.
+СОСТАВ_ПРОГОНА = {
+    "ephemeral-ledger-site-a": ("production", "ACTIVE"),
+    "ephemeral-ledger-site-b": ("test", "ACTIVE"),
+}
+
+#: Версия реестра прогона. Значение произвольно и ничего не утверждает о
+#: боевом флоте — важно лишь, что таблица есть: без неё снимок отвечает 500.
+ВЕРСИЯ_РЕЕСТРА_ПРОГОНА = 1
+
 
 def _реестр(каталог: Path) -> Path:
     """Пустой реестр молча выключает проверку site_id — поэтому он не пустой.
@@ -139,7 +155,9 @@ def _реестр(каталог: Path) -> Path:
               site_id TEXT PRIMARY KEY,
               environment TEXT NOT NULL,
               lifecycle_state TEXT NOT NULL,
-              canonical_domain TEXT
+              canonical_domain TEXT,
+              family TEXT,
+              integration_refs TEXT
             );
             CREATE TABLE outbox (
               seq INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -152,13 +170,28 @@ def _реестр(каталог: Path) -> Path:
               aggregate_version INTEGER NOT NULL,
               registry_version INTEGER NOT NULL
             );
+            CREATE TABLE registry_version (
+              id INTEGER PRIMARY KEY CHECK (id = 1),
+              version INTEGER NOT NULL
+            );
+            -- Псевдонимы и семейство читает `/api/v1/registry/snapshot`.
+            -- Без этой таблицы он отвечает 500, и проверка снимка сообщает
+            -- не о снимке, а о неполноте реестра прогона.
+            CREATE TABLE site_alias (
+              alias TEXT PRIMARY KEY,
+              site_id TEXT NOT NULL
+            );
             """
         )
+        с.execute("INSERT INTO registry_version (id, version) VALUES (1, ?)",
+                  (ВЕРСИЯ_РЕЕСТРА_ПРОГОНА,))
         for site_id in САЙТЫ_ПРОГОНА:
+            окружение, состояние = СОСТАВ_ПРОГОНА[site_id]
             с.execute(
                 "INSERT INTO site (site_id, environment, lifecycle_state, "
-                "canonical_domain) VALUES (?, 'test', 'ACTIVE', ?)",
-                (site_id, f"{site_id}.invalid"),
+                "canonical_domain, family, integration_refs) "
+                "VALUES (?, ?, ?, ?, NULL, '{}')",
+                (site_id, окружение, состояние, f"{site_id}.invalid"),
             )
             с.execute(
                 "INSERT INTO outbox (event_id, event_type, site_id, "
@@ -176,6 +209,13 @@ def _реестр(каталог: Path) -> Path:
         с.commit()
     finally:
         с.close()
+    return путь
+
+
+def _подкаталог(каталог: Path, имя: str) -> Path:
+    """Пустой подкаталог прогона. Создаётся заранее: служба его не создаёт."""
+    путь = каталог / имя
+    путь.mkdir(parents=True, exist_ok=True)
     return путь
 
 
@@ -220,6 +260,13 @@ def поднять(*, корень: Path | None = None, python: str | None = Non
         SITE_ENGINE_API_ENABLED="1",
         CREDENTIALS_DIRECTORY=str(_учётные_данные(каталог)),
         REGISTRY_DB=str(_реестр(каталог)),
+        # Резервные копии, доказательства и разрешённые для них корни тоже
+        # свои. Иначе набор, проверяющий backup и целостность доказательств,
+        # писал бы в рабочие каталоги машины — а на раннере, где их нет,
+        # падал бы на PermissionError вместо того, чтобы что-то проверить.
+        AUDIT_BACKUP_DIR=str(_подкаталог(каталог, "backups")),
+        AUDIT_EVIDENCE_DIR=str(_подкаталог(каталог, "evidence")),
+        AUDIT_EVIDENCE_ROOTS=str(_подкаталог(каталог, "evidence")),
         **ТОКЕНЫ,
     )
 

@@ -20,10 +20,16 @@ from factory.site_engine.audit import ledger_store as store
 # нельзя. Поэтому прогон идёт по эфемерной копии (`run_tests.py` поднимает
 # отдельный экземпляр), а канонический журнал остаётся историей системы, а не
 # свалкой тестовых записей.
-Б = os.environ.get("AUDIT_API_BASE", "http://127.0.0.1:8790")
-ЖУРНАЛ = os.environ.get("AUDIT_LEDGER_DB",
-                        "/srv/site-factory/audit-ledger/audit_ledger.sqlite3")
-РЕЕСТР = "/srv/site-factory/registry-core/registry.sqlite3"
+# Адреса и пути приходят из обвязки прогона (`tests/_ledger_harness`), а не из
+# рабочего контура машины. Умолчаний здесь намеренно нет: набор, который при
+# отсутствии обвязки молча уходит в канонический журнал, пишет в историю
+# системы, а на раннере — падает на отсутствующем файле. Обе беды выглядят
+# как «тест сломался», хотя сломана среда.
+Б = os.environ["AUDIT_API_BASE"]
+ЖУРНАЛ = os.environ["AUDIT_LEDGER_DB"]
+РЕЕСТР = os.environ["REGISTRY_DB"]
+#: Корень доказательств прогона. Тот же, что объявлен службе.
+ДОКАЗАТЕЛЬСТВА = Path(os.environ["AUDIT_EVIDENCE_DIR"])
 ТОКЕН = os.environ.get("AUDIT_TOKEN_ARCHITECT", "arch-local-token")
 ТОКЕН_QWEN = os.environ.get("AUDIT_TOKEN_QWEN", "qwen-local-token")
 
@@ -281,7 +287,7 @@ def test_18_bit_flip_обнаруживается(tmp_path):
 
 # 19, 20
 def test_19_изменённое_доказательство_не_проходит(tmp_path):
-    файл = Path("/srv/site-factory/audit-ledger/evidence/probe.json")
+    файл = ДОКАЗАТЕЛЬСТВА / "probe.json"
     файл.parent.mkdir(parents=True, exist_ok=True)
     файл.write_text('{"a":1}', encoding="utf-8")
     сумма = hashlib.sha256(файл.read_bytes()).hexdigest()
@@ -300,7 +306,7 @@ def test_19_изменённое_доказательство_не_проход�
 
 def test_20_path_traversal_отклоняется():
     ev = {"evidence_id": "ev-trav-" + uuid.uuid4().hex[:6],
-          "uri": "/srv/site-factory/audit-ledger/evidence/../../../etc/passwd",
+          "uri": str(ДОКАЗАТЕЛЬСТВА / "../../../etc/passwd"),
           "checksum": "0" * 64, "media_type": "text/plain", "size": 1,
           "created_at": store.сейчас(), "producer": "architect",
           "retention_class": "RUN"}
@@ -363,22 +369,57 @@ def test_26_нет_рекурсии_самособытий():
 
 
 # 28–31
-def test_29_канонический_реестр_остался_13():
+def test_29_реестр_прогона_набором_не_изменён():
+    """Журнал пишет события, а не правит реестр. Состав реестра обязан совпасть.
+
+    Раньше здесь была перепись боевого флота: 13 записей, 9 production и три
+    синтетических идентификатора поимённо. Такое утверждение проверяло не
+    журнал, а то, на какой машине запущен прогон: у раннера этого реестра нет
+    вовсе, а у хоста он меняется вместе с флотом.
+
+    Проверяемое свойство от машины не зависит и формулируется без переписи:
+    после всех записей набора состав реестра тот же, что обвязка создала до
+    первого теста. Именно это и означает «журнал ничего вокруг не испортил».
+    """
+    from tests import _ledger_harness as обвязка
+
     r = sqlite3.connect(f"file:{РЕЕСТР}?mode=ro", uri=True)
-    n = r.execute("SELECT count(*) FROM site").fetchone()[0]
-    prod = r.execute("SELECT count(*) FROM site WHERE environment='production' "
-                     "AND lifecycle_state='ACTIVE'").fetchone()[0]
-    синт = [x[0] for x in r.execute(
-        "SELECT site_id FROM site WHERE site_id LIKE 'synthetic%' ORDER BY site_id")]
+    сайты = [x[0] for x in r.execute("SELECT site_id FROM site ORDER BY site_id")]
     r.close()
-    assert n == 13 and prod == 9
-    assert синт == ["synthetic-http-b4e4f1", "synthetic-npo-1c85d0bd",
-                    "synthetic-npo-30c9237d"]
+    assert сайты == sorted(обвязка.САЙТЫ_ПРОГОНА), (
+        "состав реестра изменился за время прогона")
 
 
-def test_30_production_snapshot_девять():
+def test_30_snapshot_совпадает_с_реестром():
+    """Снимок отдаёт ровно то, что лежит в реестре, — не больше и не меньше.
+
+    Прежнее «ровно девять production» было фактом о боевом флоте: снимок
+    считали правильным, если он совпал с сегодняшним составом. Тогда добавление
+    витрины ломало проверку журнала, а на раннере она не выполнялась никак.
+
+    Сверка снимка с источником сильнее: она ловит и потерю записи, и лишнюю,
+    и остаётся верной при любом составе.
+    """
+    # Предикат берётся из того же модуля, что и у снимка. Повторить условие
+    # здесь своими словами значило бы завести вторую его реализацию: они
+    # разойдутся молча, и обе будут выглядеть верными.
+    from factory.site_engine.api import site_filter as _sf
+
+    усл, знач = _sf.production_active_where()
+    r = sqlite3.connect(f"file:{РЕЕСТР}?mode=ro", uri=True)
+    ожидаются = sorted(x[0] for x in r.execute(
+        "SELECT site_id FROM site WHERE " + усл, знач))
+    всего = r.execute("SELECT count(*) FROM site").fetchone()[0]
+    r.close()
+    assert ожидаются, "в реестре прогона нет ни одного production-сайта"
+    assert len(ожидаются) < всего, (
+        "все сайты подходят под фильтр — снимок совпал бы с реестром "
+        "и при сломанном предикате")
+
     к, т = гет("/api/v1/registry/snapshot")
-    assert к == 200 and т["count"] == 9
+    assert к == 200, т
+    assert sorted(с["site_id"] for с in т["sites"]) == ожидаются
+    assert т["count"] == len(ожидаются)
 
 
 # 38
@@ -415,14 +456,67 @@ def test_r2_рабочая_проекция_открыта_службам():
     assert т["count"] <= т2["count"]
 
 
-def test_r2_карантинные_не_попадают_в_проекцию():
+def _объявить_карантин(причина: str) -> tuple[str, set[int]]:
+    """Поместить в карантин события обвязки и вернуть их позиции.
+
+    Условие создаётся здесь, а не ожидается готовым. Прежде набор требовал,
+    чтобы карантинные позиции уже лежали в журнале, — а это свойство копии
+    боевого журнала, а не проверяемого поведения: на пустом журнале проверка
+    падала с «проверять нечего», ничего при этом не проверив.
+
+    Карантин объявляется тем же путём, что и в работе: манифест на диске,
+    событие-решение со ссылкой на него и сверкой контрольной суммы. Ярлык,
+    проставленный в обход этого пути, доказывал бы только сам себя.
+    """
     from factory.site_engine.audit import projection as pr
+    from factory.site_engine.audit import quarantine as qr
+
+    # События обвязки порождаются здесь же. Ждать их от соседних тестов значит
+    # поставить результат в зависимость от порядка запуска: набор, выполненный
+    # по одному тесту, падал бы с «проверять нечего».
+    нить = "corr-quar-" + uuid.uuid4().hex[:8]
+    for i in range(2):
+        к, т = пост(событие(correlation_id=нить,
+                            action_id="act-" + uuid.uuid4().hex[:8],
+                            summary=f"событие обвязки {i}"))
+        assert к == 201, т
+
     c = store.открыть(ЖУРНАЛ)
     try:
+        кандидаты = qr.найти_кандидатов(c)
+        assert кандидаты, "обвязка не оставила событий, пригодных для карантина"
+        манифест = qr.собрать_манифест(
+            кандидаты, ДОКАЗАТЕЛЬСТВА / f"quarantine-{uuid.uuid4().hex[:8]}.json",
+            причина=причина, prompt_id="PR77-CI-CLOSEOUT",
+            prompt_rev="1", source_commit="ephemeral")
+        ожидались = {с["ledger_seq"] for с in кандидаты}
+    finally:
+        c.close()
+
+    ev = {"evidence_id": "ev-quar-" + uuid.uuid4().hex[:6],
+          "uri": манифест["path"], "checksum": манифест["sha256"],
+          "media_type": "application/json", "size": манифест["size"],
+          "created_at": store.сейчас(), "producer": "architect",
+          "retention_class": "RUN"}
+    к, т = пост(событие(event_type=qr.СОБЫТИЕ_КАРАНТИН, evidence_refs=[ev],
+                        summary=причина))
+    assert к == 201, т
+
+    # Решение записано в журнал; рабочая проекция строится из журнала и должна
+    # быть пересобрана, чтобы его увидеть. Проставить признак мимо пересборки
+    # значило бы проверить ярлык, а не путь, которым он появляется.
+    c = store.открыть(ЖУРНАЛ)
+    try:
+        pr.пересобрать(c)
         объявлены = pr.позиции_в_карантине(c)
     finally:
         c.close()
-    assert объявлены, "в копии нет карантинных позиций — проверять нечего"
+    assert ожидались <= объявлены, "решение о карантине не отразилось в проекции"
+    return нить, объявлены
+
+
+def test_r2_карантинные_не_попадают_в_проекцию():
+    _, объявлены = _объявить_карантин("изоляция событий обвязки")
     к, рабоч = гет("/api/v1/audit/operational/events?limit=1000",
                    токен=ТОКЕН_QWEN)
     assert к == 200
@@ -444,10 +538,14 @@ def test_r2_include_quarantined_только_для_admin():
 
 
 def test_r2_нить_показывает_число_скрытых():
-    к, сыро = гет("/api/v1/audit/events?event_type=test.observed.v1&limit=1000")
-    нити = [i["correlation_id"] for i in сыро["items"] if i.get("action_id")]
-    assert нити, "в копии нет загрязнённой нити"
-    corr = нити[0]
+    """Нить создаётся и изолируется здесь же — результат не зависит от порядка.
+
+    Прежде тест искал уже загрязнённую нить в журнале. На пустом журнале её
+    нет, и проверка падала на «в копии нет загрязнённой нити», ничего не
+    проверив; а при запуске всего набора её оставлял соседний тест, из-за чего
+    результат зависел от порядка.
+    """
+    corr, _ = _объявить_карантин("скрытая нить")
     к2, рабоч = гет(f"/api/v1/audit/correlations/{corr}", токен=ТОКЕН_QWEN)
     assert к2 == 200 and рабоч["count"] == 0
     assert рабоч["quarantined_count"] > 0, "скрытые события не посчитаны"

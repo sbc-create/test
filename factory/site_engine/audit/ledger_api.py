@@ -31,9 +31,20 @@ from . import projection as proj
 СЛУЖЕБНЫЕ = ("after", "limit")
 
 #: Корни, из которых разрешено брать доказательства. Всё вне их — отказ.
-ДОПУСТИМЫЕ_КОРНИ = ("/srv/site-factory/control-plane-contracts/evidence",
-                    "/srv/site-factory/registry-core/evidence",
-                    "/srv/site-factory/audit-ledger/evidence")
+#: Корни, из которых разрешено читать доказательства. Путь вне их — отказ:
+#: иначе ссылка в событии превращается в произвольное чтение файлов службы.
+#:
+#: Список берётся из настройки развёртывания, а не зашит: каталоги — свойство
+#: конкретной установки, а не самого контракта. Умолчание — прежние
+#: канонические пути, поэтому работающая служба переменной не задаёт и ничего
+#: не замечает. Испытанию же нужен собственный корень во временном каталоге:
+#: без этого набор либо пишет в рабочие данные, либо не выполняется вовсе.
+_КОРНИ_ПО_УМОЛЧАНИЮ = ("/srv/site-factory/control-plane-contracts/evidence",
+                       "/srv/site-factory/registry-core/evidence",
+                       "/srv/site-factory/audit-ledger/evidence")
+ДОПУСТИМЫЕ_КОРНИ = tuple(
+    ч for ч in os.environ.get("AUDIT_EVIDENCE_ROOTS", "").split(os.pathsep) if ч.strip()
+) or _КОРНИ_ПО_УМОЛЧАНИЮ
 
 
 def _бд(путь: str | None = None) -> sqlite3.Connection:
