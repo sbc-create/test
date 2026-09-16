@@ -38,12 +38,16 @@ class Engine:
 
     # --- валидация -------------------------------------------------------
 
-    def валидировать(self, cid: str, *, actor_id: str, служба: str) -> dict:
+    def валидировать(self, cid: str, *, actor_id: str, служба: str,
+                     ожидаемая_версия: int | None = None,
+                     request_id: str = "") -> dict:
         набор = S.получить(self.соед, cid)
         if набор is None:
             raise S.ChangeSetError("CHANGESET_NOT_FOUND", "набора нет", 404)
         S.применить_переход(self.соед, cid, "validate", actor_id=actor_id,
-                            служба=служба, роль=M.VALIDATOR)
+                            служба=служба, роль=M.VALIDATOR,
+                            ожидаемая_версия=ожидаемая_версия,
+                            request_id=request_id)
         try:
             план = P.спланировать(набор, реестр=self.реестр, адаптер=self.адаптер)
             сухо = P.сухой_прогон(план, адаптер=self.адаптер,
@@ -72,25 +76,32 @@ class Engine:
                   "expected_resource_fingerprint":
                       план["expected_resource_fingerprint"],
                   "risk_class": план["risk_class"],
+                  "impact_level": план["impact_level"],
                   "verification_plan": план["verification_plan"],
                   "rollback_plan": план["rollback_plan"],
                   "dry_run_result": {**сухо, "per_site_plan": план["per_site_plan"],
                                      "environments": план["environments"]}})
         return {"changeset_id": cid, "plan_hash": план["plan_hash"],
                 "risk_class": план["risk_class"],
+                "impact_level": план["impact_level"],
                 "environments": план["environments"],
                 "dry_run_effects": сухо["effects"]}
 
     # --- одобрение -------------------------------------------------------
 
     def запросить_одобрение(self, cid: str, *, actor_id: str, служба: str,
-                            expires_at: str) -> dict:
+                            expires_at: str,
+                            ожидаемая_версия: int | None = None,
+                            request_id: str = "") -> dict:
         return S.применить_переход(
             self.соед, cid, "request_approval", actor_id=actor_id,
-            служба=служба, роль=M.PROPOSER, поля={"expires_at": expires_at})
+            служба=служба, роль=M.PROPOSER, поля={"expires_at": expires_at},
+            ожидаемая_версия=ожидаемая_версия, request_id=request_id)
 
     def одобрить(self, cid: str, *, approver_id: str, служба: str,
-                 actor_type: str, expires_at: str, reason: str = "") -> dict:
+                 actor_type: str, expires_at: str, reason: str = "",
+                 ожидаемая_версия: int | None = None,
+                 request_id: str = "") -> dict:
         набор = S.получить(self.соед, cid)
         if набор is None:
             raise S.ChangeSetError("CHANGESET_NOT_FOUND", "набора нет", 404)
@@ -101,7 +112,8 @@ class Engine:
         return S.применить_переход(
             self.соед, cid, "approve", actor_id=approver_id, служба=служба,
             роль=M.APPROVER, reason=reason,
-            поля={"approval": запись, "expires_at": expires_at})
+            поля={"approval": запись, "expires_at": expires_at},
+            ожидаемая_версия=ожидаемая_версия, request_id=request_id)
 
     def отозвать_одобрение(self, cid: str, *, actor_id: str) -> dict:
         """Отзыв не стирает запись, а помечает её недействительной."""
@@ -119,7 +131,8 @@ class Engine:
     # --- применение ------------------------------------------------------
 
     def применить(self, cid: str, *, actor_id: str, служба: str,
-                  fencing_token: int) -> dict:
+                  fencing_token: int, ожидаемая_версия: int | None = None,
+                  request_id: str = "") -> dict:
         """Применить одобренный набор или довести до конца прерванный.
 
         Возобновление — не отдельный режим и не отдельный код. Процесс,
@@ -131,7 +144,8 @@ class Engine:
         набор = S.получить(self.соед, cid)
         if набор is None:
             raise S.ChangeSetError("CHANGESET_NOT_FOUND", "набора нет", 404)
-        if набор["status"] in (M.APPLYING, M.VERIFYING):
+        S.сверить_версию(self.соед, cid, ожидаемая_версия)
+        if набор["status"] in (M.APPLYING, M.APPLIED, M.VERIFYING, M.VERIFIED):
             return self._прогнать_цели(набор, actor_id=actor_id, служба=служба,
                                        fencing_token=fencing_token,
                                        возобновление=True)
@@ -161,11 +175,29 @@ class Engine:
 
         S.применить_переход(self.соед, cid, "apply", actor_id=actor_id,
                             служба=служба, роль=M.EXECUTOR,
-                            fencing_token=fencing_token)
+                            fencing_token=fencing_token,
+                            ожидаемая_версия=ожидаемая_версия,
+                            request_id=request_id)
         набор = S.получить(self.соед, cid)
         return self._прогнать_цели(набор, actor_id=actor_id, служба=служба,
                                    fencing_token=fencing_token,
                                    возобновление=False)
+
+    def _довести_до_проверки(self, cid: str, *, actor_id: str, служба: str,
+                             fencing_token: int) -> None:
+        """Довести набор до VERIFYING, из какого бы состояния он ни пришёл.
+
+        Между «применяем» и «проверяем» теперь два состояния, и набор,
+        возобновлённый после падения исполнителя, может стоять в любом из
+        них. Перебор по таблице вместо цепочки if'ов — чтобы добавление
+        стадии не требовало править ещё и это место.
+        """
+        for действие, откуда in (("applied", M.APPLYING),
+                                 ("verify_start", M.APPLIED)):
+            if S.получить(self.соед, cid)["status"] == откуда:
+                S.применить_переход(self.соед, cid, действие, actor_id=actor_id,
+                                    служба=служба, роль=M.EXECUTOR,
+                                    fencing_token=fencing_token)
 
     def _прогнать_цели(self, набор: dict, *, actor_id: str, служба: str,
                        fencing_token: int, возобновление: bool) -> dict:
@@ -217,11 +249,9 @@ class Engine:
                                 after=наблюдение_после["fingerprint"],
                                 detail=проверка.get("reason", ""))
                 # Канарейка не прошла — остальные цели не трогаем вовсе.
-                if S.получить(self.соед, cid)["status"] == M.APPLYING:
-                    S.применить_переход(
-                        self.соед, cid, "applied", actor_id=actor_id,
-                        служба=служба, роль=M.EXECUTOR,
-                        fencing_token=fencing_token)
+                self._довести_до_проверки(cid, actor_id=actor_id,
+                                          служба=служба,
+                                          fencing_token=fencing_token)
                 S.применить_переход(
                     self.соед, cid, "verify_fail", actor_id=actor_id,
                     служба=служба, роль=M.EXECUTOR, fencing_token=fencing_token,
@@ -240,11 +270,15 @@ class Engine:
                             after=наблюдение_после["fingerprint"])
             применённые.append(site_id)
 
-        if S.получить(self.соед, cid)["status"] == M.APPLYING:
-            S.применить_переход(self.соед, cid, "applied", actor_id=actor_id,
-                                служба=служба, роль=M.EXECUTOR,
-                                fencing_token=fencing_token)
+        self._довести_до_проверки(cid, actor_id=actor_id, служба=служба,
+                                  fencing_token=fencing_token)
         S.применить_переход(self.соед, cid, "verify_ok", actor_id=actor_id,
+                            служба=служба, роль=M.EXECUTOR,
+                            fencing_token=fencing_token)
+        # Проверка подтвердилась — и только теперь принимается решение
+        # оставить изменение. Это разные утверждения, и разделены они затем,
+        # чтобы «проверено» нельзя было выдать за «решено оставить».
+        S.применить_переход(self.соед, cid, "keep", actor_id=actor_id,
                             служба=служба, роль=M.EXECUTOR,
                             fencing_token=fencing_token)
         return {"changeset_id": cid, "status": M.SUCCEEDED,
@@ -253,8 +287,20 @@ class Engine:
     # --- откат -----------------------------------------------------------
 
     def откатить(self, cid: str, *, actor_id: str, служба: str,
-                 fencing_token: int, цели: list[str] | None = None) -> dict:
+                 fencing_token: int, цели: list[str] | None = None,
+                 ожидаемая_версия: int | None = None,
+                 request_id: str = "") -> dict:
+        S.сверить_версию(self.соед, cid, ожидаемая_версия)
         набор = S.получить(self.соед, cid)
+        # Компенсация всегда проходит через «запрошена»: запрос на откат
+        # обязан пережить падение исполнителя, а не жить в его памяти.
+        for действие, откуда in (("rollback_start", M.APPLY_FAILED),
+                                 ("rollback_begin", M.ROLLBACK_REQUESTED)):
+            if набор["status"] == откуда:
+                S.применить_переход(self.соед, cid, действие, actor_id=actor_id,
+                                    служба=служба, роль=M.EXECUTOR,
+                                    fencing_token=fencing_token)
+                набор = S.получить(self.соед, cid)
         ад = self.адаптер or A.получить(набор["resource_type"])
         планы = набор["dry_run_result"]["per_site_plan"]
         отпечатки = {t["site_id"]: t["before_fingerprint"]

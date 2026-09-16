@@ -39,6 +39,9 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .venv/
+# и симлинка с тем же именем: правило с косой чертой её не покрывает,
+# а именно она и попадала в индекс
+.venv
 # Test output
 test-results/
 playwright-report/

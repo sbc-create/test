@@ -10,10 +10,12 @@
 """
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import json
 import os
 import sqlite3
+import threading
 import time
 import uuid
 from pathlib import Path
@@ -47,6 +49,7 @@ CREATE TABLE IF NOT EXISTS changeset (
   expected_resource_fingerprint TEXT,
   requested_change  TEXT NOT NULL,
   risk_class        TEXT,
+  impact_level      TEXT,
   policy_version    TEXT,
   plan_hash         TEXT,
   expires_at        TEXT,
@@ -87,6 +90,7 @@ CREATE TABLE IF NOT EXISTS changeset_transition (
   after_fingerprint  TEXT,
   correlation_id TEXT NOT NULL,
   causation_id   TEXT,
+  request_id     TEXT,
   occurred_at    TEXT NOT NULL
 );
 
@@ -123,7 +127,8 @@ CREATE TABLE IF NOT EXISTS changeset_outbox (
   created_at     TEXT NOT NULL,
   published_at   TEXT,
   attempts       INTEGER NOT NULL DEFAULT 0,
-  last_error     TEXT
+  last_error     TEXT,
+  next_attempt_at REAL
 );
 
 CREATE TABLE IF NOT EXISTS changeset_dlq (
@@ -152,6 +157,24 @@ BEGIN
 END;
 
 CREATE TABLE IF NOT EXISTS cs_guard (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+
+-- История переходов доступна только на дозапись. Запрет живёт в хранилище, а
+-- не в вызывающем коде: код можно обойти, подключившись к файлу напрямую, и
+-- тогда исправленная задним числом история ничем не отличалась бы от
+-- настоящей. Исправление вносится НОВЫМ переходом, а не правкой старого.
+CREATE TRIGGER IF NOT EXISTS cs_transition_no_update
+BEFORE UPDATE ON changeset_transition
+FOR EACH ROW
+BEGIN
+  SELECT RAISE(ABORT, 'история переходов не переписывается: вносите исправление новой записью');
+END;
+
+CREATE TRIGGER IF NOT EXISTS cs_transition_no_delete
+BEFORE DELETE ON changeset_transition
+FOR EACH ROW
+BEGIN
+  SELECT RAISE(ABORT, 'история переходов не удаляется');
+END;
 """
 
 
@@ -171,12 +194,94 @@ def сейчас() -> str:
     return _d.datetime.now(_d.timezone.utc).isoformat().replace("+00:00", "Z")
 
 
+_ЗАМОК_СХЕМЫ = threading.Lock()
+
+#: Столбцы, появившиеся после первой версии схемы. CREATE TABLE IF NOT EXISTS
+#: о старой таблице молчит: она существует, и оператор проходит мимо, — а
+#: запись в несуществующий столбец падает уже на рабочем контуре.
+ДОРАЩИВАНИЕ: tuple[tuple[str, str, str], ...] = (
+    ("changeset_transition", "request_id", "TEXT"),
+    ("changeset", "impact_level", "TEXT"),
+    ("changeset_outbox", "next_attempt_at", "REAL"),
+)
+
+
+#: Сторожевые триггеры, появившиеся после первой версии схемы. База, созданная
+#: раньше, их не получит от CREATE TRIGGER IF NOT EXISTS в общем скрипте —
+#: скрипт для неё не выполняется вовсе.
+СТОРОЖА = (
+    ("cs_transition_no_update", """
+CREATE TRIGGER cs_transition_no_update
+BEFORE UPDATE ON changeset_transition
+FOR EACH ROW
+BEGIN
+  SELECT RAISE(ABORT, 'история переходов не переписывается: вносите исправление новой записью');
+END"""),
+    ("cs_transition_no_delete", """
+CREATE TRIGGER cs_transition_no_delete
+BEFORE DELETE ON changeset_transition
+FOR EACH ROW
+BEGIN
+  SELECT RAISE(ABORT, 'история переходов не удаляется');
+END"""),
+)
+
+
+def _дорастить(с: sqlite3.Connection) -> None:
+    for таблица, столбец, тип in ДОРАЩИВАНИЕ:
+        есть = {r[1] for r in с.execute(f"PRAGMA table_info({таблица})")}
+        if столбец and столбец not in есть:
+            с.execute(f"ALTER TABLE {таблица} ADD COLUMN {столбец} {тип}")
+    # Наличие проверяется чтением: CREATE TRIGGER берёт исключительную
+    # блокировку, а выполнять его при каждом открытии значило бы вернуть
+    # ровно ту давку, ради устранения которой схема и применяется однажды.
+    имена = {r[0] for r in с.execute(
+        "SELECT name FROM sqlite_master WHERE type='trigger'")}
+    for имя, ddl in СТОРОЖА:
+        if имя not in имена:
+            с.execute(ddl)
+
+
+def _обеспечить_схему(с: sqlite3.Connection) -> None:
+    """Применить DDL только тогда, когда его ещё нет.
+
+    Раньше executescript выполнялся при КАЖДОМ открытии. Он берёт
+    исключительную блокировку, а на переходе SHARED→EXCLUSIVE sqlite не зовёт
+    обработчик занятости — иначе два ждущих соединения заклинили бы друг
+    друга. Поэтому двадцать одновременных подач получали не ожидание, а сразу
+    «database is locked»: `timeout=30` в этом случае не работает.
+
+    Проверка наличия таблицы — обычное чтение и блокировки не требует. Замок
+    снимает гонку внутри процесса; повтор — между процессами.
+    """
+    if с.execute("SELECT 1 FROM sqlite_master WHERE type='table' "
+                 "AND name='changeset'").fetchone():
+        _дорастить(с)
+        return
+    with _ЗАМОК_СХЕМЫ:
+        if с.execute("SELECT 1 FROM sqlite_master WHERE type='table' "
+                     "AND name='changeset'").fetchone():
+            return
+        предел = time.monotonic() + 30
+        while True:
+            try:
+                с.executescript(СХЕМА)
+                return
+            except sqlite3.OperationalError as ош:
+                if "locked" not in str(ош) or time.monotonic() >= предел:
+                    raise
+                time.sleep(0.05)
+
+
 def открыть(путь: str | Path | None = None) -> sqlite3.Connection:
     п = str(путь or os.environ.get("CHANGESET_DB") or БД_ПО_УМОЛЧАНИЮ)
     Path(п).parent.mkdir(parents=True, exist_ok=True)
     с = sqlite3.connect(п, timeout=30, isolation_level=None)
     с.row_factory = sqlite3.Row
-    с.executescript(СХЕМА)
+    # Ссылочная целостность включается на КАЖДОМ соединении: этот PRAGMA, в
+    # отличие от journal_mode, в файле не сохраняется.
+    с.execute("PRAGMA foreign_keys=ON")
+    _обеспечить_схему(с)
     return с
 
 
@@ -229,8 +334,12 @@ def создать(соед: sqlite3.Connection, заявка: dict[str, Any], *
     cid = str(uuid.uuid4())
     т = сейчас()
     try:
-        _вставить(соед, cid, т, заявка, цели, канареи, ключ,
-                  producer_service, actor_id, actor_type)
+        # Набор, его цели и событие о нём — одна запись. Порознь они
+        # оставляли бы набор без целей или без события, и обнаруживалось бы
+        # это у того, кто эти цели потом читает.
+        with запись(соед):
+            _вставить(соед, cid, т, заявка, цели, канареи, ключ,
+                      producer_service, actor_id, actor_type)
     except sqlite3.IntegrityError:
         # Кто-то успел первым между проверкой и вставкой. Это и есть
         # идемпотентность: побеждает первый, остальные получают его результат.
@@ -287,15 +396,81 @@ def _в_ящик(соед: sqlite3.Connection, cid: str, тип: str,
         (cid, тип, к, канон(нагрузка), сейчас()))
 
 
+# --- запись ------------------------------------------------------------------
+
+@contextlib.contextmanager
+def запись(соед: sqlite3.Connection):
+    """Настоящая транзакция на запись.
+
+    Соединение открыто с ``isolation_level=None``, то есть в автофиксации, и
+    ``with соед:`` в этом режиме НЕ открывает транзакцию — он лишь вызывает
+    commit на выходе, а фиксировать нечего: каждый оператор уже зафиксирован
+    сам по себе. Блок, прерванный на середине, оставлял половину записей, и
+    выглядело это как атомарная операция.
+
+    BEGIN IMMEDIATE, а не обычный BEGIN: отложенная транзакция берёт замок
+    только на первой ЗАПИСИ, и если между её чтением и записью успел
+    зафиксироваться другой писатель, sqlite отвечает «database is locked»
+    сразу — обработчик занятости в этом случае не зовётся, иначе два
+    читателя, собравшихся писать, заклинили бы друг друга. Взяв замок сразу,
+    мы попадаем в ожидание, а не в отказ.
+    """
+    if соед.in_transaction:
+        # Вложенных транзакций в sqlite нет. Внешняя уже отвечает за атомарность.
+        yield
+        return
+    предел = time.monotonic() + 30.0
+    while True:
+        try:
+            соед.execute("BEGIN IMMEDIATE")
+            break
+        except sqlite3.OperationalError as ош:
+            if "locked" not in str(ош) or time.monotonic() >= предел:
+                raise
+            time.sleep(0.02)
+    try:
+        yield
+    except BaseException:
+        соед.execute("ROLLBACK")
+        raise
+    соед.execute("COMMIT")
+
+
+# --- сверка версии ресурса ---------------------------------------------------
+
+def сверить_версию(соед: sqlite3.Connection, cid: str,
+                   ожидаемая: int | None) -> None:
+    """Ранняя сверка ожидаемой версии ресурса.
+
+    Нужна затем, чтобы запрос, опирающийся на устаревшую картину, не успел
+    сделать ничего до отказа: между началом действия и самим переходом есть
+    чтения и проверки, и часть из них вправе записать состояние (например,
+    пометить план устаревшим). Настоящая, атомарная сверка всё равно
+    происходит в `применить_переход` — эта её не заменяет, а лишь избавляет от
+    работы, которую придётся откатывать.
+    """
+    if ожидаемая is None:
+        return
+    строка = соед.execute("SELECT version FROM changeset WHERE changeset_id=?",
+                          (cid,)).fetchone()
+    if строка is None:
+        raise ChangeSetError("CHANGESET_NOT_FOUND", "набора нет", 404)
+    if строка["version"] != ожидаемая:
+        raise ChangeSetError(
+            "VERSION_CONFLICT",
+            f"версия набора {строка['version']}, ожидалась {ожидаемая}", 409)
+
+
 # --- переходы ----------------------------------------------------------------
 
 def применить_переход(соед: sqlite3.Connection, cid: str, действие: str, *,
                       actor_id: str, служба: str, роль: str,
                       reason: str = "", поля: dict[str, Any] | None = None,
                       ожидаемая_версия: int | None = None,
+                      request_id: str = "",
                       fencing_token: int | None = None) -> dict:
     """Единственный способ изменить состояние набора изменений."""
-    with соед:
+    with запись(соед):
         строка = соед.execute("SELECT * FROM changeset WHERE changeset_id=?",
                               (cid,)).fetchone()
         if строка is None:
@@ -329,7 +504,8 @@ def применить_переход(соед: sqlite3.Connection, cid: str, д
                                  403)
 
         # Аренда проверяется для всего, что ведёт к внешнему эффекту.
-        if действие in ("apply", "applied", "verify_ok", "verify_fail",
+        if действие in ("apply", "applied", "verify_start", "verify_ok",
+                        "keep", "verify_fail", "rollback_begin",
                         "rollback_ok", "rollback_fail"):
             _проверить_аренду(соед, cid, fencing_token)
 
@@ -355,9 +531,9 @@ def применить_переход(соед: sqlite3.Connection, cid: str, д
         соед.execute(
             "INSERT INTO changeset_transition(changeset_id, action, from_status, "
             "to_status, actor_id, actor_role, reason, correlation_id, "
-            "causation_id, occurred_at) VALUES(?,?,?,?,?,?,?,?,?,?)",
+            "causation_id, request_id, occurred_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
             (cid, действие, текущее, п.в_состояние, actor_id, роль, reason,
-             строка["correlation_id"], строка["causation_id"], т))
+             строка["correlation_id"], строка["causation_id"], request_id, т))
 
         if п.в_состояние in M.АКТИВНЫЕ:
             _взять_замок(соед, строка, cid)
@@ -370,7 +546,7 @@ def применить_переход(соед: sqlite3.Connection, cid: str, д
             "changeset_id": cid, "action": действие, "from_status": текущее,
             "to_status": п.в_состояние, "actor_id": actor_id, "role": роль,
             "reason": reason, "correlation_id": строка["correlation_id"],
-            "causation_id": строка["causation_id"],
+            "causation_id": строка["causation_id"], "request_id": request_id,
             "resource_type": строка["resource_type"],
             "resource_id": строка["resource_id"],
             "target_site_ids": json.loads(строка["target_site_ids"]),
@@ -411,7 +587,7 @@ def взять_аренду(соед: sqlite3.Connection, cid: str, worker_id: s
     старым номером — и будет отвергнут, сколько бы он ни был уверен, что
     работает он один.
     """
-    with соед:
+    with запись(соед):
         текущая = соед.execute(
             "SELECT * FROM changeset_lease WHERE changeset_id=?", (cid,)).fetchone()
         сейчас_м = time.monotonic()
@@ -439,7 +615,7 @@ def взять_аренду(соед: sqlite3.Connection, cid: str, worker_id: s
 def продлить_аренду(соед: sqlite3.Connection, cid: str, worker_id: str,
                     маркер: int, *, ttl: float = 60.0) -> bool:
     с = time.monotonic()
-    with соед:
+    with запись(соед):
         изменено = соед.execute(
             "UPDATE changeset_lease SET expires_at=?, heartbeat_at=? "
             "WHERE changeset_id=? AND worker_id=? AND fencing_token=?",
@@ -494,7 +670,7 @@ def получить(соед: sqlite3.Connection, cid: str) -> dict | None:
 def обновить_цель(соед: sqlite3.Connection, cid: str, site_id: str, *,
                   state: str, before: str | None = None,
                   after: str | None = None, detail: str = "") -> None:
-    with соед:
+    with запись(соед):
         соед.execute(
             "UPDATE changeset_target SET state=?, before_fingerprint="
             "COALESCE(?, before_fingerprint), after_fingerprint=?, "

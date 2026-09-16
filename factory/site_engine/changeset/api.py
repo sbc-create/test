@@ -23,7 +23,9 @@ from . import policy as POL
 from . import store as S
 
 ФИЛЬТРЫ = ("status", "resource_type", "resource_id", "producer_service",
-           "actor_id", "risk_class", "site_id", "correlation_id")
+           "actor_id", "risk_class", "impact_level", "site_id",
+           "correlation_id")
+
 СЛУЖЕБНЫЕ = ("after", "limit")
 
 #: Действия и роль, которой они требуют.
@@ -58,9 +60,66 @@ def _соед():
     return S.открыть()
 
 
+def _версия_из_etag(значение: str) -> int:
+    """Разобрать If-Match. Принимается и слабая форма: W/"7"."""
+    з = значение.strip()
+    if з.startswith("W/"):
+        з = з[2:].strip()
+    return int(з.strip('"'))
+
+
+def _ожидаемая_версия(тело: dict, заг: dict) -> int | None:
+    """Версия ресурса, на которую опирается клиент.
+
+    Принимается и полем тела, и заголовком If-Match: первым удобно клиенту
+    контура, вторым — обычному HTTP-посреднику. Когда заданы оба и они
+    расходятся, запрос отклоняется: выбрать за клиента, какое из двух его
+    намерений настоящее, нельзя — а угадав, можно применить изменение поверх
+    той картины, которую он как раз и не подтверждал.
+    """
+    из_тела = тело.get("expected_resource_version")
+    сырой = заг.get("if-match")
+    из_заг = None
+    if сырой not in (None, "", "*"):
+        try:
+            из_заг = _версия_из_etag(str(сырой))
+        except ValueError:
+            raise ValueError(f"If-Match не версия ресурса: {сырой!r}") from None
+    if из_тела is not None:
+        if isinstance(из_тела, bool) or not isinstance(из_тела, int):
+            raise ValueError("expected_resource_version — целое число")
+        if из_заг is not None and из_заг != из_тела:
+            raise ValueError(
+                f"expected_resource_version={из_тела} и If-Match={из_заг} "
+                f"расходятся")
+        return из_тела
+    return из_заг
+
+
+def _идентификатор_запроса(тело: dict, заг: dict) -> str:
+    return str(тело.get("request_id") or заг.get("x-request-id") or "")[:200]
+
+
 def обработать(метод: str, путь: str, *, query: dict | None = None,
                body: dict | None = None,
-               headers: dict | None = None) -> tuple[int, Any]:
+               headers: dict | None = None) -> tuple[int, Any, dict[str, str]]:
+    """Разобрать запрос и вернуть (код, тело, заголовки).
+
+    Заголовки отделены от тела намеренно: версия ресурса нужна посреднику,
+    который тела не разбирает, — иначе условный запрос пришлось бы собирать,
+    предварительно распарсив ответ.
+    """
+    итог = _маршрутизировать(метод, путь, query=query, body=body,
+                             headers=headers)
+    if len(итог) == 3:
+        return итог  # type: ignore[return-value]
+    код, тело = итог
+    return код, тело, {}
+
+
+def _маршрутизировать(метод: str, путь: str, *, query: dict | None = None,
+                      body: dict | None = None,
+                      headers: dict | None = None) -> tuple:
     заг = {str(k).lower(): v for k, v in (headers or {}).items()}
     части = [c for c in путь.strip("/").split("/") if c]
     метод = метод.upper()
@@ -88,6 +147,12 @@ def обработать(метод: str, путь: str, *, query: dict | None =
     actor_id = кто["actor_id"]
     actor_type = кто["actor_type"]
 
+    try:
+        ожидаемая = _ожидаемая_версия(body or {}, заг)
+    except ValueError as e:
+        return _проблема(422, "EXPECTED_VERSION_INVALID", str(e))
+    request_id = _идентификатор_запроса(body or {}, заг)
+
     соед = _соед()
     try:
         if метод == "POST" and rest == ["changesets"]:
@@ -96,8 +161,11 @@ def обработать(метод: str, путь: str, *, query: dict | None =
             return _список(соед, query or {})
         if метод == "GET" and len(rest) == 2:
             набор = S.получить(соед, rest[1])
-            return (_ответ(200, набор) if набор else
-                    _проблема(404, "CHANGESET_NOT_FOUND", "набора нет"))
+            if not набор:
+                return _проблема(404, "CHANGESET_NOT_FOUND", "набора нет")
+            # Версия ресурса отдаётся так, чтобы её можно было вернуть
+            # обратно в If-Match, не вычитывая из тела.
+            return 200, набор, {"ETag": f'"{набор["version"]}"'}
         if метод == "GET" and len(rest) == 3 and rest[2] == "transitions":
             набор = S.получить(соед, rest[1])
             if not набор:
@@ -107,7 +175,8 @@ def обработать(метод: str, путь: str, *, query: dict | None =
                                 "count": len(набор["transitions"])})
         if метод == "POST" and len(rest) == 3 and rest[2] in ДЕЙСТВИЯ:
             return _действие(соед, rest[1], rest[2], body or {},
-                             служба, actor_id, actor_type)
+                             служба, actor_id, actor_type,
+                             ожидаемая_версия=ожидаемая, request_id=request_id)
         return _проблема(404, "NOT_FOUND", "маршрут контура изменений не найден")
     except S.ChangeSetError as e:
         return _проблема(e.status, e.error_code, e.detail)
@@ -154,9 +223,14 @@ def _список(соед, q: dict) -> tuple[int, Any]:
         else:
             где.append(f"{k}=?")
         знач.append(q[k])
-    if "status" in q and q["status"] not in M.СОСТОЯНИЯ:
-        return _проблема(422, "FILTER_VALUE_UNKNOWN",
-                         f"неизвестное состояние {q['status']!r}")
+    допустимые = {"status": M.СОСТОЯНИЯ, "risk_class": M.КЛАССЫ_РИСКА,
+                  "impact_level": M.УРОВНИ_ВЛИЯНИЯ}
+    for имя, значения in допустимые.items():
+        if имя in q and q[имя] not in значения:
+            return _проблема(
+                422, "FILTER_VALUE_UNKNOWN",
+                f"неизвестное значение {имя}={q[имя]!r}; "
+                f"допустимы {sorted(значения)}")
     try:
         after = int(q.get("after", 0))
         limit = min(int(q.get("limit", 100)), 1000)
@@ -174,7 +248,9 @@ def _список(соед, q: dict) -> tuple[int, Any]:
 
 
 def _действие(соед, cid: str, действие: str, тело: dict, служба: str,
-              actor_id: str, actor_type: str) -> tuple[int, Any]:
+              actor_id: str, actor_type: str, *,
+              ожидаемая_версия: int | None = None,
+              request_id: str = "") -> tuple[int, Any]:
     роль = ДЕЙСТВИЯ[действие]
     POL.проверить_действие_модели(
         actor_type, {"approve": "approve", "apply": "apply",
@@ -185,7 +261,9 @@ def _действие(соед, cid: str, действие: str, тело: dict,
     дв = E.Engine(соед)
 
     if действие == "validate":
-        return _ответ(200, дв.валидировать(cid, actor_id=actor_id, служба=служба))
+        return _ответ(200, дв.валидировать(
+            cid, actor_id=actor_id, служба=служба,
+            ожидаемая_версия=ожидаемая_версия, request_id=request_id))
     if действие == "approve":
         срок = тело.get("expires_at")
         if not срок:
@@ -195,14 +273,22 @@ def _действие(соед, cid: str, действие: str, тело: dict,
         набор = S.получить(соед, cid)
         if набор and набор["status"] == M.VALIDATED:
             дв.запросить_одобрение(cid, actor_id=actor_id, служба=служба,
-                                   expires_at=срок)
+                                   expires_at=срок,
+                                   ожидаемая_версия=ожидаемая_версия,
+                                   request_id=request_id)
+            # Версия уже сдвинулась этим же запросом: сверять её второй раз
+            # значило бы отказать клиенту за им же сделанный шаг.
+            ожидаемая_версия = None
         return _ответ(200, дв.одобрить(cid, approver_id=actor_id, служба=служба,
                                        actor_type=actor_type, expires_at=срок,
-                                       reason=тело.get("reason", "")))
+                                       reason=тело.get("reason", ""),
+                                       ожидаемая_версия=ожидаемая_версия,
+                                       request_id=request_id))
     if действие == "reject":
         return _ответ(200, S.применить_переход(
             соед, cid, "reject", actor_id=actor_id, служба=служба,
-            роль=M.APPROVER, reason=тело.get("reason", "")))
+            роль=M.APPROVER, reason=тело.get("reason", ""),
+            ожидаемая_версия=ожидаемая_версия, request_id=request_id))
     if действие == "revoke-approval":
         return _ответ(200, дв.отозвать_одобрение(cid, actor_id=actor_id))
     if действие == "cancel":
@@ -215,16 +301,19 @@ def _действие(соед, cid: str, действие: str, тело: dict,
                              "в текущем состоянии отмена не предусмотрена")
         return _ответ(200, S.применить_переход(
             соед, cid, д, actor_id=actor_id, служба=служба, роль=M.PROPOSER,
-            reason=тело.get("reason", "")))
+            reason=тело.get("reason", ""),
+            ожидаемая_версия=ожидаемая_версия, request_id=request_id))
     if действие in ("apply", "rollback"):
         аренда = S.взять_аренду(соед, cid, тело.get("worker_id") or actor_id)
         if действие == "apply":
             return _ответ(200, дв.применить(
                 cid, actor_id=actor_id, служба=служба,
-                fencing_token=аренда["fencing_token"]))
+                fencing_token=аренда["fencing_token"],
+                ожидаемая_версия=ожидаемая_версия, request_id=request_id))
         return _ответ(200, дв.откатить(
             cid, actor_id=actor_id, служба=служба,
-            fencing_token=аренда["fencing_token"]))
+            fencing_token=аренда["fencing_token"],
+            ожидаемая_версия=ожидаемая_версия, request_id=request_id))
     return _проблема(404, "NOT_FOUND", "действие не найдено")
 
 

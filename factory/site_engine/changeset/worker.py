@@ -153,8 +153,9 @@ def восстановить_прерванные(соед) -> int:
     """
     восстановлено = 0
     for r in соед.execute("SELECT changeset_id, status FROM changeset "
-                          "WHERE status IN (?, ?, ?)",
-                          (M.APPLYING, M.VERIFYING, M.ROLLING_BACK)):
+                          "WHERE status IN (?, ?, ?, ?, ?, ?)",
+                          (M.APPLYING, M.APPLIED, M.VERIFYING, M.VERIFIED,
+                           M.ROLLBACK_REQUESTED, M.ROLLING_BACK)):
         cid = r["changeset_id"]
         набор = S.получить(соед, cid)
         if not набор:
@@ -183,7 +184,7 @@ def восстановить_прерванные(соед) -> int:
             continue
         дв = E.Engine(соед)
         try:
-            if набор["status"] == M.ROLLING_BACK:
+            if набор["status"] in (M.ROLLBACK_REQUESTED, M.ROLLING_BACK):
                 дв.откатить(cid, actor_id=f"service:{WORKER_ID}",
                             служба="control-plane",
                             fencing_token=аренда["fencing_token"])
