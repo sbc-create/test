@@ -344,7 +344,10 @@ def test_11_истёкшее_одобрение_блокирует_примен�
     # в самой выдаче. Поэтому берётся настоящее короткое одобрение и
     # дожидается его конца — проверяется ровно то, что нужно проверить:
     # применение ПОСЛЕ окончания срока, а не выдача задним числом.
-    срок = срок_через(часов=2 / 3600)
+    # Окно намеренно с запасом: выписка одобрения — три обращения к
+    # подписанту, и под нагрузкой двух секунд не хватало — срок истекал
+    # прямо внутри помощника, и отказ приходил не оттуда, откуда ожидался.
+    срок = срок_через(часов=8 / 3600)
     довести_до_одобрения(бд, двигатель, cid, срок=срок)
     while _d.datetime.now(tz=_d.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ") <= срок:
         time.sleep(0.2)
@@ -400,6 +403,83 @@ def test_12c_qwen_может_предложить_но_не_одобрить(б�
                            actor_type="MODEL",
                            expires_at="2099-01-01T00:00:00Z")
     assert ош.value.error_code == "MODEL_ACTION_DENIED"
+
+
+# --- 12b. сверка версии ресурса ---------------------------------------------
+
+def _версия(бд, cid: str) -> int:
+    return бд.execute("SELECT version FROM changeset WHERE changeset_id=?",
+                      (cid,)).fetchone()["version"]
+
+
+def _счётчики(бд, cid: str) -> tuple[int, int]:
+    """Сколько записано переходов и сколько отправлено событий."""
+    п = бд.execute("SELECT count(*) c FROM changeset_transition "
+                   "WHERE changeset_id=?", (cid,)).fetchone()["c"]
+    я = бд.execute("SELECT count(*) c FROM changeset_outbox "
+                   "WHERE changeset_id=?", (cid,)).fetchone()["c"]
+    return п, я
+
+
+def test_12c_устаревшая_ожидаемая_версия_отклоняется(бд, двигатель, адаптер):
+    адаптер.посеять("test-alpha-0001", "res-1", {"title": "старое"})
+    cid = создать(бд)
+    двигатель.валидировать(cid, actor_id="service:control-plane",
+                           служба="control-plane")
+    было = _счётчики(бд, cid)
+    with pytest.raises(S.ChangeSetError) as ош:
+        двигатель.запросить_одобрение(
+            cid, actor_id="service:templates", служба="templates",
+            expires_at=срок_через(), ожидаемая_версия=_версия(бд, cid) - 1)
+    assert ош.value.error_code == "VERSION_CONFLICT"
+    assert ош.value.status == 409
+    # Конфликт не оставляет следов: ни перехода, ни события в ящике.
+    assert _счётчики(бд, cid) == было
+
+
+def test_12d_совпавшая_ожидаемая_версия_пропускает(бд, двигатель, адаптер):
+    адаптер.посеять("test-alpha-0001", "res-1", {"title": "старое"})
+    cid = создать(бд)
+    двигатель.валидировать(cid, actor_id="service:control-plane",
+                           служба="control-plane",
+                           ожидаемая_версия=_версия(бд, cid))
+    assert S.получить(бд, cid)["status"] == M.VALIDATED
+
+
+def test_12e_сверка_версии_атомарна_при_гонке(бд, двигатель, адаптер):
+    """Из двух запросов с одной и той же ожидаемой версией пройдёт один.
+
+    Оба опираются на ОДНУ картину мира, и оба не могут быть правы: второй
+    описывает состояние, которого уже нет.
+    """
+    адаптер.посеять("test-alpha-0001", "res-1", {"title": "старое"})
+    cid = создать(бд)
+    двигатель.валидировать(cid, actor_id="service:control-plane",
+                           служба="control-plane")
+    версия = _версия(бд, cid)
+
+    итоги = []
+    for _ in range(2):
+        try:
+            двигатель.запросить_одобрение(
+                cid, actor_id="service:templates", служба="templates",
+                expires_at=срок_через(), ожидаемая_версия=версия)
+            итоги.append("ok")
+        except S.ChangeSetError as e:
+            итоги.append(e.error_code)
+    assert итоги == ["ok", "VERSION_CONFLICT"], итоги
+
+
+def test_12f_идентификатор_запроса_попадает_в_переход(бд, двигатель, адаптер):
+    """Запрос должен опознаваться в истории, а не только в журнале процесса."""
+    адаптер.посеять("test-alpha-0001", "res-1", {"title": "старое"})
+    cid = создать(бд)
+    двигатель.валидировать(cid, actor_id="service:control-plane",
+                           служба="control-plane", request_id="req-0001")
+    строки = [r["request_id"] for r in бд.execute(
+        "SELECT request_id FROM changeset_transition WHERE changeset_id=? "
+        "ORDER BY seq", (cid,))]
+    assert строки[0] == "req-0001", строки
 
 
 # --- 13. сухой прогон -------------------------------------------------------

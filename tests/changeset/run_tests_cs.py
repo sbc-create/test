@@ -106,8 +106,8 @@ def main() -> int:
         CONTROL_API_BASE=f"http://127.0.0.1:{ПОРТ}",
         AUDIT_LEDGER_DB=str(врем / "ledger.sqlite3"),
         AUDIT_FEED=str(врем / "feed.jsonl"),
-        PYTHONPATH=str(ВЫПУСК),
         CREDENTIALS_DIRECTORY=str(креды),
+        PYTHONPATH=str(КОРЕНЬ),
     )
     # Копия журнала: эфемерный экземпляр обязан писать в неё, а не в канон.
     ист = sqlite3.connect(f"file:{ЖУРНАЛ}?mode=ro", uri=True)
@@ -116,11 +116,16 @@ def main() -> int:
         ист.backup(наз)
     наз.close(); ист.close()
 
+    # Сервер поднимается из РАБОЧЕГО ДЕРЕВА, а не из выложённого релиза.
+    # Релиз приколот к коммиту и от ветки отстаёт на всё, что в ней сделано;
+    # поднимая его, набор проверял бы вчерашний код и молчал бы ровно о тех
+    # изменениях, ради которых и запускается. От релиза остаётся только
+    # интерпретатор: в нём собраны зависимости.
     сервер = subprocess.Popen(
         [str(ВЫПУСК / ".venv/bin/python"), "-m", "factory.site_engine.api.server",
          "--root", "/srv/site-factory/repo", "--host", "127.0.0.1",
          "--port", str(ПОРТ)],
-        cwd=ВЫПУСК, env=окр, preexec_fn=_умереть_с_родителем,
+        cwd=str(КОРЕНЬ), env=окр, preexec_fn=_умереть_с_родителем,
         stdout=(врем / "server.log").open("w"), stderr=subprocess.STDOUT)
     код = 1
     try:

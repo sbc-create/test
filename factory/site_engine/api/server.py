@@ -109,10 +109,13 @@ class _Handler(http.server.BaseHTTPRequestHandler):
     def log_message(self, fmt: str, *args: Any) -> None:  # noqa: A003
         pass
 
-    def _send(self, status: int, payload: dict) -> None:
+    def _send(self, status: int, payload: dict,
+              заголовки: dict[str, str] | None = None) -> None:
         body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
+        for имя, значение in (заголовки or {}).items():
+            self.send_header(имя, str(значение))
         # Контекст следа возвращается заголовком: вызывающему нужен способ
         # связать свой запрос с записанным путём, не разбирая тело ответа.
         if isinstance(payload, dict) and payload.get("traceparent"):
@@ -309,14 +312,14 @@ class _Handler(http.server.BaseHTTPRequestHandler):
                 path.startswith("/api/v1/workflows"):
             try:
                 from factory.site_engine.changeset import api as _cs
-                код, тело = _cs.обработать(
+                код, тело, доп = _cs.обработать(
                     method, path, query=query, body=body,
                     headers=self._headers_dict())
             except Exception:  # noqa: BLE001
                 self._error(500, "internal_error",
                             "внутренняя ошибка контура изменений")
                 return
-            self._send(код, тело)
+            self._send(код, тело, доп)
             return
 
         if path.startswith("/api/v1/audit"):

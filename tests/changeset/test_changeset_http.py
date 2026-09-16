@@ -25,23 +25,27 @@ pytestmark = pytest.mark.skipif(
 }
 
 
-def зов(метод: str, путь: str, тело=None, служба: str = "architect"):
+def зов(метод: str, путь: str, тело=None, служба: str = "architect",
+        доп: dict | None = None, с_заголовками: bool = False):
     заг = {"Content-Type": "application/json"}
     if ТОКЕНЫ.get(служба):
         заг["Authorization"] = "Bearer " + ТОКЕНЫ[служба]
+    заг.update(доп or {})
     r = urllib.request.Request(
         Б + путь, method=метод, headers=заг,
         data=json.dumps(тело, ensure_ascii=False).encode() if тело is not None
         else None)
     try:
         with urllib.request.urlopen(r, timeout=20) as о:
-            return о.status, json.loads(о.read() or b"{}")
+            код, т, h = о.status, json.loads(о.read() or b"{}"), dict(о.headers)
     except urllib.error.HTTPError as e:
         сырое = e.read() or b"{}"
+        h = dict(e.headers or {})
         try:
-            return e.code, json.loads(сырое)
+            код, т = e.code, json.loads(сырое)
         except ValueError:
-            return e.code, {"raw": сырое.decode("utf-8", "replace")[:300]}
+            код, т = e.code, {"raw": сырое.decode("utf-8", "replace")[:300]}
+    return (код, т, h) if с_заголовками else (код, т)
 
 
 def заявка(**kw):
@@ -157,3 +161,67 @@ def test_http_история_переходов_записывается():
     assert [i["to_status"] for i in т4["items"]] == ["VALIDATING",
                                                      "VALIDATION_FAILED"], т4
     assert all(i["actor_role"] == "validator" for i in т4["items"]), т4
+
+
+# --- версия ресурса как условие запроса --------------------------------------
+
+def _создать_набор():
+    к, т = зов("POST", "/api/v1/changesets", заявка())
+    assert к == 201, т
+    return т["changeset_id"]
+
+
+def test_http_etag_отдаёт_версию_ресурса():
+    cid = _создать_набор()
+    к, т, h = зов("GET", f"/api/v1/changesets/{cid}", с_заголовками=True)
+    assert к == 200, т
+    assert h.get("ETag") == f'"{т["version"]}"', (h.get("ETag"), т["version"])
+
+
+def test_http_устаревший_if_match_отклоняется():
+    cid = _создать_набор()
+    к, т, h = зов("GET", f"/api/v1/changesets/{cid}", с_заголовками=True)
+    версия = т["version"]
+    к, т = зов("POST", f"/api/v1/changesets/{cid}/validate", {},
+               доп={"If-Match": f'"{версия - 1}"'})
+    assert к == 409, т
+    assert т["error_code"] == "VERSION_CONFLICT", т
+    # Отказ не сдвинул состояние: набор остался предложением.
+    к, после = зов("GET", f"/api/v1/changesets/{cid}")
+    assert после["status"] == "PROPOSED", после["status"]
+    assert после["version"] == версия, после["version"]
+
+
+def test_http_совпавший_if_match_пропускает():
+    """Отмена выбрана намеренно: она не ходит в реестр.
+
+    Проверяется условие запроса, а не доступность витрин, и действие, которое
+    здесь отказало бы по своей причине, ответ на этот вопрос только затемнит.
+    """
+    cid = _создать_набор()
+    к, т, h = зов("GET", f"/api/v1/changesets/{cid}", с_заголовками=True)
+    assert к == 200, т
+    к, т = зов("POST", f"/api/v1/changesets/{cid}/cancel",
+               {"reason": "проверка условия запроса"}, доп={"If-Match": h["ETag"]})
+    assert к == 200, т
+    к, после = зов("GET", f"/api/v1/changesets/{cid}")
+    assert после["status"] == "CANCELLED", после["status"]
+
+
+def test_http_расхождение_if_match_и_поля_отклоняется():
+    """Два разных намерения в одном запросе — не повод выбрать любое."""
+    cid = _создать_набор()
+    к, т = зов("POST", f"/api/v1/changesets/{cid}/validate",
+               {"expected_resource_version": 1}, доп={"If-Match": '"9"'})
+    assert к == 422, т
+    assert т["error_code"] == "EXPECTED_VERSION_INVALID", т
+
+
+def test_http_нечисловой_if_match_отклоняется():
+    cid = _создать_набор()
+    # Значение латиницей не из придирчивости: в заголовок HTTP кириллица не
+    # укладывается, и запрос упал бы у клиента, не дойдя до проверки.
+    к, т = зов("POST", f"/api/v1/changesets/{cid}/cancel", {},
+               доп={"If-Match": '"not-a-version"'})
+    assert к == 422, т
+    assert т["error_code"] == "EXPECTED_VERSION_INVALID", т

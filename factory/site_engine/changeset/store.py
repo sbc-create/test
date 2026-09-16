@@ -88,6 +88,7 @@ CREATE TABLE IF NOT EXISTS changeset_transition (
   after_fingerprint  TEXT,
   correlation_id TEXT NOT NULL,
   causation_id   TEXT,
+  request_id     TEXT,
   occurred_at    TEXT NOT NULL
 );
 
@@ -174,6 +175,20 @@ def сейчас() -> str:
 
 _ЗАМОК_СХЕМЫ = threading.Lock()
 
+#: Столбцы, появившиеся после первой версии схемы. CREATE TABLE IF NOT EXISTS
+#: о старой таблице молчит: она существует, и оператор проходит мимо, — а
+#: запись в несуществующий столбец падает уже на рабочем контуре.
+ДОРАЩИВАНИЕ: tuple[tuple[str, str, str], ...] = (
+    ("changeset_transition", "request_id", "TEXT"),
+)
+
+
+def _дорастить(с: sqlite3.Connection) -> None:
+    for таблица, столбец, тип in ДОРАЩИВАНИЕ:
+        есть = {r[1] for r in с.execute(f"PRAGMA table_info({таблица})")}
+        if столбец and столбец not in есть:
+            с.execute(f"ALTER TABLE {таблица} ADD COLUMN {столбец} {тип}")
+
 
 def _обеспечить_схему(с: sqlite3.Connection) -> None:
     """Применить DDL только тогда, когда его ещё нет.
@@ -189,6 +204,7 @@ def _обеспечить_схему(с: sqlite3.Connection) -> None:
     """
     if с.execute("SELECT 1 FROM sqlite_master WHERE type='table' "
                  "AND name='changeset'").fetchone():
+        _дорастить(с)
         return
     with _ЗАМОК_СХЕМЫ:
         if с.execute("SELECT 1 FROM sqlite_master WHERE type='table' "
@@ -324,12 +340,38 @@ def _в_ящик(соед: sqlite3.Connection, cid: str, тип: str,
         (cid, тип, к, канон(нагрузка), сейчас()))
 
 
+# --- сверка версии ресурса ---------------------------------------------------
+
+def сверить_версию(соед: sqlite3.Connection, cid: str,
+                   ожидаемая: int | None) -> None:
+    """Ранняя сверка ожидаемой версии ресурса.
+
+    Нужна затем, чтобы запрос, опирающийся на устаревшую картину, не успел
+    сделать ничего до отказа: между началом действия и самим переходом есть
+    чтения и проверки, и часть из них вправе записать состояние (например,
+    пометить план устаревшим). Настоящая, атомарная сверка всё равно
+    происходит в `применить_переход` — эта её не заменяет, а лишь избавляет от
+    работы, которую придётся откатывать.
+    """
+    if ожидаемая is None:
+        return
+    строка = соед.execute("SELECT version FROM changeset WHERE changeset_id=?",
+                          (cid,)).fetchone()
+    if строка is None:
+        raise ChangeSetError("CHANGESET_NOT_FOUND", "набора нет", 404)
+    if строка["version"] != ожидаемая:
+        raise ChangeSetError(
+            "VERSION_CONFLICT",
+            f"версия набора {строка['version']}, ожидалась {ожидаемая}", 409)
+
+
 # --- переходы ----------------------------------------------------------------
 
 def применить_переход(соед: sqlite3.Connection, cid: str, действие: str, *,
                       actor_id: str, служба: str, роль: str,
                       reason: str = "", поля: dict[str, Any] | None = None,
                       ожидаемая_версия: int | None = None,
+                      request_id: str = "",
                       fencing_token: int | None = None) -> dict:
     """Единственный способ изменить состояние набора изменений."""
     with соед:
@@ -393,9 +435,9 @@ def применить_переход(соед: sqlite3.Connection, cid: str, д
         соед.execute(
             "INSERT INTO changeset_transition(changeset_id, action, from_status, "
             "to_status, actor_id, actor_role, reason, correlation_id, "
-            "causation_id, occurred_at) VALUES(?,?,?,?,?,?,?,?,?,?)",
+            "causation_id, request_id, occurred_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
             (cid, действие, текущее, п.в_состояние, actor_id, роль, reason,
-             строка["correlation_id"], строка["causation_id"], т))
+             строка["correlation_id"], строка["causation_id"], request_id, т))
 
         if п.в_состояние in M.АКТИВНЫЕ:
             _взять_замок(соед, строка, cid)
@@ -408,7 +450,7 @@ def применить_переход(соед: sqlite3.Connection, cid: str, д
             "changeset_id": cid, "action": действие, "from_status": текущее,
             "to_status": п.в_состояние, "actor_id": actor_id, "role": роль,
             "reason": reason, "correlation_id": строка["correlation_id"],
-            "causation_id": строка["causation_id"],
+            "causation_id": строка["causation_id"], "request_id": request_id,
             "resource_type": строка["resource_type"],
             "resource_id": строка["resource_id"],
             "target_site_ids": json.loads(строка["target_site_ids"]),
