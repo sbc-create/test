@@ -253,3 +253,81 @@ def test_http_класс_риска_фильтруется_по_перечисл
     assert т["error_code"] == "FILTER_VALUE_UNKNOWN", т
     к, т = зов("GET", "/api/v1/changesets?risk_class=R2")
     assert к == 200, т
+
+
+# --- эталонный клиент против живого контура ----------------------------------
+
+def _клиент(служба: str = "architect"):
+    import importlib.util
+    from pathlib import Path as _P
+    путь = (_P(__file__).resolve().parents[2]
+            / "contracts/control-plane/clients/changeset_client.py")
+    спец = importlib.util.spec_from_file_location("changeset_client", путь)
+    м = importlib.util.module_from_spec(спец)
+    спец.loader.exec_module(м)
+    return м, м.КлиентИзменений(Б, ТОКЕНЫ[служба])
+
+
+def test_http_эталонный_клиент_проводит_набор():
+    """Совпадения имён мало: клиент обязан работать против настоящего контура.
+
+    Клиент, сверенный только по описанию, расходится с ним ровно там, где
+    описание неполно, — и узнаёт об этом тот, кто им пользуется.
+    """
+    м, к = _клиент()
+    создан = к.предложить(заявка(), request_id="req-client-1")
+    cid = создан["changeset_id"]
+
+    набор, версия = к.получить(cid)
+    assert набор["status"] == "PROPOSED", набор["status"]
+    assert версия >= 1, версия
+
+    # Устаревшая версия отклоняется разобранной ошибкой, а не текстом.
+    try:
+        к.отменить(cid, reason="проверка", версия=версия - 1)
+        raise AssertionError("устаревшая версия принята")
+    except м.ОшибкаКонтура as ош:
+        assert ош.статус == 409, ош.статус
+        assert ош.error_code == "VERSION_CONFLICT", ош.error_code
+        assert ош.повторяем is True
+
+    итог = к.отменить(cid, reason="проверка клиента", версия=версия)
+    assert итог["status"] == "CANCELLED", итог
+
+    история = к.история(cid)
+    assert история["count"] >= 1, история
+    assert [п["to_status"] for п in история["items"]][-1] == "CANCELLED"
+
+
+def test_http_клиент_отвергает_неизвестное_действие():
+    """Опечатка в имени действия ловится у клиента, а не 404 от сервера."""
+    м, к = _клиент()
+    cid = к.предложить(заявка())["changeset_id"]
+    try:
+        к._действие(cid, "approove")
+        raise AssertionError("неизвестное действие принято")
+    except ValueError as e:
+        assert "не предусмотрено" in str(e), str(e)
+
+
+def test_http_клиент_видит_фильтры_сервера():
+    м, к = _клиент()
+    к.предложить(заявка())
+    отобрано = к.список(status="PROPOSED", limit=5)
+    assert отобрано["filters_applied"]["status"] == "PROPOSED", отобрано
+    try:
+        к.список(risk_class="HIGH")
+        raise AssertionError("значение вне перечисления принято")
+    except м.ОшибкаКонтура as ош:
+        assert ош.error_code == "FILTER_VALUE_UNKNOWN", ош.error_code
+
+
+def test_http_клиент_отказывает_в_непригодном_идентификаторе():
+    """Отказ должен называть причину, а не всплывать из глубины urllib."""
+    м, к = _клиент()
+    cid = к.предложить(заявка())["changeset_id"]
+    try:
+        к.отменить(cid, request_id="запрос-1")
+        raise AssertionError("непригодный идентификатор принят")
+    except ValueError as e:
+        assert "latin-1" in str(e), str(e)

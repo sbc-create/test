@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import ast
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 
@@ -174,3 +175,67 @@ def test_каждый_возвращаемый_код_ошибки_объявл�
     assert из_кода, "разбор исходников не нашёл ни одного кода"
     отсутствуют = sorted(из_кода - объявленные)
     assert not отсутствуют, f"коды вне каталога ошибок: {отсутствуют}"
+
+
+# --- эталонный клиент --------------------------------------------------------
+
+def _клиент():
+    """Клиент лежит в наборе контрактов, а не в пакете: он обязан работать
+    без установки проекта, поэтому и импортируется по пути."""
+    путь = КОРЕНЬ / "contracts/control-plane/clients/changeset_client.py"
+    спец = importlib.util.spec_from_file_location("changeset_client", путь)
+    м = importlib.util.module_from_spec(спец)
+    спец.loader.exec_module(м)
+    return м
+
+
+def test_клиент_знает_ровно_те_же_действия():
+    """Ни одного лишнего действия и ни одного забытого."""
+    assert set(_клиент().ДЕЙСТВИЯ) == set(API.ДЕЙСТВИЯ)
+
+
+def test_у_каждого_действия_клиента_есть_метод():
+    к = _клиент()
+    имена = {"validate": "валидировать", "approve": "одобрить",
+             "reject": "отклонить", "revoke-approval": "отозвать_одобрение",
+             "apply": "применить", "rollback": "откатить",
+             "cancel": "отменить"}
+    assert set(имена) == set(к.ДЕЙСТВИЯ), sorted(set(имена) ^ set(к.ДЕЙСТВИЯ))
+    нет = [м for м in имена.values() if not hasattr(к.КлиентИзменений, м)]
+    assert not нет, нет
+
+
+def test_пути_клиента_объявлены_в_openapi(openapi):
+    к = _клиент()
+    основа = "/api/v1/changesets/{changeset_id}/"
+    объявленные = {п[len(основа):] for п in openapi["paths"]
+                   if п.startswith(основа)}
+    нет = [д for д in к.ДЕЙСТВИЯ if д not in объявленные]
+    assert not нет, нет
+    assert к.БАЗА in openapi["paths"], к.БАЗА
+
+
+def test_клиент_не_задаёт_состояние():
+    """Состояние — вывод сервера. Клиент, умеющий его прислать, однажды
+    пришлёт, и машина переходов окажется необязательной."""
+    путь = КОРЕНЬ / "contracts/control-plane/clients/changeset_client.py"
+    текст = путь.read_text("utf-8")
+    подозрительные = [с for с in текст.splitlines()
+                      if '"status"' in с and "#" not in с.split('"status"')[0]]
+    assert not подозрительные, подозрительные
+
+
+def test_клиент_обходится_стандартной_библиотекой():
+    """Клиент с зависимостями перестаёт быть эталонным: его не берут в тесную
+    среду, и он расходится с контрактом молча."""
+    import ast
+    путь = КОРЕНЬ / "contracts/control-plane/clients/changeset_client.py"
+    дерево = ast.parse(путь.read_text("utf-8"))
+    корни = set()
+    for узел in ast.walk(дерево):
+        if isinstance(узел, ast.Import):
+            корни |= {a.name.split(".")[0] for a in узел.names}
+        elif isinstance(узел, ast.ImportFrom) and узел.level == 0 and узел.module:
+            корни.add(узел.module.split(".")[0])
+    свои = корни - {"json", "urllib", "typing", "__future__", "ast"}
+    assert not свои, f"внешние зависимости у эталонного клиента: {sorted(свои)}"
