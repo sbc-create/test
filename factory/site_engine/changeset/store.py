@@ -126,7 +126,8 @@ CREATE TABLE IF NOT EXISTS changeset_outbox (
   created_at     TEXT NOT NULL,
   published_at   TEXT,
   attempts       INTEGER NOT NULL DEFAULT 0,
-  last_error     TEXT
+  last_error     TEXT,
+  next_attempt_at REAL
 );
 
 CREATE TABLE IF NOT EXISTS changeset_dlq (
@@ -200,6 +201,7 @@ _ЗАМОК_СХЕМЫ = threading.Lock()
 ДОРАЩИВАНИЕ: tuple[tuple[str, str, str], ...] = (
     ("changeset_transition", "request_id", "TEXT"),
     ("changeset", "impact_level", "TEXT"),
+    ("changeset_outbox", "next_attempt_at", "REAL"),
 )
 
 

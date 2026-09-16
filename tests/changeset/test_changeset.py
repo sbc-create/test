@@ -405,6 +405,114 @@ def test_12c_qwen_может_предложить_но_не_одобрить(б�
     assert ош.value.error_code == "MODEL_ACTION_DENIED"
 
 
+# --- 11c. исходящий ящик: повторы, отсрочка, недоставленное -----------------
+
+def _в_ящик(бд, тип: str = "changeset.applied.v1", ключ: str = "к-1") -> int:
+    бд.execute(
+        "INSERT INTO changeset_outbox(changeset_id, event_type, "
+        "idempotency_key, payload, created_at) VALUES(?,?,?,?,?)",
+        ("cs-1", тип, ключ, S.канон({"changeset_id": "cs-1"}), S.сейчас()))
+    return бд.execute("SELECT max(seq) s FROM changeset_outbox").fetchone()["s"]
+
+
+def test_11c_временный_отказ_откладывает_повтор(бд, monkeypatch):
+    """Недоступность журнала не должна оборачиваться потоком запросов к нему."""
+    _в_ящик(бд)
+
+    def падать(_з, **_):
+        raise AB.LedgerUnavailable("журнал недоступен")
+
+    monkeypatch.setattr(AB, "отправить", падать)
+    итог = AB.опубликовать(бд)
+    assert итог["published"] == 0 and итог["deferred"] == 1, итог
+    строка = бд.execute("SELECT attempts, next_attempt_at FROM changeset_outbox"
+                        ).fetchone()
+    assert строка["attempts"] == 1
+    assert строка["next_attempt_at"] > time.time(), строка["next_attempt_at"]
+    # Пока отсрочка не истекла, запись не берётся вовсе.
+    assert AB.опубликовать(бд)["deferred"] == 0
+
+
+def test_11c_отсрочка_растёт_и_имеет_потолок():
+    предыдущая = 0.0
+    for попытка in range(0, 6):
+        текущая = AB._отсрочка(попытка)
+        assert текущая >= предыдущая, (попытка, текущая, предыдущая)
+        предыдущая = текущая
+    assert AB._отсрочка(1000) == AB.ПРЕДЕЛ_ОТСРОЧКИ_СЕК
+
+
+def test_11c_исчерпание_попыток_уводит_в_недоставленное(бд, monkeypatch):
+    """Неустранимая поломка обязана перестать притворяться перебоем."""
+    seq = _в_ящик(бд)
+    бд.execute("UPDATE changeset_outbox SET attempts=? WHERE seq=?",
+               (AB.ПРЕДЕЛ_ОТПРАВОК - 1, seq))
+
+    def падать(_з, **_):
+        raise AB.LedgerUnavailable("журнал недоступен")
+
+    monkeypatch.setattr(AB, "отправить", падать)
+    итог = AB.опубликовать(бд)
+    assert итог["rejected"] == 1, итог
+    строка = бд.execute("SELECT error_code FROM changeset_dlq").fetchone()
+    assert строка["error_code"] == "LEDGER_UNAVAILABLE_EXHAUSTED"
+    assert итог["backlog"] == 0, итог
+
+
+def test_11c_неизвестная_версия_события_блокируется(бд, monkeypatch):
+    """Запись, смысла которой отправитель не понимает, не уходит наружу."""
+    _в_ящик(бд, тип="changeset.applied.v99")
+    отправлено = []
+    monkeypatch.setattr(AB, "отправить",
+                        lambda з, **_: отправлено.append(з) or {})
+    итог = AB.опубликовать(бд)
+    assert отправлено == [], отправлено
+    assert итог["rejected"] == 1, итог
+    строка = бд.execute("SELECT error_code FROM changeset_dlq").fetchone()
+    assert строка["error_code"] == "EVENT_VERSION_UNKNOWN"
+
+
+@pytest.mark.parametrize("тип,ожидание", [
+    ("changeset.applied.v1", 1), ("changeset.applied.v12", 12),
+    ("changeset.applied", None), ("changeset.applied.vX", None)])
+def test_11c_версия_читается_из_имени(тип, ожидание):
+    assert AB.версия_события(тип) == ожидание
+
+
+def test_11c_воспроизведение_идёт_с_позиции(бд, monkeypatch):
+    """После восстановления журнала события досылаются, а не разбираются."""
+    ключи = [_в_ящик(бд, ключ=f"к-{i}") for i in range(4)]
+    отправленные = []
+    monkeypatch.setattr(AB, "отправить",
+                        lambda з, **_: отправленные.append(з["seq"]) or {})
+    итог = AB.воспроизвести(бд, с_позиции=ключи[1])
+    assert отправленные == ключи[2:], отправленные
+    assert итог["replayed"] == 2 and итог["cursor"] == ключи[-1], итог
+
+
+def test_11c_воспроизведение_возвращает_честную_позицию(бд, monkeypatch):
+    """Прерванное воспроизведение продолжается ровно оттуда, где встало."""
+    ключи = [_в_ящик(бд, ключ=f"к-{i}") for i in range(4)]
+    отправленные = []
+
+    def иногда_падать(з, **_):
+        if з["seq"] == ключи[2]:
+            raise AB.LedgerUnavailable("журнал пропал")
+        отправленные.append(з["seq"])
+        return {}
+
+    monkeypatch.setattr(AB, "отправить", иногда_падать)
+    итог = AB.воспроизвести(бд, с_позиции=0)
+    assert итог["cursor"] == ключи[2] - 1, итог
+    # Продолжение с возвращённой позиции повторяет ровно ту запись, что не
+    # прошла, и ни одной лишней.
+    отправленные.clear()
+    monkeypatch.setattr(AB, "отправить",
+                        lambda з, **_: отправленные.append(з["seq"]) or {})
+    AB.воспроизвести(бд, с_позиции=итог["cursor"])
+    assert отправленные == ключи[2:], отправленные
+
+
 # --- 12a. класс риска и второе лицо -----------------------------------------
 
 def _класс(род: str, операция: str = "update", целей: int = 1,
