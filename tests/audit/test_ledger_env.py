@@ -1,45 +1,67 @@
-"""Проверки окружения и сохранности базовой линии (пункты 23, 27, 28, 31–37).
+"""Проверки окружения журнала, которые верны в любом клоне репозитория.
 
 Отдельным файлом, потому что эти проверки касаются не журнала, а того, что он
 ничего вокруг себя не испортил. Смешивать их с функциональными тестами значит
 потерять различие между «журнал работает» и «журнал ничего не сломал».
+
+Что отсюда ушло и куда
+----------------------
+
+Часть прежних проверок утверждала о ЖИВОМ флоте, а не о коде: каноническая
+резервная копия в `/srv/site-factory`, перепись реестра (13 сайтов, 9
+production), три синтетические записи и `registry_version=32`, ответы публичных
+доменов, отсутствие осиротевших процессов и единственность слушателя на
+`127.0.0.1:8790`. В CI ничего этого нет — там падало десять проверок, ни одна
+из которых не сообщала о журнале ничего.
+
+Они не удалены и не ослаблены: они переехали в host-контур `bin/host-attest`
+(`host_attestation/checks.py`) и стали обязательными проверками свидетельства,
+без которого production-выкат не выпускается. Соответствие:
+
+    test_27  → ledger.backup
+    test_31  → registry.synthetic_records
+    test_32  → fleet.public_domains
+    test_36  → systemd.no_orphan_processes
+    test_37  → systemd.listeners
+    перепись → fleet.census, registry.version
+
+`test_28` проверял, что прогон по эфемерной базе не изменил базовую линию
+реестра, и делал это запуском скрипта `n_plus_one_isolated.py`, лежащего вне
+репозитория. Скрипт воспроизвести нельзя, а проверяемое им свойство —
+«базовая линия реестра не изменилась» — измеряется на хосте проверками
+`fleet.census` и `registry.synthetic_records`, причём непосредственно, а не по
+выводу постороннего процесса.
+
+Здесь остались проверки, не зависящие от машины: восстановление публикации
+после перерыва, отсутствие записи в публичные сайты, отсутствие обращений к
+внешним провайдерам и отсутствие секретов в данных прогона. Журнал и лента —
+эфемерные, их поднимает `tests/audit/conftest.py`.
 """
 from __future__ import annotations
 
-import hashlib
 import json
 import os
+import re
 import shutil
 import sqlite3
-import subprocess
-import urllib.error
-import urllib.request
 from pathlib import Path
 
 import pytest
 
 from factory.site_engine.audit import ledger_store as store
 
-ЖУРНАЛ = "/srv/site-factory/audit-ledger/audit_ledger.sqlite3"
-РЕЕСТР = "/srv/site-factory/registry-core/registry.sqlite3"
+#: Журнал прогона. Приходит из обвязки, а не из рабочего контура машины:
+#: умолчания здесь намеренно нет — набор, который при отсутствии обвязки молча
+#: уходит в канонический журнал, пишет в историю системы.
+ЖУРНАЛ = os.environ["AUDIT_LEDGER_DB"]
+#: Корень доказательств прогона. Тот же, что объявлен службе.
+ДОКАЗАТЕЛЬСТВА = Path(os.environ["AUDIT_EVIDENCE_DIR"])
+
 ДОМЕНЫ = ["yummyani.org", "yummyani.site", "yummyani.biz"]
 #: Исходный код журнала — в репозитории; сканировать рабочий каталог данных
 #: бессмысленно, там больше нет ни одного модуля.
 ИСХОДНИКИ = [Path(__file__).resolve().parent,
              Path(__file__).resolve().parents[2] / "factory/site_engine/audit"]
-#: Базовая линия реестра, зафиксированная до начала работ.
-ОЖИДАЕМЫЙ_РЕЕСТР = 13
-ОЖИДАЕМЫЙ_PRODUCTION = 9
-
-
-def _строки_синтетики(путь: str) -> str:
-    c = sqlite3.connect(f"file:{путь}?mode=ro", uri=True)
-    c.row_factory = sqlite3.Row
-    строки = [dict(r) for r in c.execute(
-        "SELECT * FROM site WHERE site_id LIKE 'synthetic%' ORDER BY site_id")]
-    c.close()
-    return hashlib.sha256(json.dumps(строки, ensure_ascii=False, sort_keys=True)
-                          .encode()).hexdigest()
 
 
 # 23
@@ -88,100 +110,7 @@ def test_23_перерыв_ленты_не_теряет_событий(tmp_path,
     assert len(строки) >= ждали, "доставка не at-least-once"
 
 
-# 27
-def test_27_backup_и_изолированное_восстановление():
-    from factory.site_engine.audit import ledger_backup as bk
-    м = bk.создать()
-    r = bk.восстановить(Path(bk.КАТАЛОГ) / м["backup_file"])
-    assert r["restore_verdict"] == "PASS", r["mismatches"]
-    assert r["restored_snapshot"]["count"] == м["source_snapshot"]["count"]
-    assert r["restored_snapshot"]["last_seq"] == м["source_snapshot"]["last_seq"]
-    assert r["restored_snapshot"]["chain_root"] == м["source_snapshot"]["chain_root"]
-    assert {"le_no_update", "le_no_delete"} <= set(r["immutability_triggers"])
-
-
-# 28
-def test_28_n_plus_one_в_ephemeral_db_не_трогает_базовую_линию():
-    до_всего, до_prod, до_синт = _слепок_реестра()
-    p = subprocess.run(["/home/claude/work-test/.venv/bin/python",
-                        "n_plus_one_isolated.py"],
-                       cwd="/srv/site-factory/control-plane-contracts",
-                       capture_output=True, text=True, timeout=300)
-    assert p.returncode == 0, p.stdout[-2000:] + p.stderr[-2000:]
-    assert "'CANONICAL_REGISTRY_RECORD_MUTATIONS': 0" in p.stdout, p.stdout[-800:]
-    assert "'CANONICAL_TEST_RECORDS_CREATED': 0" in p.stdout, p.stdout[-800:]
-    после = _слепок_реестра()
-    assert (до_всего, до_prod, до_синт) == после, "базовая линия изменилась"
-
-
-def _слепок_реестра():
-    c = sqlite3.connect(f"file:{РЕЕСТР}?mode=ro", uri=True)
-    всего = c.execute("SELECT count(*) FROM site").fetchone()[0]
-    prod = c.execute("SELECT count(*) FROM site WHERE environment='production' "
-                     "AND lifecycle_state='ACTIVE'").fetchone()[0]
-    c.close()
-    return всего, prod, _строки_синтетики(РЕЕСТР)
-
-
-# 31
-def test_31_три_синтетические_записи_не_изменены():
-    c = sqlite3.connect(f"file:{РЕЕСТР}?mode=ro", uri=True)
-    c.row_factory = sqlite3.Row
-    строки = [dict(r) for r in c.execute(
-        "SELECT * FROM site WHERE site_id LIKE 'synthetic%' ORDER BY site_id")]
-    c.close()
-    assert len(строки) == 3
-    assert [r["site_id"] for r in строки] == [
-        "synthetic-http-b4e4f1", "synthetic-npo-1c85d0bd", "synthetic-npo-30c9237d"]
-    # Записи остаются долгом, а не мусором: их не удаляют и не «чинят».
-    # Версии агрегата (1, 3, 3) достались от прошлых задач; доказывать нужно
-    # не их значение, а то, что в этой задаче записи не менялись. Любое
-    # изменение реестра порождает событие outbox, поэтому отсутствие таких
-    # событий после генезиса журнала и есть доказательство.
-    ж = sqlite3.connect(f"file:{ЖУРНАЛ}?mode=ro", uri=True)
-    генезис = ж.execute("SELECT occurred_at FROM ledger_event "
-                        "WHERE ledger_seq=1").fetchone()[0]
-    ж.close()
-    c = sqlite3.connect(f"file:{РЕЕСТР}?mode=ro", uri=True)
-    правки = list(c.execute(
-        "SELECT event_id, site_id, event_type, occurred_at FROM outbox "
-        "WHERE site_id LIKE 'synthetic%' AND occurred_at > ?", (генезис,)))
-    версия = c.execute("SELECT max(version) FROM registry_version").fetchone()[0]
-    c.close()
-    assert not правки, правки
-    assert версия == 32, f"registry_version изменилась: {версия}"
-    # Долг зафиксирован в журнале, по одному событию на запись.
-    ж = sqlite3.connect(f"file:{ЖУРНАЛ}?mode=ro", uri=True)
-    n = ж.execute("SELECT count(*) FROM ledger_event WHERE "
-                  "event_type='technical.debt.observed.v1' AND "
-                  "resource_id LIKE 'synthetic%'").fetchone()[0]
-    ж.close()
-    assert n == 3, f"событий о долге по синтетическим записям: {n}"
-
-
-# 32, 33
-def test_32_публичные_сайты_только_читаются():
-    методы = set()
-    for домен in ДОМЕНЫ:
-        r = urllib.request.Request(f"https://{домен}/", method="GET",
-                                   headers={"User-Agent": "fleet-audit-smoke",
-                                            "Cache-Control": "no-cache"})
-        методы.add("GET")
-        последняя = None
-        for _ in range(3):
-            try:
-                with urllib.request.urlopen(r, timeout=40) as o:
-                    assert o.status == 200, f"{домен}: {o.status}"
-                    assert o.read(4096), f"{домен}: пустой ответ"
-                последняя = None
-                break
-            except (urllib.error.URLError, TimeoutError, OSError) as e:
-                последняя = e
-        if последняя is not None:
-            pytest.fail(f"{домен} недоступен после 3 попыток: {последняя}")
-    assert методы == {"GET"}, "smoke использовал не только чтение"
-
-
+# 33
 def test_33_публичных_записей_не_производилось():
     # Единственный способ этого прогона изменить публичный сайт — послать в
     # него не-GET. Ни один тест такого запроса не содержит.
@@ -212,25 +141,32 @@ def test_35_секретов_не_раскрыто():
     """Токены не должны попадать ни в журнал, ни в ленту, ни в манифесты.
 
     Проверяются два разных риска: секрет, записанный в событие, и секрет,
-    просочившийся в ленту или лог при публикации.
+    просочившийся в ленту или лог при публикации. Цели — данные ПРОГОНА: его
+    журнал и его каталог доказательств. Канонические ленту и манифесты хоста
+    просматривает та же по смыслу проверка host-контура
+    (`ledger.secrets_not_exposed`) — там, где они существуют.
+
+    Утечка ищется по живым токенам прогона, а не по выдуманному образцу:
+    обвязка выдаёт службе настоящие для неё значения, и если хоть одно из них
+    окажется в данных, найдено будет именно оно.
     """
-    import re
     опасно = re.compile(
         r"(?i)(bearer\s+[A-Za-z0-9._-]{16,}|(?:token|secret|password|api[_-]?key)"
         r"\s*[=:]\s*[\'\"]?[A-Za-z0-9._-]{16,})")
     живые_токены = [v for k, v in os.environ.items()
                     if k.startswith("AUDIT_TOKEN_") and v]
-    цели = [Path("/srv/site-factory/audit-ledger/feed/audit-events.jsonl")]
-    цели += sorted(Path("/srv/site-factory/audit-ledger/backups").glob("*.manifest.json"))
-    цели += sorted(Path("/srv/site-factory/control-plane-contracts/1.1.0").rglob("*.json"))
+    assert живые_токены, "у прогона нет токенов — искать было бы нечего"
+
+    цели = sorted(ДОКАЗАТЕЛЬСТВА.rglob("*")) if ДОКАЗАТЕЛЬСТВА.is_dir() else []
     утечки = []
     for f in цели:
-        if not f.exists():
+        if not f.is_file():
             continue
         т = f.read_text(encoding="utf-8", errors="replace")
         if опасно.search(т):
             утечки.append(f"{f.name}: образец секрета")
         утечки += [f"{f.name}: живой токен" for t in живые_токены if t in т]
+
     c = sqlite3.connect(f"file:{ЖУРНАЛ}?mode=ro", uri=True)
     c.row_factory = sqlite3.Row
     текст = json.dumps([dict(r) for r in c.execute("SELECT * FROM ledger_event")],
@@ -240,29 +176,3 @@ def test_35_секретов_не_раскрыто():
         утечки.append("ledger_event: образец секрета")
     утечки += ["ledger_event: живой токен" for t in живые_токены if t in текст]
     assert not утечки, утечки
-
-
-# 36
-def test_36_осиротевших_процессов_нет():
-    p = subprocess.run(["ps", "-eo", "pid,ppid,args"], capture_output=True,
-                       text=True, timeout=60)
-    осиротевшие = [s for s in p.stdout.splitlines()
-                   if "site_engine.api.server" in s and "--port 879" in s
-                   and "--port 8790" not in s]
-    assert not осиротевшие, осиротевшие
-
-
-# 37
-def test_37_дублирующих_слушателей_нет():
-    p = subprocess.run(["ss", "-lntp"], capture_output=True, text=True, timeout=60)
-    порты: dict[str, int] = {}
-    for s in p.stdout.splitlines()[1:]:
-        части = s.split()
-        if len(части) < 4:
-            continue
-        адрес = части[3]
-        if ":" in адрес:
-            порты[адрес] = порты.get(адрес, 0) + 1
-    дубли = {k: v for k, v in порты.items() if v > 1}
-    assert not дубли, дубли
-    assert порты.get("127.0.0.1:8790", 0) == 1, "Control API слушает не один раз"
