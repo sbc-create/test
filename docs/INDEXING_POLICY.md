@@ -161,14 +161,26 @@ seo-operator indexing-drift
 
 ## 12. Как убедиться, что поисковым системам ничего не отправлено
 
-Контур не умеет отправлять: ни в одном модуле политики нет вызова к Search
-Console, Вебмастеру, IndexNow или URL Inspection. Проверяется поиском по дереву:
+Контур не умеет отправлять. Проверяется двумя разными поисками, и важно, что
+именно ищется.
 
 ```bash
-grep -rniE "indexnow|urlnotification|searchconsole|webmaster.*submit" factory/ seo_operator/
+# 1. Отправляющие вызовы: их нет ни одного.
+grep -rniE "requests\.post|urlopen|\.post\(|submit|ping\?sitemap" \
+     seo_operator/datasources/ factory/indexing/
+
+# 2. Упоминания поисковых систем: они есть, и это нормально.
+grep -rniE "searchconsole|webmaster" seo_operator/
 ```
 
-Пустой вывод означает, что отправлять нечем.
+Первый поиск обязан быть пустым — это и есть доказательство.
+
+Второй пустым не будет и не должен: `GoogleSearchConsole` и источники Яндекса
+объявлены в `seo_operator/datasources/live.py` как источники **чтения**
+(`kind = "search_analytics"`, метрики `impressions`, `clicks`, `ctr`,
+`position`). Они умеют спрашивать статистику и не умеют ничего отправлять.
+Путать наличие имени с наличием возможности — ровно та ошибка, ради которой
+здесь две команды вместо одной.
 
 ## Известные расхождения слоёв
 
