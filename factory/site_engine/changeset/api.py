@@ -23,7 +23,9 @@ from . import policy as POL
 from . import store as S
 
 ФИЛЬТРЫ = ("status", "resource_type", "resource_id", "producer_service",
-           "actor_id", "risk_class", "site_id", "correlation_id")
+           "actor_id", "risk_class", "impact_level", "site_id",
+           "correlation_id")
+
 СЛУЖЕБНЫЕ = ("after", "limit")
 
 #: Действия и роль, которой они требуют.
@@ -221,9 +223,14 @@ def _список(соед, q: dict) -> tuple[int, Any]:
         else:
             где.append(f"{k}=?")
         знач.append(q[k])
-    if "status" in q and q["status"] not in M.СОСТОЯНИЯ:
-        return _проблема(422, "FILTER_VALUE_UNKNOWN",
-                         f"неизвестное состояние {q['status']!r}")
+    допустимые = {"status": M.СОСТОЯНИЯ, "risk_class": M.КЛАССЫ_РИСКА,
+                  "impact_level": M.УРОВНИ_ВЛИЯНИЯ}
+    for имя, значения in допустимые.items():
+        if имя in q and q[имя] not in значения:
+            return _проблема(
+                422, "FILTER_VALUE_UNKNOWN",
+                f"неизвестное значение {имя}={q[имя]!r}; "
+                f"допустимы {sorted(значения)}")
     try:
         after = int(q.get("after", 0))
         limit = min(int(q.get("limit", 100)), 1000)

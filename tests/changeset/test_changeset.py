@@ -405,6 +405,114 @@ def test_12c_qwen_может_предложить_но_не_одобрить(б�
     assert ош.value.error_code == "MODEL_ACTION_DENIED"
 
 
+# --- 12a. класс риска и второе лицо -----------------------------------------
+
+def _класс(род: str, операция: str = "update", целей: int = 1,
+           окружения=("test",), изменение=None) -> str:
+    набор = {"resource_type": род, "operation_type": операция,
+             "target_site_ids": [f"test-site-{i}" for i in range(целей)],
+             "requested_change": изменение or {"title": "x"}}
+    return P.классифицировать_риск(набор, {}, set(окружения))
+
+
+@pytest.mark.parametrize("род,ожидание", [
+    ("audit.event", M.RISK_R0),
+    ("seo.audit", M.RISK_R0),
+    ("qwen.proposal", M.RISK_R1),
+    ("content.catalog", M.RISK_R2),
+    ("template.release", M.RISK_R2),
+    ("site.identity", M.RISK_R3),
+    ("site.robots", M.RISK_R3),
+    ("site.sitemap", M.RISK_R3),
+    ("site.dns", M.RISK_R4),
+    ("site.secrets", M.RISK_R4),
+])
+def test_12a_класс_риска_по_роду_ресурса(род, ожидание):
+    assert _класс(род) == ожидание
+
+
+def test_12a_удаление_всегда_старший_класс():
+    """Необратимость решает независимо от того, что именно удаляют."""
+    for род in ("content.catalog", "audit.event", "seo.audit"):
+        assert _класс(род, операция="delete") == M.RISK_R4, род
+
+
+def test_12a_принуждение_поднимает_до_старшего():
+    """Принуждение — отказ от проверок, которые иначе остановили бы правку."""
+    assert _класс("content.catalog", изменение={"force": True}) == M.RISK_R4
+
+
+def test_12a_массовость_поднимает_но_не_опускает():
+    # Содержимое на одной витрине — R2, на пороге массовости — уже R3.
+    assert _класс("content.catalog", целей=1) == M.RISK_R2
+    assert _класс("content.catalog", целей=M.ПОРОГ_МАССОВОСТИ) == M.RISK_R3
+    # А массовая смена DNS не становится легче оттого, что она массовая.
+    assert _класс("site.dns", целей=M.ПОРОГ_МАССОВОСТИ) == M.RISK_R4
+
+
+def test_12a_неизвестный_род_не_считается_безобидным():
+    """Отсутствие сведений — не довод считать изменение безопасным."""
+    assert _класс("нечто.невиданное") == M.RISK_R3
+
+
+def test_12a_охват_и_класс_риска_это_разные_величины():
+    """Широкая правка текста и узкая правка DNS не сравнимы по одной шкале."""
+    текст = {"resource_type": "content.catalog", "operation_type": "update",
+             "target_site_ids": ["a", "b", "c"], "requested_change": {}}
+    днс = {"resource_type": "site.dns", "operation_type": "update",
+           "target_site_ids": ["a"], "requested_change": {}}
+    assert P.оценить_влияние(текст, {"production"}) == M.ВЛИЯНИЕ_ВЫСОКОЕ
+    assert P.оценить_влияние(днс, {"test"}) == M.ВЛИЯНИЕ_НИЗКОЕ
+    # При этом по последствиям DNS старше.
+    assert (M.СТАРШИНСТВО_РИСКА[P.классифицировать_риск(днс, {}, {"test"})]
+            > M.СТАРШИНСТВО_РИСКА[
+                P.классифицировать_риск(текст, {}, {"production"})])
+
+
+def test_12a_повторное_одобрение_тем_же_лицом_не_новое(бд, двигатель, адаптер):
+    """Второе «да» того же человека не добавляет ничего, кроме записи."""
+    адаптер.посеять("test-alpha-0001", "res-1", {"title": "старое"})
+    cid = создать(бд)
+    довести_до_одобрения(бд, двигатель, cid)
+    with pytest.raises(S.ChangeSetError) as ош:
+        двигатель.одобрить(cid, approver_id="human:owner", служба="human_owner",
+                           actor_type="HUMAN", expires_at=срок_через())
+    # Отказывает подписант, а не машина переходов: он читает каноническое
+    # состояние сам и подписи на уже одобренный набор не выдаёт. Это раньше и
+    # строже — до попытки перехода дело не доходит.
+    assert ош.value.error_code == "CHANGESET_STATE_INVALID", ош.value.error_code
+    # Одобрение осталось ровно одно.
+    набор = S.получить(бд, cid)
+    одобрений = [t for t in набор["transitions"] if t["action"] == "approve"]
+    assert len(одобрений) == 1, одобрений
+
+
+def test_12a_отказ_записан_и_неизменяем(бд, двигатель, адаптер):
+    """Запрещённая попытка обязана остаться в истории, а не исчезнуть."""
+    адаптер.посеять("test-alpha-0001", "res-1", {"title": "старое"})
+    cid = S.создать(бд, заявка(), producer_service="qwen",
+                    actor_id="service:qwen", actor_type="MODEL")["changeset_id"]
+    двигатель.валидировать(cid, actor_id="service:control-plane",
+                           служба="control-plane")
+    двигатель.запросить_одобрение(cid, actor_id="service:qwen", служба="qwen",
+                                  expires_at=срок_через())
+    with pytest.raises(S.ChangeSetError):
+        двигатель.одобрить(cid, approver_id="service:qwen", служба="qwen",
+                           actor_type="MODEL", expires_at=срок_через())
+    # Отказ не создал перехода — и не стёр уже записанные.
+    набор = S.получить(бд, cid)
+    assert [t["action"] for t in набор["transitions"]] == [
+        "validate", "validate_ok", "request_approval"]
+    # История доступна только на дозапись, и запрет живёт в самом хранилище:
+    # код можно обойти, подключившись к файлу напрямую.
+    with pytest.raises(sqlite3.DatabaseError):
+        бд.execute("UPDATE changeset_transition SET action='подделка' "
+                   "WHERE changeset_id=?", (cid,))
+    with pytest.raises(sqlite3.DatabaseError):
+        бд.execute("DELETE FROM changeset_transition WHERE changeset_id=?",
+                   (cid,))
+
+
 # --- 12b. сверка версии ресурса ---------------------------------------------
 
 def _версия(бд, cid: str) -> int:

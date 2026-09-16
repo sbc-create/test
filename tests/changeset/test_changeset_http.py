@@ -225,3 +225,31 @@ def test_http_нечисловой_if_match_отклоняется():
                доп={"If-Match": '"not-a-version"'})
     assert к == 422, т
     assert т["error_code"] == "EXPECTED_VERSION_INVALID", т
+
+
+def test_http_личность_из_тела_не_даёт_полномочий():
+    """Кем себя назвал отправитель — не довод. Личность берётся из токена.
+
+    Поля вроде actor_id или approved_by в теле выглядят как обычные данные и
+    потому опаснее подделанного заголовка: их легко принять к сведению.
+    """
+    з = заявка()
+    з.update(actor_id="human:owner", actor_type="HUMAN",
+             producer_service="human_owner", approved_by="human:owner",
+             authority="owner")
+    к, т = зов("POST", "/api/v1/changesets", з, служба="qwen")
+    assert к == 201, т
+    к, набор = зов("GET", f"/api/v1/changesets/{т['changeset_id']}")
+    assert набор["actor_id"] != "human:owner", набор["actor_id"]
+    assert набор["actor_type"] == "MODEL", набор["actor_type"]
+    assert набор["producer_service"] == "qwen", набор["producer_service"]
+    assert not набор.get("approval"), набор.get("approval")
+
+
+def test_http_класс_риска_фильтруется_по_перечислению():
+    """Опечатка в значении фильтра не должна выглядеть как «ничего нет»."""
+    к, т = зов("GET", "/api/v1/changesets?risk_class=HIGH")
+    assert к == 422, т
+    assert т["error_code"] == "FILTER_VALUE_UNKNOWN", т
+    к, т = зов("GET", "/api/v1/changesets?risk_class=R2")
+    assert к == 200, т

@@ -76,6 +76,8 @@ class Engine:
                   "expected_resource_fingerprint":
                       план["expected_resource_fingerprint"],
                   "risk_class": план["risk_class"],
+                "impact_level": план["impact_level"],
+                  "impact_level": план["impact_level"],
                   "verification_plan": план["verification_plan"],
                   "rollback_plan": план["rollback_plan"],
                   "dry_run_result": {**сухо, "per_site_plan": план["per_site_plan"],

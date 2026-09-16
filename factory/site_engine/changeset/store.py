@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS changeset (
   expected_resource_fingerprint TEXT,
   requested_change  TEXT NOT NULL,
   risk_class        TEXT,
+  impact_level      TEXT,
   policy_version    TEXT,
   plan_hash         TEXT,
   expires_at        TEXT,
@@ -154,6 +155,24 @@ BEGIN
 END;
 
 CREATE TABLE IF NOT EXISTS cs_guard (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+
+-- История переходов доступна только на дозапись. Запрет живёт в хранилище, а
+-- не в вызывающем коде: код можно обойти, подключившись к файлу напрямую, и
+-- тогда исправленная задним числом история ничем не отличалась бы от
+-- настоящей. Исправление вносится НОВЫМ переходом, а не правкой старого.
+CREATE TRIGGER IF NOT EXISTS cs_transition_no_update
+BEFORE UPDATE ON changeset_transition
+FOR EACH ROW
+BEGIN
+  SELECT RAISE(ABORT, 'история переходов не переписывается: вносите исправление новой записью');
+END;
+
+CREATE TRIGGER IF NOT EXISTS cs_transition_no_delete
+BEFORE DELETE ON changeset_transition
+FOR EACH ROW
+BEGIN
+  SELECT RAISE(ABORT, 'история переходов не удаляется');
+END;
 """
 
 
@@ -180,6 +199,28 @@ _ЗАМОК_СХЕМЫ = threading.Lock()
 #: запись в несуществующий столбец падает уже на рабочем контуре.
 ДОРАЩИВАНИЕ: tuple[tuple[str, str, str], ...] = (
     ("changeset_transition", "request_id", "TEXT"),
+    ("changeset", "impact_level", "TEXT"),
+)
+
+
+#: Сторожевые триггеры, появившиеся после первой версии схемы. База, созданная
+#: раньше, их не получит от CREATE TRIGGER IF NOT EXISTS в общем скрипте —
+#: скрипт для неё не выполняется вовсе.
+СТОРОЖА = (
+    ("cs_transition_no_update", """
+CREATE TRIGGER cs_transition_no_update
+BEFORE UPDATE ON changeset_transition
+FOR EACH ROW
+BEGIN
+  SELECT RAISE(ABORT, 'история переходов не переписывается: вносите исправление новой записью');
+END"""),
+    ("cs_transition_no_delete", """
+CREATE TRIGGER cs_transition_no_delete
+BEFORE DELETE ON changeset_transition
+FOR EACH ROW
+BEGIN
+  SELECT RAISE(ABORT, 'история переходов не удаляется');
+END"""),
 )
 
 
@@ -188,6 +229,14 @@ def _дорастить(с: sqlite3.Connection) -> None:
         есть = {r[1] for r in с.execute(f"PRAGMA table_info({таблица})")}
         if столбец and столбец not in есть:
             с.execute(f"ALTER TABLE {таблица} ADD COLUMN {столбец} {тип}")
+    # Наличие проверяется чтением: CREATE TRIGGER берёт исключительную
+    # блокировку, а выполнять его при каждом открытии значило бы вернуть
+    # ровно ту давку, ради устранения которой схема и применяется однажды.
+    имена = {r[0] for r in с.execute(
+        "SELECT name FROM sqlite_master WHERE type='trigger'")}
+    for имя, ddl in СТОРОЖА:
+        if имя not in имена:
+            с.execute(ddl)
 
 
 def _обеспечить_схему(с: sqlite3.Connection) -> None:
