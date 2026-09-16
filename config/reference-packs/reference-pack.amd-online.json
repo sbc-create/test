@@ -4,9 +4,9 @@
   "url": "https://amd.online/",
   "provenance": "Change Request v2.0 от 22.08.2026, раздел 3; запись inventory/reference-sources.yaml",
   "access": {
-    "status": "blocked_policy",
-    "checked_at": "2026-09-04T00:00:00Z",
-    "detail": "Отказ наступает до сети: guard профиля UNATTENDED_SAFE отвечает «хост не входит в переданные контракты» на попытку обращения. Ранее (D35, 22.08.2026) тот же референс отклонялся прокси средой с net::ERR_TUNNEL_CONNECTION_FAILED. Инструмент измерения готов и запускается без правки кода, как только доступ откроют."
+    "status": "reachable",
+    "checked_at": "2026-09-16T16:32:56Z",
+    "detail": "REF-EGRESS-01 снят. Хост внесён в inventory/network-allowlist.yaml заданием TEMPLATE-ZONA-INPUT-MEASURE-02, после чего доступность проверена пятью последовательными запросами: 5/5 HTTP 200, редиректов нет, проверка TLS успешна, адрес 186.2.165.21 стабилен. measurement_plan отработал на пяти поверхностях в трёх ширинах без ошибок. Доказательства: artifacts/reference-pack-amd-online-01/availability.json и .../capture/*/measurements.json."
   },
   "measurement_plan": {
     "tool": "node tests/tools/measure_reference.js <url> artifacts/reference/<ref> 390,768,1024,1440,1920",
@@ -74,21 +74,21 @@
     },
     {
       "parameter": "ширина контента",
-      "value": "~1272 px",
-      "source": "CR v2.0 §3",
-      "verified": "unverified"
+      "value": "1438 px на ширине 1440",
+      "source": "замер measurement_plan 2026-09-16, artifacts/reference-pack-amd-online-01/capture/home/measurements.json",
+      "verified": "measured_by_factory"
     },
     {
       "parameter": "боковые поля",
-      "value": "~40 px",
-      "source": "CR v2.0 §3",
-      "verified": "unverified"
+      "value": "1 px на 1440, 6 px на 390",
+      "source": "замер measurement_plan 2026-09-16, artifacts/reference-pack-amd-online-01/capture/home/measurements.json",
+      "verified": "measured_by_factory"
     },
     {
       "parameter": "базовый кегль",
       "value": "14 px, плотная типографика",
-      "source": "CR v2.0 §3",
-      "verified": "unverified"
+      "source": "замер measurement_plan 2026-09-16, artifacts/reference-pack-amd-online-01/capture/home/measurements.json",
+      "verified": "measured_by_factory"
     },
     {
       "parameter": "основа",
@@ -98,9 +98,9 @@
     },
     {
       "parameter": "шапка",
-      "value": "горизонтальная",
-      "source": "CR v2.0 §3",
-      "verified": "unverified"
+      "value": "горизонтальная, высота 90 px на 1440 и 126 px на 390, не липкая",
+      "source": "замер measurement_plan 2026-09-16, artifacts/reference-pack-amd-online-01/capture/home/measurements.json",
+      "verified": "measured_by_factory"
     },
     {
       "parameter": "секции главной",

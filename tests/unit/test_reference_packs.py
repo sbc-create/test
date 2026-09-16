@@ -17,6 +17,7 @@
 from __future__ import annotations
 
 import json
+import re
 
 import pytest
 import yaml
@@ -56,6 +57,18 @@ def _pack(name: str):
 
 def _yaml(name: str, file: str) -> dict:
     return yaml.safe_load((_pack(name) / file).read_text(encoding="utf-8"))
+
+
+def _access_status(name: str) -> str:
+    """Состояние доступа к референсу по плану измерения.
+
+    Именно оно решает, что пакету положено утверждать: пока доступа нет,
+    заполненные токены запрещены; как только он появился, запрещена пустота.
+    """
+    plan = PATHS.root / "config" / "reference-packs" / f"reference-pack.{name}.json"
+    if not plan.exists():
+        return "unknown"
+    return (json.loads(plan.read_text(encoding="utf-8")).get("access") or {}).get("status", "unknown")
 
 
 @pytest.mark.parametrize("name", PACKS)
@@ -123,23 +136,49 @@ class TestDraftClaimsNothingExtra:
             assert not pattern.search(text), (
                 f"{name}/{path.name}: версия объявлена как latest")
 
-    def test_visual_tokens_stay_empty_while_reference_is_unreachable(self, name):
-        tokens = _yaml(name, "VISUAL_TOKENS.yaml")
-        assert tokens["status"] == "blocked", f"{name}: токены объявлены измеренными"
-        assert not tokens["tokens"], (
-            f"{name}: токены заполнены, хотя референс недоступен — "
-            "правдоподобное число в поле замера неотличимо от замера")
+    def test_visual_tokens_match_reference_access(self, name):
+        """Токены заполнены тогда и только тогда, когда референс доступен.
 
-    def test_screenshot_index_says_blocked_not_pass(self, name):
+        Прежняя редакция утверждала пустоту безусловно — тогда оба референса
+        были закрыты профилем, и это совпадало со смыслом. После открытия
+        доступа такая проверка начала запрещать сам замер, то есть защищать
+        форму вместо смысла. Условие стало двусторонним: пока доступа нет,
+        правдоподобные числа запрещены; как только он появился, пустота
+        перестаёт быть честной и требует замера с происхождением.
+        """
+        tokens = _yaml(name, "VISUAL_TOKENS.yaml")
+        if _access_status(name) != "reachable":
+            assert tokens["status"] == "blocked", f"{name}: токены объявлены измеренными"
+            assert not tokens["tokens"], (
+                f"{name}: токены заполнены, хотя референс недоступен — "
+                "правдоподобное число в поле замера неотличимо от замера")
+            return
+        assert tokens["status"] == "measured", (
+            f"{name}: референс доступен, а токены объявлены заблокированными")
+        assert tokens["tokens"], f"{name}: референс доступен, а замеров нет"
+        for т in tokens["tokens"]:
+            assert т.get("evidence"), f"{name}: токен {т.get('name')} без доказательства"
+            assert т.get("status") == "measured_by_factory", (
+                f"{name}: токен {т.get('name')} без статуса замера")
+
+    def test_screenshot_index_matches_reference_access(self, name):
+        """Индекс снимков говорит правду о том, снято ли что-нибудь."""
         text = (_pack(name) / "SCREENSHOT_INDEX.md").read_text(encoding="utf-8")
-        assert "BLOCKED" in text, f"{name}: индекс снимков не отмечает недоступность"
-        # Проверяется строка таблицы, а не слово в тексте: фраза «ни одна
-        # строка не помечена PASS» сама содержит PASS, и наивный поиск
-        # подстроки падал на объяснении запрета.
         rows = [line for line in text.splitlines() if line.strip().startswith("|")]
-        marked = [line for line in rows if "PASS" in line]
-        assert not marked, (
-            f"{name}: строка индекса помечена PASS, хотя снимков нет: {marked}")
+        if _access_status(name) != "reachable":
+            assert "BLOCKED" in text, f"{name}: индекс снимков не отмечает недоступность"
+            # Проверяется строка таблицы, а не слово в тексте: фраза «ни одна
+            # строка не помечена PASS» сама содержит PASS, и наивный поиск
+            # подстроки падал на объяснении запрета.
+            marked = [line for line in rows if "PASS" in line]
+            assert not marked, (
+                f"{name}: строка индекса помечена PASS, хотя снимков нет: {marked}")
+            return
+        # Доступен — значит снимки перечислены с дайджестами, иначе независимый
+        # проверяющий не сможет сверить ни один из них.
+        digests = [line for line in rows if re.search(r"[0-9a-f]{64}", line)]
+        assert len(digests) >= 9, (
+            f"{name}: референс доступен, а строк с дайджестами всего {len(digests)}")
 
     def test_fixtures_are_deterministic_and_synthetic(self, name):
         for fixture in ("home.normal", "title.normal", "states"):

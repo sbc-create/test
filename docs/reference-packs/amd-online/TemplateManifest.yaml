@@ -1,7 +1,13 @@
-# Манифест шаблона Animedia (amd.online) — архитектурный черновик.
+# Манифест шаблона Animedia (amd.online).
 #
-# Черновик означает ровно одно: ни одна величина здесь не измерена на
-# референсе, потому что референс недоступен. Структура — наша.
+# Черновик снят частично. Геометрия и типографика теперь измерены на самом
+# референсе (VISUAL_TOKENS.yaml, 357 замеров на пяти поверхностях и трёх
+# ширинах). Структура маршрутов по-прежнему наша: она описана своими словами
+# и с референса не копировалась.
+#
+# Почему статус всё ещё draft — см. ACCEPTANCE.md: не заполнены диапазоны
+# совместимости, и в репозитории нет утверждённого алгоритма визуального
+# сравнения. Ни то, ни другое замером не закрывается.
 
 schemaVersion: 1
 templateId: animedia-anime-portal
@@ -15,10 +21,19 @@ indexingEnabled: false
 reference:
   url: https://amd.online/
   provenance: Change Request v2.0 от 22.08.2026, раздел 3
-  access: blocked_policy
-  blocker: REF-EGRESS-01
+  access: reachable
+  blocker: null
+  accessCheckedAt: "2026-09-16"
+  accessEvidence: artifacts/reference-pack-amd-online-01/availability.json
   observations: 8
+  observationsMeasured: 4
+  measuredTokens: 357
+  measurementEvidence: docs/reference-packs/amd-online/VISUAL_TOKENS.yaml
 
+# Диапазоны совместимости остаются pending намеренно: это решение об
+# архитектуре, а не величина, которую можно снять с чужой страницы. Замер их
+# не закрывает, и подставить сюда правдоподобные значения означало бы ровно ту
+# подмену, против которой написан весь пакет.
 compatibility:
   status: pending
   onIncompatibleContract: fail_build
