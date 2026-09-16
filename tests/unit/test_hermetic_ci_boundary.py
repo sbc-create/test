@@ -112,22 +112,45 @@ def test_набор_не_ходит_на_канонические_порты(ф�
         + "\n".join(нарушения))
 
 
+def _окружение(узел: ast.AST) -> bool:
+    """Это `…environ`? Имя модуля не важно: `os.environ` и `_os.environ` равны."""
+    return isinstance(узел, ast.Attribute) and узел.attr == "environ"
+
+
 def _правит_окружение_на_уровне_модуля(дерево: ast.Module) -> list[int]:
-    """Строки, где `os.environ` правится в теле модуля, а не внутри функции."""
-    строки = []
-    for узел in дерево.body:
+    """Строки, где `os.environ` ПИШЕТСЯ в теле модуля, а не внутри функции.
+
+    Чтение не считается правкой: `значение = os.environ["X"]` на уровне модуля
+    безвредно и встречается законно. Поэтому подписка учитывается только как
+    ЦЕЛЬ присваивания или удаления, а не везде, где она встретилась.
+    """
+    строки: list[int] = []
+
+    def цели(узел: ast.AST) -> list[ast.expr]:
+        if isinstance(узел, ast.Assign):
+            return list(узел.targets)
+        if isinstance(узел, ast.AugAssign | ast.AnnAssign):
+            return [узел.target]
+        if isinstance(узел, ast.Delete):
+            return list(узел.targets)
+        return []
+
+    # Только операторы самого модуля. Правка внутри функции выполняется тогда,
+    # когда её позовут, — и снимать её обязан тот, кто зовёт; правка в теле
+    # модуля выполняется при импорте, то есть на этапе сбора, и снять её после
+    # уже некому.
+    тело = [у for у in дерево.body
+            if not isinstance(у, ast.FunctionDef | ast.AsyncFunctionDef | ast.ClassDef)]
+    for узел in тело:
         for внутри in ast.walk(узел):
             if (isinstance(внутри, ast.Call)
                     and isinstance(внутри.func, ast.Attribute)
-                    and внутри.func.attr in ("update", "setdefault", "pop")
-                    and isinstance(внутри.func.value, ast.Attribute)
-                    and внутри.func.value.attr == "environ"):
+                    and внутри.func.attr in ("update", "setdefault", "pop", "clear")
+                    and _окружение(внутри.func.value)):
                 строки.append(внутри.lineno)
-            if isinstance(внутри, ast.Subscript) and isinstance(
-                    внутри.value, ast.Attribute) and внутри.value.attr == "environ":
-                родитель = узел
-                if isinstance(родитель, ast.Assign | ast.AugAssign | ast.AnnAssign):
-                    строки.append(внутри.lineno)
+            for цель in цели(внутри):
+                if isinstance(цель, ast.Subscript) and _окружение(цель.value):
+                    строки.append(цель.lineno)
     return sorted(set(строки))
 
 
