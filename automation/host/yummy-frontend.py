@@ -66,6 +66,21 @@ def _манифест() -> dict:
 #: canonical-редирект «/anime/<слаг>--<uuid>» → «/anime/<слаг>» превращался в
 #: 308 без адреса перехода и с типом application/octet-stream. Снаружи это
 #: выглядело как «карточки строят нерабочие адреса», хотя ломал их посредник.
+#: Заголовки, которые не пересылаются наверх НИ В КАКОМ запросе.
+ВЫРЕЗАЕМЫЕ_ОБЩИЕ = frozenset({"host", "accept-encoding", "connection"})
+#: Дополнительно вырезается у ВНУТРЕННЕГО запроса за оболочкой витрины.
+#:
+#: Браузер предзагружает маршруты Next.js с заголовком `RSC: 1`, прося не
+#: разметку, а flight-полезную нагрузку. Витрина же ходит наверх за обычным
+#: HTML, чтобы собрать из него свою страницу. Пересылая `RSC` дальше, она
+#: получала не разметку, разбор оболочки срывался, и запрос проваливался в
+#: общее проксирование: `/top` с `RSC: 1` отвечал 404, а в консоли каждой
+#: страницы висела ошибка предзагрузки. Клиентский переход на «Топ» ломался.
+ВЫРЕЗАЕМЫЕ_ВНУТРИ = ВЫРЕЗАЕМЫЕ_ОБЩИЕ | {
+    "rsc", "next-router-prefetch", "next-router-state-tree", "next-url",
+    "accept", "range", "if-none-match", "if-modified-since",
+}
+
 ПЕРЕНОСИМЫЕ = ("location", "cache-control", "content-language", "vary",
                "last-modified", "etag", "content-disposition", "link",
                "x-nextjs-cache", "x-nextjs-prerender")
@@ -815,9 +830,13 @@ class Обработчик(BaseHTTPRequestHandler):
         try:
             соед = http.client.HTTPConnection(хост, int(порт or 80), timeout=ТАЙМАУТ_ВЕРХА)
             заг = {k: v for k, v in self.headers.items()
-                   if k.lower() not in ("host", "accept-encoding", "connection")}
+                   if k.lower() not in ВЫРЕЗАЕМЫЕ_ВНУТРИ}
             заг["Host"] = self.headers.get("Host", хост)
             заг["Accept-Encoding"] = "identity"
+            # Внутренний запрос идёт за разметкой, а не за тем, что попросил
+            # браузер. Без явного Accept клиентское согласование содержимого
+            # решало бы, что получит витрина для сборки собственной страницы.
+            заг["Accept"] = "text/html,*/*;q=0.8"
             соед.request("GET", адрес, headers=заг)
             о = соед.getresponse()
             итог = (о.read(), о.getheader("Content-Type", "application/octet-stream"), о.status)
