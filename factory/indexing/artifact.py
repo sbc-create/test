@@ -17,7 +17,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from factory.indexing.policy import IndexingPolicy, compile_policy
+from factory.indexing.policy import FLEET_REGISTRY, IndexingPolicy, compile_policy
 
 ARTIFACT_NAME = "indexing-policy.json"
 ARTIFACT_SCHEMA = "indexing-policy/1.0"
@@ -31,16 +31,24 @@ def build(
     profiles_dir: Path,
     *,
     environment: str = "production",
+    fleet_path: Path | None = None,
     expected_domains: set[str] | None = None,
     source_commit: str | None = None,
 ) -> dict:
     """Собрать артефакт. Любая неполнота входа — исключение, а не пустая матрица."""
+    реестр = fleet_path if fleet_path is not None else profiles_dir.parent / FLEET_REGISTRY.name
     policy = compile_policy(
-        profiles_dir, environment=environment, expected_domains=expected_domains
+        profiles_dir,
+        environment=environment,
+        fleet_path=реестр,
+        expected_domains=expected_domains,
     )
     профили = {}
     for путь in sorted(profiles_dir.glob("*.json")):
         профили[путь.name] = _sha256(путь.read_bytes())
+    # Реестр флота — такой же вход, как профили: он задаёт, какие домены вообще
+    # обслуживаются. Без его отпечатка манифест не заметил бы появления сайта.
+    профили[реестр.name] = _sha256(реестр.read_bytes())
 
     домены = {
         домен: {

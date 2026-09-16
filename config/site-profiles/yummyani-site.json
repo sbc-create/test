@@ -212,8 +212,7 @@
     "indexing_enabled": true,
     "canonical_host": "yummyani.site",
     "editorial_profile": "yummyani-site-editorial",
-    "indexing_expected": "open",
-    "indexing_reason": "решение владельца 2026-09-15, коммит 1490271: открыт только этот домен"
+    "indexing_reason": "решение владельца 2026-09-15: открыт только этот домен, по нему уже идёт поисковый трафик"
   },
   "analytics_profile": {
     "enabled": true,
@@ -244,9 +243,5 @@
     "monitoring-audit": "site-factory/platform"
   },
   "health_endpoint": "/healthz",
-  "coverage_endpoint": "/api/v1/coverage",
-  "environment": "production",
-  "profile_family": "yummy",
-  "profile_version": "1.0",
-  "canonical_domain": "yummyani.site"
+  "coverage_endpoint": "/api/v1/coverage"
 }

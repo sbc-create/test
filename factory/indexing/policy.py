@@ -4,19 +4,34 @@
 непрослеживаемом файле профиля на хосте и в compose-файле ветки, которой нет в
 `main`. Совпадали они случайно, и обычный deploy закрывал живую витрину.
 
-Здесь решение одно: версионируемый профиль сайта. Всё остальное —
-``X-Robots-Tag``, мета-тег, ``robots.txt``, доступность карты сайта, ворота
-релиза и сверка дрейфа — производится из него, а не принимается заново.
+Здесь решение одно, и — что важнее — оно не заводит в репозитории новых полей.
+Всё нужное уже было:
+
+* **перечень обслуживаемых доменов** — ``config/FLEET-REGISTRY.json``;
+* **решение по сайту** — ``seo_profile.indexing_enabled`` в его профиле;
+* **собственный домен** — ``seo_profile.canonical_host`` там же.
+
+Добавлено ровно одно поле: ``seo_profile.indexing_reason``. Решение без
+основания нельзя проверить на обзоре, а открытие домена — это то изменение,
+которое обязано быть объяснено.
+
+Первая редакция модуля требовала своих полей (``canonical_domain``,
+``environment``, ``profile_family``, ``profile_version``) и своего каталога
+профилей. Это было ошибкой дважды: схема ``site-profile.schema.json`` запрещает
+лишние поля верхнего уровня — то есть ворота схемы падали, — и собственный
+``canonical_domain`` рядом с существующим ``canonical_host`` создавал ровно ту
+вторую запись истины, ради устранения которой всё и затевалось.
 
 Правила, которые модуль обязан удержать, и причина каждого.
 
 1. **Неизвестный хост закрыт.** Разрешение выдаётся поимённо. Умолчание
    «наверное, можно» однажды открыло бы домен, которого никто не проверял.
-2. **Новый домен закрыт.** Профиль создаётся со значением ``closed``; открытие —
-   отдельное изменение именно его профиля.
-3. **Семейство не открывает.** Ни ``profile_family``, ни любое групповое
-   значение не может открыть домен: иначе добавление сайта в семейство молча
-   открывало бы его.
+2. **Сайт флота без профиля закрыт.** Не ошибка сборки, а явное решение с
+   основанием «профиля нет». Если такой домен сейчас открыт, разницу поймают
+   ворота релиза и потребуют её назвать.
+3. **Семейство не открывает.** Ни ``site_type``, ни любое групповое значение
+   не может открыть домен: иначе добавление сайта в семейство молча открывало
+   бы его.
 4. **Окружение не подменяет решение.** Переменная среды может только сузить
    разрешение. Открыть то, что закрыто профилем, она не может — ровно этот
    путь и привёл к тому, что глобальный флаг открывал всё семейство сразу.
@@ -24,7 +39,9 @@
    чего ещё нет.
 6. **Дубликат блокирует сборку.** Два профиля на один домен — два разных
    решения, и молча выбирать из них нельзя.
-7. **Окружения не смешиваются.** Production не читает staging и demo.
+7. **Production — это флот.** Профиль, которого нет в реестре флота, в
+   production-политику не попадает: так демонстрационный ``demo-books`` не
+   может повлиять на боевые домены.
 8. **Домен нормализуется до сравнения.** Регистр, завершающая точка и
    ``www`` — это тот же домен; расхождение в написании не должно создавать
    второй, никем не решённый.
@@ -41,22 +58,26 @@ from pathlib import Path
 OPEN = "open"
 CLOSED = "closed"
 
-#: Поля, без которых профиль не является решением.
-REQUIRED_FIELDS = (
-    "schema_version",
-    "site_id",
-    "canonical_domain",
-    "environment",
-    "profile_family",
-    "profile_version",
-)
-REQUIRED_SEO_FIELDS = ("indexing_expected", "indexing_reason")
+#: Реестр обслуживаемых сайтов — перечень доменов production.
+FLEET_REGISTRY = Path("config") / "FLEET-REGISTRY.json"
 
-ALLOWED_EXPECTED = (OPEN, CLOSED)
-ALLOWED_ENVIRONMENTS = ("production", "staging", "demo")
+#: Поля профиля, без которых решение не прочитать. Все они есть в схеме
+#: ``schemas/site-engine/site-profile.schema.json`` и существовали до этого
+#: модуля.
+REQUIRED_FIELDS = ("schema_version", "site_id", "site_type", "domains", "seo_profile")
+
+#: ``indexing_enabled`` — само решение, ``canonical_host`` — собственный домен
+#: сайта, ``indexing_reason`` — основание решения.
+REQUIRED_SEO_FIELDS = ("indexing_enabled", "canonical_host", "indexing_reason")
+
+ALLOWED_ENVIRONMENTS = ("production", "demo")
 
 _WILDCARD = re.compile(r"[*?]")
 _DOMAIN_OK = re.compile(r"^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$")
+
+#: Основание для сайта флота, у которого профиля нет. Решения об открытии не
+#: принимали — значит его нет, и это записывается явно.
+NO_PROFILE_REASON = "профиля сайта нет: решения об открытии не принимали"
 
 
 class PolicyError(RuntimeError):
@@ -129,6 +150,39 @@ class IndexingPolicy:
         }
 
 
+def load_fleet(path: Path) -> dict[str, str]:
+    """Прочитать реестр флота: ``site_id`` → домен.
+
+    Реестр — перечень того, что вообще обслуживается. Без него нельзя отличить
+    «домена нет в политике, потому что решения нет» от «домена нет, потому что
+    про него забыли».
+    """
+    if not path.is_file():
+        raise PolicyError(f"реестр флота не найден: {path}")
+    текст = path.read_text(encoding="utf-8")
+    if not текст.strip():
+        raise PolicyError(f"{path.name}: реестр флота пуст")
+    try:
+        данные = json.loads(текст)
+    except ValueError as ошибка:
+        raise PolicyError(f"{path.name}: реестр не разбирается — {ошибка}") from ошибка
+    записи = данные.get("fleet")
+    if not isinstance(записи, list) or not записи:
+        raise PolicyError(f"{path.name}: в реестре нет списка fleet")
+    флот: dict[str, str] = {}
+    for запись in записи:
+        site_id = запись.get("site_id")
+        домен = normalize_domain(str(запись.get("domain") or ""))
+        if not site_id or not домен:
+            raise PolicyError(f"{path.name}: запись без site_id или domain: {запись!r}")
+        if not _DOMAIN_OK.match(домен):
+            raise PolicyError(f"{path.name}: домен {домен!r} не похож на имя хоста")
+        if site_id in флот:
+            raise PolicyError(f"{path.name}: сайт {site_id} объявлен дважды")
+        флот[site_id] = домен
+    return флот
+
+
 def _validate(profile: dict, path: Path) -> None:
     for поле in REQUIRED_FIELDS:
         if поле not in profile or profile[поле] in (None, ""):
@@ -138,16 +192,13 @@ def _validate(profile: dict, path: Path) -> None:
         raise PolicyError(f"{path.name}: нет блока seo_profile")
     for поле in REQUIRED_SEO_FIELDS:
         if поле not in seo or seo[поле] in (None, ""):
+            if поле == "indexing_enabled" and seo.get(поле) is False:
+                continue  # False — полноценное решение, а не пустое поле
             raise PolicyError(f"{path.name}: нет обязательного поля seo_profile.{поле}")
-    if seo["indexing_expected"] not in ALLOWED_EXPECTED:
+    if not isinstance(seo["indexing_enabled"], bool):
         raise PolicyError(
-            f"{path.name}: indexing_expected={seo['indexing_expected']!r}, "
-            f"допустимо только {ALLOWED_EXPECTED}"
-        )
-    if profile["environment"] not in ALLOWED_ENVIRONMENTS:
-        raise PolicyError(
-            f"{path.name}: environment={profile['environment']!r}, "
-            f"допустимо только {ALLOWED_ENVIRONMENTS}"
+            f"{path.name}: seo_profile.indexing_enabled="
+            f"{seo['indexing_enabled']!r}, допустимо только true или false"
         )
     домены = profile.get("domains")
     if not isinstance(домены, list) or not домены:
@@ -162,8 +213,8 @@ def _validate(profile: dict, path: Path) -> None:
             raise PolicyError(f"{path.name}: домен {домен!r} не похож на имя хоста")
 
 
-def load_profiles(directory: Path, *, environment: str = "production") -> list[dict]:
-    """Прочитать профили нужного окружения. Повреждённый файл останавливает всё."""
+def load_profiles(directory: Path) -> list[dict]:
+    """Прочитать все профили каталога. Повреждённый файл останавливает всё."""
     if not directory.is_dir():
         raise PolicyError(f"каталог профилей не найден: {directory}")
     профили = []
@@ -176,41 +227,91 @@ def load_profiles(directory: Path, *, environment: str = "production") -> list[d
         except ValueError as ошибка:
             raise PolicyError(f"{путь.name}: профиль не разбирается — {ошибка}") from ошибка
         _validate(профиль, путь)
-        if профиль["environment"] != environment:
-            # Правило 7: production не читает staging и demo. Профиль не
-            # ошибочен — он просто не про это окружение.
-            continue
         профили.append(профиль)
     if not профили:
-        raise PolicyError(
-            f"в {directory} нет ни одного профиля окружения {environment!r}"
-        )
+        raise PolicyError(f"в {directory} нет ни одного профиля")
     return профили
+
+
+def _decision_from_profile(
+    профиль: dict, *, environment: str, домен: str, фактический_домен: str
+) -> DomainDecision:
+    seo = профиль["seo_profile"]
+    return DomainDecision(
+        domain=домен,
+        site_id=профиль["site_id"],
+        expected=OPEN if seo["indexing_enabled"] else CLOSED,
+        reason=seo["indexing_reason"],
+        environment=environment,
+        family=профиль["site_type"],
+        profile_version=str(профиль["schema_version"]),
+        canonical_domain=фактический_домен,
+        aliases=(f"www.{домен}",),
+    )
 
 
 def compile_policy(
     directory: Path,
     *,
     environment: str = "production",
+    fleet_path: Path | None = None,
     expected_domains: set[str] | None = None,
 ) -> IndexingPolicy:
     """Собрать политику. Любое сомнение — исключение, а не тихое умолчание.
 
-    ``expected_domains`` — инвентарь доменов, которые обслуживает production.
-    Известный домен без профиля останавливает сборку: это правило 1 из задания,
-    и сработать оно обязано до того, как что-нибудь изменится.
+    ``directory`` — каталог профилей сайтов. ``fleet_path`` — реестр флота;
+    по умолчанию ``config/FLEET-REGISTRY.json`` рядом с каталогом профилей.
+
+    Для ``environment="production"`` перечень доменов задаёт реестр флота:
+    профиль, которого в реестре нет, в боевую политику не попадает (правило 7),
+    а сайт реестра без профиля получает явное закрытое решение (правило 2).
     """
+    if environment not in ALLOWED_ENVIRONMENTS:
+        raise PolicyError(
+            f"environment={environment!r}, допустимо только {ALLOWED_ENVIRONMENTS}"
+        )
+    если_рядом = directory.parent / FLEET_REGISTRY.name
+    флот = load_fleet(fleet_path if fleet_path is not None else если_рядом)
+
     policy = IndexingPolicy(source_environment=environment)
     видели: dict[str, str] = {}
+    профили = {p["site_id"]: p for p in load_profiles(directory)}
 
-    for профиль in load_profiles(directory, environment=environment):
-        site_id = профиль["site_id"]
-        canonical = normalize_domain(профиль["canonical_domain"])
+    # Production — это ровно флот (правило 7). Всё остальное окружение видит
+    # только те профили, которых во флоте нет: так демонстрационный сайт не
+    # может повлиять на боевые домены, а боевой — утечь в демонстрацию.
+    участники = sorted(флот) if environment == "production" else sorted(set(профили) - set(флот))
+
+    for site_id in участники:
+        профиль = профили.get(site_id)
+        if профиль is None:
+            # Правило 2: сайт обслуживается, решения о нём не принимали.
+            домен = флот[site_id]
+            policy.decisions[домен] = DomainDecision(
+                domain=домен,
+                site_id=site_id,
+                expected=CLOSED,
+                reason=NO_PROFILE_REASON,
+                environment=environment,
+                family="",
+                profile_version="",
+                canonical_domain=домен,
+                aliases=(f"www.{домен}",),
+            )
+            видели[домен] = site_id
+            continue
+
         seo = профиль["seo_profile"]
+        canonical = normalize_domain(seo["canonical_host"])
         домены = [normalize_domain(d) for d in профиль["domains"]]
         if canonical not in домены:
             raise PolicyError(
-                f"{site_id}: canonical_domain={canonical} отсутствует в domains={домены}"
+                f"{site_id}: canonical_host={canonical} отсутствует в domains={домены}"
+            )
+        if site_id in флот and флот[site_id] not in домены:
+            raise PolicyError(
+                f"{site_id}: реестр флота обслуживает {флот[site_id]}, "
+                f"а профиль знает только {домены}"
             )
         for домен in домены:
             if домен in видели:
@@ -219,24 +320,16 @@ def compile_policy(
                     "Два профиля — два решения, выбирать из них молча нельзя"
                 )
             видели[домен] = site_id
-            policy.decisions[домен] = DomainDecision(
-                domain=домен,
-                site_id=site_id,
-                expected=seo["indexing_expected"],
-                reason=seo["indexing_reason"],
-                environment=профиль["environment"],
-                family=профиль["profile_family"],
-                profile_version=str(профиль["profile_version"]),
-                canonical_domain=canonical,
-                aliases=(f"www.{домен}",),
+            policy.decisions[домен] = _decision_from_profile(
+                профиль, environment=environment, домен=домен, фактический_домен=canonical
             )
 
     if expected_domains:
-        нет_профиля = {normalize_domain(d) for d in expected_domains} - set(policy.decisions)
-        if нет_профиля:
+        нет_решения = {normalize_domain(d) for d in expected_domains} - set(policy.decisions)
+        if нет_решения:
             raise PolicyError(
-                "известные production-домены без профиля: "
-                + ", ".join(sorted(нет_профиля))
+                "обслуживаемые домены без решения: "
+                + ", ".join(sorted(нет_решения))
                 + ". Deploy остановлен до изменений"
             )
     return policy

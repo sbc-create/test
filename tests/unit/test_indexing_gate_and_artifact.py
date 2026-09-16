@@ -19,6 +19,22 @@ from factory.indexing.gate import check, matrix_from_live, require
 
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 ПРОФИЛИ = КОРЕНЬ / "config" / "site-profiles"
+РЕЕСТР = КОРЕНЬ / "config" / "FLEET-REGISTRY.json"
+
+
+def песочница(tmp_path: Path) -> Path:
+    """Копия входа политики целиком: профили и реестр флота рядом с ними.
+
+    Копировать только профили нельзя: реестр — такой же вход, и без него
+    песочница проверяла бы не то, что собирается на самом деле.
+    """
+    корень = tmp_path / "config"
+    каталог = корень / "site-profiles"
+    каталог.mkdir(parents=True, exist_ok=True)
+    for путь in ПРОФИЛИ.glob("*.json"):
+        (каталог / путь.name).write_text(путь.read_text(encoding="utf-8"), encoding="utf-8")
+    (корень / РЕЕСТР.name).write_text(РЕЕСТР.read_text(encoding="utf-8"), encoding="utf-8")
+    return каталог
 
 ОТКРЫТ = "yummyani.site"
 ЗАКРЫТЫЕ = {
@@ -42,29 +58,44 @@ def test_артефакт_собирается_детерминированно(
     assert первый["manifest"]["policy_sha256"] == второй["manifest"]["policy_sha256"]
 
 
-def test_манифест_несёт_отпечаток_каждого_профиля() -> None:
+def test_манифест_несёт_отпечаток_каждого_входа() -> None:
+    """Входов два: профили и реестр флота. Пропусти реестр — и появление
+    нового обслуживаемого домена не изменило бы ни одного отпечатка."""
     артефакт = build(ПРОФИЛИ)
     профили = артефакт["manifest"]["profiles"]
-    assert len(профили) == len(list(ПРОФИЛИ.glob("*.json")))
+    assert len(профили) == len(list(ПРОФИЛИ.glob("*.json"))) + 1
+    assert РЕЕСТР.name in профили
     for имя, отпечаток in профили.items():
         assert len(отпечаток) == 64, f"{имя}: отпечаток не похож на sha256"
 
 
 def test_правка_профиля_меняет_отпечаток_политики(tmp_path: Path) -> None:
     """Иначе манифест не поймал бы подмену решения."""
-    песочница = tmp_path / "profiles"
-    песочница.mkdir()
-    for путь in ПРОФИЛИ.glob("*.json"):
-        (песочница / путь.name).write_text(путь.read_text(encoding="utf-8"), encoding="utf-8")
-    до = build(песочница)["manifest"]["policy_sha256"]
+    каталог = песочница(tmp_path)
+    до = build(каталог)["manifest"]["policy_sha256"]
 
-    цель = песочница / "yummyani-org.json"
+    цель = каталог / "yummyani-org.json"
     данные = json.loads(цель.read_text(encoding="utf-8"))
-    данные["seo_profile"]["indexing_expected"] = OPEN
+    данные["seo_profile"]["indexing_enabled"] = True
     цель.write_text(json.dumps(данные, ensure_ascii=False), encoding="utf-8")
 
-    после = build(песочница)["manifest"]["policy_sha256"]
+    после = build(каталог)["manifest"]["policy_sha256"]
     assert до != после
+
+
+def test_появление_сайта_в_реестре_меняет_отпечаток(tmp_path: Path) -> None:
+    """Реестр — вход политики, и его правка обязана быть видна в манифесте."""
+    каталог = песочница(tmp_path)
+    до = build(каталог)["manifest"]["policy_sha256"]
+
+    реестр = каталог.parent / РЕЕСТР.name
+    данные = json.loads(реестр.read_text(encoding="utf-8"))
+    данные["fleet"].append({"site_id": "tenth-site", "domain": "tenth.example"})
+    реестр.write_text(json.dumps(данные, ensure_ascii=False), encoding="utf-8")
+
+    артефакт = build(каталог)
+    assert артефакт["manifest"]["policy_sha256"] != до
+    assert "tenth.example" in артефакт["matrix"]["closed"], "новый сайт обязан быть закрыт"
 
 
 def test_артефакт_читается_обратно_в_политику(tmp_path: Path) -> None:

@@ -108,8 +108,7 @@
     "indexing_enabled": false,
     "canonical_host": "demo-books.invalid",
     "editorial_profile": "demo-books-editorial",
-    "indexing_expected": "closed",
-    "indexing_reason": "демонстрационный профиль; домен demo-books.invalid не маршрутизируется"
+    "indexing_reason": "демонстрационный профиль: в поиске ему делать нечего"
   },
   "analytics_profile": {
     "enabled": false,
@@ -146,9 +145,5 @@
       "limit": 12,
       "position": 0
     }
-  ],
-  "environment": "demo",
-  "profile_family": "demo",
-  "profile_version": "1.0",
-  "canonical_domain": "demo-books.invalid"
+  ]
 }

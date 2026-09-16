@@ -197,28 +197,6 @@ cp -p "$TARGET" "$BACKUP"
 step "проверка синтаксиса новой версии"
 python3 -m py_compile "$SOURCE"
 
-step "объявленная политика витрины приводится к решению владельца"
-if [ -w "$PROFILE" ] || [ -w "$(dirname "$PROFILE")" ]; then
-  PROFILE_BACKUP="${PROFILE}.before-open-indexing.${STAMP}"
-  cp -p "$PROFILE" "$PROFILE_BACKUP"
-  PROFILE_OWNER=$(stat -c '%U:%G' "$PROFILE")
-  python3 - "$PROFILE" <<'PY'
-import json, sys
-path = sys.argv[1]
-with open(path, encoding="utf-8") as fh:
-    profile = json.load(fh)
-profile.setdefault("seo_profile", {})["indexing_enabled"] = True
-with open(path, "w", encoding="utf-8") as fh:
-    json.dump(profile, fh, ensure_ascii=False, indent=2)
-    fh.write("\n")
-PY
-  if [ "${#INSTALL_OWNERSHIP[@]}" -gt 0 ]; then chown "$PROFILE_OWNER" "$PROFILE"; fi
-  printf '   копия профиля: %s\n' "$PROFILE_BACKUP"
-else
-  PROFILE_BACKUP=""
-  fail "профиль недоступен на запись, объявленная политика останется прежней: $PROFILE"
-fi
-
 step "сборка артефакта политики и ворота релиза"
 POLICY_BUILT=$(mktemp)
 if ! python3 - "$PROFILES_DIR" "$POLICY_BUILT" <<'PYGATE'
@@ -246,6 +224,37 @@ then
   fail "ворота релиза не пропустили выкладку — ничего не изменено"
   rm -f "$POLICY_BUILT"
   exit 4
+fi
+
+step "объявленная политика витрины приводится к решению из артефакта"
+if [ -w "$PROFILE" ] || [ -w "$(dirname "$PROFILE")" ]; then
+  PROFILE_BACKUP="${PROFILE}.before-open-indexing.${STAMP}"
+  cp -p "$PROFILE" "$PROFILE_BACKUP"
+  PROFILE_OWNER=$(stat -c '%U:%G' "$PROFILE")
+  python3 - "$PROFILE" "$POLICY_BUILT" "$OPEN_DOMAIN" <<'PY'
+import json, sys
+
+путь, артефакт_путь, домен = sys.argv[1], sys.argv[2], sys.argv[3]
+with open(артефакт_путь, encoding="utf-8") as fh:
+    запись = json.load(fh)["domains"][домен]
+with open(путь, encoding="utf-8") as fh:
+    профиль = json.load(fh)
+# Решение здесь не принимается второй раз, а читается из собранного артефакта.
+# Прежде в этой строке стояло жёсткое `True` — то есть сценарий был ещё одним
+# независимым местом, где записано решение владельца. Ровно на таких
+# независимых местах контур и ломался.
+seo = профиль.setdefault("seo_profile", {})
+seo["indexing_enabled"] = запись["indexing_expected"] == "open"
+seo["indexing_reason"] = запись["indexing_reason"]
+with open(путь, "w", encoding="utf-8") as fh:
+    json.dump(профиль, fh, ensure_ascii=False, indent=2)
+    fh.write("\n")
+PY
+  if [ "${#INSTALL_OWNERSHIP[@]}" -gt 0 ]; then chown "$PROFILE_OWNER" "$PROFILE"; fi
+  printf '   копия профиля: %s\n' "$PROFILE_BACKUP"
+else
+  PROFILE_BACKUP=""
+  fail "профиль недоступен на запись, объявленная политика останется прежней: $PROFILE"
 fi
 
 step "установка и перезапуск ${UNIT} (службы .org и .biz не трогаются)"

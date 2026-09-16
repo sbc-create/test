@@ -212,8 +212,7 @@
     "indexing_enabled": false,
     "canonical_host": "yummyani.org",
     "editorial_profile": "yummyani-org-editorial",
-    "indexing_expected": "closed",
-    "indexing_reason": "страницы произведений совпадают с yummyani.site; собственных материалов нет"
+    "indexing_reason": "решения об открытии нет"
   },
   "analytics_profile": {
     "enabled": true,
@@ -244,9 +243,5 @@
     "monitoring-audit": "site-factory/platform"
   },
   "health_endpoint": "/healthz",
-  "coverage_endpoint": "/api/v1/coverage",
-  "environment": "production",
-  "profile_family": "yummy",
-  "profile_version": "1.0",
-  "canonical_domain": "yummyani.org"
+  "coverage_endpoint": "/api/v1/coverage"
 }

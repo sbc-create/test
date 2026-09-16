@@ -14,6 +14,12 @@ deploy закрывал живую витрину.
 читает собранный из профилей артефакт. Прежние утверждения не потеряны: каждое
 заменено более строгим.
 
+Источником стало то, что в репозитории уже было: перечень доменов —
+``config/FLEET-REGISTRY.json``, решение — ``seo_profile.indexing_enabled``
+профиля, собственный домен — ``seo_profile.canonical_host`` там же. Новых полей
+контур не завёл: добавлено одно, ``indexing_reason``, потому что решение без
+основания нельзя проверить на обзоре.
+
 ===========================================  ==================================
 прежнее утверждение                          где оно теперь
 ===========================================  ==================================
@@ -62,7 +68,7 @@ def test_решение_живёт_в_профиле_а_не_в_коде() -> No
     """Открытие названо в профиле, и там же его основание."""
     профиль = json.loads((ПРОФИЛИ / "yummyani-site.json").read_text(encoding="utf-8"))
     seo = профиль["seo_profile"]
-    assert seo["indexing_expected"] == "open"
+    assert seo["indexing_enabled"] is True
     assert seo["indexing_reason"].strip(), "открытие без основания не проверить"
 
 
@@ -70,6 +76,20 @@ def test_ни_один_другой_профиль_не_открыт() -> None:
     открытые = []
     for путь in sorted(ПРОФИЛИ.glob("*.json")):
         профиль = json.loads(путь.read_text(encoding="utf-8"))
-        if профиль["seo_profile"]["indexing_expected"] == "open":
-            открытые.append(профиль["canonical_domain"])
+        if профиль["seo_profile"]["indexing_enabled"]:
+            открытые.append(профиль["seo_profile"]["canonical_host"])
     assert открытые == ["yummyani.site"], f"открытыми числятся: {открытые}"
+
+
+def test_политика_не_завела_своего_поля_решения() -> None:
+    """Второе поле с тем же смыслом — та же вторая запись истины.
+
+    Первая редакция контура добавляла в профиль ``indexing_expected`` рядом с
+    существующим ``indexing_enabled`` и ``canonical_domain`` рядом с
+    ``canonical_host``. Схема ``site-profile.schema.json`` этого не пропустила —
+    и была права.
+    """
+    for путь in sorted(ПРОФИЛИ.glob("*.json")):
+        профиль = json.loads(путь.read_text(encoding="utf-8"))
+        assert "canonical_domain" not in профиль, f"{путь.name}: поле-дубликат"
+        assert "indexing_expected" not in профиль["seo_profile"], f"{путь.name}: поле-дубликат"
