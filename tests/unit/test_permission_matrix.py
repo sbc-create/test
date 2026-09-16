@@ -445,7 +445,9 @@ class TestProfileProperties:
         TEMPLATES-YUMMY-EPISODES-LIVE-DEPLOY-013: без них живая приёмка
         выкаченного релиза неисполнима. Они отличаются от остальных записей
         тем, что это не интеграции, а собственные домены, и методы у них
-        только читающие. Проверяется точный состав: незамеченная лишняя
+        только читающие. Шестая витрина, zonafilm.space, добавлена заданием
+        TEMPLATE-ZONA-INPUT-MEASURE-02 по той же причине и на тех же условиях.
+        Проверяется точный состав: незамеченная лишняя
         строка здесь — это открытый наружу канал.
         """
         assert unattended.inventory_hosts() == set()
@@ -461,9 +463,75 @@ class TestProfileProperties:
             "yummyani.biz",
             "animedia.icu",
             "animedia.space",
+            "zonafilm.space",
             "amd.online",
             "w140.zona.plus",
         }
+
+
+class TestZonafilmReadOnlyContract:
+    """Контракт zonafilm.space: ровно одно имя и только чтение.
+
+    Задание TEMPLATE-ZONA-INPUT-MEASURE-02 разрешило точный контракт
+    `zonafilm.space + GET/HEAD`. Проверяется не факт строки в файле, а решение
+    guard: именно оно определяет, состоится ли запрос.
+    """
+
+    def test_get_is_allowed(self):
+        assert guard_rules.evaluate_bash("curl -sS https://zonafilm.space/").decision == "pass"
+
+    def test_head_is_allowed(self):
+        assert guard_rules.evaluate_bash("curl -sS -I https://zonafilm.space/").decision == "pass"
+
+    def test_www_is_not_covered_by_the_bare_name(self):
+        """www — отдельное имя. Его никто не проверял и отдельно не регистрировал."""
+        decision = guard_rules.evaluate_bash("curl -sS https://www.zonafilm.space/")
+        assert decision.decision == "deny"
+        assert decision.rule_id == "G-EGRESS"
+
+    def test_subdomain_is_denied(self):
+        decision = guard_rules.evaluate_bash("curl -sS https://sub.zonafilm.space/")
+        assert decision.decision == "deny"
+        assert decision.rule_id == "G-EGRESS"
+
+    def test_lookalike_domain_is_denied(self):
+        """Совпадение по подстроке не даёт доступа: имя сверяется целиком."""
+        decision = guard_rules.evaluate_bash("curl -sS https://evil-zonafilm.space/")
+        assert decision.decision == "deny"
+        assert decision.rule_id == "G-EGRESS"
+
+    def test_absent_domain_is_denied(self):
+        decision = guard_rules.evaluate_bash("curl -sS https://not-registered-xyz.example/")
+        assert decision.decision == "deny"
+        assert decision.rule_id == "G-EGRESS"
+
+    def test_reference_host_was_already_authorised(self):
+        """Референс сравнения разрешён прежним заданием, а не этим."""
+        assert guard_rules.evaluate_bash("curl -sS https://w140.zona.plus/").decision == "pass"
+
+    def test_methods_field_is_recorded_as_read_only(self):
+        """В реестре у витрины записаны только читающие методы.
+
+        Это проверка данных, а не поведения guard: сегодня guard сверяет имя
+        хоста и не читает `methods` (см. test_http_method_is_not_enforced_yet).
+        """
+        entries = guard_rules._read_inventory("network-allowlist.yaml", "hosts")
+        zona = [e for e in entries if e.get("host") == "zonafilm.space"]
+        assert len(zona) == 1, "запись должна быть ровно одна"
+        declared = {m.strip().upper() for m in zona[0]["methods"].strip("[]").split(",")}
+        assert declared == {"GET", "HEAD"}
+
+    def test_http_method_is_not_enforced_yet(self):
+        """Фиксирует действующий разрыв: `methods` объявлен, но не исполняется.
+
+        Задание требовало доказать, что POST к витрине запрещён. Он не запрещён:
+        guard сверяет только имя хоста, поэтому запись «methods: [GET, HEAD]»
+        сегодня ничего не закрывает. Тест закреплён намеренно и обязан упасть,
+        когда проверка методов появится, — тогда его переписывают на deny.
+        Ослаблять требование нельзя, выдавать желаемое за действительное тоже.
+        """
+        assert guard_rules.evaluate_bash("curl -sS -X POST https://zonafilm.space/").decision == "pass"
+        assert guard_rules.evaluate_bash("curl -sS -d a=1 https://zonafilm.space/").decision == "pass"
 
 
 class TestWritePaths:

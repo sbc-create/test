@@ -90,6 +90,22 @@ hosts:
     host: animedia.space
     purpose: "приёмка выкаченного релиза: footer и contact-блок"
     methods: [GET, HEAD]
+  # Внесён заданием TEMPLATE-ZONA-INPUT-MEASURE-02 (OWNER_AUTHORIZATION=
+  # EXACT_INVENTORY_GET_HEAD_AND_READ_ONLY_MEASUREMENT). Приёмка
+  # TEMPLATE-POSTDEPLOY-ACCEPTANCE-01 остановилась на BLOCKED_INPUT именно здесь:
+  # витрина выложена и обслуживается, но без записи guard отклоняет запрос, и
+  # третья витрина остаётся неизмеренной. Значение host взято из совпадения двух
+  # независимых источников на этом же хосте: nginx `server_name` в
+  # /etc/nginx/lords/zona-01.conf и `canonical_domain` витрины zona-01 в
+  # /srv/lords/.frontend/indexing-policy.json. Методы — только читающие: витрина
+  # не принимает от фабрики ни форм, ни credentials, ни записи.
+  #
+  # nginx отвечает и на www.zonafilm.space, но это имя намеренно не внесено:
+  # задание разрешило ровно одно имя, а alias никто не измерял.
+  - ref: zonafilm-space-public
+    host: zonafilm.space
+    purpose: "приёмка выкаченного релиза: baseline витрины Zona"
+    methods: [GET, HEAD]
 
   # --- референсы визуального сравнения --------------------------------------
   # Названы владельцем в задании YUMMY/ANIMEDIA/ZONA как «подтверждённые
