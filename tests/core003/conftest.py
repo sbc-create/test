@@ -14,6 +14,7 @@ import json
 import os
 import socket
 import subprocess
+import sys
 import threading
 import time
 import urllib.error
@@ -22,8 +23,28 @@ from pathlib import Path
 
 import pytest
 
-#: Выложенный релиз. Тот же артефакт, что обслуживает контур.
-РЕЛИЗ = Path("/srv/site-factory/control-api/current").resolve()
+#: Выложенный релиз, если он есть на этой машине.
+_ВЫЛОЖЕННЫЙ = Path("/srv/site-factory/control-api/current")
+
+#: Дерево, из которого поднимается служба подписи.
+#:
+#: Предпочтение остаётся за выложенным релизом: на хосте проверяется ровно тот
+#: артефакт, что обслуживает контур, и поведение этих тестов там не меняется.
+#:
+#: Но когда релиза нет — в CI его нет никогда, — прежний код падал на
+#: `FileNotFoundError: /srv/site-factory/control-api/current` ещё в фикстуре, и
+#: тринадцать проверок не выполнялись вовсе. Выбор в этом случае не между
+#: «релизом» и «рабочим деревом», а между «рабочим деревом» и «ничем». Для
+#: проверки PR рабочее дерево к тому же и есть предлагаемый артефакт: релиз на
+#: машине — это вчерашний, он о содержимом ветки ничего не говорит.
+РЕЛИЗ = (_ВЫЛОЖЕННЫЙ.resolve() if _ВЫЛОЖЕННЫЙ.is_dir()
+         else Path(__file__).resolve().parents[2])
+
+#: Интерпретатор той же сборки. У выложенного релиза свой venv; у рабочего
+#: дерева — тот, которым запущен pytest.
+_ВЕНВ = РЕЛИЗ / ".venv/bin/python"
+ПИТОН = str(_ВЕНВ) if _ВЕНВ.is_file() else sys.executable
+
 ЭФЕМЕРНЫЙ_САЙТ = "ephemeral-core003-0001"
 
 
@@ -146,8 +167,7 @@ class ТестовыйSigner:
                    PYTHONUNBUFFERED="1")
         self.журнал = (каталог_ключей.parent / "signer.log").open("w")
         self.процесс = subprocess.Popen(
-            [str(РЕЛИЗ / ".venv/bin/python"), "-m",
-             "factory.site_engine.approval.service"],
+            [ПИТОН, "-m", "factory.site_engine.approval.service"],
             cwd=str(РЕЛИЗ), env=окр, stdout=self.журнал,
             stderr=subprocess.STDOUT)
         for _ in range(80):
