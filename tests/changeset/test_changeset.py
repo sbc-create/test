@@ -439,11 +439,10 @@ def test_11a_блок_записи_действительно_транзакци
     cid = создать(бд)
     поле = "SELECT failure_reason r FROM changeset WHERE changeset_id=?"
     до = бд.execute(поле, (cid,)).fetchone()["r"]
-    with pytest.raises(RuntimeError):
-        with S.запись(бд):
-            бд.execute("UPDATE changeset SET failure_reason=? "
-                       "WHERE changeset_id=?", ("передумали", cid))
-            raise RuntimeError("передумали")
+    with pytest.raises(RuntimeError), S.запись(бд):
+        бд.execute("UPDATE changeset SET failure_reason=? "
+                   "WHERE changeset_id=?", ("передумали", cid))
+        raise RuntimeError("передумали")
     assert бд.execute(поле, (cid,)).fetchone()["r"] == до
 
 

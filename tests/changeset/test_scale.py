@@ -16,9 +16,9 @@ from pathlib import Path
 
 import pytest
 
+from factory.site_engine.changeset import engine as E
 from factory.site_engine.changeset import model as M
 from factory.site_engine.changeset import store as S
-from factory.site_engine.changeset import engine as E
 from factory.site_engine.changeset.testing import FakeRegistry, заявка
 
 КОРЕНЬ = Path(__file__).resolve().parents[2]

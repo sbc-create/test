@@ -42,8 +42,7 @@ def реестр():
     набор проходил ровно до тех пор, пока реестр не менялся: любое добавление
     сайта роняло двадцать один тест, не имеющий к сайтам никакого отношения.
     """
-    from factory.site_engine.changeset.registry_client import (RegistryClient,
-                                                               RegistryUnavailable)
+    from factory.site_engine.changeset.registry_client import RegistryClient, RegistryUnavailable
     try:
         return FakeRegistry(версия=RegistryClient().версия())
     except (RegistryUnavailable, Exception):  # noqa: B014 — реестр может быть закрыт

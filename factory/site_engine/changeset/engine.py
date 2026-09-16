@@ -76,7 +76,6 @@ class Engine:
                   "expected_resource_fingerprint":
                       план["expected_resource_fingerprint"],
                   "risk_class": план["risk_class"],
-                "impact_level": план["impact_level"],
                   "impact_level": план["impact_level"],
                   "verification_plan": план["verification_plan"],
                   "rollback_plan": план["rollback_plan"],
@@ -84,6 +83,7 @@ class Engine:
                                      "environments": план["environments"]}})
         return {"changeset_id": cid, "plan_hash": план["plan_hash"],
                 "risk_class": план["risk_class"],
+                "impact_level": план["impact_level"],
                 "environments": план["environments"],
                 "dry_run_effects": сухо["effects"]}
 
