@@ -181,7 +181,7 @@
     "owned_files": [
       {
         "path": "automation/host/lords-frontend.py",
-        "sha256": "4a8083debb039c910bb70240c8daf8f7a14628efc76170f3abd1f8f827af64ec"
+        "sha256": "1444ee74d0e145960446c44abf8c1b2954523ebbbc4003c8a9706eed3eb490de"
       },
       {
         "path": "factory/lords/collection_contract.py",

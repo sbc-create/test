@@ -1,0 +1,89 @@
+{
+  "prompt_id": "TEMPLATE-POSTDEPLOY-REMEDIATION-03B-COLLECTION-VISUAL-PARITY",
+  "canonical_pr": 76,
+  "branch": "claude/fleet-tpl-baseline-001",
+  "start_head": "c7aee581001a387034a44469e53fefc05f787f22",
+  "measured_on": "боевой снимок animedia-01, рендерер ветки поднят локально (порт 9501); базовый c7aee581 — порт 9502",
+  "collections": {
+    "spec_count": 1,
+    "resolver_count": 1,
+    "cta_bound": "4/4",
+    "cta_prefix_order_parity": "4/4",
+    "generic_catalog_cta": 0,
+    "shelves": [
+      {"key": "new_episodes", "cta": "/collection/new_episodes/", "rail": 24, "first_n_parity": true},
+      {"key": "recently_added", "cta": "/collection/recently_added/", "rail": 24, "first_n_parity": true},
+      {"key": "top_rated", "cta": "/collection/top_rated/", "rail": 24, "first_n_parity": true},
+      {"key": "video_available", "cta": "/collection/video_available/", "rail": 24, "first_n_parity": true}
+    ],
+    "unknown_collection_status": 404,
+    "known_collection_status": 200,
+    "hidden_without_data": ["ongoing", "today"]
+  },
+  "legacy_routes": {
+    "root_cause": "боевой снимок уже хранится отсортированным по published_at, поэтому пересортировка /new была пустой операцией, а /collections вообще не имел собственной выборки",
+    "before": {
+      "catalog_first2": ["/title/vo-vseoruzhii-sila-artefaktov/", "/title/dedushkina-lampa/"],
+      "new_first2": ["/title/vo-vseoruzhii-sila-artefaktov/", "/title/dedushkina-lampa/"],
+      "collections_first2": ["/title/vo-vseoruzhii-sila-artefaktov/", "/title/dedushkina-lampa/"],
+      "duplicate_pairs": 3
+    },
+    "after": {
+      "catalog": {"semantics": "полный каталог, порядок по названию", "first2": ["/title/009-1/", "/title/10-zhizney-2024/"], "cards": 48},
+      "new": {"semantics": "свежесть публикации, published_at desc", "first2": ["/title/vo-vseoruzhii-sila-artefaktov/", "/title/dedushkina-lampa/"], "cards": 48},
+      "collections": {"semantics": "хаб коллекций", "title_links": 0, "collection_links": ["/collection/current_season/", "/collection/new_episodes/", "/collection/recently_added/", "/collection/top_rated/", "/collection/video_available/"]},
+      "duplicate_pairs": 0
+    }
+  },
+  "episode_list": {
+    "title": "detektiv-konan",
+    "episodes_preserved": "1212/1212",
+    "unique": 1212,
+    "range": "1..1212",
+    "gaps": 0,
+    "order_preserved": true,
+    "container_height_px": {"390": 591, "768": 520, "1440": 520},
+    "container_pct_of_viewport": {"390": 70.0, "768": 57.8, "1440": 57.8},
+    "limits": {"mobile": "<=70vh", "desktop": "<=720px"},
+    "scrollable": true,
+    "first_and_last_focusable": true,
+    "last_href": "/title/detektiv-konan/season-1/episode-1212/",
+    "page_height_px_before": {"390": 53990, "1440": 28858},
+    "page_height_px_after": {"390": 3871, "768": 3423, "1440": 4025},
+    "horizontal_overflow": 0
+  },
+  "regressions_held": {
+    "poster_placeholder_overlay": {"390": false, "768": false, "1440": false},
+    "banner_gap_px": {"390": 0, "768": 0, "1440": 0}
+  },
+  "layout_harness": {
+    "tool": "scripts/viewport-check.js (существующий harness ветки)",
+    "surfaces": ["/", "/collections/", "/collection/new_episodes/", "/collection/recently_added/", "/collection/top_rated/", "/collection/video_available/"],
+    "viewports": [390, 768, 1440],
+    "horizontal_scroll": 0,
+    "console_errors": 0,
+    "failed_requests": 0,
+    "preexisting_counters_identical_to_baseline": true,
+    "preexisting": {
+      "out_of_viewport_at_390": 3,
+      "overlap_at_768_on_collection_pages": 1,
+      "gap_on_home_px": 22,
+      "note": "те же значения измерены на c7aee581 (порт 9502) — введены не этим этапом"
+    }
+  },
+  "visual_similarity": {
+    "status": "NOT_CERTIFIABLE",
+    "reason": "Утверждённый reference-пак docs/reference-packs/amd-online/ имеет status: blocked (REF-EGRESS-01), VISUAL_TOKENS.yaml пуст намеренно (tokens: {}), а его собственный ACCEPTANCE.md запрещает объявлять визуальное соответствие, пока пакет остаётся черновиком. Заполнять пак этим этапом нельзя: задание запрещает менять reference.",
+    "additional_finding": "Комментарий в АНИМЕДИА_СТИЛЬ и ЗОНА_СТИЛЬ ссылается на artifacts/evidence/templates-zona-animedia-visual-parity-006/ как на источник измеренных величин эталона; этого каталога в ветке нет. Либо ссылка устарела, либо величины не подтверждены.",
+    "structural_limit": "Композиция эталона включает рекламный ряд и Telegram-баннер; их воспроизведение прямо запрещено правилом «не придумывай рекламные блоки и Telegram-ссылки». Поэтому часть веса composition недостижима по построению.",
+    "last_measured_by_session_rubric": {"animedia": "24%", "zona": "29%", "note": "собственная рубрика сессии, не утверждённый инструмент"}
+  },
+  "production": {
+    "artifact_digest": "0e47d31dd373565603f3590544532261de0e74483b128ad2ac6523d8ac853357",
+    "unchanged": true,
+    "indexing_matrix_before": "1_OPEN_8_CLOSED",
+    "indexing_matrix_after": "1_OPEN_8_CLOSED",
+    "deploy_performed": 0,
+    "merge_performed": 0
+  }
+}

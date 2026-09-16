@@ -1139,7 +1139,24 @@ font-family:system-ui,sans-serif;color:#cfd8e2}
 background:@ALT@;padding:12px 16px;font-family:system-ui,sans-serif}
 .zsea__h b{font-size:15px}
 .zsea__h span{font-size:13px;color:@DIM@}
-.zeps{display:flex;flex-wrap:wrap;gap:6px;padding:14px 16px}
+/* Хаб подборок: карточка коллекции, а не ещё одна сетка тайтлов. */
+.zhub{display:grid;gap:12px;margin:14px 0;grid-template-columns:1fr}
+@media(min-width:600px){.zhub{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.zhub{grid-template-columns:repeat(3,1fr)}}
+.zhub__c{display:block;padding:12px;border:1px solid @LINE@;border-radius:8px;
+background:@SURF@;color:inherit;text-decoration:none}
+.zhub__c:hover{border-color:@ACC@}
+.zhub__g{display:flex;gap:4px;margin-bottom:9px}
+.zhub__p{flex:1 1 0;aspect-ratio:2/3;overflow:hidden;border-radius:5px;background:@ALT@}
+.zhub__img{width:100%;height:100%;object-fit:cover;display:block}
+.zhub__t{display:block;font-weight:700;font-size:15.5px}
+.zhub__m{display:block;font-size:12.5px;color:@ACC@;font-weight:600;margin:2px 0 4px}
+.zhub__d{display:block;font-size:13px;color:@DIM@;line-height:1.45}
+
+/* Окно просмотра списка серий ограничено; сам список не обрезается. */
+.zeps{display:flex;flex-wrap:wrap;gap:6px;padding:14px 16px;max-height:70vh;
+overflow-y:auto;overscroll-behavior:contain}
+@media(min-width:768px){.zeps{max-height:520px}}
 .zeps a{font-family:system-ui,sans-serif;font-size:13.5px;font-weight:600;padding:7px 12px;
 border:1px solid @LINE@;border-radius:8px;color:@ACC@}
 .zeps a:hover{background:@ALT@;border-color:@ACC@}
@@ -1368,7 +1385,24 @@ object-fit:cover;display:block}
 .zaside{background:@SURF@;border:1px solid @LINE@;border-radius:8px;
 padding:14px 16px;font-size:13px;color:@DIM@}
 .zaside a{color:@ACC@;font-weight:600}
-.zeps{display:grid;gap:7px;margin:14px 0}
+/* Хаб подборок: карточка коллекции, а не ещё одна сетка тайтлов. */
+.zhub{display:grid;gap:12px;margin:14px 0;grid-template-columns:1fr}
+@media(min-width:600px){.zhub{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.zhub{grid-template-columns:repeat(3,1fr)}}
+.zhub__c{display:block;padding:12px;border:1px solid @LINE@;border-radius:8px;
+background:@SURF@;color:inherit;text-decoration:none}
+.zhub__c:hover{border-color:@ACC@}
+.zhub__g{display:flex;gap:4px;margin-bottom:9px}
+.zhub__p{flex:1 1 0;aspect-ratio:2/3;overflow:hidden;border-radius:5px;background:@ALT@}
+.zhub__img{width:100%;height:100%;object-fit:cover;display:block}
+.zhub__t{display:block;font-weight:700;font-size:15.5px}
+.zhub__m{display:block;font-size:12.5px;color:@ACC@;font-weight:600;margin:2px 0 4px}
+.zhub__d{display:block;font-size:13px;color:@DIM@;line-height:1.45}
+
+/* Окно просмотра списка серий ограничено; сам список не обрезается. */
+.zeps{display:grid;gap:7px;margin:14px 0;max-height:70vh;overflow-y:auto;
+overscroll-behavior:contain}
+@media(min-width:768px){.zeps{max-height:520px}}
 .zeps a,.zeps span{display:block;padding:9px 12px;border-radius:6px;
 border:1px solid @LINE@;background:@SURF@;font-size:13.5px}
 .zeps span{opacity:.55}
@@ -1589,8 +1623,27 @@ object-fit:cover;display:block}
 .zaside{background:@ALT@;border:1px solid @LINE@;border-radius:4px;
 padding:12px 14px;font-size:13px;color:@DIM@}
 .zaside a{color:@ACC@;font-weight:700}
-.zeps{display:grid;gap:5px;margin:12px 0}
-@media(min-width:768px){.zeps{grid-template-columns:repeat(2,1fr)}}
+/* Хаб подборок: карточка коллекции, а не ещё одна сетка тайтлов. */
+.zhub{display:grid;gap:12px;margin:14px 0;grid-template-columns:1fr}
+@media(min-width:600px){.zhub{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.zhub{grid-template-columns:repeat(3,1fr)}}
+.zhub__c{display:block;padding:12px;border:1px solid @LINE@;border-radius:6px;
+background:@SURF@;color:inherit;text-decoration:none}
+.zhub__c:hover{border-color:@ACC@}
+.zhub__g{display:flex;gap:4px;margin-bottom:9px}
+.zhub__p{flex:1 1 0;aspect-ratio:2/3;overflow:hidden;border-radius:4px;background:@ALT@}
+.zhub__img{width:100%;height:100%;object-fit:cover;display:block}
+.zhub__t{display:block;font-weight:700;font-size:15px}
+.zhub__m{display:block;font-size:12.5px;color:@ACC@;font-weight:600;margin:2px 0 4px}
+.zhub__d{display:block;font-size:13px;color:@DIM@;line-height:1.45}
+
+/* Список серий: высота ограничена, прокрутка своя. У «Детектива Конана»
+   1212 кнопок, и без предела страница вырастала до десятков тысяч пикселей —
+   всё, что ниже списка, становилось недостижимым. Ни одна серия при этом не
+   убирается из разметки: ограничивается окно просмотра, а не список. */
+.zeps{display:grid;gap:5px;margin:12px 0;max-height:70vh;overflow-y:auto;
+overscroll-behavior:contain}
+@media(min-width:768px){.zeps{grid-template-columns:repeat(2,1fr);max-height:520px}}
 .zeps a,.zeps span{display:block;padding:8px 11px;border-radius:4px;
 border:1px solid @LINE@;background:@PAGE@;font-size:13px}
 .zeps span{opacity:.5}
@@ -2251,6 +2304,15 @@ def отбор(данные: "Данные", индекс: dict, зпр: dict, �
         # «Новинки» — это свежесть публикации, а не год производства: фильм
         # 1974 года, выложенный вчера, новинкой витрины является.
         набор = sorted(набор, key=lambda з: з.get("published_at") or "", reverse=True)
+    elif раздел == "/catalog":
+        # У полного каталога собственный порядок, и он обязан быть собственным
+        # даже тогда, когда снимок уже разложен по свежести. Боевой снимок
+        # разложен именно так, поэтому сортировка «новинок» была пустой
+        # операцией, а два раздела отдавали один и тот же документ под разными
+        # заголовками. Каталог перебирают по названию — по нему и порядок;
+        # slug вторым ключом делает его устойчивым при совпадающих названиях.
+        набор = sorted(набор, key=lambda з: (з.get("_n") or нормализовать(з["title"]),
+                                             з["slug"]))
     return набор, {"kind": вид, "year": год, "genre": жанр}
 
 
@@ -2959,9 +3021,60 @@ class ВидЗона(Вид):
             описание=f"{self.имя}: фильмы, сериалы и анимация.",
             сверху="")
 
+    def хаб_коллекций(self) -> str:
+        """Перечень коллекций со ссылками на их собственные страницы.
+
+        До этого `/collections/` отдавал тот же каталог, что и `/catalog/`, —
+        то есть обещал подборки, а показывал общий список. Здесь страница
+        собирается из тех же спецификаций, что и ленты главной: заголовок,
+        описание, размер и адрес берутся из контракта, второго перечня нет.
+
+        Недоступные коллекции не показываются: контракт объявляет их с
+        политикой «скрыть», и рисовать пустую карточку значило бы обещать
+        раздел, которого нет.
+        """
+        снимок = Снимок.получить(self.д, self.п)
+        if КОЛЛЕКЦИИ is None or снимок is None:
+            return ('<div class="zempty"><b>Подборки недоступны</b>'
+                    "<p>Контракт коллекций витрине не передан.</p></div>")
+        карточки = []
+        for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО):
+            if not спец.доступна:
+                continue
+            коллекция = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО,
+                                            предел=4)
+            if коллекция is None or not коллекция.items:
+                continue
+            обложки = "".join(
+                f'<span class="zhub__p">'
+                f'<img class="zhub__img" src="{html.escape(_адрес_постера(к.poster) or "")}"'
+                f' alt="" loading="lazy" width="120" height="180"></span>'
+                for к in коллекция.items[:4] if к.poster)
+            карточки.append(
+                f'<a class="zhub__c" href="{html.escape(спец.canonical_path)}">'
+                f'<span class="zhub__g">{обложки}</span>'
+                f'<span class="zhub__t">{html.escape(коллекция.title)}</span>'
+                f'<span class="zhub__m">{коллекция.total} записей</span>'
+                f'<span class="zhub__d">{html.escape(коллекция.description)}</span>'
+                f'</a>')
+        if not карточки:
+            return ('<div class="zempty"><b>Подборок пока нет</b>'
+                    "<p>Ни одна коллекция контура не набрала записей в текущем снимке. "
+                    "Наполнять их похожими тайтлами нельзя: подборка без источника — "
+                    "это выдумка.</p></div>")
+        return f'<div class="zhub">{"".join(карточки)}</div>'
+
     def список(self, разд: str, зпр: dict) -> str:
         имена = {"/catalog": "Весь каталог", "/new": "Что нового", "/collections": "Подборки"}
         титул = имена.get(разд, "Каталог")
+        if разд == "/collections":
+            тело = (f'<div class="zwrap"><h1 class="zh">{html.escape(титул)}</h1>'
+                    f'<p class="zsub">Коллекции собираются одним контрактом: '
+                    f'состав и порядок здесь те же, что в лентах на главной.</p>'
+                    + self.хаб_коллекций() + "</div>")
+            return self.оболочка(тело, f"{титул} — {self.имя}", "/collections/",
+                                 актив="/collections/",
+                                 описание=f"Подборки витрины {self.имя}.")
         набор, выбрано = отбор(self.д, self.индекс, зпр, разд)
         стр = max(1, int((зпр.get("page") or ["1"])[0] or 1))
         всего = max(1, (len(набор) + НА_СТРАНИЦЕ_1_1 - 1) // НА_СТРАНИЦЕ_1_1)
