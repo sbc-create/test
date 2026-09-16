@@ -1,0 +1,26 @@
+{
+  "schema": "template-baseline-manifest/1.0",
+  "generated_from": {
+    "site_registry": "config/FLEET-REGISTRY.json",
+    "release_manifest": "/srv/lords/<site_id>/current/release-manifest.json"
+  },
+  "source_commit": "0123456789abcdef0123456789abcdef01234567",
+  "sites": [
+    {
+      "site_id": "example-lies",
+      "canonical_domain": "example.test",
+      "template_family_id": "example-family",
+      "family_engine_version": "0123456789ab",
+      "template_variant_id": "example_dark",
+      "template_variant_version": "unknown",
+      "blueprint_version": "-",
+      "module_bundle_version": "0",
+      "route_contract_digest": "1111aaaa2222",
+      "collection_contract_digest": "3333bbbb4444",
+      "source_commit": "0123456789ab",
+      "artifact_digest": "",
+      "desired_index_state": "maybe",
+      "observed_index_state": "closed"
+    }
+  ]
+}
