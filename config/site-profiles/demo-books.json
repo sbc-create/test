@@ -107,7 +107,8 @@
     "enabled": true,
     "indexing_enabled": false,
     "canonical_host": "demo-books.invalid",
-    "editorial_profile": "demo-books-editorial"
+    "editorial_profile": "demo-books-editorial",
+    "indexing_reason": "демонстрационный профиль: в поиске ему делать нечего"
   },
   "analytics_profile": {
     "enabled": false,

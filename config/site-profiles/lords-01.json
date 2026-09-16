@@ -193,7 +193,8 @@
     "enabled": true,
     "indexing_enabled": false,
     "canonical_host": "lordfilm47.space",
-    "editorial_profile": "lords-01-editorial"
+    "editorial_profile": "lords-01-editorial",
+    "indexing_reason": "решения об открытии нет"
   },
   "analytics_profile": {
     "enabled": true,

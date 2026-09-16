@@ -193,7 +193,8 @@
     "enabled": true,
     "indexing_enabled": false,
     "canonical_host": "lordserial33.biz",
-    "editorial_profile": "lords-02-editorial"
+    "editorial_profile": "lords-02-editorial",
+    "indexing_reason": "решения об открытии нет"
   },
   "analytics_profile": {
     "enabled": true,

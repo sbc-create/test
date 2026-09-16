@@ -233,7 +233,8 @@
       "type": "object",
       "required": [
         "enabled",
-        "indexing_enabled"
+        "indexing_enabled",
+        "indexing_reason"
       ],
       "properties": {
         "enabled": {
@@ -247,6 +248,11 @@
         },
         "editorial_profile": {
           "type": "string"
+        },
+        "indexing_reason": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Основание решения indexing_enabled. Открытие домена обязано быть объяснено: решение без основания нельзя проверить на обзоре."
         }
       }
     },

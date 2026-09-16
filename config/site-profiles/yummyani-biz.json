@@ -211,7 +211,8 @@
     "enabled": true,
     "indexing_enabled": false,
     "canonical_host": "yummyani.biz",
-    "editorial_profile": "yummyani-biz-editorial"
+    "editorial_profile": "yummyani-biz-editorial",
+    "indexing_reason": "решения об открытии нет"
   },
   "analytics_profile": {
     "enabled": true,

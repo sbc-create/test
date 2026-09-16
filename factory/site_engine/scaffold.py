@@ -63,6 +63,7 @@ def scaffold_profile(
     feature_flags: dict[str, Any] | None = None,
     seo_enabled: bool = True,
     indexing_enabled: bool = False,
+    indexing_reason: str = "новый сайт: решения об открытии не принимали",
 ) -> dict[str, Any]:
     """Профиль нового сайта.
 
@@ -128,6 +129,9 @@ def scaffold_profile(
             "enabled": seo_enabled,
             # Индексация остаётся решением владельца и по умолчанию выключена.
             "indexing_enabled": indexing_enabled,
+            # Основание обязательно и для отказа: «закрыт, потому что решения
+            # не было» — проверяемое утверждение, а молчание им не является.
+            "indexing_reason": indexing_reason,
             "canonical_host": domain,
             "editorial_profile": f"{site_id}-editorial",
         },

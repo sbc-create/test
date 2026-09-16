@@ -75,6 +75,27 @@ def _манифест() -> dict:
                "background:#1b1b1fdd;color:#ffb4a2;border:1px solid #ff7f5c;"
                "border-radius:8px;padding:4px 9px;font:600 11px/1.2 ui-monospace,"
                "SFMono-Regular,Menlo,monospace;pointer-events:none}")
+#: Показывать ли видимый бейдж сборки. По умолчанию нет.
+#:
+#: Бейдж — инструмент диагностики выкладки, и на стенде он полезен. На рабочем
+#: домене он оказывается в тексте, который читает посетитель и индексирует
+#: поиск: «Template: yummy 1.4.5 · cf558484». Служебная строка в публичном HTML
+#: не становится безобидной оттого, что мелкая, — она просто перестаёт быть
+#: заметной нам, оставаясь заметной снаружи.
+#:
+#: Сведения о сборке никуда не исчезают: их по-прежнему несут мета-теги
+#: site-factory-* и атрибуты data-template-*, которыми пользуется приёмка
+#: выкладки. Убран ровно видимый читателю слой.
+ПОКАЗЫВАТЬ_БЕЙДЖ = os.environ.get("LORDS_TEMPLATE_BADGE", "") == "1"
+
+
+def _бейдж_подвала() -> str:
+    """Служебный бейдж в подвале — только при включённой диагностике."""
+    if not ПОКАЗЫВАТЬ_БЕЙДЖ:
+        return ""
+    return (f'<span class="vbadge">Template: {СЕМЕЙСТВО} {ВЕРСИЯ} · '
+            f'{МАНИФЕСТ["source_commit"][:8]}</span>')
+
 #: Имя шаблона КОНКРЕТНОГО семейства. Отсюда и из версии складывается то, что
 #: домен объявляет о себе.
 ШАБЛОН_СЕМЕЙСТВА = f"{СЕМЕЙСТВО}-nova"
@@ -166,6 +187,73 @@ def _рядом(имя: str, модуль: str):
 БАЗА_ЧТЕНИЯ = os.environ.get("YUMMY_READMODEL",
                              "/srv/lords/.frontend/yummy-readmodel.sqlite3")
 ВАРИАНТ_ДОМЕНА = os.environ.get("YUMMY_VARIANT_DOMAIN", "yummyani.site")
+
+#: Файл политики индексации, собранный из версионируемых профилей сайтов.
+#:
+#: Раньше список открытых доменов был записан прямо здесь. Это работало, но
+#: означало, что решение владельца живёт в коде посредника — то есть в одном из
+#: трёх независимых мест, и совпадали они случайно. Теперь решение одно:
+#: `config/site-profiles/*.json` в репозитории; сюда приезжает собранный из них
+#: артефакт с отпечатками, а посредник только спрашивает у него ответ.
+ПОЛИТИКА_ФАЙЛ = os.environ.get(
+    "LORDS_INDEXING_POLICY",
+    str(Path(__file__).resolve().parent / "indexing-policy.json"),
+)
+
+
+def _прочитать_политику(путь: str) -> dict:
+    """Домены, которым разрешена индексация. Любая беда — пустое разрешение.
+
+    Отсутствующий, пустой или повреждённый файл означает «никому», а не «всем».
+    Ошибаться здесь можно только в сторону закрытия: открытая по недоразумению
+    витрина попадает в индекс, и обратно это уже не забрать.
+    """
+    try:
+        данные = json.loads(Path(путь).read_text(encoding="utf-8"))
+    except (OSError, ValueError) as ошибка:
+        sys.stderr.write(f"[nova] политика индексации не прочитана ({ошибка}): всё закрыто\n")
+        return {}
+    if данные.get("schema") != "indexing-policy/1.0":
+        sys.stderr.write("[nova] чужая схема политики индексации: всё закрыто\n")
+        return {}
+    открытые = {}
+    for домен, запись in (данные.get("domains") or {}).items():
+        if запись.get("indexing_expected") == "open":
+            открытые[_нормализовать_домен(домен)] = запись
+    return открытые
+
+
+def _нормализовать_домен(значение: str) -> str:
+    """Регистр, завершающая точка и www — это тот же домен."""
+    домен = (значение or "").strip().lower().rstrip(".")
+    return домен[4:] if домен.startswith("www.") else домен
+
+
+ОТКРЫТЫЕ_ДОМЕНЫ = _прочитать_политику(ПОЛИТИКА_ФАЙЛ)
+
+#: Домен, который обслуживает ЭТОТ экземпляр. Берётся без умолчания: у
+#: `ВАРИАНТ_ДОМЕНА` умолчание `yummyani.site`, и экземпляр с незаданной
+#: переменной молча считался бы открытым.
+СВОЙ_ДОМЕН = _нормализовать_домен(os.environ.get("YUMMY_VARIANT_DOMAIN", ""))
+
+
+def индексация_открыта(хост: str | None = None) -> bool:
+    """Открыта ли индексация для этого запроса.
+
+    Два условия, и оба обязательны. Домен экземпляра должен быть разрешён
+    политикой — это решение владельца. И заголовок `Host` должен совпадать с
+    доменом экземпляра — иначе подделанный заголовок открывал бы закрытую
+    витрину, оставаясь для неё «своим». Неизвестный, чужой или отсутствующий
+    `Host` закрыт всегда.
+    """
+    if not СВОЙ_ДОМЕН or СВОЙ_ДОМЕН not in ОТКРЫТЫЕ_ДОМЕНЫ:
+        return False
+    if хост is None:
+        return True
+    # У заголовка может быть порт; сравнивается только имя.
+    имя = _нормализовать_домен(хост.split(":", 1)[0])
+    return имя == СВОЙ_ДОМЕН
+
 НА_СТРАНИЦЕ = 60
 
 # Оформление и разделы — свои у каждого семейства.
@@ -444,8 +532,7 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 <button class="tsw" type="button" aria-label="Переключить тему">&#9789;</button>
 </div></header>
 <main class="wrap">{тело}</main>
-<footer class="ft"><div class="wrap">{html.escape(ИМЯ_ВИТРИНЫ)} · тестовая витрина, закрыта от индексации
-<span class="vbadge">Template: {СЕМЕЙСТВО} {ВЕРСИЯ} · {МАНИФЕСТ["source_commit"][:8]}</span>
+<footer class="ft"><div class="wrap">{html.escape(ИМЯ_ВИТРИНЫ)}{_бейдж_подвала()}
 </div></footer>
 <script>{СКРИПТ}</script></body></html>"""
 
@@ -464,7 +551,8 @@ class Обработчик(BaseHTTPRequestHandler):
         for имя, значение in (ещё or []):
             self.send_header(имя, значение)
         self.send_header("Content-Length", str(len(тело)))
-        self.send_header("X-Robots-Tag", "noindex, nofollow")
+        if not индексация_открыта(self.headers.get("Host")):
+            self.send_header("X-Robots-Tag", "noindex, nofollow")
         self.send_header("X-Site-Factory-Template-Revision", МАНИФЕСТ["source_commit"])
         self.send_header("X-Site-Factory-Template", ШАБЛОН_СЕМЕЙСТВА)
         self.send_header("X-Site-Factory-Core", ЯДРО)
@@ -527,8 +615,11 @@ class Обработчик(BaseHTTPRequestHandler):
                             "core": ЯДРО, "family": СЕМЕЙСТВО, "profile": ПРОФИЛЬ,
                             "revision": РЕВИЗИЯ, "display": "standalone"}, ensure_ascii=False)
             return self._отдать(м.encode(), "application/manifest+json")
-        if путь == "/robots.txt":
+        if путь == "/robots.txt" and not индексация_открыта(self.headers.get("Host")):
             return self._отдать(b"User-agent: *\nDisallow: /\n", "text/plain; charset=utf-8")
+        # На открытом домене robots.txt не перехватывается: документ отдаёт
+        # приложение, и источник истины остаётся один. Свой ответ здесь означал
+        # бы вторую версию правил, расходящуюся с первой при каждой правке.
 
         # Единый renderer семейства: страницы рисует приложение YummyAnime.
         #
@@ -1188,7 +1279,7 @@ class Обработчик(BaseHTTPRequestHandler):
             (f'<html data-sf-own="1" data-template-version="{ВЕРСИЯ}" '
              f'data-template-family="{СЕМЕЙСТВО}" '
              f'data-build-id="{СБОРКА}"').encode("utf-8"), 1)
-        if b"</body>" in тело:
+        if ПОКАЗЫВАТЬ_БЕЙДЖ and b"</body>" in тело:
             бейдж = (f'<div class="sf-vbadge">Template: {СЕМЕЙСТВО} {ВЕРСИЯ} · '
                      f'{МАНИФЕСТ["source_commit"][:8]}</div>').encode("utf-8")
             тело = тело.replace(b"</body>", бейдж + b"</body>", 1)

@@ -193,7 +193,8 @@
     "enabled": true,
     "indexing_enabled": false,
     "canonical_host": "1lordserials1.online",
-    "editorial_profile": "lords-03-editorial"
+    "editorial_profile": "lords-03-editorial",
+    "indexing_reason": "решения об открытии нет"
   },
   "analytics_profile": {
     "enabled": true,
