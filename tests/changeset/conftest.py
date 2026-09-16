@@ -34,7 +34,20 @@ def адаптер(tmp_path):
 
 @pytest.fixture()
 def реестр():
-    return FakeRegistry()
+    """Поддельный реестр с версией НАСТОЯЩЕГО реестра испытательного контура.
+
+    Версия здесь не выдумывается. План строится по ней, а подпись выдаёт живая
+    служба, которая каноническое состояние читает сама — и справедливо отвергает
+    план, опирающийся на другой состав флота. Пока версия была прибита числом,
+    набор проходил ровно до тех пор, пока реестр не менялся: любое добавление
+    сайта роняло двадцать один тест, не имеющий к сайтам никакого отношения.
+    """
+    from factory.site_engine.changeset.registry_client import (RegistryClient,
+                                                               RegistryUnavailable)
+    try:
+        return FakeRegistry(версия=RegistryClient().версия())
+    except (RegistryUnavailable, Exception):  # noqa: B014 — реестр может быть закрыт
+        return FakeRegistry()
 
 
 @pytest.fixture()

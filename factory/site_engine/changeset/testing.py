@@ -7,6 +7,7 @@
 """
 from __future__ import annotations
 
+import datetime as _d
 import uuid
 from typing import Any
 
@@ -78,8 +79,20 @@ def создать(соед, **kw) -> str:
                      actor_type="SERVICE")["changeset_id"]
 
 
+def срок_через(часов: float = 1.0) -> str:
+    """Срок одобрения, заведомо укладывающийся в политику службы одобрений.
+
+    Политика запрещает одобрение «навсегда»: подписант отказывает, если срок
+    дальше суток. Прибитая дата вроде 2099 года поэтому не годится — набор
+    падал бы целиком, причём с жалобой на срок, а не на то, что проверяется.
+    """
+    момент = _d.datetime.now(tz=_d.timezone.utc) + _d.timedelta(hours=часов)
+    return момент.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
 def довести_до_одобрения(соед, двигатель, cid: str, *,
-                         срок: str = "2099-01-01T00:00:00Z") -> None:
+                         срок: str | None = None) -> None:
+    срок = срок or срок_через()
     двигатель.валидировать(cid, actor_id="service:control-plane",
                            служба="control-plane")
     двигатель.запросить_одобрение(cid, actor_id="service:templates",

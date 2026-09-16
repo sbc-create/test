@@ -14,6 +14,7 @@ import hashlib
 import json
 import os
 import sqlite3
+import threading
 import time
 import uuid
 from pathlib import Path
@@ -171,12 +172,48 @@ def сейчас() -> str:
     return _d.datetime.now(_d.timezone.utc).isoformat().replace("+00:00", "Z")
 
 
+_ЗАМОК_СХЕМЫ = threading.Lock()
+
+
+def _обеспечить_схему(с: sqlite3.Connection) -> None:
+    """Применить DDL только тогда, когда его ещё нет.
+
+    Раньше executescript выполнялся при КАЖДОМ открытии. Он берёт
+    исключительную блокировку, а на переходе SHARED→EXCLUSIVE sqlite не зовёт
+    обработчик занятости — иначе два ждущих соединения заклинили бы друг
+    друга. Поэтому двадцать одновременных подач получали не ожидание, а сразу
+    «database is locked»: `timeout=30` в этом случае не работает.
+
+    Проверка наличия таблицы — обычное чтение и блокировки не требует. Замок
+    снимает гонку внутри процесса; повтор — между процессами.
+    """
+    if с.execute("SELECT 1 FROM sqlite_master WHERE type='table' "
+                 "AND name='changeset'").fetchone():
+        return
+    with _ЗАМОК_СХЕМЫ:
+        if с.execute("SELECT 1 FROM sqlite_master WHERE type='table' "
+                     "AND name='changeset'").fetchone():
+            return
+        предел = time.monotonic() + 30
+        while True:
+            try:
+                с.executescript(СХЕМА)
+                return
+            except sqlite3.OperationalError as ош:
+                if "locked" not in str(ош) or time.monotonic() >= предел:
+                    raise
+                time.sleep(0.05)
+
+
 def открыть(путь: str | Path | None = None) -> sqlite3.Connection:
     п = str(путь or os.environ.get("CHANGESET_DB") or БД_ПО_УМОЛЧАНИЮ)
     Path(п).parent.mkdir(parents=True, exist_ok=True)
     с = sqlite3.connect(п, timeout=30, isolation_level=None)
     с.row_factory = sqlite3.Row
-    с.executescript(СХЕМА)
+    # Ссылочная целостность включается на КАЖДОМ соединении: этот PRAGMA, в
+    # отличие от journal_mode, в файле не сохраняется.
+    с.execute("PRAGMA foreign_keys=ON")
+    _обеспечить_схему(с)
     return с
 
 

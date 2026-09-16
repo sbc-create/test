@@ -7,8 +7,10 @@
 from __future__ import annotations
 
 import concurrent.futures as fut
+import datetime as _d
 import json
 import sqlite3
+import time
 import uuid
 from pathlib import Path
 
@@ -23,7 +25,8 @@ from factory.site_engine.changeset import policy as POL
 from factory.site_engine.changeset import store as S
 from factory.site_engine.changeset import worker as WK
 from factory.site_engine.changeset.testing import (
-    РЕСУРС, FakeRegistry, довести_до_одобрения, заявка, создать)
+    РЕСУРС, FakeRegistry, довести_до_одобрения, заявка, создать,
+    срок_через)
 
 
 # --- 1. все разрешённые переходы проходят -----------------------------------
@@ -290,7 +293,14 @@ def test_10c_предложивший_не_может_одобрить(бд, д�
 def test_11_истёкшее_одобрение_блокирует_применение(бд, двигатель, адаптер):
     адаптер.посеять("test-alpha-0001", "res-1", {"title": "старое"})
     cid = создать(бд)
-    довести_до_одобрения(бд, двигатель, cid, срок="2000-01-01T00:00:00Z")
+    # Одобрение с уже истёкшим сроком выписать нельзя: подписант отказывает
+    # в самой выдаче. Поэтому берётся настоящее короткое одобрение и
+    # дожидается его конца — проверяется ровно то, что нужно проверить:
+    # применение ПОСЛЕ окончания срока, а не выдача задним числом.
+    срок = срок_через(часов=2 / 3600)
+    довести_до_одобрения(бд, двигатель, cid, срок=срок)
+    while _d.datetime.now(tz=_d.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ") <= срок:
+        time.sleep(0.2)
     аренда = S.взять_аренду(бд, cid, "worker-1")
     with pytest.raises(S.ChangeSetError) as ош:
         двигатель.применить(cid, actor_id="service:control-plane",

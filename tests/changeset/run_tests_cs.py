@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import ctypes
+import hashlib
 import json
 import os
 import shutil
@@ -28,6 +29,13 @@ from pathlib import Path
 ЖУРНАЛ = "/srv/site-factory/audit-ledger/audit_ledger.sqlite3"
 РЕЕСТР = "/srv/site-factory/registry-core/registry.sqlite3"
 ПОРТ = int(os.environ.get("CHANGESET_TEST_PORT", "8792"))
+
+#: Токены ТОЛЬКО этого прогона. Сервер их значений не получает: он опознаёт
+#: службы по отпечаткам, а отпечаток обратно в токен не разворачивается.
+ТОКЕНЫ = {"AUDIT_TOKEN_ARCHITECT": "arch-cs-token",
+          "AUDIT_TOKEN_REGISTRY": "reg-cs-token",
+          "AUDIT_TOKEN_QWEN": "qwen-cs-token",
+          "AUDIT_TOKEN_TEMPLATES": "tpl-cs-token"}
 PR_SET_PDEATHSIG = 1
 
 
@@ -75,6 +83,17 @@ def main() -> int:
     реестр_до = снимок(РЕЕСТР, "site", "site_id")
     врем = Path(tempfile.mkdtemp(prefix="changeset-tests-"))
 
+    # Протокол запуска требует credential с отпечатками служб: значения
+    # токенов окружением не передаются, и без этого файла HTTP-контур
+    # отвечает 503 на каждый запрос — включая те, что проверяют отказ.
+    креды = врем / "credentials"
+    креды.mkdir(parents=True, exist_ok=True)
+    (креды / "audit-token-fingerprints").write_text(
+        json.dumps({"services": {имя.removeprefix("AUDIT_TOKEN_").lower():
+                                 hashlib.sha256(значение.encode()).hexdigest()
+                                 for имя, значение in ТОКЕНЫ.items()},
+                    "revoked": []}), encoding="utf-8")
+
     окр = dict(
         os.environ,
         SITE_ENGINE_HTTP="1", SITE_ENGINE_API_ENABLED="1",
@@ -88,6 +107,7 @@ def main() -> int:
         AUDIT_LEDGER_DB=str(врем / "ledger.sqlite3"),
         AUDIT_FEED=str(врем / "feed.jsonl"),
         PYTHONPATH=str(ВЫПУСК),
+        CREDENTIALS_DIRECTORY=str(креды),
     )
     # Копия журнала: эфемерный экземпляр обязан писать в неё, а не в канон.
     ист = sqlite3.connect(f"file:{ЖУРНАЛ}?mode=ro", uri=True)
@@ -118,7 +138,7 @@ def main() -> int:
         p = subprocess.run(
             [str(ВЫПУСК / ".venv/bin/python"), "-m", "pytest",
              "tests/changeset/", "-q", "-p", "no:cacheprovider"] + sys.argv[1:],
-            cwd=str(КОРЕНЬ), env=окр)
+            cwd=str(КОРЕНЬ), env=dict(окр, **ТОКЕНЫ))
         код = p.returncode
     finally:
         сервер.terminate()
