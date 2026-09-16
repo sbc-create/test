@@ -19,6 +19,7 @@
 from __future__ import annotations
 
 import os
+import re
 import shutil
 import stat
 import subprocess
@@ -121,28 +122,42 @@ def песочница(tmp_path):
     источник.write_text("# новая версия посредника\n", encoding="utf-8")
     профиль = tmp_path / "yummyani-site.json"
     профиль.write_text('{"seo_profile": {"indexing_enabled": false}}\n', encoding="utf-8")
+    политика = tmp_path / "indexing-policy.json"
     return {
         "tmp": tmp_path, "bin": bin_dir, "цель": цель,
-        "источник": источник, "профиль": профиль,
+        "источник": источник, "профиль": профиль, "политика": политика,
+    }
+
+
+def переопределения(песочница, сценарий: str, *, ожидаемый_sha: str | None = None) -> dict:
+    """Всё, что сценарий пишет, направлено в песочницу.
+
+    Пропуск хотя бы одного пути здесь означает, что тест пишет в production:
+    умолчания сценария боевые. Именно так и вышло с ``POLICY_TARGET`` —
+    переменную добавили в сценарий и забыли добавить сюда, а на машине с
+    настоящим ``/srv/lords/.frontend`` тесты прошли и записали туда файл.
+    Заслон — ``test_тест_не_может_писать_в_production`` ниже.
+    """
+    return {
+        "PATH": f"{песочница['bin']}:{os.environ['PATH']}",
+        "SCENARIO": сценарий,
+        "FIXTURE_HTML": str(ОБРАЗЕЦ),
+        "CURL": str(песочница["bin"] / "curl"),
+        "SYSTEMCTL": str(песочница["bin"] / "systemctl"),
+        "INSTALL_OWNERSHIP": "",
+        "TARGET": str(песочница["цель"]),
+        "SOURCE": str(песочница["источник"]),
+        "PROFILE": str(песочница["профиль"]),
+        "POLICY_TARGET": str(песочница["политика"]),
+        "EXPECTED_BEFORE": ожидаемый_sha or ПРЕЖНИЙ_SHA,
+        "REQUEST_TIMEOUT": "5",
+        "READINESS_ATTEMPTS": "2",
     }
 
 
 def запустить(песочница, сценарий: str, *, ожидаемый_sha: str | None = None):
     окружение = dict(os.environ)
-    окружение.update(
-        PATH=f"{песочница['bin']}:{os.environ['PATH']}",
-        SCENARIO=сценарий,
-        FIXTURE_HTML=str(ОБРАЗЕЦ),
-        CURL=str(песочница["bin"] / "curl"),
-        SYSTEMCTL=str(песочница["bin"] / "systemctl"),
-        INSTALL_OWNERSHIP="",
-        TARGET=str(песочница["цель"]),
-        SOURCE=str(песочница["источник"]),
-        PROFILE=str(песочница["профиль"]),
-        EXPECTED_BEFORE=ожидаемый_sha or ПРЕЖНИЙ_SHA,
-        REQUEST_TIMEOUT="5",
-        READINESS_ATTEMPTS="2",
-    )
+    окружение.update(переопределения(песочница, сценарий, ожидаемый_sha=ожидаемый_sha))
     return subprocess.run(
         ["bash", str(СЦЕНАРИЙ)], capture_output=True, text=True, env=окружение, timeout=120
     )
@@ -298,3 +313,51 @@ def test_чужая_версия_на_хосте_отменяет_выкладк
     assert готово.returncode == 3
     assert песочница["цель"].read_text(encoding="utf-8") == ПРЕЖНЕЕ
     assert not list(песочница["tmp"].glob("*before-open-indexing*"))
+
+
+def test_тест_не_может_писать_в_production(песочница) -> None:
+    """Каждый боевой путь сценария обязан быть переопределён песочницей.
+
+    Сценарий держит умолчания боевыми намеренно: под root он должен работать
+    без единого аргумента. Плата за это — тест, забывший переопределить хоть
+    один путь, пишет в production и при этом проходит. Так и случилось:
+    ``POLICY_TARGET`` добавили в сценарий, но не в песочницу, и прогон на
+    машине с настоящим ``/srv/lords/.frontend`` записал туда артефакт.
+
+    Проверка читает сам сценарий, находит все переменные с боевым умолчанием и
+    требует, чтобы каждая была в списке переопределений. Новая переменная с
+    путём в ``/srv`` или ``/etc`` уронит этот тест, пока её не занесут туда же.
+    """
+    исходник = СЦЕНАРИЙ.read_text(encoding="utf-8")
+    боевые = set(re.findall(r"^(\w+)=\$\{\1:-(?:/srv|/etc)[^}]*\}", исходник, re.MULTILINE))
+    assert боевые, "в сценарии не нашлось ни одного боевого умолчания — проверка сломана"
+
+    задано = set(переопределения(песочница, "ok"))
+    забыты = боевые - задано
+    assert not забыты, (
+        "эти пути сценария не переопределены и указывают в production: "
+        + ", ".join(sorted(забыты))
+    )
+
+
+def test_сценарий_ничего_не_пишет_вне_песочницы(песочница) -> None:
+    """Прямая проверка: после прогона боевые пути не затронуты.
+
+    Предыдущий тест сверяет списки, этот — факт. Списки можно синхронизировать
+    и всё равно ошибиться в имени переменной.
+    """
+    боевой_каталог = Path("/srv/lords/.frontend")
+    было = (
+        {п.name: п.stat().st_mtime_ns for п in боевой_каталог.iterdir()}
+        if боевой_каталог.is_dir() else None
+    )
+
+    результат = запустить(песочница, "ok", ожидаемый_sha=подставить_слепок(песочница))
+    assert результат.returncode == 0
+
+    if было is not None:
+        стало = {п.name: п.stat().st_mtime_ns for п in боевой_каталог.iterdir()}
+        assert стало == было, (
+            "прогон изменил боевой каталог: "
+            f"{sorted(set(стало) ^ set(было)) or 'файлы перезаписаны'}"
+        )
