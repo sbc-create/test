@@ -25,6 +25,7 @@ from factory.paths import PATHS
 from factory.report import build_result, write_result
 from factory.retry import DEFAULT_POLICY, run_with_retry
 from factory.seo.report import combine
+from factory.site_engine.attestation import gate as attestation_gate
 from factory.state import JobState
 from factory.targets import build_target
 
@@ -183,6 +184,33 @@ def run_job(site_id: str, *, environment: str | None = None, job_id: str | None 
                         f"Цель «{target_conf.get('ref')}» не пригодна для production.", field="target_ref",
                         required_input="production_capable: true у проверенной цели",
                         blocks_stage="PRODUCTION_DEPLOY").as_blocker()])
+
+                # ------------------------------------- свидетельство о живом хосте
+                #
+                # Обычный CI герметичен: он проверяет программные контракты и о
+                # состоянии флота не знает ничего — у раннера нет ни реестра, ни
+                # юнитов, ни доменов. Зелёный CI поэтому не означает, что флот
+                # пригоден к выкату; он означает, что код таков, как объявлено.
+                #
+                # Факты о флоте устанавливает host-контур (`bin/host-attest`) и
+                # записывает в свидетельство, привязанное к тому же дереву. Ворота
+                # закрыты по умолчанию: свидетельства нет ровно тогда, когда флот
+                # не измеряли, — то есть в том самом случае, ради которого они
+                # поставлены. Dry-run сюда не попадает: он ничего не меняет, и
+                # требовать от него измерения живого хоста нечего.
+                if not dry_run:
+                    candidate_sha = audit.factory_commit()
+                    try:
+                        свидетельство = attestation_gate.допустить(candidate_sha=candidate_sha)
+                    except attestation_gate.РелизЗаблокирован as ош:
+                        step("host_attestation", "blocked", detail=ош.detail[:160], exit_code=1)
+                        return finish("BLOCKED_AUTHORIZATION", [BlockedAuthorization(
+                            f"Выкат остановлен воротами аттестации хоста: {ош.detail}",
+                            field=ош.код, required_input=ош.required_input,
+                            blocks_stage="AUTHORIZATION_CHECK").as_blocker()])
+                    step("host_attestation",
+                         detail=f"свидетельство {candidate_sha[:12]} от "
+                                f"{свидетельство['measured_at']}: все обязательные проверки PASS")
 
             # ------------------------------------------------- ворота аналитики
             # Проверяются до сборки: страница с аналитикой собирается один раз,

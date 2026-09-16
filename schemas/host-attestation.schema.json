@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://site-factory.local/schemas/host-attestation.schema.json",
+  "title": "Host attestation evidence",
+  "description": "Машиночитаемый результат измерения живого флота. Выпускается только явным запуском bin/host-attest на разрешённом control host и привязан к конкретному candidate SHA: свидетельство без этой привязки ничего не говорит о том, что собираются выкатывать.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_sha",
+    "measured_at",
+    "host",
+    "verdict",
+    "checks"
+  ],
+  "properties": {
+    "schema_version": {
+      "description": "Версия контракта. Читатель, не знающий версии, обязан отказать, а не угадывать.",
+      "const": "host-attestation/1.0.0"
+    },
+    "candidate_sha": {
+      "description": "Полный git SHA дерева, которое измерялось.",
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "measured_at": {
+      "description": "Момент измерения, UTC. Не момент записи файла и не момент чтения.",
+      "type": "string",
+      "format": "date-time"
+    },
+    "host": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hostname", "control_host", "evidence_root"],
+      "properties": {
+        "hostname": { "type": "string", "minLength": 1 },
+        "control_host": {
+          "description": "Измерение выполнено на хосте, объявленном control host. false означает, что документ описывает не боевой флот.",
+          "type": "boolean"
+        },
+        "evidence_root": { "type": "string", "minLength": 1 }
+      }
+    },
+    "verdict": {
+      "description": "PASS только когда каждая обязательная проверка PASS. Недоступность обязательной проверки — BLOCKED, а не PASS.",
+      "enum": ["PASS", "FAIL", "BLOCKED"]
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/check" }
+    }
+  },
+  "$defs": {
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["check_id", "title", "required", "status", "detail", "measured_at"],
+      "properties": {
+        "check_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)+$"
+        },
+        "title": { "type": "string", "minLength": 1 },
+        "required": { "type": "boolean" },
+        "status": { "enum": ["PASS", "FAIL", "BLOCKED"] },
+        "detail": {
+          "description": "Человекочитаемое основание результата. Секретов не содержит: проверка отчитывается фактами, а не значениями.",
+          "type": "string"
+        },
+        "measured_at": { "type": "string", "format": "date-time" },
+        "observed": {
+          "description": "Измеренные величины, по которым вынесен результат.",
+          "type": "object"
+        }
+      }
+    }
+  }
+}

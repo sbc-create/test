@@ -32,6 +32,7 @@
 | REQ-QUEUE | Один job семантически один раз даже после restart; quarantine после исчерпания | §7 | `tests/unit/test_queue.py` |
 | REQ-DRYRUN | `plan` и `--dry-run` не меняют инфраструктуру | §7 | `tests/integration/test_dry_run.py` |
 | REQ-AUTH | `production_authorized=false` → ноль мутаций; staging не открывает production | §7 | `tests/unit/test_production_gates.py` |
+| REQ-HOST-ATTESTATION | Production-выкат требует свидетельства host-контура для того же candidate SHA; отсутствующее, протухшее, чужое, неполное или содержащее failed/blocked обязательную проверку блокирует релиз до единой мутации | §7 | `tests/unit/test_host_attestation_gate.py` |
 | REQ-SSH | Least-privilege, host key pinning, узкий sudo-allowlist, scoped DNS-токены | §8 | `tests/unit/test_inventory_security.py` |
 | REQ-ATOMIC | Атомарные релизы; переключение после health; предыдущий релиз сохраняется | §8.7 | `tests/integration/test_rollback.py` |
 | REQ-EXPOSURE | Закрыты installer, конфиги, бэкапы, `.env`, git-метаданные, debug, листинг каталогов | §8.10 | `tests/integration/test_security_smoke.py` |
