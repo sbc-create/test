@@ -461,6 +461,8 @@ class TestProfileProperties:
             "yummyani.biz",
             "animedia.icu",
             "animedia.space",
+            "amd.online",
+            "w140.zona.plus",
         }
 
 
