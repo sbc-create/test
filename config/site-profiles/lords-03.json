@@ -193,7 +193,9 @@
     "enabled": true,
     "indexing_enabled": false,
     "canonical_host": "1lordserials1.online",
-    "editorial_profile": "lords-03-editorial"
+    "editorial_profile": "lords-03-editorial",
+    "indexing_expected": "closed",
+    "indexing_reason": "решения владельца об открытии нет"
   },
   "analytics_profile": {
     "enabled": true,
@@ -224,5 +226,17 @@
     "monitoring-audit": "site-factory/platform"
   },
   "health_endpoint": "/healthz",
-  "coverage_endpoint": "/api/v1/coverage"
+  "coverage_endpoint": "/api/v1/coverage",
+  "player": {
+    "provider": "cdnvideohub",
+    "credential_profile": "lords",
+    "publisher_id_ref": "secret://cdnvideohub/lords/lords-03/publisher-id",
+    "sidecar": "/srv/lords/.frontend/player-lords-03.json",
+    "note": "Привязка витрины к паре учётных данных провайдера. Здесь только ссылка: значение Publisher ID живёт в Secret Hub и в git не попадает. Боковой файл создаёт операция PLAYER_CONFIGURE.",
+    "source_mode": "provider-id"
+  },
+  "environment": "production",
+  "profile_family": "lords",
+  "profile_version": "1.0",
+  "canonical_domain": "1lordserials1.online"
 }
