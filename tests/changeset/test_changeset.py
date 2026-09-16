@@ -43,7 +43,54 @@ def test_01_полный_путь_до_успеха(бд, двигатель, а
     набор = S.получить(бд, cid)
     путь = [t["to_status"] for t in набор["transitions"]]
     assert путь == [M.VALIDATING, M.VALIDATED, M.AWAITING_APPROVAL, M.APPROVED,
-                    M.APPLYING, M.VERIFYING, M.SUCCEEDED], путь
+                    M.APPLYING, M.APPLIED, M.VERIFYING, M.VERIFIED,
+                    M.SUCCEEDED], путь
+
+
+def test_01c_одобрено_применено_и_проверено_это_разные_состояния():
+    """Три разных утверждения не вправе делить одно состояние.
+
+    «Разрешено начать», «мир изменён» и «изменение подтверждено наблюдением»
+    различаются последствиями: после второго нужен откат, после первого — нет.
+    Слияние любых двух из них стирает именно эту разницу.
+    """
+    тройка = {M.APPROVED, M.APPLIED, M.VERIFIED}
+    assert len(тройка) == 3, тройка
+    assert M.APPLIED not in M.ТЕРМИНАЛЬНЫЕ
+    assert M.VERIFIED not in M.ТЕРМИНАЛЬНЫЕ
+    # Между ними обязаны быть переходы, а не совпадение имён.
+    assert M.разрешён(M.APPLYING, M.APPLIED)
+    assert M.разрешён(M.APPLIED, M.VERIFYING)
+    assert M.разрешён(M.VERIFYING, M.VERIFIED)
+    assert M.разрешён(M.VERIFIED, M.SUCCEEDED)
+
+
+def test_01d_канонические_имена_программы_покрыты():
+    """Каждое имя из обязательного набора программы имеет своё состояние."""
+    обязательные = {
+        "PROPOSED", "VALIDATED", "APPROVED", "APPLY_STARTED", "APPLIED",
+        "VERIFY_STARTED", "VERIFIED", "KEEP", "ROLLBACK_REQUESTED",
+        "ROLLED_BACK", "REJECTED", "FAILED", "BLOCKED", "CANCELLED"}
+    assert set(M.КАНОНИЧЕСКИЕ_ИМЕНА) == обязательные
+    # Соответствие ведёт в настоящие состояния, а не в выдуманные имена.
+    for имя, состояния in M.КАНОНИЧЕСКИЕ_ИМЕНА.items():
+        assert состояния, имя
+        for с in состояния:
+            assert с in M.СОСТОЯНИЯ, (имя, с)
+    # Одно состояние не отвечает за два канонических имени: иначе разделение,
+    # ради которого набор и перечислен, существовало бы только на бумаге.
+    все = [с for сс in M.КАНОНИЧЕСКИЕ_ИМЕНА.values() for с in сс]
+    assert len(все) == len(set(все)), sorted(все)
+
+
+@pytest.mark.parametrize("действие,откуда", [
+    ("verify_ok", M.APPLIED),        # проверка без её начала
+    ("keep", M.VERIFYING),           # решение оставить без подтверждения
+    ("rollback_ok", M.ROLLBACK_REQUESTED),  # откат без его начала
+])
+def test_01e_обход_обязательной_стадии_запрещён(действие, откуда):
+    """Стадию нельзя перепрыгнуть, даже зная имя следующего действия."""
+    assert M.переход(откуда, действие) is None
 
 
 def test_01b_каждый_переход_таблицы_достижим():

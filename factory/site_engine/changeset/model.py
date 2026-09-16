@@ -24,7 +24,13 @@ VALIDATED = "VALIDATED"
 AWAITING_APPROVAL = "AWAITING_APPROVAL"
 APPROVED = "APPROVED"
 APPLYING = "APPLYING"
+#: Эффект создан, но ещё не проверен наблюдением. Отдельное состояние нужно
+#: затем, что «применено» и «подтверждено» — разные утверждения: между ними
+#: набор уже изменил мир, но права считать изменение удачным ещё нет.
+APPLIED = "APPLIED"
 VERIFYING = "VERIFYING"
+#: Наблюдение совпало с ожидаемым. Ещё не решение оставить: решение — SUCCEEDED.
+VERIFIED = "VERIFIED"
 SUCCEEDED = "SUCCEEDED"
 
 #: Боковые состояния.
@@ -34,6 +40,10 @@ STALE = "STALE"
 EXPIRED = "EXPIRED"
 CANCELLED = "CANCELLED"
 APPLY_FAILED = "APPLY_FAILED"
+#: Компенсация запрошена, но ещё не начата. Разделение нужно, чтобы запрос на
+#: откат пережил падение исполнителя: иначе намерение откатить существовало бы
+#: только в памяти процесса, который его и не пережил.
+ROLLBACK_REQUESTED = "ROLLBACK_REQUESTED"
 ROLLING_BACK = "ROLLING_BACK"
 ROLLED_BACK = "ROLLED_BACK"
 ROLLBACK_FAILED = "ROLLBACK_FAILED"
@@ -41,10 +51,37 @@ MANUAL_INTERVENTION_REQUIRED = "MANUAL_INTERVENTION_REQUIRED"
 
 СОСТОЯНИЯ = (
     PROPOSED, VALIDATING, VALIDATED, AWAITING_APPROVAL, APPROVED, APPLYING,
-    VERIFYING, SUCCEEDED, VALIDATION_FAILED, REJECTED, STALE, EXPIRED,
-    CANCELLED, APPLY_FAILED, ROLLING_BACK, ROLLED_BACK, ROLLBACK_FAILED,
-    MANUAL_INTERVENTION_REQUIRED,
+    APPLIED, VERIFYING, VERIFIED, SUCCEEDED, VALIDATION_FAILED, REJECTED,
+    STALE, EXPIRED, CANCELLED, APPLY_FAILED, ROLLBACK_REQUESTED, ROLLING_BACK,
+    ROLLED_BACK, ROLLBACK_FAILED, MANUAL_INTERVENTION_REQUIRED,
 )
+
+#: Канонические имена программы FLEET → состояния этого контура.
+#:
+#: Имена различаются там, где местный словарь старше программного, и менять их
+#: задним числом нельзя: enum уже опубликован в принятом наборе контрактов, и
+#: переименование сломало бы всех, кто по нему читает. Соответствие поэтому
+#: объявлено явно и проверяется испытанием, а не подразумевается.
+#:
+#: FAILED раскрыт в три состояния намеренно: «не прошло» на валидации, при
+#: применении и при откате требуют разных действий, и сводить их в одно имя
+#: значило бы терять именно ту разницу, ради которой состояние и смотрят.
+КАНОНИЧЕСКИЕ_ИМЕНА: dict[str, tuple[str, ...]] = {
+    "PROPOSED": (PROPOSED,),
+    "VALIDATED": (VALIDATED,),
+    "APPROVED": (APPROVED,),
+    "APPLY_STARTED": (APPLYING,),
+    "APPLIED": (APPLIED,),
+    "VERIFY_STARTED": (VERIFYING,),
+    "VERIFIED": (VERIFIED,),
+    "KEEP": (SUCCEEDED,),
+    "ROLLBACK_REQUESTED": (ROLLBACK_REQUESTED,),
+    "ROLLED_BACK": (ROLLED_BACK,),
+    "REJECTED": (REJECTED,),
+    "FAILED": (VALIDATION_FAILED, APPLY_FAILED, ROLLBACK_FAILED),
+    "BLOCKED": (MANUAL_INTERVENTION_REQUIRED,),
+    "CANCELLED": (CANCELLED,),
+}
 
 #: Состояния, из которых выхода нет. Попытка продолжить из терминального —
 #: не ошибка клиента, а признак того, что кто-то держит устаревшую картину.
@@ -55,8 +92,8 @@ MANUAL_INTERVENTION_REQUIRED = "MANUAL_INTERVENTION_REQUIRED"
 
 #: Состояния, в которых набор изменений занимает замок целей.
 АКТИВНЫЕ = frozenset({
-    VALIDATING, VALIDATED, AWAITING_APPROVAL, APPROVED, APPLYING, VERIFYING,
-    ROLLING_BACK,
+    VALIDATING, VALIDATED, AWAITING_APPROVAL, APPROVED, APPLYING, APPLIED,
+    VERIFYING, VERIFIED, ROLLBACK_REQUESTED, ROLLING_BACK,
 })
 
 # --- роли --------------------------------------------------------------------
@@ -208,25 +245,38 @@ def _п(действие, откуда, куда, роли, пред=(), пос�
        пост=("отпечаток до изменения сохранён", "намерение записано в журнал"),
        таймаут=600, повторов=0, событие="changeset.applying.v1",
        компенсируемо=True),
-    _п("applied", APPLYING, VERIFYING, {EXECUTOR},
+    _п("applied", APPLYING, APPLIED, {EXECUTOR},
        пред=("адаптер сообщил о завершении",),
        пост=("результат применения сохранён",),
        таймаут=300, повторов=2, событие="changeset.applied.v1",
        компенсируемо=True),
+    _п("verify_start", APPLIED, VERIFYING, {EXECUTOR},
+       пред=("результат применения сохранён",),
+       пост=("проверка читает наблюдаемое состояние заново",),
+       таймаут=300, повторов=2, событие="changeset.verifying.v1",
+       компенсируемо=True),
     _п("apply_fail", APPLYING, APPLY_FAILED, {EXECUTOR},
        пред=("адаптер отказал",), пост=("причина записана",),
        событие="changeset.apply_failed.v1", компенсируемо=True),
-    _п("verify_ok", VERIFYING, SUCCEEDED, {EXECUTOR},
+    _п("verify_ok", VERIFYING, VERIFIED, {EXECUTOR},
        пред=("наблюдаемое состояние совпало с ожидаемым",),
-       пост=("замок освобождён", "отпечаток после изменения сохранён"),
+       пост=("отпечаток после изменения сохранён",),
+       событие="changeset.verified.v1", компенсируемо=True),
+    _п("keep", VERIFIED, SUCCEEDED, {EXECUTOR},
+       пред=("проверка подтверждена",),
+       пост=("замок освобождён", "изменение оставлено"),
        событие="changeset.succeeded.v1"),
-    _п("verify_fail", VERIFYING, ROLLING_BACK, {EXECUTOR},
+    _п("verify_fail", VERIFYING, ROLLBACK_REQUESTED, {EXECUTOR},
        пред=("наблюдаемое состояние не совпало",),
-       пост=("запущена компенсация",),
+       пост=("компенсация запрошена",),
        таймаут=600, повторов=2, событие="changeset.verify_failed.v1",
        компенсируемо=True),
-    _п("rollback_start", APPLY_FAILED, ROLLING_BACK, {EXECUTOR, OPERATOR},
-       пред=("эффект обратим",), пост=("запущена компенсация",),
+    _п("rollback_start", APPLY_FAILED, ROLLBACK_REQUESTED, {EXECUTOR, OPERATOR},
+       пред=("эффект обратим",), пост=("компенсация запрошена",),
+       таймаут=600, повторов=2, событие="changeset.rollback_requested.v1",
+       компенсируемо=True),
+    _п("rollback_begin", ROLLBACK_REQUESTED, ROLLING_BACK, {EXECUTOR, OPERATOR},
+       пред=("компенсация запрошена",), пост=("запущена компенсация",),
        таймаут=600, повторов=2, событие="changeset.rolling_back.v1",
        компенсируемо=True),
     _п("rollback_ok", ROLLING_BACK, ROLLED_BACK, {EXECUTOR},

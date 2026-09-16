@@ -131,7 +131,7 @@ class Engine:
         набор = S.получить(self.соед, cid)
         if набор is None:
             raise S.ChangeSetError("CHANGESET_NOT_FOUND", "набора нет", 404)
-        if набор["status"] in (M.APPLYING, M.VERIFYING):
+        if набор["status"] in (M.APPLYING, M.APPLIED, M.VERIFYING, M.VERIFIED):
             return self._прогнать_цели(набор, actor_id=actor_id, служба=служба,
                                        fencing_token=fencing_token,
                                        возобновление=True)
@@ -166,6 +166,22 @@ class Engine:
         return self._прогнать_цели(набор, actor_id=actor_id, служба=служба,
                                    fencing_token=fencing_token,
                                    возобновление=False)
+
+    def _довести_до_проверки(self, cid: str, *, actor_id: str, служба: str,
+                             fencing_token: int) -> None:
+        """Довести набор до VERIFYING, из какого бы состояния он ни пришёл.
+
+        Между «применяем» и «проверяем» теперь два состояния, и набор,
+        возобновлённый после падения исполнителя, может стоять в любом из
+        них. Перебор по таблице вместо цепочки if'ов — чтобы добавление
+        стадии не требовало править ещё и это место.
+        """
+        for действие, откуда in (("applied", M.APPLYING),
+                                 ("verify_start", M.APPLIED)):
+            if S.получить(self.соед, cid)["status"] == откуда:
+                S.применить_переход(self.соед, cid, действие, actor_id=actor_id,
+                                    служба=служба, роль=M.EXECUTOR,
+                                    fencing_token=fencing_token)
 
     def _прогнать_цели(self, набор: dict, *, actor_id: str, служба: str,
                        fencing_token: int, возобновление: bool) -> dict:
@@ -217,11 +233,9 @@ class Engine:
                                 after=наблюдение_после["fingerprint"],
                                 detail=проверка.get("reason", ""))
                 # Канарейка не прошла — остальные цели не трогаем вовсе.
-                if S.получить(self.соед, cid)["status"] == M.APPLYING:
-                    S.применить_переход(
-                        self.соед, cid, "applied", actor_id=actor_id,
-                        служба=служба, роль=M.EXECUTOR,
-                        fencing_token=fencing_token)
+                self._довести_до_проверки(cid, actor_id=actor_id,
+                                          служба=служба,
+                                          fencing_token=fencing_token)
                 S.применить_переход(
                     self.соед, cid, "verify_fail", actor_id=actor_id,
                     служба=служба, роль=M.EXECUTOR, fencing_token=fencing_token,
@@ -240,11 +254,15 @@ class Engine:
                             after=наблюдение_после["fingerprint"])
             применённые.append(site_id)
 
-        if S.получить(self.соед, cid)["status"] == M.APPLYING:
-            S.применить_переход(self.соед, cid, "applied", actor_id=actor_id,
-                                служба=служба, роль=M.EXECUTOR,
-                                fencing_token=fencing_token)
+        self._довести_до_проверки(cid, actor_id=actor_id, служба=служба,
+                                  fencing_token=fencing_token)
         S.применить_переход(self.соед, cid, "verify_ok", actor_id=actor_id,
+                            служба=служба, роль=M.EXECUTOR,
+                            fencing_token=fencing_token)
+        # Проверка подтвердилась — и только теперь принимается решение
+        # оставить изменение. Это разные утверждения, и разделены они затем,
+        # чтобы «проверено» нельзя было выдать за «решено оставить».
+        S.применить_переход(self.соед, cid, "keep", actor_id=actor_id,
                             служба=служба, роль=M.EXECUTOR,
                             fencing_token=fencing_token)
         return {"changeset_id": cid, "status": M.SUCCEEDED,
@@ -255,6 +273,15 @@ class Engine:
     def откатить(self, cid: str, *, actor_id: str, служба: str,
                  fencing_token: int, цели: list[str] | None = None) -> dict:
         набор = S.получить(self.соед, cid)
+        # Компенсация всегда проходит через «запрошена»: запрос на откат
+        # обязан пережить падение исполнителя, а не жить в его памяти.
+        for действие, откуда in (("rollback_start", M.APPLY_FAILED),
+                                 ("rollback_begin", M.ROLLBACK_REQUESTED)):
+            if набор["status"] == откуда:
+                S.применить_переход(self.соед, cid, действие, actor_id=actor_id,
+                                    служба=служба, роль=M.EXECUTOR,
+                                    fencing_token=fencing_token)
+                набор = S.получить(self.соед, cid)
         ад = self.адаптер or A.получить(набор["resource_type"])
         планы = набор["dry_run_result"]["per_site_plan"]
         отпечатки = {t["site_id"]: t["before_fingerprint"]

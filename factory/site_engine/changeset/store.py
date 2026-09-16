@@ -366,7 +366,8 @@ def применить_переход(соед: sqlite3.Connection, cid: str, д
                                  403)
 
         # Аренда проверяется для всего, что ведёт к внешнему эффекту.
-        if действие in ("apply", "applied", "verify_ok", "verify_fail",
+        if действие in ("apply", "applied", "verify_start", "verify_ok",
+                        "keep", "verify_fail", "rollback_begin",
                         "rollback_ok", "rollback_fail"):
             _проверить_аренду(соед, cid, fencing_token)
 
