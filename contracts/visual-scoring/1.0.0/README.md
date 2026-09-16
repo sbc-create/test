@@ -126,7 +126,7 @@ provenance; изменении evidence после начала проверки
 | Параметр | Значение | Источник |
 | --- | --- | --- |
 | Playwright | `1.62.1` | `package.json`, `package-lock.json` |
-| Chromium | `chromium-1194` | `tests/tools/measure_reference.js:14` |
+| Chromium | `chromium-1234` | `@playwright/test 1.62.1` + `artifacts/evidence/env-report.json:77` |
 | Python | `3.11` | `.github/workflows/ci.yml:17`, `deploy.yml:36` |
 | DPR | `1` | `tests/tools/measure_reference.js:143` |
 | Ширины | 390, 768, 1440; высота 844 при ширине < 500, иначе 1000 | `measure_reference.js:142` |

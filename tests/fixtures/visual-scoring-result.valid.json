@@ -9,7 +9,7 @@
   "environment_manifest": {
     "renderer_engine": "chromium",
     "renderer_driver_version": "1.62.1",
-    "browser_build": "chromium-1194",
+    "browser_build": "chromium-1234",
     "device_pixel_ratio": 1,
     "screenshot_capture_mode": "viewport",
     "locale": "ru-RU",

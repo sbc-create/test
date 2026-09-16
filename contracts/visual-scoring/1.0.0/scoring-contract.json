@@ -204,7 +204,7 @@
       "engine": "chromium",
       "driver": "playwright",
       "driver_version": {"value": "1.62.1", "source": "package.json devDependencies + package-lock.json", "kind": "pinned_exact"},
-      "browser_build": {"value": "chromium-1194", "source": "tests/tools/measure_reference.js:14 executablePath /opt/pw-browsers/chromium-1194", "kind": "pinned_exact"},
+      "browser_build": {"value": "chromium-1234", "source": "@playwright/test 1.62.1 (package.json + package-lock.json) определяет ревизию; artifacts/evidence/env-report.json:77 и docs/templates/handoff/TEMPLATE_TO_CORE-009-stale-chromium-path.md подтверждают установленную chromium-1234 в chrome-linux64/", "kind": "derived_from_driver", "note": "Ревизия не хардкодится: tests/tools/measure_reference.js намеренно отдаёт выбор Playwright, потому что ревизия меняется вместе с версией драйвера. Диапазон задаёт driver_version; browser_build обязан совпасть у эталона и кандидата."},
       "range_justification": "package.json фиксирует 1.62.1 точной версией, а не диапазоном; lockfile подтверждает. Доказуемого диапазона совместимости нет, поэтому закреплена проверенная версия."
     },
     "python_runtime": {"value": "3.11", "source": ".github/workflows/ci.yml:17 и deploy.yml:36", "kind": "pinned_exact"},

@@ -32,8 +32,11 @@
 
 Источники закреплённых версий совместимости: `package.json` и
 `package-lock.json` (Playwright `1.62.1`), `tests/tools/measure_reference.js`
-(Chromium `chromium-1194`, DPR 1, режим снимка, высоты вьюпортов),
-`.github/workflows/ci.yml` и `deploy.yml` (Python `3.11`).
+(DPR 1, режим снимка, высоты вьюпортов), `.github/workflows/ci.yml` и
+`deploy.yml` (Python `3.11`). Ревизия Chromium `chromium-1234` не хардкодится
+в коде замера: её определяет версия драйвера, а подтверждают
+`artifacts/evidence/env-report.json:77` и
+`docs/templates/handoff/TEMPLATE_TO_CORE-009-stale-chromium-path.md`.
 
 Ни одно число не выведено из результатов PR #80 или PR #76. Кандидат этой
 версией не оценивался.

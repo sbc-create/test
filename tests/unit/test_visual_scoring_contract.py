@@ -104,7 +104,7 @@ def _tokens(value_for, surfaces=None, viewports=None) -> list[dict]:
 
 _ENV = {
     "renderer_engine": "chromium", "renderer_driver_version": "1.62.1",
-    "browser_build": "chromium-1194", "device_pixel_ratio": 1,
+    "browser_build": "chromium-1234", "device_pixel_ratio": 1,
     "screenshot_capture_mode": "viewport", "locale": "ru-RU",
     "timezone": "Europe/Moscow", "animation_policy": "reduce",
 }
@@ -386,7 +386,7 @@ def test_three_distinct_subjects_pass_independence():
 
 
 def test_environment_mismatch_is_reported():
-    reference = {"browser_build": "chromium-1194", "device_pixel_ratio": 1}
+    reference = {"browser_build": "chromium-1234", "device_pixel_ratio": 1}
     candidate = {"browser_build": "chromium-1200", "device_pixel_ratio": 1}
     mismatches = check_compatibility(reference, candidate)
     assert any("browser_build" in m for m in mismatches)
@@ -398,7 +398,7 @@ def test_unprovable_range_is_forbidden():
 
 
 def test_identical_environment_has_no_mismatch():
-    env = {"browser_build": "chromium-1194", "locale": "ru-RU"}
+    env = {"browser_build": "chromium-1234", "locale": "ru-RU"}
     assert check_compatibility(env, env) == []
 
 
@@ -406,7 +406,7 @@ def test_contract_pins_versions_instead_of_guessing(contract):
     """Недоказуемый диапазон закреплён версией, а не словом latest."""
     compat = contract["compatibility"]
     assert compat["renderer"]["driver_version"]["value"] == "1.62.1"
-    assert compat["renderer"]["browser_build"]["value"] == "chromium-1194"
+    assert compat["renderer"]["browser_build"]["value"] == "chromium-1234"
     assert compat["python_runtime"]["value"] == "3.11"
     for key in ("locale", "timezone", "font_availability", "animation_policy"):
         assert compat[key]["kind"] == "must_be_declared"
