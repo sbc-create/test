@@ -26,6 +26,11 @@ set -euo pipefail
 # менялись, а тест подставляет свою песочницу и прогоняет все ветки, включая
 # откат, не касаясь production.
 TARGET=${TARGET:-/srv/lords/.frontend/yummy-frontend.py}
+# Артефакт политики индексации. Посредник читает его и ничего не решает сам,
+# поэтому выложить посредник без артефакта — значит закрыть все витрины: файла
+# нет, решения нет, по умолчанию закрыто. Оба файла кладутся одним шагом.
+POLICY_TARGET=${POLICY_TARGET:-/srv/lords/.frontend/indexing-policy.json}
+PROFILES_DIR=${PROFILES_DIR:-$(dirname "$(readlink -f "$0")")/../../config/site-profiles}
 UNIT=${UNIT:-nova-yummy-site.service}
 OPEN_DOMAIN=yummyani.site
 # Объявленная политика витрины. Её тоже надо привести к решению владельца:
@@ -214,7 +219,43 @@ else
   fail "профиль недоступен на запись, объявленная политика останется прежней: $PROFILE"
 fi
 
+step "сборка артефакта политики и ворота релиза"
+POLICY_BUILT=$(mktemp)
+if ! python3 - "$PROFILES_DIR" "$POLICY_BUILT" <<'PYGATE'
+import sys, pathlib
+профили, цель = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2])
+sys.path.insert(0, str(профили.resolve().parent.parent))
+from factory.indexing.artifact import build, write
+from factory.indexing.gate import check, require
+from factory.indexing.policy import compile_policy
+
+артефакт = build(профили)
+матрица = артефакт["matrix"]
+# Разрешённая владельцем матрица: один открытый домен, восемь закрытых.
+require(check(
+    compile_policy(профили),
+    allowed_open={"yummyani.site"},
+    allowed_closed=set(матрица["closed"]),
+    live={d: "open" for d in матрица["open"]} | {d: "closed" for d in матрица["closed"]},
+))
+write(артефакт, цель)
+print(f"   матрица: открыт {матрица['open_count']}, закрыт {матрица['closed_count']}")
+print(f"   policy_sha256: {артефакт['manifest']['policy_sha256']}")
+PYGATE
+then
+  fail "ворота релиза не пропустили выкладку — ничего не изменено"
+  rm -f "$POLICY_BUILT"
+  exit 4
+fi
+
 step "установка и перезапуск ${UNIT} (службы .org и .biz не трогаются)"
+POLICY_BACKUP=""
+if [ -f "$POLICY_TARGET" ]; then
+  POLICY_BACKUP="${POLICY_TARGET}.before-open-indexing.${STAMP}"
+  cp -p "$POLICY_TARGET" "$POLICY_BACKUP"
+fi
+install "${INSTALL_OWNERSHIP[@]}" -m 0644 "$POLICY_BUILT" "$POLICY_TARGET"
+rm -f "$POLICY_BUILT"
 install "${INSTALL_OWNERSHIP[@]}" -m 0755 "$SOURCE" "$TARGET"
 "$SYSTEMCTL" restart "$UNIT"
 
@@ -237,6 +278,9 @@ fi
 
 fail "проверки не прошли — откатываю"
 install "${INSTALL_OWNERSHIP[@]}" -m 0755 "$BACKUP" "$TARGET"
+if [ -n "${POLICY_BACKUP:-}" ]; then
+  install "${INSTALL_OWNERSHIP[@]}" -m 0644 "$POLICY_BACKUP" "$POLICY_TARGET"
+fi
 if [ -n "${PROFILE_BACKUP:-}" ]; then
   cp -p "$PROFILE_BACKUP" "$PROFILE"
 fi
