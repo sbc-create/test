@@ -406,6 +406,63 @@ def test_12c_qwen_может_предложить_но_не_одобрить(б�
     assert ош.value.error_code == "MODEL_ACTION_DENIED"
 
 
+# --- 11a. запись целиком или никак -------------------------------------------
+
+def test_11a_сбой_на_середине_перехода_не_оставляет_половины(бд, двигатель,
+                                                             адаптер,
+                                                             monkeypatch):
+    """Переход — одна запись: состояние, история, замок и событие вместе.
+
+    Соединение открыто в автофиксации, где `with соед:` транзакции НЕ
+    открывает. Пока это оставалось незамеченным, прерванный переход оставлял
+    новое состояние без события о нём — и выглядело это как обычная запись.
+    """
+    адаптер.посеять("test-alpha-0001", "res-1", {"title": "старое"})
+    cid = создать(бд)
+
+    def падать(*_a, **_k):
+        raise RuntimeError("сбой на отправке события")
+
+    monkeypatch.setattr(S, "_в_ящик", падать)
+    до_статус = S.получить(бд, cid)["status"]
+    до = _счётчики(бд, cid)
+    with pytest.raises(RuntimeError):
+        двигатель.валидировать(cid, actor_id="service:control-plane",
+                               служба="control-plane")
+    monkeypatch.undo()
+    assert S.получить(бд, cid)["status"] == до_статус
+    assert _счётчики(бд, cid) == до
+
+
+def test_11a_блок_записи_действительно_транзакция(бд):
+    """Прямая проверка механизма, без которой прежняя ошибка и жила."""
+    cid = создать(бд)
+    поле = "SELECT failure_reason r FROM changeset WHERE changeset_id=?"
+    до = бд.execute(поле, (cid,)).fetchone()["r"]
+    with pytest.raises(RuntimeError):
+        with S.запись(бд):
+            бд.execute("UPDATE changeset SET failure_reason=? "
+                       "WHERE changeset_id=?", ("передумали", cid))
+            raise RuntimeError("передумали")
+    assert бд.execute(поле, (cid,)).fetchone()["r"] == до
+
+
+def test_11a_вложенный_блок_не_ломает_внешний(бд):
+    """Вложенных транзакций в sqlite нет — внешняя отвечает за обе."""
+    cid = создать(бд)
+    with S.запись(бд):
+        with S.запись(бд):
+            бд.execute("UPDATE changeset SET failure_reason=? "
+                       "WHERE changeset_id=?", ("вложенно", cid))
+        # Внутренний блок ничего не зафиксировал сам: он вложен, и за обе
+        # записи отвечает внешний.
+        assert бд.in_transaction
+    assert not бд.in_transaction
+    стало = бд.execute("SELECT failure_reason r FROM changeset "
+                       "WHERE changeset_id=?", (cid,)).fetchone()["r"]
+    assert стало == "вложенно", стало
+
+
 # --- 11b. верхняя отметка истории -------------------------------------------
 
 def test_11b_отметка_растёт_и_не_опускается(tmp_path, monkeypatch):

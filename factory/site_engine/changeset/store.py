@@ -10,6 +10,7 @@
 """
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import json
 import os
@@ -333,8 +334,12 @@ def создать(соед: sqlite3.Connection, заявка: dict[str, Any], *
     cid = str(uuid.uuid4())
     т = сейчас()
     try:
-        _вставить(соед, cid, т, заявка, цели, канареи, ключ,
-                  producer_service, actor_id, actor_type)
+        # Набор, его цели и событие о нём — одна запись. Порознь они
+        # оставляли бы набор без целей или без события, и обнаруживалось бы
+        # это у того, кто эти цели потом читает.
+        with запись(соед):
+            _вставить(соед, cid, т, заявка, цели, канареи, ключ,
+                      producer_service, actor_id, actor_type)
     except sqlite3.IntegrityError:
         # Кто-то успел первым между проверкой и вставкой. Это и есть
         # идемпотентность: побеждает первый, остальные получают его результат.
@@ -391,6 +396,46 @@ def _в_ящик(соед: sqlite3.Connection, cid: str, тип: str,
         (cid, тип, к, канон(нагрузка), сейчас()))
 
 
+# --- запись ------------------------------------------------------------------
+
+@contextlib.contextmanager
+def запись(соед: sqlite3.Connection):
+    """Настоящая транзакция на запись.
+
+    Соединение открыто с ``isolation_level=None``, то есть в автофиксации, и
+    ``with соед:`` в этом режиме НЕ открывает транзакцию — он лишь вызывает
+    commit на выходе, а фиксировать нечего: каждый оператор уже зафиксирован
+    сам по себе. Блок, прерванный на середине, оставлял половину записей, и
+    выглядело это как атомарная операция.
+
+    BEGIN IMMEDIATE, а не обычный BEGIN: отложенная транзакция берёт замок
+    только на первой ЗАПИСИ, и если между её чтением и записью успел
+    зафиксироваться другой писатель, sqlite отвечает «database is locked»
+    сразу — обработчик занятости в этом случае не зовётся, иначе два
+    читателя, собравшихся писать, заклинили бы друг друга. Взяв замок сразу,
+    мы попадаем в ожидание, а не в отказ.
+    """
+    if соед.in_transaction:
+        # Вложенных транзакций в sqlite нет. Внешняя уже отвечает за атомарность.
+        yield
+        return
+    предел = time.monotonic() + 30.0
+    while True:
+        try:
+            соед.execute("BEGIN IMMEDIATE")
+            break
+        except sqlite3.OperationalError as ош:
+            if "locked" not in str(ош) or time.monotonic() >= предел:
+                raise
+            time.sleep(0.02)
+    try:
+        yield
+    except BaseException:
+        соед.execute("ROLLBACK")
+        raise
+    соед.execute("COMMIT")
+
+
 # --- сверка версии ресурса ---------------------------------------------------
 
 def сверить_версию(соед: sqlite3.Connection, cid: str,
@@ -425,7 +470,7 @@ def применить_переход(соед: sqlite3.Connection, cid: str, д
                       request_id: str = "",
                       fencing_token: int | None = None) -> dict:
     """Единственный способ изменить состояние набора изменений."""
-    with соед:
+    with запись(соед):
         строка = соед.execute("SELECT * FROM changeset WHERE changeset_id=?",
                               (cid,)).fetchone()
         if строка is None:
@@ -542,7 +587,7 @@ def взять_аренду(соед: sqlite3.Connection, cid: str, worker_id: s
     старым номером — и будет отвергнут, сколько бы он ни был уверен, что
     работает он один.
     """
-    with соед:
+    with запись(соед):
         текущая = соед.execute(
             "SELECT * FROM changeset_lease WHERE changeset_id=?", (cid,)).fetchone()
         сейчас_м = time.monotonic()
@@ -570,7 +615,7 @@ def взять_аренду(соед: sqlite3.Connection, cid: str, worker_id: s
 def продлить_аренду(соед: sqlite3.Connection, cid: str, worker_id: str,
                     маркер: int, *, ttl: float = 60.0) -> bool:
     с = time.monotonic()
-    with соед:
+    with запись(соед):
         изменено = соед.execute(
             "UPDATE changeset_lease SET expires_at=?, heartbeat_at=? "
             "WHERE changeset_id=? AND worker_id=? AND fencing_token=?",
@@ -625,7 +670,7 @@ def получить(соед: sqlite3.Connection, cid: str) -> dict | None:
 def обновить_цель(соед: sqlite3.Connection, cid: str, site_id: str, *,
                   state: str, before: str | None = None,
                   after: str | None = None, detail: str = "") -> None:
-    with соед:
+    with запись(соед):
         соед.execute(
             "UPDATE changeset_target SET state=?, before_fingerprint="
             "COALESCE(?, before_fingerprint), after_fingerprint=?, "
