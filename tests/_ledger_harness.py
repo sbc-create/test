@@ -22,6 +22,7 @@
   пропустить тесты: `ЖурналНеПоднялся` обязан долететь до pytest. Пропуск
   превратил бы «служба сломана» в «всё хорошо», а именно это и нужно поймать.
 """
+
 from __future__ import annotations
 
 import contextlib
@@ -32,6 +33,7 @@ import os
 import shutil
 import signal
 import socket
+import sqlite3
 import subprocess
 import sys
 import tempfile
@@ -69,8 +71,7 @@ class ЖурналНеПоднялся(RuntimeError):
 
 def _умереть_с_родителем() -> None:
     with contextlib.suppress(OSError):
-        ctypes.CDLL("libc.so.6", use_errno=True).prctl(
-            PR_SET_PDEATHSIG, signal.SIGKILL, 0, 0, 0)
+        ctypes.CDLL("libc.so.6", use_errno=True).prctl(PR_SET_PDEATHSIG, signal.SIGKILL, 0, 0, 0)
 
 
 def свободный_порт() -> int:
@@ -110,6 +111,74 @@ class Экземпляр:
         shutil.rmtree(self.каталог, ignore_errors=True)
 
 
+#: Сайты эфемерного реестра. Это идентификаторы прогона, а не перепись флота:
+#: набору важно лишь, что реестр НЕ ПУСТ.
+САЙТЫ_ПРОГОНА = ("ephemeral-ledger-site-a", "ephemeral-ledger-site-b")
+
+
+def _реестр(каталог: Path) -> Path:
+    """Пустой реестр молча выключает проверку site_id — поэтому он не пустой.
+
+    `ledger_api.известные_сайты()` при отсутствующем файле возвращает пустое
+    множество, а вызывающий превращает пустое в `None`, и `store.append`
+    пропускает проверку идентификатора целиком. То есть без реестра событие с
+    любым выдуманным `site_id` принимается с кодом 201 — и набор, который
+    как раз это и проверяет, краснеет не потому, что проверка сломана, а
+    потому, что её не на чем выполнить.
+
+    Двух записей достаточно: тесты подают заведомо неизвестные идентификаторы
+    и ждут отказа. Совпадать с настоящим флотом этим именам не нужно и не
+    следует — выдумывать состав боевого реестра здесь было бы неправдой.
+    """
+    путь = каталог / "registry.sqlite3"
+    с = sqlite3.connect(путь)
+    try:
+        с.executescript(
+            """
+            CREATE TABLE site (
+              site_id TEXT PRIMARY KEY,
+              environment TEXT NOT NULL,
+              lifecycle_state TEXT NOT NULL,
+              canonical_domain TEXT
+            );
+            CREATE TABLE outbox (
+              seq INTEGER PRIMARY KEY AUTOINCREMENT,
+              event_id TEXT NOT NULL UNIQUE,
+              event_type TEXT NOT NULL,
+              site_id TEXT NOT NULL,
+              correlation_id TEXT NOT NULL,
+              causation_id TEXT,
+              occurred_at TEXT NOT NULL,
+              aggregate_version INTEGER NOT NULL,
+              registry_version INTEGER NOT NULL
+            );
+            """
+        )
+        for site_id in САЙТЫ_ПРОГОНА:
+            с.execute(
+                "INSERT INTO site (site_id, environment, lifecycle_state, "
+                "canonical_domain) VALUES (?, 'test', 'ACTIVE', ?)",
+                (site_id, f"{site_id}.invalid"),
+            )
+            с.execute(
+                "INSERT INTO outbox (event_id, event_type, site_id, "
+                "correlation_id, causation_id, occurred_at, aggregate_version, "
+                "registry_version) VALUES (?, 'site.registered.v1', ?, ?, NULL, "
+                "?, 1, ?)",
+                (
+                    f"ephemeral-registry-event-{site_id}",
+                    site_id,
+                    f"ephemeral-corr-{site_id}",
+                    "2026-01-01T00:00:00Z",
+                    1,
+                ),
+            )
+        с.commit()
+    finally:
+        с.close()
+    return путь
+
+
 def _учётные_данные(каталог: Path) -> Path:
     """Каталог учётных данных прогона: только отпечатки, не значения.
 
@@ -124,7 +193,8 @@ def _учётные_данные(каталог: Path) -> Path:
         for имя, значение in ТОКЕНЫ.items()
     }
     (креды / "audit-token-fingerprints").write_text(
-        json.dumps({"services": отпечатки, "revoked": []}), encoding="utf-8")
+        json.dumps({"services": отпечатки, "revoked": []}), encoding="utf-8"
+    )
     return креды
 
 
@@ -149,15 +219,28 @@ def поднять(*, корень: Path | None = None, python: str | None = Non
         SITE_ENGINE_ADMIN="1",
         SITE_ENGINE_API_ENABLED="1",
         CREDENTIALS_DIRECTORY=str(_учётные_данные(каталог)),
+        REGISTRY_DB=str(_реестр(каталог)),
         **ТОКЕНЫ,
     )
 
     лог = (каталог / "server.log").open("w")
     процесс = subprocess.Popen(
-        [str(python), "-m", "factory.site_engine.api.server",
-         "--root", str(корень), "--host", "127.0.0.1", "--port", str(порт)],
-        cwd=str(корень), env=окр, preexec_fn=_умереть_с_родителем,
-        stdout=лог, stderr=subprocess.STDOUT,
+        [
+            str(python),
+            "-m",
+            "factory.site_engine.api.server",
+            "--root",
+            str(корень),
+            "--host",
+            "127.0.0.1",
+            "--port",
+            str(порт),
+        ],
+        cwd=str(корень),
+        env=окр,
+        preexec_fn=_умереть_с_родителем,
+        stdout=лог,
+        stderr=subprocess.STDOUT,
     )
     экземпляр = Экземпляр(порт=порт, каталог=каталог, процесс=процесс, окружение=окр)
 
@@ -168,10 +251,12 @@ def поднять(*, корень: Path | None = None, python: str | None = Non
             хвост = экземпляр.журнал_службы[-2000:]
             экземпляр.погасить()
             raise ЖурналНеПоднялся(
-                f"служба журнала завершилась с кодом {процесс.returncode}:\n{хвост}")
+                f"служба журнала завершилась с кодом {процесс.returncode}:\n{хвост}"
+            )
         try:
             with urllib.request.urlopen(
-                    f"http://127.0.0.1:{порт}/api/v1/audit/health", timeout=3) as о:
+                f"http://127.0.0.1:{порт}/api/v1/audit/health", timeout=3
+            ) as о:
                 if о.status == 200:
                     лог.close()
                     return экземпляр
@@ -181,5 +266,4 @@ def поднять(*, корень: Path | None = None, python: str | None = Non
     лог.close()
     хвост = экземпляр.журнал_службы[-2000:]
     экземпляр.погасить()
-    raise ЖурналНеПоднялся(
-        f"журнал не ответил на /health за {ГОТОВНОСТЬ_СЕК:.0f} с:\n{хвост}")
+    raise ЖурналНеПоднялся(f"журнал не ответил на /health за {ГОТОВНОСТЬ_СЕК:.0f} с:\n{хвост}")
