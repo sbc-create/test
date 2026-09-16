@@ -1,0 +1,142 @@
+{
+  "prompt_id": "TEMPLATE-POSTDEPLOY-REMEDIATION-03A-CANONICAL-INTEGRATION",
+  "decision": "владельцем template-release назначен PR #76; PR #69 и #74 — только источники",
+  "canonical": {
+    "pr": 76,
+    "head_ref": "claude/fleet-tpl-baseline-001",
+    "head_sha_at_start": "ca805888a4a3ff723d61b453163e56bae7bfa48c",
+    "base_ref": "claude/templates-integration-28",
+    "worktree": "/home/claude/wt-canon-76",
+    "state_at_start": "OPEN, clean, no other writer"
+  },
+  "transfers": [
+    {
+      "source_pr": 74,
+      "source_commit": "acdeaffe71cc6ca8323f4914af2765394e428391",
+      "items": [
+        {
+          "path": "factory/lords/collection_contract.py",
+          "action": "verified_already_present",
+          "sha256_source": "58b786017fba0dc360017188b3473074dfd18b4d552cd70a9c63a412b1d96c71",
+          "sha256_target": "58b786017fba0dc360017188b3473074dfd18b4d552cd70a9c63a412b1d96c71",
+          "note": "побайтово совпадает; копирование не требовалось"
+        },
+        {
+          "path": "tests/test_collection_contract.py",
+          "action": "verified_already_present",
+          "sha256_source": "177c814a99fc1824033668690b6e452eef2dcebaa8c7c63271f8872250daeb8a",
+          "sha256_target": "177c814a99fc1824033668690b6e452eef2dcebaa8c7c63271f8872250daeb8a"
+        },
+        {
+          "path": "automation/host/lords-frontend.py",
+          "action": "verified_already_wired",
+          "note": "import collection_contract as КОЛЛЕКЦИИ; ленты собираются через КОЛЛЕКЦИИ.разрешить(ключ, снимок, СЕМЕЙСТВО, предел=24)"
+        }
+      ]
+    },
+    {
+      "source_pr": 69,
+      "source_commit": "fbe72438c58de5f27d3c1ed27b878dfcbfe0288a",
+      "items": [
+        {
+          "path": "automation/host/lords-frontend.py",
+          "action": "hunks_ported",
+          "hunks": 2,
+          "targets": [
+            "ЗОНА_СТИЛЬ",
+            "АНИМЕДИА_СТИЛЬ"
+          ],
+          "diff_stat": "+10/-4",
+          "context_match": "построчно совпал с источником до переноса",
+          "note": "база рендерера в #76 (746be11053e1) отличается от базы #69 (0e47d31d), поэтому переносились не патч-файлом, а точечной правкой тех же правил после сверки контекста"
+        },
+        {
+          "path": "tests/unit/test_lords_poster_and_banner_layers.py",
+          "action": "copied_verbatim",
+          "sha256": "7beab93fb3d565b9c3581b63aedcb5ef24d34847ce58331ae8f56f70b21c5a29"
+        },
+        {
+          "path": "docs/lords/TEMPLATE-REMEDIATION-HANDOFF.md",
+          "action": "copied_verbatim",
+          "source_commit": "b713db94baa5d721db7900cc1fb5dde50a12ee55",
+          "sha256": "b97b68f73b4ff85bc17f21a5fcf1b483fa8c8148130f703ad7cc52560d9a01c2"
+        }
+      ]
+    }
+  ],
+  "defects_verified_on_canonical": {
+    "method": "рендерер канонической ветки поднят локально на снимке animedia-01, порт 9491",
+    "poster_placeholder_over_loaded_image": {
+      "390": false,
+      "768": false,
+      "1440": false,
+      "note": "placeholderOnTop=false; постер получил position:relative и z-index:1"
+    },
+    "banner_gap_px": {
+      "390": 0,
+      "768": 0,
+      "1440": 0
+    },
+    "horizontal_overflow": {
+      "390": false,
+      "768": false,
+      "1440": false
+    }
+  },
+  "duplicate_scan": {
+    "collection_contract_files": 1,
+    "collection_resolver_entrypoints": 1,
+    "renderer_files": 1,
+    "note": "разрешить_адрес в yummy_readmodel и разрешить в seo_bindings — другие пространства, к коллекциям отношения не имеют"
+  },
+  "unrelated_changes": {
+    "count": 0,
+    "note": "первая попытка записать JSON через json.dump переформатировала файлы целиком; изменения откачены и внесены текстово, diff стал аддитивным"
+  },
+  "production": {
+    "artifact_before": "0e47d31dd373565603f3590544532261de0e74483b128ad2ac6523d8ac853357",
+    "artifact_after": "0e47d31dd373565603f3590544532261de0e74483b128ad2ac6523d8ac853357",
+    "rollback_point": "746be11053e1b13695dbc32fc2b10c11f51b1a1bf4c1c44550a66afe14215d82",
+    "indexing_matrix_before": "1_OPEN_8_CLOSED",
+    "indexing_matrix_after": "1_OPEN_8_CLOSED",
+    "deploy_performed": 0,
+    "merge_performed": 0
+  },
+  "findings_for_next_stage": [
+    {
+      "id": "EPISODE-LIST-CAP-ABSENT",
+      "severity": "high",
+      "text": "В канонической ветке нет ограничения высоты списка серий (.zeps max-height 440/520 px). На «Детективе Конане» (1212 серий) страница вырастает до 53990 px — 60 экранов на 390 px и 28858 px на 1440 px; сам список занимает 50710 px. Серии при этом целы: 1212 уникальных, 1…1212, без пропусков, бокового скролла нет.",
+      "origin": "исправлено в PR #69 коммитом 89981e4, но это посторонний scope для 03A и переносу здесь не подлежит",
+      "action": "оценить и перенести в T3B вместе с визуальной переработкой"
+    }
+  ],
+  "notes": {
+    "handoff_doc_status": "docs/lords/TEMPLATE-REMEDIATION-HANDOFF.md перенесён дословно ради провенанса. Его раздел «Почему остановились» описывает состояние ДО решения владельца и теперь историчен: владение разведено этим этапом, см. ownership в config/TEMPLATE-BASELINE-MANIFEST.json. Раздел «Что делать после разблокировки» остаётся актуальным планом T3B.",
+    "cta_state_on_canonical": {
+      "measured": "рендерер канонической ветки, снимок animedia-01",
+      "shelves": [
+        "ongoing: скрыт честным пустым состоянием",
+        "today: скрыт честным пустым состоянием",
+        "new_episodes -> /collection/new_episodes/",
+        "recently_added -> /collection/recently_added/",
+        "top_rated -> /collection/top_rated/",
+        "video_available -> /collection/video_available/"
+      ],
+      "cta_bound": "4/4",
+      "cta_prefix_order": "4/4",
+      "generic_fallbacks": 0,
+      "note": "достигнуто контрактом из PR #74, а не этим этапом; подтверждает, что консолидация была единственным путём к parity"
+    },
+    "legacy_routes_still_duplicated": {
+      "pairs": [
+        "/catalog/ == /new/",
+        "/catalog/ == /collections/",
+        "/new/ == /collections/"
+      ],
+      "count": 3,
+      "action": "T3B, §4.5 — развести семантику легаси-маршрутов"
+    },
+    "measurement_artifact": "локальный рендерер на порту 9491 блокировал один тест полного прогона занятым портом; после остановки прогон продолжился. К коду отношения не имеет."
+  }
+}

@@ -5,10 +5,54 @@
   "description": "Какой шаблон стоит на каждом ACTIVE production-сайте. Перечень сайтов задаёт config/FLEET-REGISTRY.json и только он: второй перечень означал бы второй ответ на один вопрос.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema", "generated_from", "source_commit", "sites"],
+  "required": ["schema", "generated_from", "source_commit", "sites", "ownership"],
   "properties": {
     "schema": {
       "const": "template-baseline-manifest/1.0"
+    },
+    "ownership": {
+      "description": "Единственный writer template-release. Общие файлы релиза ведёт один PR, остальные — только источники. Записано здесь, а не в переписке, чтобы владение проверялось машинно.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical_pr", "canonical_head_ref", "canonical_head_sha", "source_prs", "owned_files", "superseded_scope", "collection_contract_version", "renderer_version"],
+      "properties": {
+        "canonical_pr": { "type": "integer", "minimum": 1 },
+        "canonical_head_ref": { "type": "string", "minLength": 1 },
+        "canonical_head_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "source_prs": {
+          "description": "Откуда перенесено. Без коммита провенанс недоказуем.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["pr", "commit", "took"],
+            "properties": {
+              "pr": { "type": "integer", "minimum": 1 },
+              "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+              "took": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+              "note": { "type": "string" }
+            }
+          }
+        },
+        "owned_files": {
+          "description": "Разделяемые исходники релиза и их дайджесты на момент записи.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "sha256"],
+            "properties": {
+              "path": { "type": "string", "minLength": 1 },
+              "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+            }
+          }
+        },
+        "superseded_scope": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "collection_contract_version": { "type": "integer", "minimum": 1 },
+        "renderer_version": { "type": "string", "minLength": 1 }
+      }
     },
     "generated_from": {
       "description": "Откуда взяты значения. Записано в самом файле, чтобы проверяющему не приходилось угадывать источник.",

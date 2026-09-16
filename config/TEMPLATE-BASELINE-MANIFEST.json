@@ -151,5 +151,48 @@
       "desired_index_state": "NOT_MEASURED",
       "observed_index_state": "closed"
     }
-  ]
+  ],
+  "ownership": {
+    "canonical_pr": 76,
+    "canonical_head_ref": "claude/fleet-tpl-baseline-001",
+    "canonical_head_sha": "ca805888a4a3ff723d61b453163e56bae7bfa48c",
+    "source_prs": [
+      {
+        "pr": 74,
+        "commit": "acdeaffe71cc6ca8323f4914af2765394e428391",
+        "took": [
+          "factory/lords/collection_contract.py",
+          "tests/test_collection_contract.py",
+          "automation/host/lords-frontend.py: вызов контракта в лентах"
+        ],
+        "note": "Канонический контракт коллекций. Уже присутствовал в этой ветке побайтово, поэтому перенос сведён к сверке дайджестов: 58b786017fba."
+      },
+      {
+        "pr": 69,
+        "commit": "fbe72438c58de5f27d3c1ed27b878dfcbfe0288a",
+        "took": [
+          "automation/host/lords-frontend.py: слой постера и картинка баннера в ЗОНА_СТИЛЬ и АНИМЕДИА_СТИЛЬ",
+          "tests/unit/test_lords_poster_and_banner_layers.py",
+          "docs/lords/TEMPLATE-REMEDIATION-HANDOFF.md"
+        ],
+        "note": "Два доказанных дефекта Animedia. Handoff взят из b713db94baa5d721db7900cc1fb5dde50a12ee55 той же ветки."
+      }
+    ],
+    "owned_files": [
+      {
+        "path": "automation/host/lords-frontend.py",
+        "sha256": "4a8083debb039c910bb70240c8daf8f7a14628efc76170f3abd1f8f827af64ec"
+      },
+      {
+        "path": "factory/lords/collection_contract.py",
+        "sha256": "58b786017fba0dc360017188b3473074dfd18b4d552cd70a9c63a412b1d96c71"
+      }
+    ],
+    "superseded_scope": [
+      "PR #69: шаблонная часть — рендерер витрин и его тесты",
+      "PR #74: шаблонная часть — контракт коллекций и его адаптеры"
+    ],
+    "collection_contract_version": 1,
+    "renderer_version": "template-release/03A"
+  }
 }

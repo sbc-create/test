@@ -1353,12 +1353,15 @@ padding:11px 22px;border-radius:6px;font-weight:600}
 
 /* Страница произведения. */
 .zban{position:relative;border-radius:10px;overflow:hidden;background:@ALT@;
-margin:18px 0 0;max-height:280px}
-.zban__img{width:100%;height:100%;object-fit:cover;display:block;opacity:.42}
+margin:18px 0 0;min-height:200px;max-height:280px}
+.zban__img{position:absolute;inset:0;opacity:.42}
+.zban__img img{width:100%;height:100%;object-fit:cover;display:block}
 .zhead{display:grid;grid-template-columns:1fr;gap:18px;margin:18px 0 8px}
 @media(min-width:768px){.zhead{grid-template-columns:208px 1fr}}
 .zhead__ps{aspect-ratio:2/3;border-radius:8px;overflow:hidden;background:@ALT@;
 position:relative;max-width:208px}
+.zhead__ps img,.zhead__img{position:relative;z-index:1;width:100%;height:100%;
+object-fit:cover;display:block}
 .zhead__x{min-width:0}
 .zhead__o{font-size:14px;color:@DIM@;margin:0 0 10px}
 .zbody{font-size:14.5px;line-height:1.62;color:@INK@;max-width:70ch}
@@ -1571,12 +1574,15 @@ border-bottom:1px solid @LINE@;font-size:12.5px}
 .asch__n{color:@MUTE@;font-style:italic}
 
 .zban{position:relative;border-radius:4px;overflow:hidden;background:@SURF@;
-margin:14px 0 0;max-height:240px}
-.zban__img{width:100%;height:100%;object-fit:cover;display:block;opacity:.5}
+margin:14px 0 0;min-height:170px;max-height:240px}
+.zban__img{position:absolute;inset:0;opacity:.5}
+.zban__img img{width:100%;height:100%;object-fit:cover;display:block}
 .zhead{display:grid;grid-template-columns:1fr;gap:14px;margin:14px 0 6px}
 @media(min-width:768px){.zhead{grid-template-columns:190px 1fr}}
 .zhead__ps{aspect-ratio:86/100;border-radius:4px;overflow:hidden;background:@SURF@;
 position:relative;max-width:190px}
+.zhead__ps img,.zhead__img{position:relative;z-index:1;width:100%;height:100%;
+object-fit:cover;display:block}
 .zhead__x{min-width:0}
 .zhead__o{font-size:13.5px;color:@DIM@;margin:0 0 9px}
 .zbody{font-size:14px;line-height:1.6;color:@INK@;max-width:72ch}
