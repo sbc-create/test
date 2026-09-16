@@ -41,7 +41,7 @@ content_types:
   animation: true
   anime: true
   dorama: false
-  collections: false
+  collections: true
 brand:
   # Имя витрины, а не технический идентификатор соседней. `lords-04` попал
   # сюда при создании пакета из образца и остался.

@@ -149,9 +149,14 @@ def application(site_id: str) -> serve_mod.Application:
 
 
 def serve(site_id: str, *, host: str = "127.0.0.1", port: int = 0):
-    """Запускает стенд локально. Адрес — только петлевой интерфейс."""
+    """Запускает стенд локально. Адрес — только петлевой интерфейс.
+
+    Сервер обслуживает запросы параллельно (serve_mod.ThreadingWSGIServer):
+    однопоточный `wsgiref` держал бы измерительный инструмент, открывающий
+    несколько соединений на одну страницу, в очереди друг за другом.
+    """
     from wsgiref.simple_server import make_server
 
     app = application(site_id)
-    server = make_server(host, port, app)
+    server = make_server(host, port, app, server_class=serve_mod.ThreadingWSGIServer)
     return server, app

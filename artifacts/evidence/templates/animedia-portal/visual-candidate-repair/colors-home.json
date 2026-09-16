@@ -1,0 +1,182 @@
+{
+  "url": "http://127.0.0.1:8977/",
+  "surface": "home",
+  "tool": "tests/tools/measure_reference_colors.js",
+  "method": "Playwright/Chromium CDP getComputedStyle, частотное ранжирование, два независимых прохода",
+  "passes": 2,
+  "measured_at_utc": "2026-09-16T21:35:37.213Z",
+  "viewports": {
+    "1440": {
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 1
+      },
+      "measured_from_utc": "2026-09-16T21:35:37.482Z",
+      "measured_to_utc": "2026-09-16T21:35:56.942Z",
+      "http_status": 200,
+      "screenshot": {
+        "file": "colors-1440.png",
+        "sha256": "b27fc1d57d8fb40afa47e517d00a5b583b8ee1ffb01e8287bffa0aa351688cc5"
+      },
+      "probe_links": 8,
+      "focus_stops": 12,
+      "focus_kinds": [
+        "outline",
+        "outline",
+        "outline",
+        "outline",
+        "outline",
+        "outline",
+        "outline",
+        "outline",
+        "outline",
+        "outline",
+        "outline",
+        "outline"
+      ],
+      "tokens": {
+        "color_page_background": {
+          "value": "#ffffff",
+          "stable": "2/2 проходов дали одно значение",
+          "samples": null
+        },
+        "surface_header_background": {
+          "value": "#ffffff",
+          "stable": "2/2 проходов дали одно значение",
+          "samples": null
+        },
+        "color_text_primary": {
+          "value": "#161616",
+          "stable": "2/2 проходов дали одно значение",
+          "samples": null
+        },
+        "color_text_secondary": {
+          "value": "#08110f",
+          "stable": "2/2 проходов дали одно значение",
+          "samples": {
+            "hex": "#08110f",
+            "count": 1,
+            "total": 1,
+            "tie": false,
+            "basis": "элементы",
+            "distinct": [
+              {
+                "hex": "#08110f",
+                "count": 1
+              }
+            ]
+          }
+        },
+        "color_accent_background": {
+          "value": "#eef2f4",
+          "stable": "2/2 проходов дали одно значение",
+          "samples": {
+            "hex": "#eef2f4",
+            "count": 6786,
+            "total": 9786,
+            "tie": false,
+            "basis": "px²",
+            "distinct": [
+              {
+                "hex": "#eef2f4",
+                "count": 6786
+              },
+              {
+                "hex": "#37b3a4",
+                "count": 3000
+              }
+            ]
+          }
+        },
+        "color_link": {
+          "value": "#4f5964",
+          "stable": "2/2 проходов дали одно значение",
+          "samples": {
+            "hex": "#4f5964",
+            "count": 46,
+            "total": 161,
+            "tie": false,
+            "basis": "элементы",
+            "distinct": [
+              {
+                "hex": "#4f5964",
+                "count": 46
+              },
+              {
+                "hex": "#161616",
+                "count": 41
+              },
+              {
+                "hex": "#268176",
+                "count": 24
+              },
+              {
+                "hex": "#cfcfcf",
+                "count": 21
+              },
+              {
+                "hex": "#ffffff",
+                "count": 21
+              }
+            ]
+          }
+        },
+        "color_border_default": {
+          "value": "#e0e4e8",
+          "stable": "2/2 проходов дали одно значение",
+          "samples": {
+            "hex": "#e0e4e8",
+            "count": 222,
+            "total": 223,
+            "tie": false,
+            "basis": "элементы",
+            "distinct": [
+              {
+                "hex": "#e0e4e8",
+                "count": 222
+              },
+              {
+                "hex": "#37b3a4",
+                "count": 1
+              }
+            ]
+          }
+        },
+        "color_focus_ring": {
+          "value": "#37b3a4",
+          "stable": "2/2 проходов дали одно значение",
+          "samples": {
+            "hex": "#37b3a4",
+            "count": 12,
+            "total": 12,
+            "tie": false,
+            "basis": "элементы",
+            "distinct": [
+              {
+                "hex": "#37b3a4",
+                "count": 12
+              }
+            ]
+          }
+        }
+      },
+      "unstable": [],
+      "absent": [
+        {
+          "name": "surface_card_background",
+          "reason": "карточек с постером ≥60×60 на поверхности нет",
+          "pass_a": null,
+          "pass_b": null
+        },
+        {
+          "name": "color_link_hover",
+          "reason": "ни одна из проверенных ссылок не меняет цвет при наведении",
+          "pass_a": null,
+          "pass_b": null
+        }
+      ]
+    }
+  },
+  "errors": []
+}
