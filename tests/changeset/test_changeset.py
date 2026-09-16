@@ -17,6 +17,7 @@ from pathlib import Path
 import pytest
 
 from factory.site_engine.changeset import adapter as A
+from factory.site_engine.changeset import backup as B
 from factory.site_engine.changeset import audit_bridge as AB
 from factory.site_engine.changeset import engine as E
 from factory.site_engine.changeset import model as M
@@ -403,6 +404,90 @@ def test_12c_qwen_может_предложить_но_не_одобрить(б�
                            actor_type="MODEL",
                            expires_at="2099-01-01T00:00:00Z")
     assert ош.value.error_code == "MODEL_ACTION_DENIED"
+
+
+# --- 11b. верхняя отметка истории -------------------------------------------
+
+def test_11b_отметка_растёт_и_не_опускается(tmp_path, monkeypatch):
+    """Отметка отвечает на вопрос «докуда история уже дошла»."""
+    monkeypatch.setattr(B, "КАТАЛОГ", tmp_path / "backups")
+    assert B.прочитать_отметку() == {"transition_seq": 0, "outbox_seq": 0}
+    B.поднять_отметку({"transition_seq": 7, "outbox_seq": 4})
+    assert B.прочитать_отметку()["transition_seq"] == 7
+    # Меньшее значение отметку не двигает: забыть уже записанное нельзя.
+    B.поднять_отметку({"transition_seq": 2, "outbox_seq": 9})
+    assert B.прочитать_отметку() == {"transition_seq": 7, "outbox_seq": 9}
+
+
+def test_11b_испорченная_отметка_не_считается_пустой_историей(tmp_path,
+                                                              monkeypatch):
+    monkeypatch.setattr(B, "КАТАЛОГ", tmp_path / "backups")
+    B.поднять_отметку({"transition_seq": 5, "outbox_seq": 5})
+    B.файл_отметки().write_text("{не json", encoding="utf-8")
+    # Читается как ноль — но следующая же запись поднимет её обратно, а не
+    # закрепит потерю: поднять_отметку берёт максимум.
+    assert B.прочитать_отметку()["transition_seq"] == 0
+    assert B.поднять_отметку({"transition_seq": 5,
+                              "outbox_seq": 5})["transition_seq"] == 5
+
+
+def test_11b_копия_поднимает_отметку(бд, двигатель, адаптер, tmp_path,
+                                     monkeypatch):
+    адаптер.посеять("test-alpha-0001", "res-1", {"title": "старое"})
+    cid = создать(бд)
+    довести_до_одобрения(бд, двигатель, cid)
+    monkeypatch.setattr(B, "КАТАЛОГ", tmp_path / "backups")
+    м = B.создать()
+    assert м["high_water_before"]["transition_seq"] == 0
+    assert м["high_water_after"]["transition_seq"] > 0, м["high_water_after"]
+    assert (м["high_water_after"]["transition_seq"]
+            == м["source_snapshot"]["high_water"]["transition_seq"])
+
+
+def test_11b_старая_копия_не_опускает_отметку(бд, двигатель, адаптер,
+                                              tmp_path, monkeypatch):
+    """Восстановление из копии, отставшей от истории, — это её потеря."""
+    адаптер.посеять("test-alpha-0001", "res-1", {"title": "старое"})
+    cid = создать(бд)
+    двигатель.валидировать(cid, actor_id="service:control-plane",
+                           служба="control-plane")
+    monkeypatch.setattr(B, "КАТАЛОГ", tmp_path / "backups")
+    ранняя = B.создать()
+
+    # История продолжилась; следующая копия поднимает отметку выше.
+    двигатель.запросить_одобрение(cid, actor_id="service:templates",
+                                  служба="templates", expires_at=срок_через())
+    B.создать()
+
+    r = B.восстановить(B.КАТАЛОГ / ранняя["backup_file"])
+    assert r["restore_verdict"] == "FAIL", r
+    assert r["high_water_regression"], r
+    assert "потеряло бы переходы" in r["failure_reason"], r["failure_reason"]
+
+
+def test_11b_свежая_копия_проходит_проверку(бд, двигатель, адаптер, tmp_path,
+                                            monkeypatch):
+    адаптер.посеять("test-alpha-0001", "res-1", {"title": "старое"})
+    довести_до_одобрения(бд, двигатель, создать(бд))
+    monkeypatch.setattr(B, "КАТАЛОГ", tmp_path / "backups")
+    м = B.создать()
+    r = B.восстановить(B.КАТАЛОГ / м["backup_file"])
+    assert r["restore_verdict"] == "PASS", r
+    assert not r["missing_guards"], r["missing_guards"]
+    assert r["production_restore"] == "DENIED", r
+
+
+def test_11b_восстановление_не_трогает_рабочее_хранилище(бд, двигатель,
+                                                        адаптер, tmp_path,
+                                                        monkeypatch):
+    """Проверка копии разворачивает её в стороне, а не поверх живого."""
+    адаптер.посеять("test-alpha-0001", "res-1", {"title": "старое"})
+    довести_до_одобрения(бд, двигатель, создать(бд))
+    monkeypatch.setattr(B, "КАТАЛОГ", tmp_path / "backups")
+    м = B.создать()
+    до = B._слепок(бд)
+    B.восстановить(B.КАТАЛОГ / м["backup_file"])
+    assert B._слепок(бд) == до
 
 
 # --- 11c. исходящий ящик: повторы, отсрочка, недоставленное -----------------
@@ -1017,7 +1102,6 @@ def test_копия_и_восстановление_заполненного_х�
     Развернуть пустую базу и объявить восстановление работающим — значит
     проверить обёртку, а не то, ради чего копия делается.
     """
-    from factory.site_engine.changeset import backup as B
 
     адаптер.посеять("test-alpha-0001", "res-1", {"title": "старое"})
     адаптер.посеять("test-beta-0002", "res-1", {"title": "старое"})

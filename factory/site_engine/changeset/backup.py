@@ -27,6 +27,57 @@ from . import store as S
 #: Копия вне хоста — контракт, а не факт: второй хост не выделен.
 OFF_HOST_BACKUP = "PLANNED"
 
+#: Верхняя отметка живёт ВНЕ базы намеренно. Храни её внутри — и старая копия
+#: принесла бы вместе с собой старую отметку, то есть ровно то забвение, от
+#: которого отметка и защищает.
+#:
+#: Путь вычисляется при каждом обращении, а не запоминается при импорте:
+#: каталог копий подменяем, и отметка обязана следовать за ним — иначе
+#: проверка писала бы в рабочий каталог, думая, что работает во временном.
+ИМЯ_ОТМЕТКИ = "high-water.json"
+
+
+def файл_отметки() -> Path:
+    return КАТАЛОГ / ИМЯ_ОТМЕТКИ
+
+#: Восстановление поверх рабочего хранилища не предусмотрено ни одним путём в
+#: этом модуле. Проверка разворачивает копию только во временный каталог:
+#: «восстановили и посмотрим» — это потеря того, что было.
+ПРОДУКТИВНОЕ_ВОССТАНОВЛЕНИЕ = "DENIED"
+
+
+def отметка_базы(c: sqlite3.Connection) -> dict[str, int]:
+    """Докуда дошла история в этой базе."""
+    переходы = c.execute(
+        "SELECT coalesce(max(seq), 0) FROM changeset_transition").fetchone()[0]
+    ящик = c.execute(
+        "SELECT coalesce(max(seq), 0) FROM changeset_outbox").fetchone()[0]
+    return {"transition_seq": int(переходы), "outbox_seq": int(ящик)}
+
+
+def прочитать_отметку() -> dict[str, int]:
+    ф = файл_отметки()
+    if not ф.is_file():
+        return {"transition_seq": 0, "outbox_seq": 0}
+    try:
+        д = json.loads(ф.read_text(encoding="utf-8"))
+    except ValueError:
+        # Испорченная отметка — не повод считать, что истории не было.
+        return {"transition_seq": 0, "outbox_seq": 0}
+    return {k: int(д.get(k) or 0) for k in ("transition_seq", "outbox_seq")}
+
+
+def поднять_отметку(значения: dict[str, int]) -> dict[str, int]:
+    """Отметка растёт и никогда не опускается."""
+    было = прочитать_отметку()
+    стало = {k: max(было.get(k, 0), int(значения.get(k) or 0)) for k in было}
+    ф = файл_отметки()
+    ф.parent.mkdir(parents=True, exist_ok=True)
+    ф.write_text(
+        json.dumps({**стало, "updated_at": S.сейчас()}, ensure_ascii=False,
+                   indent=2), encoding="utf-8")
+    return стало
+
 
 def _версии() -> dict:
     м = Path("/srv/site-factory/control-api/release-manifest.json")
@@ -61,7 +112,8 @@ def _слепок(c: sqlite3.Connection) -> dict:
     return {"changesets": наборов, "by_status": по_состояниям,
             "transitions": переходов, "targets": целей,
             "outbox": ящик, "outbox_backlog": задолженность, "dlq": dlq,
-            "locks": замки, "transition_digest": отпечаток}
+            "locks": замки, "transition_digest": отпечаток,
+            "high_water": отметка_базы(c)}
 
 
 def создать() -> dict:
@@ -75,10 +127,14 @@ def создать() -> dict:
         ист.backup(наз)
     наз.close(); ист.close()
     сумма = hashlib.sha256(цель.read_bytes()).hexdigest()
+    отметка_до = прочитать_отметку()
+    отметка_после = поднять_отметку(слепок["high_water"])
     манифест = {"backup_file": цель.name, "created_at": S.сейчас(),
                 "sha256": сумма, "size": цель.stat().st_size,
                 "source_snapshot": слепок, "versions": _версии(),
-                "off_host_backup": OFF_HOST_BACKUP}
+                "off_host_backup": OFF_HOST_BACKUP,
+                "high_water_before": отметка_до,
+                "high_water_after": отметка_после}
     цель.with_suffix(".manifest.json").write_text(
         json.dumps(манифест, ensure_ascii=False, indent=2), encoding="utf-8")
     return манифест
@@ -100,16 +156,39 @@ def восстановить(файл: Path) -> dict:
         c.close()
     исх = манифест["source_snapshot"]
     расхождения = {k: [исх[k], восст[k]] for k in исх if исх[k] != восст[k]}
-    # Запрет прямой записи состояния обязан пережить восстановление: копия без
-    # триггера — обычная таблица, а не машина состояний.
-    ok = (с_манифестом and not расхождения
-          and "cs_no_direct_status" in триггеры)
-    return {"restore_verdict": "PASS" if ok else "FAIL",
+    # Все сторожа обязаны пережить восстановление: копия без них — обычные
+    # таблицы, а не машина состояний и не история, которую нельзя переписать.
+    нет_сторожей = [с for с, _ in S.СТОРОЖА if с not in триггеры]
+    if "cs_no_direct_status" not in триггеры:
+        нет_сторожей.append("cs_no_direct_status")
+
+    # Отметка — единственная проверка, которая смотрит НАРУЖУ копии. Копия
+    # сама по себе непротиворечива; вопрос в том, не отбрасывает ли она
+    # историю, которая уже была.
+    отметка_сейчас = прочитать_отметку()
+    отметка_копии = восст.get("high_water") or {"transition_seq": 0,
+                                                "outbox_seq": 0}
+    откат_отметки = {k: [отметка_сейчас[k], отметка_копии.get(k, 0)]
+                     for k in отметка_сейчас
+                     if отметка_копии.get(k, 0) < отметка_сейчас[k]}
+
+    ok = с_манифестом and not расхождения and not нет_сторожей and not откат_отметки
+    итог = {"restore_verdict": "PASS" if ok else "FAIL",
             "checksum_matches_manifest": с_манифестом,
             "restored_snapshot": восст, "manifest_snapshot": исх,
             "mismatches": расхождения, "guards": триггеры,
+            "missing_guards": нет_сторожей,
+            "high_water_now": отметка_сейчас,
+            "high_water_in_backup": отметка_копии,
+            "high_water_regression": откат_отметки,
+            "production_restore": ПРОДУКТИВНОЕ_ВОССТАНОВЛЕНИЕ,
             "versions": манифест.get("versions", {}),
             "off_host_backup": OFF_HOST_BACKUP}
+    if откат_отметки:
+        итог["failure_reason"] = (
+            "копия старше уже записанной истории: восстановление из неё "
+            "потеряло бы переходы, которые уже произошли")
+    return итог
 
 
 def main(argv=None) -> int:
