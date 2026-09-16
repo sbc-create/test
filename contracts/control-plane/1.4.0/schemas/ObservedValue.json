@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/ObservedValue.json",
+  "title": "Наблюдённое значение",
+  "description": "Значение вместе с состоянием знания о нём. Ноль, ложь и пустая строка суть ЗНАЧЕНИЯ и допустимы только при state=PRESENT. Незнание выражается состоянием, а не подстановкой нуля: подставленный ноль неотличим от измеренного и потому необратимо теряет правду.",
+  "x-owner": "architect",
+  "x-schema-version": "1.0.0",
+  "x-lifecycle": "ACTIVE",
+  "x-created-at": "2026-09-11T12:56:26Z",
+  "x-updated-at": "2026-09-11T12:56:26Z",
+  "x-compatibility": "BACKWARD_COMPATIBLE_ADDITIVE",
+  "type": "object",
+  "properties": {
+    "state": {
+      "enum": [
+        "PRESENT",
+        "UNKNOWN",
+        "ABSENT",
+        "STALE",
+        "ERROR",
+        "NOT_APPLICABLE"
+      ]
+    },
+    "value": {
+      "description": "любое значение, включая честный 0 и false"
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source": {
+      "type": "string"
+    },
+    "error_code": {
+      "type": "string"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    }
+  },
+  "required": [
+    "state"
+  ],
+  "additionalProperties": true,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "const": "PRESENT"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "value",
+          "observed_at",
+          "source"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "const": "ERROR"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "error_code"
+        ]
+      }
+    }
+  ]
+}

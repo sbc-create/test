@@ -1,0 +1,148 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "ExecutionGrant.v1.json",
+ "title": "Разрешение на исполнение одобренного набора изменений",
+ "description": "Выдаётся только службой подписи по ссылке на канонический ChangeSet. Ни одно притязание безопасности не является необязательным: «опциональное» притязание однажды не придёт, и проверка молча пропустит его.",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "typ",
+  "issuer",
+  "audience",
+  "subject",
+  "changeset_id",
+  "site_id",
+  "environment",
+  "resource_kind",
+  "action",
+  "plan_hash",
+  "approval_hash",
+  "artifact_digest",
+  "registry_fingerprint",
+  "policy_version",
+  "contract_version",
+  "fencing_token",
+  "jti",
+  "idempotency_key",
+  "issued_at",
+  "not_before",
+  "expires_at"
+ ],
+ "properties": {
+  "typ": {
+   "type": "string"
+  },
+  "issuer": {
+   "type": "string"
+  },
+  "audience": {
+   "type": "string",
+   "enum": [
+    "changeset-worker",
+    "templates-executor"
+   ]
+  },
+  "subject": {
+   "type": "string"
+  },
+  "changeset_id": {
+   "type": "string"
+  },
+  "site_id": {
+   "type": "string"
+  },
+  "environment": {
+   "type": "string",
+   "enum": [
+    "test",
+    "non-production",
+    "production"
+   ]
+  },
+  "resource_kind": {
+   "type": "string",
+   "enum": [
+    "fake.resource",
+    "template.release",
+    "template.build"
+   ]
+  },
+  "action": {
+   "type": "string",
+   "enum": [
+    "publish",
+    "rollback",
+    "create",
+    "update",
+    "patch"
+   ]
+  },
+  "plan_hash": {
+   "type": "string"
+  },
+  "approval_hash": {
+   "type": "string"
+  },
+  "artifact_digest": {
+   "type": "string"
+  },
+  "registry_fingerprint": {
+   "type": "string"
+  },
+  "policy_version": {
+   "type": "string"
+  },
+  "contract_version": {
+   "type": "string"
+  },
+  "fencing_token": {
+   "type": "integer",
+   "minimum": 1
+  },
+  "jti": {
+   "type": "string"
+  },
+  "idempotency_key": {
+   "type": "string"
+  },
+  "issued_at": {
+   "type": "string"
+  },
+  "not_before": {
+   "type": "string"
+  },
+  "expires_at": {
+   "type": "string"
+  },
+  "registry_version": {
+   "type": [
+    "integer",
+    "null"
+   ]
+  },
+  "build_id": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "approval_ref": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "target_site_ids": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "expected_resource_fingerprint": {
+   "type": [
+    "string",
+    "null"
+   ]
+  }
+ }
+}
