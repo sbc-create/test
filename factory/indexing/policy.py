@@ -32,6 +32,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import json
 import re
 from dataclasses import dataclass, field
@@ -73,10 +74,8 @@ def normalize_domain(value: str) -> str:
     домен = (value or "").strip().lower().rstrip(".")
     if домен.startswith("www."):
         домен = домен[4:]
-    try:
+    with contextlib.suppress(UnicodeError, UnicodeDecodeError):
         домен = домен.encode("idna").decode("ascii")
-    except (UnicodeError, UnicodeDecodeError):
-        pass
     return домен
 
 

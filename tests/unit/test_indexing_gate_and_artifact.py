@@ -132,10 +132,10 @@ def test_незапланированное_изменение_запрещае�
     результат = check(политика(), allowed_open={ОТКРЫТ}, allowed_closed=ЗАКРЫТЫЕ, live=живое)
     assert not результат.allowed
     assert any("незапланированное изменение" in b for b in результат.blockers)
-    assert [str(c) for c in результат.changes] == [
-        c for c in [str(результат.changes[0])]
-    ]
+    assert len(результат.changes) == 1, "изменение обязано быть видно в diff"
     assert результат.changes[0].domain == ОТКРЫТ
+    assert результат.changes[0].before == CLOSED
+    assert результат.changes[0].after == OPEN
 
 
 def test_заявленное_изменение_проходит_и_видно_в_diff() -> None:
