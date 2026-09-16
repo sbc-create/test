@@ -112,6 +112,58 @@ def test_набор_не_ходит_на_канонические_порты(ф�
         + "\n".join(нарушения))
 
 
+def _правит_окружение_на_уровне_модуля(дерево: ast.Module) -> list[int]:
+    """Строки, где `os.environ` правится в теле модуля, а не внутри функции."""
+    строки = []
+    for узел in дерево.body:
+        for внутри in ast.walk(узел):
+            if (isinstance(внутри, ast.Call)
+                    and isinstance(внутри.func, ast.Attribute)
+                    and внутри.func.attr in ("update", "setdefault", "pop")
+                    and isinstance(внутри.func.value, ast.Attribute)
+                    and внутри.func.value.attr == "environ"):
+                строки.append(внутри.lineno)
+            if isinstance(внутри, ast.Subscript) and isinstance(
+                    внутри.value, ast.Attribute) and внутри.value.attr == "environ":
+                родитель = узел
+                if isinstance(родитель, ast.Assign | ast.AugAssign | ast.AnnAssign):
+                    строки.append(внутри.lineno)
+    return sorted(set(строки))
+
+
+@pytest.mark.parametrize(
+    "файл", sorted(НАБОРЫ.rglob("conftest.py")),
+    ids=lambda p: str(p.relative_to(КОРЕНЬ)))
+def test_conftest_не_оставляет_окружение_чужим_наборам(файл: Path):
+    """Правка `os.environ` на уровне модуля обязана иметь парное снятие.
+
+    Дефект, ради которого проверка написана, стоил половины разбора этого PR.
+    `tests/audit/conftest.py` направлял набор на эфемерный экземпляр правкой
+    `os.environ` — это верно и необходимо: тестовые модули читают пути при
+    импорте, и фикстура уже опоздала бы. Но правка оставалась до конца процесса
+    и доставалась каждому набору, собранному позже: `/api/v1/sites` читал
+    `REGISTRY_DB` прогона вместо профилей репозитория, и `test_admin_http`
+    падал — только в полном прогоне и только из-за соседнего каталога.
+
+    Всё это время утечка существовала и ничем себя не проявляла: запрос к
+    неполному реестру прогона падал, API молча откатывался к профилям. Стоило
+    реестру прогона стать полнее — и дефект проявился в постороннем наборе.
+
+    Поэтому требование простое: кто правит окружение в теле conftest, тот
+    обязан объявить `pytest_runtest_teardown`. Хук вызывается только для
+    элементов своего каталога, и после последнего из них правка снимается.
+    """
+    дерево = ast.parse(файл.read_text(encoding="utf-8"), filename=str(файл))
+    правки = _правит_окружение_на_уровне_модуля(дерево)
+    if not правки:
+        return
+    снятие = {узел.name for узел in дерево.body
+              if isinstance(узел, ast.FunctionDef | ast.AsyncFunctionDef)}
+    assert "pytest_runtest_teardown" in снятие, (
+        f"{файл.relative_to(КОРЕНЬ)}: окружение правится в строках {правки}, "
+        "но снятия нет — правка достанется каждому набору, собранному позже")
+
+
 def test_host_контур_не_попадает_в_обычную_коллекцию():
     """`pytest tests/` не должен собирать ни одной host-проверки.
 
