@@ -14,6 +14,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from . import indexing as idx
+from . import indexing_contract as contract
 from . import ledger_identity as ident
 from . import ledger_store as store
 from . import projection as proj
@@ -80,15 +82,102 @@ def _строка(р: sqlite3.Row) -> dict[str, Any]:
     return d
 
 
+
+def _индексация(метод: str, rest: list[str], заг: dict) -> tuple[int, Any]:
+    """Только чтение состояния индексации.
+
+    Изменение живёт в ``indexing.открыть_индексацию`` и
+    ``indexing.закрыть_индексацию`` и требует разрешения владельца. Здесь его
+    нет и быть не может: мутация, доступная читателю, делает читателя вторым
+    писателем.
+
+    Достаточно роли ``producer``: службе ``seo`` для чтения хватает
+    ``OBSERVE``, и выдавать ей больше незачем.
+    """
+    if метод != "GET":
+        # 405, а не 404: маршрут есть, но менять состояние отсюда нельзя, и об
+        # этом лучше сказать прямо.
+        return _проблема(405, "READ_ONLY",
+                         "состояние индексации доступно только для чтения; "
+                         "изменение — owner-командой OPEN_INDEXING/CLOSE_INDEXING")
+    try:
+        ident.требовать_роль(заг, "producer")
+    except ident.IdentityError as e:
+        return _проблема(e.status, e.error_code, e.detail)
+
+    if rest[:1] != ["state"] or len(rest) > 2:
+        return _проблема(404, "NOT_FOUND", "не маршрут состояния индексации")
+
+    соед = _бд()
+    try:
+        idx.подготовить(соед)
+        известные = известные_сайты() or None
+        домены = _домены()
+        if len(rest) == 2:
+            try:
+                тело = contract.прочитать_сайт(
+                    соед, rest[1], известные_сайты=известные, домены=домены)
+            except contract.UnknownSite as e:
+                # Неизвестный сайт — ошибка, а не CLOSED. «Не знаем такого» и
+                # «решили не индексировать» — разные ответы, и путать их
+                # означает закрывать витрины по недоразумению.
+                return _проблема(404, "SITE_ID_UNKNOWN", str(e))
+            return _ответ(200, {"contract_version": contract.ВЕРСИЯ_КОНТРАКТА,
+                                "schema_version": idx.СХЕМА_СОСТОЯНИЯ,
+                                "provider_health": contract.ЗДОРОВ,
+                                "site": тело})
+        ответ = contract.прочитать(соед, домены=домены)
+        return _ответ(200, json.loads(ответ.to_json()))
+    except sqlite3.Error as e:
+        # Отказ называется отказом. Пустой снимок означал бы «все закрыты» и
+        # закрыл бы живую витрину.
+        return _проблема(503, "PROVIDER_UNAVAILABLE",
+                         f"состояние индексации недоступно: {e}")
+    finally:
+        соед.close()
+
+
+def _домены() -> dict[str, str]:
+    """``site_id`` → канонический домен из Site Registry.
+
+    Домен — производное значение, а не ключ: он меняется, идентификатор нет.
+    Отдаётся ради удобства потребителя, чтобы каждый не ходил в реестр сам.
+    """
+    п = os.environ.get("REGISTRY_DB") or РЕЕСТР_ПО_УМОЛЧАНИЮ
+    if not Path(п).exists():
+        return {}
+    с = sqlite3.connect(f"file:{п}?mode=ro", uri=True)
+    try:
+        return {r[0]: r[1] for r in с.execute(
+            "SELECT site_id, domain FROM site WHERE domain IS NOT NULL")}
+    except sqlite3.Error:
+        return {}
+    finally:
+        с.close()
+
+
 def обработать(метод: str, путь: str, *, query: dict | None = None,
                body: dict | None = None,
                headers: dict | None = None) -> tuple[int, Any]:
     заг = {str(k).lower(): v for k, v in (headers or {}).items()}
     части = [c for c in путь.strip("/").split("/") if c]
+    метод = метод.upper()
+
+    # Поверхность чтения состояния индексации. Отдельный префикс, потому что
+    # это не лента журнала, а производное от неё состояние: потребителю нужен
+    # ответ «открыт ли сайт», а не история того, как к нему пришли.
+    #
+    # Без этой поверхности состояние можно было прочитать только открыв базу
+    # Core напрямую или импортировав его внутренние модули. Потребитель,
+    # знающий схему хранения, привязан к ней навсегда; потребитель, собирающий
+    # состояние из ленты событий, повторяет логику Core — то есть становится
+    # вторым вычислителем того же состояния.
+    if части[:3] == ["api", "v1", "indexing"]:
+        return _индексация(метод, части[3:], заг)
+
     if части[:3] != ["api", "v1", "audit"]:
         return _проблема(404, "NOT_FOUND", "не маршрут журнала")
     rest = части[3:]
-    метод = метод.upper()
 
     if метод in ("PUT", "PATCH", "DELETE"):
         # Отвечаем 405, а не 404: маршрут существует, но изменение факта
