@@ -226,3 +226,76 @@ curl -s .../api/v1/compatibility -H 'Authorization: Bearer ops' | jq '.byState'
 управляет контейнерами и не меняет оформление. Выкладка остаётся поэтапной
 процедурой с канареечной витриной — одновременная выкладка на весь массив
 запрещена (ADR-001).
+
+## Выкладка выпуска с набором контрактов 1.4.0
+
+Состояние на момент записи: служба работает с выпуска
+`e698e2adf50223c4b922efae5ff019355751f2a1` и отдаёт набор контрактов 1.3.1.
+Код ветки `claude/fleet-core-003-r2` объявляет 1.4.0; пока набор не разложен,
+служба честно сообщает об этом — `contracts_version.обслуживаемый()`
+возвращает `matches_code: false` с пояснением, какая версия отдаётся на самом
+деле. Отдавать устаревший план молча хуже, чем отдавать его с пометкой:
+молчащий выглядит истинным.
+
+### Что уже проверено
+
+Новое поведение HTTP-контура — условие запроса по версии ресурса, ETag,
+классы риска R0–R4, состояния APPLIED/VERIFIED/ROLLBACK_REQUESTED — доказано
+на ОТДЕЛЬНОМ экземпляре службы, поднятом из этой же ветки поверх копий баз
+(`tests/changeset/run_tests_cs.py`). Действия в нём только синтетические: все
+витрины с приставкой `test-`, ни одна не совпадает ни с одной настоящей.
+Канонические хранилища при этом не меняются, и прогон это проверяет: журнал
+122 → 122 с неизменным корнем цепочки, реестр 13 → 13,
+`CANONICAL_TEST_EVENT_DELTA=0`.
+
+### Артефакт
+
+Собирается из коммита и воспроизводим — две сборки подряд дают одну сумму:
+
+    git archive --format=tar --prefix=control-api/ <SHA> | gzip -n > control-api-<SHA>.tar.gz
+
+Текущий:
+
+* коммит: `2756952bfb22dd0df63706f56ac58972cb6ae169`
+* файл: `/home/claude/artifacts/control-api-2756952bfb22dd0df63706f56ac58972cb6ae169.tar.gz`
+* sha256: `cf53f2a9fbfffc8859642df5c7ed37b2bc3434dc8d185282f47fb0ed0647a23a`
+
+### Что должен сделать владелец
+
+Выкладка требует прав root: каталог выпусков и юнит принадлежат root, а
+`claude` их не меняет. Ниже — ровно те шаги, которые нужны; обходить запрет
+исполнителю нельзя, поэтому задача возвращается владельцу.
+
+    SHA=2756952bfb22dd0df63706f56ac58972cb6ae169
+    A=/home/claude/artifacts/control-api-$SHA.tar.gz
+    test "$(sha256sum "$A" | cut -d' ' -f1)" = \
+         cf53f2a9fbfffc8859642df5c7ed37b2bc3434dc8d185282f47fb0ed0647a23a || exit 1
+    sudo mkdir -p /srv/site-factory/control-api/releases/$SHA
+    sudo tar -xzf "$A" -C /srv/site-factory/control-api/releases/$SHA --strip-components=1
+    sudo cp -a /srv/site-factory/control-api/current/.venv \
+               /srv/site-factory/control-api/releases/$SHA/.venv
+    sudo cp -a /home/claude/wt-core003/contracts/control-plane/1.4.0 \
+               /srv/site-factory/control-plane-contracts/1.4.0
+    sudo ln -sfn /srv/site-factory/control-api/releases/$SHA \
+                 /srv/site-factory/control-api/current
+    sudo systemctl restart site-factory-control-api
+
+Набор контрактов копируется ДО перевода символической ссылки: иначе между
+двумя шагами служба объявляла бы 1.4.0, которого на диске ещё нет.
+
+### Проверка после выкладки
+
+    curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:8790/api/v1/workflows   # 200
+    curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:8790/api/v1/changesets   # 401
+    curl -s http://127.0.0.1:8790/api/v1/capabilities | head -c 200                    # версия 1.4.0
+
+### Откат
+
+Прежний выпуск на месте и не тронут:
+
+    sudo ln -sfn /srv/site-factory/control-api/releases/e698e2adf50223c4b922efae5ff019355751f2a1 \
+                 /srv/site-factory/control-api/current
+    sudo systemctl restart site-factory-control-api
+
+Набор 1.4.0 при откате можно оставить: код выпуска
+`e698e2a` о нём не знает и продолжает отдавать 1.3.1.
