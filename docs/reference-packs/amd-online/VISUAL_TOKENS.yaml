@@ -14,7 +14,7 @@ measured_at_utc: "2026-09-16T16:31:49.981317+00:00"
 measured_by: tests/tools/measure_reference.js
 reference_url: "https://amd.online/"
 blocker: null   # REF-EGRESS-01 снят: см. artifacts/.../availability.json
-tokens_total: 357
+tokens_total: 508
 tokens:
   - name: content_width
     value: 378
@@ -3229,3 +3229,1880 @@ tokens:
     evidence: "artifacts/reference-pack-amd-online-01/capture/not_found/amd-online-1440.png"
     tolerance: "exact"
     status: measured_by_factory
+
+  # --- цветовые токены -----------------------------------------------
+  # Сняты отдельным прогоном tests/tools/measure_reference_colors.js: см.
+  # раздел color_evidence ниже и VISUAL_DECISIONS.md о правилах выбора
+  # элемента. Значение принято только там, где два независимых прохода
+  # дали один hex; отсутствующий элемент записан отсутствующим.
+  - name: color_page_background
+    value: "#ffffff"
+    unit: hex
+    surface: home
+    viewport: 390
+    method: "CDP getComputedStyle: фон html, при его прозрачности — фон body; полупрозрачные слои скомпонованы над холстом документа"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/390/tokens/color_page_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:04.059Z"
+    screenshot_sha256: "c478649e6d6d9f22307a43b61e1b1ed02713a508d8dafb77885d3134e9319d01"
+    sample: "два прохода дали одно значение"
+  - name: surface_header_background
+    value: "#ffffff"
+    unit: hex
+    surface: home
+    viewport: 390
+    method: "CDP getComputedStyle шапки (тот же элемент, которым измерена header_height); фон скомпонован по цепочке предков до первого непрозрачного"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/390/tokens/surface_header_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:04.059Z"
+    screenshot_sha256: "c478649e6d6d9f22307a43b61e1b1ed02713a508d8dafb77885d3134e9319d01"
+    sample: "два прохода дали одно значение"
+  - name: surface_card_background
+    value: "#f9f9f9"
+    unit: hex
+    surface: home
+    viewport: 390
+    method: "CDP getComputedStyle ссылки-карточки (постер ≥60×60 внутри ссылки); ранжирование по закрашенной площади"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/390/tokens/surface_card_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:04.059Z"
+    screenshot_sha256: "c478649e6d6d9f22307a43b61e1b1ed02713a508d8dafb77885d3134e9319d01"
+    sample: "286072 из 286072 px²; два прохода дали одно значение"
+  - name: color_text_primary
+    value: "#161616"
+    unit: hex
+    surface: home
+    viewport: 390
+    method: "CDP getComputedStyle(body).color"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/390/tokens/color_text_primary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:04.059Z"
+    screenshot_sha256: "c478649e6d6d9f22307a43b61e1b1ed02713a508d8dafb77885d3134e9319d01"
+    sample: "два прохода дали одно значение"
+  - name: color_text_secondary
+    value: "#757b85"
+    unit: hex
+    surface: home
+    viewport: 390
+    method: "CDP getComputedStyle: самый частый цвет видимого текста вне ссылок, отличный от основного текста и от цвета ссылок"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/390/tokens/color_text_secondary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:04.059Z"
+    screenshot_sha256: "c478649e6d6d9f22307a43b61e1b1ed02713a508d8dafb77885d3134e9319d01"
+    sample: "72 из 157 элементы; два прохода дали одно значение"
+  - name: color_accent_background
+    value: "#c50725"
+    unit: hex
+    surface: home
+    viewport: 390
+    method: "CDP getComputedStyle интерактивных элементов (button, role=button, input[type=submit|button]); ранжирование по закрашенной площади, фон страницы исключён"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/390/tokens/color_accent_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:04.059Z"
+    screenshot_sha256: "c478649e6d6d9f22307a43b61e1b1ed02713a508d8dafb77885d3134e9319d01"
+    sample: "67032 из 83816 px²; два прохода дали одно значение"
+  - name: color_link
+    value: "#161616"
+    unit: hex
+    surface: home
+    viewport: 390
+    method: "CDP getComputedStyle: самый частый цвет видимых ссылок с собственным текстом"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/390/tokens/color_link"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:04.059Z"
+    screenshot_sha256: "c478649e6d6d9f22307a43b61e1b1ed02713a508d8dafb77885d3134e9319d01"
+    sample: "76 из 155 элементы; два прохода дали одно значение"
+  - name: color_link_hover
+    value: "#ffffff"
+    unit: hex
+    surface: home
+    viewport: 390
+    method: "наведение Playwright на видимые ссылки; цвет читается после того, как CSS-переход перестал менять значение"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/390/tokens/color_link_hover"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:04.059Z"
+    screenshot_sha256: "c478649e6d6d9f22307a43b61e1b1ed02713a508d8dafb77885d3134e9319d01"
+    sample: "7 из 7 элементы; два прохода дали одно значение"
+  - name: color_border_default
+    value: "#f2f2f2"
+    unit: hex
+    surface: home
+    viewport: 390
+    method: "CDP getComputedStyle: самый частый цвет видимой границы (ширина ≥1px, стиль не none и не hidden)"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/390/tokens/color_border_default"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:04.059Z"
+    screenshot_sha256: "c478649e6d6d9f22307a43b61e1b1ed02713a508d8dafb77885d3134e9319d01"
+    sample: "78 из 226 элементы; два прохода дали одно значение"
+  - name: color_focus_ring
+    value: "#c50725"
+    unit: hex
+    surface: home
+    viewport: 390
+    method: "клавиатурная навигация Tab: цвет outline при видимом контуре, иначе цвет тени фокуса, отличной от тени того же элемента без фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/390/tokens/color_focus_ring"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:04.059Z"
+    screenshot_sha256: "c478649e6d6d9f22307a43b61e1b1ed02713a508d8dafb77885d3134e9319d01"
+    sample: "1 из 1 элементы; два прохода дали одно значение"
+  - name: color_run_screenshot_sha256
+    value: "c478649e6d6d9f22307a43b61e1b1ed02713a508d8dafb77885d3134e9319d01"
+    unit: sha256
+    surface: home
+    viewport: 390
+    method: "sha256 снимка цветового прогона, снятого до наведения и фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors-390.png"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:04.059Z"
+    screenshot_sha256: "c478649e6d6d9f22307a43b61e1b1ed02713a508d8dafb77885d3134e9319d01"
+  - name: color_page_background
+    value: "#ffffff"
+    unit: hex
+    surface: home
+    viewport: 768
+    method: "CDP getComputedStyle: фон html, при его прозрачности — фон body; полупрозрачные слои скомпонованы над холстом документа"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/768/tokens/color_page_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:23.031Z"
+    screenshot_sha256: "fc8a23961140796c7fcfc0e78240182263badfa31208ce6df0c4fdb77746298d"
+    sample: "два прохода дали одно значение"
+  - name: surface_header_background
+    value: "#ffffff"
+    unit: hex
+    surface: home
+    viewport: 768
+    method: "CDP getComputedStyle шапки (тот же элемент, которым измерена header_height); фон скомпонован по цепочке предков до первого непрозрачного"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/768/tokens/surface_header_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:23.031Z"
+    screenshot_sha256: "fc8a23961140796c7fcfc0e78240182263badfa31208ce6df0c4fdb77746298d"
+    sample: "два прохода дали одно значение"
+  - name: surface_card_background
+    value: "#f9f9f9"
+    unit: hex
+    surface: home
+    viewport: 768
+    method: "CDP getComputedStyle ссылки-карточки (постер ≥60×60 внутри ссылки); ранжирование по закрашенной площади"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/768/tokens/surface_card_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:23.031Z"
+    screenshot_sha256: "fc8a23961140796c7fcfc0e78240182263badfa31208ce6df0c4fdb77746298d"
+    sample: "292464 из 292464 px²; два прохода дали одно значение"
+  - name: color_text_primary
+    value: "#161616"
+    unit: hex
+    surface: home
+    viewport: 768
+    method: "CDP getComputedStyle(body).color"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/768/tokens/color_text_primary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:23.031Z"
+    screenshot_sha256: "fc8a23961140796c7fcfc0e78240182263badfa31208ce6df0c4fdb77746298d"
+    sample: "два прохода дали одно значение"
+  - name: color_text_secondary
+    value: "#757b85"
+    unit: hex
+    surface: home
+    viewport: 768
+    method: "CDP getComputedStyle: самый частый цвет видимого текста вне ссылок, отличный от основного текста и от цвета ссылок"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/768/tokens/color_text_secondary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:23.031Z"
+    screenshot_sha256: "fc8a23961140796c7fcfc0e78240182263badfa31208ce6df0c4fdb77746298d"
+    sample: "72 из 158 элементы; два прохода дали одно значение"
+  - name: color_accent_background
+    value: "#c50725"
+    unit: hex
+    surface: home
+    viewport: 768
+    method: "CDP getComputedStyle интерактивных элементов (button, role=button, input[type=submit|button]); ранжирование по закрашенной площади, фон страницы исключён"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/768/tokens/color_accent_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:23.031Z"
+    screenshot_sha256: "fc8a23961140796c7fcfc0e78240182263badfa31208ce6df0c4fdb77746298d"
+    sample: "139784 из 157793 px²; два прохода дали одно значение"
+  - name: color_link
+    value: "#161616"
+    unit: hex
+    surface: home
+    viewport: 768
+    method: "CDP getComputedStyle: самый частый цвет видимых ссылок с собственным текстом"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/768/tokens/color_link"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:23.031Z"
+    screenshot_sha256: "fc8a23961140796c7fcfc0e78240182263badfa31208ce6df0c4fdb77746298d"
+    sample: "76 из 173 элементы; два прохода дали одно значение"
+  - name: color_link_hover
+    value: "#ffffff"
+    unit: hex
+    surface: home
+    viewport: 768
+    method: "наведение Playwright на видимые ссылки; цвет читается после того, как CSS-переход перестал менять значение"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/768/tokens/color_link_hover"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:23.031Z"
+    screenshot_sha256: "fc8a23961140796c7fcfc0e78240182263badfa31208ce6df0c4fdb77746298d"
+    sample: "7 из 7 элементы; два прохода дали одно значение"
+  - name: color_border_default
+    value: "#f2f2f2"
+    unit: hex
+    surface: home
+    viewport: 768
+    method: "CDP getComputedStyle: самый частый цвет видимой границы (ширина ≥1px, стиль не none и не hidden)"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/768/tokens/color_border_default"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:23.031Z"
+    screenshot_sha256: "fc8a23961140796c7fcfc0e78240182263badfa31208ce6df0c4fdb77746298d"
+    sample: "78 из 226 элементы; два прохода дали одно значение"
+  - name: color_focus_ring
+    value: "#c50725"
+    unit: hex
+    surface: home
+    viewport: 768
+    method: "клавиатурная навигация Tab: цвет outline при видимом контуре, иначе цвет тени фокуса, отличной от тени того же элемента без фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/768/tokens/color_focus_ring"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:23.031Z"
+    screenshot_sha256: "fc8a23961140796c7fcfc0e78240182263badfa31208ce6df0c4fdb77746298d"
+    sample: "1 из 1 элементы; два прохода дали одно значение"
+  - name: color_run_screenshot_sha256
+    value: "fc8a23961140796c7fcfc0e78240182263badfa31208ce6df0c4fdb77746298d"
+    unit: sha256
+    surface: home
+    viewport: 768
+    method: "sha256 снимка цветового прогона, снятого до наведения и фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors-768.png"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:23.031Z"
+    screenshot_sha256: "fc8a23961140796c7fcfc0e78240182263badfa31208ce6df0c4fdb77746298d"
+  - name: color_page_background
+    value: "#ffffff"
+    unit: hex
+    surface: home
+    viewport: 1440
+    method: "CDP getComputedStyle: фон html, при его прозрачности — фон body; полупрозрачные слои скомпонованы над холстом документа"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/1440/tokens/color_page_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:41.840Z"
+    screenshot_sha256: "b82711be4175d14436baa84ca774f6fc67da53902c8ea97d9474c65a5d261df0"
+    sample: "два прохода дали одно значение"
+  - name: surface_header_background
+    value: "#ffffff"
+    unit: hex
+    surface: home
+    viewport: 1440
+    method: "CDP getComputedStyle шапки (тот же элемент, которым измерена header_height); фон скомпонован по цепочке предков до первого непрозрачного"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/1440/tokens/surface_header_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:41.840Z"
+    screenshot_sha256: "b82711be4175d14436baa84ca774f6fc67da53902c8ea97d9474c65a5d261df0"
+    sample: "два прохода дали одно значение"
+  - name: surface_card_background
+    value: "#f9f9f9"
+    unit: hex
+    surface: home
+    viewport: 1440
+    method: "CDP getComputedStyle ссылки-карточки (постер ≥60×60 внутри ссылки); ранжирование по закрашенной площади"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/1440/tokens/surface_card_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:41.840Z"
+    screenshot_sha256: "b82711be4175d14436baa84ca774f6fc67da53902c8ea97d9474c65a5d261df0"
+    sample: "511908 из 511908 px²; два прохода дали одно значение"
+  - name: color_text_primary
+    value: "#161616"
+    unit: hex
+    surface: home
+    viewport: 1440
+    method: "CDP getComputedStyle(body).color"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/1440/tokens/color_text_primary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:41.840Z"
+    screenshot_sha256: "b82711be4175d14436baa84ca774f6fc67da53902c8ea97d9474c65a5d261df0"
+    sample: "два прохода дали одно значение"
+  - name: color_text_secondary
+    value: "#757b85"
+    unit: hex
+    surface: home
+    viewport: 1440
+    method: "CDP getComputedStyle: самый частый цвет видимого текста вне ссылок, отличный от основного текста и от цвета ссылок"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/1440/tokens/color_text_secondary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:41.840Z"
+    screenshot_sha256: "b82711be4175d14436baa84ca774f6fc67da53902c8ea97d9474c65a5d261df0"
+    sample: "77 из 166 элементы; два прохода дали одно значение"
+  - name: color_accent_background
+    value: "#c50725"
+    unit: hex
+    surface: home
+    viewport: 1440
+    method: "CDP getComputedStyle интерактивных элементов (button, role=button, input[type=submit|button]); ранжирование по закрашенной площади, фон страницы исключён"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/1440/tokens/color_accent_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:41.840Z"
+    screenshot_sha256: "b82711be4175d14436baa84ca774f6fc67da53902c8ea97d9474c65a5d261df0"
+    sample: "22324 из 40333 px²; два прохода дали одно значение"
+  - name: color_link
+    value: "#161616"
+    unit: hex
+    surface: home
+    viewport: 1440
+    method: "CDP getComputedStyle: самый частый цвет видимых ссылок с собственным текстом"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/1440/tokens/color_link"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:41.840Z"
+    screenshot_sha256: "b82711be4175d14436baa84ca774f6fc67da53902c8ea97d9474c65a5d261df0"
+    sample: "77 из 175 элементы; два прохода дали одно значение"
+  - name: color_link_hover
+    value: "#ffffff"
+    unit: hex
+    surface: home
+    viewport: 1440
+    method: "наведение Playwright на видимые ссылки; цвет читается после того, как CSS-переход перестал менять значение"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/1440/tokens/color_link_hover"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:41.840Z"
+    screenshot_sha256: "b82711be4175d14436baa84ca774f6fc67da53902c8ea97d9474c65a5d261df0"
+    sample: "7 из 7 элементы; два прохода дали одно значение"
+  - name: color_border_default
+    value: "#f2f2f2"
+    unit: hex
+    surface: home
+    viewport: 1440
+    method: "CDP getComputedStyle: самый частый цвет видимой границы (ширина ≥1px, стиль не none и не hidden)"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/1440/tokens/color_border_default"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:41.840Z"
+    screenshot_sha256: "b82711be4175d14436baa84ca774f6fc67da53902c8ea97d9474c65a5d261df0"
+    sample: "94 из 246 элементы; два прохода дали одно значение"
+  - name: color_focus_ring
+    value: "#c50725"
+    unit: hex
+    surface: home
+    viewport: 1440
+    method: "клавиатурная навигация Tab: цвет outline при видимом контуре, иначе цвет тени фокуса, отличной от тени того же элемента без фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json#/viewports/1440/tokens/color_focus_ring"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:41.840Z"
+    screenshot_sha256: "b82711be4175d14436baa84ca774f6fc67da53902c8ea97d9474c65a5d261df0"
+    sample: "1 из 1 элементы; два прохода дали одно значение"
+  - name: color_run_screenshot_sha256
+    value: "b82711be4175d14436baa84ca774f6fc67da53902c8ea97d9474c65a5d261df0"
+    unit: sha256
+    surface: home
+    viewport: 1440
+    method: "sha256 снимка цветового прогона, снятого до наведения и фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors-1440.png"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:48:41.840Z"
+    screenshot_sha256: "b82711be4175d14436baa84ca774f6fc67da53902c8ea97d9474c65a5d261df0"
+  - name: color_page_background
+    value: "#ffffff"
+    unit: hex
+    surface: catalog
+    viewport: 390
+    method: "CDP getComputedStyle: фон html, при его прозрачности — фон body; полупрозрачные слои скомпонованы над холстом документа"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/390/tokens/color_page_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:05.598Z"
+    screenshot_sha256: "e30e7ae3b5c7cfb035a33a435ef371db3b906af5b0a1eebc5929824dcce8811c"
+    sample: "два прохода дали одно значение"
+  - name: surface_header_background
+    value: "#ffffff"
+    unit: hex
+    surface: catalog
+    viewport: 390
+    method: "CDP getComputedStyle шапки (тот же элемент, которым измерена header_height); фон скомпонован по цепочке предков до первого непрозрачного"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/390/tokens/surface_header_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:05.598Z"
+    screenshot_sha256: "e30e7ae3b5c7cfb035a33a435ef371db3b906af5b0a1eebc5929824dcce8811c"
+    sample: "два прохода дали одно значение"
+  - name: color_text_primary
+    value: "#161616"
+    unit: hex
+    surface: catalog
+    viewport: 390
+    method: "CDP getComputedStyle(body).color"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/390/tokens/color_text_primary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:05.598Z"
+    screenshot_sha256: "e30e7ae3b5c7cfb035a33a435ef371db3b906af5b0a1eebc5929824dcce8811c"
+    sample: "два прохода дали одно значение"
+  - name: color_text_secondary
+    value: "#c50725"
+    unit: hex
+    surface: catalog
+    viewport: 390
+    method: "CDP getComputedStyle: самый частый цвет видимого текста вне ссылок, отличный от основного текста и от цвета ссылок"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/390/tokens/color_text_secondary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:05.598Z"
+    screenshot_sha256: "e30e7ae3b5c7cfb035a33a435ef371db3b906af5b0a1eebc5929824dcce8811c"
+    sample: "12 из 17 элементы; два прохода дали одно значение"
+  - name: color_accent_background
+    value: "#c50725"
+    unit: hex
+    surface: catalog
+    viewport: 390
+    method: "CDP getComputedStyle интерактивных элементов (button, role=button, input[type=submit|button]); ранжирование по закрашенной площади, фон страницы исключён"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/390/tokens/color_accent_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:05.598Z"
+    screenshot_sha256: "e30e7ae3b5c7cfb035a33a435ef371db3b906af5b0a1eebc5929824dcce8811c"
+    sample: "14800 из 17250 px²; два прохода дали одно значение"
+  - name: color_link
+    value: "#161616"
+    unit: hex
+    surface: catalog
+    viewport: 390
+    method: "CDP getComputedStyle: самый частый цвет видимых ссылок с собственным текстом"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/390/tokens/color_link"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:05.598Z"
+    screenshot_sha256: "e30e7ae3b5c7cfb035a33a435ef371db3b906af5b0a1eebc5929824dcce8811c"
+    sample: "25 из 43 элементы; два прохода дали одно значение"
+  - name: color_link_hover
+    value: "#ffffff"
+    unit: hex
+    surface: catalog
+    viewport: 390
+    method: "наведение Playwright на видимые ссылки; цвет читается после того, как CSS-переход перестал менять значение"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/390/tokens/color_link_hover"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:05.598Z"
+    screenshot_sha256: "e30e7ae3b5c7cfb035a33a435ef371db3b906af5b0a1eebc5929824dcce8811c"
+    sample: "7 из 7 элементы; два прохода дали одно значение"
+  - name: color_border_default
+    value: "#e6e6e6"
+    unit: hex
+    surface: catalog
+    viewport: 390
+    method: "CDP getComputedStyle: самый частый цвет видимой границы (ширина ≥1px, стиль не none и не hidden)"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/390/tokens/color_border_default"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:05.598Z"
+    screenshot_sha256: "e30e7ae3b5c7cfb035a33a435ef371db3b906af5b0a1eebc5929824dcce8811c"
+    sample: "48 из 66 элементы; два прохода дали одно значение"
+  - name: color_focus_ring
+    value: "#c50725"
+    unit: hex
+    surface: catalog
+    viewport: 390
+    method: "клавиатурная навигация Tab: цвет outline при видимом контуре, иначе цвет тени фокуса, отличной от тени того же элемента без фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/390/tokens/color_focus_ring"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:05.598Z"
+    screenshot_sha256: "e30e7ae3b5c7cfb035a33a435ef371db3b906af5b0a1eebc5929824dcce8811c"
+    sample: "1 из 1 элементы; два прохода дали одно значение"
+  - name: color_run_screenshot_sha256
+    value: "e30e7ae3b5c7cfb035a33a435ef371db3b906af5b0a1eebc5929824dcce8811c"
+    unit: sha256
+    surface: catalog
+    viewport: 390
+    method: "sha256 снимка цветового прогона, снятого до наведения и фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors-390.png"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:05.598Z"
+    screenshot_sha256: "e30e7ae3b5c7cfb035a33a435ef371db3b906af5b0a1eebc5929824dcce8811c"
+  - name: color_page_background
+    value: "#ffffff"
+    unit: hex
+    surface: catalog
+    viewport: 768
+    method: "CDP getComputedStyle: фон html, при его прозрачности — фон body; полупрозрачные слои скомпонованы над холстом документа"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/768/tokens/color_page_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:25.247Z"
+    screenshot_sha256: "f4249f7a3d14d01e12024f82fd0fe7a9c6a434adf0b719ad055af56f45de1c77"
+    sample: "два прохода дали одно значение"
+  - name: surface_header_background
+    value: "#ffffff"
+    unit: hex
+    surface: catalog
+    viewport: 768
+    method: "CDP getComputedStyle шапки (тот же элемент, которым измерена header_height); фон скомпонован по цепочке предков до первого непрозрачного"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/768/tokens/surface_header_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:25.247Z"
+    screenshot_sha256: "f4249f7a3d14d01e12024f82fd0fe7a9c6a434adf0b719ad055af56f45de1c77"
+    sample: "два прохода дали одно значение"
+  - name: color_text_primary
+    value: "#161616"
+    unit: hex
+    surface: catalog
+    viewport: 768
+    method: "CDP getComputedStyle(body).color"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/768/tokens/color_text_primary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:25.247Z"
+    screenshot_sha256: "f4249f7a3d14d01e12024f82fd0fe7a9c6a434adf0b719ad055af56f45de1c77"
+    sample: "два прохода дали одно значение"
+  - name: color_text_secondary
+    value: "#c50725"
+    unit: hex
+    surface: catalog
+    viewport: 768
+    method: "CDP getComputedStyle: самый частый цвет видимого текста вне ссылок, отличный от основного текста и от цвета ссылок"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/768/tokens/color_text_secondary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:25.247Z"
+    screenshot_sha256: "f4249f7a3d14d01e12024f82fd0fe7a9c6a434adf0b719ad055af56f45de1c77"
+    sample: "12 из 17 элементы; два прохода дали одно значение"
+  - name: color_accent_background
+    value: "#c50725"
+    unit: hex
+    surface: catalog
+    viewport: 768
+    method: "CDP getComputedStyle интерактивных элементов (button, role=button, input[type=submit|button]); ранжирование по закрашенной площади, фон страницы исключён"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/768/tokens/color_accent_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:25.247Z"
+    screenshot_sha256: "f4249f7a3d14d01e12024f82fd0fe7a9c6a434adf0b719ad055af56f45de1c77"
+    sample: "33120 из 36795 px²; два прохода дали одно значение"
+  - name: color_link
+    value: "#161616"
+    unit: hex
+    surface: catalog
+    viewport: 768
+    method: "CDP getComputedStyle: самый частый цвет видимых ссылок с собственным текстом"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/768/tokens/color_link"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:25.247Z"
+    screenshot_sha256: "f4249f7a3d14d01e12024f82fd0fe7a9c6a434adf0b719ad055af56f45de1c77"
+    sample: "25 из 57 элементы; два прохода дали одно значение"
+  - name: color_link_hover
+    value: "#ffffff"
+    unit: hex
+    surface: catalog
+    viewport: 768
+    method: "наведение Playwright на видимые ссылки; цвет читается после того, как CSS-переход перестал менять значение"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/768/tokens/color_link_hover"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:25.247Z"
+    screenshot_sha256: "f4249f7a3d14d01e12024f82fd0fe7a9c6a434adf0b719ad055af56f45de1c77"
+    sample: "7 из 7 элементы; два прохода дали одно значение"
+  - name: color_border_default
+    value: "#e6e6e6"
+    unit: hex
+    surface: catalog
+    viewport: 768
+    method: "CDP getComputedStyle: самый частый цвет видимой границы (ширина ≥1px, стиль не none и не hidden)"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/768/tokens/color_border_default"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:25.247Z"
+    screenshot_sha256: "f4249f7a3d14d01e12024f82fd0fe7a9c6a434adf0b719ad055af56f45de1c77"
+    sample: "48 из 66 элементы; два прохода дали одно значение"
+  - name: color_focus_ring
+    value: "#c50725"
+    unit: hex
+    surface: catalog
+    viewport: 768
+    method: "клавиатурная навигация Tab: цвет outline при видимом контуре, иначе цвет тени фокуса, отличной от тени того же элемента без фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/768/tokens/color_focus_ring"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:25.247Z"
+    screenshot_sha256: "f4249f7a3d14d01e12024f82fd0fe7a9c6a434adf0b719ad055af56f45de1c77"
+    sample: "1 из 1 элементы; два прохода дали одно значение"
+  - name: color_run_screenshot_sha256
+    value: "f4249f7a3d14d01e12024f82fd0fe7a9c6a434adf0b719ad055af56f45de1c77"
+    unit: sha256
+    surface: catalog
+    viewport: 768
+    method: "sha256 снимка цветового прогона, снятого до наведения и фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors-768.png"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:25.247Z"
+    screenshot_sha256: "f4249f7a3d14d01e12024f82fd0fe7a9c6a434adf0b719ad055af56f45de1c77"
+  - name: color_page_background
+    value: "#ffffff"
+    unit: hex
+    surface: catalog
+    viewport: 1440
+    method: "CDP getComputedStyle: фон html, при его прозрачности — фон body; полупрозрачные слои скомпонованы над холстом документа"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/1440/tokens/color_page_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:43.654Z"
+    screenshot_sha256: "728c4e49c67a3a5b1b5dc1100f11df4fa6fd5bf7b3326b8a10c4b37f15fca493"
+    sample: "два прохода дали одно значение"
+  - name: surface_header_background
+    value: "#ffffff"
+    unit: hex
+    surface: catalog
+    viewport: 1440
+    method: "CDP getComputedStyle шапки (тот же элемент, которым измерена header_height); фон скомпонован по цепочке предков до первого непрозрачного"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/1440/tokens/surface_header_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:43.654Z"
+    screenshot_sha256: "728c4e49c67a3a5b1b5dc1100f11df4fa6fd5bf7b3326b8a10c4b37f15fca493"
+    sample: "два прохода дали одно значение"
+  - name: color_text_primary
+    value: "#161616"
+    unit: hex
+    surface: catalog
+    viewport: 1440
+    method: "CDP getComputedStyle(body).color"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/1440/tokens/color_text_primary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:43.654Z"
+    screenshot_sha256: "728c4e49c67a3a5b1b5dc1100f11df4fa6fd5bf7b3326b8a10c4b37f15fca493"
+    sample: "два прохода дали одно значение"
+  - name: color_text_secondary
+    value: "#c50725"
+    unit: hex
+    surface: catalog
+    viewport: 1440
+    method: "CDP getComputedStyle: самый частый цвет видимого текста вне ссылок, отличный от основного текста и от цвета ссылок"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/1440/tokens/color_text_secondary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:43.654Z"
+    screenshot_sha256: "728c4e49c67a3a5b1b5dc1100f11df4fa6fd5bf7b3326b8a10c4b37f15fca493"
+    sample: "12 из 25 элементы; два прохода дали одно значение"
+  - name: color_accent_background
+    value: "#c50725"
+    unit: hex
+    surface: catalog
+    viewport: 1440
+    method: "CDP getComputedStyle интерактивных элементов (button, role=button, input[type=submit|button]); ранжирование по закрашенной площади, фон страницы исключён"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/1440/tokens/color_accent_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:43.654Z"
+    screenshot_sha256: "728c4e49c67a3a5b1b5dc1100f11df4fa6fd5bf7b3326b8a10c4b37f15fca493"
+    sample: "8600 из 12275 px²; два прохода дали одно значение"
+  - name: color_link
+    value: "#161616"
+    unit: hex
+    surface: catalog
+    viewport: 1440
+    method: "CDP getComputedStyle: самый частый цвет видимых ссылок с собственным текстом"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/1440/tokens/color_link"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:43.654Z"
+    screenshot_sha256: "728c4e49c67a3a5b1b5dc1100f11df4fa6fd5bf7b3326b8a10c4b37f15fca493"
+    sample: "26 из 59 элементы; два прохода дали одно значение"
+  - name: color_link_hover
+    value: "#ffffff"
+    unit: hex
+    surface: catalog
+    viewport: 1440
+    method: "наведение Playwright на видимые ссылки; цвет читается после того, как CSS-переход перестал менять значение"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/1440/tokens/color_link_hover"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:43.654Z"
+    screenshot_sha256: "728c4e49c67a3a5b1b5dc1100f11df4fa6fd5bf7b3326b8a10c4b37f15fca493"
+    sample: "7 из 7 элементы; два прохода дали одно значение"
+  - name: color_border_default
+    value: "#f2f2f2"
+    unit: hex
+    surface: catalog
+    viewport: 1440
+    method: "CDP getComputedStyle: самый частый цвет видимой границы (ширина ≥1px, стиль не none и не hidden)"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/1440/tokens/color_border_default"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:43.654Z"
+    screenshot_sha256: "728c4e49c67a3a5b1b5dc1100f11df4fa6fd5bf7b3326b8a10c4b37f15fca493"
+    sample: "34 из 50 элементы; два прохода дали одно значение"
+  - name: color_focus_ring
+    value: "#c50725"
+    unit: hex
+    surface: catalog
+    viewport: 1440
+    method: "клавиатурная навигация Tab: цвет outline при видимом контуре, иначе цвет тени фокуса, отличной от тени того же элемента без фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/1440/tokens/color_focus_ring"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:43.654Z"
+    screenshot_sha256: "728c4e49c67a3a5b1b5dc1100f11df4fa6fd5bf7b3326b8a10c4b37f15fca493"
+    sample: "1 из 1 элементы; два прохода дали одно значение"
+  - name: color_run_screenshot_sha256
+    value: "728c4e49c67a3a5b1b5dc1100f11df4fa6fd5bf7b3326b8a10c4b37f15fca493"
+    unit: sha256
+    surface: catalog
+    viewport: 1440
+    method: "sha256 снимка цветового прогона, снятого до наведения и фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors-1440.png"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:49:43.654Z"
+    screenshot_sha256: "728c4e49c67a3a5b1b5dc1100f11df4fa6fd5bf7b3326b8a10c4b37f15fca493"
+  - name: color_page_background
+    value: "#ffffff"
+    unit: hex
+    surface: collection_hub
+    viewport: 390
+    method: "CDP getComputedStyle: фон html, при его прозрачности — фон body; полупрозрачные слои скомпонованы над холстом документа"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/390/tokens/color_page_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:08.192Z"
+    screenshot_sha256: "f20b2cba6542b06dc0e2f388503a3b69e93f1b5550d9155b7888a572d29aee73"
+    sample: "два прохода дали одно значение"
+  - name: surface_header_background
+    value: "#ffffff"
+    unit: hex
+    surface: collection_hub
+    viewport: 390
+    method: "CDP getComputedStyle шапки (тот же элемент, которым измерена header_height); фон скомпонован по цепочке предков до первого непрозрачного"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/390/tokens/surface_header_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:08.192Z"
+    screenshot_sha256: "f20b2cba6542b06dc0e2f388503a3b69e93f1b5550d9155b7888a572d29aee73"
+    sample: "два прохода дали одно значение"
+  - name: surface_card_background
+    value: "#f7f7f7"
+    unit: hex
+    surface: collection_hub
+    viewport: 390
+    method: "CDP getComputedStyle ссылки-карточки (постер ≥60×60 внутри ссылки); ранжирование по закрашенной площади"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/390/tokens/surface_card_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:08.192Z"
+    screenshot_sha256: "f20b2cba6542b06dc0e2f388503a3b69e93f1b5550d9155b7888a572d29aee73"
+    sample: "50700 из 50700 px²; два прохода дали одно значение"
+  - name: color_text_primary
+    value: "#161616"
+    unit: hex
+    surface: collection_hub
+    viewport: 390
+    method: "CDP getComputedStyle(body).color"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/390/tokens/color_text_primary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:08.192Z"
+    screenshot_sha256: "f20b2cba6542b06dc0e2f388503a3b69e93f1b5550d9155b7888a572d29aee73"
+    sample: "два прохода дали одно значение"
+  - name: color_text_secondary
+    value: "#757b85"
+    unit: hex
+    surface: collection_hub
+    viewport: 390
+    method: "CDP getComputedStyle: самый частый цвет видимого текста вне ссылок, отличный от основного текста и от цвета ссылок"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/390/tokens/color_text_secondary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:08.192Z"
+    screenshot_sha256: "f20b2cba6542b06dc0e2f388503a3b69e93f1b5550d9155b7888a572d29aee73"
+    sample: "17 из 21 элементы; два прохода дали одно значение"
+  - name: color_accent_background
+    value: "#c50725"
+    unit: hex
+    surface: collection_hub
+    viewport: 390
+    method: "CDP getComputedStyle интерактивных элементов (button, role=button, input[type=submit|button]); ранжирование по закрашенной площади, фон страницы исключён"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/390/tokens/color_accent_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:08.192Z"
+    screenshot_sha256: "f20b2cba6542b06dc0e2f388503a3b69e93f1b5550d9155b7888a572d29aee73"
+    sample: "5116 из 7566 px²; два прохода дали одно значение"
+  - name: color_link
+    value: "#161616"
+    unit: hex
+    surface: collection_hub
+    viewport: 390
+    method: "CDP getComputedStyle: самый частый цвет видимых ссылок с собственным текстом"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/390/tokens/color_link"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:08.192Z"
+    screenshot_sha256: "f20b2cba6542b06dc0e2f388503a3b69e93f1b5550d9155b7888a572d29aee73"
+    sample: "37 из 45 элементы; два прохода дали одно значение"
+  - name: color_link_hover
+    value: "#c50725"
+    unit: hex
+    surface: collection_hub
+    viewport: 390
+    method: "наведение Playwright на видимые ссылки; цвет читается после того, как CSS-переход перестал менять значение"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/390/tokens/color_link_hover"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:08.192Z"
+    screenshot_sha256: "f20b2cba6542b06dc0e2f388503a3b69e93f1b5550d9155b7888a572d29aee73"
+    sample: "7 из 7 элементы; два прохода дали одно значение"
+  - name: color_border_default
+    value: "#ffffff"
+    unit: hex
+    surface: collection_hub
+    viewport: 390
+    method: "CDP getComputedStyle: самый частый цвет видимой границы (ширина ≥1px, стиль не none и не hidden)"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/390/tokens/color_border_default"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:08.192Z"
+    screenshot_sha256: "f20b2cba6542b06dc0e2f388503a3b69e93f1b5550d9155b7888a572d29aee73"
+    sample: "144 из 243 элементы; два прохода дали одно значение"
+  - name: color_focus_ring
+    value: "#c50725"
+    unit: hex
+    surface: collection_hub
+    viewport: 390
+    method: "клавиатурная навигация Tab: цвет outline при видимом контуре, иначе цвет тени фокуса, отличной от тени того же элемента без фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/390/tokens/color_focus_ring"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:08.192Z"
+    screenshot_sha256: "f20b2cba6542b06dc0e2f388503a3b69e93f1b5550d9155b7888a572d29aee73"
+    sample: "1 из 1 элементы; два прохода дали одно значение"
+  - name: color_run_screenshot_sha256
+    value: "f20b2cba6542b06dc0e2f388503a3b69e93f1b5550d9155b7888a572d29aee73"
+    unit: sha256
+    surface: collection_hub
+    viewport: 390
+    method: "sha256 снимка цветового прогона, снятого до наведения и фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors-390.png"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:08.192Z"
+    screenshot_sha256: "f20b2cba6542b06dc0e2f388503a3b69e93f1b5550d9155b7888a572d29aee73"
+  - name: color_page_background
+    value: "#ffffff"
+    unit: hex
+    surface: collection_hub
+    viewport: 768
+    method: "CDP getComputedStyle: фон html, при его прозрачности — фон body; полупрозрачные слои скомпонованы над холстом документа"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/768/tokens/color_page_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:27.099Z"
+    screenshot_sha256: "b658260241fe7ef26a1e06eb53c621d5562b218c4c00e4ee7a4f0cbad5c97e24"
+    sample: "два прохода дали одно значение"
+  - name: surface_header_background
+    value: "#ffffff"
+    unit: hex
+    surface: collection_hub
+    viewport: 768
+    method: "CDP getComputedStyle шапки (тот же элемент, которым измерена header_height); фон скомпонован по цепочке предков до первого непрозрачного"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/768/tokens/surface_header_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:27.099Z"
+    screenshot_sha256: "b658260241fe7ef26a1e06eb53c621d5562b218c4c00e4ee7a4f0cbad5c97e24"
+    sample: "два прохода дали одно значение"
+  - name: surface_card_background
+    value: "#f7f7f7"
+    unit: hex
+    surface: collection_hub
+    viewport: 768
+    method: "CDP getComputedStyle ссылки-карточки (постер ≥60×60 внутри ссылки); ранжирование по закрашенной площади"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/768/tokens/surface_card_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:27.099Z"
+    screenshot_sha256: "b658260241fe7ef26a1e06eb53c621d5562b218c4c00e4ee7a4f0cbad5c97e24"
+    sample: "50700 из 50700 px²; два прохода дали одно значение"
+  - name: color_text_primary
+    value: "#161616"
+    unit: hex
+    surface: collection_hub
+    viewport: 768
+    method: "CDP getComputedStyle(body).color"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/768/tokens/color_text_primary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:27.099Z"
+    screenshot_sha256: "b658260241fe7ef26a1e06eb53c621d5562b218c4c00e4ee7a4f0cbad5c97e24"
+    sample: "два прохода дали одно значение"
+  - name: color_text_secondary
+    value: "#757b85"
+    unit: hex
+    surface: collection_hub
+    viewport: 768
+    method: "CDP getComputedStyle: самый частый цвет видимого текста вне ссылок, отличный от основного текста и от цвета ссылок"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/768/tokens/color_text_secondary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:27.099Z"
+    screenshot_sha256: "b658260241fe7ef26a1e06eb53c621d5562b218c4c00e4ee7a4f0cbad5c97e24"
+    sample: "17 из 21 элементы; два прохода дали одно значение"
+  - name: color_accent_background
+    value: "#c50725"
+    unit: hex
+    surface: collection_hub
+    viewport: 768
+    method: "CDP getComputedStyle интерактивных элементов (button, role=button, input[type=submit|button]); ранжирование по закрашенной площади, фон страницы исключён"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/768/tokens/color_accent_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:27.099Z"
+    screenshot_sha256: "b658260241fe7ef26a1e06eb53c621d5562b218c4c00e4ee7a4f0cbad5c97e24"
+    sample: "8316 из 11991 px²; два прохода дали одно значение"
+  - name: color_link
+    value: "#161616"
+    unit: hex
+    surface: collection_hub
+    viewport: 768
+    method: "CDP getComputedStyle: самый частый цвет видимых ссылок с собственным текстом"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/768/tokens/color_link"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:27.099Z"
+    screenshot_sha256: "b658260241fe7ef26a1e06eb53c621d5562b218c4c00e4ee7a4f0cbad5c97e24"
+    sample: "37 из 59 элементы; два прохода дали одно значение"
+  - name: color_link_hover
+    value: "#c50725"
+    unit: hex
+    surface: collection_hub
+    viewport: 768
+    method: "наведение Playwright на видимые ссылки; цвет читается после того, как CSS-переход перестал менять значение"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/768/tokens/color_link_hover"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:27.099Z"
+    screenshot_sha256: "b658260241fe7ef26a1e06eb53c621d5562b218c4c00e4ee7a4f0cbad5c97e24"
+    sample: "7 из 7 элементы; два прохода дали одно значение"
+  - name: color_border_default
+    value: "#ffffff"
+    unit: hex
+    surface: collection_hub
+    viewport: 768
+    method: "CDP getComputedStyle: самый частый цвет видимой границы (ширина ≥1px, стиль не none и не hidden)"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/768/tokens/color_border_default"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:27.099Z"
+    screenshot_sha256: "b658260241fe7ef26a1e06eb53c621d5562b218c4c00e4ee7a4f0cbad5c97e24"
+    sample: "144 из 243 элементы; два прохода дали одно значение"
+  - name: color_focus_ring
+    value: "#c50725"
+    unit: hex
+    surface: collection_hub
+    viewport: 768
+    method: "клавиатурная навигация Tab: цвет outline при видимом контуре, иначе цвет тени фокуса, отличной от тени того же элемента без фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/768/tokens/color_focus_ring"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:27.099Z"
+    screenshot_sha256: "b658260241fe7ef26a1e06eb53c621d5562b218c4c00e4ee7a4f0cbad5c97e24"
+    sample: "1 из 1 элементы; два прохода дали одно значение"
+  - name: color_run_screenshot_sha256
+    value: "b658260241fe7ef26a1e06eb53c621d5562b218c4c00e4ee7a4f0cbad5c97e24"
+    unit: sha256
+    surface: collection_hub
+    viewport: 768
+    method: "sha256 снимка цветового прогона, снятого до наведения и фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors-768.png"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:27.099Z"
+    screenshot_sha256: "b658260241fe7ef26a1e06eb53c621d5562b218c4c00e4ee7a4f0cbad5c97e24"
+  - name: color_page_background
+    value: "#ffffff"
+    unit: hex
+    surface: collection_hub
+    viewport: 1440
+    method: "CDP getComputedStyle: фон html, при его прозрачности — фон body; полупрозрачные слои скомпонованы над холстом документа"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/1440/tokens/color_page_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:45.193Z"
+    screenshot_sha256: "3ea6dbed59cfcc6678e9003bec09b0ac2436991a9ff978f6889d906e2eb97874"
+    sample: "два прохода дали одно значение"
+  - name: surface_header_background
+    value: "#ffffff"
+    unit: hex
+    surface: collection_hub
+    viewport: 1440
+    method: "CDP getComputedStyle шапки (тот же элемент, которым измерена header_height); фон скомпонован по цепочке предков до первого непрозрачного"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/1440/tokens/surface_header_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:45.193Z"
+    screenshot_sha256: "3ea6dbed59cfcc6678e9003bec09b0ac2436991a9ff978f6889d906e2eb97874"
+    sample: "два прохода дали одно значение"
+  - name: surface_card_background
+    value: "#f7f7f7"
+    unit: hex
+    surface: collection_hub
+    viewport: 1440
+    method: "CDP getComputedStyle ссылки-карточки (постер ≥60×60 внутри ссылки); ранжирование по закрашенной площади"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/1440/tokens/surface_card_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:45.193Z"
+    screenshot_sha256: "3ea6dbed59cfcc6678e9003bec09b0ac2436991a9ff978f6889d906e2eb97874"
+    sample: "50700 из 50700 px²; два прохода дали одно значение"
+  - name: color_text_primary
+    value: "#161616"
+    unit: hex
+    surface: collection_hub
+    viewport: 1440
+    method: "CDP getComputedStyle(body).color"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/1440/tokens/color_text_primary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:45.193Z"
+    screenshot_sha256: "3ea6dbed59cfcc6678e9003bec09b0ac2436991a9ff978f6889d906e2eb97874"
+    sample: "два прохода дали одно значение"
+  - name: color_text_secondary
+    value: "#757b85"
+    unit: hex
+    surface: collection_hub
+    viewport: 1440
+    method: "CDP getComputedStyle: самый частый цвет видимого текста вне ссылок, отличный от основного текста и от цвета ссылок"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/1440/tokens/color_text_secondary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:45.193Z"
+    screenshot_sha256: "3ea6dbed59cfcc6678e9003bec09b0ac2436991a9ff978f6889d906e2eb97874"
+    sample: "17 из 21 элементы; два прохода дали одно значение"
+  - name: color_accent_background
+    value: "#c50725"
+    unit: hex
+    surface: collection_hub
+    viewport: 1440
+    method: "CDP getComputedStyle интерактивных элементов (button, role=button, input[type=submit|button]); ранжирование по закрашенной площади, фон страницы исключён"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/1440/tokens/color_accent_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:45.193Z"
+    screenshot_sha256: "3ea6dbed59cfcc6678e9003bec09b0ac2436991a9ff978f6889d906e2eb97874"
+    sample: "8316 из 11991 px²; два прохода дали одно значение"
+  - name: color_link
+    value: "#161616"
+    unit: hex
+    surface: collection_hub
+    viewport: 1440
+    method: "CDP getComputedStyle: самый частый цвет видимых ссылок с собственным текстом"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/1440/tokens/color_link"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:45.193Z"
+    screenshot_sha256: "3ea6dbed59cfcc6678e9003bec09b0ac2436991a9ff978f6889d906e2eb97874"
+    sample: "38 из 61 элементы; два прохода дали одно значение"
+  - name: color_link_hover
+    value: "#c50725"
+    unit: hex
+    surface: collection_hub
+    viewport: 1440
+    method: "наведение Playwright на видимые ссылки; цвет читается после того, как CSS-переход перестал менять значение"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/1440/tokens/color_link_hover"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:45.193Z"
+    screenshot_sha256: "3ea6dbed59cfcc6678e9003bec09b0ac2436991a9ff978f6889d906e2eb97874"
+    sample: "7 из 7 элементы; два прохода дали одно значение"
+  - name: color_border_default
+    value: "#ffffff"
+    unit: hex
+    surface: collection_hub
+    viewport: 1440
+    method: "CDP getComputedStyle: самый частый цвет видимой границы (ширина ≥1px, стиль не none и не hidden)"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/1440/tokens/color_border_default"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:45.193Z"
+    screenshot_sha256: "3ea6dbed59cfcc6678e9003bec09b0ac2436991a9ff978f6889d906e2eb97874"
+    sample: "144 из 243 элементы; два прохода дали одно значение"
+  - name: color_focus_ring
+    value: "#c50725"
+    unit: hex
+    surface: collection_hub
+    viewport: 1440
+    method: "клавиатурная навигация Tab: цвет outline при видимом контуре, иначе цвет тени фокуса, отличной от тени того же элемента без фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json#/viewports/1440/tokens/color_focus_ring"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:45.193Z"
+    screenshot_sha256: "3ea6dbed59cfcc6678e9003bec09b0ac2436991a9ff978f6889d906e2eb97874"
+    sample: "1 из 1 элементы; два прохода дали одно значение"
+  - name: color_run_screenshot_sha256
+    value: "3ea6dbed59cfcc6678e9003bec09b0ac2436991a9ff978f6889d906e2eb97874"
+    unit: sha256
+    surface: collection_hub
+    viewport: 1440
+    method: "sha256 снимка цветового прогона, снятого до наведения и фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors-1440.png"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:50:45.193Z"
+    screenshot_sha256: "3ea6dbed59cfcc6678e9003bec09b0ac2436991a9ff978f6889d906e2eb97874"
+  - name: color_page_background
+    value: "#ffffff"
+    unit: hex
+    surface: title
+    viewport: 390
+    method: "CDP getComputedStyle: фон html, при его прозрачности — фон body; полупрозрачные слои скомпонованы над холстом документа"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/390/tokens/color_page_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:06.178Z"
+    screenshot_sha256: "49295ee18f723a83d6896e9edf2ec1421ddd65fef0021e696dfc91b7902d0fd4"
+    sample: "два прохода дали одно значение"
+  - name: surface_header_background
+    value: "#ffffff"
+    unit: hex
+    surface: title
+    viewport: 390
+    method: "CDP getComputedStyle шапки (тот же элемент, которым измерена header_height); фон скомпонован по цепочке предков до первого непрозрачного"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/390/tokens/surface_header_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:06.178Z"
+    screenshot_sha256: "49295ee18f723a83d6896e9edf2ec1421ddd65fef0021e696dfc91b7902d0fd4"
+    sample: "два прохода дали одно значение"
+  - name: surface_card_background
+    value: "#f9f9f9"
+    unit: hex
+    surface: title
+    viewport: 390
+    method: "CDP getComputedStyle ссылки-карточки (постер ≥60×60 внутри ссылки); ранжирование по закрашенной площади"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/390/tokens/surface_card_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:06.178Z"
+    screenshot_sha256: "49295ee18f723a83d6896e9edf2ec1421ddd65fef0021e696dfc91b7902d0fd4"
+    sample: "259956 из 259956 px²; два прохода дали одно значение"
+  - name: color_text_primary
+    value: "#161616"
+    unit: hex
+    surface: title
+    viewport: 390
+    method: "CDP getComputedStyle(body).color"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/390/tokens/color_text_primary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:06.178Z"
+    screenshot_sha256: "49295ee18f723a83d6896e9edf2ec1421ddd65fef0021e696dfc91b7902d0fd4"
+    sample: "два прохода дали одно значение"
+  - name: color_text_secondary
+    value: "#ffffff"
+    unit: hex
+    surface: title
+    viewport: 390
+    method: "CDP getComputedStyle: самый частый цвет видимого текста вне ссылок, отличный от основного текста и от цвета ссылок"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/390/tokens/color_text_secondary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:06.178Z"
+    screenshot_sha256: "49295ee18f723a83d6896e9edf2ec1421ddd65fef0021e696dfc91b7902d0fd4"
+    sample: "65 из 280 элементы; два прохода дали одно значение"
+  - name: color_accent_background
+    value: "#c50725"
+    unit: hex
+    surface: title
+    viewport: 390
+    method: "CDP getComputedStyle интерактивных элементов (button, role=button, input[type=submit|button]); ранжирование по закрашенной площади, фон страницы исключён"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/390/tokens/color_accent_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:06.178Z"
+    screenshot_sha256: "49295ee18f723a83d6896e9edf2ec1421ddd65fef0021e696dfc91b7902d0fd4"
+    sample: "12906 из 39047 px²; два прохода дали одно значение"
+  - name: color_link
+    value: "#bbbbbb"
+    unit: hex
+    surface: title
+    viewport: 390
+    method: "CDP getComputedStyle: самый частый цвет видимых ссылок с собственным текстом"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/390/tokens/color_link"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:06.178Z"
+    screenshot_sha256: "49295ee18f723a83d6896e9edf2ec1421ddd65fef0021e696dfc91b7902d0fd4"
+    sample: "211 из 371 элементы; два прохода дали одно значение"
+  - name: color_border_default
+    value: "#f3b3b3"
+    unit: hex
+    surface: title
+    viewport: 390
+    method: "CDP getComputedStyle: самый частый цвет видимой границы (ширина ≥1px, стиль не none и не hidden)"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/390/tokens/color_border_default"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:06.178Z"
+    screenshot_sha256: "49295ee18f723a83d6896e9edf2ec1421ddd65fef0021e696dfc91b7902d0fd4"
+    sample: "108 из 235 элементы; два прохода дали одно значение"
+  - name: color_focus_ring
+    value: "#c50725"
+    unit: hex
+    surface: title
+    viewport: 390
+    method: "клавиатурная навигация Tab: цвет outline при видимом контуре, иначе цвет тени фокуса, отличной от тени того же элемента без фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/390/tokens/color_focus_ring"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:06.178Z"
+    screenshot_sha256: "49295ee18f723a83d6896e9edf2ec1421ddd65fef0021e696dfc91b7902d0fd4"
+    sample: "1 из 1 элементы; два прохода дали одно значение"
+  - name: color_run_screenshot_sha256
+    value: "49295ee18f723a83d6896e9edf2ec1421ddd65fef0021e696dfc91b7902d0fd4"
+    unit: sha256
+    surface: title
+    viewport: 390
+    method: "sha256 снимка цветового прогона, снятого до наведения и фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors-390.png"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:06.178Z"
+    screenshot_sha256: "49295ee18f723a83d6896e9edf2ec1421ddd65fef0021e696dfc91b7902d0fd4"
+  - name: color_page_background
+    value: "#ffffff"
+    unit: hex
+    surface: title
+    viewport: 768
+    method: "CDP getComputedStyle: фон html, при его прозрачности — фон body; полупрозрачные слои скомпонованы над холстом документа"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/768/tokens/color_page_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:23.842Z"
+    screenshot_sha256: "ae9943944255ee346776830bdd9fba8beb40707a864a2c49df012ddbd53c0ba4"
+    sample: "два прохода дали одно значение"
+  - name: surface_header_background
+    value: "#ffffff"
+    unit: hex
+    surface: title
+    viewport: 768
+    method: "CDP getComputedStyle шапки (тот же элемент, которым измерена header_height); фон скомпонован по цепочке предков до первого непрозрачного"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/768/tokens/surface_header_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:23.842Z"
+    screenshot_sha256: "ae9943944255ee346776830bdd9fba8beb40707a864a2c49df012ddbd53c0ba4"
+    sample: "два прохода дали одно значение"
+  - name: surface_card_background
+    value: "#f9f9f9"
+    unit: hex
+    surface: title
+    viewport: 768
+    method: "CDP getComputedStyle ссылки-карточки (постер ≥60×60 внутри ссылки); ранжирование по закрашенной площади"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/768/tokens/surface_card_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:23.842Z"
+    screenshot_sha256: "ae9943944255ee346776830bdd9fba8beb40707a864a2c49df012ddbd53c0ba4"
+    sample: "511632 из 511632 px²; два прохода дали одно значение"
+  - name: color_text_primary
+    value: "#161616"
+    unit: hex
+    surface: title
+    viewport: 768
+    method: "CDP getComputedStyle(body).color"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/768/tokens/color_text_primary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:23.842Z"
+    screenshot_sha256: "ae9943944255ee346776830bdd9fba8beb40707a864a2c49df012ddbd53c0ba4"
+    sample: "два прохода дали одно значение"
+  - name: color_text_secondary
+    value: "#ffffff"
+    unit: hex
+    surface: title
+    viewport: 768
+    method: "CDP getComputedStyle: самый частый цвет видимого текста вне ссылок, отличный от основного текста и от цвета ссылок"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/768/tokens/color_text_secondary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:23.842Z"
+    screenshot_sha256: "ae9943944255ee346776830bdd9fba8beb40707a864a2c49df012ddbd53c0ba4"
+    sample: "64 из 283 элементы; два прохода дали одно значение"
+  - name: color_accent_background
+    value: "#c50725"
+    unit: hex
+    surface: title
+    viewport: 768
+    method: "CDP getComputedStyle интерактивных элементов (button, role=button, input[type=submit|button]); ранжирование по закрашенной площади, фон страницы исключён"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/768/tokens/color_accent_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:23.842Z"
+    screenshot_sha256: "ae9943944255ee346776830bdd9fba8beb40707a864a2c49df012ddbd53c0ba4"
+    sample: "16106 из 43472 px²; два прохода дали одно значение"
+  - name: color_link
+    value: "#bbbbbb"
+    unit: hex
+    surface: title
+    viewport: 768
+    method: "CDP getComputedStyle: самый частый цвет видимых ссылок с собственным текстом"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/768/tokens/color_link"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:23.842Z"
+    screenshot_sha256: "ae9943944255ee346776830bdd9fba8beb40707a864a2c49df012ddbd53c0ba4"
+    sample: "211 из 433 элементы; два прохода дали одно значение"
+  - name: color_border_default
+    value: "#f3b3b3"
+    unit: hex
+    surface: title
+    viewport: 768
+    method: "CDP getComputedStyle: самый частый цвет видимой границы (ширина ≥1px, стиль не none и не hidden)"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/768/tokens/color_border_default"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:23.842Z"
+    screenshot_sha256: "ae9943944255ee346776830bdd9fba8beb40707a864a2c49df012ddbd53c0ba4"
+    sample: "108 из 239 элементы; два прохода дали одно значение"
+  - name: color_focus_ring
+    value: "#c50725"
+    unit: hex
+    surface: title
+    viewport: 768
+    method: "клавиатурная навигация Tab: цвет outline при видимом контуре, иначе цвет тени фокуса, отличной от тени того же элемента без фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/768/tokens/color_focus_ring"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:23.842Z"
+    screenshot_sha256: "ae9943944255ee346776830bdd9fba8beb40707a864a2c49df012ddbd53c0ba4"
+    sample: "1 из 1 элементы; два прохода дали одно значение"
+  - name: color_run_screenshot_sha256
+    value: "ae9943944255ee346776830bdd9fba8beb40707a864a2c49df012ddbd53c0ba4"
+    unit: sha256
+    surface: title
+    viewport: 768
+    method: "sha256 снимка цветового прогона, снятого до наведения и фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors-768.png"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:23.842Z"
+    screenshot_sha256: "ae9943944255ee346776830bdd9fba8beb40707a864a2c49df012ddbd53c0ba4"
+  - name: color_page_background
+    value: "#ffffff"
+    unit: hex
+    surface: title
+    viewport: 1440
+    method: "CDP getComputedStyle: фон html, при его прозрачности — фон body; полупрозрачные слои скомпонованы над холстом документа"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/1440/tokens/color_page_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:41.374Z"
+    screenshot_sha256: "bdc96ef10afe3f273e95cb50bceb4bd151790e79744803107b974c9c87bc2330"
+    sample: "два прохода дали одно значение"
+  - name: surface_header_background
+    value: "#ffffff"
+    unit: hex
+    surface: title
+    viewport: 1440
+    method: "CDP getComputedStyle шапки (тот же элемент, которым измерена header_height); фон скомпонован по цепочке предков до первого непрозрачного"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/1440/tokens/surface_header_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:41.374Z"
+    screenshot_sha256: "bdc96ef10afe3f273e95cb50bceb4bd151790e79744803107b974c9c87bc2330"
+    sample: "два прохода дали одно значение"
+  - name: surface_card_background
+    value: "#f9f9f9"
+    unit: hex
+    surface: title
+    viewport: 1440
+    method: "CDP getComputedStyle ссылки-карточки (постер ≥60×60 внутри ссылки); ранжирование по закрашенной площади"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/1440/tokens/surface_card_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:41.374Z"
+    screenshot_sha256: "bdc96ef10afe3f273e95cb50bceb4bd151790e79744803107b974c9c87bc2330"
+    sample: "331872 из 331872 px²; два прохода дали одно значение"
+  - name: color_text_primary
+    value: "#161616"
+    unit: hex
+    surface: title
+    viewport: 1440
+    method: "CDP getComputedStyle(body).color"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/1440/tokens/color_text_primary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:41.374Z"
+    screenshot_sha256: "bdc96ef10afe3f273e95cb50bceb4bd151790e79744803107b974c9c87bc2330"
+    sample: "два прохода дали одно значение"
+  - name: color_text_secondary
+    value: "#ffffff"
+    unit: hex
+    surface: title
+    viewport: 1440
+    method: "CDP getComputedStyle: самый частый цвет видимого текста вне ссылок, отличный от основного текста и от цвета ссылок"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/1440/tokens/color_text_secondary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:41.374Z"
+    screenshot_sha256: "bdc96ef10afe3f273e95cb50bceb4bd151790e79744803107b974c9c87bc2330"
+    sample: "64 из 283 элементы; два прохода дали одно значение"
+  - name: color_accent_background
+    value: "#c50725"
+    unit: hex
+    surface: title
+    viewport: 1440
+    method: "CDP getComputedStyle интерактивных элементов (button, role=button, input[type=submit|button]); ранжирование по закрашенной площади, фон страницы исключён"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/1440/tokens/color_accent_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:41.374Z"
+    screenshot_sha256: "bdc96ef10afe3f273e95cb50bceb4bd151790e79744803107b974c9c87bc2330"
+    sample: "16106 из 43472 px²; два прохода дали одно значение"
+  - name: color_link
+    value: "#bbbbbb"
+    unit: hex
+    surface: title
+    viewport: 1440
+    method: "CDP getComputedStyle: самый частый цвет видимых ссылок с собственным текстом"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/1440/tokens/color_link"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:41.374Z"
+    screenshot_sha256: "bdc96ef10afe3f273e95cb50bceb4bd151790e79744803107b974c9c87bc2330"
+    sample: "211 из 435 элементы; два прохода дали одно значение"
+  - name: color_border_default
+    value: "#f3b3b3"
+    unit: hex
+    surface: title
+    viewport: 1440
+    method: "CDP getComputedStyle: самый частый цвет видимой границы (ширина ≥1px, стиль не none и не hidden)"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/1440/tokens/color_border_default"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:41.374Z"
+    screenshot_sha256: "bdc96ef10afe3f273e95cb50bceb4bd151790e79744803107b974c9c87bc2330"
+    sample: "108 из 239 элементы; два прохода дали одно значение"
+  - name: color_focus_ring
+    value: "#c50725"
+    unit: hex
+    surface: title
+    viewport: 1440
+    method: "клавиатурная навигация Tab: цвет outline при видимом контуре, иначе цвет тени фокуса, отличной от тени того же элемента без фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/1440/tokens/color_focus_ring"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:41.374Z"
+    screenshot_sha256: "bdc96ef10afe3f273e95cb50bceb4bd151790e79744803107b974c9c87bc2330"
+    sample: "1 из 1 элементы; два прохода дали одно значение"
+  - name: color_run_screenshot_sha256
+    value: "bdc96ef10afe3f273e95cb50bceb4bd151790e79744803107b974c9c87bc2330"
+    unit: sha256
+    surface: title
+    viewport: 1440
+    method: "sha256 снимка цветового прогона, снятого до наведения и фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors-1440.png"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:51:41.374Z"
+    screenshot_sha256: "bdc96ef10afe3f273e95cb50bceb4bd151790e79744803107b974c9c87bc2330"
+  - name: color_page_background
+    value: "#ffffff"
+    unit: hex
+    surface: not_found
+    viewport: 390
+    method: "CDP getComputedStyle: фон html, при его прозрачности — фон body; полупрозрачные слои скомпонованы над холстом документа"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/390/tokens/color_page_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:04.935Z"
+    screenshot_sha256: "3b8a7520a284d52ea50ac427846b9babb738cf5b0723b52a5f6bc513bb366b4f"
+    sample: "два прохода дали одно значение"
+  - name: surface_header_background
+    value: "#ffffff"
+    unit: hex
+    surface: not_found
+    viewport: 390
+    method: "CDP getComputedStyle шапки (тот же элемент, которым измерена header_height); фон скомпонован по цепочке предков до первого непрозрачного"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/390/tokens/surface_header_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:04.935Z"
+    screenshot_sha256: "3b8a7520a284d52ea50ac427846b9babb738cf5b0723b52a5f6bc513bb366b4f"
+    sample: "два прохода дали одно значение"
+  - name: color_text_primary
+    value: "#161616"
+    unit: hex
+    surface: not_found
+    viewport: 390
+    method: "CDP getComputedStyle(body).color"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/390/tokens/color_text_primary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:04.935Z"
+    screenshot_sha256: "3b8a7520a284d52ea50ac427846b9babb738cf5b0723b52a5f6bc513bb366b4f"
+    sample: "два прохода дали одно значение"
+  - name: color_text_secondary
+    value: "#ffffff"
+    unit: hex
+    surface: not_found
+    viewport: 390
+    method: "CDP getComputedStyle: самый частый цвет видимого текста вне ссылок, отличный от основного текста и от цвета ссылок"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/390/tokens/color_text_secondary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:04.935Z"
+    screenshot_sha256: "3b8a7520a284d52ea50ac427846b9babb738cf5b0723b52a5f6bc513bb366b4f"
+    sample: "3 из 5 элементы; два прохода дали одно значение"
+  - name: color_accent_background
+    value: "#c50725"
+    unit: hex
+    surface: not_found
+    viewport: 390
+    method: "CDP getComputedStyle интерактивных элементов (button, role=button, input[type=submit|button]); ранжирование по закрашенной площади, фон страницы исключён"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/390/tokens/color_accent_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:04.935Z"
+    screenshot_sha256: "3b8a7520a284d52ea50ac427846b9babb738cf5b0723b52a5f6bc513bb366b4f"
+    sample: "14800 из 17250 px²; два прохода дали одно значение"
+  - name: color_link
+    value: "#161616"
+    unit: hex
+    surface: not_found
+    viewport: 390
+    method: "CDP getComputedStyle: самый частый цвет видимых ссылок с собственным текстом"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/390/tokens/color_link"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:04.935Z"
+    screenshot_sha256: "3b8a7520a284d52ea50ac427846b9babb738cf5b0723b52a5f6bc513bb366b4f"
+    sample: "13 из 21 элементы; два прохода дали одно значение"
+  - name: color_focus_ring
+    value: "#c50725"
+    unit: hex
+    surface: not_found
+    viewport: 390
+    method: "клавиатурная навигация Tab: цвет outline при видимом контуре, иначе цвет тени фокуса, отличной от тени того же элемента без фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/390/tokens/color_focus_ring"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:04.935Z"
+    screenshot_sha256: "3b8a7520a284d52ea50ac427846b9babb738cf5b0723b52a5f6bc513bb366b4f"
+    sample: "1 из 1 элементы; два прохода дали одно значение"
+  - name: color_run_screenshot_sha256
+    value: "3b8a7520a284d52ea50ac427846b9babb738cf5b0723b52a5f6bc513bb366b4f"
+    unit: sha256
+    surface: not_found
+    viewport: 390
+    method: "sha256 снимка цветового прогона, снятого до наведения и фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors-390.png"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:04.935Z"
+    screenshot_sha256: "3b8a7520a284d52ea50ac427846b9babb738cf5b0723b52a5f6bc513bb366b4f"
+  - name: color_page_background
+    value: "#ffffff"
+    unit: hex
+    surface: not_found
+    viewport: 768
+    method: "CDP getComputedStyle: фон html, при его прозрачности — фон body; полупрозрачные слои скомпонованы над холстом документа"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/768/tokens/color_page_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:17.539Z"
+    screenshot_sha256: "1deeda9d3c7814f2812abf0f50c2849cdb6bb512683ec3dd16fdb5fab65e0cb6"
+    sample: "два прохода дали одно значение"
+  - name: surface_header_background
+    value: "#ffffff"
+    unit: hex
+    surface: not_found
+    viewport: 768
+    method: "CDP getComputedStyle шапки (тот же элемент, которым измерена header_height); фон скомпонован по цепочке предков до первого непрозрачного"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/768/tokens/surface_header_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:17.539Z"
+    screenshot_sha256: "1deeda9d3c7814f2812abf0f50c2849cdb6bb512683ec3dd16fdb5fab65e0cb6"
+    sample: "два прохода дали одно значение"
+  - name: color_text_primary
+    value: "#161616"
+    unit: hex
+    surface: not_found
+    viewport: 768
+    method: "CDP getComputedStyle(body).color"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/768/tokens/color_text_primary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:17.539Z"
+    screenshot_sha256: "1deeda9d3c7814f2812abf0f50c2849cdb6bb512683ec3dd16fdb5fab65e0cb6"
+    sample: "два прохода дали одно значение"
+  - name: color_text_secondary
+    value: "#5c5c5c"
+    unit: hex
+    surface: not_found
+    viewport: 768
+    method: "CDP getComputedStyle: самый частый цвет видимого текста вне ссылок, отличный от основного текста и от цвета ссылок"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/768/tokens/color_text_secondary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:17.539Z"
+    screenshot_sha256: "1deeda9d3c7814f2812abf0f50c2849cdb6bb512683ec3dd16fdb5fab65e0cb6"
+    sample: "2 из 2 элементы; два прохода дали одно значение"
+  - name: color_accent_background
+    value: "#c50725"
+    unit: hex
+    surface: not_found
+    viewport: 768
+    method: "CDP getComputedStyle интерактивных элементов (button, role=button, input[type=submit|button]); ранжирование по закрашенной площади, фон страницы исключён"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/768/tokens/color_accent_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:17.539Z"
+    screenshot_sha256: "1deeda9d3c7814f2812abf0f50c2849cdb6bb512683ec3dd16fdb5fab65e0cb6"
+    sample: "33120 из 36795 px²; два прохода дали одно значение"
+  - name: color_link
+    value: "#ffffff"
+    unit: hex
+    surface: not_found
+    viewport: 768
+    method: "CDP getComputedStyle: самый частый цвет видимых ссылок с собственным текстом"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/768/tokens/color_link"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:17.539Z"
+    screenshot_sha256: "1deeda9d3c7814f2812abf0f50c2849cdb6bb512683ec3dd16fdb5fab65e0cb6"
+    sample: "19 из 35 элементы; два прохода дали одно значение"
+  - name: color_border_default
+    value: "#e6e6e6"
+    unit: hex
+    surface: not_found
+    viewport: 768
+    method: "CDP getComputedStyle: самый частый цвет видимой границы (ширина ≥1px, стиль не none и не hidden)"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/768/tokens/color_border_default"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:17.539Z"
+    screenshot_sha256: "1deeda9d3c7814f2812abf0f50c2849cdb6bb512683ec3dd16fdb5fab65e0cb6"
+    sample: "24 из 46 элементы; два прохода дали одно значение"
+  - name: color_focus_ring
+    value: "#c50725"
+    unit: hex
+    surface: not_found
+    viewport: 768
+    method: "клавиатурная навигация Tab: цвет outline при видимом контуре, иначе цвет тени фокуса, отличной от тени того же элемента без фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/768/tokens/color_focus_ring"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:17.539Z"
+    screenshot_sha256: "1deeda9d3c7814f2812abf0f50c2849cdb6bb512683ec3dd16fdb5fab65e0cb6"
+    sample: "1 из 1 элементы; два прохода дали одно значение"
+  - name: color_run_screenshot_sha256
+    value: "1deeda9d3c7814f2812abf0f50c2849cdb6bb512683ec3dd16fdb5fab65e0cb6"
+    unit: sha256
+    surface: not_found
+    viewport: 768
+    method: "sha256 снимка цветового прогона, снятого до наведения и фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors-768.png"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:17.539Z"
+    screenshot_sha256: "1deeda9d3c7814f2812abf0f50c2849cdb6bb512683ec3dd16fdb5fab65e0cb6"
+  - name: color_page_background
+    value: "#ffffff"
+    unit: hex
+    surface: not_found
+    viewport: 1440
+    method: "CDP getComputedStyle: фон html, при его прозрачности — фон body; полупрозрачные слои скомпонованы над холстом документа"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/1440/tokens/color_page_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:30.090Z"
+    screenshot_sha256: "50c10028fbe65a4e6e0f81f5cec9355c1b8f7b30d93bcff5075f528f2cf67264"
+    sample: "два прохода дали одно значение"
+  - name: surface_header_background
+    value: "#ffffff"
+    unit: hex
+    surface: not_found
+    viewport: 1440
+    method: "CDP getComputedStyle шапки (тот же элемент, которым измерена header_height); фон скомпонован по цепочке предков до первого непрозрачного"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/1440/tokens/surface_header_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:30.090Z"
+    screenshot_sha256: "50c10028fbe65a4e6e0f81f5cec9355c1b8f7b30d93bcff5075f528f2cf67264"
+    sample: "два прохода дали одно значение"
+  - name: color_text_primary
+    value: "#161616"
+    unit: hex
+    surface: not_found
+    viewport: 1440
+    method: "CDP getComputedStyle(body).color"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/1440/tokens/color_text_primary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:30.090Z"
+    screenshot_sha256: "50c10028fbe65a4e6e0f81f5cec9355c1b8f7b30d93bcff5075f528f2cf67264"
+    sample: "два прохода дали одно значение"
+  - name: color_text_secondary
+    value: "#757b85"
+    unit: hex
+    surface: not_found
+    viewport: 1440
+    method: "CDP getComputedStyle: самый частый цвет видимого текста вне ссылок, отличный от основного текста и от цвета ссылок"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/1440/tokens/color_text_secondary"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:30.090Z"
+    screenshot_sha256: "50c10028fbe65a4e6e0f81f5cec9355c1b8f7b30d93bcff5075f528f2cf67264"
+    sample: "5 из 7 элементы; два прохода дали одно значение"
+  - name: color_accent_background
+    value: "#c50725"
+    unit: hex
+    surface: not_found
+    viewport: 1440
+    method: "CDP getComputedStyle интерактивных элементов (button, role=button, input[type=submit|button]); ранжирование по закрашенной площади, фон страницы исключён"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/1440/tokens/color_accent_background"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:30.090Z"
+    screenshot_sha256: "50c10028fbe65a4e6e0f81f5cec9355c1b8f7b30d93bcff5075f528f2cf67264"
+    sample: "8600 из 12275 px²; два прохода дали одно значение"
+  - name: color_link
+    value: "#ffffff"
+    unit: hex
+    surface: not_found
+    viewport: 1440
+    method: "CDP getComputedStyle: самый частый цвет видимых ссылок с собственным текстом"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/1440/tokens/color_link"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:30.090Z"
+    screenshot_sha256: "50c10028fbe65a4e6e0f81f5cec9355c1b8f7b30d93bcff5075f528f2cf67264"
+    sample: "19 из 37 элементы; два прохода дали одно значение"
+  - name: color_focus_ring
+    value: "#c50725"
+    unit: hex
+    surface: not_found
+    viewport: 1440
+    method: "клавиатурная навигация Tab: цвет outline при видимом контуре, иначе цвет тени фокуса, отличной от тени того же элемента без фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/1440/tokens/color_focus_ring"
+    tolerance: "ΔE00 ≤ 1.0"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:30.090Z"
+    screenshot_sha256: "50c10028fbe65a4e6e0f81f5cec9355c1b8f7b30d93bcff5075f528f2cf67264"
+    sample: "1 из 1 элементы; два прохода дали одно значение"
+  - name: color_run_screenshot_sha256
+    value: "50c10028fbe65a4e6e0f81f5cec9355c1b8f7b30d93bcff5075f528f2cf67264"
+    unit: sha256
+    surface: not_found
+    viewport: 1440
+    method: "sha256 снимка цветового прогона, снятого до наведения и фокуса"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors-1440.png"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-16T19:52:30.090Z"
+    screenshot_sha256: "50c10028fbe65a4e6e0f81f5cec9355c1b8f7b30d93bcff5075f528f2cf67264"
+
+# Доказательства цветового прогона: файл целиком, с дайджестом.
+color_evidence:
+  tool: tests/tools/measure_reference_colors.js
+  passes_required: 2
+  runs_confirmed: 2
+  metric: CIEDE2000 (визуальное сравнение), значения нормализованы к #rrggbb
+  files:
+    - surface: home
+      url: "https://amd.online/"
+      path: "artifacts/reference-pack-amd-online-01/capture-colors/home/colors.json"
+      sha256: "8bd36b71aa53a070d01e1e37cbdef86d94b19091e15182ca59e3c21fd8218b71"
+      measured_at_utc: "2026-09-16T19:48:03.801Z"
+    - surface: catalog
+      url: "https://amd.online/anime/ghanr/3d/"
+      path: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json"
+      sha256: "bb7ed778ec43659ab4d5555d75624bcd2e495559b8f721f509bdfda2169fedc2"
+      measured_at_utc: "2026-09-16T19:49:05.228Z"
+    - surface: collection_hub
+      url: "https://amd.online/anime-collections/"
+      path: "artifacts/reference-pack-amd-online-01/capture-colors/collection_hub/colors.json"
+      sha256: "b4faaa93d030445b3f051153a56360b71a2194129fc007b8dcb9bb892ddee297"
+      measured_at_utc: "2026-09-16T19:50:07.929Z"
+    - surface: title
+      url: "https://amd.online/1200-raskolotaja-bitvoj-sineva-nebes-5.html"
+      path: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json"
+      sha256: "832d675c47f206059351048da53f0a2ccffa69f52bcee339ab51d1dbd51450b3"
+      measured_at_utc: "2026-09-16T19:51:05.472Z"
+    - surface: not_found
+      url: "https://amd.online/nonexistent-refpack-probe-01/"
+      path: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json"
+      sha256: "f6eb3a1c521fc699e437633da58f13f11e80a292f0c080d98a2164d250a0d12e"
+      measured_at_utc: "2026-09-16T19:52:04.474Z"
+
+# Среда замера. Контракт визуального сравнения требует объявить то, что
+# инструмент замера не задаёт и из репозитория недоказуемо: локаль, часовой
+# пояс, набор шрифтов и политику анимаций. Здесь они не назначены, а измерены —
+# см. evidence ниже.
+#
+# Диапазонов apiVersionRange / sdkVersionRange / seoContractVersionRange здесь
+# намеренно НЕТ. Это решение владельца контракта об архитектуре, а не величина
+# среды; подставить сюда правдоподобное значение означало бы закрыть чужой
+# блокер записью. Он остаётся открытым — см. ACCEPTANCE.md.
+environment_manifest:
+  renderer_engine: chromium
+  renderer_driver: playwright
+  driver_version: "1.62.1"
+  browser_build: "chromium-1234"
+  browser_version: "151.0.7922.34"
+  device_pixel_ratio: 1
+  screenshot_capture_mode: viewport
+  viewport_heights: "ширина < 500 -> 844, иначе 1000"
+  locale: "en-US"
+  timezone: "UTC"
+  animation_policy: "prefers-reduced-motion: no-preference"
+  forced_colors: "none"
+  color_scheme: "light"
+  font_availability:
+    - Arial
+    - Helvetica
+    - Times New Roman
+    - Courier New
+    - Noto Color Emoji
+    - DejaVu Sans
+    - DejaVu Serif
+    - DejaVu Sans Mono
+    - Liberation Sans
+    - Liberation Serif
+    - Liberation Mono
+    - FreeSans
+  font_availability_method: "ширина строки в 72px с базовым запасным семейством против той же строки без запрошенного семейства"
+  measured_at_utc: "2026-09-16T20:01:33.042Z"
+  evidence: "artifacts/reference-pack-amd-online-01/capture-colors/environment.json"
+  evidence_sha256: "f5148e7911fcdded544b17ca87ccd784bec4e3d7c65646b3247cec4fa143c59b"

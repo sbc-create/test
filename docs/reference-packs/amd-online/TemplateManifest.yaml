@@ -1,7 +1,7 @@
 # Манифест шаблона Animedia (amd.online).
 #
-# Черновик снят частично. Геометрия и типографика теперь измерены на самом
-# референсе (VISUAL_TOKENS.yaml, 357 замеров на пяти поверхностях и трёх
+# Черновик снят частично. Геометрия, типографика и цвет теперь измерены на самом
+# референсе (VISUAL_TOKENS.yaml, 508 замеров на пяти поверхностях и трёх
 # ширинах). Структура маршрутов по-прежнему наша: она описана своими словами
 # и с референса не копировалась.
 #
@@ -26,9 +26,13 @@ reference:
   accessCheckedAt: "2026-09-16"
   accessEvidence: artifacts/reference-pack-amd-online-01/availability.json
   observations: 8
-  observationsMeasured: 4
-  measuredTokens: 357
+  observationsMeasured: 5
+  measuredTokens: 508
+  measuredColorTokens: 136
+  colorExclusions: 4
+  colorComponentExcluded: false
   measurementEvidence: docs/reference-packs/amd-online/VISUAL_TOKENS.yaml
+  exclusionsEvidence: docs/reference-packs/amd-online/EXCLUSIONS.yaml
 
 # Диапазоны совместимости остаются pending намеренно: это решение об
 # архитектуре, а не величина, которую можно снять с чужой страницы. Замер их
