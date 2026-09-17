@@ -1,0 +1,266 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://site-factory.local/schemas/visual-scoring-result.schema.json",
+  "title": "Visual scoring result",
+  "description": "Машиночитаемый результат расчёта визуального соответствия по контракту visual-scoring. Документ описывает применение правила к паре reference/candidate и сам по себе не является разрешением на выпуск.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "reference_pack_id",
+    "reference_commit",
+    "candidate_commit",
+    "scoring_contract_version",
+    "checker_identity",
+    "pack_author_identity",
+    "candidate_author_identity",
+    "environment_manifest",
+    "exclusions_digest",
+    "surface_scores",
+    "viewport_scores",
+    "component_scores",
+    "overall_score",
+    "hard_failures",
+    "evidence_completeness",
+    "certification_status",
+    "blocked_reasons",
+    "generated_at"
+  ],
+  "properties": {
+    "reference_pack_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Идентификатор эталонного пакета, например amd-online."
+    },
+    "reference_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$",
+      "description": "Полный SHA коммита, в котором зафиксирован эталон. Сокращённый SHA недопустим: он не доказывает неизменность."
+    },
+    "candidate_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "scoring_contract_version": {
+      "type": "string",
+      "pattern": "^visual-scoring/[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "checker_identity": { "$ref": "#/$defs/identity" },
+    "pack_author_identity": { "$ref": "#/$defs/identity" },
+    "candidate_author_identity": { "$ref": "#/$defs/identity" },
+    "environment_manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "renderer_engine",
+        "renderer_driver_version",
+        "browser_build",
+        "device_pixel_ratio",
+        "screenshot_capture_mode",
+        "locale",
+        "timezone",
+        "font_availability",
+        "animation_policy",
+        "template_manifest_compatibility"
+      ],
+      "properties": {
+        "renderer_engine": { "type": "string", "minLength": 1 },
+        "renderer_driver_version": { "type": "string", "minLength": 1 },
+        "browser_build": { "type": "string", "minLength": 1 },
+        "device_pixel_ratio": { "type": "number", "exclusiveMinimum": 0 },
+        "screenshot_capture_mode": { "type": "string", "enum": ["viewport", "full_page"] },
+        "locale": { "type": "string", "minLength": 1 },
+        "timezone": { "type": "string", "minLength": 1 },
+        "font_availability": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1
+        },
+        "animation_policy": { "type": "string", "enum": ["reduce", "allow"] },
+        "template_manifest_compatibility": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["apiVersionRange", "sdkVersionRange", "seoContractVersionRange"],
+          "properties": {
+            "apiVersionRange": { "$ref": "#/$defs/declared_range" },
+            "sdkVersionRange": { "$ref": "#/$defs/declared_range" },
+            "seoContractVersionRange": { "$ref": "#/$defs/declared_range" }
+          }
+        }
+      }
+    },
+    "exclusions_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "Дайджест списка исключений, снятый ДО начала сравнения. Расхождение с текущим списком означает позднее исключение."
+    },
+    "surface_scores": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/score" },
+      "description": "Балл каждой обязательной поверхности, округлённый до двух знаков."
+    },
+    "viewport_scores": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "^[0-9]+$" },
+      "additionalProperties": { "$ref": "#/$defs/score" }
+    },
+    "component_scores": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["surface", "viewport", "component", "score", "weight", "tokens_compared", "tokens_missing"],
+        "properties": {
+          "surface": { "type": "string", "minLength": 1 },
+          "viewport": { "type": "integer", "exclusiveMinimum": 0 },
+          "component": {
+            "type": "string",
+            "enum": ["structure_order", "geometry", "typography", "colors", "cards_media", "responsive"]
+          },
+          "score": { "$ref": "#/$defs/score" },
+          "weight": { "type": "number", "minimum": 0, "maximum": 100 },
+          "tokens_compared": { "type": "integer", "minimum": 0 },
+          "tokens_missing": { "type": "integer", "minimum": 0 },
+          "excluded": { "type": "boolean" },
+          "exclusion_reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "overall_score": { "$ref": "#/$defs/score" },
+    "comparisons_performed": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Число фактически выполненных сравнений токенов. Ноль запрещает сертификацию."
+    },
+    "hard_failures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code", "detail"],
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "MISSING_SURFACE",
+              "MISSING_VIEWPORT",
+              "DIGEST_MISMATCH",
+              "MEASUREMENT_WITHOUT_PROVENANCE",
+              "EVIDENCE_MUTATED_DURING_RUN",
+              "HORIZONTAL_OVERFLOW",
+              "REQUIRED_BLOCK_ABSENT",
+              "CONTENT_OVERLAP",
+              "CHECKER_NOT_INDEPENDENT",
+              "CONTRACT_MUTATED_AFTER_RESULT",
+              "UNDECLARED_EXCLUSION"
+            ]
+          },
+          "detail": { "type": "string", "minLength": 1 },
+          "surface": { "type": "string" },
+          "viewport": { "type": "integer" }
+        }
+      }
+    },
+    "evidence_completeness": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Доля ожидаемых эталонных измерений, фактически присутствующих с provenance. Сертификация требует ровно 100."
+    },
+    "certification_status": {
+      "type": "string",
+      "enum": [
+        "VISUAL_CERTIFIED",
+        "VISUAL_REJECTED",
+        "BLOCKED_EVIDENCE_INCOMPLETE",
+        "BLOCKED_COMPATIBILITY_MISMATCH",
+        "BLOCKED_INDEPENDENCE_VIOLATION",
+        "BLOCKED_SCORING_CONTRACT_MISSING"
+      ]
+    },
+    "blocked_reasons": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "weight_redistribution": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["surface", "viewport", "component", "from_weight", "to_weight"],
+        "properties": {
+          "surface": { "type": "string" },
+          "viewport": { "type": "integer" },
+          "component": { "type": "string" },
+          "from_weight": { "type": "number" },
+          "to_weight": { "type": "number" }
+        }
+      }
+    },
+    "generated_at": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "description": "Сертификация обязана нести пустой список hard_failures.",
+      "if": {
+        "properties": { "certification_status": { "const": "VISUAL_CERTIFIED" } },
+        "required": ["certification_status"]
+      },
+      "then": {
+        "properties": {
+          "hard_failures": { "maxItems": 0 },
+          "evidence_completeness": { "const": 100 },
+          "overall_score": { "minimum": 80.0 },
+          "comparisons_performed": { "minimum": 1 }
+        },
+        "required": ["comparisons_performed"]
+      }
+    },
+    {
+      "description": "Любой блокирующий статус обязан назвать причину.",
+      "if": {
+        "properties": {
+          "certification_status": {
+            "enum": [
+              "BLOCKED_EVIDENCE_INCOMPLETE",
+              "BLOCKED_COMPATIBILITY_MISMATCH",
+              "BLOCKED_INDEPENDENCE_VIOLATION",
+              "BLOCKED_SCORING_CONTRACT_MISSING"
+            ]
+          }
+        },
+        "required": ["certification_status"]
+      },
+      "then": {
+        "properties": { "blocked_reasons": { "minItems": 1 } }
+      }
+    }
+  ],
+  "$defs": {
+    "score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "multipleOf": 0.01,
+      "description": "Балл, округлённый до двух знаков."
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "role"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "role": { "type": "string", "minLength": 1 }
+      },
+      "description": "Субъект действия. Сравнение checker/pack_author/candidate_author идёт по полю id."
+    },
+    "declared_range": {
+      "type": "string",
+      "minLength": 1,
+      "not": { "enum": ["any", "latest", "*", "pending", ""] },
+      "description": "Объявленный диапазон или закреплённая версия. any, latest, * и pending запрещены: недоказуемый диапазон закрепляется проверенной версией."
+    }
+  }
+}

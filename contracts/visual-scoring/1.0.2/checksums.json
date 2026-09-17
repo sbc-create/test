@@ -1,0 +1,11 @@
+{
+  "contract_version": "visual-scoring/1.0.2",
+  "algorithm": "sha256",
+  "note": "Дайджесты фиксируют неизменяемость версии. Расхождение означает правку контракта после выпуска — hard-fail CONTRACT_MUTATED_AFTER_RESULT.",
+  "files": {
+    "CHANGELOG.md": "sha256:16361a109fd948c3fea0fda1c5b68ac5d762b5d11f3f42cc49949520468778e7",
+    "README.md": "sha256:6219e0410da5d24d50faeed3cf1ff1802ed50c9d2f93d6e937f84eea50fca28a",
+    "scoring-contract.json": "sha256:da2639ebac81ad36d08bec8e6a51fc4c38ed49a8501c0223ce44f8550f675d8d",
+    "../../../schemas/visual-scoring-result.schema.json": "sha256:21969f958af836ecc4c46438e135aaf236456978a2e5cc0201ac262be881c478"
+  }
+}

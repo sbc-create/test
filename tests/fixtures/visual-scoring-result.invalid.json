@@ -1,0 +1,49 @@
+{
+  "_why_invalid": "Сертификация при непустом hard_failures, неполном evidence, балле ниже порога, недоказуемом диапазоне pending и сокращённом SHA. Схема обязана отвергнуть каждый из этих случаев.",
+  "reference_pack_id": "example-pack",
+  "reference_commit": "0123456",
+  "candidate_commit": "89abcdef0123456789abcdef0123456789abcdef",
+  "scoring_contract_version": "visual-scoring/1.0.0",
+  "checker_identity": { "id": "templates-01", "role": "TEMPLATES" },
+  "pack_author_identity": { "id": "templates-01", "role": "TEMPLATES" },
+  "candidate_author_identity": { "id": "candidate-01", "role": "TEMPLATES_CANDIDATE" },
+  "environment_manifest": {
+    "renderer_engine": "chromium",
+    "renderer_driver_version": "1.62.1",
+    "browser_build": "chromium-1234",
+    "device_pixel_ratio": 1,
+    "screenshot_capture_mode": "viewport",
+    "locale": "ru-RU",
+    "timezone": "Europe/Moscow",
+    "font_availability": ["DejaVu Sans"],
+    "animation_policy": "reduce",
+    "template_manifest_compatibility": {
+      "apiVersionRange": "pending",
+      "sdkVersionRange": "latest",
+      "seoContractVersionRange": "any"
+    }
+  },
+  "exclusions_digest": "not-a-digest",
+  "surface_scores": { "home": 92.5 },
+  "viewport_scores": { "390": 87.0 },
+  "component_scores": [
+    {
+      "surface": "home",
+      "viewport": 390,
+      "component": "unknown_component",
+      "score": 120,
+      "weight": 30,
+      "tokens_compared": 6,
+      "tokens_missing": 0
+    }
+  ],
+  "overall_score": 61.4,
+  "comparisons_performed": 0,
+  "hard_failures": [
+    { "code": "HORIZONTAL_OVERFLOW", "detail": "появилась горизонтальная прокрутка" }
+  ],
+  "evidence_completeness": 91.2,
+  "certification_status": "VISUAL_CERTIFIED",
+  "blocked_reasons": [],
+  "generated_at": "2026-09-16T18:00:00Z"
+}

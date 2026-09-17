@@ -1,0 +1,252 @@
+{
+  "contract_version": "visual-scoring/1.0.0",
+  "status": "immutable",
+  "issued_at": "2026-09-16T00:00:00Z",
+  "issued_by": "CHAT_ARCHITECT / TEMPLATE-VISUAL-SCORING-CONTRACT-01",
+  "purpose": "Детерминированный расчёт визуального соответствия кандидата эталонному reference pack. Контракт определяет правило, а не выносит вердикт по конкретному кандидату.",
+
+  "inputs": {
+    "reference_pack": {
+      "required": true,
+      "immutable": true,
+      "fields": ["reference_pack_id", "reference_commit", "schema_version", "tokens", "screenshot_digests", "exclusions", "environment_manifest"]
+    },
+    "candidate_pack": {
+      "required": true,
+      "fields": ["candidate_commit", "tokens", "screenshot_digests", "environment_manifest"]
+    },
+    "token": {
+      "required_fields": ["name", "value", "unit", "surface", "viewport", "method", "evidence"],
+      "provenance_fields": ["method", "evidence"],
+      "rule": "Токен без непустых method и evidence не имеет provenance и вызывает hard-fail MEASUREMENT_WITHOUT_PROVENANCE. Значение, вписанное вручную, provenance не имеет по определению."
+    },
+    "surfaces_must_match": true,
+    "viewports_must_match": true,
+    "manual_values_forbidden": true
+  },
+
+  "required_surfaces": ["home", "catalog", "collection_hub", "title", "not_found"],
+  "required_viewports": [390, 768, 1440],
+
+  "weights": {
+    "surfaces": {
+      "home": 25,
+      "catalog": 20,
+      "collection_hub": 20,
+      "title": 25,
+      "not_found": 10
+    },
+    "viewports": {
+      "390": 30,
+      "768": 30,
+      "1440": 40
+    },
+    "components": {
+      "structure_order": 30,
+      "geometry": 30,
+      "typography": 15,
+      "colors": 10,
+      "cards_media": 10,
+      "responsive": 5
+    },
+    "sum_check": {
+      "surfaces": 100,
+      "viewports": 100,
+      "components": 100,
+      "enforced": true,
+      "rule": "Каждая матрица весов обязана вычислительно суммироваться в 100. Несоответствие — отказ загрузки контракта, а не предупреждение."
+    }
+  },
+
+  "non_scoring_units": ["sha256"],
+
+  "component_assignment": {
+    "rule": "Первое совпадение по порядку. Явное поле token.component имеет приоритет над шаблонами. Токен, не попавший ни в одно правило, получает UNASSIGNED и снижает evidence_completeness.",
+    "order": [
+      {
+        "component": "structure_order",
+        "name_patterns": ["^section_order$", "^block_order$", "^blocks_present$", "^.*_present$", "^.*_order$", "^required_block_.*$"]
+      },
+      {
+        "component": "responsive",
+        "name_patterns": ["^horizontal_overflow$", "^.*_overflow$", "^.*_overlap$", "^content_overlap$", "^viewport_.*$"]
+      },
+      {
+        "component": "typography",
+        "name_patterns": ["^type_.*$", "^font_.*$", "^.*_font_size$", "^.*_font_weight$", "^.*_line_height$", "^.*_letter_spacing$"]
+      },
+      {
+        "component": "cards_media",
+        "name_patterns": ["^card_.*$", "^cards_.*$", "^media_.*$", "^poster_.*$", "^.*_aspect_ratio$"]
+      },
+      {
+        "component": "colors",
+        "name_patterns": ["^color_.*$", "^.*_color$", "^.*_background$", "^.*_border$", "^border_.*$", "^.*_radius$", "^radius_.*$", "^surface_.*$"]
+      },
+      {
+        "component": "geometry",
+        "name_patterns": ["^content_width$", "^outer_gutter$", "^header_height$", "^page_height$", "^grid_columns$", "^grid_gap$", "^container_.*$", "^.*_width$", "^.*_height$", "^.*_gap$", "^.*_padding$", "^.*_margin$"]
+      }
+    ]
+  },
+
+  "scoring_rules": {
+    "numeric": {
+      "applies_to_units": ["px", "weight", "count", "ratio", "ms", "pct"],
+      "deviation": "relative = abs(candidate - reference) / abs(reference)",
+      "reference_zero": "Если reference == 0: совпадение при candidate == 0 даёт 100, иначе 0.",
+      "bands": [
+        {"max_relative_deviation": 0.05, "score": 100},
+        {"from_relative_deviation": 0.05, "to_relative_deviation": 0.25, "score": "linear", "formula": "100 * (0.25 - relative) / 0.20"},
+        {"from_relative_deviation": 0.25, "score": 0}
+      ]
+    },
+    "color": {
+      "applies_to_units": ["color", "hex", "rgb"],
+      "metric": "CIEDE2000",
+      "color_space": "sRGB -> CIELAB, illuminant D65, 2-degree observer",
+      "exact_match": "Идентичный нормализованный hex либо совпадение имени design token даёт 100 без вычисления метрики.",
+      "bands": [
+        {"max_delta_e": 1.0, "score": 100},
+        {"from_delta_e": 1.0, "to_delta_e": 5.0, "score": "linear", "formula": "100 * (5.0 - deltaE) / 4.0"},
+        {"from_delta_e": 5.0, "score": 0}
+      ],
+      "rationale": "CIEDE2000 выбрана как опубликованная воспроизводимая метрика. Пороги 1.0 и 5.0 — числовые и тестируемые: 1.0 соответствует границе различимости обученным наблюдателем, 5.0 — заведомо другому цвету."
+    },
+    "categorical": {
+      "applies_to_units": ["bool", "enum", "order", "presence", "string"],
+      "exact_match_score": 100,
+      "mismatch_score": 0
+    },
+    "missing_measurement": {
+      "score": 0,
+      "rule": "Отсутствующее измерение получает 0, если оно не было заранее исключено. Исключение действительно только при наличии причины и provenance, объявленных ДО начала сравнения."
+    },
+    "extra_candidate_token": {
+      "rule": "Токен, которого нет в эталоне, не участвует в расчёте и не может повысить оценку. Отсутствие исключённого элемента у эталона не даёт кандидату права его добавить: добавленный элемент попадает в hard-fail CONTENT_OVERLAP или REQUIRED_BLOCK_ABSENT только если нарушает структуру, но баллов не приносит никогда."
+    }
+  },
+
+  "exclusions": {
+    "declared_before_comparison_required": true,
+    "required_fields": ["scope", "reason", "provenance", "declared_at"],
+    "digest": "SHA-256 канонической JSON-сериализации списка исключений, снятый до начала сравнения и записанный в результат как exclusions_digest.",
+    "late_exclusion": "Исключение, отсутствовавшее в exclusions_digest на момент старта, вызывает hard-fail UNDECLARED_EXCLUSION.",
+    "not_scored_categories": ["dynamic_text", "ads", "trackers", "third_party_widgets"],
+    "component_level_exclusion": {
+      "allowed": true,
+      "effect": "weight_redistribution",
+      "rule": "Компонент, полностью исключённый заранее с причиной и provenance, исключается из расчёта, а его вес пропорционально перераспределяется между остальными компонентами того же surface/viewport. Перераспределение записывается в результат.",
+      "undeclared_absence": "Компонент без единого эталонного токена и без объявленного исключения не перераспределяется и не обнуляется молча: он даёт component score 0 и снижает evidence_completeness ниже 100, что блокирует сертификацию статусом BLOCKED_EVIDENCE_INCOMPLETE."
+    }
+  },
+
+  "aggregation": {
+    "order": ["token", "component", "viewport_cell", "surface", "overall"],
+    "token_to_component": "Среднее арифметическое баллов токенов компонента. Каждый токен внутри компонента имеет равный вес.",
+    "component_to_cell": "Взвешенная сумма баллов компонентов по component weights (после перераспределения) для пары surface x viewport.",
+    "cell_to_surface": "Взвешенная сумма ячеек surface по viewport weights.",
+    "surface_to_overall": "Взвешенная сумма surface scores по surface weights.",
+    "viewport_aggregate": "Для порога viewport: взвешенная сумма ячеек данного viewport по surface weights.",
+    "precision": {
+      "internal": "decimal.Decimal, без промежуточного округления",
+      "intermediate_values_retained": true,
+      "reported_rounding": "ROUND_HALF_EVEN до 2 знаков",
+      "threshold_comparison": "Пороги сравниваются с уже округлённым до 2 знаков отчётным значением, чтобы отчёт и вердикт не могли разойтись."
+    },
+    "determinism": {
+      "required": true,
+      "rule": "Повторный запуск на тех же входных данных обязан дать побитово тот же результат, кроме поля generated_at. Порядок обхода токенов, компонентов, surfaces и viewports задаётся сортировкой, а не порядком поступления."
+    }
+  },
+
+  "thresholds": {
+    "overall_min": 80.00,
+    "surface_min": 70.00,
+    "viewport_aggregate_min": 65.00,
+    "evidence_completeness_required": 100.0
+  },
+
+  "certification": {
+    "status": "VISUAL_CERTIFIED",
+    "all_conditions_required": [
+      "overall_score >= 80.00",
+      "каждый обязательный surface >= 70.00",
+      "каждый viewport aggregate >= 65.00",
+      "hard_failures пуст",
+      "evidence_completeness == 100.0",
+      "checker_identity != pack_author_identity",
+      "checker_identity != candidate_author_identity",
+      "comparisons_performed > 0"
+    ],
+    "zero_comparison_guard": "Ноль выполненных сравнений запрещено трактовать как успех. comparisons_performed == 0 даёт BLOCKED_EVIDENCE_INCOMPLETE независимо от прочих условий."
+  },
+
+  "hard_failures": [
+    {"code": "MISSING_SURFACE", "detail": "Обязательная поверхность отсутствует в эталоне или кандидате."},
+    {"code": "MISSING_VIEWPORT", "detail": "Обязательный viewport отсутствует в эталоне или кандидате."},
+    {"code": "DIGEST_MISMATCH", "detail": "Дайджест снимка не совпадает с записанным в evidence."},
+    {"code": "MEASUREMENT_WITHOUT_PROVENANCE", "detail": "Токен не имеет method или evidence."},
+    {"code": "EVIDENCE_MUTATED_DURING_RUN", "detail": "Эталонное или кандидатское evidence изменилось после начала проверки."},
+    {"code": "HORIZONTAL_OVERFLOW", "detail": "У кандидата появилась горизонтальная прокрутка страницы."},
+    {"code": "REQUIRED_BLOCK_ABSENT", "detail": "Обязательный блок отсутствует или недоступен."},
+    {"code": "CONTENT_OVERLAP", "detail": "Элементы перекрывают основной контент."},
+    {"code": "CHECKER_NOT_INDEPENDENT", "detail": "Checker является автором reference pack или кандидата."},
+    {"code": "CONTRACT_MUTATED_AFTER_RESULT", "detail": "Scoring contract изменён после просмотра результата кандидата."},
+    {"code": "UNDECLARED_EXCLUSION", "detail": "Применено исключение, не объявленное заранее."}
+  ],
+
+  "compatibility": {
+    "policy": "Диапазон берётся только из доказанного манифеста, lockfile или конфигурации CI. Недоказуемый диапазон закрепляется текущей проверенной версией. Значения any, latest и * запрещены.",
+    "reference_pack_schema_version": {"value": 1, "source": "docs/reference-packs/*/VISUAL_TOKENS.yaml:schemaVersion", "kind": "pinned_exact"},
+    "scoring_contract_version": {"value": "visual-scoring/1.0.0", "kind": "pinned_exact"},
+    "renderer": {
+      "engine": "chromium",
+      "driver": "playwright",
+      "driver_version": {"value": "1.62.1", "source": "package.json devDependencies + package-lock.json", "kind": "pinned_exact"},
+      "browser_build": {"value": "chromium-1234", "source": "@playwright/test 1.62.1 (package.json + package-lock.json) определяет ревизию; artifacts/evidence/env-report.json:77 и docs/templates/handoff/TEMPLATE_TO_CORE-009-stale-chromium-path.md подтверждают установленную chromium-1234 в chrome-linux64/", "kind": "derived_from_driver", "note": "Ревизия не хардкодится: tests/tools/measure_reference.js намеренно отдаёт выбор Playwright, потому что ревизия меняется вместе с версией драйвера. Диапазон задаёт driver_version; browser_build обязан совпасть у эталона и кандидата."},
+      "range_justification": "package.json фиксирует 1.62.1 точной версией, а не диапазоном; lockfile подтверждает. Доказуемого диапазона совместимости нет, поэтому закреплена проверенная версия."
+    },
+    "python_runtime": {"value": "3.11", "source": ".github/workflows/ci.yml:17 и deploy.yml:36", "kind": "pinned_exact"},
+    "viewports": {
+      "widths": [390, 768, 1440],
+      "heights": {"rule": "width < 500 -> 844, иначе 1000", "source": "tests/tools/measure_reference.js:142", "kind": "pinned_exact"}
+    },
+    "device_pixel_ratio": {"value": 1, "source": "tests/tools/measure_reference.js:143 deviceScaleFactor", "kind": "pinned_exact"},
+    "screenshot_capture_mode": {"value": "viewport", "full_page": false, "source": "tests/tools/measure_reference.js:152 screenshot({fullPage:false})", "kind": "pinned_exact"},
+    "locale": {"value": null, "kind": "must_be_declared", "note": "Инструмент замера locale не задаёт. Значение недоказуемо из репозитория, поэтому обязано быть объявлено в environment_manifest обеих сторон и совпасть."},
+    "timezone": {"value": null, "kind": "must_be_declared", "note": "Инструмент замера timezone не задаёт. Обязано быть объявлено и совпасть."},
+    "font_availability": {"value": null, "kind": "must_be_declared", "note": "Набор доступных шрифтов меняет метрики текста. Обязан быть объявлен списком имён и совпасть."},
+    "animation_policy": {"value": null, "kind": "must_be_declared", "note": "Инструмент замера reducedMotion не задаёт. Обязано быть объявлено и совпасть."},
+    "template_manifest_compatibility": {"value": null, "kind": "must_be_declared", "note": "apiVersionRange, sdkVersionRange и seoContractVersionRange в reference pack остаются pending. Пока владелец контракта их не заполнил, они обязаны присутствовать в environment_manifest как объявленные значения и совпадать."},
+    "mismatch_status": "BLOCKED_COMPATIBILITY_MISMATCH"
+  },
+
+  "result_schema": "schemas/visual-scoring-result.schema.json",
+
+  "statuses": [
+    "VISUAL_CERTIFIED",
+    "VISUAL_REJECTED",
+    "BLOCKED_EVIDENCE_INCOMPLETE",
+    "BLOCKED_COMPATIBILITY_MISMATCH",
+    "BLOCKED_INDEPENDENCE_VIOLATION",
+    "BLOCKED_SCORING_CONTRACT_MISSING"
+  ],
+
+  "status_precedence": [
+    "BLOCKED_SCORING_CONTRACT_MISSING",
+    "BLOCKED_INDEPENDENCE_VIOLATION",
+    "BLOCKED_COMPATIBILITY_MISMATCH",
+    "BLOCKED_EVIDENCE_INCOMPLETE",
+    "VISUAL_REJECTED",
+    "VISUAL_CERTIFIED"
+  ],
+
+  "anti_fitting_rules": [
+    "Веса, допуски и пороги закреплены этой версией и не меняются по результату кандидата.",
+    "Изменение любого числа требует новой версии контракта и нового immutable каталога.",
+    "Автор контракта не может быть checker'ом того кандидата, ради которого контракт менялся.",
+    "Субъективная формулировка вида «визуально похоже» не является входом расчёта.",
+    "Исключения после начала сравнения запрещены и обнаруживаются сверкой exclusions_digest."
+  ]
+}

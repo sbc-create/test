@@ -1,0 +1,1325 @@
+"""Контракт visual-scoring: веса, допуски, пороги и запреты.
+
+Тесты проверяют правило, а не кандидата. Ни один тест не использует данные
+reference pack amd.online и не выносит по нему вердикт: контракт, настроенный
+по результату конкретного кандидата, перестаёт быть измерением.
+"""
+from __future__ import annotations
+
+import json
+from decimal import Decimal
+from pathlib import Path
+
+import pytest
+
+from factory.visual_scoring import (
+    ComponentScore,
+    ContractError,
+    Identity,
+    ScoringResult,
+    aggregate,
+    applicability_reason,
+    assign_component,
+    check_compatibility,
+    check_independence,
+    check_weight_sums,
+    compare,
+    component_applicability,
+    decide,
+    exclusions_digest,
+    load_contract,
+    score_categorical,
+    score_color,
+    score_numeric,
+    score_token,
+    valid_exclusion,
+)
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+COMPONENTS = ("structure_order", "geometry", "typography", "colors", "cards_media", "responsive")
+
+
+@pytest.fixture(scope="module")
+def contract() -> dict:
+    return load_contract("1.0.0", root=REPO_ROOT / "contracts" / "visual-scoring")
+
+
+def _cells(contract: dict, score_by_cell) -> list[ComponentScore]:
+    """Разложить заданный балл ячейки по компонентам без искажения весов."""
+    weights = {k: Decimal(str(v)) for k, v in contract["weights"]["components"].items()}
+    out = []
+    for surface in contract["required_surfaces"]:
+        for viewport in contract["required_viewports"]:
+            value = Decimal(str(score_by_cell(surface, viewport)))
+            for component in COMPONENTS:
+                out.append(ComponentScore(surface, viewport, component, value,
+                                          weights[component], 1, 0))
+    return out
+
+
+def _result(contract: dict, score_by_cell, **overrides) -> ScoringResult:
+    components = _cells(contract, score_by_cell)
+    overall, surfaces, viewports = aggregate(components, contract)
+    base = {
+        "overall_score": overall, "surface_scores": surfaces, "viewport_scores": viewports,
+        "component_scores": components, "hard_failures": [],
+        "evidence_completeness": Decimal("100"), "comparisons_performed": len(components),
+        "certification_status": "", "blocked_reasons": [],
+    }
+    base.update(overrides)
+    return ScoringResult(**base)
+
+
+#: По одному токену на каждый компонент — иначе компонент остался бы без
+#: эталонных измерений и полнота evidence честно упала бы ниже 100.
+_VALUES = {
+    "section_order": "header,main,footer",   # structure_order
+    "content_width": 1200,                   # geometry
+    "type_body_font_size": 16,               # typography
+    "accent_color": "#3366cc",               # colors
+    "card_aspect_ratio": 1.5,                # cards_media
+    "horizontal_overflow": False,            # responsive
+}
+_UNITS = {
+    "section_order": "order", "content_width": "px", "type_body_font_size": "px",
+    "accent_color": "color", "card_aspect_ratio": "ratio", "horizontal_overflow": "bool",
+}
+
+
+def _tokens(value_for, surfaces=None, viewports=None) -> list[dict]:
+    """Полный набор измерений: 5 поверхностей x 3 ширины x 6 компонентов."""
+    surfaces = surfaces if surfaces is not None else \
+        ["home", "catalog", "collection_hub", "title", "not_found"]
+    viewports = viewports if viewports is not None else [390, 768, 1440]
+    out = []
+    for surface in surfaces:
+        for viewport in viewports:
+            for name in _VALUES:
+                out.append({
+                    "name": name, "value": value_for(name, surface, viewport),
+                    "unit": _UNITS[name], "surface": surface, "viewport": viewport,
+                    "method": "CDP getBoundingClientRect",
+                    "evidence": f"artifacts/capture/{surface}/measurements.json#/{viewport}",
+                })
+    return out
+
+
+_ENV = {
+    "renderer_engine": "chromium", "renderer_driver_version": "1.62.1",
+    "browser_build": "chromium-1234", "device_pixel_ratio": 1,
+    "screenshot_capture_mode": "viewport", "locale": "ru-RU",
+    "timezone": "Europe/Moscow", "animation_policy": "reduce",
+}
+
+
+def _pack(contract, reference, candidate, **overrides) -> dict:
+    """Аргументы compare() с тремя разными субъектами по умолчанию."""
+    args = {
+        "reference_tokens": reference, "candidate_tokens": candidate, "contract": contract,
+        "checker": Identity("checker-01", "CHECKER"),
+        "pack_author": Identity("templates-01", "TEMPLATES"),
+        "candidate_author": Identity("candidate-01", "CANDIDATE"),
+        "reference_environment": dict(_ENV), "candidate_environment": dict(_ENV),
+    }
+    args.update(overrides)
+    return args
+
+
+# --- 1. веса -----------------------------------------------------------------
+
+
+def test_every_weight_matrix_sums_to_one_hundred(contract):
+    assert check_weight_sums(contract) == []
+
+
+@pytest.mark.parametrize("matrix", ["surfaces", "viewports", "components"])
+def test_broken_weight_matrix_is_rejected(contract, matrix):
+    """Опечатка в весах обязана валить загрузку, а не молча смещать оценку."""
+    broken = json.loads(json.dumps(contract))
+    key = next(iter(broken["weights"][matrix]))
+    broken["weights"][matrix][key] += 1
+    assert check_weight_sums(broken) != []
+
+
+def test_load_contract_refuses_inconsistent_weights(tmp_path, contract):
+    broken = json.loads(json.dumps(contract))
+    broken["weights"]["surfaces"]["home"] = 99
+    version_dir = tmp_path / "9.9.9"
+    version_dir.mkdir()
+    (version_dir / "scoring-contract.json").write_text(json.dumps(broken), encoding="utf-8")
+    with pytest.raises(ContractError):
+        load_contract("9.9.9", root=tmp_path)
+
+
+def test_missing_contract_raises_rather_than_defaulting(tmp_path):
+    """Отсутствующий контракт не заменяется значениями по умолчанию."""
+    with pytest.raises(FileNotFoundError):
+        load_contract("0.0.0", root=tmp_path)
+
+
+# --- 2. граничные значения порога --------------------------------------------
+
+
+@pytest.mark.parametrize("cell,expected", [
+    ("79.99", "VISUAL_REJECTED"),
+    ("80.00", "VISUAL_CERTIFIED"),
+    ("80.01", "VISUAL_CERTIFIED"),
+])
+def test_overall_threshold_boundaries(contract, cell, expected):
+    result = _result(contract, lambda s, v: cell)
+    status, _ = decide(result, contract)
+    assert status == expected
+
+
+def test_threshold_uses_the_reported_rounded_value(contract):
+    """Отчёт и вердикт не могут разойтись: сравнивается округлённое значение."""
+    result = _result(contract, lambda s, v: "79.996")
+    status, _ = decide(result, contract)
+    assert status == "VISUAL_CERTIFIED"
+    assert result.overall_score.quantize(Decimal("0.01")) == Decimal("80.00")
+
+
+# --- 3. минимумы surface и viewport ------------------------------------------
+
+
+def test_surface_below_minimum_rejects_despite_high_overall(contract):
+    """Один проваленный surface не компенсируется остальными."""
+    result = _result(contract, lambda s, v: "69.99" if s == "not_found" else "100")
+    status, reasons = decide(result, contract)
+    assert status == "VISUAL_REJECTED"
+    assert any("not_found" in r for r in reasons)
+
+
+def test_surface_at_minimum_passes(contract):
+    result = _result(contract, lambda s, v: "70.00" if s == "not_found" else "100")
+    assert decide(result, contract)[0] == "VISUAL_CERTIFIED"
+
+
+def test_viewport_below_minimum_rejects(contract):
+    result = _result(contract, lambda s, v: "64.99" if v == 390 else "100")
+    status, reasons = decide(result, contract)
+    assert status == "VISUAL_REJECTED"
+    assert any("390" in r for r in reasons)
+
+
+def test_viewport_at_minimum_passes(contract):
+    result = _result(contract, lambda s, v: "65.00" if v == 390 else "100")
+    assert decide(result, contract)[0] == "VISUAL_CERTIFIED"
+
+
+# --- 4. линейная числовая шкала ----------------------------------------------
+
+
+@pytest.mark.parametrize("reference,candidate,expected", [
+    (100, 100, "100"),      # совпадение
+    (100, 105, "100"),      # ровно 5 % — ещё полная оценка
+    (100, 95, "100"),       # отклонение в меньшую сторону симметрично
+    (100, 115, "50"),       # середина полосы
+    (100, 125, "0"),        # ровно 25 % — уже ноль
+    (100, 400, "0"),        # далеко за полосой
+])
+def test_numeric_linear_scoring(contract, reference, candidate, expected):
+    assert score_numeric(reference, candidate, contract) == Decimal(expected)
+
+
+def test_numeric_scoring_is_monotonic(contract):
+    """Рост отклонения не может поднимать балл."""
+    scores = [score_numeric(100, 100 + d, contract) for d in range(0, 30)]
+    assert scores == sorted(scores, reverse=True)
+
+
+def test_zero_reference_does_not_divide(contract):
+    assert score_numeric(0, 0, contract) == Decimal("100")
+    assert score_numeric(0, 1, contract) == Decimal("0")
+
+
+def test_categorical_is_exact_or_zero():
+    assert score_categorical(True, True) == Decimal("100")
+    assert score_categorical(True, False) == Decimal("0")
+    assert score_categorical("header,main,footer", "header,footer,main") == Decimal("0")
+
+
+def test_color_exact_match_scores_full(contract):
+    assert score_color("#1A2B3C", "1a2b3c", contract) == Decimal("100")
+
+
+def test_color_far_apart_scores_zero(contract):
+    assert score_color("#000000", "#ffffff", contract) == Decimal("0")
+
+
+def test_color_scoring_is_bounded(contract):
+    value = score_color("#3366cc", "#3a6ccd", contract)
+    assert Decimal("0") <= value <= Decimal("100")
+
+
+# --- 5. отсутствующее измерение ----------------------------------------------
+
+
+def test_missing_candidate_token_scores_zero(contract):
+    reference = {"name": "content_width", "value": 378, "unit": "px"}
+    assert score_token(reference, None, contract) == Decimal("0")
+
+
+def test_extra_candidate_token_cannot_raise_the_score(contract):
+    """Токена нет в эталоне — он не участвует в расчёте и не даёт баллов."""
+    reference = _tokens(lambda name, s, v: _VALUES[name])
+    plain = compare(**_pack(contract, reference, reference))
+    padded_candidate = reference + [
+        {"name": "bonus_width", "value": 999, "unit": "px", "surface": "home",
+         "viewport": 390, "method": "CDP", "evidence": "artifacts/x#/1",
+         "component": "geometry"}]
+    padded = compare(**_pack(contract, reference, padded_candidate))
+    assert padded.overall_score == plain.overall_score
+    assert padded.comparisons_performed == plain.comparisons_performed
+
+
+# --- 6-7. исключения ---------------------------------------------------------
+
+
+def test_declared_exclusion_needs_reason_and_provenance(contract):
+    good = {"scope": "ads", "reason": "монетизация эталона",
+            "provenance": "EXCLUSIONS.md", "declared_at": "2026-09-16T00:00:00Z"}
+    assert valid_exclusion(good, contract)
+    for field in ("reason", "provenance", "declared_at"):
+        bad = dict(good)
+        bad[field] = ""
+        assert not valid_exclusion(bad, contract)
+
+
+def test_late_exclusion_changes_the_digest(contract):
+    declared = [{"scope": "ads", "reason": "монетизация", "provenance": "EXCLUSIONS.md",
+                 "declared_at": "2026-09-16T00:00:00Z"}]
+    before = exclusions_digest(declared)
+    late = declared + [{"scope": "grid_gap", "reason": "неудобно", "provenance": "нет",
+                        "declared_at": "2026-09-17T00:00:00Z"}]
+    assert exclusions_digest(late) != before
+
+
+def test_exclusion_digest_is_order_independent():
+    """Перестановка списка — не подмена: значение имеет состав, а не порядок."""
+    a = {"scope": "ads", "reason": "r", "provenance": "p", "declared_at": "t"}
+    b = {"scope": "trackers", "reason": "r", "provenance": "p", "declared_at": "t"}
+    assert exclusions_digest([a, b]) == exclusions_digest([b, a])
+
+
+def test_exclusion_digest_changes_when_content_changes():
+    a = {"scope": "ads", "reason": "r", "provenance": "p", "declared_at": "t"}
+    changed = dict(a, reason="другая причина")
+    assert exclusions_digest([a]) != exclusions_digest([changed])
+
+
+def test_excluded_component_weight_is_redistributed(contract):
+    """Исключённый компонент не обнуляет ячейку и не даёт даровых баллов."""
+    weights = {k: Decimal(str(v)) for k, v in contract["weights"]["components"].items()}
+    components = []
+    for surface in contract["required_surfaces"]:
+        for viewport in contract["required_viewports"]:
+            for component in COMPONENTS:
+                excluded = component == "colors"
+                components.append(ComponentScore(
+                    surface, viewport, component,
+                    Decimal("0") if excluded else Decimal("90"),
+                    weights[component], 0 if excluded else 1, 0,
+                    excluded=excluded,
+                    exclusion_reason="эталон цвет не измеряет" if excluded else None))
+    overall, _, _ = aggregate(components, contract)
+    assert overall == Decimal("90")
+
+
+def test_undeclared_missing_component_blocks_instead_of_passing(contract):
+    """Непокрытый и необъявленный компонент блокирует, а не снижает балл молча."""
+    result = _result(contract, lambda s, v: "100",
+                     evidence_completeness=Decimal("96.5"))
+    status, reasons = decide(result, contract)
+    assert status == "BLOCKED_EVIDENCE_INCOMPLETE"
+    assert any("полнота evidence" in r for r in reasons)
+
+
+# --- 8-9. hard-fail и дайджесты ----------------------------------------------
+
+
+def test_hard_fail_overrides_a_perfect_score(contract):
+    result = _result(contract, lambda s, v: "100", hard_failures=[
+        {"code": "HORIZONTAL_OVERFLOW", "detail": "появилась горизонтальная прокрутка"}])
+    status, reasons = decide(result, contract)
+    assert status == "VISUAL_REJECTED"
+    assert reasons == ["hard-fail: HORIZONTAL_OVERFLOW"]
+
+
+def test_digest_mismatch_is_a_hard_fail(contract):
+    result = _result(contract, lambda s, v: "100", hard_failures=[
+        {"code": "DIGEST_MISMATCH", "detail": "снимок home@390 не совпал"}])
+    assert decide(result, contract)[0] == "VISUAL_REJECTED"
+
+
+def test_every_required_hard_fail_code_is_declared(contract):
+    declared = {f["code"] for f in contract["hard_failures"]}
+    assert declared == {
+        "MISSING_SURFACE", "MISSING_VIEWPORT", "DIGEST_MISMATCH",
+        "MEASUREMENT_WITHOUT_PROVENANCE", "EVIDENCE_MUTATED_DURING_RUN",
+        "HORIZONTAL_OVERFLOW", "REQUIRED_BLOCK_ABSENT", "CONTENT_OVERLAP",
+        "CHECKER_NOT_INDEPENDENT", "CONTRACT_MUTATED_AFTER_RESULT",
+        "UNDECLARED_EXCLUSION",
+    }
+
+
+# --- 10. независимость -------------------------------------------------------
+
+
+def test_checker_equal_to_pack_author_is_a_violation(contract):
+    same = Identity("agent-a", "TEMPLATES")
+    failures = check_independence(same, same, Identity("agent-b", "CANDIDATE"))
+    result = _result(contract, lambda s, v: "100", hard_failures=failures)
+    assert decide(result, contract)[0] == "BLOCKED_INDEPENDENCE_VIOLATION"
+
+
+def test_checker_equal_to_candidate_author_is_a_violation(contract):
+    checker = Identity("agent-b", "CHECKER")
+    failures = check_independence(checker, Identity("agent-a", "TEMPLATES"), checker)
+    assert failures and failures[0]["code"] == "CHECKER_NOT_INDEPENDENT"
+
+
+def test_three_distinct_subjects_pass_independence():
+    assert check_independence(Identity("c", "CHECKER"), Identity("a", "PACK"),
+                              Identity("b", "CANDIDATE")) == []
+
+
+# --- 11. совместимость -------------------------------------------------------
+
+
+def test_environment_mismatch_is_reported():
+    reference = {"browser_build": "chromium-1234", "device_pixel_ratio": 1}
+    candidate = {"browser_build": "chromium-1200", "device_pixel_ratio": 1}
+    mismatches = check_compatibility(reference, candidate)
+    assert any("browser_build" in m for m in mismatches)
+
+
+def test_unprovable_range_is_forbidden():
+    both = {"apiVersionRange": "latest"}
+    assert any("запрещено контрактом" in m for m in check_compatibility(both, both))
+
+
+def test_identical_environment_has_no_mismatch():
+    env = {"browser_build": "chromium-1234", "locale": "ru-RU"}
+    assert check_compatibility(env, env) == []
+
+
+def test_contract_pins_versions_instead_of_guessing(contract):
+    """Недоказуемый диапазон закреплён версией, а не словом latest."""
+    compat = contract["compatibility"]
+    assert compat["renderer"]["driver_version"]["value"] == "1.62.1"
+    assert compat["renderer"]["browser_build"]["value"] == "chromium-1234"
+    assert compat["python_runtime"]["value"] == "3.11"
+    for key in ("locale", "timezone", "font_availability", "animation_policy"):
+        assert compat[key]["kind"] == "must_be_declared"
+        assert compat[key]["value"] is None
+
+
+# --- 12-13. детерминированность ----------------------------------------------
+
+
+def test_repeated_run_is_identical(contract):
+    first = _result(contract, lambda s, v: "83.33")
+    second = _result(contract, lambda s, v: "83.33")
+    assert first.overall_score == second.overall_score
+    assert first.surface_scores == second.surface_scores
+    assert first.viewport_scores == second.viewport_scores
+
+
+def test_component_order_does_not_change_the_result(contract):
+    components = _cells(contract, lambda s, v: "77.7")
+    straight = aggregate(components, contract)
+    shuffled = aggregate(list(reversed(components)), contract)
+    assert straight == shuffled
+
+
+def test_intermediate_values_are_not_rounded(contract):
+    """Округление на каждом шаге копит ошибку — округляется только отчёт."""
+    result = _result(contract, lambda s, v: "33.333" if v != 1440 else "33.334")
+    # Точное взвешенное значение: 0.30*33.333 + 0.30*33.333 + 0.40*33.334.
+    assert result.overall_score == Decimal("33.3334")
+    # Четвёртый знак сохранён, то есть промежуточного округления не было.
+    assert result.overall_score != result.overall_score.quantize(Decimal("0.01"))
+    assert result.overall_score.quantize(Decimal("0.01")) == Decimal("33.33")
+
+
+# --- 14. запрет тихого успеха ------------------------------------------------
+
+
+def test_zero_comparisons_cannot_pass(contract):
+    result = _result(contract, lambda s, v: "100", comparisons_performed=0)
+    status, reasons = decide(result, contract)
+    assert status == "BLOCKED_EVIDENCE_INCOMPLETE"
+    assert reasons == ["ноль выполненных сравнений не является успехом"]
+
+
+def test_incomplete_evidence_cannot_pass(contract):
+    result = _result(contract, lambda s, v: "100", evidence_completeness=Decimal("99.99"))
+    assert decide(result, contract)[0] == "BLOCKED_EVIDENCE_INCOMPLETE"
+
+
+# --- классификация токенов ---------------------------------------------------
+
+
+#: Переиспользуется тестами и 1.0.0, и 1.0.1: исправление header_sticky не
+#: имело права сдвинуть ни одно из уже закреплённых назначений.
+_COMPONENT_ASSIGNMENT_CASES = [
+    ("content_width", "geometry"),
+    ("outer_gutter", "geometry"),
+    ("grid_columns", "geometry"),
+    ("grid_gap", "geometry"),
+    ("header_height", "geometry"),
+    ("page_height", "geometry"),
+    ("type_h1_font_size", "typography"),
+    ("type_body_font_weight", "typography"),
+    ("type_h2_line_height", "typography"),
+    ("card_aspect_ratio", "cards_media"),
+    ("cards_sampled", "cards_media"),
+    ("horizontal_overflow", "responsive"),
+    ("content_overlap", "responsive"),
+    ("section_order", "structure_order"),
+    ("header_present", "structure_order"),
+    ("accent_color", "colors"),
+    ("card_radius", "cards_media"),
+]
+
+
+@pytest.mark.parametrize("name,component", _COMPONENT_ASSIGNMENT_CASES)
+def test_component_assignment_is_rule_driven(contract, name, component):
+    assert assign_component({"name": name}, contract) == component
+
+
+def test_explicit_component_field_wins(contract):
+    assert assign_component({"name": "content_width", "component": "colors"}, contract) == "colors"
+
+
+def test_unknown_token_is_not_silently_dropped(contract):
+    assert assign_component({"name": "zzz_unknown_thing"}, contract) == "UNASSIGNED"
+
+
+def test_screenshot_digest_is_not_a_scored_unit(contract):
+    assert "sha256" in contract["non_scoring_units"]
+
+
+# --- 1.0.1: header_sticky перестаёт быть UNASSIGNED --------------------------
+#
+# PR #76/#81 подтвердили прогоном compare(): header_sticky (15 токенов пакета
+# amd.online) не совпадал ни с одним name_patterns в 1.0.0, получал UNASSIGNED
+# и снижал evidence_completeness независимо от значения у кандидата. Тесты
+# ниже проверяют исправление в 1.0.1, не используя данные amd.online и не
+# вынося вердикт по кандидату.
+
+
+@pytest.fixture(scope="module")
+def contract_101() -> dict:
+    return load_contract("1.0.1", root=REPO_ROOT / "contracts" / "visual-scoring")
+
+
+@pytest.mark.parametrize("value", [True, False])
+def test_header_sticky_assigns_to_one_documented_component_regardless_of_value(contract_101, value):
+    assert assign_component({"name": "header_sticky", "value": value}, contract_101) == "geometry"
+
+
+@pytest.mark.parametrize("surface,viewport", [
+    ("home", 390), ("catalog", 768), ("collection_hub", 1440),
+    ("title", 390), ("not_found", 1440),
+])
+def test_header_sticky_assignment_is_the_same_on_every_surface_and_viewport(contract_101, surface, viewport):
+    token = {"name": "header_sticky", "surface": surface, "viewport": viewport}
+    assert assign_component(token, contract_101) == "geometry"
+
+
+@pytest.mark.parametrize("name", ["nav_sticky", "footer_sticky", "sidebar_sticky"])
+def test_sticky_rule_is_general_not_hardcoded_to_header(contract_101, name):
+    """Правило основано на семантике имени токена (*_sticky), не на header_sticky буквально."""
+    assert assign_component({"name": name}, contract_101) == "geometry"
+
+
+@pytest.mark.parametrize("name", ["modal_open", "cookie_banner_visible", "nav_collapsed"])
+def test_unrelated_boolean_token_without_a_rule_stays_fail_closed(contract_101, name):
+    """Токен без _sticky в имени не подхватывается новым правилом по совпадению типа."""
+    assert assign_component({"name": name, "unit": "bool"}, contract_101) == "UNASSIGNED"
+
+
+@pytest.mark.parametrize("name,component", _COMPONENT_ASSIGNMENT_CASES)
+def test_all_1_0_0_component_assignments_still_work_under_1_0_1(contract_101, name, component):
+    assert assign_component({"name": name}, contract_101) == component
+
+
+def test_1_0_1_contract_version_is_pinned(contract_101):
+    assert contract_101["contract_version"] == "visual-scoring/1.0.1"
+    assert contract_101["status"] == "immutable"
+
+
+def test_1_0_1_preserves_weights_thresholds_and_completeness_requirement(contract, contract_101):
+    assert contract_101["weights"] == contract["weights"]
+    assert contract_101["thresholds"] == contract["thresholds"]
+    assert contract_101["hard_failures"] == contract["hard_failures"]
+    assert contract_101["scoring_rules"] == contract["scoring_rules"]
+    assert contract_101["aggregation"] == contract["aggregation"]
+    assert contract_101["statuses"] == contract["statuses"]
+    assert contract_101["status_precedence"] == contract["status_precedence"]
+
+
+def test_1_0_1_files_match_their_recorded_checksums():
+    """1.0.1 сама стала неизменяемой версией: правка после выпуска обязана обнаруживаться."""
+    import hashlib
+
+    base = REPO_ROOT / "contracts" / "visual-scoring" / "1.0.1"
+    recorded = json.loads((base / "checksums.json").read_text(encoding="utf-8"))
+    for name, digest in sorted(recorded["files"].items()):
+        path = (base / name).resolve()
+        actual = "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
+        assert actual == digest, f"{name} изменён после выпуска версии"
+
+
+def test_1_0_0_directory_is_untouched_by_the_1_0_1_fix():
+    """Патч живёт в новом каталоге: 1.0.0 обязан остаться побитово тем же."""
+    import hashlib
+
+    base = REPO_ROOT / "contracts" / "visual-scoring" / "1.0.0"
+    recorded = json.loads((base / "checksums.json").read_text(encoding="utf-8"))
+    for name, digest in sorted(recorded["files"].items()):
+        path = (base / name).resolve()
+        actual = "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
+        assert actual == digest, f"{name} изменён — 1.0.0 больше не immutable"
+
+
+def _with_header_sticky(tokens: list[dict], value: bool = True) -> list[dict]:
+    """Добавить header_sticky на все 15 обязательных ячеек, не трогая _VALUES/_tokens()."""
+    extra = []
+    for surface in ["home", "catalog", "collection_hub", "title", "not_found"]:
+        for viewport in [390, 768, 1440]:
+            extra.append({
+                "name": "header_sticky", "value": value, "unit": "bool",
+                "surface": surface, "viewport": viewport,
+                "method": "CDP getComputedStyle.position",
+                "evidence": f"artifacts/capture/{surface}/measurements.json#/{viewport}/header_sticky",
+            })
+    return tokens + extra
+
+
+def test_header_sticky_still_blocks_full_completeness_under_1_0_0(contract):
+    """Регрессионный контроль: 1.0.0 воспроизводимо остаётся дефектной (для сравнения до/после)."""
+    reference = _with_header_sticky(_tokens(lambda name, s, v: _VALUES[name]))
+    candidate = _with_header_sticky(_tokens(lambda name, s, v: _VALUES[name]))
+    result = compare(**_pack(contract, reference, candidate))
+    assert result.evidence_completeness < Decimal("100")
+    assert result.certification_status == "BLOCKED_EVIDENCE_INCOMPLETE"
+
+
+def test_header_sticky_no_longer_blocks_completeness_under_1_0_1(contract_101):
+    """Тот же вход, исправленный контракт: header_sticky больше не UNASSIGNED."""
+    reference = _with_header_sticky(_tokens(lambda name, s, v: _VALUES[name]))
+    candidate = _with_header_sticky(_tokens(lambda name, s, v: _VALUES[name]))
+    result = compare(**_pack(contract_101, reference, candidate))
+    assert result.evidence_completeness == Decimal("100")
+    assert result.certification_status == "VISUAL_CERTIFIED"
+    assert result.comparisons_performed == 90 + 15
+
+
+def test_header_sticky_candidate_value_still_affects_the_score_under_1_0_1(contract_101):
+    """Не подгонка: расходящееся значение честно теряет баллы, а не проходит молча."""
+    reference = _with_header_sticky(_tokens(lambda name, s, v: _VALUES[name]), value=True)
+    candidate = _with_header_sticky(_tokens(lambda name, s, v: _VALUES[name]), value=False)
+    result = compare(**_pack(contract_101, reference, candidate))
+    assert result.evidence_completeness == Decimal("100")
+    assert result.overall_score < Decimal("100")
+    geometry_cells = [c for c in result.component_scores if c.component == "geometry"]
+    assert geometry_cells and all(c.score < Decimal("100") for c in geometry_cells)
+
+
+# --- 1.0.2: cards_media перестаёт быть глобально неисключаемым ---------------
+#
+# PR #80 подтвердил прогоном compare(): cards_media структурно отсутствует на
+# catalog/not_found (6 ячеек, 0 измерений на обеих независимых прогонах), но
+# реально измеряется на home/collection_hub/title (9 ячеек). Единственный
+# существовавший exclusions.component_level_exclusion ключует по компоненту
+# целиком и обнулил бы все 9 применимых ячеек ради честного пропуска 6
+# неприменимых. Тесты ниже проверяют новую секцию component_applicability, не
+# используя данные amd.online и не вынося вердикт по кандидату.
+
+_CARDS_MEDIA_NOT_APPLICABLE_SURFACES = ["catalog", "not_found"]
+_CARDS_MEDIA_REQUIRED_SURFACES = ["home", "collection_hub", "title"]
+
+
+@pytest.fixture(scope="module")
+def contract_102() -> dict:
+    return load_contract("1.0.2", root=REPO_ROOT / "contracts" / "visual-scoring")
+
+
+@pytest.mark.parametrize("surface", _CARDS_MEDIA_NOT_APPLICABLE_SURFACES)
+@pytest.mark.parametrize("viewport", [390, 768, 1440])
+def test_cards_media_is_not_applicable_on_catalog_and_not_found(contract_102, surface, viewport):
+    """viewport параметризован лишь для явности: применимость не читает viewport вовсе."""
+    assert component_applicability("cards_media", surface, contract_102) == "NOT_APPLICABLE"
+
+
+@pytest.mark.parametrize("surface", _CARDS_MEDIA_REQUIRED_SURFACES)
+def test_cards_media_stays_required_on_home_collection_hub_and_title(contract_102, surface):
+    assert component_applicability("cards_media", surface, contract_102) == "REQUIRED"
+
+
+@pytest.mark.parametrize("surface", ["unknown_surface_xyz", "", "Catalog", "catalog2"])
+def test_unknown_surface_does_not_become_not_applicable(contract_102, surface):
+    """Отсутствие записи или опечатка в имени поверхности не расширяют исключение."""
+    assert component_applicability("cards_media", surface, contract_102) == "REQUIRED"
+
+
+@pytest.mark.parametrize("component", ["structure_order", "geometry", "typography", "colors", "responsive"])
+@pytest.mark.parametrize("surface", ["home", "catalog", "collection_hub", "title", "not_found"])
+def test_only_cards_media_catalog_and_not_found_are_declared_not_applicable(contract_102, component, surface):
+    """Механизм не расширяется молча на другие компоненты или поверхности."""
+    assert component_applicability(component, surface, contract_102) == "REQUIRED"
+
+
+def _tokens_without_cards_media_on(tokens: list[dict], surfaces: list[str]) -> list[dict]:
+    """Убрать card_aspect_ratio на перечисленных surfaces, не трогая _VALUES/_tokens()."""
+    return [t for t in tokens if not (t["name"] == "card_aspect_ratio" and t["surface"] in surfaces)]
+
+
+def test_missing_cards_media_on_a_required_surface_still_blocks_completeness(contract_102):
+    """REQUIRED-ячейка без измерения остаётся тем же fail-closed правилом, что и раньше."""
+    reference = _tokens_without_cards_media_on(_tokens(lambda name, s, v: _VALUES[name]), ["home"])
+    candidate = _tokens(lambda name, s, v: _VALUES[name])
+    result = compare(**_pack(contract_102, reference, candidate))
+    assert result.certification_status == "BLOCKED_EVIDENCE_INCOMPLETE"
+    assert result.evidence_completeness < Decimal("100")
+    gap = [c for c in result.component_scores
+           if c.component == "cards_media" and c.surface == "home" and not c.excluded]
+    assert gap and all(c.tokens_compared == 0 and c.score == Decimal("0") for c in gap)
+
+
+def test_scope_aware_rule_does_not_exclude_the_whole_component(contract_102):
+    """Ядро дефекта: cards_media остаётся REQUIRED и оценивается там, где применим."""
+    reference = _tokens_without_cards_media_on(
+        _tokens(lambda name, s, v: _VALUES[name]), _CARDS_MEDIA_NOT_APPLICABLE_SURFACES)
+    candidate = _tokens_without_cards_media_on(
+        _tokens(lambda name, s, v: _VALUES[name]), _CARDS_MEDIA_NOT_APPLICABLE_SURFACES)
+    result = compare(**_pack(contract_102, reference, candidate))
+
+    assert result.evidence_completeness == Decimal("100")
+    assert result.certification_status == "VISUAL_CERTIFIED"
+
+    applicable = [c for c in result.component_scores
+                  if c.component == "cards_media" and c.surface in _CARDS_MEDIA_REQUIRED_SURFACES]
+    assert len(applicable) == 9  # 3 surfaces x 3 viewports
+    assert all(not c.excluded and c.tokens_compared > 0 for c in applicable)
+
+    scoped_out = [c for c in result.component_scores
+                  if c.component == "cards_media" and c.surface in _CARDS_MEDIA_NOT_APPLICABLE_SURFACES]
+    assert len(scoped_out) == 6  # 2 surfaces x 3 viewports
+    assert all(c.excluded and c.exclusion_reason.startswith("NOT_APPLICABLE:") for c in scoped_out)
+
+
+def test_reference_token_present_despite_not_applicable_is_still_ignored(contract_102):
+    """Даже если у эталона неожиданно нашёлся токен там, где applicability его не ждёт."""
+    reference = _tokens(lambda name, s, v: _VALUES[name])  # card_aspect_ratio на всех 15 ячейках
+    candidate = _tokens(lambda name, s, v: _VALUES[name])
+    result = compare(**_pack(contract_102, reference, candidate))
+    assert result.evidence_completeness == Decimal("100")
+    scoped_out = [c for c in result.component_scores
+                  if c.component == "cards_media" and c.surface in _CARDS_MEDIA_NOT_APPLICABLE_SURFACES]
+    assert all(c.excluded and c.tokens_compared == 0 for c in scoped_out)
+
+
+def test_declared_component_exclusion_still_works_globally_alongside_applicability(contract_102):
+    """component_level_exclusion (кандидатский, с provenance) не заменён applicability."""
+    reference = [t for t in _tokens(lambda name, s, v: _VALUES[name]) if t["name"] != "accent_color"]
+    excluded = [{"scope": "colors", "component": "colors",
+                 "reason": "эталон цвет не измеряет", "provenance": "EXCLUSIONS.md",
+                 "declared_at": "2026-09-16T00:00:00Z"}]
+    result = compare(**_pack(contract_102, reference, reference,
+                             declared_exclusions=excluded,
+                             baseline_exclusions_digest=exclusions_digest(excluded)))
+    assert result.certification_status == "VISUAL_CERTIFIED"
+    colors_cells = [c for c in result.component_scores if c.component == "colors"]
+    assert colors_cells and all(c.excluded and not c.exclusion_reason.startswith("NOT_APPLICABLE:")
+                                for c in colors_cells)
+
+
+@pytest.mark.parametrize("value", [True, False])
+def test_header_sticky_still_assigns_to_geometry_under_1_0_2(contract_102, value):
+    """1.0.1 наследуется без изменения семантики."""
+    assert assign_component({"name": "header_sticky", "value": value}, contract_102) == "geometry"
+
+
+@pytest.mark.parametrize("name,component", _COMPONENT_ASSIGNMENT_CASES)
+def test_all_legacy_component_assignments_still_work_under_1_0_2(contract_102, name, component):
+    assert assign_component({"name": name}, contract_102) == component
+
+
+def test_1_0_2_contract_version_is_pinned(contract_102):
+    assert contract_102["contract_version"] == "visual-scoring/1.0.2"
+    assert contract_102["status"] == "immutable"
+
+
+def test_1_0_2_preserves_weights_thresholds_and_completeness_requirement(contract_101, contract_102):
+    assert contract_102["weights"] == contract_101["weights"]
+    assert contract_102["thresholds"] == contract_101["thresholds"]
+    assert contract_102["hard_failures"] == contract_101["hard_failures"]
+    assert contract_102["scoring_rules"] == contract_101["scoring_rules"]
+    assert contract_102["statuses"] == contract_101["statuses"]
+    assert contract_102["status_precedence"] == contract_101["status_precedence"]
+    assert contract_102["component_assignment"]["order"] == contract_101["component_assignment"]["order"]
+
+
+def test_1_0_2_files_match_their_recorded_checksums():
+    import hashlib
+
+    base = REPO_ROOT / "contracts" / "visual-scoring" / "1.0.2"
+    recorded = json.loads((base / "checksums.json").read_text(encoding="utf-8"))
+    for name, digest in sorted(recorded["files"].items()):
+        path = (base / name).resolve()
+        actual = "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
+        assert actual == digest, f"{name} изменён после выпуска версии"
+
+
+@pytest.mark.parametrize("version", ["1.0.0", "1.0.1"])
+def test_older_versions_remain_untouched_by_the_1_0_2_fix(version):
+    """1.0.0 и 1.0.1 обязаны воспроизводиться по checksum и после этого исправления."""
+    import hashlib
+
+    base = REPO_ROOT / "contracts" / "visual-scoring" / version
+    recorded = json.loads((base / "checksums.json").read_text(encoding="utf-8"))
+    for name, digest in sorted(recorded["files"].items()):
+        path = (base / name).resolve()
+        actual = "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
+        assert actual == digest, f"{version}/{name} изменён — версия больше не immutable"
+
+
+def test_1_0_2_result_with_scope_aware_cells_validates_against_result_schema(contract_102):
+    """component_scores/weight_redistribution от NOT_APPLICABLE не требуют правки схемы."""
+    from jsonschema import Draft202012Validator
+
+    reference = _tokens_without_cards_media_on(
+        _tokens(lambda name, s, v: _VALUES[name]), _CARDS_MEDIA_NOT_APPLICABLE_SURFACES)
+    candidate = _tokens_without_cards_media_on(
+        _tokens(lambda name, s, v: _VALUES[name]), _CARDS_MEDIA_NOT_APPLICABLE_SURFACES)
+    result = compare(**_pack(contract_102, reference, candidate))
+    assert result.certification_status == "VISUAL_CERTIFIED"
+
+    def q(value: Decimal) -> float:
+        return float(value.quantize(Decimal("0.01")))
+
+    doc = {
+        "reference_pack_id": "synthetic-pack",
+        "reference_commit": "a" * 40,
+        "candidate_commit": "b" * 40,
+        "scoring_contract_version": contract_102["contract_version"],
+        "checker_identity": {"id": "checker-01", "role": "CHECKER"},
+        "pack_author_identity": {"id": "templates-01", "role": "TEMPLATES"},
+        "candidate_author_identity": {"id": "candidate-01", "role": "CANDIDATE"},
+        "environment_manifest": dict(
+            _ENV, font_availability=["Inter"],
+            template_manifest_compatibility={
+                "apiVersionRange": "1.0.0", "sdkVersionRange": "1.0.0", "seoContractVersionRange": "1.0.0"}),
+        "exclusions_digest": exclusions_digest([]),
+        "surface_scores": {k: q(v) for k, v in result.surface_scores.items()},
+        "viewport_scores": {str(k): q(v) for k, v in result.viewport_scores.items()},
+        "component_scores": [
+            {
+                "surface": c.surface, "viewport": c.viewport, "component": c.component,
+                "score": q(c.score), "weight": float(c.weight),
+                "tokens_compared": c.tokens_compared, "tokens_missing": c.tokens_missing,
+                **({"excluded": c.excluded} if c.excluded else {}),
+                **({"exclusion_reason": c.exclusion_reason} if c.exclusion_reason else {}),
+            }
+            for c in result.component_scores
+        ],
+        "overall_score": q(result.overall_score),
+        "comparisons_performed": result.comparisons_performed,
+        "hard_failures": result.hard_failures,
+        "evidence_completeness": q(result.evidence_completeness),
+        "certification_status": result.certification_status,
+        "blocked_reasons": result.blocked_reasons,
+        "weight_redistribution": result.weight_redistribution,
+        "generated_at": "2026-09-17T00:00:00Z",
+    }
+
+    schema = json.loads((REPO_ROOT / "schemas" / "visual-scoring-result.schema.json").read_text(encoding="utf-8"))
+    Draft202012Validator(schema).validate(doc)
+
+
+def test_1_0_2_environment_compatibility_checks_are_unaffected(contract_102):
+    """compatibility-проверка (check_compatibility) не завязана на applicability."""
+    other_env = dict(_ENV, browser_build="chromium-1200")
+    mismatches = check_compatibility(_ENV, other_env)
+    assert any("browser_build" in m for m in mismatches)
+
+
+# --- форма контракта ---------------------------------------------------------
+
+
+def test_contract_declares_required_surfaces_and_viewports(contract):
+    assert contract["required_surfaces"] == ["home", "catalog", "collection_hub", "title", "not_found"]
+    assert contract["required_viewports"] == [390, 768, 1440]
+
+
+def test_contract_version_is_immutable_and_pinned(contract):
+    assert contract["contract_version"] == "visual-scoring/1.0.0"
+    assert contract["status"] == "immutable"
+
+
+# --- сквозной расчёт через compare() -----------------------------------------
+
+
+def test_identical_packs_certify(contract):
+    """Полное совпадение при трёх разных субъектах даёт сертификацию."""
+    reference = _tokens(lambda name, s, v: _VALUES[name])
+    result = compare(**_pack(contract, reference, reference))
+    assert result.certification_status == "VISUAL_CERTIFIED"
+    assert result.overall_score == Decimal("100")
+    assert result.evidence_completeness == Decimal("100")
+    assert result.comparisons_performed == 90
+    assert result.hard_failures == []
+
+
+def test_missing_candidate_token_lowers_completeness_and_blocks(contract):
+    """Пропущенное измерение не проходит мимо: оно и 0 баллов, и неполнота."""
+    reference = _tokens(lambda name, s, v: _VALUES[name])
+    candidate = [t for t in reference
+                 if not (t["surface"] == "home" and t["viewport"] == 390
+                         and t["name"] == "content_width")]
+    result = compare(**_pack(contract, reference, candidate))
+    assert result.certification_status == "BLOCKED_EVIDENCE_INCOMPLETE"
+    assert result.evidence_completeness < Decimal("100")
+    assert result.comparisons_performed == 89
+
+
+def test_missing_surface_is_a_hard_fail(contract):
+    reference = _tokens(lambda name, s, v: _VALUES[name])
+    candidate = [t for t in reference if t["surface"] != "not_found"]
+    result = compare(**_pack(contract, reference, candidate))
+    assert result.certification_status == "VISUAL_REJECTED"
+    assert {f["code"] for f in result.hard_failures} == {"MISSING_SURFACE"}
+
+
+def test_missing_viewport_is_a_hard_fail(contract):
+    reference = _tokens(lambda name, s, v: _VALUES[name])
+    candidate = [t for t in reference if t["viewport"] != 1440]
+    result = compare(**_pack(contract, reference, candidate))
+    assert "MISSING_VIEWPORT" in {f["code"] for f in result.hard_failures}
+
+
+def test_token_without_provenance_is_a_hard_fail(contract):
+    reference = _tokens(lambda name, s, v: _VALUES[name])
+    stripped = [dict(t, evidence="") if t["name"] == "content_width" else t for t in reference]
+    result = compare(**_pack(contract, reference, stripped))
+    assert "MEASUREMENT_WITHOUT_PROVENANCE" in {f["code"] for f in result.hard_failures}
+    assert result.certification_status == "VISUAL_REJECTED"
+
+
+def test_digest_mismatch_blocks_a_perfect_candidate(contract):
+    reference = _tokens(lambda name, s, v: _VALUES[name])
+    result = compare(**_pack(contract, reference, reference, digest_checks=[
+        {"scope": "reference", "name": "home@390", "recorded": "sha256:aa", "observed": "sha256:bb"}]))
+    assert result.certification_status == "VISUAL_REJECTED"
+    assert {f["code"] for f in result.hard_failures} == {"DIGEST_MISMATCH"}
+
+
+def test_compatibility_mismatch_blocks_before_scoring_verdict(contract):
+    reference = _tokens(lambda name, s, v: _VALUES[name])
+    other_env = dict(_ENV, browser_build="chromium-1200")
+    result = compare(**_pack(contract, reference, reference, candidate_environment=other_env))
+    assert result.certification_status == "BLOCKED_COMPATIBILITY_MISMATCH"
+    assert any("browser_build" in r for r in result.blocked_reasons)
+
+
+def test_independence_violation_outranks_a_perfect_score(contract):
+    reference = _tokens(lambda name, s, v: _VALUES[name])
+    same = Identity("templates-01", "TEMPLATES")
+    result = compare(**_pack(contract, reference, reference, checker=same, pack_author=same))
+    assert result.certification_status == "BLOCKED_INDEPENDENCE_VIOLATION"
+    assert result.overall_score == Decimal("100")
+
+
+def test_late_exclusion_is_detected_by_the_baseline_digest(contract):
+    reference = _tokens(lambda name, s, v: _VALUES[name])
+    declared = [{"scope": "ads", "reason": "монетизация эталона",
+                 "provenance": "EXCLUSIONS.md", "declared_at": "2026-09-16T00:00:00Z"}]
+    baseline = exclusions_digest(declared)
+    late = declared + [{"scope": "colors", "reason": "портит оценку",
+                        "provenance": "нет", "declared_at": "2026-09-17T00:00:00Z"}]
+    result = compare(**_pack(contract, reference, reference,
+                             declared_exclusions=late, baseline_exclusions_digest=baseline))
+    assert "UNDECLARED_EXCLUSION" in {f["code"] for f in result.hard_failures}
+    assert result.certification_status == "VISUAL_REJECTED"
+
+
+def test_declared_component_exclusion_redistributes_weight(contract):
+    """Заранее исключённый компонент не мешает сертификации и не дарит баллов."""
+    reference = [t for t in _tokens(lambda name, s, v: _VALUES[name]) if t["name"] != "accent_color"]
+    excluded = [{"scope": "colors", "component": "colors",
+                 "reason": "эталон цвет не измеряет", "provenance": "EXCLUSIONS.md",
+                 "declared_at": "2026-09-16T00:00:00Z"}]
+    result = compare(**_pack(contract, reference, reference,
+                             declared_exclusions=excluded,
+                             baseline_exclusions_digest=exclusions_digest(excluded)))
+    assert result.certification_status == "VISUAL_CERTIFIED"
+    assert result.evidence_completeness == Decimal("100")
+    assert result.weight_redistribution
+    assert all(r["to_weight"] > r["from_weight"] for r in result.weight_redistribution)
+
+
+def test_unmeasured_component_without_exclusion_blocks(contract):
+    """Тот же пробел без объявления блокирует, а не проходит тихо."""
+    reference = [t for t in _tokens(lambda name, s, v: _VALUES[name]) if t["name"] != "accent_color"]
+    result = compare(**_pack(contract, reference, reference))
+    assert result.certification_status == "BLOCKED_EVIDENCE_INCOMPLETE"
+    assert result.evidence_completeness < Decimal("100")
+
+
+def test_empty_input_cannot_pass(contract):
+    result = compare(**_pack(contract, [], []))
+    assert result.certification_status != "VISUAL_CERTIFIED"
+    assert result.comparisons_performed == 0
+
+
+def test_compare_is_deterministic_across_runs(contract):
+    reference = _tokens(lambda name, s, v: _VALUES[name])
+    candidate = _tokens(lambda name, s, v:
+                        1290 if name == "content_width" else _VALUES[name])
+    first = compare(**_pack(contract, reference, candidate))
+    second = compare(**_pack(contract, list(reversed(reference)), list(reversed(candidate))))
+    assert first.overall_score == second.overall_score
+    assert first.surface_scores == second.surface_scores
+    assert first.viewport_scores == second.viewport_scores
+    assert first.certification_status == second.certification_status
+
+
+def test_large_geometry_drift_rejects(contract):
+    """Отклонение геометрии за полосу допуска обязано отклонять кандидата."""
+    reference = _tokens(lambda name, s, v: _VALUES[name])
+    candidate = _tokens(lambda name, s, v:
+                        600 if name == "content_width" else _VALUES[name])
+    result = compare(**_pack(contract, reference, candidate))
+    assert result.certification_status == "VISUAL_REJECTED"
+    assert result.overall_score < Decimal("80")
+
+
+def test_contract_files_match_their_recorded_checksums():
+    """Правка выпущенной версии обязана обнаруживаться, а не проходить тихо."""
+    import hashlib
+
+    base = REPO_ROOT / "contracts" / "visual-scoring" / "1.0.0"
+    recorded = json.loads((base / "checksums.json").read_text(encoding="utf-8"))
+    for name, digest in sorted(recorded["files"].items()):
+        path = (base / name).resolve()
+        actual = "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
+        assert actual == digest, f"{name} изменён после выпуска версии"
+
+
+def test_all_statuses_are_declared(contract):
+    assert set(contract["statuses"]) == {
+        "VISUAL_CERTIFIED", "VISUAL_REJECTED", "BLOCKED_EVIDENCE_INCOMPLETE",
+        "BLOCKED_COMPATIBILITY_MISMATCH", "BLOCKED_INDEPENDENCE_VIOLATION",
+        "BLOCKED_SCORING_CONTRACT_MISSING",
+    }
+
+
+# --- 1.0.3: конфликт приоритета правил component_assignment для *_sticky -----
+#
+# Независимый аудит PR #81 (NEEDS_CONTRACT_REPAIR) нашёл: правило
+# ^.*_sticky$ -> geometry (1.0.1) лежит в конце component_assignment.order.
+# assign_component() брала первое по порядку массива правило, у которого
+# совпал хоть один шаблон, — не самое специфичное. Любой *_sticky-токен, чей
+# префикс совпадал с более общим префиксным шаблоном другого, более раннего в
+# списке компонента, перехватывался этим компонентом вместо geometry. Тесты
+# ниже сначала независимо воспроизводят дефект на уже выпущенной (immutable)
+# 1.0.2, затем проверяют исправление в 1.0.3 и его общность.
+
+#: Имя токена -> префиксный шаблон, который перехватывал его под 1.0.1/1.0.2,
+#: и компонент, к которому этот шаблон принадлежит. Каждая строка — токен,
+#: чей префикс (до "_sticky") совпадает с чужим ^prefix_.*$-шаблоном.
+_STICKY_CONFLICT_CASES = [
+    ("cards_sticky", "cards_media"),
+    ("media_sticky", "cards_media"),
+    ("card_sticky", "cards_media"),
+    ("poster_sticky", "cards_media"),
+    ("border_sticky", "colors"),
+    ("surface_sticky", "colors"),
+    ("color_sticky", "colors"),
+    ("radius_sticky", "colors"),
+    ("type_sticky", "typography"),
+    ("font_sticky", "typography"),
+    ("viewport_sticky", "responsive"),
+    ("required_block_sticky", "structure_order"),
+]
+
+
+@pytest.mark.parametrize("name,hijacked_by", _STICKY_CONFLICT_CASES)
+def test_1_0_2_reproduces_the_sticky_regex_precedence_conflict(contract_102, name, hijacked_by):
+    """Независимое воспроизведение дефекта на уже выпущенной 1.0.2 (не декларация).
+
+    1.0.2 неизменяема: этот тест обязан продолжать проходить и после
+    исправления в 1.0.3 — иначе 1.0.2 перестала бы воспроизводиться побитово.
+    """
+    assert assign_component({"name": name}, contract_102) == hijacked_by
+
+
+@pytest.fixture(scope="module")
+def contract_103() -> dict:
+    return load_contract("1.0.3", root=REPO_ROOT / "contracts" / "visual-scoring")
+
+
+@pytest.mark.parametrize("name,hijacked_by", _STICKY_CONFLICT_CASES)
+def test_1_0_3_resolves_the_conflict_to_geometry_for_every_prefix(contract_103, name, hijacked_by):
+    """Исправление общее: работает для всех префиксов, перехватывавших *_sticky,
+    не только для header_sticky."""
+    assert assign_component({"name": name}, contract_103) == "geometry"
+    assert hijacked_by != "geometry"  # sanity: сценарий действительно был конфликтом
+
+
+@pytest.mark.parametrize("name", ["header_sticky", "nav_sticky", "footer_sticky", "sidebar_sticky"])
+def test_1_0_3_keeps_the_already_working_sticky_names_on_geometry(contract_103, name):
+    assert assign_component({"name": name}, contract_103) == "geometry"
+
+
+@pytest.mark.parametrize("name", ["modal_open", "cookie_banner_visible", "nav_collapsed"])
+def test_1_0_3_unrelated_boolean_token_without_a_rule_stays_fail_closed(contract_103, name):
+    """Токен без _sticky в имени по-прежнему не подхватывается новым приоритетом."""
+    assert assign_component({"name": name, "unit": "bool"}, contract_103) == "UNASSIGNED"
+
+
+@pytest.mark.parametrize("name,component", _COMPONENT_ASSIGNMENT_CASES)
+def test_1_0_3_all_legacy_component_assignments_still_work(contract_103, name, component):
+    assert assign_component({"name": name}, contract_103) == component
+
+
+@pytest.mark.parametrize("name,hijacked_by", _STICKY_CONFLICT_CASES)
+def test_1_0_3_conflict_resolution_does_not_depend_on_order_in_the_array(contract_103, name, hijacked_by):
+    """Результат для конфликтующих *_sticky-имён не зависит от случайного порядка
+    правил: у них есть явный priority, поэтому перестановка order не меняет вывод.
+
+    Ограничено именно конфликтующими именами (а не всем набором
+    _COMPONENT_ASSIGNMENT_CASES): среди правил без явного priority в контракте
+    и так есть безобидные, никогда не репортившиеся как дефект пересечения
+    (например card_radius совпадает и с ^card_.*$, и с ^.*_radius$) — их
+    тай-брейк исторически и намеренно зависит от позиции в массиве, эта версия
+    его не трогает и трогать не должна."""
+    import copy
+    import random
+
+    names_to_check = [n for n, _ in _STICKY_CONFLICT_CASES] + \
+        ["header_sticky", "nav_sticky", "footer_sticky", "sidebar_sticky"]
+    baseline = {n: assign_component({"name": n}, contract_103) for n in names_to_check}
+    assert baseline[name] == "geometry"
+    for seed in (0, 1, 2, 17, 99):
+        shuffled = copy.deepcopy(contract_103)
+        random.Random(seed).shuffle(shuffled["component_assignment"]["order"])
+        for n in names_to_check:
+            assert assign_component({"name": n}, shuffled) == baseline[n], (seed, n)
+
+
+def test_priority_resolution_mechanism_is_general_not_hardcoded_to_sticky():
+    """Синтетический контракт без единого упоминания sticky/header: доказывает,
+    что победа по priority работает для ЛЮБОЙ пары конфликтующих правил, а не
+    для конкретного токена/компонента, закреплённого в реальном контракте."""
+    synthetic = {
+        "component_assignment": {
+            "order": [
+                {"component": "GENERIC_PREFIX", "name_patterns": [r"^widget_.*$"]},
+                {"component": "SPECIFIC_SUFFIX", "priority": 50, "name_patterns": [r"^.*_variant$"]},
+            ]
+        }
+    }
+    # "widget_variant" совпадает с обоими правилами: общим префиксным (priority
+    # по умолчанию 0) и специфичным суффиксным (priority 50) — выше побеждает.
+    assert assign_component({"name": "widget_variant"}, synthetic) == "SPECIFIC_SUFFIX"
+    # Порядок правил в массиве не участвует в решении, когда priority различны.
+    synthetic_reversed = {
+        "component_assignment": {"order": list(reversed(synthetic["component_assignment"]["order"]))}
+    }
+    assert assign_component({"name": "widget_variant"}, synthetic_reversed) == "SPECIFIC_SUFFIX"
+    # Токен, совпадающий только с общим правилом, не задет новым механизмом.
+    assert assign_component({"name": "widget_thing"}, synthetic) == "GENERIC_PREFIX"
+
+
+def test_rules_without_explicit_priority_still_tie_break_by_array_order():
+    """Без priority ничего не поменялось: побеждает первое совпадение по порядку —
+    то же поведение, что было единственным механизмом в 1.0.0-1.0.2."""
+    synthetic = {
+        "component_assignment": {
+            "order": [
+                {"component": "FIRST", "name_patterns": [r"^.*_thing$"]},
+                {"component": "SECOND", "name_patterns": [r"^also_.*$"]},
+            ]
+        }
+    }
+    # "also_a_thing" совпадает с обоими правилами, ни одно priority не объявляет.
+    assert assign_component({"name": "also_a_thing"}, synthetic) == "FIRST"
+    reordered = {
+        "component_assignment": {"order": list(reversed(synthetic["component_assignment"]["order"]))}
+    }
+    assert assign_component({"name": "also_a_thing"}, reordered) == "SECOND"
+
+
+def test_1_0_3_contract_version_is_pinned(contract_103):
+    assert contract_103["contract_version"] == "visual-scoring/1.0.3"
+    assert contract_103["status"] == "immutable"
+
+
+def test_1_0_3_preserves_everything_except_component_assignment_order(contract_102, contract_103):
+    """component_assignment.order меняется намеренно; всё остальное — нет."""
+    assert contract_103["weights"] == contract_102["weights"]
+    assert contract_103["thresholds"] == contract_102["thresholds"]
+    assert contract_103["hard_failures"] == contract_102["hard_failures"]
+    assert contract_103["scoring_rules"] == contract_102["scoring_rules"]
+    assert contract_103["statuses"] == contract_102["statuses"]
+    assert contract_103["status_precedence"] == contract_102["status_precedence"]
+    assert contract_103["component_applicability"] == contract_102["component_applicability"]
+    assert contract_103["exclusions"] == contract_102["exclusions"]
+    assert contract_103["aggregation"] == contract_102["aggregation"]
+    assert contract_103["component_assignment"]["order"] != contract_102["component_assignment"]["order"]
+
+
+def test_1_0_3_files_match_their_recorded_checksums():
+    import hashlib
+
+    base = REPO_ROOT / "contracts" / "visual-scoring" / "1.0.3"
+    recorded = json.loads((base / "checksums.json").read_text(encoding="utf-8"))
+    for name, digest in sorted(recorded["files"].items()):
+        path = (base / name).resolve()
+        actual = "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
+        assert actual == digest, f"{name} изменён после выпуска версии"
+
+
+@pytest.mark.parametrize("version", ["1.0.0", "1.0.1", "1.0.2"])
+def test_older_versions_remain_untouched_by_the_1_0_3_fix(version):
+    """1.0.0-1.0.2 обязаны воспроизводиться по checksum и после этого исправления."""
+    import hashlib
+
+    base = REPO_ROOT / "contracts" / "visual-scoring" / version
+    recorded = json.loads((base / "checksums.json").read_text(encoding="utf-8"))
+    for name, digest in sorted(recorded["files"].items()):
+        path = (base / name).resolve()
+        actual = "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
+        assert actual == digest, f"{version}/{name} изменён — версия больше не immutable"
+
+
+def test_1_0_3_is_the_default_loaded_contract_version():
+    """Default обновлён только после того, как все проверки 1.0.3 зелёные."""
+    assert load_contract()["contract_version"] == "visual-scoring/1.0.3"
+
+
+# --- Дефект 2: check_compatibility честно обрабатывает отсутствующий (None) --
+# --- environment_manifest вместо падения или молчаливой фабрикации ----------
+#
+# Независимый аудит PR #81: сравнение кандидата (PR #76) с финальным эталоном
+# (PR #80/PR #81) без записанного environment_manifest эталонной стороны
+# обязано честно остановиться BLOCKED_COMPATIBILITY_MISMATCH. До исправления
+# check_compatibility(None, ...) падала TypeError — единственным способом
+# получить результат было подставить вместо отсутствующего манифеста эталона
+# манифест кандидата, что фабрикует совместимость и даёт неверный
+# VISUAL_CERTIFIED или BLOCKED_EVIDENCE_INCOMPLETE вместо честного отказа.
+
+
+def test_missing_reference_environment_manifest_does_not_crash():
+    """Независимое воспроизведение: раньше здесь был TypeError, а не статус."""
+    mismatches = check_compatibility(None, dict(_ENV))
+    assert mismatches, "отсутствие эталонного манифеста обязано быть mismatch, а не тишиной"
+    assert any("эталон" in m for m in mismatches)
+
+
+def test_missing_candidate_environment_manifest_does_not_crash():
+    mismatches = check_compatibility(dict(_ENV), None)
+    assert mismatches
+    assert any("кандидат" in m for m in mismatches)
+
+
+def test_both_environment_manifests_missing_does_not_crash():
+    mismatches = check_compatibility(None, None)
+    assert mismatches
+    assert any("эталон" in m for m in mismatches)
+    assert any("кандидат" in m for m in mismatches)
+
+
+def test_present_manifests_still_diff_key_by_key_after_the_fix():
+    """Правка не смягчает существующую посимвольную проверку различий."""
+    reference = dict(_ENV, browser_build="chromium-1234")
+    candidate = dict(_ENV, browser_build="chromium-1200")
+    mismatches = check_compatibility(reference, candidate)
+    assert any("browser_build" in m for m in mismatches)
+
+
+def _pr76_style_candidate_missing_structure_order(reference: list[dict]) -> list[dict]:
+    """PR76-подобный пробел: у кандидата нет структурных токенов эталона —
+    независимая от amd.online синтетика, воспроизводящая природу дефекта
+    (CHANGELOG 1.0.1: «отсутствие эталонных токенов structure_order (PR #80)»)
+    без единого литерала amd.online/PR76/PR80 в проверяемых данных."""
+    return [t for t in reference if t["name"] != "section_order"]
+
+
+def test_pr76_style_comparison_with_missing_reference_manifest_is_honestly_blocked(contract_103):
+    """Ядро дефекта 2: отсутствующий reference-side environment_manifest обязан
+    дать BLOCKED_COMPATIBILITY_MISMATCH, даже когда evidence кандидата тоже
+    неполна (как в PR #76) — а не BLOCKED_EVIDENCE_INCOMPLETE и не
+    VISUAL_CERTIFIED. reference_environment не копируется с candidate_environment:
+    он передан как None, честно отсутствующим."""
+    reference = _tokens(lambda name, s, v: _VALUES[name])
+    candidate = _pr76_style_candidate_missing_structure_order(reference)
+    result = compare(**_pack(contract_103, reference, candidate, reference_environment=None))
+    assert result.certification_status == "BLOCKED_COMPATIBILITY_MISMATCH"
+    assert any("отсутствует" in r for r in result.blocked_reasons)
+
+
+def test_pr76_style_comparison_with_incompatible_reference_manifest_is_blocked_not_certified(contract_103):
+    """Тот же сценарий, но манифест эталона присутствует и просто расходится с
+    кандидатским (не отсутствует, не скопирован) — итог тот же честный отказ."""
+    reference = _tokens(lambda name, s, v: _VALUES[name])
+    candidate = _pr76_style_candidate_missing_structure_order(reference)
+    incompatible_reference_env = dict(_ENV, renderer_driver_version="1.40.0")
+    result = compare(**_pack(contract_103, reference, candidate,
+                             reference_environment=incompatible_reference_env))
+    assert result.certification_status == "BLOCKED_COMPATIBILITY_MISMATCH"
+    assert result.certification_status != "BLOCKED_EVIDENCE_INCOMPLETE"
+    assert result.certification_status != "VISUAL_CERTIFIED"
+
+
+def test_compatible_pr76_style_reference_self_comparison_still_blocks_on_missing_evidence(contract_103):
+    """Контроль: без проблем с environment_manifest тот же пробел в evidence
+    по-прежнему честно даёт BLOCKED_EVIDENCE_INCOMPLETE (не подавлен фиксом)."""
+    reference = _tokens(lambda name, s, v: _VALUES[name])
+    candidate = _pr76_style_candidate_missing_structure_order(reference)
+    result = compare(**_pack(contract_103, reference, candidate))
+    assert result.certification_status == "BLOCKED_EVIDENCE_INCOMPLETE"
+
+
+# --- Дефект 2: регрессия на приоритет hard-failure/status --------------------
+
+
+def test_independence_violation_outranks_a_compatibility_mismatch(contract_103):
+    """Приоритет из status_precedence: BLOCKED_INDEPENDENCE_VIOLATION стоит выше
+    BLOCKED_COMPATIBILITY_MISMATCH, и hard-fail независимости обязан победить,
+    даже когда одновременно отсутствует reference-side environment_manifest."""
+    reference = _tokens(lambda name, s, v: _VALUES[name])
+    same = Identity("templates-01", "TEMPLATES")
+    result = compare(**_pack(contract_103, reference, reference,
+                             checker=same, pack_author=same,
+                             reference_environment=None))
+    assert result.certification_status == "BLOCKED_INDEPENDENCE_VIOLATION"
+
+
+def test_compatibility_mismatch_outranks_zero_comparisons(contract_103):
+    """compatibility проверяется раньше «ноль сравнений» — тоже часть той же
+    цепочки приоритетов status_precedence, которую защищает этот дефект.
+
+    decide() вызвана напрямую (как test_zero_comparisons_cannot_pass выше):
+    ноль сравнений через compare() почти всегда означает ещё и MISSING_SURFACE
+    (hard-fail), а этот тест проверяет именно следующую по приоритету пару —
+    compatibility против "ноль сравнений", без вмешательства hard-fail."""
+    result = _result(contract_103, lambda s, v: "100", comparisons_performed=0)
+    status, reasons = decide(result, contract_103, compatibility_mismatches=[
+        "environment_manifest эталона отсутствует — совместимость недоказуема"])
+    assert status == "BLOCKED_COMPATIBILITY_MISMATCH"
+
+
+def test_pr80_reference_self_comparison_stays_certified_under_1_0_3(contract_103):
+    """Сохранённое подтверждённое поведение: идентичный эталону кандидат с
+    совпадающим environment_manifest по-прежнему даёт 100.00% evidence
+    completeness и VISUAL_CERTIFIED — этот дефект её не задевает."""
+    reference = _tokens(lambda name, s, v: _VALUES[name])
+    result = compare(**_pack(contract_103, reference, reference))
+    assert result.evidence_completeness == Decimal("100")
+    assert result.certification_status == "VISUAL_CERTIFIED"

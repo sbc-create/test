@@ -1,0 +1,76 @@
+{
+  "reference_pack_id": "example-pack",
+  "reference_commit": "0123456789abcdef0123456789abcdef01234567",
+  "candidate_commit": "89abcdef0123456789abcdef0123456789abcdef",
+  "scoring_contract_version": "visual-scoring/1.0.0",
+  "checker_identity": { "id": "checker-01", "role": "INDEPENDENT_CHECKER" },
+  "pack_author_identity": { "id": "templates-01", "role": "TEMPLATES" },
+  "candidate_author_identity": { "id": "candidate-01", "role": "TEMPLATES_CANDIDATE" },
+  "environment_manifest": {
+    "renderer_engine": "chromium",
+    "renderer_driver_version": "1.62.1",
+    "browser_build": "chromium-1234",
+    "device_pixel_ratio": 1,
+    "screenshot_capture_mode": "viewport",
+    "locale": "ru-RU",
+    "timezone": "Europe/Moscow",
+    "font_availability": ["DejaVu Sans", "Liberation Sans"],
+    "animation_policy": "reduce",
+    "template_manifest_compatibility": {
+      "apiVersionRange": "1.4.0",
+      "sdkVersionRange": "1.4.0",
+      "seoContractVersionRange": "1.2.0"
+    }
+  },
+  "exclusions_digest": "sha256:9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+  "surface_scores": {
+    "home": 92.5,
+    "catalog": 88.0,
+    "collection_hub": 85.25,
+    "title": 90.0,
+    "not_found": 78.5
+  },
+  "viewport_scores": {
+    "390": 87.0,
+    "768": 89.25,
+    "1440": 90.5
+  },
+  "component_scores": [
+    {
+      "surface": "home",
+      "viewport": 390,
+      "component": "geometry",
+      "score": 94.0,
+      "weight": 30,
+      "tokens_compared": 6,
+      "tokens_missing": 0
+    },
+    {
+      "surface": "home",
+      "viewport": 390,
+      "component": "colors",
+      "score": 0,
+      "weight": 10,
+      "tokens_compared": 0,
+      "tokens_missing": 0,
+      "excluded": true,
+      "exclusion_reason": "эталон цветовые токены не измеряет; объявлено до сравнения"
+    }
+  ],
+  "overall_score": 89.13,
+  "comparisons_performed": 342,
+  "hard_failures": [],
+  "evidence_completeness": 100,
+  "certification_status": "VISUAL_CERTIFIED",
+  "blocked_reasons": [],
+  "weight_redistribution": [
+    {
+      "surface": "home",
+      "viewport": 390,
+      "component": "geometry",
+      "from_weight": 30,
+      "to_weight": 33.33
+    }
+  ],
+  "generated_at": "2026-09-16T18:00:00Z"
+}
