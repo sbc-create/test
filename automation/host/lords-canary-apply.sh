@@ -120,7 +120,14 @@ readonly ALLOWED_SITES=(lords-02)
 # (c6a11f65…), производственная линия — до версии 5 (434f9397…), и ни один из
 # двух отпечатков объединённому дереву не принадлежит. Значение ниже поставлено
 # перепином после слияния, а не выбрано из двух прежних.
-readonly EXPECT_DIGEST="5a8eff23da88dedc92e22011b8ea1f4f257f5b9853cacc03c8a8cc0dbb51036f"
+#
+# Версия 30 (721d4dd3…) пересчитана веткой content-runtime-animedia-lords33:
+# `_poster()` карточек списков ссылался на сырой `poster_url`, которого нет у
+# фикстурной записи, — карточки стенда рисовали только букву вместо уже
+# подготовленной локальной заглушки постера; порядок типов на главной стал
+# решением профиля (`layout.type_priority`), а не одного общего перечня.
+# scripts/release_input_audit.py::ARTIFACT_VERSIONS обновлён тем же коммитом.
+readonly EXPECT_DIGEST="721d4dd36ebdaf8c1f73efbe413419376cccee78b039cb0f32dda3ffd1c0c016"
 readonly REFRESH_TIMER="lords-content-refresh.timer"
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
