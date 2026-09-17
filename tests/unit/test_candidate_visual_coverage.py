@@ -135,10 +135,25 @@ class TestHeaderBreakpointStaysOnePassage:
     """768px давал шапку в 150px против 90/61 на соседних ширинах.
 
     Причина: тумблер меню прятался на 640px, а меню встраивалось в строку
-    шапки (`flex: 1 1 auto`) только на 1024px — в промежутке `.site-nav`
-    получал `width: 100%` и падал на отдельную строку, а сама она заворачивала
-    четыре пункта в две. Правило проверяется по тексту исходника: только
-    браузер посчитал бы реальную высоту, а этот тест обязан падать без него.
+    шапки только на 1024px — в промежутке `.site-nav` получал `width: 100%`
+    и падал на отдельную строку, а сама она заворачивала четыре пункта в две.
+    Правило проверяется по тексту исходника: только браузер посчитал бы
+    реальную высоту, а этот тест обязан падать без него.
+
+    `flex: 1 1 auto` закрывал именно этот перенос, но открывал второй той же
+    природы: с `flex-basis: auto` гипотетическая ширина `.site-nav` в расчёте
+    переноса строки берётся из полного, несвёрнутого содержимого списка меню
+    (несмотря на `overflow-x: auto` у вложенного `ul`) — на всех поверхностях,
+    где в шапке рядом ещё есть `.header-search` (все, кроме главной — там
+    форма скрыта намеренно), этой гипотетической ширины хватало, чтобы
+    целиком вытолкнуть `.header-search` на вторую строку шапки. Измерено
+    `tests/tools/measure_candidate_tokens.js` на кандидате: 152px на 768px и
+    110px на 1440px (catalog/collection_hub/title/not_found) против 99/61px
+    на главной, где `.header-search` нет и перенос не проявляется.
+    `flex-basis: 0%` отдаёт гипотетическую ширину нулю: `.site-nav` встаёт в
+    общую строку и получает через `flex-grow` только свободное место,
+    остальное список прокручивает сам — перенос исчезает на всех пяти
+    поверхностях, а не только на той, что без формы поиска.
     """
 
     def _theme_source(self) -> str:
@@ -167,15 +182,30 @@ class TestHeaderBreakpointStaysOnePassage:
     def test_nav_becomes_a_flex_item_in_the_same_640_block(self):
         """Меню обязано перейти в инлайн-раскладку там же, где прячется тумблер."""
         block = self._media_block(self._theme_source(), "640px")
-        assert re.search(r"\.site-nav\s*\{\{[^}]*flex:\s*1\s+1\s+auto", block), (
-            "нет .site-nav{{flex:1 1 auto}} в блоке 640px — меню снова получит "
+        assert re.search(r"\.site-nav\s*\{\{[^}]*flex:\s*1\s+1\s+0%", block), (
+            "нет .site-nav{{flex:1 1 0%}} в блоке 640px — меню снова получит "
             "width:100% и упадёт на отдельную строку между 640 и 1024px"
         )
+
+    def test_nav_flex_basis_is_not_auto(self):
+        """`flex-basis: auto` возвращает второй перенос — `.header-search` на свою строку.
+
+        См. docstring класса: с `auto` гипотетическая ширина `.site-nav`
+        берётся из полного списка меню, и на любой поверхности с формой
+        поиска в шапке (все, кроме главной) `.header-search` не помещается
+        в ту же строку и падает на вторую — высота шапки снова 110–152px
+        вместо 61px.
+        """
+        block = self._media_block(self._theme_source(), "640px")
+        nav_rule = re.search(r"\.site-nav\s*\{\{([^}]*)\}\}", block)
+        assert nav_rule, "нет правила .site-nav в блоке 640px"
+        assert "flex: 1 1 auto" not in nav_rule.group(1)
 
     def test_desktop_block_no_longer_duplicates_the_nav_inline_rule(self):
         source = self._theme_source()
         desktop = self._media_block(source, "1024px")
         assert "width: auto; flex: 1 1 auto" not in desktop
+        assert "width: auto; flex: 1 1 0%" not in desktop
 
 
 class TestMeasurementToolNeverCopiesReferenceValues:

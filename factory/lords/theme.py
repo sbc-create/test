@@ -828,8 +828,24 @@ main {{ padding: var(--pad) 0 40px; }}
      (тумблер прятался тут, а инлайн-раскладка меню начиналась только с 1024px)
      на 768px `.site-nav` шириной 100% занимало отдельную строку и заворачивало
      четыре пункта в две — шапка вырастала до 150px против 90px у соседних
-     ширин. Замерено `tests/tools/measure_reference.js` на живом стенде. */
-  .site-nav {{ display: block; width: auto; flex: 1 1 auto; min-width: 0; }}
+     ширин. Замерено `tests/tools/measure_reference.js` на живом стенде.
+
+     Второй, отдельный дефект той же природы остался и после этой правки:
+     `flex: 1 1 auto` берёт гипотетическую ширину `.site-nav` из полного,
+     несвёрнутого содержимого списка (даже при `overflow-x: auto` на `ul`),
+     а не из `min-width: 0`. На страницах, где в шапке рядом ещё есть
+     `.header-search` (все, кроме главной — там форма скрыта намеренно,
+     см. `_header_search`), это содержимое явно шире доступной строки, и
+     `.header-search` целиком переносится на вторую строку шапки: измерено
+     `tests/tools/measure_candidate_tokens.js` на кандидате — 152px на 768px
+     и 110px на 1440px (catalog/collection_hub/title/not_found), против
+     99/61px на главной, где `.header-search` отсутствует и перенос не
+     проявляется. `flex-basis: 0%` вместо `auto` отдаёт гипотетическую
+     ширину нулю: `.site-nav` встаёт в общую строку и получает через
+     `flex-grow` только реально свободное место, а собственный список
+     остаётся прокручиваемым при нехватке этого места — перенос исчезает на
+     всех пяти поверхностях сразу, а не только на той, что без формы поиска. */
+  .site-nav {{ display: block; width: auto; flex: 1 1 0%; min-width: 0; }}
   .site-nav ul {{ padding: 0; flex-wrap: nowrap; overflow-x: auto; }}
   .site-nav a {{ white-space: nowrap; }}
   .title-head {{ grid-template-columns: 260px minmax(0, 1fr); }}

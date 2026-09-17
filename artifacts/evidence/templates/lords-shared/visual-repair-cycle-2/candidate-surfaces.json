@@ -1,0 +1,4914 @@
+{
+  "measured_at_utc": "2026-09-17T15:28:29.012Z",
+  "base_url": "http://127.0.0.1:8932",
+  "candidate_commit": null,
+  "routes": {
+    "home": "/",
+    "catalog": "/catalog/",
+    "collection_hub": "/collections/",
+    "not_found": "/lords-visual-repair-nonexistent-route/",
+    "title": "/title/pepelnyy-nevod-2025/"
+  },
+  "surfaces": {
+    "home": {
+      "url": "http://127.0.0.1:8932/",
+      "viewports": {
+        "390": {
+          "httpStatus": 200,
+          "tokens": [
+            {
+              "name": "content_width",
+              "value": 390,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "main .container"
+            },
+            {
+              "name": "outer_gutter",
+              "value": 1,
+              "unit": "px",
+              "method": "CDP getComputedStyle('main .container').paddingLeft",
+              "evidence": "main .container"
+            },
+            {
+              "name": "page_height",
+              "value": 5447,
+              "unit": "px",
+              "method": "CDP documentElement.scrollHeight",
+              "evidence": "html"
+            },
+            {
+              "name": "horizontal_overflow",
+              "value": false,
+              "unit": "bool",
+              "method": "CDP scrollWidth>clientWidth+2",
+              "evidence": "html"
+            },
+            {
+              "name": "header_height",
+              "value": 61,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "header_sticky",
+              "value": true,
+              "unit": "bool",
+              "method": "CDP getComputedStyle.position",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "grid_columns",
+              "value": 2,
+              "unit": "count",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gridTemplateColumns",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "grid_gap",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gap",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "color_page_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).backgroundColor",
+              "evidence": "body"
+            },
+            {
+              "name": "surface_header_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=header]).backgroundColor",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "color_text_primary",
+              "value": "#161616",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).color",
+              "evidence": "body"
+            },
+            {
+              "name": "color_text_secondary",
+              "value": "#4f5964",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=footer]).color",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_accent_background",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.brand__mark).backgroundColor",
+              "evidence": ".brand__mark"
+            },
+            {
+              "name": "color_link",
+              "value": "#268176",
+              "unit": "color",
+              "method": "CDP getComputedStyle(footer ul a).color",
+              "evidence": "footer ul a"
+            },
+            {
+              "name": "type_h1_font_size",
+              "value": 22.4,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_line_height",
+              "value": 26.88,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h2_font_size",
+              "value": 18.4,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h2_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h2_line_height",
+              "value": 22.08,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h3_font_size",
+              "value": 14.72,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_line_height",
+              "value": 22.82,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_body_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_p_font_size",
+              "value": 13.12,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_line_height",
+              "value": 20.34,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_a_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_button_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "card_aspect_ratio",
+              "value": 0.67,
+              "unit": "ratio",
+              "method": "CDP getBoundingClientRect на .card__poster, режим по частоте",
+              "evidence": ".card__poster"
+            },
+            {
+              "name": "cards_sampled",
+              "value": 18,
+              "unit": "count",
+              "method": "CDP querySelectorAll(.card__poster).length с rect>8x8",
+              "evidence": ".card__poster"
+            },
+            {
+              "name": "surface_card_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).backgroundColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "color_border_default",
+              "value": "#e0e4e8",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).borderTopColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "block_order",
+              "value": "header|primary-nav|main-content|home:hero|home:hero_search|home:fresh_episodes|card-grid|home:calendar|home:latest_grid|card-grid|home:genre_chips|footer",
+              "unit": "order",
+              "method": "querySelectorAll(\"[data-visual-role],[data-block]\") в порядке документа",
+              "evidence": "[data-visual-role],[data-block]"
+            },
+            {
+              "name": "required_block_header_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"header\"]')",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "required_block_primary-nav_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"primary-nav\"]')",
+              "evidence": "[data-visual-role=\"primary-nav\"]"
+            },
+            {
+              "name": "required_block_main-content_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"main-content\"]')",
+              "evidence": "[data-visual-role=\"main-content\"]"
+            },
+            {
+              "name": "required_block_footer_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"footer\"]')",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_link_hover",
+              "value": "#268176",
+              "unit": "color",
+              "method": "Playwright page.hover() + getComputedStyle.color",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            },
+            {
+              "name": "color_focus_ring",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "Playwright page.focus() + getComputedStyle.outlineColor",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            }
+          ],
+          "diagnostics": []
+        },
+        "768": {
+          "httpStatus": 200,
+          "tokens": [
+            {
+              "name": "content_width",
+              "value": 768,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "main .container"
+            },
+            {
+              "name": "outer_gutter",
+              "value": 1,
+              "unit": "px",
+              "method": "CDP getComputedStyle('main .container').paddingLeft",
+              "evidence": "main .container"
+            },
+            {
+              "name": "page_height",
+              "value": 3525,
+              "unit": "px",
+              "method": "CDP documentElement.scrollHeight",
+              "evidence": "html"
+            },
+            {
+              "name": "horizontal_overflow",
+              "value": false,
+              "unit": "bool",
+              "method": "CDP scrollWidth>clientWidth+2",
+              "evidence": "html"
+            },
+            {
+              "name": "header_height",
+              "value": 61,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "header_sticky",
+              "value": true,
+              "unit": "bool",
+              "method": "CDP getComputedStyle.position",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "grid_columns",
+              "value": 4,
+              "unit": "count",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gridTemplateColumns",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "grid_gap",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gap",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "color_page_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).backgroundColor",
+              "evidence": "body"
+            },
+            {
+              "name": "surface_header_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=header]).backgroundColor",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "color_text_primary",
+              "value": "#161616",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).color",
+              "evidence": "body"
+            },
+            {
+              "name": "color_text_secondary",
+              "value": "#4f5964",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=footer]).color",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_accent_background",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.brand__mark).backgroundColor",
+              "evidence": ".brand__mark"
+            },
+            {
+              "name": "color_link",
+              "value": "#268176",
+              "unit": "color",
+              "method": "CDP getComputedStyle(footer ul a).color",
+              "evidence": "footer ul a"
+            },
+            {
+              "name": "type_h1_font_size",
+              "value": 22.4,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_line_height",
+              "value": 26.88,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h2_font_size",
+              "value": 18.4,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h2_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h2_line_height",
+              "value": 22.08,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h3_font_size",
+              "value": 14.72,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_line_height",
+              "value": 22.82,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_body_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_p_font_size",
+              "value": 13.12,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_line_height",
+              "value": 20.34,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_a_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_button_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "card_aspect_ratio",
+              "value": 0.67,
+              "unit": "ratio",
+              "method": "CDP getBoundingClientRect на .card__poster, режим по частоте",
+              "evidence": ".card__poster"
+            },
+            {
+              "name": "cards_sampled",
+              "value": 18,
+              "unit": "count",
+              "method": "CDP querySelectorAll(.card__poster).length с rect>8x8",
+              "evidence": ".card__poster"
+            },
+            {
+              "name": "surface_card_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).backgroundColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "color_border_default",
+              "value": "#e0e4e8",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).borderTopColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "block_order",
+              "value": "header|primary-nav|main-content|home:hero|home:hero_search|home:fresh_episodes|card-grid|home:calendar|home:latest_grid|card-grid|home:genre_chips|footer",
+              "unit": "order",
+              "method": "querySelectorAll(\"[data-visual-role],[data-block]\") в порядке документа",
+              "evidence": "[data-visual-role],[data-block]"
+            },
+            {
+              "name": "required_block_header_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"header\"]')",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "required_block_primary-nav_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"primary-nav\"]')",
+              "evidence": "[data-visual-role=\"primary-nav\"]"
+            },
+            {
+              "name": "required_block_main-content_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"main-content\"]')",
+              "evidence": "[data-visual-role=\"main-content\"]"
+            },
+            {
+              "name": "required_block_footer_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"footer\"]')",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_link_hover",
+              "value": "#268176",
+              "unit": "color",
+              "method": "Playwright page.hover() + getComputedStyle.color",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            },
+            {
+              "name": "color_focus_ring",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "Playwright page.focus() + getComputedStyle.outlineColor",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            }
+          ],
+          "diagnostics": []
+        },
+        "1440": {
+          "httpStatus": 200,
+          "tokens": [
+            {
+              "name": "content_width",
+              "value": 1440,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "main .container"
+            },
+            {
+              "name": "outer_gutter",
+              "value": 1,
+              "unit": "px",
+              "method": "CDP getComputedStyle('main .container').paddingLeft",
+              "evidence": "main .container"
+            },
+            {
+              "name": "page_height",
+              "value": 2720,
+              "unit": "px",
+              "method": "CDP documentElement.scrollHeight",
+              "evidence": "html"
+            },
+            {
+              "name": "horizontal_overflow",
+              "value": false,
+              "unit": "bool",
+              "method": "CDP scrollWidth>clientWidth+2",
+              "evidence": "html"
+            },
+            {
+              "name": "header_height",
+              "value": 61,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "header_sticky",
+              "value": true,
+              "unit": "bool",
+              "method": "CDP getComputedStyle.position",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "grid_columns",
+              "value": 6,
+              "unit": "count",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gridTemplateColumns",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "grid_gap",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gap",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "color_page_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).backgroundColor",
+              "evidence": "body"
+            },
+            {
+              "name": "surface_header_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=header]).backgroundColor",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "color_text_primary",
+              "value": "#161616",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).color",
+              "evidence": "body"
+            },
+            {
+              "name": "color_text_secondary",
+              "value": "#4f5964",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=footer]).color",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_accent_background",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.brand__mark).backgroundColor",
+              "evidence": ".brand__mark"
+            },
+            {
+              "name": "color_link",
+              "value": "#268176",
+              "unit": "color",
+              "method": "CDP getComputedStyle(footer ul a).color",
+              "evidence": "footer ul a"
+            },
+            {
+              "name": "type_h1_font_size",
+              "value": 22.4,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_line_height",
+              "value": 26.88,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h2_font_size",
+              "value": 18.4,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h2_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h2_line_height",
+              "value": 22.08,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h3_font_size",
+              "value": 14.72,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_line_height",
+              "value": 22.82,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_body_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_p_font_size",
+              "value": 13.12,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_line_height",
+              "value": 20.34,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_a_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_button_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "card_aspect_ratio",
+              "value": 0.67,
+              "unit": "ratio",
+              "method": "CDP getBoundingClientRect на .card__poster, режим по частоте",
+              "evidence": ".card__poster"
+            },
+            {
+              "name": "cards_sampled",
+              "value": 18,
+              "unit": "count",
+              "method": "CDP querySelectorAll(.card__poster).length с rect>8x8",
+              "evidence": ".card__poster"
+            },
+            {
+              "name": "surface_card_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).backgroundColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "color_border_default",
+              "value": "#e0e4e8",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).borderTopColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "block_order",
+              "value": "header|primary-nav|main-content|home:hero|home:hero_search|home:fresh_episodes|card-grid|home:calendar|home:latest_grid|card-grid|home:genre_chips|footer",
+              "unit": "order",
+              "method": "querySelectorAll(\"[data-visual-role],[data-block]\") в порядке документа",
+              "evidence": "[data-visual-role],[data-block]"
+            },
+            {
+              "name": "required_block_header_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"header\"]')",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "required_block_primary-nav_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"primary-nav\"]')",
+              "evidence": "[data-visual-role=\"primary-nav\"]"
+            },
+            {
+              "name": "required_block_main-content_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"main-content\"]')",
+              "evidence": "[data-visual-role=\"main-content\"]"
+            },
+            {
+              "name": "required_block_footer_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"footer\"]')",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_link_hover",
+              "value": "#268176",
+              "unit": "color",
+              "method": "Playwright page.hover() + getComputedStyle.color",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            },
+            {
+              "name": "color_focus_ring",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "Playwright page.focus() + getComputedStyle.outlineColor",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            }
+          ],
+          "diagnostics": []
+        }
+      }
+    },
+    "catalog": {
+      "url": "http://127.0.0.1:8932/catalog/",
+      "viewports": {
+        "390": {
+          "httpStatus": 200,
+          "tokens": [
+            {
+              "name": "content_width",
+              "value": 390,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "main .container"
+            },
+            {
+              "name": "outer_gutter",
+              "value": 1,
+              "unit": "px",
+              "method": "CDP getComputedStyle('main .container').paddingLeft",
+              "evidence": "main .container"
+            },
+            {
+              "name": "page_height",
+              "value": 6695,
+              "unit": "px",
+              "method": "CDP documentElement.scrollHeight",
+              "evidence": "html"
+            },
+            {
+              "name": "horizontal_overflow",
+              "value": false,
+              "unit": "bool",
+              "method": "CDP scrollWidth>clientWidth+2",
+              "evidence": "html"
+            },
+            {
+              "name": "header_height",
+              "value": 125.8,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "header_sticky",
+              "value": true,
+              "unit": "bool",
+              "method": "CDP getComputedStyle.position",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "grid_columns",
+              "value": 2,
+              "unit": "count",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gridTemplateColumns",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "grid_gap",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gap",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "color_page_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).backgroundColor",
+              "evidence": "body"
+            },
+            {
+              "name": "surface_header_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=header]).backgroundColor",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "color_text_primary",
+              "value": "#161616",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).color",
+              "evidence": "body"
+            },
+            {
+              "name": "color_text_secondary",
+              "value": "#4f5964",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=footer]).color",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_accent_background",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.brand__mark).backgroundColor",
+              "evidence": ".brand__mark"
+            },
+            {
+              "name": "color_link",
+              "value": "#268176",
+              "unit": "color",
+              "method": "CDP getComputedStyle(footer ul a).color",
+              "evidence": "footer ul a"
+            },
+            {
+              "name": "type_h1_font_size",
+              "value": 22.4,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_line_height",
+              "value": 26.88,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h2_font_size",
+              "value": 15.2,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h2_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h2_line_height",
+              "value": 18.24,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h3_font_size",
+              "value": 14.72,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_line_height",
+              "value": 22.82,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_body_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_p_font_size",
+              "value": 13.12,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_line_height",
+              "value": 20.34,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_a_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_button_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "card_aspect_ratio",
+              "value": 0.67,
+              "unit": "ratio",
+              "method": "CDP getBoundingClientRect на .card__poster, режим по частоте",
+              "evidence": ".card__poster"
+            },
+            {
+              "name": "cards_sampled",
+              "value": 24,
+              "unit": "count",
+              "method": "CDP querySelectorAll(.card__poster).length с rect>8x8",
+              "evidence": ".card__poster"
+            },
+            {
+              "name": "surface_card_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).backgroundColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "color_border_default",
+              "value": "#e0e4e8",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).borderTopColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "block_order",
+              "value": "header|primary-nav|main-content|facets|card-grid|pagination|footer",
+              "unit": "order",
+              "method": "querySelectorAll(\"[data-visual-role],[data-block]\") в порядке документа",
+              "evidence": "[data-visual-role],[data-block]"
+            },
+            {
+              "name": "required_block_header_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"header\"]')",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "required_block_primary-nav_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"primary-nav\"]')",
+              "evidence": "[data-visual-role=\"primary-nav\"]"
+            },
+            {
+              "name": "required_block_main-content_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"main-content\"]')",
+              "evidence": "[data-visual-role=\"main-content\"]"
+            },
+            {
+              "name": "required_block_footer_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"footer\"]')",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_link_hover",
+              "value": "#268176",
+              "unit": "color",
+              "method": "Playwright page.hover() + getComputedStyle.color",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            },
+            {
+              "name": "color_focus_ring",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "Playwright page.focus() + getComputedStyle.outlineColor",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            }
+          ],
+          "diagnostics": []
+        },
+        "768": {
+          "httpStatus": 200,
+          "tokens": [
+            {
+              "name": "content_width",
+              "value": 768,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "main .container"
+            },
+            {
+              "name": "outer_gutter",
+              "value": 1,
+              "unit": "px",
+              "method": "CDP getComputedStyle('main .container').paddingLeft",
+              "evidence": "main .container"
+            },
+            {
+              "name": "page_height",
+              "value": 3699,
+              "unit": "px",
+              "method": "CDP documentElement.scrollHeight",
+              "evidence": "html"
+            },
+            {
+              "name": "horizontal_overflow",
+              "value": false,
+              "unit": "bool",
+              "method": "CDP scrollWidth>clientWidth+2",
+              "evidence": "html"
+            },
+            {
+              "name": "header_height",
+              "value": 61,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "header_sticky",
+              "value": true,
+              "unit": "bool",
+              "method": "CDP getComputedStyle.position",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "grid_columns",
+              "value": 4,
+              "unit": "count",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gridTemplateColumns",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "grid_gap",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gap",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "color_page_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).backgroundColor",
+              "evidence": "body"
+            },
+            {
+              "name": "surface_header_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=header]).backgroundColor",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "color_text_primary",
+              "value": "#161616",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).color",
+              "evidence": "body"
+            },
+            {
+              "name": "color_text_secondary",
+              "value": "#4f5964",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=footer]).color",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_accent_background",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.brand__mark).backgroundColor",
+              "evidence": ".brand__mark"
+            },
+            {
+              "name": "color_link",
+              "value": "#268176",
+              "unit": "color",
+              "method": "CDP getComputedStyle(footer ul a).color",
+              "evidence": "footer ul a"
+            },
+            {
+              "name": "type_h1_font_size",
+              "value": 22.4,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_line_height",
+              "value": 26.88,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h2_font_size",
+              "value": 15.2,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h2_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h2_line_height",
+              "value": 18.24,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h3_font_size",
+              "value": 14.72,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_line_height",
+              "value": 22.82,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_body_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_p_font_size",
+              "value": 13.12,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_line_height",
+              "value": 20.34,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_a_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_button_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "card_aspect_ratio",
+              "value": 0.67,
+              "unit": "ratio",
+              "method": "CDP getBoundingClientRect на .card__poster, режим по частоте",
+              "evidence": ".card__poster"
+            },
+            {
+              "name": "cards_sampled",
+              "value": 24,
+              "unit": "count",
+              "method": "CDP querySelectorAll(.card__poster).length с rect>8x8",
+              "evidence": ".card__poster"
+            },
+            {
+              "name": "surface_card_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).backgroundColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "color_border_default",
+              "value": "#e0e4e8",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).borderTopColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "block_order",
+              "value": "header|primary-nav|main-content|facets|card-grid|pagination|footer",
+              "unit": "order",
+              "method": "querySelectorAll(\"[data-visual-role],[data-block]\") в порядке документа",
+              "evidence": "[data-visual-role],[data-block]"
+            },
+            {
+              "name": "required_block_header_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"header\"]')",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "required_block_primary-nav_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"primary-nav\"]')",
+              "evidence": "[data-visual-role=\"primary-nav\"]"
+            },
+            {
+              "name": "required_block_main-content_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"main-content\"]')",
+              "evidence": "[data-visual-role=\"main-content\"]"
+            },
+            {
+              "name": "required_block_footer_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"footer\"]')",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_link_hover",
+              "value": "#268176",
+              "unit": "color",
+              "method": "Playwright page.hover() + getComputedStyle.color",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            },
+            {
+              "name": "color_focus_ring",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "Playwright page.focus() + getComputedStyle.outlineColor",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            }
+          ],
+          "diagnostics": []
+        },
+        "1440": {
+          "httpStatus": 200,
+          "tokens": [
+            {
+              "name": "content_width",
+              "value": 1440,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "main .container"
+            },
+            {
+              "name": "outer_gutter",
+              "value": 1,
+              "unit": "px",
+              "method": "CDP getComputedStyle('main .container').paddingLeft",
+              "evidence": "main .container"
+            },
+            {
+              "name": "page_height",
+              "value": 3029,
+              "unit": "px",
+              "method": "CDP documentElement.scrollHeight",
+              "evidence": "html"
+            },
+            {
+              "name": "horizontal_overflow",
+              "value": false,
+              "unit": "bool",
+              "method": "CDP scrollWidth>clientWidth+2",
+              "evidence": "html"
+            },
+            {
+              "name": "header_height",
+              "value": 61,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "header_sticky",
+              "value": true,
+              "unit": "bool",
+              "method": "CDP getComputedStyle.position",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "grid_columns",
+              "value": 6,
+              "unit": "count",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gridTemplateColumns",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "grid_gap",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gap",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "color_page_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).backgroundColor",
+              "evidence": "body"
+            },
+            {
+              "name": "surface_header_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=header]).backgroundColor",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "color_text_primary",
+              "value": "#161616",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).color",
+              "evidence": "body"
+            },
+            {
+              "name": "color_text_secondary",
+              "value": "#4f5964",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=footer]).color",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_accent_background",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.brand__mark).backgroundColor",
+              "evidence": ".brand__mark"
+            },
+            {
+              "name": "color_link",
+              "value": "#268176",
+              "unit": "color",
+              "method": "CDP getComputedStyle(footer ul a).color",
+              "evidence": "footer ul a"
+            },
+            {
+              "name": "type_h1_font_size",
+              "value": 22.4,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_line_height",
+              "value": 26.88,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h2_font_size",
+              "value": 15.2,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h2_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h2_line_height",
+              "value": 18.24,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h3_font_size",
+              "value": 14.72,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_line_height",
+              "value": 22.82,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_body_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_p_font_size",
+              "value": 13.12,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_line_height",
+              "value": 20.34,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_a_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_button_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "card_aspect_ratio",
+              "value": 0.67,
+              "unit": "ratio",
+              "method": "CDP getBoundingClientRect на .card__poster, режим по частоте",
+              "evidence": ".card__poster"
+            },
+            {
+              "name": "cards_sampled",
+              "value": 24,
+              "unit": "count",
+              "method": "CDP querySelectorAll(.card__poster).length с rect>8x8",
+              "evidence": ".card__poster"
+            },
+            {
+              "name": "surface_card_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).backgroundColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "color_border_default",
+              "value": "#e0e4e8",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).borderTopColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "block_order",
+              "value": "header|primary-nav|main-content|facets|card-grid|pagination|footer",
+              "unit": "order",
+              "method": "querySelectorAll(\"[data-visual-role],[data-block]\") в порядке документа",
+              "evidence": "[data-visual-role],[data-block]"
+            },
+            {
+              "name": "required_block_header_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"header\"]')",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "required_block_primary-nav_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"primary-nav\"]')",
+              "evidence": "[data-visual-role=\"primary-nav\"]"
+            },
+            {
+              "name": "required_block_main-content_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"main-content\"]')",
+              "evidence": "[data-visual-role=\"main-content\"]"
+            },
+            {
+              "name": "required_block_footer_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"footer\"]')",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_link_hover",
+              "value": "#268176",
+              "unit": "color",
+              "method": "Playwright page.hover() + getComputedStyle.color",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            },
+            {
+              "name": "color_focus_ring",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "Playwright page.focus() + getComputedStyle.outlineColor",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            }
+          ],
+          "diagnostics": []
+        }
+      }
+    },
+    "collection_hub": {
+      "url": "http://127.0.0.1:8932/collections/",
+      "viewports": {
+        "390": {
+          "httpStatus": 200,
+          "tokens": [
+            {
+              "name": "content_width",
+              "value": 390,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "main .container"
+            },
+            {
+              "name": "outer_gutter",
+              "value": 1,
+              "unit": "px",
+              "method": "CDP getComputedStyle('main .container').paddingLeft",
+              "evidence": "main .container"
+            },
+            {
+              "name": "page_height",
+              "value": 1245,
+              "unit": "px",
+              "method": "CDP documentElement.scrollHeight",
+              "evidence": "html"
+            },
+            {
+              "name": "horizontal_overflow",
+              "value": false,
+              "unit": "bool",
+              "method": "CDP scrollWidth>clientWidth+2",
+              "evidence": "html"
+            },
+            {
+              "name": "header_height",
+              "value": 125.8,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "header_sticky",
+              "value": true,
+              "unit": "bool",
+              "method": "CDP getComputedStyle.position",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "grid_columns",
+              "value": 2,
+              "unit": "count",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gridTemplateColumns",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "grid_gap",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gap",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "color_page_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).backgroundColor",
+              "evidence": "body"
+            },
+            {
+              "name": "surface_header_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=header]).backgroundColor",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "color_text_primary",
+              "value": "#161616",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).color",
+              "evidence": "body"
+            },
+            {
+              "name": "color_text_secondary",
+              "value": "#4f5964",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=footer]).color",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_accent_background",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.brand__mark).backgroundColor",
+              "evidence": ".brand__mark"
+            },
+            {
+              "name": "color_link",
+              "value": "#268176",
+              "unit": "color",
+              "method": "CDP getComputedStyle(footer ul a).color",
+              "evidence": "footer ul a"
+            },
+            {
+              "name": "type_h1_font_size",
+              "value": 22.4,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_line_height",
+              "value": 26.88,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h3_font_size",
+              "value": 14.72,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_line_height",
+              "value": 22.82,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_body_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_p_font_size",
+              "value": 13.12,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_line_height",
+              "value": 20.34,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_a_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_button_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "surface_card_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).backgroundColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "color_border_default",
+              "value": "#e0e4e8",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).borderTopColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "block_order",
+              "value": "header|primary-nav|main-content|card-grid|footer",
+              "unit": "order",
+              "method": "querySelectorAll(\"[data-visual-role],[data-block]\") в порядке документа",
+              "evidence": "[data-visual-role],[data-block]"
+            },
+            {
+              "name": "required_block_header_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"header\"]')",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "required_block_primary-nav_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"primary-nav\"]')",
+              "evidence": "[data-visual-role=\"primary-nav\"]"
+            },
+            {
+              "name": "required_block_main-content_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"main-content\"]')",
+              "evidence": "[data-visual-role=\"main-content\"]"
+            },
+            {
+              "name": "required_block_footer_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"footer\"]')",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_link_hover",
+              "value": "#268176",
+              "unit": "color",
+              "method": "Playwright page.hover() + getComputedStyle.color",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            },
+            {
+              "name": "color_focus_ring",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "Playwright page.focus() + getComputedStyle.outlineColor",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            }
+          ],
+          "diagnostics": [
+            {
+              "name": "type_h2_font_size",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h2",
+              "attempted_selector": "h2"
+            },
+            {
+              "name": "type_h2_font_weight",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h2",
+              "attempted_selector": "h2"
+            },
+            {
+              "name": "type_h2_line_height",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h2",
+              "attempted_selector": "h2"
+            },
+            {
+              "name": "card_aspect_ratio",
+              "status": "unavailable",
+              "reason": "карточки есть, но ни у одной нет .card__poster (текстовые карточки без медиа — дизайн, не дефект измерения)",
+              "attempted_selector": ".card__poster"
+            },
+            {
+              "name": "cards_sampled",
+              "status": "unavailable",
+              "reason": "карточки есть, но ни у одной нет .card__poster (текстовые карточки без медиа — дизайн, не дефект измерения)",
+              "attempted_selector": ".card__poster"
+            }
+          ]
+        },
+        "768": {
+          "httpStatus": 200,
+          "tokens": [
+            {
+              "name": "content_width",
+              "value": 768,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "main .container"
+            },
+            {
+              "name": "outer_gutter",
+              "value": 1,
+              "unit": "px",
+              "method": "CDP getComputedStyle('main .container').paddingLeft",
+              "evidence": "main .container"
+            },
+            {
+              "name": "page_height",
+              "value": 1000,
+              "unit": "px",
+              "method": "CDP documentElement.scrollHeight",
+              "evidence": "html"
+            },
+            {
+              "name": "horizontal_overflow",
+              "value": false,
+              "unit": "bool",
+              "method": "CDP scrollWidth>clientWidth+2",
+              "evidence": "html"
+            },
+            {
+              "name": "header_height",
+              "value": 61,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "header_sticky",
+              "value": true,
+              "unit": "bool",
+              "method": "CDP getComputedStyle.position",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "grid_columns",
+              "value": 4,
+              "unit": "count",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gridTemplateColumns",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "grid_gap",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gap",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "color_page_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).backgroundColor",
+              "evidence": "body"
+            },
+            {
+              "name": "surface_header_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=header]).backgroundColor",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "color_text_primary",
+              "value": "#161616",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).color",
+              "evidence": "body"
+            },
+            {
+              "name": "color_text_secondary",
+              "value": "#4f5964",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=footer]).color",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_accent_background",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.brand__mark).backgroundColor",
+              "evidence": ".brand__mark"
+            },
+            {
+              "name": "color_link",
+              "value": "#268176",
+              "unit": "color",
+              "method": "CDP getComputedStyle(footer ul a).color",
+              "evidence": "footer ul a"
+            },
+            {
+              "name": "type_h1_font_size",
+              "value": 22.4,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_line_height",
+              "value": 26.88,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h3_font_size",
+              "value": 14.72,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_line_height",
+              "value": 22.82,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_body_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_p_font_size",
+              "value": 13.12,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_line_height",
+              "value": 20.34,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_a_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_button_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "surface_card_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).backgroundColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "color_border_default",
+              "value": "#e0e4e8",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).borderTopColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "block_order",
+              "value": "header|primary-nav|main-content|card-grid|footer",
+              "unit": "order",
+              "method": "querySelectorAll(\"[data-visual-role],[data-block]\") в порядке документа",
+              "evidence": "[data-visual-role],[data-block]"
+            },
+            {
+              "name": "required_block_header_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"header\"]')",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "required_block_primary-nav_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"primary-nav\"]')",
+              "evidence": "[data-visual-role=\"primary-nav\"]"
+            },
+            {
+              "name": "required_block_main-content_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"main-content\"]')",
+              "evidence": "[data-visual-role=\"main-content\"]"
+            },
+            {
+              "name": "required_block_footer_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"footer\"]')",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_link_hover",
+              "value": "#268176",
+              "unit": "color",
+              "method": "Playwright page.hover() + getComputedStyle.color",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            },
+            {
+              "name": "color_focus_ring",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "Playwright page.focus() + getComputedStyle.outlineColor",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            }
+          ],
+          "diagnostics": [
+            {
+              "name": "type_h2_font_size",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h2",
+              "attempted_selector": "h2"
+            },
+            {
+              "name": "type_h2_font_weight",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h2",
+              "attempted_selector": "h2"
+            },
+            {
+              "name": "type_h2_line_height",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h2",
+              "attempted_selector": "h2"
+            },
+            {
+              "name": "card_aspect_ratio",
+              "status": "unavailable",
+              "reason": "карточки есть, но ни у одной нет .card__poster (текстовые карточки без медиа — дизайн, не дефект измерения)",
+              "attempted_selector": ".card__poster"
+            },
+            {
+              "name": "cards_sampled",
+              "status": "unavailable",
+              "reason": "карточки есть, но ни у одной нет .card__poster (текстовые карточки без медиа — дизайн, не дефект измерения)",
+              "attempted_selector": ".card__poster"
+            }
+          ]
+        },
+        "1440": {
+          "httpStatus": 200,
+          "tokens": [
+            {
+              "name": "content_width",
+              "value": 1440,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "main .container"
+            },
+            {
+              "name": "outer_gutter",
+              "value": 1,
+              "unit": "px",
+              "method": "CDP getComputedStyle('main .container').paddingLeft",
+              "evidence": "main .container"
+            },
+            {
+              "name": "page_height",
+              "value": 1000,
+              "unit": "px",
+              "method": "CDP documentElement.scrollHeight",
+              "evidence": "html"
+            },
+            {
+              "name": "horizontal_overflow",
+              "value": false,
+              "unit": "bool",
+              "method": "CDP scrollWidth>clientWidth+2",
+              "evidence": "html"
+            },
+            {
+              "name": "header_height",
+              "value": 61,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "header_sticky",
+              "value": true,
+              "unit": "bool",
+              "method": "CDP getComputedStyle.position",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "grid_columns",
+              "value": 6,
+              "unit": "count",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gridTemplateColumns",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "grid_gap",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gap",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "color_page_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).backgroundColor",
+              "evidence": "body"
+            },
+            {
+              "name": "surface_header_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=header]).backgroundColor",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "color_text_primary",
+              "value": "#161616",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).color",
+              "evidence": "body"
+            },
+            {
+              "name": "color_text_secondary",
+              "value": "#4f5964",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=footer]).color",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_accent_background",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.brand__mark).backgroundColor",
+              "evidence": ".brand__mark"
+            },
+            {
+              "name": "color_link",
+              "value": "#268176",
+              "unit": "color",
+              "method": "CDP getComputedStyle(footer ul a).color",
+              "evidence": "footer ul a"
+            },
+            {
+              "name": "type_h1_font_size",
+              "value": 22.4,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_line_height",
+              "value": 26.88,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h3_font_size",
+              "value": 14.72,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_line_height",
+              "value": 22.82,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_body_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_p_font_size",
+              "value": 13.12,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_line_height",
+              "value": 20.34,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_a_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_button_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "surface_card_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).backgroundColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "color_border_default",
+              "value": "#e0e4e8",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).borderTopColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "block_order",
+              "value": "header|primary-nav|main-content|card-grid|footer",
+              "unit": "order",
+              "method": "querySelectorAll(\"[data-visual-role],[data-block]\") в порядке документа",
+              "evidence": "[data-visual-role],[data-block]"
+            },
+            {
+              "name": "required_block_header_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"header\"]')",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "required_block_primary-nav_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"primary-nav\"]')",
+              "evidence": "[data-visual-role=\"primary-nav\"]"
+            },
+            {
+              "name": "required_block_main-content_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"main-content\"]')",
+              "evidence": "[data-visual-role=\"main-content\"]"
+            },
+            {
+              "name": "required_block_footer_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"footer\"]')",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_link_hover",
+              "value": "#268176",
+              "unit": "color",
+              "method": "Playwright page.hover() + getComputedStyle.color",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            },
+            {
+              "name": "color_focus_ring",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "Playwright page.focus() + getComputedStyle.outlineColor",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            }
+          ],
+          "diagnostics": [
+            {
+              "name": "type_h2_font_size",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h2",
+              "attempted_selector": "h2"
+            },
+            {
+              "name": "type_h2_font_weight",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h2",
+              "attempted_selector": "h2"
+            },
+            {
+              "name": "type_h2_line_height",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h2",
+              "attempted_selector": "h2"
+            },
+            {
+              "name": "card_aspect_ratio",
+              "status": "unavailable",
+              "reason": "карточки есть, но ни у одной нет .card__poster (текстовые карточки без медиа — дизайн, не дефект измерения)",
+              "attempted_selector": ".card__poster"
+            },
+            {
+              "name": "cards_sampled",
+              "status": "unavailable",
+              "reason": "карточки есть, но ни у одной нет .card__poster (текстовые карточки без медиа — дизайн, не дефект измерения)",
+              "attempted_selector": ".card__poster"
+            }
+          ]
+        }
+      }
+    },
+    "not_found": {
+      "url": "http://127.0.0.1:8932/lords-visual-repair-nonexistent-route/",
+      "viewports": {
+        "390": {
+          "httpStatus": 404,
+          "tokens": [
+            {
+              "name": "content_width",
+              "value": 390,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "main .container"
+            },
+            {
+              "name": "outer_gutter",
+              "value": 1,
+              "unit": "px",
+              "method": "CDP getComputedStyle('main .container').paddingLeft",
+              "evidence": "main .container"
+            },
+            {
+              "name": "page_height",
+              "value": 885,
+              "unit": "px",
+              "method": "CDP documentElement.scrollHeight",
+              "evidence": "html"
+            },
+            {
+              "name": "horizontal_overflow",
+              "value": false,
+              "unit": "bool",
+              "method": "CDP scrollWidth>clientWidth+2",
+              "evidence": "html"
+            },
+            {
+              "name": "header_height",
+              "value": 125.8,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "header_sticky",
+              "value": true,
+              "unit": "bool",
+              "method": "CDP getComputedStyle.position",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "color_page_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).backgroundColor",
+              "evidence": "body"
+            },
+            {
+              "name": "surface_header_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=header]).backgroundColor",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "color_text_primary",
+              "value": "#161616",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).color",
+              "evidence": "body"
+            },
+            {
+              "name": "color_text_secondary",
+              "value": "#4f5964",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=footer]).color",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_accent_background",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.brand__mark).backgroundColor",
+              "evidence": ".brand__mark"
+            },
+            {
+              "name": "color_link",
+              "value": "#268176",
+              "unit": "color",
+              "method": "CDP getComputedStyle(footer ul a).color",
+              "evidence": "footer ul a"
+            },
+            {
+              "name": "type_h1_font_size",
+              "value": 22.4,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_line_height",
+              "value": 26.88,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_body_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_p_font_size",
+              "value": 13.12,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_line_height",
+              "value": 20.34,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_a_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_button_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "block_order",
+              "value": "header|primary-nav|main-content|not-found-message|footer",
+              "unit": "order",
+              "method": "querySelectorAll(\"[data-visual-role],[data-block]\") в порядке документа",
+              "evidence": "[data-visual-role],[data-block]"
+            },
+            {
+              "name": "required_block_header_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"header\"]')",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "required_block_primary-nav_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"primary-nav\"]')",
+              "evidence": "[data-visual-role=\"primary-nav\"]"
+            },
+            {
+              "name": "required_block_main-content_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"main-content\"]')",
+              "evidence": "[data-visual-role=\"main-content\"]"
+            },
+            {
+              "name": "required_block_footer_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"footer\"]')",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_link_hover",
+              "value": "#268176",
+              "unit": "color",
+              "method": "Playwright page.hover() + getComputedStyle.color",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            },
+            {
+              "name": "color_focus_ring",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "Playwright page.focus() + getComputedStyle.outlineColor",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            }
+          ],
+          "diagnostics": [
+            {
+              "name": "grid_columns",
+              "status": "unavailable",
+              "reason": "на странице нет непустого [data-visual-role=\"card-grid\"]",
+              "attempted_selector": "[data-visual-role=\"card-grid\"]"
+            },
+            {
+              "name": "grid_gap",
+              "status": "unavailable",
+              "reason": "на странице нет непустого [data-visual-role=\"card-grid\"]",
+              "attempted_selector": "[data-visual-role=\"card-grid\"]"
+            },
+            {
+              "name": "type_h2_font_size",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h2",
+              "attempted_selector": "h2"
+            },
+            {
+              "name": "type_h2_font_weight",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h2",
+              "attempted_selector": "h2"
+            },
+            {
+              "name": "type_h2_line_height",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h2",
+              "attempted_selector": "h2"
+            },
+            {
+              "name": "type_h3_font_size",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h3",
+              "attempted_selector": "h3"
+            },
+            {
+              "name": "type_h3_font_weight",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h3",
+              "attempted_selector": "h3"
+            },
+            {
+              "name": "type_h3_line_height",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h3",
+              "attempted_selector": "h3"
+            },
+            {
+              "name": "card_aspect_ratio",
+              "status": "unavailable",
+              "reason": "на странице нет .card",
+              "attempted_selector": ".card"
+            },
+            {
+              "name": "cards_sampled",
+              "status": "unavailable",
+              "reason": "на странице нет .card",
+              "attempted_selector": ".card"
+            },
+            {
+              "name": "surface_card_background",
+              "status": "unavailable",
+              "reason": "на странице нет .card",
+              "attempted_selector": ".card"
+            },
+            {
+              "name": "color_border_default",
+              "status": "unavailable",
+              "reason": "на странице нет .card",
+              "attempted_selector": ".card"
+            }
+          ]
+        },
+        "768": {
+          "httpStatus": 404,
+          "tokens": [
+            {
+              "name": "content_width",
+              "value": 768,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "main .container"
+            },
+            {
+              "name": "outer_gutter",
+              "value": 1,
+              "unit": "px",
+              "method": "CDP getComputedStyle('main .container').paddingLeft",
+              "evidence": "main .container"
+            },
+            {
+              "name": "page_height",
+              "value": 1000,
+              "unit": "px",
+              "method": "CDP documentElement.scrollHeight",
+              "evidence": "html"
+            },
+            {
+              "name": "horizontal_overflow",
+              "value": false,
+              "unit": "bool",
+              "method": "CDP scrollWidth>clientWidth+2",
+              "evidence": "html"
+            },
+            {
+              "name": "header_height",
+              "value": 61,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "header_sticky",
+              "value": true,
+              "unit": "bool",
+              "method": "CDP getComputedStyle.position",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "color_page_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).backgroundColor",
+              "evidence": "body"
+            },
+            {
+              "name": "surface_header_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=header]).backgroundColor",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "color_text_primary",
+              "value": "#161616",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).color",
+              "evidence": "body"
+            },
+            {
+              "name": "color_text_secondary",
+              "value": "#4f5964",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=footer]).color",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_accent_background",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.brand__mark).backgroundColor",
+              "evidence": ".brand__mark"
+            },
+            {
+              "name": "color_link",
+              "value": "#268176",
+              "unit": "color",
+              "method": "CDP getComputedStyle(footer ul a).color",
+              "evidence": "footer ul a"
+            },
+            {
+              "name": "type_h1_font_size",
+              "value": 22.4,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_line_height",
+              "value": 26.88,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_body_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_p_font_size",
+              "value": 13.12,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_line_height",
+              "value": 20.34,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_a_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_button_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "block_order",
+              "value": "header|primary-nav|main-content|not-found-message|footer",
+              "unit": "order",
+              "method": "querySelectorAll(\"[data-visual-role],[data-block]\") в порядке документа",
+              "evidence": "[data-visual-role],[data-block]"
+            },
+            {
+              "name": "required_block_header_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"header\"]')",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "required_block_primary-nav_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"primary-nav\"]')",
+              "evidence": "[data-visual-role=\"primary-nav\"]"
+            },
+            {
+              "name": "required_block_main-content_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"main-content\"]')",
+              "evidence": "[data-visual-role=\"main-content\"]"
+            },
+            {
+              "name": "required_block_footer_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"footer\"]')",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_link_hover",
+              "value": "#268176",
+              "unit": "color",
+              "method": "Playwright page.hover() + getComputedStyle.color",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            },
+            {
+              "name": "color_focus_ring",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "Playwright page.focus() + getComputedStyle.outlineColor",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            }
+          ],
+          "diagnostics": [
+            {
+              "name": "grid_columns",
+              "status": "unavailable",
+              "reason": "на странице нет непустого [data-visual-role=\"card-grid\"]",
+              "attempted_selector": "[data-visual-role=\"card-grid\"]"
+            },
+            {
+              "name": "grid_gap",
+              "status": "unavailable",
+              "reason": "на странице нет непустого [data-visual-role=\"card-grid\"]",
+              "attempted_selector": "[data-visual-role=\"card-grid\"]"
+            },
+            {
+              "name": "type_h2_font_size",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h2",
+              "attempted_selector": "h2"
+            },
+            {
+              "name": "type_h2_font_weight",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h2",
+              "attempted_selector": "h2"
+            },
+            {
+              "name": "type_h2_line_height",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h2",
+              "attempted_selector": "h2"
+            },
+            {
+              "name": "type_h3_font_size",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h3",
+              "attempted_selector": "h3"
+            },
+            {
+              "name": "type_h3_font_weight",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h3",
+              "attempted_selector": "h3"
+            },
+            {
+              "name": "type_h3_line_height",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h3",
+              "attempted_selector": "h3"
+            },
+            {
+              "name": "card_aspect_ratio",
+              "status": "unavailable",
+              "reason": "на странице нет .card",
+              "attempted_selector": ".card"
+            },
+            {
+              "name": "cards_sampled",
+              "status": "unavailable",
+              "reason": "на странице нет .card",
+              "attempted_selector": ".card"
+            },
+            {
+              "name": "surface_card_background",
+              "status": "unavailable",
+              "reason": "на странице нет .card",
+              "attempted_selector": ".card"
+            },
+            {
+              "name": "color_border_default",
+              "status": "unavailable",
+              "reason": "на странице нет .card",
+              "attempted_selector": ".card"
+            }
+          ]
+        },
+        "1440": {
+          "httpStatus": 404,
+          "tokens": [
+            {
+              "name": "content_width",
+              "value": 1440,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "main .container"
+            },
+            {
+              "name": "outer_gutter",
+              "value": 1,
+              "unit": "px",
+              "method": "CDP getComputedStyle('main .container').paddingLeft",
+              "evidence": "main .container"
+            },
+            {
+              "name": "page_height",
+              "value": 1000,
+              "unit": "px",
+              "method": "CDP documentElement.scrollHeight",
+              "evidence": "html"
+            },
+            {
+              "name": "horizontal_overflow",
+              "value": false,
+              "unit": "bool",
+              "method": "CDP scrollWidth>clientWidth+2",
+              "evidence": "html"
+            },
+            {
+              "name": "header_height",
+              "value": 61,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "header_sticky",
+              "value": true,
+              "unit": "bool",
+              "method": "CDP getComputedStyle.position",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "color_page_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).backgroundColor",
+              "evidence": "body"
+            },
+            {
+              "name": "surface_header_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=header]).backgroundColor",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "color_text_primary",
+              "value": "#161616",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).color",
+              "evidence": "body"
+            },
+            {
+              "name": "color_text_secondary",
+              "value": "#4f5964",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=footer]).color",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_accent_background",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.brand__mark).backgroundColor",
+              "evidence": ".brand__mark"
+            },
+            {
+              "name": "color_link",
+              "value": "#268176",
+              "unit": "color",
+              "method": "CDP getComputedStyle(footer ul a).color",
+              "evidence": "footer ul a"
+            },
+            {
+              "name": "type_h1_font_size",
+              "value": 22.4,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_line_height",
+              "value": 26.88,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_body_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_p_font_size",
+              "value": 13.12,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_line_height",
+              "value": 20.34,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_a_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_button_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "block_order",
+              "value": "header|primary-nav|main-content|not-found-message|footer",
+              "unit": "order",
+              "method": "querySelectorAll(\"[data-visual-role],[data-block]\") в порядке документа",
+              "evidence": "[data-visual-role],[data-block]"
+            },
+            {
+              "name": "required_block_header_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"header\"]')",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "required_block_primary-nav_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"primary-nav\"]')",
+              "evidence": "[data-visual-role=\"primary-nav\"]"
+            },
+            {
+              "name": "required_block_main-content_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"main-content\"]')",
+              "evidence": "[data-visual-role=\"main-content\"]"
+            },
+            {
+              "name": "required_block_footer_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"footer\"]')",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_link_hover",
+              "value": "#268176",
+              "unit": "color",
+              "method": "Playwright page.hover() + getComputedStyle.color",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            },
+            {
+              "name": "color_focus_ring",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "Playwright page.focus() + getComputedStyle.outlineColor",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            }
+          ],
+          "diagnostics": [
+            {
+              "name": "grid_columns",
+              "status": "unavailable",
+              "reason": "на странице нет непустого [data-visual-role=\"card-grid\"]",
+              "attempted_selector": "[data-visual-role=\"card-grid\"]"
+            },
+            {
+              "name": "grid_gap",
+              "status": "unavailable",
+              "reason": "на странице нет непустого [data-visual-role=\"card-grid\"]",
+              "attempted_selector": "[data-visual-role=\"card-grid\"]"
+            },
+            {
+              "name": "type_h2_font_size",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h2",
+              "attempted_selector": "h2"
+            },
+            {
+              "name": "type_h2_font_weight",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h2",
+              "attempted_selector": "h2"
+            },
+            {
+              "name": "type_h2_line_height",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h2",
+              "attempted_selector": "h2"
+            },
+            {
+              "name": "type_h3_font_size",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h3",
+              "attempted_selector": "h3"
+            },
+            {
+              "name": "type_h3_font_weight",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h3",
+              "attempted_selector": "h3"
+            },
+            {
+              "name": "type_h3_line_height",
+              "status": "unavailable",
+              "reason": "на странице нет элемента h3",
+              "attempted_selector": "h3"
+            },
+            {
+              "name": "card_aspect_ratio",
+              "status": "unavailable",
+              "reason": "на странице нет .card",
+              "attempted_selector": ".card"
+            },
+            {
+              "name": "cards_sampled",
+              "status": "unavailable",
+              "reason": "на странице нет .card",
+              "attempted_selector": ".card"
+            },
+            {
+              "name": "surface_card_background",
+              "status": "unavailable",
+              "reason": "на странице нет .card",
+              "attempted_selector": ".card"
+            },
+            {
+              "name": "color_border_default",
+              "status": "unavailable",
+              "reason": "на странице нет .card",
+              "attempted_selector": ".card"
+            }
+          ]
+        }
+      }
+    },
+    "title": {
+      "url": "http://127.0.0.1:8932/title/pepelnyy-nevod-2025/",
+      "viewports": {
+        "390": {
+          "httpStatus": 200,
+          "tokens": [
+            {
+              "name": "content_width",
+              "value": 390,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "main .container"
+            },
+            {
+              "name": "outer_gutter",
+              "value": 1,
+              "unit": "px",
+              "method": "CDP getComputedStyle('main .container').paddingLeft",
+              "evidence": "main .container"
+            },
+            {
+              "name": "page_height",
+              "value": 3752,
+              "unit": "px",
+              "method": "CDP documentElement.scrollHeight",
+              "evidence": "html"
+            },
+            {
+              "name": "horizontal_overflow",
+              "value": false,
+              "unit": "bool",
+              "method": "CDP scrollWidth>clientWidth+2",
+              "evidence": "html"
+            },
+            {
+              "name": "header_height",
+              "value": 125.8,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "header_sticky",
+              "value": true,
+              "unit": "bool",
+              "method": "CDP getComputedStyle.position",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "grid_columns",
+              "value": 2,
+              "unit": "count",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gridTemplateColumns",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "grid_gap",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gap",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "color_page_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).backgroundColor",
+              "evidence": "body"
+            },
+            {
+              "name": "surface_header_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=header]).backgroundColor",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "color_text_primary",
+              "value": "#161616",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).color",
+              "evidence": "body"
+            },
+            {
+              "name": "color_text_secondary",
+              "value": "#4f5964",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=footer]).color",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_accent_background",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.brand__mark).backgroundColor",
+              "evidence": ".brand__mark"
+            },
+            {
+              "name": "color_link",
+              "value": "#268176",
+              "unit": "color",
+              "method": "CDP getComputedStyle(footer ul a).color",
+              "evidence": "footer ul a"
+            },
+            {
+              "name": "type_h1_font_size",
+              "value": 22.4,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_line_height",
+              "value": 26.88,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h2_font_size",
+              "value": 18.4,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h2_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h2_line_height",
+              "value": 22.08,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h3_font_size",
+              "value": 14.72,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_line_height",
+              "value": 22.82,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_body_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_p_font_size",
+              "value": 13.12,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_line_height",
+              "value": 20.34,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_a_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_button_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "card_aspect_ratio",
+              "value": 0.67,
+              "unit": "ratio",
+              "method": "CDP getBoundingClientRect на .card__poster, режим по частоте",
+              "evidence": ".card__poster"
+            },
+            {
+              "name": "cards_sampled",
+              "value": 6,
+              "unit": "count",
+              "method": "CDP querySelectorAll(.card__poster).length с rect>8x8",
+              "evidence": ".card__poster"
+            },
+            {
+              "name": "surface_card_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).backgroundColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "color_border_default",
+              "value": "#e0e4e8",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).borderTopColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "block_order",
+              "value": "header|primary-nav|main-content|card-grid|comments|footer",
+              "unit": "order",
+              "method": "querySelectorAll(\"[data-visual-role],[data-block]\") в порядке документа",
+              "evidence": "[data-visual-role],[data-block]"
+            },
+            {
+              "name": "required_block_header_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"header\"]')",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "required_block_primary-nav_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"primary-nav\"]')",
+              "evidence": "[data-visual-role=\"primary-nav\"]"
+            },
+            {
+              "name": "required_block_main-content_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"main-content\"]')",
+              "evidence": "[data-visual-role=\"main-content\"]"
+            },
+            {
+              "name": "required_block_footer_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"footer\"]')",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_link_hover",
+              "value": "#268176",
+              "unit": "color",
+              "method": "Playwright page.hover() + getComputedStyle.color",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            },
+            {
+              "name": "color_focus_ring",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "Playwright page.focus() + getComputedStyle.outlineColor",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            }
+          ],
+          "diagnostics": []
+        },
+        "768": {
+          "httpStatus": 200,
+          "tokens": [
+            {
+              "name": "content_width",
+              "value": 768,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "main .container"
+            },
+            {
+              "name": "outer_gutter",
+              "value": 1,
+              "unit": "px",
+              "method": "CDP getComputedStyle('main .container').paddingLeft",
+              "evidence": "main .container"
+            },
+            {
+              "name": "page_height",
+              "value": 2885,
+              "unit": "px",
+              "method": "CDP documentElement.scrollHeight",
+              "evidence": "html"
+            },
+            {
+              "name": "horizontal_overflow",
+              "value": false,
+              "unit": "bool",
+              "method": "CDP scrollWidth>clientWidth+2",
+              "evidence": "html"
+            },
+            {
+              "name": "header_height",
+              "value": 61,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "header_sticky",
+              "value": true,
+              "unit": "bool",
+              "method": "CDP getComputedStyle.position",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "grid_columns",
+              "value": 4,
+              "unit": "count",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gridTemplateColumns",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "grid_gap",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gap",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "color_page_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).backgroundColor",
+              "evidence": "body"
+            },
+            {
+              "name": "surface_header_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=header]).backgroundColor",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "color_text_primary",
+              "value": "#161616",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).color",
+              "evidence": "body"
+            },
+            {
+              "name": "color_text_secondary",
+              "value": "#4f5964",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=footer]).color",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_accent_background",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.brand__mark).backgroundColor",
+              "evidence": ".brand__mark"
+            },
+            {
+              "name": "color_link",
+              "value": "#268176",
+              "unit": "color",
+              "method": "CDP getComputedStyle(footer ul a).color",
+              "evidence": "footer ul a"
+            },
+            {
+              "name": "type_h1_font_size",
+              "value": 22.4,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_line_height",
+              "value": 26.88,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h2_font_size",
+              "value": 18.4,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h2_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h2_line_height",
+              "value": 22.08,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h3_font_size",
+              "value": 14.72,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_line_height",
+              "value": 22.82,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_body_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_p_font_size",
+              "value": 13.12,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_line_height",
+              "value": 20.34,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_a_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_button_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "card_aspect_ratio",
+              "value": 0.67,
+              "unit": "ratio",
+              "method": "CDP getBoundingClientRect на .card__poster, режим по частоте",
+              "evidence": ".card__poster"
+            },
+            {
+              "name": "cards_sampled",
+              "value": 6,
+              "unit": "count",
+              "method": "CDP querySelectorAll(.card__poster).length с rect>8x8",
+              "evidence": ".card__poster"
+            },
+            {
+              "name": "surface_card_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).backgroundColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "color_border_default",
+              "value": "#e0e4e8",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).borderTopColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "block_order",
+              "value": "header|primary-nav|main-content|card-grid|comments|footer",
+              "unit": "order",
+              "method": "querySelectorAll(\"[data-visual-role],[data-block]\") в порядке документа",
+              "evidence": "[data-visual-role],[data-block]"
+            },
+            {
+              "name": "required_block_header_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"header\"]')",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "required_block_primary-nav_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"primary-nav\"]')",
+              "evidence": "[data-visual-role=\"primary-nav\"]"
+            },
+            {
+              "name": "required_block_main-content_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"main-content\"]')",
+              "evidence": "[data-visual-role=\"main-content\"]"
+            },
+            {
+              "name": "required_block_footer_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"footer\"]')",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_link_hover",
+              "value": "#268176",
+              "unit": "color",
+              "method": "Playwright page.hover() + getComputedStyle.color",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            },
+            {
+              "name": "color_focus_ring",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "Playwright page.focus() + getComputedStyle.outlineColor",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            }
+          ],
+          "diagnostics": []
+        },
+        "1440": {
+          "httpStatus": 200,
+          "tokens": [
+            {
+              "name": "content_width",
+              "value": 1440,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "main .container"
+            },
+            {
+              "name": "outer_gutter",
+              "value": 1,
+              "unit": "px",
+              "method": "CDP getComputedStyle('main .container').paddingLeft",
+              "evidence": "main .container"
+            },
+            {
+              "name": "page_height",
+              "value": 2844,
+              "unit": "px",
+              "method": "CDP documentElement.scrollHeight",
+              "evidence": "html"
+            },
+            {
+              "name": "horizontal_overflow",
+              "value": false,
+              "unit": "bool",
+              "method": "CDP scrollWidth>clientWidth+2",
+              "evidence": "html"
+            },
+            {
+              "name": "header_height",
+              "value": 61,
+              "unit": "px",
+              "method": "CDP getBoundingClientRect",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "header_sticky",
+              "value": true,
+              "unit": "bool",
+              "method": "CDP getComputedStyle.position",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "grid_columns",
+              "value": 6,
+              "unit": "count",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gridTemplateColumns",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "grid_gap",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle('[data-visual-role=\"card-grid\"]').gap",
+              "evidence": "[data-visual-role=\"card-grid\"]:first-of-type"
+            },
+            {
+              "name": "color_page_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).backgroundColor",
+              "evidence": "body"
+            },
+            {
+              "name": "surface_header_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=header]).backgroundColor",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "color_text_primary",
+              "value": "#161616",
+              "unit": "color",
+              "method": "CDP getComputedStyle(document.body).color",
+              "evidence": "body"
+            },
+            {
+              "name": "color_text_secondary",
+              "value": "#4f5964",
+              "unit": "color",
+              "method": "CDP getComputedStyle([data-visual-role=footer]).color",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_accent_background",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.brand__mark).backgroundColor",
+              "evidence": ".brand__mark"
+            },
+            {
+              "name": "color_link",
+              "value": "#268176",
+              "unit": "color",
+              "method": "CDP getComputedStyle(footer ul a).color",
+              "evidence": "footer ul a"
+            },
+            {
+              "name": "type_h1_font_size",
+              "value": 22.4,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h1_line_height",
+              "value": 26.88,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h1"
+            },
+            {
+              "name": "type_h2_font_size",
+              "value": 18.4,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h2_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h2_line_height",
+              "value": 22.08,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h2"
+            },
+            {
+              "name": "type_h3_font_size",
+              "value": 14.72,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_font_weight",
+              "value": "600",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_h3_line_height",
+              "value": 22.82,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "h3"
+            },
+            {
+              "name": "type_body_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_body_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "body"
+            },
+            {
+              "name": "type_p_font_size",
+              "value": 13.12,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_p_line_height",
+              "value": 20.34,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "p"
+            },
+            {
+              "name": "type_a_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_a_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "a"
+            },
+            {
+              "name": "type_button_font_size",
+              "value": 14,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_font_weight",
+              "value": "400",
+              "unit": "weight",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "type_button_line_height",
+              "value": 21.7,
+              "unit": "px",
+              "method": "CDP getComputedStyle",
+              "evidence": "button"
+            },
+            {
+              "name": "card_aspect_ratio",
+              "value": 0.67,
+              "unit": "ratio",
+              "method": "CDP getBoundingClientRect на .card__poster, режим по частоте",
+              "evidence": ".card__poster"
+            },
+            {
+              "name": "cards_sampled",
+              "value": 6,
+              "unit": "count",
+              "method": "CDP querySelectorAll(.card__poster).length с rect>8x8",
+              "evidence": ".card__poster"
+            },
+            {
+              "name": "surface_card_background",
+              "value": "#ffffff",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).backgroundColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "color_border_default",
+              "value": "#e0e4e8",
+              "unit": "color",
+              "method": "CDP getComputedStyle(.card).borderTopColor",
+              "evidence": ".card:first-of-type"
+            },
+            {
+              "name": "block_order",
+              "value": "header|primary-nav|main-content|card-grid|comments|footer",
+              "unit": "order",
+              "method": "querySelectorAll(\"[data-visual-role],[data-block]\") в порядке документа",
+              "evidence": "[data-visual-role],[data-block]"
+            },
+            {
+              "name": "required_block_header_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"header\"]')",
+              "evidence": "[data-visual-role=\"header\"]"
+            },
+            {
+              "name": "required_block_primary-nav_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"primary-nav\"]')",
+              "evidence": "[data-visual-role=\"primary-nav\"]"
+            },
+            {
+              "name": "required_block_main-content_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"main-content\"]')",
+              "evidence": "[data-visual-role=\"main-content\"]"
+            },
+            {
+              "name": "required_block_footer_present",
+              "value": true,
+              "unit": "presence",
+              "method": "querySelector('[data-visual-role=\"footer\"]')",
+              "evidence": "[data-visual-role=\"footer\"]"
+            },
+            {
+              "name": "color_link_hover",
+              "value": "#268176",
+              "unit": "color",
+              "method": "Playwright page.hover() + getComputedStyle.color",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            },
+            {
+              "name": "color_focus_ring",
+              "value": "#37b3a4",
+              "unit": "color",
+              "method": "Playwright page.focus() + getComputedStyle.outlineColor",
+              "evidence": "[data-visual-role=\"footer\"] ul a"
+            }
+          ],
+          "diagnostics": []
+        }
+      }
+    }
+  }
+}
