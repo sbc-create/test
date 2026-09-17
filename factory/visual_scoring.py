@@ -82,7 +82,7 @@ class ScoringResult:
 # --- загрузка контракта ------------------------------------------------------
 
 
-def load_contract(version: str = "1.0.2", root: Path | None = None) -> dict[str, Any]:
+def load_contract(version: str = "1.0.3", root: Path | None = None) -> dict[str, Any]:
     """Прочитать контракт и проверить его самосогласованность.
 
     Отсутствующий контракт — не повод посчитать по умолчанию: без правила
@@ -119,21 +119,50 @@ def check_weight_sums(contract: dict[str, Any]) -> list[str]:
 # --- классификация токенов ---------------------------------------------------
 
 
+#: Правило без явного `priority` в `component_assignment.order` получает этот
+#: приоритет. Все правила версий 1.0.0-1.0.2 приоритет не объявляют и поэтому
+#: равны между собой — для них единственным тай-брейком остаётся позиция в
+#: массиве, то есть их результат воспроизводится побитово, как и раньше.
+_DEFAULT_RULE_PRIORITY = 0
+
+
 def assign_component(token: dict[str, Any], contract: dict[str, Any]) -> str:
     """Определить компонент токена по контракту.
 
     Явное поле `component` сильнее шаблонов: пакет, который знает про себя
     больше, не обязан подгонять имена под регулярные выражения.
+
+    Несколько правил `order` могут совпасть с одним и тем же именем: например,
+    суффикс `^.*_sticky$` (geometry) и чей-то префиксный шаблон вроде
+    `^cards_.*$` оба совпадают с именем `cards_sticky`. Побеждает правило с
+    наибольшим `priority` (по умолчанию `_DEFAULT_RULE_PRIORITY` у правил, не
+    объявивших его) — это не зависит от того, в каком месте массива `order`
+    правило записано. Правила без явного `priority` (все правила 1.0.0-1.0.2)
+    по-прежнему равны между собой, и для них тай-брейком остаётся позиция в
+    массиве — ровно то же самое «первое совпадение по порядку», что и раньше:
+    их результат воспроизводится побитово. Механизм общий для любого правила,
+    объявившего свой `priority`, а не завязан на конкретное имя токена.
     """
     explicit = token.get("component")
     if explicit:
         return str(explicit)
     name = str(token.get("name", ""))
-    for rule in contract["component_assignment"]["order"]:
+
+    matches: list[tuple[int, int, str]] = []
+    for index, rule in enumerate(contract["component_assignment"]["order"]):
+        priority = rule.get("priority", _DEFAULT_RULE_PRIORITY)
         for pattern in rule["name_patterns"]:
             if re.match(pattern, name):
-                return rule["component"]
-    return "UNASSIGNED"
+                matches.append((priority, index, rule["component"]))
+                break
+
+    if not matches:
+        return "UNASSIGNED"
+
+    best_priority = max(priority for priority, _, _ in matches)
+    top = [match for match in matches if match[0] == best_priority]
+    top.sort(key=lambda match: match[1])
+    return top[0][2]
 
 
 def component_applicability(component: str, surface: str, contract: dict[str, Any]) -> str:
@@ -417,11 +446,25 @@ def check_independence(checker: Identity, pack_author: Identity,
     return failures
 
 
-def check_compatibility(reference_env: dict[str, Any], candidate_env: dict[str, Any]
-                        ) -> list[str]:
-    """Расхождение среды делает сравнение бессмысленным, а не приблизительным."""
+def check_compatibility(reference_env: dict[str, Any] | None,
+                        candidate_env: dict[str, Any] | None) -> list[str]:
+    """Расхождение среды делает сравнение бессмысленным, а не приблизительным.
+
+    Отсутствующий `environment_manifest` (`None`, а не просто пустой `{}`) —
+    честный `BLOCKED_COMPATIBILITY_MISMATCH`, а не повод упасть исключением.
+    Необработанное исключение здесь оставляло бы вызывающего перед выбором
+    между крахом всего сравнения и тем, чтобы подставить манифест другой
+    стороны, лишь бы сравнение прошло, — а это ровно подмена совместимости,
+    которую и обязан ловить этот контракт.
+    """
     forbidden = {"any", "latest", "*", "pending", ""}
     mismatches = []
+    if not reference_env:
+        mismatches.append("environment_manifest эталона отсутствует — совместимость недоказуема")
+    if not candidate_env:
+        mismatches.append("environment_manifest кандидата отсутствует — совместимость недоказуема")
+    reference_env = reference_env or {}
+    candidate_env = candidate_env or {}
     for key in sorted(set(reference_env) | set(candidate_env)):
         ref, cand = reference_env.get(key), candidate_env.get(key)
         if ref != cand:
@@ -489,8 +532,8 @@ def _excluded_components(exclusions: list[dict[str, Any]], contract: dict[str, A
 
 def compare(*, reference_tokens: list[dict[str, Any]], candidate_tokens: list[dict[str, Any]],
             contract: dict[str, Any], checker: Identity, pack_author: Identity,
-            candidate_author: Identity, reference_environment: dict[str, Any],
-            candidate_environment: dict[str, Any],
+            candidate_author: Identity, reference_environment: dict[str, Any] | None,
+            candidate_environment: dict[str, Any] | None,
             declared_exclusions: list[dict[str, Any]] | None = None,
             baseline_exclusions_digest: str | None = None,
             digest_checks: list[dict[str, Any]] | None = None,

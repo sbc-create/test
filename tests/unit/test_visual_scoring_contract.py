@@ -1016,3 +1016,310 @@ def test_all_statuses_are_declared(contract):
         "BLOCKED_COMPATIBILITY_MISMATCH", "BLOCKED_INDEPENDENCE_VIOLATION",
         "BLOCKED_SCORING_CONTRACT_MISSING",
     }
+
+
+# --- 1.0.3: конфликт приоритета правил component_assignment для *_sticky -----
+#
+# Независимый аудит PR #81 (NEEDS_CONTRACT_REPAIR) нашёл: правило
+# ^.*_sticky$ -> geometry (1.0.1) лежит в конце component_assignment.order.
+# assign_component() брала первое по порядку массива правило, у которого
+# совпал хоть один шаблон, — не самое специфичное. Любой *_sticky-токен, чей
+# префикс совпадал с более общим префиксным шаблоном другого, более раннего в
+# списке компонента, перехватывался этим компонентом вместо geometry. Тесты
+# ниже сначала независимо воспроизводят дефект на уже выпущенной (immutable)
+# 1.0.2, затем проверяют исправление в 1.0.3 и его общность.
+
+#: Имя токена -> префиксный шаблон, который перехватывал его под 1.0.1/1.0.2,
+#: и компонент, к которому этот шаблон принадлежит. Каждая строка — токен,
+#: чей префикс (до "_sticky") совпадает с чужим ^prefix_.*$-шаблоном.
+_STICKY_CONFLICT_CASES = [
+    ("cards_sticky", "cards_media"),
+    ("media_sticky", "cards_media"),
+    ("card_sticky", "cards_media"),
+    ("poster_sticky", "cards_media"),
+    ("border_sticky", "colors"),
+    ("surface_sticky", "colors"),
+    ("color_sticky", "colors"),
+    ("radius_sticky", "colors"),
+    ("type_sticky", "typography"),
+    ("font_sticky", "typography"),
+    ("viewport_sticky", "responsive"),
+    ("required_block_sticky", "structure_order"),
+]
+
+
+@pytest.mark.parametrize("name,hijacked_by", _STICKY_CONFLICT_CASES)
+def test_1_0_2_reproduces_the_sticky_regex_precedence_conflict(contract_102, name, hijacked_by):
+    """Независимое воспроизведение дефекта на уже выпущенной 1.0.2 (не декларация).
+
+    1.0.2 неизменяема: этот тест обязан продолжать проходить и после
+    исправления в 1.0.3 — иначе 1.0.2 перестала бы воспроизводиться побитово.
+    """
+    assert assign_component({"name": name}, contract_102) == hijacked_by
+
+
+@pytest.fixture(scope="module")
+def contract_103() -> dict:
+    return load_contract("1.0.3", root=REPO_ROOT / "contracts" / "visual-scoring")
+
+
+@pytest.mark.parametrize("name,hijacked_by", _STICKY_CONFLICT_CASES)
+def test_1_0_3_resolves_the_conflict_to_geometry_for_every_prefix(contract_103, name, hijacked_by):
+    """Исправление общее: работает для всех префиксов, перехватывавших *_sticky,
+    не только для header_sticky."""
+    assert assign_component({"name": name}, contract_103) == "geometry"
+    assert hijacked_by != "geometry"  # sanity: сценарий действительно был конфликтом
+
+
+@pytest.mark.parametrize("name", ["header_sticky", "nav_sticky", "footer_sticky", "sidebar_sticky"])
+def test_1_0_3_keeps_the_already_working_sticky_names_on_geometry(contract_103, name):
+    assert assign_component({"name": name}, contract_103) == "geometry"
+
+
+@pytest.mark.parametrize("name", ["modal_open", "cookie_banner_visible", "nav_collapsed"])
+def test_1_0_3_unrelated_boolean_token_without_a_rule_stays_fail_closed(contract_103, name):
+    """Токен без _sticky в имени по-прежнему не подхватывается новым приоритетом."""
+    assert assign_component({"name": name, "unit": "bool"}, contract_103) == "UNASSIGNED"
+
+
+@pytest.mark.parametrize("name,component", _COMPONENT_ASSIGNMENT_CASES)
+def test_1_0_3_all_legacy_component_assignments_still_work(contract_103, name, component):
+    assert assign_component({"name": name}, contract_103) == component
+
+
+@pytest.mark.parametrize("name,hijacked_by", _STICKY_CONFLICT_CASES)
+def test_1_0_3_conflict_resolution_does_not_depend_on_order_in_the_array(contract_103, name, hijacked_by):
+    """Результат для конфликтующих *_sticky-имён не зависит от случайного порядка
+    правил: у них есть явный priority, поэтому перестановка order не меняет вывод.
+
+    Ограничено именно конфликтующими именами (а не всем набором
+    _COMPONENT_ASSIGNMENT_CASES): среди правил без явного priority в контракте
+    и так есть безобидные, никогда не репортившиеся как дефект пересечения
+    (например card_radius совпадает и с ^card_.*$, и с ^.*_radius$) — их
+    тай-брейк исторически и намеренно зависит от позиции в массиве, эта версия
+    его не трогает и трогать не должна."""
+    import copy
+    import random
+
+    names_to_check = [n for n, _ in _STICKY_CONFLICT_CASES] + \
+        ["header_sticky", "nav_sticky", "footer_sticky", "sidebar_sticky"]
+    baseline = {n: assign_component({"name": n}, contract_103) for n in names_to_check}
+    assert baseline[name] == "geometry"
+    for seed in (0, 1, 2, 17, 99):
+        shuffled = copy.deepcopy(contract_103)
+        random.Random(seed).shuffle(shuffled["component_assignment"]["order"])
+        for n in names_to_check:
+            assert assign_component({"name": n}, shuffled) == baseline[n], (seed, n)
+
+
+def test_priority_resolution_mechanism_is_general_not_hardcoded_to_sticky():
+    """Синтетический контракт без единого упоминания sticky/header: доказывает,
+    что победа по priority работает для ЛЮБОЙ пары конфликтующих правил, а не
+    для конкретного токена/компонента, закреплённого в реальном контракте."""
+    synthetic = {
+        "component_assignment": {
+            "order": [
+                {"component": "GENERIC_PREFIX", "name_patterns": [r"^widget_.*$"]},
+                {"component": "SPECIFIC_SUFFIX", "priority": 50, "name_patterns": [r"^.*_variant$"]},
+            ]
+        }
+    }
+    # "widget_variant" совпадает с обоими правилами: общим префиксным (priority
+    # по умолчанию 0) и специфичным суффиксным (priority 50) — выше побеждает.
+    assert assign_component({"name": "widget_variant"}, synthetic) == "SPECIFIC_SUFFIX"
+    # Порядок правил в массиве не участвует в решении, когда priority различны.
+    synthetic_reversed = {
+        "component_assignment": {"order": list(reversed(synthetic["component_assignment"]["order"]))}
+    }
+    assert assign_component({"name": "widget_variant"}, synthetic_reversed) == "SPECIFIC_SUFFIX"
+    # Токен, совпадающий только с общим правилом, не задет новым механизмом.
+    assert assign_component({"name": "widget_thing"}, synthetic) == "GENERIC_PREFIX"
+
+
+def test_rules_without_explicit_priority_still_tie_break_by_array_order():
+    """Без priority ничего не поменялось: побеждает первое совпадение по порядку —
+    то же поведение, что было единственным механизмом в 1.0.0-1.0.2."""
+    synthetic = {
+        "component_assignment": {
+            "order": [
+                {"component": "FIRST", "name_patterns": [r"^.*_thing$"]},
+                {"component": "SECOND", "name_patterns": [r"^also_.*$"]},
+            ]
+        }
+    }
+    # "also_a_thing" совпадает с обоими правилами, ни одно priority не объявляет.
+    assert assign_component({"name": "also_a_thing"}, synthetic) == "FIRST"
+    reordered = {
+        "component_assignment": {"order": list(reversed(synthetic["component_assignment"]["order"]))}
+    }
+    assert assign_component({"name": "also_a_thing"}, reordered) == "SECOND"
+
+
+def test_1_0_3_contract_version_is_pinned(contract_103):
+    assert contract_103["contract_version"] == "visual-scoring/1.0.3"
+    assert contract_103["status"] == "immutable"
+
+
+def test_1_0_3_preserves_everything_except_component_assignment_order(contract_102, contract_103):
+    """component_assignment.order меняется намеренно; всё остальное — нет."""
+    assert contract_103["weights"] == contract_102["weights"]
+    assert contract_103["thresholds"] == contract_102["thresholds"]
+    assert contract_103["hard_failures"] == contract_102["hard_failures"]
+    assert contract_103["scoring_rules"] == contract_102["scoring_rules"]
+    assert contract_103["statuses"] == contract_102["statuses"]
+    assert contract_103["status_precedence"] == contract_102["status_precedence"]
+    assert contract_103["component_applicability"] == contract_102["component_applicability"]
+    assert contract_103["exclusions"] == contract_102["exclusions"]
+    assert contract_103["aggregation"] == contract_102["aggregation"]
+    assert contract_103["component_assignment"]["order"] != contract_102["component_assignment"]["order"]
+
+
+def test_1_0_3_files_match_their_recorded_checksums():
+    import hashlib
+
+    base = REPO_ROOT / "contracts" / "visual-scoring" / "1.0.3"
+    recorded = json.loads((base / "checksums.json").read_text(encoding="utf-8"))
+    for name, digest in sorted(recorded["files"].items()):
+        path = (base / name).resolve()
+        actual = "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
+        assert actual == digest, f"{name} изменён после выпуска версии"
+
+
+@pytest.mark.parametrize("version", ["1.0.0", "1.0.1", "1.0.2"])
+def test_older_versions_remain_untouched_by_the_1_0_3_fix(version):
+    """1.0.0-1.0.2 обязаны воспроизводиться по checksum и после этого исправления."""
+    import hashlib
+
+    base = REPO_ROOT / "contracts" / "visual-scoring" / version
+    recorded = json.loads((base / "checksums.json").read_text(encoding="utf-8"))
+    for name, digest in sorted(recorded["files"].items()):
+        path = (base / name).resolve()
+        actual = "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
+        assert actual == digest, f"{version}/{name} изменён — версия больше не immutable"
+
+
+def test_1_0_3_is_the_default_loaded_contract_version():
+    """Default обновлён только после того, как все проверки 1.0.3 зелёные."""
+    assert load_contract()["contract_version"] == "visual-scoring/1.0.3"
+
+
+# --- Дефект 2: check_compatibility честно обрабатывает отсутствующий (None) --
+# --- environment_manifest вместо падения или молчаливой фабрикации ----------
+#
+# Независимый аудит PR #81: сравнение кандидата (PR #76) с финальным эталоном
+# (PR #80/PR #81) без записанного environment_manifest эталонной стороны
+# обязано честно остановиться BLOCKED_COMPATIBILITY_MISMATCH. До исправления
+# check_compatibility(None, ...) падала TypeError — единственным способом
+# получить результат было подставить вместо отсутствующего манифеста эталона
+# манифест кандидата, что фабрикует совместимость и даёт неверный
+# VISUAL_CERTIFIED или BLOCKED_EVIDENCE_INCOMPLETE вместо честного отказа.
+
+
+def test_missing_reference_environment_manifest_does_not_crash():
+    """Независимое воспроизведение: раньше здесь был TypeError, а не статус."""
+    mismatches = check_compatibility(None, dict(_ENV))
+    assert mismatches, "отсутствие эталонного манифеста обязано быть mismatch, а не тишиной"
+    assert any("эталон" in m for m in mismatches)
+
+
+def test_missing_candidate_environment_manifest_does_not_crash():
+    mismatches = check_compatibility(dict(_ENV), None)
+    assert mismatches
+    assert any("кандидат" in m for m in mismatches)
+
+
+def test_both_environment_manifests_missing_does_not_crash():
+    mismatches = check_compatibility(None, None)
+    assert mismatches
+    assert any("эталон" in m for m in mismatches)
+    assert any("кандидат" in m for m in mismatches)
+
+
+def test_present_manifests_still_diff_key_by_key_after_the_fix():
+    """Правка не смягчает существующую посимвольную проверку различий."""
+    reference = dict(_ENV, browser_build="chromium-1234")
+    candidate = dict(_ENV, browser_build="chromium-1200")
+    mismatches = check_compatibility(reference, candidate)
+    assert any("browser_build" in m for m in mismatches)
+
+
+def _pr76_style_candidate_missing_structure_order(reference: list[dict]) -> list[dict]:
+    """PR76-подобный пробел: у кандидата нет структурных токенов эталона —
+    независимая от amd.online синтетика, воспроизводящая природу дефекта
+    (CHANGELOG 1.0.1: «отсутствие эталонных токенов structure_order (PR #80)»)
+    без единого литерала amd.online/PR76/PR80 в проверяемых данных."""
+    return [t for t in reference if t["name"] != "section_order"]
+
+
+def test_pr76_style_comparison_with_missing_reference_manifest_is_honestly_blocked(contract_103):
+    """Ядро дефекта 2: отсутствующий reference-side environment_manifest обязан
+    дать BLOCKED_COMPATIBILITY_MISMATCH, даже когда evidence кандидата тоже
+    неполна (как в PR #76) — а не BLOCKED_EVIDENCE_INCOMPLETE и не
+    VISUAL_CERTIFIED. reference_environment не копируется с candidate_environment:
+    он передан как None, честно отсутствующим."""
+    reference = _tokens(lambda name, s, v: _VALUES[name])
+    candidate = _pr76_style_candidate_missing_structure_order(reference)
+    result = compare(**_pack(contract_103, reference, candidate, reference_environment=None))
+    assert result.certification_status == "BLOCKED_COMPATIBILITY_MISMATCH"
+    assert any("отсутствует" in r for r in result.blocked_reasons)
+
+
+def test_pr76_style_comparison_with_incompatible_reference_manifest_is_blocked_not_certified(contract_103):
+    """Тот же сценарий, но манифест эталона присутствует и просто расходится с
+    кандидатским (не отсутствует, не скопирован) — итог тот же честный отказ."""
+    reference = _tokens(lambda name, s, v: _VALUES[name])
+    candidate = _pr76_style_candidate_missing_structure_order(reference)
+    incompatible_reference_env = dict(_ENV, renderer_driver_version="1.40.0")
+    result = compare(**_pack(contract_103, reference, candidate,
+                             reference_environment=incompatible_reference_env))
+    assert result.certification_status == "BLOCKED_COMPATIBILITY_MISMATCH"
+    assert result.certification_status != "BLOCKED_EVIDENCE_INCOMPLETE"
+    assert result.certification_status != "VISUAL_CERTIFIED"
+
+
+def test_compatible_pr76_style_reference_self_comparison_still_blocks_on_missing_evidence(contract_103):
+    """Контроль: без проблем с environment_manifest тот же пробел в evidence
+    по-прежнему честно даёт BLOCKED_EVIDENCE_INCOMPLETE (не подавлен фиксом)."""
+    reference = _tokens(lambda name, s, v: _VALUES[name])
+    candidate = _pr76_style_candidate_missing_structure_order(reference)
+    result = compare(**_pack(contract_103, reference, candidate))
+    assert result.certification_status == "BLOCKED_EVIDENCE_INCOMPLETE"
+
+
+# --- Дефект 2: регрессия на приоритет hard-failure/status --------------------
+
+
+def test_independence_violation_outranks_a_compatibility_mismatch(contract_103):
+    """Приоритет из status_precedence: BLOCKED_INDEPENDENCE_VIOLATION стоит выше
+    BLOCKED_COMPATIBILITY_MISMATCH, и hard-fail независимости обязан победить,
+    даже когда одновременно отсутствует reference-side environment_manifest."""
+    reference = _tokens(lambda name, s, v: _VALUES[name])
+    same = Identity("templates-01", "TEMPLATES")
+    result = compare(**_pack(contract_103, reference, reference,
+                             checker=same, pack_author=same,
+                             reference_environment=None))
+    assert result.certification_status == "BLOCKED_INDEPENDENCE_VIOLATION"
+
+
+def test_compatibility_mismatch_outranks_zero_comparisons(contract_103):
+    """compatibility проверяется раньше «ноль сравнений» — тоже часть той же
+    цепочки приоритетов status_precedence, которую защищает этот дефект.
+
+    decide() вызвана напрямую (как test_zero_comparisons_cannot_pass выше):
+    ноль сравнений через compare() почти всегда означает ещё и MISSING_SURFACE
+    (hard-fail), а этот тест проверяет именно следующую по приоритету пару —
+    compatibility против "ноль сравнений", без вмешательства hard-fail."""
+    result = _result(contract_103, lambda s, v: "100", comparisons_performed=0)
+    status, reasons = decide(result, contract_103, compatibility_mismatches=[
+        "environment_manifest эталона отсутствует — совместимость недоказуема"])
+    assert status == "BLOCKED_COMPATIBILITY_MISMATCH"
+
+
+def test_pr80_reference_self_comparison_stays_certified_under_1_0_3(contract_103):
+    """Сохранённое подтверждённое поведение: идентичный эталону кандидат с
+    совпадающим environment_manifest по-прежнему даёт 100.00% evidence
+    completeness и VISUAL_CERTIFIED — этот дефект её не задевает."""
+    reference = _tokens(lambda name, s, v: _VALUES[name])
+    result = compare(**_pack(contract_103, reference, reference))
+    assert result.evidence_completeness == Decimal("100")
+    assert result.certification_status == "VISUAL_CERTIFIED"
