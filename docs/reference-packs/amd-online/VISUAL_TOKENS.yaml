@@ -11,10 +11,10 @@
 schemaVersion: 1
 status: measured
 measured_at_utc: "2026-09-16T16:31:49.981317+00:00"
-measured_by: tests/tools/measure_reference.js
+measured_by: "tests/tools/measure_reference.js, tests/tools/measure_reference_colors.js, tests/tools/measure_reference_structure.js"
 reference_url: "https://amd.online/"
 blocker: null   # REF-EGRESS-01 снят: см. artifacts/.../availability.json
-tokens_total: 508
+tokens_total: 523
 tokens:
   - name: content_width
     value: 378
@@ -2258,23 +2258,27 @@ tokens:
     tolerance: "exact"
     status: measured_by_factory
   - name: grid_columns
-    value: 5
+    value: 1
     unit: count
     surface: title
     viewport: 390
-    method: "CDP grid-template-columns"
-    evidence: "artifacts/reference-pack-amd-online-01/capture/title/measurements.json#/viewports/390"
+    method: "CDP grid-template-columns на однозначно выбранном основном контентном grid-контейнере: наибольшая площадь среди видимых display:grid вне header/nav/footer/aside с >=4 потомками (tests/tools/measure_reference_structure.js); прежнее значение 5/gap:0 не соответствует ни одному видимому grid-контейнеру при переизмерении 2026-09-17 — источником, по всей видимости, был нестабильный виджет оценки (5 колонок при разных выборках рейтинга), а не основная сетка"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/title/structure.json#/viewports/390/pass_a/primaryGrid"
     tolerance: "exact"
     status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:41:45.548Z"
+    remeasured_from: "5 (2026-09-16, метод без исключения header/nav/footer/aside и без ранжирования по площади — см. VISUAL_DECISIONS.md)"
   - name: grid_gap
-    value: 0
+    value: 16
     unit: px
     surface: title
     viewport: 390
-    method: "CDP column-gap"
-    evidence: "artifacts/reference-pack-amd-online-01/capture/title/measurements.json#/viewports/390"
+    method: "CDP column-gap на том же однозначно выбранном grid-контейнере, что и grid_columns этой ячейки"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/title/structure.json#/viewports/390/pass_a/primaryGrid"
     tolerance: "±1px"
     status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:41:45.548Z"
+    remeasured_from: "0 (2026-09-16, тот же неоднозначный выбор, что и у grid_columns)"
   - name: card_aspect_ratio
     value: 0.78
     unit: ratio
@@ -2492,23 +2496,27 @@ tokens:
     tolerance: "exact"
     status: measured_by_factory
   - name: grid_columns
-    value: 12
+    value: 1
     unit: count
     surface: title
     viewport: 768
-    method: "CDP grid-template-columns"
-    evidence: "artifacts/reference-pack-amd-online-01/capture/title/measurements.json#/viewports/768"
+    method: "CDP grid-template-columns на однозначно выбранном основном контентном grid-контейнере: наибольшая площадь среди видимых display:grid вне header/nav/footer/aside с >=4 потомками (tests/tools/measure_reference_structure.js); прежнее значение 12/gap:0 не соответствует ни одному видимому grid-контейнеру при переизмерении 2026-09-17 — см. VISUAL_DECISIONS.md"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/title/structure.json#/viewports/768/pass_a/primaryGrid"
     tolerance: "exact"
     status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:41:45.548Z"
+    remeasured_from: "12 (2026-09-16, метод без исключения header/nav/footer/aside и без ранжирования по площади)"
   - name: grid_gap
-    value: 0
+    value: 16
     unit: px
     surface: title
     viewport: 768
-    method: "CDP column-gap"
-    evidence: "artifacts/reference-pack-amd-online-01/capture/title/measurements.json#/viewports/768"
+    method: "CDP column-gap на том же однозначно выбранном grid-контейнере, что и grid_columns этой ячейки"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/title/structure.json#/viewports/768/pass_a/primaryGrid"
     tolerance: "±1px"
     status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:41:45.548Z"
+    remeasured_from: "0 (2026-09-16, тот же неоднозначный выбор, что и у grid_columns)"
   - name: card_aspect_ratio
     value: 0.78
     unit: ratio
@@ -2726,23 +2734,27 @@ tokens:
     tolerance: "exact"
     status: measured_by_factory
   - name: grid_columns
-    value: 12
+    value: 3
     unit: count
     surface: title
     viewport: 1440
-    method: "CDP grid-template-columns"
-    evidence: "artifacts/reference-pack-amd-online-01/capture/title/measurements.json#/viewports/1440"
+    method: "CDP grid-template-columns на однозначно выбранном основном контентном grid-контейнере: наибольшая площадь среди видимых display:grid вне header/nav/footer/aside с >=4 потомками (tests/tools/measure_reference_structure.js); прежнее значение 12/gap:0 не соответствует ни одному видимому grid-контейнеру при переизмерении 2026-09-17 — см. VISUAL_DECISIONS.md"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/title/structure.json#/viewports/1440/pass_a/primaryGrid"
     tolerance: "exact"
     status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:41:45.548Z"
+    remeasured_from: "12 (2026-09-16, метод без исключения header/nav/footer/aside и без ранжирования по площади)"
   - name: grid_gap
-    value: 0
+    value: 16
     unit: px
     surface: title
     viewport: 1440
-    method: "CDP column-gap"
-    evidence: "artifacts/reference-pack-amd-online-01/capture/title/measurements.json#/viewports/1440"
+    method: "CDP column-gap на том же однозначно выбранном grid-контейнере, что и grid_columns этой ячейки"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/title/structure.json#/viewports/1440/pass_a/primaryGrid"
     tolerance: "±1px"
     status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:41:45.548Z"
+    remeasured_from: "0 (2026-09-16, тот же неоднозначный выбор, что и у grid_columns)"
   - name: card_aspect_ratio
     value: 0.75
     unit: ratio
@@ -2897,23 +2909,27 @@ tokens:
     tolerance: "exact"
     status: measured_by_factory
   - name: grid_columns
-    value: 3
+    value: 1
     unit: count
     surface: not_found
     viewport: 390
-    method: "CDP grid-template-columns"
-    evidence: "artifacts/reference-pack-amd-online-01/capture/not_found/measurements.json#/viewports/390"
+    method: "CDP grid-template-columns на однозначно выбранном основном контентном grid-контейнере: единственный видимый display:grid вне header/nav/footer/aside на этой ширине (filter-block__form скрыт media query до широких экранов) — tests/tools/measure_reference_structure.js; прежнее значение 3/gap:10 не соответствует ни одному видимому grid-контейнеру при переизмерении 2026-09-17, см. VISUAL_DECISIONS.md"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/not_found/structure.json#/viewports/390/pass_a/primaryGrid"
     tolerance: "exact"
     status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:41:59.360Z"
+    remeasured_from: "3 (2026-09-16, метод без исключения header/nav/footer/aside и без проверки видимости кандидата)"
   - name: grid_gap
-    value: 10
+    value: 16
     unit: px
     surface: not_found
     viewport: 390
-    method: "CDP column-gap"
-    evidence: "artifacts/reference-pack-amd-online-01/capture/not_found/measurements.json#/viewports/390"
+    method: "CDP column-gap на том же однозначно выбранном grid-контейнере, что и grid_columns этой ячейки"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/not_found/structure.json#/viewports/390/pass_a/primaryGrid"
     tolerance: "±1px"
     status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:41:59.360Z"
+    remeasured_from: "10 (2026-09-16, тот же неоднозначный выбор, что и у grid_columns)"
   - name: screenshot_sha256
     value: "c6b71bf4e0902d4d8b350e938e36e3068f3cbef447b507294a5861b0d08e5eb4"
     unit: sha256
@@ -3050,23 +3066,27 @@ tokens:
     tolerance: "exact"
     status: measured_by_factory
   - name: grid_columns
-    value: 3
+    value: 1
     unit: count
     surface: not_found
     viewport: 768
-    method: "CDP grid-template-columns"
-    evidence: "artifacts/reference-pack-amd-online-01/capture/not_found/measurements.json#/viewports/768"
+    method: "CDP grid-template-columns на однозначно выбранном основном контентном grid-контейнере: единственный видимый display:grid вне header/nav/footer/aside на этой ширине (filter-block__form скрыт media query до широких экранов) — tests/tools/measure_reference_structure.js; прежнее значение 3/gap:10 не соответствует ни одному видимому grid-контейнеру при переизмерении 2026-09-17, см. VISUAL_DECISIONS.md"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/not_found/structure.json#/viewports/768/pass_a/primaryGrid"
     tolerance: "exact"
     status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:41:59.360Z"
+    remeasured_from: "3 (2026-09-16, метод без исключения header/nav/footer/aside и без проверки видимости кандидата)"
   - name: grid_gap
-    value: 10
+    value: 16
     unit: px
     surface: not_found
     viewport: 768
-    method: "CDP column-gap"
-    evidence: "artifacts/reference-pack-amd-online-01/capture/not_found/measurements.json#/viewports/768"
+    method: "CDP column-gap на том же однозначно выбранном grid-контейнере, что и grid_columns этой ячейки"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/not_found/structure.json#/viewports/768/pass_a/primaryGrid"
     tolerance: "±1px"
     status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:41:59.360Z"
+    remeasured_from: "10 (2026-09-16, тот же неоднозначный выбор, что и у grid_columns)"
   - name: screenshot_sha256
     value: "268f10c9de1884b0aec1b8303807b5a597456ea8d019de432500d2b8a5126fe0"
     unit: sha256
@@ -3207,19 +3227,22 @@ tokens:
     unit: count
     surface: not_found
     viewport: 1440
-    method: "CDP grid-template-columns"
-    evidence: "artifacts/reference-pack-amd-online-01/capture/not_found/measurements.json#/viewports/1440"
+    method: "CDP grid-template-columns на однозначно выбранном основном контентном grid-контейнере: наибольшая площадь среди видимых display:grid вне header/nav/footer/aside с >=4 потомками (tests/tools/measure_reference_structure.js) — на этой ширине это filter-block__form, ставший видимым; значение подтверждено независимым переизмерением 2026-09-17 (columns совпал, gap — нет, см. ниже)"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/not_found/structure.json#/viewports/1440/pass_a/primaryGrid"
     tolerance: "exact"
     status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:41:59.360Z"
   - name: grid_gap
-    value: 10
+    value: 20
     unit: px
     surface: not_found
     viewport: 1440
-    method: "CDP column-gap"
-    evidence: "artifacts/reference-pack-amd-online-01/capture/not_found/measurements.json#/viewports/1440"
+    method: "CDP column-gap на том же однозначно выбранном grid-контейнере, что и grid_columns этой ячейки"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/not_found/structure.json#/viewports/1440/pass_a/primaryGrid"
     tolerance: "±1px"
     status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:41:59.360Z"
+    remeasured_from: "10 (2026-09-16); columns=4 у прежнего замера совпал с сегодняшним независимо — расхождение только в gap, что говорит либо о правке CSS на живом сайте между 16 и 17 сентября, либо о единичной погрешности прежнего инструмента"
   - name: screenshot_sha256
     value: "25d7b5c659acaa862002f0df2f542241e9569db7513bf336c7860864dbb6bb55"
     unit: sha256
@@ -5032,6 +5055,209 @@ tokens:
     status: measured_by_factory
     measured_at_utc: "2026-09-16T19:52:30.090Z"
     screenshot_sha256: "50c10028fbe65a4e6e0f81f5cec9355c1b8f7b30d93bcff5075f528f2cf67264"
+
+# Порядок секций верхнего уровня — компонент structure_order (вес 30 у
+# visual-scoring/1.0.0, самый тяжёлый). Прогон tests/tools/measure_reference_structure.js
+# 2026-09-17; метод и правило выбора контейнера — в самом токене (поле method)
+# и в VISUAL_DECISIONS.md. Каждый токен подтверждён двумя независимыми
+# проходами (см. evidence: .../pass_a — pass_b в том же файле совпал по order,
+# иначе значение не попало бы в пакет).
+
+  - name: structure_order
+    value: ["grid_section", "section", "grid_section_2", "grid_section_3", "grid_section_4", "heading_section", "grid_section_5", "grid_section_6", "grid_section_7"]
+    unit: order
+    component: structure_order
+    surface: home
+    viewport: 390
+    method: "CDP: секции контейнера, найденного структурным спуском от body (single-child либо >70% узлов поддерева у одного потомка) до первого узла без явного доминирования; роль — ARIA role/семантический тег/состав потомков (плеер, заголовок, форма, сетка ссылок-картинок), не CSS-класс; скрытые (display:none/visibility:hidden/0x0/aria-hidden/офскрин) исключены"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/home/structure.json#/viewports/390/pass_a"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:22:22.740Z"
+    screenshot_sha256: "5d7031ee0c8050b1e4c9540023a6e87ddbd7b92d888b22f22025d9d874dca894"
+    container: "<div>, unwrap_depth=6, two_pass_stable=true"
+  - name: structure_order
+    value: ["grid_section", "section", "grid_section_2", "grid_section_3", "grid_section_4", "heading_section", "grid_section_5", "grid_section_6", "grid_section_7"]
+    unit: order
+    component: structure_order
+    surface: home
+    viewport: 768
+    method: "CDP: секции контейнера, найденного структурным спуском от body (single-child либо >70% узлов поддерева у одного потомка) до первого узла без явного доминирования; роль — ARIA role/семантический тег/состав потомков (плеер, заголовок, форма, сетка ссылок-картинок), не CSS-класс; скрытые (display:none/visibility:hidden/0x0/aria-hidden/офскрин) исключены"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/home/structure.json#/viewports/768/pass_a"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:22:22.740Z"
+    screenshot_sha256: "193907de01f4de46a0fdd3a28a47e1a5f5cbc2a3bb560c5acbab7e850ff733c2"
+    container: "<div>, unwrap_depth=6, two_pass_stable=true"
+  - name: structure_order
+    value: ["grid_section", "section", "grid_section_2", "grid_section_3", "grid_section_4", "heading_section", "grid_section_5", "grid_section_6", "grid_section_7"]
+    unit: order
+    component: structure_order
+    surface: home
+    viewport: 1440
+    method: "CDP: секции контейнера, найденного структурным спуском от body (single-child либо >70% узлов поддерева у одного потомка) до первого узла без явного доминирования; роль — ARIA role/семантический тег/состав потомков (плеер, заголовок, форма, сетка ссылок-картинок), не CSS-класс; скрытые (display:none/visibility:hidden/0x0/aria-hidden/офскрин) исключены"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/home/structure.json#/viewports/1440/pass_a"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:22:22.740Z"
+    screenshot_sha256: "6a60634d81718af3b529c9e80744b11a96e64c34ebe4d52527a7f2eb465d5f52"
+    container: "<div>, unwrap_depth=6, two_pass_stable=true"
+  - name: structure_order
+    value: ["header", "grid_section", "footer"]
+    unit: order
+    component: structure_order
+    surface: catalog
+    viewport: 390
+    method: "CDP: секции контейнера, найденного структурным спуском от body (single-child либо >70% узлов поддерева у одного потомка) до первого узла без явного доминирования; роль — ARIA role/семантический тег/состав потомков (плеер, заголовок, форма, сетка ссылок-картинок), не CSS-класс; скрытые (display:none/visibility:hidden/0x0/aria-hidden/офскрин) исключены"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/catalog/structure.json#/viewports/390/pass_a"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:22:41.399Z"
+    screenshot_sha256: "b155cacca7e2ecb1125adece761fdbf953b12ab6c368918001a65e912c53a840"
+    container: "<div>, unwrap_depth=2, two_pass_stable=true"
+  - name: structure_order
+    value: ["header", "grid_section", "grid_section_2", "footer"]
+    unit: order
+    component: structure_order
+    surface: catalog
+    viewport: 768
+    method: "CDP: секции контейнера, найденного структурным спуском от body (single-child либо >70% узлов поддерева у одного потомка) до первого узла без явного доминирования; роль — ARIA role/семантический тег/состав потомков (плеер, заголовок, форма, сетка ссылок-картинок), не CSS-класс; скрытые (display:none/visibility:hidden/0x0/aria-hidden/офскрин) исключены"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/catalog/structure.json#/viewports/768/pass_a"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:22:41.399Z"
+    screenshot_sha256: "ed397af1108addc43fd87faedbfd132ebd2b769ec08896b7ea3a97738c42dbf7"
+    container: "<div>, unwrap_depth=2, two_pass_stable=true"
+  - name: structure_order
+    value: ["header", "grid_section", "grid_section_2", "footer"]
+    unit: order
+    component: structure_order
+    surface: catalog
+    viewport: 1440
+    method: "CDP: секции контейнера, найденного структурным спуском от body (single-child либо >70% узлов поддерева у одного потомка) до первого узла без явного доминирования; роль — ARIA role/семантический тег/состав потомков (плеер, заголовок, форма, сетка ссылок-картинок), не CSS-класс; скрытые (display:none/visibility:hidden/0x0/aria-hidden/офскрин) исключены"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/catalog/structure.json#/viewports/1440/pass_a"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:22:41.399Z"
+    screenshot_sha256: "728c4e49c67a3a5b1b5dc1100f11df4fa6fd5bf7b3326b8a10c4b37f15fca493"
+    container: "<div>, unwrap_depth=2, two_pass_stable=true"
+  - name: structure_order
+    value: ["header", "grid_section", "footer"]
+    unit: order
+    component: structure_order
+    surface: collection_hub
+    viewport: 390
+    method: "CDP: секции контейнера, найденного структурным спуском от body (single-child либо >70% узлов поддерева у одного потомка) до первого узла без явного доминирования; роль — ARIA role/семантический тег/состав потомков (плеер, заголовок, форма, сетка ссылок-картинок), не CSS-класс; скрытые (display:none/visibility:hidden/0x0/aria-hidden/офскрин) исключены"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/collection_hub/structure.json#/viewports/390/pass_a"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:22:56.079Z"
+    screenshot_sha256: "bd601294ea7c00526592b5d4614ca867c8b6d185e04f4e28cfcedce3c2ad6fa6"
+    container: "<div>, unwrap_depth=2, two_pass_stable=true"
+  - name: structure_order
+    value: ["header", "grid_section", "grid_section_2", "footer"]
+    unit: order
+    component: structure_order
+    surface: collection_hub
+    viewport: 768
+    method: "CDP: секции контейнера, найденного структурным спуском от body (single-child либо >70% узлов поддерева у одного потомка) до первого узла без явного доминирования; роль — ARIA role/семантический тег/состав потомков (плеер, заголовок, форма, сетка ссылок-картинок), не CSS-класс; скрытые (display:none/visibility:hidden/0x0/aria-hidden/офскрин) исключены"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/collection_hub/structure.json#/viewports/768/pass_a"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:22:56.079Z"
+    screenshot_sha256: "b658260241fe7ef26a1e06eb53c621d5562b218c4c00e4ee7a4f0cbad5c97e24"
+    container: "<div>, unwrap_depth=2, two_pass_stable=true"
+  - name: structure_order
+    value: ["header", "grid_section", "grid_section_2", "footer"]
+    unit: order
+    component: structure_order
+    surface: collection_hub
+    viewport: 1440
+    method: "CDP: секции контейнера, найденного структурным спуском от body (single-child либо >70% узлов поддерева у одного потомка) до первого узла без явного доминирования; роль — ARIA role/семантический тег/состав потомков (плеер, заголовок, форма, сетка ссылок-картинок), не CSS-класс; скрытые (display:none/visibility:hidden/0x0/aria-hidden/офскрин) исключены"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/collection_hub/structure.json#/viewports/1440/pass_a"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:22:56.079Z"
+    screenshot_sha256: "3ea6dbed59cfcc6678e9003bec09b0ac2436991a9ff978f6889d906e2eb97874"
+    container: "<div>, unwrap_depth=2, two_pass_stable=true"
+  - name: structure_order
+    value: ["section", "player_section", "section_2", "heading_section", "grid_section", "grid_section_2", "grid_section_3"]
+    unit: order
+    component: structure_order
+    surface: title
+    viewport: 390
+    method: "CDP: секции контейнера, найденного структурным спуском от body (single-child либо >70% узлов поддерева у одного потомка) до первого узла без явного доминирования; роль — ARIA role/семантический тег/состав потомков (плеер, заголовок, форма, сетка ссылок-картинок), не CSS-класс; скрытые (display:none/visibility:hidden/0x0/aria-hidden/офскрин) исключены"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/title/structure.json#/viewports/390/pass_a"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:23:10.884Z"
+    screenshot_sha256: "49295ee18f723a83d6896e9edf2ec1421ddd65fef0021e696dfc91b7902d0fd4"
+    container: "<div>, unwrap_depth=10, two_pass_stable=true"
+  - name: structure_order
+    value: ["section", "player_section", "section_2", "heading_section", "grid_section", "grid_section_2", "grid_section_3"]
+    unit: order
+    component: structure_order
+    surface: title
+    viewport: 768
+    method: "CDP: секции контейнера, найденного структурным спуском от body (single-child либо >70% узлов поддерева у одного потомка) до первого узла без явного доминирования; роль — ARIA role/семантический тег/состав потомков (плеер, заголовок, форма, сетка ссылок-картинок), не CSS-класс; скрытые (display:none/visibility:hidden/0x0/aria-hidden/офскрин) исключены"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/title/structure.json#/viewports/768/pass_a"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:23:10.884Z"
+    screenshot_sha256: "4e41f662337fdb73b2201fba5b0b15dad5b5e0ab4d946e839dfc309634e3406e"
+    container: "<div>, unwrap_depth=10, two_pass_stable=true"
+  - name: structure_order
+    value: ["section", "player_section", "section_2", "heading_section", "grid_section", "grid_section_2", "grid_section_3"]
+    unit: order
+    component: structure_order
+    surface: title
+    viewport: 1440
+    method: "CDP: секции контейнера, найденного структурным спуском от body (single-child либо >70% узлов поддерева у одного потомка) до первого узла без явного доминирования; роль — ARIA role/семантический тег/состав потомков (плеер, заголовок, форма, сетка ссылок-картинок), не CSS-класс; скрытые (display:none/visibility:hidden/0x0/aria-hidden/офскрин) исключены"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/title/structure.json#/viewports/1440/pass_a"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:23:10.884Z"
+    screenshot_sha256: "e85bd06b0e57381e6537d119cdd7892e466f57b63477fd4a11835f9784c52540"
+    container: "<div>, unwrap_depth=10, two_pass_stable=true"
+  - name: structure_order
+    value: ["header", "form_section", "footer"]
+    unit: order
+    component: structure_order
+    surface: not_found
+    viewport: 390
+    method: "CDP: секции контейнера, найденного структурным спуском от body (single-child либо >70% узлов поддерева у одного потомка) до первого узла без явного доминирования; роль — ARIA role/семантический тег/состав потомков (плеер, заголовок, форма, сетка ссылок-картинок), не CSS-класс; скрытые (display:none/visibility:hidden/0x0/aria-hidden/офскрин) исключены"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/not_found/structure.json#/viewports/390/pass_a"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:23:31.884Z"
+    screenshot_sha256: "2af93358f68ca18fee7103ef04809816de45cfab4290d73f6a5fa9371534269b"
+    container: "<div>, unwrap_depth=2, two_pass_stable=true"
+  - name: structure_order
+    value: ["header", "grid_section", "form_section", "footer"]
+    unit: order
+    component: structure_order
+    surface: not_found
+    viewport: 768
+    method: "CDP: секции контейнера, найденного структурным спуском от body (single-child либо >70% узлов поддерева у одного потомка) до первого узла без явного доминирования; роль — ARIA role/семантический тег/состав потомков (плеер, заголовок, форма, сетка ссылок-картинок), не CSS-класс; скрытые (display:none/visibility:hidden/0x0/aria-hidden/офскрин) исключены"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/not_found/structure.json#/viewports/768/pass_a"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:23:31.884Z"
+    screenshot_sha256: "268f10c9de1884b0aec1b8303807b5a597456ea8d019de432500d2b8a5126fe0"
+    container: "<div>, unwrap_depth=2, two_pass_stable=true"
+  - name: structure_order
+    value: ["header", "grid_section", "form_section", "footer"]
+    unit: order
+    component: structure_order
+    surface: not_found
+    viewport: 1440
+    method: "CDP: секции контейнера, найденного структурным спуском от body (single-child либо >70% узлов поддерева у одного потомка) до первого узла без явного доминирования; роль — ARIA role/семантический тег/состав потомков (плеер, заголовок, форма, сетка ссылок-картинок), не CSS-класс; скрытые (display:none/visibility:hidden/0x0/aria-hidden/офскрин) исключены"
+    evidence: "artifacts/reference-pack-amd-online-01/capture-structure/not_found/structure.json#/viewports/1440/pass_a"
+    tolerance: "exact"
+    status: measured_by_factory
+    measured_at_utc: "2026-09-17T08:23:31.884Z"
+    screenshot_sha256: "50c10028fbe65a4e6e0f81f5cec9355c1b8f7b30d93bcff5075f528f2cf67264"
+    container: "<div>, unwrap_depth=2, two_pass_stable=true"
 
 # Доказательства цветового прогона: файл целиком, с дайджестом.
 color_evidence:
