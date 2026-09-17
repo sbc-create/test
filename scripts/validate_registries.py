@@ -37,6 +37,11 @@ MAPPING = {
     # ведёт сессия выкладки, и отсутствие файла — потеря единственного места,
     # где записаны точки отката девяти доменов.
     "FLEET-REGISTRY.json": "fleet-registry.schema.json",
+    # Versioned HF/MF/LF frequency-band thresholds. Hand-authored and
+    # committed, not generated, so it belongs in MAPPING rather than DERIVED:
+    # its absence would be a real loss of the current policy revision, not a
+    # branch without a generator wired up yet.
+    "frequency-band-policy.json": "frequency-band-policy.schema.json",
 }
 
 # Производные артефакты: файл порождается из другого источника и в некоторых

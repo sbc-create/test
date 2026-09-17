@@ -1,0 +1,41 @@
+{
+  "manifest_id": "broken-manifest",
+  "version": 1,
+  "revision": 1,
+  "digest": "0000000000000000000000000000000000000000000000000000000000000000",
+  "generated_at": "2026-09-17T00:10:00+00:00",
+  "site_authority_source": "factory-site-packages",
+  "band_policy_revision": 1,
+  "entries": [
+    {
+      "site_id": "lords-01",
+      "domain": "lordfilm47.space",
+      "site_ready": false,
+      "query": "смотреть боевики онлайн",
+      "normalized_query": "смотреть боевики онлайн",
+      "taxonomy_id": "genre.action",
+      "intent": "watch_intent",
+      "cluster": "genre-action",
+      "frequency_band": "MF",
+      "frequency_measurement": {
+        "value": 4400,
+        "source": "yandex_webmaster",
+        "measured_at": "2026-08-20T00:00:00+00:00",
+        "region": "213",
+        "searcher": "yandex",
+        "freshness": "FRESH"
+      },
+      "target_url": "https://lordfilm47.space/genre/action",
+      "relevance_decision": {
+        "verdict": "APPROVED_RELEVANT",
+        "reason": "claimed relevant with no supporting evidence at all",
+        "policy_revision": 1,
+        "decided_at": "2026-09-17T00:00:00+00:00"
+      },
+      "evidence": [],
+      "owner": {"approved_by": "seo-operator-dry-run", "approved_at": "2026-09-17T00:00:00+00:00"},
+      "created_at": "2026-09-17T00:00:00+00:00",
+      "expires_at": null
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "policy_id": "broken-policy",
+  "revision": 1,
+  "supersedes_revision": null,
+  "digest": "not-a-valid-sha256-digest",
+  "effective_from": "2026-09-17T00:00:00Z",
+  "region": "213",
+  "searchers": ["yandex", "google"],
+  "freshness_max_age_days": 90,
+  "bands": [
+    {"name": "LF", "min_monthly_volume": 0, "max_monthly_volume": 1000},
+    {"name": "HF", "min_monthly_volume": 1000, "max_monthly_volume": null}
+  ]
+}

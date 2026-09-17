@@ -1,0 +1,31 @@
+{
+  "bands": [
+    {
+      "max_monthly_volume": 1000,
+      "min_monthly_volume": 0,
+      "name": "LF"
+    },
+    {
+      "max_monthly_volume": 10000,
+      "min_monthly_volume": 1000,
+      "name": "MF"
+    },
+    {
+      "max_monthly_volume": null,
+      "min_monthly_volume": 10000,
+      "name": "HF"
+    }
+  ],
+  "digest": "7d90d5bf6e0a11ff835cbb8b393c0ffca93ca30474ab6b666a388a732a6a7f72",
+  "effective_from": "2026-09-17T00:00:00Z",
+  "freshness_max_age_days": 90,
+  "note": "Default starting boundaries for the six-site RU video/anime portfolio, calibrated to round numbers rather than owner-supplied traffic data. Treat as a placeholder revision: recalibrating against real Wordstat/GSC volume is expected to produce revision 2 with a new digest, not an edit of this file.",
+  "policy_id": "ru-video-portfolio-default",
+  "region": "213",
+  "revision": 1,
+  "searchers": [
+    "yandex",
+    "google"
+  ],
+  "supersedes_revision": null
+}

@@ -1,0 +1,85 @@
+{
+  "band_policy_revision": 1,
+  "digest": "90089bedfbef0336f1700db6cfe900408e9e036af2f9cb2a1671b5fea0b46f87",
+  "entries": [
+    {
+      "cluster": "genre-action",
+      "created_at": "2026-09-17T00:00:00+00:00",
+      "domain": "lordfilm47.space",
+      "evidence": [
+        {
+          "checked_at": "2026-09-16T00:00:00+00:00",
+          "kind": "indexability_observation",
+          "ref": "idx-lords01-genre-action-001",
+          "summary": "HTTP 200, robots allowed, self-canonical, in sitemap, rendered text present"
+        }
+      ],
+      "expires_at": null,
+      "frequency_band": "MF",
+      "frequency_measurement": {
+        "freshness": "FRESH",
+        "measured_at": "2026-08-20T00:00:00+00:00",
+        "region": "213",
+        "searcher": "yandex",
+        "source": "yandex_webmaster",
+        "value": 4400
+      },
+      "intent": "watch_intent",
+      "normalized_query": "смотреть боевики онлайн",
+      "owner": {
+        "approved_at": "2026-09-17T00:00:00+00:00",
+        "approved_by": "seo-operator-dry-run"
+      },
+      "query": "смотреть боевики онлайн",
+      "relevance_decision": {
+        "decided_at": "2026-09-17T00:00:00+00:00",
+        "policy_revision": 1,
+        "reason": "intent watch_intent matches landing page taxonomy genre.action; rendered evidence confirmed; no ownership conflict",
+        "verdict": "APPROVED_RELEVANT"
+      },
+      "site_id": "lords-01",
+      "site_ready": false,
+      "target_url": "https://lordfilm47.space/genre/action",
+      "taxonomy_id": "genre.action"
+    },
+    {
+      "cluster": "title-homonym",
+      "created_at": "2026-09-17T00:05:00+00:00",
+      "domain": "lordserial33.biz",
+      "evidence": [],
+      "expires_at": null,
+      "frequency_band": "UNKNOWN",
+      "frequency_measurement": {
+        "freshness": "MISSING",
+        "measured_at": null,
+        "region": "213",
+        "searcher": "yandex",
+        "source": "yandex_webmaster",
+        "value": null
+      },
+      "intent": "title_exact",
+      "normalized_query": "интерстеллар",
+      "owner": {
+        "approved_at": "2026-09-17T00:05:00+00:00",
+        "approved_by": "seo-operator-dry-run"
+      },
+      "query": "интерстеллар",
+      "relevance_decision": {
+        "decided_at": "2026-09-17T00:05:00+00:00",
+        "policy_revision": 1,
+        "reason": "query title matches 2 distinct entities (interstellar-2014, interstellar-cover-band-ep): title text alone cannot resolve it",
+        "verdict": "AMBIGUOUS"
+      },
+      "site_id": "lords-02",
+      "site_ready": false,
+      "target_url": "https://lordserial33.biz/title/interstellar-2014",
+      "taxonomy_id": "title.unresolved"
+    }
+  ],
+  "generated_at": "2026-09-17T00:10:00+00:00",
+  "manifest_id": "approved-relevant-manifest-example",
+  "note": "Example fixture for schema validation only; not a real approval record.",
+  "revision": 1,
+  "site_authority_source": "factory-site-packages",
+  "version": 1
+}

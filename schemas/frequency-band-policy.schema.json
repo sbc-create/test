@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sbc-create/test/schemas/frequency-band-policy.schema.json",
+  "title": "Frequency Band Policy",
+  "description": "Versioned thresholds that classify a query's monthly search volume into HF/MF/LF bands. Boundaries are data, never hardcoded numbers in code. Changing a boundary requires a new revision; the previous revision is never edited in place.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "policy_id", "revision", "digest", "effective_from", "region",
+    "searchers", "freshness_max_age_days", "bands"
+  ],
+  "properties": {
+    "policy_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]{2,}(-[a-z0-9]+)*$"
+    },
+    "revision": {"type": "integer", "minimum": 1},
+    "supersedes_revision": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "description": "Revision this document replaces, or null for the first revision."
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "sha256 hex digest of the canonical (sorted-key, compact) JSON form of this document with the digest field itself removed."
+    },
+    "effective_from": {"type": "string", "format": "date-time"},
+    "note": {"type": "string"},
+    "region": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Region code the volume measurements this policy classifies were taken in, e.g. Topvisor region '213' for Moscow."
+    },
+    "searchers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "enum": ["yandex", "google"]}
+    },
+    "freshness_max_age_days": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "A volume measurement older than this is treated as stale and classifies as UNKNOWN, never as its last known band."
+    },
+    "bands": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "description": "Exactly one contiguous, non-overlapping definition of LF, MF and HF starting at 0 and ending open-ended.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "min_monthly_volume", "max_monthly_volume"],
+        "properties": {
+          "name": {"type": "string", "enum": ["LF", "MF", "HF"]},
+          "min_monthly_volume": {"type": "integer", "minimum": 0},
+          "max_monthly_volume": {
+            "type": ["integer", "null"],
+            "minimum": 0,
+            "description": "Exclusive upper bound. null marks the open-ended top band (HF)."
+          }
+        }
+      }
+    }
+  }
+}

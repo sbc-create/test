@@ -7,6 +7,7 @@ seo-operator canary  [--fixture]   применить изменения в пр
 seo-operator observe --experiment  оценить эксперимент и решить keep/rollback
 seo-operator report  [--fixture]   сформировать ежедневный отчёт
 seo-operator analytics-collect     read-only сбор показателей Метрики и Вебмастера
+seo-operator relevance-validate    dry-run проверка approved_relevant_manifest
 """
 
 from __future__ import annotations
@@ -159,6 +160,31 @@ def cmd_analytics_collect(args) -> int:
     return 0
 
 
+def cmd_relevance_validate(args) -> int:
+    """Dry-run schema + digest validation of an approved_relevant_manifest file.
+
+    Reads the file and the schema, recomputes the digest, and reports problems.
+    Never calls Topvisor and never writes anything — there is no `--apply` here.
+    """
+    from seo_operator.approved_relevant_manifest import sync_eligible_entries, validate_manifest
+
+    path = Path(args.manifest)
+    if not path.exists():
+        print(f"BLOCKED_INPUT: файл не найден: {path}", file=sys.stderr)
+        return 3
+    data = json.loads(path.read_text(encoding="utf-8"))
+    problems = validate_manifest(data)
+    if problems:
+        for problem in problems:
+            print(f"FAIL: {problem}", file=sys.stderr)
+        return 3
+    eligible = sync_eligible_entries(data)
+    print(f"OK: {path} проходит валидацию и подсчёт digest")
+    print(f"записей всего: {len(data.get('entries', []))}, sync_eligible: {len(eligible)}")
+    print("Topvisor не вызывался: эта команда только читает и проверяет файл.")
+    return 0
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(prog="seo-operator", description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -196,6 +222,12 @@ def main(argv=None) -> int:
     p.add_argument("--json", action="store_true", help="машиночитаемый вывод")
     p.add_argument("--out", help="записать отчёт в файл")
 
+    p = sub.add_parser(
+        "relevance-validate",
+        help="dry-run проверка approved_relevant_manifest (без Topvisor)",
+    )
+    p.add_argument("--manifest", required=True, help="путь к файлу манифеста")
+
     args = parser.parse_args(argv)
 
     if args.command == "analytics-collect":
@@ -214,6 +246,8 @@ def main(argv=None) -> int:
         return cmd_run(args, Mode.DRY_RUN)
     if args.command == "weekly":
         return cmd_weekly(args)
+    if args.command == "relevance-validate":
+        return cmd_relevance_validate(args)
     return 1
 
 

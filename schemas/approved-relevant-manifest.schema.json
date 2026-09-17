@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sbc-create/test/schemas/approved-relevant-manifest.schema.json",
+  "title": "Approved Relevant Manifest",
+  "description": "Versioned record of query-to-URL topical relevance decisions. Building this document performs no network call and no Topvisor mutation; only APPROVED_RELEVANT entries with non-empty evidence and a ready site are candidates for a future, separately authorized Topvisor sync that this contract does not itself perform.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "manifest_id", "version", "revision", "digest", "generated_at",
+    "site_authority_source", "band_policy_revision", "entries"
+  ],
+  "properties": {
+    "manifest_id": {"type": "string", "pattern": "^[a-z0-9]{2,}(-[a-z0-9]+)*$"},
+    "version": {"type": "integer", "minimum": 1},
+    "revision": {"type": "integer", "minimum": 1},
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "sha256 hex digest of the canonical (sorted-key, compact) JSON form of this document with the digest field itself removed. Entries are sorted by (site_id, normalized_query, target_url) before hashing so the digest does not depend on assembly order."
+    },
+    "generated_at": {"type": "string", "format": "date-time"},
+    "site_authority_source": {
+      "type": "string",
+      "enum": ["factory-site-packages"],
+      "description": "Which registry resolved site_id/domain for every entry. Only sites/*/package.yaml (via seo_operator.factory_bridge) is recognised; there is deliberately no second site registry here."
+    },
+    "band_policy_revision": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The frequency-band-policy revision used to classify every entry's frequency_band."
+    },
+    "note": {"type": "string"},
+    "entries": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/entry"}
+    }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "site_id", "domain", "site_ready", "query", "normalized_query",
+        "taxonomy_id", "intent", "cluster", "frequency_band", "frequency_measurement",
+        "target_url", "relevance_decision", "evidence", "owner", "created_at"
+      ],
+      "properties": {
+        "site_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+        "domain": {"type": "string", "pattern": "^[a-z0-9.-]+$"},
+        "site_ready": {
+          "type": "boolean",
+          "description": "Readiness (rights confirmed, production authorized, not a stand domain) as reported by the site authority at the moment this entry was built."
+        },
+        "query": {"type": "string", "minLength": 1},
+        "normalized_query": {"type": "string", "minLength": 1},
+        "taxonomy_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Content entity/taxonomy identifier the query names. This policy does not mint entity IDs; it references whatever identifier the site's content pipeline already uses."
+        },
+        "intent": {
+          "type": "string",
+          "enum": [
+            "title_exact", "title_season", "watch_intent", "discovery",
+            "informational", "navigational", "unclassified"
+          ],
+          "description": "seo_operator.priority.QueryClass value. This contract reuses that taxonomy rather than defining a second one."
+        },
+        "cluster": {"type": "string", "minLength": 1},
+        "frequency_band": {"type": "string", "enum": ["HF", "MF", "LF", "UNKNOWN"]},
+        "frequency_measurement": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["value", "source", "measured_at", "region", "searcher", "freshness"],
+          "properties": {
+            "value": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "Monthly search volume. null means not measured — never 0."
+            },
+            "source": {"type": "string", "minLength": 1},
+            "measured_at": {
+              "type": ["string", "null"],
+              "format": "date-time",
+              "description": "null only when value is also null."
+            },
+            "region": {"type": "string", "minLength": 1},
+            "searcher": {"type": "string", "enum": ["yandex", "google"]},
+            "freshness": {"type": "string", "enum": ["FRESH", "STALE", "MISSING"]}
+          }
+        },
+        "target_url": {"type": "string", "format": "uri", "pattern": "^https?://"},
+        "relevance_decision": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["verdict", "reason", "policy_revision", "decided_at"],
+          "properties": {
+            "verdict": {
+              "type": "string",
+              "enum": ["APPROVED_RELEVANT", "AMBIGUOUS", "OFF_TOPIC", "SUSPICIOUS_REQUIRES_REVIEW"]
+            },
+            "reason": {"type": "string", "minLength": 1},
+            "policy_revision": {"type": "integer", "minimum": 1},
+            "decided_at": {"type": "string", "format": "date-time"}
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["kind", "ref", "summary", "checked_at"],
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "query_observation", "rank_observation",
+                  "search_index_observation", "indexability_observation",
+                  "manual_review"
+                ]
+              },
+              "ref": {"type": "string", "minLength": 1},
+              "summary": {"type": "string", "minLength": 1},
+              "checked_at": {"type": "string", "format": "date-time"}
+            }
+          }
+        },
+        "owner": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["approved_by", "approved_at"],
+          "properties": {
+            "approved_by": {"type": "string", "minLength": 1},
+            "approved_at": {"type": "string", "format": "date-time"}
+          }
+        },
+        "created_at": {"type": "string", "format": "date-time"},
+        "expires_at": {"type": ["string", "null"], "format": "date-time"}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "relevance_decision": {
+                "properties": {"verdict": {"const": "APPROVED_RELEVANT"}}
+              }
+            }
+          },
+          "then": {
+            "properties": {"evidence": {"minItems": 1}}
+          }
+        }
+      ]
+    }
+  }
+}
