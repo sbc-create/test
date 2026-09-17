@@ -459,7 +459,9 @@ def test_incomplete_evidence_cannot_pass(contract):
 # --- классификация токенов ---------------------------------------------------
 
 
-@pytest.mark.parametrize("name,component", [
+#: Переиспользуется тестами и 1.0.0, и 1.0.1: исправление header_sticky не
+#: имело права сдвинуть ни одно из уже закреплённых назначений.
+_COMPONENT_ASSIGNMENT_CASES = [
     ("content_width", "geometry"),
     ("outer_gutter", "geometry"),
     ("grid_columns", "geometry"),
@@ -477,7 +479,10 @@ def test_incomplete_evidence_cannot_pass(contract):
     ("header_present", "structure_order"),
     ("accent_color", "colors"),
     ("card_radius", "cards_media"),
-])
+]
+
+
+@pytest.mark.parametrize("name,component", _COMPONENT_ASSIGNMENT_CASES)
 def test_component_assignment_is_rule_driven(contract, name, component):
     assert assign_component({"name": name}, contract) == component
 
@@ -492,6 +497,134 @@ def test_unknown_token_is_not_silently_dropped(contract):
 
 def test_screenshot_digest_is_not_a_scored_unit(contract):
     assert "sha256" in contract["non_scoring_units"]
+
+
+# --- 1.0.1: header_sticky перестаёт быть UNASSIGNED --------------------------
+#
+# PR #76/#81 подтвердили прогоном compare(): header_sticky (15 токенов пакета
+# amd.online) не совпадал ни с одним name_patterns в 1.0.0, получал UNASSIGNED
+# и снижал evidence_completeness независимо от значения у кандидата. Тесты
+# ниже проверяют исправление в 1.0.1, не используя данные amd.online и не
+# вынося вердикт по кандидату.
+
+
+@pytest.fixture(scope="module")
+def contract_101() -> dict:
+    return load_contract("1.0.1", root=REPO_ROOT / "contracts" / "visual-scoring")
+
+
+@pytest.mark.parametrize("value", [True, False])
+def test_header_sticky_assigns_to_one_documented_component_regardless_of_value(contract_101, value):
+    assert assign_component({"name": "header_sticky", "value": value}, contract_101) == "geometry"
+
+
+@pytest.mark.parametrize("surface,viewport", [
+    ("home", 390), ("catalog", 768), ("collection_hub", 1440),
+    ("title", 390), ("not_found", 1440),
+])
+def test_header_sticky_assignment_is_the_same_on_every_surface_and_viewport(contract_101, surface, viewport):
+    token = {"name": "header_sticky", "surface": surface, "viewport": viewport}
+    assert assign_component(token, contract_101) == "geometry"
+
+
+@pytest.mark.parametrize("name", ["nav_sticky", "footer_sticky", "sidebar_sticky"])
+def test_sticky_rule_is_general_not_hardcoded_to_header(contract_101, name):
+    """Правило основано на семантике имени токена (*_sticky), не на header_sticky буквально."""
+    assert assign_component({"name": name}, contract_101) == "geometry"
+
+
+@pytest.mark.parametrize("name", ["modal_open", "cookie_banner_visible", "nav_collapsed"])
+def test_unrelated_boolean_token_without_a_rule_stays_fail_closed(contract_101, name):
+    """Токен без _sticky в имени не подхватывается новым правилом по совпадению типа."""
+    assert assign_component({"name": name, "unit": "bool"}, contract_101) == "UNASSIGNED"
+
+
+@pytest.mark.parametrize("name,component", _COMPONENT_ASSIGNMENT_CASES)
+def test_all_1_0_0_component_assignments_still_work_under_1_0_1(contract_101, name, component):
+    assert assign_component({"name": name}, contract_101) == component
+
+
+def test_1_0_1_contract_version_is_pinned(contract_101):
+    assert contract_101["contract_version"] == "visual-scoring/1.0.1"
+    assert contract_101["status"] == "immutable"
+
+
+def test_1_0_1_preserves_weights_thresholds_and_completeness_requirement(contract, contract_101):
+    assert contract_101["weights"] == contract["weights"]
+    assert contract_101["thresholds"] == contract["thresholds"]
+    assert contract_101["hard_failures"] == contract["hard_failures"]
+    assert contract_101["scoring_rules"] == contract["scoring_rules"]
+    assert contract_101["aggregation"] == contract["aggregation"]
+    assert contract_101["statuses"] == contract["statuses"]
+    assert contract_101["status_precedence"] == contract["status_precedence"]
+
+
+def test_1_0_1_files_match_their_recorded_checksums():
+    """1.0.1 сама стала неизменяемой версией: правка после выпуска обязана обнаруживаться."""
+    import hashlib
+
+    base = REPO_ROOT / "contracts" / "visual-scoring" / "1.0.1"
+    recorded = json.loads((base / "checksums.json").read_text(encoding="utf-8"))
+    for name, digest in sorted(recorded["files"].items()):
+        path = (base / name).resolve()
+        actual = "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
+        assert actual == digest, f"{name} изменён после выпуска версии"
+
+
+def test_1_0_0_directory_is_untouched_by_the_1_0_1_fix():
+    """Патч живёт в новом каталоге: 1.0.0 обязан остаться побитово тем же."""
+    import hashlib
+
+    base = REPO_ROOT / "contracts" / "visual-scoring" / "1.0.0"
+    recorded = json.loads((base / "checksums.json").read_text(encoding="utf-8"))
+    for name, digest in sorted(recorded["files"].items()):
+        path = (base / name).resolve()
+        actual = "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
+        assert actual == digest, f"{name} изменён — 1.0.0 больше не immutable"
+
+
+def _with_header_sticky(tokens: list[dict], value: bool = True) -> list[dict]:
+    """Добавить header_sticky на все 15 обязательных ячеек, не трогая _VALUES/_tokens()."""
+    extra = []
+    for surface in ["home", "catalog", "collection_hub", "title", "not_found"]:
+        for viewport in [390, 768, 1440]:
+            extra.append({
+                "name": "header_sticky", "value": value, "unit": "bool",
+                "surface": surface, "viewport": viewport,
+                "method": "CDP getComputedStyle.position",
+                "evidence": f"artifacts/capture/{surface}/measurements.json#/{viewport}/header_sticky",
+            })
+    return tokens + extra
+
+
+def test_header_sticky_still_blocks_full_completeness_under_1_0_0(contract):
+    """Регрессионный контроль: 1.0.0 воспроизводимо остаётся дефектной (для сравнения до/после)."""
+    reference = _with_header_sticky(_tokens(lambda name, s, v: _VALUES[name]))
+    candidate = _with_header_sticky(_tokens(lambda name, s, v: _VALUES[name]))
+    result = compare(**_pack(contract, reference, candidate))
+    assert result.evidence_completeness < Decimal("100")
+    assert result.certification_status == "BLOCKED_EVIDENCE_INCOMPLETE"
+
+
+def test_header_sticky_no_longer_blocks_completeness_under_1_0_1(contract_101):
+    """Тот же вход, исправленный контракт: header_sticky больше не UNASSIGNED."""
+    reference = _with_header_sticky(_tokens(lambda name, s, v: _VALUES[name]))
+    candidate = _with_header_sticky(_tokens(lambda name, s, v: _VALUES[name]))
+    result = compare(**_pack(contract_101, reference, candidate))
+    assert result.evidence_completeness == Decimal("100")
+    assert result.certification_status == "VISUAL_CERTIFIED"
+    assert result.comparisons_performed == 90 + 15
+
+
+def test_header_sticky_candidate_value_still_affects_the_score_under_1_0_1(contract_101):
+    """Не подгонка: расходящееся значение честно теряет баллы, а не проходит молча."""
+    reference = _with_header_sticky(_tokens(lambda name, s, v: _VALUES[name]), value=True)
+    candidate = _with_header_sticky(_tokens(lambda name, s, v: _VALUES[name]), value=False)
+    result = compare(**_pack(contract_101, reference, candidate))
+    assert result.evidence_completeness == Decimal("100")
+    assert result.overall_score < Decimal("100")
+    geometry_cells = [c for c in result.component_scores if c.component == "geometry"]
+    assert geometry_cells and all(c.score < Decimal("100") for c in geometry_cells)
 
 
 # --- форма контракта ---------------------------------------------------------

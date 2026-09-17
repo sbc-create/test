@@ -82,7 +82,7 @@ class ScoringResult:
 # --- загрузка контракта ------------------------------------------------------
 
 
-def load_contract(version: str = "1.0.0", root: Path | None = None) -> dict[str, Any]:
+def load_contract(version: str = "1.0.1", root: Path | None = None) -> dict[str, Any]:
     """Прочитать контракт и проверить его самосогласованность.
 
     Отсутствующий контракт — не повод посчитать по умолчанию: без правила
