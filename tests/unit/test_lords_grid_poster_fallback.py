@@ -44,11 +44,14 @@ class TestКарточкаФикстуры:
         html = render_mod._poster(title)
         assert f'src="{title.poster_path}"' in html
 
-    def test_буква_остаётся_под_картинкой_на_случай_onerror(self):
+    def test_буква_остаётся_под_картинкой_на_случай_ошибки_загрузки(self):
+        """Обработчик — не инлайновый `onerror` (см. test_json_ld_cannot_break_out.py),
+        а делегированный слушатель `/assets/app.js` по классу `card__poster-img`."""
         catalog = fx.build_catalog()
         html = render_mod._poster(catalog.titles[0])
-        assert "card__poster-empty" in html, "onerror снимет img — под ним должна остаться буква"
-        assert "onerror=" in html
+        assert "card__poster-empty" in html, "скрипт снимет img — под ним должна остаться буква"
+        assert 'class="card__poster-img"' in html
+        assert "onerror=" not in html
 
 
 class TestКарточкаЖивойЗаписи:

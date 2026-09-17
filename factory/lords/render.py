@@ -659,10 +659,19 @@ def _poster(title) -> str:
     `poster_src` определён на обоих классах записи и уже возвращает нужный
     результат в обоих случаях — переоткрывать эту логику здесь не нужно.
 
-    Буква под изображением остаётся: `onerror` снимает картинку, если адрес
-    поставщика не открылся в браузере посетителя, и заглушка с буквой
-    оказывается под ней — карточка не показывает битое изображение и не
-    остаётся пустой.
+    Буква под изображением остаётся: скрипт витрины (`/assets/app.js`) снимает
+    картинку при ошибке загрузки и заглушка с буквой оказывается под ней —
+    карточка не показывает битое изображение и не остаётся пустой.
+
+    Обработчик — не `onerror` в разметке. Инлайновый атрибут события стоит
+    рядом с данными от поставщика (`title.name` идёт в этот же блок разметки
+    выше) и попадает под общую защиту от JSON-LD breakout: та проверяет, что
+    ни один тег на странице не несёт `on*`-атрибута, потому что появление
+    такого атрибута рядом с чужими данными и есть признак пробитой
+    экранировки. Статический `onerror="this.remove()"` неотличим от этого
+    признака чисто текстовым поиском. Делегированный слушатель в доверенном
+    файле, срабатывающий по классу `card__poster-img`, а не по содержимому —
+    тот же эффект без атрибута в разметке.
     """
     letter = escape((title.name or "?").strip()[:1].upper())
     placeholder = f'<span class="card__poster-empty" aria-hidden="true">{letter}</span>'
@@ -670,8 +679,8 @@ def _poster(title) -> str:
     if not source:
         return placeholder
     return (
-        f'{placeholder}<img src="{escape(source)}" alt="" loading="lazy"'
-        ' width="400" height="600" onerror="this.remove()">'
+        f'{placeholder}<img class="card__poster-img" src="{escape(source)}" alt="" loading="lazy"'
+        ' width="400" height="600">'
     )
 
 
@@ -721,6 +730,10 @@ def _rail_poster(item) -> str:
     Отдельно от `_poster` потому, что у карусели своя запись: она приходит от
     ранжировщика и несёт не объект каталога, а признаки. Правило то же —
     заглушка с первой буквой названия, изображение снимает себя при отказе.
+
+    Слушатель ошибки — делегированный, в `/assets/app.js`, по классу
+    `rail__poster-img`; см. `_poster` — тот же инлайновый `onerror` рядом с
+    чужими данными задевал защиту от JSON-LD breakout.
     """
     letter = escape((getattr(item, "title", "") or "?").strip()[:1].upper())
     placeholder = f'<span class="rail__poster-empty" aria-hidden="true">{letter}</span>'
@@ -728,8 +741,8 @@ def _rail_poster(item) -> str:
     if not source:
         return placeholder
     return (
-        f'{placeholder}<img src="{escape(source)}" alt="" loading="lazy" decoding="async"'
-        ' width="400" height="600" onerror="this.remove()">'
+        f'{placeholder}<img class="rail__poster-img" src="{escape(source)}" alt="" loading="lazy" decoding="async"'
+        ' width="400" height="600">'
     )
 
 
@@ -2235,6 +2248,25 @@ APP_JS = r"""/* Lords — поведение интерфейса. Ни одно
   }
   window.setTimeout(decide, READY_TIMEOUT_MS);
 })();
+
+
+/* Постер записи: снять картинку, если адрес поставщика не открылся.
+ *
+ * Раньше это был `onerror="this.remove()"` прямо в разметке карточки. Тот же
+ * тег несёт данные от поставщика (название, отсюда и буква заглушки), и
+ * инлайновый атрибут события рядом с чужими данными неотличим текстовым
+ * поиском от признака пробитой экранировки — под этим же именем его ищет
+ * защита от JSON-LD breakout (см. tests/unit/test_json_ld_cannot_break_out.py).
+ * Здесь тот же эффект получен без единого атрибута события в разметке:
+ * делегированный слушатель по имени класса, не по содержимому тега. `error`
+ * на `<img>` не всплывает — слушатель обязан быть на фазе перехвата. */
+document.addEventListener("error", function (event) {
+  var img = event.target;
+  if (!img || img.tagName !== "IMG") { return; }
+  if (img.classList.contains("card__poster-img") || img.classList.contains("rail__poster-img")) {
+    img.remove();
+  }
+}, true);
 
 
 /* Выбор темы.
