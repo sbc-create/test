@@ -1,0 +1,88 @@
+# Исключения пакета amd-online в машиночитаемой форме.
+#
+# EXCLUSIONS.md остаётся объяснением для человека; этот файл — то, что подаётся
+# независимому проверяющему как `declared_exclusions`. Оба описывают одно и то
+# же разделение, но сравнение считает по этому файлу: прозу нельзя захешировать.
+#
+# `exclusions_digest` снят с состава списка (не с порядка строк) по правилу
+# visual-scoring: канонический JSON каждого элемента, сортировка строк, sha256.
+# Он объявлен ЗДЕСЬ и ЗАРАНЕЕ — до того, как кандидат измерен и оценён. Любое
+# исключение, появившееся после начала сравнения, разойдётся с этим дайджестом
+# и обязано дать hard-fail UNDECLARED_EXCLUSION.
+#
+# Ни один элемент списка не содержит поля `component`. Это существенно: поле
+# `component` исключило бы компонент целиком с перераспределением веса, а
+# компонент `colors` пакет НЕ исключает. Цвета измерены на всех пяти
+# поверхностях и всех трёх ширинах; исключены только те отдельные элементы,
+# которых у самого эталона нет.
+
+schemaVersion: 1
+declared_at_utc: "2026-09-16T20:05:00Z"
+declared_before_candidate_comparison: true
+excluded_components: []
+
+exclusions:
+  # --- отсутствующие у эталона цветовые элементы ----------------------------
+  - scope: "surface=catalog; element=surface_card_background; viewports=390,768,1440"
+    reason: "На странице каталога у эталона нет карточек с постером ≥60×60 внутри ссылки, поэтому фон карточки измерять не на чем. Отсутствие элемента записано отсутствием, а не цветом фона страницы."
+    provenance: "artifacts/reference-pack-amd-online-01/capture-colors/catalog/colors.json#/viewports/*/absent; независимо подтверждается геометрическим прогоном 2026-09-16: artifacts/reference-pack-amd-online-01/all-measurements.json#/catalog/viewports/*/cardAspectRatios пуст на всех трёх ширинах"
+    declared_at: "2026-09-16T20:05:00Z"
+
+  - scope: "surface=not_found; element=surface_card_background; viewports=390,768,1440"
+    reason: "На странице 404 у эталона нет карточек с постером ≥60×60 внутри ссылки. Тот же признак, что и на каталоге, и по той же причине: поверхность не показывает постеров."
+    provenance: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/*/absent; независимо подтверждается геометрическим прогоном 2026-09-16: artifacts/reference-pack-amd-online-01/all-measurements.json#/not_found/viewports/*/cardAspectRatios пуст на всех трёх ширинах"
+    declared_at: "2026-09-16T20:05:00Z"
+
+  - scope: "surface=title; element=color_link_hover; viewports=390,768,1440"
+    reason: "Ни одна из восьми проверенных видимых ссылок страницы тайтла не меняет цвет при наведении: состояния hover у эталона на этой поверхности нет. Подставить сюда цвет ссылки значило бы выдумать состояние."
+    provenance: "artifacts/reference-pack-amd-online-01/capture-colors/title/colors.json#/viewports/*/absent (probe_links=8 на каждой ширине, ни одного изменения цвета после остановки CSS-перехода)"
+    declared_at: "2026-09-16T20:05:00Z"
+
+  - scope: "surface=not_found; element=color_link_hover; viewports=390,768,1440"
+    reason: "Ни одна из пяти проверенных видимых ссылок страницы 404 не меняет цвет при наведении: состояния hover у эталона на этой поверхности нет."
+    provenance: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/*/absent (probe_links=5 на каждой ширине, ни одного изменения цвета после остановки CSS-перехода)"
+    declared_at: "2026-09-16T20:05:00Z"
+
+  # --- разделение областей из EXCLUSIONS.md ---------------------------------
+  # Формализация уже объявленного текстом: реклама, трекеры, сторонние виджеты и
+  # динамический текст не оцениваются. Правило одностороннее — исключение
+  # снимает штраф за отсутствие, но не даёт кандидату права такие блоки добавить.
+  - scope: "category=ads; все поверхности и ширины"
+    reason: "Рекламная сетка эталона принадлежит его монетизации, а не продуктовой структуре. Кандидат рекламы не несёт, и добивать сходство её имитацией запрещено."
+    provenance: "docs/reference-packs/amd-online/EXCLUSIONS.md#OUT_OF_SCOPE_ADS_AND_TRACKERS; правило заданий «не придумывай рекламные блоки»"
+    declared_at: "2026-09-16T20:05:00Z"
+
+  - scope: "category=trackers; все поверхности и ширины"
+    reason: "Счётчики и трекеры эталона не являются частью его интерфейса и переносу не подлежат."
+    provenance: "docs/reference-packs/amd-online/EXCLUSIONS.md#OUT_OF_SCOPE_ADS_AND_TRACKERS; политика inventory/reference-sources.yaml (идентификаторы не сохраняются)"
+    declared_at: "2026-09-16T20:05:00Z"
+
+  - scope: "category=third_party_widgets; все поверхности и ширины"
+    reason: "Telegram-баннер, внешние комментарии, рейтинговые виджеты и сторонние плееры принадлежат поставщикам, а не структуре витрины."
+    provenance: "docs/reference-packs/amd-online/EXCLUSIONS.md#OUT_OF_SCOPE_THIRD_PARTY_WIDGETS"
+    declared_at: "2026-09-16T20:05:00Z"
+
+  - scope: "category=dynamic_text; все поверхности и ширины"
+    reason: "Тексты, заголовки и каталог эталона не переносятся ни в каком виде и не сравниваются: переносима только информационная архитектура."
+    provenance: "docs/reference-packs/amd-online/EXCLUSIONS.md#FORBIDDEN_TO_COPY; политика inventory/reference-sources.yaml (page_text: false)"
+    declared_at: "2026-09-16T20:05:00Z"
+
+# Не исключение, а честная запись о качестве замера: значение, которое два
+# независимых прохода не подтвердили, в токены не попало. Это НЕ повод не
+# сравнивать элемент у кандидата — эталон просто не даёт для этой ячейки
+# величины, с которой можно сравнивать, и баллов она не приносит никому.
+unstable_measurements:
+  - surface: not_found
+    viewport: 390
+    element: color_border_default
+    observed: ["#f2f2f2", "#e6e6e6"]
+    detail: "Страница 404 меняет состав блоков между загрузками, и самый частый цвет границы меняется вместе с ним. Значение не усреднялось: среднее двух разных замеров — не замер."
+    provenance: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/390/unstable"
+  - surface: not_found
+    viewport: 1440
+    element: color_border_default
+    observed: ["#f2f2f2", "#e6e6e6"]
+    detail: "То же расхождение на широкой ширине; на 768 в этом прогоне оба прохода совпали, и токен записан."
+    provenance: "artifacts/reference-pack-amd-online-01/capture-colors/not_found/colors.json#/viewports/1440/unstable"
+
+exclusions_digest: "sha256:4df4bbac08d9ed183ea7d9d6aa4edc39eb45ca6e509a4743047da8839c4875a8"
