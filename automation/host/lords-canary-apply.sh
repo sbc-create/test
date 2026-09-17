@@ -127,7 +127,16 @@ readonly ALLOWED_SITES=(lords-02)
 # подготовленной локальной заглушки постера; порядок типов на главной стал
 # решением профиля (`layout.type_priority`), а не одного общего перечня.
 # scripts/release_input_audit.py::ARTIFACT_VERSIONS обновлён тем же коммитом.
-readonly EXPECT_DIGEST="721d4dd36ebdaf8c1f73efbe413419376cccee78b039cb0f32dda3ffd1c0c016"
+#
+# Версия 31 (83aff65e…) — та же ветка, исправление независимой проверки.
+# `_poster()`/`_rail_poster()` несли инлайновый `onerror="this.remove()"`
+# рядом с данными поставщика (название записи — в том же теге разметки), и
+# это неотличимо текстовым поиском от признака пробитой экранировки, которую
+# ищет защита от JSON-LD breakout (tests/unit/test_json_ld_cannot_break_out.py).
+# Обработчик снят из разметки: снятие картинки при ошибке загрузки теперь
+# делает делегированный слушатель `/assets/app.js` по классу
+# `card__poster-img`/`rail__poster-img`, не по содержимому тега.
+readonly EXPECT_DIGEST="83aff65ef4a48368a4280e19a48f0b36d831dd6e7181f8e8c8535893f3ef8790"
 readonly REFRESH_TIMER="lords-content-refresh.timer"
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
