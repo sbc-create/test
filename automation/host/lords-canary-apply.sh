@@ -120,7 +120,13 @@ readonly ALLOWED_SITES=(lords-02)
 # (c6a11f65…), производственная линия — до версии 5 (434f9397…), и ни один из
 # двух отпечатков объединённому дереву не принадлежит. Значение ниже поставлено
 # перепином после слияния, а не выбрано из двух прежних.
-readonly EXPECT_DIGEST="5a8eff23da88dedc92e22011b8ea1f4f257f5b9853cacc03c8a8cc0dbb51036f"
+#
+# Версия 30 (c0b39bb8…) — ремонт визуального кандидата PR #76: карточки
+# получили заголовок `<h3>` (был `unavailable` весь `type_h3_*`, а разметка
+# карточки — без единой роли заголовка), стабильные `data-visual-role` для
+# structure_order и брейкпоинт меню на 640px вместо разъезда с тумблером на
+# 1024px (шапка на 768px была 150px против 90px у соседних ширин).
+readonly EXPECT_DIGEST="c0b39bb8def3c2ec954a872931da796c797fca2039ff366acb04c4a7702c25de"
 readonly REFRESH_TIMER="lords-content-refresh.timer"
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"

@@ -64,6 +64,7 @@ ARTIFACT_VERSIONS = {
     "03e690f4fa269e8644f615e9845cf9c877aff76bd5720219b3088c052625e714": 27,
     "ca25a6e8319edf8727cf167d73ddfbf044cdaa422c889ca9c7609dd11b0af363": 28,
     "5a8eff23da88dedc92e22011b8ea1f4f257f5b9853cacc03c8a8cc0dbb51036f": 29,
+    "c0b39bb8def3c2ec954a872931da796c797fca2039ff366acb04c4a7702c25de": 30,
 }
 
 #: Ревизии, участвующие в релизе. Полные, а не сокращённые.

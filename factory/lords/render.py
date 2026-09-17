@@ -457,7 +457,7 @@ def _document(ctx: dict, meta: Meta, body: str) -> str:
         + "".join(head)
         + "</head><body>"
         + _header(ctx, meta)
-        + '<main id="content"><div class="container">'
+        + '<main id="content" data-visual-role="main-content"><div class="container">'
         + _breadcrumbs(meta.breadcrumbs)
         + body
         + "</div></main>"
@@ -483,7 +483,7 @@ def _header(ctx: dict, meta: Meta) -> str:
            "Каталог синтетический (fixture/test), названия и постеры выдуманы, "
            "индексация закрыта.</p></div>" if ctx.get("fixture_catalog") else "")
         +
-        '<header class="site-header"><div class="header-row">'
+        '<header class="site-header" data-visual-role="header"><div class="header-row">'
         f'<a class="brand" href="/"><span class="brand__mark">{mark}</span>'
         # Рядом с именем сайта стоял его внутренний идентификатор —
         # `lords-01`. Посетителю он ничего не сообщает, а страницу
@@ -491,7 +491,8 @@ def _header(ctx: dict, meta: Meta) -> str:
         f'<span class="brand__name">{escape(ctx["brand"])}</span></a>'
         '<button class="nav-toggle" type="button" aria-expanded="false" '
         'aria-controls="site-nav">Меню</button>'
-        '<nav class="site-nav" id="site-nav" aria-label="Основная навигация"><ul>'
+        '<nav class="site-nav" id="site-nav" data-visual-role="primary-nav" '
+        'aria-label="Основная навигация"><ul>'
         + _nav_items(ctx["nav"], ctx.get("_path", ""))
         + "</ul></nav>"
         + _header_search(ctx)
@@ -576,7 +577,7 @@ def _footer(ctx: dict) -> str:
     switch = (_theme_switch(str(ctx.get("site_id") or "lords"))
               if ctx.get("theme_switch") else "")
     return (
-        '<footer class="site-footer"><div class="container">'
+        '<footer class="site-footer" data-visual-role="footer"><div class="container">'
         + switch
         + f"<ul>{links}</ul>"
         # Идентификатор сайта и имя профиля сборки — внутренняя
@@ -626,7 +627,7 @@ def _card(title: fx.Title) -> str:
         f"{_card_rating(title)}"
         f"{seasons}</a>"
         '<div class="card__body">'
-        f'<a class="card__title" href="{escape(title.path)}">{escape(title.name)}</a>'
+        f'<h3><a class="card__title" href="{escape(title.path)}">{escape(title.name)}</a></h3>'
         f'<span class="card__meta">{escape(meta)}</span>'
         f'<span class="card__meta">{escape(", ".join(title.genres))}</span>'
         "</div></article>"
@@ -808,7 +809,7 @@ def _grid(titles, *, anchor: bool = False) -> str:
             '<p class="empty">По выбранным условиям в каталоге ничего нет. '
             "Стенд показывает пустой результат честно и не подставляет чужие записи.</p>"
         )
-    attrs = ' id="grid"' if anchor else ""
+    attrs = (' id="grid"' if anchor else "") + ' data-visual-role="card-grid"'
     return f'<div class="grid"{attrs}>' + "".join(_card(t) for t in titles) + "</div>"
 
 
@@ -865,7 +866,7 @@ def _pagination(base: str, page: int, pages: int) -> str:
     if page < pages:
         items.append(f'<li><a rel="next" href="{escape(href(page + 1))}">Вперёд</a></li>')
     return (
-        '<nav class="pagination" aria-label="Страницы списка"><ul>'
+        '<nav class="pagination" data-visual-role="pagination" aria-label="Страницы списка"><ul>'
         + "".join(items) + "</ul></nav>"
     )
 
@@ -970,8 +971,10 @@ def _facets(catalog: fx.Catalog, kinds, *, show_type: bool, row: bool = False,
     # Форма нужна только ради поля сортировки; без него это перечень ссылок, и
     # оборачивать его в форму значило бы обещать отправку, которой нет.
     if sortable:
-        return f'<form class="{css}" id="facets" aria-label="Фильтры и сортировка">{body}</form>'
-    return f'<nav class="{css}" id="facets" aria-label="Фильтры">{body}</nav>' 
+        return (f'<form class="{css}" id="facets" data-visual-role="facets" '
+                 f'aria-label="Фильтры и сортировка">{body}</form>')
+    return (f'<nav class="{css}" id="facets" data-visual-role="facets" '
+            f'aria-label="Фильтры">{body}</nav>')
 
 
 #: Выше этого размера полный набор в разметку не встраивается.
@@ -1436,7 +1439,7 @@ def _collection_cards(ctx, catalog: fx.Catalog) -> str:
     for col in catalog.collections:
         cards.append(
             '<article class="card"><div class="card__body">'
-            f'<a class="card__title" href="{escape(col.path)}">{escape(col.name)}</a>'
+            f'<h3><a class="card__title" href="{escape(col.path)}">{escape(col.name)}</a></h3>'
             f'<span class="card__meta">{len(col.title_slugs)} записей</span>'
             f'<span class="card__meta">{escape(col.summary)}</span>'
             "</div></article>"
@@ -1444,7 +1447,7 @@ def _collection_cards(ctx, catalog: fx.Catalog) -> str:
     return (
         '<section class="section"><div class="section__head"><h2>Подборки</h2>'
         '<a class="section__more" href="/collections/">Все подборки</a></div>'
-        '<div class="grid">' + "".join(cards) + "</div></section>"
+        '<div class="grid" data-visual-role="card-grid">' + "".join(cards) + "</div></section>"
     )
 
 
@@ -1523,7 +1526,7 @@ def _comments_block(ctx, title: fx.Title) -> str:
     if not ctx["comments_enabled"]:
         return ""
     return (
-        '<section class="comments" aria-labelledby="comments-heading">'
+        '<section class="comments" data-visual-role="comments" aria-labelledby="comments-heading">'
         '<h2 id="comments-heading">Комментарии</h2>'
         + ('<p class="comments__note">На стенде комментарии выключены: писать не о чем — '
            "запись синтетическая, а публиковать чужие тексты стенд не станет. "
@@ -2036,11 +2039,13 @@ def _search_page(ctx, catalog: fx.Catalog, kinds) -> Page:
 
 def _not_found(ctx) -> Page:
     body = (
+        '<div data-visual-role="not-found-message">'
         "<h1>Страница не найдена</h1>"
         '<p class="lede">Такого адреса на сайте нет. Возможные причины: раздел '
         "выключен в настройках сайта, запись отсутствует в каталоге или адрес "
         "набран с ошибкой.</p>"
         '<p><a href="/">Вернуться на главную</a></p>'
+        "</div>"
     )
     meta = Meta(
         title="Страница не найдена", description="Запрошенного адреса на сайте нет.",
@@ -2611,7 +2616,7 @@ def _collections_index(ctx, catalog: fx.Catalog, indexable: bool) -> Page:
     title = text.get("title") or SECTION_LABELS["collections_index"]
     cards = "".join(
         '<article class="card"><div class="card__body">'
-        f'<a class="card__title" href="{escape(col.path)}">{escape(col.name)}</a>'
+        f'<h3><a class="card__title" href="{escape(col.path)}">{escape(col.name)}</a></h3>'
         f'<span class="card__meta">{len(col.title_slugs)} записей</span>'
         f'<span class="card__meta">{escape(col.summary)}</span></div></article>'
         for col in catalog.collections
@@ -2620,7 +2625,7 @@ def _collections_index(ctx, catalog: fx.Catalog, indexable: bool) -> Page:
         f'<h1>{escape(text.get("h1") or title)}</h1>'
         + _lede(text.get("intro", ""))
         + f'<p class="count">Подборок: {len(catalog.collections)}.</p>'
-        f'<div class="grid">{cards}</div>'
+        f'<div class="grid" data-visual-role="card-grid">{cards}</div>'
     )
     meta = Meta(
         title=title, description=text.get("description", ""), h1=text.get("h1") or title,

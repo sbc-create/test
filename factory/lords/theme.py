@@ -672,6 +672,12 @@ main {{ padding: var(--pad) 0 40px; }}
 }}
 .card__body {{ padding: var(--card-pad); display: flex; flex-direction: column; gap: 4px; }}
 .card__title {{ font-size: .92rem; font-weight: 600; color: var(--text); overflow-wrap: anywhere; }}
+/* `.card__title` — сама ссылка, как и была; `<h3>` вокруг неё — только
+   структурный якорь для заголовка карточки (доступность, измерение
+   типографики), без своего вида: сброшен до фонового текста, чтобы
+   `h1,h2,h3{{margin:0 0 .5em}}` не добавил кегль и отступ поверх того, что уже
+   задаёт `.card__title`. */
+.card__body h3 {{ margin: 0; font: inherit; }}
 .card__meta {{ font-size: .76rem; color: var(--muted); }}
 
 /* --- фасеты и сортировка -------------------------------------------------- */
@@ -817,7 +823,15 @@ main {{ padding: var(--pad) 0 40px; }}
   :root {{ --cols: {cols['tablet']}; }}
   .header-search {{ width: auto; flex: 1 1 240px; padding-bottom: 0; order: 0; }}
   .nav-toggle {{ display: none; }}
-  .site-nav {{ display: block; width: 100%; }}
+  /* Тумблер меню исчезает здесь же — значит, меню обязано влезть в ту же
+     строку шапки здесь же, а не на следующем брейкпоинте. При старом разбиении
+     (тумблер прятался тут, а инлайн-раскладка меню начиналась только с 1024px)
+     на 768px `.site-nav` шириной 100% занимало отдельную строку и заворачивало
+     четыре пункта в две — шапка вырастала до 150px против 90px у соседних
+     ширин. Замерено `tests/tools/measure_reference.js` на живом стенде. */
+  .site-nav {{ display: block; width: auto; flex: 1 1 auto; min-width: 0; }}
+  .site-nav ul {{ padding: 0; flex-wrap: nowrap; overflow-x: auto; }}
+  .site-nav a {{ white-space: nowrap; }}
   .title-head {{ grid-template-columns: 260px minmax(0, 1fr); }}
   .facets--row {{ grid-template-columns: repeat(3, minmax(0, 1fr)); }}
 }}
@@ -825,9 +839,6 @@ main {{ padding: var(--pad) 0 40px; }}
 /* --- десктоп -------------------------------------------------------------------- */
 @media (min-width: 1024px) {{
   :root {{ --cols: {cols['desktop']}; }}
-  .site-nav {{ width: auto; flex: 1 1 auto; min-width: 0; }}
-  .site-nav ul {{ padding: 0; flex-wrap: nowrap; overflow-x: auto; }}
-  .site-nav a {{ white-space: nowrap; }}
   .header-search {{ flex: 0 1 300px; }}
   .facets--row {{ grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }}
   /* В сайдбаре ширины на две колонки нет: поля возвращаются в столбик. */
