@@ -1,0 +1,126 @@
+{
+  "url": "http://127.0.0.1:8850/does-not-exist-xyz/",
+  "measured_at_utc": "2026-09-17T15:16:43.457Z",
+  "viewports": {
+    "390": {
+      "http_status": 404,
+      "document_width": 390,
+      "content_width": 0,
+      "outer_gutter": 0,
+      "horizontal_overflow": false,
+      "typography": {
+        "body": {
+          "fontSize": 14,
+          "lineHeight": 21.7,
+          "fontWeight": "400"
+        },
+        "h1": {
+          "fontSize": 22.4,
+          "lineHeight": 26.88,
+          "fontWeight": "600"
+        },
+        "a": {
+          "fontSize": 14,
+          "lineHeight": 21.7,
+          "fontWeight": "400"
+        },
+        "p": {
+          "fontSize": 13.12,
+          "lineHeight": 20.34,
+          "fontWeight": "400"
+        },
+        "button": {
+          "fontSize": 14,
+          "lineHeight": 21.7,
+          "fontWeight": "400"
+        }
+      },
+      "card_aspect_ratios": [],
+      "grid_columns": [
+        1
+      ],
+      "image_count": 0,
+      "header_sticky": true
+    },
+    "768": {
+      "http_status": 404,
+      "document_width": 768,
+      "content_width": 0,
+      "outer_gutter": 0,
+      "horizontal_overflow": false,
+      "typography": {
+        "body": {
+          "fontSize": 14,
+          "lineHeight": 21.7,
+          "fontWeight": "400"
+        },
+        "h1": {
+          "fontSize": 22.4,
+          "lineHeight": 26.88,
+          "fontWeight": "600"
+        },
+        "a": {
+          "fontSize": 14,
+          "lineHeight": 21.7,
+          "fontWeight": "400"
+        },
+        "p": {
+          "fontSize": 13.12,
+          "lineHeight": 20.34,
+          "fontWeight": "400"
+        },
+        "button": {
+          "fontSize": 14,
+          "lineHeight": 21.7,
+          "fontWeight": "400"
+        }
+      },
+      "card_aspect_ratios": [],
+      "grid_columns": [
+        1
+      ],
+      "image_count": 0,
+      "header_sticky": true
+    },
+    "1440": {
+      "http_status": 404,
+      "document_width": 1440,
+      "content_width": 0,
+      "outer_gutter": 0,
+      "horizontal_overflow": false,
+      "typography": {
+        "body": {
+          "fontSize": 14,
+          "lineHeight": 21.7,
+          "fontWeight": "400"
+        },
+        "h1": {
+          "fontSize": 22.4,
+          "lineHeight": 26.88,
+          "fontWeight": "600"
+        },
+        "a": {
+          "fontSize": 14,
+          "lineHeight": 21.7,
+          "fontWeight": "400"
+        },
+        "p": {
+          "fontSize": 13.12,
+          "lineHeight": 20.34,
+          "fontWeight": "400"
+        },
+        "button": {
+          "fontSize": 14,
+          "lineHeight": 21.7,
+          "fontWeight": "400"
+        }
+      },
+      "card_aspect_ratios": [],
+      "grid_columns": [
+        1
+      ],
+      "image_count": 0,
+      "header_sticky": true
+    }
+  }
+}

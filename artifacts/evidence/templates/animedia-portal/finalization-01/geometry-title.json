@@ -1,0 +1,171 @@
+{
+  "url": "http://127.0.0.1:8850/title/pepelnyy-nevod-2025/",
+  "measured_at_utc": "2026-09-17T15:16:36.909Z",
+  "viewports": {
+    "390": {
+      "http_status": 200,
+      "document_width": 390,
+      "content_width": 388,
+      "outer_gutter": 1,
+      "horizontal_overflow": false,
+      "typography": {
+        "body": {
+          "fontSize": 14,
+          "lineHeight": 21.7,
+          "fontWeight": "400"
+        },
+        "h1": {
+          "fontSize": 22.4,
+          "lineHeight": 26.88,
+          "fontWeight": "600"
+        },
+        "h2": {
+          "fontSize": 18.4,
+          "lineHeight": 22.08,
+          "fontWeight": "600"
+        },
+        "a": {
+          "fontSize": 14,
+          "lineHeight": 21.7,
+          "fontWeight": "400"
+        },
+        "p": {
+          "fontSize": 13.12,
+          "lineHeight": 20.34,
+          "fontWeight": "400"
+        },
+        "button": {
+          "fontSize": 14,
+          "lineHeight": 21.7,
+          "fontWeight": "400"
+        }
+      },
+      "card_aspect_ratios": [
+        {
+          "ratio": 0.67,
+          "count": 6
+        }
+      ],
+      "grid_columns": [
+        1,
+        1,
+        2,
+        1,
+        2,
+        1
+      ],
+      "image_count": 7,
+      "header_sticky": true
+    },
+    "768": {
+      "http_status": 200,
+      "document_width": 768,
+      "content_width": 766,
+      "outer_gutter": 1,
+      "horizontal_overflow": false,
+      "typography": {
+        "body": {
+          "fontSize": 14,
+          "lineHeight": 21.7,
+          "fontWeight": "400"
+        },
+        "h1": {
+          "fontSize": 22.4,
+          "lineHeight": 26.88,
+          "fontWeight": "600"
+        },
+        "h2": {
+          "fontSize": 18.4,
+          "lineHeight": 22.08,
+          "fontWeight": "600"
+        },
+        "a": {
+          "fontSize": 14,
+          "lineHeight": 21.7,
+          "fontWeight": "400"
+        },
+        "p": {
+          "fontSize": 13.12,
+          "lineHeight": 20.34,
+          "fontWeight": "400"
+        },
+        "button": {
+          "fontSize": 14,
+          "lineHeight": 21.7,
+          "fontWeight": "400"
+        }
+      },
+      "card_aspect_ratios": [
+        {
+          "ratio": 0.67,
+          "count": 6
+        }
+      ],
+      "grid_columns": [
+        1,
+        2,
+        2,
+        1,
+        4,
+        1
+      ],
+      "image_count": 7,
+      "header_sticky": true
+    },
+    "1440": {
+      "http_status": 200,
+      "document_width": 1440,
+      "content_width": 1438,
+      "outer_gutter": 1,
+      "horizontal_overflow": false,
+      "typography": {
+        "body": {
+          "fontSize": 14,
+          "lineHeight": 21.7,
+          "fontWeight": "400"
+        },
+        "h1": {
+          "fontSize": 22.4,
+          "lineHeight": 26.88,
+          "fontWeight": "600"
+        },
+        "h2": {
+          "fontSize": 18.4,
+          "lineHeight": 22.08,
+          "fontWeight": "600"
+        },
+        "a": {
+          "fontSize": 14,
+          "lineHeight": 21.7,
+          "fontWeight": "400"
+        },
+        "p": {
+          "fontSize": 13.12,
+          "lineHeight": 20.34,
+          "fontWeight": "400"
+        },
+        "button": {
+          "fontSize": 14,
+          "lineHeight": 21.7,
+          "fontWeight": "400"
+        }
+      },
+      "card_aspect_ratios": [
+        {
+          "ratio": 0.67,
+          "count": 6
+        }
+      ],
+      "grid_columns": [
+        1,
+        2,
+        2,
+        1,
+        6,
+        1
+      ],
+      "image_count": 7,
+      "header_sticky": true
+    }
+  }
+}
