@@ -1,0 +1,365 @@
+{
+ "schema_version": "1.0.0",
+ "bundle_version": "1.0.1",
+ "generated_at": "2026-09-11T14:04:12Z",
+ "count": 20,
+ "available": 8,
+ "planned": 12,
+ "blocked": 0,
+ "capabilities": [
+  {
+   "capability_id": "registry.sites.filter",
+   "owner_service": "architect",
+   "version": "1.0.1",
+   "status": "AVAILABLE",
+   "read_endpoint": "/api/v1/sites?environment=production&lifecycle_state=ACTIVE",
+   "command_endpoint": null,
+   "event_types": [],
+   "required_scopes": [
+    "registry:read"
+   ],
+   "dependencies": [],
+   "last_verified_at": "2026-09-11T14:04:12Z",
+   "evidence_ref": "live-probe:/api/v1/sites?environment=production&lifecycle_state=ACTIVE:HTTP200",
+   "verified_http_status": 200
+  },
+  {
+   "capability_id": "registry.sites.read",
+   "owner_service": "architect",
+   "version": "1.0.1",
+   "status": "AVAILABLE",
+   "read_endpoint": "/api/v1/sites",
+   "command_endpoint": null,
+   "event_types": [
+    "site.registered.v1",
+    "site.updated.v1",
+    "site.activated.v1",
+    "site.retired.v1"
+   ],
+   "required_scopes": [
+    "registry:read"
+   ],
+   "dependencies": [],
+   "last_verified_at": "2026-09-11T14:04:12Z",
+   "evidence_ref": "live-probe:/api/v1/sites:HTTP200",
+   "verified_http_status": 200
+  },
+  {
+   "capability_id": "registry.snapshot.read",
+   "owner_service": "architect",
+   "version": "1.0.1",
+   "status": "AVAILABLE",
+   "read_endpoint": "/api/v1/registry/snapshot",
+   "command_endpoint": null,
+   "event_types": [],
+   "required_scopes": [
+    "registry:read"
+   ],
+   "dependencies": [],
+   "last_verified_at": "2026-09-11T14:04:12Z",
+   "evidence_ref": "live-probe:/api/v1/registry/snapshot:HTTP200",
+   "verified_http_status": 200
+  },
+  {
+   "capability_id": "registry.version.read",
+   "owner_service": "architect",
+   "version": "1.0.1",
+   "status": "AVAILABLE",
+   "read_endpoint": "/api/v1/registry/version",
+   "command_endpoint": null,
+   "event_types": [],
+   "required_scopes": [
+    "registry:read"
+   ],
+   "dependencies": [],
+   "last_verified_at": "2026-09-11T14:04:12Z",
+   "evidence_ref": "live-probe:/api/v1/registry/version:HTTP200",
+   "verified_http_status": 200
+  },
+  {
+   "capability_id": "registry.events.replay",
+   "owner_service": "architect",
+   "version": "1.0.1",
+   "status": "AVAILABLE",
+   "read_endpoint": "/api/v1/events",
+   "command_endpoint": null,
+   "event_types": [
+    "site.registered.v1",
+    "site.updated.v1",
+    "site.activated.v1",
+    "site.retired.v1"
+   ],
+   "required_scopes": [
+    "registry:read"
+   ],
+   "dependencies": [],
+   "last_verified_at": "2026-09-11T14:04:12Z",
+   "evidence_ref": "live-probe:/api/v1/events:HTTP200",
+   "verified_http_status": 200
+  },
+  {
+   "capability_id": "contracts.discovery",
+   "owner_service": "architect",
+   "version": "1.0.1",
+   "status": "AVAILABLE",
+   "read_endpoint": "/api/v1/contracts/manifest",
+   "command_endpoint": null,
+   "event_types": [],
+   "required_scopes": [
+    "registry:read"
+   ],
+   "dependencies": [],
+   "last_verified_at": "2026-09-11T14:04:12Z",
+   "evidence_ref": "live-probe:/api/v1/contracts/manifest:HTTP200",
+   "verified_http_status": 200
+  },
+  {
+   "capability_id": "capabilities.directory",
+   "owner_service": "architect",
+   "version": "1.0.1",
+   "status": "AVAILABLE",
+   "read_endpoint": "/api/v1/capabilities",
+   "command_endpoint": null,
+   "event_types": [],
+   "required_scopes": [
+    "registry:read"
+   ],
+   "dependencies": [],
+   "last_verified_at": "2026-09-11T14:04:12Z",
+   "evidence_ref": "live-probe:/api/v1/capabilities:HTTP200",
+   "verified_http_status": 200
+  },
+  {
+   "capability_id": "control-plane.version",
+   "owner_service": "architect",
+   "version": "1.0.1",
+   "status": "AVAILABLE",
+   "read_endpoint": "/api/v1/control-plane/version",
+   "command_endpoint": null,
+   "event_types": [],
+   "required_scopes": [
+    "registry:read"
+   ],
+   "dependencies": [],
+   "last_verified_at": "2026-09-11T14:04:12Z",
+   "evidence_ref": "live-probe:/api/v1/control-plane/version:HTTP200",
+   "verified_http_status": 200
+  },
+  {
+   "capability_id": "registry.commands.write",
+   "owner_service": "architect",
+   "version": "1.0.1",
+   "status": "PLANNED",
+   "read_endpoint": null,
+   "command_endpoint": null,
+   "event_types": [
+    "site.registered.v1"
+   ],
+   "required_scopes": [
+    "registry:write"
+   ],
+   "dependencies": [
+    "contracts.discovery"
+   ],
+   "last_verified_at": null,
+   "evidence_ref": null,
+   "planned_reason": "командный API существует, но выносится наружу после IAM (FLEET-CORE-003)"
+  },
+  {
+   "capability_id": "actions.ledger",
+   "owner_service": "architect",
+   "version": "1.0.1",
+   "status": "PLANNED",
+   "read_endpoint": null,
+   "command_endpoint": null,
+   "event_types": [
+    "action.recorded.v1"
+   ],
+   "required_scopes": [
+    "actions:read"
+   ],
+   "dependencies": [],
+   "last_verified_at": null,
+   "evidence_ref": null,
+   "planned_reason": "FLEET-CORE-002"
+  },
+  {
+   "capability_id": "workflows.engine",
+   "owner_service": "architect",
+   "version": "1.0.1",
+   "status": "PLANNED",
+   "read_endpoint": null,
+   "command_endpoint": null,
+   "event_types": [
+    "workflow.started.v1"
+   ],
+   "required_scopes": [
+    "workflow:read"
+   ],
+   "dependencies": [],
+   "last_verified_at": null,
+   "evidence_ref": null,
+   "planned_reason": "FLEET-CORE-004"
+  },
+  {
+   "capability_id": "changesets.controller",
+   "owner_service": "architect",
+   "version": "1.0.1",
+   "status": "PLANNED",
+   "read_endpoint": null,
+   "command_endpoint": null,
+   "event_types": [
+    "changeset.approved.v1"
+   ],
+   "required_scopes": [
+    "changeset:read"
+   ],
+   "dependencies": [],
+   "last_verified_at": null,
+   "evidence_ref": null,
+   "planned_reason": "владелец не реализован"
+  },
+  {
+   "capability_id": "evidence.store",
+   "owner_service": "architect",
+   "version": "1.0.1",
+   "status": "PLANNED",
+   "read_endpoint": null,
+   "command_endpoint": null,
+   "event_types": [],
+   "required_scopes": [
+    "evidence:read"
+   ],
+   "dependencies": [],
+   "last_verified_at": null,
+   "evidence_ref": null,
+   "planned_reason": "FLEET-CORE-002"
+  },
+  {
+   "capability_id": "integrations.provisioner",
+   "owner_service": "architect",
+   "version": "1.0.1",
+   "status": "PLANNED",
+   "read_endpoint": null,
+   "command_endpoint": null,
+   "event_types": [
+    "integration.provision.completed.v1"
+   ],
+   "required_scopes": [
+    "integration:write"
+   ],
+   "dependencies": [],
+   "last_verified_at": null,
+   "evidence_ref": null,
+   "planned_reason": "создание счётчиков Метрики и проектов Topvisor; владелец не реализован"
+  },
+  {
+   "capability_id": "templates.releases",
+   "owner_service": "templates",
+   "version": "1.0.1",
+   "status": "PLANNED",
+   "read_endpoint": null,
+   "command_endpoint": null,
+   "event_types": [
+    "template.release.published.v1"
+   ],
+   "required_scopes": [
+    "templates:read"
+   ],
+   "dependencies": [],
+   "last_verified_at": null,
+   "evidence_ref": null,
+   "planned_reason": "владелец не реализован"
+  },
+  {
+   "capability_id": "content.catalog",
+   "owner_service": "content",
+   "version": "1.0.1",
+   "status": "PLANNED",
+   "read_endpoint": null,
+   "command_endpoint": null,
+   "event_types": [
+    "content.refresh.completed.v1"
+   ],
+   "required_scopes": [
+    "content:read"
+   ],
+   "dependencies": [],
+   "last_verified_at": null,
+   "evidence_ref": null,
+   "planned_reason": "владелец не реализован"
+  },
+  {
+   "capability_id": "seo.audits",
+   "owner_service": "seo",
+   "version": "1.0.1",
+   "status": "PLANNED",
+   "read_endpoint": null,
+   "command_endpoint": null,
+   "event_types": [
+    "seo.audit.completed.v1"
+   ],
+   "required_scopes": [
+    "seo:read"
+   ],
+   "dependencies": [],
+   "last_verified_at": null,
+   "evidence_ref": null,
+   "planned_reason": "владелец не реализован"
+  },
+  {
+   "capability_id": "monitoring.observations",
+   "owner_service": "monitoring",
+   "version": "1.0.1",
+   "status": "PLANNED",
+   "read_endpoint": null,
+   "command_endpoint": null,
+   "event_types": [
+    "monitor.alert.opened.v1"
+   ],
+   "required_scopes": [
+    "monitoring:read"
+   ],
+   "dependencies": [],
+   "last_verified_at": null,
+   "evidence_ref": null,
+   "planned_reason": "владелец не реализован"
+  },
+  {
+   "capability_id": "backup.runs",
+   "owner_service": "backup",
+   "version": "1.0.1",
+   "status": "PLANNED",
+   "read_endpoint": null,
+   "command_endpoint": null,
+   "event_types": [
+    "backup.completed.v1"
+   ],
+   "required_scopes": [
+    "backup:read"
+   ],
+   "dependencies": [],
+   "last_verified_at": null,
+   "evidence_ref": null,
+   "planned_reason": "владелец не реализован"
+  },
+  {
+   "capability_id": "qwen.planner",
+   "owner_service": "qwen",
+   "version": "1.0.1",
+   "status": "PLANNED",
+   "read_endpoint": null,
+   "command_endpoint": null,
+   "event_types": [],
+   "required_scopes": [
+    "qwen:propose"
+   ],
+   "dependencies": [
+    "contracts.discovery"
+   ],
+   "last_verified_at": null,
+   "evidence_ref": null,
+   "planned_reason": "MODEL-actor; только предложения, production apply выключен"
+  }
+ ]
+}

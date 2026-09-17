@@ -1,0 +1,21 @@
+{
+  "schema_version": "host-attestation/1.0.0",
+  "candidate_sha": "not-a-sha",
+  "measured_at": "2026-09-16T08:00:00Z",
+  "host": {
+    "hostname": "control-host.invalid",
+    "control_host": true,
+    "evidence_root": "/srv/site-factory"
+  },
+  "verdict": "PASS",
+  "checks": [
+    {
+      "check_id": "fleet.census",
+      "title": "Перепись флота: число сайтов и production в реестре",
+      "required": true,
+      "status": "PASS",
+      "detail": "13 сайтов, из них 9 production ACTIVE",
+      "measured_at": "2026-09-16T08:00:00Z"
+    }
+  ]
+}

@@ -8,6 +8,9 @@ Description=site-factory: run the queue worker regularly
 [Timer]
 OnBootSec=2min
 OnUnitActiveSec=2min
+# Якорь по завершению: без него убитый запуск останавливает очередь
+# навсегда — таймер остаётся active, а заданий никто не берёт.
+OnUnitInactiveSec=2min
 AccuracySec=30s
 
 [Install]

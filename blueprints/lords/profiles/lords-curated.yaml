@@ -28,7 +28,9 @@ layout:
   hero: editorial
   card_ratio: "2 / 3"
   columns: { mobile: 2, tablet: 4, desktop: 6 }
-  home_blocks: [top_carousel, hero_editorial, collection_cards, latest_grid, type_rows, top_rated, genre_chips, editor_note]
+  # hero_editorial отсюда убран по той же причине, что hero_timeline у lords-new:
+  # рендерер такого блока не знает. Первый экран задаёт hero: editorial.
+  home_blocks: [top_carousel, collection_cards, latest_grid, type_rows, top_rated, genre_chips, editor_note]
   carousel_heading: Популярное за месяц
   show_calendar: false
   show_collection_cards: true

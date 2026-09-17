@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.site-factory.internal/1.2.0/schemas/ProjectionState.v1.json",
+  "title": "ProjectionState.v1",
+  "description": "Состояние операционной проекции. Проекция — индекс над журналом, а не его копия, и полностью пересобирается из него. Вторым источником истины она не является: при расхождении прав журнал.",
+  "type": "object",
+  "required": [
+    "projection",
+    "active_table",
+    "rebuildable_from"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "projection": {
+      "type": "string"
+    },
+    "active_table": {
+      "type": "string"
+    },
+    "rollback_table": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "rebuildable_from": {
+      "const": "ledger_event"
+    },
+    "watermark_seq": {
+      "type": "integer"
+    },
+    "event_count": {
+      "type": "integer"
+    },
+    "excluded_count": {
+      "type": "integer"
+    },
+    "built_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_commit": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

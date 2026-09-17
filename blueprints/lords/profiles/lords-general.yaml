@@ -33,7 +33,11 @@ layout:
   hero: catalog
   card_ratio: "2 / 3"
   columns: { mobile: 2, tablet: 4, desktop: 6 }
-  home_blocks: [top_carousel, hero_search, latest_grid, type_rows, top_rated, genre_chips, year_grid]
+  # hero_search стоит первым, потому что первый экран рисуется до цикла по
+  # home_blocks: в прежнем порядке манифест обещал карусель выше поиска, а
+  # на странице поиск всё равно был выше. Разметка не менялась — менялось
+  # только обещание.
+  home_blocks: [hero_search, top_carousel, latest_grid, type_rows, top_rated, genre_chips, year_grid]
   carousel_heading: Новинки каталога
   show_calendar: false
   show_collection_cards: false

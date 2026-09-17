@@ -1,0 +1,85 @@
+{
+  "contract": "fleet-audit-observability/1.0.0",
+  "metrics": [
+    {
+      "name": "audit_events_total",
+      "type": "counter",
+      "labels": [
+        "producer_service",
+        "phase",
+        "result"
+      ]
+    },
+    {
+      "name": "audit_append_rejected_total",
+      "type": "counter",
+      "labels": [
+        "error_code"
+      ]
+    },
+    {
+      "name": "audit_idempotent_replays_total",
+      "type": "counter"
+    },
+    {
+      "name": "audit_outbox_backlog",
+      "type": "gauge",
+      "note": "Неопубликованные записи ленты."
+    },
+    {
+      "name": "audit_dlq_size",
+      "type": "gauge"
+    },
+    {
+      "name": "audit_chain_verified_ok",
+      "type": "gauge",
+      "note": "1 — цепь сошлась; 0 — нет. Отдельное 'не проверяли' = отсутствие метрики, не 0."
+    },
+    {
+      "name": "audit_reconciliation_missing",
+      "type": "gauge",
+      "labels": [
+        "producer_service"
+      ]
+    },
+    {
+      "name": "audit_backup_age_seconds",
+      "type": "gauge",
+      "note": "Возраст последней ПРОВЕРЕННОЙ копии, а не последней снятой."
+    }
+  ],
+  "alerts": [
+    {
+      "name": "AuditIntegrityFailed",
+      "expr": "audit_chain_verified_ok == 0",
+      "severity": "critical",
+      "channel": "audit.integrity.failed.v1"
+    },
+    {
+      "name": "AuditReconciliationGap",
+      "expr": "audit_reconciliation_missing > 0",
+      "severity": "critical",
+      "channel": "audit.reconciliation.failed.v1"
+    },
+    {
+      "name": "AuditOutboxBacklog",
+      "expr": "audit_outbox_backlog > 100",
+      "for": "15m",
+      "severity": "warning"
+    },
+    {
+      "name": "AuditDlqNonEmpty",
+      "expr": "audit_dlq_size > 0",
+      "severity": "warning",
+      "channel": "audit.ingest.failed.v1"
+    },
+    {
+      "name": "AuditBackupStale",
+      "expr": "audit_backup_age_seconds > 172800",
+      "severity": "warning",
+      "channel": "audit.backup.stale.v1"
+    }
+  ],
+  "scope": "internal",
+  "note": "Контур внутренний. Счётчики Метрики и проекты Topvisor не создаются и этим контрактом не затрагиваются."
+}

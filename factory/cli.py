@@ -458,6 +458,53 @@ def cmd_db(args) -> int:
     return EXIT_OK
 
 
+def cmd_template_check(args) -> int:
+    """Проверка шаблонов направления по контракту.
+
+    Без `--manifest` проверяются все шаблоны в blueprints/lords/profiles/ и
+    правила между ними: один владелец на раздел, один владелец страниц
+    произведений, совпадение реестра блоков с рендерером.
+    """
+    from factory.templates import contract
+
+    if getattr(args, "manifest", None):
+        manifest = contract.load_manifest(Path(args.manifest))
+        problems = contract.validate_manifest(manifest, where=str(args.manifest))
+    else:
+        problems = contract.validate_repository()
+    _print({"problems": [str(p) for p in problems]}, args.json)
+    if not args.json:
+        for problem in problems:
+            print(f"  - {problem}")
+        print("шаблоны приняты" if not problems else f"претензий: {len(problems)}")
+    return EXIT_OK if not problems else EXIT_FAILED
+
+
+def cmd_template_new(args) -> int:
+    """Новый шаблон из манифеста. Ingestion, API и служебная логика не копируются."""
+    import yaml
+
+    from factory.templates import contract
+    from factory.templates import scaffold as scaffold_mod
+
+    if getattr(args, "example", False):
+        print(yaml.safe_dump(scaffold_mod.example_manifest(args.example),
+                             allow_unicode=True, sort_keys=False))
+        return EXIT_OK
+    if not getattr(args, "manifest", None):
+        print("нужен --manifest или --example <имя>", file=sys.stderr)
+        return EXIT_FAILED
+    manifest = contract.load_manifest(Path(args.manifest))
+    result = scaffold_mod.scaffold(manifest, force=args.force, dry_run=args.dry_run)
+    _print(result.as_dict(), args.json)
+    if not args.json:
+        for problem in result.problems:
+            print(f"  - {problem}")
+        for changed, action in result.changes:
+            print(f"  {'будет изменён' if args.dry_run else 'изменён'} {changed}: {action}")
+    return EXIT_OK if result.ok else EXIT_FAILED
+
+
 def cmd_blueprint(args) -> int:
     status = blueprint.check(args.blueprint)
     _print(status.as_dict(), args.json)
@@ -524,7 +571,7 @@ def cmd_lords_preview(args) -> int:
     return 0
 
 
-def cmd_lords_live(args) -> int:  # noqa: ARG001 — команда без аргументов
+def cmd_lords_live(args) -> int:
     """Собирает три сайта Lords на живом каталоге. Ничего не применяет.
 
     Значения читаются из каталога systemd credentials и в вывод не попадают:
@@ -534,21 +581,49 @@ def cmd_lords_live(args) -> int:  # noqa: ARG001 — команда без ар�
     # окружение нет намеренно: переменные видны в `systemctl show` и в
     # /proc/<pid>/environ, а существующий запасной путь однажды окажется
     # использованным в production.
-    from factory.lords import live_build
+    from factory.lords import content_live, live_build
     try:
         credentials = live_build.Credentials.from_credentials_dir()
     except live_build.LiveBuildError as error:
         print(f"BLOCKED_INPUT_CDNVIDEOHUB_CREDENTIALS: {error}")
         return 2
 
-    report = live_build.build_live(credentials=credentials)
+    report = live_build.build_live(
+        credentials=credentials, incremental=bool(getattr(args, "incremental", False)))
     target = live_build.write_report(report)
 
     for site_id, entry in sorted(report["sites"].items()):
         print(f"  {site_id}: {entry['status']}, записей {entry['item_count']}, "
               f"страниц {entry['pages']}, разделы {', '.join(entry['sections_enabled']) or '—'}")
+        # Режим виден всегда: молчаливый откат к полному обходу выглядел бы как
+        # исправная работа инкрементального, и разницу в десять минут никто бы
+        # не связал с причиной.
+        # Про приращение сообщается только когда оно состоялось. Прежде строка
+        # печаталась и при отказе источника — «приращение: изменено 0,
+        # добавлено 0» рядом со статусом STALE читалось как «ничего не
+        # изменилось», хотя означало «обхода не было вовсе».
+        if entry.get("status") == content_live.FRESH and entry.get("mode") == "incremental":
+            print(f"    приращение: изменено {entry.get('replaced', 0)}, "
+                  f"добавлено {entry.get('added', 0)}")
+        elif entry.get("status") != content_live.FRESH:
+            print(f"    {entry.get('reason', 'причина не указана')}")
+        elif entry.get("mode_reason"):
+            print(f"    полный обход: {entry['mode_reason']}")
 
     problems = live_build.verify_report(report)
+    if problems and live_build.source_unavailable_but_fresh_enough(report):
+        # Источник недоступен, но последний удачный ответ ещё свеж. Это не
+        # поломка фабрики, и объявлять её сломанной нельзя: иначе внешний 502
+        # неотличим от собственного отказа, и настоящая поломка теряется среди
+        # чужих. Витрина остаётся на прежнем релизе — как и должна.
+        возраст = max(
+            (e.get("cache_age_ms") or 0) for e in (report.get("sites") or {}).values()
+        )
+        print("источник недоступен; витрина оставлена на последнем удачном ответе "
+              f"({возраст // 60000} мин назад)")
+        for problem in problems:
+            print(f"  — {problem}")
+        return 0
     if problems:
         print("живой каталог непригоден:")
         for problem in problems:
@@ -819,6 +894,19 @@ def main(argv: list[str] | None = None) -> int:
     analytics_cli.register(sub)
     secret_hub_cli.register(sub)
 
+    p = sub.add_parser("template-check",
+                       help="Lords: проверка шаблонов по контракту (schemas/template-manifest.schema.json)")
+    p.add_argument("--manifest", help="один манифест; без него — все шаблоны направления")
+    p.set_defaults(func=cmd_template_check)
+
+    p = sub.add_parser("template-new", help="Lords: новый шаблон из манифеста")
+    p.add_argument("--manifest", help="путь к манифесту (YAML или JSON)")
+    p.add_argument("--example", nargs="?", const="lords-example",
+                   help="напечатать заготовку манифеста и выйти")
+    p.add_argument("--force", action="store_true", help="перезаписать существующий шаблон")
+    p.add_argument("--dry-run", action="store_true", help="показать правки, ничего не записывая")
+    p.set_defaults(func=cmd_template_new)
+
     p = sub.add_parser("lords-plan", help="Lords: dry-run плана сайтов и ворот дублей")
     p.add_argument("--site", help="только один сайт направления")
     p.add_argument("--assume-source", choices=["none", "fixture"], default="none",
@@ -842,6 +930,12 @@ def main(argv: list[str] | None = None) -> int:
 
     p = sub.add_parser("lords-live",
                        help="Lords: собрать три сайта на живом каталоге CDNVideoHub")
+    p.add_argument(
+        "--incremental", action="store_true",
+        help=("запрашивать у источника только изменения с отметки прошлой удачной "
+              "загрузки и сливать их с каталогом. При любом сомнении — отметки нет, "
+              "кэш пуст, пора сверять исчезнувшие — выполняется полный обход"),
+    )
     p.set_defaults(func=cmd_lords_live)
 
     p = sub.add_parser("env-report", help="read-only отчёт об окружении")

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/VersionRef.json",
+  "title": "Версия ресурса",
+  "description": "Версия конкретного ресурса. aggregate_version монотонна внутри ресурса и служит для optimistic concurrency; schema_version описывает форму, а не содержимое.",
+  "x-owner": "architect",
+  "x-schema-version": "1.0.0",
+  "x-lifecycle": "ACTIVE",
+  "x-created-at": "2026-09-11T12:56:26Z",
+  "x-updated-at": "2026-09-11T12:56:26Z",
+  "x-compatibility": "BACKWARD_COMPATIBLE_ADDITIVE",
+  "type": "object",
+  "properties": {
+    "resource_type": {
+      "type": "string"
+    },
+    "resource_id": {
+      "type": "string"
+    },
+    "aggregate_version": {
+      "type": "integer"
+    },
+    "schema_version": {
+      "type": "string"
+    },
+    "build_id": {
+      "type": "string"
+    },
+    "release_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "resource_type",
+    "resource_id"
+  ],
+  "additionalProperties": true
+}

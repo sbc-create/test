@@ -1,0 +1,40 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/CorrelationContext.json",
+ "title": "Контекст прослеживания",
+ "description": "Сквозной контекст запроса. correlation_id связывает всю цепочку, causation_id указывает непосредственную причину конкретного шага; смешивать их нельзя, иначе граф причин выродится в список.",
+ "x-owner": "architect",
+ "x-schema-version": "1.0.0",
+ "x-lifecycle": "ACTIVE",
+ "x-created-at": "2026-09-11T12:56:26Z",
+ "x-updated-at": "2026-09-11T12:56:26Z",
+ "x-compatibility": "BACKWARD_COMPATIBLE_ADDITIVE",
+ "type": "object",
+ "properties": {
+  "request_id": {
+   "type": "string"
+  },
+  "correlation_id": {
+   "type": "string"
+  },
+  "causation_id": {
+   "type": "string"
+  },
+  "trace_id": {
+   "type": "string"
+  },
+  "prompt_id": {
+   "type": "string"
+  },
+  "prompt_rev": {
+   "type": "string"
+  },
+  "run_id": {
+   "type": "string"
+  }
+ },
+ "required": [
+  "correlation_id"
+ ],
+ "additionalProperties": true
+}

@@ -206,6 +206,20 @@ def test_all_paths_inside_a_unit_share_one_root(unit) -> None:
         if key not in {"WorkingDirectory", "ExecStart", "ExecStop", "ReadWritePaths"}:
             continue
         roots.update(ROOT_RE.findall(stripped))
+    # Исключение допустимо, но только объявленное: правило держится для всех,
+    # а тот, кто его нарушает, обязан написать почему. Молчаливое расхождение —
+    # это и есть тот дефект, ради которого правило появилось.
+    маркер = "# X-Split-Roots:"
+    объяснение = ""
+    for line in text.splitlines():
+        if line.strip().startswith(маркер):
+            объяснение = line.strip()[len(маркер):].strip()
+            break
+    if len(roots) > 1 and объяснение:
+        assert len(объяснение) >= 30, (
+            f"{unit.name}: разные корни объявлены, но без внятной причины")
+        return
+
     assert len(roots) <= 1, (
         f"{unit.name}: пути ведут в разные деревья {sorted(roots)} — служба будет "
         "исполнять код не из того worktree, из которого её ставили"

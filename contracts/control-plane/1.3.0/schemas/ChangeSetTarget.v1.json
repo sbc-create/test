@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.site-factory.internal/1.3.0/schemas/ChangeSetTarget.v1.json",
+  "title": "ChangeSetTarget.v1",
+  "description": "Состояние одной цели. Отпечатки «до» и «после» — то, по чему проверяется успех и строится откат.",
+  "type": "object",
+  "required": [
+    "changeset_id",
+    "site_id",
+    "state"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "changeset_id": {
+      "type": "string"
+    },
+    "site_id": {
+      "type": "string"
+    },
+    "is_canary": {
+      "type": "integer",
+      "enum": [
+        0,
+        1
+      ]
+    },
+    "state": {
+      "enum": [
+        "PENDING",
+        "APPLYING",
+        "SUCCEEDED",
+        "APPLY_FAILED",
+        "VERIFY_FAILED",
+        "ROLLED_BACK",
+        "ROLLBACK_FAILED"
+      ]
+    },
+    "before_fingerprint": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "after_fingerprint": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "attempts": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "detail": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Измерить живой флот и выпустить свидетельство для ворот релиза.
+#
+# Запускается ТОЛЬКО явно и только на разрешённом control host. Без допуска
+# команда выпускает свидетельство с вердиктом BLOCKED и завершается кодом 2:
+# «не измеряли» обязано отличаться от «измерили, всё хорошо».
+#
+# Коды возврата: 0 — PASS, 1 — FAIL, 2 — BLOCKED, 3 — неверный вызов.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+PY="${PY:-.venv/bin/python}"
+if [ ! -x "$PY" ]; then
+  if [ "${FACTORY_REQUIRE_VENV:-0}" = "1" ]; then
+    echo "bin/host-attest: не найдено окружение $PWD/$PY, а FACTORY_REQUIRE_VENV=1." >&2
+    exit 78
+  fi
+  PY="$(command -v python3)"
+fi
+exec "$PY" -m host_attestation.cli "$@"

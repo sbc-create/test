@@ -1,0 +1,32 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/Page.v1.json",
+ "title": "Страница выдачи",
+ "description": "Курсорная выдача. snapshot_version фиксирует, какую версию данных листает потребитель: без неё страницы могут склеиться из разных состояний и дать набор, которого не существовало ни в один момент.",
+ "x-owner": "architect",
+ "x-schema-version": "1.0.0",
+ "x-lifecycle": "ACTIVE",
+ "x-created-at": "2026-09-11T12:56:26Z",
+ "x-updated-at": "2026-09-11T12:56:26Z",
+ "x-compatibility": "BACKWARD_COMPATIBLE_ADDITIVE",
+ "type": "object",
+ "properties": {
+  "items": {
+   "type": "array"
+  },
+  "next_cursor": {
+   "type": "string"
+  },
+  "snapshot_version": {
+   "type": "integer"
+  },
+  "generated_at": {
+   "type": "string",
+   "format": "date-time"
+  }
+ },
+ "required": [
+  "items"
+ ],
+ "additionalProperties": true
+}

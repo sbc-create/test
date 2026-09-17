@@ -1,0 +1,20 @@
+{
+  "baseline_version": "fleet-baseline/1.0.0",
+  "_comment": "Базовая линия живого флота. Значения не выдуманы здесь: они перенесены из утверждений, которые до разделения контуров стояли прямо в tests/audit/test_ledger_env.py и tests/audit/test_ledger.py. Там они делали герметичный прогон зависимым от машины; здесь они — то, чем они всегда были: объявленным состоянием боевого контура, с которым host-контур сверяет измерение.",
+  "fleet_root": "/srv/site-factory",
+  "registry_sites_total": 13,
+  "registry_sites_production_active": 9,
+  "registry_version": 32,
+  "synthetic_site_ids": [
+    "synthetic-http-b4e4f1",
+    "synthetic-npo-1c85d0bd",
+    "synthetic-npo-30c9237d"
+  ],
+  "public_domains": [
+    "yummyani.org",
+    "yummyani.site",
+    "yummyani.biz"
+  ],
+  "control_api_listener": "127.0.0.1:8790",
+  "technical_debt_events_expected": 3
+}

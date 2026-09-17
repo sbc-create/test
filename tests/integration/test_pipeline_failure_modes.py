@@ -62,7 +62,8 @@ def test_unverified_restore_gives_deploy_failed(temp_site, monkeypatch):
 
 
 @pytest.mark.slow
-def test_failed_production_smoke_triggers_rollback(temp_site, pilot_package, monkeypatch):
+def test_failed_production_smoke_triggers_rollback(temp_site, pilot_package, monkeypatch,
+                                                   свидетельство_хоста):
     """Провал production smoke обязан привести к откату, а не к DONE."""
     from factory.targets.local_disposable import LocalDisposableTarget
     monkeypatch.setattr(inventory, "target", lambda ref: {

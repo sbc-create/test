@@ -1,0 +1,279 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.site-factory.internal/1.2.0/schemas/AuditEvent.v1.json",
+  "title": "AuditEvent.v1",
+  "description": "Неизменяемая запись журнала: состоявшийся факт, а не желаемое состояние. Журнал не является ни реестром сайтов, ни источником истины об их текущем виде. Перечень полей совпадает со столбцами хранилища: контракт описывает то, что отдаётся, а не то, что хотелось бы отдавать.",
+  "type": "object",
+  "required": [
+    "ledger_seq",
+    "event_id",
+    "schema_version",
+    "event_type",
+    "phase",
+    "result",
+    "received_at",
+    "stored_at",
+    "producer_service",
+    "actor_id",
+    "actor_type",
+    "authority",
+    "scope",
+    "correlation_id",
+    "idempotency_key",
+    "payload_hash",
+    "prev_hash",
+    "event_hash"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "ledger_seq": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Позиция в журнале; курсор чтения и ключ порядка."
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "string"
+    },
+    "event_type": {
+      "type": "string"
+    },
+    "phase": {
+      "enum": [
+        "PROPOSED",
+        "VALIDATED",
+        "AUTHORIZED",
+        "STARTED",
+        "SUCCEEDED",
+        "FAILED",
+        "VERIFIED",
+        "ROLLED_BACK",
+        "BLOCKED",
+        "CANCELLED",
+        "OBSERVED",
+        "GENESIS"
+      ]
+    },
+    "result": {
+      "enum": [
+        "SUCCESS",
+        "FAILURE",
+        "PENDING",
+        "NOT_APPLICABLE"
+      ],
+      "description": "PENDING и NOT_APPLICABLE — отдельные значения, а не синонимы FAILURE и не 0: «ещё не известно» и «неприменимо» различаются."
+    },
+    "error_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "occurred_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "description": "Когда факт случился у производителя. null означает, что производитель времени не сообщил; received_at заменой не является и в это поле не подставляется — иначе время приёма выдавалось бы за время события."
+    },
+    "received_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Когда журнал получил запрос."
+    },
+    "stored_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Когда запись зафиксирована. Не подменяет occurred_at."
+    },
+    "producer_service": {
+      "type": "string"
+    },
+    "producer_instance": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "actor_id": {
+      "type": "string"
+    },
+    "actor_type": {
+      "enum": [
+        "SERVICE",
+        "HUMAN",
+        "MODEL"
+      ]
+    },
+    "authority": {
+      "enum": [
+        "OBSERVE",
+        "PROPOSE",
+        "EXECUTE",
+        "AUTHORIZE"
+      ]
+    },
+    "scope": {
+      "enum": [
+        "SITE",
+        "FLEET"
+      ]
+    },
+    "environment": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "site_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Единственный межсервисный ключ сайта. Домен ключом не является и сюда не пишется."
+    },
+    "resource_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "resource_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "resource_owner": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "action_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "change_set_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "correlation_id": {
+      "type": "string"
+    },
+    "causation_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "idempotency_key": {
+      "type": "string"
+    },
+    "prompt_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "prompt_rev": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "run_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "summary": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "before_hash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "after_hash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "commit_sha": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "build_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "release_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "approval_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "rollback_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "https://contracts.site-factory.internal/1.2.0/schemas/EvidenceRef.json"
+      }
+    },
+    "corrects_event_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Исправление выполняется новым событием со ссылкой на прежнее: запись не правится."
+    },
+    "supersedes_event_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "payload_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "Хэш канонического содержимого. Само содержимое в записи не хранится — это удерживает секреты вне журнала."
+    },
+    "prev_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "event_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

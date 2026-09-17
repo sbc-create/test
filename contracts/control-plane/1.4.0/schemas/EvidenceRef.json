@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EvidenceRef.json",
+  "title": "Ссылка на доказательство",
+  "description": "Утверждение без доказательства считается недоказанным. Ссылка обязана нести контрольную сумму: путь без неё не отличает нынешний артефакт от подменённого.",
+  "x-owner": "architect",
+  "x-schema-version": "1.0.0",
+  "x-lifecycle": "ACTIVE",
+  "x-created-at": "2026-09-11T12:56:26Z",
+  "x-updated-at": "2026-09-11T12:56:26Z",
+  "x-compatibility": "BACKWARD_COMPATIBLE_ADDITIVE",
+  "type": "object",
+  "properties": {
+    "evidence_id": {
+      "type": "string"
+    },
+    "uri": {
+      "type": "string"
+    },
+    "checksum": {
+      "type": "string"
+    },
+    "media_type": {
+      "type": "string"
+    },
+    "produced_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "producer": {
+      "type": "string"
+    },
+    "retention_class": {
+      "enum": [
+        "EPHEMERAL",
+        "RUN",
+        "RELEASE",
+        "AUDIT"
+      ]
+    }
+  },
+  "required": [
+    "evidence_id",
+    "uri",
+    "checksum"
+  ],
+  "additionalProperties": true
+}

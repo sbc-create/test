@@ -1,0 +1,2432 @@
+{
+ "openapi": "3.0.3",
+ "info": {
+  "title": "Fleet Control Plane",
+  "version": "1.3.0",
+  "description": "Единый внешний контракт внутренних контуров. Единый язык и discovery, но НЕ общая БД: каждый сервис владеет только своими данными."
+ },
+ "servers": [
+  {
+   "url": "http://127.0.0.1:8790",
+   "description": "внутренний контур; наружу не публикуется"
+  }
+ ],
+ "paths": {
+  "/api/v1/contracts/manifest": {
+   "get": {
+    "summary": "Манифест bundle",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "ok"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    }
+   }
+  },
+  "/api/v1/contracts/openapi": {
+   "get": {
+    "summary": "OpenAPI bundle",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "ok"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    }
+   }
+  },
+  "/api/v1/contracts/asyncapi": {
+   "get": {
+    "summary": "AsyncAPI bundle",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "ok"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    }
+   }
+  },
+  "/api/v1/contracts/schemas/{schema_id}": {
+   "get": {
+    "summary": "JSON Schema по идентификатору",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "схема"
+     },
+     "404": {
+      "description": "нет такой схемы"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    },
+    "parameters": [
+     {
+      "name": "schema_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/v1/capabilities": {
+   "get": {
+    "summary": "Каталог возможностей",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "ok"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    }
+   }
+  },
+  "/api/v1/capabilities/{capability_id}": {
+   "get": {
+    "summary": "Возможность",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "возможность"
+     },
+     "404": {
+      "description": "нет такой возможности"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    },
+    "parameters": [
+     {
+      "name": "capability_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/v1/control-plane/version": {
+   "get": {
+    "summary": "Версия Control Plane",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "ok"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    }
+   }
+  },
+  "/api/v1/sites": {
+   "get": {
+    "summary": "Список сайтов",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "отфильтрованная выдача; пустой массив при валидной комбинации без совпадений — это ответ, а не ошибка"
+     },
+     "422": {
+      "description": "значение фильтра недопустимо, пусто или противоречиво; error_code из перечня FILTER_VALUE_UNKNOWN, FILTER_VALUE_EMPTY, FILTER_VALUE_CONFLICT"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    },
+    "parameters": [
+     {
+      "name": "environment",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "string",
+       "enum": [
+        "production",
+        "non-production",
+        "test"
+       ]
+      },
+      "description": "сравнение по каноническому значению; регистр не нормализуется, похожие значения не подставляются"
+     },
+     {
+      "name": "lifecycle_state",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "string",
+       "enum": [
+        "DRAFT",
+        "ACTIVE",
+        "QUARANTINED",
+        "RETIRED"
+       ]
+      },
+      "description": "перечень совпадает с CHECK-ограничением таблицы site"
+     }
+    ],
+    "description": "Без параметров возвращает полный текущий реестр. Параметры применяются на стороне сервера ДО нарезки страниц; два параметра соединяются через AND. Недопустимое, пустое или противоречивое значение не игнорируется, а отвергается с 422 и Problem.v1.",
+    "x-filter-semantics": {
+     "combination": "AND",
+     "applied": "server-side",
+     "order": "фильтр применяется до pagination и cursor slicing",
+     "canonical_predicate": "factory.site_engine.api.site_filter",
+     "shared_with": [
+      "/api/v1/registry/snapshot"
+     ],
+     "silent_ignore": false
+    },
+    "x-examples": {
+     "все": {
+      "request": "/api/v1/sites",
+      "note": "полный реестр"
+     },
+     "боевые действующие": {
+      "request": "/api/v1/sites?environment=production&lifecycle_state=ACTIVE",
+      "note": "ровно та же проекция, что у /api/v1/registry/snapshot"
+     },
+     "неизвестное значение": {
+      "request": "/api/v1/sites?environment=nonsense",
+      "response_status": 422,
+      "error_code": "FILTER_VALUE_UNKNOWN"
+     },
+     "пустое значение": {
+      "request": "/api/v1/sites?environment=",
+      "response_status": 422,
+      "error_code": "FILTER_VALUE_EMPTY"
+     },
+     "конфликт ключа": {
+      "request": "/api/v1/sites?environment=production&environment=test",
+      "response_status": 422,
+      "error_code": "FILTER_VALUE_CONFLICT"
+     },
+     "валидная пустая выдача": {
+      "request": "/api/v1/sites?environment=non-production&lifecycle_state=RETIRED",
+      "response_status": 200,
+      "count": 0
+     }
+    }
+   }
+  },
+  "/api/v1/sites/{site_id}": {
+   "get": {
+    "summary": "Сайт",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "запись"
+     },
+     "404": {
+      "description": "нет такого сайта"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    },
+    "parameters": [
+     {
+      "name": "site_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/v1/registry/version": {
+   "get": {
+    "summary": "Версия реестра",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "ok"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    }
+   }
+  },
+  "/api/v1/registry/snapshot": {
+   "get": {
+    "summary": "Снимок ACTIVE production",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "ok"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    }
+   }
+  },
+  "/api/v1/events": {
+   "get": {
+    "summary": "Лента событий по курсору",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "ok"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    },
+    "parameters": [
+     {
+      "name": "after",
+      "in": "query",
+      "schema": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "limit",
+      "in": "query",
+      "schema": {
+       "type": "integer"
+      }
+     }
+    ]
+   }
+  },
+  "/health": {
+   "get": {
+    "summary": "Живость",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "ok"
+     },
+     "503": {
+      "description": "зависимость недоступна"
+     }
+    }
+   }
+  },
+  "/ready": {
+   "get": {
+    "summary": "Готовность",
+    "x-owner": "architect",
+    "x-status": "AVAILABLE",
+    "responses": {
+     "200": {
+      "description": "готов"
+     },
+     "503": {
+      "description": "не готов"
+     }
+    }
+   }
+  },
+  "/api/v1/actions": {
+   "get": {
+    "summary": "Журнал действий",
+    "x-owner": "architect",
+    "x-status": "PLANNED",
+    "description": "зарезервировано; владелец ещё не реализовал. Адреса нет — обращаться нельзя",
+    "responses": {
+     "501": {
+      "description": "не реализовано"
+     }
+    }
+   }
+  },
+  "/api/v1/workflows": {
+   "get": {
+    "operationId": "getWorkflowState",
+    "summary": "Состояние контура изменений",
+    "x-owner": "control-plane",
+    "x-status": "AVAILABLE",
+    "description": "Наборы по состояниям, задолженность ящика, аренды, подключённые адаптеры и признак автономного применения.",
+    "responses": {
+     "200": {
+      "description": "Состояние"
+     }
+    }
+   }
+  },
+  "/api/v1/changesets": {
+   "get": {
+    "operationId": "listChangeSets",
+    "summary": "Наборы изменений",
+    "x-owner": "control-plane",
+    "x-status": "AVAILABLE",
+    "description": "Фильтрация серверная; неизвестный параметр — 422.",
+    "parameters": [
+     {
+      "name": "status",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "resource_type",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "resource_id",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "producer_service",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "actor_id",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "risk_class",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "site_id",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "correlation_id",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "after",
+      "in": "query",
+      "schema": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "limit",
+      "in": "query",
+      "schema": {
+       "type": "integer"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Страница наборов"
+     },
+     "401": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Токен не предъявлен"
+     },
+     "422": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Неизвестный или пустой фильтр"
+     }
+    }
+   },
+   "post": {
+    "operationId": "proposeChangeSet",
+    "summary": "Предложить изменение",
+    "x-owner": "control-plane",
+    "x-status": "AVAILABLE",
+    "description": "Создаёт набор в состоянии PROPOSED. Идемпотентно по (producer_service, idempotency_key). Поле status в запросе не принимается.",
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/ChangeSet.v1.json"
+       }
+      }
+     }
+    },
+    "responses": {
+     "201": {
+      "description": "Набор создан"
+     },
+     "200": {
+      "description": "Идемпотентный повтор"
+     },
+     "401": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Токен не предъявлен"
+     },
+     "403": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "ROLE_NOT_GRANTED"
+     },
+     "409": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "IDEMPOTENCY_CONFLICT"
+     },
+     "422": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "STATUS_NOT_WRITABLE, FIELD_REQUIRED или PAYLOAD_REJECTED"
+     }
+    }
+   },
+   "put": {
+    "operationId": "changeSetsPutDenied",
+    "summary": "Запрещено",
+    "description": "Набор не редактируется и не удаляется: состояние меняется только действиями, история сохраняется.",
+    "responses": {
+     "405": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "ACTION_ONLY"
+     }
+    }
+   },
+   "patch": {
+    "operationId": "changeSetsPatchDenied",
+    "summary": "Запрещено",
+    "description": "Набор не редактируется и не удаляется: состояние меняется только действиями, история сохраняется.",
+    "responses": {
+     "405": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "ACTION_ONLY"
+     }
+    }
+   },
+   "delete": {
+    "operationId": "changeSetsDeleteDenied",
+    "summary": "Запрещено",
+    "description": "Набор не редактируется и не удаляется: состояние меняется только действиями, история сохраняется.",
+    "responses": {
+     "405": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "ACTION_ONLY"
+     }
+    }
+   }
+  },
+  "/api/v1/evidence": {
+   "get": {
+    "summary": "Доказательства",
+    "x-owner": "architect",
+    "x-status": "PLANNED",
+    "description": "зарезервировано; владелец ещё не реализовал. Адреса нет — обращаться нельзя",
+    "responses": {
+     "501": {
+      "description": "не реализовано"
+     }
+    }
+   }
+  },
+  "/api/v1/integrations": {
+   "get": {
+    "summary": "Внешние интеграции",
+    "x-owner": "architect",
+    "x-status": "PLANNED",
+    "description": "зарезервировано; владелец ещё не реализовал. Адреса нет — обращаться нельзя",
+    "responses": {
+     "501": {
+      "description": "не реализовано"
+     }
+    }
+   }
+  },
+  "/api/v1/observations": {
+   "get": {
+    "summary": "Наблюдения",
+    "x-owner": "monitoring",
+    "x-status": "PLANNED",
+    "description": "зарезервировано; владелец ещё не реализовал. Адреса нет — обращаться нельзя",
+    "responses": {
+     "501": {
+      "description": "не реализовано"
+     }
+    }
+   }
+  },
+  "/api/v1/alerts": {
+   "get": {
+    "summary": "Оповещения",
+    "x-owner": "monitoring",
+    "x-status": "PLANNED",
+    "description": "зарезервировано; владелец ещё не реализовал. Адреса нет — обращаться нельзя",
+    "responses": {
+     "501": {
+      "description": "не реализовано"
+     }
+    }
+   }
+  },
+  "/api/v1/backups": {
+   "get": {
+    "summary": "Резервные копии",
+    "x-owner": "backup",
+    "x-status": "PLANNED",
+    "description": "зарезервировано; владелец ещё не реализовал. Адреса нет — обращаться нельзя",
+    "responses": {
+     "501": {
+      "description": "не реализовано"
+     }
+    }
+   }
+  },
+  "/api/v1/audit/events": {
+   "get": {
+    "operationId": "listAuditEvents",
+    "summary": "Страница журнала по возрастанию ledger_seq",
+    "description": "Полная неизменяемая история, включая записи, помещённые в карантин; их статус виден в поле surface и в проекции. Доступ — только роль audit-admin: по этой ленте не принимают рабочих решений, по ней разбирают историю, в том числе ошибки самой системы.",
+    "parameters": [
+     {
+      "name": "site_id",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "producer_service",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "actor_id",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "actor_type",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "phase",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "result",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "scope",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "event_type",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "correlation_id",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "action_id",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "resource_type",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "resource_id",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "occurred_from",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "occurred_to",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "after",
+      "in": "query",
+      "schema": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "limit",
+      "in": "query",
+      "schema": {
+       "type": "integer",
+       "minimum": 1,
+       "maximum": 1000
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Страница событий",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "object",
+         "required": [
+          "items",
+          "count"
+         ],
+         "properties": {
+          "items": {
+           "type": "array",
+           "items": {
+            "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/AuditEvent.v1.json"
+           }
+          },
+          "count": {
+           "type": "integer"
+          },
+          "next_cursor": {
+           "type": [
+            "integer",
+            "null"
+           ]
+          },
+          "has_more": {
+           "type": "boolean"
+          }
+         }
+        }
+       }
+      }
+     },
+     "422": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Неизвестный, пустой или противоречивый фильтр"
+     },
+     "401": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Токен не предъявлен или не распознан"
+     },
+     "403": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "ROLE_DENIED или TOKEN_REVOKED"
+     }
+    }
+   },
+   "post": {
+    "operationId": "appendAuditEvent",
+    "summary": "Добавить событие",
+    "description": "Идемпотентно по (producer_service, idempotency_key). Повтор того же содержимого — 200 с тем же event_id; другое содержимое под тем же ключом — 409.",
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/AuditEvent.v1.json"
+       }
+      }
+     }
+    },
+    "responses": {
+     "201": {
+      "description": "Событие добавлено"
+     },
+     "200": {
+      "description": "Идемпотентный повтор; событие уже существует"
+     },
+     "401": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Нет или неизвестен токен службы"
+     },
+     "403": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "IDENTITY_SPOOF, AUTHORITY_DENIED или MODEL_PHASE_DENIED"
+     },
+     "409": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "IDEMPOTENCY_CONFLICT"
+     },
+     "422": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "SITE_ID_UNKNOWN, SECRET_IN_PAYLOAD или нарушение схемы"
+     }
+    }
+   },
+   "put": {
+    "operationId": "auditEventsPutDenied",
+    "summary": "Запрещено",
+    "description": "Журнал только на добавление.",
+    "responses": {
+     "405": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "APPEND_ONLY"
+     }
+    }
+   },
+   "patch": {
+    "operationId": "auditEventsPatchDenied",
+    "summary": "Запрещено",
+    "description": "Журнал только на добавление.",
+    "responses": {
+     "405": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "APPEND_ONLY"
+     }
+    }
+   },
+   "delete": {
+    "operationId": "auditEventsDeleteDenied",
+    "summary": "Запрещено",
+    "description": "Журнал только на добавление.",
+    "responses": {
+     "405": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "APPEND_ONLY"
+     }
+    }
+   }
+  },
+  "/api/v1/audit/events/{event_id}": {
+   "get": {
+    "operationId": "getAuditEvent",
+    "parameters": [
+     {
+      "name": "event_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Событие",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/AuditEvent.v1.json"
+        }
+       }
+      }
+     },
+     "404": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Не найдено"
+     }
+    }
+   }
+  },
+  "/api/v1/audit/correlations/{correlation_id}": {
+   "get": {
+    "operationId": "getAuditCorrelation",
+    "summary": "Полная нить действия в порядке фаз",
+    "parameters": [
+     {
+      "name": "correlation_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "include_quarantined",
+      "in": "query",
+      "schema": {
+       "type": "boolean"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Нить событий"
+     },
+     "401": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Токен не предъявлен"
+     },
+     "403": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "ROLE_DENIED"
+     }
+    },
+    "description": "По умолчанию нить рабочая: карантинные события исключены, а их число показано отдельным счётчиком quarantined_count — укоротить нить молча значило бы скрыть сам факт изъятия. include_quarantined доступен только роли audit-admin."
+   }
+  },
+  "/api/v1/audit/actions/{action_id}": {
+   "get": {
+    "operationId": "getAuditAction",
+    "parameters": [
+     {
+      "name": "action_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "include_quarantined",
+      "in": "query",
+      "schema": {
+       "type": "boolean"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "События действия"
+     },
+     "401": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Токен не предъявлен"
+     },
+     "403": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "ROLE_DENIED"
+     }
+    },
+    "description": "По умолчанию нить рабочая: карантинные события исключены, а их число показано отдельным счётчиком quarantined_count — укоротить нить молча значило бы скрыть сам факт изъятия. include_quarantined доступен только роли audit-admin."
+   }
+  },
+  "/api/v1/audit/integrity": {
+   "get": {
+    "operationId": "getAuditIntegrity",
+    "summary": "Проверка цепи хешей",
+    "responses": {
+     "200": {
+      "description": "Отчёт",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/AuditIntegrityReport.v1.json"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/audit/checkpoints/latest": {
+   "get": {
+    "operationId": "getLatestAuditCheckpoint",
+    "responses": {
+     "200": {
+      "description": "Отметка",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/AuditCheckpoint.v1.json"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/audit/health": {
+   "get": {
+    "operationId": "getAuditHealth",
+    "summary": "Готовность журнала",
+    "description": "Плоскость обслуживания не обязана дожидаться этого ответа: недоступность журнала не должна гасить сайты.",
+    "responses": {
+     "200": {
+      "description": "Состояние"
+     }
+    }
+   }
+  },
+  "/api/v1/audit/evidence/{evidence_id}/metadata": {
+   "get": {
+    "operationId": "getEvidenceMetadata",
+    "summary": "Метаданные доказательства и результат сверки контрольной суммы",
+    "parameters": [
+     {
+      "name": "evidence_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Метаданные; verified=false при расхождении суммы"
+     },
+     "403": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "EVIDENCE_PATH_DENIED"
+     },
+     "404": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Не найдено"
+     }
+    }
+   }
+  },
+  "/api/v1/audit/operational/events": {
+   "get": {
+    "operationId": "listOperationalAuditEvents",
+    "summary": "Рабочая проекция журнала",
+    "description": "События, пригодные для рабочих решений: карантинные исключены. Именно эту поверхность используют Templates, Content, SEO, Monitoring, Backup и Qwen. Проекция пересобирается из журнала и источником истины не является.",
+    "parameters": [
+     {
+      "name": "site_id",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "producer_service",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "actor_id",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "actor_type",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "phase",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "result",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "scope",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "event_type",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "correlation_id",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "action_id",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "resource_type",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "resource_id",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "occurred_from",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "occurred_to",
+      "in": "query",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "after",
+      "in": "query",
+      "schema": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "limit",
+      "in": "query",
+      "schema": {
+       "type": "integer",
+       "minimum": 1,
+       "maximum": 1000
+      }
+     },
+     {
+      "name": "include_quarantined",
+      "in": "query",
+      "schema": {
+       "type": "boolean"
+      },
+      "description": "Только для роли audit-admin; иначе 403 ROLE_DENIED."
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Страница рабочих событий"
+     },
+     "401": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Токен не предъявлен или не распознан"
+     },
+     "403": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "ROLE_DENIED или TOKEN_REVOKED"
+     },
+     "422": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Неизвестный, пустой или противоречивый фильтр"
+     }
+    }
+   }
+  },
+  "/api/v1/audit/projection": {
+   "get": {
+    "operationId": "getAuditProjectionState",
+    "summary": "Состояние операционной проекции",
+    "responses": {
+     "200": {
+      "description": "Состояние",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/ProjectionState.v1.json"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/changesets/{changeset_id}": {
+   "get": {
+    "operationId": "getChangeSet",
+    "x-status": "AVAILABLE",
+    "parameters": [
+     {
+      "name": "changeset_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Набор",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/ChangeSet.v1.json"
+        }
+       }
+      }
+     },
+     "404": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "CHANGESET_NOT_FOUND"
+     }
+    }
+   }
+  },
+  "/api/v1/changesets/{changeset_id}/transitions": {
+   "get": {
+    "operationId": "listChangeSetTransitions",
+    "x-status": "AVAILABLE",
+    "summary": "История переходов набора",
+    "parameters": [
+     {
+      "name": "changeset_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Переходы"
+     },
+     "404": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "CHANGESET_NOT_FOUND"
+     }
+    }
+   }
+  },
+  "/api/v1/changesets/{changeset_id}/validate": {
+   "post": {
+    "operationId": "changeSetValidate",
+    "summary": "Проверить и построить план",
+    "description": "Выполняет схемную проверку, сверку site_id с реестром, детерминированный diff, классификацию риска, план проверки, план отката и сухой прогон. Эффектов не создаёт.",
+    "x-required-role": "validator",
+    "x-status": "AVAILABLE",
+    "parameters": [
+     {
+      "name": "changeset_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Действие выполнено"
+     },
+     "401": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Токен не предъявлен"
+     },
+     "403": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "ROLE_NOT_GRANTED, MODEL_ACTION_DENIED, SEPARATION_OF_DUTIES, APPROVAL_EXPIRED или AUTONOMOUS_PRODUCTION_APPLY_DISABLED"
+     },
+     "404": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "CHANGESET_NOT_FOUND"
+     },
+     "409": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "TRANSITION_NOT_ALLOWED, LOCK_CONFLICT, FENCED_OUT, PLAN_STALE или VERSION_CONFLICT"
+     },
+     "422": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Нарушение валидации"
+     },
+     "503": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "AUDIT_LEDGER_UNAVAILABLE или REGISTRY_UNAVAILABLE"
+     }
+    }
+   }
+  },
+  "/api/v1/changesets/{changeset_id}/approve": {
+   "post": {
+    "operationId": "changeSetApprove",
+    "summary": "Одобрить",
+    "description": "Требует expires_at. Одобряющий не может совпадать с предложившим. Разрешение связывается хэшем с планом и целями.",
+    "x-required-role": "approver",
+    "x-status": "AVAILABLE",
+    "parameters": [
+     {
+      "name": "changeset_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Действие выполнено"
+     },
+     "401": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Токен не предъявлен"
+     },
+     "403": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "ROLE_NOT_GRANTED, MODEL_ACTION_DENIED, SEPARATION_OF_DUTIES, APPROVAL_EXPIRED или AUTONOMOUS_PRODUCTION_APPLY_DISABLED"
+     },
+     "404": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "CHANGESET_NOT_FOUND"
+     },
+     "409": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "TRANSITION_NOT_ALLOWED, LOCK_CONFLICT, FENCED_OUT, PLAN_STALE или VERSION_CONFLICT"
+     },
+     "422": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Нарушение валидации"
+     },
+     "503": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "AUDIT_LEDGER_UNAVAILABLE или REGISTRY_UNAVAILABLE"
+     }
+    }
+   }
+  },
+  "/api/v1/changesets/{changeset_id}/reject": {
+   "post": {
+    "operationId": "changeSetReject",
+    "summary": "Отклонить",
+    "description": "Терминальное решение.",
+    "x-required-role": "approver",
+    "x-status": "AVAILABLE",
+    "parameters": [
+     {
+      "name": "changeset_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Действие выполнено"
+     },
+     "401": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Токен не предъявлен"
+     },
+     "403": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "ROLE_NOT_GRANTED, MODEL_ACTION_DENIED, SEPARATION_OF_DUTIES, APPROVAL_EXPIRED или AUTONOMOUS_PRODUCTION_APPLY_DISABLED"
+     },
+     "404": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "CHANGESET_NOT_FOUND"
+     },
+     "409": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "TRANSITION_NOT_ALLOWED, LOCK_CONFLICT, FENCED_OUT, PLAN_STALE или VERSION_CONFLICT"
+     },
+     "422": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Нарушение валидации"
+     },
+     "503": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "AUDIT_LEDGER_UNAVAILABLE или REGISTRY_UNAVAILABLE"
+     }
+    }
+   }
+  },
+  "/api/v1/changesets/{changeset_id}/revoke-approval": {
+   "post": {
+    "operationId": "changeSetRevokeApproval",
+    "summary": "Отозвать одобрение",
+    "description": "Запись не стирается, а помечается недействительной.",
+    "x-required-role": "approver",
+    "x-status": "AVAILABLE",
+    "parameters": [
+     {
+      "name": "changeset_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Действие выполнено"
+     },
+     "401": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Токен не предъявлен"
+     },
+     "403": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "ROLE_NOT_GRANTED, MODEL_ACTION_DENIED, SEPARATION_OF_DUTIES, APPROVAL_EXPIRED или AUTONOMOUS_PRODUCTION_APPLY_DISABLED"
+     },
+     "404": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "CHANGESET_NOT_FOUND"
+     },
+     "409": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "TRANSITION_NOT_ALLOWED, LOCK_CONFLICT, FENCED_OUT, PLAN_STALE или VERSION_CONFLICT"
+     },
+     "422": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Нарушение валидации"
+     },
+     "503": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "AUDIT_LEDGER_UNAVAILABLE или REGISTRY_UNAVAILABLE"
+     }
+    }
+   }
+  },
+  "/api/v1/changesets/{changeset_id}/apply": {
+   "post": {
+    "operationId": "changeSetApply",
+    "summary": "Применить",
+    "description": "Повторно проверяет одобрение, версию реестра и отпечатки целей. Канарейка применяется первой; при её отказе остальные цели не затрагиваются. Требует действующей аренды и маркера ограждения.",
+    "x-required-role": "executor",
+    "x-status": "AVAILABLE",
+    "parameters": [
+     {
+      "name": "changeset_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Действие выполнено"
+     },
+     "401": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Токен не предъявлен"
+     },
+     "403": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "ROLE_NOT_GRANTED, MODEL_ACTION_DENIED, SEPARATION_OF_DUTIES, APPROVAL_EXPIRED или AUTONOMOUS_PRODUCTION_APPLY_DISABLED"
+     },
+     "404": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "CHANGESET_NOT_FOUND"
+     },
+     "409": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "TRANSITION_NOT_ALLOWED, LOCK_CONFLICT, FENCED_OUT, PLAN_STALE или VERSION_CONFLICT"
+     },
+     "422": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Нарушение валидации"
+     },
+     "503": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "AUDIT_LEDGER_UNAVAILABLE или REGISTRY_UNAVAILABLE"
+     }
+    }
+   }
+  },
+  "/api/v1/changesets/{changeset_id}/rollback": {
+   "post": {
+    "operationId": "changeSetRollback",
+    "summary": "Откатить",
+    "description": "Идемпотентная компенсация с проверкой восстановленного состояния.",
+    "x-required-role": "executor",
+    "x-status": "AVAILABLE",
+    "parameters": [
+     {
+      "name": "changeset_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Действие выполнено"
+     },
+     "401": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Токен не предъявлен"
+     },
+     "403": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "ROLE_NOT_GRANTED, MODEL_ACTION_DENIED, SEPARATION_OF_DUTIES, APPROVAL_EXPIRED или AUTONOMOUS_PRODUCTION_APPLY_DISABLED"
+     },
+     "404": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "CHANGESET_NOT_FOUND"
+     },
+     "409": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "TRANSITION_NOT_ALLOWED, LOCK_CONFLICT, FENCED_OUT, PLAN_STALE или VERSION_CONFLICT"
+     },
+     "422": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Нарушение валидации"
+     },
+     "503": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "AUDIT_LEDGER_UNAVAILABLE или REGISTRY_UNAVAILABLE"
+     }
+    }
+   }
+  },
+  "/api/v1/changesets/{changeset_id}/cancel": {
+   "post": {
+    "operationId": "changeSetCancel",
+    "summary": "Отменить предложение",
+    "description": "Доступно до применения.",
+    "x-required-role": "proposer",
+    "x-status": "AVAILABLE",
+    "parameters": [
+     {
+      "name": "changeset_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Действие выполнено"
+     },
+     "401": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Токен не предъявлен"
+     },
+     "403": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "ROLE_NOT_GRANTED, MODEL_ACTION_DENIED, SEPARATION_OF_DUTIES, APPROVAL_EXPIRED или AUTONOMOUS_PRODUCTION_APPLY_DISABLED"
+     },
+     "404": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "CHANGESET_NOT_FOUND"
+     },
+     "409": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "TRANSITION_NOT_ALLOWED, LOCK_CONFLICT, FENCED_OUT, PLAN_STALE или VERSION_CONFLICT"
+     },
+     "422": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "Нарушение валидации"
+     },
+     "503": {
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "https://contracts.site-factory.internal/1.3.0/schemas/Problem.v1.json"
+        }
+       }
+      },
+      "description": "AUDIT_LEDGER_UNAVAILABLE или REGISTRY_UNAVAILABLE"
+     }
+    }
+   }
+  },
+  "/grant": {
+   "post": {
+    "summary": "Выдать разрешение на исполнение одобренного набора",
+    "description": "Принимается ТОЛЬКО ссылка на набор изменений. Каноническое состояние служба читает сама.",
+    "operationId": "issueExecutionGrant",
+    "servers": [
+     {
+      "url": "http://127.0.0.1:8795"
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "changeset_id",
+         "audience",
+         "fencing_token"
+        ],
+        "properties": {
+         "changeset_id": {
+          "type": "string"
+         },
+         "audience": {
+          "type": "string",
+          "enum": [
+           "changeset-worker",
+           "templates-executor"
+          ]
+         },
+         "fencing_token": {
+          "type": "integer"
+         }
+        }
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "разрешение выдано",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "object",
+         "properties": {
+          "grant": {
+           "$ref": "#/components/schemas/ExecutionGrant"
+          },
+          "signature": {
+           "type": "string"
+          },
+          "kid": {
+           "type": "string"
+          }
+         }
+        }
+       }
+      }
+     },
+     "403": {
+      "description": "аудитория, запросчик или окружение не допущены"
+     },
+     "409": {
+      "description": "состояние набора или маркер не допускают выдачи"
+     }
+    }
+   }
+  }
+ },
+ "components": {
+  "schemas": {
+   "SiteRef": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/SiteRef.json"
+   },
+   "ActorRef": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/ActorRef.json"
+   },
+   "ObservedValue": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/ObservedValue.json"
+   },
+   "CorrelationContext": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/CorrelationContext.json"
+   },
+   "VersionRef": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/VersionRef.json"
+   },
+   "EvidenceRef": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EvidenceRef.json"
+   },
+   "DesiredObservedState": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/DesiredObservedState.json"
+   },
+   "CommandEnvelope.v1": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/CommandEnvelope.v1.json"
+   },
+   "CommandReceipt.v1": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/CommandReceipt.v1.json"
+   },
+   "EventEnvelope.v1": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EventEnvelope.v1.json"
+   },
+   "Problem.v1": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/Problem.v1.json"
+   },
+   "Page.v1": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/Page.v1.json"
+   },
+   "Capability.v1": {
+    "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/Capability.v1.json"
+   },
+   "ExecutionGrant": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "ExecutionGrant.v1.json",
+    "title": "Разрешение на исполнение одобренного набора изменений",
+    "description": "Выдаётся только службой подписи по ссылке на канонический ChangeSet. Ни одно притязание безопасности не является необязательным: «опциональное» притязание однажды не придёт, и проверка молча пропустит его.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "typ",
+     "issuer",
+     "audience",
+     "subject",
+     "changeset_id",
+     "site_id",
+     "environment",
+     "resource_kind",
+     "action",
+     "plan_hash",
+     "approval_hash",
+     "artifact_digest",
+     "registry_fingerprint",
+     "policy_version",
+     "contract_version",
+     "fencing_token",
+     "jti",
+     "idempotency_key",
+     "issued_at",
+     "not_before",
+     "expires_at"
+    ],
+    "properties": {
+     "typ": {
+      "type": "string"
+     },
+     "issuer": {
+      "type": "string"
+     },
+     "audience": {
+      "type": "string",
+      "enum": [
+       "changeset-worker",
+       "templates-executor"
+      ]
+     },
+     "subject": {
+      "type": "string"
+     },
+     "changeset_id": {
+      "type": "string"
+     },
+     "site_id": {
+      "type": "string"
+     },
+     "environment": {
+      "type": "string",
+      "enum": [
+       "test",
+       "non-production",
+       "production"
+      ]
+     },
+     "resource_kind": {
+      "type": "string",
+      "enum": [
+       "fake.resource",
+       "template.release",
+       "template.build"
+      ]
+     },
+     "action": {
+      "type": "string",
+      "enum": [
+       "publish",
+       "rollback",
+       "create",
+       "update",
+       "patch"
+      ]
+     },
+     "plan_hash": {
+      "type": "string"
+     },
+     "approval_hash": {
+      "type": "string"
+     },
+     "artifact_digest": {
+      "type": "string"
+     },
+     "registry_fingerprint": {
+      "type": "string"
+     },
+     "policy_version": {
+      "type": "string"
+     },
+     "contract_version": {
+      "type": "string"
+     },
+     "fencing_token": {
+      "type": "integer",
+      "minimum": 1
+     },
+     "jti": {
+      "type": "string"
+     },
+     "idempotency_key": {
+      "type": "string"
+     },
+     "issued_at": {
+      "type": "string"
+     },
+     "not_before": {
+      "type": "string"
+     },
+     "expires_at": {
+      "type": "string"
+     },
+     "registry_version": {
+      "type": [
+       "integer",
+       "null"
+      ]
+     },
+     "build_id": {
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "approval_ref": {
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "target_site_ids": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "expected_resource_fingerprint": {
+      "type": [
+       "string",
+       "null"
+      ]
+     }
+    }
+   },
+   "ClaimErratum": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "ClaimErratum.v1.json",
+    "title": "Исправление числовых утверждений прежнего события журнала",
+    "description": "Журнал только дополняется: исправление — новая запись со ссылкой на прежнюю, а не правка прежней.",
+    "type": "object",
+    "additionalProperties": true,
+    "required": [
+     "event_type",
+     "source_event_id",
+     "source_ledger_seq",
+     "source_event_type",
+     "subject_producer",
+     "correction_actor",
+     "correction_authority",
+     "idempotency_key",
+     "reason_code",
+     "claim_namespace",
+     "claim_corrections",
+     "evidence_refs"
+    ],
+    "properties": {
+     "event_type": {
+      "const": "audit.claim.erratum.v1"
+     },
+     "source_event_id": {
+      "type": "string",
+      "format": "uuid"
+     },
+     "source_ledger_seq": {
+      "type": "integer",
+      "minimum": 1
+     },
+     "source_event_type": {
+      "type": "string"
+     },
+     "subject_producer": {
+      "type": "string"
+     },
+     "correction_actor": {
+      "type": "string"
+     },
+     "correction_authority": {
+      "type": "string"
+     },
+     "reason_code": {
+      "type": "string",
+      "enum": [
+       "RECOMPUTED_FROM_PINNED_EVIDENCE",
+       "EVIDENCE_INSUFFICIENT",
+       "UNIT_MISMATCH",
+       "SOURCE_DATA_LOST"
+      ]
+     },
+     "claim_namespace": {
+      "type": "object",
+      "required": [
+       "ref",
+       "sha256"
+      ],
+      "properties": {
+       "ref": {
+        "type": "string"
+       },
+       "sha256": {
+        "type": "string"
+       },
+       "pointer": {
+        "type": "string"
+       }
+      }
+     },
+     "claim_corrections": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+       "type": "object",
+       "required": [
+        "path",
+        "disposition"
+       ],
+       "properties": {
+        "path": {
+         "type": "string",
+         "pattern": "^/"
+        },
+        "previous_value": {},
+        "disposition": {
+         "type": "string",
+         "enum": [
+          "CORRECTED",
+          "WITHDRAWN_UNVERIFIED"
+         ]
+        },
+        "replacement_value": {}
+       },
+       "allOf": [
+        {
+         "if": {
+          "properties": {
+           "disposition": {
+            "const": "CORRECTED"
+           }
+          }
+         },
+         "then": {
+          "required": [
+           "replacement_value"
+          ]
+         }
+        },
+        {
+         "if": {
+          "properties": {
+           "disposition": {
+            "const": "WITHDRAWN_UNVERIFIED"
+           }
+          }
+         },
+         "then": {
+          "not": {
+           "required": [
+            "replacement_value"
+           ]
+          }
+         }
+        }
+       ]
+      }
+     }
+    }
+   }
+  }
+ }
+}

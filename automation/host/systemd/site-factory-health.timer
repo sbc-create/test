@@ -4,6 +4,9 @@ Description=site-factory: run host health check every 15 minutes
 [Timer]
 OnBootSec=3min
 OnUnitActiveSec=15min
+# Якорь по завершению: таймер обязан переоснащаться
+# и после неудачного запуска, иначе он молча замирает.
+OnUnitInactiveSec=15min
 AccuracySec=30s
 Persistent=true
 

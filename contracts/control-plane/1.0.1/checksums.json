@@ -1,0 +1,29 @@
+{
+ "algorithm": "sha256",
+ "generated_at": "2026-09-11T14:04:52Z",
+ "count": 22,
+ "files": {
+  "CHANGELOG.md": "d38585254a1db320c3b464e6b85337e7ab8c7c1eada419b801d0a6fcd1cc6e42",
+  "COMPATIBILITY.md": "1ed4dc967e55eee245ea13085eb161ea212e84bb168c8b79e1a89e86e3bd51c1",
+  "MIGRATION.md": "d6961cddc45eaf599b8f7befbb6233839451c51c3fc6d2baaf21a0fa5ffe7775",
+  "asyncapi.json": "b9befbcdd51b16ac8a814121f88bee3e748fb014702f9c8e7535ccc2db315958",
+  "capability-catalog.json": "597331e2b640347560beb9731be8f0f70f522db9c8d562bb57c00befcadd721f",
+  "error-catalog.json": "332feef04299d5fc8e0e79b7bdfc4690ef8d8795b1ca6f0561fb7bb61fd67264",
+  "manifest.json": "041a6ef83aee0eb36048dfad968d5979e0755f7da950dc1df70142a7623e9aa6",
+  "openapi.json": "498a268094e239f68643840f851d0c071f3f95129c26519cb905a85fc7923576",
+  "ownership-matrix.json": "54427e8502ef465f9e69d48113c13fac4c776ee96b6dbe0ed70278496ead5a88",
+  "schemas/ActorRef.json": "d24dc2a97260f1f7c5422f67d049ba69f6ed786e4256811addcdc9881f84b821",
+  "schemas/Capability.v1.json": "d749ee98bbaf34c34bb66e49494c598d97d11fca14b62e9fbbff3bebf6a960c9",
+  "schemas/CommandEnvelope.v1.json": "7d674d642eddeee8d764f5c351b65afffe89f4db4ea016660a4efb3fea2217bd",
+  "schemas/CommandReceipt.v1.json": "57a977e8de7e9fa1de057db6ce21beb2c2fdb2245c0d5a1d7f17c0a12b369647",
+  "schemas/CorrelationContext.json": "dfdd3985e53ce99c71b6d90d32711d7563fca286863c821015bc15f4ff773629",
+  "schemas/DesiredObservedState.json": "29e3a81ccaec42d96c8198e1368b432bd28b38943d597ad7a951fbae810c5f1c",
+  "schemas/EventEnvelope.v1.json": "14cfea0eb5146e214b6223ee122e8c5c3e2cabc4fdcb189d3b777022c4a38efa",
+  "schemas/EvidenceRef.json": "c2eafc05c9fa2f378018cfd07685fe78d601e0467c83f347ea8a839d12723a2a",
+  "schemas/ObservedValue.json": "b8a8dd77de37c95e7f0cc8ae770c3afe2a713a04fb512e0358b06301e4618d12",
+  "schemas/Page.v1.json": "aa7a03e552bf22778f1875d8f8832c67e865cd445c5e667a6060ea78be074969",
+  "schemas/Problem.v1.json": "dab589a181a95e2cc969f84ab79e46553f3c5cebf26374fa74bdd91cac33346b",
+  "schemas/SiteRef.json": "09de8378ce549c0c477ca76f83e69e46fdf500bb775845cbac5ea3a91a520c5a",
+  "schemas/VersionRef.json": "a5adb79e86c09b887414b2841f954e3b2013f6d9f245b4ac1a666fb1f098c776"
+ }
+}

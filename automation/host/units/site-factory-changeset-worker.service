@@ -1,0 +1,65 @@
+[Unit]
+Description=site-factory: рабочий процесс контура изменений (ChangeSet/Workflow)
+Documentation=file:///srv/site-factory/repo/docs/runbooks/changeset-workflow.md
+# Контур читает реестр через versioned API управляющей службы и пишет события
+# в журнал аудита через неё же. Поэтому она поднимается первой.
+After=network-online.target site-factory-control-api.service
+Wants=network-online.target
+
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=notify
+NotifyAccess=main
+
+User=claude
+Group=claude
+
+WorkingDirectory=/srv/site-factory/control-api/current
+Environment=PYTHONPATH=/srv/site-factory/control-api/current
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=PYTHONUNBUFFERED=1
+# Ключ подписи одобрений и токены — из того же файла окружения, что у
+# управляющей службы. В релиз и в Git они не входят.
+EnvironmentFile=-/etc/site-factory/control-api.env
+
+ExecStart=/srv/site-factory/control-api/current/.venv/bin/python -m factory.site_engine.changeset.worker serve
+
+TimeoutStartSec=60
+
+Restart=on-failure
+RestartSec=5
+
+# Мягкая остановка: процесс доводит текущий проход до конца. Обрыв на середине
+# оставил бы набор в состоянии, из которого его пришлось бы поднимать
+# восстановлением, — лишняя работа там, где достаточно подождать.
+KillSignal=SIGTERM
+KillMode=mixed
+TimeoutStopSec=60
+
+MemoryMax=256M
+CPUQuota=25%
+TasksMax=32
+
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=full
+ProtectHome=read-only
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=yes
+RestrictRealtime=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+# Пишет только в своё хранилище; код релиза остаётся неизменяемым.
+ReadWritePaths=/srv/site-factory/changeset-store
+
+# Дамп памяти содержал бы ключ подписи одобрений.
+LimitCORE=0
+
+[Install]
+WantedBy=multi-user.target

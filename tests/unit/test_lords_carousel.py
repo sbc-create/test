@@ -159,10 +159,19 @@ class TestStylesExistForTheCarousel:
 
 class TestProfilesUseTheCarousel:
     def test_all_three_product_profiles_lead_with_it(self):
+        # Первым в потоке, а не первым в списке. Блоки первого экрана
+        # (`hero_search`, `hero_facets`) рисуются до цикла по `home_blocks`
+        # (`render.py _home`), поэтому в манифесте они стоят раньше — и раньше
+        # они стояли не всегда, отчего манифест обещал порядок, которого на
+        # странице не было. Полка ведёт поток; сам поток начинается после
+        # первого экрана.
+        from factory.templates import contract
+
         profiles = plan_mod.load_profiles()
         for name in ("lords-general", "lords-new", "lords-curated"):
             blocks = theme_mod.layout_of(profiles[name])["home_blocks"]
-            assert blocks[0] == "top_carousel", name
+            stream = [b for b in blocks if contract.BLOCKS[b].slot == "stream"]
+            assert stream[0] == "top_carousel", name
 
     def test_each_domain_names_its_shelf_differently(self):
         profiles = plan_mod.load_profiles()

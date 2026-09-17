@@ -115,6 +115,70 @@ def test_pipeline_blocks_non_production_capable_target(production_site, monkeypa
     assert outcome.status == "BLOCKED_ACCESS"
 
 
+def test_pipeline_blocks_production_without_host_attestation(production_site, tmp_path,
+                                                             monkeypatch):
+    """Зелёный CI — не разрешение на выкат: о состоянии флота он ничего не знает.
+
+    Обычная проверка PR герметична: у раннера нет ни реестра, ни юнитов, ни
+    доменов, и она их не трогает. Факты о живом флоте устанавливает host-контур
+    и записывает в свидетельство. Без свидетельства выкат обязан остановиться
+    ДО единой мутации — именно этот случай, «никто не измерял», и есть тот, ради
+    которого ворота поставлены.
+    """
+    monkeypatch.setenv("HOST_ATTESTATION_DIR", str(tmp_path / "пусто"))
+    outcome = pipeline.run_job(production_site(), skip_browser=True,
+                               allow_production=True)
+    assert outcome.status == "BLOCKED_AUTHORIZATION"
+    assert any(b["field"] == "HOST_ATTESTATION_MISSING" for b in outcome.blockers), \
+        outcome.blockers
+    data = json.loads(outcome.result_path.read_text(encoding="utf-8"))
+    assert data["mutations"] == [], "заблокированный воротами job не трогает инфраструктуру"
+
+
+def test_pipeline_blocks_host_attestation_for_another_tree(production_site, tmp_path,
+                                                           monkeypatch):
+    """Свидетельство о ДРУГОМ дереве — это измерение не того, что выкатывают."""
+    from factory.site_engine.attestation import contract as attestation
+
+    каталог = tmp_path / "host-attestation"
+    monkeypatch.setenv("HOST_ATTESTATION_DIR", str(каталог))
+    чужое = attestation.собрать(
+        candidate_sha="f" * 40, hostname="test-control-host", control_host=True,
+        evidence_root=str(tmp_path / "fleet"),
+        результаты=[attestation.Результат(check_id=cid, status="PASS",
+                                          detail="синтетический",
+                                          measured_at=attestation.сейчас())
+                    for cid in sorted(attestation.ОБЯЗАТЕЛЬНЫЕ)])
+    attestation.записать(чужое, каталог=каталог)
+
+    outcome = pipeline.run_job(production_site(), skip_browser=True,
+                               allow_production=True)
+    assert outcome.status == "BLOCKED_AUTHORIZATION"
+    # Свидетельство адресуется деревом: файл назван своим candidate SHA. Поэтому
+    # чужое измерение не «не подошло», а просто не является измерением этого
+    # дерева — и ворота докладывают, что для выкатываемого SHA его нет.
+    assert any(b["field"] == "HOST_ATTESTATION_MISSING" for b in outcome.blockers), \
+        outcome.blockers
+
+
+def test_pipeline_passes_gate_with_valid_host_attestation(production_site,
+                                                          свидетельство_хоста):
+    """Годное свидетельство ворота проходит — иначе они блокировали бы всегда.
+
+    Проверка симметрична предыдущим намеренно: ворота, которые не пропускают
+    ничего, неотличимы от выключенного production и точно так же бесполезны.
+    Выкат дальше упирается в другие ворота стенда; здесь важно лишь, что он
+    больше не останавливается на аттестации.
+    """
+    outcome = pipeline.run_job(production_site(), skip_browser=True,
+                               allow_production=True)
+    assert not any(b["field"].startswith("HOST_ATTESTATION")
+                   for b in outcome.blockers), outcome.blockers
+    data = json.loads(outcome.result_path.read_text(encoding="utf-8"))
+    ворота = [ш for ш in data["steps"] if ш["id"] == "host_attestation"]
+    assert ворота and ворота[0]["status"] == "ok", data["steps"]
+
+
 def test_environment_flag_cannot_downgrade_production(production_site):
     """Подмена окружения флагом обходила бы лицензию, авторизацию и smoke."""
     site = production_site()

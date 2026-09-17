@@ -21,9 +21,9 @@ from __future__ import annotations
 import datetime as _dt
 import html
 import json
-import math
 import re
-from dataclasses import dataclass, field
+from collections.abc import Callable
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 
 from factory.analytics import client_codegen as analytics_codegen
@@ -31,6 +31,7 @@ from factory.analytics import snippet as analytics_snippet
 from factory.lords import content_types as ct
 from factory.lords import fixtures as fx
 from factory.lords import icons
+from factory.lords import pagination as pagination_mod
 from factory.lords import plan as plan_mod
 from factory.lords import player as player_mod
 from factory.lords import recommend as recommend_mod
@@ -323,12 +324,32 @@ def _header(ctx: dict, meta: Meta) -> str:
         '<nav class="site-nav" id="site-nav" aria-label="Основная навигация"><ul>'
         + _nav_items(ctx["nav"], ctx.get("_path", ""))
         + "</ul></nav>"
+        + _header_search(ctx)
+        + "</div></header>"
+    )
+
+
+def _header_search(ctx: dict) -> str:
+    """Форма поиска в шапке — кроме главной, где она уже стоит в первом экране.
+
+    Измерено 2026-09-02 на живом lordfilm47.space: две видимые формы поиска на
+    всех трёх ширинах, обе с action=/search/ и классом header-search. Соседние
+    витрины того же семейства показывали одну — расхождение шло от профиля:
+    `lords-general` держит `hero_search` в `home_blocks`, а форма в шапке
+    рисовалась безусловно.
+
+    Убирается именно вторая по счёту, а не первая попавшаяся: форма в первом
+    экране заметнее и стоит там намеренно, форма в шапке есть на всех
+    остальных страницах и никуда не девается.
+    """
+    if "hero_search" in (ctx.get("home_blocks") or ()) and ctx.get("_path", "/") == "/":
+        return ""
+    return (
         '<form class="header-search" role="search" action="/search/" method="get">'
         '<label class="visually-hidden" for="q">Поиск по каталогу</label>'
         '<input id="q" name="q" type="search" placeholder="Название из каталога" '
         'autocomplete="off">'
         "<button type=\"submit\">Найти</button></form>"
-        "</div></header>"
     )
 
 
@@ -561,17 +582,28 @@ def _options(pairs, name: str) -> str:
     return f'<option value="">{escape(name)}</option>{body}'
 
 
-def _facets(catalog: fx.Catalog, kinds, *, show_type: bool, row: bool = False) -> str:
+def _facets(catalog: fx.Catalog, kinds, *, show_type: bool, row: bool = False,
+            with_counts: bool = True) -> str:
     """Панель фильтров и сортировки. Работает поверх встроенного набора данных.
 
     `row` включает раскладку в строку — она нужна там, где фасеты стоят над
     списком: пять полей в колонку отодвигают первую карточку за сгиб, и раздел
     выглядит пустым, хотя в нём полсотни записей.
+
+    `with_counts=False` убирает числа из подписей фильтров. Числа считаются по
+    всему разделу, поэтому одна добавленная запись меняла подпись `2026 (1842)`
+    на `2026 (1843)` — и меняла её на **каждой** странице раздела. Измерено
+    2026-09-03: после перехода на разбиение по годам одна запись всё равно
+    перерисовывала 9266 страниц из 9717, и дифф показал, что расходятся ровно
+    эти счётчики. Числа остаются там, где они полезны и где страница и так
+    меняется от любой правки, — на первой странице раздела.
     """
     types = [(k, TYPE_LABELS[k]) for k in kinds if catalog.of_type(k)]
-    genres = [(slug, f"{label} ({count})") for slug, label, count in catalog.genres(kinds)]
-    years = [(str(y), f"{y} ({c})") for y, c in catalog.years(kinds)]
-    countries = [(slug, f"{label} ({count})") for slug, label, count in catalog.countries(kinds)]
+    подпись = (lambda label, count: f"{label} ({count})") if with_counts else (
+        lambda label, count: str(label))
+    genres = [(slug, подпись(label, count)) for slug, label, count in catalog.genres(kinds)]
+    years = [(str(y), подпись(y, c)) for y, c in catalog.years(kinds)]
+    countries = [(slug, подпись(label, count)) for slug, label, count in catalog.countries(kinds)]
 
     type_block = ""
     if show_type and len(types) > 1:
@@ -688,32 +720,49 @@ def _listing_pages(
     """Список с фасетами, сортировкой и пагинацией. Одна функция на все разделы."""
     items = _sorted(titles)
     per_page = ctx["per_page"]
-    pages_count = max(1, math.ceil(len(items) / per_page)) if items else 1
+    # Разбиение по блокам годов ограничивает правку одним годом: добавленная
+    # запись 2026-го трогает 82 страницы вместо 2216. Договор и цена перехода —
+    # adr/0007-pagination-by-year-blocks.md. Пока владелец не согласился на
+    # однократную смену состава страниц, поведение прежнее.
+    страницы = pagination_mod.разбить(
+        items, per_page, по_годам=bool(ctx.get("pagination_by_year")))
+    pages_count = len(страницы)
     out = []
     position = ctx["facet_position"]
+    # Два варианта панели: с числами для первой страницы раздела и без чисел
+    # для остальных. Числа считаются по всему разделу и потому связывают все
+    # страницы между собой — с ними инкрементальная публикация невозможна.
     facets = (
         _facets(catalog, kinds, show_type=show_type, row=position != "sidebar")
         if (show_facets and items) else ""
     )
+    facets_deep = (
+        _facets(catalog, kinds, show_type=show_type, row=position != "sidebar",
+                with_counts=False)
+        if (show_facets and items) else ""
+    )
 
     for number in range(1, pages_count + 1):
-        chunk = items[(number - 1) * per_page: number * per_page]
+        chunk = страницы[number - 1]
         path = base if number == 1 else f"{base}page/{number}/"
         heading = h1 if number == 1 else f"{h1} — страница {number}"
         title = section_title if number == 1 else f"{section_title} — страница {number}"
         desc = description if number == 1 else f"{description} Страница {number}."
         lede = f'<p class="lede">{escape(intro)}</p>' if intro and number == 1 else ""
         grid = _grid(chunk) + _pagination(base, number, pages_count)
-        body_top = (
-            f'<h1>{escape(heading)}</h1>{lede}'
-            f'<p class="count">Записей в разделе: {len(items)}.</p>{extra_top}'
-        )
-        if not facets:
+        # Общее число записей — та же связность: оно меняется от любой правки
+        # каталога и стоит на каждой странице. Остаётся на первой, где читатель
+        # его и ищет.
+        счётчик = (f'<p class="count">Записей в разделе: {len(items)}.</p>'
+                   if number == 1 else "")
+        body_top = f'<h1>{escape(heading)}</h1>{lede}{счётчик}{extra_top}'
+        панель = facets if number == 1 else facets_deep
+        if not панель:
             inner = body_top + grid
         elif position == "sidebar":
-            inner = body_top + f'<div class="listing">{facets}<div>{grid}</div></div>'
+            inner = body_top + f'<div class="listing">{панель}<div>{grid}</div></div>'
         else:  # top / hero / none — фасеты стоят над списком
-            inner = body_top + facets + grid
+            inner = body_top + панель + grid
         inner += _dataset(items)
 
         page_trail = trail if number == 1 else trail + ((f"Страница {number}", ""),)
@@ -795,6 +844,22 @@ def _watchable_first(titles, limit: int) -> list:
     return (watchable + rest)[:limit]
 
 
+def _mark(block: str, html: str) -> str:
+    """Помечает фрагмент главной именем блока из манифеста шаблона.
+
+    До этой метки состав главной нельзя было проверить снаружи: контракт
+    называет блоки именами, а в разметке они различались только заголовком —
+    «Жанры», «Годы выпуска», «Страны» — и два блока с одинаковым заголовком
+    было не отличить друг от друга вовсе. Атрибут добавляется в первый тег
+    фрагмента, ничего в нём не меняя и ни на что не влияя, кроме проверок.
+    """
+    if not html:
+        return html
+    positions = [pos for pos in (html.find(" "), html.find(">")) if pos > 0]
+    at = min(positions)
+    return f'{html[:at]} data-block="{escape(block)}"{html[at:]}'
+
+
 def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
     text = ctx["texts"].get("home") or {}
     blocks = ctx["home_blocks"]
@@ -807,29 +872,34 @@ def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
     hero_body += f'<p class="lede">{escape(text.get("intro", ""))}</p>'
     if "hero_search" in blocks:
         hero_body += (
-            '<form class="header-search" role="search" action="/search/" method="get">'
+            '<form class="header-search" data-block="hero_search" role="search"'
+            ' action="/search/" method="get">'
             '<label class="visually-hidden" for="hero-q">Поиск по каталогу</label>'
             '<input id="hero-q" name="q" type="search" placeholder="Название из каталога">'
             "<button type=\"submit\">Найти</button></form>"
         )
     if "hero_facets" in blocks:
-        hero_body += _chips([
+        hero_body += _mark("hero_facets", _chips([
             (label, f"/genres/{slug}/", count) for slug, label, count in catalog.genres(kinds)[:8]
-        ])
-    parts.append(f'<section class="hero hero--{escape(hero_kind)}">{hero_body}</section>')
+        ]))
+    parts.append(_mark(
+        "hero", f'<section class="hero hero--{escape(hero_kind)}">{hero_body}</section>'))
+
+    def add(block: str, html: str) -> None:
+        parts.append(_mark(block, html))
 
     for block in blocks:
         if block == "top_carousel":
             # Полка собирается ранжировщиком из записей каталога: правила
             # допуска и разнообразия живут в одном месте и одинаковы для всех
             # доменов. Вручную сюда ничего не подставляется.
-            parts.append(_carousel(
+            add(block, _carousel(
                 ctx,
                 recommend_mod.carousel_shelf(
                     catalog.of_types(kinds), domain=ctx.get("domain") or None),
                 ctx.get("carousel_heading") or "Новинки"))
         elif block == "latest_grid":
-            parts.append(
+            add(block,
                 '<section class="section"><div class="section__head">'
                 "<h2>Последние добавления</h2>"
                 f'<a class="section__more" href="{escape(ctx["catalog_path"])}">Весь каталог</a>'
@@ -842,45 +912,45 @@ def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
                     continue
                 href = ctx["type_paths"].get(kind)
                 more = f'<a class="section__more" href="{escape(href)}">Все</a>' if href else ""
-                parts.append(
+                add(block,
                     '<section class="section"><div class="section__head">'
                     f"<h2>{escape(TYPE_SECTION_LABELS.get(kind, TYPE_LABELS[kind]))}</h2>{more}</div>"
                     + _grid(row) + "</section>"
                 )
         elif block == "top_rated":
-            parts.append(_top_rated(ctx, pool))
+            add(block, _top_rated(ctx, pool))
         elif block == "genre_chips":
-            parts.append(
+            add(block,
                 '<section class="section"><h2>Жанры</h2>'
                 + _chips([(label, f"/genres/{slug}/", count)
                           for slug, label, count in catalog.genres(kinds)])
                 + "</section>"
             )
         elif block == "year_grid":
-            parts.append(
+            add(block,
                 '<section class="section"><h2>Годы выпуска</h2>'
                 + _chips([(str(year), f"/years/{year}/", count)
                           for year, count in catalog.years(kinds)])
                 + "</section>"
             )
         elif block == "country_grid":
-            parts.append(
+            add(block,
                 '<section class="section"><h2>Страны</h2>'
                 + _chips([(label, f"/countries/{slug}/", count)
                           for slug, label, count in catalog.countries(kinds)])
                 + "</section>"
             )
         elif block == "calendar" and ctx["show_calendar"]:
-            parts.append(_calendar(catalog, kinds))
+            add(block, _calendar(catalog, kinds))
         elif block == "fresh_episodes":
             episodic = [t for t in _sorted(pool) if t.episodic][:ctx["row_items"]]
             if episodic:
-                parts.append(
+                add(block,
                     '<section class="section"><div class="section__head">'
                     "<h2>Продолжающиеся истории</h2></div>" + _grid(episodic) + "</section>"
                 )
         elif block == "collection_cards" and ctx["show_collection_cards"]:
-            parts.append(_collection_cards(ctx, catalog))
+            add(block, _collection_cards(ctx, catalog))
         elif block == "editor_note":
             # Оговорка про тестовый каталог верна только для стенда. На живом
             # каталоге она сообщала посетителю, что за записями не стоят
@@ -894,7 +964,7 @@ def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
                 "Подборки собраны по формальным признакам каталога — году, типу, "
                 "длительности и числу сезонов. Состав обновляется вместе с каталогом."
             )
-            parts.append(
+            add(block,
                 '<section class="section"><h2>Как собран список</h2>'
                 f'<p class="lede">{escape(note)}</p></section>'
             )
@@ -1748,6 +1818,9 @@ def _context(package: dict, profile: dict, site_plan, player_state,
         ),
         "nav": [("home", "/")] + nav,
         "per_page": int(((package.get("seo") or {}).get("items_per_page")) or 24),
+        # Выключено по умолчанию: включение меняет состав страниц один раз и
+        # требует согласия владельца (adr/0007).
+        "pagination_by_year": bool((package.get("seo") or {}).get("pagination_by_year")),
         "home_items": 12,
         "row_items": 6,
         "facet_position": str(layout.get("facet_position")),
@@ -1782,6 +1855,8 @@ def render_site(
     root: Path | None = None,
     environ: dict | None = None,
     publisher_id: str | None = None,
+    only_title_slugs: frozenset[str] | None = None,
+    sink: Callable[[Page], None] | None = None,
 ) -> RenderedSite:
     """Полный сайт одного пакета: страницы, ассеты и отчёт о сборке.
 
@@ -1789,6 +1864,16 @@ def render_site(
     случае все типы находятся в состоянии `blocked_credentials`, разделов не
     возникает, и рендерер честно отдаёт сайт без каталога вместо витрины с
     выдуманным содержимым.
+
+    `only_title_slugs` ограничивает отрисовку страниц произведений названными.
+    По умолчанию (`None`) поведение прежнее — отрисовываются все. Ограничение
+    нужно быстрому пути: страниц произведений 53 116, и на них уходит почти всё
+    время сборки, тогда как выход одной серии меняет одну такую страницу.
+
+    В ограниченном режиме карта сайта **не** пересобирается: она строится по
+    списку отрисованных страниц, а он в этом режиме заведомо неполон. Карта
+    остаётся прежней — что верно, пока произведения не появляются и не исчезают.
+    Появление и исчезновение произведения требует полного цикла.
     """
     catalog = catalog if catalog is not None else fx.build_catalog()
     profiles = plan_mod.load_profiles(root)
@@ -1814,6 +1899,23 @@ def render_site(
                         brand=ctx["brand"], plan=site_plan)
 
     def add(page: Page) -> None:
+        # Потоковая отдача вместо накопления.
+        #
+        # `RenderedSite.pages` хранит тело каждой страницы, а их 9721 на
+        # витрину: замер 3 сентября — 1791 МБ на один рендер при 3671 МБ
+        # доступных на хосте, из которых почти три гигабайта уже в swap.
+        # Поэтому три витрины нельзя собирать одновременно, и третья выходила
+        # за пятнадцатиминутный срок.
+        #
+        # Когда вызывающий передал `sink`, страница уходит ему сразу, а в
+        # словаре остаётся запись без тела: пути, признак индексируемости, тип
+        # и статус по-прежнему видны всем, кому нужен состав сайта.
+        #
+        # Без `sink` поведение прежнее — тела остаются на месте, и ни сервер
+        # разработки, ни отпечаток предпросмотра, ни отчёты ничего не теряют.
+        if sink is not None:
+            sink(page)
+            page = replace(page, body="", raw=None)
         site.pages[page.path] = page
 
     def texts_of(section: str) -> dict:
@@ -1930,6 +2032,8 @@ def render_site(
     # Страницы произведений
     owns_titles = bool(profile.get("owns_title_page"))
     for title in pool:
+        if only_title_slugs is not None and title.slug not in only_title_slugs:
+            continue
         add(_title_page(ctx, catalog, title, kinds, indexable=owns_titles))
 
     # Поиск и служебные документы
@@ -1939,7 +2043,12 @@ def render_site(
     for icon_page in _icon_pages(ctx):
         add(icon_page)
     add(_robots(ctx))
-    add(_sitemap(ctx, indexable_paths))
+    # Карта сайта строится по списку отрисованного. В ограниченном режиме этот
+    # список неполон, и пересборка выбросила бы из карты все неотрисованные
+    # страницы. Прежняя карта остаётся верной, пока состав произведений не
+    # менялся; изменение состава — повод для полного цикла, а не для быстрого.
+    if only_title_slugs is None:
+        add(_sitemap(ctx, indexable_paths))
     site.not_found = _not_found(ctx)
 
     # Ассеты

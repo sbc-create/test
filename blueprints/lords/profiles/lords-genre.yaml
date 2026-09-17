@@ -29,7 +29,11 @@ layout:
   hero: facets
   card_ratio: "2 / 3"
   columns: { mobile: 2, tablet: 5, desktop: 8 }
-  home_blocks: [hero_facets, genre_chips, year_grid, country_grid]
+  # latest_grid добавлен не для красоты: приёмка боевого обновления ищет на
+  # главной class="card" и без карточек возвращает прежний релиз
+  # (automation/host/lords-content-refresh.sh:233). Витрина фасетов остаётся
+  # витриной фасетов — сетка стоит под плашками, а не над ними.
+  home_blocks: [hero_facets, genre_chips, year_grid, country_grid, latest_grid]
   show_calendar: false
   show_collection_cards: false
   facet_position: hero

@@ -1,0 +1,56 @@
+{
+  "bundle": "fleet-control-plane-contracts",
+  "version": "1.2.0",
+  "generated_at": "2026-09-11T14:04:52Z",
+  "owner": "architect",
+  "compatibility_policy": {
+    "url_major": "/api/v1",
+    "bundle_versioning": "SemVer",
+    "event_suffix": ".v1",
+    "additive_optional_ok_within_major": true,
+    "removal_or_rename_requires_new_major": true,
+    "consumers_must_tolerate_unknown_optional": true,
+    "provider_must_not_drop_required": true,
+    "supported_majors": [
+      "v1"
+    ],
+    "note": "Аддитивное расширение допустимо внутри major. Удаление, переименование или смена смысла поля — ломающее изменение и требует нового major."
+  },
+  "artifacts": [
+    "CHANGELOG.md",
+    "COMPATIBILITY.md",
+    "MIGRATION.md",
+    "asyncapi.json",
+    "capability-catalog.json",
+    "error-catalog.json",
+    "manifest.json",
+    "openapi.json",
+    "ownership-matrix.json",
+    "schemas/ActorRef.json",
+    "schemas/Capability.v1.json",
+    "schemas/CommandEnvelope.v1.json",
+    "schemas/CommandReceipt.v1.json",
+    "schemas/CorrelationContext.json",
+    "schemas/DesiredObservedState.json",
+    "schemas/EventEnvelope.v1.json",
+    "schemas/EvidenceRef.json",
+    "schemas/ObservedValue.json",
+    "schemas/Page.v1.json",
+    "schemas/Problem.v1.json",
+    "schemas/SiteRef.json",
+    "schemas/VersionRef.json"
+  ],
+  "checksums": "checksums.json",
+  "schemas_count": 13,
+  "capabilities": {
+    "available": 8,
+    "planned": 12,
+    "blocked": 0
+  },
+  "depends_on": {
+    "prompt": "FLEET-ARC-001.R1",
+    "commit": "4d8cb5a",
+    "registry_version_at_build": 29
+  },
+  "contract": "fleet-control-plane-contracts/1.2.0"
+}

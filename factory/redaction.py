@@ -30,6 +30,38 @@ NON_SECRET_ENV = {
     "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY", "http_proxy", "https_proxy", "no_proxy",
 }
 
+#: Формы значений, которые секретом не являются НИКОГДА, как бы ни называлось
+#: поле. Нужны потому, что запрет по имени поля слеп к содержимому: `actor_token`
+#: попадает под правило из-за суффикса `_token`, хотя хранит неприводимый
+#: 12-значный отпечаток, созданный специально для журналов. Затирая его, система
+#: перестаёт отвечать на вопрос «кто действовал» — и отвечать на него становится
+#: нечем ровно тогда, когда он задан.
+НЕСЕКРЕТНЫЕ_ФОРМЫ: tuple[re.Pattern[str], ...] = (
+    re.compile(r"^[0-9a-f]{12}$"),          # отпечаток токена для журналов
+    re.compile(r"^[0-9a-f]{16}$"),          # kid ключа подписи
+    re.compile(r"^[0-9a-f]{64}$"),          # полный SHA-256 без префикса
+    re.compile(r"^sha256:[0-9a-f]{64}$"),   # он же с префиксом
+    re.compile(r"^anonymous$"),
+)
+
+
+#: Поля, которые ПО НАЗНАЧЕНИЮ хранят отпечаток, а не значение. Разрешение
+#: по одной лишь форме было бы слишком широким: двенадцать шестнадцатеричных
+#: знаков может содержать и настоящий короткий пароль, и пропускать его из-за
+#: совпадения формы недопустимо. Нужны оба условия сразу.
+ПОЛЯ_ОТПЕЧАТКОВ = frozenset({
+    "actor_token", "token_id", "token_fingerprint", "fingerprint",
+    "previous_fingerprint", "new_fingerprint", "kid", "plan_hash",
+})
+
+
+def несекретная_форма(ключ: Any, значение: Any) -> bool:
+    """Поле хранит неприводимый отпечаток, и значение этой форме отвечает."""
+    return (isinstance(ключ, str) and ключ in ПОЛЯ_ОТПЕЧАТКОВ
+            and isinstance(значение, str)
+            and any(о.match(значение) for о in НЕСЕКРЕТНЫЕ_ФОРМЫ))
+
+
 #: Строка выглядит как секрет: длинная, без пробелов, с высокой долей уникальных символов.
 def _looks_like_secret(value: str) -> bool:
     if len(value) < 20 or " " in value or "/" in value and value.startswith("/"):
@@ -145,7 +177,9 @@ def redact_obj(obj: Any) -> Any:
     if isinstance(obj, dict):
         out = {}
         for key, value in obj.items():
-            if isinstance(key, str) and SENSITIVE_KEY_RE.search(key) and not key.endswith("_ref"):
+            if (isinstance(key, str) and SENSITIVE_KEY_RE.search(key)
+                    and not key.endswith("_ref")
+                    and not несекретная_форма(key, value)):
                 out[key] = PLACEHOLDER if value not in (None, "", [], {}) else value
             else:
                 out[key] = redact_obj(value)

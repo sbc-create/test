@@ -81,6 +81,38 @@ def temp_site(pilot_package):
             state.unlink(missing_ok=True)
 
 
+@pytest.fixture
+def свидетельство_хоста(tmp_path, monkeypatch):
+    """Синтетическое свидетельство о живом хосте для тестов production-выката.
+
+    Production-выкат требует годного свидетельства host-контура
+    (`factory/site_engine/attestation/gate.py`). Это предусловие того же рода,
+    что `production_authorized: true`, и тесты, проверяющие ПОСЛЕДУЮЩИЕ шаги
+    конвейера — smoke, откат, — обязаны его выполнить, иначе они меряют ворота
+    вместо того, что собирались мерить.
+
+    Свидетельство здесь синтетическое и живого флота не касается: host-контур
+    не запускается, `/srv` не читается. Настоящие ворота проверяются на
+    настоящих отказах в `tests/unit/test_host_attestation_gate.py`, а то, что
+    их отсутствие останавливает конвейер, — в `test_production_gates.py`.
+    """
+    from factory import audit as _audit
+    from factory.site_engine.attestation import contract as _contract
+
+    каталог = tmp_path / "host-attestation"
+    monkeypatch.setenv("HOST_ATTESTATION_DIR", str(каталог))
+    результаты = [
+        _contract.Результат(check_id=cid, status="PASS",
+                            detail="синтетический результат для теста конвейера",
+                            measured_at=_contract.сейчас())
+        for cid in sorted(_contract.ОБЯЗАТЕЛЬНЫЕ)]
+    документ = _contract.собрать(
+        candidate_sha=_audit.factory_commit(), hostname="test-control-host",
+        control_host=True, evidence_root=str(tmp_path / "fleet"),
+        результаты=результаты)
+    return _contract.записать(документ, каталог=каталог)
+
+
 @pytest.fixture(scope="session", autouse=True)
 def stop_all_stands():
     """Останавливает все локальные стенды после сессии тестов.

@@ -1,0 +1,291 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-09-11T14:01:38Z",
+  "http_semantics": {
+    "200": "завершённый синхронный результат",
+    "201": "ресурс создан",
+    "202": "асинхронная команда ПРИНЯТА, но не выполнена",
+    "400": "запрос не разобран",
+    "401": "не аутентифицирован",
+    "403": "нет прав",
+    "404": "ресурс неизвестен",
+    "409": "конфликт состояния или ключа идемпотентности",
+    "412": "предусловие версии не выполнено",
+    "422": "схема или бизнес-правило нарушены",
+    "429": "ограничение частоты",
+    "503": "зависимость недоступна"
+  },
+  "errors": [
+    {
+      "error_code": "REGISTRY_UNAVAILABLE",
+      "status": 503,
+      "retryable": true,
+      "owner": "architect",
+      "detail": "хранилище реестра недоступно"
+    },
+    {
+      "error_code": "SITE_NOT_FOUND",
+      "status": 404,
+      "retryable": false,
+      "owner": "architect",
+      "detail": "сайта с таким site_id нет"
+    },
+    {
+      "error_code": "SCHEMA_UNKNOWN",
+      "status": 404,
+      "retryable": false,
+      "owner": "architect",
+      "detail": "схемы с таким идентификатором нет"
+    },
+    {
+      "error_code": "CAPABILITY_UNKNOWN",
+      "status": 404,
+      "retryable": false,
+      "owner": "architect",
+      "detail": "возможности с таким идентификатором нет"
+    },
+    {
+      "error_code": "IDEMPOTENCY_KEY_REQUIRED",
+      "status": 422,
+      "retryable": false,
+      "owner": "architect",
+      "detail": "мутация без Idempotency-Key не принимается"
+    },
+    {
+      "error_code": "VERSION_CONFLICT",
+      "status": 412,
+      "retryable": false,
+      "owner": "architect",
+      "detail": "expected_version не совпал; перечитайте и повторите"
+    },
+    {
+      "error_code": "DOMAIN_TAKEN",
+      "status": 409,
+      "retryable": false,
+      "owner": "architect",
+      "detail": "домен уже принадлежит другому сайту"
+    },
+    {
+      "error_code": "UNAUTHORIZED",
+      "status": 401,
+      "retryable": false,
+      "owner": "architect",
+      "detail": "служебный токен отсутствует или неверен"
+    },
+    {
+      "error_code": "NOT_IMPLEMENTED",
+      "status": 501,
+      "retryable": false,
+      "owner": "architect",
+      "detail": "пространство имён зарезервировано, владелец ещё не реализовал"
+    },
+    {
+      "error_code": "DEADLINE_EXCEEDED",
+      "status": 503,
+      "retryable": true,
+      "owner": "architect",
+      "detail": "истёк срок; НЕ считать успехом и не помечать SUCCEEDED"
+    },
+    {
+      "error_code": "FILTER_VALUE_UNKNOWN",
+      "status": 422,
+      "retryable": false,
+      "owner": "architect",
+      "detail": "значение не входит в канонический перечень"
+    },
+    {
+      "error_code": "FILTER_VALUE_EMPTY",
+      "status": 422,
+      "retryable": false,
+      "owner": "architect",
+      "detail": "параметр задан пустым значением"
+    },
+    {
+      "error_code": "FILTER_VALUE_CONFLICT",
+      "status": 422,
+      "retryable": false,
+      "owner": "architect",
+      "detail": "параметр повторён с разными значениями"
+    },
+    {
+      "code": "APPEND_ONLY",
+      "http": 405,
+      "meaning": "Изменение или удаление записи журнала запрещено."
+    },
+    {
+      "code": "IDEMPOTENCY_CONFLICT",
+      "http": 409,
+      "meaning": "Ключ идемпотентности уже использован с другим содержимым."
+    },
+    {
+      "code": "IDENTITY_SPOOF",
+      "http": 403,
+      "meaning": "Заявленная служба не совпадает с личностью, выведенной из токена."
+    },
+    {
+      "code": "AUTHORITY_DENIED",
+      "http": 403,
+      "meaning": "У службы нет запрошенных полномочий."
+    },
+    {
+      "code": "MODEL_PHASE_DENIED",
+      "http": 403,
+      "meaning": "Актору типа MODEL недоступны исполнительные фазы."
+    },
+    {
+      "code": "SITE_ID_UNKNOWN",
+      "http": 422,
+      "meaning": "site_id отсутствует в реестре; домен идентификатором не считается."
+    },
+    {
+      "code": "SECRET_IN_PAYLOAD",
+      "http": 422,
+      "meaning": "В содержимом обнаружен секрет; событие не принято."
+    },
+    {
+      "code": "EVIDENCE_PATH_DENIED",
+      "http": 403,
+      "meaning": "Путь доказательства выходит за разрешённые корни."
+    },
+    {
+      "code": "FILTER_UNKNOWN",
+      "http": 422,
+      "meaning": "Неизвестный параметр фильтра."
+    },
+    {
+      "code": "ROLE_DENIED",
+      "http": 403,
+      "meaning": "У опознанной службы нет роли, требуемой этим маршрутом."
+    },
+    {
+      "code": "TOKEN_REVOKED",
+      "http": 403,
+      "meaning": "Токен опознан, но выведен из обращения."
+    },
+    {
+      "code": "ACTION_ONLY",
+      "http": 405,
+      "meaning": "Набор изменяется только действиями; правка и удаление запрещены."
+    },
+    {
+      "code": "STATUS_NOT_WRITABLE",
+      "http": 422,
+      "meaning": "Состояние вычисляется сервером и в запросе не задаётся."
+    },
+    {
+      "code": "TRANSITION_NOT_ALLOWED",
+      "http": 409,
+      "meaning": "Из текущего состояния такое действие не предусмотрено."
+    },
+    {
+      "code": "ROLE_NOT_GRANTED",
+      "http": 403,
+      "meaning": "У службы нет роли, требуемой этим действием."
+    },
+    {
+      "code": "MODEL_ACTION_DENIED",
+      "http": 403,
+      "meaning": "Актору-модели закрыты approve, apply, rollback и выдача полномочий."
+    },
+    {
+      "code": "SEPARATION_OF_DUTIES",
+      "http": 403,
+      "meaning": "Предложивший изменение не может сам его одобрить."
+    },
+    {
+      "code": "APPROVAL_REQUIRED",
+      "http": 403,
+      "meaning": "Изменение не одобрено."
+    },
+    {
+      "code": "APPROVAL_EXPIRED",
+      "http": 403,
+      "meaning": "Срок одобрения истёк."
+    },
+    {
+      "code": "APPROVAL_REVOKED",
+      "http": 403,
+      "meaning": "Одобрение отозвано."
+    },
+    {
+      "code": "APPROVAL_BINDING_MISMATCH",
+      "http": 409,
+      "meaning": "После одобрения изменился план, цели или иная связанная величина."
+    },
+    {
+      "code": "APPROVAL_SIGNATURE_INVALID",
+      "http": 403,
+      "meaning": "Подпись одобрения не совпала."
+    },
+    {
+      "code": "PLAN_STALE",
+      "http": 409,
+      "meaning": "Версия реестра или отпечаток цели разошлись с планом."
+    },
+    {
+      "code": "LOCK_CONFLICT",
+      "http": 409,
+      "meaning": "Цель уже изменяется другим набором."
+    },
+    {
+      "code": "FENCED_OUT",
+      "http": 409,
+      "meaning": "Предъявлен устаревший маркер ограждения."
+    },
+    {
+      "code": "LEASE_HELD",
+      "http": 409,
+      "meaning": "Аренда у другого исполнителя."
+    },
+    {
+      "code": "VERSION_CONFLICT",
+      "http": 409,
+      "meaning": "Версия набора изменилась между чтением и записью."
+    },
+    {
+      "code": "IRREVERSIBLE_OPERATION",
+      "http": 422,
+      "meaning": "Необратимые операции в этой версии не выполняются."
+    },
+    {
+      "code": "PAYLOAD_REJECTED",
+      "http": 422,
+      "meaning": "В содержимом обнаружены путь, команда, адрес или SQL."
+    },
+    {
+      "code": "AUTONOMOUS_PRODUCTION_APPLY_DISABLED",
+      "http": 403,
+      "meaning": "Применение вне test и non-production выключено."
+    },
+    {
+      "code": "AUDIT_LEDGER_UNAVAILABLE",
+      "http": 503,
+      "meaning": "Журнал аудита недоступен; изменения заблокированы."
+    },
+    {
+      "code": "REGISTRY_UNAVAILABLE",
+      "http": 503,
+      "meaning": "Реестр недоступен."
+    }
+  ],
+  "reliability_rules": {
+    "idempotency": "Idempotency-Key обязателен для всех мутаций",
+    "concurrency": "If-Match / expected_version; несовпадение — 412",
+    "correlation": "X-Correlation-ID обязателен",
+    "timeout": "ограниченный дедлайн, распространяется вниз по цепочке",
+    "retry": "только retryable=true",
+    "backoff": "экспоненциальный с джиттером и верхней границей",
+    "circuit_breaker": "обязателен для внешних провайдеров",
+    "backpressure": "ограниченная очередь; переполнение — 429, не молчание",
+    "cursor": "durable, переживает перезапуск потребителя",
+    "dead_letter": "терминальное состояние; НИКОГДА не SUCCESS",
+    "stale_heartbeat": "не считается RUNNING",
+    "terminal_statuses": [
+      "SUCCEEDED",
+      "FAILED",
+      "BLOCKED",
+      "CANCELLED"
+    ],
+    "serving_plane": "публичные сайты не зависят синхронно от Control Plane; last-known-good — для выдачи, но не источник истины"
+  }
+}

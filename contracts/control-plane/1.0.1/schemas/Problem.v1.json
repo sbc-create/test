@@ -1,0 +1,57 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/Problem.v1.json",
+ "title": "Ошибка",
+ "description": "Совместима с RFC 9457. safe_public_detail существует отдельно от detail потому, что подробность, полезная владельцу, часто раскрывает внутреннее устройство наружу.",
+ "x-owner": "architect",
+ "x-schema-version": "1.0.0",
+ "x-lifecycle": "ACTIVE",
+ "x-created-at": "2026-09-11T12:56:26Z",
+ "x-updated-at": "2026-09-11T12:56:26Z",
+ "x-compatibility": "BACKWARD_COMPATIBLE_ADDITIVE",
+ "type": "object",
+ "properties": {
+  "type": {
+   "type": "string"
+  },
+  "title": {
+   "type": "string"
+  },
+  "status": {
+   "type": "integer"
+  },
+  "detail": {
+   "type": "string"
+  },
+  "instance": {
+   "type": "string"
+  },
+  "error_code": {
+   "type": "string"
+  },
+  "retryable": {
+   "type": "boolean"
+  },
+  "owner": {
+   "type": "string"
+  },
+  "correlation_id": {
+   "type": "string"
+  },
+  "evidence_ref": {
+   "$ref": "https://contracts.site-factory.internal/fleet/1.0.0/schemas/EvidenceRef.json"
+  },
+  "safe_public_detail": {
+   "type": "string"
+  }
+ },
+ "required": [
+  "type",
+  "title",
+  "status",
+  "error_code",
+  "retryable",
+  "owner"
+ ],
+ "additionalProperties": true
+}
