@@ -71,7 +71,15 @@ def features_from_title(title) -> ItemFeatures:
         genres=tuple(getattr(title, "genres", ()) or ()),
         countries=tuple(c for c in (getattr(title, "country", None),) if c),
         franchise_id=None,
-        poster=getattr(title, "poster_url", None) or getattr(title, "poster_src", None),
+        # `poster_src` (когда он есть у записи) уже несёт нужный порядок:
+        # проверенный адрес поставщика или, если его нет, собственный маршрут
+        # заглушки — тот же, что получает страница произведения. Прежде
+        # здесь читалось сырое `poster_url` первым, и адрес не https
+        # (источник иногда отдаёт http) уходил на карусель непроверенным
+        # вместо отката к заглушке. `poster_url` остаётся вторым вариантом —
+        # не у каждого объекта записи (например, в тестах ранжировщика) есть
+        # `poster_src`, и терять признак полки для них не нужно.
+        poster=getattr(title, "poster_src", None) or getattr(title, "poster_url", None),
         path=getattr(title, "path", None),
         playback_state=_playback_state(title, playback),
         has_title_page=True,

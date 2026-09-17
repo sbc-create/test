@@ -95,8 +95,28 @@ def resolve(
     return out
 
 
-def active_types(states: dict[str, TypeState]) -> list[str]:
-    return [name for name in CONTENT_TYPES if states[name].active]
+def active_types(states: dict[str, TypeState], order: tuple[str, ...] | None = None) -> list[str]:
+    """Активные типы в порядке показа.
+
+    `order` — приоритет показа, объявленный профилем витрины (например, чтобы
+    фильмы и сериалы Lords шли раньше аниме и дорам). `None` — глобальный
+    порядок `CONTENT_TYPES` по умолчанию. Тип, не упомянутый в `order`, не
+    теряется: он идёт следом, в исходном порядке `CONTENT_TYPES` — профиль
+    объявляет только то, что для него важно, а не весь перечень заново.
+    """
+    sequence = CONTENT_TYPES if not order else (
+        tuple(name for name in order if name in CONTENT_TYPES)
+        + tuple(name for name in CONTENT_TYPES if name not in order)
+    )
+    seen: set[str] = set()
+    out: list[str] = []
+    for name in sequence:
+        if name in seen:
+            continue
+        seen.add(name)
+        if states[name].active:
+            out.append(name)
+    return out
 
 
 def counts(states: dict[str, TypeState]) -> dict[str, int]:

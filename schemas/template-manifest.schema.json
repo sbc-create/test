@@ -177,6 +177,15 @@
           "type": "boolean",
           "default": false,
           "description": "Флаг блока collection_cards. Ведёт себя так же."
+        },
+        "type_priority": {
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/content_kind"
+          },
+          "description": "Порядок показа активных типов в type_rows и в отчёте active_types (factory/lords/render.py render_site). Тип, не упомянутый здесь, не пропадает — он идёт следом, в порядке factory/lords/content_types.CONTENT_TYPES. Без поля действует тот же порядок по умолчанию. Нужен профилям, чей порядок сознательно отличается от общего: свой порядок в одном профиле не должен менять чужой."
         }
       }
     },
@@ -242,6 +251,16 @@
         "search"
       ],
       "description": "Каталог разделов направления. Совпадение с blueprints/lords/blueprint.yaml проверяется тестом: раздел, которого нет в blueprint, не появится в плане сайта."
+    },
+    "content_kind": {
+      "enum": [
+        "movies",
+        "series",
+        "animation",
+        "anime",
+        "dorama"
+      ],
+      "description": "Типы контента направления, совпадает с factory/lords/content_types.CONTENT_TYPES без collections: подборки — не тип показа, а отдельный флаг."
     },
     "home_block": {
       "enum": [

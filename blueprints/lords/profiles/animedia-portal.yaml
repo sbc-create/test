@@ -75,6 +75,12 @@ layout:
   - calendar
   - latest_grid
   - genre_chips
+  # Портал заведён ради аниме (см. purpose и navigation.primary пакета —
+  # там аниме тоже идёт первым): свой порядок типов не должен зависеть от
+  # общего перечня content_types.py, который ведёт фильмами ради Lords.
+  # `type_rows` в home_blocks сейчас нет, но порядок объявлен, чтобы решение
+  # не терялось, если блок здесь когда-нибудь понадобится.
+  type_priority: [anime, series, movies, animation, dorama]
   carousel_heading: Сейчас выходит
   show_calendar: true
   show_collection_cards: false

@@ -38,6 +38,10 @@ layout:
   # на странице поиск всё равно был выше. Разметка не менялась — менялось
   # только обещание.
   home_blocks: [hero_search, top_carousel, latest_grid, type_rows, top_rated, genre_chips, year_grid]
+  # См. lords-new.yaml: направление Lords ведёт фильмами и сериалами, и
+  # «type_rows» не должен переставлять их местами с аниме/дорамой, если тип
+  # когда-нибудь включат. Объявлено в профиле, а не в общем перечне типов.
+  type_priority: [movies, series, animation, anime, dorama]
   carousel_heading: Новинки каталога
   show_calendar: false
   show_collection_cards: false

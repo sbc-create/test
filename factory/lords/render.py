@@ -168,16 +168,26 @@ class RenderedSite:
 # ---------------------------------------------------------------------------
 # Постеры: локальные нейтральные заглушки, сгенерированные из слага
 # ---------------------------------------------------------------------------
-def poster_svg(title: fx.Title) -> str:
+def poster_svg(title) -> str:
     """Заглушка постера. Ни одного чужого изображения и ни одного запроса наружу.
 
     Цвет выводится из слага, поэтому одна и та же запись всегда выглядит
     одинаково, а соседние карточки отличаются. Палитра приглушённая: заглушка
     обязана читаться как заглушка, а не как обложка.
+
+    Подпись зависит от происхождения записи. Функция вызывается для каждой
+    записи пула, у которой нет своего постера, — а это не только фикстуры
+    стенда: у живой записи источник тоже может не прислать картинку. Прежде
+    подпись «FIXTURE / тестовая заглушка» ставилась всем без разбора, и живая,
+    настоящая запись каталога получала на своей странице пометку теста —
+    утверждение о происхождении, которое для неё не соответствует действительности.
     """
     seed = sum(ord(c) * (i + 1) for i, c in enumerate(title.slug))
     hue = seed % 360
     initials = "".join(word[0] for word in title.name.split()[:2]).upper()
+    is_fixture = bool(getattr(title, "fixture", True))
+    caption = "FIXTURE" if is_fixture else "POSTER"
+    subcaption = "тестовая заглушка" if is_fixture else "постер недоступен"
     return (
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" '
         f'role="img" aria-label="Заглушка постера: {escape(title.name)}">'
@@ -187,9 +197,9 @@ def poster_svg(title: fx.Title) -> str:
         f'<text x="200" y="278" text-anchor="middle" font-size="86" font-weight="700" '
         f'fill="hsl({hue} 20% 62%)" font-family="system-ui, sans-serif">{escape(initials)}</text>'
         '<text x="200" y="500" text-anchor="middle" font-size="26" fill="hsl(0 0% 72%)" '
-        'font-family="system-ui, sans-serif">FIXTURE</text>'
+        f'font-family="system-ui, sans-serif">{escape(caption)}</text>'
         '<text x="200" y="536" text-anchor="middle" font-size="19" fill="hsl(0 0% 55%)" '
-        'font-family="system-ui, sans-serif">тестовая заглушка</text>'
+        f'font-family="system-ui, sans-serif">{escape(subcaption)}</text>'
         "</svg>"
     )
 
@@ -637,22 +647,26 @@ def _card(title: fx.Title) -> str:
 def _poster(title) -> str:
     """Постер записи или заглушка вместо него.
 
-    Постеры отдаёт внешний хост поставщика, и часть их не приходит: запись без
-    постера у источника, снятая картинка, закрытая сеть. Пустой элемент
-    изображения оставляет в карточке серый прямоугольник, и страница выглядит
-    сломанной, а не неполной — разница для зрителя большая.
+    Источник картинки — `title.poster_src`, а не сырое поле `poster_url`.
+    Разница между ними и есть отличие живой записи от фикстурной: у
+    `LiveTitle` `poster_src` — это проверенный адрес поставщика или, если его
+    нет, собственный маршрут заглушки; у фикстуры `poster_url` не существует
+    вовсе, и обращение к нему напрямую (`getattr(..., "poster_url", None)`)
+    всегда возвращало пусто. Карточка рисовала одну только букву на каждой
+    записи стенда — притом что для каждой из них уже собирался и выкладывался
+    настоящий файл заглушки (см. `poster_svg` и цикл, который его выкладывает):
+    карточка о нём просто не знала.
+    `poster_src` определён на обоих классах записи и уже возвращает нужный
+    результат в обоих случаях — переоткрывать эту логику здесь не нужно.
 
-    Заглушка несёт первую букву названия. Это не украшение: она отличает
-    карточки друг от друга взглядом, пока названия ещё не прочитаны, и
-    показывает, что место занято намеренно. Буква скрыта от экранного диктора —
-    он читает название рядом, и повторять его инициалом незачем.
-
-    `onerror` снимает изображение, не сумевшее загрузиться, и оставляет
-    заглушку под ним: без этого браузер рисует значок битой картинки.
+    Буква под изображением остаётся: `onerror` снимает картинку, если адрес
+    поставщика не открылся в браузере посетителя, и заглушка с буквой
+    оказывается под ней — карточка не показывает битое изображение и не
+    остаётся пустой.
     """
     letter = escape((title.name or "?").strip()[:1].upper())
     placeholder = f'<span class="card__poster-empty" aria-hidden="true">{letter}</span>'
-    source = fx.safe_poster_src(getattr(title, "poster_url", None))
+    source = fx.safe_poster_src(getattr(title, "poster_src", None))
     if not source:
         return placeholder
     return (
@@ -2874,7 +2888,13 @@ def render_site(
     )
     ctx = _context(package, profile, site_plan, player_state, publisher_id, fixture_catalog)
 
-    kinds = [k for k in ct.active_types(site_plan.type_states) if k in TYPE_LABELS]
+    # Порядок показа типов — из профиля, а не из одного глобального перечня:
+    # у профилей разное назначение (Lords ведёт фильмами и сериалами, портал
+    # аниме заведён ради аниме), и общий порядок одного из них не должен
+    # решать за другого. Профиль без объявления получает порядок по умолчанию.
+    type_priority = tuple((profile.get("layout") or {}).get("type_priority") or ())
+    kinds = [k for k in ct.active_types(site_plan.type_states, order=type_priority or None)
+             if k in TYPE_LABELS]
     collections_on = site_plan.type_states["collections"].active
     by_section = {page.section: page for page in site_plan.pages}
     pool = catalog.of_types(kinds)
