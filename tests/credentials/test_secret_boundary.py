@@ -117,21 +117,57 @@ class TestОдобрениеПослеОтзыва:
     """Ротация без отзыва оставила бы вчерашние разрешения в силе."""
 
     def test_одобрение_перестаёт_действовать(self, tmp_path, monkeypatch):
+        from factory.site_engine.changeset import model as M
         from factory.site_engine.changeset import policy as POL
-        набор_данных = {
-            "changeset_id": "cs-1", "plan_hash": "ph", "actor_id": "service:templates",
-            "target_site_ids": ["s1"], "canary_site_ids": [],
-            "resource_type": "template.build", "resource_id": "r1",
-            "operation_type": "update", "base_registry_version": 32,
-            "expected_resource_fingerprint": "fp", "policy_version": "policy/1.0.0",
-            "risk_class": "LOW", "verification_plan": {}, "rollback_plan": {},
-        }
+        from factory.site_engine.changeset import store as S
+        from factory.site_engine.changeset import testing as ЧТ
+
         каталог = tmp_path / "credentials"
         with ПТ.эфемерный_signer(каталог, monkeypatch):
+            # Одобрение подписывается по ссылке на набор — служба подписи
+            # читает каноническое состояние сама, поэтому набор обязан
+            # существовать в хранилище, а не только в переменной теста.
+            срок = ЧТ.срок_через(1)
+            соед = S.открыть()
+            try:
+                cid = S.создать(
+                    соед,
+                    {"resource_type": "template.build", "resource_id": "r1",
+                     "operation_type": "update", "target_site_ids": ["s1"],
+                     "canary_site_ids": [], "requested_change": {"build": "новое"},
+                     "idempotency_key": "revocation-test-1"},
+                    producer_service="templates", actor_id="service:templates",
+                    actor_type="SERVICE")["changeset_id"]
+                S.применить_переход(соед, cid, "validate",
+                                    actor_id="service:control-plane",
+                                    служба="control-plane", роль=M.VALIDATOR)
+                S.применить_переход(
+                    соед, cid, "validate_ok",
+                    actor_id="service:control-plane", служба="control-plane",
+                    роль=M.VALIDATOR,
+                    поля={"plan_hash": "ph", "base_registry_version": 32,
+                          "expected_resource_fingerprint": "fp",
+                          "risk_class": "LOW", "verification_plan": {},
+                          "rollback_plan": {}})
+                S.применить_переход(
+                    соед, cid, "request_approval",
+                    actor_id="service:templates", служба="templates",
+                    роль=M.PROPOSER, поля={"expires_at": срок})
+            finally:
+                соед.close()
+
+            набор_данных = {
+                "changeset_id": cid, "plan_hash": "ph", "actor_id": "service:templates",
+                "target_site_ids": ["s1"], "canary_site_ids": [],
+                "resource_type": "template.build", "resource_id": "r1",
+                "operation_type": "update", "base_registry_version": 32,
+                "expected_resource_fingerprint": "fp", "policy_version": "policy/1.0.0",
+                "risk_class": "LOW", "verification_plan": {}, "rollback_plan": {},
+            }
             запись = POL.одобрить(набор_данных, approver_id="human:owner",
                                   approver_service="human_owner",
                                   approver_type="HUMAN",
-                                  expires_at="2099-01-01T00:00:00Z")
+                                  expires_at=срок)
             полный = {**набор_данных, "approval": запись}
             POL.проверить_одобрение(полный, сейчас_utc="2026-09-12T00:00:00Z")
 
