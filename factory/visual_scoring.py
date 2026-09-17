@@ -82,7 +82,7 @@ class ScoringResult:
 # --- загрузка контракта ------------------------------------------------------
 
 
-def load_contract(version: str = "1.0.1", root: Path | None = None) -> dict[str, Any]:
+def load_contract(version: str = "1.0.2", root: Path | None = None) -> dict[str, Any]:
     """Прочитать контракт и проверить его самосогласованность.
 
     Отсутствующий контракт — не повод посчитать по умолчанию: без правила
@@ -134,6 +134,31 @@ def assign_component(token: dict[str, Any], contract: dict[str, Any]) -> str:
             if re.match(pattern, name):
                 return rule["component"]
     return "UNASSIGNED"
+
+
+def component_applicability(component: str, surface: str, contract: dict[str, Any]) -> str:
+    """REQUIRED, если контракт явно не объявил обратное для этой пары.
+
+    Список `component_applicability.not_applicable` умеет только сужать охват,
+    никогда не расширять его по умолчанию: отсутствие записи и неизвестная
+    surface дают REQUIRED. Опечатка в имени поверхности поэтому не освобождает
+    кандидата от измерения молча — она просто не находит совпадения и остаётся
+    fail-closed, как и раньше.
+    """
+    rules = contract.get("component_applicability", {}).get("not_applicable", [])
+    for rule in rules:
+        if rule["component"] == component and rule["surface"] == surface:
+            return "NOT_APPLICABLE"
+    return "REQUIRED"
+
+
+def applicability_reason(component: str, surface: str, contract: dict[str, Any]) -> str:
+    """Причина NOT_APPLICABLE из контракта, для отчётной трассируемости."""
+    rules = contract.get("component_applicability", {}).get("not_applicable", [])
+    for rule in rules:
+        if rule["component"] == component and rule["surface"] == surface:
+            return str(rule.get("reason", ""))
+    return ""
 
 
 # --- сравнение значений ------------------------------------------------------
@@ -548,6 +573,11 @@ def compare(*, reference_tokens: list[dict[str, Any]], candidate_tokens: list[di
             continue
         if component in excluded:
             continue
+        if component_applicability(component, surface, contract) == "NOT_APPLICABLE":
+            # Контракт заранее объявил: этот компонент не относится к типу этой
+            # поверхности. Токен не участвует в расчёте и не портит полноту —
+            # но только для этой surface, а не для компонента целиком.
+            continue
         expected += 1
         candidate = cand_index.get(key)
         buckets.setdefault((surface, viewport, component), []).append(
@@ -567,6 +597,12 @@ def compare(*, reference_tokens: list[dict[str, Any]], candidate_tokens: list[di
                     component_scores.append(ComponentScore(
                         surface, viewport, component, _ZERO, weights[component], 0, 0,
                         excluded=True, exclusion_reason=excluded[component]))
+                    continue
+                if component_applicability(component, surface, contract) == "NOT_APPLICABLE":
+                    reason = applicability_reason(component, surface, contract)
+                    component_scores.append(ComponentScore(
+                        surface, viewport, component, _ZERO, weights[component], 0, 0,
+                        excluded=True, exclusion_reason=f"NOT_APPLICABLE: {reason}"))
                     continue
                 scores = buckets.get(cell, [])
                 if not scores:
@@ -591,6 +627,19 @@ def compare(*, reference_tokens: list[dict[str, Any]], candidate_tokens: list[di
             redistribution.append({"component": component,
                                    "from_weight": float(weights[component]),
                                    "to_weight": float(after[component])})
+
+    for surface in contract["required_surfaces"]:
+        not_applicable = {c for c in weights
+                          if component_applicability(c, surface, contract) == "NOT_APPLICABLE"}
+        if not not_applicable:
+            continue
+        after = _redistribute(weights, set(excluded) | not_applicable)
+        for viewport in contract["required_viewports"]:
+            for component in sorted(after):
+                if after[component] != weights[component]:
+                    redistribution.append({
+                        "surface": surface, "viewport": viewport, "component": component,
+                        "from_weight": float(weights[component]), "to_weight": float(after[component])})
 
     result = ScoringResult(
         overall_score=overall, surface_scores=surfaces, viewport_scores=viewports,

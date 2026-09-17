@@ -18,11 +18,13 @@ from factory.visual_scoring import (
     Identity,
     ScoringResult,
     aggregate,
+    applicability_reason,
     assign_component,
     check_compatibility,
     check_independence,
     check_weight_sums,
     compare,
+    component_applicability,
     decide,
     exclusions_digest,
     load_contract,
@@ -625,6 +627,225 @@ def test_header_sticky_candidate_value_still_affects_the_score_under_1_0_1(contr
     assert result.overall_score < Decimal("100")
     geometry_cells = [c for c in result.component_scores if c.component == "geometry"]
     assert geometry_cells and all(c.score < Decimal("100") for c in geometry_cells)
+
+
+# --- 1.0.2: cards_media перестаёт быть глобально неисключаемым ---------------
+#
+# PR #80 подтвердил прогоном compare(): cards_media структурно отсутствует на
+# catalog/not_found (6 ячеек, 0 измерений на обеих независимых прогонах), но
+# реально измеряется на home/collection_hub/title (9 ячеек). Единственный
+# существовавший exclusions.component_level_exclusion ключует по компоненту
+# целиком и обнулил бы все 9 применимых ячеек ради честного пропуска 6
+# неприменимых. Тесты ниже проверяют новую секцию component_applicability, не
+# используя данные amd.online и не вынося вердикт по кандидату.
+
+_CARDS_MEDIA_NOT_APPLICABLE_SURFACES = ["catalog", "not_found"]
+_CARDS_MEDIA_REQUIRED_SURFACES = ["home", "collection_hub", "title"]
+
+
+@pytest.fixture(scope="module")
+def contract_102() -> dict:
+    return load_contract("1.0.2", root=REPO_ROOT / "contracts" / "visual-scoring")
+
+
+@pytest.mark.parametrize("surface", _CARDS_MEDIA_NOT_APPLICABLE_SURFACES)
+@pytest.mark.parametrize("viewport", [390, 768, 1440])
+def test_cards_media_is_not_applicable_on_catalog_and_not_found(contract_102, surface, viewport):
+    """viewport параметризован лишь для явности: применимость не читает viewport вовсе."""
+    assert component_applicability("cards_media", surface, contract_102) == "NOT_APPLICABLE"
+
+
+@pytest.mark.parametrize("surface", _CARDS_MEDIA_REQUIRED_SURFACES)
+def test_cards_media_stays_required_on_home_collection_hub_and_title(contract_102, surface):
+    assert component_applicability("cards_media", surface, contract_102) == "REQUIRED"
+
+
+@pytest.mark.parametrize("surface", ["unknown_surface_xyz", "", "Catalog", "catalog2"])
+def test_unknown_surface_does_not_become_not_applicable(contract_102, surface):
+    """Отсутствие записи или опечатка в имени поверхности не расширяют исключение."""
+    assert component_applicability("cards_media", surface, contract_102) == "REQUIRED"
+
+
+@pytest.mark.parametrize("component", ["structure_order", "geometry", "typography", "colors", "responsive"])
+@pytest.mark.parametrize("surface", ["home", "catalog", "collection_hub", "title", "not_found"])
+def test_only_cards_media_catalog_and_not_found_are_declared_not_applicable(contract_102, component, surface):
+    """Механизм не расширяется молча на другие компоненты или поверхности."""
+    assert component_applicability(component, surface, contract_102) == "REQUIRED"
+
+
+def _tokens_without_cards_media_on(tokens: list[dict], surfaces: list[str]) -> list[dict]:
+    """Убрать card_aspect_ratio на перечисленных surfaces, не трогая _VALUES/_tokens()."""
+    return [t for t in tokens if not (t["name"] == "card_aspect_ratio" and t["surface"] in surfaces)]
+
+
+def test_missing_cards_media_on_a_required_surface_still_blocks_completeness(contract_102):
+    """REQUIRED-ячейка без измерения остаётся тем же fail-closed правилом, что и раньше."""
+    reference = _tokens_without_cards_media_on(_tokens(lambda name, s, v: _VALUES[name]), ["home"])
+    candidate = _tokens(lambda name, s, v: _VALUES[name])
+    result = compare(**_pack(contract_102, reference, candidate))
+    assert result.certification_status == "BLOCKED_EVIDENCE_INCOMPLETE"
+    assert result.evidence_completeness < Decimal("100")
+    gap = [c for c in result.component_scores
+           if c.component == "cards_media" and c.surface == "home" and not c.excluded]
+    assert gap and all(c.tokens_compared == 0 and c.score == Decimal("0") for c in gap)
+
+
+def test_scope_aware_rule_does_not_exclude_the_whole_component(contract_102):
+    """Ядро дефекта: cards_media остаётся REQUIRED и оценивается там, где применим."""
+    reference = _tokens_without_cards_media_on(
+        _tokens(lambda name, s, v: _VALUES[name]), _CARDS_MEDIA_NOT_APPLICABLE_SURFACES)
+    candidate = _tokens_without_cards_media_on(
+        _tokens(lambda name, s, v: _VALUES[name]), _CARDS_MEDIA_NOT_APPLICABLE_SURFACES)
+    result = compare(**_pack(contract_102, reference, candidate))
+
+    assert result.evidence_completeness == Decimal("100")
+    assert result.certification_status == "VISUAL_CERTIFIED"
+
+    applicable = [c for c in result.component_scores
+                  if c.component == "cards_media" and c.surface in _CARDS_MEDIA_REQUIRED_SURFACES]
+    assert len(applicable) == 9  # 3 surfaces x 3 viewports
+    assert all(not c.excluded and c.tokens_compared > 0 for c in applicable)
+
+    scoped_out = [c for c in result.component_scores
+                  if c.component == "cards_media" and c.surface in _CARDS_MEDIA_NOT_APPLICABLE_SURFACES]
+    assert len(scoped_out) == 6  # 2 surfaces x 3 viewports
+    assert all(c.excluded and c.exclusion_reason.startswith("NOT_APPLICABLE:") for c in scoped_out)
+
+
+def test_reference_token_present_despite_not_applicable_is_still_ignored(contract_102):
+    """Даже если у эталона неожиданно нашёлся токен там, где applicability его не ждёт."""
+    reference = _tokens(lambda name, s, v: _VALUES[name])  # card_aspect_ratio на всех 15 ячейках
+    candidate = _tokens(lambda name, s, v: _VALUES[name])
+    result = compare(**_pack(contract_102, reference, candidate))
+    assert result.evidence_completeness == Decimal("100")
+    scoped_out = [c for c in result.component_scores
+                  if c.component == "cards_media" and c.surface in _CARDS_MEDIA_NOT_APPLICABLE_SURFACES]
+    assert all(c.excluded and c.tokens_compared == 0 for c in scoped_out)
+
+
+def test_declared_component_exclusion_still_works_globally_alongside_applicability(contract_102):
+    """component_level_exclusion (кандидатский, с provenance) не заменён applicability."""
+    reference = [t for t in _tokens(lambda name, s, v: _VALUES[name]) if t["name"] != "accent_color"]
+    excluded = [{"scope": "colors", "component": "colors",
+                 "reason": "эталон цвет не измеряет", "provenance": "EXCLUSIONS.md",
+                 "declared_at": "2026-09-16T00:00:00Z"}]
+    result = compare(**_pack(contract_102, reference, reference,
+                             declared_exclusions=excluded,
+                             baseline_exclusions_digest=exclusions_digest(excluded)))
+    assert result.certification_status == "VISUAL_CERTIFIED"
+    colors_cells = [c for c in result.component_scores if c.component == "colors"]
+    assert colors_cells and all(c.excluded and not c.exclusion_reason.startswith("NOT_APPLICABLE:")
+                                for c in colors_cells)
+
+
+@pytest.mark.parametrize("value", [True, False])
+def test_header_sticky_still_assigns_to_geometry_under_1_0_2(contract_102, value):
+    """1.0.1 наследуется без изменения семантики."""
+    assert assign_component({"name": "header_sticky", "value": value}, contract_102) == "geometry"
+
+
+@pytest.mark.parametrize("name,component", _COMPONENT_ASSIGNMENT_CASES)
+def test_all_legacy_component_assignments_still_work_under_1_0_2(contract_102, name, component):
+    assert assign_component({"name": name}, contract_102) == component
+
+
+def test_1_0_2_contract_version_is_pinned(contract_102):
+    assert contract_102["contract_version"] == "visual-scoring/1.0.2"
+    assert contract_102["status"] == "immutable"
+
+
+def test_1_0_2_preserves_weights_thresholds_and_completeness_requirement(contract_101, contract_102):
+    assert contract_102["weights"] == contract_101["weights"]
+    assert contract_102["thresholds"] == contract_101["thresholds"]
+    assert contract_102["hard_failures"] == contract_101["hard_failures"]
+    assert contract_102["scoring_rules"] == contract_101["scoring_rules"]
+    assert contract_102["statuses"] == contract_101["statuses"]
+    assert contract_102["status_precedence"] == contract_101["status_precedence"]
+    assert contract_102["component_assignment"]["order"] == contract_101["component_assignment"]["order"]
+
+
+def test_1_0_2_files_match_their_recorded_checksums():
+    import hashlib
+
+    base = REPO_ROOT / "contracts" / "visual-scoring" / "1.0.2"
+    recorded = json.loads((base / "checksums.json").read_text(encoding="utf-8"))
+    for name, digest in sorted(recorded["files"].items()):
+        path = (base / name).resolve()
+        actual = "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
+        assert actual == digest, f"{name} изменён после выпуска версии"
+
+
+@pytest.mark.parametrize("version", ["1.0.0", "1.0.1"])
+def test_older_versions_remain_untouched_by_the_1_0_2_fix(version):
+    """1.0.0 и 1.0.1 обязаны воспроизводиться по checksum и после этого исправления."""
+    import hashlib
+
+    base = REPO_ROOT / "contracts" / "visual-scoring" / version
+    recorded = json.loads((base / "checksums.json").read_text(encoding="utf-8"))
+    for name, digest in sorted(recorded["files"].items()):
+        path = (base / name).resolve()
+        actual = "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
+        assert actual == digest, f"{version}/{name} изменён — версия больше не immutable"
+
+
+def test_1_0_2_result_with_scope_aware_cells_validates_against_result_schema(contract_102):
+    """component_scores/weight_redistribution от NOT_APPLICABLE не требуют правки схемы."""
+    from jsonschema import Draft202012Validator
+
+    reference = _tokens_without_cards_media_on(
+        _tokens(lambda name, s, v: _VALUES[name]), _CARDS_MEDIA_NOT_APPLICABLE_SURFACES)
+    candidate = _tokens_without_cards_media_on(
+        _tokens(lambda name, s, v: _VALUES[name]), _CARDS_MEDIA_NOT_APPLICABLE_SURFACES)
+    result = compare(**_pack(contract_102, reference, candidate))
+    assert result.certification_status == "VISUAL_CERTIFIED"
+
+    def q(value: Decimal) -> float:
+        return float(value.quantize(Decimal("0.01")))
+
+    doc = {
+        "reference_pack_id": "synthetic-pack",
+        "reference_commit": "a" * 40,
+        "candidate_commit": "b" * 40,
+        "scoring_contract_version": contract_102["contract_version"],
+        "checker_identity": {"id": "checker-01", "role": "CHECKER"},
+        "pack_author_identity": {"id": "templates-01", "role": "TEMPLATES"},
+        "candidate_author_identity": {"id": "candidate-01", "role": "CANDIDATE"},
+        "environment_manifest": dict(
+            _ENV, font_availability=["Inter"],
+            template_manifest_compatibility={
+                "apiVersionRange": "1.0.0", "sdkVersionRange": "1.0.0", "seoContractVersionRange": "1.0.0"}),
+        "exclusions_digest": exclusions_digest([]),
+        "surface_scores": {k: q(v) for k, v in result.surface_scores.items()},
+        "viewport_scores": {str(k): q(v) for k, v in result.viewport_scores.items()},
+        "component_scores": [
+            {
+                "surface": c.surface, "viewport": c.viewport, "component": c.component,
+                "score": q(c.score), "weight": float(c.weight),
+                "tokens_compared": c.tokens_compared, "tokens_missing": c.tokens_missing,
+                **({"excluded": c.excluded} if c.excluded else {}),
+                **({"exclusion_reason": c.exclusion_reason} if c.exclusion_reason else {}),
+            }
+            for c in result.component_scores
+        ],
+        "overall_score": q(result.overall_score),
+        "comparisons_performed": result.comparisons_performed,
+        "hard_failures": result.hard_failures,
+        "evidence_completeness": q(result.evidence_completeness),
+        "certification_status": result.certification_status,
+        "blocked_reasons": result.blocked_reasons,
+        "weight_redistribution": result.weight_redistribution,
+        "generated_at": "2026-09-17T00:00:00Z",
+    }
+
+    schema = json.loads((REPO_ROOT / "schemas" / "visual-scoring-result.schema.json").read_text(encoding="utf-8"))
+    Draft202012Validator(schema).validate(doc)
+
+
+def test_1_0_2_environment_compatibility_checks_are_unaffected(contract_102):
+    """compatibility-проверка (check_compatibility) не завязана на applicability."""
+    other_env = dict(_ENV, browser_build="chromium-1200")
+    mismatches = check_compatibility(_ENV, other_env)
+    assert any("browser_build" in m for m in mismatches)
 
 
 # --- форма контракта ---------------------------------------------------------
