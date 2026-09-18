@@ -1441,20 +1441,54 @@ def _top_rated(ctx, pool) -> str:
     )
 
 
+def _representative_title(catalog: fx.Catalog, col: fx.Collection):
+    """Первый тайтл подборки, который реально есть в каталоге.
+
+    `title_slugs` — заявленный состав; `Catalog.by_slug` — единственный способ
+    получить медиа без выдумывания постера. Пропуски (устаревший слаг, тип
+    вне профиля) не подменяются соседней записью «для красоты»: берётся
+    первый резолвящийся слаг в порядке подборки.
+    """
+    for slug in col.title_slugs:
+        title = catalog.by_slug(slug)
+        if title is not None:
+            return title
+    return None
+
+
+def _collection_card(catalog: fx.Catalog, col: fx.Collection) -> str:
+    """Карточка подборки с `.card__poster` для cards_media на collection_hub.
+
+    Медиа — representative poster первого резолвящегося тайтла. Ссылка на
+    постере ведёт в подборку, а не на тайтл: клик по обложке и по заголовку
+    должен открывать одно и то же. Если состав пуст или ни один слаг не
+    резолвится, слот постера всё равно остаётся — иначе измеритель снова
+    увидит текстовые карточки и снимет cards_media как unavailable.
+    """
+    title = _representative_title(catalog, col)
+    if title is not None:
+        poster = _poster(title)
+    else:
+        letter = escape((col.name or "?").strip()[:1].upper() or "?")
+        poster = f'<span class="card__poster-empty" aria-hidden="true">{letter}</span>'
+    return (
+        f'<article class="card">'
+        f'<a class="card__poster" href="{escape(col.path)}" tabindex="-1" aria-hidden="true">'
+        f"{poster}</a>"
+        '<div class="card__body">'
+        f'<h3><a class="card__title" href="{escape(col.path)}">{escape(col.name)}</a></h3>'
+        f'<span class="card__meta">{len(col.title_slugs)} записей</span>'
+        f'<span class="card__meta">{escape(col.summary)}</span>'
+        "</div></article>"
+    )
+
+
 def _collection_cards(ctx, catalog: fx.Catalog) -> str:
-    cards = []
-    for col in catalog.collections:
-        cards.append(
-            '<article class="card"><div class="card__body">'
-            f'<h3><a class="card__title" href="{escape(col.path)}">{escape(col.name)}</a></h3>'
-            f'<span class="card__meta">{len(col.title_slugs)} записей</span>'
-            f'<span class="card__meta">{escape(col.summary)}</span>'
-            "</div></article>"
-        )
+    cards = "".join(_collection_card(catalog, col) for col in catalog.collections)
     return (
         '<section class="section"><div class="section__head"><h2>Подборки</h2>'
         '<a class="section__more" href="/collections/">Все подборки</a></div>'
-        '<div class="grid" data-visual-role="card-grid">' + "".join(cards) + "</div></section>"
+        '<div class="grid" data-visual-role="card-grid">' + cards + "</div></section>"
     )
 
 
@@ -2625,13 +2659,7 @@ def _index_page(ctx, *, path, section, pairs, trail_label, indexable) -> Page:
 def _collections_index(ctx, catalog: fx.Catalog, indexable: bool) -> Page:
     text = ctx["texts"].get("collections_index") or {}
     title = text.get("title") or SECTION_LABELS["collections_index"]
-    cards = "".join(
-        '<article class="card"><div class="card__body">'
-        f'<h3><a class="card__title" href="{escape(col.path)}">{escape(col.name)}</a></h3>'
-        f'<span class="card__meta">{len(col.title_slugs)} записей</span>'
-        f'<span class="card__meta">{escape(col.summary)}</span></div></article>'
-        for col in catalog.collections
-    )
+    cards = "".join(_collection_card(catalog, col) for col in catalog.collections)
     body = (
         f'<h1>{escape(text.get("h1") or title)}</h1>'
         + _lede(text.get("intro", ""))
