@@ -2792,7 +2792,14 @@ def _context(package: dict, profile: dict, site_plan, player_state,
         "hero": str(layout.get("hero")),
         "home_blocks": list(layout.get("home_blocks") or []),
         "show_calendar": bool(layout.get("show_calendar")),
-        "show_collection_cards": bool(layout.get("show_collection_cards")),
+        # Профильный флаг недостаточен сам по себе: пакет может выключить
+        # `content_types.collections` (zona-cinema-preview). Тогда страниц
+        # `/collections/` в плане нет, а полка со ссылками на них — битые
+        # внутренние адреса на главной.
+        "show_collection_cards": (
+            bool(layout.get("show_collection_cards"))
+            and bool(site_plan.type_states["collections"].active)
+        ),
         "texts": profile.get("sections") or {},
         "title_page": profile.get("title_page") or {
             "title_template": "{name}", "h1_template": "{name}",
