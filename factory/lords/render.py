@@ -1342,7 +1342,7 @@ def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
             # сетку под ними. Пустая секция ради структуры хуже отсутствия
             # секции: зритель видит обещание и ничего за ним.
             if catalog.collections:
-                add(block, _collection_cards(ctx, catalog))
+                add(block, _collection_cards(ctx, catalog, kinds))
         elif block == "editor_note":
             # Оговорка про тестовый каталог верна только для стенда. На живом
             # каталоге она сообщала посетителю, что за записями не стоят
@@ -1441,31 +1441,40 @@ def _top_rated(ctx, pool) -> str:
     )
 
 
-def _representative_title(catalog: fx.Catalog, col: fx.Collection):
-    """Первый тайтл подборки, который реально есть в каталоге.
+def _collection_titles(catalog: fx.Catalog, col: fx.Collection, kinds) -> list:
+    """Состав подборки так же, как на её detail-странице.
 
-    `title_slugs` — заявленный состав; `Catalog.by_slug` — единственный способ
-    получить медиа без выдумывания постера. Пропуски (устаревший слаг, тип
-    вне профиля) не подменяются соседней записью «для красоты»: берётся
-    первый резолвящийся слаг в порядке подборки.
+    Один проход по `title_slugs` через `Catalog.by_slug` (O(1) на слаг) и
+    тот же фильтр типов, что у listing. Хаб, счётчик и detail не расходятся:
+    постер и «N записей» описывают ровно то, что откроется по ссылке.
     """
+    allowed = set(kinds)
+    titles = []
     for slug in col.title_slugs:
         title = catalog.by_slug(slug)
-        if title is not None:
-            return title
-    return None
+        if title is None or title.content_type not in allowed:
+            continue
+        titles.append(title)
+    return titles
 
 
-def _collection_card(catalog: fx.Catalog, col: fx.Collection) -> str:
+def _representative_title(catalog: fx.Catalog, col: fx.Collection, kinds):
+    """Первый тайтл подборки, видимый в активных типах профиля."""
+    titles = _collection_titles(catalog, col, kinds)
+    return titles[0] if titles else None
+
+
+def _collection_card(catalog: fx.Catalog, col: fx.Collection, kinds) -> str:
     """Карточка подборки с `.card__poster` для cards_media на collection_hub.
 
-    Медиа — representative poster первого резолвящегося тайтла. Ссылка на
-    постере ведёт в подборку, а не на тайтл: клик по обложке и по заголовку
-    должен открывать одно и то же. Если состав пуст или ни один слаг не
-    резолвится, слот постера всё равно остаётся — иначе измеритель снова
-    увидит текстовые карточки и снимет cards_media как unavailable.
+    Медиа — representative poster первого видимого тайтла. Ссылка на постере
+    ведёт в подборку, а не на тайтл: клик по обложке и по заголовку открывает
+    одно и то же. Если состав пуст или ни один слаг не резолвится в активных
+    типах, слот постера всё равно остаётся — иначе измеритель снова увидит
+    текстовые карточки и снимет cards_media как unavailable.
     """
-    title = _representative_title(catalog, col)
+    titles = _collection_titles(catalog, col, kinds)
+    title = titles[0] if titles else None
     if title is not None:
         poster = _poster(title)
     else:
@@ -1477,14 +1486,14 @@ def _collection_card(catalog: fx.Catalog, col: fx.Collection) -> str:
         f"{poster}</a>"
         '<div class="card__body">'
         f'<h3><a class="card__title" href="{escape(col.path)}">{escape(col.name)}</a></h3>'
-        f'<span class="card__meta">{len(col.title_slugs)} записей</span>'
+        f'<span class="card__meta">{len(titles)} записей</span>'
         f'<span class="card__meta">{escape(col.summary)}</span>'
         "</div></article>"
     )
 
 
-def _collection_cards(ctx, catalog: fx.Catalog) -> str:
-    cards = "".join(_collection_card(catalog, col) for col in catalog.collections)
+def _collection_cards(ctx, catalog: fx.Catalog, kinds) -> str:
+    cards = "".join(_collection_card(catalog, col, kinds) for col in catalog.collections)
     return (
         '<section class="section"><div class="section__head"><h2>Подборки</h2>'
         '<a class="section__more" href="/collections/">Все подборки</a></div>'
@@ -2656,10 +2665,10 @@ def _index_page(ctx, *, path, section, pairs, trail_label, indexable) -> Page:
     return _page(ctx, path, meta, body)
 
 
-def _collections_index(ctx, catalog: fx.Catalog, indexable: bool) -> Page:
+def _collections_index(ctx, catalog: fx.Catalog, kinds, indexable: bool) -> Page:
     text = ctx["texts"].get("collections_index") or {}
     title = text.get("title") or SECTION_LABELS["collections_index"]
-    cards = "".join(_collection_card(catalog, col) for col in catalog.collections)
+    cards = "".join(_collection_card(catalog, col, kinds) for col in catalog.collections)
     body = (
         f'<h1>{escape(text.get("h1") or title)}</h1>'
         + _lede(text.get("intro", ""))
@@ -3106,10 +3115,9 @@ def render_site(
     # Подборки
     if collections_on and "collections_index" in by_section:
         entry = by_section["collections_index"]
-        add(_collections_index(ctx, catalog, entry.indexable))
+        add(_collections_index(ctx, catalog, kinds, entry.indexable))
         for col in catalog.collections:
-            picks = [t for t in (catalog.by_slug(s) for s in col.title_slugs)
-                     if t is not None and t.content_type in kinds]
+            picks = _collection_titles(catalog, col, kinds)
             for page in _listing_pages(
                 ctx, base=col.path, titles=picks, catalog=catalog, kinds=kinds,
                 section_title=col.name, h1=col.name, description=col.summary,
