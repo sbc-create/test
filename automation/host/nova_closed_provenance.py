@@ -26,7 +26,7 @@ class ClosedSiteProvenance(TypedDict):
     runtime_repo: str
 
 
-LORDS_COMMIT = "99ec78291141de9f350f03298edabd6e89b3a9d6"
+LORDS_COMMIT = "69d56ce2bfab987fa722ce15379a844bb5a2835c"
 ANIMEDIA_COMMIT = "b023bd50cced8d281cb3814a75bf72b429afee0b"
 ZONA_COMMIT = "a10e68b2350a020a2f7d5efe28cd98ef2fc89edd"
 
