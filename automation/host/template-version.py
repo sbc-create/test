@@ -42,7 +42,8 @@ def отпечаток_текста(т: str) -> str:
 
 
 def собрать_манифест(*, family: str, design_version: str, source_commit: str,
-                     profile: str, artifact_sha256: str, build_suffix: str) -> dict:
+                     profile: str, artifact_sha256: str, build_suffix: str,
+                     runtime_commit: str | None = None) -> dict:
     if family not in СЕМЕЙСТВА:
         raise SystemExit(f"неизвестное семейство: {family}")
     if not SEMVER.match(design_version):
@@ -51,12 +52,16 @@ def собрать_манифест(*, family: str, design_version: str, source_
         raise SystemExit("source_commit обязан быть полным SHA из сорока знаков")
     if not ХЕКС64.match(artifact_sha256):
         raise SystemExit("artifact_sha256 обязан быть шестьюдесятью четырьмя знаками")
+    рантайм = runtime_commit or source_commit
+    if not ХЕКС40.match(рантайм):
+        raise SystemExit("runtime_commit обязан быть полным SHA из сорока знаков")
     когда = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     return {
         "schema_version": 1,
         "template_family": family,
         "design_version": design_version,
         "source_commit": source_commit,
+        "runtime_commit": рантайм,
         # Уникален для каждой сборки: время плюс суффикс плюс начало коммита.
         "build_id": f"{когда}-{source_commit[:8]}-{build_suffix}",
         "artifact_sha256": artifact_sha256,
@@ -72,6 +77,9 @@ def проверить_манифест(м: dict) -> list[str]:
         беды.append("design_version не по SemVer")
     if "source_commit" in м and not ХЕКС40.match(str(м["source_commit"])):
         беды.append("source_commit не полный SHA")
+    if "runtime_commit" in м and м["runtime_commit"] is not None \
+            and not ХЕКС40.match(str(м["runtime_commit"])):
+        беды.append("runtime_commit не полный SHA")
     if "artifact_sha256" in м and not ХЕКС64.match(str(м["artifact_sha256"])):
         беды.append("artifact_sha256 не 64 знака")
     if "build_id" in м and not str(м["build_id"]).strip():
