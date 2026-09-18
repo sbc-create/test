@@ -47,6 +47,12 @@ theme:
     h1_size: '1.4rem'
     h2_size: '1.15rem'
     heading_font: '''Open Sans'', ''Segoe UI'', Roboto, Arial, sans-serif'
+    # OWNER_DECISION: header.sticky = false на amd.online (замер
+    # tests/tools/measure_reference.js, docs/reference-packs/amd-online/
+    # VISUAL_TOKENS.yaml). Остальные профили направления умолчание
+    # `factory/lords/theme.py: DEFAULT_TOKENS.header_position` не трогают и
+    # остаются липкими.
+    header_position: static
   # Прежняя тёмная палитра сохранена как пользовательская альтернатива:
   # переключатель темы (factory/lords/render.py: _theme_switch) появляется
   # автоматически там, где вторая палитра объявлена, и он же даёт

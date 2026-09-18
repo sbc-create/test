@@ -52,6 +52,14 @@ DEFAULT_TOKENS = {
     # создаёт — измерено, шкала выходила 1,07.
     "h1_size": "1.125rem",
     "h2_size": "1.05rem",
+    # Позиция шапки при прокрутке. Умолчание — прежнее поведение (`sticky`),
+    # поэтому витрина, которая параметр не объявляет, не меняется.
+    # Управляется профилем через `theme.tokens.header_position`, как и
+    # остальные токены выше — механизм уже есть в `tokens_of`, второго не
+    # заводится. Паттерн подтверждён совместимым в Zona (commit d96ae38):
+    # портируется только сам токен и его использование в `.site-header`, без
+    # остальных несвязанных правок той ветки (gutter_mode, header_search и т.д.).
+    "header_position": "sticky",
 }
 
 DEFAULT_LAYOUT = {
@@ -470,7 +478,7 @@ a.visually-hidden:focus-visible {{
 
 /* --- шапка ------------------------------------------------------------- */
 .site-header {{
-  position: sticky; top: 0; z-index: 20;
+  position: {t['header_position']}; top: 0; z-index: 20;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
 }}

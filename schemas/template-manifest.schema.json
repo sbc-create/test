@@ -311,6 +311,15 @@
         "h2_size": {
           "$ref": "#/$defs/length",
           "description": "Кегль заголовка второго уровня. См. h1_size."
+        },
+        "header_position": {
+          "enum": [
+            "sticky",
+            "static",
+            "relative",
+            "fixed"
+          ],
+          "description": "CSS position шапки (.site-header). Незаданный токен берётся из DEFAULT_TOKENS (sticky). Паттерн Zona commit d96ae38."
         }
       }
     },
