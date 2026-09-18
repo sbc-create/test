@@ -1,0 +1,848 @@
+{
+  "domain": "https://animedia.space",
+  "key": "animedia_space",
+  "routes": {
+    "home": {
+      "url": "https://animedia.space/",
+      "status": 200,
+      "bytes": 70926,
+      "err": null,
+      "title": "Animedia — аниме-портал",
+      "h1": [
+        "Аниме-портал: онгоинги, новые эпизоды и расписание"
+      ],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "animedia-portal",
+      "data_family": "animedia",
+      "data_version": "1.2.0",
+      "profile_header": "animedia-general",
+      "family_header": "animedia",
+      "img_count": 96,
+      "link_count": 107,
+      "form_count": 1,
+      "empty_signals": [
+        "empty-class"
+      ],
+      "classes_top": [
+        [
+          "zt",
+          96
+        ],
+        [
+          "zt__p",
+          96
+        ],
+        [
+          "zt__none",
+          96
+        ],
+        [
+          "zt__img",
+          96
+        ],
+        [
+          "zt__b",
+          96
+        ],
+        [
+          "zt__t",
+          96
+        ],
+        [
+          "zt__m",
+          96
+        ],
+        [
+          "zt__r",
+          96
+        ],
+        [
+          "zsec",
+          6
+        ],
+        [
+          "zsec__h",
+          6
+        ],
+        [
+          "zg",
+          4
+        ],
+        [
+          "zempty",
+          2
+        ],
+        [
+          "skip",
+          1
+        ],
+        [
+          "zs",
+          1
+        ],
+        [
+          "zhd",
+          1
+        ]
+      ]
+    },
+    "catalog": {
+      "url": "https://animedia.space/catalog/",
+      "status": 200,
+      "bytes": 64005,
+      "err": null,
+      "title": "Весь каталог — Animedia",
+      "h1": [
+        "Весь каталог"
+      ],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "animedia-portal",
+      "data_family": "animedia",
+      "data_version": "1.2.0",
+      "profile_header": "animedia-general",
+      "family_header": "animedia",
+      "img_count": 48,
+      "link_count": 59,
+      "form_count": 1,
+      "empty_signals": [],
+      "classes_top": [
+        [
+          "zr",
+          48
+        ],
+        [
+          "zr__p",
+          48
+        ],
+        [
+          "zr__none",
+          48
+        ],
+        [
+          "zr__img",
+          48
+        ],
+        [
+          "zr__t",
+          48
+        ],
+        [
+          "zr__m",
+          48
+        ],
+        [
+          "zr__d",
+          32
+        ],
+        [
+          "zr__r",
+          17
+        ],
+        [
+          "zwrap",
+          2
+        ],
+        [
+          "skip",
+          1
+        ],
+        [
+          "zs",
+          1
+        ],
+        [
+          "zhd",
+          1
+        ],
+        [
+          "zhd__in",
+          1
+        ],
+        [
+          "zhd__logo",
+          1
+        ],
+        [
+          "zhd__n",
+          1
+        ]
+      ]
+    },
+    "collections": {
+      "url": "https://animedia.space/collections/",
+      "status": 200,
+      "bytes": 23623,
+      "err": null,
+      "title": "Подборки — Animedia",
+      "h1": [
+        "Подборки"
+      ],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "animedia-portal",
+      "data_family": "animedia",
+      "data_version": "1.2.0",
+      "profile_header": "animedia-general",
+      "family_header": "animedia",
+      "img_count": 20,
+      "link_count": 12,
+      "form_count": 1,
+      "empty_signals": [],
+      "classes_top": [
+        [
+          "zhub__p",
+          20
+        ],
+        [
+          "zhub__img",
+          20
+        ],
+        [
+          "zhub__c",
+          5
+        ],
+        [
+          "zhub__g",
+          5
+        ],
+        [
+          "zhub__t",
+          5
+        ],
+        [
+          "zhub__m",
+          5
+        ],
+        [
+          "zhub__d",
+          5
+        ],
+        [
+          "zwrap",
+          2
+        ],
+        [
+          "skip",
+          1
+        ],
+        [
+          "zs",
+          1
+        ],
+        [
+          "zhd",
+          1
+        ],
+        [
+          "zhd__in",
+          1
+        ],
+        [
+          "zhd__logo",
+          1
+        ],
+        [
+          "zhd__n",
+          1
+        ],
+        [
+          "zhd__s",
+          1
+        ]
+      ]
+    },
+    "genres": {
+      "url": "https://animedia.space/genres/",
+      "status": 404,
+      "bytes": 17786,
+      "err": "HTTP Error 404: Not Found",
+      "title": "Страница не найдена — Animedia",
+      "h1": [
+        "Страница не найдена"
+      ],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "animedia-portal",
+      "data_family": "animedia",
+      "data_version": "1.2.0",
+      "profile_header": "animedia-general",
+      "family_header": "animedia",
+      "img_count": 0,
+      "link_count": 8,
+      "form_count": 1,
+      "empty_signals": [],
+      "classes_top": [
+        [
+          "skip",
+          1
+        ],
+        [
+          "zs",
+          1
+        ],
+        [
+          "zhd",
+          1
+        ],
+        [
+          "zhd__in",
+          1
+        ],
+        [
+          "zhd__logo",
+          1
+        ],
+        [
+          "zhd__n",
+          1
+        ],
+        [
+          "zhd__s",
+          1
+        ],
+        [
+          "vh",
+          1
+        ],
+        [
+          "zmain",
+          1
+        ],
+        [
+          "zwrap",
+          1
+        ],
+        [
+          "znf",
+          1
+        ],
+        [
+          "zft",
+          1
+        ],
+        [
+          "zvb",
+          1
+        ]
+      ]
+    },
+    "countries": {
+      "url": "https://animedia.space/countries/",
+      "status": 404,
+      "bytes": 17789,
+      "err": "HTTP Error 404: Not Found",
+      "title": "Страница не найдена — Animedia",
+      "h1": [
+        "Страница не найдена"
+      ],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "animedia-portal",
+      "data_family": "animedia",
+      "data_version": "1.2.0",
+      "profile_header": "animedia-general",
+      "family_header": "animedia",
+      "img_count": 0,
+      "link_count": 8,
+      "form_count": 1,
+      "empty_signals": [],
+      "classes_top": [
+        [
+          "skip",
+          1
+        ],
+        [
+          "zs",
+          1
+        ],
+        [
+          "zhd",
+          1
+        ],
+        [
+          "zhd__in",
+          1
+        ],
+        [
+          "zhd__logo",
+          1
+        ],
+        [
+          "zhd__n",
+          1
+        ],
+        [
+          "zhd__s",
+          1
+        ],
+        [
+          "vh",
+          1
+        ],
+        [
+          "zmain",
+          1
+        ],
+        [
+          "zwrap",
+          1
+        ],
+        [
+          "znf",
+          1
+        ],
+        [
+          "zft",
+          1
+        ],
+        [
+          "zvb",
+          1
+        ]
+      ]
+    },
+    "search_page": {
+      "url": "https://animedia.space/search/",
+      "status": 200,
+      "bytes": 18627,
+      "err": null,
+      "title": "Поиск — Animedia",
+      "h1": [
+        "Поиск"
+      ],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "animedia-portal",
+      "data_family": "animedia",
+      "data_version": "1.2.0",
+      "profile_header": "animedia-general",
+      "family_header": "animedia",
+      "img_count": 0,
+      "link_count": 8,
+      "form_count": 1,
+      "empty_signals": [
+        "empty-class"
+      ],
+      "classes_top": [
+        [
+          "zwrap",
+          2
+        ],
+        [
+          "skip",
+          1
+        ],
+        [
+          "zs",
+          1
+        ],
+        [
+          "zhd",
+          1
+        ],
+        [
+          "zhd__in",
+          1
+        ],
+        [
+          "zhd__logo",
+          1
+        ],
+        [
+          "zhd__n",
+          1
+        ],
+        [
+          "zhd__s",
+          1
+        ],
+        [
+          "vh",
+          1
+        ],
+        [
+          "zmain",
+          1
+        ],
+        [
+          "zh",
+          1
+        ],
+        [
+          "zsub",
+          1
+        ],
+        [
+          "zempty",
+          1
+        ],
+        [
+          "zft",
+          1
+        ],
+        [
+          "zvb",
+          1
+        ]
+      ]
+    },
+    "robots": {
+      "url": "https://animedia.space/robots.txt",
+      "status": 200,
+      "bytes": 26,
+      "err": null,
+      "title": "",
+      "h1": [],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": null,
+      "data_design": null,
+      "data_family": null,
+      "data_version": null,
+      "profile_header": "animedia-general",
+      "family_header": "animedia",
+      "img_count": 0,
+      "link_count": 0,
+      "form_count": 0,
+      "empty_signals": [],
+      "classes_top": []
+    },
+    "not_found": {
+      "url": "https://animedia.space/__no_such_page_live_qa_404__/",
+      "status": 404,
+      "bytes": 17808,
+      "err": "HTTP Error 404: Not Found",
+      "title": "Страница не найдена — Animedia",
+      "h1": [
+        "Страница не найдена"
+      ],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "animedia-portal",
+      "data_family": "animedia",
+      "data_version": "1.2.0",
+      "profile_header": "animedia-general",
+      "family_header": "animedia",
+      "img_count": 0,
+      "link_count": 8,
+      "form_count": 1,
+      "empty_signals": [],
+      "classes_top": [
+        [
+          "skip",
+          1
+        ],
+        [
+          "zs",
+          1
+        ],
+        [
+          "zhd",
+          1
+        ],
+        [
+          "zhd__in",
+          1
+        ],
+        [
+          "zhd__logo",
+          1
+        ],
+        [
+          "zhd__n",
+          1
+        ],
+        [
+          "zhd__s",
+          1
+        ],
+        [
+          "vh",
+          1
+        ],
+        [
+          "zmain",
+          1
+        ],
+        [
+          "zwrap",
+          1
+        ],
+        [
+          "znf",
+          1
+        ],
+        [
+          "zft",
+          1
+        ],
+        [
+          "zvb",
+          1
+        ]
+      ]
+    },
+    "title": {
+      "url": "https://animedia.space/title/009-1/",
+      "status": 200,
+      "bytes": 31669,
+      "title": "009-1 — смотреть онлайн — Animedia",
+      "h1": [
+        "009-1"
+      ],
+      "has_player_zone": true,
+      "img_count": 8,
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "animedia-portal"
+    }
+  },
+  "search": {
+    "plain": {
+      "url": "https://animedia.space/search/?q=matrix",
+      "status": 200,
+      "title_links": 0,
+      "h1": [
+        "«matrix»"
+      ],
+      "bytes": 18465
+    },
+    "cyrillic": {
+      "url": "https://animedia.space/search/?q=%D0%BC%D0%B0%D1%82%D1%80%D0%B8%D1%86%D0%B0",
+      "status": 200,
+      "title_links": 3,
+      "h1": [
+        "«матрица»"
+      ],
+      "bytes": 21776
+    },
+    "partial": {
+      "url": "https://animedia.space/search/?q=%D0%BC%D0%B0%D1%82",
+      "status": 200,
+      "title_links": 53,
+      "h1": [
+        "«мат»"
+      ],
+      "bytes": 82432
+    },
+    "empty": {
+      "url": "https://animedia.space/search/?q=",
+      "status": 200,
+      "title_links": 0,
+      "h1": [
+        "Поиск"
+      ],
+      "bytes": 18627
+    },
+    "missing": {
+      "url": "https://animedia.space/search/?q=zzzqxqnonexistent999",
+      "status": 200,
+      "title_links": 0,
+      "h1": [
+        "«zzzqxqnonexistent999»"
+      ],
+      "bytes": 18493
+    }
+  },
+  "nav": {
+    "sampled": [
+      [
+        "/catalog/",
+        "Каталог аниме"
+      ],
+      [
+        "/new/",
+        "Новые эпизоды"
+      ],
+      [
+        "/collections/",
+        "Подборки"
+      ],
+      [
+        "/collection/new_episodes/",
+        "Весь раздел"
+      ],
+      [
+        "/title/nelyud-film-2-stolknovenie/",
+        "Нпостер не открылсяНелюдь. Фильм 2: СтолкновениеАниме · 2016КП 7.011IMDb 7.8"
+      ],
+      [
+        "/title/drakoniy-zhemchug-zet-plan-po-unichtozheniyu-sayyanov-2/",
+        "Дпостер не открылсяДраконий жемчуг Зет: План по уничтожению сайянов 2Аниме · 2010оценки нет"
+      ],
+      [
+        "/collection/recently_added/",
+        "Весь раздел"
+      ],
+      [
+        "/title/nelyud-film-2-stolknovenie/",
+        "Нпостер не открылсяНелюдь. Фильм 2: СтолкновениеАниме · 2016КП 7.011IMDb 7.8"
+      ],
+      [
+        "/title/drakoniy-zhemchug-zet-plan-po-unichtozheniyu-sayyanov-2/",
+        "Дпостер не открылсяДраконий жемчуг Зет: План по уничтожению сайянов 2Аниме · 2010оценки нет"
+      ],
+      [
+        "/collection/top_rated/",
+        "Весь раздел"
+      ],
+      [
+        "/title/pervyy-shag-novyy-pretendent/",
+        "Ппостер не открылсяПервый шаг: Новый претендентАниме · 2009IMDb 8.8"
+      ],
+      [
+        "/title/stena-velikih-voinov/",
+        "Спостер не открылсяСтена великих воиновАниме · 2019КП 8.75IMDb 7.8"
+      ],
+      [
+        "/collection/video_available/",
+        "Весь раздел"
+      ],
+      [
+        "/title/nelyud-film-2-stolknovenie/",
+        "Нпостер не открылсяНелюдь. Фильм 2: СтолкновениеАниме · 2016КП 7.011IMDb 7.8"
+      ],
+      [
+        "/title/drakoniy-zhemchug-zet-plan-po-unichtozheniyu-sayyanov-2/",
+        "Дпостер не открылсяДраконий жемчуг Зет: План по уничтожению сайянов 2Аниме · 2010оценки нет"
+      ]
+    ]
+  },
+  "seo": {
+    "x_robots": "noindex, nofollow",
+    "meta_robots": "noindex, nofollow",
+    "robots_status": 200,
+    "robots_body": "User-agent: *\nDisallow: /",
+    "www_authenticate": null,
+    "indexing_closed_signal": true
+  },
+  "cards": {
+    "poster_tags": 48,
+    "broken_src": 0,
+    "alts_missing": 0,
+    "rating_mentions": 17,
+    "year_mentions": 54
+  },
+  "player": {},
+  "filters": {
+    "sort_year": {
+      "url": "https://animedia.space/catalog/?sort=year",
+      "status": 200,
+      "title_links": 48,
+      "bytes": 64005
+    },
+    "sort_rating": {
+      "url": "https://animedia.space/catalog/?sort=rating",
+      "status": 200,
+      "title_links": 48,
+      "bytes": 64005
+    },
+    "sort_new": {
+      "url": "https://animedia.space/catalog/?sort=new",
+      "status": 200,
+      "title_links": 48,
+      "bytes": 64005
+    },
+    "page2": {
+      "url": "https://animedia.space/catalog/?page=2",
+      "status": 200,
+      "title_links": 48,
+      "bytes": 71728
+    },
+    "page3": {
+      "url": "https://animedia.space/catalog/page/3/",
+      "status": 404,
+      "title_links": 0,
+      "bytes": 17794
+    },
+    "kind_film": {
+      "url": "https://animedia.space/catalog/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC",
+      "status": 200,
+      "title_links": 0,
+      "bytes": 18743
+    },
+    "kind_serial": {
+      "url": "https://animedia.space/catalog/?kind=%D0%A1%D0%B5%D1%80%D0%B8%D0%B0%D0%BB",
+      "status": 200,
+      "title_links": 0,
+      "bytes": 18743
+    }
+  },
+  "version": {
+    "schema_version": 1,
+    "template_family": "animedia",
+    "design_version": "1.2.0",
+    "source_commit": "b023bd50cced8d281cb3814a75bf72b429afee0b",
+    "build_id": "20260918T215044Z-b023bd50-nova",
+    "artifact_sha256": "1668f71bb514a5a2c81247131183bd6dfc2a503481421ced7f48a3b67c7699bd",
+    "profile": "animedia-general",
+    "built_at": "2026-09-18T21:50:56Z",
+    "core_runtime": "site-factory-nova",
+    "family_template": "animedia-nova"
+  },
+  "internal_link_sample": {
+    "https://animedia.space/": 200,
+    "https://animedia.space/catalog/": 200,
+    "https://animedia.space/new/": 200,
+    "https://animedia.space/schedule/": 200,
+    "https://animedia.space/collections/": 200,
+    "https://animedia.space/collection/new_episodes/": 200,
+    "https://animedia.space/title/nelyud-chast-2/": 200,
+    "https://animedia.space/title/nelyud-film-2-stolknovenie/": 200,
+    "https://animedia.space/title/zolotaya-sekira/": 200,
+    "https://animedia.space/title/vo-vseoruzhii-sila-artefaktov/": 200,
+    "https://animedia.space/title/dedushkina-lampa/": 200,
+    "https://animedia.space/title/ovosch-supergeroy-morkkorm/": 200,
+    "https://animedia.space/title/violonchelist-gosyu-1982/": 200,
+    "https://animedia.space/title/gorod-dozhdya/": 200,
+    "https://animedia.space/title/ryba/": 200,
+    "https://animedia.space/title/uzh-ne-zombi-li-eto-sredi-mertvecov-ova/": 200,
+    "https://animedia.space/title/uzh-ne-zombi-li-eto-ova/": 200,
+    "https://animedia.space/title/daybaster-dotyanis-do-neba-2/": 200,
+    "https://animedia.space/title/daybaster-dotyanis-do-neba/": 200,
+    "https://animedia.space/title/drakoniy-zhemchug-zet-plan-po-unichtozheniyu-sayyanov-2/": 200,
+    "https://animedia.space/title/nelyud-film-1-impuls/": 200,
+    "https://animedia.space/title/ksi-avant/": 200,
+    "https://animedia.space/title/korolevskie-kosmicheskie-sily-krylya-honneamiz/": 200,
+    "https://animedia.space/title/generator-gaul/": 200,
+    "https://animedia.space/title/kiberegoist-kaydzo/": 200,
+    "https://animedia.space/title/legenda-boevyh-lentyaev-severnoy-zvezdy/": 200,
+    "https://animedia.space/title/toriko-3d-appetitnoe-priklyuchenie/": 200,
+    "https://animedia.space/title/tenti-lishniy-v-lyubvi/": 200,
+    "https://animedia.space/title/vpered-anpanman-davayte-pobedim-korabl-s-privideniyami/": 200,
+    "https://animedia.space/title/prishedshiy-iz-drevnosti-2/": 200,
+    "https://animedia.space/collection/recently_added/": 200,
+    "https://animedia.space/collection/top_rated/": 200,
+    "https://animedia.space/title/graciya-duha/": 200,
+    "https://animedia.space/title/puteshestvie-k-bessmertiyu-mchas-v-sinhay-prolog/": 200,
+    "https://animedia.space/title/neyro-nogami-detektiv-iz-ada/": 200,
+    "https://animedia.space/title/blich-tysyacheletnyaya-krovavaya-voyna-bedstvie/": 200,
+    "https://animedia.space/title/blich-tysyacheletnyaya-krovavaya-voyna-bedstvie-2/": 200,
+    "https://animedia.space/title/ohotnik-h-ohotnik-2011/": 200,
+    "https://animedia.space/title/van-pis/": 200,
+    "https://animedia.space/title/blich-tysyacheletnyaya-krovavaya-voyna/": 200
+  },
+  "home_structure": {
+    "shelves_class_hits": 0,
+    "empty_signals": [
+      "empty-class"
+    ],
+    "nav_link_count": 107,
+    "data_design": "animedia-portal",
+    "search_forms": [
+      {
+        "action": "/search/",
+        "method": "get",
+        "inputs": [
+          {
+            "type": "text",
+            "name": "q",
+            "placeholder": "Название аниме"
+          }
+        ]
+      }
+    ],
+    "header_sticky_css": false
+  }
+}

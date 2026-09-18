@@ -1,0 +1,852 @@
+{
+  "domain": "https://lordserial33.biz",
+  "key": "lords",
+  "routes": {
+    "home": {
+      "url": "https://lordserial33.biz/",
+      "status": 200,
+      "bytes": 42998,
+      "err": null,
+      "title": "Lordserial — фильмы и сериалы онлайн",
+      "h1": [
+        "Фильмы и сериалы новинки смотреть онлайн"
+      ],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "lords-sheet",
+      "data_family": "lords",
+      "data_version": "1.1.0",
+      "profile_header": "lords-new",
+      "family_header": "lords",
+      "img_count": 49,
+      "link_count": 59,
+      "form_count": 1,
+      "empty_signals": [],
+      "classes_top": [
+        [
+          "c",
+          48
+        ],
+        [
+          "c__p",
+          48
+        ],
+        [
+          "c__none",
+          48
+        ],
+        [
+          "c__img",
+          48
+        ],
+        [
+          "c__badge",
+          48
+        ],
+        [
+          "c__cap",
+          48
+        ],
+        [
+          "c__t",
+          48
+        ],
+        [
+          "c__r",
+          48
+        ],
+        [
+          "c__kp",
+          48
+        ],
+        [
+          "c__imdb",
+          48
+        ],
+        [
+          "c__y",
+          27
+        ],
+        [
+          "tabs",
+          4
+        ],
+        [
+          "tabs__pill",
+          4
+        ],
+        [
+          "grid",
+          4
+        ],
+        [
+          "backdrop",
+          1
+        ]
+      ]
+    },
+    "catalog": {
+      "url": "https://lordserial33.biz/catalog/",
+      "status": 200,
+      "bytes": 42755,
+      "err": null,
+      "title": "Каталог — Lordserial",
+      "h1": [
+        "Каталог: 52793 записей"
+      ],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "lords-sheet",
+      "data_family": "lords",
+      "data_version": "1.1.0",
+      "profile_header": "lords-new",
+      "family_header": "lords",
+      "img_count": 49,
+      "link_count": 73,
+      "form_count": 1,
+      "empty_signals": [],
+      "classes_top": [
+        [
+          "c",
+          48
+        ],
+        [
+          "c__p",
+          48
+        ],
+        [
+          "c__none",
+          48
+        ],
+        [
+          "c__img",
+          48
+        ],
+        [
+          "c__badge",
+          48
+        ],
+        [
+          "c__cap",
+          48
+        ],
+        [
+          "c__t",
+          48
+        ],
+        [
+          "c__r",
+          48
+        ],
+        [
+          "c__kp",
+          48
+        ],
+        [
+          "c__imdb",
+          48
+        ],
+        [
+          "c__y",
+          16
+        ],
+        [
+          "tabs",
+          2
+        ],
+        [
+          "backdrop",
+          1
+        ],
+        [
+          "skip",
+          1
+        ],
+        [
+          "sheet",
+          1
+        ]
+      ]
+    },
+    "collections": {
+      "url": "https://lordserial33.biz/collections/",
+      "status": 200,
+      "bytes": 43479,
+      "err": null,
+      "title": "Подборки — Lordserial",
+      "h1": [
+        "Подборки: 52793 записей"
+      ],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "lords-sheet",
+      "data_family": "lords",
+      "data_version": "1.1.0",
+      "profile_header": "lords-new",
+      "family_header": "lords",
+      "img_count": 49,
+      "link_count": 73,
+      "form_count": 1,
+      "empty_signals": [],
+      "classes_top": [
+        [
+          "c",
+          48
+        ],
+        [
+          "c__p",
+          48
+        ],
+        [
+          "c__none",
+          48
+        ],
+        [
+          "c__img",
+          48
+        ],
+        [
+          "c__badge",
+          48
+        ],
+        [
+          "c__cap",
+          48
+        ],
+        [
+          "c__t",
+          48
+        ],
+        [
+          "c__r",
+          48
+        ],
+        [
+          "c__kp",
+          48
+        ],
+        [
+          "c__imdb",
+          48
+        ],
+        [
+          "c__y",
+          24
+        ],
+        [
+          "tabs",
+          2
+        ],
+        [
+          "backdrop",
+          1
+        ],
+        [
+          "skip",
+          1
+        ],
+        [
+          "sheet",
+          1
+        ]
+      ]
+    },
+    "genres": {
+      "url": "https://lordserial33.biz/genres/",
+      "status": 404,
+      "bytes": 15770,
+      "err": "HTTP Error 404: Not Found",
+      "title": "Страница не найдена — Lordserial",
+      "h1": [
+        "Такой страницы на витрине нет"
+      ],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "lords-sheet",
+      "data_family": "lords",
+      "data_version": "1.1.0",
+      "profile_header": "lords-new",
+      "family_header": "lords",
+      "img_count": 1,
+      "link_count": 8,
+      "form_count": 1,
+      "empty_signals": [],
+      "classes_top": [
+        [
+          "backdrop",
+          1
+        ],
+        [
+          "skip",
+          1
+        ],
+        [
+          "sheet",
+          1
+        ],
+        [
+          "hd",
+          1
+        ],
+        [
+          "hd__in",
+          1
+        ],
+        [
+          "hd__logo",
+          1
+        ],
+        [
+          "hd__mark",
+          1
+        ],
+        [
+          "hd__nav",
+          1
+        ],
+        [
+          "hd__s",
+          1
+        ],
+        [
+          "vh",
+          1
+        ],
+        [
+          "pad",
+          1
+        ],
+        [
+          "nf",
+          1
+        ],
+        [
+          "ft",
+          1
+        ],
+        [
+          "ft__g",
+          1
+        ],
+        [
+          "vb",
+          1
+        ]
+      ]
+    },
+    "countries": {
+      "url": "https://lordserial33.biz/countries/",
+      "status": 404,
+      "bytes": 15773,
+      "err": "HTTP Error 404: Not Found",
+      "title": "Страница не найдена — Lordserial",
+      "h1": [
+        "Такой страницы на витрине нет"
+      ],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "lords-sheet",
+      "data_family": "lords",
+      "data_version": "1.1.0",
+      "profile_header": "lords-new",
+      "family_header": "lords",
+      "img_count": 1,
+      "link_count": 8,
+      "form_count": 1,
+      "empty_signals": [],
+      "classes_top": [
+        [
+          "backdrop",
+          1
+        ],
+        [
+          "skip",
+          1
+        ],
+        [
+          "sheet",
+          1
+        ],
+        [
+          "hd",
+          1
+        ],
+        [
+          "hd__in",
+          1
+        ],
+        [
+          "hd__logo",
+          1
+        ],
+        [
+          "hd__mark",
+          1
+        ],
+        [
+          "hd__nav",
+          1
+        ],
+        [
+          "hd__s",
+          1
+        ],
+        [
+          "vh",
+          1
+        ],
+        [
+          "pad",
+          1
+        ],
+        [
+          "nf",
+          1
+        ],
+        [
+          "ft",
+          1
+        ],
+        [
+          "ft__g",
+          1
+        ],
+        [
+          "vb",
+          1
+        ]
+      ]
+    },
+    "search_page": {
+      "url": "https://lordserial33.biz/search/",
+      "status": 200,
+      "bytes": 16510,
+      "err": null,
+      "title": "Поиск — Lordserial",
+      "h1": [
+        "Поиск по каталогу"
+      ],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "lords-sheet",
+      "data_family": "lords",
+      "data_version": "1.1.0",
+      "profile_header": "lords-new",
+      "family_header": "lords",
+      "img_count": 1,
+      "link_count": 8,
+      "form_count": 1,
+      "empty_signals": [
+        "empty-class"
+      ],
+      "classes_top": [
+        [
+          "backdrop",
+          1
+        ],
+        [
+          "skip",
+          1
+        ],
+        [
+          "sheet",
+          1
+        ],
+        [
+          "hd",
+          1
+        ],
+        [
+          "hd__in",
+          1
+        ],
+        [
+          "hd__logo",
+          1
+        ],
+        [
+          "hd__mark",
+          1
+        ],
+        [
+          "hd__nav",
+          1
+        ],
+        [
+          "hd__s",
+          1
+        ],
+        [
+          "vh",
+          1
+        ],
+        [
+          "pad",
+          1
+        ],
+        [
+          "lead",
+          1
+        ],
+        [
+          "empty",
+          1
+        ],
+        [
+          "ft",
+          1
+        ],
+        [
+          "ft__g",
+          1
+        ]
+      ]
+    },
+    "robots": {
+      "url": "https://lordserial33.biz/robots.txt",
+      "status": 200,
+      "bytes": 26,
+      "err": null,
+      "title": "",
+      "h1": [],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": null,
+      "data_design": null,
+      "data_family": null,
+      "data_version": null,
+      "profile_header": "lords-new",
+      "family_header": "lords",
+      "img_count": 0,
+      "link_count": 0,
+      "form_count": 0,
+      "empty_signals": [],
+      "classes_top": []
+    },
+    "not_found": {
+      "url": "https://lordserial33.biz/__no_such_page_live_qa_404__/",
+      "status": 404,
+      "bytes": 15792,
+      "err": "HTTP Error 404: Not Found",
+      "title": "Страница не найдена — Lordserial",
+      "h1": [
+        "Такой страницы на витрине нет"
+      ],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "lords-sheet",
+      "data_family": "lords",
+      "data_version": "1.1.0",
+      "profile_header": "lords-new",
+      "family_header": "lords",
+      "img_count": 1,
+      "link_count": 8,
+      "form_count": 1,
+      "empty_signals": [],
+      "classes_top": [
+        [
+          "backdrop",
+          1
+        ],
+        [
+          "skip",
+          1
+        ],
+        [
+          "sheet",
+          1
+        ],
+        [
+          "hd",
+          1
+        ],
+        [
+          "hd__in",
+          1
+        ],
+        [
+          "hd__logo",
+          1
+        ],
+        [
+          "hd__mark",
+          1
+        ],
+        [
+          "hd__nav",
+          1
+        ],
+        [
+          "hd__s",
+          1
+        ],
+        [
+          "vh",
+          1
+        ],
+        [
+          "pad",
+          1
+        ],
+        [
+          "nf",
+          1
+        ],
+        [
+          "ft",
+          1
+        ],
+        [
+          "ft__g",
+          1
+        ],
+        [
+          "vb",
+          1
+        ]
+      ]
+    },
+    "title": {
+      "url": "https://lordserial33.biz/title/007-doroga-k-millionu/",
+      "status": 200,
+      "bytes": 29133,
+      "title": "007: Дорога к миллиону — смотреть онлайн — Lordserial",
+      "h1": [
+        "007: Дорога к миллиону"
+      ],
+      "has_player_zone": true,
+      "img_count": 8,
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "lords-sheet"
+    }
+  },
+  "search": {
+    "plain": {
+      "url": "https://lordserial33.biz/search/?q=matrix",
+      "status": 200,
+      "title_links": 0,
+      "h1": [
+        "Поиск: matrix"
+      ],
+      "bytes": 16413
+    },
+    "cyrillic": {
+      "url": "https://lordserial33.biz/search/?q=%D0%BC%D0%B0%D1%82%D1%80%D0%B8%D1%86%D0%B0",
+      "status": 200,
+      "title_links": 8,
+      "h1": [
+        "Поиск: матрица — 8 совпадений"
+      ],
+      "bytes": 20473
+    },
+    "partial": {
+      "url": "https://lordserial33.biz/search/?q=%D0%BC%D0%B0%D1%82",
+      "status": 200,
+      "title_links": 120,
+      "h1": [
+        "Поиск: мат — 120 совпадений"
+      ],
+      "bytes": 79334
+    },
+    "empty": {
+      "url": "https://lordserial33.biz/search/?q=",
+      "status": 200,
+      "title_links": 0,
+      "h1": [
+        "Поиск по каталогу"
+      ],
+      "bytes": 16510
+    },
+    "missing": {
+      "url": "https://lordserial33.biz/search/?q=zzzqxqnonexistent999",
+      "status": 200,
+      "title_links": 0,
+      "h1": [
+        "Поиск: zzzqxqnonexistent999"
+      ],
+      "bytes": 16441
+    }
+  },
+  "nav": {
+    "sampled": [
+      [
+        "/new/",
+        "Новинки"
+      ],
+      [
+        "/catalog/?kind=Фильм",
+        "Фильмы"
+      ],
+      [
+        "/catalog/?kind=Сериал",
+        "Сериалы"
+      ],
+      [
+        "/catalog/?kind=Мультфильм",
+        "Мультфильмы"
+      ],
+      [
+        "/catalog/",
+        "Каталог"
+      ],
+      [
+        "/new/",
+        "Все"
+      ],
+      [
+        "/title/v-poiskah-dzheka-charltona/",
+        "Впостер не открылсяФильмВ поисках Джека Чарльтона2020КП —IMDb —"
+      ],
+      [
+        "/catalog/?kind=Фильм",
+        "Все"
+      ],
+      [
+        "/title/v-poiskah-dzheka-charltona/",
+        "Впостер не открылсяФильмВ поисках Джека Чарльтона2020КП —IMDb —"
+      ],
+      [
+        "/catalog/?kind=Сериал",
+        "Все"
+      ],
+      [
+        "/catalog/?kind=Мультфильм",
+        "Все"
+      ]
+    ]
+  },
+  "seo": {
+    "x_robots": "noindex, nofollow",
+    "meta_robots": "noindex, nofollow",
+    "robots_status": 200,
+    "robots_body": "User-agent: *\nDisallow: /",
+    "www_authenticate": null,
+    "indexing_closed_signal": true
+  },
+  "cards": {
+    "poster_tags": 49,
+    "broken_src": 0,
+    "alts_missing": 0,
+    "rating_mentions": 147,
+    "year_mentions": 46
+  },
+  "player": {},
+  "filters": {
+    "sort_year": {
+      "url": "https://lordserial33.biz/catalog/?sort=year",
+      "status": 200,
+      "title_links": 48,
+      "bytes": 42755
+    },
+    "sort_rating": {
+      "url": "https://lordserial33.biz/catalog/?sort=rating",
+      "status": 200,
+      "title_links": 48,
+      "bytes": 42755
+    },
+    "sort_new": {
+      "url": "https://lordserial33.biz/catalog/?sort=new",
+      "status": 200,
+      "title_links": 48,
+      "bytes": 42755
+    },
+    "page2": {
+      "url": "https://lordserial33.biz/catalog/?page=2",
+      "status": 200,
+      "title_links": 48,
+      "bytes": 42246
+    },
+    "page3": {
+      "url": "https://lordserial33.biz/catalog/page/3/",
+      "status": 404,
+      "title_links": 0,
+      "bytes": 15778
+    },
+    "kind_film": {
+      "url": "https://lordserial33.biz/catalog/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC",
+      "status": 200,
+      "title_links": 48,
+      "bytes": 42326
+    },
+    "kind_serial": {
+      "url": "https://lordserial33.biz/catalog/?kind=%D0%A1%D0%B5%D1%80%D0%B8%D0%B0%D0%BB",
+      "status": 200,
+      "title_links": 48,
+      "bytes": 43789
+    }
+  },
+  "version": {
+    "schema_version": 1,
+    "template_family": "lords",
+    "design_version": "1.1.0",
+    "source_commit": "99ec78291141de9f350f03298edabd6e89b3a9d6",
+    "build_id": "20260918T215044Z-99ec7829-nova",
+    "artifact_sha256": "1668f71bb514a5a2c81247131183bd6dfc2a503481421ced7f48a3b67c7699bd",
+    "profile": "lords-new",
+    "built_at": "2026-09-18T21:50:44Z",
+    "core_runtime": "site-factory-nova",
+    "family_template": "lords-nova"
+  },
+  "internal_link_sample": {
+    "https://lordserial33.biz/": 200,
+    "https://lordserial33.biz/new/": 200,
+    "https://lordserial33.biz/catalog/?kind=Фильм": null,
+    "https://lordserial33.biz/catalog/?kind=Сериал": null,
+    "https://lordserial33.biz/catalog/?kind=Мультфильм": null,
+    "https://lordserial33.biz/catalog/": 200,
+    "https://lordserial33.biz/title/pylnye-utesy/": 200,
+    "https://lordserial33.biz/title/operaciya-fortitude/": 200,
+    "https://lordserial33.biz/title/ohota-za-brakom-v-37-eto-pole-bitvy/": 200,
+    "https://lordserial33.biz/title/chti-svoyu-mat/": 200,
+    "https://lordserial33.biz/title/v-poiskah-dzheka-charltona/": 200,
+    "https://lordserial33.biz/title/tihookeanskie-rassledovaniya/": 200,
+    "https://lordserial33.biz/title/le-man-55-taynaya-katastrofa/": 200,
+    "https://lordserial33.biz/title/sryv/": 200,
+    "https://lordserial33.biz/title/obitel-zla-2/": 200,
+    "https://lordserial33.biz/title/lyubov-i-remont/": 200,
+    "https://lordserial33.biz/title/skandal-4/": 200,
+    "https://lordserial33.biz/title/udivitelnyy-mir-ieronima-bosha/": 200,
+    "https://lordserial33.biz/title/uvyadanie/": 200,
+    "https://lordserial33.biz/title/sidni-lyumet-o-sebe/": 200,
+    "https://lordserial33.biz/title/nerazryvnye-uzy/": 200,
+    "https://lordserial33.biz/title/isstuplenie-2/": 200,
+    "https://lordserial33.biz/title/chernila-i-voda/": 200,
+    "https://lordserial33.biz/title/sletet-s-katushek-2/": 200,
+    "https://lordserial33.biz/title/skay-king/": 200,
+    "https://lordserial33.biz/title/mesto-gde-voshodit-solnce/": 200,
+    "https://lordserial33.biz/title/sestry-obschaya-lyubov/": 200,
+    "https://lordserial33.biz/title/moy-sekret/": 200,
+    "https://lordserial33.biz/title/halatnost-2/": 200,
+    "https://lordserial33.biz/title/o-vseh-sozdaniyah-bolshih-i-malyh/": 200,
+    "https://lordserial33.biz/title/legenda-boevyh-lentyaev-severnoy-zvezdy/": 200,
+    "https://lordserial33.biz/title/zolotaya-sekira/": 200,
+    "https://lordserial33.biz/title/schenyachiy-patrul-dinofilm/": 200,
+    "https://lordserial33.biz/title/vpered/": 200,
+    "https://lordserial33.biz/title/multachki-bayki-iz-radiator-springs/": 200,
+    "https://lordserial33.biz/title/supersemeyka/": 200,
+    "https://lordserial33.biz/title/tofu-boy/": 200,
+    "https://lordserial33.biz/title/lego-zvezdnye-voyny-mandalorec/": 200,
+    "https://lordserial33.biz/title/dan/": 200,
+    "https://lordserial33.biz/title/hranitel-lev-geroi-savanny/": 200
+  },
+  "home_structure": {
+    "shelves_class_hits": 0,
+    "empty_signals": [],
+    "nav_link_count": 59,
+    "data_design": "lords-sheet",
+    "search_forms": [
+      {
+        "action": "/search/",
+        "method": "get",
+        "inputs": [
+          {
+            "type": "text",
+            "name": "q",
+            "placeholder": "Введите название"
+          }
+        ]
+      }
+    ],
+    "header_sticky_css": false
+  }
+}

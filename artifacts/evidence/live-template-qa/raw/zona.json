@@ -1,0 +1,885 @@
+{
+  "domain": "https://zonafilm.space",
+  "key": "zona",
+  "routes": {
+    "home": {
+      "url": "https://zonafilm.space/",
+      "status": 200,
+      "bytes": 47316,
+      "err": null,
+      "title": "Zona — кинопортал",
+      "h1": [
+        "Кинопортал: что смотреть и где это найти"
+      ],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "zona-top",
+      "data_family": "zona",
+      "data_version": "1.2.0",
+      "profile_header": "zona-general",
+      "family_header": "zona",
+      "img_count": 49,
+      "link_count": 74,
+      "form_count": 1,
+      "empty_signals": [
+        "empty-class"
+      ],
+      "classes_top": [
+        [
+          "zt",
+          48
+        ],
+        [
+          "zt__p",
+          48
+        ],
+        [
+          "zt__none",
+          48
+        ],
+        [
+          "zt__img",
+          48
+        ],
+        [
+          "zt__b",
+          48
+        ],
+        [
+          "zt__t",
+          48
+        ],
+        [
+          "zt__m",
+          48
+        ],
+        [
+          "zt__r",
+          48
+        ],
+        [
+          "zrl__btn",
+          8
+        ],
+        [
+          "zsec",
+          5
+        ],
+        [
+          "zsec__h",
+          5
+        ],
+        [
+          "zrl",
+          4
+        ],
+        [
+          "zrl__btn--p",
+          4
+        ],
+        [
+          "zrl__vp",
+          4
+        ],
+        [
+          "zrl__track",
+          4
+        ]
+      ]
+    },
+    "catalog": {
+      "url": "https://zonafilm.space/catalog/",
+      "status": 200,
+      "bytes": 76149,
+      "err": null,
+      "title": "Весь каталог — Zona",
+      "h1": [
+        "Весь каталог"
+      ],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "zona-top",
+      "data_family": "zona",
+      "data_version": "1.2.0",
+      "profile_header": "zona-general",
+      "family_header": "zona",
+      "img_count": 49,
+      "link_count": 62,
+      "form_count": 1,
+      "empty_signals": [],
+      "classes_top": [
+        [
+          "zr",
+          48
+        ],
+        [
+          "zr__p",
+          48
+        ],
+        [
+          "zr__none",
+          48
+        ],
+        [
+          "zr__img",
+          48
+        ],
+        [
+          "zr__t",
+          48
+        ],
+        [
+          "zr__m",
+          48
+        ],
+        [
+          "zr__r",
+          42
+        ],
+        [
+          "zr__d",
+          40
+        ],
+        [
+          "zwrap",
+          2
+        ],
+        [
+          "skip",
+          1
+        ],
+        [
+          "zs",
+          1
+        ],
+        [
+          "zhd",
+          1
+        ],
+        [
+          "zhd__in",
+          1
+        ],
+        [
+          "zhd__logo",
+          1
+        ],
+        [
+          "zhd__n",
+          1
+        ]
+      ]
+    },
+    "collections": {
+      "url": "https://zonafilm.space/collections/",
+      "status": 200,
+      "bytes": 25947,
+      "err": null,
+      "title": "Подборки — Zona",
+      "h1": [
+        "Подборки"
+      ],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "zona-top",
+      "data_family": "zona",
+      "data_version": "1.2.0",
+      "profile_header": "zona-general",
+      "family_header": "zona",
+      "img_count": 25,
+      "link_count": 14,
+      "form_count": 1,
+      "empty_signals": [],
+      "classes_top": [
+        [
+          "zhub__p",
+          24
+        ],
+        [
+          "zhub__img",
+          24
+        ],
+        [
+          "zhub__c",
+          6
+        ],
+        [
+          "zhub__g",
+          6
+        ],
+        [
+          "zhub__t",
+          6
+        ],
+        [
+          "zhub__m",
+          6
+        ],
+        [
+          "zhub__d",
+          6
+        ],
+        [
+          "zwrap",
+          2
+        ],
+        [
+          "skip",
+          1
+        ],
+        [
+          "zs",
+          1
+        ],
+        [
+          "zhd",
+          1
+        ],
+        [
+          "zhd__in",
+          1
+        ],
+        [
+          "zhd__logo",
+          1
+        ],
+        [
+          "zhd__n",
+          1
+        ],
+        [
+          "zhd__s",
+          1
+        ]
+      ]
+    },
+    "genres": {
+      "url": "https://zonafilm.space/genres/",
+      "status": 404,
+      "bytes": 19127,
+      "err": "HTTP Error 404: Not Found",
+      "title": "Страница не найдена — Zona",
+      "h1": [
+        "Страница не найдена"
+      ],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "zona-top",
+      "data_family": "zona",
+      "data_version": "1.2.0",
+      "profile_header": "zona-general",
+      "family_header": "zona",
+      "img_count": 1,
+      "link_count": 9,
+      "form_count": 1,
+      "empty_signals": [],
+      "classes_top": [
+        [
+          "skip",
+          1
+        ],
+        [
+          "zs",
+          1
+        ],
+        [
+          "zhd",
+          1
+        ],
+        [
+          "zhd__in",
+          1
+        ],
+        [
+          "zhd__logo",
+          1
+        ],
+        [
+          "zhd__n",
+          1
+        ],
+        [
+          "zhd__s",
+          1
+        ],
+        [
+          "vh",
+          1
+        ],
+        [
+          "zmain",
+          1
+        ],
+        [
+          "zwrap",
+          1
+        ],
+        [
+          "znf",
+          1
+        ],
+        [
+          "zft",
+          1
+        ],
+        [
+          "zvb",
+          1
+        ]
+      ]
+    },
+    "countries": {
+      "url": "https://zonafilm.space/countries/",
+      "status": 404,
+      "bytes": 19130,
+      "err": "HTTP Error 404: Not Found",
+      "title": "Страница не найдена — Zona",
+      "h1": [
+        "Страница не найдена"
+      ],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "zona-top",
+      "data_family": "zona",
+      "data_version": "1.2.0",
+      "profile_header": "zona-general",
+      "family_header": "zona",
+      "img_count": 1,
+      "link_count": 9,
+      "form_count": 1,
+      "empty_signals": [],
+      "classes_top": [
+        [
+          "skip",
+          1
+        ],
+        [
+          "zs",
+          1
+        ],
+        [
+          "zhd",
+          1
+        ],
+        [
+          "zhd__in",
+          1
+        ],
+        [
+          "zhd__logo",
+          1
+        ],
+        [
+          "zhd__n",
+          1
+        ],
+        [
+          "zhd__s",
+          1
+        ],
+        [
+          "vh",
+          1
+        ],
+        [
+          "zmain",
+          1
+        ],
+        [
+          "zwrap",
+          1
+        ],
+        [
+          "znf",
+          1
+        ],
+        [
+          "zft",
+          1
+        ],
+        [
+          "zvb",
+          1
+        ]
+      ]
+    },
+    "search_page": {
+      "url": "https://zonafilm.space/search/",
+      "status": 200,
+      "bytes": 19964,
+      "err": null,
+      "title": "Поиск — Zona",
+      "h1": [
+        "Поиск"
+      ],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "zona-top",
+      "data_family": "zona",
+      "data_version": "1.2.0",
+      "profile_header": "zona-general",
+      "family_header": "zona",
+      "img_count": 1,
+      "link_count": 9,
+      "form_count": 1,
+      "empty_signals": [
+        "empty-class"
+      ],
+      "classes_top": [
+        [
+          "zwrap",
+          2
+        ],
+        [
+          "skip",
+          1
+        ],
+        [
+          "zs",
+          1
+        ],
+        [
+          "zhd",
+          1
+        ],
+        [
+          "zhd__in",
+          1
+        ],
+        [
+          "zhd__logo",
+          1
+        ],
+        [
+          "zhd__n",
+          1
+        ],
+        [
+          "zhd__s",
+          1
+        ],
+        [
+          "vh",
+          1
+        ],
+        [
+          "zmain",
+          1
+        ],
+        [
+          "zh",
+          1
+        ],
+        [
+          "zsub",
+          1
+        ],
+        [
+          "zempty",
+          1
+        ],
+        [
+          "zft",
+          1
+        ],
+        [
+          "zvb",
+          1
+        ]
+      ]
+    },
+    "robots": {
+      "url": "https://zonafilm.space/robots.txt",
+      "status": 200,
+      "bytes": 26,
+      "err": null,
+      "title": "",
+      "h1": [],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": null,
+      "data_design": null,
+      "data_family": null,
+      "data_version": null,
+      "profile_header": "zona-general",
+      "family_header": "zona",
+      "img_count": 0,
+      "link_count": 0,
+      "form_count": 0,
+      "empty_signals": [],
+      "classes_top": []
+    },
+    "not_found": {
+      "url": "https://zonafilm.space/__no_such_page_live_qa_404__/",
+      "status": 404,
+      "bytes": 19149,
+      "err": "HTTP Error 404: Not Found",
+      "title": "Страница не найдена — Zona",
+      "h1": [
+        "Страница не найдена"
+      ],
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "zona-top",
+      "data_family": "zona",
+      "data_version": "1.2.0",
+      "profile_header": "zona-general",
+      "family_header": "zona",
+      "img_count": 1,
+      "link_count": 9,
+      "form_count": 1,
+      "empty_signals": [],
+      "classes_top": [
+        [
+          "skip",
+          1
+        ],
+        [
+          "zs",
+          1
+        ],
+        [
+          "zhd",
+          1
+        ],
+        [
+          "zhd__in",
+          1
+        ],
+        [
+          "zhd__logo",
+          1
+        ],
+        [
+          "zhd__n",
+          1
+        ],
+        [
+          "zhd__s",
+          1
+        ],
+        [
+          "vh",
+          1
+        ],
+        [
+          "zmain",
+          1
+        ],
+        [
+          "zwrap",
+          1
+        ],
+        [
+          "znf",
+          1
+        ],
+        [
+          "zft",
+          1
+        ],
+        [
+          "zvb",
+          1
+        ]
+      ]
+    },
+    "title": {
+      "url": "https://zonafilm.space/title/007-doroga-k-millionu/",
+      "status": 200,
+      "bytes": 32687,
+      "title": "007: Дорога к миллиону — смотреть онлайн — Zona",
+      "h1": [
+        "007: Дорога к миллиону"
+      ],
+      "has_player_zone": true,
+      "img_count": 9,
+      "x_robots": "noindex, nofollow",
+      "meta_robots": "noindex, nofollow",
+      "data_design": "zona-top"
+    }
+  },
+  "search": {
+    "plain": {
+      "url": "https://zonafilm.space/search/?q=matrix",
+      "status": 200,
+      "title_links": 0,
+      "h1": [
+        "«matrix»"
+      ],
+      "bytes": 19802
+    },
+    "cyrillic": {
+      "url": "https://zonafilm.space/search/?q=%D0%BC%D0%B0%D1%82%D1%80%D0%B8%D1%86%D0%B0",
+      "status": 200,
+      "title_links": 8,
+      "h1": [
+        "«матрица»"
+      ],
+      "bytes": 28923
+    },
+    "partial": {
+      "url": "https://zonafilm.space/search/?q=%D0%BC%D0%B0%D1%82",
+      "status": 200,
+      "title_links": 120,
+      "h1": [
+        "«мат»"
+      ],
+      "bytes": 151158
+    },
+    "empty": {
+      "url": "https://zonafilm.space/search/?q=",
+      "status": 200,
+      "title_links": 0,
+      "h1": [
+        "Поиск"
+      ],
+      "bytes": 19964
+    },
+    "missing": {
+      "url": "https://zonafilm.space/search/?q=zzzqxqnonexistent999",
+      "status": 200,
+      "title_links": 0,
+      "h1": [
+        "«zzzqxqnonexistent999»"
+      ],
+      "bytes": 19830
+    }
+  },
+  "nav": {
+    "sampled": [
+      [
+        "/new/",
+        "Что нового"
+      ],
+      [
+        "/catalog/?kind=Фильм",
+        "Кино"
+      ],
+      [
+        "/catalog/?kind=Сериал",
+        "Сериалы"
+      ],
+      [
+        "/catalog/?kind=Мультфильм",
+        "Анимация"
+      ],
+      [
+        "/catalog/",
+        "Весь каталог"
+      ],
+      [
+        "/catalog/?genre=dorama",
+        "дорама"
+      ],
+      [
+        "/catalog/?genre=west_content",
+        "западный контент"
+      ],
+      [
+        "/catalog/?genre=drama",
+        "драма"
+      ],
+      [
+        "/catalog/?genre=comedy",
+        "комедия"
+      ],
+      [
+        "/catalog/?genre=triller",
+        "триллер"
+      ],
+      [
+        "/catalog/?genre=action",
+        "боевик"
+      ],
+      [
+        "/catalog/?genre=horror",
+        "ужасы"
+      ],
+      [
+        "/catalog/?genre=melodrama",
+        "мелодрама"
+      ],
+      [
+        "/catalog/?genre=criminal",
+        "криминал"
+      ],
+      [
+        "/catalog/?genre=fantastic",
+        "фантастика"
+      ],
+      [
+        "/catalog/?genre=adventures",
+        "приключения"
+      ],
+      [
+        "/catalog/?genre=fantasy",
+        "фэнтези"
+      ],
+      [
+        "/catalog/?genre=anime",
+        "аниме"
+      ],
+      [
+        "/catalog/?genre=detective",
+        "детектив"
+      ],
+      [
+        "/catalog/?kind=Фильм",
+        "Весь раздел"
+      ],
+      [
+        "/title/vne-uchebnoy-programmy-novaya-glava/",
+        "Впостер не открылсяВне учебной программы: Новая главаФильм · 2026IMDb 9.2"
+      ],
+      [
+        "/catalog/?kind=Сериал",
+        "Весь раздел"
+      ],
+      [
+        "/catalog/?kind=Фильм",
+        "Весь раздел"
+      ],
+      [
+        "/catalog/?kind=Сериал",
+        "Весь раздел"
+      ]
+    ]
+  },
+  "seo": {
+    "x_robots": "noindex, nofollow",
+    "meta_robots": "noindex, nofollow",
+    "robots_status": 200,
+    "robots_body": "User-agent: *\nDisallow: /",
+    "www_authenticate": null,
+    "indexing_closed_signal": true
+  },
+  "cards": {
+    "poster_tags": 49,
+    "broken_src": 0,
+    "alts_missing": 0,
+    "rating_mentions": 42,
+    "year_mentions": 55
+  },
+  "player": {},
+  "filters": {
+    "sort_year": {
+      "url": "https://zonafilm.space/catalog/?sort=year",
+      "status": 200,
+      "title_links": 48,
+      "bytes": 76149
+    },
+    "sort_rating": {
+      "url": "https://zonafilm.space/catalog/?sort=rating",
+      "status": 200,
+      "title_links": 48,
+      "bytes": 76149
+    },
+    "sort_new": {
+      "url": "https://zonafilm.space/catalog/?sort=new",
+      "status": 200,
+      "title_links": 48,
+      "bytes": 76149
+    },
+    "page2": {
+      "url": "https://zonafilm.space/catalog/?page=2",
+      "status": 200,
+      "title_links": 48,
+      "bytes": 71945
+    },
+    "page3": {
+      "url": "https://zonafilm.space/catalog/page/3/",
+      "status": 404,
+      "title_links": 0,
+      "bytes": 19135
+    },
+    "kind_film": {
+      "url": "https://zonafilm.space/catalog/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC",
+      "status": 200,
+      "title_links": 48,
+      "bytes": 77591
+    },
+    "kind_serial": {
+      "url": "https://zonafilm.space/catalog/?kind=%D0%A1%D0%B5%D1%80%D0%B8%D0%B0%D0%BB",
+      "status": 200,
+      "title_links": 48,
+      "bytes": 68563
+    }
+  },
+  "version": {
+    "schema_version": 1,
+    "template_family": "zona",
+    "design_version": "1.2.0",
+    "source_commit": "a10e68b2350a020a2f7d5efe28cd98ef2fc89edd",
+    "runtime_commit": "99ec78291141de9f350f03298edabd6e89b3a9d6",
+    "build_id": "20260918T215756Z-a10e68b2-nova",
+    "artifact_sha256": "1668f71bb514a5a2c81247131183bd6dfc2a503481421ced7f48a3b67c7699bd",
+    "profile": "zona-general",
+    "built_at": "2026-09-18T21:57:56Z",
+    "core_runtime": "site-factory-nova",
+    "family_template": "zona-nova"
+  },
+  "internal_link_sample": {
+    "https://zonafilm.space/": 200,
+    "https://zonafilm.space/new/": 200,
+    "https://zonafilm.space/catalog/?kind=Фильм": null,
+    "https://zonafilm.space/catalog/?kind=Сериал": null,
+    "https://zonafilm.space/catalog/?kind=Мультфильм": null,
+    "https://zonafilm.space/catalog/": 200,
+    "https://zonafilm.space/catalog/?genre=dorama": 200,
+    "https://zonafilm.space/catalog/?genre=west_content": 200,
+    "https://zonafilm.space/catalog/?genre=drama": 200,
+    "https://zonafilm.space/catalog/?genre=comedy": 200,
+    "https://zonafilm.space/catalog/?genre=triller": 200,
+    "https://zonafilm.space/catalog/?genre=action": 200,
+    "https://zonafilm.space/catalog/?genre=horror": 200,
+    "https://zonafilm.space/catalog/?genre=melodrama": 200,
+    "https://zonafilm.space/catalog/?genre=criminal": 200,
+    "https://zonafilm.space/catalog/?genre=fantastic": 200,
+    "https://zonafilm.space/catalog/?genre=adventures": 200,
+    "https://zonafilm.space/catalog/?genre=fantasy": 200,
+    "https://zonafilm.space/catalog/?genre=anime": 200,
+    "https://zonafilm.space/catalog/?genre=detective": 200,
+    "https://zonafilm.space/title/tancuy-chtoby-zhit/": 200,
+    "https://zonafilm.space/title/svinorez/": 200,
+    "https://zonafilm.space/title/kadaknath/": 200,
+    "https://zonafilm.space/title/sheri-lyubov-moya/": 200,
+    "https://zonafilm.space/title/vne-uchebnoy-programmy-novaya-glava/": 200,
+    "https://zonafilm.space/title/na-kryuchke/": 200,
+    "https://zonafilm.space/title/rok-vo-imya-iisusa/": 200,
+    "https://zonafilm.space/title/bez-prava-na-strah/": 200,
+    "https://zonafilm.space/title/imperiya-artura/": 200,
+    "https://zonafilm.space/title/delo-ob-ubiystve-lakshmikantana/": 200,
+    "https://zonafilm.space/title/el-tonto-por-kristo/": 200,
+    "https://zonafilm.space/title/pesnya-dlya-ereshi/": 200,
+    "https://zonafilm.space/title/bezdna/": 200,
+    "https://zonafilm.space/title/ng-morskie-odissei-otkryvaya-tihiy-okean/": 200,
+    "https://zonafilm.space/title/nascar-amerika/": 200,
+    "https://zonafilm.space/title/operaciya-beloe-more-missiya-nad-gimalayami/": 200,
+    "https://zonafilm.space/title/rassledovanie-prestupleniy/": 200,
+    "https://zonafilm.space/title/evolyuciya/": 200,
+    "https://zonafilm.space/title/v-chetyre-ruki/": 200,
+    "https://zonafilm.space/title/krutoy-uchitel-onidzuka-7/": 200
+  },
+  "home_structure": {
+    "shelves_class_hits": 0,
+    "empty_signals": [
+      "empty-class"
+    ],
+    "nav_link_count": 74,
+    "data_design": "zona-top",
+    "search_forms": [
+      {
+        "action": "/search/",
+        "method": "get",
+        "inputs": [
+          {
+            "type": "text",
+            "name": "q",
+            "placeholder": "Название фильма или сериала"
+          }
+        ]
+      }
+    ],
+    "header_sticky_css": false
+  }
+}

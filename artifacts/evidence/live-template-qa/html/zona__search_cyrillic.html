@@ -1,0 +1,279 @@
+<!doctype html><html lang="ru" data-template-version="1.2.0" data-template-family="zona" data-build-id="20260918T215756Z-a10e68b2-nova" data-design="zona-top">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Поиск — Zona</title><link rel="canonical" href="https://zonafilm.space/search/">
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="site-factory-template-revision" content="a10e68b2350a020a2f7d5efe28cd98ef2fc89edd"><meta name="site-factory-design-version" content="1.2.0"><meta name="site-factory-template-family" content="zona"><meta name="site-factory-build-id" content="20260918T215756Z-a10e68b2-nova"><meta name="site-factory-artifact-sha256" content="1668f71bb514a5a2c81247131183bd6dfc2a503481421ced7f48a3b67c7699bd"><meta name="site-factory-template" content="zona-nova"><meta name="site-factory-core" content="site-factory-nova"><meta name="site-factory-profile" content="zona-general"><script data-metrika-counter="112582938">(function(){if(window.__sfMetrikaReady){return;}window.__sfMetrikaReady=1;(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<e.scripts.length;j++){if(e.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");ym(112582938,"init",{trackLinks:true,accurateTrackBounce:true,webvisor:false});})();</script><noscript><div><img src="https://mc.yandex.ru/watch/112582938" style="position:absolute;left:-9999px" alt=""></div></noscript>
+<style>
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh}
+img{max-width:100%;display:block}
+a{text-decoration:none;color:inherit}
+.vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+clip:rect(0 0 0 0);white-space:nowrap;border:0}
+:focus-visible{outline:3px solid #4d9bff;outline-offset:2px;border-radius:3px}
+.skip{position:absolute;left:-9999px;top:0;z-index:200;padding:10px 16px;background:#4d9bff;color:#fff}
+.skip:focus{left:8px;top:8px}
+
+/* Оформление Zona 1.2.0. Числа — измеренные на эталоне; разметка и правила
+   написаны свои. Ключевые цели измерения (см. artifacts/evidence/
+   templates-zona-animedia-visual-parity-006/reference/zona-w140/):
+     контейнер 1400 max, поля 20 (16 на узком), шапка горизонтальная и
+     закреплённая высотой 69 на десктопе, кегль тела 13/17.9,
+     h2 22.1 нормального начертания, ссылки 15.6 полужирные. */
+body{background:#1e252b;color:#ffffff;
+font:13px/1.375 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif;
+padding-top:117px}
+@media(min-width:768px){body{padding-top:138px}}
+@media(min-width:1280px){body{padding-top:69px}}
+.zs{min-height:100vh;display:block}
+.zmain{min-width:0}
+.zwrap{max-width:1400px;margin:0 auto;padding:0 16px}
+@media(min-width:1280px){.zwrap{padding:0 20px}}
+
+/* Шапка: горизонтальная, закреплённая. Постоянной левой колонки нет ни на
+   одной ширине — это и было главным расхождением с эталоном. */
+.zhd{position:fixed;top:0;left:0;right:0;z-index:60;background:#546778;
+color:#ffffff;box-shadow:0 1px 0 rgba(0,0,0,.25)}
+.zhd__in{max-width:1400px;margin:0 auto;padding:14px 16px;display:flex;
+align-items:center;gap:12px;flex-wrap:wrap}
+@media(min-width:768px){.zhd__in{padding:25px 16px;gap:14px}}
+@media(min-width:1280px){.zhd__in{padding:0 20px;height:69px;flex-wrap:nowrap;gap:14px}}
+.zhd__logo{font-size:19px;font-weight:700;letter-spacing:-.3px;color:#fff;
+white-space:nowrap;flex:0 0 auto}
+/* Пункты в одну строку с горизонтальной прокруткой: перенос на узком экране
+   поднимал шапку до 185 px против измеренных на эталоне 117. */
+.zhd__n{display:flex;gap:2px;flex:1 0 100%;order:3;min-width:0;
+overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.zhd__n::-webkit-scrollbar{display:none}
+@media(min-width:1280px){.zhd__n{flex:1 1 auto;order:0;overflow:visible}}
+.zhd__n a{padding:9px 10px;border-radius:6px;font-size:15.6px;font-weight:500;
+color:#eef3f8;white-space:nowrap;flex:0 0 auto}
+.zhd__n a:hover{background:rgba(255,255,255,.14)}
+.zhd__n a[aria-current]{background:#0a5bd0;color:#fff}
+.zhd__s{display:flex;flex:1 1 140px;min-width:0;max-width:420px;
+border-radius:6px;overflow:hidden;background:#fff}
+.zhd__s input{flex:1;min-width:0;border:0;padding:9px 12px;font-size:14px;
+color:#1e252b;font-family:inherit}
+.zhd__s button{border:0;background:#0a5bd0;color:#fff;padding:0 16px;
+font-weight:600;font-size:14px;cursor:pointer;font-family:inherit}
+/* Жанры вынесены из шапки в тело главной: третий ряд поднимал шапку до
+   170 px против измеренных на эталоне 137.8. */
+
+/* Прежние узлы каркаса остаются объявленными: на них ссылаются страницы
+   каталога, поиска и произведения. Боковая колонка больше не раскладывается. */
+.zrail,.zrail__logo,.zrail__sub,.zrail__t,.zrail__n,.zrail__g{display:none}
+.ztop{border-bottom:1px solid #3a4450;background:#1e252b}
+.ztop__a{display:flex;align-items:center;gap:16px;padding:12px 0}
+.ztop__s{flex:1;display:flex;border:1px solid #3a4450;border-radius:6px;
+overflow:hidden;background:#28303a;max-width:640px}
+.ztop__s input{flex:1;border:0;padding:10px 13px;font-size:14px;
+background:transparent;color:#ffffff;font-family:inherit}
+.ztop__s button{border:0;background:#0a5bd0;color:#fff;padding:0 18px;
+font-weight:600;font-size:14px;cursor:pointer;font-family:inherit}
+.ztop__b{display:flex;gap:16px;padding:0 0 10px;font-size:13px;color:#aeb9c5;
+flex-wrap:wrap}
+.ztop__b a{color:#4d9bff;font-weight:600;display:inline-block;padding:5px 2px}
+.ztop__b a[aria-current]{color:#ffffff;box-shadow:inset 0 -2px 0 #4d9bff}
+
+/* Типографика по измерению: h2 22.1 нормального начертания. */
+.zh{font-size:26px;line-height:1.22;font-weight:600;margin:22px 0 6px;
+letter-spacing:-.3px}
+@media(min-width:1280px){.zh{font-size:30px}}
+.zh--sm{font-size:22.1px;font-weight:400;margin:26px 0 6px;letter-spacing:0}
+.zsub{font-size:13px;color:#aeb9c5;margin:0 0 18px}
+.zsub a{display:inline-block;padding:5px 2px;color:#4d9bff;font-weight:600}
+.zcr{font-size:12.5px;color:#aeb9c5;padding:12px 0 0}
+.zcr a{color:#4d9bff}
+
+/* Пять горизонтальных лент. Управление мышью, клавиатурой и свайпом. */
+.zsec{margin:26px 0 30px}
+.zsec__h{display:flex;align-items:baseline;justify-content:space-between;
+gap:12px;margin:0 0 10px}
+.zsec__h h2{font-size:22.1px;font-weight:400;margin:0;letter-spacing:0}
+.zsec__h a{font-size:13px;color:#4d9bff;font-weight:600;white-space:nowrap}
+.zrl{position:relative}
+.zrl__vp{overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;
+scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+scrollbar-width:thin;padding:2px 0 10px}
+/* align-items:flex-start обязателен: по умолчанию флекс растягивает все
+   карточки до высоты самой высокой, и постер с заданной пропорцией
+   перерастает её — измерено 0.56 вместо 0.67 в лентах с длинными названиями. */
+.zrl__track{display:flex;gap:12px;min-width:min-content;align-items:flex-start}
+.zrl__track>*{flex:0 0 132px;scroll-snap-align:start}
+@media(min-width:768px){.zrl__track>*{flex-basis:150px}}
+@media(min-width:1280px){.zrl__track>*{flex-basis:168px}}
+.zrl__btn{position:absolute;top:34%;transform:translateY(-50%);z-index:5;
+width:34px;height:52px;border:0;border-radius:5px;cursor:pointer;
+background:rgba(16,21,26,.82);color:#fff;font-size:18px;line-height:1;
+display:none;align-items:center;justify-content:center}
+@media(min-width:1024px){.zrl:hover .zrl__btn,.zrl__btn:focus-visible{display:flex}}
+.zrl__btn--p{left:-6px}
+.zrl__btn--n{right:-6px}
+.zrl__btn[disabled]{opacity:.32;cursor:default}
+
+/* Сетка каталога и карточка. Пропорция постера 2:3. */
+.zg{display:grid;gap:14px;grid-template-columns:repeat(2,1fr);align-items:start}
+@media(min-width:560px){.zg{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:900px){.zg{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:1280px){.zg{grid-template-columns:repeat(6,1fr)}}
+.zt{display:flex;flex-direction:column;background:#232b34;
+border:1px solid #3a4450;border-radius:8px;overflow:hidden;
+transition:border-color .16s,transform .16s}
+.zt:hover{border-color:#4d9bff;transform:translateY(-2px)}
+.zt__p{display:block;aspect-ratio:2/3;background:#28303a;position:relative;flex:0 0 auto}
+/* Изображение выводится из потока: часть «постеров» каталога на деле
+   широкоформатные кадры, и картинка в потоке задавала контейнеру свою
+   высоту, перебивая пропорцию — измерено 0.56 (16:9) вместо 0.67. */
+.zt__p img,.zt__img{position:absolute;inset:0;z-index:1;width:100%;height:100%;
+object-fit:cover;display:block}
+.zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:12px;
+text-align:center;color:#8d9aa8;font-size:12px;line-height:1.3}
+.zt__none b{display:block;font-size:24px;font-weight:700;color:#aeb9c5;margin-bottom:4px}
+.zt__b{padding:8px 9px 10px;display:flex;flex-direction:column;gap:4px;flex:1}
+.zt__t{font-size:13.5px;font-weight:600;line-height:1.28;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zt__m{display:block;font-size:12px;color:#aeb9c5}
+.zt__r{display:flex;gap:9px;font-size:12px;color:#aeb9c5;margin-top:auto;
+padding-top:4px;flex-wrap:wrap}
+.zt__r b{color:#ffb454;font-weight:700}
+.zt__r i{color:#ffb454;font-style:normal;font-weight:700}
+.zt__r em{color:#8d9aa8;font-style:italic}
+
+/* Строка списка: постер слева. Это не сетка главной. */
+.zl{display:flex;flex-direction:column;gap:10px}
+.zr{display:grid;grid-template-columns:64px 1fr;gap:12px;padding:10px;
+background:#232b34;border:1px solid #3a4450;border-radius:8px;align-items:start}
+@media(min-width:768px){.zr{grid-template-columns:82px 1fr}}
+.zr:hover{border-color:#4d9bff}
+.zr__p{aspect-ratio:2/3;background:#28303a;border-radius:5px;overflow:hidden;
+position:relative}
+.zr__p img,.zr__img{position:absolute;inset:0;width:100%;height:100%;
+object-fit:cover;display:block;z-index:1}
+.zr__none{position:absolute;inset:0;display:grid;place-items:center;
+text-align:center;color:#8d9aa8;font-size:11px;padding:6px}
+.zr__t{display:block;font-size:15px;font-weight:600;line-height:1.3;margin-bottom:3px}
+.zr__m{display:block;font-size:12.5px;color:#aeb9c5;margin-bottom:5px}
+.zr__d{font-size:12.5px;color:#aeb9c5;line-height:1.45;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zr__r{display:flex;gap:10px;font-size:12px;color:#aeb9c5;margin-top:6px;flex-wrap:wrap}
+
+/* Фильтры, пагинация, служебные состояния. */
+.zstrip{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 6px}
+.zstrip a{background:#232b34;border:1px solid #3a4450;border-radius:6px;
+padding:7px 12px;font-size:13px;color:#aeb9c5;font-weight:600}
+.zstrip a:hover{border-color:#4d9bff;color:#ffffff}
+.zstrip a[aria-current]{background:#0a5bd0;color:#fff;border-color:#0a5bd0}
+.zpg{display:flex;gap:7px;justify-content:center;margin:26px 0;flex-wrap:wrap}
+.zpg a,.zpg span{padding:8px 13px;border-radius:6px;border:1px solid #3a4450;
+background:#232b34;font-size:13.5px;min-width:40px;text-align:center}
+.zpg span{background:#0a5bd0;color:#fff;border-color:#0a5bd0}
+.zempty,.znf{padding:52px 18px;text-align:center;color:#aeb9c5}
+.znf b{display:block;font-size:44px;font-weight:700;color:#4d9bff;margin-bottom:6px}
+.znf h1{font-size:24px;margin:0 0 8px;color:#ffffff;font-weight:600}
+.znf a{display:inline-block;margin-top:14px;background:#0a5bd0;color:#fff;
+padding:11px 22px;border-radius:6px;font-weight:600}
+.zsea__h{font-size:13px;color:#aeb9c5;margin:0 0 14px}
+.zsea{margin:0 0 20px}
+
+/* Страница произведения. */
+.zban{position:relative;border-radius:10px;overflow:hidden;background:#28303a;
+margin:18px 0 0;min-height:200px;max-height:280px}
+.zban__img{position:absolute;inset:0;opacity:.42}
+.zban__img img{width:100%;height:100%;object-fit:cover;display:block}
+.zhead{display:grid;grid-template-columns:1fr;gap:18px;margin:18px 0 8px}
+@media(min-width:768px){.zhead{grid-template-columns:208px 1fr}}
+.zhead__ps{aspect-ratio:2/3;border-radius:8px;overflow:hidden;background:#28303a;
+position:relative;max-width:208px}
+.zhead__ps img,.zhead__img{position:relative;z-index:1;width:100%;height:100%;
+object-fit:cover;display:block}
+.zhead__x{min-width:0}
+.zhead__o{font-size:14px;color:#aeb9c5;margin:0 0 10px}
+.zbody{font-size:14.5px;line-height:1.62;color:#ffffff;max-width:70ch}
+.zaside{background:#232b34;border:1px solid #3a4450;border-radius:8px;
+padding:14px 16px;font-size:13px;color:#aeb9c5}
+.zaside a{color:#4d9bff;font-weight:600}
+/* Хаб подборок: карточка коллекции, а не ещё одна сетка тайтлов. */
+.zhub{display:grid;gap:12px;margin:14px 0;grid-template-columns:1fr}
+@media(min-width:600px){.zhub{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.zhub{grid-template-columns:repeat(3,1fr)}}
+.zhub__c{display:block;padding:12px;border:1px solid #3a4450;border-radius:8px;
+background:#232b34;color:inherit;text-decoration:none}
+.zhub__c:hover{border-color:#4d9bff}
+.zhub__g{display:flex;gap:4px;margin-bottom:9px}
+.zhub__p{flex:1 1 0;aspect-ratio:2/3;overflow:hidden;border-radius:5px;background:#28303a}
+.zhub__img{width:100%;height:100%;object-fit:cover;display:block}
+.zhub__t{display:block;font-weight:700;font-size:15.5px}
+.zhub__m{display:block;font-size:12.5px;color:#4d9bff;font-weight:600;margin:2px 0 4px}
+.zhub__d{display:block;font-size:13px;color:#aeb9c5;line-height:1.45}
+
+/* Окно просмотра списка серий ограничено; сам список не обрезается. */
+.zeps{display:grid;gap:7px;margin:14px 0;max-height:70vh;overflow-y:auto;
+overscroll-behavior:contain}
+@media(min-width:768px){.zeps{max-height:520px}}
+.zeps a,.zeps span{display:block;padding:9px 12px;border-radius:6px;
+border:1px solid #3a4450;background:#232b34;font-size:13.5px}
+.zeps span{opacity:.55}
+.zeps a[aria-current]{background:#0a5bd0;color:#fff;border-color:#0a5bd0}
+.zepnav{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+.zepnav a{background:#232b34;border:1px solid #3a4450;border-radius:6px;
+padding:9px 14px;font-size:13.5px;color:#4d9bff;font-weight:600}
+
+/* Плеер: кадр зарезервирован заранее, состояние объявляется словами. */
+.zpl{margin:18px 0}
+.zpl__f{aspect-ratio:16/9;background:#0d1217;border:1px solid #3a4450;
+border-radius:8px;overflow:hidden;position:relative}
+.zpl__h{font-size:22.1px;font-weight:400;margin:22px 0 10px}
+.zpl__s{position:absolute;inset:0;display:grid;place-items:center;padding:22px;
+text-align:center;color:#aeb9c5;font-size:13.5px;line-height:1.5}
+
+.zft{border-top:1px solid #3a4450;margin:36px 0 0;padding:20px 0 30px;
+font-size:12.5px;color:#aeb9c5;display:flex;gap:14px;flex-wrap:wrap;
+justify-content:space-between;align-items:center}
+.zvb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;
+border:1px solid #3a4450;border-radius:5px;padding:5px 9px;background:#232b34;
+color:#8d9aa8}
+
+img[hidden]{display:none}
+
+/* Оценки по источникам. Разметка общая, вид свой у каждого семейства. */
+.rbs{margin:14px 0;display:flex;flex-direction:column;gap:8px}
+.rbs__l{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.rbs__i{display:flex;align-items:baseline;gap:6px;padding:6px 11px;border-radius:6px;
+white-space:nowrap}
+.rbs__s{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.rbs__n{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.rbs__n small{font-size:11px;font-weight:400;opacity:.72}
+.rbs__v{font-size:11px;opacity:.75;font-variant-numeric:tabular-nums}
+.rbs__l--own{border-top:1px dashed currentColor;padding-top:8px;margin-top:2px;opacity:.95}
+.rbs--none{margin:14px 0;font-size:13px;font-style:italic}
+@media(max-width:400px){.rbs__i{padding:5px 8px}.rbs__n{font-size:14px}}
+.rbs__i{background:#232b34;border:1px solid #3a4450;color:#ffffff}
+.rbs__s{color:#4d9bff}
+.rbs__n{color:#ffb454}
+.rbs__l--own{color:#aeb9c5}
+.rbs--none{color:#8d9aa8}
+
+</style><script>document.addEventListener('error',function(e){var i=e.target;if(i&&i.tagName==='IMG'&&i.hasAttribute('data-poster'))i.hidden=true;},true);
+document.addEventListener('click',function(e){var b=e.target.closest('[data-rl]');if(!b)return;var v=document.getElementById(b.getAttribute('aria-controls'));if(!v)return;var d=Math.max(160,Math.round(v.clientWidth*0.86));v.scrollBy({left:b.getAttribute('data-rl')==='next'?d:-d,behavior:'smooth'});});</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Zona","url":"https://zonafilm.space/","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://zonafilm.space/search/?q={search_term_string}"},"query-input":"required name=search_term_string"}}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://zonafilm.space/"},{"@type":"ListItem","position":2,"name":"search","item":"https://zonafilm.space/search/"}]}</script></head>
+<body><a class="skip" href="#main">Перейти к содержимому</a>
+<div class="zs">
+<header class="zhd">
+<div class="zhd__in">
+<a class="zhd__logo" href="/">Zona</a>
+<nav class="zhd__n" aria-label="Разделы"><a href="/">Обзор</a><a href="/new/">Что нового</a><a href="/catalog/?kind=Фильм">Кино</a><a href="/catalog/?kind=Сериал">Сериалы</a><a href="/catalog/?kind=Мультфильм">Анимация</a><a href="/catalog/">Весь каталог</a></nav>
+<form class="zhd__s" action="/search/" method="get" role="search">
+<label class="vh" for="q">Поиск по каталогу</label>
+<input id="q" name="q" placeholder="Название фильма или сериала">
+<button type="submit">Найти</button></form>
+</div>
+</header>
+<div class="zmain">
+<div class="zwrap">
+<main id="main"><div class="zwrap"><h1 class="zh">«матрица»</h1><p class="zsub">Совпадений: 8</p><div class="zl"><a class="zr" href="/title/matrica-vremeni/"><span class="zr__p"><span class="zr__none"><b>М</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/01985062-cdd1-71d5-afb2-6316692f6906.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Матрица времени</span><span class="zr__m">Фильм · 2017 · США · западный контент · детектив</span><span class="zr__d">Саманта - крутая девчонка, которой всегда и во всем везло. Но в тот день, в пятницу, 12 февраля, что-то пошло не так, а потом та авария на трассе… Саманта оказалась в заколдованном круге проклятого дня, и теперь она вынуждена проживать ужас той пятницы снова и снова. Чтобы распутать петлю времени, она должна вычислить ошибку и исправить неверный шаг. Но каждый раз что-то не срабатывает…</span><span class="zr__r"><span>Кинопоиск <b>6.482</b></span><span>IMDb <i>6.4</i></span></span></span></a><a class="zr" href="/title/matrica-voskreshenie/"><span class="zr__p"><span class="zr__none"><b>М</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/019156d3-9064-7a3b-8613-329b18277752.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Матрица: Воскрешение</span><span class="zr__m">Фильм · 2021 · США · западный контент · боевик</span><span class="zr__d">Геймдизайнер Томас Андерсон сделал себе имя работой над трилогией игр «Матрица». Хотя окружающий мир периодически даёт сбои и обнажает свою истинную сущность, бывший Нео исправно посещает психотерапевта, принимает пилюли и практически убедил себя, что всё это — игра его воображения. Но однажды на него выходит хакерша Багз и предлагает снова следовать за белым кроликом.</span><span class="zr__r"><span>Кинопоиск <b>5.704</b></span><span>IMDb <i>5.6</i></span></span></span></a><a class="zr" href="/title/matrica-revolyuciya/"><span class="zr__p"><span class="zr__none"><b>М</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/019156d3-903a-77f7-89f8-921da7ff6158.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Матрица: Революция</span><span class="zr__m">Фильм · 2003 · США · западный контент · боевик</span><span class="zr__d">Пока армия машин пытается уничтожить Зион, его жители из последних сил держат оборону.</span><span class="zr__r"><span>Кинопоиск <b>7.635</b></span><span>IMDb <i>6.7</i></span></span></span></a><a class="zr" href="/title/matrica-perezagruzka/"><span class="zr__p"><span class="zr__none"><b>М</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/019156d3-900f-7e4a-8865-f665afa0bc92.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Матрица: Перезагрузка</span><span class="zr__m">Фильм · 2003 · США · западный контент · боевик</span><span class="zr__d">Борцы за свободу Нео, Тринити и Морфеус продолжают руководить восстанием людей против армии машин. Они вынуждены использовать не только арсенал превосходного оружия, но и свои выдающиеся навыки. Участие в миссии по спасению человеческой расы от истребления приносит им более глубокое понимание Матрицы и осознание центральной роли Нео в судьбе человечества.</span><span class="zr__r"><span>Кинопоиск <b>7.744</b></span><span>IMDb <i>7.2</i></span></span></span></a><a class="zr" href="/title/matrica-1999/"><span class="zr__p"><span class="zr__none"><b>М</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/01915258-8fd3-771f-8824-39397cd276ec.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Матрица (1999)</span><span class="zr__m">Фильм · 1999 · США · западный контент · боевик</span><span class="zr__d">Жизнь Томаса Андерсона разделена на две части: днём он — самый обычный офисный работник, получающий нагоняи от начальства, а ночью превращается в хакера по имени Нео, и нет места в сети, куда он бы не смог проникнуть. Но однажды всё меняется. Томас узнаёт ужасающую правду о реальности.</span><span class="zr__r"><span>Кинопоиск <b>8.499</b></span><span>IMDb <i>8.7</i></span></span></span></a><a class="zr" href="/title/armitazh-dvoynaya-matrica/"><span class="zr__p"><span class="zr__none"><b>А</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/0196b192-e235-7671-a7d1-af0b2cd056e9.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Армитаж: Двойная матрица</span><span class="zr__m">Фильм · 2002 · аниме · боевик</span><span class="zr__d">Спустя несколько лет после событий первой серии Наоми Армитаж [ナオミ・アミテージ] и Росс Силибас [ロス・シリバス] живут размеренной семейной жизнью, воспитывая дочь Ёко [ヨーコ・シリバス]. Для них это нелегко, так как многие люди против роботов, а точнее — данным им с человеком равных прав. Будучи занятой приготовлением торта по поводу дня рождения дочери, Наоми почувствовала предсмертные отгласы роботов, схожих с её моделью, что не могло её не заинтересовать. Отметив день рождения Ёко и дождавшись ночи, Армитаж отправляется на собственное расследование.</span></span></a><a class="zr" href="/title/animatrica/"><span class="zr__p"><span class="zr__none"><b>А</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/0195fbd8-5236-7a22-aea4-336c45330671.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Аниматрица</span><span class="zr__m">Фильм · 2003 · аниме · боевик</span></span></a><a class="zr" href="/title/armitazh-polimatrica/"><span class="zr__p"><span class="zr__none"><b>А</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/019293f7-4eb4-7388-9775-ebb182bdce23.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Армитаж: Полиматрица</span><span class="zr__m">Мультфильм · 1996 · Япония · аниме · мультфильм</span><span class="zr__d">2046-й год. Громкое убийство приоткрывает завесу тайны над существованием киборгов «третьего типа» настолько сложно организованных, что они с легкостью могут сойти за людей. Общество сотрясает вспышка ненависти к андроидам, определенными кругами умело разжигаются - шовинистские настроения. Детективы Росс Силибус и Наоми Армитаж распутывают клубок правительственных заговоров и убийств на почве использования секретных разработок. Ситуация резко осложняется, когда враги узнают главный секрет Армитаж: она тоже Киборг «третьего типа»!</span><span class="zr__r"><span>IMDb <i>6.7</i></span></span></span></a></div></div></main>
+<footer class="zft">
+<span>Zona · тестовая витрина, закрыта от индексации</span>
+<span class="zvb">Template: zona 1.2.0 · a10e68b2</span>
+</footer></div></div></div></body></html>

@@ -1,0 +1,276 @@
+<!doctype html><html lang="ru" data-template-version="1.2.0" data-template-family="animedia" data-build-id="20260918T215044Z-b023bd50-nova" data-design="animedia-portal">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Весь каталог — Animedia</title><meta name="description" content="Весь каталог на витрине Animedia."><link rel="canonical" href="https://animedia.space/catalog/">
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="site-factory-template-revision" content="b023bd50cced8d281cb3814a75bf72b429afee0b"><meta name="site-factory-design-version" content="1.2.0"><meta name="site-factory-template-family" content="animedia"><meta name="site-factory-build-id" content="20260918T215044Z-b023bd50-nova"><meta name="site-factory-artifact-sha256" content="1668f71bb514a5a2c81247131183bd6dfc2a503481421ced7f48a3b67c7699bd"><meta name="site-factory-template" content="animedia-nova"><meta name="site-factory-core" content="site-factory-nova"><meta name="site-factory-profile" content="animedia-general">
+<style>
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh}
+img{max-width:100%;display:block}
+a{text-decoration:none;color:inherit}
+.vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+clip:rect(0 0 0 0);white-space:nowrap;border:0}
+:focus-visible{outline:3px solid #c50725;outline-offset:2px;border-radius:3px}
+.skip{position:absolute;left:-9999px;top:0;z-index:200;padding:10px 16px;background:#c50725;color:#fff}
+.skip:focus{left:8px;top:8px}
+
+/* Оформление Animedia 1.2.0. Числа измерены на эталоне (см. artifacts/evidence/
+   templates-zona-animedia-visual-parity-006/reference/amd-online/):
+     контейнер почти во всю ширину (поля 6 на узком, 1 дальше), шапка 90 на
+     десктопе и 126 на узком и НЕ закреплённая, кегль тела 14, h2 16/700,
+     ссылки 17/400, пропорция карточки 0.86, сетка 3 колонки до 1024 и 4 от
+     1440 с зазором 10. Разметка и правила — свои. */
+body{background:#ffffff;color:#161616;
+font:14px/1.45 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif}
+.zs{min-height:100vh;display:block}
+.zmain{min-width:0}
+.zwrap{max-width:100%;margin:0 auto;padding:0 6px}
+@media(min-width:768px){.zwrap{padding:0 1px}}
+
+/* Шапка: обычная, не закреплённая. Плотное меню разделов в одну строку. */
+.zhd{position:relative;background:#ffffff;color:#161616;
+border-bottom:2px solid #c50725}
+.zhd__in{max-width:100%;margin:0 auto;padding:12px 6px;display:flex;
+align-items:center;gap:10px;flex-wrap:wrap;min-height:126px}
+@media(min-width:768px){.zhd__in{padding:10px 1px;min-height:90px;flex-wrap:nowrap}}
+.zhd__logo{font-size:22px;font-weight:800;letter-spacing:-.4px;color:#c50725;
+white-space:nowrap;flex:0 0 auto}
+.zhd__n{display:flex;gap:2px;flex:1 0 100%;order:3;min-width:0;
+overflow-x:auto;scrollbar-width:none}
+.zhd__n::-webkit-scrollbar{display:none}
+@media(min-width:768px){.zhd__n{flex:1 1 auto;order:0;overflow-x:auto}}
+.zhd__n a{padding:7px 9px;border-radius:4px;font-size:17px;font-weight:400;
+color:#161616;white-space:nowrap;flex:0 0 auto}
+.zhd__n a:hover{background:#f9f9f9;color:#c50725}
+.zhd__n a[aria-current]{color:#c50725;font-weight:700;box-shadow:inset 0 -2px 0 #c50725}
+.zhd__s{display:flex;flex:1 1 150px;min-width:0;max-width:340px;
+border:1px solid #e4e4e4;border-radius:4px;overflow:hidden;background:#ffffff}
+.zhd__s input{flex:1;min-width:0;border:0;padding:8px 10px;font-size:14px;
+color:#161616;font-family:inherit;background:transparent}
+.zhd__s button{border:0;background:#c50725;color:#fff;padding:0 14px;
+font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
+
+/* Служебная полоса состояния данных. */
+.ast{background:#f9f9f9;border:1px solid #e4e4e4;border-left:4px solid #c50725;
+border-radius:4px;padding:14px 16px;margin:14px 0;font-size:13.5px;
+line-height:1.55;color:#161616}
+.ast b{display:block;font-size:15px;font-weight:700;margin-bottom:5px;color:#c50725}
+.ast code{background:#f0f0f0;padding:1px 5px;border-radius:3px;font-size:12.5px}
+
+.zrail,.zrail__logo,.zrail__sub,.zrail__t,.zrail__n,.zrail__g{display:none}
+.ztop{border-bottom:1px solid #e4e4e4;background:#ffffff}
+.ztop__a{display:flex;align-items:center;gap:14px;padding:10px 0}
+.ztop__s{flex:1;display:flex;border:1px solid #e4e4e4;border-radius:4px;
+overflow:hidden;background:#ffffff;max-width:600px}
+.ztop__s input{flex:1;border:0;padding:9px 12px;font-size:14px;
+background:transparent;color:#161616;font-family:inherit}
+.ztop__s button{border:0;background:#c50725;color:#fff;padding:0 16px;
+font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
+.ztop__b{display:flex;gap:14px;padding:0 0 9px;font-size:13px;color:#5c6370;
+flex-wrap:wrap}
+.ztop__b a{color:#c50725;font-weight:700;display:inline-block;padding:4px 2px}
+
+/* Типографика по измерению: h2 16/700, ссылки 17/400. */
+.zh{font-size:16px;line-height:1.3;font-weight:500;margin:16px 0 5px}
+.zh--sm{font-size:16px;font-weight:700;margin:20px 0 5px}
+.zsub{font-size:13px;color:#5c6370;margin:0 0 14px}
+.zsub a{color:#c50725;font-weight:700;padding:4px 2px;display:inline-block}
+.zcr{font-size:12.5px;color:#5c6370;padding:10px 0 0}
+.zcr a{color:#c50725}
+
+.zsec{margin:18px 0 22px}
+.zsec__h{display:flex;align-items:center;justify-content:space-between;
+gap:10px;margin:0 0 9px;border-bottom:1px solid #e4e4e4;padding-bottom:6px}
+.zsec__h h2{font-size:16px;font-weight:700;margin:0}
+.zsec__h a{font-size:13px;color:#c50725;font-weight:700;white-space:nowrap}
+.zrl{position:relative}
+.zrl__vp{overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;
+scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:2px 0 8px}
+.zrl__track{display:flex;gap:10px;min-width:min-content;align-items:flex-start}
+.zrl__track>*{flex:0 0 132px;scroll-snap-align:start}
+@media(min-width:1440px){.zrl__track>*{flex-basis:150px}}
+.zrl__btn{position:absolute;top:34%;transform:translateY(-50%);z-index:5;
+width:30px;height:48px;border:1px solid #e4e4e4;border-radius:4px;cursor:pointer;
+background:rgba(255,255,255,.94);color:#c50725;font-size:17px;line-height:1;
+display:none;align-items:center;justify-content:center}
+@media(min-width:1024px){.zrl:hover .zrl__btn,.zrl__btn:focus-visible{display:flex}}
+.zrl__btn--p{left:-4px}
+.zrl__btn--n{right:-4px}
+
+/* Плотная сетка: 3 колонки до 1024, 4 от 1440, зазор 10. */
+.zg{display:grid;gap:10px;grid-template-columns:repeat(2,1fr);align-items:start}
+@media(min-width:560px){.zg{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:1440px){.zg{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:1800px){.zg{grid-template-columns:repeat(6,1fr)}}
+.zt{display:flex;flex-direction:column;background:#ffffff;
+border:1px solid #e4e4e4;border-radius:4px;overflow:hidden;
+transition:border-color .14s,box-shadow .14s}
+.zt:hover{border-color:#c50725;box-shadow:0 4px 14px rgba(0,0,0,.09)}
+/* Пропорция постера 0.86 — измерена на эталоне. */
+.zt__p{display:block;aspect-ratio:86/100;background:#f0f0f0;position:relative;flex:0 0 auto}
+.zt__p img,.zt__img{position:absolute;inset:0;z-index:1;width:100%;height:100%;
+object-fit:cover;display:block}
+.zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:10px;
+text-align:center;color:#757b85;font-size:11.5px;line-height:1.3}
+.zt__none b{display:block;font-size:22px;font-weight:800;color:#5c6370;margin-bottom:3px}
+.zt__b{padding:7px 8px 9px;display:flex;flex-direction:column;gap:3px;flex:1}
+.zt__t{font-size:13px;font-weight:700;line-height:1.26;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zt__m{display:block;font-size:11.5px;color:#5c6370}
+.zt__r{display:flex;gap:8px;font-size:11.5px;color:#5c6370;margin-top:auto;
+padding-top:3px;flex-wrap:wrap}
+.zt__r b,.zt__r i{color:#c50725;font-weight:700;font-style:normal}
+.zt__r em{color:#757b85;font-style:italic}
+
+.zl{display:flex;flex-direction:column;gap:8px}
+.zr{display:grid;grid-template-columns:58px 1fr;gap:10px;padding:8px;
+background:#ffffff;border:1px solid #e4e4e4;border-radius:4px;align-items:start}
+@media(min-width:768px){.zr{grid-template-columns:74px 1fr}}
+.zr:hover{border-color:#c50725}
+.zr__p{aspect-ratio:86/100;background:#f0f0f0;border-radius:3px;overflow:hidden;
+position:relative}
+.zr__p img,.zr__img{position:absolute;inset:0;width:100%;height:100%;
+object-fit:cover;display:block;z-index:1}
+.zr__none{position:absolute;inset:0;display:grid;place-items:center;
+text-align:center;color:#757b85;font-size:10.5px;padding:5px}
+.zr__t{display:block;font-size:14px;font-weight:700;line-height:1.3;margin-bottom:2px}
+.zr__m{display:block;font-size:12px;color:#5c6370;margin-bottom:4px}
+.zr__d{font-size:12px;color:#5c6370;line-height:1.42;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zr__r{display:flex;gap:9px;font-size:11.5px;color:#5c6370;margin-top:5px;flex-wrap:wrap}
+
+.zstrip{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 5px}
+.zstrip a{background:#f9f9f9;border:1px solid #e4e4e4;border-radius:4px;
+padding:6px 10px;font-size:12.5px;color:#161616;font-weight:600}
+.zstrip a:hover{border-color:#c50725;color:#c50725}
+.zstrip a[aria-current]{background:#c50725;color:#fff;border-color:#c50725}
+.zpg{display:flex;gap:5px;justify-content:center;margin:22px 0;flex-wrap:wrap}
+.zpg a,.zpg span{padding:7px 12px;border-radius:4px;border:1px solid #e4e4e4;
+background:#ffffff;font-size:13px;min-width:36px;text-align:center}
+.zpg span{background:#c50725;color:#fff;border-color:#c50725}
+.zempty,.znf{padding:44px 16px;text-align:center;color:#5c6370}
+.znf b{display:block;font-size:40px;font-weight:800;color:#c50725;margin-bottom:5px}
+.znf h1{font-size:21px;margin:0 0 7px;color:#161616;font-weight:700}
+.znf a{display:inline-block;margin-top:12px;background:#c50725;color:#fff;
+padding:10px 20px;border-radius:4px;font-weight:700}
+.zsea__h{font-size:13px;color:#5c6370;margin:0 0 12px}
+.zsea{margin:0 0 18px}
+
+/* Расписание: день, время и номер серии. Пустое значение названо словами. */
+.asch{display:grid;gap:10px;margin:12px 0}
+@media(min-width:900px){.asch{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1440px){.asch{grid-template-columns:repeat(4,1fr)}}
+.asch__d{border:1px solid #e4e4e4;border-radius:4px;background:#ffffff;overflow:hidden}
+.asch__d h3{margin:0;padding:8px 11px;font-size:13px;font-weight:700;
+background:#f9f9f9;border-bottom:1px solid #e4e4e4}
+.asch__l{margin:0;padding:0;list-style:none}
+.asch__l li{display:flex;gap:9px;align-items:baseline;padding:7px 11px;
+border-bottom:1px solid #e4e4e4;font-size:12.5px}
+.asch__l li:last-child{border-bottom:0}
+.asch__t{color:#c50725;font-weight:700;flex:0 0 42px;font-variant-numeric:tabular-nums}
+.asch__e{color:#5c6370;margin-left:auto;flex:0 0 auto;font-size:11.5px}
+.asch__n{color:#757b85;font-style:italic}
+
+.zban{position:relative;border-radius:4px;overflow:hidden;background:#f0f0f0;
+margin:14px 0 0;min-height:170px;max-height:240px}
+.zban__img{position:absolute;inset:0;opacity:.5}
+.zban__img img{width:100%;height:100%;object-fit:cover;display:block}
+.zhead{display:grid;grid-template-columns:1fr;gap:14px;margin:14px 0 6px}
+@media(min-width:768px){.zhead{grid-template-columns:190px 1fr}}
+.zhead__ps{aspect-ratio:86/100;border-radius:4px;overflow:hidden;background:#f0f0f0;
+position:relative;max-width:190px}
+.zhead__ps img,.zhead__img{position:relative;z-index:1;width:100%;height:100%;
+object-fit:cover;display:block}
+.zhead__x{min-width:0}
+.zhead__o{font-size:13.5px;color:#5c6370;margin:0 0 9px}
+.zbody{font-size:14px;line-height:1.6;color:#161616;max-width:72ch}
+.zaside{background:#f9f9f9;border:1px solid #e4e4e4;border-radius:4px;
+padding:12px 14px;font-size:13px;color:#5c6370}
+.zaside a{color:#c50725;font-weight:700}
+/* Хаб подборок: карточка коллекции, а не ещё одна сетка тайтлов. */
+.zhub{display:grid;gap:12px;margin:14px 0;grid-template-columns:1fr}
+@media(min-width:600px){.zhub{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.zhub{grid-template-columns:repeat(3,1fr)}}
+.zhub__c{display:block;padding:12px;border:1px solid #e4e4e4;border-radius:6px;
+background:#f0f0f0;color:inherit;text-decoration:none}
+.zhub__c:hover{border-color:#c50725}
+.zhub__g{display:flex;gap:4px;margin-bottom:9px}
+.zhub__p{flex:1 1 0;aspect-ratio:2/3;overflow:hidden;border-radius:4px;background:#f9f9f9}
+.zhub__img{width:100%;height:100%;object-fit:cover;display:block}
+.zhub__t{display:block;font-weight:700;font-size:15px}
+.zhub__m{display:block;font-size:12.5px;color:#c50725;font-weight:600;margin:2px 0 4px}
+.zhub__d{display:block;font-size:13px;color:#5c6370;line-height:1.45}
+
+/* Список серий: высота ограничена, прокрутка своя. У «Детектива Конана»
+   1212 кнопок, и без предела страница вырастала до десятков тысяч пикселей —
+   всё, что ниже списка, становилось недостижимым. Ни одна серия при этом не
+   убирается из разметки: ограничивается окно просмотра, а не список. */
+.zeps{display:grid;gap:5px;margin:12px 0;max-height:70vh;overflow-y:auto;
+overscroll-behavior:contain}
+@media(min-width:768px){.zeps{grid-template-columns:repeat(2,1fr);max-height:520px}}
+.zeps a,.zeps span{display:block;padding:8px 11px;border-radius:4px;
+border:1px solid #e4e4e4;background:#ffffff;font-size:13px}
+.zeps span{opacity:.5}
+.zeps a[aria-current]{background:#c50725;color:#fff;border-color:#c50725}
+.zepnav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.zepnav a{background:#f9f9f9;border:1px solid #e4e4e4;border-radius:4px;
+padding:8px 12px;font-size:13px;color:#c50725;font-weight:700}
+
+.zpl{margin:14px 0}
+.zpl__f{aspect-ratio:16/9;background:#101010;border:1px solid #e4e4e4;
+border-radius:4px;overflow:hidden;position:relative}
+.zpl__h{font-size:16px;font-weight:700;margin:18px 0 9px}
+.zpl__s{position:absolute;inset:0;display:grid;place-items:center;padding:20px;
+text-align:center;color:#d8d8d8;font-size:13px;line-height:1.5}
+
+.zft{border-top:2px solid #c50725;margin:28px 0 0;padding:16px 0 26px;
+font-size:12.5px;color:#5c6370;display:flex;gap:12px;flex-wrap:wrap;
+justify-content:space-between;align-items:center}
+.zvb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;
+border:1px solid #e4e4e4;border-radius:4px;padding:4px 8px;background:#f9f9f9;
+color:#757b85}
+
+img[hidden]{display:none}
+
+/* Оценки по источникам. Разметка общая, вид свой у каждого семейства. */
+.rbs{margin:14px 0;display:flex;flex-direction:column;gap:8px}
+.rbs__l{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.rbs__i{display:flex;align-items:baseline;gap:6px;padding:6px 11px;border-radius:6px;
+white-space:nowrap}
+.rbs__s{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.rbs__n{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.rbs__n small{font-size:11px;font-weight:400;opacity:.72}
+.rbs__v{font-size:11px;opacity:.75;font-variant-numeric:tabular-nums}
+.rbs__l--own{border-top:1px dashed currentColor;padding-top:8px;margin-top:2px;opacity:.95}
+.rbs--none{margin:14px 0;font-size:13px;font-style:italic}
+@media(max-width:400px){.rbs__i{padding:5px 8px}.rbs__n{font-size:14px}}
+.rbs__i{background:#f9f9f9;border:1px solid #e4e4e4;color:#161616}
+.rbs__s{color:#c50725}
+.rbs__n{color:#161616}
+.rbs__l--own{color:#5c6370}
+.rbs--none{color:#757b85}
+
+</style><script>document.addEventListener('error',function(e){var i=e.target;if(i&&i.tagName==='IMG'&&i.hasAttribute('data-poster'))i.hidden=true;},true);
+document.addEventListener('click',function(e){var b=e.target.closest('[data-rl]');if(!b)return;var v=document.getElementById(b.getAttribute('aria-controls'));if(!v)return;var d=Math.max(160,Math.round(v.clientWidth*0.86));v.scrollBy({left:b.getAttribute('data-rl')==='next'?d:-d,behavior:'smooth'});});</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Animedia","url":"https://animedia.space/","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://animedia.space/search/?q={search_term_string}"},"query-input":"required name=search_term_string"}}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://animedia.space/"},{"@type":"ListItem","position":2,"name":"catalog","item":"https://animedia.space/catalog/"}]}</script></head>
+<body><a class="skip" href="#main">Перейти к содержимому</a>
+<div class="zs">
+<header class="zhd">
+<div class="zhd__in">
+<a class="zhd__logo" href="/">Animedia</a>
+<nav class="zhd__n" aria-label="Разделы"><a href="/">Главная</a><a href="/catalog/" aria-current="page">Каталог аниме</a><a href="/new/">Новые эпизоды</a><a href="/schedule/">Расписание</a><a href="/collections/">Подборки</a></nav>
+<form class="zhd__s" action="/search/" method="get" role="search">
+<label class="vh" for="q">Поиск по каталогу аниме</label>
+<input id="q" name="q" placeholder="Название аниме">
+<button type="submit">Найти</button></form>
+</div>
+</header>
+<div class="zmain">
+<div class="zwrap"><div class="ztop"><div class="ztop__b"><a href="/catalog/?kind=Аниме">Аниме</a></div></div>
+<main id="main"><div class="zwrap"><h1 class="zh">Весь каталог</h1><p class="zsub">Найдено 7423 записей · страница 1 из 155</p><div class="zl"><a class="zr" href="/title/009-1/"><span class="zr__p"><span class="zr__none"><b>0</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/01927e18-0e9e-7319-91b5-b8dd8be5a6a9.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">009-1</span><span class="zr__m">Аниме · 2006 · Япония · аниме · боевик</span><span class="zr__d">Шпионка-киборг Милен Хоффман с кодовым именем 009-1 живёт в мире, где уже 140 лет идёт война между Западным и Восточным блоком. Вместе с другими агентами Милен выполняет различные задания руководства, всё глубже погружаясь в атмосферу хаоса и обмана.</span><span class="zr__r"><span>IMDb <i>6.4</i></span></span></span></a><a class="zr" href="/title/10-zhizney-2024/"><span class="zr__p"><span class="zr__none"><b>1</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/01915218-d7d6-78ff-a760-e45018c05bed.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">10 жизней (2024)</span><span class="zr__m">Аниме · 2024 · Великобритания · западный контент · комедия</span><span class="zr__d">Все прекрасно знают, что у котов девять жизней. А еще говорят, что коты ленивые, капризные и довольно агрессивны к окружающим. И все-таки даже самые заносчивые из них просто душки по сравнению с пушистой бестией по имени Беккет. Но его будни скоро изменятся. Притом, целых десять раз! Коту предстоит побывать в шкуре совершенно разных животных, чтобы, наконец, начать ценить свою собственную жизнь.</span><span class="zr__r"><span>Кинопоиск <b>7.879</b></span><span>IMDb <i>6</i></span></span></span></a><a class="zr" href="/title/12-let-bienie-malenkogo-serdca/"><span class="zr__p"><span class="zr__none"><b>1</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/01917ed6-94a7-7585-a9c8-eed39de149d0.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">12 лет: Биение маленького сердца</span><span class="zr__m">Аниме · 2016 · Япония · аниме · комедия</span><span class="zr__d">История 12-летних подруг-школьниц, которые входят в новый период своей жизни, наполненный романтикой и чувствами к противоположному полу.</span><span class="zr__r"><span>IMDb <i>6.1</i></span></span></span></a><a class="zr" href="/title/1-2-ray/"><span class="zr__p"><span class="zr__none"><b>1</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/01921291-a956-7820-8ea0-b5afec099941.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">1+2=Рай</span><span class="zr__m">Аниме · 1990 · Япония · аниме · комедия</span><span class="zr__d">Студент-медик Юсукэ собирается стать гинекологом, вот только он панически боится женщин, а при близком контакте и вовсе впадает в панику. Чтобы излечить парня, его отец временно уезжает, подстроив так, что в одном доме с Юсукэ селятся две невероятно сексапильные и темпераментные сестры-близняшки.</span><span class="zr__r"><span>IMDb <i>4.9</i></span></span></span></a><a class="zr" href="/title/1999-otdel-protivodeystviya-okkultizmu/"><span class="zr__p"><span class="zr__none"><b>1</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/019fc72d-4296-78c2-8e4e-84e518825e46.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">1999! Отдел противодействия оккультизму</span><span class="zr__m">Аниме · 2026 · Япония · комедия · аниме</span><span class="zr__d">Дверь в глубине Лапласского вычислительного центра захлопывается за Маркус раньше, чем застенчивая девушка успевает понять, почему её привели в отдел. Из-за нелепой путаницы человека, которому трудно громко заговорить даже перед несколькими людьми, назначают руководителем Отдела противодействия оккультным происшествиям — подразделения, собранного из самых непредсказуемых арканистов организации. В 1 сезоне ей приходится распределять задания между Регулус, Медисин Покет и другими сотрудниками, чьи способности полезны лишь до тех пор, пока личные привычки не превращают простое расследование в новый инцидент. Первая же проверка показывает, что кабинетная должность не спасает от опасности: ненадёжные воспоминания, странные артефакты и последствия аномалий требуют решений быстрее, чем Маркус успевает преодолеть волнение. Новый отдел живёт по хаотичному ритму, где авторитет нельзя получить одной табличкой на двери, а попытка навести порядок часто заканчивается ещё большей неразберихой. Чем больше команда ошибается, тем яснее ставка: Маркус должна не стать самой громкой, а научиться удерживать рядом людей, способных справиться с любой угрозой, если сначала они не поссорятся друг с другом.</span></span></a><a class="zr" href="/title/22-7/"><span class="zr__p"><span class="zr__none"><b>2</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/0192524b-1149-7a25-858d-d3a0ddea6fb8.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">22/7</span><span class="zr__m">Аниме · 2020 · аниме · музыка</span><span class="zr__d">Однажды Миу Такигава получает письмо, в котором говорится, что она была выбрана для участия в новом проекте продюсерского агенства. Миу с недоверием отнеслась к письму, но всё же решила прийти. На месте она познакомилась ещё с семью девушками, приехавшими на кастинг. Как оказалось, все они были выбраны загадочной «Стеной» для создания айдолов нового типа и совсем скоро должны дебютировать при участии мейджор-лейбла. Девочки будут вместе учиться петь и танцевать, а также выполнять всё, что прикажет им «Стена».</span></span></a><a class="zr" href="/title/24-y-okrug-tokio/"><span class="zr__p"><span class="zr__none"><b>2</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/01917ea4-87a6-705c-8ba5-57d4e94c7ea9.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">24-й округ Токио</span><span class="zr__m">Аниме · 2022 · Япония · аниме · боевик</span><span class="zr__d">Парни Ран, Сюта и Коки дружат с детства, и все трое выросли в одном округе Токио. Однажды после странного происшествия у них одновременно начинают звонить телефоны, а таинственный голос в трубке призывает их «выбрать будущее».</span><span class="zr__r"><span>IMDb <i>6.1</i></span></span></span></a><a class="zr" href="/title/3000-mil-v-poiskah-materi/"><span class="zr__p"><span class="zr__none"><b>3</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/019865a6-a78e-797a-a68f-7e26633360c1.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">3000 миль в поисках матери</span><span class="zr__m">Аниме · 1976 · аниме · драма</span></span></a><a class="zr" href="/title/35-yy-otryad-antimagicheskoy-akademii/"><span class="zr__p"><span class="zr__none"><b>3</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/0191513d-5f2b-7b64-a75f-0b46b6ac3dc3.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">35-ый отряд Антимагической академии</span><span class="zr__m">Аниме · 2015 · Япония · аниме · боевик</span><span class="zr__d">Добро пожаловать в «Антимагическую академию»! Её ученики выслеживают и убивают, уничтожают или иным образом обезвреживают магические артефакты и тех, кто практикует магию. 35-е экспериментальное подразделение — это группа профессионалов. Каждый член является специалистом в определенной области, и группа может стать величайшей командой, которая когда-либо существовала.</span><span class="zr__r"><span>IMDb <i>5.3</i></span></span></span></a><a class="zr" href="/title/3x3-glaza/"><span class="zr__p"><span class="zr__none"><b>3</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/0192302c-7338-7864-8f9a-507989a98a3c.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">3x3 глаза</span><span class="zr__m">Аниме · 1991 · Япония · аниме · боевик</span><span class="zr__d">Жизнь обычного школьника Якумо Фудзии переворачивается с ног на голову, когда он сталкивается с последним представителем расы трёхглазых демонов. Чтобы спасти жизнь Якумо, демон поглощает его душу и делает своим бессмертным рабом. Вместе они отправляются в полное опасностей путешествие.</span><span class="zr__r"><span>IMDb <i>7.3</i></span></span></span></a><a class="zr" href="/title/3x3-glaza-skazanie-seymy/"><span class="zr__p"><span class="zr__none"><b>3</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/0191beda-c77f-78ab-99f6-61a7902b9f74.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">3x3 глаза: Сказание Сэймы</span><span class="zr__m">Аниме · 1995 · Япония · аниме · боевик</span><span class="zr__d">Четыре года Якумо Фудзии упорно тренировался и разыскивал пропавшую Паи. Но когда поиски увенчались успехом, выяснилось, что Паи лишилась памяти. Единственный способ вернуть утраченные воспоминания — отправиться в Святую землю, где обитает раса бессмертных.</span><span class="zr__r"><span>IMDb <i>7.1</i></span></span></span></a><a class="zr" href="/title/5-santimetrov-v-sekundu-2/"><span class="zr__p"><span class="zr__none"><b>5</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/01928897-9f46-774c-83a8-94e0e8661527.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">5 сантиметров в секунду</span><span class="zr__m">Аниме · 2007 · Япония · аниме · западный контент</span><span class="zr__d">Три истории из жизни Такаки Тоно, которые начинаются в Японии в середине 1990-х годов.</span><span class="zr__r"><span>IMDb <i>7.4</i></span></span></span></a><a class="zr" href="/title/663114/"><span class="zr__p"><span class="zr__none"><b>6</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/0195593f-ca8a-7367-93fa-f78bc5178bab.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">663114</span><span class="zr__m">Аниме · 2011 · аниме · фэнтези</span><span class="zr__d">Короткий, но сильный монолог шестидесятишестилетней цикады. Насекомое проводит параллели между катастрофами Хиросимы и Фукусимы, ставя фундаментальный вопрос о будущем нашей планеты. Шестьдесят шесть — это число лет с тех пор, как Хиросима и Нагасаки были уничтожены «Толстяком» и «Малышом». 3/11 — дата землетрясения в Тохоку 2011 года и последующего катастрофического цунами. Четыре — количество реакторов, испускающих излучение от станции «Фукусима-дайити».</span></span></a><a class="zr" href="/title/7-samuraev/"><span class="zr__p"><span class="zr__none"><b>7</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/01955b20-955c-7c3a-904d-bace241b9133.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">7 самураев</span><span class="zr__m">Аниме · 2004 · аниме · исторический</span><span class="zr__d">Альтернативная реальность, далекое будущее Японии. Войны механизированных самураев сменяет шаткая эпоха торговли и жалкого мира. Лишь ставшие никому не нужными механизированные подразделения самураев остаются не у дел. Озлобленные на весь мир, они сбиваются в банды и терроризируют не имеющих возможность сопротивляться селян, собирая с них дань. Под угрозой голодной смерти или уничтожения от рук бывших военных, доведенные до полного отчаяния селяне вынуждены сделать рискованный выбор — нанять самураев для защиты. Не имея ни денег, ни какого-то либо имущества, которым можно отплатить наемникам, они полностью полагаются на чутье своей жрицы — Кирары [キララ]. Отправившись в город, та попадает в очень опасную историю, которая станет тем последним толчком, от которого и начнется настоящее путешествие. Никто не ведает, чем завершится это противостояние крестьян глухой деревушки и Бандитов — для каждого из них в отдельности, и всей страны в целом.</span></span></a><a class="zr" href="/title/7-semyan/"><span class="zr__p"><span class="zr__none"><b>7</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/01917e96-c055-7adc-b64e-dc20893eff2d.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">7 семян</span><span class="zr__m">Аниме · 2019 · Япония · аниме · боевик</span><span class="zr__d">В ближайшем будущем гигантский метеорит столкнулся с Землёй. Всё живое, включая человечество, погибло. Правительство предвидело подобный исход, поэтому приняло меры для противодействия наихудшему сценарию. Так был создан проект «7 семян», в котором пять групп из семи юношей и девушек были тщательно отобраны и распределены по командам (весна, лето A, лето Б, осень и зима). Затем каждый участник был погружен в криогенный сон. Теперь очнувшиеся в постапокалиптическом мире люди должны научиться жить в новых условиях.</span><span class="zr__r"><span>IMDb <i>6.3</i></span></span></span></a><a class="zr" href="/title/7-semyan-vtoroy-sezon/"><span class="zr__p"><span class="zr__none"><b>7</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/01926341-6ac7-795d-b36a-28d18fe7633f.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">7 семян (второй сезон)</span><span class="zr__m">Аниме · 2020 · аниме · драма</span></span></a><a class="zr" href="/title/91-den/"><span class="zr__p"><span class="zr__none"><b>9</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/019174c2-da11-7445-b5b4-1d073bf4fb17.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">91 день</span><span class="zr__m">Аниме · 2016 · Япония · аниме · боевик</span><span class="zr__d">Времена «сухого закона». На глазах мальчика Анджело бандиты убивают всю его семью. Уехав из родных мест с мыслью о мести, Анджело берёт себе имя Авилио и начинает оттачивать необходимые навыки, чтобы покарать мафиозную семью Ванетти, виновную в смерти его родных. Спустя 7 лет Авилио начинает осуществление своего плана, но для начала необходимо втереться в доверие к Неро Ванетти — сыну главы клана.</span><span class="zr__r"><span>IMDb <i>7.6</i></span></span></span></a><a class="zr" href="/title/91-den-den-13/"><span class="zr__p"><span class="zr__none"><b>9</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/01955b65-1c92-78e4-b47b-a010fcfa780f.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">91 день: День 13</span><span class="zr__m">Аниме · 2017 · аниме · боевик</span><span class="zr__d">Эпизод «День 13» состоит из трёх историй. Первая — «Опасности времени» (ориг. Toki no Asase) — покажет случай из детства Неро и Ванно, когда они уговаривают Фрате сбежать с ними с обедни посмотреть цирк. Вторая — «Любая возможность» (ориг. Subete no Kinou) — расскажет о встрече Ганзо с молодым человеком по имени Винсент, который просит Ганзо о помощи. В третьей истории — «До завтра, завтра» (ориг. Ashita, Mata Ashita) — Авилио присматривает за заболевшим Неро, когда они возвращаются в Лоулесс.</span></span></a><a class="zr" href="/title/91-den-korotkaya-svecha/"><span class="zr__p"><span class="zr__none"><b>9</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/01955b60-8add-742b-9b33-4827b7895401.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">91 день: Короткая свеча</span><span class="zr__m">Аниме · 2016 · аниме · боевик</span><span class="zr__d">Пересказ первых семи эпизодов аниме-сериала «[91 Days]».</span></span></a><a class="zr" href="/title/91-izumlenie/"><span class="zr__p"><span class="zr__none"><b>9</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/01955b4e-3865-7a39-8720-abd42f49424d.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">91 изумление</span><span class="zr__m">Аниме · 2016 · аниме · исторический</span><span class="zr__d">Серия короткометражек, выпущенных на DVD и Blu-Ray дисках. Сюжет представляет Авилио, Неро, а иногда и Кольтео в различных комедийных ситуациях.</span></span></a><a class="zr" href="/title/a3-vesna-i-leto/"><span class="zr__p"><span class="zr__none"><b>A</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/0196df22-a5c6-74c3-9811-2163a11c695f.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">A3! Весна и лето</span><span class="zr__m">Аниме · 2020 · аниме · драма</span></span></a><a class="zr" href="/title/a3-osen-i-zima/"><span class="zr__p"><span class="zr__none"><b>A</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/0196df22-a83a-7c66-8303-088fb02bb5a3.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">A3! Осень и зима</span><span class="zr__m">Аниме · 2020 · аниме · драма</span></span></a><a class="zr" href="/title/a-i-c-o-voploschenie/"><span class="zr__p"><span class="zr__none"><b>A</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/01917006-f48c-7b75-99df-d1f8791a84d3.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">A.I.C.O. Воплощение</span><span class="zr__m">Аниме · 2018 · Япония · аниме · боевик</span><span class="zr__d">Недалекое будущее. Происходит событие, позже получившее название Взрыв, в результате чего зарождается некая агрессивная форма жизни, быстро распространяется, угрожая самому существованию человечества. Спасут мир, разумеется, японские школьники. Старшекласснице, потерявшей родителей во время Взрыва, нужно пробраться в самое сердце научной лаборатории, где произошел инцидент, чтобы узнать правду о самой себе и остановить всепоглощающую материю.</span><span class="zr__r"><span>IMDb <i>6.3</i></span></span></span></a><a class="zr" href="/title/and2-and2/"><span class="zr__p"><span class="zr__none"><b>A</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/01981846-ea62-7546-b8d2-917ebfccb319.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">And2! And2!</span><span class="zr__m">Аниме · 2018 · аниме · музыка</span></span></a><a class="zr" href="/title/arp-propusk-v-zakulise/"><span class="zr__p"><span class="zr__none"><b>A</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/0192524b-25c8-75c8-b679-42af43daa717.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">ARP. Пропуск в закулисье</span><span class="zr__m">Аниме · 2020 · аниме · музыка</span><span class="zr__d">Четверо учеников музыкальной школы: Дайя Комото, Леон Фудзивара, Рэйдзи Хида и Синдзи Кано организовали музыкальную группу. Каждый обладает удивительным голосом, что делает их коллектив по-настоящему уникальным и узнаваемым. А ещё они пытаются решить самый главный для себя вопрос: кто из них лидер группы? Кто главное лицо ARP? Смогут ли четверо невероятно талантливых людей и дальше уверенно выступать на одной сцене? Продолжат ли радовать многочисленных поклонников новыми песнями? Или же творческие разногласия поставят крест на их музыкальной карьере?</span></span></a><a class="zr" href="/title/charisma-sabira/"><span class="zr__p"><span class="zr__none"><b>C</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/019f310a-2799-78c2-b395-8aa7e39a9517.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Charisma Sabira</span><span class="zr__m">Аниме · 2025 · Япония · аниме · музыка</span></span></a><a class="zr" href="/title/chou-charisma-bon-odori/"><span class="zr__p"><span class="zr__none"><b>C</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/019f3109-9e4b-78c2-a353-280fc18ac1b0.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Chou Charisma Bon-Odori</span><span class="zr__m">Аниме · 2025 · Япония · аниме · музыка</span></span></a><a class="zr" href="/title/complex-princess/"><span class="zr__p"><span class="zr__none"><b>C</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/019b0d84-624e-7a5c-835c-25010866710f.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Complex♡Princess</span><span class="zr__m">Аниме · 2024 · Япония · аниме · музыка</span></span></a><a class="zr" href="/title/devil-may-cry/"><span class="zr__p"><span class="zr__none"><b>D</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/0195faaa-2969-7646-a217-def6cb73c7a4.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Devil may cry</span><span class="zr__m">Аниме · 2025 · США · аниме · западный контент</span><span class="zr__r"><span>IMDb <i>7.5</i></span></span></span></a><a class="zr" href="/title/ezhemecyachnik-vcyachiny/"><span class="zr__p"><span class="zr__none"><b>E</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/0198e90f-6357-7861-9fde-341aba1e7dbb.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Eжeмecячник вcячины</span><span class="zr__m">Аниме · 2025 · аниме</span></span></a><a class="zr" href="/title/genshin-impact-ballada-o-lunnoy-nochi/"><span class="zr__p"><span class="zr__none"><b>G</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/019c9f9d-5130-77a6-8f09-4ed587efdf9c.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Genshin Impact: Баллада о лунной ночи</span><span class="zr__m">Аниме · 2025 · Япония · дунхуа · фэнтези</span><span class="zr__d">Рекламный ролик, демонстрирующий состав персонажей Nod-Krai в Genshin Impact.</span></span></a><a class="zr" href="/title/genshin-impact-bozhi-granicy/"><span class="zr__p"><span class="zr__none"><b>G</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/019fa3ca-2a82-78c2-8af4-66ee34dd3846.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Genshin Impact: Божьи границы</span><span class="zr__m">Аниме · 2025 · Япония · дунхуа · фэнтези</span><span class="zr__d">Рекламный ролик, демонстрирующий четыре оттенка Небесных принципов из Genshin Impact.</span></span></a><a class="zr" href="/title/genshin-impact-goryaschaya-v-zole-pesn/"><span class="zr__p"><span class="zr__none"><b>G</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/01919ff6-d63e-7e33-bcf8-4dd3b3e7986d.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Genshin Impact: Горящая в золе песнь</span><span class="zr__m">Аниме · 2024 · аниме</span><span class="zr__d">Анимационный короткометражный фильм, демонстрирующий предысторию Арлекино из компьютерной игры Genshin Impact.</span></span></a><a class="zr" href="/title/genshin-impact-zvezdnaya-odisseya/"><span class="zr__p"><span class="zr__none"><b>G</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/019fa3c9-60ee-78c2-baef-e84c5e657b48.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Genshin Impact: Звёздная Одиссея</span><span class="zr__m">Аниме · 2025 · Япония · дунхуа · фэнтези</span><span class="zr__d">Анимационный короткометражный фильм, демонстрирующий предысторию Скирк из компьютерной игры Genshin Impact.</span></span></a><a class="zr" href="/title/genshin-impact-lacco-v-zimney-nochi/"><span class="zr__p"><span class="zr__none"><b>G</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/019cb882-fe64-7c02-b78f-a9b722036d0e.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Genshin Impact: Лаццо в зимней ночи</span><span class="zr__m">Аниме · 2022 · Япония · дунхуа · фэнтези</span><span class="zr__d">Рекламный видеоролик, демонстрирующий последствия событий из сюжетной линии региона Инадзумы со стороны одиннадцати Предвестников Фатуи из компьютерной игры Genshin Impact.</span></span></a><a class="zr" href="/title/genshin-impact-neizbrannyy-put/"><span class="zr__p"><span class="zr__none"><b>G</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/019cb87e-5077-7138-960b-9bd5dadc2f58.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Genshin Impact: Неизбранный путь</span><span class="zr__m">Аниме · 2024 · Япония · дунхуа · драма</span><span class="zr__d">Анимационный ролик о близнецах Итэре и Люмин из компьютерной игры Genshin Impact.</span></span></a><a class="zr" href="/title/goat-mechtay-po-krupnomu/"><span class="zr__p"><span class="zr__none"><b>G</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/019c603e-8260-79e9-aae0-929ec6898fd9.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">GOAT: Мечтай по-крупному</span><span class="zr__m">Аниме · 2026 · США · западный контент · мультфильм</span><span class="zr__d">Козёл Уилл Харрис получает уникальный шанс стать профессионалом в звероболе, контактном виде спорта, где доминируют самые большие и сильные животные. Его новые партнёры по команде не в восторге от того, что в их составе оказалась такая мелочь, но Уилл намерен изменить спорт раз и навсегда.</span><span class="zr__r"><span>Кинопоиск <b>7.393</b></span><span>IMDb <i>6.9</i></span></span></span></a><a class="zr" href="/title/h2o-sledy-na-peske/"><span class="zr__p"><span class="zr__none"><b>H</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/0191ebed-a528-7494-a0d9-ceee949d878f.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">H2O: Следы на песке</span><span class="zr__m">Аниме · 2008 · Япония · аниме · драма</span><span class="zr__d">У 14-летнего Такумы Хиросэ трагически погибает мать, а сам мальчик практически слепнет от перенесённого ужаса утраты. Отец отправляет его к своему брату в деревню, полагая, что смена обстановки поможет ему пережить горе. Поправив своё здоровье и познакомившись с новым классом, где теперь ему предстояло учиться, Такума понимает, что деревенская жизнь намного сложнее, чем это кажется на первый взгляд. Ученики, возглавляемые «королевой школы», травят ни в чём не повинную Хаями Кохинату. Такума проникается симпатией к девушке, однако вскоре узнаёт, что к смерти его матери причастны люди из клана Кохинаты, после чего с ним случается ещё один нервный срыв.</span></span></a><a class="zr" href="/title/hamster-gretel/"><span class="zr__p"><span class="zr__none"><b>H</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/0191ddc2-eb42-7197-8518-81bdfeeb3eb8.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Hamster &amp; Gretel</span><span class="zr__m">Аниме · 2022 · США · западный контент · боевик</span><span class="zr__r"><span>IMDb <i>6.8</i></span></span></span></a><a class="zr" href="/title/hu-he-yao-shi-lu/"><span class="zr__p"><span class="zr__none"><b>H</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/019464b4-2d57-7968-909f-ba30de76668e.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Hu He Yao Shi Lu</span><span class="zr__m">Аниме · 2024 · дунхуа · аниме</span></span></a><a class="zr" href="/title/id-vtorzhenie/"><span class="zr__p"><span class="zr__none"><b>I</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/019152a5-e2d1-7096-8212-8e122b0425d5.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">ID: Вторжение</span><span class="zr__m">Аниме · 2020 · Япония · аниме · детектив</span><span class="zr__d">Организация «Кура» расследует преступления, используя специальную систему, способную чувствовать намерение убийства. Детектив Сакаидо становится пилотом системы: он проникает в подсознание преступников, чтобы найти зацепки для следствия.</span><span class="zr__r"><span>IMDb <i>7.5</i></span></span></span></a><a class="zr" href="/title/iii/"><span class="zr__p"><span class="zr__none"><b>I</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/019b0d82-7dbf-7e0c-a27d-c4b56826fb64.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">III</span><span class="zr__m">Аниме · 2024 · Япония · аниме · музыка</span></span></a><a class="zr" href="/title/kaidan-resutoran/"><span class="zr__p"><span class="zr__none"><b>K</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/0191513f-41eb-79a2-94a8-8e0f164e1299.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Kaidan Resutoran</span><span class="zr__m">Аниме · 2009 · Япония · аниме · детектив</span><span class="zr__r"><span>IMDb <i>7.2</i></span></span></span></a><a class="zr" href="/title/kengan-ashura-season-2-part-2/"><span class="zr__p"><span class="zr__none"><b>K</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/0191b48d-c9a4-7f88-86f5-0ecaef6386e3.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Kengan Ashura Season 2 Part 2</span><span class="zr__m">Аниме · 2024 · аниме · боевик</span><span class="zr__d">Связав воедино нити своего прошлого и настоящего, Ома Токита полностью освобождает потаённые секреты боевого искусства стиля Нико и готовится принять последний вызов на пути к обретению чемпионского статуса на турнире «Кэнган: Жизнь или смерть». Прочие воины, как и Ома, прошедшие через многочисленные схватки, уже начали подготовку своих боевых стилей для финального сражения друг против друга. Остаётся нерешённым последний вопрос: кому суждено подняться на вершину мира единоборств, а кому — прямой путь в ад?</span></span></a><a class="zr" href="/title/m3-chernaya-stal/"><span class="zr__p"><span class="zr__none"><b>M</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/0191f112-fddd-798d-8e08-9949af9f3a32.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">M3: Чёрная сталь</span><span class="zr__m">Аниме · 2014 · аниме · боевик</span><span class="zr__d">Непроглядный, бесконечный мрак вокруг. Место, в котором тьма поглотила и забрала все, известное теперь как Царство Мрака. Отчаяние и хаос человечества здесь обретают форму странных существ, которых называют Искажённые. Научная экспедиция исследует Царство Мрака, зона и обитатели которого поглощают человеческие души. Для этого ученые сформировали учебный отряд из абсолютно разных юношей и девушек, практически ничем не связанных между собой. Или так только кажется на первый взгляд? Сложные пересечения между надвигающейся угрозой в настоящем и узлами судьбы прошлого. Сможет ли эта восьмерка ребят, призванных противостоять царству мрака, найти путь в светлое будущее?</span></span></a><a class="zr" href="/title/mayonaka-no-doa-stay-with-me-houshou-marine-cover/"><span class="zr__p"><span class="zr__none"><b>M</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/019b0d93-aa9b-72fd-9292-4703bf2b7efa.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Mayonaka no Doa: Stay With Me (Houshou Marine Cover)</span><span class="zr__m">Аниме · 2023 · Япония · аниме · музыка</span></span></a><a class="zr" href="/title/megumi-no-hito-houshou-marine-cover/"><span class="zr__p"><span class="zr__none"><b>M</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/019b0d8c-0699-79a7-9e9c-6e8a7ad9c992.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Megumi no Hito (Houshou Marine Cover)</span><span class="zr__m">Аниме · 2023 · Япония · аниме · музыка</span></span></a><a class="zr" href="/title/mezzo-igra-so-smertyu/"><span class="zr__p"><span class="zr__none"><b>M</b>постер не открылся</span><img class="zr__img" src="https://poster.cdnvideohub.com/0192630e-a67c-7847-8f63-531d1fe14f4d.webp" alt="" loading="lazy" width="184" height="276" data-poster></span><span><span class="zr__t">Mezzo: Игра со смертью</span><span class="zr__m">Аниме · 2004 · Япония · аниме · боевик</span><span class="zr__d">Микура, Курокава и Харада - троица, составляющая Детективное Спецагентство. Непоседа Микура вечно рвется в бой, припанкованный Харада планирует операции, а бывший полицейский Курокава считает себя руководителем всей шаражки.Они возьмутся за самое головоломное и опасное дело, от которого в ужасе бегут все частные детективы - лишь бы работа была хорошо оплачена!</span></span></a></div><nav class="zpg" aria-label="Страницы"><span aria-current="page">1</span><a href="/catalog/?page=2">2</a><a href="/catalog/?page=3">3</a><em>…</em><a href="/catalog/?page=155">155</a></nav></div></main>
+<footer class="zft">
+<span>Animedia · тестовая витрина, закрыта от индексации</span>
+<span class="zvb">Template: animedia 1.2.0 · b023bd50</span>
+</footer></div></div></div></body></html>

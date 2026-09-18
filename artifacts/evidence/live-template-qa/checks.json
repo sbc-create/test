@@ -1,0 +1,1234 @@
+[
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "template_version",
+    "url": "https://lordserial33.biz/__template_version",
+    "ok": true,
+    "detail": "status=200 err=None",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "route:home",
+    "url": "https://lordserial33.biz/",
+    "ok": true,
+    "detail": "status=200 title='Lordserial — фильмы и сериалы онлайн'",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "route:catalog",
+    "url": "https://lordserial33.biz/catalog/",
+    "ok": true,
+    "detail": "status=200 title='Каталог — Lordserial'",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "route:collections",
+    "url": "https://lordserial33.biz/collections/",
+    "ok": true,
+    "detail": "status=200 title='Подборки — Lordserial'",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "route:genres",
+    "url": "https://lordserial33.biz/genres/",
+    "ok": false,
+    "detail": "status=404 title='Страница не найдена — Lordserial'",
+    "status": 404
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "route:countries",
+    "url": "https://lordserial33.biz/countries/",
+    "ok": false,
+    "detail": "status=404 title='Страница не найдена — Lordserial'",
+    "status": 404
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "route:search_page",
+    "url": "https://lordserial33.biz/search/",
+    "ok": true,
+    "detail": "status=200 title='Поиск — Lordserial'",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "route:robots",
+    "url": "https://lordserial33.biz/robots.txt",
+    "ok": true,
+    "detail": "status=200 title=''",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "route:not_found",
+    "url": "https://lordserial33.biz/__no_such_page_live_qa_404__/",
+    "ok": true,
+    "detail": "status=404 title='Страница не найдена — Lordserial'",
+    "status": 404
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "route:title",
+    "url": "https://lordserial33.biz/title/007-doroga-k-millionu/",
+    "ok": true,
+    "detail": "status=200 player=True",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "seo:x-robots",
+    "url": "https://lordserial33.biz/",
+    "ok": true,
+    "detail": "X-Robots-Tag=noindex, nofollow",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "seo:meta-robots",
+    "url": "https://lordserial33.biz/",
+    "ok": true,
+    "detail": "meta=noindex, nofollow",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "seo:robots.txt",
+    "url": "https://lordserial33.biz/robots.txt",
+    "ok": true,
+    "detail": "User-agent: *\nDisallow: /",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "search:plain",
+    "url": "https://lordserial33.biz/search/?q=matrix",
+    "ok": true,
+    "detail": "status=200 title_links=0",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "search:cyrillic",
+    "url": "https://lordserial33.biz/search/?q=%D0%BC%D0%B0%D1%82%D1%80%D0%B8%D1%86%D0%B0",
+    "ok": true,
+    "detail": "status=200 title_links=8",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "search:partial",
+    "url": "https://lordserial33.biz/search/?q=%D0%BC%D0%B0%D1%82",
+    "ok": true,
+    "detail": "status=200 title_links=120",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "search:empty",
+    "url": "https://lordserial33.biz/search/?q=",
+    "ok": true,
+    "detail": "status=200 title_links=0",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "search:missing",
+    "url": "https://lordserial33.biz/search/?q=zzzqxqnonexistent999",
+    "ok": true,
+    "detail": "status=200 title_links=0",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "filter:sort_year",
+    "url": "https://lordserial33.biz/catalog/?sort=year",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "filter:sort_rating",
+    "url": "https://lordserial33.biz/catalog/?sort=rating",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "filter:sort_new",
+    "url": "https://lordserial33.biz/catalog/?sort=new",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "filter:page2",
+    "url": "https://lordserial33.biz/catalog/?page=2",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "filter:page3",
+    "url": "https://lordserial33.biz/catalog/page/3/",
+    "ok": false,
+    "detail": "status=404",
+    "status": 404
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "filter:kind_film",
+    "url": "https://lordserial33.biz/catalog/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "filter:kind_serial",
+    "url": "https://lordserial33.biz/catalog/?kind=%D0%A1%D0%B5%D1%80%D0%B8%D0%B0%D0%BB",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "nav_link",
+    "url": "https://lordserial33.biz/new/",
+    "ok": true,
+    "detail": "text='Новинки' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "nav_link",
+    "url": "https://lordserial33.biz/catalog/?kind=Фильм",
+    "ok": false,
+    "detail": "text='Фильмы' status=None",
+    "status": null
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "nav_link",
+    "url": "https://lordserial33.biz/catalog/?kind=Сериал",
+    "ok": false,
+    "detail": "text='Сериалы' status=None",
+    "status": null
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "nav_link",
+    "url": "https://lordserial33.biz/catalog/?kind=Мультфильм",
+    "ok": false,
+    "detail": "text='Мультфильмы' status=None",
+    "status": null
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "nav_link",
+    "url": "https://lordserial33.biz/catalog/",
+    "ok": true,
+    "detail": "text='Каталог' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "nav_link",
+    "url": "https://lordserial33.biz/title/v-poiskah-dzheka-charltona/",
+    "ok": true,
+    "detail": "text='Впостер не открылсяФильмВ поисках Джека Чарльтона2020КП —IMDb —' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://lordserial33.biz",
+    "name": "internal_links_sample",
+    "url": "https://lordserial33.biz/",
+    "ok": false,
+    "detail": "checked=40 bad=3",
+    "status": null
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "template_version",
+    "url": "https://animedia.space/__template_version",
+    "ok": true,
+    "detail": "status=200 err=None",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "route:home",
+    "url": "https://animedia.space/",
+    "ok": true,
+    "detail": "status=200 title='Animedia — аниме-портал'",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "route:catalog",
+    "url": "https://animedia.space/catalog/",
+    "ok": true,
+    "detail": "status=200 title='Весь каталог — Animedia'",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "route:collections",
+    "url": "https://animedia.space/collections/",
+    "ok": true,
+    "detail": "status=200 title='Подборки — Animedia'",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "route:genres",
+    "url": "https://animedia.space/genres/",
+    "ok": false,
+    "detail": "status=404 title='Страница не найдена — Animedia'",
+    "status": 404
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "route:countries",
+    "url": "https://animedia.space/countries/",
+    "ok": false,
+    "detail": "status=404 title='Страница не найдена — Animedia'",
+    "status": 404
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "route:search_page",
+    "url": "https://animedia.space/search/",
+    "ok": true,
+    "detail": "status=200 title='Поиск — Animedia'",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "route:robots",
+    "url": "https://animedia.space/robots.txt",
+    "ok": true,
+    "detail": "status=200 title=''",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "route:not_found",
+    "url": "https://animedia.space/__no_such_page_live_qa_404__/",
+    "ok": true,
+    "detail": "status=404 title='Страница не найдена — Animedia'",
+    "status": 404
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "route:title",
+    "url": "https://animedia.space/title/009-1/",
+    "ok": true,
+    "detail": "status=200 player=True",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "seo:x-robots",
+    "url": "https://animedia.space/",
+    "ok": true,
+    "detail": "X-Robots-Tag=noindex, nofollow",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "seo:meta-robots",
+    "url": "https://animedia.space/",
+    "ok": true,
+    "detail": "meta=noindex, nofollow",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "seo:robots.txt",
+    "url": "https://animedia.space/robots.txt",
+    "ok": true,
+    "detail": "User-agent: *\nDisallow: /",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "search:plain",
+    "url": "https://animedia.space/search/?q=matrix",
+    "ok": true,
+    "detail": "status=200 title_links=0",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "search:cyrillic",
+    "url": "https://animedia.space/search/?q=%D0%BC%D0%B0%D1%82%D1%80%D0%B8%D1%86%D0%B0",
+    "ok": true,
+    "detail": "status=200 title_links=3",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "search:partial",
+    "url": "https://animedia.space/search/?q=%D0%BC%D0%B0%D1%82",
+    "ok": true,
+    "detail": "status=200 title_links=53",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "search:empty",
+    "url": "https://animedia.space/search/?q=",
+    "ok": true,
+    "detail": "status=200 title_links=0",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "search:missing",
+    "url": "https://animedia.space/search/?q=zzzqxqnonexistent999",
+    "ok": true,
+    "detail": "status=200 title_links=0",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "filter:sort_year",
+    "url": "https://animedia.space/catalog/?sort=year",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "filter:sort_rating",
+    "url": "https://animedia.space/catalog/?sort=rating",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "filter:sort_new",
+    "url": "https://animedia.space/catalog/?sort=new",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "filter:page2",
+    "url": "https://animedia.space/catalog/?page=2",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "filter:page3",
+    "url": "https://animedia.space/catalog/page/3/",
+    "ok": false,
+    "detail": "status=404",
+    "status": 404
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "filter:kind_film",
+    "url": "https://animedia.space/catalog/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "filter:kind_serial",
+    "url": "https://animedia.space/catalog/?kind=%D0%A1%D0%B5%D1%80%D0%B8%D0%B0%D0%BB",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "nav_link",
+    "url": "https://animedia.space/catalog/",
+    "ok": true,
+    "detail": "text='Каталог аниме' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "nav_link",
+    "url": "https://animedia.space/new/",
+    "ok": true,
+    "detail": "text='Новые эпизоды' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "nav_link",
+    "url": "https://animedia.space/collections/",
+    "ok": true,
+    "detail": "text='Подборки' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "nav_link",
+    "url": "https://animedia.space/collection/new_episodes/",
+    "ok": true,
+    "detail": "text='Весь раздел' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "nav_link",
+    "url": "https://animedia.space/title/nelyud-film-2-stolknovenie/",
+    "ok": true,
+    "detail": "text='Нпостер не открылсяНелюдь. Фильм 2: СтолкновениеАниме · 2016КП 7.011IMDb 7.8' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "nav_link",
+    "url": "https://animedia.space/title/drakoniy-zhemchug-zet-plan-po-unichtozheniyu-sayyanov-2/",
+    "ok": true,
+    "detail": "text='Дпостер не открылсяДраконий жемчуг Зет: План по уничтожению сайянов 2Аниме · 2010оценки нет' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "nav_link",
+    "url": "https://animedia.space/collection/recently_added/",
+    "ok": true,
+    "detail": "text='Весь раздел' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "nav_link",
+    "url": "https://animedia.space/collection/top_rated/",
+    "ok": true,
+    "detail": "text='Весь раздел' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "nav_link",
+    "url": "https://animedia.space/title/pervyy-shag-novyy-pretendent/",
+    "ok": true,
+    "detail": "text='Ппостер не открылсяПервый шаг: Новый претендентАниме · 2009IMDb 8.8' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "nav_link",
+    "url": "https://animedia.space/title/stena-velikih-voinov/",
+    "ok": true,
+    "detail": "text='Спостер не открылсяСтена великих воиновАниме · 2019КП 8.75IMDb 7.8' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "nav_link",
+    "url": "https://animedia.space/collection/video_available/",
+    "ok": true,
+    "detail": "text='Весь раздел' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.space",
+    "name": "internal_links_sample",
+    "url": "https://animedia.space/",
+    "ok": true,
+    "detail": "checked=40 bad=0",
+    "status": null
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "template_version",
+    "url": "https://animedia.icu/__template_version",
+    "ok": true,
+    "detail": "status=200 err=None",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "route:home",
+    "url": "https://animedia.icu/",
+    "ok": true,
+    "detail": "status=200 title='Animedia — аниме-портал'",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "route:catalog",
+    "url": "https://animedia.icu/catalog/",
+    "ok": true,
+    "detail": "status=200 title='Весь каталог — Animedia'",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "route:collections",
+    "url": "https://animedia.icu/collections/",
+    "ok": true,
+    "detail": "status=200 title='Подборки — Animedia'",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "route:genres",
+    "url": "https://animedia.icu/genres/",
+    "ok": false,
+    "detail": "status=404 title='Страница не найдена — Animedia'",
+    "status": 404
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "route:countries",
+    "url": "https://animedia.icu/countries/",
+    "ok": false,
+    "detail": "status=404 title='Страница не найдена — Animedia'",
+    "status": 404
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "route:search_page",
+    "url": "https://animedia.icu/search/",
+    "ok": true,
+    "detail": "status=200 title='Поиск — Animedia'",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "route:robots",
+    "url": "https://animedia.icu/robots.txt",
+    "ok": true,
+    "detail": "status=200 title=''",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "route:not_found",
+    "url": "https://animedia.icu/__no_such_page_live_qa_404__/",
+    "ok": true,
+    "detail": "status=404 title='Страница не найдена — Animedia'",
+    "status": 404
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "route:title",
+    "url": "https://animedia.icu/title/009-1/",
+    "ok": true,
+    "detail": "status=200 player=True",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "seo:x-robots",
+    "url": "https://animedia.icu/",
+    "ok": true,
+    "detail": "X-Robots-Tag=noindex, nofollow",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "seo:meta-robots",
+    "url": "https://animedia.icu/",
+    "ok": true,
+    "detail": "meta=noindex, nofollow",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "seo:robots.txt",
+    "url": "https://animedia.icu/robots.txt",
+    "ok": true,
+    "detail": "User-agent: *\nDisallow: /",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "search:plain",
+    "url": "https://animedia.icu/search/?q=matrix",
+    "ok": true,
+    "detail": "status=200 title_links=0",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "search:cyrillic",
+    "url": "https://animedia.icu/search/?q=%D0%BC%D0%B0%D1%82%D1%80%D0%B8%D1%86%D0%B0",
+    "ok": true,
+    "detail": "status=200 title_links=3",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "search:partial",
+    "url": "https://animedia.icu/search/?q=%D0%BC%D0%B0%D1%82",
+    "ok": true,
+    "detail": "status=200 title_links=53",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "search:empty",
+    "url": "https://animedia.icu/search/?q=",
+    "ok": true,
+    "detail": "status=200 title_links=0",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "search:missing",
+    "url": "https://animedia.icu/search/?q=zzzqxqnonexistent999",
+    "ok": true,
+    "detail": "status=200 title_links=0",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "filter:sort_year",
+    "url": "https://animedia.icu/catalog/?sort=year",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "filter:sort_rating",
+    "url": "https://animedia.icu/catalog/?sort=rating",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "filter:sort_new",
+    "url": "https://animedia.icu/catalog/?sort=new",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "filter:page2",
+    "url": "https://animedia.icu/catalog/?page=2",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "filter:page3",
+    "url": "https://animedia.icu/catalog/page/3/",
+    "ok": false,
+    "detail": "status=404",
+    "status": 404
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "filter:kind_film",
+    "url": "https://animedia.icu/catalog/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "filter:kind_serial",
+    "url": "https://animedia.icu/catalog/?kind=%D0%A1%D0%B5%D1%80%D0%B8%D0%B0%D0%BB",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "nav_link",
+    "url": "https://animedia.icu/catalog/",
+    "ok": true,
+    "detail": "text='Каталог аниме' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "nav_link",
+    "url": "https://animedia.icu/new/",
+    "ok": true,
+    "detail": "text='Новые эпизоды' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "nav_link",
+    "url": "https://animedia.icu/collections/",
+    "ok": true,
+    "detail": "text='Подборки' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "nav_link",
+    "url": "https://animedia.icu/collection/new_episodes/",
+    "ok": true,
+    "detail": "text='Весь раздел' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "nav_link",
+    "url": "https://animedia.icu/title/nelyud-film-2-stolknovenie/",
+    "ok": true,
+    "detail": "text='Нпостер не открылсяНелюдь. Фильм 2: СтолкновениеАниме · 2016КП 7.011IMDb 7.8' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "nav_link",
+    "url": "https://animedia.icu/title/drakoniy-zhemchug-zet-plan-po-unichtozheniyu-sayyanov-2/",
+    "ok": true,
+    "detail": "text='Дпостер не открылсяДраконий жемчуг Зет: План по уничтожению сайянов 2Аниме · 2010оценки нет' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "nav_link",
+    "url": "https://animedia.icu/collection/recently_added/",
+    "ok": true,
+    "detail": "text='Весь раздел' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "nav_link",
+    "url": "https://animedia.icu/collection/top_rated/",
+    "ok": true,
+    "detail": "text='Весь раздел' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "nav_link",
+    "url": "https://animedia.icu/title/pervyy-shag-novyy-pretendent/",
+    "ok": true,
+    "detail": "text='Ппостер не открылсяПервый шаг: Новый претендентАниме · 2009IMDb 8.8' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "nav_link",
+    "url": "https://animedia.icu/title/stena-velikih-voinov/",
+    "ok": true,
+    "detail": "text='Спостер не открылсяСтена великих воиновАниме · 2019КП 8.75IMDb 7.8' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "nav_link",
+    "url": "https://animedia.icu/collection/video_available/",
+    "ok": true,
+    "detail": "text='Весь раздел' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://animedia.icu",
+    "name": "internal_links_sample",
+    "url": "https://animedia.icu/",
+    "ok": true,
+    "detail": "checked=40 bad=0",
+    "status": null
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "template_version",
+    "url": "https://zonafilm.space/__template_version",
+    "ok": true,
+    "detail": "status=200 err=None",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "route:home",
+    "url": "https://zonafilm.space/",
+    "ok": true,
+    "detail": "status=200 title='Zona — кинопортал'",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "route:catalog",
+    "url": "https://zonafilm.space/catalog/",
+    "ok": true,
+    "detail": "status=200 title='Весь каталог — Zona'",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "route:collections",
+    "url": "https://zonafilm.space/collections/",
+    "ok": true,
+    "detail": "status=200 title='Подборки — Zona'",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "route:genres",
+    "url": "https://zonafilm.space/genres/",
+    "ok": false,
+    "detail": "status=404 title='Страница не найдена — Zona'",
+    "status": 404
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "route:countries",
+    "url": "https://zonafilm.space/countries/",
+    "ok": false,
+    "detail": "status=404 title='Страница не найдена — Zona'",
+    "status": 404
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "route:search_page",
+    "url": "https://zonafilm.space/search/",
+    "ok": true,
+    "detail": "status=200 title='Поиск — Zona'",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "route:robots",
+    "url": "https://zonafilm.space/robots.txt",
+    "ok": true,
+    "detail": "status=200 title=''",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "route:not_found",
+    "url": "https://zonafilm.space/__no_such_page_live_qa_404__/",
+    "ok": true,
+    "detail": "status=404 title='Страница не найдена — Zona'",
+    "status": 404
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "route:title",
+    "url": "https://zonafilm.space/title/007-doroga-k-millionu/",
+    "ok": true,
+    "detail": "status=200 player=True",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "seo:x-robots",
+    "url": "https://zonafilm.space/",
+    "ok": true,
+    "detail": "X-Robots-Tag=noindex, nofollow",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "seo:meta-robots",
+    "url": "https://zonafilm.space/",
+    "ok": true,
+    "detail": "meta=noindex, nofollow",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "seo:robots.txt",
+    "url": "https://zonafilm.space/robots.txt",
+    "ok": true,
+    "detail": "User-agent: *\nDisallow: /",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "search:plain",
+    "url": "https://zonafilm.space/search/?q=matrix",
+    "ok": true,
+    "detail": "status=200 title_links=0",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "search:cyrillic",
+    "url": "https://zonafilm.space/search/?q=%D0%BC%D0%B0%D1%82%D1%80%D0%B8%D1%86%D0%B0",
+    "ok": true,
+    "detail": "status=200 title_links=8",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "search:partial",
+    "url": "https://zonafilm.space/search/?q=%D0%BC%D0%B0%D1%82",
+    "ok": true,
+    "detail": "status=200 title_links=120",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "search:empty",
+    "url": "https://zonafilm.space/search/?q=",
+    "ok": true,
+    "detail": "status=200 title_links=0",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "search:missing",
+    "url": "https://zonafilm.space/search/?q=zzzqxqnonexistent999",
+    "ok": true,
+    "detail": "status=200 title_links=0",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "filter:sort_year",
+    "url": "https://zonafilm.space/catalog/?sort=year",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "filter:sort_rating",
+    "url": "https://zonafilm.space/catalog/?sort=rating",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "filter:sort_new",
+    "url": "https://zonafilm.space/catalog/?sort=new",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "filter:page2",
+    "url": "https://zonafilm.space/catalog/?page=2",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "filter:page3",
+    "url": "https://zonafilm.space/catalog/page/3/",
+    "ok": false,
+    "detail": "status=404",
+    "status": 404
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "filter:kind_film",
+    "url": "https://zonafilm.space/catalog/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "filter:kind_serial",
+    "url": "https://zonafilm.space/catalog/?kind=%D0%A1%D0%B5%D1%80%D0%B8%D0%B0%D0%BB",
+    "ok": true,
+    "detail": "status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "nav_link",
+    "url": "https://zonafilm.space/new/",
+    "ok": true,
+    "detail": "text='Что нового' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "nav_link",
+    "url": "https://zonafilm.space/catalog/?kind=Фильм",
+    "ok": false,
+    "detail": "text='Кино' status=None",
+    "status": null
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "nav_link",
+    "url": "https://zonafilm.space/catalog/?kind=Сериал",
+    "ok": false,
+    "detail": "text='Сериалы' status=None",
+    "status": null
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "nav_link",
+    "url": "https://zonafilm.space/catalog/?kind=Мультфильм",
+    "ok": false,
+    "detail": "text='Анимация' status=None",
+    "status": null
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "nav_link",
+    "url": "https://zonafilm.space/catalog/",
+    "ok": true,
+    "detail": "text='Весь каталог' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "nav_link",
+    "url": "https://zonafilm.space/catalog/?genre=dorama",
+    "ok": true,
+    "detail": "text='дорама' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "nav_link",
+    "url": "https://zonafilm.space/catalog/?genre=west_content",
+    "ok": true,
+    "detail": "text='западный контент' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "nav_link",
+    "url": "https://zonafilm.space/catalog/?genre=drama",
+    "ok": true,
+    "detail": "text='драма' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "nav_link",
+    "url": "https://zonafilm.space/catalog/?genre=comedy",
+    "ok": true,
+    "detail": "text='комедия' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "nav_link",
+    "url": "https://zonafilm.space/catalog/?genre=triller",
+    "ok": true,
+    "detail": "text='триллер' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "nav_link",
+    "url": "https://zonafilm.space/catalog/?genre=action",
+    "ok": true,
+    "detail": "text='боевик' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "nav_link",
+    "url": "https://zonafilm.space/catalog/?genre=horror",
+    "ok": true,
+    "detail": "text='ужасы' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "nav_link",
+    "url": "https://zonafilm.space/catalog/?genre=melodrama",
+    "ok": true,
+    "detail": "text='мелодрама' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "nav_link",
+    "url": "https://zonafilm.space/catalog/?genre=criminal",
+    "ok": true,
+    "detail": "text='криминал' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "nav_link",
+    "url": "https://zonafilm.space/catalog/?genre=fantastic",
+    "ok": true,
+    "detail": "text='фантастика' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "nav_link",
+    "url": "https://zonafilm.space/catalog/?genre=adventures",
+    "ok": true,
+    "detail": "text='приключения' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "nav_link",
+    "url": "https://zonafilm.space/catalog/?genre=fantasy",
+    "ok": true,
+    "detail": "text='фэнтези' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "nav_link",
+    "url": "https://zonafilm.space/catalog/?genre=anime",
+    "ok": true,
+    "detail": "text='аниме' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "nav_link",
+    "url": "https://zonafilm.space/catalog/?genre=detective",
+    "ok": true,
+    "detail": "text='детектив' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "nav_link",
+    "url": "https://zonafilm.space/title/vne-uchebnoy-programmy-novaya-glava/",
+    "ok": true,
+    "detail": "text='Впостер не открылсяВне учебной программы: Новая главаФильм · 2026IMDb 9.2' status=200",
+    "status": 200
+  },
+  {
+    "domain": "https://zonafilm.space",
+    "name": "internal_links_sample",
+    "url": "https://zonafilm.space/",
+    "ok": false,
+    "detail": "checked=40 bad=3",
+    "status": null
+  },
+  {
+    "domain": "reference",
+    "name": "ref:amd-online",
+    "url": "https://amd.online/",
+    "ok": true,
+    "detail": "probe status=200 (reachability recorded, not a product defect)",
+    "status": 200
+  },
+  {
+    "domain": "reference",
+    "name": "ref:zona-w140",
+    "url": "https://w140.zona.plus/",
+    "ok": true,
+    "detail": "probe status=200 (reachability recorded, not a product defect)",
+    "status": 200
+  }
+]
