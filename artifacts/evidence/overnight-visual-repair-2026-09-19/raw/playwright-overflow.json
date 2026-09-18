@@ -1,0 +1,158 @@
+{
+  "lords": {
+    "1440x900": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "bodyScrollWidth": 1440,
+      "title": "Lordserial — фильмы и сериалы онлайн",
+      "screenshot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/lords-home-1440x900.png"
+    },
+    "768x1024": {
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflow": false,
+      "bodyScrollWidth": 768,
+      "title": "Lordserial — фильмы и сериалы онлайн",
+      "screenshot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/lords-home-768x1024.png"
+    },
+    "390x844": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflow": false,
+      "bodyScrollWidth": 390,
+      "title": "Lordserial — фильмы и сериалы онлайн",
+      "screenshot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/lords-home-390x844.png"
+    }
+  },
+  "animedia_space": {
+    "1440x900": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "bodyScrollWidth": 1440,
+      "title": "Animedia — аниме-портал",
+      "screenshot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/animedia_space-home-1440x900.png"
+    },
+    "768x1024": {
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflow": false,
+      "bodyScrollWidth": 768,
+      "title": "Animedia — аниме-портал",
+      "screenshot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/animedia_space-home-768x1024.png"
+    },
+    "390x844": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflow": false,
+      "bodyScrollWidth": 390,
+      "title": "Animedia — аниме-портал",
+      "screenshot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/animedia_space-home-390x844.png"
+    }
+  },
+  "animedia_icu": {
+    "1440x900": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "bodyScrollWidth": 1440,
+      "title": "Animedia — аниме-портал",
+      "screenshot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/animedia_icu-home-1440x900.png"
+    },
+    "768x1024": {
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflow": false,
+      "bodyScrollWidth": 768,
+      "title": "Animedia — аниме-портал",
+      "screenshot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/animedia_icu-home-768x1024.png"
+    },
+    "390x844": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflow": false,
+      "bodyScrollWidth": 390,
+      "title": "Animedia — аниме-портал",
+      "screenshot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/animedia_icu-home-390x844.png"
+    }
+  },
+  "zona": {
+    "1440x900": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "bodyScrollWidth": 1440,
+      "title": "Zona — кинопортал",
+      "screenshot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/zona-home-1440x900.png"
+    },
+    "768x1024": {
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflow": false,
+      "bodyScrollWidth": 768,
+      "title": "Zona — кинопортал",
+      "screenshot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/zona-home-768x1024.png"
+    },
+    "390x844": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflow": false,
+      "bodyScrollWidth": 390,
+      "title": "Zona — кинопортал",
+      "screenshot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/zona-home-390x844.png"
+    }
+  },
+  "amd": {
+    "1440x900": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "bodyScrollWidth": 1440,
+      "title": "Animedia Online - Смотреть аниме онлайн!",
+      "screenshot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/amd-home-1440x900.png"
+    },
+    "768x1024": {
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflow": false,
+      "bodyScrollWidth": 768,
+      "title": "Animedia Online - Смотреть аниме онлайн!",
+      "screenshot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/amd-home-768x1024.png"
+    },
+    "390x844": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflow": false,
+      "bodyScrollWidth": 390,
+      "title": "Animedia Online - Смотреть аниме онлайн!",
+      "screenshot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/amd-home-390x844.png"
+    }
+  },
+  "w140": {
+    "1440x900": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "bodyScrollWidth": 1440,
+      "title": "zona.plus (ex zona.mobi) - смотреть фильмы и сериалы онлайн в хорошем качестве",
+      "screenshot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/w140-home-1440x900.png"
+    },
+    "768x1024": {
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflow": false,
+      "bodyScrollWidth": 768,
+      "title": "zona.plus (ex zona.mobi) - смотреть фильмы и сериалы онлайн в хорошем качестве",
+      "screenshot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/w140-home-768x1024.png"
+    },
+    "390x844": {
+      "scrollWidth": 600,
+      "clientWidth": 390,
+      "overflow": true,
+      "bodyScrollWidth": 600,
+      "title": "zona.plus (ex zona.mobi) - смотреть фильмы и сериалы онлайн в хорошем качестве",
+      "screenshot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/w140-home-390x844.png"
+    }
+  }
+}

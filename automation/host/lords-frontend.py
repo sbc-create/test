@@ -40,7 +40,7 @@ import sys
 import unicodedata
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import parse_qs, unquote, urlparse
+from urllib.parse import parse_qs, parse_qsl, quote, unquote, urlencode, urlparse
 
 РЕВИЗИЯ = os.environ.get("LORDS_TEMPLATE_REVISION", "unknown")
 МАНИФЕСТ_ФАЙЛ = os.environ.get("LORDS_TEMPLATE_MANIFEST",
@@ -441,6 +441,41 @@ def токены(с: str) -> list[str]:
     return [т for т in re.split(r"[^a-zа-я0-9]+", с) if т]
 
 
+#: Русская раскладка под латинскими клавишами: «vfnhbwf» → «матрица».
+_РАСКЛАДКА = str.maketrans(
+    "qwertyuiop[]asdfghjkl;'zxcvbnm,.`",
+    "йцукенгшщзхъфывапролджэячсмитьбюё",
+)
+
+#: Транслитерация кириллицы → латиница теми же правилами, что у slug витрины.
+_ТРАНСЛИТ = {
+    "а": "a", "б": "b", "в": "v", "г": "g", "д": "d", "е": "e", "ж": "zh",
+    "з": "z", "и": "i", "й": "y", "к": "k", "л": "l", "м": "m", "н": "n",
+    "о": "o", "п": "p", "р": "r", "с": "s", "т": "t", "у": "u", "ф": "f",
+    "х": "h", "ц": "c", "ч": "ch", "ш": "sh", "щ": "sch", "ъ": "", "ы": "y",
+    "ь": "", "э": "e", "ю": "yu", "я": "ya",
+}
+
+
+def транслит(с: str) -> str:
+    """Кириллица латиницей. Латинские символы остаются как есть."""
+    return "".join(_ТРАНСЛИТ.get(ch, ch) for ch in (с or "").lower().replace("ё", "е"))
+
+
+def из_раскладки(с: str) -> str:
+    """Строка, набранная латинскими клавишами вместо русских."""
+    return (с or "").translate(_РАСКЛАДКА)
+
+
+def закодировать_запрос(url: str) -> str:
+    """Percent-encode query values in an already-built path (?kind=Фильм)."""
+    if "?" not in (url or ""):
+        return url
+    путь, _, хвост = url.partition("?")
+    пары = parse_qsl(хвост, keep_blank_values=True)
+    return путь + (("?" + urlencode(пары, quote_via=quote)) if пары else "")
+
+
 #: Слова, которые в запросе несут форму издания, а не название. По ним нельзя
 #: отсеивать: «Бункер 1-3 сезон» обязан находить «Бункер».
 СЛУЖЕБНЫЕ = {"сезон", "сезона", "сезонов", "серия", "серии", "season", "s",
@@ -475,34 +510,68 @@ class Данные:
         for з in self.items:
             з["_n"] = нормализовать(з["title"])
             # Все известные формы названия: русское, оригинальное, синонимы
-            # владельца. Пустых среди них нет — сравнивать с пустой строкой
-            # значило бы совпадать со всем подряд.
+            # владельца, slug и транслит. Пустых среди них нет — сравнивать
+            # с пустой строкой значило бы совпадать со всем подряд.
+            #
+            # Без slug/транслита запрос «matrix» / «naruto» / точный slug
+            # живого `/title/{slug}/` давал пустую выдачу при живой карточке.
             формы = [з["_n"]]
-            for поле in ("original_title",):
+            if з.get("slug"):
+                формы.append(нормализовать(з["slug"]))
+            if з.get("title"):
+                формы.append(нормализовать(транслит(з["title"])))
+            for поле in ("original_title", "original_name"):
                 if з.get(поле):
                     формы.append(нормализовать(з[поле]))
+                    формы.append(нормализовать(транслит(з[поле])))
             for доп in (з.get("aliases") or []):
                 формы.append(нормализовать(доп))
-            з["_формы"] = [ф for ф in формы if ф]
+                формы.append(нормализовать(транслит(доп)))
+            # Уникальный порядок без пустых.
+            увидели: list[str] = []
+            for ф in формы:
+                if ф and ф not in увидели:
+                    увидели.append(ф)
+            з["_формы"] = увидели
         self.years = sorted({з["year"] for з in self.items if з["year"]}, reverse=True)
         self.kinds = sorted({з["kind"] for з in self.items if з["kind"]})
 
     def искать(self, q: str, предел: int = 120) -> list[dict]:
         """Терпимый поиск по всем известным названиям записи.
 
-        Ищется по русскому названию, оригинальному названию и переданным
-        владельцем синонимам — по каждому в отдельности. Служебные слова
-        запроса («сезон», «серия») отбрасываются: «Бункер 1-3 сезон» обязан
-        находить «Бункер», а не пустую выдачу.
+        Ищется по русскому названию, оригинальному названию, синонимам,
+        slug и транслиту. Запрос дополнительно читается как набранный в
+        чужой раскладке. Служебные слова («сезон», «серия») отбрасываются.
+
+        Смешанный запрос («Matrix матрица») не склеивается в одно ядро:
+        значимые токены проверяются по отдельности (OR), иначе латиница +
+        кириллица никогда не совпали бы ни с одной формой.
 
         Ранжирование: точное совпадение, затем начало, затем вхождение, затем
-        терпимость к одной-двум опечаткам. Выдумывать совпадения нельзя, но и
-        терять их из-за регистра, «ё» или дефиса — тоже.
+        терпимость к одной-двум опечаткам.
         """
-        нq = нормализовать(q)
-        если_токены = [т for т in токены(q) if т not in СЛУЖЕБНЫЕ and not т.isdigit()]
-        ядро = нормализовать("".join(если_токены))
-        if not нq and not ядро:
+        сырые = [q, из_раскладки(q)]
+        цели: list[str] = []
+        for сырой in сырые:
+            нq = нормализовать(сырой)
+            если_токены = [т for т in токены(сырой)
+                           if т not in СЛУЖЕБНЫЕ and not т.isdigit()]
+            if нq:
+                цели.append(нq)
+            for т in если_токены:
+                нт = нормализовать(т)
+                if нт and нт not in цели:
+                    цели.append(нт)
+            ядро = нормализовать("".join(если_токены))
+            if ядро and ядро not in цели:
+                цели.append(ядро)
+        # Уникальный порядок.
+        увидели_цели: list[str] = []
+        for ц in цели:
+            if ц and ц not in увидели_цели:
+                увидели_цели.append(ц)
+        цели = увидели_цели
+        if not цели:
             return []
 
         точн, начало, внутри, мягкие = [], [], [], []
@@ -510,18 +579,27 @@ class Данные:
             формы = з["_формы"]
             if not формы:
                 continue
-            if нq and нq in формы:
-                точн.append(з)
+            попал = False
+            for цель in цели:
+                if цель in формы:
+                    точн.append(з)
+                    попал = True
+                    break
+            if попал:
                 continue
-            if ядро and ядро in формы:
-                точн.append(з)
+            for цель in цели:
+                if any(ф.startswith(цель) for ф in формы):
+                    начало.append(з)
+                    попал = True
+                    break
+            if попал:
                 continue
-            цель = ядро or нq
-            if any(ф.startswith(цель) for ф in формы):
-                начало.append(з)
-                continue
-            if any(цель in ф for ф in формы):
-                внутри.append(з)
+            for цель in цели:
+                if any(цель in ф for ф in формы):
+                    внутри.append(з)
+                    попал = True
+                    break
+            if попал:
                 continue
             # Терпимость к опечатке соразмерна длине запроса.
             #
@@ -530,12 +608,18 @@ class Данные:
             # «47»: на коротких строках две правки — это уже другое слово.
             # Ниже пяти знаков нечёткое сравнение не применяется вовсе, до
             # восьми допускается одна правка, дальше две.
-            if len(цель) >= 5 and len(мягкие) < предел:
-                допуск = 1 if len(цель) < 8 else 2
-                for ф in формы:
-                    if abs(len(ф) - len(цель)) <= допуск and \
-                            sum(1 for a, b in zip(ф, цель) if a != b) <= допуск:
-                        мягкие.append(з)
+            if len(мягкие) < предел:
+                for цель in цели:
+                    if len(цель) < 5:
+                        continue
+                    допуск = 1 if len(цель) < 8 else 2
+                    for ф in формы:
+                        if abs(len(ф) - len(цель)) <= допуск and \
+                                sum(1 for a, b in zip(ф, цель) if a != b) <= допуск:
+                            мягкие.append(з)
+                            попал = True
+                            break
+                    if попал:
                         break
         итог, видели = [], set()
         for группа in (точн, начало, внутри, мягкие):
@@ -796,9 +880,9 @@ def сезон_по_номеру(деталь: dict, номер: int) -> dict | 
 #: любого семейства. Всё остальное расходится.
 ОБЩЕЕ_1_1 = """
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;min-height:100vh}
-img{max-width:100%;display:block}
+html{-webkit-text-size-adjust:100%;overflow-x:clip;max-width:100%}
+body{margin:0;min-height:100vh;overflow-x:clip;max-width:100%}
+img,video,iframe,svg{max-width:100%;height:auto;display:block}
 a{text-decoration:none;color:inherit}
 .vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
 clip:rect(0 0 0 0);white-space:nowrap;border:0}
@@ -1270,8 +1354,9 @@ background:transparent;color:@INK@;font-family:inherit}
 .ztop__s button{border:0;background:@ACCDK@;color:#fff;padding:0 18px;
 font-weight:600;font-size:14px;cursor:pointer;font-family:inherit}
 .ztop__b{display:flex;gap:16px;padding:0 0 10px;font-size:13px;color:@DIM@;
-flex-wrap:wrap}
-.ztop__b a{color:@ACC@;font-weight:600;display:inline-block;padding:5px 2px}
+flex-wrap:wrap;max-width:100%;min-width:0}
+.ztop__b a{color:@ACC@;font-weight:600;display:inline-block;padding:5px 2px;
+max-width:100%;overflow-wrap:anywhere}
 .ztop__b a[aria-current]{color:@INK@;box-shadow:inset 0 -2px 0 @ACC@}
 
 /* Типографика по измерению: h2 22.1 нормального начертания. */
@@ -1357,9 +1442,10 @@ display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hi
 .zr__r{display:flex;gap:10px;font-size:12px;color:@DIM@;margin-top:6px;flex-wrap:wrap}
 
 /* Фильтры, пагинация, служебные состояния. */
-.zstrip{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 6px}
+.zstrip{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 6px;max-width:100%;min-width:0}
 .zstrip a{background:@SURF@;border:1px solid @LINE@;border-radius:6px;
-padding:7px 12px;font-size:13px;color:@DIM@;font-weight:600}
+padding:7px 12px;font-size:13px;color:@DIM@;font-weight:600;
+max-width:100%;overflow-wrap:anywhere}
 .zstrip a:hover{border-color:@ACC@;color:@INK@}
 .zstrip a[aria-current]{background:@ACCDK@;color:#fff;border-color:@ACCDK@}
 .zpg{display:flex;gap:7px;justify-content:center;margin:26px 0;flex-wrap:wrap}
@@ -1743,7 +1829,7 @@ def _подставить(шаблон: str, токены: dict) -> str:
         "нав": [("/", "Главная"), ("/catalog/", "Каталог аниме"),
                 ("/new/", "Новые эпизоды"), ("/schedule/", "Расписание"),
                 ("/collections/", "Подборки")],
-        "поиск": "Название аниме",
+        "поиск": "Поиск аниме",
         "полосы": [],
         "лид": "Аниме-портал: онгоинги, новые эпизоды и расписание",
         "метка": "A",
@@ -2373,10 +2459,11 @@ def отбор(данные: "Данные", индекс: dict, зпр: dict, �
 
 
 def запрос_строкой(выбрано: dict, **замена) -> str:
+    """Собрать `?k=v` с percent-encoding значений (kind=Фильм → %D0%A4…)."""
     поля = dict(выбрано)
     поля.update(замена)
     пары = [(к, з) for к, з in поля.items() if з]
-    return ("?" + "&".join(f"{к}={з}" for к, з in пары)) if пары else ""
+    return ("?" + urlencode(пары, quote_via=quote)) if пары else ""
 
 
 def факты(вид: Вид, запись: dict, деталь: dict) -> list:
@@ -2398,7 +2485,7 @@ def факты(вид: Вид, запись: dict, деталь: dict) -> list:
         ссылки = []
         for i, имя in enumerate(жанры):
             код = коды[i] if i < len(коды) else ""
-            ссылки.append(f'<a href="/catalog/?genre={html.escape(код)}">{html.escape(имя)}</a>'
+            ссылки.append(f'<a href="/catalog/{запрос_строкой({"genre": код})}">{html.escape(имя)}</a>'
                           if код else html.escape(имя))
         добавить("Жанр", " · ".join(ссылки))
     добавить("Время", html.escape(_длительность(деталь.get("duration"))))
@@ -2483,7 +2570,7 @@ class ВидЛордс(Вид):
                  описание: str = "", разметка: str = "", код: int = 200,
                  крошки: str = "", og: dict | None = None) -> str:
         нав = "".join(
-            f'<a href="{u}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
+            f'<a href="{закодировать_запрос(u)}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
             for u, t in self.се["нав"])
         схемы = "".join(f'<script type="application/ld+json">{р}</script>'
                         for р in ([разметка] if разметка else []))
@@ -2530,8 +2617,14 @@ class ВидЛордс(Вид):
             значок = f'<span class="c__badge">{html.escape(запись["kind"])}</span>'
         кп = _число(деталь.get("kinopoisk_rating"))
         им = _число(деталь.get("imdb_rating"))
-        полоса = (f'<div class="c__r"><span class="c__kp">КП{f"<i>{кп}</i>" if кп else " <em>—</em>"}</span>'
-                  f'<span class="c__imdb">IMDb{f"<i>{им}</i>" if им else " <em>—</em>"}</span></div>')
+        # Пустые «КП — / IMDb —» читаются как оценка «нет», хотя источником
+        # число просто не передано. Рисуем полосу только при реальном числе.
+        полоса = ""
+        if кп or им:
+            полоса = ('<div class="c__r">'
+                      + (f'<span class="c__kp">КП<i>{кп}</i></span>' if кп else "")
+                      + (f'<span class="c__imdb">IMDb<i>{им}</i></span>' if им else "")
+                      + "</div>")
         год = f'<span class="c__y">{запись["year"]}</span>' if запись.get("year") else ""
         return (f'<a class="c" href="{запись["url"]}">'
                 f'<span class="c__p">{изо}{значок}'
@@ -2580,7 +2673,7 @@ class ВидЛордс(Вид):
 
     def _полоса(self, титул: str, ссылка: str, набор) -> str:
         return (f'<section><div class="tabs"><span class="tabs__pill">{html.escape(титул)} ›</span>'
-                f'<a href="{ссылка}">Все</a></div>{self.сетка(набор)}</section>')
+                f'<a href="{закодировать_запрос(ссылка)}">Все</a></div>{self.сетка(набор)}</section>')
 
     def список(self, разд: str, зпр: dict) -> str:
         имена = {"/catalog": "Каталог", "/new": "Новинки", "/collections": "Подборки"}
@@ -2802,7 +2895,7 @@ class ВидЗона(Вид):
                  описание: str = "", разметка: str = "", код: int = 200,
                  сверху: str = "", крошки: str = "", og: dict | None = None) -> str:
         нав = "".join(
-            f'<a href="{u}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
+            f'<a href="{закодировать_запрос(u)}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
             for u, t in self.се["нав"])
         жанры = "".join(
             f'<a href="/catalog/?genre={html.escape(код_жанра)}">{html.escape(имя)}</a>'
@@ -2948,7 +3041,13 @@ class ВидЗона(Вид):
         которую забыли реализовать. Поэтому состав объявлен всегда, а нехватка
         данных названа словами.
         """
-        ссылка_html = f'<a href="{ссылка}">Весь раздел</a>' if ссылка else ""
+        # Полки без данных и без шанса их получить (трейлеры) не рисуем:
+        # пустой zempty на главной неотличим от «забыли реализовать», а эталон
+        # w140 прячет отсутствующие блоки, а не объясняет их на каждом визите.
+        if not набор and ключ in {"trailers"}:
+            return ""
+        ссылка_html = (f'<a href="{закодировать_запрос(ссылка)}">Весь раздел</a>'
+                       if ссылка else "")
         шапка = (f'<div class="zsec__h"><h2>{html.escape(титул)}</h2>{ссылка_html}</div>')
         тело = (self.карусель(ключ, набор) if набор
                 else f'<div class="zempty">{html.escape(пусто)}</div>')
@@ -3068,7 +3167,7 @@ class ВидЗона(Вид):
              "трейлера, ни ссылки на него. Выдумывать их нельзя."),
         ]
         жанры = "".join(
-            f'<a href="/catalog/?genre={html.escape(код)}">{html.escape(имя)}</a>'
+            f'<a href="/catalog/{запрос_строкой({"genre": код})}">{html.escape(имя)}</a>'
             for код, имя in self.индекс["genre_names"][:14])
         куски = [f'<h1 class="zh">{html.escape(self.се["лид"])}</h1>'
                  f'<p class="zsub">В снимке каталога {len(self.д.items)} записей.</p>'
@@ -3522,10 +3621,19 @@ class ВидАнимедиа(ВидЗона):
         10, и за первый экран видно объём каталога. Лента Zona здесь была бы
         чужим ритмом.
         """
-        ссылка_html = f'<a href="{ссылка}">Весь раздел</a>' if ссылка else ""
+        # «Онгоинги» / «Сегодня выйдет» источником не наполняются никогда
+        # (нет признака ongoing и нет времени выхода). Честный пустой блок
+        # на главной отдаляет витрину от amd.online сильнее, чем скрытие:
+        # эталон показывает только наполненные секции. При появлении данных
+        # в снимке секция снова появится — набор станет непустым.
+        if not набор and ключ in {"ongoing", "today-schedule", "today_schedule"}:
+            return ""
+        ссылка_html = (f'<a href="{закодировать_запрос(ссылка)}">Весь раздел</a>'
+                       if ссылка else "")
         шапка = f'<div class="zsec__h"><h2>{html.escape(титул)}</h2>{ссылка_html}</div>'
         тело = (self.плитки(набор) if набор
-                else f'<div class="zempty">{html.escape(пусто)}</div>')
+                else f'<div class="zempty"><b>{html.escape(титул)}</b>'
+                     f'<p>{html.escape(пусто)}</p></div>')
         return f'<section class="zsec">{шапка}{тело}</section>'
 
     # --- честное состояние данных -------------------------------------
@@ -3550,7 +3658,7 @@ class ВидАнимедиа(ВидЗона):
                  описание: str = "", разметка: str = "", код: int = 200,
                  сверху: str = "", крошки: str = "", og: dict | None = None) -> str:
         нав = "".join(
-            f'<a href="{u}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
+            f'<a href="{закодировать_запрос(u)}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
             for u, t in self.се["нав"])
         схемы = "".join(f'<script type="application/ld+json">{р}</script>'
                         for р in ([разметка] if разметка else []))
@@ -4070,12 +4178,13 @@ class Обработчик(BaseHTTPRequestHandler):
 
         ТЕК = ' aria-current="true"'
         фвид = "".join(
-            f'<a href="{разд}/?kind={к}"{ТЕК if вид == к else ""}>{к}</a>'
+            f'<a href="{разд}/{запрос_строкой({"kind": к})}"{ТЕК if вид == к else ""}>{к}</a>'
             for к in д.kinds)
         фгод = "".join(
-            f'<a href="{разд}/?year={г}"{ТЕК if год == str(г) else ""}>{г}</a>'
+            f'<a href="{разд}/{запрос_строкой({"year": г})}"{ТЕК if год == str(г) else ""}>{г}</a>'
             for г in д.years[:14])
-        осн = "&".join(f"{k}={v}" for k, v in (("kind", вид), ("year", год)) if v)
+        осн = urlencode([(k, v) for k, v in (("kind", вид), ("year", год)) if v],
+                        quote_via=quote)
         листалка = "".join(
             (f'<span>{p}</span>' if p == стр else
              f'<a href="{разд}/?{осн}&page={p}">{p}</a>')

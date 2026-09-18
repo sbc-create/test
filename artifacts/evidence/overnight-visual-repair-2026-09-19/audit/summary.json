@@ -1,0 +1,418 @@
+{
+  "lords": {
+    "version": {
+      "schema_version": 1,
+      "template_family": "lords",
+      "design_version": "1.1.0",
+      "source_commit": "479f7d2de1e4fc76d65da2373c4aa7c070c3def9",
+      "runtime_commit": "479f7d2de1e4fc76d65da2373c4aa7c070c3def9",
+      "build_id": "20260918T223635Z-479f7d2d-nova",
+      "artifact_sha256": "2089d3560727296def3601db160ffa708d13f0298483317fad27b885f7f2a487",
+      "profile": "lords-new",
+      "built_at": "2026-09-18T22:36:35Z",
+      "core_runtime": "site-factory-nova",
+      "family_template": "lords-nova",
+      "catalog_revision": "2020cb55bf541ee36ee3c7d22028809b",
+      "catalog_built_at": "2026-09-18T20:45:03Z",
+      "details_catalog_revision": "9f8f6433722f535e0916d95a14eabd4b",
+      "details_catalog_built_at": "2026-09-18T03:19:01Z",
+      "details_coverage": 53493,
+      "catalog_details_skew": true
+    },
+    "route_status": {
+      "/": 200,
+      "/catalog/": 200,
+      "/search/": 200,
+      "/collections/": 200,
+      "/genres/": 404,
+      "/countries/": 404,
+      "/years/": 404,
+      "/ongoing/": 404,
+      "/new/": 200,
+      "/schedule/": 308,
+      "/robots.txt": 200,
+      "/sitemap.xml": 200,
+      "/no-such-route-xyz-overnight/": 404
+    },
+    "search": {
+      "cyr": {
+        "q": "матрица",
+        "status": 200,
+        "title_links": 8,
+        "h1": "Поиск: матрица — 8 совпадений",
+        "xrobots": "noindex, nofollow"
+      },
+      "lat": {
+        "q": "matrix",
+        "status": 200,
+        "title_links": 0,
+        "h1": "Поиск: matrix",
+        "xrobots": "noindex, nofollow"
+      },
+      "slug": {
+        "q": "007-doroga-k-millionu",
+        "status": 200,
+        "title_links": 0,
+        "h1": "Поиск: 007-doroga-k-millionu",
+        "xrobots": "noindex, nofollow"
+      },
+      "mixed": {
+        "q": "Matrix матрица",
+        "status": 200,
+        "title_links": 0,
+        "h1": "Поиск: Matrix матрица",
+        "xrobots": "noindex, nofollow"
+      },
+      "empty": {
+        "q": "",
+        "status": 200,
+        "title_links": 0,
+        "h1": "Поиск по каталогу",
+        "xrobots": "noindex, nofollow"
+      },
+      "spaces": {
+        "q": "ма три",
+        "status": 200,
+        "title_links": 24,
+        "h1": "Поиск: ма три — 24 совпадений",
+        "xrobots": "noindex, nofollow"
+      },
+      "partial": {
+        "q": "мат",
+        "status": 200,
+        "title_links": 120,
+        "h1": "Поиск: мат — 120 совпадений",
+        "xrobots": "noindex, nofollow"
+      }
+    },
+    "titles": [
+      {
+        "path": "/title/eho-kamera/",
+        "status": 200,
+        "player": [
+          "playable"
+        ],
+        "vp": 1
+      },
+      {
+        "path": "/title/sudmedekspert-stavshaya-domohozyaykoy/",
+        "status": 200,
+        "player": [
+          "awaiting"
+        ],
+        "vp": 0
+      },
+      {
+        "path": "/title/sudmedekspert-stavshaya-domohozyaykoy/season-1/episode-1/",
+        "status": 200,
+        "player": [
+          "playable"
+        ],
+        "vp": 1
+      }
+    ]
+  },
+  "animedia_space": {
+    "version": {
+      "schema_version": 1,
+      "template_family": "animedia",
+      "design_version": "1.2.0",
+      "source_commit": "b023bd50cced8d281cb3814a75bf72b429afee0b",
+      "build_id": "20260918T215044Z-b023bd50-nova",
+      "artifact_sha256": "1668f71bb514a5a2c81247131183bd6dfc2a503481421ced7f48a3b67c7699bd",
+      "profile": "animedia-general",
+      "built_at": "2026-09-18T21:50:56Z",
+      "core_runtime": "site-factory-nova",
+      "family_template": "animedia-nova"
+    },
+    "route_status": {
+      "/": 200,
+      "/catalog/": 200,
+      "/search/": 200,
+      "/collections/": 200,
+      "/genres/": 404,
+      "/countries/": 404,
+      "/years/": 404,
+      "/ongoing/": 404,
+      "/new/": 200,
+      "/schedule/": 200,
+      "/robots.txt": 200,
+      "/sitemap.xml": 404,
+      "/no-such-route-xyz-overnight/": 404
+    },
+    "search": {
+      "cyr": {
+        "q": "наруто",
+        "status": 200,
+        "title_links": 2,
+        "h1": "«наруто»",
+        "xrobots": "noindex, nofollow"
+      },
+      "lat": {
+        "q": "naruto",
+        "status": 200,
+        "title_links": 0,
+        "h1": "«naruto»",
+        "xrobots": "noindex, nofollow"
+      },
+      "slug": {
+        "q": "naruto",
+        "status": 200,
+        "title_links": 0,
+        "h1": "«naruto»",
+        "xrobots": "noindex, nofollow"
+      },
+      "mixed": {
+        "q": "Naruto наруто",
+        "status": 200,
+        "title_links": 0,
+        "h1": "«Naruto наруто»",
+        "xrobots": "noindex, nofollow"
+      },
+      "empty": {
+        "q": "",
+        "status": 200,
+        "title_links": 0,
+        "h1": "Поиск",
+        "xrobots": "noindex, nofollow"
+      },
+      "spaces": {
+        "q": "на ру",
+        "status": 200,
+        "title_links": 5,
+        "h1": "«на ру»",
+        "xrobots": "noindex, nofollow"
+      },
+      "partial": {
+        "q": "нару",
+        "status": 200,
+        "title_links": 5,
+        "h1": "«нару»",
+        "xrobots": "noindex, nofollow"
+      }
+    },
+    "titles": [
+      {
+        "path": "/title/nelyud-chast-2/",
+        "status": 200,
+        "player": [
+          "playable"
+        ],
+        "vp": 1
+      },
+      {
+        "path": "/title/nelyud-chast-2/season-2/episode-1/",
+        "status": 200,
+        "player": [
+          "playable"
+        ],
+        "vp": 1
+      }
+    ]
+  },
+  "animedia_icu": {
+    "version": {
+      "schema_version": 1,
+      "template_family": "animedia",
+      "design_version": "1.2.0",
+      "source_commit": "b023bd50cced8d281cb3814a75bf72b429afee0b",
+      "build_id": "20260918T215044Z-b023bd50-nova",
+      "artifact_sha256": "1668f71bb514a5a2c81247131183bd6dfc2a503481421ced7f48a3b67c7699bd",
+      "profile": "animedia-general",
+      "built_at": "2026-09-18T21:50:51Z",
+      "core_runtime": "site-factory-nova",
+      "family_template": "animedia-nova"
+    },
+    "route_status": {
+      "/": 200,
+      "/catalog/": 200,
+      "/search/": 200,
+      "/collections/": 200,
+      "/genres/": 404,
+      "/countries/": 404,
+      "/years/": 404,
+      "/ongoing/": 404,
+      "/new/": 200,
+      "/schedule/": 200,
+      "/robots.txt": 200,
+      "/sitemap.xml": 404,
+      "/no-such-route-xyz-overnight/": 404
+    },
+    "search": {
+      "cyr": {
+        "q": "наруто",
+        "status": 200,
+        "title_links": 2,
+        "h1": "«наруто»",
+        "xrobots": "noindex, nofollow"
+      },
+      "lat": {
+        "q": "naruto",
+        "status": 200,
+        "title_links": 0,
+        "h1": "«naruto»",
+        "xrobots": "noindex, nofollow"
+      },
+      "slug": {
+        "q": "naruto",
+        "status": 200,
+        "title_links": 0,
+        "h1": "«naruto»",
+        "xrobots": "noindex, nofollow"
+      },
+      "mixed": {
+        "q": "Naruto наруто",
+        "status": 200,
+        "title_links": 0,
+        "h1": "«Naruto наруто»",
+        "xrobots": "noindex, nofollow"
+      },
+      "empty": {
+        "q": "",
+        "status": 200,
+        "title_links": 0,
+        "h1": "Поиск",
+        "xrobots": "noindex, nofollow"
+      },
+      "spaces": {
+        "q": "на ру",
+        "status": 200,
+        "title_links": 5,
+        "h1": "«на ру»",
+        "xrobots": "noindex, nofollow"
+      },
+      "partial": {
+        "q": "нару",
+        "status": 200,
+        "title_links": 5,
+        "h1": "«нару»",
+        "xrobots": "noindex, nofollow"
+      }
+    },
+    "titles": [
+      {
+        "path": "/title/nelyud-chast-2/",
+        "status": 200,
+        "player": [
+          "playable"
+        ],
+        "vp": 1
+      },
+      {
+        "path": "/title/nelyud-chast-2/season-2/episode-1/",
+        "status": 200,
+        "player": [
+          "playable"
+        ],
+        "vp": 1
+      }
+    ]
+  },
+  "zona": {
+    "version": {
+      "schema_version": 1,
+      "template_family": "zona",
+      "design_version": "1.2.0",
+      "source_commit": "a10e68b2350a020a2f7d5efe28cd98ef2fc89edd",
+      "runtime_commit": "99ec78291141de9f350f03298edabd6e89b3a9d6",
+      "build_id": "20260918T215756Z-a10e68b2-nova",
+      "artifact_sha256": "1668f71bb514a5a2c81247131183bd6dfc2a503481421ced7f48a3b67c7699bd",
+      "profile": "zona-general",
+      "built_at": "2026-09-18T21:57:56Z",
+      "core_runtime": "site-factory-nova",
+      "family_template": "zona-nova"
+    },
+    "route_status": {
+      "/": 200,
+      "/catalog/": 200,
+      "/search/": 200,
+      "/collections/": 200,
+      "/genres/": 404,
+      "/countries/": 404,
+      "/years/": 404,
+      "/ongoing/": 404,
+      "/new/": 200,
+      "/schedule/": 308,
+      "/robots.txt": 200,
+      "/sitemap.xml": 200,
+      "/no-such-route-xyz-overnight/": 404
+    },
+    "search": {
+      "cyr": {
+        "q": "аватар",
+        "status": 200,
+        "title_links": 17,
+        "h1": "«аватар»",
+        "xrobots": "noindex, nofollow"
+      },
+      "lat": {
+        "q": "avatar",
+        "status": 200,
+        "title_links": 0,
+        "h1": "«avatar»",
+        "xrobots": "noindex, nofollow"
+      },
+      "slug": {
+        "q": "avatar",
+        "status": 200,
+        "title_links": 0,
+        "h1": "«avatar»",
+        "xrobots": "noindex, nofollow"
+      },
+      "mixed": {
+        "q": "Avatar аватар",
+        "status": 200,
+        "title_links": 0,
+        "h1": "«Avatar аватар»",
+        "xrobots": "noindex, nofollow"
+      },
+      "empty": {
+        "q": "",
+        "status": 200,
+        "title_links": 0,
+        "h1": "Поиск",
+        "xrobots": "noindex, nofollow"
+      },
+      "spaces": {
+        "q": "ава тар",
+        "status": 200,
+        "title_links": 17,
+        "h1": "«ава тар»",
+        "xrobots": "noindex, nofollow"
+      },
+      "partial": {
+        "q": "ават",
+        "status": 200,
+        "title_links": 40,
+        "h1": "«ават»",
+        "xrobots": "noindex, nofollow"
+      }
+    },
+    "titles": [
+      {
+        "path": "/title/tancuy-chtoby-zhit/",
+        "status": 200,
+        "player": [
+          "playable"
+        ],
+        "vp": 1
+      },
+      {
+        "path": "/title/svinorez/",
+        "status": 200,
+        "player": [
+          "playable"
+        ],
+        "vp": 1
+      },
+      {
+        "path": "/title/kadaknath/",
+        "status": 200,
+        "player": [
+          "playable"
+        ],
+        "vp": 1
+      }
+    ]
+  }
+}
