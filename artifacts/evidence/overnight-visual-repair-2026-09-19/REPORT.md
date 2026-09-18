@@ -12,7 +12,9 @@ Closed storefronts only. Local commits in `cursor/lords-integration-canary-01`.
 | animedia.icu | animedia-01 | animedia-general | `b023bd50` / — |
 | zonafilm.space | zona-01 | zona-general | `a10e68b2` / `99ec7829` |
 
-Starting HEAD: `b1522a5201dfd7e9168009c87b3ec5ff62242679`
+Starting HEAD: `b1522a5201dfd7e9168009c87b3ec5ff62242679`  
+Final HEAD: `3c4a9d348e0645c58d664ffed3d5cd3e8a795fc4`  
+Local commit: `3c4a9d3` — `fix(nova): overnight storefront search, encoding, and shelf honesty`
 
 ## Root causes addressed (code)
 
