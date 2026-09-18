@@ -1,125 +1,193 @@
-# Live Template QA — закрытые витрины
+# Live Template QA — закрытые витрины (полный прогон)
 
-**Дата:** 2026-09-18T22:00Z–22:07Z  
-**Метод:** серверный HTTP (urllib/curl-эквивалент), структурный разбор HTML, Playwright Chromium screenshots  
-**Мутации:** нет (DNS / noindex / access / nginx-домены / код не менялись)
+**Дата:** 2026-09-18T22:00Z–22:20Z
+**Метод:** серверный HTTP (urllib), структурный разбор HTML, Playwright Chromium (screenshots + CSS metrics + scroll-check постеров)
+**Мутации:** нет (`DNS_MUTATIONS=0`, `PRODUCTION_MUTATIONS=0`, код/nginx/noindex/access не менялись)
+**Provenance Zona (подтверждено live):** `source_commit=a10e68b2350a020a2f7d5efe28cd98ef2fc89edd`, `runtime_commit=99ec78291141de9f350f03298edabd6e89b3a9d6`, `profile=zona-general`
 
 ## Домены
 
-| Ключ | URL | family / design | source_commit | runtime_commit | profile |
-|---|---|---|---|---|---|
-| Lords | https://lordserial33.biz/ | lords / `lords-sheet` | `99ec7829…` | `99ec7829…` | lords-new |
-| Animedia | https://animedia.space/ | animedia / `animedia-portal` | `b023bd50…` | `99ec7829…` | animedia-general |
-| Animedia | https://animedia.icu/ | animedia / `animedia-portal` | `b023bd50…` | `99ec7829…` | animedia-general |
-| Zona | https://zonafilm.space/ | zona / `zona-top` | `a10e68b2…` | `99ec7829…` | zona-general |
+| Ключ | URL | template_family / design | source_commit | runtime_commit | profile | build_id |
+|---|---|---|---|---|---|---|
+| Lords | https://lordserial33.biz/ | lords / `lords-sheet` | `99ec7829…` | — (поле отсутствует) | lords-new | `20260918T215044Z-99ec7829-nova` |
+| Animedia | https://animedia.space/ | animedia / `animedia-portal` | `b023bd50…` | — | animedia-general | `20260918T215044Z-b023bd50-nova` |
+| Animedia | https://animedia.icu/ | animedia / `animedia-portal` | `b023bd50…` | — | animedia-general | `20260918T215044Z-b023bd50-nova` |
+| Zona | https://zonafilm.space/ | zona / `zona-top` | `a10e68b2…` | `99ec7829…` | zona-general | `20260918T215756Z-a10e68b2-nova` |
+
+Источник provenance: `GET /__template_version` на каждом домене → `raw/*_deep.json`.
 
 ## Референсы (только из inventory)
 
-Источник: `inventory/reference-sources.yaml`.
+Источник: `inventory/reference-sources.yaml` (allowed_paths: `/` only).
 
-| Семейство | ref | URL | Пакет | Доступ в этой сессии |
+| Семейство | ref | URL | Пакет | Live probe |
 |---|---|---|---|---|
-| Animedia | `amd-online` | https://amd.online/ | `docs/reference-packs/amd-online`, `config/reference-packs/reference-pack.amd-online.json` | HTTP 200 (probe) |
-| Zona | `zona-w140` | https://w140.zona.plus/ | `docs/reference-packs/zona-w140`, `config/reference-packs/reference-pack.zona-w140.json` | HTTP 200 (probe) |
+| Animedia | `amd-online` | https://amd.online/ | `docs/reference-packs/amd-online`, `config/reference-packs/reference-pack.amd-online.json` | HTTP 200 |
+| Zona | `zona-w140` | https://w140.zona.plus/ | `docs/reference-packs/zona-w140`, `config/reference-packs/reference-pack.zona-w140.json` | HTTP 200 |
 | Lords | — | — | нет записи в inventory | `no_reference_in_inventory` |
 
-Политика пакетов: `PAGE_MAP.md` / `ACCEPTANCE.md` прямо говорят, что состав маршрутов снят с нашей структуры, а не с референса; визуальное соответствие **нельзя объявлять**, пока `measurement_plan` не отработал и токены не заполнены. Здесь — структурное сравнение и live-поведение витрин, без объявления pixel-parity.
+Политика пакетов (`PAGE_MAP.md` / `ACCEPTANCE.md`): состав маршрутов снят с **нашей** структуры; визуальный match **нельзя объявлять** без отработанного `measurement_plan`. Ниже — структурное и поведенческое сравнение, не pixel-parity.
 
-## Артефакты прогона
+## Артефакты
 
 | Путь | Содержание |
 |---|---|
-| `qa-summary.json` | сводка checks/findings (сырой автопрогон; см. корректировку ниже) |
-| `checks.json` | 154 автопроверки |
-| `raw/*.json` | дампы по доменам |
-| `raw/structure-metrics.json` | счётчики a/img/h2 vs референсы |
-| `html/*` | HTML-срезы home/catalog/title/search |
-| `screenshots/*` | Playwright PNG 1440 / 390 |
-
-> Автопрогон изначально пометил 12×P0 из‑за **некодированных** кириллических `?kind=` в urllib (браузеры кодируют сами → 200). Ниже — **скорректированный** реестр дефектов после ручной перепроверки и скриншотов с `networkidle`.
-
----
-
-## Сводка проверок (скорректированная)
-
-| Метрика | Значение |
-|---|---|
-| Автопроверок (raw) | 154 |
-| Успешных после коррекции ложных сбоев kind-URL | ~146 |
-| Подтверждённых дефектов | см. таблицу ниже |
-| **P0** | **0** |
-| **P1** | **2** |
-| **P2** | **4** |
-| **P3** | **5** |
-| Ложные срабатывания автопрогона | 12 (некодированный `kind=Фильм` и т.п.) |
+| `checks.json` / `checks-deep.json` | автопроверки (базовый + расширенный прогон) |
+| `qa-summary.json` / `raw/deep-summary.json` | сводки |
+| `raw/*_deep.json` | дампы по доменам (home/catalog/title/search/nav/images/manifest) |
+| `raw/refs_home.json` | метрики home референсов |
+| `raw/playwright-metrics.json` | CSS/DOM метрики после `networkidle` |
+| `html/*` | HTML-срезы |
+| `screenshots/*` | PNG 1440 / 390 (+ search/catalog/title/refs) |
 
 ---
 
-## Матрица маршрутов (все домены)
+## Сводка дефектов
 
-| Раздел | Lords | Animedia.space | Animedia.icu | Zona | Комментарий |
-|---|---|---|---|---|---|
-| `/` home | 200 | 200 | 200 | 200 | OK |
-| `/catalog/` | 200 | 200 | 200 | 200 | пагинация `?page=2` OK |
-| `/title/{slug}/` | 200 + player | 200 + player | 200 + player | 200 + player | iframe/player-зона есть |
-| `/collections/` | 200 | 200 | 200 | 200 | OK |
-| `/collection/*` (Animedia CTA) | — | 200×4 | 200×4 | — | new_episodes / recently_added / top_rated / video_available |
-| `/search/?q=` | 200 | 200 | 200 | 200 | см. P1 латиница |
-| `/genres/`, `/countries/` | 404 | 404 | 404 | 404 | **не в навигации**; фасеты через query (см. P3) |
-| `/catalog/?genre=` (Zona) | — | — | — | 200×14 | OK |
-| `/catalog/?year=` (Lords) | 200 | — | — | — | OK |
-| `/catalog/?kind=` (urlencoded) | 200 | 200 (пусто для Фильм — ожидаемо) | 200 | 200 | OK |
-| `/new/`, `/schedule/` | 200 / 308→ | 200 / 200 | 200 / 200 | 200 / 308→ | OK |
-| `/robots.txt` | Disallow: / | Disallow: / | Disallow: / | Disallow: / | OK |
-| `X-Robots-Tag` | noindex, nofollow | noindex, nofollow | noindex, nofollow | noindex, nofollow | OK |
-| meta robots | noindex, nofollow | noindex, nofollow | noindex, nofollow | noindex, nofollow | OK |
-| indexing-policy | closed | closed | closed | closed | OK |
-| Basic Auth | нет (уже снята) | нет | нет | нет | закрытие = noindex, не пароль |
-| 500/502 на проверенных URL | нет | нет | нет | нет | OK |
+| Severity | Кол-во | ID |
+|---|---|---|
+| **P0** | **0** | — |
+| **P1** | **2** | P1-01, P1-02 |
+| **P2** | **4** | P2-01 … P2-04 |
+| **P3** | **6** | P3-01 … P3-06 |
+| Ложные срабатывания | — | некодированный `kind=` в сыром urllib; lazy-img `naturalWidth=0` до scroll (Animedia 68→0 после прокрутки) |
 
-Поиск (все семейства, выборочно):
+Расширенный автопрогон: **170** checks, **164** ok после коррекции ложных кодировок/lazy.
+
+---
+
+## Матрица маршрутов
+
+| Раздел | Lords | Animedia.space | Animedia.icu | Zona |
+|---|---|---|---|---|
+| `/` home | 200 | 200 | 200 | 200 |
+| `/catalog/` + `?page=2` + sort | 200 | 200 | 200 | 200 |
+| `/catalog/?kind=` (urlencoded) | 200 | 200 | 200 | 200 |
+| `/catalog/?year=` / `?genre=` | year 200 | — | — | genre 200×14 |
+| `/collections/` | 200 (facet hub) | 200 | 200 | 200 |
+| `/collection/{slug}/` | нет в IA | 200×5 (~60 titles) | 200×5 | 200×6 |
+| `/title/{slug}/` + `[data-player]` | 200 playable | 200 playable | 200 playable | 200 playable |
+| `/search/?q=` | 200 | 200 | 200 | 200 |
+| `/new/` | 200 | 200 | 200 | 200 |
+| `/schedule/` | 308 | 200 (дни недели) | 200 | 308 |
+| `/genres/`, `/countries/` | 404 | 404 | 404 | 404 |
+| `/catalog/page/2\|3/` | 404 | 404 | 404 | 404 |
+| `/robots.txt` | `Disallow: /` | `Disallow: /` | `Disallow: /` | `Disallow: /` |
+| `X-Robots-Tag` | noindex, nofollow | noindex, nofollow | noindex, nofollow | noindex, nofollow |
+| meta robots | noindex, nofollow | noindex, nofollow | noindex, nofollow | noindex, nofollow |
+| 500/502 на проверенных URL | нет | нет | нет | нет |
+| Basic Auth | нет | нет | нет | нет |
+| Битые внутренние ссылки (≤40, encoded) | 0 | 0 | 0 | 0 |
+| Битые постеры (HEAD sample / после scroll) | 0 | 0 | 0 | 0 |
+
+### Поиск
 
 | Запрос | Lords | Animedia | Zona |
 |---|---|---|---|
-| обычный / кириллица (`матрица` / `наруто` / `ван пис`) | hit | hit | hit (по каталогу) |
-| частичный (`мат`) | 200 | 200 | 200 |
-| пустой `q=` | 200 | 200 | 200 |
+| точное кириллица (`матрица` / `наруто` / `аватар`) | 8 hits | 2 hits | 17 hits |
+| частичный (`мат` / `нару` / `ават`) | 200, много | 200 | 200 |
+| латиница (`matrix` / `naruto` / `avatar`) | **0** | **0** | **0** |
+| смешанный (`naruto наруто`) | **0** | **0** | **0** |
+| пустой `q=` | 200, пусто | 200 | 200 |
 | несуществующий | честное «нет» | честное «нет» | честное «нет» |
-| латиница (`matrix` / `naruto` / `avatar`) | 0 hits | 0 hits | (аналогично по смыслу) | **P1** |
+| очистка / mobile search UI | форма на home 390px есть | форма есть, header↑128px | форма есть |
+
+---
+
+## Проверки по чеклисту
+
+### 1. Главная
+
+| Аспект | Lords | Animedia | Zona |
+|---|---|---|---|
+| Шапка | `.hd`, height 63, `position:static`, белая | `.zhd`, height 92, `position:relative`, border-bottom `#c50725` | `.zhd`, height 69, **`position:fixed`**, bg `#546778` |
+| Логотип | «Lordserial» 19px/800 | «Animedia» 22px/800, цвет `#c50725` | «Zona» 19px/700, белый |
+| Навигация | Новинки · Фильмы · Сериалы · Мультфильмы · Каталог | Главная · Каталог аниме · Новые эпизоды · Расписание · Подборки | Обзор · Что нового · Кино · Сериалы · Анимация · Весь каталог + жанровые чипы |
+| Мобильная (390) | nav+search умещаются | header 128px, nav сохранена | fixed header + search |
+| Hero / верх | lead h1, tabs «Новинки» | h1 портала + 6 секций | h1 + genre strip + 5 полок |
+| Полки / карусели | grid карточек | `.zrl` карусели; 2× `zempty` | `.zrl`; 1× `zempty` (трейлеры) |
+| Футер | служебные ссылки | служебные | служебные |
+
+Доказательства: `screenshots/*-home-*.png`, `raw/playwright-metrics.json`.
+
+### 2. Каталог
+
+- Заголовки: Lords «Каталог: 52793 записей»; Animedia/Zona «Весь каталог».
+- Карточки с постерами, годом, типом; ссылки `/title/…` 200.
+- Пагинация через `?page=`; path-style `/catalog/page/N/` → 404 (P3).
+- Сортировка `sort=year|rating|title` → 200.
+- Фильтры: Lords year facets; Zona genre chips; kind-фильтры на всех.
+
+### 3. Поиск
+
+См. таблицу выше. Критичный разрыв — латиница/смешанный запрос (P1-01). Дубликатов title-href в выдаче кириллицы не замечено.
+
+### 4. Разделы
+
+Все ссылки основной навигации (encoded) → 200.
+Animedia/Zona: живые `/collection/*`. Lords: `/collections/` как facet-каталог (year/kind), без `/collection/{slug}/` — иная IA, не 500.
+
+### 5. Страница тайтла
+
+| Поле | Lords `007-doroga-k-millionu` | Animedia `009-1` / `naruto-posledniy-film` | Zona `007-doroga-k-millionu` |
+|---|---|---|---|
+| h1 / URL | OK | OK | OK |
+| постер | `/poster/…` 200 | прямой CDN 200 | прямой CDN 200 |
+| описание | **пустое** («источник пока не передал») на этом slug | есть/зависит от записи | есть/зависит |
+| год / страна / жанры | OK | OK | OK |
+| КП / IMDb | блок оценок есть | есть | IMDb; КП в HTML не найден на этом slug |
+| серии | «2 сезон(ов), 16 серий» | OK | OK |
+| player | `[data-player] data-state="playable"` + `video-player` | то же | то же |
+| похожие | есть | есть | есть |
+| «0 минут» | нет | нет | нет |
+
+Доказательства: `html/*__title*.html`, `screenshots/*-title*.png`.
+
+### 6. Технические
+
+- HTTP 200 на основных маршрутах; 404 только на ожидаемых IA-пробелах и path-pagination.
+- noindex header+meta+robots — все 4 домена.
+- Закрытый доступ = indexing closed (Basic Auth снят) — сохранено.
+- Manifest/profile соответствуют рендеру (`data-design`, семейства не смешаны; animedia.icu ≡ animedia.space).
+- Zona provenance после фикса корректна (source ≠ runtime).
+
+### 7. Сравнение с референсами
+
+См. разделы ниже «Что уже соответствует» / «Что особенно далеко».
 
 ---
 
 ## Дефекты (подтверждённые)
 
-### P1-01 — Поиск не находит латиницу при наличии кириллических карточек
+### P1-01 — Поиск не находит латиницу / смешанный запрос
 
 | Поле | Значение |
 |---|---|
-| Домен | https://animedia.space/ (то же на .icu); также https://lordserial33.biz/ |
-| URL | `/search/?q=naruto` → «Совпадений нет»; `/search/?q=наруто` → 2 title |
+| Домен | lordserial33.biz, animedia.space, animedia.icu, zonafilm.space |
+| URL | напр. `https://animedia.space/search/?q=naruto` → 0; `…?q=наруто` → 2; `…?q=naruto%20наруто` → 0 |
 | Раздел | поиск |
-| Шаг | ввести `naruto` / `matrix` / `avatar` латиницей |
-| Факт | пустой результат, хотя slug/карточки есть (`/title/naruto-posledniy-film/`, «матрица» находит 8) |
-| Ожидание | поиск по slug/алиасам/транслиту или подсказка |
+| Шаг | ввести латиницу или смесь при наличии кириллической карточки / slug |
+| Факт | 0 title-hits |
+| Ожидание | поиск по slug / транслиту / алиасам или осмысленная подсказка |
 | Severity | **P1** |
-| Владелец | `automation/host/lords-frontend.py` (поиск по снимку) |
-| Доказательство | `html/animedia_space__search_naruto_latin.html` |
+| Владелец | `automation/host/lords-frontend.py` (search over snapshot) |
+| Доказательство | HTTP 200 + HTML `html/*__search_lat.html`; screenshots `*-search-lat.png` / `*-search-cyr.png` |
 
-### P1-02 — Animedia: прямые CDN-постеры без `/poster/` proxy (в отличие от Lords)
+### P1-02 — Animedia/Zona: нет рабочего `/poster/` proxy (в отличие от Lords)
 
 | Поле | Значение |
 |---|---|
-| Домен | https://animedia.space/, https://animedia.icu/ |
-| URL | главная / каталог |
+| Домен | animedia.space, animedia.icu, zonafilm.space |
+| URL | img → `https://poster.cdnvideohub.com/…`; probe `/poster/test` → **308**, `/poster/` → **404**. Lords `/poster/…` → **200** |
 | Раздел | постеры |
-| Шаг | сравнить `<img src>` с Lords |
-| Факт | Animedia/Zona → `https://poster.cdnvideohub.com/...`; Lords → `/poster/...` (локальный proxy, 200). На Animedia `/poster/...` отвечает **308**. В быстром screenshot без ожидания виден flash «постер не открылся» (lazy + fallback в разметке). После `networkidle` видимые постеры загружаются. |
-| Ожидание | единый proxy `/poster/` на всех семействах (как у Lords) для стабильности и CSP |
-| Severity | **P1** (риск деградации/блокировок CDN; UX flash) |
-| Владелец | `automation/host/lords-frontend.py` + nginx `yummyani-poster-cache` / lords poster map |
-| Доказательство | screenshots `animedia-space-home-1440.png` (ранний) vs `animedia-space-home-1440-wait.png` (после wait); HEAD `/poster/` 308 на animedia/zona, 200 на lords |
+| Шаг | сравнить `src` карточек; HEAD proxy; screenshot до/после wait/scroll |
+| Факт | прямой CDN; до загрузки в DOM виден fallback «постер не открылся»; после scroll все 96 Animedia img `naturalWidth>0`, HEAD CDN 25/25 = 200 |
+| Ожидание | единый `/poster/` proxy на всех семействах |
+| Severity | **P1** (риск CDN/CSP + UX flash) |
+| Владелец | `automation/host/lords-frontend.py` + nginx poster map |
+| Доказательство | `raw/*_deep.json` poster_probe/images; screenshots `animedia-space-home-1440-wait.png`, `animedia-space-home-scrolled.png` |
 
-### P2-01 — Lords: пустые оценки на карточках главной («КП — IMDb —»)
+### P2-01 — Lords: пустые «КП — / IMDb —» на карточках главной
 
 | Поле | Значение |
 |---|---|
@@ -127,41 +195,41 @@
 | URL | `/` |
 | Раздел | карточки / рейтинги |
 | Шаг | открыть главную |
-| Факт | на видимых карточках рейтинги отображаются прочерками |
-| Ожидание | числа КП/IMDb, когда есть в снимке; иначе не рисовать пустую шкалу |
+| Факт | Playwright: `kpDashes=42` на видимых карточках |
+| Ожидание | числа при наличии в снимке; иначе не рисовать пустую шкалу |
 | Severity | **P2** |
-| Владелец | `automation/host/lords-frontend.py` (карточка lords-sheet) |
-| Доказательство | `screenshots/lords-home-1440.png` |
+| Владелец | lords-sheet card renderer |
+| Доказательство | `screenshots/lords-home-1440.png`, `playwright-metrics.json` |
 
 ### P2-02 — Некодированные кириллические query в `href`
 
 | Поле | Значение |
 |---|---|
-| Домен | lordserial33.biz, zonafilm.space |
-| URL | `/catalog/?kind=Фильм` (в HTML буквально) |
+| Домен | lordserial33.biz (6), zonafilm.space (7) |
+| URL | литерал `/catalog/?kind=Фильм` в HTML |
 | Раздел | навигация / фильтры |
-| Шаг | разобрать HTML; запросить URL без percent-encoding |
-| Факт | urllib/некоторые клиенты получают сбой; браузер кодирует → 200 |
+| Шаг | разобрать HTML; запросить без percent-encoding |
+| Факт | браузер кодирует → 200; не-браузерные клиенты могут ломаться |
 | Ожидание | `kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC` в разметке |
 | Severity | **P2** |
 | Владелец | `automation/host/lords-frontend.py` |
-| Доказательство | сырой HTML home; автопрогон `checks.json` nav_link status=None |
+| Доказательство | `raw/lords_deep.json` / `zona_deep.json` → `nav.unencoded_cyrillic_hrefs` |
 
-### P2-03 — Animedia vs amd.online: плотность и состав главной
+### P2-03 — Animedia vs amd.online: плотность, IA, chrome
 
 | Поле | Значение |
 |---|---|
 | Домен | https://animedia.space/ vs https://amd.online/ |
 | URL | `/` |
-| Раздел | главная / IA |
-| Шаг | сравнить structure-metrics |
-| Факт | live: 107 `<a>`, 96 `<img>`, 6 полок (2 честно пустые). Ref: 333 `<a>`, 180 `<img>`, другие заголовки («Новые серии аниме», …), 3 формы (логин+поиск). Шапка live: `position:relative`, красный акцент `#c50725`, placeholder «Название аниме». |
-| Ожидание | по ACCEPTANCE — нельзя заявлять визуальный match без measurement_plan; разрыв плотности/IA зафиксирован как долг |
-| Severity | **P2** (продуктовый разрыв с эталоном, не runtime-авария) |
-| Владелец | templates Animedia / `docs/reference-packs/amd-online` |
-| Доказательство | `raw/structure-metrics.json`, screenshots |
+| Раздел | главная / IA / визуал |
+| Шаг | structure + Playwright metrics |
+| Факт | live ≈107 `<a>` / 96 `<img>` / 1 форма; ref ≈328 `<a>` / 179 `<img>` / 3 формы (логин+поиск). Live nav: 5 пунктов; ref: Premium/AMDейлик/мегаменю жанров. Шрифт live system-ui; ref Circe. Акцент live `#c50725`. Шапка live `relative` (не sticky) — у ref тоже `relative`. |
+| Ожидание | measurement_plan + токены; не silent “готово как оригинал” |
+| Severity | **P2** |
+| Владелец | Animedia templates / `docs/reference-packs/amd-online` |
+| Доказательство | `raw/refs_home.json`, `playwright-metrics.json`, screenshots `animedia-space-home-*` vs `amd-online-home.png` |
 
-### P2-04 — Zona «Новые трейлеры» всегда пустая полка
+### P2-04 — Zona: полка «Новые трейлеры» всегда empty
 
 | Поле | Значение |
 |---|---|
@@ -169,111 +237,83 @@
 | URL | `/` |
 | Раздел | главная / полки |
 | Шаг | открыть главную |
-| Факт | честное `zempty`: «Трейлеры источником не передаются…» |
-| Ожидание | либо скрыть полку (как цель empty-shelf gate), либо иметь данные |
+| Факт | честный `zempty`: трейлеры источником не передаются |
+| Ожидание | скрыть полку без данных **или** иметь данные |
 | Severity | **P2** |
-| Владелец | `automation/host/lords-frontend.py` (zona shelves) |
-| Доказательство | HTML home snippet в прогоне |
+| Владелец | zona shelves in lords-frontend |
+| Доказательство | HTML home + `playwright-metrics.json` emptyShelves |
 
-### P3-01 — Нет отдельных `/genres/` и `/countries/`
+### P3-01 — Нет `/genres/` и `/countries/` как отдельных страниц
 
-Навигация на них не ссылается. Фасеты: Lords `?year=`, Zona `?genre=`, Animedia `?kind=Аниме`.  
-**Severity P3** (ожидание «страница жанров» из чеклиста ≠ фактическая IA).  
-Владелец: docs / IA, не hotfix.
+404 на всех доменах; в основной навигации ссылок нет. Фасеты через query.
+**Severity P3.** Доказательство: route matrix.
 
-### P3-02 — Animedia честные пустые «Онгоинги» / «Сегодня выйдет»
+### P3-02 — Animedia: честные empty «Онгоинги» / «Сегодня выйдет»
 
-Сообщения объясняют отсутствие полей источника. Это **не** 500 и не ложные карточки. Относительно amd.online (где блок «Сегодня выйдет» заполнен) — data gap.  
-**Severity P3** (или accepted debt).  
-Доказательство: screenshot wait + HTML `zempty`.
+Data gap относительно amd.online (там блоки заполнены). Не 500.
+**Severity P3.**
 
-### P3-03 — `alt=""` у постеров на всех семействах
+### P3-03 — `alt=""` у постеров
 
-**Severity P3** a11y. Владелец: lords-frontend.
+На всех семействах. **P3** a11y.
 
-### P3-04 — Пагинация `/catalog/page/3/` → 404
+### P3-04 — Path-pagination `/catalog/page/N/` → 404
 
-Рабочий путь: `?page=3`. UI ссылается на query.  
-**Severity P3**.
+UI использует `?page=`. **P3**.
 
-### P3-05 — Zona vs w140.zona.plus: тёмная тема live vs светлый эталон-пакет
+### P3-05 — Lords: пустой plot на части title pages
 
-Live `zona-top` тёмный; пакет `zona-w140` описывает светлый лист 1.1.0 как legacy. Разные design epochs.  
-**Severity P3** (документированный dual-design), не регрессия закрытого стенда.
+Пример: `/title/007-doroga-k-millionu/` — «Описание… источник пока не передал». Честный empty, но UX-дыра. **P3**.
 
----
+### P3-06 — `runtime_commit` только у Zona
 
-## Что работает хорошо
-
-1. **Закрытость:** noindex header+meta, `robots.txt` Disallow:/, indexing-policy closed — на всех четырёх.
-2. **Семейства не смешаны:** `lords-sheet` / `animedia-portal` / `zona-top`; animedia.icu ≡ animedia.space по design/build.
-3. **Каталог, title, player-зона, collections** — 200, без 502.
-4. **Zona жанровые чипы** (14) и **Lords year facets** — живые.
-5. **Animedia collection CTA** (`/collection/...`) — 200, ~60 titles.
-6. **Честные empty-states** (онгоинги/сегодня/трейлеры) — не выдумывают данные.
-7. **Provenance Zona** после фикса: source `a10e68b2`, runtime `99ec7829`.
+Lords/Animedia отдают `source_commit` без `runtime_commit` в `/__template_version`. После provenance-фикса это ожидаемо асимметрично; для аудита единообразия — долг документации/API. **P3**.
 
 ---
 
-## Сравнение семейств и референсов
+## Что уже соответствует оригиналу
 
-### Lords ↔ Animedia ↔ Zona
+1. **Закрытость стенда:** `X-Robots-Tag` + meta noindex + `robots.txt Disallow: /` на всех четырёх доменах.
+2. **Семейства не смешаны:** `lords-sheet` / `animedia-portal` / `zona-top`; animedia.icu ≡ animedia.space по design/build/source.
+3. **Zona ↔ w140.zona.plus (структурно близко):** тёмная тема `rgb(30,37,43)`, fixed header `rgb(84,103,120)` height 69, те же заголовки полок («Популярные новинки фильмов», «Популярные сериалы», «Добавленные недавно фильмы», «Новые серии», «Новые трейлеры»), genre/kind навигация узнаваема. Provenance source=`a10e68b2`, runtime=`99ec7829` корректны.
+4. **Animedia ↔ amd.online (узнаваемость):** светлый лист, красный акцент, секции «Сегодня выйдет» / «Новые аниме*», карточки с рейтингами, поиск в шапке, portal-IA без login на закрытом стенде — ожидаемо.
+5. **Каталог / title / player-зона / collections:** 200, player `data-state="playable"`, без 502; внутренние ссылки (encoded sample) без 4xx.
+6. **Честные empty-states** вместо выдуманных данных (онгоинги, сегодня, трейлеры, plot).
+7. **Постеры после догрузки:** CDN/proxy отдают 200; «битые» в Playwright до scroll — lazy, не 404.
 
-| Аспект | Lords | Animedia | Zona |
-|---|---|---|---|
-| Тема | светлая, зелёный акцент | светлая, красный `#c50725` | тёмная, синий акцент |
-| Шапка | sticky-like sheet nav | `position:relative` (static) | top bar + pill active |
-| Поиск placeholder | «Введите название» | «Название аниме» | «Название фильма или сериала» |
-| Постеры | `/poster/` proxy | прямой CDN | прямой CDN |
-| Полки главной | grid «Новинки» без h2-списка | 6 секций h2 | 5 секций h2 |
-| Оценки на карточках | часто «—» | КП/IMDb числа | IMDb числа |
+## Что особенно далеко от оригинала
 
-### Animedia ↔ amd.online (особое внимание)
+1. **Animedia vs amd.online:** плотность (~3× меньше ссылок), нет login/social chrome, нет жанрового мегаменю, шрифт не Circe, другие названия/набор полок («Онгоинги» vs заполненные блоки ref), две пустые data-полки, placeholder «Название аниме» vs «Поиск аниме».
+2. **Поиск латиница** на всех витринах — функциональный разрыв с ожиданиями пользователя (slug часто латиницей).
+3. **Poster pipeline:** только Lords на `/poster/`; Animedia/Zona на прямом CDN.
+4. **Lords:** нет UI-референса в inventory; пустые рейтинги на карточках; collections = facet hub, не curated `/collection/*`.
+5. **Zona package dual-design:** live `zona-top` тёмный совпадает с live w140; светлый legacy в `docs/reference-packs/zona-w140` — не целевой epoch для этого стенда (не регрессия, но путаница в docs).
 
-| | animedia.space | amd.online (ref) |
-|---|---|---|
-| `<a>` | 107 | 333 |
-| `<img>` | 96 | 180 |
-| формы | 1 (поиск) | 3 (логин+пароль+поиск) |
-| h2 | Онгоинги, Новые эпизоды, Сегодня выйдет, Новые аниме, Топ, С видео | Новые серии аниме, Сегодня выйдет, Новые аниме на сайте |
-| Шапка | logo+5 пунктов+поиск | плотнее, иной chrome |
-| Онгоинги / Сегодня | честный empty | на референсе блоки заполнены |
+## Следующий цикл исправлений
 
-Вывод: live Animedia — **узнаваемый** portal (красный акцент, светлый лист, аниме-навигация), но **не** измеренный паритет с amd.online (пакет сам запрещает заявлять match). Главные UX-риски: латиница в поиске, proxy постеров, пустые data-dependent полки.
-
-### Zona ↔ w140.zona.plus
-
-Live тёмный `zona-top` с жанровыми чипами и полками; ref probe 200, ~93 ссылки, мало `<img>` в первом HTML (вероятно lazy/JS). Пакет `zona-w140` — черновик без заполненных токенов. Объявлять visual match нельзя.
-
-### Lords
-
-Отдельного UI-референса в inventory нет. Live стабилен по маршрутам; слабые места — пустые рейтинги на карточках и латинский поиск.
+1. **P1-01** — поиск: транслит / slug / latin aliases (+ mixed query) для всех семейств.
+2. **P1-02** — включить `/poster/` proxy для Animedia и Zona по образцу Lords.
+3. **P2-01** — не рендерить пустые КП/IMDb на Lords-карточках.
+4. **P2-02** — percent-encode `kind`/`genre` в `href`.
+5. **P2-04** — скрыть полку «Новые трейлеры» без данных.
+6. **P2-03** — Animedia: measurement_plan против amd.online (nav order, typography Circe/tokens, shelf set, header density) — без заявления match до измерений.
+7. **P3** — alt-тексты; docs IA genres/countries; единообразие `runtime_commit` в manifest; path-pagination или явный отказ в docs.
 
 ---
 
-## Приоритет исправлений
+## Итоговая таблица по доменам
 
-1. **P1-01** — поиск: транслит / slug / латиница (Animedia + Lords).  
-2. **P1-02** — включить `/poster/` proxy для Animedia (и ideally Zona) как у Lords.  
-3. **P2-01** — не показывать пустые «КП — IMDb —» на Lords.  
-4. **P2-02** — percent-encode `kind`/`genre` в `href`.  
-5. **P2-03 / P2-04** — продуктовые: measurement_plan Animedia; скрыть полку трейлеров Zona без данных.  
-6. **P3** — a11y alt, IA docs для genres/countries, dual-design Zona.
+| Домен | HTTP/noindex | Profile / commits | Критичные находки | Вердикт стенда |
+|---|---|---|---|---|
+| lordserial33.biz | OK / closed | lords-new · source `99ec7829` | P1 search latin; P2 empty ratings; P2 unencoded kind | **GO for closed QA**, fix search/ratings next |
+| animedia.space | OK / closed | animedia-general · source `b023bd50` | P1 search latin; P1 no poster proxy; P2 density vs amd.online; P3 empty shelves | **GO closed**, furthest from amd.online IA |
+| animedia.icu | OK / closed | ≡ space | те же, что space | **GO closed**, parity with .space |
+| zonafilm.space | OK / closed | zona-general · source `a10e68b2` · runtime `99ec7829` | P1 search latin; P1 no poster proxy; P2 empty trailers; P2 unencoded kind | **GO closed**, closest structural match to w140 |
 
----
-
-## Итоговая таблица
-
-| | |
+| Метрика | Значение |
 |---|---|
-| Всего автопроверок | 154 |
-| Ложные P0 (kind URL encoding) | 12 |
-| Подтверждённые P0 | **0** |
-| Подтверждённые P1 | **2** |
-| Подтверждённые P2 | **4** |
-| Подтверждённые P3 | **5** |
-| Отличие от оригинала | Animedia заметно реже/проще amd.online; пустые data-полки; нет login-форм (ожидаемо для закрытой витрины); Zona тёмная vs светлый legacy-пакет; Lords без внешнего UI-ref |
-| Делать первыми | поиск латиница → poster proxy Animedia → пустые рейтинги Lords → encode query |
+| Всего автопроверок (deep) | 170 |
+| Подтверждённые P0 / P1 / P2 / P3 | **0 / 2 / 4 / 6** |
+| Делать первыми | latin/slug search → poster proxy Animedia/Zona → Lords empty ratings → encode query → hide Zona trailers shelf |
 
-`DEPLOY_PERFORMED` в этой задаче: **нет** (только исследование).  
-`DNS_MUTATIONS=0` · `PAID_OPERATIONS=0` · `PRODUCTION_MUTATIONS=0`
+`DEPLOY_PERFORMED` в этой задаче: **нет** (только аудит и отчёт).
