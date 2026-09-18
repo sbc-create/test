@@ -2604,7 +2604,11 @@ def _index_page(ctx, *, path, section, pairs, trail_label, indexable) -> Page:
         )
     meta = Meta(
         title=title,
-        description=text.get("description", f"{title} каталога."),
+        # Без текста профиля описание не выдумывается. Прежний шаблон
+        # «{title} каталога.» давал «Каталог каталога.» / «Новое каталога.»
+        # на страницах noindex-навигации, у которых в профиле нет sections.* —
+        # это хуже отсутствующего meta (см. test_lords_section_description).
+        description=text.get("description") or "",
         h1=h1, page_type="category", indexable=indexable,
         breadcrumbs=(("Главная", "/"), (trail_label, "")),
     )
@@ -2970,7 +2974,8 @@ def render_site(
         for page in _listing_pages(
             ctx, base=base, titles=titles, catalog=catalog, kinds=subset,
             section_title=title, h1=text.get("h1") or title,
-            description=text.get("description", f"{title} каталога."),
+            # Без текста профиля — без meta description (не «{title} каталога.»).
+            description=text.get("description") or "",
             intro=text.get("intro", ""), indexable=entry.indexable,
             trail=(("Главная", "/"), (trail_label, "")), show_type=show_type,
             order=order,
