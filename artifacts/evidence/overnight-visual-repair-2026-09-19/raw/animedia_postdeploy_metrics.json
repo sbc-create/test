@@ -1,0 +1,401 @@
+{
+  "animedia_space": {
+    "1440x900": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "headerPos": "relative",
+      "headerH": 92,
+      "headerBg": "rgb(255, 255, 255)",
+      "headerBorder": "rgb(197, 7, 37)",
+      "bodyBg": "rgb(255, 255, 255)",
+      "bodyFont": "ui-sans-serif, system-ui, \"Segoe UI\", Roboto, Arial, sans-serif",
+      "cardAspect": "auto",
+      "nSections": 4,
+      "overflowing": [],
+      "shot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/postdeploy-animedia_space-1440x900.png"
+    },
+    "768x1024": {
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflow": false,
+      "headerPos": "relative",
+      "headerH": 92,
+      "headerBg": "rgb(255, 255, 255)",
+      "headerBorder": "rgb(197, 7, 37)",
+      "bodyBg": "rgb(255, 255, 255)",
+      "bodyFont": "ui-sans-serif, system-ui, \"Segoe UI\", Roboto, Arial, sans-serif",
+      "cardAspect": "auto",
+      "nSections": 4,
+      "overflowing": [],
+      "shot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/postdeploy-animedia_space-768x1024.png"
+    },
+    "390x844": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflow": false,
+      "headerPos": "relative",
+      "headerH": 128,
+      "headerBg": "rgb(255, 255, 255)",
+      "headerBorder": "rgb(197, 7, 37)",
+      "bodyBg": "rgb(255, 255, 255)",
+      "bodyFont": "ui-sans-serif, system-ui, \"Segoe UI\", Roboto, Arial, sans-serif",
+      "cardAspect": "auto",
+      "nSections": 4,
+      "overflowing": [
+        {
+          "tag": "A",
+          "cls": "",
+          "right": 417,
+          "w": 157
+        },
+        {
+          "tag": "A",
+          "cls": "",
+          "right": 541,
+          "w": 123
+        },
+        {
+          "tag": "A",
+          "cls": "",
+          "right": 649,
+          "w": 106
+        }
+      ],
+      "shot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/postdeploy-animedia_space-390x844.png"
+    }
+  },
+  "animedia_space_cat": {
+    "1440x900": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "headerPos": "relative",
+      "headerH": 92,
+      "headerBg": "rgb(255, 255, 255)",
+      "headerBorder": "rgb(197, 7, 37)",
+      "bodyBg": "rgb(255, 255, 255)",
+      "bodyFont": "ui-sans-serif, system-ui, \"Segoe UI\", Roboto, Arial, sans-serif",
+      "cardAspect": null,
+      "nSections": 0,
+      "overflowing": [],
+      "shot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/postdeploy-animedia_space_cat-1440x900.png"
+    },
+    "768x1024": {
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflow": false,
+      "headerPos": "relative",
+      "headerH": 92,
+      "headerBg": "rgb(255, 255, 255)",
+      "headerBorder": "rgb(197, 7, 37)",
+      "bodyBg": "rgb(255, 255, 255)",
+      "bodyFont": "ui-sans-serif, system-ui, \"Segoe UI\", Roboto, Arial, sans-serif",
+      "cardAspect": null,
+      "nSections": 0,
+      "overflowing": [
+        {
+          "tag": "A",
+          "cls": "",
+          "right": 773,
+          "w": 106
+        }
+      ],
+      "shot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/postdeploy-animedia_space_cat-768x1024.png"
+    },
+    "390x844": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflow": false,
+      "headerPos": "relative",
+      "headerH": 128,
+      "headerBg": "rgb(255, 255, 255)",
+      "headerBorder": "rgb(197, 7, 37)",
+      "bodyBg": "rgb(255, 255, 255)",
+      "bodyFont": "ui-sans-serif, system-ui, \"Segoe UI\", Roboto, Arial, sans-serif",
+      "cardAspect": null,
+      "nSections": 0,
+      "overflowing": [
+        {
+          "tag": "A",
+          "cls": "",
+          "right": 422,
+          "w": 157
+        },
+        {
+          "tag": "A",
+          "cls": "",
+          "right": 547,
+          "w": 123
+        },
+        {
+          "tag": "A",
+          "cls": "",
+          "right": 655,
+          "w": 106
+        }
+      ],
+      "shot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/postdeploy-animedia_space_cat-390x844.png"
+    }
+  },
+  "animedia_space_search": {
+    "1440x900": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "headerPos": "relative",
+      "headerH": 92,
+      "headerBg": "rgb(255, 255, 255)",
+      "headerBorder": "rgb(197, 7, 37)",
+      "bodyBg": "rgb(255, 255, 255)",
+      "bodyFont": "ui-sans-serif, system-ui, \"Segoe UI\", Roboto, Arial, sans-serif",
+      "cardAspect": null,
+      "nSections": 0,
+      "overflowing": [],
+      "shot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/postdeploy-animedia_space_search-1440x900.png"
+    },
+    "768x1024": {
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflow": false,
+      "headerPos": "relative",
+      "headerH": 92,
+      "headerBg": "rgb(255, 255, 255)",
+      "headerBorder": "rgb(197, 7, 37)",
+      "bodyBg": "rgb(255, 255, 255)",
+      "bodyFont": "ui-sans-serif, system-ui, \"Segoe UI\", Roboto, Arial, sans-serif",
+      "cardAspect": null,
+      "nSections": 0,
+      "overflowing": [],
+      "shot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/postdeploy-animedia_space_search-768x1024.png"
+    },
+    "390x844": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflow": false,
+      "headerPos": "relative",
+      "headerH": 128,
+      "headerBg": "rgb(255, 255, 255)",
+      "headerBorder": "rgb(197, 7, 37)",
+      "bodyBg": "rgb(255, 255, 255)",
+      "bodyFont": "ui-sans-serif, system-ui, \"Segoe UI\", Roboto, Arial, sans-serif",
+      "cardAspect": null,
+      "nSections": 0,
+      "overflowing": [
+        {
+          "tag": "A",
+          "cls": "",
+          "right": 410,
+          "w": 157
+        },
+        {
+          "tag": "A",
+          "cls": "",
+          "right": 535,
+          "w": 123
+        },
+        {
+          "tag": "A",
+          "cls": "",
+          "right": 643,
+          "w": 106
+        }
+      ],
+      "shot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/postdeploy-animedia_space_search-390x844.png"
+    }
+  },
+  "amd": {
+    "1440x900": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "headerPos": "relative",
+      "headerH": 90,
+      "headerBg": "rgba(0, 0, 0, 0)",
+      "headerBorder": "rgb(22, 22, 22)",
+      "bodyBg": "rgb(255, 255, 255)",
+      "bodyFont": "Circe, sans-serif",
+      "cardAspect": "auto",
+      "nSections": 4,
+      "overflowing": [
+        {
+          "tag": "INPUT",
+          "cls": "",
+          "right": 1510,
+          "w": 210
+        },
+        {
+          "tag": "DIV",
+          "cls": "owl-stage",
+          "right": 2650,
+          "w": 2560
+        },
+        {
+          "tag": "DIV",
+          "cls": "owl-item active",
+          "right": 1533,
+          "w": 163
+        },
+        {
+          "tag": "DIV",
+          "cls": "poster has-overlay grid-item d-flex fd-column",
+          "right": 1533,
+          "w": 163
+        },
+        {
+          "tag": "DIV",
+          "cls": "poster__desc order-last",
+          "right": 1533,
+          "w": 163
+        },
+        {
+          "tag": "A",
+          "cls": "poster__link",
+          "right": 1533,
+          "w": 163
+        },
+        {
+          "tag": "H3",
+          "cls": "poster__title line-clamp",
+          "right": 1533,
+          "w": 163
+        },
+        {
+          "tag": "DIV",
+          "cls": "poster__img img-responsive img-responsive--portrait img-fit-cover anim",
+          "right": 1533,
+          "w": 163
+        }
+      ],
+      "shot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/postdeploy-amd-1440x900.png"
+    },
+    "768x1024": {
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflow": false,
+      "headerPos": "relative",
+      "headerH": 90,
+      "headerBg": "rgba(0, 0, 0, 0)",
+      "headerBorder": "rgb(22, 22, 22)",
+      "bodyBg": "rgb(255, 255, 255)",
+      "bodyFont": "Circe, sans-serif",
+      "cardAspect": "auto",
+      "nSections": 4,
+      "overflowing": [
+        {
+          "tag": "INPUT",
+          "cls": "",
+          "right": 833,
+          "w": 210
+        },
+        {
+          "tag": "DIV",
+          "cls": "owl-stage",
+          "right": 1977,
+          "w": 1927
+        },
+        {
+          "tag": "DIV",
+          "cls": "owl-item",
+          "right": 856,
+          "w": 118
+        },
+        {
+          "tag": "DIV",
+          "cls": "poster has-overlay grid-item d-flex fd-column",
+          "right": 856,
+          "w": 118
+        },
+        {
+          "tag": "DIV",
+          "cls": "poster__desc order-last",
+          "right": 856,
+          "w": 118
+        },
+        {
+          "tag": "A",
+          "cls": "poster__link",
+          "right": 856,
+          "w": 118
+        },
+        {
+          "tag": "H3",
+          "cls": "poster__title line-clamp",
+          "right": 856,
+          "w": 118
+        },
+        {
+          "tag": "DIV",
+          "cls": "poster__img img-responsive img-responsive--portrait img-fit-cover anim",
+          "right": 856,
+          "w": 118
+        }
+      ],
+      "shot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/postdeploy-amd-768x1024.png"
+    },
+    "390x844": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflow": false,
+      "headerPos": "relative",
+      "headerH": 126,
+      "headerBg": "rgba(0, 0, 0, 0)",
+      "headerBorder": "rgb(22, 22, 22)",
+      "bodyBg": "rgb(255, 255, 255)",
+      "bodyFont": "Circe, sans-serif",
+      "cardAspect": "auto",
+      "nSections": 4,
+      "overflowing": [
+        {
+          "tag": "SPAN",
+          "cls": "streak__tip",
+          "right": 402,
+          "w": 168
+        },
+        {
+          "tag": "SPAN",
+          "cls": "streak__tip",
+          "right": 416,
+          "w": 168
+        },
+        {
+          "tag": "SPAN",
+          "cls": "streak__tip-rank",
+          "right": 403,
+          "w": 142
+        },
+        {
+          "tag": "SPAN",
+          "cls": "streak__tip-days",
+          "right": 403,
+          "w": 142
+        },
+        {
+          "tag": "SPAN",
+          "cls": "streak__tip-next",
+          "right": 403,
+          "w": 142
+        },
+        {
+          "tag": "SPAN",
+          "cls": "streak__tip",
+          "right": 410,
+          "w": 168
+        },
+        {
+          "tag": "SPAN",
+          "cls": "streak__tip-rank",
+          "right": 397,
+          "w": 142
+        },
+        {
+          "tag": "SPAN",
+          "cls": "streak__tip-days",
+          "right": 397,
+          "w": 142
+        }
+      ],
+      "shot": "artifacts/evidence/overnight-visual-repair-2026-09-19/screenshots/postdeploy-amd-390x844.png"
+    }
+  }
+}

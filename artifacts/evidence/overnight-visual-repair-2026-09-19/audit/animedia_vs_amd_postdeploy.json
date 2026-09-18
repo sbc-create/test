@@ -1,0 +1,304 @@
+{
+  "space": {
+    "base": "https://animedia.space",
+    "home": {
+      "status": 200,
+      "xr": "noindex, nofollow",
+      "rev": "b023bd50cced",
+      "design": "animedia-portal",
+      "n_a": 107,
+      "n_img": 96,
+      "h2": [
+        "Новые эпизоды",
+        "Новые аниме",
+        "Топ по оценкам",
+        "С видео"
+      ],
+      "nav": [
+        "class=\"zhd__n\" aria-label=\"Разделы\"><a href=\"/\" aria-current=\"page\">Главная</a><a href=\"/catalog/\">Каталог аниме</a><a href=\"/new/\">Новые эпизоды</a><a href=\"/schedule/\">Расписание</a><a href=\"/collections/\">Подборки</a></nav>"
+      ],
+      "placeholder": "Поиск аниме",
+      "ongoing": false,
+      "today": false,
+      "aspect": true,
+      "overflow_css": true,
+      "nav_links": [
+        [
+          "/",
+          "Главная"
+        ],
+        [
+          "/catalog/",
+          "Каталог аниме"
+        ],
+        [
+          "/new/",
+          "Новые эпизоды"
+        ],
+        [
+          "/schedule/",
+          "Расписание"
+        ],
+        [
+          "/collections/",
+          "Подборки"
+        ]
+      ]
+    },
+    "routes": {
+      "/catalog/": {
+        "status": 200,
+        "xr": "noindex, nofollow",
+        "body": null
+      },
+      "/search/": {
+        "status": 200,
+        "xr": "noindex, nofollow",
+        "body": null
+      },
+      "/collections/": {
+        "status": 200,
+        "xr": "noindex, nofollow",
+        "body": null
+      },
+      "/new/": {
+        "status": 200,
+        "xr": "noindex, nofollow",
+        "body": null
+      },
+      "/schedule/": {
+        "status": 200,
+        "xr": "noindex, nofollow",
+        "body": null
+      },
+      "/robots.txt": {
+        "status": 200,
+        "xr": "noindex, nofollow",
+        "body": "User-agent: *\nDisallow: /\n"
+      },
+      "/sitemap.xml": {
+        "status": 404,
+        "xr": "noindex, nofollow",
+        "body": null
+      }
+    },
+    "search": {
+      "наруто": {
+        "status": 200,
+        "hits": 2
+      },
+      "naruto": {
+        "status": 200,
+        "hits": 2
+      },
+      "Naruto": {
+        "status": 200,
+        "hits": 2
+      },
+      "empty": {
+        "status": 200,
+        "hits": 0
+      }
+    },
+    "title": {
+      "path": "/title/nelyud-chast-2/",
+      "status": 200,
+      "player": [
+        "awaiting"
+      ],
+      "vp": 0
+    }
+  },
+  "icu": {
+    "base": "https://animedia.icu",
+    "home": {
+      "status": 200,
+      "xr": "noindex, nofollow",
+      "rev": "b023bd50cced",
+      "design": "animedia-portal",
+      "n_a": 107,
+      "n_img": 96,
+      "h2": [
+        "Новые эпизоды",
+        "Новые аниме",
+        "Топ по оценкам",
+        "С видео"
+      ],
+      "nav": [
+        "class=\"zhd__n\" aria-label=\"Разделы\"><a href=\"/\" aria-current=\"page\">Главная</a><a href=\"/catalog/\">Каталог аниме</a><a href=\"/new/\">Новые эпизоды</a><a href=\"/schedule/\">Расписание</a><a href=\"/collections/\">Подборки</a></nav>"
+      ],
+      "placeholder": "Поиск аниме",
+      "ongoing": false,
+      "today": false,
+      "aspect": true,
+      "overflow_css": true,
+      "nav_links": [
+        [
+          "/",
+          "Главная"
+        ],
+        [
+          "/catalog/",
+          "Каталог аниме"
+        ],
+        [
+          "/new/",
+          "Новые эпизоды"
+        ],
+        [
+          "/schedule/",
+          "Расписание"
+        ],
+        [
+          "/collections/",
+          "Подборки"
+        ]
+      ]
+    },
+    "routes": {
+      "/catalog/": {
+        "status": 200,
+        "xr": "noindex, nofollow",
+        "body": null
+      },
+      "/search/": {
+        "status": 200,
+        "xr": "noindex, nofollow",
+        "body": null
+      },
+      "/collections/": {
+        "status": 200,
+        "xr": "noindex, nofollow",
+        "body": null
+      },
+      "/new/": {
+        "status": 200,
+        "xr": "noindex, nofollow",
+        "body": null
+      },
+      "/schedule/": {
+        "status": 200,
+        "xr": "noindex, nofollow",
+        "body": null
+      },
+      "/robots.txt": {
+        "status": 200,
+        "xr": "noindex, nofollow",
+        "body": "User-agent: *\nDisallow: /\n"
+      },
+      "/sitemap.xml": {
+        "status": 404,
+        "xr": "noindex, nofollow",
+        "body": null
+      }
+    },
+    "search": {
+      "наруто": {
+        "status": 200,
+        "hits": 2
+      },
+      "naruto": {
+        "status": 200,
+        "hits": 2
+      },
+      "Naruto": {
+        "status": 200,
+        "hits": 2
+      },
+      "empty": {
+        "status": 200,
+        "hits": 0
+      }
+    },
+    "title": {
+      "path": "/title/nelyud-chast-2/",
+      "status": 200,
+      "player": [
+        "awaiting"
+      ],
+      "vp": 0
+    }
+  },
+  "amd": {
+    "base": "https://amd.online",
+    "home": {
+      "status": 200,
+      "xr": null,
+      "rev": "",
+      "design": null,
+      "n_a": 334,
+      "n_img": 180,
+      "h2": [
+        "Новые серии аниме",
+        "Сегодня выйдет",
+        "Новые аниме на сайте",
+        "Подборки аниме",
+        "миеаприори",
+        "топ аниме",
+        "MUST-WATCH DONGHUA",
+        "Из старенького"
+      ],
+      "nav": [],
+      "placeholder": "Ваш логин",
+      "ongoing": true,
+      "today": true,
+      "aspect": false,
+      "overflow_css": false
+    },
+    "routes": {
+      "/catalog/": {
+        "status": 200,
+        "xr": null,
+        "body": null
+      },
+      "/search/": {
+        "status": 200,
+        "xr": null,
+        "body": null
+      },
+      "/collections/": {
+        "status": 404,
+        "xr": null,
+        "body": null
+      },
+      "/new/": {
+        "status": 404,
+        "xr": null,
+        "body": null
+      },
+      "/schedule/": {
+        "status": 404,
+        "xr": null,
+        "body": null
+      },
+      "/robots.txt": {
+        "status": 200,
+        "xr": null,
+        "body": "User-agent: *\nDisallow: /engine/go.php\nDisallow: /engine/download.php\nDisallow: "
+      },
+      "/sitemap.xml": {
+        "status": 200,
+        "xr": null,
+        "body": null
+      }
+    },
+    "search": {
+      "наруто": {
+        "status": 200,
+        "hits": 0
+      },
+      "naruto": {
+        "status": 200,
+        "hits": 0
+      },
+      "Naruto": {
+        "status": 200,
+        "hits": 0
+      },
+      "empty": {
+        "status": 200,
+        "hits": 0
+      }
+    }
+  }
+}
