@@ -161,3 +161,14 @@ class TestEmptyShelfPolicy:
             модуль.СЕМЕЙСТВА_1_1["animedia"], данные, дет, индекс, "Test")
         assert вид.секция("ongoing", "Онгоинги", "", [], "нет") == ""
         assert вид.секция("today-schedule", "Сегодня выйдет", "", [], "нет") == ""
+
+    def test_animedia_shell_has_mobile_nav_toggle(self, frontend):
+        модуль, данные, дет, индекс, _ = frontend
+        вид = модуль.ВидАнимедиа(
+            модуль.СЕМЕЙСТВА_1_1["animedia"], данные, дет, индекс, "Test")
+        html = вид.оболочка("<p>x</p>", "t", "/", актив="/")
+        assert 'data-nav-toggle' in html
+        assert 'id="zhd-nav"' in html
+        assert "zhd__menu" in html
+        assert "СКРИПТ_АНИМЕДИА_ШАПКА" not in html  # inlined, not name
+        assert "data-nav-toggle" in модуль.СКРИПТ_АНИМЕДИА_ШАПКА

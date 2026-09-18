@@ -1555,23 +1555,34 @@ font:14px/1.45 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif}
 .zwrap{max-width:100%;margin:0 auto;padding:0 6px}
 @media(min-width:768px){.zwrap{padding:0 1px}}
 
-/* Шапка: обычная, не закреплённая. Плотное меню разделов в одну строку. */
+/* Шапка: обычная, не закреплённая. На узком — кнопка меню вместо
+   обрезанной горизонтальной ленты пунктов (эталон amd.online: hamburger). */
 .zhd{position:relative;background:@RAIL@;color:@RAILINK@;
 border-bottom:2px solid @ACC@}
-.zhd__in{max-width:100%;margin:0 auto;padding:12px 6px;display:flex;
-align-items:center;gap:10px;flex-wrap:wrap;min-height:126px}
-@media(min-width:768px){.zhd__in{padding:10px 1px;min-height:90px;flex-wrap:nowrap}}
+.zhd__in{max-width:100%;margin:0 auto;padding:10px 6px;display:flex;
+align-items:center;gap:8px;flex-wrap:wrap;min-height:0}
+@media(min-width:768px){.zhd__in{padding:10px 1px;min-height:90px;flex-wrap:nowrap;gap:10px}}
 .zhd__logo{font-size:22px;font-weight:800;letter-spacing:-.4px;color:@ACC@;
 white-space:nowrap;flex:0 0 auto}
-.zhd__n{display:flex;gap:2px;flex:1 0 100%;order:3;min-width:0;
-overflow-x:auto;scrollbar-width:none}
+.zhd__menu{display:inline-flex;align-items:center;justify-content:center;
+width:40px;height:40px;border:1px solid @LINE@;border-radius:4px;
+background:@PAGE@;color:@INK@;font-size:20px;line-height:1;cursor:pointer;
+flex:0 0 auto;margin-left:auto}
+@media(min-width:768px){.zhd__menu{display:none}}
+.zhd__n{display:none;gap:6px;flex:1 0 100%;order:4;min-width:0;
+flex-wrap:wrap;overflow:visible;padding:6px 0 2px}
+.zhd__n.is-open{display:flex}
+@media(min-width:768px){.zhd__n{display:flex;flex:1 1 auto;order:0;
+flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding:0}}
 .zhd__n::-webkit-scrollbar{display:none}
-@media(min-width:768px){.zhd__n{flex:1 1 auto;order:0;overflow-x:auto}}
-.zhd__n a{padding:7px 9px;border-radius:4px;font-size:17px;font-weight:400;
-color:@INK@;white-space:nowrap;flex:0 0 auto}
+.zhd__n a{padding:8px 10px;border-radius:4px;font-size:15px;font-weight:400;
+color:@INK@;flex:1 1 calc(50% - 6px);text-align:center;min-width:0;
+overflow-wrap:anywhere}
+@media(min-width:768px){.zhd__n a{flex:0 0 auto;white-space:nowrap;font-size:17px;
+text-align:left;padding:7px 9px}}
 .zhd__n a:hover{background:@ALT@;color:@ACC@}
 .zhd__n a[aria-current]{color:@ACC@;font-weight:700;box-shadow:inset 0 -2px 0 @ACC@}
-.zhd__s{display:flex;flex:1 1 150px;min-width:0;max-width:340px;
+.zhd__s{display:flex;flex:1 1 120px;min-width:0;max-width:340px;
 border:1px solid @LINE@;border-radius:4px;overflow:hidden;background:@PAGE@}
 .zhd__s input{flex:1;min-width:0;border:0;padding:8px 10px;font-size:14px;
 color:@INK@;font-family:inherit;background:transparent}
@@ -1595,11 +1606,14 @@ background:transparent;color:@INK@;font-family:inherit}
 .ztop__s button{border:0;background:@ACC@;color:#fff;padding:0 16px;
 font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
 .ztop__b{display:flex;gap:14px;padding:0 0 9px;font-size:13px;color:@DIM@;
-flex-wrap:wrap}
-.ztop__b a{color:@ACC@;font-weight:700;display:inline-block;padding:4px 2px}
+flex-wrap:wrap;max-width:100%;min-width:0}
+.ztop__b a{color:@ACC@;font-weight:700;display:inline-block;padding:4px 2px;
+max-width:100%;overflow-wrap:anywhere}
 
 /* Типографика по измерению: h2 16/700, ссылки 17/400. */
-.zh{font-size:16px;line-height:1.3;font-weight:500;margin:16px 0 5px}
+.zh{font-size:15px;line-height:1.35;font-weight:500;margin:14px 0 5px;max-width:100%;
+overflow-wrap:anywhere}
+@media(min-width:768px){.zh{font-size:16px;line-height:1.3}}
 .zh--sm{font-size:16px;font-weight:700;margin:20px 0 5px}
 .zsub{font-size:13px;color:@DIM@;margin:0 0 14px}
 .zsub a{color:@ACC@;font-weight:700;padding:4px 2px;display:inline-block}
@@ -1831,7 +1845,7 @@ def _подставить(шаблон: str, токены: dict) -> str:
                 ("/collections/", "Подборки")],
         "поиск": "Поиск аниме",
         "полосы": [],
-        "лид": "Аниме-портал: онгоинги, новые эпизоды и расписание",
+        "лид": "Аниме онлайн",
         "метка": "A",
     },
 }
@@ -2191,6 +2205,17 @@ def заглушка_постера(запись: dict, класс_заглуш�
     "var v=document.getElementById(b.getAttribute('aria-controls'));if(!v)return;"
     "var d=Math.max(160,Math.round(v.clientWidth*0.86));"
     "v.scrollBy({left:b.getAttribute('data-rl')==='next'?d:-d,behavior:'smooth'});"
+    "});"
+)
+
+#: Только Animedia: на узком экране пункты меню больше не режутся горизонтальным
+#: скроллом шапки — открываются кнопкой, как у эталона amd.online.
+СКРИПТ_АНИМЕДИА_ШАПКА = (
+    "document.addEventListener('click',function(e){"
+    "var b=e.target.closest('[data-nav-toggle]');if(!b)return;"
+    "var n=document.getElementById('zhd-nav');if(!n)return;"
+    "var open=n.classList.toggle('is-open');"
+    "b.setAttribute('aria-expanded',open?'true':'false');"
     "});"
 )
 
@@ -3674,17 +3699,20 @@ class ВидАнимедиа(ВидЗона):
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 {_мета_версии()}
 <style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}
-{СКРИПТ_ЛЕНТ}</script></head>
+{СКРИПТ_ЛЕНТ}
+{СКРИПТ_АНИМЕДИА_ШАПКА}</script></head>
 <body><a class="skip" href="#main">Перейти к содержимому</a>
 <div class="zs">
 <header class="zhd">
 <div class="zhd__in">
 <a class="zhd__logo" href="/">{html.escape(self.имя)}</a>
-<nav class="zhd__n" aria-label="Разделы">{нав}</nav>
 <form class="zhd__s" action="/search/" method="get" role="search">
 <label class="vh" for="q">Поиск по каталогу аниме</label>
 <input id="q" name="q" placeholder="{html.escape(self.се["поиск"])}">
 <button type="submit">Найти</button></form>
+<button class="zhd__menu" type="button" data-nav-toggle aria-controls="zhd-nav"
+ aria-expanded="false" aria-label="Меню разделов">&#9776;</button>
+<nav id="zhd-nav" class="zhd__n" aria-label="Разделы">{нав}</nav>
 </div>
 </header>
 <div class="zmain">
@@ -3745,13 +3773,14 @@ class ВидАнимедиа(ВидЗона):
             "ongoing": ("Онгоинги",
                         "Источник не передал признака «сейчас выходит», "
                         "поэтому определить выходящие сейчас нечем."),
-            "new_episodes": ("Новые эпизоды",
+            "new_episodes": ("Новые серии аниме",
                              "В снимке нет сериальных записей с датой добавления."),
             "today_schedule": ("Сегодня выйдет",
                                "Время выхода серий источником не передаётся ни одним "
                                "полем, поэтому сегодняшний день собрать не из чего. "
                                "Выдумывать время и номер серии нельзя."),
-            "recently_added": ("Новые аниме", "В снимке нет аниме с датой добавления."),
+            "recently_added": ("Новые аниме на сайте",
+                               "В снимке нет аниме с датой добавления."),
             "top_rated": ("Топ по оценкам", "Источник не передал оценок ни одному тайтлу."),
             "video_available": ("С видео", "Ни у одной записи не подтверждена дорожка."),
         }
