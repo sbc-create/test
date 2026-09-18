@@ -1,0 +1,29 @@
+{
+  "renderer_engine": "chromium",
+  "renderer_driver_version": "1.62.1",
+  "browser_build": "chromium-1234",
+  "device_pixel_ratio": 1,
+  "screenshot_capture_mode": "viewport",
+  "locale": "en-US",
+  "timezone": "UTC",
+  "font_availability": [
+    "Arial",
+    "Helvetica",
+    "Times New Roman",
+    "Courier New",
+    "Noto Color Emoji",
+    "DejaVu Sans",
+    "DejaVu Serif",
+    "DejaVu Sans Mono",
+    "Liberation Sans",
+    "Liberation Serif",
+    "Liberation Mono",
+    "FreeSans"
+  ],
+  "animation_policy": "allow",
+  "template_manifest_compatibility": {
+    "apiVersionRange": "pending",
+    "sdkVersionRange": "pending",
+    "seoContractVersionRange": "pending"
+  }
+}

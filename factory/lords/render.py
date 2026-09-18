@@ -2676,16 +2676,54 @@ def _brand_name(package: dict, profile: dict, domain: str) -> str:
     return str(profile.get("label") or package.get("site_id") or "")
 
 
+def _navigation_primary_paths(package: dict) -> tuple[str, ...]:
+    """Порядок, который владелец сайта явно заявил в `navigation.primary`.
+
+    Поле обязательное (`schemas/site-package.schema.json`) и уже используется
+    как единственный источник шапки в generic-blueprint'е (`factory/render.py`)
+    — но не в Lords. Оно короткое и курируемое, а не полный состав меню:
+    раздел, которого здесь нет, не теряет место (см. `_priority_reorder`).
+    """
+    return tuple(
+        str(item.get("url") or "")
+        for item in ((package.get("navigation") or {}).get("primary") or [])
+    )
+
+
+def _priority_reorder(items: list, key_of, priority: tuple[str, ...]) -> list:
+    """Переставляет только те элементы, чей ключ владелец назвал явно.
+
+    Раскладка внутри группы «названных» элементов идёт в порядке `priority`;
+    любой элемент вне `priority` остаётся ровно на своей текущей позиции.
+    Это разница с сортировкой всего списка: раздел, о котором профиль/пакет
+    не высказался (служебные разделы Lords — жанры, годы, страны, поиск),
+    не имеет объявленного места и потому не двигается вовсе, а не проваливается
+    в конец или начало по умолчанию.
+    """
+    if not priority:
+        return items
+    positions = [i for i, item in enumerate(items) if key_of(item) in priority]
+    if not positions:
+        return items
+    order_key = {key: index for index, key in enumerate(priority)}
+    named_in_order = sorted((items[i] for i in positions), key=lambda item: order_key[key_of(item)])
+    result = list(items)
+    for position, item in zip(positions, named_in_order):
+        result[position] = item
+    return result
+
+
 def _context(package: dict, profile: dict, site_plan, player_state,
              publisher_id: str | None = None, fixture_catalog: bool = True) -> dict:
     layout = theme_mod.layout_of(profile)
     domain = str(package.get("domain") or "").strip()
     brand = _brand_name(package, profile, domain)
-    nav = [
-        (page.section, page.path)
-        for page in site_plan.pages
-        if page.in_menu and page.section != "home"
-    ]
+    nav_pages = _priority_reorder(
+        [page for page in site_plan.pages if page.in_menu and page.section != "home"],
+        key_of=lambda page: page.path,
+        priority=_navigation_primary_paths(package),
+    )
+    nav = [(page.section, page.path) for page in nav_pages]
     return {
         "site_id": str(package.get("site_id", "")),
         "profile": site_plan.profile,
@@ -2879,9 +2917,21 @@ def render_site(
     )
     ctx = _context(package, profile, site_plan, player_state, publisher_id, fixture_catalog)
 
-    kinds = [k for k in ct.active_types(site_plan.type_states) if k in TYPE_LABELS]
-    collections_on = site_plan.type_states["collections"].active
     by_section = {page.section: page for page in site_plan.pages}
+    # Тот же резолвер порядка, что и у шапки (`_context`): фасет «Тип» и
+    # список разделов меню — два места, показывающие один и тот же набор
+    # типов контента, и до этой правки расходились именно тем, что фасет не
+    # знал про navigation.primary вовсе (CORE-HANDOFF-nav-order.md).
+    type_paths = {
+        content_type: by_section[section].path
+        for section, content_type in SECTION_TYPE.items()
+        if section in by_section
+    }
+    kinds = [k for k in ct.active_types(site_plan.type_states) if k in TYPE_LABELS]
+    kinds = _priority_reorder(
+        kinds, key_of=lambda k: type_paths.get(k), priority=_navigation_primary_paths(package),
+    )
+    collections_on = site_plan.type_states["collections"].active
     pool = catalog.of_types(kinds)
 
     site = RenderedSite(site_id=ctx["site_id"], profile=site_plan.profile,

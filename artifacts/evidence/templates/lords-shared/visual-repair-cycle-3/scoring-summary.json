@@ -1,0 +1,71 @@
+{
+  "note": "Реальный вывод visual_scoring.compare() (PR #81, contracts/visual-scoring — не изменён и не смержен в эту ветку, прочитан read-only: `git show ca0c273a291ca601dd7e3a9ec075ab589d850685:factory/visual_scoring.py`, `git show ca0c273a291ca601dd7e3a9ec075ab589d850685:contracts/visual-scoring/1.0.3/scoring-contract.json`). Оба файла выполнялись вне tracked tree (scratchpad), не закоммичены. checker_identity == candidate_author_identity в обоих прогонах: contracts/visual-scoring запрещает такому прогону присуждать VISUAL_CERTIFIED (certification_status=BLOCKED_INDEPENDENCE_VIOLATION). Числа — честная видимость хода ремонта, не вердикт о готовности.",
+  "reference_pack": "docs/reference-packs/amd-online/VISUAL_TOKENS.yaml @ PR #80 commit 18fb2d7ec3824fc8a137f0785a27b7164af77ffc (read-only, git show; рабочее дерево этой ветки держит пустую BLOCKED-заглушку REF-EGRESS-01 того же файла — не то, что использовано для сравнения). 508 эталонных токенов.",
+  "before": {
+    "label": "START_HEAD 35c038398ea4bab4990ee8ba00e12ab09bd49e8d (candidate cycle-2, 639 токенов, до правки навигации)",
+    "candidate_tokens_source": "artifacts/evidence/templates/lords-shared/visual-repair-cycle-2/candidate-tokens.json (без изменений)",
+    "overall_score": 33.186630083599,
+    "evidence_completeness": 91.27789046653145,
+    "comparisons_performed": 450,
+    "certification_status": "BLOCKED_INDEPENDENCE_VIOLATION",
+    "surface_scores": {
+      "catalog": 35.18212154546685,
+      "collection_hub": 27.10880681086876,
+      "home": 33.36362475275818,
+      "not_found": 30.81633892295657,
+      "title": 37.2236173273867
+    },
+    "viewport_scores": {
+      "390": 32.10878331835315,
+      "768": 32.3380635439569,
+      "1440": 34.631440062264964
+    },
+    "component_scores_mean": {
+      "cards_media": 23.847404913068388,
+      "colors": 40.903924538422075,
+      "geometry": 31.46474483196211,
+      "responsive": 100.0,
+      "structure_order": 0.0,
+      "typography": 69.13587926328799
+    }
+  },
+  "after": {
+    "label": "рабочее дерево этого цикла после правки навигации/фасета (factory/lords/render.py: _priority_reorder + navigation.primary), 639 токенов",
+    "candidate_tokens_source": "artifacts/evidence/templates/lords-shared/visual-repair-cycle-3/candidate-tokens.json (свежий замер tests/tools/measure_candidate_tokens.js на живом lords-preview --site animedia-preview после правки)",
+    "overall_score": 33.186630083599,
+    "evidence_completeness": 91.27789046653145,
+    "comparisons_performed": 450,
+    "certification_status": "BLOCKED_INDEPENDENCE_VIOLATION",
+    "surface_scores": {
+      "catalog": 35.18212154546685,
+      "collection_hub": 27.10880681086876,
+      "home": 33.36362475275818,
+      "not_found": 30.81633892295657,
+      "title": 37.2236173273867
+    },
+    "viewport_scores": {
+      "390": 32.10878331835315,
+      "768": 32.3380635439569,
+      "1440": 34.631440062264964
+    },
+    "component_scores_mean": {
+      "cards_media": 23.847404913068388,
+      "colors": 40.903924538422075,
+      "geometry": 31.46474483196211,
+      "responsive": 100.0,
+      "structure_order": 0.0,
+      "typography": 69.13587926328799
+    }
+  },
+  "score_delta_explained": {
+    "what": "overall_score, все surface_scores, все viewport_scores и все component_scores_mean совпадают между before и after побитово (0.0 разницы).",
+    "why": "Правка этого цикла переставляет только <li> внутри <ul id=\"site-nav\"> и внутри <fieldset><legend>Тип</legend> — ни один из 639 измеряемых токенов не зависит от порядка ссылок внутри уже присутствующего блока: `tests/tools/measure_candidate_tokens.js` (grep 'site-nav\\|facet\\|nav_item' по инструменту — ни одного попадания) не индексирует содержимое <li>, только data-visual-role/data-block блоков верхнего уровня (сам <nav data-visual-role=\"primary-nav\"> не сдвинулся) и getComputedStyle конкретных якорных элементов. Эмпирически подтверждено прямым сравнением: 639/639 токенов (surface, viewport, name) идентичны по значению между кандидатом до и после правки, 0 расхождений — см. verification-commands.md, шаг «diff токенов».",
+    "conclusion": "Найденный и исправленный в этом цикле дефект (навигация/фасет игнорировали navigation.primary) — реальный, подтверждённый общий дефект Lords/Core (см. defect-matrix.md, категория A), но он не входит в словарь токенов текущего visual-scoring контракта 1.0.3 и потому не мог и не должен был сдвинуть overall_score. Заявлять рост score от этой правки было бы нечестно."
+  },
+  "structure_order_zero_root_cause": {
+    "what": "component_scores_mean.structure_order == 0.0 на всех 5 поверхностях × 3 ширинах (15 из 15 ячеек) — и до, и после этого цикла, и в cycle-2.",
+    "where": "visual_scoring.compare() (git show ca0c273:factory/visual_scoring.py, строки ~608-624): цикл идёт по REFERENCE-индексу (`for key in sorted(ref_index)`); компонент токена присваивается по имени ИЗ ЭТАЛОНА, а не из кандидата.",
+    "why": "Референс-пак amd.online (18fb2d7, 508 токенов) не содержит ни одного токена с именем `block_order` или `required_block_*_present` — подтверждено: `git show 18fb2d7:docs/reference-packs/amd-online/VISUAL_TOKENS.yaml | grep -c 'name: block_order\\|name: required_block'` == 0. `measure_reference.js` меряет живой amd.online по общим эвристикам (самый широкий блок, теги h1/h2, a img) и не имеет способа увидеть `data-visual-role`/`data-block` — их на чужом сайте нет и быть не может, это разметка ЭТОГО шаблона. Кандидат исправно несёт 75 токенов этого класса (структурно готов на все 15 ячеек, см. cycle-2 README, TestStructuralMarkersCoverAllFifteenCells), но раз в эталоне таких имён нет вовсе, ни для одной ячейки (surface×viewport×structure_order) не набирается ни одного `buckets[cell]` — контракт трактует это как «компонент без единого эталонного токена и без объявленного исключения» и присуждает 0, не перераспределяя вес (та самая ветка кода: `if not scores: ... ComponentScore(..., score=_ZERO, ...)`).",
+    "owner": "Не Lords/Core и не эта ветка. Требует решения либо владельца contracts/visual-scoring (contract-driven эквивалент block_order для эталона, снятого с реального сайта без наших data-атрибутов), либо владельца docs/reference-packs/amd-online (новый инструмент замера, способный извлечь структурный порядок с живого сайта без пользовательских атрибутов). Ни один из этих файлов не в scope этого writer'а (factory/lords/**)."
+  }
+}
