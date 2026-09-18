@@ -28,7 +28,7 @@ class ClosedSiteProvenance(TypedDict):
 
 # Runtime tip includes overnight search/encoding/shelf fixes (3c4a9d3+)
 # and subsequent report commits on the same lords-frontend.py bytes.
-LORDS_COMMIT = "5dfc582360fe75ef13e67e6730e935ebe40209cf"
+LORDS_COMMIT = "48d74bcf84610cb878d2b04dec4ab5432a6b026f"
 ANIMEDIA_COMMIT = "b023bd50cced8d281cb3814a75bf72b429afee0b"
 ZONA_COMMIT = "a10e68b2350a020a2f7d5efe28cd98ef2fc89edd"
 
