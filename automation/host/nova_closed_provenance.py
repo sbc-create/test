@@ -26,7 +26,9 @@ class ClosedSiteProvenance(TypedDict):
     runtime_repo: str
 
 
-LORDS_COMMIT = "479f7d2de1e4fc76d65da2373c4aa7c070c3def9"
+# Runtime tip includes overnight search/encoding/shelf fixes (3c4a9d3+)
+# and subsequent report commits on the same lords-frontend.py bytes.
+LORDS_COMMIT = "5dfc582360fe75ef13e67e6730e935ebe40209cf"
 ANIMEDIA_COMMIT = "b023bd50cced8d281cb3814a75bf72b429afee0b"
 ZONA_COMMIT = "a10e68b2350a020a2f7d5efe28cd98ef2fc89edd"
 
