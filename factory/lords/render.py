@@ -457,7 +457,7 @@ def _document(ctx: dict, meta: Meta, body: str) -> str:
         + "".join(head)
         + "</head><body>"
         + _header(ctx, meta)
-        + '<main id="content"><div class="container">'
+        + '<main id="content" data-visual-role="main-content"><div class="container">'
         + _breadcrumbs(meta.breadcrumbs)
         + body
         + "</div></main>"
@@ -483,7 +483,7 @@ def _header(ctx: dict, meta: Meta) -> str:
            "Каталог синтетический (fixture/test), названия и постеры выдуманы, "
            "индексация закрыта.</p></div>" if ctx.get("fixture_catalog") else "")
         +
-        '<header class="site-header"><div class="header-row">'
+        '<header class="site-header" data-visual-role="header"><div class="header-row">'
         f'<a class="brand" href="/"><span class="brand__mark">{mark}</span>'
         # Рядом с именем сайта стоял его внутренний идентификатор —
         # `lords-01`. Посетителю он ничего не сообщает, а страницу
@@ -491,7 +491,8 @@ def _header(ctx: dict, meta: Meta) -> str:
         f'<span class="brand__name">{escape(ctx["brand"])}</span></a>'
         '<button class="nav-toggle" type="button" aria-expanded="false" '
         'aria-controls="site-nav">Меню</button>'
-        '<nav class="site-nav" id="site-nav" aria-label="Основная навигация"><ul>'
+        '<nav class="site-nav" id="site-nav" data-visual-role="primary-nav" '
+        'aria-label="Основная навигация"><ul>'
         + _nav_items(ctx["nav"], ctx.get("_path", ""))
         + "</ul></nav>"
         + _header_search(ctx)
@@ -576,7 +577,7 @@ def _footer(ctx: dict) -> str:
     switch = (_theme_switch(str(ctx.get("site_id") or "lords"))
               if ctx.get("theme_switch") else "")
     return (
-        '<footer class="site-footer"><div class="container">'
+        '<footer class="site-footer" data-visual-role="footer"><div class="container">'
         + switch
         + f"<ul>{links}</ul>"
         # Идентификатор сайта и имя профиля сборки — внутренняя
@@ -626,7 +627,7 @@ def _card(title: fx.Title) -> str:
         f"{_card_rating(title)}"
         f"{seasons}</a>"
         '<div class="card__body">'
-        f'<a class="card__title" href="{escape(title.path)}">{escape(title.name)}</a>'
+        f'<h3><a class="card__title" href="{escape(title.path)}">{escape(title.name)}</a></h3>'
         f'<span class="card__meta">{escape(meta)}</span>'
         f'<span class="card__meta">{escape(", ".join(title.genres))}</span>'
         "</div></article>"
@@ -808,7 +809,7 @@ def _grid(titles, *, anchor: bool = False) -> str:
             '<p class="empty">По выбранным условиям в каталоге ничего нет. '
             "Стенд показывает пустой результат честно и не подставляет чужие записи.</p>"
         )
-    attrs = ' id="grid"' if anchor else ""
+    attrs = (' id="grid"' if anchor else "") + ' data-visual-role="card-grid"'
     return f'<div class="grid"{attrs}>' + "".join(_card(t) for t in titles) + "</div>"
 
 
@@ -865,7 +866,7 @@ def _pagination(base: str, page: int, pages: int) -> str:
     if page < pages:
         items.append(f'<li><a rel="next" href="{escape(href(page + 1))}">Вперёд</a></li>')
     return (
-        '<nav class="pagination" aria-label="Страницы списка"><ul>'
+        '<nav class="pagination" data-visual-role="pagination" aria-label="Страницы списка"><ul>'
         + "".join(items) + "</ul></nav>"
     )
 
@@ -970,8 +971,10 @@ def _facets(catalog: fx.Catalog, kinds, *, show_type: bool, row: bool = False,
     # Форма нужна только ради поля сортировки; без него это перечень ссылок, и
     # оборачивать его в форму значило бы обещать отправку, которой нет.
     if sortable:
-        return f'<form class="{css}" id="facets" aria-label="Фильтры и сортировка">{body}</form>'
-    return f'<nav class="{css}" id="facets" aria-label="Фильтры">{body}</nav>' 
+        return (f'<form class="{css}" id="facets" data-visual-role="facets" '
+                 f'aria-label="Фильтры и сортировка">{body}</form>')
+    return (f'<nav class="{css}" id="facets" data-visual-role="facets" '
+            f'aria-label="Фильтры">{body}</nav>')
 
 
 #: Выше этого размера полный набор в разметку не встраивается.
@@ -1436,7 +1439,7 @@ def _collection_cards(ctx, catalog: fx.Catalog) -> str:
     for col in catalog.collections:
         cards.append(
             '<article class="card"><div class="card__body">'
-            f'<a class="card__title" href="{escape(col.path)}">{escape(col.name)}</a>'
+            f'<h3><a class="card__title" href="{escape(col.path)}">{escape(col.name)}</a></h3>'
             f'<span class="card__meta">{len(col.title_slugs)} записей</span>'
             f'<span class="card__meta">{escape(col.summary)}</span>'
             "</div></article>"
@@ -1444,7 +1447,7 @@ def _collection_cards(ctx, catalog: fx.Catalog) -> str:
     return (
         '<section class="section"><div class="section__head"><h2>Подборки</h2>'
         '<a class="section__more" href="/collections/">Все подборки</a></div>'
-        '<div class="grid">' + "".join(cards) + "</div></section>"
+        '<div class="grid" data-visual-role="card-grid">' + "".join(cards) + "</div></section>"
     )
 
 
@@ -1523,7 +1526,7 @@ def _comments_block(ctx, title: fx.Title) -> str:
     if not ctx["comments_enabled"]:
         return ""
     return (
-        '<section class="comments" aria-labelledby="comments-heading">'
+        '<section class="comments" data-visual-role="comments" aria-labelledby="comments-heading">'
         '<h2 id="comments-heading">Комментарии</h2>'
         + ('<p class="comments__note">На стенде комментарии выключены: писать не о чем — '
            "запись синтетическая, а публиковать чужие тексты стенд не станет. "
@@ -2036,11 +2039,13 @@ def _search_page(ctx, catalog: fx.Catalog, kinds) -> Page:
 
 def _not_found(ctx) -> Page:
     body = (
+        '<div data-visual-role="not-found-message">'
         "<h1>Страница не найдена</h1>"
         '<p class="lede">Такого адреса на сайте нет. Возможные причины: раздел '
         "выключен в настройках сайта, запись отсутствует в каталоге или адрес "
         "набран с ошибкой.</p>"
         '<p><a href="/">Вернуться на главную</a></p>'
+        "</div>"
     )
     meta = Meta(
         title="Страница не найдена", description="Запрошенного адреса на сайте нет.",
@@ -2611,7 +2616,7 @@ def _collections_index(ctx, catalog: fx.Catalog, indexable: bool) -> Page:
     title = text.get("title") or SECTION_LABELS["collections_index"]
     cards = "".join(
         '<article class="card"><div class="card__body">'
-        f'<a class="card__title" href="{escape(col.path)}">{escape(col.name)}</a>'
+        f'<h3><a class="card__title" href="{escape(col.path)}">{escape(col.name)}</a></h3>'
         f'<span class="card__meta">{len(col.title_slugs)} записей</span>'
         f'<span class="card__meta">{escape(col.summary)}</span></div></article>'
         for col in catalog.collections
@@ -2620,7 +2625,7 @@ def _collections_index(ctx, catalog: fx.Catalog, indexable: bool) -> Page:
         f'<h1>{escape(text.get("h1") or title)}</h1>'
         + _lede(text.get("intro", ""))
         + f'<p class="count">Подборок: {len(catalog.collections)}.</p>'
-        f'<div class="grid">{cards}</div>'
+        f'<div class="grid" data-visual-role="card-grid">{cards}</div>'
     )
     meta = Meta(
         title=title, description=text.get("description", ""), h1=text.get("h1") or title,
@@ -2671,16 +2676,54 @@ def _brand_name(package: dict, profile: dict, domain: str) -> str:
     return str(profile.get("label") or package.get("site_id") or "")
 
 
+def _navigation_primary_paths(package: dict) -> tuple[str, ...]:
+    """Порядок, который владелец сайта явно заявил в `navigation.primary`.
+
+    Поле обязательное (`schemas/site-package.schema.json`) и уже используется
+    как единственный источник шапки в generic-blueprint'е (`factory/render.py`)
+    — но не в Lords. Оно короткое и курируемое, а не полный состав меню:
+    раздел, которого здесь нет, не теряет место (см. `_priority_reorder`).
+    """
+    return tuple(
+        str(item.get("url") or "")
+        for item in ((package.get("navigation") or {}).get("primary") or [])
+    )
+
+
+def _priority_reorder(items: list, key_of, priority: tuple[str, ...]) -> list:
+    """Переставляет только те элементы, чей ключ владелец назвал явно.
+
+    Раскладка внутри группы «названных» элементов идёт в порядке `priority`;
+    любой элемент вне `priority` остаётся ровно на своей текущей позиции.
+    Это разница с сортировкой всего списка: раздел, о котором профиль/пакет
+    не высказался (служебные разделы Lords — жанры, годы, страны, поиск),
+    не имеет объявленного места и потому не двигается вовсе, а не проваливается
+    в конец или начало по умолчанию.
+    """
+    if not priority:
+        return items
+    positions = [i for i, item in enumerate(items) if key_of(item) in priority]
+    if not positions:
+        return items
+    order_key = {key: index for index, key in enumerate(priority)}
+    named_in_order = sorted((items[i] for i in positions), key=lambda item: order_key[key_of(item)])
+    result = list(items)
+    for position, item in zip(positions, named_in_order):
+        result[position] = item
+    return result
+
+
 def _context(package: dict, profile: dict, site_plan, player_state,
              publisher_id: str | None = None, fixture_catalog: bool = True) -> dict:
     layout = theme_mod.layout_of(profile)
     domain = str(package.get("domain") or "").strip()
     brand = _brand_name(package, profile, domain)
-    nav = [
-        (page.section, page.path)
-        for page in site_plan.pages
-        if page.in_menu and page.section != "home"
-    ]
+    nav_pages = _priority_reorder(
+        [page for page in site_plan.pages if page.in_menu and page.section != "home"],
+        key_of=lambda page: page.path,
+        priority=_navigation_primary_paths(package),
+    )
+    nav = [(page.section, page.path) for page in nav_pages]
     return {
         "site_id": str(package.get("site_id", "")),
         "profile": site_plan.profile,
@@ -2874,9 +2917,21 @@ def render_site(
     )
     ctx = _context(package, profile, site_plan, player_state, publisher_id, fixture_catalog)
 
-    kinds = [k for k in ct.active_types(site_plan.type_states) if k in TYPE_LABELS]
-    collections_on = site_plan.type_states["collections"].active
     by_section = {page.section: page for page in site_plan.pages}
+    # Тот же резолвер порядка, что и у шапки (`_context`): фасет «Тип» и
+    # список разделов меню — два места, показывающие один и тот же набор
+    # типов контента, и до этой правки расходились именно тем, что фасет не
+    # знал про navigation.primary вовсе (CORE-HANDOFF-nav-order.md).
+    type_paths = {
+        content_type: by_section[section].path
+        for section, content_type in SECTION_TYPE.items()
+        if section in by_section
+    }
+    kinds = [k for k in ct.active_types(site_plan.type_states) if k in TYPE_LABELS]
+    kinds = _priority_reorder(
+        kinds, key_of=lambda k: type_paths.get(k), priority=_navigation_primary_paths(package),
+    )
+    collections_on = site_plan.type_states["collections"].active
     pool = catalog.of_types(kinds)
 
     site = RenderedSite(site_id=ctx["site_id"], profile=site_plan.profile,

@@ -53,6 +53,10 @@ MAPPING = {
 # присутствие обязано пройти схему.
 DERIVED = {
     "SITE-MATRIX.json": "site-matrix.schema.json",
+    # Шаблонный baseline: порождается из FLEET-REGISTRY.json и релизных
+    # манифестов витрин. В ветке без доступа к хосту собрать его нечем,
+    # поэтому отсутствие разрешено, а присутствие обязано пройти схему.
+    "TEMPLATE-BASELINE-MANIFEST.json": "template-baseline-manifest.schema.json",
 }
 
 

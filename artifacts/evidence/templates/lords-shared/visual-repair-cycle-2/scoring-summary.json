@@ -1,0 +1,100 @@
+{
+  "note": "Реальный вывод visual_scoring.compare() (PR #81, contracts/visual-scoring — не изменён, прочитан read-only: `git show ca0c273:factory/visual_scoring.py`, `git show ca0c273:contracts/visual-scoring/1.0.3/scoring-contract.json`, аналогично для 1.0.0 @ b330421 и 1.0.2 @ 04c1fe1). checker_identity == candidate_author_identity в каждом из этих прогонов: contracts/visual-scoring запрещает такому прогону присуждать VISUAL_CERTIFIED. Числа — для видимости хода ремонта, не вердикт.",
+  "reference_pack": "docs/reference-packs/amd-online/VISUAL_TOKENS.yaml @ PR #80 commit 18fb2d7 (read-only, не изменён; рабочее дерево этой ветки держит пустой BLOCKED-заглушку того же файла)",
+  "candidate_commit_before_fix": "187db84d932c9fd2efd8b51f4aff6858c983ae16",
+  "fix_commit": "см. FINAL_HEAD в отчёте сессии — этот файл закоммичен тем же коммитом, что и factory/lords/theme.py",
+  "runs": {
+    "before_fix_contract_1.0.3": {
+      "candidate_tokens": "639 токенов, кандидат = HEAD 187db84 (до правки .site-nav)",
+      "overall_score": 33.6276186175132,
+      "evidence_completeness": 91.27789046653145,
+      "comparisons_performed": 450,
+      "surface_scores": {
+        "catalog": 35.54123088170452,
+        "collection_hub": 27.323092525154472,
+        "home": 34.35933903847246,
+        "not_found": 31.05443416105181,
+        "title": 37.43790304167241
+      },
+      "viewport_scores": {
+        "390": 32.10878331835315,
+        "768": 33.1678254487188,
+        "1440": 35.11158996847904
+      },
+      "component_scores_mean": {
+        "cards_media": 23.847404913068388,
+        "colors": 40.903924538422075,
+        "geometry": 32.73900849478994,
+        "responsive": 100.0,
+        "structure_order": 0.0,
+        "typography": 69.13587926328799
+      }
+    },
+    "after_fix_contract_1.0.0": {
+      "candidate_tokens": "639 токенов, кандидат = после правки .site-nav (flex-basis 0%)",
+      "overall_score": 33.77829775646663,
+      "evidence_completeness": 87.17434869739479,
+      "comparisons_performed": 435,
+      "component_scores_mean": {
+        "cards_media": 23.847404913068388,
+        "colors": 40.903924538422075,
+        "geometry": 36.70886897062247,
+        "responsive": 100.0,
+        "structure_order": 0.0,
+        "typography": 69.13587926328799
+      }
+    },
+    "after_fix_contract_1.0.2": {
+      "overall_score": 33.186630083599,
+      "evidence_completeness": 91.27789046653145,
+      "comparisons_performed": 450,
+      "component_scores_mean": {
+        "cards_media": 23.847404913068388,
+        "colors": 40.903924538422075,
+        "geometry": 31.46474483196211,
+        "responsive": 100.0,
+        "structure_order": 0.0,
+        "typography": 69.13587926328799
+      }
+    },
+    "after_fix_contract_1.0.3": {
+      "overall_score": 33.186630083599,
+      "evidence_completeness": 91.27789046653145,
+      "comparisons_performed": 450,
+      "surface_scores": {
+        "catalog": 35.18212154546685,
+        "collection_hub": 27.10880681086876,
+        "home": 33.36362475275818,
+        "not_found": 30.81633892295657,
+        "title": 37.2236173273867
+      },
+      "viewport_scores": {
+        "390": 32.10878331835315,
+        "768": 32.3380635439569,
+        "1440": 34.631440062264964
+      },
+      "component_scores_mean": {
+        "cards_media": 23.847404913068388,
+        "colors": 40.903924538422075,
+        "geometry": 31.46474483196211,
+        "responsive": 100.0,
+        "structure_order": 0.0,
+        "typography": 69.13587926328799
+      }
+    }
+  },
+  "evidence_completeness_reproduces_confirmed_baseline": {
+    "1.0.0_expected_87.17": true,
+    "1.0.2_expected_91.28": true,
+    "note": "1.0.3 не меняет component_assignment для header_sticky относительно 1.0.2 (та запись уже была в 1.0.1) — completeness на 1.0.2 и 1.0.3 совпадает, как и должно."
+  },
+  "geometry_component_drop_explained": {
+    "what": "geometry опустился с 36.71 (1.0.0) до 31.46 (1.0.2/1.0.3) на ТОМ ЖЕ (после-фикса) кандидате",
+    "why": "не регрессия кандидата — контракт 1.0.1 впервые назначает header_sticky компоненту geometry (в 1.0.0 он был UNASSIGNED и не считался вовсе). header_sticky = true у кандидата на всех 15 ячейках (общая CSS .site-header{position:sticky}, см. factory/lords/theme.py), эталон = false на всех 15 (git show 18fb2d7). Раньше это расхождение просто не попадало в счёт; теперь completeness выросла (87.17->91.28), а honest-score чуть просел — это ожидаемо при устранении дыры в полноте, а не порча кандидата."
+  },
+  "header_geometry_fix_effect": {
+    "what": "до правки .site-nav{flex:1 1 auto} header_height на catalog/collection_hub/title/not_found был 152.25px@768 / 110.25px@1440 (шапка в две строки — .header-search падал на вторую строку); home была 98.56/61 (там формы поиска в шапке нет, перенос не проявлялся)",
+    "after": "все 5 поверхностей теперь дают одинаковую геометрию по семейству: 125.8@390/61@768/61@1440 (различие на 390 — не дефект: там .header-search ещё не встроен инлайн ни на одной поверхности, править нечего)",
+    "score_tradeoff": "cell (catalog,1440,geometry) сам по себе стал чуть дальше от эталонных 90px (было 110.25 - относительное отклонение 0.225, стало 61 - отклонение 0.322) — это единственная причина падения overall на ~0.44 балла между before_fix и after_fix на 1.0.3. Оставлять реальный перенос строки ради этой доли балла значило бы чинить число, а не дефект — запрещено явно этим prompt'ом."
+  }
+}

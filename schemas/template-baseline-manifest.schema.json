@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://site-factory.local/schemas/template-baseline-manifest.schema.json",
+  "title": "TemplateBaselineManifest",
+  "description": "Какой шаблон стоит на каждом ACTIVE production-сайте. Перечень сайтов задаёт config/FLEET-REGISTRY.json и только он: второй перечень означал бы второй ответ на один вопрос.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "generated_from", "source_commit", "sites", "ownership"],
+  "properties": {
+    "schema": {
+      "const": "template-baseline-manifest/1.0"
+    },
+    "ownership": {
+      "description": "Единственный writer template-release. Общие файлы релиза ведёт один PR, остальные — только источники. Записано здесь, а не в переписке, чтобы владение проверялось машинно.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical_pr", "canonical_head_ref", "canonical_head_sha", "source_prs", "owned_files", "superseded_scope", "collection_contract_version", "renderer_version"],
+      "properties": {
+        "canonical_pr": { "type": "integer", "minimum": 1 },
+        "canonical_head_ref": { "type": "string", "minLength": 1 },
+        "canonical_head_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "source_prs": {
+          "description": "Откуда перенесено. Без коммита провенанс недоказуем.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["pr", "commit", "took"],
+            "properties": {
+              "pr": { "type": "integer", "minimum": 1 },
+              "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+              "took": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+              "note": { "type": "string" }
+            }
+          }
+        },
+        "owned_files": {
+          "description": "Разделяемые исходники релиза и их дайджесты на момент записи.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "sha256"],
+            "properties": {
+              "path": { "type": "string", "minLength": 1 },
+              "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+            }
+          }
+        },
+        "superseded_scope": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "collection_contract_version": { "type": "integer", "minimum": 1 },
+        "renderer_version": { "type": "string", "minLength": 1 }
+      }
+    },
+    "generated_from": {
+      "description": "Откуда взяты значения. Записано в самом файле, чтобы проверяющему не приходилось угадывать источник.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["site_registry", "release_manifest"],
+      "properties": {
+        "site_registry": { "type": "string", "minLength": 1 },
+        "release_manifest": { "type": "string", "minLength": 1 },
+        "note": { "type": "string" }
+      }
+    },
+    "source_commit": {
+      "description": "Коммит, из которого собран манифест.",
+      "type": "string",
+      "pattern": "^[0-9a-f]{7,40}$"
+    },
+    "sites": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/site" }
+    }
+  },
+  "$defs": {
+    "измеримое": {
+      "description": "Значение либо измерено, либо честно названо неизмеренным. Пустая строка запрещена: она читается как «здесь ничего», хотя этого никто не проверял.",
+      "type": "string",
+      "minLength": 1,
+      "not": { "enum": ["0", "none", "null", "unknown", "-", "n/a", "N/A"] }
+    },
+    "состояние_индексации": {
+      "description": "MIXED означает, что слои говорят разное, и это не то же самое, что закрыто.",
+      "enum": ["open", "closed", "MIXED", "NOT_MEASURED"]
+    },
+    "site": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "site_id",
+        "canonical_domain",
+        "template_family_id",
+        "family_engine_version",
+        "template_variant_id",
+        "template_variant_version",
+        "blueprint_version",
+        "module_bundle_version",
+        "route_contract_digest",
+        "collection_contract_digest",
+        "source_commit",
+        "artifact_digest",
+        "desired_index_state",
+        "observed_index_state"
+      ],
+      "properties": {
+        "site_id": { "type": "string", "minLength": 1 },
+        "canonical_domain": {
+          "type": "string",
+          "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$"
+        },
+        "template_family_id": { "type": "string", "minLength": 1 },
+        "family_engine_version": { "$ref": "#/$defs/измеримое" },
+        "template_variant_id": { "$ref": "#/$defs/измеримое" },
+        "template_variant_version": { "$ref": "#/$defs/измеримое" },
+        "blueprint_version": { "$ref": "#/$defs/измеримое" },
+        "module_bundle_version": { "$ref": "#/$defs/измеримое" },
+        "route_contract_digest": { "$ref": "#/$defs/измеримое" },
+        "collection_contract_digest": { "$ref": "#/$defs/измеримое" },
+        "source_commit": { "$ref": "#/$defs/измеримое" },
+        "artifact_digest": { "$ref": "#/$defs/измеримое" },
+        "desired_index_state": { "$ref": "#/$defs/состояние_индексации" },
+        "observed_index_state": { "$ref": "#/$defs/состояние_индексации" }
+      }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "this_cycle": {
+    "start_head": "35c038398ea4bab4990ee8ba00e12ab09bd49e8d",
+    "branch": "claude/fleet-tpl-baseline-001",
+    "worktree": "/home/claude/wt-canon-76"
+  },
+  "read_only_material_used": [
+    {
+      "purpose": "CORE-HANDOFF: общий дефект порядка навигации, переданный владельцем Animedia",
+      "path": "artifacts/evidence/templates/animedia-portal/finalization-01/CORE-HANDOFF-nav-order.md",
+      "origin_branch": "origin/claude/animedia-template-finalization-01",
+      "commit": "b023bd50cced8d281cb3814a75bf72b429afee0b",
+      "access_method": "git show (без checkout, без merge)"
+    },
+    {
+      "purpose": "visual-scoring contract 1.0.3 и factory/visual_scoring.py — не смержены в эту ветку",
+      "origin_branch": "PR #81 (ветка не указана постановкой; коммит зафиксирован явно)",
+      "commit": "ca0c273a291ca601dd7e3a9ec075ab589d850685",
+      "access_method": "git show, исполнено вне tracked tree (scratchpad), не закоммичено"
+    },
+    {
+      "purpose": "reference pack amd.online (508 токенов) — рабочее дерево этой ветки держит пустую BLOCKED-заглушку REF-EGRESS-01 того же файла",
+      "path": "docs/reference-packs/amd-online/VISUAL_TOKENS.yaml",
+      "origin_branch": "PR #80",
+      "commit": "18fb2d7ec3824fc8a137f0785a27b7164af77ffc",
+      "access_method": "git show, исполнено вне tracked tree (scratchpad), не закоммичено"
+    },
+    {
+      "purpose": "evidence предыдущего цикла (baseline до этого цикла)",
+      "path": "artifacts/evidence/templates/lords-shared/visual-repair-cycle-2/",
+      "commit": "35c038398ea4bab4990ee8ba00e12ab09bd49e8d (уже в этой ветке)",
+      "access_method": "прочитано напрямую из рабочего дерева"
+    }
+  ],
+  "files_read_only_but_not_modified_or_committed": [
+    {
+      "site_id": "animedia-preview",
+      "role": "read-only тестовый стенд общего шаблона (не изменён этим циклом)",
+      "files": ["sites/animedia-preview/package.yaml", "blueprints/lords/profiles/animedia-portal.yaml"]
+    },
+    {
+      "site_id": "lords-01, zona-cinema-preview",
+      "role": "read-only контрольная группа для проверки обратной совместимости (не изменены)"
+    }
+  ],
+  "note": "Ни один файл из read_only_material_used не скопирован и не смержен в отслеживаемое дерево этой ветки. Контракт/pack исполнялись из /tmp/.../scratchpad, вне git."
+}

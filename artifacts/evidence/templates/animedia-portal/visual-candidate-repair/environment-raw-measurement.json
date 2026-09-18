@@ -1,0 +1,59 @@
+{
+  "tool": "tests/tools/measure_reference_environment.js",
+  "measured_at_utc": "2026-09-16T21:38:59.529Z",
+  "renderer": {
+    "engine": "chromium",
+    "driver": "playwright",
+    "driver_version": "1.62.1",
+    "browser_version": "151.0.7922.34",
+    "browser_build": "chromium-1234",
+    "executable_from": "/opt/pw-browsers/chromium-1234/chrome-linux64/chrome"
+  },
+  "fonts_probed": [
+    "Arial",
+    "Helvetica",
+    "Times New Roman",
+    "Courier New",
+    "Georgia",
+    "Verdana",
+    "Tahoma",
+    "Trebuchet MS",
+    "Roboto",
+    "Open Sans",
+    "Noto Sans",
+    "Noto Color Emoji",
+    "DejaVu Sans",
+    "DejaVu Serif",
+    "DejaVu Sans Mono",
+    "Liberation Sans",
+    "Liberation Serif",
+    "Liberation Mono",
+    "Ubuntu",
+    "Cantarell",
+    "FreeSans"
+  ],
+  "locale": "en-US",
+  "locales": [
+    "en-US",
+    "en"
+  ],
+  "timezone": "UTC",
+  "reduced_motion": "no-preference",
+  "forced_colors": "none",
+  "color_scheme": "light",
+  "device_pixel_ratio": 1,
+  "fonts_available": [
+    "Arial",
+    "Helvetica",
+    "Times New Roman",
+    "Courier New",
+    "Noto Color Emoji",
+    "DejaVu Sans",
+    "DejaVu Serif",
+    "DejaVu Sans Mono",
+    "Liberation Sans",
+    "Liberation Serif",
+    "Liberation Mono",
+    "FreeSans"
+  ]
+}

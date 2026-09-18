@@ -66,6 +66,21 @@ def _манифест() -> dict:
 #: canonical-редирект «/anime/<слаг>--<uuid>» → «/anime/<слаг>» превращался в
 #: 308 без адреса перехода и с типом application/octet-stream. Снаружи это
 #: выглядело как «карточки строят нерабочие адреса», хотя ломал их посредник.
+#: Заголовки, которые не пересылаются наверх НИ В КАКОМ запросе.
+ВЫРЕЗАЕМЫЕ_ОБЩИЕ = frozenset({"host", "accept-encoding", "connection"})
+#: Дополнительно вырезается у ВНУТРЕННЕГО запроса за оболочкой витрины.
+#:
+#: Браузер предзагружает маршруты Next.js с заголовком `RSC: 1`, прося не
+#: разметку, а flight-полезную нагрузку. Витрина же ходит наверх за обычным
+#: HTML, чтобы собрать из него свою страницу. Пересылая `RSC` дальше, она
+#: получала не разметку, разбор оболочки срывался, и запрос проваливался в
+#: общее проксирование: `/top` с `RSC: 1` отвечал 404, а в консоли каждой
+#: страницы висела ошибка предзагрузки. Клиентский переход на «Топ» ломался.
+ВЫРЕЗАЕМЫЕ_ВНУТРИ = ВЫРЕЗАЕМЫЕ_ОБЩИЕ | {
+    "rsc", "next-router-prefetch", "next-router-state-tree", "next-url",
+    "accept", "range", "if-none-match", "if-modified-since",
+}
+
 ПЕРЕНОСИМЫЕ = ("location", "cache-control", "content-language", "vary",
                "last-modified", "etag", "content-disposition", "link",
                "x-nextjs-cache", "x-nextjs-prerender")
@@ -75,6 +90,27 @@ def _манифест() -> dict:
                "background:#1b1b1fdd;color:#ffb4a2;border:1px solid #ff7f5c;"
                "border-radius:8px;padding:4px 9px;font:600 11px/1.2 ui-monospace,"
                "SFMono-Regular,Menlo,monospace;pointer-events:none}")
+#: Показывать ли видимый бейдж сборки. По умолчанию нет.
+#:
+#: Бейдж — инструмент диагностики выкладки, и на стенде он полезен. На рабочем
+#: домене он оказывается в тексте, который читает посетитель и индексирует
+#: поиск: «Template: yummy 1.4.5 · cf558484». Служебная строка в публичном HTML
+#: не становится безобидной оттого, что мелкая, — она просто перестаёт быть
+#: заметной нам, оставаясь заметной снаружи.
+#:
+#: Сведения о сборке никуда не исчезают: их по-прежнему несут мета-теги
+#: site-factory-* и атрибуты data-template-*, которыми пользуется приёмка
+#: выкладки. Убран ровно видимый читателю слой.
+ПОКАЗЫВАТЬ_БЕЙДЖ = os.environ.get("LORDS_TEMPLATE_BADGE", "") == "1"
+
+
+def _бейдж_подвала() -> str:
+    """Служебный бейдж в подвале — только при включённой диагностике."""
+    if not ПОКАЗЫВАТЬ_БЕЙДЖ:
+        return ""
+    return (f'<span class="vbadge">Template: {СЕМЕЙСТВО} {ВЕРСИЯ} · '
+            f'{МАНИФЕСТ["source_commit"][:8]}</span>')
+
 #: Имя шаблона КОНКРЕТНОГО семейства. Отсюда и из версии складывается то, что
 #: домен объявляет о себе.
 ШАБЛОН_СЕМЕЙСТВА = f"{СЕМЕЙСТВО}-nova"
@@ -98,6 +134,10 @@ def _манифест() -> dict:
 #: Время сборки главной — вопрос к приложению, и он записан отдельно;
 #: здесь снимается только собственный источник ошибки.
 ТАЙМАУТ_ВЕРХА = int(os.environ.get("YUMMY_UPSTREAM_TIMEOUT", "60"))
+#: Сколько байт начала документа читать, чтобы понять, своя это страница или
+#: чужая. Признак `data-sf-own` стоит в первых сотнях байт; запас взят на
+#: случай длинного `<head>`, но заведомо меньше страницы целиком.
+ПРОБА_СВОЕЙ = 32 * 1024
 
 
 def _загрузить_страницы():
@@ -166,6 +206,27 @@ def _рядом(имя: str, модуль: str):
 БАЗА_ЧТЕНИЯ = os.environ.get("YUMMY_READMODEL",
                              "/srv/lords/.frontend/yummy-readmodel.sqlite3")
 ВАРИАНТ_ДОМЕНА = os.environ.get("YUMMY_VARIANT_DOMAIN", "yummyani.site")
+
+#: Домены, которым владелец разрешил индексацию. Решение принято 2026-09-15 и
+#: названо поимённо: открыт только yummyani.site, остальные площадки остаются
+#: закрытыми.
+#:
+#: Список решает ровно два вопроса — слать ли `X-Robots-Tag: noindex` и отдавать
+#: ли собственный `robots.txt` с `Disallow: /`. Оба слоя стоят ПЕРЕД приложением
+#: и перекрывают его: приложение уже отдавало разрешающий robots.txt и
+#: `meta robots: index, follow`, а наружу уходили запреты этого посредника.
+#: Поэтому поднятия флага в приложении оказалось недостаточно и решение
+#: владельца не вступало в силу.
+ДОМЕНЫ_С_ОТКРЫТОЙ_ИНДЕКСАЦИЕЙ = frozenset({"yummyani.site"})
+
+#: Домен берётся БЕЗ умолчания именно здесь. У `ВАРИАНТ_ДОМЕНА` умолчание —
+#: `yummyani.site`, и экземпляр с незаданной переменной молча считался бы
+#: открытым. Ошибаться в эту сторону нельзя: незаданная переменная означает
+#: «закрыто», а не «вероятно, это главный домен».
+ИНДЕКСАЦИЯ_ОТКРЫТА = (
+    os.environ.get("YUMMY_VARIANT_DOMAIN") in ДОМЕНЫ_С_ОТКРЫТОЙ_ИНДЕКСАЦИЕЙ
+)
+
 НА_СТРАНИЦЕ = 60
 
 # Оформление и разделы — свои у каждого семейства.
@@ -444,8 +505,7 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 <button class="tsw" type="button" aria-label="Переключить тему">&#9789;</button>
 </div></header>
 <main class="wrap">{тело}</main>
-<footer class="ft"><div class="wrap">{html.escape(ИМЯ_ВИТРИНЫ)} · тестовая витрина, закрыта от индексации
-<span class="vbadge">Template: {СЕМЕЙСТВО} {ВЕРСИЯ} · {МАНИФЕСТ["source_commit"][:8]}</span>
+<footer class="ft"><div class="wrap">{html.escape(ИМЯ_ВИТРИНЫ)}{_бейдж_подвала()}
 </div></footer>
 <script>{СКРИПТ}</script></body></html>"""
 
@@ -464,7 +524,8 @@ class Обработчик(BaseHTTPRequestHandler):
         for имя, значение in (ещё or []):
             self.send_header(имя, значение)
         self.send_header("Content-Length", str(len(тело)))
-        self.send_header("X-Robots-Tag", "noindex, nofollow")
+        if not ИНДЕКСАЦИЯ_ОТКРЫТА:
+            self.send_header("X-Robots-Tag", "noindex, nofollow")
         self.send_header("X-Site-Factory-Template-Revision", МАНИФЕСТ["source_commit"])
         self.send_header("X-Site-Factory-Template", ШАБЛОН_СЕМЕЙСТВА)
         self.send_header("X-Site-Factory-Core", ЯДРО)
@@ -477,6 +538,48 @@ class Обработчик(BaseHTTPRequestHandler):
         self.end_headers()
         if self.command != "HEAD":
             self.wfile.write(тело)
+
+    def _потоком(self, ответ, голова: bytes, тип: str, код: int, перенос: list) -> None:
+        """Отдать ответ приложения, не дожидаясь его конца.
+
+        Чужую разметку витрина не меняет, поэтому держать её в памяти незачем.
+        Заголовки уходят сразу после заголовков приложения, дальше тело идёт
+        кусками. Для посетителя это разница между первым байтом через 0,2 с и
+        через 1,2 с на той же самой странице.
+
+        Длина переносится, если приложение её сообщило. Если нет — соединение
+        закрывается по завершении: обработчик работает по HTTP/1.0, и закрытие
+        и есть признак конца тела.
+        """
+        self.send_response(код)
+        if тип:
+            self.send_header("Content-Type", тип)
+        for имя, значение in (перенос or []):
+            self.send_header(имя, значение)
+        длина = ответ.getheader("Content-Length")
+        if длина:
+            self.send_header("Content-Length", длина)
+        if not ИНДЕКСАЦИЯ_ОТКРЫТА:
+            self.send_header("X-Robots-Tag", "noindex, nofollow")
+        self.send_header("X-Site-Factory-Template-Revision", МАНИФЕСТ["source_commit"])
+        self.send_header("X-Site-Factory-Template", ШАБЛОН_СЕМЕЙСТВА)
+        self.send_header("X-Site-Factory-Core", ЯДРО)
+        self.send_header("X-Site-Factory-Profile", ПРОФИЛЬ)
+        self.send_header("X-Site-Factory-Template-Family", СЕМЕЙСТВО)
+        self.send_header("X-Site-Factory-Template-Version", ВЕРСИЯ)
+        self.send_header("X-Site-Factory-Build-Id", СБОРКА)
+        self.send_header("X-Site-Factory-Artifact-Sha256", МАНИФЕСТ["artifact_sha256"])
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        if self.command == "HEAD":
+            return
+        if голова:
+            self.wfile.write(голова)
+        while True:
+            кусок = ответ.read(64 * 1024)
+            if not кусок:
+                break
+            self.wfile.write(кусок)
 
     def do_HEAD(self):
         self.do_GET()
@@ -527,8 +630,11 @@ class Обработчик(BaseHTTPRequestHandler):
                             "core": ЯДРО, "family": СЕМЕЙСТВО, "profile": ПРОФИЛЬ,
                             "revision": РЕВИЗИЯ, "display": "standalone"}, ensure_ascii=False)
             return self._отдать(м.encode(), "application/manifest+json")
-        if путь == "/robots.txt":
+        if путь == "/robots.txt" and not ИНДЕКСАЦИЯ_ОТКРЫТА:
             return self._отдать(b"User-agent: *\nDisallow: /\n", "text/plain; charset=utf-8")
+        # На открытом домене robots.txt не перехватывается: документ отдаёт
+        # приложение, и источник истины остаётся один. Свой ответ здесь означал
+        # бы вторую версию правил, расходящуюся с первой при каждой правке.
 
         # Единый renderer семейства: страницы рисует приложение YummyAnime.
         #
@@ -724,9 +830,13 @@ class Обработчик(BaseHTTPRequestHandler):
         try:
             соед = http.client.HTTPConnection(хост, int(порт or 80), timeout=ТАЙМАУТ_ВЕРХА)
             заг = {k: v for k, v in self.headers.items()
-                   if k.lower() not in ("host", "accept-encoding", "connection")}
+                   if k.lower() not in ВЫРЕЗАЕМЫЕ_ВНУТРИ}
             заг["Host"] = self.headers.get("Host", хост)
             заг["Accept-Encoding"] = "identity"
+            # Внутренний запрос идёт за разметкой, а не за тем, что попросил
+            # браузер. Без явного Accept клиентское согласование содержимого
+            # решало бы, что получит витрина для сборки собственной страницы.
+            заг["Accept"] = "text/html,*/*;q=0.8"
             соед.request("GET", адрес, headers=заг)
             о = соед.getresponse()
             итог = (о.read(), о.getheader("Content-Type", "application/octet-stream"), о.status)
@@ -1188,7 +1298,7 @@ class Обработчик(BaseHTTPRequestHandler):
             (f'<html data-sf-own="1" data-template-version="{ВЕРСИЯ}" '
              f'data-template-family="{СЕМЕЙСТВО}" '
              f'data-build-id="{СБОРКА}"').encode("utf-8"), 1)
-        if b"</body>" in тело:
+        if ПОКАЗЫВАТЬ_БЕЙДЖ and b"</body>" in тело:
             бейдж = (f'<div class="sf-vbadge">Template: {СЕМЕЙСТВО} {ВЕРСИЯ} · '
                      f'{МАНИФЕСТ["source_commit"][:8]}</div>').encode("utf-8")
             тело = тело.replace(b"</body>", бейдж + b"</body>", 1)
@@ -1250,13 +1360,32 @@ class Обработчик(BaseHTTPRequestHandler):
             заг["Accept-Encoding"] = "identity"
             соед.request("GET", адрес, headers=заг)
             ответ = соед.getresponse()
-            тело = ответ.read()
             # Тип не подменяется на octet-stream: у редиректа тела нет, и
             # выдумывать ему тип значит ломать переход.
             тип = ответ.getheader("Content-Type") or ""
             перенос = [(и, ответ.getheader(и)) for и in ПЕРЕНОСИМЫЕ
                        if ответ.getheader(и)]
             код = ответ.status
+
+            # Тело читается целиком ТОЛЬКО если страница наша и её нужно
+            # дополнить. Раньше читалось всегда, и это стоило посетителю
+            # секунды на пустом месте: приложение отдаёт первый байт главной за
+            # 0,2 с, а всю страницу в 254 КБ — за 1,0–1,4 с. Прокси ждал конца
+            # чтения и лишь потом отвечал, поэтому его TTFB равнялся полному
+            # времени приложения, а не его TTFB.
+            #
+            # Признак своей страницы стоит в начале документа, поэтому хватает
+            # заглянуть в первые килобайты, а остальное отдать потоком.
+            голова = b""
+            своя = False
+            if "text/html" in тип:
+                голова = ответ.read(ПРОБА_СВОЕЙ)
+                своя = b'data-sf-own="1"' in голова
+            if not своя:
+                self._потоком(ответ, голова, тип, код, перенос)
+                соед.close()
+                return
+            тело = голова + ответ.read()
             соед.close()
         except OSError as ош:
             тело = оболочка(f'<div class="empty">Витрина недоступна: {html.escape(str(ош)[:80])}</div>',

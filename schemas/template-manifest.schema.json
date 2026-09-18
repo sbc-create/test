@@ -68,6 +68,17 @@
         },
         "tokens": {
           "$ref": "#/$defs/design_tokens"
+        },
+        "tokens_alt": {
+          "$ref": "#/$defs/design_tokens",
+          "description": "Вторая палитра витрины (factory/lords/theme.py: alt_tokens_of). Не заданные здесь поля наследуются от tokens. Присутствует только у витрин с переключателем темы; без alt_scheme игнорируется."
+        },
+        "alt_scheme": {
+          "enum": [
+            "light",
+            "dark"
+          ],
+          "description": "Какой схеме соответствует tokens_alt. Обязателен, если tokens_alt задан — иначе переключатель темы не появится (factory/lords/theme.py: alt_tokens_of)."
         }
       }
     },
@@ -284,6 +295,10 @@
         },
         "container": {
           "$ref": "#/$defs/length"
+        },
+        "gutter": {
+          "$ref": "#/$defs/length",
+          "description": "Боковое поле `.container`/`.header-row` (factory/lords/theme.py). Незаданный токен берётся из DEFAULT_TOKENS (16px)."
         },
         "heading_font": {
           "type": "string",

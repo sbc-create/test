@@ -36,6 +36,9 @@ DEFAULT_TOKENS = {
     "border": "#353535",
     "radius": "6px",
     "container": "1240px",
+    #: Боковое поле контейнера. Существующие витрины его не объявляют и
+    #: получают прежнее фиксированное значение без единого изменения.
+    "gutter": "16px",
     # Open Sans — гарнитура обоих референсов. Список запасных оставлен: своего
     # файла шрифта у сайта нет, а тянуть чужой хостинг ради начертания незачем.
     "heading_font": "'Open Sans', 'Segoe UI', Roboto, Arial, sans-serif",
@@ -144,19 +147,35 @@ def readable_on(color: str, background: str, *, target: float = 4.5) -> str:
     return f"#{r:02x}{g:02x}{b:02x}"
 
 
-def _palette_block(selector: str, mode: str, *, accent: str = "", indent: str = "") -> str:
-    """Переопределение поверхностей для одной палитры.
+def _theme_choice_block(selector: str, tokens: dict) -> str:
+    """CSS-правило одного явного выбора темы: все токены палитры и ссылка,
+    вычисленная под именно эту палитру.
 
-    Вместе с поверхностями переопределяется цвет ссылки: акцент профиля
-    подобран под родную палитру и на чужой может не пройти контраст.
+    Единая точка для системного выбора, явного выбора и alt_blocks — прежде
+    эти три места вычисляли палитру порознь, и только alt_blocks читал
+    объявленную профилем tokens_alt: системный и явный выбор тихо
+    подставляли общую SURFACE_PALETTES даже там, где у профиля есть своя
+    вторая палитра, а цвет ссылки на явном выборе вовсе не пересчитывался
+    под неё. У витрины с собственной второй палитрой (а не общей,
+    выведенной по имени темы) переключатель показывал чужие цвета.
     """
-    tokens = dict(SURFACE_PALETTES[mode])
-    lines = "".join(
-        f"\n{indent}  --{name.replace('_', '-')}: {value};" for name, value in tokens.items())
-    if accent:
-        link = readable_on(accent, tokens["bg"])
-        lines += f"\n{indent}  --link: {link};"
-    return f"{indent}{selector} {{{lines}\n{indent}}}"
+    link = readable_on(tokens["accent"], tokens["bg"])
+    return f"{selector} {{\n{_переменные(tokens)}\n  --link: {link};\n}}"
+
+
+def _theme_choice_pair(profile: dict, *, declared_theme: str | None = None
+                       ) -> dict[str, dict] | None:
+    """Полные токены обеих палитр витрины, ключ — имя схемы (light/dark).
+
+    None означает, что второй палитры нет вовсе: системный и явный выбор
+    рисовать некому (см. theme_switch_available).
+    """
+    пара = alt_tokens_of(profile, declared_theme=declared_theme)
+    if пара is None:
+        return None
+    альт_схема, alt = пара
+    основная_схема = "dark" if альт_схема == "light" else "light"
+    return {альт_схема: alt, основная_схема: tokens_of(profile, declared_theme=declared_theme)}
 
 
 def _поверхность(имя: str | None) -> str | None:
@@ -321,26 +340,24 @@ def _stylesheet_base(profile: dict, *, declared_theme: str | None = None) -> str
     # Требование производственной линии здесь прямое и верное: без второй
     # палитры таблица стилей не несёт машинерии тем вовсе.
     системная_схема = ""
-    if theme_switch_available(profile, declared_theme=declared_theme):
+    явный_выбор = ""
+    альт_пара = _theme_choice_pair(profile, declared_theme=declared_theme)
+    if альт_пара is not None:
         системная_схема = (
             "@media (prefers-color-scheme: dark) {\n"
-            + _palette_block(':root[data-theme="system"]', "dark",
-                             accent=t["accent"], indent="  ")
+            + _theme_choice_block(':root[data-theme="system"]', альт_пара["dark"])
             + "\n}\n@media (prefers-color-scheme: light) {\n"
-            + _palette_block(':root[data-theme="system"]', "light",
-                             accent=t["accent"], indent="  ")
+            + _theme_choice_block(':root[data-theme="system"]', альт_пара["light"])
             + "\n}"
         )
-    # Правила явного выбора — по той же причине: выбирать некому там, где
-    # переключателя нет.
-    явный_выбор = ""
-    if theme_switch_available(profile, declared_theme=declared_theme):
+        # Правила явного выбора — по той же причине: выбирать некому там, где
+        # переключателя нет.
         явный_выбор = (
             "/* Явный выбор зрителя. Он идёт первым и побеждает системную "
             "настройку. */\n"
-            + _palette_block(':root[data-theme="dark"]', "dark", accent=t["accent"])
+            + _theme_choice_block(':root[data-theme="dark"]', альт_пара["dark"])
             + "\n"
-            + _palette_block(':root[data-theme="light"]', "light", accent=t["accent"])
+            + _theme_choice_block(':root[data-theme="light"]', альт_пара["light"])
         )
     lay = layout_of(profile)
     d = DENSITY.get(str(lay.get("density")), DENSITY["comfortable"])
@@ -360,6 +377,7 @@ def _stylesheet_base(profile: dict, *, declared_theme: str | None = None) -> str
   --border: {t['border']};
   --radius: {t['radius']};
   --container: {t['container']};
+  --gutter: {t['gutter']};
   --gap: {d['gap']};
   --pad: {d['pad']};
   --card-pad: {d['card_pad']};
@@ -430,7 +448,7 @@ h1, h2, h3 {{ line-height: 1.2; margin: 0 0 .5em; overflow-wrap: anywhere; }}
 h1 {{ font-size: var(--h1); font-weight: 600; }}
 h2 {{ font-size: var(--h2); font-weight: 600; }}
 p {{ margin: 0 0 1em; overflow-wrap: anywhere; }}
-.container {{ width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 16px; }}
+.container {{ width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 var(--gutter); }}
 .visually-hidden {{
   position: absolute; width: 1px; height: 1px; margin: -1px;
   clip-path: inset(50%); overflow: hidden; white-space: nowrap;
@@ -458,7 +476,7 @@ a.visually-hidden:focus-visible {{
 }}
 .header-row {{
   display: flex; align-items: center; gap: 12px;
-  min-height: 60px; flex-wrap: wrap; padding: 8px 16px;
+  min-height: 60px; flex-wrap: wrap; padding: 8px var(--gutter);
   max-width: var(--container); margin: 0 auto;
 }}
 .brand {{ display: flex; align-items: baseline; gap: 8px; font-weight: 700; color: var(--text); }}
@@ -499,7 +517,7 @@ a.visually-hidden:focus-visible {{
   background: var(--surface-alt); border-bottom: 1px solid var(--border);
   color: var(--muted); font-size: .82rem;
 }}
-.preview-banner p {{ margin: 0; padding: 7px 16px; max-width: var(--container); margin: 0 auto; }}
+.preview-banner p {{ margin: 0; padding: 7px var(--gutter); max-width: var(--container); margin: 0 auto; }}
 .preview-banner strong {{ color: var(--text); }}
 
 /* --- общие блоки -------------------------------------------------------- */
@@ -654,6 +672,12 @@ main {{ padding: var(--pad) 0 40px; }}
 }}
 .card__body {{ padding: var(--card-pad); display: flex; flex-direction: column; gap: 4px; }}
 .card__title {{ font-size: .92rem; font-weight: 600; color: var(--text); overflow-wrap: anywhere; }}
+/* `.card__title` — сама ссылка, как и была; `<h3>` вокруг неё — только
+   структурный якорь для заголовка карточки (доступность, измерение
+   типографики), без своего вида: сброшен до фонового текста, чтобы
+   `h1,h2,h3{{margin:0 0 .5em}}` не добавил кегль и отступ поверх того, что уже
+   задаёт `.card__title`. */
+.card__body h3 {{ margin: 0; font: inherit; }}
 .card__meta {{ font-size: .76rem; color: var(--muted); }}
 
 /* --- фасеты и сортировка -------------------------------------------------- */
@@ -799,7 +823,31 @@ main {{ padding: var(--pad) 0 40px; }}
   :root {{ --cols: {cols['tablet']}; }}
   .header-search {{ width: auto; flex: 1 1 240px; padding-bottom: 0; order: 0; }}
   .nav-toggle {{ display: none; }}
-  .site-nav {{ display: block; width: 100%; }}
+  /* Тумблер меню исчезает здесь же — значит, меню обязано влезть в ту же
+     строку шапки здесь же, а не на следующем брейкпоинте. При старом разбиении
+     (тумблер прятался тут, а инлайн-раскладка меню начиналась только с 1024px)
+     на 768px `.site-nav` шириной 100% занимало отдельную строку и заворачивало
+     четыре пункта в две — шапка вырастала до 150px против 90px у соседних
+     ширин. Замерено `tests/tools/measure_reference.js` на живом стенде.
+
+     Второй, отдельный дефект той же природы остался и после этой правки:
+     `flex: 1 1 auto` берёт гипотетическую ширину `.site-nav` из полного,
+     несвёрнутого содержимого списка (даже при `overflow-x: auto` на `ul`),
+     а не из `min-width: 0`. На страницах, где в шапке рядом ещё есть
+     `.header-search` (все, кроме главной — там форма скрыта намеренно,
+     см. `_header_search`), это содержимое явно шире доступной строки, и
+     `.header-search` целиком переносится на вторую строку шапки: измерено
+     `tests/tools/measure_candidate_tokens.js` на кандидате — 152px на 768px
+     и 110px на 1440px (catalog/collection_hub/title/not_found), против
+     99/61px на главной, где `.header-search` отсутствует и перенос не
+     проявляется. `flex-basis: 0%` вместо `auto` отдаёт гипотетическую
+     ширину нулю: `.site-nav` встаёт в общую строку и получает через
+     `flex-grow` только реально свободное место, а собственный список
+     остаётся прокручиваемым при нехватке этого места — перенос исчезает на
+     всех пяти поверхностях сразу, а не только на той, что без формы поиска. */
+  .site-nav {{ display: block; width: auto; flex: 1 1 0%; min-width: 0; }}
+  .site-nav ul {{ padding: 0; flex-wrap: nowrap; overflow-x: auto; }}
+  .site-nav a {{ white-space: nowrap; }}
   .title-head {{ grid-template-columns: 260px minmax(0, 1fr); }}
   .facets--row {{ grid-template-columns: repeat(3, minmax(0, 1fr)); }}
 }}
@@ -807,9 +855,6 @@ main {{ padding: var(--pad) 0 40px; }}
 /* --- десктоп -------------------------------------------------------------------- */
 @media (min-width: 1024px) {{
   :root {{ --cols: {cols['desktop']}; }}
-  .site-nav {{ width: auto; flex: 1 1 auto; min-width: 0; }}
-  .site-nav ul {{ padding: 0; flex-wrap: nowrap; overflow-x: auto; }}
-  .site-nav a {{ white-space: nowrap; }}
   .header-search {{ flex: 0 1 300px; }}
   .facets--row {{ grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }}
   /* В сайдбаре ширины на две колонки нет: поля возвращаются в столбик. */

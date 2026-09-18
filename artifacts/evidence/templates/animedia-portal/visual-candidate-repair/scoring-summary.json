@@ -1,0 +1,39 @@
+{
+  "measured_at_utc": "2026-09-17T07:54:07.923Z",
+  "candidate_commit": "bc97871fbb5910f35a6bdf13abd7343c39e0b5ff",
+  "contract_version": "visual-scoring/1.0.0",
+  "run_kind": "self-repro-by-candidate-author-NOT-independent-certification",
+  "note": "checker_identity == candidate_author_identity в этом прогоне: contracts/visual-scoring/1.0.0 запрещает такому прогону присуждать VISUAL_CERTIFIED (certification.all_conditions_required: checker_identity != candidate_author_identity). Числа ниже — реальный вывод factory.visual_scoring.compare() (PR #81, не изменён), нужны для видимости прогресса ремонта, а не как вердикт.",
+  "overall_score": 34.26,
+  "certification_status_this_run": "BLOCKED_INDEPENDENCE_VIOLATION",
+  "blocked_reasons_this_run": [
+    "hard-fail: CHECKER_NOT_INDEPENDENT"
+  ],
+  "evidence_completeness": 87.17,
+  "comparisons_performed": 435,
+  "surface_scores": {
+    "catalog": 33.9,
+    "collection_hub": 28.78,
+    "home": 36.24,
+    "not_found": 29.41,
+    "title": 38.9
+  },
+  "viewport_scores": {
+    "390": 32.63,
+    "768": 33.79,
+    "1440": 35.84
+  },
+  "component_scores_mean": {
+    "cards_media": 23.85,
+    "colors": 40.9,
+    "geometry": 38.14,
+    "responsive": 100.0,
+    "structure_order": 0.0,
+    "typography": 69.14
+  },
+  "evidence_completeness_gap_breakdown": {
+    "contract_unassigned_component_gap_PR81": 15,
+    "reference_missing_structure_order_tokens_gap_PR80": 15,
+    "genuine_design_absence_on_candidate_not_a_defect": 28
+  }
+}

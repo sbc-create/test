@@ -11,11 +11,13 @@
 
 from __future__ import annotations
 
-import shutil
-from pathlib import Path
 import json
+import shutil
+import socketserver
 from dataclasses import dataclass
+from pathlib import Path
 from urllib.parse import unquote
+from wsgiref.simple_server import WSGIServer
 
 from factory.lords.render import RenderedSite
 
@@ -31,6 +33,23 @@ SECURITY_HEADERS = (
 
 HEALTH_PATH = "/healthz"
 READY_PATH = "/readyz"
+
+
+class ThreadingWSGIServer(socketserver.ThreadingMixIn, WSGIServer):
+    """Сервер стенда обслуживает запросы параллельно.
+
+    `wsgiref.simple_server.make_server` по умолчанию однопоточный: занятое
+    браузером соединение (страница держит его, пока параллельно тянет CSS,
+    JS и постеры) блокирует любой следующий запрос — в том числе с другого
+    порта того же измерительного инструмента, который стенд обслуживает не
+    интерактивно, а в фоне. `Application` не хранит состояния между
+    запросами и потокобезопасна сама по себе — тот же вывод уже сделан для
+    `scripts/product_preview_stand.py`, где тот же класс существует под тем
+    же именем не случайно: это один и тот же вывод для одной и той же формы
+    сервера.
+    """
+
+    daemon_threads = True
 
 
 @dataclass(frozen=True)

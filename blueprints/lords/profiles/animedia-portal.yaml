@@ -11,21 +11,56 @@ purpose: 'Портал аниме: свежие серии и расписани
 owns_title_page: false
 owns: []
 theme:
+  # Имя темы (theme_ref/tenant.theme) не переименовано: значение проверяется
+  # по списку themes в blueprints/lords/blueprint.yaml и по enum схемы пакета
+  # сайта, и переименование потребовало бы отдельной, самостоятельной правки
+  # обеих точек. Свет и тьма ниже — вопрос токенов, а не имени.
   name: animedia_night
+  # OWNER_DECISION: светлая палитра — детерминированное умолчание витрины для
+  # чистой сессии и визуального теста. Значения bg/surface/text измерены
+  # инструментом tests/tools/measure_reference_colors.js на amd.online
+  # (docs/reference-packs/amd-online/VISUAL_TOKENS.yaml): фон страницы
+  # #ffffff, фон шапки #ffffff (шапка не выделена отдельной поверхностью —
+  # сливается с полотном), основной текст #161616. Пакет sites/animedia-preview
+  # уже объявлял тот же fingerprint в brand.colors (background/text) —
+  # расхождение было между объявленным лицом витрины и токенами темы,
+  # которые его не читали.
   tokens:
+    bg: '#ffffff'
+    surface: '#ffffff'
+    surface_alt: '#eef2f4'
+    text: '#161616'
+    muted: '#4f5964'
+    accent: '#37b3a4'
+    accent_text: '#08110f'
+    border: '#e0e4e8'
+    radius: 6px
+    # Геометрия измерена тем же инструментом на amd.online: outer_gutter
+    # около 1px и на 768, и на 1440 — портал использует контент почти на всю
+    # ширину экрана, а не колонку с полями. `container` шире любого
+    # обслуживаемого вьюпорта, поэтому его не сдерживает max-width, а
+    # `gutter` задаёт то самое поле в 1px — системно, через токен раскладки
+    # (factory/lords/theme.py: .container/.header-row), а не point-фиксом
+    # под конкретный вьюпорт.
+    container: 2400px
+    gutter: 1px
+    h1_size: '1.4rem'
+    h2_size: '1.15rem'
+    heading_font: '''Open Sans'', ''Segoe UI'', Roboto, Arial, sans-serif'
+  # Прежняя тёмная палитра сохранена как пользовательская альтернатива:
+  # переключатель темы (factory/lords/render.py: _theme_switch) появляется
+  # автоматически там, где вторая палитра объявлена, и он же даёт
+  # клавиатурный доступ, aria-pressed и сохранение выбора в localStorage без
+  # вспышки неверной темы при загрузке (_theme_boot ставит атрибут до
+  # первого кадра). Ничего из этого не пишется здесь заново.
+  tokens_alt:
     bg: '#0f1419'
     surface: '#161d24'
     surface_alt: '#1e2730'
     text: '#e8edf2'
     muted: '#94a3b1'
-    accent: '#37b3a4'
-    accent_text: '#08110f'
     border: '#2a3641'
-    radius: 6px
-    container: 1320px
-    h1_size: '1.4rem'
-    h2_size: '1.15rem'
-    heading_font: '''Open Sans'', ''Segoe UI'', Roboto, Arial, sans-serif'
+  alt_scheme: dark
 layout:
   density: dense
   hero: timeline
