@@ -1258,9 +1258,12 @@ def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
             "<button type=\"submit\">Найти</button></form>"
         )
     if "hero_facets" in blocks:
-        hero_body += _mark("hero_facets", _chips([
-            (label, f"/genres/{slug}/", count) for slug, label, count in catalog.genres(kinds)[:8]
-        ]))
+        facet_pairs = [
+            (label, f"/genres/{slug}/", count)
+            for slug, label, count in catalog.genres(kinds)[:8]
+        ]
+        if facet_pairs:
+            hero_body += _mark("hero_facets", _chips(facet_pairs))
     parts.append(_mark(
         "hero", f'<section class="hero hero--{escape(hero_kind)}">{hero_body}</section>'))
 
@@ -1278,6 +1281,11 @@ def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
                     catalog.of_types(kinds), domain=ctx.get("domain") or None),
                 ctx.get("carousel_heading") or "Новинки"))
         elif block == "latest_grid":
+            # Пустая полка на главной не рисуется. `_grid([])` писал бы
+            # «По выбранным условиям…», а фильтров на главной нет — зритель
+            # видел бы обещание «Последние добавления» и ложное объяснение.
+            if not latest:
+                continue
             add(block,
                 '<section class="section"><div class="section__head">'
                 "<h2>Последние добавления</h2>"
@@ -1299,26 +1307,25 @@ def _home(ctx, catalog: fx.Catalog, kinds, section) -> Page:
         elif block == "top_rated":
             add(block, _top_rated(ctx, pool))
         elif block == "genre_chips":
-            add(block,
-                '<section class="section"><h2>Жанры</h2>'
-                + _chips([(label, f"/genres/{slug}/", count)
-                          for slug, label, count in catalog.genres(kinds)])
-                + "</section>"
-            )
+            pairs = [(label, f"/genres/{slug}/", count)
+                     for slug, label, count in catalog.genres(kinds)]
+            if not pairs:
+                continue
+            add(block, '<section class="section"><h2>Жанры</h2>' + _chips(pairs) + "</section>")
         elif block == "year_grid":
+            pairs = [(str(year), f"/years/{year}/", count)
+                     for year, count in catalog.years(kinds)]
+            if not pairs:
+                continue
             add(block,
-                '<section class="section"><h2>Годы выпуска</h2>'
-                + _chips([(str(year), f"/years/{year}/", count)
-                          for year, count in catalog.years(kinds)])
-                + "</section>"
-            )
+                '<section class="section"><h2>Годы выпуска</h2>' + _chips(pairs) + "</section>")
         elif block == "country_grid":
+            pairs = [(label, f"/countries/{slug}/", count)
+                     for slug, label, count in catalog.countries(kinds)]
+            if not pairs:
+                continue
             add(block,
-                '<section class="section"><h2>Страны</h2>'
-                + _chips([(label, f"/countries/{slug}/", count)
-                          for slug, label, count in catalog.countries(kinds)])
-                + "</section>"
-            )
+                '<section class="section"><h2>Страны</h2>' + _chips(pairs) + "</section>")
         elif block == "calendar" and ctx["show_calendar"]:
             add(block, _calendar(catalog, kinds))
         elif block == "fresh_episodes":
