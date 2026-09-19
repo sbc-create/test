@@ -281,8 +281,8 @@ def test_domain_profiles_diverge_seo_and_shelves():
 
     text = (HOST / "lords-frontend.py").read_text(encoding="utf-8")
     assert "animedia.icu" in text and "animedia.space" in text
-    assert "Новые серии и онгоинги" in text
-    assert "Каталог аниме, топ и фильмы" in text
+    assert "Новые серии и популярное аниме" in text
+    assert "Сериалы, фильмы и дунхуа" in text
     assert text.count('"seo_home"') >= 2 or text.count("seo_home") >= 4
     assert "Шикимуни" in rs.unresolved_owner_names()
     assert "Nisa Media" in rs.unresolved_owner_names()
@@ -297,10 +297,11 @@ def test_hub_selects_latest_available_episode(monkeypatch, tmp_path):
 
 def test_home_css_locks_hero_card_width():
     text = (HOST / "lords-frontend.py").read_text(encoding="utf-8")
-    assert "max-width:min(calc(100% - 32px),1280px)" in text
-    assert "flex:0 0 154px" in text
-    assert ".ahero" in text and "max-height:300px" in text
-    assert "grid-template-columns:250px minmax(0,1fr) 150px" in text
+    assert "min(1704px,calc(100vw - 80px))" in text
+    assert "clamp(148px,9vw,180px)" in text
+    assert ".ahero" in text and "max-height:min(330px,36vh)" in text
+    assert "clamp(240px,15.8vw,306px) minmax(0,1fr)" in text
+    assert "aspect-ratio:16/9" in text
 
 
 def test_player_overlay_hidden_css_not_overridden():

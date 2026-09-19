@@ -165,8 +165,8 @@ class TestAnimediaFinalRepair:
         assert "тестовая витрина" not in html
         assert "закрыта от индексации" not in html
         assert "Template:" not in html
-        assert "Animedia 1.2.1 ·" in html
-        assert "Каталог аниме онлайн" in html
+        assert "Animedia 1.2." in html
+        assert "Новые серии и популярное" in html
         assert "Animedia Space" in html
         assert 'name="robots" content="noindex, nofollow"' in html
         assert "источник подключён" not in html
@@ -177,8 +177,8 @@ class TestAnimediaFinalRepair:
         hi = _вид(mod, catalog, details, "animedia.icu").главная()
         assert "animedia-space" in hs
         assert "animedia-icu" in hi
-        assert "Каталог аниме онлайн" in hs
-        assert "Аниме, серии и подборки" in hi
+        assert "Новые серии и популярное" in hs
+        assert "Сериалы, фильмы и дунхуа" in hi
         assert hs != hi
         assert 'rel="canonical" href="https://animedia.space/"' in hs
         assert 'rel="canonical" href="https://animedia.icu/"' in hi
@@ -244,6 +244,28 @@ class TestAnimediaFinalRepair:
         assert mod.ВЕРСИЯ == "1.2.1"
         assert mod.ОФОРМЛЕНИЕ_ПЕРЕРАБОТАННОЕ is True
         assert "animedia" in mod.ВИДЫ_1_1
+        assert mod.ВИДЫ_1_1["animedia"] is mod.ВидАнимедиа
+
+    def test_design_122_enables_animedia_portal(self, tmp_path):
+        # Temporarily override design_version by rewriting loader path via env already set;
+        # reuse fixture with patched manifest.
+        import json, os, importlib.util
+        man = {
+            "schema_version": 1, "template_family": "animedia", "design_version": "1.2.2",
+            "source_commit": "a"*40, "runtime_commit": "b"*40, "build_id": "t",
+            "artifact_sha256": "c"*64, "profile": "animedia-space",
+            "built_at": "2026-09-19T00:00:00Z",
+        }
+        path = tmp_path / "m122.json"
+        path.write_text(json.dumps(man), encoding="utf-8")
+        os.environ["LORDS_TEMPLATE_MANIFEST"] = str(path)
+        # force reload
+        name = "lords_fe_122"
+        spec = importlib.util.spec_from_file_location(name, FRONTEND)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        assert mod.ВЕРСИЯ == "1.2.2"
+        assert mod.ОФОРМЛЕНИЕ_ПЕРЕРАБОТАННОЕ is True
         assert mod.ВИДЫ_1_1["animedia"] is mod.ВидАнимедиа
 
     def test_genre_index_from_russian_names_without_codes(self, fe):
