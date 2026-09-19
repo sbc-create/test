@@ -1,0 +1,38 @@
+{
+  "taken_at_utc": "2026-09-19T19:43:54Z",
+  "live_domain": "lordfilm47.space",
+  "process_pid": 3690779,
+  "process_start_utc": "2026-09-19T03:43:05Z",
+  "runtime_file_mtime_utc": "2026-09-19T19:41:41Z",
+  "runtime_sha256": "06e991c3e558621c494e1150483b98eca67f2fcdc62ccaf0b165adf3e5b33432",
+  "runtime_bytes": 369594,
+  "manifest": {
+    "schema_version": 1,
+    "template_family": "lords",
+    "design_version": "1.1.0",
+    "source_commit": "7dc251d",
+    "build_id": "20260913T2300Z-8ececc6c-nova",
+    "artifact_sha256": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+    "profile": "lords-general",
+    "built_at": "2026-09-14T07:42:54Z"
+  },
+  "manifest_claims_artifact": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+  "runtime_matches_manifest_claim": false,
+  "worktree_sha256": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+  "worktree_bytes": 169646,
+  "worktree_equals_manifest_claim": true,
+  "animedia_finalization_sha256": "06e991c3e558621c494e1150483b98eca67f2fcdc62ccaf0b165adf3e5b33432",
+  "runtime_equals_animedia_finalization": true,
+  "stale_process": true,
+  "stale_reason": "file mtime 16h after process start; loopback still serves awaiting",
+  "loopback_generic_state": "awaiting",
+  "literal_present_on_live": "До выбора серии запросов к провайдеру нет",
+  "literal_in_worktree_HEAD": false,
+  "literal_in_runtime_disk": true,
+  "player_config": {
+    "publisher_id": "10238",
+    "source_mode": "provider-id",
+    "provenance": "Secret Hub, профиль lords (пара витрины lords-01)",
+    "note": "значение вне git; файл читает рендерер витрины по соглашению имени"
+  }
+}

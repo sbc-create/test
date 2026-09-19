@@ -1,0 +1,42 @@
+FEATURE_HEAD=ef17a7094ad7f7663ecff29fb5338998d3defe03
+at_utc=2026-09-19T20:12:39Z
+tree=committed (evidence dir may still be untracked during this capture)
+
+=== core suites ===
+........................................................................ [ 51%]
+.....................................................................    [100%]
+141 passed in 6.73s
+
+
+exit=0
+
+=== tests/lords/ full ===
+........................................................................ [ 35%]
+........................................................................ [ 71%]
+........................................sssssssssssssssss                [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/lords/test_series_episode_binding.py:50: кандидата нет: /home/claude/wt-lords-default-episode-01/var/lords-candidate
+SKIPPED [1] tests/lords/test_series_episode_binding.py:60: кандидата нет: /home/claude/wt-lords-default-episode-01/var/lords-candidate
+SKIPPED [1] tests/lords/test_series_episode_binding.py:66: кандидата нет: /home/claude/wt-lords-default-episode-01/var/lords-candidate
+SKIPPED [1] tests/lords/test_series_episode_binding.py:71: кандидата нет: /home/claude/wt-lords-default-episode-01/var/lords-candidate
+SKIPPED [1] tests/lords/test_series_episode_binding.py:85: кандидата нет: /home/claude/wt-lords-default-episode-01/var/lords-candidate
+SKIPPED [1] tests/lords/test_series_episode_binding.py:90: кандидата нет: /home/claude/wt-lords-default-episode-01/var/lords-candidate
+SKIPPED [1] tests/lords/test_series_episode_binding.py:94: кандидата нет: /home/claude/wt-lords-default-episode-01/var/lords-candidate
+SKIPPED [1] tests/lords/test_series_episode_binding.py:111: кандидата нет: /home/claude/wt-lords-default-episode-01/var/lords-candidate
+SKIPPED [1] tests/lords/test_series_episode_binding.py:120: кандидата нет: /home/claude/wt-lords-default-episode-01/var/lords-candidate
+SKIPPED [1] tests/lords/test_series_episode_binding.py:124: кандидата нет: /home/claude/wt-lords-default-episode-01/var/lords-candidate
+SKIPPED [1] tests/lords/test_series_episode_binding.py:141: кандидата нет: /home/claude/wt-lords-default-episode-01/var/lords-candidate
+SKIPPED [1] tests/lords/test_stand_lifecycle.py:34: собранной витрины нет: /home/claude/wt-lords-default-episode-01/var/probe
+SKIPPED [1] tests/lords/test_stand_lifecycle.py:40: собранной витрины нет: /home/claude/wt-lords-default-episode-01/var/probe
+SKIPPED [1] tests/lords/test_stand_lifecycle.py:53: собранной витрины нет: /home/claude/wt-lords-default-episode-01/var/probe
+SKIPPED [1] tests/lords/test_stand_lifecycle.py:62: собранной витрины нет: /home/claude/wt-lords-default-episode-01/var/probe
+SKIPPED [1] tests/lords/test_stand_lifecycle.py:76: собранной витрины нет: /home/claude/wt-lords-default-episode-01/var/probe
+SKIPPED [1] tests/lords/test_stand_lifecycle.py:98: собранной витрины нет: /home/claude/wt-lords-default-episode-01/var/probe
+184 passed, 17 skipped in 3.25s
+
+
+exit=0
+
+=== git diff --check ===
+(clean)
+exit=0

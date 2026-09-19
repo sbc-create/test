@@ -1,0 +1,211 @@
+<!doctype html><html lang="ru" data-template-version="1.1.0" data-template-family="lords" data-build-id="20260913T2300Z-8ececc6c-nova" data-design="lords-sheet">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lordfilm — фильмы и сериалы онлайн</title><meta name="description" content="Lordfilm: каталог фильмов, сериалов и мультфильмов."><link rel="canonical" href="https://lordfilm47.space/">
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="site-factory-template-revision" content="7dc251d"><meta name="site-factory-design-version" content="1.1.0"><meta name="site-factory-template-family" content="lords"><meta name="site-factory-build-id" content="20260913T2300Z-8ececc6c-nova"><meta name="site-factory-artifact-sha256" content="a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346"><meta name="site-factory-template" content="lords-nova"><meta name="site-factory-core" content="site-factory-nova"><meta name="site-factory-profile" content="lords-general"><script data-metrika-counter="112010269">(function(){if(window.__sfMetrikaReady){return;}window.__sfMetrikaReady=1;(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<e.scripts.length;j++){if(e.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");ym(112010269,"init",{trackLinks:true,accurateTrackBounce:true,webvisor:false});})();</script><noscript><div><img src="https://mc.yandex.ru/watch/112010269" style="position:absolute;left:-9999px" alt=""></div></noscript>
+<style>
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;overflow-x:clip;max-width:100%}
+body{margin:0;min-height:100vh;overflow-x:clip;max-width:100%}
+img,video,iframe,svg{max-width:100%;height:auto;display:block}
+a{text-decoration:none;color:inherit}
+.vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+clip:rect(0 0 0 0);white-space:nowrap;border:0}
+:focus-visible{outline:3px solid #3f7d26;outline-offset:2px;border-radius:3px}
+.skip{position:absolute;left:-9999px;top:0;z-index:200;padding:10px 16px;background:#3f7d26;color:#fff}
+.skip:focus{left:8px;top:8px}
+
+body{background:#111111;color:#1f2329;
+font:14px/1.5 'Open Sans','Segoe UI',system-ui,-apple-system,sans-serif}
+/* Лист. Узкая светлая полоса на тёмной подложке — первое, по чему семейство
+   узнают; ширина взята из измерения эталона на 1440 (контейнер 1100). */
+.sheet{max-width:1100px;margin:0 auto;background:#eef1f4;min-height:100vh;
+box-shadow:0 0 60px #0009}
+@media(min-width:1000px){.sheet{margin-top:118px;min-height:calc(100vh - 118px)}}
+.pad{padding:0 18px}
+.backdrop{position:fixed;inset:0 0 auto 0;height:330px;z-index:-1;
+background:radial-gradient(120% 140% at 50% 0,#243043 0,#0e1013 68%)}
+/* Шапка в одну строку. */
+.hd{background:#ffffff;border-bottom:1px solid #d7dde3}
+.hd__in{display:flex;align-items:center;gap:18px;height:62px;padding:0 18px}
+.hd__logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:19px;
+letter-spacing:.5px;text-transform:uppercase;color:#1f2329}
+.hd__mark{width:30px;height:30px;border-radius:5px;background:#3f7d26;color:#fff;
+display:grid;place-items:center;font-size:15px;font-weight:800}
+.hd__nav{display:flex;gap:2px;flex:1;flex-wrap:wrap}
+.hd__nav a{padding:8px 11px;border-radius:4px;font-size:13px;font-weight:700;
+text-transform:uppercase;letter-spacing:.3px;color:#39414a}
+.hd__nav a:hover{background:#eef1f4;color:#2f5e1c}
+.hd__nav a[aria-current]{color:#2f5e1c;box-shadow:inset 0 -2px 0 #3f7d26}
+.hd__s{display:flex;border:1px solid #d7dde3;border-radius:4px;overflow:hidden;background:#fff}
+.hd__s input{border:0;padding:8px 11px;font-size:13px;width:190px;color:#1f2329;background:#fff}
+.hd__s button{border:0;background:#fff;color:#6a737d;padding:0 11px;cursor:pointer;font-size:14px}
+.hd__s button:hover{color:#2f5e1c}
+/* Заголовок раздела и вкладки-таблетки — прямо из эталона. */
+.lead{font-size:20px;font-weight:600;color:#3a4149;margin:16px 0 12px}
+/* Заголовок раздела у эталона — 24px при 14px основного текста.
+   Было 17px: страница открывалась почти без заголовка. 20px — шаг к
+   эталону, который остаётся в ритме этой типографики; остаточное
+   расхождение названо в отчёте, а не сглажено. */
+.tabs{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin:0 0 12px}
+.tabs__pill{display:inline-flex;align-items:center;gap:7px;background:#3f7d26;color:#fff;
+font-weight:700;font-size:15px;padding:10px 18px;border-radius:4px}
+.tabs a{background:#ffffff;border:1px solid #d7dde3;border-radius:4px;padding:9px 15px;
+font-size:13px;color:#4a535d;font-weight:600}
+.tabs a:hover{color:#2f5e1c;border-color:#3f7d26}
+.tabs a[aria-current]{background:#171a1e;color:#fff;border-color:#171a1e}
+/* Сетка в шесть колонок с тесными желобами. */
+.grid{display:grid;gap:8px;grid-template-columns:repeat(2,1fr)}
+@media(min-width:520px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:860px){.grid{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:1080px){.grid{grid-template-columns:repeat(6,1fr)}}
+/* Карточка: постер во всю площадь, название поверх него, оценки полосой. */
+.c{position:relative;display:block;background:#171a1e;overflow:hidden;border-radius:3px}
+.c:hover .c__img{transform:scale(1.04)}
+.c__p{display:block;position:relative;aspect-ratio:2/3;overflow:hidden;background:#22272e}
+.c__img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;
+transition:transform .25s}
+.c__none{position:absolute;inset:0;display:grid;place-items:center;text-align:center;
+padding:10px;color:#8b95a1;font-size:12px;font-weight:600;
+background:repeating-linear-gradient(135deg,#242a32 0 9px,#1e242b 9px 18px)}
+.c__none b{display:block;font-size:26px;margin-bottom:4px;color:#aab4c0}
+.c__badge{position:absolute;z-index:2;top:6px;left:6px;background:#3f7d26;color:#fff;font-size:11px;
+font-weight:700;padding:3px 7px;border-radius:3px;max-width:calc(100% - 12px);
+overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.c__cap{position:absolute;z-index:2;left:0;right:0;bottom:0;padding:26px 7px 8px;text-align:center;
+background:linear-gradient(180deg,#0000 0,#000000d9 58%,#000000f2 100%)}
+.c__t{display:block;color:#fff;font-size:13px;font-weight:700;line-height:1.25;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.c__y{display:block;color:#c5ccd4;font-size:12px;margin-top:2px}
+.c__r{display:flex;justify-content:space-between;align-items:center;gap:6px;
+padding:6px 8px;background:#171a1e;font-size:12px;font-weight:700}
+.c__kp{color:#ff8b3d}.c__imdb{color:#f5c518}
+.c__r span i{font-style:normal;color:#fff;margin-left:4px}
+.c__r em{font-style:normal;color:#8a939e;font-weight:600}
+/* Листалка. */
+.pg{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:22px 0 8px}
+.pg a,.pg span{min-width:36px;text-align:center;padding:8px 10px;border-radius:4px;
+border:1px solid #d7dde3;background:#ffffff;font-size:13px;font-weight:600;color:#4a535d}
+.pg span[aria-current]{background:#3f7d26;border-color:#3f7d26;color:#fff}
+.pg em{border:0;background:0;font-style:normal;color:#5b6470;align-self:center}
+/* Крошки, страница тайтла. */
+.crumbs{background:#e3e7eb;border-bottom:1px solid #d7dde3;font-size:12px;color:#5b6470;
+padding:9px 18px}
+.crumbs a{color:#2f5e1c;font-weight:600;display:inline-block;padding:5px 2px}
+.crumbs b{font-weight:600;color:#1f2329}
+.tw{display:grid;grid-template-columns:1fr;gap:18px;background:#ffffff;padding:18px;
+margin:14px 0;border:1px solid #d7dde3;border-radius:4px}
+@media(min-width:720px){.tw{grid-template-columns:180px 1fr}}
+.tw__ps{position:relative;border-radius:4px;overflow:hidden;background:#22272e;aspect-ratio:2/3}
+.tw__ps img,.tw__img{position:relative;z-index:1;width:100%;height:100%;
+object-fit:cover;display:block}
+.tw__ps .c__none{font-size:13px}
+.tw h1{font-size:20px;line-height:1.3;font-weight:600;margin:0 0 12px;color:#1f2329}
+.plot p{margin:0 0 10px;font-size:13.5px;line-height:1.62;color:#333a42}
+.plot .none{color:#5b6470;font-style:italic}
+.plot a{display:inline-block;padding:5px 2px;color:#2f5e1c;font-weight:600}
+.facts{display:grid;grid-template-columns:1fr;gap:4px 26px;margin:14px 0 0;font-size:13px}
+@media(min-width:720px){.facts{grid-template-columns:1fr 1fr}}
+.facts div{display:flex;gap:6px;padding:3px 0;border-bottom:1px dotted #dfe4e9}
+.facts dt{font-weight:700;color:#39414a;flex:0 0 auto}
+.facts dd{margin:0;color:#4d555e}
+.facts a{color:#2f5e1c;font-weight:600;display:inline-block;padding:5px 2px}
+/* Высота ссылки жанра — 14 px по строке, и пальцем в неё не попасть.
+   Измерено пробой целей касания: 238 попаданий ниже 24 px, и все —
+   эти ссылки. Отступ поднимает цель до 24 px, не меняя типографики. */
+.rates{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 0}
+.rate{border:2px solid;border-radius:4px;padding:8px 14px;font-size:13px;font-weight:700;
+background:#fff}
+.rate--kp{border-color:#b34700;color:#b34700}
+.rate--imdb{border-color:#9a7b00;color:#6f5900}
+.rate small{display:block;font-weight:600;font-size:11px;color:#5b6470;margin-top:2px}
+.claim{text-align:center;font-weight:700;font-size:15px;color:#3a4149;margin:18px 0 0}
+/* Плеер: полоса вкладок и поле 16:9. */
+.pl{margin:14px 0}
+.pl__bar{display:flex;align-items:center;gap:4px;background:#171a1e;padding:0 8px;
+flex-wrap:wrap;border-radius:4px 4px 0 0}
+.pl__tab{padding:12px 18px;font-size:13px;font-weight:700;color:#b9c2cc}
+.pl__tab[aria-current]{background:#3f7d26;color:#fff;border-radius:3px 3px 0 0}
+.pl__note{margin-left:auto;color:#8d97a2;font-size:12px;padding:12px 4px}
+.pl__frame{position:relative;aspect-ratio:16/9;background:#05070a;display:grid;
+place-items:center;border-radius:0 0 4px 4px;overflow:hidden}
+.pl__frame video-player{display:block;width:100%;height:100%}
+.pl__state{max-width:520px;text-align:center;padding:26px 20px;color:#d6dde5}
+.pl__state b{display:block;font-size:16px;margin-bottom:8px;color:#fff}
+.pl__state p{margin:0;font-size:13.5px;line-height:1.6;color:#aeb8c3}
+.pl__state code{background:#151a20;padding:2px 6px;border-radius:3px;font-size:12px;color:#cfd8e2}
+/* Сезоны и серии. */
+.sec{background:#ffffff;border:1px solid #d7dde3;border-radius:4px;padding:16px 18px;margin:14px 0}
+.sec h2{font-size:16px;margin:0 0 12px;font-weight:700;color:#1f2329}
+.sea{margin:0 0 16px}
+.sea__h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 0 9px}
+.sea__h h3{margin:0;font-size:14px;font-weight:700}
+.sea__h span{font-size:12px;color:#5b6470}
+.eps{display:flex;flex-wrap:wrap;gap:5px}
+.eps a{min-width:40px;text-align:center;padding:7px 8px;border:1px solid #d7dde3;
+border-radius:3px;font-size:13px;font-weight:600;background:#fff;color:#3f4750}
+.eps a:hover{border-color:#3f7d26;color:#2f5e1c}
+.eps a[aria-current]{background:#3f7d26;border-color:#3f7d26;color:#fff}
+.eps a[data-off]{color:#5f6874;background:#f3f5f7}
+.epnav{display:flex;justify-content:space-between;gap:10px;margin:14px 0 0;flex-wrap:wrap}
+.epnav a,.epnav span{padding:9px 14px;border:1px solid #d7dde3;border-radius:4px;
+font-size:13px;font-weight:600;background:#fff;color:#3f4750}
+.epnav span{color:#5f6874;background:#f3f5f7}
+/* Похожее и подвал. */
+.rel{display:grid;gap:8px;grid-template-columns:repeat(3,1fr)}
+@media(min-width:860px){.rel{grid-template-columns:repeat(6,1fr)}}
+.empty{background:#ffffff;border:1px solid #d7dde3;border-radius:4px;padding:44px 22px;
+text-align:center;color:#4d555e;margin:14px 0}
+.empty b{display:block;font-size:17px;color:#1f2329;margin-bottom:8px}
+.empty a{display:inline-block;padding:6px 2px;color:#2f5e1c;font-weight:600}
+.nf{text-align:center;padding:56px 20px}
+.nf b{display:block;font-size:64px;font-weight:800;color:#3f7d26;line-height:1}
+.nf h1{font-size:20px;font-weight:600;margin:10px 0 8px}
+.nf p{color:#4d555e;margin:0 auto 18px;max-width:460px}
+.nf a{display:inline-block;background:#3f7d26;color:#fff;font-weight:700;padding:11px 22px;
+border-radius:4px}
+.ft{background:#ffffff;border-top:1px solid #d7dde3;margin-top:26px;padding:20px 18px 30px;
+color:#5b6470;font-size:12.5px}
+.ft__g{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.vb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:#4d555e;
+border:1px solid #d7dde3;border-radius:3px;padding:4px 8px;background:#eef1f4}
+
+img[hidden]{display:none}
+
+/* Оценки по источникам. Разметка общая, вид свой у каждого семейства. */
+.rbs{margin:14px 0;display:flex;flex-direction:column;gap:8px}
+.rbs__l{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.rbs__i{display:flex;align-items:baseline;gap:6px;padding:6px 11px;border-radius:6px;
+white-space:nowrap}
+.rbs__s{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.rbs__n{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.rbs__n small{font-size:11px;font-weight:400;opacity:.72}
+.rbs__v{font-size:11px;opacity:.75;font-variant-numeric:tabular-nums}
+.rbs__l--own{border-top:1px dashed currentColor;padding-top:8px;margin-top:2px;opacity:.95}
+.rbs--none{margin:14px 0;font-size:13px;font-style:italic}
+@media(max-width:400px){.rbs__i{padding:5px 8px}.rbs__n{font-size:14px}}
+.rbs__i{background:#ffffff;border:1px solid #d7dde3;color:#1f2329}
+.rbs__s{color:#2f5e1c}
+.rbs__i[data-source=imdb] .rbs__n{color:#b34700}
+.rbs__l--own{color:#5b6470}
+.rbs--none{color:#5f6874}
+
+</style><script>document.addEventListener('error',function(e){var i=e.target;if(i&&i.tagName==='IMG'&&i.hasAttribute('data-poster'))i.hidden=true;},true);</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Lordfilm","url":"https://lordfilm47.space/","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://lordfilm47.space/search/?q={search_term_string}"},"query-input":"required name=search_term_string"}}</script></head>
+<body><div class="backdrop"></div>
+<a class="skip" href="#main">Перейти к содержимому</a>
+<div class="sheet">
+<header class="hd"><div class="hd__in">
+<a class="hd__logo" href="/"><span class="hd__mark" aria-hidden="true">LF</span>Lordfilm</a>
+<nav class="hd__nav" aria-label="Разделы"><a href="/new/">Новинки</a><a href="/catalog/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC">Фильмы</a><a href="/catalog/?kind=%D0%A1%D0%B5%D1%80%D0%B8%D0%B0%D0%BB">Сериалы</a><a href="/catalog/?kind=%D0%9C%D1%83%D0%BB%D1%8C%D1%82%D1%84%D0%B8%D0%BB%D1%8C%D0%BC">Мультфильмы</a><a href="/catalog/">Каталог</a></nav>
+<form class="hd__s" action="/search/" method="get" role="search">
+<label class="vh" for="q">Поиск по каталогу</label>
+<input id="q" name="q" placeholder="Введите название">
+<button type="submit" aria-label="Найти">&#9906;</button></form>
+</div></header>
+<main id="main" class="pad"><h1 class="lead">Фильмы и сериалы новинки смотреть онлайн</h1><section><div class="tabs"><span class="tabs__pill">Новинки ›</span><a href="/new/">Все</a></div><div class="grid"><a class="c" href="/title/pylnye-utesy/"><span class="c__p"><span class="c__none"><b>П</b>постер не открылся</span><img class="c__img" src="/poster/01a0b61e-cab8-7b30-896f-872bb722bb97.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">1 сезон, 3 сер.</span><span class="c__cap"><span class="c__t">Пыльные утёсы</span><span class="c__y">2026</span></span></span></a><a class="c" href="/title/ohota-za-brakom-v-37-eto-pole-bitvy/"><span class="c__p"><span class="c__none"><b>О</b>постер не открылся</span><img class="c__img" src="/poster/01a0b555-997e-7526-b37e-4fe1b2b835e8.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">1 сезон, 12 сер.</span><span class="c__cap"><span class="c__t">Охота за браком в 37 - это поле битвы</span><span class="c__y">2026</span></span></span><div class="c__r"><span class="c__imdb">IMDb<i>3.5</i></span></div></a><a class="c" href="/title/chti-svoyu-mat/"><span class="c__p"><span class="c__none"><b>Ч</b>постер не открылся</span><img class="c__img" src="/poster/01a0b545-fc51-7526-9495-11d8c641e5d7.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">1 сезон, 14 сер.</span><span class="c__cap"><span class="c__t">Чти свою мать</span><span class="c__y">2026</span></span></span></a><a class="c" href="/title/operaciya-fortitude/"><span class="c__p"><span class="c__none"><b>О</b>постер не открылся</span><img class="c__img" src="/poster/01a0b52d-c68e-7b2a-af01-56b701e668e5.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Фильм</span><span class="c__cap"><span class="c__t">Операция Fortitude</span></span></span></a><a class="c" href="/title/master-lda-i-plameni-2/"><span class="c__p"><span class="c__none"><b>М</b>постер не открылся</span><img class="c__img" src="/poster/01a0b507-0813-7526-a2e6-5edf75180827.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">2 сезон, 104 сер.</span><span class="c__cap"><span class="c__t">Мастер льда и пламени 2</span><span class="c__y">2022</span></span></span></a><a class="c" href="/title/v-poiskah-dzheka-charltona/"><span class="c__p"><span class="c__none"><b>В</b>постер не открылся</span><img class="c__img" src="/poster/01a0b49e-18d6-7526-89f8-d7ec21da131a.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Фильм</span><span class="c__cap"><span class="c__t">В поисках Джека Чарльтона</span><span class="c__y">2020</span></span></span><div class="c__r"><span class="c__imdb">IMDb<i>8</i></span></div></a><a class="c" href="/title/tihookeanskie-rassledovaniya/"><span class="c__p"><span class="c__none"><b>Т</b>постер не открылся</span><img class="c__img" src="/poster/01a0b44e-797c-7526-8eb4-e28d9213edf2.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">5 сезон, 18 сер.</span><span class="c__cap"><span class="c__t">Тихоокеанские расследования</span><span class="c__y">2019</span></span></span><div class="c__r"><span class="c__kp">КП<i>7.605</i></span><span class="c__imdb">IMDb<i>5.9</i></span></div></a><a class="c" href="/title/le-man-55-taynaya-katastrofa/"><span class="c__p"><span class="c__none"><b>Л</b>постер не открылся</span><img class="c__img" src="/poster/01a0b448-bc7e-7526-a128-f9bf6c25382d.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Фильм</span><span class="c__cap"><span class="c__t">Ле-Ман &#x27;55. Тайная катастрофа</span><span class="c__y">2024</span></span></span><div class="c__r"><span class="c__kp">КП<i>6.772</i></span><span class="c__imdb">IMDb<i>7.6</i></span></div></a><a class="c" href="/title/sryv/"><span class="c__p"><span class="c__none"><b>С</b>постер не открылся</span><img class="c__img" src="/poster/01a0b413-6203-7526-8349-508bed7790c1.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">1 сезон, 6 сер.</span><span class="c__cap"><span class="c__t">Срыв</span><span class="c__y">2025</span></span></span><div class="c__r"><span class="c__imdb">IMDb<i>5.7</i></span></div></a><a class="c" href="/title/lyubov-i-remont/"><span class="c__p"><span class="c__none"><b>Л</b>постер не открылся</span><img class="c__img" src="/poster/01a0b403-b3c5-7526-a1eb-8acf3de5d6cd.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Фильм</span><span class="c__cap"><span class="c__t">Любовь и ремонт</span><span class="c__y">2024</span></span></span><div class="c__r"><span class="c__imdb">IMDb<i>5.6</i></span></div></a><a class="c" href="/title/skandal-4/"><span class="c__p"><span class="c__none"><b>С</b>постер не открылся</span><img class="c__img" src="/poster/01a0b3e3-9497-7526-a630-2aa87a498e6e.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">1 сезон, 8 сер.</span><span class="c__cap"><span class="c__t">Скандал</span><span class="c__y">2026</span></span></span></a><a class="c" href="/title/obitel-zla-2/"><span class="c__p"><span class="c__none"><b>О</b>постер не открылся</span><img class="c__img" src="/poster/01a0b3e2-8e39-7526-9625-6390a20e67c9.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Фильм</span><span class="c__cap"><span class="c__t">Обитель зла</span><span class="c__y">2026</span></span></span><div class="c__r"><span class="c__imdb">IMDb<i>7.8</i></span></div></a></div></section><section><div class="tabs"><span class="tabs__pill">Фильмы ›</span><a href="/catalog/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC">Все</a></div><div class="grid"><a class="c" href="/title/operaciya-fortitude/"><span class="c__p"><span class="c__none"><b>О</b>постер не открылся</span><img class="c__img" src="/poster/01a0b52d-c68e-7b2a-af01-56b701e668e5.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Фильм</span><span class="c__cap"><span class="c__t">Операция Fortitude</span></span></span></a><a class="c" href="/title/v-poiskah-dzheka-charltona/"><span class="c__p"><span class="c__none"><b>В</b>постер не открылся</span><img class="c__img" src="/poster/01a0b49e-18d6-7526-89f8-d7ec21da131a.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Фильм</span><span class="c__cap"><span class="c__t">В поисках Джека Чарльтона</span><span class="c__y">2020</span></span></span><div class="c__r"><span class="c__imdb">IMDb<i>8</i></span></div></a><a class="c" href="/title/le-man-55-taynaya-katastrofa/"><span class="c__p"><span class="c__none"><b>Л</b>постер не открылся</span><img class="c__img" src="/poster/01a0b448-bc7e-7526-a128-f9bf6c25382d.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Фильм</span><span class="c__cap"><span class="c__t">Ле-Ман &#x27;55. Тайная катастрофа</span><span class="c__y">2024</span></span></span><div class="c__r"><span class="c__kp">КП<i>6.772</i></span><span class="c__imdb">IMDb<i>7.6</i></span></div></a><a class="c" href="/title/lyubov-i-remont/"><span class="c__p"><span class="c__none"><b>Л</b>постер не открылся</span><img class="c__img" src="/poster/01a0b403-b3c5-7526-a1eb-8acf3de5d6cd.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Фильм</span><span class="c__cap"><span class="c__t">Любовь и ремонт</span><span class="c__y">2024</span></span></span><div class="c__r"><span class="c__imdb">IMDb<i>5.6</i></span></div></a><a class="c" href="/title/obitel-zla-2/"><span class="c__p"><span class="c__none"><b>О</b>постер не открылся</span><img class="c__img" src="/poster/01a0b3e2-8e39-7526-9625-6390a20e67c9.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Фильм</span><span class="c__cap"><span class="c__t">Обитель зла</span><span class="c__y">2026</span></span></span><div class="c__r"><span class="c__imdb">IMDb<i>7.8</i></span></div></a><a class="c" href="/title/udivitelnyy-mir-ieronima-bosha/"><span class="c__p"><span class="c__none"><b>У</b>постер не открылся</span><img class="c__img" src="/poster/01a0b3d0-6349-7526-8473-8c514e274288.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Фильм</span><span class="c__cap"><span class="c__t">Удивительный мир Иеронима Босха</span><span class="c__y">2016</span></span></span><div class="c__r"><span class="c__kp">КП<i>7.919</i></span><span class="c__imdb">IMDb<i>7.4</i></span></div></a><a class="c" href="/title/sidni-lyumet-o-sebe/"><span class="c__p"><span class="c__none"><b>С</b>постер не открылся</span><img class="c__img" src="/poster/01a0b379-36e8-7526-aa88-ac8531bec724.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Фильм</span><span class="c__cap"><span class="c__t">Сидни Люмет о себе</span><span class="c__y">2015</span></span></span><div class="c__r"><span class="c__imdb">IMDb<i>7.2</i></span></div></a><a class="c" href="/title/nerazryvnye-uzy/"><span class="c__p"><span class="c__none"><b>Н</b>постер не открылся</span><img class="c__img" src="/poster/01a0b35e-1ccd-7526-900d-d5f54271cb36.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Фильм</span><span class="c__cap"><span class="c__t">Неразрывные узы</span><span class="c__y">2026</span></span></span><div class="c__r"><span class="c__imdb">IMDb<i>4.6</i></span></div></a><a class="c" href="/title/isstuplenie-2/"><span class="c__p"><span class="c__none"><b>И</b>постер не открылся</span><img class="c__img" src="/poster/01a0b357-80a0-7526-a8b1-5a0de33ea6c3.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Фильм</span><span class="c__cap"><span class="c__t">Исступление</span><span class="c__y">2026</span></span></span><div class="c__r"><span class="c__imdb">IMDb<i>5.7</i></span></div></a><a class="c" href="/title/uvyadanie/"><span class="c__p"><span class="c__none"><b>У</b>постер не открылся</span><img class="c__img" src="/poster/01a0b355-be26-7526-878c-8434b2a8cff0.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Фильм</span><span class="c__cap"><span class="c__t">Увядание</span><span class="c__y">2026</span></span></span><div class="c__r"><span class="c__imdb">IMDb<i>8.1</i></span></div></a><a class="c" href="/title/skay-king/"><span class="c__p"><span class="c__none"><b>С</b>постер не открылся</span><img class="c__img" src="/poster/01a0b352-6fd6-7526-958c-29d78de19cd1.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Фильм</span><span class="c__cap"><span class="c__t">Скай Кинг</span><span class="c__y">2026</span></span></span><div class="c__r"><span class="c__imdb">IMDb<i>7.3</i></span></div></a><a class="c" href="/title/begi-pryachsya-bey-nevernye/"><span class="c__p"><span class="c__none"><b>Б</b>постер не открылся</span><img class="c__img" src="/poster/01a0b34d-80c0-7526-a8bd-418c223aea4a.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Фильм</span><span class="c__cap"><span class="c__t">Беги, прячься, бей: Неверные</span><span class="c__y">2026</span></span></span><div class="c__r"><span class="c__imdb">IMDb<i>4.9</i></span></div></a></div></section><section><div class="tabs"><span class="tabs__pill">Сериалы ›</span><a href="/catalog/?kind=%D0%A1%D0%B5%D1%80%D0%B8%D0%B0%D0%BB">Все</a></div><div class="grid"><a class="c" href="/title/pylnye-utesy/"><span class="c__p"><span class="c__none"><b>П</b>постер не открылся</span><img class="c__img" src="/poster/01a0b61e-cab8-7b30-896f-872bb722bb97.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">1 сезон, 3 сер.</span><span class="c__cap"><span class="c__t">Пыльные утёсы</span><span class="c__y">2026</span></span></span></a><a class="c" href="/title/ohota-za-brakom-v-37-eto-pole-bitvy/"><span class="c__p"><span class="c__none"><b>О</b>постер не открылся</span><img class="c__img" src="/poster/01a0b555-997e-7526-b37e-4fe1b2b835e8.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">1 сезон, 12 сер.</span><span class="c__cap"><span class="c__t">Охота за браком в 37 - это поле битвы</span><span class="c__y">2026</span></span></span><div class="c__r"><span class="c__imdb">IMDb<i>3.5</i></span></div></a><a class="c" href="/title/chti-svoyu-mat/"><span class="c__p"><span class="c__none"><b>Ч</b>постер не открылся</span><img class="c__img" src="/poster/01a0b545-fc51-7526-9495-11d8c641e5d7.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">1 сезон, 14 сер.</span><span class="c__cap"><span class="c__t">Чти свою мать</span><span class="c__y">2026</span></span></span></a><a class="c" href="/title/master-lda-i-plameni-2/"><span class="c__p"><span class="c__none"><b>М</b>постер не открылся</span><img class="c__img" src="/poster/01a0b507-0813-7526-a2e6-5edf75180827.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">2 сезон, 104 сер.</span><span class="c__cap"><span class="c__t">Мастер льда и пламени 2</span><span class="c__y">2022</span></span></span></a><a class="c" href="/title/tihookeanskie-rassledovaniya/"><span class="c__p"><span class="c__none"><b>Т</b>постер не открылся</span><img class="c__img" src="/poster/01a0b44e-797c-7526-8eb4-e28d9213edf2.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">5 сезон, 18 сер.</span><span class="c__cap"><span class="c__t">Тихоокеанские расследования</span><span class="c__y">2019</span></span></span><div class="c__r"><span class="c__kp">КП<i>7.605</i></span><span class="c__imdb">IMDb<i>5.9</i></span></div></a><a class="c" href="/title/sryv/"><span class="c__p"><span class="c__none"><b>С</b>постер не открылся</span><img class="c__img" src="/poster/01a0b413-6203-7526-8349-508bed7790c1.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">1 сезон, 6 сер.</span><span class="c__cap"><span class="c__t">Срыв</span><span class="c__y">2025</span></span></span><div class="c__r"><span class="c__imdb">IMDb<i>5.7</i></span></div></a><a class="c" href="/title/skandal-4/"><span class="c__p"><span class="c__none"><b>С</b>постер не открылся</span><img class="c__img" src="/poster/01a0b3e3-9497-7526-a630-2aa87a498e6e.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">1 сезон, 8 сер.</span><span class="c__cap"><span class="c__t">Скандал</span><span class="c__y">2026</span></span></span></a><a class="c" href="/title/moy-sekret/"><span class="c__p"><span class="c__none"><b>М</b>постер не открылся</span><img class="c__img" src="/poster/01a0b386-3633-7526-b229-05fea70d7bb7.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">1 сезон, 120 сер.</span><span class="c__cap"><span class="c__t">Мой секрет</span><span class="c__y">2022</span></span></span><div class="c__r"><span class="c__imdb">IMDb<i>6.4</i></span></div></a><a class="c" href="/title/sestry-obschaya-lyubov/"><span class="c__p"><span class="c__none"><b>С</b>постер не открылся</span><img class="c__img" src="/poster/01a0b376-1c2f-7526-831d-e668a3124055.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">1 сезон, 10 сер.</span><span class="c__cap"><span class="c__t">Сёстры, общая любовь</span><span class="c__y">2026</span></span></span><div class="c__r"><span class="c__imdb">IMDb<i>3.9</i></span></div></a><a class="c" href="/title/gorod-zhun/"><span class="c__p"><span class="c__none"><b>Г</b>постер не открылся</span><img class="c__img" src="/poster/01a0b334-7ca7-7526-ac93-e07a04ada2d4.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">1 сезон, 24 сер.</span><span class="c__cap"><span class="c__t">Город Жун</span><span class="c__y">2026</span></span></span></a><a class="c" href="/title/vo-imya-lyubvi-2/"><span class="c__p"><span class="c__none"><b>В</b>постер не открылся</span><img class="c__img" src="/poster/01a0b061-0efb-7526-a62a-fc639ea16706.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">1 сезон, 24 сер.</span><span class="c__cap"><span class="c__t">Во имя любви</span><span class="c__y">2026</span></span></span></a><a class="c" href="/title/poceluy-menya-derzko/"><span class="c__p"><span class="c__none"><b>П</b>постер не открылся</span><img class="c__img" src="/poster/01a0af80-d480-7526-9d18-cccad90633a4.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">1 сезон, 77 сер.</span><span class="c__cap"><span class="c__t">Поцелуй меня дерзко</span><span class="c__y">2025</span></span></span></a></div></section><section><div class="tabs"><span class="tabs__pill">Мультфильмы ›</span><a href="/catalog/?kind=%D0%9C%D1%83%D0%BB%D1%8C%D1%82%D1%84%D0%B8%D0%BB%D1%8C%D0%BC">Все</a></div><div class="grid"><a class="c" href="/title/nelyud-chast-2/"><span class="c__p"><span class="c__none"><b>Н</b>постер не открылся</span><img class="c__img" src="/poster/01a0af3f-984f-7526-ae39-e7d8395b775a.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">2 сезон, 13 сер.</span><span class="c__cap"><span class="c__t">Нелюдь. Часть 2</span><span class="c__y">2016</span></span></span><div class="c__r"><span class="c__kp">КП<i>7.065</i></span><span class="c__imdb">IMDb<i>7.5</i></span></div></a><a class="c" href="/title/nelyud-film-2-stolknovenie/"><span class="c__p"><span class="c__none"><b>Н</b>постер не открылся</span><img class="c__img" src="/poster/01a0aa6e-09d6-7526-b228-8df81f8dc726.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Мультфильм</span><span class="c__cap"><span class="c__t">Нелюдь. Фильм 2: Столкновение</span><span class="c__y">2016</span></span></span><div class="c__r"><span class="c__kp">КП<i>7.011</i></span><span class="c__imdb">IMDb<i>7.8</i></span></div></a><a class="c" href="/title/zolotaya-sekira/"><span class="c__p"><span class="c__none"><b>З</b>постер не открылся</span><img class="c__img" src="/poster/01a0a9d3-4334-7526-b204-dcde14db60e9.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">1 сезон, 10 сер.</span><span class="c__cap"><span class="c__t">Золотая секира</span><span class="c__y">2026</span></span></span><div class="c__r"><span class="c__imdb">IMDb<i>7.2</i></span></div></a><a class="c" href="/title/dedushkina-lampa/"><span class="c__p"><span class="c__none"><b>Д</b>постер не открылся</span><img class="c__img" src="/poster/01a09d0c-f4d8-7526-b5ac-63f565a06c10.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Мультфильм</span><span class="c__cap"><span class="c__t">Дедушкина лампа</span><span class="c__y">2011</span></span></span><div class="c__r"><span class="c__imdb">IMDb<i>6.7</i></span></div></a><a class="c" href="/title/ovosch-supergeroy-morkkorm/"><span class="c__p"><span class="c__none"><b>О</b>постер не открылся</span><img class="c__img" src="/poster/01a09d0b-94b9-7526-be2a-9876f8388f12.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Мультфильм</span><span class="c__cap"><span class="c__t">Овощ-супергерой Морккорм</span><span class="c__y">2011</span></span></span><div class="c__r"><span class="c__imdb">IMDb<i>5.2</i></span></div></a><a class="c" href="/title/violonchelist-gosyu-1982/"><span class="c__p"><span class="c__none"><b>В</b>постер не открылся</span><img class="c__img" src="/poster/01a09d0a-4f8c-7526-a15b-36911d54d144.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Мультфильм</span><span class="c__cap"><span class="c__t">Виолончелист Госю (1982)</span><span class="c__y">1982</span></span></span><div class="c__r"><span class="c__kp">КП<i>7.094</i></span><span class="c__imdb">IMDb<i>7</i></span></div></a><a class="c" href="/title/gorod-dozhdya/"><span class="c__p"><span class="c__none"><b>Г</b>постер не открылся</span><img class="c__img" src="/poster/01a09d05-a746-7526-ab1f-b1ba858758da.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Мультфильм</span><span class="c__cap"><span class="c__t">Город дождя</span><span class="c__y">2011</span></span></span><div class="c__r"><span class="c__kp">КП<i>7.065</i></span><span class="c__imdb">IMDb<i>6.9</i></span></div></a><a class="c" href="/title/ryba/"><span class="c__p"><span class="c__none"><b>Р</b>постер не открылся</span><img class="c__img" src="/poster/01a09d02-7de5-7526-969d-45e4b2f8250f.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Мультфильм</span><span class="c__cap"><span class="c__t">Рыба</span><span class="c__y">2011</span></span></span><div class="c__r"><span class="c__kp">КП<i>6.086</i></span><span class="c__imdb">IMDb<i>5.5</i></span></div></a><a class="c" href="/title/uchitel-medium/"><span class="c__p"><span class="c__none"><b>У</b>постер не открылся</span><img class="c__img" src="/poster/01a09cfb-6293-7526-97ce-3409aa378da8.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">1 сезон, 22 сер.</span><span class="c__cap"><span class="c__t">Учитель-медиум</span><span class="c__y">2011</span></span></span><div class="c__r"><span class="c__imdb">IMDb<i>2</i></span></div></a><a class="c" href="/title/uzh-ne-zombi-li-eto-sredi-mertvecov-ova/"><span class="c__p"><span class="c__none"><b>У</b>постер не открылся</span><img class="c__img" src="/poster/01a09cf8-2e13-7526-8f7d-23a55c389358.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">Мультфильм</span><span class="c__cap"><span class="c__t">Уж не зомби ли это? Среди мертвецов OVA</span><span class="c__y">2012</span></span></span><div class="c__r"><span class="c__kp">КП<i>6.396</i></span></div></a><a class="c" href="/title/uzh-ne-zombi-li-eto-ova/"><span class="c__p"><span class="c__none"><b>У</b>постер не открылся</span><img class="c__img" src="/poster/01a09cf5-009b-7526-90d0-f270263def04.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">1 сезон, 2 сер.</span><span class="c__cap"><span class="c__t">Уж не зомби ли это? OVA</span><span class="c__y">2011</span></span></span><div class="c__r"><span class="c__kp">КП<i>6.178</i></span></div></a><a class="c" href="/title/daybaster-dotyanis-do-neba-2/"><span class="c__p"><span class="c__none"><b>Д</b>постер не открылся</span><img class="c__img" src="/poster/01a09ced-2432-7526-a0b9-e205c59fff14.webp" alt="" loading="lazy" width="300" height="450" data-poster><span class="c__badge">2 сезон, 6 сер.</span><span class="c__cap"><span class="c__t">Дайбастер: Дотянись до неба! 2</span><span class="c__y">2004</span></span></span><div class="c__r"><span class="c__kp">КП<i>6.973</i></span><span class="c__imdb">IMDb<i>6.8</i></span></div></a></div></section></main>
+<footer class="ft"><div class="ft__g">
+<span>Lordfilm · тестовая витрина, закрыта от индексации</span>
+<span class="vb">Template: lords 1.1.0 · 7dc251d</span>
+</div></footer></div></body></html>

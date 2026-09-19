@@ -1,0 +1,83 @@
+{
+ "action": "install",
+ "site": "lords-01",
+ "unit": "lords-nova-01.service",
+ "domain": "lordfilm47.space",
+ "rollback_point": "/srv/lords/.frontend/.rollback/20260919T194835Z-lords-01",
+ "artifact_sha256": "36ce7eada5691b7ed949c0c301c45e1123dd6ddbf9c667701566ea37e883d1a6",
+ "previous_artifact_sha256": "06e991c3e558621c494e1150483b98eca67f2fcdc62ccaf0b165adf3e5b33432",
+ "manifest": {
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.1.0",
+  "source_commit": "7dc251d66d65c9b041a1c7cb706e7b3070dbd6e0",
+  "build_id": "20260919T194500Z-36ce7ead-nova",
+  "artifact_sha256": "36ce7eada5691b7ed949c0c301c45e1123dd6ddbf9c667701566ea37e883d1a6",
+  "profile": "lords-general",
+  "built_at": "2026-09-19T19:48:35Z"
+ },
+ "previous_manifest": {
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.1.0",
+  "source_commit": "7dc251d",
+  "build_id": "20260913T2300Z-8ececc6c-nova",
+  "artifact_sha256": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+  "profile": "lords-general",
+  "built_at": "2026-09-14T07:42:54Z"
+ },
+ "restart_ok": false,
+ "restart_output": "Failed to restart lords-nova-01.service: Interactive authentication required.\nSee system logs and 'systemctl status lords-nova-01.service' for details.",
+ "health": {
+  "ok": false,
+  "checks": [],
+  "domain": "lordfilm47.space"
+ },
+ "proven_chain": {
+  "nginx_config": "/etc/nginx/lords/lords-01.conf",
+  "upstream_port": 9110,
+  "unit": "lords-nova-01.service",
+  "executable": "/srv/lords/.frontend/lords-frontend.py",
+  "manifest_path": "/srv/lords/.frontend/template-manifest.json",
+  "verdict": "MISMATCH"
+ },
+ "at_utc": "20260919T194839Z",
+ "auto_rolled_back": true,
+ "rollback_restart_ok": false,
+ "rollback_output": "Failed to restart lords-nova-01.service: Interactive authentication required.\nSee system logs and 'systemctl status lords-nova-01.service' for details.",
+ "health_after_rollback": {
+  "domain": "lordfilm47.space",
+  "checks": [
+   {
+    "path": "/healthz",
+    "status": 200,
+    "bytes": 11,
+    "version": "1.1.0",
+    "artifact": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+    "ok": true
+   },
+   {
+    "path": "/",
+    "status": 200,
+    "bytes": 41275,
+    "version": "1.1.0",
+    "artifact": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+    "ok": true
+   },
+   {
+    "path": "/catalog/",
+    "status": 200,
+    "bytes": 42312,
+    "version": "1.1.0",
+    "artifact": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+    "ok": true
+   }
+  ],
+  "ok": true
+ },
+ "served_artifact_after_rollback": [
+  "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346"
+ ],
+ "baseline_fingerprint_match": false,
+ "verdict": "ROLLED_BACK_NO_CHANGE"
+}

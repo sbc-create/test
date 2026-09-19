@@ -1,0 +1,26 @@
+{
+  "rollback_path": "/srv/lords/.frontend/.rollback/20260919T194936Z-lords-01-deferred",
+  "rollback_source_commit": "7dc251d",
+  "rollback_build_id": "20260913T2300Z-8ececc6c-nova",
+  "rollback_artifact_sha256": "06e991c3e558621c494e1150483b98eca67f2fcdc62ccaf0b165adf3e5b33432",
+  "rollback_manifest_sha256": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+  "rollback_manifest_claims_artifact": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+  "rollback_bytes_match_manifest_claim": false,
+  "rollback_matches_old_running_build": false,
+  "rollback_is_complete": true,
+  "rollback_is_bootable": true,
+  "ROLLBACK_VERIFIED": "NO",
+  "reason": "deferred candidate frontend sha 06e991c3 does not match manifest claim a51dade (build 20260913T2300Z-8ececc6c-nova); also does not match currently running process HTML build marker",
+  "point_json": {
+    "rollback_point": "/srv/lords/.frontend/.rollback/20260919T194936Z-lords-01-deferred",
+    "new_artifact": "36ce7eada5691b7ed949c0c301c45e1123dd6ddbf9c667701566ea37e883d1a6"
+  },
+  "exact_old_runtime_artifact_a51dade_locations": [
+    "/srv/lords/.frontend/.rollback/20260914T074300Z-zona-01/lords-frontend.py",
+    "/srv/lords/.frontend/.rollback/20260914T094638Z-zona-01/lords-frontend.py",
+    "/srv/lords/.frontend/.rollback/20260914T094657Z-zona-01/lords-frontend.py"
+  ],
+  "exact_old_runtime_artifact_available": true,
+  "exact_old_runtime_artifact_note": "a51dade bytes exist only under zona-named rollback dirs; no lords-named rollback dir contains exact 8ececc6c/a51dade pair with matching bytes",
+  "new_pre_install_rollback": "/srv/lords/.frontend/.rollback/20260919T201039Z-lords-01"
+}

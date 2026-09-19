@@ -1,0 +1,49 @@
+{
+ "action": "install",
+ "site": "lords-01",
+ "unit": "lords-nova-01.service",
+ "domain": "lordfilm47.space",
+ "rollback_point": "/srv/lords/.frontend/.rollback/20260919T201039Z-lords-01",
+ "artifact_sha256": "36ce7eada5691b7ed949c0c301c45e1123dd6ddbf9c667701566ea37e883d1a6",
+ "previous_artifact_sha256": "36ce7eada5691b7ed949c0c301c45e1123dd6ddbf9c667701566ea37e883d1a6",
+ "manifest": {
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.1.0",
+  "source_commit": "ef17a7094ad7f7663ecff29fb5338998d3defe03",
+  "build_id": "20260919T201028Z-ef17a709-nova",
+  "artifact_sha256": "36ce7eada5691b7ed949c0c301c45e1123dd6ddbf9c667701566ea37e883d1a6",
+  "profile": "lords-general",
+  "built_at": "2026-09-19T20:10:39Z",
+  "source_dirty": false,
+  "domain": "lordfilm47.space"
+ },
+ "previous_manifest": {
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.1.0",
+  "source_commit": "7dc251d66d65c9b041a1c7cb706e7b3070dbd6e0",
+  "build_id": "20260919T194500Z-36ce7ead-nova",
+  "artifact_sha256": "36ce7eada5691b7ed949c0c301c45e1123dd6ddbf9c667701566ea37e883d1a6",
+  "profile": "lords-general",
+  "built_at": "2026-09-19T19:49:36Z",
+  "deploy_note": "files written; unit restart BLOCKED_ACCESS (systemctl auth); awaiting owner restart"
+ },
+ "restart_ok": null,
+ "restart_deferred": true,
+ "restart_output": "deferred: --no-restart; owner must restart unit",
+ "health": {
+  "ok": null,
+  "note": "not probed; process still stale until restart"
+ },
+ "proven_chain": {
+  "nginx_config": "/etc/nginx/lords/lords-01.conf",
+  "upstream_port": 9110,
+  "unit": "lords-nova-01.service",
+  "executable": "/srv/lords/.frontend/lords-frontend.py",
+  "manifest_path": "/srv/lords/.frontend/template-manifest.json",
+  "verdict": "MISMATCH"
+ },
+ "at_utc": "20260919T201039Z",
+ "verdict": "STAGED_AWAITING_OWNER_RESTART"
+}

@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "template_family": "lords",
+  "design_version": "1.1.0",
+  "source_commit": "ef17a7094ad7f7663ecff29fb5338998d3defe03",
+  "build_id": "20260919T201028Z-ef17a709-nova",
+  "artifact_sha256": "36ce7eada5691b7ed949c0c301c45e1123dd6ddbf9c667701566ea37e883d1a6",
+  "profile": "lords-general",
+  "built_at": "2026-09-19T20:10:39Z",
+  "source_dirty": false,
+  "domain": "lordfilm47.space"
+}

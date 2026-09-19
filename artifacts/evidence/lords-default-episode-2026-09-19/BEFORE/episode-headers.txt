@@ -1,0 +1,19 @@
+HTTP/2 200 
+server: nginx/1.18.0 (Ubuntu)
+date: Sat, 19 Sep 2026 19:41:45 GMT
+content-type: text/html; charset=utf-8
+x-robots-tag: noindex, nofollow
+x-site-factory-template-revision: 7dc251d
+x-site-factory-template: lords-nova
+x-site-factory-core: site-factory-nova
+x-site-factory-profile: lords-general
+x-site-factory-template-family: lords
+x-site-factory-template-version: 1.1.0
+x-site-factory-build-id: 20260913T2300Z-8ececc6c-nova
+x-site-factory-artifact-sha256: a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346
+cache-control: no-store
+x-robots-tag: noindex, nofollow
+x-content-type-options: nosniff
+referrer-policy: no-referrer
+x-frame-options: SAMEORIGIN
+
