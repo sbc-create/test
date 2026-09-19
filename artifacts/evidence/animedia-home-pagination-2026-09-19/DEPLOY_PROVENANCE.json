@@ -1,0 +1,25 @@
+{
+  "icu": {
+    "x-site-factory-template-revision": "7cb7c90177f823a6629ea563c6bda45dc07f2489",
+    "x-site-factory-template": "animedia-nova",
+    "x-site-factory-core": "site-factory-nova",
+    "x-site-factory-profile": "animedia-icu",
+    "x-site-factory-template-family": "animedia",
+    "x-site-factory-template-version": "1.2.3",
+    "x-site-factory-build-id": "20260919T201809Z-7cb7c901-nova",
+    "x-site-factory-artifact-sha256": "a6871995ba0882e744532e7cb61d61913857b5137ba6cbfc4f204492cc01b33d",
+    "cache-control": "no-store"
+  },
+  "space": {
+    "x-site-factory-template-revision": "7cb7c90177f823a6629ea563c6bda45dc07f2489",
+    "x-site-factory-template": "animedia-nova",
+    "x-site-factory-core": "site-factory-nova",
+    "x-site-factory-profile": "animedia-space",
+    "x-site-factory-template-family": "animedia",
+    "x-site-factory-template-version": "1.2.3",
+    "x-site-factory-build-id": "20260919T201809Z-7cb7c901-nova",
+    "x-site-factory-artifact-sha256": "a6871995ba0882e744532e7cb61d61913857b5137ba6cbfc4f204492cc01b33d",
+    "cache-control": "no-store"
+  },
+  "rollback": "/srv/lords/.frontend/.rollback/pre-closed-update-20260919T201809Z"
+}

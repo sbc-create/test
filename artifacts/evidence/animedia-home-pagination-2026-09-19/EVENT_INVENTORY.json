@@ -1,0 +1,9 @@
+{
+  "SOURCE_EVENT_COUNT": 5495,
+  "ELIGIBLE_EVENT_COUNT": 5495,
+  "HOME_RENDERED": 10,
+  "PAGE_SIZE": 10,
+  "PAGE_COUNT": 550,
+  "TIMESTAMP_FIELD": "catalog.items[].published_at",
+  "TIMESTAMP_SEMANTICS": "title/catalog publish ISO datetime; not episode air time"
+}

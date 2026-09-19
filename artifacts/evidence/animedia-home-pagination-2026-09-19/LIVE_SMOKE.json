@@ -1,0 +1,63 @@
+{
+  "invalid_pages": [
+    {
+      "page": "0",
+      "http": 200,
+      "is_404": true
+    },
+    {
+      "page": "-1",
+      "http": 200,
+      "is_404": true
+    },
+    {
+      "page": "abc",
+      "http": 200,
+      "is_404": true
+    },
+    {
+      "page": "99999",
+      "http": 200,
+      "is_404": true
+    }
+  ],
+  "home_page1_match": true,
+  "cache": {
+    "animedia.icu": {
+      "m1": "Animedia 1.2.3 \u00b7 3e66dfd",
+      "m2": "Animedia 1.2.3 \u00b7 3e66dfd",
+      "ok": true
+    },
+    "animedia.space": {
+      "m1": "Animedia 1.2.3 \u00b7 3e66dfd",
+      "m2": "Animedia 1.2.3 \u00b7 3e66dfd",
+      "ok": true
+    }
+  },
+  "player_runs": 2,
+  "player_ok_no_overlay": 2,
+  "player_false": {
+    "ready": 0,
+    "fail": 0,
+    "overlay": 0
+  },
+  "invalid_pages_http": [
+    {
+      "page": "0",
+      "http": 404
+    },
+    {
+      "page": "-1",
+      "http": 404
+    },
+    {
+      "page": "abc",
+      "http": 404
+    },
+    {
+      "page": "99999",
+      "http": 404
+    }
+  ],
+  "page1_page2_intersection": 0
+}

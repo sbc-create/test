@@ -1,0 +1,5 @@
+{
+  "rule": "latest season with avail>=1; episode_number=avail; requires title slug + route",
+  "excluded": "titles without seasons or avail<1",
+  "eligible": 5495
+}

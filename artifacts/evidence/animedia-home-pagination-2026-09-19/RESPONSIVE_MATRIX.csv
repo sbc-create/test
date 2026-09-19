@@ -1,0 +1,7 @@
+cols,domain,feedCount,fiveRowsFitApprox,heroW,overflow,pagerPresent,rowGap,rowH,thumb,viewport,wrapW
+2,animedia.icu,10,True,148,0,True,16,82,"{""w"": 64, ""h"": 82}",1440,
+1,animedia.icu,10,True,148,0,True,12,76,"{""w"": 56, ""h"": 76}",768,
+1,animedia.icu,10,False,117,0,True,12,76,"{""w"": 56, ""h"": 76}",390,
+2,animedia.space,10,True,148,0,True,16,82,"{""w"": 64, ""h"": 82}",1440,
+1,animedia.space,10,True,148,0,True,12,76,"{""w"": 56, ""h"": 76}",768,
+1,animedia.space,10,False,117,0,True,12,76,"{""w"": 56, ""h"": 76}",390,
