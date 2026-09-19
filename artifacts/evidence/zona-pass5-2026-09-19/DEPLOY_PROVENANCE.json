@@ -1,0 +1,11 @@
+{
+  "build_id": "20260919T215728Z-0fc98e2e-nova",
+  "artifact_sha256": "dec738733737754afb47afd42c5ebd10be39e7c07408285035d426aef4e611b0",
+  "source_commit": "0fc98e2ee6e08ae48ad56e7ac9398d5d5a0d2e7b",
+  "rollback": "/srv/lords/.frontend/.rollback/20260919T215728Z-zona-01-pass5",
+  "deploy_scope": "zona-01-only",
+  "neighbors_unchanged": true,
+  "consecutive_stable_live_runs": 2,
+  "content_snapshot_digest": "14add2ef912f0fe706db40a35c56ad4a",
+  "at": "2026-09-19T22:02:19.038254+00:00"
+}

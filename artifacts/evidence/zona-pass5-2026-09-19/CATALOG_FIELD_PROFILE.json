@@ -1,0 +1,164 @@
+{
+  "catalog_fields_sample": [
+    "kind",
+    "poster",
+    "published_at",
+    "published_at_estimated",
+    "slug",
+    "title",
+    "url",
+    "year"
+  ],
+  "detail_fields_sample": [
+    "countries",
+    "description",
+    "description_source",
+    "external_ids",
+    "genre_codes",
+    "genres",
+    "id",
+    "imdb_rating",
+    "is_series",
+    "kinopoisk_rating",
+    "licensed",
+    "name",
+    "original_name",
+    "playable",
+    "poster_source",
+    "poster_url",
+    "premiere_date",
+    "ratings_by_source",
+    "ratings_source",
+    "recommendation_ids",
+    "seasons",
+    "seasons_count",
+    "sources",
+    "type",
+    "year"
+  ],
+  "year_type_counts": {
+    "integer": 50782,
+    "null": 2742
+  },
+  "premiere_date_present": 1218,
+  "description_present": 40208,
+  "countries_present": 37322,
+  "genres_present": 53522,
+  "playable_true": 52703,
+  "suspicious_years": {
+    "2003": {
+      "raw_catalog_year_count": 468,
+      "including_detail_fallback": 468,
+      "by_kind": {
+        "animation": 49,
+        "series": 86,
+        "films": 333
+      },
+      "sample_slugs": [
+        "svyaschennye-zveri",
+        "taynaya-strast",
+        "betmen-tayna-betvumen",
+        "nanaka-6-17",
+        "princ-tennisa-novogodniy-vypusk",
+        "princ-tennisa-film-gruppy-princev-udar-buduschee",
+        "shosse-smerti",
+        "vklyuchay-turbonadduv"
+      ]
+    },
+    "2010": {
+      "raw_catalog_year_count": 1089,
+      "including_detail_fallback": 1089,
+      "by_kind": {
+        "series": 229,
+        "films": 784,
+        "animation": 76
+      },
+      "sample_slugs": [
+        "bashnya-poznaniya",
+        "schastlivyy-gorod",
+        "drakoniy-zhemchug-zet-plan-po-unichtozheniyu-sayyanov-2",
+        "gadkiy-ya",
+        "liga-spravedlivosti-krizis-dvuh-mirov",
+        "puteshestvie",
+        "brayt-folls",
+        "nu-ne-mozhet-moya-sestrenka-byt-takoy-miloy-animirovannyy-kommentariy"
+      ]
+    },
+    "2013": {
+      "raw_catalog_year_count": 1521,
+      "including_detail_fallback": 1521,
+      "by_kind": {
+        "series": 307,
+        "films": 1090,
+        "animation": 124
+      },
+      "sample_slugs": [
+        "ostrov-krasnyh-pauchih-liliy",
+        "malysh-spiru",
+        "poslednyaya-zolushka",
+        "grem-grin-zhizn-na-grani",
+        "bez-polumer-kak-sozdavalsya-finalnyy-sezon-vo-vse-tyazhkie",
+        "multachki-bayki-iz-radiator-springs",
+        "gadkiy-ya-2",
+        "liga-spravedlivosti-paradoks-istochnika-konflikta"
+      ]
+    },
+    "2018": {
+      "raw_catalog_year_count": 2098,
+      "including_detail_fallback": 2098,
+      "by_kind": {
+        "series": 759,
+        "films": 1126,
+        "animation": 213
+      },
+      "sample_slugs": [
+        "fors-mazhory-3",
+        "diana",
+        "sharlotta-razvlekaetsya",
+        "plastikovyy-priliv",
+        "park-los-reyes",
+        "cemya-lisic-i-barsukov",
+        "13-let-pustoty",
+        "okovy-lyubvi"
+      ]
+    },
+    "2019": {
+      "raw_catalog_year_count": 2144,
+      "including_detail_fallback": 2144,
+      "by_kind": {
+        "series": 825,
+        "films": 1100,
+        "animation": 219
+      },
+      "sample_slugs": [
+        "tihookeanskie-rassledovaniya",
+        "krasnyy-sneg-2",
+        "dobro-pozhalovat-v-platvil",
+        "mechty-o-velikanah",
+        "neizvestnyy-nomer",
+        "dolli-parton-vot-ya",
+        "vpered",
+        "prinimayas-za-delo"
+      ]
+    },
+    "2026": {
+      "raw_catalog_year_count": 2187,
+      "including_detail_fallback": 2187,
+      "by_kind": {
+        "series": 1030,
+        "films": 1067,
+        "animation": 90
+      },
+      "sample_slugs": [
+        "pylnye-utesy",
+        "ohota-za-brakom-v-37-eto-pole-bitvy",
+        "chti-svoyu-mat",
+        "skandal-4",
+        "obitel-zla-2",
+        "sestry-obschaya-lyubov",
+        "nerazryvnye-uzy",
+        "isstuplenie-2"
+      ]
+    }
+  }
+}

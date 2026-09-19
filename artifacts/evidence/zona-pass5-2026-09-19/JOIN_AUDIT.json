@@ -1,0 +1,13 @@
+{
+  "catalog_count": 53524,
+  "details_map_count": 53524,
+  "missing_details_count": 0,
+  "missing_details_sample": [],
+  "orphan_details_count": 0,
+  "orphan_details_sample": [],
+  "id_type_notes_count": 0,
+  "id_type_notes_sample": [],
+  "NESTED_DETAILS_JOIN_UNEXPLAINED_MISSING": 0,
+  "DETAILS_ORPHANS_UNEXPLAINED": 0,
+  "note": "Missing/orphan must be explained if non-zero; zero means perfect join."
+}

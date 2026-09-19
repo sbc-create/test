@@ -1,0 +1,36 @@
+{
+  "years": {
+    "2003": {
+      "ui_total": 468,
+      "oracle_total": 468,
+      "match": true
+    },
+    "2010": {
+      "ui_total": 1089,
+      "oracle_total": 1089,
+      "match": true
+    },
+    "2013": {
+      "ui_total": 1521,
+      "oracle_total": 1521,
+      "match": true
+    },
+    "2018": {
+      "ui_total": 2098,
+      "oracle_total": 2098,
+      "match": true
+    },
+    "2019": {
+      "ui_total": 2144,
+      "oracle_total": 2144,
+      "match": true
+    },
+    "2026": {
+      "ui_total": 2187,
+      "oracle_total": 2187,
+      "match": true
+    }
+  },
+  "mismatches": [],
+  "year_select_count_movies": 92
+}

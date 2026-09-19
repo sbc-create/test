@@ -1,0 +1,15 @@
+{
+  "at": "2026-09-19T21:51:56.991091+00:00",
+  "catalog_path": "/srv/lords/.frontend/zona-01-catalog.json",
+  "details_path": "/srv/lords/.frontend/zona-01-details.json",
+  "catalog_sha256": "14add2ef912f0fe706db40a35c56ad4a791bc19d393e2ee0dc6adbf9a345df32",
+  "details_sha256": "d8f5a25ae8c5b133dbfe7f606bf9c96663a85c9d3c9455a143a55d196d5faec2",
+  "catalog_revision": "fe5e1331eb39f75852a5aa6f2bca132d",
+  "catalog_builtAt": "2026-09-19T03:23:34Z",
+  "details_catalog_revision": "fe5e1331eb39f75852a5aa6f2bca132d",
+  "details_catalog_built_at": "2026-09-19T03:23:34Z",
+  "EXPECTED_PREVIOUS_CATALOG_COUNT": 53524,
+  "current_catalog_count": 53524,
+  "delta": 0,
+  "delta_explained": "same count as Pass4 baseline"
+}

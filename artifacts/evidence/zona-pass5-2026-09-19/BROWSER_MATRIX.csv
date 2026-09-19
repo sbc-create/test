@@ -1,0 +1,4 @@
+browser,status,notes
+chromium,PASS,screenshots+golden
+firefox,NOT_AVAILABLE,
+webkit,NOT_AVAILABLE,

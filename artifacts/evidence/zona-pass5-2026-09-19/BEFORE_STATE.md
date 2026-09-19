@@ -1,0 +1,54 @@
+# BEFORE_STATE — Zona Pass 5
+
+```json
+{
+  "at": "2026-09-19T21:50:45.934131+00:00",
+  "SOURCE_HEAD": "3c5a14d53d27eed13f2a7db6f6db9440f1f72ef9",
+  "ARTIFACT_SOURCE_HEAD": "c624bebce3f6fac6eb05a5ee01907e02e813456b",
+  "RUNTIME_SOURCE_HEAD": "c624bebce3f6fac6eb05a5ee01907e02e813456b",
+  "LIVE_BUILD": "20260919T211402Z-c624bebc-nova",
+  "ARTIFACT_SHA256": "bed22ece4ae0b2313e9f3adbad501165b9fab3a668531f23044956840e9cc5a1",
+  "RUNTIME_ARTIFACT_SHA256": "bed22ece4ae0b2313e9f3adbad501165b9fab3a668531f23044956840e9cc5a1",
+  "CONTENT_SNAPSHOT_DIGEST": "14add2ef912f0fe706db40a35c56ad4a",
+  "RAW_CATALOG_COUNT": 53524,
+  "catalog_file_sha256": "14add2ef912f0fe706db40a35c56ad4a791bc19d393e2ee0dc6adbf9a345df32",
+  "details_file_sha256": "d8f5a25ae8c5b133dbfe7f606bf9c966",
+  "ROLLBACK_PATH": "/srv/lords/.frontend/.rollback/20260919T211402Z-zona-01-pass4",
+  "NOINDEX_STATE": "noindex, nofollow",
+  "FOOTER_CONFIG_STATE": "contact_missing",
+  "live_marker": "Zona · 1.2.0 · c624bebc",
+  "manifest": {
+    "schema_version": 1,
+    "template_family": "zona",
+    "design_version": "1.2.0",
+    "source_commit": "c624bebce3f6fac6eb05a5ee01907e02e813456b",
+    "runtime_commit": "c624bebce3f6fac6eb05a5ee01907e02e813456b",
+    "build_id": "20260919T211402Z-c624bebc-nova",
+    "artifact_sha256": "bed22ece4ae0b2313e9f3adbad501165b9fab3a668531f23044956840e9cc5a1",
+    "profile": "zona-general",
+    "built_at": "2026-09-19T21:14:02Z"
+  },
+  "lineage_note": "LIVE_BUILD contains c624bebc = short of deploy source commit c624beb (Pass4 code). Evidence commit 3c5a14d is descendant and does not change runtime artifact.",
+  "SERVED_CATALOG_COUNT": 53524,
+  "year_route_totals": {
+    "movies_2003": 333,
+    "series_2003": 86,
+    "catalog_2003": 468,
+    "movies_2010": 784,
+    "series_2010": 229,
+    "catalog_2010": 1089,
+    "movies_2013": 1090,
+    "series_2013": 307,
+    "catalog_2013": 1521,
+    "movies_2018": 1126,
+    "series_2018": 759,
+    "catalog_2018": 2098,
+    "movies_2019": 1100,
+    "series_2019": 825,
+    "catalog_2019": 2144,
+    "movies_2026": 1067,
+    "series_2026": 1030,
+    "catalog_2026": 2187
+  }
+}
+```

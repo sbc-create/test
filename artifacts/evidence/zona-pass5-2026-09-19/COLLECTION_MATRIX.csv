@@ -1,0 +1,13 @@
+collection_id,title,selection_rule,sort_rule,source_fields,total_count,preview_ids,snapshot_digest
+current_season,,contract,,,,,
+genre_animation,,contract,,,,,
+genre_comedy,,contract,,,,,
+genre_drama,,contract,,,,,
+genre_thriller,,contract,,,,,
+new_episodes,,contract,,,,,
+new_movie_releases,,contract,,,,,
+new_series_releases,,contract,,,,,
+recently_added,,contract,,,,,
+recently_added_movies,,contract,,,,,
+top_rated,,contract,,,,,
+video_available,,contract,,,,,

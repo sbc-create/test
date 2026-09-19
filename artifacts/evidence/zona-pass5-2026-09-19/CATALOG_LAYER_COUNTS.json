@@ -1,0 +1,36 @@
+{
+  "L0_provider_raw_catalog": {
+    "record_count": 53524,
+    "unique_entity_count": 53524,
+    "duplicate_entity_count": 0,
+    "missing_details_count": null,
+    "snapshot_id": "fe5e1331eb39f75852a5aa6f2bca132d",
+    "snapshot_digest": "14add2ef912f0fe706db40a35c56ad4a",
+    "source_updated_at": "2026-09-19T03:23:34Z",
+    "active_filters": null,
+    "limit": null,
+    "offset_or_cursor": null,
+    "declared_count": 53524
+  },
+  "L1_nested_details_joined": {
+    "record_count": 53524,
+    "unique_entity_count": 53524,
+    "duplicate_entity_count": 0,
+    "missing_details_count": 0,
+    "orphan_details_count": 0,
+    "snapshot_id": "fe5e1331eb39f75852a5aa6f2bca132d",
+    "snapshot_digest": "d8f5a25ae8c5b133dbfe7f606bf9c966",
+    "source_updated_at": "2026-09-19T03:23:34Z",
+    "details_total_declared": 53524,
+    "items_total_declared": 53524
+  },
+  "L2_normalized_unique_catalog": {
+    "record_count": 53524,
+    "unique_entity_count": 53524,
+    "duplicate_entity_count": 0,
+    "valid_year_records": 50782,
+    "missing_year_records": 2742,
+    "invalid_year_records": 0,
+    "equation_holds": true
+  }
+}

@@ -1,0 +1,9 @@
+bucket,count,raw_kind_breakdown
+animation,4138,
+films,31807,
+series,17579,
+
+raw_kind,count
+Фильм,31807
+Сериал,17579
+Мультфильм,4138
