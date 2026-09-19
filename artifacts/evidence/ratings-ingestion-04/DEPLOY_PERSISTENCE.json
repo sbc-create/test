@@ -1,0 +1,8 @@
+{
+  "canonical_db": "/srv/site-factory/repo/var/ratings/ratings.sqlite",
+  "outside_release_symlink": true,
+  "path": "/srv/site-factory/repo/var/ratings/",
+  "survives_animedia_release_swap": true,
+  "DEPLOY_PERSISTENCE_PASS": true,
+  "journal_mode": "wal"
+}

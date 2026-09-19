@@ -1,0 +1,12 @@
+{
+  "SNAPSHOT_ATOMIC_PUBLICATION_PASS": true,
+  "paths": {
+    "animedia.icu": "/srv/site-factory/repo/var/ratings/snapshots/animedia.icu/ratings_snapshot_v1.json",
+    "animedia.space": "/srv/site-factory/repo/var/ratings/snapshots/animedia.space/ratings_snapshot_v1.json"
+  },
+  "digest_icu": "f6000fb1a8aa53b724320aa155a1b040c3b8008e8fb75b4a1dcd5f8eb09872b2",
+  "digest_space": "f6000fb1a8aa53b724320aa155a1b040c3b8008e8fb75b4a1dcd5f8eb09872b2",
+  "RUNTIME_SNAPSHOT_DIGEST_MATCH": true,
+  "title_count": 100,
+  "method": "tmp+fsync+rename via atomic_publish_candidate"
+}

@@ -1,0 +1,569 @@
+{
+  "LIVE_GATEWAY_SAMPLE_TITLES": 25,
+  "LIVE_GATEWAY_SAMPLE_PASS": true,
+  "MISSING_RENDERED_AS_ZERO": 0,
+  "CROSS_SOURCE_VOTE_SUMMING": 0,
+  "RUNTIME_SNAPSHOT_DIGEST_MATCH": true,
+  "NOINDEX_PRESERVED": true,
+  "noindex": {
+    "animedia.icu": {
+      "ok": true,
+      "http_status": 200,
+      "x_robots_tag": "noindex, nofollow",
+      "robots_disallow_all": true,
+      "robots_excerpt": "User-agent: *\nDisallow: /\n",
+      "sitemap_new_urls_from_ratings": 0
+    },
+    "animedia.space": {
+      "ok": true,
+      "http_status": 200,
+      "x_robots_tag": "noindex, nofollow",
+      "robots_disallow_all": true,
+      "robots_excerpt": "User-agent: *\nDisallow: /\n",
+      "sitemap_new_urls_from_ratings": 0
+    }
+  },
+  "note": "Gateway reads published snapshot artifact under var/ratings/snapshots; live serve.py HTML not mutated",
+  "samples": [
+    {
+      "canonical_title_id": "amd_online:1200",
+      "sources": [
+        "amd_online"
+      ],
+      "amd": {
+        "source": "amd_online",
+        "score": 9.52,
+        "voteCount": 21742,
+        "fetchedAt": "2026-09-19T20:04:36Z",
+        "freshness": "FRESH",
+        "provenance": {
+          "url": "https://amd.online/1200-raskolotaja-bitvoj-sineva-nebes-5.html"
+        },
+        "components": {
+          "story": "9.6",
+          "characters": "9.6",
+          "art": "9.6",
+          "voice": "9.4"
+        },
+        "attribution": "Источник: AMD.online",
+        "canonicalSourceUrl": "https://amd.online/1200-raskolotaja-bitvoj-sineva-nebes-5.html"
+      },
+      "localRating": null,
+      "combined": null,
+      "attribution": "Источник: AMD.online"
+    },
+    {
+      "canonical_title_id": "amd_online:2397",
+      "sources": [
+        "amd_online"
+      ],
+      "amd": {
+        "source": "amd_online",
+        "score": 8.14,
+        "voteCount": 761,
+        "fetchedAt": "2026-09-19T20:04:46Z",
+        "freshness": "FRESH",
+        "provenance": {
+          "url": "https://amd.online/2397-nekromant-ja-katastrofa.html"
+        },
+        "components": {
+          "story": "8",
+          "characters": "8.1",
+          "art": "8",
+          "voice": "8.4"
+        },
+        "attribution": "Источник: AMD.online",
+        "canonicalSourceUrl": "https://amd.online/2397-nekromant-ja-katastrofa.html"
+      },
+      "localRating": null,
+      "combined": null,
+      "attribution": "Источник: AMD.online"
+    },
+    {
+      "canonical_title_id": "amd_online:1489",
+      "sources": [
+        "amd_online"
+      ],
+      "amd": {
+        "source": "amd_online",
+        "score": 9.66,
+        "voteCount": 32285,
+        "fetchedAt": "2026-09-19T20:04:56Z",
+        "freshness": "FRESH",
+        "provenance": {
+          "url": "https://amd.online/1489-protivostojanie-svjatogo.html"
+        },
+        "components": {
+          "story": "9.7",
+          "characters": "9.7",
+          "art": "9.7",
+          "voice": "9.6"
+        },
+        "attribution": "Источник: AMD.online",
+        "canonicalSourceUrl": "https://amd.online/1489-protivostojanie-svjatogo.html"
+      },
+      "localRating": null,
+      "combined": null,
+      "attribution": "Источник: AMD.online"
+    },
+    {
+      "canonical_title_id": "amd_online:770",
+      "sources": [
+        "amd_online"
+      ],
+      "amd": {
+        "source": "amd_online",
+        "score": 9.64,
+        "voteCount": 17543,
+        "fetchedAt": "2026-09-19T20:05:06Z",
+        "freshness": "FRESH",
+        "provenance": {
+          "url": "https://amd.online/770-pogloschennaya-zvezda.html"
+        },
+        "components": {
+          "story": "9.7",
+          "characters": "9.7",
+          "art": "9.7",
+          "voice": "9.5"
+        },
+        "attribution": "Источник: AMD.online",
+        "canonicalSourceUrl": "https://amd.online/770-pogloschennaya-zvezda.html"
+      },
+      "localRating": null,
+      "combined": null,
+      "attribution": "Источник: AMD.online"
+    },
+    {
+      "canonical_title_id": "amd_online:2150",
+      "sources": [
+        "amd_online"
+      ],
+      "amd": {
+        "source": "amd_online",
+        "score": 9.68,
+        "voteCount": 2031,
+        "fetchedAt": "2026-09-19T20:05:16Z",
+        "freshness": "FRESH",
+        "provenance": {
+          "url": "https://amd.online/2150-za-granju-vremeni.html"
+        },
+        "components": {
+          "story": "9.7",
+          "characters": "9.7",
+          "art": "9.7",
+          "voice": "9.6"
+        },
+        "attribution": "Источник: AMD.online",
+        "canonicalSourceUrl": "https://amd.online/2150-za-granju-vremeni.html"
+      },
+      "localRating": null,
+      "combined": null,
+      "attribution": "Источник: AMD.online"
+    },
+    {
+      "canonical_title_id": "amd_online:704",
+      "sources": [
+        "amd_online"
+      ],
+      "amd": {
+        "source": "amd_online",
+        "score": 9.29,
+        "voteCount": 13142,
+        "fetchedAt": "2026-09-19T20:05:26Z",
+        "freshness": "FRESH",
+        "provenance": {
+          "url": "https://amd.online/704-puteshestvie-k-bessmertiju.html"
+        },
+        "components": {
+          "story": "9.3",
+          "characters": "9.3",
+          "art": "9.3",
+          "voice": "9.2"
+        },
+        "attribution": "Источник: AMD.online",
+        "canonicalSourceUrl": "https://amd.online/704-puteshestvie-k-bessmertiju.html"
+      },
+      "localRating": null,
+      "combined": null,
+      "attribution": "Источник: AMD.online"
+    },
+    {
+      "canonical_title_id": "amd_online:1413",
+      "sources": [
+        "amd_online"
+      ],
+      "amd": {
+        "source": "amd_online",
+        "score": 9.4,
+        "voteCount": 16956,
+        "fetchedAt": "2026-09-19T20:05:36Z",
+        "freshness": "FRESH",
+        "provenance": {
+          "url": "https://amd.online/1413-boevoj-kontinent-2-neprevzojdennyj-klan-tan.html"
+        },
+        "components": {
+          "story": "9.4",
+          "characters": "9.5",
+          "art": "9.6",
+          "voice": "9.2"
+        },
+        "attribution": "Источник: AMD.online",
+        "canonicalSourceUrl": "https://amd.online/1413-boevoj-kontinent-2-neprevzojdennyj-klan-tan.html"
+      },
+      "localRating": null,
+      "combined": null,
+      "attribution": "Источник: AMD.online"
+    },
+    {
+      "canonical_title_id": "amd_online:2251",
+      "sources": [
+        "amd_online"
+      ],
+      "amd": {
+        "source": "amd_online",
+        "score": 9.07,
+        "voteCount": 1054,
+        "fetchedAt": "2026-09-19T20:05:46Z",
+        "freshness": "FRESH",
+        "provenance": {
+          "url": "https://amd.online/2251-o-moem-pererozhdenii-v-sliz-4.html"
+        },
+        "components": {
+          "story": "9",
+          "characters": "9.1",
+          "art": "9.1",
+          "voice": "9.1"
+        },
+        "attribution": "Источник: AMD.online",
+        "canonicalSourceUrl": "https://amd.online/2251-o-moem-pererozhdenii-v-sliz-4.html"
+      },
+      "localRating": null,
+      "combined": null,
+      "attribution": "Источник: AMD.online"
+    },
+    {
+      "canonical_title_id": "amd_online:2333",
+      "sources": [
+        "amd_online"
+      ],
+      "amd": {
+        "source": "amd_online",
+        "score": 8.6,
+        "voteCount": 880,
+        "fetchedAt": "2026-09-19T20:05:56Z",
+        "freshness": "FRESH",
+        "provenance": {
+          "url": "https://amd.online/2333-izgnannyj-reinkarnirovannyj-tjazhelyj-rycar-ne-imeet-sebe-ravnyh-v-znanijah-igry.html"
+        },
+        "components": {
+          "story": "8.5",
+          "characters": "8.5",
+          "art": "8.4",
+          "voice": "8.9"
+        },
+        "attribution": "Источник: AMD.online",
+        "canonicalSourceUrl": "https://amd.online/2333-izgnannyj-reinkarnirovannyj-tjazhelyj-rycar-ne-imeet-sebe-ravnyh-v-znanijah-igry.html"
+      },
+      "localRating": null,
+      "combined": null,
+      "attribution": "Источник: AMD.online"
+    },
+    {
+      "canonical_title_id": "amd_online:1850",
+      "sources": [
+        "amd_online"
+      ],
+      "amd": {
+        "source": "amd_online",
+        "score": 9.35,
+        "voteCount": 7519,
+        "fetchedAt": "2026-09-19T20:06:06Z",
+        "freshness": "FRESH",
+        "provenance": {
+          "url": "https://amd.online/1850-skazanie-o-pastuhe-bogov.html"
+        },
+        "components": {
+          "story": "9.3",
+          "characters": "9.4",
+          "art": "9.4",
+          "voice": "9.3"
+        },
+        "attribution": "Источник: AMD.online",
+        "canonicalSourceUrl": "https://amd.online/1850-skazanie-o-pastuhe-bogov.html"
+      },
+      "localRating": null,
+      "combined": null,
+      "attribution": "Источник: AMD.online"
+    },
+    {
+      "canonical_title_id": "amd_online:888",
+      "sources": [
+        "amd_online"
+      ],
+      "amd": {
+        "source": "amd_online",
+        "score": 9.59,
+        "voteCount": 11797,
+        "fetchedAt": "2026-09-19T20:06:16Z",
+        "freshness": "FRESH",
+        "provenance": {
+          "url": "https://amd.online/888-bezuprechnyy-mir.html"
+        },
+        "components": {
+          "story": "9.6",
+          "characters": "9.6",
+          "art": "9.6",
+          "voice": "9.5"
+        },
+        "attribution": "Источник: AMD.online",
+        "canonicalSourceUrl": "https://amd.online/888-bezuprechnyy-mir.html"
+      },
+      "localRating": null,
+      "combined": null,
+      "attribution": "Источник: AMD.online"
+    },
+    {
+      "canonical_title_id": "amd_online:571",
+      "sources": [
+        "amd_online"
+      ],
+      "amd": {
+        "source": "amd_online",
+        "score": 9.35,
+        "voteCount": 9584,
+        "fetchedAt": "2026-09-19T20:06:26Z",
+        "freshness": "FRESH",
+        "provenance": {
+          "url": "https://amd.online/571-boevoy-master.html"
+        },
+        "components": {
+          "story": "9.4",
+          "characters": "9.4",
+          "art": "9.3",
+          "voice": "9.3"
+        },
+        "attribution": "Источник: AMD.online",
+        "canonicalSourceUrl": "https://amd.online/571-boevoy-master.html"
+      },
+      "localRating": null,
+      "combined": null,
+      "attribution": "Источник: AMD.online"
+    },
+    {
+      "canonical_title_id": "amd_online:2344",
+      "sources": [
+        "amd_online"
+      ],
+      "amd": {
+        "source": "amd_online",
+        "score": 8.85,
+        "voteCount": 672,
+        "fetchedAt": "2026-09-19T20:06:36Z",
+        "freshness": "FRESH",
+        "provenance": {
+          "url": "https://amd.online/2344-reinkarnacija-bezrabotnogo-istorija-o-prikljuchenijah-v-drugom-mire-3.html"
+        },
+        "components": {
+          "story": "8.7",
+          "characters": "8.8",
+          "art": "9",
+          "voice": "9"
+        },
+        "attribution": "Источник: AMD.online",
+        "canonicalSourceUrl": "https://amd.online/2344-reinkarnacija-bezrabotnogo-istorija-o-prikljuchenijah-v-drugom-mire-3.html"
+      },
+      "localRating": null,
+      "combined": null,
+      "attribution": "Источник: AMD.online"
+    },
+    {
+      "canonical_title_id": "amd_online:2340",
+      "sources": [
+        "amd_online"
+      ],
+      "amd": {
+        "source": "amd_online",
+        "score": 8.59,
+        "voteCount": 429,
+        "fetchedAt": "2026-09-19T20:06:46Z",
+        "freshness": "FRESH",
+        "provenance": {
+          "url": "https://amd.online/2340-adskij-rezhim-gejmer-kotoryj-ljubit-spidran-stanovitsja-bespodobnym-v-parallelnom-mire-s-ustarevshimi-nastrojkami-2.html"
+        },
+        "components": {
+          "story": "8.5",
+          "characters": "8.5",
+          "art": "8.5",
+          "voice": "8.9"
+        },
+        "attribution": "Источник: AMD.online",
+        "canonicalSourceUrl": "https://amd.online/2340-adskij-rezhim-gejmer-kotoryj-ljubit-spidran-stanovitsja-bespodobnym-v-parallelnom-mire-s-ustarevshimi-nastrojkami-2.html"
+      },
+      "localRating": null,
+      "combined": null,
+      "attribution": "Источник: AMD.online"
+    },
+    {
+      "canonical_title_id": "amd_online:2257",
+      "sources": [
+        "amd_online"
+      ],
+      "amd": {
+        "source": "amd_online",
+        "score": 8.78,
+        "voteCount": 290,
+        "fetchedAt": "2026-09-19T20:06:56Z",
+        "freshness": "FRESH",
+        "provenance": {
+          "url": "https://amd.online/2257-cugai-zagrobnogo-mira.html"
+        },
+        "components": {
+          "story": "8.8",
+          "characters": "8.7",
+          "art": "8.8",
+          "voice": "8.8"
+        },
+        "attribution": "Источник: AMD.online",
+        "canonicalSourceUrl": "https://amd.online/2257-cugai-zagrobnogo-mira.html"
+      },
+      "localRating": null,
+      "combined": null,
+      "attribution": "Источник: AMD.online"
+    },
+    {
+      "canonical_title_id": "amd_online:2259",
+      "sources": [
+        "amd_online"
+      ],
+      "amd": {
+        "source": "amd_online",
+        "score": 7.54,
+        "voteCount": 103,
+        "fetchedAt": "2026-09-19T20:07:06Z",
+        "freshness": "FRESH",
+        "provenance": {
+          "url": "https://amd.online/2259-mao.html"
+        },
+        "components": {
+          "story": "7.5",
+          "characters": "7.3",
+          "art": "7.6",
+          "voice": "7.7"
+        },
+        "attribution": "Источник: AMD.online",
+        "canonicalSourceUrl": "https://amd.online/2259-mao.html"
+      },
+      "localRating": null,
+      "combined": null,
+      "attribution": "Источник: AMD.online"
+    },
+    {
+      "canonical_title_id": "amd_online:2349",
+      "sources": [
+        "amd_online"
+      ],
+      "amd": {
+        "source": "amd_online",
+        "score": 7.22,
+        "voteCount": 115,
+        "fetchedAt": "2026-09-19T20:07:16Z",
+        "freshness": "FRESH",
+        "provenance": {
+          "url": "https://amd.online/2349-lirichnaja-volshebnica-nanoha-operediteli-ognennyj-vystrel-vozmezdija.html"
+        },
+        "components": {
+          "story": "6.9",
+          "characters": "7.1",
+          "art": "7.4",
+          "voice": "7.5"
+        },
+        "attribution": "Источник: AMD.online",
+        "canonicalSourceUrl": "https://amd.online/2349-lirichnaja-volshebnica-nanoha-operediteli-ognennyj-vystrel-vozmezdija.html"
+      },
+      "localRating": null,
+      "combined": null,
+      "attribution": "Источник: AMD.online"
+    },
+    {
+      "canonical_title_id": "amd_online:2348",
+      "sources": [
+        "amd_online"
+      ],
+      "amd": {
+        "source": "amd_online",
+        "score": 7.3,
+        "voteCount": 137,
+        "fetchedAt": "2026-09-19T20:07:26Z",
+        "freshness": "FRESH",
+        "provenance": {
+          "url": "https://amd.online/2348-sledujuschij-gercog-kotoryj-skazhet-ja-ne-hochu-ljubit-tebja-budet-ljubit-tebja-po-kakoj-to-prichine.html"
+        },
+        "components": {
+          "story": "7.2",
+          "characters": "7.2",
+          "art": "7.3",
+          "voice": "7.5"
+        },
+        "attribution": "Источник: AMD.online",
+        "canonicalSourceUrl": "https://amd.online/2348-sledujuschij-gercog-kotoryj-skazhet-ja-ne-hochu-ljubit-tebja-budet-ljubit-tebja-po-kakoj-to-prichine.html"
+      },
+      "localRating": null,
+      "combined": null,
+      "attribution": "Источник: AMD.online"
+    },
+    {
+      "canonical_title_id": "amd_online:2346",
+      "sources": [
+        "amd_online"
+      ],
+      "amd": {
+        "source": "amd_online",
+        "score": 8.63,
+        "voteCount": 281,
+        "fetchedAt": "2026-09-19T20:07:36Z",
+        "freshness": "FRESH",
+        "provenance": {
+          "url": "https://amd.online/2346-chernyj-fakel.html"
+        },
+        "components": {
+          "story": "8.5",
+          "characters": "8.5",
+          "art": "8.8",
+          "voice": "8.7"
+        },
+        "attribution": "Источник: AMD.online",
+        "canonicalSourceUrl": "https://amd.online/2346-chernyj-fakel.html"
+      },
+      "localRating": null,
+      "combined": null,
+      "attribution": "Источник: AMD.online"
+    },
+    {
+      "canonical_title_id": "amd_online:2255",
+      "sources": [
+        "amd_online"
+      ],
+      "amd": {
+        "source": "amd_online",
+        "score": 8.35,
+        "voteCount": 197,
+        "fetchedAt": "2026-09-19T20:07:46Z",
+        "freshness": "FRESH",
+        "provenance": {
+          "url": "https://amd.online/2255-dobro-pozhalovat-v-ad-iruma-4.html"
+        },
+        "components": {
+          "story": "8.2",
+          "characters": "8.4",
+          "art": "8.4",
+          "voice": "8.4"
+        },
+        "attribution": "Источник: AMD.online",
+        "canonicalSourceUrl": "https://amd.online/2255-dobro-pozhalovat-v-ad-iruma-4.html"
+      },
+      "localRating": null,
+      "combined": null,
+      "attribution": "Источник: AMD.online"
+    }
+  ]
+}
