@@ -208,7 +208,8 @@ def decide(payload: dict) -> dict:
     if tool in GITHUB_WRITE_TOOLS:
         return _out("allow", f"{tool}: работа с pull request в собственной ветке")
 
-    if tool == "Bash":
+    # Cursor IDE переименовал инструмент Bash → Shell; семантика та же.
+    if tool in ("Bash", "Shell"):
         command = str(tool_input.get("command", ""))
         environment = payload.get("environment", "sandbox")
         verdict = classify(ActionContext(command=command, environment=environment))

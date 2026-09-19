@@ -80,8 +80,14 @@ class TestDangerousBlocked:
         """«Нет правила» означает «нет разрешения», а не «спросим человека»."""
         assert d("SomeNewTool", foo="bar") == "deny"
 
+    def test_shell_alias_matches_bash_for_routine_git(self):
+        """Cursor шлёт Shell вместо Bash; семантика команд та же."""
+        assert d("Shell", command="git status --short") == "allow"
+        assert d("Bash", command="git status --short") == "allow"
+
     def test_unknown_command_denied(self):
         assert d("Bash", command="mystery-binary --wipe") == "deny"
+        assert d("Shell", command="mystery-binary --wipe") == "deny"
 
 
 class TestProductionGate:

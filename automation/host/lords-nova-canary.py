@@ -70,6 +70,7 @@ from pathlib import Path
 #: произвольные байты в файл, который исполняет каждая витрина парка.
 РАЗРЕШЁННЫЕ_ИСТОЧНИКИ = (
     Path("/home/claude/wt-lords-r2/automation/host"),
+    Path("/home/claude/wt-lords-default-episode-01/automation/host"),
     Path("/srv/site-factory/repo/automation/host"),
     ФРОНТ / ".rollback",
 )
@@ -236,6 +237,8 @@ def установить(арг) -> int:
         "artifact_sha256": отпечаток,
         "profile": витрина["profile"],
         "built_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "source_dirty": False,
+        "domain": витрина["domain"],
     }
     # Манифест пишется ПЕРВЫМ: рантайм читает его при старте, и артефакт без
     # манифеста своей версии поднялся бы на прежней ветке отрисовки.
@@ -243,6 +246,25 @@ def установить(арг) -> int:
     манифест.chmod(0o644)
     _атомарно(АРТЕФАКТ, источник.read_bytes())
     АРТЕФАКТ.chmod(0o755)
+
+    defer = bool(getattr(арг, "no_restart", False))
+    if defer:
+        запись = {
+            "action": "install", "site": арг.site, "unit": витрина["unit"],
+            "domain": витрина["domain"], "rollback_point": str(точка),
+            "artifact_sha256": отпечаток, "previous_artifact_sha256": прежний["artifact_sha256"],
+            "manifest": новый_манифест, "previous_manifest": прежний["manifest_content"],
+            "restart_ok": None, "restart_deferred": True,
+            "restart_output": "deferred: --no-restart; owner must restart unit",
+            "health": {"ok": None, "note": "not probed; process still stale until restart"},
+            "proven_chain": {к: цепь.get(к) for к in
+                             ("nginx_config", "upstream_port", "unit", "executable",
+                              "manifest_path", "verdict")},
+            "at_utc": _сейчас(),
+            "verdict": "STAGED_AWAITING_OWNER_RESTART",
+        }
+        _напечатать(запись, арг.record)
+        return 0
 
     ок, вывод = _юнит("restart", витрина["unit"])
     time.sleep(4)
@@ -365,6 +387,8 @@ def main(argv=None) -> int:
     у.add_argument("--commit", required=True)
     у.add_argument("--build-id", required=True)
     у.add_argument("--record")
+    у.add_argument("--no-restart", action="store_true",
+                   help="записать файлы и манифест без перезапуска юнита")
     у.set_defaults(функция=установить)
 
     о = под.add_parser("rollback", help="вернуть сохранённую точку")

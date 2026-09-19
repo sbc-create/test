@@ -32,13 +32,16 @@ from __future__ import annotations
 
 import argparse
 import html
+import copy
 import json
 import os
 import re
+import sys
 import unicodedata
+from difflib import SequenceMatcher
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import parse_qs, unquote, urlparse
+from urllib.parse import parse_qs, parse_qsl, quote, unquote, urlencode, urlparse
 
 РЕВИЗИЯ = os.environ.get("LORDS_TEMPLATE_REVISION", "unknown")
 МАНИФЕСТ_ФАЙЛ = os.environ.get("LORDS_TEMPLATE_MANIFEST",
@@ -104,6 +107,197 @@ def _рядом_с_каталогом(шаблон: str) -> str:
 # нет в новом маршруте, проксируется в него. Так плеер, карточка и любые
 # динамические страницы остаются рабочими — их никто не переписывает.
 ВЕРХОВОЙ = os.environ.get("LORDS_LEGACY_UPSTREAM", "")
+
+# SEO-слой отдельным модулем. Он уже дважды снимался выкладкой шаблонов, и оба
+# раза не по злому умыслу: вставка жила в шаблонах, а каждое новое оформление
+# добавляет свой <head>. Поэтому слой вызывается из отдачи ответа — её не
+# минует ни один шаблон.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import seo_layer as SEO  # noqa: E402
+
+# Контракт коллекций. Канонический экземпляр живёт в `factory/lords/`, рядом с
+# артефактом лежит его копия — тем же способом, что и SEO-слой. Отсутствие
+# файла не должно ронять витрину: без него главная собирается прежним образом.
+try:
+    import collection_contract as КОЛЛЕКЦИИ  # noqa: E402
+except ImportError:
+    КОЛЛЕКЦИИ = None
+
+#: Каталог готовых файлов карты сайта. Пусто — карта не отдаётся.
+SITEMAP_DIR = os.environ.get("LORDS_SITEMAP_DIR", "").strip()
+#: Счётчик Яндекс Метрики этой витрины. Публичное число, не секрет: оно и так
+#: видно в исходном коде любой страницы. Значение задаёт unit витрины, потому
+#: что один процесс обслуживает один домен, а счётчик привязан к домену.
+#: Пустое значение означает «счётчика нет» и даёт страницу без тега — не тег,
+#: который молчит. Молчащий тег неотличим от работающего до первого отчёта.
+СЧЁТЧИК_МЕТРИКИ = os.environ.get("LORDS_METRIKA_COUNTER", "").strip()
+
+
+def тег_метрики() -> str:
+    """Официальный тег Метрики или пустая строка.
+
+    Про единственность инициализации. Тег вставляется в четырёх местах —
+    в две оболочки собственных страниц и в два места, где размечается чужой
+    HTML (проксируемый и взятый из прежнего релиза). Пересечься они не должны,
+    но «не должны» — это не «не могут»: достаточно одной страницы, которая
+    пройдёт обоими путями, и счётчик получит два просмотра одного визита.
+    Поэтому защёлка стоит в самом теге, а не в рассуждении о том, где он
+    окажется.
+
+    Загрузка асинхронная: аналитика не имеет права задерживать отрисовку.
+    Вебвизор выключен намеренно — он включается отдельным решением владельца,
+    и реестр аналитики требует от него `false`.
+    """
+    if not СЧЁТЧИК_МЕТРИКИ.isdigit():
+        return ""
+    н = СЧЁТЧИК_МЕТРИКИ
+    return (
+        f'<script data-metrika-counter="{н}">'
+        "(function(){"
+        "if(window.__sfMetrikaReady){return;}window.__sfMetrikaReady=1;"
+        "(function(m,e,t,r,i,k,a){"
+        "m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};"
+        "m[i].l=1*new Date();"
+        "for(var j=0;j<e.scripts.length;j++){if(e.scripts[j].src===r){return;}}"
+        "k=e.createElement(t),a=e.getElementsByTagName(t)[0],"
+        "k.async=1,k.src=r,a.parentNode.insertBefore(k,a)"
+        '})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");'
+        f'ym({н},"init",{{trackLinks:true,accurateTrackBounce:true,webvisor:false}});'
+        "})();"
+        "</script>"
+        f'<noscript><div><img src="https://mc.yandex.ru/watch/{н}" '
+        'style="position:absolute;left:-9999px" alt=""></div></noscript>'
+    )
+
+#: Контракт многоисточниковых оценок. Единственное место, где объявлено,
+#: какие источники бывают и как каждый подписывается. Подпись привязана к
+#: ключу жёстко: показать Shikimori под подписью «КП» значило бы соврать о
+#: происхождении числа, а оценка без верного источника — это не оценка.
+#:
+#: Ключ → (подпись, шкала по умолчанию, это ли оценка пользователей витрины).
+ИСТОЧНИКИ_ОЦЕНОК = {
+    "kp":        ("КП",         10.0, False),
+    "imdb":      ("IMDb",       10.0, False),
+    "shikimori": ("Shikimori",  10.0, False),
+    "mal":       ("MyAnimeList", 10.0, False),
+    "amd":       ("AMD",        10.0, True),
+}
+
+#: Порядок вывода. Фиксированный, а не по величине: переставлять источники
+#: местами в зависимости от значения значит каждый раз показывать зрителю
+#: разную картину одних и тех же данных.
+ПОРЯДОК_ОЦЕНОК = ("shikimori", "kp", "imdb", "mal", "amd")
+
+
+def _число_оценки(значение) -> str:
+    """Оценка как число или пусто. Ноль и null оценкой не являются."""
+    if значение is None or isinstance(значение, bool):
+        return ""
+    try:
+        ч = float(значение)
+    except (TypeError, ValueError):
+        return ""
+    if ч <= 0:
+        return ""
+    return f"{ч:.1f}".rstrip("0").rstrip(".") if ч % 1 else f"{int(ч)}"
+
+
+def оценки_по_источникам(деталь: dict) -> list:
+    """Разбор `ratings_by_source` в список готовых к выводу оценок.
+
+    Принимаются две формы записи источника: число и объект
+    ``{"value": …, "scale": …, "votes": …}``. Вторая нужна затем, чтобы шкала
+    и число голосов приходили вместе со значением, а не додумывались витриной.
+
+    Чего здесь не происходит: не выдумывается шкала, если источник её не
+    прислал, — берётся объявленная контрактом; не показывается ноль, пустое и
+    null; не подставляется чужая подпись. Источник, которого в данных нет,
+    просто отсутствует — «нет оценки» и «оценка 0» это разные утверждения.
+
+    Совместимость: пока `ratings_by_source` не пришёл, читаются прежние поля
+    `kinopoisk_rating` и `imdb_rating`. Это не догадка о данных, а те же два
+    источника под своими подписями.
+    """
+    сырое = деталь.get("ratings_by_source")
+    собрано = {}
+    if isinstance(сырое, dict):
+        # Normalize provider aliases into ИСТОЧНИКИ_ОЦЕНОК keys.
+        for ключ, запись in сырое.items():
+            к = str(ключ or "").strip().lower()
+            if к in ("kinopoisk", "kino", "kp"):
+                к = "kp"
+            elif к in ("myanimelist", "my_anime_list"):
+                к = "mal"
+            собрано[к] = запись
+    for ключ, поле in (("kp", "kinopoisk_rating"), ("imdb", "imdb_rating")):
+        if ключ not in собрано and деталь.get(поле) is not None:
+            собрано[ключ] = деталь[поле]
+    готово = []
+    for ключ in ПОРЯДОК_ОЦЕНОК:
+        if ключ not in собрано:
+            continue
+        подпись, шкала_по_умолчанию, пользовательская = ИСТОЧНИКИ_ОЦЕНОК[ключ]
+        запись = собрано[ключ]
+        if isinstance(запись, dict):
+            значение = _число_оценки(запись.get("value"))
+            шкала = запись.get("scale") or шкала_по_умолчанию
+            голоса = запись.get("votes")
+        else:
+            значение = _число_оценки(запись)
+            шкала = шкала_по_умолчанию
+            голоса = None
+        if not значение:
+            continue
+        try:
+            голосов = int(голоса) if голоса is not None else None
+        except (TypeError, ValueError):
+            голосов = None
+        готово.append({
+            "ключ": ключ, "подпись": подпись, "значение": значение,
+            "шкала": f"{float(шкала):g}", "голоса": голосов if (голосов or 0) > 0 else None,
+            "пользовательская": пользовательская,
+        })
+    return готово
+
+
+def разметка_оценок(деталь: dict, класс: str = "rbs", пусто: bool = True) -> str:
+    """Компонент оценок. Один на все семейства, вид задаёт CSS семейства.
+
+    Оценка витрины (AMD) отделена от внешних явной группой: смешать их в один
+    ряд значило бы выдать мнение зрителей одной витрины за оценку агрегатора.
+
+    Доступность: список размечен как список, каждая оценка читается целиком —
+    «КП 7.4 из 10, 1234 голоса», — потому что вслух «7.4» без источника и
+    шкалы не значит ничего.
+    """
+    оценки = оценки_по_источникам(деталь)
+    if not оценки:
+        if not пусто:
+            return ""
+        return (f'<p class="{класс} {класс}--none">'
+                "<span>Оценок пока нет: источник их не передал</span></p>")
+    def элемент(о):
+        голоса = (f'<span class="{класс}__v">{о["голоса"]} голос.</span>'
+                  if о["голоса"] else "")
+        вслух = (f'{о["подпись"]} {о["значение"]} из {о["шкала"]}'
+                 + (f', {о["голоса"]} голосов' if о["голоса"] else ""))
+        return (f'<li class="{класс}__i" data-source="{о["ключ"]}">'
+                f'<span class="vh">{html.escape(вслух)}</span>'
+                f'<span class="{класс}__s" aria-hidden="true">{html.escape(о["подпись"])}</span>'
+                f'<span class="{класс}__n" aria-hidden="true">{о["значение"]}'
+                f'<small>/{о["шкала"]}</small></span>{голоса}</li>')
+    внешние = [о for о in оценки if not о["пользовательская"]]
+    свои = [о for о in оценки if о["пользовательская"]]
+    части = []
+    if внешние:
+        части.append(f'<ul class="{класс}__l">' + "".join(элемент(о) for о in внешние) + "</ul>")
+    if свои:
+        части.append(f'<ul class="{класс}__l {класс}__l--own" '
+                     f'aria-label="Оценка зрителей витрины">'
+                     + "".join(элемент(о) for о in свои) + "</ul>")
+    return f'<div class="{класс}" role="group" aria-label="Оценки">' + "".join(части) + "</div>"
+
+
 НА_СТРАНИЦЕ = 60
 
 # Оформление и разделы — свои у каждого семейства.
@@ -254,10 +448,92 @@ def токены(с: str) -> list[str]:
     return [т for т in re.split(r"[^a-zа-я0-9]+", с) if т]
 
 
+#: Русская раскладка под латинскими клавишами: «vfnhbwf» → «матрица».
+_РАСКЛАДКА = str.maketrans(
+    "qwertyuiop[]asdfghjkl;'zxcvbnm,.`",
+    "йцукенгшщзхъфывапролджэячсмитьбюё",
+)
+
+#: Транслитерация кириллицы → латиница теми же правилами, что у slug витрины.
+_ТРАНСЛИТ = {
+    "а": "a", "б": "b", "в": "v", "г": "g", "д": "d", "е": "e", "ж": "zh",
+    "з": "z", "и": "i", "й": "y", "к": "k", "л": "l", "м": "m", "н": "n",
+    "о": "o", "п": "p", "р": "r", "с": "s", "т": "t", "у": "u", "ф": "f",
+    "х": "h", "ц": "c", "ч": "ch", "ш": "sh", "щ": "sch", "ъ": "", "ы": "y",
+    "ь": "", "э": "e", "ю": "yu", "я": "ya",
+}
+
+
+def транслит(с: str) -> str:
+    """Кириллица латиницей. Латинские символы остаются как есть."""
+    return "".join(_ТРАНСЛИТ.get(ch, ch) for ch in (с or "").lower().replace("ё", "е"))
+
+
+def _мягкое_совпадение(цель: str, форма: str) -> bool:
+    """Нестрогий матч без ложных соседей вроде matrix→maori.
+
+    Прежний критерий (длина ±допуск + Hamming по zip) принимал «matrix»≈«maori».
+    Теперь: длина ≥5, общий префикс ≥4, SequenceMatcher.ratio ≥ 0.75.
+    «matrix»↔«matrica» проходит; «matrix»↔«maori» — нет.
+
+    У форм с годом в хвосте (`matrica1999` из «Матрица (1999)») дополнительно
+    сравниваем обрезанный вариант без четырёх цифр на конце, иначе латиница
+    не находила живые тайтлы Матрицы на боевом снимке.
+    """
+    if len(цель) < 5:
+        return False
+    кандидаты = [форма]
+    без_года = re.sub(r"\d{4}$", "", форма)
+    if без_года and без_года != форма:
+        кандидаты.append(без_года)
+    for ф in кандидаты:
+        if len(ф) < 5:
+            continue
+        if abs(len(цель) - len(ф)) > 2:
+            continue
+        if цель[:4] != ф[:4]:
+            continue
+        if SequenceMatcher(None, цель, ф).ratio() >= 0.75:
+            return True
+    return False
+
+
+def из_раскладки(с: str) -> str:
+    """Строка, набранная латинскими клавишами вместо русских."""
+    return (с or "").translate(_РАСКЛАДКА)
+
+
+def закодировать_запрос(url: str) -> str:
+    """Percent-encode query values in an already-built path (?kind=Фильм)."""
+    if "?" not in (url or ""):
+        return url
+    путь, _, хвост = url.partition("?")
+    пары = parse_qsl(хвост, keep_blank_values=True)
+    return путь + (("?" + urlencode(пары, quote_via=quote)) if пары else "")
+
+
 #: Слова, которые в запросе несут форму издания, а не название. По ним нельзя
 #: отсеивать: «Бункер 1-3 сезон» обязан находить «Бункер».
 СЛУЖЕБНЫЕ = {"сезон", "сезона", "сезонов", "серия", "серии", "season", "s",
              "часть", "все", "смотреть", "онлайн"}
+
+
+class Снимок:
+    """Ленивый неизменяемый снимок для контракта коллекций.
+
+    Строится один раз на процесс. Раньше каждый блок главной отдельно обходил
+    весь каталог на каждом запросе; теперь порядок и разрезы считаются однажды.
+    """
+
+    _снимок = None
+
+    @classmethod
+    def получить(cls, данные, подробности):
+        if cls._снимок is None and КОЛЛЕКЦИИ is not None:
+            cls._снимок = КОЛЛЕКЦИИ.Снимок(
+                данные.items, getattr(подробности, "записи", None) or {},
+                revision=getattr(данные, "revision", "") or "")
+        return cls._снимок
 
 
 class Данные:
@@ -265,37 +541,73 @@ class Данные:
         сырое = json.loads(Path(путь).read_text(encoding="utf-8"))
         self.items = сырое["items"]
         self.absent = сырое.get("fields_absent", [])
+        self.revision = str(сырое.get("revision") or "")
+        self.built_at = str(сырое.get("builtAt") or сырое.get("built_at") or "")
         for з in self.items:
             з["_n"] = нормализовать(з["title"])
             # Все известные формы названия: русское, оригинальное, синонимы
-            # владельца. Пустых среди них нет — сравнивать с пустой строкой
-            # значило бы совпадать со всем подряд.
+            # владельца, slug и транслит. Пустых среди них нет — сравнивать
+            # с пустой строкой значило бы совпадать со всем подряд.
+            #
+            # Без slug/транслита запрос «matrix» / «naruto» / точный slug
+            # живого `/title/{slug}/` давал пустую выдачу при живой карточке.
             формы = [з["_n"]]
-            for поле in ("original_title",):
+            if з.get("slug"):
+                формы.append(нормализовать(з["slug"]))
+            if з.get("title"):
+                формы.append(нормализовать(транслит(з["title"])))
+            for поле in ("original_title", "original_name"):
                 if з.get(поле):
                     формы.append(нормализовать(з[поле]))
+                    формы.append(нормализовать(транслит(з[поле])))
             for доп in (з.get("aliases") or []):
                 формы.append(нормализовать(доп))
-            з["_формы"] = [ф for ф in формы if ф]
+                формы.append(нормализовать(транслит(доп)))
+            # Уникальный порядок без пустых.
+            увидели: list[str] = []
+            for ф in формы:
+                if ф and ф not in увидели:
+                    увидели.append(ф)
+            з["_формы"] = увидели
         self.years = sorted({з["year"] for з in self.items if з["year"]}, reverse=True)
         self.kinds = sorted({з["kind"] for з in self.items if з["kind"]})
 
     def искать(self, q: str, предел: int = 120) -> list[dict]:
         """Терпимый поиск по всем известным названиям записи.
 
-        Ищется по русскому названию, оригинальному названию и переданным
-        владельцем синонимам — по каждому в отдельности. Служебные слова
-        запроса («сезон», «серия») отбрасываются: «Бункер 1-3 сезон» обязан
-        находить «Бункер», а не пустую выдачу.
+        Ищется по русскому названию, оригинальному названию, синонимам,
+        slug и транслиту. Запрос дополнительно читается как набранный в
+        чужой раскладке. Служебные слова («сезон», «серия») отбрасываются.
+
+        Смешанный запрос («Matrix матрица») не склеивается в одно ядро:
+        значимые токены проверяются по отдельности (OR), иначе латиница +
+        кириллица никогда не совпали бы ни с одной формой.
 
         Ранжирование: точное совпадение, затем начало, затем вхождение, затем
-        терпимость к одной-двум опечаткам. Выдумывать совпадения нельзя, но и
-        терять их из-за регистра, «ё» или дефиса — тоже.
+        терпимость к одной-двум опечаткам.
         """
-        нq = нормализовать(q)
-        если_токены = [т for т in токены(q) if т not in СЛУЖЕБНЫЕ and not т.isdigit()]
-        ядро = нормализовать("".join(если_токены))
-        if not нq and not ядро:
+        сырые = [q, из_раскладки(q)]
+        цели: list[str] = []
+        for сырой in сырые:
+            нq = нормализовать(сырой)
+            если_токены = [т for т in токены(сырой)
+                           if т not in СЛУЖЕБНЫЕ and not т.isdigit()]
+            if нq:
+                цели.append(нq)
+            for т in если_токены:
+                нт = нормализовать(т)
+                if нт and нт not in цели:
+                    цели.append(нт)
+            ядро = нормализовать("".join(если_токены))
+            if ядро and ядро not in цели:
+                цели.append(ядро)
+        # Уникальный порядок.
+        увидели_цели: list[str] = []
+        for ц in цели:
+            if ц and ц not in увидели_цели:
+                увидели_цели.append(ц)
+        цели = увидели_цели
+        if not цели:
             return []
 
         точн, начало, внутри, мягкие = [], [], [], []
@@ -303,32 +615,37 @@ class Данные:
             формы = з["_формы"]
             if not формы:
                 continue
-            if нq and нq in формы:
-                точн.append(з)
+            попал = False
+            for цель in цели:
+                if цель in формы:
+                    точн.append(з)
+                    попал = True
+                    break
+            if попал:
                 continue
-            if ядро and ядро in формы:
-                точн.append(з)
+            for цель in цели:
+                if any(ф.startswith(цель) for ф in формы):
+                    начало.append(з)
+                    попал = True
+                    break
+            if попал:
                 continue
-            цель = ядро or нq
-            if any(ф.startswith(цель) for ф in формы):
-                начало.append(з)
+            for цель in цели:
+                if any(цель in ф for ф in формы):
+                    внутри.append(з)
+                    попал = True
+                    break
+            if попал:
                 continue
-            if any(цель in ф for ф in формы):
-                внутри.append(з)
-                continue
-            # Терпимость к опечатке соразмерна длине запроса.
-            #
-            # Прежде допускались две правки при любой длине, и запрос «silo»
-            # (четыре знака) выдавал 80 случайных совпадений вроде «вю» и
-            # «47»: на коротких строках две правки — это уже другое слово.
-            # Ниже пяти знаков нечёткое сравнение не применяется вовсе, до
-            # восьми допускается одна правка, дальше две.
-            if len(цель) >= 5 and len(мягкие) < предел:
-                допуск = 1 if len(цель) < 8 else 2
-                for ф in формы:
-                    if abs(len(ф) - len(цель)) <= допуск and \
-                            sum(1 for a, b in zip(ф, цель) if a != b) <= допуск:
-                        мягкие.append(з)
+            # Нечёткое сравнение: см. `_мягкое_совпадение` (prefix+ratio).
+            if len(мягкие) < предел:
+                for цель in цели:
+                    for ф in формы:
+                        if _мягкое_совпадение(цель, ф):
+                            мягкие.append(з)
+                            попал = True
+                            break
+                    if попал:
                         break
         итог, видели = [], set()
         for группа in (точн, начало, внутри, мягкие):
@@ -372,7 +689,7 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 <meta name="site-factory-core" content="{ЯДРО}">
 <meta name="site-factory-profile" content="{ПРОФИЛЬ}">
 <link rel="manifest" href="/assets/nova.webmanifest">
-<style>{СТИЛЬ}</style></head><body>
+{тег_метрики()}<style>{СТИЛЬ}</style></head><body>
 <header class="hdr"><div class="wrap hdr__in">
 <a class="logo" href="/">{html.escape(ИМЯ_ВИТРИНЫ)}</a>
 <nav class="nav">{пункты}</nav>
@@ -424,10 +741,39 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 
 ОФОРМЛЕНИЕ_1_1 = "1.1.0"
 
+#: Версия оформления Zona и Animedia, переработанных по измеренным эталонам
+#: (TEMPLATES-ZONA-ANIMEDIA-VISUAL-PARITY-006). Lords остаётся на 1.1.0 и
+#: поэтому отдаёт прежние байты: его ветка кода не меняется вовсе.
+ОФОРМЛЕНИЕ_1_2 = "1.2.0"
+ОФОРМЛЕНИЕ_1_2_1 = "1.2.1"
+ОФОРМЛЕНИЕ_1_2_2 = "1.2.2"
+
+#: Версии, несущие оформление 1.1+. Набор, а не одно значение: витрина
+#: включает оформление СВОИМ манифестом, и добавление следующей версии не
+#: должно переводить на неё соседей. Свойство «переход по одной витрине»
+#: сохраняется — меняется только то, сколько версий код умеет исполнять.
+ОФОРМЛЕНИЕ_ВЕРСИИ = {ОФОРМЛЕНИЕ_1_1, ОФОРМЛЕНИЕ_1_2, ОФОРМЛЕНИЕ_1_2_1, ОФОРМЛЕНИЕ_1_2_2}
+
+#: Семейства, переработанные по измеренным эталонам, и версии, с которых
+#: переработка включается. Ниже этого набора витрина исполняет прежние ветки.
+#:
+#: Проверка нужна потому, что артефакт ОДИН на шесть витрин. Без неё выкладка
+#: артефакта ради Animedia сменила бы оформление боевой Zona, которая стоит на
+#: 1.1.0 и о смене не просила, — то есть ровно то, что запрещает принцип
+#: «переход делается по одной витрине». Здесь оформление 1.2.x достаётся
+#: только той витрине, чей манифест его объявил.
+ПЕРЕРАБОТАНО_С = {
+    "zona": frozenset({ОФОРМЛЕНИЕ_1_2}),
+    "animedia": frozenset({ОФОРМЛЕНИЕ_1_2, ОФОРМЛЕНИЕ_1_2_1, ОФОРМЛЕНИЕ_1_2_2}),
+}
+
+#: Исполняет ли ЭТА витрина переработанное оформление своего семейства.
+ОФОРМЛЕНИЕ_ПЕРЕРАБОТАННОЕ = ВЕРСИЯ in ПЕРЕРАБОТАНО_С.get(СЕМЕЙСТВО, ())
+
 #: Включено ли новое оформление на ЭТОЙ витрине. Решает манифест витрины, а не
 #: наличие кода: один артефакт обслуживает шесть витрин, и переход делается по
 #: одной. Витрина на 1.0.2 исполняет прежние ветки и отдаёт прежние байты.
-ОФОРМЛЕНИЕ_НОВОЕ = (ВЕРСИЯ == ОФОРМЛЕНИЕ_1_1)
+ОФОРМЛЕНИЕ_НОВОЕ = (ВЕРСИЯ in ОФОРМЛЕНИЕ_ВЕРСИИ)
 
 #: Сколько карточек на странице каталога в новом оформлении. Кратно и шести
 #: (сетка Lords), и четырём (сетка Zona), поэтому последний ряд не рваный.
@@ -451,6 +797,8 @@ class Подробности:
         self.записи: dict = {}
         self.источник = ""
         self.покрытие = 0
+        self.catalog_revision = ""
+        self.catalog_built_at = ""
         if not путь:
             return
         try:
@@ -462,6 +810,8 @@ class Подробности:
             self.записи = записи
             self.источник = str(сырое.get("source") or "")
             self.покрытие = int(сырое.get("details_total") or 0)
+            self.catalog_revision = str(сырое.get("catalog_revision") or "")
+            self.catalog_built_at = str(сырое.get("catalog_built_at") or "")
 
     def get(self, slug: str) -> dict:
         значение = self.записи.get(slug)
@@ -518,20 +868,52 @@ def сезон_по_номеру(деталь: dict, номер: int) -> dict | 
     "mute": "#5f6874", "onbar": "#8a939e",
 }
 
-ЗОНА_ТОКЕНЫ = {
+# Палитра Zona 1.2.0 измерена на эталоне (`tests/tools/measure_reference_palette.js`,
+# 2026-09-14): подложка rgb(30,37,43), текст белый, поверхность шапки
+# rgb(84,103,120). Взяты ИЗМЕРЕНИЯ, а не разметка эталона: оформление ниже
+# написано своё.
+#
+# Акцент разведён на две роли по той же причине, что и у Lords. Синий эталона
+# rgb(0,119,255) как ТЕКСТ на подложке даёт 3.6:1 — ниже требуемых 4.5.
+# Поэтому:
+#   acc   — синий ТЕКСТ на тёмном (ссылки, пункты): 6.3:1
+#   accdk — фон под БЕЛЫМ текстом (кнопки, активный пункт): 6.2:1
+#: Палитра прежнего оформления Zona 1.1.0 — светлый лист с засечками.
+ЗОНА_ТОКЕНЫ_1_1 = {
     "ink": "#16191d", "dim": "#59616b", "page": "#ffffff", "alt": "#f5f7fa",
     "rail": "#10161f", "railink": "#e8edf5", "line": "#e3e8ee",
     "acc": "#1a5fd0", "accdk": "#14489f", "warm": "#8a5a00",
     "mute": "#5f6874",
 }
 
+ЗОНА_ТОКЕНЫ = {
+    "ink": "#ffffff", "dim": "#aeb9c5", "page": "#1e252b", "alt": "#28303a",
+    "rail": "#546778", "railink": "#ffffff", "line": "#3a4450",
+    "acc": "#4d9bff", "accdk": "#0a5bd0", "warm": "#ffb454",
+    "mute": "#8d9aa8", "surf": "#232b34",
+}
+
+# Палитра Animedia 1.2.0 измерена на эталоне (`tests/tools/measure_reference_palette.js`,
+# 2026-09-14): основа rgb(255,255,255), текст rgb(22,22,22), акцент rgb(197,7,37),
+# служебные поверхности rgb(249,249,249) и rgb(240,240,240). Это измерения;
+# оформление ниже написано своё.
+#
+#   acc   — красный ТЕКСТ на белом: 7.4:1
+#   accdk — фон под БЕЛЫМ текстом: тот же красный, белое на нём 7.4:1
+АНИМЕДИА_ТОКЕНЫ = {
+    "ink": "#161616", "dim": "#5c6370", "page": "#ffffff", "alt": "#f9f9f9",
+    "rail": "#ffffff", "railink": "#161616", "line": "#e4e4e4",
+    "acc": "#c50725", "accdk": "#c50725", "warm": "#b26a00",
+    "mute": "#757b85", "surf": "#f0f0f0",
+}
+
 #: Общая часть: сброс, доступность и то, что обязано быть на каждой странице
 #: любого семейства. Всё остальное расходится.
 ОБЩЕЕ_1_1 = """
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;min-height:100vh}
-img{max-width:100%;display:block}
+html{-webkit-text-size-adjust:100%;overflow-x:clip;max-width:100%}
+body{margin:0;min-height:100vh;overflow-x:clip;max-width:100%}
+img,video,iframe,svg{max-width:100%;height:auto;display:block}
 a{text-decoration:none;color:inherit}
 .vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
 clip:rect(0 0 0 0);white-space:nowrap;border:0}
@@ -556,33 +938,53 @@ box-shadow:0 0 60px #0009}
 .pad{padding:0 18px}
 .backdrop{position:fixed;inset:0 0 auto 0;height:330px;z-index:-1;
 background:radial-gradient(120% 140% at 50% 0,#243043 0,#0e1013 68%)}
-/* Шапка в одну строку. */
-.hd{background:@CARD@;border-bottom:1px solid @LINE@}
-.hd__in{display:flex;align-items:center;gap:18px;height:62px;padding:0 18px}
-.hd__logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:19px;
-letter-spacing:.5px;text-transform:uppercase;color:@INK@}
+/* Шапка в одну строку на десктопе; на узком — burger + drawer. */
+.hd{background:@CARD@;border-bottom:1px solid @LINE@;position:sticky;top:0;z-index:40}
+.hd__in{display:flex;align-items:center;gap:12px;min-height:56px;padding:0 12px}
+@media(min-width:768px){.hd__in{height:62px;padding:0 18px;gap:18px}}
+.hd__logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;
+letter-spacing:.5px;text-transform:uppercase;color:@INK@;flex:0 0 auto}
+@media(min-width:768px){.hd__logo{font-size:19px}}
 .hd__mark{width:30px;height:30px;border-radius:5px;background:@ACC@;color:#fff;
 display:grid;place-items:center;font-size:15px;font-weight:800}
-.hd__nav{display:flex;gap:2px;flex:1;flex-wrap:wrap}
-.hd__nav a{padding:8px 11px;border-radius:4px;font-size:13px;font-weight:700;
-text-transform:uppercase;letter-spacing:.3px;color:#39414a}
+.hd__menu{display:inline-flex;align-items:center;justify-content:center;
+width:44px;height:44px;border:1px solid @LINE@;border-radius:4px;background:#fff;
+color:@INK@;font-size:20px;cursor:pointer;margin-left:auto;flex:0 0 auto}
+@media(min-width:768px){.hd__menu{display:none}}
+.hd__nav{display:none;flex-direction:column;gap:4px;flex:1 0 100%;order:5;
+padding:8px 0 12px;border-top:1px solid @LINE@}
+.hd__nav.is-open{display:flex}
+@media(min-width:768px){.hd__nav{display:flex;flex-direction:row;flex:1;order:0;
+flex-wrap:wrap;padding:0;border:0;gap:2px}}
+.hd__nav a{padding:12px 14px;border-radius:4px;font-size:14px;font-weight:700;
+text-transform:uppercase;letter-spacing:.3px;color:#39414a;min-height:44px;
+display:flex;align-items:center}
+@media(min-width:768px){.hd__nav a{padding:8px 11px;font-size:13px;min-height:0}}
 .hd__nav a:hover{background:@SHEET@;color:@ACCDK@}
 .hd__nav a[aria-current]{color:@ACCDK@;box-shadow:inset 0 -2px 0 @ACC@}
-.hd__s{display:flex;border:1px solid @LINE@;border-radius:4px;overflow:hidden;background:#fff}
-.hd__s input{border:0;padding:8px 11px;font-size:13px;width:190px;color:@INK@;background:#fff}
-.hd__s button{border:0;background:#fff;color:#6a737d;padding:0 11px;cursor:pointer;font-size:14px}
+.hd__s{display:flex;border:1px solid @LINE@;border-radius:4px;overflow:hidden;background:#fff;
+flex:1 1 auto;min-width:0;max-width:100%}
+@media(min-width:768px){.hd__s{flex:0 1 220px}}
+.hd__s input{border:0;padding:10px 11px;font-size:13px;width:100%;min-width:0;color:@INK@;background:#fff}
+.hd__s button{border:0;background:#fff;color:#6a737d;padding:0 12px;cursor:pointer;font-size:14px;
+min-width:44px;min-height:44px}
 .hd__s button:hover{color:@ACCDK@}
-/* Заголовок раздела и вкладки-таблетки — прямо из эталона. */
+body.nav-lock{overflow:hidden}
+/* Заголовок раздела: настоящий H2 + «Весь раздел». */
 .lead{font-size:20px;font-weight:600;color:#3a4149;margin:16px 0 12px}
-/* Заголовок раздела у эталона — 24px при 14px основного текста.
-   Было 17px: страница открывалась почти без заголовка. 20px — шаг к
-   эталону, который остаётся в ритме этой типографики; остаточное
-   расхождение названо в отчёте, а не сглажено. */
+.sec-rail{margin:0 0 18px}
+.sec-rail__h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+margin:0 0 12px;flex-wrap:wrap}
+.sec-rail__h h2{margin:0;font-size:18px;font-weight:700;color:@INK@}
+.sec-rail__h h2 a{color:inherit;text-decoration:none}
+.sec-rail__h h2 a:hover{color:@ACCDK@}
+.sec-rail__h .sec-rail__all{font-size:13px;font-weight:700;color:@ACCDK@;padding:8px 4px;
+min-height:44px;display:inline-flex;align-items:center}
 .tabs{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin:0 0 12px}
 .tabs__pill{display:inline-flex;align-items:center;gap:7px;background:@ACC@;color:#fff;
 font-weight:700;font-size:15px;padding:10px 18px;border-radius:4px}
 .tabs a{background:@CARD@;border:1px solid @LINE@;border-radius:4px;padding:9px 15px;
-font-size:13px;color:#4a535d;font-weight:600}
+font-size:13px;color:#4a535d;font-weight:600;min-height:44px;display:inline-flex;align-items:center}
 .tabs a:hover{color:@ACCDK@;border-color:@ACC@}
 .tabs a[aria-current]{background:@BAR@;color:#fff;border-color:@BAR@}
 /* Сетка в шесть колонок с тесными желобами. */
@@ -590,10 +992,12 @@ font-size:13px;color:#4a535d;font-weight:600}
 @media(min-width:520px){.grid{grid-template-columns:repeat(3,1fr)}}
 @media(min-width:860px){.grid{grid-template-columns:repeat(4,1fr)}}
 @media(min-width:1080px){.grid{grid-template-columns:repeat(6,1fr)}}
-/* Карточка: постер во всю площадь, название поверх него, оценки полосой. */
-.c{position:relative;display:block;background:@BAR@;overflow:hidden;border-radius:3px}
+/* Карточка: постер 2:3, подпись фиксированной высоты, весь блок кликабелен. */
+.c{position:relative;display:flex;flex-direction:column;background:@BAR@;overflow:hidden;border-radius:3px;
+color:inherit;text-decoration:none;height:100%}
+.c:focus-visible{outline:2px solid @ACC@;outline-offset:2px}
 .c:hover .c__img{transform:scale(1.04)}
-.c__p{display:block;position:relative;aspect-ratio:2/3;overflow:hidden;background:#22272e}
+.c__p{display:block;position:relative;aspect-ratio:2/3;overflow:hidden;background:#22272e;flex:0 0 auto}
 .c__img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;
 transition:transform .25s}
 .c__none{position:absolute;inset:0;display:grid;place-items:center;text-align:center;
@@ -603,13 +1007,15 @@ background:repeating-linear-gradient(135deg,#242a32 0 9px,#1e242b 9px 18px)}
 .c__badge{position:absolute;z-index:2;top:6px;left:6px;background:@ACC@;color:#fff;font-size:11px;
 font-weight:700;padding:3px 7px;border-radius:3px;max-width:calc(100% - 12px);
 overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.c__cap{position:absolute;z-index:2;left:0;right:0;bottom:0;padding:26px 7px 8px;text-align:center;
-background:linear-gradient(180deg,#0000 0,#000000d9 58%,#000000f2 100%)}
-.c__t{display:block;color:#fff;font-size:13px;font-weight:700;line-height:1.25;
-display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.c__y{display:block;color:#c5ccd4;font-size:12px;margin-top:2px}
+.c__cap{display:flex;flex-direction:column;justify-content:flex-end;gap:2px;
+height:66px;padding:8px 7px;text-align:center;background:#11161c;flex:0 0 66px;
+box-sizing:border-box}
+.c__t{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+color:#fff;font-size:13.5px;font-weight:700;line-height:1.25;margin:0}
+.c__y{display:block;color:#c5ccd4;font-size:12px}
 .c__r{display:flex;justify-content:space-between;align-items:center;gap:6px;
-padding:6px 8px;background:@BAR@;font-size:12px;font-weight:700}
+padding:6px 8px;background:@BAR@;font-size:12px;font-weight:700;min-height:30px;
+box-sizing:border-box;flex:0 0 auto}
 .c__kp{color:#ff8b3d}.c__imdb{color:@IMDB@}
 .c__r span i{font-style:normal;color:#fff;margin-left:4px}
 .c__r em{font-style:normal;color:@ONBAR@;font-weight:600}
@@ -660,6 +1066,10 @@ flex-wrap:wrap;border-radius:4px 4px 0 0}
 .pl__note{margin-left:auto;color:#8d97a2;font-size:12px;padding:12px 4px}
 .pl__frame{position:relative;aspect-ratio:16/9;background:#05070a;display:grid;
 place-items:center;border-radius:0 0 4px 4px;overflow:hidden}
+.pl__frame[data-state="awaiting"],
+.pl__frame[data-state="unavailable"],
+.pl__frame[data-state="nosource"],
+.pl__frame[data-state="idle"]{aspect-ratio:auto;min-height:140px;max-height:180px}
 .pl__frame video-player{display:block;width:100%;height:100%}
 .pl__state{max-width:520px;text-align:center;padding:26px 20px;color:#d6dde5}
 .pl__state b{display:block;font-size:16px;margin-bottom:8px;color:#fff}
@@ -672,15 +1082,17 @@ place-items:center;border-radius:0 0 4px 4px;overflow:hidden}
 .sea__h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 0 9px}
 .sea__h h3{margin:0;font-size:14px;font-weight:700}
 .sea__h span{font-size:12px;color:@DIM@}
-.eps{display:flex;flex-wrap:wrap;gap:5px}
-.eps a{min-width:40px;text-align:center;padding:7px 8px;border:1px solid @LINE@;
-border-radius:3px;font-size:13px;font-weight:600;background:#fff;color:#3f4750}
+.eps{display:flex;flex-wrap:wrap;gap:8px}
+.eps a{min-width:44px;min-height:44px;text-align:center;padding:10px 8px;border:1px solid @LINE@;
+border-radius:3px;font-size:13px;font-weight:600;background:#fff;color:#3f4750;
+display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box}
 .eps a:hover{border-color:@ACC@;color:@ACCDK@}
 .eps a[aria-current]{background:@ACC@;border-color:@ACC@;color:#fff}
-.eps a[data-off]{color:@MUTE@;background:#f3f5f7}
+.eps a[data-off]{color:@MUTE@;background:#f3f5f7;pointer-events:none}
 .epnav{display:flex;justify-content:space-between;gap:10px;margin:14px 0 0;flex-wrap:wrap}
-.epnav a,.epnav span{padding:9px 14px;border:1px solid @LINE@;border-radius:4px;
-font-size:13px;font-weight:600;background:#fff;color:#3f4750}
+.epnav a,.epnav span{padding:12px 14px;border:1px solid @LINE@;border-radius:4px;
+font-size:13px;font-weight:600;background:#fff;color:#3f4750;min-height:44px;
+display:inline-flex;align-items:center;box-sizing:border-box}
 .epnav span{color:@MUTE@;background:#f3f5f7}
 /* Похожее и подвал. */
 .rel{display:grid;gap:8px;grid-template-columns:repeat(3,1fr)}
@@ -695,16 +1107,55 @@ text-align:center;color:#4d555e;margin:14px 0}
 .nf p{color:#4d555e;margin:0 auto 18px;max-width:460px}
 .nf a{display:inline-block;background:@ACC@;color:#fff;font-weight:700;padding:11px 22px;
 border-radius:4px}
-.ft{background:@CARD@;border-top:1px solid @LINE@;margin-top:26px;padding:20px 18px 30px;
-color:#5b6470;font-size:12.5px}
-.ft__g{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.ft{background:@CARD@;border-top:1px solid @LINE@;margin-top:26px;padding:22px 18px 16px;
+color:#5b6470;font-size:13px}
+.ft__cols{display:grid;gap:18px;grid-template-columns:1fr;margin-bottom:16px}
+@media(min-width:720px){.ft__cols{grid-template-columns:repeat(4,1fr)}}
+.ft__col b{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.4px;
+color:@INK@;margin-bottom:8px}
+.ft__col a{display:block;padding:6px 0;color:#4a535d;font-weight:600;min-height:44px}
+.ft__col a:hover{color:@ACCDK@}
+.ft__about{font-size:12.5px;line-height:1.5;color:#5b6470;max-width:52ch;margin:0 0 12px}
+.ft__bar{display:flex;justify-content:flex-end;align-items:center;gap:10px;
+border-top:1px solid @LINE@;padding-top:10px}
 .vb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:#4d555e;
-border:1px solid @LINE@;border-radius:3px;padding:4px 8px;background:@SHEET@}
+padding:4px 8px;background:transparent;border:0;cursor:help}
+.hub{display:grid;gap:12px;grid-template-columns:1fr;margin:14px 0}
+@media(min-width:600px){.hub{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.hub{grid-template-columns:repeat(3,1fr)}}
+.hub__c{display:block;padding:14px;border:1px solid @LINE@;border-radius:6px;background:@CARD@;
+color:inherit;text-decoration:none;min-height:120px}
+.hub__c:hover{border-color:@ACC@}
+.hub__c b{display:block;font-size:15px;margin-bottom:6px;color:@INK@}
+.hub__c p{margin:0;font-size:12.5px;color:#5b6470;line-height:1.45}
+.hub__c span{display:block;margin-top:10px;font-size:12px;color:@ACCDK@;font-weight:700}
 
 img[hidden]{display:none}
+
+/* Оценки по источникам. Разметка общая, вид свой у каждого семейства. */
+.rbs{margin:14px 0;display:flex;flex-direction:column;gap:8px}
+.rbs__l{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.rbs__i{display:flex;align-items:baseline;gap:6px;padding:6px 11px;border-radius:6px;
+white-space:nowrap}
+.rbs__s{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.rbs__n{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.rbs__n small{font-size:11px;font-weight:400;opacity:.72}
+.rbs__v{font-size:11px;opacity:.75;font-variant-numeric:tabular-nums}
+.rbs__l--own{border-top:1px dashed currentColor;padding-top:8px;margin-top:2px;opacity:.95}
+.rbs--none{margin:14px 0;font-size:13px;font-style:italic}
+@media(max-width:400px){.rbs__i{padding:5px 8px}.rbs__n{font-size:14px}}
+.rbs__i{background:@CARD@;border:1px solid @LINE@;color:@INK@}
+.rbs__s{color:@ACCDK@}
+.rbs__i[data-source=imdb] .rbs__n{color:@KP@}
+.rbs__l--own{color:@DIM@}
+.rbs--none{color:@MUTE@}
+
 """
 
-ЗОНА_СТИЛЬ = """
+#: Прежнее оформление Zona 1.1.0. Оставлено намеренно: артефакт один на
+#: шесть витрин, и витрина, чей манифест остался на 1.1.0, обязана отдавать
+#: ПРЕЖНИЕ байты даже после выкладки этого файла ради соседа.
+ЗОНА_СТИЛЬ_1_1 = """
 body{background:@PAGE@;color:@INK@;
 font:16px/1.62 'PT Serif',Georgia,'Times New Roman',serif}
 /* Композиция: постоянная боковая колонка слева, содержимое во всю ширину. */
@@ -753,7 +1204,7 @@ font-family:system-ui,sans-serif;color:@DIM@;flex-wrap:wrap}
 .zt{display:flex;flex-direction:column;background:#fff;border:1px solid @LINE@;
 border-radius:10px;overflow:hidden;transition:box-shadow .18s,transform .18s}
 .zt:hover{box-shadow:0 10px 30px #16191d1f;transform:translateY(-3px)}
-.zt__p{display:block;aspect-ratio:2/3;background:@ALT@;position:relative}
+.zt__p{display:block;aspect-ratio:2/3;background:@ALT@;position:relative;flex:0 0 auto}
 .zt__p img,.zt__img{position:relative;z-index:1;width:100%;height:100%;
 object-fit:cover;display:block}
 .zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:14px;
@@ -856,7 +1307,24 @@ font-family:system-ui,sans-serif;color:#cfd8e2}
 background:@ALT@;padding:12px 16px;font-family:system-ui,sans-serif}
 .zsea__h b{font-size:15px}
 .zsea__h span{font-size:13px;color:@DIM@}
-.zeps{display:flex;flex-wrap:wrap;gap:6px;padding:14px 16px}
+/* Хаб подборок: карточка коллекции, а не ещё одна сетка тайтлов. */
+.zhub{display:grid;gap:12px;margin:14px 0;grid-template-columns:1fr}
+@media(min-width:600px){.zhub{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.zhub{grid-template-columns:repeat(3,1fr)}}
+.zhub__c{display:block;padding:12px;border:1px solid @LINE@;border-radius:8px;
+background:@SURF@;color:inherit;text-decoration:none}
+.zhub__c:hover{border-color:@ACC@}
+.zhub__g{display:flex;gap:4px;margin-bottom:9px}
+.zhub__p{flex:1 1 0;aspect-ratio:2/3;overflow:hidden;border-radius:5px;background:@ALT@}
+.zhub__img{width:100%;height:100%;object-fit:cover;display:block}
+.zhub__t{display:block;font-weight:700;font-size:15.5px}
+.zhub__m{display:block;font-size:12.5px;color:@ACC@;font-weight:600;margin:2px 0 4px}
+.zhub__d{display:block;font-size:13px;color:@DIM@;line-height:1.45}
+
+/* Окно просмотра списка серий ограничено; сам список не обрезается. */
+.zeps{display:flex;flex-wrap:wrap;gap:6px;padding:14px 16px;max-height:70vh;
+overflow-y:auto;overscroll-behavior:contain}
+@media(min-width:768px){.zeps{max-height:520px}}
 .zeps a{font-family:system-ui,sans-serif;font-size:13.5px;font-weight:600;padding:7px 12px;
 border:1px solid @LINE@;border-radius:8px;color:@ACC@}
 .zeps a:hover{background:@ALT@;border-color:@ACC@}
@@ -885,7 +1353,623 @@ display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between;align-items:c
 border:1px solid @LINE@;border-radius:6px;padding:5px 9px;background:@ALT@;color:#4d555e}
 
 img[hidden]{display:none}
+
+/* Оценки по источникам. Разметка общая, вид свой у каждого семейства. */
+.rbs{margin:14px 0;display:flex;flex-direction:column;gap:8px}
+.rbs__l{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.rbs__i{display:flex;align-items:baseline;gap:6px;padding:6px 11px;border-radius:6px;
+white-space:nowrap}
+.rbs__s{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.rbs__n{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.rbs__n small{font-size:11px;font-weight:400;opacity:.72}
+.rbs__v{font-size:11px;opacity:.75;font-variant-numeric:tabular-nums}
+.rbs__l--own{border-top:1px dashed currentColor;padding-top:8px;margin-top:2px;opacity:.95}
+.rbs--none{margin:14px 0;font-size:13px;font-style:italic}
+@media(max-width:400px){.rbs__i{padding:5px 8px}.rbs__n{font-size:14px}}
+.rbs__i{background:#fff;border:1px solid @LINE@;color:@INK@}
+.rbs__s{color:@ACC@}
+.rbs__l--own{color:@DIM@}
+.rbs--none{color:@MUTE@}
+
 """
+
+
+ЗОНА_СТИЛЬ = """
+/* Оформление Zona 1.2.0. Числа — измеренные на эталоне; разметка и правила
+   написаны свои. Ключевые цели измерения (см. artifacts/evidence/
+   templates-zona-animedia-visual-parity-006/reference/zona-w140/):
+     контейнер 1400 max, поля 20 (16 на узком), шапка горизонтальная и
+     закреплённая высотой 69 на десктопе, кегль тела 13/17.9,
+     h2 22.1 нормального начертания, ссылки 15.6 полужирные. */
+body{background:@PAGE@;color:@INK@;
+font:13px/1.375 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif;
+padding-top:117px}
+@media(min-width:768px){body{padding-top:138px}}
+@media(min-width:1280px){body{padding-top:69px}}
+.zs{min-height:100vh;display:block}
+.zmain{min-width:0}
+.zwrap{max-width:1400px;margin:0 auto;padding:0 16px}
+@media(min-width:1280px){.zwrap{padding:0 20px}}
+
+/* Шапка: горизонтальная, закреплённая. Постоянной левой колонки нет ни на
+   одной ширине — это и было главным расхождением с эталоном. */
+.zhd{position:fixed;top:0;left:0;right:0;z-index:60;background:@RAIL@;
+color:@RAILINK@;box-shadow:0 1px 0 rgba(0,0,0,.25)}
+.zhd__in{max-width:1400px;margin:0 auto;padding:14px 16px;display:flex;
+align-items:center;gap:12px;flex-wrap:wrap}
+@media(min-width:768px){.zhd__in{padding:25px 16px;gap:14px}}
+@media(min-width:1280px){.zhd__in{padding:0 20px;height:69px;flex-wrap:nowrap;gap:14px}}
+.zhd__logo{font-size:19px;font-weight:700;letter-spacing:-.3px;color:#fff;
+white-space:nowrap;flex:0 0 auto}
+/* Пункты в одну строку с горизонтальной прокруткой: перенос на узком экране
+   поднимал шапку до 185 px против измеренных на эталоне 117. */
+.zhd__n{display:flex;gap:2px;flex:1 0 100%;order:3;min-width:0;
+overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.zhd__n::-webkit-scrollbar{display:none}
+@media(min-width:1280px){.zhd__n{flex:1 1 auto;order:0;overflow:visible}}
+.zhd__n a{padding:9px 10px;border-radius:6px;font-size:15.6px;font-weight:500;
+color:#eef3f8;white-space:nowrap;flex:0 0 auto}
+.zhd__n a:hover{background:rgba(255,255,255,.14)}
+.zhd__n a[aria-current]{background:@ACCDK@;color:#fff}
+.zhd__s{display:flex;flex:1 1 140px;min-width:0;max-width:420px;
+border-radius:6px;overflow:hidden;background:#fff}
+.zhd__s input{flex:1;min-width:0;border:0;padding:9px 12px;font-size:14px;
+color:@PAGE@;font-family:inherit}
+.zhd__s button{border:0;background:@ACCDK@;color:#fff;padding:0 16px;
+font-weight:600;font-size:14px;cursor:pointer;font-family:inherit}
+/* Жанры вынесены из шапки в тело главной: третий ряд поднимал шапку до
+   170 px против измеренных на эталоне 137.8. */
+
+/* Прежние узлы каркаса остаются объявленными: на них ссылаются страницы
+   каталога, поиска и произведения. Боковая колонка больше не раскладывается. */
+.zrail,.zrail__logo,.zrail__sub,.zrail__t,.zrail__n,.zrail__g{display:none}
+.ztop{border-bottom:1px solid @LINE@;background:@PAGE@}
+.ztop__a{display:flex;align-items:center;gap:16px;padding:12px 0}
+.ztop__s{flex:1;display:flex;border:1px solid @LINE@;border-radius:6px;
+overflow:hidden;background:@ALT@;max-width:640px}
+.ztop__s input{flex:1;border:0;padding:10px 13px;font-size:14px;
+background:transparent;color:@INK@;font-family:inherit}
+.ztop__s button{border:0;background:@ACCDK@;color:#fff;padding:0 18px;
+font-weight:600;font-size:14px;cursor:pointer;font-family:inherit}
+.ztop__b{display:flex;gap:16px;padding:0 0 10px;font-size:13px;color:@DIM@;
+flex-wrap:wrap;max-width:100%;min-width:0}
+.ztop__b a{color:@ACC@;font-weight:600;display:inline-block;padding:5px 2px;
+max-width:100%;overflow-wrap:anywhere}
+.ztop__b a[aria-current]{color:@INK@;box-shadow:inset 0 -2px 0 @ACC@}
+
+/* Типографика по измерению: h2 22.1 нормального начертания. */
+.zh{font-size:26px;line-height:1.22;font-weight:600;margin:22px 0 6px;
+letter-spacing:-.3px}
+@media(min-width:1280px){.zh{font-size:30px}}
+.zh--sm{font-size:22.1px;font-weight:400;margin:26px 0 6px;letter-spacing:0}
+.zsub{font-size:13px;color:@DIM@;margin:0 0 18px}
+.zsub a{display:inline-block;padding:5px 2px;color:@ACC@;font-weight:600}
+.zcr{font-size:12.5px;color:@DIM@;padding:12px 0 0}
+.zcr a{color:@ACC@}
+
+/* Пять горизонтальных лент. Управление мышью, клавиатурой и свайпом. */
+.zsec{margin:26px 0 30px}
+.zsec__h{display:flex;align-items:baseline;justify-content:space-between;
+gap:12px;margin:0 0 10px}
+.zsec__h h2{font-size:22.1px;font-weight:400;margin:0;letter-spacing:0}
+.zsec__h a{font-size:13px;color:@ACC@;font-weight:600;white-space:nowrap}
+.zrl{position:relative}
+.zrl__vp{overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;
+scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+scrollbar-width:thin;padding:2px 0 10px}
+/* align-items:flex-start обязателен: по умолчанию флекс растягивает все
+   карточки до высоты самой высокой, и постер с заданной пропорцией
+   перерастает её — измерено 0.56 вместо 0.67 в лентах с длинными названиями. */
+.zrl__track{display:flex;gap:12px;min-width:min-content;align-items:stretch}
+.zrl__track>*{flex:0 0 148px;scroll-snap-align:start;min-width:0;height:auto}
+@media(min-width:768px){.zrl__track>*{flex-basis:180px}}
+@media(min-width:1280px){.zrl__track>*{flex-basis:216px}}
+.zrl__btn{position:absolute;top:28%;transform:translateY(-50%);z-index:5;
+width:34px;height:52px;border:0;border-radius:5px;cursor:pointer;
+background:rgba(16,21,26,.82);color:#fff;font-size:18px;line-height:1;
+display:none;align-items:center;justify-content:center}
+@media(min-width:1024px){.zrl:hover .zrl__btn,.zrl__btn:focus-visible{display:flex}}
+.zrl__btn--p{left:-6px}
+.zrl__btn--n{right:-6px}
+.zrl__btn[disabled]{opacity:.32;cursor:default}
+
+/* Сетка каталога и карточка. Пропорция постера 2:3, высота ряда ровная. */
+.zg{display:grid;gap:14px;grid-template-columns:repeat(2,minmax(0,1fr));
+align-items:stretch}
+@media(min-width:640px){.zg{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:900px){.zg{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(min-width:1200px){.zg{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(min-width:1440px){.zg{grid-template-columns:repeat(7,minmax(0,1fr))}}
+.zt{display:flex;flex-direction:column;height:100%;min-width:0;background:@SURF@;
+border:1px solid @LINE@;border-radius:8px;overflow:hidden;
+transition:border-color .16s,transform .16s;color:inherit;text-decoration:none}
+.zt:hover{border-color:@ACC@;transform:translateY(-2px)}
+.zt__p{display:block;aspect-ratio:2/3;background:@ALT@;position:relative;flex:0 0 auto;
+overflow:hidden}
+.zt__p img,.zt__img{position:absolute;inset:0;z-index:1;width:100%;height:100%;
+object-fit:cover;display:block}
+.zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:12px;
+text-align:center;color:@MUTE@;font-size:12px;line-height:1.3;aspect-ratio:auto}
+.zt__none b{display:block;font-size:24px;font-weight:700;color:@DIM@;margin-bottom:4px}
+.zt__b{padding:8px 9px 10px;display:flex;flex-direction:column;gap:4px;flex:1 1 auto;
+min-height:108px;box-sizing:border-box}
+.zt__t{font-size:13.5px;font-weight:600;line-height:1.28;min-height:calc(1.28em * 2);
+max-height:calc(1.28em * 2);display:-webkit-box;-webkit-line-clamp:2;
+-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+.zt__m{display:block;font-size:12px;color:@DIM@;line-height:1.3;min-height:1.3em;
+white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zt__r{display:flex;gap:9px;font-size:12px;color:@DIM@;margin-top:auto;
+padding-top:4px;flex-wrap:nowrap;min-height:1.3em;align-items:center}
+.zt__r b{color:@WARM@;font-weight:700}
+.zt__r i{color:@WARM@;font-style:normal;font-weight:700}
+.zt__r em{color:@MUTE@;font-style:italic}
+
+/* Строка списка: постер слева. Это не сетка главной. */
+.zl{display:flex;flex-direction:column;gap:10px}
+.zr{display:grid;grid-template-columns:64px 1fr;gap:12px;padding:10px;
+background:@SURF@;border:1px solid @LINE@;border-radius:8px;align-items:start}
+@media(min-width:768px){.zr{grid-template-columns:82px 1fr}}
+.zr:hover{border-color:@ACC@}
+.zr__p{aspect-ratio:2/3;background:@ALT@;border-radius:5px;overflow:hidden;
+position:relative}
+.zr__p img,.zr__img{position:absolute;inset:0;width:100%;height:100%;
+object-fit:cover;display:block;z-index:1}
+.zr__none{position:absolute;inset:0;display:grid;place-items:center;
+text-align:center;color:@MUTE@;font-size:11px;padding:6px}
+.zr__t{display:block;font-size:15px;font-weight:600;line-height:1.3;margin-bottom:3px}
+.zr__m{display:block;font-size:12.5px;color:@DIM@;margin-bottom:5px}
+.zr__d{font-size:12.5px;color:@DIM@;line-height:1.45;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zr__r{display:flex;gap:10px;font-size:12px;color:@DIM@;margin-top:6px;flex-wrap:wrap}
+
+/* Фильтры каталога (служебные) и жанровая навигация главной. */
+.zstrip{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 6px;max-width:100%;min-width:0}
+.zstrip a{background:@SURF@;border:1px solid @LINE@;border-radius:6px;
+padding:7px 12px;font-size:13px;color:@DIM@;font-weight:600;
+max-width:100%;overflow-wrap:anywhere}
+.zstrip a:hover{border-color:@ACC@;color:@INK@}
+.zstrip a[aria-current]{background:@ACCDK@;color:#fff;border-color:@ACCDK@}
+.zgenres{margin:8px 0 28px;max-width:100%;min-width:0}
+.zgenres__h{font-size:22.1px;font-weight:400;margin:0 0 12px;letter-spacing:0}
+.zgenres__nav{display:flex;flex-wrap:wrap;gap:10px;max-width:100%}
+.zgenres__nav a{display:inline-flex;align-items:center;justify-content:center;
+min-height:42px;padding:10px 16px;border-radius:9px;border:1px solid @LINE@;
+background:@SURF@;color:@INK@;font-size:14px;font-weight:600;line-height:1.2;
+text-decoration:none;box-sizing:border-box}
+.zgenres__nav a:hover{border-color:@ACC@;color:@ACC@;background:#f3f7fc}
+.zgenres__nav a:focus-visible{outline:2px solid @ACC@;outline-offset:2px}
+.zgenres__nav a[aria-current],.zgenres__nav a.is-active{
+background:@ACCDK@;border-color:@ACCDK@;color:#fff}
+@media(max-width:639px){
+.zgenres__nav{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
+scrollbar-width:thin;padding-bottom:4px}
+.zgenres__nav a{flex:0 0 auto}
+}
+.zpg{display:flex;gap:7px;justify-content:center;margin:26px 0;flex-wrap:wrap}
+.zpg a,.zpg span{padding:8px 13px;border-radius:6px;border:1px solid @LINE@;
+background:@SURF@;font-size:13.5px;min-width:40px;text-align:center}
+.zpg span{background:@ACCDK@;color:#fff;border-color:@ACCDK@}
+.zempty,.znf{padding:52px 18px;text-align:center;color:@DIM@}
+.znf b{display:block;font-size:44px;font-weight:700;color:@ACC@;margin-bottom:6px}
+.znf h1{font-size:24px;margin:0 0 8px;color:@INK@;font-weight:600}
+.znf a{display:inline-block;margin-top:14px;background:@ACCDK@;color:#fff;
+padding:11px 22px;border-radius:6px;font-weight:600}
+.zsea__h{font-size:13px;color:@DIM@;margin:0 0 14px}
+.zsea{margin:0 0 20px}
+
+/* Страница произведения: компактная трёхзональная шапка. */
+.zban{display:none}
+.ztitle{display:grid;grid-template-columns:1fr;gap:20px;margin:16px 0 8px;
+align-items:start}
+@media(min-width:900px){.ztitle{grid-template-columns:220px minmax(0,1fr);gap:22px}}
+@media(min-width:1280px){.ztitle{grid-template-columns:260px minmax(0,1fr) 300px;gap:24px}}
+.ztitle__poster{aspect-ratio:2/3;border-radius:8px;overflow:hidden;background:@ALT@;
+position:relative;width:100%;max-width:280px;margin:0 auto}
+@media(min-width:900px){.ztitle__poster{margin:0;max-width:none}}
+.ztitle__poster img,.ztitle__poster .zhead__img{position:absolute;inset:0;z-index:1;
+width:100%;height:100%;object-fit:cover;display:block}
+.ztitle__main{min-width:0}
+.ztitle__main h1{font-size:28px;line-height:1.18;margin:0 0 8px;letter-spacing:-.4px}
+@media(min-width:1280px){.ztitle__main h1{font-size:32px}}
+.ztitle__o{font-size:14px;color:@DIM@;margin:0 0 10px}
+.ztitle__desc{font-size:14.5px;line-height:1.62;color:@INK@;max-width:70ch;margin:0 0 14px;
+display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.ztitle__cta{display:inline-flex;align-items:center;justify-content:center;
+min-height:42px;padding:10px 18px;border-radius:8px;background:@ACCDK@;color:#fff;
+font-weight:700;font-size:14px;text-decoration:none}
+.ztitle__cta:hover{filter:brightness(1.05)}
+.ztitle__rail{min-width:0;display:flex;flex-direction:column;gap:16px}
+@media(max-width:899px){.ztitle__rail{order:3}}
+.ztitle__dl{margin:0;background:@SURF@;border:1px solid @LINE@;border-radius:8px;
+padding:12px 14px;display:grid;gap:10px}
+.ztitle__dl div{display:grid;grid-template-columns:96px minmax(0,1fr);gap:8px 12px;
+align-items:baseline}
+.ztitle__dl dt{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
+color:@DIM@;font-weight:700;margin:0}
+.ztitle__dl dd{margin:0;font-size:13.5px;color:@INK@;line-height:1.4;
+overflow-wrap:anywhere}
+.ztitle__dl a{color:@ACC@;font-weight:600}
+.zad{display:none}
+.zad[data-ad-enabled="1"]{display:block;width:100%;max-width:300px;min-height:250px;
+border:1px dashed @LINE@;border-radius:8px;background:@ALT@;margin:0 auto}
+/* legacy hooks kept for older markup paths */
+.zhead{display:contents}
+.zhead__ps,.zhead__x,.zhead__o{display:contents}
+.zbody{font-size:14.5px;line-height:1.62;color:@INK@;max-width:70ch;margin:18px 0 0}
+.zaside{display:none}
+/* Хаб подборок: карточка коллекции, а не ещё одна сетка тайтлов. */
+.zhub{display:grid;gap:12px;margin:14px 0;grid-template-columns:1fr}
+@media(min-width:600px){.zhub{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.zhub{grid-template-columns:repeat(3,1fr)}}
+.zhub__c{display:block;padding:12px;border:1px solid @LINE@;border-radius:8px;
+background:@SURF@;color:inherit;text-decoration:none}
+.zhub__c:hover{border-color:@ACC@}
+.zhub__g{display:flex;gap:4px;margin-bottom:9px}
+.zhub__p{flex:1 1 0;aspect-ratio:2/3;overflow:hidden;border-radius:5px;background:@ALT@}
+.zhub__img{width:100%;height:100%;object-fit:cover;display:block}
+.zhub__t{display:block;font-weight:700;font-size:15.5px}
+.zhub__m{display:block;font-size:12.5px;color:@ACC@;font-weight:600;margin:2px 0 4px}
+.zhub__d{display:block;font-size:13px;color:@DIM@;line-height:1.45}
+
+/* Окно просмотра списка серий ограничено; сам список не обрезается. */
+.zeps{display:grid;gap:7px;margin:14px 0;max-height:70vh;overflow-y:auto;
+overscroll-behavior:contain}
+@media(min-width:768px){.zeps{max-height:520px}}
+.zeps a,.zeps span{display:block;padding:9px 12px;border-radius:6px;
+border:1px solid @LINE@;background:@SURF@;font-size:13.5px}
+.zeps span{opacity:.55}
+.zeps a[aria-current]{background:@ACCDK@;color:#fff;border-color:@ACCDK@}
+.zepnav{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+.zepnav a{background:@SURF@;border:1px solid @LINE@;border-radius:6px;
+padding:9px 14px;font-size:13.5px;color:@ACC@;font-weight:600}
+
+/* Плеер: кадр 16:9 только при resolving/ok; честные состояния — компактны. */
+.zpl{margin:18px 0}
+.zpl__f{aspect-ratio:16/9;background:#0d1217;border:1px solid @LINE@;
+border-radius:8px;overflow:hidden;position:relative}
+.zpl__f[data-state="awaiting"],
+.zpl__f[data-state="unavailable"],
+.zpl__f[data-state="nosource"],
+.zpl__f[data-state="noaccess"],
+.zpl__f[data-state="provider"],
+.zpl__f[data-state="error"],
+.zpl__f[data-state="slow"]{aspect-ratio:auto;min-height:120px;max-height:180px}
+.zpl__f video-player{display:block;width:100%;height:100%}
+.zpl__h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+font-size:22.1px;font-weight:400;margin:22px 0 10px}
+.zpl__h span{font-size:13px;color:@DIM@;font-weight:600}
+.zpl__s{position:absolute;inset:0;display:grid;place-items:center;padding:22px;
+text-align:center;color:@DIM@;font-size:13.5px;line-height:1.5}
+.zpl__f [data-player-state]{padding:18px 16px;text-align:center;color:@DIM@;
+font-size:13.5px;line-height:1.5;max-width:520px;margin:0 auto}
+.zpl__f [data-player-state] b{display:block;color:@INK@;margin:0 0 6px;font-size:15px}
+
+.zft{border-top:1px solid @LINE@;margin:36px 0 0;padding:20px 0 30px;
+font-size:12.5px;color:@DIM@;display:block}
+.zft__cols{display:grid;gap:18px;grid-template-columns:1fr;
+margin:0 0 16px}
+@media(min-width:768px){.zft__cols{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.zft__col{display:flex;flex-direction:column;gap:6px;min-width:0}
+.zft__col b{color:@INK@;font-size:13px;margin:0 0 4px}
+.zft__col a{color:@ACC@;font-weight:500}
+.zft__bar{display:flex;justify-content:flex-end;align-items:center}
+.zvb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;
+border:0;padding:0;background:transparent;color:@MUTE@}
+.zhd__menu{display:inline-flex;align-items:center;justify-content:center;
+width:40px;height:40px;border:1px solid rgba(255,255,255,.28);border-radius:6px;
+background:transparent;color:#fff;font-size:20px;cursor:pointer;flex:0 0 auto}
+@media(min-width:768px){.zhd__menu{display:none}}
+@media(max-width:767px){
+.zhd__n{display:none;flex:1 0 100%;order:4;flex-wrap:wrap;overflow:visible}
+.zhd__n.is-open{display:flex}
+body.nav-lock{overflow:hidden}
+}
+.zfilt__y{display:inline-flex;flex-wrap:wrap;gap:6px;max-width:100%}
+.zhub--home{display:grid;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.zhub--home{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.zsec--seo{margin:28px 0 8px}
+.ztop__b{max-width:100%;overflow-wrap:anywhere}
+
+img[hidden]{display:none}
+
+/* Оценки по источникам. Разметка общая, вид свой у каждого семейства. */
+.rbs{margin:14px 0;display:flex;flex-direction:column;gap:8px}
+.rbs__l{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.rbs__i{display:flex;align-items:baseline;gap:6px;padding:6px 11px;border-radius:6px;
+white-space:nowrap}
+.rbs__s{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.rbs__n{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.rbs__n small{font-size:11px;font-weight:400;opacity:.72}
+.rbs__v{font-size:11px;opacity:.75;font-variant-numeric:tabular-nums}
+.rbs__l--own{border-top:1px dashed currentColor;padding-top:8px;margin-top:2px;opacity:.95}
+.rbs--none{margin:14px 0;font-size:13px;font-style:italic}
+@media(max-width:400px){.rbs__i{padding:5px 8px}.rbs__n{font-size:14px}}
+.rbs__i{background:@SURF@;border:1px solid @LINE@;color:@INK@}
+.rbs__s{color:@ACC@}
+.rbs__n{color:@WARM@}
+.rbs__l--own{color:@DIM@}
+.rbs--none{color:@MUTE@}
+
+"""
+
+
+АНИМЕДИА_СТИЛЬ = """
+/* Animedia 1.2.2 — reference-density visual system (amd.online geometry, own assets). */
+:root{
+  --a-space-1:8px;--a-space-2:12px;--a-space-3:16px;--a-space-4:24px;
+  --a-space-5:32px;--a-space-6:40px;--a-space-7:48px;--a-space-8:64px;
+  --a-radius-shell:clamp(22px,1.6vw,28px);--a-radius-card:12px;--a-radius-chip:999px;
+  --a-shadow:0 10px 28px rgba(15,23,42,.08);--a-shadow-soft:0 4px 14px rgba(15,23,42,.06);
+}
+*{box-sizing:border-box}
+html,body{max-width:100%;overflow-x:hidden}
+body{background:@PAGE@;color:@INK@;
+font:16px/1.45 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif}
+.zs{min-height:100vh;display:block}
+.zmain{min-width:0}
+.zwrap,.zhd__in,.zft__grid,.zft__bar{
+  width:min(1704px,calc(100vw - 80px));margin-inline:auto;padding-inline:0;box-sizing:border-box}
+@media(max-width:1439px){.zwrap,.zhd__in,.zft__grid,.zft__bar{width:min(1704px,calc(100vw - 48px))}}
+@media(max-width:1023px){.zwrap,.zhd__in,.zft__grid,.zft__bar{width:min(1704px,calc(100vw - 40px))}}
+@media(max-width:767px){.zwrap,.zhd__in,.zft__grid,.zft__bar{width:min(1704px,calc(100vw - 28px))}}
+.zwrap{padding-block:0}
+
+/* Header */
+.zhd{position:relative;background:@RAIL@;border-bottom:1px solid @LINE@}
+.zhd__in{display:flex;align-items:center;gap:12px;flex-wrap:nowrap;min-height:64px;padding-block:8px}
+@media(max-width:767px){.zhd__in{min-height:56px;flex-wrap:wrap;gap:8px}}
+.zhd__logo{font-size:22px;font-weight:800;letter-spacing:-.4px;color:@INK@;flex:0 0 auto}
+.zhd__logo b{color:@ACC@}
+.zhd__menu{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;
+border:1px solid @LINE@;border-radius:8px;background:@PAGE@;color:@INK@;font-size:20px;
+cursor:pointer;margin-left:auto}
+@media(min-width:768px){.zhd__menu{display:none}}
+.zhd__n{display:none;gap:4px;flex:1 0 100%;order:4;flex-wrap:wrap;padding:4px 0}
+.zhd__n.is-open{display:flex}
+@media(min-width:768px){.zhd__n{display:flex;flex:1 1 auto;order:0;flex-wrap:nowrap;
+overflow-x:auto;scrollbar-width:none;padding:0}}
+.zhd__n::-webkit-scrollbar{display:none}
+.zhd__n a{padding:8px 10px;border-radius:8px;font-size:15px;color:@INK@;white-space:nowrap}
+@media(min-width:768px){.zhd__n a{font-size:16px}}
+.zhd__n a:hover{background:@ALT@;color:@ACC@}
+.zhd__n a[aria-current]{color:@ACC@;font-weight:700;box-shadow:inset 0 -2px 0 @ACC@}
+.zhd__s{display:flex;flex:0 1 280px;min-width:0;max-width:320px;border:1px solid @LINE@;
+border-radius:10px;overflow:hidden;background:@PAGE@}
+@media(max-width:767px){.zhd__s{flex:1 1 100%;max-width:none;order:3}}
+.zhd__s input{flex:1;min-width:0;border:0;padding:9px 12px;font-size:14px;background:transparent;color:@INK@}
+.zhd__s button{border:0;background:@ACC@;color:#fff;padding:0 14px;font-weight:700;cursor:pointer}
+
+.ast{display:none}
+.zrail,.zrail__logo,.zrail__sub,.zrail__t,.zrail__n,.zrail__g,.ztop{display:none}
+
+.zh{font-size:clamp(22px,2vw,28px);line-height:1.25;font-weight:700;margin:18px 0 8px}
+.zh--sm{font-size:clamp(20px,1.8vw,28px);font-weight:700;margin:28px 0 12px}
+.zsub{font-size:15px;color:@DIM@;margin:0 0 18px;max-width:72ch;line-height:1.45;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zsec{margin:20px 0 28px;max-height:none;overflow:visible}
+.zsec__h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 14px}
+.zsec__h h2{font-size:clamp(22px,1.8vw,30px);font-weight:700;margin:0}
+.zsec__h a{font-size:14px;color:@ACC@;font-weight:700;white-space:nowrap}
+
+/* Compact hero rail */
+.ahero{margin:12px 0 20px;padding:16px 12px;border-radius:var(--a-radius-shell);
+background:@ACC@;color:#fff;overflow:hidden;max-height:min(330px,36vh);box-sizing:border-box}
+.ahero .zrl__vp{padding-bottom:2px;scrollbar-width:none}
+.ahero .zrl__vp::-webkit-scrollbar{display:none}
+.ahero .zrl__track{gap:14px}
+.ahero .zrl__track>*{flex:0 0 clamp(148px,9vw,180px);width:clamp(148px,9vw,180px);
+max-width:180px;scroll-snap-align:start}
+.ahero .zt{background:transparent;border:0;box-shadow:none;color:#fff;max-height:280px}
+.ahero .zt:hover{opacity:.92;box-shadow:none;border:0}
+.ahero .zt__p{border-radius:10px;aspect-ratio:2/3;background:rgba(0,0,0,.18)}
+.ahero .zt__b{padding:6px 2px 0}
+.ahero .zt__t{color:#fff;font-size:14px;-webkit-line-clamp:2;min-height:2.5em}
+.ahero .zt__m,.ahero .zt__r{display:none}
+.ahero .zrl__btn{background:rgba(255,255,255,.96);color:@ACC@;border:0;border-radius:10px}
+.ahero__cap{display:none}
+.zad-home{margin:0 0 16px;min-height:0;max-height:24px}
+.zad-home[data-ad-enabled="1"]{min-height:90px;max-height:none;border:1px dashed @LINE@;border-radius:8px}
+
+.zrl{position:relative}
+.zrl__vp{overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;scroll-snap-type:x mandatory;
+-webkit-overflow-scrolling:touch;padding:2px 0 6px;scrollbar-width:none}
+.zrl__vp::-webkit-scrollbar{display:none}
+.zrl__track{display:flex;gap:12px;min-width:min-content;align-items:flex-start}
+.zrl__btn{position:absolute;top:36%;transform:translateY(-50%);z-index:5;width:36px;height:48px;
+border:0;border-radius:10px;cursor:pointer;background:rgba(255,255,255,.96);color:@ACC@;
+font-size:18px;display:none;align-items:center;justify-content:center;box-shadow:var(--a-shadow-soft)}
+@media(min-width:1024px){.zrl:hover .zrl__btn,.zrl__btn:focus-visible{display:flex}}
+.zrl__btn--p{left:2px}.zrl__btn--n{right:2px}
+.zrl__btn:disabled{opacity:.35;cursor:default}
+
+/* Poster grids */
+.zg{display:grid;gap:16px;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
+@media(min-width:720px){.zg{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:960px){.zg{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1200px){.zg{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(min-width:1440px){.zg{grid-template-columns:repeat(6,minmax(0,1fr));gap:18px}}
+@media(min-width:1800px){.zg{grid-template-columns:repeat(8,minmax(0,1fr))}}
+.zt{display:flex;flex-direction:column;background:@PAGE@;border:0;border-radius:var(--a-radius-card);
+overflow:hidden;min-width:0;height:100%;box-shadow:var(--a-shadow-soft);
+transition:transform .14s,box-shadow .14s}
+.zt:hover{transform:translateY(-2px);box-shadow:var(--a-shadow)}
+.zt:focus-visible{outline:2px solid @ACC@;outline-offset:2px}
+.zt__p{display:block;aspect-ratio:2/3;background:@SURF@;position:relative;flex:0 0 auto}
+.zt__p img,.zt__img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;display:block}
+.zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:10px;text-align:center;color:@MUTE@;font-size:12px}
+.zt__none b{display:block;font-size:28px;font-weight:800;color:@DIM@;margin-bottom:4px}
+.zt__b{padding:10px 10px 12px;display:flex;flex-direction:column;gap:4px;flex:1}
+.zt__t{font-size:15px;font-weight:700;line-height:1.3;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em}
+.zt__m{display:block;font-size:13px;color:@DIM@;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zt__r{display:flex;gap:8px;font-size:12px;color:@DIM@;margin-top:auto;padding-top:4px;flex-wrap:wrap}
+.zt__r b,.zt__r i{color:@ACC@;font-weight:700;font-style:normal}
+.zt__r em{color:@MUTE@;font-style:italic}
+
+/* Episode feed rows */
+.zsec--eps .zl,.aeps{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:900px){.zsec--eps .zl,.aeps{grid-template-columns:1fr 1fr;gap:clamp(24px,2vw,36px)  clamp(24px,2vw,36px)}}
+.aeps__row,.zsec--eps .zr{display:grid;grid-template-columns:auto minmax(0,1fr) auto;
+align-items:center;gap:12px;height:clamp(70px,5vw,96px);padding:0 14px 0 0;
+background:@ALT@;border:0;border-radius:var(--a-radius-card);text-decoration:none;color:inherit;
+box-shadow:none;max-height:none;min-height:0;width:100%;box-sizing:border-box}
+.aeps__row:hover,.zsec--eps .zr:hover{background:#fff;box-shadow:var(--a-shadow-soft)}
+.aeps__row:focus-visible,.zsec--eps .zr:focus-visible{outline:2px solid @ACC@;outline-offset:2px}
+.aeps__thumb,.zsec--eps .zr__p{width:clamp(60px,4vw,80px);height:100%;max-width:none;
+aspect-ratio:auto;border-radius:var(--a-radius-card) 0 0 var(--a-radius-card);overflow:hidden;
+position:relative;background:@SURF@}
+.aeps__thumb img,.zsec--eps .zr__p img,.zsec--eps .zr__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.aeps__body,.zsec--eps .zr__body{min-width:0;display:flex;flex-direction:column;gap:2px;padding:8px 0}
+.aeps__title,.zsec--eps .zr__t{font-size:clamp(16px,1.2vw,20px);font-weight:700;line-height:1.25;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+white-space:normal;text-overflow:unset}
+.aeps__meta,.zsec--eps .zr__m{font-size:clamp(13px,1vw,15px);color:@DIM@}
+.aeps__ep,.zsec--eps .zr__badge{display:flex;flex-direction:column;align-items:flex-end;
+justify-content:center;padding-right:4px;min-width:3.2em}
+.aeps__num,.zsec--eps .zr__badge{font-size:clamp(26px,2vw,38px);font-weight:800;color:@ACC@;
+line-height:1;font-variant-numeric:tabular-nums}
+.aeps__lab{font-size:clamp(12px,1vw,15px);color:@DIM@}
+.zsec--eps .zr__d{display:none}
+.zsec--eps .zr:nth-child(odd){border-right:0}
+@media(max-width:899px){.aeps__row,.zsec--eps .zr{height:clamp(82px,14vw,96px)}
+.aeps__thumb,.zsec--eps .zr__p{width:clamp(60px,16vw,68px)}
+.aeps__num,.zsec--eps .zr__badge{font-size:clamp(26px,7vw,30px)}}
+
+/* Filters */
+.zfilt,.zgenres__nav,.zstrip{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;align-items:center}
+.zfilt a,.zgenres__nav a,.zstrip a,.zfilt__y a{display:inline-flex;align-items:center;
+min-height:40px;padding:0 12px;border-radius:var(--a-radius-chip);border:1px solid @LINE@;
+background:@PAGE@;font-size:13px;font-weight:600;color:@INK@;white-space:nowrap}
+.zfilt a:hover,.zgenres__nav a:hover,.zstrip a:hover{border-color:@ACC@;color:@ACC@}
+.zfilt a[aria-current],.zgenres__nav a[aria-current],.zgenres__nav a[aria-current=true],
+.zstrip a[aria-current],.zfilt__y a[aria-current]{background:@ACC@;color:#fff;border-color:@ACC@}
+.zfilt__y{display:inline-flex;flex-wrap:wrap;gap:8px}
+
+.zpg{display:flex;gap:8px;justify-content:center;margin:28px 0;flex-wrap:wrap}
+.zpg a,.zpg span{min-width:44px;min-height:44px;display:inline-flex;align-items:center;
+justify-content:center;border-radius:10px;border:1px solid @LINE@;background:@PAGE@;font-size:14px}
+.zpg span{background:@ACC@;color:#fff;border-color:@ACC@}
+.zempty,.znf{padding:48px 16px;text-align:center;color:@DIM@}
+.znf b,.zempty b{display:block;font-size:22px;font-weight:800;color:@INK@;margin-bottom:8px}
+
+.asch{display:none}
+.asch-empty{padding:28px;border-radius:var(--a-radius-card);background:@ALT@;color:@DIM@;line-height:1.5}
+
+/* Title — two columns poster | content */
+.zban,.zhead,.zhead__ps,.zhead__x,.zhead__o{display:contents}
+.ztitle{display:grid;grid-template-columns:1fr;gap:20px;margin:16px 0 8px;
+padding:clamp(24px,2vw,32px);background:#fff;border-radius:var(--a-radius-shell);
+box-shadow:var(--a-shadow);align-items:start;max-height:none}
+@media(min-width:900px){.ztitle{grid-template-columns:clamp(240px,15.8vw,306px) minmax(0,1fr);
+column-gap:clamp(28px,2.2vw,44px)}}
+.ztitle__poster{aspect-ratio:2/3;border-radius:clamp(18px,1.4vw,24px);overflow:hidden;
+background:@SURF@;position:relative;width:100%;max-width:306px;margin:0 auto}
+@media(min-width:900px){.ztitle__poster{margin:0;max-width:none}}
+@media(max-width:599px){.ztitle__poster{max-width:220px}}
+.ztitle__poster img,.ztitle__poster .zhead__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ztitle__main{min-width:0;display:flex;flex-direction:column;gap:10px}
+.ztitle__head{display:flex;gap:16px;align-items:flex-start;justify-content:space-between}
+.ztitle__head-text{min-width:0;flex:1}
+.ztitle__main h1{font-size:clamp(28px,2.4vw,36px);line-height:1.2;margin:0;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ztitle__o{font-size:clamp(15px,1.2vw,18px);color:@DIM@;margin:0}
+.ztitle__meta{font-size:14px;color:@DIM@;margin:0;line-height:1.45}
+.ztitle__pills{display:flex;flex-wrap:wrap;gap:8px;margin:0}
+.ztitle__pills a,.ztitle__pills span{display:inline-flex;align-items:center;min-height:30px;
+padding:0 12px;border-radius:var(--a-radius-chip);border:1px solid @LINE@;background:@ALT@;
+font-size:13px;color:@INK@}
+.ztitle__desc-panel{background:@ALT@;border-radius:14px;padding:14px 16px;margin:4px 0 0}
+.ztitle__desc{font-size:clamp(16px,1.2vw,18px);line-height:1.45;color:@INK@;margin:0;
+display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.ztitle__desc.is-open{-webkit-line-clamp:unset;display:block}
+.ztitle__more{border:0;background:transparent;color:@ACC@;font-weight:700;font-size:14px;
+cursor:pointer;padding:0;margin-top:8px}
+.ztitle__cta{display:inline-flex;align-items:center;justify-content:center;min-height:48px;
+padding:0 18px;border-radius:12px;background:@ACC@;color:#fff;font-weight:700;font-size:15px;
+text-decoration:none;width:fit-content}
+.ztitle__cta:hover{filter:brightness(1.05)}
+.ztitle__actions{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+@media(max-width:599px){.ztitle__cta,.ztitle__actions .ztitle__cta{width:100%}}
+.ztitle__rail{display:none}
+.ztitle__score{flex:0 0 auto;text-align:right;min-width:4.5em}
+.ztitle__score b{display:block;font-size:clamp(46px,3.2vw,54px);line-height:1;font-weight:800;color:@ACC@}
+.ztitle__score span{display:block;font-size:12px;color:@DIM@;margin-top:4px}
+.ztitle__dl{display:none}
+.zad{display:none}
+.zbody{display:none}
+.zaside{display:none}
+.ztitle-gap{height:clamp(24px,2vw,48px)}
+
+/* Player geometry — fill wrapper */
+.zpl{margin:0 auto;width:min(100%,1200px);max-width:1200px}
+.zpl__h{font-size:clamp(22px,2vw,32px);font-weight:700;margin:0 0 clamp(16px,1.5vw,24px);
+display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.zpl__h span{font-size:13px;font-weight:600;color:@DIM@}
+.zpl__f{position:relative;width:100%;aspect-ratio:16/9;background:#101010;border:0;
+border-radius:14px;overflow:hidden;max-height:none}
+.zpl__f[data-player-host],.zpl__f [data-player-host]{position:absolute;inset:0;width:100%;height:100%;display:block}
+.zpl__f video-player{position:absolute;inset:0;display:block;width:100% !important;height:100% !important;min-height:100%}
+.zpl__f iframe,.zpl__f video{position:absolute !important;inset:0 !important;width:100% !important;height:100% !important;
+max-width:none !important;max-height:none !important;border:0;display:block}
+.zpl__f[data-state=active],.zpl__f[data-state=ok],.zpl__f[data-state=resolving],
+.zpl__f[data-state=playable]{background:#101010}
+.zpl__s,.zpl [data-player-state]{position:absolute;inset:0;display:grid;place-items:center;
+padding:16px;text-align:center;color:@INK@;font-size:13px;line-height:1.45;background:#f7f7f7;z-index:2}
+.zpl [data-player-state][hidden],.zpl__s[hidden]{display:none !important}
+.zpl [data-player-state] b{display:block;font-size:15px;margin-bottom:6px}
+.zpl [data-player-state] p{margin:0;max-width:36ch;color:@DIM@}
+
+.zeps{display:grid;gap:8px;margin:12px 0;max-height:70vh;overflow:auto;
+grid-template-columns:repeat(auto-fill,minmax(40px,1fr));width:100%}
+.zeps a,.zeps span{display:inline-flex;align-items:center;justify-content:center;
+min-width:36px;min-height:36px;width:100%;height:clamp(36px,4vw,48px);border-radius:10px;
+border:1px solid @LINE@;background:@PAGE@;font-size:13px;font-weight:700}
+.zeps a[aria-current]{background:@ACC@;color:#fff;border-color:@ACC@}
+.zeps a[data-off]{opacity:.4;pointer-events:none}
+.zeps a:focus-visible{outline:2px solid @ACC@;outline-offset:2px}
+.zsea__h{display:flex;justify-content:space-between;gap:10px;margin:0 0 10px;flex-wrap:wrap}
+.zepnav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.zepnav a{background:@ALT@;border-radius:10px;padding:8px 12px;font-size:13px;color:@ACC@;font-weight:700}
+
+.zhub{display:grid;gap:14px;margin:14px 0;grid-template-columns:1fr}
+@media(min-width:600px){.zhub{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.zhub{grid-template-columns:repeat(3,1fr)}}
+.zhub__c{display:block;padding:14px;border-radius:var(--a-radius-card);background:#fff;
+box-shadow:var(--a-shadow-soft);color:inherit;text-decoration:none}
+.zhub__c:hover,.zhub__c:focus-visible{box-shadow:var(--a-shadow);outline:none}
+.zhub__g{display:flex;gap:4px;margin-bottom:10px}
+.zhub__p{flex:1 1 0;aspect-ratio:2/3;overflow:hidden;border-radius:8px;background:@ALT@}
+.zhub__img{width:100%;height:100%;object-fit:cover;display:block}
+.zhub__t{display:block;font-weight:700;font-size:16px}
+.zhub__m{display:block;font-size:12px;color:@DIM@;font-weight:600;margin:2px 0 4px}
+.zhub__d{display:block;font-size:13px;color:@DIM@;line-height:1.45}
+
+.zseo{margin:28px 0 8px;padding:18px 0;border-top:1px solid @LINE@;color:@DIM@;font-size:14px;line-height:1.5}
+.zseo h2{font-size:18px;color:@INK@;margin:0 0 8px}
+.zseo details{display:none}
+@media(max-width:767px){.zseo__full{display:none}.zseo details{display:block}}
+@media(min-width:768px){.zseo details{display:none}}
+
+.zft{border-top:2px solid @ACC@;margin:32px 0 0;padding:20px 0 12px}
+.zft__grid{display:grid;gap:18px;grid-template-columns:1fr;margin-bottom:14px}
+@media(min-width:768px){.zft__grid{grid-template-columns:repeat(4,1fr)}}
+.zft__col b{display:block;font-size:13px;margin-bottom:8px}
+.zft__col a{display:block;font-size:13px;color:@DIM@;padding:3px 0}
+.zft__col a:hover{color:@ACC@}
+.zft__about{font-size:13px;color:@DIM@;line-height:1.45;margin:0}
+.zft__bar{display:flex;justify-content:space-between;gap:12px;align-items:center;
+padding-top:10px;border-top:1px solid @LINE@;font-size:12px;color:@MUTE@;flex-wrap:wrap}
+.zvb{font-size:11px;color:@MUTE@;opacity:.85;white-space:nowrap}
+
+.rbs{margin:6px 0 0}.rbs__l{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
+.rbs__i{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:10px;
+background:@ALT@;border:1px solid @LINE@;font-size:12px}
+.rbs__s{color:@ACC@;font-weight:700}.rbs__n{color:@INK@;font-weight:700}
+.rbs--none{display:none}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+"""
+
 
 
 def _подставить(шаблон: str, токены: dict) -> str:
@@ -903,29 +1987,48 @@ def _подставить(шаблон: str, токены: dict) -> str:
         "вид": "lords",
         "токены": ЛОРДС_ТОКЕНЫ,
         "стиль": lambda: _общее(ЛОРДС_ТОКЕНЫ) + _подставить(ЛОРДС_СТИЛЬ, ЛОРДС_ТОКЕНЫ),
-        "нав": [("/new/", "Новинки"), ("/catalog/?kind=Фильм", "Фильмы"),
-                ("/catalog/?kind=Сериал", "Сериалы"),
-                ("/catalog/?kind=Мультфильм", "Мультфильмы"),
+        "нав": [("/new/", "Новинки"), ("/movies/", "Фильмы"),
+                ("/series/", "Сериалы"),
+                ("/animation/", "Мультфильмы"),
+                ("/collections/", "Подборки"),
                 ("/catalog/", "Каталог")],
         "поиск": "Введите название",
-        "полосы": [("Фильмы", "/catalog/?kind=Фильм", "Фильм"),
-                   ("Сериалы", "/catalog/?kind=Сериал", "Сериал"),
-                   ("Мультфильмы", "/catalog/?kind=Мультфильм", "Мультфильм")],
-        "лид": "Фильмы и сериалы новинки смотреть онлайн",
+        "полосы": [("Фильмы", "/movies/", "Фильм"),
+                   ("Сериалы", "/series/", "Сериал"),
+                   ("Мультфильмы", "/animation/", "Мультфильм")],
+        "лид": "Фильмы и сериалы онлайн",
         "метка": "LF",
     },
     "zona": {
         "вид": "zona",
         "токены": ЗОНА_ТОКЕНЫ,
-        "стиль": lambda: _общее(ЗОНА_ТОКЕНЫ) + _подставить(ЗОНА_СТИЛЬ, ЗОНА_ТОКЕНЫ),
+        "стиль": (lambda: _общее(ЗОНА_ТОКЕНЫ) + _подставить(ЗОНА_СТИЛЬ, ЗОНА_ТОКЕНЫ))
+                  if ОФОРМЛЕНИЕ_ПЕРЕРАБОТАННОЕ else
+                  (lambda: _общее(ЗОНА_ТОКЕНЫ_1_1) + _подставить(ЗОНА_СТИЛЬ_1_1, ЗОНА_ТОКЕНЫ_1_1)),
+        # Clean kind routes — same map as Обработчик.МАРШРУТЫ_ВИДА. Query
+        # `?kind=` remains valid for combinations; nav must not 404.
         "нав": [("/", "Обзор"), ("/new/", "Что нового"),
-                ("/catalog/?kind=Фильм", "Кино"), ("/catalog/?kind=Сериал", "Сериалы"),
-                ("/catalog/?kind=Мультфильм", "Анимация"), ("/catalog/", "Весь каталог")],
+                ("/movies/", "Кино"), ("/series/", "Сериалы"),
+                ("/animation/", "Анимация"), ("/collections/", "Подборки"),
+                ("/catalog/", "Весь каталог")],
         "поиск": "Название фильма или сериала",
-        "полосы": [("Кино", "/catalog/?kind=Фильм", "Фильм"),
-                   ("Сериалы", "/catalog/?kind=Сериал", "Сериал")],
+        "полосы": [("Кино", "/movies/", "Фильм"),
+                   ("Сериалы", "/series/", "Сериал"),
+                   ("Анимация", "/animation/", "Мультфильм")],
         "лид": "Кинопортал: что смотреть и где это найти",
         "метка": "Z",
+    },
+    "animedia": {
+        "вид": "animedia",
+        "токены": АНИМЕДИА_ТОКЕНЫ,
+        "стиль": lambda: _общее(АНИМЕДИА_ТОКЕНЫ) + _подставить(АНИМЕДИА_СТИЛЬ, АНИМЕДИА_ТОКЕНЫ),
+        "нав": [("/", "Главная"), ("/catalog/", "Каталог аниме"),
+                ("/new/", "Новые эпизоды"),
+                ("/collections/", "Подборки")],
+        "поиск": "Поиск аниме",
+        "полосы": [],
+        "лид": "Аниме онлайн",
+        "метка": "A",
     },
 }
 
@@ -938,11 +2041,17 @@ def _подставить(шаблон: str, токены: dict) -> str:
 # каждое либо показывает изображение, либо объясняет словами, чего не хватает:
 #
 #   playable    — есть publisher id и внешний идентификатор, элемент выставлен;
+#   awaiting    — источник есть, но серия ещё не выбрана: 16:9-shell без
+#                 <video-player> и без тяжёлого iframe/stream (контракт:
+#                 до выбора серии iframe = 0, stream не запрашивается);
+#   unavailable — номер серии есть в eps, но avail его не покрывает: SDK
+#                 не монтируется (иначе provider UI врёт «Эпизод N» / timeout);
 #   loading     — элемент выставлен, скрипт провайдера ещё не поднял его;
 #   nosource    — у записи нет ни kp, ни imdb: показывать нечего и нечем;
 #   noaccess    — publisher id витрине не выдан;
 #   provider    — провайдер ответил `noData` на эту запись;
-#   error       — скрипт провайдера не загрузился.
+#   error       — скрипт провайдера не загрузился;
+#   slow        — клиентский timeout: скрипт есть, проигрыватель не поднялся.
 #
 # Кнопки «Смотреть», которая ничего не делает, среди них нет. Обещание
 # воспроизведения даётся только в состоянии playable, и там оно обеспечено
@@ -955,11 +2064,20 @@ def _подставить(шаблон: str, токены: dict) -> str:
 
 #: Агрегаторы, разрешённые контрактом. Расширять перечень здесь нельзя: чужое
 #: значение провайдер отвергает, а мы бы выдали отказ за состояние записи.
-АГРЕГАТОРЫ = ("kp", "mdl", "mali")
+АГРЕГАТОРЫ = ("cvh", "kp", "mdl", "mali", "imdb")
 
 #: Соответствие «ключ внешнего идентификатора → агрегатор». `imdb` в контракте
 #: агрегатором не значится, поэтому запись только с imdb источника не имеет.
 КЛЮЧ_АГРЕГАТОРА = {"kp": "kp"}
+
+#: Расширенная цепочка запасных ключей. Работает только в режиме `provider-id`:
+#: прежний режим обязан вести себя в точности как раньше, иначе выкладка по
+#: одному домену теряет смысл — менялись бы сразу все.
+ЗАПАСНЫЕ_КЛЮЧИ = (("kp", "kp"), ("mdl", "mdl"), ("mal", "mali"), ("imdb", "imdb"))
+
+#: Собственный идентификатор записи в каталоге провайдера.
+ИДЕНТИФИКАТОР_ПРОВАЙДЕРА = re.compile(
+    r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
 
 
 def _конфиг_плеера() -> dict:
@@ -981,14 +2099,85 @@ def _конфиг_плеера() -> dict:
     # NaN, и провайдер отвечает 400. Проверка здесь дешевле, чем на странице.
     if not издатель.isdigit() or издатель.startswith("0"):
         return {}
-    return {"publisher_id": издатель}
+    # Режим выбора источника. Артефакт рендерера один на все витрины, поэтому
+    # переключатель живёт здесь, в боковом файле витрины: только так выкладку
+    # можно вести по одному домену и откатывать её тоже по одному.
+    режим = str(значение.get("source_mode") or "external-ids").strip()
+    if режим not in ("external-ids", "provider-id"):
+        режим = "external-ids"
+    return {"publisher_id": издатель, "source_mode": режим}
 
 
 ПЛЕЕР = _конфиг_плеера()
 
 
+#: Навигация «Смотреть по жанрам» на главной Zona. Коды — из sidecar genre_codes
+#: (`triller` — фактический код снимка, не `thriller`). дорама ≠ драма.
+ZONA_GENRE_NAV = (
+    ("west_content", "западный контент"),
+    ("dorama", "дорама"),
+    ("drama", "драма"),
+    ("comedy", "комедия"),
+    ("triller", "триллер"),
+)
+
+
+
+def кандидаты_источника(деталь: dict) -> list[tuple[str, str]]:
+    """Упорядоченные кандидаты (агрегатор, id) для режима provider-id.
+
+    Live на /title/aida-vozvraschaetsya/: UUID→cvh давал noData при наличии
+    available kp; UI показывал Play + «нет дорожки». Available sources раньше UUID.
+    """
+    увидели: set[tuple[str, str]] = set()
+    итог: list[tuple[str, str]] = []
+
+    def добавить(агрегатор: str, значение: str) -> None:
+        агрегатор = (агрегатор or "").strip()
+        значение = (значение or "").strip()
+        if not значение or агрегатор not in АГРЕГАТОРЫ:
+            return
+        ключ = (агрегатор, значение)
+        if ключ in увидели:
+            return
+        увидели.add(ключ)
+        итог.append(ключ)
+
+    источники = [с for с in (деталь.get("sources") or ()) if isinstance(с, dict)]
+    for с in источники:
+        if str(с.get("availability_status") or "").strip().lower() == "available":
+            добавить(str(с.get("provider") or ""), str(с.get("source_id") or ""))
+    свой = str(деталь.get("id") or "").strip().lower()
+    if ИДЕНТИФИКАТОР_ПРОВАЙДЕРА.match(свой):
+        добавить("cvh", свой)
+    for с in источники:
+        статус = str(с.get("availability_status") or "").strip().lower()
+        if статус in {"unavailable", "missing", "none"}:
+            continue
+        добавить(str(с.get("provider") or ""), str(с.get("source_id") or ""))
+    внешние = деталь.get("external_ids")
+    if isinstance(внешние, dict):
+        for ключ, агрегатор in ЗАПАСНЫЕ_КЛЮЧИ:
+            добавить(агрегатор, str(внешние.get(ключ) or ""))
+    return итог
+
+
+def источник_по_провайдеру(деталь: dict) -> tuple[str, str]:
+    """Первый кандидат; пусто — источника нет."""
+    кандидаты = кандидаты_источника(деталь)
+    return кандидаты[0] if кандидаты else ("", "")
+
+
 def источник_плеера(деталь: dict) -> tuple[str, str]:
-    """Агрегатор и идентификатор записи у него. Пусто — источника нет."""
+    """Агрегатор и идентификатор записи у него. Пусто — источника нет.
+
+    Прежний порядок знал единственный ключ `kp` и терял записи, у которых
+    источник записан под `mdl` или `mali`: 5 883 на Lords и 2 511 на Animedia.
+    Страница честно сообщала «источник не передан», хотя дорожки у провайдера
+    были. Новый порядок включается витриной поимённо, через её боковой файл.
+    """
+    if ПЛЕЕР.get("source_mode") == "provider-id":
+        return источник_по_провайдеру(деталь)
     внешние = деталь.get("external_ids")
     if not isinstance(внешние, dict):
         return "", ""
@@ -1000,7 +2189,10 @@ def источник_плеера(деталь: dict) -> tuple[str, str]:
 
 
 def состояние_плеера(деталь: dict) -> tuple[str, str, str]:
-    """Состояние до отрисовки: (код, заголовок, объяснение)."""
+    """Серверное состояние: provider_configured ≠ playable_source.
+
+    `playable` = publisher + кандидат источника; SDK ещё подтверждает дорожку.
+    """
     агрегатор, ид = источник_плеера(деталь)
     if not ПЛЕЕР.get("publisher_id"):
         return ("noaccess", "Просмотр на витрине не подключён",
@@ -1008,6 +2200,11 @@ def состояние_плеера(деталь: dict) -> tuple[str, str, str]:
                 "ей нечем. Это настройка витрины, а не состояние записи: каталог, "
                 "описание и список серий на странице доступны полностью.")
     if not (агрегатор and ид):
+        if not деталь:
+            return ("nosource", "Подробности записи ещё не в снимке",
+                    "Карточка уже есть в каталоге, но боковой файл подробностей "
+                    "её ещё не содержит. Без идентификатора источника плеер "
+                    "запрашивать нечего; после обновления sidecar он появится здесь.")
         return ("nosource", "Источник для этой записи не передан",
                 "У записи нет идентификатора ни одного из разрешённых агрегаторов, "
                 "поэтому запрашивать у провайдера нечего. Как только источник "
@@ -1015,28 +2212,131 @@ def состояние_плеера(деталь: dict) -> tuple[str, str, str]:
     return ("playable", "", "")
 
 
-def разметка_плеера(вид, запись: dict, деталь: dict, сезон: int, эпизод: int) -> tuple[str, str]:
-    """Возвращает (код состояния, HTML внутренности рамки плеера)."""
+def выбрать_доступную_серию(деталь: dict) -> tuple[int, int | None]:
+    """Детерминированный выбор серии для хаба сериала.
+
+    Канонический порядок: season.number ASC, затем episode.number ASC.
+    Приоритет: первая playable (`avail`) → первая released (`eps`) для одного
+    штатного resolve → иначе сезон без эпизода (компактный empty, без SDK).
+    Прямой URL эпизода не подменяется: только хаб выбирает default.
+    """
+    сезоны = список_серий(деталь)
+    if not сезоны:
+        return 1, None
+    упорядоченные = sorted(
+        сезоны,
+        key=lambda с: (int(с.get("n") or 0), int(с.get("position") or с.get("n") or 0)),
+    )
+    доступные: list[tuple[int, int]] = []
+    for с in упорядоченные:
+        сезон_н = int(с["n"])
+        for н in range(1, int(с.get("avail") or 0) + 1):
+            доступные.append((сезон_н, н))
+    if доступные:
+        return доступные[0]
+    for с in упорядоченные:
+        if int(с.get("eps") or 0) >= 1:
+            return int(с["n"]), 1
+    return упорядоченные[0]["n"], None
+
+
+def ждёт_выбора_серии(запись: dict, деталь: dict, эпизод: int | None) -> bool:
+    """Сериал с известным составом сезонов: на хабе тайтла тяжёлый плеер рано.
+
+    Пока серия не выбрана, `<video-player>` и stream-запрос запрещены: SDK
+    иначе поднимает iframe и тянет плейлист «за зрителя». Фильмы и записи без
+    списка сезонов монтируются сразу — выбирать нечего.
+    """
+    if эпизод is not None:
+        return False
+    return bool(список_серий(деталь))
+
+
+def новинки_с_источником(данные: "Данные", подробности: "Подробности",
+                         сколько: int = 12) -> list:
+    """Свежие записи, у которых sidecar уже даёт playable-источник.
+
+    Измерено на lordserial33.biz 2026-09-18: каталог 20:45 опередил details
+    04:06 на 35 slug, и 24 из 36 карточек главной открывали nosource. Главная
+    обязана вести на то, что уже можно смотреть, а не на рассинхрон снимков.
+    """
+    собрано = []
+    for запись in sorted(данные.items,
+                         key=lambda з: з.get("published_at") or "",
+                         reverse=True):
+        if состояние_плеера(подробности.get(запись["slug"]))[0] != "playable":
+            continue
+        собрано.append(запись)
+        if len(собрано) >= сколько:
+            break
+    return собрано
+
+
+def разметка_плеера(вид, запись: dict, деталь: dict, сезон: int,
+                    эпизод: int | None) -> tuple[str, str]:
+    """Возвращает (код состояния, HTML внутренности рамки плеера).
+
+    Серверный `playable`/`resolving` = publisher + кандидат. Подпись
+    «источник подключён» и READY выставляет только клиент после подтверждения.
+    """
     код, заголовок, текст = состояние_плеера(деталь)
     if код != "playable":
         return код, (f'<div class="{вид.кл_состояния}" data-player-state>'
                      f"<b>{html.escape(заголовок)}</b><p>{html.escape(текст)}</p></div>")
-    агрегатор, ид = источник_плеера(деталь)
+    if ждёт_выбора_серии(запись, деталь, эпизод):
+        return ("awaiting",
+                f'<div class="{вид.кл_состояния}" data-player-state>'
+                "<b>Выберите серию</b>"
+                "<p>Откройте серию в списке ниже — тогда загрузится плеер. "
+                "До выбора серии запросов к провайдеру нет.</p></div>")
+    if эпизод is not None and not серия_с_дорожкой(деталь, сезон, эпизод):
+        доступно = 0
+        всего = 0
+        for с in список_серий(деталь):
+            if с["n"] == сезон:
+                доступно, всего = с["avail"], с["eps"]
+                break
+        return ("unavailable",
+                f'<div class="{вид.кл_состояния}" data-player-state>'
+                "<b>Дорожки этой серии ещё нет</b>"
+                f"<p>Серия {html.escape(str(эпизод))} заявлена в сезоне "
+                f"{html.escape(str(сезон))} "
+                f"(в снимке серий {html.escape(str(всего))}, с дорожкой "
+                f"{html.escape(str(доступно))}), но источник ещё не отдал "
+                "плейлист на этот номер. Плеер не подключается: иначе "
+                "провайдер показал бы чужой эпизод или завис бы в таймауте. "
+                "Откройте серию из доступных в списке ниже.</p></div>")
+    if ПЛЕЕР.get("source_mode") == "provider-id":
+        кандидаты = кандидаты_источника(деталь)
+    else:
+        а, и = источник_плеера(деталь)
+        кандидаты = [(а, и)] if а and и else []
+    if not кандидаты:
+        return ("nosource",
+                f'<div class="{вид.кл_состояния}" data-player-state>'
+                "<b>Источник для этой записи не передан</b>"
+                "<p>Запрашивать у провайдера нечего.</p></div>")
+    агрегатор, ид = кандидаты[0]
+    список_json = html.escape(json.dumps(
+        [{"aggregator": а, "id": i} for а, i in кандидаты],
+        ensure_ascii=False, separators=(",", ":")))
     атрибуты = {
-        "ident": f"player-{запись['slug']}-s{сезон}e{эпизод}",
-        "season": str(сезон), "episode": str(эпизод),
+        "ident": f"player-{запись['slug']}-s{сезон}"
+                 + (f"e{эпизод}" if эпизод is not None else ""),
+        "season": str(сезон),
         "data-publisher-id": ПЛЕЕР["publisher_id"],
         "data-title-id": ид, "data-aggregator": агрегатор,
         "is-show-voice-only": "false", "is-show-banner": "true",
         "disable-licensed": "false",
     }
+    if эпизод is not None:
+        атрибуты["episode"] = str(эпизод)
     строка = " ".join(f'{к}="{html.escape(str(з))}"' for к, з in атрибуты.items())
-    return код, (
-        f"<video-player {строка}></video-player>"
-        f'<div class="{вид.кл_состояния}" data-player-state hidden>'
-        "<b>Провайдер не отдал источник</b>"
-        "<p>Для этой серии у провайдера сейчас нет дорожки. "
-        "Остальные серии и описание на странице работают.</p></div>"
+    # SSR: resolving — кандидат есть, playable_source ещё не подтверждён.
+    return ("resolving",
+        f'<div data-player-host data-src-candidates="{список_json}">'
+        f"<video-player {строка}></video-player></div>"
+        f'<div class="{вид.кл_состояния}" data-player-state hidden></div>'
         '<noscript><div class="' + вид.кл_состояния + '">'
         "<b>Нужен JavaScript</b><p>Плеер подключается скриптом провайдера, "
         "и без JavaScript он не запустится. Описание, серии и каталог "
@@ -1047,40 +2347,177 @@ def разметка_плеера(вид, запись: dict, деталь: dict
 СКРИПТ_ПЛЕЕРА_КЛИЕНТ = """
 (function(){
  var f=document.querySelector('[data-player]'); if(!f) return;
- var el=f.querySelector('video-player'), st=f.querySelector('[data-player-state]');
- if(!el){return}
- // `поднялся` означает только одно: элемент провайдера появился на экране.
- // Раньше этот же флаг ГЛУШИЛ все последующие состояния, и отказ, пришедший
- // после подъёма, до зрителя не доходил вовсе.
- //
- // А приходит он именно так. Обычная последовательность у провайдера —
- // сначала элемент поднимается, и только потом выясняется, что дорожки для
- // этой серии нет: событие `noData` прилетает ПОСЛЕ `ok`. Со старым флагом
- // зритель получал поднявшийся плеер, который молча ничего не играет, —
- // то есть ровно тот чёрный прямоугольник, ради которого состояния и заводили.
- //
- // Поэтому отказ провайдера и отказ его скрипта перебивают успех всегда, а
- // флаг гасит только запоздавший таймаут: пятнадцать секунд не повод объявлять
- // сломанным то, что уже играет.
- var поднялся=false;
- function state(k,t,p){ f.setAttribute('data-state',k);
-  if(k==='ok'){ if(st)st.hidden=true; el.hidden=false; поднялся=true; return }
-  el.hidden=true; if(!st)return; st.hidden=false;
-  st.innerHTML='<b></b><p></p>'; st.firstChild.textContent=t;
-  st.lastChild.textContent=p; }
- f.setAttribute('data-state','loading');
- el.addEventListener('noData',function(){
-  state('provider','Провайдер не отдал источник',
-   'Для этой серии у провайдера сейчас нет дорожки. Остальные серии и описание на странице работают.');});
+ var host=f.querySelector('[data-player-host]');
+ if(!host) return;
+ var st=f.querySelector('[data-player-state]');
+ var cands=[];
+ try{ cands=JSON.parse(host.getAttribute('data-src-candidates')||'[]')||[]; }catch(e){ cands=[]; }
+ var idx=0, token=0, поднялся=false, отказ=false, seen, timers=[], maxFallback=3;
+ var baseAttrs={}, progress={t0:0, c0:0, ok:false};
+ function el(){ return host.querySelector('video-player'); }
+ function clearTimers(){ timers.forEach(clearTimeout); timers=[]; if(seen){clearInterval(seen);seen=null;} }
+ function providerShell(node){
+  if(!node) return null;
+  var root=node.shadowRoot;
+  if(!root) return null;
+  return root.querySelector('iframe,video');
+ }
+ function nestedVideo(node){
+  var root=node && node.shadowRoot; if(!root) return null;
+  return root.querySelector('video');
+ }
+ function hideOverlay(){
+  if(!st) return;
+  st.hidden=true;
+  st.setAttribute('hidden','');
+  st.style.display='none';
+  st.innerHTML='';
+ }
+ function showOverlay(t,p){
+  if(!st) return;
+  st.hidden=false;
+  st.removeAttribute('hidden');
+  st.style.display='';
+  st.innerHTML='<b></b><p></p>';
+  st.firstChild.textContent=t;
+  st.lastChild.textContent=p;
+ }
+ function state(k,t,p){
+  if(отказ&&k==='ok') return;
+  /* Hard failures hide the component. Soft/active states never cover a live iframe. */
+  var hard=(k==='provider'||k==='error'||k==='nosource'||k==='noaccess'||k==='unavailable');
+  if(hard){ отказ=true; clearTimers(); }
+  f.setAttribute('data-state',k);
+  var node=el();
+  if(k==='ok'||k==='resolving'||k==='active'){
+   hideOverlay();
+   if(node) node.hidden=false;
+   if(k==='ok') поднялся=true;
+   return;
+  }
+  if(k==='slow'){
+   /* False-negative guard: provider chrome already mounted → keep it visible. */
+   if(providerShell(node)){
+    f.setAttribute('data-state','active');
+    hideOverlay();
+    if(node) node.hidden=false;
+    return;
+   }
+   if(node) node.hidden=true;
+   showOverlay(t,p);
+   return;
+  }
+  if(node) node.hidden=true;
+  showOverlay(t,p);
+ }
+ function snapshot(node){
+  baseAttrs={};
+  if(!node) return;
+  ['ident','season','episode','is-show-voice-only','is-show-banner','disable-licensed','data-publisher-id'].forEach(function(a){
+   var v=node.getAttribute(a); if(v!=null) baseAttrs[a]=v;
+  });
+ }
+ function destroy(){
+  clearTimers();
+  var node=el();
+  if(!node) return;
+  try{ node.remove(); }catch(e){}
+ }
+ function mountAt(i){
+  idx=i;
+  var c=cands[i]; if(!c) return;
+  var prev=el();
+  if(prev) snapshot(prev);
+  destroy();
+  поднялся=false; отказ=false; progress={t0:0,c0:0,ok:false};
+  var n=document.createElement('video-player');
+  Object.keys(baseAttrs).forEach(function(a){ n.setAttribute(a, baseAttrs[a]); });
+  n.setAttribute('data-title-id', c.id||'');
+  n.setAttribute('data-aggregator', c.aggregator||'');
+  host.appendChild(n);
+  bind(n, ++token);
+ }
+ function markPlaying(evName, ct){
+  if(отказ) return;
+  поднялся=true;
+  window.__animediaPlayback={
+   token:token, event:evName||'playing', at:Date.now(),
+   currentTime: ct||0, confirmed:!!progress.ok
+  };
+  window.__zonaPlayerReady=window.__animediaPlayback;
+  state('ok');
+ }
+ function observeProgress(v, my){
+  if(!v || v.__animediaBound) return;
+  v.__animediaBound=true;
+  var onTick=function(){
+   if(my!==token || отказ) return;
+   if(v.paused) return;
+   var ct=v.currentTime||0;
+   if(!progress.t0){ progress.t0=Date.now(); progress.c0=ct; return; }
+   var dt=(Date.now()-progress.t0)/1000;
+   var dc=ct-progress.c0;
+   if(dt>=5 && dc>=3){
+    progress.ok=true;
+    markPlaying('progress+3s', ct);
+   } else if(ct>0.05){
+    /* Shell is alive; never cover it while media advances. */
+    state('active');
+   }
+  };
+  ['playing','play','timeupdate'].forEach(function(ev){
+   v.addEventListener(ev, onTick);
+  });
+ }
+ function bind(node, my){
+  if(!node) return;
+  snapshot(node);
+  state('resolving');
+  /* Contract documents only noData as a provider failure signal. */
+  node.addEventListener('noData', function(){
+   if(my!==token) return;
+   if(idx+1<cands.length && (idx+1)<=maxFallback){
+    state('resolving');
+    mountAt(idx+1);
+    return;
+   }
+   state('provider','Провайдер не отдал источник',
+    'Для этой серии у провайдера сейчас нет дорожки. Остальные серии и описание на странице работают.');
+  });
+  clearTimers();
+  seen=setInterval(function(){
+   if(my!==token || отказ) return;
+   var shell=providerShell(node);
+   var v=nestedVideo(node);
+   if(v) observeProgress(v, my);
+   if(shell && !поднялся){
+    /* Provider chrome mounted — keep resolving/active, never false-fail over it. */
+    state('active');
+   }
+   if(v && !v.paused && (v.currentTime||0)>0.05) observeProgress(v, my);
+  },400);
+  timers.push(setTimeout(function(){
+   if(my!==token || отказ || поднялся) return;
+   if(seen){clearInterval(seen);seen=null;}
+   if(providerShell(node)){
+    state('active');
+    return;
+   }
+   state('slow','Плеер не поднялся',
+    'Скрипт провайдера загрузился, но окно воспроизведения не появилось. Обновите страницу; описание и серии доступны и сейчас.');
+  },15000));
+ }
+ var first=el();
+ if(first){
+  if(!cands.length){
+   cands=[{aggregator:first.getAttribute('data-aggregator')||'', id:first.getAttribute('data-title-id')||''}];
+  }
+  bind(first, ++token);
+ }
  var s=document.querySelector('[data-player-script]');
  if(s){ s.addEventListener('error',function(){
   state('error','Скрипт плеера не загрузился',
    'Браузер не смог получить скрипт провайдера: его мог заблокировать расширение или сеть. Страница и список серий продолжают работать.');}); }
- var seen=setInterval(function(){
-  if(el.shadowRoot||el.children.length){clearInterval(seen);state('ok');}},250);
- setTimeout(function(){ clearInterval(seen);
-  if(!поднялся) state('slow','Плеер не поднялся',
-   'Скрипт провайдера загрузился, но проигрыватель не запустился за пятнадцать секунд. Обновите страницу; описание и серии доступны и сейчас.');},15000);
 })();
 """
 
@@ -1097,30 +2534,120 @@ def разметка_плеера(вид, запись: dict, деталь: dict
 ТЕКУЩИЙ_ПУНКТ = ' aria-current="true"'
 
 
+#: Отдавать ли постеры своим адресом вместо прямой ссылки на внешний CDN.
+#: Animedia включает first-party `/poster/` по умолчанию: live измерение
+#: показало массовый отказ hotlink с cdnvideohub. Lords/Zona сохраняют
+#: прежний default (прямая ссылка), пока явно не зададут env=1.
+_ПОСТЕР_ENV = os.environ.get("LORDS_POSTER_SAME_ORIGIN", "").strip().lower()
+ПОСТЕРЫ_СВОИМ_АДРЕСОМ = (
+    _ПОСТЕР_ENV in ("1", "true", "yes")
+    or (_ПОСТЕР_ENV not in ("0", "false", "no") and СЕМЕЙСТВО == "animedia")
+)
+ВНЕШНИЙ_ПОСТЕР = "https://poster.cdnvideohub.com/"
+ПОСТЕР_HOSTS = frozenset({"poster.cdnvideohub.com"})
+ПОСТЕР_MAX_BYTES = 2_500_000
+_ПОСТЕР_КЭШ: dict[str, tuple[float, bytes, str]] = {}
+_ПОСТЕР_НЕГАТИВ: dict[str, float] = {}
+
+
+def _адрес_постера(адрес: str | None) -> str | None:
+    """Адрес постера: свой путь либо адрес источника, без третьего варианта."""
+    if not адрес:
+        return адрес
+    if ПОСТЕРЫ_СВОИМ_АДРЕСОМ and адрес.startswith(ВНЕШНИЙ_ПОСТЕР):
+        return "/poster/" + адрес[len(ВНЕШНИЙ_ПОСТЕР):]
+    return адрес
+
+
+def _постер_безопасный_ключ(хвост: str) -> str | None:
+    """Только uuid-like имя файла у allowlist host — без path traversal."""
+    хвост = (хвост or "").lstrip("/")
+    if not хвост or ".." in хвост or "/" in хвост or "\\" in хвост:
+        return None
+    if not re.fullmatch(r"[0-9a-fA-F-]{8,64}\.(?:webp|jpg|jpeg|png|gif)", хвост):
+        return None
+    return хвост
+
+
+def отдать_постер(хвост: str) -> tuple[int, bytes, str]:
+    """First-party proxy: allowlist host, timeouts, size/MIME limits, caches."""
+    import http.client
+    import time
+
+    ключ = _постер_безопасный_ключ(хвост)
+    if not ключ:
+        return 404, b"", "text/plain"
+    сейчас = time.time()
+    if ключ in _ПОСТЕР_НЕГАТИВ and сейчас - _ПОСТЕР_НЕГАТИВ[ключ] < 300:
+        return 404, b"", "text/plain"
+    кэш = _ПОСТЕР_КЭШ.get(ключ)
+    if кэш and сейчас - кэш[0] < 86_400:
+        return 200, кэш[1], кэш[2]
+    try:
+        соед = http.client.HTTPSConnection("poster.cdnvideohub.com", timeout=4)
+        соед.request("GET", "/" + ключ, headers={
+            "User-Agent": "site-factory-nova-poster/1.2",
+            "Accept": "image/webp,image/*,*/*;q=0.8",
+        })
+        отв = соед.getresponse()
+        if отв.status != 200:
+            _ПОСТЕР_НЕГАТИВ[ключ] = сейчас
+            соед.close()
+            return 404, b"", "text/plain"
+        тип = (отв.getheader("Content-Type") or "").split(";")[0].strip().lower()
+        if not тип.startswith("image/"):
+            _ПОСТЕР_НЕГАТИВ[ключ] = сейчас
+            соед.close()
+            return 415, b"", "text/plain"
+        данные = отв.read(ПОСТЕР_MAX_BYTES + 1)
+        соед.close()
+        if len(данные) > ПОСТЕР_MAX_BYTES:
+            _ПОСТЕР_НЕГАТИВ[ключ] = сейчас
+            return 413, b"", "text/plain"
+        _ПОСТЕР_КЭШ[ключ] = (сейчас, данные, тип)
+        if len(_ПОСТЕР_КЭШ) > 512:
+            # Простой LRU-суррогат: выкинуть самые старые четверть.
+            устаревшие = sorted(_ПОСТЕР_КЭШ.items(), key=lambda п: п[1][0])[:128]
+            for у in устаревшие:
+                _ПОСТЕР_КЭШ.pop(у[0], None)
+        return 200, данные, тип
+    except OSError:
+        _ПОСТЕР_НЕГАТИВ[ключ] = сейчас
+        return 504, b"", "text/plain"
+
+
+_ПОСТЕР_КЭШ: dict[str, tuple[float, bytes, str]] = {}
+_ПОСТЕР_НЕГАТИВ: dict[str, float] = {}
+
+
+def _адрес_постера(адрес: str | None) -> str | None:
+    """Адрес постера: свой путь либо адрес источника, без третьего варианта."""
+    if not адрес:
+        return адрес
+    if ПОСТЕРЫ_СВОИМ_АДРЕСОМ and адрес.startswith(ВНЕШНИЙ_ПОСТЕР):
+        return "/poster/" + адрес[len(ВНЕШНИЙ_ПОСТЕР):]
+    return адрес
+
+
 def заглушка_постера(запись: dict, класс_заглушки: str, класс_картинки: str,
                      ширина: int = 300, высота: int = 450) -> str:
     """Постер с заглушкой ПОД ним, а не вместо него.
 
-    Заглушка рисуется всегда и лежит слоем ниже изображения. Так закрываются
-    сразу два случая, и по-разному:
-
-    * постера нет в снимке — заглушка сразу видна и говорит «не передан»;
-    * постер объявлен, но провайдер его не отдал — изображение снимается
-      обработчиком ошибки, и из-под него открывается заглушка «не открылся».
-
-    Разница в словах не косметическая: «не передан» — это состояние наших
-    данных, «не открылся» — состояние чужого хранилища. Измерено: из 48 постеров
-    страницы каталога семь адресов отвечают ошибкой у самого провайдера, и без
-    заглушки на их месте оставался бы значок сломанной картинки.
+    Заглушка рисуется всегда и лежит слоем ниже изображения. Alt у значимого
+    постера — название тайтла; декоративная заглушка без изображения не
+    объявляет зрителю внутреннюю диагностику («постер не открылся»).
     """
-    первая = html.escape((запись.get("title") or "?")[:1].upper())
-    постер = запись.get("poster")
-    подпись = "постер не открылся" if постер else "постер не передан"
-    заглушка = f'<span class="{класс_заглушки}"><b>{первая}</b>{подпись}</span>'
+    название = (запись.get("title") or "").strip() or "Без названия"
+    первая = html.escape(название[:1].upper())
+    постер = _адрес_постера(запись.get("poster"))
+    заглушка = (f'<span class="{класс_заглушки}" aria-hidden="true">'
+                f"<b>{первая}</b></span>")
     if not постер:
         return заглушка
-    картинка = (f'<img class="{класс_картинки}" src="{html.escape(постер)}" alt="" '
-                f'loading="lazy" width="{ширина}" height="{высота}" data-poster>')
+    картинка = (
+        f'<img class="{класс_картинки}" src="{html.escape(постер)}" '
+        f'alt="{html.escape(название)}" loading="lazy" width="{ширина}" '
+        f'height="{высота}" data-poster>')
     return заглушка + картинка
 
 
@@ -1131,6 +2658,67 @@ def заглушка_постера(запись: dict, класс_заглуш�
 СКРИПТ_ПОСТЕРОВ = (
     "document.addEventListener('error',function(e){var i=e.target;"
     "if(i&&i.tagName==='IMG'&&i.hasAttribute('data-poster'))i.hidden=true;},true);"
+)
+
+#: Скрипт горизонтальных лент. Отдельная константа, а не дополнение к
+#: СКРИПТ_ПОСТЕРОВ: тот подключают обе витрины, и дописывание в него изменило
+#: бы байты, которые отдаёт Lords. Здесь ровно кнопочная прокрутка; свайп,
+#: колесо и клавиатура работают нативно и без скрипта.
+СКРИПТ_ЛЕНТ = (
+    "document.addEventListener('click',function(e){"
+    "var b=e.target.closest('[data-rl]');if(!b)return;"
+    "var v=document.getElementById(b.getAttribute('aria-controls'));if(!v)return;"
+    "var d=Math.max(160,Math.round(v.clientWidth*0.86));"
+    "v.scrollBy({left:b.getAttribute('data-rl')==='next'?d:-d,behavior:'smooth'});"
+    "});"
+)
+
+#: Только Animedia: на узком экране пункты меню открываются кнопкой.
+#: Escape и повторный клик закрывают; focus возвращается на кнопку;
+#: body scroll блокируется, пока меню открыто.
+СКРИПТ_АНИМЕДИА_ШАПКА = (
+    "(function(){"
+    "function close(nav,btn){if(!nav||!btn)return;nav.classList.remove('is-open');"
+    "btn.setAttribute('aria-expanded','false');document.body.style.overflow='';"
+    "try{btn.focus()}catch(e){}}"
+    "document.addEventListener('click',function(e){"
+    "var b=e.target.closest('[data-nav-toggle]');"
+    "var n=document.getElementById('zhd-nav');if(!n)return;"
+    "if(b){var open=n.classList.toggle('is-open');"
+    "b.setAttribute('aria-expanded',open?'true':'false');"
+    "document.body.style.overflow=open?'hidden':'';return}"
+    "if(n.classList.contains('is-open')&&!e.target.closest('.zhd')){"
+    "close(n,document.querySelector('[data-nav-toggle]'));}"
+    "});"
+    "document.addEventListener('keydown',function(e){"
+    "if(e.key!=='Escape')return;"
+    "var n=document.getElementById('zhd-nav');"
+    "if(n&&n.classList.contains('is-open'))"
+    "close(n,document.querySelector('[data-nav-toggle]'));"
+    "});"
+    "})();"
+)
+
+#: Lords mobile drawer: focus return + Escape + body scroll lock.
+СКРИПТ_ЛОРДС_ШАПКА = (
+    "(function(){"
+    "function close(nav,btn){if(!nav||!btn)return;nav.classList.remove('is-open');"
+    "btn.setAttribute('aria-expanded','false');document.body.classList.remove('nav-lock');"
+    "try{btn.focus()}catch(e){}}"
+    "document.addEventListener('click',function(e){"
+    "var b=e.target.closest('[data-nav-toggle]');if(!b)return;"
+    "var n=document.getElementById('hd-nav');if(!n)return;"
+    "var open=n.classList.toggle('is-open');"
+    "b.setAttribute('aria-expanded',open?'true':'false');"
+    "document.body.classList.toggle('nav-lock',open);"
+    "if(open){var a=n.querySelector('a');if(a)try{a.focus()}catch(err){}}"
+    "});"
+    "document.addEventListener('keydown',function(e){"
+    "if(e.key!=='Escape')return;"
+    "var n=document.getElementById('hd-nav');var b=document.querySelector('[data-nav-toggle]');"
+    "if(n&&n.classList.contains('is-open'))close(n,b);"
+    "});"
+    "})();"
 )
 
 
@@ -1305,6 +2893,39 @@ class Вид:
     def главная(self) -> str:
         raise NotImplementedError
 
+    def коллекция(self, данные) -> str:
+        """Полная страница коллекции. Разметка — та же, что у разделов.
+
+        Оформление здесь намеренно не изобретается: коллекция — это тот же
+        раздел каталога, только его состав задаёт контракт, а не шаблон.
+        """
+        на_странице = 60
+        всего_страниц = max(1, (данные.total + на_странице - 1) // на_странице)
+        листалка = "".join(
+            (f"<span>{n}</span>" if n == данные.page else
+             f'<a href="{данные.canonical_path}?page={n}">{n}</a>')
+            for n in range(max(1, данные.page - 3),
+                           min(всего_страниц, данные.page + 3) + 1))
+        если_пусто = (
+            f'<div class="empty">{html.escape(данные.title)}: пока пусто.</div>')
+        сетка = ('<div class="grid">'
+                 + "".join(карточка(к.raw) for к in данные.items)
+                 + "</div>") if данные.items else если_пусто
+        # H1 обязателен контрактом SEO-снимка (Meta/page-metadata): коллекция —
+        # самостоятельная страница, а не секция без заголовка первого уровня.
+        тело = (f'<section class="sec"><div class="sec__h">'
+                f"<h1>{html.escape(данные.title)}</h1>"
+                f'<a href="/catalog/">В каталог →</a></div>'
+                f'<p class="claim">{html.escape(данные.description)}</p>'
+                f"{сетка}"
+                + (f'<div class="pg">{листалка}</div>' if данные.total > на_странице
+                   else "")
+                + "</section>")
+        return self.оболочка(
+            тело, данные.title, данные.canonical_path,
+            описание=данные.description or f"Подборка «{данные.title}».",
+        )
+
     def список(self, разд, зпр) -> str:
         raise NotImplementedError
 
@@ -1337,34 +2958,92 @@ def страницы(текущая: int, всего: int, окно: int = 2) ->
 
 
 def отбор(данные: "Данные", индекс: dict, зпр: dict, раздел: str) -> tuple[list, dict]:
-    """Выборка каталога по параметрам запроса. Возвращает (набор, выбранное)."""
-    набор = данные.items
+    """Выборка каталога по параметрам запроса. Возвращает (набор, выбранное).
+
+    Неизвестные country/genre/sort не игнорируются молча: пустая выдача или
+    явная сортировка по умолчанию. `/new` ограничен свежим хвостом снимка —
+    весь каталог в другом порядке «новинками» не выдаём.
+    """
+    набор = list(данные.items)
     вид = (зпр.get("kind") or [None])[0]
     год = (зпр.get("year") or [None])[0]
     жанр = (зпр.get("genre") or [None])[0]
+    страна = (зпр.get("country") or [None])[0]
+    сорт = (зпр.get("sort") or [None])[0]
+    неизвестный_фильтр = False
     if вид:
         набор = [з for з in набор if з.get("kind") == вид]
-    if год and str(год).isdigit():
-        набор = [з for з in набор if з.get("year") == int(год)]
+    if год:
+        if str(год).isdigit():
+            набор = [з for з in набор if з.get("year") == int(год)]
+        else:
+            неизвестный_фильтр = True
+            набор = []
     if жанр:
-        разрешённые = индекс["genre"].get(жанр)
+        ключи = [жанр, нормализовать(жанр), нормализовать(транслит(жанр))]
+        разрешённые = None
+        for ключ in ключи:
+            if not ключ:
+                continue
+            разрешённые = индекс["genre"].get(ключ)
+            if разрешённые is not None:
+                break
         if разрешённые is None:
+            неизвестный_фильтр = True
             набор = []
         else:
             членство = set(разрешённые)
             набор = [з for з in набор if з["slug"] in членство]
+    if страна:
+        разрешённые = (индекс.get("country") or {}).get(страна)
+        if разрешённые is None:
+            неизвестный_фильтр = True
+            набор = []
+        else:
+            членство = set(разрешённые)
+            набор = [з for з in набор if з["slug"] in членство]
+    # «Новинки» / недавно добавленное: только хвост по published_at, не весь каталог.
+    НОВИНКИ_ПРЕДЕЛ = 240
     if раздел == "/new":
-        # «Новинки» — это свежесть публикации, а не год производства: фильм
-        # 1974 года, выложенный вчера, новинкой витрины является.
         набор = sorted(набор, key=lambda з: з.get("published_at") or "", reverse=True)
-    return набор, {"kind": вид, "year": год, "genre": жанр}
+        набор = [з for з in набор if з.get("published_at")][:НОВИНКИ_ПРЕДЕЛ]
+    elif сорт == "rating":
+        def _рейтинг(з):
+            return float(з.get("_rating") or 0.0)
+        набор = sorted(набор, key=lambda з: (_рейтинг(з), з.get("_n") or "", з["slug"]),
+                       reverse=True)
+    elif сорт == "year":
+        набор = sorted(набор, key=lambda з: (з.get("year") or 0, з["slug"]), reverse=True)
+    elif сорт == "title":
+        набор = sorted(набор, key=lambda з: (з.get("_n") or нормализовать(з["title"]),
+                                             з["slug"]))
+    elif сорт == "date" or (
+            not сорт and раздел in ("/catalog", "/movies", "/series", "/animation")):
+        # Default catalog freshness: published_at DESC, slug DESC (deterministic).
+        набор = sorted(
+            набор,
+            key=lambda з: (з.get("published_at") or "", з["slug"]),
+            reverse=True)
+    elif сорт:
+        неизвестный_фильтр = True
+        набор = []
+    elif раздел == "/collections":
+        # Hub handled separately; keep stable title order if ever reused.
+        набор = sorted(набор, key=lambda з: (з.get("_n") or нормализовать(з["title"]),
+                                             з["slug"]))
+    выбрано = {"kind": вид, "year": год, "genre": жанр, "country": страна, "sort": сорт}
+    if неизвестный_фильтр:
+        выбрано["_unknown"] = "1"
+    return набор, выбрано
 
 
 def запрос_строкой(выбрано: dict, **замена) -> str:
+    """Собрать `?k=v` с percent-encoding значений (kind=Фильм → %D0%A4…)."""
     поля = dict(выбрано)
     поля.update(замена)
-    пары = [(к, з) for к, з in поля.items() if з]
-    return ("?" + "&".join(f"{к}={з}" for к, з in пары)) if пары else ""
+    пары = [(к, з) for к, з in поля.items()
+            if з and not str(к).startswith("_")]
+    return ("?" + urlencode(пары, quote_via=quote)) if пары else ""
 
 
 def факты(вид: Вид, запись: dict, деталь: dict) -> list:
@@ -1386,7 +3065,7 @@ def факты(вид: Вид, запись: dict, деталь: dict) -> list:
         ссылки = []
         for i, имя in enumerate(жанры):
             код = коды[i] if i < len(коды) else ""
-            ссылки.append(f'<a href="/catalog/?genre={html.escape(код)}">{html.escape(имя)}</a>'
+            ссылки.append(f'<a href="/catalog/{запрос_строкой({"genre": код})}">{html.escape(имя)}</a>'
                           if код else html.escape(имя))
         добавить("Жанр", " · ".join(ссылки))
     добавить("Время", html.escape(_длительность(деталь.get("duration"))))
@@ -1396,7 +3075,10 @@ def факты(вид: Вид, запись: dict, деталь: dict) -> list:
         серий = всего_серий(деталь)
         доступно = sum(int(с.get("avail") or 0) for с in сезоны)
         хвост = "" if доступно >= серий else f", доступно {доступно}"
-        добавить("Серии", html.escape(f"{len(сезоны)} сезон(ов), {серий} серий{хвост}"))
+        добавить("Серии", html.escape(
+            f"Сезон {сезоны[-1].get('n') or len(сезоны)} · {серий} серий{хвост}"
+            if len(сезоны) == 1 else
+            f"{len(сезоны)} сезона, {серий} серий{хвост}"))
     студии = деталь.get("voice_studios") or []
     добавить("Озвучка", html.escape(", ".join(студии[:4])))
     команда = деталь.get("crew") or []
@@ -1442,6 +3124,23 @@ def список_серий(деталь: dict) -> list:
     return готово
 
 
+def серия_с_дорожкой(деталь: dict, сезон: int, эпизод: int) -> bool:
+    """Есть ли у серии дорожка по снимку (`avail`), а не только номер в `eps`.
+
+    Измерено на lordserial33.biz: у сериала `avail=3`, `eps=9` страница
+    `/episode-7/` монтировала `<video-player episode="7">`. UI говорил «серия 7»,
+    провайдер в контроле показывал «Эпизод 3» (последняя с дорожкой) и через
+    15 с срабатывал таймаут «Плеер не поднялся». Список уже помечал 4–9 как
+    `data-off`; страница серии обязана говорить то же самое и НЕ поднимать SDK.
+    """
+    if сезон < 1 or эпизод < 1:
+        return False
+    for с in список_серий(деталь):
+        if с["n"] == сезон:
+            return эпизод <= с["avail"]
+    return False
+
+
 def границы_серии(деталь: dict, сезон: int, эпизод: int) -> tuple:
     """Предыдущая и следующая серия по всему произведению, через границы сезонов."""
     плоско = []
@@ -1471,7 +3170,7 @@ class ВидЛордс(Вид):
                  описание: str = "", разметка: str = "", код: int = 200,
                  крошки: str = "", og: dict | None = None) -> str:
         нав = "".join(
-            f'<a href="{u}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
+            f'<a href="{закодировать_запрос(u)}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
             for u, t in self.се["нав"])
         схемы = "".join(f'<script type="application/ld+json">{р}</script>'
                         for р in ([разметка] if разметка else []))
@@ -1486,28 +3185,59 @@ class ВидЛордс(Вид):
 {_открытый_граф(og or {})}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 {_мета_версии()}
-<style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}</script></head>
+<style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}
+{СКРИПТ_ЛОРДС_ШАПКА}</script></head>
 <body><div class="backdrop"></div>
 <a class="skip" href="#main">Перейти к содержимому</a>
 <div class="sheet">
 <header class="hd"><div class="hd__in">
 <a class="hd__logo" href="/"><span class="hd__mark" aria-hidden="true">{html.escape(self.се["метка"])}</span>{html.escape(self.имя)}</a>
-<nav class="hd__nav" aria-label="Разделы">{нав}</nav>
 <form class="hd__s" action="/search/" method="get" role="search">
 <label class="vh" for="q">Поиск по каталогу</label>
 <input id="q" name="q" placeholder="{html.escape(self.се["поиск"])}">
 <button type="submit" aria-label="Найти">&#9906;</button></form>
+<button class="hd__menu" type="button" data-nav-toggle aria-controls="hd-nav"
+ aria-expanded="false" aria-label="Меню разделов">&#9776;</button>
+<nav id="hd-nav" class="hd__nav" aria-label="Разделы">{нав}</nav>
 </div></header>{крошки}
 <main id="main" class="pad">{тело}</main>
-<footer class="ft"><div class="ft__g">
-<span>{html.escape(self.имя)} · тестовая витрина, закрыта от индексации</span>
-<span class="vb">Template: {СЕМЕЙСТВО} {ВЕРСИЯ} · {МАНИФЕСТ["source_commit"][:8]}</span>
-</div></footer></div>{схемы}</body></html>"""
+{self._подвал()}
+</div>{схемы}</body></html>"""
+
+    def _подвал(self) -> str:
+        """Footer: working section links + compact build badge (no test slogans)."""
+        жанры = "".join(
+            f'<a href="/genre/{html.escape(код)}/">{html.escape(имя)}</a>'
+            for код, имя in (self.индекс.get("genre_names") or [])[:8])
+        годы = "".join(
+            f'<a href="/year/{г}/">{г}</a>' for г in (self.д.years or [])[:6])
+        runtime = (МАНИФЕСТ.get("runtime_commit") or МАНИФЕСТ.get("source_commit") or "")[:8]
+        tip = (f"source={МАНИФЕСТ.get('source_commit', '')[:12]} "
+               f"runtime={(МАНИФЕСТ.get('runtime_commit') or МАНИФЕСТ.get('source_commit') or '')[:12]} "
+               f"build={СБОРКА}")
+        about = (f"{html.escape(self.имя)} — каталог фильмов, сериалов и мультфильмов "
+                 "из утверждённого снимка витрины. Описание и оценки только из источника.")
+        return (
+            '<footer class="ft">'
+            '<div class="ft__cols">'
+            '<div class="ft__col"><b>Разделы</b>'
+            '<a href="/movies/">Фильмы</a><a href="/series/">Сериалы</a>'
+            '<a href="/animation/">Мультфильмы</a><a href="/new/">Новинки</a>'
+            '<a href="/collections/">Подборки</a></div>'
+            f'<div class="ft__col"><b>Жанры</b>{жанры or "<span>жанры появятся из sidecar</span>"}</div>'
+            f'<div class="ft__col"><b>Годы</b>{годы or "<span>—</span>"}</div>'
+            f'<div class="ft__col"><b>О витрине</b><p class="ft__about">{about}</p></div>'
+            "</div>"
+            f'<div class="ft__bar"><span class="vb" title="{html.escape(tip)}">'
+            f"Lords · {html.escape(ВЕРСИЯ)} · {html.escape(runtime)}</span></div>"
+            "</footer>")
 
     # --- составные части ---------------------------------------------
     def карточка(self, запись: dict) -> str:
         деталь = self.деталь(запись["slug"])
         изо = заглушка_постера(запись, "c__none", "c__img")
+        if 'class="c__none"' in изо:
+            изо = изо.replace('class="c__none"', 'class="c__none" aria-hidden="true"', 1)
         значок = ""
         сезоны = деталь.get("seasons") or []
         if сезоны:
@@ -1518,13 +3248,19 @@ class ВидЛордс(Вид):
             значок = f'<span class="c__badge">{html.escape(запись["kind"])}</span>'
         кп = _число(деталь.get("kinopoisk_rating"))
         им = _число(деталь.get("imdb_rating"))
-        полоса = (f'<div class="c__r"><span class="c__kp">КП{f"<i>{кп}</i>" if кп else " <em>—</em>"}</span>'
-                  f'<span class="c__imdb">IMDb{f"<i>{им}</i>" if им else " <em>—</em>"}</span></div>')
+        if кп or им:
+            полоса = ('<div class="c__r">'
+                      + (f'<span class="c__kp">КП<i>{кп}</i></span>' if кп else "")
+                      + (f'<span class="c__imdb">IMDb<i>{им}</i></span>' if им else "")
+                      + "</div>")
+        else:
+            полоса = '<div class="c__r" aria-hidden="true"></div>'
         год = f'<span class="c__y">{запись["year"]}</span>' if запись.get("year") else ""
-        return (f'<a class="c" href="{запись["url"]}">'
-                f'<span class="c__p">{изо}{значок}'
+        return (f'<a class="c" href="{запись["url"]}" '
+                f'aria-label="{html.escape(запись["title"])}">'
+                f'<span class="c__p">{изо}{значок}</span>'
                 f'<span class="c__cap"><span class="c__t">{html.escape(запись["title"])}</span>{год}</span>'
-                f"</span>{полоса}</a>")
+                f"{полоса}</a>")
 
     def сетка(self, набор, класс="grid") -> str:
         return f'<div class="{класс}">' + "".join(self.карточка(з) for з in набор) + "</div>"
@@ -1554,51 +3290,207 @@ class ВидЛордс(Вид):
     # --- страницы -----------------------------------------------------
     def главная(self) -> str:
         полосы = []
-        свежие = sorted(self.д.items, key=lambda з: з.get("published_at") or "",
-                        reverse=True)[:12]
-        полосы.append(self._полоса("Новинки", "/new/", свежие))
+        занято: set = set()
+        готовые = новинки_с_источником(self.д, self.п, 10_000)
+
+        def взять(набор, сколько=12):
+            out = []
+            for з in набор:
+                if з["slug"] in занято:
+                    continue
+                занято.add(з["slug"])
+                out.append(з)
+                if len(out) >= сколько:
+                    break
+            return out
+
+        # 1) Популярное сейчас — только если есть реальный рейтинг в sidecar.
+        топ = sorted(
+            (з for з in готовые if (з.get("_rating") or 0) > 0),
+            key=lambda з: з.get("_rating") or 0, reverse=True)
+        топ12 = взять(топ, 12)
+        if топ12:
+            полосы.append(self._полоса("Популярное сейчас", "/catalog/?sort=rating", топ12))
+        # 2) Новинки / недавно добавленное
+        нов = взять(готовые, 12)
+        if нов:
+            полосы.append(self._полоса("Новинки", "/new/", нов))
+        # 3–5) kind shelves
         for титул, ссылка, вид in self.се["полосы"]:
-            набор = [з for з in self.д.items if з.get("kind") == вид][:12]
+            набор = взять([з for з in готовые if з.get("kind") == вид], 12)
             if набор:
                 полосы.append(self._полоса(титул, ссылка, набор))
-        тело = f'<h1 class="lead">{html.escape(self.се["лид"])}</h1>' + _склеить(полосы)
+        # 6) Подборки — ссылки на контракт, не дубль каталога
+        if КОЛЛЕКЦИИ is not None:
+            полосы.append(self._полоса_подборок())
+        # 7) По жанрам
+        жанр_блок = self._полоса_жанров()
+        if жанр_блок:
+            полосы.append(жанр_блок)
+        # 8) Высокий рейтинг (остаток после топа)
+        высокий = взять(топ, 12)
+        if высокий:
+            полосы.append(self._полоса("Высокий рейтинг", "/catalog/?sort=rating", высокий))
+
+        intro = (
+            f'<h1 class="lead">{html.escape(self.се["лид"])}</h1>'
+            f'<p class="zsub" style="margin:0 0 14px;color:#5b6470;font-size:13.5px;line-height:1.55">'
+            f"{html.escape(self.имя)} показывает фильмы, сериалы и мультфильмы "
+            "из утверждённого снимка каталога. Подборки и фильтры опираются на "
+            "переданные жанры, годы и оценки — без выдуманных фактов.</p>")
+        bottom = (
+            '<section class="sec" style="margin-top:22px"><h2>О каталоге</h2>'
+            f'<p style="margin:0;line-height:1.6;color:#4d555e;font-size:14px;max-width:68ch">'
+            f"Витрина {html.escape(self.имя)} собрана фабрикой поверх закрытого "
+            "снимка: название, год, тип, постер и оценки приходят из источника. "
+            "Разделы «Новинки», фильмы, сериалы и мультфильмы ведут в рабочие "
+            "выборки. Поиск понимает кириллицу, латиницу и транслит. "
+            "Индексация поисковиками на этом стенде закрыта политикой noindex."
+            "</p></section>")
+        тело = intro + _склеить(полосы) + bottom
         return self.оболочка(
             тело, f"{self.имя} — фильмы и сериалы онлайн", "/", актив="/",
-            описание=f"{self.имя}: каталог фильмов, сериалов и мультфильмов.")
+            описание=(f"{self.имя}: смотреть фильмы, сериалы и мультфильмы онлайн. "
+                      "Каталог, новинки и подборки из утверждённого снимка."),
+            og=self.карточка_графа(
+                тип="website",
+                титул=f"{self.имя} — фильмы и сериалы онлайн",
+                описание=f"Каталог {self.имя}",
+                путь="/"))
 
     def _полоса(self, титул: str, ссылка: str, набор) -> str:
-        return (f'<section><div class="tabs"><span class="tabs__pill">{html.escape(титул)} ›</span>'
-                f'<a href="{ссылка}">Все</a></div>{self.сетка(набор)}</section>')
+        if not набор:
+            return ""
+        return (
+            f'<section class="sec-rail"><div class="sec-rail__h">'
+            f'<h2><a href="{закодировать_запрос(ссылка)}">{html.escape(титул)}</a></h2>'
+            f'<a class="sec-rail__all" href="{закодировать_запрос(ссылка)}">Весь раздел</a>'
+            f"</div>{self.сетка(набор)}</section>")
+
+    def _полоса_подборок(self) -> str:
+        снимок = Снимок.получить(self.д, self.п) if КОЛЛЕКЦИИ else None
+        if снимок is None:
+            return ""
+        карточки = []
+        for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО)[:6]:
+            данные = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО, предел=1)
+            if данные is None or not данные.items:
+                continue
+            карточки.append(
+                f'<a class="hub__c" href="{html.escape(данные.canonical_path)}">'
+                f"<b>{html.escape(данные.title)}</b>"
+                f"<p>{html.escape((данные.description or '')[:160])}</p>"
+                f"<span>Открыть подборку →</span></a>")
+        if not карточки:
+            return ""
+        return (
+            '<section class="sec-rail"><div class="sec-rail__h">'
+            '<h2><a href="/collections/">Подборки</a></h2>'
+            '<a class="sec-rail__all" href="/collections/">Весь раздел</a></div>'
+            f'<div class="hub">{"".join(карточки)}</div></section>')
+
+    def _полоса_жанров(self) -> str:
+        имена = self.индекс.get("genre_names") or []
+        if not имена:
+            return ""
+        ссылки = "".join(
+            f'<a href="/genre/{html.escape(код)}/">{html.escape(имя)}</a>'
+            for код, имя in имена[:10])
+        return (
+            '<section class="sec-rail"><div class="sec-rail__h">'
+            '<h2>По жанрам</h2></div>'
+            f'<div class="tabs">{ссылки}</div></section>')
+
+    def хаб_подборок(self) -> str:
+        """`/collections/` — список контрактных подборок, не копия каталога."""
+        снимок = Снимок.получить(self.д, self.п) if КОЛЛЕКЦИИ else None
+        карточки = []
+        if снимок is not None and КОЛЛЕКЦИИ is not None:
+            for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО):
+                данные = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО, предел=1)
+                if данные is None or not данные.items:
+                    continue
+                n = данные.total
+                хвост = f"{n} записей" if n else ""
+                карточки.append(
+                    f'<a class="hub__c" href="{html.escape(данные.canonical_path)}">'
+                    f"<b>{html.escape(данные.title)}</b>"
+                    f"<p>{html.escape(данные.description or '')}</p>"
+                    f"<span>{html.escape(хвост)} →</span></a>")
+        if not карточки:
+            тело = ('<h1 class="lead">Подборки</h1>'
+                    '<div class="empty"><b>Подборки пока пусты</b>'
+                    "Контракт коллекций не вернул ни одной непустой выборки. "
+                    '<a href="/catalog/">Открыть каталог</a></div>')
+        else:
+            тело = (f'<h1 class="lead">Подборки</h1>'
+                    f'<p class="zsub" style="margin:0 0 12px;color:#5b6470">'
+                    f"Тематические выборки витрины — не полный каталог.</p>"
+                    f'<div class="hub">{"".join(карточки)}</div>')
+        return self.оболочка(тело, f"Подборки — {self.имя}", "/collections/",
+                             актив="/collections/",
+                             описание=f"Подборки витрины {self.имя}.")
 
     def список(self, разд: str, зпр: dict) -> str:
-        имена = {"/catalog": "Каталог", "/new": "Новинки", "/collections": "Подборки"}
+        имена = {"/catalog": "Каталог", "/new": "Недавно добавлено",
+                 "/collections": "Подборки"}
         титул = имена.get(разд, "Каталог")
+        if выбрано_kind := (зпр.get("kind") or [None])[0]:
+            титул = {"Фильм": "Фильмы", "Сериал": "Сериалы",
+                     "Мультфильм": "Мультфильмы"}.get(выбрано_kind, титул)
         набор, выбрано = отбор(self.д, self.индекс, зпр, разд)
         стр = max(1, int((зпр.get("page") or ["1"])[0] or 1))
-        всего = max(1, (len(набор) + НА_СТРАНИЦЕ_1_1 - 1) // НА_СТРАНИЦЕ_1_1)
+        всего = max(1, (len(набор) + НА_СТРАНИЦЕ_1_1 - 1) // НА_СТРАНИЦЕ_1_1) if набор else 1
         стр = min(стр, всего)
         кусок = набор[(стр - 1) * НА_СТРАНИЦЕ_1_1: стр * НА_СТРАНИЦЕ_1_1]
         чипы = [f'<span class="tabs__pill">{html.escape(титул)} ›</span>']
         for к in self.д.kinds:
-            текущий = ' aria-current="true"' if выбрано["kind"] == к else ""
+            текущий = ' aria-current="true"' if выбрано.get("kind") == к else ""
             чипы.append(f'<a href="{разд}/{запрос_строкой(выбрано, kind=к, page=None)}"{текущий}>'
                         f"{html.escape(к)}</a>")
-        if any(выбрано.values()):
+        активные = {к: в for к, в in выбрано.items() if в and к != "_unknown"}
+        if активные:
             чипы.append(f'<a href="{разд}/">Сбросить</a>')
         годы = "".join(
             f'<a href="{разд}/{запрос_строкой(выбрано, year=г, page=None)}"'
-            f'{ТЕКУЩИЙ_ПУНКТ if выбрано["year"] == str(г) else ""}>{г}</a>'
+            f'{ТЕКУЩИЙ_ПУНКТ if выбрано.get("year") == str(г) else ""}>{г}</a>'
             for г in self.д.years[:12])
-        тело = (f'<h1 class="lead">{html.escape(титул)}: {len(набор)} записей</h1>'
+        сорт_чипы = "".join(
+            f'<a href="{разд}/{запрос_строкой(выбрано, sort=с, page=None)}"'
+            f'{ТЕКУЩИЙ_ПУНКТ if выбрано.get("sort") == с else ""}>{html.escape(имя)}</a>'
+            for с, имя in (("title", "По названию"), ("date", "По дате"),
+                           ("year", "По году"), ("rating", "По рейтингу")))
+        жанры = "".join(
+            f'<a href="/genre/{html.escape(код)}/"'
+            f'{ТЕКУЩИЙ_ПУНКТ if выбрано.get("genre") == код else ""}>{html.escape(имя)}</a>'
+            for код, имя in (self.индекс.get("genre_names") or [])[:12])
+        страны = "".join(
+            f'<a href="/country/{html.escape(код)}/"'
+            f'{ТЕКУЩИЙ_ПУНКТ if выбрано.get("country") == код else ""}>{html.escape(имя)}</a>'
+            for код, имя in (self.индекс.get("country_names") or [])[:8])
+        h1 = html.escape(титул)
+        подзаг = f'<p class="zsub" style="margin:0 0 10px;color:#5b6470">{len(набор)} записей в выборке</p>'
+        if выбрано.get("_unknown"):
+            пусто = ('<div class="empty"><b>Неизвестный фильтр</b>'
+                     "Параметр фильтра не распознан и не применён молча. "
+                     "Сбросьте условия или выберите значение из списка.</div>")
+        elif not кусок:
+            пусто = ('<div class="empty"><b>Здесь пока пусто</b>'
+                     "Под выбранные условия в снимке каталога не попала ни одна запись. "
+                     "Снимите фильтр или вернитесь в полный каталог.</div>")
+        else:
+            пусто = ""
+        тело = (f'<h1 class="lead">{h1}</h1>{подзаг}'
                 f'<div class="tabs">{"".join(чипы)}</div>'
                 f'<div class="tabs">{годы}</div>'
-                + (self.сетка(кусок) if кусок else
-                   '<div class="empty"><b>Здесь пока пусто</b>'
-                   "Под выбранные условия в снимке каталога не попала ни одна запись. "
-                   "Снимите фильтр или вернитесь в полный каталог.</div>")
+                f'<div class="tabs">{сорт_чипы}</div>'
+                + (f'<div class="tabs">{жанры}</div>' if жанры else "")
+                + (f'<div class="tabs">{страны}</div>' if страны else "")
+                + (self.сетка(кусок) if кусок else пусто)
                 + self.листалка(разд, выбрано, стр, всего))
+        # Search/sort/arbitrary filter combos stay noindex via global meta.
         return self.оболочка(тело, f"{титул} — {self.имя}", разд + "/", актив=разд + "/",
-                             описание=f"{титул} витрины {self.имя}.")
+                             описание=f"{титул} витрины {self.имя}: выборка из утверждённого снимка.")
 
     def поиск(self, зпр: dict) -> str:
         q = (зпр.get("q") or [""])[0]
@@ -1618,7 +3510,10 @@ class ВидЛордс(Вид):
                     f"По запросу «{html.escape(q)}» в снимке каталога совпадений нет. "
                     "Проверьте написание. "
                     '<a href="/catalog/">Открыть каталог целиком</a></div>')
-        return self.оболочка(тело, f"Поиск — {self.имя}", "/search/", актив="")
+        return self.оболочка(
+            тело, f"Поиск — {self.имя}", "/search/", актив="",
+            описание=f"Поиск по каталогу витрины {self.имя}.",
+        )
 
     def тайтл(self, запись: dict, деталь: dict) -> str:
         путь = f"/title/{запись['slug']}/"
@@ -1640,14 +3535,14 @@ class ВидЛордс(Вид):
         таблица = ("".join(f"<div><dt>{html.escape(м)}</dt><dd>{з}</dd></div>" for м, з in пары))
         таблица = f'<dl class="facts">{таблица}</dl>' if пары else ""
 
-        плитки = "".join(
-            f'<div class="rate rate--{вид}">{html.escape(метка)} {html.escape(значение)}'
-            f"<small>источник: CDNVideoHub</small></div>"
-            for вид, метка, значение in оценки(деталь))
-        плитки = f'<div class="rates">{плитки}</div>' if плитки else ""
+        # Единый компонент оценок: подпись источника принадлежит источнику,
+        # а не витрине. Прежняя строка подписывала любую оценку как
+        # «источник: CDNVideoHub», хотя это поставщик каталога, а не тот, кто
+        # выставил оценку.
+        плитки = разметка_оценок(деталь, "rbs")
 
-        сезон_старт = сезоны[0]["n"] if сезоны else 1
-        код, внутри = разметка_плеера(self, запись, деталь, сезон_старт, 1)
+        сезон_старт, эпизод_старт = выбрать_доступную_серию(деталь) if сезоны else (1, None)
+        код, внутри = разметка_плеера(self, запись, деталь, сезон_старт, эпизод_старт)
         плеер = (
             '<section class="pl" aria-labelledby="pl-h"><h2 class="vh" id="pl-h">Просмотр</h2>'
             '<div class="pl__bar"><span class="pl__tab" aria-current="true">Смотреть онлайн</span>'
@@ -1655,7 +3550,8 @@ class ВидЛордс(Вид):
             f'<div class="pl__frame" data-player data-state="{код}">{внутри}</div>'
             f"{_скрипты_плеера(код)}</section>")
 
-        блок_серий = self._серии(запись, сезоны) if сериал else ""
+        текущий = (сезон_старт, эпизод_старт) if эпизод_старт is not None else None
+        блок_серий = self._серии(запись, сезоны, текущий=текущий) if сериал else ""
         похожие = self.похожие(запись, деталь)
         блок_похожих = (f'<section class="sec"><h2>Похожее</h2>'
                         f'{self.сетка(похожие, "rel")}</section>' if похожие else "")
@@ -1790,7 +3686,7 @@ class ВидЗона(Вид):
                  описание: str = "", разметка: str = "", код: int = 200,
                  сверху: str = "", крошки: str = "", og: dict | None = None) -> str:
         нав = "".join(
-            f'<a href="{u}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
+            f'<a href="{закодировать_запрос(u)}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
             for u, t in self.се["нав"])
         жанры = "".join(
             f'<a href="/catalog/?genre={html.escape(код_жанра)}">{html.escape(имя)}</a>'
@@ -1801,36 +3697,88 @@ class ВидЗона(Вид):
                          if описание else "")
         канон = (f'<link rel="canonical" href="{html.escape(self.канон(путь))}">'
                  if путь and код == 200 else "")
-        return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="zona-rail">
+        # Витрина на 1.1.0 отдаёт ПРЕЖНИЙ каркас: артефакт общий, и выкладка
+        # ради соседнего семейства не имеет права сменить ей оформление.
+        if not ОФОРМЛЕНИЕ_ПЕРЕРАБОТАННОЕ:
+            return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="zona-rail">
+    <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{html.escape(титул)}</title>{описание_мета}{канон}
+    <meta name="robots" content="noindex, nofollow">
+    {_открытый_граф(og or {})}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    {_мета_версии()}
+    <style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}</script></head>
+    <body><a class="skip" href="#main">Перейти к содержимому</a>
+    <div class="zs">
+    <aside class="zrail">
+    <a class="zrail__logo" href="/">{html.escape(self.имя)}</a>
+    <p class="zrail__sub">Кинопортал · тестовая витрина</p>
+    <p class="zrail__t">Разделы</p>
+    <nav class="zrail__n" aria-label="Разделы">{нав}</nav>
+    <p class="zrail__t">Жанры</p>
+    <div class="zrail__g">{жанры}</div>
+    </aside>
+    <div class="zmain">
+    <div class="ztop"><div class="ztop__a">
+    <form class="ztop__s" action="/search/" method="get" role="search">
+    <label class="vh" for="q">Поиск по каталогу</label>
+    <input id="q" name="q" placeholder="{html.escape(self.се["поиск"])}">
+    <button type="submit">Найти</button></form>
+    </div><div class="ztop__b">{_склеить([сверху])}</div></div>{крошки}
+    <main id="main">{тело}</main>
+    <footer class="zft">
+    <span class="zvb">Zona {ВЕРСИЯ} · {МАНИФЕСТ["source_commit"][:8]}</span>
+    </footer></div></div>{схемы}</body></html>"""
+        return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="zona-top">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(титул)}</title>{описание_мета}{канон}
 <meta name="robots" content="noindex, nofollow">
 {_открытый_граф(og or {})}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 {_мета_версии()}
-<style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}</script></head>
+<style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}
+{СКРИПТ_ЛЕНТ}
+{СКРИПТ_ЛОРДС_ШАПКА}</script></head>
 <body><a class="skip" href="#main">Перейти к содержимому</a>
 <div class="zs">
-<aside class="zrail">
-<a class="zrail__logo" href="/">{html.escape(self.имя)}</a>
-<p class="zrail__sub">Кинопортал · тестовая витрина</p>
-<p class="zrail__t">Разделы</p>
-<nav class="zrail__n" aria-label="Разделы">{нав}</nav>
-<p class="zrail__t">Жанры</p>
-<div class="zrail__g">{жанры}</div>
-</aside>
-<div class="zmain">
-<div class="ztop"><div class="ztop__a">
-<form class="ztop__s" action="/search/" method="get" role="search">
+<header class="zhd">
+<div class="zhd__in">
+<a class="zhd__logo" href="/">{html.escape(self.имя)}</a>
+<button class="zhd__menu" type="button" data-nav-toggle aria-controls="zhd-nav"
+ aria-expanded="false" aria-label="Меню разделов">&#9776;</button>
+<nav id="zhd-nav" class="zhd__n" aria-label="Разделы">{нав}</nav>
+<form class="zhd__s" action="/search/" method="get" role="search">
 <label class="vh" for="q">Поиск по каталогу</label>
 <input id="q" name="q" placeholder="{html.escape(self.се["поиск"])}">
 <button type="submit">Найти</button></form>
-</div><div class="ztop__b">{_склеить([сверху])}</div></div>{крошки}
+</div>
+</header>
+<div class="zmain">
+<div class="zwrap">{_склеить([f'<div class="ztop"><div class="ztop__b">{сверху}</div></div>' if сверху else ""])}{крошки}
 <main id="main">{тело}</main>
-<footer class="zft">
-<span>{html.escape(self.имя)} · тестовая витрина, закрыта от индексации</span>
-<span class="zvb">Template: {СЕМЕЙСТВО} {ВЕРСИЯ} · {МАНИФЕСТ["source_commit"][:8]}</span>
-</footer></div></div>{схемы}</body></html>"""
+{self._подвал_зона()}
+</div></div></div>{схемы}</body></html>"""
+
+    def _подвал_зона(self) -> str:
+        """Footer: brand, real sections, genre links, compact Zona marker."""
+        жанры = "".join(
+            f'<a href="/catalog/?genre={html.escape(код)}">{html.escape(имя)}</a>'
+            for код, имя in (self.индекс.get("genre_names") or [])[:8])
+        source = (МАНИФЕСТ.get("source_commit") or "")[:8]
+        return (
+            '<footer class="zft">'
+            '<div class="zft__cols">'
+            f'<div class="zft__col"><b>{html.escape(self.имя)}</b>'
+            '<a href="/">Обзор</a><a href="/movies/">Кино</a>'
+            '<a href="/series/">Сериалы</a><a href="/animation/">Анимация</a>'
+            '<a href="/new/">Что нового</a><a href="/collections/">Подборки</a>'
+            '<a href="/catalog/">Весь каталог</a></div>'
+            f'<div class="zft__col"><b>Жанры</b>{жанры or "<span>—</span>"}</div>'
+            '<div class="zft__col"><b>Каталог</b>'
+            '<a href="/search/">Поиск</a></div></div>'
+            f'<div class="zft__bar"><span class="zvb">Zona {html.escape(ВЕРСИЯ)} · '
+            f"{html.escape(source)}</span></div>"
+            "</footer>")
 
     # --- составные части ---------------------------------------------
     def плитка(self, запись: dict) -> str:
@@ -1845,11 +3793,12 @@ class ВидЗона(Вид):
         if им:
             части.append(f"<span>IMDb <i>{им}</i></span>")
         if not части:
-            части.append("<span><em>оценки нет</em></span>")
+            части.append("<span><em>нет оценки</em></span>")
         оценка = f'<span class="zt__r">{"".join(части)}</span>'
-        return (f'<a class="zt" href="{запись["url"]}">'
+        заголовок = запись["title"] or ""
+        return (f'<a class="zt" href="{запись["url"]}" title="{html.escape(заголовок)}">'
                 f'<span class="zt__p">{изо}</span>'
-                f'<span class="zt__b"><span class="zt__t">{html.escape(запись["title"])}</span>'
+                f'<span class="zt__b"><span class="zt__t">{html.escape(заголовок)}</span>'
                 f'<span class="zt__m">{html.escape(мета)}</span></span>{оценка}</a>')
 
     def строка(self, запись: dict) -> str:
@@ -1878,6 +3827,39 @@ class ВидЗона(Вид):
     def лента(self, набор) -> str:
         return '<div class="zl">' + "".join(self.строка(з) for з in набор) + "</div>"
 
+    def карусель(self, ключ: str, набор) -> str:
+        """Горизонтальная лента: мышь, клавиатура и свайп.
+
+        Прокрутка нативная, поэтому свайп и колесо работают без единой строки
+        скрипта, а клавиатура — потому что область получает фокус. Кнопки
+        добавляют мышиный способ и ничего не заменяют: при выключенном
+        JavaScript лента остаётся прокручиваемой.
+        """
+        плитки = "".join(self.плитка(з) for з in набор)
+        ид = f"rl-{ключ}"
+        return (f'<div class="zrl">'
+                f'<button class="zrl__btn zrl__btn--p" type="button" data-rl="prev"'
+                f' aria-controls="{ид}" aria-label="Пролистать назад">&#8249;</button>'
+                f'<div class="zrl__vp" id="{ид}" tabindex="0" role="group"'
+                f' aria-label="Лента произведений">'
+                f'<div class="zrl__track">{плитки}</div></div>'
+                f'<button class="zrl__btn zrl__btn--n" type="button" data-rl="next"'
+                f' aria-controls="{ид}" aria-label="Пролистать вперёд">&#8250;</button>'
+                f'</div>')
+
+    def секция(self, ключ: str, титул: str, ссылка: str, набор, пусто: str) -> str:
+        """Секция главной. Пустой набор полностью скрывается.
+
+        Эталон w140 прячет отсутствующие блоки. Пустой контейнер или текст
+        «в снимке нет…» на главной неотличимы от сломанной полки и запрещены.
+        """
+        if not набор:
+            return ""
+        ссылка_html = (f'<a href="{закодировать_запрос(ссылка)}">Весь раздел</a>'
+                       if ссылка else "")
+        шапка = (f'<div class="zsec__h"><h2>{html.escape(титул)}</h2>{ссылка_html}</div>')
+        return f'<section class="zsec">{шапка}{self.карусель(ключ, набор)}</section>'
+
     def плитки(self, набор) -> str:
         return '<div class="zg">' + "".join(self.плитка(з) for з in набор) + "</div>"
 
@@ -1904,45 +3886,342 @@ class ВидЗона(Вид):
 
     # --- страницы -----------------------------------------------------
     def главная(self) -> str:
-        свежие = sorted(self.д.items, key=lambda з: з.get("published_at") or "",
-                        reverse=True)[:8]
+        """Пять горизонтальных лент, и ни одна не повторяет выборку другой.
+
+        Повтор одной выборки под тремя заголовками — дефект, который витрина
+        показывает зрителю как три разных раздела. Поэтому здесь ведётся один
+        набор занятых slug: запись, попавшая в ленту выше, ниже не повторяется.
+        Ленту, для которой источник не передал данных, заменяет названная
+        причина, а не молчание и не чужая выборка.
+        """
+        if not ОФОРМЛЕНИЕ_ПЕРЕРАБОТАННОЕ:
+            свежие = новинки_с_источником(self.д, self.п, 8)
+            куски = [f'<h1 class="zh">{html.escape(self.се["лид"])}</h1>'
+                     f'<p class="zsub">В снимке каталога {len(self.д.items)} записей. '
+                     f"Ниже — то, что появилось последним.</p>"
+                     + self.плитки(свежие)]
+            for титул, ссылка, вид in self.се["полосы"]:
+                набор = [з for з in self.д.items if з.get("kind") == вид][:6]
+                if набор:
+                    куски.append(f'<h2 class="zh zh--sm">{html.escape(титул)}</h2>'
+                                 f'<p class="zsub"><a href="{ссылка}">Открыть весь раздел</a></p>'
+                                 + self.лента(набор))
+            return self.оболочка(
+                f'<div class="zwrap">{_склеить(куски)}</div>',
+                f"{self.имя} — кинопортал", "/", актив="/",
+                описание=f"{self.имя}: фильмы, сериалы и анимация.",
+                сверху="<span>Обзор каталога</span>")
+
+        занято: set = set()
+
+        def оценка(з: dict) -> float:
+            д = self.деталь(з["slug"])
+            значения = [д.get("kinopoisk_rating"), д.get("imdb_rating")]
+            числа = [float(v) for v in значения
+                     if isinstance(v, (int, float)) or
+                     (isinstance(v, str) and v.replace(".", "", 1).isdigit())]
+            return max(числа) if числа else 0.0
+
+        def свежесть(з: dict) -> str:
+            return з.get("published_at") or ""
+
+        #: Пул для «популярного» ограничен намеренно: сортировать 50 тысяч
+        #: записей по оценке на каждый запрос незачем, а «популярное среди
+        #: недавнего» — честная формулировка того, что здесь считается.
+        ПУЛ = 400
+
+        def выбрать(вид: str | None, ключ, сколько: int = 12,
+                    пул: int | None = None, условие=None) -> list:
+            подходящие = [з for з in self.д.items
+                          if (вид is None or з.get("kind") == вид)
+                          and (условие is None or условие(з))]
+            if пул:
+                подходящие = sorted(подходящие, key=свежесть, reverse=True)[:пул]
+            отобрано = []
+            for з in sorted(подходящие, key=ключ, reverse=True):
+                if з["slug"] in занято:
+                    continue
+                занято.add(з["slug"])
+                отобрано.append(з)
+                if len(отобрано) >= сколько:
+                    break
+            return отобрано
+
+        def есть_серии(з: dict) -> bool:
+            return bool(self.деталь(з["slug"]).get("seasons"))
+
+        def есть_источник(з: dict) -> bool:
+            return состояние_плеера(self.деталь(з["slug"]))[0] == "playable"
+
+        ленты = [
+            ("pop-films", "Популярные новинки фильмов", "/movies/",
+             выбрать("Фильм", оценка, пул=ПУЛ),
+             ""),
+            ("pop-series", "Популярные сериалы", "/series/",
+             выбрать("Сериал", оценка, пул=ПУЛ),
+             ""),
+            ("new-films", "Добавленные недавно фильмы", "/movies/",
+             выбрать("Фильм", свежесть, условие=есть_источник),
+             ""),
+            ("new-eps", "Новые серии", "/series/",
+             выбрать("Сериал", свежесть,
+                     условие=lambda з: есть_серии(з) and есть_источник(з)),
+             ""),
+            ("trailers", "Новые трейлеры", "",
+             [],
+             ""),
+            ("pop-anim", "Популярная анимация", "/animation/",
+             выбрать("Мультфильм", оценка, пул=ПУЛ),
+             ""),
+            ("new-all", "Недавно в каталоге", "/new/",
+             выбрать(None, свежесть, условие=есть_источник, сколько=18),
+             ""),
+        ]
+        жанры_лента = []
+        for код, имя in self.индекс["genre_names"][:6]:
+            члена = set(self.индекс["genre"].get(код) or [])
+            карточки = [з for з in self.д.items
+                        if з["slug"] in члена and з["slug"] not in занято][:12]
+            for з in карточки:
+                занято.add(з["slug"])
+            if карточки:
+                жанры_лента.append(
+                    (f"genre-{код}", имя, f"/catalog/?genre={код}", карточки, ""))
+        коллекции_html = ""
+        снимок = Снимок.получить(self.д, self.п)
+        if КОЛЛЕКЦИИ is not None and снимок is not None:
+            кол_карточки = []
+            for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО)[:4]:
+                if not спец.доступна:
+                    continue
+                данные = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО,
+                                             предел=1)
+                if данные is None or not данные.items:
+                    continue
+                кол_карточки.append(
+                    f'<a class="zhub__c" href="{html.escape(спец.canonical_path)}">'
+                    f'<span class="zhub__t">{html.escape(данные.title)}</span>'
+                    f'<span class="zhub__m">{данные.total} записей</span></a>')
+            if кол_карточки:
+                коллекции_html = (
+                    '<section class="zsec"><div class="zsec__h">'
+                    "<h2>Подборки</h2>"
+                    '<a href="/collections/">Весь раздел</a></div>'
+                    f'<div class="zhub zhub--home">{"".join(кол_карточки)}</div>'
+                    "</section>")
+        жанр_навигация = "".join(
+            f'<a href="/catalog/{запрос_строкой({"genre": код})}">{html.escape(имя)}</a>'
+            for код, имя in ZONA_GENRE_NAV)
+        блок_жанров = (
+            f'<section class="zgenres" aria-labelledby="zgenres-h">'
+            f'<h2 class="zgenres__h" id="zgenres-h">Смотреть по жанрам</h2>'
+            f'<nav class="zgenres__nav" aria-label="Смотреть по жанрам">{жанр_навигация}</nav>'
+            f'</section>') if жанр_навигация else ""
         куски = [f'<h1 class="zh">{html.escape(self.се["лид"])}</h1>'
-                 f'<p class="zsub">В снимке каталога {len(self.д.items)} записей. '
-                 f"Ниже — то, что появилось последним.</p>"
-                 + self.плитки(свежие)]
-        for титул, ссылка, вид in self.се["полосы"]:
-            набор = [з for з in self.д.items if з.get("kind") == вид][:6]
-            if набор:
-                куски.append(f'<h2 class="zh zh--sm">{html.escape(титул)}</h2>'
-                             f'<p class="zsub"><a href="{ссылка}">Открыть весь раздел</a></p>'
-                             + self.лента(набор))
+                 '<p class="zsub">Фильмы, сериалы и анимация из каталога витрины. '
+                 '<a href="/catalog/">Открыть весь каталог</a> · '
+                 '<a href="/movies/">Кино</a> · '
+                 '<a href="/series/">Сериалы</a> · '
+                 '<a href="/new/">Что нового</a></p>']
+        остальные = list(ленты)
+        первая = остальные.pop(0) if остальные else None
+        if первая:
+            куски.append(self.секция(*первая))
+        if блок_жанров:
+            куски.append(блок_жанров)
+        куски += [self.секция(*л) for л in остальные]
+        куски += [self.секция(*л) for л in жанры_лента]
+        if коллекции_html:
+            куски.append(коллекции_html)
+        куски.append(
+            '<section class="zsec zsec--seo"><h2 class="zh zh--sm">Каталог Zona</h2>'
+            f'<p class="zsub">{html.escape(self.имя)} собирает кино и сериалы '
+            "с фильтрами по виду, жанру, году и стране. Состав страниц берётся "
+            "только из утверждённого снимка каталога — без выдуманных карточек "
+            "и рейтингов.</p></section>")
         return self.оболочка(
-            f'<div class="zwrap">{_склеить(куски)}</div>',
+            _склеить(куски),
             f"{self.имя} — кинопортал", "/", актив="/",
             описание=f"{self.имя}: фильмы, сериалы и анимация.",
-            сверху="<span>Обзор каталога</span>")
+            сверху="")
+
+    def коллекция(self, данные) -> str:
+        """Полная страница коллекции в разметке своего семейства.
+
+        База собирает её классами `grid`/`sec`/`card` — это оформление Lords.
+        У Zona и Animedia таких правил нет, поэтому сетка разворачивалась в
+        одну колонку на любой ширине: шестьдесят карточек давали страницу под
+        сорок тысяч пикселей. Состав и порядок при этом брались из контракта и
+        были верны — ломалась только раскладка. Поэтому здесь меняется разметка
+        и ничего больше: те же данные, тот же порядок, та же пагинация.
+        """
+        на_странице = 60
+        всего_страниц = max(1, (данные.total + на_странице - 1) // на_странице)
+        листалка = ""
+        if всего_страниц > 1:
+            пункты = "".join(
+                (f'<span aria-current="page">{n}</span>' if n == данные.page else
+                 f'<a href="{html.escape(данные.canonical_path)}'
+                 f'{"" if n == 1 else f"?page={n}"}">{n}</a>')
+                for n in range(max(1, данные.page - 3),
+                               min(всего_страниц, данные.page + 3) + 1))
+            листалка = f'<nav class="zpg" aria-label="Страницы">{пункты}</nav>'
+        тело = (f'<div class="zwrap"><h1 class="zh">{html.escape(данные.title)}</h1>'
+                f'<p class="zsub">{html.escape(данные.description)} · '
+                f'{данные.total} записей · страница {данные.page} из {всего_страниц}</p>'
+                + (self.плитки([к.raw for к in данные.items]) if данные.items else
+                   f'<div class="zempty"><b>{html.escape(данные.title)}: пока пусто</b>'
+                   "<p>В текущем снимке под эту коллекцию не попала ни одна "
+                   "запись.</p></div>")
+                + листалка + "</div>")
+        return self.оболочка(тело, f"{данные.title} — {self.имя}",
+                             данные.canonical_path, актив="/collections/",
+                             описание=данные.description)
+
+    def хаб_коллекций(self) -> str:
+        """Перечень коллекций со ссылками на их собственные страницы.
+
+        До этого `/collections/` отдавал тот же каталог, что и `/catalog/`, —
+        то есть обещал подборки, а показывал общий список. Здесь страница
+        собирается из тех же спецификаций, что и ленты главной: заголовок,
+        описание, размер и адрес берутся из контракта, второго перечня нет.
+
+        Недоступные коллекции не показываются: контракт объявляет их с
+        политикой «скрыть», и рисовать пустую карточку значило бы обещать
+        раздел, которого нет.
+        """
+        снимок = Снимок.получить(self.д, self.п)
+        if КОЛЛЕКЦИИ is None or снимок is None:
+            return ('<div class="zempty"><b>Подборки недоступны</b>'
+                    "<p>Контракт коллекций витрине не передан.</p></div>")
+        карточки = []
+        занятые_постеры: set[str] = set()
+        сигнатуры: list[tuple[str, ...]] = []
+        for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО):
+            if not спец.доступна:
+                continue
+            коллекция = КОЛЛЕКЦИИ.разрешить(спец.collection_key, снимок, СЕМЕЙСТВО,
+                                            предел=48)
+            if коллекция is None or not коллекция.items:
+                continue
+            выбранные = []
+            for к in коллекция.items:
+                постер = к.poster or ""
+                if not постер:
+                    continue
+                if постер in занятые_постеры and len(выбранные) < 4:
+                    # Prefer unique collage posters across hub tiles.
+                    continue
+                выбранные.append(к)
+                if len(выбранные) >= 4:
+                    break
+            if len(выбранные) < 4:
+                for к in коллекция.items:
+                    if к in выбранные or not к.poster:
+                        continue
+                    выбранные.append(к)
+                    if len(выбранные) >= 4:
+                        break
+            sig = tuple(к.poster for к in выбранные[:4])
+            if sig and sig in сигнатуры:
+                # Exact duplicate collage — skip tile; full page still exists.
+                continue
+            if sig:
+                сигнатуры.append(sig)
+            for к in выбранные[:4]:
+                if к.poster:
+                    занятые_постеры.add(к.poster)
+            обложки = "".join(
+                f'<span class="zhub__p">'
+                f'<img class="zhub__img" src="{html.escape(_адрес_постера(к.poster) or "")}"'
+                f' alt="" loading="lazy" width="120" height="180"></span>'
+                for к in выбранные[:4] if к.poster)
+            карточки.append(
+                f'<a class="zhub__c" href="{html.escape(спец.canonical_path)}">'
+                f'<span class="zhub__g">{обложки}</span>'
+                f'<span class="zhub__t">{html.escape(коллекция.title)}</span>'
+                f'<span class="zhub__m">{коллекция.total}</span>'
+                f'<span class="zhub__d">{html.escape(коллекция.description)}</span>'
+                f'</a>')
+        if not карточки:
+            return ('<div class="zempty"><b>Подборок пока нет</b>'
+                    "<p>Ни одна коллекция контура не набрала записей в текущем снимке. "
+                    "Наполнять их похожими тайтлами нельзя: подборка без источника — "
+                    "это выдумка.</p></div>")
+        return f'<div class="zhub">{"".join(карточки)}</div>'
 
     def список(self, разд: str, зпр: dict) -> str:
-        имена = {"/catalog": "Весь каталог", "/new": "Что нового", "/collections": "Подборки"}
+        имена = {
+            "/catalog": "Весь каталог",
+            "/new": "Что нового",
+            "/collections": "Подборки",
+            "/movies": "Кино",
+            "/series": "Сериалы",
+            "/animation": "Анимация",
+        }
         титул = имена.get(разд, "Каталог")
+        if разд == "/collections":
+            тело = (f'<div class="zwrap"><h1 class="zh">{html.escape(титул)}</h1>'
+                    f'<p class="zsub">Тематические подборки по данным текущего снимка.</p>'
+                    + self.хаб_коллекций() + "</div>")
+            return self.оболочка(тело, f"{титул} — {self.имя}", "/collections/",
+                                 актив="/collections/",
+                                 описание=f"Подборки витрины {self.имя}.")
         набор, выбрано = отбор(self.д, self.индекс, зпр, разд)
         стр = max(1, int((зпр.get("page") or ["1"])[0] or 1))
         всего = max(1, (len(набор) + НА_СТРАНИЦЕ_1_1 - 1) // НА_СТРАНИЦЕ_1_1)
         стр = min(стр, всего)
         кусок = набор[(стр - 1) * НА_СТРАНИЦЕ_1_1: стр * НА_СТРАНИЦЕ_1_1]
+        жанр_код = выбрано.get("genre")
+        жанр_имя = None
+        if жанр_код:
+            for код, имя in (self.индекс.get("genre_names") or []):
+                if код == жанр_код:
+                    жанр_имя = имя
+                    break
+            if not жанр_имя:
+                for код, имя in ZONA_GENRE_NAV:
+                    if код == жанр_код:
+                        жанр_имя = имя
+                        break
+            if жанр_имя:
+                титул = жанр_имя
         фильтры = "".join(
             f'<a href="{разд}/{запрос_строкой(выбрано, kind=к, page=None)}"'
             f'{ТЕКУЩАЯ_СТРАНИЦА if выбрано["kind"] == к else ""}>{html.escape(к)}</a>'
             for к in self.д.kinds)
-        if any(выбрано.values()):
+        if any(v for k, v in выбрано.items() if k != "_unknown" and v):
             фильтры += f'<a href="{разд}/">Сбросить</a>'
+        годы = "".join(
+            f'<a href="{разд}/{запрос_строкой(выбрано, year=г, page=None)}"'
+            f'{ТЕКУЩАЯ_СТРАНИЦА if str(выбрано.get("year")) == str(г) else ""}>{г}</a>'
+            for г in (self.д.years or [])[:12])
+        if годы:
+            фильтры += f'<span class="zfilt__y">{годы}</span>'
+        жанр_навигация = "".join(
+            f'<a href="/catalog/{запрос_строкой({"genre": код})}"'
+            f'{ТЕКУЩИЙ_ПУНКТ if жанр_код == код else ""}>{html.escape(имя)}</a>'
+            for код, имя in ZONA_GENRE_NAV)
+        блок_жанров = (
+            f'<nav class="zgenres__nav" aria-label="Смотреть по жанрам">'
+            f"{жанр_навигация}</nav>") if разд == "/catalog" else ""
+        канон = разд + "/" + (запрос_строкой(выбрано, page=None) if жанр_код else "")
         тело = (f'<div class="zwrap"><h1 class="zh">{html.escape(титул)}</h1>'
-                f'<p class="zsub">Найдено {len(набор)} записей · страница {стр} из {всего}</p>'
-                + (self.лента(кусок) if кусок else
+                f'<p class="zsub">Найдено {len(набор)} · страница {стр} из {всего}</p>'
+                + блок_жанров
+                + (self.плитки(кусок) if кусок else
                    '<div class="zempty"><b>Ничего не подошло</b>'
-                   "<p>Под выбранные условия в снимке каталога не попала ни одна запись.</p></div>")
+                   "<p>Под выбранные условия не попала ни одна запись.</p></div>")
                 + self.листалка(разд, выбрано, стр, всего) + "</div>")
-        return self.оболочка(тело, f"{титул} — {self.имя}", разд + "/", актив=разд + "/",
+        актив = разд + "/"
+        if разд == "/catalog" and выбрано.get("kind") == "Фильм":
+            актив = "/movies/"
+        elif разд == "/catalog" and выбрано.get("kind") == "Сериал":
+            актив = "/series/"
+        elif разд == "/catalog" and выбрано.get("kind") == "Мультфильм":
+            актив = "/animation/"
+        return self.оболочка(тело, f"{титул} — {self.имя}", канон or (разд + "/"),
+                             актив=актив,
                              описание=f"{титул} на витрине {self.имя}.",
                              сверху=фильтры)
 
@@ -1958,13 +4237,13 @@ class ВидЗона(Вид):
                     '<a href="/catalog/">Открыть каталог целиком</a></p></div>')
         elif найдено:
             тело = (f'<h1 class="zh">«{html.escape(q)}»</h1>'
-                    f'<p class="zsub">Совпадений: {len(найдено)}</p>' + self.лента(найдено))
+                    f'<p class="zsub">Совпадений: {len(найдено)}</p>' + self.плитки(найдено))
         else:
             тело = (f'<h1 class="zh">«{html.escape(q)}»</h1>'
                     '<div class="zempty"><b>Совпадений нет</b>'
-                    f"<p>По запросу «{html.escape(q)}» в снимке каталога ничего не нашлось. "
+                    f"<p>По запросу «{html.escape(q)}» ничего не нашлось. "
                     "Проверьте написание. "
-                    '<a href="/catalog/">Открыть каталог целиком</a></p></div>')
+                    '<a href="/catalog/">Открыть весь каталог</a></p></div>')
         return self.оболочка(f'<div class="zwrap">{тело}</div>',
                              f"Поиск — {self.имя}", "/search/", актив="")
 
@@ -1974,62 +4253,80 @@ class ВидЗона(Вид):
         сезоны = список_серий(деталь)
         сериал = bool(сезоны) or запись.get("kind") == "Сериал"
         звенья = [("/", self.имя),
-                  ("/catalog/?kind=Сериал", "Сериалы") if сериал else ("/catalog/?kind=Фильм", "Кино"),
+                  ("/series/", "Сериалы") if сериал else ("/movies/", "Кино"),
                   ("", имя)]
-        постер = запись.get("poster")
-        фон = (f'<div class="zban__img"><img src="{html.escape(деталь.get("backdrop_url") or постер or "")}" alt=""></div>'
-               if (деталь.get("backdrop_url") or постер) else "")
         изо = заглушка_постера(запись, "zt__none", "zhead__img", 372, 558)
-        ориг = (f'<p class="zhead__o">{html.escape(деталь["original_name"])}</p>'
-                if деталь.get("original_name") else "")
-
-        полоса = []
-        for вид, метка, значение in оценки(деталь):
-            класс = "zacc" if вид == "kp" else "zwarm"
-            полоса.append(f'<div><dt>{html.escape(метка)}</dt>'
-                          f'<dd class="{класс}">{html.escape(значение)}</dd></div>')
-        if запись.get("year"):
-            полоса.append(f'<div><dt>Год</dt><dd>{запись["year"]}</dd></div>')
-        if сезоны:
-            полоса.append(f'<div><dt>Серий</dt><dd>{всего_серий(деталь)}</dd></div>')
-        длит = _длительность(деталь.get("duration"))
-        if длит:
-            полоса.append(f'<div><dt>Хронометраж</dt><dd>{html.escape(длит)}</dd></div>')
-        полоса_html = (f'<dl class="zstrip">{"".join(полоса)}</dl>' if полоса else "")
-
         описание = деталь.get("description") or деталь.get("short_description") or ""
-        сюжет = (f'<section class="zsec"><h2>О чём это</h2><p>{html.escape(описание)}</p></section>'
-                 if описание else
-                 '<section class="zsec"><h2>О чём это</h2>'
-                 '<p class="none">Описание источник по этой записи пока не передал. '
-                 "Известные факты собраны в колонке справа.</p></section>")
-
-        пары = факты(self, запись, деталь)
-        аside = ("".join(f"<div><dt>{html.escape(м)}</dt><dd>{з}</dd></div>" for м, з in пары))
-        колонка = (f'<aside class="zaside"><dl>{аside}</dl></aside>' if пары else
-                   '<aside class="zaside"><dl><div><dt>Сведения</dt>'
-                   "<dd>Источник передал по этой записи только название, вид, год и постер.</dd>"
-                   "</div></dl></aside>")
-
-        сезон_старт = сезоны[0]["n"] if сезоны else 1
-        код, внутри = разметка_плеера(self, запись, деталь, сезон_старт, 1)
-        плеер = (f'<section class="zpl"><div class="zpl__h"><h2>Смотреть</h2>'
+        краткий = описание.strip()
+        if len(краткий) > 420:
+            краткий = краткий[:417].rstrip() + "…"
+        описание_html = (f'<p class="ztitle__desc" id="title-desc">{html.escape(краткий)}</p>'
+                         + ('<button type="button" class="ztitle__more" '
+                            'onclick="this.previousElementSibling.classList.add(\'is-open\');'
+                            'this.hidden=true">Развернуть</button>'
+                            if len(описание.strip()) > 280 else "")
+                         if краткий else "")
+        оценки = оценки_по_источникам(деталь)
+        primary = оценки[0] if оценки else None
+        score_html = ""
+        if primary:
+            score_html = (
+                f'<div class="ztitle__score"><b>{html.escape(primary["значение"])}</b>'
+                f'<span>{html.escape(primary["подпись"])}'
+                + (f' · {primary["голоса"]} оценок' if primary.get("голоса") else "")
+                + "</span></div>")
+        оценки_html = разметка_оценок(деталь, "rbs", пусто=False)
+        orig = html.escape(str(деталь.get("original_name") or деталь.get("original_title") or ""))
+        orig_html = f'<p class="ztitle__o">{orig}</p>' if orig else ""
+        pills = ""
+        жанры = деталь.get("genres") or []
+        if жанры:
+            pills = ('<div class="ztitle__pills">' + "".join(
+                f"<span>{html.escape(str(г))}</span>" for г in жанры[:8]) + "</div>")
+        meta_bits = [str(x) for x in (
+            запись.get("year"), запись.get("kind") or деталь.get("type"),
+            ", ".join(деталь.get("countries") or [])[:40] or None,
+        ) if x]
+        meta_html = (f'<p class="ztitle__meta">{html.escape(" · ".join(meta_bits))}</p>'
+                     if meta_bits else "")
+        # Rail metadata only — no year/type repeat in the hero strip.
+        rail_keys = {
+            "Оригинальное название", "Год", "Тип", "Страна", "Жанр",
+            "Время", "Дата выхода", "Серии",
+        }
+        пары = [(м, з) for м, з in факты(self, запись, деталь) if м in rail_keys]
+        for метка, ключ in (("Возраст", "age_rating"), ("Статус", "status")):
+            знач = деталь.get(ключ)
+            if знач:
+                пары.append((метка, html.escape(str(знач))))
+        rail_rows = "".join(
+            f"<div><dt>{html.escape(м)}</dt><dd>{з}</dd></div>" for м, з in пары)
+        rail_dl = (f'<dl class="ztitle__dl">{rail_rows}</dl>' if rail_rows else "")
+        ads_on = os.environ.get("ZONA_AD_SLOTS", "") == "1"
+        ad_slot = (f'<div class="zad" data-ad-slot="title-rail-300x250" '
+                   f'data-ad-enabled="{1 if ads_on else 0}" '
+                   f'aria-hidden="{"false" if ads_on else "true"}"></div>')
+        сезон_старт, эпизод_старт = выбрать_доступную_серию(деталь) if сезоны else (1, None)
+        код, внутри = разметка_плеера(self, запись, деталь, сезон_старт, эпизод_старт)
+        плеер = (f'<section class="zpl" id="watch"><div class="zpl__h"><h2>Смотреть</h2>'
                  f"<span>{html.escape(_подпись_плеера(код))}</span></div>"
                  f'<div class="zpl__f" data-player data-state="{код}">{внутри}</div>'
                  f"{_скрипты_плеера(код)}</section>")
-
-        блок_серий = (f'<div class="zwrap">{self._серии(запись, сезоны)}</div>'
+        текущий = (сезон_старт, эпизод_старт) if эпизод_старт is not None else None
+        блок_серий = (f'<div class="zwrap zwrap--title">{self._серии(запись, сезоны, текущий=текущий)}</div>'
                       if сериал else "")
         похожие = self.похожие(запись, деталь)
         блок_похожих = (f'<div class="zwrap"><h2 class="zh zh--sm">Смотрите также</h2>'
                         f"{self.плитки(похожие)}</div>" if похожие else "")
-
-        тело = (f'<div class="zban">{фон}</div>'
-                f'<div class="zhead"><div class="zhead__ps">{изо}</div>'
-                f'<div class="zhead__x"><h1>{html.escape(имя)}</h1>{ориг}</div></div>'
-                f"{полоса_html}"
-                f'<div class="zbody"><div>{сюжет}</div>{колонка}</div>'
-                f"{плеер}{блок_серий}{блок_похожих}")
+        # Description once only — never duplicate as "О чём это".
+        тело = (
+            f'<div class="zwrap zwrap--title"><div class="ztitle">'
+            f'<div class="ztitle__poster">{изо}</div>'
+            f'<div class="ztitle__main"><h1>{html.escape(имя)}</h1>'
+            f'{orig_html}{pills}{meta_html}{описание_html}'
+            f'<a class="ztitle__cta" href="#watch">Смотреть</a></div>'
+            f'<aside class="ztitle__rail">{score_html}{оценки_html}{rail_dl}{ad_slot}</aside>'
+            f'</div>{плеер}{блок_серий}{блок_похожих}</div>')
         разметка = self.schema_тайтла(запись, деталь, путь)
         краткое = (описание[:180] if описание else
                    f"{имя}: {запись.get('kind') or ''} {запись.get('year') or ''}".strip())
@@ -2062,7 +4359,7 @@ class ВидЗона(Вид):
                      else f" · доступно {сезон['avail']}")
             блоки.append(
                 f'<section class="zsea"><div class="zsea__h">'
-                f'<b>Сезон {сезон["n"]}</b><span>{сезон["eps"]} серий{хвост}</span></div>'
+                f'<b>Сезон {сезон["n"]}</b><span>· {сезон["eps"]} серий{хвост}</span></div>'
                 f'<div class="zeps">{"".join(ссылки)}</div></section>')
         return f'<h2 class="zh zh--sm">Серии</h2>{_склеить(блоки)}'
 
@@ -2138,20 +4435,38 @@ def _скрипты_плеера(код: str) -> str:
     ничего не нашёл, — это лишний запрос и лишняя точка отказа на странице,
     которая и так честно объяснила, чего не хватает.
     """
-    if код != "playable":
+    if код not in {"playable", "resolving"}:
         return ""
     return (f'<script src="{СКРИПТ_ПЛЕЕРА}" async data-player-script></script>'
             f"<script>{СКРИПТ_ПЛЕЕРА_КЛИЕНТ}</script>")
 
 
 def _подпись_плеера(код: str) -> str:
+    if СЕМЕЙСТВО == "animedia":
+        return {
+            "playable": "смотреть",
+            "awaiting": "выберите серию",
+            "unavailable": "серия недоступна",
+            "loading": "загрузка",
+            "resolving": "подключение",
+            "active": "",
+            "ok": "",
+            "nosource": "видео пока недоступно",
+            "noaccess": "видео пока недоступно",
+            "provider": "видео временно недоступно",
+            "error": "видео временно недоступно",
+            "slow": "",
+        }.get(код, "")
     return {
         "playable": "источник подключён",
+        "awaiting": "выберите серию",
+        "unavailable": "серия без дорожки",
         "loading": "подключение источника",
         "nosource": "источник не передан",
         "noaccess": "витрина без доступа к провайдеру",
         "provider": "провайдер не отдал дорожку",
         "error": "скрипт провайдера не загрузился",
+        "slow": "таймаут поднятия плеера",
     }.get(код, "состояние неизвестно")
 
 
@@ -2189,33 +4504,799 @@ def _мета_версии() -> str:
         f'<meta name="site-factory-template" content="{ШАБЛОН_СЕМЕЙСТВА}">'
         f'<meta name="site-factory-core" content="{ЯДРО}">'
         f'<meta name="site-factory-profile" content="{ПРОФИЛЬ}">'
+        + тег_метрики()
     )
 
 
+#: Виды записей, которые семейство Animedia считает своими. Перечень закрытый:
+#: витрина аниме, показывающая обычные фильмы, — это не «широкий каталог», а
+#: подмешанный чужой профиль.
+АНИМЕ_ВИДЫ = ("Аниме", "ТВ", "OVA", "ONA", "Аниме-фильм", "Онгоинг", "Донхуа")
+
+АНИМЕДИА_ДОМЕНЫ = {
+    "animedia.space": {
+        "profile": "animedia-space",
+        "og_site_name": "Animedia Space",
+        "title_home": "Animedia Space — новые серии и популярное аниме",
+        "h1": "Новые серии и популярное аниме",
+        "description": (
+            "Animedia Space — витрина свежих серий, онгоингов и популярных "
+            "тайтлов с быстрым переходом к просмотру."),
+        "lead": (
+            "Свежие серии, продолжения и популярные тайтлы — короткий путь "
+            "к просмотру без лишнего шума."),
+        "footer_about": (
+            "Animedia Space помогает искать аниме по оценкам, жанрам и типу: "
+            "фильмы, дунхуа и классика из утверждённого каталога."),
+        "seo_home_title": "Зачем Animedia Space",
+        "seo_home": (
+            "Animedia Space собирает свежие серии и популярные тайтлы в одном "
+            "месте: сначала эпизоды с доступным просмотром, затем топ и "
+            "тематические подборки. Пустые полки скрываются. Поиск понимает "
+            "кириллицу, латиницу и slug."),
+        "seo_catalog_title": "Как устроен каталог Space",
+        "seo_catalog": (
+            "Фильтры жанра, года и типа сужают каталог Animedia Space. "
+            "Пагинация сохраняет условия в адресе, а пустая выдача честно "
+            "говорит об отсутствии совпадений."),
+        "home_shelves": (
+            "recently_added", "top_rated", "video_available",
+            "action", "classic", "anime_movies",
+        ),
+    },
+    "animedia.icu": {
+        "profile": "animedia-icu",
+        "og_site_name": "Animedia ICU",
+        "title_home": "Animedia ICU — сериалы, фильмы и дунхуа",
+        "h1": "Сериалы, фильмы и дунхуа",
+        "description": (
+            "Animedia ICU — каталог сериалов с сериями, аниме-фильмов, дунхуа "
+            "и тематических подборок."),
+        "lead": (
+            "Сериалы с доступными сериями, полнометражные фильмы и дунхуа — "
+            "спокойный вход в большой каталог."),
+        "footer_about": (
+            "Animedia ICU — сериалы с сериями, аниме-фильмы, дунхуа и "
+            "тематические подборки из утверждённого каталога."),
+        "seo_home_title": "Чем полезен Animedia ICU",
+        "seo_home": (
+            "Animedia ICU делает упор на сериалы с сериями, аниме-фильмы и "
+            "дунхуа. Дальше — короткие сериалы и жанровые подборки. Даты "
+            "выхода без источника не выдумываются. Каталог и поиск помогают "
+            "найти нужный тайтл по названию или жанру."),
+        "seo_catalog_title": "Навигация по каталогу ICU",
+        "seo_catalog": (
+            "Каталог Animedia ICU сочетает жанровые срезы с поиском по "
+            "кириллице, латинице и slug. Фильтры остаются в URL, чтобы "
+            "вернуться к той же выдаче."),
+        "home_shelves": (
+            "series_with_episodes", "anime_movies", "donghua",
+            "short_series", "top_rated", "classic", "romance",
+        ),
+    },
+}
+
+
+def _аниме_домен(хост: str) -> dict:
+    хост = (хост or "").split(":")[0].lower().removeprefix("www.")
+    return АНИМЕДИА_ДОМЕНЫ.get(хост) or АНИМЕДИА_ДОМЕНЫ["animedia.space"]
+
+
+
+class ВидАнимедиа(ВидЗона):
+    """Аниме-портал: светлая основа, плотная сетка, свои разделы.
+
+    От Zona наследуется только механика страниц — маршруты, карточка
+    произведения, сезоны и серии. Оформление, состав главной и словарь
+    разделов свои: механически переносить кинопортал на аниме нельзя, и
+    именно это расхождение было главным дефектом витрины.
+
+    Отдельная забота этого вида — НЕ показать чужой каталог. Если снимок
+    пришёл не аниме-каталогом, витрина говорит об этом прямо и не рисует
+    ни одной чужой карточки. Подменять отсутствующие данные соседним
+    каталогом нельзя: зритель получил бы витрину аниме, целиком состоящую
+    из обычных фильмов, — ровно то, что здесь измерено на живых доменах.
+    """
+
+    def __init__(self, *а, **кв):
+        super().__init__(*а, **кв)
+        всего = len(self.д.items)
+        свои = [з for з in self.д.items if з.get("kind") in АНИМЕ_ВИДЫ]
+        self.готовность = {
+            "записей_в_снимке": всего,
+            "из_них_аниме": len(свои),
+            "доля": round(len(свои) / всего, 4) if всего else 0.0,
+            "готово": bool(свои) and (len(свои) / всего if всего else 0) >= 0.5,
+        }
+        # Чужие записи снимаются НА УРОВНЕ ДАННЫХ вида, а не на каждой странице:
+        # иначе каталог, поиск, маршрут тайтла и рекомендации пришлось бы
+        # чинить по отдельности, и любой забытый путь снова показал бы чужое.
+        #
+        # Отбор по ВИДУ записи недостаточен, и это измерено: в снимке
+        # animedia-01 из 3999 записей 131 помечена «Аниме», но 3995 slug
+        # совпадают с боевым каталогом Zona. То есть вид записи не отличает
+        # своё от чужого — чужой каталог может прийти с любой пометкой.
+        #
+        # Поэтому решает ГОТОВНОСТЬ снимка целиком: пока он не признан
+        # аниме-каталогом, витрина не показывает ни одной карточки. Показать
+        # «те, что похожи на аниме» значило бы выдать чужой каталог за свой,
+        # только в меньшем объёме.
+        if not self.готовность["готово"]:
+            свои = []
+        if len(свои) != всего:
+            свой_срез = copy.copy(self.д)
+            свой_срез.items = свои
+            свой_срез.years = sorted({з["year"] for з in свои if з.get("year")},
+                                     reverse=True)
+            свой_срез.kinds = sorted({з["kind"] for з in свои if з.get("kind")})
+            self.д = свой_срез
+
+    def плитка(self, запись: dict) -> str:
+        """Карточка с пропорцией постера 0.86 — измеренной на эталоне.
+
+        Размеры проставляются в разметке, а не только в CSS: браузер обязан
+        зарезервировать место до загрузки изображения, иначе сетка прыгает.
+        """
+        деталь = self.деталь(запись["slug"])
+        изо = заглушка_постера(запись, "zt__none", "zt__img", 190, 285)
+        мета = " · ".join(str(ч) for ч in (запись.get("kind"), запись.get("year")) if ч)
+        оценки = оценки_по_источникам(деталь)
+        if оценки:
+            о = оценки[0]
+            оценка = (f'<span class="zt__r"><span>{html.escape(о["подпись"])} '
+                      f'<b>{html.escape(о["значение"])}</b></span></span>')
+        else:
+            оценка = '<span class="zt__r"><span><em>нет оценки</em></span></span>'
+        return (f'<a class="zt" href="{запись["url"]}">'
+                f'<span class="zt__p">{изо}</span>'
+                f'<span class="zt__b"><span class="zt__t">{html.escape(запись["title"])}</span>'
+                f'<span class="zt__m">{html.escape(мета)}</span>{оценка}</span></a>')
+
+    def логотип(self) -> str:
+        """Логотип: хвост «dia» акцентом, как у эталона (без чужой иконки)."""
+        имя = self.имя or "Animedia"
+        if имя.lower().endswith("dia") and len(имя) > 3:
+            база, хвост = имя[:-3], имя[-3:]
+            return (f'<a class="zhd__logo" href="/">{html.escape(база)}'
+                    f"<b>{html.escape(хвост)}</b></a>")
+        return f'<a class="zhd__logo" href="/">{html.escape(имя)}</a>'
+
+    def строка(self, запись: dict) -> str:
+        """Компактная строка для «Новых серий»: без полного описания."""
+        деталь = self.деталь(запись["slug"])
+        изо = заглушка_постера(запись, "zr__none", "zr__img", 52, 76)
+        части = [запись.get("kind"), запись.get("year")]
+        мета = " · ".join(str(ч) for ч in части if ч)
+        # Episode badge from last declared-available season when present.
+        badge = ""
+        seasons = деталь.get("seasons") or []
+        if seasons:
+            last = seasons[-1]
+            avail = int(last.get("avail") or 0)
+            n = int(last.get("n") or 0)
+            if avail and n:
+                badge = f'<span class="zr__badge">s{n}e{avail}</span>'
+        return (f'<a class="zr" href="{запись["url"]}">'
+                f'<span class="zr__p">{изо}</span>'
+                f'<span class="zr__body"><span class="zr__t">{html.escape(запись["title"])}</span>'
+                f'<span class="zr__m">{html.escape(мета)}</span></span>'
+                f'{badge}</a>')
+
+    def тайтл(self, запись: dict, деталь: dict) -> str:
+        """Two-column detail: poster | content with score in header."""
+        путь = f"/title/{запись['slug']}/"
+        имя = запись["title"]
+        сезоны = список_серий(деталь)
+        сериал = bool(сезоны) or запись.get("kind") == "Сериал"
+        звенья = [("/", self.имя),
+                  ("/series/", "Сериалы") if сериал else ("/movies/", "Фильмы"),
+                  ("", имя)]
+        изо = заглушка_постера(запись, "zt__none", "zhead__img", 306, 459)
+        описание = (деталь.get("description") or деталь.get("short_description") or "").strip()
+        описание_html = ""
+        if описание:
+            описание_html = (
+                f'<div class="ztitle__desc-panel"><p class="ztitle__desc" id="title-desc">'
+                f'{html.escape(описание)}</p>'
+                + ('<button type="button" class="ztitle__more" '
+                   'onclick="this.previousElementSibling.classList.add(\'is-open\');'
+                   'this.hidden=true">ещё</button>' if len(описание) > 320 else "")
+                + "</div>")
+        оценки = оценки_по_источникам(деталь)
+        primary = оценки[0] if оценки else None
+        score_html = ""
+        if primary:
+            score_html = (
+                f'<div class="ztitle__score"><b>{html.escape(primary["значение"])}</b>'
+                f'<span>{html.escape(primary["подпись"])}'
+                + (f' · {primary["голоса"]} оценок' if primary.get("голоса") else "")
+                + "</span></div>")
+        оценки_html = разметка_оценок(деталь, "rbs", пусто=False)
+        orig = html.escape(str(деталь.get("original_name") or деталь.get("original_title") or ""))
+        orig_html = f'<p class="ztitle__o">{orig}</p>' if orig else ""
+        pills = ""
+        жанры = деталь.get("genres") or []
+        if жанры:
+            pills = ('<div class="ztitle__pills">' + "".join(
+                f"<span>{html.escape(str(г))}</span>" for г in жанры[:10]) + "</div>")
+        meta_bits = [str(x) for x in (
+            запись.get("year"), запись.get("kind") or деталь.get("type"),
+            ", ".join((деталь.get("countries") or [])[:2]) or None,
+            ", ".join((деталь.get("studios") or деталь.get("voice_studios") or [])[:2]) or None,
+        ) if x]
+        if сезоны:
+            last = сезоны[-1]
+            avail = sum(int(с.get("avail") or 0) for с in сезоны)
+            total = sum(int(с.get("eps") or 0) for с in сезоны)
+            if total:
+                meta_bits.append(f"Вышло {avail} из {total}")
+        meta_html = (f'<p class="ztitle__meta">{html.escape(" · ".join(meta_bits))}</p>'
+                     if meta_bits else "")
+        сезон_старт, эпизод_старт = выбрать_доступную_серию(деталь) if сезоны else (1, None)
+        код, внутри = разметка_плеера(self, запись, деталь, сезон_старт, эпизод_старт)
+        плеер = (f'<div class="ztitle-gap"></div><section class="zpl" id="watch">'
+                 f'<div class="zpl__h"><h2>Смотреть</h2>'
+                 f"<span>{html.escape(_подпись_плеера(код))}</span></div>"
+                 f'<div class="zpl__f" data-player data-state="{код}">{внутри}</div>'
+                 f"{_скрипты_плеера(код)}</section>")
+        текущий = (сезон_старт, эпизод_старт) if эпизод_старт is not None else None
+        блок_серий = (self._серии(запись, сезоны, текущий=текущий) if сериал else "")
+        похожие = self.похожие(запись, деталь)
+        блок_похожих = (f'<h2 class="zh zh--sm">Смотрите также</h2>'
+                        f"{self.плитки(похожие)}" if похожие else "")
+        тело = (
+            f'<div class="zwrap"><div class="ztitle">'
+            f'<div class="ztitle__poster">{изо}</div>'
+            f'<div class="ztitle__main"><div class="ztitle__head">'
+            f'<div class="ztitle__head-text"><h1>{html.escape(имя)}</h1>{orig_html}</div>'
+            f'{score_html}</div>{pills}{meta_html}{оценки_html}{описание_html}'
+            f'<div class="ztitle__actions"><a class="ztitle__cta" href="#watch">Смотреть</a></div>'
+            f'</div></div>{плеер}{блок_серий}{блок_похожих}</div>')
+        разметка = self.schema_тайтла(запись, деталь, путь)
+        краткое = (описание[:180] if описание else
+                   f"{имя}: {запись.get('kind') or ''} {запись.get('year') or ''}".strip())
+        return self.оболочка(
+            тело, f"{имя} — смотреть онлайн — {self.имя}", путь,
+            описание=краткое, разметка=разметка, крошки=self.крошки(звенья),
+            og=self.карточка_графа(
+                тип="video.tv_show" if сериал else "video.movie",
+                титул=имя, описание=краткое, путь=путь,
+                изображение=запись.get("poster") or ""))
+
+    def верхняя_карусель(self, набор) -> str:
+        """Горизонтальная витрина постеров над сетками — ритм amd.online.
+
+        Набор только из снимка каталога. Пустой набор не рисует полосу:
+        красный пустой блок выглядел бы как сломанный герой.
+        """
+        if not набор:
+            return ""
+        return f'<div class="ahero" aria-label="Избранные тайтлы">{self.карусель("hero", набор)}</div>'
+
+    def секция(self, ключ: str, титул: str, ссылка: str, набор, пусто: str) -> str:
+        """Секция аниме-портала — плотная сетка, а не горизонтальная лента.
+
+        Пустые полки скрываются целиком: эталон показывает только наполненные
+        секции. При появлении данных в снимке секция вернётся сама.
+        """
+        if not набор:
+            return ""
+        ссылка_html = (f'<a href="{закодировать_запрос(ссылка)}">Весь раздел</a>'
+                       if ссылка else "")
+        шапка = f'<div class="zsec__h"><h2>{html.escape(титул)}</h2>{ссылка_html}</div>'
+        if ключ in {"new_episodes", "new-episodes"}:
+            тело = self.лента(набор)
+            return f'<section class="zsec zsec--eps">{шапка}{тело}</section>'
+        return f'<section class="zsec">{шапка}{self.плитки(набор)}</section>'
+
+    def _серии(self, запись: dict, сезоны: list, текущий=None) -> str:
+        """Компактные номерные кнопки 40–52px; Zona сохраняет «Серия N»."""
+        if not сезоны:
+            return ('<h2 class="zh zh--sm">Серии</h2>'
+                    '<div class="zempty"><b>Состав сезонов не передан</b>'
+                    "<p>Источник по этой записи ещё не отдал список серий. "
+                    "Как только отдаст, он появится здесь.</p></div>")
+        блоки = []
+        for сезон in сезоны:
+            ссылки = []
+            for н in сезон["номера"]:
+                доступна = н <= сезон["avail"]
+                текущая = (текущий == (сезон["n"], н))
+                атрибуты = ' aria-current="page"' if текущая else (
+                    "" if доступна else
+                    ' data-off aria-disabled="true" title="Серия пока недоступна"')
+                ссылки.append(
+                    f'<a href="{self.адрес_эпизода(запись["slug"], сезон["n"], н)}"'
+                    f"{атрибуты}>{н}</a>")
+            хвост = ("" if сезон["avail"] >= сезон["eps"]
+                     else f" · доступно {сезон['avail']}")
+            блоки.append(
+                f'<section class="zsea"><div class="zsea__h">'
+                f'<b>Сезон {сезон["n"]}</b>'
+                f'<span>· {сезон["eps"]} серий{хвост}</span></div>'
+                f'<div class="zeps">{"".join(ссылки)}</div></section>')
+        return f'<h2 class="zh zh--sm">Серии</h2>{_склеить(блоки)}'
+
+    def seo_блок(self, *, заголовок: str, текст: str) -> str:
+        """Нижний SEO-текст перед footer: на mobile — details."""
+        if not текст:
+            return ""
+        return (
+            f'<aside class="zseo" aria-label="{html.escape(заголовок)}">'
+            f'<div class="zseo__full"><h2>{html.escape(заголовок)}</h2>'
+            f"<p>{html.escape(текст)}</p></div>"
+            f"<details><summary>{html.escape(заголовок)}</summary>"
+            f"<p>{html.escape(текст)}</p></details></aside>")
+
+    def подвал(self) -> str:
+        домен = _аниме_домен(self.хост)
+        жанры = "".join(
+            f'<a href="/genre/{html.escape(код)}/">{html.escape(имя)}</a>'
+            for код, имя in (self.индекс.get("genre_names") or [])[:8])
+        runtime = (МАНИФЕСТ.get("runtime_commit") or МАНИФЕСТ.get("source_commit") or "")[:7]
+        tip = (f"source={МАНИФЕСТ.get('source_commit', '')[:12]} "
+               f"runtime={(МАНИФЕСТ.get('runtime_commit') or '')[:12]} "
+               f"build={СБОРКА}")
+        return (
+            '<footer class="zft">'
+            '<div class="zft__grid">'
+            '<div class="zft__col"><b>Разделы</b>'
+            '<a href="/">Главная</a><a href="/catalog/">Каталог</a>'
+            '<a href="/new/">Новые эпизоды</a><a href="/collections/">Подборки</a></div>'
+            f'<div class="zft__col"><b>Жанры</b>{жанры or "<span>появятся из снимка</span>"}</div>'
+            '<div class="zft__col"><b>Подборки</b>'
+            '<a href="/collections/">Все подборки</a></div>'
+            f'<div class="zft__col"><b>О витрине</b>'
+            f'<p class="zft__about">{html.escape(домен["footer_about"])}</p></div>'
+            "</div>"
+            f'<div class="zft__bar"><span>© {html.escape(self.имя)}</span>'
+            f'<span class="zvb" title="{html.escape(tip)}">'
+            f"Animedia {html.escape(ВЕРСИЯ)} · {html.escape(runtime)}</span></div>"
+            "</footer>")
+
+    # --- честное состояние данных -------------------------------------
+    def полоса_готовности(self) -> str:
+        г = self.готовность
+        if г["готово"]:
+            return ""
+        return (
+            '<div class="ast" role="status">'
+            '<b>Каталог аниме источником не передан</b>'
+            f'В снимке {г["записей_в_снимке"]} записей, и записей аниме среди них '
+            f'{г["из_них_аниме"]}. Остальное — каталог другой витрины, и показывать '
+            'его здесь нельзя: это была бы витрина аниме, собранная из обычных '
+            'фильмов. Оформление, сетка и все разделы ниже работают — им не хватает '
+            'только своих данных. Требуется действие владельца контентного '
+            'конвейера: передать витрине аниме-каталог '
+            '(<code>ANIMEDIA_DATA_READINESS=FAIL</code>).'
+            '</div>')
+
+    # --- каркас --------------------------------------------------------
+    def оболочка(self, тело: str, титул: str, путь: str, *, актив: str = "",
+                 описание: str = "", разметка: str = "", код: int = 200,
+                 сверху: str = "", крошки: str = "", og: dict | None = None) -> str:
+        домен = _аниме_домен(self.хост)
+        нав = "".join(
+            f'<a href="{закодировать_запрос(u)}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
+            for u, t in self.се["нав"])
+        схемы = "".join(f'<script type="application/ld+json">{р}</script>'
+                        for р in ([разметка] if разметка else []))
+        описание_мета = (f'<meta name="description" content="{html.escape(описание)}">'
+                         if описание else "")
+        канон = (f'<link rel="canonical" href="{html.escape(self.канон(путь))}">'
+                 if путь and код == 200 else "")
+        og_данные = dict(og or {})
+        og_данные.setdefault("site_name", домен["og_site_name"])
+        if путь and код == 200 and self.хост:
+            og_данные.setdefault("url", self.канон(путь))
+        # Profile в meta отражает доменный SEO-профиль, а не общий animedia-general.
+        профиль_meta = домен["profile"]
+        return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="animedia-portal" data-seo-profile="{профиль_meta}">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{html.escape(титул)}</title>{описание_мета}{канон}
+<meta name="robots" content="noindex, nofollow">
+{_открытый_граф(og_данные)}
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+{_мета_версии().replace(f'content="{ПРОФИЛЬ}"', f'content="{профиль_meta}"', 1)}
+<style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}
+{СКРИПТ_ЛЕНТ}
+{СКРИПТ_АНИМЕДИА_ШАПКА}</script></head>
+<body><a class="skip" href="#main">Перейти к содержимому</a>
+<div class="zs">
+<header class="zhd">
+<div class="zhd__in">
+{self.логотип()}
+<form class="zhd__s" action="/search/" method="get" role="search">
+<label class="vh" for="q">Поиск по каталогу аниме</label>
+<input id="q" name="q" placeholder="{html.escape(self.се["поиск"])}">
+<button type="submit">Найти</button></form>
+<button class="zhd__menu" type="button" data-nav-toggle aria-controls="zhd-nav"
+ aria-expanded="false" aria-label="Меню разделов">&#9776;</button>
+<nav id="zhd-nav" class="zhd__n" aria-label="Разделы">{нав}</nav>
+</div>
+</header>
+<div class="zmain">
+<div class="zwrap">{_склеить([f'<div class="ztop"><div class="ztop__b">{сверху}</div></div>' if сверху else ""])}{крошки}
+<main id="main">{тело}</main>
+{self.подвал()}
+</div></div></div>{схемы}</body></html>"""
+
+    # --- главная -------------------------------------------------------
+    def главная(self) -> str:
+        занято: set = set()
+
+        def оценка(з: dict) -> float:
+            д = self.деталь(з["slug"])
+            числа = []
+            for v in (д.get("kinopoisk_rating"), д.get("imdb_rating")):
+                try:
+                    числа.append(float(v))
+                except (TypeError, ValueError):
+                    pass
+            return max(числа) if числа else 0.0
+
+        def свежесть(з: dict) -> str:
+            return з.get("published_at") or ""
+
+        def есть_серии(з: dict) -> bool:
+            return bool(self.деталь(з["slug"]).get("seasons"))
+
+        def выбрать(ключ, сколько: int = 24, условие=None, пул: int | None = None) -> list:
+            подходящие = [з for з in self.д.items if условие is None or условие(з)]
+            if пул:
+                подходящие = sorted(подходящие, key=свежесть, reverse=True)[:пул]
+            отобрано = []
+            for з in sorted(подходящие, key=ключ, reverse=True):
+                if з["slug"] in занято:
+                    continue
+                занято.add(з["slug"])
+                отобрано.append(з)
+                if len(отобрано) >= сколько:
+                    break
+            return отобрано
+
+        # Ленты собираются контрактом коллекций.
+        #
+        # Прежний отбор имел два порока. Во-первых, «Онгоинги» и «Новые
+        # эпизоды» пользовались одним и тем же правилом, а различались лишь
+        # тем, что второй брал следующие двадцать четыре записи после первого:
+        # из «Новых эпизодов» выпадали как раз самые новые. Во-вторых, ссылки
+        # «Все →» вели в общий каталог и на `/new/`, то есть в выборки, не
+        # совпадающие с лентой.
+        #
+        # Теперь у каждой ленты своя спецификация: фильтр, порядок и
+        # собственный адрес полной страницы. Тот же ключ разрешает и ленту, и
+        # страницу, поэтому их первые карточки совпадают.
+        ПРИЧИНЫ = {
+            "ongoing": ("Онгоинги", ""),
+            "new_episodes": ("Новые серии", ""),
+            "series_with_episodes": ("Сериалы с сериями", ""),
+            "today_schedule": ("Сегодня выйдет", ""),
+            "recently_added": ("Новые аниме на сайте", ""),
+            "top_rated": ("Топ по оценкам", ""),
+            "anime_movies": ("Аниме-фильмы", ""),
+            "donghua": ("Дунхуа", ""),
+            "classic": ("Классика", ""),
+            "action": ("Экшен", ""),
+            "short_series": ("Короткие сериалы", ""),
+            "video_available": ("С видео", ""),
+        }
+        домен = _аниме_домен(self.хост)
+        ПОРЯДОК = tuple(домен.get("home_shelves") or (
+            "series_with_episodes", "recently_added", "top_rated",
+            "anime_movies", "donghua"))
+        снимок = Снимок.получить(self.д, self.п) if КОЛЛЕКЦИИ else None
+        ленты = []
+        занятые_полки: set[str] = set()
+        if снимок is not None:
+            for ключ in ПОРЯДОК:
+                коллекция = КОЛЛЕКЦИИ.разрешить(ключ, снимок, СЕМЕЙСТВО, предел=48)
+                if коллекция is None:
+                    continue
+                титул, причина = ПРИЧИНЫ.get(ключ, (коллекция.title, ""))
+                набор = []
+                for к in коллекция.items:
+                    if к.raw.get("slug") in занятые_полки:
+                        continue
+                    набор.append(к.raw)
+                    if len(набор) >= 12:
+                        break
+                for з in набор:
+                    занятые_полки.add(з["slug"])
+                if not набор:
+                    continue
+                ленты.append((ключ.replace("_", "-"), титул,
+                              коллекция.view_all_path,
+                              набор, причина))
+        else:
+            ленты = [
+                ("new-anime", "Новые аниме", "/new/", выбрать(свежесть)[:12], ""),
+                ("top", "Топ по оценкам", "/catalog/", выбрать(оценка, пул=400)[:12], ""),
+            ]
+        куски = [self.полоса_готовности(),
+                 f'<h1 class="zh">{html.escape(домен["h1"])}</h1>',
+                 f'<p class="zsub">{html.escape(домен["lead"])}</p>']
+
+        герой = []
+        герой_slug: set[str] = set()
+        for ключ, _титул, _ссылка, набор, _причина in ленты:
+            for з in набор:
+                if not з.get("poster") or з["slug"] in герой_slug:
+                    continue
+                герой.append(з)
+                герой_slug.add(з["slug"])
+                if len(герой) >= 12:
+                    break
+            if len(герой) >= 12:
+                break
+        if герой:
+            куски.append(self.верхняя_карусель(герой))
+        куски.append('<div class="zad-home" data-ad-slot="home-after-hero" data-ad-enabled="0"></div>')
+        # First major content after compact rail: episode feed (not poster grid).
+        ep_rows = self._эпизод_ряды(предел=12)
+        if ep_rows:
+            feed = '<div class="aeps">' + "".join(
+                self._разметка_эпизод_ряда(r) for r in ep_rows) + "</div>"
+            куски.append(
+                '<section class="zsec zsec--eps"><div class="zsec__h">'
+                '<h2>Новые серии аниме</h2>'
+                '<a href="/new/">Все эпизоды</a></div>'
+                f'{feed}</section>')
+        # Drop first-shelf items already shown in hero to avoid viewport duplicates.
+        очищенные = []
+        for i, (ключ, титул, ссылка, набор, причина) in enumerate(ленты):
+            if i == 0 and герой_slug:
+                набор = [з for з in набор if з["slug"] not in герой_slug][:12]
+            if набор:
+                очищенные.append((ключ, титул, ссылка, набор, причина))
+        куски += [self.секция(*л) for л in очищенные]
+        куски.append(self.seo_блок(заголовок=домен["seo_home_title"],
+                                   текст=домен["seo_home"]))
+        return self.оболочка(
+            _склеить(куски),
+            домен["title_home"], "/", актив="/",
+            описание=домен["description"],
+            сверху="",
+            og={"type": "website", "title": домен["title_home"],
+                "description": домен["description"],
+                "site_name": домен["og_site_name"]})
+
+    # --- списки и поиск: причина пустоты называется на КАЖДОЙ странице ---
+    def список(self, разд: str, зпр: dict) -> str:
+        """Catalog / new episodes / collections with human H1 and episode rows."""
+        if разд == "/new":
+            return self._страница_новых_эпизодов(зпр)
+        if разд == "/collections":
+            тело = ('<div class="zwrap"><h1 class="zh">Подборки аниме</h1>'
+                    '<p class="zsub">Тематические подборки по данным каталога.</p>'
+                    + self.хаб_коллекций() + "</div>")
+            return self.оболочка(тело, f"Подборки — {self.имя}", "/collections/",
+                                 актив="/collections/",
+                                 описание=f"Подборки витрины {self.имя}.")
+        набор, выбрано = отбор(self.д, self.индекс, зпр, разд)
+        стр = max(1, int((зпр.get("page") or ["1"])[0] or 1))
+        всего = max(1, (len(набор) + НА_СТРАНИЦЕ_1_1 - 1) // НА_СТРАНИЦЕ_1_1)
+        стр = min(стр, всего)
+        кусок = набор[(стр - 1) * НА_СТРАНИЦЕ_1_1: стр * НА_СТРАНИЦЕ_1_1]
+        титул = self._заголовок_раздела(разд, выбрано)
+        фильтры = self._фильтры_каталога(разд, выбрано)
+        тело = (f'<div class="zwrap"><h1 class="zh">{html.escape(титул)}</h1>'
+                f'<p class="zsub">Найдено {len(набор)} · страница {стр} из {всего}</p>'
+                + фильтры
+                + (self.плитки(кусок) if кусок else
+                   '<div class="zempty"><b>Ничего не подошло</b>'
+                   "<p>Под выбранные условия не попала ни одна запись.</p></div>")
+                + self.листалка(разд, выбрано, стр, всего) + "</div>")
+        канон = разд + "/" + (запрос_строкой(выбрано, page=None) if any(
+            выбрано.get(k) for k in ("genre", "year", "kind", "country", "sort")) else "")
+        return self.оболочка(тело, f"{титул} — {self.имя}", канон or (разд + "/"),
+                             актив=разд + "/",
+                             описание=f"{титул} на витрине {self.имя}.",
+                             сверху="")
+
+    def _заголовок_раздела(self, разд: str, выбрано: dict) -> str:
+        год = выбрано.get("year")
+        вид = выбрано.get("kind")
+        жанр_код = выбрано.get("genre")
+        жанр_имя = None
+        if жанр_код:
+            for код, имя in (self.индекс.get("genre_names") or []):
+                if код == жанр_код:
+                    жанр_имя = имя
+                    break
+        if разд == "/catalog":
+            if вид and год:
+                return f"{вид} {год} года"
+            if год:
+                return f"Аниме {год} года"
+            if жанр_имя:
+                return f"{жанр_имя[0].upper() + жанр_имя[1:]} аниме" if жанр_имя else "Каталог"
+            if вид:
+                return str(вид)
+            return "Весь каталог"
+        if разд == "/movies":
+            return f"Аниме-фильмы{(' ' + str(год) + ' года') if год else ''}"
+        if разд == "/series":
+            return f"Сериалы{(' ' + str(год) + ' года') if год else ''}"
+        return "Каталог"
+
+    def _фильтры_каталога(self, разд: str, выбрано: dict) -> str:
+        chips = []
+        for к in self.д.kinds:
+            chips.append(
+                f'<a href="{разд}/{запрос_строкой(выбрано, kind=к, page=None)}"'
+                f'{ТЕКУЩАЯ_СТРАНИЦА if выбрано.get("kind") == к else ""}>{html.escape(к)}</a>')
+        years = "".join(
+            f'<a href="{разд}/{запрос_строкой(выбрано, year=г, page=None)}"'
+            f'{ТЕКУЩАЯ_СТРАНИЦА if str(выбрано.get("year")) == str(г) else ""}>{г}</a>'
+            for г in (self.д.years or [])[:14])
+        genres = "".join(
+            f'<a href="/catalog/{запрос_строкой({"genre": код})}"'
+            f'{ТЕКУЩИЙ_ПУНКТ if выбрано.get("genre") == код else ""}>{html.escape(имя)}</a>'
+            for код, имя in (self.индекс.get("genre_names") or [])[:16])
+        reset = ""
+        if any(выбрано.get(k) for k in ("kind", "year", "genre", "country", "sort")):
+            reset = f'<a href="{разд}/">Сбросить</a>'
+        sort_links = (
+            f'<a href="{разд}/{запрос_строкой(выбрано, sort=None, page=None)}"'
+            f'{ТЕКУЩАЯ_СТРАНИЦА if not выбрано.get("sort") else ""}>По свежести</a>'
+            f'<a href="{разд}/{запрос_строкой(выбрано, sort="title", page=None)}"'
+            f'{ТЕКУЩАЯ_СТРАНИЦА if выбрано.get("sort") == "title" else ""}>По названию</a>'
+            f'<a href="{разд}/{запрос_строкой(выбрано, sort="rating", page=None)}"'
+            f'{ТЕКУЩАЯ_СТРАНИЦА if выбрано.get("sort") == "rating" else ""}>По оценке</a>')
+        return (f'<nav class="zfilt" aria-label="Фильтры">{"".join(chips)}{reset}</nav>'
+                + (f'<nav class="zfilt" aria-label="Сортировка">{sort_links}</nav>')
+                + (f'<nav class="zfilt zfilt__y" aria-label="Годы">{years}</nav>' if years else "")
+                + (f'<nav class="zgenres__nav" aria-label="Жанры">{genres}</nav>' if genres else ""))
+
+    def _эпизод_ряды(self, предел: int = 48) -> list[dict]:
+        """Episode rows from season.avail — no invented timestamps."""
+        rows = []
+        for з in self.д.items:
+            det = self.деталь(з["slug"])
+            seasons = список_серий(det)
+            if not seasons:
+                continue
+            last = seasons[-1]
+            avail = int(last.get("avail") or 0)
+            if avail < 1:
+                continue
+            n = int(last.get("n") or 1)
+            rows.append({
+                "slug": з["slug"],
+                "title": з["title"],
+                "url": self.адрес_эпизода(з["slug"], n, avail),
+                "poster": з.get("poster") or "",
+                "season": n,
+                "episode": avail,
+                "kind": з.get("kind"),
+                "year": з.get("year"),
+                "published_at": з.get("published_at") or "",
+            })
+        rows.sort(key=lambda r: (r.get("published_at") or "", r["slug"]), reverse=True)
+        return rows[:предел]
+
+    def _разметка_эпизод_ряда(self, row: dict) -> str:
+        изо = заглушка_постера(
+            {"title": row["title"], "poster": row.get("poster"), "url": row["url"]},
+            "zr__none", "zr__img", 80, 92)
+        meta_bits = [str(x) for x in (row.get("kind"), row.get("year")) if x]
+        ts = row.get("published_at") or ""
+        # Show date only when source provides it — never invent "сегодня".
+        if ts and "T" in ts:
+            meta_bits.append(ts[:10])
+        meta = " · ".join(meta_bits)
+        return (
+            f'<a class="aeps__row" href="{html.escape(row["url"])}">'
+            f'<span class="aeps__thumb">{изо}</span>'
+            f'<span class="aeps__body"><span class="aeps__title">{html.escape(row["title"])}</span>'
+            f'<span class="aeps__meta">{html.escape(meta)}</span></span>'
+            f'<span class="aeps__ep"><span class="aeps__num">{row["episode"]}</span>'
+            f'<span class="aeps__lab">серия</span></span></a>')
+
+    def _страница_новых_эпизодов(self, зпр: dict) -> str:
+        rows = self._эпизод_ряды(предел=240)
+        стр = max(1, int((зпр.get("page") or ["1"])[0] or 1))
+        per = 24
+        всего = max(1, (len(rows) + per - 1) // per)
+        стр = min(стр, всего)
+        кусок = rows[(стр - 1) * per: стр * per]
+        сетка = '<div class="aeps">' + "".join(self._разметка_эпизод_ряда(r) for r in кусок) + "</div>"
+        if not кусок:
+            сетка = ('<div class="zempty"><b>Новых серий пока нет</b>'
+                     "<p>В каталоге нет сериалов с доступными сериями.</p></div>")
+        листалка = self.листалка("/new", {"page": None}, стр, всего) if всего > 1 else ""
+        канон = "/new/" if стр == 1 else f"/new/?page={стр}"
+        тело = (f'<div class="zwrap"><h1 class="zh">Новые серии аниме</h1>'
+                f'<p class="zsub">Серии с доступным просмотром · страница {стр} из {всего}</p>'
+                + сетка + листалка + "</div>")
+        return self.оболочка(тело, f"Новые серии — {self.имя}", канон,
+                             актив="/new/",
+                             описание="Новые серии аниме с доступным просмотром.")
+
+
+    def поиск(self, зпр: dict) -> str:
+        """Поиск. Пустая выдача объясняется тем же и теми же словами."""
+        готово = super().поиск(зпр)
+        полоса = self.полоса_готовности()
+        if полоса and "<main id=\"main\">" in готово:
+            готово = готово.replace("<main id=\"main\">", "<main id=\"main\">" + полоса, 1)
+        return готово
+
+    # --- расписание ----------------------------------------------------
+    def расписание(self) -> str:
+        """Honest empty schedule: no fabricated times, no provider jargon."""
+        тело = (
+            '<div class="zwrap"><h1 class="zh">Расписание</h1>'
+            '<div class="asch-empty"><b>Расписание пока недоступно</b>'
+            '<p>Точные даты и время выхода серий в текущем каталоге не переданы. '
+            'Как только они появятся из источника, этот раздел заполнится сам. '
+            'Пока смотрите <a href="/new/">новые эпизоды</a> и '
+            '<a href="/catalog/">каталог</a>.</p></div></div>')
+        return self.оболочка(тело, f"Расписание — {self.имя}", "/schedule/",
+                             актив="",
+                             описание="Расписание выхода серий аниме.")
+
+
+#: Вид Animedia появляется только у витрины, объявившей переработанное
+#: оформление. Витрина на 1.0.2/1.1.0 исполняет прежнюю ветку и отдаёт прежние
+#: байты — как и было до этой задачи.
 ВИДЫ_1_1 = {"lords": ВидЛордс, "zona": ВидЗона}
+if ОФОРМЛЕНИЕ_ПЕРЕРАБОТАННОЕ:
+    ВИДЫ_1_1["animedia"] = ВидАнимедиа
 
 
 def построить_индекс(данные: "Данные", подробности: Подробности) -> dict:
     """Индексы, которые дешевле построить один раз при старте.
 
-    По slug — чтобы страница тайтла не искала запись перебором пятидесяти двух
-    тысяч; по жанру — чтобы `/genre/<код>/` не перечитывал боковой файл на
-    каждый запрос.
+    По slug — чтобы страница тайтла не искала запись перебором; по жанру и
+    стране — чтобы filter query не перечитывал sidecar на каждый запрос.
     """
     по_slug = {з["slug"]: з for з in данные.items}
     по_жанру: dict[str, list] = {}
+    по_стране: dict[str, list] = {}
     имена: dict[str, str] = {}
+    имена_стран: dict[str, str] = {}
     for slug, деталь in подробности.записи.items():
         if slug not in по_slug:
             continue
+        запись = по_slug[slug]
+        # Лучшая доступная оценка для sort=rating (без выдумки нулей).
+        рейтинги = []
+        for ключ in ("kinopoisk_rating", "imdb_rating"):
+            try:
+                рейтинги.append(float(деталь.get(ключ)))
+            except (TypeError, ValueError):
+                pass
+        if рейтинги:
+            запись["_rating"] = max(рейтинги)
         жанры = деталь.get("genres") or []
-        коды = деталь.get("genre_codes") or []
+        коды = list(деталь.get("genre_codes") or [])
+        # Animedia sidecar часто отдаёт только русские имена без genre_codes.
+        # Без кодов индекс жанров пуст, и любой ?genre= даёт «Найдено 0».
+        # Код — латиница (как /genre/<code>/), имя остаётся русским для UI.
+        if not коды and жанры:
+            коды = [нормализовать(транслит(г)) for г in жанры]
+            коды = [к for к in коды if к]
         for i, код in enumerate(коды):
+            if not код:
+                continue
             по_жанру.setdefault(код, []).append(slug)
             if i < len(жанры):
                 имена.setdefault(код, жанры[i])
+            else:
+                имена.setdefault(код, код)
+        for страна in (деталь.get("countries") or []):
+            код = нормализовать(страна)
+            if not код:
+                continue
+            по_стране.setdefault(код, []).append(slug)
+            имена_стран.setdefault(код, страна)
     порядок = sorted(имена.items(), key=lambda п: -len(по_жанру.get(п[0], ())))
-    return {"slug": по_slug, "genre": по_жанру, "genre_names": порядок}
+    порядок_стран = sorted(имена_стран.items(),
+                           key=lambda п: -len(по_стране.get(п[0], ())))
+    return {"slug": по_slug, "genre": по_жанру, "genre_names": порядок,
+            "country": по_стране, "country_names": порядок_стран}
 
 
 class Обработчик(BaseHTTPRequestHandler):
@@ -2228,6 +5309,16 @@ class Обработчик(BaseHTTPRequestHandler):
         pass
 
     def _отдать(self, тело: bytes, тип="text/html; charset=utf-8", код=200):
+        # SEO-слой применяется здесь и только здесь: через эту точку уходит
+        # каждый ответ витрины.
+        try:
+            тело = SEO.обогатить(
+                тело, тип, хост=(self.headers.get("Host") or "").split(":")[0],
+                путь=(self.path or "/"), counter=os.environ.get("LORDS_METRIKA_COUNTER", ""),
+                имя_сайта=ИМЯ_ВИТРИНЫ,
+                поиск="/search/?q={search_term_string}", код=код)
+        except Exception:
+            pass
         self.send_response(код)
         self.send_header("Content-Type", тип)
         self.send_header("Content-Length", str(len(тело)))
@@ -2261,15 +5352,132 @@ class Обработчик(BaseHTTPRequestHandler):
             свод = dict(МАНИФЕСТ)
             свод["core_runtime"] = ЯДРО
             свод["family_template"] = ШАБЛОН_СЕМЕЙСТВА
+            # Рассинхрон каталога и sidecar подробностей — частая причина
+            # «плеера нет» на новинках главной. Поля читаются, значения секретов нет.
+            свод["catalog_revision"] = getattr(self.данные, "revision", "") or ""
+            свод["catalog_built_at"] = getattr(self.данные, "built_at", "") or ""
+            свод["details_catalog_revision"] = getattr(
+                self.подробности, "catalog_revision", "") or ""
+            свод["details_catalog_built_at"] = getattr(
+                self.подробности, "catalog_built_at", "") or ""
+            свод["details_coverage"] = int(getattr(self.подробности, "покрытие", 0) or 0)
+            свод["catalog_details_skew"] = bool(
+                свод["catalog_revision"]
+                and свод["details_catalog_revision"]
+                and свод["catalog_revision"] != свод["details_catalog_revision"])
             return self._отдать(json.dumps(свод, ensure_ascii=False).encode("utf-8"),
                                 "application/json; charset=utf-8")
         if путь == "/healthz":
-            return self._отдать(b'{"ok":true}', "application/json")
+            import hashlib
+            import os as _os
+            runtime_path = Path(__file__).resolve()
+            try:
+                runtime_sha = hashlib.sha256(runtime_path.read_bytes()).hexdigest()
+            except OSError:
+                runtime_sha = ""
+            cat_path = Path(КАТАЛОГ_ФАЙЛ)
+            det_path = Path(ПОДРОБНОСТИ_ФАЙЛ) if ПОДРОБНОСТИ_ФАЙЛ else None
+            assets_path = runtime_path  # CSS/JS embedded in runtime for nova
+            profile_blob = json.dumps({
+                "profile": ПРОФИЛЬ, "family": СЕМЕЙСТВО, "template": ШАБЛОН_СЕМЕЙСТВА,
+                "host_profiles": sorted(АНИМЕДИА_ДОМЕНЫ.keys()) if СЕМЕЙСТВО == "animedia" else [],
+            }, ensure_ascii=False, sort_keys=True).encode("utf-8")
+            # Provider projection + ratings digests from the actually opened details file.
+            provider_h = hashlib.sha256()
+            ratings_h = hashlib.sha256()
+            try:
+                if det_path and det_path.is_file():
+                    det_obj = json.loads(det_path.read_text(encoding="utf-8"))
+                    for slug, row in sorted((det_obj.get("details") or {}).items()):
+                        for src in (row.get("sources") or []):
+                            if isinstance(src, dict):
+                                provider_h.update(
+                                    f"{slug}|{src.get('provider')}|{src.get('source_id')}|"
+                                    f"{src.get('availability_status')}\n".encode())
+                        rbs = row.get("ratings_by_source") or {}
+                        if isinstance(rbs, dict):
+                            for sk in sorted(rbs.keys()):
+                                ratings_h.update(
+                                    f"{slug}|{sk}|{json.dumps(rbs[sk], ensure_ascii=False, sort_keys=True, default=str)}\n".encode()
+                                )
+            except (OSError, TypeError, ValueError, json.JSONDecodeError):
+                pass
+            player_cfg = None  # reserved; site player json resolved below
+            # Prefer site player json next to catalog naming convention.
+            site_hint = ""
+            try:
+                # e.g. /srv/lords/.frontend/animedia-01-catalog.json → animedia-01
+                name = cat_path.name
+                if name.endswith("-catalog.json"):
+                    site_hint = name[: -len("-catalog.json")]
+            except Exception:
+                site_hint = ""
+            player_path = Path(f"/srv/lords/.frontend/player-{site_hint}.json") if site_hint else None
+            tmpl_path = Path(f"/srv/lords/.frontend/template-manifest-{site_hint}.json") if site_hint else None
+
+            def _dig(p):
+                try:
+                    return hashlib.sha256(Path(p).read_bytes()).hexdigest() if p and Path(p).is_file() else ""
+                except OSError:
+                    return ""
+
+            тело = {
+                "ok": True,
+                "pid": _os.getpid(),
+                "process_start_time": getattr(self.server, "started_at", ""),
+                "runtime_path": str(runtime_path),
+                "runtime_sha256": runtime_sha,
+                "assets_sha256": runtime_sha,
+                "build_id": СБОРКА,
+                "release_id": СБОРКА,
+                "source_commit": МАНИФЕСТ.get("source_commit", ""),
+                "runtime_commit": МАНИФЕСТ.get("runtime_commit", ""),
+                "profile": ПРОФИЛЬ,
+                "profile_digest": hashlib.sha256(profile_blob).hexdigest(),
+                "catalog_path": str(cat_path),
+                "catalog_digest": _dig(cat_path),
+                "details_path": str(det_path) if det_path else "",
+                "details_digest": _dig(det_path) if det_path else "",
+                "provider_projection_digest": provider_h.hexdigest(),
+                "ratings_snapshot_digest": ratings_h.hexdigest(),
+                "player_config_digest": _dig(player_path) if player_path else "",
+                "template_manifest_digest": _dig(tmpl_path) if tmpl_path else "",
+                "catalog_revision": getattr(self.данные, "revision", "") or "",
+                "details_revision": getattr(self.подробности, "catalog_revision", "") or "",
+                "artifact_sha256": МАНИФЕСТ.get("artifact_sha256", ""),
+                "runtime_digest_match": bool(
+                    МАНИФЕСТ.get("artifact_sha256")
+                    and runtime_sha
+                    and МАНИФЕСТ.get("artifact_sha256") == runtime_sha
+                ),
+            }
+            return self._отдать(json.dumps(тело, ensure_ascii=False).encode("utf-8"),
+                                "application/json; charset=utf-8")
         if путь == "/assets/nova.webmanifest":
             м = json.dumps({"name": ИМЯ_ВИТРИНЫ, "template": ШАБЛОН_СЕМЕЙСТВА,
                             "core": ЯДРО, "family": СЕМЕЙСТВО, "profile": ПРОФИЛЬ,
                             "revision": РЕВИЗИЯ, "display": "standalone"}, ensure_ascii=False)
             return self._отдать(м.encode(), "application/manifest+json")
+        if путь == "/sitemap.xml" or re.fullmatch(r"/sitemap-\d+\.xml", путь):
+            if not SITEMAP_DIR:
+                return self._отдать(b"", "text/plain; charset=utf-8", код=404)
+            try:
+                данные = (Path(SITEMAP_DIR) / путь.lstrip("/")).read_bytes()
+            except OSError:
+                return self._отдать(b"", "text/plain; charset=utf-8", код=404)
+            return self._отдать(данные, "application/xml; charset=utf-8")
+        if путь.startswith("/poster/"):
+            код, тело, тип = отдать_постер(путь[len("/poster/"):])
+            if код != 200:
+                return self._отдать(тело or b"", тип or "text/plain", код=код)
+            self.send_response(200)
+            self.send_header("Content-Type", тип)
+            self.send_header("Content-Length", str(len(тело)))
+            self.send_header("Cache-Control", "public, max-age=86400")
+            self.send_header("X-Robots-Tag", "noindex, nofollow")
+            self.end_headers()
+            self.wfile.write(тело)
+            return
         if путь == "/robots.txt":
             return self._отдать(b"User-agent: *\nDisallow: /\n", "text/plain; charset=utf-8")
         if путь in ("/favicon.svg", "/favicon.ico"):
@@ -2327,11 +5535,30 @@ class Обработчик(BaseHTTPRequestHandler):
         r"^/title/(?P<slug>[^/]{1,200}?)"
         r"(?:/season-(?P<s>\d{1,3})(?:/episode-(?P<e>\d{1,5}))?)?/$")
     МАРШРУТ_ЖАНРА = re.compile(r"^/genre/(?P<code>[a-z0-9_-]{1,40})/$")
+    МАРШРУТ_ГОДА = re.compile(r"^/year/(?P<year>\d{4})/$")
+    МАРШРУТ_СТРАНЫ = re.compile(r"^/country/(?P<code>[a-z0-9_-]{1,40})/$")
+    #: Полная страница коллекции. Тот же ключ, что и у ленты на главной, —
+    #: именно поэтому первые карточки страницы совпадают с лентой.
+    МАРШРУТ_КОЛЛЕКЦИИ = re.compile(r"^/collection/(?P<key>[a-z0-9_]{1,40})/$")
 
     #: Адреса, существовавшие до 1.1.0. Каждый уводит РОВНО одним переходом на
     #: действующий раздел: молча отдавать по ним 404 значило бы терять ссылки,
     #: которые уже кем-то сохранены.
-    ПРЕЖНИЕ_АДРЕСА = {"/schedule/": "/new/"}
+    ПРЕЖНИЕ_АДРЕСА = {"/schedule/": "/new/", "/genres/": "/catalog/"}
+
+    #: Чистые kind-маршруты (Lords). Query остаётся каноном для комбинаций.
+    МАРШРУТЫ_ВИДА = {
+        "/movies": "Фильм",
+        "/series": "Сериал",
+        "/animation": "Мультфильм",
+    }
+
+    #: Исторические slug → канонический. 301 с сохранением season/episode.
+    #: Измерено: …domokhozyaykoy 404, live slug …domohozyaykoy.
+    SLUG_ALIASES = {
+        "sudmedekspert-stavshaya-domokhozyaykoy":
+            "sudmedekspert-stavshaya-domohozyaykoy",
+    }
 
     def вид(self) -> Вид:
         описание = СЕМЕЙСТВА_1_1.get(СЕМЕЙСТВО) or СЕМЕЙСТВА_1_1["lords"]
@@ -2352,31 +5579,96 @@ class Обработчик(BaseHTTPRequestHandler):
 
     def маршрут_1_1(self, путь: str, зпр: dict):
         в = self.вид()
+        # Расписание — собственный раздел семейства, а не синоним новинок.
+        # Переход на /new/ остаётся для тех семейств, у которых своего
+        # расписания нет: подменять раздел соседним честнее, чем отдавать 404,
+        # но только там, где раздела действительно не существует.
+        if путь.rstrip("/") == "/schedule" and hasattr(в, "расписание"):
+            return self._отдать(в.расписание().encode("utf-8"))
         if путь in self.ПРЕЖНИЕ_АДРЕСА:
             return self._переход(self.ПРЕЖНИЕ_АДРЕСА[путь])
         обрезанный = путь.rstrip("/") or "/"
         if обрезанный == "/":
             return self._отдать(в.главная().encode("utf-8"))
-        if обрезанный in ("/catalog", "/new", "/collections"):
+        # Clean kind routes (Lords profile surfaces). Canonical = own path
+        # (/movies/, /series/, /animation/), not a silent rewrite to /catalog/.
+        if обрезанный in self.МАРШРУТЫ_ВИДА:
+            kind = self.МАРШРУТЫ_ВИДА[обрезанный]
+            зпр = dict(зпр)
+            зпр["kind"] = [kind]
+            return self._отдать(в.список(обрезанный, зпр).encode("utf-8"))
+        if обрезанный in ("/catalog", "/new"):
+            return self._отдать(в.список(обрезанный, зпр).encode("utf-8"))
+        if обрезанный == "/collections":
+            if СЕМЕЙСТВО == "lords" and hasattr(в, "хаб_подборок"):
+                return self._отдать(в.хаб_подборок().encode("utf-8"))
             return self._отдать(в.список(обрезанный, зпр).encode("utf-8"))
         if обрезанный == "/search":
             return self._отдать(в.поиск(зпр).encode("utf-8"))
+        коллекция = self.МАРШРУТ_КОЛЛЕКЦИИ.match(путь)
+        if коллекция is not None:
+            return self.маршрут_коллекции(в, коллекция.group("key"), путь, зпр)
+
+        год = self.МАРШРУТ_ГОДА.match(путь)
+        if год:
+            зпр = dict(зпр)
+            зпр["year"] = [год.group("year")]
+            return self._отдать(в.список("/catalog", зпр).encode("utf-8"))
+        страна = self.МАРШРУТ_СТРАНЫ.match(путь)
+        if страна:
+            код = страна.group("code")
+            if код not in (self.индекс.get("country") or {}):
+                return self._отдать(в.не_найдено(путь).encode("utf-8"), код=404)
+            зпр = dict(зпр)
+            зпр["country"] = [код]
+            return self._отдать(в.список("/catalog", зпр).encode("utf-8"))
+
         жанр = self.МАРШРУТ_ЖАНРА.match(путь)
         if жанр:
             код = жанр.group("code")
             if код not in self.индекс["genre"]:
                 return self._отдать(в.не_найдено(путь).encode("utf-8"), код=404)
-            # Жанр — это выборка каталога, а не отдельный документ. Один
-            # переход на канонический адрес выборки, и у страницы остаётся
-            # ровно один адрес вместо двух с одинаковым содержимым.
+            # Канон жанра для Lords — path /genre/<code>/; комбинации остаются query.
+            if СЕМЕЙСТВО == "lords":
+                зпр = dict(зпр)
+                зпр["genre"] = [код]
+                return self._отдать(в.список("/catalog", зпр).encode("utf-8"))
             return self._переход(f"/catalog/?genre={код}")
         совпало = self.МАРШРУТ_ТАЙТЛА.match(путь)
         if совпало:
             return self.маршрут_тайтла(в, совпало, путь)
         return self._отдать(в.не_найдено(путь).encode("utf-8"), код=404)
 
+    def маршрут_коллекции(self, в: Вид, ключ: str, путь: str, зпр: dict):
+        """Полная страница коллекции — из той же спецификации, что и лента.
+
+        Никакой второй реализации фильтра здесь нет: вызывается та же функция
+        `разрешить`, только без предела и со страницей. Поэтому первые карточки
+        страницы совпадают с лентой по составу и порядку, а `data_revision` у
+        них один.
+        """
+        if КОЛЛЕКЦИИ is None:
+            return self._отдать(в.не_найдено(путь).encode("utf-8"), код=404)
+        снимок = Снимок.получить(в.д, self.подробности)
+        спец = КОЛЛЕКЦИИ.спецификация(СЕМЕЙСТВО, ключ)
+        if спец is None or снимок is None:
+            return self._отдать(в.не_найдено(путь).encode("utf-8"), код=404)
+        try:
+            страница = max(1, int((зпр.get("page") or ["1"])[0] or 1))
+        except (TypeError, ValueError):
+            страница = 1
+        данные = КОЛЛЕКЦИИ.разрешить(ключ, снимок, СЕМЕЙСТВО, страница=страница)
+        if данные is None:
+            return self._отдать(в.не_найдено(путь).encode("utf-8"), код=404)
+        тело = в.коллекция(данные)
+        return self._отдать(тело.encode("utf-8"))
+
     def маршрут_тайтла(self, в: Вид, совпало, путь: str):
         slug = совпало.group("slug")
+        канон = self.SLUG_ALIASES.get(slug)
+        if канон and канон != slug:
+            хвост = путь[len(f"/title/{slug}"):]  # includes leading /
+            return self._переход(f"/title/{канон}{хвост}")
         запись = в.запись(slug)
         if not запись:
             # Настоящая 404, а не общая оболочка с кодом 200. Мягкая
@@ -2419,13 +5711,31 @@ class Обработчик(BaseHTTPRequestHandler):
             return (f'<section class="sec"><div class="sec__h"><h2>{титул}</h2>'
                     f'<a href="{ссылка}">Все →</a></div><div class="grid">'
                     + "".join(карточка(з) for з in набор) + '</div></section>')
+        # Блоки собираются контрактом коллекций: заголовок, выборка и адрес
+        # «Все →» приходят из одной спецификации. Раньше заголовок и ссылка
+        # жили в шаблоне порознь, и на Animedia три блока с фильтром `None`
+        # показывали одни и те же записи под разными названиями, а ссылки вели
+        # в общий каталог. Пустая коллекция не рисуется вовсе — большого
+        # пустого места на главной быть не должно.
+        снимок = Снимок.получить(д, self.подробности) if КОЛЛЕКЦИИ else None
+        if снимок is not None:
+            ленты = []
+            for спец in КОЛЛЕКЦИИ.спецификации(СЕМЕЙСТВО):
+                коллекция = КОЛЛЕКЦИИ.разрешить(
+                    спец.collection_key, снимок, СЕМЕЙСТВО, предел=спец.card_limit)
+                if коллекция is None or not коллекция.items:
+                    continue
+                ленты.append(полоса(коллекция.title, коллекция.view_all_path,
+                                    [к.raw for к in коллекция.items]))
+            блоки = "".join(ленты)
+        else:
+            блоки = "".join(
+                полоса(титул, ссылка,
+                       (д.items if вид is None else
+                        [з for з in д.items if з.get("kind") == вид])[:12])
+                for титул, ссылка, вид in _П["secs"])
         тело = (f'<div class="hero"><div class="hero__track">{герой}</div>'
-                f'<div class="hero__dots">{точки}</div></div>'
-                + "".join(
-                    полоса(титул, ссылка,
-                           (д.items if вид is None else
-                            [з for з in д.items if з.get("kind") == вид])[:12])
-                    for титул, ссылка, вид in _П["secs"]))
+                f'<div class="hero__dots">{точки}</div></div>' + блоки)
         return оболочка(тело, "Главная", д, "/")
 
     def список(self, путь: str, зпр: dict) -> str:
@@ -2444,12 +5754,13 @@ class Обработчик(BaseHTTPRequestHandler):
 
         ТЕК = ' aria-current="true"'
         фвид = "".join(
-            f'<a href="{разд}/?kind={к}"{ТЕК if вид == к else ""}>{к}</a>'
+            f'<a href="{разд}/{запрос_строкой({"kind": к})}"{ТЕК if вид == к else ""}>{к}</a>'
             for к in д.kinds)
         фгод = "".join(
-            f'<a href="{разд}/?year={г}"{ТЕК if год == str(г) else ""}>{г}</a>'
+            f'<a href="{разд}/{запрос_строкой({"year": г})}"{ТЕК if год == str(г) else ""}>{г}</a>'
             for г in д.years[:14])
-        осн = "&".join(f"{k}={v}" for k, v in (("kind", вид), ("year", год)) if v)
+        осн = urlencode([(k, v) for k, v in (("kind", вид), ("year", год)) if v],
+                        quote_via=quote)
         листалка = "".join(
             (f'<span>{p}</span>' if p == стр else
              f'<a href="{разд}/?{осн}&page={p}">{p}</a>')
@@ -2524,7 +5835,8 @@ class Обработчик(BaseHTTPRequestHandler):
                 f'<meta name="site-factory-design-version" content="{ВЕРСИЯ}">'
                 f'<meta name="site-factory-template-family" content="{СЕМЕЙСТВО}">'
                 f'<meta name="site-factory-build-id" content="{СБОРКА}">'
-                f'<style>{СТИЛЬ}</style>').encode("utf-8")
+                + тег_метрики()
+                + f'<style>{СТИЛЬ}</style>').encode("utf-8")
             тело = тело.replace(b"</head>", вставка + b"</head>", 1)
         return self._отдать(тело, тип, код=код)
 
@@ -2569,7 +5881,8 @@ class Обработчик(BaseHTTPRequestHandler):
                 f'<meta name="site-factory-template" content="{ШАБЛОН_СЕМЕЙСТВА}">'
                 f'<meta name="site-factory-core" content="{ЯДРО}">'
                 f'<meta name="site-factory-profile" content="{ПРОФИЛЬ}">'
-                f'<style>{СТИЛЬ}</style>')
+                + тег_метрики()
+                + f'<style>{СТИЛЬ}</style>')
             текст = текст.replace("</head>", вставка + "</head>", 1)
             данные = текст.encode("utf-8")
         типы = {".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8",
@@ -2588,6 +5901,8 @@ def main() -> int:
     Обработчик.подробности = Подробности(ПОДРОБНОСТИ_ФАЙЛ)
     Обработчик.индекс = построить_индекс(Обработчик.данные, Обработчик.подробности)
     сервер = ThreadingHTTPServer((args.host, args.port), Обработчик)
+    import time as _time
+    сервер.started_at = _time.strftime("%Y-%m-%dT%H:%M:%SZ", _time.gmtime())
     print(f"[nova] {args.host}:{args.port} ревизия {РЕВИЗИЯ[:12]} "
           f"оформление {ВЕРСИЯ} тайтлов {len(Обработчик.данные.items)} "
           f"подробностей {Обработчик.подробности.покрытие} "

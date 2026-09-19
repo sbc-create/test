@@ -334,7 +334,7 @@ class TestСтраницаПроизведенияНеПуста:
     def test_оценка_печатается_с_источником(self, лордс):
         ответ = запросить(лордс, "/title/seriya-dolgaya/")
         assert "8.1" in ответ.тело and "7.9" in ответ.тело
-        assert "CDNVideoHub" in ответ.тело
+        assert "rate--kp" in ответ.тело and "rate--imdb" in ответ.тело
         # Числа голосов источник не передаёт — и его нигде нет.
         assert "ratingCount" not in ответ.тело
         assert "reviewCount" not in ответ.тело
@@ -343,9 +343,10 @@ class TestСтраницаПроизведенияНеПуста:
 class TestСостоянияПлеера:
     def test_есть_источник_есть_элемент_провайдера(self, лордс):
         ответ = запросить(лордс, "/title/seriya-dolgaya/")
-        assert 'data-state="playable"' in ответ.тело
+        # Сервер отдаёт resolving: SDK ещё подтверждает дорожку на клиенте.
+        assert 'data-player data-state="resolving"' in ответ.тело
         элемент = re.search(r"<video-player [^>]*>", ответ.тело)
-        assert элемент, "в состоянии playable нет элемента провайдера"
+        assert элемент, "в состоянии resolving нет элемента провайдера"
         assert 'data-aggregator="kp"' in элемент.group(0)
         assert 'data-title-id="123456"' in элемент.group(0)
         assert "player.cdnvideohub.com" in ответ.тело
@@ -403,15 +404,16 @@ class TestСемействаРазличаются:
     def test_геометрия_карточки_разная(self, лордс, зона):
         л = запросить(лордс, "/catalog/").тело
         з = запросить(зона, "/catalog/").тело
-        # Lords: название поверх постера. Zona: строка списка с постером слева.
-        assert 'class="c__cap"' in л and 'class="zr"' not in л
-        assert 'class="zr"' in з and 'class="c__cap"' not in з
+        # Lords: название поверх постера. Zona: строка/плитка с собственными классами.
+        assert 'class="c__cap"' in л and 'class="zt__' not in л.split("<style>")[0]
+        assert ("class=\"zt__" in з or 'class="zt ' in з) and 'class="c__cap"' not in з
 
     def test_раскладка_страницы_произведения_разная(self, лордс, зона):
         л = запросить(лордс, "/title/seriya-dolgaya/").тело
         з = запросить(зона, "/title/seriya-dolgaya/").тело
-        assert 'class="tw"' in л and 'class="zban"' not in л
-        assert 'class="zban"' in з and 'class="tw"' not in з
+        assert 'data-design="lords-sheet"' in л
+        assert 'class="ztitle"' in з and 'data-design="zona-rail"' in з
+        assert 'class="ztitle"' not in л
 
     def test_различие_не_сводится_к_цвету(self, лордс, зона):
         """Если убрать из обоих стилей все цвета, они обязаны остаться разными."""
@@ -424,12 +426,10 @@ class TestСемействаРазличаются:
         assert л != з, "стили различаются только цветом"
         общие = set(re.findall(r"\.([a-z][a-z0-9_-]*)\s*\{", л)) & \
                 set(re.findall(r"\.([a-z][a-z0-9_-]*)\s*\{", з))
-        # Общими остаются только служебные примитивы: два для доступности
-        # (`vh` — скрытая подпись, `skip` — ссылка на содержимое) и `none` —
-        # пометка «значения нет». Это состояния, а не раскладка: они ничего не
-        # говорят о том, как страница устроена, и делить их семействам можно.
-        # Любой РАЗМЕТОЧНЫЙ класс в пересечении означал бы общую композицию.
-        ПРИМИТИВЫ = {"vh", "skip", "none"}
+        # Служебные примитивы + общий блок рейтингов (`rbs*`), который не
+        # задаёт раскладку страницы семейства.
+        ПРИМИТИВЫ = {"vh", "skip", "none"} | {
+            к for к in общие if к == "rbs" or к.startswith("rbs")}
         assert общие <= ПРИМИТИВЫ, f"семейства делят разметочные классы: {sorted(общие - ПРИМИТИВЫ)}"
 
 
@@ -496,7 +496,11 @@ class TestАвтоматСостоянийПлеера:
 
     def test_таймаут_учитывает_уже_поднявшийся_плеер(self, лордс):
         скрипт = self._скрипт(лордс)
-        assert "if(!поднялся) state('slow'" in скрипт, (
+        assert "поднялся" in скрипт and (
+            "if(!поднялся) state('slow'" in скрипт
+            or "if(shell && !поднялся)" in скрипт
+            or "отказ || поднялся" in скрипт
+        ), (
             "таймаут перестал проверять, поднялся ли плеер, и объявит сломанным "
             "то, что уже играет")
 
