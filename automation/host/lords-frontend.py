@@ -939,9 +939,9 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 #: одной. Витрина на 1.0.2 исполняет прежние ветки и отдаёт прежние байты.
 ОФОРМЛЕНИЕ_НОВОЕ = (ВЕРСИЯ in ОФОРМЛЕНИЕ_ВЕРСИИ)
 
-#: Сколько карточек на странице каталога в новом оформлении. Кратно и шести
-#: (сетка Lords), и четырём (сетка Zona), поэтому последний ряд не рваный.
-НА_СТРАНИЦЕ_1_1 = 48
+#: Catalog page size (Zona 1.2 densify). 28 = four full rows of seven cards
+#: on desktop; totals and facets still use the full filtered set.
+НА_СТРАНИЦЕ_1_1 = 28
 
 #: Сколько серий показывается в одном блоке списка серий. Ограничения на общее
 #: число серий нет: список из двухсот десяти обязан содержать все двести
@@ -1639,41 +1639,44 @@ display:none;align-items:center;justify-content:center}
 .zrl__btn--n{right:-6px}
 .zrl__btn[disabled]{opacity:.32;cursor:default}
 
-/* Сетка каталога и карточка. Пропорция постера 2:3, высота ряда ровная. */
-.zg{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr));
-align-items:stretch}
-@media(min-width:768px){.zg{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}}
-@media(min-width:1280px){.zg{grid-template-columns:repeat(5,minmax(0,1fr))}}
-@media(min-width:1440px){.zg{grid-template-columns:repeat(6,minmax(0,1fr))}}
-@media(min-width:1920px){.zg{grid-template-columns:repeat(7,minmax(0,1fr))}}
-.zg--related{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr));
-overflow:visible}
-@media(min-width:768px){.zg--related{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}}
-@media(min-width:1440px){.zg--related{grid-template-columns:repeat(6,minmax(0,1fr))}}
-.zt{display:flex;flex-direction:column;height:100%;min-width:0;background:@SURF@;
-border:1px solid @LINE@;border-radius:8px;overflow:hidden;
+/* Pass5 densify: 2 / 4 / 7 / 8+ cols; card width capped at 180px. */
+:root{--z-card-max:180px;--z-gap:14px;--z-poster-max-h:270px}
+.zg{display:grid;gap:var(--z-gap);grid-template-columns:repeat(2,minmax(0,var(--z-card-max)));
+align-items:stretch;justify-content:start}
+@media(min-width:768px){.zg{grid-template-columns:repeat(4,minmax(0,var(--z-card-max)))}}
+@media(min-width:1440px){.zg{grid-template-columns:repeat(7,minmax(0,var(--z-card-max)))}}
+@media(min-width:1920px){.zg{grid-template-columns:repeat(8,minmax(0,var(--z-card-max)))}}
+.zg--related{display:grid;gap:var(--z-gap);grid-template-columns:repeat(2,minmax(0,var(--z-card-max)));
+overflow:visible;justify-content:start}
+@media(min-width:768px){.zg--related{grid-template-columns:repeat(4,minmax(0,var(--z-card-max)))}}
+@media(min-width:1440px){.zg--related{grid-template-columns:repeat(7,minmax(0,var(--z-card-max)))}}
+.zt{display:flex;flex-direction:column;height:100%;min-width:0;max-width:var(--z-card-max);
+background:@SURF@;border:1px solid @LINE@;border-radius:6px;overflow:hidden;
 transition:border-color .16s,transform .16s;color:inherit;text-decoration:none}
-.zt:hover{border-color:@ACC@;transform:translateY(-2px)}
-.zt__p{display:block;aspect-ratio:2/3;background:@ALT@;position:relative;flex:0 0 auto;
-overflow:hidden}
+.zt:hover,.zt:focus-visible{border-color:@ACC@;transform:translateY(-1px);outline:none}
+.zt__p{display:block;aspect-ratio:2/3;max-height:var(--z-poster-max-h);background:@ALT@;
+position:relative;flex:0 0 auto;overflow:hidden}
 .zt__p img,.zt__img{position:absolute;inset:0;z-index:1;width:100%;height:100%;
 object-fit:cover;display:block}
-.zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:12px;
-text-align:center;color:@MUTE@;font-size:12px;line-height:1.3;aspect-ratio:auto}
-.zt__none b{display:block;font-size:24px;font-weight:700;color:@DIM@;margin-bottom:4px}
-.zt__b{padding:8px 9px 10px;display:flex;flex-direction:column;gap:3px;flex:0 0 auto;
-height:96px;min-height:96px;max-height:96px;box-sizing:border-box;overflow:hidden}
-.zt__t{font-size:13.5px;font-weight:600;line-height:1.28;min-height:calc(1.28em * 2);
-max-height:calc(1.28em * 2);display:-webkit-box;-webkit-line-clamp:2;
+.zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:10px;
+text-align:center;color:@MUTE@;font-size:11px;line-height:1.3;aspect-ratio:auto}
+.zt__none b{display:block;font-size:20px;font-weight:700;color:@DIM@;margin-bottom:3px}
+.zt__b{padding:7px 8px 8px;display:flex;flex-direction:column;gap:2px;flex:0 0 auto;
+height:132px;min-height:132px;max-height:132px;box-sizing:border-box;overflow:hidden}
+.zt__t{font-size:12.5px;font-weight:600;line-height:1.25;min-height:calc(1.25em * 2);
+max-height:calc(1.25em * 2);display:-webkit-box;-webkit-line-clamp:2;
 -webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
-.zt__m{display:block;font-size:12px;color:@DIM@;line-height:1.3;min-height:1.3em;
-max-height:1.3em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.zt__r{display:flex;gap:9px;font-size:12px;color:@DIM@;margin-top:auto;
-padding-top:4px;flex-wrap:nowrap;min-height:1.3em;max-height:1.3em;align-items:center;
+.zt__m{font-size:11px;color:@DIM@;line-height:1.25;min-height:1.25em;
+max-height:1.25em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zt__x{font-size:10.5px;color:@MUTE@;line-height:1.25;min-height:calc(1.25em * 2);
+max-height:calc(1.25em * 2);display:-webkit-box;-webkit-line-clamp:2;
+-webkit-box-orient:vertical;overflow:hidden}
+.zt__r{display:flex;gap:8px;font-size:11px;color:@DIM@;margin-top:auto;
+padding-top:2px;flex-wrap:nowrap;min-height:1.25em;max-height:1.25em;align-items:center;
 overflow:hidden}
 .zt__r b{color:@WARM@;font-weight:700}
 .zt__r i{color:@WARM@;font-style:normal;font-weight:700}
-.zt__r em{color:@MUTE@;font-style:italic}
+.zt__play{display:inline-block;font-size:10px;font-weight:700;color:@ACC@;margin-left:auto}
 
 /* Строка списка: постер слева. Это не сетка главной. */
 .zl{display:flex;flex-direction:column;gap:10px}
@@ -1786,6 +1789,15 @@ color:@DIM@;font-weight:700;margin:0;line-height:1.35;padding-top:2px}
 .ztitle__dl dd{margin:0;font-size:13.5px;color:@INK@;line-height:1.4;
 overflow-wrap:anywhere;min-width:0}
 .ztitle__dl a{color:@ACC@;font-weight:600;display:inline-block;margin:0 6px 4px 0}
+.ztitle__facts{margin:0 0 12px;display:grid;gap:6px 16px;
+grid-template-columns:1fr;max-width:52ch}
+@media(min-width:600px){.ztitle__facts{grid-template-columns:1fr 1fr}}
+.ztitle__facts div{display:grid;grid-template-columns:72px minmax(0,1fr);gap:4px 8px;
+align-items:baseline}
+.ztitle__facts dt{margin:0;font-size:11px;letter-spacing:.03em;text-transform:uppercase;
+color:@DIM@;font-weight:700}
+.ztitle__facts dd{margin:0;font-size:13.5px;color:@INK@;line-height:1.35;
+overflow-wrap:anywhere;min-width:0}
 .ztitle__chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
 .ztitle__chip{display:inline-flex;align-items:center;min-height:28px;padding:4px 10px;
 border-radius:999px;background:@ALT@;border:1px solid @LINE@;font-size:12.5px;color:@DIM@}
@@ -1873,14 +1885,17 @@ display:none!important;visibility:hidden!important;pointer-events:none!important
 font-size:13.5px;line-height:1.5;max-width:520px;margin:0 auto}
 .zpl__f [data-player-state] b{display:block;color:@INK@;margin:0 0 6px;font-size:15px}
 
-.zft{border-top:1px solid @LINE@;margin:36px 0 0;padding:44px 0 28px;
-font-size:13px;color:@DIM@;display:block;max-width:1400px}
-.zft__cols{display:grid;gap:28px;grid-template-columns:1fr;margin:0 0 22px}
-@media(min-width:700px){.zft__cols{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}}
-@media(min-width:1100px){.zft__cols{grid-template-columns:repeat(4,minmax(0,1fr));gap:40px}}
-.zft__col{display:flex;flex-direction:column;gap:7px;min-width:0}
-.zft__col b{color:@INK@;font-size:13.5px;margin:0 0 6px;font-weight:700}
-.zft__col a{color:@ACC@;font-weight:500}
+.zft{border-top:1px solid @LINE@;margin:48px 0 0;padding:32px 0 24px;
+font-size:13px;color:@DIM@;display:block;width:100%;max-width:1760px;margin-left:auto;margin-right:auto}
+.zft__cols{display:grid;gap:18px;grid-template-columns:1fr;margin:0 0 18px}
+@media(min-width:700px){.zft__cols{grid-template-columns:minmax(0,1.3fr) repeat(2,minmax(0,1fr));gap:24px}}
+@media(min-width:1100px){.zft__cols{grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr));gap:28px}}
+.zft__cols--fallback{@media(min-width:700px){grid-template-columns:minmax(0,1.3fr) repeat(2,minmax(0,1fr))}}
+.zft__col{display:flex;flex-direction:column;gap:6px;min-width:0}
+.zft__col b{color:@INK@;font-size:13px;margin:0 0 4px;font-weight:700}
+.zft__col a{color:@ACC@;font-weight:500;line-height:1.35}
+@media(max-width:699px){.zft__col--links{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}
+.zft__col--links b{grid-column:1/-1}}
 .zft__col a:hover,.zft__col a:focus-visible{text-decoration:underline}
 .zft__about{font-size:13px;line-height:1.5;color:@DIM@;margin:0 0 4px;max-width:36ch}
 .zft__bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;
@@ -1900,7 +1915,10 @@ background:transparent;color:#fff;font-size:20px;cursor:pointer;flex:0 0 auto}
 .zhd__n.is-open{display:flex}
 body.nav-lock{overflow:hidden}
 }
-.zfilt__y{display:inline-flex;flex-wrap:wrap;gap:6px;max-width:100%}
+.zfilt__y{display:inline-flex;flex-wrap:wrap;gap:6px;max-width:100%;align-items:center}
+.zfilt__year{min-height:36px;padding:6px 10px;border:1px solid @LINE@;border-radius:6px;
+background:@SURF@;color:@INK@;font:inherit;font-size:13px;max-width:100%}
+.zfilt__y a[data-count]::after{content:attr(data-count);margin-left:4px;color:@MUTE@;font-size:11px}
 .zhub--home{display:grid;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(min-width:768px){.zhub--home{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .zsec--seo{margin:28px 0 8px}
@@ -2019,8 +2037,8 @@ gap:10px;margin:0 0 9px;border-bottom:1px solid @LINE@;padding-bottom:6px}
 .zrl__vp{overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;
 scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:2px 0 8px}
 .zrl__track{display:flex;gap:10px;min-width:min-content;align-items:flex-start}
-.zrl__track>*{flex:0 0 190px;scroll-snap-align:start;max-width:230px}
-@media(min-width:1440px){.zrl__track>*{flex-basis:210px}}
+.zrl__track>*{flex:0 0 148px;scroll-snap-align:start;max-width:180px}
+@media(min-width:1440px){.zrl__track>*{flex-basis:160px}}
 .zrl__btn{position:absolute;top:34%;transform:translateY(-50%);z-index:5;
 width:30px;height:48px;border:1px solid @LINE@;border-radius:4px;cursor:pointer;
 background:rgba(255,255,255,.94);color:@ACC@;font-size:17px;line-height:1;
@@ -4176,11 +4194,13 @@ class ВидЗона(Вид):
                     continue
                 out.append(f'<a href="{html.escape(href)}">{html.escape(label)}</a>')
             return "".join(out)
-        разделы = _links([
-            ("/", "Обзор"), ("/new/", "Что нового"), ("/movies/", "Кино"),
-            ("/series/", "Сериалы"), ("/animation/", "Анимация"),
-            ("/collections/", "Подборки"), ("/catalog/", "Каталог"),
-            ("/search/", "Поиск"),
+        раздел_а = _links([
+            ("/", "Обзор"), ("/new/", "Что нового"),
+            ("/movies/", "Кино"), ("/series/", "Сериалы"),
+        ])
+        раздел_б = _links([
+            ("/animation/", "Анимация"), ("/collections/", "Подборки"),
+            ("/catalog/", "Каталог"), ("/search/", "Поиск"),
         ])
         помощь = _links([
             (cfg.get("about_url"), "О проекте"),
@@ -4196,19 +4216,21 @@ class ВидЗона(Вид):
             cfg.get(k) for k in (
                 "about_url", "contacts_url", "feedback_url",
                 "rights_url", "privacy_url", "terms_url", "contact_email"))
-        # No public placeholders — omit empty help/docs columns entirely.
+        # No placeholders: omit empty help/docs. Fallback = brand + two link cols.
         help_col = (f'<div class="zft__col"><b>Помощь</b>{помощь}</div>' if помощь else "")
         docs_col = (f'<div class="zft__col"><b>Документы</b>{документы}</div>' if документы else "")
+        cols_mod = ' zft__cols--fallback' if contact_missing else ""
         marker = (f'<span class="zvb" data-contact-config-missing="{1 if contact_missing else 0}" '
                   f'data-footer-contact-gate="{0 if contact_missing else 1}">'
                   f'Zona · {html.escape(ВЕРСИЯ)} · {html.escape(source)}</span>')
         return (
             '<footer class="zft" data-testid="site-footer">'
-            '<div class="zft__cols">'
+            f'<div class="zft__cols{cols_mod}">'
             f'<div class="zft__col"><b>{html.escape(self.имя)}</b>'
             f'<p class="zft__about">{html.escape(self.имя)} — витрина фильмов, '
             "сериалов и анимации с каталогом, поиском и подборками.</p></div>"
-            f'<div class="zft__col"><b>Разделы</b>{разделы}</div>'
+            f'<div class="zft__col zft__col--links"><b>Разделы</b>{раздел_а}</div>'
+            f'<div class="zft__col zft__col--links"><b>Каталог</b>{раздел_б}</div>'
             f'{help_col}{docs_col}'
             "</div>"
             f'<div class="zft__bar"><span>© {html.escape(self.имя)}</span>'
@@ -4216,13 +4238,27 @@ class ВидЗона(Вид):
 
     # --- составные части ---------------------------------------------
     def плитка(self, запись: dict, *, freshness: bool = False) -> str:
-        деталь = self.деталь(запись["slug"])
+        деталь = self.деталь(запись["slug"]) or {}
         изо = заглушка_постера(запись, "zt__none", "zt__img")
-        мета = " · ".join(str(ч) for ч in (запись.get("kind"), запись.get("year")) if ч)
+        # Line 1: year · country (source-backed only).
+        страна = ""
+        страны = деталь.get("countries") or []
+        if страны:
+            страна = str(страны[0])
+        meta1_parts = [str(ч) for ч in (запись.get("year"), страна) if ч]
+        # Line 2: kind · up to 2 genres.
+        жанры = [str(g) for g in (деталь.get("genres") or [])[:2] if g]
+        meta2_parts = [str(ч) for ч in (запись.get("kind"), *жанры) if ч]
         if freshness:
             reason = _подпись_свежести(запись)
             if reason:
-                мета = f"{мета} · {reason}" if мета else reason
+                meta2_parts.append(reason)
+        мета1 = " · ".join(meta1_parts)
+        мета2 = " · ".join(meta2_parts)
+        # Optional 2-line description — never invent.
+        опис = (деталь.get("short_description") or деталь.get("description") or "").strip()
+        if len(опис) > 140:
+            опис = опис[:137].rstrip() + "…"
         кп = _число(деталь.get("kinopoisk_rating"))
         им = _число(деталь.get("imdb_rating"))
         части = []
@@ -4230,16 +4266,26 @@ class ВидЗона(Вид):
             части.append(f"<span>КП <b>{кп}</b></span>")
         if им:
             части.append(f"<span>IMDb <i>{им}</i></span>")
-        # Missing rating keeps line height without dominating copy.
         if not части:
-            части.append("<span class=\"zt__r-empty\" aria-hidden=\"true\">&nbsp;</span>")
+            части.append('<span class="zt__r-empty" aria-hidden="true">&nbsp;</span>')
+        if деталь.get("playable") is True:
+            части.append('<span class="zt__play" title="Есть видео">▶</span>')
         оценка = f'<span class="zt__r">{"".join(части)}</span>'
         заголовок = запись["title"] or ""
+        meta_html = ""
+        if мета1:
+            meta_html += f'<span class="zt__m">{html.escape(мета1)}</span>'
+        if мета2:
+            meta_html += f'<span class="zt__m">{html.escape(мета2)}</span>'
+        if not meta_html:
+            meta_html = '<span class="zt__m">&nbsp;</span>'
+        desc_html = (f'<span class="zt__x">{html.escape(опис)}</span>' if опис else
+                     '<span class="zt__x" aria-hidden="true">&nbsp;</span>')
         return (f'<a class="zt" data-testid="title-card" href="{запись["url"]}" '
                 f'title="{html.escape(заголовок)}">'
                 f'<span class="zt__p">{изо}</span>'
                 f'<span class="zt__b"><span class="zt__t">{html.escape(заголовок)}</span>'
-                f'<span class="zt__m">{html.escape(мета)}</span></span>{оценка}</a>')
+                f'{meta_html}{desc_html}</span>{оценка}</a>')
 
     def строка(self, запись: dict) -> str:
         деталь = self.деталь(запись["slug"])
@@ -4737,14 +4783,41 @@ class ВидЗона(Вид):
         if any(v for k, v in выбрано.items() if k not in ("_unknown", "sort") and v):
             фильтры += f'<a href="{разд}/">Сбросить</a>'
 
-        годы = "".join(
-            f'<a href="{разд}/{запрос_строкой({**выбрано, **omit}, year=г, page=None)}"'
-            f'{ТЕКУЩАЯ_СТРАНИЦА if str(выбрано.get("year")) == str(г) else ""}>{г}</a>'
-            for г in (self.д.years or [])[:24])
-        if годы:
-            фильтры += ('<a href="' + разд + '/' + запрос_строкой({**выбрано, **omit}, year=None, page=None)
-                        + '">Все годы</a>')
-            фильтры += f'<span class="zfilt__y">{годы}</span>'
+        # Year facets from kind-scoped full set (no year filter), count>0 only.
+        # Never truncate with [:24] — that hid pre-2003 and under-informed users.
+        facet_зпр = {k: ([None] if k == "year" else v) for k, v in зпр.items()}
+        if "year" not in facet_зпр:
+            facet_зпр["year"] = [None]
+        facet_набор, _ = отбор(self.д, self.индекс, facet_зпр, разд)
+        from collections import Counter as _Counter
+        year_counts = _Counter(
+            int(з["year"]) for з in facet_набор
+            if isinstance(з.get("year"), int) and 1870 <= int(з["year"]) <= 2100)
+        year_list = sorted(year_counts.keys(), reverse=True)
+        if year_list:
+            all_years_href = разд + "/" + запрос_строкой(
+                {**выбрано, **omit}, year=None, page=None)
+            opts = [f'<option value="{all_years_href}">Все годы</option>']
+            chips = []
+            for г in year_list:
+                href = разд + "/" + запрос_строкой(
+                    {**выбрано, **omit}, year=г, page=None)
+                sel = " selected" if str(выбрано.get("year")) == str(г) else ""
+                cur = ТЕКУЩАЯ_СТРАНИЦА if str(выбрано.get("year")) == str(г) else ""
+                n = year_counts[г]
+                opts.append(f'<option value="{html.escape(href)}"{sel}>{г} ({n})</option>')
+                # Keep a short recent-chip strip for discoverability (≤12 newest).
+                if len(chips) < 12:
+                    chips.append(
+                        f'<a href="{html.escape(href)}"{cur} data-count="({n})">{г}</a>')
+            фильтры += (
+                f'<a href="{html.escape(all_years_href)}">Все годы</a>'
+                f'<label class="vh" for="zona-year-facet">Год</label>'
+                f'<select class="zfilt__year" id="zona-year-facet" '
+                f'onchange="if(this.value)location.href=this.value" '
+                f'aria-label="Фильтр по году">'
+                f'{"".join(opts)}</select>'
+                f'<span class="zfilt__y">{"".join(chips)}</span>')
 
         # Visible sort selector (URL-backed).
         sort_opts = (
@@ -4911,14 +4984,24 @@ class ВидЗона(Вид):
         if дата:
             chips.append(f'<span class="ztitle__chip">{html.escape(дата)}</span>')
         chips_html = (f'<div class="ztitle__chips">{"".join(chips)}</div>' if chips else "")
-        rail_keys = {"Год", "Тип", "Страна", "Серии"}
-        пары = [(м, з) for м, з in факты(self, запись, деталь) if м in rail_keys]
+        rail_keys = {"Статус", "Серии", "Возраст"}
+        core_keys = {"Год", "Тип", "Страна"}
+        все_пары = list(факты(self, запись, деталь))
         for метка, ключ in (("Возраст", "age_rating"), ("Статус", "status")):
             знач = деталь.get(ключ)
             if знач:
-                пары.append((метка, html.escape(str(знач))))
+                все_пары.append((метка, html.escape(str(знач))))
+        core_пары = [(м, з) for м, з in все_пары if м in core_keys]
+        # Genres as fact row when present.
+        if жанры:
+            core_пары.append(("Жанры", ", ".join(html.escape(g) for g in жанры[:6])))
+        rail_пары = [(м, з) for м, з in все_пары if м in rail_keys]
+        core_rows = "".join(
+            f"<div><dt>{html.escape(м)}</dt><dd>{з}</dd></div>" for м, з in core_пары)
+        core_dl = (f'<dl class="ztitle__facts" data-testid="title-facts">{core_rows}</dl>'
+                   if core_rows else "")
         rail_rows = "".join(
-            f"<div><dt>{html.escape(м)}</dt><dd>{з}</dd></div>" for м, з in пары)
+            f"<div><dt>{html.escape(м)}</dt><dd>{з}</dd></div>" for м, з in rail_пары)
         rail_dl = (f'<dl class="ztitle__dl">{rail_rows}</dl>' if rail_rows else "")
         ads_on = os.environ.get("ZONA_AD_SLOTS", "") == "1"
         ad_slot = (f'<div class="zad" data-ad-slot="title-rail-300x250" '
@@ -4948,13 +5031,17 @@ class ВидЗона(Вид):
             "b.addEventListener('click',function(){var open=p.classList.toggle('is-open');"
             "p.hidden=false;b.setAttribute('aria-expanded',open?'true':'false');"
             "b.textContent=open?'Свернуть':'Развернуть';});})();</script>")
+        aside = ""
+        if rail_dl or ads_on:
+            aside = f'<aside class="ztitle__rail">{rail_dl}{ad_slot}</aside>'
         тело = (
             f'<div class="zwrap"><div class="ztitle">'
             f'<div class="ztitle__poster">{изо}</div>'
             f'<div class="ztitle__main"><h1>{html.escape(имя)}</h1>'
-            f'{оригинал_html}{оценки_html}{genres_html}{chips_html}{описание_html}'
+            f'{оригинал_html}{оценки_html}{genres_html}{chips_html}{core_dl}'
+            f'{описание_html}'
             f'<a class="ztitle__cta" href="#watch">Смотреть</a></div>'
-            f'<aside class="ztitle__rail">{rail_dl}{ad_slot}</aside>'
+            f'{aside}'
             f'</div></div>{плеер}{блок_серий}{блок_похожих}{expand_js}')
         разметка = self.schema_тайтла(запись, деталь, путь)
         meta_desc = (краткое_поле or полное or "").strip()

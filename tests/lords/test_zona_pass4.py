@@ -131,19 +131,28 @@ class TestRouteKinds:
     def test_movies_route_contains_only_films(self, зона):
         о = запросить(зона, "/movies/")
         assert о.статус == 200
-        metas = re.findall(r'class="zt__m"[^>]*>([^<]+)', о.тело)
-        assert metas
-        assert all("Фильм" in m for m in metas)
+        cards = re.findall(r'data-testid="title-card"[^>]*>(.*?)</a>', о.тело, re.S)
+        assert cards
+        for card in cards:
+            blob = " ".join(re.findall(r'class="zt__m"[^>]*>([^<]+)', card))
+            assert "Фильм" in blob
+            assert "Сериал" not in blob
 
     def test_series_route_contains_only_series(self, зона):
         о = запросить(зона, "/series/")
-        metas = re.findall(r'class="zt__m"[^>]*>([^<]+)', о.тело)
-        assert all("Сериал" in m for m in metas)
+        cards = re.findall(r'data-testid="title-card"[^>]*>(.*?)</a>', о.тело, re.S)
+        assert cards
+        for card in cards:
+            blob = " ".join(re.findall(r'class="zt__m"[^>]*>([^<]+)', card))
+            assert "Сериал" in blob
 
     def test_animation_route_contains_only_animation(self, зона):
         о = запросить(зона, "/animation/")
-        metas = re.findall(r'class="zt__m"[^>]*>([^<]+)', о.тело)
-        assert all("Мультфильм" in m for m in metas)
+        cards = re.findall(r'data-testid="title-card"[^>]*>(.*?)</a>', о.тело, re.S)
+        assert cards
+        for card in cards:
+            blob = " ".join(re.findall(r'class="zt__m"[^>]*>([^<]+)', card))
+            assert "Мультфильм" in blob
 
     def test_route_specific_urls_do_not_emit_kind_param(self, зона):
         о = запросить(зона, "/movies/")
@@ -186,8 +195,11 @@ class TestSortAndNew:
     def test_year_means_release_year_only(self, зона):
         о = запросить(зона, "/series/?year=2026")
         assert "Сериалы 2026 года" in о.тело
-        metas = re.findall(r'class="zt__m"[^>]*>([^<]+)', о.тело)
-        assert all("2026" in m for m in metas)
+        cards = re.findall(r'data-testid="title-card"[^>]*>(.*?)</a>', о.тело, re.S)
+        assert cards
+        for card in cards:
+            blob = " ".join(re.findall(r'class="zt__m"[^>]*>([^<]+)', card))
+            assert "2026" in blob
 
     def test_current_year_uses_clock_not_catalog_max(self, зона):
         assert зона.текущий_год_часов() == 2026
@@ -201,12 +213,12 @@ class TestSortAndNew:
 class TestPagination:
     def test_pagination_241_items(self, зона241):
         о = запросить(зона241, "/catalog/")
-        assert "Результаты: 243" in о.тело or "Результаты: 241" in о.тело or "Результаты:" in о.тело
-        # 241+2 alpha traps = 243; pages = ceil(n/48)
+        assert "Результаты:" in о.тело
+        # Pass5 PAGE_SIZE=28; 241+2 traps ≈ 243 → ceil(243/28)=9 pages.
         assert 'aria-current="page">1<' in о.тело
-        о2 = запросить(зона241, "/catalog/?page=6")
+        о2 = запросить(зона241, "/catalog/?page=9")
         assert о2.статус == 200
-        о3 = запросить(зона241, "/catalog/?page=7")
+        о3 = запросить(зона241, "/catalog/?page=10")
         assert о3.статус == 404
 
     def test_page_overflow_returns_404(self, зона):
