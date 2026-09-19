@@ -1,0 +1,63 @@
+{
+  "SOURCE_ARTIFACT_RUNTIME_MATCH": true,
+  "artifact_sha256": "39f91efcefc8a7d933db2e474477854624b724b407bc2865bf2245539dd2bf93",
+  "domains": {
+    "animedia.icu": {
+      "http": 200,
+      "tip": "18cd7d7",
+      "build": "20260919T222328Z-18cd7d7e-nova",
+      "noindex": true,
+      "robots": "noindex, nofollow",
+      "honest_feed": true,
+      "shelves": [
+        "Сериалы с сериями",
+        "Аниме-фильмы",
+        "Дунхуа",
+        "Короткие сериалы",
+        "Топ по оценкам",
+        "Классика",
+        "Романтика"
+      ],
+      "shelf_count": 7,
+      "healthz": 200,
+      "healthz_snip": "{\"ok\": true, \"pid\": 173243, \"process_start_time\": \"2026-09-19T22:23:33Z\", \"runtime_path\": \"/srv/lords/.frontend/lords-frontend.py\", \"runtime_sha256\": \"39f91efcefc8a7d933db2e474477854624b724b407bc2865b"
+    },
+    "animedia.space": {
+      "http": 200,
+      "tip": "18cd7d7",
+      "build": "20260919T222328Z-18cd7d7e-nova",
+      "noindex": true,
+      "robots": "noindex, nofollow",
+      "honest_feed": true,
+      "shelves": [
+        "Новые аниме на сайте",
+        "Топ по оценкам",
+        "Экшен",
+        "Классика",
+        "Аниме-фильмы",
+        "Дунхуа"
+      ],
+      "shelf_count": 6,
+      "healthz": 200,
+      "healthz_snip": "{\"ok\": true, \"pid\": 176535, \"process_start_time\": \"2026-09-19T22:23:40Z\", \"runtime_path\": \"/srv/lords/.frontend/lords-frontend.py\", \"runtime_sha256\": \"39f91efcefc8a7d933db2e474477854624b724b407bc2865b"
+    }
+  },
+  "manifests": {
+    "manifest_animedia-01": {
+      "build_id": "20260919T222328Z-18cd7d7e-nova",
+      "source_commit": "18cd7d7ecfd829b17917abcd627111f0147f8b79",
+      "runtime_commit": "18cd7d7ecfd829b17917abcd627111f0147f8b79",
+      "artifact_sha256": "39f91efcefc8a7d933db2e474477854624b724b407bc2865bf2245539dd2bf93",
+      "profile": "animedia-icu"
+    },
+    "manifest_animedia-02": {
+      "build_id": "20260919T222328Z-18cd7d7e-nova",
+      "source_commit": "18cd7d7ecfd829b17917abcd627111f0147f8b79",
+      "runtime_commit": "18cd7d7ecfd829b17917abcd627111f0147f8b79",
+      "artifact_sha256": "39f91efcefc8a7d933db2e474477854624b724b407bc2865bf2245539dd2bf93",
+      "profile": "animedia-space"
+    }
+  },
+  "DEPLOY_SCOPE": "animedia.icu,animedia.space",
+  "DEPLOY_BUILD": "20260919T222328Z-18cd7d7e-nova"
+}
