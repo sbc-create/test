@@ -1,0 +1,279 @@
+{
+  "route_matrix": [
+    {
+      "path": "/",
+      "status": 200,
+      "final": "https://zonafilm.space/",
+      "build": "20260919T142243Z-cdef2b1e-nova",
+      "family": "zona",
+      "version": "1.2.0",
+      "source": "cdef2b1ef4981e0d39e0353e8df9b60bf87c7fa6",
+      "artifact": "b6e5810f3116a6c0db56542115888f616f59cf3c4ccdfc051c794f5eb36cead3",
+      "robots": "noindex, nofollow",
+      "h1": true,
+      "marker": true,
+      "debug": false,
+      "design": "zona-top"
+    },
+    {
+      "path": "/movies/",
+      "status": 200,
+      "final": "https://zonafilm.space/movies/",
+      "build": "20260919T142243Z-cdef2b1e-nova",
+      "family": "zona",
+      "version": "1.2.0",
+      "source": "cdef2b1ef4981e0d39e0353e8df9b60bf87c7fa6",
+      "artifact": "b6e5810f3116a6c0db56542115888f616f59cf3c4ccdfc051c794f5eb36cead3",
+      "robots": "noindex, nofollow",
+      "h1": true,
+      "marker": true,
+      "debug": false,
+      "design": "zona-top"
+    },
+    {
+      "path": "/series/",
+      "status": 200,
+      "final": "https://zonafilm.space/series/",
+      "build": "20260919T142243Z-cdef2b1e-nova",
+      "family": "zona",
+      "version": "1.2.0",
+      "source": "cdef2b1ef4981e0d39e0353e8df9b60bf87c7fa6",
+      "artifact": "b6e5810f3116a6c0db56542115888f616f59cf3c4ccdfc051c794f5eb36cead3",
+      "robots": "noindex, nofollow",
+      "h1": true,
+      "marker": true,
+      "debug": false,
+      "design": "zona-top"
+    },
+    {
+      "path": "/animation/",
+      "status": 200,
+      "final": "https://zonafilm.space/animation/",
+      "build": "20260919T142243Z-cdef2b1e-nova",
+      "family": "zona",
+      "version": "1.2.0",
+      "source": "cdef2b1ef4981e0d39e0353e8df9b60bf87c7fa6",
+      "artifact": "b6e5810f3116a6c0db56542115888f616f59cf3c4ccdfc051c794f5eb36cead3",
+      "robots": "noindex, nofollow",
+      "h1": true,
+      "marker": true,
+      "debug": false,
+      "design": "zona-top"
+    },
+    {
+      "path": "/catalog/",
+      "status": 200,
+      "final": "https://zonafilm.space/catalog/",
+      "build": "20260919T142243Z-cdef2b1e-nova",
+      "family": "zona",
+      "version": "1.2.0",
+      "source": "cdef2b1ef4981e0d39e0353e8df9b60bf87c7fa6",
+      "artifact": "b6e5810f3116a6c0db56542115888f616f59cf3c4ccdfc051c794f5eb36cead3",
+      "robots": "noindex, nofollow",
+      "h1": true,
+      "marker": true,
+      "debug": false,
+      "design": "zona-top"
+    },
+    {
+      "path": "/new/",
+      "status": 200,
+      "final": "https://zonafilm.space/new/",
+      "build": "20260919T142243Z-cdef2b1e-nova",
+      "family": "zona",
+      "version": "1.2.0",
+      "source": "cdef2b1ef4981e0d39e0353e8df9b60bf87c7fa6",
+      "artifact": "b6e5810f3116a6c0db56542115888f616f59cf3c4ccdfc051c794f5eb36cead3",
+      "robots": "noindex, nofollow",
+      "h1": true,
+      "marker": true,
+      "debug": false,
+      "design": "zona-top"
+    },
+    {
+      "path": "/collections/",
+      "status": 200,
+      "final": "https://zonafilm.space/collections/",
+      "build": "20260919T142243Z-cdef2b1e-nova",
+      "family": "zona",
+      "version": "1.2.0",
+      "source": "cdef2b1ef4981e0d39e0353e8df9b60bf87c7fa6",
+      "artifact": "b6e5810f3116a6c0db56542115888f616f59cf3c4ccdfc051c794f5eb36cead3",
+      "robots": "noindex, nofollow",
+      "h1": true,
+      "marker": true,
+      "debug": false,
+      "design": "zona-top"
+    },
+    {
+      "path": "/search/",
+      "status": 200,
+      "final": "https://zonafilm.space/search/",
+      "build": "20260919T142243Z-cdef2b1e-nova",
+      "family": "zona",
+      "version": "1.2.0",
+      "source": "cdef2b1ef4981e0d39e0353e8df9b60bf87c7fa6",
+      "artifact": "b6e5810f3116a6c0db56542115888f616f59cf3c4ccdfc051c794f5eb36cead3",
+      "robots": "noindex, nofollow",
+      "h1": true,
+      "marker": true,
+      "debug": false,
+      "design": "zona-top"
+    },
+    {
+      "path": "/robots.txt",
+      "status": 200,
+      "final": "https://zonafilm.space/robots.txt",
+      "build": "20260919T142243Z-cdef2b1e-nova",
+      "family": "zona",
+      "version": "1.2.0",
+      "source": "cdef2b1ef4981e0d39e0353e8df9b60bf87c7fa6",
+      "artifact": "b6e5810f3116a6c0db56542115888f616f59cf3c4ccdfc051c794f5eb36cead3",
+      "robots": "noindex, nofollow",
+      "h1": false,
+      "marker": false,
+      "debug": false,
+      "design": null
+    },
+    {
+      "path": "/catalog/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC",
+      "status": 200,
+      "final": "https://zonafilm.space/catalog/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC",
+      "build": "20260919T142243Z-cdef2b1e-nova",
+      "family": "zona",
+      "version": "1.2.0",
+      "source": "cdef2b1ef4981e0d39e0353e8df9b60bf87c7fa6",
+      "artifact": "b6e5810f3116a6c0db56542115888f616f59cf3c4ccdfc051c794f5eb36cead3",
+      "robots": "noindex, nofollow",
+      "h1": true,
+      "marker": true,
+      "debug": false,
+      "design": "zona-top"
+    },
+    {
+      "path": "/catalog/?kind=%D0%A1%D0%B5%D1%80%D0%B8%D0%B0%D0%BB",
+      "status": 200,
+      "final": "https://zonafilm.space/catalog/?kind=%D0%A1%D0%B5%D1%80%D0%B8%D0%B0%D0%BB",
+      "build": "20260919T142243Z-cdef2b1e-nova",
+      "family": "zona",
+      "version": "1.2.0",
+      "source": "cdef2b1ef4981e0d39e0353e8df9b60bf87c7fa6",
+      "artifact": "b6e5810f3116a6c0db56542115888f616f59cf3c4ccdfc051c794f5eb36cead3",
+      "robots": "noindex, nofollow",
+      "h1": true,
+      "marker": true,
+      "debug": false,
+      "design": "zona-top"
+    },
+    {
+      "path": "/catalog/?page=2",
+      "status": 200,
+      "final": "https://zonafilm.space/catalog/?page=2",
+      "build": "20260919T142243Z-cdef2b1e-nova",
+      "family": "zona",
+      "version": "1.2.0",
+      "source": "cdef2b1ef4981e0d39e0353e8df9b60bf87c7fa6",
+      "artifact": "b6e5810f3116a6c0db56542115888f616f59cf3c4ccdfc051c794f5eb36cead3",
+      "robots": "noindex, nofollow",
+      "h1": true,
+      "marker": true,
+      "debug": false,
+      "design": "zona-top"
+    },
+    {
+      "path": "/search/?q=%D0%BC%D0%B0%D1%82%D1%80%D0%B8%D1%86%D0%B0",
+      "status": 200,
+      "final": "https://zonafilm.space/search/?q=%D0%BC%D0%B0%D1%82%D1%80%D0%B8%D1%86%D0%B0",
+      "build": "20260919T142243Z-cdef2b1e-nova",
+      "family": "zona",
+      "version": "1.2.0",
+      "source": "cdef2b1ef4981e0d39e0353e8df9b60bf87c7fa6",
+      "artifact": "b6e5810f3116a6c0db56542115888f616f59cf3c4ccdfc051c794f5eb36cead3",
+      "robots": "noindex, nofollow",
+      "h1": true,
+      "marker": true,
+      "debug": false,
+      "design": "zona-top"
+    }
+  ],
+  "filters": {
+    "movies_status": 200,
+    "series_status": 200,
+    "movies_slugs_sample": [
+      "0-0-mgc",
+      "0-1-mira",
+      "007-koordinaty-skayfoll",
+      "007-spektr",
+      "009-1-konec-nachala",
+      "03-34-zemletryasenie-v-chili",
+      "1",
+      "1-11"
+    ],
+    "series_slugs_sample": [
+      "007-doroga-k-millionu",
+      "1-11-vremya-dlya-vstrechi-s-toboy",
+      "10-5-ballov",
+      "10-5-ballov-apokalipsis",
+      "10-kilo",
+      "10-let-spustya",
+      "10-ochkov-na-buduschee",
+      "10-prichin-moey-nenavisti"
+    ],
+    "intersection_count": 0,
+    "movies_only": 48,
+    "series_only": 48
+  },
+  "load": {
+    "sequential_100_5xx": 0,
+    "parallel_20_5xx": 0
+  },
+  "other_domains": {
+    "animedia": {
+      "status": 200,
+      "build": "20260919T075819Z-b023bd50-nova",
+      "family": "animedia",
+      "artifact": "20772a574f0542e9d71bd82fe7f974d526723612a8b1f9d54cf2bf8b1453d196"
+    },
+    "lords": {
+      "status": 200,
+      "build": "20260913T2300Z-8ececc6c-nova",
+      "family": "lords",
+      "artifact": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346"
+    }
+  },
+  "manifests": {
+    "zona-01": {
+      "build_id": "20260919T142243Z-cdef2b1e-nova",
+      "source_commit": "cdef2b1ef4981e0d39e0353e8df9b60bf87c7fa6",
+      "runtime_commit": "cdef2b1ef4981e0d39e0353e8df9b60bf87c7fa6",
+      "artifact_sha256": "b6e5810f3116a6c0db56542115888f616f59cf3c4ccdfc051c794f5eb36cead3",
+      "design_version": "1.2.0",
+      "template_family": "zona"
+    },
+    "animedia-01": {
+      "build_id": "20260919T075819Z-b023bd50-nova",
+      "source_commit": "b023bd50cced8d281cb3814a75bf72b429afee0b",
+      "runtime_commit": "cc83fd7cb326f5c67906face1d6fa0d137afdeaa",
+      "artifact_sha256": "20772a574f0542e9d71bd82fe7f974d526723612a8b1f9d54cf2bf8b1453d196",
+      "design_version": "1.2.0",
+      "template_family": "animedia"
+    },
+    "lords-02": {
+      "build_id": "20260919T135218Z-5fc22310-nova",
+      "source_commit": "5fc22310fdfb8f0c8748f69e5603e4de3267f27e",
+      "runtime_commit": "5fc22310fdfb8f0c8748f69e5603e4de3267f27e",
+      "artifact_sha256": "b08519b2f023329ccf1cde6c0d0b3f758b764ffe0ca47eba3a9587a5f29d5493",
+      "design_version": "1.1.0",
+      "template_family": "lords"
+    },
+    "lords-03": {
+      "build_id": "20260910T124530Z-a1691c56-nova",
+      "source_commit": "a1691c568d5b53a6f5a09f3c79cc3b76c52821ee",
+      "runtime_commit": null,
+      "artifact_sha256": "9229879ee5ab04eb68a59a98d9aeb1c6e3b745de7125c984756787790b0d6bbd",
+      "design_version": "1.1.0",
+      "template_family": "lords"
+    }
+  },
+  "robots_body": "User-agent: *\nDisallow: /\n"
+}

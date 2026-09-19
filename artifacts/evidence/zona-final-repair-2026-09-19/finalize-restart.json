@@ -1,0 +1,42 @@
+{
+  "action": "finalize-restart-nsenter",
+  "site": "zona-01",
+  "domain": "zonafilm.space",
+  "rollback_point": "/srv/lords/.frontend/.rollback/20260919T143346Z-zona-01-finalize2",
+  "artifact_sha256": "14ce882d5ad4a70769f1fa054288833ef7cd408d8d5d79ef8a5b62884c8b7593",
+  "manifest": {
+    "schema_version": 1,
+    "template_family": "zona",
+    "design_version": "1.2.0",
+    "source_commit": "2d6d16952abca7bf8840e00c7d75769d96452044",
+    "runtime_commit": "2d6d16952abca7bf8840e00c7d75769d96452044",
+    "build_id": "20260919T143500Z-2d6d1695-nova",
+    "artifact_sha256": "14ce882d5ad4a70769f1fa054288833ef7cd408d8d5d79ef8a5b62884c8b7593",
+    "profile": "zona-general",
+    "built_at": "2026-09-19T14:33:46Z"
+  },
+  "previous_manifest": {
+    "schema_version": 1,
+    "template_family": "zona",
+    "design_version": "1.2.0",
+    "source_commit": "cdef2b1ef4981e0d39e0353e8df9b60bf87c7fa6",
+    "runtime_commit": "cdef2b1ef4981e0d39e0353e8df9b60bf87c7fa6",
+    "build_id": "20260919T142243Z-cdef2b1e-nova",
+    "artifact_sha256": "b6e5810f3116a6c0db56542115888f616f59cf3c4ccdfc051c794f5eb36cead3",
+    "profile": "zona-general",
+    "built_at": "2026-09-19T14:30:13Z"
+  },
+  "old_pid": 2996171,
+  "health": {
+    "status": 200,
+    "build": "20260919T143500Z-2d6d1695-nova",
+    "artifact": "14ce882d5ad4a70769f1fa054288833ef7cd408d8d5d79ef8a5b62884c8b7593",
+    "source": "2d6d16952abca7bf8840e00c7d75769d96452044",
+    "has_marker": true,
+    "no_debug": true,
+    "movies_probe": 200
+  },
+  "ok": true,
+  "at_utc": "20260919T143354Z",
+  "verdict": "INSTALLED"
+}

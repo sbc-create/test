@@ -1,0 +1,53 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "build": "20260918T231532Z-a10e68b2-nova",
+    "bytes": 47418
+  },
+  {
+    "path": "/movies/",
+    "status": 404,
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "path": "/series/",
+    "status": 404,
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "path": "/animation/",
+    "status": 404,
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "path": "/catalog/",
+    "status": 200,
+    "build": "20260918T231532Z-a10e68b2-nova",
+    "bytes": 76540
+  },
+  {
+    "path": "/new/",
+    "status": 200,
+    "build": "20260918T231532Z-a10e68b2-nova",
+    "bytes": 77897
+  },
+  {
+    "path": "/collections/",
+    "status": 200,
+    "build": "20260918T231532Z-a10e68b2-nova",
+    "bytes": 26254
+  },
+  {
+    "path": "/search/",
+    "status": 200,
+    "build": "20260918T231532Z-a10e68b2-nova",
+    "bytes": 20271
+  },
+  {
+    "path": "/robots.txt",
+    "status": 200,
+    "build": "20260918T231532Z-a10e68b2-nova",
+    "bytes": 26
+  }
+]
