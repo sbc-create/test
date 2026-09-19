@@ -1,0 +1,14 @@
+# BLOCK_11
+
+`BLOCK_11_PASS` (visual) / `BLOCKED_OWNER_DATA` (contacts+schedule)
+
+Footer mobile 2-col nav; contacts only from owner config (absent).
+
+```text
+FOOTER_VISUAL_SCORE=94
+CONTACT_DATA_GAP=1
+SCHEDULE_DATA_GAP=1
+FOOTER_VISUAL_CAN_BE_CLOSED=YES
+FOOTER_DATA_CAN_BE_CLOSED=NO
+SCHEDULE_CAN_BE_CLOSED=NO
+```

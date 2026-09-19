@@ -31,11 +31,11 @@ Unrelated dirty (left untouched): `artifacts/evidence/animedia-final-repair-…/
 | BLOCK_04 | `/` lower | `.zsec` shelves | **PASS** | 1 | `18cd7d7` |
 | BLOCK_05 | `/title/*` info | `.ztitle` (no player) | **PASS** | 1 | `3209a8e` |
 | BLOCK_06 | `/title/*` ratings | `.rbs`, ratings contract | **PASS** | 1 | `139e9e7` |
-| BLOCK_07 | `/title/*` player | `.zpl` | **PASS** | 1 | _(pending)_ |
-| BLOCK_08 | `/catalog/` | filters + cards | PENDING | 0 | — |
-| BLOCK_09 | `/search/` | ranking | PENDING | 0 | — |
-| BLOCK_10 | collections/related | `.zhub`, `.zsec--rel` | PENDING | 0 | — |
-| BLOCK_11 | footer/schedule | `.zft`, schedule | PENDING | 0 | — |
+| BLOCK_07 | `/title/*` player | `.zpl` | **PASS** | 1 | `fa43b38` |
+| BLOCK_08 | `/catalog/` | filters + cards | **PASS** | 1 | _(pending)_ |
+| BLOCK_09 | `/search/` | ranking | **PASS** | 1 | _(pending)_ |
+| BLOCK_10 | collections/related | `.zhub`, `.zsec--rel` | **PASS** | 1 | _(pending)_ |
+| BLOCK_11 | footer/schedule | `.zft`, schedule | **PASS** | 1 | _(pending)_ |
 | BLOCK_12 | regression | all routes × viewports × themes | PENDING | 0 | — |
 
 Close flags until owner review:

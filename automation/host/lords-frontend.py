@@ -581,83 +581,108 @@ class Данные:
         slug и транслиту. Запрос дополнительно читается как набранный в
         чужой раскладке. Служебные слова («сезон», «серия») отбрасываются.
 
-        Смешанный запрос («Matrix матрица») не склеивается в одно ядро:
-        значимые токены проверяются по отдельности (OR), иначе латиница +
-        кириллица никогда не совпали бы ни с одной формой.
+        Ранжирование (выше — раньше):
+        1) полная фраза точно совпала с формой;
+        2) все значимые токены присутствуют (AND) — точные / prefix / substring;
+        3) одиночный токен (OR) — только если токенов мало;
+        4) мягкое совпадение опечаток.
 
-        Ранжирование: точное совпадение, затем начало, затем вхождение, затем
-        терпимость к одной-двум опечаткам.
+        Для «Звёздные войны» точное/полное название обязано быть выше
+        однотокенных prefix-совпадений вроде «Воин…».
         """
         сырые = [q, из_раскладки(q)]
-        цели: list[str] = []
+        фразы: list[str] = []
+        токены_запроса: list[str] = []
         for сырой in сырые:
             нq = нормализовать(сырой)
             если_токены = [т for т in токены(сырой)
                            if т not in СЛУЖЕБНЫЕ and not т.isdigit()]
-            if нq:
-                цели.append(нq)
+            if нq and нq not in фразы:
+                фразы.append(нq)
             for т in если_токены:
                 нт = нормализовать(т)
-                if нт and нт not in цели:
-                    цели.append(нт)
-            ядро = нормализовать("".join(если_токены))
-            if ядро and ядро not in цели:
-                цели.append(ядро)
-        # Уникальный порядок.
-        увидели_цели: list[str] = []
-        for ц in цели:
-            if ц and ц not in увидели_цели:
-                увидели_цели.append(ц)
-        цели = увидели_цели
-        if not цели:
+                if нт and нт not in токены_запроса and len(нт) >= 2:
+                    токены_запроса.append(нт)
+        if not фразы and not токены_запроса:
             return []
 
-        точн, начало, внутри, мягкие = [], [], [], []
+        знач_токены = [т for т in токены_запроса if len(т) >= 3]
+        многословный = len(знач_токены) >= 2
+
+        def токен_в_формах(т: str, формы: list[str]) -> str | None:
+            if т in формы:
+                return "exact"
+            if any(ф.startswith(т) for ф in формы):
+                return "prefix"
+            if any(т in ф for ф in формы):
+                return "sub"
+            return None
+
+        scored: list[tuple[int, str, dict]] = []
         for з in self.items:
             формы = з["_формы"]
             if not формы:
                 continue
-            попал = False
-            for цель in цели:
-                if цель in формы:
-                    точн.append(з)
-                    попал = True
+            score = 0
+            # 1) full-phrase exact
+            for фраза in фразы:
+                if фраза and фраза in формы:
+                    score = max(score, 1000)
                     break
-            if попал:
-                continue
-            for цель in цели:
-                if any(ф.startswith(цель) for ф in формы):
-                    начало.append(з)
-                    попал = True
-                    break
-            if попал:
-                continue
-            for цель in цели:
-                if any(цель in ф for ф in формы):
-                    внутри.append(з)
-                    попал = True
-                    break
-            if попал:
-                continue
-            # Нечёткое сравнение: см. `_мягкое_совпадение` (prefix+ratio).
-            if len(мягкие) < предел:
-                for цель in цели:
-                    for ф in формы:
-                        if _мягкое_совпадение(цель, ф):
-                            мягкие.append(з)
-                            попал = True
-                            break
-                    if попал:
+            # 2) multi-token AND
+            if score < 1000 and знач_токены:
+                kinds = [токен_в_формах(т, формы) for т in знач_токены]
+                if all(kinds):
+                    if all(k == "exact" for k in kinds):
+                        score = max(score, 900)
+                    elif all(k in {"exact", "prefix"} for k in kinds):
+                        score = max(score, 800)
+                    else:
+                        score = max(score, 700)
+                elif not многословный:
+                    # single meaningful token — OR tiers
+                    for т in знач_токены:
+                        k = токен_в_формах(т, формы)
+                        if k == "exact":
+                            score = max(score, 600)
+                        elif k == "prefix":
+                            score = max(score, 400)
+                        elif k == "sub":
+                            score = max(score, 300)
+            elif score < 1000 and not многословный:
+                for т in токены_запроса:
+                    k = токен_в_формах(т, формы)
+                    if k == "exact":
+                        score = max(score, 600)
+                    elif k == "prefix":
+                        score = max(score, 400)
+                    elif k == "sub":
+                        score = max(score, 300)
+            # 3) soft only if still unmatched and short query
+            if score == 0 and not многословный:
+                for цель in (фразы + токены_запроса):
+                    if any(_мягкое_совпадение(цель, ф) for ф in формы):
+                        score = 100
                         break
+            if score == 0 and многословный:
+                soft_hits = sum(
+                    1 for т in знач_токены
+                    if токен_в_формах(т, формы) or any(_мягкое_совпадение(т, ф) for ф in формы[:3])
+                )
+                if soft_hits == len(знач_токены):
+                    score = 150
+            if score > 0:
+                scored.append((score, з.get("title") or "", з))
+
+        scored.sort(key=lambda x: (-x[0], x[1]))
         итог, видели = [], set()
-        for группа in (точн, начало, внутри, мягкие):
-            for з in группа:
-                if з["url"] in видели:
-                    continue
-                видели.add(з["url"])
-                итог.append(з)
-                if len(итог) >= предел:
-                    return итог
+        for _, _, з in scored:
+            if з["url"] in видели:
+                continue
+            видели.add(з["url"])
+            итог.append(з)
+            if len(итог) >= предел:
+                break
         return итог
 
 
@@ -2032,6 +2057,8 @@ display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hi
 .zft__nav a{font-size:13px;color:var(--a-dim);font-weight:600;min-height:36px;display:inline-flex;align-items:center}
 .zft__nav a:hover{color:var(--a-acc)}
 .zft__contact:empty,.zft__legal:empty{display:none}
+@media(max-width:767px){.zft__nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 16px;width:100%}
+.zft__about{width:100%}}
 .zft__bar{display:flex;justify-content:space-between;gap:12px;align-items:center;
 padding-top:6px;border-top:1px solid var(--a-line);font-size:12px;color:var(--a-mute);flex-wrap:wrap}
 .zvb{font-size:11px;color:var(--a-mute);opacity:.85;white-space:nowrap}
