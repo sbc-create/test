@@ -109,21 +109,21 @@ sources:
     enabled: false
     ttl_seconds: 86400
     rate_limit_per_minute: 6
-    state: CLOSED_CANARY_ALLOWED
+    state: DISABLED_PERMISSION_MISSING
     provenance:
       delivery: "public detail HTML pages via factory/ratings"
       origin: "https://amd.online/"
       score_field: "multirating-itog-rateval"
       vote_field: "multirating-itog-votes"
     authorization:
-      status: closed_canary_allowed
+      status: not_provided_recurring_disabled
       reason: >-
-        Closed technical canary (≤100 titles, noindex animedia) allowed without
-        written permission. Public indexed publication remains
-        BLOCKED_PENDING_SEPARATE_APPROVAL.
+        Written permission NOT_PROVIDED. Stage 2/3 closed canary was one-shot.
+        Stage 4 disables new AMD fetches; last-good retained. Public indexed
+        publication remains BLOCKED.
       document: artifacts/evidence/ratings-ingestion-02/AMD_PERMISSION_STATUS.md
       granted_at: ""
       modes:
-        AMD_CLOSED_CANARY_INGESTION: ALLOWED
-        AMD_CLOSED_NOINDEX_PUBLICATION: ALLOWED
+        AMD_CLOSED_CANARY_INGESTION: COMPLETED_STAGE2_3
+        AMD_RECURRING_FETCHES: DISABLED
         AMD_PUBLIC_INDEXED_PUBLICATION: BLOCKED_PENDING_SEPARATE_APPROVAL

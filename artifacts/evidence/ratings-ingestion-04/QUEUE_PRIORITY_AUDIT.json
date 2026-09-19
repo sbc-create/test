@@ -1,0 +1,25 @@
+{
+  "order": [
+    "ongoing_without_rating",
+    "new_30_days_without_rating",
+    "ongoing_stale",
+    "recently_updated",
+    "completed_without_coverage",
+    "catalog_tail",
+    "planned_refresh_covered"
+  ],
+  "tie_break": "canonical_title_id ASC",
+  "fuzzy_auto_publish": false,
+  "amd_new_fetches": false,
+  "authorized_sources_for_pilot": [
+    "shikimori"
+  ],
+  "coverage_aware_target": {
+    "DAILY_ACCEPTED_TARGET": 100,
+    "effective_target": 100,
+    "authorized_uncovered": 7033,
+    "authorized_due_refresh": 0,
+    "shortfall_allowed": false,
+    "shortfall_reason": ""
+  }
+}
