@@ -41,7 +41,7 @@ class Rule:
             return False
         if self.pattern is None:
             return True
-        if tool == "Bash":
+        if tool in ("Bash", "Shell"):
             return _bash_matches(self.pattern, argument)
         return _path_matches(self.pattern, argument)
 
@@ -119,6 +119,9 @@ def _bash_units(command: str) -> list[str]:
 
 
 def settings_decision(groups: dict[str, list[Rule]], tool: str, argument: str) -> str | None:
+    # Cursor Agent uses Shell; permission rules and settings are authored for Bash.
+    if tool == "Shell":
+        tool = "Bash"
     units = _bash_units(argument) if tool == "Bash" else [argument]
     for group in (DENY, ASK, ALLOW):
         for rule in groups.get(group, []):

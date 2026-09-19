@@ -41,6 +41,15 @@ class TestUnattendedSafe:
     def test_safe_bash_allowed(self, command):
         assert d("Bash", command=command) == "allow"
 
+    def test_cursor_shell_alias_allowed(self):
+        """Cursor harness names the tool Shell; rules must treat it as Bash."""
+        assert d("Shell", command="git status") == "allow"
+        assert d("Shell", command="mystery-binary --wipe") == "deny"
+
+    def test_cursor_strreplace_allowed(self):
+        assert d("StrReplace", path="/home/user/test/seo_operator/x.py") == "allow"
+        assert d("StrReplace", path="/repo/.claude/settings.json") == "deny"
+
     def test_read_tools_allowed(self):
         assert d("Read", file_path="/x") == "allow"
         assert d("Grep", pattern="x") == "allow"

@@ -117,7 +117,20 @@ WEB_SEARCH_TOOLS = frozenset({"WebSearch"})
 
 # Tools that write inside the working tree. Safe under UNATTENDED_SAFE because
 # the session works in its own branch and cannot push without authorization.
-BRANCH_LOCAL_WRITE_TOOLS = frozenset({"Write", "Edit", "MultiEdit", "NotebookEdit"})
+# Cursor harness names: StrReplace / Delete (Claude Code: Edit / MultiEdit).
+BRANCH_LOCAL_WRITE_TOOLS = frozenset(
+    {
+        "Write",
+        "Edit",
+        "MultiEdit",
+        "NotebookEdit",
+        "StrReplace",
+        "Delete",
+    }
+)
+
+# Cursor Agent exposes `Shell`; Claude Code exposes `Bash`. Same command surface.
+SHELL_TOOLS = frozenset({"Bash", "Shell"})
 
 # GitHub через штатные инструменты. Чтение и работа с pull request — обычная
 # часть цикла; всё, что удаляет или переносит владение, остаётся за человеком.
@@ -193,7 +206,8 @@ def decide(payload: dict) -> dict:
         return _deny(tool, f"{tool}: хост «{host or 'не определён'}» не внесён в inventory", url)
 
     if tool in BRANCH_LOCAL_WRITE_TOOLS:
-        path = str(tool_input.get("file_path", ""))
+        # Claude Code uses file_path; Cursor Write/StrReplace/Delete use path.
+        path = str(tool_input.get("file_path") or tool_input.get("path") or "")
         if "/.claude/hooks/" in path or path.endswith("settings.json"):
             # Правка защитной машинерии тем же агентом, которого она ограничивает,
             # снимает защиту её собственным механизмом. Это запрет, а не вопрос:
@@ -208,7 +222,7 @@ def decide(payload: dict) -> dict:
     if tool in GITHUB_WRITE_TOOLS:
         return _out("allow", f"{tool}: работа с pull request в собственной ветке")
 
-    if tool == "Bash":
+    if tool in SHELL_TOOLS:
         command = str(tool_input.get("command", ""))
         environment = payload.get("environment", "sandbox")
         verdict = classify(ActionContext(command=command, environment=environment))
