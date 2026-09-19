@@ -5,7 +5,7 @@ const launchOptions = CHROMIUM ? { executablePath: CHROMIUM } : {};
 
 module.exports = defineConfig({
   testDir: './tests/e2e-lords',
-  testMatch: 'player-viewport-fill.spec.js',
+  testMatch: /player-(viewport-fill|full-bleed-contract)\.spec\.js/,
   timeout: 60_000,
   expect: { timeout: 10_000 },
   fullyParallel: false,

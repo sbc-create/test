@@ -34,7 +34,7 @@ ${viewportCss}
 <section class="pl">
   <div class="pl__bar"><span class="pl__tab" aria-current="true">Смотреть</span>
     <span class="pl__note">Загрузка плеера…</span></div>
-  <div class="pl__frame" data-player data-state="resolving">
+  <div class="pl__frame" data-player data-player-layout-contract="full-bleed-v1" data-state="resolving">
     <div data-player-host data-src-candidates='[{"aggregator":"cvh","id":"demo"}]'>
       <video-player ident="demo" season="1" episode="1"
         data-publisher-id="1" data-title-id="demo" data-aggregator="cvh"></video-player>
