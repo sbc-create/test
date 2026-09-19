@@ -6,7 +6,7 @@
 | WORKTREE | `/home/claude/wt-animedia-finalization-01` |
 | BRANCH | `claude/animedia-template-finalization-01` |
 | ACTUAL_START_HEAD | `87c5e5bfc5d37e38891888adb2dc2af0d0c63130` |
-| FINAL_HEAD | `e99fcdc432c3db123a8cc6704e4aadfa288571e1` |
+| FINAL_HEAD | `720825ebf919bb4376d2f6bb7ccda47a73a6d0fc` |
 | Live build | `20260919T194140Z-d01c1370-nova` |
 | Marker | `Animedia 1.2.2 · d01c137` |
 
@@ -76,7 +76,7 @@ REFERENCE_WEIGHTED_SCORE=88
 VERDICT=PASS
 EXPECTED_START_HEAD_PREFIX=87c5e5b
 ACTUAL_START_HEAD=87c5e5bfc5d37e38891888adb2dc2af0d0c63130
-FINAL_HEAD=e99fcdc432c3db123a8cc6704e4aadfa288571e1
+FINAL_HEAD=720825ebf919bb4376d2f6bb7ccda47a73a6d0fc
 DEPLOY_PERFORMED=1
 DEPLOY_SCOPE=animedia.icu,animedia.space
 DNS_MUTATIONS=0
