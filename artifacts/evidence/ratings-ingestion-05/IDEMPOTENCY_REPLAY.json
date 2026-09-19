@@ -1,0 +1,41 @@
+{
+  "idempotent_replay": true,
+  "new_observations": 125,
+  "metrics": {
+    "source": "shikimori",
+    "run_id": "stage5-supervised-20260919T224456Z-9bc222",
+    "started_at": "2026-09-19T22:45:16Z",
+    "finished_at": "2026-09-19T22:45:39Z",
+    "duration_sec": 23.0,
+    "dry_run": false,
+    "queue_size": 150,
+    "planned_candidates": 150,
+    "attempted": 150,
+    "fetched": 150,
+    "matched": 125,
+    "inserted": 125,
+    "unchanged": 0,
+    "refreshed": 0,
+    "not_found": 25,
+    "conflicts": 0,
+    "review_queued": 0,
+    "retried": 0,
+    "rate_limited": 0,
+    "failed": 0,
+    "dead_letter": 0,
+    "request_count": 3,
+    "daily_limit_usage": {
+      "request_count": 3,
+      "requests_last_minute": 3,
+      "max_per_minute": 6,
+      "max_rps": 0.1
+    },
+    "wrong_automatic_mappings": 0,
+    "ambiguous_auto_published": 0,
+    "last_good_preserved": 25,
+    "checkpoint": {
+      "idempotent_replay": true,
+      "prior_run": "stage5-supervised-20260919T224456Z-9bc222"
+    }
+  }
+}

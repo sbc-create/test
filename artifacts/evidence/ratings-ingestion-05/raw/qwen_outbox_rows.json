@@ -1,0 +1,13 @@
+[
+  {
+    "dedupe_id": "97337bba3da57a699fba96d5380e62b296ae872a58db750d9213e6da7a1edcc1",
+    "report_id": "rpt-stage5-supervised-20260919T224456Z-9bc222",
+    "cycle_id": "stage5-supervised-20260919T224456Z-9bc222",
+    "payload_digest": "790004b6f1595d9e6fb141b082a66cc5fc30e6fc969b68aefb484e8c4a0b1e0d",
+    "status": "DRY_RUN_ACK",
+    "attempts": 1,
+    "created_at": "2026-09-19T22:45:48Z",
+    "updated_at": "2026-09-19T22:45:48Z",
+    "last_error": ""
+  }
+]

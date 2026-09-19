@@ -1,0 +1,22 @@
+{
+  "domain": "animedia.icu",
+  "indexing": "noindex",
+  "publication_mode": "CLOSED_NOINDEX",
+  "public_indexed": false,
+  "live_path": "/srv/site-factory/repo/var/ratings/snapshots/animedia.icu/ratings_snapshot_v1.json",
+  "evidence_path": "/home/claude/wt-ratings-ingestion-01/artifacts/evidence/ratings-ingestion-05/closed-noindex/animedia.icu/ratings_snapshot_v1.json",
+  "live": {
+    "path": "/srv/site-factory/repo/var/ratings/snapshots/animedia.icu/ratings_snapshot_v1.json",
+    "digest": "52a497c04b07d7a99573037e3e085cb6aff60f9593d3474f80d2d00b1be3baaa",
+    "previous": "/srv/site-factory/repo/var/ratings/snapshots/animedia.icu/ratings_snapshot_v1.json.prev",
+    "title_count": 225
+  },
+  "evidence": {
+    "path": "/home/claude/wt-ratings-ingestion-01/artifacts/evidence/ratings-ingestion-05/closed-noindex/animedia.icu/ratings_snapshot_v1.json",
+    "digest": "52a497c04b07d7a99573037e3e085cb6aff60f9593d3474f80d2d00b1be3baaa",
+    "previous": null,
+    "title_count": 225
+  },
+  "attribution_required": "Источник: AMD.online",
+  "robots_policy": "noindex, nofollow (closed nova)"
+}

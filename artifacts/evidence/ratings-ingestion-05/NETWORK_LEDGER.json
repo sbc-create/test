@@ -1,0 +1,14 @@
+{
+  "request_count": 3,
+  "rate_limiter": {
+    "request_count": 3,
+    "requests_last_minute": 3,
+    "max_per_minute": 6,
+    "max_rps": 0.1
+  },
+  "SOURCE_RATE_LIMIT_RPS": 0.1,
+  "SOURCE_CONCURRENCY": 1,
+  "AMD_NETWORK_CALLS": 0,
+  "UNAUTHORIZED_SOURCE_CALLS": 0,
+  "rate_limited_events": 0
+}

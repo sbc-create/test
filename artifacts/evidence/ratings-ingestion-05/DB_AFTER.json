@@ -1,0 +1,29 @@
+{
+  "path": "/srv/site-factory/repo/var/ratings/ratings.sqlite",
+  "health": {
+    "path": "/srv/site-factory/repo/var/ratings/ratings.sqlite",
+    "SQLITE_INTEGRITY_CHECK": "ok",
+    "FOREIGN_KEY_CHECK_FAILURES": 0,
+    "foreign_key_rows": [],
+    "journal_mode": "wal",
+    "busy_timeout": 5000,
+    "foreign_keys": 0
+  },
+  "counts": {
+    "rating_observations": 225,
+    "rating_current": 225,
+    "title_source_mappings": 250,
+    "rating_source_absence": 10,
+    "rating_combined_projection": 100,
+    "schema_migrations": 3
+  },
+  "as_of": "2026-09-19T22:45:39Z",
+  "by_source_current": {
+    "amd_online": 100,
+    "shikimori": 125
+  },
+  "by_source_obs": {
+    "amd_online": 100,
+    "shikimori": 125
+  }
+}

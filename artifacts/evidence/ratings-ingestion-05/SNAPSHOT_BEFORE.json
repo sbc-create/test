@@ -1,0 +1,12 @@
+{
+  "animedia.icu": {
+    "path": "/srv/site-factory/repo/var/ratings/snapshots/animedia.icu/ratings_snapshot_v1.json",
+    "exists": true,
+    "digest": "c718ce835f372badeb29ac3dd6a2bc1fbda8c7e7eb1a4c1c4adaadd17747ce71"
+  },
+  "animedia.space": {
+    "path": "/srv/site-factory/repo/var/ratings/snapshots/animedia.space/ratings_snapshot_v1.json",
+    "exists": true,
+    "digest": "c718ce835f372badeb29ac3dd6a2bc1fbda8c7e7eb1a4c1c4adaadd17747ce71"
+  }
+}

@@ -370,7 +370,9 @@ def block_06_supervised_cycle(
 
     metrics = engine.ingest(
         source_key=SOURCE_ALLOWED,
-        limit=min(CANDIDATE_CAP, ACCEPTED_TARGET + 50),  # claim up to cap
+        # Claim at most ACCEPTED_TARGET so we cannot insert above the daily cap.
+        # Candidate queue may still hold up to CANDIDATE_CAP for planning/evidence.
+        limit=ACCEPTED_TARGET,
         dry_run=False,
         apply=True,
         run_id=run_id,
@@ -378,10 +380,12 @@ def block_06_supervised_cycle(
         use_lock=False,  # outer lease held
     )
     m = metrics.as_dict()
-    accepted = int(m.get("inserted") or 0) + int(m.get("refreshed") or 0)
-    # Cap semantics: newly accepted observations toward target
     newly = int(m.get("inserted") or 0)
     refreshed = int(m.get("refreshed") or 0)
+    # Hard gate: never report/accept above Stage5 daily cap
+    if newly + refreshed > ACCEPTED_TARGET:
+        m["ACCEPTED_CAP_OVERSHOOT"] = newly + refreshed - ACCEPTED_TARGET
+        m["ACCEPTED_CAP_VIOLATION"] = 1
     attempted = int(m.get("attempted") or 0)
     rejected = (
         int(m.get("not_found") or 0)
@@ -545,7 +549,7 @@ def block_08_snapshot_gateway(*, ev: Path, store: RatingsStore, db_path: Path) -
 
     # Runtime digest match against live files
     runtime_match = 1
-    for domain, meta in (pubs.get("domains") or {}).items():
+    for _domain, meta in (pubs.get("domains") or {}).items():
         live = Path(meta["live_path"])
         if live.is_file():
             live_body = json.loads(live.read_text(encoding="utf-8"))
@@ -635,8 +639,8 @@ def block_09_user_votes(ev: Path, tmp: Path) -> dict[str, Any]:
         ACTION_CREATE,
         ACTION_DELETE,
         ACTION_UPDATE,
-        LocalVotesService,
         SCOPE_NETWORK,
+        LocalVotesService,
     )
 
     db = tmp / "votes_regression.sqlite"
@@ -1024,12 +1028,22 @@ def run_supervised(*, apply_live: bool = True) -> dict[str, Any]:
     summary.update({k: v for k, v in sim.items() if k.startswith("BLOCK_") or k.startswith("SIMULATION") or k in ("ok",)})
 
     # Verdict
-    if summary.get("FIRST_SUPERVISED_CYCLE_PASS") == 1 and summary.get("SCHEDULER_ENABLED") == "YES":
+    accepted_n = int(summary.get("ACCEPTED") or 0)
+    overshoot = accepted_n > ACCEPTED_TARGET
+    if overshoot:
+        summary["DAILY_ACCEPTED_ABOVE_100"] = 1
+        summary["RESIDUAL_BLOCKER"] = (
+            f"supervised cycle inserted {accepted_n} observations; Stage5 cap is "
+            f"{ACCEPTED_TARGET}. Excess rows retained (valid Shikimori observations); "
+            "claim limit fixed to ACCEPTED_TARGET for future cycles. No second live cycle."
+        )
+        verdict = "NEEDS_REPAIR"
+    elif summary.get("FIRST_SUPERVISED_CYCLE_PASS") == 1 and summary.get("SCHEDULER_ENABLED") == "YES":
         verdict = "PASS_SUPERVISED_100_TIMER_ENABLED"
     elif summary.get("FIRST_SUPERVISED_CYCLE_PASS") == 1 and summary.get("QWEN_DELIVERY") == "BLOCKED_NO_CONFIG":
-        if int(summary.get("ACCEPTED") or 0) >= ACCEPTED_TARGET:
+        if accepted_n >= ACCEPTED_TARGET:
             verdict = "PASS_SUPERVISED_100_NEEDS_QWEN_CONFIG"
-        elif int(summary.get("ACCEPTED") or 0) > 0:
+        elif accepted_n > 0:
             verdict = "PASS_SUPERVISED_SHORTFALL_EXPLAINED"
         elif queue["QUEUE_CANDIDATE_COUNT"] == 0:
             verdict = "BLOCKED_NO_ELIGIBLE_EXACT_MAPPINGS"

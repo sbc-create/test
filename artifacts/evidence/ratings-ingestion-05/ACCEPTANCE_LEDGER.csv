@@ -1,0 +1,2 @@
+run_id,attempted,inserted,refreshed,unchanged,not_found,failed,accepted_toward_target,shortfall
+stage5-supervised-20260919T224456Z-9bc222,150,125,0,0,25,0,125,0

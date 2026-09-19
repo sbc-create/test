@@ -1,0 +1,38 @@
+{
+  "DB_BACKUP_PATH": "/srv/site-factory/repo/var/ratings/backups/ratings.sqlite.20260919T224506Z.bak",
+  "DB_BACKUP_DIGEST": "5737800e783688578b80371c2a0e037626b13908bd8761008e7968a9403bdb3a",
+  "DB_BACKUP_DIGEST_MATCH": true,
+  "restored_path": "/home/claude/wt-ratings-ingestion-01/artifacts/evidence/ratings-ingestion-05/raw/restored.sqlite",
+  "prod_counts": {
+    "rating_observations": 100,
+    "rating_current": 100,
+    "title_source_mappings": 100,
+    "rating_source_absence": 10,
+    "rating_combined_projection": 100,
+    "schema_migrations": 3
+  },
+  "restored_counts_after_schema": {
+    "rating_observations": 100,
+    "rating_current": 100,
+    "title_source_mappings": 100,
+    "rating_source_absence": 10,
+    "rating_combined_projection": 100,
+    "schema_migrations": 3
+  },
+  "health": {
+    "path": "/home/claude/wt-ratings-ingestion-01/artifacts/evidence/ratings-ingestion-05/raw/restored.sqlite",
+    "SQLITE_INTEGRITY_CHECK": "ok",
+    "FOREIGN_KEY_CHECK_FAILURES": 0,
+    "foreign_key_rows": [],
+    "journal_mode": "wal",
+    "busy_timeout": 5000,
+    "foreign_keys": 0
+  },
+  "CONCURRENT_READER_WRITER_PASS": true,
+  "concurrent_errors": [],
+  "CRASH_RESUME_PASS": true,
+  "SQLITE_INTEGRITY_CHECK": "ok",
+  "FOREIGN_KEY_CHECK_FAILURES": 0,
+  "DB_RESTORE_DRILL_PASS": true,
+  "PRODUCTION_DB_MUTATED": false
+}

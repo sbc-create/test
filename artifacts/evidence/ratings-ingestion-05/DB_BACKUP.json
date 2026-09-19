@@ -1,0 +1,8 @@
+{
+  "status": "OK",
+  "path": "/srv/site-factory/repo/var/ratings/backups/ratings.sqlite.20260919T224506Z.bak",
+  "sha256": "5737800e783688578b80371c2a0e037626b13908bd8761008e7968a9403bdb3a",
+  "bytes": 335872,
+  "DB_BACKUP_DIGEST_VERIFIED": 1,
+  "DB_BACKUP_DIGEST_MATCH": 1
+}

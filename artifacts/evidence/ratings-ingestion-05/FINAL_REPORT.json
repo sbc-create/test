@@ -1,0 +1,24 @@
+{
+  "VERDICT": "NEEDS_REPAIR",
+  "STAGE": 5,
+  "BRANCH": "cursor/ratings-ingestion-01",
+  "START_HEAD": "8b66f2400e02d49967a9e96774df5bec97405fdd",
+  "FEATURE_HEAD": "6d483f9d3bc904df75dff23fa94f18c90eb23b48",
+  "REPORT_HEAD": "6d483f9d3bc904df75dff23fa94f18c90eb23b48",
+  "FINAL_HEAD": "6d483f9d3bc904df75dff23fa94f18c90eb23b48",
+  "COMMITS": [
+    "6d483f9 feat(ratings): Stage 5 Blocks 01-04 policy queue mapping Qwen gate",
+    "2108c6c docs(ratings): Stage 5 Block 00 denominator reconciliation"
+  ],
+  "RESIDUAL_BLOCKER": "supervised cycle inserted 125 observations; Stage5 cap is 100. Excess rows retained (valid Shikimori observations); claim limit fixed to ACCEPTED_TARGET for future cycles. No second live cycle.",
+  "ACCEPTED": 125,
+  "ATTEMPTED": 150,
+  "REJECTED": 25,
+  "SHORTFALL": 0,
+  "DAILY_ACCEPTED_ABOVE_100": 1,
+  "AMD_COVERED_AFTER": 100,
+  "SHIKIMORI_COVERED_AFTER": 125,
+  "SCHEDULER_ENABLED": "NO",
+  "QWEN_DELIVERY": "BLOCKED_NO_CONFIG",
+  "READY_FOR_DAILY_100_PILOT": "NO"
+}

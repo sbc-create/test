@@ -1,0 +1,8 @@
+{
+  "BACKLOG_ETA_AT_100": "~70d",
+  "BACKLOG_ETA_AT_250": "~28d",
+  "BACKLOG_ETA_AT_500": "~14d",
+  "uncovered_for_eta": 6908,
+  "note": "ETA is forecast only; does not authorize higher daily limits",
+  "COVERAGE_SATURATED": 0
+}

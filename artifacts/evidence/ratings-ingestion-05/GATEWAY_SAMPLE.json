@@ -1,0 +1,333 @@
+{
+  "LIVE_GATEWAY_SAMPLE_TITLES": 25,
+  "samples": [
+    {
+      "title_id": "nova:01a0b507-3280-7b2a-8af4-674dd73cff72",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": 7.12,
+      "has_scores": true
+    },
+    {
+      "title_id": "nova:01a0af3f-a972-76be-a845-326a4a565a93",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": 7.55,
+      "has_scores": true
+    },
+    {
+      "title_id": "nova:01a09cfb-640a-7909-be9f-a03fb2178c42",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": 6.47,
+      "has_scores": true
+    },
+    {
+      "title_id": "nova:01a09cf5-02a7-7909-b8f3-4ee5e72de92e",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": 7.35,
+      "has_scores": true
+    },
+    {
+      "title_id": "nova:01a09ced-2b8c-7909-94c8-b6714f1d8109",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": 7.62,
+      "has_scores": true
+    },
+    {
+      "title_id": "nova:01a09cd5-6a1b-7909-a71b-0696fa4f29b3",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": 6.92,
+      "has_scores": true
+    },
+    {
+      "title_id": "nova:01a09cd2-db3b-7909-bb57-13a2bf382145",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": 6.86,
+      "has_scores": true
+    },
+    {
+      "title_id": "nova:01a09ccf-5b2b-7909-ab02-74e63bbb46c2",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": 6.03,
+      "has_scores": true
+    },
+    {
+      "title_id": "nova:01a09ca4-8129-7909-a3fe-325fae8f1f61",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": 6.96,
+      "has_scores": true
+    },
+    {
+      "title_id": "nova:01a09bba-5f87-7901-b838-5bfe4f989e95",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": 7.9,
+      "has_scores": true
+    },
+    {
+      "title_id": "amd_online:1034",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": null,
+      "has_scores": true
+    },
+    {
+      "title_id": "amd_online:1036",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": null,
+      "has_scores": true
+    },
+    {
+      "title_id": "amd_online:1077",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": null,
+      "has_scores": true
+    },
+    {
+      "title_id": "amd_online:1190",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": null,
+      "has_scores": true
+    },
+    {
+      "title_id": "amd_online:1200",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": null,
+      "has_scores": true
+    },
+    {
+      "title_id": "amd_online:1203",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": null,
+      "has_scores": true
+    },
+    {
+      "title_id": "amd_online:1211",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": null,
+      "has_scores": true
+    },
+    {
+      "title_id": "amd_online:1266",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": null,
+      "has_scores": true
+    },
+    {
+      "title_id": "nova:missing-title-probe",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": null,
+      "has_scores": false
+    },
+    {
+      "title_id": "nova:pad-19",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": null,
+      "has_scores": false
+    },
+    {
+      "title_id": "nova:pad-20",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": null,
+      "has_scores": false
+    },
+    {
+      "title_id": "nova:pad-21",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": null,
+      "has_scores": false
+    },
+    {
+      "title_id": "nova:pad-22",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": null,
+      "has_scores": false
+    },
+    {
+      "title_id": "nova:pad-23",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": null,
+      "has_scores": false
+    },
+    {
+      "title_id": "nova:pad-24",
+      "view_keys": [
+        "canonical_title_id",
+        "ratingSources",
+        "localRating",
+        "combinedRating",
+        "rotation",
+        "scores"
+      ],
+      "score": null,
+      "has_scores": false
+    }
+  ],
+  "MISSING_RENDERED_AS_ZERO": 0,
+  "INVENTED_RATINGS": 0,
+  "CROSS_SOURCE_VOTE_SUMMING": 0
+}

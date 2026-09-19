@@ -1,0 +1,36 @@
+{
+  "report_id": "rpt-stage5-supervised-20260919T224456Z-9bc222",
+  "run_id": "stage5-supervised-20260919T224456Z-9bc222",
+  "date_time": "2026-09-19T22:45:48Z",
+  "source": "shikimori",
+  "candidate_count": 150,
+  "attempted": 150,
+  "accepted": 125,
+  "newly_covered": 125,
+  "refreshed": 0,
+  "rejected": 25,
+  "quarantined": 0,
+  "shortfall": 0,
+  "shortfall_reasons": [],
+  "coverage_before": {
+    "global": 100,
+    "shikimori": null
+  },
+  "coverage_after": {
+    "global": 225,
+    "shikimori": 125
+  },
+  "ongoing_coverage": null,
+  "current_season_coverage": null,
+  "new_30d_coverage": null,
+  "mapping_failures": 0,
+  "network_failures": 0,
+  "rate_limit_violations": 0,
+  "db_result": "PASS",
+  "snapshot_result": "PASS",
+  "gateway_result": 1,
+  "user_vote_regression": "PASS",
+  "kill_switch_state": "enabled",
+  "scheduler_state": "DISABLED",
+  "next_run": "awaiting_qwen_config_and_daily_timer_gate"
+}

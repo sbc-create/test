@@ -1,0 +1,13 @@
+{
+  "report_id": "rpt-stage5-supervised-20260919T224456Z-9bc222",
+  "run_id": "stage5-supervised-20260919T224456Z-9bc222",
+  "report_digest": "97337bba3da57a699fba96d5380e62b296ae872a58db750d9213e6da7a1edcc1",
+  "created_at": "2026-09-19T22:45:48Z",
+  "delivery_state": "BLOCKED_NO_CONFIG",
+  "attempt_count": 0,
+  "last_error_class": "NO_CONFIG",
+  "delivered_at": "",
+  "ack": "",
+  "duplicate_replay": false,
+  "outbox_path": "/home/claude/wt-ratings-ingestion-01/artifacts/evidence/ratings-ingestion-05/raw/qwen_outbox.sqlite"
+}

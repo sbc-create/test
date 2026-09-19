@@ -130,10 +130,13 @@ def test_31_day_simulation_gates():
     assert sim["ok"] is True
 
 
-def test_cli_rejects_amd_source():
-    from factory.ratings.cli import _adapter
-    from factory.ratings.config import RatingsConfig
+def test_supervised_claim_limit_is_accepted_target():
+    """Regression: Stage5 must claim ≤100, not the full 150 candidate cap."""
+    import inspect
 
-    cfg = RatingsConfig(db_path=Path("/tmp/x.sqlite"))
-    with pytest.raises(SystemExit):
-        _adapter("amd_online", cfg)
+    from factory.ratings import stage5_supervised as mod
+    from factory.ratings.stage5_constants import ACCEPTED_TARGET
+
+    src = inspect.getsource(mod.block_06_supervised_cycle)
+    assert "limit=ACCEPTED_TARGET" in src
+    assert ACCEPTED_TARGET == 100

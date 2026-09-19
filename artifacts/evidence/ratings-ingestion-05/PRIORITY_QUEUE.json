@@ -1,6 +1,6 @@
 {
-  "run_id": "stage5-pre-live-plan",
-  "created_at": "2026-09-19T22:44:41Z",
+  "run_id": "stage5-supervised-20260919T224456Z-9bc222",
+  "created_at": "2026-09-19T22:45:06Z",
   "frozen_catalog_digest": "c3a2561e2183a573f5bb6cfc145b7bbc6784c9ac37706a3b5c49d350762adfba",
   "source": "shikimori",
   "candidate_cap": 150,
@@ -2143,7 +2143,7 @@
   "QUEUE_AMBIGUOUS_COUNT": 0,
   "QUEUE_DUPLICATE_IDS": 0,
   "QUEUE_DUPLICATE_EXTERNAL_IDS": 0,
-  "queue_digest": "a92adf2355fb8025f4cf25fe8ee213db5aa8972495c4729b25e958b01e49150f",
+  "queue_digest": "36abd495fccb10325aec886cdcce2ac073361b9a0fd66d426163e2fdb1af6cd8",
   "gates": {
     "QUEUE_SOURCE": "shikimori",
     "QUEUE_CANDIDATE_COUNT_OK": true,

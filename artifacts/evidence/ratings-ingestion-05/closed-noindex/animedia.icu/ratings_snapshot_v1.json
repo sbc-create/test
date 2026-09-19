@@ -1,0 +1,4220 @@
+{
+  "schema_version": "ratings_snapshot_v1",
+  "generated_at": "2026-09-19T22:45:39Z",
+  "source_cutoffs": {
+    "amd_online": "",
+    "animemedia": "",
+    "provider_feed_imdb": "",
+    "provider_feed_kinopoisk": "",
+    "shikimori": ""
+  },
+  "source_adapter_versions": {
+    "amd_online": "amd_online_html/1.0.0",
+    "animemedia": "animemedia-unverified/0.0.0",
+    "provider_feed_imdb": "provider-feed/1.0.0",
+    "provider_feed_kinopoisk": "provider-feed/1.0.0",
+    "shikimori": "shikimori-graphql/1.0.0"
+  },
+  "source_health": {
+    "amd_online": {
+      "state": "BLOCKED",
+      "health": "UNKNOWN"
+    },
+    "animemedia": {
+      "state": "UNVERIFIED_DISABLED",
+      "health": "UNKNOWN"
+    },
+    "provider_feed_imdb": {
+      "state": "READY",
+      "health": "HEALTHY"
+    },
+    "provider_feed_kinopoisk": {
+      "state": "READY",
+      "health": "HEALTHY"
+    },
+    "shikimori": {
+      "state": "READY",
+      "health": "UNKNOWN"
+    }
+  },
+  "primary_source": "shikimori",
+  "titles": [
+    {
+      "canonical_title_id": "amd_online:1200",
+      "scores": {
+        "amd_online": {
+          "score": 9.52,
+          "vote_count": 21742,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1200-raskolotaja-bitvoj-sineva-nebes-5.html",
+          "observed_at": "2026-09-19T20:04:36Z",
+          "external_id": "1200",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.6",
+            "characters": "9.6",
+            "art": "9.6",
+            "voice": "9.4"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1200-raskolotaja-bitvoj-sineva-nebes-5.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:2397",
+      "scores": {
+        "amd_online": {
+          "score": 8.14,
+          "vote_count": 761,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/2397-nekromant-ja-katastrofa.html",
+          "observed_at": "2026-09-19T20:04:46Z",
+          "external_id": "2397",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "8",
+            "characters": "8.1",
+            "art": "8",
+            "voice": "8.4"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/2397-nekromant-ja-katastrofa.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1489",
+      "scores": {
+        "amd_online": {
+          "score": 9.66,
+          "vote_count": 32285,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1489-protivostojanie-svjatogo.html",
+          "observed_at": "2026-09-19T20:04:56Z",
+          "external_id": "1489",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.7",
+            "characters": "9.7",
+            "art": "9.7",
+            "voice": "9.6"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1489-protivostojanie-svjatogo.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:770",
+      "scores": {
+        "amd_online": {
+          "score": 9.64,
+          "vote_count": 17543,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/770-pogloschennaya-zvezda.html",
+          "observed_at": "2026-09-19T20:05:06Z",
+          "external_id": "770",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.7",
+            "characters": "9.7",
+            "art": "9.7",
+            "voice": "9.5"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/770-pogloschennaya-zvezda.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:2150",
+      "scores": {
+        "amd_online": {
+          "score": 9.68,
+          "vote_count": 2031,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/2150-za-granju-vremeni.html",
+          "observed_at": "2026-09-19T20:05:16Z",
+          "external_id": "2150",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.7",
+            "characters": "9.7",
+            "art": "9.7",
+            "voice": "9.6"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/2150-za-granju-vremeni.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:704",
+      "scores": {
+        "amd_online": {
+          "score": 9.29,
+          "vote_count": 13142,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/704-puteshestvie-k-bessmertiju.html",
+          "observed_at": "2026-09-19T20:05:26Z",
+          "external_id": "704",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.3",
+            "characters": "9.3",
+            "art": "9.3",
+            "voice": "9.2"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/704-puteshestvie-k-bessmertiju.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1413",
+      "scores": {
+        "amd_online": {
+          "score": 9.4,
+          "vote_count": 16956,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1413-boevoj-kontinent-2-neprevzojdennyj-klan-tan.html",
+          "observed_at": "2026-09-19T20:05:36Z",
+          "external_id": "1413",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.4",
+            "characters": "9.5",
+            "art": "9.6",
+            "voice": "9.2"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1413-boevoj-kontinent-2-neprevzojdennyj-klan-tan.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:2251",
+      "scores": {
+        "amd_online": {
+          "score": 9.07,
+          "vote_count": 1054,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/2251-o-moem-pererozhdenii-v-sliz-4.html",
+          "observed_at": "2026-09-19T20:05:46Z",
+          "external_id": "2251",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9",
+            "characters": "9.1",
+            "art": "9.1",
+            "voice": "9.1"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/2251-o-moem-pererozhdenii-v-sliz-4.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:2333",
+      "scores": {
+        "amd_online": {
+          "score": 8.6,
+          "vote_count": 880,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/2333-izgnannyj-reinkarnirovannyj-tjazhelyj-rycar-ne-imeet-sebe-ravnyh-v-znanijah-igry.html",
+          "observed_at": "2026-09-19T20:05:56Z",
+          "external_id": "2333",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "8.5",
+            "characters": "8.5",
+            "art": "8.4",
+            "voice": "8.9"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/2333-izgnannyj-reinkarnirovannyj-tjazhelyj-rycar-ne-imeet-sebe-ravnyh-v-znanijah-igry.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1850",
+      "scores": {
+        "amd_online": {
+          "score": 9.35,
+          "vote_count": 7519,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1850-skazanie-o-pastuhe-bogov.html",
+          "observed_at": "2026-09-19T20:06:06Z",
+          "external_id": "1850",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.3",
+            "characters": "9.4",
+            "art": "9.4",
+            "voice": "9.3"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1850-skazanie-o-pastuhe-bogov.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:888",
+      "scores": {
+        "amd_online": {
+          "score": 9.59,
+          "vote_count": 11797,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/888-bezuprechnyy-mir.html",
+          "observed_at": "2026-09-19T20:06:16Z",
+          "external_id": "888",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.6",
+            "characters": "9.6",
+            "art": "9.6",
+            "voice": "9.5"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/888-bezuprechnyy-mir.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:571",
+      "scores": {
+        "amd_online": {
+          "score": 9.35,
+          "vote_count": 9584,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/571-boevoy-master.html",
+          "observed_at": "2026-09-19T20:06:26Z",
+          "external_id": "571",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.4",
+            "characters": "9.4",
+            "art": "9.3",
+            "voice": "9.3"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/571-boevoy-master.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:2344",
+      "scores": {
+        "amd_online": {
+          "score": 8.85,
+          "vote_count": 672,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/2344-reinkarnacija-bezrabotnogo-istorija-o-prikljuchenijah-v-drugom-mire-3.html",
+          "observed_at": "2026-09-19T20:06:36Z",
+          "external_id": "2344",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "8.7",
+            "characters": "8.8",
+            "art": "9",
+            "voice": "9"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/2344-reinkarnacija-bezrabotnogo-istorija-o-prikljuchenijah-v-drugom-mire-3.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:2340",
+      "scores": {
+        "amd_online": {
+          "score": 8.59,
+          "vote_count": 429,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/2340-adskij-rezhim-gejmer-kotoryj-ljubit-spidran-stanovitsja-bespodobnym-v-parallelnom-mire-s-ustarevshimi-nastrojkami-2.html",
+          "observed_at": "2026-09-19T20:06:46Z",
+          "external_id": "2340",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "8.5",
+            "characters": "8.5",
+            "art": "8.5",
+            "voice": "8.9"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/2340-adskij-rezhim-gejmer-kotoryj-ljubit-spidran-stanovitsja-bespodobnym-v-parallelnom-mire-s-ustarevshimi-nastrojkami-2.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:2257",
+      "scores": {
+        "amd_online": {
+          "score": 8.78,
+          "vote_count": 290,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/2257-cugai-zagrobnogo-mira.html",
+          "observed_at": "2026-09-19T20:06:56Z",
+          "external_id": "2257",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "8.8",
+            "characters": "8.7",
+            "art": "8.8",
+            "voice": "8.8"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/2257-cugai-zagrobnogo-mira.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:2259",
+      "scores": {
+        "amd_online": {
+          "score": 7.54,
+          "vote_count": 103,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/2259-mao.html",
+          "observed_at": "2026-09-19T20:07:06Z",
+          "external_id": "2259",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "7.5",
+            "characters": "7.3",
+            "art": "7.6",
+            "voice": "7.7"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/2259-mao.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:2349",
+      "scores": {
+        "amd_online": {
+          "score": 7.22,
+          "vote_count": 115,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/2349-lirichnaja-volshebnica-nanoha-operediteli-ognennyj-vystrel-vozmezdija.html",
+          "observed_at": "2026-09-19T20:07:16Z",
+          "external_id": "2349",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "6.9",
+            "characters": "7.1",
+            "art": "7.4",
+            "voice": "7.5"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/2349-lirichnaja-volshebnica-nanoha-operediteli-ognennyj-vystrel-vozmezdija.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:2348",
+      "scores": {
+        "amd_online": {
+          "score": 7.3,
+          "vote_count": 137,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/2348-sledujuschij-gercog-kotoryj-skazhet-ja-ne-hochu-ljubit-tebja-budet-ljubit-tebja-po-kakoj-to-prichine.html",
+          "observed_at": "2026-09-19T20:07:26Z",
+          "external_id": "2348",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "7.2",
+            "characters": "7.2",
+            "art": "7.3",
+            "voice": "7.5"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/2348-sledujuschij-gercog-kotoryj-skazhet-ja-ne-hochu-ljubit-tebja-budet-ljubit-tebja-po-kakoj-to-prichine.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:2346",
+      "scores": {
+        "amd_online": {
+          "score": 8.63,
+          "vote_count": 281,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/2346-chernyj-fakel.html",
+          "observed_at": "2026-09-19T20:07:36Z",
+          "external_id": "2346",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "8.5",
+            "characters": "8.5",
+            "art": "8.8",
+            "voice": "8.7"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/2346-chernyj-fakel.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:2255",
+      "scores": {
+        "amd_online": {
+          "score": 8.35,
+          "vote_count": 197,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/2255-dobro-pozhalovat-v-ad-iruma-4.html",
+          "observed_at": "2026-09-19T20:07:46Z",
+          "external_id": "2255",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "8.2",
+            "characters": "8.4",
+            "art": "8.4",
+            "voice": "8.4"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/2255-dobro-pozhalovat-v-ad-iruma-4.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:2384",
+      "scores": {
+        "amd_online": {
+          "score": 9.11,
+          "vote_count": 261,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/2384-skazanija-o-demonah-i-bogah-10.html",
+          "observed_at": "2026-09-19T20:07:56Z",
+          "external_id": "2384",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.2",
+            "characters": "9.2",
+            "art": "9.1",
+            "voice": "9"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/2384-skazanija-o-demonah-i-bogah-10.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:2254",
+      "scores": {
+        "amd_online": {
+          "score": 9.11,
+          "vote_count": 355,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/2254-vlast-knizhnogo-chervja-priemnaja-doch-lorda.html",
+          "observed_at": "2026-09-19T20:08:07Z",
+          "external_id": "2254",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.1",
+            "characters": "9.1",
+            "art": "9.1",
+            "voice": "9.1"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/2254-vlast-knizhnogo-chervja-priemnaja-doch-lorda.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:2350",
+      "scores": {
+        "amd_online": {
+          "score": 8.08,
+          "vote_count": 190,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/2350-nevesta-demona.html",
+          "observed_at": "2026-09-19T20:08:16Z",
+          "external_id": "2350",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "7.9",
+            "characters": "8",
+            "art": "8.2",
+            "voice": "8.2"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/2350-nevesta-demona.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:2375",
+      "scores": {
+        "amd_online": {
+          "score": 7.06,
+          "vote_count": 116,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/2375-hanaori-hochet-dratsja-dazhe-posle-pererozhdenija.html",
+          "observed_at": "2026-09-19T20:08:26Z",
+          "external_id": "2375",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "6.9",
+            "characters": "7",
+            "art": "6.9",
+            "voice": "7.4"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/2375-hanaori-hochet-dratsja-dazhe-posle-pererozhdenija.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:2377",
+      "scores": {
+        "amd_online": {
+          "score": 8.11,
+          "vote_count": 146,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/2377-zabota-ob-odarennoj-devushke-v-prestizhnoj-shkole-polnoj-vysokoklassnyh-uchenikov-ja-budu-tajno-zabotitsja-o-samoj-krasivoj-devushke-ne-imejuschej.html",
+          "observed_at": "2026-09-19T20:08:36Z",
+          "external_id": "2377",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "8",
+            "characters": "8.1",
+            "art": "8.2",
+            "voice": "8.2"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/2377-zabota-ob-odarennoj-devushke-v-prestizhnoj-shkole-polnoj-vysokoklassnyh-uchenikov-ja-budu-tajno-zabotitsja-o-samoj-krasivoj-devushke-ne-imejuschej.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5736",
+      "scores": {
+        "amd_online": {
+          "score": 9.49,
+          "vote_count": 187,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5736-vo-vseoruzhii-sila-artefaktov.html",
+          "observed_at": "2026-09-19T20:08:46Z",
+          "external_id": "5736",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.5",
+            "characters": "9.5",
+            "art": "9.5",
+            "voice": "9.5"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5736-vo-vseoruzhii-sila-artefaktov.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5735",
+      "scores": {
+        "amd_online": {
+          "score": 9.42,
+          "vote_count": 248,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5735-stranniki-duhovnogo-mira.html",
+          "observed_at": "2026-09-19T20:08:56Z",
+          "external_id": "5735",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.4",
+            "characters": "9.5",
+            "art": "9.4",
+            "voice": "9.3"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5735-stranniki-duhovnogo-mira.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5734",
+      "scores": {
+        "amd_online": {
+          "score": 4.35,
+          "vote_count": 12,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5734-vedma-salli.html",
+          "observed_at": "2026-09-19T20:09:06Z",
+          "external_id": "5734",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "4.4",
+            "characters": "4.4",
+            "art": "4.3",
+            "voice": "4.3"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5734-vedma-salli.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5733",
+      "scores": {
+        "amd_online": {
+          "score": 6.94,
+          "vote_count": 4,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5733-gonschik-spidi.html",
+          "observed_at": "2026-09-19T20:09:16Z",
+          "external_id": "5733",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "6.8",
+            "characters": "7",
+            "art": "6.8",
+            "voice": "7.3"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5733-gonschik-spidi.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5732",
+      "scores": {
+        "amd_online": {
+          "score": 5.5,
+          "vote_count": 6,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5732-luchshaja-podacha.html",
+          "observed_at": "2026-09-19T20:09:26Z",
+          "external_id": "5732",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "5.5",
+            "characters": "5.5",
+            "art": "5.5",
+            "voice": "5.5"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5732-luchshaja-podacha.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5731",
+      "scores": {
+        "amd_online": {
+          "score": 8.46,
+          "vote_count": 12,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5731-dororo-i-hjakkimaru.html",
+          "observed_at": "2026-09-19T20:09:36Z",
+          "external_id": "5731",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "8.5",
+            "characters": "8.5",
+            "art": "8.3",
+            "voice": "8.5"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5731-dororo-i-hjakkimaru.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5730",
+      "scores": {
+        "amd_online": {
+          "score": 7.0,
+          "vote_count": 6,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5730-zavtrashnij-dzho.html",
+          "observed_at": "2026-09-19T20:09:46Z",
+          "external_id": "5730",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "7",
+            "characters": "7",
+            "art": "7",
+            "voice": "7"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5730-zavtrashnij-dzho.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5729",
+      "scores": {
+        "amd_online": {
+          "score": 5.5,
+          "vote_count": 6,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5729-pervobytnyj-malchik-rju.html",
+          "observed_at": "2026-09-19T20:09:56Z",
+          "external_id": "5729",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "6",
+            "characters": "5.7",
+            "art": "5.2",
+            "voice": "5.2"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5729-pervobytnyj-malchik-rju.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5728",
+      "scores": {
+        "amd_online": {
+          "score": 7.0,
+          "vote_count": 6,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5728-ljupen-iii.html",
+          "observed_at": "2026-09-19T20:10:06Z",
+          "external_id": "5728",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "7",
+            "characters": "7",
+            "art": "7",
+            "voice": "7"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5728-ljupen-iii.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5727",
+      "scores": {
+        "amd_online": {
+          "score": 7.38,
+          "vote_count": 2,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5727-komanda-uchenyh-nindzja-gatchamen.html",
+          "observed_at": "2026-09-19T20:10:16Z",
+          "external_id": "5727",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "8.5",
+            "characters": "8.5",
+            "art": "7",
+            "voice": "5.5"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5727-komanda-uchenyh-nindzja-gatchamen.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5726",
+      "scores": {
+        "amd_online": {
+          "score": 7.55,
+          "vote_count": 5,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5726-chelovek-djavol.html",
+          "observed_at": "2026-09-19T20:10:26Z",
+          "external_id": "5726",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "8",
+            "characters": "7.6",
+            "art": "7.8",
+            "voice": "6.8"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5726-chelovek-djavol.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5725",
+      "scores": {
+        "amd_online": {
+          "score": 7.75,
+          "vote_count": 4,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5725-milashka-hani.html",
+          "observed_at": "2026-09-19T20:10:36Z",
+          "external_id": "5725",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "7.8",
+            "characters": "7.8",
+            "art": "7.8",
+            "voice": "7.8"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5725-milashka-hani.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:4368",
+      "scores": {
+        "amd_online": {
+          "score": 9.75,
+          "vote_count": 3,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/4368-vrata-shtejna.html",
+          "observed_at": "2026-09-19T20:10:46Z",
+          "external_id": "4368",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "10",
+            "characters": "10",
+            "art": "9.3",
+            "voice": "9.7"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/4368-vrata-shtejna.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1034",
+      "scores": {
+        "amd_online": {
+          "score": 9.39,
+          "vote_count": 2172,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1034-poschadi-menja-velikij-gospodin.html",
+          "observed_at": "2026-09-19T20:10:56Z",
+          "external_id": "1034",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.4",
+            "characters": "9.5",
+            "art": "9.5",
+            "voice": "9.2"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1034-poschadi-menja-velikij-gospodin.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:2403",
+      "scores": {
+        "amd_online": {
+          "score": 7.53,
+          "vote_count": 31,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/2403-agent-vremeni-3.html",
+          "observed_at": "2026-09-19T20:11:06Z",
+          "external_id": "2403",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "7.5",
+            "characters": "7.5",
+            "art": "7.5",
+            "voice": "7.7"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/2403-agent-vremeni-3.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:2386",
+      "scores": {
+        "amd_online": {
+          "score": 9.48,
+          "vote_count": 410,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/2386-den-moego-voznesenija.html",
+          "observed_at": "2026-09-19T20:11:16Z",
+          "external_id": "2386",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.5",
+            "characters": "9.5",
+            "art": "9.6",
+            "voice": "9.4"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/2386-den-moego-voznesenija.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5724",
+      "scores": {
+        "amd_online": {
+          "score": 7.67,
+          "vote_count": 3,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5724-bej-jejs.html",
+          "observed_at": "2026-09-19T20:11:26Z",
+          "external_id": "5724",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "7.3",
+            "characters": "7.3",
+            "art": "6.3",
+            "voice": "9.7"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5724-bej-jejs.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5722",
+      "scores": {
+        "amd_online": {
+          "score": 7.0,
+          "vote_count": 3,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5722-kosmicheskij-linkor-jamato.html",
+          "observed_at": "2026-09-19T20:11:46Z",
+          "external_id": "5722",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "7",
+            "characters": "7",
+            "art": "7",
+            "voice": "7"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5722-kosmicheskij-linkor-jamato.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5721",
+      "scores": {
+        "amd_online": {
+          "score": 1.0,
+          "vote_count": 1,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5721-flandrijskij-pes.html",
+          "observed_at": "2026-09-19T20:11:56Z",
+          "external_id": "5721",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "1",
+            "characters": "1",
+            "art": "1",
+            "voice": "1"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5721-flandrijskij-pes.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5720",
+      "scores": {
+        "amd_online": {
+          "score": 5.5,
+          "vote_count": 2,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5720-prikljuchenija-gamby.html",
+          "observed_at": "2026-09-19T20:12:06Z",
+          "external_id": "5720",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "5.5",
+            "characters": "5.5",
+            "art": "5.5",
+            "voice": "5.5"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5720-prikljuchenija-gamby.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5719",
+      "scores": {
+        "amd_online": {
+          "score": 7.59,
+          "vote_count": 8,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5719-kjendi-kjendi.html",
+          "observed_at": "2026-09-19T20:12:16Z",
+          "external_id": "5719",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "7.6",
+            "characters": "7.6",
+            "art": "7.5",
+            "voice": "7.6"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5719-kjendi-kjendi.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5718",
+      "scores": {
+        "amd_online": {
+          "score": 5.5,
+          "vote_count": 2,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5718-ljupen-iii-chast-ii.html",
+          "observed_at": "2026-09-19T20:12:26Z",
+          "external_id": "5718",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "5.5",
+            "characters": "5.5",
+            "art": "5.5",
+            "voice": "5.5"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5718-ljupen-iii-chast-ii.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5713",
+      "scores": {
+        "amd_online": {
+          "score": 6.88,
+          "vote_count": 4,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5713-konan-malchik-iz-buduschego.html",
+          "observed_at": "2026-09-19T20:13:16Z",
+          "external_id": "5713",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "6.8",
+            "characters": "7.3",
+            "art": "6.5",
+            "voice": "7"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5713-konan-malchik-iz-buduschego.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5712",
+      "scores": {
+        "amd_online": {
+          "score": 6.25,
+          "vote_count": 2,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5712-galakticheskij-jekspress-999.html",
+          "observed_at": "2026-09-19T20:13:26Z",
+          "external_id": "5712",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "6",
+            "characters": "5.5",
+            "art": "6",
+            "voice": "7.5"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5712-galakticheskij-jekspress-999.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5711",
+      "scores": {
+        "amd_online": {
+          "score": 9.9,
+          "vote_count": 5,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5711-kosmicheskij-pirat-kapitan-harlok.html",
+          "observed_at": "2026-09-19T20:13:36Z",
+          "external_id": "5711",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "10",
+            "characters": "10",
+            "art": "9.8",
+            "voice": "9.8"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5711-kosmicheskij-pirat-kapitan-harlok.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5707",
+      "scores": {
+        "amd_online": {
+          "score": 10.0,
+          "vote_count": 1,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5707-roza-versalja.html",
+          "observed_at": "2026-09-19T20:14:16Z",
+          "external_id": "5707",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "10",
+            "characters": "10",
+            "art": "10",
+            "voice": "10"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5707-roza-versalja.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5706",
+      "scores": {
+        "amd_online": {
+          "score": 10.0,
+          "vote_count": 1,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5706-jenn-iz-zelenyh-krysh.html",
+          "observed_at": "2026-09-19T20:14:26Z",
+          "external_id": "5706",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "10",
+            "characters": "10",
+            "art": "10",
+            "voice": "10"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5706-jenn-iz-zelenyh-krysh.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5705",
+      "scores": {
+        "amd_online": {
+          "score": 9.56,
+          "vote_count": 4,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5705-mobilnyj-voin-gandam.html",
+          "observed_at": "2026-09-19T20:14:36Z",
+          "external_id": "5705",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.3",
+            "characters": "9.5",
+            "art": "10",
+            "voice": "9.5"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5705-mobilnyj-voin-gandam.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5703",
+      "scores": {
+        "amd_online": {
+          "score": 8.5,
+          "vote_count": 1,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5703-prikljuchenija-toma-sojera.html",
+          "observed_at": "2026-09-19T20:14:56Z",
+          "external_id": "5703",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9",
+            "characters": "9",
+            "art": "8",
+            "voice": "8"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5703-prikljuchenija-toma-sojera.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:5701",
+      "scores": {
+        "amd_online": {
+          "score": 5.5,
+          "vote_count": 2,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5701-rybak-sampjej.html",
+          "observed_at": "2026-09-19T20:15:16Z",
+          "external_id": "5701",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "5.5",
+            "characters": "5.5",
+            "art": "5.5",
+            "voice": "5.5"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/5701-rybak-sampjej.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:664",
+      "scores": {
+        "amd_online": {
+          "score": 9.42,
+          "vote_count": 5859,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/664-verhovnyy-bog.html",
+          "observed_at": "2026-09-19T20:15:26Z",
+          "external_id": "664",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.4",
+            "characters": "9.4",
+            "art": "9.4",
+            "voice": "9.4"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/664-verhovnyy-bog.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:936",
+      "scores": {
+        "amd_online": {
+          "score": 9.45,
+          "vote_count": 7232,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/936-nebesnaja-strazha.html",
+          "observed_at": "2026-09-19T20:15:36Z",
+          "external_id": "936",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.5",
+            "characters": "9.5",
+            "art": "9.4",
+            "voice": "9.4"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/936-nebesnaja-strazha.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1652",
+      "scores": {
+        "amd_online": {
+          "score": 9.61,
+          "vote_count": 11934,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1652-tron-otmechennyj-bogom-2.html",
+          "observed_at": "2026-09-19T20:15:46Z",
+          "external_id": "1652",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.6",
+            "characters": "9.6",
+            "art": "9.7",
+            "voice": "9.6"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1652-tron-otmechennyj-bogom-2.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1621",
+      "scores": {
+        "amd_online": {
+          "score": 9.42,
+          "vote_count": 7155,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1621-neprevzojdennyj-na-puti-alhimii.html",
+          "observed_at": "2026-09-19T20:15:56Z",
+          "external_id": "1621",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.4",
+            "characters": "9.4",
+            "art": "9.4",
+            "voice": "9.4"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1621-neprevzojdennyj-na-puti-alhimii.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1723",
+      "scores": {
+        "amd_online": {
+          "score": 9.51,
+          "vote_count": 5444,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1723-nesravnennyj-boevoj-duh.html",
+          "observed_at": "2026-09-19T20:16:06Z",
+          "external_id": "1723",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.5",
+            "characters": "9.5",
+            "art": "9.5",
+            "voice": "9.5"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1723-nesravnennyj-boevoj-duh.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1403",
+      "scores": {
+        "amd_online": {
+          "score": 9.43,
+          "vote_count": 7420,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1403-okutyvaja-nebesa.html",
+          "observed_at": "2026-09-19T20:16:16Z",
+          "external_id": "1403",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.4",
+            "characters": "9.4",
+            "art": "9.5",
+            "voice": "9.4"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1403-okutyvaja-nebesa.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1333",
+      "scores": {
+        "amd_online": {
+          "score": 9.61,
+          "vote_count": 6742,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1333-praktikuja-ci-sto-tysjach-let.html",
+          "observed_at": "2026-09-19T20:16:26Z",
+          "external_id": "1333",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.6",
+            "characters": "9.6",
+            "art": "9.6",
+            "voice": "9.6"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1333-praktikuja-ci-sto-tysjach-let.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:863",
+      "scores": {
+        "amd_online": {
+          "score": 9.43,
+          "vote_count": 4255,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/863-vladyka-mnozhestva-mirov.html",
+          "observed_at": "2026-09-19T20:16:36Z",
+          "external_id": "863",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.4",
+            "characters": "9.5",
+            "art": "9.4",
+            "voice": "9.4"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/863-vladyka-mnozhestva-mirov.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:310",
+      "scores": {
+        "amd_online": {
+          "score": 9.13,
+          "vote_count": 4924,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/310-vladyka-duhovnogo-mecha.html",
+          "observed_at": "2026-09-19T20:16:46Z",
+          "external_id": "310",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.1",
+            "characters": "9.1",
+            "art": "9.1",
+            "voice": "9.1"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/310-vladyka-duhovnogo-mecha.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1336",
+      "scores": {
+        "amd_online": {
+          "score": 9.33,
+          "vote_count": 5074,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1336-kontrataka-izgnannogo-uchenika.html",
+          "observed_at": "2026-09-19T20:16:56Z",
+          "external_id": "1336",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.3",
+            "characters": "9.3",
+            "art": "9.3",
+            "voice": "9.4"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1336-kontrataka-izgnannogo-uchenika.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:48",
+      "scores": {
+        "amd_online": {
+          "score": 9.56,
+          "vote_count": 3875,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/48-boevoy-kontinent.html",
+          "observed_at": "2026-09-19T20:17:06Z",
+          "external_id": "48",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.7",
+            "characters": "9.7",
+            "art": "9.6",
+            "voice": "9.3"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/48-boevoy-kontinent.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1266",
+      "scores": {
+        "amd_online": {
+          "score": 9.3,
+          "vote_count": 3324,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1266-stanovlenie-bogom.html",
+          "observed_at": "2026-09-19T20:17:16Z",
+          "external_id": "1266",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.2",
+            "characters": "9.3",
+            "art": "9.4",
+            "voice": "9.3"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1266-stanovlenie-bogom.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1538",
+      "scores": {
+        "amd_online": {
+          "score": 9.48,
+          "vote_count": 4267,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1538-prishedshij-iz-drevnosti.html",
+          "observed_at": "2026-09-19T20:17:26Z",
+          "external_id": "1538",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.5",
+            "characters": "9.5",
+            "art": "9.5",
+            "voice": "9.5"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1538-prishedshij-iz-drevnosti.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1869",
+      "scores": {
+        "amd_online": {
+          "score": 9.57,
+          "vote_count": 15905,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1869-podnjatie-urovnja-v-odinochku-2-vosstante-iz-teni.html",
+          "observed_at": "2026-09-19T20:17:36Z",
+          "external_id": "1869",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.6",
+            "characters": "9.6",
+            "art": "9.6",
+            "voice": "9.4"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1869-podnjatie-urovnja-v-odinochku-2-vosstante-iz-teni.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1874",
+      "scores": {
+        "amd_online": {
+          "score": 8.95,
+          "vote_count": 2684,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1874-drevnij-lekar-v-sovremennom-gorode.html",
+          "observed_at": "2026-09-19T20:17:46Z",
+          "external_id": "1874",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "8.9",
+            "characters": "9",
+            "art": "8.9",
+            "voice": "9.1"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1874-drevnij-lekar-v-sovremennom-gorode.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:764",
+      "scores": {
+        "amd_online": {
+          "score": 9.26,
+          "vote_count": 3183,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/764-bespodobnyj-boevoj-duh.html",
+          "observed_at": "2026-09-19T20:17:56Z",
+          "external_id": "764",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.2",
+            "characters": "9.2",
+            "art": "9.2",
+            "voice": "9.3"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/764-bespodobnyj-boevoj-duh.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:6",
+      "scores": {
+        "amd_online": {
+          "score": 8.98,
+          "vote_count": 6526,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/6-van-pis.html",
+          "observed_at": "2026-09-19T20:18:06Z",
+          "external_id": "6",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.1",
+            "characters": "9.1",
+            "art": "9",
+            "voice": "8.8"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/6-van-pis.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:671",
+      "scores": {
+        "amd_online": {
+          "score": 9.45,
+          "vote_count": 3121,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/671-odin-shag-na-puti-k-svobode.html",
+          "observed_at": "2026-09-19T20:18:16Z",
+          "external_id": "671",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.5",
+            "characters": "9.5",
+            "art": "9.4",
+            "voice": "9.5"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/671-odin-shag-na-puti-k-svobode.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1779",
+      "scores": {
+        "amd_online": {
+          "score": 9.07,
+          "vote_count": 1950,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1779-kontinent-sily-i-duha.html",
+          "observed_at": "2026-09-19T20:18:26Z",
+          "external_id": "1779",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.1",
+            "characters": "9.1",
+            "art": "9.1",
+            "voice": "9"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1779-kontinent-sily-i-duha.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1752",
+      "scores": {
+        "amd_online": {
+          "score": 9.57,
+          "vote_count": 6039,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1752-vechnaja-volja-3.html",
+          "observed_at": "2026-09-19T20:18:36Z",
+          "external_id": "1752",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.6",
+            "characters": "9.6",
+            "art": "9.6",
+            "voice": "9.5"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1752-vechnaja-volja-3.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1190",
+      "scores": {
+        "amd_online": {
+          "score": 9.06,
+          "vote_count": 2398,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1190-grobnica-bogov.html",
+          "observed_at": "2026-09-19T20:18:46Z",
+          "external_id": "1190",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.1",
+            "characters": "9.1",
+            "art": "9.2",
+            "voice": "8.9"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1190-grobnica-bogov.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1325",
+      "scores": {
+        "amd_online": {
+          "score": 9.38,
+          "vote_count": 3845,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1325-moj-starshij-brat-slishkom-stabilen.html",
+          "observed_at": "2026-09-19T20:18:56Z",
+          "external_id": "1325",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.3",
+            "characters": "9.4",
+            "art": "9.5",
+            "voice": "9.3"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1325-moj-starshij-brat-slishkom-stabilen.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1420",
+      "scores": {
+        "amd_online": {
+          "score": 9.54,
+          "vote_count": 3814,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1420-lazurnoe-nasledie.html",
+          "observed_at": "2026-09-19T20:19:07Z",
+          "external_id": "1420",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.5",
+            "characters": "9.5",
+            "art": "9.6",
+            "voice": "9.5"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1420-lazurnoe-nasledie.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1211",
+      "scores": {
+        "amd_online": {
+          "score": 9.38,
+          "vote_count": 2046,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1211-drevnij-mif.html",
+          "observed_at": "2026-09-19T20:19:16Z",
+          "external_id": "1211",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.4",
+            "characters": "9.4",
+            "art": "9.4",
+            "voice": "9.4"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1211-drevnij-mif.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1492",
+      "scores": {
+        "amd_online": {
+          "score": 9.47,
+          "vote_count": 2862,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1492-vosstavshij-protiv-neba.html",
+          "observed_at": "2026-09-19T20:19:26Z",
+          "external_id": "1492",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.5",
+            "characters": "9.5",
+            "art": "9.5",
+            "voice": "9.4"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1492-vosstavshij-protiv-neba.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1799",
+      "scores": {
+        "amd_online": {
+          "score": 8.9,
+          "vote_count": 1605,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1799-edinstvennyj-vladyka-mira.html",
+          "observed_at": "2026-09-19T20:19:36Z",
+          "external_id": "1799",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "8.9",
+            "characters": "8.9",
+            "art": "8.9",
+            "voice": "8.9"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1799-edinstvennyj-vladyka-mira.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1601",
+      "scores": {
+        "amd_online": {
+          "score": 8.78,
+          "vote_count": 4282,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1601-lunnoe-puteshestvie-privedet-k-novomu-miru-2.html",
+          "observed_at": "2026-09-19T20:19:46Z",
+          "external_id": "1601",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "8.7",
+            "characters": "8.8",
+            "art": "8.8",
+            "voice": "8.8"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1601-lunnoe-puteshestvie-privedet-k-novomu-miru-2.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1203",
+      "scores": {
+        "amd_online": {
+          "score": 9.42,
+          "vote_count": 3154,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1203-ubijca-bogov-3.html",
+          "observed_at": "2026-09-19T20:19:56Z",
+          "external_id": "1203",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.4",
+            "characters": "9.4",
+            "art": "9.5",
+            "voice": "9.4"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1203-ubijca-bogov-3.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1426",
+      "scores": {
+        "amd_online": {
+          "score": 9.61,
+          "vote_count": 3267,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1426-velikij-pravitel.html",
+          "observed_at": "2026-09-19T20:20:06Z",
+          "external_id": "1426",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.6",
+            "characters": "9.6",
+            "art": "9.7",
+            "voice": "9.6"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1426-velikij-pravitel.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1594",
+      "scores": {
+        "amd_online": {
+          "score": 9.31,
+          "vote_count": 10057,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1594-podnjatie-urovnja-v-odinochku.html",
+          "observed_at": "2026-09-19T20:20:17Z",
+          "external_id": "1594",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.4",
+            "characters": "9.3",
+            "art": "9.3",
+            "voice": "9.2"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1594-podnjatie-urovnja-v-odinochku.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1036",
+      "scores": {
+        "amd_online": {
+          "score": 9.01,
+          "vote_count": 2397,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1036-volshebnyj-povar-lda-i-plameni.html",
+          "observed_at": "2026-09-19T20:20:27Z",
+          "external_id": "1036",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "8.9",
+            "characters": "9",
+            "art": "9.1",
+            "voice": "9"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1036-volshebnyj-povar-lda-i-plameni.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1423",
+      "scores": {
+        "amd_online": {
+          "score": 8.67,
+          "vote_count": 1873,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1423-bog-vojny-pjati-stihij.html",
+          "observed_at": "2026-09-19T20:20:37Z",
+          "external_id": "1423",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "8.6",
+            "characters": "8.6",
+            "art": "8.7",
+            "voice": "8.8"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1423-bog-vojny-pjati-stihij.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1077",
+      "scores": {
+        "amd_online": {
+          "score": 8.72,
+          "vote_count": 3011,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1077-bessmertie.html",
+          "observed_at": "2026-09-19T20:20:46Z",
+          "external_id": "1077",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.3",
+            "characters": "9.2",
+            "art": "9.6",
+            "voice": "6.8"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1077-bessmertie.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1271",
+      "scores": {
+        "amd_online": {
+          "score": 8.89,
+          "vote_count": 1578,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1271-velikij-uzurpator.html",
+          "observed_at": "2026-09-19T20:20:56Z",
+          "external_id": "1271",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "8.9",
+            "characters": "8.9",
+            "art": "8.9",
+            "voice": "8.9"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1271-velikij-uzurpator.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1547",
+      "scores": {
+        "amd_online": {
+          "score": 9.21,
+          "vote_count": 1726,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1547-legenda-kontinenta-mechej-3.html",
+          "observed_at": "2026-09-19T20:21:07Z",
+          "external_id": "1547",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.2",
+            "characters": "9.2",
+            "art": "9.2",
+            "voice": "9.3"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1547-legenda-kontinenta-mechej-3.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1707",
+      "scores": {
+        "amd_online": {
+          "score": 9.57,
+          "vote_count": 2176,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1707-skazanija-o-demonah-i-bogah-7.html",
+          "observed_at": "2026-09-19T20:21:16Z",
+          "external_id": "1707",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.6",
+            "characters": "9.6",
+            "art": "9.6",
+            "voice": "9.6"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1707-skazanija-o-demonah-i-bogah-7.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1738",
+      "scores": {
+        "amd_online": {
+          "score": 8.72,
+          "vote_count": 3039,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1738-ja-stal-samym-silnym-s-provalnym-navykom-nenormalnoe-sostojanie-ja-razrushu-vse.html",
+          "observed_at": "2026-09-19T20:21:26Z",
+          "external_id": "1738",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "8.8",
+            "characters": "8.8",
+            "art": "8.4",
+            "voice": "8.9"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1738-ja-stal-samym-silnym-s-provalnym-navykom-nenormalnoe-sostojanie-ja-razrushu-vse.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1870",
+      "scores": {
+        "amd_online": {
+          "score": 9.53,
+          "vote_count": 1841,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1870-pik-boevyh-iskusstv.html",
+          "observed_at": "2026-09-19T20:21:37Z",
+          "external_id": "1870",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.5",
+            "characters": "9.5",
+            "art": "9.5",
+            "voice": "9.5"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1870-pik-boevyh-iskusstv.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1673",
+      "scores": {
+        "amd_online": {
+          "score": 9.17,
+          "vote_count": 3722,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1673-pererozhdenie-monstr.html",
+          "observed_at": "2026-09-19T20:21:47Z",
+          "external_id": "1673",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.1",
+            "characters": "9.1",
+            "art": "9.2",
+            "voice": "9.2"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1673-pererozhdenie-monstr.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1789",
+      "scores": {
+        "amd_online": {
+          "score": 8.54,
+          "vote_count": 1579,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1789-zemlja-klaviaturnogo-bessmertnogo.html",
+          "observed_at": "2026-09-19T20:21:57Z",
+          "external_id": "1789",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "8.4",
+            "characters": "8.5",
+            "art": "8.6",
+            "voice": "8.6"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1789-zemlja-klaviaturnogo-bessmertnogo.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1790",
+      "scores": {
+        "amd_online": {
+          "score": 9.06,
+          "vote_count": 1395,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1790-vechnoe-carstvo-bogov.html",
+          "observed_at": "2026-09-19T20:22:07Z",
+          "external_id": "1790",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9",
+            "characters": "9.1",
+            "art": "9.1",
+            "voice": "9"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1790-vechnoe-carstvo-bogov.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:2021",
+      "scores": {
+        "amd_online": {
+          "score": 9.02,
+          "vote_count": 973,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/2021-voznesshijsja-nad-nebesami.html",
+          "observed_at": "2026-09-19T20:22:17Z",
+          "external_id": "2021",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9",
+            "characters": "9",
+            "art": "9",
+            "voice": "9.1"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/2021-voznesshijsja-nad-nebesami.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1649",
+      "scores": {
+        "amd_online": {
+          "score": 9.11,
+          "vote_count": 2061,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1649-povelitel-zvezdnyh-drakonov.html",
+          "observed_at": "2026-09-19T20:22:27Z",
+          "external_id": "1649",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.1",
+            "characters": "9.1",
+            "art": "9.1",
+            "voice": "9.2"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1649-povelitel-zvezdnyh-drakonov.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1992",
+      "scores": {
+        "amd_online": {
+          "score": 8.94,
+          "vote_count": 1085,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1992-vse-v-klane-pod-prikrytiem-krome-menja.html",
+          "observed_at": "2026-09-19T20:22:37Z",
+          "external_id": "1992",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "8.9",
+            "characters": "9",
+            "art": "9",
+            "voice": "8.8"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1992-vse-v-klane-pod-prikrytiem-krome-menja.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "amd_online:1542",
+      "scores": {
+        "amd_online": {
+          "score": 9.51,
+          "vote_count": 5324,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/1542-monolog-farmacevta.html",
+          "observed_at": "2026-09-19T20:22:47Z",
+          "external_id": "1542",
+          "adapter_version": "amd_online_html/1.0.0",
+          "components": {
+            "story": "9.6",
+            "characters": "9.6",
+            "art": "9.6",
+            "voice": "9.4"
+          },
+          "attribution": "Источник: AMD.online",
+          "canonical_source_url": "https://amd.online/1542-monolog-farmacevta.html"
+        }
+      },
+      "primary": null
+    },
+    {
+      "canonical_title_id": "nova:01a0b507-3280-7b2a-8af4-674dd73cff72",
+      "scores": {
+        "shikimori": {
+          "score": 7.12,
+          "vote_count": 236,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/53477-binghuo-mochu-2",
+          "observed_at": "2026-09-19T22:45:16Z",
+          "external_id": "53477",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a0af3f-a972-76be-a845-326a4a565a93",
+      "scores": {
+        "shikimori": {
+          "score": 7.55,
+          "vote_count": 11708,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/33253-ajin-part-2",
+          "observed_at": "2026-09-19T22:45:16Z",
+          "external_id": "33253",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09cfb-640a-7909-be9f-a03fb2178c42",
+      "scores": {
+        "shikimori": {
+          "score": 6.47,
+          "vote_count": 221,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10338-honto-ni-atta-reibai-sensei",
+          "observed_at": "2026-09-19T22:45:16Z",
+          "external_id": "10338",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09cf5-02a7-7909-b8f3-4ee5e72de92e",
+      "scores": {
+        "shikimori": {
+          "score": 7.35,
+          "vote_count": 5047,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10209-kore-wa-zombie-desu-ka-ova",
+          "observed_at": "2026-09-19T22:45:17Z",
+          "external_id": "10209",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09ced-2b8c-7909-94c8-b6714f1d8109",
+      "scores": {
+        "shikimori": {
+          "score": 7.62,
+          "vote_count": 2199,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/1002-top-wo-nerae-2-diebuster",
+          "observed_at": "2026-09-19T22:45:17Z",
+          "external_id": "1002",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09cd5-6a1b-7909-a71b-0696fa4f29b3",
+      "scores": {
+        "shikimori": {
+          "score": 6.92,
+          "vote_count": 97,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/1022-generator-gawl",
+          "observed_at": "2026-09-19T22:45:17Z",
+          "external_id": "1022",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09cd2-db3b-7909-bb57-13a2bf382145",
+      "scores": {
+        "shikimori": {
+          "score": 6.86,
+          "vote_count": 1352,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10191-katte-ni-kaizou",
+          "observed_at": "2026-09-19T22:45:17Z",
+          "external_id": "10191",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09ccf-5b2b-7909-ab02-74e63bbb46c2",
+      "scores": {
+        "shikimori": {
+          "score": 6.03,
+          "vote_count": 94,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10177-dd-hokuto-no-ken",
+          "observed_at": "2026-09-19T22:45:17Z",
+          "external_id": "10177",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09ca4-8129-7909-a3fe-325fae8f1f61",
+      "scores": {
+        "shikimori": {
+          "score": 6.96,
+          "vote_count": 157,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/58057-dubu-wangu-2nd-season",
+          "observed_at": "2026-09-19T22:45:17Z",
+          "external_id": "58057",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09bba-5f87-7901-b838-5bfe4f989e95",
+      "scores": {
+        "shikimori": {
+          "score": 7.9,
+          "vote_count": 8553,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/60285-sakamoto-days-part-2",
+          "observed_at": "2026-09-19T22:45:17Z",
+          "external_id": "60285",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a07e16-4af0-7357-ac5d-846ab524751d",
+      "scores": {
+        "shikimori": {
+          "score": 6.34,
+          "vote_count": 69,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/3004-saint-beast-ikusen-no-hiru-to-yoru-hen",
+          "observed_at": "2026-09-19T22:45:17Z",
+          "external_id": "3004",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a07e11-f100-7357-9899-e43068add5b6",
+      "scores": {
+        "shikimori": {
+          "score": 6.04,
+          "vote_count": 182,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/1037-saint-beast-seijuu-kourin-hen",
+          "observed_at": "2026-09-19T22:45:17Z",
+          "external_id": "1037",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a071de-4844-7568-904c-56256c7f4048",
+      "scores": {
+        "shikimori": {
+          "score": 6.85,
+          "vote_count": 39,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63138-kaijuu-8-gou-narumi-no-heijitsu",
+          "observed_at": "2026-09-19T22:45:17Z",
+          "external_id": "63138",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a06809-263c-79e9-96c8-e9d9cca30084",
+      "scores": {
+        "shikimori": {
+          "score": 7.36,
+          "vote_count": 253,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/1021-kaikan-phrase",
+          "observed_at": "2026-09-19T22:45:17Z",
+          "external_id": "1021",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a0301c-063b-7353-87b0-dc8f89d41c52",
+      "scores": {
+        "shikimori": {
+          "score": 6.15,
+          "vote_count": 47,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/2260-kirameki-project",
+          "observed_at": "2026-09-19T22:45:17Z",
+          "external_id": "2260",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a00fa0-e5c9-7c0e-b6e4-c3a4d4c4d2a1",
+      "scores": {
+        "shikimori": {
+          "score": 6.73,
+          "vote_count": 70,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/61293-koisuru-one-piece",
+          "observed_at": "2026-09-19T22:45:17Z",
+          "external_id": "61293",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a00ba1-1088-7bef-b380-b0c48db820f3",
+      "scores": {
+        "shikimori": {
+          "score": 6.83,
+          "vote_count": 9,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62863-poketoon-2025",
+          "observed_at": "2026-09-19T22:45:17Z",
+          "external_id": "62863",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a00b9c-92b7-7bed-81a3-35f3a4348b95",
+      "scores": {
+        "shikimori": {
+          "score": 7.29,
+          "vote_count": 113,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/42161-poketoon",
+          "observed_at": "2026-09-19T22:45:17Z",
+          "external_id": "42161",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a00b9a-7e87-7bea-a6d0-a51fede9d0f3",
+      "scores": {
+        "shikimori": {
+          "score": 7.22,
+          "vote_count": 17,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/59944-poketoon-2024",
+          "observed_at": "2026-09-19T22:45:17Z",
+          "external_id": "59944",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a0012c-c6c5-74da-9d7d-baea17d1c245",
+      "scores": {
+        "shikimori": {
+          "score": 8.55,
+          "vote_count": 228,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/61607-shiguang-dailiren-iii",
+          "observed_at": "2026-09-19T22:45:18Z",
+          "external_id": "61607",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019fe27b-309e-751f-a990-d82a6a58f76f",
+      "scores": {
+        "shikimori": {
+          "score": 5.76,
+          "vote_count": 5,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/61272-petitcure-precure-fairies",
+          "observed_at": "2026-09-19T22:45:18Z",
+          "external_id": "61272",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019fe276-1190-7519-91ba-393eee92fe0d",
+      "scores": {
+        "shikimori": {
+          "score": 5.97,
+          "vote_count": 2,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62676-petitcure-precure-fairies-season-2",
+          "observed_at": "2026-09-19T22:45:18Z",
+          "external_id": "62676",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019fd1bf-1dbd-7c35-a1eb-f19b0d7b3e5f",
+      "scores": {
+        "shikimori": {
+          "score": 7.12,
+          "vote_count": 101,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/61546-star-wars-visions-kyuuninme-no-jedi",
+          "observed_at": "2026-09-19T22:45:18Z",
+          "external_id": "61546",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019fc6ee-9749-7ab5-bded-2a3f396fbb80",
+      "scores": {
+        "shikimori": {
+          "score": 8.73,
+          "vote_count": 625,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/60568-jiyi-guanli-ju-2026",
+          "observed_at": "2026-09-19T22:45:18Z",
+          "external_id": "60568",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019fb2ac-e04b-78df-bdf4-e50fafdae2ff",
+      "scores": {
+        "shikimori": {
+          "score": 6.85,
+          "vote_count": 47,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63987-li-xiongmao",
+          "observed_at": "2026-09-19T22:45:18Z",
+          "external_id": "63987",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019fa7c1-700c-77c6-a9e4-13b223a032dc",
+      "scores": {
+        "shikimori": {
+          "score": 7.08,
+          "vote_count": 64,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62789-yi-zhan-cangqiong",
+          "observed_at": "2026-09-19T22:45:18Z",
+          "external_id": "62789",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019f952c-89c7-71c5-a6d5-117949152b66",
+      "scores": {
+        "shikimori": {
+          "score": 7.19,
+          "vote_count": 5704,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/13055-sankarea-ova",
+          "observed_at": "2026-09-19T22:45:18Z",
+          "external_id": "13055",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019f94d7-1e45-71c0-abc3-6b00100660e7",
+      "scores": {
+        "shikimori": {
+          "score": 7.48,
+          "vote_count": 151,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62248-yi-nian-yong-heng-wanjie-ji",
+          "observed_at": "2026-09-19T22:45:18Z",
+          "external_id": "62248",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019f93ce-4144-7139-814a-528c9d0278bd",
+      "scores": {
+        "shikimori": {
+          "score": 7.86,
+          "vote_count": 11871,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/z10080-kami-nomi-zo-shiru-sekai-ii",
+          "observed_at": "2026-09-19T22:45:18Z",
+          "external_id": "10080",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019f8f7d-d327-70c3-80eb-8be61f40101a",
+      "scores": {
+        "shikimori": {
+          "score": 7.98,
+          "vote_count": 10565,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/z16706-kami-nomi-zo-shiru-sekai-megami-hen",
+          "observed_at": "2026-09-19T22:45:18Z",
+          "external_id": "16706",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019f8ee3-dffc-709e-9e52-7a2d7bde0081",
+      "scores": {
+        "shikimori": {
+          "score": 6.3,
+          "vote_count": 8235,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/18857-ore-no-imouto-ga-konnani-kawaii-wake-ga-nai-specials",
+          "observed_at": "2026-09-19T22:45:18Z",
+          "external_id": "18857",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019f8ec8-7198-7097-9e4b-a2dcbbbdca6b",
+      "scores": {
+        "shikimori": {
+          "score": 6.34,
+          "vote_count": 18,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/64577-youjo-shenki-2",
+          "observed_at": "2026-09-19T22:45:18Z",
+          "external_id": "64577",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019f8ebe-ac59-708d-9d03-c2d7a2e9e818",
+      "scores": {
+        "shikimori": {
+          "score": 7.31,
+          "vote_count": 9967,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10020-ore-no-imouto-ga-konnani-kawaii-wake-ga-nai-specials",
+          "observed_at": "2026-09-19T22:45:18Z",
+          "external_id": "10020",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019f8eb4-876d-7062-b7e6-c2d869bb4446",
+      "scores": {
+        "shikimori": {
+          "score": 6.88,
+          "vote_count": 18130,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/13659-ore-no-imouto-ga-konnani-kawaii-wake-ga-nai",
+          "observed_at": "2026-09-19T22:45:18Z",
+          "external_id": "13659",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019f8a9e-26bb-7d7e-b84d-c46a25b17ba4",
+      "scores": {
+        "shikimori": {
+          "score": 6.8,
+          "vote_count": 12142,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/11285-black-rock-shooter-tv",
+          "observed_at": "2026-09-19T22:45:26Z",
+          "external_id": "11285",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019f55b2-e65b-784d-9be0-32282c6398e3",
+      "scores": {
+        "shikimori": {
+          "score": 8.1,
+          "vote_count": 165,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/64398-guangyin-zhi-wai-2",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "64398",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019f4b16-5444-775b-9477-4c7edc913a53",
+      "scores": {
+        "shikimori": {
+          "score": 7.73,
+          "vote_count": 77,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62651-cang-yuan-tu-3",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "62651",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019f4adf-dd4d-7731-bc29-b62d9ba77f77",
+      "scores": {
+        "shikimori": {
+          "score": 6.58,
+          "vote_count": 28,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/64519-bananya-at-home-party",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "64519",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019f4888-9f35-7710-92ff-88e7681f66b1",
+      "scores": {
+        "shikimori": {
+          "score": 5.83,
+          "vote_count": 20,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63418-thunder-3",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "63418",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019f4215-6744-7674-bbb9-369f6aa682c8",
+      "scores": {
+        "shikimori": {
+          "score": 7.71,
+          "vote_count": 158,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/61921-shen-mu-nian-fan",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "61921",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019f4212-0312-7669-bdb2-63f5c834c675",
+      "scores": {
+        "shikimori": {
+          "score": 7.2,
+          "vote_count": 234,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/59434-shen-mu-2nd-season",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "59434",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019f36ef-9fe0-7528-a417-2767ec466389",
+      "scores": {
+        "shikimori": {
+          "score": 6.44,
+          "vote_count": 1994,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/z40031-mugyutto-black-clover",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "40031",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019f3359-d877-7496-a642-192f5a8ae906",
+      "scores": {
+        "shikimori": {
+          "score": 8.07,
+          "vote_count": 619,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62811-kimi-no-koto-ga-daidaidaidaidaisuki-na-100-nin-no-kanojo-3rd-season",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "62811",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019f2e28-7080-7434-a339-c95265069d48",
+      "scores": {
+        "shikimori": {
+          "score": 7.18,
+          "vote_count": 123,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62051-grow-up-show-himawari-no-circus-dan",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "62051",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019f2954-abfe-73e8-a501-4dd988a9e48c",
+      "scores": {
+        "shikimori": {
+          "score": 6.32,
+          "vote_count": 136,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63468-ushiro-no-shoumen-kamui-san",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "63468",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019f272d-6d08-7c27-b28f-a242f7ac6d38",
+      "scores": {
+        "shikimori": {
+          "score": 7.0,
+          "vote_count": 151,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62957-bai-ri-cheng-wang",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "62957",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019f1e88-fb97-7d23-ae5e-feadc89139ff",
+      "scores": {
+        "shikimori": {
+          "score": 7.28,
+          "vote_count": 56,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63780-hanazakari-no-kimitachi-e-2nd-season",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "63780",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efef6-120d-7a5e-8ed2-104c1f870d05",
+      "scores": {
+        "shikimori": {
+          "score": 6.48,
+          "vote_count": 13,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63276-candy-caries",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "63276",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efe6f-e5b0-7a43-9b7b-fb1b2b775123",
+      "scores": {
+        "shikimori": {
+          "score": 7.76,
+          "vote_count": 149,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62234-zhan-shen-fanchen-shenyu-ii",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "62234",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa57-5991-7ef3-9a93-8a57f06db31b",
+      "scores": {
+        "shikimori": {
+          "score": 5.56,
+          "vote_count": 27,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63878-migawari-reijou-wo-sukutta-no-wa-reikoku-mujihi-na-koori-no-ouji-no-ai-deshita",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "63878",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa56-daa0-7ef3-94a2-5b2daaf4fc51",
+      "scores": {
+        "shikimori": {
+          "score": 8.5,
+          "vote_count": 764,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63832-seihantai-na-kimi-to-boku-2nd-season",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "63832",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa56-3951-7ef3-843e-2f51e5bb3f7a",
+      "scores": {
+        "shikimori": {
+          "score": 5.23,
+          "vote_count": 63,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63802-mebius-dust",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "63802",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa55-eb64-7ef3-9358-318ec6901673",
+      "scores": {
+        "shikimori": {
+          "score": 6.42,
+          "vote_count": 234,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63752-suterare-seijo-no-isekai-gohan-tabi-kakure-skill-de-camping-car-wo-shoukan-shimashita",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "63752",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa55-6cf5-7ef3-bd4c-1761c24733ad",
+      "scores": {
+        "shikimori": {
+          "score": 6.84,
+          "vote_count": 199,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63537-kimi-wo-aisuru-ki-wa-nai-to-itta-jiki-koushaku-sama-ga-nazeka-dekiai-shitekimasu",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "63537",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa55-2f12-7ef3-ac54-2872cf15fe94",
+      "scores": {
+        "shikimori": {
+          "score": 6.2,
+          "vote_count": 2596,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63508-rakudai-kenja-no-gakuin-musou-nidome-no-tensei-s-rank-cheat-majutsushi-boukenroku",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "63508",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa54-f0cb-7ef3-ad45-3757414c18c7",
+      "scores": {
+        "shikimori": {
+          "score": 5.74,
+          "vote_count": 158,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63489-sora-wa-akai-kawa-no-hotori",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "63489",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa54-7db3-7ef3-8491-dc3c112e4d1a",
+      "scores": {
+        "shikimori": {
+          "score": 7.09,
+          "vote_count": 2739,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63403-yani-neko",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "63403",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa54-40b0-7ef3-aef7-dce35a6a2d84",
+      "scores": {
+        "shikimori": {
+          "score": 7.28,
+          "vote_count": 184,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63347-world-is-dancing",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "63347",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa53-fb26-7ef3-a615-4a088f510ba8",
+      "scores": {
+        "shikimori": {
+          "score": 5.92,
+          "vote_count": 113,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63324-iwamoto-senpai-no-suisen",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "63324",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa53-9cc8-7ef3-9e2a-4326eb0cfd39",
+      "scores": {
+        "shikimori": {
+          "score": 7.53,
+          "vote_count": 834,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63150-otome-kaijuu-carameliser",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "63150",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa53-2c6f-7ef3-8364-6d789f30385b",
+      "scores": {
+        "shikimori": {
+          "score": 7.35,
+          "vote_count": 182,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63100-tetsunabe-no-jan",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "63100",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa52-db2d-7ef0-ac9f-29bda090bcd8",
+      "scores": {
+        "shikimori": {
+          "score": 6.99,
+          "vote_count": 378,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63082-reiwa-no-dara-san",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "63082",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa52-8450-7eea-ba6e-c8259af50a74",
+      "scores": {
+        "shikimori": {
+          "score": 7.05,
+          "vote_count": 167,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63061-uchi-no-otouto-domo-ga-sumimasen",
+          "observed_at": "2026-09-19T22:45:27Z",
+          "external_id": "63061",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa51-2cb2-7eea-aa61-a9049fcc8bd8",
+      "scores": {
+        "shikimori": {
+          "score": 6.26,
+          "vote_count": 10,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63047-yoroi-shin-den-samurai-troopers-part-2",
+          "observed_at": "2026-09-19T22:45:28Z",
+          "external_id": "63047",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa4f-fafb-7eea-bbf5-2831965afb85",
+      "scores": {
+        "shikimori": {
+          "score": 8.03,
+          "vote_count": 648,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62936-toumei-na-yoru-ni-kakeru-kimi-to-me-ni-mienai-koi-wo-shita",
+          "observed_at": "2026-09-19T22:45:28Z",
+          "external_id": "62936",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa4f-0553-7eea-8cc5-0185e197cc1b",
+      "scores": {
+        "shikimori": {
+          "score": 7.14,
+          "vote_count": 632,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62876-saijo-no-osewa-takane-no-hanadarake-na-meimonkou-de-gakuin-ichi-no-ojousama-seikatsu-nouryoku-kaimu-wo-kagenagara-osewa-suru-koto-ni-narimashita",
+          "observed_at": "2026-09-19T22:45:28Z",
+          "external_id": "62876",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa4e-8ba8-7eea-aab5-1605968c197a",
+      "scores": {
+        "shikimori": {
+          "score": 7.61,
+          "vote_count": 523,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62856-nijusseiki-denki-mokuroku-eureka-evrika",
+          "observed_at": "2026-09-19T22:45:28Z",
+          "external_id": "62856",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa4d-da0c-7eea-8632-4e616048d12d",
+      "scores": {
+        "shikimori": {
+          "score": 6.39,
+          "vote_count": 145,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62683-let-s-go-kaiki-gumi",
+          "observed_at": "2026-09-19T22:45:28Z",
+          "external_id": "62683",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa4d-995f-7eea-a679-cbc9223a4b76",
+      "scores": {
+        "shikimori": {
+          "score": 6.27,
+          "vote_count": 1140,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62617-koko-wa-ore-ni-makasete-saki-ni-ike-to-itte-kara-10-nen-ga-tattara-densetsu-ni-natteita",
+          "observed_at": "2026-09-19T22:45:28Z",
+          "external_id": "62617",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa4c-fee0-7eea-8fbb-a78d080861de",
+      "scores": {
+        "shikimori": {
+          "score": 8.42,
+          "vote_count": 1328,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62542-grand-blue-season-3",
+          "observed_at": "2026-09-19T22:45:28Z",
+          "external_id": "62542",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa4c-b2ec-7eea-ba31-1f2d28e635eb",
+      "scores": {
+        "shikimori": {
+          "score": 7.09,
+          "vote_count": 399,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62535-hanaori-san-wa-tensei-shitemo-kenka-ga-shitai",
+          "observed_at": "2026-09-19T22:45:28Z",
+          "external_id": "62535",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa4c-086a-7eea-a67a-9caf7b0523bd",
+      "scores": {
+        "shikimori": {
+          "score": 7.72,
+          "vote_count": 722,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62513-clevatess-ii-majuu-no-ou-to-itsuwari-no-yuusha-denshou",
+          "observed_at": "2026-09-19T22:45:28Z",
+          "external_id": "62513",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa4b-b3e1-7eea-941d-59183399ecc0",
+      "scores": {
+        "shikimori": {
+          "score": 7.45,
+          "vote_count": 938,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62476-tefuda-ga-oome-no-victoria",
+          "observed_at": "2026-09-19T22:45:28Z",
+          "external_id": "62476",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa4b-6c2d-7ee7-bd17-07e486d8462c",
+      "scores": {
+        "shikimori": {
+          "score": 5.59,
+          "vote_count": 468,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62435-sekai-saikyou-no-kouei-meikyuukoku-no-shinjin-tansakusha",
+          "observed_at": "2026-09-19T22:45:28Z",
+          "external_id": "62435",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa49-6fbe-7ee7-bc63-5ac43035ff0a",
+      "scores": {
+        "shikimori": {
+          "score": 7.49,
+          "vote_count": 117,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62430-bang-dream-yume-mita",
+          "observed_at": "2026-09-19T22:45:28Z",
+          "external_id": "62430",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa46-a863-7ee7-a973-2c716ffc9668",
+      "scores": {
+        "shikimori": {
+          "score": 7.16,
+          "vote_count": 579,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/61897-katainaka-no-ossan-kensei-ni-naru-ii",
+          "observed_at": "2026-09-19T22:45:28Z",
+          "external_id": "61897",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa2b-9e1c-7ee4-8d44-850382167dbe",
+      "scores": {
+        "shikimori": {
+          "score": 6.13,
+          "vote_count": 1977,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62322-lv999-no-murabito",
+          "observed_at": "2026-09-19T22:45:28Z",
+          "external_id": "62322",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa2b-62ad-7ee4-90cb-4c0fee682ddc",
+      "scores": {
+        "shikimori": {
+          "score": 6.74,
+          "vote_count": 510,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62289-buchigire-reijou-wa-houfuku-wo-chikaimashita-madousho-no-chikara-de-sokoku-wo-tatakitsubushimasu",
+          "observed_at": "2026-09-19T22:45:36Z",
+          "external_id": "62289",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa2a-f6a5-7ee4-8a6b-e97b88ca2ca9",
+      "scores": {
+        "shikimori": {
+          "score": 6.82,
+          "vote_count": 147,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62102-ibitte-konai-gibo-to-gishi",
+          "observed_at": "2026-09-19T22:45:36Z",
+          "external_id": "62102",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa2a-a64e-7ee4-afb1-a3b56158ce5b",
+      "scores": {
+        "shikimori": {
+          "score": 6.38,
+          "vote_count": 615,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62080-mujikaku-seijo-wa-kyou-mo-muishiki-ni-chikara-wo-tare-nagasu",
+          "observed_at": "2026-09-19T22:45:37Z",
+          "external_id": "62080",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa29-b9b7-7ee4-8805-ff1db3581187",
+      "scores": {
+        "shikimori": {
+          "score": 6.75,
+          "vote_count": 1164,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62078-ryoumin-0-nin-start-no-henkyou-ryoushu-sama",
+          "observed_at": "2026-09-19T22:45:37Z",
+          "external_id": "62078",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa29-20c8-7ee4-86ef-cbf03d1edb75",
+      "scores": {
+        "shikimori": {
+          "score": 6.87,
+          "vote_count": 348,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/61814-oni-no-hanayome",
+          "observed_at": "2026-09-19T22:45:37Z",
+          "external_id": "61814",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa28-bc76-7ee4-92b1-4f0d57067524",
+      "scores": {
+        "shikimori": {
+          "score": 7.04,
+          "vote_count": 966,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/61686-heroine-seijo-iie-all-works-maid-desu-hokori",
+          "observed_at": "2026-09-19T22:45:37Z",
+          "external_id": "61686",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa28-4e2f-7ee4-b6a5-ecfb8d8e8f92",
+      "scores": {
+        "shikimori": {
+          "score": 8.47,
+          "vote_count": 897,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/61483-tenmaku-no-jaadugar",
+          "observed_at": "2026-09-19T22:45:37Z",
+          "external_id": "61483",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa28-000b-7ee4-a903-225d9c380872",
+      "scores": {
+        "shikimori": {
+          "score": 7.7,
+          "vote_count": 174,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/61280-kore-kaite-shine",
+          "observed_at": "2026-09-19T22:45:37Z",
+          "external_id": "61280",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa27-6a9d-7ee4-8973-5398f1047136",
+      "scores": {
+        "shikimori": {
+          "score": 8.22,
+          "vote_count": 775,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/61240-futsutsuka-na-akujo-dewa-gozaimasu-ga-suuguu-chouso-torikae-den",
+          "observed_at": "2026-09-19T22:45:37Z",
+          "external_id": "61240",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa27-0515-7ee4-83d5-04b15b373e22",
+      "scores": {
+        "shikimori": {
+          "score": 6.89,
+          "vote_count": 779,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/61169-black-torch",
+          "observed_at": "2026-09-19T22:45:37Z",
+          "external_id": "61169",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa26-ae86-7ee4-a1f2-4e467f4be442",
+      "scores": {
+        "shikimori": {
+          "score": 7.84,
+          "vote_count": 999,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/61048-neko-to-ryuu",
+          "observed_at": "2026-09-19T22:45:37Z",
+          "external_id": "61048",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa24-d300-7ee1-9d41-f8e7cfc76c2f",
+      "scores": {
+        "shikimori": {
+          "score": 7.03,
+          "vote_count": 90,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/60637-mahou-shoujo-lyrical-nanoha-exceeds-gun-blaze-vengeance",
+          "observed_at": "2026-09-19T22:45:37Z",
+          "external_id": "60637",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa23-41c7-7ee0-979c-98e8ae8f31fb",
+      "scores": {
+        "shikimori": {
+          "score": 9.07,
+          "vote_count": 1280,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/60636-bleach-sennen-kessen-hen-kashin-tan",
+          "observed_at": "2026-09-19T22:45:37Z",
+          "external_id": "60636",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa17-9b20-7ee0-96ab-c44c95072f6d",
+      "scores": {
+        "shikimori": {
+          "score": 7.09,
+          "vote_count": 73,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/60552-kabushikigaisha-magi-lumi-re-2nd-season",
+          "observed_at": "2026-09-19T22:45:37Z",
+          "external_id": "60552",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa15-ba6c-7ee0-b7fa-fa7ffba56a7f",
+      "scores": {
+        "shikimori": {
+          "score": 6.47,
+          "vote_count": 692,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/60522-gaikotsu-kishi-sama-tadaima-isekai-e-odekakechuu-ii",
+          "observed_at": "2026-09-19T22:45:37Z",
+          "external_id": "60522",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa15-1b11-7ee0-a27a-7ee1f233cc4e",
+      "scores": {
+        "shikimori": {
+          "score": 6.74,
+          "vote_count": 40,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/56613-azur-lane-bisoku-zenshin-ni",
+          "observed_at": "2026-09-19T22:45:37Z",
+          "external_id": "56613",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019efa11-3b1f-7ee0-91a0-15272f1e89f3",
+      "scores": {
+        "shikimori": {
+          "score": 6.74,
+          "vote_count": 819,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/54000-otome-game-sekai-wa-mob-ni-kibishii-sekai-desu-2",
+          "observed_at": "2026-09-19T22:45:37Z",
+          "external_id": "54000",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019ef9e4-5710-7ede-82e8-96b54c4f470d",
+      "scores": {
+        "shikimori": {
+          "score": 8.24,
+          "vote_count": 1239,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/49233-youjo-senki-ii",
+          "observed_at": "2026-09-19T22:45:37Z",
+          "external_id": "49233",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019ef9db-7bd9-7edb-8e8d-5e29f2999748",
+      "scores": {
+        "shikimori": {
+          "score": 7.58,
+          "vote_count": 183,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/60059-nige-jouzu-no-wakagimi-2nd-season",
+          "observed_at": "2026-09-19T22:45:37Z",
+          "external_id": "60059",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019ef9d9-822b-7eda-a819-5f46d5a28050",
+      "scores": {
+        "shikimori": {
+          "score": 6.79,
+          "vote_count": 1104,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/59741-tsuihou-sareta-tensei-juukishi-wa-game-chishiki-de-musou-suru",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "59741",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019ef9d9-3017-7ed8-af18-af6988cb2998",
+      "scores": {
+        "shikimori": {
+          "score": 7.87,
+          "vote_count": 1703,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/58929-koukaku-kidoutai-tv",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "58929",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019ef9d8-ccd9-7ed6-8873-dd4892ae1862",
+      "scores": {
+        "shikimori": {
+          "score": 8.01,
+          "vote_count": 256,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/58878-sayonara-lara",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "58878",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019ef9d7-0ffc-7ed4-abff-506b7e265a66",
+      "scores": {
+        "shikimori": {
+          "score": 6.32,
+          "vote_count": 474,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/56736-saikyou-degarashi-ouji-no-anyaku-teii-arasoi",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "56736",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019ef9d6-0eea-7ed4-8899-2390be34735f",
+      "scores": {
+        "shikimori": {
+          "score": 6.85,
+          "vote_count": 559,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/56735-tenkou-saki-no-seiso-karen-na-bishoujo-ga-mukashi-danshi-to-omotte-issho-ni-asonda-osananajimi-datta-ken",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "56735",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019ef4a6-c901-7348-8351-114efd236bba",
+      "scores": {
+        "shikimori": {
+          "score": 6.6,
+          "vote_count": 111,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/776-nanaka-6-17",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "776",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019ee4ec-9250-7081-a023-c16e0830e030",
+      "scores": {
+        "shikimori": {
+          "score": 8.7,
+          "vote_count": 2124,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62276-guimi-zhi-zhu-specials",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "62276",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019ee040-7d44-7445-86d2-6c573c439560",
+      "scores": {
+        "shikimori": {
+          "score": 7.59,
+          "vote_count": 254,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62241-biao-ren-er",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "62241",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019edb89-5337-74d7-ad25-c5e325240fdb",
+      "scores": {
+        "shikimori": {
+          "score": 6.71,
+          "vote_count": 2664,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/34742-youjo-shenki",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "34742",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019edadb-4a5a-74b1-a37a-71ecab32e8a7",
+      "scores": {
+        "shikimori": {
+          "score": 7.26,
+          "vote_count": 744,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63833-baki-dou-part-2",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "63833",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019ecc6f-f6dd-7bca-98dd-496e63967526",
+      "scores": {
+        "shikimori": {
+          "score": 6.7,
+          "vote_count": 74,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/8767-shin-tenchi-muyou-specials",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "8767",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019ec6da-bf82-73e9-a3de-505997c5454e",
+      "scores": {
+        "shikimori": {
+          "score": 6.62,
+          "vote_count": 618,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63316-dogulwang",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "63316",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019eae9c-b60d-7100-aaaf-53a1a76ca3ab",
+      "scores": {
+        "shikimori": {
+          "score": 7.08,
+          "vote_count": 338,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/61642-wan-ren-zhi-shang",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "61642",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019e8dfc-6ee8-74f3-bd05-b92ba9f86f81",
+      "scores": {
+        "shikimori": {
+          "score": 8.31,
+          "vote_count": 5854,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62076-super-no-ura-de-yani-suu-futari",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "62076",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019e820c-1c30-7466-9e8f-801577489ce1",
+      "scores": {
+        "shikimori": {
+          "score": 6.72,
+          "vote_count": 181,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/51291-duo-xuan-shi",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "51291",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a0aa6e-2008-70d0-89d1-1af7b85336b1",
+      "scores": {
+        "shikimori": {
+          "score": 7.2,
+          "vote_count": 1277,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/30869-ajin-part-2-shoutotsu",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "30869",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09d0c-f740-7909-b36f-3689522bf61e",
+      "scores": {
+        "shikimori": {
+          "score": 7.48,
+          "vote_count": 1275,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10500-ojiisan-no-lamp",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "10500",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09d0b-9513-7909-a38f-900e1d9f8b62",
+      "scores": {
+        "shikimori": {
+          "score": 5.99,
+          "vote_count": 221,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10501-bannou-yasai-ninninman",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "10501",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09d0a-504b-7909-ac34-43a702b6d3c9",
+      "scores": {
+        "shikimori": {
+          "score": 6.91,
+          "vote_count": 516,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/1049-cello-hiki-no-gauche-1982",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "1049",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09d05-ab74-7909-b087-1ffc479aec8b",
+      "scores": {
+        "shikimori": {
+          "score": 7.08,
+          "vote_count": 1984,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10448-rain-town",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "10448",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09d02-7e49-7909-9c6c-961b9d115d27",
+      "scores": {
+        "shikimori": {
+          "score": 5.32,
+          "vote_count": 5804,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10417-gyo",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "10417",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09cf8-2fc0-7909-b31d-82452b65a3f4",
+      "scores": {
+        "shikimori": {
+          "score": 7.41,
+          "vote_count": 4242,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/15437-kore-wa-zombie-desu-ka-of-the-dead-hai-minotake-ni-attemasu",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "15437",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09ceb-cf13-7909-9f0d-55cc4ff59423",
+      "scores": {
+        "shikimori": {
+          "score": 7.39,
+          "vote_count": 340,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/1911-top-wo-nerae-top-wo-nerae-2-gattai-movie",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "1911",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09ce3-bf37-7909-820d-c8ac3b116f28",
+      "scores": {
+        "shikimori": {
+          "score": 6.58,
+          "vote_count": 356,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10017-dragon-ball-super-saiya-jin-zetsumetsu-keikaku",
+          "observed_at": "2026-09-19T22:45:38Z",
+          "external_id": "10017",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09ce0-7b41-7909-9970-51bdb3121042",
+      "scores": {
+        "shikimori": {
+          "score": 7.41,
+          "vote_count": 2665,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/30868-ajin-part-1-shoudou",
+          "observed_at": "2026-09-19T22:45:39Z",
+          "external_id": "30868",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09cdd-5599-7909-be3d-76237d08c43a",
+      "scores": {
+        "shikimori": {
+          "score": 6.14,
+          "vote_count": 287,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10405-xi-avant",
+          "observed_at": "2026-09-19T22:45:39Z",
+          "external_id": "10405",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09cd8-d08c-7909-afa9-b988ca6c3fdf",
+      "scores": {
+        "shikimori": {
+          "score": 7.47,
+          "vote_count": 1544,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/1034-ouritsu-uchuugun-honneamise-no-tsubasa",
+          "observed_at": "2026-09-19T22:45:39Z",
+          "external_id": "1034",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09ccc-73b1-7909-9932-01bae7df7da1",
+      "scores": {
+        "shikimori": {
+          "score": 6.69,
+          "vote_count": 284,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10074-toriko-3d-kaimaku-gourmet-adventure",
+          "observed_at": "2026-09-19T22:45:39Z",
+          "external_id": "10074",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09ccb-32a4-7909-a634-56dc6065f830",
+      "scores": {
+        "shikimori": {
+          "score": 7.44,
+          "vote_count": 254,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/1006-tenchi-muyou-in-love",
+          "observed_at": "2026-09-19T22:45:39Z",
+          "external_id": "1006",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    }
+  ],
+  "title_count": 225,
+  "snapshot_sha256": "52a497c04b07d7a99573037e3e085cb6aff60f9593d3474f80d2d00b1be3baaa"
+}
