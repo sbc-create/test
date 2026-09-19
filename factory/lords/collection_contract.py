@@ -360,7 +360,7 @@ def _общие(семейство: str, кино: str, сериал: str) -> li
     """Коллекции, которые опираются только на реально заполненные поля."""
     return [
         _спец("recently_added", семейство, "Недавно добавленные",
-              "Записи в порядке появления в каталоге поставщика.",
+              "Свежие поступления в каталог аниме.",
               "catalog", {}, {"field": "published_at", "order": "desc"},
               "published_at", "/collection/recently_added/"),
         _спец("recently_added_movies", семейство, "Новые фильмы",
@@ -368,7 +368,7 @@ def _общие(семейство: str, кино: str, сериал: str) -> li
               "catalog", {"kind": кино}, {"field": "published_at", "order": "desc"},
               "published_at", "/collection/recently_added_movies/"),
         _спец("new_episodes", семейство, "Новые эпизоды",
-              "События выхода серий по episode.published_at / available_at.",
+              "Недавно вышедшие серии аниме.",
               "episodes", {"episode_events": True},
               {"field": "episode_published_at", "order": "desc"},
               "episode_published_at", "/collection/new_episodes/"),
@@ -381,7 +381,7 @@ def _общие(семейство: str, кино: str, сериал: str) -> li
               "catalog", {"year": "max"}, {"field": "published_at", "order": "desc"},
               "year", "/collection/current_season/"),
         _спец("video_available", семейство, "С видео",
-              "Записи с фактически подтверждённой playable-дорожкой.",
+              "Тайтлы, которые можно смотреть прямо сейчас.",
               "catalog", {"playable": True}, {"field": "published_at", "order": "desc"},
               "published_at", "/collection/video_available/"),
     ]
@@ -391,7 +391,7 @@ def _аниме_подборки(семейство: str = "animedia") -> list[�
     """Независимые пользовательские подборки Animedia — без fallback на catalog[:N]."""
     return [
         _спец("anime_movies", семейство, "Аниме-фильмы",
-              "Полнометражные аниме (type=movie).",
+              "Полнометражные аниме-фильмы.",
               "details", {"type": "movie"}, {"field": "published_at", "order": "desc"},
               "type", "/collection/anime_movies/"),
         _спец("donghua", семейство, "Дунхуа",
@@ -419,7 +419,7 @@ def _аниме_подборки(семейство: str = "animedia") -> list[�
               "details", {"genre": "семей"}, {"field": "published_at", "order": "desc"},
               "genre", "/collection/family/"),
         _спец("series_with_episodes", семейство, "Сериалы с сериями",
-              "Тайтлы, у которых в sidecar есть доступные серии.",
+              "Сериалы с доступными сериями для просмотра.",
               "details", {"with_episodes": True},
               {"field": "published_at", "order": "desc"},
               "seasons", "/collection/series_with_episodes/"),
