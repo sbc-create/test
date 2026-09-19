@@ -1,0 +1,30 @@
+{
+  "SOURCE_HEAD": "a16ead334484e7f17213d7962bad7f88ffdf2cf2",
+  "PASS5_FEATURE_HEAD": "0fc98e2",
+  "PASS5_EVIDENCE_HEAD": "99f8869",
+  "PASS5_REPORT_HEAD": "a16ead3",
+  "PASS5_REPORT_REVALIDATED": true,
+  "LIVE_BUILD_MATCH": true,
+  "CATALOG_ORACLE_STABLE": true,
+  "YEAR_2019_COUNT": 2144,
+  "YEAR_2019_LIVE": 2144,
+  "MOVIE_YEAR_FACETS": 92,
+  "PLAYER_SMOKE_PASS": true,
+  "oracle_run1": {
+    "raw": 53524,
+    "details": 53524,
+    "missing_join": 0,
+    "year_2019": 2144,
+    "movie_year_facets": 92,
+    "catalog_sha": "14add2ef912f0fe706db40a35c56ad4a"
+  },
+  "oracle_run2": {
+    "raw": 53524,
+    "details": 53524,
+    "missing_join": 0,
+    "year_2019": 2144,
+    "movie_year_facets": 92,
+    "catalog_sha": "14add2ef912f0fe706db40a35c56ad4a"
+  },
+  "content_snapshot_digest": "14add2ef912f0fe706db40a35c56ad4a"
+}

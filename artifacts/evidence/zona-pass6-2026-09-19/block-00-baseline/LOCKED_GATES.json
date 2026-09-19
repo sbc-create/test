@@ -1,0 +1,13 @@
+{
+  "LOCKED_01_FULL_CATALOG_ORACLE": true,
+  "LOCKED_02_YEAR_NORMALIZATION": true,
+  "LOCKED_03_YEAR_FACET_COUNTS": true,
+  "LOCKED_04_KIND_FILTER_CONTRACT": true,
+  "LOCKED_05_PAGINATION_COMPLETENESS": true,
+  "LOCKED_06_CARD_BREAKPOINTS_8_7_4_2": true,
+  "LOCKED_07_PLAYER_STATE_MACHINE": true,
+  "LOCKED_08_PLAYER_GOLDEN_10_OF_10": true,
+  "baseline_card_width_1440": 175,
+  "baseline_poster_height": 260,
+  "baseline_grid": "8/7/4/2"
+}

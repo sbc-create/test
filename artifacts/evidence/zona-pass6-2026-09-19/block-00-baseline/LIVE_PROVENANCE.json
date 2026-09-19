@@ -1,0 +1,23 @@
+{
+  "at": "2026-09-19T22:20:08.050946+00:00",
+  "LIVE_BUILD": "20260919T215728Z-0fc98e2e-nova",
+  "RUNTIME_ARTIFACT": "dec738733737754afb47afd42c5ebd10be39e7c07408285035d426aef4e611b0",
+  "RUNTIME_SOURCE": "0fc98e2ee6e08ae48ad56e7ac9398d5d5a0d2e7b",
+  "EXPECTED_PASS5_LIVE_BUILD": "20260919T215728Z-0fc98e2e-nova",
+  "LIVE_BUILD_MATCH": true,
+  "manifest": {
+    "schema_version": 1,
+    "template_family": "zona",
+    "design_version": "1.2.0",
+    "source_commit": "0fc98e2ee6e08ae48ad56e7ac9398d5d5a0d2e7b",
+    "runtime_commit": "0fc98e2ee6e08ae48ad56e7ac9398d5d5a0d2e7b",
+    "build_id": "20260919T215728Z-0fc98e2e-nova",
+    "artifact_sha256": "dec738733737754afb47afd42c5ebd10be39e7c07408285035d426aef4e611b0",
+    "profile": "zona-general",
+    "built_at": "2026-09-19T21:57:28Z"
+  },
+  "artifact_sha256_file": "4b541137ff4df012eb189e4ed5ce2125d47af7d205188e5e7554170954abb120",
+  "noindex": "noindex, nofollow",
+  "ROLLBACK_PATH": "/srv/lords/.frontend/.rollback/20260919T215728Z-zona-01-pass5",
+  "rollback_exists": true
+}
