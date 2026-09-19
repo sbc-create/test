@@ -16,7 +16,7 @@ HOST = ROOT / "automation" / "host"
 FRONTEND = HOST / "lords-frontend.py"
 
 
-def _load(tmp: Path, *, n_titles: int = 25, version: str = "1.2.3"):
+def _load(tmp: Path, *, n_titles: int = 25, version: str = "1.2.4"):
     manifest = {
         "schema_version": 1,
         "template_family": "animedia",
@@ -216,12 +216,12 @@ class TestCssIsolation:
         mod, _, _ = fe
         css = mod.АНИМЕДИА_СТИЛЬ
         assert ".ahome-eps" in css
-        assert "height:82px" in css
-        assert "width:64px" in css
+        assert "height:72px" in css
+        assert "width:60px" in css
         # must not rewrite global article/img card player
         assert "article{" not in css.replace(" ", "")
         assert ".ahero .zrl__track>*" in css
-        assert "168px" in css
+        assert "152px" in css
 
 
 class TestDomainConsistency:

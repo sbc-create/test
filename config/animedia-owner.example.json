@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "contact_email": "",
+  "telegram_url": "",
+  "privacy_url": "",
+  "terms_url": "",
+  "_comment": "Fill only owner-approved real values. Empty strings stay hidden in UI. Do not invent contacts."
+}

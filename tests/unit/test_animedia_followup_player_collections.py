@@ -297,11 +297,13 @@ def test_hub_selects_latest_available_episode(monkeypatch, tmp_path):
 
 def test_home_css_locks_hero_card_width():
     text = (HOST / "lords-frontend.py").read_text(encoding="utf-8")
-    assert "min(1704px,calc(100vw - 80px))" in text
-    assert "clamp(148px,8.2vw,168px)" in text
-    assert ".ahero" in text and "max-height:min(300px,34vh)" in text
-    assert "clamp(240px,15.8vw,306px) minmax(0,1fr)" in text
+    assert "--a-content-max:1760px" in text
+    assert "calc(100% - var(--page-gutters))" in text
+    assert "width:152px;height:214px" in text
+    assert ".ahero" in text and "max-height:300px" in text
+    assert "clamp(240px,15.8vw,280px) minmax(0,1fr)" in text
     assert "aspect-ratio:16/9" in text
+    assert "repeat(6,minmax(0,1fr))" in text
 
 
 def test_player_overlay_hidden_css_not_overridden():
