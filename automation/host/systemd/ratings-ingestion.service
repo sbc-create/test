@@ -15,16 +15,20 @@ WorkingDirectory=/srv/site-factory/repo
 # Environment=SHIKIMORI_TOKEN_CREDENTIAL=shikimori_api_token
 # Environment=CREDENTIALS_DIRECTORY=%d
 
+# Stage 3: AMD closed/noindex canary defaults (scheduler stays disabled).
 Environment=RATINGS_DAILY_SUCCESS_TARGET=500
 Environment=RATINGS_DAILY_CANDIDATE_CAP=750
 Environment=RATINGS_INITIAL_CANARY_LIMIT=100
 Environment=RATINGS_BATCH_SIZE=50
-Environment=RATINGS_MAX_RPS=2
-Environment=RATINGS_MAX_REQUESTS_PER_MINUTE=60
+Environment=RATINGS_MAX_RPS=0.1
+Environment=RATINGS_MAX_REQUESTS_PER_MINUTE=6
 Environment=RATINGS_USER_AGENT=site-factory-ratings/1.0 (+ratings-ingestion; contact=ops)
+Environment=RATINGS_SCHEDULER_STATE=DISABLED
+Environment=RATINGS_CURRENT_DAILY_LIMIT=0
 
-# Stage 2 will pass --apply. Stage 1 units are repo-only and must not be enabled.
-ExecStart=/usr/bin/python3 -m factory ratings ingest --source shikimori --limit 500 --dry-run
+# Stage 3: unit installed in repo but MUST remain disabled / dry-run.
+# Do not systemctl enable. Live apply is a later confirmed stage.
+ExecStart=/usr/bin/python3 -m factory ratings ingest --source amd_online --limit 0 --dry-run
 
 # Singleton: flock inside factory.ratings.locks; also systemd itself.
 ExecStartPre=/usr/bin/flock -n /run/site-factory/ratings-ingestion.lock /bin/true
