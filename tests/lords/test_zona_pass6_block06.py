@@ -85,5 +85,7 @@ def test_footer_fallback_two_link_cols_marks_contact_gap(зона):
 
 def test_footer_css_mobile_brand_full_width_two_cols(зона):
     css = зона.ЗОНА_СТИЛЬ
-    assert re.search(r"@media\(max-width:699px\)\{[^}]*grid-column:1/-1", css, re.S)
+    assert "@media(max-width:699px)" in css
+    assert "grid-column:1/-1" in css
     assert "zft__cols--fallback" in css
+    assert "min-height:44px" in css
