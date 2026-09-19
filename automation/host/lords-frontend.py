@@ -430,16 +430,30 @@ font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 """
 
 
+def _сжать_юникод(с: str) -> str:
+    """NFKC + ё→е + снятие комбинирующих знаков.
+
+    NFKD разбивал «й» на «и»+breve, и `токены("войны")` давали
+    `["вои","ны"]` — из‑за этого «Вой» оказывался точным хитом
+    запроса «звездные войны».
+    """
+    с = unicodedata.normalize("NFKC", (с or "").lower()).replace("ё", "е")
+    return "".join(ch for ch in с if unicodedata.category(ch) != "Mn")
+
+
 def нормализовать(с: str) -> str:
     """Единая форма для сравнения: регистр, ё/е, дефисы, пробелы, пунктуация."""
-    с = unicodedata.normalize("NFKD", (с or "").lower()).replace("ё", "е")
-    return re.sub(r"[^a-zа-я0-9]+", "", с)
+    return re.sub(r"[^a-zа-я0-9]+", "", _сжать_юникод(с))
 
 
 def токены(с: str) -> list[str]:
     """Слова запроса по отдельности: «бункер 1-3 сезон» — это четыре токена."""
-    с = unicodedata.normalize("NFKD", (с or "").lower()).replace("ё", "е")
-    return [т for т in re.split(r"[^a-zа-я0-9]+", с) if т]
+    return [т for т in re.split(r"[^a-zа-я0-9]+", _сжать_юникод(с)) if т]
+
+
+def нормализовать_фразу(с: str) -> str:
+    """Фраза с пробелами между словами (для phrase/prefix ranking)."""
+    return " ".join(токены(с))
 
 
 #: Русская раскладка под латинскими клавишами: «vfnhbwf» → «матрица».
@@ -567,86 +581,184 @@ class Данные:
         self.kinds = sorted({з["kind"] for з in self.items if з["kind"]})
 
     def искать(self, q: str, предел: int = 120) -> list[dict]:
-        """Терпимый поиск по всем известным названиям записи.
+        """Поиск с phrase-first ranking и AND по значимым токенам.
 
-        Ищется по русскому названию, оригинальному названию, синонимам,
-        slug и транслиту. Запрос дополнительно читается как набранный в
-        чужой раскладке. Служебные слова («сезон», «серия») отбрасываются.
-
-        Смешанный запрос («Matrix матрица») не склеивается в одно ядро:
-        значимые токены проверяются по отдельности (OR), иначе латиница +
-        кириллица никогда не совпали бы ни с одной формой.
-
-        Ранжирование: точное совпадение, затем начало, затем вхождение, затем
-        терпимость к одной-двум опечаткам.
+        «звездные войны» больше не матчит «Вой»: токены не режутся по
+        combining marks, а частичный фрагмент не обгоняет полную фразу.
+        Popularity/rating не поднимают нерелевантное выше tier.
         """
-        сырые = [q, из_раскладки(q)]
-        цели: list[str] = []
-        for сырой in сырые:
-            нq = нормализовать(сырой)
-            если_токены = [т for т in токены(сырой)
-                           if т not in СЛУЖЕБНЫЕ and not т.isdigit()]
-            if нq:
-                цели.append(нq)
-            for т in если_токены:
-                нт = нормализовать(т)
-                if нт and нт not in цели:
-                    цели.append(нт)
-            ядро = нормализовать("".join(если_токены))
-            if ядро and ядро not in цели:
-                цели.append(ядро)
-        # Уникальный порядок.
-        увидели_цели: list[str] = []
-        for ц in цели:
-            if ц and ц not in увидели_цели:
-                увидели_цели.append(ц)
-        цели = увидели_цели
-        if not цели:
+        сырой = (q or "").strip()
+        if not сырой:
             return []
-
-        точн, начало, внутри, мягкие = [], [], [], []
-        for з in self.items:
-            формы = з["_формы"]
-            if not формы:
-                continue
-            попал = False
-            for цель in цели:
-                if цель in формы:
-                    точн.append(з)
-                    попал = True
-                    break
-            if попал:
-                continue
-            for цель in цели:
-                if any(ф.startswith(цель) for ф in формы):
-                    начало.append(з)
-                    попал = True
-                    break
-            if попал:
-                continue
-            for цель in цели:
-                if any(цель in ф for ф in формы):
-                    внутри.append(з)
-                    попал = True
-                    break
-            if попал:
-                continue
-            # Нечёткое сравнение: см. `_мягкое_совпадение` (prefix+ratio).
-            if len(мягкие) < предел:
-                for цель in цели:
-                    for ф in формы:
-                        if _мягкое_совпадение(цель, ф):
-                            мягкие.append(з)
-                            попал = True
-                            break
-                    if попал:
-                        break
-        итог, видели = [], set()
-        for группа in (точн, начало, внутри, мягкие):
-            for з in группа:
-                if з["url"] in видели:
+        варианты = [сырой, из_раскладки(сырой)]
+        значимые: list[str] = []
+        for v in варианты:
+            for т in токены(v):
+                if т in СЛУЖЕБНЫЕ or т.isdigit():
                     continue
-                видели.add(з["url"])
+                if т not in значимые:
+                    значимые.append(т)
+        if not значимые:
+            return []
+        фраза = " ".join(значимые)
+        фраза_слитно = "".join(значимые)
+        # Primary form per item: normalized title with spaces for phrase checks.
+        корзины = {i: [] for i in range(1, 11)}
+
+        def primary_phrase(з: dict) -> str:
+            return нормализовать_фразу(з.get("title") or "")
+
+        def forms_compact(з: dict) -> list[str]:
+            return list(з.get("_формы") or [])
+
+        def forms_phrase(з: dict) -> list[str]:
+            """Spaced phrases from title / original / aliases."""
+            out = [primary_phrase(з)]
+            for поле in ("original_title", "original_name", "alt_title"):
+                val = з.get(поле)
+                if val:
+                    out.append(нормализовать_фразу(str(val)))
+            for доп in з.get("aliases") or ():
+                out.append(нормализовать_фразу(str(доп)))
+            # spaced translit of title
+            out.append(нормализовать_фразу(транслит(з.get("title") or "")))
+            uniq, seen = [], set()
+            for p in out:
+                if p and p not in seen:
+                    seen.add(p)
+                    uniq.append(p)
+            return uniq
+
+        def all_tokens_in(phrase: str) -> bool:
+            return all(т in phrase.split() or т in phrase.replace(" ", "")
+                       for т in значимые)
+
+        def all_tokens_ordered(phrase: str) -> bool:
+            parts = phrase.split()
+            if not parts:
+                return False
+            i = 0
+            for part in parts:
+                if i < len(значимые) and (part == значимые[i] or part.startswith(значимые[i])):
+                    i += 1
+            return i == len(значимые)
+
+        def strict_prefix_all(phrase: str) -> bool:
+            parts = phrase.split()
+            if len(parts) < len(значимые):
+                # also allow compact
+                compact = phrase.replace(" ", "")
+                pos = 0
+                for т in значимые:
+                    j = compact.find(т, pos)
+                    if j < 0:
+                        return False
+                    pos = j + len(т)
+                return True
+            used = [False] * len(parts)
+            for т in значимые:
+                ok = False
+                for i, p in enumerate(parts):
+                    if used[i]:
+                        continue
+                    if p.startswith(т) or т.startswith(p):
+                        used[i] = True
+                        ok = True
+                        break
+                if not ok:
+                    return False
+            return True
+
+        for з in self.items:
+            forms = forms_compact(з)
+            phrases = forms_phrase(з)
+            if not forms and not phrases:
+                continue
+            primary = phrases[0] if phrases else ""
+            tier = None
+            # 1 exact primary title (compact or spaced)
+            if primary == фраза or нормализовать(з.get("title") or "") == фраза_слитно:
+                tier = 1
+            # 2 exact original/alias
+            elif any(p == фраза for p in phrases[1:]) or фраза_слитно in forms:
+                # exact compact form match that is NOT a single-token false friend
+                if фраза_слитно in forms and len(значимые) == 1:
+                    tier = 2
+                elif any(p == фраза for p in phrases[1:]):
+                    tier = 2
+                elif фраза_слитно in forms and len(значимые) > 1:
+                    tier = 2
+            # 3 primary starts with full phrase
+            if tier is None and (primary.startswith(фраза + " ") or primary.startswith(фраза)
+                                 or нормализовать(з.get("title") or "").startswith(фраза_слитно)):
+                if len(значимые) > 1 or primary.startswith(фраза):
+                    tier = 3
+            # 4 primary contains full phrase
+            if tier is None and len(значимые) > 1 and (
+                    f" {фраза} " in f" {primary} "
+                    or фраза_слитно in нормализовать(з.get("title") or "")):
+                tier = 4
+            # 5 original/alias starts or contains phrase
+            if tier is None and len(значимые) > 1:
+                for p in phrases[1:]:
+                    if p.startswith(фраза) or f" {фраза} " in f" {p} ":
+                        tier = 5
+                        break
+            # 6 all tokens in primary in order
+            if tier is None and len(значимые) > 1 and all_tokens_ordered(primary):
+                tier = 6
+            # 7 all tokens present any order (AND)
+            if tier is None and len(значимые) > 1:
+                blob = " ".join(phrases) + " " + " ".join(forms)
+                if all(т in blob for т in значимые):
+                    tier = 7
+            # 8 strict token-prefix for all query tokens
+            if tier is None and len(значимые) > 1 and strict_prefix_all(primary):
+                tier = 8
+            # Single-token query: exact / prefix / contains on word boundaries
+            if tier is None and len(значимые) == 1:
+                т = значимые[0]
+                if т in forms or primary == т:
+                    tier = 1
+                elif primary.startswith(т) or any(f.startswith(т) for f in forms):
+                    tier = 3
+                elif any(f" {т} " in f" {p} " for p in phrases) or any(
+                        f.startswith(т) or т == f for f in forms):
+                    # word-ish contains; reject if query is only a short stem of unrelated
+                    tier = 4
+            # 9 transliteration already covered via forms; keep soft as 10
+            if tier is None and len(значимые) == 1 and len(значимые[0]) >= 5:
+                т = значимые[0]
+                for f in forms:
+                    if _мягкое_совпадение(т, f):
+                        tier = 10
+                        break
+            if tier is None and len(значимые) > 1:
+                # do not let single-token soft/partial of one word into results
+                # for multi-word queries (blocks «Вой» for «звездные войны»)
+                continue
+            if tier is None:
+                continue
+            year = з.get("year") or 0
+            try:
+                year = int(year)
+            except (TypeError, ValueError):
+                year = 0
+            # Stable within tier: newer year, then title, then slug
+            корзины[tier].append((
+                -year,
+                primary or нормализовать(з.get("title") or ""),
+                з.get("slug") or "",
+                з,
+            ))
+
+        итог, видели = [], set()
+        for t in range(1, 11):
+            for _y, _p, _s, з in sorted(корзины[t]):
+                key = з.get("url") or з.get("slug")
+                if key in видели:
+                    continue
+                видели.add(key)
                 итог.append(з)
                 if len(итог) >= предел:
                     return итог
@@ -1452,7 +1564,7 @@ scrollbar-width:thin;padding:2px 0 10px}
 .zrl__track{display:flex;gap:12px;min-width:min-content;align-items:stretch}
 .zrl__track>*{flex:0 0 148px;scroll-snap-align:start;min-width:0;height:auto}
 @media(min-width:768px){.zrl__track>*{flex-basis:180px}}
-@media(min-width:1280px){.zrl__track>*{flex-basis:216px}}
+@media(min-width:1280px){.zrl__track>*{flex-basis:200px}}
 .zrl__btn{position:absolute;top:28%;transform:translateY(-50%);z-index:5;
 width:34px;height:52px;border:0;border-radius:5px;cursor:pointer;
 background:rgba(16,21,26,.82);color:#fff;font-size:18px;line-height:1;
@@ -1480,8 +1592,8 @@ object-fit:cover;display:block}
 .zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:12px;
 text-align:center;color:@MUTE@;font-size:12px;line-height:1.3;aspect-ratio:auto}
 .zt__none b{display:block;font-size:24px;font-weight:700;color:@DIM@;margin-bottom:4px}
-.zt__b{padding:8px 9px 10px;display:flex;flex-direction:column;gap:4px;flex:1 1 auto;
-min-height:108px;box-sizing:border-box}
+.zt__b{padding:8px 9px 10px;display:flex;flex-direction:column;gap:3px;flex:1 1 auto;
+min-height:96px;max-height:120px;box-sizing:border-box}
 .zt__t{font-size:13.5px;font-weight:600;line-height:1.28;min-height:calc(1.28em * 2);
 max-height:calc(1.28em * 2);display:-webkit-box;-webkit-line-clamp:2;
 -webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
@@ -1548,7 +1660,9 @@ padding:11px 22px;border-radius:6px;font-weight:600}
 
 /* Страница произведения: компактная трёхзональная шапка. */
 .zban{display:none}
-.ztitle{display:grid;grid-template-columns:1fr;gap:20px;margin:16px 0 8px;
+.zmain{padding-top:88px}
+@media(min-width:1280px){.zmain{padding-top:93px}}
+.ztitle{display:grid;grid-template-columns:1fr;gap:20px;margin:8px 0 8px;
 align-items:start}
 @media(min-width:900px){.ztitle{grid-template-columns:220px minmax(0,1fr);gap:22px}}
 @media(min-width:1280px){.ztitle{grid-template-columns:260px minmax(0,1fr) 300px;gap:24px}}
@@ -1560,9 +1674,10 @@ width:100%;height:100%;object-fit:cover;display:block}
 .ztitle__main{min-width:0}
 .ztitle__main h1{font-size:28px;line-height:1.18;margin:0 0 8px;letter-spacing:-.4px}
 @media(min-width:1280px){.ztitle__main h1{font-size:32px}}
-.ztitle__o{font-size:14px;color:@DIM@;margin:0 0 10px}
-.ztitle__desc{font-size:14.5px;line-height:1.62;color:@INK@;max-width:70ch;margin:0 0 14px;
-display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.ztitle__o{font-size:14px;color:@DIM@;margin:0 0 10px;font-weight:500;
+overflow-wrap:anywhere}
+.ztitle__desc{font-size:14.5px;line-height:1.62;color:@INK@;max-width:70ch;margin:0 0 14px}
+.ztitle__more{display:inline-block;margin:0 0 14px;color:@ACC@;font-weight:600;font-size:14px}
 .ztitle__cta{display:inline-flex;align-items:center;justify-content:center;
 min-height:42px;padding:10px 18px;border-radius:8px;background:@ACCDK@;color:#fff;
 font-weight:700;font-size:14px;text-decoration:none}
@@ -1571,17 +1686,19 @@ font-weight:700;font-size:14px;text-decoration:none}
 @media(max-width:899px){.ztitle__rail{order:3}}
 .ztitle__dl{margin:0;background:@SURF@;border:1px solid @LINE@;border-radius:8px;
 padding:12px 14px;display:grid;gap:10px}
-.ztitle__dl div{display:grid;grid-template-columns:96px minmax(0,1fr);gap:8px 12px;
-align-items:baseline}
-.ztitle__dl dt{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
-color:@DIM@;font-weight:700;margin:0}
+.ztitle__dl div{display:grid;grid-template-columns:110px minmax(0,1fr);gap:8px 12px;
+align-items:start}
+.ztitle__dl dt{font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;
+color:@DIM@;font-weight:700;margin:0;line-height:1.35;padding-top:2px}
 .ztitle__dl dd{margin:0;font-size:13.5px;color:@INK@;line-height:1.4;
-overflow-wrap:anywhere}
-.ztitle__dl a{color:@ACC@;font-weight:600}
+overflow-wrap:anywhere;min-width:0}
+.ztitle__dl a{color:@ACC@;font-weight:600;display:inline-block;margin:0 6px 4px 0}
+.ztitle__chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.ztitle__chip{display:inline-flex;align-items:center;min-height:28px;padding:4px 10px;
+border-radius:999px;background:@ALT@;border:1px solid @LINE@;font-size:12.5px;color:@DIM@}
 .zad{display:none}
 .zad[data-ad-enabled="1"]{display:block;width:100%;max-width:300px;min-height:250px;
 border:1px dashed @LINE@;border-radius:8px;background:@ALT@;margin:0 auto}
-/* legacy hooks kept for older markup paths */
 .zhead{display:contents}
 .zhead__ps,.zhead__x,.zhead__o{display:contents}
 .zbody{font-size:14.5px;line-height:1.62;color:@INK@;max-width:70ch;margin:18px 0 0}
@@ -1612,36 +1729,55 @@ border:1px solid @LINE@;background:@SURF@;font-size:13.5px}
 .zepnav a{background:@SURF@;border:1px solid @LINE@;border-radius:6px;
 padding:9px 14px;font-size:13.5px;color:@ACC@;font-weight:600}
 
-/* Плеер: кадр 16:9 только при resolving/ok; честные состояния — компактны. */
-.zpl{margin:18px 0}
-.zpl__f{aspect-ratio:16/9;background:#0d1217;border:1px solid @LINE@;
-border-radius:8px;overflow:hidden;position:relative}
+/* Плеер: единый 16:9 stage; компакт только для честных unavailable/error. */
+.zpl{margin:18px auto 22px;width:100%;max-width:1200px}
+.zpl__f{position:relative;width:100%;aspect-ratio:16/9;background:#0d1217;
+border:1px solid @LINE@;border-radius:8px;overflow:hidden;min-height:200px}
 .zpl__f[data-state="awaiting"],
 .zpl__f[data-state="unavailable"],
 .zpl__f[data-state="nosource"],
-.zpl__f[data-state="noaccess"],
+.zpl__f[data-state="noaccess"]{aspect-ratio:auto;min-height:120px;max-height:168px}
+/* provider/error/slow keep stage size until fallback finishes — avoid 150px banner trap */
 .zpl__f[data-state="provider"],
 .zpl__f[data-state="error"],
-.zpl__f[data-state="slow"]{aspect-ratio:auto;min-height:120px;max-height:180px}
-.zpl__f video-player{display:block;width:100%;height:100%}
+.zpl__f[data-state="slow"]{aspect-ratio:16/9;max-height:none;min-height:200px}
+.zpl__f[data-player-host],
+.zpl__f [data-player-host]{position:absolute;inset:0;width:100%;height:100%;
+display:block;min-height:100%}
+.zpl__f video-player{position:absolute;inset:0;display:block;width:100%!important;
+height:100%!important;max-width:none!important;max-height:none!important;border:0;
+min-height:100%}
+.zpl__f iframe,.zpl__f video{position:absolute;inset:0;width:100%;height:100%;
+border:0;object-fit:contain}
 .zpl__h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
-font-size:22.1px;font-weight:400;margin:22px 0 10px}
+font-size:22.1px;font-weight:400;margin:18px 0 10px}
 .zpl__h span{font-size:13px;color:@DIM@;font-weight:600}
 .zpl__s{position:absolute;inset:0;display:grid;place-items:center;padding:22px;
-text-align:center;color:@DIM@;font-size:13.5px;line-height:1.5}
+text-align:center;color:@DIM@;font-size:13.5px;line-height:1.5;z-index:2;
+pointer-events:none}
+.zpl__f[data-state="provider"] .zpl__s,
+.zpl__f[data-state="error"] .zpl__s,
+.zpl__f[data-state="unavailable"] .zpl__s,
+.zpl__f[data-state="nosource"] .zpl__s,
+.zpl__f[data-state="noaccess"] .zpl__s{pointer-events:auto}
 .zpl__f [data-player-state]{padding:18px 16px;text-align:center;color:@DIM@;
 font-size:13.5px;line-height:1.5;max-width:520px;margin:0 auto}
 .zpl__f [data-player-state] b{display:block;color:@INK@;margin:0 0 6px;font-size:15px}
 
-.zft{border-top:1px solid @LINE@;margin:36px 0 0;padding:20px 0 30px;
-font-size:12.5px;color:@DIM@;display:block}
-.zft__cols{display:grid;gap:18px;grid-template-columns:1fr;
-margin:0 0 16px}
-@media(min-width:768px){.zft__cols{grid-template-columns:repeat(3,minmax(0,1fr))}}
-.zft__col{display:flex;flex-direction:column;gap:6px;min-width:0}
-.zft__col b{color:@INK@;font-size:13px;margin:0 0 4px}
+.zft{border-top:1px solid @LINE@;margin:36px 0 0;padding:44px 0 28px;
+font-size:13px;color:@DIM@;display:block;max-width:1400px}
+.zft__cols{display:grid;gap:28px;grid-template-columns:1fr;margin:0 0 22px}
+@media(min-width:700px){.zft__cols{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}}
+@media(min-width:1100px){.zft__cols{grid-template-columns:repeat(4,minmax(0,1fr));gap:40px}}
+.zft__col{display:flex;flex-direction:column;gap:7px;min-width:0}
+.zft__col b{color:@INK@;font-size:13.5px;margin:0 0 6px;font-weight:700}
 .zft__col a{color:@ACC@;font-weight:500}
-.zft__bar{display:flex;justify-content:flex-end;align-items:center}
+.zft__col a:hover,.zft__col a:focus-visible{text-decoration:underline}
+.zft__about{font-size:13px;line-height:1.5;color:@DIM@;margin:0 0 4px;max-width:36ch}
+.zft__bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;
+gap:10px;padding-top:14px;border-top:1px solid @LINE@}
+.zsec--seo{margin:28px 0 8px;max-width:78ch}
+.zsec--seo p{font-size:14px;line-height:1.6;color:@DIM@}
 .zvb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;
 border:0;padding:0;background:transparent;color:@MUTE@}
 .zhd__menu{display:inline-flex;align-items:center;justify-content:center;
@@ -2063,7 +2199,10 @@ def _подставить(шаблон: str, токены: dict) -> str:
 
 #: Агрегаторы, разрешённые контрактом. Расширять перечень здесь нельзя: чужое
 #: значение провайдер отвергает, а мы бы выдали отказ за состояние записи.
-АГРЕГАТОРЫ = ("cvh", "kp", "mdl", "mali", "imdb")
+# Playback aggregators: contract allows kp/mali/mdl; cvh is provider-id UUID mode.
+# IMDb is never a playback aggregator (PC-2).
+АГРЕГАТОРЫ = ("cvh", "kp", "mdl", "mali")
+АГРЕГАТОРЫ_ПЛЕЕРА = frozenset({"kp", "mdl", "mali", "cvh"})
 
 #: Соответствие «ключ внешнего идентификатора → агрегатор». `imdb` в контракте
 #: агрегатором не значится, поэтому запись только с imdb источника не имеет.
@@ -2072,7 +2211,7 @@ def _подставить(шаблон: str, токены: dict) -> str:
 #: Расширенная цепочка запасных ключей. Работает только в режиме `provider-id`:
 #: прежний режим обязан вести себя в точности как раньше, иначе выкладка по
 #: одному домену теряет смысл — менялись бы сразу все.
-ЗАПАСНЫЕ_КЛЮЧИ = (("kp", "kp"), ("mdl", "mdl"), ("mal", "mali"), ("imdb", "imdb"))
+ЗАПАСНЫЕ_КЛЮЧИ = (("kp", "kp"), ("mdl", "mdl"), ("mal", "mali"))
 
 #: Собственный идентификатор записи в каталоге провайдера.
 ИДЕНТИФИКАТОР_ПРОВАЙДЕРА = re.compile(
@@ -2134,7 +2273,10 @@ def кандидаты_источника(деталь: dict) -> list[tuple[str,
     def добавить(агрегатор: str, значение: str) -> None:
         агрегатор = (агрегатор or "").strip()
         значение = (значение or "").strip()
-        if not значение or агрегатор not in АГРЕГАТОРЫ:
+        if not значение or агрегатор not in АГРЕГАТОРЫ_ПЛЕЕРА:
+            return
+        # PC-2: IMDb never used as playback identifier.
+        if агрегатор == "imdb":
             return
         ключ = (агрегатор, значение)
         if ключ in увидели:
@@ -2316,7 +2458,7 @@ def разметка_плеера(вид, запись: dict, деталь: dict
         "season": str(сезон),
         "data-publisher-id": ПЛЕЕР["publisher_id"],
         "data-title-id": ид, "data-aggregator": агрегатор,
-        "is-show-voice-only": "false", "is-show-banner": "true",
+        "is-show-voice-only": "false", "is-show-banner": "false",
         "disable-licensed": "false",
     }
     if эпизод is not None:
@@ -2327,9 +2469,8 @@ def разметка_плеера(вид, запись: dict, деталь: dict
         f'<div data-player-host data-src-candidates="{список_json}">'
         f"<video-player {строка}></video-player></div>"
         f'<div class="{вид.кл_состояния}" data-player-state hidden>'
-        "<b>Провайдер не отдал источник</b>"
-        "<p>Для этой серии у провайдера сейчас нет дорожки. "
-        "Остальные серии и описание на странице работают.</p></div>"
+        "<b>Видео временно недоступно</b>"
+        "<p>Попробуйте другую озвучку или вернитесь позже.</p></div>"
         '<noscript><div class="' + вид.кл_состояния + '">'
         "<b>Нужен JavaScript</b><p>Плеер подключается скриптом провайдера, "
         "и без JavaScript он не запустится. Описание, серии и каталог "
@@ -2343,29 +2484,39 @@ def разметка_плеера(вид, запись: dict, деталь: dict
  var host=f.querySelector('[data-player-host]');
  if(!host) return;
  var st=f.querySelector('[data-player-state]');
+ var label=document.querySelector('.zpl__h span, .pl__note');
  var cands=[];
  try{ cands=JSON.parse(host.getAttribute('data-src-candidates')||'[]')||[]; }catch(e){ cands=[]; }
- var idx=0, token=0, поднялся=false, отказ=false, seen, timers=[], maxFallback=3;
- var baseAttrs={};
+ var idx=0, token=0, playing=false, отказ=false, seen, timers=[], maxFallback=3;
+ var baseAttrs={}, lastPos=0, readyAt=0;
+ var MSG='Видео временно недоступно. Попробуйте другую озвучку или вернитесь позже.';
+ var LABELS={resolving:'подключение источника',ready:'источник готов',playing:'воспроизведение',
+  provider:'видео недоступно',unavailable:'видео недоступно',error:'видео недоступно',
+  slow:'видео недоступно',nosource:'видео недоступно',noaccess:'видео недоступно'};
+ var ORIGIN='https://player.cdnvideohub.com';
  function el(){ return host.querySelector('video-player'); }
  function clearTimers(){ timers.forEach(clearTimeout); timers=[]; if(seen){clearInterval(seen);seen=null;} }
+ function setLabel(k){ if(label) label.textContent=LABELS[k]||''; }
  function state(k,t,p){
-  if(отказ&&k==='ok') return;
-  if(k!=='ok'&&k!=='loading'&&k!=='resolving'){ отказ=true; clearTimers(); }
+  if(отказ&&(k==='ok'||k==='ready'||k==='playing')) return;
+  if(k!=='ok'&&k!=='ready'&&k!=='playing'&&k!=='loading'&&k!=='resolving'){
+   отказ=true; clearTimers();
+  }
   f.setAttribute('data-state',k);
+  setLabel(k);
   var node=el();
-  if(k==='ok'||k==='resolving'){
+  if(k==='resolving'||k==='ready'||k==='playing'||k==='ok'){
    if(st) st.hidden=true;
    if(node) node.hidden=false;
-   if(k==='ok') поднялся=true;
+   if(k==='playing'||k==='ok'){ playing=true; f.setAttribute('data-state','playing'); setLabel('playing'); }
    return;
   }
   if(node) node.hidden=true;
   if(!st) return;
   st.hidden=false;
   st.innerHTML='<b></b><p></p>';
-  st.firstChild.textContent=t;
-  st.lastChild.textContent=p;
+  st.firstChild.textContent=t||MSG;
+  st.lastChild.textContent=p||'';
  }
  function snapshot(node){
   baseAttrs={};
@@ -2380,73 +2531,115 @@ def разметка_плеера(вид, запись: dict, деталь: dict
   if(!node) return;
   try{ node.remove(); }catch(e){}
  }
+ function nextOrFail(reason){
+  if(playing) return;
+  if(idx+1<cands.length && (idx+1)<=maxFallback){
+   state('resolving');
+   mountAt(idx+1);
+   return;
+  }
+  state('provider', MSG, '');
+ }
  function mountAt(i){
   idx=i;
   var c=cands[i]; if(!c) return;
   var prev=el();
   if(prev) snapshot(prev);
   destroy();
-  поднялся=false; отказ=false;
+  playing=false; отказ=false; lastPos=0; readyAt=0;
   var n=document.createElement('video-player');
   Object.keys(baseAttrs).forEach(function(a){ n.setAttribute(a, baseAttrs[a]); });
   n.setAttribute('data-title-id', c.id||'');
   n.setAttribute('data-aggregator', c.aggregator||'');
+  n.setAttribute('is-show-banner', 'false');
   host.appendChild(n);
   bind(n, ++token);
  }
+ function confirmPlaying(evName, pos){
+  if(typeof token==='undefined') return;
+  window.__zonaPlayerPlaying={token:token,event:evName||'playing',pos:pos||0,at:Date.now()};
+  playing=true; отказ=false;
+  state('playing');
+  clearTimers();
+ }
+ function onProviderMsg(ev){
+  if(!ev || ev.origin!==ORIGIN) return;
+  var payload=ev.data, type='', data=null;
+  try{
+   if(typeof payload==='string') payload=JSON.parse(payload);
+   type=payload && payload.eventType || '';
+   data=payload && payload.data;
+  }catch(e){ return; }
+  if(!type) return;
+  // Cross-origin iframe: only provider postMessage proves state (not HTTP 200).
+  if(type==='statechange' && data==='ready'){
+   if(!playing && !отказ){ readyAt=Date.now(); state('ready'); }
+   return;
+  }
+  if(type==='timeupdate' && data && typeof data.position==='number'){
+   lastPos=data.position;
+   // first-frame + further timeupdate, or solid 3s progress
+   if(data.position>=3 || (readyAt && data.position>=1)){
+    confirmPlaying(data.position>=3 ? 'pm.timeupdate3' : 'pm.firstframe+timeupdate', data.position);
+   }
+   return;
+  }
+  if(type==='statechange' && data==='playing'){
+   // first-frame signal; PLAYING only after further timeupdate progress
+   if(lastPos>=3) confirmPlaying('pm.statechange.playing', lastPos);
+   else if(!playing && !отказ){ readyAt=Date.now(); state('ready'); }
+   return;
+  }
+  if(type==='play'||type==='started'){
+   if(lastPos>=3) confirmPlaying('pm.'+type, lastPos);
+   else if(!playing && !отказ){ readyAt=Date.now(); state('ready'); }
+   return;
+  }
+ }
+ window.addEventListener('message', onProviderMsg);
  function bind(node, my){
   if(!node) return;
   snapshot(node);
-  f.setAttribute('data-state','resolving');
+  f.setAttribute('data-state','resolving'); setLabel('resolving');
   if(st) st.hidden=true;
   node.hidden=false;
   node.addEventListener('noData', function(){
-   if(my!==token) return;
-   if(idx+1<cands.length && (idx+1)<=maxFallback){
-    state('resolving','Подключаем другой источник',
-     'Первая дорожка недоступна, пробуем следующую.');
-    mountAt(idx+1);
-    return;
-   }
-   state('provider','Провайдер не отдал источник',
-    'Для этой серии у провайдера сейчас нет дорожки. Остальные серии и описание на странице работают.');
+   if(my!==token || playing) return;
+   nextOrFail('noData');
   });
   node.addEventListener('error', function(){
-   if(my!==token) return;
-   state('error','Ошибка плеера','Провайдер вернул ошибку на выбранной дорожке.');
+   if(my!==token || playing) return;
+   nextOrFail('error');
   });
   clearTimers();
-  function markReady(evName){
-   if(my!==token) return;
-   window.__zonaPlayerReady = {token:my, event:evName||'ready', at:Date.now()};
-   state('ok');
-  }
-  ['playing','play','loadeddata','canplay','canplaythrough'].forEach(function(ev){
-   node.addEventListener(ev, function(){ markReady(ev); }, {once:true});
-  });
-  // Shadow/iframe mount is NOT playback proof — only media events set READY.
-  // Still observe nested video for cross-origin-incapable hosts that re-target events.
+  // Same-document video (rare); primary proof is provider postMessage.
   seen=setInterval(function(){
-   if(my!==token || поднялся) return;
+   if(my!==token || playing) return;
    var root=node.shadowRoot; if(!root) return;
    var v=root.querySelector('video');
    if(v && !v.__zonaBound){
     v.__zonaBound=true;
-    ['playing','play','timeupdate'].forEach(function(ev){
-     v.addEventListener(ev, function(){
-      if(ev==='timeupdate' && !(v.currentTime>0.05)) return;
-      markReady('video.'+ev);
-     }, {once:true});
+    v.addEventListener('timeupdate', function(){
+     if(my!==token) return;
+     if(v.currentTime>=3) confirmPlaying('video.timeupdate3', v.currentTime);
     });
    }
-   if(v && !v.paused && v.currentTime>0.05) markReady('video.playing');
+   if(v && !v.paused && v.currentTime>=3) confirmPlaying('video.poll', v.currentTime);
   },400);
+  // No READY within 10s → try next candidate.
   timers.push(setTimeout(function(){
-   if(my!==token) return;
-   if(seen){clearInterval(seen);seen=null;}
-   if(!поднялся) state('slow','Плеер не поднялся',
-    'Скрипт провайдера загрузился, но воспроизведение не подтвердилось за пятнадцать секунд. Обновите страницу; описание и серии доступны и сейчас.');
-  },15000));
+   if(my!==token || playing || readyAt) return;
+   nextOrFail('timeout-no-ready');
+  },10000));
+  // READY but never reached PLAYING (timeupdate>=3) → next or fail.
+  timers.push(setTimeout(function(){
+   if(my!==token || playing) return;
+   nextOrFail('timeout-no-playing');
+  },22000));
+  timers.push(setTimeout(function(){
+   if(my!==token || playing) return;
+   if(!отказ) state('provider', MSG, '');
+  },32000));
  }
  var first=el();
  if(first){
@@ -2457,8 +2650,7 @@ def разметка_плеера(вид, запись: dict, деталь: dict
  }
  var s=document.querySelector('[data-player-script]');
  if(s){ s.addEventListener('error',function(){
-  state('error','Скрипт плеера не загрузился',
-   'Браузер не смог получить скрипт провайдера: его мог заблокировать расширение или сеть. Страница и список серий продолжают работать.');}); }
+  state('error', MSG, '');}); }
 })();
 """
 
@@ -2588,12 +2780,14 @@ def _склеить(части) -> str:
 
 
 def _число(значение) -> str:
-    """Оценка печатается как пришла, без округления и без выдумки."""
+    """Оценка с одним знаком после запятой (5.1), без ложной точности."""
     try:
         ч = float(значение)
     except (TypeError, ValueError):
         return ""
-    return (f"{ч:.3f}".rstrip("0").rstrip(".")) if ч else ""
+    if ч <= 0:
+        return ""
+    return f"{ч:.1f}".rstrip("0").rstrip(".") if ч % 1 else f"{int(ч)}"
 
 
 def _длительность(минут) -> str:
@@ -3607,7 +3801,7 @@ class ВидЗона(Вид):
 </div></div></div>{схемы}</body></html>"""
 
     def _подвал_зона(self) -> str:
-        """Footer: brand, real sections, genre links, compact Zona marker."""
+        """Four-zone Zona footer + compact provenance marker."""
         жанры = "".join(
             f'<a href="/catalog/?genre={html.escape(код)}">{html.escape(имя)}</a>'
             for код, имя in (self.индекс.get("genre_names") or [])[:8])
@@ -3616,14 +3810,21 @@ class ВидЗона(Вид):
             '<footer class="zft">'
             '<div class="zft__cols">'
             f'<div class="zft__col"><b>{html.escape(self.имя)}</b>'
-            '<a href="/">Обзор</a><a href="/movies/">Кино</a>'
-            '<a href="/series/">Сериалы</a><a href="/animation/">Анимация</a>'
-            '<a href="/new/">Что нового</a><a href="/collections/">Подборки</a>'
-            '<a href="/catalog/">Весь каталог</a></div>'
-            f'<div class="zft__col"><b>Жанры</b>{жанры or "<span>—</span>"}</div>'
-            '<div class="zft__col"><b>Каталог</b>'
-            '<a href="/search/">Поиск</a></div></div>'
-            f'<div class="zft__bar"><span class="zvb">Zona {html.escape(ВЕРСИЯ)} · '
+            f'<p class="zft__about">{html.escape(self.имя)} — кинопортал фильмов, '
+            "сериалов и анимации из утверждённого каталога витрины.</p></div>"
+            '<div class="zft__col"><b>Разделы</b>'
+            '<a href="/">Обзор</a><a href="/new/">Что нового</a>'
+            '<a href="/movies/">Кино</a><a href="/series/">Сериалы</a>'
+            '<a href="/animation/">Анимация</a>'
+            '<a href="/collections/">Подборки</a></div>'
+            f'<div class="zft__col"><b>Жанры</b>{жанры or "<span>—</span>"}'
+            '<a href="/catalog/">Все жанры</a></div>'
+            '<div class="zft__col"><b>Каталог и информация</b>'
+            '<a href="/catalog/">Весь каталог</a><a href="/search/">Поиск</a>'
+            '<a href="/new/">Новинки</a><a href="/movies/">Популярное</a></div>'
+            "</div>"
+            f'<div class="zft__bar"><span>© {html.escape(self.имя)}</span>'
+            f'<span class="zvb">Zona · v{html.escape(ВЕРСИЯ)} · '
             f"{html.escape(source)}</span></div>"
             "</footer>")
 
@@ -4047,24 +4248,32 @@ class ВидЗона(Вид):
     def поиск(self, зпр: dict) -> str:
         q = (зпр.get("q") or [""])[0]
         найдено = self.д.искать(q) if q.strip() else []
+        q_attr = html.escape(q, quote=True)
         if not q.strip():
             тело = ('<h1 class="zh">Поиск</h1><p class="zsub">Введите название — '
                     "поиск идёт по русскому и оригинальному написанию.</p>"
                     '<div class="zempty"><b>Запрос пуст</b>'
-                    "<p>Наберите название в строке сверху. Слова «сезон» и «серия» "
-                    "в запросе поиску не мешают. "
+                    "<p>Наберите название в строке сверху. "
                     '<a href="/catalog/">Открыть каталог целиком</a></p></div>')
         elif найдено:
-            тело = (f'<h1 class="zh">«{html.escape(q)}»</h1>'
+            тело = (f'<h1 class="zh">Результаты поиска: «{html.escape(q)}»</h1>'
                     f'<p class="zsub">Совпадений: {len(найдено)}</p>' + self.плитки(найдено))
         else:
-            тело = (f'<h1 class="zh">«{html.escape(q)}»</h1>'
+            тело = (f'<h1 class="zh">Результаты поиска: «{html.escape(q)}»</h1>'
                     '<div class="zempty"><b>Совпадений нет</b>'
                     f"<p>По запросу «{html.escape(q)}» ничего не нашлось. "
                     "Проверьте написание. "
                     '<a href="/catalog/">Открыть весь каталог</a></p></div>')
-        return self.оболочка(f'<div class="zwrap">{тело}</div>',
-                             f"Поиск — {self.имя}", "/search/", актив="")
+        html_page = self.оболочка(f'<div class="zwrap">{тело}</div>',
+                             f"Поиск — {self.имя}", f"/search/?q={q_attr}" if q.strip() else "/search/",
+                             актив="")
+        if q.strip():
+            html_page = html_page.replace(
+                'id="q" name="q" placeholder=',
+                f'id="q" name="q" value="{q_attr}" placeholder=',
+                1)
+        return html_page
+
 
     def тайтл(self, запись: dict, деталь: dict) -> str:
         путь = f"/title/{запись['slug']}/"
@@ -4075,21 +4284,32 @@ class ВидЗона(Вид):
                   ("/series/", "Сериалы") if сериал else ("/movies/", "Кино"),
                   ("", имя)]
         изо = заглушка_постера(запись, "zt__none", "zhead__img", 372, 558)
-        описание = деталь.get("description") or деталь.get("short_description") or ""
-        краткий = описание.strip()
-        if len(краткий) > 420:
-            краткий = краткий[:417].rstrip() + "…"
-        описание_html = (f'<p class="ztitle__desc">{html.escape(краткий)}</p>'
-                         if краткий else
-                         '<p class="ztitle__desc">Описание источник пока не передал.</p>')
+        полное = (деталь.get("description") or "").strip()
+        краткое_поле = (деталь.get("short_description") or "").strip()
+        # Hero shows short_summary only when it is a distinct field — never a
+        # truncated copy of the full synopsis (same-page SEO duplicate).
+        if краткое_поле and краткое_поле != полное:
+            описание_html = f'<p class="ztitle__desc">{html.escape(краткое_поле)}</p>'
+            if полное:
+                описание_html += '<a class="ztitle__more" href="#synopsis">Подробнее</a>'
+        else:
+            описание_html = ""
         оценки_html = разметка_оценок(деталь, "rbs")
-        # Rail metadata only — no year/type repeat in the hero strip.
+        chips = []
+        длит = _длительность(деталь.get("duration"))
+        if длит:
+            chips.append(f'<span class="ztitle__chip">{html.escape(длит)}</span>')
+        дата = _дата(деталь.get("premiere_date") or "")
+        if дата:
+            chips.append(f'<span class="ztitle__chip">{html.escape(дата)}</span>')
+        chips_html = (f'<div class="ztitle__chips">{"".join(chips)}</div>' if chips else "")
         rail_keys = {
             "Оригинальное название", "Год", "Тип", "Страна", "Жанр",
-            "Время", "Дата выхода", "Серии",
+            "Серии",
         }
+        # Duration/date already as chips — avoid duplicate year-like noise when
+        # premiere year equals catalog year: keep Год once in rail.
         пары = [(м, з) for м, з in факты(self, запись, деталь) if м in rail_keys]
-        # Age/status if present in sidecar (optional).
         for метка, ключ in (("Возраст", "age_rating"), ("Статус", "status")):
             знач = деталь.get(ключ)
             if знач:
@@ -4098,7 +4318,7 @@ class ВидЗона(Вид):
             f"<div><dt>{html.escape(м)}</dt><dd>{з}</dd></div>" for м, з in пары)
         rail_dl = (f'<dl class="ztitle__dl">{rail_rows}</dl>' if rail_rows else
                    '<dl class="ztitle__dl"><div><dt>Сведения</dt>'
-                   "<dd>Источник передал только название и постер.</dd></div></dl>")
+                   "<dd>Название, вид, год и постер.</dd></div></dl>")
         ads_on = os.environ.get("ZONA_AD_SLOTS", "") == "1"
         ad_slot = (f'<div class="zad" data-ad-slot="title-rail-300x250" '
                    f'data-ad-enabled="{1 if ads_on else 0}" '
@@ -4115,25 +4335,23 @@ class ВидЗона(Вид):
         похожие = self.похожие(запись, деталь)
         блок_похожих = (f'<div class="zwrap"><h2 class="zh zh--sm">Смотрите также</h2>'
                         f"{self.плитки(похожие)}</div>" if похожие else "")
-        полный_сюжет = ""
-        if описание and len(описание.strip()) > 420:
-            полный_сюжет = (f'<section class="zbody"><h2 class="zh zh--sm">О чём это</h2>'
-                            f'<p>{html.escape(описание)}</p></section>')
-        elif not краткий:
-            полный_сюжет = ""
+        if полное:
+            полный_сюжет = (f'<section class="zbody" id="synopsis">'
+                            f'<h2 class="zh zh--sm">О чём это</h2>'
+                            f'<p>{html.escape(полное)}</p></section>')
         else:
-            # short already shown in main; skip duplicate block
             полный_сюжет = ""
         тело = (
             f'<div class="zwrap"><div class="ztitle">'
             f'<div class="ztitle__poster">{изо}</div>'
             f'<div class="ztitle__main"><h1>{html.escape(имя)}</h1>'
-            f'{оценки_html}{описание_html}'
+            f'{оценки_html}{chips_html}{описание_html}'
             f'<a class="ztitle__cta" href="#watch">Смотреть</a></div>'
             f'<aside class="ztitle__rail">{rail_dl}{ad_slot}</aside>'
             f'</div>{плеер}{полный_сюжет}{блок_серий}{блок_похожих}</div>')
         разметка = self.schema_тайтла(запись, деталь, путь)
-        краткое = (описание[:180] if описание else
+        meta_desc = (краткое_поле or полное or "").strip()
+        краткое = (meta_desc[:180] if meta_desc else
                    f"{имя}: {запись.get('kind') or ''} {запись.get('year') or ''}".strip())
         return self.оболочка(
             тело, f"{имя} — смотреть онлайн — {self.имя}", путь,
@@ -4142,7 +4360,6 @@ class ВидЗона(Вид):
                 тип="video.tv_show" if сериал else "video.movie",
                 титул=имя, описание=краткое, путь=путь,
                 изображение=запись.get("poster") or ""))
-
 
     def _серии(self, запись: dict, сезоны: list, текущий=None) -> str:
         if not сезоны:
@@ -4251,15 +4468,17 @@ def _подпись_плеера(код: str) -> str:
     return {
         "playable": "подключение источника",
         "resolving": "подключение источника",
+        "ready": "источник готов",
         "ok": "источник готов",
+        "playing": "воспроизведение",
         "awaiting": "выберите серию",
-        "unavailable": "серия без дорожки",
+        "unavailable": "видео недоступно",
         "loading": "подключение источника",
-        "nosource": "источник не передан",
-        "noaccess": "витрина без доступа к провайдеру",
-        "provider": "провайдер не отдал дорожку",
-        "error": "скрипт провайдера не загрузился",
-        "slow": "таймаут поднятия плеера",
+        "nosource": "видео недоступно",
+        "noaccess": "видео недоступно",
+        "provider": "видео недоступно",
+        "error": "видео недоступно",
+        "slow": "видео недоступно",
     }.get(код, "состояние неизвестно")
 
 
