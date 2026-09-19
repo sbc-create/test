@@ -36,7 +36,7 @@ Unrelated dirty (left untouched): `artifacts/evidence/animedia-final-repair-…/
 | BLOCK_09 | `/search/` | ranking | **PASS** | 1 | `ca16967` |
 | BLOCK_10 | collections/related | `.zhub`, `.zsec--rel` | **PASS** | 1 | `ca16967` |
 | BLOCK_11 | footer/schedule | `.zft`, schedule | **PASS** | 1 | `ca16967` |
-| BLOCK_12 | regression | all routes × viewports × themes | **PASS** | 1 | _(pending)_ |
+| BLOCK_12 | regression | all routes × viewports × themes | **PASS** | 1 | `93f9f65` |
 
 Close flags until owner review:
 

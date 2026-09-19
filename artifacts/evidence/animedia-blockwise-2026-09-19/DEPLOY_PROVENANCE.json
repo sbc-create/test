@@ -1,63 +1,36 @@
 {
   "SOURCE_ARTIFACT_RUNTIME_MATCH": true,
-  "artifact_sha256": "39f91efcefc8a7d933db2e474477854624b724b407bc2865bf2245539dd2bf93",
+  "ours": "f89b9d8257f20b5170333bbdac372eebf1be6f2aa934b49be5b27487c4cbc680",
+  "disk": "f89b9d8257f20b5170333bbdac372eebf1be6f2aa934b49be5b27487c4cbc680",
+  "LIVE_BUILD": "20260919T224052Z-ca169679-nova",
   "domains": {
     "animedia.icu": {
-      "http": 200,
-      "tip": "18cd7d7",
-      "build": "20260919T222328Z-18cd7d7e-nova",
+      "home_tip": "ca16967",
+      "build": "20260919T224052Z-ca169679-nova",
       "noindex": true,
-      "robots": "noindex, nofollow",
       "honest_feed": true,
-      "shelves": [
-        "Сериалы с сериями",
-        "Аниме-фильмы",
-        "Дунхуа",
-        "Короткие сериалы",
-        "Топ по оценкам",
-        "Классика",
-        "Романтика"
+      "title_facts": true,
+      "search_top": [
+        "Звёздные войны: Видения",
+        "Звёздные войны: Видения представляют — Девятый джедай"
       ],
-      "shelf_count": 7,
-      "healthz": 200,
-      "healthz_snip": "{\"ok\": true, \"pid\": 173243, \"process_start_time\": \"2026-09-19T22:23:33Z\", \"runtime_path\": \"/srv/lords/.frontend/lords-frontend.py\", \"runtime_sha256\": \"39f91efcefc8a7d933db2e474477854624b724b407bc2865b"
+      "healthz_ok": true,
+      "artifact_meta": "f89b9d8257f20b5170333bbdac372eebf1be6f2aa934b49be5b27487c4cbc680"
     },
     "animedia.space": {
-      "http": 200,
-      "tip": "18cd7d7",
-      "build": "20260919T222328Z-18cd7d7e-nova",
+      "home_tip": "ca16967",
+      "build": "20260919T224052Z-ca169679-nova",
       "noindex": true,
-      "robots": "noindex, nofollow",
       "honest_feed": true,
-      "shelves": [
-        "Новые аниме на сайте",
-        "Топ по оценкам",
-        "Экшен",
-        "Классика",
-        "Аниме-фильмы",
-        "Дунхуа"
+      "title_facts": true,
+      "search_top": [
+        "Звёздные войны: Видения",
+        "Звёздные войны: Видения представляют — Девятый джедай"
       ],
-      "shelf_count": 6,
-      "healthz": 200,
-      "healthz_snip": "{\"ok\": true, \"pid\": 176535, \"process_start_time\": \"2026-09-19T22:23:40Z\", \"runtime_path\": \"/srv/lords/.frontend/lords-frontend.py\", \"runtime_sha256\": \"39f91efcefc8a7d933db2e474477854624b724b407bc2865b"
+      "healthz_ok": true,
+      "artifact_meta": "f89b9d8257f20b5170333bbdac372eebf1be6f2aa934b49be5b27487c4cbc680"
     }
   },
-  "manifests": {
-    "manifest_animedia-01": {
-      "build_id": "20260919T222328Z-18cd7d7e-nova",
-      "source_commit": "18cd7d7ecfd829b17917abcd627111f0147f8b79",
-      "runtime_commit": "18cd7d7ecfd829b17917abcd627111f0147f8b79",
-      "artifact_sha256": "39f91efcefc8a7d933db2e474477854624b724b407bc2865bf2245539dd2bf93",
-      "profile": "animedia-icu"
-    },
-    "manifest_animedia-02": {
-      "build_id": "20260919T222328Z-18cd7d7e-nova",
-      "source_commit": "18cd7d7ecfd829b17917abcd627111f0147f8b79",
-      "runtime_commit": "18cd7d7ecfd829b17917abcd627111f0147f8b79",
-      "artifact_sha256": "39f91efcefc8a7d933db2e474477854624b724b407bc2865bf2245539dd2bf93",
-      "profile": "animedia-space"
-    }
-  },
-  "DEPLOY_SCOPE": "animedia.icu,animedia.space",
-  "DEPLOY_BUILD": "20260919T222328Z-18cd7d7e-nova"
+  "DEPLOY_COUNT": 2,
+  "ROLLBACK": "/srv/lords/.frontend/.rollback/pre-closed-update-20260919T224052Z"
 }
