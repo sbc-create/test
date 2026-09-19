@@ -1,0 +1,55 @@
+{
+  "golden": {
+    "PLAYER_GOLDEN_TOTAL": 2,
+    "PLAYER_GOLDEN_HTTP_PASS": 2,
+    "PLAYER_FAILURES": 0,
+    "results": [
+      {
+        "url": "https://animedia.icu/title/master-lda-i-plameni-2/",
+        "http": 200,
+        "has_player_shell": true,
+        "has_candidates": false,
+        "robots": "noindex, nofollow",
+        "profile": "animedia-icu",
+        "build_id": "20260919T144739Z-289a459f-nova"
+      },
+      {
+        "url": "https://animedia.space/title/master-lda-i-plameni-2/",
+        "http": 200,
+        "has_player_shell": true,
+        "has_candidates": false,
+        "robots": "noindex, nofollow",
+        "profile": "animedia-space",
+        "build_id": "20260919T144719Z-289a459f-nova"
+      }
+    ]
+  },
+  "bindings": [
+    {
+      "url": "https://animedia.icu/title/master-lda-i-plameni-2/",
+      "http": 200,
+      "bind": {
+        "PROVIDER_BINDING_MATCH": 0,
+        "has_candidates": false,
+        "aggregator": "cvh",
+        "title_id": "01a0b507-3280-7b2a-8af4-674dd73cff72",
+        "mali_first": false
+      },
+      "build": "20260919T144739Z-289a459f-nova",
+      "profile": "animedia-icu"
+    },
+    {
+      "url": "https://animedia.space/title/master-lda-i-plameni-2/",
+      "http": 200,
+      "bind": {
+        "PROVIDER_BINDING_MATCH": 0,
+        "has_candidates": false,
+        "aggregator": "cvh",
+        "title_id": "01a0b507-3280-7b2a-8af4-674dd73cff72",
+        "mali_first": false
+      },
+      "build": "20260919T144719Z-289a459f-nova",
+      "profile": "animedia-space"
+    }
+  ]
+}

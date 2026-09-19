@@ -1,0 +1,17 @@
+HTTP/2 200 
+server: nginx
+date: Sat, 19 Sep 2026 15:19:46 GMT
+content-type: text/html; charset=utf-8
+content-length: 105184
+x-robots-tag: noindex, nofollow
+x-site-factory-template-revision: 289a459f0e9359777b988f61cc0d66084fc94cd3
+x-site-factory-template: animedia-nova
+x-site-factory-core: site-factory-nova
+x-site-factory-profile: animedia-space
+x-site-factory-template-family: animedia
+x-site-factory-template-version: 1.2.1
+x-site-factory-build-id: 20260919T144719Z-289a459f-nova
+x-site-factory-artifact-sha256: 0940212f9cbd317400bf11eae1c7da44e98dc30ef4be357bb7ddfd6dffde8afb
+cache-control: no-store
+x-robots-tag: noindex, nofollow
+

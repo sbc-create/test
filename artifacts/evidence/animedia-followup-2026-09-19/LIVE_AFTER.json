@@ -1,0 +1,478 @@
+{
+  "icu_home": {
+    "url": "https://animedia.icu/",
+    "http": 200,
+    "profile": "animedia-icu",
+    "build_id": "20260919T153858Z-7cbaa89b-nova",
+    "revision": "7cbaa89b809726cedd49ad626428868ab754086c",
+    "robots": "noindex, nofollow",
+    "artifact": "46782b9df9b07729f54f9afdabafb12a93a3bf861d8d388bd22742b6e78a2e2a",
+    "h2": [
+      "Сериалы с сериями",
+      "Новые аниме на сайте",
+      "Топ по оценкам",
+      "Аниме-фильмы",
+      "Дунхуа",
+      "Чем полезен Animedia ICU"
+    ],
+    "first_posters": [
+      "/title/master-lda-i-plameni-2/",
+      "/title/nelyud-chast-2/",
+      "/title/zolotaya-sekira/",
+      "/title/vo-vseoruzhii-sila-artefaktov/",
+      "/title/uchitel-medium/",
+      "/title/uzh-ne-zombi-li-eto-ova/",
+      "/title/daybaster-dotyanis-do-neba-2/",
+      "/title/generator-gaul/",
+      "/title/kiberegoist-kaydzo/",
+      "/title/legenda-boevyh-lentyaev-severnoy-zvezdy/",
+      "/title/prishedshiy-iz-drevnosti-2/",
+      "/title/dni-sakamoto-chast-2/",
+      "/title/master-lda-i-plameni-2/",
+      "/title/nelyud-chast-2/",
+      "/title/zolotaya-sekira/",
+      "/title/vo-vseoruzhii-sila-artefaktov/"
+    ],
+    "zg_present": true,
+    "has_7425": false
+  },
+  "space_home": {
+    "url": "https://animedia.space/",
+    "http": 200,
+    "profile": "animedia-space",
+    "build_id": "20260919T153917Z-7cbaa89b-nova",
+    "revision": "7cbaa89b809726cedd49ad626428868ab754086c",
+    "robots": "noindex, nofollow",
+    "artifact": "46782b9df9b07729f54f9afdabafb12a93a3bf861d8d388bd22742b6e78a2e2a",
+    "h2": [
+      "Сериалы с сериями",
+      "Новые аниме на сайте",
+      "Топ по оценкам",
+      "Аниме-фильмы",
+      "Дунхуа",
+      "О каталоге Animedia Space"
+    ],
+    "first_posters": [
+      "/title/master-lda-i-plameni-2/",
+      "/title/nelyud-chast-2/",
+      "/title/zolotaya-sekira/",
+      "/title/vo-vseoruzhii-sila-artefaktov/",
+      "/title/uchitel-medium/",
+      "/title/uzh-ne-zombi-li-eto-ova/",
+      "/title/daybaster-dotyanis-do-neba-2/",
+      "/title/generator-gaul/",
+      "/title/kiberegoist-kaydzo/",
+      "/title/legenda-boevyh-lentyaev-severnoy-zvezdy/",
+      "/title/prishedshiy-iz-drevnosti-2/",
+      "/title/dni-sakamoto-chast-2/",
+      "/title/master-lda-i-plameni-2/",
+      "/title/nelyud-chast-2/",
+      "/title/zolotaya-sekira/",
+      "/title/vo-vseoruzhii-sila-artefaktov/"
+    ],
+    "zg_present": true,
+    "has_7425": false
+  },
+  "icu_title": {
+    "url": "https://animedia.icu/title/master-lda-i-plameni-2/",
+    "http": 200,
+    "profile": "animedia-icu",
+    "build_id": "20260919T153858Z-7cbaa89b-nova",
+    "revision": "7cbaa89b809726cedd49ad626428868ab754086c",
+    "robots": "noindex, nofollow",
+    "artifact": "46782b9df9b07729f54f9afdabafb12a93a3bf861d8d388bd22742b6e78a2e2a",
+    "bind": {
+      "PROVIDER_BINDING_MATCH": 1,
+      "has_candidates": true,
+      "aggregator": "mali",
+      "title_id": "53477",
+      "mali_first": true
+    },
+    "season_label": true,
+    "episode_count": 104,
+    "episode_missing": [],
+    "HIDDEN_EPISODE_NUMBERS": 0,
+    "has_ztitle": true,
+    "tech_leak": false
+  },
+  "space_title": {
+    "url": "https://animedia.space/title/master-lda-i-plameni-2/",
+    "http": 200,
+    "profile": "animedia-space",
+    "build_id": "20260919T153917Z-7cbaa89b-nova",
+    "revision": "7cbaa89b809726cedd49ad626428868ab754086c",
+    "robots": "noindex, nofollow",
+    "artifact": "46782b9df9b07729f54f9afdabafb12a93a3bf861d8d388bd22742b6e78a2e2a",
+    "bind": {
+      "PROVIDER_BINDING_MATCH": 1,
+      "has_candidates": true,
+      "aggregator": "mali",
+      "title_id": "53477",
+      "mali_first": true
+    },
+    "season_label": true,
+    "episode_count": 104,
+    "episode_missing": [],
+    "HIDDEN_EPISODE_NUMBERS": 0,
+    "has_ztitle": true,
+    "tech_leak": false
+  },
+  "icu_ep104": {
+    "url": "https://animedia.icu/title/master-lda-i-plameni-2/season-2/episode-104/",
+    "http": 200,
+    "profile": "animedia-icu",
+    "build_id": "20260919T153858Z-7cbaa89b-nova",
+    "revision": "7cbaa89b809726cedd49ad626428868ab754086c",
+    "robots": "noindex, nofollow",
+    "artifact": "46782b9df9b07729f54f9afdabafb12a93a3bf861d8d388bd22742b6e78a2e2a",
+    "bind": {
+      "PROVIDER_BINDING_MATCH": 1,
+      "has_candidates": true,
+      "aggregator": "mali",
+      "title_id": "53477",
+      "mali_first": true
+    },
+    "season_label": true,
+    "episode_count": 104,
+    "episode_missing": [],
+    "HIDDEN_EPISODE_NUMBERS": 0,
+    "has_ztitle": false,
+    "tech_leak": false
+  },
+  "icu_ep103": {
+    "url": "https://animedia.icu/title/master-lda-i-plameni-2/season-2/episode-103/",
+    "http": 200,
+    "profile": "animedia-icu",
+    "build_id": "20260919T153858Z-7cbaa89b-nova",
+    "revision": "7cbaa89b809726cedd49ad626428868ab754086c",
+    "robots": "noindex, nofollow",
+    "artifact": "46782b9df9b07729f54f9afdabafb12a93a3bf861d8d388bd22742b6e78a2e2a",
+    "bind": {
+      "PROVIDER_BINDING_MATCH": 1,
+      "has_candidates": true,
+      "aggregator": "mali",
+      "title_id": "53477",
+      "mali_first": true
+    },
+    "season_label": true,
+    "episode_count": 104,
+    "episode_missing": [],
+    "HIDDEN_EPISODE_NUMBERS": 0,
+    "has_ztitle": false,
+    "tech_leak": false
+  },
+  "icu_collections": {
+    "url": "https://animedia.icu/collections/",
+    "http": 200,
+    "profile": "animedia-icu",
+    "build_id": "20260919T153858Z-7cbaa89b-nova",
+    "revision": "7cbaa89b809726cedd49ad626428868ab754086c",
+    "robots": "noindex, nofollow",
+    "artifact": "46782b9df9b07729f54f9afdabafb12a93a3bf861d8d388bd22742b6e78a2e2a",
+    "tiles": [
+      "Недавно добавленные",
+      "Высокие оценки",
+      "Этого года",
+      "С видео",
+      "Аниме-фильмы",
+      "Дунхуа",
+      "Короткие сериалы",
+      "Классика",
+      "Экшен",
+      "Романтика",
+      "Семейный просмотр",
+      "Сериалы с сериями"
+    ],
+    "counts": [
+      "7425",
+      "2642",
+      "232",
+      "7397",
+      "1921",
+      "186",
+      "2945",
+      "1317",
+      "2652",
+      "717",
+      "137",
+      "5495"
+    ],
+    "tile_posters": {
+      "/collection/recently_added/": [
+        "/poster/01a0b507-0813-7526-a2e6-5edf75180827.webp",
+        "/poster/01a0af3f-984f-7526-ae39-e7d8395b775a.webp",
+        "/poster/01a0aa6e-09d6-7526-b228-8df81f8dc726.webp",
+        "/poster/01a0a9d3-4334-7526-b204-dcde14db60e9.webp"
+      ],
+      "/collection/top_rated/": [
+        "/poster/01920087-486a-71a0-8c45-3db6e8a909e7.webp",
+        "/poster/01995791-958f-722e-b386-0e8afe9fc379.webp",
+        "/poster/0191513f-6c79-7b7a-8d2c-2d432e981f00.webp",
+        "/poster/019f6eb9-5d5f-7bef-98ce-30674e5d6d6d.webp"
+      ],
+      "/collection/current_season/": [
+        "/poster/01a0a9d3-4334-7526-b204-dcde14db60e9.webp",
+        "/poster/01a09eec-82de-7526-a4af-cd5a9e3d1e22.webp",
+        "/poster/01a088fb-b62a-7526-a40a-0c85b11d2f3a.webp",
+        "/poster/01a071de-45f9-7afa-83c2-8054afe0a0ff.webp"
+      ],
+      "/collection/video_available/": [
+        "/poster/01a0b507-0813-7526-a2e6-5edf75180827.webp",
+        "/poster/01a0af3f-984f-7526-ae39-e7d8395b775a.webp",
+        "/poster/01a0aa6e-09d6-7526-b228-8df81f8dc726.webp",
+        "/poster/01a0a9d3-4334-7526-b204-dcde14db60e9.webp"
+      ],
+      "/collection/anime_movies/": [
+        "/poster/01a0aa6e-09d6-7526-b228-8df81f8dc726.webp",
+        "/poster/01a09d0c-f4d8-7526-b5ac-63f565a06c10.webp",
+        "/poster/01a09d0b-94b9-7526-be2a-9876f8388f12.webp",
+        "/poster/01a09d0a-4f8c-7526-a15b-36911d54d144.webp"
+      ],
+      "/collection/donghua/": [
+        "/poster/01a02fbd-fe2d-7622-a4e6-8f6edfe6fb83.webp",
+        "/poster/01a00b94-fc3d-7be7-aff3-c3445eb42f5f.webp",
+        "/poster/01a0012d-98ef-74db-ab24-9259051d3d93.webp",
+        "/poster/019ff2d8-38b0-76b8-8136-fdcc87750b40.webp"
+      ],
+      "/collection/short_series/": [
+        "/poster/01a0a9d3-4334-7526-b204-dcde14db60e9.webp",
+        "/poster/01a09eec-82de-7526-a4af-cd5a9e3d1e22.webp",
+        "/poster/01a09cf5-009b-7526-90d0-f270263def04.webp",
+        "/poster/01a09ced-2432-7526-a0b9-e205c59fff14.webp"
+      ],
+      "/collection/classic/": [
+        "/poster/01a09d0a-4f8c-7526-a15b-36911d54d144.webp",
+        "/poster/01a09ced-2432-7526-a0b9-e205c59fff14.webp",
+        "/poster/01a09cd8-cf5d-7526-8100-03222eea6694.webp",
+        "/poster/01a09cd5-609f-7526-bcb1-8fa9b9c8fcef.webp"
+      ],
+      "/collection/action/": [
+        "/poster/01a0b507-0813-7526-a2e6-5edf75180827.webp",
+        "/poster/01a0af3f-984f-7526-ae39-e7d8395b775a.webp",
+        "/poster/01a0aa6e-09d6-7526-b228-8df81f8dc726.webp",
+        "/poster/01a0a9d3-4334-7526-b204-dcde14db60e9.webp"
+      ],
+      "/collection/romance/": [
+        "/poster/01a09ccb-3231-7526-8934-d5f0fbbdaed4.webp",
+        "/poster/01a06cf5-5fa7-7afa-ac24-d1160667b431.webp",
+        "/poster/01a06808-f9ad-7afa-9b87-856a9be51ecc.webp",
+        "/poster/01a02f63-0ff7-7622-b43f-d27fd064f192.webp"
+      ],
+      "/collection/family/": [
+        "/poster/01a085c0-9ccb-7526-8759-5b41cbf4e986.webp",
+        "/poster/01a06d37-a9be-7afa-a9e9-09525c763b94.webp",
+        "/poster/01a00b9c-8db9-7b9d-92aa-d44f9cc6e9f8.webp",
+        "/poster/019f30e7-b0ef-78c2-aebb-bc69118488c8.webp"
+      ],
+      "/collection/series_with_episodes/": [
+        "/poster/01a0b507-0813-7526-a2e6-5edf75180827.webp",
+        "/poster/01a0af3f-984f-7526-ae39-e7d8395b775a.webp",
+        "/poster/01a0a9d3-4334-7526-b204-dcde14db60e9.webp",
+        "/poster/01a09eec-82de-7526-a4af-cd5a9e3d1e22.webp"
+      ]
+    }
+  },
+  "space_collections": {
+    "url": "https://animedia.space/collections/",
+    "http": 200,
+    "profile": "animedia-space",
+    "build_id": "20260919T153917Z-7cbaa89b-nova",
+    "revision": "7cbaa89b809726cedd49ad626428868ab754086c",
+    "robots": "noindex, nofollow",
+    "artifact": "46782b9df9b07729f54f9afdabafb12a93a3bf861d8d388bd22742b6e78a2e2a",
+    "tiles": [
+      "Недавно добавленные",
+      "Высокие оценки",
+      "Этого года",
+      "С видео",
+      "Аниме-фильмы",
+      "Дунхуа",
+      "Короткие сериалы",
+      "Классика",
+      "Экшен",
+      "Романтика",
+      "Семейный просмотр",
+      "Сериалы с сериями"
+    ],
+    "counts": [
+      "7425",
+      "2642",
+      "232",
+      "7397",
+      "1921",
+      "186",
+      "2945",
+      "1317",
+      "2652",
+      "717",
+      "137",
+      "5495"
+    ],
+    "tile_posters": {
+      "/collection/recently_added/": [
+        "/poster/01a0b507-0813-7526-a2e6-5edf75180827.webp",
+        "/poster/01a0af3f-984f-7526-ae39-e7d8395b775a.webp",
+        "/poster/01a0aa6e-09d6-7526-b228-8df81f8dc726.webp",
+        "/poster/01a0a9d3-4334-7526-b204-dcde14db60e9.webp"
+      ],
+      "/collection/top_rated/": [
+        "/poster/01920087-486a-71a0-8c45-3db6e8a909e7.webp",
+        "/poster/01995791-958f-722e-b386-0e8afe9fc379.webp",
+        "/poster/0191513f-6c79-7b7a-8d2c-2d432e981f00.webp",
+        "/poster/019f6eb9-5d5f-7bef-98ce-30674e5d6d6d.webp"
+      ],
+      "/collection/current_season/": [
+        "/poster/01a0a9d3-4334-7526-b204-dcde14db60e9.webp",
+        "/poster/01a09eec-82de-7526-a4af-cd5a9e3d1e22.webp",
+        "/poster/01a088fb-b62a-7526-a40a-0c85b11d2f3a.webp",
+        "/poster/01a071de-45f9-7afa-83c2-8054afe0a0ff.webp"
+      ],
+      "/collection/video_available/": [
+        "/poster/01a0b507-0813-7526-a2e6-5edf75180827.webp",
+        "/poster/01a0af3f-984f-7526-ae39-e7d8395b775a.webp",
+        "/poster/01a0aa6e-09d6-7526-b228-8df81f8dc726.webp",
+        "/poster/01a0a9d3-4334-7526-b204-dcde14db60e9.webp"
+      ],
+      "/collection/anime_movies/": [
+        "/poster/01a0aa6e-09d6-7526-b228-8df81f8dc726.webp",
+        "/poster/01a09d0c-f4d8-7526-b5ac-63f565a06c10.webp",
+        "/poster/01a09d0b-94b9-7526-be2a-9876f8388f12.webp",
+        "/poster/01a09d0a-4f8c-7526-a15b-36911d54d144.webp"
+      ],
+      "/collection/donghua/": [
+        "/poster/01a02fbd-fe2d-7622-a4e6-8f6edfe6fb83.webp",
+        "/poster/01a00b94-fc3d-7be7-aff3-c3445eb42f5f.webp",
+        "/poster/01a0012d-98ef-74db-ab24-9259051d3d93.webp",
+        "/poster/019ff2d8-38b0-76b8-8136-fdcc87750b40.webp"
+      ],
+      "/collection/short_series/": [
+        "/poster/01a0a9d3-4334-7526-b204-dcde14db60e9.webp",
+        "/poster/01a09eec-82de-7526-a4af-cd5a9e3d1e22.webp",
+        "/poster/01a09cf5-009b-7526-90d0-f270263def04.webp",
+        "/poster/01a09ced-2432-7526-a0b9-e205c59fff14.webp"
+      ],
+      "/collection/classic/": [
+        "/poster/01a09d0a-4f8c-7526-a15b-36911d54d144.webp",
+        "/poster/01a09ced-2432-7526-a0b9-e205c59fff14.webp",
+        "/poster/01a09cd8-cf5d-7526-8100-03222eea6694.webp",
+        "/poster/01a09cd5-609f-7526-bcb1-8fa9b9c8fcef.webp"
+      ],
+      "/collection/action/": [
+        "/poster/01a0b507-0813-7526-a2e6-5edf75180827.webp",
+        "/poster/01a0af3f-984f-7526-ae39-e7d8395b775a.webp",
+        "/poster/01a0aa6e-09d6-7526-b228-8df81f8dc726.webp",
+        "/poster/01a0a9d3-4334-7526-b204-dcde14db60e9.webp"
+      ],
+      "/collection/romance/": [
+        "/poster/01a09ccb-3231-7526-8934-d5f0fbbdaed4.webp",
+        "/poster/01a06cf5-5fa7-7afa-ac24-d1160667b431.webp",
+        "/poster/01a06808-f9ad-7afa-9b87-856a9be51ecc.webp",
+        "/poster/01a02f63-0ff7-7622-b43f-d27fd064f192.webp"
+      ],
+      "/collection/family/": [
+        "/poster/01a085c0-9ccb-7526-8759-5b41cbf4e986.webp",
+        "/poster/01a06d37-a9be-7afa-a9e9-09525c763b94.webp",
+        "/poster/01a00b9c-8db9-7b9d-92aa-d44f9cc6e9f8.webp",
+        "/poster/019f30e7-b0ef-78c2-aebb-bc69118488c8.webp"
+      ],
+      "/collection/series_with_episodes/": [
+        "/poster/01a0b507-0813-7526-a2e6-5edf75180827.webp",
+        "/poster/01a0af3f-984f-7526-ae39-e7d8395b775a.webp",
+        "/poster/01a0a9d3-4334-7526-b204-dcde14db60e9.webp",
+        "/poster/01a09eec-82de-7526-a4af-cd5a9e3d1e22.webp"
+      ]
+    }
+  },
+  "icu_catalog": {
+    "url": "https://animedia.icu/catalog/",
+    "http": 200,
+    "profile": "animedia-icu",
+    "build_id": "20260919T153858Z-7cbaa89b-nova",
+    "revision": "7cbaa89b809726cedd49ad626428868ab754086c",
+    "robots": "noindex, nofollow",
+    "artifact": "46782b9df9b07729f54f9afdabafb12a93a3bf861d8d388bd22742b6e78a2e2a",
+    "zg_present": true,
+    "has_7425": true
+  },
+  "icu_movies": {
+    "url": "https://animedia.icu/collection/anime_movies/",
+    "http": 200,
+    "profile": "animedia-icu",
+    "build_id": "20260919T153858Z-7cbaa89b-nova",
+    "revision": "7cbaa89b809726cedd49ad626428868ab754086c",
+    "robots": "noindex, nofollow",
+    "artifact": "46782b9df9b07729f54f9afdabafb12a93a3bf861d8d388bd22742b6e78a2e2a"
+  },
+  "icu_donghua": {
+    "url": "https://animedia.icu/collection/donghua/",
+    "http": 200,
+    "profile": "animedia-icu",
+    "build_id": "20260919T153858Z-7cbaa89b-nova",
+    "revision": "7cbaa89b809726cedd49ad626428868ab754086c",
+    "robots": "noindex, nofollow",
+    "artifact": "46782b9df9b07729f54f9afdabafb12a93a3bf861d8d388bd22742b6e78a2e2a"
+  },
+  "icu_top": {
+    "url": "https://animedia.icu/collection/top_rated/",
+    "http": 200,
+    "profile": "animedia-icu",
+    "build_id": "20260919T153858Z-7cbaa89b-nova",
+    "revision": "7cbaa89b809726cedd49ad626428868ab754086c",
+    "robots": "noindex, nofollow",
+    "artifact": "46782b9df9b07729f54f9afdabafb12a93a3bf861d8d388bd22742b6e78a2e2a"
+  },
+  "collection_metrics": {
+    "EXACT_DUPLICATE_SHELVES": 3,
+    "MAX_CROSS_SHELF_JACCARD_TOP4": 1.0,
+    "pairs_sample": [
+      [
+        "/collection/recently_added/",
+        "/collection/video_available/",
+        1.0
+      ],
+      [
+        "/collection/recently_added/",
+        "/collection/action/",
+        1.0
+      ],
+      [
+        "/collection/video_available/",
+        "/collection/action/",
+        1.0
+      ],
+      [
+        "/collection/recently_added/",
+        "/collection/series_with_episodes/",
+        0.6
+      ],
+      [
+        "/collection/video_available/",
+        "/collection/series_with_episodes/",
+        0.6
+      ],
+      [
+        "/collection/action/",
+        "/collection/series_with_episodes/",
+        0.6
+      ],
+      [
+        "/collection/current_season/",
+        "/collection/short_series/",
+        0.333
+      ],
+      [
+        "/collection/current_season/",
+        "/collection/series_with_episodes/",
+        0.333
+      ]
+    ]
+  },
+  "seo_split": {
+    "icu_title": "Animedia ICU — аниме, серии и подборки",
+    "space_title": "Animedia Space — каталог аниме онлайн",
+    "icu_desc": "Animedia ICU показывает аниме-каталог с упором на серии, подборки и расписание: данные только из утверждённого снимка.",
+    "space_desc": "Animedia Space собирает аниме из утверждённого снимка каталога: новые серии, оценки и подборки без выдуманных полок.",
+    "titles_differ": true,
+    "desc_differ": true
+  }
+}

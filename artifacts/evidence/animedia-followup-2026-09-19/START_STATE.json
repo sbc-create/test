@@ -1,0 +1,11 @@
+{
+  "pwd": "/home/claude/wt-animedia-finalization-01",
+  "branch": "claude/animedia-template-finalization-01",
+  "START_HEAD": "6d0625498a65adab477b3543099348f5c6142d86",
+  "status_short": "M artifacts/evidence/animedia-final-repair-2026-09-19/FINAL.md\n M automation/host/lords-frontend.py\n?? automation/host/lords-frontend.animedia-prev.py",
+  "recent_commits": "6d06254 docs(animedia): align FINAL report HEAD with evidence commit\n5e9e816 evidence(animedia): final live repair report and matrix for 1.2.1\n43dc842 chore(nova): provenance tip for genre-index runtime fix\n289a459 fix(animedia): build genre index from Russian names without codes\n960bf9d chore(nova): point runtime provenance at Animedia 1.2.1 gate fix\n6ce421e fix(animedia): accept design 1.2.1 as reworked portal gate\n400e831 chore(nova): deploy lock and provenance tip for Animedia runtime\nd9bd7b3 fix(animedia): shared-runtime superset with Zona live + Animedia repair\na3d6309 chore(nova): closed-update tooling with separate Animedia SEO profiles\nf772c02 fix(animedia): production-ready storefront on shared nova runtime\n0ec9262 fix(unattended): treat Cursor Shell as Bash in permission guard\nb023bd5 evidence(animedia-portal): финализация профиля — 5×3 геометрия проверена, дефект шапки передан Lords writer",
+  "changed_files": "artifacts/evidence/animedia-final-repair-2026-09-19/FINAL.md\nautomation/host/lords-frontend.py\nautomation/host/lords-frontend.animedia-prev.py",
+  "wt_frontend_sha256": "d8bbfd2612b12232455afa29a3c2df8bcce6c6fadd13b8dbfa5475a4249e250b",
+  "live_frontend_sha256": "5cbd0eb79395f971eea021c08cac0816c4194d79cf76f288835ceb9fd6d5b7d8",
+  "captured_at": "2026-09-19T15:19:46Z"
+}

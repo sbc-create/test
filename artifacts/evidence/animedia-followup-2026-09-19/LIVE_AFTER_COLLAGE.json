@@ -1,0 +1,50 @@
+{
+  "EXACT_DUPLICATE_SHELVES": 0,
+  "MAX_CROSS_SHELF_JACCARD_TOP4": 0.0,
+  "tiles": [
+    "/collection/recently_added/",
+    "/collection/top_rated/",
+    "/collection/current_season/",
+    "/collection/video_available/",
+    "/collection/anime_movies/",
+    "/collection/donghua/",
+    "/collection/short_series/",
+    "/collection/classic/",
+    "/collection/action/",
+    "/collection/romance/",
+    "/collection/family/",
+    "/collection/series_with_episodes/"
+  ],
+  "bindings": [
+    {
+      "url": "https://animedia.icu/title/master-lda-i-plameni-2/",
+      "bind": {
+        "PROVIDER_BINDING_MATCH": 1,
+        "has_candidates": true,
+        "aggregator": "mali",
+        "title_id": "53477",
+        "mali_first": true
+      },
+      "build": "20260919T155522Z-3fb63ad5-nova",
+      "profile": "animedia-icu",
+      "rev": "3fb63ad52ed82a1959c93e591763fa968e9333ec"
+    },
+    {
+      "url": "https://animedia.space/title/master-lda-i-plameni-2/",
+      "bind": {
+        "PROVIDER_BINDING_MATCH": 1,
+        "has_candidates": true,
+        "aggregator": "mali",
+        "title_id": "53477",
+        "mali_first": true
+      },
+      "build": "20260919T155522Z-3fb63ad5-nova",
+      "profile": "animedia-space",
+      "rev": "3fb63ad52ed82a1959c93e591763fa968e9333ec"
+    }
+  ],
+  "HIDDEN_EPISODE_NUMBERS": 0,
+  "season_ok": true,
+  "ztitle": true,
+  "zg_cols_hint": true
+}
