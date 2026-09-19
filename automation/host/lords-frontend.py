@@ -182,7 +182,7 @@ def тег_метрики() -> str:
     "imdb":      ("IMDb",       10.0, False),
     "shikimori": ("Shikimori",  10.0, False),
     "mal":       ("MyAnimeList", 10.0, False),
-    "amd":       ("AMD",        10.0, True),
+    "amd":       ("AnimeMedia", 10.0, True),
 }
 
 #: Порядок вывода. Фиксированный, а не по величине: переставлять источники
