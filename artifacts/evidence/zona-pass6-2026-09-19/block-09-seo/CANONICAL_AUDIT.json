@@ -1,0 +1,67 @@
+[
+  {
+    "route": "home",
+    "path": "/",
+    "canonical": "https://zonafilm.space/"
+  },
+  {
+    "route": "movies",
+    "path": "/movies/",
+    "canonical": "https://zonafilm.space/movies/?sort=newest"
+  },
+  {
+    "route": "series",
+    "path": "/series/",
+    "canonical": "https://zonafilm.space/series/?sort=newest"
+  },
+  {
+    "route": "animation",
+    "path": "/animation/",
+    "canonical": "https://zonafilm.space/animation/?sort=newest"
+  },
+  {
+    "route": "catalog",
+    "path": "/catalog/",
+    "canonical": "https://zonafilm.space/catalog/?sort=newest"
+  },
+  {
+    "route": "year-2019",
+    "path": "/catalog/?year=2019",
+    "canonical": "https://zonafilm.space/catalog/?year=2019&sort=newest"
+  },
+  {
+    "route": "catalog-page2",
+    "path": "/catalog/?page=2",
+    "canonical": "https://zonafilm.space/catalog/?sort=newest"
+  },
+  {
+    "route": "collections",
+    "path": "/collections/",
+    "canonical": "https://zonafilm.space/collections/"
+  },
+  {
+    "route": "collection",
+    "path": "/collection/recently_added/",
+    "canonical": "https://zonafilm.space/collection/recently_added/"
+  },
+  {
+    "route": "search",
+    "path": "/search/?q=тест",
+    "canonical": "https://zonafilm.space/search/?q=%D1%82%D0%B5%D1%81%D1%82"
+  },
+  {
+    "route": "title",
+    "path": "/title/chasha-vesny/",
+    "canonical": "https://zonafilm.space/title/chasha-vesny/"
+  },
+  {
+    "route": "new",
+    "path": "/new/",
+    "canonical": "https://zonafilm.space/new/?sort=newest"
+  },
+  {
+    "route": "404",
+    "path": "/this-route-does-not-exist-zona/",
+    "canonical": ""
+  }
+]

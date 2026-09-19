@@ -1,0 +1,67 @@
+[
+  {
+    "route": "home",
+    "ld_count": 1,
+    "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Zona\",\"url\":\"https://zonafilm.space/\",\"potentialAction\":{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://zonafilm.space/search/?q={search_term_string}\"},\"query-input\":\"required name=search_term_string\"}}"
+  },
+  {
+    "route": "movies",
+    "ld_count": 2,
+    "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Zona\",\"url\":\"https://zonafilm.space/\",\"potentialAction\":{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://zonafilm.space/search/?q={search_term_string}\"},\"query-input\":\"required name=search_term_string\"}}"
+  },
+  {
+    "route": "series",
+    "ld_count": 2,
+    "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Zona\",\"url\":\"https://zonafilm.space/\",\"potentialAction\":{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://zonafilm.space/search/?q={search_term_string}\"},\"query-input\":\"required name=search_term_string\"}}"
+  },
+  {
+    "route": "animation",
+    "ld_count": 2,
+    "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Zona\",\"url\":\"https://zonafilm.space/\",\"potentialAction\":{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://zonafilm.space/search/?q={search_term_string}\"},\"query-input\":\"required name=search_term_string\"}}"
+  },
+  {
+    "route": "catalog",
+    "ld_count": 2,
+    "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Zona\",\"url\":\"https://zonafilm.space/\",\"potentialAction\":{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://zonafilm.space/search/?q={search_term_string}\"},\"query-input\":\"required name=search_term_string\"}}"
+  },
+  {
+    "route": "year-2019",
+    "ld_count": 2,
+    "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Zona\",\"url\":\"https://zonafilm.space/\",\"potentialAction\":{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://zonafilm.space/search/?q={search_term_string}\"},\"query-input\":\"required name=search_term_string\"}}"
+  },
+  {
+    "route": "catalog-page2",
+    "ld_count": 2,
+    "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Zona\",\"url\":\"https://zonafilm.space/\",\"potentialAction\":{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://zonafilm.space/search/?q={search_term_string}\"},\"query-input\":\"required name=search_term_string\"}}"
+  },
+  {
+    "route": "collections",
+    "ld_count": 2,
+    "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Zona\",\"url\":\"https://zonafilm.space/\",\"potentialAction\":{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://zonafilm.space/search/?q={search_term_string}\"},\"query-input\":\"required name=search_term_string\"}}"
+  },
+  {
+    "route": "collection",
+    "ld_count": 2,
+    "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Zona\",\"url\":\"https://zonafilm.space/\",\"potentialAction\":{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://zonafilm.space/search/?q={search_term_string}\"},\"query-input\":\"required name=search_term_string\"}}"
+  },
+  {
+    "route": "search",
+    "ld_count": 2,
+    "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Zona\",\"url\":\"https://zonafilm.space/\",\"potentialAction\":{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://zonafilm.space/search/?q={search_term_string}\"},\"query-input\":\"required name=search_term_string\"}}"
+  },
+  {
+    "route": "title",
+    "ld_count": 3,
+    "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Zona\",\"url\":\"https://zonafilm.space/\",\"potentialAction\":{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://zonafilm.space/search/?q={search_term_string}\"},\"query-input\":\"required name=search_term_string\"}}"
+  },
+  {
+    "route": "new",
+    "ld_count": 2,
+    "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Zona\",\"url\":\"https://zonafilm.space/\",\"potentialAction\":{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://zonafilm.space/search/?q={search_term_string}\"},\"query-input\":\"required name=search_term_string\"}}"
+  },
+  {
+    "route": "404",
+    "ld_count": 0,
+    "sample": ""
+  }
+]

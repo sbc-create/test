@@ -1,0 +1,16 @@
+{
+  "BLOCK": "09",
+  "STATUS": "PASS",
+  "NOINDEX_PRESERVED": true,
+  "DUPLICATE_TITLE_UNEXPLAINED": 0,
+  "DUPLICATE_H1_UNEXPLAINED": 0,
+  "CANONICAL_CONFLICTS": 0,
+  "BROKEN_INTERNAL_LINKS": 0,
+  "STRUCTURED_DATA_INVENTED_FIELDS": 0,
+  "SITEMAP_NEW_URLS": 0,
+  "INDEXING_OPENED": 0,
+  "NOTE": "Pre-deploy live audit of Pass5 build; code SEO contract unchanged in Pass6 visual blocks",
+  "DUPLICATE_TITLE_SAMPLES": [
+    "Весь каталог — Zona"
+  ]
+}

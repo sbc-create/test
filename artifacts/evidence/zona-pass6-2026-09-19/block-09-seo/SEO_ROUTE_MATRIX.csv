@@ -1,0 +1,14 @@
+route,path,http,robots,title,h1,canonical,meta_desc_len,ld_count
+home,/,200,"noindex, nofollow",Zona — кинопортал,Кинопортал: что смотреть и где это найти,https://zonafilm.space/,33,1
+movies,/movies/,200,"noindex, nofollow",Кино — Zona,Кино,https://zonafilm.space/movies/?sort=newest,21,2
+series,/series/,200,"noindex, nofollow",Сериалы — Zona,Сериалы,https://zonafilm.space/series/?sort=newest,24,2
+animation,/animation/,200,"noindex, nofollow",Анимация — Zona,Анимация,https://zonafilm.space/animation/?sort=newest,25,2
+catalog,/catalog/,200,"noindex, nofollow",Весь каталог — Zona,Весь каталог,https://zonafilm.space/catalog/?sort=newest,29,2
+year-2019,/catalog/?year=2019,200,"noindex, nofollow",Каталог 2019 года — Zona,Каталог 2019 года,https://zonafilm.space/catalog/?year=2019&sort=newest,34,2
+catalog-page2,/catalog/?page=2,200,"noindex, nofollow",Весь каталог — Zona,Весь каталог,https://zonafilm.space/catalog/?sort=newest,29,2
+collections,/collections/,200,"noindex, nofollow",Подборки — Zona,Подборки,https://zonafilm.space/collections/,22,2
+collection,/collection/recently_added/,200,"noindex, nofollow",Недавно добавленные — Zona,Недавно добавленные,https://zonafilm.space/collection/recently_added/,38,2
+search,/search/?q=тест,200,"noindex, nofollow",Поиск — Zona,Результаты поиска: «тест»,https://zonafilm.space/search/?q=%D1%82%D0%B5%D1%81%D1%82,0,2
+title,/title/chasha-vesny/,200,"noindex, nofollow",Чаша весны — смотреть онлайн — Zona,Чаша весны,https://zonafilm.space/title/chasha-vesny/,180,3
+new,/new/,200,"noindex, nofollow",Что нового — Zona,Что нового,https://zonafilm.space/new/?sort=newest,27,2
+404,/this-route-does-not-exist-zona/,404,"noindex, nofollow",Страница не найдена — Zona,Страница не найдена,,0,0
