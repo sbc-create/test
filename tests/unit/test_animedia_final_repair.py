@@ -238,3 +238,10 @@ class TestAnimediaFinalRepair:
         assert "lords" in mod.СЕМЕЙСТВА_1_1
         assert mod.СЕМЕЙСТВО == "lords"
         assert mod.ПОСТЕРЫ_СВОИМ_АДРЕСОМ is False
+
+    def test_design_121_enables_animedia_portal(self, tmp_path):
+        mod, _, _ = _load_frontend(tmp_path, family="animedia", profile="animedia-space")
+        assert mod.ВЕРСИЯ == "1.2.1"
+        assert mod.ОФОРМЛЕНИЕ_ПЕРЕРАБОТАННОЕ is True
+        assert "animedia" in mod.ВИДЫ_1_1
+        assert mod.ВИДЫ_1_1["animedia"] is mod.ВидАнимедиа
