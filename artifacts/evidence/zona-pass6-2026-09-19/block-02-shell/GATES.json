@@ -1,0 +1,19 @@
+{
+  "BLOCK": "02",
+  "STATUS": "PASS_LOCAL",
+  "MOBILE_BODY_PADDING_PX": 72,
+  "OLD_PADDING_REMOVED": true,
+  "NAV_MIN_TOUCH_44": true,
+  "MENU_BUTTON_44": true,
+  "FOCUS_VISIBLE": true,
+  "SIDE_RAIL_HIDDEN": true,
+  "CARD_GRID_LOCKED": true,
+  "PLAYER_CSS_UNTOUCHED_SCOPE": "Block 02 only edited shell/header/nav rules",
+  "TESTS": "tests/lords/test_zona_pass6_block02.py + test_zona_pass5.py = 12 passed",
+  "LIVE_VERIFY": "deferred to post-visual deploy (max 2 deploys)",
+  "ROOT_CAUSE": "body padding-top:117px assumed two-row mobile header; burger collapses header to ~68px leaving 49px empty strip",
+  "CHANGED_FILES": [
+    "automation/host/lords-frontend.py",
+    "tests/lords/test_zona_pass6_block02.py"
+  ]
+}

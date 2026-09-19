@@ -1547,12 +1547,14 @@ white-space:nowrap}
      h2 22.1 нормального начертания, ссылки 15.6 полужирные. */
 body{background:@PAGE@;color:@INK@;
 font:13px/1.375 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif;
-padding-top:117px}
+/* Mobile uses burger: header is a single ~68px row. Old 117px pad left a
+   49px empty strip between header and content (Pass6 Block 02). */
+padding-top:72px}
 @media(min-width:768px){body{padding-top:138px}}
 @media(min-width:1280px){body{padding-top:69px}}
 .zs{min-height:100vh;display:block}
 .zmain{min-width:0}
-.zwrap{max-width:1760px;margin:0 auto;padding:0 12px}
+.zwrap{max-width:1760px;margin:0 auto;padding:0 12px;box-sizing:border-box}
 @media(min-width:768px){.zwrap{padding:0 24px}}
 @media(min-width:1440px){.zwrap{padding:0 32px}}
 @media(min-width:1920px){.zwrap{padding:0 64px}}
@@ -1561,28 +1563,34 @@ padding-top:117px}
    одной ширине — это и было главным расхождением с эталоном. */
 .zhd{position:fixed;top:0;left:0;right:0;z-index:60;background:@RAIL@;
 color:@RAILINK@;box-shadow:0 1px 0 rgba(0,0,0,.25)}
-.zhd__in{max-width:1400px;margin:0 auto;padding:14px 16px;display:flex;
-align-items:center;gap:12px;flex-wrap:wrap}
-@media(min-width:768px){.zhd__in{padding:25px 16px;gap:14px}}
-@media(min-width:1280px){.zhd__in{padding:0 20px;height:69px;flex-wrap:nowrap;gap:14px}}
+.zhd__in{max-width:1400px;margin:0 auto;padding:10px 12px;display:flex;
+align-items:center;gap:12px;flex-wrap:wrap;min-height:72px;box-sizing:border-box}
+@media(min-width:768px){.zhd__in{padding:25px 16px;gap:14px;min-height:0}}
+@media(min-width:1280px){.zhd__in{padding:0 20px;height:69px;min-height:69px;flex-wrap:nowrap;gap:14px}}
 .zhd__logo{font-size:19px;font-weight:700;letter-spacing:-.3px;color:#fff;
-white-space:nowrap;flex:0 0 auto}
+white-space:nowrap;flex:0 0 auto;min-height:44px;display:inline-flex;align-items:center}
+.zhd__logo:focus-visible{outline:2px solid #fff;outline-offset:3px;border-radius:4px}
 /* Пункты в одну строку с горизонтальной прокруткой: перенос на узком экране
    поднимал шапку до 185 px против измеренных на эталоне 117. */
 .zhd__n{display:flex;gap:2px;flex:1 0 100%;order:3;min-width:0;
 overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .zhd__n::-webkit-scrollbar{display:none}
 @media(min-width:1280px){.zhd__n{flex:1 1 auto;order:0;overflow:visible}}
-.zhd__n a{padding:9px 10px;border-radius:6px;font-size:15.6px;font-weight:500;
-color:#eef3f8;white-space:nowrap;flex:0 0 auto}
+.zhd__n a{padding:10px 12px;border-radius:6px;font-size:15.6px;font-weight:500;
+color:#eef3f8;white-space:nowrap;flex:0 0 auto;min-height:44px;min-width:44px;
+display:inline-flex;align-items:center;box-sizing:border-box}
 .zhd__n a:hover{background:rgba(255,255,255,.14)}
+.zhd__n a:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .zhd__n a[aria-current]{background:@ACCDK@;color:#fff}
 .zhd__s{display:flex;flex:1 1 140px;min-width:0;max-width:420px;
-border-radius:6px;overflow:hidden;background:#fff}
+border-radius:6px;overflow:hidden;background:#fff;min-height:44px}
 .zhd__s input{flex:1;min-width:0;border:0;padding:9px 12px;font-size:14px;
-color:@PAGE@;font-family:inherit}
+color:@PAGE@;font-family:inherit;min-height:44px;box-sizing:border-box}
+.zhd__s input:focus-visible{outline:2px solid @ACCDK@;outline-offset:-2px}
 .zhd__s button{border:0;background:@ACCDK@;color:#fff;padding:0 16px;
-font-weight:600;font-size:14px;cursor:pointer;font-family:inherit}
+font-weight:600;font-size:14px;cursor:pointer;font-family:inherit;
+min-height:44px;min-width:44px}
+.zhd__s button:focus-visible{outline:2px solid #fff;outline-offset:2px}
 /* Жанры вынесены из шапки в тело главной: третий ряд поднимал шапку до
    170 px против измеренных на эталоне 137.8. */
 
@@ -1907,12 +1915,16 @@ gap:10px;padding-top:14px;border-top:1px solid @LINE@}
 .zvb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;
 border:0;padding:0;background:transparent;color:@MUTE@}
 .zhd__menu{display:inline-flex;align-items:center;justify-content:center;
-width:40px;height:40px;border:1px solid rgba(255,255,255,.28);border-radius:6px;
+width:44px;height:44px;min-width:44px;min-height:44px;
+border:1px solid rgba(255,255,255,.28);border-radius:6px;
 background:transparent;color:#fff;font-size:20px;cursor:pointer;flex:0 0 auto}
+.zhd__menu:focus-visible{outline:2px solid #fff;outline-offset:2px}
 @media(min-width:768px){.zhd__menu{display:none}}
 @media(max-width:767px){
-.zhd__n{display:none;flex:1 0 100%;order:4;flex-wrap:wrap;overflow:visible}
+.zhd__n{display:none;flex:1 0 100%;order:4;flex-wrap:wrap;overflow:visible;
+background:@RAIL@;padding:8px 0 12px;border-top:1px solid rgba(255,255,255,.12)}
 .zhd__n.is-open{display:flex}
+.zhd__n a{flex:1 1 calc(50% - 4px);justify-content:center}
 body.nav-lock{overflow:hidden}
 }
 .zfilt__y{display:inline-flex;flex-wrap:wrap;gap:6px;max-width:100%;align-items:center}
