@@ -1,0 +1,136 @@
+{
+ "action": "install",
+ "site": "zona-01",
+ "unit": "nova-zona-01.service",
+ "domain": "zonafilm.space",
+ "rollback_point": "/srv/lords/.frontend/.rollback/20260919T151410Z-zona-01",
+ "artifact_sha256": "525443ff7fd35bfd01859d3baaae90cdb14e63b620dede0cbe11a3b023730f13",
+ "previous_artifact_sha256": "0940212f9cbd317400bf11eae1c7da44e98dc30ef4be357bb7ddfd6dffde8afb",
+ "manifest": {
+  "schema_version": 1,
+  "template_family": "zona",
+  "design_version": "1.2.0",
+  "source_commit": "159d1a38b396d7383440b0cc99019ca4bd47e451",
+  "runtime_commit": "159d1a38b396d7383440b0cc99019ca4bd47e451",
+  "build_id": "20260919T151340Z-159d1a38-nova",
+  "artifact_sha256": "525443ff7fd35bfd01859d3baaae90cdb14e63b620dede0cbe11a3b023730f13",
+  "profile": "zona-general",
+  "built_at": "2026-09-19T15:14:11Z"
+ },
+ "previous_manifest": {
+  "schema_version": 1,
+  "template_family": "zona",
+  "design_version": "1.2.0",
+  "source_commit": "bcbea00877708c7f930f1fe931a17f66decafed5",
+  "runtime_commit": "2d6d16952abca7bf8840e00c7d75769d96452044",
+  "build_id": "20260919T143500Z-2d6d1695-nova",
+  "artifact_sha256": "14ce882d5ad4a70769f1fa054288833ef7cd408d8d5d79ef8a5b62884c8b7593",
+  "profile": "zona-general",
+  "built_at": "2026-09-19T14:34:57Z"
+ },
+ "restart_ok": false,
+ "restart_output": "Failed to restart nova-zona-01.service: Interactive authentication required.\nSee system logs and 'systemctl status nova-zona-01.service' for details.",
+ "health": {
+  "ok": false,
+  "checks": [],
+  "domain": "zonafilm.space"
+ },
+ "proven_chain": {
+  "nginx_config": "/etc/nginx/lords/zona-01.conf",
+  "upstream_port": 9120,
+  "unit": "nova-zona-01.service",
+  "executable": "/srv/lords/.frontend/lords-frontend.py",
+  "manifest_path": "/srv/lords/.frontend/template-manifest-zona-01.json",
+  "verdict": "PROVEN"
+ },
+ "at_utc": "20260919T151415Z",
+ "auto_rolled_back": true,
+ "rollback_restart_ok": false,
+ "rollback_output": "Failed to restart nova-zona-01.service: Interactive authentication required.\nSee system logs and 'systemctl status nova-zona-01.service' for details.",
+ "health_after_rollback": {
+  "domain": "zonafilm.space",
+  "checks": [
+   {
+    "path": "/healthz",
+    "status": 200,
+    "bytes": 11,
+    "final_url": "https://zonafilm.space/healthz",
+    "redirects": 0,
+    "redirect_chain": [],
+    "declared": {
+     "template_family": "zona",
+     "design_version": "1.2.0",
+     "build_id": "20260919T143500Z-2d6d1695-nova",
+     "artifact_sha256": "14ce882d5ad4a70769f1fa054288833ef7cd408d8d5d79ef8a5b62884c8b7593",
+     "source_commit": "bcbea00877708c7f930f1fe931a17f66decafed5"
+    },
+    "version": "1.2.0",
+    "artifact": "14ce882d5ad4a70769f1fa054288833ef7cd408d8d5d79ef8a5b62884c8b7593",
+    "structure": {
+     "html_sha256": "4062edaf750fb8074e7e83e0c9028c94e32468a8b6f1614774328ef045150f93",
+     "css_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "js_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "bytes": 11
+    },
+    "ok": true
+   },
+   {
+    "path": "/",
+    "status": 200,
+    "bytes": 107963,
+    "final_url": "https://zonafilm.space/",
+    "redirects": 0,
+    "redirect_chain": [],
+    "declared": {
+     "template_family": "zona",
+     "design_version": "1.2.0",
+     "build_id": "20260919T143500Z-2d6d1695-nova",
+     "artifact_sha256": "14ce882d5ad4a70769f1fa054288833ef7cd408d8d5d79ef8a5b62884c8b7593",
+     "source_commit": "bcbea00877708c7f930f1fe931a17f66decafed5"
+    },
+    "version": "1.2.0",
+    "artifact": "14ce882d5ad4a70769f1fa054288833ef7cd408d8d5d79ef8a5b62884c8b7593",
+    "structure": {
+     "html_sha256": "2727aadda4bdaa199368488e2125f4388e840114938ec64c356f49a2e5fac3b6",
+     "css_sha256": "939ed5896f8b9cb3b7ae039c2056e5b985ecb2aa53420cb3b20c6b17249cc265",
+     "js_sha256": "5cd640e3974bb324eef12dcb0302d3f65a37736c724fc83d07787b56c2a0be5f",
+     "bytes": 107963
+    },
+    "ok": true
+   },
+   {
+    "path": "/catalog/",
+    "status": 200,
+    "bytes": 48196,
+    "final_url": "https://zonafilm.space/catalog/",
+    "redirects": 0,
+    "redirect_chain": [],
+    "declared": {
+     "template_family": "zona",
+     "design_version": "1.2.0",
+     "build_id": "20260919T143500Z-2d6d1695-nova",
+     "artifact_sha256": "14ce882d5ad4a70769f1fa054288833ef7cd408d8d5d79ef8a5b62884c8b7593",
+     "source_commit": "bcbea00877708c7f930f1fe931a17f66decafed5"
+    },
+    "version": "1.2.0",
+    "artifact": "14ce882d5ad4a70769f1fa054288833ef7cd408d8d5d79ef8a5b62884c8b7593",
+    "structure": {
+     "html_sha256": "caf8ce25016d1d49959a148e2b7624519454bb85239c0bbcd607dd0e852fbd2e",
+     "css_sha256": "939ed5896f8b9cb3b7ae039c2056e5b985ecb2aa53420cb3b20c6b17249cc265",
+     "js_sha256": "8df29860b3a0d7b50bad956d9856f9b59bbd0dc78266ec8e780ae1671be3d117",
+     "bytes": 48196
+    },
+    "ok": true
+   }
+  ],
+  "ok": true
+ },
+ "served_artifact_after_rollback": [
+  "14ce882d5ad4a70769f1fa054288833ef7cd408d8d5d79ef8a5b62884c8b7593"
+ ],
+ "baseline_release_match": true,
+ "baseline_structure_match": true,
+ "baseline_structure_diff": [],
+ "baseline_fingerprint_match": true,
+ "verdict": "ROLLED_BACK_NO_CHANGE"
+}

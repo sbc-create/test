@@ -1,0 +1,328 @@
+{
+  "expect_artifact": "525443ff7fd35bfd01859d3baaae90cdb14e63b620dede0cbe11a3b023730f13",
+  "genres": {
+    "west_content": {
+      "status": 200,
+      "count_slugs": 48,
+      "h1": "западный контент",
+      "active": true,
+      "artifact": "525443ff7fd35bfd01859d3baaae90cdb14e63b620dede0cbe11a3b023730f13",
+      "robots": "noindex, nofollow",
+      "sample": [
+        "13-dush",
+        "1975-god-izmenivshiy-ameriku",
+        "24-chasa",
+        "33-dnya",
+        "40-dney-2"
+      ]
+    },
+    "dorama": {
+      "status": 200,
+      "count_slugs": 48,
+      "h1": "дорама",
+      "active": true,
+      "artifact": "525443ff7fd35bfd01859d3baaae90cdb14e63b620dede0cbe11a3b023730f13",
+      "robots": "noindex, nofollow",
+      "sample": [
+        "1-11-vremya-dlya-vstrechi-s-toboy",
+        "100-dney-do-proschaniya-dorogoy",
+        "100-prichin-ne-byt-imperatorom",
+        "102-predlozhenie-ruki-i-serdca",
+        "21-den"
+      ]
+    },
+    "drama": {
+      "status": 200,
+      "count_slugs": 48,
+      "h1": "драма",
+      "active": true,
+      "artifact": "525443ff7fd35bfd01859d3baaae90cdb14e63b620dede0cbe11a3b023730f13",
+      "robots": "noindex, nofollow",
+      "sample": [
+        "13-dush",
+        "24-chasa",
+        "40-dney-2",
+        "6-dney",
+        "a-potom-sluchaetsya-zhizn"
+      ]
+    },
+    "comedy": {
+      "status": 200,
+      "count_slugs": 48,
+      "h1": "комедия",
+      "active": true,
+      "artifact": "525443ff7fd35bfd01859d3baaae90cdb14e63b620dede0cbe11a3b023730f13",
+      "robots": "noindex, nofollow",
+      "sample": [
+        "a-potom-sel",
+        "adel-nepravednyy",
+        "adskiy-skeyt",
+        "aida-vozvraschaetsya",
+        "aktivy"
+      ]
+    },
+    "triller": {
+      "status": 200,
+      "count_slugs": 48,
+      "h1": "триллер",
+      "active": true,
+      "artifact": "525443ff7fd35bfd01859d3baaae90cdb14e63b620dede0cbe11a3b023730f13",
+      "robots": "noindex, nofollow",
+      "sample": [
+        "ad-v-rayckom-ugolke",
+        "aktivy",
+        "akuly-v-prage",
+        "amerikanskiy-zasov",
+        "anatomiya-odnogo-mgnoveniya"
+      ]
+    }
+  },
+  "genre_pairs": {
+    "west_content|dorama": {
+      "inter": 1,
+      "a": 48,
+      "b": 48,
+      "equal": false
+    },
+    "west_content|drama": {
+      "inter": 18,
+      "a": 48,
+      "b": 48,
+      "equal": false
+    },
+    "west_content|comedy": {
+      "inter": 9,
+      "a": 48,
+      "b": 48,
+      "equal": false
+    },
+    "west_content|triller": {
+      "inter": 6,
+      "a": 48,
+      "b": 48,
+      "equal": false
+    },
+    "dorama|drama": {
+      "inter": 0,
+      "a": 48,
+      "b": 48,
+      "equal": false
+    },
+    "dorama|comedy": {
+      "inter": 0,
+      "a": 48,
+      "b": 48,
+      "equal": false
+    },
+    "dorama|triller": {
+      "inter": 0,
+      "a": 48,
+      "b": 48,
+      "equal": false
+    },
+    "drama|comedy": {
+      "inter": 6,
+      "a": 48,
+      "b": 48,
+      "equal": false
+    },
+    "drama|triller": {
+      "inter": 7,
+      "a": 48,
+      "b": 48,
+      "equal": false
+    },
+    "comedy|triller": {
+      "inter": 1,
+      "a": 48,
+      "b": 48,
+      "equal": false
+    }
+  },
+  "player_samples": [
+    {
+      "kind": "movie_playable",
+      "url": "https://zonafilm.space/title/aida-vozvraschaetsya/",
+      "status": 200,
+      "state": "resolving",
+      "aggregator": "kp",
+      "title_id_present": true,
+      "connected_label": false,
+      "video_player": true,
+      "artifact": "525443ff7fd35bfd01859d3baaae90cdb14e63b620dede0cbe11a3b023730f13",
+      "honest_unavailable": false,
+      "resolving_ok": true
+    },
+    {
+      "kind": "movie_nosource",
+      "url": "https://zonafilm.space/title/imperiya-artura/",
+      "status": 200,
+      "state": "resolving",
+      "aggregator": "cvh",
+      "title_id_present": true,
+      "connected_label": false,
+      "video_player": true,
+      "artifact": "525443ff7fd35bfd01859d3baaae90cdb14e63b620dede0cbe11a3b023730f13",
+      "honest_unavailable": false,
+      "resolving_ok": true
+    },
+    {
+      "kind": "movie_kp",
+      "url": "https://zonafilm.space/title/007-koordinaty-skayfoll/",
+      "status": 200,
+      "state": "resolving",
+      "aggregator": "kp",
+      "title_id_present": true,
+      "connected_label": false,
+      "video_player": true,
+      "artifact": "525443ff7fd35bfd01859d3baaae90cdb14e63b620dede0cbe11a3b023730f13",
+      "honest_unavailable": false,
+      "resolving_ok": true
+    },
+    {
+      "kind": "movie_2",
+      "url": "https://zonafilm.space/title/007-spektr/",
+      "status": 200,
+      "state": "resolving",
+      "aggregator": "kp",
+      "title_id_present": true,
+      "connected_label": false,
+      "video_player": true,
+      "artifact": "525443ff7fd35bfd01859d3baaae90cdb14e63b620dede0cbe11a3b023730f13",
+      "honest_unavailable": false,
+      "resolving_ok": true
+    },
+    {
+      "kind": "series_hub",
+      "url": "https://zonafilm.space/title/1999-otdel-protivodeystviya-okkultizmu/",
+      "status": 200,
+      "state": "resolving",
+      "aggregator": "mali",
+      "title_id_present": true,
+      "connected_label": false,
+      "video_player": true,
+      "artifact": "525443ff7fd35bfd01859d3baaae90cdb14e63b620dede0cbe11a3b023730f13",
+      "honest_unavailable": false,
+      "resolving_ok": true
+    },
+    {
+      "kind": "series_ep_ok",
+      "url": "https://zonafilm.space/title/1999-otdel-protivodeystviya-okkultizmu/season-1/episode-1/",
+      "status": 200,
+      "state": "resolving",
+      "aggregator": "mali",
+      "title_id_present": true,
+      "connected_label": false,
+      "video_player": true,
+      "artifact": "525443ff7fd35bfd01859d3baaae90cdb14e63b620dede0cbe11a3b023730f13",
+      "honest_unavailable": false,
+      "resolving_ok": true
+    },
+    {
+      "kind": "series_ep_bad",
+      "url": "https://zonafilm.space/title/1999-otdel-protivodeystviya-okkultizmu/season-1/episode-12/",
+      "status": 200,
+      "state": "unavailable",
+      "aggregator": null,
+      "title_id_present": false,
+      "connected_label": false,
+      "video_player": false,
+      "artifact": "525443ff7fd35bfd01859d3baaae90cdb14e63b620dede0cbe11a3b023730f13",
+      "honest_unavailable": true,
+      "resolving_ok": false
+    },
+    {
+      "kind": "series_hub2",
+      "url": "https://zonafilm.space/title/anna-pidzhen/",
+      "status": 200,
+      "state": "resolving",
+      "aggregator": "kp",
+      "title_id_present": true,
+      "connected_label": false,
+      "video_player": true,
+      "artifact": "525443ff7fd35bfd01859d3baaae90cdb14e63b620dede0cbe11a3b023730f13",
+      "honest_unavailable": false,
+      "resolving_ok": true
+    },
+    {
+      "kind": "series_ep2",
+      "url": "https://zonafilm.space/title/anna-pidzhen/season-1/episode-1/",
+      "status": 200,
+      "state": "resolving",
+      "aggregator": "kp",
+      "title_id_present": true,
+      "connected_label": false,
+      "video_player": true,
+      "artifact": "525443ff7fd35bfd01859d3baaae90cdb14e63b620dede0cbe11a3b023730f13",
+      "honest_unavailable": false,
+      "resolving_ok": true
+    },
+    {
+      "kind": "movie_3",
+      "url": "https://zonafilm.space/title/0-0-mgc/",
+      "status": 200,
+      "state": "resolving",
+      "aggregator": "kp",
+      "title_id_present": true,
+      "connected_label": false,
+      "video_player": true,
+      "artifact": "525443ff7fd35bfd01859d3baaae90cdb14e63b620dede0cbe11a3b023730f13",
+      "honest_unavailable": false,
+      "resolving_ok": true
+    },
+    {
+      "kind": "movie_4",
+      "url": "https://zonafilm.space/title/03-34-zemletryasenie-v-chili/",
+      "status": 200,
+      "state": "resolving",
+      "aggregator": "kp",
+      "title_id_present": true,
+      "connected_label": false,
+      "video_player": true,
+      "artifact": "525443ff7fd35bfd01859d3baaae90cdb14e63b620dede0cbe11a3b023730f13",
+      "honest_unavailable": false,
+      "resolving_ok": true
+    },
+    {
+      "kind": "series_gap_hub",
+      "url": "https://zonafilm.space/title/anonimnoe-pogruzhenie/",
+      "status": 200,
+      "state": "resolving",
+      "aggregator": "mdl",
+      "title_id_present": true,
+      "connected_label": false,
+      "video_player": true,
+      "artifact": "525443ff7fd35bfd01859d3baaae90cdb14e63b620dede0cbe11a3b023730f13",
+      "honest_unavailable": false,
+      "resolving_ok": true
+    }
+  ],
+  "neighbors": {
+    "lords": {
+      "status": 200,
+      "family": "lords",
+      "build": "20260913T2300Z-8ececc6c-nova",
+      "artifact": "a51dade469321e3078b8a7eee124e5ac936f286a33c28f327368bfbfabb85346",
+      "zona_marker": false
+    },
+    "animedia-org": {
+      "status": 200,
+      "family": "yummy",
+      "build": "20260911T151617Z-b8d02371-yummy",
+      "artifact": "98c6e704b17deb62f385cd4b2f612a859215348da68b73c678e4c4aed5383fe8",
+      "zona_marker": false
+    },
+    "animedia-site": {
+      "status": 200,
+      "family": "yummy",
+      "build": "20260911T151617Z-b8d02371-yummy",
+      "artifact": "98c6e704b17deb62f385cd4b2f612a859215348da68b73c678e4c4aed5383fe8",
+      "zona_marker": false
+    }
+  },
+  "robots": {
+    "status": 200,
+    "body": "User-agent: *\nDisallow: /\n",
+    "disallow": true
+  }
+}

@@ -1,0 +1,956 @@
+{
+  "PLAYER_SAMPLE_TOTAL": 12,
+  "PLAYER_PLAYABLE_PASS": 10,
+  "PLAYER_HONEST_UNAVAILABLE": 1,
+  "PLAYER_FALLBACK_RECOVERED": 0,
+  "PLAYER_FAILURES": 1,
+  "results": [
+    {
+      "label": "aida",
+      "url": "https://zonafilm.space/title/aida-vozvraschaetsya/",
+      "http": 200,
+      "ssr": {
+        "state": "resolving",
+        "agg": "kp",
+        "tid": "11922371",
+        "hasVP": true,
+        "label": "подключение источника",
+        "connected": false
+      },
+      "z": {
+        "noData": false,
+        "ready": null,
+        "events": []
+      },
+      "state": "resolving",
+      "video_hits": [
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/14628861336170"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/7594804075028"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/16668083575399"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/18029965957854"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/18029965957854"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/9525819365922"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/9485139729091"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/10368622484093"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/15537406630576"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/7594925251092"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        }
+      ],
+      "other_api": [
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist"
+        }
+      ],
+      "err4": [],
+      "frames": 2,
+      "final": {
+        "state": "resolving",
+        "hidden": false,
+        "z": {
+          "noData": false,
+          "ready": null,
+          "events": []
+        },
+        "iframe": true
+      },
+      "class": "PLAYABLE_PASS"
+    },
+    {
+      "label": "skyfall",
+      "url": "https://zonafilm.space/title/007-koordinaty-skayfoll/",
+      "http": 200,
+      "ssr": {
+        "state": "resolving",
+        "agg": "kp",
+        "tid": "408871",
+        "hasVP": true,
+        "label": "подключение источника",
+        "connected": false
+      },
+      "z": {
+        "noData": false,
+        "ready": null,
+        "events": []
+      },
+      "state": "resolving",
+      "video_hits": [
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/7594804075028"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/16668083575399"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/18029965957854"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/18029965957854"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/9525819365922"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/9485139729091"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/10368622484093"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/15537406630576"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/7594925251092"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        }
+      ],
+      "other_api": [
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist"
+        }
+      ],
+      "err4": [],
+      "frames": 2,
+      "final": {
+        "state": "resolving",
+        "hidden": false,
+        "z": {
+          "noData": false,
+          "ready": null,
+          "events": []
+        },
+        "iframe": true
+      },
+      "class": "PLAYABLE_PASS"
+    },
+    {
+      "label": "imperiya",
+      "url": "https://zonafilm.space/title/imperiya-artura/",
+      "http": 200,
+      "ssr": {
+        "state": "resolving",
+        "agg": "cvh",
+        "tid": "01a07a80-894b-72e5-96e4-8880e4a139a0",
+        "hasVP": true,
+        "label": "подключение источника",
+        "connected": false
+      },
+      "z": {
+        "noData": false,
+        "ready": null,
+        "events": []
+      },
+      "state": "resolving",
+      "video_hits": [
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/16668083575399"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/18029965957854"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/18029965957854"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/9525819365922"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/9485139729091"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/10368622484093"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/15537406630576"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/7594925251092"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        }
+      ],
+      "other_api": [
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist"
+        }
+      ],
+      "err4": [],
+      "frames": 2,
+      "final": {
+        "state": "resolving",
+        "hidden": false,
+        "z": {
+          "noData": false,
+          "ready": null,
+          "events": []
+        },
+        "iframe": true
+      },
+      "class": "PLAYABLE_PASS"
+    },
+    {
+      "label": "ep_ok",
+      "url": "https://zonafilm.space/title/anna-pidzhen/season-1/episode-1/",
+      "http": 200,
+      "ssr": {
+        "state": "resolving",
+        "agg": "kp",
+        "tid": "13403249",
+        "hasVP": true,
+        "label": "подключение источника",
+        "connected": false
+      },
+      "z": {
+        "noData": false,
+        "ready": null,
+        "events": []
+      },
+      "state": "resolving",
+      "video_hits": [
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/18029965957854"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/18029965957854"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/9525819365922"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/9485139729091"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/10368622484093"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/15537406630576"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/7594925251092"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        }
+      ],
+      "other_api": [
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist"
+        }
+      ],
+      "err4": [],
+      "frames": 2,
+      "final": {
+        "state": "resolving",
+        "hidden": false,
+        "z": {
+          "noData": false,
+          "ready": null,
+          "events": []
+        },
+        "iframe": true
+      },
+      "class": "PLAYABLE_PASS"
+    },
+    {
+      "label": "ep_bad",
+      "url": "https://zonafilm.space/title/1999-otdel-protivodeystviya-okkultizmu/season-1/episode-12/",
+      "http": 200,
+      "ssr": {
+        "state": "unavailable",
+        "agg": null,
+        "tid": null,
+        "hasVP": false,
+        "label": "серия без дорожки",
+        "connected": false
+      },
+      "class": "HONEST_UNAVAILABLE",
+      "video_hits": [
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/18029965957854"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/9525819365922"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/9485139729091"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/10368622484093"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/15537406630576"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/7594925251092"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        }
+      ]
+    },
+    {
+      "label": "series_hub",
+      "url": "https://zonafilm.space/title/anna-pidzhen/",
+      "http": 200,
+      "ssr": {
+        "state": "resolving",
+        "agg": "kp",
+        "tid": "13403249",
+        "hasVP": true,
+        "label": "подключение источника",
+        "connected": false
+      },
+      "z": {
+        "noData": false,
+        "ready": null,
+        "events": []
+      },
+      "state": "resolving",
+      "video_hits": [
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/18029965957854"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/9525819365922"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/9485139729091"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/10368622484093"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/15537406630576"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/7594925251092"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        }
+      ],
+      "other_api": [
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist"
+        }
+      ],
+      "err4": [],
+      "frames": 2,
+      "final": {
+        "state": "resolving",
+        "hidden": false,
+        "z": {
+          "noData": false,
+          "ready": null,
+          "events": []
+        },
+        "iframe": true
+      },
+      "class": "PLAYABLE_PASS"
+    },
+    {
+      "label": "mira",
+      "url": "https://zonafilm.space/title/0-1-mira/",
+      "http": 200,
+      "ssr": {
+        "state": "resolving",
+        "agg": "kp",
+        "tid": "4862171",
+        "hasVP": true,
+        "label": "подключение источника",
+        "connected": false
+      },
+      "z": {
+        "noData": false,
+        "ready": null,
+        "events": []
+      },
+      "state": "resolving",
+      "video_hits": [
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/9525819365922"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/9485139729091"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/10368622484093"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/15537406630576"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/7594925251092"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        }
+      ],
+      "other_api": [
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist"
+        }
+      ],
+      "err4": [],
+      "frames": 2,
+      "final": {
+        "state": "resolving",
+        "hidden": false,
+        "z": {
+          "noData": false,
+          "ready": null,
+          "events": []
+        },
+        "iframe": true
+      },
+      "class": "PLAYABLE_PASS"
+    },
+    {
+      "label": "mgc",
+      "url": "https://zonafilm.space/title/0-0-mgc/",
+      "http": 200,
+      "ssr": {
+        "state": "resolving",
+        "agg": "kp",
+        "tid": "1171952",
+        "hasVP": true,
+        "label": "подключение источника",
+        "connected": false
+      },
+      "z": {
+        "noData": false,
+        "ready": null,
+        "events": []
+      },
+      "state": "resolving",
+      "video_hits": [
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/9485139729091"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/10368622484093"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/15537406630576"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/7594925251092"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        }
+      ],
+      "other_api": [
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist"
+        }
+      ],
+      "err4": [],
+      "frames": 2,
+      "final": {
+        "state": "resolving",
+        "hidden": false,
+        "z": {
+          "noData": false,
+          "ready": null,
+          "events": []
+        },
+        "iframe": true
+      },
+      "class": "PLAYABLE_PASS"
+    },
+    {
+      "label": "chile",
+      "url": "https://zonafilm.space/title/03-34-zemletryasenie-v-chili/",
+      "http": 200,
+      "ssr": {
+        "state": "resolving",
+        "agg": "kp",
+        "tid": "622830",
+        "hasVP": true,
+        "label": "подключение источника",
+        "connected": false
+      },
+      "z": {
+        "noData": false,
+        "ready": null,
+        "events": []
+      },
+      "state": "resolving",
+      "video_hits": [
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/10368622484093"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/15537406630576"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/7594925251092"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        }
+      ],
+      "other_api": [
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist"
+        }
+      ],
+      "err4": [],
+      "frames": 2,
+      "final": {
+        "state": "resolving",
+        "hidden": false,
+        "z": {
+          "noData": false,
+          "ready": null,
+          "events": []
+        },
+        "iframe": true
+      },
+      "class": "PLAYABLE_PASS"
+    },
+    {
+      "label": "occ_ep1",
+      "url": "https://zonafilm.space/title/1999-otdel-protivodeystviya-okkultizmu/season-1/episode-1/",
+      "http": 200,
+      "ssr": {
+        "state": "resolving",
+        "agg": "mali",
+        "tid": "64724",
+        "hasVP": true,
+        "label": "подключение источника",
+        "connected": false
+      },
+      "z": {
+        "noData": false,
+        "ready": null,
+        "events": []
+      },
+      "state": "resolving",
+      "video_hits": [
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/15537406630576"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        },
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/7594925251092"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        }
+      ],
+      "other_api": [
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist"
+        }
+      ],
+      "err4": [],
+      "frames": 2,
+      "final": {
+        "state": "resolving",
+        "hidden": false,
+        "z": {
+          "noData": false,
+          "ready": null,
+          "events": []
+        },
+        "iframe": true
+      },
+      "class": "PLAYABLE_PASS"
+    },
+    {
+      "label": "anon_ep",
+      "url": "https://zonafilm.space/title/anonimnoe-pogruzhenie/season-2/episode-1/",
+      "http": 404,
+      "ssr": {
+        "state": null,
+        "agg": null,
+        "tid": null,
+        "hasVP": false,
+        "label": "",
+        "connected": false
+      },
+      "z": {
+        "noData": false,
+        "ready": null,
+        "events": []
+      },
+      "state": null,
+      "video_hits": [
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/7594925251092"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        }
+      ],
+      "other_api": [],
+      "err4": [],
+      "frames": 1,
+      "final": {
+        "state": null,
+        "hidden": null,
+        "z": {
+          "noData": false,
+          "ready": null,
+          "events": []
+        },
+        "iframe": false
+      },
+      "class": "FAILURE"
+    },
+    {
+      "label": "spectrum",
+      "url": "https://zonafilm.space/title/007-spektr/",
+      "http": 200,
+      "ssr": {
+        "state": "resolving",
+        "agg": "kp",
+        "tid": "678552",
+        "hasVP": true,
+        "label": "подключение источника",
+        "connected": false
+      },
+      "z": {
+        "noData": false,
+        "ready": null,
+        "events": []
+      },
+      "state": "resolving",
+      "video_hits": [
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/7594925251092"
+        },
+        {
+          "status": 200,
+          "url": "https://iv.okcdn.ru/videoPreview"
+        }
+      ],
+      "other_api": [
+        {
+          "status": 200,
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist"
+        }
+      ],
+      "err4": [],
+      "frames": 2,
+      "final": {
+        "state": "resolving",
+        "hidden": false,
+        "z": {
+          "noData": false,
+          "ready": null,
+          "events": []
+        },
+        "iframe": true
+      },
+      "class": "PLAYABLE_PASS"
+    }
+  ]
+}

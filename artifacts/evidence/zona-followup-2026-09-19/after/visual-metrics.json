@@ -1,0 +1,559 @@
+{
+  "viewports": {
+    "d1440": {
+      "home": {
+        "cards": {
+          "count": 24,
+          "maxDelta": 0,
+          "overflow": 0,
+          "scrollWidth": 1440,
+          "clientWidth": 1440,
+          "sampleWidths": [
+            216
+          ]
+        },
+        "title": {},
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/d1440-home.png"
+      },
+      "catalog": {
+        "cards": {
+          "count": 24,
+          "maxDelta": 0,
+          "overflow": 0,
+          "scrollWidth": 1440,
+          "clientWidth": 1440,
+          "sampleWidths": [
+            177
+          ]
+        },
+        "title": {},
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/d1440-catalog.png"
+      },
+      "genre-dorama": {
+        "cards": {
+          "count": 24,
+          "maxDelta": 0,
+          "overflow": 0,
+          "scrollWidth": 1440,
+          "clientWidth": 1440,
+          "sampleWidths": [
+            177
+          ]
+        },
+        "title": {},
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/d1440-genre-dorama.png"
+      },
+      "search": {
+        "cards": {
+          "count": 12,
+          "maxDelta": 0,
+          "overflow": 0,
+          "scrollWidth": 1440,
+          "clientWidth": 1440,
+          "sampleWidths": [
+            177
+          ]
+        },
+        "title": {},
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/d1440-search.png"
+      },
+      "aida": {
+        "cards": {
+          "count": 6,
+          "maxDelta": 0,
+          "overflow": 0,
+          "scrollWidth": 1440,
+          "clientWidth": 1440,
+          "sampleWidths": [
+            171
+          ]
+        },
+        "title": {
+          "playerTop": 526,
+          "playerExists": true,
+          "state": null,
+          "railWidth": 1320,
+          "adEnabled": "0",
+          "adDisplay": "none",
+          "titleLayout": true,
+          "overflow": 0
+        },
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/d1440-aida.png"
+      },
+      "imperiya": {
+        "cards": {
+          "count": 6,
+          "maxDelta": 0,
+          "overflow": 0,
+          "scrollWidth": 1440,
+          "clientWidth": 1440,
+          "sampleWidths": [
+            171
+          ]
+        },
+        "title": {
+          "playerTop": 526,
+          "playerExists": true,
+          "state": null,
+          "railWidth": 1320,
+          "adEnabled": "0",
+          "adDisplay": "none",
+          "titleLayout": true,
+          "overflow": 0
+        },
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/d1440-imperiya.png"
+      },
+      "series-hub": {
+        "cards": {
+          "count": 6,
+          "maxDelta": 0,
+          "overflow": 0,
+          "scrollWidth": 1440,
+          "clientWidth": 1440,
+          "sampleWidths": [
+            171
+          ]
+        },
+        "title": {
+          "playerTop": 526,
+          "playerExists": true,
+          "state": null,
+          "railWidth": 1320,
+          "adEnabled": "0",
+          "adDisplay": "none",
+          "titleLayout": true,
+          "overflow": 0
+        },
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/d1440-series-hub.png"
+      },
+      "episode": {
+        "cards": {
+          "count": 0
+        },
+        "title": {
+          "playerTop": 213,
+          "playerExists": true,
+          "state": null,
+          "railWidth": null,
+          "adEnabled": null,
+          "adDisplay": null,
+          "titleLayout": false,
+          "overflow": 0
+        },
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/d1440-episode.png"
+      }
+    },
+    "t768": {
+      "home": {
+        "cards": {
+          "count": 24,
+          "maxDelta": 0,
+          "overflow": 0,
+          "scrollWidth": 768,
+          "clientWidth": 768,
+          "sampleWidths": [
+            180
+          ]
+        },
+        "title": {},
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/t768-home.png"
+      },
+      "catalog": {
+        "cards": {
+          "count": 24,
+          "maxDelta": 0,
+          "overflow": 0,
+          "scrollWidth": 768,
+          "clientWidth": 768,
+          "sampleWidths": [
+            225
+          ]
+        },
+        "title": {},
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/t768-catalog.png"
+      },
+      "genre-dorama": {
+        "cards": {
+          "count": 24,
+          "maxDelta": 0,
+          "overflow": 0,
+          "scrollWidth": 768,
+          "clientWidth": 768,
+          "sampleWidths": [
+            225
+          ]
+        },
+        "title": {},
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/t768-genre-dorama.png"
+      },
+      "search": {
+        "cards": {
+          "count": 12,
+          "maxDelta": 0,
+          "overflow": 0,
+          "scrollWidth": 768,
+          "clientWidth": 768,
+          "sampleWidths": [
+            225
+          ]
+        },
+        "title": {},
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/t768-search.png"
+      },
+      "aida": {
+        "cards": {
+          "count": 6,
+          "maxDelta": 0,
+          "overflow": 0,
+          "scrollWidth": 768,
+          "clientWidth": 768,
+          "sampleWidths": [
+            215
+          ]
+        },
+        "title": {
+          "playerTop": 1090,
+          "playerExists": true,
+          "state": null,
+          "railWidth": 704,
+          "adEnabled": "0",
+          "adDisplay": "none",
+          "titleLayout": true,
+          "overflow": 0
+        },
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/t768-aida.png"
+      },
+      "imperiya": {
+        "cards": {
+          "count": 6,
+          "maxDelta": 0,
+          "overflow": 0,
+          "scrollWidth": 768,
+          "clientWidth": 768,
+          "sampleWidths": [
+            215
+          ]
+        },
+        "title": {
+          "playerTop": 1087,
+          "playerExists": true,
+          "state": null,
+          "railWidth": 704,
+          "adEnabled": "0",
+          "adDisplay": "none",
+          "titleLayout": true,
+          "overflow": 0
+        },
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/t768-imperiya.png"
+      },
+      "series-hub": {
+        "cards": {
+          "count": 6,
+          "maxDelta": 0,
+          "overflow": 0,
+          "scrollWidth": 768,
+          "clientWidth": 768,
+          "sampleWidths": [
+            215
+          ]
+        },
+        "title": {
+          "playerTop": 1146,
+          "playerExists": true,
+          "state": null,
+          "railWidth": 704,
+          "adEnabled": "0",
+          "adDisplay": "none",
+          "titleLayout": true,
+          "overflow": 0
+        },
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/t768-series-hub.png"
+      },
+      "episode": {
+        "cards": {
+          "count": 0
+        },
+        "title": {
+          "playerTop": 309,
+          "playerExists": true,
+          "state": null,
+          "railWidth": null,
+          "adEnabled": null,
+          "adDisplay": null,
+          "titleLayout": false,
+          "overflow": 0
+        },
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/t768-episode.png"
+      }
+    },
+    "m390": {
+      "home": {
+        "cards": {
+          "count": 24,
+          "maxDelta": 0,
+          "overflow": 0,
+          "scrollWidth": 390,
+          "clientWidth": 390,
+          "sampleWidths": [
+            148
+          ]
+        },
+        "title": {},
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/m390-home.png"
+      },
+      "catalog": {
+        "cards": {
+          "count": 24,
+          "maxDelta": 0,
+          "overflow": 0,
+          "scrollWidth": 390,
+          "clientWidth": 390,
+          "sampleWidths": [
+            156
+          ]
+        },
+        "title": {},
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/m390-catalog.png"
+      },
+      "genre-dorama": {
+        "cards": {
+          "count": 24,
+          "maxDelta": 0,
+          "overflow": 0,
+          "scrollWidth": 390,
+          "clientWidth": 390,
+          "sampleWidths": [
+            156
+          ]
+        },
+        "title": {},
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/m390-genre-dorama.png"
+      },
+      "search": {
+        "cards": {
+          "count": 12,
+          "maxDelta": 0,
+          "overflow": 0,
+          "scrollWidth": 390,
+          "clientWidth": 390,
+          "sampleWidths": [
+            156
+          ]
+        },
+        "title": {},
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/m390-search.png"
+      },
+      "aida": {
+        "cards": {
+          "count": 6,
+          "maxDelta": 0,
+          "overflow": 0,
+          "scrollWidth": 390,
+          "clientWidth": 390,
+          "sampleWidths": [
+            140
+          ]
+        },
+        "title": {
+          "playerTop": 1085,
+          "playerExists": true,
+          "state": null,
+          "railWidth": 326,
+          "adEnabled": "0",
+          "adDisplay": "none",
+          "titleLayout": true,
+          "overflow": 0
+        },
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/m390-aida.png"
+      },
+      "imperiya": {
+        "cards": {
+          "count": 6,
+          "maxDelta": 0,
+          "overflow": 0,
+          "scrollWidth": 390,
+          "clientWidth": 390,
+          "sampleWidths": [
+            140
+          ]
+        },
+        "title": {
+          "playerTop": 1128,
+          "playerExists": true,
+          "state": null,
+          "railWidth": 326,
+          "adEnabled": "0",
+          "adDisplay": "none",
+          "titleLayout": true,
+          "overflow": 0
+        },
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/m390-imperiya.png"
+      },
+      "series-hub": {
+        "cards": {
+          "count": 6,
+          "maxDelta": 0,
+          "overflow": 0,
+          "scrollWidth": 390,
+          "clientWidth": 390,
+          "sampleWidths": [
+            140
+          ]
+        },
+        "title": {
+          "playerTop": 1230,
+          "playerExists": true,
+          "state": null,
+          "railWidth": 326,
+          "adEnabled": "0",
+          "adDisplay": "none",
+          "titleLayout": true,
+          "overflow": 0
+        },
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/m390-series-hub.png"
+      },
+      "episode": {
+        "cards": {
+          "count": 0
+        },
+        "title": {
+          "playerTop": 386,
+          "playerExists": true,
+          "state": null,
+          "railWidth": null,
+          "adEnabled": null,
+          "adDisplay": null,
+          "titleLayout": false,
+          "overflow": 0
+        },
+        "shot": "/home/claude/wt-zona-finalization-01/artifacts/evidence/zona-followup-2026-09-19/screenshots/m390-episode.png"
+      }
+    }
+  },
+  "playback": [
+    {
+      "label": "aida",
+      "clicked": true,
+      "state_before": "resolving",
+      "state_after": "ok",
+      "errors": [],
+      "playing_signal": true,
+      "provider_hidden": false,
+      "state_mid": "ok",
+      "click_detail": {
+        "ok": true,
+        "tag": "DIALOG",
+        "cls": "vk-player-dialog"
+      },
+      "probe": {
+        "state": "ok",
+        "hasVideo": false,
+        "currentTime": 0,
+        "paused": null,
+        "iframe": true,
+        "stateHidden": true,
+        "hostHidden": false,
+        "shadow": true
+      }
+    },
+    {
+      "label": "skyfall",
+      "clicked": true,
+      "state_before": "resolving",
+      "state_after": "ok",
+      "errors": [],
+      "playing_signal": true,
+      "provider_hidden": false,
+      "state_mid": "ok",
+      "click_detail": {
+        "ok": true,
+        "tag": "DIALOG",
+        "cls": "vk-player-dialog"
+      },
+      "probe": {
+        "state": "ok",
+        "hasVideo": false,
+        "currentTime": 0,
+        "paused": null,
+        "iframe": true,
+        "stateHidden": true,
+        "hostHidden": false,
+        "shadow": true
+      }
+    },
+    {
+      "label": "imperiya",
+      "clicked": true,
+      "state_before": "resolving",
+      "state_after": "ok",
+      "errors": [],
+      "playing_signal": true,
+      "provider_hidden": false,
+      "state_mid": "ok",
+      "click_detail": {
+        "ok": true,
+        "tag": "DIALOG",
+        "cls": "vk-player-dialog"
+      },
+      "probe": {
+        "state": "ok",
+        "hasVideo": false,
+        "currentTime": 0,
+        "paused": null,
+        "iframe": true,
+        "stateHidden": true,
+        "hostHidden": false,
+        "shadow": true
+      }
+    },
+    {
+      "label": "ep_ok",
+      "clicked": true,
+      "state_before": "resolving",
+      "state_after": "ok",
+      "errors": [],
+      "playing_signal": true,
+      "provider_hidden": false,
+      "state_mid": "ok",
+      "click_detail": {
+        "ok": true,
+        "tag": "DIALOG",
+        "cls": "vk-player-dialog"
+      },
+      "probe": {
+        "state": "ok",
+        "hasVideo": false,
+        "currentTime": 0,
+        "paused": null,
+        "iframe": true,
+        "stateHidden": true,
+        "hostHidden": false,
+        "shadow": true
+      }
+    },
+    {
+      "label": "ep_bad",
+      "clicked": false,
+      "state_before": "unavailable",
+      "state_after": "unavailable",
+      "errors": [],
+      "playing_signal": false,
+      "provider_hidden": false,
+      "state_mid": "unavailable",
+      "click_detail": {
+        "ok": false,
+        "reason": "no-host"
+      },
+      "probe": {
+        "state": "unavailable",
+        "hasVideo": false,
+        "currentTime": 0,
+        "paused": null,
+        "iframe": false,
+        "stateHidden": false,
+        "hostHidden": null,
+        "shadow": false
+      }
+    }
+  ]
+}

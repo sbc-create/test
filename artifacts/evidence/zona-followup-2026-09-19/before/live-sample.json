@@ -1,0 +1,38 @@
+{
+  "/": {
+    "status": 200,
+    "build": "20260919T143500Z-2d6d1695-nova",
+    "artifact": "14ce882d5ad4a70769f1fa054288833ef7cd408d8d5d79ef8a5b62884c8b7593",
+    "source": "bcbea00877708c7f930f1fe931a17f66decafed5",
+    "state": null,
+    "aggregator": null,
+    "connected_label": false,
+    "kp_title": false,
+    "ztitle": false,
+    "zgenres": false
+  },
+  "/title/aida-vozvraschaetsya/": {
+    "status": 200,
+    "build": "20260919T143500Z-2d6d1695-nova",
+    "artifact": "14ce882d5ad4a70769f1fa054288833ef7cd408d8d5d79ef8a5b62884c8b7593",
+    "source": "bcbea00877708c7f930f1fe931a17f66decafed5",
+    "state": "playable",
+    "aggregator": "cvh",
+    "connected_label": true,
+    "kp_title": false,
+    "ztitle": false,
+    "zgenres": false
+  },
+  "/title/imperiya-artura/": {
+    "status": 200,
+    "build": "20260919T143500Z-2d6d1695-nova",
+    "artifact": "14ce882d5ad4a70769f1fa054288833ef7cd408d8d5d79ef8a5b62884c8b7593",
+    "source": "bcbea00877708c7f930f1fe931a17f66decafed5",
+    "state": "playable",
+    "aggregator": "cvh",
+    "connected_label": true,
+    "kp_title": false,
+    "ztitle": false,
+    "zgenres": false
+  }
+}

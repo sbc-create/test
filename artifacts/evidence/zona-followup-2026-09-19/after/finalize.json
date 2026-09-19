@@ -1,0 +1,65 @@
+{
+  "rollback": "/srv/lords/.frontend/.rollback/20260919T151916Z-zona-01-followup",
+  "artifact_sha": "5cbd0eb79395f971eea021c08cac0816c4194d79cf76f288835ceb9fd6d5b7d8",
+  "manifest": {
+    "schema_version": 1,
+    "template_family": "zona",
+    "design_version": "1.2.0",
+    "source_commit": "5906cde39dfc3a18dd6c4b86440e92b905bbfebc",
+    "runtime_commit": "5906cde39dfc3a18dd6c4b86440e92b905bbfebc",
+    "build_id": "20260919T151916Z-5906cde3-nova",
+    "artifact_sha256": "5cbd0eb79395f971eea021c08cac0816c4194d79cf76f288835ceb9fd6d5b7d8",
+    "profile": "zona-general",
+    "built_at": "2026-09-19T15:19:16Z"
+  },
+  "checks": {
+    "/healthz": {
+      "status": 200,
+      "build": "20260919T151916Z-5906cde3-nova",
+      "artifact": "5cbd0eb79395f971eea021c08cac0816c4194d79cf76f288835ceb9fd6d5b7d8",
+      "source": "5906cde39dfc3a18dd6c4b86440e92b905bbfebc",
+      "robots": "noindex, nofollow",
+      "has_resolving_or_ready": false,
+      "kp_preferred": null,
+      "connected_false_positive": false,
+      "ztitle": false,
+      "zgenres": false
+    },
+    "/": {
+      "status": 200,
+      "build": "20260919T151916Z-5906cde3-nova",
+      "artifact": "5cbd0eb79395f971eea021c08cac0816c4194d79cf76f288835ceb9fd6d5b7d8",
+      "source": "5906cde39dfc3a18dd6c4b86440e92b905bbfebc",
+      "robots": "noindex, nofollow",
+      "has_resolving_or_ready": true,
+      "kp_preferred": null,
+      "connected_false_positive": false,
+      "ztitle": false,
+      "zgenres": true
+    },
+    "/title/aida-vozvraschaetsya/": {
+      "status": 200,
+      "build": "20260919T151916Z-5906cde3-nova",
+      "artifact": "5cbd0eb79395f971eea021c08cac0816c4194d79cf76f288835ceb9fd6d5b7d8",
+      "source": "5906cde39dfc3a18dd6c4b86440e92b905bbfebc",
+      "robots": "noindex, nofollow",
+      "has_resolving_or_ready": true,
+      "kp_preferred": true,
+      "connected_false_positive": false,
+      "ztitle": true,
+      "zgenres": false
+    },
+    "/movies/": {
+      "status": 200,
+      "build": "20260919T151916Z-5906cde3-nova",
+      "artifact": "5cbd0eb79395f971eea021c08cac0816c4194d79cf76f288835ceb9fd6d5b7d8",
+      "source": "5906cde39dfc3a18dd6c4b86440e92b905bbfebc",
+      "robots": "noindex, nofollow",
+      "has_resolving_or_ready": true,
+      "kp_preferred": null,
+      "connected_false_positive": false,
+      "ztitle": false,
+      "zgenres": false
+    }
+  }
+}

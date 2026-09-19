@@ -1,0 +1,197 @@
+{
+  "PLAYER_SAMPLE_TOTAL": 8,
+  "PLAYER_PLAYABLE_PASS": 0,
+  "PLAYER_HONEST_UNAVAILABLE": 1,
+  "PLAYER_FALLBACK_RECOVERED": 6,
+  "PLAYER_FAILURES": 1,
+  "results": [
+    {
+      "label": "aida",
+      "url": "https://zonafilm.space/title/aida-vozvraschaetsya/",
+      "ssr_state": "ok",
+      "agg": "kp",
+      "state": "ok",
+      "probe": {
+        "events": [],
+        "playing": false,
+        "time": 0,
+        "noData": false,
+        "err": false
+      },
+      "final": {
+        "state": "ok",
+        "hostHidden": false,
+        "hasVideo": false,
+        "currentTime": null,
+        "paused": null,
+        "readyState": null,
+        "dialogText": "\n      :host {\n        display: block;\n        width: 100%;\n        height: 100%;\n      }\n      .vk-player-dialog {\n        width: 100%;\n        height: 100%;\n        max-width: none;\n        max-heig"
+      },
+      "errors": [],
+      "net_err": [],
+      "class": "FALLBACK_OR_SHELL"
+    },
+    {
+      "label": "skyfall",
+      "url": "https://zonafilm.space/title/007-koordinaty-skayfoll/",
+      "ssr_state": "ok",
+      "agg": "kp",
+      "state": "ok",
+      "probe": {
+        "events": [],
+        "playing": false,
+        "time": 0,
+        "noData": false,
+        "err": false
+      },
+      "final": {
+        "state": "ok",
+        "hostHidden": false,
+        "hasVideo": false,
+        "currentTime": null,
+        "paused": null,
+        "readyState": null,
+        "dialogText": "\n      :host {\n        display: block;\n        width: 100%;\n        height: 100%;\n      }\n      .vk-player-dialog {\n        width: 100%;\n        height: 100%;\n        max-width: none;\n        max-heig"
+      },
+      "errors": [],
+      "net_err": [],
+      "class": "FALLBACK_OR_SHELL"
+    },
+    {
+      "label": "imperiya",
+      "url": "https://zonafilm.space/title/imperiya-artura/",
+      "ssr_state": "ok",
+      "agg": "cvh",
+      "state": "ok",
+      "probe": {
+        "events": [],
+        "playing": false,
+        "time": 0,
+        "noData": false,
+        "err": false
+      },
+      "final": {
+        "state": "ok",
+        "hostHidden": false,
+        "hasVideo": false,
+        "currentTime": null,
+        "paused": null,
+        "readyState": null,
+        "dialogText": "\n      :host {\n        display: block;\n        width: 100%;\n        height: 100%;\n      }\n      .vk-player-dialog {\n        width: 100%;\n        height: 100%;\n        max-width: none;\n        max-heig"
+      },
+      "errors": [],
+      "net_err": [],
+      "class": "FALLBACK_OR_SHELL"
+    },
+    {
+      "label": "ep_ok",
+      "url": "https://zonafilm.space/title/anna-pidzhen/season-1/episode-1/",
+      "ssr_state": "ok",
+      "agg": "kp",
+      "state": "ok",
+      "probe": {
+        "events": [],
+        "playing": false,
+        "time": 0,
+        "noData": false,
+        "err": false
+      },
+      "final": {
+        "state": "ok",
+        "hostHidden": false,
+        "hasVideo": false,
+        "currentTime": null,
+        "paused": null,
+        "readyState": null,
+        "dialogText": "\n      :host {\n        display: block;\n        width: 100%;\n        height: 100%;\n      }\n      .vk-player-dialog {\n        width: 100%;\n        height: 100%;\n        max-width: none;\n        max-heig"
+      },
+      "errors": [],
+      "net_err": [],
+      "class": "FALLBACK_OR_SHELL"
+    },
+    {
+      "label": "ep_bad",
+      "url": "https://zonafilm.space/title/1999-otdel-protivodeystviya-okkultizmu/season-1/episode-12/",
+      "ssr_state": "unavailable",
+      "agg": null,
+      "state": "unavailable",
+      "probe": {
+        "events": [],
+        "playing": false,
+        "time": 0,
+        "noData": false,
+        "err": false
+      },
+      "final": {
+        "state": "unavailable",
+        "hostHidden": null,
+        "hasVideo": false,
+        "currentTime": null,
+        "paused": null,
+        "readyState": null,
+        "dialogText": ""
+      },
+      "errors": [],
+      "net_err": [],
+      "class": "HONEST_UNAVAILABLE"
+    },
+    {
+      "label": "series_hub",
+      "url": "https://zonafilm.space/title/anna-pidzhen/",
+      "ssr_state": "ok",
+      "agg": "kp",
+      "state": "ok",
+      "probe": {
+        "events": [],
+        "playing": false,
+        "time": 0,
+        "noData": false,
+        "err": false
+      },
+      "final": {
+        "state": "ok",
+        "hostHidden": false,
+        "hasVideo": false,
+        "currentTime": null,
+        "paused": null,
+        "readyState": null,
+        "dialogText": "\n      :host {\n        display: block;\n        width: 100%;\n        height: 100%;\n      }\n      .vk-player-dialog {\n        width: 100%;\n        height: 100%;\n        max-width: none;\n        max-heig"
+      },
+      "errors": [],
+      "net_err": [],
+      "class": "FALLBACK_OR_SHELL"
+    },
+    {
+      "label": "movie_empty_fallback_live",
+      "url": "https://zonafilm.space/title/0-1-mira/",
+      "ssr_state": "ok",
+      "agg": "kp",
+      "state": "ok",
+      "probe": {
+        "events": [],
+        "playing": false,
+        "time": 0,
+        "noData": false,
+        "err": false
+      },
+      "final": {
+        "state": "ok",
+        "hostHidden": false,
+        "hasVideo": false,
+        "currentTime": null,
+        "paused": null,
+        "readyState": null,
+        "dialogText": "\n      :host {\n        display: block;\n        width: 100%;\n        height: 100%;\n      }\n      .vk-player-dialog {\n        width: 100%;\n        height: 100%;\n        max-width: none;\n        max-heig"
+      },
+      "errors": [],
+      "net_err": [],
+      "class": "FALLBACK_OR_SHELL"
+    },
+    {
+      "label": "mdl_series",
+      "url": "https://zonafilm.space/title/anonimnoe-pogruzhenie/season-2/episode-1/",
+      "class": "FAILURE",
+      "error": "Locator.get_attribute: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(\"[data-player]\").first\n"
+    }
+  ]
+}
