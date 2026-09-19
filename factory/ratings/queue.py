@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from datetime import datetime, timezone
-from typing import Iterable
 
 from factory.ratings.config import (
     PRIORITY_ACTIVE_SEASONAL,
@@ -105,7 +105,7 @@ def plan_queue(
                     )
 
     breakdown: dict[str, int] = {}
-    for pr, label, _ in selected:
+    for _pr, label, _title in selected:
         breakdown[label] = breakdown.get(label, 0) + 1
 
     return {

@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Iterator
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any
 
 from factory.ratings.models import CatalogTitle
 
@@ -83,7 +84,7 @@ def titles_from_catalog_items(
 def _parse_ts(value: Any) -> datetime | None:
     if value is None or value == "":
         return None
-    if isinstance(value, (int, float)):
+    if isinstance(value, int | float):
         # ms or s
         ts = float(value)
         if ts > 1e12:

@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
-from factory.ratings import ADAPTER_VERSION_ANIMEMEDIA, ADAPTER_VERSION_SHIKIMORI
+from factory.ratings import (
+    ADAPTER_VERSION_AMD_ONLINE,
+    ADAPTER_VERSION_ANIMEMEDIA,
+    ADAPTER_VERSION_SHIKIMORI,
+)
 from factory.ratings.models import HealthState, SourceRecord, SourceState
 from factory.ratings.store import RatingsStore
 
@@ -36,8 +40,27 @@ def default_sources() -> list[SourceRecord]:
             health_state=HealthState.UNKNOWN,
         ),
         SourceRecord(
+            source_key="amd_online",
+            display_name="AMD.online",
+            canonical_origin="https://amd.online",
+            adapter_version=ADAPTER_VERSION_AMD_ONLINE,
+            state=SourceState.BLOCKED,
+            enabled=False,
+            score_scale=10.0,
+            supports_vote_count=True,
+            supports_distribution=False,
+            max_rps=0.1,
+            max_requests_per_minute=6,
+            freshness_policy={"detail_pages_only": True, "min_interval_sec": 10},
+            legal_access_evidence=(
+                "artifacts/evidence/ratings-ingestion-02/AMD_PERMISSION_STATUS.md"
+            ),
+            attribution_gate="BLOCKED_PENDING_WRITTEN_PERMISSION",
+            health_state=HealthState.UNKNOWN,
+        ),
+        SourceRecord(
             source_key="animemedia",
-            display_name="AnimeMedia (unverified)",
+            display_name="AnimeMedia (unverified — not our sites)",
             canonical_origin="",
             adapter_version=ADAPTER_VERSION_ANIMEMEDIA,
             state=SourceState.UNVERIFIED_DISABLED,
@@ -47,13 +70,11 @@ def default_sources() -> list[SourceRecord]:
             supports_distribution=False,
             legal_access_evidence=(
                 "UNVERIFIED: animedia.icu/space are our sites, not external sources. "
-                "amd.online or other origin not confirmed for ingestion."
+                "Use amd_online for AMD.online baseline."
             ),
             attribution_gate="CONTRACT_GATE: source unverified",
             health_state=HealthState.UNKNOWN,
         ),
-        # Provider-feed KP/IMDb remain owned by site_engine/rating_feed;
-        # registered here for gateway multi-source visibility only.
         SourceRecord(
             source_key="provider_feed_kinopoisk",
             display_name="Кинопоиск (provider feed)",

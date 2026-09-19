@@ -66,8 +66,8 @@ def _markdown(data: dict[str, Any]) -> str:
         "",
         "## Counters",
         "",
-        f"| metric | value |",
-        f"| --- | --- |",
+        "| metric | value |",
+        "| --- | --- |",
     ]
     for key in (
         "queue_size",

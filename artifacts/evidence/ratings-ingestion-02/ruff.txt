@@ -1,0 +1,632 @@
+[1mfactory/ratings/adapters/amd_online.py[0m[36m:[0m11[36m:[0m8[36m:[0m [1;31mF401[0m [[36m*[0m] `json` imported but unused
+[1;38;5;12m   |[0m
+[1;38;5;12m10 |[0m import hashlib
+[1;38;5;12m11 |[0m import json
+[1;38;5;12m   |[0m[1;38;5;9m        ^^^^[0m [1;38;5;9mF401[0m
+[1;38;5;12m12 |[0m import time
+[1;38;5;12m13 |[0m import urllib.error
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove unused import: `json`
+
+[1mfactory/ratings/adapters/amd_online.py[0m[36m:[0m16[36m:[0m1[36m:[0m [1;31mUP035[0m [[36m*[0m] Import from `collections.abc` instead: `Callable`
+[1;38;5;12m   |[0m
+[1;38;5;12m14 |[0m import urllib.request
+[1;38;5;12m15 |[0m from pathlib import Path
+[1;38;5;12m16 |[0m from typing import Any, Callable
+[1;38;5;12m   |[0m[1;38;5;9m ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m [1;38;5;9mUP035[0m
+[1;38;5;12m17 |[0m 
+[1;38;5;12m18 |[0m from factory.paths import PATHS
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Import from `collections.abc`
+
+[1mfactory/ratings/adapters/amd_parser.py[0m[36m:[0m182[36m:[0m5[36m:[0m [1;31mSIM102[0m Use a single `if` statement instead of nested `if` statements
+[1;38;5;12m    |[0m
+[1;38;5;12m181 |[0m   def validate_scores(detail: AmdDetail) -> None:
+[1;38;5;12m182 |[0m       if detail.score is not None:
+[1;38;5;12m    |[0m  [1;38;5;9m_____^[0m
+[1;38;5;12m183 |[0m [1;38;5;9m|[0m         if not (Decimal("1") <= detail.score <= Decimal("10")):
+[1;38;5;12m    |[0m [1;38;5;9m|[0m[1;38;5;9m_______________________________________________________________^[0m [1;38;5;9mSIM102[0m
+[1;38;5;12m184 |[0m               raise AmdParseError("OUT_OF_RANGE", f"score={detail.score}")
+[1;38;5;12m185 |[0m       if detail.vote_count is not None and detail.vote_count < 0:
+[1;38;5;12m    |[0m
+    [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Combine `if` statements using `and`
+
+[1mfactory/ratings/adapters/shikimori.py[0m[36m:[0m21[36m:[0m1[36m:[0m [1;31mUP035[0m [[36m*[0m] Import from `collections.abc` instead: `Callable`
+[1;38;5;12m   |[0m
+[1;38;5;12m19 |[0m import urllib.error
+[1;38;5;12m20 |[0m import urllib.request
+[1;38;5;12m21 |[0m from typing import Any, Callable
+[1;38;5;12m   |[0m[1;38;5;9m ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m [1;38;5;9mUP035[0m
+[1;38;5;12m22 |[0m 
+[1;38;5;12m23 |[0m from factory.ratings import ADAPTER_VERSION_SHIKIMORI
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Import from `collections.abc`
+
+[1mfactory/ratings/adapters/shikimori.py[0m[36m:[0m199[36m:[0m20[36m:[0m [1;31mB014[0m [[36m*[0m] Exception handler with duplicate exception: `TimeoutError`
+[1;38;5;12m    |[0m
+[1;38;5;12m197 |[0m                     continue
+[1;38;5;12m198 |[0m                 raise AdapterError("HTTP_ERROR", f"HTTP {exc.code}", retryable=False) from exc
+[1;38;5;12m199 |[0m             except (TimeoutError, urllib.error.URLError, TimeoutError) as exc:
+[1;38;5;12m    |[0m[1;38;5;9m                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m [1;38;5;9mB014[0m
+[1;38;5;12m200 |[0m                 attempt += 1
+[1;38;5;12m201 |[0m                 if attempt > self.max_retries:
+[1;38;5;12m    |[0m
+    [1;38;5;12m=[0m [1;38;5;14mhelp[0m: De-duplicate exceptions
+
+[1mfactory/ratings/catalog.py[0m[36m:[0m8[36m:[0m1[36m:[0m [1;31mUP035[0m [[36m*[0m] Import from `collections.abc` instead: `Iterator`
+[1;38;5;12m   |[0m
+[1;38;5;12m 6 |[0m from datetime import datetime, timezone
+[1;38;5;12m 7 |[0m from pathlib import Path
+[1;38;5;12m 8 |[0m from typing import Any, Iterator
+[1;38;5;12m   |[0m[1;38;5;9m ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m [1;38;5;9mUP035[0m
+[1;38;5;12m 9 |[0m 
+[1;38;5;12m10 |[0m from factory.ratings.models import CatalogTitle
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Import from `collections.abc`
+
+[1mfactory/ratings/catalog.py[0m[36m:[0m86[36m:[0m8[36m:[0m [1;31mUP038[0m Use `X | Y` in `isinstance` call instead of `(X, Y)`
+[1;38;5;12m   |[0m
+[1;38;5;12m84 |[0m     if value is None or value == "":
+[1;38;5;12m85 |[0m         return None
+[1;38;5;12m86 |[0m     if isinstance(value, (int, float)):
+[1;38;5;12m   |[0m[1;38;5;9m        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m [1;38;5;9mUP038[0m
+[1;38;5;12m87 |[0m         # ms or s
+[1;38;5;12m88 |[0m         ts = float(value)
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Convert to `X | Y`
+
+[1mfactory/ratings/circuit_breaker.py[0m[36m:[0m6[36m:[0m36[36m:[0m [1;31mF401[0m [[36m*[0m] `dataclasses.field` imported but unused
+[1;38;5;12m  |[0m
+[1;38;5;12m5 |[0m import time
+[1;38;5;12m6 |[0m from dataclasses import dataclass, field
+[1;38;5;12m  |[0m[1;38;5;9m                                    ^^^^^[0m [1;38;5;9mF401[0m
+[1;38;5;12m7 |[0m from typing import Any
+[1;38;5;12m  |[0m
+  [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove unused import: `dataclasses.field`
+
+[1mfactory/ratings/cli.py[0m[36m:[0m17[36m:[0m37[36m:[0m [1;31mF401[0m [[36m*[0m] `factory.ratings.gateway.RatingGateway` imported but unused
+[1;38;5;12m   |[0m
+[1;38;5;12m15 |[0m from factory.ratings.catalog import iter_mal_mapped, load_catalog_json, titles_from_catalog_items
+[1;38;5;12m16 |[0m from factory.ratings.config import RatingsConfig
+[1;38;5;12m17 |[0m from factory.ratings.gateway import RatingGateway
+[1;38;5;12m   |[0m[1;38;5;9m                                     ^^^^^^^^^^^^^[0m [1;38;5;9mF401[0m
+[1;38;5;12m18 |[0m from factory.ratings.ingestion import IngestionEngine
+[1;38;5;12m19 |[0m from factory.ratings.queue import plan_queue
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove unused import: `factory.ratings.gateway.RatingGateway`
+
+[1mfactory/ratings/cli.py[0m[36m:[0m20[36m:[0m36[36m:[0m [1;31mF401[0m [[36m*[0m] `factory.ratings.report.estimate_backlog_completion` imported but unused
+[1;38;5;12m   |[0m
+[1;38;5;12m18 |[0m from factory.ratings.ingestion import IngestionEngine
+[1;38;5;12m19 |[0m from factory.ratings.queue import plan_queue
+[1;38;5;12m20 |[0m from factory.ratings.report import estimate_backlog_completion, write_run_report
+[1;38;5;12m   |[0m[1;38;5;9m                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m [1;38;5;9mF401[0m
+[1;38;5;12m21 |[0m from factory.ratings.snapshot import atomic_publish_candidate, build_snapshot, validate_snapshot
+[1;38;5;12m22 |[0m from factory.ratings.source_registry import seed_registry
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove unused import: `factory.ratings.report.estimate_backlog_completion`
+
+[1mfactory/ratings/config.py[0m[36m:[0m56[36m:[0m92[36m:[0m [1;31mUP037[0m [[36m*[0m] Remove quotes from type annotation
+[1;38;5;12m   |[0m
+[1;38;5;12m55 |[0m     @classmethod
+[1;38;5;12m56 |[0m     def from_env(cls, *, db_path: Path | None = None, evidence_dir: Path | None = None) -> "RatingsConfig":
+[1;38;5;12m   |[0m[1;38;5;9m                                                                                            ^^^^^^^^^^^^^^^[0m [1;38;5;9mUP037[0m
+[1;38;5;12m57 |[0m         root = PATHS.root
+[1;38;5;12m58 |[0m         return cls(
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove quotes
+
+[1mfactory/ratings/daily.py[0m[36m:[0m3[36m:[0m1[36m:[0m [1;31mI001[0m [[36m*[0m] Import block is un-sorted or un-formatted
+[1;38;5;12m   |[0m
+[1;38;5;12m 1 |[0m   """Coverage-aware daily SLA and ratings_daily_v1 report builder."""
+[1;38;5;12m 2 |[0m   
+[1;38;5;12m 3 |[0m [1;38;5;9m/[0m from __future__ import annotations
+[1;38;5;12m 4 |[0m [1;38;5;9m|[0m 
+[1;38;5;12m 5 |[0m [1;38;5;9m|[0m import csv
+[1;38;5;12m 6 |[0m [1;38;5;9m|[0m import hashlib
+[1;38;5;12m 7 |[0m [1;38;5;9m|[0m import json
+[1;38;5;12m 8 |[0m [1;38;5;9m|[0m import uuid
+[1;38;5;12m 9 |[0m [1;38;5;9m|[0m from dataclasses import dataclass, field
+[1;38;5;12m10 |[0m [1;38;5;9m|[0m from datetime import datetime, timedelta, timezone
+[1;38;5;12m11 |[0m [1;38;5;9m|[0m from decimal import Decimal, ROUND_HALF_UP
+[1;38;5;12m12 |[0m [1;38;5;9m|[0m from pathlib import Path
+[1;38;5;12m13 |[0m [1;38;5;9m|[0m from typing import Any
+[1;38;5;12m14 |[0m [1;38;5;9m|[0m 
+[1;38;5;12m15 |[0m [1;38;5;9m|[0m from factory.ratings.formula import FORMULA_VERSION
+[1;38;5;12m16 |[0m [1;38;5;9m|[0m from factory.ratings.models import utc_now_iso
+[1;38;5;12m17 |[0m [1;38;5;9m|[0m from factory.ratings.rotation import ROTATION_ALGORITHM_VERSION
+[1;38;5;12m18 |[0m [1;38;5;9m|[0m 
+[1;38;5;12m19 |[0m [1;38;5;9m|[0m DAILY_SCHEMA = "ratings_daily_v1"
+[1;38;5;12m   |[0m [1;38;5;9m|[0m[1;38;5;9m_^[0m [1;38;5;9mI001[0m
+[1;38;5;12m20 |[0m   DAILY_NEW_COVERAGE_TARGET = 500
+[1;38;5;12m21 |[0m   DAILY_UNIQUE_CANDIDATE_CAP = 750
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Organize imports
+
+[1mfactory/ratings/daily.py[0m[36m:[0m6[36m:[0m8[36m:[0m [1;31mF401[0m [[36m*[0m] `hashlib` imported but unused
+[1;38;5;12m  |[0m
+[1;38;5;12m5 |[0m import csv
+[1;38;5;12m6 |[0m import hashlib
+[1;38;5;12m  |[0m[1;38;5;9m        ^^^^^^^[0m [1;38;5;9mF401[0m
+[1;38;5;12m7 |[0m import json
+[1;38;5;12m8 |[0m import uuid
+[1;38;5;12m  |[0m
+  [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove unused import: `hashlib`
+
+[1mfactory/ratings/daily.py[0m[36m:[0m8[36m:[0m8[36m:[0m [1;31mF401[0m [[36m*[0m] `uuid` imported but unused
+[1;38;5;12m   |[0m
+[1;38;5;12m 6 |[0m import hashlib
+[1;38;5;12m 7 |[0m import json
+[1;38;5;12m 8 |[0m import uuid
+[1;38;5;12m   |[0m[1;38;5;9m        ^^^^[0m [1;38;5;9mF401[0m
+[1;38;5;12m 9 |[0m from dataclasses import dataclass, field
+[1;38;5;12m10 |[0m from datetime import datetime, timedelta, timezone
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove unused import: `uuid`
+
+[1mfactory/ratings/daily.py[0m[36m:[0m9[36m:[0m36[36m:[0m [1;31mF401[0m [[36m*[0m] `dataclasses.field` imported but unused
+[1;38;5;12m   |[0m
+[1;38;5;12m 7 |[0m import json
+[1;38;5;12m 8 |[0m import uuid
+[1;38;5;12m 9 |[0m from dataclasses import dataclass, field
+[1;38;5;12m   |[0m[1;38;5;9m                                    ^^^^^[0m [1;38;5;9mF401[0m
+[1;38;5;12m10 |[0m from datetime import datetime, timedelta, timezone
+[1;38;5;12m11 |[0m from decimal import Decimal, ROUND_HALF_UP
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove unused import: `dataclasses.field`
+
+[1mfactory/ratings/daily.py[0m[36m:[0m11[36m:[0m30[36m:[0m [1;31mF401[0m [[36m*[0m] `decimal.ROUND_HALF_UP` imported but unused
+[1;38;5;12m   |[0m
+[1;38;5;12m 9 |[0m from dataclasses import dataclass, field
+[1;38;5;12m10 |[0m from datetime import datetime, timedelta, timezone
+[1;38;5;12m11 |[0m from decimal import Decimal, ROUND_HALF_UP
+[1;38;5;12m   |[0m[1;38;5;9m                              ^^^^^^^^^^^^^[0m [1;38;5;9mF401[0m
+[1;38;5;12m12 |[0m from pathlib import Path
+[1;38;5;12m13 |[0m from typing import Any
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove unused import: `decimal.ROUND_HALF_UP`
+
+[1mfactory/ratings/daily.py[0m[36m:[0m16[36m:[0m36[36m:[0m [1;31mF401[0m [[36m*[0m] `factory.ratings.models.utc_now_iso` imported but unused
+[1;38;5;12m   |[0m
+[1;38;5;12m15 |[0m from factory.ratings.formula import FORMULA_VERSION
+[1;38;5;12m16 |[0m from factory.ratings.models import utc_now_iso
+[1;38;5;12m   |[0m[1;38;5;9m                                    ^^^^^^^^^^^[0m [1;38;5;9mF401[0m
+[1;38;5;12m17 |[0m from factory.ratings.rotation import ROTATION_ALGORITHM_VERSION
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove unused import: `factory.ratings.models.utc_now_iso`
+
+[1mfactory/ratings/formula.py[0m[36m:[0m7[36m:[0m1[36m:[0m [1;31mI001[0m [[36m*[0m] Import block is un-sorted or un-formatted
+[1;38;5;12m   |[0m
+[1;38;5;12m 5 |[0m   """
+[1;38;5;12m 6 |[0m   
+[1;38;5;12m 7 |[0m [1;38;5;9m/[0m from __future__ import annotations
+[1;38;5;12m 8 |[0m [1;38;5;9m|[0m 
+[1;38;5;12m 9 |[0m [1;38;5;9m|[0m from dataclasses import dataclass
+[1;38;5;12m10 |[0m [1;38;5;9m|[0m from decimal import Decimal, ROUND_HALF_UP
+[1;38;5;12m11 |[0m [1;38;5;9m|[0m from typing import Any
+[1;38;5;12m12 |[0m [1;38;5;9m|[0m 
+[1;38;5;12m13 |[0m [1;38;5;9m|[0m FORMULA_VERSION = "animedia_blend_v1"
+[1;38;5;12m   |[0m [1;38;5;9m|[0m[1;38;5;9m_^[0m [1;38;5;9mI001[0m
+[1;38;5;12m14 |[0m   AMD_BASELINE_PRIOR_CAP = 100
+[1;38;5;12m15 |[0m   MISSING_VOTE_COUNT_PRIOR_WEIGHT = 25
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Organize imports
+
+[1mfactory/ratings/gateway.py[0m[36m:[0m71[36m:[0m73[36m:[0m [1;31mUP037[0m [[36m*[0m] Remove quotes from type annotation
+[1;38;5;12m   |[0m
+[1;38;5;12m70 |[0m     @classmethod
+[1;38;5;12m71 |[0m     def from_store(cls, store, *, primary_source: str = "shikimori") -> "RatingGateway":
+[1;38;5;12m   |[0m[1;38;5;9m                                                                         ^^^^^^^^^^^^^^^[0m [1;38;5;9mUP037[0m
+[1;38;5;12m72 |[0m         from factory.ratings.snapshot import build_snapshot
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove quotes
+
+[1mfactory/ratings/ingestion.py[0m[36m:[0m10[36m:[0m1[36m:[0m [1;31mUP035[0m [[36m*[0m] Import from `collections.abc` instead: `Callable`
+[1;38;5;12m   |[0m
+[1;38;5;12m 8 |[0m from dataclasses import dataclass, field
+[1;38;5;12m 9 |[0m from datetime import datetime, timezone
+[1;38;5;12m10 |[0m from typing import Any, Callable
+[1;38;5;12m   |[0m[1;38;5;9m ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m [1;38;5;9mUP035[0m
+[1;38;5;12m11 |[0m 
+[1;38;5;12m12 |[0m from factory.ratings.adapters.base import AdapterError, FetchResult, SourceAdapter
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Import from `collections.abc`
+
+[1mfactory/ratings/mapping.py[0m[36m:[0m222[36m:[0m5[36m:[0m [1;31mSIM102[0m Use a single `if` statement instead of nested `if` statements
+[1;38;5;12m    |[0m
+[1;38;5;12m220 |[0m       # Episode count — allow ongoing without count
+[1;38;5;12m221 |[0m       oe, ce = title.episode_count, cand.get("episode_count")
+[1;38;5;12m222 |[0m       if oe is not None and ce is not None and int(oe) != int(ce):
+[1;38;5;12m    |[0m  [1;38;5;9m_____^[0m
+[1;38;5;12m223 |[0m [1;38;5;9m|[0m         if not (title.is_ongoing or cand.get("is_ongoing")):
+[1;38;5;12m    |[0m [1;38;5;9m|[0m[1;38;5;9m____________________________________________________________^[0m [1;38;5;9mSIM102[0m
+[1;38;5;12m224 |[0m               return "conflict:episode_count"
+[1;38;5;12m    |[0m
+    [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Combine `if` statements using `and`
+
+[1mfactory/ratings/mapping.py[0m[36m:[0m227[36m:[0m5[36m:[0m [1;31mSIM102[0m Use a single `if` statement instead of nested `if` statements
+[1;38;5;12m    |[0m
+[1;38;5;12m226 |[0m       # Remake / original flags if present
+[1;38;5;12m227 |[0m       if bool(cand.get("is_remake")) and not bool(getattr(title, "is_remake", False)):
+[1;38;5;12m    |[0m  [1;38;5;9m_____^[0m
+[1;38;5;12m228 |[0m [1;38;5;9m|[0m         if title.year and cy and int(title.year) != int(cy):
+[1;38;5;12m    |[0m [1;38;5;9m|[0m[1;38;5;9m____________________________________________________________^[0m [1;38;5;9mSIM102[0m
+[1;38;5;12m229 |[0m               return "conflict:remake"
+[1;38;5;12m    |[0m
+    [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Combine `if` statements using `and`
+
+[1mfactory/ratings/queue.py[0m[36m:[0m6[36m:[0m1[36m:[0m [1;31mUP035[0m [[36m*[0m] Import from `collections.abc` instead: `Iterable`
+[1;38;5;12m  |[0m
+[1;38;5;12m5 |[0m from datetime import datetime, timezone
+[1;38;5;12m6 |[0m from typing import Iterable
+[1;38;5;12m  |[0m[1;38;5;9m ^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m [1;38;5;9mUP035[0m
+[1;38;5;12m7 |[0m 
+[1;38;5;12m8 |[0m from factory.ratings.config import (
+[1;38;5;12m  |[0m
+  [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Import from `collections.abc`
+
+[1mfactory/ratings/queue.py[0m[36m:[0m108[36m:[0m9[36m:[0m [1;31mB007[0m Loop control variable `pr` not used within loop body
+[1;38;5;12m    |[0m
+[1;38;5;12m107 |[0m     breakdown: dict[str, int] = {}
+[1;38;5;12m108 |[0m     for pr, label, _ in selected:
+[1;38;5;12m    |[0m[1;38;5;9m         ^^[0m [1;38;5;9mB007[0m
+[1;38;5;12m109 |[0m         breakdown[label] = breakdown.get(label, 0) + 1
+[1;38;5;12m    |[0m
+    [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Rename unused `pr` to `_pr`
+
+[1mfactory/ratings/report.py[0m[36m:[0m69[36m:[0m9[36m:[0m [1;31mF541[0m [[36m*[0m] f-string without any placeholders
+[1;38;5;12m   |[0m
+[1;38;5;12m67 |[0m         "## Counters",
+[1;38;5;12m68 |[0m         "",
+[1;38;5;12m69 |[0m         f"| metric | value |",
+[1;38;5;12m   |[0m[1;38;5;9m         ^^^^^^^^^^^^^^^^^^^^^[0m [1;38;5;9mF541[0m
+[1;38;5;12m70 |[0m         f"| --- | --- |",
+[1;38;5;12m71 |[0m     ]
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove extraneous `f` prefix
+
+[1mfactory/ratings/report.py[0m[36m:[0m70[36m:[0m9[36m:[0m [1;31mF541[0m [[36m*[0m] f-string without any placeholders
+[1;38;5;12m   |[0m
+[1;38;5;12m68 |[0m         "",
+[1;38;5;12m69 |[0m         f"| metric | value |",
+[1;38;5;12m70 |[0m         f"| --- | --- |",
+[1;38;5;12m   |[0m[1;38;5;9m         ^^^^^^^^^^^^^^^^[0m [1;38;5;9mF541[0m
+[1;38;5;12m71 |[0m     ]
+[1;38;5;12m72 |[0m     for key in (
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove extraneous `f` prefix
+
+[1mfactory/ratings/rotation.py[0m[36m:[0m9[36m:[0m1[36m:[0m [1;31mUP035[0m [[36m*[0m] Import from `collections.abc` instead: `Iterable`
+[1;38;5;12m   |[0m
+[1;38;5;12m 8 |[0m from decimal import Decimal
+[1;38;5;12m 9 |[0m from typing import Any, Iterable
+[1;38;5;12m   |[0m[1;38;5;9m ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m [1;38;5;9mUP035[0m
+[1;38;5;12m10 |[0m 
+[1;38;5;12m11 |[0m ROTATION_ALGORITHM_VERSION = "animedia_rotation_v1"
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Import from `collections.abc`
+
+[1mfactory/ratings/rotation.py[0m[36m:[0m17[36m:[0m5[36m:[0m [1;31mSIM108[0m Use ternary operator `combined_dec = Decimal("-1") if combined is None else Decimal(str(combined))` instead of `if`-`else`-block
+[1;38;5;12m   |[0m
+[1;38;5;12m15 |[0m       """Sort key: combined DESC, local_count DESC, amd_votes DESC NULLS LAST, freshness DESC, id ASC."""
+[1;38;5;12m16 |[0m       combined = row.get("rotation_score") or row.get("combined_raw")
+[1;38;5;12m17 |[0m       if combined is None:
+[1;38;5;12m   |[0m  [1;38;5;9m_____^[0m
+[1;38;5;12m18 |[0m [1;38;5;9m|[0m         combined_dec = Decimal("-1")
+[1;38;5;12m19 |[0m [1;38;5;9m|[0m     else:
+[1;38;5;12m20 |[0m [1;38;5;9m|[0m         combined_dec = Decimal(str(combined))
+[1;38;5;12m   |[0m [1;38;5;9m|[0m[1;38;5;9m_____________________________________________^[0m [1;38;5;9mSIM108[0m
+[1;38;5;12m21 |[0m       local_count = int(row.get("local_vote_count") or 0)
+[1;38;5;12m22 |[0m       amd_votes = row.get("amd_vote_count")
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Replace `if`-`else`-block with `combined_dec = Decimal("-1") if combined is None else Decimal(str(combined))`
+
+[1mfactory/ratings/rotation.py[0m[36m:[0m84[36m:[0m9[36m:[0m [1;31mSIM108[0m Use ternary operator `amd_key = (1, 0) if r.get("amd_vote_count") is None else (0, -int(r["amd_vote_count"]))` instead of `if`-`else`-block
+[1;38;5;12m   |[0m
+[1;38;5;12m82 |[0m           combined_key = Decimal("-Infinity") if combined is None else -combined
+[1;38;5;12m83 |[0m           local_key = -int(r.get("local_vote_count") or 0)
+[1;38;5;12m84 |[0m           if r.get("amd_vote_count") is None:
+[1;38;5;12m   |[0m  [1;38;5;9m_________^[0m
+[1;38;5;12m85 |[0m [1;38;5;9m|[0m             amd_key = (1, 0)  # nulls last
+[1;38;5;12m86 |[0m [1;38;5;9m|[0m         else:
+[1;38;5;12m87 |[0m [1;38;5;9m|[0m             amd_key = (0, -int(r["amd_vote_count"]))
+[1;38;5;12m   |[0m [1;38;5;9m|[0m[1;38;5;9m____________________________________________________^[0m [1;38;5;9mSIM108[0m
+[1;38;5;12m88 |[0m           freshness = r.get("updated_at") or ""
+[1;38;5;12m89 |[0m           # DESC freshness: invert by using empty first in reverse — use tuple (0/1, negated)
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Replace `if`-`else`-block with `amd_key = (1, 0) if r.get("amd_vote_count") is None else (0, -int(r["amd_vote_count"]))`
+
+[1mfactory/ratings/rotation.py[0m[36m:[0m90[36m:[0m9[36m:[0m [1;31mF841[0m Local variable `fresh_key` is assigned to but never used
+[1;38;5;12m   |[0m
+[1;38;5;12m88 |[0m         freshness = r.get("updated_at") or ""
+[1;38;5;12m89 |[0m         # DESC freshness: invert by using empty first in reverse — use tuple (0/1, negated)
+[1;38;5;12m90 |[0m         fresh_key = (0, "") if not freshness else (1, freshness)
+[1;38;5;12m   |[0m[1;38;5;9m         ^^^^^^^^^[0m [1;38;5;9mF841[0m
+[1;38;5;12m91 |[0m         # We want freshness DESC among non-empty → sort by (-present, -freshness) in ASC terms:
+[1;38;5;12m92 |[0m         fresh_sort = (0 if freshness else 1, "".join(chr(255 - ord(c)) for c in freshness[:32]) if freshness else "")
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove assignment to unused variable `fresh_key`
+
+[1mmigrations/0003_ratings_local_amd.py[0m[36m:[0m60[36m:[0m101[36m:[0m [1;31mE501[0m Line too long (105 > 100)
+[1;38;5;12m   |[0m
+[1;38;5;12m58 |[0m     """,
+[1;38;5;12m59 |[0m     "CREATE INDEX IF NOT EXISTS ix_rve_title ON rating_vote_event(canonical_title_id)",
+[1;38;5;12m60 |[0m     "CREATE INDEX IF NOT EXISTS ix_rve_voter ON rating_vote_event(voter_subject_id, canonical_title_id)",
+[1;38;5;12m   |[0m[1;38;5;9m                                                                                                     ^^^^^[0m [1;38;5;9mE501[0m
+[1;38;5;12m61 |[0m     """
+[1;38;5;12m62 |[0m     CREATE TABLE IF NOT EXISTS rating_vote_current (
+[1;38;5;12m   |[0m
+
+[1mmigrations/0003_ratings_local_amd.py[0m[36m:[0m187[36m:[0m9[36m:[0m [1;31mSIM105[0m Use `contextlib.suppress(sqlite3.OperationalError)` instead of `try`-`except`-`pass`
+[1;38;5;12m    |[0m
+[1;38;5;12m185 |[0m   def downgrade(conn: sqlite3.Connection) -> None:
+[1;38;5;12m186 |[0m       for stmt in DOWN:
+[1;38;5;12m187 |[0m           try:
+[1;38;5;12m    |[0m  [1;38;5;9m_________^[0m
+[1;38;5;12m188 |[0m [1;38;5;9m|[0m             conn.execute(stmt)
+[1;38;5;12m189 |[0m [1;38;5;9m|[0m         except sqlite3.OperationalError:
+[1;38;5;12m190 |[0m [1;38;5;9m|[0m             pass
+[1;38;5;12m    |[0m [1;38;5;9m|[0m[1;38;5;9m________________^[0m [1;38;5;9mSIM105[0m
+[1;38;5;12m191 |[0m       conn.commit()
+[1;38;5;12m    |[0m
+    [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Replace with `contextlib.suppress(sqlite3.OperationalError)`
+
+[1mtests/unit/ratings/test_ratings_ingestion.py[0m[36m:[0m3[36m:[0m1[36m:[0m [1;31mI001[0m [[36m*[0m] Import block is un-sorted or un-formatted
+[1;38;5;12m   |[0m
+[1;38;5;12m 1 |[0m   """Unit tests for centralized ratings ingestion (Stage 1). No live network."""
+[1;38;5;12m 2 |[0m   
+[1;38;5;12m 3 |[0m [1;38;5;9m/[0m from __future__ import annotations
+[1;38;5;12m 4 |[0m [1;38;5;9m|[0m 
+[1;38;5;12m 5 |[0m [1;38;5;9m|[0m import io
+[1;38;5;12m 6 |[0m [1;38;5;9m|[0m import json
+[1;38;5;12m 7 |[0m [1;38;5;9m|[0m import threading
+[1;38;5;12m 8 |[0m [1;38;5;9m|[0m import time
+[1;38;5;12m 9 |[0m [1;38;5;9m|[0m from pathlib import Path
+[1;38;5;12m10 |[0m [1;38;5;9m|[0m from unittest.mock import MagicMock
+[1;38;5;12m11 |[0m [1;38;5;9m|[0m 
+[1;38;5;12m12 |[0m [1;38;5;9m|[0m import pytest
+[1;38;5;12m13 |[0m [1;38;5;9m|[0m 
+[1;38;5;12m14 |[0m [1;38;5;9m|[0m from factory.ratings.adapters.animemedia import AnimeMediaAdapter
+[1;38;5;12m15 |[0m [1;38;5;9m|[0m from factory.ratings.adapters.base import AdapterError, FetchResult
+[1;38;5;12m16 |[0m [1;38;5;9m|[0m from factory.ratings.adapters.shikimori import (
+[1;38;5;12m17 |[0m [1;38;5;9m|[0m     ShikimoriGraphQLAdapter,
+[1;38;5;12m18 |[0m [1;38;5;9m|[0m     normalize_score,
+[1;38;5;12m19 |[0m [1;38;5;9m|[0m     vote_count_from_stats,
+[1;38;5;12m20 |[0m [1;38;5;9m|[0m )
+[1;38;5;12m21 |[0m [1;38;5;9m|[0m from factory.ratings.circuit_breaker import CircuitBreaker
+[1;38;5;12m22 |[0m [1;38;5;9m|[0m from factory.ratings.config import (
+[1;38;5;12m23 |[0m [1;38;5;9m|[0m     PRIORITY_NEW_CATALOG,
+[1;38;5;12m24 |[0m [1;38;5;9m|[0m     PRIORITY_ONGOING_NEW_EPISODE,
+[1;38;5;12m25 |[0m [1;38;5;9m|[0m     RatingsConfig,
+[1;38;5;12m26 |[0m [1;38;5;9m|[0m )
+[1;38;5;12m27 |[0m [1;38;5;9m|[0m from factory.ratings.gateway import RatingGateway, format_ui_line
+[1;38;5;12m28 |[0m [1;38;5;9m|[0m from factory.ratings.ingestion import IngestionEngine
+[1;38;5;12m29 |[0m [1;38;5;9m|[0m from factory.ratings.locks import RatingsLockBusy, ratings_lock
+[1;38;5;12m30 |[0m [1;38;5;9m|[0m from factory.ratings.mapping import normalize_title, resolve_mapping
+[1;38;5;12m31 |[0m [1;38;5;9m|[0m from factory.ratings.models import CatalogTitle, MappingMethod, MappingState, RatingObservation, ValidationState, payload_sha256, utc_now_iso
+[1;38;5;12m32 |[0m [1;38;5;9m|[0m from factory.ratings.projection import apply_observation, score_never_zero_from_null
+[1;38;5;12m33 |[0m [1;38;5;9m|[0m from factory.ratings.queue import classify_priority, plan_queue
+[1;38;5;12m34 |[0m [1;38;5;9m|[0m from factory.ratings.rate_limit import RateLimiter
+[1;38;5;12m35 |[0m [1;38;5;9m|[0m from factory.ratings.secrets import load_secret_file, redact_headers
+[1;38;5;12m36 |[0m [1;38;5;9m|[0m from factory.ratings.snapshot import atomic_publish_candidate, build_snapshot, rollback_snapshot, validate_snapshot
+[1;38;5;12m37 |[0m [1;38;5;9m|[0m from factory.ratings.source_registry import seed_registry
+[1;38;5;12m38 |[0m [1;38;5;9m|[0m from factory.ratings.store import RatingsStore
+[1;38;5;12m39 |[0m [1;38;5;9m|[0m 
+[1;38;5;12m40 |[0m [1;38;5;9m|[0m ROOT = Path(__file__).resolve().parents[3]
+[1;38;5;12m   |[0m [1;38;5;9m|[0m[1;38;5;9m_^[0m [1;38;5;9mI001[0m
+[1;38;5;12m41 |[0m   FIXTURES = ROOT / "tests" / "fixtures" / "ratings"
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Organize imports
+
+[1mtests/unit/ratings/test_ratings_ingestion.py[0m[36m:[0m5[36m:[0m8[36m:[0m [1;31mF401[0m [[36m*[0m] `io` imported but unused
+[1;38;5;12m  |[0m
+[1;38;5;12m3 |[0m from __future__ import annotations
+[1;38;5;12m4 |[0m 
+[1;38;5;12m5 |[0m import io
+[1;38;5;12m  |[0m[1;38;5;9m        ^^[0m [1;38;5;9mF401[0m
+[1;38;5;12m6 |[0m import json
+[1;38;5;12m7 |[0m import threading
+[1;38;5;12m  |[0m
+  [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove unused import: `io`
+
+[1mtests/unit/ratings/test_ratings_ingestion.py[0m[36m:[0m8[36m:[0m8[36m:[0m [1;31mF401[0m [[36m*[0m] `time` imported but unused
+[1;38;5;12m   |[0m
+[1;38;5;12m 6 |[0m import json
+[1;38;5;12m 7 |[0m import threading
+[1;38;5;12m 8 |[0m import time
+[1;38;5;12m   |[0m[1;38;5;9m        ^^^^[0m [1;38;5;9mF401[0m
+[1;38;5;12m 9 |[0m from pathlib import Path
+[1;38;5;12m10 |[0m from unittest.mock import MagicMock
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove unused import: `time`
+
+[1mtests/unit/ratings/test_ratings_ingestion.py[0m[36m:[0m10[36m:[0m27[36m:[0m [1;31mF401[0m [[36m*[0m] `unittest.mock.MagicMock` imported but unused
+[1;38;5;12m   |[0m
+[1;38;5;12m 8 |[0m import time
+[1;38;5;12m 9 |[0m from pathlib import Path
+[1;38;5;12m10 |[0m from unittest.mock import MagicMock
+[1;38;5;12m   |[0m[1;38;5;9m                           ^^^^^^^^^[0m [1;38;5;9mF401[0m
+[1;38;5;12m11 |[0m 
+[1;38;5;12m12 |[0m import pytest
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove unused import: `unittest.mock.MagicMock`
+
+[1mtests/unit/ratings/test_ratings_ingestion.py[0m[36m:[0m29[36m:[0m52[36m:[0m [1;31mF401[0m [[36m*[0m] `factory.ratings.locks.ratings_lock` imported but unused
+[1;38;5;12m   |[0m
+[1;38;5;12m27 |[0m from factory.ratings.gateway import RatingGateway, format_ui_line
+[1;38;5;12m28 |[0m from factory.ratings.ingestion import IngestionEngine
+[1;38;5;12m29 |[0m from factory.ratings.locks import RatingsLockBusy, ratings_lock
+[1;38;5;12m   |[0m[1;38;5;9m                                                    ^^^^^^^^^^^^[0m [1;38;5;9mF401[0m
+[1;38;5;12m30 |[0m from factory.ratings.mapping import normalize_title, resolve_mapping
+[1;38;5;12m31 |[0m from factory.ratings.models import CatalogTitle, MappingMethod, MappingState, RatingObservation, ValidationState, payload_sha256, utc_now_iso
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove unused import: `factory.ratings.locks.ratings_lock`
+
+[1mtests/unit/ratings/test_ratings_ingestion.py[0m[36m:[0m31[36m:[0m115[36m:[0m [1;31mF401[0m [[36m*[0m] `factory.ratings.models.payload_sha256` imported but unused
+[1;38;5;12m   |[0m
+[1;38;5;12m29 |[0m from factory.ratings.locks import RatingsLockBusy, ratings_lock
+[1;38;5;12m30 |[0m from factory.ratings.mapping import normalize_title, resolve_mapping
+[1;38;5;12m31 |[0m from factory.ratings.models import CatalogTitle, MappingMethod, MappingState, RatingObservation, ValidationState, payload_sha256, utc_now_iso
+[1;38;5;12m   |[0m[1;38;5;9m                                                                                                                   ^^^^^^^^^^^^^^[0m [1;38;5;9mF401[0m
+[1;38;5;12m32 |[0m from factory.ratings.projection import apply_observation, score_never_zero_from_null
+[1;38;5;12m33 |[0m from factory.ratings.queue import classify_priority, plan_queue
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove unused import: `factory.ratings.models.payload_sha256`
+
+[1mtests/unit/ratings/test_ratings_ingestion.py[0m[36m:[0m177[36m:[0m10[36m:[0m [1;31mB017[0m `pytest.raises(Exception)` should be considered evil
+[1;38;5;12m    |[0m
+[1;38;5;12m175 |[0m     wide.write_text("x", encoding="utf-8")
+[1;38;5;12m176 |[0m     wide.chmod(0o644)
+[1;38;5;12m177 |[0m     with pytest.raises(Exception):
+[1;38;5;12m    |[0m[1;38;5;9m          ^^^^^^^^^^^^^^^^^^^^^^^^[0m [1;38;5;9mB017[0m
+[1;38;5;12m178 |[0m         load_secret_file(wide)
+[1;38;5;12m179 |[0m     red = redact_headers({"Authorization": "Bearer abc", "User-Agent": "x"})
+[1;38;5;12m    |[0m
+
+[1mtests/unit/ratings/test_ratings_ingestion.py[0m[36m:[0m405[36m:[0m1[36m:[0m [1;31mI001[0m [[36m*[0m] Import block is un-sorted or un-formatted
+[1;38;5;12m    |[0m
+[1;38;5;12m403 |[0m       def fake_lock(name: str = "ratings-ingestion", *, timeout: float = 0.0):
+[1;38;5;12m404 |[0m           # Redirect PATHS.locks via monkeypatch on module used inside
+[1;38;5;12m405 |[0m [1;38;5;9m/[0m         from contextlib import contextmanager
+[1;38;5;12m406 |[0m [1;38;5;9m|[0m         import errno
+[1;38;5;12m407 |[0m [1;38;5;9m|[0m         import fcntl
+[1;38;5;12m408 |[0m [1;38;5;9m|[0m         import json
+[1;38;5;12m409 |[0m [1;38;5;9m|[0m         import os
+[1;38;5;12m410 |[0m [1;38;5;9m|[0m         import time
+[1;38;5;12m411 |[0m [1;38;5;9m|[0m 
+[1;38;5;12m    |[0m [1;38;5;9m|[0m[1;38;5;9m_^[0m [1;38;5;9mI001[0m
+[1;38;5;12m412 |[0m           @contextmanager
+[1;38;5;12m413 |[0m           def _cm():
+[1;38;5;12m    |[0m
+    [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Organize imports
+
+[1mtests/unit/ratings/test_ratings_ingestion.py[0m[36m:[0m408[36m:[0m16[36m:[0m [1;31mF401[0m [[36m*[0m] `json` imported but unused
+[1;38;5;12m    |[0m
+[1;38;5;12m406 |[0m         import errno
+[1;38;5;12m407 |[0m         import fcntl
+[1;38;5;12m408 |[0m         import json
+[1;38;5;12m    |[0m[1;38;5;9m                ^^^^[0m [1;38;5;9mF401[0m
+[1;38;5;12m409 |[0m         import os
+[1;38;5;12m410 |[0m         import time
+[1;38;5;12m    |[0m
+    [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove unused import: `json`
+
+[1mtests/unit/ratings/test_ratings_ingestion.py[0m[36m:[0m410[36m:[0m16[36m:[0m [1;31mF811[0m [[36m*[0m] Redefinition of unused `time` from line 8
+[1;38;5;12m    |[0m
+[1;38;5;12m408 |[0m         import json
+[1;38;5;12m409 |[0m         import os
+[1;38;5;12m410 |[0m         import time
+[1;38;5;12m    |[0m[1;38;5;9m                ^^^^[0m [1;38;5;9mF811[0m
+[1;38;5;12m411 |[0m 
+[1;38;5;12m412 |[0m         @contextmanager
+[1;38;5;12m    |[0m
+    [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove definition: `time`
+
+[1mtests/unit/ratings/test_ratings_ingestion.py[0m[36m:[0m410[36m:[0m16[36m:[0m [1;31mF401[0m [[36m*[0m] `time` imported but unused
+[1;38;5;12m    |[0m
+[1;38;5;12m408 |[0m         import json
+[1;38;5;12m409 |[0m         import os
+[1;38;5;12m410 |[0m         import time
+[1;38;5;12m    |[0m[1;38;5;9m                ^^^^[0m [1;38;5;9mF401[0m
+[1;38;5;12m411 |[0m 
+[1;38;5;12m412 |[0m         @contextmanager
+[1;38;5;12m    |[0m
+    [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove unused import: `time`
+
+[1mtests/unit/ratings/test_ratings_stage2.py[0m[36m:[0m3[36m:[0m1[36m:[0m [1;31mI001[0m [[36m*[0m] Import block is un-sorted or un-formatted
+[1;38;5;12m   |[0m
+[1;38;5;12m 1 |[0m   """Stage 2 tests: AMD parser, local votes, formula, SLA, gateway contract."""
+[1;38;5;12m 2 |[0m   
+[1;38;5;12m 3 |[0m [1;38;5;9m/[0m from __future__ import annotations
+[1;38;5;12m 4 |[0m [1;38;5;9m|[0m 
+[1;38;5;12m 5 |[0m [1;38;5;9m|[0m import json
+[1;38;5;12m 6 |[0m [1;38;5;9m|[0m import threading
+[1;38;5;12m 7 |[0m [1;38;5;9m|[0m from decimal import Decimal
+[1;38;5;12m 8 |[0m [1;38;5;9m|[0m from pathlib import Path
+[1;38;5;12m 9 |[0m [1;38;5;9m|[0m 
+[1;38;5;12m10 |[0m [1;38;5;9m|[0m import pytest
+[1;38;5;12m11 |[0m [1;38;5;9m|[0m 
+[1;38;5;12m12 |[0m [1;38;5;9m|[0m from factory.ratings.adapters.amd_online import AmdOnlineAdapter
+[1;38;5;12m13 |[0m [1;38;5;9m|[0m from factory.ratings.adapters.amd_parser import AmdParseError, parse_detail_html
+[1;38;5;12m14 |[0m [1;38;5;9m|[0m from factory.ratings.adapters.base import AdapterError, FetchResult
+[1;38;5;12m15 |[0m [1;38;5;9m|[0m from factory.ratings.circuit_breaker import CircuitBreaker
+[1;38;5;12m16 |[0m [1;38;5;9m|[0m from factory.ratings.config import RatingsConfig
+[1;38;5;12m17 |[0m [1;38;5;9m|[0m from factory.ratings.daily import (
+[1;38;5;12m18 |[0m [1;38;5;9m|[0m     CoverageSnapshot,
+[1;38;5;12m19 |[0m [1;38;5;9m|[0m     QwenDelivery,
+[1;38;5;12m20 |[0m [1;38;5;9m|[0m     build_qwen_message,
+[1;38;5;12m21 |[0m [1;38;5;9m|[0m     effective_daily_target,
+[1;38;5;12m22 |[0m [1;38;5;9m|[0m     verify_reason_arithmetic,
+[1;38;5;12m23 |[0m [1;38;5;9m|[0m     write_daily_report,
+[1;38;5;12m24 |[0m [1;38;5;9m|[0m )
+[1;38;5;12m25 |[0m [1;38;5;9m|[0m from factory.ratings.formula import combine_amd_local
+[1;38;5;12m26 |[0m [1;38;5;9m|[0m from factory.ratings.gateway import RatingGateway
+[1;38;5;12m27 |[0m [1;38;5;9m|[0m from factory.ratings.ingestion import IngestionEngine
+[1;38;5;12m28 |[0m [1;38;5;9m|[0m from factory.ratings.local_votes import (
+[1;38;5;12m29 |[0m [1;38;5;9m|[0m     ACTION_CREATE,
+[1;38;5;12m30 |[0m [1;38;5;9m|[0m     ACTION_DELETE,
+[1;38;5;12m31 |[0m [1;38;5;9m|[0m     ACTION_UPDATE,
+[1;38;5;12m32 |[0m [1;38;5;9m|[0m     LocalVotesService,
+[1;38;5;12m33 |[0m [1;38;5;9m|[0m     SCOPE_NETWORK,
+[1;38;5;12m34 |[0m [1;38;5;9m|[0m     STATE_ACCEPTED,
+[1;38;5;12m35 |[0m [1;38;5;9m|[0m     VoteConflict,
+[1;38;5;12m36 |[0m [1;38;5;9m|[0m     VoteValidationError,
+[1;38;5;12m37 |[0m [1;38;5;9m|[0m     upsert_combined,
+[1;38;5;12m38 |[0m [1;38;5;9m|[0m )
+[1;38;5;12m39 |[0m [1;38;5;9m|[0m from factory.ratings.mapping import resolve_mapping
+[1;38;5;12m40 |[0m [1;38;5;9m|[0m from factory.ratings.models import (
+[1;38;5;12m41 |[0m [1;38;5;9m|[0m     CatalogTitle,
+[1;38;5;12m42 |[0m [1;38;5;9m|[0m     MappingMethod,
+[1;38;5;12m43 |[0m [1;38;5;9m|[0m     MappingState,
+[1;38;5;12m44 |[0m [1;38;5;9m|[0m     RatingObservation,
+[1;38;5;12m45 |[0m [1;38;5;9m|[0m     TitleSourceMapping,
+[1;38;5;12m46 |[0m [1;38;5;9m|[0m     ValidationState,
+[1;38;5;12m47 |[0m [1;38;5;9m|[0m     utc_now_iso,
+[1;38;5;12m48 |[0m [1;38;5;9m|[0m )
+[1;38;5;12m49 |[0m [1;38;5;9m|[0m from factory.ratings.projection import apply_observation
+[1;38;5;12m50 |[0m [1;38;5;9m|[0m from factory.ratings.rate_limit import RateLimiter
+[1;38;5;12m51 |[0m [1;38;5;9m|[0m from factory.ratings.rotation import sort_for_rotation
+[1;38;5;12m52 |[0m [1;38;5;9m|[0m from factory.ratings.source_registry import seed_registry
+[1;38;5;12m53 |[0m [1;38;5;9m|[0m from factory.ratings.store import RatingsStore
+[1;38;5;12m54 |[0m [1;38;5;9m|[0m 
+[1;38;5;12m55 |[0m [1;38;5;9m|[0m ROOT = Path(__file__).resolve().parents[3]
+[1;38;5;12m   |[0m [1;38;5;9m|[0m[1;38;5;9m_^[0m [1;38;5;9mI001[0m
+[1;38;5;12m56 |[0m   AMD = ROOT / "tests" / "fixtures" / "ratings" / "amd"
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Organize imports
+
+[1mtests/unit/ratings/test_ratings_stage2.py[0m[36m:[0m5[36m:[0m8[36m:[0m [1;31mF401[0m [[36m*[0m] `json` imported but unused
+[1;38;5;12m  |[0m
+[1;38;5;12m3 |[0m from __future__ import annotations
+[1;38;5;12m4 |[0m 
+[1;38;5;12m5 |[0m import json
+[1;38;5;12m  |[0m[1;38;5;9m        ^^^^[0m [1;38;5;9mF401[0m
+[1;38;5;12m6 |[0m import threading
+[1;38;5;12m7 |[0m from decimal import Decimal
+[1;38;5;12m  |[0m
+  [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove unused import: `json`
+
+[1mtests/unit/ratings/test_ratings_stage2.py[0m[36m:[0m15[36m:[0m45[36m:[0m [1;31mF401[0m [[36m*[0m] `factory.ratings.circuit_breaker.CircuitBreaker` imported but unused
+[1;38;5;12m   |[0m
+[1;38;5;12m13 |[0m from factory.ratings.adapters.amd_parser import AmdParseError, parse_detail_html
+[1;38;5;12m14 |[0m from factory.ratings.adapters.base import AdapterError, FetchResult
+[1;38;5;12m15 |[0m from factory.ratings.circuit_breaker import CircuitBreaker
+[1;38;5;12m   |[0m[1;38;5;9m                                             ^^^^^^^^^^^^^^[0m [1;38;5;9mF401[0m
+[1;38;5;12m16 |[0m from factory.ratings.config import RatingsConfig
+[1;38;5;12m17 |[0m from factory.ratings.daily import (
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove unused import: `factory.ratings.circuit_breaker.CircuitBreaker`
+
+[1mtests/unit/ratings/test_ratings_stage2.py[0m[36m:[0m34[36m:[0m5[36m:[0m [1;31mF401[0m [[36m*[0m] `factory.ratings.local_votes.STATE_ACCEPTED` imported but unused
+[1;38;5;12m   |[0m
+[1;38;5;12m32 |[0m     LocalVotesService,
+[1;38;5;12m33 |[0m     SCOPE_NETWORK,
+[1;38;5;12m34 |[0m     STATE_ACCEPTED,
+[1;38;5;12m   |[0m[1;38;5;9m     ^^^^^^^^^^^^^^[0m [1;38;5;9mF401[0m
+[1;38;5;12m35 |[0m     VoteConflict,
+[1;38;5;12m36 |[0m     VoteValidationError,
+[1;38;5;12m   |[0m
+   [1;38;5;12m=[0m [1;38;5;14mhelp[0m: Remove unused import: `factory.ratings.local_votes.STATE_ACCEPTED`
+
+Found 47 errors.
+[[36m*[0m] 36 fixable with the `--fix` option (5 hidden fixes can be enabled with the `--unsafe-fixes` option).

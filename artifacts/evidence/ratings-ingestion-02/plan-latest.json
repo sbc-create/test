@@ -1,0 +1,17 @@
+{
+  "source": "shikimori",
+  "planned_candidates": 750,
+  "enqueued": 750,
+  "candidate_cap": 750,
+  "success_target": 500,
+  "priority_breakdown": {
+    "new_catalog": 26,
+    "new_30_days": 17,
+    "release_180_days": 251,
+    "stale_refresh": 215,
+    "archive": 241
+  },
+  "backlog_remaining": 6283,
+  "planned_at": "2026-09-19T18:20:28Z",
+  "requested_limit": 500
+}

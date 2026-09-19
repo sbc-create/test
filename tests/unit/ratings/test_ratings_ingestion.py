@@ -2,12 +2,9 @@
 
 from __future__ import annotations
 
-import io
 import json
 import threading
-import time
 from pathlib import Path
-from unittest.mock import MagicMock
 
 import pytest
 
@@ -26,14 +23,26 @@ from factory.ratings.config import (
 )
 from factory.ratings.gateway import RatingGateway, format_ui_line
 from factory.ratings.ingestion import IngestionEngine
-from factory.ratings.locks import RatingsLockBusy, ratings_lock
+from factory.ratings.locks import RatingsLockBusy
 from factory.ratings.mapping import normalize_title, resolve_mapping
-from factory.ratings.models import CatalogTitle, MappingMethod, MappingState, RatingObservation, ValidationState, payload_sha256, utc_now_iso
+from factory.ratings.models import (
+    CatalogTitle,
+    MappingMethod,
+    MappingState,
+    RatingObservation,
+    ValidationState,
+    utc_now_iso,
+)
 from factory.ratings.projection import apply_observation, score_never_zero_from_null
 from factory.ratings.queue import classify_priority, plan_queue
 from factory.ratings.rate_limit import RateLimiter
-from factory.ratings.secrets import load_secret_file, redact_headers
-from factory.ratings.snapshot import atomic_publish_candidate, build_snapshot, rollback_snapshot, validate_snapshot
+from factory.ratings.secrets import SecretError, load_secret_file, redact_headers
+from factory.ratings.snapshot import (
+    atomic_publish_candidate,
+    build_snapshot,
+    rollback_snapshot,
+    validate_snapshot,
+)
 from factory.ratings.source_registry import seed_registry
 from factory.ratings.store import RatingsStore
 
@@ -174,7 +183,7 @@ def test_auth_secret_redaction(tmp_path):
     wide = tmp_path / "wide"
     wide.write_text("x", encoding="utf-8")
     wide.chmod(0o644)
-    with pytest.raises(Exception):
+    with pytest.raises(SecretError):
         load_secret_file(wide)
     red = redact_headers({"Authorization": "Bearer abc", "User-Agent": "x"})
     assert red["Authorization"] == "***REDACTED***"
@@ -402,12 +411,10 @@ def test_concurrent_workers_singleton(tmp_path, monkeypatch):
 
     def fake_lock(name: str = "ratings-ingestion", *, timeout: float = 0.0):
         # Redirect PATHS.locks via monkeypatch on module used inside
-        from contextlib import contextmanager
         import errno
         import fcntl
-        import json
         import os
-        import time
+        from contextlib import contextmanager
 
         @contextmanager
         def _cm():

@@ -53,7 +53,7 @@ class RatingsConfig:
     lock_name: str = "ratings-ingestion"
 
     @classmethod
-    def from_env(cls, *, db_path: Path | None = None, evidence_dir: Path | None = None) -> "RatingsConfig":
+    def from_env(cls, *, db_path: Path | None = None, evidence_dir: Path | None = None) -> RatingsConfig:
         root = PATHS.root
         return cls(
             daily_success_target=_int("RATINGS_DAILY_SUCCESS_TARGET", 500),

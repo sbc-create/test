@@ -1,0 +1,1449 @@
+{
+  "schema_version": "ratings_snapshot_v1",
+  "generated_at": "2026-09-19T18:20:49Z",
+  "source_cutoffs": {
+    "amd_online": "",
+    "animemedia": "",
+    "provider_feed_imdb": "",
+    "provider_feed_kinopoisk": "",
+    "shikimori": ""
+  },
+  "source_adapter_versions": {
+    "amd_online": "amd_online_html/1.0.0",
+    "animemedia": "animemedia-unverified/0.0.0",
+    "provider_feed_imdb": "provider-feed/1.0.0",
+    "provider_feed_kinopoisk": "provider-feed/1.0.0",
+    "shikimori": "shikimori-graphql/1.0.0"
+  },
+  "source_health": {
+    "amd_online": {
+      "state": "BLOCKED",
+      "health": "UNKNOWN"
+    },
+    "animemedia": {
+      "state": "UNVERIFIED_DISABLED",
+      "health": "UNKNOWN"
+    },
+    "provider_feed_imdb": {
+      "state": "READY",
+      "health": "HEALTHY"
+    },
+    "provider_feed_kinopoisk": {
+      "state": "READY",
+      "health": "HEALTHY"
+    },
+    "shikimori": {
+      "state": "READY",
+      "health": "UNKNOWN"
+    }
+  },
+  "primary_source": "shikimori",
+  "titles": [
+    {
+      "canonical_title_id": "nova:01a09bba-5f87-7901-b838-5bfe4f989e95",
+      "scores": {
+        "shikimori": {
+          "score": 7.9,
+          "vote_count": 8551,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/60285-sakamoto-days-part-2",
+          "observed_at": "2026-09-19T18:20:29Z",
+          "external_id": "60285",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        },
+        "amd_online": {
+          "score": 9.68,
+          "vote_count": 2031,
+          "freshness": "FRESH",
+          "provenance_url": "https://amd.online/5114-fullmetal.html",
+          "observed_at": "2026-09-19T18:20:49Z",
+          "external_id": "demo",
+          "adapter_version": "amd_online_html/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09ca4-8129-7909-a3fe-325fae8f1f61",
+      "scores": {
+        "shikimori": {
+          "score": 6.96,
+          "vote_count": 157,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/58057-dubu-wangu-2nd-season",
+          "observed_at": "2026-09-19T18:20:29Z",
+          "external_id": "58057",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09cb3-b7db-7909-894a-831818257ce8",
+      "scores": {
+        "shikimori": {
+          "score": 6.02,
+          "vote_count": 5,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10058-sore-ike-anpanman-yuurei-sen-wo-yattsukero",
+          "observed_at": "2026-09-19T18:20:29Z",
+          "external_id": "10058",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09ccb-32a4-7909-a634-56dc6065f830",
+      "scores": {
+        "shikimori": {
+          "score": 7.44,
+          "vote_count": 254,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/1006-tenchi-muyou-in-love",
+          "observed_at": "2026-09-19T18:20:29Z",
+          "external_id": "1006",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09ccc-73b1-7909-9932-01bae7df7da1",
+      "scores": {
+        "shikimori": {
+          "score": 6.69,
+          "vote_count": 284,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10074-toriko-3d-kaimaku-gourmet-adventure",
+          "observed_at": "2026-09-19T18:20:29Z",
+          "external_id": "10074",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09ccf-5b2b-7909-ab02-74e63bbb46c2",
+      "scores": {
+        "shikimori": {
+          "score": 6.03,
+          "vote_count": 94,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10177-dd-hokuto-no-ken",
+          "observed_at": "2026-09-19T18:20:29Z",
+          "external_id": "10177",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09cd2-db3b-7909-bb57-13a2bf382145",
+      "scores": {
+        "shikimori": {
+          "score": 6.86,
+          "vote_count": 1352,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10191-katte-ni-kaizou",
+          "observed_at": "2026-09-19T18:20:29Z",
+          "external_id": "10191",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09cd5-6a1b-7909-a71b-0696fa4f29b3",
+      "scores": {
+        "shikimori": {
+          "score": 6.92,
+          "vote_count": 97,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/1022-generator-gawl",
+          "observed_at": "2026-09-19T18:20:29Z",
+          "external_id": "1022",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09cd8-d08c-7909-afa9-b988ca6c3fdf",
+      "scores": {
+        "shikimori": {
+          "score": 7.47,
+          "vote_count": 1544,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/1034-ouritsu-uchuugun-honneamise-no-tsubasa",
+          "observed_at": "2026-09-19T18:20:29Z",
+          "external_id": "1034",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09cdd-5599-7909-be3d-76237d08c43a",
+      "scores": {
+        "shikimori": {
+          "score": 6.14,
+          "vote_count": 287,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10405-xi-avant",
+          "observed_at": "2026-09-19T18:20:29Z",
+          "external_id": "10405",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09ce0-7b41-7909-9970-51bdb3121042",
+      "scores": {
+        "shikimori": {
+          "score": 7.41,
+          "vote_count": 2665,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/30868-ajin-part-1-shoudou",
+          "observed_at": "2026-09-19T18:20:29Z",
+          "external_id": "30868",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09ce3-bf37-7909-820d-c8ac3b116f28",
+      "scores": {
+        "shikimori": {
+          "score": 6.58,
+          "vote_count": 356,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10017-dragon-ball-super-saiya-jin-zetsumetsu-keikaku",
+          "observed_at": "2026-09-19T18:20:29Z",
+          "external_id": "10017",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09ceb-cf13-7909-9f0d-55cc4ff59423",
+      "scores": {
+        "shikimori": {
+          "score": 7.39,
+          "vote_count": 340,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/1911-top-wo-nerae-top-wo-nerae-2-gattai-movie",
+          "observed_at": "2026-09-19T18:20:29Z",
+          "external_id": "1911",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09ced-2b8c-7909-94c8-b6714f1d8109",
+      "scores": {
+        "shikimori": {
+          "score": 7.62,
+          "vote_count": 2199,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/1002-top-wo-nerae-2-diebuster",
+          "observed_at": "2026-09-19T18:20:29Z",
+          "external_id": "1002",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09cf5-02a7-7909-b8f3-4ee5e72de92e",
+      "scores": {
+        "shikimori": {
+          "score": 7.35,
+          "vote_count": 5047,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10209-kore-wa-zombie-desu-ka-ova",
+          "observed_at": "2026-09-19T18:20:29Z",
+          "external_id": "10209",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09cf8-2fc0-7909-b31d-82452b65a3f4",
+      "scores": {
+        "shikimori": {
+          "score": 7.41,
+          "vote_count": 4242,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/15437-kore-wa-zombie-desu-ka-of-the-dead-hai-minotake-ni-attemasu",
+          "observed_at": "2026-09-19T18:20:29Z",
+          "external_id": "15437",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09cfb-640a-7909-be9f-a03fb2178c42",
+      "scores": {
+        "shikimori": {
+          "score": 6.47,
+          "vote_count": 221,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10338-honto-ni-atta-reibai-sensei",
+          "observed_at": "2026-09-19T18:20:29Z",
+          "external_id": "10338",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09d02-7e49-7909-9c6c-961b9d115d27",
+      "scores": {
+        "shikimori": {
+          "score": 5.32,
+          "vote_count": 5804,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10417-gyo",
+          "observed_at": "2026-09-19T18:20:29Z",
+          "external_id": "10417",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09d05-ab74-7909-b087-1ffc479aec8b",
+      "scores": {
+        "shikimori": {
+          "score": 7.08,
+          "vote_count": 1984,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10448-rain-town",
+          "observed_at": "2026-09-19T18:20:29Z",
+          "external_id": "10448",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09d0a-504b-7909-ac34-43a702b6d3c9",
+      "scores": {
+        "shikimori": {
+          "score": 6.91,
+          "vote_count": 516,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/1049-cello-hiki-no-gauche-1982",
+          "observed_at": "2026-09-19T18:20:29Z",
+          "external_id": "1049",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09d0b-9513-7909-a38f-900e1d9f8b62",
+      "scores": {
+        "shikimori": {
+          "score": 5.99,
+          "vote_count": 221,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10501-bannou-yasai-ninninman",
+          "observed_at": "2026-09-19T18:20:29Z",
+          "external_id": "10501",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a09d0c-f740-7909-b36f-3689522bf61e",
+      "scores": {
+        "shikimori": {
+          "score": 7.48,
+          "vote_count": 1275,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10500-ojiisan-no-lamp",
+          "observed_at": "2026-09-19T18:20:30Z",
+          "external_id": "10500",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a0aa6e-2008-70d0-89d1-1af7b85336b1",
+      "scores": {
+        "shikimori": {
+          "score": 7.2,
+          "vote_count": 1277,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/30869-ajin-part-2-shoutotsu",
+          "observed_at": "2026-09-19T18:20:30Z",
+          "external_id": "30869",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a0af3f-a972-76be-a845-326a4a565a93",
+      "scores": {
+        "shikimori": {
+          "score": 7.55,
+          "vote_count": 11708,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/33253-ajin-part-2",
+          "observed_at": "2026-09-19T18:20:30Z",
+          "external_id": "33253",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a0b507-3280-7b2a-8af4-674dd73cff72",
+      "scores": {
+        "shikimori": {
+          "score": 7.12,
+          "vote_count": 236,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/53477-binghuo-mochu-2",
+          "observed_at": "2026-09-19T18:20:30Z",
+          "external_id": "53477",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a0251f-eba3-71bb-b187-3d40150e8108",
+      "scores": {
+        "shikimori": {
+          "score": 7.45,
+          "vote_count": 2218,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/z16273-acchi-kocchi-place-princess",
+          "observed_at": "2026-09-19T18:20:30Z",
+          "external_id": "16273",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a02aaa-f467-7252-82ef-5d32893a17cc",
+      "scores": {
+        "shikimori": {
+          "score": 7.61,
+          "vote_count": 7974,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/23385-kyoukai-no-kanata-shinonome",
+          "observed_at": "2026-09-19T18:20:30Z",
+          "external_id": "23385",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a0301c-063b-7353-87b0-dc8f89d41c52",
+      "scores": {
+        "shikimori": {
+          "score": 6.15,
+          "vote_count": 47,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/2260-kirameki-project",
+          "observed_at": "2026-09-19T18:20:30Z",
+          "external_id": "2260",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a06809-263c-79e9-96c8-e9d9cca30084",
+      "scores": {
+        "shikimori": {
+          "score": 7.36,
+          "vote_count": 253,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/1021-kaikan-phrase",
+          "observed_at": "2026-09-19T18:20:30Z",
+          "external_id": "1021",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a06cf5-9cf8-7275-b1a9-2e283bf0f006",
+      "scores": {
+        "shikimori": {
+          "score": 7.78,
+          "vote_count": 9636,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10029-coquelicot-zaka-kara",
+          "observed_at": "2026-09-19T18:20:30Z",
+          "external_id": "10029",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a06d37-d2f1-727b-b2f2-18ef64702047",
+      "scores": {
+        "shikimori": {
+          "score": 5.75,
+          "vote_count": 21,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10261-toufu-kozou",
+          "observed_at": "2026-09-19T18:20:30Z",
+          "external_id": "10261",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a06d4d-4b5c-727b-b63b-9b37acbc43f2",
+      "scores": {
+        "shikimori": {
+          "score": 6.46,
+          "vote_count": 37,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10013-shouwa-monogatari-movie",
+          "observed_at": "2026-09-19T18:20:30Z",
+          "external_id": "10013",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a071de-4844-7568-904c-56256c7f4048",
+      "scores": {
+        "shikimori": {
+          "score": 6.87,
+          "vote_count": 39,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63138-kaijuu-8-gou-narumi-no-heijitsu",
+          "observed_at": "2026-09-19T18:20:30Z",
+          "external_id": "63138",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a07e0c-5e70-7357-8f3a-0d99dbd88208",
+      "scores": {
+        "shikimori": {
+          "score": 6.35,
+          "vote_count": 227,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/10055-black-jack-obaa-chan",
+          "observed_at": "2026-09-19T18:20:30Z",
+          "external_id": "10055",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a07e11-f100-7357-9899-e43068add5b6",
+      "scores": {
+        "shikimori": {
+          "score": 6.04,
+          "vote_count": 182,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/1037-saint-beast-seijuu-kourin-hen",
+          "observed_at": "2026-09-19T18:20:30Z",
+          "external_id": "1037",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a07e16-4af0-7357-ac5d-846ab524751d",
+      "scores": {
+        "shikimori": {
+          "score": 6.34,
+          "vote_count": 69,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/3004-saint-beast-ikusen-no-hiru-to-yoru-hen",
+          "observed_at": "2026-09-19T18:20:31Z",
+          "external_id": "3004",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:01a088fb-b68f-7ea3-a402-607f146bf613",
+      "scores": {
+        "shikimori": {
+          "score": 7.95,
+          "vote_count": 13,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63011-chiikawa-movie-ningyo-no-shima-no-himitsu",
+          "observed_at": "2026-09-19T18:20:31Z",
+          "external_id": "63011",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d2d45-c348-736d-942a-94d5504a1647",
+      "scores": {
+        "shikimori": {
+          "score": 6.88,
+          "vote_count": 86,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/61626-sou-shen-ji-ona",
+          "observed_at": "2026-09-19T18:20:31Z",
+          "external_id": "61626",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d2eff-d7ea-7f90-b8b2-62809d948cd8",
+      "scores": {
+        "shikimori": {
+          "score": 6.57,
+          "vote_count": 57,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/60778-fushigi-no-kuni-de-alice-to-dive-in-wonderland",
+          "observed_at": "2026-09-19T18:20:31Z",
+          "external_id": "60778",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d2f13-a351-722b-ab1e-f878cdb60dc5",
+      "scores": {
+        "shikimori": {
+          "score": 7.56,
+          "vote_count": 463,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/47351-kaibutsu",
+          "observed_at": "2026-09-19T18:20:31Z",
+          "external_id": "47351",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d2f14-98a1-7804-a272-a1b4b49eba29",
+      "scores": {
+        "shikimori": {
+          "score": 7.34,
+          "vote_count": 405,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/44407-shinkai-2020",
+          "observed_at": "2026-09-19T18:20:31Z",
+          "external_id": "44407",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d2f14-9ad2-774c-a971-a1dd0290db15",
+      "scores": {
+        "shikimori": {
+          "score": 7.02,
+          "vote_count": 254,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/43590-yakusoku-2020",
+          "observed_at": "2026-09-19T18:20:31Z",
+          "external_id": "43590",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d2f15-8dbd-7790-9d17-366258ee0988",
+      "scores": {
+        "shikimori": {
+          "score": 7.33,
+          "vote_count": 313,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/43919-obenkyou-shitoite-yo",
+          "observed_at": "2026-09-19T18:20:31Z",
+          "external_id": "43919",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d2f17-71e7-73b6-8cc0-b34a1660c756",
+      "scores": {
+        "shikimori": {
+          "score": 6.93,
+          "vote_count": 199,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/43522-leo",
+          "observed_at": "2026-09-19T18:20:31Z",
+          "external_id": "43522",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d2f19-581a-7763-84fe-00b60838ea43",
+      "scores": {
+        "shikimori": {
+          "score": 7.33,
+          "vote_count": 413,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/48554-yasashii-suisei",
+          "observed_at": "2026-09-19T18:20:31Z",
+          "external_id": "48554",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d2f21-e7e2-798b-a8f6-89e0470e023f",
+      "scores": {
+        "shikimori": {
+          "score": 7.7,
+          "vote_count": 601,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/47402-heikousen",
+          "observed_at": "2026-09-19T18:20:31Z",
+          "external_id": "47402",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d2f27-b451-7d21-baaa-7e72dd8ab92c",
+      "scores": {
+        "shikimori": {
+          "score": 7.08,
+          "vote_count": 226,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/42783-dazzling-white-town",
+          "observed_at": "2026-09-19T18:20:31Z",
+          "external_id": "42783",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d2f29-9e54-740f-8898-539ba46c8483",
+      "scores": {
+        "shikimori": {
+          "score": 7.27,
+          "vote_count": 1180,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/z38921-tsurune-kazemai-koukou-kyuudou-bu-yabai",
+          "observed_at": "2026-09-19T18:20:31Z",
+          "external_id": "38921",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d2f2d-692b-7ac8-ad45-d5637f83422a",
+      "scores": {
+        "shikimori": {
+          "score": 7.26,
+          "vote_count": 8,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/8364-crayon-shin-chan-movie-12-arashi-wo-yobu-yuuhi-no-kasukabe-boys",
+          "observed_at": "2026-09-19T18:20:31Z",
+          "external_id": "8364",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d2f5c-b508-7f03-aac5-ab868dc7ef6b",
+      "scores": {
+        "shikimori": {
+          "score": 7.59,
+          "vote_count": 2116,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/38002-asobi-asobase-specials",
+          "observed_at": "2026-09-19T18:20:31Z",
+          "external_id": "38002",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d2f86-ebb3-7462-b284-21257d5f0ba7",
+      "scores": {
+        "shikimori": {
+          "score": 7.75,
+          "vote_count": 667,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/37959-gakuen-babysitters-special",
+          "observed_at": "2026-09-19T18:20:31Z",
+          "external_id": "37959",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d2fb2-498a-7bf6-b0ab-fd7d358f26df",
+      "scores": {
+        "shikimori": {
+          "score": 7.6,
+          "vote_count": 1272,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/37306-k-seven-stories-movie-5-memory-of-red-burn",
+          "observed_at": "2026-09-19T18:20:32Z",
+          "external_id": "37306",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d2fb2-4bc3-79ad-8e43-79c8e17d0a4d",
+      "scores": {
+        "shikimori": {
+          "score": 7.18,
+          "vote_count": 1038,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/37307-k-seven-stories-movie-6-circle-vision-nameless-song",
+          "observed_at": "2026-09-19T18:20:32Z",
+          "external_id": "37307",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d2fc4-3ef5-7b56-98ff-0bee4a191ebd",
+      "scores": {
+        "shikimori": {
+          "score": 7.35,
+          "vote_count": 472,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/37266-ano-ko-secret",
+          "observed_at": "2026-09-19T18:20:32Z",
+          "external_id": "37266",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d31ac-2b24-779a-be10-bc166e679b30",
+      "scores": {
+        "shikimori": {
+          "score": 7.17,
+          "vote_count": 69,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/37178-kiratto-pri-chan",
+          "observed_at": "2026-09-19T18:20:32Z",
+          "external_id": "37178",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d3e95-f9e9-7dc4-b678-1cd19c8d8ed4",
+      "scores": {
+        "shikimori": {
+          "score": 7.72,
+          "vote_count": 1254,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/61443-shunkashuutou-daikousha-haru-no-mai",
+          "observed_at": "2026-09-19T18:20:32Z",
+          "external_id": "61443",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d4295-5ce1-7c26-9744-3ad6d2c6a332",
+      "scores": {
+        "shikimori": {
+          "score": 6.69,
+          "vote_count": 1280,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/56906-isekai-de-cheat-skill-wo-te-ni-shita-ore-wa-genjitsu-sekai-wo-mo-musou-suru-level-up-wa-jinsei-wo-kaeta-tv-special",
+          "observed_at": "2026-09-19T18:20:32Z",
+          "external_id": "56906",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d4388-1bf0-7a1c-bdc9-c8bf380b5d4f",
+      "scores": {
+        "shikimori": {
+          "score": 5.76,
+          "vote_count": 26,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62066-monster-strike-deadverse-reloaded",
+          "observed_at": "2026-09-19T18:20:32Z",
+          "external_id": "62066",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d440b-362a-7268-912a-431d9b4d502c",
+      "scores": {
+        "shikimori": {
+          "score": 7.47,
+          "vote_count": 38,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/38804-kiratto-pri-chan-season-2",
+          "observed_at": "2026-09-19T18:20:32Z",
+          "external_id": "38804",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d4555-03a0-7250-8eb4-93cb7d674b78",
+      "scores": {
+        "shikimori": {
+          "score": 5.84,
+          "vote_count": 2764,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62825-saikyou-no-shokugyou-wa-yuusha-demo-kenja-demo-naku-kanteishi-kari-rashii-desu-yo",
+          "observed_at": "2026-09-19T18:20:32Z",
+          "external_id": "62825",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d495f-d54f-7a84-9b02-81a411771455",
+      "scores": {
+        "shikimori": {
+          "score": 7.83,
+          "vote_count": 9176,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/59708-youkoso-jitsuryoku-shijou-shugi-no-kyoushitsu-e-4th-season-2-nensei-hen-1-gakki",
+          "observed_at": "2026-09-19T18:20:32Z",
+          "external_id": "59708",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d49b6-6287-7332-bf69-810267c88a75",
+      "scores": {
+        "shikimori": {
+          "score": 6.92,
+          "vote_count": 453,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62342-maid-san-wa-taberu-dake",
+          "observed_at": "2026-09-19T18:20:32Z",
+          "external_id": "62342",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d4a4e-1be7-74dd-adf3-17c00ff49650",
+      "scores": {
+        "shikimori": {
+          "score": 7.14,
+          "vote_count": 1398,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62893-nigashita-sakana-wa-ookikatta-ga-tsuriageta-sakana-ga-ookisugita-ken",
+          "observed_at": "2026-09-19T18:20:32Z",
+          "external_id": "62893",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d4b36-552e-7e4c-939c-9e2d0a8fef4d",
+      "scores": {
+        "shikimori": {
+          "score": 5.91,
+          "vote_count": 154,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/40517-ano-hi-no-kokoro-wo-toraete",
+          "observed_at": "2026-09-19T18:20:32Z",
+          "external_id": "40517",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d4b4c-486a-7e59-bf8b-f99956b32acd",
+      "scores": {
+        "shikimori": {
+          "score": 6.76,
+          "vote_count": 992,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62512-jidou-hanbaiki-ni-umarekawatta-ore-wa-meikyuu-wo-samayou-3rd-season",
+          "observed_at": "2026-09-19T18:20:32Z",
+          "external_id": "62512",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d4b5f-356b-7b22-9243-59357b327a55",
+      "scores": {
+        "shikimori": {
+          "score": 8.45,
+          "vote_count": 5061,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/57779-dorohedoro-season-2",
+          "observed_at": "2026-09-19T18:20:33Z",
+          "external_id": "57779",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d4bdf-b2a1-7a84-98cd-53a8975e0204",
+      "scores": {
+        "shikimori": {
+          "score": 6.53,
+          "vote_count": 3261,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/61831-saikyou-no-ousama-nidome-no-jinsei-wa-nani-wo-suru-season-2",
+          "observed_at": "2026-09-19T18:20:33Z",
+          "external_id": "61831",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d4e98-942d-79b6-95e1-2fc4960f76d0",
+      "scores": {
+        "shikimori": {
+          "score": 8.26,
+          "vote_count": 6906,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62568-dr-stone-science-future-part-3",
+          "observed_at": "2026-09-19T18:20:33Z",
+          "external_id": "62568",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d4f7b-4330-745c-93c9-a67bd239d8de",
+      "scores": {
+        "shikimori": {
+          "score": 8.25,
+          "vote_count": 3258,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/60852-koori-no-jouheki",
+          "observed_at": "2026-09-19T18:20:33Z",
+          "external_id": "60852",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d4f8c-fb24-7493-8b78-877ebabf0c61",
+      "scores": {
+        "shikimori": {
+          "score": 6.61,
+          "vote_count": 1445,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/61943-haibara-kun-no-tsuyokute-seishun-new-game",
+          "observed_at": "2026-09-19T18:20:33Z",
+          "external_id": "61943",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d4f8d-ebbc-7da4-b899-733f43ff8a11",
+      "scores": {
+        "shikimori": {
+          "score": 6.22,
+          "vote_count": 834,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62964-mata-korosarete-shimatta-no-desu-ne-tantei-sama",
+          "observed_at": "2026-09-19T18:20:33Z",
+          "external_id": "62964",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d4f8e-dc65-79d7-bf97-f9b2358699d3",
+      "scores": {
+        "shikimori": {
+          "score": 7.16,
+          "vote_count": 417,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/59835-kirio-fanclub",
+          "observed_at": "2026-09-19T18:20:33Z",
+          "external_id": "59835",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d4f91-ab03-73fc-820d-084f42c34689",
+      "scores": {
+        "shikimori": {
+          "score": 6.07,
+          "vote_count": 979,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/59443-reincarnation-no-kaben",
+          "observed_at": "2026-09-19T18:20:33Z",
+          "external_id": "59443",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d5252-baf3-7889-926a-126ff0e3d1d0",
+      "scores": {
+        "shikimori": {
+          "score": 6.06,
+          "vote_count": 1312,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63304-mamonogurai-no-boukensha-ore-dake-mamono-wo-kuratte-tsuyoku-naru",
+          "observed_at": "2026-09-19T18:20:33Z",
+          "external_id": "63304",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d53b1-b653-72c1-9b05-c98ef104a6b8",
+      "scores": {
+        "shikimori": {
+          "score": 7.67,
+          "vote_count": 2780,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/61687-jishou-akuyaku-reijou-na-konyakusha-no-kansatsu-kiroku",
+          "observed_at": "2026-09-19T18:20:33Z",
+          "external_id": "61687",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d53f7-4d1b-7caf-ab38-9c3dce36c270",
+      "scores": {
+        "shikimori": {
+          "score": 7.0,
+          "vote_count": 3598,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/56876-otonari-no-tenshi-sama-ni-itsunomanika-dame-ningen-ni-sareteita-ken-2",
+          "observed_at": "2026-09-19T18:20:33Z",
+          "external_id": "56876",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d5673-87c6-7357-b506-4a7a8354399a",
+      "scores": {
+        "shikimori": {
+          "score": 6.95,
+          "vote_count": 316,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62068-snowball-earth",
+          "observed_at": "2026-09-19T18:20:33Z",
+          "external_id": "62068",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d5873-f4a7-7e21-921d-fa5e36ab0703",
+      "scores": {
+        "shikimori": {
+          "score": 6.53,
+          "vote_count": 11,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/60153-rilakkuma",
+          "observed_at": "2026-09-19T18:20:33Z",
+          "external_id": "60153",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d587a-7c29-7a61-a23d-150b663ab619",
+      "scores": {
+        "shikimori": {
+          "score": 7.74,
+          "vote_count": 914,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/57466-honzuki-no-gekokujou-shisho-ni-naru-tame-ni-wa-shudan-wo-erandeiraremasen-ryoushu-no-youjo",
+          "observed_at": "2026-09-19T18:20:34Z",
+          "external_id": "57466",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d587d-4ad7-76ab-9aaa-cdad67d697ab",
+      "scores": {
+        "shikimori": {
+          "score": 8.08,
+          "vote_count": 547,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/60310-mairimashita-iruma-kun-4th-season",
+          "observed_at": "2026-09-19T18:20:34Z",
+          "external_id": "60310",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d59e1-8b7b-77fb-be95-4c68b4cfbc97",
+      "scores": {
+        "shikimori": {
+          "score": 7.86,
+          "vote_count": 1631,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62001-yomi-no-tsugai",
+          "observed_at": "2026-09-19T18:20:34Z",
+          "external_id": "62001",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d59f0-71fa-74a3-934f-94f13731792c",
+      "scores": {
+        "shikimori": {
+          "score": 6.9,
+          "vote_count": 1313,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62913-needy-girl-overdose",
+          "observed_at": "2026-09-19T18:20:34Z",
+          "external_id": "62913",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d5a1f-e8ca-7b0f-bd7c-416828314b34",
+      "scores": {
+        "shikimori": {
+          "score": 7.16,
+          "vote_count": 1466,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62050-kami-no-niwatsuki-kusunoki-tei",
+          "observed_at": "2026-09-19T18:20:34Z",
+          "external_id": "62050",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d5a22-b721-74c7-adb6-43f7ba8c6b24",
+      "scores": {
+        "shikimori": {
+          "score": 7.94,
+          "vote_count": 1247,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62164-akane-banashi",
+          "observed_at": "2026-09-19T18:20:34Z",
+          "external_id": "62164",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d5a26-7fc0-7bd1-b91a-e99bae8b7471",
+      "scores": {
+        "shikimori": {
+          "score": 7.08,
+          "vote_count": 1796,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/61501-kanan-sama-wa-akumade-choroi",
+          "observed_at": "2026-09-19T18:20:34Z",
+          "external_id": "61501",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d5a28-5f01-7cef-926b-83262ad03d34",
+      "scores": {
+        "shikimori": {
+          "score": 6.95,
+          "vote_count": 256,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62048-mao",
+          "observed_at": "2026-09-19T18:20:34Z",
+          "external_id": "62048",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d5dd9-0483-7af5-afe1-a0b24e5b5c04",
+      "scores": {
+        "shikimori": {
+          "score": 7.71,
+          "vote_count": 147,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63606-zhe-tian-movie-bei-guan-zhan-wang-teng",
+          "observed_at": "2026-09-19T18:20:34Z",
+          "external_id": "63606",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d5dfd-cb88-7f2f-aab3-31682d9f2208",
+      "scores": {
+        "shikimori": {
+          "score": 5.32,
+          "vote_count": 316,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63433-daikenja-riddle-no-jikan-gyakkou",
+          "observed_at": "2026-09-19T18:20:34Z",
+          "external_id": "63433",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d5e43-97e4-70ba-ad55-3122a4da2041",
+      "scores": {
+        "shikimori": {
+          "score": 8.03,
+          "vote_count": 287,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/58877-diamond-no-ace-act-ii-second-season",
+          "observed_at": "2026-09-19T18:20:34Z",
+          "external_id": "58877",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d5ea2-7983-7c8d-90c5-b83443bb5c6d",
+      "scores": {
+        "shikimori": {
+          "score": 8.53,
+          "vote_count": 4639,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63375-nippon-sangoku",
+          "observed_at": "2026-09-19T18:20:34Z",
+          "external_id": "63375",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d5ec6-cf97-72ac-830b-f8edb2ea67e0",
+      "scores": {
+        "shikimori": {
+          "score": 5.35,
+          "vote_count": 83,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/62852-ghost-concert-missing-songs",
+          "observed_at": "2026-09-19T18:20:34Z",
+          "external_id": "62852",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d5ed4-ab6e-73fe-995c-891ce7c6c043",
+      "scores": {
+        "shikimori": {
+          "score": 6.67,
+          "vote_count": 414,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/63857-tsue-to-tsurugi-no-wistoria-recap",
+          "observed_at": "2026-09-19T18:20:34Z",
+          "external_id": "63857",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:019d638b-164b-7203-aae7-4307acd8ebad",
+      "scores": {
+        "shikimori": {
+          "score": 8.48,
+          "vote_count": 12686,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/51553-tongari-boushi-no-atelier",
+          "observed_at": "2026-09-19T18:20:34Z",
+          "external_id": "51553",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    }
+  ],
+  "title_count": 93,
+  "snapshot_sha256": "24b783c37e172f1afde9ec0ba588bf1f8579d5001fc19bd0ae74a5c1dc1ffd09"
+}

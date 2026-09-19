@@ -14,10 +14,9 @@ from factory.ratings.adapters.animemedia import AnimeMediaAdapter
 from factory.ratings.adapters.shikimori import ShikimoriGraphQLAdapter
 from factory.ratings.catalog import iter_mal_mapped, load_catalog_json, titles_from_catalog_items
 from factory.ratings.config import RatingsConfig
-from factory.ratings.gateway import RatingGateway
 from factory.ratings.ingestion import IngestionEngine
 from factory.ratings.queue import plan_queue
-from factory.ratings.report import estimate_backlog_completion, write_run_report
+from factory.ratings.report import write_run_report
 from factory.ratings.snapshot import atomic_publish_candidate, build_snapshot, validate_snapshot
 from factory.ratings.source_registry import seed_registry
 from factory.ratings.store import RatingsStore

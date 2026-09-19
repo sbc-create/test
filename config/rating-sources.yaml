@@ -104,3 +104,22 @@ sources:
         sources (cyclic provenance forbidden).
       document: docs/rights/animemedia-ratings.md
       granted_at: ""
+
+  - id: amd_online
+    enabled: false
+    ttl_seconds: 86400
+    rate_limit_per_minute: 6
+    state: BLOCKED_PENDING_WRITTEN_PERMISSION
+    provenance:
+      delivery: "public detail HTML pages via factory/ratings"
+      origin: "https://amd.online/"
+      score_field: "multirating-itog-rateval"
+      vote_field: "multirating-itog-votes"
+    authorization:
+      status: absent
+      reason: >-
+        Written commercial reuse / derivative-formula permission from AMD.online
+        owner not provided. Adapter and fixtures ready; bulk live ingestion
+        blocked (AMD_SOURCE_STATE=BLOCKED_PENDING_WRITTEN_PERMISSION).
+      document: artifacts/evidence/ratings-ingestion-02/AMD_PERMISSION_STATUS.md
+      granted_at: ""

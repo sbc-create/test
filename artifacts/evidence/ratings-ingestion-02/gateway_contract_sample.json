@@ -1,0 +1,61 @@
+{
+  "canonical_title_id": "nova:01a09bba-5f87-7901-b838-5bfe4f989e95",
+  "ratingSources": [
+    {
+      "source": "shikimori",
+      "score": 7.9,
+      "voteCount": 8551,
+      "fetchedAt": "2026-09-19T18:20:29Z",
+      "freshness": "FRESH",
+      "provenance": {
+        "url": "https://shikimori.io/animes/60285-sakamoto-days-part-2"
+      }
+    },
+    {
+      "source": "amd_online",
+      "score": 9.68,
+      "voteCount": 2031,
+      "fetchedAt": "2026-09-19T18:20:49Z",
+      "freshness": "FRESH",
+      "provenance": {
+        "url": "https://amd.online/5114-fullmetal.html"
+      }
+    }
+  ],
+  "localRating": {
+    "score": 8.0,
+    "voteCount": 1,
+    "scope": "NETWORK"
+  },
+  "combinedRating": {
+    "score": 9.66,
+    "formulaVersion": "animedia_blend_v1",
+    "baselineWeight": 100,
+    "localVoteCount": 1,
+    "state": "AMD_PLUS_LOCAL"
+  },
+  "rotation": {
+    "score": 9.66,
+    "algorithmVersion": "animedia_rotation_v1"
+  },
+  "scores": {
+    "shikimori": {
+      "score": 7.9,
+      "vote_count": 8551,
+      "freshness": "FRESH",
+      "provenance_url": "https://shikimori.io/animes/60285-sakamoto-days-part-2",
+      "observed_at": "2026-09-19T18:20:29Z",
+      "external_id": "60285",
+      "adapter_version": "shikimori-graphql/1.0.0"
+    },
+    "amd_online": {
+      "score": 9.68,
+      "vote_count": 2031,
+      "freshness": "FRESH",
+      "provenance_url": "https://amd.online/5114-fullmetal.html",
+      "observed_at": "2026-09-19T18:20:49Z",
+      "external_id": "demo",
+      "adapter_version": "amd_online_html/1.0.0"
+    }
+  }
+}

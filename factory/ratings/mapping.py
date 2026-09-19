@@ -219,13 +219,22 @@ def _exact_match_reason(title: CatalogTitle, cand: dict[str, Any]) -> str:
 
     # Episode count — allow ongoing without count
     oe, ce = title.episode_count, cand.get("episode_count")
-    if oe is not None and ce is not None and int(oe) != int(ce):
-        if not (title.is_ongoing or cand.get("is_ongoing")):
-            return "conflict:episode_count"
+    if (
+        oe is not None
+        and ce is not None
+        and int(oe) != int(ce)
+        and not (title.is_ongoing or cand.get("is_ongoing"))
+    ):
+        return "conflict:episode_count"
 
     # Remake / original flags if present
-    if bool(cand.get("is_remake")) and not bool(getattr(title, "is_remake", False)):
-        if title.year and cy and int(title.year) != int(cy):
-            return "conflict:remake"
+    if (
+        bool(cand.get("is_remake"))
+        and not bool(getattr(title, "is_remake", False))
+        and title.year
+        and cy
+        and int(title.year) != int(cy)
+    ):
+        return "conflict:remake"
 
     return "exact"

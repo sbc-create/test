@@ -18,7 +18,8 @@ import random
 import time
 import urllib.error
 import urllib.request
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from factory.ratings import ADAPTER_VERSION_SHIKIMORI
 from factory.ratings.adapters.base import AdapterError, FetchResult
@@ -196,7 +197,7 @@ class ShikimoriGraphQLAdapter:
                     self.sleeper(delay)
                     continue
                 raise AdapterError("HTTP_ERROR", f"HTTP {exc.code}", retryable=False) from exc
-            except (TimeoutError, urllib.error.URLError, TimeoutError) as exc:
+            except (TimeoutError, urllib.error.URLError) as exc:
                 attempt += 1
                 if attempt > self.max_retries:
                     raise AdapterError(
