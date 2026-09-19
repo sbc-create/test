@@ -28,7 +28,8 @@ class ClosedSiteProvenance(TypedDict):
 
 # source_commit per family; RUNTIME_COMMIT filled after Animedia frontend commit.
 LORDS_COMMIT = "5fc22310fdfb8f0c8748f69e5603e4de3267f27e"
-ANIMEDIA_COMMIT = "7cb7c90177f823a6629ea563c6bda45dc07f2489"
+# Tip filled after visual-final commit; apply-nova reads live HEAD when deploying.
+ANIMEDIA_COMMIT = "1cc115824ce684fc47f005edfaa393bd61037f94"
 ZONA_COMMIT = "bcbea00877708c7f930f1fe931a17f66decafed5"
 
 REPO_LORDS = "/home/claude/wt-lords-integration-canary-01"
@@ -59,7 +60,7 @@ CLOSED_SITES: tuple[ClosedSiteProvenance, ...] = (
         "profile": "animedia-icu",
         "source_commit": ANIMEDIA_COMMIT,
         "runtime_commit": RUNTIME_COMMIT,
-        "design_version": "1.2.3",
+        "design_version": "1.2.4",
         "source_repo": REPO_ANIMEDIA,
         "runtime_repo": RUNTIME_REPO,
     },
@@ -70,7 +71,7 @@ CLOSED_SITES: tuple[ClosedSiteProvenance, ...] = (
         "profile": "animedia-space",
         "source_commit": ANIMEDIA_COMMIT,
         "runtime_commit": RUNTIME_COMMIT,
-        "design_version": "1.2.3",
+        "design_version": "1.2.4",
         "source_repo": REPO_ANIMEDIA,
         "runtime_repo": RUNTIME_REPO,
     },
