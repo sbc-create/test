@@ -44,6 +44,16 @@ def _load_migration_0003():
     return mod
 
 
+def _load_migration_0004():
+    path = PATHS.root / "migrations" / "0004_ratings_absence.py"
+    spec = importlib.util.spec_from_file_location("ratings_migration_0004", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"не удалось загрузить миграцию {path}")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
 def _connect(path: Path) -> sqlite3.Connection:
     path.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(str(path), timeout=30.0, isolation_level=None)
@@ -68,6 +78,9 @@ class RatingsStore:
         mig3 = _load_migration_0003()
         if not mig3.applied(self.conn):
             mig3.upgrade(self.conn)
+        mig4 = _load_migration_0004()
+        if not mig4.applied(self.conn):
+            mig4.upgrade(self.conn)
 
     def close(self) -> None:
         self.conn.close()
