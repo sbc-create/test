@@ -1831,14 +1831,15 @@ font-size:18px;display:none;align-items:center;justify-content:center;box-shadow
 .zrl__btn:disabled{opacity:.35;cursor:default}
 .zg{display:grid;gap:var(--a-grid-gap);grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
 @media(min-width:640px){.zg{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(min-width:1024px){.zg{grid-template-columns:repeat(4,minmax(0,1fr))}}
-@media(min-width:1200px){.zg{grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}}
-@media(min-width:1800px){.zg{grid-template-columns:repeat(8,minmax(0,1fr));gap:18px}}
+@media(min-width:768px){.zg{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1024px){.zg{grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}}
+@media(min-width:1200px){.zg{grid-template-columns:repeat(7,minmax(0,1fr));gap:14px}}
+@media(min-width:1800px){.zg{grid-template-columns:repeat(10,minmax(0,1fr));gap:14px}}
 @media(min-width:768px) and (max-width:1199px){
   .zcat .zg,.zwrap--catalog .zg{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
 .zt{display:flex;flex-direction:column;background:var(--a-page);border:0;border-radius:var(--a-radius-card);
-overflow:hidden;min-width:0;height:auto;max-height:370px;box-shadow:var(--a-shadow-soft);
+overflow:hidden;min-width:0;height:auto;max-height:320px;box-shadow:var(--a-shadow-soft);
 transition:transform .14s,box-shadow .14s}
 .zt:hover{transform:translateY(-2px);box-shadow:var(--a-shadow)}
 .zt:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
@@ -1847,11 +1848,11 @@ transition:transform .14s,box-shadow .14s}
 max-width:none;max-height:none}
 .zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:10px;text-align:center;color:var(--a-mute);font-size:12px}
 .zt__none b{display:block;font-size:28px;font-weight:800;color:var(--a-dim);margin-bottom:4px}
-.zt__b{padding:8px 8px 10px;display:flex;flex-direction:column;gap:2px;flex:0 0 auto;min-height:64px}
-.zt__t{font-size:13px;font-weight:700;line-height:1.3;
-display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em}
-.zt__m{display:block;font-size:12px;color:var(--a-dim);line-height:1.3;
-display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;min-height:1.3em}
+.zt__b{padding:6px 8px 8px;display:flex;flex-direction:column;gap:2px;flex:0 0 auto;min-height:52px}
+.zt__t{font-size:12.5px;font-weight:700;line-height:1.25;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:0}
+.zt__m{display:block;font-size:11px;color:var(--a-dim);line-height:1.25;
+display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;min-height:0}
 .zt__r{display:flex;gap:8px;font-size:12px;color:var(--a-dim);margin-top:4px;padding-top:0;
 flex-wrap:nowrap;min-height:1.25em;align-items:center}
 .zt__r b,.zt__r i{color:var(--a-acc);font-weight:700;font-style:normal}
@@ -4709,8 +4710,8 @@ def _аниме_legal_html() -> str:
             "Пагинация сохраняет условия в адресе, а пустая выдача честно "
             "говорит об отсутствии совпадений."),
         "home_shelves": (
-            "recently_added", "top_rated", "video_available",
-            "action", "classic", "anime_movies",
+            "recently_added", "top_rated", "action",
+            "classic", "anime_movies", "donghua",
         ),
     },
     "animedia.icu": {
@@ -5177,6 +5178,7 @@ class ВидАнимедиа(ВидЗона):
             "action": ("Экшен", ""),
             "short_series": ("Короткие сериалы", ""),
             "video_available": ("С видео", ""),
+            "romance": ("Романтика", ""),
         }
         домен = _аниме_домен(self.хост)
         ПОРЯДОК = tuple(домен.get("home_shelves") or (
@@ -5184,31 +5186,21 @@ class ВидАнимедиа(ВидЗона):
             "anime_movies", "donghua"))
         снимок = Снимок.получить(self.д, self.п) if КОЛЛЕКЦИИ else None
         ленты = []
-        занятые_полки: set[str] = set()
         if снимок is not None:
             for ключ in ПОРЯДОК:
                 коллекция = КОЛЛЕКЦИИ.разрешить(ключ, снимок, СЕМЕЙСТВО, предел=48)
-                if коллекция is None:
+                if коллекция is None or not коллекция.items:
                     continue
                 титул, причина = ПРИЧИНЫ.get(ключ, (коллекция.title, ""))
-                набор = []
-                for к in коллекция.items:
-                    if к.raw.get("slug") in занятые_полки:
-                        continue
-                    набор.append(к.raw)
-                    if len(набор) >= 12:
-                        break
-                for з in набор:
-                    занятые_полки.add(з["slug"])
-                if not набор:
-                    continue
+                # Keep full pool (≤48); hero + cross-shelf trim happens at render.
+                набор = [к.raw for к in коллекция.items[:48]]
                 ленты.append((ключ.replace("_", "-"), титул,
                               коллекция.view_all_path,
                               набор, причина))
         else:
             ленты = [
-                ("new-anime", "Новые аниме", "/new/", выбрать(свежесть)[:12], ""),
-                ("top", "Топ по оценкам", "/catalog/", выбрать(оценка, пул=400)[:12], ""),
+                ("new-anime", "Новые аниме", "/new/", выбрать(свежесть)[:48], ""),
+                ("top", "Топ по оценкам", "/catalog/", выбрать(оценка, пул=400)[:48], ""),
             ]
         куски = [self.полоса_готовности(),
                  f'<h1 class="zh">{html.escape(домен["h1"])}</h1>',
@@ -5244,11 +5236,20 @@ class ВидАнимедиа(ВидЗона):
                 '<a href="/new/?page=1">Все добавленные</a></div>'
                 f'{feed}{pager}</section>')
         куски.append('<div class="zad-mid" data-ad-slot="home-mid-content" data-ad-enabled="0"></div>')
-        # Drop first-shelf items already shown in hero to avoid viewport duplicates.
+        # Hero + cross-shelf dedup with refill so the first shelf cannot vanish.
         очищенные = []
-        for i, (ключ, титул, ссылка, набор, причина) in enumerate(ленты):
-            if i == 0 and герой_slug:
-                набор = [з for з in набор if з["slug"] not in герой_slug][:12]
+        занятые: set[str] = set(герой_slug)
+        for ключ, титул, ссылка, кандидаты, причина in ленты:
+            набор = []
+            for з in кандидаты:
+                slug = з.get("slug") or ""
+                if not slug or slug in занятые:
+                    continue
+                набор.append(з)
+                if len(набор) >= 12:
+                    break
+            for з in набор:
+                занятые.add(з["slug"])
             if набор:
                 очищенные.append((ключ, титул, ссылка, набор, причина))
         куски += [self.секция(*л) for л in очищенные]

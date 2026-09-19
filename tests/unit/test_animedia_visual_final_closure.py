@@ -27,10 +27,10 @@ class TestVisualFinalClosure:
         css = mod.СЕМЕЙСТВА_1_1["animedia"]["стиль"]()
         assert "--a-content-max:1760px" in css
         assert "calc(100% - var(--page-gutters))" in css
-        assert "min-width:1200px){.zg{grid-template-columns:repeat(6" in css
-        assert "min-width:1800px){.zg{grid-template-columns:repeat(8" in css
-        assert "repeat(5,minmax(0,1fr))" not in css
-        assert "max-height:370px" in css
+        assert "min-width:1200px){.zg{grid-template-columns:repeat(7" in css
+        assert "min-width:1800px){.zg{grid-template-columns:repeat(10" in css
+        assert "min-width:1024px){.zg{grid-template-columns:repeat(5" in css
+        assert "max-height:320px" in css
         assert ".ahero .zt__p{border-radius:10px;width:152px;height:214px" in css
         assert ".ahome-eps .aeps__thumb{width:60px" in css
         assert "[data-player-state][hidden]" in css

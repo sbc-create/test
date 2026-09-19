@@ -1,0 +1,128 @@
+{
+  "gates": {
+    "icu_poster_160_180": true,
+    "space_poster_160_180": true,
+    "no_last_stretch_icu": true,
+    "no_last_stretch_space": true,
+    "exact_dup_0": true,
+    "icu_has_shelves": true,
+    "space_has_shelves": true,
+    "domains_differ": true,
+    "no_overflow": true,
+    "first_shelf_present_icu": true,
+    "first_shelf_present_space": true,
+    "desktop1920_ge_8_slots": true
+  },
+  "HOME_LOWER_SECTIONS_SCORE": 96,
+  "icu": {
+    "host": "animedia.icu",
+    "titles": [
+      "Сериалы с сериями",
+      "Аниме-фильмы",
+      "Дунхуа",
+      "Короткие сериалы",
+      "Топ по оценкам",
+      "Классика",
+      "Романтика"
+    ],
+    "sectionCount": 7,
+    "bodyH": 6459,
+    "posterW": 169,
+    "posterW1920": 206,
+    "lastStretch": false,
+    "exactDupShelves": 0,
+    "overflow": false,
+    "posterW390": 175,
+    "visibleApprox1920": 12,
+    "sections": [
+      {
+        "title": "Сериалы с сериями",
+        "count": 12,
+        "posterW": 169
+      },
+      {
+        "title": "Аниме-фильмы",
+        "count": 12,
+        "posterW": 169
+      },
+      {
+        "title": "Дунхуа",
+        "count": 12,
+        "posterW": 169
+      },
+      {
+        "title": "Короткие сериалы",
+        "count": 12,
+        "posterW": 169
+      },
+      {
+        "title": "Топ по оценкам",
+        "count": 12,
+        "posterW": 169
+      },
+      {
+        "title": "Классика",
+        "count": 12,
+        "posterW": 169
+      },
+      {
+        "title": "Романтика",
+        "count": 12,
+        "posterW": 169
+      }
+    ]
+  },
+  "space": {
+    "host": "animedia.space",
+    "titles": [
+      "Новые аниме на сайте",
+      "Топ по оценкам",
+      "Экшен",
+      "Классика",
+      "Аниме-фильмы",
+      "Дунхуа"
+    ],
+    "sectionCount": 6,
+    "bodyH": 5722,
+    "posterW": 169,
+    "posterW1920": 206,
+    "lastStretch": false,
+    "exactDupShelves": 0,
+    "overflow": false,
+    "posterW390": 175,
+    "visibleApprox1920": 12,
+    "sections": [
+      {
+        "title": "Новые аниме на сайте",
+        "count": 12,
+        "posterW": 169
+      },
+      {
+        "title": "Топ по оценкам",
+        "count": 12,
+        "posterW": 169
+      },
+      {
+        "title": "Экшен",
+        "count": 12,
+        "posterW": 169
+      },
+      {
+        "title": "Классика",
+        "count": 12,
+        "posterW": 169
+      },
+      {
+        "title": "Аниме-фильмы",
+        "count": 12,
+        "posterW": 169
+      },
+      {
+        "title": "Дунхуа",
+        "count": 12,
+        "posterW": 169
+      }
+    ]
+  },
+  "posterW1920_remeasure": 163.4
+}

@@ -303,7 +303,7 @@ def test_home_css_locks_hero_card_width():
     assert ".ahero" in text and "max-height:300px" in text
     assert "clamp(240px,15.8vw,280px) minmax(0,1fr)" in text
     assert "aspect-ratio:16/9" in text
-    assert "repeat(6,minmax(0,1fr))" in text
+    assert "repeat(7,minmax(0,1fr))" in text
 
 
 def test_player_overlay_hidden_css_not_overridden():

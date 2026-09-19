@@ -40,4 +40,14 @@
 | unit tests | home_pagination + visual_finalization: 22 passed |
 | local QA | all gates true; pagination 5495 events; dups=0; beyond=404 |
 | scores | EPISODE_FEED_SCORE=96 |
+| commit | `f5ac02e` |
+
+## BLOCK_04 attempt 1 → PASS
+
+| Step | Result |
+| --- | --- |
+| section inventory | ICU 7 / SPACE 6 distinct algorithms; height delta explained |
+| repair | 7/10-col denser cards; hero refill; drop SPACE video_available |
+| local QA | poster 169@1363 / 163@1920; exact dup shelves 0 |
+| scores | HOME_LOWER_SECTIONS_SCORE=96 |
 | commit | pending |

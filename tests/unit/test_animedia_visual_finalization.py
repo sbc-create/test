@@ -158,8 +158,8 @@ class TestVisualContracts:
         assert "clamp(240px,15.8vw,280px)" in css
         assert "[data-player-state][hidden]" in css
         assert "height:100% !important" in css
-        assert "grid-template-columns:repeat(8" in css
-        assert "grid-template-columns:repeat(6" in css
+        assert "grid-template-columns:repeat(10" in css
+        assert "grid-template-columns:repeat(7" in css
 
     def test_home_leads_with_episode_feed(self, fe):
         mod, catalog, details = fe
