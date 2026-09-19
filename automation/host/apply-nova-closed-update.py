@@ -222,6 +222,31 @@ def main() -> int:
             if live_m.get("profile") != s["profile"]:
                 raise RuntimeError(f"{s['site']}: profile={live_m.get('profile')} ожидался {s['profile']}")
 
+            # Lords: SEO-снимок обязан существовать и совпадать с live build.
+            if s["family"] == "lords":
+                from factory.lords import seo_snapshot as seo_snap
+
+                snap_path = FRONT / f"seo-snapshot-{s['site']}.json"
+                snap = seo_snap.прочитать(snap_path)
+                expected = {
+                    "source_commit": live_m["source_commit"],
+                    "runtime_commit": live_m["runtime_commit"],
+                    "build_id": live_m["build_id"],
+                    "artifact_sha256": live_m["artifact_sha256"],
+                    "profile": live_m["profile"],
+                    "design_version": live_m["design_version"],
+                    "content_snapshot_id": seo_snap.content_snapshot_id(
+                        catalog=FRONT / f"{s['site']}-catalog.json",
+                        details=FRONT / f"{s['site']}-details.json",
+                    ),
+                }
+                seo_snap.проверить(snap, expected=expected)
+                say(
+                    f"{s['site']}: seo-snapshot ok "
+                    f"pages={len(snap.get('pages') or [])} "
+                    f"content_snapshot_id={snap['content_snapshot_id'][:12]}…"
+                )
+
         run(["sudo", "-n", "nginx", "-t"], env={MANDATE_ENV: MANDATE})
         for s in sites:
             unit = f"nova-{s['site']}.service"
@@ -229,6 +254,17 @@ def main() -> int:
             if out.returncode != 0:
                 raise RuntimeError(f"{unit} not active")
             say(f"{unit}: active")
+            if s["family"] == "lords":
+                port = {"lords-02": "9111"}.get(s["site"])
+                if port:
+                    hz = run(
+                        ["curl", "-fsS", "--max-time", "3",
+                         f"http://127.0.0.1:{port}/healthz"],
+                        check=False,
+                    )
+                    if hz.returncode != 0:
+                        raise RuntimeError(f"{s['site']}: /healthz failed after apply")
+                    say(f"{s['site']}: /healthz ok")
     except Exception as exc:
         say(f"ОТКАЗ после {applied}: {exc}")
         say(f"откат: манифесты и frontend в {rb}")

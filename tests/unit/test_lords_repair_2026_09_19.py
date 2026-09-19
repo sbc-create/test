@@ -223,3 +223,36 @@ class TestPlayerAndAlias:
         модуль = frontend[0]
         assert модуль.Обработчик.МАРШРУТЫ_ВИДА["/movies"] == "Фильм"
         assert "/series" in модуль.Обработчик.МАРШРУТЫ_ВИДА
+
+
+class TestSeoFieldsClosed:
+    def test_search_emits_description(self, frontend):
+        _, вид, *_ = frontend
+        html = вид.поиск({})
+        assert 'name="description"' in html
+        assert "<h1" in html
+        assert "noindex, nofollow" in html
+
+    def test_movies_canonical_is_own_path(self, frontend):
+        _, вид, *_ = frontend
+        html = вид.список("/movies", {"kind": ["Фильм"]})
+        assert 'rel="canonical" href="https://' in html or 'rel="canonical"' in html
+        assert "/movies/" in html
+        assert 'content="noindex, nofollow"' in html
+
+    def test_collection_page_has_h1_and_description(self, frontend):
+        модуль, вид, *_ = frontend
+        # Minimal collection payload matching collection_contract shape.
+        данные = types.SimpleNamespace(
+            title="Топ по рейтингу",
+            description="Лучшие по рейтингу из снимка.",
+            canonical_path="/collection/top_rated/",
+            total=1,
+            page=1,
+            items=[],
+        )
+        html = вид.коллекция(данные)
+        assert "<h1" in html and "Топ по рейтингу" in html
+        assert 'name="description"' in html
+        assert "Лучшие по рейтингу" in html
+        assert "Lords ·" not in html.split("<title>")[1].split("</title>")[0]

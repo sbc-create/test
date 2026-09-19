@@ -2553,15 +2553,20 @@ class Вид:
         сетка = ('<div class="grid">'
                  + "".join(карточка(к.raw) for к in данные.items)
                  + "</div>") if данные.items else если_пусто
+        # H1 обязателен контрактом SEO-снимка (Meta/page-metadata): коллекция —
+        # самостоятельная страница, а не секция без заголовка первого уровня.
         тело = (f'<section class="sec"><div class="sec__h">'
-                f"<h2>{html.escape(данные.title)}</h2>"
+                f"<h1>{html.escape(данные.title)}</h1>"
                 f'<a href="/catalog/">В каталог →</a></div>'
                 f'<p class="claim">{html.escape(данные.description)}</p>'
                 f"{сетка}"
                 + (f'<div class="pg">{листалка}</div>' if данные.total > на_странице
                    else "")
                 + "</section>")
-        return self.оболочка(тело, данные.title, данные.canonical_path)
+        return self.оболочка(
+            тело, данные.title, данные.canonical_path,
+            описание=данные.description or f"Подборка «{данные.title}».",
+        )
 
     def список(self, разд, зпр) -> str:
         raise NotImplementedError
@@ -2644,7 +2649,8 @@ def отбор(данные: "Данные", индекс: dict, зпр: dict, �
                        reverse=True)
     elif сорт == "year":
         набор = sorted(набор, key=lambda з: (з.get("year") or 0, з["slug"]), reverse=True)
-    elif сорт == "title" or раздел == "/catalog":
+    elif сорт == "title" or раздел in (
+            "/catalog", "/movies", "/series", "/animation"):
         набор = sorted(набор, key=lambda з: (з.get("_n") or нормализовать(з["title"]),
                                              з["slug"]))
     elif сорт == "date":
@@ -3132,7 +3138,10 @@ class ВидЛордс(Вид):
                     f"По запросу «{html.escape(q)}» в снимке каталога совпадений нет. "
                     "Проверьте написание. "
                     '<a href="/catalog/">Открыть каталог целиком</a></div>')
-        return self.оболочка(тело, f"Поиск — {self.имя}", "/search/", актив="")
+        return self.оболочка(
+            тело, f"Поиск — {self.имя}", "/search/", актив="",
+            описание=f"Поиск по каталогу витрины {self.имя}.",
+        )
 
     def тайтл(self, запись: dict, деталь: dict) -> str:
         путь = f"/title/{запись['slug']}/"
@@ -4535,12 +4544,13 @@ class Обработчик(BaseHTTPRequestHandler):
         обрезанный = путь.rstrip("/") or "/"
         if обрезанный == "/":
             return self._отдать(в.главная().encode("utf-8"))
-        # Clean kind routes (Lords profile surfaces).
+        # Clean kind routes (Lords profile surfaces). Canonical = own path
+        # (/movies/, /series/, /animation/), not a silent rewrite to /catalog/.
         if обрезанный in self.МАРШРУТЫ_ВИДА:
             kind = self.МАРШРУТЫ_ВИДА[обрезанный]
             зпр = dict(зпр)
             зпр["kind"] = [kind]
-            return self._отдать(в.список("/catalog", зпр).encode("utf-8"))
+            return self._отдать(в.список(обрезанный, зпр).encode("utf-8"))
         if обрезанный in ("/catalog", "/new"):
             return self._отдать(в.список(обрезанный, зпр).encode("utf-8"))
         if обрезанный == "/collections":

@@ -111,8 +111,35 @@ UNIT
 systemctl daemon-reload
 systemctl enable --now "nova-${SITE}.service" >/dev/null
 systemctl restart "nova-${SITE}.service"
-sleep 3
+
+# Readiness gate: is-active alone is not enough. Single-worker restart on the
+# same port leaves nginx proxying to a dead socket → global 502 until bind.
+# Fail-closed: no /healthz within the budget → abort before nginx cutover claim.
+ready=0
+for attempt in $(seq 1 40); do
+  if curl -fsS --max-time 2 "http://127.0.0.1:${PORT}/healthz" >/dev/null 2>&1; then
+    ready=1
+    echo "[nova] ${SITE}: /healthz ready after ${attempt} attempt(s)"
+    break
+  fi
+  sleep 0.5
+done
+if [[ "${ready}" != "1" ]]; then
+  echo "[nova] ОТКАЗ: ${SITE} /healthz не ответил после restart (порт ${PORT})" >&2
+  systemctl --no-pager -l status "nova-${SITE}.service" >&2 || true
+  exit 1
+fi
 systemctl is-active "nova-${SITE}.service"
+
+# SEO snapshot bound to this build — empty/partial/stale/wrong-build → fail.
+REPO_FOR_SEO="${RUNTIME_REPO:-$REPO}"
+python3 "${REPO_FOR_SEO}/automation/host/lords-seo-snapshot.py" \
+  --site "${SITE}" \
+  --domain "${DOMAIN}" \
+  --port "${PORT}" \
+  --front "${FRONT}" \
+  --out "${FRONT}/seo-snapshot-${SITE}.json"
+chmod 644 "${FRONT}/seo-snapshot-${SITE}.json"
 
 # 4. nginx: витрина переводится на новый порт после проверки конфигурации.
 OLDPORT="$(grep -oE '127\.0\.0\.1:9[0-9]{3}' "/etc/nginx/lords/${SITE}.conf" | head -1 | cut -d: -f2)"
