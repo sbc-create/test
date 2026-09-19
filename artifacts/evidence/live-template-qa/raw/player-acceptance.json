@@ -1,0 +1,44 @@
+{
+  "ep1": {
+    "host": {
+      "state": "ok",
+      "ep": "1",
+      "hasVP": true
+    },
+    "videos": [
+      {
+        "rs": 4,
+        "ct": 3.089744,
+        "paused": false,
+        "w": 1280
+      }
+    ],
+    "okcdn_2xx": 23,
+    "ready": true,
+    "playing": true
+  },
+  "ep3": {
+    "host": {
+      "state": "ok",
+      "ep": "3",
+      "hasVP": true
+    },
+    "videos": [
+      {
+        "rs": 4,
+        "ct": 3.036171,
+        "paused": false,
+        "w": 852
+      }
+    ],
+    "okcdn_2xx": 26,
+    "ready": true,
+    "playing": true
+  },
+  "ep7": {
+    "state": "unavailable",
+    "hasVP": false,
+    "text": true,
+    "current": "7"
+  }
+}

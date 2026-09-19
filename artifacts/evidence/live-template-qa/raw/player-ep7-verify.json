@@ -1,0 +1,98 @@
+{
+  "ep7": {
+    "status": 200,
+    "path": "/title/sudmedekspert-stavshaya-domohozyaykoy/season-1/episode-7/",
+    "data_state": "unavailable",
+    "pl_note": "серия без дорожки",
+    "video_player_count": 0,
+    "video_player": [],
+    "episode_attrs": [],
+    "player_script": false,
+    "has_unavailable_copy": true,
+    "has_timeout_copy": false,
+    "series_7_current": true,
+    "robots": "noindex, nofollow",
+    "sha256": "78db2c14740084a7"
+  },
+  "ep1": {
+    "status": 200,
+    "path": "/title/sudmedekspert-stavshaya-domohozyaykoy/season-1/episode-1/",
+    "data_state": "playable",
+    "pl_note": "источник подключён",
+    "video_player_count": 1,
+    "video_player": [
+      "<video-player ident=\"player-sudmedekspert-stavshaya-domohozyaykoy-s1e1\" season=\"1\" data-publisher-id=\"10238\" data-title-id=\"01a0ae3f-4381-7695-9d6b-4028dabf3561\" data-aggregator=\"cvh\" is-show-voice-only=\"false\" is-show-banner=\"true\" disable-licensed=\"false\" episode=\"1\">"
+    ],
+    "episode_attrs": [
+      "1"
+    ],
+    "player_script": true,
+    "has_unavailable_copy": false,
+    "has_timeout_copy": true,
+    "series_7_current": false,
+    "robots": "noindex, nofollow",
+    "sha256": "b491d8c9d8849780"
+  },
+  "ep3": {
+    "status": 200,
+    "path": "/title/sudmedekspert-stavshaya-domohozyaykoy/season-1/episode-3/",
+    "data_state": "playable",
+    "pl_note": "источник подключён",
+    "video_player_count": 1,
+    "video_player": [
+      "<video-player ident=\"player-sudmedekspert-stavshaya-domohozyaykoy-s1e3\" season=\"1\" data-publisher-id=\"10238\" data-title-id=\"01a0ae3f-4381-7695-9d6b-4028dabf3561\" data-aggregator=\"cvh\" is-show-voice-only=\"false\" is-show-banner=\"true\" disable-licensed=\"false\" episode=\"3\">"
+    ],
+    "episode_attrs": [
+      "3"
+    ],
+    "player_script": true,
+    "has_unavailable_copy": false,
+    "has_timeout_copy": true,
+    "series_7_current": false,
+    "robots": "noindex, nofollow",
+    "sha256": "b46566923c05fbfe"
+  },
+  "ep9": {
+    "status": 200,
+    "path": "/title/sudmedekspert-stavshaya-domohozyaykoy/season-1/episode-9/",
+    "data_state": "unavailable",
+    "pl_note": "серия без дорожки",
+    "video_player_count": 0,
+    "video_player": [],
+    "episode_attrs": [],
+    "player_script": false,
+    "has_unavailable_copy": true,
+    "has_timeout_copy": false,
+    "series_7_current": false,
+    "robots": "noindex, nofollow",
+    "sha256": "99c4069a17f9dae4"
+  },
+  "hub": {
+    "status": 200,
+    "path": "/title/sudmedekspert-stavshaya-domohozyaykoy/",
+    "data_state": "awaiting",
+    "pl_note": "выберите серию",
+    "video_player_count": 0,
+    "video_player": [],
+    "episode_attrs": [],
+    "player_script": false,
+    "has_unavailable_copy": false,
+    "has_timeout_copy": false,
+    "series_7_current": false,
+    "robots": "noindex, nofollow",
+    "sha256": "ad59e089493567b6"
+  },
+  "frontend": {
+    "live_sha256": "7491029692f528cb810a63b35b9b2f92b4942ca2f0364c2f6d35f13400c9a067",
+    "worktree_sha256": "7491029692f528cb810a63b35b9b2f92b4942ca2f0364c2f6d35f13400c9a067",
+    "match": true,
+    "has_seriya_s_dorozhkoy": true
+  },
+  "rollback_dir": [
+    "pre-closed-update-20260918T231532Z",
+    "pre-closed-update-20260919T074636Z",
+    "pre-nova-templates-20260916T090311Z"
+  ],
+  "details_err": "CalledProcessError(1, ['sudo', '-n', 'python3', '-c', \"import json; d=json.load(open('/srv/lords/lords-02/current/site/details.json')); print(json.dumps(d['details'].get('sudmedekspert-stavshaya-domohozyaykoy',{}),ensure_ascii=False))\"])",
+  "manifest_err": "CalledProcessError(1, ['sudo', '-n', 'cat', '/srv/lords/lords-02/current/site/template-manifest.json'])"
+}

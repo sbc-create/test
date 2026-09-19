@@ -1,0 +1,218 @@
+{
+  "ep3": {
+    "url": "https://lordserial33.biz/title/sudmedekspert-stavshaya-domohozyaykoy/season-1/episode-3/",
+    "host": {
+      "dataState": "ok",
+      "episode": "3",
+      "season": "1",
+      "titleId": "01a0ae3f-4381-7695-9d6b-4028dabf3561",
+      "shadowHTML": "<style>\n      :host {\n        display: block;\n        width: 100%;\n        height: 100%;\n      }\n      .vk-player-dialog {\n        width: 100%;\n        height: 100%;\n        max-width: none;\n        max-height: none;\n        margin: 0;\n        padding: 0;\n        border: 0;\n        background: transparent;\n      }\n      .vk-player-dialog:not([open]) {\n        display: block;\n        position: static;\n      }\n      .vk-player-dialog[open] {\n        position: fixed;\n        inset: 0;\n      }\n     "
+    },
+    "frames": [
+      {
+        "url": "https://lordserial33.biz/title/sudmedekspert-stavshaya-domohozyaykoy/season-1/episode-3/",
+        "name": "",
+        "videos": [],
+        "ui": {
+          "texts": [
+            "⚲"
+          ],
+          "body": "Перейти к содержимому\nLF\nLORDSERIAL\nНОВИНКИ\nФИЛЬМЫ\nСЕРИАЛЫ\nМУЛЬТФИЛЬМЫ\nКАТАЛОГ\nПоиск по каталогу\n⚲\nLordserial » Сериалы » Судмедэксперт, ставшая домохозяйкой » 1 сезон, 3 серия\nСудмедэксперт, ставшая домохозяйкой — 1 сезон, 3 серия\n\nСерия 3 из 9 по произведению «Судмедэксперт, ставшая домохозяйкой». Вернуться к описанию.\n\nПросмотр серии\nСмотреть онлайн\nисточник подключён\n← 1 сезон, 2 серия\n1 сезон, 4 серия →\nСерии\n1 сезон\n9 серий, доступно 3\n1\n2\n3\n4\n5\n6\n7\n8\n9\nLordserial · тестовая витрина, закры"
+        }
+      },
+      {
+        "url": "https://player.cdnvideohub.com/s2/v2.19.1/frame/",
+        "name": "",
+        "videos": [],
+        "ui": {
+          "texts": [
+            "Сезон 1\nЭпизод 3\nСубтитры"
+          ],
+          "body": "Сезон 1\nЭпизод 3\nСубтитры"
+        }
+      }
+    ],
+    "video_stats": [],
+    "play_trace": null,
+    "currentTime_advanced": false,
+    "readyState_ge_2": false,
+    "media": [
+      {
+        "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/18534149413598",
+        "status": 200,
+        "type": "xhr"
+      },
+      {
+        "url": "https://iv.okcdn.ru/videoPreview?id=20100818340574&type=32&idx=1&scl=4&tkn=FnjxtnDOgrR1_wNs1zfZxveynmE",
+        "status": 200,
+        "type": "image"
+      },
+      {
+        "url": "https://vd703.okcdn.ru/?expires=1789890621868&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ch=-41527938&ms=176.112.172.19&type=1&sig=CwYcJZ3oR7A&ct=6&urls=178.237.23.123&clientType=46&zs=43&id=20100818340574",
+        "status": 200,
+        "type": "fetch"
+      },
+      {
+        "url": "https://vd703.okcdn.ru/?expires=1789890621868&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.19&type=2&sig=b2zejf9tN20&ct=11&urls=178.237.23.123&clientType=46&zs=43&id=20100818340574&bytes=0-6291",
+        "status": 200,
+        "type": "fetch"
+      },
+      {
+        "url": "https://vd703.okcdn.ru/?expires=1789890621868&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.19&type=3&sig=f74ADjhE-5Y&ct=12&urls=178.237.23.123&clientType=46&zs=43&id=20100818340574&bytes=0-5752",
+        "status": 200,
+        "type": "fetch"
+      },
+      {
+        "url": "https://vd703.okcdn.ru/?expires=1789890621868&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.19&type=2&sig=b2zejf9tN20&ct=11&urls=178.237.23.123&clientType=46&zs=43&id=20100818340574&bytes=6292-452238",
+        "status": 200,
+        "type": "fetch"
+      },
+      {
+        "url": "https://vd703.okcdn.ru/?expires=1789890621868&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.19&type=3&sig=f74ADjhE-5Y&ct=12&urls=178.237.23.123&clientType=46&zs=43&id=20100818340574&bytes=5753-224546",
+        "status": 200,
+        "type": "fetch"
+      },
+      {
+        "url": "https://vd703.okcdn.ru/?expires=1789890621868&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.19&type=2&sig=b2zejf9tN20&ct=11&urls=178.237.23.123&clientType=46&zs=43&id=20100818340574&bytes=452239-1304280",
+        "status": 200,
+        "type": "fetch"
+      }
+    ],
+    "playlists_meta": [
+      {
+        "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10238&aggr=cvh&id=01a0ae3f-4381-7695-9d6b-4028dabf3561",
+        "status": 200,
+        "has_body": true
+      }
+    ],
+    "playlist_sample": {
+      "keys": [
+        "titleName",
+        "isSerial",
+        "items",
+        "trailers",
+        "ads",
+        "vast"
+      ],
+      "sample": "{'titleName': 'Судмедэксперт, ставшая домохозяйкой', 'isSerial': True, 'items': [{'cvhId': '01a0aecf-c016-76a8-b3c4-17b7a9e76fa1', 'name': 'Серия 1', 'vkId': '18534163765982', 'voiceType': 'Субтитры', 'season': 1, 'episode': 1}, {'cvhId': '01a0aecf-c018-76a8-bf09-f67f47f47524', 'name': 'Серия 2', 'vkId': '18534154525406', 'voiceType': 'Субтитры', 'season': 1, 'episode': 2}, {'cvhId': '01a0aecf-c014-76a8-a5a0-ad84b83ada81', 'name': 'Серия 3', 'vkId': '18534149413598', 'voiceType': 'Субтитры', 'season': 1, 'episode': 3}], 'trailers': None, 'ads': {'vast': {'preroll': ['https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqc&p2=juhq&puid10=', 'https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqd&p2=juhq&puid10='], 'prerolls': [{'url': 'https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqc&p2=j"
+    },
+    "screenshot": "artifacts/evidence/live-template-qa/screenshots/deep-pass/lords-ep3-iframe-iframe.png"
+  },
+  "ep1": {
+    "url": "https://lordserial33.biz/title/sudmedekspert-stavshaya-domohozyaykoy/season-1/episode-1/",
+    "host": {
+      "dataState": "ok",
+      "episode": "1",
+      "season": "1",
+      "titleId": "01a0ae3f-4381-7695-9d6b-4028dabf3561",
+      "shadowHTML": "<style>\n      :host {\n        display: block;\n        width: 100%;\n        height: 100%;\n      }\n      .vk-player-dialog {\n        width: 100%;\n        height: 100%;\n        max-width: none;\n        max-height: none;\n        margin: 0;\n        padding: 0;\n        border: 0;\n        background: transparent;\n      }\n      .vk-player-dialog:not([open]) {\n        display: block;\n        position: static;\n      }\n      .vk-player-dialog[open] {\n        position: fixed;\n        inset: 0;\n      }\n     "
+    },
+    "frames": [
+      {
+        "url": "https://lordserial33.biz/title/sudmedekspert-stavshaya-domohozyaykoy/season-1/episode-1/",
+        "name": "",
+        "videos": [],
+        "ui": {
+          "texts": [
+            "⚲"
+          ],
+          "body": "Перейти к содержимому\nLF\nLORDSERIAL\nНОВИНКИ\nФИЛЬМЫ\nСЕРИАЛЫ\nМУЛЬТФИЛЬМЫ\nКАТАЛОГ\nПоиск по каталогу\n⚲\nLordserial » Сериалы » Судмедэксперт, ставшая домохозяйкой » 1 сезон, 1 серия\nСудмедэксперт, ставшая домохозяйкой — 1 сезон, 1 серия\n\nСерия 1 из 9 по произведению «Судмедэксперт, ставшая домохозяйкой». Вернуться к описанию.\n\nПросмотр серии\nСмотреть онлайн\nисточник подключён\nЭто первая серия\n1 сезон, 2 серия →\nСерии\n1 сезон\n9 серий, доступно 3\n1\n2\n3\n4\n5\n6\n7\n8\n9\nLordserial · тестовая витрина, закрыта"
+        }
+      },
+      {
+        "url": "https://player.cdnvideohub.com/s2/v2.19.1/frame/",
+        "name": "",
+        "videos": [],
+        "ui": {
+          "texts": [
+            "Сезон 1\nЭпизод 1\nСубтитры"
+          ],
+          "body": "Сезон 1\nЭпизод 1\nСубтитры"
+        }
+      }
+    ],
+    "video_stats": [],
+    "play_trace": null,
+    "currentTime_advanced": false,
+    "readyState_ge_2": false,
+    "media": [
+      {
+        "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/18534163765982",
+        "status": 200,
+        "type": "xhr"
+      },
+      {
+        "url": "https://iv.okcdn.ru/videoPreview?id=20100843768542&type=32&idx=0&scl=4&tkn=opTxpMx6aYejckTEVWb428pXT7A",
+        "status": 200,
+        "type": "image"
+      },
+      {
+        "url": "https://vd661.okcdn.ru/?expires=1789890627494&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ch=-649402730&ms=178.237.23.12&type=1&sig=1hcUCBydnkk&ct=6&urls=185.180.203.19&clientType=46&zs=43&id=20100843768542",
+        "status": 200,
+        "type": "fetch"
+      },
+      {
+        "url": "https://vd661.okcdn.ru/?expires=1789890627494&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=178.237.23.12&type=3&sig=V5rShTp8dMY&ct=11&urls=185.180.203.19&clientType=46&zs=43&id=20100843768542&bytes=0-7807",
+        "status": 200,
+        "type": "fetch"
+      },
+      {
+        "url": "https://vd661.okcdn.ru/?expires=1789890627494&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=178.237.23.12&type=3&sig=V5rShTp8dMY&ct=12&urls=185.180.203.19&clientType=46&zs=43&id=20100843768542&bytes=0-7120",
+        "status": 200,
+        "type": "fetch"
+      },
+      {
+        "url": "https://vd661.okcdn.ru/?expires=1789890627494&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=178.237.23.12&type=3&sig=V5rShTp8dMY&ct=11&urls=185.180.203.19&clientType=46&zs=43&id=20100843768542&bytes=7808-226092",
+        "status": 200,
+        "type": "fetch"
+      },
+      {
+        "url": "https://vd661.okcdn.ru/?expires=1789890627494&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=178.237.23.12&type=3&sig=V5rShTp8dMY&ct=12&urls=185.180.203.19&clientType=46&zs=43&id=20100843768542&bytes=7121-225852",
+        "status": 200,
+        "type": "fetch"
+      },
+      {
+        "url": "https://vd661.okcdn.ru/?expires=1789890627494&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=178.237.23.12&type=3&sig=V5rShTp8dMY&ct=11&urls=185.180.203.19&clientType=46&zs=43&id=20100843768542&bytes=226093-753838",
+        "status": 200,
+        "type": "fetch"
+      }
+    ],
+    "playlists_meta": [
+      {
+        "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10238&aggr=cvh&id=01a0ae3f-4381-7695-9d6b-4028dabf3561",
+        "status": 200,
+        "has_body": true
+      }
+    ],
+    "playlist_sample": {
+      "keys": [
+        "titleName",
+        "isSerial",
+        "items",
+        "trailers",
+        "ads",
+        "vast"
+      ],
+      "sample": "{'titleName': 'Судмедэксперт, ставшая домохозяйкой', 'isSerial': True, 'items': [{'cvhId': '01a0aecf-c016-76a8-b3c4-17b7a9e76fa1', 'name': 'Серия 1', 'vkId': '18534163765982', 'voiceType': 'Субтитры', 'season': 1, 'episode': 1}, {'cvhId': '01a0aecf-c018-76a8-bf09-f67f47f47524', 'name': 'Серия 2', 'vkId': '18534154525406', 'voiceType': 'Субтитры', 'season': 1, 'episode': 2}, {'cvhId': '01a0aecf-c014-76a8-a5a0-ad84b83ada81', 'name': 'Серия 3', 'vkId': '18534149413598', 'voiceType': 'Субтитры', 'season': 1, 'episode': 3}], 'trailers': None, 'ads': {'vast': {'preroll': ['https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqc&p2=juhq&puid10=', 'https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqd&p2=juhq&puid10='], 'prerolls': [{'url': 'https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqc&p2=j"
+    },
+    "screenshot": "artifacts/evidence/live-template-qa/screenshots/deep-pass/lords-ep1-iframe-iframe.png"
+  },
+  "playlists_captured": {
+    "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10238&aggr=cvh&id=01a0ae3f-4381-7695-9d6b-4028dabf3561": [
+      "titleName",
+      "isSerial",
+      "items",
+      "trailers",
+      "ads",
+      "vast"
+    ]
+  },
+  "verdict": {
+    "ep3_ready": false,
+    "ep3_advanced": false,
+    "ep1_ready": false,
+    "ep1_advanced": false,
+    "ep3_episode_attr": "3",
+    "ep1_episode_attr": "1"
+  }
+}

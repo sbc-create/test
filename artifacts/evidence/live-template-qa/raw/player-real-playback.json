@@ -1,0 +1,144 @@
+{
+  "host": {
+    "state": "ok",
+    "episode": "3",
+    "season": "1",
+    "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.1/frame/"
+  },
+  "videos_before": [
+    {
+      "readyState": 4,
+      "currentTime": 2.168093,
+      "paused": false,
+      "networkState": 2,
+      "videoWidth": 1280,
+      "videoHeight": 720,
+      "src": "blob:https://player.cdnvideohub.com/d669f648-34e6-48d5-8a49-5e92e9c512f2",
+      "frame": "https://player.cdnvideohub.com/s2/v2.19.1/frame/"
+    }
+  ],
+  "videos_after": [
+    {
+      "readyState": 4,
+      "currentTime": 7.203369,
+      "paused": false,
+      "networkState": 2,
+      "videoWidth": 1280,
+      "videoHeight": 720,
+      "src": "blob:https://player.cdnvideohub.com/d669f648-34e6-48d5-8a49-5e92e9c512f2",
+      "frame": "https://player.cdnvideohub.com/s2/v2.19.1/frame/"
+    }
+  ],
+  "ui_texts": [
+    {
+      "frame": "https://lordserial33.biz/title/sudmedekspert-stavshaya-domohozyaykoy/season-1/episode-3/",
+      "text": "Перейти к содержимому\nLF\nLORDSERIAL\nНОВИНКИ\nФИЛЬМЫ\nСЕРИАЛЫ\nМУЛЬТФИЛЬМЫ\nКАТАЛОГ\nПоиск по каталогу\n⚲\nLordserial » Сериалы » Судмедэксперт, ставшая домохозяйкой » 1 сезон, 3 серия\nСудмедэксперт, ставшая домохозяйкой — 1 сезон, 3 серия\n\nСерия 3 из 9 по произведению «Судмедэксперт, ставшая домохозяйкой». Вернуться к описанию.\n\nПросмотр серии\nСмотреть онлайн\nисточник подключён\n← 1 сезон, 2 серия\n1 сезон, 4 серия →\nСерии\n1 сезон\n9 серий, доступно 3\n1\n2\n3\n4\n5\n6\n7\n8\n9\nLordserial · тестовая витрина, закрыта от индексации\nTemplate: lords 1.1.0 · a67bf79d"
+    },
+    {
+      "frame": "https://player.cdnvideohub.com/s2/v2.19.1/frame/",
+      "text": ""
+    }
+  ],
+  "playlist_url": "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10238&aggr=cvh&id=01a0ae3f-4381-7695-9d6b-4028dabf3561",
+  "playlist_title": [
+    "Судмедэксперт, ставшая домохозяйкой",
+    true,
+    3
+  ],
+  "playlist_items_compact": [
+    {
+      "cvhId": "01a0aecf-c016-76a8-b3c4-17b7a9e76fa1",
+      "name": "Серия 1",
+      "vkId": "18534163765982",
+      "season": 1,
+      "episode": 1
+    },
+    {
+      "cvhId": "01a0aecf-c018-76a8-bf09-f67f47f47524",
+      "name": "Серия 2",
+      "vkId": "18534154525406",
+      "season": 1,
+      "episode": 2
+    },
+    {
+      "cvhId": "01a0aecf-c014-76a8-a5a0-ad84b83ada81",
+      "name": "Серия 3",
+      "vkId": "18534149413598",
+      "season": 1,
+      "episode": 3
+    }
+  ],
+  "video_api_url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/18534149413598",
+  "video_api_keys": [
+    "unitedVideoId",
+    "duration",
+    "failoverHost",
+    "thumbUrl",
+    "sources"
+  ],
+  "segments_2xx_count": 25,
+  "segments_sample": [
+    {
+      "url": "https://iv.okcdn.ru/videoPreview?id=20100818340574&type=32&idx=1&scl=4&tkn=FnjxtnDOgrR1_wNs1zfZxveynmE",
+      "status": 200,
+      "bytes": "27533"
+    },
+    {
+      "url": "https://vd703.okcdn.ru/?expires=1789890621868&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ch=-41527938&ms=176.112.172.19&type=1&sig=CwYcJZ3oR7A&ct=6&urls=178.237.23.123&clientType=46&z",
+      "status": 200,
+      "bytes": "1115"
+    },
+    {
+      "url": "https://vd703.okcdn.ru/?expires=1789890621868&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.19&type=3&sig=f74ADjhE-5Y&ct=11&urls=178.237.23.123&clientType=46&zs=43&id=2010",
+      "status": 200,
+      "bytes": "6296"
+    },
+    {
+      "url": "https://vd703.okcdn.ru/?expires=1789890621868&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.19&type=3&sig=f74ADjhE-5Y&ct=12&urls=178.237.23.123&clientType=46&zs=43&id=2010",
+      "status": 200,
+      "bytes": "5753"
+    },
+    {
+      "url": "https://vd703.okcdn.ru/?expires=1789890621868&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.19&type=3&sig=f74ADjhE-5Y&ct=11&urls=178.237.23.123&clientType=46&zs=43&id=2010",
+      "status": 200,
+      "bytes": "734405"
+    },
+    {
+      "url": "https://vd703.okcdn.ru/?expires=1789890621868&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.19&type=3&sig=f74ADjhE-5Y&ct=12&urls=178.237.23.123&clientType=46&zs=43&id=2010",
+      "status": 200,
+      "bytes": "218794"
+    },
+    {
+      "url": "https://vd703.okcdn.ru/?expires=1789890621868&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.19&type=3&sig=f74ADjhE-5Y&ct=11&urls=178.237.23.123&clientType=46&zs=43&id=2010",
+      "status": 200,
+      "bytes": "1538980"
+    },
+    {
+      "url": "https://iv.okcdn.ru/videoPreview?id=20100818340574&type=32&idx=1&scl=4&tkn=FnjxtnDOgrR1_wNs1zfZxveynmE",
+      "status": 200,
+      "bytes": "27533"
+    },
+    {
+      "url": "https://vd703.okcdn.ru/?expires=1789890621868&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.19&type=3&sig=f74ADjhE-5Y&ct=12&urls=178.237.23.123&clientType=46&zs=43&id=2010",
+      "status": 200,
+      "bytes": "1093102"
+    },
+    {
+      "url": "https://vd703.okcdn.ru/?expires=1789890621868&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.19&type=3&sig=f74ADjhE-5Y&ct=11&urls=178.237.23.123&clientType=46&zs=43&id=2010",
+      "status": 200,
+      "bytes": "1563197"
+    },
+    {
+      "url": "https://vd703.okcdn.ru/?expires=1789890621868&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.19&type=5&sig=4t3ZRPg5Ji8&ct=11&urls=178.237.23.123&clientType=46&zs=43&id=2010",
+      "status": 200,
+      "bytes": "6298"
+    },
+    {
+      "url": "https://vd703.okcdn.ru/?expires=1789890621868&srcIp=45.131.182.225&pr=90&srcAg=CHROME&ms=176.112.172.19&type=2&sig=b2zejf9tN20&ct=12&urls=178.237.23.123&clientType=46&zs=43&id=2010",
+      "status": 200,
+      "bytes": "5753"
+    }
+  ],
+  "readyState_ge_2": true,
+  "currentTime_advanced": true
+}

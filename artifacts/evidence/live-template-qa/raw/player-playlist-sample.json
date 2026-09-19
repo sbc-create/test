@@ -1,0 +1,88 @@
+{
+  "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10238&aggr=cvh&id=01a0ae3f-4381-7695-9d6b-4028dabf3561",
+  "body": {
+    "titleName": "Судмедэксперт, ставшая домохозяйкой",
+    "isSerial": true,
+    "items": [
+      {
+        "cvhId": "01a0aecf-c016-76a8-b3c4-17b7a9e76fa1",
+        "name": "Серия 1",
+        "vkId": "18534163765982",
+        "voiceType": "Субтитры",
+        "season": 1,
+        "episode": 1
+      },
+      {
+        "cvhId": "01a0aecf-c018-76a8-bf09-f67f47f47524",
+        "name": "Серия 2",
+        "vkId": "18534154525406",
+        "voiceType": "Субтитры",
+        "season": 1,
+        "episode": 2
+      },
+      {
+        "cvhId": "01a0aecf-c014-76a8-a5a0-ad84b83ada81",
+        "name": "Серия 3",
+        "vkId": "18534149413598",
+        "voiceType": "Субтитры",
+        "season": 1,
+        "episode": 3
+      }
+    ],
+    "trailers": null,
+    "ads": {
+      "vast": {
+        "preroll": [
+          "https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqc&p2=juhq&puid10=",
+          "https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqd&p2=juhq&puid10="
+        ],
+        "prerolls": [
+          {
+            "url": "https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqc&p2=juhq&puid10=",
+            "priority": 0
+          },
+          {
+            "url": "https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqd&p2=juhq&puid10=",
+            "priority": 1
+          }
+        ],
+        "pauseroll": [
+          "https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqe&p2=juhq&puid10="
+        ],
+        "pauserolls": [
+          {
+            "url": "https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqe&p2=juhq&puid10=",
+            "priority": 0
+          }
+        ],
+        "midroll": null
+      }
+    },
+    "vast": {
+      "preroll": [
+        "https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqc&p2=juhq&puid10=",
+        "https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqd&p2=juhq&puid10="
+      ],
+      "prerolls": [
+        {
+          "url": "https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqc&p2=juhq&puid10=",
+          "priority": 0
+        },
+        {
+          "url": "https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqd&p2=juhq&puid10=",
+          "priority": 1
+        }
+      ],
+      "pauseroll": [
+        "https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqe&p2=juhq&puid10="
+      ],
+      "pauserolls": [
+        {
+          "url": "https://yandex.ru/ads/adfox/14677041/getCode?p1=drfqe&p2=juhq&puid10=",
+          "priority": 0
+        }
+      ],
+      "midroll": null
+    }
+  }
+}

@@ -1,0 +1,325 @@
+{
+  "ts": "2026-09-19T07:48:24Z",
+  "cases": {
+    "ep7": {
+      "url": "https://lordserial33.biz/title/sudmedekspert-stavshaya-domohozyaykoy/season-1/episode-7/",
+      "dom_initial": {
+        "dataState": "unavailable",
+        "hasVideoPlayer": false,
+        "episodeAttr": null,
+        "seasonAttr": null,
+        "titleId": null,
+        "publisherId": null,
+        "note": "серия без дорожки",
+        "unavailableText": true,
+        "ariaCurrent": "7"
+      },
+      "dom_final": {
+        "dataState": "unavailable",
+        "hasVideoPlayer": false,
+        "episodeAttr": null,
+        "note": "серия без дорожки",
+        "stateVisible": true,
+        "stateText": "Дорожки этой серии ещё нет\n\nСерия 7 заявлена в сезоне 1 (в снимке серий 9, с дорожкой 3), но источник ещё не отдал плейлист на этот номер. Плеер не подключается: иначе провайдер показал бы чужой эпизод или завис бы в таймауте. Откройте серию из доступных в списке ниже.",
+        "ariaCurrent": "7"
+      },
+      "playback": null,
+      "console_errors": [],
+      "interesting_net_count": 2,
+      "media_2xx": [],
+      "screenshot": "artifacts/evidence/live-template-qa/screenshots/deep-pass/lords-ep7-unavail-1440.png"
+    },
+    "ep3": {
+      "url": "https://lordserial33.biz/title/sudmedekspert-stavshaya-domohozyaykoy/season-1/episode-3/",
+      "dom_initial": {
+        "dataState": "ok",
+        "hasVideoPlayer": true,
+        "episodeAttr": "3",
+        "seasonAttr": "1",
+        "titleId": "01a0ae3f-4381-7695-9d6b-4028dabf3561",
+        "publisherId": "10238",
+        "note": "источник подключён",
+        "unavailableText": false,
+        "ariaCurrent": "3"
+      },
+      "dom_final": {
+        "dataState": "ok",
+        "hasVideoPlayer": true,
+        "episodeAttr": "3",
+        "note": "источник подключён",
+        "stateVisible": false,
+        "stateText": "Провайдер не отдал источникДля этой серии у провайдера сейчас нет дорожки. Остальные серии и описание на странице работают.",
+        "ariaCurrent": "3"
+      },
+      "playback": {
+        "ok": false,
+        "reason": "no-video-yet",
+        "shadowKids": 2,
+        "selectText": null,
+        "dataState": "ok"
+      },
+      "console_errors": [
+        {
+          "type": "warning",
+          "text": "The resource https://yastatic.net/partner-code-bundles/1306718/vas-bundles/bundles-es2017/loader.bundle.js was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally."
+        },
+        {
+          "type": "warning",
+          "text": "The resource https://yastatic.net/partner-code-bundles/1306718/vas-bundles/bundles-es2017/loader.bundle.js was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally."
+        }
+      ],
+      "interesting_net_count": 21,
+      "media_2xx": [
+        {
+          "url": "https://player.cdnvideohub.com/s2/stable/video-player.umd.js",
+          "status": 200,
+          "type": "script"
+        },
+        {
+          "url": "https://plapi.cdnvideohub.com/",
+          "status": 200,
+          "type": "fetch"
+        },
+        {
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10238&aggr=cvh&id=01a0ae3f-4381-7695-9d6b-4028dabf3561",
+          "status": 200,
+          "type": "xhr"
+        },
+        {
+          "url": "https://player.cdnvideohub.com/s2/v2.19.1/frame/",
+          "status": 200,
+          "type": "document"
+        },
+        {
+          "url": "https://player.cdnvideohub.com/s2/v2.19.1/frame/style.css",
+          "status": 200,
+          "type": "stylesheet"
+        },
+        {
+          "url": "https://player.cdnvideohub.com/s2/v2.19.1/frame/index.js",
+          "status": 200,
+          "type": "script"
+        },
+        {
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/18534149413598",
+          "status": 200,
+          "type": "xhr"
+        },
+        {
+          "url": "https://vk.ru/js/lang-pack.js?format=json&name=videoplayer&lang=ru",
+          "status": 200,
+          "type": "fetch"
+        },
+        {
+          "url": "https://iv.okcdn.ru/videoPreview?id=20100818340574&type=32&idx=1&scl=4&tkn=FnjxtnDOgrR1_wNs1zfZxveynmE",
+          "status": 200,
+          "type": "image"
+        },
+        {
+          "url": "https://player.cdnvideohub.com/s2/stable/media-hills-pixels.json",
+          "status": 200,
+          "type": "fetch"
+        }
+      ],
+      "screenshot": "artifacts/evidence/live-template-qa/screenshots/deep-pass/lords-ep3-play-1440.png"
+    },
+    "ep1": {
+      "url": "https://lordserial33.biz/title/sudmedekspert-stavshaya-domohozyaykoy/season-1/episode-1/",
+      "dom_initial": {
+        "dataState": "ok",
+        "hasVideoPlayer": true,
+        "episodeAttr": "1",
+        "seasonAttr": "1",
+        "titleId": "01a0ae3f-4381-7695-9d6b-4028dabf3561",
+        "publisherId": "10238",
+        "note": "источник подключён",
+        "unavailableText": false,
+        "ariaCurrent": "1"
+      },
+      "dom_final": {
+        "dataState": "ok",
+        "hasVideoPlayer": true,
+        "episodeAttr": "1",
+        "note": "источник подключён",
+        "stateVisible": false,
+        "stateText": "Провайдер не отдал источникДля этой серии у провайдера сейчас нет дорожки. Остальные серии и описание на странице работают.",
+        "ariaCurrent": "1"
+      },
+      "playback": {
+        "ok": false,
+        "reason": "no-video-yet",
+        "shadowKids": 2,
+        "selectText": null,
+        "dataState": "ok"
+      },
+      "console_errors": [
+        {
+          "type": "warning",
+          "text": "The resource https://yastatic.net/partner-code-bundles/1306718/vas-bundles/bundles-es2017/loader.bundle.js was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally."
+        },
+        {
+          "type": "warning",
+          "text": "The resource https://yastatic.net/partner-code-bundles/1306718/vas-bundles/bundles-es2017/loader.bundle.js was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally."
+        }
+      ],
+      "interesting_net_count": 21,
+      "media_2xx": [
+        {
+          "url": "https://player.cdnvideohub.com/s2/stable/video-player.umd.js",
+          "status": 200,
+          "type": "script"
+        },
+        {
+          "url": "https://plapi.cdnvideohub.com/",
+          "status": 200,
+          "type": "fetch"
+        },
+        {
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10238&aggr=cvh&id=01a0ae3f-4381-7695-9d6b-4028dabf3561",
+          "status": 200,
+          "type": "xhr"
+        },
+        {
+          "url": "https://player.cdnvideohub.com/s2/v2.19.1/frame/",
+          "status": 200,
+          "type": "document"
+        },
+        {
+          "url": "https://player.cdnvideohub.com/s2/v2.19.1/frame/index.js",
+          "status": 200,
+          "type": "script"
+        },
+        {
+          "url": "https://player.cdnvideohub.com/s2/v2.19.1/frame/style.css",
+          "status": 200,
+          "type": "stylesheet"
+        },
+        {
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/18534163765982",
+          "status": 200,
+          "type": "xhr"
+        },
+        {
+          "url": "https://vk.ru/js/lang-pack.js?format=json&name=videoplayer&lang=ru",
+          "status": 200,
+          "type": "fetch"
+        },
+        {
+          "url": "https://iv.okcdn.ru/videoPreview?id=20100843768542&type=32&idx=0&scl=4&tkn=opTxpMx6aYejckTEVWb428pXT7A",
+          "status": 200,
+          "type": "image"
+        },
+        {
+          "url": "https://player.cdnvideohub.com/s2/stable/media-hills-pixels.json",
+          "status": 200,
+          "type": "fetch"
+        }
+      ],
+      "screenshot": "artifacts/evidence/live-template-qa/screenshots/deep-pass/lords-ep1-play-1440.png"
+    },
+    "ep3_mobile": {
+      "url": "https://lordserial33.biz/title/sudmedekspert-stavshaya-domohozyaykoy/season-1/episode-3/",
+      "dom_initial": {
+        "dataState": "ok",
+        "hasVideoPlayer": true,
+        "episodeAttr": "3",
+        "seasonAttr": "1",
+        "titleId": "01a0ae3f-4381-7695-9d6b-4028dabf3561",
+        "publisherId": "10238",
+        "note": "источник подключён",
+        "unavailableText": false,
+        "ariaCurrent": "3"
+      },
+      "dom_final": {
+        "dataState": "ok",
+        "hasVideoPlayer": true,
+        "episodeAttr": "3",
+        "note": "источник подключён",
+        "stateVisible": false,
+        "stateText": "Провайдер не отдал источникДля этой серии у провайдера сейчас нет дорожки. Остальные серии и описание на странице работают.",
+        "ariaCurrent": "3"
+      },
+      "playback": {
+        "ok": false,
+        "reason": "no-video-yet",
+        "shadowKids": 2,
+        "selectText": null,
+        "dataState": "ok"
+      },
+      "console_errors": [
+        {
+          "type": "warning",
+          "text": "The resource https://yastatic.net/partner-code-bundles/1306718/vas-bundles/bundles-es2017/loader.bundle.js was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally."
+        },
+        {
+          "type": "warning",
+          "text": "The resource https://yastatic.net/partner-code-bundles/1306718/vas-bundles/bundles-es2017/loader.bundle.js was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally."
+        }
+      ],
+      "interesting_net_count": 21,
+      "media_2xx": [
+        {
+          "url": "https://player.cdnvideohub.com/s2/stable/video-player.umd.js",
+          "status": 200,
+          "type": "script"
+        },
+        {
+          "url": "https://plapi.cdnvideohub.com/",
+          "status": 200,
+          "type": "fetch"
+        },
+        {
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10238&aggr=cvh&id=01a0ae3f-4381-7695-9d6b-4028dabf3561",
+          "status": 200,
+          "type": "xhr"
+        },
+        {
+          "url": "https://player.cdnvideohub.com/s2/v2.19.1/frame/",
+          "status": 200,
+          "type": "document"
+        },
+        {
+          "url": "https://player.cdnvideohub.com/s2/v2.19.1/frame/style.css",
+          "status": 200,
+          "type": "stylesheet"
+        },
+        {
+          "url": "https://player.cdnvideohub.com/s2/v2.19.1/frame/index.js",
+          "status": 200,
+          "type": "script"
+        },
+        {
+          "url": "https://plapi.cdnvideohub.com/api/v1/player/sv/video/18534149413598",
+          "status": 200,
+          "type": "xhr"
+        },
+        {
+          "url": "https://vk.ru/js/lang-pack.js?format=json&name=videoplayer&lang=ru",
+          "status": 200,
+          "type": "fetch"
+        },
+        {
+          "url": "https://iv.okcdn.ru/videoPreview?id=20100818340574&type=32&idx=1&scl=4&tkn=FnjxtnDOgrR1_wNs1zfZxveynmE",
+          "status": 200,
+          "type": "image"
+        },
+        {
+          "url": "https://player.cdnvideohub.com/s2/stable/media-hills-pixels.json",
+          "status": 200,
+          "type": "fetch"
+        }
+      ],
+      "screenshot": "artifacts/evidence/live-template-qa/screenshots/deep-pass/lords-ep3-play-390-1440.png"
+    }
+  },
+  "verdict": {
+    "ep7_unavailable_no_sdk": true,
+    "ep3_real_playback": false,
+    "ep1_real_playback": false,
+    "ep3_mobile_real_playback": false,
+    "ep3_provider_episode": "3",
+    "ep1_provider_episode": "1",
+    "ep3_select": null,
+    "ep1_select": null
+  }
+}

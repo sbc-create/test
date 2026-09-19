@@ -1,0 +1,45 @@
+[apply-nova] artifact_sha256=7491029692f528cb810a63b35b9b2f92b4942ca2f0364c2f6d35f13400c9a067
+[apply-nova] runtime_commit=a67bf79d64eb30480e224a9a30c4bbe6288221b7
+[apply-nova] live_before=27d3ceccb2ff85550cd416b1d9a75806ef258f333eda312c747cdd62e0c59974
+[apply-nova] plan lords-02 source=a67bf79d64eb runtime=a67bf79d64eb profile=lords-new repo=/home/claude/wt-lords-integration-canary-01
+[apply-nova] rollback snapshot: /srv/lords/.frontend/.rollback/pre-closed-update-20260919T074636Z
+[apply-nova] $ sudo -n env REPO=/home/claude/wt-lords-integration-canary-01 SOURCE_COMMIT=a67bf79d64eb30480e224a9a30c4bbe6288221b7 RUNTIME_COMMIT=a67bf79d64eb30480e224a9a30c4bbe6288221b7 NOVA_INSTALL_FRONTEND=1 RUNTIME_REPO=/home/claude/wt-lords-integration-canary-01 FACTORY_OWNER_ROOT_MANDATE=SITE_FACTORY_ROOT_20260909 DESIGN_VERSION=1.1.0 bash /home/claude/wt-lords-integration-canary-01/automation/host/deploy-nova-lords.sh lords-02 lordserial33.biz 9111 lords-new Lordserial 20260919T074636Z-a67bf79d-nova 7491029692f528cb810a63b35b9b2f92b4942ca2f0364c2f6d35f13400c9a067
+[nova] lords-02 → lordserial33.biz:9111 профиль lords-new source a67bf79d64eb runtime a67bf79d64eb from /home/claude/wt-lords-integration-canary-01
+[nova] установлен frontend runtime из /home/claude/wt-lords-integration-canary-01 (a67bf79d64eb)
+[nova] манифест lords-02: 1.1.0 source=a67bf79d64eb runtime=a67bf79d64eb 20260919T074636Z-a67bf79d-nova
+active
+[nova] lordserial33.biz: nginx 9111 → 9111
+[apply-nova] $ sudo -n nginx -t
+nginx: [warn] duplicate MIME type "text/html" in /etc/nginx/lords/lords-01.conf:96
+nginx: [warn] duplicate MIME type "text/html" in /etc/nginx/lords/lords-02.conf:96
+nginx: [warn] duplicate MIME type "text/html" in /etc/nginx/lords/lords-03.conf:96
+nginx: [warn] conflicting server name "yummyani.biz" on 0.0.0.0:80, ignored
+nginx: [warn] conflicting server name "www.yummyani.biz" on 0.0.0.0:80, ignored
+nginx: [warn] conflicting server name "yummyani.org" on 0.0.0.0:80, ignored
+nginx: [warn] conflicting server name "www.yummyani.org" on 0.0.0.0:80, ignored
+nginx: [warn] conflicting server name "yummyani.site" on 0.0.0.0:80, ignored
+nginx: [warn] conflicting server name "www.yummyani.site" on 0.0.0.0:80, ignored
+nginx: [warn] conflicting server name "yummyani.biz" on [::]:80, ignored
+nginx: [warn] conflicting server name "www.yummyani.biz" on [::]:80, ignored
+nginx: [warn] conflicting server name "yummyani.org" on [::]:80, ignored
+nginx: [warn] conflicting server name "www.yummyani.org" on [::]:80, ignored
+nginx: [warn] conflicting server name "yummyani.site" on [::]:80, ignored
+nginx: [warn] conflicting server name "www.yummyani.site" on [::]:80, ignored
+nginx: [warn] conflicting server name "www.yummyani.biz" on 0.0.0.0:443, ignored
+nginx: [warn] conflicting server name "yummyani.biz" on 0.0.0.0:443, ignored
+nginx: [warn] conflicting server name "www.yummyani.org" on 0.0.0.0:443, ignored
+nginx: [warn] conflicting server name "yummyani.org" on 0.0.0.0:443, ignored
+nginx: [warn] conflicting server name "www.yummyani.site" on 0.0.0.0:443, ignored
+nginx: [warn] conflicting server name "yummyani.site" on 0.0.0.0:443, ignored
+nginx: [warn] conflicting server name "www.yummyani.biz" on [::]:443, ignored
+nginx: [warn] conflicting server name "yummyani.biz" on [::]:443, ignored
+nginx: [warn] conflicting server name "www.yummyani.org" on [::]:443, ignored
+nginx: [warn] conflicting server name "yummyani.org" on [::]:443, ignored
+nginx: [warn] conflicting server name "www.yummyani.site" on [::]:443, ignored
+nginx: [warn] conflicting server name "yummyani.site" on [::]:443, ignored
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+[apply-nova] $ systemctl is-active nova-lords-02.service
+active
+[apply-nova] nova-lords-02.service: active
+[apply-nova] DONE
