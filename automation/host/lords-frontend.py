@@ -746,12 +746,13 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 #: поэтому отдаёт прежние байты: его ветка кода не меняется вовсе.
 ОФОРМЛЕНИЕ_1_2 = "1.2.0"
 ОФОРМЛЕНИЕ_1_2_1 = "1.2.1"
+ОФОРМЛЕНИЕ_1_2_2 = "1.2.2"
 
 #: Версии, несущие оформление 1.1+. Набор, а не одно значение: витрина
 #: включает оформление СВОИМ манифестом, и добавление следующей версии не
 #: должно переводить на неё соседей. Свойство «переход по одной витрине»
 #: сохраняется — меняется только то, сколько версий код умеет исполнять.
-ОФОРМЛЕНИЕ_ВЕРСИИ = {ОФОРМЛЕНИЕ_1_1, ОФОРМЛЕНИЕ_1_2, ОФОРМЛЕНИЕ_1_2_1}
+ОФОРМЛЕНИЕ_ВЕРСИИ = {ОФОРМЛЕНИЕ_1_1, ОФОРМЛЕНИЕ_1_2, ОФОРМЛЕНИЕ_1_2_1, ОФОРМЛЕНИЕ_1_2_2}
 
 #: Семейства, переработанные по измеренным эталонам, и версии, с которых
 #: переработка включается. Ниже этого набора витрина исполняет прежние ветки.
@@ -763,7 +764,7 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 #: только той витрине, чей манифест его объявил.
 ПЕРЕРАБОТАНО_С = {
     "zona": frozenset({ОФОРМЛЕНИЕ_1_2}),
-    "animedia": frozenset({ОФОРМЛЕНИЕ_1_2, ОФОРМЛЕНИЕ_1_2_1}),
+    "animedia": frozenset({ОФОРМЛЕНИЕ_1_2, ОФОРМЛЕНИЕ_1_2_1, ОФОРМЛЕНИЕ_1_2_2}),
 }
 
 #: Исполняет ли ЭТА витрина переработанное оформление своего семейства.
@@ -1693,390 +1694,282 @@ white-space:nowrap}
 
 
 АНИМЕДИА_СТИЛЬ = """
-/* Оформление Animedia 1.2.0. Числа измерены на эталоне (см. artifacts/evidence/
-   templates-zona-animedia-visual-parity-006/reference/amd-online/):
-     контейнер почти во всю ширину (поля 6 на узком, 1 дальше), шапка 90 на
-     десктопе и 126 на узком и НЕ закреплённая, кегль тела 14, h2 16/700,
-     ссылки 17/400, пропорция карточки 0.86, сетка 3 колонки до 1024 и 4 от
-     1440 с зазором 10. Разметка и правила — свои. */
+/* Animedia 1.2.2 — reference-density visual system (amd.online geometry, own assets). */
+:root{
+  --a-space-1:8px;--a-space-2:12px;--a-space-3:16px;--a-space-4:24px;
+  --a-space-5:32px;--a-space-6:40px;--a-space-7:48px;--a-space-8:64px;
+  --a-radius-shell:clamp(22px,1.6vw,28px);--a-radius-card:12px;--a-radius-chip:999px;
+  --a-shadow:0 10px 28px rgba(15,23,42,.08);--a-shadow-soft:0 4px 14px rgba(15,23,42,.06);
+}
+*{box-sizing:border-box}
+html,body{max-width:100%;overflow-x:hidden}
 body{background:@PAGE@;color:@INK@;
-font:14px/1.45 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif}
+font:16px/1.45 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif}
 .zs{min-height:100vh;display:block}
 .zmain{min-width:0}
-.zwrap{max-width:min(calc(100% - 32px),1280px);margin:0 auto;padding:0 16px;box-sizing:border-box}
-@media(min-width:900px){.zwrap--title{max-width:min(calc(100% - 32px),1360px)}}
-body{overflow-x:hidden}
+.zwrap,.zhd__in,.zft__grid,.zft__bar{
+  width:min(1704px,calc(100vw - 80px));margin-inline:auto;padding-inline:0;box-sizing:border-box}
+@media(max-width:1439px){.zwrap,.zhd__in,.zft__grid,.zft__bar{width:min(1704px,calc(100vw - 48px))}}
+@media(max-width:1023px){.zwrap,.zhd__in,.zft__grid,.zft__bar{width:min(1704px,calc(100vw - 40px))}}
+@media(max-width:767px){.zwrap,.zhd__in,.zft__grid,.zft__bar{width:min(1704px,calc(100vw - 28px))}}
+.zwrap{padding-block:0}
 
-/* Шапка: обычная, не закреплённая. На узком — кнопка меню вместо
-   обрезанной горизонтальной ленты пунктов (эталон amd.online: hamburger). */
-.zhd{position:relative;background:@RAIL@;color:@RAILINK@;
-border-bottom:2px solid @ACC@}
-.zhd__in{max-width:100%;margin:0 auto;padding:10px 6px;display:flex;
-align-items:center;gap:8px;flex-wrap:wrap;min-height:0}
-@media(min-width:768px){.zhd__in{padding:10px 1px;min-height:90px;flex-wrap:nowrap;gap:10px}}
-.zhd__logo{font-size:22px;font-weight:800;letter-spacing:-.4px;color:@INK@;
-white-space:nowrap;flex:0 0 auto}
-.zhd__logo b{color:@ACC@;font-weight:800}
-.zhd__menu{display:inline-flex;align-items:center;justify-content:center;
-width:40px;height:40px;border:1px solid @LINE@;border-radius:4px;
-background:@PAGE@;color:@INK@;font-size:20px;line-height:1;cursor:pointer;
-flex:0 0 auto;margin-left:auto}
+/* Header */
+.zhd{position:relative;background:@RAIL@;border-bottom:1px solid @LINE@}
+.zhd__in{display:flex;align-items:center;gap:12px;flex-wrap:nowrap;min-height:64px;padding-block:8px}
+@media(max-width:767px){.zhd__in{min-height:56px;flex-wrap:wrap;gap:8px}}
+.zhd__logo{font-size:22px;font-weight:800;letter-spacing:-.4px;color:@INK@;flex:0 0 auto}
+.zhd__logo b{color:@ACC@}
+.zhd__menu{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;
+border:1px solid @LINE@;border-radius:8px;background:@PAGE@;color:@INK@;font-size:20px;
+cursor:pointer;margin-left:auto}
 @media(min-width:768px){.zhd__menu{display:none}}
-.zhd__n{display:none;gap:6px;flex:1 0 100%;order:4;min-width:0;
-flex-wrap:wrap;overflow:visible;padding:6px 0 2px}
+.zhd__n{display:none;gap:4px;flex:1 0 100%;order:4;flex-wrap:wrap;padding:4px 0}
 .zhd__n.is-open{display:flex}
-@media(min-width:768px){.zhd__n{display:flex;flex:1 1 auto;order:0;
-flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding:0}}
+@media(min-width:768px){.zhd__n{display:flex;flex:1 1 auto;order:0;flex-wrap:nowrap;
+overflow-x:auto;scrollbar-width:none;padding:0}}
 .zhd__n::-webkit-scrollbar{display:none}
-.zhd__n a{padding:8px 10px;border-radius:4px;font-size:15px;font-weight:400;
-color:@INK@;flex:1 1 calc(50% - 6px);text-align:center;min-width:0;
-overflow-wrap:anywhere}
-@media(min-width:768px){.zhd__n a{flex:0 0 auto;white-space:nowrap;font-size:17px;
-text-align:left;padding:7px 9px}}
+.zhd__n a{padding:8px 10px;border-radius:8px;font-size:15px;color:@INK@;white-space:nowrap}
+@media(min-width:768px){.zhd__n a{font-size:16px}}
 .zhd__n a:hover{background:@ALT@;color:@ACC@}
 .zhd__n a[aria-current]{color:@ACC@;font-weight:700;box-shadow:inset 0 -2px 0 @ACC@}
-.zhd__s{display:flex;flex:1 1 120px;min-width:0;max-width:340px;
-border:1px solid @LINE@;border-radius:4px;overflow:hidden;background:@PAGE@}
-.zhd__s input{flex:1;min-width:0;border:0;padding:8px 10px;font-size:14px;
-color:@INK@;font-family:inherit;background:transparent}
-.zhd__s button{border:0;background:@ACC@;color:#fff;padding:0 14px;
-font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
+.zhd__s{display:flex;flex:0 1 280px;min-width:0;max-width:320px;border:1px solid @LINE@;
+border-radius:10px;overflow:hidden;background:@PAGE@}
+@media(max-width:767px){.zhd__s{flex:1 1 100%;max-width:none;order:3}}
+.zhd__s input{flex:1;min-width:0;border:0;padding:9px 12px;font-size:14px;background:transparent;color:@INK@}
+.zhd__s button{border:0;background:@ACC@;color:#fff;padding:0 14px;font-weight:700;cursor:pointer}
 
-/* Служебная полоса состояния данных. */
-.ast{background:@ALT@;border:1px solid @LINE@;border-left:4px solid @ACC@;
-border-radius:4px;padding:14px 16px;margin:14px 0;font-size:13.5px;
-line-height:1.55;color:@INK@}
-.ast b{display:block;font-size:15px;font-weight:700;margin-bottom:5px;color:@ACC@}
-.ast code{background:@SURF@;padding:1px 5px;border-radius:3px;font-size:12.5px}
+.ast{display:none}
+.zrail,.zrail__logo,.zrail__sub,.zrail__t,.zrail__n,.zrail__g,.ztop{display:none}
 
-.zrail,.zrail__logo,.zrail__sub,.zrail__t,.zrail__n,.zrail__g{display:none}
-.ztop{border-bottom:1px solid @LINE@;background:@PAGE@}
-.ztop__a{display:flex;align-items:center;gap:14px;padding:10px 0}
-.ztop__s{flex:1;display:flex;border:1px solid @LINE@;border-radius:4px;
-overflow:hidden;background:@PAGE@;max-width:600px}
-.ztop__s input{flex:1;border:0;padding:9px 12px;font-size:14px;
-background:transparent;color:@INK@;font-family:inherit}
-.ztop__s button{border:0;background:@ACC@;color:#fff;padding:0 16px;
-font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
-.ztop__b{display:flex;gap:14px;padding:0 0 9px;font-size:13px;color:@DIM@;
-flex-wrap:wrap;max-width:100%;min-width:0}
-.ztop__b a{color:@ACC@;font-weight:700;display:inline-block;padding:4px 2px;
-max-width:100%;overflow-wrap:anywhere}
+.zh{font-size:clamp(22px,2vw,28px);line-height:1.25;font-weight:700;margin:18px 0 8px}
+.zh--sm{font-size:clamp(20px,1.8vw,28px);font-weight:700;margin:28px 0 12px}
+.zsub{font-size:15px;color:@DIM@;margin:0 0 18px;max-width:72ch;line-height:1.45;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zsec{margin:20px 0 28px;max-height:none;overflow:visible}
+.zsec__h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 14px}
+.zsec__h h2{font-size:clamp(22px,1.8vw,30px);font-weight:700;margin:0}
+.zsec__h a{font-size:14px;color:@ACC@;font-weight:700;white-space:nowrap}
 
-/* Типографика по измерению: h2 16/700, ссылки 17/400. */
-.zh{font-size:15px;line-height:1.35;font-weight:500;margin:14px 0 5px;max-width:100%;
-overflow-wrap:anywhere}
-@media(min-width:768px){.zh{font-size:16px;line-height:1.3}}
-.zh--sm{font-size:16px;font-weight:700;margin:20px 0 5px}
-.zsub{font-size:13px;color:@DIM@;margin:0 0 14px}
-.zsub a{color:@ACC@;font-weight:700;padding:4px 2px;display:inline-block}
-.zcr{font-size:12.5px;color:@DIM@;padding:10px 0 0}
-.zcr a{color:@ACC@}
+/* Compact hero rail */
+.ahero{margin:12px 0 20px;padding:16px 12px;border-radius:var(--a-radius-shell);
+background:@ACC@;color:#fff;overflow:hidden;max-height:min(330px,36vh);box-sizing:border-box}
+.ahero .zrl__vp{padding-bottom:2px;scrollbar-width:none}
+.ahero .zrl__vp::-webkit-scrollbar{display:none}
+.ahero .zrl__track{gap:14px}
+.ahero .zrl__track>*{flex:0 0 clamp(148px,9vw,180px);width:clamp(148px,9vw,180px);
+max-width:180px;scroll-snap-align:start}
+.ahero .zt{background:transparent;border:0;box-shadow:none;color:#fff;max-height:280px}
+.ahero .zt:hover{opacity:.92;box-shadow:none;border:0}
+.ahero .zt__p{border-radius:10px;aspect-ratio:2/3;background:rgba(0,0,0,.18)}
+.ahero .zt__b{padding:6px 2px 0}
+.ahero .zt__t{color:#fff;font-size:14px;-webkit-line-clamp:2;min-height:2.5em}
+.ahero .zt__m,.ahero .zt__r{display:none}
+.ahero .zrl__btn{background:rgba(255,255,255,.96);color:@ACC@;border:0;border-radius:10px}
+.ahero__cap{display:none}
+.zad-home{margin:0 0 16px;min-height:0;max-height:24px}
+.zad-home[data-ad-enabled="1"]{min-height:90px;max-height:none;border:1px dashed @LINE@;border-radius:8px}
 
-.zsec{margin:18px 0 22px}
-.zsec__h{display:flex;align-items:center;justify-content:space-between;
-gap:10px;margin:0 0 9px;border-bottom:1px solid @LINE@;padding-bottom:6px}
-.zsec__h h2{font-size:16px;font-weight:700;margin:0}
-.zsec__h a{font-size:13px;color:@ACC@;font-weight:700;white-space:nowrap}
 .zrl{position:relative}
-.zrl__vp{overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;
-scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:2px 0 8px}
-.zrl__track{display:flex;gap:10px;min-width:min-content;align-items:flex-start}
-.zrl__track>*{flex:0 0 154px;width:154px;max-width:154px;scroll-snap-align:start}
-@media(max-width:1024px){.zrl__track>*{flex-basis:144px;width:144px;max-width:144px}}
-@media(max-width:768px){.zrl__track>*{flex-basis:132px;width:132px;max-width:132px}}
-@media(max-width:767px){.zrl__track>*{flex-basis:112px;width:112px;max-width:112px}}
-.zrl__btn{position:absolute;top:34%;transform:translateY(-50%);z-index:5;
-width:30px;height:48px;border:1px solid @LINE@;border-radius:4px;cursor:pointer;
-background:rgba(255,255,255,.94);color:@ACC@;font-size:17px;line-height:1;
-display:none;align-items:center;justify-content:center}
+.zrl__vp{overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;scroll-snap-type:x mandatory;
+-webkit-overflow-scrolling:touch;padding:2px 0 6px;scrollbar-width:none}
+.zrl__vp::-webkit-scrollbar{display:none}
+.zrl__track{display:flex;gap:12px;min-width:min-content;align-items:flex-start}
+.zrl__btn{position:absolute;top:36%;transform:translateY(-50%);z-index:5;width:36px;height:48px;
+border:0;border-radius:10px;cursor:pointer;background:rgba(255,255,255,.96);color:@ACC@;
+font-size:18px;display:none;align-items:center;justify-content:center;box-shadow:var(--a-shadow-soft)}
 @media(min-width:1024px){.zrl:hover .zrl__btn,.zrl__btn:focus-visible{display:flex}}
-.zrl__btn--p{left:-4px}
-.zrl__btn--n{right:-4px}
+.zrl__btn--p{left:2px}.zrl__btn--n{right:2px}
 .zrl__btn:disabled{opacity:.35;cursor:default}
 
-/* Компактная сетка полок: 6 колонок внутри 1280. */
-.zg{display:grid;gap:14px;grid-template-columns:repeat(2,minmax(0,1fr));
-align-items:stretch}
-@media(min-width:700px){.zg{grid-template-columns:repeat(4,minmax(0,1fr))}}
-@media(min-width:900px){.zg{grid-template-columns:repeat(5,minmax(0,1fr))}}
-@media(min-width:1100px){.zg{grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}}
-.zt{display:flex;flex-direction:column;background:@PAGE@;
-border:1px solid @LINE@;border-radius:4px;overflow:hidden;min-width:0;
-height:100%;transition:border-color .14s,box-shadow .14s}
-.zt:hover{border-color:@ACC@;box-shadow:0 4px 14px rgba(0,0,0,.09)}
+/* Poster grids */
+.zg{display:grid;gap:16px;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
+@media(min-width:720px){.zg{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:960px){.zg{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1200px){.zg{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(min-width:1440px){.zg{grid-template-columns:repeat(6,minmax(0,1fr));gap:18px}}
+@media(min-width:1800px){.zg{grid-template-columns:repeat(8,minmax(0,1fr))}}
+.zt{display:flex;flex-direction:column;background:@PAGE@;border:0;border-radius:var(--a-radius-card);
+overflow:hidden;min-width:0;height:100%;box-shadow:var(--a-shadow-soft);
+transition:transform .14s,box-shadow .14s}
+.zt:hover{transform:translateY(-2px);box-shadow:var(--a-shadow)}
+.zt:focus-visible{outline:2px solid @ACC@;outline-offset:2px}
 .zt__p{display:block;aspect-ratio:2/3;background:@SURF@;position:relative;flex:0 0 auto}
-.zt__p img,.zt__img{position:absolute;inset:0;z-index:1;width:100%;height:100%;
-object-fit:cover;display:block}
-.zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:10px;
-text-align:center;color:@MUTE@;font-size:11.5px;line-height:1.3}
-.zt__none b{display:block;font-size:22px;font-weight:800;color:@DIM@;margin-bottom:3px}
-.zt__b{padding:7px 8px 9px;display:flex;flex-direction:column;gap:3px;flex:1}
-.zt__t{font-size:13px;font-weight:700;line-height:1.26;
+.zt__p img,.zt__img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;display:block}
+.zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:10px;text-align:center;color:@MUTE@;font-size:12px}
+.zt__none b{display:block;font-size:28px;font-weight:800;color:@DIM@;margin-bottom:4px}
+.zt__b{padding:10px 10px 12px;display:flex;flex-direction:column;gap:4px;flex:1}
+.zt__t{font-size:15px;font-weight:700;line-height:1.3;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em}
+.zt__m{display:block;font-size:13px;color:@DIM@;
 display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.zt__m{display:block;font-size:11.5px;color:@DIM@}
-.zt__r{display:flex;gap:8px;font-size:11.5px;color:@DIM@;margin-top:auto;
-padding-top:3px;flex-wrap:wrap}
+.zt__r{display:flex;gap:8px;font-size:12px;color:@DIM@;margin-top:auto;padding-top:4px;flex-wrap:wrap}
 .zt__r b,.zt__r i{color:@ACC@;font-weight:700;font-style:normal}
 .zt__r em{color:@MUTE@;font-style:italic}
 
-.zl{display:flex;flex-direction:column;gap:8px}
-.zr{display:grid;grid-template-columns:58px 1fr;gap:10px;padding:8px;
-background:@PAGE@;border:1px solid @LINE@;border-radius:4px;align-items:start}
-@media(min-width:768px){.zr{grid-template-columns:74px 1fr}}
-.zr:hover{border-color:@ACC@}
-.zr__p{aspect-ratio:2/3;background:@SURF@;border-radius:3px;overflow:hidden;
-position:relative}
-.zr__p img,.zr__img{position:absolute;inset:0;width:100%;height:100%;
-object-fit:cover;display:block;z-index:1}
-.zr__none{position:absolute;inset:0;display:grid;place-items:center;
-text-align:center;color:@MUTE@;font-size:10.5px;padding:5px}
-.zr__t{display:block;font-size:14px;font-weight:700;line-height:1.3;margin-bottom:2px}
-.zr__m{display:block;font-size:12px;color:@DIM@;margin-bottom:4px}
-.zr__d{font-size:12px;color:@DIM@;line-height:1.42;
-display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.zr__r{display:flex;gap:9px;font-size:11.5px;color:@DIM@;margin-top:5px;flex-wrap:wrap}
-
-.zstrip{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 5px}
-.zstrip a{background:@ALT@;border:1px solid @LINE@;border-radius:4px;
-padding:6px 10px;font-size:12.5px;color:@INK@;font-weight:600}
-.zstrip a:hover{border-color:@ACC@;color:@ACC@}
-.zstrip a[aria-current]{background:@ACC@;color:#fff;border-color:@ACC@}
-.zpg{display:flex;gap:5px;justify-content:center;margin:22px 0;flex-wrap:wrap}
-.zpg a,.zpg span{padding:7px 12px;border-radius:4px;border:1px solid @LINE@;
-background:@PAGE@;font-size:13px;min-width:36px;text-align:center}
-.zpg span{background:@ACC@;color:#fff;border-color:@ACC@}
-.zempty,.znf{padding:44px 16px;text-align:center;color:@DIM@}
-.znf b{display:block;font-size:40px;font-weight:800;color:@ACC@;margin-bottom:5px}
-.znf h1{font-size:21px;margin:0 0 7px;color:@INK@;font-weight:700}
-.znf a{display:inline-block;margin-top:12px;background:@ACC@;color:#fff;
-padding:10px 20px;border-radius:4px;font-weight:700}
-.zsea__h{font-size:13px;color:@DIM@;margin:0 0 12px}
-.zsea{margin:0 0 18px}
-
-/* Расписание: день, время и номер серии. Пустое значение названо словами. */
-.asch{display:grid;gap:10px;margin:12px 0}
-@media(min-width:900px){.asch{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:1440px){.asch{grid-template-columns:repeat(4,1fr)}}
-.asch__d{border:1px solid @LINE@;border-radius:4px;background:@PAGE@;overflow:hidden}
-.asch__d h3{margin:0;padding:8px 11px;font-size:13px;font-weight:700;
-background:@ALT@;border-bottom:1px solid @LINE@}
-.asch__l{margin:0;padding:0;list-style:none}
-.asch__l li{display:flex;gap:9px;align-items:baseline;padding:7px 11px;
-border-bottom:1px solid @LINE@;font-size:12.5px}
-.asch__l li:last-child{border-bottom:0}
-.asch__t{color:@ACC@;font-weight:700;flex:0 0 42px;font-variant-numeric:tabular-nums}
-.asch__e{color:@DIM@;margin-left:auto;flex:0 0 auto;font-size:11.5px}
-.asch__n{color:@MUTE@;font-style:italic}
-
-.zban{position:relative;border-radius:4px;overflow:hidden;background:@SURF@;
-margin:14px 0 0;min-height:170px;max-height:240px}
-.zban__img{position:absolute;inset:0;opacity:.5}
-.zban__img img{width:100%;height:100%;object-fit:cover;display:block}
-
-/* Верхняя карусель главной: фиксированная ширина карточки, shell ≤300px. */
-.ahero{margin:10px 0 16px;padding:18px 12px 14px;border-radius:4px;
-background:@ACC@;color:#fff;overflow:hidden;max-height:300px;box-sizing:border-box}
-.ahero .zrl__vp{padding-bottom:4px;max-height:260px}
-.ahero .zrl__track{gap:14px}
-.ahero .zrl__track>*{flex:0 0 154px;width:154px;max-width:154px}
-@media(max-width:1024px){.ahero .zrl__track>*{flex-basis:144px;width:144px;max-width:144px}}
-@media(max-width:768px){.ahero{padding:14px 8px 10px;max-height:240px}
-.ahero .zrl__track>*{flex-basis:132px;width:132px;max-width:132px}}
-@media(max-width:767px){.ahero{max-height:225px;padding:12px 6px 8px}
-.ahero .zrl__track>*{flex-basis:112px;width:112px;max-width:112px}}
-.ahero .zt{background:transparent;border:0;border-radius:0;box-shadow:none;color:#fff;
-max-height:260px}
-.ahero .zt:hover{border:0;box-shadow:none;opacity:.92}
-.ahero .zt__p{border-radius:2px;aspect-ratio:2/3;background:rgba(0,0,0,.18)}
-.ahero .zt__b{padding:6px 2px 0}
-.ahero .zt__t{color:#fff;font-size:14px;-webkit-line-clamp:2;line-height:1.25}
-.ahero .zt__m,.ahero .zt__r{display:none}
-.ahero .zrl__btn{background:rgba(255,255,255,.95);color:@ACC@;border-color:transparent}
-.ahero__cap{display:none}
-.zsec{max-height:760px;overflow:hidden}
-.zsec--eps{max-height:none;overflow:visible}
-
-/* «Новые серии» — компактные строки, 2 колонки на desktop. */
-.zsec--eps .zl{display:grid;gap:0;grid-template-columns:1fr;
-border:1px solid @LINE@;border-radius:4px;overflow:hidden;background:@PAGE@}
-@media(min-width:900px){.zsec--eps .zl{grid-template-columns:1fr 1fr}}
-.zsec--eps .zr{border:0;border-bottom:1px solid @LINE@;border-radius:0;
-padding:8px 10px;align-items:center;grid-template-columns:52px minmax(0,1fr) auto;
-min-height:70px;max-height:76px;max-width:none;width:100%;box-sizing:border-box}
-@media(max-width:767px){.zsec--eps .zr{min-height:64px;max-height:72px}}
-.zsec--eps .zr:nth-child(odd){border-right:1px solid @LINE@}
-@media(max-width:899px){.zsec--eps .zr:nth-child(odd){border-right:0}}
-.zsec--eps .zr:last-child{border-bottom:0}
-.zsec--eps .zr__p{aspect-ratio:3/4;border-radius:3px;max-width:52px;width:52px}
-.zsec--eps .zr__body{min-width:0;display:flex;flex-direction:column;gap:2px}
-.zsec--eps .zr__t{font-size:15px;line-height:1.2;white-space:nowrap;overflow:hidden;
-text-overflow:ellipsis;min-height:auto;-webkit-line-clamp:1;display:block}
-.zsec--eps .zr__m{font-size:12px}
+/* Episode feed rows */
+.zsec--eps .zl,.aeps{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:900px){.zsec--eps .zl,.aeps{grid-template-columns:1fr 1fr;gap:clamp(24px,2vw,36px)  clamp(24px,2vw,36px)}}
+.aeps__row,.zsec--eps .zr{display:grid;grid-template-columns:auto minmax(0,1fr) auto;
+align-items:center;gap:12px;height:clamp(70px,5vw,96px);padding:0 14px 0 0;
+background:@ALT@;border:0;border-radius:var(--a-radius-card);text-decoration:none;color:inherit;
+box-shadow:none;max-height:none;min-height:0;width:100%;box-sizing:border-box}
+.aeps__row:hover,.zsec--eps .zr:hover{background:#fff;box-shadow:var(--a-shadow-soft)}
+.aeps__row:focus-visible,.zsec--eps .zr:focus-visible{outline:2px solid @ACC@;outline-offset:2px}
+.aeps__thumb,.zsec--eps .zr__p{width:clamp(60px,4vw,80px);height:100%;max-width:none;
+aspect-ratio:auto;border-radius:var(--a-radius-card) 0 0 var(--a-radius-card);overflow:hidden;
+position:relative;background:@SURF@}
+.aeps__thumb img,.zsec--eps .zr__p img,.zsec--eps .zr__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.aeps__body,.zsec--eps .zr__body{min-width:0;display:flex;flex-direction:column;gap:2px;padding:8px 0}
+.aeps__title,.zsec--eps .zr__t{font-size:clamp(16px,1.2vw,20px);font-weight:700;line-height:1.25;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+white-space:normal;text-overflow:unset}
+.aeps__meta,.zsec--eps .zr__m{font-size:clamp(13px,1vw,15px);color:@DIM@}
+.aeps__ep,.zsec--eps .zr__badge{display:flex;flex-direction:column;align-items:flex-end;
+justify-content:center;padding-right:4px;min-width:3.2em}
+.aeps__num,.zsec--eps .zr__badge{font-size:clamp(26px,2vw,38px);font-weight:800;color:@ACC@;
+line-height:1;font-variant-numeric:tabular-nums}
+.aeps__lab{font-size:clamp(12px,1vw,15px);color:@DIM@}
 .zsec--eps .zr__d{display:none}
-.zsec--eps .zr__badge{font-size:12px;font-weight:700;color:@ACC@;white-space:nowrap}
-.zad-home{margin:0 0 16px;min-height:0;max-height:24px}
-.zad-home[data-ad-enabled="1"]{min-height:90px;max-height:none;border:1px dashed @LINE@;border-radius:4px}
+.zsec--eps .zr:nth-child(odd){border-right:0}
+@media(max-width:899px){.aeps__row,.zsec--eps .zr{height:clamp(82px,14vw,96px)}
+.aeps__thumb,.zsec--eps .zr__p{width:clamp(60px,16vw,68px)}
+.aeps__num,.zsec--eps .zr__badge{font-size:clamp(26px,7vw,30px)}}
 
-/* Title hub: poster 250 | main | rating rail 150. */
-.zban{display:none}
-.zhead{display:contents}
-.zhead__ps,.zhead__x,.zhead__o{display:contents}
-.ztitle{display:grid;grid-template-columns:1fr;gap:16px;margin:12px 0 8px;
-align-items:start}
-@media(min-width:900px){.ztitle{grid-template-columns:250px minmax(0,1fr);gap:24px;
-max-height:460px}}
-@media(min-width:1100px){.ztitle{grid-template-columns:250px minmax(0,1fr) 150px;gap:28px}}
-.ztitle__poster{aspect-ratio:2/3;border-radius:6px;overflow:hidden;background:@SURF@;
-position:relative;width:100%;max-width:250px;margin:0 auto;max-height:390px}
-@media(min-width:900px){.ztitle__poster{margin:0;max-width:250px}}
-@media(max-width:767px){.ztitle__poster{max-width:150px}}
-.ztitle__poster img,.ztitle__poster .zhead__img{position:absolute;inset:0;z-index:1;
-width:100%;height:100%;object-fit:cover;display:block}
-.ztitle__main{min-width:0}
-.ztitle__main h1{font-size:28px;line-height:1.2;margin:0 0 8px;letter-spacing:-.3px;
+/* Filters */
+.zfilt,.zgenres__nav,.zstrip{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;align-items:center}
+.zfilt a,.zgenres__nav a,.zstrip a,.zfilt__y a{display:inline-flex;align-items:center;
+min-height:40px;padding:0 12px;border-radius:var(--a-radius-chip);border:1px solid @LINE@;
+background:@PAGE@;font-size:13px;font-weight:600;color:@INK@;white-space:nowrap}
+.zfilt a:hover,.zgenres__nav a:hover,.zstrip a:hover{border-color:@ACC@;color:@ACC@}
+.zfilt a[aria-current],.zgenres__nav a[aria-current],.zgenres__nav a[aria-current=true],
+.zstrip a[aria-current],.zfilt__y a[aria-current]{background:@ACC@;color:#fff;border-color:@ACC@}
+.zfilt__y{display:inline-flex;flex-wrap:wrap;gap:8px}
+
+.zpg{display:flex;gap:8px;justify-content:center;margin:28px 0;flex-wrap:wrap}
+.zpg a,.zpg span{min-width:44px;min-height:44px;display:inline-flex;align-items:center;
+justify-content:center;border-radius:10px;border:1px solid @LINE@;background:@PAGE@;font-size:14px}
+.zpg span{background:@ACC@;color:#fff;border-color:@ACC@}
+.zempty,.znf{padding:48px 16px;text-align:center;color:@DIM@}
+.znf b,.zempty b{display:block;font-size:22px;font-weight:800;color:@INK@;margin-bottom:8px}
+
+.asch{display:none}
+.asch-empty{padding:28px;border-radius:var(--a-radius-card);background:@ALT@;color:@DIM@;line-height:1.5}
+
+/* Title — two columns poster | content */
+.zban,.zhead,.zhead__ps,.zhead__x,.zhead__o{display:contents}
+.ztitle{display:grid;grid-template-columns:1fr;gap:20px;margin:16px 0 8px;
+padding:clamp(24px,2vw,32px);background:#fff;border-radius:var(--a-radius-shell);
+box-shadow:var(--a-shadow);align-items:start;max-height:none}
+@media(min-width:900px){.ztitle{grid-template-columns:clamp(240px,15.8vw,306px) minmax(0,1fr);
+column-gap:clamp(28px,2.2vw,44px)}}
+.ztitle__poster{aspect-ratio:2/3;border-radius:clamp(18px,1.4vw,24px);overflow:hidden;
+background:@SURF@;position:relative;width:100%;max-width:306px;margin:0 auto}
+@media(min-width:900px){.ztitle__poster{margin:0;max-width:none}}
+@media(max-width:599px){.ztitle__poster{max-width:220px}}
+.ztitle__poster img,.ztitle__poster .zhead__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ztitle__main{min-width:0;display:flex;flex-direction:column;gap:10px}
+.ztitle__head{display:flex;gap:16px;align-items:flex-start;justify-content:space-between}
+.ztitle__head-text{min-width:0;flex:1}
+.ztitle__main h1{font-size:clamp(28px,2.4vw,36px);line-height:1.2;margin:0;
 display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-@media(min-width:1100px){.ztitle__main h1{font-size:34px;line-height:1.18}}
-.ztitle__o{font-size:16px;color:@DIM@;margin:0 0 8px}
-.ztitle__meta{font-size:13px;color:@DIM@;margin:0 0 10px;line-height:1.45}
-.ztitle__pills{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
-.ztitle__pills a,.ztitle__pills span{display:inline-flex;align-items:center;
-min-height:30px;padding:0 10px;border-radius:4px;border:1px solid @LINE@;
-background:@ALT@;font-size:12.5px;color:@INK@}
-.ztitle__desc{font-size:14px;line-height:1.55;color:@INK@;max-width:68ch;margin:0 0 12px;
-display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.ztitle__o{font-size:clamp(15px,1.2vw,18px);color:@DIM@;margin:0}
+.ztitle__meta{font-size:14px;color:@DIM@;margin:0;line-height:1.45}
+.ztitle__pills{display:flex;flex-wrap:wrap;gap:8px;margin:0}
+.ztitle__pills a,.ztitle__pills span{display:inline-flex;align-items:center;min-height:30px;
+padding:0 12px;border-radius:var(--a-radius-chip);border:1px solid @LINE@;background:@ALT@;
+font-size:13px;color:@INK@}
+.ztitle__desc-panel{background:@ALT@;border-radius:14px;padding:14px 16px;margin:4px 0 0}
+.ztitle__desc{font-size:clamp(16px,1.2vw,18px);line-height:1.45;color:@INK@;margin:0;
+display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
 .ztitle__desc.is-open{-webkit-line-clamp:unset;display:block}
-.ztitle__more{border:0;background:transparent;color:@ACC@;font-weight:700;
-font-size:13px;cursor:pointer;padding:0;margin:0 0 12px}
-.ztitle__cta{display:inline-flex;align-items:center;justify-content:center;
-min-height:40px;padding:8px 16px;border-radius:4px;background:@ACC@;color:#fff;
-font-weight:700;font-size:14px;text-decoration:none}
+.ztitle__more{border:0;background:transparent;color:@ACC@;font-weight:700;font-size:14px;
+cursor:pointer;padding:0;margin-top:8px}
+.ztitle__cta{display:inline-flex;align-items:center;justify-content:center;min-height:48px;
+padding:0 18px;border-radius:12px;background:@ACC@;color:#fff;font-weight:700;font-size:15px;
+text-decoration:none;width:fit-content}
 .ztitle__cta:hover{filter:brightness(1.05)}
-.ztitle__rail{min-width:0;display:flex;flex-direction:column;gap:10px}
-@media(max-width:1099px){.ztitle__rail{order:3;flex-direction:row;flex-wrap:wrap}}
-.ztitle__score{background:@ALT@;border:1px solid @LINE@;border-radius:4px;
-padding:12px 10px;text-align:center}
-.ztitle__score b{display:block;font-size:44px;line-height:1;font-weight:800;color:@ACC@}
+.ztitle__actions{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+@media(max-width:599px){.ztitle__cta,.ztitle__actions .ztitle__cta{width:100%}}
+.ztitle__rail{display:none}
+.ztitle__score{flex:0 0 auto;text-align:right;min-width:4.5em}
+.ztitle__score b{display:block;font-size:clamp(46px,3.2vw,54px);line-height:1;font-weight:800;color:@ACC@}
 .ztitle__score span{display:block;font-size:12px;color:@DIM@;margin-top:4px}
-.ztitle__dl{margin:0;background:@ALT@;border:1px solid @LINE@;border-radius:4px;
-padding:10px 12px;display:grid;gap:8px}
-.ztitle__dl div{display:grid;grid-template-columns:1fr;gap:2px}
-.ztitle__dl dt{font-size:11px;letter-spacing:.04em;text-transform:uppercase;
-color:@DIM@;font-weight:700;margin:0}
-.ztitle__dl dd{margin:0;font-size:13px;color:@INK@;line-height:1.35;
-overflow-wrap:anywhere}
-.ztitle__dl a{color:@ACC@;font-weight:700}
+.ztitle__dl{display:none}
 .zad{display:none}
-.zad[data-ad-enabled="1"]{display:block;width:100%;max-width:300px;min-height:250px;
-border:1px dashed @LINE@;border-radius:4px;background:@ALT@;margin:0 auto}
-.zbody{font-size:14px;line-height:1.55;color:@INK@;max-width:70ch;margin:14px 0 0}
+.zbody{display:none}
 .zaside{display:none}
-.zpl{margin:14px 0;max-width:1120px}
-.zpl__f{aspect-ratio:16/9;background:#f3f3f3;border:1px solid @LINE@;
-border-radius:4px;overflow:hidden;position:relative;max-height:none}
+.ztitle-gap{height:clamp(24px,2vw,48px)}
+
+/* Player geometry — fill wrapper */
+.zpl{margin:0 auto;width:min(100%,1200px);max-width:1200px}
+.zpl__h{font-size:clamp(22px,2vw,32px);font-weight:700;margin:0 0 clamp(16px,1.5vw,24px);
+display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.zpl__h span{font-size:13px;font-weight:600;color:@DIM@}
+.zpl__f{position:relative;width:100%;aspect-ratio:16/9;background:#101010;border:0;
+border-radius:14px;overflow:hidden;max-height:none}
+.zpl__f[data-player-host],.zpl__f [data-player-host]{position:absolute;inset:0;width:100%;height:100%;display:block}
+.zpl__f video-player{position:absolute;inset:0;display:block;width:100% !important;height:100% !important;min-height:100%}
+.zpl__f iframe,.zpl__f video{position:absolute !important;inset:0 !important;width:100% !important;height:100% !important;
+max-width:none !important;max-height:none !important;border:0;display:block}
 .zpl__f[data-state=active],.zpl__f[data-state=ok],.zpl__f[data-state=resolving],
 .zpl__f[data-state=playable]{background:#101010}
-.zh{font-size:22px;line-height:1.3;font-weight:700;margin:14px 0 6px;max-width:100%}
-@media(min-width:768px){.zh{font-size:26px}}
-.zsub{font-size:14px;color:@DIM@;margin:0 0 14px;max-width:72ch;
-display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-/* Хаб подборок: карточка коллекции, а не ещё одна сетка тайтлов. */
-.zhub{display:grid;gap:12px;margin:14px 0;grid-template-columns:1fr}
-@media(min-width:600px){.zhub{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:1000px){.zhub{grid-template-columns:repeat(3,1fr)}}
-.zhub__c{display:block;padding:12px;border:1px solid @LINE@;border-radius:6px;
-background:@SURF@;color:inherit;text-decoration:none}
-.zhub__c:hover,.zhub__c:focus-visible{border-color:@ACC@;outline:none}
-.zhub__g{display:flex;gap:4px;margin-bottom:9px}
-.zhub__p{flex:1 1 0;aspect-ratio:2/3;overflow:hidden;border-radius:4px;background:@ALT@}
-.zhub__img{width:100%;height:100%;object-fit:cover;display:block}
-.zhub__t{display:block;font-weight:700;font-size:15px}
-.zhub__m{display:block;font-size:12px;color:@DIM@;font-weight:600;margin:2px 0 4px}
-.zhub__d{display:block;font-size:13px;color:@DIM@;line-height:1.45}
-
-/* Компактные номерные кнопки серий: CSS Grid auto-fill, без скрытых колонок. */
-.zeps{display:grid;gap:6px;margin:12px 0;max-height:70vh;overflow-x:hidden;
-overflow-y:auto;overscroll-behavior:contain;align-content:flex-start;
-grid-template-columns:repeat(auto-fill,minmax(44px,1fr));width:100%;
-max-width:100%;min-width:0;box-sizing:border-box}
-@media(min-width:768px){.zeps{max-height:520px;
-grid-template-columns:repeat(auto-fill,minmax(48px,1fr))}}
-.zeps a,.zeps span{display:inline-flex;align-items:center;justify-content:center;
-min-width:44px;min-height:44px;width:100%;height:44px;padding:0;
-border-radius:6px;border:1px solid @LINE@;background:@PAGE@;font-size:13px;
-font-weight:700;font-variant-numeric:tabular-nums;box-sizing:border-box}
-@media(min-width:768px){.zeps a,.zeps span{min-height:48px;height:48px}}
-.zeps span{opacity:.5}
-.zeps a[aria-current]{background:@ACC@;color:#fff;border-color:@ACC@}
-.zeps a[data-off]{opacity:.45;pointer-events:none}
-.zsea__h{display:flex;justify-content:space-between;align-items:baseline;
-gap:10px;flex-wrap:wrap;margin:0 0 10px}
-.zsea__h b{font-size:15px;font-weight:700}
-.zsea__h span{font-size:13px;color:@DIM@}
-.zepnav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
-.zepnav a{background:@ALT@;border:1px solid @LINE@;border-radius:4px;
-padding:8px 12px;font-size:13px;color:@ACC@;font-weight:700}
-
-.zpl{margin:14px 0}
-.zpl__f{aspect-ratio:16/9;background:#f3f3f3;border:1px solid @LINE@;
-border-radius:4px;overflow:hidden;position:relative;max-height:min(56vw,420px)}
-.zpl__f[data-state=playable]{background:#101010;max-height:none}
-.zpl__h{font-size:16px;font-weight:700;margin:18px 0 9px;display:flex;
-align-items:baseline;justify-content:space-between;gap:10px}
-.zpl__h span{font-size:12.5px;font-weight:600;color:@DIM@}
-.zpl__s,.zpl [data-player-state]{position:absolute;inset:0;display:grid;
-place-items:center;padding:16px;text-align:center;color:@INK@;font-size:13px;
-line-height:1.45;background:#f7f7f7}
+.zpl__s,.zpl [data-player-state]{position:absolute;inset:0;display:grid;place-items:center;
+padding:16px;text-align:center;color:@INK@;font-size:13px;line-height:1.45;background:#f7f7f7;z-index:2}
 .zpl [data-player-state][hidden],.zpl__s[hidden]{display:none !important}
 .zpl [data-player-state] b{display:block;font-size:15px;margin-bottom:6px}
 .zpl [data-player-state] p{margin:0;max-width:36ch;color:@DIM@}
 
-.zft{border-top:2px solid @ACC@;margin:28px 0 0;padding:18px 0 10px;
-font-size:13px;color:@DIM@}
-.zft__grid{display:grid;gap:14px;grid-template-columns:1fr;
-margin-bottom:14px}
+.zeps{display:grid;gap:8px;margin:12px 0;max-height:70vh;overflow:auto;
+grid-template-columns:repeat(auto-fill,minmax(40px,1fr));width:100%}
+.zeps a,.zeps span{display:inline-flex;align-items:center;justify-content:center;
+min-width:36px;min-height:36px;width:100%;height:clamp(36px,4vw,48px);border-radius:10px;
+border:1px solid @LINE@;background:@PAGE@;font-size:13px;font-weight:700}
+.zeps a[aria-current]{background:@ACC@;color:#fff;border-color:@ACC@}
+.zeps a[data-off]{opacity:.4;pointer-events:none}
+.zeps a:focus-visible{outline:2px solid @ACC@;outline-offset:2px}
+.zsea__h{display:flex;justify-content:space-between;gap:10px;margin:0 0 10px;flex-wrap:wrap}
+.zepnav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.zepnav a{background:@ALT@;border-radius:10px;padding:8px 12px;font-size:13px;color:@ACC@;font-weight:700}
+
+.zhub{display:grid;gap:14px;margin:14px 0;grid-template-columns:1fr}
+@media(min-width:600px){.zhub{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.zhub{grid-template-columns:repeat(3,1fr)}}
+.zhub__c{display:block;padding:14px;border-radius:var(--a-radius-card);background:#fff;
+box-shadow:var(--a-shadow-soft);color:inherit;text-decoration:none}
+.zhub__c:hover,.zhub__c:focus-visible{box-shadow:var(--a-shadow);outline:none}
+.zhub__g{display:flex;gap:4px;margin-bottom:10px}
+.zhub__p{flex:1 1 0;aspect-ratio:2/3;overflow:hidden;border-radius:8px;background:@ALT@}
+.zhub__img{width:100%;height:100%;object-fit:cover;display:block}
+.zhub__t{display:block;font-weight:700;font-size:16px}
+.zhub__m{display:block;font-size:12px;color:@DIM@;font-weight:600;margin:2px 0 4px}
+.zhub__d{display:block;font-size:13px;color:@DIM@;line-height:1.45}
+
+.zseo{margin:28px 0 8px;padding:18px 0;border-top:1px solid @LINE@;color:@DIM@;font-size:14px;line-height:1.5}
+.zseo h2{font-size:18px;color:@INK@;margin:0 0 8px}
+.zseo details{display:none}
+@media(max-width:767px){.zseo__full{display:none}.zseo details{display:block}}
+@media(min-width:768px){.zseo details{display:none}}
+
+.zft{border-top:2px solid @ACC@;margin:32px 0 0;padding:20px 0 12px}
+.zft__grid{display:grid;gap:18px;grid-template-columns:1fr;margin-bottom:14px}
 @media(min-width:768px){.zft__grid{grid-template-columns:repeat(4,1fr)}}
-.zft__col b{display:block;font-size:12.5px;font-weight:700;color:@INK@;
-margin-bottom:6px;text-transform:uppercase;letter-spacing:.03em}
-.zft__col a{display:block;padding:3px 0;color:@DIM@;font-size:13px}
+.zft__col b{display:block;font-size:13px;margin-bottom:8px}
+.zft__col a{display:block;font-size:13px;color:@DIM@;padding:3px 0}
 .zft__col a:hover{color:@ACC@}
-.zft__about{margin:0;font-size:12.5px;line-height:1.45;color:@DIM@}
-.zft__bar{display:flex;justify-content:space-between;align-items:center;
-gap:10px;flex-wrap:wrap;border-top:1px solid @LINE@;padding-top:10px}
-.zvb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;
-color:@MUTE@;letter-spacing:0}
-.zseo{margin:22px 0 8px;padding:12px 0 0;border-top:1px solid @LINE@;
-color:@DIM@;font-size:13px;line-height:1.55;max-width:72ch}
-.zseo h2{font-size:14px;font-weight:700;color:@INK@;margin:0 0 6px}
-.zseo p{margin:0 0 8px}
-@media(max-width:767px){.zseo{font-size:12.5px}
-.zseo details{border:1px solid @LINE@;border-radius:4px;padding:8px 10px}
-.zseo summary{cursor:pointer;font-weight:700;color:@INK@}}
-.zseo .zseo__full{display:none}
-@media(min-width:768px){.zseo details{display:none}
-.zseo .zseo__full{display:block}}
+.zft__about{font-size:13px;color:@DIM@;line-height:1.45;margin:0}
+.zft__bar{display:flex;justify-content:space-between;gap:12px;align-items:center;
+padding-top:10px;border-top:1px solid @LINE@;font-size:12px;color:@MUTE@;flex-wrap:wrap}
+.zvb{font-size:11px;color:@MUTE@;opacity:.85;white-space:nowrap}
 
-img[hidden]{display:none}
-
-/* Оценки по источникам. Разметка общая, вид свой у каждого семейства. */
-.rbs{margin:14px 0;display:flex;flex-direction:column;gap:8px}
-.rbs__l{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
-.rbs__i{display:flex;align-items:baseline;gap:6px;padding:6px 11px;border-radius:6px;
-white-space:nowrap}
-.rbs__s{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
-.rbs__n{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
-.rbs__n small{font-size:11px;font-weight:400;opacity:.72}
-.rbs__v{font-size:11px;opacity:.75;font-variant-numeric:tabular-nums}
-.rbs__l--own{border-top:1px dashed currentColor;padding-top:8px;margin-top:2px;opacity:.95}
-.rbs--none{margin:14px 0;font-size:13px;font-style:italic}
-@media(max-width:400px){.rbs__i{padding:5px 8px}.rbs__n{font-size:14px}}
-.rbs__i{background:@ALT@;border:1px solid @LINE@;color:@INK@}
-.rbs__s{color:@ACC@}
-.rbs__n{color:@INK@}
-.rbs__l--own{color:@DIM@}
-.rbs--none{color:@MUTE@}
-
+.rbs{margin:6px 0 0}.rbs__l{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
+.rbs__i{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:10px;
+background:@ALT@;border:1px solid @LINE@;font-size:12px}
+.rbs__s{color:@ACC@;font-weight:700}.rbs__n{color:@INK@;font-weight:700}
+.rbs--none{display:none}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 """
+
 
 
 def _подставить(шаблон: str, токены: dict) -> str:
@@ -2130,7 +2023,7 @@ def _подставить(шаблон: str, токены: dict) -> str:
         "токены": АНИМЕДИА_ТОКЕНЫ,
         "стиль": lambda: _общее(АНИМЕДИА_ТОКЕНЫ) + _подставить(АНИМЕДИА_СТИЛЬ, АНИМЕДИА_ТОКЕНЫ),
         "нав": [("/", "Главная"), ("/catalog/", "Каталог аниме"),
-                ("/new/", "Новые эпизоды"), ("/schedule/", "Расписание"),
+                ("/new/", "Новые эпизоды"),
                 ("/collections/", "Подборки")],
         "поиск": "Поиск аниме",
         "полосы": [],
@@ -3115,12 +3008,16 @@ def отбор(данные: "Данные", индекс: dict, зпр: dict, �
                        reverse=True)
     elif сорт == "year":
         набор = sorted(набор, key=lambda з: (з.get("year") or 0, з["slug"]), reverse=True)
-    elif сорт == "title" or раздел in (
-            "/catalog", "/movies", "/series", "/animation"):
+    elif сорт == "title":
         набор = sorted(набор, key=lambda з: (з.get("_n") or нормализовать(з["title"]),
                                              з["slug"]))
-    elif сорт == "date":
-        набор = sorted(набор, key=lambda з: з.get("published_at") or "", reverse=True)
+    elif сорт == "date" or (
+            not сорт and раздел in ("/catalog", "/movies", "/series", "/animation")):
+        # Default catalog freshness: published_at DESC, slug DESC (deterministic).
+        набор = sorted(
+            набор,
+            key=lambda з: (з.get("published_at") or "", з["slug"]),
+            reverse=True)
     elif сорт:
         неизвестный_фильтр = True
         набор = []
@@ -3890,7 +3787,7 @@ class ВидЗона(Вид):
         if им:
             части.append(f"<span>IMDb <i>{им}</i></span>")
         if not части:
-            части.append("<span><em>оценки нет</em></span>")
+            части.append("<span><em>нет оценки</em></span>")
         оценка = f'<span class="zt__r">{"".join(части)}</span>'
         заголовок = запись["title"] or ""
         return (f'<a class="zt" href="{запись["url"]}" title="{html.escape(заголовок)}">'
@@ -4435,10 +4332,6 @@ class ВидЗона(Вид):
                 титул=имя, описание=краткое, путь=путь,
                 изображение=запись.get("poster") or ""))
 
-    def _серии_PLACEHOLDER_REMOVE(self):
-        pass
-
-
     def _серии(self, запись: dict, сезоны: list, текущий=None) -> str:
         if not сезоны:
             return ('<h2 class="zh zh--sm">Серии</h2>'
@@ -4618,63 +4511,61 @@ def _мета_версии() -> str:
     "animedia.space": {
         "profile": "animedia-space",
         "og_site_name": "Animedia Space",
-        "title_home": "Animedia Space — каталог аниме, топ и фильмы",
-        "h1": "Каталог аниме, топ и фильмы",
+        "title_home": "Animedia Space — новые серии и популярное аниме",
+        "h1": "Новые серии и популярное аниме",
         "description": (
-            "Animedia Space — каталог аниме с акцентом на высокие оценки, "
-            "полнометражные фильмы, дунхуа и устойчивые подборки жанров."),
+            "Animedia Space — витрина свежих серий, онгоингов и популярных "
+            "тайтлов с быстрым переходом к просмотру."),
         "lead": (
-            "Каталог, топ оценок и фильмы — удобный вход в большой архив аниме "
-            "без шума расписания."),
+            "Свежие серии, продолжения и популярные тайтлы — короткий путь "
+            "к просмотру без лишнего шума."),
         "footer_about": (
             "Animedia Space помогает искать аниме по оценкам, жанрам и типу: "
             "фильмы, дунхуа и классика из утверждённого каталога."),
         "seo_home_title": "Зачем Animedia Space",
         "seo_home": (
-            "Animedia Space заточен под спокойный просмотр каталога: сначала "
-            "высокие оценки и фильмы, затем дунхуа и жанровые подборки. "
-            "Пустые полки скрываются. Поиск понимает кириллицу, латиницу и slug. "
-            "Откройте каталог, топ по оценкам или аниме-фильмы — каждый раздел "
-            "ведёт к своей выборке."),
+            "Animedia Space собирает свежие серии и популярные тайтлы в одном "
+            "месте: сначала эпизоды с доступным просмотром, затем топ и "
+            "тематические подборки. Пустые полки скрываются. Поиск понимает "
+            "кириллицу, латиницу и slug."),
         "seo_catalog_title": "Как устроен каталог Space",
         "seo_catalog": (
             "Фильтры жанра, года и типа сужают каталог Animedia Space. "
             "Пагинация сохраняет условия в адресе, а пустая выдача честно "
             "говорит об отсутствии совпадений."),
         "home_shelves": (
-            "top_rated", "anime_movies", "donghua", "recently_added",
-            "classic", "action",
+            "recently_added", "top_rated", "video_available",
+            "action", "classic", "anime_movies",
         ),
     },
     "animedia.icu": {
         "profile": "animedia-icu",
         "og_site_name": "Animedia ICU",
-        "title_home": "Animedia ICU — новые серии и онгоинги",
-        "h1": "Новые серии и онгоинги",
+        "title_home": "Animedia ICU — сериалы, фильмы и дунхуа",
+        "h1": "Сериалы, фильмы и дунхуа",
         "description": (
-            "Animedia ICU — витрина свежих серий и продолжающихся тайтлов: "
-            "эпизоды, сезонные полки и быстрый переход к просмотру."),
+            "Animedia ICU — каталог сериалов с сериями, аниме-фильмов, дунхуа "
+            "и тематических подборок."),
         "lead": (
-            "Свежие серии и продолжения — короткий путь от выхода эпизода "
-            "к странице просмотра."),
+            "Сериалы с доступными сериями, полнометражные фильмы и дунхуа — "
+            "спокойный вход в большой каталог."),
         "footer_about": (
-            "Animedia ICU сфокусирован на сериях и онгоингах: новые эпизоды, "
-            "сериалы с доступными дорожками и тематические подборки."),
+            "Animedia ICU — сериалы с сериями, аниме-фильмы, дунхуа и "
+            "тематические подборки из утверждённого каталога."),
         "seo_home_title": "Чем полезен Animedia ICU",
         "seo_home": (
-            "На Animedia ICU главная начинается с сериалов, у которых уже есть "
-            "доступные серии, и с новых поступлений. Дальше — топ и фильмы "
-            "как вспомогательные полки. Расписание без реальных дат выхода "
-            "не заполняется выдуманным временем. Смотрите новые серии, "
-            "онгоинги и короткие сериалы в одном месте."),
+            "Animedia ICU делает упор на сериалы с сериями, аниме-фильмы и "
+            "дунхуа. Дальше — короткие сериалы и жанровые подборки. Даты "
+            "выхода без источника не выдумываются. Каталог и поиск помогают "
+            "найти нужный тайтл по названию или жанру."),
         "seo_catalog_title": "Навигация по каталогу ICU",
         "seo_catalog": (
             "Каталог Animedia ICU сочетает жанровые срезы с поиском по "
             "кириллице, латинице и slug. Фильтры остаются в URL, чтобы "
             "вернуться к той же выдаче."),
         "home_shelves": (
-            "new_episodes", "series_with_episodes", "recently_added",
-            "top_rated", "anime_movies", "donghua", "short_series",
+            "series_with_episodes", "anime_movies", "donghua",
+            "short_series", "top_rated", "classic", "romance",
         ),
     },
 }
@@ -4749,7 +4640,7 @@ class ВидАнимедиа(ВидЗона):
             оценка = (f'<span class="zt__r"><span>{html.escape(о["подпись"])} '
                       f'<b>{html.escape(о["значение"])}</b></span></span>')
         else:
-            оценка = '<span class="zt__r"><span><em>оценки нет</em></span></span>'
+            оценка = '<span class="zt__r"><span><em>нет оценки</em></span></span>'
         return (f'<a class="zt" href="{запись["url"]}">'
                 f'<span class="zt__p">{изо}</span>'
                 f'<span class="zt__b"><span class="zt__t">{html.escape(запись["title"])}</span>'
@@ -4785,6 +4676,87 @@ class ВидАнимедиа(ВидЗона):
                 f'<span class="zr__m">{html.escape(мета)}</span></span>'
                 f'{badge}</a>')
 
+    def тайтл(self, запись: dict, деталь: dict) -> str:
+        """Two-column detail: poster | content with score in header."""
+        путь = f"/title/{запись['slug']}/"
+        имя = запись["title"]
+        сезоны = список_серий(деталь)
+        сериал = bool(сезоны) or запись.get("kind") == "Сериал"
+        звенья = [("/", self.имя),
+                  ("/series/", "Сериалы") if сериал else ("/movies/", "Фильмы"),
+                  ("", имя)]
+        изо = заглушка_постера(запись, "zt__none", "zhead__img", 306, 459)
+        описание = (деталь.get("description") or деталь.get("short_description") or "").strip()
+        описание_html = ""
+        if описание:
+            описание_html = (
+                f'<div class="ztitle__desc-panel"><p class="ztitle__desc" id="title-desc">'
+                f'{html.escape(описание)}</p>'
+                + ('<button type="button" class="ztitle__more" '
+                   'onclick="this.previousElementSibling.classList.add(\'is-open\');'
+                   'this.hidden=true">ещё</button>' if len(описание) > 320 else "")
+                + "</div>")
+        оценки = оценки_по_источникам(деталь)
+        primary = оценки[0] if оценки else None
+        score_html = ""
+        if primary:
+            score_html = (
+                f'<div class="ztitle__score"><b>{html.escape(primary["значение"])}</b>'
+                f'<span>{html.escape(primary["подпись"])}'
+                + (f' · {primary["голоса"]} оценок' if primary.get("голоса") else "")
+                + "</span></div>")
+        оценки_html = разметка_оценок(деталь, "rbs", пусто=False)
+        orig = html.escape(str(деталь.get("original_name") or деталь.get("original_title") or ""))
+        orig_html = f'<p class="ztitle__o">{orig}</p>' if orig else ""
+        pills = ""
+        жанры = деталь.get("genres") or []
+        if жанры:
+            pills = ('<div class="ztitle__pills">' + "".join(
+                f"<span>{html.escape(str(г))}</span>" for г in жанры[:10]) + "</div>")
+        meta_bits = [str(x) for x in (
+            запись.get("year"), запись.get("kind") or деталь.get("type"),
+            ", ".join((деталь.get("countries") or [])[:2]) or None,
+            ", ".join((деталь.get("studios") or деталь.get("voice_studios") or [])[:2]) or None,
+        ) if x]
+        if сезоны:
+            last = сезоны[-1]
+            avail = sum(int(с.get("avail") or 0) for с in сезоны)
+            total = sum(int(с.get("eps") or 0) for с in сезоны)
+            if total:
+                meta_bits.append(f"Вышло {avail} из {total}")
+        meta_html = (f'<p class="ztitle__meta">{html.escape(" · ".join(meta_bits))}</p>'
+                     if meta_bits else "")
+        сезон_старт, эпизод_старт = выбрать_доступную_серию(деталь) if сезоны else (1, None)
+        код, внутри = разметка_плеера(self, запись, деталь, сезон_старт, эпизод_старт)
+        плеер = (f'<div class="ztitle-gap"></div><section class="zpl" id="watch">'
+                 f'<div class="zpl__h"><h2>Смотреть</h2>'
+                 f"<span>{html.escape(_подпись_плеера(код))}</span></div>"
+                 f'<div class="zpl__f" data-player data-state="{код}">{внутри}</div>'
+                 f"{_скрипты_плеера(код)}</section>")
+        текущий = (сезон_старт, эпизод_старт) if эпизод_старт is not None else None
+        блок_серий = (self._серии(запись, сезоны, текущий=текущий) if сериал else "")
+        похожие = self.похожие(запись, деталь)
+        блок_похожих = (f'<h2 class="zh zh--sm">Смотрите также</h2>'
+                        f"{self.плитки(похожие)}" if похожие else "")
+        тело = (
+            f'<div class="zwrap"><div class="ztitle">'
+            f'<div class="ztitle__poster">{изо}</div>'
+            f'<div class="ztitle__main"><div class="ztitle__head">'
+            f'<div class="ztitle__head-text"><h1>{html.escape(имя)}</h1>{orig_html}</div>'
+            f'{score_html}</div>{pills}{meta_html}{оценки_html}{описание_html}'
+            f'<div class="ztitle__actions"><a class="ztitle__cta" href="#watch">Смотреть</a></div>'
+            f'</div></div>{плеер}{блок_серий}{блок_похожих}</div>')
+        разметка = self.schema_тайтла(запись, деталь, путь)
+        краткое = (описание[:180] if описание else
+                   f"{имя}: {запись.get('kind') or ''} {запись.get('year') or ''}".strip())
+        return self.оболочка(
+            тело, f"{имя} — смотреть онлайн — {self.имя}", путь,
+            описание=краткое, разметка=разметка, крошки=self.крошки(звенья),
+            og=self.карточка_графа(
+                тип="video.tv_show" if сериал else "video.movie",
+                титул=имя, описание=краткое, путь=путь,
+                изображение=запись.get("poster") or ""))
+
     def верхняя_карусель(self, набор) -> str:
         """Горизонтальная витрина постеров над сетками — ритм amd.online.
 
@@ -4806,8 +4778,7 @@ class ВидАнимедиа(ВидЗона):
         ссылка_html = (f'<a href="{закодировать_запрос(ссылка)}">Весь раздел</a>'
                        if ссылка else "")
         шапка = f'<div class="zsec__h"><h2>{html.escape(титул)}</h2>{ссылка_html}</div>'
-        if ключ in {"new_episodes", "new-episodes", "series_with_episodes",
-                    "series-with-episodes"}:
+        if ключ in {"new_episodes", "new-episodes"}:
             тело = self.лента(набор)
             return f'<section class="zsec zsec--eps">{шапка}{тело}</section>'
         return f'<section class="zsec">{шапка}{self.плитки(набор)}</section>'
@@ -4865,8 +4836,7 @@ class ВидАнимедиа(ВидЗона):
             '<div class="zft__grid">'
             '<div class="zft__col"><b>Разделы</b>'
             '<a href="/">Главная</a><a href="/catalog/">Каталог</a>'
-            '<a href="/new/">Новые эпизоды</a><a href="/collections/">Подборки</a>'
-            '<a href="/schedule/">Расписание</a></div>'
+            '<a href="/new/">Новые эпизоды</a><a href="/collections/">Подборки</a></div>'
             f'<div class="zft__col"><b>Жанры</b>{жанры or "<span>появятся из снимка</span>"}</div>'
             '<div class="zft__col"><b>Подборки</b>'
             '<a href="/collections/">Все подборки</a></div>'
@@ -5040,6 +5010,7 @@ class ВидАнимедиа(ВидЗона):
         куски = [self.полоса_готовности(),
                  f'<h1 class="zh">{html.escape(домен["h1"])}</h1>',
                  f'<p class="zsub">{html.escape(домен["lead"])}</p>']
+
         герой = []
         герой_slug: set[str] = set()
         for ключ, _титул, _ссылка, набор, _причина in ленты:
@@ -5055,6 +5026,16 @@ class ВидАнимедиа(ВидЗона):
         if герой:
             куски.append(self.верхняя_карусель(герой))
         куски.append('<div class="zad-home" data-ad-slot="home-after-hero" data-ad-enabled="0"></div>')
+        # First major content after compact rail: episode feed (not poster grid).
+        ep_rows = self._эпизод_ряды(предел=12)
+        if ep_rows:
+            feed = '<div class="aeps">' + "".join(
+                self._разметка_эпизод_ряда(r) for r in ep_rows) + "</div>"
+            куски.append(
+                '<section class="zsec zsec--eps"><div class="zsec__h">'
+                '<h2>Новые серии аниме</h2>'
+                '<a href="/new/">Все эпизоды</a></div>'
+                f'{feed}</section>')
         # Drop first-shelf items already shown in hero to avoid viewport duplicates.
         очищенные = []
         for i, (ключ, титул, ссылка, набор, причина) in enumerate(ленты):
@@ -5076,17 +5057,157 @@ class ВидАнимедиа(ВидЗона):
 
     # --- списки и поиск: причина пустоты называется на КАЖДОЙ странице ---
     def список(self, разд: str, зпр: dict) -> str:
-        """Каталог, новинки и подборки.
+        """Catalog / new episodes / collections with human H1 and episode rows."""
+        if разд == "/new":
+            return self._страница_новых_эпизодов(зпр)
+        if разд == "/collections":
+            тело = ('<div class="zwrap"><h1 class="zh">Подборки аниме</h1>'
+                    '<p class="zsub">Тематические подборки по данным каталога.</p>'
+                    + self.хаб_коллекций() + "</div>")
+            return self.оболочка(тело, f"Подборки — {self.имя}", "/collections/",
+                                 актив="/collections/",
+                                 описание=f"Подборки витрины {self.имя}.")
+        набор, выбрано = отбор(self.д, self.индекс, зпр, разд)
+        стр = max(1, int((зпр.get("page") or ["1"])[0] or 1))
+        всего = max(1, (len(набор) + НА_СТРАНИЦЕ_1_1 - 1) // НА_СТРАНИЦЕ_1_1)
+        стр = min(стр, всего)
+        кусок = набор[(стр - 1) * НА_СТРАНИЦЕ_1_1: стр * НА_СТРАНИЦЕ_1_1]
+        титул = self._заголовок_раздела(разд, выбрано)
+        фильтры = self._фильтры_каталога(разд, выбрано)
+        тело = (f'<div class="zwrap"><h1 class="zh">{html.escape(титул)}</h1>'
+                f'<p class="zsub">Найдено {len(набор)} · страница {стр} из {всего}</p>'
+                + фильтры
+                + (self.плитки(кусок) if кусок else
+                   '<div class="zempty"><b>Ничего не подошло</b>'
+                   "<p>Под выбранные условия не попала ни одна запись.</p></div>")
+                + self.листалка(разд, выбрано, стр, всего) + "</div>")
+        канон = разд + "/" + (запрос_строкой(выбрано, page=None) if any(
+            выбрано.get(k) for k in ("genre", "year", "kind", "country", "sort")) else "")
+        return self.оболочка(тело, f"{титул} — {self.имя}", канон or (разд + "/"),
+                             актив=разд + "/",
+                             описание=f"{титул} на витрине {self.имя}.",
+                             сверху="")
 
-        Пустая страница без объяснения неотличима от сломанной, поэтому
-        причина нехватки данных называется здесь так же, как на главной, а не
-        только там, где о ней вспомнили.
-        """
-        готово = super().список(разд, зпр)
-        полоса = self.полоса_готовности()
-        if полоса and "<main id=\"main\">" in готово:
-            готово = готово.replace("<main id=\"main\">", "<main id=\"main\">" + полоса, 1)
-        return готово
+    def _заголовок_раздела(self, разд: str, выбрано: dict) -> str:
+        год = выбрано.get("year")
+        вид = выбрано.get("kind")
+        жанр_код = выбрано.get("genre")
+        жанр_имя = None
+        if жанр_код:
+            for код, имя in (self.индекс.get("genre_names") or []):
+                if код == жанр_код:
+                    жанр_имя = имя
+                    break
+        if разд == "/catalog":
+            if вид and год:
+                return f"{вид} {год} года"
+            if год:
+                return f"Аниме {год} года"
+            if жанр_имя:
+                return f"{жанр_имя[0].upper() + жанр_имя[1:]} аниме" if жанр_имя else "Каталог"
+            if вид:
+                return str(вид)
+            return "Весь каталог"
+        if разд == "/movies":
+            return f"Аниме-фильмы{(' ' + str(год) + ' года') if год else ''}"
+        if разд == "/series":
+            return f"Сериалы{(' ' + str(год) + ' года') if год else ''}"
+        return "Каталог"
+
+    def _фильтры_каталога(self, разд: str, выбрано: dict) -> str:
+        chips = []
+        for к in self.д.kinds:
+            chips.append(
+                f'<a href="{разд}/{запрос_строкой(выбрано, kind=к, page=None)}"'
+                f'{ТЕКУЩАЯ_СТРАНИЦА if выбрано.get("kind") == к else ""}>{html.escape(к)}</a>')
+        years = "".join(
+            f'<a href="{разд}/{запрос_строкой(выбрано, year=г, page=None)}"'
+            f'{ТЕКУЩАЯ_СТРАНИЦА if str(выбрано.get("year")) == str(г) else ""}>{г}</a>'
+            for г in (self.д.years or [])[:14])
+        genres = "".join(
+            f'<a href="/catalog/{запрос_строкой({"genre": код})}"'
+            f'{ТЕКУЩИЙ_ПУНКТ if выбрано.get("genre") == код else ""}>{html.escape(имя)}</a>'
+            for код, имя in (self.индекс.get("genre_names") or [])[:16])
+        reset = ""
+        if any(выбрано.get(k) for k in ("kind", "year", "genre", "country", "sort")):
+            reset = f'<a href="{разд}/">Сбросить</a>'
+        sort_links = (
+            f'<a href="{разд}/{запрос_строкой(выбрано, sort=None, page=None)}"'
+            f'{ТЕКУЩАЯ_СТРАНИЦА if not выбрано.get("sort") else ""}>По свежести</a>'
+            f'<a href="{разд}/{запрос_строкой(выбрано, sort="title", page=None)}"'
+            f'{ТЕКУЩАЯ_СТРАНИЦА if выбрано.get("sort") == "title" else ""}>По названию</a>'
+            f'<a href="{разд}/{запрос_строкой(выбрано, sort="rating", page=None)}"'
+            f'{ТЕКУЩАЯ_СТРАНИЦА if выбрано.get("sort") == "rating" else ""}>По оценке</a>')
+        return (f'<nav class="zfilt" aria-label="Фильтры">{"".join(chips)}{reset}</nav>'
+                + (f'<nav class="zfilt" aria-label="Сортировка">{sort_links}</nav>')
+                + (f'<nav class="zfilt zfilt__y" aria-label="Годы">{years}</nav>' if years else "")
+                + (f'<nav class="zgenres__nav" aria-label="Жанры">{genres}</nav>' if genres else ""))
+
+    def _эпизод_ряды(self, предел: int = 48) -> list[dict]:
+        """Episode rows from season.avail — no invented timestamps."""
+        rows = []
+        for з in self.д.items:
+            det = self.деталь(з["slug"])
+            seasons = список_серий(det)
+            if not seasons:
+                continue
+            last = seasons[-1]
+            avail = int(last.get("avail") or 0)
+            if avail < 1:
+                continue
+            n = int(last.get("n") or 1)
+            rows.append({
+                "slug": з["slug"],
+                "title": з["title"],
+                "url": self.адрес_эпизода(з["slug"], n, avail),
+                "poster": з.get("poster") or "",
+                "season": n,
+                "episode": avail,
+                "kind": з.get("kind"),
+                "year": з.get("year"),
+                "published_at": з.get("published_at") or "",
+            })
+        rows.sort(key=lambda r: (r.get("published_at") or "", r["slug"]), reverse=True)
+        return rows[:предел]
+
+    def _разметка_эпизод_ряда(self, row: dict) -> str:
+        изо = заглушка_постера(
+            {"title": row["title"], "poster": row.get("poster"), "url": row["url"]},
+            "zr__none", "zr__img", 80, 92)
+        meta_bits = [str(x) for x in (row.get("kind"), row.get("year")) if x]
+        ts = row.get("published_at") or ""
+        # Show date only when source provides it — never invent "сегодня".
+        if ts and "T" in ts:
+            meta_bits.append(ts[:10])
+        meta = " · ".join(meta_bits)
+        return (
+            f'<a class="aeps__row" href="{html.escape(row["url"])}">'
+            f'<span class="aeps__thumb">{изо}</span>'
+            f'<span class="aeps__body"><span class="aeps__title">{html.escape(row["title"])}</span>'
+            f'<span class="aeps__meta">{html.escape(meta)}</span></span>'
+            f'<span class="aeps__ep"><span class="aeps__num">{row["episode"]}</span>'
+            f'<span class="aeps__lab">серия</span></span></a>')
+
+    def _страница_новых_эпизодов(self, зпр: dict) -> str:
+        rows = self._эпизод_ряды(предел=240)
+        стр = max(1, int((зпр.get("page") or ["1"])[0] or 1))
+        per = 24
+        всего = max(1, (len(rows) + per - 1) // per)
+        стр = min(стр, всего)
+        кусок = rows[(стр - 1) * per: стр * per]
+        сетка = '<div class="aeps">' + "".join(self._разметка_эпизод_ряда(r) for r in кусок) + "</div>"
+        if not кусок:
+            сетка = ('<div class="zempty"><b>Новых серий пока нет</b>'
+                     "<p>В каталоге нет сериалов с доступными сериями.</p></div>")
+        листалка = self.листалка("/new", {"page": None}, стр, всего) if всего > 1 else ""
+        канон = "/new/" if стр == 1 else f"/new/?page={стр}"
+        тело = (f'<div class="zwrap"><h1 class="zh">Новые серии аниме</h1>'
+                f'<p class="zsub">Серии с доступным просмотром · страница {стр} из {всего}</p>'
+                + сетка + листалка + "</div>")
+        return self.оболочка(тело, f"Новые серии — {self.имя}", канон,
+                             актив="/new/",
+                             описание="Новые серии аниме с доступным просмотром.")
+
 
     def поиск(self, зпр: dict) -> str:
         """Поиск. Пустая выдача объясняется тем же и теми же словами."""
@@ -5098,29 +5219,16 @@ class ВидАнимедиа(ВидЗона):
 
     # --- расписание ----------------------------------------------------
     def расписание(self) -> str:
-        """Расписание выхода серий.
-
-        Дни недели объявлены всегда: раздел, исчезающий без данных,
-        неотличим от нереализованного. Время и номер серии берутся только из
-        источника; их отсутствие названо словами, а не заполнено правдоподобным
-        значением — выдуманное расписание хуже пустого.
-        """
-        дни = ("Понедельник", "Вторник", "Среда", "Четверг",
-               "Пятница", "Суббота", "Воскресенье")
-        карточки = []
-        for день in дни:
-            карточки.append(
-                f'<div class="asch__d"><h3>{день}</h3>'
-                f'<ul class="asch__l"><li><span class="asch__n">'
-                f'источник не передал времени и номера серии</span></li></ul></div>')
-        тело = (self.полоса_готовности()
-                + '<h1 class="zh">Расписание выхода серий</h1>'
-                + '<p class="zsub">Время и номер серии берутся из источника. '
-                  'Пока источник их не передаёт, дни показаны пустыми: '
-                  'правдоподобное расписание опаснее пустого, потому что ему верят.</p>'
-                + f'<div class="asch">{"".join(карточки)}</div>')
+        """Honest empty schedule: no fabricated times, no provider jargon."""
+        тело = (
+            '<div class="zwrap"><h1 class="zh">Расписание</h1>'
+            '<div class="asch-empty"><b>Расписание пока недоступно</b>'
+            '<p>Точные даты и время выхода серий в текущем каталоге не переданы. '
+            'Как только они появятся из источника, этот раздел заполнится сам. '
+            'Пока смотрите <a href="/new/">новые эпизоды</a> и '
+            '<a href="/catalog/">каталог</a>.</p></div></div>')
         return self.оболочка(тело, f"Расписание — {self.имя}", "/schedule/",
-                             актив="/schedule/",
+                             актив="",
                              описание="Расписание выхода серий аниме.")
 
 
