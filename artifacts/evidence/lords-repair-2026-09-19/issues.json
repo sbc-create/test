@@ -9,19 +9,91 @@
     "frontend_sha256": "20772a574f0542e9d71bd82fe7f974d526723612a8b1f9d54cf2bf8b1453d196"
   },
   "issues": [
-    {"id": "P0-SEARCH-MATRIX", "sev": "P0", "status": "open", "summary": "q=matrix ranks Маори first via soft Hamming on maori"},
-    {"id": "P0-SLUG-ALIAS", "sev": "P0", "status": "open", "summary": "historical domokhozyaykoy slug 404; need 301 to domohozyaykoy"},
-    {"id": "P0-PLAYER-HUB", "sev": "P0", "status": "open", "summary": "series hub shows empty 16:9 awaiting canvas"},
-    {"id": "P1-FILTER-COUNTRY-SORT", "sev": "P1", "status": "open", "summary": "country and sort query params silently ignored"},
-    {"id": "P1-ROUTES-KIND", "sev": "P1", "status": "open", "summary": "/movies/ /series/ /animation/ /genres/ 404"},
-    {"id": "P1-COLLECTIONS-DISTINCT", "sev": "P1", "status": "open", "summary": "/collections/ mirrors catalog"},
-    {"id": "P1-NEW-SEMANTICS", "sev": "P1", "status": "open", "summary": "/new/ is nearly full catalog reorder"},
-    {"id": "P1-HOME-H2", "sev": "P1", "status": "open", "summary": "home section titles not H2; weak Все links"},
-    {"id": "P1-MOBILE-HEADER", "sev": "P1", "status": "open", "summary": "no burger/drawer; search fixed 190px crowds 390"},
-    {"id": "P1-FOOTER", "sev": "P1", "status": "open", "summary": "technical test footer; no film/series/genre columns"},
-    {"id": "P1-SEO", "sev": "P1", "status": "open", "summary": "SEO copy/pipeline absent; SEO_NOT_READY expected while closed"},
-    {"id": "P2-EP-BUTTONS", "sev": "P2", "status": "open", "summary": "episode buttons <44px"},
-    {"id": "P2-502", "sev": "P2", "status": "open", "summary": "observed ~20s global 502 under burst; needs logs+load test"},
-    {"id": "OK-EP7-AVAIL", "sev": "info", "status": "fixed-prior", "summary": "episode>avail no longer mounts SDK (a67bf79); needs regression lock"}
-  ]
+    {
+      "id": "P0-SEARCH-MATRIX",
+      "sev": "P0",
+      "status": "fixed",
+      "summary": "q=matrix ranks Маори first via soft Hamming on maori"
+    },
+    {
+      "id": "P0-SLUG-ALIAS",
+      "sev": "P0",
+      "status": "fixed",
+      "summary": "historical domokhozyaykoy slug 404; need 301 to domohozyaykoy"
+    },
+    {
+      "id": "P0-PLAYER-HUB",
+      "sev": "P0",
+      "status": "fixed",
+      "summary": "series hub shows empty 16:9 awaiting canvas"
+    },
+    {
+      "id": "P1-FILTER-COUNTRY-SORT",
+      "sev": "P1",
+      "status": "fixed",
+      "summary": "country and sort query params silently ignored"
+    },
+    {
+      "id": "P1-ROUTES-KIND",
+      "sev": "P1",
+      "status": "fixed",
+      "summary": "/movies/ /series/ /animation/ /genres/ 404"
+    },
+    {
+      "id": "P1-COLLECTIONS-DISTINCT",
+      "sev": "P1",
+      "status": "fixed",
+      "summary": "/collections/ mirrors catalog"
+    },
+    {
+      "id": "P1-NEW-SEMANTICS",
+      "sev": "P1",
+      "status": "fixed",
+      "summary": "/new/ is nearly full catalog reorder"
+    },
+    {
+      "id": "P1-HOME-H2",
+      "sev": "P1",
+      "status": "fixed",
+      "summary": "home section titles not H2; weak Все links"
+    },
+    {
+      "id": "P1-MOBILE-HEADER",
+      "sev": "P1",
+      "status": "fixed",
+      "summary": "no burger/drawer; search fixed 190px crowds 390"
+    },
+    {
+      "id": "P1-FOOTER",
+      "sev": "P1",
+      "status": "fixed",
+      "summary": "technical test footer; no film/series/genre columns"
+    },
+    {
+      "id": "P1-SEO",
+      "sev": "P1",
+      "status": "partial-draft",
+      "summary": "SEO copy/pipeline absent; SEO_NOT_READY expected while closed"
+    },
+    {
+      "id": "P2-EP-BUTTONS",
+      "sev": "P2",
+      "status": "fixed",
+      "summary": "episode buttons <44px"
+    },
+    {
+      "id": "P2-502",
+      "sev": "P2",
+      "status": "open",
+      "summary": "observed ~20s global 502 under burst; needs logs+load test"
+    },
+    {
+      "id": "OK-EP7-AVAIL",
+      "sev": "info",
+      "status": "fixed",
+      "summary": "episode>avail no longer mounts SDK (a67bf79); needs regression lock"
+    }
+  ],
+  "verdict": "NEEDS_REPAIR",
+  "live_build": "20260919T094007Z-ed8effd6-nova"
 }

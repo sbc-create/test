@@ -1,0 +1,80 @@
+{
+  "build": "20260919T090023Z-a0db875f-nova",
+  "home_marker": "Lords · 1.1.0 · a0db875f",
+  "home_h2": 8,
+  "home_test_slogan": false,
+  "home_burger": true,
+  "matrix_titles": [],
+  "matr_titles": [
+    "Матрица времени",
+    "Матрица: Революция",
+    "Матрица: Перезагрузка",
+    "Матрица: Воскрешение",
+    "Матрица (1999)",
+    "Армитаж: Двойная матрица",
+    "Аниматрица",
+    "Армитаж: Полиматрица"
+  ],
+  "alias": {
+    "path": "/title/sudmedekspert-stavshaya-domokhozyaykoy/",
+    "status": 308,
+    "loc": "/title/sudmedekspert-stavshaya-domohozyaykoy/",
+    "robots": "noindex, nofollow",
+    "body": ""
+  },
+  "alias_ep": {
+    "path": "/title/sudmedekspert-stavshaya-domokhozyaykoy/season-1/episode-7/",
+    "status": 308,
+    "loc": "/title/sudmedekspert-stavshaya-domohozyaykoy/season-1/episode-7/",
+    "robots": "noindex, nofollow",
+    "body": ""
+  },
+  "hub_state": "awaiting",
+  "hub_vp": 0,
+  "ep7_state": "awaiting",
+  "ep3_ep": [
+    "3"
+  ],
+  "collections_hub": true,
+  "movies": 200,
+  "genres_redirect_or": {
+    "path": "/genres/",
+    "status": 308,
+    "loc": "/catalog/",
+    "robots": "noindex, nofollow",
+    "body": ""
+  },
+  "noindex": "noindex, nofollow",
+  "route_statuses": {
+    "/": 200,
+    "/new/": 200,
+    "/catalog/": 200,
+    "/movies/": 200,
+    "/series/": 200,
+    "/animation/": 200,
+    "/collections/": 200,
+    "/genres/": 308,
+    "/year/2024/": 200,
+    "/search/?q=matrix": 200,
+    "/search/?q=%D0%9C%D0%B0%D1%82%D1%80%D0%B8%D1%86%D0%B0": 200,
+    "/title/sudmedekspert-stavshaya-domohozyaykoy/": 200,
+    "/title/sudmedekspert-stavshaya-domohozyaykoy/season-1/episode-7/": 200,
+    "/title/sudmedekspert-stavshaya-domohozyaykoy/season-1/episode-3/": 200,
+    "/robots.txt": 200
+  },
+  "load": {
+    "seq_100": {
+      "codes": [
+        200
+      ],
+      "ms": 15016,
+      "ok": true
+    },
+    "par_20": {
+      "codes": [
+        200
+      ],
+      "ok": true
+    }
+  }
+}
