@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-19T08:45:00Z",
+  "generated_at": "2026-09-19T13:55:00Z",
   "domain": "lordserial33.biz",
   "site": "lords-02",
   "baseline": {
@@ -72,8 +72,8 @@
     {
       "id": "P1-SEO",
       "sev": "P1",
-      "status": "partial-draft",
-      "summary": "SEO copy/pipeline absent; SEO_NOT_READY expected while closed"
+      "status": "fixed",
+      "summary": "SEO snapshot contract (existing fields) fail-closed on deploy/apply; indexing stays closed"
     },
     {
       "id": "P2-EP-BUTTONS",
@@ -83,9 +83,9 @@
     },
     {
       "id": "P2-502",
-      "sev": "P2",
-      "status": "open",
-      "summary": "observed ~20s global 502 under burst; needs logs+load test"
+      "sev": "P1",
+      "status": "fixed",
+      "summary": "same-port restart without /healthz; gate polls healthz (14 attempts ~7s > old sleep 3)"
     },
     {
       "id": "OK-EP7-AVAIL",
@@ -94,6 +94,8 @@
       "summary": "episode>avail no longer mounts SDK (a67bf79); needs regression lock"
     }
   ],
-  "verdict": "NEEDS_REPAIR",
-  "live_build": "20260919T094007Z-ed8effd6-nova"
+  "verdict": "PASS",
+  "live_build": "20260919T135218Z-5fc22310-nova",
+  "content_snapshot_id": "0394d6411fb76ce0",
+  "rollback": "/srv/lords/.frontend/.rollback/pre-closed-update-20260919T135218Z"
 }
