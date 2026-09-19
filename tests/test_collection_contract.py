@@ -131,9 +131,37 @@ def test_фильтр_по_виду_действительно_фильтруе�
     assert к.total == 3
 
 
-def test_новые_эпизоды_это_только_сериалы(снимок):
+def test_новые_эпизоды_это_события_серий_а_не_каталог(снимок):
+    """Без episode.published_at коллекция пуста — нельзя подменить catalog[:N]."""
     к = кк.разрешить("new_episodes", снимок, "lords")
-    assert {э.badge for э in к.items} == {"Сериал"}
+    assert к.total == 0
+    assert к.items == []
+
+
+def test_новые_эпизоды_с_датой_эпизода():
+    items = [
+        {"slug": "s1", "title": "S1", "kind": "Сериал", "year": 2024,
+         "published_at": "2026-09-01T00:00:00Z", "poster": "", "url": "/title/s1/"},
+        {"slug": "f1", "title": "F1", "kind": "Фильм", "year": 2024,
+         "published_at": "2026-09-02T00:00:00Z", "poster": "", "url": "/title/f1/"},
+    ]
+    details = {
+        "s1": {
+            "id": "s1", "playable": True,
+            "seasons": [{
+                "n": 1, "eps": 2, "avail": 2,
+                "episodes": [
+                    {"n": 2, "published_at": "2026-09-18T12:00:00Z"},
+                    {"n": 1, "published_at": "2026-09-11T12:00:00Z"},
+                ],
+            }],
+        },
+        "f1": {"id": "f1", "playable": True, "seasons": []},
+    }
+    snap = кк.Снимок(items, details, revision="ep-1")
+    к = кк.разрешить("new_episodes", snap, "lords", предел=12)
+    assert [э.raw["slug"] for э in к.items] == ["s1"]
+    assert к.total == 1
 
 
 def test_сортировка_по_дате_убывающая(снимок):
