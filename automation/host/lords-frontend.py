@@ -80,15 +80,11 @@ def _формат_даты_карточки(значение: str) -> str:
 
 
 def _подпись_свежести(запись: dict) -> str:
-    """Source-backed freshness line for /new/ cards — never invents episode air dates."""
+    """Source-backed freshness line for /new/ cards — never invents dates."""
     prem = (запись.get("_premiere_date") or "").strip()
     if prem:
         показан = _формат_даты_карточки(prem)
         return f"Премьера · {показан}" if показан else ""
-    pub = (запись.get("published_at") or "").strip()
-    if pub:
-        показан = _формат_даты_карточки(pub)
-        return f"Обновлено · {показан}" if показан else ""
     return ""
 
 МАНИФЕСТ_ФАЙЛ = os.environ.get("LORDS_TEMPLATE_MANIFEST",
@@ -3318,9 +3314,9 @@ def страницы(текущая: int, всего: int, окно: int = 2) ->
 def отбор(данные: "Данные", индекс: dict, зпр: dict, раздел: str) -> tuple[list, dict]:
     """Выборка каталога по параметрам запроса. Возвращает (набор, выбранное).
 
-    year = release year only. /new/ uses activity_at (premiere_date else
-    published_at) without a hard 240 cap. Default kind-routes sort by release
-    freshness, not title alphabet.
+    year = release year only. /new/ uses source-backed activity_at
+    (premiere_date only — catalog published_at is not activity) without a
+    hard 240 cap. Default kind-routes sort by release freshness, not title.
     """
     набор = list(данные.items)
     вид = (зпр.get("kind") or [None])[0]
@@ -3331,6 +3327,10 @@ def отбор(данные: "Данные", индекс: dict, зпр: dict, �
     # Aliases: date → newest (legacy).
     сорт = {"date": "newest", "new": "newest"}.get(сырой_сорт or "", сырой_сорт)
     неизвестный_фильтр = False
+
+    # /new/ is not recently_added: require a confirmed premiere/activity date.
+    if раздел == "/new":
+        набор = [з for з in набор if з.get("_premiere_date")]
 
     if вид:
         набор = [з for з in набор if з.get("kind") == вид]
@@ -3368,11 +3368,10 @@ def отбор(данные: "Данные", индекс: dict, зпр: dict, �
         return (з.get("_n") or нормализовать(з["title"]), з["slug"])
 
     def _activity_key(з: dict) -> tuple:
-        # Prefer premiere_date; else catalog published_at. Missing sorts last.
+        # Confirmed premiere/activity only — never fall back to ingest date.
         prem = з.get("_premiere_date") or ""
-        pub = з.get("published_at") or ""
-        has = 1 if (prem or pub) else 0
-        return (has, prem or pub, _title_key(з)[0], з["slug"])
+        has = 1 if prem else 0
+        return (has, prem, _title_key(з)[0], з["slug"])
 
     def _release_key(з: dict) -> tuple:
         prem = з.get("_premiere_date") or ""
@@ -3402,7 +3401,7 @@ def отбор(данные: "Данные", индекс: dict, зпр: dict, �
             сорт = "newest"
 
     if раздел == "/new" or сорт == "newest":
-        # /new/ activity = premiere_date else published_at (labels differ in UI).
+        # /new/ activity = premiere_date DESC; kind-routes use release freshness.
         набор = sorted(набор, key=_activity_key if раздел == "/new" else _release_key,
                        reverse=True)
     elif сорт == "recently_added":
