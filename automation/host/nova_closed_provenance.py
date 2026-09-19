@@ -28,7 +28,7 @@ class ClosedSiteProvenance(TypedDict):
 
 # source_commit per family; RUNTIME_COMMIT filled after Animedia frontend commit.
 LORDS_COMMIT = "5fc22310fdfb8f0c8748f69e5603e4de3267f27e"
-ANIMEDIA_COMMIT = "744c2ec9bd210f2c44ed37bc4cfb9cacd25d1a13"
+ANIMEDIA_COMMIT = "d01c13704adfe945eb8d2efde540a7114c27db71"
 ZONA_COMMIT = "bcbea00877708c7f930f1fe931a17f66decafed5"
 
 REPO_LORDS = "/home/claude/wt-lords-integration-canary-01"
