@@ -26,9 +26,8 @@ class ClosedSiteProvenance(TypedDict):
     runtime_repo: str
 
 
-# Runtime tip includes overnight search/encoding/shelf fixes (3c4a9d3+)
-# and subsequent report commits on the same lords-frontend.py bytes.
-LORDS_COMMIT = "48d74bcf84610cb878d2b04dec4ab5432a6b026f"
+# Runtime tip: player avail-gate (a67bf79) on top of overnight + Animedia nav.
+LORDS_COMMIT = "a67bf79d64eb30480e224a9a30c4bbe6288221b7"
 ANIMEDIA_COMMIT = "b023bd50cced8d281cb3814a75bf72b429afee0b"
 ZONA_COMMIT = "a10e68b2350a020a2f7d5efe28cd98ef2fc89edd"
 
