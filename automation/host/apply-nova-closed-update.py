@@ -29,6 +29,8 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+# Worktree first: /srv/site-factory/repo may lag the closed-update tip.
+sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "automation" / "host"))
 from nova_closed_provenance import (  # noqa: E402
     CLOSED_SITES,
