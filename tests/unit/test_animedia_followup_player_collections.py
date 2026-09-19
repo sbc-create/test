@@ -250,7 +250,10 @@ def test_release_gate_requires_zona_ready_markers():
     report = gate.runtime_compatible(cand, None)
     assert report["RUNTIME_COMPATIBLE"] == 1
     assert report["RUNTIME_DOWNGRADE"] == 0
-    assert "markReady" in cand.read_text(encoding="utf-8")
+    text = cand.read_text(encoding="utf-8")
+    assert "providerShell" in text
+    assert "__animediaPlayback" in text
+    assert "node.addEventListener('error'" not in text
 
 
 def test_split_seo_profile_does_not_change_provider_binding(monkeypatch, tmp_path):
@@ -262,3 +265,39 @@ def test_split_seo_profile_does_not_change_provider_binding(monkeypatch, tmp_pat
         (tmp_path / "manifest.json").write_text(json.dumps(man), encoding="utf-8")
         cands = mod.кандидаты_источника(det)
         assert cands[0][0] == "mali"
+
+
+def test_player_client_never_listens_for_undocumented_error():
+    text = (HOST / "lords-frontend.py").read_text(encoding="utf-8")
+    # Only script-tag load error is allowed — not provider 'error' on video-player.
+    assert "node.addEventListener('error'" not in text
+    assert "node.addEventListener('noData'" in text
+    assert "providerShell(node)" in text
+    assert "progress+3s" in text
+
+
+def test_domain_profiles_diverge_seo_and_shelves():
+    import animedia_ratings_sources as rs
+
+    text = (HOST / "lords-frontend.py").read_text(encoding="utf-8")
+    assert "animedia.icu" in text and "animedia.space" in text
+    assert "Новые серии и онгоинги" in text
+    assert "Каталог аниме, топ и фильмы" in text
+    assert text.count('"seo_home"') >= 2 or text.count("seo_home") >= 4
+    assert "Шикимуни" in rs.unresolved_owner_names()
+    assert "Nisa Media" in rs.unresolved_owner_names()
+    assert "shikimori" in rs.enabled_source_keys()
+
+
+def test_hub_selects_latest_available_episode(monkeypatch, tmp_path):
+    mod, det, _item = _load_frontend(monkeypatch, tmp_path)
+    s, e = mod.выбрать_доступную_серию(det)
+    assert (s, e) == (2, 104)
+
+
+def test_home_css_locks_hero_card_width():
+    text = (HOST / "lords-frontend.py").read_text(encoding="utf-8")
+    assert "max-width:min(calc(100% - 32px),1280px)" in text
+    assert "flex:0 0 154px" in text
+    assert ".ahero" in text and "max-height:300px" in text
+    assert "grid-template-columns:250px minmax(0,1fr) 150px" in text

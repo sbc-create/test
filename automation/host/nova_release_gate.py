@@ -25,8 +25,8 @@ FRONT = Path("/srv/lords/.frontend")
 REQUIRED_RUNTIME_MARKERS = (
     "def кандидаты_источника",
     "data-src-candidates",
-    "markReady",
-    "__zonaPlayerReady",
+    "__animediaPlayback",
+    "providerShell",
     "ВидАнимедиа",
     "АНИМЕДИА_СТИЛЬ",
     "ОФОРМЛЕНИЕ_1_2_1",
