@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "template_family": "animedia",
+  "design_version": "1.2.1",
+  "source_commit": "ff4bb0f0fd524c1d05d5b56d16f53c823b4d3156",
+  "runtime_commit": "ff4bb0f0fd524c1d05d5b56d16f53c823b4d3156",
+  "build_id": "20260919T170618Z-ff4bb0f0-nova",
+  "artifact_sha256": "432f5bfb5c77b0c00d1fd5c8be1ead5d06abd3e89ff9aa75da7d6009af81a2e6",
+  "profile": "animedia-space",
+  "built_at": "2026-09-19T17:06:26Z"
+}

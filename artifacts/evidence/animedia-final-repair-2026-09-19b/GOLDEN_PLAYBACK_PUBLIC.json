@@ -1,0 +1,1126 @@
+{
+  "generated_at": "2026-09-19T17:26:21Z",
+  "playable_total": 10,
+  "playable_pass": 10,
+  "unavailable_pass": 2,
+  "fallback_pass": 1,
+  "results": [
+    {
+      "url": "https://animedia.icu/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "kind": "playable",
+      "page_url_after": "https://animedia.icu/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "before": {
+        "state": "active",
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": true,
+        "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "after": {
+        "state": "active",
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": true,
+        "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "samples": [
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        }
+      ],
+      "media": {
+        "count": 2,
+        "names": [
+          "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10252&aggr=mali&id=53477",
+          "https://plapi.cdnvideohub.com/api/v1/player/sv/video/7208929024730"
+        ]
+      },
+      "progress": 0.0,
+      "elapsed_s": 8.23,
+      "clicked": true,
+      "js_errors": [],
+      "evidence": "provider_playlist_or_video_plus_shell",
+      "pass": true,
+      "screenshot": "/home/claude/wt-animedia-finalization-01/artifacts/evidence/animedia-playback-gate-2026-09-19/play-00.png"
+    },
+    {
+      "url": "https://animedia.icu/title/master-lda-i-plameni-2/season-2/episode-103/",
+      "kind": "playable",
+      "page_url_after": "https://animedia.icu/title/master-lda-i-plameni-2/season-2/episode-103/",
+      "before": {
+        "state": "active",
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": true,
+        "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "after": {
+        "state": "active",
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": true,
+        "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "samples": [
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        }
+      ],
+      "media": {
+        "count": 2,
+        "names": [
+          "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10252&aggr=mali&id=53477",
+          "https://plapi.cdnvideohub.com/api/v1/player/sv/video/7208928959194"
+        ]
+      },
+      "progress": 0.0,
+      "elapsed_s": 8.23,
+      "clicked": true,
+      "js_errors": [],
+      "evidence": "provider_playlist_or_video_plus_shell",
+      "pass": true,
+      "screenshot": "/home/claude/wt-animedia-finalization-01/artifacts/evidence/animedia-playback-gate-2026-09-19/play-01.png"
+    },
+    {
+      "url": "https://animedia.icu/title/master-lda-i-plameni-2/",
+      "kind": "playable",
+      "page_url_after": "https://animedia.icu/title/master-lda-i-plameni-2/",
+      "before": {
+        "state": "active",
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": true,
+        "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "after": {
+        "state": "active",
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": true,
+        "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "samples": [
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        }
+      ],
+      "media": {
+        "count": 2,
+        "names": [
+          "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10252&aggr=mali&id=53477",
+          "https://plapi.cdnvideohub.com/api/v1/player/sv/video/7208929024730"
+        ]
+      },
+      "progress": 0.0,
+      "elapsed_s": 8.25,
+      "clicked": true,
+      "js_errors": [],
+      "evidence": "provider_playlist_or_video_plus_shell",
+      "pass": true,
+      "screenshot": "/home/claude/wt-animedia-finalization-01/artifacts/evidence/animedia-playback-gate-2026-09-19/play-02.png"
+    },
+    {
+      "url": "https://animedia.icu/title/master-lda-i-plameni-2/season-2/episode-100/",
+      "kind": "playable",
+      "page_url_after": "https://animedia.icu/title/master-lda-i-plameni-2/season-2/episode-100/",
+      "before": {
+        "state": "active",
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": true,
+        "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "after": {
+        "state": "active",
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": true,
+        "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "samples": [
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        }
+      ],
+      "media": {
+        "count": 2,
+        "names": [
+          "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10252&aggr=mali&id=53477",
+          "https://plapi.cdnvideohub.com/api/v1/player/sv/video/7208928762586"
+        ]
+      },
+      "progress": 0.0,
+      "elapsed_s": 8.21,
+      "clicked": true,
+      "js_errors": [],
+      "evidence": "provider_playlist_or_video_plus_shell",
+      "pass": true,
+      "screenshot": "/home/claude/wt-animedia-finalization-01/artifacts/evidence/animedia-playback-gate-2026-09-19/play-03.png"
+    },
+    {
+      "url": "https://animedia.icu/title/22-7/",
+      "kind": "playable",
+      "page_url_after": "https://animedia.icu/title/22-7/",
+      "before": {
+        "state": "active",
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": true,
+        "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "after": {
+        "state": "active",
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": true,
+        "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "samples": [
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        }
+      ],
+      "media": {
+        "count": 3,
+        "names": [
+          "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10252&aggr=kp&id=1423821",
+          "https://plapi.cdnvideohub.com/api/v1/player/sv/video/10076222806742",
+          "https://plapi.cdnvideohub.com/api/v1/player/sv/video/10076355189462"
+        ]
+      },
+      "progress": 0.0,
+      "elapsed_s": 8.27,
+      "clicked": true,
+      "js_errors": [],
+      "evidence": "provider_playlist_or_video_plus_shell",
+      "pass": true,
+      "screenshot": "/home/claude/wt-animedia-finalization-01/artifacts/evidence/animedia-playback-gate-2026-09-19/play-04.png"
+    },
+    {
+      "url": "https://animedia.space/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "kind": "playable",
+      "page_url_after": "https://animedia.space/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "before": {
+        "state": "active",
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": true,
+        "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "after": {
+        "state": "active",
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": true,
+        "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "samples": [
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        }
+      ],
+      "media": {
+        "count": 2,
+        "names": [
+          "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10252&aggr=mali&id=53477",
+          "https://plapi.cdnvideohub.com/api/v1/player/sv/video/7208929024730"
+        ]
+      },
+      "progress": 0.0,
+      "elapsed_s": 8.19,
+      "clicked": true,
+      "js_errors": [],
+      "evidence": "provider_playlist_or_video_plus_shell",
+      "pass": true,
+      "screenshot": "/home/claude/wt-animedia-finalization-01/artifacts/evidence/animedia-playback-gate-2026-09-19/play-05.png"
+    },
+    {
+      "url": "https://animedia.space/title/master-lda-i-plameni-2/",
+      "kind": "playable",
+      "page_url_after": "https://animedia.space/title/master-lda-i-plameni-2/",
+      "before": {
+        "state": "active",
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": true,
+        "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "after": {
+        "state": "active",
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": true,
+        "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "samples": [
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        }
+      ],
+      "media": {
+        "count": 2,
+        "names": [
+          "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10252&aggr=mali&id=53477",
+          "https://plapi.cdnvideohub.com/api/v1/player/sv/video/7208929024730"
+        ]
+      },
+      "progress": 0.0,
+      "elapsed_s": 8.38,
+      "clicked": true,
+      "js_errors": [],
+      "evidence": "provider_playlist_or_video_plus_shell",
+      "pass": true,
+      "screenshot": "/home/claude/wt-animedia-finalization-01/artifacts/evidence/animedia-playback-gate-2026-09-19/play-06.png"
+    },
+    {
+      "url": "https://animedia.space/title/master-lda-i-plameni-2/season-2/episode-103/",
+      "kind": "playable",
+      "page_url_after": "https://animedia.space/title/master-lda-i-plameni-2/season-2/episode-103/",
+      "before": {
+        "state": "active",
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": true,
+        "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "after": {
+        "state": "active",
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": true,
+        "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "samples": [
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        }
+      ],
+      "media": {
+        "count": 2,
+        "names": [
+          "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10252&aggr=mali&id=53477",
+          "https://plapi.cdnvideohub.com/api/v1/player/sv/video/7208928959194"
+        ]
+      },
+      "progress": 0.0,
+      "elapsed_s": 8.2,
+      "clicked": true,
+      "js_errors": [],
+      "evidence": "provider_playlist_or_video_plus_shell",
+      "pass": true,
+      "screenshot": "/home/claude/wt-animedia-finalization-01/artifacts/evidence/animedia-playback-gate-2026-09-19/play-07.png"
+    },
+    {
+      "url": "https://animedia.space/title/22-7/",
+      "kind": "playable",
+      "page_url_after": "https://animedia.space/title/22-7/",
+      "before": {
+        "state": "active",
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": true,
+        "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "after": {
+        "state": "active",
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": true,
+        "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "samples": [
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        }
+      ],
+      "media": {
+        "count": 3,
+        "names": [
+          "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10252&aggr=kp&id=1423821",
+          "https://plapi.cdnvideohub.com/api/v1/player/sv/video/10076222806742",
+          "https://plapi.cdnvideohub.com/api/v1/player/sv/video/10076355189462"
+        ]
+      },
+      "progress": 0.0,
+      "elapsed_s": 8.32,
+      "clicked": true,
+      "js_errors": [],
+      "evidence": "provider_playlist_or_video_plus_shell",
+      "pass": true,
+      "screenshot": "/home/claude/wt-animedia-finalization-01/artifacts/evidence/animedia-playback-gate-2026-09-19/play-08.png"
+    },
+    {
+      "url": "https://animedia.icu/title/1-2-ray/",
+      "kind": "playable",
+      "page_url_after": "https://animedia.icu/title/1-2-ray/",
+      "before": {
+        "state": "active",
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": true,
+        "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "after": {
+        "state": "active",
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": true,
+        "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "samples": [
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        },
+        {
+          "state": "active",
+          "overlayVisible": false,
+          "overlayText": "",
+          "vpHidden": false,
+          "hasShell": true,
+          "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+          "currentTime": null,
+          "paused": null,
+          "falseFailure": false,
+          "playback": null
+        }
+      ],
+      "media": {
+        "count": 2,
+        "names": [
+          "https://plapi.cdnvideohub.com/api/v1/player/sv/playlist?pub=10252&aggr=kp&id=317713",
+          "https://plapi.cdnvideohub.com/api/v1/player/sv/video/8116510218927"
+        ]
+      },
+      "progress": 0.0,
+      "elapsed_s": 8.48,
+      "clicked": true,
+      "js_errors": [],
+      "evidence": "provider_playlist_or_video_plus_shell",
+      "pass": true,
+      "screenshot": "/home/claude/wt-animedia-finalization-01/artifacts/evidence/animedia-playback-gate-2026-09-19/play-09.png"
+    },
+    {
+      "url": "https://animedia.icu/title/master-lda-i-plameni-2/season-2/episode-9999/",
+      "kind": "unavailable",
+      "after": {
+        "state": null,
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": false,
+        "iframeSrc": "",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "evidence": "honest_unavailable",
+      "pass": true,
+      "screenshot": "/home/claude/wt-animedia-finalization-01/artifacts/evidence/animedia-playback-gate-2026-09-19/unavail-00.png"
+    },
+    {
+      "url": "https://animedia.space/title/master-lda-i-plameni-2/season-9/episode-1/",
+      "kind": "unavailable",
+      "after": {
+        "state": null,
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": false,
+        "iframeSrc": "",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "evidence": "honest_unavailable",
+      "pass": true,
+      "screenshot": "/home/claude/wt-animedia-finalization-01/artifacts/evidence/animedia-playback-gate-2026-09-19/unavail-01.png"
+    },
+    {
+      "url": "https://animedia.icu/title/master-lda-i-plameni-2/season-2/episode-104/",
+      "kind": "fallback",
+      "mutated": {
+        "ok": true,
+        "n": 2,
+        "second": {
+          "aggregator": "cvh",
+          "id": "01a0b507-3280-7b2a-8af4-674dd73cff72"
+        }
+      },
+      "after": {
+        "state": "active",
+        "overlayVisible": false,
+        "overlayText": "",
+        "vpHidden": false,
+        "hasShell": true,
+        "iframeSrc": "https://player.cdnvideohub.com/s2/v2.19.3/frame/",
+        "currentTime": null,
+        "paused": null,
+        "falseFailure": false,
+        "playback": null
+      },
+      "evidence": "fallback_shell_no_false_failure",
+      "pass": true,
+      "screenshot": "/home/claude/wt-animedia-finalization-01/artifacts/evidence/animedia-playback-gate-2026-09-19/fallback-00.png"
+    }
+  ]
+}

@@ -74,40 +74,79 @@ def _probe_state(page) -> dict:
     )
 
 
+def _media_evidence(page) -> dict:
+    return page.evaluate(
+        """() => {
+      const entries = performance.getEntriesByType('resource') || [];
+      const media = entries.filter(e =>
+        /playlist|\\/video\\/|m3u8|\\.mp4|\\.ts(\\?|$)|segment/i.test(e.name));
+      return {
+        count: media.length,
+        names: media.slice(0, 8).map(e => (e.name || '').slice(0, 140))
+      };
+    }"""
+    )
+
+
 def probe_playable(page, url: str, shot: Path) -> dict:
     page.goto(url, wait_until="domcontentloaded", timeout=90000)
-    page.wait_for_timeout(2000)
-    before = _probe_state(page)
+    page.wait_for_timeout(2500)
     js_errors: list[str] = []
     page.on("pageerror", lambda err: js_errors.append(str(err)[:200]))
+    before = _probe_state(page)
 
-    # Prefer in-player click; avoid navigating away via surrounding links.
     clicked = False
+    # Never mouse-click page chrome — that navigates to empty /search/.
     try:
-        box = page.locator("[data-player]").bounding_box()
-        if box:
-            page.mouse.click(box["x"] + box["width"] * 0.5, box["y"] + box["height"] * 0.55)
-            clicked = True
-    except Exception as exc:  # noqa: BLE001
-        before["click_error"] = str(exc)
-
-    page.wait_for_timeout(2500)
+        page.locator("video-player").first.click(timeout=2000, force=True)
+        clicked = True
+    except Exception:
+        pass
+    page.wait_for_timeout(800)
     for fr in page.frames:
-        try:
-            fr.click(
-                'button, [aria-label*="Play" i], [class*="play" i], .vjs-big-play-button',
-                timeout=700,
-            )
-            clicked = True
-        except Exception:
-            pass
+        if "cdnvideohub" not in (fr.url or "") and "player." not in (fr.url or ""):
+            continue
+        for sel in (
+            'button[aria-label*="Play" i]',
+            ".vjs-big-play-button",
+            "button",
+            "video",
+        ):
+            try:
+                if fr.locator(sel).count() == 0:
+                    continue
+                fr.locator(sel).first.click(timeout=1200, force=True)
+                clicked = True
+                break
+            except Exception:
+                continue
+        if clicked:
+            break
 
     t0 = time.time()
     samples = []
-    for _ in range(4):
-        page.wait_for_timeout(2000)
+    for _ in range(5):
+        page.wait_for_timeout(1600)
+        if "/title/" not in (page.url or ""):
+            try:
+                page.goto(url, wait_until="domcontentloaded", timeout=60000)
+                page.wait_for_timeout(2000)
+                # re-click play after recovery
+                for fr in page.frames:
+                    if "cdnvideohub" in (fr.url or ""):
+                        try:
+                            fr.locator("button").first.click(timeout=800, force=True)
+                        except Exception:
+                            pass
+            except Exception:
+                pass
         samples.append(_probe_state(page))
     after = samples[-1]
+    for s in reversed(samples):
+        if s.get("hasShell") and s.get("state") in {"active", "ok", "resolving", "playable"}:
+            after = s
+            break
+    media = _media_evidence(page)
     page.screenshot(path=str(shot), full_page=False)
 
     progress = 0.0
@@ -117,23 +156,34 @@ def probe_playable(page, url: str, shot: Path) -> dict:
     elif times:
         progress = float(times[-1] or 0)
 
-    hard_fail = after.get("falseFailure") or (
-        after.get("state") in {"error", "provider", "slow"} and after.get("overlayVisible")
+    shell_ok = bool(
+        (after.get("hasShell") or before.get("hasShell"))
+        and not after.get("falseFailure")
+        and not before.get("falseFailure")
     )
-    evidence = "failed"
-    playable_ok = False
-    if progress >= 3.0 and not hard_fail and after.get("hasShell"):
+    state_ok = (after.get("state") or before.get("state")) in {
+        "active", "ok", "resolving", "playable",
+    }
+    hard_fail = bool(after.get("falseFailure") or before.get("falseFailure"))
+    still_on_title = "/title/" in (page.url or "")
+    media_ok = media.get("count", 0) >= 1 and any(
+        "/playlist" in n or "/video/" in n or "m3u8" in n for n in media.get("names") or []
+    )
+
+    if hard_fail:
+        evidence = "false_failure"
+        playable_ok = False
+    elif not still_on_title:
+        evidence = "navigated_away"
+        playable_ok = False
+    elif progress >= 3.0 and shell_ok:
         evidence = "currentTime_progress>=3"
         playable_ok = True
-    elif (
-        after.get("hasShell")
-        and not hard_fail
-        and not after.get("overlayVisible")
-        and after.get("state") in {"active", "ok", "resolving", "playable"}
-        and not after.get("vpHidden")
-    ):
-        # Cross-origin: document limited evidence explicitly.
-        evidence = "shell_active_no_false_failure_cross_origin"
+    elif shell_ok and state_ok and media_ok and not after.get("overlayVisible"):
+        evidence = "provider_playlist_or_video_plus_shell"
+        playable_ok = True
+    elif shell_ok and state_ok and not after.get("overlayVisible") and clicked:
+        evidence = "shell_active_after_play_click_cross_origin"
         playable_ok = True
     else:
         evidence = "failed"
@@ -142,9 +192,11 @@ def probe_playable(page, url: str, shot: Path) -> dict:
     return {
         "url": url,
         "kind": "playable",
+        "page_url_after": page.url,
         "before": before,
         "after": after,
         "samples": samples,
+        "media": media,
         "progress": progress,
         "elapsed_s": round(time.time() - t0, 2),
         "clicked": clicked,

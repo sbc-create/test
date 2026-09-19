@@ -1,0 +1,1239 @@
+[apply-nova] release_gate RUNTIME_DOWNGRADE=0 RUNTIME_COMPATIBLE=1 CONTENT_SNAPSHOT_DIGEST_MATCH=1 CATALOG_DETAILS_SKEW=0
+[apply-nova] artifact_sha256=432f5bfb5c77b0c00d1fd5c8be1ead5d06abd3e89ff9aa75da7d6009af81a2e6
+[apply-nova] runtime_commit=ff4bb0f0fd524c1d05d5b56d16f53c823b4d3156
+[apply-nova] live_before=f8eefc44b80bb7b1e9e7f1ac799aecebd946e67353ec2c25d77a4726e3b52964
+[apply-nova] plan animedia-01 source=ff4bb0f0fd52 runtime=ff4bb0f0fd52 profile=animedia-icu repo=/home/claude/wt-animedia-finalization-01
+[apply-nova] plan animedia-02 source=ff4bb0f0fd52 runtime=ff4bb0f0fd52 profile=animedia-space repo=/home/claude/wt-animedia-finalization-01
+[apply-nova] rollback snapshot: /srv/lords/.frontend/.rollback/pre-closed-update-20260919T172143Z
+[apply-nova] $ sudo -n env REPO=/home/claude/wt-animedia-finalization-01 SOURCE_COMMIT=ff4bb0f0fd524c1d05d5b56d16f53c823b4d3156 RUNTIME_COMMIT=ff4bb0f0fd524c1d05d5b56d16f53c823b4d3156 NOVA_INSTALL_FRONTEND=1 RUNTIME_REPO=/home/claude/wt-animedia-finalization-01 FACTORY_OWNER_ROOT_MANDATE=SITE_FACTORY_ROOT_20260909 bash /home/claude/wt-animedia-finalization-01/automation/host/deploy-nova-family.sh animedia-01 animedia.icu 9121 animedia animedia-icu Animedia 1.2.1 20260919T172143Z-ff4bb0f0-nova 432f5bfb5c77b0c00d1fd5c8be1ead5d06abd3e89ff9aa75da7d6009af81a2e6 /srv/lords/animedia-01/current/site
+[nova] animedia-01 → animedia.icu:9121 семейство animedia версия 1.2.1 source ff4bb0f0fd52 runtime ff4bb0f0fd52 from /home/claude/wt-animedia-finalization-01
+[nova] установлен frontend runtime из /home/claude/wt-animedia-finalization-01 (ff4bb0f0fd52)
+[nova] манифест animedia-01: animedia 1.2.1 source=ff4bb0f0fd52 runtime=ff4bb0f0fd52 20260919T172143Z-ff4bb0f0-nova
+active
+[nova] animedia.icu: nginx 9121 → 9121
+[apply-nova] $ sudo -n env REPO=/home/claude/wt-animedia-finalization-01 SOURCE_COMMIT=ff4bb0f0fd524c1d05d5b56d16f53c823b4d3156 RUNTIME_COMMIT=ff4bb0f0fd524c1d05d5b56d16f53c823b4d3156 NOVA_INSTALL_FRONTEND=0 RUNTIME_REPO=/home/claude/wt-animedia-finalization-01 FACTORY_OWNER_ROOT_MANDATE=SITE_FACTORY_ROOT_20260909 bash /home/claude/wt-animedia-finalization-01/automation/host/deploy-nova-family.sh animedia-02 animedia.space 9122 animedia animedia-space Animedia 1.2.1 20260919T172143Z-ff4bb0f0-nova 432f5bfb5c77b0c00d1fd5c8be1ead5d06abd3e89ff9aa75da7d6009af81a2e6 /srv/lords/animedia-02/current/site
+[nova] animedia-02 → animedia.space:9122 семейство animedia версия 1.2.1 source ff4bb0f0fd52 runtime ff4bb0f0fd52 from /home/claude/wt-animedia-finalization-01
+[nova] манифест animedia-02: animedia 1.2.1 source=ff4bb0f0fd52 runtime=ff4bb0f0fd52 20260919T172143Z-ff4bb0f0-nova
+active
+[nova] animedia.space: nginx 9122 → 9122
+[apply-nova] $ sudo -n nginx -t
+nginx: [warn] duplicate MIME type "text/html" in /etc/nginx/lords/lords-01.conf:96
+nginx: [warn] duplicate MIME type "text/html" in /etc/nginx/lords/lords-02.conf:96
+nginx: [warn] duplicate MIME type "text/html" in /etc/nginx/lords/lords-03.conf:96
+nginx: [warn] conflicting server name "yummyani.biz" on 0.0.0.0:80, ignored
+nginx: [warn] conflicting server name "www.yummyani.biz" on 0.0.0.0:80, ignored
+nginx: [warn] conflicting server name "yummyani.org" on 0.0.0.0:80, ignored
+nginx: [warn] conflicting server name "www.yummyani.org" on 0.0.0.0:80, ignored
+nginx: [warn] conflicting server name "yummyani.site" on 0.0.0.0:80, ignored
+nginx: [warn] conflicting server name "www.yummyani.site" on 0.0.0.0:80, ignored
+nginx: [warn] conflicting server name "yummyani.biz" on [::]:80, ignored
+nginx: [warn] conflicting server name "www.yummyani.biz" on [::]:80, ignored
+nginx: [warn] conflicting server name "yummyani.org" on [::]:80, ignored
+nginx: [warn] conflicting server name "www.yummyani.org" on [::]:80, ignored
+nginx: [warn] conflicting server name "yummyani.site" on [::]:80, ignored
+nginx: [warn] conflicting server name "www.yummyani.site" on [::]:80, ignored
+nginx: [warn] conflicting server name "www.yummyani.biz" on 0.0.0.0:443, ignored
+nginx: [warn] conflicting server name "yummyani.biz" on 0.0.0.0:443, ignored
+nginx: [warn] conflicting server name "www.yummyani.org" on 0.0.0.0:443, ignored
+nginx: [warn] conflicting server name "yummyani.org" on 0.0.0.0:443, ignored
+nginx: [warn] conflicting server name "www.yummyani.site" on 0.0.0.0:443, ignored
+nginx: [warn] conflicting server name "yummyani.site" on 0.0.0.0:443, ignored
+nginx: [warn] conflicting server name "www.yummyani.biz" on [::]:443, ignored
+nginx: [warn] conflicting server name "yummyani.biz" on [::]:443, ignored
+nginx: [warn] conflicting server name "www.yummyani.org" on [::]:443, ignored
+nginx: [warn] conflicting server name "yummyani.org" on [::]:443, ignored
+nginx: [warn] conflicting server name "www.yummyani.site" on [::]:443, ignored
+nginx: [warn] conflicting server name "yummyani.site" on [::]:443, ignored
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+[apply-nova] $ systemctl is-active nova-animedia-01.service
+active
+[apply-nova] nova-animedia-01.service: active
+[apply-nova] $ curl -fsS --max-time 8 http://127.0.0.1:9121/title/master-lda-i-plameni-2/
+<!doctype html><html lang="ru" data-template-version="1.2.1" data-template-family="animedia" data-build-id="20260919T172143Z-ff4bb0f0-nova" data-design="animedia-portal" data-seo-profile="animedia-space">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Мастер льда и пламени 2 — смотреть онлайн — Animedia</title><meta name="description" content="Мастер льда и пламени 2: Аниме 2022"><link rel="canonical" href="https://127.0.0.1/title/master-lda-i-plameni-2/">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="video.tv_show"><meta property="og:title" content="Мастер льда и пламени 2"><meta property="og:description" content="Мастер льда и пламени 2: Аниме 2022"><meta property="og:url" content="https://127.0.0.1/title/master-lda-i-plameni-2/"><meta property="og:image" content="https://poster.cdnvideohub.com/01a0b507-0813-7526-a2e6-5edf75180827.webp"><meta property="og:site_name" content="Animedia"><meta property="og:locale" content="ru_RU"><meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="site-factory-template-revision" content="ff4bb0f0fd524c1d05d5b56d16f53c823b4d3156"><meta name="site-factory-design-version" content="1.2.1"><meta name="site-factory-template-family" content="animedia"><meta name="site-factory-build-id" content="20260919T172143Z-ff4bb0f0-nova"><meta name="site-factory-artifact-sha256" content="432f5bfb5c77b0c00d1fd5c8be1ead5d06abd3e89ff9aa75da7d6009af81a2e6"><meta name="site-factory-template" content="animedia-nova"><meta name="site-factory-core" content="site-factory-nova"><meta name="site-factory-profile" content="animedia-space">
+<style>
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;overflow-x:clip;max-width:100%}
+body{margin:0;min-height:100vh;overflow-x:clip;max-width:100%}
+img,video,iframe,svg{max-width:100%;height:auto;display:block}
+a{text-decoration:none;color:inherit}
+.vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+clip:rect(0 0 0 0);white-space:nowrap;border:0}
+:focus-visible{outline:3px solid #c50725;outline-offset:2px;border-radius:3px}
+.skip{position:absolute;left:-9999px;top:0;z-index:200;padding:10px 16px;background:#c50725;color:#fff}
+.skip:focus{left:8px;top:8px}
+
+/* Оформление Animedia 1.2.0. Числа измерены на эталоне (см. artifacts/evidence/
+   templates-zona-animedia-visual-parity-006/reference/amd-online/):
+     контейнер почти во всю ширину (поля 6 на узком, 1 дальше), шапка 90 на
+     десктопе и 126 на узком и НЕ закреплённая, кегль тела 14, h2 16/700,
+     ссылки 17/400, пропорция карточки 0.86, сетка 3 колонки до 1024 и 4 от
+     1440 с зазором 10. Разметка и правила — свои. */
+body{background:#ffffff;color:#161616;
+font:14px/1.45 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif}
+.zs{min-height:100vh;display:block}
+.zmain{min-width:0}
+.zwrap{max-width:min(calc(100% - 32px),1280px);margin:0 auto;padding:0 16px;box-sizing:border-box}
+@media(min-width:900px){.zwrap--title{max-width:min(calc(100% - 32px),1360px)}}
+body{overflow-x:hidden}
+
+/* Шапка: обычная, не закреплённая. На узком — кнопка меню вместо
+   обрезанной горизонтальной ленты пунктов (эталон amd.online: hamburger). */
+.zhd{position:relative;background:#ffffff;color:#161616;
+border-bottom:2px solid #c50725}
+.zhd__in{max-width:100%;margin:0 auto;padding:10px 6px;display:flex;
+align-items:center;gap:8px;flex-wrap:wrap;min-height:0}
+@media(min-width:768px){.zhd__in{padding:10px 1px;min-height:90px;flex-wrap:nowrap;gap:10px}}
+.zhd__logo{font-size:22px;font-weight:800;letter-spacing:-.4px;color:#161616;
+white-space:nowrap;flex:0 0 auto}
+.zhd__logo b{color:#c50725;font-weight:800}
+.zhd__menu{display:inline-flex;align-items:center;justify-content:center;
+width:40px;height:40px;border:1px solid #e4e4e4;border-radius:4px;
+background:#ffffff;color:#161616;font-size:20px;line-height:1;cursor:pointer;
+flex:0 0 auto;margin-left:auto}
+@media(min-width:768px){.zhd__menu{display:none}}
+.zhd__n{display:none;gap:6px;flex:1 0 100%;order:4;min-width:0;
+flex-wrap:wrap;overflow:visible;padding:6px 0 2px}
+.zhd__n.is-open{display:flex}
+@media(min-width:768px){.zhd__n{display:flex;flex:1 1 auto;order:0;
+flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding:0}}
+.zhd__n::-webkit-scrollbar{display:none}
+.zhd__n a{padding:8px 10px;border-radius:4px;font-size:15px;font-weight:400;
+color:#161616;flex:1 1 calc(50% - 6px);text-align:center;min-width:0;
+overflow-wrap:anywhere}
+@media(min-width:768px){.zhd__n a{flex:0 0 auto;white-space:nowrap;font-size:17px;
+text-align:left;padding:7px 9px}}
+.zhd__n a:hover{background:#f9f9f9;color:#c50725}
+.zhd__n a[aria-current]{color:#c50725;font-weight:700;box-shadow:inset 0 -2px 0 #c50725}
+.zhd__s{display:flex;flex:1 1 120px;min-width:0;max-width:340px;
+border:1px solid #e4e4e4;border-radius:4px;overflow:hidden;background:#ffffff}
+.zhd__s input{flex:1;min-width:0;border:0;padding:8px 10px;font-size:14px;
+color:#161616;font-family:inherit;background:transparent}
+.zhd__s button{border:0;background:#c50725;color:#fff;padding:0 14px;
+font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
+
+/* Служебная полоса состояния данных. */
+.ast{background:#f9f9f9;border:1px solid #e4e4e4;border-left:4px solid #c50725;
+border-radius:4px;padding:14px 16px;margin:14px 0;font-size:13.5px;
+line-height:1.55;color:#161616}
+.ast b{display:block;font-size:15px;font-weight:700;margin-bottom:5px;color:#c50725}
+.ast code{background:#f0f0f0;padding:1px 5px;border-radius:3px;font-size:12.5px}
+
+.zrail,.zrail__logo,.zrail__sub,.zrail__t,.zrail__n,.zrail__g{display:none}
+.ztop{border-bottom:1px solid #e4e4e4;background:#ffffff}
+.ztop__a{display:flex;align-items:center;gap:14px;padding:10px 0}
+.ztop__s{flex:1;display:flex;border:1px solid #e4e4e4;border-radius:4px;
+overflow:hidden;background:#ffffff;max-width:600px}
+.ztop__s input{flex:1;border:0;padding:9px 12px;font-size:14px;
+background:transparent;color:#161616;font-family:inherit}
+.ztop__s button{border:0;background:#c50725;color:#fff;padding:0 16px;
+font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
+.ztop__b{display:flex;gap:14px;padding:0 0 9px;font-size:13px;color:#5c6370;
+flex-wrap:wrap;max-width:100%;min-width:0}
+.ztop__b a{color:#c50725;font-weight:700;display:inline-block;padding:4px 2px;
+max-width:100%;overflow-wrap:anywhere}
+
+/* Типографика по измерению: h2 16/700, ссылки 17/400. */
+.zh{font-size:15px;line-height:1.35;font-weight:500;margin:14px 0 5px;max-width:100%;
+overflow-wrap:anywhere}
+@media(min-width:768px){.zh{font-size:16px;line-height:1.3}}
+.zh--sm{font-size:16px;font-weight:700;margin:20px 0 5px}
+.zsub{font-size:13px;color:#5c6370;margin:0 0 14px}
+.zsub a{color:#c50725;font-weight:700;padding:4px 2px;display:inline-block}
+.zcr{font-size:12.5px;color:#5c6370;padding:10px 0 0}
+.zcr a{color:#c50725}
+
+.zsec{margin:18px 0 22px}
+.zsec__h{display:flex;align-items:center;justify-content:space-between;
+gap:10px;margin:0 0 9px;border-bottom:1px solid #e4e4e4;padding-bottom:6px}
+.zsec__h h2{font-size:16px;font-weight:700;margin:0}
+.zsec__h a{font-size:13px;color:#c50725;font-weight:700;white-space:nowrap}
+.zrl{position:relative}
+.zrl__vp{overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;
+scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:2px 0 8px}
+.zrl__track{display:flex;gap:10px;min-width:min-content;align-items:flex-start}
+.zrl__track>*{flex:0 0 154px;width:154px;max-width:154px;scroll-snap-align:start}
+@media(max-width:1024px){.zrl__track>*{flex-basis:144px;width:144px;max-width:144px}}
+@media(max-width:768px){.zrl__track>*{flex-basis:132px;width:132px;max-width:132px}}
+@media(max-width:767px){.zrl__track>*{flex-basis:112px;width:112px;max-width:112px}}
+.zrl__btn{position:absolute;top:34%;transform:translateY(-50%);z-index:5;
+width:30px;height:48px;border:1px solid #e4e4e4;border-radius:4px;cursor:pointer;
+background:rgba(255,255,255,.94);color:#c50725;font-size:17px;line-height:1;
+display:none;align-items:center;justify-content:center}
+@media(min-width:1024px){.zrl:hover .zrl__btn,.zrl__btn:focus-visible{display:flex}}
+.zrl__btn--p{left:-4px}
+.zrl__btn--n{right:-4px}
+.zrl__btn:disabled{opacity:.35;cursor:default}
+
+/* Компактная сетка полок: 6 колонок внутри 1280. */
+.zg{display:grid;gap:14px;grid-template-columns:repeat(2,minmax(0,1fr));
+align-items:stretch}
+@media(min-width:700px){.zg{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:900px){.zg{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(min-width:1100px){.zg{grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}}
+.zt{display:flex;flex-direction:column;background:#ffffff;
+border:1px solid #e4e4e4;border-radius:4px;overflow:hidden;min-width:0;
+height:100%;transition:border-color .14s,box-shadow .14s}
+.zt:hover{border-color:#c50725;box-shadow:0 4px 14px rgba(0,0,0,.09)}
+.zt__p{display:block;aspect-ratio:2/3;background:#f0f0f0;position:relative;flex:0 0 auto}
+.zt__p img,.zt__img{position:absolute;inset:0;z-index:1;width:100%;height:100%;
+object-fit:cover;display:block}
+.zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:10px;
+text-align:center;color:#757b85;font-size:11.5px;line-height:1.3}
+.zt__none b{display:block;font-size:22px;font-weight:800;color:#5c6370;margin-bottom:3px}
+.zt__b{padding:7px 8px 9px;display:flex;flex-direction:column;gap:3px;flex:1}
+.zt__t{font-size:13px;font-weight:700;line-height:1.26;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zt__m{display:block;font-size:11.5px;color:#5c6370}
+.zt__r{display:flex;gap:8px;font-size:11.5px;color:#5c6370;margin-top:auto;
+padding-top:3px;flex-wrap:wrap}
+.zt__r b,.zt__r i{color:#c50725;font-weight:700;font-style:normal}
+.zt__r em{color:#757b85;font-style:italic}
+
+.zl{display:flex;flex-direction:column;gap:8px}
+.zr{display:grid;grid-template-columns:58px 1fr;gap:10px;padding:8px;
+background:#ffffff;border:1px solid #e4e4e4;border-radius:4px;align-items:start}
+@media(min-width:768px){.zr{grid-template-columns:74px 1fr}}
+.zr:hover{border-color:#c50725}
+.zr__p{aspect-ratio:2/3;background:#f0f0f0;border-radius:3px;overflow:hidden;
+position:relative}
+.zr__p img,.zr__img{position:absolute;inset:0;width:100%;height:100%;
+object-fit:cover;display:block;z-index:1}
+.zr__none{position:absolute;inset:0;display:grid;place-items:center;
+text-align:center;color:#757b85;font-size:10.5px;padding:5px}
+.zr__t{display:block;font-size:14px;font-weight:700;line-height:1.3;margin-bottom:2px}
+.zr__m{display:block;font-size:12px;color:#5c6370;margin-bottom:4px}
+.zr__d{font-size:12px;color:#5c6370;line-height:1.42;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zr__r{display:flex;gap:9px;font-size:11.5px;color:#5c6370;margin-top:5px;flex-wrap:wrap}
+
+.zstrip{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 5px}
+.zstrip a{background:#f9f9f9;border:1px solid #e4e4e4;border-radius:4px;
+padding:6px 10px;font-size:12.5px;color:#161616;font-weight:600}
+.zstrip a:hover{border-color:#c50725;color:#c50725}
+.zstrip a[aria-current]{background:#c50725;color:#fff;border-color:#c50725}
+.zpg{display:flex;gap:5px;justify-content:center;margin:22px 0;flex-wrap:wrap}
+.zpg a,.zpg span{padding:7px 12px;border-radius:4px;border:1px solid #e4e4e4;
+background:#ffffff;font-size:13px;min-width:36px;text-align:center}
+.zpg span{background:#c50725;color:#fff;border-color:#c50725}
+.zempty,.znf{padding:44px 16px;text-align:center;color:#5c6370}
+.znf b{display:block;font-size:40px;font-weight:800;color:#c50725;margin-bottom:5px}
+.znf h1{font-size:21px;margin:0 0 7px;color:#161616;font-weight:700}
+.znf a{display:inline-block;margin-top:12px;background:#c50725;color:#fff;
+padding:10px 20px;border-radius:4px;font-weight:700}
+.zsea__h{font-size:13px;color:#5c6370;margin:0 0 12px}
+.zsea{margin:0 0 18px}
+
+/* Расписание: день, время и номер серии. Пустое значение названо словами. */
+.asch{display:grid;gap:10px;margin:12px 0}
+@media(min-width:900px){.asch{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1440px){.asch{grid-template-columns:repeat(4,1fr)}}
+.asch__d{border:1px solid #e4e4e4;border-radius:4px;background:#ffffff;overflow:hidden}
+.asch__d h3{margin:0;padding:8px 11px;font-size:13px;font-weight:700;
+background:#f9f9f9;border-bottom:1px solid #e4e4e4}
+.asch__l{margin:0;padding:0;list-style:none}
+.asch__l li{display:flex;gap:9px;align-items:baseline;padding:7px 11px;
+border-bottom:1px solid #e4e4e4;font-size:12.5px}
+.asch__l li:last-child{border-bottom:0}
+.asch__t{color:#c50725;font-weight:700;flex:0 0 42px;font-variant-numeric:tabular-nums}
+.asch__e{color:#5c6370;margin-left:auto;flex:0 0 auto;font-size:11.5px}
+.asch__n{color:#757b85;font-style:italic}
+
+.zban{position:relative;border-radius:4px;overflow:hidden;background:#f0f0f0;
+margin:14px 0 0;min-height:170px;max-height:240px}
+.zban__img{position:absolute;inset:0;opacity:.5}
+.zban__img img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* Верхняя карусель главной: фиксированная ширина карточки, shell ≤300px. */
+.ahero{margin:10px 0 16px;padding:18px 12px 14px;border-radius:4px;
+background:#c50725;color:#fff;overflow:hidden;max-height:300px;box-sizing:border-box}
+.ahero .zrl__vp{padding-bottom:4px;max-height:260px}
+.ahero .zrl__track{gap:14px}
+.ahero .zrl__track>*{flex:0 0 154px;width:154px;max-width:154px}
+@media(max-width:1024px){.ahero .zrl__track>*{flex-basis:144px;width:144px;max-width:144px}}
+@media(max-width:768px){.ahero{padding:14px 8px 10px;max-height:240px}
+.ahero .zrl__track>*{flex-basis:132px;width:132px;max-width:132px}}
+@media(max-width:767px){.ahero{max-height:225px;padding:12px 6px 8px}
+.ahero .zrl__track>*{flex-basis:112px;width:112px;max-width:112px}}
+.ahero .zt{background:transparent;border:0;border-radius:0;box-shadow:none;color:#fff;
+max-height:260px}
+.ahero .zt:hover{border:0;box-shadow:none;opacity:.92}
+.ahero .zt__p{border-radius:2px;aspect-ratio:2/3;background:rgba(0,0,0,.18)}
+.ahero .zt__b{padding:6px 2px 0}
+.ahero .zt__t{color:#fff;font-size:14px;-webkit-line-clamp:2;line-height:1.25}
+.ahero .zt__m,.ahero .zt__r{display:none}
+.ahero .zrl__btn{background:rgba(255,255,255,.95);color:#c50725;border-color:transparent}
+.ahero__cap{display:none}
+.zsec{max-height:760px;overflow:hidden}
+.zsec--eps{max-height:none;overflow:visible}
+
+/* «Новые серии» — компактные строки, 2 колонки на desktop. */
+.zsec--eps .zl{display:grid;gap:0;grid-template-columns:1fr;
+border:1px solid #e4e4e4;border-radius:4px;overflow:hidden;background:#ffffff}
+@media(min-width:900px){.zsec--eps .zl{grid-template-columns:1fr 1fr}}
+.zsec--eps .zr{border:0;border-bottom:1px solid #e4e4e4;border-radius:0;
+padding:8px 10px;align-items:center;grid-template-columns:52px minmax(0,1fr) auto;
+min-height:70px;max-height:76px;max-width:none;width:100%;box-sizing:border-box}
+@media(max-width:767px){.zsec--eps .zr{min-height:64px;max-height:72px}}
+.zsec--eps .zr:nth-child(odd){border-right:1px solid #e4e4e4}
+@media(max-width:899px){.zsec--eps .zr:nth-child(odd){border-right:0}}
+.zsec--eps .zr:last-child{border-bottom:0}
+.zsec--eps .zr__p{aspect-ratio:3/4;border-radius:3px;max-width:52px;width:52px}
+.zsec--eps .zr__body{min-width:0;display:flex;flex-direction:column;gap:2px}
+.zsec--eps .zr__t{font-size:15px;line-height:1.2;white-space:nowrap;overflow:hidden;
+text-overflow:ellipsis;min-height:auto;-webkit-line-clamp:1;display:block}
+.zsec--eps .zr__m{font-size:12px}
+.zsec--eps .zr__d{display:none}
+.zsec--eps .zr__badge{font-size:12px;font-weight:700;color:#c50725;white-space:nowrap}
+.zad-home{margin:0 0 16px;min-height:0;max-height:24px}
+.zad-home[data-ad-enabled="1"]{min-height:90px;max-height:none;border:1px dashed #e4e4e4;border-radius:4px}
+
+/* Title hub: poster 250 | main | rating rail 150. */
+.zban{display:none}
+.zhead{display:contents}
+.zhead__ps,.zhead__x,.zhead__o{display:contents}
+.ztitle{display:grid;grid-template-columns:1fr;gap:16px;margin:12px 0 8px;
+align-items:start}
+@media(min-width:900px){.ztitle{grid-template-columns:250px minmax(0,1fr);gap:24px;
+max-height:460px}}
+@media(min-width:1100px){.ztitle{grid-template-columns:250px minmax(0,1fr) 150px;gap:28px}}
+.ztitle__poster{aspect-ratio:2/3;border-radius:6px;overflow:hidden;background:#f0f0f0;
+position:relative;width:100%;max-width:250px;margin:0 auto;max-height:390px}
+@media(min-width:900px){.ztitle__poster{margin:0;max-width:250px}}
+@media(max-width:767px){.ztitle__poster{max-width:150px}}
+.ztitle__poster img,.ztitle__poster .zhead__img{position:absolute;inset:0;z-index:1;
+width:100%;height:100%;object-fit:cover;display:block}
+.ztitle__main{min-width:0}
+.ztitle__main h1{font-size:28px;line-height:1.2;margin:0 0 8px;letter-spacing:-.3px;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+@media(min-width:1100px){.ztitle__main h1{font-size:34px;line-height:1.18}}
+.ztitle__o{font-size:16px;color:#5c6370;margin:0 0 8px}
+.ztitle__meta{font-size:13px;color:#5c6370;margin:0 0 10px;line-height:1.45}
+.ztitle__pills{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.ztitle__pills a,.ztitle__pills span{display:inline-flex;align-items:center;
+min-height:30px;padding:0 10px;border-radius:4px;border:1px solid #e4e4e4;
+background:#f9f9f9;font-size:12.5px;color:#161616}
+.ztitle__desc{font-size:14px;line-height:1.55;color:#161616;max-width:68ch;margin:0 0 12px;
+display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.ztitle__desc.is-open{-webkit-line-clamp:unset;display:block}
+.ztitle__more{border:0;background:transparent;color:#c50725;font-weight:700;
+font-size:13px;cursor:pointer;padding:0;margin:0 0 12px}
+.ztitle__cta{display:inline-flex;align-items:center;justify-content:center;
+min-height:40px;padding:8px 16px;border-radius:4px;background:#c50725;color:#fff;
+font-weight:700;font-size:14px;text-decoration:none}
+.ztitle__cta:hover{filter:brightness(1.05)}
+.ztitle__rail{min-width:0;display:flex;flex-direction:column;gap:10px}
+@media(max-width:1099px){.ztitle__rail{order:3;flex-direction:row;flex-wrap:wrap}}
+.ztitle__score{background:#f9f9f9;border:1px solid #e4e4e4;border-radius:4px;
+padding:12px 10px;text-align:center}
+.ztitle__score b{display:block;font-size:44px;line-height:1;font-weight:800;color:#c50725}
+.ztitle__score span{display:block;font-size:12px;color:#5c6370;margin-top:4px}
+.ztitle__dl{margin:0;background:#f9f9f9;border:1px solid #e4e4e4;border-radius:4px;
+padding:10px 12px;display:grid;gap:8px}
+.ztitle__dl div{display:grid;grid-template-columns:1fr;gap:2px}
+.ztitle__dl dt{font-size:11px;letter-spacing:.04em;text-transform:uppercase;
+color:#5c6370;font-weight:700;margin:0}
+.ztitle__dl dd{margin:0;font-size:13px;color:#161616;line-height:1.35;
+overflow-wrap:anywhere}
+.ztitle__dl a{color:#c50725;font-weight:700}
+.zad{display:none}
+.zad[data-ad-enabled="1"]{display:block;width:100%;max-width:300px;min-height:250px;
+border:1px dashed #e4e4e4;border-radius:4px;background:#f9f9f9;margin:0 auto}
+.zbody{font-size:14px;line-height:1.55;color:#161616;max-width:70ch;margin:14px 0 0}
+.zaside{display:none}
+.zpl{margin:14px 0;max-width:1120px}
+.zpl__f{aspect-ratio:16/9;background:#f3f3f3;border:1px solid #e4e4e4;
+border-radius:4px;overflow:hidden;position:relative;max-height:none}
+.zpl__f[data-state=active],.zpl__f[data-state=ok],.zpl__f[data-state=resolving],
+.zpl__f[data-state=playable]{background:#101010}
+.zh{font-size:22px;line-height:1.3;font-weight:700;margin:14px 0 6px;max-width:100%}
+@media(min-width:768px){.zh{font-size:26px}}
+.zsub{font-size:14px;color:#5c6370;margin:0 0 14px;max-width:72ch;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+/* Хаб подборок: карточка коллекции, а не ещё одна сетка тайтлов. */
+.zhub{display:grid;gap:12px;margin:14px 0;grid-template-columns:1fr}
+@media(min-width:600px){.zhub{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.zhub{grid-template-columns:repeat(3,1fr)}}
+.zhub__c{display:block;padding:12px;border:1px solid #e4e4e4;border-radius:6px;
+background:#f0f0f0;color:inherit;text-decoration:none}
+.zhub__c:hover,.zhub__c:focus-visible{border-color:#c50725;outline:none}
+.zhub__g{display:flex;gap:4px;margin-bottom:9px}
+.zhub__p{flex:1 1 0;aspect-ratio:2/3;overflow:hidden;border-radius:4px;background:#f9f9f9}
+.zhub__img{width:100%;height:100%;object-fit:cover;display:block}
+.zhub__t{display:block;font-weight:700;font-size:15px}
+.zhub__m{display:block;font-size:12px;color:#5c6370;font-weight:600;margin:2px 0 4px}
+.zhub__d{display:block;font-size:13px;color:#5c6370;line-height:1.45}
+
+/* Компактные номерные кнопки серий: CSS Grid auto-fill, без скрытых колонок. */
+.zeps{display:grid;gap:6px;margin:12px 0;max-height:70vh;overflow-x:hidden;
+overflow-y:auto;overscroll-behavior:contain;align-content:flex-start;
+grid-template-columns:repeat(auto-fill,minmax(44px,1fr));width:100%;
+max-width:100%;min-width:0;box-sizing:border-box}
+@media(min-width:768px){.zeps{max-height:520px;
+grid-template-columns:repeat(auto-fill,minmax(48px,1fr))}}
+.zeps a,.zeps span{display:inline-flex;align-items:center;justify-content:center;
+min-width:44px;min-height:44px;width:100%;height:44px;padding:0;
+border-radius:6px;border:1px solid #e4e4e4;background:#ffffff;font-size:13px;
+font-weight:700;font-variant-numeric:tabular-nums;box-sizing:border-box}
+@media(min-width:768px){.zeps a,.zeps span{min-height:48px;height:48px}}
+.zeps span{opacity:.5}
+.zeps a[aria-current]{background:#c50725;color:#fff;border-color:#c50725}
+.zeps a[data-off]{opacity:.45;pointer-events:none}
+.zsea__h{display:flex;justify-content:space-between;align-items:baseline;
+gap:10px;flex-wrap:wrap;margin:0 0 10px}
+.zsea__h b{font-size:15px;font-weight:700}
+.zsea__h span{font-size:13px;color:#5c6370}
+.zepnav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.zepnav a{background:#f9f9f9;border:1px solid #e4e4e4;border-radius:4px;
+padding:8px 12px;font-size:13px;color:#c50725;font-weight:700}
+
+.zpl{margin:14px 0}
+.zpl__f{aspect-ratio:16/9;background:#f3f3f3;border:1px solid #e4e4e4;
+border-radius:4px;overflow:hidden;position:relative;max-height:min(56vw,420px)}
+.zpl__f[data-state=playable]{background:#101010;max-height:none}
+.zpl__h{font-size:16px;font-weight:700;margin:18px 0 9px;display:flex;
+align-items:baseline;justify-content:space-between;gap:10px}
+.zpl__h span{font-size:12.5px;font-weight:600;color:#5c6370}
+.zpl__s,.zpl [data-player-state]{position:absolute;inset:0;display:grid;
+place-items:center;padding:16px;text-align:center;color:#161616;font-size:13px;
+line-height:1.45;background:#f7f7f7}
+.zpl [data-player-state] b{display:block;font-size:15px;margin-bottom:6px}
+.zpl [data-player-state] p{margin:0;max-width:36ch;color:#5c6370}
+
+.zft{border-top:2px solid #c50725;margin:28px 0 0;padding:18px 0 10px;
+font-size:13px;color:#5c6370}
+.zft__grid{display:grid;gap:14px;grid-template-columns:1fr;
+margin-bottom:14px}
+@media(min-width:768px){.zft__grid{grid-template-columns:repeat(4,1fr)}}
+.zft__col b{display:block;font-size:12.5px;font-weight:700;color:#161616;
+margin-bottom:6px;text-transform:uppercase;letter-spacing:.03em}
+.zft__col a{display:block;padding:3px 0;color:#5c6370;font-size:13px}
+.zft__col a:hover{color:#c50725}
+.zft__about{margin:0;font-size:12.5px;line-height:1.45;color:#5c6370}
+.zft__bar{display:flex;justify-content:space-between;align-items:center;
+gap:10px;flex-wrap:wrap;border-top:1px solid #e4e4e4;padding-top:10px}
+.zvb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;
+color:#757b85;letter-spacing:0}
+.zseo{margin:22px 0 8px;padding:12px 0 0;border-top:1px solid #e4e4e4;
+color:#5c6370;font-size:13px;line-height:1.55;max-width:72ch}
+.zseo h2{font-size:14px;font-weight:700;color:#161616;margin:0 0 6px}
+.zseo p{margin:0 0 8px}
+@media(max-width:767px){.zseo{font-size:12.5px}
+.zseo details{border:1px solid #e4e4e4;border-radius:4px;padding:8px 10px}
+.zseo summary{cursor:pointer;font-weight:700;color:#161616}}
+.zseo .zseo__full{display:none}
+@media(min-width:768px){.zseo details{display:none}
+.zseo .zseo__full{display:block}}
+
+img[hidden]{display:none}
+
+/* Оценки по источникам. Разметка общая, вид свой у каждого семейства. */
+.rbs{margin:14px 0;display:flex;flex-direction:column;gap:8px}
+.rbs__l{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.rbs__i{display:flex;align-items:baseline;gap:6px;padding:6px 11px;border-radius:6px;
+white-space:nowrap}
+.rbs__s{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.rbs__n{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.rbs__n small{font-size:11px;font-weight:400;opacity:.72}
+.rbs__v{font-size:11px;opacity:.75;font-variant-numeric:tabular-nums}
+.rbs__l--own{border-top:1px dashed currentColor;padding-top:8px;margin-top:2px;opacity:.95}
+.rbs--none{margin:14px 0;font-size:13px;font-style:italic}
+@media(max-width:400px){.rbs__i{padding:5px 8px}.rbs__n{font-size:14px}}
+.rbs__i{background:#f9f9f9;border:1px solid #e4e4e4;color:#161616}
+.rbs__s{color:#c50725}
+.rbs__n{color:#161616}
+.rbs__l--own{color:#5c6370}
+.rbs--none{color:#757b85}
+
+</style><script>document.addEventListener('error',function(e){var i=e.target;if(i&&i.tagName==='IMG'&&i.hasAttribute('data-poster'))i.hidden=true;},true);
+document.addEventListener('click',function(e){var b=e.target.closest('[data-rl]');if(!b)return;var v=document.getElementById(b.getAttribute('aria-controls'));if(!v)return;var d=Math.max(160,Math.round(v.clientWidth*0.86));v.scrollBy({left:b.getAttribute('data-rl')==='next'?d:-d,behavior:'smooth'});});
+(function(){function close(nav,btn){if(!nav||!btn)return;nav.classList.remove('is-open');btn.setAttribute('aria-expanded','false');document.body.style.overflow='';try{btn.focus()}catch(e){}}document.addEventListener('click',function(e){var b=e.target.closest('[data-nav-toggle]');var n=document.getElementById('zhd-nav');if(!n)return;if(b){var open=n.classList.toggle('is-open');b.setAttribute('aria-expanded',open?'true':'false');document.body.style.overflow=open?'hidden':'';return}if(n.classList.contains('is-open')&&!e.target.closest('.zhd')){close(n,document.querySelector('[data-nav-toggle]'));}});document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;var n=document.getElementById('zhd-nav');if(n&&n.classList.contains('is-open'))close(n,document.querySelector('[data-nav-toggle]'));});})();</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Animedia","url":"https://127.0.0.1/","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://127.0.0.1/search/?q={search_term_string}"},"query-input":"required name=search_term_string"}}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://127.0.0.1/"},{"@type":"ListItem","position":2,"name":"title","item":"https://127.0.0.1/title/"},{"@type":"ListItem","position":3,"name":"master-lda-i-plameni-2","item":"https://127.0.0.1/title/master-lda-i-plameni-2/"}]}</script></head>
+<body><a class="skip" href="#main">Перейти к содержимому</a>
+<div class="zs">
+<header class="zhd">
+<div class="zhd__in">
+<a class="zhd__logo" href="/">Anime<b>dia</b></a>
+<form class="zhd__s" action="/search/" method="get" role="search">
+<label class="vh" for="q">Поиск по каталогу аниме</label>
+<input id="q" name="q" placeholder="Поиск аниме">
+<button type="submit">Найти</button></form>
+<button class="zhd__menu" type="button" data-nav-toggle aria-controls="zhd-nav"
+ aria-expanded="false" aria-label="Меню разделов">&#9776;</button>
+<nav id="zhd-nav" class="zhd__n" aria-label="Разделы"><a href="/">Главная</a><a href="/catalog/">Каталог аниме</a><a href="/new/">Новые эпизоды</a><a href="/schedule/">Расписание</a><a href="/collections/">Подборки</a></nav>
+</div>
+</header>
+<div class="zmain">
+<div class="zwrap"><nav class="zcr" aria-label="Хлебные крошки"><a href="/">Animedia</a> / <a href="/series/">Сериалы</a> / Мастер льда и пламени 2</nav>
+<main id="main"><div class="zwrap zwrap--title"><div class="ztitle"><div class="ztitle__poster"><span class="zt__none" aria-hidden="true"><b>М</b></span><img class="zhead__img" src="/poster/01a0b507-0813-7526-a2e6-5edf75180827.webp" alt="Мастер льда и пламени 2" loading="lazy" width="372" height="558" data-poster></div><div class="ztitle__main"><h1>Мастер льда и пламени 2</h1><p class="ztitle__o">Binghuo Mochu 2</p><div class="ztitle__pills"><span>боевик</span><span>приключения</span><span>фэнтези</span><span>аниме</span></div><p class="ztitle__meta">2022 · Аниме · Япония</p><a class="ztitle__cta" href="#watch">Смотреть</a></div><aside class="ztitle__rail"><div class="ztitle__score"><b>7.1</b><span>Shikimori</span></div><div class="rbs" role="group" aria-label="Оценки"><ul class="rbs__l"><li class="rbs__i" data-source="shikimori"><span class="vh">Shikimori 7.1 из 10</span><span class="rbs__s" aria-hidden="true">Shikimori</span><span class="rbs__n" aria-hidden="true">7.1<small>/10</small></span></li></ul></div><dl class="ztitle__dl"><div><dt>Оригинальное название</dt><dd>Binghuo Mochu 2</dd></div><div><dt>Год</dt><dd>2022</dd></div><div><dt>Тип</dt><dd>Аниме</dd></div><div><dt>Страна</dt><dd>Япония</dd></div><div><dt>Жанр</dt><dd>боевик · приключения · фэнтези · аниме</dd></div><div><dt>Серии</dt><dd>Сезон 2 · 104 серий</dd></div></dl><div class="zad" data-ad-slot="title-rail-300x250" data-ad-enabled="0" aria-hidden="true"></div></aside></div><section class="zpl" id="watch"><div class="zpl__h"><h2>Смотреть</h2><span>подключение</span></div><div class="zpl__f" data-player data-state="resolving"><div data-player-host data-src-candidates="[{&quot;aggregator&quot;:&quot;mali&quot;,&quot;id&quot;:&quot;53477&quot;},{&quot;aggregator&quot;:&quot;cvh&quot;,&quot;id&quot;:&quot;01a0b507-3280-7b2a-8af4-674dd73cff72&quot;}]"><video-player ident="player-master-lda-i-plameni-2-s2e104" season="2" data-publisher-id="10252" data-title-id="53477" data-aggregator="mali" is-show-voice-only="false" is-show-banner="true" disable-licensed="false" episode="104"></video-player></div><div class="zpl__s" data-player-state hidden><b>Провайдер не отдал источник</b><p>Для этой серии у провайдера сейчас нет дорожки. Остальные серии и описание на странице работают.</p></div><noscript><div class="zpl__s"><b>Нужен JavaScript</b><p>Плеер подключается скриптом провайдера, и без JavaScript он не запустится. Описание, серии и каталог доступны без него.</p></div></noscript></div><script src="https://player.cdnvideohub.com/s2/stable/video-player.umd.js" async data-player-script></script><script>
+(function(){
+ var f=document.querySelector('[data-player]'); if(!f) return;
+ var host=f.querySelector('[data-player-host]');
+ if(!host) return;
+ var st=f.querySelector('[data-player-state]');
+ var cands=[];
+ try{ cands=JSON.parse(host.getAttribute('data-src-candidates')||'[]')||[]; }catch(e){ cands=[]; }
+ var idx=0, token=0, поднялся=false, отказ=false, seen, timers=[], maxFallback=3;
+ var baseAttrs={}, progress={t0:0, c0:0, ok:false};
+ function el(){ return host.querySelector('video-player'); }
+ function clearTimers(){ timers.forEach(clearTimeout); timers=[]; if(seen){clearInterval(seen);seen=null;} }
+ function providerShell(node){
+  if(!node) return null;
+  var root=node.shadowRoot;
+  if(!root) return null;
+  return root.querySelector('iframe,video');
+ }
+ function nestedVideo(node){
+  var root=node && node.shadowRoot; if(!root) return null;
+  return root.querySelector('video');
+ }
+ function showOverlay(t,p){
+  if(!st) return;
+  st.hidden=false;
+  st.innerHTML='<b></b><p></p>';
+  st.firstChild.textContent=t;
+  st.lastChild.textContent=p;
+ }
+ function hideOverlay(){ if(st) st.hidden=true; }
+ function state(k,t,p){
+  if(отказ&&k==='ok') return;
+  /* Hard failures hide the component. Soft/active states never cover a live iframe. */
+  var hard=(k==='provider'||k==='error'||k==='nosource'||k==='noaccess'||k==='unavailable');
+  if(hard){ отказ=true; clearTimers(); }
+  f.setAttribute('data-state',k);
+  var node=el();
+  if(k==='ok'||k==='resolving'||k==='active'){
+   hideOverlay();
+   if(node) node.hidden=false;
+   if(k==='ok') поднялся=true;
+   return;
+  }
+  if(k==='slow'){
+   /* False-negative guard: provider chrome already mounted → keep it visible. */
+   if(providerShell(node)){
+    f.setAttribute('data-state','active');
+    hideOverlay();
+    if(node) node.hidden=false;
+    return;
+   }
+   if(node) node.hidden=true;
+   showOverlay(t,p);
+   return;
+  }
+  if(node) node.hidden=true;
+  showOverlay(t,p);
+ }
+ function snapshot(node){
+  baseAttrs={};
+  if(!node) return;
+  ['ident','season','episode','is-show-voice-only','is-show-banner','disable-licensed','data-publisher-id'].forEach(function(a){
+   var v=node.getAttribute(a); if(v!=null) baseAttrs[a]=v;
+  });
+ }
+ function destroy(){
+  clearTimers();
+  var node=el();
+  if(!node) return;
+  try{ node.remove(); }catch(e){}
+ }
+ function mountAt(i){
+  idx=i;
+  var c=cands[i]; if(!c) return;
+  var prev=el();
+  if(prev) snapshot(prev);
+  destroy();
+  поднялся=false; отказ=false; progress={t0:0,c0:0,ok:false};
+  var n=document.createElement('video-player');
+  Object.keys(baseAttrs).forEach(function(a){ n.setAttribute(a, baseAttrs[a]); });
+  n.setAttribute('data-title-id', c.id||'');
+  n.setAttribute('data-aggregator', c.aggregator||'');
+  host.appendChild(n);
+  bind(n, ++token);
+ }
+ function markPlaying(evName, ct){
+  if(отказ) return;
+  поднялся=true;
+  window.__animediaPlayback={
+   token:token, event:evName||'playing', at:Date.now(),
+   currentTime: ct||0, confirmed:!!progress.ok
+  };
+  window.__zonaPlayerReady=window.__animediaPlayback;
+  state('ok');
+ }
+ function observeProgress(v, my){
+  if(!v || v.__animediaBound) return;
+  v.__animediaBound=true;
+  var onTick=function(){
+   if(my!==token || отказ) return;
+   if(v.paused) return;
+   var ct=v.currentTime||0;
+   if(!progress.t0){ progress.t0=Date.now(); progress.c0=ct; return; }
+   var dt=(Date.now()-progress.t0)/1000;
+   var dc=ct-progress.c0;
+   if(dt>=5 && dc>=3){
+    progress.ok=true;
+    markPlaying('progress+3s', ct);
+   } else if(ct>0.05){
+    /* Shell is alive; never cover it while media advances. */
+    state('active');
+   }
+  };
+  ['playing','play','timeupdate'].forEach(function(ev){
+   v.addEventListener(ev, onTick);
+  });
+ }
+ function bind(node, my){
+  if(!node) return;
+  snapshot(node);
+  state('resolving');
+  /* Contract documents only noData as a provider failure signal. */
+  node.addEventListener('noData', function(){
+   if(my!==token) return;
+   if(idx+1<cands.length && (idx+1)<=maxFallback){
+    state('resolving');
+    mountAt(idx+1);
+    return;
+   }
+   state('provider','Провайдер не отдал источник',
+    'Для этой серии у провайдера сейчас нет дорожки. Остальные серии и описание на странице работают.');
+  });
+  clearTimers();
+  seen=setInterval(function(){
+   if(my!==token || отказ) return;
+   var shell=providerShell(node);
+   var v=nestedVideo(node);
+   if(v) observeProgress(v, my);
+   if(shell && !поднялся){
+    /* Provider chrome mounted — keep resolving/active, never false-fail over it. */
+    state('active');
+   }
+   if(v && !v.paused && (v.currentTime||0)>0.05) observeProgress(v, my);
+  },400);
+  timers.push(setTimeout(function(){
+   if(my!==token || отказ || поднялся) return;
+   if(seen){clearInterval(seen);seen=null;}
+   if(providerShell(node)){
+    state('active');
+    return;
+   }
+   state('slow','Плеер не поднялся',
+    'Скрипт провайдера загрузился, но окно воспроизведения не появилось. Обновите страницу; описание и серии доступны и сейчас.');
+  },15000));
+ }
+ var first=el();
+ if(first){
+  if(!cands.length){
+   cands=[{aggregator:first.getAttribute('data-aggregator')||'', id:first.getAttribute('data-title-id')||''}];
+  }
+  bind(first, ++token);
+ }
+ var s=document.querySelector('[data-player-script]');
+ if(s){ s.addEventListener('error',function(){
+  state('error','Скрипт плеера не загрузился',
+   'Браузер не смог получить скрипт провайдера: его мог заблокировать расширение или сеть. Страница и список серий продолжают работать.');}); }
+})();
+</script></section><div class="zwrap zwrap--title"><h2 class="zh zh--sm">Серии</h2><section class="zsea"><div class="zsea__h"><b>Сезон 2</b><span>· 104 серий</span></div><div class="zeps"><a href="/title/master-lda-i-plameni-2/season-2/episode-1/">1</a><a href="/title/master-lda-i-plameni-2/season-2/episode-2/">2</a><a href="/title/master-lda-i-plameni-2/season-2/episode-3/">3</a><a href="/title/master-lda-i-plameni-2/season-2/episode-4/">4</a><a href="/title/master-lda-i-plameni-2/season-2/episode-5/">5</a><a href="/title/master-lda-i-plameni-2/season-2/episode-6/">6</a><a href="/title/master-lda-i-plameni-2/season-2/episode-7/">7</a><a href="/title/master-lda-i-plameni-2/season-2/episode-8/">8</a><a href="/title/master-lda-i-plameni-2/season-2/episode-9/">9</a><a href="/title/master-lda-i-plameni-2/season-2/episode-10/">10</a><a href="/title/master-lda-i-plameni-2/season-2/episode-11/">11</a><a href="/title/master-lda-i-plameni-2/season-2/episode-12/">12</a><a href="/title/master-lda-i-plameni-2/season-2/episode-13/">13</a><a href="/title/master-lda-i-plameni-2/season-2/episode-14/">14</a><a href="/title/master-lda-i-plameni-2/season-2/episode-15/">15</a><a href="/title/master-lda-i-plameni-2/season-2/episode-16/">16</a><a href="/title/master-lda-i-plameni-2/season-2/episode-17/">17</a><a href="/title/master-lda-i-plameni-2/season-2/episode-18/">18</a><a href="/title/master-lda-i-plameni-2/season-2/episode-19/">19</a><a href="/title/master-lda-i-plameni-2/season-2/episode-20/">20</a><a href="/title/master-lda-i-plameni-2/season-2/episode-21/">21</a><a href="/title/master-lda-i-plameni-2/season-2/episode-22/">22</a><a href="/title/master-lda-i-plameni-2/season-2/episode-23/">23</a><a href="/title/master-lda-i-plameni-2/season-2/episode-24/">24</a><a href="/title/master-lda-i-plameni-2/season-2/episode-25/">25</a><a href="/title/master-lda-i-plameni-2/season-2/episode-26/">26</a><a href="/title/master-lda-i-plameni-2/season-2/episode-27/">27</a><a href="/title/master-lda-i-plameni-2/season-2/episode-28/">28</a><a href="/title/master-lda-i-plameni-2/season-2/episode-29/">29</a><a href="/title/master-lda-i-plameni-2/season-2/episode-30/">30</a><a href="/title/master-lda-i-plameni-2/season-2/episode-31/">31</a><a href="/title/master-lda-i-plameni-2/season-2/episode-32/">32</a><a href="/title/master-lda-i-plameni-2/season-2/episode-33/">33</a><a href="/title/master-lda-i-plameni-2/season-2/episode-34/">34</a><a href="/title/master-lda-i-plameni-2/season-2/episode-35/">35</a><a href="/title/master-lda-i-plameni-2/season-2/episode-36/">36</a><a href="/title/master-lda-i-plameni-2/season-2/episode-37/">37</a><a href="/title/master-lda-i-plameni-2/season-2/episode-38/">38</a><a href="/title/master-lda-i-plameni-2/season-2/episode-39/">39</a><a href="/title/master-lda-i-plameni-2/season-2/episode-40/">40</a><a href="/title/master-lda-i-plameni-2/season-2/episode-41/">41</a><a href="/title/master-lda-i-plameni-2/season-2/episode-42/">42</a><a href="/title/master-lda-i-plameni-2/season-2/episode-43/">43</a><a href="/title/master-lda-i-plameni-2/season-2/episode-44/">44</a><a href="/title/master-lda-i-plameni-2/season-2/episode-45/">45</a><a href="/title/master-lda-i-plameni-2/season-2/episode-46/">46</a><a href="/title/master-lda-i-plameni-2/season-2/episode-47/">47</a><a href="/title/master-lda-i-plameni-2/season-2/episode-48/">48</a><a href="/title/master-lda-i-plameni-2/season-2/episode-49/">49</a><a href="/title/master-lda-i-plameni-2/season-2/episode-50/">50</a><a href="/title/master-lda-i-plameni-2/season-2/episode-51/">51</a><a href="/title/master-lda-i-plameni-2/season-2/episode-52/">52</a><a href="/title/master-lda-i-plameni-2/season-2/episode-53/">53</a><a href="/title/master-lda-i-plameni-2/season-2/episode-54/">54</a><a href="/title/master-lda-i-plameni-2/season-2/episode-55/">55</a><a href="/title/master-lda-i-plameni-2/season-2/episode-56/">56</a><a href="/title/master-lda-i-plameni-2/season-2/episode-57/">57</a><a href="/title/master-lda-i-plameni-2/season-2/episode-58/">58</a><a href="/title/master-lda-i-plameni-2/season-2/episode-59/">59</a><a href="/title/master-lda-i-plameni-2/season-2/episode-60/">60</a><a href="/title/master-lda-i-plameni-2/season-2/episode-61/">61</a><a href="/title/master-lda-i-plameni-2/season-2/episode-62/">62</a><a href="/title/master-lda-i-plameni-2/season-2/episode-63/">63</a><a href="/title/master-lda-i-plameni-2/season-2/episode-64/">64</a><a href="/title/master-lda-i-plameni-2/season-2/episode-65/">65</a><a href="/title/master-lda-i-plameni-2/season-2/episode-66/">66</a><a href="/title/master-lda-i-plameni-2/season-2/episode-67/">67</a><a href="/title/master-lda-i-plameni-2/season-2/episode-68/">68</a><a href="/title/master-lda-i-plameni-2/season-2/episode-69/">69</a><a href="/title/master-lda-i-plameni-2/season-2/episode-70/">70</a><a href="/title/master-lda-i-plameni-2/season-2/episode-71/">71</a><a href="/title/master-lda-i-plameni-2/season-2/episode-72/">72</a><a href="/title/master-lda-i-plameni-2/season-2/episode-73/">73</a><a href="/title/master-lda-i-plameni-2/season-2/episode-74/">74</a><a href="/title/master-lda-i-plameni-2/season-2/episode-75/">75</a><a href="/title/master-lda-i-plameni-2/season-2/episode-76/">76</a><a href="/title/master-lda-i-plameni-2/season-2/episode-77/">77</a><a href="/title/master-lda-i-plameni-2/season-2/episode-78/">78</a><a href="/title/master-lda-i-plameni-2/season-2/episode-79/">79</a><a href="/title/master-lda-i-plameni-2/season-2/episode-80/">80</a><a href="/title/master-lda-i-plameni-2/season-2/episode-81/">81</a><a href="/title/master-lda-i-plameni-2/season-2/episode-82/">82</a><a href="/title/master-lda-i-plameni-2/season-2/episode-83/">83</a><a href="/title/master-lda-i-plameni-2/season-2/episode-84/">84</a><a href="/title/master-lda-i-plameni-2/season-2/episode-85/">85</a><a href="/title/master-lda-i-plameni-2/season-2/episode-86/">86</a><a href="/title/master-lda-i-plameni-2/season-2/episode-87/">87</a><a href="/title/master-lda-i-plameni-2/season-2/episode-88/">88</a><a href="/title/master-lda-i-plameni-2/season-2/episode-89/">89</a><a href="/title/master-lda-i-plameni-2/season-2/episode-90/">90</a><a href="/title/master-lda-i-plameni-2/season-2/episode-91/">91</a><a href="/title/master-lda-i-plameni-2/season-2/episode-92/">92</a><a href="/title/master-lda-i-plameni-2/season-2/episode-93/">93</a><a href="/title/master-lda-i-plameni-2/season-2/episode-94/">94</a><a href="/title/master-lda-i-plameni-2/season-2/episode-95/">95</a><a href="/title/master-lda-i-plameni-2/season-2/episode-96/">96</a><a href="/title/master-lda-i-plameni-2/season-2/episode-97/">97</a><a href="/title/master-lda-i-plameni-2/season-2/episode-98/">98</a><a href="/title/master-lda-i-plameni-2/season-2/episode-99/">99</a><a href="/title/master-lda-i-plameni-2/season-2/episode-100/">100</a><a href="/title/master-lda-i-plameni-2/season-2/episode-101/">101</a><a href="/title/master-lda-i-plameni-2/season-2/episode-102/">102</a><a href="/title/master-lda-i-plameni-2/season-2/episode-103/">103</a><a href="/title/master-lda-i-plameni-2/season-2/episode-104/" aria-current="page">104</a></div></section></div><div class="zwrap"><h2 class="zh zh--sm">Смотрите также</h2><div class="zg"><a class="zt" href="/title/nelyud-chast-2/"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>Н</b></span><img class="zt__img" src="/poster/01a0af3f-984f-7526-ae39-e7d8395b775a.webp" alt="Нелюдь. Часть 2" loading="lazy" width="190" height="285" data-poster></span><span class="zt__b"><span class="zt__t">Нелюдь. Часть 2</span><span class="zt__m">Аниме · 2016</span><span class="zt__r"><span>КП <b>7.1</b></span></span></span></a><a class="zt" href="/title/nelyud-film-2-stolknovenie/"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>Н</b></span><img class="zt__img" src="/poster/01a0aa6e-09d6-7526-b228-8df81f8dc726.webp" alt="Нелюдь. Фильм 2: Столкновение" loading="lazy" width="190" height="285" data-poster></span><span class="zt__b"><span class="zt__t">Нелюдь. Фильм 2: Столкновение</span><span class="zt__m">Аниме · 2016</span><span class="zt__r"><span>КП <b>7</b></span></span></span></a><a class="zt" href="/title/zolotaya-sekira/"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>З</b></span><img class="zt__img" src="/poster/01a0a9d3-4334-7526-b204-dcde14db60e9.webp" alt="Золотая секира" loading="lazy" width="190" height="285" data-poster></span><span class="zt__b"><span class="zt__t">Золотая секира</span><span class="zt__m">Аниме · 2026</span><span class="zt__r"><span>IMDb <b>7.2</b></span></span></span></a><a class="zt" href="/title/vo-vseoruzhii-sila-artefaktov/"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>В</b></span><img class="zt__img" src="/poster/01a09eec-82de-7526-a4af-cd5a9e3d1e22.webp" alt="Во всеоружии: Сила артефактов" loading="lazy" width="190" height="285" data-poster></span><span class="zt__b"><span class="zt__t">Во всеоружии: Сила артефактов</span><span class="zt__m">Аниме · 2026</span><span class="zt__r"><span><em>оценки нет</em></span></span></span></a><a class="zt" href="/title/dedushkina-lampa/"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>Д</b></span><img class="zt__img" src="/poster/01a09d0c-f4d8-7526-b5ac-63f565a06c10.webp" alt="Дедушкина лампа" loading="lazy" width="190" height="285" data-poster></span><span class="zt__b"><span class="zt__t">Дедушкина лампа</span><span class="zt__m">Аниме · 2011</span><span class="zt__r"><span>IMDb <b>6.7</b></span></span></span></a><a class="zt" href="/title/ovosch-supergeroy-morkkorm/"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>О</b></span><img class="zt__img" src="/poster/01a09d0b-94b9-7526-be2a-9876f8388f12.webp" alt="Овощ-супергерой Морккорм" loading="lazy" width="190" height="285" data-poster></span><span class="zt__b"><span class="zt__t">Овощ-супергерой Морккорм</span><span class="zt__m">Аниме · 2011</span><span class="zt__r"><span>IMDb <b>5.2</b></span></span></span></a></div></div></div></main>
+<footer class="zft"><div class="zft__grid"><div class="zft__col"><b>Разделы</b><a href="/">Главная</a><a href="/catalog/">Каталог</a><a href="/new/">Новые эпизоды</a><a href="/collections/">Подборки</a><a href="/schedule/">Расписание</a></div><div class="zft__col"><b>Жанры</b><a href="/genre/anime/">аниме</a><a href="/genre/multfilm/">мультфильм</a><a href="/genre/boevik/">боевик</a><a href="/genre/komediya/">комедия</a><a href="/genre/fentezi/">фэнтези</a><a href="/genre/priklyucheniya/">приключения</a><a href="/genre/drama/">драма</a><a href="/genre/fantastika/">фантастика</a></div><div class="zft__col"><b>Подборки</b><a href="/collections/">Все подборки</a></div><div class="zft__col"><b>О витрине</b><p class="zft__about">Animedia Space помогает искать аниме по оценкам, жанрам и типу: фильмы, дунхуа и классика из утверждённого каталога.</p></div></div><div class="zft__bar"><span>© Animedia</span><span class="zvb" title="source=ff4bb0f0fd52 runtime=ff4bb0f0fd52 build=20260919T172143Z-ff4bb0f0-nova">Animedia 1.2.1 · ff4bb0f</span></div></footer>
+</div></div></div><script type="application/ld+json">{"@context": "https://schema.org", "@type": "TVSeries", "name": "Мастер льда и пламени 2", "url": "https://127.0.0.1/title/master-lda-i-plameni-2/", "image": "https://poster.cdnvideohub.com/01a0b507-0813-7526-a2e6-5edf75180827.webp", "datePublished": "2022", "genre": ["боевик", "приключения", "фэнтези", "аниме"], "countryOfOrigin": ["Япония"], "alternateName": "Binghuo Mochu 2", "numberOfSeasons": 1, "numberOfEpisodes": 104}</script></body></html>
+[apply-nova] animedia-01: PROVIDER_BINDING_MATCH=1 agg=mali mali_first=True
+[apply-nova] $ systemctl is-active nova-animedia-02.service
+active
+[apply-nova] nova-animedia-02.service: active
+[apply-nova] $ curl -fsS --max-time 8 http://127.0.0.1:9122/title/master-lda-i-plameni-2/
+<!doctype html><html lang="ru" data-template-version="1.2.1" data-template-family="animedia" data-build-id="20260919T172143Z-ff4bb0f0-nova" data-design="animedia-portal" data-seo-profile="animedia-space">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Мастер льда и пламени 2 — смотреть онлайн — Animedia</title><meta name="description" content="Мастер льда и пламени 2: Аниме 2022"><link rel="canonical" href="https://127.0.0.1/title/master-lda-i-plameni-2/">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="video.tv_show"><meta property="og:title" content="Мастер льда и пламени 2"><meta property="og:description" content="Мастер льда и пламени 2: Аниме 2022"><meta property="og:url" content="https://127.0.0.1/title/master-lda-i-plameni-2/"><meta property="og:image" content="https://poster.cdnvideohub.com/01a0b507-0813-7526-a2e6-5edf75180827.webp"><meta property="og:site_name" content="Animedia"><meta property="og:locale" content="ru_RU"><meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="site-factory-template-revision" content="ff4bb0f0fd524c1d05d5b56d16f53c823b4d3156"><meta name="site-factory-design-version" content="1.2.1"><meta name="site-factory-template-family" content="animedia"><meta name="site-factory-build-id" content="20260919T172143Z-ff4bb0f0-nova"><meta name="site-factory-artifact-sha256" content="432f5bfb5c77b0c00d1fd5c8be1ead5d06abd3e89ff9aa75da7d6009af81a2e6"><meta name="site-factory-template" content="animedia-nova"><meta name="site-factory-core" content="site-factory-nova"><meta name="site-factory-profile" content="animedia-space">
+<style>
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;overflow-x:clip;max-width:100%}
+body{margin:0;min-height:100vh;overflow-x:clip;max-width:100%}
+img,video,iframe,svg{max-width:100%;height:auto;display:block}
+a{text-decoration:none;color:inherit}
+.vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+clip:rect(0 0 0 0);white-space:nowrap;border:0}
+:focus-visible{outline:3px solid #c50725;outline-offset:2px;border-radius:3px}
+.skip{position:absolute;left:-9999px;top:0;z-index:200;padding:10px 16px;background:#c50725;color:#fff}
+.skip:focus{left:8px;top:8px}
+
+/* Оформление Animedia 1.2.0. Числа измерены на эталоне (см. artifacts/evidence/
+   templates-zona-animedia-visual-parity-006/reference/amd-online/):
+     контейнер почти во всю ширину (поля 6 на узком, 1 дальше), шапка 90 на
+     десктопе и 126 на узком и НЕ закреплённая, кегль тела 14, h2 16/700,
+     ссылки 17/400, пропорция карточки 0.86, сетка 3 колонки до 1024 и 4 от
+     1440 с зазором 10. Разметка и правила — свои. */
+body{background:#ffffff;color:#161616;
+font:14px/1.45 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif}
+.zs{min-height:100vh;display:block}
+.zmain{min-width:0}
+.zwrap{max-width:min(calc(100% - 32px),1280px);margin:0 auto;padding:0 16px;box-sizing:border-box}
+@media(min-width:900px){.zwrap--title{max-width:min(calc(100% - 32px),1360px)}}
+body{overflow-x:hidden}
+
+/* Шапка: обычная, не закреплённая. На узком — кнопка меню вместо
+   обрезанной горизонтальной ленты пунктов (эталон amd.online: hamburger). */
+.zhd{position:relative;background:#ffffff;color:#161616;
+border-bottom:2px solid #c50725}
+.zhd__in{max-width:100%;margin:0 auto;padding:10px 6px;display:flex;
+align-items:center;gap:8px;flex-wrap:wrap;min-height:0}
+@media(min-width:768px){.zhd__in{padding:10px 1px;min-height:90px;flex-wrap:nowrap;gap:10px}}
+.zhd__logo{font-size:22px;font-weight:800;letter-spacing:-.4px;color:#161616;
+white-space:nowrap;flex:0 0 auto}
+.zhd__logo b{color:#c50725;font-weight:800}
+.zhd__menu{display:inline-flex;align-items:center;justify-content:center;
+width:40px;height:40px;border:1px solid #e4e4e4;border-radius:4px;
+background:#ffffff;color:#161616;font-size:20px;line-height:1;cursor:pointer;
+flex:0 0 auto;margin-left:auto}
+@media(min-width:768px){.zhd__menu{display:none}}
+.zhd__n{display:none;gap:6px;flex:1 0 100%;order:4;min-width:0;
+flex-wrap:wrap;overflow:visible;padding:6px 0 2px}
+.zhd__n.is-open{display:flex}
+@media(min-width:768px){.zhd__n{display:flex;flex:1 1 auto;order:0;
+flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding:0}}
+.zhd__n::-webkit-scrollbar{display:none}
+.zhd__n a{padding:8px 10px;border-radius:4px;font-size:15px;font-weight:400;
+color:#161616;flex:1 1 calc(50% - 6px);text-align:center;min-width:0;
+overflow-wrap:anywhere}
+@media(min-width:768px){.zhd__n a{flex:0 0 auto;white-space:nowrap;font-size:17px;
+text-align:left;padding:7px 9px}}
+.zhd__n a:hover{background:#f9f9f9;color:#c50725}
+.zhd__n a[aria-current]{color:#c50725;font-weight:700;box-shadow:inset 0 -2px 0 #c50725}
+.zhd__s{display:flex;flex:1 1 120px;min-width:0;max-width:340px;
+border:1px solid #e4e4e4;border-radius:4px;overflow:hidden;background:#ffffff}
+.zhd__s input{flex:1;min-width:0;border:0;padding:8px 10px;font-size:14px;
+color:#161616;font-family:inherit;background:transparent}
+.zhd__s button{border:0;background:#c50725;color:#fff;padding:0 14px;
+font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
+
+/* Служебная полоса состояния данных. */
+.ast{background:#f9f9f9;border:1px solid #e4e4e4;border-left:4px solid #c50725;
+border-radius:4px;padding:14px 16px;margin:14px 0;font-size:13.5px;
+line-height:1.55;color:#161616}
+.ast b{display:block;font-size:15px;font-weight:700;margin-bottom:5px;color:#c50725}
+.ast code{background:#f0f0f0;padding:1px 5px;border-radius:3px;font-size:12.5px}
+
+.zrail,.zrail__logo,.zrail__sub,.zrail__t,.zrail__n,.zrail__g{display:none}
+.ztop{border-bottom:1px solid #e4e4e4;background:#ffffff}
+.ztop__a{display:flex;align-items:center;gap:14px;padding:10px 0}
+.ztop__s{flex:1;display:flex;border:1px solid #e4e4e4;border-radius:4px;
+overflow:hidden;background:#ffffff;max-width:600px}
+.ztop__s input{flex:1;border:0;padding:9px 12px;font-size:14px;
+background:transparent;color:#161616;font-family:inherit}
+.ztop__s button{border:0;background:#c50725;color:#fff;padding:0 16px;
+font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
+.ztop__b{display:flex;gap:14px;padding:0 0 9px;font-size:13px;color:#5c6370;
+flex-wrap:wrap;max-width:100%;min-width:0}
+.ztop__b a{color:#c50725;font-weight:700;display:inline-block;padding:4px 2px;
+max-width:100%;overflow-wrap:anywhere}
+
+/* Типографика по измерению: h2 16/700, ссылки 17/400. */
+.zh{font-size:15px;line-height:1.35;font-weight:500;margin:14px 0 5px;max-width:100%;
+overflow-wrap:anywhere}
+@media(min-width:768px){.zh{font-size:16px;line-height:1.3}}
+.zh--sm{font-size:16px;font-weight:700;margin:20px 0 5px}
+.zsub{font-size:13px;color:#5c6370;margin:0 0 14px}
+.zsub a{color:#c50725;font-weight:700;padding:4px 2px;display:inline-block}
+.zcr{font-size:12.5px;color:#5c6370;padding:10px 0 0}
+.zcr a{color:#c50725}
+
+.zsec{margin:18px 0 22px}
+.zsec__h{display:flex;align-items:center;justify-content:space-between;
+gap:10px;margin:0 0 9px;border-bottom:1px solid #e4e4e4;padding-bottom:6px}
+.zsec__h h2{font-size:16px;font-weight:700;margin:0}
+.zsec__h a{font-size:13px;color:#c50725;font-weight:700;white-space:nowrap}
+.zrl{position:relative}
+.zrl__vp{overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;
+scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:2px 0 8px}
+.zrl__track{display:flex;gap:10px;min-width:min-content;align-items:flex-start}
+.zrl__track>*{flex:0 0 154px;width:154px;max-width:154px;scroll-snap-align:start}
+@media(max-width:1024px){.zrl__track>*{flex-basis:144px;width:144px;max-width:144px}}
+@media(max-width:768px){.zrl__track>*{flex-basis:132px;width:132px;max-width:132px}}
+@media(max-width:767px){.zrl__track>*{flex-basis:112px;width:112px;max-width:112px}}
+.zrl__btn{position:absolute;top:34%;transform:translateY(-50%);z-index:5;
+width:30px;height:48px;border:1px solid #e4e4e4;border-radius:4px;cursor:pointer;
+background:rgba(255,255,255,.94);color:#c50725;font-size:17px;line-height:1;
+display:none;align-items:center;justify-content:center}
+@media(min-width:1024px){.zrl:hover .zrl__btn,.zrl__btn:focus-visible{display:flex}}
+.zrl__btn--p{left:-4px}
+.zrl__btn--n{right:-4px}
+.zrl__btn:disabled{opacity:.35;cursor:default}
+
+/* Компактная сетка полок: 6 колонок внутри 1280. */
+.zg{display:grid;gap:14px;grid-template-columns:repeat(2,minmax(0,1fr));
+align-items:stretch}
+@media(min-width:700px){.zg{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:900px){.zg{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(min-width:1100px){.zg{grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}}
+.zt{display:flex;flex-direction:column;background:#ffffff;
+border:1px solid #e4e4e4;border-radius:4px;overflow:hidden;min-width:0;
+height:100%;transition:border-color .14s,box-shadow .14s}
+.zt:hover{border-color:#c50725;box-shadow:0 4px 14px rgba(0,0,0,.09)}
+.zt__p{display:block;aspect-ratio:2/3;background:#f0f0f0;position:relative;flex:0 0 auto}
+.zt__p img,.zt__img{position:absolute;inset:0;z-index:1;width:100%;height:100%;
+object-fit:cover;display:block}
+.zt__none{position:absolute;inset:0;display:grid;place-items:center;padding:10px;
+text-align:center;color:#757b85;font-size:11.5px;line-height:1.3}
+.zt__none b{display:block;font-size:22px;font-weight:800;color:#5c6370;margin-bottom:3px}
+.zt__b{padding:7px 8px 9px;display:flex;flex-direction:column;gap:3px;flex:1}
+.zt__t{font-size:13px;font-weight:700;line-height:1.26;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zt__m{display:block;font-size:11.5px;color:#5c6370}
+.zt__r{display:flex;gap:8px;font-size:11.5px;color:#5c6370;margin-top:auto;
+padding-top:3px;flex-wrap:wrap}
+.zt__r b,.zt__r i{color:#c50725;font-weight:700;font-style:normal}
+.zt__r em{color:#757b85;font-style:italic}
+
+.zl{display:flex;flex-direction:column;gap:8px}
+.zr{display:grid;grid-template-columns:58px 1fr;gap:10px;padding:8px;
+background:#ffffff;border:1px solid #e4e4e4;border-radius:4px;align-items:start}
+@media(min-width:768px){.zr{grid-template-columns:74px 1fr}}
+.zr:hover{border-color:#c50725}
+.zr__p{aspect-ratio:2/3;background:#f0f0f0;border-radius:3px;overflow:hidden;
+position:relative}
+.zr__p img,.zr__img{position:absolute;inset:0;width:100%;height:100%;
+object-fit:cover;display:block;z-index:1}
+.zr__none{position:absolute;inset:0;display:grid;place-items:center;
+text-align:center;color:#757b85;font-size:10.5px;padding:5px}
+.zr__t{display:block;font-size:14px;font-weight:700;line-height:1.3;margin-bottom:2px}
+.zr__m{display:block;font-size:12px;color:#5c6370;margin-bottom:4px}
+.zr__d{font-size:12px;color:#5c6370;line-height:1.42;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zr__r{display:flex;gap:9px;font-size:11.5px;color:#5c6370;margin-top:5px;flex-wrap:wrap}
+
+.zstrip{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 5px}
+.zstrip a{background:#f9f9f9;border:1px solid #e4e4e4;border-radius:4px;
+padding:6px 10px;font-size:12.5px;color:#161616;font-weight:600}
+.zstrip a:hover{border-color:#c50725;color:#c50725}
+.zstrip a[aria-current]{background:#c50725;color:#fff;border-color:#c50725}
+.zpg{display:flex;gap:5px;justify-content:center;margin:22px 0;flex-wrap:wrap}
+.zpg a,.zpg span{padding:7px 12px;border-radius:4px;border:1px solid #e4e4e4;
+background:#ffffff;font-size:13px;min-width:36px;text-align:center}
+.zpg span{background:#c50725;color:#fff;border-color:#c50725}
+.zempty,.znf{padding:44px 16px;text-align:center;color:#5c6370}
+.znf b{display:block;font-size:40px;font-weight:800;color:#c50725;margin-bottom:5px}
+.znf h1{font-size:21px;margin:0 0 7px;color:#161616;font-weight:700}
+.znf a{display:inline-block;margin-top:12px;background:#c50725;color:#fff;
+padding:10px 20px;border-radius:4px;font-weight:700}
+.zsea__h{font-size:13px;color:#5c6370;margin:0 0 12px}
+.zsea{margin:0 0 18px}
+
+/* Расписание: день, время и номер серии. Пустое значение названо словами. */
+.asch{display:grid;gap:10px;margin:12px 0}
+@media(min-width:900px){.asch{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1440px){.asch{grid-template-columns:repeat(4,1fr)}}
+.asch__d{border:1px solid #e4e4e4;border-radius:4px;background:#ffffff;overflow:hidden}
+.asch__d h3{margin:0;padding:8px 11px;font-size:13px;font-weight:700;
+background:#f9f9f9;border-bottom:1px solid #e4e4e4}
+.asch__l{margin:0;padding:0;list-style:none}
+.asch__l li{display:flex;gap:9px;align-items:baseline;padding:7px 11px;
+border-bottom:1px solid #e4e4e4;font-size:12.5px}
+.asch__l li:last-child{border-bottom:0}
+.asch__t{color:#c50725;font-weight:700;flex:0 0 42px;font-variant-numeric:tabular-nums}
+.asch__e{color:#5c6370;margin-left:auto;flex:0 0 auto;font-size:11.5px}
+.asch__n{color:#757b85;font-style:italic}
+
+.zban{position:relative;border-radius:4px;overflow:hidden;background:#f0f0f0;
+margin:14px 0 0;min-height:170px;max-height:240px}
+.zban__img{position:absolute;inset:0;opacity:.5}
+.zban__img img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* Верхняя карусель главной: фиксированная ширина карточки, shell ≤300px. */
+.ahero{margin:10px 0 16px;padding:18px 12px 14px;border-radius:4px;
+background:#c50725;color:#fff;overflow:hidden;max-height:300px;box-sizing:border-box}
+.ahero .zrl__vp{padding-bottom:4px;max-height:260px}
+.ahero .zrl__track{gap:14px}
+.ahero .zrl__track>*{flex:0 0 154px;width:154px;max-width:154px}
+@media(max-width:1024px){.ahero .zrl__track>*{flex-basis:144px;width:144px;max-width:144px}}
+@media(max-width:768px){.ahero{padding:14px 8px 10px;max-height:240px}
+.ahero .zrl__track>*{flex-basis:132px;width:132px;max-width:132px}}
+@media(max-width:767px){.ahero{max-height:225px;padding:12px 6px 8px}
+.ahero .zrl__track>*{flex-basis:112px;width:112px;max-width:112px}}
+.ahero .zt{background:transparent;border:0;border-radius:0;box-shadow:none;color:#fff;
+max-height:260px}
+.ahero .zt:hover{border:0;box-shadow:none;opacity:.92}
+.ahero .zt__p{border-radius:2px;aspect-ratio:2/3;background:rgba(0,0,0,.18)}
+.ahero .zt__b{padding:6px 2px 0}
+.ahero .zt__t{color:#fff;font-size:14px;-webkit-line-clamp:2;line-height:1.25}
+.ahero .zt__m,.ahero .zt__r{display:none}
+.ahero .zrl__btn{background:rgba(255,255,255,.95);color:#c50725;border-color:transparent}
+.ahero__cap{display:none}
+.zsec{max-height:760px;overflow:hidden}
+.zsec--eps{max-height:none;overflow:visible}
+
+/* «Новые серии» — компактные строки, 2 колонки на desktop. */
+.zsec--eps .zl{display:grid;gap:0;grid-template-columns:1fr;
+border:1px solid #e4e4e4;border-radius:4px;overflow:hidden;background:#ffffff}
+@media(min-width:900px){.zsec--eps .zl{grid-template-columns:1fr 1fr}}
+.zsec--eps .zr{border:0;border-bottom:1px solid #e4e4e4;border-radius:0;
+padding:8px 10px;align-items:center;grid-template-columns:52px minmax(0,1fr) auto;
+min-height:70px;max-height:76px;max-width:none;width:100%;box-sizing:border-box}
+@media(max-width:767px){.zsec--eps .zr{min-height:64px;max-height:72px}}
+.zsec--eps .zr:nth-child(odd){border-right:1px solid #e4e4e4}
+@media(max-width:899px){.zsec--eps .zr:nth-child(odd){border-right:0}}
+.zsec--eps .zr:last-child{border-bottom:0}
+.zsec--eps .zr__p{aspect-ratio:3/4;border-radius:3px;max-width:52px;width:52px}
+.zsec--eps .zr__body{min-width:0;display:flex;flex-direction:column;gap:2px}
+.zsec--eps .zr__t{font-size:15px;line-height:1.2;white-space:nowrap;overflow:hidden;
+text-overflow:ellipsis;min-height:auto;-webkit-line-clamp:1;display:block}
+.zsec--eps .zr__m{font-size:12px}
+.zsec--eps .zr__d{display:none}
+.zsec--eps .zr__badge{font-size:12px;font-weight:700;color:#c50725;white-space:nowrap}
+.zad-home{margin:0 0 16px;min-height:0;max-height:24px}
+.zad-home[data-ad-enabled="1"]{min-height:90px;max-height:none;border:1px dashed #e4e4e4;border-radius:4px}
+
+/* Title hub: poster 250 | main | rating rail 150. */
+.zban{display:none}
+.zhead{display:contents}
+.zhead__ps,.zhead__x,.zhead__o{display:contents}
+.ztitle{display:grid;grid-template-columns:1fr;gap:16px;margin:12px 0 8px;
+align-items:start}
+@media(min-width:900px){.ztitle{grid-template-columns:250px minmax(0,1fr);gap:24px;
+max-height:460px}}
+@media(min-width:1100px){.ztitle{grid-template-columns:250px minmax(0,1fr) 150px;gap:28px}}
+.ztitle__poster{aspect-ratio:2/3;border-radius:6px;overflow:hidden;background:#f0f0f0;
+position:relative;width:100%;max-width:250px;margin:0 auto;max-height:390px}
+@media(min-width:900px){.ztitle__poster{margin:0;max-width:250px}}
+@media(max-width:767px){.ztitle__poster{max-width:150px}}
+.ztitle__poster img,.ztitle__poster .zhead__img{position:absolute;inset:0;z-index:1;
+width:100%;height:100%;object-fit:cover;display:block}
+.ztitle__main{min-width:0}
+.ztitle__main h1{font-size:28px;line-height:1.2;margin:0 0 8px;letter-spacing:-.3px;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+@media(min-width:1100px){.ztitle__main h1{font-size:34px;line-height:1.18}}
+.ztitle__o{font-size:16px;color:#5c6370;margin:0 0 8px}
+.ztitle__meta{font-size:13px;color:#5c6370;margin:0 0 10px;line-height:1.45}
+.ztitle__pills{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.ztitle__pills a,.ztitle__pills span{display:inline-flex;align-items:center;
+min-height:30px;padding:0 10px;border-radius:4px;border:1px solid #e4e4e4;
+background:#f9f9f9;font-size:12.5px;color:#161616}
+.ztitle__desc{font-size:14px;line-height:1.55;color:#161616;max-width:68ch;margin:0 0 12px;
+display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.ztitle__desc.is-open{-webkit-line-clamp:unset;display:block}
+.ztitle__more{border:0;background:transparent;color:#c50725;font-weight:700;
+font-size:13px;cursor:pointer;padding:0;margin:0 0 12px}
+.ztitle__cta{display:inline-flex;align-items:center;justify-content:center;
+min-height:40px;padding:8px 16px;border-radius:4px;background:#c50725;color:#fff;
+font-weight:700;font-size:14px;text-decoration:none}
+.ztitle__cta:hover{filter:brightness(1.05)}
+.ztitle__rail{min-width:0;display:flex;flex-direction:column;gap:10px}
+@media(max-width:1099px){.ztitle__rail{order:3;flex-direction:row;flex-wrap:wrap}}
+.ztitle__score{background:#f9f9f9;border:1px solid #e4e4e4;border-radius:4px;
+padding:12px 10px;text-align:center}
+.ztitle__score b{display:block;font-size:44px;line-height:1;font-weight:800;color:#c50725}
+.ztitle__score span{display:block;font-size:12px;color:#5c6370;margin-top:4px}
+.ztitle__dl{margin:0;background:#f9f9f9;border:1px solid #e4e4e4;border-radius:4px;
+padding:10px 12px;display:grid;gap:8px}
+.ztitle__dl div{display:grid;grid-template-columns:1fr;gap:2px}
+.ztitle__dl dt{font-size:11px;letter-spacing:.04em;text-transform:uppercase;
+color:#5c6370;font-weight:700;margin:0}
+.ztitle__dl dd{margin:0;font-size:13px;color:#161616;line-height:1.35;
+overflow-wrap:anywhere}
+.ztitle__dl a{color:#c50725;font-weight:700}
+.zad{display:none}
+.zad[data-ad-enabled="1"]{display:block;width:100%;max-width:300px;min-height:250px;
+border:1px dashed #e4e4e4;border-radius:4px;background:#f9f9f9;margin:0 auto}
+.zbody{font-size:14px;line-height:1.55;color:#161616;max-width:70ch;margin:14px 0 0}
+.zaside{display:none}
+.zpl{margin:14px 0;max-width:1120px}
+.zpl__f{aspect-ratio:16/9;background:#f3f3f3;border:1px solid #e4e4e4;
+border-radius:4px;overflow:hidden;position:relative;max-height:none}
+.zpl__f[data-state=active],.zpl__f[data-state=ok],.zpl__f[data-state=resolving],
+.zpl__f[data-state=playable]{background:#101010}
+.zh{font-size:22px;line-height:1.3;font-weight:700;margin:14px 0 6px;max-width:100%}
+@media(min-width:768px){.zh{font-size:26px}}
+.zsub{font-size:14px;color:#5c6370;margin:0 0 14px;max-width:72ch;
+display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+/* Хаб подборок: карточка коллекции, а не ещё одна сетка тайтлов. */
+.zhub{display:grid;gap:12px;margin:14px 0;grid-template-columns:1fr}
+@media(min-width:600px){.zhub{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.zhub{grid-template-columns:repeat(3,1fr)}}
+.zhub__c{display:block;padding:12px;border:1px solid #e4e4e4;border-radius:6px;
+background:#f0f0f0;color:inherit;text-decoration:none}
+.zhub__c:hover,.zhub__c:focus-visible{border-color:#c50725;outline:none}
+.zhub__g{display:flex;gap:4px;margin-bottom:9px}
+.zhub__p{flex:1 1 0;aspect-ratio:2/3;overflow:hidden;border-radius:4px;background:#f9f9f9}
+.zhub__img{width:100%;height:100%;object-fit:cover;display:block}
+.zhub__t{display:block;font-weight:700;font-size:15px}
+.zhub__m{display:block;font-size:12px;color:#5c6370;font-weight:600;margin:2px 0 4px}
+.zhub__d{display:block;font-size:13px;color:#5c6370;line-height:1.45}
+
+/* Компактные номерные кнопки серий: CSS Grid auto-fill, без скрытых колонок. */
+.zeps{display:grid;gap:6px;margin:12px 0;max-height:70vh;overflow-x:hidden;
+overflow-y:auto;overscroll-behavior:contain;align-content:flex-start;
+grid-template-columns:repeat(auto-fill,minmax(44px,1fr));width:100%;
+max-width:100%;min-width:0;box-sizing:border-box}
+@media(min-width:768px){.zeps{max-height:520px;
+grid-template-columns:repeat(auto-fill,minmax(48px,1fr))}}
+.zeps a,.zeps span{display:inline-flex;align-items:center;justify-content:center;
+min-width:44px;min-height:44px;width:100%;height:44px;padding:0;
+border-radius:6px;border:1px solid #e4e4e4;background:#ffffff;font-size:13px;
+font-weight:700;font-variant-numeric:tabular-nums;box-sizing:border-box}
+@media(min-width:768px){.zeps a,.zeps span{min-height:48px;height:48px}}
+.zeps span{opacity:.5}
+.zeps a[aria-current]{background:#c50725;color:#fff;border-color:#c50725}
+.zeps a[data-off]{opacity:.45;pointer-events:none}
+.zsea__h{display:flex;justify-content:space-between;align-items:baseline;
+gap:10px;flex-wrap:wrap;margin:0 0 10px}
+.zsea__h b{font-size:15px;font-weight:700}
+.zsea__h span{font-size:13px;color:#5c6370}
+.zepnav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.zepnav a{background:#f9f9f9;border:1px solid #e4e4e4;border-radius:4px;
+padding:8px 12px;font-size:13px;color:#c50725;font-weight:700}
+
+.zpl{margin:14px 0}
+.zpl__f{aspect-ratio:16/9;background:#f3f3f3;border:1px solid #e4e4e4;
+border-radius:4px;overflow:hidden;position:relative;max-height:min(56vw,420px)}
+.zpl__f[data-state=playable]{background:#101010;max-height:none}
+.zpl__h{font-size:16px;font-weight:700;margin:18px 0 9px;display:flex;
+align-items:baseline;justify-content:space-between;gap:10px}
+.zpl__h span{font-size:12.5px;font-weight:600;color:#5c6370}
+.zpl__s,.zpl [data-player-state]{position:absolute;inset:0;display:grid;
+place-items:center;padding:16px;text-align:center;color:#161616;font-size:13px;
+line-height:1.45;background:#f7f7f7}
+.zpl [data-player-state] b{display:block;font-size:15px;margin-bottom:6px}
+.zpl [data-player-state] p{margin:0;max-width:36ch;color:#5c6370}
+
+.zft{border-top:2px solid #c50725;margin:28px 0 0;padding:18px 0 10px;
+font-size:13px;color:#5c6370}
+.zft__grid{display:grid;gap:14px;grid-template-columns:1fr;
+margin-bottom:14px}
+@media(min-width:768px){.zft__grid{grid-template-columns:repeat(4,1fr)}}
+.zft__col b{display:block;font-size:12.5px;font-weight:700;color:#161616;
+margin-bottom:6px;text-transform:uppercase;letter-spacing:.03em}
+.zft__col a{display:block;padding:3px 0;color:#5c6370;font-size:13px}
+.zft__col a:hover{color:#c50725}
+.zft__about{margin:0;font-size:12.5px;line-height:1.45;color:#5c6370}
+.zft__bar{display:flex;justify-content:space-between;align-items:center;
+gap:10px;flex-wrap:wrap;border-top:1px solid #e4e4e4;padding-top:10px}
+.zvb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;
+color:#757b85;letter-spacing:0}
+.zseo{margin:22px 0 8px;padding:12px 0 0;border-top:1px solid #e4e4e4;
+color:#5c6370;font-size:13px;line-height:1.55;max-width:72ch}
+.zseo h2{font-size:14px;font-weight:700;color:#161616;margin:0 0 6px}
+.zseo p{margin:0 0 8px}
+@media(max-width:767px){.zseo{font-size:12.5px}
+.zseo details{border:1px solid #e4e4e4;border-radius:4px;padding:8px 10px}
+.zseo summary{cursor:pointer;font-weight:700;color:#161616}}
+.zseo .zseo__full{display:none}
+@media(min-width:768px){.zseo details{display:none}
+.zseo .zseo__full{display:block}}
+
+img[hidden]{display:none}
+
+/* Оценки по источникам. Разметка общая, вид свой у каждого семейства. */
+.rbs{margin:14px 0;display:flex;flex-direction:column;gap:8px}
+.rbs__l{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.rbs__i{display:flex;align-items:baseline;gap:6px;padding:6px 11px;border-radius:6px;
+white-space:nowrap}
+.rbs__s{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.rbs__n{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.rbs__n small{font-size:11px;font-weight:400;opacity:.72}
+.rbs__v{font-size:11px;opacity:.75;font-variant-numeric:tabular-nums}
+.rbs__l--own{border-top:1px dashed currentColor;padding-top:8px;margin-top:2px;opacity:.95}
+.rbs--none{margin:14px 0;font-size:13px;font-style:italic}
+@media(max-width:400px){.rbs__i{padding:5px 8px}.rbs__n{font-size:14px}}
+.rbs__i{background:#f9f9f9;border:1px solid #e4e4e4;color:#161616}
+.rbs__s{color:#c50725}
+.rbs__n{color:#161616}
+.rbs__l--own{color:#5c6370}
+.rbs--none{color:#757b85}
+
+</style><script>document.addEventListener('error',function(e){var i=e.target;if(i&&i.tagName==='IMG'&&i.hasAttribute('data-poster'))i.hidden=true;},true);
+document.addEventListener('click',function(e){var b=e.target.closest('[data-rl]');if(!b)return;var v=document.getElementById(b.getAttribute('aria-controls'));if(!v)return;var d=Math.max(160,Math.round(v.clientWidth*0.86));v.scrollBy({left:b.getAttribute('data-rl')==='next'?d:-d,behavior:'smooth'});});
+(function(){function close(nav,btn){if(!nav||!btn)return;nav.classList.remove('is-open');btn.setAttribute('aria-expanded','false');document.body.style.overflow='';try{btn.focus()}catch(e){}}document.addEventListener('click',function(e){var b=e.target.closest('[data-nav-toggle]');var n=document.getElementById('zhd-nav');if(!n)return;if(b){var open=n.classList.toggle('is-open');b.setAttribute('aria-expanded',open?'true':'false');document.body.style.overflow=open?'hidden':'';return}if(n.classList.contains('is-open')&&!e.target.closest('.zhd')){close(n,document.querySelector('[data-nav-toggle]'));}});document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;var n=document.getElementById('zhd-nav');if(n&&n.classList.contains('is-open'))close(n,document.querySelector('[data-nav-toggle]'));});})();</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Animedia","url":"https://127.0.0.1/","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://127.0.0.1/search/?q={search_term_string}"},"query-input":"required name=search_term_string"}}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://127.0.0.1/"},{"@type":"ListItem","position":2,"name":"title","item":"https://127.0.0.1/title/"},{"@type":"ListItem","position":3,"name":"master-lda-i-plameni-2","item":"https://127.0.0.1/title/master-lda-i-plameni-2/"}]}</script></head>
+<body><a class="skip" href="#main">Перейти к содержимому</a>
+<div class="zs">
+<header class="zhd">
+<div class="zhd__in">
+<a class="zhd__logo" href="/">Anime<b>dia</b></a>
+<form class="zhd__s" action="/search/" method="get" role="search">
+<label class="vh" for="q">Поиск по каталогу аниме</label>
+<input id="q" name="q" placeholder="Поиск аниме">
+<button type="submit">Найти</button></form>
+<button class="zhd__menu" type="button" data-nav-toggle aria-controls="zhd-nav"
+ aria-expanded="false" aria-label="Меню разделов">&#9776;</button>
+<nav id="zhd-nav" class="zhd__n" aria-label="Разделы"><a href="/">Главная</a><a href="/catalog/">Каталог аниме</a><a href="/new/">Новые эпизоды</a><a href="/schedule/">Расписание</a><a href="/collections/">Подборки</a></nav>
+</div>
+</header>
+<div class="zmain">
+<div class="zwrap"><nav class="zcr" aria-label="Хлебные крошки"><a href="/">Animedia</a> / <a href="/series/">Сериалы</a> / Мастер льда и пламени 2</nav>
+<main id="main"><div class="zwrap zwrap--title"><div class="ztitle"><div class="ztitle__poster"><span class="zt__none" aria-hidden="true"><b>М</b></span><img class="zhead__img" src="/poster/01a0b507-0813-7526-a2e6-5edf75180827.webp" alt="Мастер льда и пламени 2" loading="lazy" width="372" height="558" data-poster></div><div class="ztitle__main"><h1>Мастер льда и пламени 2</h1><p class="ztitle__o">Binghuo Mochu 2</p><div class="ztitle__pills"><span>боевик</span><span>приключения</span><span>фэнтези</span><span>аниме</span></div><p class="ztitle__meta">2022 · Аниме · Япония</p><a class="ztitle__cta" href="#watch">Смотреть</a></div><aside class="ztitle__rail"><div class="ztitle__score"><b>7.1</b><span>Shikimori</span></div><div class="rbs" role="group" aria-label="Оценки"><ul class="rbs__l"><li class="rbs__i" data-source="shikimori"><span class="vh">Shikimori 7.1 из 10</span><span class="rbs__s" aria-hidden="true">Shikimori</span><span class="rbs__n" aria-hidden="true">7.1<small>/10</small></span></li></ul></div><dl class="ztitle__dl"><div><dt>Оригинальное название</dt><dd>Binghuo Mochu 2</dd></div><div><dt>Год</dt><dd>2022</dd></div><div><dt>Тип</dt><dd>Аниме</dd></div><div><dt>Страна</dt><dd>Япония</dd></div><div><dt>Жанр</dt><dd>боевик · приключения · фэнтези · аниме</dd></div><div><dt>Серии</dt><dd>Сезон 2 · 104 серий</dd></div></dl><div class="zad" data-ad-slot="title-rail-300x250" data-ad-enabled="0" aria-hidden="true"></div></aside></div><section class="zpl" id="watch"><div class="zpl__h"><h2>Смотреть</h2><span>подключение</span></div><div class="zpl__f" data-player data-state="resolving"><div data-player-host data-src-candidates="[{&quot;aggregator&quot;:&quot;mali&quot;,&quot;id&quot;:&quot;53477&quot;},{&quot;aggregator&quot;:&quot;cvh&quot;,&quot;id&quot;:&quot;01a0b507-3280-7b2a-8af4-674dd73cff72&quot;}]"><video-player ident="player-master-lda-i-plameni-2-s2e104" season="2" data-publisher-id="10252" data-title-id="53477" data-aggregator="mali" is-show-voice-only="false" is-show-banner="true" disable-licensed="false" episode="104"></video-player></div><div class="zpl__s" data-player-state hidden><b>Провайдер не отдал источник</b><p>Для этой серии у провайдера сейчас нет дорожки. Остальные серии и описание на странице работают.</p></div><noscript><div class="zpl__s"><b>Нужен JavaScript</b><p>Плеер подключается скриптом провайдера, и без JavaScript он не запустится. Описание, серии и каталог доступны без него.</p></div></noscript></div><script src="https://player.cdnvideohub.com/s2/stable/video-player.umd.js" async data-player-script></script><script>
+(function(){
+ var f=document.querySelector('[data-player]'); if(!f) return;
+ var host=f.querySelector('[data-player-host]');
+ if(!host) return;
+ var st=f.querySelector('[data-player-state]');
+ var cands=[];
+ try{ cands=JSON.parse(host.getAttribute('data-src-candidates')||'[]')||[]; }catch(e){ cands=[]; }
+ var idx=0, token=0, поднялся=false, отказ=false, seen, timers=[], maxFallback=3;
+ var baseAttrs={}, progress={t0:0, c0:0, ok:false};
+ function el(){ return host.querySelector('video-player'); }
+ function clearTimers(){ timers.forEach(clearTimeout); timers=[]; if(seen){clearInterval(seen);seen=null;} }
+ function providerShell(node){
+  if(!node) return null;
+  var root=node.shadowRoot;
+  if(!root) return null;
+  return root.querySelector('iframe,video');
+ }
+ function nestedVideo(node){
+  var root=node && node.shadowRoot; if(!root) return null;
+  return root.querySelector('video');
+ }
+ function showOverlay(t,p){
+  if(!st) return;
+  st.hidden=false;
+  st.innerHTML='<b></b><p></p>';
+  st.firstChild.textContent=t;
+  st.lastChild.textContent=p;
+ }
+ function hideOverlay(){ if(st) st.hidden=true; }
+ function state(k,t,p){
+  if(отказ&&k==='ok') return;
+  /* Hard failures hide the component. Soft/active states never cover a live iframe. */
+  var hard=(k==='provider'||k==='error'||k==='nosource'||k==='noaccess'||k==='unavailable');
+  if(hard){ отказ=true; clearTimers(); }
+  f.setAttribute('data-state',k);
+  var node=el();
+  if(k==='ok'||k==='resolving'||k==='active'){
+   hideOverlay();
+   if(node) node.hidden=false;
+   if(k==='ok') поднялся=true;
+   return;
+  }
+  if(k==='slow'){
+   /* False-negative guard: provider chrome already mounted → keep it visible. */
+   if(providerShell(node)){
+    f.setAttribute('data-state','active');
+    hideOverlay();
+    if(node) node.hidden=false;
+    return;
+   }
+   if(node) node.hidden=true;
+   showOverlay(t,p);
+   return;
+  }
+  if(node) node.hidden=true;
+  showOverlay(t,p);
+ }
+ function snapshot(node){
+  baseAttrs={};
+  if(!node) return;
+  ['ident','season','episode','is-show-voice-only','is-show-banner','disable-licensed','data-publisher-id'].forEach(function(a){
+   var v=node.getAttribute(a); if(v!=null) baseAttrs[a]=v;
+  });
+ }
+ function destroy(){
+  clearTimers();
+  var node=el();
+  if(!node) return;
+  try{ node.remove(); }catch(e){}
+ }
+ function mountAt(i){
+  idx=i;
+  var c=cands[i]; if(!c) return;
+  var prev=el();
+  if(prev) snapshot(prev);
+  destroy();
+  поднялся=false; отказ=false; progress={t0:0,c0:0,ok:false};
+  var n=document.createElement('video-player');
+  Object.keys(baseAttrs).forEach(function(a){ n.setAttribute(a, baseAttrs[a]); });
+  n.setAttribute('data-title-id', c.id||'');
+  n.setAttribute('data-aggregator', c.aggregator||'');
+  host.appendChild(n);
+  bind(n, ++token);
+ }
+ function markPlaying(evName, ct){
+  if(отказ) return;
+  поднялся=true;
+  window.__animediaPlayback={
+   token:token, event:evName||'playing', at:Date.now(),
+   currentTime: ct||0, confirmed:!!progress.ok
+  };
+  window.__zonaPlayerReady=window.__animediaPlayback;
+  state('ok');
+ }
+ function observeProgress(v, my){
+  if(!v || v.__animediaBound) return;
+  v.__animediaBound=true;
+  var onTick=function(){
+   if(my!==token || отказ) return;
+   if(v.paused) return;
+   var ct=v.currentTime||0;
+   if(!progress.t0){ progress.t0=Date.now(); progress.c0=ct; return; }
+   var dt=(Date.now()-progress.t0)/1000;
+   var dc=ct-progress.c0;
+   if(dt>=5 && dc>=3){
+    progress.ok=true;
+    markPlaying('progress+3s', ct);
+   } else if(ct>0.05){
+    /* Shell is alive; never cover it while media advances. */
+    state('active');
+   }
+  };
+  ['playing','play','timeupdate'].forEach(function(ev){
+   v.addEventListener(ev, onTick);
+  });
+ }
+ function bind(node, my){
+  if(!node) return;
+  snapshot(node);
+  state('resolving');
+  /* Contract documents only noData as a provider failure signal. */
+  node.addEventListener('noData', function(){
+   if(my!==token) return;
+   if(idx+1<cands.length && (idx+1)<=maxFallback){
+    state('resolving');
+    mountAt(idx+1);
+    return;
+   }
+   state('provider','Провайдер не отдал источник',
+    'Для этой серии у провайдера сейчас нет дорожки. Остальные серии и описание на странице работают.');
+  });
+  clearTimers();
+  seen=setInterval(function(){
+   if(my!==token || отказ) return;
+   var shell=providerShell(node);
+   var v=nestedVideo(node);
+   if(v) observeProgress(v, my);
+   if(shell && !поднялся){
+    /* Provider chrome mounted — keep resolving/active, never false-fail over it. */
+    state('active');
+   }
+   if(v && !v.paused && (v.currentTime||0)>0.05) observeProgress(v, my);
+  },400);
+  timers.push(setTimeout(function(){
+   if(my!==token || отказ || поднялся) return;
+   if(seen){clearInterval(seen);seen=null;}
+   if(providerShell(node)){
+    state('active');
+    return;
+   }
+   state('slow','Плеер не поднялся',
+    'Скрипт провайдера загрузился, но окно воспроизведения не появилось. Обновите страницу; описание и серии доступны и сейчас.');
+  },15000));
+ }
+ var first=el();
+ if(first){
+  if(!cands.length){
+   cands=[{aggregator:first.getAttribute('data-aggregator')||'', id:first.getAttribute('data-title-id')||''}];
+  }
+  bind(first, ++token);
+ }
+ var s=document.querySelector('[data-player-script]');
+ if(s){ s.addEventListener('error',function(){
+  state('error','Скрипт плеера не загрузился',
+   'Браузер не смог получить скрипт провайдера: его мог заблокировать расширение или сеть. Страница и список серий продолжают работать.');}); }
+})();
+</script></section><div class="zwrap zwrap--title"><h2 class="zh zh--sm">Серии</h2><section class="zsea"><div class="zsea__h"><b>Сезон 2</b><span>· 104 серий</span></div><div class="zeps"><a href="/title/master-lda-i-plameni-2/season-2/episode-1/">1</a><a href="/title/master-lda-i-plameni-2/season-2/episode-2/">2</a><a href="/title/master-lda-i-plameni-2/season-2/episode-3/">3</a><a href="/title/master-lda-i-plameni-2/season-2/episode-4/">4</a><a href="/title/master-lda-i-plameni-2/season-2/episode-5/">5</a><a href="/title/master-lda-i-plameni-2/season-2/episode-6/">6</a><a href="/title/master-lda-i-plameni-2/season-2/episode-7/">7</a><a href="/title/master-lda-i-plameni-2/season-2/episode-8/">8</a><a href="/title/master-lda-i-plameni-2/season-2/episode-9/">9</a><a href="/title/master-lda-i-plameni-2/season-2/episode-10/">10</a><a href="/title/master-lda-i-plameni-2/season-2/episode-11/">11</a><a href="/title/master-lda-i-plameni-2/season-2/episode-12/">12</a><a href="/title/master-lda-i-plameni-2/season-2/episode-13/">13</a><a href="/title/master-lda-i-plameni-2/season-2/episode-14/">14</a><a href="/title/master-lda-i-plameni-2/season-2/episode-15/">15</a><a href="/title/master-lda-i-plameni-2/season-2/episode-16/">16</a><a href="/title/master-lda-i-plameni-2/season-2/episode-17/">17</a><a href="/title/master-lda-i-plameni-2/season-2/episode-18/">18</a><a href="/title/master-lda-i-plameni-2/season-2/episode-19/">19</a><a href="/title/master-lda-i-plameni-2/season-2/episode-20/">20</a><a href="/title/master-lda-i-plameni-2/season-2/episode-21/">21</a><a href="/title/master-lda-i-plameni-2/season-2/episode-22/">22</a><a href="/title/master-lda-i-plameni-2/season-2/episode-23/">23</a><a href="/title/master-lda-i-plameni-2/season-2/episode-24/">24</a><a href="/title/master-lda-i-plameni-2/season-2/episode-25/">25</a><a href="/title/master-lda-i-plameni-2/season-2/episode-26/">26</a><a href="/title/master-lda-i-plameni-2/season-2/episode-27/">27</a><a href="/title/master-lda-i-plameni-2/season-2/episode-28/">28</a><a href="/title/master-lda-i-plameni-2/season-2/episode-29/">29</a><a href="/title/master-lda-i-plameni-2/season-2/episode-30/">30</a><a href="/title/master-lda-i-plameni-2/season-2/episode-31/">31</a><a href="/title/master-lda-i-plameni-2/season-2/episode-32/">32</a><a href="/title/master-lda-i-plameni-2/season-2/episode-33/">33</a><a href="/title/master-lda-i-plameni-2/season-2/episode-34/">34</a><a href="/title/master-lda-i-plameni-2/season-2/episode-35/">35</a><a href="/title/master-lda-i-plameni-2/season-2/episode-36/">36</a><a href="/title/master-lda-i-plameni-2/season-2/episode-37/">37</a><a href="/title/master-lda-i-plameni-2/season-2/episode-38/">38</a><a href="/title/master-lda-i-plameni-2/season-2/episode-39/">39</a><a href="/title/master-lda-i-plameni-2/season-2/episode-40/">40</a><a href="/title/master-lda-i-plameni-2/season-2/episode-41/">41</a><a href="/title/master-lda-i-plameni-2/season-2/episode-42/">42</a><a href="/title/master-lda-i-plameni-2/season-2/episode-43/">43</a><a href="/title/master-lda-i-plameni-2/season-2/episode-44/">44</a><a href="/title/master-lda-i-plameni-2/season-2/episode-45/">45</a><a href="/title/master-lda-i-plameni-2/season-2/episode-46/">46</a><a href="/title/master-lda-i-plameni-2/season-2/episode-47/">47</a><a href="/title/master-lda-i-plameni-2/season-2/episode-48/">48</a><a href="/title/master-lda-i-plameni-2/season-2/episode-49/">49</a><a href="/title/master-lda-i-plameni-2/season-2/episode-50/">50</a><a href="/title/master-lda-i-plameni-2/season-2/episode-51/">51</a><a href="/title/master-lda-i-plameni-2/season-2/episode-52/">52</a><a href="/title/master-lda-i-plameni-2/season-2/episode-53/">53</a><a href="/title/master-lda-i-plameni-2/season-2/episode-54/">54</a><a href="/title/master-lda-i-plameni-2/season-2/episode-55/">55</a><a href="/title/master-lda-i-plameni-2/season-2/episode-56/">56</a><a href="/title/master-lda-i-plameni-2/season-2/episode-57/">57</a><a href="/title/master-lda-i-plameni-2/season-2/episode-58/">58</a><a href="/title/master-lda-i-plameni-2/season-2/episode-59/">59</a><a href="/title/master-lda-i-plameni-2/season-2/episode-60/">60</a><a href="/title/master-lda-i-plameni-2/season-2/episode-61/">61</a><a href="/title/master-lda-i-plameni-2/season-2/episode-62/">62</a><a href="/title/master-lda-i-plameni-2/season-2/episode-63/">63</a><a href="/title/master-lda-i-plameni-2/season-2/episode-64/">64</a><a href="/title/master-lda-i-plameni-2/season-2/episode-65/">65</a><a href="/title/master-lda-i-plameni-2/season-2/episode-66/">66</a><a href="/title/master-lda-i-plameni-2/season-2/episode-67/">67</a><a href="/title/master-lda-i-plameni-2/season-2/episode-68/">68</a><a href="/title/master-lda-i-plameni-2/season-2/episode-69/">69</a><a href="/title/master-lda-i-plameni-2/season-2/episode-70/">70</a><a href="/title/master-lda-i-plameni-2/season-2/episode-71/">71</a><a href="/title/master-lda-i-plameni-2/season-2/episode-72/">72</a><a href="/title/master-lda-i-plameni-2/season-2/episode-73/">73</a><a href="/title/master-lda-i-plameni-2/season-2/episode-74/">74</a><a href="/title/master-lda-i-plameni-2/season-2/episode-75/">75</a><a href="/title/master-lda-i-plameni-2/season-2/episode-76/">76</a><a href="/title/master-lda-i-plameni-2/season-2/episode-77/">77</a><a href="/title/master-lda-i-plameni-2/season-2/episode-78/">78</a><a href="/title/master-lda-i-plameni-2/season-2/episode-79/">79</a><a href="/title/master-lda-i-plameni-2/season-2/episode-80/">80</a><a href="/title/master-lda-i-plameni-2/season-2/episode-81/">81</a><a href="/title/master-lda-i-plameni-2/season-2/episode-82/">82</a><a href="/title/master-lda-i-plameni-2/season-2/episode-83/">83</a><a href="/title/master-lda-i-plameni-2/season-2/episode-84/">84</a><a href="/title/master-lda-i-plameni-2/season-2/episode-85/">85</a><a href="/title/master-lda-i-plameni-2/season-2/episode-86/">86</a><a href="/title/master-lda-i-plameni-2/season-2/episode-87/">87</a><a href="/title/master-lda-i-plameni-2/season-2/episode-88/">88</a><a href="/title/master-lda-i-plameni-2/season-2/episode-89/">89</a><a href="/title/master-lda-i-plameni-2/season-2/episode-90/">90</a><a href="/title/master-lda-i-plameni-2/season-2/episode-91/">91</a><a href="/title/master-lda-i-plameni-2/season-2/episode-92/">92</a><a href="/title/master-lda-i-plameni-2/season-2/episode-93/">93</a><a href="/title/master-lda-i-plameni-2/season-2/episode-94/">94</a><a href="/title/master-lda-i-plameni-2/season-2/episode-95/">95</a><a href="/title/master-lda-i-plameni-2/season-2/episode-96/">96</a><a href="/title/master-lda-i-plameni-2/season-2/episode-97/">97</a><a href="/title/master-lda-i-plameni-2/season-2/episode-98/">98</a><a href="/title/master-lda-i-plameni-2/season-2/episode-99/">99</a><a href="/title/master-lda-i-plameni-2/season-2/episode-100/">100</a><a href="/title/master-lda-i-plameni-2/season-2/episode-101/">101</a><a href="/title/master-lda-i-plameni-2/season-2/episode-102/">102</a><a href="/title/master-lda-i-plameni-2/season-2/episode-103/">103</a><a href="/title/master-lda-i-plameni-2/season-2/episode-104/" aria-current="page">104</a></div></section></div><div class="zwrap"><h2 class="zh zh--sm">Смотрите также</h2><div class="zg"><a class="zt" href="/title/nelyud-chast-2/"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>Н</b></span><img class="zt__img" src="/poster/01a0af3f-984f-7526-ae39-e7d8395b775a.webp" alt="Нелюдь. Часть 2" loading="lazy" width="190" height="285" data-poster></span><span class="zt__b"><span class="zt__t">Нелюдь. Часть 2</span><span class="zt__m">Аниме · 2016</span><span class="zt__r"><span>КП <b>7.1</b></span></span></span></a><a class="zt" href="/title/nelyud-film-2-stolknovenie/"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>Н</b></span><img class="zt__img" src="/poster/01a0aa6e-09d6-7526-b228-8df81f8dc726.webp" alt="Нелюдь. Фильм 2: Столкновение" loading="lazy" width="190" height="285" data-poster></span><span class="zt__b"><span class="zt__t">Нелюдь. Фильм 2: Столкновение</span><span class="zt__m">Аниме · 2016</span><span class="zt__r"><span>КП <b>7</b></span></span></span></a><a class="zt" href="/title/zolotaya-sekira/"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>З</b></span><img class="zt__img" src="/poster/01a0a9d3-4334-7526-b204-dcde14db60e9.webp" alt="Золотая секира" loading="lazy" width="190" height="285" data-poster></span><span class="zt__b"><span class="zt__t">Золотая секира</span><span class="zt__m">Аниме · 2026</span><span class="zt__r"><span>IMDb <b>7.2</b></span></span></span></a><a class="zt" href="/title/vo-vseoruzhii-sila-artefaktov/"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>В</b></span><img class="zt__img" src="/poster/01a09eec-82de-7526-a4af-cd5a9e3d1e22.webp" alt="Во всеоружии: Сила артефактов" loading="lazy" width="190" height="285" data-poster></span><span class="zt__b"><span class="zt__t">Во всеоружии: Сила артефактов</span><span class="zt__m">Аниме · 2026</span><span class="zt__r"><span><em>оценки нет</em></span></span></span></a><a class="zt" href="/title/dedushkina-lampa/"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>Д</b></span><img class="zt__img" src="/poster/01a09d0c-f4d8-7526-b5ac-63f565a06c10.webp" alt="Дедушкина лампа" loading="lazy" width="190" height="285" data-poster></span><span class="zt__b"><span class="zt__t">Дедушкина лампа</span><span class="zt__m">Аниме · 2011</span><span class="zt__r"><span>IMDb <b>6.7</b></span></span></span></a><a class="zt" href="/title/ovosch-supergeroy-morkkorm/"><span class="zt__p"><span class="zt__none" aria-hidden="true"><b>О</b></span><img class="zt__img" src="/poster/01a09d0b-94b9-7526-be2a-9876f8388f12.webp" alt="Овощ-супергерой Морккорм" loading="lazy" width="190" height="285" data-poster></span><span class="zt__b"><span class="zt__t">Овощ-супергерой Морккорм</span><span class="zt__m">Аниме · 2011</span><span class="zt__r"><span>IMDb <b>5.2</b></span></span></span></a></div></div></div></main>
+<footer class="zft"><div class="zft__grid"><div class="zft__col"><b>Разделы</b><a href="/">Главная</a><a href="/catalog/">Каталог</a><a href="/new/">Новые эпизоды</a><a href="/collections/">Подборки</a><a href="/schedule/">Расписание</a></div><div class="zft__col"><b>Жанры</b><a href="/genre/anime/">аниме</a><a href="/genre/multfilm/">мультфильм</a><a href="/genre/boevik/">боевик</a><a href="/genre/komediya/">комедия</a><a href="/genre/fentezi/">фэнтези</a><a href="/genre/priklyucheniya/">приключения</a><a href="/genre/drama/">драма</a><a href="/genre/fantastika/">фантастика</a></div><div class="zft__col"><b>Подборки</b><a href="/collections/">Все подборки</a></div><div class="zft__col"><b>О витрине</b><p class="zft__about">Animedia Space помогает искать аниме по оценкам, жанрам и типу: фильмы, дунхуа и классика из утверждённого каталога.</p></div></div><div class="zft__bar"><span>© Animedia</span><span class="zvb" title="source=ff4bb0f0fd52 runtime=ff4bb0f0fd52 build=20260919T172143Z-ff4bb0f0-nova">Animedia 1.2.1 · ff4bb0f</span></div></footer>
+</div></div></div><script type="application/ld+json">{"@context": "https://schema.org", "@type": "TVSeries", "name": "Мастер льда и пламени 2", "url": "https://127.0.0.1/title/master-lda-i-plameni-2/", "image": "https://poster.cdnvideohub.com/01a0b507-0813-7526-a2e6-5edf75180827.webp", "datePublished": "2022", "genre": ["боевик", "приключения", "фэнтези", "аниме"], "countryOfOrigin": ["Япония"], "alternateName": "Binghuo Mochu 2", "numberOfSeasons": 1, "numberOfEpisodes": 104}</script></body></html>
+[apply-nova] animedia-02: PROVIDER_BINDING_MATCH=1 agg=mali mali_first=True
+[apply-nova] DONE
