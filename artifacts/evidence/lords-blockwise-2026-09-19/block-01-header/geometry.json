@@ -1,0 +1,107 @@
+[
+  {
+    "sheet": {
+      "width": 1100,
+      "height": 782,
+      "top": 118
+    },
+    "header": {
+      "width": 1100,
+      "height": 71,
+      "top": 118
+    },
+    "header_inner": {
+      "width": 1100,
+      "height": 70,
+      "top": 118
+    },
+    "header_rows": 1,
+    "page_overflow": 0,
+    "sticky": "relative",
+    "viewport": "1440x900"
+  },
+  {
+    "sheet": {
+      "width": 1024,
+      "height": 650,
+      "top": 118
+    },
+    "header": {
+      "width": 1024,
+      "height": 71,
+      "top": 118
+    },
+    "header_inner": {
+      "width": 1024,
+      "height": 70,
+      "top": 118
+    },
+    "header_rows": 1,
+    "page_overflow": 0,
+    "sticky": "relative",
+    "viewport": "1024x768"
+  },
+  {
+    "sheet": {
+      "width": 768,
+      "height": 1024,
+      "top": 0
+    },
+    "header": {
+      "width": 768,
+      "height": 71,
+      "top": 0
+    },
+    "header_inner": {
+      "width": 768,
+      "height": 70,
+      "top": 0
+    },
+    "header_rows": 1,
+    "page_overflow": 0,
+    "sticky": "relative",
+    "viewport": "768x1024"
+  },
+  {
+    "sheet": {
+      "width": 390,
+      "height": 844,
+      "top": 0
+    },
+    "header": {
+      "width": 390,
+      "height": 57,
+      "top": 0
+    },
+    "header_inner": {
+      "width": 390,
+      "height": 56,
+      "top": 0
+    },
+    "header_rows": 1,
+    "page_overflow": 0,
+    "sticky": "relative",
+    "viewport": "390x844"
+  },
+  {
+    "sheet": {
+      "width": 360,
+      "height": 800,
+      "top": 0
+    },
+    "header": {
+      "width": 360,
+      "height": 57,
+      "top": 0
+    },
+    "header_inner": {
+      "width": 360,
+      "height": 56,
+      "top": 0
+    },
+    "header_rows": 1,
+    "page_overflow": 0,
+    "sticky": "relative",
+    "viewport": "360x800"
+  }
+]

@@ -938,15 +938,17 @@ box-shadow:0 0 60px #0009}
 .pad{padding:0 18px}
 .backdrop{position:fixed;inset:0 0 auto 0;height:330px;z-index:-1;
 background:radial-gradient(120% 140% at 50% 0,#243043 0,#0e1013 68%)}
-/* Шапка в одну строку на десктопе; на узком — burger + drawer. */
-.hd{background:@CARD@;border-bottom:1px solid @LINE@;position:sticky;top:0;z-index:40}
-.hd__in{display:flex;align-items:center;gap:12px;min-height:56px;padding:0 12px}
-@media(min-width:768px){.hd__in{height:62px;padding:0 18px;gap:18px}}
+/* Шапка: эталон lordfilm-hit — relative, ~70px, одна строка на desktop. */
+.hd{background:@CARD@;border-bottom:1px solid @LINE@;position:relative;z-index:40}
+.hd__in{display:flex;align-items:center;gap:12px;min-height:70px;height:70px;
+padding:0 12px;flex-wrap:nowrap}
+@media(min-width:768px){.hd__in{height:70px;min-height:70px;padding:0 18px;gap:16px}}
 .hd__logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;
-letter-spacing:.5px;text-transform:uppercase;color:@INK@;flex:0 0 auto}
-@media(min-width:768px){.hd__logo{font-size:19px}}
+letter-spacing:.5px;text-transform:uppercase;color:@INK@;flex:0 1 auto;
+max-width:min(42vw,220px);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+@media(min-width:768px){.hd__logo{font-size:19px;max-width:240px}}
 .hd__mark{width:30px;height:30px;border-radius:5px;background:@ACC@;color:#fff;
-display:grid;place-items:center;font-size:15px;font-weight:800}
+display:grid;place-items:center;font-size:15px;font-weight:800;flex:0 0 auto}
 .hd__menu{display:inline-flex;align-items:center;justify-content:center;
 width:44px;height:44px;border:1px solid @LINE@;border-radius:4px;background:#fff;
 color:@INK@;font-size:20px;cursor:pointer;margin-left:auto;flex:0 0 auto}
@@ -954,17 +956,17 @@ color:@INK@;font-size:20px;cursor:pointer;margin-left:auto;flex:0 0 auto}
 .hd__nav{display:none;flex-direction:column;gap:4px;flex:1 0 100%;order:5;
 padding:8px 0 12px;border-top:1px solid @LINE@}
 .hd__nav.is-open{display:flex}
-@media(min-width:768px){.hd__nav{display:flex;flex-direction:row;flex:1;order:0;
-flex-wrap:wrap;padding:0;border:0;gap:2px}}
+@media(min-width:768px){.hd__nav{display:flex;flex-direction:row;flex:1 1 auto;order:0;
+flex-wrap:nowrap;padding:0;border:0;gap:2px;min-width:0;overflow:hidden}}
 .hd__nav a{padding:12px 14px;border-radius:4px;font-size:14px;font-weight:700;
 text-transform:uppercase;letter-spacing:.3px;color:#39414a;min-height:44px;
-display:flex;align-items:center}
-@media(min-width:768px){.hd__nav a{padding:8px 11px;font-size:13px;min-height:0}}
+display:flex;align-items:center;white-space:nowrap}
+@media(min-width:768px){.hd__nav a{padding:8px 10px;font-size:13px;min-height:44px}}
 .hd__nav a:hover{background:@SHEET@;color:@ACCDK@}
 .hd__nav a[aria-current]{color:@ACCDK@;box-shadow:inset 0 -2px 0 @ACC@}
 .hd__s{display:flex;border:1px solid @LINE@;border-radius:4px;overflow:hidden;background:#fff;
 flex:1 1 auto;min-width:0;max-width:100%}
-@media(min-width:768px){.hd__s{flex:0 1 220px}}
+@media(min-width:768px){.hd__s{flex:0 0 200px;max-width:200px}}
 .hd__s input{border:0;padding:10px 11px;font-size:13px;width:100%;min-width:0;color:@INK@;background:#fff}
 .hd__s button{border:0;background:#fff;color:#6a737d;padding:0 12px;cursor:pointer;font-size:14px;
 min-width:44px;min-height:44px}
