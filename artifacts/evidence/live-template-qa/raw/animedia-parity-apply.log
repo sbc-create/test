@@ -1,0 +1,54 @@
+[apply-nova] artifact_sha256=20772a574f0542e9d71bd82fe7f974d526723612a8b1f9d54cf2bf8b1453d196
+[apply-nova] runtime_commit=cc83fd7cb326f5c67906face1d6fa0d137afdeaa
+[apply-nova] live_before=7491029692f528cb810a63b35b9b2f92b4942ca2f0364c2f6d35f13400c9a067
+[apply-nova] plan animedia-01 source=b023bd50cced runtime=cc83fd7cb326 profile=animedia-general repo=/home/claude/wt-animedia-finalization-01
+[apply-nova] plan animedia-02 source=b023bd50cced runtime=cc83fd7cb326 profile=animedia-general repo=/home/claude/wt-animedia-finalization-01
+[apply-nova] rollback snapshot: /srv/lords/.frontend/.rollback/pre-closed-update-20260919T075819Z
+[apply-nova] $ sudo -n env REPO=/home/claude/wt-animedia-finalization-01 SOURCE_COMMIT=b023bd50cced8d281cb3814a75bf72b429afee0b RUNTIME_COMMIT=cc83fd7cb326f5c67906face1d6fa0d137afdeaa NOVA_INSTALL_FRONTEND=1 RUNTIME_REPO=/home/claude/wt-lords-integration-canary-01 FACTORY_OWNER_ROOT_MANDATE=SITE_FACTORY_ROOT_20260909 bash /home/claude/wt-lords-integration-canary-01/automation/host/deploy-nova-family.sh animedia-01 animedia.icu 9121 animedia animedia-general Animedia 1.2.0 20260919T075819Z-b023bd50-nova 20772a574f0542e9d71bd82fe7f974d526723612a8b1f9d54cf2bf8b1453d196 /srv/lords/animedia-01/current/site
+[nova] animedia-01 → animedia.icu:9121 семейство animedia версия 1.2.0 source b023bd50cced runtime cc83fd7cb326 from /home/claude/wt-animedia-finalization-01
+[nova] установлен frontend runtime из /home/claude/wt-lords-integration-canary-01 (cc83fd7cb326)
+[nova] манифест animedia-01: animedia 1.2.0 source=b023bd50cced runtime=cc83fd7cb326 20260919T075819Z-b023bd50-nova
+active
+[nova] animedia.icu: nginx 9121 → 9121
+[apply-nova] $ sudo -n env REPO=/home/claude/wt-animedia-finalization-01 SOURCE_COMMIT=b023bd50cced8d281cb3814a75bf72b429afee0b RUNTIME_COMMIT=cc83fd7cb326f5c67906face1d6fa0d137afdeaa NOVA_INSTALL_FRONTEND=0 RUNTIME_REPO=/home/claude/wt-lords-integration-canary-01 FACTORY_OWNER_ROOT_MANDATE=SITE_FACTORY_ROOT_20260909 bash /home/claude/wt-lords-integration-canary-01/automation/host/deploy-nova-family.sh animedia-02 animedia.space 9122 animedia animedia-general Animedia 1.2.0 20260919T075819Z-b023bd50-nova 20772a574f0542e9d71bd82fe7f974d526723612a8b1f9d54cf2bf8b1453d196 /srv/lords/animedia-02/current/site
+[nova] animedia-02 → animedia.space:9122 семейство animedia версия 1.2.0 source b023bd50cced runtime cc83fd7cb326 from /home/claude/wt-animedia-finalization-01
+[nova] манифест animedia-02: animedia 1.2.0 source=b023bd50cced runtime=cc83fd7cb326 20260919T075819Z-b023bd50-nova
+active
+[nova] animedia.space: nginx 9122 → 9122
+[apply-nova] $ sudo -n nginx -t
+nginx: [warn] duplicate MIME type "text/html" in /etc/nginx/lords/lords-01.conf:96
+nginx: [warn] duplicate MIME type "text/html" in /etc/nginx/lords/lords-02.conf:96
+nginx: [warn] duplicate MIME type "text/html" in /etc/nginx/lords/lords-03.conf:96
+nginx: [warn] conflicting server name "yummyani.biz" on 0.0.0.0:80, ignored
+nginx: [warn] conflicting server name "www.yummyani.biz" on 0.0.0.0:80, ignored
+nginx: [warn] conflicting server name "yummyani.org" on 0.0.0.0:80, ignored
+nginx: [warn] conflicting server name "www.yummyani.org" on 0.0.0.0:80, ignored
+nginx: [warn] conflicting server name "yummyani.site" on 0.0.0.0:80, ignored
+nginx: [warn] conflicting server name "www.yummyani.site" on 0.0.0.0:80, ignored
+nginx: [warn] conflicting server name "yummyani.biz" on [::]:80, ignored
+nginx: [warn] conflicting server name "www.yummyani.biz" on [::]:80, ignored
+nginx: [warn] conflicting server name "yummyani.org" on [::]:80, ignored
+nginx: [warn] conflicting server name "www.yummyani.org" on [::]:80, ignored
+nginx: [warn] conflicting server name "yummyani.site" on [::]:80, ignored
+nginx: [warn] conflicting server name "www.yummyani.site" on [::]:80, ignored
+nginx: [warn] conflicting server name "www.yummyani.biz" on 0.0.0.0:443, ignored
+nginx: [warn] conflicting server name "yummyani.biz" on 0.0.0.0:443, ignored
+nginx: [warn] conflicting server name "www.yummyani.org" on 0.0.0.0:443, ignored
+nginx: [warn] conflicting server name "yummyani.org" on 0.0.0.0:443, ignored
+nginx: [warn] conflicting server name "www.yummyani.site" on 0.0.0.0:443, ignored
+nginx: [warn] conflicting server name "yummyani.site" on 0.0.0.0:443, ignored
+nginx: [warn] conflicting server name "www.yummyani.biz" on [::]:443, ignored
+nginx: [warn] conflicting server name "yummyani.biz" on [::]:443, ignored
+nginx: [warn] conflicting server name "www.yummyani.org" on [::]:443, ignored
+nginx: [warn] conflicting server name "yummyani.org" on [::]:443, ignored
+nginx: [warn] conflicting server name "www.yummyani.site" on [::]:443, ignored
+nginx: [warn] conflicting server name "yummyani.site" on [::]:443, ignored
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+[apply-nova] $ systemctl is-active nova-animedia-01.service
+active
+[apply-nova] nova-animedia-01.service: active
+[apply-nova] $ systemctl is-active nova-animedia-02.service
+active
+[apply-nova] nova-animedia-02.service: active
+[apply-nova] DONE

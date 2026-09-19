@@ -1,0 +1,731 @@
+{
+  "amd-1440": {
+    "overflow": false,
+    "sw": 1440,
+    "cw": 1440,
+    "hasMenuBtn": false,
+    "menuDisplay": null,
+    "navDisplay": null,
+    "navOpen": false,
+    "cardCount": 0,
+    "brokenImgs": 0,
+    "totalImgs": 184,
+    "imgSample": [
+      {
+        "src": "https://amd.online/templates/Animedia1/images/social/vk.png",
+        "w": 0,
+        "h": 0,
+        "complete": false,
+        "ok": false
+      },
+      {
+        "src": "https://amd.online/templates/Animedia1/images/social/yandex.png",
+        "w": 0,
+        "h": 0,
+        "complete": false,
+        "ok": false
+      },
+      {
+        "src": "https://amd.online/grupa/pre.png",
+        "w": 20,
+        "h": 16,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://amd.online/grupa/pre.png",
+        "w": 20,
+        "h": 16,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://amd.online/uploads/posts/2025-02/battle-through-the-heavens-season-5-btth-season-5-5-dou-po-cangqiong-season-5.w",
+        "w": 260,
+        "h": 380,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://amd.online/uploads/posts/2026-08/necromancer_i_am_the_calamity_tv_1_422304035desctop.webp",
+        "w": 260,
+        "h": 380,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://amd.online/uploads/posts/2024-12/original.webp",
+        "w": 260,
+        "h": 380,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://amd.online/uploads/posts/2024-09/photo_2024-10-01_00-15-22.webp",
+        "w": 260,
+        "h": 380,
+        "complete": true,
+        "ok": true
+      }
+    ],
+    "h1": "Animedia Online - Смотреть аниме онлайн",
+    "shelves": [],
+    "styles": {
+      "bodyBg": "rgb(255, 255, 255)",
+      "accent": null,
+      "logo": "Animedia.online",
+      "logoColor": null,
+      "headerBorder": null,
+      "gridCols": null,
+      "cardBorder": null,
+      "cardRadius": null,
+      "posterAR": null,
+      "sectionH2": null,
+      "padWrap": null
+    },
+    "hasHeroBanner": true,
+    "carouselTrack": false,
+    "robots": null
+  },
+  "icu-1440": {
+    "overflow": false,
+    "sw": 1440,
+    "cw": 1440,
+    "hasMenuBtn": true,
+    "menuDisplay": "none",
+    "navDisplay": "flex",
+    "navOpen": false,
+    "cardCount": 96,
+    "brokenImgs": 0,
+    "totalImgs": 96,
+    "imgSample": [
+      {
+        "src": "https://poster.cdnvideohub.com/01a0af3f-984f-7526-ae39-e7d8395b775a.webp",
+        "w": 700,
+        "h": 995,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a0aa6e-09d6-7526-b228-8df81f8dc726.webp",
+        "w": 705,
+        "h": 1000,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a0a9d3-4334-7526-b204-dcde14db60e9.webp",
+        "w": 300,
+        "h": 443,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09eec-82de-7526-a4af-cd5a9e3d1e22.webp",
+        "w": 446,
+        "h": 600,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09d0c-f4d8-7526-b5ac-63f565a06c10.webp",
+        "w": 290,
+        "h": 431,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09d0b-94b9-7526-be2a-9876f8388f12.webp",
+        "w": 338,
+        "h": 450,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09d0a-4f8c-7526-a15b-36911d54d144.webp",
+        "w": 605,
+        "h": 855,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09d05-a746-7526-ab1f-b1ba858758da.webp",
+        "w": 860,
+        "h": 990,
+        "complete": true,
+        "ok": true
+      }
+    ],
+    "h1": "Аниме онлайн",
+    "shelves": [
+      "Новые серии аниме",
+      "Новые аниме на сайте",
+      "Топ по оценкам",
+      "С видео"
+    ],
+    "styles": {
+      "bodyBg": "rgb(255, 255, 255)",
+      "accent": null,
+      "logo": "Animedia",
+      "logoColor": "rgb(197, 7, 37)",
+      "headerBorder": "2px solid rgb(197, 7, 37)",
+      "gridCols": "352px 352px 352px 352px",
+      "cardBorder": "1px solid rgb(228, 228, 228)",
+      "cardRadius": "4px",
+      "posterAR": "86 / 100",
+      "sectionH2": "16px",
+      "padWrap": "0px 1px"
+    },
+    "hasHeroBanner": false,
+    "carouselTrack": false,
+    "robots": "noindex, nofollow"
+  },
+  "space-1440": {
+    "overflow": false,
+    "sw": 1440,
+    "cw": 1440,
+    "hasMenuBtn": true,
+    "menuDisplay": "none",
+    "navDisplay": "flex",
+    "navOpen": false,
+    "cardCount": 96,
+    "brokenImgs": 0,
+    "totalImgs": 96,
+    "imgSample": [
+      {
+        "src": "https://poster.cdnvideohub.com/01a0af3f-984f-7526-ae39-e7d8395b775a.webp",
+        "w": 700,
+        "h": 995,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a0aa6e-09d6-7526-b228-8df81f8dc726.webp",
+        "w": 705,
+        "h": 1000,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a0a9d3-4334-7526-b204-dcde14db60e9.webp",
+        "w": 300,
+        "h": 443,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09eec-82de-7526-a4af-cd5a9e3d1e22.webp",
+        "w": 446,
+        "h": 600,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09d0c-f4d8-7526-b5ac-63f565a06c10.webp",
+        "w": 290,
+        "h": 431,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09d0b-94b9-7526-be2a-9876f8388f12.webp",
+        "w": 338,
+        "h": 450,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09d0a-4f8c-7526-a15b-36911d54d144.webp",
+        "w": 605,
+        "h": 855,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09d05-a746-7526-ab1f-b1ba858758da.webp",
+        "w": 860,
+        "h": 990,
+        "complete": true,
+        "ok": true
+      }
+    ],
+    "h1": "Аниме онлайн",
+    "shelves": [
+      "Новые серии аниме",
+      "Новые аниме на сайте",
+      "Топ по оценкам",
+      "С видео"
+    ],
+    "styles": {
+      "bodyBg": "rgb(255, 255, 255)",
+      "accent": null,
+      "logo": "Animedia",
+      "logoColor": "rgb(197, 7, 37)",
+      "headerBorder": "2px solid rgb(197, 7, 37)",
+      "gridCols": "352px 352px 352px 352px",
+      "cardBorder": "1px solid rgb(228, 228, 228)",
+      "cardRadius": "4px",
+      "posterAR": "86 / 100",
+      "sectionH2": "16px",
+      "padWrap": "0px 1px"
+    },
+    "hasHeroBanner": false,
+    "carouselTrack": false,
+    "robots": "noindex, nofollow"
+  },
+  "amd-390": {
+    "overflow": false,
+    "sw": 390,
+    "cw": 390,
+    "hasMenuBtn": false,
+    "menuDisplay": null,
+    "navDisplay": null,
+    "navOpen": false,
+    "cardCount": 0,
+    "brokenImgs": 0,
+    "totalImgs": 184,
+    "imgSample": [
+      {
+        "src": "https://amd.online/templates/Animedia1/images/social/vk.png",
+        "w": 0,
+        "h": 0,
+        "complete": false,
+        "ok": false
+      },
+      {
+        "src": "https://amd.online/templates/Animedia1/images/social/yandex.png",
+        "w": 0,
+        "h": 0,
+        "complete": false,
+        "ok": false
+      },
+      {
+        "src": "https://amd.online/grupa/pre.png",
+        "w": 20,
+        "h": 16,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://amd.online/grupa/pre.png",
+        "w": 20,
+        "h": 16,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://amd.online/uploads/posts/2025-02/battle-through-the-heavens-season-5-btth-season-5-5-dou-po-cangqiong-season-5.w",
+        "w": 0,
+        "h": 0,
+        "complete": false,
+        "ok": false
+      },
+      {
+        "src": "https://amd.online/uploads/posts/2026-08/necromancer_i_am_the_calamity_tv_1_422304035desctop.webp",
+        "w": 0,
+        "h": 0,
+        "complete": false,
+        "ok": false
+      },
+      {
+        "src": "https://amd.online/uploads/posts/2024-12/original.webp",
+        "w": 260,
+        "h": 380,
+        "complete": false,
+        "ok": true
+      },
+      {
+        "src": "https://amd.online/uploads/posts/2024-09/photo_2024-10-01_00-15-22.webp",
+        "w": 0,
+        "h": 0,
+        "complete": false,
+        "ok": false
+      }
+    ],
+    "h1": "Animedia Online - Смотреть аниме онлайн",
+    "shelves": [],
+    "styles": {
+      "bodyBg": "rgb(255, 255, 255)",
+      "accent": null,
+      "logo": "Animedia.online",
+      "logoColor": null,
+      "headerBorder": null,
+      "gridCols": null,
+      "cardBorder": null,
+      "cardRadius": null,
+      "posterAR": null,
+      "sectionH2": null,
+      "padWrap": null
+    },
+    "hasHeroBanner": true,
+    "carouselTrack": false,
+    "robots": null
+  },
+  "icu-390": {
+    "overflow": false,
+    "sw": 390,
+    "cw": 390,
+    "hasMenuBtn": true,
+    "menuDisplay": "flex",
+    "navDisplay": "none",
+    "navOpen": false,
+    "cardCount": 96,
+    "brokenImgs": 6,
+    "totalImgs": 96,
+    "imgSample": [
+      {
+        "src": "https://poster.cdnvideohub.com/01a0af3f-984f-7526-ae39-e7d8395b775a.webp",
+        "w": 0,
+        "h": 0,
+        "complete": true,
+        "ok": false
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a0aa6e-09d6-7526-b228-8df81f8dc726.webp",
+        "w": 0,
+        "h": 0,
+        "complete": true,
+        "ok": false
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a0a9d3-4334-7526-b204-dcde14db60e9.webp",
+        "w": 0,
+        "h": 0,
+        "complete": true,
+        "ok": false
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09eec-82de-7526-a4af-cd5a9e3d1e22.webp",
+        "w": 0,
+        "h": 0,
+        "complete": true,
+        "ok": false
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09d0c-f4d8-7526-b5ac-63f565a06c10.webp",
+        "w": 0,
+        "h": 0,
+        "complete": true,
+        "ok": false
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09d0b-94b9-7526-be2a-9876f8388f12.webp",
+        "w": 0,
+        "h": 0,
+        "complete": true,
+        "ok": false
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09d0a-4f8c-7526-a15b-36911d54d144.webp",
+        "w": 605,
+        "h": 855,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09d05-a746-7526-ab1f-b1ba858758da.webp",
+        "w": 860,
+        "h": 990,
+        "complete": true,
+        "ok": true
+      }
+    ],
+    "h1": "Аниме онлайн",
+    "shelves": [
+      "Новые серии аниме",
+      "Новые аниме на сайте",
+      "Топ по оценкам",
+      "С видео"
+    ],
+    "styles": {
+      "bodyBg": "rgb(255, 255, 255)",
+      "accent": null,
+      "logo": "Animedia",
+      "logoColor": "rgb(197, 7, 37)",
+      "headerBorder": "2px solid rgb(197, 7, 37)",
+      "gridCols": "184px 184px",
+      "cardBorder": "1px solid rgb(228, 228, 228)",
+      "cardRadius": "4px",
+      "posterAR": "86 / 100",
+      "sectionH2": "16px",
+      "padWrap": "0px 6px"
+    },
+    "hasHeroBanner": false,
+    "carouselTrack": false,
+    "robots": "noindex, nofollow"
+  },
+  "space-390": {
+    "overflow": false,
+    "sw": 390,
+    "cw": 390,
+    "hasMenuBtn": true,
+    "menuDisplay": "flex",
+    "navDisplay": "none",
+    "navOpen": false,
+    "cardCount": 96,
+    "brokenImgs": 0,
+    "totalImgs": 96,
+    "imgSample": [
+      {
+        "src": "https://poster.cdnvideohub.com/01a0af3f-984f-7526-ae39-e7d8395b775a.webp",
+        "w": 700,
+        "h": 995,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a0aa6e-09d6-7526-b228-8df81f8dc726.webp",
+        "w": 705,
+        "h": 1000,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a0a9d3-4334-7526-b204-dcde14db60e9.webp",
+        "w": 300,
+        "h": 443,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09eec-82de-7526-a4af-cd5a9e3d1e22.webp",
+        "w": 446,
+        "h": 600,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09d0c-f4d8-7526-b5ac-63f565a06c10.webp",
+        "w": 290,
+        "h": 431,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09d0b-94b9-7526-be2a-9876f8388f12.webp",
+        "w": 338,
+        "h": 450,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09d0a-4f8c-7526-a15b-36911d54d144.webp",
+        "w": 605,
+        "h": 855,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09d05-a746-7526-ab1f-b1ba858758da.webp",
+        "w": 860,
+        "h": 990,
+        "complete": true,
+        "ok": true
+      }
+    ],
+    "h1": "Аниме онлайн",
+    "shelves": [
+      "Новые серии аниме",
+      "Новые аниме на сайте",
+      "Топ по оценкам",
+      "С видео"
+    ],
+    "styles": {
+      "bodyBg": "rgb(255, 255, 255)",
+      "accent": null,
+      "logo": "Animedia",
+      "logoColor": "rgb(197, 7, 37)",
+      "headerBorder": "2px solid rgb(197, 7, 37)",
+      "gridCols": "184px 184px",
+      "cardBorder": "1px solid rgb(228, 228, 228)",
+      "cardRadius": "4px",
+      "posterAR": "86 / 100",
+      "sectionH2": "16px",
+      "padWrap": "0px 6px"
+    },
+    "hasHeroBanner": false,
+    "carouselTrack": false,
+    "robots": "noindex, nofollow"
+  },
+  "icu-768": {
+    "overflow": false,
+    "sw": 768,
+    "cw": 768,
+    "hasMenuBtn": true,
+    "menuDisplay": "none",
+    "navDisplay": "flex",
+    "navOpen": false,
+    "cardCount": 96,
+    "brokenImgs": 0,
+    "totalImgs": 96,
+    "imgSample": [
+      {
+        "src": "https://poster.cdnvideohub.com/01a0af3f-984f-7526-ae39-e7d8395b775a.webp",
+        "w": 700,
+        "h": 995,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a0aa6e-09d6-7526-b228-8df81f8dc726.webp",
+        "w": 705,
+        "h": 1000,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a0a9d3-4334-7526-b204-dcde14db60e9.webp",
+        "w": 300,
+        "h": 443,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09eec-82de-7526-a4af-cd5a9e3d1e22.webp",
+        "w": 446,
+        "h": 600,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09d0c-f4d8-7526-b5ac-63f565a06c10.webp",
+        "w": 290,
+        "h": 431,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09d0b-94b9-7526-be2a-9876f8388f12.webp",
+        "w": 338,
+        "h": 450,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09d0a-4f8c-7526-a15b-36911d54d144.webp",
+        "w": 605,
+        "h": 855,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://poster.cdnvideohub.com/01a09d05-a746-7526-ab1f-b1ba858758da.webp",
+        "w": 860,
+        "h": 990,
+        "complete": true,
+        "ok": true
+      }
+    ],
+    "h1": "Аниме онлайн",
+    "shelves": [
+      "Новые серии аниме",
+      "Новые аниме на сайте",
+      "Топ по оценкам",
+      "С видео"
+    ],
+    "styles": {
+      "bodyBg": "rgb(255, 255, 255)",
+      "accent": null,
+      "logo": "Animedia",
+      "logoColor": "rgb(197, 7, 37)",
+      "headerBorder": "2px solid rgb(197, 7, 37)",
+      "gridCols": "248.656px 248.672px 248.672px",
+      "cardBorder": "1px solid rgb(228, 228, 228)",
+      "cardRadius": "4px",
+      "posterAR": "86 / 100",
+      "sectionH2": "16px",
+      "padWrap": "0px 1px"
+    },
+    "hasHeroBanner": false,
+    "carouselTrack": false,
+    "robots": "noindex, nofollow"
+  },
+  "amd-768": {
+    "overflow": false,
+    "sw": 768,
+    "cw": 768,
+    "hasMenuBtn": false,
+    "menuDisplay": null,
+    "navDisplay": null,
+    "navOpen": false,
+    "cardCount": 0,
+    "brokenImgs": 0,
+    "totalImgs": 184,
+    "imgSample": [
+      {
+        "src": "https://amd.online/templates/Animedia1/images/social/vk.png",
+        "w": 0,
+        "h": 0,
+        "complete": false,
+        "ok": false
+      },
+      {
+        "src": "https://amd.online/templates/Animedia1/images/social/yandex.png",
+        "w": 0,
+        "h": 0,
+        "complete": false,
+        "ok": false
+      },
+      {
+        "src": "https://amd.online/grupa/pre.png",
+        "w": 20,
+        "h": 16,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://amd.online/grupa/pre.png",
+        "w": 20,
+        "h": 16,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://amd.online/uploads/posts/2025-02/battle-through-the-heavens-season-5-btth-season-5-5-dou-po-cangqiong-season-5.w",
+        "w": 260,
+        "h": 380,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://amd.online/uploads/posts/2026-08/necromancer_i_am_the_calamity_tv_1_422304035desctop.webp",
+        "w": 260,
+        "h": 380,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://amd.online/uploads/posts/2024-12/original.webp",
+        "w": 260,
+        "h": 380,
+        "complete": true,
+        "ok": true
+      },
+      {
+        "src": "https://amd.online/uploads/posts/2024-09/photo_2024-10-01_00-15-22.webp",
+        "w": 260,
+        "h": 380,
+        "complete": true,
+        "ok": true
+      }
+    ],
+    "h1": "Animedia Online - Смотреть аниме онлайн",
+    "shelves": [],
+    "styles": {
+      "bodyBg": "rgb(255, 255, 255)",
+      "accent": null,
+      "logo": "Animedia.online",
+      "logoColor": null,
+      "headerBorder": null,
+      "gridCols": null,
+      "cardBorder": null,
+      "cardRadius": null,
+      "posterAR": null,
+      "sectionH2": null,
+      "padWrap": null
+    },
+    "hasHeroBanner": true,
+    "carouselTrack": false,
+    "robots": null
+  }
+}

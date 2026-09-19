@@ -1,0 +1,193 @@
+{
+  "lords/title/sudmedekspert-stavshaya-domohozyaykoy/season-1/episode-7/": {
+    "state": "unavailable",
+    "vp": 0,
+    "robots": true
+  },
+  "lords/title/sudmedekspert-stavshaya-domohozyaykoy/season-1/episode-3/": {
+    "state": "playable",
+    "vp": 1,
+    "robots": true
+  },
+  "icu|1440": {
+    "overflow": false,
+    "sw": 1440,
+    "cw": 1440,
+    "hero": true,
+    "heroCards": 12,
+    "epsList": true,
+    "epsRows": 24,
+    "logoB": true,
+    "menu": true,
+    "menuDisplay": "none",
+    "shelves": [
+      "Новые серии аниме",
+      "Новые аниме на сайте",
+      "Топ по оценкам",
+      "С видео"
+    ],
+    "robots": "noindex, nofollow"
+  },
+  "icu|1440|shot": "artifacts/evidence/live-template-qa/screenshots/animedia-parity/icu-home-post-1440.png",
+  "icu|768": {
+    "overflow": false,
+    "sw": 768,
+    "cw": 768,
+    "hero": true,
+    "heroCards": 12,
+    "epsList": true,
+    "epsRows": 24,
+    "logoB": true,
+    "menu": true,
+    "menuDisplay": "none",
+    "shelves": [
+      "Новые серии аниме",
+      "Новые аниме на сайте",
+      "Топ по оценкам",
+      "С видео"
+    ],
+    "robots": "noindex, nofollow"
+  },
+  "icu|768|shot": "artifacts/evidence/live-template-qa/screenshots/animedia-parity/icu-home-post-768.png",
+  "icu|390": {
+    "overflow": false,
+    "sw": 390,
+    "cw": 390,
+    "hero": true,
+    "heroCards": 12,
+    "epsList": true,
+    "epsRows": 24,
+    "logoB": true,
+    "menu": true,
+    "menuDisplay": "flex",
+    "shelves": [
+      "Новые серии аниме",
+      "Новые аниме на сайте",
+      "Топ по оценкам",
+      "С видео"
+    ],
+    "robots": "noindex, nofollow",
+    "navOpen": true,
+    "navLinks": [
+      "Главная",
+      "Каталог аниме",
+      "Новые эпизоды",
+      "Расписание",
+      "Подборки"
+    ]
+  },
+  "icu|390|shot": "artifacts/evidence/live-template-qa/screenshots/animedia-parity/icu-home-post-390.png",
+  "space|1440": {
+    "overflow": false,
+    "sw": 1440,
+    "cw": 1440,
+    "hero": true,
+    "heroCards": 12,
+    "epsList": true,
+    "epsRows": 24,
+    "logoB": true,
+    "menu": true,
+    "menuDisplay": "none",
+    "shelves": [
+      "Новые серии аниме",
+      "Новые аниме на сайте",
+      "Топ по оценкам",
+      "С видео"
+    ],
+    "robots": "noindex, nofollow"
+  },
+  "space|1440|shot": "artifacts/evidence/live-template-qa/screenshots/animedia-parity/space-home-post-1440.png",
+  "space|768": {
+    "overflow": false,
+    "sw": 768,
+    "cw": 768,
+    "hero": true,
+    "heroCards": 12,
+    "epsList": true,
+    "epsRows": 24,
+    "logoB": true,
+    "menu": true,
+    "menuDisplay": "none",
+    "shelves": [
+      "Новые серии аниме",
+      "Новые аниме на сайте",
+      "Топ по оценкам",
+      "С видео"
+    ],
+    "robots": "noindex, nofollow"
+  },
+  "space|768|shot": "artifacts/evidence/live-template-qa/screenshots/animedia-parity/space-home-post-768.png",
+  "space|390": {
+    "overflow": false,
+    "sw": 390,
+    "cw": 390,
+    "hero": true,
+    "heroCards": 12,
+    "epsList": true,
+    "epsRows": 24,
+    "logoB": true,
+    "menu": true,
+    "menuDisplay": "flex",
+    "shelves": [
+      "Новые серии аниме",
+      "Новые аниме на сайте",
+      "Топ по оценкам",
+      "С видео"
+    ],
+    "robots": "noindex, nofollow",
+    "navOpen": true,
+    "navLinks": [
+      "Главная",
+      "Каталог аниме",
+      "Новые эпизоды",
+      "Расписание",
+      "Подборки"
+    ]
+  },
+  "space|390|shot": "artifacts/evidence/live-template-qa/screenshots/animedia-parity/space-home-post-390.png",
+  "amd|1440": {
+    "overflow": false,
+    "sw": 1440,
+    "cw": 1440,
+    "hero": false,
+    "heroCards": 0,
+    "epsList": false,
+    "epsRows": 0,
+    "logoB": false,
+    "menu": false,
+    "menuDisplay": null,
+    "shelves": [],
+    "robots": null
+  },
+  "amd|1440|shot": "artifacts/evidence/live-template-qa/screenshots/animedia-parity/amd-home-post-1440.png",
+  "amd|768": {
+    "overflow": false,
+    "sw": 768,
+    "cw": 768,
+    "hero": false,
+    "heroCards": 0,
+    "epsList": false,
+    "epsRows": 0,
+    "logoB": false,
+    "menu": false,
+    "menuDisplay": null,
+    "shelves": [],
+    "robots": null
+  },
+  "amd|768|shot": "artifacts/evidence/live-template-qa/screenshots/animedia-parity/amd-home-post-768.png",
+  "amd|390": {
+    "overflow": false,
+    "sw": 390,
+    "cw": 390,
+    "hero": false,
+    "heroCards": 0,
+    "epsList": false,
+    "epsRows": 0,
+    "logoB": false,
+    "menu": false,
+    "menuDisplay": null,
+    "shelves": [],
+    "robots": null
+  },
+  "amd|390|shot": "artifacts/evidence/live-template-qa/screenshots/animedia-parity/amd-home-post-390.png"
+}
