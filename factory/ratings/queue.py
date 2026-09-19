@@ -120,6 +120,26 @@ def plan_queue(
     }
 
 
+def apply_backlog_aging(
+    items: list[tuple[int, str, str]],
+    *,
+    age_days: dict[str, int],
+    age_boost_every_days: int = 14,
+    max_boost: int = 3,
+) -> list[tuple[int, str, str]]:
+    """Raise backlog priority (lower int) as items age so they do not starve.
+
+    items: (priority, label, canonical_title_id)
+    """
+    aged: list[tuple[int, str, str]] = []
+    for pr, label, cid in items:
+        days = int(age_days.get(cid, 0))
+        boost = min(max_boost, days // age_boost_every_days)
+        aged.append((max(1, pr - boost), label, cid))
+    aged.sort(key=lambda x: (x[0], x[2]))
+    return aged
+
+
 def enqueue_new_title(store: RatingsStore, title: CatalogTitle, *, source_key: str) -> None:
     """Новый catalog publish сразу ставит title в очередь (не ждёт ночного обхода)."""
     store.enqueue(
