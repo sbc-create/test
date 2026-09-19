@@ -206,6 +206,37 @@ def _точка_отката(метка: str, манифест: Path) -> Path:
     return каталог
 
 
+def _замок_витрины(сайт: str):
+    """Fail-closed exclusive lease for one site's frontend install.
+
+    Prevents two worktrees from racing writes to the shared lords-frontend.py.
+    """
+    import fcntl
+    ОТКАТЫ.mkdir(parents=True, exist_ok=True)
+    путь = ОТКАТЫ / f".lock-{сайт}"
+    дескриптор = open(путь, "a+", encoding="utf-8")
+    try:
+        fcntl.flock(дескриптор.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError as ош:
+        дескриптор.close()
+        raise Отказ(f"витрина {сайт} уже занята другим install (lease {путь})") from ош
+    return дескриптор
+
+
+def _проверить_player_contract(источник: Path) -> None:
+    """Refuse install when full-bleed-v1 player contract is absent."""
+    текст = источник.read_text(encoding="utf-8", errors="replace")
+    нужно = (
+        'data-player-layout-contract="full-bleed-v1"',
+        "fitPlayerTree",
+        "ensureLayoutObserver",
+        "[data-player-layout-contract=\"full-bleed-v1\"] iframe",
+    )
+    нет = [с for с in нужно if с not in текст]
+    if нет:
+        raise Отказ("player layout contract missing from artifact: " + "; ".join(нет))
+
+
 def установить(арг) -> int:
     витрина = ВИТРИНЫ.get(арг.site)
     if not витрина:
@@ -219,10 +250,26 @@ def установить(арг) -> int:
     if арг.expect_sha256 != отпечаток:
         raise Отказ(f"отпечаток артефакта не тот: ожидался {арг.expect_sha256}, "
                     f"получен {отпечаток}")
+    _проверить_player_contract(источник)
+    замок = _замок_витрины(арг.site)
+    try:
+        return _установить_под_замком(арг, витрина, источник, отпечаток)
+    finally:
+        import fcntl
+        fcntl.flock(замок.fileno(), fcntl.LOCK_UN)
+        замок.close()
+
+
+def _установить_под_замком(арг, витрина: dict, источник: Path, отпечаток: str) -> int:
     # Юнит определяется по живым nginx и systemd, а не по таблице. Совпадение
     # не удостоверено — выкладки не будет.
     цепь = доказать_цепочку(арг.site, витрина)
     манифест = ФРОНТ / витрина["manifest"]
+
+    # Concurrent overwrite detector: if disk bytes changed since caller measured
+    # expect-sha of previous install intent, still proceed with our artifact but
+    # record the drift for the operator.
+    было_на_диске = _sha(АРТЕФАКТ) if АРТЕФАКТ.is_file() else ""
 
     метка = f"{_сейчас()}-{арг.site}"
     точка = _точка_отката(метка, манифест)
@@ -239,6 +286,7 @@ def установить(арг) -> int:
         "built_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "source_dirty": False,
         "domain": витрина["domain"],
+        "player_layout_contract": "full-bleed-v1",
     }
     # Манифест пишется ПЕРВЫМ: рантайм читает его при старте, и артефакт без
     # манифеста своей версии поднялся бы на прежней ветке отрисовки.
@@ -247,12 +295,17 @@ def установить(арг) -> int:
     _атомарно(АРТЕФАКТ, источник.read_bytes())
     АРТЕФАКТ.chmod(0o755)
 
+    после = _sha(АРТЕФАКТ)
+    if после != отпечаток:
+        raise Отказ(f"CONCURRENT_DEPLOYMENT_DETECTED: disk sha {после} != staged {отпечаток}")
+
     defer = bool(getattr(арг, "no_restart", False))
     if defer:
         запись = {
             "action": "install", "site": арг.site, "unit": витрина["unit"],
             "domain": витрина["domain"], "rollback_point": str(точка),
             "artifact_sha256": отпечаток, "previous_artifact_sha256": прежний["artifact_sha256"],
+            "disk_sha_before_write": было_на_диске,
             "manifest": новый_манифест, "previous_manifest": прежний["manifest_content"],
             "restart_ok": None, "restart_deferred": True,
             "restart_output": "deferred: --no-restart; owner must restart unit",
@@ -262,6 +315,7 @@ def установить(арг) -> int:
                               "manifest_path", "verdict")},
             "at_utc": _сейчас(),
             "verdict": "STAGED_AWAITING_OWNER_RESTART",
+            "player_layout_contract": "full-bleed-v1",
         }
         _напечатать(запись, арг.record)
         return 0

@@ -122,9 +122,30 @@ class TestОтпечатокОбязателен:
             commit = "0" * 40
             build_id = "X"
             record = None
+            no_restart = False
         with pytest.raises(уст.Отказ) as ош:
             уст.установить(Арг())
         assert "отпечаток артефакта не тот" in str(ош.value)
+
+
+class TestPlayerLayoutContractGate:
+    def test_contract_check_accepts_current_frontend(self, уст):
+        уст._проверить_player_contract(КОРЕНЬ / "automation" / "host" / "lords-frontend.py")
+
+    def test_contract_check_rejects_bare_file(self, уст, tmp_path):
+        bad = tmp_path / "lords-frontend.py"
+        bad.write_text("print('x')\n", encoding="utf-8")
+        with pytest.raises(уст.Отказ) as ош:
+            уст._проверить_player_contract(bad)
+        assert "player layout contract missing" in str(ош.value)
+
+    def test_lease_helpers_present(self, уст):
+        assert hasattr(уст, "_замок_витрины")
+        текст = ИСХОДНИК.read_text(encoding="utf-8")
+        assert "LOCK_EX" in текст
+        assert "CONCURRENT_DEPLOYMENT_DETECTED" in текст
+        assert "player_layout_contract" in текст
+        assert "--no-restart" in текст
 
 
 class TestНичегоЛишнегоНеТрогает:
