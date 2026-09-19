@@ -1,0 +1,11 @@
+{
+  "schema": "zona-footer-config/1.0.0",
+  "note": "Populate only verified public URLs/emails. Empty values keep CONTACT_CONFIG_MISSING=1 and omit dead footer links.",
+  "about_url": "",
+  "contacts_url": "",
+  "feedback_url": "",
+  "rights_url": "",
+  "privacy_url": "",
+  "terms_url": "",
+  "contact_email": ""
+}

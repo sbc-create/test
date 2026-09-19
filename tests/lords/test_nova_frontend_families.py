@@ -521,7 +521,8 @@ class TestАвтоматСостоянийПлеера:
     def test_таймаут_учитывает_уже_поднявшийся_плеер(self, лордс):
         скрипт = self._скрипт(лордс)
         # PASS2: timeout must not mark UNAVAILABLE/ERROR while playing is proven.
-        assert "if(my!==token || playing) return" in скрипт, (
+        assert "if(myGen!==generation || myAttempt!==attempt || playing) return" in скрипт or (
+            "if(my!==token || playing) return" in скрипт), (
             "таймаут перестал проверять, играет ли плеер, и объявит сломанным "
             "то, что уже играет")
         assert "nextOrFail" in скрипт

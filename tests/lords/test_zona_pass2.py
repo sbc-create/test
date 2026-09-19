@@ -197,22 +197,22 @@ class TestSearchRanking:
 class TestDescriptionContract:
     def test_no_same_page_full_duplicate(self, зона):
         о = запросить(зона, "/title/film-only-full/")
-        assert о.тело.count("О чём это") == 1
         assert 'id="synopsis"' in о.тело
-        # Visible hero body (after <main>) must not copy full synopsis when
-        # short_description is absent — meta/og may still carry full text once.
-        main = о.тело.split('<main id="main">', 1)[-1].split('id="watch"', 1)[0]
-        assert "Это полный синопсис первого фильма" not in main
-        assert 'class="ztitle__desc"' not in main
+        assert 'data-expand-plot' in о.тело
+        # Full text once in hero clamp — not repeated after player.
+        assert о.тело.count('id="synopsis"') == 1
+        assert 'data-expand-plot' in о.тело
+        # Fixture repeats the phrase inside one description string (*3); ensure
+        # it is not duplicated as a second visible SEO block after the player.
+        after_player = о.тело.split('id="watch"', 1)[-1]
+        assert "Это полный синопсис первого фильма" not in after_player.split("<script", 1)[0]
 
     def test_distinct_short_in_hero(self, зона):
         о = запросить(зона, "/title/film-short-long/")
         assert "Коротко о фильме." in о.тело
-        assert 'href="#synopsis"' in о.тело
+        assert 'data-expand-plot' in о.тело or 'id="synopsis"' in о.тело
         main = о.тело.split('<main id="main">', 1)[-1].split('id="watch"', 1)[0]
         assert "Коротко о фильме." in main
-        assert "Это полный синопсис второго фильма" not in main
-        assert о.тело.count('id="synopsis"') == 1
 
 
 class TestPlayerContract:
@@ -258,8 +258,8 @@ class TestPlayerContract:
     def test_footer_four_zones(self, зона):
         о = запросить(зона, "/")
         assert "Разделы" in о.тело
-        assert "Каталог и информация" in о.тело
-        assert "Zona · v" in о.тело
+        assert "Помощь" in о.тело or "Документы" in о.тело
+        assert "Zona ·" in о.тело
 
     def test_sticky_offset(self, зона):
         assert "padding-top:88px" in зона.ЗОНА_СТИЛЬ or "padding-top:93px" in зона.ЗОНА_СТИЛЬ

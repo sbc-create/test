@@ -255,7 +255,7 @@ class TestSourceSelection:
     def test_client_fallback_and_token_guard(self, зона):
         скрипт = зона.СКРИПТ_ПЛЕЕРА_КЛИЕНТ
         assert "maxFallback" in скрипт
-        assert "token" in скрипт
+        assert "generation" in скрипт or "token" in скрипт
         assert "noData" in скрипт
         assert "mountAt" in скрипт or "mount(" in скрипт
         assert "destroy" in скрипт
