@@ -188,6 +188,9 @@ class TestPagination:
         for raw in ("0", "-1", "abc", "99"):
             html = вид.список("/new", {"page": [raw]})
             assert "не найдена" in html.lower() or "404" in html
+            assert getattr(вид, "_http_status", 200) == 404
+        вид.список("/new", {})
+        assert getattr(вид, "_http_status", 200) == 200
 
     def test_canonical_page_urls(self, fe):
         mod, items, details = fe

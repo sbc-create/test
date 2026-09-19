@@ -5355,11 +5355,14 @@ class ВидАнимедиа(ВидЗона):
         всего = max(1, (len(events) + per - 1) // per) if events else 1
         стр, err = self._разобрать_страницу_эпизодов(зпр, всего if events else 0)
         if err or стр is None:
+            self._http_status = 404
             return self.не_найдено("/new/")
+        self._http_status = 200
         if not events:
             тело = ('<div class="zwrap ahome-eps"><h1 class="zh">Новые серии аниме</h1>'
                     '<div class="zempty"><b>Новых серий пока нет</b>'
                     "<p>В каталоге нет сериалов с доступными сериями.</p></div></div>")
+            self._http_status = 200
             return self.оболочка(тело, f"Новые серии — {self.имя}", "/new/",
                                  актив="/new/",
                                  описание="Новые серии аниме с доступным просмотром.")
@@ -5758,7 +5761,9 @@ class Обработчик(BaseHTTPRequestHandler):
             зпр["kind"] = [kind]
             return self._отдать(в.список(обрезанный, зпр).encode("utf-8"))
         if обрезанный in ("/catalog", "/new"):
-            return self._отдать(в.список(обрезанный, зпр).encode("utf-8"))
+            тело = в.список(обрезанный, зпр)
+            код = int(getattr(в, "_http_status", 200) or 200)
+            return self._отдать(тело.encode("utf-8"), код=код)
         if обрезанный == "/collections":
             if СЕМЕЙСТВО == "lords" and hasattr(в, "хаб_подборок"):
                 return self._отдать(в.хаб_подборок().encode("utf-8"))
