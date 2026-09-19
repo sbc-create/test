@@ -1,0 +1,31 @@
+{
+  "STAGE": 1,
+  "BRANCH": "cursor/ratings-ingestion-01",
+  "SHIKIMORI_CONTRACT": "PASS",
+  "SHIKIMORI_SOURCE": "READY",
+  "ANIMEMEDIA_SOURCE": "UNVERIFIED_DISABLED",
+  "DAILY_SUCCESS_TARGET": 500,
+  "DAILY_CANDIDATE_CAP": 750,
+  "DRY_RUN_PLANNED": 750,
+  "DRY_RUN_ATTEMPTED": 100,
+  "DRY_RUN_MATCHED": 92,
+  "DRY_RUN_INSERTED": 0,
+  "IDEMPOTENCY_GATE": "PASS",
+  "CRASH_RESUME_GATE": "PASS",
+  "CANDIDATE_SNAPSHOT_BUILT": 1,
+  "candidate_snapshot_path": "artifacts/evidence/ratings-ingestion-01/ratings_snapshot_v1.candidate.json",
+  "candidate_snapshot_digest": "08bee426e1e010340e59b47ccfc0a1e99ace2f4955189a67238a133526e389a3",
+  "priority_breakdown": {
+    "new_catalog": 26,
+    "new_30_days": 17,
+    "release_180_days": 251,
+    "stale_refresh": 215,
+    "archive": 241
+  },
+  "queue_starts_with": "new_catalog",
+  "backlog_remaining": 6283,
+  "estimated_backlog_completion": "2026-10-02",
+  "PRODUCTION_DB_MIGRATIONS": 0,
+  "PRODUCTION_MUTATIONS": 0,
+  "SCHEDULER_ACTIVE": 0
+}

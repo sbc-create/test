@@ -1,0 +1,33 @@
+{
+  "adapter_version": "shikimori-graphql/1.0.0",
+  "endpoint": "https://shikimori.io/api/graphql",
+  "required_fields_present": true,
+  "fields_checked": [
+    "id",
+    "malId",
+    "name",
+    "russian",
+    "score",
+    "scoresStats",
+    "updatedAt",
+    "url"
+  ],
+  "batch_ids_csv": true,
+  "sample_ok": true,
+  "request_headers_redacted": {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "User-Agent": "site-factory-ratings/1.0 (+ratings-ingestion; contact=ops)"
+  },
+  "score_semantics": "shikimori_score_not_mal",
+  "vote_count_from": "sum(scoresStats.count)",
+  "documented_limits": {
+    "rps": 5,
+    "rpm": 90
+  },
+  "operational_cap": {
+    "rps": 2.0,
+    "rpm": 60
+  },
+  "ok": true
+}

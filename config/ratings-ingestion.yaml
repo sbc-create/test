@@ -1,0 +1,21 @@
+# Operational config for factory/ratings ingestion (Stage 1).
+# All values overridable via environment variables of the same name.
+
+RATINGS_DAILY_SUCCESS_TARGET: 500
+RATINGS_DAILY_CANDIDATE_CAP: 750
+RATINGS_INITIAL_CANARY_LIMIT: 100
+RATINGS_BATCH_SIZE: 50
+RATINGS_MAX_RPS: 2
+RATINGS_MAX_REQUESTS_PER_MINUTE: 60
+
+shikimori:
+  endpoint: https://shikimori.io/api/graphql
+  adapter_version: shikimori-graphql/1.0.0
+  state: READY
+  score_semantics: shikimori_score_not_mal
+  vote_count: sum(scoresStats.count)
+  legal: docs/rights/shikimori-ratings.md
+
+animemedia:
+  state: UNVERIFIED_DISABLED
+  legal: docs/rights/animemedia-ratings.md

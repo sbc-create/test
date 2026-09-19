@@ -1,0 +1,84 @@
+{
+  "schema_version": "ratings_snapshot_v1",
+  "generated_at": "2026-09-19T16:52:22Z",
+  "source_cutoffs": {
+    "animemedia": "",
+    "provider_feed_imdb": "",
+    "provider_feed_kinopoisk": "",
+    "shikimori": ""
+  },
+  "source_adapter_versions": {
+    "animemedia": "animemedia-unverified/0.0.0",
+    "provider_feed_imdb": "provider-feed/1.0.0",
+    "provider_feed_kinopoisk": "provider-feed/1.0.0",
+    "shikimori": "shikimori-graphql/1.0.0"
+  },
+  "source_health": {
+    "animemedia": {
+      "state": "UNVERIFIED_DISABLED",
+      "health": "UNKNOWN"
+    },
+    "provider_feed_imdb": {
+      "state": "READY",
+      "health": "HEALTHY"
+    },
+    "provider_feed_kinopoisk": {
+      "state": "READY",
+      "health": "HEALTHY"
+    },
+    "shikimori": {
+      "state": "READY",
+      "health": "UNKNOWN"
+    }
+  },
+  "primary_source": "shikimori",
+  "titles": [
+    {
+      "canonical_title_id": "nova:demo-1",
+      "scores": {
+        "shikimori": {
+          "score": 8.75,
+          "vote_count": 65063,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/1-cowboy-bebop",
+          "observed_at": "2026-09-19T16:52:22Z",
+          "external_id": "1",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:demo-20",
+      "scores": {
+        "shikimori": {
+          "score": 8.02,
+          "vote_count": 111806,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/z20-naruto",
+          "observed_at": "2026-09-19T16:52:22Z",
+          "external_id": "20",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    },
+    {
+      "canonical_title_id": "nova:demo-5114",
+      "scores": {
+        "shikimori": {
+          "score": 9.11,
+          "vote_count": 95005,
+          "freshness": "FRESH",
+          "provenance_url": "https://shikimori.io/animes/z5114-fullmetal-alchemist-brotherhood",
+          "observed_at": "2026-09-19T16:52:22Z",
+          "external_id": "5114",
+          "adapter_version": "shikimori-graphql/1.0.0"
+        }
+      },
+      "primary": "shikimori"
+    }
+  ],
+  "title_count": 3,
+  "snapshot_sha256": "08bee426e1e010340e59b47ccfc0a1e99ace2f4955189a67238a133526e389a3"
+}

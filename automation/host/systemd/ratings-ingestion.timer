@@ -1,0 +1,15 @@
+[Unit]
+Description=site-factory: daily ratings ingestion timer
+Documentation=file:///srv/site-factory/repo/docs/rights/shikimori-ratings.md
+
+[Timer]
+# Один ежедневный основной запуск. Stage 1: unit в репозитории, НЕ install/enable.
+OnCalendar=*-*-* 03:15:00
+# Random delay / jitter
+RandomizedDelaySec=900
+Persistent=true
+AccuracySec=1min
+Unit=ratings-ingestion.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,33 @@
+{
+  "data": {
+    "animes": [
+      {
+        "id": "1",
+        "malId": "1",
+        "name": "Cowboy Bebop",
+        "russian": "Ковбой Бибоп",
+        "score": 8.75,
+        "scoresStats": [
+          {"score": 10, "count": 100},
+          {"score": 9, "count": 50},
+          {"score": 8, "count": 25}
+        ],
+        "updatedAt": "2026-09-14T07:47:00+03:00",
+        "url": "https://shikimori.io/animes/1-cowboy-bebop"
+      },
+      {
+        "id": "5114",
+        "malId": "5114",
+        "name": "Fullmetal Alchemist: Brotherhood",
+        "russian": "Стальной алхимик: Братство",
+        "score": 9.11,
+        "scoresStats": [
+          {"score": 10, "count": 200},
+          {"score": 9, "count": 100}
+        ],
+        "updatedAt": "2026-09-14T07:47:00+03:00",
+        "url": "https://shikimori.io/animes/5114-fma"
+      }
+    ]
+  }
+}

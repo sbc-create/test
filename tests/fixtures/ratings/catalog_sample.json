@@ -1,0 +1,55 @@
+{
+  "items": [
+    {
+      "external_id": "t1",
+      "name": "Cowboy Bebop",
+      "year": 1998,
+      "type": "tv",
+      "is_series": true,
+      "is_ongoing": false,
+      "is_new_catalog": true,
+      "external_ids": {"myanimelist": "1", "shikimori": "1"},
+      "kinopoisk_rating": null,
+      "imdb_rating": null
+    },
+    {
+      "external_id": "t2",
+      "name": "Fullmetal Alchemist: Brotherhood",
+      "year": 2009,
+      "type": "tv",
+      "is_series": true,
+      "is_ongoing": false,
+      "has_new_episode": false,
+      "is_seasonal": false,
+      "external_ids": {"myanimelist": "5114"},
+      "on_home": true
+    },
+    {
+      "external_id": "t3",
+      "name": "Ongoing Show",
+      "year": 2026,
+      "type": "tv",
+      "is_series": true,
+      "is_ongoing": true,
+      "has_new_episode": true,
+      "is_seasonal": true,
+      "external_ids": {"myanimelist": "99901"},
+      "days_since_release": 10
+    },
+    {
+      "external_id": "t4",
+      "name": "Archive Film",
+      "year": 1990,
+      "type": "movie",
+      "external_ids": {"myanimelist": "99902"},
+      "kinopoisk_rating": 7.1
+    },
+    {
+      "external_id": "t5",
+      "name": "No Mapping",
+      "year": 2020,
+      "type": "tv",
+      "external_ids": {}
+    }
+  ]
+}

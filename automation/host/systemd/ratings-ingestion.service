@@ -1,0 +1,47 @@
+[Unit]
+Description=site-factory: daily ratings ingestion (Shikimori)
+Documentation=file:///srv/site-factory/repo/docs/rights/shikimori-ratings.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=site-factory
+Group=site-factory
+WorkingDirectory=/srv/site-factory/repo
+
+# Secrets via systemd credentials — never in Environment=
+# LoadCredential=shikimori_api_token:/etc/site-factory/secrets/ratings/shikimori-api-token
+# Environment=SHIKIMORI_TOKEN_CREDENTIAL=shikimori_api_token
+# Environment=CREDENTIALS_DIRECTORY=%d
+
+Environment=RATINGS_DAILY_SUCCESS_TARGET=500
+Environment=RATINGS_DAILY_CANDIDATE_CAP=750
+Environment=RATINGS_INITIAL_CANARY_LIMIT=100
+Environment=RATINGS_BATCH_SIZE=50
+Environment=RATINGS_MAX_RPS=2
+Environment=RATINGS_MAX_REQUESTS_PER_MINUTE=60
+Environment=RATINGS_USER_AGENT=site-factory-ratings/1.0 (+ratings-ingestion; contact=ops)
+
+# Stage 2 will pass --apply. Stage 1 units are repo-only and must not be enabled.
+ExecStart=/usr/bin/python3 -m factory ratings ingest --source shikimori --limit 500 --dry-run
+
+# Singleton: flock inside factory.ratings.locks; also systemd itself.
+ExecStartPre=/usr/bin/flock -n /run/site-factory/ratings-ingestion.lock /bin/true
+
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/srv/site-factory/repo/var/ratings /srv/site-factory/repo/artifacts/evidence /var/log/site-factory
+ReadOnlyPaths=/srv/site-factory/repo
+UMask=0077
+
+TimeoutStartSec=3600
+MemoryMax=1G
+TasksMax=64
+
+# Machine-readable daily report is written by factory.ratings.report into evidence.
+
+[Install]
+WantedBy=multi-user.target

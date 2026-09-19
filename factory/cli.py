@@ -20,6 +20,7 @@ from factory.analytics import cli as analytics_cli
 from factory.errors import FactoryError
 from factory.locks import LockBusy, site_lock
 from factory.paths import PATHS
+from factory.ratings import cli as ratings_cli
 from factory.report import build_result, write_result
 from factory.secret_hub import cli as secret_hub_cli
 from factory.seo import crawl as crawl_mod
@@ -1018,6 +1019,7 @@ def main(argv: list[str] | None = None) -> int:
 
     analytics_cli.register(sub)
     secret_hub_cli.register(sub)
+    ratings_cli.register(sub)
 
     p = sub.add_parser("template-check",
                        help="Lords: проверка шаблонов по контракту (schemas/template-manifest.schema.json)")

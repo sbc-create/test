@@ -1,0 +1,46 @@
+{
+  "source": "shikimori",
+  "run_id": "run-a4f7a60da4ec",
+  "started_at": "2026-09-19T16:52:22Z",
+  "finished_at": "2026-09-19T16:52:22Z",
+  "duration_sec": 0.0,
+  "dry_run": false,
+  "queue_size": 3,
+  "planned_candidates": 10,
+  "attempted": 3,
+  "fetched": 3,
+  "matched": 3,
+  "inserted": 3,
+  "unchanged": 0,
+  "refreshed": 0,
+  "not_found": 0,
+  "conflicts": 0,
+  "review_queued": 0,
+  "retried": 0,
+  "rate_limited": 0,
+  "failed": 0,
+  "dead_letter": 0,
+  "request_count": 1,
+  "daily_limit_usage": {
+    "request_count": 1,
+    "requests_last_minute": 1,
+    "max_per_minute": 60,
+    "max_rps": 2
+  },
+  "wrong_automatic_mappings": 0,
+  "ambiguous_auto_published": 0,
+  "last_good_preserved": 0,
+  "checkpoint": {
+    "last_external_ids": [
+      "1",
+      "20",
+      "5114"
+    ],
+    "attempted": 3,
+    "inserted": 3
+  },
+  "estimated_backlog_completion": "2026-10-02",
+  "candidate_snapshot_digest": "08bee426e1e010340e59b47ccfc0a1e99ace2f4955189a67238a133526e389a3",
+  "dry_run_planned": 750,
+  "backlog_remaining": 6283
+}

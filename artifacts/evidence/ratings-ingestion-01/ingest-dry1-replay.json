@@ -1,0 +1,41 @@
+{
+  "source": "shikimori",
+  "run_id": "run-6ac879d5c678",
+  "started_at": "2026-09-19T16:51:51Z",
+  "finished_at": "2026-09-19T16:52:00Z",
+  "duration_sec": 9.0,
+  "dry_run": true,
+  "queue_size": 755,
+  "planned_candidates": 100,
+  "attempted": 100,
+  "fetched": 100,
+  "matched": 92,
+  "inserted": 0,
+  "unchanged": 0,
+  "refreshed": 0,
+  "not_found": 8,
+  "conflicts": 0,
+  "review_queued": 0,
+  "retried": 0,
+  "rate_limited": 0,
+  "failed": 0,
+  "dead_letter": 0,
+  "request_count": 2,
+  "daily_limit_usage": {
+    "request_count": 2,
+    "requests_last_minute": 2,
+    "max_per_minute": 60,
+    "max_rps": 2.0
+  },
+  "wrong_automatic_mappings": 0,
+  "ambiguous_auto_published": 0,
+  "last_good_preserved": 8,
+  "checkpoint": {
+    "idempotent_replay": true,
+    "prior_run": "run-6ac879d5c678"
+  },
+  "report_paths": {
+    "json": "artifacts/evidence/ratings-ingestion-01/run-run-6ac879d5c678.json",
+    "markdown": "artifacts/evidence/ratings-ingestion-01/run-run-6ac879d5c678.md"
+  }
+}

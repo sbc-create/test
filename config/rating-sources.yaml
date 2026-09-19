@@ -12,7 +12,11 @@
 # и реестр с таким сочетанием не читается вовсе. Флаг, способный включить
 # неразрешённый источник, обесценивает само разрешение.
 
-version: 2
+version: 3
+
+# Примечание: shikimori/animemedia ниже — документальные записи для factory/ratings.
+# Витринный site_engine по-прежнему считает единственным enabled+granted источником
+# provider-feed (shikimori.enabled=false).
 
 sources:
   - id: provider-feed
@@ -64,4 +68,39 @@ sources:
         2026-09-06: скрапинг сайта не разрешён. Оценка kinopoisk_rating
         показывается только тогда, когда приходит в фиде поставщика.
       document: docs/rights/provider-feed-ratings.md
+      granted_at: ""
+
+  # factory/ratings pipeline; не витринный site_engine connector.
+  # enabled=false → не попадает в site_engine.authorized (ровно provider-feed).
+  - id: shikimori
+    enabled: false
+    ttl_seconds: 86400
+    rate_limit_per_minute: 60
+    provenance:
+      delivery: "official GraphQL API via factory/ratings"
+      endpoint: "https://shikimori.io/api/graphql"
+      score_semantics: "shikimori score (not MAL)"
+      vote_count: "sum(scoresStats.count)"
+    authorization:
+      status: granted
+      reason: >-
+        Stage-1 owner request 2026-09-19: централизованный ratings ingestion
+        через официальный GraphQL. Витринный слой не включает источник
+        напрямую (enabled=false); runtime — factory/ratings. Production
+        timer / live snapshot — Stage 2.
+      document: docs/rights/shikimori-ratings.md
+      granted_at: "2026-09-19"
+
+  - id: animemedia
+    enabled: false
+    ttl_seconds: 0
+    rate_limit_per_minute: 0
+    state: UNVERIFIED_DISABLED
+    authorization:
+      status: absent
+      reason: >-
+        Canonical origin, ownership, API/feed, attribution and rate limits
+        not verified. Our animedia.icu/space sites are not external rating
+        sources (cyclic provenance forbidden).
+      document: docs/rights/animemedia-ratings.md
       granted_at: ""
