@@ -1,0 +1,44 @@
+{
+  "as_of": "2026-09-19T22:38:03Z",
+  "catalog_path": "/srv/site-factory/repo/var/lords/lords/catalog-cache/lords-01.json",
+  "frozen_catalog_digest": "b871eafaf31970cde06b4207ad1a31c40a9f178c1bf65c0d37d0814327d72f3b",
+  "GLOBAL_CATALOG_TITLE_TOTAL": 53548,
+  "RATING_SOURCE_ELIGIBLE_TOTAL": 7143,
+  "explanation_7143": {
+    "SHIKIMORI_ELIGIBLE_TOTAL": 7033,
+    "AMD_ELIGIBLE_TOTAL": 110,
+    "sum": 7143,
+    "note": "GLOBAL_SOURCE_TARGET_TOTAL = SHIKIMORI_ELIGIBLE + AMD_ELIGIBLE(mapped|absence). Not full catalog."
+  },
+  "covered_100_composition": {
+    "amd_online_current": 100,
+    "shikimori_current": 0,
+    "amd_canonical_namespace": {
+      "nova_prefix": 0,
+      "amd_online_prefix": 100
+    },
+    "note": "All 100 covered are Stage3 AMD observations with canonical_title_id=amd_online:{id}, not nova catalog IDs."
+  },
+  "AMD_ELIGIBLE_TOTAL": 110,
+  "SHIKIMORI_ELIGIBLE_TOTAL": 7033,
+  "ONGOING_ELIGIBLE_TOTAL": 0,
+  "ONGOING_COVERED_TOTAL": 0,
+  "ONGOING_COVERAGE_PERCENT": "N/A",
+  "ONGOING_CLASSIFICATION_GAP": {
+    "catalog_is_ongoing_true": 0,
+    "tag_or_flag_ongoing_scan": 0,
+    "reason": "lords-01 catalog items lack reliable is_ongoing/status; tags rarely contain ongoing markers. Cannot compute ongoing coverage percent without false precision.",
+    "count_unclassified": 53548
+  },
+  "CURRENT_SEASON_ELIGIBLE_TOTAL": 136,
+  "CURRENT_SEASON_HEURISTIC": "is_seasonal OR (days_since_release<=120 AND kind=tv) among MAL-mapped",
+  "NEW_30D_ELIGIBLE_TOTAL": 43,
+  "NEW_30D_TIMESTAMP": "created_at from catalog when present, else year-based days_since_release",
+  "NEW_30D_CATALOG_ALL": 716,
+  "OTHER_BACKLOG_TOTAL": 6873,
+  "titles_without_source_target": 46515,
+  "source_intersection_note": "AMD Stage3 IDs do not intersect nova:{external_id} namespace; intersection=0",
+  "status_field_presence_sample_5k": {
+    "tags": 905
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "source": "shikimori",
+  "count": 7033,
+  "digest": "c3a2561e2183a573f5bb6cfc145b7bbc6784c9ac37706a3b5c49d350762adfba",
+  "catalog_digest": "b871eafaf31970cde06b4207ad1a31c40a9f178c1bf65c0d37d0814327d72f3b",
+  "ids_head": [
+    "nova:0191511d-3648-7224-989d-5ef91f2efaa6",
+    "nova:0191511d-84b5-71de-91aa-9f28e25c0ec7",
+    "nova:0191511d-8eb9-719f-9276-4b5da943060e",
+    "nova:0191511d-978d-7885-b03a-0f34a36499cb",
+    "nova:0191511d-a11d-75ff-81f2-6062049e3ef9",
+    "nova:0191511d-ebda-7742-a015-496357cfb2ec",
+    "nova:0191511d-f785-7144-a5fa-f22c9e49482c",
+    "nova:0191511e-21f4-786e-8907-b4f7f91d80e3",
+    "nova:0191511e-415b-7573-ae14-3dcd47d59484",
+    "nova:0191511e-4b7b-7f58-bddf-1e7fc85306f4",
+    "nova:0191511e-55e0-7ba3-89a5-65e1335f3099",
+    "nova:0191511e-5fbd-78e4-a412-d5ec28c4ce18",
+    "nova:0191511e-6962-7753-b911-7d31966dd9ef",
+    "nova:0191511e-722f-74dc-904c-10cba232ac9a",
+    "nova:0191511e-7bf5-7e88-974b-aebf5660af64",
+    "nova:0191511e-86eb-7359-a591-ae57b21d1e73",
+    "nova:0191511e-9223-748b-913d-fdabdeadf858",
+    "nova:0191511e-a2cc-7cb2-9cd4-53d1543b7b58",
+    "nova:0191511e-c62d-7231-9133-2bc75783321e",
+    "nova:0191511e-cfac-7d16-85e9-d73e0e0681e7"
+  ],
+  "ids_tail": [
+    "nova:01a09d0c-f740-7909-b36f-3689522bf61e",
+    "nova:01a09eec-835b-7a2a-8028-2bd949c3f8f4",
+    "nova:01a0aa6e-2008-70d0-89d1-1af7b85336b1",
+    "nova:01a0af3f-a972-76be-a845-326a4a565a93",
+    "nova:01a0b507-3280-7b2a-8af4-674dd73cff72"
+  ]
+}
