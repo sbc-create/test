@@ -1698,7 +1698,7 @@ white-space:nowrap}
 
 
 АНИМЕДИА_СТИЛЬ = """
-/* Animedia 1.2.4 — visual final: 6×2 shelves, compact chrome, scoped tokens. */
+/* Animedia 1.2.4 — blockwise: shell/header/theme (BLOCK_01) + shelves. */
 :root{
   --a-content-max:1760px;
   --page-gutters:96px;
@@ -1717,9 +1717,15 @@ white-space:nowrap}
 @media(max-width:1023px){:root{--page-gutters:44px}}
 @media(max-width:767px){:root{--page-gutters:28px}}
 @media(max-width:390px){:root{--page-gutters:24px}}
-html[data-theme=dark]{
-  --a-page:#12141a;--a-ink:#f2f3f5;--a-dim:#a7adb8;--a-alt:#1a1d26;--a-line:#2a3040;
+html{color-scheme:light}
+html[data-theme=dark]{color-scheme:dark;
+  --a-page:#12141a;--a-ink:#eef0f4;--a-dim:#a7adb8;--a-alt:#1c202b;--a-line:#2e3545;
   --a-mute:#8b92a0;--a-surf:#222633;--a-rail:#161922;--a-warm:#e0a24a;
+  --a-shadow:0 10px 28px rgba(0,0,0,.45);--a-shadow-soft:0 4px 14px rgba(0,0,0,.35);
+}
+/* Theme must never recolor media */
+.zt__p img,.zt__img,.ahero img,.ztitle__poster img,.zpl__f iframe,.zpl__f video,.zhub__img{
+  filter:none !important;-webkit-filter:none !important;
 }
 *{box-sizing:border-box}
 html,body{max-width:100%;overflow-x:hidden}
@@ -1738,20 +1744,29 @@ font:16px/1.45 ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif}
 .zhd{position:relative;background:var(--a-rail);border-bottom:1px solid var(--a-line);z-index:30}
 .zhd__in{display:flex;align-items:center;gap:12px;flex-wrap:nowrap;height:68px;min-height:64px;
 max-height:72px;padding-block:0}
-@media(max-width:767px){.zhd__in{height:56px;min-height:52px;max-height:58px;flex-wrap:nowrap;gap:8px}}
-.zhd__logo{font-size:22px;font-weight:800;letter-spacing:-.4px;color:var(--a-ink);flex:0 0 auto}
+@media(max-width:767px){
+  .zhd__in{height:56px;min-height:52px;max-height:58px;flex-wrap:nowrap;gap:8px;padding-block:0}
+}
+.zhd__logo{font-size:22px;font-weight:800;letter-spacing:-.4px;color:var(--a-ink);flex:0 0 auto;
+line-height:1;min-height:44px;display:inline-flex;align-items:center}
 .zhd__logo b{color:var(--a-acc)}
+.zhd__actions{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;margin-left:auto}
 .zhd__menu{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;
-border:1px solid var(--a-line);border-radius:8px;background:var(--a-page);color:var(--a-ink);font-size:20px;
-cursor:pointer;margin-left:auto}
+min-width:44px;min-height:44px;flex:0 0 44px;border:1px solid var(--a-line);border-radius:8px;
+background:var(--a-page);color:var(--a-ink);font-size:20px;cursor:pointer;margin-left:0}
 @media(min-width:768px){.zhd__menu{display:none}}
 .zhd__theme{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;
-border:1px solid var(--a-line);border-radius:8px;background:var(--a-page);color:var(--a-ink);
-font-size:16px;cursor:pointer;flex:0 0 auto}
-.zhd__n{display:none;gap:4px;flex:1 0 100%;order:5;flex-wrap:wrap;padding:8px 0}
-.zhd__n.is-open{display:flex}
-@media(min-width:768px){.zhd__n{display:flex;flex:1 1 auto;order:0;flex-wrap:nowrap;
-overflow-x:auto;scrollbar-width:none;padding:0}}
+min-width:44px;min-height:44px;flex:0 0 44px;border:1px solid var(--a-line);border-radius:8px;
+background:var(--a-page);color:var(--a-ink);font-size:16px;cursor:pointer}
+.zhd__theme:focus-visible,.zhd__menu:focus-visible,.zhd__n a:focus-visible,.zhd__s button:focus-visible{
+outline:2px solid var(--a-acc);outline-offset:2px}
+.zhd__n{display:none;gap:4px;flex-wrap:wrap;padding:8px;border-top:1px solid var(--a-line)}
+@media(max-width:767px){
+  .zhd__n.is-open{display:flex;position:absolute;left:0;right:0;top:100%;z-index:40;
+  background:var(--a-rail);box-shadow:var(--a-shadow);flex-direction:column;max-height:70vh;overflow:auto}
+}
+@media(min-width:768px){.zhd__n{display:flex;flex:1 1 auto;order:0;flex-wrap:nowrap;position:static;
+overflow-x:auto;scrollbar-width:none;padding:0;border-top:0;max-height:none;box-shadow:none}}
 .zhd__n::-webkit-scrollbar{display:none}
 .zhd__n a{padding:8px 10px;border-radius:8px;font-size:15px;color:var(--a-ink);white-space:nowrap;
 min-height:44px;display:inline-flex;align-items:center}
@@ -1760,9 +1775,13 @@ min-height:44px;display:inline-flex;align-items:center}
 .zhd__n a[aria-current]{color:var(--a-acc);font-weight:700;box-shadow:inset 0 -2px 0 var(--a-acc)}
 .zhd__s{display:flex;flex:0 1 280px;min-width:0;max-width:320px;border:1px solid var(--a-line);
 border-radius:10px;overflow:hidden;background:var(--a-page)}
-@media(max-width:767px){.zhd__s{flex:1 1 auto;max-width:none;order:0}}
+@media(max-width:767px){
+  .zhd__s{flex:1 1 calc(100% - 108px);max-width:none;order:0;min-width:120px}
+  .zhd__actions{order:0}
+}
 .zhd__s input{flex:1;min-width:0;border:0;padding:9px 12px;font-size:14px;background:transparent;color:var(--a-ink)}
-.zhd__s button{border:0;background:var(--a-acc);color:#fff;padding:0 14px;font-weight:700;cursor:pointer;min-width:44px}
+.zhd__s button{border:0;background:var(--a-acc);color:#fff;padding:0 14px;font-weight:700;cursor:pointer;
+min-width:44px;min-height:44px;flex:0 0 auto}
 .ast{display:none}
 .zrail,.zrail__logo,.zrail__sub,.zrail__t,.zrail__n,.zrail__g,.ztop{display:none}
 .zh{font-size:clamp(22px,2vw,28px);line-height:1.25;font-weight:700;margin:16px 0 8px}
@@ -1856,7 +1875,7 @@ flex-wrap:nowrap;min-height:1.25em;align-items:center}
 align-items:center;gap:10px;height:72px;padding:0 12px 0 0;
 background:var(--a-alt);border:0;border-radius:10px;text-decoration:none;color:inherit;
 box-shadow:none;max-height:none;min-height:0;width:100%;box-sizing:border-box}
-.ahome-eps .aeps__row:hover{background:var(--a-page);box-shadow:var(--a-shadow-soft)}
+.ahome-eps .aeps__row:hover{background:var(--a-page);box-shadow:var(--a-shadow-soft);filter:none}
 .ahome-eps .aeps__row:focus-visible{outline:2px solid var(--a-acc);outline-offset:2px}
 .ahome-eps .aeps__thumb{width:60px;height:100%;max-width:none;aspect-ratio:auto;
 border-radius:8px 0 0 8px;overflow:hidden;position:relative;background:var(--a-surf)}
@@ -1961,7 +1980,7 @@ max-width:none !important;max-height:none !important;border:0;display:block;obje
 .zpl__f[data-state=active],.zpl__f[data-state=ok],.zpl__f[data-state=resolving],
 .zpl__f[data-state=playable]{background:#101010}
 .zpl__s,.zpl [data-player-state]{position:absolute;inset:0;display:grid;place-items:center;
-padding:16px;text-align:center;color:var(--a-ink);font-size:13px;line-height:1.45;background:#f7f7f7;z-index:2}
+padding:16px;text-align:center;color:var(--a-ink);font-size:13px;line-height:1.45;background:var(--a-alt);z-index:2}
 .zpl [data-player-state][hidden],.zpl__s[hidden]{display:none !important}
 .zpl [data-player-state] b{display:block;font-size:15px;margin-bottom:6px}
 .zpl [data-player-state] p{margin:0;max-width:36ch;color:var(--a-dim)}
@@ -2714,14 +2733,25 @@ def заглушка_постера(запись: dict, класс_заглуш�
 #: Только Animedia: на узком экране пункты меню открываются кнопкой.
 #: Escape и повторный клик закрывают; focus возвращается на кнопку;
 #: body scroll блокируется, пока меню открыто.
+СКРИПТ_АНИМЕДИА_ТЕМА_BOOT = (
+    "(function(){try{var k='animedia-theme',r=document.documentElement,s=localStorage.getItem(k);"
+    "var t=(s==='light'||s==='dark')?s:((window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light');"
+    "r.setAttribute('data-theme',t);r.style.colorScheme=t;}catch(e){document.documentElement.setAttribute('data-theme','light');}})();"
+)
+
 СКРИПТ_АНИМЕДИА_ШАПКА = (
     "(function(){"
     "var TK='animedia-theme';"
-    "function applyTheme(t){var r=document.documentElement;if(t==='dark'||t==='light'){"
-    "r.setAttribute('data-theme',t);}else{r.removeAttribute('data-theme');"
-    "if(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)"
-    "r.setAttribute('data-theme','dark');else r.setAttribute('data-theme','light');}}"
-    "try{applyTheme(localStorage.getItem(TK)||'');}catch(e){applyTheme('');}"
+    "function applyTheme(t){var r=document.documentElement;"
+    "if(t!=='dark'&&t!=='light'){"
+    "t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}"
+    "r.setAttribute('data-theme',t);r.style.colorScheme=t;"
+    "var b=document.querySelector('[data-theme-toggle]');"
+    "if(b)b.setAttribute('aria-pressed',t==='dark'?'true':'false');}"
+    "function sync(){try{var stored=localStorage.getItem(TK);applyTheme(stored||'');}catch(e){applyTheme('');}}"
+    "if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync();"
+    "try{var mq=window.matchMedia('(prefers-color-scheme: dark)');"
+    "mq.addEventListener('change',function(){try{if(!localStorage.getItem(TK))sync();}catch(err){}});}catch(e){}"
     "function close(nav,btn){if(!nav||!btn)return;nav.classList.remove('is-open');"
     "btn.setAttribute('aria-expanded','false');document.body.style.overflow='';"
     "try{btn.focus()}catch(e){}}"
@@ -2729,7 +2759,7 @@ def заглушка_постера(запись: dict, класс_заглуш�
     "var th=e.target.closest('[data-theme-toggle]');"
     "if(th){var cur=document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light';"
     "var next=cur==='dark'?'light':'dark';try{localStorage.setItem(TK,next);}catch(err){}"
-    "applyTheme(next);th.setAttribute('aria-pressed',next==='dark'?'true':'false');return;}"
+    "applyTheme(next);return;}"
     "var more=e.target.closest('[data-desc-toggle]');"
     "if(more){var p=document.getElementById(more.getAttribute('aria-controls')||'title-desc');"
     "if(p){var open=p.classList.toggle('is-open');more.setAttribute('aria-expanded',open?'true':'false');"
@@ -5051,6 +5081,7 @@ class ВидАнимедиа(ВидЗона):
 {_открытый_граф(og_данные)}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 {_мета_версии().replace(f'content="{ПРОФИЛЬ}"', f'content="{профиль_meta}"', 1)}
+<script>{СКРИПТ_АНИМЕДИА_ТЕМА_BOOT}</script>
 <style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}
 {СКРИПТ_ЛЕНТ}
 {СКРИПТ_АНИМЕДИА_ШАПКА}</script></head>
@@ -5063,10 +5094,12 @@ class ВидАнимедиа(ВидЗона):
 <label class="vh" for="q">Поиск по каталогу аниме</label>
 <input id="q" name="q" placeholder="{html.escape(self.се["поиск"])}">
 <button type="submit">Найти</button></form>
+<div class="zhd__actions">
 <button class="zhd__theme" type="button" data-theme-toggle aria-pressed="false"
  aria-label="Переключить тему" title="Тема">◐</button>
 <button class="zhd__menu" type="button" data-nav-toggle aria-controls="zhd-nav"
  aria-expanded="false" aria-label="Меню разделов">&#9776;</button>
+</div>
 <nav id="zhd-nav" class="zhd__n" aria-label="Разделы">{нав}</nav>
 </div>
 </header>

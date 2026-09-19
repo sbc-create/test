@@ -1,0 +1,11 @@
+................................F.....................                   [100%]
+=================================== FAILURES ===================================
+E   AssertionError: assert ('Сегодня' in 'Вчера, 21:01' or '19.09.2026' in 'Вчера, 21:01')
+     +  where 'Вчера, 21:01' = <function _аниме_формат_времени_анонса at 0x7f728602c9d0>('2026-09-19T18:01:00Z', 'datetime')
+     +    where <function _аниме_формат_времени_анонса at 0x7f728602c9d0> = <module 'animedia_home_pag_test_timestamp_semantics0' from '/home/claude/wt-animedia-finalization-01/automation/host/lords-frontend.py'>._аниме_формат_времени_анонса
+     +  and   'Вчера, 21:01' = <function _аниме_формат_времени_анонса at 0x7f728602c9d0>('2026-09-19T18:01:00Z', 'datetime')
+     +    where <function _аниме_формат_времени_анонса at 0x7f728602c9d0> = <module 'animedia_home_pag_test_timestamp_semantics0' from '/home/claude/wt-animedia-finalization-01/automation/host/lords-frontend.py'>._аниме_формат_времени_анонса
+/home/claude/wt-animedia-finalization-01/tests/unit/test_animedia_home_pagination.py:152: AssertionError: assert ('Сегодня' in 'Вчера, 21:01' or '19.09.2026' in 'Вчера, 21:01')
+=========================== short test summary info ============================
+FAILED tests/unit/test_animedia_home_pagination.py::TestEpisodeEvents::test_timestamp_semantics
+1 failed, 53 passed in 0.82s

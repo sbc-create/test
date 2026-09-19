@@ -149,8 +149,15 @@ class TestEpisodeEvents:
 
     def test_timestamp_semantics(self, fe):
         mod, _, _ = fe
-        assert "Сегодня" in mod._аниме_формат_времени_анонса("2026-09-19T18:01:00Z", "datetime") or \
-               "19.09.2026" in mod._аниме_формат_времени_анонса("2026-09-19T18:01:00Z", "datetime")
+        from datetime import datetime, timedelta, timezone
+        msk = timezone(timedelta(hours=3))
+        now = datetime.now(msk)
+        today_utc = now.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        yesterday = (now - timedelta(days=1)).astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        today_label = mod._аниме_формат_времени_анонса(today_utc, "datetime")
+        yday_label = mod._аниме_формат_времени_анонса(yesterday, "datetime")
+        assert today_label.startswith("Сегодня")
+        assert yday_label.startswith("Вчера")
         date_only = mod._аниме_формат_времени_анонса("2026-09-18", "date")
         assert date_only == "18.09.2026"
         assert "00:00" not in date_only

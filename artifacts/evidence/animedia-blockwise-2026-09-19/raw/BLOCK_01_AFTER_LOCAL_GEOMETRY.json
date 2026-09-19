@@ -1,0 +1,114 @@
+{
+  "dark_load": {
+    "theme": "dark",
+    "bodyBg": "rgb(18, 20, 26)",
+    "wrapW": 1344,
+    "headerH": 69,
+    "headerInH": 68,
+    "themeBtn": {
+      "w": 44,
+      "h": 44
+    },
+    "menuBtn": {
+      "w": 0,
+      "h": 0,
+      "display": "none"
+    },
+    "overlap": 0,
+    "overflow": 0,
+    "ariaPressed": "true",
+    "bootBeforeStyle": true,
+    "storage": "dark",
+    "early": "dark"
+  },
+  "after_toggle_light": {
+    "theme": "light",
+    "bodyBg": "rgb(255, 255, 255)",
+    "wrapW": 1344,
+    "headerH": 69,
+    "headerInH": 68,
+    "themeBtn": {
+      "w": 44,
+      "h": 44
+    },
+    "menuBtn": {
+      "w": 0,
+      "h": 0,
+      "display": "none"
+    },
+    "overlap": 0,
+    "overflow": 0,
+    "ariaPressed": "false",
+    "bootBeforeStyle": true,
+    "storage": "light"
+  },
+  "reload_keeps_light": {
+    "theme": "light",
+    "bodyBg": "rgb(255, 255, 255)",
+    "wrapW": 1344,
+    "headerH": 69,
+    "headerInH": 68,
+    "themeBtn": {
+      "w": 44,
+      "h": 44
+    },
+    "menuBtn": {
+      "w": 0,
+      "h": 0,
+      "display": "none"
+    },
+    "overlap": 0,
+    "overflow": 0,
+    "ariaPressed": "false",
+    "bootBeforeStyle": true,
+    "storage": "light"
+  },
+  "390_light": {
+    "theme": "light",
+    "bodyBg": "rgb(255, 255, 255)",
+    "wrapW": 366,
+    "headerH": 57,
+    "headerInH": 56,
+    "themeBtn": {
+      "w": 44,
+      "h": 44
+    },
+    "menuBtn": {
+      "w": 44,
+      "h": 44,
+      "display": "flex"
+    },
+    "overlap": 0,
+    "overflow": 0,
+    "ariaPressed": "false",
+    "bootBeforeStyle": true,
+    "storage": null
+  },
+  "390_menu_open": {
+    "open": true,
+    "headerH": 57,
+    "headerInH": 56,
+    "h1Top": 73
+  },
+  "390_dark": {
+    "theme": "dark",
+    "bodyBg": "rgb(18, 20, 26)",
+    "wrapW": 366,
+    "headerH": 57,
+    "headerInH": 56,
+    "themeBtn": {
+      "w": 44,
+      "h": 44
+    },
+    "menuBtn": {
+      "w": 44,
+      "h": 44,
+      "display": "flex"
+    },
+    "overlap": 0,
+    "overflow": 0,
+    "ariaPressed": "true",
+    "bootBeforeStyle": true,
+    "storage": "dark"
+  }
+}
