@@ -13,14 +13,14 @@ from factory.ratings.scheduler import DEFAULT_STATE, SchedulerConfig, save_sched
 
 PILOT_MAX_CYCLES = 7
 PILOT_DAILY_ACCEPTED_TARGET = 100
-PILOT_DAILY_CANDIDATE_CAP = 750
+PILOT_DAILY_CANDIDATE_CAP = 150
 
 
 @dataclass
 class PilotConfig:
     scope: str = "closed noindex ratings ingestion"
     daily_accepted_target: int = PILOT_DAILY_ACCEPTED_TARGET
-    daily_candidate_cap: int = PILOT_DAILY_CANDIDATE_CAP
+    daily_candidate_cap: int = 150
     max_cycles: int = PILOT_MAX_CYCLES
     paid_operations: int = 0
     public_indexed_publication: int = 0

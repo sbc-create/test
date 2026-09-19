@@ -1,0 +1,20 @@
+{
+  "BLOCK_04_QWEN": "PASS",
+  "QWEN_DELIVERY_CONFIGURED": "NO",
+  "QWEN_DELIVERY": "BLOCKED_NO_CONFIG",
+  "QWEN_NETWORK_ATTEMPTS": 0,
+  "QWEN_WRITE_PERMISSIONS": 0,
+  "config_discovery": {
+    "configured": false,
+    "endpoint_set": false,
+    "token_file_set": false,
+    "token_file_exists": false,
+    "mode": "unset",
+    "QWEN_DELIVERY_CONFIGURED": "NO",
+    "env_keys": [
+      "QWEN_DELIVERY_ENDPOINT",
+      "QWEN_DELIVERY_TOKEN_FILE",
+      "QWEN_DELIVERY_MODE"
+    ]
+  }
+}

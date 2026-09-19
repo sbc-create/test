@@ -1,0 +1,141 @@
+{
+  "queue_digest": "a92adf2355fb8025f4cf25fe8ee213db5aa8972495c4729b25e958b01e49150f",
+  "QUEUE_REPLAY_DIGEST_MATCH": 1,
+  "candidate_count": 150,
+  "tier_breakdown": {
+    "current_season": 136,
+    "new_30_days": 14
+  },
+  "top_10": [
+    {
+      "canonical_title_id": "nova:01a0b507-3280-7b2a-8af4-674dd73cff72",
+      "external_id": "53477",
+      "mapping_method": "MAL_ID_CROSSWALK",
+      "mapping_confidence": 1.0,
+      "tier": 500,
+      "tier_label": "current_season",
+      "priority_score": 199,
+      "updated_at": "2026-09-18T14:59:02Z",
+      "title": "Мастер льда и пламени 2",
+      "year": 2022,
+      "kind": "tv"
+    },
+    {
+      "canonical_title_id": "nova:01a0af3f-a972-76be-a845-326a4a565a93",
+      "external_id": "33253",
+      "mapping_method": "MAL_ID_CROSSWALK",
+      "mapping_confidence": 1.0,
+      "tier": 500,
+      "tier_label": "current_season",
+      "priority_score": 198,
+      "updated_at": "2026-09-17T12:03:00Z",
+      "title": "Нелюдь. Часть 2",
+      "year": 2016,
+      "kind": "tv"
+    },
+    {
+      "canonical_title_id": "nova:01a09eec-835b-7a2a-8028-2bd949c3f8f4",
+      "external_id": "64340",
+      "mapping_method": "MAL_ID_CROSSWALK",
+      "mapping_confidence": 1.0,
+      "tier": 500,
+      "tier_label": "current_season",
+      "priority_score": 195,
+      "updated_at": "2026-09-14T07:58:15Z",
+      "title": "Во всеоружии: Сила артефактов",
+      "year": 2026,
+      "kind": "tv"
+    },
+    {
+      "canonical_title_id": "nova:01a09cfb-640a-7909-be9f-a03fb2178c42",
+      "external_id": "10338",
+      "mapping_method": "MAL_ID_CROSSWALK",
+      "mapping_confidence": 1.0,
+      "tier": 500,
+      "tier_label": "current_season",
+      "priority_score": 195,
+      "updated_at": "2026-09-13T22:55:15Z",
+      "title": "Учитель-медиум",
+      "year": 2011,
+      "kind": "tv"
+    },
+    {
+      "canonical_title_id": "nova:01a09cf5-02a7-7909-b8f3-4ee5e72de92e",
+      "external_id": "10209",
+      "mapping_method": "MAL_ID_CROSSWALK",
+      "mapping_confidence": 1.0,
+      "tier": 500,
+      "tier_label": "current_season",
+      "priority_score": 195,
+      "updated_at": "2026-09-13T22:48:17Z",
+      "title": "Уж не зомби ли это? OVA",
+      "year": 2011,
+      "kind": "tv"
+    },
+    {
+      "canonical_title_id": "nova:01a09ced-2b8c-7909-94c8-b6714f1d8109",
+      "external_id": "1002",
+      "mapping_method": "MAL_ID_CROSSWALK",
+      "mapping_confidence": 1.0,
+      "tier": 500,
+      "tier_label": "current_season",
+      "priority_score": 194,
+      "updated_at": "2026-09-13T22:39:44Z",
+      "title": "Дайбастер: Дотянись до неба! 2",
+      "year": 2004,
+      "kind": "tv"
+    },
+    {
+      "canonical_title_id": "nova:01a09cd5-6a1b-7909-a71b-0696fa4f29b3",
+      "external_id": "1022",
+      "mapping_method": "MAL_ID_CROSSWALK",
+      "mapping_confidence": 1.0,
+      "tier": 500,
+      "tier_label": "current_season",
+      "priority_score": 194,
+      "updated_at": "2026-09-13T22:13:47Z",
+      "title": "Генератор Гаул",
+      "year": 1998,
+      "kind": "tv"
+    },
+    {
+      "canonical_title_id": "nova:01a09cd2-db3b-7909-bb57-13a2bf382145",
+      "external_id": "10191",
+      "mapping_method": "MAL_ID_CROSSWALK",
+      "mapping_confidence": 1.0,
+      "tier": 500,
+      "tier_label": "current_season",
+      "priority_score": 194,
+      "updated_at": "2026-09-13T22:10:59Z",
+      "title": "Киберэгоист Кайдзо",
+      "year": 2011,
+      "kind": "tv"
+    },
+    {
+      "canonical_title_id": "nova:01a09ccf-5b2b-7909-ab02-74e63bbb46c2",
+      "external_id": "10177",
+      "mapping_method": "MAL_ID_CROSSWALK",
+      "mapping_confidence": 1.0,
+      "tier": 500,
+      "tier_label": "current_season",
+      "priority_score": 194,
+      "updated_at": "2026-09-13T22:07:10Z",
+      "title": "Легенда боевых лентяев Северной звезды",
+      "year": 2011,
+      "kind": "tv"
+    },
+    {
+      "canonical_title_id": "nova:01a09ca4-8129-7909-a3fe-325fae8f1f61",
+      "external_id": "58057",
+      "mapping_method": "MAL_ID_CROSSWALK",
+      "mapping_confidence": 1.0,
+      "tier": 500,
+      "tier_label": "current_season",
+      "priority_score": 194,
+      "updated_at": "2026-09-13T21:20:21Z",
+      "title": "Пришедший из древности 2",
+      "year": 2024,
+      "kind": "tv"
+    }
+  ]
+}

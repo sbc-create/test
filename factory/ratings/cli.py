@@ -36,6 +36,19 @@ def _store(cfg: RatingsConfig) -> RatingsStore:
 
 
 def _adapter(source: str, cfg: RatingsConfig, *, live: bool = False):
+    from factory.ratings.stage5_policy import UnauthorizedSourceError, assert_live_source_allowed
+
+    key = (source or "").strip().lower()
+    if key in ("amd_online", "amd.online", "animemedia"):
+        raise SystemExit(
+            f"source {source!r} disabled for factory ratings CLI live path "
+            f"(AMD_SOURCE_DISABLED_PERMISSION_MISSING / unauthorized)"
+        )
+    if live or key == "shikimori":
+        try:
+            assert_live_source_allowed(key if key != "shikimori" else "shikimori")
+        except UnauthorizedSourceError as exc:
+            raise SystemExit(str(exc)) from exc
     if source == "shikimori":
         return ShikimoriGraphQLAdapter(
             url=cfg.shikimori_graphql_url,
