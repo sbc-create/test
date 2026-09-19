@@ -1755,21 +1755,19 @@ padding:11px 22px;border-radius:6px;font-weight:600}
 .zsea__h{font-size:13px;color:@DIM@;margin:0 0 14px}
 .zsea{margin:0 0 20px}
 
-/* Страница произведения: компактная трёхзональная шапка. */
+/* Страница произведения: постер + основная колонка (без правой rail). */
 .zban{display:none}
 .zmain{padding-top:24px;scroll-padding-top:88px}
 @media(min-width:768px){.zmain{padding-top:36px}}
 @media(min-width:1280px){.zmain{padding-top:40px}}
-/* Detail title pages keep a slightly tighter top rhythm via .ztitle margin. */
 .ztitle{scroll-margin-top:88px}
 #catalog-h1{scroll-margin-top:88px}
-.ztitle{display:grid;grid-template-columns:1fr;gap:16px;margin:4px 0 8px;
+.ztitle{display:grid;grid-template-columns:1fr;gap:16px;margin:4px 0 12px;
 align-items:start;max-height:none}
-@media(min-width:900px){.ztitle{grid-template-columns:240px minmax(0,1fr);gap:20px;
-max-height:500px}}
-@media(min-width:1280px){.ztitle{grid-template-columns:260px minmax(0,1fr) 280px;gap:22px}}
+@media(min-width:900px){.ztitle{grid-template-columns:220px minmax(0,1fr);gap:24px}}
+@media(min-width:1280px){.ztitle{grid-template-columns:240px minmax(0,1fr);gap:28px}}
 .ztitle__poster{aspect-ratio:2/3;border-radius:8px;overflow:hidden;background:@ALT@;
-position:relative;width:100%;max-width:280px;margin:0 auto}
+position:relative;width:100%;max-width:240px;margin:0 auto}
 @media(min-width:900px){.ztitle__poster{margin:0;max-width:none}}
 .ztitle__poster img,.ztitle__poster .zhead__img{position:absolute;inset:0;z-index:1;
 width:100%;height:100%;object-fit:cover;display:block}
@@ -1787,32 +1785,25 @@ overflow-wrap:anywhere}
 .ztitle__more{display:inline-block;margin:0 0 14px;color:@ACC@;font-weight:600;font-size:14px}
 .ztitle__src{font-size:12px;color:@MUTE@;margin:0 0 12px;line-height:1.4}
 .ztitle__cta{display:inline-flex;align-items:center;justify-content:center;
-min-height:42px;padding:10px 18px;border-radius:8px;background:@ACCDK@;color:#fff;
-font-weight:700;font-size:14px;text-decoration:none}
+min-height:44px;padding:10px 18px;border-radius:8px;background:@ACCDK@;color:#fff;
+font-weight:700;font-size:14px;text-decoration:none;margin:4px 0 0}
 .ztitle__cta:hover{filter:brightness(1.05)}
-.ztitle__rail{min-width:0;display:flex;flex-direction:column;gap:16px}
-@media(max-width:899px){.ztitle__rail{order:3}}
-.ztitle__dl{margin:0;background:@SURF@;border:1px solid @LINE@;border-radius:8px;
-padding:12px 14px;display:grid;gap:10px}
-.ztitle__dl div{display:grid;grid-template-columns:110px minmax(0,1fr);gap:8px 12px;
-align-items:start}
-.ztitle__dl dt{font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;
-color:@DIM@;font-weight:700;margin:0;line-height:1.35;padding-top:2px}
-.ztitle__dl dd{margin:0;font-size:13.5px;color:@INK@;line-height:1.4;
-overflow-wrap:anywhere;min-width:0}
-.ztitle__dl a{color:@ACC@;font-weight:600;display:inline-block;margin:0 6px 4px 0}
+.ztitle__rail{display:none}
+.ztitle__dl{display:none}
+.zpl{margin-top:18px}
 .ztitle__facts{margin:0 0 12px;display:grid;gap:6px 16px;
-grid-template-columns:1fr;max-width:52ch}
+grid-template-columns:1fr;max-width:70ch}
 @media(min-width:600px){.ztitle__facts{grid-template-columns:1fr 1fr}}
-.ztitle__facts div{display:grid;grid-template-columns:72px minmax(0,1fr);gap:4px 8px;
-align-items:baseline}
+.ztitle__facts div{display:grid;grid-template-columns:88px minmax(0,1fr);gap:4px 8px;
+align-items:start}
 .ztitle__facts dt{margin:0;font-size:11px;letter-spacing:.03em;text-transform:uppercase;
-color:@DIM@;font-weight:700}
+color:@DIM@;font-weight:700;line-height:1.35;padding-top:2px}
 .ztitle__facts dd{margin:0;font-size:13.5px;color:@INK@;line-height:1.35;
 overflow-wrap:anywhere;min-width:0}
+.ztitle__facts a{color:@ACC@;font-weight:600}
 .ztitle__chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
 .ztitle__chip{display:inline-flex;align-items:center;min-height:28px;padding:4px 10px;
-border-radius:999px;background:@ALT@;border:1px solid @LINE@;font-size:12.5px;color:@DIM@}
+border-radius:6px;border:1px solid @LINE@;background:@ALT@;color:@DIM@;font-size:12px}
 .zad{display:none}
 .zad[data-ad-enabled="1"]{display:block;width:100%;max-width:300px;min-height:250px;
 border:1px dashed @LINE@;border-radius:8px;background:@ALT@;margin:0 auto}
@@ -4993,29 +4984,33 @@ class ВидЗона(Вид):
         if дата:
             chips.append(f'<span class="ztitle__chip">{html.escape(дата)}</span>')
         chips_html = (f'<div class="ztitle__chips">{"".join(chips)}</div>' if chips else "")
-        rail_keys = {"Статус", "Серии", "Возраст"}
-        core_keys = {"Год", "Тип", "Страна"}
+        # Single facts grid only — no right-hand series rail (Pass6 Block 04).
+        # Genres stay as chips above; do not duplicate them as a fact row.
+        keep_labels = {
+            "Год", "Тип", "Страна", "Статус", "Время", "Серии", "Возраст",
+            "Дата выхода",
+        }
+        label_map = {"Время": "Продолжительность"}
         все_пары = list(факты(self, запись, деталь))
         for метка, ключ in (("Возраст", "age_rating"), ("Статус", "status")):
             знач = деталь.get(ключ)
             if знач:
                 все_пары.append((метка, html.escape(str(знач))))
-        core_пары = [(м, з) for м, з in все_пары if м in core_keys]
-        # Genres as fact row when present.
-        if жанры:
-            core_пары.append(("Жанры", ", ".join(html.escape(g) for g in жанры[:6])))
-        rail_пары = [(м, з) for м, з in все_пары if м in rail_keys]
+        seen = set()
+        fact_пары = []
+        for м, з in все_пары:
+            if м not in keep_labels or not з or м in seen:
+                continue
+            seen.add(м)
+            fact_пары.append((label_map.get(м, м), з))
         core_rows = "".join(
-            f"<div><dt>{html.escape(м)}</dt><dd>{з}</dd></div>" for м, з in core_пары)
+            f"<div><dt>{html.escape(м)}</dt><dd>{з}</dd></div>" for м, з in fact_пары)
         core_dl = (f'<dl class="ztitle__facts" data-testid="title-facts">{core_rows}</dl>'
                    if core_rows else "")
-        rail_rows = "".join(
-            f"<div><dt>{html.escape(м)}</dt><dd>{з}</dd></div>" for м, з in rail_пары)
-        rail_dl = (f'<dl class="ztitle__dl">{rail_rows}</dl>' if rail_rows else "")
         ads_on = os.environ.get("ZONA_AD_SLOTS", "") == "1"
         ad_slot = (f'<div class="zad" data-ad-slot="title-rail-300x250" '
                    f'data-ad-enabled="{1 if ads_on else 0}" '
-                   f'aria-hidden="{"false" if ads_on else "true"}"></div>')
+                   f'aria-hidden="{"false" if ads_on else "true"}"></div>') if ads_on else ""
         сезон_старт, эпизод_старт = выбрать_доступную_серию(деталь) if сезоны else (1, None)
         код, внутри = разметка_плеера(self, запись, деталь, сезон_старт, эпизод_старт)
         плеер = (f'<section class="zpl" id="watch"><div class="zpl__h"><h2>Смотреть</h2>'
@@ -5034,23 +5029,21 @@ class ВидЗона(Вид):
                 f'{"".join(self.плитка(з) for з in похожие)}</div></section></div>')
         else:
             блок_похожих = ""
-        expand_js = (
-            "<script>(function(){var b=document.querySelector('[data-expand-plot]');"
-            "var p=document.getElementById('synopsis');if(!b||!p)return;"
-            "b.addEventListener('click',function(){var open=p.classList.toggle('is-open');"
-            "p.hidden=false;b.setAttribute('aria-expanded',open?'true':'false');"
-            "b.textContent=open?'Свернуть':'Развернуть';});})();</script>")
-        aside = ""
-        if rail_dl or ads_on:
-            aside = f'<aside class="ztitle__rail">{rail_dl}{ad_slot}</aside>'
+        expand_js = ""
+        if "data-expand-plot" in описание_html:
+            expand_js = (
+                "<script>(function(){var b=document.querySelector('[data-expand-plot]');"
+                "var p=document.getElementById('synopsis');if(!b||!p)return;"
+                "b.addEventListener('click',function(){var open=p.classList.toggle('is-open');"
+                "p.hidden=false;b.setAttribute('aria-expanded',open?'true':'false');"
+                "b.textContent=open?'Свернуть':'Развернуть';});})();</script>")
         тело = (
             f'<div class="zwrap"><div class="ztitle">'
             f'<div class="ztitle__poster">{изо}</div>'
             f'<div class="ztitle__main"><h1>{html.escape(имя)}</h1>'
             f'{оригинал_html}{оценки_html}{genres_html}{chips_html}{core_dl}'
             f'{описание_html}'
-            f'<a class="ztitle__cta" href="#watch">Смотреть</a></div>'
-            f'{aside}'
+            f'<a class="ztitle__cta" href="#watch">Смотреть</a>{ad_slot}</div>'
             f'</div></div>{плеер}{блок_серий}{блок_похожих}{expand_js}')
         разметка = self.schema_тайтла(запись, деталь, путь)
         meta_desc = (краткое_поле or полное or "").strip()

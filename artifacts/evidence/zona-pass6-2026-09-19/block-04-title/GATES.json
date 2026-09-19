@@ -1,0 +1,9 @@
+{
+  "BLOCK": "04",
+  "STATUS": "PASS_LOCAL",
+  "RIGHT_RAIL_REMOVED": true,
+  "FACTS_MERGED": true,
+  "EMPTY_DESC_NO_BLOCK": true,
+  "PLAYER_UNTOUCHED": true,
+  "TESTS": "test_zona_pass6_block04 + pass5 = 14 passed"
+}
