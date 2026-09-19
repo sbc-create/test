@@ -1,0 +1,41 @@
+{
+  "AMD_PERMISSION_STATUS": "NOT_PROVIDED",
+  "AMD_CLOSED_CANARY_ALLOWED": "YES",
+  "AMD_CLOSED_CANARY_ATTEMPTED": 100,
+  "AMD_CLOSED_CANARY_ACCEPTED": 90,
+  "AMD_CLOSED_NOINDEX_PUBLICATION_ALLOWED": "YES",
+  "AMD_PUBLIC_INDEXED_PUBLICATION": "NO",
+  "urls_planned": 100,
+  "adapter_stats": {
+    "attempted": 100,
+    "matched": 90,
+    "accepted": 90,
+    "rejected": 10,
+    "quarantined": 0,
+    "http_403": 0,
+    "http_429": 0,
+    "challenges": 0,
+    "robots_digest_changed": 0,
+    "last_good_retained": 0,
+    "auto_stop_triggered": 0
+  },
+  "auto_stopped": false,
+  "stop_reason": "",
+  "replay_duplicate_prevented": 1,
+  "publications": {
+    "animedia.icu": {
+      "path": "artifacts/evidence/ratings-ingestion-02/closed-noindex/animedia.icu/ratings_snapshot_v1.candidate.json",
+      "digest": "043167e37ba92093e4f01119cdab315f160f45b4e72bd8f31b57b8535265c474",
+      "previous": null,
+      "title_count": 90
+    },
+    "animedia.space": {
+      "path": "artifacts/evidence/ratings-ingestion-02/closed-noindex/animedia.space/ratings_snapshot_v1.candidate.json",
+      "digest": "043167e37ba92093e4f01119cdab315f160f45b4e72bd8f31b57b8535265c474",
+      "previous": null,
+      "title_count": 90
+    }
+  },
+  "snapshot_digest": "043167e37ba92093e4f01119cdab315f160f45b4e72bd8f31b57b8535265c474",
+  "false_positives": 0
+}

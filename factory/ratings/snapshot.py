@@ -41,7 +41,7 @@ def build_snapshot(store: RatingsStore, *, primary_source: str = "shikimori") ->
             },
         )
         src = row["source_key"]
-        entry["scores"][src] = {
+        score_block: dict[str, Any] = {
             "score": score,
             "vote_count": row.get("vote_count"),
             "freshness": row.get("freshness"),
@@ -50,6 +50,18 @@ def build_snapshot(store: RatingsStore, *, primary_source: str = "shikimori") ->
             "external_id": row.get("external_id"),
             "adapter_version": row.get("adapter_version"),
         }
+        raw_comps = row.get("component_scores")
+        if raw_comps:
+            try:
+                comps = json.loads(raw_comps) if isinstance(raw_comps, str) else raw_comps
+            except (TypeError, json.JSONDecodeError):
+                comps = None
+            if comps:
+                score_block["components"] = comps
+        if src == "amd_online":
+            score_block["attribution"] = "Источник: AMD.online"
+            score_block["canonical_source_url"] = row.get("provenance_url")
+        entry["scores"][src] = score_block
         if src == primary_source and entry["primary"] is None:
             entry["primary"] = src
 

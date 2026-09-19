@@ -2,45 +2,76 @@
 
 ## Heads
 
-- START_HEAD: `174f03f50b00889dbe740a12d11527c9aa97e315`
+- START_HEAD (Stage 1): `174f03f50b00889dbe740a12d11527c9aa97e315`
+- PREV_IMPL_HEAD: `ada31202581984c2de16e8365355ce982fd1ed86`
 - BRANCH: `cursor/ratings-ingestion-01`
 - WORKTREE: `/home/claude/wt-ratings-ingestion-01`
 
-## Implementation
+## Verdict
 
-Extended `factory/ratings/` (no parallel module):
+```text
+IMPLEMENTATION_VERDICT=PASS
+AMD_CLOSED_CANARY_VERDICT=PASS
+OVERALL_VERDICT=PASS_CLOSED_CANARY
+READY_FOR_STAGE_3=YES
+```
 
-- AMD.online adapter + centralized selectors + sanitized fixtures
-- Local votes (CRUD, idempotency, quarantine, aggregates)
-- `animedia_blend_v1` combined formula + `animedia_rotation_v1`
-- Gateway contract with separate `ratingSources` / `localRating` / `combinedRating`
-- Daily SLA + Qwen message builder (`ratings_daily_v1`)
-- Migration `0003` (isolated only)
+## AMD permission modes
 
-## Shikimori isolated canary
+```text
+AMD_PERMISSION_STATUS=NOT_PROVIDED
+AMD_CLOSED_CANARY_INGESTION=ALLOWED
+AMD_CLOSED_NOINDEX_PUBLICATION=ALLOWED
+AMD_PUBLIC_INDEXED_PUBLICATION=BLOCKED_PENDING_SEPARATE_APPROVAL
+```
 
-| metric | Stage1 dry-run | Stage2 apply |
-| --- | --- | --- |
-| attempted | 100 | 100 |
-| matched | 92 | 93 |
-| inserted | 0 | 93 |
-| replay inserted | — | 0 |
+Written permission is **not** required for closed technical canary. It remains
+the gate only before mass public indexed publication.
 
-Delta +1 matched: different queue slice / upstream score availability on re-run;
-manual sample of 25 stored scores re-checked live — **0 wrong**.
+## First CLI attempt (failed, superseded)
 
-## AMD
+Task `902556` / `AMD_CANARY_FIRST_CLI_FAILURE.json`:
 
-- Permission: **NOT_PROVIDED**
-- Live canary: **BLOCKED_PERMISSION**
-- Contract probe: 3 GET (robots, home, 1 detail) — selectors confirmed
-- Fixtures + parser tests: PASS
-- Auto-stop on 403: tested
+- `exit_code=2` in 266ms
+- cause: stale argparse without `--urls-file` (no AMD detail GETs)
+- superseded by successful attempt 2 → `AMD_CLOSED_CANARY_REPORT.json`
 
-## Local / formula / rotation / daily
+## AMD closed canary (live attempt 2)
 
-All acceptance examples automated. Qwen delivery **NOT_CONFIGURED** (report ready).
+| metric | value |
+| --- | --- |
+| attempted | 100 |
+| accepted | 90 |
+| rejected | 10 |
+| reject class | ZERO_SCORE_NO_VOTE (`0.0` / `(0)`), see `AMD_CLOSED_CANARY_REJECTIONS.json` |
+| network / challenge / parser failures | 0 / 0 / 0 |
+| auto-stop | NO |
+| rate | ≤0.1 rps, concurrency=1 |
+| components | 90/90 after backfill |
+| replay duplicate prevented | 1 |
+
+Raw proof of reject class: `raw/amd_detail_5723_oor.html` → score `0.0`, votes `(0)`.
+
+Closed noindex candidate snapshots:
+
+- `closed-noindex/animedia.icu/ratings_snapshot_v1.candidate.json`
+- `closed-noindex/animedia.space/ratings_snapshot_v1.candidate.json`
+
+Display verified: AMD score, vote count, story/characters/art/voice,
+`Источник: AMD.online`, canonical source URL. Blend + rotation:
+`BLEND_LOCAL_SMOKE.json`, `rotation_before_after.json`.
+
+## CAPTCHA detection
+
+`dle_captcha_type` alone is **not** a challenge. Real ddos-guard / Cloudflare /
+`g-recaptcha` / `hcaptcha` / `captcha-box` (tiny non-detail pages) still trip
+auto-stop. Covered by unit tests.
+
+## Shikimori isolated canary (unchanged)
+
+attempted 100 / matched 93 / inserted 93; replay 0.
 
 ## Production guards
 
-No production DB migration, scheduler enable, frontend deploy, push, or merge.
+No production DB migration, scheduler enable, frontend deploy, push, merge,
+public indexing, DNS/nginx changes. Stage 3 **not started**.

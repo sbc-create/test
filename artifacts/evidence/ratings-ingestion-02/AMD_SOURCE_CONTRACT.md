@@ -21,10 +21,10 @@ https://amd.online/{numeric-id}-{slug}.html
 | title_original | `.amd-sub` |
 | score | `.multirating-itog-rateval` (published value; not recomputed) |
 | vote_count | `.multirating-itog-votes` (digits only; `(186)` → 186) |
-| story | `data-area="story"` |
-| characters | `data-area="actors"` |
-| art | `data-area="graph"` |
-| voice | `data-area="sound"` |
+| story | `data-area="story"` → `.multirating-item-rateval-num` (or `data-rate`) |
+| characters | `data-area="actors"` → `.multirating-item-rateval-num` |
+| art | `data-area="graph"` → `.multirating-item-rateval-num` |
+| voice | `data-area="sound"` → `.multirating-item-rateval-num` |
 
 ## Validation
 
@@ -40,6 +40,15 @@ https://amd.online/{numeric-id}-{slug}.html
 403, 429, CAPTCHA/DDOS challenge, unexpected redirect, robots digest change,
 parser drift → circuit open. No proxy rotation / IP bypass.
 
-## Permission
+## Permission / modes
 
-See `AMD_PERMISSION_STATUS.md`. Bulk ingestion blocked until GRANTED.
+See `AMD_PERMISSION_STATUS.md`.
+
+```text
+AMD_CLOSED_CANARY_INGESTION=ALLOWED
+AMD_CLOSED_NOINDEX_PUBLICATION=ALLOWED
+AMD_PUBLIC_INDEXED_PUBLICATION=BLOCKED_PENDING_SEPARATE_APPROVAL
+```
+
+Written commercial permission is a separate gate only before mass public
+indexed publication. It does **not** block closed technical canary.

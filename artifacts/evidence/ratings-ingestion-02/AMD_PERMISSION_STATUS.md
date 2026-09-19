@@ -1,21 +1,25 @@
 AMD_PERMISSION_STATUS=NOT_PROVIDED
-AMD_SOURCE_STATE=BLOCKED_PENDING_WRITTEN_PERMISSION
+AMD_CLOSED_CANARY_INGESTION=ALLOWED
+AMD_CLOSED_NOINDEX_PUBLICATION=ALLOWED
+AMD_PUBLIC_INDEXED_PUBLICATION=BLOCKED_PENDING_SEPARATE_APPROVAL
+AMD_SOURCE_STATE=CLOSED_CANARY_ALLOWED
 AMD_PRODUCTION_INGESTION=0
+AMD_PUBLIC_INDEXED_PUBLICATION_ALLOWED=0
 
-# Evidence search (Stage 2)
+# Stage 2 correction (2026-09-19)
 
-Searched worktree for written owner permission covering AMD.online commercial
-reuse, derivative rating formula, attribution, rate limits, and deletion.
+Written commercial/indexed permission is NOT required for closed technical canary.
+It remains a separate gate only before mass public indexed publication (Stage 3+).
 
-**Result:** no such document found.
+Allowed now:
+- read-only AMD detail canary up to 100 unique titles
+- isolated DB write of accepted baselines
+- candidate snapshot for closed noindex animedia.icu / animedia.space
+- display AMD score/votes/components + attribution
+- animedia_blend_v1 with local votes
+- rotation/sort verification
 
-Public robots.txt allows crawling of detail pages (`User-agent: *` with limited
-Disallow paths). Public accessibility ≠ commercial reuse permission.
-
-Bounded Stage 2 technical probe (max 3 GET):
-
-1. `https://amd.online/robots.txt` → 200
-2. `https://amd.online/` → 200
-3. one detail page → 200; selectors confirmed
-
-Bulk live canary: **not started**.
+Still blocked:
+- public indexed publication
+- production scheduler enable
+- CAPTCHA/DDOS bypass / proxy rotation / AMD voting endpoints

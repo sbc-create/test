@@ -1,0 +1,12 @@
+{
+  "canonical_title_id": "amd_online:2150",
+  "amd_score": "9.68",
+  "amd_vote_count": 2031,
+  "before_ui": "9.68",
+  "after_ui": "9.66",
+  "expected_ui": "9.66",
+  "local_vote_count": 3,
+  "state": "AMD_PLUS_LOCAL",
+  "rotation_rank_after": 5,
+  "ok": true
+}

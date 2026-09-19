@@ -161,6 +161,18 @@ def _data_id(html: str) -> str | None:
 
 
 def _component(html: str, area: str) -> Decimal | None:
+    # Live AMD: <div ... data-area="story" ...> ... <span class="multirating-item-rateval-num">9.5</span>
+    # Stop at the next sibling data-area (not at multirating-item-rateval — that contains the same prefix).
+    m = re.search(
+        rf'data-area="{re.escape(area)}"[^>]*>'
+        rf'(?:(?!data-area=).)*?'
+        rf'class="[^"]*\bmultirating-item-rateval-num\b[^"]*"[^>]*>\s*([\d.,]+)',
+        html,
+        re.I | re.S,
+    )
+    if m:
+        return _dec(m.group(1))
+    # Fixture / alternate: data-rate on the area element itself
     m = re.search(
         rf'data-area="{re.escape(area)}"[^>]*data-rate="([\d.]+)"',
         html,
@@ -215,12 +227,20 @@ def parse_detail_html(
     vote_count = _vote_count(votes_raw)
 
     flags: list[str] = []
+    # Published 0.0 with zero votes = no rating yet (never treat as real score)
+    if score is not None and score == 0:
+        score = None
+        flags.append("SCORE_ZERO_AS_NULL")
     if score is None:
         flags.append("SCORE_MISSING")
     if score is not None and vote_count is None:
         flags.append("VOTE_COUNT_MISSING")
 
-    comps = {field: _component(html, area) for area, field in COMPONENT_AREAS.items()}
+    comps = {fname: _component(html, area) for area, fname in COMPONENT_AREAS.items()}
+    for fname, val in list(comps.items()):
+        if val is not None and val == 0:
+            comps[fname] = None
+            flags.append(f"{fname.upper()}_ZERO_AS_NULL")
     detail = AmdDetail(
         source_id=uid,
         source_url=source_url,

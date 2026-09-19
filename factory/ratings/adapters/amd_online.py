@@ -1,8 +1,12 @@
-"""AMD.online source adapter — permission-gated.
+"""AMD.online source adapter — closed-canary gated.
 
-Without written owner permission: BLOCKED_PENDING_WRITTEN_PERMISSION.
-Max 3 read-only GETs allowed for Stage 2 contract probe only (already spent).
-Bulk live canary requires evidence file with granted status.
+Modes (from AMD_PERMISSION_STATUS.md):
+
+* AMD_CLOSED_CANARY_INGESTION=ALLOWED → live detail canary up to configured limit
+* AMD_CLOSED_NOINDEX_PUBLICATION=ALLOWED → candidate snapshot for closed sites
+* AMD_PUBLIC_INDEXED_PUBLICATION=BLOCKED_PENDING_SEPARATE_APPROVAL
+
+Written commercial permission is a separate Stage-3+ gate for public indexing.
 """
 
 from __future__ import annotations
@@ -30,23 +34,29 @@ from factory.ratings.rate_limit import RateLimiter
 ADAPTER_VERSION = "amd_online_html/1.0.0"
 PERMISSION_EVIDENCE = "artifacts/evidence/ratings-ingestion-02/AMD_PERMISSION_STATUS.md"
 
+_DEFAULTS = {
+    "AMD_PERMISSION_STATUS": "NOT_PROVIDED",
+    "AMD_CLOSED_CANARY_INGESTION": "ALLOWED",
+    "AMD_CLOSED_NOINDEX_PUBLICATION": "ALLOWED",
+    "AMD_PUBLIC_INDEXED_PUBLICATION": "BLOCKED_PENDING_SEPARATE_APPROVAL",
+    "AMD_SOURCE_STATE": "CLOSED_CANARY_ALLOWED",
+    "AMD_PRODUCTION_INGESTION": "0",
+}
+
 
 def load_permission_status(root: Path | None = None) -> dict[str, str]:
     root = root or PATHS.root
-    path = root / "artifacts/evidence/ratings-ingestion-02/AMD_PERMISSION_STATUS.md"
-    # Default until evidence file written
-    status = {
-        "AMD_PERMISSION_STATUS": "NOT_PROVIDED",
-        "AMD_SOURCE_STATE": "BLOCKED_PENDING_WRITTEN_PERMISSION",
-        "AMD_PRODUCTION_INGESTION": "0",
-    }
+    path = root / PERMISSION_EVIDENCE
+    status = dict(_DEFAULTS)
     if not path.is_file():
         return status
     text = path.read_text(encoding="utf-8")
-    for key in status:
-        for line in text.splitlines():
-            if line.startswith(f"{key}="):
-                status[key] = line.split("=", 1)[1].strip()
+    for line in text.splitlines():
+        if "=" in line and not line.startswith("#") and not line.startswith(" "):
+            key, _, val = line.partition("=")
+            key = key.strip()
+            if key in status or key.startswith("AMD_"):
+                status[key] = val.strip()
     return status
 
 
@@ -67,7 +77,6 @@ class AmdOnlineAdapter:
         robots_digest: str = "",
     ) -> None:
         self.user_agent = user_agent
-        # Stage 2 granted limit: <=0.1 rps, max 1 per 10s
         self.rate_limiter = rate_limiter or RateLimiter(max_rps=0.1, max_per_minute=6)
         self.opener = opener
         self.permission = load_permission_status(permission_root)
@@ -92,11 +101,20 @@ class AmdOnlineAdapter:
             "auto_stop_triggered": 0,
         }
 
+    def closed_canary_allowed(self) -> bool:
+        return self.permission.get("AMD_CLOSED_CANARY_INGESTION") == "ALLOWED"
+
+    def closed_noindex_publication_allowed(self) -> bool:
+        return self.permission.get("AMD_CLOSED_NOINDEX_PUBLICATION") == "ALLOWED"
+
+    def public_indexed_blocked(self) -> bool:
+        return self.permission.get("AMD_PUBLIC_INDEXED_PUBLICATION") != "ALLOWED"
+
     def permission_blocks_bulk(self) -> bool:
-        return self.permission.get("AMD_PERMISSION_STATUS") != "GRANTED"
+        """Blocks only when closed canary is not allowed."""
+        return not self.closed_canary_allowed()
 
     def fetch_detail_html(self, url: str, *, html: str | None = None) -> FetchResult:
-        """Parse one detail page from provided HTML or gated live GET."""
         if self.auto_stopped:
             raise AdapterError("AUTO_STOPPED", self.stop_reason, hard_circuit=True)
 
@@ -104,7 +122,13 @@ class AmdOnlineAdapter:
             if self.permission_blocks_bulk() and not self.allow_live:
                 raise AdapterError(
                     "SOURCE_POLICY_BLOCK",
-                    "AMD_PERMISSION_STATUS=NOT_PROVIDED; bulk live fetch blocked",
+                    "AMD_CLOSED_CANARY_INGESTION not ALLOWED",
+                    hard_circuit=True,
+                )
+            if not self.closed_canary_allowed() and not self.allow_live:
+                raise AdapterError(
+                    "SOURCE_POLICY_BLOCK",
+                    "closed canary not allowed",
                     hard_circuit=True,
                 )
             if self._live_used >= self.max_live_requests:
@@ -157,11 +181,10 @@ class AmdOnlineAdapter:
             name=detail.title_original or detail.title_ru,
             russian=detail.title_ru,
             payload=detail.as_dict(),
-            source_updated_at="",  # AMD has no proven rating_updated_at
+            source_updated_at="",
         )
 
     def fetch_by_ids(self, external_ids: list[str]) -> dict[str, FetchResult]:
-        """IDs alone are insufficient without URL mapping — require URL map via payload."""
         raise AdapterError(
             "SOURCE_POLICY_BLOCK",
             "amd_online requires canonical detail URLs, not bare id batch",
@@ -175,6 +198,9 @@ class AmdOnlineAdapter:
             "permission_version": PERMISSION_VERSION,
             "canonical_origin": CANONICAL_ORIGIN,
             "permission": self.permission,
+            "closed_canary_allowed": self.closed_canary_allowed(),
+            "closed_noindex_publication_allowed": self.closed_noindex_publication_allowed(),
+            "public_indexed_blocked": self.public_indexed_blocked(),
             "selectors": [
                 "h1",
                 "amd-sub",
@@ -183,7 +209,6 @@ class AmdOnlineAdapter:
                 "multirating-itog-votes",
                 'data-area="story|actors|graph|sound"',
             ],
-            "bulk_allowed": not self.permission_blocks_bulk(),
         }
 
     def _stop(self, reason: str) -> None:
@@ -219,8 +244,7 @@ class AmdOnlineAdapter:
             raise AdapterError("TIMEOUT", str(exc), retryable=True) from exc
 
         text = raw.decode("utf-8", errors="replace")
-        low = text.lower()
-        if "captcha" in low or "ddos-guard" in low or "checking your browser" in low:
+        if _looks_like_challenge(text):
             self.stats["challenges"] += 1
             self._stop("CHALLENGE")
         if final_url and "amd.online" not in final_url:
@@ -228,6 +252,23 @@ class AmdOnlineAdapter:
         if status and int(status) in (403, 429):
             self._stop(f"HTTP_{status}")
         return text
+
+
+def _looks_like_challenge(html: str) -> bool:
+    """Detect real anti-bot challenges; ignore DLE ``dle_captcha_type`` JS vars."""
+    low = html.lower()
+    if "ddos-guard" in low or "checking your browser" in low:
+        return True
+    if "cf-browser-verification" in low or 'id="challenge-form"' in low:
+        return True
+    if "just a moment" in low and "cloudflare" in low:
+        return True
+    # DLE embeds dle_captcha_type in every page — not a challenge.
+    return (
+        ("g-recaptcha" in low or "hcaptcha" in low or "captcha-box" in low)
+        and "multirating" not in low
+        and len(html) < 8000
+    )
 
 
 def robots_digest(text: str) -> str:

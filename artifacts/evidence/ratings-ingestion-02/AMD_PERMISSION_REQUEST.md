@@ -1,6 +1,10 @@
 # AMD.online permission request (NOT SENT)
 
-Prepared for Stage 2. **Do not auto-send.**
+Prepared for Stage 2/3. **Do not auto-send.**
+
+Closed technical canary (≤100 titles, noindex animedia) proceeds without this
+letter. Written grant remains the gate before **public indexed** publication
+and daily mass ingestion beyond closed canary.
 
 ## Recipient
 

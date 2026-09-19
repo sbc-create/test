@@ -1,0 +1,14 @@
+{
+  "domain": "animedia.icu",
+  "indexing": "noindex",
+  "publication_mode": "CLOSED_NOINDEX_CANDIDATE",
+  "public_indexed": false,
+  "snapshot": {
+    "path": "artifacts/evidence/ratings-ingestion-02/closed-noindex/animedia.icu/ratings_snapshot_v1.candidate.json",
+    "digest": "c0764799926f2e082112a95cbfbf90ad024def6fa0ffc98aab819e8f98808704",
+    "previous": "artifacts/evidence/ratings-ingestion-02/closed-noindex/animedia.icu/ratings_snapshot_v1.candidate.json.prev",
+    "title_count": 90
+  },
+  "robots_policy": "noindex, nofollow (closed nova)",
+  "components_backfilled": true
+}

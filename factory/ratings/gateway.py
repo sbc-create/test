@@ -137,6 +137,14 @@ class RatingGateway:
             comps = row.get("components") or row.get("component_scores")
             if comps:
                 entry["components"] = comps
+            if row.get("attribution"):
+                entry["attribution"] = row["attribution"]
+            elif src == "amd_online":
+                entry["attribution"] = "Источник: AMD.online"
+            if row.get("canonical_source_url"):
+                entry["canonicalSourceUrl"] = row["canonical_source_url"]
+            elif row.get("provenance_url"):
+                entry["canonicalSourceUrl"] = row["provenance_url"]
             rating_sources.append(entry)
 
         local_row = self._local.get(canonical_title_id)

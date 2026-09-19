@@ -109,17 +109,21 @@ sources:
     enabled: false
     ttl_seconds: 86400
     rate_limit_per_minute: 6
-    state: BLOCKED_PENDING_WRITTEN_PERMISSION
+    state: CLOSED_CANARY_ALLOWED
     provenance:
       delivery: "public detail HTML pages via factory/ratings"
       origin: "https://amd.online/"
       score_field: "multirating-itog-rateval"
       vote_field: "multirating-itog-votes"
     authorization:
-      status: absent
+      status: closed_canary_allowed
       reason: >-
-        Written commercial reuse / derivative-formula permission from AMD.online
-        owner not provided. Adapter and fixtures ready; bulk live ingestion
-        blocked (AMD_SOURCE_STATE=BLOCKED_PENDING_WRITTEN_PERMISSION).
+        Closed technical canary (≤100 titles, noindex animedia) allowed without
+        written permission. Public indexed publication remains
+        BLOCKED_PENDING_SEPARATE_APPROVAL.
       document: artifacts/evidence/ratings-ingestion-02/AMD_PERMISSION_STATUS.md
       granted_at: ""
+      modes:
+        AMD_CLOSED_CANARY_INGESTION: ALLOWED
+        AMD_CLOSED_NOINDEX_PUBLICATION: ALLOWED
+        AMD_PUBLIC_INDEXED_PUBLICATION: BLOCKED_PENDING_SEPARATE_APPROVAL

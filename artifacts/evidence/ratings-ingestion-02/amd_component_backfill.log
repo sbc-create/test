@@ -1,0 +1,43 @@
+{"progress": 10, "comps_sample": {"story": "9.3", "characters": "9.4", "art": "9.4", "voice": "9.3"}}
+{"progress": 20, "comps_sample": {"story": "8.2", "characters": "8.4", "art": "8.4", "voice": "8.4"}}
+{"progress": 30, "comps_sample": {"story": "5.5", "characters": "5.5", "art": "5.5", "voice": "5.5"}}
+{"progress": 40, "comps_sample": {"story": "7.5", "characters": "7.5", "art": "7.5", "voice": "7.7"}}
+{"progress": 50, "comps_sample": {"story": "10", "characters": "10", "art": "9.8", "voice": "9.8"}}
+{"progress": 60, "comps_sample": {"story": "9.5", "characters": "9.5", "art": "9.5", "voice": "9.5"}}
+{"progress": 70, "comps_sample": {"story": "8.9", "characters": "9", "art": "8.9", "voice": "9.1"}}
+{"progress": 80, "comps_sample": {"story": "9.5", "characters": "9.5", "art": "9.5", "voice": "9.4"}}
+{"progress": 90, "comps_sample": {"story": "9.2", "characters": "9.2", "art": "9.2", "voice": "9.3"}}
+{
+  "backfill_updated": 90,
+  "backfill_failed": 0,
+  "auto_stopped": false,
+  "stop_reason": "",
+  "adapter_stats": {
+    "attempted": 90,
+    "matched": 90,
+    "accepted": 90,
+    "rejected": 0,
+    "quarantined": 0,
+    "http_403": 0,
+    "http_429": 0,
+    "challenges": 0,
+    "robots_digest_changed": 0,
+    "last_good_retained": 0,
+    "auto_stop_triggered": 0
+  },
+  "publications": {
+    "animedia.icu": {
+      "path": "artifacts/evidence/ratings-ingestion-02/closed-noindex/animedia.icu/ratings_snapshot_v1.candidate.json",
+      "digest": "c0764799926f2e082112a95cbfbf90ad024def6fa0ffc98aab819e8f98808704",
+      "previous": "artifacts/evidence/ratings-ingestion-02/closed-noindex/animedia.icu/ratings_snapshot_v1.candidate.json.prev",
+      "title_count": 90
+    },
+    "animedia.space": {
+      "path": "artifacts/evidence/ratings-ingestion-02/closed-noindex/animedia.space/ratings_snapshot_v1.candidate.json",
+      "digest": "c0764799926f2e082112a95cbfbf90ad024def6fa0ffc98aab819e8f98808704",
+      "previous": "artifacts/evidence/ratings-ingestion-02/closed-noindex/animedia.space/ratings_snapshot_v1.candidate.json.prev",
+      "title_count": 90
+    }
+  },
+  "snapshot_digest": "c0764799926f2e082112a95cbfbf90ad024def6fa0ffc98aab819e8f98808704"
+}

@@ -1,0 +1,30 @@
+{
+  "classification": "ZERO_SCORE_NO_VOTE",
+  "count": 10,
+  "primary_reason_in_outcomes_csv": "OUT_OF_RANGE",
+  "explanation": "At canary time, published AMD score 0.0 failed validate_scores (1<=score<=10). Raw sample amd_detail_5723_oor.html shows multirating-itog-rateval=0.0 and votes=(0). Not HTTP/CAPTCHA/parser-drift/mapping/timeout. Later parser maps 0.0 → SCORE_ZERO_AS_NULL (null, never displayed as 0).",
+  "sample_raw": {
+    "file": "raw/amd_detail_5723_oor.html",
+    "url": "https://amd.online/5723-hajdi-devochka-alp.html",
+    "score": "0.0",
+    "votes": "(0)"
+  },
+  "urls": [
+    "https://amd.online/5723-hajdi-devochka-alp.html",
+    "https://amd.online/5717-enot-po-imeni-raskal.html",
+    "https://amd.online/5716-bezdomnyj-malchik-remi.html",
+    "https://amd.online/5715-istorija-perrin.html",
+    "https://amd.online/5714-kosmicheskij-linkor-jamato-2.html",
+    "https://amd.online/5710-komanda-uchenyh-nindzja-gatchamen-ii.html",
+    "https://amd.online/5709-ostrov-sokrovisch.html",
+    "https://amd.online/5708-kapitan-buduschee.html",
+    "https://amd.online/5704-moguchij-atom-1980.html",
+    "https://amd.online/5702-kosmicheskij-linkor-jamato-3.html"
+  ],
+  "network_failures": 0,
+  "challenge_failures": 0,
+  "parser_failures": 0,
+  "http_403": 0,
+  "http_429": 0,
+  "auto_stop_triggered": false
+}

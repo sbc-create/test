@@ -1,0 +1,22 @@
+{
+  "attempt": 1,
+  "status": "FAILED",
+  "exit_code": 2,
+  "started_at": "2026-09-19T18:28:22.771Z",
+  "ended_at": "2026-09-19T18:28:23.037Z",
+  "elapsed_ms": 266,
+  "terminal_task_id": "902556",
+  "command": "python -m factory.ratings.amd_canary --db artifacts/tmp/amd-closed-canary.sqlite --evidence artifacts/evidence/ratings-ingestion-02 --limit 100 --urls-file artifacts/evidence/ratings-ingestion-02/amd_canary_urls.json",
+  "primary_reason": "CLI_STALE_ARGPARSE",
+  "stderr_excerpt": "usage: amd_canary.py [-h] --db DB --evidence EVIDENCE [--limit LIMIT] [--homepage-file HOMEPAGE_FILE]\namd_canary.py: error: unrecognized arguments: --urls-file ...",
+  "note": "First launch raced an incomplete amd_canary.py without --urls-file. No AMD detail GETs were issued (elapsed 266ms). Superseded by attempt 2 after CLI update.",
+  "network_requests_to_amd_detail": 0,
+  "superseded_by": {
+    "attempt": 2,
+    "status": "PASS",
+    "evidence": "AMD_CLOSED_CANARY_REPORT.json",
+    "AMD_CLOSED_CANARY_ATTEMPTED": 100,
+    "AMD_CLOSED_CANARY_ACCEPTED": 90,
+    "exit_code": 0
+  }
+}

@@ -55,7 +55,10 @@ def default_sources() -> list[SourceRecord]:
             legal_access_evidence=(
                 "artifacts/evidence/ratings-ingestion-02/AMD_PERMISSION_STATUS.md"
             ),
-            attribution_gate="BLOCKED_PENDING_WRITTEN_PERMISSION",
+            attribution_gate=(
+                "CLOSED_CANARY_ALLOWED; "
+                "AMD_PUBLIC_INDEXED_PUBLICATION=BLOCKED_PENDING_SEPARATE_APPROVAL"
+            ),
             health_state=HealthState.UNKNOWN,
         ),
         SourceRecord(

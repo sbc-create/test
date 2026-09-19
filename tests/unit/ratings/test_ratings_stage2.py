@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from factory.ratings.adapters.amd_online import AmdOnlineAdapter
+from factory.ratings.adapters.amd_online import AmdOnlineAdapter, _looks_like_challenge
 from factory.ratings.adapters.amd_parser import AmdParseError, parse_detail_html
 from factory.ratings.adapters.base import AdapterError, FetchResult
 from factory.ratings.config import RatingsConfig
@@ -110,6 +110,24 @@ def test_amd_score_out_of_range():
     assert ei.value.code == "OUT_OF_RANGE"
 
 
+def test_amd_zero_score_becomes_null():
+    html = """<!DOCTYPE html><html><body>
+    <h1>Zero</h1><div class="amd-sub">Z</div>
+    <div class="multirating" data-id="5723">
+      <span class="multirating-itog-rateval">0.0</span>
+      <span class="multirating-itog-votes">(0)</span>
+      <div class="multirating-item" data-area="story"><span class="multirating-item-rateval-num">0</span></div>
+      <div class="multirating-item" data-area="actors"><span class="multirating-item-rateval-num">0</span></div>
+      <div class="multirating-item" data-area="graph"><span class="multirating-item-rateval-num">0</span></div>
+      <div class="multirating-item" data-area="sound"><span class="multirating-item-rateval-num">0</span></div>
+    </div></body></html>"""
+    d = parse_detail_html(html, source_url="https://amd.online/5723-x.html")
+    assert d.score is None
+    assert d.vote_count == 0
+    assert d.story_score is None
+    assert "SCORE_ZERO_AS_NULL" in d.quality_flags
+
+
 def test_amd_vote_count_decrease_quarantine(store):
     """Decrease is flagged — last-good preserved via projection rules."""
     obs1 = RatingObservation(
@@ -169,8 +187,35 @@ def test_amd_digest_idempotency():
     assert d1.content_digest_sha256 == d2.content_digest_sha256
 
 
-def test_amd_permission_blocks_bulk():
+def test_amd_challenge_ignores_dle_captcha_var():
+    # DLE JS var alone is not a challenge
+    assert not _looks_like_challenge("var dle_captcha_type = '0';\n" + "x" * 9000 + "multirating")
+    assert _looks_like_challenge("<html>ddos-guard checking</html>")
+    assert _looks_like_challenge('<div id="challenge-form"></div>')
+    assert _looks_like_challenge("<html>Just a moment... cloudflare</html>")
+    # tiny page with captcha widget, no multirating → challenge
+    assert _looks_like_challenge('<html><div class="g-recaptcha"></div></html>')
+    assert _looks_like_challenge('<html><div class="hcaptcha"></div></html>')
+    assert _looks_like_challenge('<html><div class="captcha-box"></div></html>')
+    # real detail-sized page with multirating must not trip on widget-like strings alone
+    detailish = "multirating-itog-rateval" + ("x" * 9000)
+    assert not _looks_like_challenge(detailish)
+
+
+def test_amd_closed_canary_allowed_by_default():
     a = AmdOnlineAdapter(permission_root=Path("/nonexistent"))
+    assert a.closed_canary_allowed()
+    assert a.closed_noindex_publication_allowed()
+    assert a.public_indexed_blocked()
+    assert not a.permission_blocks_bulk()
+
+
+def test_amd_permission_blocks_when_canary_disallowed():
+    a = AmdOnlineAdapter(permission_root=Path("/nonexistent"), allow_live=False)
+    a.permission = {
+        **a.permission,
+        "AMD_CLOSED_CANARY_INGESTION": "DENIED",
+    }
     assert a.permission_blocks_bulk()
     with pytest.raises(AdapterError) as ei:
         a.fetch_detail_html("https://amd.online/1-x.html")

@@ -21,7 +21,7 @@ SELECTORS = {
 }
 
 PARSER_VERSION = "amd_online_html/1.0.0"
-PERMISSION_VERSION = "pending_written_permission"
+PERMISSION_VERSION = "closed_canary_allowed_v1"
 SOURCE_KEY = "amd_online"
 CANONICAL_ORIGIN = "https://amd.online"
 
